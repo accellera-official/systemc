@@ -14,7 +14,7 @@ namespace analysis  /// TLM analysis header sub group
 #include "tlm_analysis_triple.h"
 #include "tlm_analysis_fifo.h"
 #include "tlm_analysis_port.h"
-
+#include "tlm_analysis_bind_if.h"
 }
 
 #endif /* ANALYSIS_HEADER */

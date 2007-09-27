@@ -9,7 +9,8 @@
 template < typename T>
 class analysis_port :
   public sc_object ,
-  public virtual analysis_if< T >
+  public virtual analysis_if< T > ,
+  public virtual analysis_bind_if< T >
 {
  public:
   analysis_port() : sc_object() {}
@@ -20,6 +21,11 @@ class analysis_port :
 
   void bind( analysis_if<T> &_if ) {
     m_interfaces.push_back( &_if );
+  }
+
+  // another bind point to observe the 'callback' event in a logical order
+  void bind_p( analysis_if<T> &_if ) {
+    m_p_interfaces.push_back( &_if );
   }
 
   void operator() ( analysis_if<T> &_if ) { bind( _if ); }
@@ -45,8 +51,39 @@ class analysis_port :
 
   }
 
+  bool unbind_p( analysis_if<T> &_if ) {
+
+    typename std::deque< analysis_if<T> *>::iterator i;
+
+    for( i = m_p_interfaces.begin(); 
+	 i != m_p_interfaces.end();
+	 i++ ) {
+
+      if( *i == &_if ) {
+
+	m_p_interfaces.erase( i );
+	return 1;
+
+      }
+
+    }
+
+    return 0;
+
+  }
+
   void write( const T &t ) {
     typename std::deque< analysis_if<T> * >::iterator i;
+ 
+    // a_interface is processed before the actual interface to 
+    // gurantee the ordering. 
+    for( i = m_p_interfaces.begin(); 
+	 i != m_p_interfaces.end();
+	 i++ ) {
+
+      (*i)->write( t );
+
+    }
  
     for( i = m_interfaces.begin(); 
 	 i != m_interfaces.end();
@@ -60,6 +97,7 @@ class analysis_port :
 
  private:
   std::deque< analysis_if<T> * > m_interfaces;
+  std::deque< analysis_if<T> * > m_p_interfaces;
 
 };
 
