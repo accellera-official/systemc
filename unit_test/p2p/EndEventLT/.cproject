@@ -6,7 +6,7 @@
 <cconfiguration id="cdt.managedbuild.config.gnu.macosx.exe.debug.978291959">
 <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.macosx.exe.debug.978291959" moduleId="org.eclipse.cdt.core.settings" name="Debug">
 <macros>
-<stringMacro name="SYSTEMC" type="VALUE_PATH_DIR" value="/Users/charleswilson/Documents/SystemC/osci/systemc/2.3-gcc4.0"/>
+<stringMacro name="ProjDirPath" type="VALUE_TEXT" value="../p2p/EndEventLT"/>
 </macros>
 <externalSettings/>
 <extensions>
@@ -26,7 +26,7 @@
 <tool id="cdt.managedbuild.tool.macosx.c.linker.macosx.exe.debug.1706179432" name="MacOS X C Linker" superClass="cdt.managedbuild.tool.macosx.c.linker.macosx.exe.debug"/>
 <tool id="cdt.managedbuild.tool.macosx.cpp.linker.macosx.exe.debug.1780274656" name="MacOS X C++ Linker" superClass="cdt.managedbuild.tool.macosx.cpp.linker.macosx.exe.debug">
 <option id="macosx.cpp.link.option.paths.1601460579" name="Library search path (-L)" superClass="macosx.cpp.link.option.paths" valueType="libPaths">
-<listOptionValue builtIn="false" value="&quot;${SYSTEMC}/lib-macosx-i386&quot;"/>
+<listOptionValue builtIn="false" value="&quot;${SYSTEMC}/${SYSTEMC_LIB_DIR}&quot;"/>
 </option>
 <option id="macosx.cpp.link.option.libs.1621570842" name="Libraries (-l)" superClass="macosx.cpp.link.option.libs" valueType="libs">
 <listOptionValue builtIn="false" value="systemc"/>
@@ -37,7 +37,7 @@
 </inputType>
 </tool>
 <tool id="cdt.managedbuild.tool.gnu.assembler.macosx.exe.debug.1601727493" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.macosx.exe.debug">
-<option id="gnu.both.asm.option.include.paths.1157722325" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath"/>
+<option id="gnu.both.asm.option.include.paths.1157722325" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths"/>
 <inputType id="cdt.managedbuild.tool.gnu.assembler.input.246130563" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 </tool>
 <tool id="cdt.managedbuild.tool.gnu.archiver.macosx.base.29753783" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.macosx.base"/>
@@ -59,6 +59,9 @@
 </tool>
 </toolChain>
 </folderInfo>
+<sourceEntries>
+<entry excluding="build-unix" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+</sourceEntries>
 </configuration>
 </storageModule>
 <storageModule moduleId="scannerConfiguration">
@@ -482,7 +485,7 @@
 <cconfiguration id="cdt.managedbuild.config.macosx.exe.release.827990123">
 <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.macosx.exe.release.827990123" moduleId="org.eclipse.cdt.core.settings" name="Release">
 <macros>
-<stringMacro name="SYSTEMC" type="VALUE_PATH_DIR" value="/Users/charleswilson/Documents/SystemC/osci/systemc/2.3-gcc4.0"/>
+<stringMacro name="ProjDirPath" type="VALUE_TEXT" value="../p2p/EndEventLT"/>
 </macros>
 <externalSettings/>
 <extensions>
@@ -502,7 +505,7 @@
 <tool id="cdt.managedbuild.tool.macosx.c.linker.macosx.exe.release.1704902776" name="MacOS X C Linker" superClass="cdt.managedbuild.tool.macosx.c.linker.macosx.exe.release"/>
 <tool id="cdt.managedbuild.tool.macosx.cpp.linker.macosx.exe.release.1137127440" name="MacOS X C++ Linker" superClass="cdt.managedbuild.tool.macosx.cpp.linker.macosx.exe.release">
 <option id="macosx.cpp.link.option.paths.1963049979" name="Library search path (-L)" superClass="macosx.cpp.link.option.paths" valueType="libPaths">
-<listOptionValue builtIn="false" value="&quot;${SYSTEMC}/lib-macosx-i386&quot;"/>
+<listOptionValue builtIn="false" value="&quot;${SYSTEMC}/${SYSTEMC_LIB_DIR}&quot;"/>
 </option>
 <option id="macosx.cpp.link.option.libs.1868048769" name="Libraries (-l)" superClass="macosx.cpp.link.option.libs" valueType="libs">
 <listOptionValue builtIn="false" value="systemc"/>
@@ -513,7 +516,7 @@
 </inputType>
 </tool>
 <tool id="cdt.managedbuild.tool.gnu.assembler.macosx.exe.release.1977651731" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.macosx.exe.release">
-<option id="gnu.both.asm.option.include.paths.2105946806" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath"/>
+<option id="gnu.both.asm.option.include.paths.2105946806" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths"/>
 <inputType id="cdt.managedbuild.tool.gnu.assembler.input.911318701" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 </tool>
 <tool id="cdt.managedbuild.tool.gnu.archiver.macosx.base.1951429990" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.macosx.base"/>
@@ -535,6 +538,9 @@
 </tool>
 </toolChain>
 </folderInfo>
+<sourceEntries>
+<entry excluding="build-unix" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+</sourceEntries>
 </configuration>
 </storageModule>
 <storageModule moduleId="scannerConfiguration">

@@ -6,7 +6,7 @@
 <cconfiguration id="cdt.managedbuild.config.gnu.macosx.exe.debug.1629952928">
 <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.macosx.exe.debug.1629952928" moduleId="org.eclipse.cdt.core.settings" name="Debug">
 <macros>
-<stringMacro name="SYSTEMC" type="VALUE_PATH_DIR" value="/Users/charleswilson/Documents/SystemC/osci/systemc/2.3-gcc4.0"/>
+<stringMacro name="ProjDirPath" type="VALUE_TEXT" value="../p2p/RegisterSocketProcessLT"/>
 </macros>
 <externalSettings/>
 <extensions>
@@ -26,7 +26,7 @@
 <tool id="cdt.managedbuild.tool.macosx.c.linker.macosx.exe.debug.1990561019" name="MacOS X C Linker" superClass="cdt.managedbuild.tool.macosx.c.linker.macosx.exe.debug"/>
 <tool id="cdt.managedbuild.tool.macosx.cpp.linker.macosx.exe.debug.13646400" name="MacOS X C++ Linker" superClass="cdt.managedbuild.tool.macosx.cpp.linker.macosx.exe.debug">
 <option id="macosx.cpp.link.option.paths.2116739171" name="Library search path (-L)" superClass="macosx.cpp.link.option.paths" valueType="libPaths">
-<listOptionValue builtIn="false" value="&quot;${SYSTEMC}/lib-macosx-i386&quot;"/>
+<listOptionValue builtIn="false" value="&quot;${SYSTEMC}/${SYSTEMC_LIB_DIR}&quot;"/>
 </option>
 <option id="macosx.cpp.link.option.libs.1852508060" name="Libraries (-l)" superClass="macosx.cpp.link.option.libs" valueType="libs">
 <listOptionValue builtIn="false" value="systemc"/>
@@ -480,7 +480,7 @@
 <cconfiguration id="cdt.managedbuild.config.macosx.exe.release.926475080">
 <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.macosx.exe.release.926475080" moduleId="org.eclipse.cdt.core.settings" name="Release">
 <macros>
-<stringMacro name="SYSTEMC" type="VALUE_PATH_DIR" value="/Users/charleswilson/Documents/SystemC/osci/systemc/2.3-gcc4.0"/>
+<stringMacro name="ProjDirPath" type="VALUE_TEXT" value="../p2p/RegisterSocketProcessLT"/>
 </macros>
 <externalSettings/>
 <extensions>
@@ -500,7 +500,7 @@
 <tool id="cdt.managedbuild.tool.macosx.c.linker.macosx.exe.release.1028143822" name="MacOS X C Linker" superClass="cdt.managedbuild.tool.macosx.c.linker.macosx.exe.release"/>
 <tool id="cdt.managedbuild.tool.macosx.cpp.linker.macosx.exe.release.513596064" name="MacOS X C++ Linker" superClass="cdt.managedbuild.tool.macosx.cpp.linker.macosx.exe.release">
 <option id="macosx.cpp.link.option.paths.1699087377" name="Library search path (-L)" superClass="macosx.cpp.link.option.paths" valueType="libPaths">
-<listOptionValue builtIn="false" value="&quot;${SYSTEMC}/lib-macosx-i386&quot;"/>
+<listOptionValue builtIn="false" value="&quot;${SYSTEMC}/${SYSTEMC_LIB_DIR}&quot;"/>
 </option>
 <option id="macosx.cpp.link.option.libs.827825494" name="Libraries (-l)" superClass="macosx.cpp.link.option.libs" valueType="libs">
 <listOptionValue builtIn="false" value="systemc"/>

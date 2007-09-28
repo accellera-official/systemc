@@ -6,7 +6,7 @@
 <cconfiguration id="cdt.managedbuild.config.gnu.macosx.exe.debug.683170378">
 <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.macosx.exe.debug.683170378" moduleId="org.eclipse.cdt.core.settings" name="Debug">
 <macros>
-<stringMacro name="SYSTEMC" type="VALUE_PATH_DIR" value="/Users/charleswilson/Documents/SystemC/osci/systemc/2.3-gcc4.0"/>
+<stringMacro name="ProjDirPath" type="VALUE_TEXT" value="../p2p/SimpleAT"/>
 </macros>
 <externalSettings/>
 <extensions>
@@ -18,7 +18,7 @@
 </extensions>
 </storageModule>
 <storageModule moduleId="cdtBuildSystem" version="4.0.0">
-<configuration artifactExtension="" artifactName="SimpleAT" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.macosx.exe.debug.683170378" name="Debug" parent="cdt.managedbuild.config.gnu.macosx.exe.debug">
+<configuration artifactExtension="" artifactName="SimpleAT" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.macosx.exe.debug.683170378" name="Debug" parent="cdt.managedbuild.config.gnu.macosx.exe.debug">
 <folderInfo id="cdt.managedbuild.config.gnu.macosx.exe.debug.683170378." name="/" resourcePath="">
 <toolChain id="cdt.managedbuild.toolchain.gnu.macosx.exe.debug.1114323839" name="MacOSX GCC" superClass="cdt.managedbuild.toolchain.gnu.macosx.exe.debug">
 <targetPlatform id="cdt.managedbuild.target.gnu.platform.macosx.exe.debug.519126761" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.macosx.exe.debug"/>
@@ -29,7 +29,7 @@
 <listOptionValue builtIn="false" value="systemc"/>
 </option>
 <option id="macosx.cpp.link.option.paths.852951356" name="Library search path (-L)" superClass="macosx.cpp.link.option.paths" valueType="libPaths">
-<listOptionValue builtIn="false" value="&quot;${SYSTEMC}/lib-macosx-i386&quot;"/>
+<listOptionValue builtIn="false" value="&quot;${SYSTEMC}/${SYSTEMC_LIB_DIR}&quot;"/>
 </option>
 <inputType id="cdt.managedbuild.tool.macosx.cpp.linker.input.1552384501" superClass="cdt.managedbuild.tool.macosx.cpp.linker.input">
 <additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -58,6 +58,9 @@
 </tool>
 </toolChain>
 </folderInfo>
+<sourceEntries>
+<entry excluding="build-unix" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+</sourceEntries>
 </configuration>
 </storageModule>
 <storageModule moduleId="scannerConfiguration">
@@ -483,7 +486,7 @@
 <cconfiguration id="cdt.managedbuild.config.macosx.exe.release.1913460825">
 <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.macosx.exe.release.1913460825" moduleId="org.eclipse.cdt.core.settings" name="Release">
 <macros>
-<stringMacro name="SYSTEMC" type="VALUE_PATH_DIR" value="/Users/charleswilson/Documents/SystemC/osci/systemc/2.3-gcc4.0"/>
+<stringMacro name="ProjDirPath" type="VALUE_TEXT" value="../p2p/SimpleAT"/>
 </macros>
 <externalSettings/>
 <extensions>
@@ -495,7 +498,7 @@
 </extensions>
 </storageModule>
 <storageModule moduleId="cdtBuildSystem" version="4.0.0">
-<configuration artifactName="SimpleAT" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.macosx.exe.release.1913460825" name="Release" parent="cdt.managedbuild.config.macosx.exe.release">
+<configuration artifactName="SimpleAT" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.macosx.exe.release.1913460825" name="Release" parent="cdt.managedbuild.config.macosx.exe.release">
 <folderInfo id="cdt.managedbuild.config.macosx.exe.release.1913460825." name="/" resourcePath="">
 <toolChain id="cdt.managedbuild.toolchain.gnu.macosx.exe.release.791099522" name="MacOSX GCC" superClass="cdt.managedbuild.toolchain.gnu.macosx.exe.release">
 <targetPlatform id="cdt.managedbuild.target.gnu.platform.macosx.exe.release.1348787890" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.macosx.exe.release"/>
@@ -506,7 +509,7 @@
 <listOptionValue builtIn="false" value="systemc"/>
 </option>
 <option id="macosx.cpp.link.option.paths.1542827211" name="Library search path (-L)" superClass="macosx.cpp.link.option.paths" valueType="libPaths">
-<listOptionValue builtIn="false" value="&quot;${SYSTEMC}/lib-macosx-i386&quot;"/>
+<listOptionValue builtIn="false" value="&quot;${SYSTEMC}/${SYSTEMC_LIB_DIR}&quot;"/>
 </option>
 <inputType id="cdt.managedbuild.tool.macosx.cpp.linker.input.1466684626" superClass="cdt.managedbuild.tool.macosx.cpp.linker.input">
 <additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -535,6 +538,9 @@
 </tool>
 </toolChain>
 </folderInfo>
+<sourceEntries>
+<entry excluding="build-unix" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+</sourceEntries>
 </configuration>
 </storageModule>
 <storageModule moduleId="scannerConfiguration">
