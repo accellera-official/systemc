@@ -20,14 +20,15 @@
 #define _TLM_GP_PORT_H
 
 
-#include "systemc.h"
+#include "systemc"
 #include "tlm_nb_transport_if.h"
 #include "tlm_generic_payload.h"
 
 namespace tlm {
 
 template< unsigned int busdatawidth > // in bits
-class tlm_gp_port : virtual public sc_port< tlm::nb_transport_if<tlm::tlm_generic_payload> >
+class tlm_gp_port
+    : virtual public sc_core::sc_port< tlm::nb_transport_if<tlm::tlm_generic_payload> >
 {
 	typedef tlm::nb_transport_if<tlm::tlm_generic_payload> interfaceType;
 
@@ -35,7 +36,7 @@ public:
 
 	// Constructor
 	tlm_gp_port(const char* name = 0) 
-		: sc_port< interfaceType >(name)
+		: sc_core::sc_port< interfaceType >(name)
 		, m_busdatawidth(busdatawidth)
 	{
 	}
@@ -44,8 +45,8 @@ public:
 	~tlm_gp_port() {}
 
 	// Binding
-	void operator () ( interfaceType& exp ) { sc_port< interfaceType >::operator() ( exp ); }
-	void operator () ( tlm_gp_port< busdatawidth >& p ) { sc_port< interfaceType >::operator() ( p ); }
+	void operator () ( interfaceType& exp ) { sc_core::sc_port< interfaceType >::operator() ( exp ); }
+	void operator () ( tlm_gp_port< busdatawidth >& p ) { sc_core::sc_port< interfaceType >::operator() ( p ); }
 
 	// Convenient function
 	unsigned int getBusDataWidth() {return m_busdatawidth;}

@@ -64,7 +64,7 @@ namespace tlm {
       memcpy(dest, src, nrOfBytes);
 
     } else {
-      for (int i = 0; i < nrOfBytes; ++i) {
+      for (unsigned int i = 0; i < nrOfBytes; ++i) {
         dest[i] = src[nrOfBytes - 1 - i];
       }
     }

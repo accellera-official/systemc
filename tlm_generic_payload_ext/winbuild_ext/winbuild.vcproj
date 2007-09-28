@@ -252,7 +252,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\tlm_vector.h"
+				RelativePath="..\tlm_array.h"
 				>
 			</File>
 		</Filter>

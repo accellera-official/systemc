@@ -1,5 +1,23 @@
+/*****************************************************************************
+
+  The following code is derived, directly or indirectly, from the SystemC
+  source code Copyright (c) 1996-2007 by all Contributors.
+  All Rights reserved.
+
+  The contents of this file are subject to the restrictions and limitations
+  set forth in the SystemC Open Source License Version 2.4 (the "License");
+  You may not use this file except in compliance with such restrictions and
+  limitations. You may obtain instructions on how to receive a copy of the
+  License at http://www.systemc.org/. Software distributed by Contributors
+  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
+  ANY KIND, either express or implied. See the License for the specific
+  language governing rights and limitations under the License.
+
+*****************************************************************************/
 
 #include "tlm_master.h"
+
+using namespace std;
 
 void tlm_master::test_single_write(bool use_ext1,
                                    bool use_ext2,
@@ -7,8 +25,6 @@ void tlm_master::test_single_write(bool use_ext1,
 {
     unsigned int m_address = 0x10; 
     unsigned int m_data = 100;
-    
-    // Single WRITE transaction 
     
     cout << name() << " : Single WRITE transaction : ";
     
@@ -19,17 +35,20 @@ void tlm_master::test_single_write(bool use_ext1,
     m_gp.set_burst_mode(tlm::TLM_INCREMENT_BURST);
     m_gp.set_data_ptr((unsigned char*)&m_data);
     
+    // Add/clear extensions:
     if (use_ext1)
     {
-        m_gp.add_extension(&m_ext1);
+        m_gp.set_extension(&m_ext1);
+        // or: m_gp.set_extension(tlm_extension1::ID, &m_ext1);
     }
     else
     {
         m_gp.clear_extension(&m_ext1);
+        // or: m_gp.clear_extension(tlm_extension1::ID);
     }
     if (use_ext2)
     {
-        m_gp.add_extension(&m_ext2);
+        m_gp.set_extension(&m_ext2);
     }
     else
     {
@@ -37,7 +56,7 @@ void tlm_master::test_single_write(bool use_ext1,
     }
     if (use_ext3)
     {
-        m_gp.add_extension(&m_ext3);
+        m_gp.set_extension(&m_ext3);
     }
     else
     {
@@ -73,10 +92,10 @@ void tlm_master::test_single_read()
     m_gp.set_data_ptr((unsigned char*)&m_data);
     
 
-    // Clear by direct access:
-    m_gp.clear_extension(&m_ext1);
-    m_gp.clear_extension(&m_ext2);
-    m_gp.clear_extension(&m_ext3);
+    // Clear extension array using direct indexes:
+    m_gp.clear_extension(tlm_extension1::ID);
+    m_gp.clear_extension(tlm_extension2::ID);
+    m_gp.clear_extension(tlm_extension3::ID);
 
     bus_port->nb_transport(&m_gp);
     

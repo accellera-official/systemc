@@ -30,9 +30,9 @@ public:
 	tlm_checker(sc_dt::uint64 start_address_range, // first address 
 				sc_dt::uint64 end_address_range,   // last address
 				unsigned int bus_data_width)
-		: m_start_address_range(start_address_range)
+		: m_bus_data_width(bus_data_width)
+		, m_start_address_range(start_address_range)
 		, m_end_address_range(end_address_range)
-		, m_bus_data_width(bus_data_width)
 		, m_write_command_supported(true)
 		, m_read_command_supported(true)
 		, m_burst_supported(true)

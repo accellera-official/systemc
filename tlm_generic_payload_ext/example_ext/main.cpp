@@ -15,11 +15,10 @@
 
  *****************************************************************************/
 
-#include "systemc.h"
+#include "systemc"
 
 #include "tlm_master.h"
 #include "tlm_slave.h"
-
 
 int sc_main(int argc, char* argv[])
 {
@@ -34,7 +33,7 @@ int sc_main(int argc, char* argv[])
     // connections
     master_1->bus_port(slave_1->bus_port);
     
-    sc_start();
+    sc_core::sc_start();
     
     if (master_1) {delete master_1;}
     if (slave_1) {delete slave_1;}

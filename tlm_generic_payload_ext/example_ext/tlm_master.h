@@ -18,61 +18,62 @@
 #ifndef _TLM_MASTER_H
 #define _TLM_MASTER_H
 
-#include "systemc.h"
+#include "systemc"
 
 #include "tlm_gp_port.h"
 
 #include "tlm_extensions.h"
 
-class tlm_master : public sc_module
+class tlm_master : public sc_core::sc_module
 {
 public:
     
-	tlm::tlm_gp_port< 32 > bus_port; // bus data width in bits
-
+    tlm::tlm_gp_port< 32 > bus_port; // bus data width in bits
+    
     SC_HAS_PROCESS(tlm_master);
-
-	// Constructor
-    tlm_master(sc_module_name _name)
-        : sc_module(_name)
+    
+    // Constructor
+    tlm_master(sc_core::sc_module_name _name)
+        : sc_core::sc_module(_name)
         , bus_port("bus_port")
-	{
-            m_ext1.data1 = 10;
-            m_ext2.data2 = 20;
-            m_ext3.data3 = 30;
-            SC_THREAD(main);
-	}
+    {
+        m_ext1.data1 = 10;
+        m_ext2.data2 = 20;
+        m_ext3.data3 = 30;
+        SC_THREAD(main);
+    }
     
     // Destructor
     ~tlm_master()
-	{
-	}
+    {
+    }
     
     void main()
-	{
-            while(true)
-            {
-                test_single_write(false, false, false);
-                test_single_write(false, false, true);
-                test_single_write(false, true,  false);
-                test_single_write(false, true,  true);
-                test_single_write(true,  false, false);
-                test_single_write(true,  false, true);
-                test_single_write(true,  true,  false);
-                test_single_write(true,  true,  true);
-                test_single_read();
-                sc_stop();
-                sc_core::wait();
-            }
-	}
-
+    {
+        while(true)
+        {
+            test_single_write(false, false, false);
+            test_single_write(false, false, true);
+            test_single_write(false, true,  false);
+            test_single_write(false, true,  true);
+            test_single_write(true,  false, false);
+            test_single_write(true,  false, true);
+            test_single_write(true,  true,  false);
+            test_single_write(true,  true,  true);
+            test_single_read();
+            sc_core::sc_stop();
+            sc_core::wait();
+        }
+    }
+    
 private:
-
+    
     tlm::tlm_generic_payload  m_gp;
+    // Extension objects:
     tlm_extension1 m_ext1;
     tlm_extension2 m_ext2;
     tlm_extension3 m_ext3;
-
+    
     // GP tests
     void test_single_write(bool use_ex1,
                            bool use_ex2,

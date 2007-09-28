@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2004 by all Contributors.
+  source code Copyright (c) 1996-2007 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -20,14 +20,14 @@
 #define _TLM_GENERIC_PAYLOAD_H
 
 #include <systemc>
-#include "tlm_vector.h"
+#include "tlm_array.h"
 
 namespace tlm {
 
 //---------------------------------------------------------------------------
-// Helper classes for the extension mechanism
+// Classes and helper functions for the extension mechanism
 //---------------------------------------------------------------------------
-// Registry for extensions:
+// Helper function:
 inline unsigned int max_num_extensions(bool increment=false)
 {
     static unsigned int max_num = 0;
@@ -35,35 +35,32 @@ inline unsigned int max_num_extensions(bool increment=false)
     return max_num;
 }
 
-// Base class for extension storage in the extension vector:
+// This class can be used for storing pointers to the extension classes, used
+// in tlm_generic_payload:
 class tlm_extension_base
 {
 public:
-    virtual tlm_extension_base* clone() = 0;
     static unsigned int register_extension()
     {
         static int extension_index = -1;
         max_num_extensions(true);
         return (unsigned int)++extension_index;
     };
-    virtual ~tlm_extension_base() {}
 };
 
-// All extension classes must be derived publicly from this class as
-// follows:
+// Base class for all extension classes, derive your extension class in
+// the following way:
 // class my_extension : public tlm_extension<my_extension> { ...
-// This allows for extension registration during C++ static contruction time.
-// We require that an extension class implements the clone() method.
+// This triggers proper extension registration during C++ static
+// contruction time. my_extension::ID will hold the unique index in the
+// tlm_generic_payload::m_extensions array.
 template <typename T>
 class tlm_extension : public tlm_extension_base
 {
 public:
-    virtual tlm_extension_base* clone() = 0;
     const static unsigned int ID;
-    virtual ~tlm_extension() {}
 };
 
-// The actual registration call:
 template <typename T>
 const
 unsigned int tlm_extension<T>::ID = tlm_extension_base::register_extension();
@@ -205,74 +202,92 @@ public:
     }
     
     /* --------------------------------------------------------------------- */
-    /* Extension mechanism:                                                  */
+    /* Dynamic extension mechanism:                                          */
     /* --------------------------------------------------------------------- */
     /* The extension mechanism is intended to enable initiator modules to    */
     /* optionally and transparently add data fields to the                   */
-    /* tlm_generic_payload. Any target module may check if a specific        */
-    /* extension is present, and should respond gracefully if it is present  */
-    /* or not. */
-    /* This mechanism is mainly intended, but not restricted to,             */
-    /* communicate non-protocol relevant data, e.g. debugging information,   */
-    /* in a transparent manner over the system.                              */
+    /* tlm_generic_payload. Target modules are free to check for extensions  */
+    /* and may or may not react to the data in the extension fields. The     */
+    /* definition of the extensions' semantics is solely in the              */
+    /* responsibility of the user.                                           */
     /*                                                                       */
     /* The following rules apply:                                            */
-    /* - Every extension class must be derived from tlm_extension, like:     */
-    /*      class my_extension : public tlm_extension<my_extension> { ...    */
-    /* - A tlm_generic_payload object must only be constructed after C++     */
-    /*   static initialization time. Only this way we can guarantee that the */
-    /*   extension vector is of sufficient size to hold all possible         */
-    /*   extensions. This restriction can be dropped if the initiator        */
-    /*   module makes sure that the resize_extensions() method is called     */
-    /*   once before the first transaction with this payload object is       */
+    /*                                                                       */
+    /* - Every extension class must be derived from tlm_extension, e.g.:     */
+    /*     class my_extension : public tlm_extension<my_extension> { ... }   */
+    /*                                                                       */
+    /* - A tlm_generic_payload object should be constructed after C++        */
+    /*   static initialization time. This way it is guaranteed that the      */
+    /*   extension array is of sufficient size to hold all possible          */
+    /*   extensions. Alternatively, the initiator module can enforce a valid */
+    /*   extension array size by calling the resize_extensions() method      */
+    /*   once before the first transaction with the payload object is        */
     /*   initiated.                                                          */
+    /*                                                                       */
+    /* - Initiators should use the the set_extension(e) or clear_extension(e)*/
+    /*   methods for manipulating the extension array. The type of the       */
+    /*   argument must be a pointer to the specific registered extension     */
+    /*   type (my_extension in the above example) and is used to             */
+    /*   automatically locate the appropriate index in the array.            */
+    /*                                                                       */
+    /* - Targets can check for a specific extension by calling               */
+    /*   get_extension(e). e will point to zero if the extension is not      */
+    /*   present.                                                            */
+    /*                                                                       */
     /* --------------------------------------------------------------------- */
 
-    tlm_vector<tlm_extension_base*> m_extensions;
-
-    // Add extension:
-    template <typename T> void add_extension(T* ext)
+    // Stick the pointer to an extension into the vector:
+    template <typename T> void set_extension(T* ext)
     {
         resize_extensions();
         m_extensions[T::ID] = static_cast<tlm_extension_base*>(ext);
     }
+    // non-templatized version with manual index:
+    void set_extension(unsigned int index, tlm_extension_base* ext)
+    {
+        resize_extensions();
+        m_extensions[index] = ext;
+    }
+
+    // Check for an extension, ext will point to 0 if not present
+    template <typename T> void get_extension(T*& ext)
+    {
+        ext = static_cast<T*>(m_extensions[T::ID]);
+    }
+    // Non-templatized version:
+     tlm_extension_base* get_extension(unsigned int index)
+    {
+        return m_extensions[index];
+    }
 
     // Clear extension, the argument is needed to find the right index:
-    template <typename T> void clear_extension(T* ext)
+    template <typename T> void clear_extension(const T* ext)
     {
         resize_extensions();
         m_extensions[T::ID] = static_cast<tlm_extension_base*>(0);
     }
-
-    // Check for an extension, returns 0 if not present
-    template <typename T> void get_extension(T*& ext)
+    // Non-templatized version with manual index
+    void clear_extension(unsigned int index)
     {
-#if 0
-        // Enabling this branch would make the use model independend of
-        // the contruction restriction. However, as checking for extensions
-        // may be done very frequently in the system, we think it's more
-        // efficient to require that an initiator always uses a proper
-        // payload object either by constructing at a safe time or by calling
-        // resize_extensions().
-        if(T::ID < m_extensions.size())
+        if (index < m_extensions.size())
         {
-            ext = static_cast<T*>(m_extensions[T::ID]);
+            m_extensions[index] = static_cast<tlm_extension_base*>(0);
         }
-        else
-        {
-            ext = 0;
-        }
-#else
-        ext = static_cast<T*>(m_extensions[T::ID]);
-#endif
     }
 
-    // Make sure the extension vector is large enough:
+    // Make sure the extension array is large enough. Can be called once by
+    // an initiator module (before issuing the first transaction) to make
+    // sure that the extension array is of correct size. This is only needed
+    // if the initiator cannot guarantee that the generic payload object is
+    // allocated after C++ static construction time.
     void resize_extensions()
     {
         m_extensions.expand(max_num_extensions());
     }
     
+protected:
+    tlm_array<tlm_extension_base*> m_extensions;
+
 };
 
 } // end namespace

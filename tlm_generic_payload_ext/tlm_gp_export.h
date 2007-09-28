@@ -20,14 +20,15 @@
 #define _TLM_GP_EXPORT_H
 
 
-#include "systemc.h"
+#include "systemc"
 #include "tlm_nb_transport_if.h"
 #include "tlm_generic_payload.h"
 
 namespace tlm {
 
 template< unsigned int busdatawidth > // in bits
-class tlm_gp_export : public sc_export< tlm::nb_transport_if<tlm::tlm_generic_payload> >
+class tlm_gp_export
+    : public sc_core::sc_export< tlm::nb_transport_if<tlm::tlm_generic_payload> >
 {
 	typedef tlm::nb_transport_if<tlm::tlm_generic_payload> interfaceType;
 
@@ -35,7 +36,7 @@ public:
 
 	// Constructor
 	tlm_gp_export(const char* name = 0) 
-		: sc_export< interfaceType >(name)
+		: sc_core::sc_export< interfaceType >(name)
 		, m_busdatawidth(busdatawidth)
 	{
 	}
@@ -44,8 +45,8 @@ public:
 	~tlm_gp_export() {}
 
 	// binding operators
-	void bind(tlm_gp_export< busdatawidth >& ex)	{ sc_export< interfaceType >::bind(ex); }
-	void bind( interfaceType& _if ) { sc_export< interfaceType >::bind(_if); }
+	void bind(tlm_gp_export< busdatawidth >& ex)	{ sc_core::sc_export< interfaceType >::bind(ex); }
+	void bind( interfaceType& _if ) { sc_core::sc_export< interfaceType >::bind(_if); }
 	
 	void operator() (tlm_gp_export< busdatawidth >& ex) { bind(ex); }
 	void operator() ( interfaceType& _if ) { bind(_if); }

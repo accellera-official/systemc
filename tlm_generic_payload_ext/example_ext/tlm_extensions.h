@@ -21,6 +21,11 @@
 
 #include "tlm_generic_payload.h"
 
+// This header file defines a simple set of extension classes.
+// The basic structure here is that the classes must be derived
+// from tlm_extension<T>, with T being the extension class
+// name.
+
 class tlm_extension1 :
    public tlm::tlm_extension<tlm_extension1>
 {
@@ -29,11 +34,6 @@ public:
         : data1(0)
     {}
     int data1;
-    
-    tlm_extension_base* clone()
-    {
-        return new tlm_extension1(*this);
-    }
 };
 
 class tlm_extension2 :
@@ -44,11 +44,6 @@ public:
         : data2(0)
     {}
     int data2;
-    
-    tlm_extension_base* clone()
-    {
-        return new tlm_extension2(*this);
-    }
 };
 
 class tlm_extension3 :
@@ -59,11 +54,6 @@ public:
         : data3(0)
     {}
     int data3;
-    
-    tlm_extension_base* clone()
-    {
-        return new tlm_extension3(*this);
-    }
 };
 
 #endif

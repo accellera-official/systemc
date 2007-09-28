@@ -18,44 +18,41 @@
 #ifndef _TLM_SLAVE_H
 #define _TLM_SLAVE_H
 
-#include "systemc.h"
+#include "systemc"
 
 #include "tlm_gp_export.h"
 
 #include "tlm_memory.h"
 #include "tlm_checkers.h"
 
-
 class tlm_slave
-	: public sc_module
-	, virtual public tlm::nb_transport_if<tlm::tlm_generic_payload>
+    : public sc_core::sc_module
+    , virtual public tlm::nb_transport_if<tlm::tlm_generic_payload>
 {
 public:
 
-	tlm::tlm_gp_export< 32 > bus_port; // bus data width in bits
+    tlm::tlm_gp_export< 32 > bus_port; // bus data width in bits
 
     SC_HAS_PROCESS(tlm_slave);
     
-	// constructor & destructor
-	tlm_slave(sc_module_name _name, unsigned int start_address, unsigned int end_address);
-	~tlm_slave() { }
+    // constructor & destructor
+    tlm_slave(sc_core::sc_module_name _name,
+              unsigned int start_address,
+              unsigned int end_address);
+    ~tlm_slave() { }
     
     // interface methods
     void nb_transport(tlm::tlm_generic_payload* gp);
     unsigned int transport_dbg(tlm::tlm_generic_payload* gp) {return 0;}
 
-    
 private:
-
     tlm_memory m_mem;
-
     unsigned int m_mem_size;
     unsigned int m_start_address;
     unsigned int m_end_address;
     unsigned int m_incr_address;
 
-	tlm::tlm_checker m_checker;
-
+    tlm::tlm_checker m_checker;
 }; 
 
 #endif
