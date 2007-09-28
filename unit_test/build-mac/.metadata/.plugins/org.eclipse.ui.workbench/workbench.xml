@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<workbench progressCount="14" version="2.0">
+<workbench progressCount="17" version="2.0">
 <workbenchAdvisor/>
-<window height="774" width="1280" x="0" y="22">
+<window height="774" width="1280" x="3" y="22">
 <fastViewData fastViewLocation="1024"/>
 <perspectiveBar>
 <itemSize x="287"/>
@@ -82,7 +82,7 @@
 </viewState>
 </view>
 <view id="org.eclipse.ui.views.ProblemView" partName="Problems">
-<viewState columnWidth0="544" columnWidth1="99" columnWidth2="174" columnWidth3="84" columnWidth4="0" horizontalPosition="0" verticalPosition="18">
+<viewState columnWidth0="544" columnWidth1="99" columnWidth2="174" columnWidth3="84" columnWidth4="0" horizontalPosition="0" verticalPosition="0">
 <columnOrder columnOrderIndex="0"/>
 <columnOrder columnOrderIndex="1"/>
 <columnOrder columnOrderIndex="2"/>
@@ -186,6 +186,8 @@
 <alwaysOnActionSet id="org.eclipse.cdt.ui.OpenActionSet"/>
 <alwaysOnActionSet id="org.eclipse.ui.edit.text.actionSet.presentation"/>
 <alwaysOnActionSet id="org.eclipse.debug.ui.debugActionSet"/>
+<alwaysOnActionSet id="org.tigris.subversion.subclipse.actionSet"/>
+<alwaysOnActionSet id="org.eclipse.team.ui.actionSet"/>
 <show_view_action id="org.eclipse.cdt.make.ui.views.MakeView"/>
 <show_view_action id="org.eclipse.cdt.ui.CView"/>
 <show_view_action id="org.eclipse.cdt.ui.includeBrowser"/>
@@ -306,6 +308,7 @@
 <view id="org.tigris.subversion.subclipse.ui.repository.RepositoriesView"/>
 <view id="org.tigris.subversion.subclipse.ui.annotations.AnnotateView"/>
 <view id="org.eclipse.team.ui.GenericHistoryView"/>
+<view id="org.eclipse.ui.console.ConsoleView"/>
 <fastViewBars/>
 <layout>&#x0A;<mainWindow>&#x0A;<info folder="true" part="top">&#x0A;<folder activePageID="org.tigris.subversion.subclipse.ui.repository.RepositoriesView" appearance="2" expanded="2">&#x0A;<page content="org.tigris.subversion.subclipse.ui.repository.RepositoriesView" label="SVN Repository"/>
 <page content="org.tigris.subversion.subclipse.ui.annotations.AnnotateView" label="SVN Annotate"/>
@@ -320,8 +323,10 @@
 </folder>
 </info>
 <info part="org.eclipse.ui.editorss" ratio="0.39937106" ratioLeft="508" ratioRight="764" relationship="2" relative="top"/>
-<info folder="true" part="org.eclipse.ui.internal.ViewStack@fd03f4" ratio="0.6998557" ratioLeft="485" ratioRight="208" relationship="4" relative="org.eclipse.ui.editorss">&#x0A;<folder activePageID="org.eclipse.team.ui.GenericHistoryView" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.team.ui.GenericHistoryView" label="History"/>
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@fd03f4" ratio="0.6998557" ratioLeft="485" ratioRight="208" relationship="4" relative="org.eclipse.ui.editorss">&#x0A;<folder activePageID="org.eclipse.ui.console.ConsoleView" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.team.ui.GenericHistoryView" label="History"/>
+<page content="org.eclipse.ui.console.ConsoleView" label="Console"/>
 <presentation id="org.eclipse.ui.internal.presentations.r33.WorkbenchPresentationFactory_33">&#x0A;<part id="0"/>
+<part id="1"/>
 </presentation>
 </folder>
 </info>
@@ -433,14 +438,26 @@
 </trimLayout>
 </window>
 <mruList>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="base_socket_LT.cpp" tooltip="BaseSocketLT/src/base_socket_LT.cpp">
+<persistable path="/BaseSocketLT/src/base_socket_LT.cpp"/>
+</file>
+<file factoryID="org.eclipse.cdt.ui.ExternalEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="simple_socket_utils.h" tooltip="/Users/charleswilson/Documents/ESLX/projects/tlm_2_1/unit_test/common/include/SimpleSocket/simple_socket_utils.h">
+<persistable path="/Users/charleswilson/Documents/ESLX/projects/tlm_2_1/unit_test/common/include/SimpleSocket/simple_socket_utils.h" project="SimpleAT_TA"/>
+</file>
+<file factoryID="org.eclipse.cdt.ui.ExternalEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="tlm_quantumkeeper.h" tooltip="/Users/charleswilson/Documents/ESLX/projects/tlm_2_1/include/tlm_quantum/tlm_quantumkeeper.h">
+<persistable path="/Users/charleswilson/Documents/ESLX/projects/tlm_2_1/include/tlm_quantum/tlm_quantumkeeper.h" project="transactor"/>
+</file>
+<file factoryID="org.eclipse.cdt.ui.ExternalEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="tlm.h" tooltip="/Users/charleswilson/Documents/ESLX/projects/tlm_2_1/include/tlm.h">
+<persistable path="/Users/charleswilson/Documents/ESLX/projects/tlm_2_1/include/tlm.h" project="transactor"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="simple_AT_TA.cpp" tooltip="SimpleAT_TA/src/simple_AT_TA.cpp">
+<persistable path="/SimpleAT_TA/src/simple_AT_TA.cpp"/>
+</file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="transactor.cpp" tooltip="transactor/src/transactor.cpp">
 <persistable path="/transactor/src/transactor.cpp"/>
 </file>
 <file factoryID="org.eclipse.cdt.ui.ExternalEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="iostream" tooltip="/usr/include/c++/4.0.0/iostream">
 <persistable path="/usr/include/c++/4.0.0/iostream" project="SimpleAT_TA"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="simple_AT_TA.cpp" tooltip="SimpleAT_TA/src/simple_AT_TA.cpp">
-<persistable path="/SimpleAT_TA/src/simple_AT_TA.cpp"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="simple_AT.cpp" tooltip="SimpleAT/src/simple_AT.cpp">
 <persistable path="/SimpleAT/src/simple_AT.cpp"/>
@@ -454,14 +471,8 @@
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="end_event_LT.cpp" tooltip="EndEventLT/src/end_event_LT.cpp">
 <persistable path="/EndEventLT/src/end_event_LT.cpp"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="base_socket_LT.cpp" tooltip="BaseSocketLT/src/base_socket_LT.cpp">
-<persistable path="/BaseSocketLT/src/base_socket_LT.cpp"/>
-</file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="tlm_byte_enable.h" tooltip="transactor/include/tlm_bus/tlm_byte_enable.h">
 <persistable path="/transactor/include/tlm_bus/tlm_byte_enable.h"/>
-</file>
-<file factoryID="org.eclipse.cdt.ui.ExternalEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="tlm.h" tooltip="/Users/charleswilson/Documents/ESLX/projects/tlm_2_1/include/tlm.h">
-<persistable path="/Users/charleswilson/Documents/ESLX/projects/tlm_2_1/include/tlm.h" project="transactor"/>
 </file>
 <file factoryID="org.eclipse.cdt.ui.ExternalEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="simple_master_socket.h" tooltip="/Users/charleswilson/Documents/ESLX/projects/tlm_2_1/unit_test/common/include/SimpleSocket/simple_master_socket.h">
 <persistable path="/Users/charleswilson/Documents/ESLX/projects/tlm_2_1/unit_test/common/include/SimpleSocket/simple_master_socket.h" project="bus"/>
@@ -471,9 +482,6 @@
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="bus.cpp" tooltip="bus/src/bus.cpp">
 <persistable path="/bus/src/bus.cpp"/>
-</file>
-<file factoryID="org.eclipse.cdt.ui.ExternalEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="MyPEQ.h" tooltip="/Users/charleswilson/Documents/ESLX/projects/tlm_2_1/unit_test/common/include/utils/MyPEQ.h">
-<persistable path="/Users/charleswilson/Documents/ESLX/projects/tlm_2_1/unit_test/common/include/utils/MyPEQ.h" project="bus"/>
 </file>
 </mruList>
 </workbench>
