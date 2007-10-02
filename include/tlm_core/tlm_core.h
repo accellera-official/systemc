@@ -21,6 +21,16 @@
 #define TLM_CORE_HEADER
 
 //#include "systemc.h"
+#include <stdint.h>
+
+// 64-bit ints
+#if ( #defined ( _INT64_T ) )
+typedef unsigned long long   uint64_t;
+#endif /* _INT64_T */
+
+#if ( #defined ( _UINT64_T ) )
+typedef unsigned long long   uint64_t;
+#endif /* _UINT64_T */
 
 namespace tlm_annotated  /// TLM annotated namespace
 {
