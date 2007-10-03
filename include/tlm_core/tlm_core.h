@@ -28,10 +28,12 @@
 
 // 64-bit ints
 #if ( ! defined ( _INT64_T ) )
+#define _INT64_T
 typedef long long   int64_t;
 #endif /* ! _INT64_T */
 
 #if ( ! defined ( _UINT64_T ) )
+#define _UINT64_T
 typedef unsigned long long   uint64_t;
 #endif /* ! _UINT64_T */
 
