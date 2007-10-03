@@ -20,7 +20,7 @@ CFLAGS = $(FLAGS) $(INCDIR)
 
 .PHONE: clean all
 
-all: $(OBJ_NAME)
+all: $(OBJ_NAME).exe
 
 .c.o:
 	$(GCC) $(CFLAGS) -c $<
@@ -29,14 +29,14 @@ all: $(OBJ_NAME)
 .cc.o:
 	$(GXX) $(CFLAGS) -c $< -o $@
 
-$(OBJ_NAME): $(OBJ_NAME).o
+$(OBJ_NAME).exe: $(OBJ_NAME).o
 	$(GXX) -o $@ $(OBJ_NAME).o $(LIBS)
 
 $(OBJ_NAME).o: $(SRCDIR)/$(OBJ_NAME).cpp
-	$(GXX) -c $(CFLAGS) $(SRCDIR)/$(OBJ_NAME).cpp
+	$(GXX) -c $(CFLAGS) $(SRCDIR)/$(OBJ_NAME).cpp  $< -o $@
 
 clean:
-	\rm -f $(OBJ_NAME) *.o
+	rm -f $(OBJ_NAME).exe *.o
 
 # DO NOT DELETE
 

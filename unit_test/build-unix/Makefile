@@ -1,7 +1,8 @@
 
 SUBDIRS = \
  	../bus \
-        ../p2p \
+ 	../gp_extension \
+    ../p2p \
 	../transactor
 
 .PHONY: all clean

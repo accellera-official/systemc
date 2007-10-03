@@ -29,14 +29,14 @@ all: $(OBJ_NAME)
 .cc.o:
 	$(GXX) $(CFLAGS) -c $< -o $@
 
-$(OBJ_NAME): $(OBJ_NAME).o
+$(OBJ_NAME).exe: $(OBJ_NAME).o
 	$(GXX) -o $@ $(OBJ_NAME).o $(LIBS)
 
 $(OBJ_NAME).o: $(SRCDIR)/$(OBJ_NAME).cpp
 	$(GXX) -c $(CFLAGS) $(SRCDIR)/$(OBJ_NAME).cpp
 
 clean:
-	\rm -f $(OBJ_NAME) *.o
+	rm -f $(OBJ_NAME).exe *.o
 
 # DO NOT DELETE
 
