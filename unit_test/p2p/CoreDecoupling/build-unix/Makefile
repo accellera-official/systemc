@@ -20,7 +20,7 @@ CFLAGS = $(FLAGS) $(INCDIR)
 
 .PHONE: clean all
 
-all: $(OBJ_NAME)
+all: $(OBJ_NAME).exe
 
 .c.o:
 	$(GCC) $(CFLAGS) -c $<
