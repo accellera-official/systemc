@@ -10,7 +10,7 @@ namespace tlm {
 
   inline bool hostHasLittleEndianness()
   {
-#if defined(__sparc) || defined(macintosh) || defined(__hppa)
+#if defined(__sparc) || defined(macintosh) || defined(__hppa) || defined(__APPLE__)
 
 	  return false; // HOST IS BIG ENDIAN
 
