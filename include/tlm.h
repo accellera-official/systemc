@@ -25,14 +25,14 @@
 #include <deque>      /// STD deque class
 #include <map>        /// STD map class
 
-#include "tlm_core/tlm_core.h"
-#include "tlm_analysis/tlm_analysis.h"
-#include "tlm_annotated/tlm_annotated.h"
-#include "tlm_bus/tlm_bus.h"
-#include "tlm_generic_payload/tlm_generic_payload.h"
-//#include "tlm_analysis/tlm_bus_analysis.h"
-#include "tlm_ports/tlm_ports.h"
-#include "tlm_quantum/tlm_quantum.h"
+#include "tlm_h/tlm_core/tlm_core.h"
+#include "tlm_h/tlm_analysis/tlm_analysis.h"
+#include "tlm_h/tlm_annotated/tlm_annotated.h"
+#include "tlm_h/tlm_bus/tlm_bus.h"
+#include "tlm_h/tlm_generic_payload/tlm_generic_payload.h"
+//#include "tlm_h/tlm_analysis/tlm_bus_analysis.h"
+#include "tlm_h/tlm_ports/tlm_ports.h"
+#include "tlm_h/tlm_quantum/tlm_quantum.h"
 
 namespace tlm  /// TLM namespace
 {
