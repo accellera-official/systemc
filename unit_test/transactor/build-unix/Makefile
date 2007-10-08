@@ -8,7 +8,7 @@ FLAGS = -g -Wall
 
 OBJ_NAME = transactor
 
-INCDIR = -I$(SYSTEMC_HOME)/include -I$(TLM_HOME)/include -I../../common/include/SimpleSocket -I../../common/include/models -I../../common/include/utils -I../include/transactors -I../include/tlm_bus
+INCDIR = -I$(SYSTEMC_HOME)/include -I$(TLM_HOME)/include/tlm_h -I../../common/include/SimpleSocket -I../../common/include/models -I../../common/include/utils -I../include/transactors -I../include/tlm_bus
 SRCDIR = ../src
 LIBDIR = -L$(SYSTEMC_HOME)/lib-$(TARGET_ARCH)
 

@@ -8,7 +8,7 @@ FLAGS = -g -Wall
 
 OBJ_NAME = simple_AT_TA
 
-INCDIR = -I$(SYSTEMC_HOME)/include -I$(TLM_HOME)/include -I../../../common/include/models -I../../../common/include/SimpleSocket
+INCDIR = -I$(SYSTEMC_HOME)/include -I$(TLM_HOME)/include/tlm_h -I../../../common/include/models -I../../../common/include/SimpleSocket
 SRCDIR = ../src
 LIBDIR = -L$(SYSTEMC_HOME)/lib-$(TARGET_ARCH)
 
