@@ -1,0 +1,4 @@
+#Mon Oct 08 21:34:58 CDT 2007
+eclipse.preferences.version=1
+org.eclipse.jsch.core.hasMigratedSsh2Preferences=true
+SSH2HOME=.

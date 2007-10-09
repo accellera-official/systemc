@@ -1,0 +1,13 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+# Add inputs and outputs from these tool invocations to the build variables 
+O_SRCS += \
+../build-unix/generic_packet_extension.o \
+../build-unix/tlm_master.o \
+../build-unix/tlm_slave.o 
+
+
+# Each subdirectory must supply rules for building sources it contributes
+

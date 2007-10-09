@@ -1,0 +1,4 @@
+#Wed Sep 26 19:25:55 CDT 2007
+eclipse.preferences.version=1
+org.eclipse.debug.ui.PREF_LAUNCH_PERSPECTIVES=<?xml version\="1.0" encoding\="UTF-8"?>\n<launchPerspectives/>\n
+org.eclipse.debug.ui.user_view_bindings=<?xml version\="1.0" encoding\="UTF-8"?>\n<viewBindings>\n<view id\="org.eclipse.ui.console.ConsoleView">\n<perspective id\="org.tigris.subversion.subclipse.ui.svnPerspective" userAction\="opened"/>\n</view>\n</viewBindings>\n

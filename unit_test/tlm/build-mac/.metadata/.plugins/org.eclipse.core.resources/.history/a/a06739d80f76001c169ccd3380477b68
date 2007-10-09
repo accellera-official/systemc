@@ -1,0 +1,24 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+# Add inputs and outputs from these tool invocations to the build variables 
+CPP_SRCS += \
+../src/simple_AT_TA.cpp 
+
+OBJS += \
+./src/simple_AT_TA.o 
+
+CPP_DEPS += \
+./src/simple_AT_TA.d 
+
+
+# Each subdirectory must supply rules for building sources it contributes
+src/%.o: ../src/%.cpp
+	@echo 'Building file: $<'
+	@echo 'Invoking: GCC C++ Compiler'
+	g++ -I"/Users/charleswilson/Documents/SystemC/osci/systemc/2.3-gcc4.0/include" -I../../../../../include/tlm_h -I../../../common/include/models -I../../../common/include/SimpleSocket -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o"$@" "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+

@@ -1,0 +1,3 @@
+#Mon Oct 08 17:22:56 CDT 2007
+eclipse.preferences.version=1
+environment/project/cdt.managedbuild.config.macosx.exe.release.897953340=<?xml version\="1.0" encoding\="UTF-8"?>\n<environment append\="true">\n<variable name\="PWD" operation\="replace" value\="./Release"/>\n<variable name\="CWD" operation\="replace" value\="./Release"/>\n</environment>\n
