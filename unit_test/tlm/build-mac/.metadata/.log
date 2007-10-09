@@ -1398,3 +1398,435 @@ org.eclipse.core.internal.resources.ResourceException: A resource already exists
 !MESSAGE Errors running builder 'CDT Builder' on project 'transactor'.
 !SUBENTRY 2 org.eclipse.core.resources 4 272 2007-10-08 17:31:02.661
 !MESSAGE A resource already exists on disk '/Users/charleswilson/Documents/ESLX/projects/tlm_2_1/unit_test/transactor/Release/sources.mk'.
+!SESSION 2007-10-09 10:40:44.507 -----------------------------------------------
+eclipse.buildId=I20070625-1500
+java.version=1.5.0_07
+java.vendor=Apple Computer, Inc.
+BootLoader constants: OS=macosx, ARCH=x86, WS=carbon, NL=en_US
+Framework arguments:  -keyring /Users/charleswilson/.eclipse_keyring -showlocation
+Command-line arguments:  -os macosx -ws carbon -arch x86 -keyring /Users/charleswilson/.eclipse_keyring -consoleLog -showlocation
+
+!ENTRY org.tigris.subversion.subclipse.core 4 0 2007-10-09 10:40:57.635
+!MESSAGE No subversion client interface found.
+!STACK 0
+org.tigris.subversion.svnclientadapter.SVNClientException: No subversion client interface found.
+	at org.tigris.subversion.svnclientadapter.SVNClientAdapterFactory.getPreferredSVNClientType(SVNClientAdapterFactory.java:86)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.setSvnClientInterface(SVNClientManager.java:59)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.getSvnClientInterface(SVNClientManager.java:97)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.createSVNClient(SVNClientManager.java:114)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.createSVNClient(SVNProviderPlugin.java:415)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.getAdminDirectoryName(SVNProviderPlugin.java:536)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.isManagedBySubversion(SVNProviderPlugin.java:568)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.isManagedBySubversion(SVNProviderPlugin.java:560)
+	at org.tigris.subversion.subclipse.core.SVNTeamProviderType.metaFilesDetected(SVNTeamProviderType.java:242)
+	at org.eclipse.team.internal.core.TeamResourceChangeListener.handleUnsharedProjectChanges(TeamResourceChangeListener.java:95)
+	at org.eclipse.team.internal.core.TeamResourceChangeListener.resourceChanged(TeamResourceChangeListener.java:54)
+	at org.eclipse.core.internal.events.NotificationManager$2.run(NotificationManager.java:282)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:37)
+	at org.eclipse.core.internal.events.NotificationManager.notify(NotificationManager.java:276)
+	at org.eclipse.core.internal.events.NotificationManager.broadcastChanges(NotificationManager.java:148)
+	at org.eclipse.core.internal.resources.Workspace.broadcastPostChange(Workspace.java:311)
+	at org.eclipse.core.internal.resources.Workspace.endOperation(Workspace.java:1018)
+	at org.eclipse.core.internal.resources.Resource.refreshLocal(Resource.java:1433)
+	at org.eclipse.cdt.internal.core.pdom.PDOMManager$3.syncronizeProjectSettings(PDOMManager.java:628)
+	at org.eclipse.cdt.internal.core.pdom.PDOMManager$3.run(PDOMManager.java:617)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+
+!ENTRY org.tigris.subversion.subclipse.core 4 0 2007-10-09 10:40:58.297
+!MESSAGE No subversion client interface found.
+!STACK 0
+org.tigris.subversion.svnclientadapter.SVNClientException: No subversion client interface found.
+	at org.tigris.subversion.svnclientadapter.SVNClientAdapterFactory.getPreferredSVNClientType(SVNClientAdapterFactory.java:86)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.setSvnClientInterface(SVNClientManager.java:59)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.getSvnClientInterface(SVNClientManager.java:97)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.createSVNClient(SVNClientManager.java:114)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.createSVNClient(SVNProviderPlugin.java:415)
+	at org.tigris.subversion.subclipse.core.resources.SVNWorkspaceRoot.peekResourceStatusFor(SVNWorkspaceRoot.java:290)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.isManagedBySubversion(SVNProviderPlugin.java:573)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.isManagedBySubversion(SVNProviderPlugin.java:560)
+	at org.tigris.subversion.subclipse.core.SVNTeamProviderType.metaFilesDetected(SVNTeamProviderType.java:242)
+	at org.eclipse.team.internal.core.TeamResourceChangeListener.handleUnsharedProjectChanges(TeamResourceChangeListener.java:95)
+	at org.eclipse.team.internal.core.TeamResourceChangeListener.resourceChanged(TeamResourceChangeListener.java:54)
+	at org.eclipse.core.internal.events.NotificationManager$2.run(NotificationManager.java:282)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:37)
+	at org.eclipse.core.internal.events.NotificationManager.notify(NotificationManager.java:276)
+	at org.eclipse.core.internal.events.NotificationManager.broadcastChanges(NotificationManager.java:148)
+	at org.eclipse.core.internal.resources.Workspace.broadcastPostChange(Workspace.java:311)
+	at org.eclipse.core.internal.resources.Workspace.endOperation(Workspace.java:1018)
+	at org.eclipse.core.internal.resources.Resource.refreshLocal(Resource.java:1433)
+	at org.eclipse.cdt.internal.core.pdom.PDOMManager$3.syncronizeProjectSettings(PDOMManager.java:628)
+	at org.eclipse.cdt.internal.core.pdom.PDOMManager$3.run(PDOMManager.java:617)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+
+!ENTRY org.eclipse.core.resources 4 2 2007-10-09 10:40:58.299
+!MESSAGE Problems occurred when invoking code from plug-in: "org.eclipse.core.resources".
+!STACK 0
+java.lang.NullPointerException
+	at org.tigris.subversion.subclipse.core.client.PeekStatusCommand.execute(PeekStatusCommand.java:88)
+	at org.tigris.subversion.subclipse.core.resources.SVNWorkspaceRoot.peekResourceStatusFor(SVNWorkspaceRoot.java:290)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.isManagedBySubversion(SVNProviderPlugin.java:573)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.isManagedBySubversion(SVNProviderPlugin.java:560)
+	at org.tigris.subversion.subclipse.core.SVNTeamProviderType.metaFilesDetected(SVNTeamProviderType.java:242)
+	at org.eclipse.team.internal.core.TeamResourceChangeListener.handleUnsharedProjectChanges(TeamResourceChangeListener.java:95)
+	at org.eclipse.team.internal.core.TeamResourceChangeListener.resourceChanged(TeamResourceChangeListener.java:54)
+	at org.eclipse.core.internal.events.NotificationManager$2.run(NotificationManager.java:282)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:37)
+	at org.eclipse.core.internal.events.NotificationManager.notify(NotificationManager.java:276)
+	at org.eclipse.core.internal.events.NotificationManager.broadcastChanges(NotificationManager.java:148)
+	at org.eclipse.core.internal.resources.Workspace.broadcastPostChange(Workspace.java:311)
+	at org.eclipse.core.internal.resources.Workspace.endOperation(Workspace.java:1018)
+	at org.eclipse.core.internal.resources.Resource.refreshLocal(Resource.java:1433)
+	at org.eclipse.cdt.internal.core.pdom.PDOMManager$3.syncronizeProjectSettings(PDOMManager.java:628)
+	at org.eclipse.cdt.internal.core.pdom.PDOMManager$3.run(PDOMManager.java:617)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+
+!ENTRY org.tigris.subversion.subclipse.core 4 0 2007-10-09 10:40:58.320
+!MESSAGE No subversion client interface found.
+!STACK 0
+org.tigris.subversion.svnclientadapter.SVNClientException: No subversion client interface found.
+	at org.tigris.subversion.svnclientadapter.SVNClientAdapterFactory.getPreferredSVNClientType(SVNClientAdapterFactory.java:86)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.setSvnClientInterface(SVNClientManager.java:59)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.getSvnClientInterface(SVNClientManager.java:97)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.createSVNClient(SVNClientManager.java:114)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.createSVNClient(SVNProviderPlugin.java:415)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.getAdminDirectoryName(SVNProviderPlugin.java:536)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.isAdminDirectory(SVNProviderPlugin.java:590)
+	at org.tigris.subversion.subclipse.core.resourcesListeners.SyncFileChangeListener$2.visit(SyncFileChangeListener.java:116)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:67)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.tigris.subversion.subclipse.core.resourcesListeners.SyncFileChangeListener.resourceChanged(SyncFileChangeListener.java:75)
+	at org.eclipse.core.internal.events.NotificationManager$2.run(NotificationManager.java:282)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:37)
+	at org.eclipse.core.internal.events.NotificationManager.notify(NotificationManager.java:276)
+	at org.eclipse.core.internal.events.NotificationManager.broadcastChanges(NotificationManager.java:148)
+	at org.eclipse.core.internal.resources.Workspace.broadcastBuildEvent(Workspace.java:295)
+	at org.eclipse.core.internal.events.AutoBuildJob.doBuild(AutoBuildJob.java:133)
+	at org.eclipse.core.internal.events.AutoBuildJob.run(AutoBuildJob.java:235)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+
+!ENTRY org.tigris.subversion.subclipse.core 4 0 2007-10-09 10:40:58.322
+!MESSAGE No subversion client interface found.
+!STACK 0
+org.tigris.subversion.svnclientadapter.SVNClientException: No subversion client interface found.
+	at org.tigris.subversion.svnclientadapter.SVNClientAdapterFactory.getPreferredSVNClientType(SVNClientAdapterFactory.java:86)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.setSvnClientInterface(SVNClientManager.java:59)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.getSvnClientInterface(SVNClientManager.java:97)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.createSVNClient(SVNClientManager.java:114)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.createSVNClient(SVNProviderPlugin.java:415)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.getAdminDirectoryName(SVNProviderPlugin.java:536)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.isAdminDirectory(SVNProviderPlugin.java:590)
+	at org.tigris.subversion.subclipse.core.resourcesListeners.SyncFileChangeListener$2.visit(SyncFileChangeListener.java:116)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:67)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.tigris.subversion.subclipse.core.resourcesListeners.SyncFileChangeListener.resourceChanged(SyncFileChangeListener.java:75)
+	at org.eclipse.core.internal.events.NotificationManager$2.run(NotificationManager.java:282)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:37)
+	at org.eclipse.core.internal.events.NotificationManager.notify(NotificationManager.java:276)
+	at org.eclipse.core.internal.events.NotificationManager.broadcastChanges(NotificationManager.java:148)
+	at org.eclipse.core.internal.resources.Workspace.broadcastBuildEvent(Workspace.java:295)
+	at org.eclipse.core.internal.events.AutoBuildJob.doBuild(AutoBuildJob.java:133)
+	at org.eclipse.core.internal.events.AutoBuildJob.run(AutoBuildJob.java:235)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+
+!ENTRY org.tigris.subversion.subclipse.core 4 0 2007-10-09 10:40:58.352
+!MESSAGE No subversion client interface found.
+!STACK 0
+org.tigris.subversion.svnclientadapter.SVNClientException: No subversion client interface found.
+	at org.tigris.subversion.svnclientadapter.SVNClientAdapterFactory.getPreferredSVNClientType(SVNClientAdapterFactory.java:86)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.setSvnClientInterface(SVNClientManager.java:59)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.getSvnClientInterface(SVNClientManager.java:97)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.createSVNClient(SVNClientManager.java:114)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.createSVNClient(SVNProviderPlugin.java:415)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.getAdminDirectoryName(SVNProviderPlugin.java:536)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.isAdminDirectory(SVNProviderPlugin.java:590)
+	at org.tigris.subversion.subclipse.core.resourcesListeners.SyncFileChangeListener$2.visit(SyncFileChangeListener.java:116)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:67)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.tigris.subversion.subclipse.core.resourcesListeners.SyncFileChangeListener.resourceChanged(SyncFileChangeListener.java:75)
+	at org.eclipse.core.internal.events.NotificationManager$2.run(NotificationManager.java:282)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:37)
+	at org.eclipse.core.internal.events.NotificationManager.notify(NotificationManager.java:276)
+	at org.eclipse.core.internal.events.NotificationManager.broadcastChanges(NotificationManager.java:148)
+	at org.eclipse.core.internal.resources.Workspace.broadcastBuildEvent(Workspace.java:295)
+	at org.eclipse.core.internal.events.AutoBuildJob.doBuild(AutoBuildJob.java:133)
+	at org.eclipse.core.internal.events.AutoBuildJob.run(AutoBuildJob.java:235)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+
+!ENTRY org.tigris.subversion.subclipse.core 4 0 2007-10-09 10:40:58.364
+!MESSAGE No subversion client interface found.
+!STACK 0
+org.tigris.subversion.svnclientadapter.SVNClientException: No subversion client interface found.
+	at org.tigris.subversion.svnclientadapter.SVNClientAdapterFactory.getPreferredSVNClientType(SVNClientAdapterFactory.java:86)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.setSvnClientInterface(SVNClientManager.java:59)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.getSvnClientInterface(SVNClientManager.java:97)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.createSVNClient(SVNClientManager.java:114)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.createSVNClient(SVNProviderPlugin.java:415)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.getAdminDirectoryName(SVNProviderPlugin.java:536)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.isAdminDirectory(SVNProviderPlugin.java:590)
+	at org.tigris.subversion.subclipse.core.resourcesListeners.SyncFileChangeListener$2.visit(SyncFileChangeListener.java:116)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:67)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.tigris.subversion.subclipse.core.resourcesListeners.SyncFileChangeListener.resourceChanged(SyncFileChangeListener.java:75)
+	at org.eclipse.core.internal.events.NotificationManager$2.run(NotificationManager.java:282)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:37)
+	at org.eclipse.core.internal.events.NotificationManager.notify(NotificationManager.java:276)
+	at org.eclipse.core.internal.events.NotificationManager.broadcastChanges(NotificationManager.java:148)
+	at org.eclipse.core.internal.resources.Workspace.broadcastBuildEvent(Workspace.java:295)
+	at org.eclipse.core.internal.events.AutoBuildJob.doBuild(AutoBuildJob.java:133)
+	at org.eclipse.core.internal.events.AutoBuildJob.run(AutoBuildJob.java:235)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+
+!ENTRY org.tigris.subversion.subclipse.core 4 0 2007-10-09 10:40:58.366
+!MESSAGE No subversion client interface found.
+!STACK 0
+org.tigris.subversion.svnclientadapter.SVNClientException: No subversion client interface found.
+	at org.tigris.subversion.svnclientadapter.SVNClientAdapterFactory.getPreferredSVNClientType(SVNClientAdapterFactory.java:86)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.setSvnClientInterface(SVNClientManager.java:59)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.getSvnClientInterface(SVNClientManager.java:97)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.createSVNClient(SVNClientManager.java:114)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.createSVNClient(SVNProviderPlugin.java:415)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.getAdminDirectoryName(SVNProviderPlugin.java:536)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.isAdminDirectory(SVNProviderPlugin.java:590)
+	at org.tigris.subversion.subclipse.core.resourcesListeners.SyncFileChangeListener$2.visit(SyncFileChangeListener.java:116)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:67)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.tigris.subversion.subclipse.core.resourcesListeners.SyncFileChangeListener.resourceChanged(SyncFileChangeListener.java:75)
+	at org.eclipse.core.internal.events.NotificationManager$2.run(NotificationManager.java:282)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:37)
+	at org.eclipse.core.internal.events.NotificationManager.notify(NotificationManager.java:276)
+	at org.eclipse.core.internal.events.NotificationManager.broadcastChanges(NotificationManager.java:148)
+	at org.eclipse.core.internal.resources.Workspace.broadcastBuildEvent(Workspace.java:295)
+	at org.eclipse.core.internal.events.AutoBuildJob.doBuild(AutoBuildJob.java:133)
+	at org.eclipse.core.internal.events.AutoBuildJob.run(AutoBuildJob.java:235)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+
+!ENTRY org.tigris.subversion.subclipse.core 4 0 2007-10-09 10:40:58.368
+!MESSAGE No subversion client interface found.
+!STACK 0
+org.tigris.subversion.svnclientadapter.SVNClientException: No subversion client interface found.
+	at org.tigris.subversion.svnclientadapter.SVNClientAdapterFactory.getPreferredSVNClientType(SVNClientAdapterFactory.java:86)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.setSvnClientInterface(SVNClientManager.java:59)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.getSvnClientInterface(SVNClientManager.java:97)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.createSVNClient(SVNClientManager.java:114)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.createSVNClient(SVNProviderPlugin.java:415)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.getAdminDirectoryName(SVNProviderPlugin.java:536)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.isAdminDirectory(SVNProviderPlugin.java:590)
+	at org.tigris.subversion.subclipse.core.resourcesListeners.SyncFileChangeListener$2.visit(SyncFileChangeListener.java:116)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:67)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.tigris.subversion.subclipse.core.resourcesListeners.SyncFileChangeListener.resourceChanged(SyncFileChangeListener.java:75)
+	at org.eclipse.core.internal.events.NotificationManager$2.run(NotificationManager.java:282)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:37)
+	at org.eclipse.core.internal.events.NotificationManager.notify(NotificationManager.java:276)
+	at org.eclipse.core.internal.events.NotificationManager.broadcastChanges(NotificationManager.java:148)
+	at org.eclipse.core.internal.resources.Workspace.broadcastBuildEvent(Workspace.java:295)
+	at org.eclipse.core.internal.events.AutoBuildJob.doBuild(AutoBuildJob.java:133)
+	at org.eclipse.core.internal.events.AutoBuildJob.run(AutoBuildJob.java:235)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+
+!ENTRY org.tigris.subversion.subclipse.core 4 0 2007-10-09 10:40:58.378
+!MESSAGE No subversion client interface found.
+!STACK 0
+org.tigris.subversion.svnclientadapter.SVNClientException: No subversion client interface found.
+	at org.tigris.subversion.svnclientadapter.SVNClientAdapterFactory.getPreferredSVNClientType(SVNClientAdapterFactory.java:86)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.setSvnClientInterface(SVNClientManager.java:59)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.getSvnClientInterface(SVNClientManager.java:97)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.createSVNClient(SVNClientManager.java:114)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.createSVNClient(SVNProviderPlugin.java:415)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.getAdminDirectoryName(SVNProviderPlugin.java:536)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.isAdminDirectory(SVNProviderPlugin.java:590)
+	at org.tigris.subversion.subclipse.core.resourcesListeners.SyncFileChangeListener$2.visit(SyncFileChangeListener.java:116)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:67)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.tigris.subversion.subclipse.core.resourcesListeners.SyncFileChangeListener.resourceChanged(SyncFileChangeListener.java:75)
+	at org.eclipse.core.internal.events.NotificationManager$2.run(NotificationManager.java:282)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:37)
+	at org.eclipse.core.internal.events.NotificationManager.notify(NotificationManager.java:276)
+	at org.eclipse.core.internal.events.NotificationManager.broadcastChanges(NotificationManager.java:148)
+	at org.eclipse.core.internal.resources.Workspace.broadcastBuildEvent(Workspace.java:295)
+	at org.eclipse.core.internal.events.AutoBuildJob.doBuild(AutoBuildJob.java:133)
+	at org.eclipse.core.internal.events.AutoBuildJob.run(AutoBuildJob.java:235)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+
+!ENTRY org.tigris.subversion.subclipse.core 4 0 2007-10-09 10:40:58.380
+!MESSAGE No subversion client interface found.
+!STACK 0
+org.tigris.subversion.svnclientadapter.SVNClientException: No subversion client interface found.
+	at org.tigris.subversion.svnclientadapter.SVNClientAdapterFactory.getPreferredSVNClientType(SVNClientAdapterFactory.java:86)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.setSvnClientInterface(SVNClientManager.java:59)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.getSvnClientInterface(SVNClientManager.java:97)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.createSVNClient(SVNClientManager.java:114)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.createSVNClient(SVNProviderPlugin.java:415)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.getAdminDirectoryName(SVNProviderPlugin.java:536)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.isAdminDirectory(SVNProviderPlugin.java:590)
+	at org.tigris.subversion.subclipse.core.resourcesListeners.SyncFileChangeListener$2.visit(SyncFileChangeListener.java:116)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:67)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.tigris.subversion.subclipse.core.resourcesListeners.SyncFileChangeListener.resourceChanged(SyncFileChangeListener.java:75)
+	at org.eclipse.core.internal.events.NotificationManager$2.run(NotificationManager.java:282)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:37)
+	at org.eclipse.core.internal.events.NotificationManager.notify(NotificationManager.java:276)
+	at org.eclipse.core.internal.events.NotificationManager.broadcastChanges(NotificationManager.java:148)
+	at org.eclipse.core.internal.resources.Workspace.broadcastBuildEvent(Workspace.java:295)
+	at org.eclipse.core.internal.events.AutoBuildJob.doBuild(AutoBuildJob.java:133)
+	at org.eclipse.core.internal.events.AutoBuildJob.run(AutoBuildJob.java:235)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+
+!ENTRY org.tigris.subversion.subclipse.core 4 0 2007-10-09 10:40:58.382
+!MESSAGE No subversion client interface found.
+!STACK 0
+org.tigris.subversion.svnclientadapter.SVNClientException: No subversion client interface found.
+	at org.tigris.subversion.svnclientadapter.SVNClientAdapterFactory.getPreferredSVNClientType(SVNClientAdapterFactory.java:86)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.setSvnClientInterface(SVNClientManager.java:59)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.getSvnClientInterface(SVNClientManager.java:97)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.createSVNClient(SVNClientManager.java:114)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.createSVNClient(SVNProviderPlugin.java:415)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.getAdminDirectoryName(SVNProviderPlugin.java:536)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.isAdminDirectory(SVNProviderPlugin.java:590)
+	at org.tigris.subversion.subclipse.core.resourcesListeners.SyncFileChangeListener$2.visit(SyncFileChangeListener.java:116)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:67)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.tigris.subversion.subclipse.core.resourcesListeners.SyncFileChangeListener.resourceChanged(SyncFileChangeListener.java:75)
+	at org.eclipse.core.internal.events.NotificationManager$2.run(NotificationManager.java:282)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:37)
+	at org.eclipse.core.internal.events.NotificationManager.notify(NotificationManager.java:276)
+	at org.eclipse.core.internal.events.NotificationManager.broadcastChanges(NotificationManager.java:148)
+	at org.eclipse.core.internal.resources.Workspace.broadcastBuildEvent(Workspace.java:295)
+	at org.eclipse.core.internal.events.AutoBuildJob.doBuild(AutoBuildJob.java:133)
+	at org.eclipse.core.internal.events.AutoBuildJob.run(AutoBuildJob.java:235)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+
+!ENTRY org.tigris.subversion.subclipse.core 4 0 2007-10-09 10:40:58.384
+!MESSAGE No subversion client interface found.
+!STACK 0
+org.tigris.subversion.svnclientadapter.SVNClientException: No subversion client interface found.
+	at org.tigris.subversion.svnclientadapter.SVNClientAdapterFactory.getPreferredSVNClientType(SVNClientAdapterFactory.java:86)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.setSvnClientInterface(SVNClientManager.java:59)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.getSvnClientInterface(SVNClientManager.java:97)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.createSVNClient(SVNClientManager.java:114)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.createSVNClient(SVNProviderPlugin.java:415)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.getAdminDirectoryName(SVNProviderPlugin.java:536)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.isAdminDirectory(SVNProviderPlugin.java:590)
+	at org.tigris.subversion.subclipse.core.resourcesListeners.SyncFileChangeListener$2.visit(SyncFileChangeListener.java:116)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:67)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.tigris.subversion.subclipse.core.resourcesListeners.SyncFileChangeListener.resourceChanged(SyncFileChangeListener.java:75)
+	at org.eclipse.core.internal.events.NotificationManager$2.run(NotificationManager.java:282)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:37)
+	at org.eclipse.core.internal.events.NotificationManager.notify(NotificationManager.java:276)
+	at org.eclipse.core.internal.events.NotificationManager.broadcastChanges(NotificationManager.java:148)
+	at org.eclipse.core.internal.resources.Workspace.broadcastBuildEvent(Workspace.java:295)
+	at org.eclipse.core.internal.events.AutoBuildJob.doBuild(AutoBuildJob.java:133)
+	at org.eclipse.core.internal.events.AutoBuildJob.run(AutoBuildJob.java:235)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+
+!ENTRY org.tigris.subversion.subclipse.core 4 0 2007-10-09 10:40:58.386
+!MESSAGE No subversion client interface found.
+!STACK 0
+org.tigris.subversion.svnclientadapter.SVNClientException: No subversion client interface found.
+	at org.tigris.subversion.svnclientadapter.SVNClientAdapterFactory.getPreferredSVNClientType(SVNClientAdapterFactory.java:86)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.setSvnClientInterface(SVNClientManager.java:59)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.getSvnClientInterface(SVNClientManager.java:97)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.createSVNClient(SVNClientManager.java:114)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.createSVNClient(SVNProviderPlugin.java:415)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.getAdminDirectoryName(SVNProviderPlugin.java:536)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.isAdminDirectory(SVNProviderPlugin.java:590)
+	at org.tigris.subversion.subclipse.core.resourcesListeners.SyncFileChangeListener$2.visit(SyncFileChangeListener.java:116)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:67)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:76)
+	at org.tigris.subversion.subclipse.core.resourcesListeners.SyncFileChangeListener.resourceChanged(SyncFileChangeListener.java:75)
+	at org.eclipse.core.internal.events.NotificationManager$2.run(NotificationManager.java:282)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:37)
+	at org.eclipse.core.internal.events.NotificationManager.notify(NotificationManager.java:276)
+	at org.eclipse.core.internal.events.NotificationManager.broadcastChanges(NotificationManager.java:148)
+	at org.eclipse.core.internal.resources.Workspace.broadcastBuildEvent(Workspace.java:295)
+	at org.eclipse.core.internal.events.AutoBuildJob.doBuild(AutoBuildJob.java:133)
+	at org.eclipse.core.internal.events.AutoBuildJob.run(AutoBuildJob.java:235)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+
+!ENTRY org.tigris.subversion.subclipse.core 4 0 2007-10-09 10:40:58.390
+!MESSAGE No subversion client interface found.
+!STACK 0
+org.tigris.subversion.svnclientadapter.SVNClientException: No subversion client interface found.
+	at org.tigris.subversion.svnclientadapter.SVNClientAdapterFactory.getPreferredSVNClientType(SVNClientAdapterFactory.java:86)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.setSvnClientInterface(SVNClientManager.java:59)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.getSvnClientInterface(SVNClientManager.java:97)
+	at org.tigris.subversion.subclipse.core.SVNClientManager.createSVNClient(SVNClientManager.java:114)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.createSVNClient(SVNProviderPlugin.java:415)
+	at org.tigris.subversion.subclipse.core.status.NonRecursiveStatusUpdateStrategy.statusesToUpdate(NonRecursiveStatusUpdateStrategy.java:53)
+	at org.tigris.subversion.subclipse.core.status.StatusCacheManager.refreshStatus(StatusCacheManager.java:264)
+	at org.tigris.subversion.subclipse.core.resourcesListeners.SyncFileChangeListener$ChangesCollector.refreshProjectFolders(SyncFileChangeListener.java:314)
+	at org.tigris.subversion.subclipse.core.resourcesListeners.SyncFileChangeListener$1.run(SyncFileChangeListener.java:293)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin$6.run(SVNProviderPlugin.java:485)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:1797)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.run(SVNProviderPlugin.java:480)
+	at org.tigris.subversion.subclipse.core.resourcesListeners.SyncFileChangeListener$ChangesCollector.refreshChangedResources(SyncFileChangeListener.java:291)
+	at org.tigris.subversion.subclipse.core.resourcesListeners.SyncFileChangeListener.resourceChanged(SyncFileChangeListener.java:142)
+	at org.eclipse.core.internal.events.NotificationManager$2.run(NotificationManager.java:282)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:37)
+	at org.eclipse.core.internal.events.NotificationManager.notify(NotificationManager.java:276)
+	at org.eclipse.core.internal.events.NotificationManager.broadcastChanges(NotificationManager.java:148)
+	at org.eclipse.core.internal.resources.Workspace.broadcastBuildEvent(Workspace.java:295)
+	at org.eclipse.core.internal.events.AutoBuildJob.doBuild(AutoBuildJob.java:133)
+	at org.eclipse.core.internal.events.AutoBuildJob.run(AutoBuildJob.java:235)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+
+!ENTRY org.eclipse.core.resources 4 2 2007-10-09 10:40:58.394
+!MESSAGE Problems occurred when invoking code from plug-in: "org.eclipse.core.resources".
+!STACK 0
+java.lang.NullPointerException
+	at org.tigris.subversion.subclipse.core.status.NonRecursiveStatusUpdateStrategy.statusesToUpdate(NonRecursiveStatusUpdateStrategy.java:54)
+	at org.tigris.subversion.subclipse.core.status.StatusCacheManager.refreshStatus(StatusCacheManager.java:264)
+	at org.tigris.subversion.subclipse.core.resourcesListeners.SyncFileChangeListener$ChangesCollector.refreshProjectFolders(SyncFileChangeListener.java:314)
+	at org.tigris.subversion.subclipse.core.resourcesListeners.SyncFileChangeListener$1.run(SyncFileChangeListener.java:293)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin$6.run(SVNProviderPlugin.java:485)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:1797)
+	at org.tigris.subversion.subclipse.core.SVNProviderPlugin.run(SVNProviderPlugin.java:480)
+	at org.tigris.subversion.subclipse.core.resourcesListeners.SyncFileChangeListener$ChangesCollector.refreshChangedResources(SyncFileChangeListener.java:291)
+	at org.tigris.subversion.subclipse.core.resourcesListeners.SyncFileChangeListener.resourceChanged(SyncFileChangeListener.java:142)
+	at org.eclipse.core.internal.events.NotificationManager$2.run(NotificationManager.java:282)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:37)
+	at org.eclipse.core.internal.events.NotificationManager.notify(NotificationManager.java:276)
+	at org.eclipse.core.internal.events.NotificationManager.broadcastChanges(NotificationManager.java:148)
+	at org.eclipse.core.internal.resources.Workspace.broadcastBuildEvent(Workspace.java:295)
+	at org.eclipse.core.internal.events.AutoBuildJob.doBuild(AutoBuildJob.java:133)
+	at org.eclipse.core.internal.events.AutoBuildJob.run(AutoBuildJob.java:235)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)

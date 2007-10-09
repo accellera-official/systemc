@@ -45,7 +45,7 @@
 <option id="gnu.cpp.compiler.macosx.exe.debug.option.debugging.level.2038767053" name="Debug Level" superClass="gnu.cpp.compiler.macosx.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 <option id="gnu.cpp.compiler.option.include.paths.1733029123" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 <listOptionValue builtIn="false" value="&quot;${SYSTEMC}/include&quot;"/>
-<listOptionValue builtIn="false" value="../../../../include/tlm_h"/>
+<listOptionValue builtIn="false" value="../../../../include"/>
 <listOptionValue builtIn="false" value="../../common/include/models"/>
 <listOptionValue builtIn="false" value="../../common/include/utils"/>
 <listOptionValue builtIn="false" value="../../common/include/SimpleSocket"/>
@@ -526,7 +526,7 @@
 <option id="gnu.cpp.compiler.macosx.exe.release.option.debugging.level.1566345109" name="Debug Level" superClass="gnu.cpp.compiler.macosx.exe.release.option.debugging.level" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
 <option id="gnu.cpp.compiler.option.include.paths.286949124" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 <listOptionValue builtIn="false" value="&quot;${SYSTEMC}/include&quot;"/>
-<listOptionValue builtIn="false" value="../../../../include/tlm_h"/>
+<listOptionValue builtIn="false" value="../../../../include"/>
 <listOptionValue builtIn="false" value="../../common/include/models"/>
 <listOptionValue builtIn="false" value="../../common/include/utils"/>
 <listOptionValue builtIn="false" value="../../common/include/SimpleSocket"/>

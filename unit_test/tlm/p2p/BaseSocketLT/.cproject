@@ -45,7 +45,7 @@
 <option id="gnu.cpp.compiler.macosx.exe.debug.option.debugging.level.1962213922" name="Debug Level" superClass="gnu.cpp.compiler.macosx.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 <option id="gnu.cpp.compiler.option.include.paths.192954241" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 <listOptionValue builtIn="false" value="&quot;${SYSTEMC}/include&quot;"/>
-<listOptionValue builtIn="false" value="../../../../../include/tlm_h"/>
+<listOptionValue builtIn="false" value="../../../../../include"/>
 <listOptionValue builtIn="false" value="../../../common/include/models"/>
 </option>
 <inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.267578402" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
@@ -522,7 +522,7 @@
 <option id="gnu.cpp.compiler.macosx.exe.release.option.debugging.level.64687679" name="Debug Level" superClass="gnu.cpp.compiler.macosx.exe.release.option.debugging.level" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
 <option id="gnu.cpp.compiler.option.include.paths.111543094" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 <listOptionValue builtIn="false" value="&quot;${SYSTEMC}/include&quot;"/>
-<listOptionValue builtIn="false" value="../../../../../include/tlm_h"/>
+<listOptionValue builtIn="false" value="../../../../../include"/>
 <listOptionValue builtIn="false" value="../../../common/include/models"/>
 </option>
 <inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.297707776" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>

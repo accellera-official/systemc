@@ -44,7 +44,7 @@
 <listOptionValue builtIn="false" value="&quot;${SYSTEMC}/include&quot;"/>
 <listOptionValue builtIn="false" value="../include"/>
 <listOptionValue builtIn="false" value="../../common/include"/>
-<listOptionValue builtIn="false" value="../../../../../include/tlm_h"/>
+<listOptionValue builtIn="false" value="../../../../../include"/>
 </option>
 <inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1709243095" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 </tool>
@@ -516,7 +516,7 @@
 <listOptionValue builtIn="false" value="&quot;${SYSTEMC}/include&quot;"/>
 <listOptionValue builtIn="false" value="../include"/>
 <listOptionValue builtIn="false" value="../../common/include"/>
-<listOptionValue builtIn="false" value="../../../../../include/tlm_h"/>
+<listOptionValue builtIn="false" value="../../../../../include"/>
 </option>
 <inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.88183043" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 </tool>
