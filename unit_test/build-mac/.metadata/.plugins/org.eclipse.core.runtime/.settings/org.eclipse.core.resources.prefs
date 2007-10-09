@@ -1,8 +1,0 @@
-#Fri Sep 28 11:00:56 CDT 2007
-version=1
-eclipse.preferences.version=1
-encoding=UTF-8
-description.autobuilding=false
-description.buildorder=bus/BaseSocketLT/CoreDecoupling/EndEventLT/RegisterSocketProcessLT/SimpleAT/SimpleAT_TA/transactor
-description.filestatelongevity=86400000
-description.defaultbuildorder=false
