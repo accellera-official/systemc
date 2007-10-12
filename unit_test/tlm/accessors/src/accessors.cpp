@@ -59,13 +59,19 @@ public:
 
 };
 
+enum eAccess
+{
+	EACCESS_DIRECT,
+	EACCESS_ACCESSOR
+};
 
 struct Config
 {
 	unsigned int repeats;
-	bool         setget;
+	eAccess      access;
 	bool         context_switch;
-	Config() : repeats(1), setget(0), context_switch(0) {}
+
+	Config() : repeats(1), access(EACCESS_DIRECT), context_switch(0) {}
 };
 
 Config config;
@@ -87,54 +93,74 @@ SC_MODULE(Top)
 		unsigned char c;
 		for (unsigned int i = 0; i < config.repeats; i++)
 		{
-			if (config.setget)
+			switch ( config.access )
 			{
-				t->set_command( TLM_WRITE_COMMAND );
-				t->set_address( i );
-				c = i % 256;
-				t->set_data_ptr( &c );
-				t->set_burst_length( 1 );
-				t->set_burst_data_size( 4 );
-				t->set_burst_mode( TLM_INCREMENT_BURST );
+				case EACCESS_ACCESSOR:
+				{
+					t->set_command( TLM_WRITE_COMMAND );
+					t->set_address( i );
+					c = i % 256;
+					t->set_data_ptr( &c );
+					t->set_burst_length( 1 );
+					t->set_burst_data_size( 4 );
+					t->set_burst_mode( TLM_INCREMENT_BURST );
+
+					break;
+				}
+			
+				case EACCESS_DIRECT:
+				{
+					t->m_command      = TLM_WRITE_COMMAND;
+					t->m_address      = i;
+					c                 = i % 256;
+					t->m_data         = &c;
+					t->m_burst_length = 1;
+					t->m_burst_data_size = 4;
+					t->m_burst_mode   = TLM_INCREMENT_BURST;
+
+					break;
+				}
 			}
-			else
-			{
-				t->m_command      = TLM_WRITE_COMMAND;
-				t->m_address      = i;
-				c                 = i % 256;
-				t->m_data         = &c;
-				t->m_burst_length = 1;
-				t->m_burst_data_size = 4;
-				t->m_burst_mode   = TLM_INCREMENT_BURST;
-			}
+
 			P(t);
 			if (config.context_switch)
 			  if ((i % 10) == 0) wait(SC_ZERO_TIME);
 		}
 		int sum = 0;
 		for (int j = 0; j < 1000; j++)
+		{
 			sum += mem[j];
-		cout << "Checksum = " << sum << endl;
+		}
+
+		cout << "checksum: " << sum << endl;
 
 	}
 	void P(tlm_generic_payload* t)
 	{
-		if (config.setget)
+		switch (config.access)
 		{
-			if (t->get_command() == TLM_WRITE_COMMAND && t->get_burst_mode() == TLM_INCREMENT_BURST)
+			case EACCESS_ACCESSOR:
 			{
-				for (unsigned int j = 0; j < t->get_burst_length(); j++)
-					mem[(t->get_address() + j) % 1000] = *(t->get_data_ptr() + j);
-				if (t->get_address() == config.repeats-1) sc_stop();
+				if (t->get_command() == TLM_WRITE_COMMAND && t->get_burst_mode() == TLM_INCREMENT_BURST)
+				{
+					for (unsigned int j = 0; j < t->get_burst_length(); j++)
+						mem[(t->get_address() + j) % 1000] = *(t->get_data_ptr() + j);
+					if (t->get_address() == config.repeats-1) sc_stop();
+				}
+
+				break;
 			}
-		}
-		else
-		{
-			if (t->m_command == TLM_WRITE_COMMAND && t->m_burst_mode == TLM_INCREMENT_BURST)
+
+			case EACCESS_DIRECT:
 			{
-				for (unsigned int j = 0; j < t->m_burst_length; j++)
-					mem[(t->m_address + j) % 1000] = *(t->m_data + j);
-				if (t->m_address == config.repeats-1) sc_stop();
+				if (t->m_command == TLM_WRITE_COMMAND && t->m_burst_mode == TLM_INCREMENT_BURST)
+				{
+					for (unsigned int j = 0; j < t->m_burst_length; j++)
+						mem[(t->m_address + j) % 1000] = *(t->m_data + j);
+					if (t->m_address == config.repeats-1) sc_stop();
+				}
+
+				break;
 			}
 		}
 	}
@@ -142,16 +168,27 @@ SC_MODULE(Top)
 
 int sc_main( int argc, char* argv[])
 {
-	assert(argc == 4);
-	config.repeats        = atoi(argv[1]); // Number of repeats
-	config.setget         = atoi(argv[2]); // 0 => .field, 1 => setters and getters
-	config.context_switch = atoi(argv[3]); // 0 => no waits, 1 => wait
+	if ( argc != 4 )
+	{
+		cout	<< endl
+				<< "accessors.exe repeat access_type wait_flag"
+				<< endl;
+	}
+	else
+	{
+		config.repeats        =           atoi(argv[1]); // Number of repeats
+		config.access         = (eAccess) atoi(argv[2]); // 0 => direct, 1 => accessors
+		config.context_switch = (bool)    atoi(argv[3]); // 0 => no waits, 1 => wait
 
-	cout << "# repeats = " << config.repeats
-	     << " setget = " << config.setget
-	     << " context switch = " << config.context_switch << endl;
+		cout	<< "repeat count: " << config.repeats << endl
+				<< "      access: " << ( config.access ? "accessors" : "direct" ) << endl
+				<< "   switching: " << ( config.context_switch ? "true" : "false" ) << endl
+				<< endl;
 
-	Top top("top");
-	sc_start();
+		Top top("top");
+
+		sc_start();
+	}
+
 	return 0;
 }

@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="generic_payload"
+	Name="accessors"
 	ProjectGUID="{A9CB1145-19F6-45B0-8783-BDC5A407C9B2}"
 	RootNamespace="winbuild"
 	Keyword="Win32Proj"
@@ -20,7 +20,7 @@
 			OutputDirectory="Debug"
 			IntermediateDirectory="Debug"
 			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;..\..\..\build-windows\systemc.vsprops"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;..\..\build-windows\systemc.vsprops"
 			CharacterSet="2"
 			>
 			<Tool
@@ -42,6 +42,9 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/vmg"
 				Optimization="0"
+				InlineFunctionExpansion="0"
+				EnableIntrinsicFunctions="false"
+				FavorSizeOrSpeed="0"
 				AdditionalIncludeDirectories="..\include;..\..\common\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				StringPooling="true"
@@ -50,6 +53,8 @@
 				RuntimeLibrary="1"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="0"
+				AssemblerOutput="2"
+				AssemblerListingLocation="$(OutDir)\"
 				BrowseInformation="1"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
@@ -106,7 +111,7 @@
 			OutputDirectory="Release"
 			IntermediateDirectory="Release"
 			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;..\..\..\build-windows\systemc.vsprops"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;..\..\build-windows\systemc.vsprops"
 			CharacterSet="2"
 			>
 			<Tool
@@ -127,6 +132,10 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/vmg"
+				Optimization="3"
+				InlineFunctionExpansion="2"
+				EnableIntrinsicFunctions="true"
+				FavorSizeOrSpeed="1"
 				AdditionalIncludeDirectories="..\include;..\..\common\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;SC_INCLUDE_FX"
 				StringPooling="false"
@@ -134,6 +143,8 @@
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
+				AssemblerOutput="2"
+				AssemblerListingLocation="$(OutDir)\"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
@@ -196,11 +207,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\src\generic_packet.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\src\tlm_slave.cpp"
+				RelativePath="..\src\accessors.cpp"
 				>
 			</File>
 		</Filter>
