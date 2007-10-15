@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/vmg"
 				Optimization="0"
-				AdditionalIncludeDirectories="D:\projects\TLM\TLM_2_Ext\unit_test\common\include\models;D:\projects\TLM\TLM_2_Ext\unit_test\common\include\SimpleSocket;D:\projects\TLM\TLM_2_Ext\include;..\include;..\..\common\include"
+				AdditionalIncludeDirectories="..\..\..\common\include\SimpleSocket;..\..\..\\common\include\models"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				StringPooling="true"
 				MinimalRebuild="true"
