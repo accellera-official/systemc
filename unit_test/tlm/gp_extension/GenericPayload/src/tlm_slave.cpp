@@ -56,7 +56,7 @@ void tlm_slave::nb_transport(tlm::tlm_generic_payload* gp)
 
 			if(gp->get_command() == tlm::TLM_WRITE_COMMAND)
 			{
-				for(int bl=0;bl<gp->get_burst_length();bl++)
+				for(int bl=0;bl<(int)gp->get_burst_length();bl++)
 				{
 					m_mem.write(data, addr, gp->get_burst_data_size());
 					addr += m_incr_address; 
@@ -67,7 +67,7 @@ void tlm_slave::nb_transport(tlm::tlm_generic_payload* gp)
 			}
 			else // TLM_READ_COMMAND
 			{
-				for(int bl=0;bl<gp->get_burst_length();bl++)
+				for(int bl=0;bl<(int)gp->get_burst_length();bl++)
 				{
 					m_mem.read(data, addr, gp->get_burst_data_size());
 					addr += m_incr_address; 

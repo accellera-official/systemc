@@ -27,7 +27,7 @@
 class CoreDecouplingLTMaster : public sc_module
 {
 public:
-  typedef tlm::tlm_transaction transaction_type;
+  typedef tlm::tlm_generic_payload transaction_type;
   typedef tlm::tlm_phase phase_type;
   typedef SimpleMasterSocket<transaction_type> master_socket_type;
 
@@ -55,16 +55,16 @@ public:
   bool initTransaction(transaction_type& trans)
   {
     if (mTransactionCount < mNrOfTransactions) {
-      trans.setAddress(mBaseAddress + mTransactionCount);
+      trans.set_address(mBaseAddress + mTransactionCount);
       mData = mTransactionCount;
-      trans.setDataPtr(reinterpret_cast<char*>(&mData));
-      trans.setIsWrite();
+      trans.set_data_ptr(reinterpret_cast<unsigned char*>(&mData));
+      trans.set_command(tlm::TLM_WRITE_COMMAND);
 
     } else if (mTransactionCount < 2 * mNrOfTransactions) {
-      trans.setAddress(mBaseAddress + mTransactionCount - mNrOfTransactions);
+      trans.set_address(mBaseAddress + mTransactionCount - mNrOfTransactions);
       mData = 0;
-      trans.setDataPtr(reinterpret_cast<char*>(&mData));
-      trans.setIsRead();
+      trans.set_data_ptr(reinterpret_cast<unsigned char*>(&mData));
+      trans.set_command(tlm::TLM_READ_COMMAND);
 
     } else {
       return false;
@@ -76,9 +76,9 @@ public:
 
   void logStartTransation(transaction_type& trans)
   {
-    if (trans.isWrite()) {
+    if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
       std::cerr << name() << ": Send write request: A = "
-                << (void*)(int)trans.getAddress() << ", D = " << (void*)mData
+                << (void*)(int)trans.get_address() << ", D = " << (void*)mData
                 << " @ " << mQuantumKeeper.getCurrentTime()
                 << " (" << sc_time_stamp() << " + "
                 << mQuantumKeeper.getLocalTime() << ")"
@@ -86,7 +86,7 @@ public:
       
     } else {
       std::cerr << name() << ": Send read request: A = "
-                << (void*)(int)trans.getAddress()
+                << (void*)(int)trans.get_address()
                 << " @ " << mQuantumKeeper.getCurrentTime()
                 << " (" << sc_time_stamp() << " + "
                 << mQuantumKeeper.getLocalTime() << ")"
@@ -96,7 +96,7 @@ public:
 
   void logEndTransaction(transaction_type& trans)
   {
-    if (!trans.getResponse()) {
+    if (trans.get_response_status() != tlm::TLM_OK_RESP) {
       std::cerr << name() << ": Received error response @ "
                 << mQuantumKeeper.getCurrentTime()
                 << " (" << sc_time_stamp() << " + "
@@ -105,7 +105,7 @@ public:
 
     } else {
       std::cerr << name() <<  ": Received ok response";
-      if (trans.isRead()) {
+      if (trans.get_command() == tlm::TLM_READ_COMMAND) {
         std::cerr << ": D = " << (void*)mData;
       }
       std::cerr << " @ " << mQuantumKeeper.getCurrentTime()

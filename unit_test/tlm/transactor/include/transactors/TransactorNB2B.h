@@ -33,7 +33,7 @@ public:
   typedef tlm::tlm_annotated_transport_if<tlm_request_type, tlm_response_type> tlm_transport_if;
   typedef sc_port<tlm_transport_if> master_port;
 
-  typedef tlm::tlm_transaction transaction_type;
+  typedef tlm::tlm_generic_payload transaction_type;
   typedef tlm::tlm_phase phase_type;
   typedef tlm::tlm_nonblocking_transport_if<transaction_type> interface_type;
   typedef SimpleSlaveSocket<transaction_type> slave_socket_type;
@@ -63,25 +63,30 @@ public:
       transaction_type* trans;
       while ((trans = mTransactionPEQ.getNextTransaction())) {
         tlm_request_type req;
-        req.set_address(trans->getAddress());
+        req.set_address(trans->get_address());
 
         unsigned int data;
         req.set_data_array(1, &data);
 
-        if (trans->isRead()) {
+        if (trans->get_command() == tlm::TLM_READ_COMMAND) {
           req.set_command(READ);
 
         } else {
           req.set_command(WRITE);
-          data = *reinterpret_cast<unsigned int*>(trans->getDataPtr());
+          data = *reinterpret_cast<unsigned int*>(trans->get_data_ptr());
         }
 
         tlm_response_type resp = port->transport(req);
 
-        trans->setResponse(resp.get_status().is_ok());
+        if (resp.get_status().is_ok()) {
+          trans->set_response_status(tlm::TLM_OK_RESP);
 
-        if (trans->isRead()) {
-          *reinterpret_cast<unsigned int*>(trans->getDataPtr()) = resp.get_data();
+        } else {
+          trans->set_response_status(tlm::TLM_GENERIC_ERROR_RESP);
+        }
+
+        if (trans->get_command() == tlm::TLM_READ_COMMAND) {
+          *reinterpret_cast<unsigned int*>(trans->get_data_ptr()) = resp.get_data();
         }
 
         phase_type phase = tlm::BEGIN_RESP;

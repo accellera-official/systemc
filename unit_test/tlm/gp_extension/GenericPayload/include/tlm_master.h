@@ -22,7 +22,7 @@
 
 #include "tlm_gp_port.h"
 
-#include "tlm_helpers.h"
+#include "tlm.h"
 
 
 class tlm_master : public sc_module
@@ -52,7 +52,7 @@ public:
       DT tmp = tlm::swapIfNeeded(value, endianness);
       std::cerr << "  Data (simulated endianness) = [ ";
       std::cerr << std::hex;
-      for (int i = 0; i < sizeof(DT); ++i, tmp >>= 8) {
+      for (int i = 0; i < (int)sizeof(DT); ++i, tmp >>= 8) {
         if (i != 0) {
           std::cerr << ", ";
         }

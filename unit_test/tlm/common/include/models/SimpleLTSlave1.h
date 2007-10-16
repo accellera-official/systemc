@@ -26,10 +26,10 @@
 
 class SimpleLTSlave1 :
   public sc_module,
-  public virtual tlm::tlm_nonblocking_transport_if<tlm::tlm_transaction>
+  public virtual tlm::tlm_nonblocking_transport_if<tlm::tlm_generic_payload>
 {
 public:
-  typedef tlm::tlm_transaction transaction_type;
+  typedef tlm::tlm_generic_payload transaction_type;
   typedef tlm::tlm_phase phase_type;
   typedef tlm::tlm_nonblocking_transport_if<transaction_type> interface_type;
   typedef tlm::tlm_slave_socket<interface_type> slave_socket_type;
@@ -51,11 +51,11 @@ public:
   {
     assert(phase == tlm::BEGIN_REQ);
 
-    uint64_t address = trans.getAddress();
+    sc_dt::uint64 address = trans.get_address();
     assert(address < 100);
 
-    unsigned int& data = *reinterpret_cast<unsigned int*>(trans.getDataPtr());
-    if (trans.isWrite()) {
+    unsigned int& data = *reinterpret_cast<unsigned int*>(trans.get_data_ptr());
+    if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
       std::cerr << name() << ": Received write request: A = "
                 << (void*)(int)address << ", D = " << (void*)data
                 << " @ " << sc_time_stamp() << std::endl;
@@ -71,7 +71,7 @@ public:
       t += sc_time(100, SC_NS);
     }
 
-    trans.setResponse(true);
+    trans.set_response_status(tlm::TLM_OK_RESP);
 
     // LT slave
     // - always return true

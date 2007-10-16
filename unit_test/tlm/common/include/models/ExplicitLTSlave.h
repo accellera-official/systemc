@@ -29,7 +29,7 @@
 class ExplicitLTSlave : public sc_module
 {
 public:
-  typedef tlm::tlm_transaction transaction_type;
+  typedef tlm::tlm_generic_payload transaction_type;
   typedef tlm::tlm_phase phase_type;
   typedef SimpleSlaveSocket<transaction_type> slave_socket_type;
 
@@ -53,15 +53,15 @@ public:
   bool myNBTransport(transaction_type& trans, phase_type& phase, sc_time& t)
   {
     if (phase == tlm::BEGIN_REQ) {
-      uint64_t address = trans.getAddress();
+      sc_dt::uint64 address = trans.get_address();
       assert(address < 100);
 
       // This slave only supports one transaction at a time
       // This will only work with LT masters
       assert(mCurrentTransaction == 0);
 
-      unsigned int& data = *reinterpret_cast<unsigned int*>(trans.getDataPtr());
-      if (trans.isWrite()) {
+      unsigned int& data = *reinterpret_cast<unsigned int*>(trans.get_data_ptr());
+      if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
         std::cerr << name() << ": Received write request: A = "
                 << (void*)(int)address << ", D = " << (void*)data
                 << " @ " << sc_time_stamp() << std::endl;
@@ -111,12 +111,12 @@ public:
       sc_time t = SC_ZERO_TIME;
 
       // Set response data
-      mCurrentTransaction->setResponse(true);
-      assert(mCurrentTransaction->isWrite());
+      mCurrentTransaction->set_response_status(tlm::TLM_OK_RESP);
+      assert(mCurrentTransaction->get_command() == tlm::TLM_WRITE_COMMAND);
 
-      uint64_t address = mCurrentTransaction->getAddress();
+      sc_dt::uint64 address = mCurrentTransaction->get_address();
       assert(address < 100);
-      *reinterpret_cast<unsigned int*>(mCurrentTransaction->getDataPtr()) =
+      *reinterpret_cast<unsigned int*>(mCurrentTransaction->get_data_ptr()) =
         mMem[address];
 
       // We are synchronized, we can read/write sc_signals, wait,...

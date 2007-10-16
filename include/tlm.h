@@ -28,7 +28,6 @@
 #include "tlm_h/tlm_core/tlm_core.h"
 #include "tlm_h/tlm_analysis/tlm_analysis.h"
 #include "tlm_h/tlm_annotated/tlm_annotated.h"
-#include "tlm_h/tlm_bus/tlm_bus.h"
 #include "tlm_h/tlm_generic_payload/tlm_generic_payload.h"
 //#include "tlm_h/tlm_analysis/tlm_bus_analysis.h"
 #include "tlm_h/tlm_ports/tlm_ports.h"
@@ -39,7 +38,6 @@ namespace tlm  /// TLM namespace
   using namespace tlm_core;
   using namespace analysis;
   using namespace tlm_annotated;
-  using namespace tlm_bus;
   using namespace tlm_generic_payload;
   using namespace tlm_ports;
   using namespace tlm_quantum;

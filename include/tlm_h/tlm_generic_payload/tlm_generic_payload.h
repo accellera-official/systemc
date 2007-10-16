@@ -18,11 +18,16 @@
  
 #pragma once
 
-#if ( ! defined ( __TLM_GENERIC_PAYLOAD_H ) )
-#define __TLM_GENERIC_PAYLOAD_H
+#ifndef TLM_GENERIC_PAYLOAD_HEADER
+#define TLM_GENERIC_PAYLOAD_HEADER
 
 namespace tlm_generic_payload  /// TLM generic payload
 {
+
+#include "tlm_helpers.h"
+#include "tlm_gp.h"
+#include "tlm_data_serializers.h"
+
 }
 
-#endif /* __TLM_GENERIC_PAYLOAD_H */
+#endif /* TLM_GP_HEADER */

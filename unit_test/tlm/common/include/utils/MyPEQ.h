@@ -25,7 +25,7 @@
 class MyPEQ : public sc_module
 {
 public:
-  typedef tlm::tlm_transaction transaction_type;
+  typedef tlm::tlm_generic_payload transaction_type;
 
 public:
   SC_HAS_PROCESS(MyPEQ);

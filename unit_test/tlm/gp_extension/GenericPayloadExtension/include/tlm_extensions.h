@@ -19,7 +19,7 @@
 #ifndef TLM_EXTENSIONS_H
 #define TLM_EXTENSIONS_H
 
-#include "tlm_generic_payload.h"
+#include "tlm.h"
 
 // This header file defines a simple set of extension classes.
 // The basic structure here is that the classes must be derived

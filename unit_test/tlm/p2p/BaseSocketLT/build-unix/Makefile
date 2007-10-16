@@ -31,7 +31,7 @@ $(OBJ_NAME).exe: $(OBJ_NAME).o
 	$(GXX) -o $@ $(OBJ_NAME).o $(LIBS)
 
 $(OBJ_NAME).o: $(SRCDIR)/$(OBJ_NAME).cpp
-	$(GXX) -c $(CFLAGS) $(SRCDIR)/$(OBJ_NAME).cpp  $< -o $@
+	$(GXX) -c $(CFLAGS) $< -o $@
 
 clean:
 	rm -f $(OBJ_NAME).exe *.o

@@ -22,7 +22,7 @@
 
 #include "systemc"
 #include "tlm_nb_transport_if.h"
-#include "tlm_generic_payload.h"
+#include "tlm.h"
 
 namespace tlm {
 

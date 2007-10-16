@@ -29,7 +29,7 @@
 class SimpleATSlave2 : public sc_module
 {
 public:
-  typedef tlm::tlm_transaction transaction_type;
+  typedef tlm::tlm_generic_payload transaction_type;
   typedef tlm::tlm_phase phase_type;
   typedef SimpleSlaveSocket<transaction_type> slave_socket_type;
 
@@ -65,11 +65,11 @@ public:
   bool myNBTransport(transaction_type& trans, phase_type& phase, sc_time& t)
   {
     if (phase == tlm::BEGIN_REQ) {
-      uint64_t address = trans.getAddress();
+      sc_dt::uint64 address = trans.get_address();
       assert(address < 100);
 
-      unsigned int& data = *reinterpret_cast<unsigned int*>(trans.getDataPtr());
-      if (trans.isWrite()) {
+      unsigned int& data = *reinterpret_cast<unsigned int*>(trans.get_data_ptr());
+      if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
         std::cerr << name() << ": Received write request: A = "
                   << (void*)(int)address << ", D = " << (void*)data
                   << " @ " << sc_time_stamp() << std::endl;
@@ -122,11 +122,11 @@ public:
     assert(trans);
 
     // Set response data
-    trans->setResponse(true);
-    if (trans->isRead()) {
-       uint64_t address = trans->getAddress();
+    trans->set_response_status(tlm::TLM_OK_RESP);
+    if (trans->get_command() == tlm::TLM_READ_COMMAND) {
+       sc_dt::uint64 address = trans->get_address();
        assert(address < 100);
-      *reinterpret_cast<unsigned int*>(trans->getDataPtr()) = mMem[address];
+      *reinterpret_cast<unsigned int*>(trans->get_data_ptr()) = mMem[address];
     }
 
     if (socket->nb_transport(*trans, phase, t)) {

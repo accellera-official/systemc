@@ -16,13 +16,11 @@
 *****************************************************************************/
 
 
-#ifndef _TLM_GENERIC_PAYLOAD_H
-#define _TLM_GENERIC_PAYLOAD_H
+#ifndef TLM_GP_HEADER
+#define TLM_GP_HEADER
 
 #include <systemc>
 #include "tlm_array.h"
-
-namespace tlm {
 
 //---------------------------------------------------------------------------
 // Classes and helper functions for the extension mechanism
@@ -70,7 +68,8 @@ unsigned int tlm_extension<T>::ID = tlm_extension_base::register_extension();
 //---------------------------------------------------------------------------
 enum tlm_command {
     TLM_READ_COMMAND,
-    TLM_WRITE_COMMAND
+    TLM_WRITE_COMMAND,
+    TLM_NOP
 };
 
 enum tlm_burst_mode {
@@ -80,12 +79,12 @@ enum tlm_burst_mode {
 };
 
 enum tlm_response_status {
-    TLM_OK_RESP,
-    TLM_GENERIC_ERROR_RESP,
-    TLM_ADDRESS_ERROR_RESP,
-    TLM_COMMAND_ERROR_RESP,
-    TLM_BURST_ERROR_RESP,
-    TLM_INCOMPLETE_RESP
+    TLM_OK_RESP = 1,
+    TLM_INCOMPLETE_RESP = 0,
+    TLM_GENERIC_ERROR_RESP = -1,
+    TLM_ADDRESS_ERROR_RESP = -2,
+    TLM_COMMAND_ERROR_RESP = -3,
+    TLM_BURST_ERROR_RESP = -4
 };
 
 //---------------------------------------------------------------------------
@@ -100,13 +99,13 @@ public:
     
     // Default constructor
     tlm_generic_payload() 
-        : m_command(tlm::TLM_READ_COMMAND)
+        : m_command(TLM_NOP)
         , m_address(0)
         , m_data(0)
-        , m_burst_length(0)
+        , m_burst_length(1)
         , m_burst_data_size(0)
-        , m_burst_mode(tlm::TLM_INCREMENT_BURST)
-        , m_response_status(tlm::TLM_INCOMPLETE_RESP)
+        , m_burst_mode(TLM_INCREMENT_BURST)
+        , m_response_status(TLM_INCOMPLETE_RESP)
         , m_extensions(max_num_extensions())
     {
     }
@@ -116,7 +115,7 @@ public:
     //--------------
     // Destructor
     //--------------
-    ~tlm_generic_payload() {}
+    virtual ~tlm_generic_payload() {}
     
     //----------------
     // Setters & getters
@@ -129,6 +128,7 @@ public:
     tlm_burst_mode      get_burst_mode()      const {return m_burst_mode;}
     unsigned char*      get_data_ptr()        const {return m_data;}
     tlm_response_status get_response_status() const {return m_response_status;}
+    bool				get_lock()            const {return m_lock;}
     
     void set_command(const tlm_command command)
         {m_command = command;}
@@ -144,13 +144,16 @@ public:
         {m_data = data;}
     void set_response_status(const tlm_response_status response_status)
         {m_response_status = response_status;}  
+	void set_lock(const bool lock)
+	    {m_lock = lock;}
     
     /* --------------------------------------------------------------------- */
     /* Generic Payload attributes:                                           */
     /* --------------------------------------------------------------------- */
-    /* - m_command         : Type of transaction. Two values supported:      */
+    /* - m_command         : Type of transaction. Three values supported:    */
     /*                       - TLM_WRITE_COMMAND                             */
     /*                       - TLM_READ_COMMAND                              */
+    /*                       - TLM_NOP                                       */
     /* - m_address         : Transaction base address (byte-addressing).     */
     /* - m_data            : When m_command = TLM_WRITE_COMMAND contains a   */
     /*                       pointer to the data to be written in the target.*/
@@ -158,7 +161,7 @@ public:
     /*                       pointer where to copy the data read from the    */
     /*                       target.                                         */
     /* - m_burst_length    : Number of data transfers in the transaction.    */
-    /*			     This is an element count, not a byte count.     */
+    /*			             This is an element count, not a byte count.     */
     /*                       Size in bytes of each data transfer is indicated*/
     /*                       by the burst_data_size attribute.               */
     /* - m_burst_data_size : Size in bytes of each data transfer in the      */
@@ -182,25 +185,14 @@ public:
     unsigned int         m_burst_data_size;	
     tlm_burst_mode       m_burst_mode;
     tlm_response_status  m_response_status;
+    bool                 m_lock;
 
     // unsigned int*        m_byte_enable
-    // bool                 m_lock
     // int                  m_identifier
     
 public:
 
-    // serialisation helper functions
-    // for these, the index is not in bytes but in units of sizeof(T)
-    template<class T> inline T read_data(unsigned int index)
-    {
-        return reinterpret_cast<T*>(m_data)[index];
-    }
-    
-    template<class T> inline void write_data(T data, unsigned int index)
-    {
-        reinterpret_cast<T*>(m_data)[index] = data;
-    }
-    
+   
     /* --------------------------------------------------------------------- */
     /* Dynamic extension mechanism:                                          */
     /* --------------------------------------------------------------------- */
@@ -290,8 +282,5 @@ protected:
 
 };
 
-} // end namespace
-	
 
-
-#endif
+#endif /* TLM_GP_HEADER */

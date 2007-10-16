@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2004 by all Contributors.
+  source code Copyright (c) 1996-2007 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -16,34 +16,37 @@
   Author: Olaf Scheufen
 *****************************************************************************/
 
-#ifndef TLM_VECTOR_H
-#define TLM_VECTOR_H
+#ifndef TLM_ARRAY_HEADER
+#define TLM_ARRAY_HEADER
 
-#include <exception>
-#include <assert.h>
+//
+// To the LRM writer: the below class is an artifact of the tlm_generic_payload
+//                    implementation and not part of the core TLM standard
+//
 
 #include <systemc>
+#include <exception>
+// unused for the time being: #include <assert.h>
 
-namespace tlm {
-
-// This implements a fast vector class with limited functionality
-// compared to std::vector. The class is primarily used in the
-// tlm_generic_payload class for storing the pointers to the extensions.
+// This implements a lean and fast array class that supports array expansion on
+// request. The class is primarily used in the tlm_generic_payload class for
+// storing the pointers to the extensions.
 //
-// Individual vector elements can be accessed through the [] operators, or
-// by accessing the m_data array directly.
+// Individual array elements can be accessed through the [] operators, and the
+// array length is returned by the size() method.
 //
 // The size can be dynamically expanded using the expand(uint) method. There
 // is no shrinking mechanism implemented, because the extension mechanism
-// -as primary use case- does not require this feature.
+// does not require this feature. Bear in mind that calling the expand method
+// may invalidate all direct pointers into the m_data array.
 
 template <typename T>
-class tlm_vector
+class tlm_array
 {
 public:
 
     // constructor:
-    tlm_vector(unsigned int size = 0, T default_value = 0)
+    tlm_array(unsigned int size = 0, T default_value = 0)
         : m_data(0)
         , m_size(0)
         , m_default(default_value)
@@ -52,7 +55,7 @@ public:
     }
 
     // copy constructor:
-    tlm_vector(const tlm_vector& orig)
+    tlm_array(const tlm_array& orig)
     {
         m_size = orig.size();
         if (m_size>0)
@@ -71,7 +74,7 @@ public:
     }
 
     // destructor:
-    ~tlm_vector()
+    ~tlm_array()
     {
         if (m_size>0) delete[] m_data;
         m_size = 0;
@@ -80,8 +83,6 @@ public:
     // operators for dereferencing:
     T& operator[](const unsigned int index)
     {
-        // TODO: should we enable assertions here? If the user doesn't define
-        // NDEBUG manually, the assert would cost performance:
         // assert(index < m_size);
         return m_data[index];
     }
@@ -91,10 +92,10 @@ public:
         return m_data[index];
     }
 
-    // vector size:
+    // array size:
     unsigned int size() const {return m_size;}
 
-    // expand the vector if needed:
+    // expand the array if needed:
     void expand(unsigned int new_size)
     {
         if (new_size > m_size)
@@ -127,7 +128,7 @@ public:
                 {
                     m_data[i] = tmp[i];
                 }
-                for(i=0; i<new_size; i++)
+                for(i=m_size; i<new_size; i++)
                 {
                     m_data[i] = m_default;
                 }
@@ -138,23 +139,20 @@ public:
     }
 
     static const char* const kind_string;
-    const char* kind() const
-        { return kind_string; }
+    const char* kind() const { return kind_string; }
 
-    // direct access to the data vector is allowed:
+protected:
     T* m_data;
-
-private:
     unsigned int m_size;
     T m_default;
 
     // disabled:
-    tlm_vector& operator=(const tlm_vector<T>&);
+    tlm_array& operator=(const tlm_array<T>&);
     
     // Report allocation error:
     void report_error(std::exception &e)
     {
-        std::string msg("Allocation of vector failed: ");
+        std::string msg("Allocation of array failed: ");
         msg += e.what();
         SC_REPORT_FATAL(kind_string, msg.c_str());
     }
@@ -162,8 +160,6 @@ private:
 
 
 template <typename T>
-const char* const tlm_vector<T>::kind_string = "tlm_vector";
+const char* const tlm_array<T>::kind_string = "tlm_array";
 
-} // namespace tlm
-
-#endif
+#endif /* TLM_ARRAY_HEADER */

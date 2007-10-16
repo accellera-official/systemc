@@ -6,7 +6,7 @@ FLAGS = -g -Wall
 
 OBJ_NAME = generic_payload_extension
 
-INCDIR  = -I$(SYSTEMC_INC_DIR) -I../include -I../../common/include
+INCDIR  = -I$(SYSTEMC_INC_DIR) -I$(TLM_INC_DIR) -I../include -I../../common/include
 SRCDIR  = ../src
 LIBDIR  = -L$(SYSTEMC_LIB_DIR)
 

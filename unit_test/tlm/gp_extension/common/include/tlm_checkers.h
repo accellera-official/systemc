@@ -18,7 +18,7 @@
 #ifndef _TLM_CHECKERS_H
 #define _TLM_CHECKERS_H
 
-#include "tlm_generic_payload.h"
+#include "tlm.h"
 
 namespace tlm {
 
@@ -55,7 +55,7 @@ public:
 	inline void burst_mode_wrapping_not_supported() {m_burst_mode_wrapping_supported = false;}
 
 	// main function to check if the transaction is valid 
-	bool transactionIsValid(tlm_generic_payload* gp)
+	bool transactionIsValid(tlm::tlm_generic_payload* gp)
 	{
 		m_response_status = do_check(gp);
 
@@ -66,7 +66,7 @@ public:
 
 private:
 	
-	tlm_response_status do_check(tlm_generic_payload* gp)
+	tlm_response_status do_check(tlm::tlm_generic_payload* gp)
 	{
 		// Check 1: Write transaction supported
 		if((gp->get_command() == TLM_WRITE_COMMAND) && (m_write_command_supported == false))

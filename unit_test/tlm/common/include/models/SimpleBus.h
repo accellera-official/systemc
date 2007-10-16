@@ -31,7 +31,7 @@ template <int NR_OF_MASTERS, int NR_OF_SLAVES>
 class SimpleBus : public sc_module
 {
 public:
-  typedef tlm::tlm_transaction transaction_type;
+  typedef tlm::tlm_generic_payload transaction_type;
   typedef tlm::tlm_phase phase_type;
   typedef SimpleSlaveSocket<transaction_type> slave_socket_type;
   typedef SimpleMasterSocket<transaction_type> master_socket_type;
@@ -98,10 +98,10 @@ public:
     // - substract base address
     // - return master socket
 
-    const uint64_t address = trans.getAddress();
+    const sc_dt::uint64 address = trans.get_address();
 
     unsigned int portId = (unsigned int)address >> 28;
-    trans.setAddress(address & 0xfffffff);
+    trans.set_address(address & 0xfffffff);
 
     return &master_socket[portId];
   }

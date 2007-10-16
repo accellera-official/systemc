@@ -36,7 +36,7 @@ public:
   typedef tlm::tlm_annotated_transport_if<tlm_request_type, tlm_response_type> tlm_transport_if;
   typedef sc_export<tlm_transport_if> slave_export;
 
-  typedef tlm::tlm_transaction transaction_type;
+  typedef tlm::tlm_generic_payload transaction_type;
   typedef tlm::tlm_phase phase_type;
   typedef tlm::tlm_nonblocking_transport_if<transaction_type> interface_type;
   typedef SimpleMasterSocket<transaction_type> master_socket_type;
@@ -60,22 +60,22 @@ public:
     phase_type phase = tlm::BEGIN_REQ;
 
     transaction_type trans;
-    trans.setAddress(req.get_address());
+    trans.set_address(req.get_address());
     
     unsigned int data;
-    trans.setDataPtr(reinterpret_cast<char*>(&data));
+    trans.set_data_ptr(reinterpret_cast<unsigned char*>(&data));
 
     if (req.get_command() == READ) {
-      trans.setIsRead();
+      trans.set_command(tlm::TLM_READ_COMMAND);
     } else { // WRITE
-      trans.setIsWrite();
+      trans.set_command(tlm::TLM_WRITE_COMMAND);
       data = req.get_data();
     }
 
     socket->nb_transport(trans, phase, t);
 
     tlm_status status;
-    if (trans.getResponse()) {
+    if (trans.get_response_status() == tlm::TLM_OK_RESP) {
       status.set_ok();
 
     } else {

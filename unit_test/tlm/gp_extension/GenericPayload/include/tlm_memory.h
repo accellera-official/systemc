@@ -1,7 +1,7 @@
 #ifndef _TLM_MEMORY_H
 #define _TLM_MEMORY_H
 
-#include "tlm_helpers.h"
+#include "tlm.h"
 #include <vector>
 
 //

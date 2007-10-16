@@ -47,11 +47,10 @@ public:
     
 private:
 
-    tlm_memory m_mem;
-
-    unsigned int m_mem_size;
     unsigned int m_start_address;
     unsigned int m_end_address;
+    tlm_memory m_mem;
+    unsigned int m_mem_size;
     unsigned int m_incr_address;
 
 	tlm::tlm_checker m_checker;
