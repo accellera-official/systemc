@@ -1,3 +1,4 @@
+include ./Makefile.config
 
 SUBDIRS = \
  	../bus \
@@ -12,5 +13,11 @@ all:
         (cd $$i/build-unix && $(MAKE)); done
 
 clean:
-	@for i in $(SUBDIRS); do \
-        (cd $$i/build-unix && $(MAKE) clean); done
+	@if ( test ! -d $(SYSTEMC_HOME) ); \
+		then echo 'SYSTEMC_HOME [$(SYSTEMC_HOME)] is not present. Update $(PWD)/Makefile.config'; \
+	elif ( test ! -d $(TLM_HOME) ); \
+		then echo 'TLM_HOME [$(TLM_HOME)] is not present. Update $(PWD)/Makefile.config'; \
+	else \
+		for i in $(SUBDIRS); do (cd $$i/build-unix && $(MAKE) clean); done; \
+    fi
+       	
