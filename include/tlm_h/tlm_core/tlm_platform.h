@@ -27,6 +27,39 @@
 
 // make sure we have the standard scalar data types
 
+// 8-bit ints
+#if ( ! defined ( _INT8_T ) )
+#define _INT8_T
+typedef long long   int8_t;
+#endif /* ! _INT8_T */
+
+#if ( ! defined ( _UINT8_T ) )
+#define _UINT8_T
+typedef unsigned long long   uint8_t;
+#endif /* ! _UINT8_T */
+
+// 16-bit ints
+#if ( ! defined ( _INT16_T ) )
+#define _INT16_T
+typedef long long   int16_t;
+#endif /* ! _INT16_T */
+
+#if ( ! defined ( _UINT16_T ) )
+#define _UINT16_T
+typedef unsigned long long   uint16_t;
+#endif /* ! _UINT16_T */
+
+// 32-bit ints
+#if ( ! defined ( _INT32_T ) )
+#define _INT32_T
+typedef long long   int32_t;
+#endif /* ! _INT32_T */
+
+#if ( ! defined ( _UINT32_T ) )
+#define _UINT32_T
+typedef unsigned long long   uint32_t;
+#endif /* ! _UINT32_T */
+
 // 64-bit ints
 #if ( ! defined ( _INT64_T ) )
 #define _INT64_T
