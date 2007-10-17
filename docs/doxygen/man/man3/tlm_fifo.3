@@ -1,0 +1,461 @@
+.TH "tlm_fifo" 3 "17 Oct 2007" "Version 1" "TLM 2" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tlm_fifo \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <tlm_fifo.h>\fP
+.PP
+Inherits \fBtlm_fifo_get_if< T >< T >\fP, and \fBtlm_fifo_put_if< T >< T >\fP.
+.PP
+Inherited by \fBanalysis_fifo< T >\fP, and \fBtlm_internal_annotated_fifo< T >\fP.
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBtlm_fifo\fP (int size_=1)"
+.br
+.ti -1c
+.RI "\fBtlm_fifo\fP (const char *name_, int size_=1)"
+.br
+.ti -1c
+.RI "virtual \fB~tlm_fifo\fP ()"
+.br
+.ti -1c
+.RI "T \fBget\fP (\fBtlm_tag\fP< T > *t=0)"
+.br
+.ti -1c
+.RI "bool \fBnb_get\fP (T &)"
+.br
+.ti -1c
+.RI "bool \fBnb_can_get\fP (\fBtlm_tag\fP< T > *t=0) const "
+.br
+.ti -1c
+.RI "const sc_event & \fBok_to_get\fP (\fBtlm_tag\fP< T > *t=0) const "
+.br
+.ti -1c
+.RI "T \fBpeek\fP (\fBtlm_tag\fP< T > *t=0) const "
+.br
+.ti -1c
+.RI "bool \fBnb_peek\fP (T &) const "
+.br
+.ti -1c
+.RI "bool \fBnb_can_peek\fP (\fBtlm_tag\fP< T > *t=0) const "
+.br
+.ti -1c
+.RI "const sc_event & \fBok_to_peek\fP (\fBtlm_tag\fP< T > *t=0) const "
+.br
+.ti -1c
+.RI "void \fBput\fP (const T &)"
+.br
+.ti -1c
+.RI "bool \fBnb_put\fP (const T &)"
+.br
+.ti -1c
+.RI "bool \fBnb_can_put\fP (\fBtlm_tag\fP< T > *t=0) const "
+.br
+.ti -1c
+.RI "const sc_event & \fBok_to_put\fP (\fBtlm_tag\fP< T > *t=0) const "
+.br
+.ti -1c
+.RI "void \fBnb_expand\fP (unsigned int n=1)"
+.br
+.ti -1c
+.RI "void \fBnb_unbound\fP (unsigned int n=16)"
+.br
+.ti -1c
+.RI "bool \fBnb_reduce\fP (unsigned int n=1)"
+.br
+.ti -1c
+.RI "bool \fBnb_bound\fP (unsigned int n)"
+.br
+.ti -1c
+.RI "bool \fBnb_peek\fP (T &, int n) const "
+.br
+.ti -1c
+.RI "bool \fBnb_poke\fP (const T &, int n=0)"
+.br
+.ti -1c
+.RI "int \fBused\fP () const "
+.br
+.ti -1c
+.RI "int \fBsize\fP () const "
+.br
+.ti -1c
+.RI "void \fBdebug\fP () const "
+.br
+.ti -1c
+.RI "const char * \fBkind\fP () const "
+.br
+.in -1c
+.SS "Static Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "static const char *const \fBkind_string\fP = 'tlm_fifo'"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "sc_event & \fBread_event\fP (\fBtlm_tag\fP< T > *t=0)"
+.br
+.ti -1c
+.RI "void \fBupdate\fP ()"
+.br
+.ti -1c
+.RI "void \fBinit\fP (int)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBcircular_buffer\fP< T > * \fBbuffer\fP"
+.br
+.ti -1c
+.RI "int \fBm_size\fP"
+.br
+.ti -1c
+.RI "int \fBm_num_readable\fP"
+.br
+.ti -1c
+.RI "int \fBm_num_read\fP"
+.br
+.ti -1c
+.RI "int \fBm_num_written\fP"
+.br
+.ti -1c
+.RI "bool \fBm_expand\fP"
+.br
+.ti -1c
+.RI "int \fBm_num_read_no_notify\fP"
+.br
+.ti -1c
+.RI "sc_event \fBm_data_read_event\fP"
+.br
+.ti -1c
+.RI "sc_event \fBm_data_written_event\fP"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "bool \fBnb_can_put\fP (int count, \fBtlm_tag\fP< T > *t=0) const "
+.br
+.ti -1c
+.RI "bool \fBnb_get_no_notify\fP (T &)"
+.br
+.ti -1c
+.RI "\fBtlm_fifo\fP (const \fBtlm_fifo\fP< T > &)"
+.br
+.ti -1c
+.RI "\fBtlm_fifo\fP & \fBoperator=\fP (const \fBtlm_fifo\fP< T > &)"
+.br
+.ti -1c
+.RI "bool \fBis_empty\fP () const "
+.br
+.ti -1c
+.RI "bool \fBis_full\fP () const "
+.br
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "class \fBtlm_annotated::tlm_annotated_fifo< T >\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<class T> class tlm_fifo< T >"
+
+.PP
+Definition at line 45 of file tlm_fifo.h.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<class T> \fBtlm_fifo\fP< T >::\fBtlm_fifo\fP (int size_ = \fC1\fP)\fC [inline, explicit]\fP"
+.PP
+Definition at line 54 of file tlm_fifo.h.
+.PP
+References tlm_fifo< T >::init().
+.SS "template<class T> \fBtlm_fifo\fP< T >::\fBtlm_fifo\fP (const char * name_, int size_ = \fC1\fP)\fC [inline, explicit]\fP"
+.PP
+Definition at line 61 of file tlm_fifo.h.
+.PP
+References tlm_fifo< T >::init().
+.SS "template<class T> virtual \fBtlm_fifo\fP< T >::~\fBtlm_fifo\fP ()\fC [inline, virtual]\fP"
+.PP
+Definition at line 70 of file tlm_fifo.h.
+.PP
+References tlm_fifo< T >::buffer.
+.SS "template<class T> \fBtlm_fifo\fP< T >::\fBtlm_fifo\fP (const \fBtlm_fifo\fP< T > &)\fC [private]\fP"
+.PP
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename T> T \fBtlm_fifo\fP< T >::get (\fBtlm_tag\fP< T > * t = \fC0\fP)\fC [inline, virtual]\fP"
+.PP
+Implements \fBtlm_blocking_get_if< T >\fP.
+.PP
+Definition at line 36 of file tlm_fifo_put_get.h.
+.PP
+References tlm_fifo< T >::buffer, tlm_fifo< T >::is_empty(), tlm_fifo< T >::m_data_written_event, and tlm_fifo< T >::m_num_read.
+.SS "template<typename T> bool \fBtlm_fifo\fP< T >::nb_get (T & val_)\fC [inline, virtual]\fP"
+.PP
+Implements \fBtlm_nonblocking_get_if< T >\fP.
+.PP
+Definition at line 55 of file tlm_fifo_put_get.h.
+.PP
+References tlm_fifo< T >::buffer, tlm_fifo< T >::is_empty(), and tlm_fifo< T >::m_num_read.
+.SS "template<typename T> bool \fBtlm_fifo\fP< T >::nb_can_get (\fBtlm_tag\fP< T > * t = \fC0\fP) const\fC [inline, virtual]\fP"
+.PP
+Implements \fBtlm_nonblocking_get_if< T >\fP.
+.PP
+Definition at line 95 of file tlm_fifo_put_get.h.
+.PP
+References tlm_fifo< T >::is_empty().
+.SS "template<class T> const sc_event& \fBtlm_fifo\fP< T >::ok_to_get (\fBtlm_tag\fP< T > * t = \fC0\fP) const\fC [inline, virtual]\fP"
+.PP
+Implements \fBtlm_nonblocking_get_if< T >\fP.
+.PP
+Definition at line 82 of file tlm_fifo.h.
+.PP
+References tlm_fifo< T >::m_data_written_event.
+.SS "template<typename T> T \fBtlm_fifo\fP< T >::peek (\fBtlm_tag\fP< T > * t = \fC0\fP) const\fC [inline, virtual]\fP"
+.PP
+Implements \fBtlm_blocking_peek_if< T >\fP.
+.PP
+Definition at line 30 of file tlm_fifo_peek.h.
+.PP
+References tlm_fifo< T >::buffer, tlm_fifo< T >::is_empty(), and tlm_fifo< T >::m_data_written_event.
+.SS "template<typename T> bool \fBtlm_fifo\fP< T >::nb_peek (T & t) const\fC [inline, virtual]\fP"
+.PP
+Implements \fBtlm_nonblocking_peek_if< T >\fP.
+.PP
+Definition at line 48 of file tlm_fifo_peek.h.
+.PP
+References tlm_fifo< T >::buffer, and tlm_fifo< T >::used().
+.SS "template<typename T> bool \fBtlm_fifo\fP< T >::nb_can_peek (\fBtlm_tag\fP< T > * t = \fC0\fP) const\fC [inline, virtual]\fP"
+.PP
+Implements \fBtlm_nonblocking_peek_if< T >\fP.
+.PP
+Definition at line 80 of file tlm_fifo_peek.h.
+.PP
+References tlm_fifo< T >::is_empty().
+.SS "template<class T> const sc_event& \fBtlm_fifo\fP< T >::ok_to_peek (\fBtlm_tag\fP< T > * t = \fC0\fP) const\fC [inline, virtual]\fP"
+.PP
+Implements \fBtlm_nonblocking_peek_if< T >\fP.
+.PP
+Definition at line 92 of file tlm_fifo.h.
+.PP
+References tlm_fifo< T >::m_data_written_event.
+.SS "template<typename T> void \fBtlm_fifo\fP< T >::put (const T & val_)\fC [inline, virtual]\fP"
+.PP
+Implements \fBtlm_blocking_put_if< T >\fP.
+.PP
+Definition at line 111 of file tlm_fifo_put_get.h.
+.PP
+References tlm_fifo< T >::buffer, tlm_fifo< T >::is_full(), tlm_fifo< T >::m_data_read_event, and tlm_fifo< T >::m_num_written.
+.SS "template<typename T> bool \fBtlm_fifo\fP< T >::nb_put (const T & val_)\fC [inline, virtual]\fP"
+.PP
+Implements \fBtlm_nonblocking_put_if< T >\fP.
+.PP
+Definition at line 132 of file tlm_fifo_put_get.h.
+.PP
+References tlm_fifo< T >::buffer, tlm_fifo< T >::is_full(), and tlm_fifo< T >::m_num_written.
+.PP
+Referenced by tlm_internal_annotated_fifo< T >::write(), and analysis_fifo< T >::write().
+.SS "template<typename T> bool \fBtlm_fifo\fP< T >::nb_can_put (\fBtlm_tag\fP< T > * t = \fC0\fP) const\fC [inline, virtual]\fP"
+.PP
+Implements \fBtlm_nonblocking_put_if< T >\fP.
+.PP
+Definition at line 155 of file tlm_fifo_put_get.h.
+.PP
+References tlm_fifo< T >::is_full().
+.PP
+Referenced by tlm_internal_annotated_fifo< T >::write().
+.SS "template<class T> const sc_event& \fBtlm_fifo\fP< T >::ok_to_put (\fBtlm_tag\fP< T > * t = \fC0\fP) const\fC [inline, virtual]\fP"
+.PP
+Implements \fBtlm_nonblocking_put_if< T >\fP.
+.PP
+Definition at line 103 of file tlm_fifo.h.
+.PP
+References tlm_fifo< T >::m_data_read_event.
+.SS "template<typename T> void \fBtlm_fifo\fP< T >::nb_expand (unsigned int n = \fC1\fP)\fC [inline]\fP"
+.PP
+Definition at line 36 of file tlm_fifo_resize.h.
+.PP
+References tlm_fifo< T >::m_expand, and tlm_fifo< T >::m_size.
+.SS "template<typename T> void \fBtlm_fifo\fP< T >::nb_unbound (unsigned int n = \fC16\fP)\fC [inline]\fP"
+.PP
+Definition at line 47 of file tlm_fifo_resize.h.
+.PP
+References tlm_fifo< T >::buffer, tlm_fifo< T >::m_expand, and tlm_fifo< T >::m_size.
+.SS "template<typename T> bool \fBtlm_fifo\fP< T >::nb_reduce (unsigned int n = \fC1\fP)\fC [inline]\fP"
+.PP
+Definition at line 63 of file tlm_fifo_resize.h.
+.PP
+References tlm_fifo< T >::m_size, tlm_fifo< T >::nb_bound(), and tlm_fifo< T >::size().
+.SS "template<typename T> bool \fBtlm_fifo\fP< T >::nb_bound (unsigned int n)\fC [inline]\fP"
+.PP
+Definition at line 76 of file tlm_fifo_resize.h.
+.PP
+References tlm_fifo< T >::m_size, and tlm_fifo< T >::used().
+.PP
+Referenced by tlm_fifo< T >::nb_reduce().
+.SS "template<typename T> bool \fBtlm_fifo\fP< T >::nb_peek (T & t, int n) const\fC [inline, virtual]\fP"
+.PP
+Implements \fBtlm_fifo_debug_if< T >\fP.
+.PP
+Definition at line 62 of file tlm_fifo_peek.h.
+.PP
+References tlm_fifo< T >::buffer, and tlm_fifo< T >::used().
+.SS "template<typename T> bool \fBtlm_fifo\fP< T >::nb_poke (const T & t, int n = \fC0\fP)\fC [inline, virtual]\fP"
+.PP
+Implements \fBtlm_fifo_debug_if< T >\fP.
+.PP
+Definition at line 88 of file tlm_fifo_peek.h.
+.PP
+References tlm_fifo< T >::buffer, and tlm_fifo< T >::used().
+.SS "template<class T> int \fBtlm_fifo\fP< T >::used () const\fC [inline, virtual]\fP"
+.PP
+Implements \fBtlm_fifo_debug_if< T >\fP.
+.PP
+Definition at line 120 of file tlm_fifo.h.
+.PP
+References tlm_fifo< T >::m_num_read, and tlm_fifo< T >::m_num_readable.
+.PP
+Referenced by tlm_fifo< T >::debug(), tlm_fifo< T >::is_empty(), tlm_fifo< T >::nb_bound(), tlm_fifo< T >::nb_peek(), and tlm_fifo< T >::nb_poke().
+.SS "template<class T> int \fBtlm_fifo\fP< T >::size () const\fC [inline, virtual]\fP"
+.PP
+Implements \fBtlm_fifo_debug_if< T >\fP.
+.PP
+Definition at line 124 of file tlm_fifo.h.
+.PP
+References tlm_fifo< T >::m_size.
+.PP
+Referenced by tlm_fifo< T >::debug(), tlm_fifo< T >::is_full(), and tlm_fifo< T >::nb_reduce().
+.SS "template<class T> void \fBtlm_fifo\fP< T >::debug () const\fC [inline, virtual]\fP"
+.PP
+Implements \fBtlm_fifo_debug_if< T >\fP.
+.PP
+Definition at line 128 of file tlm_fifo.h.
+.PP
+References tlm_fifo< T >::is_empty(), tlm_fifo< T >::is_full(), tlm_fifo< T >::m_num_read, tlm_fifo< T >::m_num_readable, tlm_fifo< T >::m_num_written, tlm_fifo< T >::size(), and tlm_fifo< T >::used().
+.SS "template<class T> const char* \fBtlm_fifo\fP< T >::kind () const\fC [inline]\fP"
+.PP
+Definition at line 143 of file tlm_fifo.h.
+.PP
+References tlm_fifo< T >::kind_string.
+.SS "template<class T> bool \fBtlm_fifo\fP< T >::nb_can_put (int count, \fBtlm_tag\fP< T > * t = \fC0\fP) const\fC [inline, private]\fP"
+.PP
+Definition at line 151 of file tlm_fifo.h.
+.PP
+References tlm_fifo< T >::m_num_readable, tlm_fifo< T >::m_num_written, and tlm_fifo< T >::m_size.
+.SS "template<typename T> bool \fBtlm_fifo\fP< T >::nb_get_no_notify (T & val_)\fC [inline, private]\fP"
+.PP
+Definition at line 74 of file tlm_fifo_put_get.h.
+.PP
+References tlm_fifo< T >::buffer, tlm_fifo< T >::is_empty(), tlm_fifo< T >::m_num_read, and tlm_fifo< T >::m_num_read_no_notify.
+.SS "template<class T> sc_event& \fBtlm_fifo\fP< T >::read_event (\fBtlm_tag\fP< T > * t = \fC0\fP)\fC [inline, protected]\fP"
+.PP
+Definition at line 161 of file tlm_fifo.h.
+.PP
+References tlm_fifo< T >::m_data_read_event.
+.PP
+Referenced by tlm_internal_annotated_fifo< T >::write().
+.SS "template<typename T> void \fBtlm_fifo\fP< T >::update ()\fC [inline, protected]\fP"
+.PP
+Definition at line 248 of file tlm_fifo.h.
+.PP
+References tlm_fifo< T >::buffer, tlm_fifo< T >::m_data_read_event, tlm_fifo< T >::m_data_written_event, tlm_fifo< T >::m_expand, tlm_fifo< T >::m_num_read, tlm_fifo< T >::m_num_read_no_notify, tlm_fifo< T >::m_num_readable, and tlm_fifo< T >::m_num_written.
+.SS "template<typename T> void \fBtlm_fifo\fP< T >::init (int size_)\fC [inline, protected]\fP"
+.PP
+Definition at line 222 of file tlm_fifo.h.
+.PP
+References tlm_fifo< T >::buffer, tlm_fifo< T >::m_expand, tlm_fifo< T >::m_num_read, tlm_fifo< T >::m_num_read_no_notify, tlm_fifo< T >::m_num_readable, tlm_fifo< T >::m_num_written, and tlm_fifo< T >::m_size.
+.PP
+Referenced by tlm_fifo< T >::tlm_fifo().
+.SS "template<class T> \fBtlm_fifo\fP& \fBtlm_fifo\fP< T >::operator= (const \fBtlm_fifo\fP< T > &)\fC [private]\fP"
+.PP
+.SS "template<class T> bool \fBtlm_fifo\fP< T >::is_empty () const\fC [inline, private]\fP"
+.PP
+Definition at line 199 of file tlm_fifo.h.
+.PP
+References tlm_fifo< T >::used().
+.PP
+Referenced by tlm_fifo< T >::debug(), tlm_fifo< T >::get(), tlm_fifo< T >::nb_can_get(), tlm_fifo< T >::nb_can_peek(), tlm_fifo< T >::nb_get(), tlm_fifo< T >::nb_get_no_notify(), and tlm_fifo< T >::peek().
+.SS "template<class T> bool \fBtlm_fifo\fP< T >::is_full () const\fC [inline, private]\fP"
+.PP
+Definition at line 203 of file tlm_fifo.h.
+.PP
+References tlm_fifo< T >::m_num_readable, tlm_fifo< T >::m_num_written, and tlm_fifo< T >::size().
+.PP
+Referenced by tlm_fifo< T >::debug(), tlm_fifo< T >::nb_can_put(), tlm_fifo< T >::nb_put(), and tlm_fifo< T >::put().
+.SH "Friends And Related Function Documentation"
+.PP 
+.SS "template<class T> friend class \fBtlm_annotated::tlm_annotated_fifo\fP< T >\fC [friend]\fP"
+.PP
+Definition at line 147 of file tlm_fifo.h.
+.SH "Member Data Documentation"
+.PP 
+.SS "template<class T> const char *const \fBtlm_fifo\fP< T >::\fBkind_string\fP = 'tlm_fifo'\fC [inline, static]\fP"
+.PP
+Definition at line 141 of file tlm_fifo.h.
+.PP
+Referenced by tlm_fifo< T >::kind().
+.SS "template<class T> \fBcircular_buffer\fP<T>* \fBtlm_fifo\fP< T >::\fBbuffer\fP\fC [protected]\fP"
+.PP
+Definition at line 175 of file tlm_fifo.h.
+.PP
+Referenced by tlm_fifo< T >::get(), tlm_fifo< T >::init(), tlm_fifo< T >::nb_get(), tlm_fifo< T >::nb_get_no_notify(), tlm_fifo< T >::nb_peek(), tlm_fifo< T >::nb_poke(), tlm_fifo< T >::nb_put(), tlm_fifo< T >::nb_unbound(), tlm_fifo< T >::peek(), tlm_fifo< T >::put(), tlm_fifo< T >::update(), and tlm_fifo< T >::~tlm_fifo().
+.SS "template<class T> int \fBtlm_fifo\fP< T >::\fBm_size\fP\fC [protected]\fP"
+.PP
+Definition at line 177 of file tlm_fifo.h.
+.PP
+Referenced by tlm_fifo< T >::init(), tlm_fifo< T >::nb_bound(), tlm_fifo< T >::nb_can_put(), tlm_fifo< T >::nb_expand(), tlm_fifo< T >::nb_reduce(), tlm_fifo< T >::nb_unbound(), and tlm_fifo< T >::size().
+.SS "template<class T> int \fBtlm_fifo\fP< T >::\fBm_num_readable\fP\fC [protected]\fP"
+.PP
+Definition at line 179 of file tlm_fifo.h.
+.PP
+Referenced by tlm_fifo< T >::debug(), tlm_fifo< T >::init(), tlm_fifo< T >::is_full(), tlm_fifo< T >::nb_can_put(), tlm_fifo< T >::update(), and tlm_fifo< T >::used().
+.SS "template<class T> int \fBtlm_fifo\fP< T >::\fBm_num_read\fP\fC [protected]\fP"
+.PP
+Definition at line 180 of file tlm_fifo.h.
+.PP
+Referenced by tlm_fifo< T >::debug(), tlm_fifo< T >::get(), tlm_fifo< T >::init(), tlm_fifo< T >::nb_get(), tlm_fifo< T >::nb_get_no_notify(), tlm_fifo< T >::update(), and tlm_fifo< T >::used().
+.SS "template<class T> int \fBtlm_fifo\fP< T >::\fBm_num_written\fP\fC [protected]\fP"
+.PP
+Definition at line 181 of file tlm_fifo.h.
+.PP
+Referenced by tlm_fifo< T >::debug(), tlm_fifo< T >::init(), tlm_fifo< T >::is_full(), tlm_fifo< T >::nb_can_put(), tlm_fifo< T >::nb_put(), tlm_fifo< T >::put(), and tlm_fifo< T >::update().
+.SS "template<class T> bool \fBtlm_fifo\fP< T >::\fBm_expand\fP\fC [protected]\fP"
+.PP
+Definition at line 182 of file tlm_fifo.h.
+.PP
+Referenced by tlm_fifo< T >::init(), tlm_fifo< T >::nb_expand(), tlm_fifo< T >::nb_unbound(), and tlm_fifo< T >::update().
+.SS "template<class T> int \fBtlm_fifo\fP< T >::\fBm_num_read_no_notify\fP\fC [protected]\fP"
+.PP
+Definition at line 183 of file tlm_fifo.h.
+.PP
+Referenced by tlm_fifo< T >::init(), tlm_fifo< T >::nb_get_no_notify(), and tlm_fifo< T >::update().
+.SS "template<class T> sc_event \fBtlm_fifo\fP< T >::\fBm_data_read_event\fP\fC [protected]\fP"
+.PP
+Definition at line 185 of file tlm_fifo.h.
+.PP
+Referenced by tlm_fifo< T >::ok_to_put(), tlm_fifo< T >::put(), tlm_fifo< T >::read_event(), and tlm_fifo< T >::update().
+.SS "template<class T> sc_event \fBtlm_fifo\fP< T >::\fBm_data_written_event\fP\fC [protected]\fP"
+.PP
+Definition at line 186 of file tlm_fifo.h.
+.PP
+Referenced by tlm_fifo< T >::get(), tlm_fifo< T >::ok_to_get(), tlm_fifo< T >::ok_to_peek(), tlm_fifo< T >::peek(), and tlm_fifo< T >::update().
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for TLM 2 from the source code.

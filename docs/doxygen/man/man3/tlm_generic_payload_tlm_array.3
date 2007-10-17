@@ -1,0 +1,126 @@
+.TH "tlm_generic_payload::tlm_array" 3 "17 Oct 2007" "Version 1" "TLM 2" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tlm_generic_payload::tlm_array \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <tlm_generic_payload.h>\fP
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBtlm_array\fP (unsigned int size=0, T default_value=0)"
+.br
+.ti -1c
+.RI "\fBtlm_array\fP (const \fBtlm_array\fP &orig)"
+.br
+.ti -1c
+.RI "\fB~tlm_array\fP ()"
+.br
+.ti -1c
+.RI "T & \fBoperator[]\fP (const unsigned int index)"
+.br
+.ti -1c
+.RI "const T & \fBoperator[]\fP (const unsigned int index) const "
+.br
+.ti -1c
+.RI "unsigned int \fBsize\fP () const "
+.br
+.ti -1c
+.RI "void \fBexpand\fP (unsigned int new_size)"
+.br
+.ti -1c
+.RI "const char * \fBkind\fP () const "
+.br
+.in -1c
+.SS "Static Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "static const char *const \fBkind_string\fP = 'tlm_array'"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBtlm_array\fP & \fBoperator=\fP (const \fBtlm_array\fP< T > &)"
+.br
+.ti -1c
+.RI "void \fBreport_error\fP (std::exception &e)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "T * \fBm_data\fP"
+.br
+.ti -1c
+.RI "unsigned int \fBm_size\fP"
+.br
+.ti -1c
+.RI "T \fBm_default\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename T> class tlm_generic_payload::tlm_array< T >"
+
+.PP
+Definition at line 178 of file tlm_generic_payload.h.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename T> \fBtlm_generic_payload::tlm_array\fP< T >::\fBtlm_array\fP (unsigned int size = \fC0\fP, T default_value = \fC0\fP)\fC [inline]\fP"
+.PP
+Definition at line 183 of file tlm_generic_payload.h.
+.SS "template<typename T> \fBtlm_generic_payload::tlm_array\fP< T >::\fBtlm_array\fP (const \fBtlm_array\fP< T > & orig)\fC [inline]\fP"
+.PP
+Definition at line 192 of file tlm_generic_payload.h.
+.SS "template<typename T> \fBtlm_generic_payload::tlm_array\fP< T >::~\fBtlm_array\fP ()\fC [inline]\fP"
+.PP
+Definition at line 211 of file tlm_generic_payload.h.
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename T> T& \fBtlm_generic_payload::tlm_array\fP< T >::operator[] (const unsigned int index)\fC [inline]\fP"
+.PP
+Definition at line 218 of file tlm_generic_payload.h.
+.SS "template<typename T> const T& \fBtlm_generic_payload::tlm_array\fP< T >::operator[] (const unsigned int index) const\fC [inline]\fP"
+.PP
+Definition at line 223 of file tlm_generic_payload.h.
+.SS "template<typename T> unsigned int \fBtlm_generic_payload::tlm_array\fP< T >::size () const\fC [inline]\fP"
+.PP
+Definition at line 230 of file tlm_generic_payload.h.
+.SS "template<typename T> void \fBtlm_generic_payload::tlm_array\fP< T >::expand (unsigned int new_size)\fC [inline]\fP"
+.PP
+Definition at line 233 of file tlm_generic_payload.h.
+.SS "template<typename T> const char* \fBtlm_generic_payload::tlm_array\fP< T >::kind () const\fC [inline]\fP"
+.PP
+Definition at line 276 of file tlm_generic_payload.h.
+.SS "template<typename T> \fBtlm_array\fP& \fBtlm_generic_payload::tlm_array\fP< T >::operator= (const \fBtlm_array\fP< T > &)\fC [protected]\fP"
+.PP
+.SS "template<typename T> void \fBtlm_generic_payload::tlm_array\fP< T >::report_error (std::exception & e)\fC [inline, protected]\fP"
+.PP
+Definition at line 287 of file tlm_generic_payload.h.
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename T> const char *const \fBtlm_generic_payload::tlm_array\fP< T >::\fBkind_string\fP = 'tlm_array'\fC [inline, static]\fP"
+.PP
+Definition at line 275 of file tlm_generic_payload.h.
+.SS "template<typename T> T* \fBtlm_generic_payload::tlm_array\fP< T >::\fBm_data\fP\fC [protected]\fP"
+.PP
+Definition at line 279 of file tlm_generic_payload.h.
+.SS "template<typename T> unsigned int \fBtlm_generic_payload::tlm_array\fP< T >::\fBm_size\fP\fC [protected]\fP"
+.PP
+Definition at line 280 of file tlm_generic_payload.h.
+.SS "template<typename T> T \fBtlm_generic_payload::tlm_array\fP< T >::\fBm_default\fP\fC [protected]\fP"
+.PP
+Definition at line 281 of file tlm_generic_payload.h.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for TLM 2 from the source code.

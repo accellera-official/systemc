@@ -1,0 +1,140 @@
+.TH "tlm_ports::tlm_target_port_base" 3 "17 Oct 2007" "Version 1" "TLM 2" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tlm_ports::tlm_target_port_base \- Class \fBtlm_target_port_base\fP: This class is a base class for tlm_target port class.  
+
+.PP
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <tlm_ports.h>\fP
+.PP
+Inherited by \fBtlm_ports::tlm_target_port< IF >\fP.
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBtlm_target_port_base\fP ()"
+.br
+.in -1c
+.PP
+.RI "\fBData members access methods\fP"
+.br
+
+.in +1c
+.in +1c
+.ti -1c
+.RI "int \fBget_tlm_export_id\fP () const "
+.br
+.RI "\fIReturns the port id. \fP"
+.ti -1c
+.RI "void \fBset_tlm_export_id\fP (int tlm_export_id)"
+.br
+.RI "\fISets the port id. \fP"
+.ti -1c
+.RI "void \fBregister_target_port\fP (\fBthis_type\fP *target_port)"
+.br
+.RI "\fIRegister the target port. \fP"
+.ti -1c
+.RI "std::vector< \fBthis_type\fP * > & \fBget_target_port_list\fP ()"
+.br
+.RI "\fIReturns the vector of registered target port(s). \fP"
+.ti -1c
+.RI "void \fBset_target_port_list\fP (std::vector< \fBthis_type\fP * > &target_port_list)"
+.br
+.RI "\fISets the vector of registered target port(s) (port propagation). \fP"
+.in -1c
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "int \fBm_tlm_export_id\fP"
+.br
+.RI "\fIPort instance ID. \fP"
+.ti -1c
+.RI "std::vector< \fBthis_type\fP * > \fBm_target_port_list\fP"
+.br
+.RI "\fItarget port objects registration \fP"
+.in -1c
+.SS "Private Types"
+
+.in +1c
+.ti -1c
+.RI "typedef \fBtlm_target_port_base\fP \fBthis_type\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Class \fBtlm_target_port_base\fP: This class is a base class for tlm_target port class. 
+
+
+.br
+ It provides a container to store registered target ports as pointer list. 
+.br
+ In addition, it provides a target port ID used by to identify the input export port. This ID is injected in the request structure by the initiator at run time.
+.PP
+
+.br
+ Accessors are provided for the port list and port ID. 
+.PP
+Definition at line 106 of file tlm_ports.h.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef \fBtlm_target_port_base\fP \fBtlm_ports::tlm_target_port_base::this_type\fP\fC [private]\fP"
+.PP
+Definition at line 108 of file tlm_ports.h.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "tlm_ports::tlm_target_port_base::tlm_target_port_base ()\fC [inline]\fP"
+.PP
+Definition at line 115 of file tlm_ports.h.
+.SH "Member Function Documentation"
+.PP 
+.SS "int tlm_ports::tlm_target_port_base::get_tlm_export_id () const\fC [inline]\fP"
+.PP
+Returns the port id. 
+.PP
+Definition at line 126 of file tlm_ports.h.
+.SS "void tlm_ports::tlm_target_port_base::set_tlm_export_id (int tlm_export_id)\fC [inline]\fP"
+.PP
+Sets the port id. 
+.PP
+Definition at line 131 of file tlm_ports.h.
+.SS "void tlm_ports::tlm_target_port_base::register_target_port (\fBthis_type\fP * target_port)\fC [inline]\fP"
+.PP
+Register the target port. 
+.PP
+Definition at line 139 of file tlm_ports.h.
+.SS "std::vector<\fBthis_type\fP *>& tlm_ports::tlm_target_port_base::get_target_port_list ()\fC [inline]\fP"
+.PP
+Returns the vector of registered target port(s). 
+.PP
+Definition at line 144 of file tlm_ports.h.
+.SS "void tlm_ports::tlm_target_port_base::set_target_port_list (std::vector< \fBthis_type\fP * > & target_port_list)\fC [inline]\fP"
+.PP
+Sets the vector of registered target port(s) (port propagation). 
+.PP
+Definition at line 149 of file tlm_ports.h.
+.SH "Member Data Documentation"
+.PP 
+.SS "int \fBtlm_ports::tlm_target_port_base::m_tlm_export_id\fP\fC [protected]\fP"
+.PP
+Port instance ID. 
+.PP
+Definition at line 159 of file tlm_ports.h.
+.SS "std::vector<\fBthis_type\fP *> \fBtlm_ports::tlm_target_port_base::m_target_port_list\fP\fC [protected]\fP"
+.PP
+target port objects registration 
+.PP
+Direct registration of the target port(s) into current target port. 
+.br
+ Used for transaction recording and target port id propagation in case of target port binding through a module hierarchy 
+.PP
+Definition at line 167 of file tlm_ports.h.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for TLM 2 from the source code.

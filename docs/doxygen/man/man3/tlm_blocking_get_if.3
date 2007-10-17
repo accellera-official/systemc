@@ -1,0 +1,45 @@
+.TH "tlm_blocking_get_if" 3 "17 Oct 2007" "Version 1" "TLM 2" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tlm_blocking_get_if \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <tlm_core_ifs.h>\fP
+.PP
+Inherits \fBsc_interface\fP.
+.PP
+Inherited by \fBtlm_blocking_get_peek_if< T >\fP\fC [virtual]\fP, \fBtlm_get_if< T >\fP\fC [virtual]\fP, and \fBtlm_get_if< REQ >\fP\fC [virtual]\fP.
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual T \fBget\fP (\fBtlm_tag\fP< T > *t=0)=0"
+.br
+.ti -1c
+.RI "virtual void \fBget\fP (T &t)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename T> class tlm_blocking_get_if< T >"
+
+.PP
+Definition at line 50 of file tlm_core_ifs.h.
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename T> virtual T \fBtlm_blocking_get_if\fP< T >::get (\fBtlm_tag\fP< T > * t = \fC0\fP)\fC [pure virtual]\fP"
+.PP
+Implemented in \fBtlm_fifo< T >\fP, \fBtlm_put_get_imp< PUT_DATA, GET_DATA >\fP, and \fBtlm_put_get_imp< REQ, RSP >\fP.
+.PP
+Referenced by tlm_put_get_imp< RSP, REQ >::get().
+.SS "template<typename T> virtual void \fBtlm_blocking_get_if\fP< T >::get (T & t)\fC [inline, virtual]\fP"
+.PP
+Definition at line 54 of file tlm_core_ifs.h.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for TLM 2 from the source code.

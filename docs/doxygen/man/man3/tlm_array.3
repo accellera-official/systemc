@@ -1,0 +1,158 @@
+.TH "tlm_array" 3 "17 Oct 2007" "Version 1" "TLM 2" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tlm_array \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <tlm_array.h>\fP
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBtlm_array\fP (unsigned int size=0, T default_value=0)"
+.br
+.ti -1c
+.RI "\fBtlm_array\fP (const \fBtlm_array\fP &orig)"
+.br
+.ti -1c
+.RI "\fB~tlm_array\fP ()"
+.br
+.ti -1c
+.RI "T & \fBoperator[]\fP (const unsigned int index)"
+.br
+.ti -1c
+.RI "const T & \fBoperator[]\fP (const unsigned int index) const "
+.br
+.ti -1c
+.RI "unsigned int \fBsize\fP () const "
+.br
+.ti -1c
+.RI "void \fBexpand\fP (unsigned int new_size)"
+.br
+.ti -1c
+.RI "const char * \fBkind\fP () const "
+.br
+.in -1c
+.SS "Static Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "static const char *const \fBkind_string\fP = 'tlm_array'"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBtlm_array\fP & \fBoperator=\fP (const \fBtlm_array\fP< T > &)"
+.br
+.ti -1c
+.RI "void \fBreport_error\fP (std::exception &e)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "T * \fBm_data\fP"
+.br
+.ti -1c
+.RI "unsigned int \fBm_size\fP"
+.br
+.ti -1c
+.RI "T \fBm_default\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename T> class tlm_array< T >"
+
+.PP
+Definition at line 44 of file tlm_array.h.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename T> \fBtlm_array\fP< T >::\fBtlm_array\fP (unsigned int size = \fC0\fP, T default_value = \fC0\fP)\fC [inline]\fP"
+.PP
+Definition at line 49 of file tlm_array.h.
+.PP
+References tlm_array< T >::expand(), and tlm_array< T >::size().
+.SS "template<typename T> \fBtlm_array\fP< T >::\fBtlm_array\fP (const \fBtlm_array\fP< T > & orig)\fC [inline]\fP"
+.PP
+Definition at line 58 of file tlm_array.h.
+.PP
+References tlm_array< T >::m_data, tlm_array< T >::m_size, tlm_array< T >::report_error(), and tlm_array< T >::size().
+.SS "template<typename T> \fBtlm_array\fP< T >::~\fBtlm_array\fP ()\fC [inline]\fP"
+.PP
+Definition at line 77 of file tlm_array.h.
+.PP
+References tlm_array< T >::m_data, and tlm_array< T >::m_size.
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename T> T& \fBtlm_array\fP< T >::operator[] (const unsigned int index)\fC [inline]\fP"
+.PP
+Definition at line 84 of file tlm_array.h.
+.PP
+References tlm_array< T >::m_data.
+.SS "template<typename T> const T& \fBtlm_array\fP< T >::operator[] (const unsigned int index) const\fC [inline]\fP"
+.PP
+Definition at line 89 of file tlm_array.h.
+.PP
+References tlm_array< T >::m_data.
+.SS "template<typename T> unsigned int \fBtlm_array\fP< T >::size () const\fC [inline]\fP"
+.PP
+Definition at line 96 of file tlm_array.h.
+.PP
+References tlm_array< T >::m_size.
+.PP
+Referenced by tlm_array< T >::tlm_array().
+.SS "template<typename T> void \fBtlm_array\fP< T >::expand (unsigned int new_size)\fC [inline]\fP"
+.PP
+Definition at line 99 of file tlm_array.h.
+.PP
+References tlm_array< T >::m_data, tlm_array< T >::m_default, tlm_array< T >::m_size, and tlm_array< T >::report_error().
+.PP
+Referenced by tlm_array< T >::tlm_array().
+.SS "template<typename T> const char* \fBtlm_array\fP< T >::kind () const\fC [inline]\fP"
+.PP
+Definition at line 142 of file tlm_array.h.
+.PP
+References tlm_array< T >::kind_string.
+.SS "template<typename T> \fBtlm_array\fP& \fBtlm_array\fP< T >::operator= (const \fBtlm_array\fP< T > &)\fC [protected]\fP"
+.PP
+.SS "template<typename T> void \fBtlm_array\fP< T >::report_error (std::exception & e)\fC [inline, protected]\fP"
+.PP
+Definition at line 153 of file tlm_array.h.
+.PP
+References tlm_array< T >::kind_string.
+.PP
+Referenced by tlm_array< T >::expand(), and tlm_array< T >::tlm_array().
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename T> const char *const \fBtlm_array\fP< T >::\fBkind_string\fP = 'tlm_array'\fC [inline, static]\fP"
+.PP
+Definition at line 141 of file tlm_array.h.
+.PP
+Referenced by tlm_array< T >::kind(), and tlm_array< T >::report_error().
+.SS "template<typename T> T* \fBtlm_array\fP< T >::\fBm_data\fP\fC [protected]\fP"
+.PP
+Definition at line 145 of file tlm_array.h.
+.PP
+Referenced by tlm_array< T >::expand(), tlm_array< T >::operator[](), tlm_array< T >::tlm_array(), and tlm_array< T >::~tlm_array().
+.SS "template<typename T> unsigned int \fBtlm_array\fP< T >::\fBm_size\fP\fC [protected]\fP"
+.PP
+Definition at line 146 of file tlm_array.h.
+.PP
+Referenced by tlm_array< T >::expand(), tlm_array< T >::size(), tlm_array< T >::tlm_array(), and tlm_array< T >::~tlm_array().
+.SS "template<typename T> T \fBtlm_array\fP< T >::\fBm_default\fP\fC [protected]\fP"
+.PP
+Definition at line 147 of file tlm_array.h.
+.PP
+Referenced by tlm_array< T >::expand().
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for TLM 2 from the source code.

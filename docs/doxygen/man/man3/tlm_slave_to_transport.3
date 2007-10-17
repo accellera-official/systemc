@@ -1,0 +1,82 @@
+.TH "tlm_slave_to_transport" 3 "17 Oct 2007" "Version 1" "TLM 2" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tlm_slave_to_transport \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <tlm_adapters.h>\fP
+.PP
+Inherits \fBsc_module\fP.
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBSC_HAS_PROCESS\fP (\fBtlm_slave_to_transport\fP)"
+.br
+.ti -1c
+.RI "\fBtlm_slave_to_transport\fP (sc_module_name nm)"
+.br
+.ti -1c
+.RI "\fBtlm_slave_to_transport\fP ()"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "sc_port< \fBtlm_slave_if\fP< REQ, RSP > > \fBslave_port\fP"
+.br
+.ti -1c
+.RI "sc_port< \fBtlm_transport_if\fP< REQ, RSP > > \fBinitiator_port\fP"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBrun\fP ()"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename REQ, typename RSP> class tlm_slave_to_transport< REQ, RSP >"
+
+.PP
+Definition at line 49 of file tlm_adapters.h.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename REQ, typename RSP> \fBtlm_slave_to_transport\fP< REQ, RSP >::\fBtlm_slave_to_transport\fP (sc_module_name nm)\fC [inline]\fP"
+.PP
+Definition at line 58 of file tlm_adapters.h.
+.SS "template<typename REQ, typename RSP> \fBtlm_slave_to_transport\fP< REQ, RSP >::\fBtlm_slave_to_transport\fP ()\fC [inline]\fP"
+.PP
+Definition at line 61 of file tlm_adapters.h.
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename REQ, typename RSP> \fBtlm_slave_to_transport\fP< REQ, RSP >::SC_HAS_PROCESS (\fBtlm_slave_to_transport\fP< REQ, RSP >)"
+.PP
+.SS "template<typename REQ, typename RSP> void \fBtlm_slave_to_transport\fP< REQ, RSP >::run ()\fC [inline, private]\fP"
+.PP
+Definition at line 66 of file tlm_adapters.h.
+.PP
+References tlm_slave_to_transport< REQ, RSP >::initiator_port, and tlm_slave_to_transport< REQ, RSP >::slave_port.
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename REQ, typename RSP> sc_port< \fBtlm_slave_if\fP< REQ , RSP > > \fBtlm_slave_to_transport\fP< REQ, RSP >::\fBslave_port\fP"
+.PP
+Definition at line 55 of file tlm_adapters.h.
+.PP
+Referenced by tlm_slave_to_transport< REQ, RSP >::run().
+.SS "template<typename REQ, typename RSP> sc_port< \fBtlm_transport_if\fP< REQ , RSP > > \fBtlm_slave_to_transport\fP< REQ, RSP >::\fBinitiator_port\fP"
+.PP
+Definition at line 56 of file tlm_adapters.h.
+.PP
+Referenced by tlm_slave_to_transport< REQ, RSP >::run().
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for TLM 2 from the source code.

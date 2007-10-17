@@ -1,0 +1,135 @@
+.TH "C:/ESLX/projects/TLMWG/tlm2/include/tlm_h/tlm_generic_payload/tlm_generic_payload.h" 3 "17 Oct 2007" "Version 1" "TLM 2" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+C:/ESLX/projects/TLMWG/tlm2/include/tlm_h/tlm_generic_payload/tlm_generic_payload.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'tlm_helpers.h'\fP
+.br
+\fC#include 'tlm_gp.h'\fP
+.br
+\fC#include 'tlm_data_serializers.h'\fP
+.br
+
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI "namespace \fBtlm_generic_payload\fP"
+.br
+.in -1c
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBtlm_generic_payload::tlm_array< T >\fP"
+.br
+.ti -1c
+.RI "class \fBtlm_generic_payload::tlm_extension_base\fP"
+.br
+.ti -1c
+.RI "class \fBtlm_generic_payload::tlm_extension< T >\fP"
+.br
+.ti -1c
+.RI "class \fBtlm_generic_payload::tlm_generic_payload\fP"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "bool \fBtlm_generic_payload::hostHasLittleEndianness\fP ()"
+.br
+.ti -1c
+.RI "bool \fBtlm_generic_payload::hasHostEndianness\fP (\fBtlm_endianness\fP endianness)"
+.br
+.ti -1c
+.RI "unsigned char \fBtlm_generic_payload::swap_bytes\fP (unsigned char rhs)"
+.br
+.ti -1c
+.RI "char \fBtlm_generic_payload::swap_bytes\fP (char rhs)"
+.br
+.ti -1c
+.RI "signed char \fBtlm_generic_payload::swap_bytes\fP (signed char rhs)"
+.br
+.ti -1c
+.RI "unsigned short \fBtlm_generic_payload::swap_bytes\fP (unsigned short rhs)"
+.br
+.ti -1c
+.RI "signed short \fBtlm_generic_payload::swap_bytes\fP (signed short rhs)"
+.br
+.ti -1c
+.RI "unsigned int \fBtlm_generic_payload::swap_bytes\fP (unsigned int rhs)"
+.br
+.ti -1c
+.RI "signed int \fBtlm_generic_payload::swap_bytes\fP (signed int rhs)"
+.br
+.ti -1c
+.RI "unsigned long \fBtlm_generic_payload::swap_bytes\fP (unsigned long rhs)"
+.br
+.ti -1c
+.RI "signed long \fBtlm_generic_payload::swap_bytes\fP (signed long rhs)"
+.br
+.ti -1c
+.RI "unsigned long long \fBtlm_generic_payload::swap_bytes\fP (unsigned long long rhs)"
+.br
+.ti -1c
+.RI "signed long long \fBtlm_generic_payload::swap_bytes\fP (signed long long rhs)"
+.br
+.ti -1c
+.RI "void \fBtlm_generic_payload::copy_data\fP (const unsigned char *src, unsigned char *dest, unsigned int nrOfBytes, \fBtlm_endianness\fP endianness)"
+.br
+.ti -1c
+.RI "template<typename DT> DT \fBtlm_generic_payload::swapIfNeeded\fP (DT word, \fBtlm_endianness\fP endianness)"
+.br
+.ti -1c
+.RI "unsigned int \fBtlm_generic_payload::max_num_extensions\fP (bool increment=false)"
+.br
+.ti -1c
+.RI "template<class T> void \fBtlm_generic_payload::copy_from_array\fP (T &data, unsigned int index, unsigned char *m_data)"
+.br
+.ti -1c
+.RI "template<class T> void \fBtlm_generic_payload::copy_to_array\fP (const T &data, unsigned int index, unsigned char *m_data)"
+.br
+.ti -1c
+.RI "\fBtlm_generic_payload::TLM_COPY_FROM_ARRAY\fP (signed char)"
+.br
+.ti -1c
+.RI "\fBtlm_generic_payload::TLM_COPY_FROM_ARRAY\fP (signed long)"
+.br
+.ti -1c
+.RI "\fBtlm_generic_payload::TLM_COPY_FROM_ARRAY\fP (signed long long)"
+.br
+.ti -1c
+.RI "\fBtlm_generic_payload::TLM_COPY_FROM_ARRAY\fP (unsigned char)"
+.br
+.ti -1c
+.RI "\fBtlm_generic_payload::TLM_COPY_FROM_ARRAY\fP (unsigned long)"
+.br
+.ti -1c
+.RI "\fBtlm_generic_payload::TLM_COPY_FROM_ARRAY\fP (unsigned long long)"
+.br
+.ti -1c
+.RI "\fBtlm_generic_payload::TLM_COPY_TO_ARRAY\fP (signed char)"
+.br
+.ti -1c
+.RI "\fBtlm_generic_payload::TLM_COPY_TO_ARRAY\fP (signed long)"
+.br
+.ti -1c
+.RI "\fBtlm_generic_payload::TLM_COPY_TO_ARRAY\fP (signed long long)"
+.br
+.ti -1c
+.RI "\fBtlm_generic_payload::TLM_COPY_TO_ARRAY\fP (unsigned char)"
+.br
+.ti -1c
+.RI "\fBtlm_generic_payload::TLM_COPY_TO_ARRAY\fP (unsigned long)"
+.br
+.ti -1c
+.RI "\fBtlm_generic_payload::TLM_COPY_TO_ARRAY\fP (unsigned long long)"
+.br
+.in -1c
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for TLM 2 from the source code.

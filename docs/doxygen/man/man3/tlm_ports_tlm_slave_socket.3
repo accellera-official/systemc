@@ -1,0 +1,131 @@
+.TH "tlm_ports::tlm_slave_socket" 3 "17 Oct 2007" "Version 1" "TLM 2" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tlm_ports::tlm_slave_socket \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <tlm_ports.h>\fP
+.PP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef IF \fBinterface_type\fP"
+.br
+.ti -1c
+.RI "typedef sc_port< \fBinterface_type\fP > \fBport_type\fP"
+.br
+.ti -1c
+.RI "typedef sc_export< \fBinterface_type\fP > \fBexport_type\fP"
+.br
+.ti -1c
+.RI "typedef \fBtlm_master_socket\fP< \fBinterface_type\fP > \fBmaster_socket_type\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBtlm_slave_socket\fP (const char *name)"
+.br
+.ti -1c
+.RI "void \fBbind\fP (\fBmaster_socket_type\fP &s)"
+.br
+.ti -1c
+.RI "void \fBoperator()\fP (\fBmaster_socket_type\fP &s)"
+.br
+.ti -1c
+.RI "void \fBbind\fP (\fBtlm_slave_socket\fP &s)"
+.br
+.ti -1c
+.RI "void \fBoperator()\fP (\fBtlm_slave_socket\fP &s)"
+.br
+.ti -1c
+.RI "void \fBbind\fP (\fBinterface_type\fP &ifs)"
+.br
+.ti -1c
+.RI "void \fBoperator()\fP (\fBinterface_type\fP &s)"
+.br
+.ti -1c
+.RI "\fBinterface_type\fP * \fBoperator->\fP ()"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBport_type\fP \fBmPort\fP"
+.br
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "class \fBtlm_master_socket< interface_type >\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename IF> class tlm_ports::tlm_slave_socket< IF >"
+
+.PP
+Definition at line 1469 of file tlm_ports.h.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "template<typename IF> typedef IF \fBtlm_ports::tlm_slave_socket\fP< IF >::\fBinterface_type\fP"
+.PP
+Definition at line 1472 of file tlm_ports.h.
+.SS "template<typename IF> typedef sc_port<\fBinterface_type\fP> \fBtlm_ports::tlm_slave_socket\fP< IF >::\fBport_type\fP"
+.PP
+Definition at line 1473 of file tlm_ports.h.
+.SS "template<typename IF> typedef sc_export<\fBinterface_type\fP> \fBtlm_ports::tlm_slave_socket\fP< IF >::\fBexport_type\fP"
+.PP
+Definition at line 1474 of file tlm_ports.h.
+.SS "template<typename IF> typedef \fBtlm_master_socket\fP<\fBinterface_type\fP> \fBtlm_ports::tlm_slave_socket\fP< IF >::\fBmaster_socket_type\fP"
+.PP
+Definition at line 1475 of file tlm_ports.h.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename IF> \fBtlm_ports::tlm_slave_socket\fP< IF >::\fBtlm_slave_socket\fP (const char * name)\fC [inline]\fP"
+.PP
+Definition at line 1480 of file tlm_ports.h.
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename IF> void \fBtlm_ports::tlm_slave_socket\fP< IF >::bind (\fBmaster_socket_type\fP & s)\fC [inline]\fP"
+.PP
+Definition at line 1490 of file tlm_ports.h.
+.SS "template<typename IF> void \fBtlm_ports::tlm_slave_socket\fP< IF >::operator() (\fBmaster_socket_type\fP & s)\fC [inline]\fP"
+.PP
+Definition at line 1498 of file tlm_ports.h.
+.SS "template<typename IF> void \fBtlm_ports::tlm_slave_socket\fP< IF >::bind (\fBtlm_slave_socket\fP< IF > & s)\fC [inline]\fP"
+.PP
+Definition at line 1507 of file tlm_ports.h.
+.SS "template<typename IF> void \fBtlm_ports::tlm_slave_socket\fP< IF >::operator() (\fBtlm_slave_socket\fP< IF > & s)\fC [inline]\fP"
+.PP
+Definition at line 1515 of file tlm_ports.h.
+.SS "template<typename IF> void \fBtlm_ports::tlm_slave_socket\fP< IF >::bind (\fBinterface_type\fP & ifs)\fC [inline]\fP"
+.PP
+Definition at line 1524 of file tlm_ports.h.
+.SS "template<typename IF> void \fBtlm_ports::tlm_slave_socket\fP< IF >::operator() (\fBinterface_type\fP & s)\fC [inline]\fP"
+.PP
+Definition at line 1529 of file tlm_ports.h.
+.SS "template<typename IF> \fBinterface_type\fP* \fBtlm_ports::tlm_slave_socket\fP< IF >::operator-> ()\fC [inline]\fP"
+.PP
+Definition at line 1537 of file tlm_ports.h.
+.SH "Friends And Related Function Documentation"
+.PP 
+.SS "template<typename IF> friend class \fBtlm_master_socket\fP< \fBinterface_type\fP >\fC [friend]\fP"
+.PP
+Definition at line 1477 of file tlm_ports.h.
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename IF> \fBport_type\fP \fBtlm_ports::tlm_slave_socket\fP< IF >::\fBmPort\fP\fC [protected]\fP"
+.PP
+Definition at line 1543 of file tlm_ports.h.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for TLM 2 from the source code.

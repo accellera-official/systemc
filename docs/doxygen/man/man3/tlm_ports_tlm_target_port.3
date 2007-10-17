@@ -1,0 +1,162 @@
+.TH "tlm_ports::tlm_target_port" 3 "17 Oct 2007" "Version 1" "TLM 2" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tlm_ports::tlm_target_port \- Class \fBtlm_target_port\fP: port to be instantiated on the target side.  
+
+.PP
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <tlm_ports.h>\fP
+.PP
+Inherits \fBtlm_ports::tlm_target_port_base\fP.
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBtlm_target_port\fP (const char *name)"
+.br
+.in -1c
+.PP
+.RI "\fBsc_export overridden methods\fP"
+.br
+Need to specialize binding operation to support port propagation in transaction recorders. Specialization is done for sc_export/sc_export. Other redefinitions of bindings are just calls to regular bind function 
+.br
+ Note: This is due to non virtual definition of SystemC bind 
+.PP
+.in +1c
+.in +1c
+.ti -1c
+.RI "void \fBbefore_end_of_elaboration\fP ()"
+.br
+.ti -1c
+.RI "void \fBend_of_elaboration\fP ()"
+.br
+.ti -1c
+.RI "void \fBbind\fP (\fBtarget_port_type\fP &target_port_)"
+.br
+.RI "\fIbind(sc_export) with target ports propagation \fP"
+.ti -1c
+.RI "template<typename OTHER_IF> void \fBbind\fP (\fBtlm_target_port\fP< OTHER_IF > &target_port_)"
+.br
+.RI "\fICase of the other port uses another interface as template: works only if OTHER_IF derives from IF. \fP"
+.ti -1c
+.RI "void \fBoperator()\fP (\fBtarget_port_type\fP &target_port_)"
+.br
+.RI "\fIoperator() (sc_export) overridden: just calls bind(sc_export) \fP"
+.ti -1c
+.RI "template<typename OTHER_IF> void \fBoperator()\fP (\fBtlm_target_port\fP< OTHER_IF > &target_port_)"
+.br
+.RI "\fICase of the other port uses another interface as template: works only if OTHER_IF derives from IF. \fP"
+.ti -1c
+.RI "void \fBbind\fP (\fBinterface_type\fP &interface_)"
+.br
+.RI "\fIbind(interface_type) overridden \fP"
+.ti -1c
+.RI "void \fBoperator()\fP (\fBinterface_type\fP &interface_)"
+.br
+.RI "\fIoperator() (interface_type) overridden \fP"
+.in -1c
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "bool \fBis_already_bound\fP (\fBsc_interface\fP *other_if)"
+.br
+.in -1c
+.SS "Private Types"
+
+.in +1c
+.ti -1c
+.RI "typedef IF \fBinterface_type\fP"
+.br
+.ti -1c
+.RI "typedef \fBtlm_target_port\fP< IF > \fBtarget_port_type\fP"
+.br
+.ti -1c
+.RI "typedef \fBtlm_target_port_base\fP \fBtarget_port_base_type\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename IF> class tlm_ports::tlm_target_port< IF >"
+Class \fBtlm_target_port\fP: port to be instantiated on the target side. 
+
+This class could be used as base class for user defined target ports (support of user convenience layer). 
+.br
+ It provides new binding methods definition: sc_export to sc_export binding must be identified in order create tlm_target_port_base::target_port_list used target port ID propagation through hierarchical binding; the only port ID that makes sense is the port ID of the port directly bound to the interface. An error detection is also provided: multiple interface bind declarations are not detected by sc_export (the interface is just replaced), the new binding definition issues an error message in this case. 
+.PP
+Definition at line 465 of file tlm_ports.h.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "template<typename IF> typedef IF \fBtlm_ports::tlm_target_port\fP< IF >::\fBinterface_type\fP\fC [private]\fP"
+.PP
+Definition at line 469 of file tlm_ports.h.
+.SS "template<typename IF> typedef \fBtlm_target_port\fP<IF> \fBtlm_ports::tlm_target_port\fP< IF >::\fBtarget_port_type\fP\fC [private]\fP"
+.PP
+Definition at line 470 of file tlm_ports.h.
+.SS "template<typename IF> typedef \fBtlm_target_port_base\fP \fBtlm_ports::tlm_target_port\fP< IF >::\fBtarget_port_base_type\fP\fC [private]\fP"
+.PP
+Definition at line 471 of file tlm_ports.h.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename IF> \fBtlm_target_port\fP< IF >::\fBtlm_target_port\fP (const char * name)\fC [inline]\fP"
+.PP
+Definition at line 560 of file tlm_ports.h.
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename IF> void \fBtlm_target_port\fP< IF >::before_end_of_elaboration ()\fC [inline]\fP"
+.PP
+Called just before end of elaboration to propagate the significant target port id: the only valid port id is the one set by the module which implements the \fBtlm\fP core interface.
+.PP
+Remark: sc_port_base::complete_binding should be the best place to do that but this method is private !! 
+.PP
+Definition at line 603 of file tlm_ports.h.
+.SS "template<typename IF> void \fBtlm_target_port\fP< IF >::end_of_elaboration ()\fC [inline]\fP"
+.PP
+Called at the end of elaboration. Used to print debug message: content opf the target port list 
+.PP
+Definition at line 621 of file tlm_ports.h.
+.SS "template<typename IF> void \fBtlm_target_port\fP< IF >::bind (\fBtarget_port_type\fP & target_port_)\fC [inline]\fP"
+.PP
+bind(sc_export) with target ports propagation 
+.PP
+Definition at line 641 of file tlm_ports.h.
+.SS "template<typename IF> template<typename OTHER_IF> void \fBtlm_target_port\fP< IF >::bind (\fBtlm_target_port\fP< OTHER_IF > & target_port_)\fC [inline]\fP"
+.PP
+Case of the other port uses another interface as template: works only if OTHER_IF derives from IF. 
+.PP
+Definition at line 662 of file tlm_ports.h.
+.SS "template<typename IF> void \fBtlm_ports::tlm_target_port\fP< IF >::operator() (\fBtarget_port_type\fP & target_port_)\fC [inline]\fP"
+.PP
+operator() (sc_export) overridden: just calls bind(sc_export) 
+.PP
+Definition at line 521 of file tlm_ports.h.
+.SS "template<typename IF> template<typename OTHER_IF> void \fBtlm_ports::tlm_target_port\fP< IF >::operator() (\fBtlm_target_port\fP< OTHER_IF > & target_port_)\fC [inline]\fP"
+.PP
+Case of the other port uses another interface as template: works only if OTHER_IF derives from IF. 
+.PP
+Definition at line 527 of file tlm_ports.h.
+.SS "template<typename IF> void \fBtlm_target_port\fP< IF >::bind (\fBinterface_type\fP & interface_)\fC [inline]\fP"
+.PP
+bind(interface_type) overridden 
+.PP
+Definition at line 697 of file tlm_ports.h.
+.SS "template<typename IF> void \fBtlm_target_port\fP< IF >::operator() (\fBinterface_type\fP & interface_)\fC [inline]\fP"
+.PP
+operator() (interface_type) overridden 
+.PP
+Definition at line 705 of file tlm_ports.h.
+.SS "template<typename IF> bool \fBtlm_target_port\fP< IF >::is_already_bound (\fBsc_interface\fP * other_if)\fC [inline, protected]\fP"
+.PP
+Returns true and issues an error message if the port is already bound to an interface during the binding of other_if (called by bind(sc_export)) 
+.PP
+Definition at line 570 of file tlm_ports.h.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for TLM 2 from the source code.

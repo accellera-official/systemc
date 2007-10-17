@@ -1,0 +1,149 @@
+.TH "C:/ESLX/projects/TLMWG/tlm2/include/tlm_h/tlm_generic_payload/tlm_helpers.h" 3 "17 Oct 2007" "Version 1" "TLM 2" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+C:/ESLX/projects/TLMWG/tlm2/include/tlm_h/tlm_generic_payload/tlm_helpers.h \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBtlm_endianness\fP { \fBTLM_LITTLE_ENDIAN\fP, \fBTLM_BIG_ENDIAN\fP }"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "bool \fBhostHasLittleEndianness\fP ()"
+.br
+.ti -1c
+.RI "bool \fBhasHostEndianness\fP (\fBtlm_endianness\fP endianness)"
+.br
+.ti -1c
+.RI "unsigned char \fBswap_bytes\fP (unsigned char rhs)"
+.br
+.ti -1c
+.RI "char \fBswap_bytes\fP (char rhs)"
+.br
+.ti -1c
+.RI "signed char \fBswap_bytes\fP (signed char rhs)"
+.br
+.ti -1c
+.RI "unsigned short \fBswap_bytes\fP (unsigned short rhs)"
+.br
+.ti -1c
+.RI "signed short \fBswap_bytes\fP (signed short rhs)"
+.br
+.ti -1c
+.RI "unsigned int \fBswap_bytes\fP (unsigned int rhs)"
+.br
+.ti -1c
+.RI "signed int \fBswap_bytes\fP (signed int rhs)"
+.br
+.ti -1c
+.RI "unsigned long \fBswap_bytes\fP (unsigned long rhs)"
+.br
+.ti -1c
+.RI "signed long \fBswap_bytes\fP (signed long rhs)"
+.br
+.ti -1c
+.RI "unsigned long long \fBswap_bytes\fP (unsigned long long rhs)"
+.br
+.ti -1c
+.RI "signed long long \fBswap_bytes\fP (signed long long rhs)"
+.br
+.ti -1c
+.RI "void \fBcopy_data\fP (const unsigned char *src, unsigned char *dest, unsigned int nrOfBytes, \fBtlm_endianness\fP endianness)"
+.br
+.ti -1c
+.RI "template<typename DT> DT \fBswapIfNeeded\fP (DT word, \fBtlm_endianness\fP endianness)"
+.br
+.in -1c
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBtlm_endianness\fP"
+.PP
+\fBEnumerator: \fP
+.in +1c
+.TP
+\fB\fITLM_LITTLE_ENDIAN \fP\fP
+.TP
+\fB\fITLM_BIG_ENDIAN \fP\fP
+
+.PP
+Definition at line 7 of file tlm_helpers.h.
+.SH "Function Documentation"
+.PP 
+.SS "void copy_data (const unsigned char * src, unsigned char * dest, unsigned int nrOfBytes, \fBtlm_endianness\fP endianness)\fC [inline]\fP"
+.PP
+Definition at line 59 of file tlm_helpers.h.
+.PP
+References hasHostEndianness().
+.SS "bool hasHostEndianness (\fBtlm_endianness\fP endianness)\fC [inline]\fP"
+.PP
+Definition at line 27 of file tlm_helpers.h.
+.PP
+References hostHasLittleEndianness(), TLM_BIG_ENDIAN, and TLM_LITTLE_ENDIAN.
+.PP
+Referenced by copy_data(), and swapIfNeeded().
+.SS "bool hostHasLittleEndianness ()\fC [inline]\fP"
+.PP
+Definition at line 9 of file tlm_helpers.h.
+.PP
+Referenced by copy_from_array(), copy_to_array(), and hasHostEndianness().
+.SS "signed long long swap_bytes (signed long long rhs)\fC [inline]\fP"
+.PP
+Definition at line 51 of file tlm_helpers.h.
+.PP
+References swap_bytes().
+.SS "unsigned long long swap_bytes (unsigned long long rhs)\fC [inline]\fP"
+.PP
+Definition at line 50 of file tlm_helpers.h.
+.PP
+References swap_bytes().
+.SS "signed long swap_bytes (signed long rhs)\fC [inline]\fP"
+.PP
+Definition at line 48 of file tlm_helpers.h.
+.PP
+References swap_bytes().
+.SS "unsigned long swap_bytes (unsigned long rhs)\fC [inline]\fP"
+.PP
+Definition at line 47 of file tlm_helpers.h.
+.SS "signed int swap_bytes (signed int rhs)\fC [inline]\fP"
+.PP
+Definition at line 45 of file tlm_helpers.h.
+.PP
+References swap_bytes().
+.SS "unsigned int swap_bytes (unsigned int rhs)\fC [inline]\fP"
+.PP
+Definition at line 44 of file tlm_helpers.h.
+.SS "signed short swap_bytes (signed short rhs)\fC [inline]\fP"
+.PP
+Definition at line 42 of file tlm_helpers.h.
+.PP
+References swap_bytes().
+.SS "unsigned short swap_bytes (unsigned short rhs)\fC [inline]\fP"
+.PP
+Definition at line 41 of file tlm_helpers.h.
+.SS "signed char swap_bytes (signed char rhs)\fC [inline]\fP"
+.PP
+Definition at line 39 of file tlm_helpers.h.
+.SS "char swap_bytes (char rhs)\fC [inline]\fP"
+.PP
+Definition at line 38 of file tlm_helpers.h.
+.SS "unsigned char swap_bytes (unsigned char rhs)\fC [inline]\fP"
+.PP
+Definition at line 37 of file tlm_helpers.h.
+.PP
+Referenced by swap_bytes(), and swapIfNeeded().
+.SS "template<typename DT> DT swapIfNeeded (DT word, \fBtlm_endianness\fP endianness)\fC [inline]\fP"
+.PP
+Definition at line 76 of file tlm_helpers.h.
+.PP
+References hasHostEndianness(), and swap_bytes().
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for TLM 2 from the source code.

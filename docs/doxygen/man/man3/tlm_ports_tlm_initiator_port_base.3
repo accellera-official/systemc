@@ -1,0 +1,215 @@
+.TH "tlm_ports::tlm_initiator_port_base" 3 "17 Oct 2007" "Version 1" "TLM 2" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tlm_ports::tlm_initiator_port_base \- Class \fBtlm_initiator_port_base\fP: This class is a base class for tlm_initiator port.  
+
+.PP
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <tlm_ports.h>\fP
+.PP
+Inherited by \fBtlm_ports::tlm_initiator_port< IF, N >\fP.
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBtlm_initiator_port_base\fP ()"
+.br
+.in -1c
+.PP
+.RI "\fBData members access methods\fP"
+.br
+
+.in +1c
+.in +1c
+.ti -1c
+.RI "void \fBregister_target_port\fP (\fBtarget_port_type\fP *target_port)"
+.br
+.RI "\fIRegister the target port. \fP"
+.ti -1c
+.RI "std::vector< \fBtarget_port_type\fP * > & \fBget_target_port_list\fP ()"
+.br
+.RI "\fIReturns the vector of registered target port(s). \fP"
+.ti -1c
+.RI "void \fBset_target_port_list\fP (std::vector< \fBtarget_port_type\fP * > &target_port_list)"
+.br
+.RI "\fISets the vector of registered target port(s) (port propagation). \fP"
+.ti -1c
+.RI "void \fBregister_initiator_port\fP (\fBthis_type\fP *initiator_port)"
+.br
+.RI "\fIRegister the initiator port in the regular list. \fP"
+.ti -1c
+.RI "std::vector< \fBthis_type\fP * > & \fBget_initiator_port_list\fP ()"
+.br
+.RI "\fIReturns the vector of registered initiator port(s). \fP"
+.ti -1c
+.RI "void \fBset_initiator_port_list\fP (std::vector< \fBthis_type\fP * > &initiator_port_list)"
+.br
+.RI "\fISets the vector of registered initiator port(s) (port propagation). \fP"
+.ti -1c
+.RI "void \fBreversed_register_initiator_port\fP (\fBthis_type\fP *initiator_port)"
+.br
+.RI "\fIRegister the initiator port in the reversed list. \fP"
+.ti -1c
+.RI "std::vector< \fBthis_type\fP * > & \fBget_reversed_initiator_port_list\fP ()"
+.br
+.RI "\fIReturns the vector of registered initiator port(s), reversed list. \fP"
+.ti -1c
+.RI "void \fBset_reversed_initiator_port_list\fP (std::vector< \fBthis_type\fP * > &initiator_port_list)"
+.br
+.RI "\fISets the vector of registered initiator port(s) (port propagation) reversed list. \fP"
+.in -1c
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBcreate_port_list\fP (std::vector< \fBthis_type\fP * > &port_list)"
+.br
+.RI "\fICreates the initiator port list from a non NULL initiator_port_type * list. \fP"
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::vector< \fBtarget_port_type\fP * > \fBm_target_port_list\fP"
+.br
+.RI "\fIsc_export objects registration \fP"
+.ti -1c
+.RI "std::vector< \fBthis_type\fP * > \fBm_initiator_port_list\fP"
+.br
+.RI "\fIsc_port objects registration \fP"
+.ti -1c
+.RI "std::vector< \fBthis_type\fP * > \fBm_reversed_initiator_port_list\fP"
+.br
+.RI "\fIsc_port objects registration \fP"
+.in -1c
+.SS "Private Types"
+
+.in +1c
+.ti -1c
+.RI "typedef \fBtlm_initiator_port_base\fP \fBthis_type\fP"
+.br
+.ti -1c
+.RI "typedef \fBtlm_target_port_base\fP \fBtarget_port_type\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Class \fBtlm_initiator_port_base\fP: This class is a base class for tlm_initiator port. 
+
+
+.br
+ It provides a container to store registered target ports as pointer list (required for target port ID propagation and transaction recording). 
+.br
+ It provides also two containers to store registered initiator ports as pointer list:
+.IP "\(bu" 2
+The first container registers initiator port from 'deeper' initiator port to the the initiator port directly bound to the interface.
+.IP "\(bu" 2
+The second list, named reversed list, allows the port directly bound to the interface to propagate its target port list to 'deeper' initiator ports.
+.PP
+.PP
+
+.br
+ Accessors are provided for all the port lists. 
+.PP
+Definition at line 194 of file tlm_ports.h.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef \fBtlm_initiator_port_base\fP \fBtlm_ports::tlm_initiator_port_base::this_type\fP\fC [private]\fP"
+.PP
+Definition at line 196 of file tlm_ports.h.
+.SS "typedef \fBtlm_target_port_base\fP \fBtlm_ports::tlm_initiator_port_base::target_port_type\fP\fC [private]\fP"
+.PP
+Reimplemented in \fBtlm_ports::tlm_initiator_port< IF, N >\fP.
+.PP
+Definition at line 197 of file tlm_ports.h.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "tlm_ports::tlm_initiator_port_base::tlm_initiator_port_base ()\fC [inline]\fP"
+.PP
+Definition at line 204 of file tlm_ports.h.
+.SH "Member Function Documentation"
+.PP 
+.SS "void tlm_ports::tlm_initiator_port_base::register_target_port (\fBtarget_port_type\fP * target_port)\fC [inline]\fP"
+.PP
+Register the target port. 
+.PP
+Definition at line 216 of file tlm_ports.h.
+.SS "std::vector<\fBtarget_port_type\fP *>& tlm_ports::tlm_initiator_port_base::get_target_port_list ()\fC [inline]\fP"
+.PP
+Returns the vector of registered target port(s). 
+.PP
+Definition at line 221 of file tlm_ports.h.
+.SS "void tlm_ports::tlm_initiator_port_base::set_target_port_list (std::vector< \fBtarget_port_type\fP * > & target_port_list)\fC [inline]\fP"
+.PP
+Sets the vector of registered target port(s) (port propagation). 
+.PP
+Definition at line 226 of file tlm_ports.h.
+.SS "void tlm_ports::tlm_initiator_port_base::register_initiator_port (\fBthis_type\fP * initiator_port)\fC [inline]\fP"
+.PP
+Register the initiator port in the regular list. 
+.PP
+Definition at line 233 of file tlm_ports.h.
+.SS "std::vector<\fBthis_type\fP *>& tlm_ports::tlm_initiator_port_base::get_initiator_port_list ()\fC [inline]\fP"
+.PP
+Returns the vector of registered initiator port(s). 
+.PP
+Definition at line 238 of file tlm_ports.h.
+.SS "void tlm_ports::tlm_initiator_port_base::set_initiator_port_list (std::vector< \fBthis_type\fP * > & initiator_port_list)\fC [inline]\fP"
+.PP
+Sets the vector of registered initiator port(s) (port propagation). 
+.PP
+Definition at line 243 of file tlm_ports.h.
+.SS "void tlm_ports::tlm_initiator_port_base::reversed_register_initiator_port (\fBthis_type\fP * initiator_port)\fC [inline]\fP"
+.PP
+Register the initiator port in the reversed list. 
+.PP
+Definition at line 250 of file tlm_ports.h.
+.SS "std::vector<\fBthis_type\fP *>& tlm_ports::tlm_initiator_port_base::get_reversed_initiator_port_list ()\fC [inline]\fP"
+.PP
+Returns the vector of registered initiator port(s), reversed list. 
+.PP
+Definition at line 255 of file tlm_ports.h.
+.SS "void tlm_ports::tlm_initiator_port_base::set_reversed_initiator_port_list (std::vector< \fBthis_type\fP * > & initiator_port_list)\fC [inline]\fP"
+.PP
+Sets the vector of registered initiator port(s) (port propagation) reversed list. 
+.PP
+Definition at line 260 of file tlm_ports.h.
+.SS "void tlm_ports::tlm_initiator_port_base::create_port_list (std::vector< \fBthis_type\fP * > & port_list)\fC [inline, protected]\fP"
+.PP
+Creates the initiator port list from a non NULL initiator_port_type * list. 
+.PP
+Reentreant function to create the complete list of bound initiator_port 
+.PP
+Definition at line 292 of file tlm_ports.h.
+.SH "Member Data Documentation"
+.PP 
+.SS "std::vector<\fBtarget_port_type\fP *> \fBtlm_ports::tlm_initiator_port_base::m_target_port_list\fP\fC [protected]\fP"
+.PP
+sc_export objects registration 
+.PP
+Direct registration of the bound target port(s) into current initiator port 
+.PP
+Definition at line 273 of file tlm_ports.h.
+.SS "std::vector<\fBthis_type\fP *> \fBtlm_ports::tlm_initiator_port_base::m_initiator_port_list\fP\fC [protected]\fP"
+.PP
+sc_port objects registration 
+.PP
+Direct registration of the bound initiator port into current initiator port 
+.PP
+Definition at line 280 of file tlm_ports.h.
+.SS "std::vector<\fBthis_type\fP *> \fBtlm_ports::tlm_initiator_port_base::m_reversed_initiator_port_list\fP\fC [protected]\fP"
+.PP
+sc_port objects registration 
+.PP
+Direct registration of the current initiator port into the bound initiator port for port propagation: all bound initiator ports get back the same target_port_list 
+.PP
+Definition at line 287 of file tlm_ports.h.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for TLM 2 from the source code.

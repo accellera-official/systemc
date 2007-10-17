@@ -1,0 +1,67 @@
+.TH "tlm_internal_annotated_fifo" 3 "17 Oct 2007" "Version 1" "TLM 2" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tlm_internal_annotated_fifo \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <tlm_annotated_fifo.h>\fP
+.PP
+Inherits \fBtlm_fifo< T >< T >\fP, \fBanalysis::analysis_if< T >< T >\fP, and \fBanalysis::analysis_if< T >< tlm_tag< T > * >\fP.
+.PP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef \fBtlm_tag\fP< T > * \fBmy_tag_ptr\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBtlm_internal_annotated_fifo\fP (const char *nm, int size)"
+.br
+.ti -1c
+.RI "void \fBwrite\fP (const T &t)"
+.br
+.ti -1c
+.RI "void \fBwrite\fP (const \fBmy_tag_ptr\fP &)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename T> class tlm_internal_annotated_fifo< T >"
+
+.PP
+Definition at line 17 of file tlm_annotated_fifo.h.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "template<typename T> typedef \fBtlm_tag\fP<T>* \fBtlm_internal_annotated_fifo\fP< T >::\fBmy_tag_ptr\fP"
+.PP
+Definition at line 23 of file tlm_annotated_fifo.h.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename T> \fBtlm_internal_annotated_fifo\fP< T >::\fBtlm_internal_annotated_fifo\fP (const char * nm, int size)\fC [inline]\fP"
+.PP
+Definition at line 25 of file tlm_annotated_fifo.h.
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename T> void \fBtlm_internal_annotated_fifo\fP< T >::write (const T & t)\fC [inline, virtual]\fP"
+.PP
+Implements \fBanalysis::analysis_if< T >\fP.
+.PP
+Definition at line 28 of file tlm_annotated_fifo.h.
+.PP
+References tlm_fifo< T >::nb_can_put(), and tlm_fifo< T >::nb_put().
+.SS "template<typename T> void \fBtlm_internal_annotated_fifo\fP< T >::write (const \fBmy_tag_ptr\fP &)\fC [inline]\fP"
+.PP
+Definition at line 33 of file tlm_annotated_fifo.h.
+.PP
+References tlm_fifo< T >::read_event().
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for TLM 2 from the source code.

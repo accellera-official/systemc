@@ -1,0 +1,55 @@
+.TH "tlm_nonblocking_put_if" 3 "17 Oct 2007" "Version 1" "TLM 2" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tlm_nonblocking_put_if \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <tlm_core_ifs.h>\fP
+.PP
+Inherits \fBsc_interface\fP.
+.PP
+Inherited by \fBtlm_put_if< T >\fP\fC [virtual]\fP.
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual bool \fBnb_put\fP (const T &t)=0"
+.br
+.ti -1c
+.RI "virtual bool \fBnb_can_put\fP (\fBtlm_tag\fP< T > *t=0) const =0"
+.br
+.ti -1c
+.RI "virtual const sc_event & \fBok_to_put\fP (\fBtlm_tag\fP< T > *t=0) const =0"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename T> class tlm_nonblocking_put_if< T >"
+
+.PP
+Definition at line 77 of file tlm_core_ifs.h.
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename T> virtual bool \fBtlm_nonblocking_put_if\fP< T >::nb_put (const T & t)\fC [pure virtual]\fP"
+.PP
+Implemented in \fBtlm_fifo< T >\fP, \fBtlm_put_get_imp< PUT_DATA, GET_DATA >\fP, \fBtlm_put_get_imp< REQ, RSP >\fP, and \fBtlm_put_get_imp< RSP, REQ >\fP.
+.PP
+Referenced by tlm_put_get_imp< RSP, REQ >::nb_put().
+.SS "template<typename T> virtual bool \fBtlm_nonblocking_put_if\fP< T >::nb_can_put (\fBtlm_tag\fP< T > * t = \fC0\fP) const\fC [pure virtual]\fP"
+.PP
+Implemented in \fBtlm_fifo< T >\fP, \fBtlm_put_get_imp< PUT_DATA, GET_DATA >\fP, \fBtlm_put_get_imp< REQ, RSP >\fP, and \fBtlm_put_get_imp< RSP, REQ >\fP.
+.PP
+Referenced by tlm_put_get_imp< RSP, REQ >::nb_can_put().
+.SS "template<typename T> virtual const sc_event& \fBtlm_nonblocking_put_if\fP< T >::ok_to_put (\fBtlm_tag\fP< T > * t = \fC0\fP) const\fC [pure virtual]\fP"
+.PP
+Implemented in \fBtlm_fifo< T >\fP, \fBtlm_put_get_imp< PUT_DATA, GET_DATA >\fP, \fBtlm_put_get_imp< REQ, RSP >\fP, and \fBtlm_put_get_imp< RSP, REQ >\fP.
+.PP
+Referenced by tlm_put_get_imp< RSP, REQ >::ok_to_put(), and tlm_nonblocking_put_port< T >::ok_to_put().
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for TLM 2 from the source code.

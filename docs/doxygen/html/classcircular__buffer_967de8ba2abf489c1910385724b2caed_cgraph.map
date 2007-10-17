@@ -1,0 +1,7 @@
+<area shape="rect" href="$classcircular__buffer.html#a1eb408ac80da2c23718ea43fbc65a6f" title="circular_buffer::init" alt="" coords="249,5,380,32">
+<area shape="rect" href="$classcircular__buffer.html#a2e8640bc57a1be30baab57b99427d36" title="circular_buffer::peek_data" alt="" coords="227,56,403,83">
+<area shape="rect" href="$classcircular__buffer.html#b2a2e16463ebd79327bf0d12d75dc7d8" title="circular_buffer::size" alt="" coords="500,81,639,108">
+<area shape="rect" href="$classcircular__buffer.html#571ff44ad23cda46c07baa124fec2077" title="circular_buffer::used" alt="" coords="244,157,385,184">
+<area shape="rect" href="$classcircular__buffer.html#51b6079a3817014e86cb367e06cc940f" title="circular_buffer::write" alt="" coords="244,208,385,235">
+<area shape="rect" href="$classcircular__buffer.html#1639df53f179a37dd9842022b0dcf929" title="circular_buffer::increment_write_pos" alt="" coords="451,183,688,209">
+<area shape="rect" href="$classcircular__buffer.html#3048923aa6ad6f3112430fd318013611" title="circular_buffer::write_data" alt="" coords="481,233,657,260">

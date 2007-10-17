@@ -1,0 +1,123 @@
+.TH "tlm_core::tlm_req_rsp_channel" 3 "17 Oct 2007" "Version 1" "TLM 2" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tlm_core::tlm_req_rsp_channel \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <tlm_core.h>\fP
+.PP
+Inherits \fBsc_module\fP.
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBtlm_req_rsp_channel\fP (int req_size=1, int rsp_size=1)"
+.br
+.ti -1c
+.RI "\fBtlm_req_rsp_channel\fP (sc_module_name module_name, int req_size=1, int rsp_size=1)"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "sc_export< \fBtlm_fifo_get_if\fP< REQ > > \fBget_request_export\fP"
+.br
+.ti -1c
+.RI "sc_export< \fBtlm_fifo_put_if\fP< RSP > > \fBput_response_export\fP"
+.br
+.ti -1c
+.RI "sc_export< \fBtlm_fifo_put_if\fP< REQ > > \fBput_request_export\fP"
+.br
+.ti -1c
+.RI "sc_export< \fBtlm_fifo_get_if\fP< RSP > > \fBget_response_export\fP"
+.br
+.ti -1c
+.RI "sc_export< \fBtlm_master_if\fP< REQ, RSP > > \fBmaster_export\fP"
+.br
+.ti -1c
+.RI "sc_export< \fBtlm_slave_if\fP< REQ, RSP > > \fBslave_export\fP"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "REQ_CHANNEL \fBrequest_fifo\fP"
+.br
+.ti -1c
+.RI "RSP_CHANNEL \fBresponse_fifo\fP"
+.br
+.ti -1c
+.RI "\fBtlm_master_imp\fP< REQ, RSP > \fBmaster\fP"
+.br
+.ti -1c
+.RI "\fBtlm_slave_imp\fP< REQ, RSP > \fBslave\fP"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBbind_exports\fP ()"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename REQ, typename RSP, typename REQ_CHANNEL = tlm_fifo<REQ>, typename RSP_CHANNEL = tlm_fifo<RSP>> class tlm_core::tlm_req_rsp_channel< REQ, RSP, REQ_CHANNEL, RSP_CHANNEL >"
+
+.PP
+Definition at line 283 of file tlm_core.h.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename REQ, typename RSP, typename REQ_CHANNEL = tlm_fifo<REQ>, typename RSP_CHANNEL = tlm_fifo<RSP>> \fBtlm_core::tlm_req_rsp_channel\fP< REQ, RSP, REQ_CHANNEL, RSP_CHANNEL >::\fBtlm_req_rsp_channel\fP (int req_size = \fC1\fP, int rsp_size = \fC1\fP)\fC [inline]\fP"
+.PP
+Definition at line 302 of file tlm_core.h.
+.SS "template<typename REQ, typename RSP, typename REQ_CHANNEL = tlm_fifo<REQ>, typename RSP_CHANNEL = tlm_fifo<RSP>> \fBtlm_core::tlm_req_rsp_channel\fP< REQ, RSP, REQ_CHANNEL, RSP_CHANNEL >::\fBtlm_req_rsp_channel\fP (sc_module_name module_name, int req_size = \fC1\fP, int rsp_size = \fC1\fP)\fC [inline]\fP"
+.PP
+Definition at line 314 of file tlm_core.h.
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename REQ, typename RSP, typename REQ_CHANNEL = tlm_fifo<REQ>, typename RSP_CHANNEL = tlm_fifo<RSP>> void \fBtlm_core::tlm_req_rsp_channel\fP< REQ, RSP, REQ_CHANNEL, RSP_CHANNEL >::bind_exports ()\fC [inline, private]\fP"
+.PP
+Definition at line 328 of file tlm_core.h.
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename REQ, typename RSP, typename REQ_CHANNEL = tlm_fifo<REQ>, typename RSP_CHANNEL = tlm_fifo<RSP>> sc_export< \fBtlm_fifo_get_if\fP< REQ > > \fBtlm_core::tlm_req_rsp_channel\fP< REQ, RSP, REQ_CHANNEL, RSP_CHANNEL >::\fBget_request_export\fP"
+.PP
+Definition at line 288 of file tlm_core.h.
+.SS "template<typename REQ, typename RSP, typename REQ_CHANNEL = tlm_fifo<REQ>, typename RSP_CHANNEL = tlm_fifo<RSP>> sc_export< \fBtlm_fifo_put_if\fP< RSP > > \fBtlm_core::tlm_req_rsp_channel\fP< REQ, RSP, REQ_CHANNEL, RSP_CHANNEL >::\fBput_response_export\fP"
+.PP
+Definition at line 289 of file tlm_core.h.
+.SS "template<typename REQ, typename RSP, typename REQ_CHANNEL = tlm_fifo<REQ>, typename RSP_CHANNEL = tlm_fifo<RSP>> sc_export< \fBtlm_fifo_put_if\fP< REQ > > \fBtlm_core::tlm_req_rsp_channel\fP< REQ, RSP, REQ_CHANNEL, RSP_CHANNEL >::\fBput_request_export\fP"
+.PP
+Definition at line 293 of file tlm_core.h.
+.SS "template<typename REQ, typename RSP, typename REQ_CHANNEL = tlm_fifo<REQ>, typename RSP_CHANNEL = tlm_fifo<RSP>> sc_export< \fBtlm_fifo_get_if\fP< RSP > > \fBtlm_core::tlm_req_rsp_channel\fP< REQ, RSP, REQ_CHANNEL, RSP_CHANNEL >::\fBget_response_export\fP"
+.PP
+Definition at line 294 of file tlm_core.h.
+.SS "template<typename REQ, typename RSP, typename REQ_CHANNEL = tlm_fifo<REQ>, typename RSP_CHANNEL = tlm_fifo<RSP>> sc_export< \fBtlm_master_if\fP< REQ , RSP > > \fBtlm_core::tlm_req_rsp_channel\fP< REQ, RSP, REQ_CHANNEL, RSP_CHANNEL >::\fBmaster_export\fP"
+.PP
+Definition at line 298 of file tlm_core.h.
+.SS "template<typename REQ, typename RSP, typename REQ_CHANNEL = tlm_fifo<REQ>, typename RSP_CHANNEL = tlm_fifo<RSP>> sc_export< \fBtlm_slave_if\fP< REQ , RSP > > \fBtlm_core::tlm_req_rsp_channel\fP< REQ, RSP, REQ_CHANNEL, RSP_CHANNEL >::\fBslave_export\fP"
+.PP
+Definition at line 299 of file tlm_core.h.
+.SS "template<typename REQ, typename RSP, typename REQ_CHANNEL = tlm_fifo<REQ>, typename RSP_CHANNEL = tlm_fifo<RSP>> REQ_CHANNEL \fBtlm_core::tlm_req_rsp_channel\fP< REQ, RSP, REQ_CHANNEL, RSP_CHANNEL >::\fBrequest_fifo\fP\fC [protected]\fP"
+.PP
+Definition at line 342 of file tlm_core.h.
+.SS "template<typename REQ, typename RSP, typename REQ_CHANNEL = tlm_fifo<REQ>, typename RSP_CHANNEL = tlm_fifo<RSP>> RSP_CHANNEL \fBtlm_core::tlm_req_rsp_channel\fP< REQ, RSP, REQ_CHANNEL, RSP_CHANNEL >::\fBresponse_fifo\fP\fC [protected]\fP"
+.PP
+Definition at line 343 of file tlm_core.h.
+.SS "template<typename REQ, typename RSP, typename REQ_CHANNEL = tlm_fifo<REQ>, typename RSP_CHANNEL = tlm_fifo<RSP>> \fBtlm_master_imp\fP< REQ , RSP > \fBtlm_core::tlm_req_rsp_channel\fP< REQ, RSP, REQ_CHANNEL, RSP_CHANNEL >::\fBmaster\fP\fC [protected]\fP"
+.PP
+Definition at line 345 of file tlm_core.h.
+.SS "template<typename REQ, typename RSP, typename REQ_CHANNEL = tlm_fifo<REQ>, typename RSP_CHANNEL = tlm_fifo<RSP>> \fBtlm_slave_imp\fP< REQ , RSP > \fBtlm_core::tlm_req_rsp_channel\fP< REQ, RSP, REQ_CHANNEL, RSP_CHANNEL >::\fBslave\fP\fC [protected]\fP"
+.PP
+Definition at line 346 of file tlm_core.h.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for TLM 2 from the source code.

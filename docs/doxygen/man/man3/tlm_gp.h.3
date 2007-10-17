@@ -1,0 +1,103 @@
+.TH "C:/ESLX/projects/TLMWG/tlm2/include/tlm_h/tlm_generic_payload/tlm_gp.h" 3 "17 Oct 2007" "Version 1" "TLM 2" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+C:/ESLX/projects/TLMWG/tlm2/include/tlm_h/tlm_generic_payload/tlm_gp.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <systemc>\fP
+.br
+\fC#include 'tlm_array.h'\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBtlm_extension_base\fP"
+.br
+.ti -1c
+.RI "class \fBtlm_extension< T >\fP"
+.br
+.ti -1c
+.RI "class \fBtlm_generic_payload\fP"
+.br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBtlm_command\fP { \fBTLM_READ_COMMAND\fP, \fBTLM_WRITE_COMMAND\fP, \fBTLM_NOP\fP }"
+.br
+.ti -1c
+.RI "enum \fBtlm_burst_mode\fP { \fBTLM_INCREMENT_BURST\fP, \fBTLM_STREAMING_BURST\fP, \fBTLM_WRAPPING_BURST\fP }"
+.br
+.ti -1c
+.RI "enum \fBtlm_response_status\fP { \fBTLM_OK_RESP\fP =  1, \fBTLM_INCOMPLETE_RESP\fP =  0, \fBTLM_GENERIC_ERROR_RESP\fP =  -1, \fBTLM_ADDRESS_ERROR_RESP\fP =  -2, \fBTLM_COMMAND_ERROR_RESP\fP =  -3, \fBTLM_BURST_ERROR_RESP\fP =  -4 }"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "unsigned int \fBmax_num_extensions\fP (bool increment=false)"
+.br
+.in -1c
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBtlm_burst_mode\fP"
+.PP
+\fBEnumerator: \fP
+.in +1c
+.TP
+\fB\fITLM_INCREMENT_BURST \fP\fP
+.TP
+\fB\fITLM_STREAMING_BURST \fP\fP
+.TP
+\fB\fITLM_WRAPPING_BURST \fP\fP
+
+.PP
+Definition at line 75 of file tlm_gp.h.
+.SS "enum \fBtlm_command\fP"
+.PP
+\fBEnumerator: \fP
+.in +1c
+.TP
+\fB\fITLM_READ_COMMAND \fP\fP
+.TP
+\fB\fITLM_WRITE_COMMAND \fP\fP
+.TP
+\fB\fITLM_NOP \fP\fP
+
+.PP
+Definition at line 69 of file tlm_gp.h.
+.SS "enum \fBtlm_response_status\fP"
+.PP
+\fBEnumerator: \fP
+.in +1c
+.TP
+\fB\fITLM_OK_RESP \fP\fP
+.TP
+\fB\fITLM_INCOMPLETE_RESP \fP\fP
+.TP
+\fB\fITLM_GENERIC_ERROR_RESP \fP\fP
+.TP
+\fB\fITLM_ADDRESS_ERROR_RESP \fP\fP
+.TP
+\fB\fITLM_COMMAND_ERROR_RESP \fP\fP
+.TP
+\fB\fITLM_BURST_ERROR_RESP \fP\fP
+
+.PP
+Definition at line 81 of file tlm_gp.h.
+.SH "Function Documentation"
+.PP 
+.SS "unsigned int max_num_extensions (bool increment = \fCfalse\fP)\fC [inline]\fP"
+.PP
+Definition at line 29 of file tlm_gp.h.
+.PP
+Referenced by tlm_extension_base::register_extension().
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for TLM 2 from the source code.

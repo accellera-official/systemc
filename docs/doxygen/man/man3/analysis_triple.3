@@ -1,0 +1,97 @@
+.TH "analysis_triple" 3 "17 Oct 2007" "Version 1" "TLM 2" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+analysis_triple \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <tlm_analysis_triple.h>\fP
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBanalysis_triple\fP ()"
+.br
+.ti -1c
+.RI "\fBanalysis_triple\fP (const \fBanalysis_triple\fP &triple)"
+.br
+.ti -1c
+.RI "\fBanalysis_triple\fP (const T &t)"
+.br
+.ti -1c
+.RI "\fBoperator T\fP ()"
+.br
+.ti -1c
+.RI "\fBoperator const T &\fP () const "
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "sc_time \fBstart_time\fP"
+.br
+.ti -1c
+.RI "T \fBtransaction\fP"
+.br
+.ti -1c
+.RI "sc_time \fBend_time\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename T> struct analysis_triple< T >"
+
+.PP
+Definition at line 8 of file tlm_analysis_triple.h.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename T> \fBanalysis_triple\fP< T >::\fBanalysis_triple\fP ()\fC [inline]\fP"
+.PP
+Definition at line 14 of file tlm_analysis_triple.h.
+.SS "template<typename T> \fBanalysis_triple\fP< T >::\fBanalysis_triple\fP (const \fBanalysis_triple\fP< T > & triple)\fC [inline]\fP"
+.PP
+Definition at line 16 of file tlm_analysis_triple.h.
+.PP
+References analysis_triple< T >::end_time, analysis_triple< T >::start_time, and analysis_triple< T >::transaction.
+.SS "template<typename T> \fBanalysis_triple\fP< T >::\fBanalysis_triple\fP (const T & t)\fC [inline]\fP"
+.PP
+Definition at line 22 of file tlm_analysis_triple.h.
+.PP
+References analysis_triple< T >::transaction.
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename T> \fBanalysis_triple\fP< T >::operator T ()\fC [inline]\fP"
+.PP
+Definition at line 26 of file tlm_analysis_triple.h.
+.PP
+References analysis_triple< T >::transaction.
+.SS "template<typename T> \fBanalysis_triple\fP< T >::operator const T & () const\fC [inline]\fP"
+.PP
+Definition at line 27 of file tlm_analysis_triple.h.
+.PP
+References analysis_triple< T >::transaction.
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename T> sc_time \fBanalysis_triple\fP< T >::\fBstart_time\fP"
+.PP
+Definition at line 10 of file tlm_analysis_triple.h.
+.PP
+Referenced by analysis_triple< T >::analysis_triple().
+.SS "template<typename T> T \fBanalysis_triple\fP< T >::\fBtransaction\fP"
+.PP
+Definition at line 11 of file tlm_analysis_triple.h.
+.PP
+Referenced by analysis_triple< T >::analysis_triple(), analysis_triple< T >::operator const T &(), and analysis_triple< T >::operator T().
+.SS "template<typename T> sc_time \fBanalysis_triple\fP< T >::\fBend_time\fP"
+.PP
+Definition at line 12 of file tlm_analysis_triple.h.
+.PP
+Referenced by analysis_triple< T >::analysis_triple().
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for TLM 2 from the source code.

@@ -1,0 +1,43 @@
+.TH "tlm_annotated::tlm_annotated_nonblocking_put_if" 3 "17 Oct 2007" "Version 1" "TLM 2" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tlm_annotated::tlm_annotated_nonblocking_put_if \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <tlm_annotated.h>\fP
+.PP
+Inherits \fBtlm_core::tlm_nonblocking_put_if< T >< T >\fP.
+.PP
+Inherited by \fBtlm_annotated::tlm_annotated_nonblocking_slave_if< REQ, RSP >\fP\fC [virtual]\fP, \fBtlm_annotated::tlm_annotated_put_if< T >\fP\fC [virtual]\fP, and \fBtlm_annotated::tlm_annotated_put_if< REQ >\fP\fC [virtual]\fP.
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual bool \fBnb_put\fP (const T &, const sc_time &)=0"
+.br
+.ti -1c
+.RI "virtual bool \fBnb_can_put\fP (const sc_time &, tlm_tag< T > *t=0) const =0"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename T> class tlm_annotated::tlm_annotated_nonblocking_put_if< T >"
+
+.PP
+Definition at line 73 of file tlm_annotated.h.
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename T> virtual bool \fBtlm_annotated::tlm_annotated_nonblocking_put_if\fP< T >::nb_put (const T &, const sc_time &)\fC [pure virtual]\fP"
+.PP
+Implemented in \fBtlm_annotated::tlm_annotated_fifo< T >\fP.
+.SS "template<typename T> virtual bool \fBtlm_annotated::tlm_annotated_nonblocking_put_if\fP< T >::nb_can_put (const sc_time &, tlm_tag< T > * t = \fC0\fP) const\fC [pure virtual]\fP"
+.PP
+Implemented in \fBtlm_annotated::tlm_annotated_fifo< T >\fP.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for TLM 2 from the source code.

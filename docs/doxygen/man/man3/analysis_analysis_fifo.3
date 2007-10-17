@@ -1,0 +1,57 @@
+.TH "analysis::analysis_fifo" 3 "17 Oct 2007" "Version 1" "TLM 2" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+analysis::analysis_fifo \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <tlm_analysis.h>\fP
+.PP
+Inherits \fBanalysis::analysis_if< T >< T >\fP, and \fBanalysis::analysis_if< T >< analysis::analysis_triple< T > >\fP.
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBanalysis_fifo\fP (const char *nm)"
+.br
+.ti -1c
+.RI "\fBanalysis_fifo\fP ()"
+.br
+.ti -1c
+.RI "void \fBwrite\fP (const \fBanalysis_triple\fP< T > &t)"
+.br
+.ti -1c
+.RI "void \fBwrite\fP (const T &t)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename T> class analysis::analysis_fifo< T >"
+
+.PP
+Definition at line 129 of file tlm_analysis.h.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename T> \fBanalysis::analysis_fifo\fP< T >::\fBanalysis_fifo\fP (const char * nm)\fC [inline]\fP"
+.PP
+Definition at line 138 of file tlm_analysis.h.
+.SS "template<typename T> \fBanalysis::analysis_fifo\fP< T >::\fBanalysis_fifo\fP ()\fC [inline]\fP"
+.PP
+Definition at line 139 of file tlm_analysis.h.
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename T> void \fBanalysis::analysis_fifo\fP< T >::write (const \fBanalysis_triple\fP< T > & t)\fC [inline]\fP"
+.PP
+Definition at line 141 of file tlm_analysis.h.
+.SS "template<typename T> void \fBanalysis::analysis_fifo\fP< T >::write (const T & t)\fC [inline, virtual]\fP"
+.PP
+Implements \fBanalysis::analysis_if< T >\fP.
+.PP
+Definition at line 145 of file tlm_analysis.h.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for TLM 2 from the source code.

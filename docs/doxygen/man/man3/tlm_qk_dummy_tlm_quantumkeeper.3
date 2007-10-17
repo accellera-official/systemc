@@ -1,0 +1,163 @@
+.TH "tlm_qk_dummy::tlm_quantumkeeper" 3 "17 Oct 2007" "Version 1" "TLM 2" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tlm_qk_dummy::tlm_quantumkeeper \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <tlm_quantumkeeper.h>\fP
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBtlm_quantumkeeper\fP ()"
+.br
+.ti -1c
+.RI "void \fBinc\fP (const sc_time &t)"
+.br
+.ti -1c
+.RI "bool \fBneedSync\fP () const "
+.br
+.ti -1c
+.RI "void \fBreset\fP ()"
+.br
+.ti -1c
+.RI "sc_time \fBgetCurrentTime\fP () const "
+.br
+.ti -1c
+.RI "const sc_time & \fBgetLocalTime\fP () const "
+.br
+.ti -1c
+.RI "sc_time & \fBgetLocalTime\fP ()"
+.br
+.ti -1c
+.RI "void \fBsync\fP ()"
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static void \fBsetGlobalQuantum\fP (const sc_time &t)"
+.br
+.ti -1c
+.RI "static const sc_time & \fBgetGlobalQuantum\fP ()"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual void \fBcomputeLocalQuantum\fP ()"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "sc_time \fBmLocalQuantum\fP"
+.br
+.ti -1c
+.RI "sc_time \fBmLocalTime\fP"
+.br
+.in -1c
+.SS "Static Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "static sc_time \fBmGlobalQuantum\fP = SC_ZERO_TIME"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename Dummy> class tlm_qk_dummy::tlm_quantumkeeper< Dummy >"
+
+.PP
+Definition at line 26 of file tlm_quantumkeeper.h.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename Dummy> \fBtlm_qk_dummy::tlm_quantumkeeper\fP< Dummy >::\fBtlm_quantumkeeper\fP ()\fC [inline]\fP"
+.PP
+Definition at line 40 of file tlm_quantumkeeper.h.
+.PP
+References tlm_qk_dummy::tlm_quantumkeeper< Dummy >::computeLocalQuantum().
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename Dummy> static void \fBtlm_qk_dummy::tlm_quantumkeeper\fP< Dummy >::setGlobalQuantum (const sc_time & t)\fC [inline, static]\fP"
+.PP
+Definition at line 29 of file tlm_quantumkeeper.h.
+.PP
+References tlm_qk_dummy::tlm_quantumkeeper< Dummy >::mGlobalQuantum.
+.SS "template<typename Dummy> static const sc_time& \fBtlm_qk_dummy::tlm_quantumkeeper\fP< Dummy >::getGlobalQuantum ()\fC [inline, static]\fP"
+.PP
+Definition at line 34 of file tlm_quantumkeeper.h.
+.PP
+References tlm_qk_dummy::tlm_quantumkeeper< Dummy >::mGlobalQuantum.
+.SS "template<typename Dummy> void \fBtlm_qk_dummy::tlm_quantumkeeper\fP< Dummy >::inc (const sc_time & t)\fC [inline]\fP"
+.PP
+Definition at line 46 of file tlm_quantumkeeper.h.
+.PP
+References tlm_qk_dummy::tlm_quantumkeeper< Dummy >::mLocalTime.
+.SS "template<typename Dummy> bool \fBtlm_qk_dummy::tlm_quantumkeeper\fP< Dummy >::needSync () const\fC [inline]\fP"
+.PP
+Definition at line 51 of file tlm_quantumkeeper.h.
+.PP
+References tlm_qk_dummy::tlm_quantumkeeper< Dummy >::mLocalQuantum, and tlm_qk_dummy::tlm_quantumkeeper< Dummy >::mLocalTime.
+.SS "template<typename Dummy> void \fBtlm_qk_dummy::tlm_quantumkeeper\fP< Dummy >::reset ()\fC [inline]\fP"
+.PP
+Definition at line 56 of file tlm_quantumkeeper.h.
+.PP
+References tlm_qk_dummy::tlm_quantumkeeper< Dummy >::computeLocalQuantum(), and tlm_qk_dummy::tlm_quantumkeeper< Dummy >::mLocalTime.
+.PP
+Referenced by tlm_qk_dummy::tlm_quantumkeeper< Dummy >::sync().
+.SS "template<typename Dummy> sc_time \fBtlm_qk_dummy::tlm_quantumkeeper\fP< Dummy >::getCurrentTime () const\fC [inline]\fP"
+.PP
+Definition at line 62 of file tlm_quantumkeeper.h.
+.PP
+References tlm_qk_dummy::tlm_quantumkeeper< Dummy >::mLocalTime.
+.SS "template<typename Dummy> const sc_time& \fBtlm_qk_dummy::tlm_quantumkeeper\fP< Dummy >::getLocalTime () const\fC [inline]\fP"
+.PP
+Definition at line 67 of file tlm_quantumkeeper.h.
+.PP
+References tlm_qk_dummy::tlm_quantumkeeper< Dummy >::mLocalTime.
+.SS "template<typename Dummy> sc_time& \fBtlm_qk_dummy::tlm_quantumkeeper\fP< Dummy >::getLocalTime ()\fC [inline]\fP"
+.PP
+Definition at line 72 of file tlm_quantumkeeper.h.
+.PP
+References tlm_qk_dummy::tlm_quantumkeeper< Dummy >::mLocalTime.
+.SS "template<typename Dummy> void \fBtlm_qk_dummy::tlm_quantumkeeper\fP< Dummy >::sync ()\fC [inline]\fP"
+.PP
+Definition at line 77 of file tlm_quantumkeeper.h.
+.PP
+References tlm_qk_dummy::tlm_quantumkeeper< Dummy >::mLocalTime, and tlm_qk_dummy::tlm_quantumkeeper< Dummy >::reset().
+.SS "template<typename Dummy> virtual void \fBtlm_qk_dummy::tlm_quantumkeeper\fP< Dummy >::computeLocalQuantum ()\fC [inline, protected, virtual]\fP"
+.PP
+Definition at line 84 of file tlm_quantumkeeper.h.
+.PP
+References tlm_qk_dummy::tlm_quantumkeeper< Dummy >::mGlobalQuantum, and tlm_qk_dummy::tlm_quantumkeeper< Dummy >::mLocalQuantum.
+.PP
+Referenced by tlm_qk_dummy::tlm_quantumkeeper< Dummy >::reset(), and tlm_qk_dummy::tlm_quantumkeeper< Dummy >::tlm_quantumkeeper().
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename Dummy> sc_time \fBtlm_qk_dummy::tlm_quantumkeeper\fP< Dummy >::\fBmGlobalQuantum\fP = SC_ZERO_TIME\fC [inline, static, private]\fP"
+.PP
+Definition at line 90 of file tlm_quantumkeeper.h.
+.PP
+Referenced by tlm_qk_dummy::tlm_quantumkeeper< Dummy >::computeLocalQuantum(), tlm_qk_dummy::tlm_quantumkeeper< Dummy >::getGlobalQuantum(), and tlm_qk_dummy::tlm_quantumkeeper< Dummy >::setGlobalQuantum().
+.SS "template<typename Dummy> sc_time \fBtlm_qk_dummy::tlm_quantumkeeper\fP< Dummy >::\fBmLocalQuantum\fP\fC [private]\fP"
+.PP
+Definition at line 93 of file tlm_quantumkeeper.h.
+.PP
+Referenced by tlm_qk_dummy::tlm_quantumkeeper< Dummy >::computeLocalQuantum(), and tlm_qk_dummy::tlm_quantumkeeper< Dummy >::needSync().
+.SS "template<typename Dummy> sc_time \fBtlm_qk_dummy::tlm_quantumkeeper\fP< Dummy >::\fBmLocalTime\fP\fC [private]\fP"
+.PP
+Definition at line 94 of file tlm_quantumkeeper.h.
+.PP
+Referenced by tlm_qk_dummy::tlm_quantumkeeper< Dummy >::getCurrentTime(), tlm_qk_dummy::tlm_quantumkeeper< Dummy >::getLocalTime(), tlm_qk_dummy::tlm_quantumkeeper< Dummy >::inc(), tlm_qk_dummy::tlm_quantumkeeper< Dummy >::needSync(), tlm_qk_dummy::tlm_quantumkeeper< Dummy >::reset(), and tlm_qk_dummy::tlm_quantumkeeper< Dummy >::sync().
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for TLM 2 from the source code.

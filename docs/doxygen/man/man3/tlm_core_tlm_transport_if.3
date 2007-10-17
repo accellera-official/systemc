@@ -1,0 +1,42 @@
+.TH "tlm_core::tlm_transport_if" 3 "17 Oct 2007" "Version 1" "TLM 2" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tlm_core::tlm_transport_if \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <tlm_core.h>\fP
+.PP
+Inherits \fBsc_interface\fP.
+.PP
+Inherited by \fBtlm_annotated::tlm_annotated_transport_if< REQ, RSP >\fP\fC [virtual]\fP, and \fBtlm_annotated_transport_if< REQ, RSP >\fP\fC [virtual]\fP.
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual RSP \fBtransport\fP (const REQ &)=0"
+.br
+.ti -1c
+.RI "virtual void \fBtransport\fP (const REQ &req, RSP &rsp)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename REQ, typename RSP> class tlm_core::tlm_transport_if< REQ, RSP >"
+
+.PP
+Definition at line 70 of file tlm_core.h.
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename REQ, typename RSP> virtual RSP \fBtlm_core::tlm_transport_if\fP< REQ, RSP >::transport (const REQ &)\fC [pure virtual]\fP"
+.PP
+.SS "template<typename REQ, typename RSP> virtual void \fBtlm_core::tlm_transport_if\fP< REQ, RSP >::transport (const REQ & req, RSP & rsp)\fC [inline, virtual]\fP"
+.PP
+Definition at line 75 of file tlm_core.h.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for TLM 2 from the source code.

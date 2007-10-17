@@ -1,0 +1,61 @@
+.TH "tlm_fifo_debug_if" 3 "17 Oct 2007" "Version 1" "TLM 2" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tlm_fifo_debug_if \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <tlm_fifo_ifs.h>\fP
+.PP
+Inherits \fBsc_interface\fP.
+.PP
+Inherited by \fBtlm_fifo_get_if< T >\fP\fC [virtual]\fP, and \fBtlm_fifo_put_if< T >\fP\fC [virtual]\fP.
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual int \fBused\fP () const =0"
+.br
+.ti -1c
+.RI "virtual int \fBsize\fP () const =0"
+.br
+.ti -1c
+.RI "virtual void \fBdebug\fP () const =0"
+.br
+.ti -1c
+.RI "virtual bool \fBnb_peek\fP (T &, int n) const =0"
+.br
+.ti -1c
+.RI "virtual bool \fBnb_poke\fP (const T &, int n=0)=0"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename T> class tlm_fifo_debug_if< T >"
+
+.PP
+Definition at line 36 of file tlm_fifo_ifs.h.
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename T> virtual int \fBtlm_fifo_debug_if\fP< T >::used () const\fC [pure virtual]\fP"
+.PP
+Implemented in \fBtlm_fifo< T >\fP.
+.SS "template<typename T> virtual int \fBtlm_fifo_debug_if\fP< T >::size () const\fC [pure virtual]\fP"
+.PP
+Implemented in \fBtlm_fifo< T >\fP.
+.SS "template<typename T> virtual void \fBtlm_fifo_debug_if\fP< T >::debug () const\fC [pure virtual]\fP"
+.PP
+Implemented in \fBtlm_fifo< T >\fP.
+.SS "template<typename T> virtual bool \fBtlm_fifo_debug_if\fP< T >::nb_peek (T &, int n) const\fC [pure virtual]\fP"
+.PP
+Implemented in \fBtlm_fifo< T >\fP.
+.SS "template<typename T> virtual bool \fBtlm_fifo_debug_if\fP< T >::nb_poke (const T &, int n = \fC0\fP)\fC [pure virtual]\fP"
+.PP
+Implemented in \fBtlm_fifo< T >\fP.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for TLM 2 from the source code.

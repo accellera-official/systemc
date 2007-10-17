@@ -1,0 +1,124 @@
+.TH "tlm_annotated::tlm_peq" 3 "17 Oct 2007" "Version 1" "TLM 2" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tlm_annotated::tlm_peq \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <tlm_annotated.h>\fP
+.PP
+Inherits \fBsc_module\fP, and \fBanalysis::delayed_analysis_if< T >< T >\fP.
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBSC_HAS_PROCESS\fP (\fBtlm_peq\fP)"
+.br
+.ti -1c
+.RI "\fBtlm_peq\fP (sc_module_name nm)"
+.br
+.ti -1c
+.RI "int \fBsize\fP () const "
+.br
+.ti -1c
+.RI "int \fBposted_before\fP (const sc_time &time) const "
+.br
+.ti -1c
+.RI "int \fBposted_at\fP (const sc_time &time) const "
+.br
+.ti -1c
+.RI "void \fBwrite\fP (const T &transaction, const sc_time &time)"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "sc_export< \fBdelayed_analysis_if\fP< T > > \fBdelayed_analysis_export\fP"
+.br
+.ti -1c
+.RI "\fBanalysis_port\fP< T > \fBap\fP"
+.br
+.in -1c
+.SS "Private Types"
+
+.in +1c
+.ti -1c
+.RI "typedef pair< sc_time, T > \fBpair_type\fP"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBwake_up_method\fP ()"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "sc_event \fBm_wake_up\fP"
+.br
+.ti -1c
+.RI "multimap< sc_time, T > \fBm_map\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename T> class tlm_annotated::tlm_peq< T >"
+
+.PP
+Definition at line 255 of file tlm_annotated.h.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "template<typename T> typedef pair<sc_time,T> \fBtlm_annotated::tlm_peq\fP< T >::\fBpair_type\fP\fC [private]\fP"
+.PP
+Definition at line 307 of file tlm_annotated.h.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename T> \fBtlm_annotated::tlm_peq\fP< T >::\fBtlm_peq\fP (sc_module_name nm)\fC [inline]\fP"
+.PP
+Definition at line 265 of file tlm_annotated.h.
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename T> \fBtlm_annotated::tlm_peq\fP< T >::SC_HAS_PROCESS (\fBtlm_peq\fP< T >)"
+.PP
+.SS "template<typename T> int \fBtlm_annotated::tlm_peq\fP< T >::size () const\fC [inline]\fP"
+.PP
+Definition at line 275 of file tlm_annotated.h.
+.SS "template<typename T> int \fBtlm_annotated::tlm_peq\fP< T >::posted_before (const sc_time & time) const\fC [inline]\fP"
+.PP
+Definition at line 277 of file tlm_annotated.h.
+.SS "template<typename T> int \fBtlm_annotated::tlm_peq\fP< T >::posted_at (const sc_time & time) const\fC [inline]\fP"
+.PP
+Definition at line 295 of file tlm_annotated.h.
+.SS "template<typename T> void \fBtlm_annotated::tlm_peq\fP< T >::write (const T & transaction, const sc_time & time)\fC [inline, virtual]\fP"
+.PP
+Implements \fBanalysis::delayed_analysis_if< T >\fP.
+.PP
+Definition at line 299 of file tlm_annotated.h.
+.SS "template<typename T> void \fBtlm_annotated::tlm_peq\fP< T >::wake_up_method ()\fC [inline, private]\fP"
+.PP
+Definition at line 309 of file tlm_annotated.h.
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename T> sc_export< \fBdelayed_analysis_if\fP< T > > \fBtlm_annotated::tlm_peq\fP< T >::\fBdelayed_analysis_export\fP"
+.PP
+Definition at line 260 of file tlm_annotated.h.
+.SS "template<typename T> \fBanalysis_port\fP< T > \fBtlm_annotated::tlm_peq\fP< T >::\fBap\fP"
+.PP
+Definition at line 261 of file tlm_annotated.h.
+.SS "template<typename T> sc_event \fBtlm_annotated::tlm_peq\fP< T >::\fBm_wake_up\fP\fC [private]\fP"
+.PP
+Definition at line 339 of file tlm_annotated.h.
+.SS "template<typename T> multimap< sc_time , T> \fBtlm_annotated::tlm_peq\fP< T >::\fBm_map\fP\fC [private]\fP"
+.PP
+Definition at line 340 of file tlm_annotated.h.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for TLM 2 from the source code.
