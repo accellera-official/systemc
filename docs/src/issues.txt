@@ -1,0 +1,52 @@
+0001 - /include/tlm_h/tlm_generic_payload/tlm_array.h is an array class implementation.
+       Is there a reason for using this over the stdlibc++ array class? If not, it should
+       be removed and tlm_gp.h updated appropriately. If if needs to stay, it should either
+       be renamed to tlm_gp_array.h or promoted to tlm_core.
+
+0002 - The namespace for tlm_analysis needs to be renamed 'tlm_analysis'. It is presently
+       named 'analysis'.
+
+0003 - /include/tlm_h/tlm_generic_payload/tlm_helpers.h needs to be renamed
+       'tlm_gp_helpers.h' or promoted to tlm_core
+
+0004 - There are variables beginning with underscore characters (_)
+
+0005 - Endianness can be determined using #include <endian.h> which defines __BYTE_ORDER,
+       __LITTLE_ENDIAN and __BIG_ENDIAN for gcc compilers. An addition can be made to
+       tlm_platform.h for MSVC. (MacOSX runs on both big and little endian architectures)
+
+0006 - The namespace for tlm_generic_payload needs to be renamed to 'tlm_generic_payload'.
+       It is presently named 'tlm_generic_payload_ns'.
+
+0007 - Include guards should be consistent. The Unix convention is full name in uppercase
+       beginning and ending with two underscores; and non-alphabetic characters replaced by
+       underscores. (tlm_somestuff_here.h --> __TLM_SOMESTUFF_HERE_H__)
+
+0008 - when building /unit_test/tlm/bus (unix) 
+       warning: 'class tlm_quantum::tlm_qk_dummy::tlm_quantumkeeper<tlm_quantum::tlm_qk_dummy::tlm_dummy>'
+       has virtual functions but non-virtual destructor
+
+0009 - when building /unit_test/gp_extension/GenericPayload (Windows)
+       c:\eslx\projects\tlmwg\tlm2\unit_test\tlm\gp_extension\genericpayload\include\tlm_master.h(148)
+       : warning C4312: 'type cast' : conversion from 'unsigned int' to 'void *' of greater size
+
+0010 - when building /unit_test/gp_extension/GenericPayload (Windows)
+       c:\eslx\projects\tlmwg\tlm2\unit_test\tlm\gp_extension\genericpayload\include\tlm_master.h(102)
+       : see reference to function template instantiation
+       'void tlm_master::write<unsigned int>(unsigned int,DT)' being compiled
+        with
+        [
+            DT=unsigned int
+        ]
+
+0011 - explicitly sized variables (8, 16, 32, 64) should use explicitly sized type
+       [u]int[8,16,32,64]_t or sc_dt::[u]int64 over compiler dependent types (char, short,
+       long) as these vary by implementation <stdint.h>
+
+0012 - all 64-bit variables should use sc_dt::[u]int64 or [u]int64_t <stdint.h> as long long
+       is not part of the C++ standard
+
+0013 - there is a circular include file reference
+       /include/tlm_h/tlm_core/tlm_fifo/tlm_fifo.h
+       /include/tlm_h/tlm_core/tlm_fifo/tlm_fifo_put_get.h
+
