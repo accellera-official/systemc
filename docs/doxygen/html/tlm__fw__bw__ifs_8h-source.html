@@ -41,158 +41,159 @@
 <a name="l00026"></a>00026 <span class="keyword">using</span> <a class="code" href="classtlm__generic__payload__ns_1_1tlm__debug__payload.html">tlm_generic_payload_ns::tlm_debug_payload</a>;
 <a name="l00027"></a>00027 
 <a name="l00028"></a><a class="code" href="tlm__fw__bw__ifs_8h.html#1b4c9bd8c2fa6d4f407c7291cd0b16d6">00028</a> <span class="keyword">enum</span> <a class="code" href="tlm__fw__bw__ifs_8h.html#1b4c9bd8c2fa6d4f407c7291cd0b16d6">tlm_phase</a> { <a class="code" href="tlm__fw__bw__ifs_8h.html#1b4c9bd8c2fa6d4f407c7291cd0b16d6fe0e26bc9437a630cb993e993b836276">BEGIN_REQ</a>, <a class="code" href="tlm__fw__bw__ifs_8h.html#1b4c9bd8c2fa6d4f407c7291cd0b16d6276d3aef3d2f116bea959bbc4a9066e1">END_REQ</a>, <a class="code" href="tlm__fw__bw__ifs_8h.html#1b4c9bd8c2fa6d4f407c7291cd0b16d6d0324ff480e81637252d3c1f99cfd87f">BEGIN_RESP</a>, <a class="code" href="tlm__fw__bw__ifs_8h.html#1b4c9bd8c2fa6d4f407c7291cd0b16d608857d20c4d746e46f94c79295778434">END_RESP</a> };
-<a name="l00029"></a>00029 
-<a name="l00031"></a>00031 <span class="comment">// Basic interfaces</span>
-<a name="l00033"></a>00033 <span class="comment"></span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> TRANS = tlm_<span class="keyword">generic</span>_payload, <span class="keyword">typename</span> PHASE = tlm_phase&gt;
-<a name="l00034"></a><a class="code" href="classtlm__nonblocking__transport__if.html">00034</a> <span class="keyword">class </span><a class="code" href="classtlm__nonblocking__transport__if.html">tlm_nonblocking_transport_if</a> : <span class="keyword">public</span> <span class="keyword">virtual</span> <a class="code" href="classsc__interface.html">sc_interface</a> {
-<a name="l00035"></a>00035 <span class="keyword">public</span>:
-<a name="l00036"></a>00036   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> nb_transport(TRANS&amp; trans, PHASE&amp; phase, sc_time&amp; t) = 0;
-<a name="l00037"></a>00037 };
-<a name="l00038"></a>00038 
-<a name="l00039"></a>00039 <span class="keyword">template</span> &lt;<span class="keyword">typename</span> TRANS = tlm_<span class="keyword">generic</span>_payload&gt;
-<a name="l00040"></a><a class="code" href="classtlm__blocking__transport__if.html">00040</a> <span class="keyword">class </span><a class="code" href="classtlm__blocking__transport__if.html">tlm_blocking_transport_if</a> : <span class="keyword">public</span> <span class="keyword">virtual</span> <a class="code" href="classsc__interface.html">sc_interface</a> {
-<a name="l00041"></a>00041 <span class="keyword">public</span>:
-<a name="l00042"></a>00042   <span class="keyword">virtual</span> <span class="keywordtype">void</span> b_transport(TRANS&amp; trans) = 0;
-<a name="l00043"></a>00043 };
-<a name="l00044"></a>00044 
-<a name="l00046"></a>00046 <span class="comment">// DMI interfaces for getting and invalidating DMI pointers:</span>
-<a name="l00048"></a>00048 <span class="comment"></span>
-<a name="l00049"></a>00049 <span class="comment">// The semantics of the forward interface are as follows:</span>
-<a name="l00050"></a>00050 <span class="comment">// </span>
-<a name="l00051"></a>00051 <span class="comment">// - An initiator that want to get direct access to a slave's memory region</span>
-<a name="l00052"></a>00052 <span class="comment">//   can call the get_direct_mem_ptr method with the address parameter set to</span>
-<a name="l00053"></a>00053 <span class="comment">//   the address that it wants to gain access to. The forReads parameter specifies</span>
-<a name="l00054"></a>00054 <span class="comment">//   if a dmi range for read accesses or for write access must be returned.</span>
-<a name="l00055"></a>00055 <span class="comment">// - The 'forReads' parameter is necessary because read and write ranges do not have</span>
-<a name="l00056"></a>00056 <span class="comment">//   to have the same ranges. If they do, a slave can specify that the range is valid</span>
-<a name="l00057"></a>00057 <span class="comment">//   for all accesses with the type attribute in the tlm_dmi structure.</span>
-<a name="l00058"></a>00058 <span class="comment">// - The bus, if any, needs to decode the address and forward the call to</span>
-<a name="l00059"></a>00059 <span class="comment">//   the corresponding slave. It needs to handle the address exactly as the</span>
-<a name="l00060"></a>00060 <span class="comment">//   slave would expect on a transaction call, e.g. mask the address according</span>
-<a name="l00061"></a>00061 <span class="comment">//   to the slave's address width.</span>
-<a name="l00062"></a>00062 <span class="comment">// - If the slave supports DMI access for the given address, it sets the</span>
-<a name="l00063"></a>00063 <span class="comment">//   data fields in the DMI struct and returns true.</span>
-<a name="l00064"></a>00064 <span class="comment">// - If the slave does not support DMI access it needs to return false.</span>
-<a name="l00065"></a>00065 <span class="comment">//   The slave can either set the correct address range in the DMI struct</span>
-<a name="l00066"></a>00066 <span class="comment">//   to indicate the memory region where DMI is disallowed, or it can specify</span>
-<a name="l00067"></a>00067 <span class="comment">//   the complete address range if it doesn't know it's memory range.</span>
-<a name="l00068"></a>00068 <span class="comment">// - The bus must translate the addresses to the master's address space. This</span>
-<a name="l00069"></a>00069 <span class="comment">//   must be the inverse operation of what the bus/interconnect needed to do</span>
-<a name="l00070"></a>00070 <span class="comment">//   when forwarding the call.</span>
-<a name="l00071"></a>00071 <span class="comment">// - In case the slave returned with an invalid region the bus/interconnect</span>
-<a name="l00072"></a>00072 <span class="comment">//   must fill in the complete address region for the particular slave in the</span>
-<a name="l00073"></a>00073 <span class="comment">//   DMI data structure.</span>
-<a name="l00074"></a>00074 <span class="comment">//</span>
-<a name="l00075"></a>00075 <span class="comment">// DMI hint optimization:</span>
-<a name="l00076"></a>00076 <span class="comment">// </span>
-<a name="l00077"></a>00077 <span class="comment">// Initiators may use the DMI hint in the tlm_generic_payload to avoid</span>
-<a name="l00078"></a>00078 <span class="comment">// unnecessary memory locking attempts. The recommended sequence of interface</span>
-<a name="l00079"></a>00079 <span class="comment">// method calls would be:</span>
-<a name="l00080"></a>00080 <span class="comment">//</span>
-<a name="l00081"></a>00081 <span class="comment">// - The initiator first tries to check if it has a valid DMI region for the</span>
-<a name="l00082"></a>00082 <span class="comment">//   address that it wants to access next.</span>
-<a name="l00083"></a>00083 <span class="comment">// - If not, it performs a normal transaction.</span>
-<a name="l00084"></a>00084 <span class="comment">// - If the DMI hint in this transaction is true, the initiator can try and</span>
-<a name="l00085"></a>00085 <span class="comment">//   get the DMI region.</span>
-<a name="l00086"></a>00086 <span class="comment">//</span>
-<a name="l00087"></a>00087 <span class="comment">// Note that the DMI hint optimization is completely optional and every</span>
-<a name="l00088"></a>00088 <span class="comment">// initiator model is free to ignore the DMI hint.</span>
-<a name="l00089"></a>00089 
-<a name="l00090"></a><a class="code" href="classtlm__fw__direct__mem__if.html">00090</a> <span class="keyword">class </span><a class="code" href="classtlm__fw__direct__mem__if.html">tlm_fw_direct_mem_if</a> : <span class="keyword">public</span> <span class="keyword">virtual</span> <a class="code" href="classsc__interface.html">sc_interface</a>
-<a name="l00091"></a>00091 {
-<a name="l00092"></a>00092 <span class="keyword">public</span>:
-<a name="l00093"></a>00093   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> get_direct_mem_ptr(<span class="keyword">const</span> sc_dt::uint64&amp; address, <span class="keywordtype">bool</span> forReads,
-<a name="l00094"></a>00094                                   <a class="code" href="classtlm__dmi.html">tlm_dmi</a>&amp; dmi_data) = 0;
-<a name="l00095"></a>00095 };
-<a name="l00096"></a>00096 
-<a name="l00097"></a>00097 <span class="comment">// The semantics of the backwards call is as follows:</span>
-<a name="l00098"></a>00098 <span class="comment">//</span>
-<a name="l00099"></a>00099 <span class="comment">// - If a slave wants to notify the system that all DMI pointers to its</span>
-<a name="l00100"></a>00100 <span class="comment">//   memory are about to become invalid it must call the below interface</span>
-<a name="l00101"></a>00101 <span class="comment">//   method with the range arguments set to its memory region and the </span>
-<a name="l00102"></a>00102 <span class="comment">//   invalidate_all argument set to false.</span>
-<a name="l00103"></a>00103 <span class="comment">// - A bus/interconnect must forward this call to all masters that could</span>
-<a name="l00104"></a>00104 <span class="comment">//   potentially have a DMI pointer to this memory. A safe implementation is</span>
-<a name="l00105"></a>00105 <span class="comment">//   to call every attached master.</span>
-<a name="l00106"></a>00106 <span class="comment">// - Each master must check if it has a pointer to the given memory and throw</span>
-<a name="l00107"></a>00107 <span class="comment">//   this away.</span>
-<a name="l00108"></a>00108 <span class="comment">//</span>
-<a name="l00109"></a>00109 <span class="comment">// - A full DMI pointer invalidation, e.g. for a bus remap can be signaled</span>
-<a name="l00110"></a>00110 <span class="comment">//   by setting the invalidate_all argument to true.</span>
-<a name="l00111"></a>00111 <span class="comment">// - A master must throw away all DMI pointers in this case.</span>
-<a name="l00112"></a>00112 <span class="comment">//</span>
-<a name="l00113"></a>00113 <span class="comment">// - Under no circumstances a model is allowed to call the get_direct_mem_ptr</span>
-<a name="l00114"></a>00114 <span class="comment">//   from within the invalidate_direct_mem_ptr method, directly or indirectly.</span>
-<a name="l00115"></a>00115 <span class="comment">//</span>
-<a name="l00116"></a><a class="code" href="classtlm__bw__direct__mem__if.html">00116</a> <span class="keyword">class </span><a class="code" href="classtlm__bw__direct__mem__if.html">tlm_bw_direct_mem_if</a> : <span class="keyword">public</span> <span class="keyword">virtual</span> <a class="code" href="classsc__interface.html">sc_interface</a>
-<a name="l00117"></a>00117 {
-<a name="l00118"></a>00118 <span class="keyword">public</span>:
-<a name="l00119"></a>00119   <span class="keyword">virtual</span> <span class="keywordtype">void</span> invalidate_direct_mem_ptr(<span class="keywordtype">bool</span> invalidate_all,
-<a name="l00120"></a>00120                                          sc_dt::uint64 start_range,
-<a name="l00121"></a>00121                                          sc_dt::uint64 end_range) = 0;
-<a name="l00122"></a>00122 };
-<a name="l00123"></a>00123 
-<a name="l00125"></a>00125 <span class="comment">// debug interface for memory access</span>
-<a name="l00127"></a>00127 <span class="comment"></span><span class="comment">//</span>
-<a name="l00128"></a>00128 <span class="comment">// This interface can be used to gain access to a slaves memory or registers</span>
-<a name="l00129"></a>00129 <span class="comment">// in a non-intrusive manner. No side effects, waits or event notifications</span>
-<a name="l00130"></a>00130 <span class="comment">// must happen in the course of the method.</span>
-<a name="l00131"></a>00131 <span class="comment">//</span>
-<a name="l00132"></a>00132 <span class="comment">// Semantics:</span>
-<a name="l00133"></a>00133 <span class="comment">// - The initiator calls the transport_dbg method with the following arguments:</span>
-<a name="l00134"></a>00134 <span class="comment">//   . address: The start address that it wants to peek or poke.</span>
-<a name="l00135"></a>00135 <span class="comment">//   . num_bytes: The number of bytes that it requests to read or write.</span>
-<a name="l00136"></a>00136 <span class="comment">//   . do_read: Indicates a read or write access.</span>
-<a name="l00137"></a>00137 <span class="comment">//   . data: A pointer to the initiator-allocated data buffer, which must be</span>
-<a name="l00138"></a>00138 <span class="comment">//           at least num_bytes large. The data is always organized in the</span>
-<a name="l00139"></a>00139 <span class="comment">//           endianness of the machine.</span>
-<a name="l00140"></a>00140 <span class="comment">// - The bus/interconnect will decode the address and forward the call to the</span>
-<a name="l00141"></a>00141 <span class="comment">//   appropriate slave.</span>
-<a name="l00142"></a>00142 <span class="comment">// - The slave must return the number of successfully transmitted bytes, where</span>
-<a name="l00143"></a>00143 <span class="comment">//   this number must be &lt;= num_bytes. Thus, a slave can safely return 0 if it</span>
-<a name="l00144"></a>00144 <span class="comment">//   does not support debug transactions.</span>
-<a name="l00145"></a>00145 <span class="comment">//</span>
-<a name="l00146"></a><a class="code" href="classtlm__transport__dbg__if.html">00146</a> <span class="keyword">class </span><a class="code" href="classtlm__transport__dbg__if.html">tlm_transport_dbg_if</a> : <span class="keyword">public</span> <span class="keyword">virtual</span> <a class="code" href="classsc__interface.html">sc_interface</a>
-<a name="l00147"></a>00147 {
-<a name="l00148"></a>00148 <span class="keyword">public</span>:
-<a name="l00149"></a>00149   <span class="comment">// The return value of defines the number of bytes successfully</span>
-<a name="l00150"></a>00150   <span class="comment">// transferred.</span>
-<a name="l00151"></a>00151   <span class="keyword">virtual</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> transport_dbg(<a class="code" href="classtlm__debug__payload.html">tlm_debug_payload</a>&amp; r) = 0;
-<a name="l00152"></a>00152 };
-<a name="l00153"></a>00153 
-<a name="l00155"></a>00155 <span class="comment">// Combined interfaces</span>
-<a name="l00157"></a>00157 <span class="comment"></span>
-<a name="l00158"></a>00158 <span class="comment">// The forward non-blocking interface:</span>
-<a name="l00159"></a>00159 <span class="keyword">template</span> &lt;<span class="keyword">typename</span> TRANS = tlm_<span class="keyword">generic</span>_payload, <span class="keyword">typename</span> PHASE = tlm_phase&gt;
-<a name="l00160"></a><a class="code" href="classtlm__fw__nb__transport__if.html">00160</a> <span class="keyword">class </span><a class="code" href="classtlm__fw__nb__transport__if.html">tlm_fw_nb_transport_if</a>
-<a name="l00161"></a>00161   : <span class="keyword">public</span> <span class="keyword">virtual</span> <a class="code" href="classtlm__nonblocking__transport__if.html">tlm_nonblocking_transport_if&lt;TRANS, PHASE&gt;</a>
-<a name="l00162"></a>00162   , <span class="keyword">public</span> <span class="keyword">virtual</span> <a class="code" href="classtlm__fw__direct__mem__if.html">tlm_fw_direct_mem_if</a>
-<a name="l00163"></a>00163   , <span class="keyword">public</span> <span class="keyword">virtual</span> <a class="code" href="classtlm__transport__dbg__if.html">tlm_transport_dbg_if</a>
-<a name="l00164"></a>00164 {};
-<a name="l00165"></a>00165 
-<a name="l00166"></a>00166 <span class="comment">// The backward non-blocking interface:</span>
-<a name="l00167"></a>00167 <span class="keyword">template</span> &lt;<span class="keyword">typename</span> TRANS = <a class="code" href="classtlm__generic__payload__ns_1_1tlm__generic__payload.html">tlm_generic_payload</a>,
-<a name="l00168"></a>00168           <span class="keyword">typename</span> PHASE = <a class="code" href="tlm__fw__bw__ifs_8h.html#1b4c9bd8c2fa6d4f407c7291cd0b16d6">tlm_phase</a>&gt;
-<a name="l00169"></a><a class="code" href="classtlm__bw__nb__transport__if.html">00169</a> <span class="keyword">class </span><a class="code" href="classtlm__bw__nb__transport__if.html">tlm_bw_nb_transport_if</a>
-<a name="l00170"></a>00170   : <span class="keyword">public</span> <span class="keyword">virtual</span> <a class="code" href="classtlm__nonblocking__transport__if.html">tlm_nonblocking_transport_if</a>&lt;TRANS, PHASE&gt;
-<a name="l00171"></a>00171   , <span class="keyword">public</span> <span class="keyword">virtual</span> <a class="code" href="classtlm__bw__direct__mem__if.html">tlm_bw_direct_mem_if</a>
-<a name="l00172"></a>00172 {};
-<a name="l00173"></a>00173 
-<a name="l00174"></a>00174 <span class="comment">// The forward blocking interface:</span>
-<a name="l00175"></a>00175 <span class="keyword">template</span> &lt;<span class="keyword">typename</span> TRANS = tlm_<span class="keyword">generic</span>_payload&gt;
-<a name="l00176"></a><a class="code" href="classtlm__fw__transport__if.html">00176</a> <span class="keyword">class </span><a class="code" href="classtlm__fw__transport__if.html">tlm_fw_transport_if</a>
-<a name="l00177"></a>00177   : <span class="keyword">public</span> <span class="keyword">virtual</span> <a class="code" href="classtlm__blocking__transport__if.html">tlm_blocking_transport_if&lt;TRANS&gt;</a>
-<a name="l00178"></a>00178   , <span class="keyword">public</span> <span class="keyword">virtual</span> tlm_fw_direct_mem_if
-<a name="l00179"></a>00179   , <span class="keyword">public</span> <span class="keyword">virtual</span> <a class="code" href="classtlm__transport__dbg__if.html">tlm_transport_dbg_if</a>
-<a name="l00180"></a>00180 {};
-<a name="l00181"></a>00181 
-<a name="l00182"></a>00182 <span class="comment">// The backward blocking interface:</span>
-<a name="l00183"></a><a class="code" href="classtlm__bw__transport__if.html">00183</a> <span class="keyword">class </span><a class="code" href="classtlm__bw__transport__if.html">tlm_bw_transport_if</a>
-<a name="l00184"></a>00184   : <span class="keyword">public</span> <span class="keyword">virtual</span> <a class="code" href="classtlm__bw__direct__mem__if.html">tlm_bw_direct_mem_if</a>
-<a name="l00185"></a>00185 {};
-<a name="l00186"></a>00186 
-<a name="l00187"></a>00187 <span class="preprocessor">#endif </span><span class="comment">/* TLM_FW_BW_IFS_HEADER */</span>
-</pre></div><hr size="1"><address style="text-align: right;"><small>Generated on Thu Oct 18 09:22:37 2007 for TLM 2 by&nbsp;
+<a name="l00029"></a><a class="code" href="tlm__fw__bw__ifs_8h.html#7c0e91e4bf67a83d836807ea215d119a">00029</a> <span class="keyword">enum</span> <a class="code" href="tlm__fw__bw__ifs_8h.html#7c0e91e4bf67a83d836807ea215d119a">tlm_sync_enum</a> { <a class="code" href="tlm__fw__bw__ifs_8h.html#7c0e91e4bf67a83d836807ea215d119a11977ef052175ae99f5bb7a1bf495fa0">TLM_REJECTED</a>, <a class="code" href="tlm__fw__bw__ifs_8h.html#7c0e91e4bf67a83d836807ea215d119adcdc757bf4defebd7d4b8fee0f23898e">TLM_SYNC</a>, <a class="code" href="tlm__fw__bw__ifs_8h.html#7c0e91e4bf67a83d836807ea215d119accabfc389e57ec47312fdddb5f10e1f0">TLM_SYNC_CONTINUE</a>, <a class="code" href="tlm__fw__bw__ifs_8h.html#7c0e91e4bf67a83d836807ea215d119a1fa9bb75b42e4f06e54a5e91f2258f19">TLM_COMPLETED</a> };
+<a name="l00030"></a>00030 
+<a name="l00032"></a>00032 <span class="comment">// Basic interfaces</span>
+<a name="l00034"></a>00034 <span class="comment"></span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> TRANS = tlm_<span class="keyword">generic</span>_payload, <span class="keyword">typename</span> PHASE = tlm_phase&gt;
+<a name="l00035"></a><a class="code" href="classtlm__nonblocking__transport__if.html">00035</a> <span class="keyword">class </span><a class="code" href="classtlm__nonblocking__transport__if.html">tlm_nonblocking_transport_if</a> : <span class="keyword">public</span> <span class="keyword">virtual</span> <a class="code" href="classsc__interface.html">sc_interface</a> {
+<a name="l00036"></a>00036 <span class="keyword">public</span>:
+<a name="l00037"></a>00037   <span class="keyword">virtual</span> <a class="code" href="tlm__fw__bw__ifs_8h.html#7c0e91e4bf67a83d836807ea215d119a">tlm_sync_enum</a> nb_transport(TRANS&amp; trans, PHASE&amp; phase, sc_time&amp; t) = 0;
+<a name="l00038"></a>00038 };
+<a name="l00039"></a>00039 
+<a name="l00040"></a>00040 <span class="keyword">template</span> &lt;<span class="keyword">typename</span> TRANS = tlm_<span class="keyword">generic</span>_payload&gt;
+<a name="l00041"></a><a class="code" href="classtlm__blocking__transport__if.html">00041</a> <span class="keyword">class </span><a class="code" href="classtlm__blocking__transport__if.html">tlm_blocking_transport_if</a> : <span class="keyword">public</span> <span class="keyword">virtual</span> <a class="code" href="classsc__interface.html">sc_interface</a> {
+<a name="l00042"></a>00042 <span class="keyword">public</span>:
+<a name="l00043"></a>00043   <span class="keyword">virtual</span> <span class="keywordtype">void</span> b_transport(TRANS&amp; trans) = 0;
+<a name="l00044"></a>00044 };
+<a name="l00045"></a>00045 
+<a name="l00047"></a>00047 <span class="comment">// DMI interfaces for getting and invalidating DMI pointers:</span>
+<a name="l00049"></a>00049 <span class="comment"></span>
+<a name="l00050"></a>00050 <span class="comment">// The semantics of the forward interface are as follows:</span>
+<a name="l00051"></a>00051 <span class="comment">// </span>
+<a name="l00052"></a>00052 <span class="comment">// - An initiator that want to get direct access to a slave's memory region</span>
+<a name="l00053"></a>00053 <span class="comment">//   can call the get_direct_mem_ptr method with the address parameter set to</span>
+<a name="l00054"></a>00054 <span class="comment">//   the address that it wants to gain access to. The forReads parameter specifies</span>
+<a name="l00055"></a>00055 <span class="comment">//   if a dmi range for read accesses or for write access must be returned.</span>
+<a name="l00056"></a>00056 <span class="comment">// - The 'forReads' parameter is necessary because read and write ranges do not have</span>
+<a name="l00057"></a>00057 <span class="comment">//   to have the same ranges. If they do, a slave can specify that the range is valid</span>
+<a name="l00058"></a>00058 <span class="comment">//   for all accesses with the type attribute in the tlm_dmi structure.</span>
+<a name="l00059"></a>00059 <span class="comment">// - The bus, if any, needs to decode the address and forward the call to</span>
+<a name="l00060"></a>00060 <span class="comment">//   the corresponding slave. It needs to handle the address exactly as the</span>
+<a name="l00061"></a>00061 <span class="comment">//   slave would expect on a transaction call, e.g. mask the address according</span>
+<a name="l00062"></a>00062 <span class="comment">//   to the slave's address width.</span>
+<a name="l00063"></a>00063 <span class="comment">// - If the slave supports DMI access for the given address, it sets the</span>
+<a name="l00064"></a>00064 <span class="comment">//   data fields in the DMI struct and returns true.</span>
+<a name="l00065"></a>00065 <span class="comment">// - If the slave does not support DMI access it needs to return false.</span>
+<a name="l00066"></a>00066 <span class="comment">//   The slave can either set the correct address range in the DMI struct</span>
+<a name="l00067"></a>00067 <span class="comment">//   to indicate the memory region where DMI is disallowed, or it can specify</span>
+<a name="l00068"></a>00068 <span class="comment">//   the complete address range if it doesn't know it's memory range.</span>
+<a name="l00069"></a>00069 <span class="comment">// - The bus must translate the addresses to the master's address space. This</span>
+<a name="l00070"></a>00070 <span class="comment">//   must be the inverse operation of what the bus/interconnect needed to do</span>
+<a name="l00071"></a>00071 <span class="comment">//   when forwarding the call.</span>
+<a name="l00072"></a>00072 <span class="comment">// - In case the slave returned with an invalid region the bus/interconnect</span>
+<a name="l00073"></a>00073 <span class="comment">//   must fill in the complete address region for the particular slave in the</span>
+<a name="l00074"></a>00074 <span class="comment">//   DMI data structure.</span>
+<a name="l00075"></a>00075 <span class="comment">//</span>
+<a name="l00076"></a>00076 <span class="comment">// DMI hint optimization:</span>
+<a name="l00077"></a>00077 <span class="comment">// </span>
+<a name="l00078"></a>00078 <span class="comment">// Initiators may use the DMI hint in the tlm_generic_payload to avoid</span>
+<a name="l00079"></a>00079 <span class="comment">// unnecessary memory locking attempts. The recommended sequence of interface</span>
+<a name="l00080"></a>00080 <span class="comment">// method calls would be:</span>
+<a name="l00081"></a>00081 <span class="comment">//</span>
+<a name="l00082"></a>00082 <span class="comment">// - The initiator first tries to check if it has a valid DMI region for the</span>
+<a name="l00083"></a>00083 <span class="comment">//   address that it wants to access next.</span>
+<a name="l00084"></a>00084 <span class="comment">// - If not, it performs a normal transaction.</span>
+<a name="l00085"></a>00085 <span class="comment">// - If the DMI hint in this transaction is true, the initiator can try and</span>
+<a name="l00086"></a>00086 <span class="comment">//   get the DMI region.</span>
+<a name="l00087"></a>00087 <span class="comment">//</span>
+<a name="l00088"></a>00088 <span class="comment">// Note that the DMI hint optimization is completely optional and every</span>
+<a name="l00089"></a>00089 <span class="comment">// initiator model is free to ignore the DMI hint.</span>
+<a name="l00090"></a>00090 
+<a name="l00091"></a><a class="code" href="classtlm__fw__direct__mem__if.html">00091</a> <span class="keyword">class </span><a class="code" href="classtlm__fw__direct__mem__if.html">tlm_fw_direct_mem_if</a> : <span class="keyword">public</span> <span class="keyword">virtual</span> <a class="code" href="classsc__interface.html">sc_interface</a>
+<a name="l00092"></a>00092 {
+<a name="l00093"></a>00093 <span class="keyword">public</span>:
+<a name="l00094"></a>00094   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> get_direct_mem_ptr(<span class="keyword">const</span> sc_dt::uint64&amp; address, <span class="keywordtype">bool</span> forReads,
+<a name="l00095"></a>00095                                   <a class="code" href="classtlm__dmi.html">tlm_dmi</a>&amp; dmi_data) = 0;
+<a name="l00096"></a>00096 };
+<a name="l00097"></a>00097 
+<a name="l00098"></a>00098 <span class="comment">// The semantics of the backwards call is as follows:</span>
+<a name="l00099"></a>00099 <span class="comment">//</span>
+<a name="l00100"></a>00100 <span class="comment">// - If a slave wants to notify the system that all DMI pointers to its</span>
+<a name="l00101"></a>00101 <span class="comment">//   memory are about to become invalid it must call the below interface</span>
+<a name="l00102"></a>00102 <span class="comment">//   method with the range arguments set to its memory region and the </span>
+<a name="l00103"></a>00103 <span class="comment">//   invalidate_all argument set to false.</span>
+<a name="l00104"></a>00104 <span class="comment">// - A bus/interconnect must forward this call to all masters that could</span>
+<a name="l00105"></a>00105 <span class="comment">//   potentially have a DMI pointer to this memory. A safe implementation is</span>
+<a name="l00106"></a>00106 <span class="comment">//   to call every attached master.</span>
+<a name="l00107"></a>00107 <span class="comment">// - Each master must check if it has a pointer to the given memory and throw</span>
+<a name="l00108"></a>00108 <span class="comment">//   this away.</span>
+<a name="l00109"></a>00109 <span class="comment">//</span>
+<a name="l00110"></a>00110 <span class="comment">// - A full DMI pointer invalidation, e.g. for a bus remap can be signaled</span>
+<a name="l00111"></a>00111 <span class="comment">//   by setting the invalidate_all argument to true.</span>
+<a name="l00112"></a>00112 <span class="comment">// - A master must throw away all DMI pointers in this case.</span>
+<a name="l00113"></a>00113 <span class="comment">//</span>
+<a name="l00114"></a>00114 <span class="comment">// - Under no circumstances a model is allowed to call the get_direct_mem_ptr</span>
+<a name="l00115"></a>00115 <span class="comment">//   from within the invalidate_direct_mem_ptr method, directly or indirectly.</span>
+<a name="l00116"></a>00116 <span class="comment">//</span>
+<a name="l00117"></a><a class="code" href="classtlm__bw__direct__mem__if.html">00117</a> <span class="keyword">class </span><a class="code" href="classtlm__bw__direct__mem__if.html">tlm_bw_direct_mem_if</a> : <span class="keyword">public</span> <span class="keyword">virtual</span> <a class="code" href="classsc__interface.html">sc_interface</a>
+<a name="l00118"></a>00118 {
+<a name="l00119"></a>00119 <span class="keyword">public</span>:
+<a name="l00120"></a>00120   <span class="keyword">virtual</span> <span class="keywordtype">void</span> invalidate_direct_mem_ptr(<span class="keywordtype">bool</span> invalidate_all,
+<a name="l00121"></a>00121                                          sc_dt::uint64 start_range,
+<a name="l00122"></a>00122                                          sc_dt::uint64 end_range) = 0;
+<a name="l00123"></a>00123 };
+<a name="l00124"></a>00124 
+<a name="l00126"></a>00126 <span class="comment">// debug interface for memory access</span>
+<a name="l00128"></a>00128 <span class="comment"></span><span class="comment">//</span>
+<a name="l00129"></a>00129 <span class="comment">// This interface can be used to gain access to a slaves memory or registers</span>
+<a name="l00130"></a>00130 <span class="comment">// in a non-intrusive manner. No side effects, waits or event notifications</span>
+<a name="l00131"></a>00131 <span class="comment">// must happen in the course of the method.</span>
+<a name="l00132"></a>00132 <span class="comment">//</span>
+<a name="l00133"></a>00133 <span class="comment">// Semantics:</span>
+<a name="l00134"></a>00134 <span class="comment">// - The initiator calls the transport_dbg method with the following arguments:</span>
+<a name="l00135"></a>00135 <span class="comment">//   . address: The start address that it wants to peek or poke.</span>
+<a name="l00136"></a>00136 <span class="comment">//   . num_bytes: The number of bytes that it requests to read or write.</span>
+<a name="l00137"></a>00137 <span class="comment">//   . do_read: Indicates a read or write access.</span>
+<a name="l00138"></a>00138 <span class="comment">//   . data: A pointer to the initiator-allocated data buffer, which must be</span>
+<a name="l00139"></a>00139 <span class="comment">//           at least num_bytes large. The data is always organized in the</span>
+<a name="l00140"></a>00140 <span class="comment">//           endianness of the machine.</span>
+<a name="l00141"></a>00141 <span class="comment">// - The bus/interconnect will decode the address and forward the call to the</span>
+<a name="l00142"></a>00142 <span class="comment">//   appropriate slave.</span>
+<a name="l00143"></a>00143 <span class="comment">// - The slave must return the number of successfully transmitted bytes, where</span>
+<a name="l00144"></a>00144 <span class="comment">//   this number must be &lt;= num_bytes. Thus, a slave can safely return 0 if it</span>
+<a name="l00145"></a>00145 <span class="comment">//   does not support debug transactions.</span>
+<a name="l00146"></a>00146 <span class="comment">//</span>
+<a name="l00147"></a><a class="code" href="classtlm__transport__dbg__if.html">00147</a> <span class="keyword">class </span><a class="code" href="classtlm__transport__dbg__if.html">tlm_transport_dbg_if</a> : <span class="keyword">public</span> <span class="keyword">virtual</span> <a class="code" href="classsc__interface.html">sc_interface</a>
+<a name="l00148"></a>00148 {
+<a name="l00149"></a>00149 <span class="keyword">public</span>:
+<a name="l00150"></a>00150   <span class="comment">// The return value of defines the number of bytes successfully</span>
+<a name="l00151"></a>00151   <span class="comment">// transferred.</span>
+<a name="l00152"></a>00152   <span class="keyword">virtual</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> transport_dbg(<a class="code" href="classtlm__debug__payload.html">tlm_debug_payload</a>&amp; r) = 0;
+<a name="l00153"></a>00153 };
+<a name="l00154"></a>00154 
+<a name="l00156"></a>00156 <span class="comment">// Combined interfaces</span>
+<a name="l00158"></a>00158 <span class="comment"></span>
+<a name="l00159"></a>00159 <span class="comment">// The forward non-blocking interface:</span>
+<a name="l00160"></a>00160 <span class="keyword">template</span> &lt;<span class="keyword">typename</span> TRANS = tlm_<span class="keyword">generic</span>_payload, <span class="keyword">typename</span> PHASE = tlm_phase&gt;
+<a name="l00161"></a><a class="code" href="classtlm__fw__nb__transport__if.html">00161</a> <span class="keyword">class </span><a class="code" href="classtlm__fw__nb__transport__if.html">tlm_fw_nb_transport_if</a>
+<a name="l00162"></a>00162   : <span class="keyword">public</span> <span class="keyword">virtual</span> <a class="code" href="classtlm__nonblocking__transport__if.html">tlm_nonblocking_transport_if&lt;TRANS, PHASE&gt;</a>
+<a name="l00163"></a>00163   , <span class="keyword">public</span> <span class="keyword">virtual</span> <a class="code" href="classtlm__fw__direct__mem__if.html">tlm_fw_direct_mem_if</a>
+<a name="l00164"></a>00164   , <span class="keyword">public</span> <span class="keyword">virtual</span> <a class="code" href="classtlm__transport__dbg__if.html">tlm_transport_dbg_if</a>
+<a name="l00165"></a>00165 {};
+<a name="l00166"></a>00166 
+<a name="l00167"></a>00167 <span class="comment">// The backward non-blocking interface:</span>
+<a name="l00168"></a>00168 <span class="keyword">template</span> &lt;<span class="keyword">typename</span> TRANS = <a class="code" href="classtlm__generic__payload__ns_1_1tlm__generic__payload.html">tlm_generic_payload</a>,
+<a name="l00169"></a>00169           <span class="keyword">typename</span> PHASE = <a class="code" href="tlm__fw__bw__ifs_8h.html#1b4c9bd8c2fa6d4f407c7291cd0b16d6">tlm_phase</a>&gt;
+<a name="l00170"></a><a class="code" href="classtlm__bw__nb__transport__if.html">00170</a> <span class="keyword">class </span><a class="code" href="classtlm__bw__nb__transport__if.html">tlm_bw_nb_transport_if</a>
+<a name="l00171"></a>00171   : <span class="keyword">public</span> <span class="keyword">virtual</span> <a class="code" href="classtlm__nonblocking__transport__if.html">tlm_nonblocking_transport_if</a>&lt;TRANS, PHASE&gt;
+<a name="l00172"></a>00172   , <span class="keyword">public</span> <span class="keyword">virtual</span> <a class="code" href="classtlm__bw__direct__mem__if.html">tlm_bw_direct_mem_if</a>
+<a name="l00173"></a>00173 {};
+<a name="l00174"></a>00174 
+<a name="l00175"></a>00175 <span class="comment">// The forward blocking interface:</span>
+<a name="l00176"></a>00176 <span class="keyword">template</span> &lt;<span class="keyword">typename</span> TRANS = tlm_<span class="keyword">generic</span>_payload&gt;
+<a name="l00177"></a><a class="code" href="classtlm__fw__transport__if.html">00177</a> <span class="keyword">class </span><a class="code" href="classtlm__fw__transport__if.html">tlm_fw_transport_if</a>
+<a name="l00178"></a>00178   : <span class="keyword">public</span> <span class="keyword">virtual</span> <a class="code" href="classtlm__blocking__transport__if.html">tlm_blocking_transport_if&lt;TRANS&gt;</a>
+<a name="l00179"></a>00179   , <span class="keyword">public</span> <span class="keyword">virtual</span> tlm_fw_direct_mem_if
+<a name="l00180"></a>00180   , <span class="keyword">public</span> <span class="keyword">virtual</span> <a class="code" href="classtlm__transport__dbg__if.html">tlm_transport_dbg_if</a>
+<a name="l00181"></a>00181 {};
+<a name="l00182"></a>00182 
+<a name="l00183"></a>00183 <span class="comment">// The backward blocking interface:</span>
+<a name="l00184"></a><a class="code" href="classtlm__bw__transport__if.html">00184</a> <span class="keyword">class </span><a class="code" href="classtlm__bw__transport__if.html">tlm_bw_transport_if</a>
+<a name="l00185"></a>00185   : <span class="keyword">public</span> <span class="keyword">virtual</span> <a class="code" href="classtlm__bw__direct__mem__if.html">tlm_bw_direct_mem_if</a>
+<a name="l00186"></a>00186 {};
+<a name="l00187"></a>00187 
+<a name="l00188"></a>00188 <span class="preprocessor">#endif </span><span class="comment">/* TLM_FW_BW_IFS_HEADER */</span>
+</pre></div><hr size="1"><address style="text-align: right;"><small>Generated on Thu Oct 18 18:52:43 2007 for TLM 2 by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
 </body>
