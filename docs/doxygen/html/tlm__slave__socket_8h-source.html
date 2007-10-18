@@ -33,90 +33,108 @@
 <a name="l00018"></a>00018 <span class="preprocessor">#ifndef TLM_SLAVE_SOCKET_H</span>
 <a name="l00019"></a>00019 <span class="preprocessor"></span><span class="preprocessor">#define TLM_SLAVE_SOCKET_H</span>
 <a name="l00020"></a>00020 <span class="preprocessor"></span>
-<a name="l00021"></a>00021 <span class="comment">//#include &lt;systemc.h&gt;</span>
-<a name="l00022"></a>00022 
-<a name="l00023"></a>00023 <span class="keyword">template</span> &lt;<span class="keyword">typename</span> IF&gt; <span class="keyword">class </span><a class="code" href="classtlm__master__socket.html">tlm_master_socket</a>;
-<a name="l00024"></a>00024 
-<a name="l00025"></a>00025 <span class="keyword">template</span> &lt;<span class="keyword">typename</span> IF&gt;
-<a name="l00026"></a><a class="code" href="classtlm__slave__socket.html">00026</a> <span class="keyword">class </span><a class="code" href="classtlm__slave__socket.html">tlm_slave_socket</a> : <span class="keyword">public</span> sc_export&lt;IF&gt;
-<a name="l00027"></a>00027 {
-<a name="l00028"></a>00028 <span class="keyword">public</span>:
-<a name="l00029"></a><a class="code" href="classtlm__slave__socket.html#c339d214b5242f44e981bdad9ce2cdb0">00029</a>   <span class="keyword">typedef</span> IF <a class="code" href="classtlm__slave__socket.html#c339d214b5242f44e981bdad9ce2cdb0">interface_type</a>;
-<a name="l00030"></a><a class="code" href="classtlm__slave__socket.html#b22dcf909d9ce847d39ac8e49ac41bed">00030</a>   <span class="keyword">typedef</span> sc_port&lt;interface_type&gt; <a class="code" href="classtlm__slave__socket.html#b22dcf909d9ce847d39ac8e49ac41bed">port_type</a>;
-<a name="l00031"></a><a class="code" href="classtlm__slave__socket.html#d0f71a96c22a57093ded94de68a07c5d">00031</a>   <span class="keyword">typedef</span> sc_export&lt;interface_type&gt; <a class="code" href="classtlm__slave__socket.html#d0f71a96c22a57093ded94de68a07c5d">export_type</a>;
-<a name="l00032"></a><a class="code" href="classtlm__slave__socket.html#f958953b2ce25fbc7dc998768caea9df">00032</a>   <span class="keyword">typedef</span> <a class="code" href="classtlm__master__socket.html">tlm_master_socket&lt;interface_type&gt;</a> <a class="code" href="classtlm__master__socket.html">master_socket_type</a>;
-<a name="l00033"></a>00033 
-<a name="l00034"></a><a class="code" href="classtlm__slave__socket.html#545a6b16b5ac7456003a173cc84dd940">00034</a>   <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classtlm__master__socket.html">tlm_master_socket</a>&lt;<a class="code" href="classtlm__slave__socket.html#c339d214b5242f44e981bdad9ce2cdb0">interface_type</a>&gt;;
-<a name="l00035"></a>00035 
+<a name="l00021"></a>00021 <span class="preprocessor">#include "<a class="code" href="tlm__fw__bw__ifs_8h.html">tlm_h/tlm_annotated/tlm_fw_bw_ifs/tlm_fw_bw_ifs.h</a>"</span>
+<a name="l00022"></a>00022 <span class="comment">//#include &lt;systemc.h&gt;</span>
+<a name="l00023"></a>00023 
+<a name="l00024"></a>00024 <span class="keyword">using</span> <a class="code" href="classtlm__annotated_1_1tlm__fw__nb__transport__if.html">tlm_annotated::tlm_fw_nb_transport_if</a>;
+<a name="l00025"></a>00025 <span class="keyword">using</span> <a class="code" href="classtlm__annotated_1_1tlm__bw__nb__transport__if.html">tlm_annotated::tlm_bw_nb_transport_if</a>;
+<a name="l00026"></a>00026 
+<a name="l00027"></a>00027 <span class="keyword">template</span> &lt;<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> BUSWIDTH,
+<a name="l00028"></a>00028           <span class="keyword">typename</span> FW_IF,
+<a name="l00029"></a>00029           <span class="keyword">typename</span> BW_IF&gt; <span class="keyword">class </span><a class="code" href="classtlm__master__socket.html">tlm_master_socket</a>;
+<a name="l00030"></a>00030 
+<a name="l00031"></a>00031 <span class="keyword">template</span> &lt;<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> BUSWIDTH = 32,
+<a name="l00032"></a>00032           <span class="keyword">typename</span> FW_IF = <a class="code" href="classtlm__annotated_1_1tlm__fw__nb__transport__if.html">tlm_fw_nb_transport_if&lt;&gt;</a>,
+<a name="l00033"></a>00033           <span class="keyword">typename</span> BW_IF = <a class="code" href="classtlm__annotated_1_1tlm__bw__nb__transport__if.html">tlm_bw_nb_transport_if&lt;&gt;</a> &gt;
+<a name="l00034"></a><a class="code" href="classtlm__slave__socket.html">00034</a> <span class="keyword">class </span><a class="code" href="classtlm__slave__socket.html">tlm_slave_socket</a> : <span class="keyword">public</span> sc_export&lt;FW_IF&gt;
+<a name="l00035"></a>00035 {
 <a name="l00036"></a>00036 <span class="keyword">public</span>:
-<a name="l00037"></a><a class="code" href="classtlm__slave__socket.html#0c945964284b1ce7b04d8bfabc647de5">00037</a>   <a class="code" href="classtlm__slave__socket.html#0c945964284b1ce7b04d8bfabc647de5">tlm_slave_socket</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* name) :
-<a name="l00038"></a>00038     <a class="code" href="classtlm__slave__socket.html#d0f71a96c22a57093ded94de68a07c5d">export_type</a>(name)
-<a name="l00039"></a>00039   {
-<a name="l00040"></a>00040   }
-<a name="l00041"></a>00041 
-<a name="l00042"></a>00042   <span class="comment">//</span>
-<a name="l00043"></a>00043   <span class="comment">// Bind slave socket to master socket</span>
-<a name="l00044"></a>00044   <span class="comment">// - Binds the port of the master socket to the export of the slave socket</span>
-<a name="l00045"></a>00045   <span class="comment">// - Binds the port of the slave socket to the export of the master socket</span>
-<a name="l00046"></a>00046   <span class="comment">//</span>
-<a name="l00047"></a><a class="code" href="classtlm__slave__socket.html#73940843de5fea2ec4d5e24b844c86ac">00047</a>   <span class="keywordtype">void</span> <a class="code" href="classtlm__slave__socket.html#73940843de5fea2ec4d5e24b844c86ac">bind</a>(<a class="code" href="classtlm__master__socket.html">master_socket_type</a>&amp; s)
-<a name="l00048"></a>00048   {
-<a name="l00049"></a>00049     <span class="comment">// master.port -&gt; slave.export</span>
-<a name="l00050"></a>00050     (*<span class="keyword">static_cast&lt;</span><a class="code" href="classtlm__slave__socket.html#b22dcf909d9ce847d39ac8e49ac41bed">port_type</a>*<span class="keyword">&gt;</span>(&amp;s))(*<span class="keyword">static_cast&lt;</span><a class="code" href="classtlm__slave__socket.html#d0f71a96c22a57093ded94de68a07c5d">export_type</a>*<span class="keyword">&gt;</span>(<span class="keyword">this</span>));
-<a name="l00051"></a>00051     <span class="comment">// slave.port -&gt; master.export</span>
-<a name="l00052"></a>00052     <a class="code" href="classtlm__slave__socket.html#28869778fd57f14e0b7c2b1e41a4997b">mPort</a>(s.<a class="code" href="classtlm__master__socket.html#7294a6d94d1cfc39380d1c81b28ae5f9">mExport</a>);
+<a name="l00037"></a><a class="code" href="classtlm__slave__socket.html#3d4698307aa5181330e1e4ba606ea9a5">00037</a>   <span class="keyword">typedef</span> FW_IF <a class="code" href="classtlm__slave__socket.html#3d4698307aa5181330e1e4ba606ea9a5">fw_interface_type</a>;
+<a name="l00038"></a><a class="code" href="classtlm__slave__socket.html#1fdfa89d9fe5a818300e80228b548812">00038</a>   <span class="keyword">typedef</span> BW_IF <a class="code" href="classtlm__slave__socket.html#1fdfa89d9fe5a818300e80228b548812">bw_interface_type</a>;
+<a name="l00039"></a><a class="code" href="classtlm__slave__socket.html#1e44840eb9644a3ba56b591ad52ec4e8">00039</a>   <span class="keyword">typedef</span> sc_port&lt;bw_interface_type&gt; <a class="code" href="classtlm__slave__socket.html#1e44840eb9644a3ba56b591ad52ec4e8">port_type</a>;
+<a name="l00040"></a><a class="code" href="classtlm__slave__socket.html#ce92de48ede16a5f2ae93bb596c09606">00040</a>   <span class="keyword">typedef</span> sc_export&lt;fw_interface_type&gt; <a class="code" href="classtlm__slave__socket.html#ce92de48ede16a5f2ae93bb596c09606">export_type</a>;
+<a name="l00041"></a>00041   <span class="keyword">typedef</span> <a class="code" href="classtlm__master__socket.html">tlm_master_socket</a>&lt;BUSWIDTH,
+<a name="l00042"></a>00042                             <a class="code" href="classtlm__slave__socket.html#3d4698307aa5181330e1e4ba606ea9a5">fw_interface_type</a>,
+<a name="l00043"></a><a class="code" href="classtlm__slave__socket.html#06724eb0de2c01763c5eea4ca0bd1aac">00043</a>                             <a class="code" href="classtlm__slave__socket.html#1fdfa89d9fe5a818300e80228b548812">bw_interface_type</a>&gt; <a class="code" href="classtlm__master__socket.html">master_socket_type</a>;
+<a name="l00044"></a>00044 
+<a name="l00045"></a>00045   <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classtlm__master__socket.html">tlm_master_socket</a>&lt;BUSWIDTH,
+<a name="l00046"></a>00046                                  <a class="code" href="classtlm__slave__socket.html#3d4698307aa5181330e1e4ba606ea9a5">fw_interface_type</a>,
+<a name="l00047"></a><a class="code" href="classtlm__slave__socket.html#d48a28db0cb29bd74e1f65ce9e6b9002">00047</a>                                  <a class="code" href="classtlm__slave__socket.html#1fdfa89d9fe5a818300e80228b548812">bw_interface_type</a>&gt;;
+<a name="l00048"></a>00048 
+<a name="l00049"></a>00049 <span class="keyword">public</span>:
+<a name="l00050"></a><a class="code" href="classtlm__slave__socket.html#ab2422b971478a8af1a11f5da5101759">00050</a>   <a class="code" href="classtlm__slave__socket.html#ab2422b971478a8af1a11f5da5101759">tlm_slave_socket</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* name) :
+<a name="l00051"></a>00051     <a class="code" href="classtlm__slave__socket.html#ce92de48ede16a5f2ae93bb596c09606">export_type</a>(name)
+<a name="l00052"></a>00052   {
 <a name="l00053"></a>00053   }
 <a name="l00054"></a>00054 
-<a name="l00055"></a><a class="code" href="classtlm__slave__socket.html#c90d9c76a31ed62f42c72d3e6456b7a1">00055</a>   <span class="keywordtype">void</span> <a class="code" href="classtlm__slave__socket.html#c90d9c76a31ed62f42c72d3e6456b7a1">operator() </a>(<a class="code" href="classtlm__master__socket.html">master_socket_type</a>&amp; s)
-<a name="l00056"></a>00056   {
-<a name="l00057"></a>00057     <a class="code" href="classtlm__slave__socket.html#73940843de5fea2ec4d5e24b844c86ac">bind</a>(s);
+<a name="l00055"></a><a class="code" href="classtlm__slave__socket.html#b5ce8aff5d6c4499e1ad49c82714ff8f">00055</a>   <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classtlm__slave__socket.html#b5ce8aff5d6c4499e1ad49c82714ff8f">get_bus_width</a>()<span class="keyword"> const</span>
+<a name="l00056"></a>00056 <span class="keyword">  </span>{
+<a name="l00057"></a>00057     <span class="keywordflow">return</span> BUSWIDTH;
 <a name="l00058"></a>00058   }
 <a name="l00059"></a>00059 
 <a name="l00060"></a>00060   <span class="comment">//</span>
-<a name="l00061"></a>00061   <span class="comment">// Bind slave socket to slave socket (hierarchical bind)</span>
-<a name="l00062"></a>00062   <span class="comment">// - Binds both the export and the port</span>
-<a name="l00063"></a>00063   <span class="comment">//</span>
-<a name="l00064"></a><a class="code" href="classtlm__slave__socket.html#cb59d9746448c24d4638c9c3317007d0">00064</a>   <span class="keywordtype">void</span> <a class="code" href="classtlm__slave__socket.html#73940843de5fea2ec4d5e24b844c86ac">bind</a>(<a class="code" href="classtlm__slave__socket.html">tlm_slave_socket</a>&amp; s)
-<a name="l00065"></a>00065   {
-<a name="l00066"></a>00066     <span class="comment">// export</span>
-<a name="l00067"></a>00067     (*<span class="keyword">static_cast&lt;</span><a class="code" href="classtlm__slave__socket.html#d0f71a96c22a57093ded94de68a07c5d">export_type</a>*<span class="keyword">&gt;</span>(<span class="keyword">this</span>))(*<span class="keyword">static_cast&lt;</span><a class="code" href="classtlm__slave__socket.html#d0f71a96c22a57093ded94de68a07c5d">export_type</a>*<span class="keyword">&gt;</span>(s));
-<a name="l00068"></a>00068     <span class="comment">// port</span>
-<a name="l00069"></a>00069     <a class="code" href="classtlm__slave__socket.html#28869778fd57f14e0b7c2b1e41a4997b">mPort</a>(s.<a class="code" href="classtlm__slave__socket.html#28869778fd57f14e0b7c2b1e41a4997b">mPort</a>);
-<a name="l00070"></a>00070   }
-<a name="l00071"></a>00071 
-<a name="l00072"></a><a class="code" href="classtlm__slave__socket.html#d75a2884ad460fadbc8bc38a3d90e7c8">00072</a>   <span class="keywordtype">void</span> <a class="code" href="classtlm__slave__socket.html#c90d9c76a31ed62f42c72d3e6456b7a1">operator() </a>(<a class="code" href="classtlm__slave__socket.html">tlm_slave_socket</a>&amp; s)
-<a name="l00073"></a>00073   {
-<a name="l00074"></a>00074     <a class="code" href="classtlm__slave__socket.html#73940843de5fea2ec4d5e24b844c86ac">bind</a>(s);
-<a name="l00075"></a>00075   }
-<a name="l00076"></a>00076 
-<a name="l00077"></a>00077   <span class="comment">//</span>
-<a name="l00078"></a>00078   <span class="comment">// Bind interface to socket</span>
-<a name="l00079"></a>00079   <span class="comment">// - Binds the interface to the export</span>
-<a name="l00080"></a>00080   <span class="comment">//</span>
-<a name="l00081"></a><a class="code" href="classtlm__slave__socket.html#87ab1bf914646ef285eb7999d6e67f80">00081</a>   <span class="keywordtype">void</span> <a class="code" href="classtlm__slave__socket.html#73940843de5fea2ec4d5e24b844c86ac">bind</a>(<a class="code" href="classtlm__slave__socket.html#c339d214b5242f44e981bdad9ce2cdb0">interface_type</a>&amp; ifs)
-<a name="l00082"></a>00082   {
-<a name="l00083"></a>00083     (*<span class="keyword">static_cast&lt;</span><a class="code" href="classtlm__slave__socket.html#d0f71a96c22a57093ded94de68a07c5d">export_type</a>*<span class="keyword">&gt;</span>(<span class="keyword">this</span>))(ifs);
-<a name="l00084"></a>00084   }
-<a name="l00085"></a>00085 
-<a name="l00086"></a><a class="code" href="classtlm__slave__socket.html#0a70661d305182bda7860a2f271f0191">00086</a>   <span class="keywordtype">void</span> <a class="code" href="classtlm__slave__socket.html#c90d9c76a31ed62f42c72d3e6456b7a1">operator() </a>(<a class="code" href="classtlm__slave__socket.html#c339d214b5242f44e981bdad9ce2cdb0">interface_type</a>&amp; s)
-<a name="l00087"></a>00087   {
-<a name="l00088"></a>00088     <a class="code" href="classtlm__slave__socket.html#73940843de5fea2ec4d5e24b844c86ac">bind</a>(s);
-<a name="l00089"></a>00089   }
-<a name="l00090"></a>00090 
-<a name="l00091"></a>00091   <span class="comment">//</span>
-<a name="l00092"></a>00092   <span class="comment">// Forward to 'operator-&gt;()' of port class</span>
-<a name="l00093"></a>00093   <span class="comment">//</span>
-<a name="l00094"></a><a class="code" href="classtlm__slave__socket.html#2e660efba30fb5744baafbed8243a8c1">00094</a>   <a class="code" href="classtlm__slave__socket.html#c339d214b5242f44e981bdad9ce2cdb0">interface_type</a>* <a class="code" href="classtlm__slave__socket.html#2e660efba30fb5744baafbed8243a8c1">operator-&gt;</a>()
-<a name="l00095"></a>00095   {
-<a name="l00096"></a>00096     <span class="keywordflow">return</span> <a class="code" href="classtlm__slave__socket.html#28869778fd57f14e0b7c2b1e41a4997b">mPort</a>.operator-&gt;();
-<a name="l00097"></a>00097   }
-<a name="l00098"></a>00098 
-<a name="l00099"></a>00099 <span class="keyword">protected</span>:
-<a name="l00100"></a><a class="code" href="classtlm__slave__socket.html#28869778fd57f14e0b7c2b1e41a4997b">00100</a>   <a class="code" href="classtlm__slave__socket.html#b22dcf909d9ce847d39ac8e49ac41bed">port_type</a> <a class="code" href="classtlm__slave__socket.html#28869778fd57f14e0b7c2b1e41a4997b">mPort</a>;
-<a name="l00101"></a>00101 };
-<a name="l00102"></a>00102 
-<a name="l00103"></a>00103 <span class="preprocessor">#endif</span>
-</pre></div><hr size="1"><address style="text-align: right;"><small>Generated on Wed Oct 17 10:22:08 2007 for TLM 2 by&nbsp;
+<a name="l00061"></a>00061   <span class="comment">// Bind slave socket to master socket</span>
+<a name="l00062"></a>00062   <span class="comment">// - Binds the port of the master socket to the export of the slave socket</span>
+<a name="l00063"></a>00063   <span class="comment">// - Binds the port of the slave socket to the export of the master socket</span>
+<a name="l00064"></a>00064   <span class="comment">//</span>
+<a name="l00065"></a><a class="code" href="classtlm__slave__socket.html#fdee64be76b6199ad518c18634471018">00065</a>   <span class="keywordtype">void</span> <a class="code" href="classtlm__slave__socket.html#fdee64be76b6199ad518c18634471018">bind</a>(<a class="code" href="classtlm__master__socket.html">master_socket_type</a>&amp; s)
+<a name="l00066"></a>00066   {
+<a name="l00067"></a>00067     <span class="comment">// master.port -&gt; slave.export</span>
+<a name="l00068"></a>00068     (*<span class="keyword">static_cast&lt;</span>typename <a class="code" href="classtlm__master__socket.html#7a9aaea12d28ed85315b9cfc6e1f74da">master_socket_type::port_type</a>*<span class="keyword">&gt;</span>(&amp;s))(*<span class="keyword">static_cast&lt;</span><a class="code" href="classtlm__slave__socket.html#ce92de48ede16a5f2ae93bb596c09606">export_type</a>*<span class="keyword">&gt;</span>(<span class="keyword">this</span>));
+<a name="l00069"></a>00069     <span class="comment">// slave.port -&gt; master.export</span>
+<a name="l00070"></a>00070     <a class="code" href="classtlm__slave__socket.html#baf342cf946df981672eb773eac4100e">mPort</a>(s.<a class="code" href="classtlm__master__socket.html#2e43701a4077a766e276ee7d8cea2057">mExport</a>);
+<a name="l00071"></a>00071   }
+<a name="l00072"></a>00072 
+<a name="l00073"></a><a class="code" href="classtlm__slave__socket.html#f258857f1882c2061d9905682480e164">00073</a>   <span class="keywordtype">void</span> <a class="code" href="classtlm__slave__socket.html#f258857f1882c2061d9905682480e164">operator() </a>(<a class="code" href="classtlm__master__socket.html">master_socket_type</a>&amp; s)
+<a name="l00074"></a>00074   {
+<a name="l00075"></a>00075     <a class="code" href="classtlm__slave__socket.html#fdee64be76b6199ad518c18634471018">bind</a>(s);
+<a name="l00076"></a>00076   }
+<a name="l00077"></a>00077 
+<a name="l00078"></a>00078   <span class="comment">//</span>
+<a name="l00079"></a>00079   <span class="comment">// Bind slave socket to slave socket (hierarchical bind)</span>
+<a name="l00080"></a>00080   <span class="comment">// - Binds both the export and the port</span>
+<a name="l00081"></a>00081   <span class="comment">//</span>
+<a name="l00082"></a><a class="code" href="classtlm__slave__socket.html#0e5ce2b6ad10ca5e178236d4052bcb9e">00082</a>   <span class="keywordtype">void</span> <a class="code" href="classtlm__slave__socket.html#fdee64be76b6199ad518c18634471018">bind</a>(<a class="code" href="classtlm__slave__socket.html">tlm_slave_socket</a>&amp; s)
+<a name="l00083"></a>00083   {
+<a name="l00084"></a>00084     <span class="comment">// export</span>
+<a name="l00085"></a>00085     (*<span class="keyword">static_cast&lt;</span><a class="code" href="classtlm__slave__socket.html#ce92de48ede16a5f2ae93bb596c09606">export_type</a>*<span class="keyword">&gt;</span>(<span class="keyword">this</span>))(*<span class="keyword">static_cast&lt;</span><a class="code" href="classtlm__slave__socket.html#ce92de48ede16a5f2ae93bb596c09606">export_type</a>*<span class="keyword">&gt;</span>(s));
+<a name="l00086"></a>00086     <span class="comment">// port</span>
+<a name="l00087"></a>00087     <a class="code" href="classtlm__slave__socket.html#baf342cf946df981672eb773eac4100e">mPort</a>(s.<a class="code" href="classtlm__slave__socket.html#baf342cf946df981672eb773eac4100e">mPort</a>);
+<a name="l00088"></a>00088   }
+<a name="l00089"></a>00089 
+<a name="l00090"></a><a class="code" href="classtlm__slave__socket.html#ac95b97260169236630009c20f20b0f4">00090</a>   <span class="keywordtype">void</span> <a class="code" href="classtlm__slave__socket.html#f258857f1882c2061d9905682480e164">operator() </a>(<a class="code" href="classtlm__slave__socket.html">tlm_slave_socket</a>&amp; s)
+<a name="l00091"></a>00091   {
+<a name="l00092"></a>00092     <a class="code" href="classtlm__slave__socket.html#fdee64be76b6199ad518c18634471018">bind</a>(s);
+<a name="l00093"></a>00093   }
+<a name="l00094"></a>00094 
+<a name="l00095"></a>00095   <span class="comment">//</span>
+<a name="l00096"></a>00096   <span class="comment">// Bind interface to socket</span>
+<a name="l00097"></a>00097   <span class="comment">// - Binds the interface to the export</span>
+<a name="l00098"></a>00098   <span class="comment">//</span>
+<a name="l00099"></a><a class="code" href="classtlm__slave__socket.html#e8252a6c057bd42f4ac363ad9f1d9a4a">00099</a>   <span class="keywordtype">void</span> <a class="code" href="classtlm__slave__socket.html#fdee64be76b6199ad518c18634471018">bind</a>(<a class="code" href="classtlm__slave__socket.html#3d4698307aa5181330e1e4ba606ea9a5">fw_interface_type</a>&amp; ifs)
+<a name="l00100"></a>00100   {
+<a name="l00101"></a>00101     (*<span class="keyword">static_cast&lt;</span><a class="code" href="classtlm__slave__socket.html#ce92de48ede16a5f2ae93bb596c09606">export_type</a>*<span class="keyword">&gt;</span>(<span class="keyword">this</span>))(ifs);
+<a name="l00102"></a>00102   }
+<a name="l00103"></a>00103 
+<a name="l00104"></a><a class="code" href="classtlm__slave__socket.html#60410cdd9f319976cc366e68a81ca929">00104</a>   <span class="keywordtype">void</span> <a class="code" href="classtlm__slave__socket.html#f258857f1882c2061d9905682480e164">operator() </a>(<a class="code" href="classtlm__slave__socket.html#3d4698307aa5181330e1e4ba606ea9a5">fw_interface_type</a>&amp; s)
+<a name="l00105"></a>00105   {
+<a name="l00106"></a>00106     <a class="code" href="classtlm__slave__socket.html#fdee64be76b6199ad518c18634471018">bind</a>(s);
+<a name="l00107"></a>00107   }
+<a name="l00108"></a>00108 
+<a name="l00109"></a>00109   <span class="comment">//</span>
+<a name="l00110"></a>00110   <span class="comment">// Forward to 'operator-&gt;()' of port class</span>
+<a name="l00111"></a>00111   <span class="comment">//</span>
+<a name="l00112"></a><a class="code" href="classtlm__slave__socket.html#a6eb9400300746450d7690fac8d8bbec">00112</a>   <a class="code" href="classtlm__slave__socket.html#1fdfa89d9fe5a818300e80228b548812">bw_interface_type</a>* <a class="code" href="classtlm__slave__socket.html#a6eb9400300746450d7690fac8d8bbec">operator-&gt;</a>()
+<a name="l00113"></a>00113   {
+<a name="l00114"></a>00114     <span class="keywordflow">return</span> <a class="code" href="classtlm__slave__socket.html#baf342cf946df981672eb773eac4100e">mPort</a>.operator-&gt;();
+<a name="l00115"></a>00115   }
+<a name="l00116"></a>00116 
+<a name="l00117"></a>00117 <span class="keyword">protected</span>:
+<a name="l00118"></a><a class="code" href="classtlm__slave__socket.html#baf342cf946df981672eb773eac4100e">00118</a>   <a class="code" href="classtlm__slave__socket.html#1e44840eb9644a3ba56b591ad52ec4e8">port_type</a> <a class="code" href="classtlm__slave__socket.html#baf342cf946df981672eb773eac4100e">mPort</a>;
+<a name="l00119"></a>00119 };
+<a name="l00120"></a>00120 
+<a name="l00121"></a>00121 <span class="preprocessor">#endif</span>
+</pre></div><hr size="1"><address style="text-align: right;"><small>Generated on Thu Oct 18 09:22:38 2007 for TLM 2 by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
 </body>

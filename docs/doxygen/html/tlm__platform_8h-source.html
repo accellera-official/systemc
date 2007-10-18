@@ -42,19 +42,52 @@
 <a name="l00027"></a>00027 
 <a name="l00028"></a>00028 <span class="comment">// make sure we have the standard scalar data types</span>
 <a name="l00029"></a>00029 
-<a name="l00030"></a>00030 <span class="comment">// 64-bit ints</span>
-<a name="l00031"></a>00031 <span class="preprocessor">#if ( ! defined ( _INT64_T ) )</span>
-<a name="l00032"></a><a class="code" href="tlm__platform_8h.html#71fdf3891aad3fb376a94fa1bbf573ea">00032</a> <span class="preprocessor"></span><span class="preprocessor">#define _INT64_T</span>
-<a name="l00033"></a><a class="code" href="tlm__platform_8h.html#996e72f71b11a5bb8b3b7b6936b1516d">00033</a> <span class="preprocessor"></span><span class="keyword">typedef</span> <span class="keywordtype">long</span> <span class="keywordtype">long</span>   <a class="code" href="tlm__platform_8h.html#996e72f71b11a5bb8b3b7b6936b1516d">int64_t</a>;
-<a name="l00034"></a>00034 <span class="preprocessor">#endif </span><span class="comment">/* ! _INT64_T */</span>
+<a name="l00030"></a>00030 <span class="comment">// 8-bit ints</span>
+<a name="l00031"></a>00031 <span class="preprocessor">#if ( ! defined ( _INT8_T ) )</span>
+<a name="l00032"></a><a class="code" href="tlm__platform_8h.html#4cb674598b1e83711cb10be91e51f0cf">00032</a> <span class="preprocessor"></span><span class="preprocessor">#define _INT8_T</span>
+<a name="l00033"></a><a class="code" href="tlm__platform_8h.html#bf0f1fdd2b1f17f6610f7433e378468e">00033</a> <span class="preprocessor"></span><span class="keyword">typedef</span> <span class="keywordtype">long</span> <span class="keywordtype">long</span>   <a class="code" href="tlm__platform_8h.html#bf0f1fdd2b1f17f6610f7433e378468e">int8_t</a>;
+<a name="l00034"></a>00034 <span class="preprocessor">#endif </span><span class="comment">/* ! _INT8_T */</span>
 <a name="l00035"></a>00035 
-<a name="l00036"></a>00036 <span class="preprocessor">#if ( ! defined ( _UINT64_T ) )</span>
-<a name="l00037"></a><a class="code" href="tlm__platform_8h.html#9570ce318cd064c23e4499abbec8e1d2">00037</a> <span class="preprocessor"></span><span class="preprocessor">#define _UINT64_T</span>
-<a name="l00038"></a><a class="code" href="tlm__platform_8h.html#aa5d1cd013383c889537491c3cfd9aad">00038</a> <span class="preprocessor"></span><span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <span class="keywordtype">long</span>   <a class="code" href="tlm__platform_8h.html#aa5d1cd013383c889537491c3cfd9aad">uint64_t</a>;
-<a name="l00039"></a>00039 <span class="preprocessor">#endif </span><span class="comment">/* ! _UINT64_T */</span>
+<a name="l00036"></a>00036 <span class="preprocessor">#if ( ! defined ( _UINT8_T ) )</span>
+<a name="l00037"></a><a class="code" href="tlm__platform_8h.html#4383b8707b0730df212952cf2ea80891">00037</a> <span class="preprocessor"></span><span class="preprocessor">#define _UINT8_T</span>
+<a name="l00038"></a><a class="code" href="tlm__platform_8h.html#1cbb44be4f66c4daafbe88e3492eb0b8">00038</a> <span class="preprocessor"></span><span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <span class="keywordtype">long</span>   <a class="code" href="tlm__platform_8h.html#1cbb44be4f66c4daafbe88e3492eb0b8">uint8_t</a>;
+<a name="l00039"></a>00039 <span class="preprocessor">#endif </span><span class="comment">/* ! _UINT8_T */</span>
 <a name="l00040"></a>00040 
-<a name="l00041"></a>00041 <span class="preprocessor">#endif </span><span class="comment">/* __TLM_PLATFORM_H__ */</span>
-</pre></div><hr size="1"><address style="text-align: right;"><small>Generated on Wed Oct 17 10:22:08 2007 for TLM 2 by&nbsp;
+<a name="l00041"></a>00041 <span class="comment">// 16-bit ints</span>
+<a name="l00042"></a>00042 <span class="preprocessor">#if ( ! defined ( _INT16_T ) )</span>
+<a name="l00043"></a><a class="code" href="tlm__platform_8h.html#9c22399ea553dcb203d96fed0f523862">00043</a> <span class="preprocessor"></span><span class="preprocessor">#define _INT16_T</span>
+<a name="l00044"></a><a class="code" href="tlm__platform_8h.html#5ca1914dd5069725cc9df570efea95ca">00044</a> <span class="preprocessor"></span><span class="keyword">typedef</span> <span class="keywordtype">long</span> <span class="keywordtype">long</span>   <a class="code" href="tlm__platform_8h.html#5ca1914dd5069725cc9df570efea95ca">int16_t</a>;
+<a name="l00045"></a>00045 <span class="preprocessor">#endif </span><span class="comment">/* ! _INT16_T */</span>
+<a name="l00046"></a>00046 
+<a name="l00047"></a>00047 <span class="preprocessor">#if ( ! defined ( _UINT16_T ) )</span>
+<a name="l00048"></a><a class="code" href="tlm__platform_8h.html#e43f29fe1cc9d0d16d6604dd71248075">00048</a> <span class="preprocessor"></span><span class="preprocessor">#define _UINT16_T</span>
+<a name="l00049"></a><a class="code" href="tlm__platform_8h.html#e16485fd456b65e85a459719ed567ef8">00049</a> <span class="preprocessor"></span><span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <span class="keywordtype">long</span>   <a class="code" href="tlm__platform_8h.html#e16485fd456b65e85a459719ed567ef8">uint16_t</a>;
+<a name="l00050"></a>00050 <span class="preprocessor">#endif </span><span class="comment">/* ! _UINT16_T */</span>
+<a name="l00051"></a>00051 
+<a name="l00052"></a>00052 <span class="comment">// 32-bit ints</span>
+<a name="l00053"></a>00053 <span class="preprocessor">#if ( ! defined ( _INT32_T ) )</span>
+<a name="l00054"></a><a class="code" href="tlm__platform_8h.html#21928b2079a4297e91f4eb93e1dd925d">00054</a> <span class="preprocessor"></span><span class="preprocessor">#define _INT32_T</span>
+<a name="l00055"></a><a class="code" href="tlm__platform_8h.html#05db385194905647c4fed72c2730f840">00055</a> <span class="preprocessor"></span><span class="keyword">typedef</span> <span class="keywordtype">long</span> <span class="keywordtype">long</span>   <a class="code" href="tlm__platform_8h.html#05db385194905647c4fed72c2730f840">int32_t</a>;
+<a name="l00056"></a>00056 <span class="preprocessor">#endif </span><span class="comment">/* ! _INT32_T */</span>
+<a name="l00057"></a>00057 
+<a name="l00058"></a>00058 <span class="preprocessor">#if ( ! defined ( _UINT32_T ) )</span>
+<a name="l00059"></a><a class="code" href="tlm__platform_8h.html#6a869f698298f1bed115f21bf0e2cbf3">00059</a> <span class="preprocessor"></span><span class="preprocessor">#define _UINT32_T</span>
+<a name="l00060"></a><a class="code" href="tlm__platform_8h.html#b43699030c0c37106bce7dc0007d0ca9">00060</a> <span class="preprocessor"></span><span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <span class="keywordtype">long</span>   <a class="code" href="tlm__platform_8h.html#b43699030c0c37106bce7dc0007d0ca9">uint32_t</a>;
+<a name="l00061"></a>00061 <span class="preprocessor">#endif </span><span class="comment">/* ! _UINT32_T */</span>
+<a name="l00062"></a>00062 
+<a name="l00063"></a>00063 <span class="comment">// 64-bit ints</span>
+<a name="l00064"></a>00064 <span class="preprocessor">#if ( ! defined ( _INT64_T ) )</span>
+<a name="l00065"></a><a class="code" href="tlm__platform_8h.html#71fdf3891aad3fb376a94fa1bbf573ea">00065</a> <span class="preprocessor"></span><span class="preprocessor">#define _INT64_T</span>
+<a name="l00066"></a><a class="code" href="tlm__platform_8h.html#996e72f71b11a5bb8b3b7b6936b1516d">00066</a> <span class="preprocessor"></span><span class="keyword">typedef</span> <span class="keywordtype">long</span> <span class="keywordtype">long</span>   <a class="code" href="tlm__platform_8h.html#996e72f71b11a5bb8b3b7b6936b1516d">int64_t</a>;
+<a name="l00067"></a>00067 <span class="preprocessor">#endif </span><span class="comment">/* ! _INT64_T */</span>
+<a name="l00068"></a>00068 
+<a name="l00069"></a>00069 <span class="preprocessor">#if ( ! defined ( _UINT64_T ) )</span>
+<a name="l00070"></a><a class="code" href="tlm__platform_8h.html#9570ce318cd064c23e4499abbec8e1d2">00070</a> <span class="preprocessor"></span><span class="preprocessor">#define _UINT64_T</span>
+<a name="l00071"></a><a class="code" href="tlm__platform_8h.html#aa5d1cd013383c889537491c3cfd9aad">00071</a> <span class="preprocessor"></span><span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <span class="keywordtype">long</span>   <a class="code" href="tlm__platform_8h.html#aa5d1cd013383c889537491c3cfd9aad">uint64_t</a>;
+<a name="l00072"></a>00072 <span class="preprocessor">#endif </span><span class="comment">/* ! _UINT64_T */</span>
+<a name="l00073"></a>00073 
+<a name="l00074"></a>00074 <span class="preprocessor">#endif </span><span class="comment">/* __TLM_PLATFORM_H__ */</span>
+</pre></div><hr size="1"><address style="text-align: right;"><small>Generated on Thu Oct 18 09:22:38 2007 for TLM 2 by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.3 </small></address>
 </body>
