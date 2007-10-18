@@ -4,7 +4,7 @@ GXX = g++
 GCC = gcc
 FLAGS = -g -Wall
 
-OBJ_NAME = bus
+OBJ_NAME = bus_dmi
 
 INCDIR = -I$(SYSTEMC_INC_DIR) -I$(TLM_INC_DIR) -I../../common/include/SimpleSocket -I../../common/include/models -I../../common/include/utils
 SRCDIR = ../src
