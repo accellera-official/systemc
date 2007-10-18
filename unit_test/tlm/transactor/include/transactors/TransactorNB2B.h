@@ -35,6 +35,7 @@ public:
 
   typedef tlm::tlm_generic_payload transaction_type;
   typedef tlm::tlm_phase phase_type;
+  typedef tlm::tlm_sync_enum sync_enum_type;
   typedef SimpleSlaveSocket<> slave_socket_type;
 
 public:
@@ -90,14 +91,27 @@ public:
 
         phase_type phase = tlm::BEGIN_RESP;
         sc_time t = SC_ZERO_TIME;
-        if (!socket->nb_transport(*trans, phase, t)) {
+        switch (socket->nb_transport(*trans, phase, t)) {
+        case tlm::TLM_COMPLETED:
+          // Transaction Finished
+          break;
+
+        case tlm::TLM_SYNC:
+        case tlm::TLM_SYNC_CONTINUE:
+          // Transaction not yet finished, wait for the end of it
           wait(mEndTransactionEvent);
-        }        
+          break;
+
+        case tlm::TLM_REJECTED:
+          // FIXME: Not supported (wait and retry same transaction)
+        default:
+          assert(0); exit(1);
+        };
       }
     }
   }
 
-  bool myNBTransport(transaction_type& trans, phase_type& phase, sc_time& t)
+  sync_enum_type myNBTransport(transaction_type& trans, phase_type& phase, sc_time& t)
   {
     if (phase == tlm::BEGIN_REQ) {
       mTransactionPEQ.notify(trans, t);
@@ -109,7 +123,7 @@ public:
       assert(0); exit(1);
     }
 
-    return false;
+    return tlm::TLM_SYNC;
   }
 
 private:

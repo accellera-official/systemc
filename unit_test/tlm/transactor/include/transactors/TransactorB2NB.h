@@ -38,6 +38,7 @@ public:
 
   typedef tlm::tlm_generic_payload transaction_type;
   typedef tlm::tlm_phase phase_type;
+  typedef tlm::tlm_sync_enum sync_enum_type;
   typedef SimpleMasterSocket<> master_socket_type;
 
 public:
@@ -71,7 +72,22 @@ public:
       data = req.get_data();
     }
 
-    socket->nb_transport(trans, phase, t);
+    switch (socket->nb_transport(trans, phase, t)) {
+    case tlm::TLM_COMPLETED:
+      // Transaction Finished
+      break;
+
+    case tlm::TLM_SYNC:
+    case tlm::TLM_SYNC_CONTINUE:
+      // Transaction not yet finished, wait for the end of it
+      wait(socket.getEndEvent());
+      break;
+
+    case tlm::TLM_REJECTED:
+      // FIXME: Not supported (wait and retry same transaction)
+    default:
+      assert(0); exit(1);
+    };
 
     tlm_status status;
     if (trans.get_response_status() == tlm::TLM_OK_RESP) {

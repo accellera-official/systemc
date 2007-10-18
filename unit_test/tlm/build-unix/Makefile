@@ -2,7 +2,7 @@ include ./Makefile.config
 
 SUBDIRS = \
  	../bus \
-	../bus_tlm \
+	../bus_dmi \
  	../gp_extension \
 	../p2p \
 	../transactor

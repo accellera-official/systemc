@@ -31,6 +31,7 @@ class SimpleATSlave1 : public sc_module
 public:
   typedef tlm::tlm_generic_payload transaction_type;
   typedef tlm::tlm_phase phase_type;
+  typedef tlm::tlm_sync_enum sync_enum_type;
   typedef SimpleSlaveSocket<> slave_socket_type;
 
 public:
@@ -65,7 +66,7 @@ public:
   // - Request is accepted after ACCEPT delay (relative to end of prev request phase)
   // - Response is started after RESPONSE delay (relative to end of prev resp phase)
   //
-  bool myNBTransport(transaction_type& trans, phase_type& phase, sc_time& t)
+  sync_enum_type myNBTransport(transaction_type& trans, phase_type& phase, sc_time& t)
   {
     if (phase == tlm::BEGIN_REQ) {
       sc_dt::uint64 address = trans.get_address();
@@ -95,19 +96,19 @@ public:
       // AT-noTA slave
       // - always return false
       // - seperate call to indicate end of phase (do not update phase or t)
-      return false;
+      return tlm::TLM_SYNC;
 
     } else if (phase == tlm::END_RESP) {
 
       // response phase ends after t
       mEndResponseEvent.notify(t);
 
-      return true;
+      return tlm::TLM_COMPLETED;
     }
 
     // Not possible
     assert(0); exit(1);
-    return false;
+    return tlm::TLM_REJECTED;
   }
 
   void endRequest()
@@ -119,8 +120,8 @@ public:
     transaction_type* trans = mEndRequestQueue.front();
     assert(trans);
     mEndRequestQueue.pop();
-    bool r = socket->nb_transport(*trans, phase, t);
-    assert(!r); // FIXME: master should return false?
+    sync_enum_type r = socket->nb_transport(*trans, phase, t);
+    assert(r == tlm::TLM_SYNC); // FIXME: master should return TLM_SYNC?
     assert(t == SC_ZERO_TIME); // t must be SC_ZERO_TIME
 
     // Notify end of request phase for next transaction after ACCEPT delay
@@ -154,13 +155,22 @@ public:
         *reinterpret_cast<unsigned int*>(&mMem[address]);
     }
 
-    if (socket->nb_transport(*trans, phase, t)) {
+    switch (socket->nb_transport(*trans, phase, t)) {
+    case tlm::TLM_COMPLETED:
       // response phase ends after t
       mEndResponseEvent.notify(t);
+      break;
 
-    } else {
-      // master will call nb_transport to indicate end of response phase
-    }
+    case tlm::TLM_SYNC:
+    case tlm::TLM_SYNC_CONTINUE:
+     // master will call nb_transport to indicate end of response phase
+     break;
+
+    case tlm::TLM_REJECTED:
+      // FIXME: Not supported (wait and retry same transaction)
+    default:
+      assert(0); exit(1);
+    };
   }
 
   void endResponse()

@@ -30,6 +30,7 @@ class SimpleATMaster2 : public sc_module
 public:
   typedef tlm::tlm_generic_payload transaction_type;
   typedef tlm::tlm_phase phase_type;
+  typedef tlm::tlm_sync_enum sync_enum_type;
   typedef SimpleMasterSocket<> master_socket_type;
 
 public:
@@ -88,13 +89,13 @@ public:
   {
     if (mTransactionCount < mNrOfTransactions) {
       trans = transPool.claim();
-      trans->set_address(mBaseAddress + mTransactionCount);
+      trans->set_address(mBaseAddress + 4*mTransactionCount);
       trans->setData(mTransactionCount);
       trans->set_command(tlm::TLM_WRITE_COMMAND);
 
     } else if (mTransactionCount < 2 * mNrOfTransactions) {
       trans = transPool.claim();
-      trans->set_address(mBaseAddress + mTransactionCount - mNrOfTransactions);
+      trans->set_address(mBaseAddress + 4*(mTransactionCount - mNrOfTransactions));
       trans->set_command(tlm::TLM_READ_COMMAND);
 
     } else {
@@ -154,12 +155,15 @@ public:
 
       logStartTransation(trans);
 
-      if (socket->nb_transport(trans, phase, t)) {
+      switch (socket->nb_transport(trans, phase, t)) {
+      case tlm::TLM_COMPLETED:
         // Transaction Finished, wait for the returned delay
         wait(t);
         logEndTransaction(trans);
+        break;
 
-      } else {
+      case tlm::TLM_SYNC:
+      case tlm::TLM_SYNC_CONTINUE:
         switch (phase) {
         case tlm::BEGIN_REQ:
           // Request phase not yet finished
@@ -199,18 +203,25 @@ public:
           assert(0); exit(1);
           break;
         }
-      }
+        break;
+
+      case tlm::TLM_REJECTED:
+        // FIXME: Not supported (wait and retry same transaction)
+      default:
+        assert(0); exit(1);
+      };
     }
   }
 
-  bool myNBTransport(transaction_type& trans, phase_type& phase, sc_time& t)
+  sync_enum_type myNBTransport(transaction_type& trans, phase_type& phase, sc_time& t)
   {
     switch (phase) {
     case tlm::END_REQ:
       assert(t == SC_ZERO_TIME); // FIXME: can t != 0?
       // Request phase ended
       mEndRequestPhase.notify(SC_ZERO_TIME);
-      return false;
+      return tlm::TLM_SYNC;
+
     case tlm::BEGIN_RESP:
     {
       assert(t == SC_ZERO_TIME); // FIXME: can t != 0?
@@ -231,16 +242,16 @@ public:
       logEndTransaction(*myTrans);
       transPool.release(myTrans);
 
-      return true;
+      return tlm::TLM_COMPLETED;
     }
+
     case tlm::BEGIN_REQ: // fall-through
     case tlm::END_RESP:  // fall-through
     default:
       // A slave should never call nb_transport with these phases
       assert(0); exit(1);
-      return false;
-    }
-    return false;
+      return tlm::TLM_REJECTED;
+    };
   }
 
 private:

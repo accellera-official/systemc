@@ -20,11 +20,11 @@
 
 #include "tlm.h"
 
-#include "SimpleLTMaster1_DMI.h"
+#include "SimpleLTMaster1.h"
 #include "SimpleLTSlave1.h"
-#include "SimpleLTMaster2_DMI.h"
+#include "SimpleLTMaster2.h"
 #include "SimpleLTSlave2.h"
-#include "SimpleLTMaster3_DMI.h"
+#include "SimpleLTMaster3.h"
 #include "SimpleATMaster1.h"
 #include "SimpleATSlave1.h"
 #include "SimpleATMaster2.h"
@@ -57,13 +57,13 @@ private:
 
 int sc_main(int argc, char* argv[])
 {
-  SimpleLTMaster1_dmi master1("master1", 10, 0x0);
+  SimpleLTMaster1 master1("master1", 10, 0x0);
   SimpleLTSlave1 slave1("slave1");
 
-  SimpleLTMaster2_dmi master2("master2", 10, 0x10000000);
+  SimpleLTMaster2 master2("master2", 10, 0x10000000);
   SimpleLTSlave2 slave2("slave2");
 
-  SimpleLTMaster3_dmi master3("master3", 10, 0x20000000);
+  SimpleLTMaster3 master3("master3", 10, 0x20000000);
   SimpleLTSlave2 slave3("slave3");
 
   SimpleATMaster1 master4("master4", 10, 0x30000000);

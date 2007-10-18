@@ -31,6 +31,7 @@ class SimpleATSlave2 : public sc_module
 public:
   typedef tlm::tlm_generic_payload transaction_type;
   typedef tlm::tlm_phase phase_type;
+  typedef tlm::tlm_sync_enum sync_enum_type;
   typedef SimpleSlaveSocket<> slave_socket_type;
 
 public:
@@ -61,7 +62,7 @@ public:
   // - Request is accepted after fixed delay (relative to end of prev request phase)
   // - Response is started after fixed delay (relative to end of prev resp phase)
   //
-  bool myNBTransport(transaction_type& trans, phase_type& phase, sc_time& t)
+  sync_enum_type myNBTransport(transaction_type& trans, phase_type& phase, sc_time& t)
   {
     if (phase == tlm::BEGIN_REQ) {
       sc_dt::uint64 address = trans.get_address();
@@ -96,19 +97,19 @@ public:
       // AT-noTA slave
       // - always return false
       // - immediately return delay to indicate end of phase
-      return false;
+      return tlm::TLM_SYNC_CONTINUE;
 
     } else if (phase == tlm::END_RESP) {
 
       // response phase ends after t
       mEndResponseEvent.notify(t);
 
-      return true;
+      return tlm::TLM_COMPLETED;
     }
 
     // Not possible
     assert(0); exit(1);
-    return false;
+    return tlm::TLM_REJECTED;
   }
 
   void beginResponse()
@@ -129,12 +130,13 @@ public:
         *reinterpret_cast<unsigned int*>(&mMem[address]);
     }
 
-    if (socket->nb_transport(*trans, phase, t)) {
+    if (socket->nb_transport(*trans, phase, t) == tlm::TLM_COMPLETED) {
       // response phase ends after t
       mEndResponseEvent.notify(t);
 
     } else {
       // master will call nb_transport to indicate end of response phase
+      //FIXME: TLM_REJECTED not supported
     }
   }
 

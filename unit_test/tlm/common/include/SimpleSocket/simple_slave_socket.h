@@ -30,6 +30,7 @@ class SimpleSlaveSocket :
 public:
   typedef TRANS transaction_type;
   typedef tlm::tlm_phase phase_type;
+  typedef tlm::tlm_sync_enum sync_enum_type;
   typedef tlm::tlm_fw_nb_transport_if<transaction_type, phase_type> fw_interface_type;
   typedef tlm::tlm_bw_nb_transport_if<transaction_type, phase_type> bw_interface_type;
   typedef tlm::tlm_slave_socket<BUSWIDTH, fw_interface_type, bw_interface_type> base_type;
@@ -44,7 +45,7 @@ public:
 
   // REGISTER_SOCKETPROCESS
   template <typename MODULE>
-  void CB(MODULE* mod, bool (MODULE::*cb)(transaction_type&, phase_type&, sc_time&), int id)
+  void CB(MODULE* mod, sync_enum_type (MODULE::*cb)(transaction_type&, phase_type&, sc_time&), int id)
   {
     mProcess.setTransportPtr(mod, static_cast<typename Process::TransportPtr>(cb));
     mProcess.setTransportUserId(id);
@@ -68,7 +69,7 @@ private:
   class Process : public tlm::tlm_fw_nb_transport_if<transaction_type, phase_type>
   {
   public:
-    typedef bool (sc_module::*TransportPtr)(TRANS&, tlm::tlm_phase&, sc_time&);
+    typedef sync_enum_type (sc_module::*TransportPtr)(TRANS&, tlm::tlm_phase&, sc_time&);
     typedef unsigned int (sc_module::*TransportDebugPtr)(tlm::tlm_debug_payload&);
     typedef bool (sc_module::*GetDMIPtr)(const sc_dt::uint64&, bool forReads, tlm::tlm_dmi&);
       
@@ -124,7 +125,7 @@ private:
       }
     }
 
-    bool nb_transport(transaction_type& trans, phase_type& phase, sc_time& t)
+    sync_enum_type nb_transport(transaction_type& trans, phase_type& phase, sc_time& t)
     {
       if (mTransportPtr) {
         // forward call
@@ -135,7 +136,7 @@ private:
       } else {
         std::cerr << mName << ": no non-blocking callback registered" << std::endl;
         assert(0); exit(1);
-        return false;
+        return tlm::TLM_REJECTED;
       }
     }
 

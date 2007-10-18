@@ -30,6 +30,7 @@ class SimpleMasterSocket :
 public:
   typedef TRANS transaction_type;
   typedef tlm::tlm_phase phase_type;
+  typedef tlm::tlm_sync_enum sync_enum_type;
   typedef tlm::tlm_fw_nb_transport_if<transaction_type, phase_type> fw_interface_type;
   typedef tlm::tlm_bw_nb_transport_if<transaction_type, phase_type> bw_interface_type;
   typedef tlm::tlm_master_socket<BUSWIDTH, fw_interface_type, bw_interface_type> base_type;
@@ -49,7 +50,7 @@ public:
 
   // REGISTER_SOCKETPROCESS
   template <typename MODULE>
-  void CB(MODULE* mod, bool (MODULE::*cb)(transaction_type&, phase_type&, sc_time&), int id)
+  void CB(MODULE* mod, sync_enum_type (MODULE::*cb)(transaction_type&, phase_type&, sc_time&), int id)
   {
     mProcess.setTransportPtr(mod, static_cast<typename Process::TransportPtr>(cb));
     mProcess.setTransportUserId(id);
@@ -66,7 +67,7 @@ private:
   class Process : public tlm::tlm_bw_nb_transport_if<transaction_type, phase_type>
   {
   public:
-    typedef bool (sc_module::*TransportPtr)(TRANS&, tlm::tlm_phase&, sc_time&);
+    typedef sync_enum_type (sc_module::*TransportPtr)(TRANS&, tlm::tlm_phase&, sc_time&);
     typedef void (sc_module::*InvalidateDMIPtr)(bool, sc_dt::uint64, sc_dt::uint64);
       
     Process(const std::string& name, sc_event& endEvent) :
@@ -107,7 +108,7 @@ private:
       }
     }
 
-    bool nb_transport(transaction_type& trans, phase_type& phase, sc_time& t)
+    sync_enum_type nb_transport(transaction_type& trans, phase_type& phase, sc_time& t)
     {
       if (mTransportPtr) {
         // forward call
@@ -120,20 +121,19 @@ private:
         switch (phase) {
         case tlm::END_REQ:
           // Request phase ended
-          return false;
+          return tlm::TLM_SYNC;
         case tlm::BEGIN_RESP:
           assert(t == SC_ZERO_TIME); // FIXME: can t != 0?    
           mEndEvent.notify(t);
           // Not needed to update the phase if true is returned
-          return true;
+          return tlm::TLM_COMPLETED;
         case tlm::BEGIN_REQ: // fall-through
         case tlm::END_RESP: // fall-through
         default:
           // A slave should never call nb_transport with these phases
           assert(0); exit(1);
-          return false;
-        }
-        return false;
+          return tlm::TLM_REJECTED;
+        };
       }
     }
 

@@ -31,6 +31,7 @@ class ExplicitLTSlave : public sc_module
 public:
   typedef tlm::tlm_generic_payload transaction_type;
   typedef tlm::tlm_phase phase_type;
+  typedef tlm::tlm_sync_enum sync_enum_type;
   typedef SimpleSlaveSocket<> slave_socket_type;
 
 public:
@@ -50,7 +51,7 @@ public:
     SC_THREAD(beginResponse)
   }
 
-  bool myNBTransport(transaction_type& trans, phase_type& phase, sc_time& t)
+  sync_enum_type myNBTransport(transaction_type& trans, phase_type& phase, sc_time& t)
   {
     if (phase == tlm::BEGIN_REQ) {
       sc_dt::uint64 address = trans.get_address();
@@ -74,7 +75,7 @@ public:
 
         // End request phase
         phase = tlm::END_REQ;
-        return false;
+        return tlm::TLM_SYNC_CONTINUE;
 
       } else {
         std::cerr << name() << ": Received read request: A = "
@@ -84,19 +85,19 @@ public:
 
         // Finish transaction (use timing annotation)
         t += sc_time(100, SC_NS);
-        return true;
+        return tlm::TLM_COMPLETED;
       }
 
     } else if (phase == tlm::END_RESP) {
 
       // Transaction finished
       mCurrentTransaction = 0;
-      return true;
+      return tlm::TLM_COMPLETED;
     }
 
     // Not possible
     assert(0); exit(1);
-    return false;
+    return tlm::TLM_REJECTED;
   }
 
   void beginResponse()

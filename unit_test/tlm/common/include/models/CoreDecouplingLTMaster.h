@@ -126,19 +126,28 @@ public:
 
       logStartTransation(trans);
 
-      if (socket->nb_transport(trans, phase, mQuantumKeeper.getLocalTime())) {
+      switch (socket->nb_transport(trans, phase, mQuantumKeeper.getLocalTime())) {
+      case tlm::TLM_COMPLETED:
         // Transaction finished
         // Slave may have added a delay to the quantum -> sync if needed
         if (mQuantumKeeper.needSync()) {
           std::cerr << "Sync'ing..." << std::endl;
           mQuantumKeeper.sync();
         }
+        break;
 
-      } else {
+      case tlm::TLM_SYNC:
+      case tlm::TLM_SYNC_CONTINUE:
         // Transaction not yet finished, wait for the end of it
         wait(socket.getEndEvent());
         mQuantumKeeper.reset();
-      }
+        break;
+
+      case tlm::TLM_REJECTED:
+        // FIXME: Not supported (wait and retry same transaction)
+      default:
+        assert(0); exit(1);
+      };
 
       logEndTransaction(trans);
     }

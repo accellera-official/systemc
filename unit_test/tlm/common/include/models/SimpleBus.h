@@ -33,6 +33,7 @@ class SimpleBus : public sc_module
 public:
   typedef tlm::tlm_generic_payload transaction_type;
   typedef tlm::tlm_phase phase_type;
+  typedef tlm::tlm_sync_enum sync_enum_type;
   typedef SimpleSlaveSocket<> slave_socket_type;
   typedef SimpleMasterSocket<> master_socket_type;
 
@@ -130,7 +131,7 @@ public:
   // - forward each nb_transport call to the target/initiator
   //
 
-  bool masterNBTransportLT(transaction_type& trans, phase_type& phase, sc_time& t)
+  sync_enum_type masterNBTransportLT(transaction_type& trans, phase_type& phase, sc_time& t)
   {
     master_socket_type* decodeSocket;
 
@@ -157,18 +158,16 @@ public:
 
     // FIXME: No limitation on number of pending transactions
     //        All slaves (that return false) must support multiple transactions
-    if (!(*decodeSocket)->nb_transport(trans, phase, t)) {
-      // Transaction not yet finished
-      return false;
-
-    } else {
+    sync_enum_type r = (*decodeSocket)->nb_transport(trans, phase, t);
+    if (r == tlm::TLM_COMPLETED) {
       // Transaction finished
       mPendingTransactions.erase(&trans);
-      return true;
     }
+
+    return r;
   }
 
-  bool slaveNBTransportLT(transaction_type& trans, phase_type& phase, sc_time& t)
+  sync_enum_type slaveNBTransportLT(transaction_type& trans, phase_type& phase, sc_time& t)
   {
     if (phase != tlm::END_REQ && phase != tlm::BEGIN_RESP) {
       std::cerr << "ERROR: '" << name()
@@ -179,15 +178,13 @@ public:
     PendingTransactionsIterator it = mPendingTransactions.find(&trans);
     assert(it != mPendingTransactions.end());
 
-    if ((*it->second.from)->nb_transport(trans, phase, t)) {
+    sync_enum_type r = (*it->second.from)->nb_transport(trans, phase, t);
+    if (r == tlm::TLM_COMPLETED) {
       // Transaction finished
       mPendingTransactions.erase(it);
-      return true;
-
-    } else {
-      // Transaction not yet finished
-      return false;
     }
+
+    return r;
   }
 
   //
@@ -216,7 +213,9 @@ public:
 
         // FIXME: No limitation on number of pending transactions
         //        All slaves (that return false) must support multiple transactions
-        if (!(*decodeSocket)->nb_transport(*trans, phase, t)) {
+        switch ((*decodeSocket)->nb_transport(*trans, phase, t)) {
+        case tlm::TLM_SYNC:
+        case tlm::TLM_SYNC_CONTINUE:
           // Transaction not yet finished
           if (phase == tlm::BEGIN_REQ) {
             // Request phase not yet finished
@@ -238,8 +237,9 @@ public:
           phase = tlm::END_REQ;
           t = SC_ZERO_TIME;
           (*it->second.from)->nb_transport(*trans, phase, t);
+          break;
 
-        } else {
+        case tlm::TLM_COMPLETED:
           // Transaction finished
           mResponsePEQ.notify(*trans, t);
 
@@ -247,7 +247,13 @@ public:
           it->second.to = 0;
 
           wait(t);
-        }
+          break;
+
+        case tlm::TLM_REJECTED:
+          // FIXME: Not supported (wait and retry same transaction)
+        default:
+          assert(0); exit(1);
+        };
       }
     }
   }
@@ -265,7 +271,8 @@ public:
         phase_type phase = tlm::BEGIN_RESP;
         sc_time t = SC_ZERO_TIME;
 
-        if ((*it->second.from)->nb_transport(*trans, phase, t)) {
+        switch ((*it->second.from)->nb_transport(*trans, phase, t)) {
+        case tlm::TLM_COMPLETED:
           // Transaction finished
 
           // Transaction may already be deleted (or re-used)
@@ -277,16 +284,24 @@ public:
           }
           mPendingTransactions.erase(it);
           wait(t);
+          break;
 
-        } else {
+        case tlm::TLM_SYNC:
+        case tlm::TLM_SYNC_CONTINUE:
           // Transaction not yet finished
           wait(mEndResponseEvent);
-        }
+        break;
+
+        case tlm::TLM_REJECTED:
+          // FIXME: Not supported (wait and retry same transaction)
+        default:
+          assert(0); exit(1);
+        };
       }
     }
   }
 
-  bool masterNBTransportAT(transaction_type& trans, phase_type& phase, sc_time& t)
+  sync_enum_type masterNBTransportAT(transaction_type& trans, phase_type& phase, sc_time& t)
   {
     if (phase == tlm::BEGIN_REQ) {
       addPendingTransaction(trans, 0);
@@ -301,14 +316,14 @@ public:
 
       if (it->second.to) {
         phase = tlm::END_RESP;
-        bool r = (*it->second.to)->nb_transport(trans, phase, t);
-        assert(r);
+        sync_enum_type r = (*it->second.to)->nb_transport(trans, phase, t);
+        assert(r == tlm::TLM_COMPLETED);
       }
 
       mPendingTransactions.erase(it);
 
       mEndResponseEvent.notify(t);
-      return true;
+      return tlm::TLM_COMPLETED;
 
     } else {
       std::cerr << "ERROR: '" << name()
@@ -316,10 +331,10 @@ public:
       assert(false); exit(1);
     }
 
-    return false;
+    return tlm::TLM_SYNC;
   }
 
-  bool slaveNBTransportAT(transaction_type& trans, phase_type& phase, sc_time& t)
+  sync_enum_type slaveNBTransportAT(transaction_type& trans, phase_type& phase, sc_time& t)
   {
     if (phase != tlm::END_REQ && phase != tlm::BEGIN_RESP) {
       std::cerr << "ERROR: '" << name()
@@ -333,14 +348,14 @@ public:
       mResponsePEQ.notify(trans, t);
     }
 
-    return false;
+    return tlm::TLM_SYNC;
   }
 
   //
   // interface methods
   //
 
-  bool masterNBTransport(transaction_type& trans, phase_type& phase, sc_time& t)
+  sync_enum_type masterNBTransport(transaction_type& trans, phase_type& phase, sc_time& t)
   {
     if (mAbstraction == TLM_LT) {
       return masterNBTransportLT(trans, phase, t);
@@ -350,7 +365,7 @@ public:
     }
   }
 
-  bool slaveNBTransport(transaction_type& trans, phase_type& phase, sc_time& t)
+  sync_enum_type slaveNBTransport(transaction_type& trans, phase_type& phase, sc_time& t)
   {
     if (mAbstraction == TLM_LT) {
       return slaveNBTransportLT(trans, phase, t);

@@ -31,6 +31,7 @@ class SimpleLTSlave1 :
 public:
   typedef tlm::tlm_generic_payload transaction_type;
   typedef tlm::tlm_phase phase_type;
+  typedef tlm::tlm_sync_enum sync_enum_type;
   typedef tlm::tlm_fw_nb_transport_if<> fw_interface_type;
   typedef tlm::tlm_bw_nb_transport_if<> bw_interface_type;
   typedef tlm::tlm_slave_socket<> slave_socket_type;
@@ -47,7 +48,7 @@ public:
     socket(*this);
   }
 
-  bool nb_transport(transaction_type& trans, phase_type& phase, sc_time& t)
+  sync_enum_type nb_transport(transaction_type& trans, phase_type& phase, sc_time& t)
   {
     assert(phase == tlm::BEGIN_REQ);
 
@@ -78,7 +79,7 @@ public:
     // LT slave
     // - always return true
     // - not necessary to update phase (if true is returned)
-    return true;
+    return tlm::TLM_COMPLETED;
   }
 
   unsigned int transport_dbg(tlm::tlm_debug_payload& r)
