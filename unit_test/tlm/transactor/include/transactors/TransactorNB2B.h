@@ -35,8 +35,7 @@ public:
 
   typedef tlm::tlm_generic_payload transaction_type;
   typedef tlm::tlm_phase phase_type;
-  typedef tlm::tlm_nonblocking_transport_if<transaction_type> interface_type;
-  typedef SimpleSlaveSocket<transaction_type> slave_socket_type;
+  typedef SimpleSlaveSocket<> slave_socket_type;
 
 public:
   slave_socket_type socket;

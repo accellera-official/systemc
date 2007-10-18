@@ -107,6 +107,7 @@ public:
         , m_burst_mode(TLM_INCREMENT_BURST)
         , m_response_status(TLM_INCOMPLETE_RESP)
         , m_extensions(max_num_extensions())
+        , mDMI(false)
     {
     }
     
@@ -128,7 +129,7 @@ public:
     tlm_burst_mode      get_burst_mode()      const {return m_burst_mode;}
     unsigned char*      get_data_ptr()        const {return m_data;}
     tlm_response_status get_response_status() const {return m_response_status;}
-    bool				get_lock()            const {return m_lock;}
+    bool                get_lock()            const {return m_lock;}
     
     void set_command(const tlm_command command)
         {m_command = command;}
@@ -276,10 +277,18 @@ public:
     {
         m_extensions.expand(max_num_extensions());
     }
-    
+
 protected:
     tlm_array<tlm_extension_base*> m_extensions;
 
+public:
+  // This is the "DMI-hint" a slave can set this to true if it
+  // wants to indicate that a DMI request would be supported:
+  void set_dmi_allowed(bool dmiAllowed) { mDMI = dmiAllowed; }
+  bool get_dmi_allowed() const { return mDMI; }
+
+protected:
+  bool mDMI;
 };
 
 

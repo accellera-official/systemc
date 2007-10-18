@@ -38,8 +38,7 @@ public:
 
   typedef tlm::tlm_generic_payload transaction_type;
   typedef tlm::tlm_phase phase_type;
-  typedef tlm::tlm_nonblocking_transport_if<transaction_type> interface_type;
-  typedef SimpleMasterSocket<transaction_type> master_socket_type;
+  typedef SimpleMasterSocket<> master_socket_type;
 
 public:
   slave_export port;

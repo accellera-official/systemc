@@ -31,7 +31,7 @@ class ExplicitLTSlave : public sc_module
 public:
   typedef tlm::tlm_generic_payload transaction_type;
   typedef tlm::tlm_phase phase_type;
-  typedef SimpleSlaveSocket<transaction_type> slave_socket_type;
+  typedef SimpleSlaveSocket<> slave_socket_type;
 
 public:
   slave_socket_type socket;
@@ -41,11 +41,11 @@ public:
   ExplicitLTSlave(sc_module_name name) :
     sc_module(name),
     socket("socket"),
-    mMem(100, 0),
     mCurrentTransaction(0)
   {
     // register nb_transport method
     REGISTER_SOCKETPROCESS(socket, myNBTransport);
+    REGISTER_SOCKETPROCESS(socket, transport_dbg);
 
     SC_THREAD(beginResponse)
   }
@@ -54,7 +54,7 @@ public:
   {
     if (phase == tlm::BEGIN_REQ) {
       sc_dt::uint64 address = trans.get_address();
-      assert(address < 100);
+      assert(address < 400);
 
       // This slave only supports one transaction at a time
       // This will only work with LT masters
@@ -66,7 +66,7 @@ public:
                 << (void*)(int)address << ", D = " << (void*)data
                 << " @ " << sc_time_stamp() << std::endl;
 
-        mMem[address] = data;
+        *reinterpret_cast<unsigned int*>(&mMem[address]) = data;
 
         // Synchronization on demand (eg need to assert an interrupt)
         mResponseEvent.notify(t);
@@ -80,7 +80,7 @@ public:
         std::cerr << name() << ": Received read request: A = "
                  << (void*)(int)address << " @ " << sc_time_stamp() << std::endl;
 
-        data = mMem[address];
+        data = *reinterpret_cast<unsigned int*>(&mMem[address]);
 
         // Finish transaction (use timing annotation)
         t += sc_time(100, SC_NS);
@@ -115,9 +115,9 @@ public:
       assert(mCurrentTransaction->get_command() == tlm::TLM_WRITE_COMMAND);
 
       sc_dt::uint64 address = mCurrentTransaction->get_address();
-      assert(address < 100);
+      assert(address < 400);
       *reinterpret_cast<unsigned int*>(mCurrentTransaction->get_data_ptr()) =
-        mMem[address];
+        *reinterpret_cast<unsigned int*>(&mMem[address]);
 
       // We are synchronized, we can read/write sc_signals, wait,...
       // Wait before sending the response
@@ -132,8 +132,33 @@ public:
     }
   }
 
+  unsigned int transport_dbg(tlm::tlm_debug_payload& r)
+  {
+    if (r.address >= 400) return 0;
+
+    unsigned int tmp = (int)r.address;
+    unsigned int num_bytes;
+    if (tmp + r.num_bytes >= 400) {
+      num_bytes = 400 - tmp;
+
+    } else {
+      num_bytes = r.num_bytes;
+    }
+    if (r.do_read) {
+      for (unsigned int i = 0; i < num_bytes; ++i) {
+        r.data[i] = mMem[i + tmp];
+      }
+
+    } else {
+      for (unsigned int i = 0; i < num_bytes; ++i) {
+        mMem[i + tmp] = r.data[i];
+      }
+    }
+    return num_bytes;
+  }
+
 private:
-  std::vector<unsigned int> mMem;
+  unsigned char mMem[400];
   sc_event mResponseEvent;
   transaction_type* mCurrentTransaction;
 };

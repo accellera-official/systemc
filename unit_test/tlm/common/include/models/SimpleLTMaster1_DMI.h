@@ -15,19 +15,22 @@
 
  *****************************************************************************/
 
-#ifndef SIMPLE_LT_MASTER1_H
-#define SIMPLE_LT_MASTER1_H
+#ifndef SIMPLE_LT_MASTER1_DMI_H
+#define SIMPLE_LT_MASTER1_DMI_H
 
-//#include "tlm.h"     /// TLM definitions
-#include <cassert>   /// STD assert ()
-//#include <iostream>  /// STD I/O streams
+#include "tlm.h"
+#include <systemc.h>
+#include <cassert>
+#include <iostream>
+#include <iomanip>
 
-class SimpleLTMaster1 :
+class SimpleLTMaster1_dmi :
   public sc_module,
   public virtual tlm::tlm_bw_nb_transport_if<>
 {
 public:
   typedef tlm::tlm_generic_payload transaction_type;
+  typedef tlm::tlm_dmi dmi_type;
   typedef tlm::tlm_phase phase_type;
   typedef tlm::tlm_fw_nb_transport_if<> fw_interface_type;
   typedef tlm::tlm_bw_nb_transport_if<> bw_interface_type;
@@ -37,8 +40,8 @@ public:
   master_socket_type socket;
 
 public:
-  SC_HAS_PROCESS(SimpleLTMaster1);
-  SimpleLTMaster1(sc_module_name name,
+  SC_HAS_PROCESS(SimpleLTMaster1_dmi);
+  SimpleLTMaster1_dmi(sc_module_name name,
                   unsigned int nrOfTransactions = 0x5,
                   unsigned int baseAddress = 0x0) :
     sc_module(name),
@@ -47,6 +50,8 @@ public:
     mBaseAddress(baseAddress),
     mTransactionCount(0)
   {
+    invalidate(mDMIData);
+
     // Bind this master's interface to the master socket
     socket(*this);
 
@@ -56,6 +61,9 @@ public:
 
   bool initTransaction(transaction_type& trans)
   {
+    // initialize DMI hint:
+    trans.set_dmi_allowed(false);
+
     if (mTransactionCount < mNrOfTransactions) {
       trans.set_address(mBaseAddress + 4*mTransactionCount);
       mData = mTransactionCount;
@@ -63,7 +71,7 @@ public:
       trans.set_command(tlm::TLM_WRITE_COMMAND);
 
     } else if (mTransactionCount < 2 * mNrOfTransactions) {
-      trans.set_address(mBaseAddress + 4*(mTransactionCount - mNrOfTransactions));
+      trans.set_address(mBaseAddress + 4*(mTransactionCount-mNrOfTransactions));
       mData = 0;
       trans.set_data_ptr(reinterpret_cast<unsigned char*>(&mData));
       trans.set_command(tlm::TLM_READ_COMMAND);
@@ -82,7 +90,7 @@ public:
       std::cerr << name() << ": Send write request: A = "
                 << (void*)(int)trans.get_address() << ", D = " << (void*)mData
                 << " @ " << sc_time_stamp() << std::endl;
-
+      
     } else {
       std::cerr << name() << ": Send read request: A = "
                 << (void*)(int)trans.get_address()
@@ -110,7 +118,7 @@ public:
     transaction_type trans;
     phase_type phase;
     sc_time t;
-
+    
     while (initTransaction(trans)) {
       // Create transaction and initialise phase and t
       phase = tlm::BEGIN_REQ;
@@ -118,17 +126,70 @@ public:
 
       logStartTransation(trans);
 
-      if (socket->nb_transport(trans, phase, t)) {
-        // Transaction Finished, wait for the returned delay
-        wait(t);
+      ///////////////////////////////////////////////////////////
+      // DMI handling:
+      // We use the DMI hint to check if it makes sense to ask for
+      // DMI pointers. The pattern is:
+      // - if the address is covered by a DMI region do a DMI access
+      // - otherwise do a normal transaction
+      //   -> check if we get a DMI hint and acquire the DMI pointers if it is
+      //      set
+      ///////////////////////////////////////////////////////////
 
-      } else {
-        // Transaction not yet finished, wait for the end of it
-        wait(mEndEvent);
+      // Check if the address is covered by our DMI region
+      if ( (trans.get_address() >= mDMIData.dmi_start_address) &&
+           (trans.get_address() <= mDMIData.dmi_end_address) ) {
+          // We can handle the data here. As the logEndTransaction is assuming
+          // something to happen in the data structure, we really need to
+          // do this:
+          trans.set_response_status(tlm::TLM_OK_RESP);
+          sc_dt::uint64 tmp = trans.get_address() - mDMIData.dmi_start_address;
+          assert(hasHostEndianness(mDMIData.endianness));
+          if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
+              *(unsigned int*)&mDMIData.dmi_ptr[tmp] = mData;
+
+          } else {
+              mData = *(unsigned int*)&mDMIData.dmi_ptr[tmp];
+          }
+          
+          // Do the wait immediately. Note that doing the wait here eats almost
+          // all the performance anyway, so we only gain something if we're
+          // using temporal decoupling.
+          if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
+            wait(mDMIData.write_latency);
+
+          } else {
+            wait(mDMIData.read_latency);
+          }
+          
+      } else { // we need a full transaction
+          if (socket->nb_transport(trans, phase, t)) {
+              // Transaction Finished, wait for the returned delay
+              wait(t);
+              
+          } else {
+              // Transaction not yet finished, wait for the end of it
+              wait(mEndEvent);
+          }
+          // Acquire DMI pointer if we get the hint:
+          if (trans.get_dmi_allowed())
+          {
+              dmi_type tmp;
+              if (socket->get_direct_mem_ptr(trans.get_address(),
+                                             trans.get_command() == tlm::TLM_READ_COMMAND,
+                                             tmp))
+              {
+                  // FIXME: No support for separate read/write ranges
+                  assert(mDMIData.type == tlm::tlm_dmi::READ_WRITE);
+                  mDMIData = tmp;
+              }
+          }
+
       }
-
       logEndTransaction(trans);
     }
+    sc_core::sc_stop();
+    wait();
   }
 
   bool nb_transport(transaction_type& trans, phase_type& phase, sc_time& t)
@@ -152,14 +213,66 @@ public:
     return false;
   }
 
+  void invalidate(dmi_type& dmiData)
+  {
+    dmiData.dmi_start_address = 1;
+    dmiData.dmi_end_address = 0;
+  }
+
+  // Invalidate DMI pointer(s)
   void invalidate_direct_mem_ptr(bool invalidate_all,
                                  sc_dt::uint64 start_range,
                                  sc_dt::uint64 end_range)
   {
-    // No DMI support: ignore
+    if (invalidate_all ||
+        (start_range <= mDMIData.dmi_end_address &&
+         end_range >= mDMIData.dmi_start_address)) {
+      invalidate(mDMIData);
+    }
   }
 
+  // Test for transport_dbg:
+  // FIXME: use a configurable address
+  void end_of_simulation()
+  {
+    std::cout <<  name() << ", <<SimpleLTMaster1>>:" << std::endl
+              << std::endl;
+    unsigned char data[64];
+
+    tlm::tlm_debug_payload trans;
+    trans.address = mBaseAddress;
+    trans.num_bytes = 64;
+    trans.data = data;
+    trans.do_read = true;
+
+    unsigned int n = socket->transport_dbg(trans);
+        
+    std::cout << "Mem @" << std::hex << mBaseAddress << std::endl;
+    unsigned int j = 0;
+        
+    if (n > 0)
+    {
+        for (unsigned int i=0; i<n; i++) {
+            std::cout << std::setw(2) << std::setfill('0')
+                      << (int)data[i];
+            j++;
+            if (j==16) {
+                j=0;
+                std::cout << std::endl;
+            } else {
+                std::cout << " ";
+            }
+        }
+    }
+    else
+    {
+        std::cout << "ERROR: debug transaction didn't give data." << std::endl;
+    }
+    std::cout << std::dec << std::endl;  
+  }
 private:
+  dmi_type mDMIData;
+
   sc_event mEndEvent;
   unsigned int mNrOfTransactions;
   unsigned int mBaseAddress;

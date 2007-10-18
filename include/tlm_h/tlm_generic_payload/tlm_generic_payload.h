@@ -21,12 +21,16 @@
 #ifndef TLM_GENERIC_PAYLOAD_HEADER
 #define TLM_GENERIC_PAYLOAD_HEADER
 
-namespace tlm_generic_payload  /// TLM generic payload
+namespace tlm_generic_payload_ns  /// TLM generic payload
 {
 
 #include "tlm_helpers.h"
 #include "tlm_gp.h"
 #include "tlm_data_serializers.h"
+
+#include "tlm_dmi.h"
+
+#include "tlm_debug_payload.h"
 
 }
 

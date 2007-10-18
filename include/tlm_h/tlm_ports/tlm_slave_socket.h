@@ -18,25 +18,43 @@
 #ifndef TLM_SLAVE_SOCKET_H
 #define TLM_SLAVE_SOCKET_H
 
+#include "tlm_h/tlm_annotated/tlm_fw_bw_ifs/tlm_fw_bw_ifs.h"
 //#include <systemc.h>
 
-template <typename IF> class tlm_master_socket;
+using tlm_annotated::tlm_fw_nb_transport_if;
+using tlm_annotated::tlm_bw_nb_transport_if;
 
-template <typename IF>
-class tlm_slave_socket : public sc_export<IF>
+template <unsigned int BUSWIDTH,
+          typename FW_IF,
+          typename BW_IF> class tlm_master_socket;
+
+template <unsigned int BUSWIDTH = 32,
+          typename FW_IF = tlm_fw_nb_transport_if<>,
+          typename BW_IF = tlm_bw_nb_transport_if<> >
+class tlm_slave_socket : public sc_export<FW_IF>
 {
 public:
-  typedef IF interface_type;
-  typedef sc_port<interface_type> port_type;
-  typedef sc_export<interface_type> export_type;
-  typedef tlm_master_socket<interface_type> master_socket_type;
+  typedef FW_IF fw_interface_type;
+  typedef BW_IF bw_interface_type;
+  typedef sc_port<bw_interface_type> port_type;
+  typedef sc_export<fw_interface_type> export_type;
+  typedef tlm_master_socket<BUSWIDTH,
+                            fw_interface_type,
+                            bw_interface_type> master_socket_type;
 
-  friend class tlm_master_socket<interface_type>;
+  friend class tlm_master_socket<BUSWIDTH,
+                                 fw_interface_type,
+                                 bw_interface_type>;
 
 public:
   tlm_slave_socket(const char* name) :
     export_type(name)
   {
+  }
+
+  unsigned int get_bus_width() const
+  {
+    return BUSWIDTH;
   }
 
   //
@@ -47,7 +65,7 @@ public:
   void bind(master_socket_type& s)
   {
     // master.port -> slave.export
-    (*static_cast<port_type*>(&s))(*static_cast<export_type*>(this));
+    (*static_cast<typename master_socket_type::port_type*>(&s))(*static_cast<export_type*>(this));
     // slave.port -> master.export
     mPort(s.mExport);
   }
@@ -78,12 +96,12 @@ public:
   // Bind interface to socket
   // - Binds the interface to the export
   //
-  void bind(interface_type& ifs)
+  void bind(fw_interface_type& ifs)
   {
     (*static_cast<export_type*>(this))(ifs);
   }
 
-  void operator() (interface_type& s)
+  void operator() (fw_interface_type& s)
   {
     bind(s);
   }
@@ -91,7 +109,7 @@ public:
   //
   // Forward to 'operator->()' of port class
   //
-  interface_type* operator->()
+  bw_interface_type* operator->()
   {
     return mPort.operator->();
   }

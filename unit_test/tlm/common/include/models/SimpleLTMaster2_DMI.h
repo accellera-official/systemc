@@ -1,0 +1,293 @@
+/*****************************************************************************
+
+  The following code is derived, directly or indirectly, from the SystemC
+  source code Copyright (c) 1996-2007 by all Contributors.
+  All Rights reserved.
+
+  The contents of this file are subject to the restrictions and limitations
+  set forth in the SystemC Open Source License Version 2.4 (the "License");
+  You may not use this file except in compliance with such restrictions and
+  limitations. You may obtain instructions on how to receive a copy of the
+  License at http://www.systemc.org/. Software distributed by Contributors
+  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
+  ANY KIND, either express or implied. See the License for the specific
+  language governing rights and limitations under the License.
+
+ *****************************************************************************/
+
+#ifndef SIMPLE_LT_MASTER2_DMI_H
+#define SIMPLE_LT_MASTER2_DMI_H
+
+#include "tlm.h"
+#include "simple_master_socket.h"
+#include <systemc.h>
+#include <cassert>
+#include <iostream>
+#include <map>
+
+class SimpleLTMaster2_dmi : public sc_module
+{
+public:
+  typedef tlm::tlm_generic_payload transaction_type;
+  typedef tlm::tlm_dmi dmi_type;
+  typedef tlm::tlm_phase phase_type;
+  typedef SimpleMasterSocket<> master_socket_type;
+
+public:
+  master_socket_type socket;
+
+public:
+  SC_HAS_PROCESS(SimpleLTMaster2_dmi);
+  SimpleLTMaster2_dmi(sc_module_name name,
+                  unsigned int nrOfTransactions = 0x5,
+                  unsigned int baseAddress = 0x0) :
+    sc_module(name),
+    socket("socket"),
+    mNrOfTransactions(nrOfTransactions),
+    mBaseAddress(baseAddress),
+    mTransactionCount(0)
+  {
+    mDMIDataReads.first.dmi_start_address = 1;
+    mDMIDataReads.first.dmi_end_address = 0;
+    mDMIDataWrites.first.dmi_start_address = 1;
+    mDMIDataWrites.first.dmi_end_address = 0;
+
+    // register nb_transport method
+    REGISTER_SOCKETPROCESS(socket, myNBTransport);
+    REGISTER_SOCKETPROCESS(socket, invalidate_direct_mem_ptr);
+
+    // Master thread
+    SC_THREAD(run);
+  }
+
+  bool initTransaction(transaction_type& trans)
+  {
+    if (mTransactionCount < mNrOfTransactions) {
+      trans.set_address(mBaseAddress + 4*mTransactionCount);
+      mData = mTransactionCount;
+      trans.set_data_ptr(reinterpret_cast<unsigned char*>(&mData));
+      trans.set_command(tlm::TLM_WRITE_COMMAND);
+
+    } else if (mTransactionCount < 2 * mNrOfTransactions) {
+      trans.set_address(mBaseAddress + 4*(mTransactionCount-mNrOfTransactions));
+      mData = 0;
+      trans.set_data_ptr(reinterpret_cast<unsigned char*>(&mData));
+      trans.set_command(tlm::TLM_READ_COMMAND);
+
+    } else {
+      return false;
+    }
+
+    ++mTransactionCount;
+    return true;
+  }
+
+  void logStartTransation(transaction_type& trans)
+  {
+    if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
+      std::cerr << name() << ": Send write request: A = "
+                << (void*)(int)trans.get_address() << ", D = " << (void*)mData
+                << " @ " << sc_time_stamp() << std::endl;
+      
+    } else {
+      std::cerr << name() << ": Send read request: A = "
+                << (void*)(int)trans.get_address()
+                << " @ " << sc_time_stamp() << std::endl;
+    }
+  }
+
+  void logEndTransaction(transaction_type& trans)
+  {
+    if (trans.get_response_status() != tlm::TLM_OK_RESP) {
+      std::cerr << name() << ": Received error response @ "
+                << sc_time_stamp() << std::endl;
+
+    } else {
+      std::cerr << name() <<  ": Received ok response";
+      if (trans.get_command() == tlm::TLM_READ_COMMAND) {
+        std::cerr << ": D = " << (void*)mData;
+      }
+      std::cerr << " @ " << sc_time_stamp() << std::endl;
+    }
+  }
+
+  std::pair<dmi_type, bool>& getDMIData(const transaction_type& trans)
+  {
+    if (trans.get_command() == tlm::TLM_READ_COMMAND) {
+      return mDMIDataReads;
+
+    } else { // WRITE
+      return mDMIDataWrites;
+    }
+  }
+
+  void run()
+  {
+    transaction_type trans;
+    phase_type phase;
+    sc_time t;
+    
+    while (initTransaction(trans)) {
+      // Create transaction and initialise phase and t
+      phase = tlm::BEGIN_REQ;
+      t = SC_ZERO_TIME;
+
+      logStartTransation(trans);
+
+      ///////////////////////////////////////////////////////////
+      // DMI handling:
+      // We do *not* use the DMI hint to check if it makes sense to ask for
+      // DMI pointers. So the pattern is:
+      // - if the address is not covered by a DMI region try to acquire DMI
+      //   pointers
+      // - if we have a DMI pointer, do the DMI "transaction"
+      // - otherwise fall back to a normal transaction
+      ///////////////////////////////////////////////////////////
+
+      std::pair<dmi_type, bool>& dmi_data = getDMIData(trans);
+
+      // Check if we need to acquire a DMI pointer
+      if((trans.get_address() < dmi_data.first.dmi_start_address) ||
+         (trans.get_address() > dmi_data.first.dmi_end_address) )
+      {
+          dmi_data.second =
+            socket->get_direct_mem_ptr(trans.get_address(),
+                                       trans.get_command() == tlm::TLM_READ_COMMAND,
+                                       dmi_data.first);
+      }
+      // Do DMI "transaction" if we have a valid region
+      if (dmi_data.second &&
+          (trans.get_address() >= dmi_data.first.dmi_start_address) &&
+          (trans.get_address() <= dmi_data.first.dmi_end_address) )
+      {
+          // We can handle the data here. As the logEndTransaction is assuming
+          // something to happen in the data structure, we really need to
+          // do this:
+          trans.set_response_status(tlm::TLM_OK_RESP);
+          sc_dt::uint64 tmp = trans.get_address() - dmi_data.first.dmi_start_address;
+          assert(hasHostEndianness(dmi_data.first.endianness));
+          if (trans.get_command() == tlm::TLM_WRITE_COMMAND)
+          {
+              *(unsigned int*)&dmi_data.first.dmi_ptr[tmp] = mData;
+          }
+          else
+          {
+              mData = *(unsigned int*)&dmi_data.first.dmi_ptr[tmp];
+          }
+          
+          // Do the wait immediately. Note that doing the wait here eats almost
+          // all the performance anyway, so we only gain something if we're
+          // using temporal decoupling.
+          if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
+            wait(dmi_data.first.write_latency);
+
+          } else {
+            wait(dmi_data.first.read_latency);
+          }
+      }
+      else // we need a full transaction
+      {
+          if (socket->nb_transport(trans, phase, t)) {
+              // Transaction Finished, wait for the returned delay
+              wait(t);
+              
+          } else {
+              // Transaction not yet finished, wait for the end of it
+              wait(mEndEvent);
+          }
+      }
+      logEndTransaction(trans);
+    }
+  }
+
+  bool myNBTransport(transaction_type& trans, phase_type& phase, sc_time& t)
+  {
+    switch (phase) {
+    case tlm::END_REQ:
+      // Request phase ended
+      return false;
+    case tlm::BEGIN_RESP:
+      assert(t == SC_ZERO_TIME); // FIXME: can t != 0?
+      mEndEvent.notify(t);
+      // Not needed to update the phase if true is returned
+      return true;
+    case tlm::BEGIN_REQ: // fall-through
+    case tlm::END_RESP: // fall-through
+    default:
+      // A slave should never call nb_transport with these phases
+      assert(0); exit(1);
+      return false;
+    }
+    return false;
+  }
+
+  // Invalidate DMI pointer(s)
+  void invalidate_direct_mem_ptr(bool invalidate_all,
+                                 sc_dt::uint64 start_range,
+                                 sc_dt::uint64 end_range)
+  {
+    // FIXME: probably faster to always invalidate everything?
+    if (invalidate_all ||
+        (start_range <= mDMIDataReads.first.dmi_end_address &&
+         end_range >= mDMIDataReads.first.dmi_start_address)) {
+        mDMIDataReads.second = false;
+    }
+    if (invalidate_all ||
+        (start_range <= mDMIDataWrites.first.dmi_end_address &&
+         end_range >= mDMIDataWrites.first.dmi_start_address)) {
+      mDMIDataWrites.second = false;
+    }
+  }
+
+  // Test for transport_dbg, this one should fail in bus_dmi as we address
+  // a slave that doesn't support transport_dbg:
+  // FIXME: use a configurable address
+  void end_of_simulation()
+  {
+    std::cout <<  name() << ", <<SimpleLTMaster1>>:" << std::endl
+              << std::endl;
+    unsigned char data[64];
+
+    tlm::tlm_debug_payload trans;
+    trans.address = mBaseAddress;
+    trans.num_bytes = 64;
+    trans.data = data;
+    trans.do_read = true;
+
+    unsigned int n = socket->transport_dbg(trans);
+        
+    std::cout << "Mem @" << std::hex << mBaseAddress << std::endl;
+    unsigned int j = 0;
+        
+    if (n > 0)
+    {
+        for (unsigned int i=0; i<n; i++) {
+            std::cout << std::setw(2) << std::setfill('0')
+                      << (int)data[i];
+            j++;
+            if (j==16) {
+                j=0;
+                std::cout << std::endl;
+            } else {
+                std::cout << " ";
+            }
+        }
+    }
+    else
+    {
+        std::cout << "OK: debug transaction didn't give data." << std::endl;
+    }
+    std::cout << std::dec << std::endl;  
+  }
+private:
+  std::pair<dmi_type, bool> mDMIDataReads;
+  std::pair<dmi_type, bool> mDMIDataWrites;
+
+  sc_event mEndEvent;
+  unsigned int mNrOfTransactions;
+  unsigned int mBaseAddress;
+  unsigned int mTransactionCount;
+  unsigned int mData;
+};
+
+#endif

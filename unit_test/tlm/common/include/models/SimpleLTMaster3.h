@@ -29,7 +29,7 @@ class SimpleLTMaster3 : public sc_module
 public:
   typedef tlm::tlm_generic_payload transaction_type;
   typedef tlm::tlm_phase phase_type;
-  typedef SimpleMasterSocket<transaction_type> master_socket_type;
+  typedef SimpleMasterSocket<> master_socket_type;
 
 public:
   master_socket_type socket;
@@ -52,13 +52,13 @@ public:
   bool initTransaction(transaction_type& trans)
   {
     if (mTransactionCount < mNrOfTransactions) {
-      trans.set_address(mBaseAddress + mTransactionCount);
+      trans.set_address(mBaseAddress + 4*mTransactionCount);
       mData = mTransactionCount;
       trans.set_data_ptr(reinterpret_cast<unsigned char*>(&mData));
       trans.set_command(tlm::TLM_WRITE_COMMAND);
 
     } else if (mTransactionCount < 2 * mNrOfTransactions) {
-      trans.set_address(mBaseAddress + mTransactionCount - mNrOfTransactions);
+      trans.set_address(mBaseAddress + 4*(mTransactionCount-mNrOfTransactions));
       mData = 0;
       trans.set_data_ptr(reinterpret_cast<unsigned char*>(&mData));
       trans.set_command(tlm::TLM_READ_COMMAND);

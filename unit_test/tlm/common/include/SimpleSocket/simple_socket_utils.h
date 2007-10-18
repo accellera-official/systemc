@@ -22,8 +22,6 @@
 
 namespace simple_socket_utils {
   
-  template <typename MODULE> class Process;
-
   class simple_socket_user {
   public:
     static simple_socket_user& instance()
@@ -37,37 +35,9 @@ namespace simple_socket_utils {
     }
 
     int get_user_id() const { return mUserId; }
-
-  private:
-    template <typename MODULE> friend class Process;
-
     void set_user_id(int id) { mUserId = id; }
 
   private:
-    int mUserId;
-  };
-
-  template <typename TRANS>
-  class Process : public tlm::tlm_nonblocking_transport_if<TRANS>
-  {
-  public:
-    typedef bool (sc_module::*MethodPtr)(TRANS&, tlm::tlm_phase&, sc_time&);
-      
-    Process(sc_module* mod, MethodPtr f) : mF(f), mMod(mod), mUserId(0)
-    {
-    }
-  
-    bool nb_transport(TRANS& trans, tlm::tlm_phase& phase, sc_time& d)
-    {
-      simple_socket_user::instance().set_user_id(mUserId);
-      return (mMod->*mF)(trans, phase, d);
-    }
-
-    void setUserId(int id) { mUserId = id; }
-
-  protected:
-    MethodPtr mF;
-    sc_module* mMod;
     int mUserId;
   };
 

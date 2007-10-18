@@ -26,13 +26,14 @@
 
 class SimpleLTSlave1 :
   public sc_module,
-  public virtual tlm::tlm_nonblocking_transport_if<tlm::tlm_generic_payload>
+  public virtual tlm::tlm_fw_nb_transport_if<>
 {
 public:
   typedef tlm::tlm_generic_payload transaction_type;
   typedef tlm::tlm_phase phase_type;
-  typedef tlm::tlm_nonblocking_transport_if<transaction_type> interface_type;
-  typedef tlm::tlm_slave_socket<interface_type> slave_socket_type;
+  typedef tlm::tlm_fw_nb_transport_if<> fw_interface_type;
+  typedef tlm::tlm_bw_nb_transport_if<> bw_interface_type;
+  typedef tlm::tlm_slave_socket<> slave_socket_type;
 
 public:
   slave_socket_type socket;
@@ -40,8 +41,7 @@ public:
 public:
   SimpleLTSlave1(sc_module_name name) :
     sc_module(name),
-    socket("socket"),
-    mMem(100, 0)
+    socket("socket")
   {
     // Bind this slave's interface to the slave socket
     socket(*this);
@@ -52,7 +52,7 @@ public:
     assert(phase == tlm::BEGIN_REQ);
 
     sc_dt::uint64 address = trans.get_address();
-    assert(address < 100);
+    assert(address < 400);
 
     unsigned int& data = *reinterpret_cast<unsigned int*>(trans.get_data_ptr());
     if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
@@ -60,18 +60,20 @@ public:
                 << (void*)(int)address << ", D = " << (void*)data
                 << " @ " << sc_time_stamp() << std::endl;
 
-      mMem[address] = data;
+      *reinterpret_cast<unsigned int*>(&mMem[address]) = data;
       t += sc_time(10, SC_NS);
 
     } else {
       std::cerr << name() << ": Received read request: A = "
                 << (void*)(int)address << " @ " << sc_time_stamp() << std::endl;
 
-      data = mMem[address];
+      data = *reinterpret_cast<unsigned int*>(&mMem[address]);
       t += sc_time(100, SC_NS);
     }
 
     trans.set_response_status(tlm::TLM_OK_RESP);
+
+    trans.set_dmi_allowed(true);
 
     // LT slave
     // - always return true
@@ -79,8 +81,58 @@ public:
     return true;
   }
 
+  unsigned int transport_dbg(tlm::tlm_debug_payload& r)
+  {
+    if (r.address >= 400) return 0;
+
+    unsigned int tmp = (int)r.address;
+    unsigned int num_bytes;
+    if (tmp + r.num_bytes >= 400) {
+      num_bytes = 400 - tmp;
+
+    } else {
+      num_bytes = r.num_bytes;
+    }
+    if (r.do_read) {
+      for (unsigned int i = 0; i < num_bytes; ++i) {
+        r.data[i] = mMem[i + tmp];
+      }
+
+    } else {
+      for (unsigned int i = 0; i < num_bytes; ++i) {
+        mMem[i + tmp] = r.data[i];
+      }
+    }
+    return num_bytes;
+  }
+
+  bool get_direct_mem_ptr(const sc_dt::uint64& address,
+                          bool forReads,
+                          tlm::tlm_dmi& dmi_data)
+  {
+    if (address < 400) {
+      dmi_data.dmi_start_address = 0x0;
+      dmi_data.dmi_end_address = 399;
+      dmi_data.dmi_ptr = mMem;
+      dmi_data.read_latency = sc_time(100, SC_NS);
+      dmi_data.write_latency = sc_time(10, SC_NS);
+      dmi_data.type = tlm::tlm_dmi::READ_WRITE;
+      dmi_data.endianness =
+        (tlm::hostHasLittleEndianness() ? tlm::TLM_LITTLE_ENDIAN :
+                                          tlm::TLM_BIG_ENDIAN);
+      return true;
+
+    } else {
+      // should not happen
+      dmi_data.dmi_start_address = address;
+      dmi_data.dmi_end_address = address;
+      dmi_data.type = tlm::tlm_dmi::READ_WRITE;
+      return false;
+    }
+  }
+
 private:
-  std::vector<unsigned int> mMem;
+  unsigned char mMem[400];
 };
 
 #endif

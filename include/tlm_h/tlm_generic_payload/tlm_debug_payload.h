@@ -15,17 +15,27 @@
 
  *****************************************************************************/
 
-#ifndef TLM_NONBLOCKING_TRANSPORT_IF_H
-#define TLM_NONBLOCKING_TRANSPORT_IF_H
+#include <systemc>
 
-//#include <systemc.h>
+#ifndef TLM_DEBUG_PAYLOAD_HEADER
+#define TLM_DEBUG_PAYLOAD_HEADER
 
-enum tlm_phase { BEGIN_REQ, END_REQ, BEGIN_RESP, END_RESP };
-
-template <typename TRANS>
-class tlm_nonblocking_transport_if : public virtual sc_interface {
+class tlm_debug_payload
+{
 public:
-  virtual bool nb_transport(TRANS& trans, tlm_phase& phase, sc_time& t) = 0;
-};
+ // Start address of the transaction:
+ sc_dt::uint64 address;
 
-#endif
+ // Indication of a read or write access:
+ bool do_read;
+
+ // Number of bytes to transfer:
+ unsigned int num_bytes;
+
+ // Pointer to the data array. Note that the data is always
+ // organized in the endianness of the host machine (like
+ // the data pointer in the generic payload):
+ unsigned char* data;
+}; 
+
+#endif /* TLM_DEBUG_PAYLOAD_HEADER */

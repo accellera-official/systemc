@@ -33,8 +33,8 @@ class SimpleBus : public sc_module
 public:
   typedef tlm::tlm_generic_payload transaction_type;
   typedef tlm::tlm_phase phase_type;
-  typedef SimpleSlaveSocket<transaction_type> slave_socket_type;
-  typedef SimpleMasterSocket<transaction_type> master_socket_type;
+  typedef SimpleSlaveSocket<> slave_socket_type;
+  typedef SimpleMasterSocket<> master_socket_type;
 
 public:
   slave_socket_type slave_socket[NR_OF_MASTERS];
@@ -50,9 +50,12 @@ public:
   {
      for (unsigned int i = 0; i < NR_OF_MASTERS; ++i) {
        REGISTER_SOCKETPROCESS_USER(slave_socket[i], masterNBTransport, i);
+       REGISTER_SOCKETPROCESS_USER(slave_socket[i], transportDebug, i);
+       REGISTER_SOCKETPROCESS_USER(slave_socket[i], getDMIPointer, i);
      }
      for (unsigned int i = 0; i < NR_OF_SLAVES; ++i) {
        REGISTER_SOCKETPROCESS(master_socket[i], slaveNBTransport);
+       REGISTER_SOCKETPROCESS(master_socket[i], invalidateDMIPointers);
      }
 
      SC_THREAD(RequestThread);
@@ -86,24 +89,40 @@ public:
     // (END_REQ may not be forwarded to the master correctly)
     std::cerr << name() << ": Switching to AT mode" << std::endl;
     mAbstraction = TLM_AT;
+
+    // Invalidate all DMI pointers
+    invalidateDMIPointers(true, 0, 0);
+
     return true;
   }
 
   //
-  // Dummy decoder
+  // Dummy decoder:
+  // - address[31-28]: portId
+  // - address[27-0]: masked address
   //
-  master_socket_type* decode(transaction_type& trans)
+
+  unsigned int getPortId(const sc_dt::uint64& address)
+  {
+    return (unsigned int)address >> 28;
+  }
+
+  sc_dt::uint64 getAddressOffset(unsigned int portId)
+  {
+    return portId << 28;
+  }
+
+  sc_dt::uint64 getAddressMask(unsigned int portId)
+  {
+    return 0xfffffff;
+  }
+
+  unsigned int decode(const sc_dt::uint64& address)
   {
     // decode address:
-    // - substract base address
-    // - return master socket
+    // - return master socket id
 
-    const sc_dt::uint64 address = trans.get_address();
-
-    unsigned int portId = (unsigned int)address >> 28;
-    trans.set_address(address & 0xfffffff);
-
-    return &master_socket[portId];
+    return getPortId(address);
   }
 
   //
@@ -117,7 +136,10 @@ public:
 
     if (phase == tlm::BEGIN_REQ) {
       // new transaction: decode
-      decodeSocket = decode(trans);
+      unsigned int portId = decode(trans.get_address());
+      assert(portId < NR_OF_SLAVES);
+      decodeSocket = &master_socket[portId];
+      trans.set_address(trans.get_address() & getAddressMask(portId));
       addPendingTransaction(trans, decodeSocket);
 
     } else if (phase == tlm::END_RESP) {
@@ -179,7 +201,10 @@ public:
 
       transaction_type* trans;
       while ((trans = mRequestPEQ.getNextTransaction())) {
-        master_socket_type* decodeSocket = decode(*trans);
+        unsigned int portId = decode(trans->get_address());
+        assert(portId < NR_OF_SLAVES);
+        master_socket_type* decodeSocket = &master_socket[portId];
+        trans->set_address(trans->get_address() & getAddressMask(portId));
 
         // Fill in the destination port
         PendingTransactionsIterator it = mPendingTransactions.find(trans);
@@ -332,6 +357,89 @@ public:
 
     } else { // TLM_AT
       return slaveNBTransportAT(trans, phase, t);
+    }
+  }
+
+  unsigned int transportDebug(tlm::tlm_debug_payload& trans)
+  {
+    unsigned int portId = decode(trans.address);
+    assert(portId < NR_OF_SLAVES);
+    master_socket_type* decodeSocket = &master_socket[portId];
+    trans.address &= getAddressMask(portId);
+    
+    return (*decodeSocket)->transport_dbg(trans);
+  }
+
+  bool limitRange(unsigned int portId, sc_dt::uint64& low, sc_dt::uint64& high)
+  {
+    sc_dt::uint64 addressOffset = getAddressOffset(portId);
+    sc_dt::uint64 addressMask = getAddressMask(portId);
+
+    if (low > addressMask) {
+      // Range does not overlap with addressrange for this slave
+      return false;
+    }
+
+    low += addressOffset;
+    if (high > addressMask) {
+      high = addressOffset + addressMask;
+
+    } else {
+      high += addressOffset;
+    }
+    return true;
+  }
+
+  bool getDMIPointer(const sc_dt::uint64& address,
+                     bool forReads,
+                     tlm::tlm_dmi& dmi_data)
+  {
+    if (mAbstraction == TLM_AT) {
+      // DMI not supported if the bus operates in AT mode
+      dmi_data.dmi_start_address = 0x0;
+      dmi_data.dmi_end_address = (sc_dt::uint64)-1;
+    }
+
+    unsigned int portId = decode(address);
+    assert(portId < NR_OF_SLAVES);
+    master_socket_type* decodeSocket = &master_socket[portId];
+    sc_dt::uint64 maskedAddress = address & getAddressMask(portId);
+    
+    bool result =
+      (*decodeSocket)->get_direct_mem_ptr(maskedAddress, forReads, dmi_data);
+    
+    // Range must contain address
+    assert(dmi_data.dmi_start_address <= maskedAddress);
+    assert(dmi_data.dmi_end_address >= maskedAddress);
+
+    // Should always succeed
+    limitRange(portId, dmi_data.dmi_start_address, dmi_data.dmi_end_address);
+
+    return result;
+  }
+
+  void invalidateDMIPointers(bool invalidate_all,
+                             sc_dt::uint64 start_range,
+                             sc_dt::uint64 end_range)
+  {
+    // FIXME: probably faster to always invalidate everything?
+    if (invalidate_all) {
+      for (unsigned int i = 0; i < NR_OF_MASTERS; ++i) {
+        (slave_socket[i])->invalidate_direct_mem_ptr(true, 0, 0);
+      }
+
+    } else {
+      unsigned int portId = 
+        simple_socket_utils::simple_socket_user::instance().get_user_id();
+
+      if (!limitRange(portId, start_range, end_range)) {
+        // Range does not fall into address range of slave
+        return;
+      }
+      
+      for (unsigned int i = 0; i < NR_OF_MASTERS; ++i) {
+        (slave_socket[i])->invalidate_direct_mem_ptr(false, start_range, end_range);
+      }
     }
   }
 

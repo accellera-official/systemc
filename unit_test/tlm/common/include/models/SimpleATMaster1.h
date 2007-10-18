@@ -30,7 +30,7 @@ class SimpleATMaster1 : public sc_module
 public:
   typedef tlm::tlm_generic_payload transaction_type;
   typedef tlm::tlm_phase phase_type;
-  typedef SimpleMasterSocket<transaction_type> master_socket_type;
+  typedef SimpleMasterSocket<> master_socket_type;
 
 public:
   // extended transaction, holds tlm_generic_payload + data storage

@@ -21,38 +21,168 @@
 #include "simple_socket_utils.h"
 //#include "tlm.h"
 
-template <typename TRANS>
+template <unsigned int BUSWIDTH = 32, typename TRANS = tlm::tlm_generic_payload>
 class SimpleSlaveSocket :
-  public tlm_ports::tlm_slave_socket<tlm::tlm_nonblocking_transport_if<TRANS> >
+  public tlm_ports::tlm_slave_socket<BUSWIDTH,
+                                     tlm::tlm_fw_nb_transport_if<TRANS>,
+                                     tlm::tlm_bw_nb_transport_if<TRANS> >
 {
 public:
   typedef TRANS transaction_type;
-  typedef tlm::tlm_nonblocking_transport_if<transaction_type> interface_type;
-  typedef tlm_ports::tlm_slave_socket<interface_type> base_type;
   typedef tlm::tlm_phase phase_type;
-
-private:
-  typedef simple_socket_utils::Process<transaction_type> Process;
+  typedef tlm::tlm_fw_nb_transport_if<transaction_type, phase_type> fw_interface_type;
+  typedef tlm::tlm_bw_nb_transport_if<transaction_type, phase_type> bw_interface_type;
+  typedef tlm::tlm_slave_socket<BUSWIDTH, fw_interface_type, bw_interface_type> base_type;
 
 public:
-  explicit SimpleSlaveSocket(const char* name = "") :
-    base_type(name),
-    mProcess(0)
+  explicit SimpleSlaveSocket(const char* n = "") :
+    base_type(n),
+    mProcess(this->name())
   {
+    (*this)(mProcess);
   }
 
   // REGISTER_SOCKETPROCESS
   template <typename MODULE>
   void CB(MODULE* mod, bool (MODULE::*cb)(transaction_type&, phase_type&, sc_time&), int id)
   {
-    delete mProcess;
-    mProcess = new Process(mod, static_cast<typename Process::MethodPtr>(cb));
-    mProcess->setUserId(id);
-    (*this)(*mProcess);
+    mProcess.setTransportPtr(mod, static_cast<typename Process::TransportPtr>(cb));
+    mProcess.setTransportUserId(id);
+  }
+
+  template <typename MODULE>
+  void CB(MODULE* mod, unsigned int (MODULE::*cb)(tlm::tlm_debug_payload&), int id)
+  {
+    mProcess.setTransportDebugPtr(mod, static_cast<typename Process::TransportDebugPtr>(cb));
+    mProcess.setTransportDebugUserId(id);
+  }
+
+  template <typename MODULE>
+  void CB(MODULE* mod, bool (MODULE::*cb)(const sc_dt::uint64&, bool forReads, tlm::tlm_dmi&), int id)
+  {
+    mProcess.setGetDMIPtr(mod, static_cast<typename Process::GetDMIPtr>(cb));
+    mProcess.setGetDMIUserId(id);
   }
 
 private:
-  Process* mProcess;
+  class Process : public tlm::tlm_fw_nb_transport_if<transaction_type, phase_type>
+  {
+  public:
+    typedef bool (sc_module::*TransportPtr)(TRANS&, tlm::tlm_phase&, sc_time&);
+    typedef unsigned int (sc_module::*TransportDebugPtr)(tlm::tlm_debug_payload&);
+    typedef bool (sc_module::*GetDMIPtr)(const sc_dt::uint64&, bool forReads, tlm::tlm_dmi&);
+      
+    Process(const std::string& name) :
+      mName(name),
+      mMod(0),
+      mTransportPtr(0),
+      mTransportDebugPtr(0),
+      mGetDMIPtr(0),
+      mTransportUserId(0),
+      mTransportDebugUserId(0),
+      mGetDMIUserId(0)
+    {
+    }
+  
+    void setTransportUserId(int id) { mTransportUserId = id; }
+    void setTransportDebugUserId(int id) { mTransportDebugUserId = id; }
+    void setGetDMIUserId(int id) { mGetDMIUserId = id; }
+
+    void setTransportPtr(sc_module* mod, TransportPtr p)
+    {
+      if (mTransportPtr) {
+	std::cerr << mName << ": non-blocking callback allready registered" << std::endl;
+
+      } else {
+        assert(!mMod || mMod == mod);
+        mMod = mod;
+        mTransportPtr = p;
+      }
+    }
+
+    void setTransportDebugPtr(sc_module* mod, TransportDebugPtr p)
+    {
+      if (mTransportDebugPtr) {
+	std::cerr << mName << ": debug callback allready registered" << std::endl;
+
+      } else {
+        assert(!mMod || mMod == mod);
+        mMod = mod;
+        mTransportDebugPtr = p;
+      }
+    }
+
+    void setGetDMIPtr(sc_module* mod, GetDMIPtr p)
+    {
+      if (mGetDMIPtr) {
+	std::cerr << mName << ": get DMI pointer callback allready registered" << std::endl;
+
+      } else {
+        assert(!mMod || mMod == mod);
+        mMod = mod;
+        mGetDMIPtr = p;
+      }
+    }
+
+    bool nb_transport(transaction_type& trans, phase_type& phase, sc_time& t)
+    {
+      if (mTransportPtr) {
+        // forward call
+        assert(mMod);
+        simple_socket_utils::simple_socket_user::instance().set_user_id(mTransportUserId);
+        return (mMod->*mTransportPtr)(trans, phase, t);
+
+      } else {
+        std::cerr << mName << ": no non-blocking callback registered" << std::endl;
+        assert(0); exit(1);
+        return false;
+      }
+    }
+
+    unsigned int transport_dbg(tlm::tlm_debug_payload& trans)
+    {
+      if (mTransportDebugPtr) {
+        // forward call
+        assert(mMod);
+        simple_socket_utils::simple_socket_user::instance().set_user_id(mTransportDebugUserId);
+        return (mMod->*mTransportDebugPtr)(trans);
+
+      } else {
+        // No debug support
+        return 0;
+      }
+    }
+
+    bool get_direct_mem_ptr(const sc_dt::uint64& address, bool forReads, tlm::tlm_dmi& dmi_data)
+    {
+      if (mGetDMIPtr) {
+        // forward call
+        assert(mMod);
+        simple_socket_utils::simple_socket_user::instance().set_user_id(mGetDMIUserId);
+        return (mMod->*mGetDMIPtr)(address, forReads, dmi_data);
+
+      } else {
+        // No DMI support
+        dmi_data.dmi_start_address = 0x0;
+        dmi_data.dmi_end_address = (sc_dt::uint64)-1;
+        dmi_data.type = tlm::tlm_dmi::READ_WRITE;
+        return false;
+      }
+    }
+
+  private:
+    const std::string mName;
+    sc_module* mMod;
+    TransportPtr mTransportPtr;
+    TransportDebugPtr mTransportDebugPtr;
+    GetDMIPtr mGetDMIPtr;
+    int mTransportUserId;
+    int mTransportDebugUserId;
+    int mGetDMIUserId;
+  };
+
+private:
+  Process mProcess;
 };
 
 #endif

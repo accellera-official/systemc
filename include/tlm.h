@@ -38,7 +38,7 @@ namespace tlm  /// TLM namespace
   using namespace tlm_core;
   using namespace analysis;
   using namespace tlm_annotated;
-  using namespace tlm_generic_payload;
+  using namespace tlm_generic_payload_ns;
   using namespace tlm_ports;
   using namespace tlm_quantum;
 }

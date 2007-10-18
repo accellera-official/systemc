@@ -2,8 +2,9 @@ include ./Makefile.config
 
 SUBDIRS = \
  	../bus \
+	../bus_tlm \
  	../gp_extension \
-    ../p2p \
+	../p2p \
 	../transactor
 
 .PHONY: all clean

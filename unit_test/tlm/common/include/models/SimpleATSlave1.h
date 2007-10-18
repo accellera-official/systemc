@@ -31,7 +31,7 @@ class SimpleATSlave1 : public sc_module
 public:
   typedef tlm::tlm_generic_payload transaction_type;
   typedef tlm::tlm_phase phase_type;
-  typedef SimpleSlaveSocket<transaction_type> slave_socket_type;
+  typedef SimpleSlaveSocket<> slave_socket_type;
 
 public:
   slave_socket_type socket;
@@ -42,8 +42,7 @@ public:
     sc_module(name),
     socket("socket"),
     ACCEPT_DELAY(25, SC_NS),
-    RESPONSE_DELAY(100, SC_NS),
-    mMem(100, 0)
+    RESPONSE_DELAY(100, SC_NS)
   {
     // register nb_transport method
     REGISTER_SOCKETPROCESS(socket, myNBTransport);
@@ -70,7 +69,7 @@ public:
   {
     if (phase == tlm::BEGIN_REQ) {
       sc_dt::uint64 address = trans.get_address();
-      assert(address < 100);
+      assert(address < 400);
 
       unsigned int& data = *reinterpret_cast<unsigned int*>(trans.get_data_ptr());
       if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
@@ -78,13 +77,13 @@ public:
                   << (void*)(int)address << ", D = " << (void*)data
                   << " @ " << sc_time_stamp() << std::endl;
 
-        mMem[address] = data;
+        *reinterpret_cast<unsigned int*>(&mMem[address]) = data;
 
       } else {
         std::cerr << name() << ": Received read request: A = "
                   << (void*)(int)address << " @ " << sc_time_stamp() << std::endl;
 
-        data = mMem[address];
+        data = *reinterpret_cast<unsigned int*>(&mMem[address]);
       }
 
       // Notify end of request phase after ACCEPT delay
@@ -150,8 +149,9 @@ public:
     trans->set_response_status(tlm::TLM_OK_RESP);
     if (trans->get_command() == tlm::TLM_READ_COMMAND) {
        sc_dt::uint64 address = trans->get_address();
-       assert(address < 100);
-      *reinterpret_cast<unsigned int*>(trans->get_data_ptr()) = mMem[address];
+       assert(address < 400);
+      *reinterpret_cast<unsigned int*>(trans->get_data_ptr()) =
+        *reinterpret_cast<unsigned int*>(&mMem[address]);
     }
 
     if (socket->nb_transport(*trans, phase, t)) {
@@ -180,7 +180,7 @@ private:
   const sc_time RESPONSE_DELAY;
 
 private:
-  std::vector<unsigned int> mMem;
+  unsigned char mMem[400];
   std::queue<transaction_type*> mEndRequestQueue;
   sc_event mEndRequestEvent;
   std::queue<transaction_type*> mResponseQueue;

@@ -2,19 +2,42 @@ SimpleLTMaster1/SimpleLTSlave1
 ------------------------------
 
 - LT Master/Slave model using the base (standard) tlm socket
+- Added support for DMI in SimpleLTSlave1
+
+SimpleLTMaster1_DMI
+-------------------
+
+- uses DMI transactions, the DMI structure is using the DMI-hint
+  to check if a DMI request would make sense.
+- uses a single transport_dbg transaction at end_of_simulation()
 
 SimpleLTMaster2/SimpleLTSlave2
 ------------------------------
 
 - LT Master/Slave model using the convenience tlm socket
-- Slave and Master model use the REGISTER_SOCKETPROCESS macro to register a transport callback to the socket
+- Slave and Master model use the REGISTER_SOCKETPROCESS macro to register a
+  transport callback to the socket
+- Added support for DMI handling, callback registration with
+  REGISTER_SOCKETPROCESS
+- SimpleLTSlave2 does not register the transport_dbg callback, so that
+  we are able to test this case in bus_dmi.
 
+SimpleLTMaster2_DMI
+-------------------
+
+- uses DMI transactions, but ignoring the DMI hint
+- uses a single transport_dbg transaction at end_of_simulation()
 
 SimpleLTMaster3
 ---------------
 
 - LT Master model using the convenience tlm socket
 - Master model uses the endEvent of the socket to wait until the transaction is finished
+
+SimpleLTMaster3_DMI
+-------------------
+
+- based on SimpleMaster3, uses DMI (without DMI hint)
 
 SimpleATMaster1/SimpleATSlave1
 ------------------------------
@@ -37,7 +60,8 @@ CoreDecouplingLTMaster
 ExplicitLTSlave
 ---------------
 
-- LT Slave that uses ecplicit timing: seperate call for the start of the response phase
+- LT Slave that uses explicit timing: seperate call for the start of the response phase
+- added support for debug transactions
 
 SimpleBus
 ---------
@@ -45,6 +69,7 @@ SimpleBus
 - Simple bus model
 - Runtime switcheable between LT and AT (can only switch if no transactions are pending)
 - No limitation on number of pending transactions (all slaves that can return false must support multiple transactions)
+- added support for DMI and debug transactions
 - LT mode:
 -- Forward nb_transport calls to master/slaves
 -- Only one active request/response phase
