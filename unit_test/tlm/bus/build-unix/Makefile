@@ -1,9 +1,5 @@
 include ../../build-unix/Makefile.config
 
-GXX = g++
-GCC = gcc
-FLAGS = -g -Wall
-
 OBJ_NAME = bus
 
 INCDIR = -I$(SYSTEMC_INC_DIR) -I$(TLM_INC_DIR) -I../../common/include/SimpleSocket -I../../common/include/models -I../../common/include/utils
@@ -16,9 +12,14 @@ LIBS = $(LIBDIR) $(LIB_SC)
  
 CFLAGS = $(FLAGS) $(INCDIR)
 
-.PHONE: clean all
+.PHONY: clean all run
 
 all: $(OBJ_NAME).exe
+
+run:  $(OBJ_NAME).exe
+	./$(OBJ_NAME).exe > run.log
+	@diff run.log ../golden.log > diff.log 2>&1;\
+	if [ -s diff.log ]; then echo "***ERROR:"; cat diff.log; else echo "OK"; fi
 
 .c.o:
 	$(GCC) $(CFLAGS) -c $<
@@ -34,7 +35,7 @@ $(OBJ_NAME).o: $(SRCDIR)/$(OBJ_NAME).cpp
 	$(GXX) -c $(CFLAGS) $< -o $@
 
 clean:
-	rm -f $(OBJ_NAME).exe *.o
+	rm -f $(OBJ_NAME).exe *.o run.log diff.log
 
 # DO NOT DELETE
 

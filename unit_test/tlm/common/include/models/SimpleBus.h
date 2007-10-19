@@ -70,7 +70,7 @@ public:
     }
 
     if (mPendingTransactions.empty()) {
-      std::cerr << name() << ": Switching to LT mode" << std::endl;
+      std::cout << name() << ": Switching to LT mode" << std::endl;
       mAbstraction = TLM_LT;
       return true;
 
@@ -88,7 +88,7 @@ public:
 
     // Switching from LT -> AT is always possible
     // (END_REQ may not be forwarded to the master correctly)
-    std::cerr << name() << ": Switching to AT mode" << std::endl;
+    std::cout << name() << ": Switching to AT mode" << std::endl;
     mAbstraction = TLM_AT;
 
     // Invalidate all DMI pointers
@@ -151,7 +151,7 @@ public:
       decodeSocket = it->second.to;
 
     } else {
-      std::cerr << "ERROR: '" << name()
+      std::cout << "ERROR: '" << name()
                 << "': Illegal phase received from master: " << phase << std::endl;
       assert(false); exit(1);
     }
@@ -170,7 +170,7 @@ public:
   sync_enum_type slaveNBTransportLT(transaction_type& trans, phase_type& phase, sc_time& t)
   {
     if (phase != tlm::END_REQ && phase != tlm::BEGIN_RESP) {
-      std::cerr << "ERROR: '" << name()
+      std::cout << "ERROR: '" << name()
                 << "': Illegal phase received from slave:" << phase << std::endl;
       assert(false); exit(1);
     }
@@ -326,7 +326,7 @@ public:
       return tlm::TLM_COMPLETED;
 
     } else {
-      std::cerr << "ERROR: '" << name()
+      std::cout << "ERROR: '" << name()
                 << "': Illegal phase received from master." << std::endl;
       assert(false); exit(1);
     }
@@ -337,7 +337,7 @@ public:
   sync_enum_type slaveNBTransportAT(transaction_type& trans, phase_type& phase, sc_time& t)
   {
     if (phase != tlm::END_REQ && phase != tlm::BEGIN_RESP) {
-      std::cerr << "ERROR: '" << name()
+      std::cout << "ERROR: '" << name()
                 << "': Illegal phase received from slave." << std::endl;
       assert(false); exit(1);
     }

@@ -84,12 +84,12 @@ public:
   void logStartTransation(transaction_type& trans)
   {
     if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
-      std::cerr << name() << ": Send write request: A = "
+      std::cout << name() << ": Send write request: A = "
                 << (void*)(int)trans.get_address() << ", D = " << (void*)mData
                 << " @ " << sc_time_stamp() << std::endl;
       
     } else {
-      std::cerr << name() << ": Send read request: A = "
+      std::cout << name() << ": Send read request: A = "
                 << (void*)(int)trans.get_address()
                 << " @ " << sc_time_stamp() << std::endl;
     }
@@ -98,15 +98,15 @@ public:
   void logEndTransaction(transaction_type& trans)
   {
     if (trans.get_response_status() != tlm::TLM_OK_RESP) {
-      std::cerr << name() << ": Received error response @ "
+      std::cout << name() << ": Received error response @ "
                 << sc_time_stamp() << std::endl;
 
     } else {
-      std::cerr << name() <<  ": Received ok response";
+      std::cout << name() <<  ": Received ok response";
       if (trans.get_command() == tlm::TLM_READ_COMMAND) {
-        std::cerr << ": D = " << (void*)mData;
+        std::cout << ": D = " << (void*)mData;
       }
-      std::cerr << " @ " << sc_time_stamp() << std::endl;
+      std::cout << " @ " << sc_time_stamp() << std::endl;
     }
   }
 

@@ -50,16 +50,16 @@ public:
     void print(DT value, tlm::tlm_endianness endianness)
     {
       DT tmp = tlm::swapIfNeeded(value, endianness);
-      std::cerr << "  Data (simulated endianness) = [ ";
-      std::cerr << std::hex;
+      std::cout << "  Data (simulated endianness) = [ ";
+      std::cout << std::hex;
       for (int i = 0; i < (int)sizeof(DT); ++i, tmp >>= 8) {
         if (i != 0) {
-          std::cerr << ", ";
+          std::cout << ", ";
         }
-        std::cerr << "0x" << (tmp & 0xff);
+        std::cout << "0x" << (tmp & 0xff);
       }
-      std::cerr << " ]" << std::endl;
-      std::cerr << std::dec;
+      std::cout << " ]" << std::endl;
+      std::cout << std::dec;
     }
 
     void doLEReadAccesses(unsigned int address)
@@ -106,7 +106,7 @@ public:
           // - lsb lowest (byte) address
           // - msb highest (byte) address
           //
-          std::cerr << "\n\nLE Initiator:\n" << std::endl;
+          std::cout << "\n\nLE Initiator:\n" << std::endl;
           doLEReadAccesses(0x10);
 
           //
@@ -114,7 +114,7 @@ public:
           // - msb lowest (byte) address
           // - lsb highest (byte) address
           //
-          std::cerr << "\n\nBE Initiator:\n" << std::endl;
+          std::cout << "\n\nBE Initiator:\n" << std::endl;
           doBEReadAccesses(0x10);
 
           sc_stop();
@@ -144,7 +144,7 @@ public:
     	if(m_gp.get_response_status() == tlm::TLM_OK_RESP)
     	{
     		cout << " OK " << endl;
-                    std::cerr << "  writing " << sizeof(DT) << " bytes:\n"
+                    std::cout << "  writing " << sizeof(DT) << " bytes:\n"
                               << "   - address = " << (void*)address << "\n"
                               << "   - data = 0x" << std::hex << (unsigned int)data << std::dec
                               << std::endl;
@@ -180,7 +180,7 @@ public:
     	if(m_gp.get_response_status() == tlm::TLM_OK_RESP)
     	{
     		cout << " OK " << endl;
-                    std::cerr << "  Reading " << sizeof(DT) << " bytes:\n"
+                    std::cout << "  Reading " << sizeof(DT) << " bytes:\n"
                               << "   - address = " << (void*)address << "\n"
                               << "   - data = 0x" << std::hex << (unsigned int)data << std::dec
                               << std::endl;

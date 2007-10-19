@@ -77,7 +77,7 @@ public:
   void logStartTransation(transaction_type& trans)
   {
     if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
-      std::cerr << name() << ": Send write request: A = "
+      std::cout << name() << ": Send write request: A = "
                 << (void*)(int)trans.get_address() << ", D = " << (void*)mData
                 << " @ " << mQuantumKeeper.getCurrentTime()
                 << " (" << sc_time_stamp() << " + "
@@ -85,7 +85,7 @@ public:
                 << std::endl;
       
     } else {
-      std::cerr << name() << ": Send read request: A = "
+      std::cout << name() << ": Send read request: A = "
                 << (void*)(int)trans.get_address()
                 << " @ " << mQuantumKeeper.getCurrentTime()
                 << " (" << sc_time_stamp() << " + "
@@ -97,18 +97,18 @@ public:
   void logEndTransaction(transaction_type& trans)
   {
     if (trans.get_response_status() != tlm::TLM_OK_RESP) {
-      std::cerr << name() << ": Received error response @ "
+      std::cout << name() << ": Received error response @ "
                 << mQuantumKeeper.getCurrentTime()
                 << " (" << sc_time_stamp() << " + "
                 << mQuantumKeeper.getLocalTime() << ")"
                 << std::endl;
 
     } else {
-      std::cerr << name() <<  ": Received ok response";
+      std::cout << name() <<  ": Received ok response";
       if (trans.get_command() == tlm::TLM_READ_COMMAND) {
-        std::cerr << ": D = " << (void*)mData;
+        std::cout << ": D = " << (void*)mData;
       }
-      std::cerr << " @ " << mQuantumKeeper.getCurrentTime()
+      std::cout << " @ " << mQuantumKeeper.getCurrentTime()
                 << " (" << sc_time_stamp() << " + "
                 << mQuantumKeeper.getLocalTime() << ")"
                 << std::endl;
@@ -131,7 +131,7 @@ public:
         // Transaction finished
         // Slave may have added a delay to the quantum -> sync if needed
         if (mQuantumKeeper.needSync()) {
-          std::cerr << "Sync'ing..." << std::endl;
+          std::cout << "Sync'ing..." << std::endl;
           mQuantumKeeper.sync();
         }
         break;

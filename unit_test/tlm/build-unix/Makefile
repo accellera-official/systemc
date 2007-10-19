@@ -5,13 +5,18 @@ SUBDIRS = \
 	../bus_dmi \
  	../gp_extension \
 	../p2p \
-	../transactor
+	../transactor \
+        ../accessors
 
-.PHONY: all clean
+.PHONY: all clean run
 
 all:
 	@for i in $(SUBDIRS); do \
         (cd $$i/build-unix && $(MAKE)); done
+
+run:
+	@for i in $(SUBDIRS); do \
+        (cd $$i/build-unix && $(MAKE) run); done
 
 clean:
 	@if ( test ! -d $(SYSTEMC_HOME) ); \
