@@ -1,28 +1,32 @@
 -------- 2007-10-18.01 -------- Charles
        
-0001 - /include/tlm_h/tlm_generic_payload/tlm_array.h is an array class implementation.
-       Is there a reason for using this over the stdlibc++ array class? If not, it should
-       be removed and tlm_gp.h updated appropriately. If if needs to stay, it should either
-       be renamed to tlm_gp_array.h or promoted to tlm_core.
+0001 - /include/tlm_h/tlm_generic_payload/tlm_array.h is an array class
+       implementation.  Is there a reason for using this over the stdlibc++
+       array class? If not, it should be removed and tlm_gp.h updated
+       appropriately. If if needs to stay, it should either be renamed to
+       tlm_gp_array.h or promoted to tlm_core.
 
-0002 - The namespace for tlm_analysis needs to be renamed 'tlm_analysis'. It is presently
-       named 'analysis'.
+0002 - The namespace for tlm_analysis needs to be renamed 'tlm_analysis'. It is
+       presently named 'analysis'.
 
 0003 - /include/tlm_h/tlm_generic_payload/tlm_helpers.h needs to be renamed
        'tlm_gp_helpers.h' or promoted to tlm_core
 
 0004 - There are variables beginning with underscore characters (_)
 
-0005 - Endianness can be determined using #include <endian.h> which defines __BYTE_ORDER,
-       __LITTLE_ENDIAN and __BIG_ENDIAN for gcc compilers. An addition can be made to
-       tlm_platform.h for MSVC. (MacOSX runs on both big and little endian architectures)
+0005 - Endianness can be determined using #include <endian.h> which defines
+       __BYTE_ORDER, __LITTLE_ENDIAN and __BIG_ENDIAN for gcc compilers. An
+       addition can be made to tlm_platform.h for MSVC. (MacOSX runs on both
+       big and little endian architectures)
 
-0006 - The namespace for tlm_generic_payload needs to be renamed to 'tlm_generic_payload'.
-       It is presently named 'tlm_generic_payload_ns'.
+0006 - The namespace for tlm_generic_payload needs to be renamed to
+       'tlm_generic_payload'.  It is presently named 'tlm_generic_payload_ns'.
 
-0007 - Include guards should be consistent. The Unix convention is full name in uppercase
-       beginning and ending with two underscores; and non-alphabetic characters replaced by
-       underscores. (tlm_somestuff_here.h --> __TLM_SOMESTUFF_HERE_H__)
+0007 - Include guards should be consistent. The Unix convention is full name in
+       uppercase beginning and ending with two underscores; and non-alphabetic
+       characters replaced by underscores. (tlm_somestuff_here.h -->
+       __TLM_SOMESTUFF_HERE_H__)
+       [OS]: FIXED
 
 0008 - when building /unit_test/tlm/bus (unix) 
        warning: 'class tlm_quantum::tlm_qk_dummy::tlm_quantumkeeper<tlm_quantum::tlm_qk_dummy::tlm_dummy>'
@@ -41,12 +45,12 @@
             DT=unsigned int
         ]
 
-0011 - explicitly sized variables (8, 16, 32, 64) should use explicitly sized type
-       [u]int[8,16,32,64]_t or sc_dt::[u]int64 over compiler dependent types (char, short,
-       long) as these vary by implementation <stdint.h>
+0011 - explicitly sized variables (8, 16, 32, 64) should use explicitly sized
+       type [u]int[8,16,32,64]_t or sc_dt::[u]int64 over compiler dependent
+       types (char, short, long) as these vary by implementation <stdint.h>
 
-0012 - all 64-bit variables should use sc_dt::[u]int64 or [u]int64_t <stdint.h> as long long
-       is not part of the C++ standard
+0012 - all 64-bit variables should use sc_dt::[u]int64 or [u]int64_t <stdint.h>
+       as long long is not part of the C++ standard
 
 0013 - there is a circular include file reference
        /include/tlm_h/tlm_core/tlm_fifo/tlm_fifo.h
@@ -55,55 +59,67 @@
 -------- 2007-10-19.01 -------- Olaf 
        
 0014 - We should consistently use #include <systemc>, not #include <systemc.h>.
-       We stated in the meeting that we only supported SystemC versions >= 2.1.v1, so
-       I think we should use this include style to keep the SystemC namespaces intact.
+       We stated in the meeting that we only supported SystemC versions >=
+       2.1.v1, so I think we should use this include style to keep the SystemC
+       namespaces intact.
+       [OS]: FIXED
 
 0015 - We should review the namespace structure in the kit. From my perspective
-       it's very unclean and dangerous to first define the classes in no namespace at all,
-       move them to an intermediate namespace using something like
-       "namespace foo{ #include...}" in the mid-level include files, and finally break
-       the intermediate namespaces up again and moving everything into the tlm
-       namespace in the top-level tlm.h. Got lost in the description? Me too.
+       it's very unclean and dangerous to first define the classes in no
+       namespace at all, move them to an intermediate namespace using something
+       like "namespace foo{ #include...}" in the mid-level include files, and
+       finally break the intermediate namespaces up again and moving everything
+       into the tlm namespace in the top-level tlm.h. Got lost in the
+       description? Me too.
 
-       The problem is that although we might state that users should only include the
-       top-level tlm.h, we cannot really enforce this rule. So, if somebody does a
-       #include "tlm_h/tlm_generic_payload/tlm_gp.h" because he's only interested
-       in the GP, he'd end up with the GP defined in a different namespace. This error
-       might not surface immediately, so it might be somewhat hard to catch.
+       The problem is that although we might state that users should only
+       include the top-level tlm.h, we cannot really enforce this rule. So, if
+       somebody does a #include "tlm_h/tlm_generic_payload/tlm_gp.h" because
+       he's only interested in the GP, he'd end up with the GP defined in a
+       different namespace. This error might not surface immediately, so it
+       might be somewhat hard to catch.
 
-       Why not define everything properly in the tlm namespace from the beginning?
-       For the non-public stuff (like tlm_array, tlm_fifo(?) we could use e.g. namespace
-       tlm_utils, but that's really optional.
+       Why not define everything properly in the tlm namespace from the
+       beginning?  For the non-public stuff (like tlm_array, tlm_fifo(?) we
+       could use e.g. namespace tlm_utils, but that's really optional.
 
-0016 - I think we need to review the changes in the tlm_core directory from
-       TLM 1.0 to now. There are quite a few changes, and the question is if we
-       really want to have those, or if the changes are only artifacts of the draft 1
-       release that are obsolete now. I don't know.
+0016 - I think we need to review the changes in the tlm_core directory from TLM
+       1.0 to now. There are quite a few changes, and the question is if we
+       really want to have those, or if the changes are only artifacts of the
+       draft 1 release that are obsolete now. I don't know.
 
-0017 - Can we rename the tlm_core directory to something more meaningful?
-       If I understand it correctly, then the tlm_core is supposed to hold the TLM 1.0
-       interfaces, which in my mind are not at the core of things for 2.0.
+0017 - Can we rename the tlm_core directory to something more meaningful?  If I
+       understand it correctly, then the tlm_core is supposed to hold the TLM
+       1.0 interfaces, which in my mind are not at the core of things for 2.0.
 
 -------- 2007-10-19.02 -------- Charles 
        
-0018 - TLM 2 requirement 8.5 specifies the examples and unit tests (regressions) pass Purify.
-       Question: Who will be responsible for this?
+0018 - TLM 2 requirement 8.5 specifies the examples and unit tests
+       (regressions) pass Purify.  Question: Who will be responsible for this?
        
-0019 - TLM ports initiator/target ports do not appear to have the GP material integrated
+0019 - TLM ports initiator/target ports do not appear to have the GP material
+       integrated
 
-0020 - TLM ports master/slave need to be changed to initiator/target (2007-10-18 call)
+0020 - TLM ports master/slave need to be changed to initiator/target
+       (2007-10-18 call)
 
-0021 - TLM 2 requriement 8.10 specifies that there are to be no open namespaces in the
-       include files.Question: What are the implications on those in the headers?
+0021 - TLM 2 requriement 8.10 specifies that there are to be no open namespaces
+       in the include files.Question: What are the implications on those in the
+       headers?
        
 -------- 2007-10-19.03 -------- Charles 
        
 0022 - What is the minimum version of GCC to be supported?
+       [OS]: gcc 3.x?
 
 0023 - GP extension test (make run) fails on Intel Macintosh
        make: *** [run] Error 139
+       [OS]: candidate is array bounds write violation in
+       tlm_annotated::tlm_generic_payload_ns::copy_data(unsigned char...
+       [OS]: fixed a wrong delete in ~tlm_memory
+       
+0024 - GP extension test (./generic_payload_extension.exe) seg faults on Intel
+       Macintosh
 
-0024 - GP extension test (./generic_payload_extension.exe) seg faults on Intel Macintosh
-
-0025 - GP test (make run) produces incorrect results on Intel Macintosh (not correctly
-       detecting endianness)
+0025 - GP test (make run) produces incorrect results on Intel Macintosh (not
+       correctly detecting endianness)

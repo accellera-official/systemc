@@ -20,7 +20,7 @@ public:
 
   ~tlm_memory()
   {
-    delete mStorage;
+    delete[] mStorage;
   }
 
   void write(const unsigned char* v,
