@@ -1,3 +1,5 @@
+-------- 2007-10-18.01 -------- Charles
+       
 0001 - /include/tlm_h/tlm_generic_payload/tlm_array.h is an array class implementation.
        Is there a reason for using this over the stdlibc++ array class? If not, it should
        be removed and tlm_gp.h updated appropriately. If if needs to stay, it should either
@@ -49,4 +51,47 @@
 0013 - there is a circular include file reference
        /include/tlm_h/tlm_core/tlm_fifo/tlm_fifo.h
        /include/tlm_h/tlm_core/tlm_fifo/tlm_fifo_put_get.h
+       
+-------- 2007-10-19.01 -------- Olaf 
+       
+0014 - We should consistently use #include <systemc>, not #include <systemc.h>.
+       We stated in the meeting that we only supported SystemC versions >= 2.1.v1, so
+       I think we should use this include style to keep the SystemC namespaces intact.
 
+0015 - We should review the namespace structure in the kit. From my perspective
+       it's very unclean and dangerous to first define the classes in no namespace at all,
+       move them to an intermediate namespace using something like
+       "namespace foo{ #include...}" in the mid-level include files, and finally break
+       the intermediate namespaces up again and moving everything into the tlm
+       namespace in the top-level tlm.h. Got lost in the description? Me too.
+
+       The problem is that although we might state that users should only include the
+       top-level tlm.h, we cannot really enforce this rule. So, if somebody does a
+       #include "tlm_h/tlm_generic_payload/tlm_gp.h" because he's only interested
+       in the GP, he'd end up with the GP defined in a different namespace. This error
+       might not surface immediately, so it might be somewhat hard to catch.
+
+       Why not define everything properly in the tlm namespace from the beginning?
+       For the non-public stuff (like tlm_array, tlm_fifo(?) we could use e.g. namespace
+       tlm_utils, but that's really optional.
+
+0016 - I think we need to review the changes in the tlm_core directory from
+       TLM 1.0 to now. There are quite a few changes, and the question is if we
+       really want to have those, or if the changes are only artifacts of the draft 1
+       release that are obsolete now. I don't know.
+
+0017 - Can we rename the tlm_core directory to something more meaningful?
+       If I understand it correctly, then the tlm_core is supposed to hold the TLM 1.0
+       interfaces, which in my mind are not at the core of things for 2.0.
+
+-------- 2007-10-19.02 -------- Charles 
+       
+0018 - TLM 2 requirement 8.5 specifies the examples and unit tests (regressions) pass Purify.
+       Question: Who will be responsible for this?
+       
+0019 - TLM ports initiator/target ports do not appear to have the GP material integrated
+
+0020 - TLM ports master/slave need to be changed to initiator/target (2007-10-18 call)
+
+0021 - TLM 2 requriement 8.10 specifies that there are to be no open namespaces in the
+       include files.
