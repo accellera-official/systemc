@@ -24,7 +24,7 @@ run:  $(OBJ_NAME).exe
 	if [ -s diff.log ]; then echo "***ERROR:"; cat diff.log; else echo "OK"; fi
 
 $(OBJ_NAME).exe: $(OBJS)
-	$(GXX) -o $@ $(OBJS) $(LIBS)
+	$(LD) -o $@ $(OBJS) $(LIBS)
 
 $(OBJ_NAME).o: $(SRCDIR)/$(OBJ_NAME).cpp
 	$(GXX) $(CFLAGS) -c $< -o $@

@@ -29,7 +29,7 @@ run:  $(OBJ_NAME).exe
 	$(GXX) $(CFLAGS) -c $< -o $@
 
 $(OBJ_NAME).exe: $(OBJ_NAME).o
-	$(GXX) -o $@ $(OBJ_NAME).o $(LIBS)
+	$(LD) -o $@ $(OBJ_NAME).o $(LIBS)
 
 $(OBJ_NAME).o: $(SRCDIR)/$(OBJ_NAME).cpp
 	$(GXX) -c $(CFLAGS) $(SRCDIR)/$(OBJ_NAME).cpp
