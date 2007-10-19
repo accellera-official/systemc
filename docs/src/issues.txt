@@ -94,4 +94,4 @@
 0020 - TLM ports master/slave need to be changed to initiator/target (2007-10-18 call)
 
 0021 - TLM 2 requriement 8.10 specifies that there are to be no open namespaces in the
-       include files.
+       include files.Question: What are the implications on those in the headers?
