@@ -15,17 +15,17 @@
 
  *****************************************************************************/
 
-#ifndef SIMPLE_LT_SLAVE2_H
-#define SIMPLE_LT_SLAVE2_H
+#ifndef __SIMPLE_LT_SLAVE2_H__
+#define __SIMPLE_LT_SLAVE2_H__
 
-//#include "tlm.h"
+#include "tlm.h"
 #include "simple_slave_socket.h"
-//#include <systemc.h>
+//#include <systemc>
 #include <cassert>
 #include <vector>
 //#include <iostream>
 
-class SimpleLTSlave2 : public sc_module
+class SimpleLTSlave2 : public sc_core::sc_module
 {
 public:
   typedef tlm::tlm_generic_payload transaction_type;
@@ -38,8 +38,8 @@ public:
 
 public:
   SC_HAS_PROCESS(SimpleLTSlave2);
-  SimpleLTSlave2(sc_module_name name) :
-    sc_module(name),
+  SimpleLTSlave2(sc_core::sc_module_name name) :
+    sc_core::sc_module(name),
     socket("socket")
   {
     // register nb_transport method
@@ -50,7 +50,7 @@ public:
     // ADD_SOCKETPROCESS_TRANS_DBG(socket, transport_dbg);
   }
 
-  sync_enum_type myNBTransport(transaction_type& trans, phase_type& phase, sc_time& t)
+  sync_enum_type myNBTransport(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
   {
     assert(phase == tlm::BEGIN_REQ);
 
@@ -61,17 +61,17 @@ public:
     if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
       std::cout << name() << ": Received write request: A = "
                 << (void*)(int)address << ", D = " << (void*)data
-                << " @ " << sc_time_stamp() << std::endl;
+                << " @ " << sc_core::sc_time_stamp() << std::endl;
 
       *reinterpret_cast<unsigned int*>(&mMem[address]) = data;
-      t += sc_time(10, SC_NS);
+      t += sc_core::sc_time(10, sc_core::SC_NS);
 
     } else {
       std::cout << name() << ": Received read request: A = "
-                << (void*)(int)address << " @ " << sc_time_stamp() << std::endl;
+                << (void*)(int)address << " @ " << sc_core::sc_time_stamp() << std::endl;
 
       data = *reinterpret_cast<unsigned int*>(&mMem[address]);
-      t += sc_time(100, SC_NS);
+      t += sc_core::sc_time(100, sc_core::SC_NS);
     }
 
     trans.set_response_status(tlm::TLM_OK_RESP);
@@ -117,8 +117,8 @@ public:
       dmi_data.dmi_start_address = 0x0;
       dmi_data.dmi_end_address = 399;
       dmi_data.dmi_ptr = mMem;
-      dmi_data.read_latency = sc_time(100, SC_NS);
-      dmi_data.write_latency = sc_time(10, SC_NS);
+      dmi_data.read_latency = sc_core::sc_time(100, sc_core::SC_NS);
+      dmi_data.write_latency = sc_core::sc_time(10, sc_core::SC_NS);
       dmi_data.type = tlm::tlm_dmi::READ_WRITE;
       dmi_data.endianness =
         (tlm::hostHasLittleEndianness() ? tlm::TLM_LITTLE_ENDIAN :

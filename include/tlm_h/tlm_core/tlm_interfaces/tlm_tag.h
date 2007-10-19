@@ -20,8 +20,8 @@
 // Note to the LRM writer : This is part of the core TLM standard
 //
 
-#ifndef TLM_TAG_HEADER
-#define TLM_TAG_HEADER
+#ifndef __TLM_TAG_H__
+#define __TLM_TAG_H__
 
 template<class  T> class tlm_tag {};
 

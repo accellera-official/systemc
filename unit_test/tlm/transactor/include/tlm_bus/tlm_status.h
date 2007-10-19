@@ -17,8 +17,8 @@
 
 
 
-#ifndef _TLM_STATUS_H_
-#define _TLM_STATUS_H_
+#ifndef __TLM_STATUS_H__
+#define __TLM_STATUS_H__
 
   //----------------------------------------------------------------------------
   ///  Class status: status of a the TLM transaction (included in the response)
@@ -115,6 +115,6 @@
 
   };
 
-#endif /* _TLM_STATUS_H_ */
+#endif /* __TLM_STATUS_H__ */
 
 

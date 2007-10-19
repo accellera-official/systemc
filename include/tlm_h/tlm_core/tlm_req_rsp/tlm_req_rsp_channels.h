@@ -16,8 +16,8 @@
  *****************************************************************************/
 
 
-#ifndef TLM_REQ_RSP_CHANNELS
-#define TLM_REQ_RSP_CHANNELS
+#ifndef __TLM_REQ_RSP_CHANNELS_H__
+#define __TLM_REQ_RSP_CHANNELS_H__
 
 #include "tlm_h/tlm_core/tlm_adapters/tlm_adapters.h"
 #include "tlm_h/tlm_core/tlm_fifo/tlm_fifo.h"
@@ -27,27 +27,27 @@ template < typename REQ , typename RSP ,
 	   typename REQ_CHANNEL = tlm_fifo<REQ> , 
 	   typename RSP_CHANNEL = tlm_fifo<RSP> >
 
-class tlm_req_rsp_channel : public sc_module
+class tlm_req_rsp_channel : public sc_core::sc_module
 {
 public:
   // uni-directional slave interface
 
-  sc_export< tlm_fifo_get_if< REQ > > get_request_export;
-  sc_export< tlm_fifo_put_if< RSP > > put_response_export;
+  sc_core::sc_export< tlm_fifo_get_if< REQ > > get_request_export;
+  sc_core::sc_export< tlm_fifo_put_if< RSP > > put_response_export;
 
   // uni-directional master interface
 
-  sc_export< tlm_fifo_put_if< REQ > > put_request_export;
-  sc_export< tlm_fifo_get_if< RSP > > get_response_export;
+  sc_core::sc_export< tlm_fifo_put_if< REQ > > put_request_export;
+  sc_core::sc_export< tlm_fifo_get_if< RSP > > get_response_export;
 
   // master / slave interfaces
 
-  sc_export< tlm_master_if< REQ , RSP > > master_export;
-  sc_export< tlm_slave_if< REQ , RSP > > slave_export;
+  sc_core::sc_export< tlm_master_if< REQ , RSP > > master_export;
+  sc_core::sc_export< tlm_slave_if< REQ , RSP > > slave_export;
 
 
   tlm_req_rsp_channel( int req_size = 1 , int rsp_size = 1 ) :
-    sc_module( sc_module_name( sc_gen_unique_name("tlm_req_rsp_channel") ) ) ,
+    sc_core::sc_module( sc_core::sc_module_name( sc_core::sc_gen_unique_name("tlm_req_rsp_channel") ) ) ,
     request_fifo( req_size ) ,
     response_fifo( rsp_size ) ,
     master( request_fifo , response_fifo ) , 
@@ -58,9 +58,9 @@ public:
     
   }
 
-  tlm_req_rsp_channel( sc_module_name module_name ,
+  tlm_req_rsp_channel( sc_core::sc_module_name module_name ,
 		       int req_size = 1 , int rsp_size = 1 ) :
-    sc_module( module_name  ) , 
+    sc_core::sc_module( module_name  ) , 
     request_fifo( req_size ) ,
     response_fifo( rsp_size ) ,
     master( request_fifo , response_fifo ) , 
@@ -96,23 +96,23 @@ protected:
 template < typename REQ , typename RSP ,
 	   typename REQ_CHANNEL = tlm_fifo<REQ> , 
 	   typename RSP_CHANNEL = tlm_fifo<RSP> >
-class tlm_transport_channel : public sc_module
+class tlm_transport_channel : public sc_core::sc_module
 {
 public:
 
   // master transport interface
 
-  sc_export< tlm_transport_if< REQ , RSP > > target_export;
+  sc_core::sc_export< tlm_transport_if< REQ , RSP > > target_export;
 
   // slave interfaces
 
-  sc_export< tlm_fifo_get_if< REQ > > get_request_export;
-  sc_export< tlm_fifo_put_if< RSP > > put_response_export;
+  sc_core::sc_export< tlm_fifo_get_if< REQ > > get_request_export;
+  sc_core::sc_export< tlm_fifo_put_if< RSP > > put_response_export;
 
-  sc_export< tlm_slave_if< REQ , RSP > > slave_export;
+  sc_core::sc_export< tlm_slave_if< REQ , RSP > > slave_export;
 
   tlm_transport_channel() :
-    sc_module( sc_module_name( sc_gen_unique_name("transport_channel" ) ) ) ,
+    sc_core::sc_module( sc_core::sc_module_name( sc_core::sc_gen_unique_name("transport_channel" ) ) ) ,
     target_export("target_export") ,
     req_rsp( "req_rsp" , 1 , 1 ) ,
     t2m("ts2m")
@@ -120,8 +120,8 @@ public:
     do_binding();
   }
 
-  tlm_transport_channel( sc_module_name nm ) :
-    sc_module( nm ) ,
+  tlm_transport_channel( sc_core::sc_module_name nm ) :
+    sc_core::sc_module( nm ) ,
     target_export("target_export") ,
     req_rsp( "req_rsp" , 1 , 1 ) ,
     t2m("tsm" )

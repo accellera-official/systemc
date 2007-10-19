@@ -16,8 +16,8 @@
   Author: Olaf Scheufen
 *****************************************************************************/
 
-#ifndef TLM_ARRAY_HEADER
-#define TLM_ARRAY_HEADER
+#ifndef __TLM_ARRAY_H__
+#define __TLM_ARRAY_H__
 
 //
 // To the LRM writer: the below class is an artifact of the tlm_generic_payload
@@ -162,4 +162,4 @@ protected:
 template <typename T>
 const char* const tlm_array<T>::kind_string = "tlm_array";
 
-#endif /* TLM_ARRAY_HEADER */
+#endif /* __TLM_ARRAY_H__ */

@@ -21,8 +21,8 @@
 // useful in the context of tlm_fifo.
 //
 
-#ifndef TLM_FIFO_IFS_HEADER
-#define TLM_FIFO_IFS_HEADER
+#ifndef __TLM_FIFO_IFS_H__
+#define __TLM_FIFO_IFS_H__
 
 // 
 // Fifo specific interfaces
@@ -33,7 +33,7 @@
 // Fifo Debug Interface
 
 template< typename T >
-class tlm_fifo_debug_if : public virtual sc_interface
+class tlm_fifo_debug_if : public virtual sc_core::sc_interface
 {
 public:
   virtual int used() const = 0;
@@ -65,7 +65,7 @@ class tlm_fifo_get_if :
   public virtual tlm_get_peek_if<T> ,
   public virtual tlm_fifo_debug_if<T> {};
 
-class tlm_fifo_config_size_if : public virtual sc_interface
+class tlm_fifo_config_size_if : public virtual sc_core::sc_interface
 {
 public:
   virtual void nb_expand( unsigned int n = 1 ) = 0;

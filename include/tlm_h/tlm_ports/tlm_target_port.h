@@ -15,15 +15,15 @@
 
 *****************************************************************************/
 
-#ifndef _TLM_TARGET_PORT_H_
-#define _TLM_TARGET_PORT_H_
+#ifndef __TLM_TARGET_PORT_H__
+#define __TLM_TARGET_PORT_H__
 
 /*------------------------------------------------------------------------------
  * Includes
  *----------------------------------------------------------------------------*/
 #include <vector>
 
-//#include "systemc.h"
+//#include <systemc>
 
 #include "tlm_target_port_base.h"
 
@@ -41,7 +41,7 @@
 //----------------------------------------------------------------------------
 template<typename IF>
 class tlm_target_port : 
-  public sc_export<IF>,
+  public sc_core::sc_export<IF>,
   public tlm_target_port_base {
 
   typedef IF interface_type;
@@ -125,7 +125,7 @@ protected:
 /**  Returns true and issues an error message if the port is already bound to an interface during the 
      binding of other_if (called by bind(sc_export))
 **/
-  bool is_already_bound(sc_interface * other_if);
+  bool is_already_bound(sc_core::sc_interface * other_if);
 
 };
 
@@ -136,7 +136,7 @@ protected:
 
 template<typename IF>
 tlm_target_port<IF>::tlm_target_port(const char * name) :
-  sc_export<interface_type>(name)
+  sc_core::sc_export<interface_type>(name)
 {}
 
 
@@ -145,18 +145,18 @@ tlm_target_port<IF>::tlm_target_port(const char * name) :
    binding of other_if (called by bind(sc_export))
 */
 template<typename IF>
-bool tlm_target_port<IF>::is_already_bound(sc_interface * other_if) {
-  if (dynamic_cast<sc_interface * >(this->get_interface()) == NULL) return(false);
+bool tlm_target_port<IF>::is_already_bound(sc_core::sc_interface * other_if) {
+  if (dynamic_cast<sc_core::sc_interface * >(this->get_interface()) == NULL) return(false);
   else {
     std::string if_name1,if_name2 ;
-    sc_object * tmp = dynamic_cast<sc_object * >(other_if);
+    sc_core::sc_object * tmp = dynamic_cast<sc_core::sc_object * >(other_if);
     if (tmp) if_name1 = tmp->name();
     else if_name1 = "unnamed interface (non sc_object)";
-    tmp = dynamic_cast<sc_object * >(this->get_interface());
+    tmp = dynamic_cast<sc_core::sc_object * >(this->get_interface());
     if (tmp) if_name2 = tmp->name();
     else if_name2 = "unnamed interface (non sc_object)";
 
-    std::string msg(sc_object::name());
+    std::string msg(sc_core::sc_object::name());
     msg += (std::string)(": tlm_target_port warning, Can't bind to \"") + if_name1;
     msg += (std::string)("\" interface,the target port is already bound to this interface: \"");
     msg += if_name2 + (std::string)("\"\n");
@@ -199,13 +199,13 @@ void
 tlm_target_port<IF>::end_of_elaboration() {
 
 #ifdef TLM_PORT_DEBUG
-  printf("DEBUG\t\t%s: Registered target port list :\n",sc_object::name());
+  printf("DEBUG\t\t%s: Registered target port list :\n",sc_core::sc_object::name());
   for(typename std::vector<target_port_base_type *>::iterator port = get_target_port_list().begin();
       port != get_target_port_list().end();
       port++) {
-    printf("DEBUG\t\t%s: \t- %s\n",sc_object::name(),(static_cast<target_port_type * >(*port))->name());      
+    printf("DEBUG\t\t%s: \t- %s\n",sc_core::sc_object::name(),(static_cast<target_port_type * >(*port))->name());      
   }
-  printf("DEBUG\t\t%s: -------------------------------------------------------\n",sc_object::name());
+  printf("DEBUG\t\t%s: -------------------------------------------------------\n",sc_core::sc_object::name());
 #endif
     
 }
@@ -228,7 +228,7 @@ tlm_target_port<IF>::bind(target_port_type& target_port_)
     }
       
     // Calls sc_export standard bind method
-    sc_export<interface_type>::bind(target_port_);
+    sc_core::sc_export<interface_type>::bind(target_port_);
   }
 }
 
@@ -251,11 +251,11 @@ tlm_target_port<IF>::bind(tlm_target_port<OTHER_IF>& target_port_) {
       }
 	
       // Calls sc_export standard bind method 
-      sc_export<interface_type>::bind(*other_if);
+      sc_core::sc_export<interface_type>::bind(*other_if);
     }
   }
   else {
-    std::string msg(sc_object::name());
+    std::string msg(sc_core::sc_object::name());
     msg += (std::string)(": tlm_target_port error, incompatible interface detected during the binding tlm_target_port  \"") + (std::string)(this->name());
     msg += (std::string)" to tlm_target_port \"" + (std::string)(target_port_.name()) +(std::string)("\"\n") ;
     SC_REPORT_ERROR("bind export to export failed",msg.c_str());
@@ -274,14 +274,14 @@ template<typename IF>
 void 
 tlm_target_port<IF>::bind(interface_type& interface_) {
   // Calls sc_export standard bind method
-  sc_export<interface_type>::bind(interface_);
+  sc_core::sc_export<interface_type>::bind(interface_);
 }
   
 // operator() (interface_type): just calls bind(interface_type)
 template<typename IF>
 void 
 tlm_target_port<IF>::operator() (interface_type& interface_) {
-  sc_export<interface_type>::bind(interface_); 
+  sc_core::sc_export<interface_type>::bind(interface_); 
 }
 
-#endif /* _TLM_TARGET_PORT_H_ */
+#endif /* __TLM_TARGET_PORT_H__ */

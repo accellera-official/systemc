@@ -15,8 +15,8 @@
 
  *****************************************************************************/
 
-#ifndef TLM_FW_BW_IFS_HEADER
-#define TLM_FW_BW_IFS_HEADER
+#ifndef __TLM_FW_BW_IFS_H__
+#define __TLM_FW_BW_IFS_H__
 
 #include "tlm_h/tlm_generic_payload/tlm_generic_payload.h"
 #include <systemc>
@@ -32,13 +32,13 @@ enum tlm_sync_enum { TLM_REJECTED, TLM_SYNC, TLM_SYNC_CONTINUE, TLM_COMPLETED };
 // Basic interfaces
 ////////////////////////////////////////////////////////////////////////////
 template <typename TRANS = tlm_generic_payload, typename PHASE = tlm_phase>
-class tlm_nonblocking_transport_if : public virtual sc_interface {
+class tlm_nonblocking_transport_if : public virtual sc_core::sc_interface {
 public:
-  virtual tlm_sync_enum nb_transport(TRANS& trans, PHASE& phase, sc_time& t) = 0;
+  virtual tlm_sync_enum nb_transport(TRANS& trans, PHASE& phase, sc_core::sc_time& t) = 0;
 };
 
 template <typename TRANS = tlm_generic_payload>
-class tlm_blocking_transport_if : public virtual sc_interface {
+class tlm_blocking_transport_if : public virtual sc_core::sc_interface {
 public:
   virtual void b_transport(TRANS& trans) = 0;
 };
@@ -88,7 +88,7 @@ public:
 // Note that the DMI hint optimization is completely optional and every
 // initiator model is free to ignore the DMI hint.
 
-class tlm_fw_direct_mem_if : public virtual sc_interface
+class tlm_fw_direct_mem_if : public virtual sc_core::sc_interface
 {
 public:
   virtual bool get_direct_mem_ptr(const sc_dt::uint64& address, bool forReads,
@@ -114,7 +114,7 @@ public:
 // - Under no circumstances a model is allowed to call the get_direct_mem_ptr
 //   from within the invalidate_direct_mem_ptr method, directly or indirectly.
 //
-class tlm_bw_direct_mem_if : public virtual sc_interface
+class tlm_bw_direct_mem_if : public virtual sc_core::sc_interface
 {
 public:
   virtual void invalidate_direct_mem_ptr(bool invalidate_all,
@@ -144,7 +144,7 @@ public:
 //   this number must be <= num_bytes. Thus, a slave can safely return 0 if it
 //   does not support debug transactions.
 //
-class tlm_transport_dbg_if : public virtual sc_interface
+class tlm_transport_dbg_if : public virtual sc_core::sc_interface
 {
 public:
   // The return value of defines the number of bytes successfully
@@ -185,4 +185,4 @@ class tlm_bw_transport_if
   : public virtual tlm_bw_direct_mem_if
 {};
 
-#endif /* TLM_FW_BW_IFS_HEADER */
+#endif /* __TLM_FW_BW_IFS_H__ */

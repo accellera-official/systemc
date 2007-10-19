@@ -1,9 +1,9 @@
 #pragma once
 
-#ifndef TLM_ANNOTATED_HEADER
-#define TLM_ANNOTATED_HEADER
+#ifndef __TLM_ANNOTATED_H__
+#define __TLM_ANNOTATED_H__
 
-//#include <systemc.h>
+//#include <systemc>
 
 #include <map>
 #include <deque>

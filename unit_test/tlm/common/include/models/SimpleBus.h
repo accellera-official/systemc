@@ -15,11 +15,11 @@
 
  *****************************************************************************/
 
-#ifndef SIMPLEBUS_H
-#define SIMPLEBUS_H
+#ifndef __SIMPLEBUS_H__
+#define __SIMPLEBUS_H__
 
-//#include <systemc.h>
-//#include "tlm.h"
+//#include <systemc>
+#include "tlm.h"
 
 #include "simple_slave_socket.h"
 #include "simple_master_socket.h"
@@ -28,7 +28,7 @@
 #include "MyPEQ.h"
 
 template <int NR_OF_MASTERS, int NR_OF_SLAVES>
-class SimpleBus : public sc_module
+class SimpleBus : public sc_core::sc_module
 {
 public:
   typedef tlm::tlm_generic_payload transaction_type;
@@ -43,8 +43,8 @@ public:
 
 public:
   SC_HAS_PROCESS(SimpleBus);
-  SimpleBus(sc_module_name name) :
-    sc_module(name),
+  SimpleBus(sc_core::sc_module_name name) :
+    sc_core::sc_module(name),
     mAbstraction(TLM_LT),
     mRequestPEQ("requestPEQ"),
     mResponsePEQ("responsePEQ")
@@ -131,7 +131,7 @@ public:
   // - forward each nb_transport call to the target/initiator
   //
 
-  sync_enum_type masterNBTransportLT(transaction_type& trans, phase_type& phase, sc_time& t)
+  sync_enum_type masterNBTransportLT(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
   {
     master_socket_type* decodeSocket;
 
@@ -167,7 +167,7 @@ public:
     return r;
   }
 
-  sync_enum_type slaveNBTransportLT(transaction_type& trans, phase_type& phase, sc_time& t)
+  sync_enum_type slaveNBTransportLT(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
   {
     if (phase != tlm::END_REQ && phase != tlm::BEGIN_RESP) {
       std::cout << "ERROR: '" << name()
@@ -209,7 +209,7 @@ public:
         it->second.to = decodeSocket;
 
         phase_type phase = tlm::BEGIN_REQ;
-        sc_time t = SC_ZERO_TIME;
+        sc_core::sc_time t = sc_core::SC_ZERO_TIME;
 
         // FIXME: No limitation on number of pending transactions
         //        All slaves (that return false) must support multiple transactions
@@ -235,7 +235,7 @@ public:
           }
 
           phase = tlm::END_REQ;
-          t = SC_ZERO_TIME;
+          t = sc_core::SC_ZERO_TIME;
           (*it->second.from)->nb_transport(*trans, phase, t);
           break;
 
@@ -269,7 +269,7 @@ public:
         assert(it != mPendingTransactions.end());
 
         phase_type phase = tlm::BEGIN_RESP;
-        sc_time t = SC_ZERO_TIME;
+        sc_core::sc_time t = sc_core::SC_ZERO_TIME;
 
         switch ((*it->second.from)->nb_transport(*trans, phase, t)) {
         case tlm::TLM_COMPLETED:
@@ -301,7 +301,7 @@ public:
     }
   }
 
-  sync_enum_type masterNBTransportAT(transaction_type& trans, phase_type& phase, sc_time& t)
+  sync_enum_type masterNBTransportAT(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
   {
     if (phase == tlm::BEGIN_REQ) {
       addPendingTransaction(trans, 0);
@@ -334,7 +334,7 @@ public:
     return tlm::TLM_SYNC;
   }
 
-  sync_enum_type slaveNBTransportAT(transaction_type& trans, phase_type& phase, sc_time& t)
+  sync_enum_type slaveNBTransportAT(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
   {
     if (phase != tlm::END_REQ && phase != tlm::BEGIN_RESP) {
       std::cout << "ERROR: '" << name()
@@ -355,7 +355,7 @@ public:
   // interface methods
   //
 
-  sync_enum_type masterNBTransport(transaction_type& trans, phase_type& phase, sc_time& t)
+  sync_enum_type masterNBTransport(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
   {
     if (mAbstraction == TLM_LT) {
       return masterNBTransportLT(trans, phase, t);
@@ -365,7 +365,7 @@ public:
     }
   }
 
-  sync_enum_type slaveNBTransport(transaction_type& trans, phase_type& phase, sc_time& t)
+  sync_enum_type slaveNBTransport(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
   {
     if (mAbstraction == TLM_LT) {
       return slaveNBTransportLT(trans, phase, t);
@@ -485,12 +485,12 @@ private:
   PendingTransactions mPendingTransactions;
 
   MyPEQ mRequestPEQ;
-  sc_event mBeginRequestEvent;
-  sc_event mEndRequestEvent;
+  sc_core::sc_event mBeginRequestEvent;
+  sc_core::sc_event mEndRequestEvent;
 
   MyPEQ mResponsePEQ;
-  sc_event mBeginResponseEvent;
-  sc_event mEndResponseEvent;
+  sc_core::sc_event mBeginResponseEvent;
+  sc_core::sc_event mEndResponseEvent;
 };
 
 #endif

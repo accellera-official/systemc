@@ -18,8 +18,8 @@
  *****************************************************************************/
 
 
-#ifndef TLM_ANNOTATED_MASTER_SLAVE_IFS_HEADER
-#define TLM_ANNOTATED_MASTER_SLAVE_IFS_HEADER
+#ifndef __TLM_ANNOTATED_MASTER_SLAVE_IFS_H__
+#define __TLM_ANNOTATED_MASTER_SLAVE_IFS_H__
 
 // 
 // req/rsp combined interfaces
@@ -27,6 +27,7 @@
 
 #include "tlm_h/tlm_annotated/tlm_annotated_ifs/tlm_annotated_ifs.h"
 
+// TODO: delete the following:
 using tlm_core::tlm_nonblocking_master_if;
 using tlm_core::tlm_nonblocking_slave_if;
 using tlm_core::tlm_master_if;

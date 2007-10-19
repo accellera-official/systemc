@@ -15,15 +15,15 @@
 
 *****************************************************************************/
 
-#ifndef _TLM_INITIATOR_PORT_H_
-#define _TLM_INITIATOR_PORT_H_
+#ifndef __TLM_INITIATOR_PORT_H__
+#define __TLM_INITIATOR_PORT_H__
 
 /*------------------------------------------------------------------------------
  * Includes
  *----------------------------------------------------------------------------*/
 #include <vector>
 
-//#include "systemc.h"
+//#include "systemc"
 
 #include "tlm_initiator_port_base.h"
 #include "tlm_target_port.h"
@@ -48,7 +48,7 @@
 //----------------------------------------------------------------------------
 template<typename IF,int N = 1>
 class tlm_initiator_port : 
-  public sc_port<IF,N>,
+  public sc_core::sc_port<IF,N>,
   public tlm_initiator_port_base {
 
   typedef IF interface_type;
@@ -121,10 +121,10 @@ public:
 
 
   /// bind(sc_port) overridden with port registration 
-  void bind(sc_port_b<interface_type>& port_);
+  void bind(sc_core::sc_port_b<interface_type>& port_);
   
   /// operator() (sc_port) overridden with port registration 
-  void operator() (sc_port_b<interface_type>& port_);
+  void operator() (sc_core::sc_port_b<interface_type>& port_);
     
     
   //---------------------------------------------------------
@@ -145,7 +145,7 @@ protected:
 /** Returns true and issues an error message and return true if the same interface is bound 
     two times throught 2 differents target port. 
 **/
-  bool is_interface_bound_twice(sc_export_base& target_port_);
+  bool is_interface_bound_twice(sc_core::sc_export_base& target_port_);
 
 };
 
@@ -156,7 +156,7 @@ protected:
 //--------------
 template<typename IF,int N>
 tlm_initiator_port<IF,N>::tlm_initiator_port(const char * name) :
-  sc_port<interface_type,N>(name)
+  sc_core::sc_port<interface_type,N>(name)
 {}
 
   
@@ -164,15 +164,15 @@ tlm_initiator_port<IF,N>::tlm_initiator_port(const char * name) :
     two times throught 2 differents target port. 
 **/
 template<typename IF,int N>
-bool tlm_initiator_port<IF,N>::is_interface_bound_twice(sc_export_base& target_port_) {
+bool tlm_initiator_port<IF,N>::is_interface_bound_twice(sc_core::sc_export_base& target_port_) {
   for(int i=0;i<this->size();i++) {
     if ((*this)[i] == target_port_.get_interface()) {
-      sc_object * tmp = dynamic_cast<sc_object * >(target_port_.get_interface());
+      sc_core::sc_object * tmp = dynamic_cast<sc_core::sc_object * >(target_port_.get_interface());
       std::string if_name;
       if (tmp) if_name = tmp->name();
       else if_name = "unnamed interface/non sc_object";
 
-      std::string msg(sc_object::name());
+      std::string msg(sc_core::sc_object::name());
       msg += (std::string)(": tlm_initiator_port warning, while binding the interface \"");
       msg += if_name + (std::string)("\" exported by target port ");
       msg += (std::string)(target_port_.name()) + (std::string)(": the initiator port is already bound to this interface\n");
@@ -236,35 +236,35 @@ void
 tlm_initiator_port<IF,N>::end_of_elaboration() {
 
 #ifdef TLM_PORT_DEBUG
-  printf("DEBUG\t\t%s: Registered initiator port list :\n",sc_object::name());
+  printf("DEBUG\t\t%s: Registered initiator port list :\n",sc_core::sc_object::name());
   for(typename std::vector<initiator_port_base_type *>::iterator port = get_initiator_port_list().begin();
       port != get_initiator_port_list().end();
       port++) {
-    printf("DEBUG\t\t%s: \t- %s\n",sc_object::name(),(static_cast<initiator_port_type * >(*port))->name());
+    printf("DEBUG\t\t%s: \t- %s\n",sc_core::sc_object::name(),(static_cast<initiator_port_type * >(*port))->name());
       
   }
-  printf("DEBUG\t\t%s: Registered initiator reversed port list :\n",sc_object::name());
+  printf("DEBUG\t\t%s: Registered initiator reversed port list :\n",sc_core::sc_object::name());
   for(typename std::vector<initiator_port_base_type *>::iterator port = get_reversed_initiator_port_list().begin();
       port != get_reversed_initiator_port_list().end();
       port++) {
-    printf("DEBUG\t\t%s: \t- %s\n",sc_object::name(),(static_cast<initiator_port_type * >(*port))->name());
+    printf("DEBUG\t\t%s: \t- %s\n",sc_core::sc_object::name(),(static_cast<initiator_port_type * >(*port))->name());
       
   }
 
-  printf("DEBUG\t\t%s: Registered target port list:\n",sc_object::name());
+  printf("DEBUG\t\t%s: Registered target port list:\n",sc_core::sc_object::name());
   for(typename std::vector<target_port_base_type *>::iterator port = get_target_port_list().begin();
       port != get_target_port_list().end();
       port++) {
-    printf("DEBUG\t\t%s: \t- %s\n",sc_object::name(),(static_cast<target_port_type * >(*port))->name());
+    printf("DEBUG\t\t%s: \t- %s\n",sc_core::sc_object::name(),(static_cast<target_port_type * >(*port))->name());
       
   }
 
-  printf("DEBUG\t\t%s: -------------------------------------------------------\n",sc_object::name());
+  printf("DEBUG\t\t%s: -------------------------------------------------------\n",sc_core::sc_object::name());
 
 #endif
   // Checks the target port list
   if ((!get_target_port_list().size()) && this->size()) {
-    std::string msg(sc_object::name());
+    std::string msg(sc_core::sc_object::name());
     msg += (std::string)(": tlm_initiator_port error, target port list is empty. Initiator port should be bound at least to one target port\n");
     SC_REPORT_ERROR("port end of elaboration",msg.c_str());
   }
@@ -286,7 +286,7 @@ tlm_initiator_port<IF,N>::bind(target_port_type& target_port_) {
     register_target_port(&target_port_);
     
   // Calls sc_port standard bind() method 
-  sc_port_b<interface_type>::bind(target_port_);
+  sc_core::sc_port_b<interface_type>::bind(target_port_);
 }
 
 
@@ -303,10 +303,10 @@ tlm_initiator_port<IF,N>::bind(tlm_target_port<OTHER_IF>& target_port_) {
       this->register_target_port(&target_port_);
 
     // Calls sc_port standard bind() method 
-    sc_port_b<interface_type>::bind(*other_if);
+    sc_core::sc_port_b<interface_type>::bind(*other_if);
   }
   else {	
-    std::string msg(sc_object::name());
+    std::string msg(sc_core::sc_object::name());
     msg += (std::string)(": tlm_initiator_port error, incompatible interface detected during the binding tlm_initiator_port  \"") + (std::string)(this->name());
     msg += (std::string)" to tlm_target_port \"" + (std::string)(target_port_.name()) +(std::string)("\"\n") ;
     SC_REPORT_ERROR("bind export to export failed",msg.c_str());
@@ -329,7 +329,7 @@ tlm_initiator_port<IF,N>::operator() (target_port_type& target_port_) {
 //---------------------------------------------------------
 template<typename IF,int N>
 void 
-tlm_initiator_port<IF,N>::bind(sc_port_b<interface_type>& port_) {
+tlm_initiator_port<IF,N>::bind(sc_core::sc_port_b<interface_type>& port_) {
   // Register the bound port in the regular list
   this->register_initiator_port(static_cast<initiator_port_type *>(&port_));
 
@@ -341,7 +341,7 @@ tlm_initiator_port<IF,N>::bind(sc_port_b<interface_type>& port_) {
   }
 
   // Calls sc_port standard bind() method 
-  sc_port_b<interface_type>::bind(port_);
+  sc_core::sc_port_b<interface_type>::bind(port_);
 }
   
 //---------------------------------------------------------
@@ -349,7 +349,7 @@ tlm_initiator_port<IF,N>::bind(sc_port_b<interface_type>& port_) {
 //---------------------------------------------------------
 template<typename IF,int N>
 void  
-tlm_initiator_port<IF,N>::operator() (sc_port_b<interface_type>& port_) {
+tlm_initiator_port<IF,N>::operator() (sc_core::sc_port_b<interface_type>& port_) {
   bind(port_);
 }
 
@@ -365,7 +365,7 @@ template<typename IF,int N>
 void 
 tlm_initiator_port<IF,N>::bind(interface_type& interface_) {
   // Calls sc_port standard bind method
-  sc_port_b<interface_type>::bind(interface_);    
+  sc_core::sc_port_b<interface_type>::bind(interface_);    
 }
 
 //---------------------------------------------------------
@@ -374,7 +374,7 @@ tlm_initiator_port<IF,N>::bind(interface_type& interface_) {
 template<typename IF,int N>
 void 
 tlm_initiator_port<IF,N>::operator() (interface_type& interface_) {
-  sc_port_b<interface_type>::bind(interface_); 
+  sc_core::sc_port_b<interface_type>::bind(interface_); 
 }
 
-#endif /* _TLM_INITIATOR_PORT_H_ */
+#endif /* __TLM_INITIATOR_PORT_H__ */

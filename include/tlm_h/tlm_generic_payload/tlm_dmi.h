@@ -15,10 +15,12 @@
 
  *****************************************************************************/
 
+#ifndef __TLM_DMI_H__
+#define __TLM_DMI_H__
+
 #include <systemc>
 
-#ifndef TLM_DMI_HEADER
-#define TLM_DMI_HEADER
+// TODO: where do we get TLM_LITTLE_ENDIAN?
 
 class tlm_dmi
 {

@@ -19,23 +19,23 @@
 #define MY_PEQ_H
 
 //#include "tlm.h"
-//#include <systemc.h>
+#include <systemc>
 #include <map>
 
-class MyPEQ : public sc_module
+class MyPEQ : public sc_core::sc_module
 {
 public:
   typedef tlm::tlm_generic_payload transaction_type;
 
 public:
   SC_HAS_PROCESS(MyPEQ);
-  MyPEQ(sc_module_name name) : sc_module(name)
+  MyPEQ(sc_core::sc_module_name name) : sc_core::sc_module(name)
   {
   }
 
-  void notify(transaction_type& trans, sc_time& t)
+  void notify(transaction_type& trans, sc_core::sc_time& t)
   {
-    mScheduledEvents.insert(std::make_pair(t + sc_time_stamp(), &trans));
+    mScheduledEvents.insert(std::make_pair(t + sc_core::sc_time_stamp(), &trans));
     mEvent.notify(t);
   }
 
@@ -46,7 +46,7 @@ public:
       return 0;
     }
 
-    sc_time now = sc_time_stamp();
+    sc_core::sc_time now = sc_core::sc_time_stamp();
     if (mScheduledEvents.begin()->first <= now) {
       transaction_type* trans = mScheduledEvents.begin()->second;
       mScheduledEvents.erase(mScheduledEvents.begin());
@@ -58,14 +58,14 @@ public:
     return 0;
   }
 
-  sc_event& getEvent()
+  sc_core::sc_event& getEvent()
   {
     return mEvent;
   }
 
 private:
-  std::multimap<sc_time, transaction_type*> mScheduledEvents;
-  sc_event mEvent;
+  std::multimap<sc_core::sc_time, transaction_type*> mScheduledEvents;
+  sc_core::sc_event mEvent;
 };
 
 

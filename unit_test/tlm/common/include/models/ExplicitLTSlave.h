@@ -15,18 +15,18 @@
 
  *****************************************************************************/
 
-#ifndef EXPLICIT_LT_SLAVE_H
-#define EXPLICIT_LT_SLAVE_H
+#ifndef __EXPLICIT_LT_SLAVE_H__
+#define __EXPLICIT_LT_SLAVE_H__
 
-//#include "tlm.h"
+#include "tlm.h"
 #include "simple_slave_socket.h"
-//#include <systemc.h>
+//#include <systemc>
 #include <cassert>
 #include <vector>
 #include <queue>
 //#include <iostream>
 
-class ExplicitLTSlave : public sc_module
+class ExplicitLTSlave : public sc_core::sc_module
 {
 public:
   typedef tlm::tlm_generic_payload transaction_type;
@@ -39,8 +39,8 @@ public:
 
 public:
   SC_HAS_PROCESS(ExplicitLTSlave);
-  ExplicitLTSlave(sc_module_name name) :
-    sc_module(name),
+  ExplicitLTSlave(sc_core::sc_module_name name) :
+    sc_core::sc_module(name),
     socket("socket"),
     mCurrentTransaction(0)
   {
@@ -51,7 +51,7 @@ public:
     SC_THREAD(beginResponse)
   }
 
-  sync_enum_type myNBTransport(transaction_type& trans, phase_type& phase, sc_time& t)
+  sync_enum_type myNBTransport(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
   {
     if (phase == tlm::BEGIN_REQ) {
       sc_dt::uint64 address = trans.get_address();
@@ -65,7 +65,7 @@ public:
       if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
         std::cout << name() << ": Received write request: A = "
                 << (void*)(int)address << ", D = " << (void*)data
-                << " @ " << sc_time_stamp() << std::endl;
+                << " @ " << sc_core::sc_time_stamp() << std::endl;
 
         *reinterpret_cast<unsigned int*>(&mMem[address]) = data;
 
@@ -79,12 +79,12 @@ public:
 
       } else {
         std::cout << name() << ": Received read request: A = "
-                 << (void*)(int)address << " @ " << sc_time_stamp() << std::endl;
+                 << (void*)(int)address << " @ " << sc_core::sc_time_stamp() << std::endl;
 
         data = *reinterpret_cast<unsigned int*>(&mMem[address]);
 
         // Finish transaction (use timing annotation)
-        t += sc_time(100, SC_NS);
+        t += sc_core::sc_time(100, sc_core::SC_NS);
         return tlm::TLM_COMPLETED;
       }
 
@@ -109,7 +109,7 @@ public:
       assert(mCurrentTransaction);
       // start response phase
       phase_type phase = tlm::BEGIN_RESP;
-      sc_time t = SC_ZERO_TIME;
+      sc_core::sc_time t = sc_core::SC_ZERO_TIME;
 
       // Set response data
       mCurrentTransaction->set_response_status(tlm::TLM_OK_RESP);
@@ -122,7 +122,7 @@ public:
 
       // We are synchronized, we can read/write sc_signals, wait,...
       // Wait before sending the response
-      wait(50, SC_NS);
+      wait(50, sc_core::SC_NS);
 
       if (socket->nb_transport(*mCurrentTransaction, phase, t)) {
         mCurrentTransaction = 0;
@@ -160,7 +160,7 @@ public:
 
 private:
   unsigned char mMem[400];
-  sc_event mResponseEvent;
+  sc_core::sc_event mResponseEvent;
   transaction_type* mCurrentTransaction;
 };
 

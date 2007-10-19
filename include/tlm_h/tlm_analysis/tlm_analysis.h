@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef ANALYSIS_HEADER
-#define ANALYSIS_HEADER
+#ifndef __TLM_ANALYSIS_H__
+#define __TLM_ANALYSIS_H__
 
 //#include "tlm_core.h"
 #include <deque>
@@ -17,5 +17,6 @@ namespace analysis  /// TLM analysis header sub group
 
 }
 
-#endif /* ANALYSIS_HEADER */
+#endif 
+
 

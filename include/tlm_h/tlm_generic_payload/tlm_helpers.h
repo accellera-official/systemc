@@ -1,5 +1,5 @@
-#ifndef TLM_HELPERS_HEADER
-#define TLM_HELPERS_HEADER
+#ifndef __TLM_HELPERS_H__
+#define __TLM_HELPERS_H__
 
 //#include <sys/param.h>
 //#include <cstring>
@@ -83,4 +83,4 @@ inline DT swapIfNeeded(DT word, tlm_endianness endianness)
   }
 }
 
-#endif /* TLM_HELPERS_HEADER */
+#endif /* __TLM_HELPERS_H__ */

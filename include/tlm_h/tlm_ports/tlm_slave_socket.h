@@ -15,11 +15,11 @@
 
  *****************************************************************************/
 
-#ifndef TLM_SLAVE_SOCKET_H
-#define TLM_SLAVE_SOCKET_H
+#ifndef __TLM_SLAVE_SOCKET_H__
+#define __TLM_SLAVE_SOCKET_H__
 
 #include "tlm_h/tlm_annotated/tlm_fw_bw_ifs/tlm_fw_bw_ifs.h"
-//#include <systemc.h>
+//#include <systemc>
 
 using tlm_annotated::tlm_fw_nb_transport_if;
 using tlm_annotated::tlm_bw_nb_transport_if;
@@ -31,13 +31,13 @@ template <unsigned int BUSWIDTH,
 template <unsigned int BUSWIDTH = 32,
           typename FW_IF = tlm_fw_nb_transport_if<>,
           typename BW_IF = tlm_bw_nb_transport_if<> >
-class tlm_slave_socket : public sc_export<FW_IF>
+class tlm_slave_socket : public sc_core::sc_export<FW_IF>
 {
 public:
   typedef FW_IF fw_interface_type;
   typedef BW_IF bw_interface_type;
-  typedef sc_port<bw_interface_type> port_type;
-  typedef sc_export<fw_interface_type> export_type;
+  typedef sc_core::sc_port<bw_interface_type> port_type;
+  typedef sc_core::sc_export<fw_interface_type> export_type;
   typedef tlm_master_socket<BUSWIDTH,
                             fw_interface_type,
                             bw_interface_type> master_socket_type;

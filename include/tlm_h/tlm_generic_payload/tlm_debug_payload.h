@@ -17,25 +17,26 @@
 
 #include <systemc>
 
-#ifndef TLM_DEBUG_PAYLOAD_HEADER
-#define TLM_DEBUG_PAYLOAD_HEADER
+#ifndef __TLM_DEBUG_PAYLOAD_H__
+#define __TLM_DEBUG_PAYLOAD_H__
 
 class tlm_debug_payload
 {
 public:
- // Start address of the transaction:
- sc_dt::uint64 address;
+    // Start address of the transaction:
+    sc_dt::uint64 address;
+    
+    // Indication of a read or write access:
+    bool do_read;
+    
+    // Number of bytes to transfer:
+    unsigned int num_bytes;
+    
+    // Pointer to the data array. Note that the data is always
+    // organized in the endianness of the host machine (like
+    // the data pointer in the generic payload):
+    unsigned char* data;
+};
 
- // Indication of a read or write access:
- bool do_read;
+#endif /* __TLM_DEBUG_PAYLOAD_H__ */
 
- // Number of bytes to transfer:
- unsigned int num_bytes;
-
- // Pointer to the data array. Note that the data is always
- // organized in the endianness of the host machine (like
- // the data pointer in the generic payload):
- unsigned char* data;
-}; 
-
-#endif /* TLM_DEBUG_PAYLOAD_HEADER */

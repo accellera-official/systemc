@@ -16,16 +16,16 @@
  *****************************************************************************/
 
 
-#ifndef _TLM_INITIATOR_PORT_BASE_H_
-#define _TLM_INITIATOR_PORT_BASE_H_
+#ifndef __TLM_INITIATOR_PORT_BASE_H__
+#define __TLM_INITIATOR_PORT_BASE_H__
 
 
-/*------------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------
  * Includes
- *----------------------------------------------------------------------------*/
+ *---------------------------------------------------------------------------*/
 #include <vector>
 
-//#include "systemc.h"
+//#include <systemc>
 
 #include "tlm_target_port_base.h"
 
@@ -158,6 +158,6 @@
 
   };
 
-#endif /* _TLM_INITIATOR_PORT_BASE_H_ */
+#endif /* __TLM_INITIATOR_PORT_BASE_H__ */
 
 

@@ -17,10 +17,10 @@
  *****************************************************************************/
 #pragma once
 
-#ifndef TLM_CORE_HEADER
-#define TLM_CORE_HEADER
+#ifndef __TLM_CORE_H__
+#define __TLM_CORE_H__
 
-//#include "systemc.h"
+//#include <systemc>
 #include "tlm_platform.h"
 
 namespace tlm_annotated  /// TLM annotated namespace
@@ -46,4 +46,4 @@ namespace tlm_core  /// TLM core namespace
 
 }
 
-#endif /* TLM_CORE_HEADER */
+#endif /* __TLM_CORE_H__ */

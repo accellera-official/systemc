@@ -15,8 +15,8 @@
 
 *****************************************************************************/
 
-#ifndef TLM_DATA_SERIALIZERS_HEADER
-#define TLM_DATA_SERIALIZERS_HEADER
+#ifndef __TLM_DATA_SERIALIZERS_H__
+#define __TLM_DATA_SERIALIZERS_H__
 
 #include "tlm_helpers.h"
 
@@ -37,12 +37,12 @@ inline void copy_from_array( T& data, unsigned int index, unsigned char* m_data)
 
   if (hostHasLittleEndianness()) {
     for(int b = 0; b < nr_bytes; ++b) {
-      data.range(b*8+7, b*8) = sc_uint<8>(m_data[nr_bytes*index + b]); 
+      data.range(b*8+7, b*8) = sc_dt::sc_uint<8>(m_data[nr_bytes*index + b]); 
     }
 
   } else {
     for(int b = 0; b < nr_bytes; ++b) {
-      data.range(b*8+7, b*8) = sc_uint<8>(m_data[nr_bytes*index + (nr_bytes - b - 1)]); 
+      data.range(b*8+7, b*8) = sc_dt::sc_uint<8>(m_data[nr_bytes*index + (nr_bytes - b - 1)]); 
     }
   }
 }
@@ -54,12 +54,12 @@ inline void copy_to_array( const T& data, unsigned int index, unsigned char* m_d
 
   if (hostHasLittleEndianness()) {
     for(int b = 0; b < nr_bytes; ++b) {
-      m_data[nr_bytes*index + b] = sc_uint<8>(data.range(b*8+7,b*8));
+      m_data[nr_bytes*index + b] = sc_dt::sc_uint<8>(data.range(b*8+7,b*8));
     }
 
   } else {
     for(int b = 0; b < nr_bytes; ++b) {
-      m_data[nr_bytes*index + (nr_bytes - b - 1)] = sc_uint<8>(data.range(b*8+7,b*8));
+      m_data[nr_bytes*index + (nr_bytes - b - 1)] = sc_dt::sc_uint<8>(data.range(b*8+7,b*8));
     }
   }
 }
@@ -106,4 +106,4 @@ TLM_COPY_TO_ARRAY( unsigned int );
 TLM_COPY_TO_ARRAY( unsigned long );
 TLM_COPY_TO_ARRAY( unsigned long long );
    
-#endif /* TLM_DATA_SERIALIZERS_HEADER */
+#endif /* __TLM_DATA_SERIALIZERS_H__ */

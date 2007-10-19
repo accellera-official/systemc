@@ -16,23 +16,23 @@
 
  *****************************************************************************/
 
-#ifndef TLM_NONBLOCKING_PORT_HEADER
-#define TLM_NONBLOCKING_PORT_HEADER
+#ifndef __TLM_NONBLOCKING_PORT_H__
+#define __TLM_NONBLOCKING_PORT_H__
 
 #include "tlm_h/tlm_core/tlm_interfaces/tlm_core_ifs.h"
 #include "tlm_h/tlm_core/tlm_event_finder/tlm_event_finder.h"
 
 template < typename T >
 class tlm_nonblocking_get_port :
-public sc_port< tlm_nonblocking_get_if< T > , 1 >
+public sc_core::sc_port< tlm_nonblocking_get_if< T > , 1 >
 {
 public:
   typedef tlm_nonblocking_get_if<T> get_if_type;
 
   tlm_nonblocking_get_port( const char *port_name ) :
-    sc_port< tlm_nonblocking_get_if< T > , 1 >( port_name ) {}
+    sc_core::sc_port< tlm_nonblocking_get_if< T > , 1 >( port_name ) {}
 
-  sc_event_finder& ok_to_get() const {
+  sc_core::sc_event_finder& ok_to_get() const {
     
     return *new tlm_event_finder_t< get_if_type , T >(
 	     *this,
@@ -44,15 +44,15 @@ public:
 
 template < typename T >
 class tlm_nonblocking_peek_port :
-public sc_port< tlm_nonblocking_peek_if< T > , 1 >
+public sc_core::sc_port< tlm_nonblocking_peek_if< T > , 1 >
 {
 public:
   typedef tlm_nonblocking_peek_if<T> peek_if_type;
 
   tlm_nonblocking_peek_port( const char *port_name ) :
-    sc_port< tlm_nonblocking_peek_if< T > , 1 >( port_name ) {}
+    sc_core::sc_port< tlm_nonblocking_peek_if< T > , 1 >( port_name ) {}
 
-  sc_event_finder& ok_to_peek() const {
+  sc_core::sc_event_finder& ok_to_peek() const {
     
     return *new tlm_event_finder_t< peek_if_type , T >(
 	     *this,
@@ -65,15 +65,15 @@ public:
 
 template < typename T >
 class tlm_nonblocking_put_port :
-public sc_port< tlm_nonblocking_put_if< T > , 1 >
+public sc_core::sc_port< tlm_nonblocking_put_if< T > , 1 >
 {
 public:
   typedef tlm_nonblocking_put_if<T> put_if_type;
 
   tlm_nonblocking_put_port( const char *port_name ) :
-    sc_port< tlm_nonblocking_put_if< T > , 1 >( port_name ) {}
+    sc_core::sc_port< tlm_nonblocking_put_if< T > , 1 >( port_name ) {}
 
-  sc_event_finder& ok_to_put() const {
+  sc_core::sc_event_finder& ok_to_put() const {
 
     return *new tlm_event_finder_t< put_if_type , T >(
              *this,

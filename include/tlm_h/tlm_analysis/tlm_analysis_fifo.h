@@ -1,6 +1,6 @@
 
-#ifndef ANALYSIS_FIFO_HEADER
-#define ANALYSIS_FIFO_HEADER
+#ifndef __TLM_ANALYSIS_FIFO_H__
+#define __TLM_ANALYSIS_FIFO_H__
 
 //#include "tlm_core.h"
 

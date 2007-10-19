@@ -34,12 +34,12 @@
 #include "SimpleBus.h"
 
 template <int X, int Y>
-class AbstractionSwitch : public sc_module
+class AbstractionSwitch : public sc_core::sc_module
 {
 public:
   SC_HAS_PROCESS(AbstractionSwitch);
-  AbstractionSwitch(sc_module_name name, SimpleBus<X, Y>& m) :
-    sc_module(name),
+  AbstractionSwitch(sc_core::sc_module_name name, SimpleBus<X, Y>& m) :
+    sc_core::sc_module(name),
     mModule(m)
   {
     SC_THREAD(doSwitch);
@@ -47,7 +47,7 @@ public:
 
   void doSwitch()
   {
-    wait(1000, SC_NS);
+    wait(1000, sc_core::SC_NS);
     mModule.setATMode();
   }
 
@@ -91,7 +91,7 @@ int sc_main(int argc, char* argv[])
   bus.master_socket[4](slave5.socket);
   bus.master_socket[5](slave6.socket);
 
-  sc_start();
+  sc_core::sc_start();
 
   return 0;
 }

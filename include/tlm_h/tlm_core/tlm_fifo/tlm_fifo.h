@@ -17,8 +17,8 @@
  *****************************************************************************/
 
 
-#ifndef TLM_FIFO_HEADER
-#define TLM_FIFO_HEADER
+#ifndef __TLM_FIFO_H__
+#define __TLM_FIFO_H__
 
 //
 // This implements put, get and peek
@@ -34,7 +34,7 @@
 // actual physical buffer.
 //
 
-//#include <systemc.h>
+//#include <systemc>
 
 #include "tlm_h/tlm_core/tlm_interfaces/tlm_fifo_ifs.h"
 #include "tlm_h/tlm_core/tlm_fifo/circular_buffer.h"
@@ -45,21 +45,21 @@ template <class T>
 class tlm_fifo :
   public virtual tlm_fifo_get_if<T>,
   public virtual tlm_fifo_put_if<T>,
-  public sc_prim_channel
+  public sc_core::sc_prim_channel
 {
 public:
 
     // constructors
 
     explicit tlm_fifo( int size_ = 1 )
-      : sc_prim_channel( sc_gen_unique_name( "fifo" ) ) {
+      : sc_core::sc_prim_channel( sc_core::sc_gen_unique_name( "fifo" ) ) {
      
       init( size_ );
 
     }
 
     explicit tlm_fifo( const char* name_, int size_ = 1 )
-      : sc_prim_channel( name_ ) {
+      : sc_core::sc_prim_channel( name_ ) {
     
       init( size_ );
 
@@ -79,7 +79,7 @@ public:
 
     bool nb_get( T& );
     bool nb_can_get( tlm_tag<T> *t = 0 ) const;
-    const sc_event &ok_to_get( tlm_tag<T> *t = 0 ) const {
+    const sc_core::sc_event &ok_to_get( tlm_tag<T> *t = 0 ) const {
       return m_data_written_event;
     }
 
@@ -89,7 +89,7 @@ public:
 
     bool nb_peek( T& ) const;
     bool nb_can_peek( tlm_tag<T> *t = 0 ) const;
-    const sc_event &ok_to_peek( tlm_tag<T> *t = 0 ) const {
+    const sc_core::sc_event &ok_to_peek( tlm_tag<T> *t = 0 ) const {
       return m_data_written_event;
     }
 
@@ -100,7 +100,7 @@ public:
     bool nb_put( const T& );
     bool nb_can_put( tlm_tag<T> *t = 0 ) const;
 
-    const sc_event& ok_to_put( tlm_tag<T> *t = 0 ) const {
+    const sc_core::sc_event& ok_to_put( tlm_tag<T> *t = 0 ) const {
       return m_data_read_event;
     }
 
@@ -158,7 +158,7 @@ private: // some methods to support tlm_annotated_fifo !
     bool nb_get_no_notify( T& );
 
 protected:
-    sc_event &read_event( tlm_tag<T> *t = 0 ) {
+    sc_core::sc_event &read_event( tlm_tag<T> *t = 0 ) {
       return m_data_read_event;
     }
 
@@ -182,8 +182,8 @@ protected:
     bool m_expand;               // has an expand occurred during this delta cycle ? 
     int m_num_read_no_notify;    // #samples read without notify during this delta cycle
 
-    sc_event m_data_read_event;
-    sc_event m_data_written_event;
+    sc_core::sc_event m_data_read_event;
+    sc_core::sc_event m_data_written_event;
 
 private:
 
@@ -248,11 +248,11 @@ void
 tlm_fifo<T>::update()
 {
     if( m_num_read > m_num_read_no_notify || m_expand ) {
-	m_data_read_event.notify( SC_ZERO_TIME );
+	m_data_read_event.notify( sc_core::SC_ZERO_TIME );
     }
 
     if( m_num_written > 0 ) {
-	m_data_written_event.notify( SC_ZERO_TIME );
+	m_data_written_event.notify( sc_core::SC_ZERO_TIME );
     }
 
     m_expand = false;

@@ -15,36 +15,36 @@
 
  *****************************************************************************/
 
-#ifndef _TLM_MASTER_H
-#define _TLM_MASTER_H
+#ifndef __TLM_MASTER_H__
+#define __TLM_MASTER_H__
 
-#include "systemc.h"
+#include <systemc>
 
 #include "tlm_gp_port.h"
 
 #include "tlm.h"
 
 
-class tlm_master : public sc_module
+class tlm_master : public sc_core::sc_module
 {
 public:
     
-	tlm::tlm_gp_port< 32 > bus_port; // bus data width in bits
-
+    tlm::tlm_gp_port< 32 > bus_port; // bus data width in bits
+    
     SC_HAS_PROCESS(tlm_master);
-
-	// Constructor
-    tlm_master(sc_module_name _name)
-		: sc_module(_name)
-		, bus_port("bus_port")
-	{
-		SC_THREAD(main);
-	}
-
-	// Destructor
+    
+    // Constructor
+    tlm_master(sc_core::sc_module_name _name)
+        : sc_core::sc_module(_name)
+        , bus_port("bus_port")
+    {
+        SC_THREAD(main);
+    }
+    
+    // Destructor
     ~tlm_master()
-	{
-	}
+    {
+    }
 
     template <typename DT>
     void print(DT value, tlm::tlm_endianness endianness)
@@ -117,8 +117,8 @@ public:
           std::cout << "\n\nBE Initiator:\n" << std::endl;
           doBEReadAccesses(0x10);
 
-          sc_stop();
-          sc_core::wait(SC_ZERO_TIME);
+          sc_core::sc_stop();
+          sc_core::wait(sc_core::SC_ZERO_TIME);
 	}
 
     //
@@ -130,7 +130,7 @@ public:
     
     	// Single WRITE transaction 
     	
-    	cout << name() << " : Single WRITE transaction : "; 
+    	std::cout << name() << " : Single WRITE transaction : "; 
     
     	m_gp.set_address(address);
     	m_gp.set_command(tlm::TLM_WRITE_COMMAND);
@@ -143,16 +143,16 @@ public:
     
     	if(m_gp.get_response_status() == tlm::TLM_OK_RESP)
     	{
-    		cout << " OK " << endl;
-                    std::cout << "  writing " << sizeof(DT) << " bytes:\n"
-                              << "   - address = " << (void*)address << "\n"
-                              << "   - data = 0x" << std::hex << (unsigned int)data << std::dec
-                              << std::endl;
-    
+            std::cout << " OK " << std::endl;
+            std::cout << "  writing " << sizeof(DT) << " bytes:\n"
+                      << "   - address = " << (void*)address << "\n"
+                      << "   - data = 0x" << std::hex << (unsigned int)data << std::dec
+                      << std::endl;
+            
     	}
     	else
     	{
-    		cout << " ERROR " << endl;
+            std::cout << " ERROR " << std::endl;
     	}
     }
     
@@ -166,7 +166,7 @@ public:
     
     	// Single READ transaction 
     	
-    	cout << name() << " : Single READ transaction : "; 
+    	std::cout << name() << " : Single READ transaction : "; 
     
     	m_gp.set_address(address);
     	m_gp.set_command(tlm::TLM_READ_COMMAND);
@@ -179,28 +179,28 @@ public:
     
     	if(m_gp.get_response_status() == tlm::TLM_OK_RESP)
     	{
-    		cout << " OK " << endl;
-                    std::cout << "  Reading " << sizeof(DT) << " bytes:\n"
-                              << "   - address = " << (void*)address << "\n"
-                              << "   - data = 0x" << std::hex << (unsigned int)data << std::dec
-                              << std::endl;
+            std::cout << " OK " << std::endl;
+            std::cout << "  Reading " << sizeof(DT) << " bytes:\n"
+                      << "   - address = " << (void*)address << "\n"
+                      << "   - data = 0x" << std::hex << (unsigned int)data << std::dec
+                      << std::endl;
     	}
     	else
     	{
-    		cout << " ERROR " << endl;
+            std::cout << " ERROR " << std::endl;
     	}
         return data;
     }
 
 
 private:
-
+    
     tlm::tlm_generic_payload  m_gp;
-
-	// GP tests
-	void test_single_write();
-	void test_single_read();
-
+    
+    // GP tests
+    void test_single_write();
+    void test_single_read();
+    
 };
 
 #endif

@@ -18,10 +18,10 @@
  
 #pragma once
 
-#ifndef TLM_HEADER
-#define TLM_HEADER
+#ifndef __TLM_H__
+#define __TLM_H__
 
-#include "systemc.h"  /// main SystemC header
+#include <systemc>    /// main SystemC header
 #include <deque>      /// STD deque class
 #include <map>        /// STD map class
 
@@ -43,4 +43,4 @@ namespace tlm  /// TLM namespace
   using namespace tlm_quantum;
 }
 
-#endif /* TLM_HEADER */
+#endif /* __TLM_H__ */

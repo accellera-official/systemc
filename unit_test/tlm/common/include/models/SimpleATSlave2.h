@@ -15,18 +15,18 @@
 
  *****************************************************************************/
 
-#ifndef SIMPLE_AT_SLAVE2_H
-#define SIMPLE_AT_SLAVE2_H
+#ifndef __SIMPLE_AT_SLAVE2_H__
+#define __SIMPLE_AT_SLAVE2_H__
 
-//#include "tlm.h"
+#include "tlm.h"
 #include "simple_slave_socket.h"
-//#include <systemc.h>
+//#include <systemc>
 #include <cassert>
 #include <vector>
 #include <queue>
 //#include <iostream>
 
-class SimpleATSlave2 : public sc_module
+class SimpleATSlave2 : public sc_core::sc_module
 {
 public:
   typedef tlm::tlm_generic_payload transaction_type;
@@ -39,11 +39,11 @@ public:
 
 public:
   SC_HAS_PROCESS(SimpleATSlave2);
-  SimpleATSlave2(sc_module_name name) :
-    sc_module(name),
+  SimpleATSlave2(sc_core::sc_module_name name) :
+    sc_core::sc_module(name),
     socket("socket"),
-    ACCEPT_DELAY(25, SC_NS),
-    RESPONSE_DELAY(100, SC_NS)
+    ACCEPT_DELAY(25, sc_core::SC_NS),
+    RESPONSE_DELAY(100, sc_core::SC_NS)
   {
     // register nb_transport method
     REGISTER_SOCKETPROCESS(socket, myNBTransport);
@@ -62,7 +62,7 @@ public:
   // - Request is accepted after fixed delay (relative to end of prev request phase)
   // - Response is started after fixed delay (relative to end of prev resp phase)
   //
-  sync_enum_type myNBTransport(transaction_type& trans, phase_type& phase, sc_time& t)
+  sync_enum_type myNBTransport(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
   {
     if (phase == tlm::BEGIN_REQ) {
       sc_dt::uint64 address = trans.get_address();
@@ -72,13 +72,13 @@ public:
       if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
         std::cout << name() << ": Received write request: A = "
                   << (void*)(int)address << ", D = " << (void*)data
-                  << " @ " << sc_time_stamp() << std::endl;
+                  << " @ " << sc_core::sc_time_stamp() << std::endl;
 
         *reinterpret_cast<unsigned int*>(&mMem[address]) = data;
 
       } else {
         std::cout << name() << ": Received read request: A = "
-                  << (void*)(int)address << " @ " << sc_time_stamp() << std::endl;
+                  << (void*)(int)address << " @ " << sc_core::sc_time_stamp() << std::endl;
 
         data = *reinterpret_cast<unsigned int*>(&mMem[address]);
       }
@@ -117,7 +117,7 @@ public:
     assert(!mResponseQueue.empty());
     // start response phase of oldest transaction
     phase_type phase = tlm::BEGIN_RESP;
-    sc_time t = SC_ZERO_TIME;
+    sc_core::sc_time t = sc_core::SC_ZERO_TIME;
     transaction_type* trans = mResponseQueue.front();
     assert(trans);
 
@@ -153,14 +153,14 @@ public:
   }
 
 private:
-  const sc_time ACCEPT_DELAY;
-  const sc_time RESPONSE_DELAY;
+  const sc_core::sc_time ACCEPT_DELAY;
+  const sc_core::sc_time RESPONSE_DELAY;
 
 private:
   unsigned char mMem[400];
   std::queue<transaction_type*> mResponseQueue;
-  sc_event mBeginResponseEvent;
-  sc_event mEndResponseEvent;
+  sc_core::sc_event mBeginResponseEvent;
+  sc_core::sc_event mEndResponseEvent;
 };
 
 #endif

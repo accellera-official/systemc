@@ -1,15 +1,15 @@
 
-#ifndef ANALYSIS_TRIPLE
-#define ANALYSIS_TRIPLE
+#ifndef __TLM_ANALYSIS_TRIPLE_H__
+#define __TLM_ANALYSIS_TRIPLE_H__
 
-//#include "systemc.h"
+//#include <systemc>
 
 template< typename T>
 struct analysis_triple {
 
-  sc_time start_time;
+  sc_core::sc_time start_time;
   T transaction;
-  sc_time end_time;
+  sc_core::sc_time end_time;
 
   analysis_triple() {}
 

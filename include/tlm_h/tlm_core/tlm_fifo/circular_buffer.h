@@ -20,11 +20,12 @@
 // To the LRM writer : this class is purely an artifact of the implementation.
 //
 
-#ifndef CIRCULAR_BUFFER_HEADER
-#define CIRCULAR_BUFFER_HEADER
+#ifndef __CIRCULAR_BUFFER_H__
+#define __CIRCULAR_BUFFER_H__
 
 #include <iostream>
 
+// TODO: remove:
 using std::cout;
 using std::endl;
 

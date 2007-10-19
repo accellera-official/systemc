@@ -15,23 +15,23 @@
 
  *****************************************************************************/
 
-#ifndef TRANSACTOR_NB2B_H
-#define TRANSACTOR_NB2B_H
+#ifndef __TRANSACTOR_NB2B_H__
+#define __TRANSACTOR_NB2B_H__
 
-//#include "tlm.h"
+#include "tlm.h"
 #include "simple_slave_socket.h"
 #include "tlm_request.h"
 #include "tlm_response.h"
 #include "MyPEQ.h"
-//#include <systemc.h>
+//#include <systemc>
 
-class TransactorNB2B : public sc_module
+class TransactorNB2B : public sc_core::sc_module
 {
 public:
   typedef tlm_request<unsigned long long, unsigned int, TLM_PASS_BY_POINTER> tlm_request_type;
   typedef tlm_response<unsigned int, TLM_PASS_BY_POINTER> tlm_response_type;
   typedef tlm::tlm_annotated_transport_if<tlm_request_type, tlm_response_type> tlm_transport_if;
-  typedef sc_port<tlm_transport_if> master_port;
+  typedef sc_core::sc_port<tlm_transport_if> master_port;
 
   typedef tlm::tlm_generic_payload transaction_type;
   typedef tlm::tlm_phase phase_type;
@@ -44,8 +44,8 @@ public:
 
 public:
   SC_HAS_PROCESS(TransactorNB2B);
-  TransactorNB2B(sc_module_name name) :
-    sc_module(name),
+  TransactorNB2B(sc_core::sc_module_name name) :
+    sc_core::sc_module(name),
     socket("socket"),
     port("port"),
     mTransactionPEQ("transactionPEQ")
@@ -90,7 +90,7 @@ public:
         }
 
         phase_type phase = tlm::BEGIN_RESP;
-        sc_time t = SC_ZERO_TIME;
+        sc_core::sc_time t = sc_core::SC_ZERO_TIME;
         switch (socket->nb_transport(*trans, phase, t)) {
         case tlm::TLM_COMPLETED:
           // Transaction Finished
@@ -111,7 +111,7 @@ public:
     }
   }
 
-  sync_enum_type myNBTransport(transaction_type& trans, phase_type& phase, sc_time& t)
+  sync_enum_type myNBTransport(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
   {
     if (phase == tlm::BEGIN_REQ) {
       mTransactionPEQ.notify(trans, t);
@@ -128,7 +128,7 @@ public:
 
 private:
   MyPEQ mTransactionPEQ;
-  sc_event mEndTransactionEvent;
+  sc_core::sc_event mEndTransactionEvent;
 };
 
 #endif

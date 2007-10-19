@@ -16,8 +16,8 @@
 *****************************************************************************/
 
 
-#ifndef TLM_GP_HEADER
-#define TLM_GP_HEADER
+#ifndef __TLM_GP_H__
+#define __TLM_GP_H__
 
 #include <systemc>
 #include "tlm_array.h"
@@ -292,4 +292,4 @@ protected:
 };
 
 
-#endif /* TLM_GP_HEADER */
+#endif /* __TLM_GP_H__ */

@@ -15,11 +15,11 @@
 
  *****************************************************************************/
 
-#ifndef TRANSACTOR_B2NB_H
-#define TRANSACTOR_B2NB_H
+#ifndef __TRANSACTOR_B2NB_H__
+#define __TRANSACTOR_B2NB_H__
 
-//#include <systemc.h>
-//#include "tlm.h"
+//#include <systemc>
+#include "tlm.h"
 #include "simple_master_socket.h"
 #include "tlm_request.h"
 #include "tlm_response.h"
@@ -28,13 +28,13 @@ class TransactorB2NB :
   public virtual tlm::tlm_annotated_transport_if<
     tlm_request<unsigned long long, unsigned int, TLM_PASS_BY_POINTER>,
     tlm_response<unsigned int, TLM_PASS_BY_POINTER> >,
-  public sc_module
+    public sc_core::sc_module
 {
 public:
   typedef tlm_request<unsigned long long, unsigned int, TLM_PASS_BY_POINTER> tlm_request_type;
   typedef tlm_response<unsigned int, TLM_PASS_BY_POINTER> tlm_response_type;
   typedef tlm::tlm_annotated_transport_if<tlm_request_type, tlm_response_type> tlm_transport_if;
-  typedef sc_export<tlm_transport_if> slave_export;
+  typedef sc_core::sc_export<tlm_transport_if> slave_export;
 
   typedef tlm::tlm_generic_payload transaction_type;
   typedef tlm::tlm_phase phase_type;
@@ -47,15 +47,15 @@ public:
 
 public:
   SC_HAS_PROCESS(TransactorB2NB);
-  TransactorB2NB(sc_module_name name) :
-    sc_module(name),
+  TransactorB2NB(sc_core::sc_module_name name) :
+    sc_core::sc_module(name),
     port("port"),
     socket("socket")
   {
     port(*this);
   }
 
-  void transport(const tlm_request_type& req, tlm_response_type& resp, sc_time& t)
+  void transport(const tlm_request_type& req, tlm_response_type& resp, sc_core::sc_time& t)
   {
     phase_type phase = tlm::BEGIN_REQ;
 
@@ -106,7 +106,7 @@ public:
 
   tlm_response_type transport(const tlm_request_type& req)
   {
-    sc_time t = SC_ZERO_TIME;
+    sc_core::sc_time t = sc_core::SC_ZERO_TIME;
     tlm_response_type resp;
 
     transport(req, resp, t);

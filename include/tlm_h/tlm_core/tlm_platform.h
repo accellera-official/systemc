@@ -18,7 +18,7 @@
  
 #pragma once
 
-#if ( ! defined ( __TLM_PLATFORM_H__ ) )
+#ifndef __TLM_PLATFORM_H__
 #define __TLM_PLATFORM_H__
 
 #if ( ! defined ( _MSC_VER ) )
@@ -26,6 +26,9 @@
 #endif /* ! _MSC_VER */
 
 // make sure we have the standard scalar data types
+
+// TODO: still broken on linux
+#if 0
 
 // 8-bit ints
 #if ( ! defined ( _INT8_T ) )
@@ -70,5 +73,7 @@ typedef long long   int64_t;
 #define _UINT64_T
 typedef unsigned long long   uint64_t;
 #endif /* ! _UINT64_T */
+
+#endif
 
 #endif /* __TLM_PLATFORM_H__ */

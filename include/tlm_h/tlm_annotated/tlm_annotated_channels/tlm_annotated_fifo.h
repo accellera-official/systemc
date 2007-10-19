@@ -1,6 +1,6 @@
 
-#ifndef TLM_ANNOTATED_FIFO_HEADER
-#define TLM_ANNOTATED_FIFO_HEADER
+#ifndef __TLM_ANNOTATED_FIFO_H__
+#define __TLM_ANNOTATED_FIFO_H__
 
 //#include "tlm_core.h"
 #include "tlm_h/tlm_annotated/tlm_annotated_ifs/tlm_annotated_ifs.h"
@@ -31,7 +31,7 @@ public tlm_fifo<T> ,
   }
 
   void write( const my_tag_ptr & ) {
-    read_event( (my_tag_ptr)0 ).notify( SC_ZERO_TIME );
+    read_event( (my_tag_ptr)0 ).notify( sc_core::SC_ZERO_TIME );
   }
 
 };
@@ -58,14 +58,14 @@ public tlm_fifo<T> ,
 
 template< typename T >
 class tlm_annotated_fifo :
-public sc_module ,
+public sc_core::sc_module ,
 public virtual tlm_annotated_put_if< T  > ,
 public virtual tlm_annotated_get_peek_if < T  > {
 
  public:
 
-   tlm_annotated_fifo( sc_module_name nm , int size = 1 ) :
-     sc_module( nm ) ,
+   tlm_annotated_fifo( sc_core::sc_module_name nm , int size = 1 ) :
+     sc_core::sc_module( nm ) ,
      m_size( size ) ,
      m_fifo("internal_fifo" , size ) ,
      m_put_peq("put_peq") ,
@@ -77,7 +77,7 @@ public virtual tlm_annotated_get_peek_if < T  > {
   }
 
    tlm_annotated_fifo( int size = 1 ) :
-     sc_module( sc_gen_unique_name("annotated_fifo") ) ,
+     sc_core::sc_module( sc_core::sc_gen_unique_name("annotated_fifo") ) ,
      m_size( size ) ,
      m_fifo("internal_fifo" , size ) ,
      m_put_peq("put_peq") ,
@@ -112,25 +112,25 @@ public virtual tlm_annotated_get_peek_if < T  > {
 
   // nb_can_put is part of the annotated non blocking put interface
 
-  virtual bool nb_can_put( const sc_time &time , tlm_tag<T> *t = 0 ) const {
+  virtual bool nb_can_put( const sc_core::sc_time &time , tlm_tag<T> *t = 0 ) const {
     return nb_can_put();
   }
 
-  virtual bool nb_can_get( const sc_time &time , tlm_tag<T> *t = 0 ) const {
+  virtual bool nb_can_get( const sc_core::sc_time &time , tlm_tag<T> *t = 0 ) const {
     return nb_can_get();
   }
 
   // ok_to_* methods
 
-  const sc_event &ok_to_put(  tlm_tag<T> *t = 0 ) const {
+  const sc_core::sc_event &ok_to_put(  tlm_tag<T> *t = 0 ) const {
     return m_fifo.ok_to_put();
   }
 
-  const sc_event &ok_to_get(  tlm_tag<T> *t = 0 ) const {
+  const sc_core::sc_event &ok_to_get(  tlm_tag<T> *t = 0 ) const {
     return m_fifo.ok_to_get();
   }
 
-  const sc_event &ok_to_peek(  tlm_tag<T> *t = 0 ) const {
+  const sc_core::sc_event &ok_to_peek(  tlm_tag<T> *t = 0 ) const {
     return m_fifo.ok_to_peek();
   }
 
@@ -167,7 +167,7 @@ public virtual tlm_annotated_get_peek_if < T  > {
   // annotated nonblocking methods
 
 
-  bool nb_put( const T &transaction , const sc_time &time ) {
+  bool nb_put( const T &transaction , const sc_core::sc_time &time ) {
 
     if( !nb_can_put( time ) ) {
       return false;
@@ -178,7 +178,7 @@ public virtual tlm_annotated_get_peek_if < T  > {
 
   }
 
-  virtual bool nb_get( T &transaction , const sc_time &time ) {
+  virtual bool nb_get( T &transaction , const sc_core::sc_time &time ) {
     static tlm_tag<T> *t;
 
     if( !m_fifo.nb_get_no_notify( transaction ) ) {

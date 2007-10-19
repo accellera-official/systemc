@@ -20,12 +20,13 @@
 // To the LRM writer : these classes are purely artifacts of the implementation.
 //
 
-#ifndef TLM_ANNOTATED_PUT_GET_IMP_HEADER
-#define TLM_ANNOTATED_PUT_GET_IMP_HEADER
+#ifndef __TLM_ANNOTATED_PUT_GET_IMP_H__
+#define __TLM_ANNOTATED_PUT_GET_IMP_H__
 
 //#include "tlm_core.h"
 #include "tlm_h/tlm_annotated/tlm_annotated_ifs/tlm_annotated_master_slave_ifs.h"
 
+// TODO: delete this:
 using tlm_core::tlm_put_get_imp;
 
 template< typename PUT_DATA , typename GET_DATA >
@@ -40,19 +41,19 @@ public:
     tlm_put_get_imp<PUT_DATA,GET_DATA>( put_if , get_peek_if ) ,
     delayed_put_if( put_if ) , delayed_get_if( get_peek_if ) {}
 
-  bool nb_put( const PUT_DATA &t , const sc_time &time ) {
+  bool nb_put( const PUT_DATA &t , const sc_core::sc_time &time ) {
     return delayed_put_if.nb_put( t , time );
   }
 
-  bool nb_can_put( const sc_time &time , tlm_tag<PUT_DATA> *t = 0 ) const {
+  bool nb_can_put( const sc_core::sc_time &time , tlm_tag<PUT_DATA> *t = 0 ) const {
     return delayed_put_if.nb_can_put( time , t );
   }
 
-  bool nb_get( GET_DATA &t , const sc_time &time ) {
+  bool nb_get( GET_DATA &t , const sc_core::sc_time &time ) {
     return delayed_get_if.nb_get( t , time );
   }
 
-  bool nb_can_get( const sc_time &time , tlm_tag<GET_DATA> *t = 0 ) const {
+  bool nb_can_get( const sc_core::sc_time &time , tlm_tag<GET_DATA> *t = 0 ) const {
     return delayed_get_if.nb_can_get( time , t );
   }
 

@@ -15,8 +15,8 @@
 
  *****************************************************************************/
 
-#ifndef SIMPLE_SLAVE_SOCKET_H
-#define SIMPLE_SLAVE_SOCKET_H
+#ifndef __SIMPLE_SLAVE_SOCKET_H__
+#define __SIMPLE_SLAVE_SOCKET_H__
 
 #include "simple_socket_utils.h"
 //#include "tlm.h"
@@ -45,7 +45,7 @@ public:
 
   // REGISTER_SOCKETPROCESS
   template <typename MODULE>
-  void CB(MODULE* mod, sync_enum_type (MODULE::*cb)(transaction_type&, phase_type&, sc_time&), int id)
+  void CB(MODULE* mod, sync_enum_type (MODULE::*cb)(transaction_type&, phase_type&, sc_core::sc_time&), int id)
   {
     mProcess.setTransportPtr(mod, static_cast<typename Process::TransportPtr>(cb));
     mProcess.setTransportUserId(id);
@@ -69,9 +69,9 @@ private:
   class Process : public tlm::tlm_fw_nb_transport_if<transaction_type, phase_type>
   {
   public:
-    typedef sync_enum_type (sc_module::*TransportPtr)(TRANS&, tlm::tlm_phase&, sc_time&);
-    typedef unsigned int (sc_module::*TransportDebugPtr)(tlm::tlm_debug_payload&);
-    typedef bool (sc_module::*GetDMIPtr)(const sc_dt::uint64&, bool forReads, tlm::tlm_dmi&);
+    typedef sync_enum_type (sc_core::sc_module::*TransportPtr)(TRANS&, tlm::tlm_phase&, sc_core::sc_time&);
+    typedef unsigned int (sc_core::sc_module::*TransportDebugPtr)(tlm::tlm_debug_payload&);
+    typedef bool (sc_core::sc_module::*GetDMIPtr)(const sc_dt::uint64&, bool forReads, tlm::tlm_dmi&);
       
     Process(const std::string& name) :
       mName(name),
@@ -89,7 +89,7 @@ private:
     void setTransportDebugUserId(int id) { mTransportDebugUserId = id; }
     void setGetDMIUserId(int id) { mGetDMIUserId = id; }
 
-    void setTransportPtr(sc_module* mod, TransportPtr p)
+    void setTransportPtr(sc_core::sc_module* mod, TransportPtr p)
     {
       if (mTransportPtr) {
 	std::cerr << mName << ": non-blocking callback allready registered" << std::endl;
@@ -101,7 +101,7 @@ private:
       }
     }
 
-    void setTransportDebugPtr(sc_module* mod, TransportDebugPtr p)
+    void setTransportDebugPtr(sc_core::sc_module* mod, TransportDebugPtr p)
     {
       if (mTransportDebugPtr) {
 	std::cerr << mName << ": debug callback allready registered" << std::endl;
@@ -113,7 +113,7 @@ private:
       }
     }
 
-    void setGetDMIPtr(sc_module* mod, GetDMIPtr p)
+    void setGetDMIPtr(sc_core::sc_module* mod, GetDMIPtr p)
     {
       if (mGetDMIPtr) {
 	std::cerr << mName << ": get DMI pointer callback allready registered" << std::endl;
@@ -125,7 +125,7 @@ private:
       }
     }
 
-    sync_enum_type nb_transport(transaction_type& trans, phase_type& phase, sc_time& t)
+    sync_enum_type nb_transport(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
     {
       if (mTransportPtr) {
         // forward call
@@ -173,7 +173,7 @@ private:
 
   private:
     const std::string mName;
-    sc_module* mMod;
+    sc_core::sc_module* mMod;
     TransportPtr mTransportPtr;
     TransportDebugPtr mTransportDebugPtr;
     GetDMIPtr mGetDMIPtr;

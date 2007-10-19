@@ -1,6 +1,6 @@
 
-#ifndef TLM_PEQ_HEADER
-#define TLM_PEQ_HEADER
+#ifndef __TLM_PEQ_H__
+#define __TLM_PEQ_H__
 
 #include <map>
 
@@ -13,11 +13,11 @@ using analysis::delayed_analysis_if;
 using analysis::analysis_port;
 
 //
-// No lt_sctime operator required, since we have operator< defined for
+// No lt_sc_time operator required, since we have operator< defined for
 // sc_time ?
 //
 // struct lt_sc_time {
-//  bool operator<( const sc_time &a , const sc_time &b ) {
+//  bool operator<( const sc_core::sc_time &a , const sc_core::sc_time &b ) {
 //    return a < b;
 //  }
 // };
@@ -45,16 +45,16 @@ using analysis::analysis_port;
 
 template< typename T>
 class tlm_peq :
-  public sc_module ,
+  public sc_core::sc_module ,
   public virtual delayed_analysis_if< T >
 {
  public:
-  sc_export< delayed_analysis_if< T > > delayed_analysis_export;
+  sc_core::sc_export< delayed_analysis_if< T > > delayed_analysis_export;
   analysis_port< T > ap;
 
   SC_HAS_PROCESS( tlm_peq );
 
-  tlm_peq( sc_module_name nm ) : sc_module( nm ) , ap("ap") {
+  tlm_peq( sc_core::sc_module_name nm ) : sc_core::sc_module( nm ) , ap("ap") {
 
     delayed_analysis_export( *this );
 
@@ -66,11 +66,11 @@ class tlm_peq :
 
   int size() const { return m_map.size(); }
 
-  int posted_before( const sc_time &time ) const {
+  int posted_before( const sc_core::sc_time &time ) const {
 
     int i = 0;
 
-    for( typename multimap< sc_time , T>::const_iterator iter = m_map.begin();
+    for( typename multimap< sc_core::sc_time , T>::const_iterator iter = m_map.begin();
 	 iter != m_map.end();
 	 ++iter ) {
 
@@ -84,24 +84,24 @@ class tlm_peq :
 
   }
 
-  int posted_at( const sc_time &time ) const {
+  int posted_at( const sc_core::sc_time &time ) const {
     return m_map.count( time );
   }
 
-  void write( const T &transaction , const sc_time &time ) {
+  void write( const T &transaction , const sc_core::sc_time &time ) {
 
-    m_map.insert( pair_type( time + sc_time_stamp() , transaction ) );
+    m_map.insert( pair_type( time + sc_core::sc_time_stamp() , transaction ) );
     m_wake_up.notify( time );
 
   }
 
  private:
-  typedef pair<sc_time,T> pair_type;
+  typedef pair<sc_core::sc_time,T> pair_type;
 
   void wake_up_method() {
 
     pair_type p;
-    sc_time now = sc_time_stamp();
+    sc_core::sc_time now = sc_core::sc_time_stamp();
 
     // must be something there, and it must be scheduled for now
 
@@ -128,8 +128,8 @@ class tlm_peq :
 
   }
 
-  sc_event m_wake_up;
-  multimap< sc_time , T> m_map;
+  sc_core::sc_event m_wake_up;
+  multimap< sc_core::sc_time , T> m_map;
 
 };
 

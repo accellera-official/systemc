@@ -17,7 +17,7 @@
 
 //#include <iostream>
 
-//#include <systemc.h>
+//#include <systemc>
 
 #include "tlm.h"
 
@@ -38,7 +38,7 @@ int sc_main(int argc, char* argv[])
   transactorNB2B.port(transactorB2NB.port);
   transactorB2NB.socket(slave1.socket);
 
-  sc_start();
+  sc_core::sc_start();
 
   return 0;
 }

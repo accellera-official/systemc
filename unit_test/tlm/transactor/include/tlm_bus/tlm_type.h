@@ -16,13 +16,13 @@
  *****************************************************************************/
 
 
-#ifndef _TLM_TYPE_H_
-#define _TLM_TYPE_H_
+#ifndef __TLM_TYPE_H__
+#define __TLM_TYPE_H__
 
-/*------------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------
  * Includes
- *----------------------------------------------------------------------------*/
-//#include "systemc.h"
+ *---------------------------------------------------------------------------*/
+//#include "systemc"
 
   /** \defgroup byte_length_function Helper function: returns the number of byte represented by a datatype
    * @{ 
@@ -37,41 +37,41 @@
   
   // Computes the number of byte of DATA type inlined specializations
   template<>
-  inline unsigned int get_nb_byte<sc_lv<32> >() {
+  inline unsigned int get_nb_byte<sc_dt::sc_lv<32> >() {
     return(4);
   }
   
   template<>
-  inline unsigned int get_nb_byte<sc_lv<64> >() {
+  inline unsigned int get_nb_byte<sc_dt::sc_lv<64> >() {
     return(8);
   }
   
   template<>
-  inline unsigned int get_nb_byte<sc_lv<128> >() {
+  inline unsigned int get_nb_byte<sc_dt::sc_lv<128> >() {
     return(16);
   }
 
   template<>
-  inline unsigned int get_nb_byte<sc_uint<32> >() {
+  inline unsigned int get_nb_byte<sc_dt::sc_uint<32> >() {
     return(4);
   }
 
   template<>
-  inline unsigned int get_nb_byte<sc_uint<64> >() {
+  inline unsigned int get_nb_byte<sc_dt::sc_uint<64> >() {
     return(8);
   }
   
   template<>
-  inline unsigned int get_nb_byte<sc_biguint<32> >() {
+  inline unsigned int get_nb_byte<sc_dt::sc_biguint<32> >() {
     return(4);
   }
   template<>
-  inline unsigned int get_nb_byte<sc_biguint<64> >() {
+  inline unsigned int get_nb_byte<sc_dt::sc_biguint<64> >() {
     return(8);
   }
 
   template<>
-  inline unsigned int get_nb_byte<sc_biguint<128> >() {
+  inline unsigned int get_nb_byte<sc_dt::sc_biguint<128> >() {
     return(16);
   }
 

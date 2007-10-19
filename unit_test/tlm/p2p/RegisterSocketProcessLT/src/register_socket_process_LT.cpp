@@ -17,7 +17,7 @@
 
 //#include <iostream>
 
-//#include <systemc.h>
+//#include <systemc>
 
 #include "tlm.h"
 
@@ -30,7 +30,7 @@ int sc_main(int argc, char* argv[])
 
   master.socket(slave.socket);
 
-  sc_start();
+  sc_core::sc_start();
 
   return 0;
 }

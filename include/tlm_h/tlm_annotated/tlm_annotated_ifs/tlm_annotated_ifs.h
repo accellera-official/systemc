@@ -1,6 +1,6 @@
 
-#ifndef TLM_ANNOTATED_IFS_HEADER
-#define TLM_ANNOTATED_IFS_HEADER
+#ifndef __TLM_ANNOTATED_IFS_H__
+#define __TLM_ANNOTATED_IFS_H__
 
 //#include "tlm_core.h"
 
@@ -25,9 +25,9 @@ using tlm_core::tlm_get_peek_if;
 using tlm_core::tlm_tag;
 
 template< typename REQ , typename RSP >
-class tlm_delayed_transport_if : public virtual sc_interface {
+class tlm_delayed_transport_if : public virtual sc_core::sc_interface {
  public:
-  virtual void transport( const REQ &req , RSP &rsp , sc_time &t ) = 0;
+  virtual void transport( const REQ &req , RSP &rsp , sc_core::sc_time &t ) = 0;
 };
 
 template <  typename REQ , typename RSP >
@@ -50,8 +50,8 @@ class tlm_annotated_nonblocking_get_if :
   tlm_nonblocking_get_if< T >::nb_get;
   tlm_nonblocking_get_if< T >::nb_can_get;
 
-  virtual bool nb_get( T & , const sc_time & ) = 0;
-  virtual bool nb_can_get( const sc_time & , tlm_tag<T> *t = 0 ) const = 0;
+  virtual bool nb_get( T & , const sc_core::sc_time & ) = 0;
+  virtual bool nb_can_get( const sc_core::sc_time & , tlm_tag<T> *t = 0 ) const = 0;
 };
 
 
@@ -64,8 +64,8 @@ class tlm_annotated_nonblocking_put_if :
   tlm_nonblocking_put_if< T >::nb_put;
   tlm_nonblocking_put_if< T >::nb_can_put;
 
-  virtual bool nb_put( const T & , const sc_time & ) = 0;
-  virtual bool nb_can_put( const sc_time & , tlm_tag<T> *t = 0 ) const = 0;
+  virtual bool nb_put( const T & , const sc_core::sc_time & ) = 0;
+  virtual bool nb_can_put( const sc_core::sc_time & , tlm_tag<T> *t = 0 ) const = 0;
 };
 
 template < typename T >

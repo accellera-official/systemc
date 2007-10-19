@@ -15,8 +15,8 @@
 
  *****************************************************************************/
 
-#ifndef SIMPLE_MASTER_SOCKET_H
-#define SIMPLE_MASTER_SOCKET_H
+#ifndef __SIMPLE_MASTER_SOCKET_H__
+#define __SIMPLE_MASTER_SOCKET_H__
 
 #include "simple_socket_utils.h"
 //#include "tlm.h"
@@ -43,14 +43,14 @@ public:
     mExport(mProcess);
   }
 
-  sc_event& getEndEvent()
+  sc_core::sc_event& getEndEvent()
   {
     return mEndEvent;
   }
 
   // REGISTER_SOCKETPROCESS
   template <typename MODULE>
-  void CB(MODULE* mod, sync_enum_type (MODULE::*cb)(transaction_type&, phase_type&, sc_time&), int id)
+  void CB(MODULE* mod, sync_enum_type (MODULE::*cb)(transaction_type&, phase_type&, sc_core::sc_time&), int id)
   {
     mProcess.setTransportPtr(mod, static_cast<typename Process::TransportPtr>(cb));
     mProcess.setTransportUserId(id);
@@ -67,10 +67,10 @@ private:
   class Process : public tlm::tlm_bw_nb_transport_if<transaction_type, phase_type>
   {
   public:
-    typedef sync_enum_type (sc_module::*TransportPtr)(TRANS&, tlm::tlm_phase&, sc_time&);
-    typedef void (sc_module::*InvalidateDMIPtr)(bool, sc_dt::uint64, sc_dt::uint64);
+    typedef sync_enum_type (sc_core::sc_module::*TransportPtr)(TRANS&, tlm::tlm_phase&, sc_core::sc_time&);
+    typedef void (sc_core::sc_module::*InvalidateDMIPtr)(bool, sc_dt::uint64, sc_dt::uint64);
       
-    Process(const std::string& name, sc_event& endEvent) :
+    Process(const std::string& name, sc_core::sc_event& endEvent) :
       mName(name),
       mMod(0),
       mTransportPtr(0),
@@ -84,7 +84,7 @@ private:
     void setTransportUserId(int id) { mTransportUserId = id; }
     void setInvalidateDMIUserId(int id) { mInvalidateDMIUserId = id; }
 
-    void setTransportPtr(sc_module* mod, TransportPtr p)
+    void setTransportPtr(sc_core::sc_module* mod, TransportPtr p)
     {
       if (mTransportPtr) {
 	std::cerr << mName << ": non-blocking callback allready registered" << std::endl;
@@ -96,7 +96,7 @@ private:
       }
     }
 
-    void setInvalidateDMIPtr(sc_module* mod, InvalidateDMIPtr p)
+    void setInvalidateDMIPtr(sc_core::sc_module* mod, InvalidateDMIPtr p)
     {
       if (mInvalidateDMIPtr) {
 	std::cerr << mName << ": invalidate DMI callback allready registered" << std::endl;
@@ -108,7 +108,7 @@ private:
       }
     }
 
-    sync_enum_type nb_transport(transaction_type& trans, phase_type& phase, sc_time& t)
+    sync_enum_type nb_transport(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
     {
       if (mTransportPtr) {
         // forward call
@@ -123,7 +123,7 @@ private:
           // Request phase ended
           return tlm::TLM_SYNC;
         case tlm::BEGIN_RESP:
-          assert(t == SC_ZERO_TIME); // FIXME: can t != 0?    
+          assert(t == sc_core::SC_ZERO_TIME); // FIXME: can t != 0?    
           mEndEvent.notify(t);
           // Not needed to update the phase if true is returned
           return tlm::TLM_COMPLETED;
@@ -150,17 +150,17 @@ private:
 
   private:
     const std::string mName;
-    sc_module* mMod;
+    sc_core::sc_module* mMod;
     TransportPtr mTransportPtr;
     InvalidateDMIPtr mInvalidateDMIPtr;
     int mTransportUserId;
     int mInvalidateDMIUserId;
-    sc_event& mEndEvent;
+    sc_core::sc_event& mEndEvent;
   };
 
 private:
   Process mProcess;
-  sc_event mEndEvent;
+  sc_core::sc_event mEndEvent;
 };
 
 #endif

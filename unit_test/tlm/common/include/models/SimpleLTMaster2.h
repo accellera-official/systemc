@@ -15,16 +15,16 @@
 
  *****************************************************************************/
 
-#ifndef SIMPLE_LT_MASTER2_H
-#define SIMPLE_LT_MASTER2_H
+#ifndef __SIMPLE_LT_MASTER2_H__
+#define __SIMPLE_LT_MASTER2_H__
 
-//#include "tlm.h"
+#include "tlm.h"
 #include "simple_master_socket.h"
-//#include <systemc.h>
+//#include <systemc>
 #include <cassert>
 //#include <iostream>
 
-class SimpleLTMaster2 : public sc_module
+class SimpleLTMaster2 : public sc_core::sc_module
 {
 public:
   typedef tlm::tlm_generic_payload transaction_type;
@@ -37,10 +37,10 @@ public:
 
 public:
   SC_HAS_PROCESS(SimpleLTMaster2);
-  SimpleLTMaster2(sc_module_name name,
+  SimpleLTMaster2(sc_core::sc_module_name name,
                   unsigned int nrOfTransactions = 0x5,
                   unsigned int baseAddress = 0x0) :
-    sc_module(name),
+    sc_core::sc_module(name),
     socket("socket"),
     mNrOfTransactions(nrOfTransactions),
     mBaseAddress(baseAddress),
@@ -80,12 +80,12 @@ public:
     if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
       std::cout << name() << ": Send write request: A = "
                 << (void*)(int)trans.get_address() << ", D = " << (void*)mData
-                << " @ " << sc_time_stamp() << std::endl;
+                << " @ " << sc_core::sc_time_stamp() << std::endl;
 
     } else {
       std::cout << name() << ": Send read request: A = "
                 << (void*)(int)trans.get_address()
-                << " @ " << sc_time_stamp() << std::endl;
+                << " @ " << sc_core::sc_time_stamp() << std::endl;
     }
   }
 
@@ -93,14 +93,14 @@ public:
   {
     if (trans.get_response_status() != tlm::TLM_OK_RESP) {
       std::cout << name() << ": Received error response @ "
-                << sc_time_stamp() << std::endl;
+                << sc_core::sc_time_stamp() << std::endl;
 
     } else {
       std::cout << name() <<  ": Received ok response";
       if (trans.get_command() == tlm::TLM_READ_COMMAND) {
         std::cout << ": D = " << (void*)mData;
       }
-      std::cout << " @ " << sc_time_stamp() << std::endl;
+      std::cout << " @ " << sc_core::sc_time_stamp() << std::endl;
     }
   }
 
@@ -108,12 +108,12 @@ public:
   {
     transaction_type trans;
     phase_type phase;
-    sc_time t;
+    sc_core::sc_time t;
 
     while (initTransaction(trans)) {
       // Create transaction and initialise phase and t
       phase = tlm::BEGIN_REQ;
-      t = SC_ZERO_TIME;
+      t = sc_core::SC_ZERO_TIME;
 
       logStartTransation(trans);
 
@@ -139,7 +139,7 @@ public:
     }
   }
 
-  sync_enum_type myNBTransport(transaction_type& trans, phase_type& phase, sc_time& t)
+  sync_enum_type myNBTransport(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
   {
     switch (phase) {
     case tlm::END_REQ:
@@ -147,7 +147,7 @@ public:
       return tlm::TLM_SYNC;
 
     case tlm::BEGIN_RESP:
-      assert(t == SC_ZERO_TIME); // FIXME: can t != 0?
+      assert(t == sc_core::SC_ZERO_TIME); // FIXME: can t != 0?
       mEndEvent.notify(t);
       // Not needed to update the phase if true is returned
       return tlm::TLM_COMPLETED;
@@ -163,7 +163,7 @@ public:
 
 
 private:
-  sc_event mEndEvent;
+  sc_core::sc_event mEndEvent;
   unsigned int mNrOfTransactions;
   unsigned int mBaseAddress;
   unsigned int mTransactionCount;

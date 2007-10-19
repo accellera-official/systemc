@@ -1,6 +1,6 @@
 
-#ifndef TLM_QUANTUM_HEADER
-#define TLM_QUANTUM_HEADER
+#ifndef __TLM_QUANTUM_H__
+#define __TLM_QUANTUM_H__
 
 #include <vector>
 

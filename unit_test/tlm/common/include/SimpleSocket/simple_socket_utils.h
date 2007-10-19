@@ -15,8 +15,8 @@
 
  *****************************************************************************/
 
-#ifndef SIMPLE_SOCKET_UTILS_H
-#define SIMPLE_SOCKET_UTILS_H
+#ifndef __SIMPLE_SOCKET_UTILS_H__
+#define __SIMPLE_SOCKET_UTILS_H__
 
 //#include "tlm.h"
 

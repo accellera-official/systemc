@@ -17,8 +17,8 @@
 
  *****************************************************************************/
 
-#ifndef TLM_MASTER_SLAVE_IFS_HEADER
-#define TLM_MASTER_SLAVE_IFS_HEADER
+#ifndef __TLM_MASTER_SLAVE_IFS_H__
+#define __TLM_MASTER_SLAVE_IFS_H__
 
 // 
 // req/rsp combined interfaces

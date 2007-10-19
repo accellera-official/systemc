@@ -6,7 +6,8 @@ SUBDIRS = \
  	../gp_extension \
 	../p2p \
 	../transactor \
-        ../accessors
+        ../accessors \
+        ../data_types
 
 .PHONY: all clean run
 

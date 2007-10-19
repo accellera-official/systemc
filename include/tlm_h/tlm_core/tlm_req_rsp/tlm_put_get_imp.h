@@ -20,8 +20,8 @@
 // To the LRM writer : these classes are purely artifacts of the implementation.
 //
 
-#ifndef TLM_PUT_GET_IMP_HEADER
-#define TLM_PUT_GET_IMP_HEADER
+#ifndef __TLM_PUT_GET_IMP_H__
+#define __TLM_PUT_GET_IMP_H__
 
 #include "tlm_h/tlm_core/tlm_interfaces/tlm_master_slave_ifs.h"
 
@@ -43,7 +43,7 @@ public:
   bool nb_can_put( tlm_tag<PUT_DATA> *t = 0 ) const {
     return put_fifo.nb_can_put( t );
   }
-  const sc_event &ok_to_put( tlm_tag<PUT_DATA> *t = 0 ) const {
+  const sc_core::sc_event &ok_to_put( tlm_tag<PUT_DATA> *t = 0 ) const {
     return put_fifo.ok_to_put( t );
   }
 
@@ -57,7 +57,7 @@ public:
     return get_fifo.nb_can_get( t );
   }
 
-  virtual const sc_event &ok_to_get( tlm_tag<GET_DATA> *t = 0 ) const {
+  virtual const sc_core::sc_event &ok_to_get( tlm_tag<GET_DATA> *t = 0 ) const {
     return get_fifo.ok_to_get( t );
   }
 
@@ -71,7 +71,7 @@ public:
     return get_fifo.nb_can_peek( t );
   }
 
-  virtual const sc_event &ok_to_peek( tlm_tag<GET_DATA> *t = 0 ) const {
+  virtual const sc_core::sc_event &ok_to_peek( tlm_tag<GET_DATA> *t = 0 ) const {
     return get_fifo.ok_to_peek( t );
   }
 

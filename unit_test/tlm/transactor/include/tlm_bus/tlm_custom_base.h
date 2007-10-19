@@ -17,8 +17,8 @@
 
 
 
-#ifndef _TLM_CUSTOM_BASE_H_
-#define _TLM_CUSTOM_BASE_H_
+#ifndef __TLM_CUSTOM_BASE_H__
+#define __TLM_CUSTOM_BASE_H__
 
 class tlm_custom_base {
  public:

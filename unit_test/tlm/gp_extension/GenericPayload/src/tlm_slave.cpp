@@ -18,10 +18,10 @@
 #include "tlm_slave.h"
 
 // constructor
-tlm_slave::tlm_slave(sc_module_name _name, 
+tlm_slave::tlm_slave(sc_core::sc_module_name _name, 
                    unsigned int start_address, 
                    unsigned int end_address)
-	: sc_module(_name)
+	: sc_core::sc_module(_name)
 	, bus_port("bus_port")
 	, m_start_address(start_address)
 	, m_end_address(end_address)

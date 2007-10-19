@@ -21,10 +21,10 @@
 //
 
 
-#ifndef TLM_CORE_IFS_HEADER
-#define TLM_CORE_IFS_HEADER
+#ifndef __TLM_CORE_IFS_H__
+#define __TLM_CORE_IFS_H__
 
-//#include <systemc.h>
+//#include <systemc>
 
 #include "tlm_h/tlm_core/tlm_interfaces/tlm_tag.h"
 
@@ -32,7 +32,7 @@
 // bidirectional blocking interfaces
 
 template < typename REQ , typename RSP >
-class tlm_transport_if : public virtual sc_interface
+class tlm_transport_if : public virtual sc_core::sc_interface
 {
 public:
   virtual RSP transport( const REQ & ) = 0;
@@ -47,7 +47,7 @@ public:
 // uni-directional blocking interfaces
 
 template < typename T >
-class tlm_blocking_get_if : public virtual sc_interface
+class tlm_blocking_get_if : public virtual sc_core::sc_interface
 {
 public:
   virtual T get( tlm_tag<T> *t = 0 ) = 0;
@@ -56,7 +56,7 @@ public:
 };
 
 template < typename T >
-class tlm_blocking_put_if : public virtual sc_interface
+class tlm_blocking_put_if : public virtual sc_core::sc_interface
 {
 public:
   virtual void put( const T &t ) = 0;
@@ -65,21 +65,21 @@ public:
 // uni-directional non blocking interfaces
 
 template < typename T >
-class tlm_nonblocking_get_if : public virtual sc_interface
+class tlm_nonblocking_get_if : public virtual sc_core::sc_interface
 {
 public:
   virtual bool nb_get( T &t ) = 0;
   virtual bool nb_can_get( tlm_tag<T> *t = 0 ) const = 0;
-  virtual const sc_event &ok_to_get( tlm_tag<T> *t = 0 ) const = 0;
+  virtual const sc_core::sc_event &ok_to_get( tlm_tag<T> *t = 0 ) const = 0;
 };
 
 template < typename T >
-class tlm_nonblocking_put_if : public virtual sc_interface
+class tlm_nonblocking_put_if : public virtual sc_core::sc_interface
 {
 public:
   virtual bool nb_put( const T &t ) = 0;
   virtual bool nb_can_put( tlm_tag<T> *t = 0 ) const = 0;
-  virtual const sc_event &ok_to_put( tlm_tag<T> *t = 0 ) const = 0;
+  virtual const sc_core::sc_event &ok_to_put( tlm_tag<T> *t = 0 ) const = 0;
 };
 
 
@@ -99,7 +99,7 @@ class tlm_put_if :
 // peek interfaces
 
 template < typename T >
-class tlm_blocking_peek_if : public virtual sc_interface
+class tlm_blocking_peek_if : public virtual sc_core::sc_interface
 {
 public:
   virtual T peek( tlm_tag<T> *t = 0 ) const = 0;
@@ -108,12 +108,12 @@ public:
 };
 
 template < typename T >
-class tlm_nonblocking_peek_if : public virtual sc_interface
+class tlm_nonblocking_peek_if : public virtual sc_core::sc_interface
 {
 public:
   virtual bool nb_peek( T &t ) const = 0;
   virtual bool nb_can_peek( tlm_tag<T> *t = 0 ) const = 0;
-  virtual const sc_event &ok_to_peek( tlm_tag<T> *t = 0 ) const = 0;
+  virtual const sc_core::sc_event &ok_to_peek( tlm_tag<T> *t = 0 ) const = 0;
 };
 
 template < typename T >

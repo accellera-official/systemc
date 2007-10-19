@@ -1,6 +1,6 @@
 
-#ifndef ANALYSIS_PORT_HEADER
-#define ANALYSIS_PORT_HEADER
+#ifndef __TLM_ANALYSIS_PORT_H__
+#define __TLM_ANALYSIS_PORT_H__
 
 #include "tlm_analysis_if.h"
 #include <deque>
@@ -8,12 +8,12 @@
 
 template < typename T>
 class analysis_port :
-  public sc_object ,
+  public sc_core::sc_object ,
   public virtual analysis_if< T >
 {
  public:
-  analysis_port() : sc_object() {}
-  analysis_port( const char *nm ) : sc_object( nm ) {}
+  analysis_port() : sc_core::sc_object() {}
+  analysis_port( const char *nm ) : sc_core::sc_object( nm ) {}
 
   // bind and () work for both interfaces and analysis ports, since 
   // analysis ports implement the analysis interface

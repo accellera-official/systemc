@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef TLM_PORTS_HEADER
-#define TLM_PORTS_HEADER
+#ifndef __TLM_PORTS_H__
+#define __TLM_PORTS_H__
 
 namespace tlm_ports  /// TLM ports header group
 {
@@ -14,4 +14,4 @@ namespace tlm_ports  /// TLM ports header group
 
 }
 
-#endif /* TLM_PORTS_HEADER */
+#endif /* __TLM_PORTS_H__ */

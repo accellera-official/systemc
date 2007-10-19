@@ -17,10 +17,10 @@
  *****************************************************************************/
 
 
-#ifndef TLM_FIFO_PEEK_HEADER
-#define TLM_FIFO_PEEK_HEADER
+#ifndef __TLM_FIFO_PEEK_H__
+#define __TLM_FIFO_PEEK_H__
 
-#ifndef TLM_FIFO_HEADER
+#ifndef __TLM_FIFO_H__
 #include "tlm_h/tlm_core/tlm_fifo/tlm_fifo.h"
 #endif
 

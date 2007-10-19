@@ -15,8 +15,8 @@
 
  *****************************************************************************/
 
-#ifndef TLM_QUANTUMKEEPER_H
-#define TLM_QUANTUMKEEPER_H
+#ifndef __TLM_QUANTUMKEEPER_H__
+#define __TLM_QUANTUMKEEPER_H__
 
 namespace tlm_qk_dummy {
 
@@ -26,24 +26,24 @@ namespace tlm_qk_dummy {
   class tlm_quantumkeeper
   {
   public:
-    static void setGlobalQuantum(const sc_time& t)
+    static void setGlobalQuantum(const sc_core::sc_time& t)
     {
       mGlobalQuantum = t;
     }
   
-    static const sc_time& getGlobalQuantum() 
+    static const sc_core::sc_time& getGlobalQuantum() 
     {
       return mGlobalQuantum;
     }
   
   public:
     tlm_quantumkeeper() :
-      mLocalTime(SC_ZERO_TIME)
+      mLocalTime(sc_core::SC_ZERO_TIME)
     {
       computeLocalQuantum();
     }
   
-    void inc(const sc_time& t)
+    void inc(const sc_core::sc_time& t)
     {
       mLocalTime += t;
     }
@@ -55,21 +55,21 @@ namespace tlm_qk_dummy {
   
     void reset()
     {
-      mLocalTime = SC_ZERO_TIME;
+      mLocalTime = sc_core::SC_ZERO_TIME;
       computeLocalQuantum();
     }
   
-    sc_time getCurrentTime() const
+    sc_core::sc_time getCurrentTime() const
     {
-      return sc_time_stamp() + mLocalTime;
+      return sc_core::sc_time_stamp() + mLocalTime;
     }
   
-    const sc_time& getLocalTime() const
+    const sc_core::sc_time& getLocalTime() const
     {
       return mLocalTime;
     }
   
-    sc_time& getLocalTime()
+    sc_core::sc_time& getLocalTime()
     {
       return mLocalTime;
     }
@@ -87,15 +87,15 @@ namespace tlm_qk_dummy {
     }
   
   private:
-    static sc_time mGlobalQuantum;
+    static sc_core::sc_time mGlobalQuantum;
   
   private:
-    sc_time mLocalQuantum;
-    sc_time mLocalTime;
+    sc_core::sc_time mLocalQuantum;
+    sc_core::sc_time mLocalTime;
   };
   
   template <typename Dummy>
-  sc_time tlm_quantumkeeper<Dummy>::mGlobalQuantum = SC_ZERO_TIME;
+  sc_core::sc_time tlm_quantumkeeper<Dummy>::mGlobalQuantum = sc_core::SC_ZERO_TIME;
 
   struct tlm_dummy {};
 }

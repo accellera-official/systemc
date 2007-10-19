@@ -16,25 +16,25 @@
 
  *****************************************************************************/
 
-#ifndef TLM_EVENT_FINDER
-#define TLM_EVENT_FINDER
+#ifndef __TLM_EVENT_FINDER_H__
+#define __TLM_EVENT_FINDER_H__
 
-//#include <systemc.h>
+//#include <systemc>
 
 #include "tlm_h/tlm_core/tlm_interfaces/tlm_tag.h"
 
 
 template <class IF , class T>
 class tlm_event_finder_t
-: public sc_event_finder
+: public sc_core::sc_event_finder
 {
 public:
 
     // constructor
 
-    tlm_event_finder_t( const sc_port_base& port_,
-		       const sc_event& (IF::*event_method_) ( tlm_tag<T> * ) const )
-        : sc_event_finder( port_ ), m_event_method( event_method_ )
+    tlm_event_finder_t( const sc_core::sc_port_base& port_,
+                        const sc_core::sc_event& (IF::*event_method_) ( tlm_tag<T> * ) const )
+        : sc_core::sc_event_finder( port_ ), m_event_method( event_method_ )
         {}
 
     // destructor (does nothing)
@@ -42,11 +42,11 @@ public:
     virtual ~tlm_event_finder_t()
         {}
 
-    virtual const sc_event& find_event() const;
+    virtual const sc_core::sc_event& find_event() const;
 
 private:
 
-    const sc_event& (IF::*m_event_method) ( tlm_tag<T> * ) const;
+    const sc_core::sc_event& (IF::*m_event_method) ( tlm_tag<T> * ) const;
 
 private:
 
@@ -59,14 +59,14 @@ private:
 
 template <class IF , class T>
 inline
-const sc_event&
+const sc_core::sc_event&
 tlm_event_finder_t<IF,T>::find_event() const
 {
-    const IF* iface = DCAST<const IF*>( port().get_interface() );
+    const IF* iface = dynamic_cast<const IF*>( port().get_interface() );
     if( iface == 0 ) {
-	report_error( SC_ID_FIND_EVENT_, "port is not bound" );
+	report_error( sc_core::SC_ID_FIND_EVENT_, "port is not bound" );
     }
-    return (CCAST<IF*>( iface )->*m_event_method) ( 0 );
+    return (const_cast<IF*>( iface )->*m_event_method) ( 0 );
 }
 
 #endif
