@@ -95,3 +95,15 @@
 
 0021 - TLM 2 requriement 8.10 specifies that there are to be no open namespaces in the
        include files.Question: What are the implications on those in the headers?
+       
+-------- 2007-10-19.03 -------- Charles 
+       
+0022 - What is the minimum version of GCC to be supported?
+
+0023 - GP extension test (make run) fails on Intel Macintosh
+       make: *** [run] Error 139
+
+0024 - GP extension test (./generic_payload_extension.exe) seg faults on Intel Macintosh
+
+0025 - GP test (make run) produces incorrect results on Intel Macintosh (not correctly
+       detecting endianness)
