@@ -211,6 +211,9 @@ public:
         assert(0); exit(1);
       };
     }
+    sc_core::sc_stop();
+    wait();
+
   }
 
   sync_enum_type myNBTransport(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)

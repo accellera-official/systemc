@@ -208,6 +208,9 @@ public:
       }
       logEndTransaction(trans);
     }
+    sc_core::sc_stop();
+    wait();
+
   }
 
   sync_enum_type myNBTransport(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)

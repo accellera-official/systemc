@@ -20,11 +20,4 @@ slave: Received read request: A = 0xc @ 200 ns
 master: Send read request: A = 0x10 @ 225 ns
 slave: Received read request: A = 0x10 @ 225 ns
 master: Received ok response @ 235 ns
-master: Received ok response @ 345 ns
-master: Received ok response @ 455 ns
-master: Received ok response @ 565 ns
-master: Received ok response: D = 0 @ 675 ns
-master: Received ok response: D = 0x1 @ 785 ns
-master: Received ok response: D = 0x2 @ 895 ns
-master: Received ok response: D = 0x3 @ 1005 ns
-master: Received ok response: D = 0x4 @ 1115 ns
+SystemC: simulation stopped by user.

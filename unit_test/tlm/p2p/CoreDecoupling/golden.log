@@ -60,3 +60,4 @@ master: Send read request: A = 0x24 @ 1400 ns (1 us + 400 ns)
 slave: Received read request: A = 0x24 @ 1 us
 Sync'ing...
 master: Received ok response: D = 0x9 @ 1500 ns (1500 ns + 0 s)
+SystemC: simulation stopped by user.
