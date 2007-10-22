@@ -5,6 +5,7 @@
        array class? If not, it should be removed and tlm_gp.h updated
        appropriately. If if needs to stay, it should either be renamed to
        tlm_gp_array.h or promoted to tlm_core.
+       [OS]: I don't think a change is needed here.
 
 0002 - The namespace for tlm_analysis needs to be renamed 'tlm_analysis'. It is
        presently named 'analysis'.
@@ -31,10 +32,12 @@
 0008 - when building /unit_test/tlm/bus (unix) 
        warning: 'class tlm_quantum::tlm_qk_dummy::tlm_quantumkeeper<tlm_quantum::tlm_qk_dummy::tlm_dummy>'
        has virtual functions but non-virtual destructor
+       [OS]: FIXED
 
 0009 - when building /unit_test/gp_extension/GenericPayload (Windows)
        c:\eslx\projects\tlmwg\tlm2\unit_test\tlm\gp_extension\genericpayload\include\tlm_master.h(148)
        : warning C4312: 'type cast' : conversion from 'unsigned int' to 'void *' of greater size
+       [OS]: FIXED
 
 0010 - when building /unit_test/gp_extension/GenericPayload (Windows)
        c:\eslx\projects\tlmwg\tlm2\unit_test\tlm\gp_extension\genericpayload\include\tlm_master.h(102)
@@ -44,6 +47,7 @@
         [
             DT=unsigned int
         ]
+       [OS]: FIXED
 
 0011 - explicitly sized variables (8, 16, 32, 64) should use explicitly sized
        type [u]int[8,16,32,64]_t or sc_dt::[u]int64 over compiler dependent
