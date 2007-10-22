@@ -63,9 +63,10 @@ public:
 
       unsigned int& data = *reinterpret_cast<unsigned int*>(trans.get_data_ptr());
       if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
-        std::cout << name() << ": Received write request: A = "
-                << (void*)(int)address << ", D = " << (void*)data
-                << " @ " << sc_core::sc_time_stamp() << std::endl;
+        std::cout << name() << ": Received write request: A = 0x"
+                  << std::hex << (unsigned int)address << ", D = 0x" << data
+                  << std::dec << " @ " << sc_core::sc_time_stamp()
+                  << std::endl;
 
         *reinterpret_cast<unsigned int*>(&mMem[address]) = data;
 
@@ -78,8 +79,10 @@ public:
         return tlm::TLM_SYNC_CONTINUE;
 
       } else {
-        std::cout << name() << ": Received read request: A = "
-                 << (void*)(int)address << " @ " << sc_core::sc_time_stamp() << std::endl;
+        std::cout << name() << ": Received read request: A = 0x"
+                  << std::hex << (unsigned int)address
+                  << std::dec << " @ " << sc_core::sc_time_stamp()
+                  << std::endl;
 
         data = *reinterpret_cast<unsigned int*>(&mMem[address]);
 

@@ -145,8 +145,8 @@ public:
     	{
             std::cout << " OK " << std::endl;
             std::cout << "  writing " << sizeof(DT) << " bytes:\n"
-                      << "   - address = " << (void*)address << "\n"
-                      << "   - data = 0x" << std::hex << (unsigned int)data << std::dec
+                      << "   - address = " << std::hex << address << "\n"
+                      << "   - data = 0x" << (unsigned int)data << std::dec
                       << std::endl;
             
     	}
@@ -181,8 +181,8 @@ public:
     	{
             std::cout << " OK " << std::endl;
             std::cout << "  Reading " << sizeof(DT) << " bytes:\n"
-                      << "   - address = " << (void*)address << "\n"
-                      << "   - data = 0x" << std::hex << (unsigned int)data << std::dec
+                      << "   - address = " << std::hex << address << "\n"
+                      << "   - data = 0x" << (unsigned int)data << std::dec
                       << std::endl;
     	}
     	else

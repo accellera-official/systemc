@@ -1,13 +1,13 @@
-master1: Send write request: A = 0, D = 0 @ 0 s
-slave1: Received write request: A = 0, D = 0 @ 0 s
-master2: Send write request: A = 0x10000000, D = 0 @ 0 s
-master3: Send write request: A = 0x20000000, D = 0 @ 0 s
-master4: Send write request: A = 0x30000000, D = 0 @ 0 s
-slave4: Received write request: A = 0, D = 0 @ 0 s
-master5: Send write request: A = 0x40000000, D = 0 @ 0 s
-slave5: Received write request: A = 0, D = 0 @ 0 s
-master6: Send write request: A = 0x50000000, D = 0 @ 0 s (0 s + 0 s)
-slave6: Received write request: A = 0, D = 0 @ 0 s
+master1: Send write request: A = 0x0, D = 0x0 @ 0 s
+slave1: Received write request: A = 0x0, D = 0x0 @ 0 s
+master2: Send write request: A = 0x10000000, D = 0x0 @ 0 s
+master3: Send write request: A = 0x20000000, D = 0x0 @ 0 s
+master4: Send write request: A = 0x30000000, D = 0x0 @ 0 s
+slave4: Received write request: A = 0x0, D = 0x0 @ 0 s
+master5: Send write request: A = 0x40000000, D = 0x0 @ 0 s
+slave5: Received write request: A = 0x0, D = 0x0 @ 0 s
+master6: Send write request: A = 0x50000000, D = 0x0 @ 0 s (0 s + 0 s)
+slave6: Received write request: A = 0x0, D = 0x0 @ 0 s
 master1: Received ok response @ 10 ns
 master1: Send write request: A = 0x4, D = 0x1 @ 10 ns
 master3: Received ok response @ 10 ns
@@ -80,7 +80,7 @@ master2: Send write request: A = 0x10000024, D = 0x9 @ 90 ns
 master2: Received ok response @ 100 ns
 master2: Send read request: A = 0x10000000 @ 100 ns
 master1: Received ok response @ 100 ns
-master1: Send read request: A = 0 @ 100 ns
+master1: Send read request: A = 0x0 @ 100 ns
 master5: Send write request: A = 0x40000010, D = 0x4 @ 100 ns
 slave5: Received write request: A = 0x10, D = 0x4 @ 100 ns
 master3: Received ok response @ 100 ns
@@ -107,13 +107,13 @@ master5: Send write request: A = 0x4000001c, D = 0x7 @ 175 ns
 slave5: Received write request: A = 0x1c, D = 0x7 @ 175 ns
 master4: Send write request: A = 0x3000001c, D = 0x7 @ 175 ns
 slave4: Received write request: A = 0x1c, D = 0x7 @ 175 ns
-master2: Received ok response: D = 0 @ 200 ns
+master2: Received ok response: D = 0x0 @ 200 ns
 master2: Send read request: A = 0x10000004 @ 200 ns
-master3: Received ok response: D = 0 @ 200 ns
+master3: Received ok response: D = 0x0 @ 200 ns
 master3: Send read request: A = 0x20000004 @ 200 ns
 master5: Send write request: A = 0x40000020, D = 0x8 @ 200 ns
 slave5: Received write request: A = 0x20, D = 0x8 @ 200 ns
-master1: Received ok response: D = 0 @ 200 ns
+master1: Received ok response: D = 0x0 @ 200 ns
 master1: Send read request: A = 0x4 @ 200 ns
 master6: Received ok response @ 200 ns (200 ns + 0 s)
 master6: Send write request: A = 0x50000010, D = 0x4 @ 200 ns (200 ns + 0 s)
@@ -127,12 +127,12 @@ slave4: Received write request: A = 0x24, D = 0x9 @ 225 ns
 master5: Received ok response @ 235 ns
 master4: Received ok response @ 245 ns
 master5: Send read request: A = 0x40000000 @ 250 ns
-slave5: Received read request: A = 0 @ 250 ns
+slave5: Received read request: A = 0x0 @ 250 ns
 master6: Received ok response @ 250 ns (250 ns + 0 s)
 master6: Send write request: A = 0x50000014, D = 0x5 @ 250 ns (250 ns + 0 s)
 slave6: Received write request: A = 0x14, D = 0x5 @ 250 ns
 master4: Send read request: A = 0x30000000 @ 250 ns
-slave4: Received read request: A = 0 @ 250 ns
+slave4: Received read request: A = 0x0 @ 250 ns
 master5: Send read request: A = 0x40000004 @ 275 ns
 slave5: Received read request: A = 0x4 @ 275 ns
 master4: Send read request: A = 0x30000004 @ 275 ns

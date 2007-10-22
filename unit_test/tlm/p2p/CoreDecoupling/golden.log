@@ -1,5 +1,5 @@
-master: Send write request: A = 0, D = 0 @ 0 s (0 s + 0 s)
-slave: Received write request: A = 0, D = 0 @ 0 s
+master: Send write request: A = 0x0, D = 0x0 @ 0 s (0 s + 0 s)
+slave: Received write request: A = 0x0, D = 0x0 @ 0 s
 master: Received ok response @ 50 ns (50 ns + 0 s)
 master: Send write request: A = 0x4, D = 0x1 @ 50 ns (50 ns + 0 s)
 slave: Received write request: A = 0x4, D = 0x1 @ 50 ns
@@ -28,9 +28,9 @@ master: Received ok response @ 450 ns (450 ns + 0 s)
 master: Send write request: A = 0x24, D = 0x9 @ 450 ns (450 ns + 0 s)
 slave: Received write request: A = 0x24, D = 0x9 @ 450 ns
 master: Received ok response @ 500 ns (500 ns + 0 s)
-master: Send read request: A = 0 @ 500 ns (500 ns + 0 s)
-slave: Received read request: A = 0 @ 500 ns
-master: Received ok response: D = 0 @ 600 ns (500 ns + 100 ns)
+master: Send read request: A = 0x0 @ 500 ns (500 ns + 0 s)
+slave: Received read request: A = 0x0 @ 500 ns
+master: Received ok response: D = 0x0 @ 600 ns (500 ns + 100 ns)
 master: Send read request: A = 0x4 @ 600 ns (500 ns + 100 ns)
 slave: Received read request: A = 0x4 @ 500 ns
 master: Received ok response: D = 0x1 @ 700 ns (500 ns + 200 ns)

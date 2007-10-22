@@ -109,13 +109,14 @@ public:
   void logStartTransation(mytransaction_type& trans)
   {
     if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
-      std::cout << name() << ": Send write request: A = "
-                << (void*)(int)trans.get_address() << ", D = " << (void*)trans.getData()
+      std::cout << name() << ": Send write request: A = 0x"
+                << std::hex << (unsigned int)trans.get_address()
+                << ", D = 0x" << trans.getData() << std::dec
                 << " @ " << sc_core::sc_time_stamp() << std::endl;
       
     } else {
-      std::cout << name() << ": Send read request: A = "
-                << (void*)(int)trans.get_address()
+      std::cout << name() << ": Send read request: A = 0x"
+                << std::hex << (unsigned int)trans.get_address() << std::dec
                 << " @ " << sc_core::sc_time_stamp() << std::endl;
     }
   }
@@ -129,7 +130,7 @@ public:
     } else {
       std::cout << name() <<  ": Received ok response";
       if (trans.get_command() == tlm::TLM_READ_COMMAND) {
-        std::cout << ": D = " << (void*)trans.getData();
+        std::cout << ": D = 0x" << std::hex << trans.getData() << std::dec;
       }
       std::cout << " @ " << sc_core::sc_time_stamp() << std::endl;
     }

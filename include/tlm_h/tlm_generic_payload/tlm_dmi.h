@@ -20,7 +20,7 @@
 
 #include <systemc>
 
-// TODO: where do we get TLM_LITTLE_ENDIAN?
+// TODO: where do we get TLM_LITTLE_ENDIAN from?
 
 class tlm_dmi
 {
@@ -57,9 +57,10 @@ public:
 
   // The type accesses this DMI range support. If eg the 'forReads' parameter
   // of the 'get_direct_mem_ptr' call is set to true, a target must set this
-  // attribute to READ (in case the range is only for read accesses) or READ_WRITE
-  // (in case the range supports both read and write accesses). if the 'forReads'
-  // parameter is false a target must set this to WRITE or READ_WRITE.
+  // attribute to READ (in case the range is only for read accesses) or
+  // READ_WRITE (in case the range supports both read and write accesses). If
+  // the 'forReads' parameter is false a target must set this to WRITE or
+  // READ_WRITE.
   enum Type { READ = 0x1, WRITE = 0x2, READ_WRITE = READ|WRITE };
   Type type;
     

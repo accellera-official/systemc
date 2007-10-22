@@ -81,7 +81,7 @@ namespace tlm_qk_dummy {
     }
   
   protected:
-    virtual void computeLocalQuantum()
+    void computeLocalQuantum()
     {
       mLocalQuantum = mGlobalQuantum;
     }

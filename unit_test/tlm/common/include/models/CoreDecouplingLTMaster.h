@@ -77,16 +77,17 @@ public:
   void logStartTransation(transaction_type& trans)
   {
     if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
-      std::cout << name() << ": Send write request: A = "
-                << (void*)(int)trans.get_address() << ", D = " << (void*)mData
+      std::cout << name() << ": Send write request: A = 0x"
+                << std::hex << (unsigned int)trans.get_address()
+                << ", D = 0x" << mData << std::dec
                 << " @ " << mQuantumKeeper.getCurrentTime()
                 << " (" << sc_core::sc_time_stamp() << " + "
                 << mQuantumKeeper.getLocalTime() << ")"
                 << std::endl;
       
     } else {
-      std::cout << name() << ": Send read request: A = "
-                << (void*)(int)trans.get_address()
+      std::cout << name() << ": Send read request: A = 0x"
+                << std::hex << (unsigned int)trans.get_address()
                 << " @ " << mQuantumKeeper.getCurrentTime()
                 << " (" << sc_core::sc_time_stamp() << " + "
                 << mQuantumKeeper.getLocalTime() << ")"
@@ -106,7 +107,7 @@ public:
     } else {
       std::cout << name() <<  ": Received ok response";
       if (trans.get_command() == tlm::TLM_READ_COMMAND) {
-        std::cout << ": D = " << (void*)mData;
+          std::cout << ": D = 0x" << std::hex << mData << std::dec;
       }
       std::cout << " @ " << mQuantumKeeper.getCurrentTime()
                 << " (" << sc_core::sc_time_stamp() << " + "
