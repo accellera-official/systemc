@@ -215,19 +215,16 @@ public:
   }
 
   // Invalidate DMI pointer(s)
-  void invalidate_direct_mem_ptr(bool invalidate_all,
-                                 sc_dt::uint64 start_range,
+  void invalidate_direct_mem_ptr(sc_dt::uint64 start_range,
                                  sc_dt::uint64 end_range)
   {
     // FIXME: probably faster to always invalidate everything?
-    if (invalidate_all ||
-        (start_range <= mDMIDataReads.first.dmi_end_address &&
-         end_range >= mDMIDataReads.first.dmi_start_address)) {
+    if (start_range <= mDMIDataReads.first.dmi_end_address &&
+        end_range >= mDMIDataReads.first.dmi_start_address) {
         mDMIDataReads.second = false;
     }
-    if (invalidate_all ||
-        (start_range <= mDMIDataWrites.first.dmi_end_address &&
-         end_range >= mDMIDataWrites.first.dmi_start_address)) {
+    if (start_range <= mDMIDataWrites.first.dmi_end_address &&
+        end_range >= mDMIDataWrites.first.dmi_start_address) {
       mDMIDataWrites.second = false;
     }
   }

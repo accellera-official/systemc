@@ -108,7 +108,7 @@ public:
 //   this away.
 //
 // - A full DMI pointer invalidation, e.g. for a bus remap can be signaled
-//   by setting the invalidate_all argument to true.
+//   by setting the range: 0x0 - 0xffffffffffffffffull = (sc_dt::uint64)-1
 // - A master must throw away all DMI pointers in this case.
 //
 // - Under no circumstances a model is allowed to call the get_direct_mem_ptr
@@ -117,8 +117,7 @@ public:
 class tlm_bw_direct_mem_if : public virtual sc_core::sc_interface
 {
 public:
-  virtual void invalidate_direct_mem_ptr(bool invalidate_all,
-                                         sc_dt::uint64 start_range,
+  virtual void invalidate_direct_mem_ptr(sc_dt::uint64 start_range,
                                          sc_dt::uint64 end_range) = 0;
 };
 

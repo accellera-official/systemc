@@ -57,7 +57,7 @@ public:
   }
 
   template <typename MODULE>
-  void CB(MODULE* mod, void (MODULE::*cb)(bool, sc_dt::uint64, sc_dt::uint64), int id)
+  void CB(MODULE* mod, void (MODULE::*cb)(sc_dt::uint64, sc_dt::uint64), int id)
   {
     mProcess.setInvalidateDMIPtr(mod, static_cast<typename Process::InvalidateDMIPtr>(cb));
     mProcess.setInvalidateDMIUserId(id);
@@ -68,7 +68,7 @@ private:
   {
   public:
     typedef sync_enum_type (sc_core::sc_module::*TransportPtr)(TRANS&, tlm::tlm_phase&, sc_core::sc_time&);
-    typedef void (sc_core::sc_module::*InvalidateDMIPtr)(bool, sc_dt::uint64, sc_dt::uint64);
+    typedef void (sc_core::sc_module::*InvalidateDMIPtr)(sc_dt::uint64, sc_dt::uint64);
       
     Process(const std::string& name, sc_core::sc_event& endEvent) :
       mName(name),
@@ -137,14 +137,13 @@ private:
       }
     }
 
-    void invalidate_direct_mem_ptr(bool invalidate_all,
-                                   sc_dt::uint64 start_range,
+    void invalidate_direct_mem_ptr(sc_dt::uint64 start_range,
                                    sc_dt::uint64 end_range)
     {
       if (mInvalidateDMIPtr) {
         // forward call
         assert(mMod);
-        (mMod->*mInvalidateDMIPtr)(invalidate_all, start_range, end_range);
+        (mMod->*mInvalidateDMIPtr)(start_range, end_range);
       }
     }
 

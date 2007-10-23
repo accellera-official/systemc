@@ -167,8 +167,7 @@ public:
     };
   }
 
-  void invalidate_direct_mem_ptr(bool invalidate_all,
-                                 sc_dt::uint64 start_range,
+  void invalidate_direct_mem_ptr(sc_dt::uint64 start_range,
                                  sc_dt::uint64 end_range)
   {
     // No DMI support: ignore

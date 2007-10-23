@@ -92,7 +92,7 @@ public:
     mAbstraction = TLM_AT;
 
     // Invalidate all DMI pointers
-    invalidateDMIPointers(true, 0, 0);
+    invalidateDMIPointers(0, 0);
 
     return true;
   }
@@ -433,28 +433,20 @@ public:
     return result;
   }
 
-  void invalidateDMIPointers(bool invalidate_all,
-                             sc_dt::uint64 start_range,
+  void invalidateDMIPointers(sc_dt::uint64 start_range,
                              sc_dt::uint64 end_range)
   {
     // FIXME: probably faster to always invalidate everything?
-    if (invalidate_all) {
-      for (unsigned int i = 0; i < NR_OF_MASTERS; ++i) {
-        (slave_socket[i])->invalidate_direct_mem_ptr(true, 0, 0);
-      }
+    unsigned int portId = 
+      simple_socket_utils::simple_socket_user::instance().get_user_id();
 
-    } else {
-      unsigned int portId = 
-        simple_socket_utils::simple_socket_user::instance().get_user_id();
-
-      if (!limitRange(portId, start_range, end_range)) {
-        // Range does not fall into address range of slave
-        return;
-      }
-      
-      for (unsigned int i = 0; i < NR_OF_MASTERS; ++i) {
-        (slave_socket[i])->invalidate_direct_mem_ptr(false, start_range, end_range);
-      }
+    if (!limitRange(portId, start_range, end_range)) {
+      // Range does not fall into address range of slave
+      return;
+    }
+    
+    for (unsigned int i = 0; i < NR_OF_MASTERS; ++i) {
+      (slave_socket[i])->invalidate_direct_mem_ptr(start_range, end_range);
     }
   }
 

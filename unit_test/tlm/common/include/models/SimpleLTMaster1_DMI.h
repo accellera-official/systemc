@@ -232,13 +232,11 @@ public:
   }
 
   // Invalidate DMI pointer(s)
-  void invalidate_direct_mem_ptr(bool invalidate_all,
-                                 sc_dt::uint64 start_range,
+  void invalidate_direct_mem_ptr(sc_dt::uint64 start_range,
                                  sc_dt::uint64 end_range)
   {
-    if (invalidate_all ||
-        (start_range <= mDMIData.dmi_end_address &&
-         end_range >= mDMIData.dmi_start_address)) {
+    if (start_range <= mDMIData.dmi_end_address &&
+         end_range >= mDMIData.dmi_start_address) {
       invalidate(mDMIData);
     }
   }
