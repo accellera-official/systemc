@@ -43,23 +43,23 @@ public:
     (*this)(mProcess);
   }
 
-  // REGISTER_SOCKETPROCESS
+  // REGISTER_XXX
   template <typename MODULE>
-  void CB(MODULE* mod, sync_enum_type (MODULE::*cb)(transaction_type&, phase_type&, sc_core::sc_time&), int id)
+  void registerNBTransport(MODULE* mod, sync_enum_type (MODULE::*cb)(transaction_type&, phase_type&, sc_core::sc_time&), int id)
   {
     mProcess.setTransportPtr(mod, static_cast<typename Process::TransportPtr>(cb));
     mProcess.setTransportUserId(id);
   }
 
   template <typename MODULE>
-  void CB(MODULE* mod, unsigned int (MODULE::*cb)(tlm::tlm_debug_payload&), int id)
+  void registerDebugTransport(MODULE* mod, unsigned int (MODULE::*cb)(tlm::tlm_debug_payload&), int id)
   {
     mProcess.setTransportDebugPtr(mod, static_cast<typename Process::TransportDebugPtr>(cb));
     mProcess.setTransportDebugUserId(id);
   }
 
   template <typename MODULE>
-  void CB(MODULE* mod, bool (MODULE::*cb)(const sc_dt::uint64&, bool forReads, tlm::tlm_dmi&), int id)
+  void registerDMI(MODULE* mod, bool (MODULE::*cb)(const sc_dt::uint64&, bool forReads, tlm::tlm_dmi&), int id)
   {
     mProcess.setGetDMIPtr(mod, static_cast<typename Process::GetDMIPtr>(cb));
     mProcess.setGetDMIUserId(id);

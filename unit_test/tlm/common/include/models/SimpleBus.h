@@ -50,13 +50,13 @@ public:
     mResponsePEQ("responsePEQ")
   {
      for (unsigned int i = 0; i < NR_OF_MASTERS; ++i) {
-       REGISTER_SOCKETPROCESS_USER(slave_socket[i], masterNBTransport, i);
-       REGISTER_SOCKETPROCESS_USER(slave_socket[i], transportDebug, i);
-       REGISTER_SOCKETPROCESS_USER(slave_socket[i], getDMIPointer, i);
+       REGISTER_NBTRANSPORT_USER(slave_socket[i], masterNBTransport, i);
+       REGISTER_DEBUGTRANSPORT_USER(slave_socket[i], transportDebug, i);
+       REGISTER_DMI_USER(slave_socket[i], getDMIPointer, i);
      }
      for (unsigned int i = 0; i < NR_OF_SLAVES; ++i) {
-       REGISTER_SOCKETPROCESS(master_socket[i], slaveNBTransport);
-       REGISTER_SOCKETPROCESS(master_socket[i], invalidateDMIPointers);
+       REGISTER_NBTRANSPORT(master_socket[i], slaveNBTransport);
+       REGISTER_INVALIDATEDMI(master_socket[i], invalidateDMIPointers);
      }
 
      SC_THREAD(RequestThread);

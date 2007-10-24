@@ -54,8 +54,8 @@ public:
     mDMIDataWrites.first.dmi_end_address = 0;
 
     // register nb_transport method
-    REGISTER_SOCKETPROCESS(socket, myNBTransport);
-    REGISTER_SOCKETPROCESS(socket, invalidate_direct_mem_ptr);
+    REGISTER_NBTRANSPORT(socket, myNBTransport);
+    REGISTER_INVALIDATEDMI(socket, invalidate_direct_mem_ptr);
 
     // Master thread
     SC_THREAD(run);

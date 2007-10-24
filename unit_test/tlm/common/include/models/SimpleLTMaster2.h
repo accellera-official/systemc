@@ -47,7 +47,7 @@ public:
     mTransactionCount(0)
   {
     // register nb_transport method
-    REGISTER_SOCKETPROCESS(socket, myNBTransport);
+    REGISTER_NBTRANSPORT(socket, myNBTransport);
 
     // Master thread
     SC_THREAD(run);

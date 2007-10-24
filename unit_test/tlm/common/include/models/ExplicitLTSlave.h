@@ -45,8 +45,8 @@ public:
     mCurrentTransaction(0)
   {
     // register nb_transport method
-    REGISTER_SOCKETPROCESS(socket, myNBTransport);
-    REGISTER_SOCKETPROCESS(socket, transport_dbg);
+    REGISTER_NBTRANSPORT(socket, myNBTransport);
+    REGISTER_DEBUGTRANSPORT(socket, transport_dbg);
 
     SC_THREAD(beginResponse)
   }

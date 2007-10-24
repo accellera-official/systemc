@@ -48,16 +48,16 @@ public:
     return mEndEvent;
   }
 
-  // REGISTER_SOCKETPROCESS
+  // REGISTER_XXX
   template <typename MODULE>
-  void CB(MODULE* mod, sync_enum_type (MODULE::*cb)(transaction_type&, phase_type&, sc_core::sc_time&), int id)
+  void registerNBTransport(MODULE* mod, sync_enum_type (MODULE::*cb)(transaction_type&, phase_type&, sc_core::sc_time&), int id)
   {
     mProcess.setTransportPtr(mod, static_cast<typename Process::TransportPtr>(cb));
     mProcess.setTransportUserId(id);
   }
 
   template <typename MODULE>
-  void CB(MODULE* mod, void (MODULE::*cb)(sc_dt::uint64, sc_dt::uint64), int id)
+  void registerInvalidateDMI(MODULE* mod, void (MODULE::*cb)(sc_dt::uint64, sc_dt::uint64), int id)
   {
     mProcess.setInvalidateDMIPtr(mod, static_cast<typename Process::InvalidateDMIPtr>(cb));
     mProcess.setInvalidateDMIUserId(id);

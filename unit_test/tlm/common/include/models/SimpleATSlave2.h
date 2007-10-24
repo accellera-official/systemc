@@ -46,7 +46,7 @@ public:
     RESPONSE_DELAY(100, sc_core::SC_NS)
   {
     // register nb_transport method
-    REGISTER_SOCKETPROCESS(socket, myNBTransport);
+    REGISTER_NBTRANSPORT(socket, myNBTransport);
 
     SC_METHOD(beginResponse)
     sensitive << mBeginResponseEvent;

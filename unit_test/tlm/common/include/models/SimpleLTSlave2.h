@@ -43,11 +43,12 @@ public:
     socket("socket")
   {
     // register nb_transport method
-    REGISTER_SOCKETPROCESS(socket, myNBTransport);
-    REGISTER_SOCKETPROCESS(socket, myGetDMIPtr);
+    REGISTER_NBTRANSPORT(socket, myNBTransport);
+    REGISTER_DMI(socket, myGetDMIPtr);
+
     // TODO: we don't register the transport_dbg callback here, so we
     // can test if something bad happens
-    // ADD_SOCKETPROCESS_TRANS_DBG(socket, transport_dbg);
+    // REGISTER_DEBUGTRANSPORT(socket, transport_dbg);
   }
 
   sync_enum_type myNBTransport(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)

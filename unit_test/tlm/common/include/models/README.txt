@@ -15,10 +15,10 @@ SimpleLTMaster2/SimpleLTSlave2
 ------------------------------
 
 - LT Master/Slave model using the convenience tlm socket
-- Slave and Master model use the REGISTER_SOCKETPROCESS macro to register a
+- Slave and Master model use the REGISTER_DEBUGTRANSPORT macro to register a
   transport callback to the socket
 - Added support for DMI handling, callback registration with
-  REGISTER_SOCKETPROCESS
+  REGISTER_DMI
 - SimpleLTSlave2 does not register the transport_dbg callback, so that
   we are able to test this case in bus_dmi.
 

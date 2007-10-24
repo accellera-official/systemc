@@ -50,7 +50,7 @@ public:
     port("port"),
     mTransactionPEQ("transactionPEQ")
   {
-    REGISTER_SOCKETPROCESS(socket, myNBTransport);
+    REGISTER_NBTRANSPORT(socket, myNBTransport);
 
     SC_THREAD(run);
   }

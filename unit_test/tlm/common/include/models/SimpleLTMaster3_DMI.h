@@ -53,7 +53,7 @@ public:
     mDMIDataWrites.first.dmi_start_address = 1;
     mDMIDataWrites.first.dmi_end_address = 0;
 
-    REGISTER_SOCKETPROCESS(socket, invalidate_direct_mem_ptr);
+    REGISTER_INVALIDATEDMI(socket, invalidate_direct_mem_ptr);
 
     // Master thread
     SC_THREAD(run);

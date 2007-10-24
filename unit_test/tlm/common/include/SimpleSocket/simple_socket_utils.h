@@ -43,10 +43,30 @@ namespace simple_socket_utils {
 
 }
 
-#define REGISTER_SOCKETPROCESS(socket, process) \
-  socket.CB(this, &SC_CURRENT_USER_MODULE::process, 0)
 
-#define REGISTER_SOCKETPROCESS_USER(socket, process, id) \
-  socket.CB(this, &SC_CURRENT_USER_MODULE::process, id)
+#define REGISTER_NBTRANSPORT(socket, process) \
+  socket.registerNBTransport(this, &SC_CURRENT_USER_MODULE::process, 0)
+
+#define REGISTER_NBTRANSPORT_USER(socket, process, id) \
+  socket.registerNBTransport(this, &SC_CURRENT_USER_MODULE::process, id)
+
+#define REGISTER_DEBUGTRANSPORT(socket, process) \
+  socket.registerDebugTransport(this, &SC_CURRENT_USER_MODULE::process, 0)
+
+#define REGISTER_DEBUGTRANSPORT_USER(socket, process, id) \
+  socket.registerDebugTransport(this, &SC_CURRENT_USER_MODULE::process, id)
+
+#define REGISTER_DMI(socket, process) \
+  socket.registerDMI(this, &SC_CURRENT_USER_MODULE::process, 0)
+
+#define REGISTER_DMI_USER(socket, process, id) \
+  socket.registerDMI(this, &SC_CURRENT_USER_MODULE::process, id)
+
+#define REGISTER_INVALIDATEDMI(socket, process) \
+  socket.registerInvalidateDMI(this, &SC_CURRENT_USER_MODULE::process, 0)
+
+#define REGISTER_INVALIDATEDMI_USER(socket, process, id) \
+  socket.registerInvalidateDMI(this, &SC_CURRENT_USER_MODULE::process, id)
+
 
 #endif
