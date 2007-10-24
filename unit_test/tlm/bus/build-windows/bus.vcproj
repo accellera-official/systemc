@@ -51,9 +51,10 @@
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="0"
 				BrowseInformation="1"
-				WarningLevel="3"
+				WarningLevel="4"
 				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="4"
+				DisableSpecificWarnings="4100;4127"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -137,7 +138,7 @@
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
-				DisableSpecificWarnings="4244"
+				DisableSpecificWarnings="4100;4127"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -205,6 +206,54 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath="..\..\common\include\models\CoreDecouplingLTMaster.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\include\models\ExplicitLTSlave.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\include\models\SimpleATMaster1.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\include\models\SimpleATMaster2.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\include\models\SimpleATSlave1.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\include\models\SimpleATSlave2.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\include\models\SimpleBus.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\include\models\SimpleLTMaster1.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\include\models\SimpleLTMaster2.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\include\models\SimpleLTMaster3.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\include\models\SimpleLTSlave1.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\include\models\SimpleLTSlave2.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
