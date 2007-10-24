@@ -1,19 +1,25 @@
 include ./Makefile.config
 
+export FLAG_BATCH = 1
+
 SUBDIRS = \
  	../bus \
 	../bus_dmi \
  	../gp_extension \
 	../p2p \
 	../transactor \
-        ../accessors \
-        ../data_types
+    ../accessors \
+    ../data_types
 
-.PHONY: all clean run
+.PHONY: all clean check
 
 all:
 	@for i in $(SUBDIRS); do \
         (cd $$i/build-unix && $(MAKE)); done
+
+check:
+	@for i in $(SUBDIRS); do \
+        (cd $$i/build-unix && $(MAKE) check); done
 
 run:
 	@for i in $(SUBDIRS); do \

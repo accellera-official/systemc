@@ -7,11 +7,15 @@ SUBDIRS = \
 	../SimpleAT \
 	../SimpleAT_TA
 
-.PHONY: all clean run
+.PHONY: all clean check
 
 all:
 	@for i in $(SUBDIRS); do \
         (cd $$i/build-unix && $(MAKE)); done
+
+check:
+	@for i in $(SUBDIRS); do \
+        (cd $$i/build-unix && $(MAKE) check); done
 
 run:
 	@for i in $(SUBDIRS); do \

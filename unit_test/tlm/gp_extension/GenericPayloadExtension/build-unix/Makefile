@@ -15,14 +15,22 @@ CFLAGS = $(FLAGS) $(INCDIR)
 OBJS   = $(OBJ_NAME).o tlm_master.o tlm_slave.o
 
 
-.PHONY: clean all run
+.PHONY: clean all check
 
-all: $(OBJ_NAME).exe
+all: announce $(OBJ_NAME).exe
 
-run:  $(OBJ_NAME).exe
-	./$(OBJ_NAME).exe > run.log
-	@diff run.log ../golden.log > diff.log 2>&1;\
+announce:
+	@if  ( test ! -d $(FLAG_BATCH) ); \
+	 	then echo; echo "$(OBJ_NAME):"; echo; \
+	 fi
+	
+check: announce $(OBJ_NAME).exe
+	@./$(OBJ_NAME).exe > run.log
+	@diff run.log ../results/expected.log > diff.log 2>&1;\
 	if [ -s diff.log ]; then echo "***ERROR:"; cat diff.log; else echo "OK"; fi
+
+run: announce $(OBJ_NAME).exe
+	@./$(OBJ_NAME).exe
 
 $(OBJ_NAME).exe: $(OBJS)
 	$(LD) -o $@ $(OBJS) $(LIBS)
@@ -37,4 +45,4 @@ tlm_slave.o: $(SRCDIR)/tlm_slave.cpp
 	$(GXX) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJ_NAME).exe *.o run.log diff.log
+	rm -f *.o *.log $(OBJ_NAME).exe
