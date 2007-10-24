@@ -9,6 +9,7 @@
 
 0002 - The namespace for tlm_analysis needs to be renamed 'tlm_analysis'. It is
        presently named 'analysis'.
+       [TW] Agreed. Further, we need to add the tlm_ prefix to the classnames.
 
 0003 - /include/tlm_h/tlm_generic_payload/tlm_helpers.h needs to be renamed
        'tlm_gp_helpers.h' or promoted to tlm_core
@@ -100,6 +101,9 @@
        
 0018 - TLM 2 requirement 8.5 specifies the examples and unit tests
        (regressions) pass Purify.  Question: Who will be responsible for this?
+       [TW] I propose the primary code author be responsible for purify analysis;
+       if Purify isn't accessible, I think a comparable code quality tool may
+       be substituted.
        
 0019 - TLM ports initiator/target ports do not appear to have the GP material
        integrated
@@ -115,6 +119,7 @@
        
 0022 - What is the minimum version of GCC to be supported?
        [OS]: gcc 3.x?
+       [TW]: Agreed.
 
 0023 - GP extension test (make run) fails on Intel Macintosh
        make: *** [run] Error 139
