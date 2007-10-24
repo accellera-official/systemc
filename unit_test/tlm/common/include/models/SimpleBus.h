@@ -197,7 +197,7 @@ public:
       wait(mRequestPEQ.getEvent());
 
       transaction_type* trans;
-      while ((trans = mRequestPEQ.getNextTransaction())) {
+      while ((trans = mRequestPEQ.getNextTransaction())!=0) {
         unsigned int portId = decode(trans->get_address());
         assert(portId < NR_OF_SLAVES);
         master_socket_type* decodeSocket = &master_socket[portId];
@@ -264,7 +264,7 @@ public:
       wait(mResponsePEQ.getEvent());
 
       transaction_type* trans;
-      while ((trans = mResponsePEQ.getNextTransaction())) {
+      while ((trans = mResponsePEQ.getNextTransaction())!=0) {
         PendingTransactionsIterator it = mPendingTransactions.find(trans);
         assert(it != mPendingTransactions.end());
 
