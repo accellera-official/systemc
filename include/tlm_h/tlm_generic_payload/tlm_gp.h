@@ -40,6 +40,8 @@ inline unsigned int max_num_extensions(bool increment=false)
 class tlm_extension_base
 {
 public:
+    virtual tlm_extension_base* clone() const = 0;
+    virtual ~tlm_extension_base() {}
     static unsigned int register_extension()
     {
         static int extension_index = -1;
@@ -58,6 +60,8 @@ template <typename T>
 class tlm_extension : public tlm_extension_base
 {
 public:
+    virtual tlm_extension_base* clone() const = 0;
+    virtual ~tlm_extension() {}
     const static unsigned int ID;
 };
 
@@ -108,15 +112,50 @@ public:
         , m_burst_data_size(0)
         , m_burst_mode(TLM_INCREMENT_BURST)
         , m_response_status(TLM_INCOMPLETE_RESP)
+        , m_lock(false)
         , m_extensions(max_num_extensions())
         , mDMI(false)
     {
     }
     
     // FIXME: copy constructor, assignment operator, ... NOT needed
+    // OS: for cloning support a copy constructor is helpful, I think.
+    //     Please review.
+
+    // copy constructor
+    tlm_generic_payload(const tlm_generic_payload& x)
+        : m_command(x.get_command())
+        , m_address(x.get_address())
+        , m_data(x.get_data_ptr())
+        , m_burst_length(x.get_burst_length())
+        , m_burst_data_size(x.get_burst_data_size())
+        , m_burst_mode(x.get_burst_mode())
+        , m_response_status(x.get_response_status())
+        , m_lock(x.get_lock())
+        , m_extensions(max_num_extensions())
+        , mDMI(false)
+    {
+        // copy all extensions
+        if (m_extensions.size()>0)
+        {
+            for(unsigned int i=0; i<m_extensions.size(); i++)
+            {
+                if(x.get_extension(i))
+                {
+                    m_extensions[i] = x.get_extension(i)->clone();
+                }
+            }
+        }
+    }
+
+    tlm_generic_payload* clone() const
+    {
+        return new tlm_generic_payload(*this);
+    }
     
     //--------------
     // Destructor
+    // TODO: review if this needs to be virtual
     //--------------
     virtual ~tlm_generic_payload() {}
     
@@ -245,12 +284,12 @@ public:
     }
 
     // Check for an extension, ext will point to 0 if not present
-    template <typename T> void get_extension(T*& ext)
+    template <typename T> void get_extension(T*& ext) const
     {
         ext = static_cast<T*>(m_extensions[T::ID]);
     }
     // Non-templatized version:
-     tlm_extension_base* get_extension(unsigned int index)
+     tlm_extension_base* get_extension(unsigned int index) const
     {
         return m_extensions[index];
     }

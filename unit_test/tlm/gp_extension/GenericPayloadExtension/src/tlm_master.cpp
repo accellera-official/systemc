@@ -38,8 +38,17 @@ void tlm_master::test_single_write(bool use_ext1,
     // Add/clear extensions:
     if (use_ext1)
     {
+        // set the extension normally:
         m_gp.set_extension(&m_ext1);
-        // or: m_gp.set_extension(tlm_extension1::ID, &m_ext1);
+ 
+        // check for mutatability, getting the extension "normally":
+        tlm_extension1* p_ext1;
+        m_gp.get_extension(p_ext1);
+        p_ext1->data1 *= 2;
+
+        // get the extension using the explicit ID
+        p_ext1 = static_cast<tlm_extension1 *> (m_gp.get_extension(tlm_extension1::ID));
+        p_ext1->data1 /= 2;
     }
     else
     {
@@ -48,7 +57,8 @@ void tlm_master::test_single_write(bool use_ext1,
     }
     if (use_ext2)
     {
-        m_gp.set_extension(&m_ext2);
+        // test setting the extension using the explicit ID 
+        m_gp.set_extension(tlm_extension2::ID, &m_ext2);
     }
     else
     {

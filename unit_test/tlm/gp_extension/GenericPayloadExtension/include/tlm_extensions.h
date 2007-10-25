@@ -25,6 +25,9 @@
 // The basic structure here is that the classes must be derived
 // from tlm_extension<T>, with T being the extension class
 // name.
+//
+// The extension classes must define a clone() method to allow for cloning
+// of the full tlm_generic_payload class.
 
 class tlm_extension1 :
    public tlm::tlm_extension<tlm_extension1>
@@ -34,6 +37,11 @@ public:
         : data1(0)
     {}
     int data1;
+
+    tlm_extension_base* clone() const
+    {
+        return new tlm_extension1(*this);
+    }
 };
 
 class tlm_extension2 :
@@ -44,6 +52,10 @@ public:
         : data2(0)
     {}
     int data2;
+    tlm_extension_base* clone() const
+    {
+        return new tlm_extension2(*this);
+    }
 };
 
 class tlm_extension3 :
@@ -54,6 +66,11 @@ public:
         : data3(0)
     {}
     int data3;
+
+    tlm_extension_base* clone() const
+    {
+        return new tlm_extension3(*this);
+    }
 };
 
 #endif

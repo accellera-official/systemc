@@ -46,14 +46,17 @@ tlm_slave::tlm_slave(sc_core::sc_module_name _name,
 
 void tlm_slave::nb_transport(tlm::tlm_generic_payload* gp)
 {
+    // We also test cloning here:
+    tlm::tlm_generic_payload* gp_tmp = gp->clone();
+
     // handle extensions:
     tlm_extension1* ext1;
     tlm_extension2* ext2;
     tlm_extension3* ext3;
-    gp->get_extension(ext1);
-    // or: ext1 = static_cast<tlm_extension1*>(gp->get_extension(tlm_extension1::ID));
-    gp->get_extension(ext2);
-    gp->get_extension(ext3);
+    gp_tmp->get_extension(ext1);
+    // or: ext1 = static_cast<tlm_extension1*>(gp_tmp->get_extension(tlm_extension1::ID));
+    gp_tmp->get_extension(ext2);
+    gp_tmp->get_extension(ext3);
     if (ext1)
     {
         std::cout << std::endl << name() << ": got extension 1 with value = " 
@@ -71,6 +74,7 @@ void tlm_slave::nb_transport(tlm::tlm_generic_payload* gp)
     }
     std::cout << std::endl;
 
+    delete gp_tmp;
 
     // Generic Payload Protocol
     tlm::tlm_response_status m_response_status;
