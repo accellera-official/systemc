@@ -44,34 +44,42 @@ public:
   virtual void b_transport(TRANS& trans) = 0;
 };
 
-///////////////////////
+//////////////////////////////////////////////////////////////////////////
 // DMI interfaces for getting and invalidating DMI pointers:
-///////////////////////
+//////////////////////////////////////////////////////////////////////////
 
 // The semantics of the forward interface are as follows:
 // 
-// - An initiator that want to get direct access to a slave's memory region
+// - An initiator that want to get direct access to a target's memory region
 //   can call the get_direct_mem_ptr method with the address parameter set to
-//   the address that it wants to gain access to. The forReads parameter
-//   specifies if a dmi range for read accesses or for write access must be
-//   returned.
-// - The 'forReads' parameter is necessary because read and write ranges do
-//   not have to have the same ranges. If they do, a slave can specify that
-//   the range is valid for all accesses with the type attribute in the
-//   tlm_dmi structure.
-// - The bus, if any, needs to decode the address and forward the call to
-//   the corresponding slave. It needs to handle the address exactly as the
-//   slave would expect on a transaction call, e.g. mask the address according
-//   to the slave's address width.
-// - If the slave supports DMI access for the given address, it sets the
+//   the address that it wants to gain access to. The for_reads parameter
+//   specifies if the initiator wants to read or write to the target's DMI
+//   region. The initiator is responsible for calling the method with a
+//   freshly initialized tlm_dmi object either by using a newly constructed
+//   object, or by calling an existing object's init() method.
+// - The 'for_reads' parameter is necessary because read and write ranges are
+//   not necessarily identical. If they are, a target can specify that the
+//   range is valid for all accesses with the type attribute in the tlm_dmi
+//   structure.
+// - The interconnect, if any, needs to decode the address and forward the
+//   call to the corresponding target. It needs to handle the address exactly
+//   as the target would expect on a transaction call, e.g. mask the address
+//   according to the target's address width.
+// - If the target supports DMI access for the given address, it sets the
 //   data fields in the DMI struct and returns true.
-// - If the slave does not support DMI access it needs to return false.
-//   The slave can either set the correct address range in the DMI struct
+// - If a target does not support DMI access it needs to return false.
+//   The target can either set the correct address range in the DMI struct
 //   to indicate the memory region where DMI is disallowed, or it can specify
-//   the complete address range if it doesn't know it's memory range.
-// - The bus must translate the addresses to the master's address space. This
-//   must be the inverse operation of what the bus/interconnect needed to do
-//   when forwarding the call.
+//   the complete address range if it doesn't know it's memory range. In this
+//   case the interconnect is responsible for clipping the address range to
+//   the correct range that the target serves.
+// - The interconnect must always translate the addresses to the initiator's
+//   address space. This must be the inverse operation of what the
+//   interconnect needed to do when forwarding the call. In case the
+//   component wants to change any member of the tlm_dmi object, e.g. for
+//   its own latency to the target's latency, it must only do so *after* the
+//   target has been called. The target is always allowed to overwrite all
+//   values in the tlm_dmi object.
 // - In case the slave returned with an invalid region the bus/interconnect
 //   must fill in the complete address region for the particular slave in the
 //   DMI data structure.
@@ -79,7 +87,7 @@ public:
 // DMI hint optimization:
 // 
 // Initiators may use the DMI hint in the tlm_generic_payload to avoid
-// unnecessary memory locking attempts. The recommended sequence of interface
+// unnecessary DMI attempts. The recommended sequence of interface
 // method calls would be:
 //
 // - The initiator first tries to check if it has a valid DMI region for the
@@ -89,31 +97,41 @@ public:
 //   get the DMI region.
 //
 // Note that the DMI hint optimization is completely optional and every
-// initiator model is free to ignore the DMI hint.
+// initiator model is free to ignore the DMI hint. However, a target is
+// required to set the DMI hint to true if a DMI request on the given address
+// with the given transaction type (read or write) would have succeeded.
 
 class tlm_fw_direct_mem_if : public virtual sc_core::sc_interface
 {
 public:
   virtual bool get_direct_mem_ptr(const sc_dt::uint64& address,
-                                  bool forReads,
+                                  bool for_reads,
                                   tlm_dmi& dmi_data) = 0;
 };
 
 // The semantics of the backwards call is as follows:
 //
-// - If a slave wants to notify the system that all DMI pointers to its
-//   memory are about to become invalid it must call the below interface
-//   method with the range arguments set to its memory region and the 
-//   invalidate_all argument set to false.
-// - A bus/interconnect must forward this call to all masters that could
-//   potentially have a DMI pointer to this memory. A safe implementation is
-//   to call every attached master.
-// - Each master must check if it has a pointer to the given memory and throw
-//   this away.
+// - An interconnect component or a target is required to invalidate all
+//   affected DMI regions whenever any change in the regions take place.
+//   The exact rule is that a component must invalidate all those DMI regions
+//   that it already reported, if it would answer the same DMI request
+//   with any member of the tlm_dmi data structure set differently.
+// - An interconnect component must forward the invalidate_direct_mem_ptr call
+//   to all initiators that could potentially have a DMI pointer to the region
+//   specified in the method arguments. A safe implementation is to call
+//   every attached initiator.
+// - An interconnect component must transform the address region of an
+//   incoming invalidate_direct_mem_ptr to the corresponding address space
+//   for the initiators. Basically, this is the same address transformation
+//   that the interconnect does on the DMI ranges on the forward direction.
+// - Each initiator must check if it has a pointer to the given region and
+//   throw this away. It is recommended that the initiator throws away all DMI
+//   regions that have any overlap with the given regions, but this is not a
+//   hard requirement.
 //
 // - A full DMI pointer invalidation, e.g. for a bus remap can be signaled
 //   by setting the range: 0x0 - 0xffffffffffffffffull = (sc_dt::uint64)-1
-// - A master must throw away all DMI pointers in this case.
+// - An initiator must throw away all DMI pointers in this case.
 //
 // - Under no circumstances a model is allowed to call the get_direct_mem_ptr
 //   from within the invalidate_direct_mem_ptr method, directly or indirectly.
@@ -125,11 +143,11 @@ public:
                                          sc_dt::uint64 end_range) = 0;
 };
 
-///////////////////////
+/////////////////////////////////////////////////////////////////////
 // debug interface for memory access
-///////////////////////
+/////////////////////////////////////////////////////////////////////
 //
-// This interface can be used to gain access to a slaves memory or registers
+// This interface can be used to gain access to a targets memory or registers
 // in a non-intrusive manner. No side effects, waits or event notifications
 // must happen in the course of the method.
 //
@@ -141,10 +159,10 @@ public:
 //   . data: A pointer to the initiator-allocated data buffer, which must be
 //           at least num_bytes large. The data is always organized in the
 //           endianness of the machine.
-// - The bus/interconnect will decode the address and forward the call to the
-//   appropriate slave.
-// - The slave must return the number of successfully transmitted bytes, where
-//   this number must be <= num_bytes. Thus, a slave can safely return 0 if it
+// - The interconnect, if any, will decode the address and forward the call to
+//   the appropriate target.
+// - The target must return the number of successfully transmitted bytes, where
+//   this number must be <= num_bytes. Thus, a target can safely return 0 if it
 //   does not support debug transactions.
 //
 class tlm_transport_dbg_if : public virtual sc_core::sc_interface

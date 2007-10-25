@@ -36,13 +36,13 @@ public:
   
   void init()
   {
-    dmi_ptr = 0;
+    dmi_ptr           = 0;
     dmi_start_address = 0x0;
-    dmi_end_address = (sc_dt::uint64)-1;
-    type = READ_WRITE;
-    read_latency = sc_core::SC_ZERO_TIME;
-    write_latency = sc_core::SC_ZERO_TIME;
-    endianness = TLM_LITTLE_ENDIAN;
+    dmi_end_address   = (sc_dt::uint64)-1;
+    type              = READ_WRITE;
+    read_latency      = sc_core::SC_ZERO_TIME;
+    write_latency     = sc_core::SC_ZERO_TIME;
+    endianness        = TLM_LITTLE_ENDIAN;
   }
   
   // If the forward call is successful, the target returns the dmi_ptr,
@@ -51,18 +51,18 @@ public:
   // endianness of the target (endianness member of the tlm_dmi struct).
   unsigned char* dmi_ptr;
   
-  // The absolut start and end addresses of the DMI region. If the decoder
+  // The absolute start and end addresses of the DMI region. If the decoder
   // logic in the interconnect changes the address field e.g. by masking, the
-  // interconnect is responsible to transform the relative address back to a
+  // interconnect is responsible to transform the relative address back to an
   // absolute address again.
   sc_dt::uint64 dmi_start_address;
   sc_dt::uint64 dmi_end_address;
 
-  // The type accesses this DMI range support. If eg the 'forReads' parameter
+  // The type accesses this DMI range support. If the 'for_reads' parameter
   // of the 'get_direct_mem_ptr' call is set to true, a target must set this
   // attribute to READ (in case the range is only for read accesses) or
   // READ_WRITE (in case the range supports both read and write accesses). If
-  // the 'forReads' parameter is false a target must set this to WRITE or
+  // the 'for_reads' parameter is false a target must set this to WRITE or
   // READ_WRITE.
   enum Type { READ = 0x1, WRITE = 0x2, READ_WRITE = READ|WRITE };
   Type type;

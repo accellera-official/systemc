@@ -110,7 +110,7 @@ public:
   }
 
   bool get_direct_mem_ptr(const sc_dt::uint64& address,
-                          bool forReads,
+                          bool for_reads,
                           tlm::tlm_dmi& dmi_data)
   {
     if (address < 400) {

@@ -1,18 +1,12 @@
--------- 2007-10-18.01 -------- Charles
-       
-0001 - /include/tlm_h/tlm_generic_payload/tlm_array.h is an array class
-       implementation.  Is there a reason for using this over the stdlibc++
-       array class? If not, it should be removed and tlm_gp.h updated
-       appropriately. If if needs to stay, it should either be renamed to
-       tlm_gp_array.h or promoted to tlm_core.
-       [OS]: I don't think a change is needed here.
-
 0002 - The namespace for tlm_analysis needs to be renamed 'tlm_analysis'. It is
        presently named 'analysis'.
        [TW] Agreed. Further, we need to add the tlm_ prefix to the classnames.
+       [OS] No action is required for the namespaces, everything is now
+            natively in namespace tlm. I agree with the class names.
 
 0003 - /include/tlm_h/tlm_generic_payload/tlm_helpers.h needs to be renamed
        'tlm_gp_helpers.h' or promoted to tlm_core
+       [OS]: namespace part is fixed.
 
 0004 - There are variables beginning with underscore characters (_)
 
@@ -21,34 +15,6 @@
        addition can be made to tlm_platform.h for MSVC. (MacOSX runs on both
        big and little endian architectures)
 
-0006 - The namespace for tlm_generic_payload needs to be renamed to
-       'tlm_generic_payload'.  It is presently named 'tlm_generic_payload_ns'.
-
-0007 - Include guards should be consistent. The Unix convention is full name in
-       uppercase beginning and ending with two underscores; and non-alphabetic
-       characters replaced by underscores. (tlm_somestuff_here.h -->
-       __TLM_SOMESTUFF_HERE_H__)
-       [OS]: FIXED
-
-0008 - when building /unit_test/tlm/bus (unix) 
-       warning: 'class tlm_quantum::tlm_qk_dummy::tlm_quantumkeeper<tlm_quantum::tlm_qk_dummy::tlm_dummy>'
-       has virtual functions but non-virtual destructor
-       [OS]: FIXED
-
-0009 - when building /unit_test/gp_extension/GenericPayload (Windows)
-       c:\eslx\projects\tlmwg\tlm2\unit_test\tlm\gp_extension\genericpayload\include\tlm_master.h(148)
-       : warning C4312: 'type cast' : conversion from 'unsigned int' to 'void *' of greater size
-       [OS]: FIXED
-
-0010 - when building /unit_test/gp_extension/GenericPayload (Windows)
-       c:\eslx\projects\tlmwg\tlm2\unit_test\tlm\gp_extension\genericpayload\include\tlm_master.h(102)
-       : see reference to function template instantiation
-       'void tlm_master::write<unsigned int>(unsigned int,DT)' being compiled
-        with
-        [
-            DT=unsigned int
-        ]
-       [OS]: FIXED
 
 0011 - explicitly sized variables (8, 16, 32, 64) should use explicitly sized
        type [u]int[8,16,32,64]_t or sc_dt::[u]int64 over compiler dependent
@@ -61,44 +27,17 @@
        /include/tlm_h/tlm_core/tlm_fifo/tlm_fifo.h
        /include/tlm_h/tlm_core/tlm_fifo/tlm_fifo_put_get.h
        
--------- 2007-10-19.01 -------- Olaf 
-       
-0014 - We should consistently use #include <systemc>, not #include <systemc.h>.
-       We stated in the meeting that we only supported SystemC versions >=
-       2.1.v1, so I think we should use this include style to keep the SystemC
-       namespaces intact.
-       [OS]: FIXED
-
-0015 - We should review the namespace structure in the kit. From my perspective
-       it's very unclean and dangerous to first define the classes in no
-       namespace at all, move them to an intermediate namespace using something
-       like "namespace foo{ #include...}" in the mid-level include files, and
-       finally break the intermediate namespaces up again and moving everything
-       into the tlm namespace in the top-level tlm.h. Got lost in the
-       description? Me too.
-
-       The problem is that although we might state that users should only
-       include the top-level tlm.h, we cannot really enforce this rule. So, if
-       somebody does a #include "tlm_h/tlm_generic_payload/tlm_gp.h" because
-       he's only interested in the GP, he'd end up with the GP defined in a
-       different namespace. This error might not surface immediately, so it
-       might be somewhat hard to catch.
-
-       Why not define everything properly in the tlm namespace from the
-       beginning?  For the non-public stuff (like tlm_array, tlm_fifo(?) we
-       could use e.g. namespace tlm_utils, but that's really optional.
-
 0016 - I think we need to review the changes in the tlm_core directory from TLM
        1.0 to now. There are quite a few changes, and the question is if we
        really want to have those, or if the changes are only artifacts of the
        draft 1 release that are obsolete now. I don't know.
+       [John's addition]: We need to remove the "delayed and annotated
+       blocking and non-blocking interfaces" of the TLM2.0-draft1 kit?
 
 0017 - Can we rename the tlm_core directory to something more meaningful?  If I
        understand it correctly, then the tlm_core is supposed to hold the TLM
        1.0 interfaces, which in my mind are not at the core of things for 2.0.
 
--------- 2007-10-19.02 -------- Charles 
-       
 0018 - TLM 2 requirement 8.5 specifies the examples and unit tests
        (regressions) pass Purify.  Question: Who will be responsible for this?
        [TW] I propose the primary code author be responsible for purify analysis;
@@ -111,21 +50,12 @@
 0020 - TLM ports master/slave need to be changed to initiator/target
        (2007-10-18 call)
 
-0021 - TLM 2 requriement 8.10 specifies that there are to be no open namespaces
-       in the include files.Question: What are the implications on those in the
-       headers?
-       
--------- 2007-10-19.03 -------- Charles 
-       
-0022 - What is the minimum version of GCC to be supported?
-       [OS]: gcc 3.x?
-       [TW]: Agreed.
 
 0023 - GP extension test (make run) fails on Intel Macintosh
        make: *** [run] Error 139
        [OS]: candidate is array bounds write violation in
        tlm_annotated::tlm_generic_payload_ns::copy_data(unsigned char...
-       [OS]: fixed a wrong delete in ~tlm_memory
+       [OS]: fixed a wrong delete in ~tlm_memory, but did it help?
        
 0024 - GP extension test (./generic_payload_extension.exe) seg faults on Intel
        Macintosh

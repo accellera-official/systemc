@@ -1,0 +1,75 @@
+0001 - /include/tlm_h/tlm_generic_payload/tlm_array.h is an array class
+       implementation.  Is there a reason for using this over the stdlibc++
+       array class? If not, it should be removed and tlm_gp.h updated
+       appropriately. If if needs to stay, it should either be renamed to
+       tlm_gp_array.h or promoted to tlm_core.
+       [OS]: No change required.
+
+
+0006 - The namespace for tlm_generic_payload needs to be renamed to
+       'tlm_generic_payload'.  It is presently named 'tlm_generic_payload_ns'.
+       [OS]: Everything is in namespace tlm now.
+
+0007 - Include guards should be consistent. The Unix convention is full name in
+       uppercase beginning and ending with two underscores; and non-alphabetic
+       characters replaced by underscores. (tlm_somestuff_here.h -->
+       __TLM_SOMESTUFF_HERE_H__)
+       [OS]: FIXED
+
+0008 - when building /unit_test/tlm/bus (unix) 
+       warning: 'class tlm_quantum::tlm_qk_dummy::tlm_quantumkeeper<tlm_quantum::tlm_qk_dummy::tlm_dummy>'
+       has virtual functions but non-virtual destructor
+       [OS]: FIXED
+
+0009 - when building /unit_test/gp_extension/GenericPayload (Windows)
+       c:\eslx\projects\tlmwg\tlm2\unit_test\tlm\gp_extension\genericpayload\include\tlm_master.h(148)
+       : warning C4312: 'type cast' : conversion from 'unsigned int' to 'void *' of greater size
+       [OS]: FIXED
+
+0010 - when building /unit_test/gp_extension/GenericPayload (Windows)
+       c:\eslx\projects\tlmwg\tlm2\unit_test\tlm\gp_extension\genericpayload\include\tlm_master.h(102)
+       : see reference to function template instantiation
+       'void tlm_master::write<unsigned int>(unsigned int,DT)' being compiled
+        with
+        [
+            DT=unsigned int
+        ]
+       [OS]: FIXED
+
+       
+0014 - We should consistently use #include <systemc>, not #include <systemc.h>.
+       We stated in the meeting that we only supported SystemC versions >=
+       2.1.v1, so I think we should use this include style to keep the SystemC
+       namespaces intact.
+       [OS]: FIXED
+
+0015 - We should review the namespace structure in the kit. From my perspective
+       it's very unclean and dangerous to first define the classes in no
+       namespace at all, move them to an intermediate namespace using something
+       like "namespace foo{ #include...}" in the mid-level include files, and
+       finally break the intermediate namespaces up again and moving everything
+       into the tlm namespace in the top-level tlm.h. Got lost in the
+       description? Me too.
+
+       The problem is that although we might state that users should only
+       include the top-level tlm.h, we cannot really enforce this rule. So, if
+       somebody does a #include "tlm_h/tlm_generic_payload/tlm_gp.h" because
+       he's only interested in the GP, he'd end up with the GP defined in a
+       different namespace. This error might not surface immediately, so it
+       might be somewhat hard to catch.
+
+       Why not define everything properly in the tlm namespace from the
+       beginning?  For the non-public stuff (like tlm_array, tlm_fifo(?) we
+       could use e.g. namespace tlm_utils, but that's really optional.
+       [OS]: FIXED.
+
+
+0021 - TLM 2 requriement 8.10 specifies that there are to be no open namespaces
+       in the include files.Question: What are the implications on those in the
+       headers?
+       [OS]: FIXED
+       
+0022 - What is the minimum version of GCC to be supported?
+       [OS]: gcc 3.x?
+       [TW]: Agreed.
+

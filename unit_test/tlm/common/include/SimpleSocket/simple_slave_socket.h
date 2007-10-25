@@ -59,7 +59,7 @@ public:
   }
 
   template <typename MODULE>
-  void registerDMI(MODULE* mod, bool (MODULE::*cb)(const sc_dt::uint64&, bool forReads, tlm::tlm_dmi&), int id)
+  void registerDMI(MODULE* mod, bool (MODULE::*cb)(const sc_dt::uint64&, bool for_reads, tlm::tlm_dmi&), int id)
   {
     mProcess.setGetDMIPtr(mod, static_cast<typename Process::GetDMIPtr>(cb));
     mProcess.setGetDMIUserId(id);
@@ -71,7 +71,7 @@ private:
   public:
     typedef sync_enum_type (sc_core::sc_module::*TransportPtr)(TRANS&, tlm::tlm_phase&, sc_core::sc_time&);
     typedef unsigned int (sc_core::sc_module::*TransportDebugPtr)(tlm::tlm_debug_payload&);
-    typedef bool (sc_core::sc_module::*GetDMIPtr)(const sc_dt::uint64&, bool forReads, tlm::tlm_dmi&);
+    typedef bool (sc_core::sc_module::*GetDMIPtr)(const sc_dt::uint64&, bool for_reads, tlm::tlm_dmi&);
       
     Process(const std::string& name) :
       mName(name),
@@ -154,13 +154,13 @@ private:
       }
     }
 
-    bool get_direct_mem_ptr(const sc_dt::uint64& address, bool forReads, tlm::tlm_dmi& dmi_data)
+    bool get_direct_mem_ptr(const sc_dt::uint64& address, bool for_reads, tlm::tlm_dmi& dmi_data)
     {
       if (mGetDMIPtr) {
         // forward call
         assert(mMod);
         simple_socket_utils::simple_socket_user::instance().set_user_id(mGetDMIUserId);
-        return (mMod->*mGetDMIPtr)(address, forReads, dmi_data);
+        return (mMod->*mGetDMIPtr)(address, for_reads, dmi_data);
 
       } else {
         // No DMI support
