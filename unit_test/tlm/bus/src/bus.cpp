@@ -15,9 +15,7 @@
 
  *****************************************************************************/
 
-//#include <iostream>
-//#include <stdint.h>
-
+#include <systemc>
 #include "tlm.h"
 
 #include "SimpleLTMaster1.h"

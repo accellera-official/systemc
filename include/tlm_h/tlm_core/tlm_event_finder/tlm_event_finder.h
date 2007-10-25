@@ -23,6 +23,7 @@
 
 #include "tlm_h/tlm_core/tlm_interfaces/tlm_tag.h"
 
+namespace tlm {
 
 template <class IF , class T>
 class tlm_event_finder_t
@@ -68,5 +69,7 @@ tlm_event_finder_t<IF,T>::find_event() const
     }
     return (const_cast<IF*>( iface )->*m_event_method) ( 0 );
 }
+
+} // namespace tlm
 
 #endif

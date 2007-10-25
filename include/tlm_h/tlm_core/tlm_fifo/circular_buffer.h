@@ -25,9 +25,7 @@
 
 #include <iostream>
 
-// TODO: remove:
-using std::cout;
-using std::endl;
+namespace tlm {
 
 template < typename T >
 class circular_buffer
@@ -83,27 +81,27 @@ void
 circular_buffer<T>::debug() const
 {
 
-  cout << "Buffer debug" << endl;
-  cout << "Size : " << size() << endl;
-  cout << "Free/Used " << free() << "/" << used() << endl;
-  cout << "Indeces : r/w = " << m_ri << "/" << m_wi << endl;
+  std::cout << "Buffer debug" << std::endl;
+  std::cout << "Size : " << size() << std::endl;
+  std::cout << "Free/Used " << free() << "/" << used() << std::endl;
+  std::cout << "Indeces : r/w = " << m_ri << "/" << m_wi << std::endl;
 
   if( is_empty() ) {
 
-    cout << "empty" << endl;
+    std::cout << "empty" << std::endl;
 
   }
 
   if( is_full() ) {
 
-    cout << "full" << endl;
+    std::cout << "full" << std::endl;
 
   }
 
-  cout << "Data : " << endl;
+  std::cout << "Data : " << std::endl;
   for( int i = 0; i < used(); i++ ) {
 
-    cout << peek_data( i ) << endl;
+    std::cout << peek_data( i ) << std::endl;
 
   }
 
@@ -232,6 +230,8 @@ circular_buffer<T>::increment_read_pos( int i ) {
   m_free += i;
   
 }
+
+} // namespace tlm
 
 #endif
 

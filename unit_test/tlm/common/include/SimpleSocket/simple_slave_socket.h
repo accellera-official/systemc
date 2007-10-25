@@ -23,9 +23,9 @@
 
 template <unsigned int BUSWIDTH = 32, typename TRANS = tlm::tlm_generic_payload>
 class SimpleSlaveSocket :
-  public tlm_ports::tlm_slave_socket<BUSWIDTH,
-                                     tlm::tlm_fw_nb_transport_if<TRANS>,
-                                     tlm::tlm_bw_nb_transport_if<TRANS> >
+  public tlm::tlm_slave_socket<BUSWIDTH,
+                               tlm::tlm_fw_nb_transport_if<TRANS>,
+                               tlm::tlm_bw_nb_transport_if<TRANS> >
 {
 public:
   typedef TRANS transaction_type;

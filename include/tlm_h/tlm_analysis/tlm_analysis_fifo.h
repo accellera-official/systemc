@@ -4,10 +4,11 @@
 
 //#include "tlm_core.h"
 
-#include "tlm_analysis_if.h"
-#include "tlm_analysis_triple.h"
+#include "tlm_h/tlm_annotated/tlm_annotated_channels/tlm_annotated_fifo.h"
+#include "tlm_h/tlm_analysis/tlm_analysis_if.h"
+#include "tlm_h/tlm_analysis/tlm_analysis_triple.h"
 
-using tlm_core::tlm_fifo;
+namespace tlm {
 
 template< typename T >
 class analysis_fifo :
@@ -31,5 +32,7 @@ class analysis_fifo :
   }
 
 };
+
+} // namespace tlm
 
 #endif

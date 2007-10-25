@@ -24,6 +24,8 @@
 #include "tlm_h/tlm_core/tlm_fifo/tlm_fifo.h"
 #endif
 
+namespace tlm {
+
 /******************************************************************
 //
 // get interface
@@ -158,5 +160,6 @@ tlm_fifo<T>::nb_can_put( tlm_tag<T> * ) const {
 
 }
 
+} // namespace tlm
 
 #endif

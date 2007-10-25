@@ -23,6 +23,8 @@
 #include "tlm_h/tlm_core/tlm_fifo/tlm_fifo.h"
 #include "tlm_h/tlm_core/tlm_req_rsp/tlm_put_get_imp.h"
 
+namespace tlm {
+
 template < typename REQ , typename RSP ,
 	   typename REQ_CHANNEL = tlm_fifo<REQ> , 
 	   typename RSP_CHANNEL = tlm_fifo<RSP> >
@@ -146,4 +148,7 @@ private:
   tlm_transport_to_master< REQ , RSP > t2m;
 
 };
+
+} // namespace tlm
+
 #endif

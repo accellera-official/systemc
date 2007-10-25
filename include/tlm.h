@@ -16,31 +16,16 @@
 
  *****************************************************************************/
  
-#pragma once
-
 #ifndef __TLM_H__
 #define __TLM_H__
 
 #include <systemc>    /// main SystemC header
-#include <deque>      /// STD deque class
-#include <map>        /// STD map class
 
 #include "tlm_h/tlm_core/tlm_core.h"
 #include "tlm_h/tlm_analysis/tlm_analysis.h"
 #include "tlm_h/tlm_annotated/tlm_annotated.h"
 #include "tlm_h/tlm_generic_payload/tlm_generic_payload.h"
-//#include "tlm_h/tlm_analysis/tlm_bus_analysis.h"
 #include "tlm_h/tlm_ports/tlm_ports.h"
 #include "tlm_h/tlm_quantum/tlm_quantum.h"
-
-namespace tlm  /// TLM namespace
-{
-  using namespace tlm_core;
-  using namespace analysis;
-  using namespace tlm_annotated;
-  using namespace tlm_generic_payload_ns;
-  using namespace tlm_ports;
-  using namespace tlm_quantum;
-}
 
 #endif /* __TLM_H__ */

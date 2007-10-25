@@ -26,7 +26,7 @@
 
 //#include <systemc>
 
-
+namespace tlm {
 
 //----------------------------------------------------------------------------
 /// Class tlm_target_port_base: This class is a base class for tlm_target port class.
@@ -105,8 +105,7 @@ protected:
 };
 
 
-
-
+} // namespace tlm
 
 #endif /* __TLM_TARGET_PORT_BASE_H__ */
 

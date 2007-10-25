@@ -29,6 +29,7 @@
 
 #include "tlm_target_port_base.h"
 
+namespace tlm {
 
   //----------------------------------------------------------------------------
   /// Class tlm_initiator_port_base: This class is a base class for tlm_initiator port.
@@ -157,6 +158,8 @@
 
 
   };
+
+} // namespace tlm
 
 #endif /* __TLM_INITIATOR_PORT_BASE_H__ */
 

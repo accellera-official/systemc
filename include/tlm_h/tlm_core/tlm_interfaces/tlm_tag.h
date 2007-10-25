@@ -23,6 +23,8 @@
 #ifndef __TLM_TAG_H__
 #define __TLM_TAG_H__
 
+namespace tlm {
 template<class  T> class tlm_tag {};
+}
 
 #endif

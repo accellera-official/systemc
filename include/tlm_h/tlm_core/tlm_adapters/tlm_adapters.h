@@ -4,6 +4,8 @@
 
 #include "tlm_h/tlm_core/tlm_interfaces/tlm_master_slave_ifs.h"
 
+namespace tlm {
+
 template< typename REQ , typename RSP >
 class tlm_transport_to_master :
   public sc_core::sc_module ,
@@ -79,4 +81,7 @@ private:
   }
  
 };
+
+} // namespace tlm
+
 #endif

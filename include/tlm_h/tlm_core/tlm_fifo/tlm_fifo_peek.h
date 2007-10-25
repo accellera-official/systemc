@@ -24,6 +24,8 @@
 #include "tlm_h/tlm_core/tlm_fifo/tlm_fifo.h"
 #endif
 
+namespace tlm {
+
 template < typename T>
 inline
 T
@@ -95,5 +97,7 @@ tlm_fifo<T>::nb_poke( const T &t , int n ) {
   return true;
 
 }
+
+} // namespace tlm
 
 #endif

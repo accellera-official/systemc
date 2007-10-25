@@ -28,6 +28,7 @@
 
 #include "tlm_h/tlm_core/tlm_interfaces/tlm_tag.h"
 
+namespace tlm {
 
 // bidirectional blocking interfaces
 
@@ -142,5 +143,6 @@ class tlm_get_peek_if :
   public virtual tlm_nonblocking_get_peek_if<T>
   {};
 
+} // namespace tlm
 
 #endif

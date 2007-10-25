@@ -39,9 +39,11 @@
 #include "tlm_h/tlm_core/tlm_interfaces/tlm_fifo_ifs.h"
 #include "tlm_h/tlm_core/tlm_fifo/circular_buffer.h"
 
+namespace tlm {
 
+template <typename T> class tlm_annotated_fifo;
 
-template <class T>
+template <typename T>
 class tlm_fifo :
   public virtual tlm_fifo_get_if<T>,
   public virtual tlm_fifo_put_if<T>,
@@ -127,12 +129,15 @@ public:
 
     void debug() const {
 
-      if( is_empty() ) cout << "empty" << endl;
-      if( is_full() ) cout << "full" << endl;
+      if( is_empty() ) std::cout << "empty" << std::endl;
+      if( is_full() ) std::cout << "full" << std::endl;
 
-      cout << "size " << size() << " - " << used() << " used " << endl;
-      cout << "readable " << m_num_readable << endl;
-      cout << "written/read " << m_num_written << "/" << m_num_read << endl;
+      std::cout << "size " << size() << " - " << used() << " used "
+                << std::endl;
+      std::cout << "readable " << m_num_readable
+                << std::endl;
+      std::cout << "written/read " << m_num_written << "/" << m_num_read
+                << std::endl;
 
     }
 
@@ -144,7 +149,7 @@ public:
         { return kind_string; }
 
 
-    friend class tlm_annotated::tlm_annotated_fifo<T>;
+    friend class tlm::tlm_annotated_fifo<T>;
 
 private: // some methods to support tlm_annotated_fifo !
 
@@ -262,6 +267,8 @@ tlm_fifo<T>::update()
     m_num_read_no_notify = 0;
 
 }
+
+} // namespace tlm
 
 #include "tlm_h/tlm_core/tlm_fifo/tlm_fifo_put_get.h"
 #include "tlm_h/tlm_core/tlm_fifo/tlm_fifo_peek.h"

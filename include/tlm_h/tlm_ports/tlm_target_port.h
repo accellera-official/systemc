@@ -18,14 +18,16 @@
 #ifndef __TLM_TARGET_PORT_H__
 #define __TLM_TARGET_PORT_H__
 
-/*------------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------
  * Includes
- *----------------------------------------------------------------------------*/
+ *---------------------------------------------------------------------------*/
 #include <vector>
 
 //#include <systemc>
 
 #include "tlm_target_port_base.h"
+
+namespace tlm {
 
 //----------------------------------------------------------------------------
 /// Class tlm_target_port: port to be instantiated on the target side
@@ -283,5 +285,7 @@ void
 tlm_target_port<IF>::operator() (interface_type& interface_) {
   sc_core::sc_export<interface_type>::bind(interface_); 
 }
+
+} // namespace tlm
 
 #endif /* __TLM_TARGET_PORT_H__ */

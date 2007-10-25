@@ -4,6 +4,8 @@
 
 //#include <systemc>
 
+namespace tlm {
+
 template < typename T >
 class analysis_if : public virtual sc_core::sc_interface {
  public:
@@ -17,5 +19,7 @@ class delayed_analysis_if : public virtual sc_core::sc_interface {
   virtual void write( const T &transaction ,
 		      const sc_core::sc_time &time ) = 0;
 };
+
+} // namespace tlm
 
 #endif

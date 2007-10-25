@@ -20,7 +20,10 @@
 
 #include <systemc>
 
-// TODO: where do we get TLM_LITTLE_ENDIAN from?
+// TODO: review, TLM_LITTLE_ENDIAN is defined there:
+#include "tlm_h/tlm_generic_payload/tlm_helpers.h"
+
+namespace tlm {
 
 class tlm_dmi
 {
@@ -76,5 +79,7 @@ public:
   // The target sets the endianness of the data in the dmi_ptr array.
   tlm_endianness endianness;
 };
+
+} // namespace tlm
 
 #endif /* TLM_DMI_HEADER */

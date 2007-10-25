@@ -98,9 +98,12 @@ namespace tlm_qk_dummy {
   sc_core::sc_time tlm_quantumkeeper<Dummy>::mGlobalQuantum = sc_core::SC_ZERO_TIME;
 
   struct tlm_dummy {};
-}
+} // namespace tlm_qk_dummy
 
-typedef tlm_qk_dummy::tlm_quantumkeeper<tlm_qk_dummy::tlm_dummy>
+namespace tlm {
+typedef ::tlm_qk_dummy::tlm_quantumkeeper< ::tlm_qk_dummy::tlm_dummy >
   tlm_quantumkeeper;
+
+} // namespace tlm
 
 #endif

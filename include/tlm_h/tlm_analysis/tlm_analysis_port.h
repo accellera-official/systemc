@@ -5,6 +5,8 @@
 #include "tlm_analysis_if.h"
 #include <deque>
 
+namespace tlm {
+
 
 template < typename T>
 class analysis_port :
@@ -62,6 +64,8 @@ class analysis_port :
   std::deque< analysis_if<T> * > m_interfaces;
 
 };
+
+} // namespace tlm
 
 #endif
  

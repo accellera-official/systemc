@@ -13,10 +13,6 @@ check:
 	@for i in $(SUBDIRS); do \
         (cd $$i/build-unix && $(MAKE) check); done
 
-check:
-	@for i in $(SUBDIRS); do \
-        (cd $$i/build-unix && $(MAKE) run); done
-
 clean:
 	@for i in $(SUBDIRS); do \
         (cd $$i/build-unix && $(MAKE) clean); done

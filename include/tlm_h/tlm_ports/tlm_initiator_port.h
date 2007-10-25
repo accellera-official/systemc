@@ -18,9 +18,9 @@
 #ifndef __TLM_INITIATOR_PORT_H__
 #define __TLM_INITIATOR_PORT_H__
 
-/*------------------------------------------------------------------------------
+/*-----------------------------------------------------------------------------
  * Includes
- *----------------------------------------------------------------------------*/
+ *---------------------------------------------------------------------------*/
 #include <vector>
 
 //#include "systemc"
@@ -28,6 +28,7 @@
 #include "tlm_initiator_port_base.h"
 #include "tlm_target_port.h"
 
+namespace tlm {
 
 //----------------------------------------------------------------------------
 /// Class tlm_initiator_port: port to be instantiated on the initiator side
@@ -376,5 +377,7 @@ void
 tlm_initiator_port<IF,N>::operator() (interface_type& interface_) {
   sc_core::sc_port_b<interface_type>::bind(interface_); 
 }
+
+} // namespace tlm
 
 #endif /* __TLM_INITIATOR_PORT_H__ */

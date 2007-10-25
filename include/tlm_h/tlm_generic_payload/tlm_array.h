@@ -19,14 +19,17 @@
 #ifndef __TLM_ARRAY_H__
 #define __TLM_ARRAY_H__
 
+#include <systemc>
+#include <exception>
+// unused for the time being: #include <assert.h>
+
+namespace tlm {
+
 //
 // To the LRM writer: the below class is an artifact of the tlm_generic_payload
 //                    implementation and not part of the core TLM standard
 //
 
-#include <systemc>
-#include <exception>
-// unused for the time being: #include <assert.h>
 
 // This implements a lean and fast array class that supports array expansion on
 // request. The class is primarily used in the tlm_generic_payload class for
@@ -161,5 +164,7 @@ protected:
 
 template <typename T>
 const char* const tlm_array<T>::kind_string = "tlm_array";
+
+} // namespace tlm
 
 #endif /* __TLM_ARRAY_H__ */

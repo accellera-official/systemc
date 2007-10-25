@@ -3,14 +3,10 @@
 #define __TLM_PEQ_H__
 
 #include <map>
+#include "tlm_h/tlm_analysis/tlm_analysis_if.h"
+#include "tlm_h/tlm_analysis/tlm_analysis_port.h"
 
-//#include "analysis.h"
-
-using std::multimap;
-using std::pair;
-
-using analysis::delayed_analysis_if;
-using analysis::analysis_port;
+namespace tlm {
 
 //
 // No lt_sc_time operator required, since we have operator< defined for
@@ -70,7 +66,7 @@ class tlm_peq :
 
     int i = 0;
 
-    for( typename multimap< sc_core::sc_time , T>::const_iterator iter = m_map.begin();
+    for( typename std::multimap< sc_core::sc_time , T>::const_iterator iter = m_map.begin();
 	 iter != m_map.end();
 	 ++iter ) {
 
@@ -96,7 +92,7 @@ class tlm_peq :
   }
 
  private:
-  typedef pair<sc_core::sc_time,T> pair_type;
+  typedef std::pair<sc_core::sc_time,T> pair_type;
 
   void wake_up_method() {
 
@@ -129,8 +125,10 @@ class tlm_peq :
   }
 
   sc_core::sc_event m_wake_up;
-  multimap< sc_core::sc_time , T> m_map;
+  std::multimap< sc_core::sc_time , T> m_map;
 
 };
+
+} // namespace tlm
 
 #endif

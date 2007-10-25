@@ -16,13 +16,8 @@
 
  *****************************************************************************/
  
-#pragma once
-
 #ifndef __TLM_GENERIC_PAYLOAD_H__
 #define __TLM_GENERIC_PAYLOAD_H__
-
-namespace tlm_generic_payload_ns  /// TLM generic payload
-{
 
 #include "tlm_helpers.h"
 #include "tlm_gp.h"
@@ -31,8 +26,6 @@ namespace tlm_generic_payload_ns  /// TLM generic payload
 #include "tlm_dmi.h"
 
 #include "tlm_debug_payload.h"
-
-}
 
 #endif
 

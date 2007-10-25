@@ -25,6 +25,8 @@
 
 #include "tlm_h/tlm_core/tlm_interfaces/tlm_master_slave_ifs.h"
 
+namespace tlm {
+
 template < typename PUT_DATA , typename GET_DATA>
 class tlm_put_get_imp :
   private virtual tlm_put_if< PUT_DATA > ,
@@ -105,5 +107,7 @@ public:
     tlm_put_get_imp<RSP,REQ>( rsp  , req ) {}
 
 };
+
+} // namespace tlm
 
 #endif

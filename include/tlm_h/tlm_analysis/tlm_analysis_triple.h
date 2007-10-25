@@ -4,6 +4,8 @@
 
 //#include <systemc>
 
+namespace tlm {
+
 template< typename T>
 struct analysis_triple {
 
@@ -28,5 +30,6 @@ struct analysis_triple {
 
 };
 
+} // namespace tlm
 
 #endif

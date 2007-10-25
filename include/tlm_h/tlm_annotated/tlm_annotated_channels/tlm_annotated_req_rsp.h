@@ -5,6 +5,7 @@
 #include "tlm_h/tlm_annotated/tlm_annotated_channels/tlm_annotated_fifo.h"
 #include "tlm_h/tlm_annotated/tlm_annotated_channels/tlm_annotated_put_get_imp.h"
 
+namespace tlm {
 
 template < typename REQ , typename RSP ,
 	   typename REQ_CHANNEL = tlm_annotated_fifo<REQ> ,
@@ -75,5 +76,6 @@ protected:
   tlm_annotated_slave_imp< REQ , RSP > slave;
 };
 
+} // namespace tlm
 
 #endif

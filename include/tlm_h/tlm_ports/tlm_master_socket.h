@@ -21,8 +21,7 @@
 #include "tlm_h/tlm_annotated/tlm_fw_bw_ifs/tlm_fw_bw_ifs.h"
 //#include <systemc>
 
-using tlm_annotated::tlm_fw_nb_transport_if;
-using tlm_annotated::tlm_bw_nb_transport_if;
+namespace tlm {
 
 template <unsigned int BUSWIDTH,
           typename FW_IF,
@@ -109,5 +108,7 @@ public:
 protected:
   export_type mExport;
 };
+
+} // namespace tlm
 
 #endif

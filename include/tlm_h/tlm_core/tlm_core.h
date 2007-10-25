@@ -15,7 +15,6 @@
   language governing rights and limitations under the License.
 
  *****************************************************************************/
-#pragma once
 
 #ifndef __TLM_CORE_H__
 #define __TLM_CORE_H__
@@ -23,14 +22,11 @@
 //#include <systemc>
 #include "tlm_platform.h"
 
-namespace tlm_annotated  /// TLM annotated namespace
-{
-  template< typename T > class tlm_annotated_fifo;
+namespace tlm {
+
+    template< typename T > class tlm_annotated_fifo;
+
 }
-
-namespace tlm_core  /// TLM core namespace
-{
-
 // The unannotated TLM interfaces
 
 #include "tlm_interfaces/tlm_core_ifs.h"
@@ -44,6 +40,5 @@ namespace tlm_core  /// TLM core namespace
 
 #include "tlm_event_finder/tlm_nonblocking_port.h"
 
-}
 
 #endif /* __TLM_CORE_H__ */

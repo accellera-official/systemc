@@ -21,9 +21,7 @@
 #include "tlm_h/tlm_generic_payload/tlm_generic_payload.h"
 #include <systemc>
 
-using tlm_generic_payload_ns::tlm_generic_payload;
-using tlm_generic_payload_ns::tlm_dmi;
-using tlm_generic_payload_ns::tlm_debug_payload;
+namespace tlm {
 
 enum tlm_phase { BEGIN_REQ, END_REQ, BEGIN_RESP, END_RESP };
 enum tlm_sync_enum { TLM_REJECTED, TLM_SYNC, TLM_SYNC_CONTINUE, TLM_COMPLETED };
@@ -31,10 +29,13 @@ enum tlm_sync_enum { TLM_REJECTED, TLM_SYNC, TLM_SYNC_CONTINUE, TLM_COMPLETED };
 ////////////////////////////////////////////////////////////////////////////
 // Basic interfaces
 ////////////////////////////////////////////////////////////////////////////
-template <typename TRANS = tlm_generic_payload, typename PHASE = tlm_phase>
+template <typename TRANS = tlm_generic_payload,
+          typename PHASE = tlm_phase>
 class tlm_nonblocking_transport_if : public virtual sc_core::sc_interface {
 public:
-  virtual tlm_sync_enum nb_transport(TRANS& trans, PHASE& phase, sc_core::sc_time& t) = 0;
+  virtual tlm_sync_enum nb_transport(TRANS& trans,
+                                     PHASE& phase,
+                                     sc_core::sc_time& t) = 0;
 };
 
 template <typename TRANS = tlm_generic_payload>
@@ -51,11 +52,13 @@ public:
 // 
 // - An initiator that want to get direct access to a slave's memory region
 //   can call the get_direct_mem_ptr method with the address parameter set to
-//   the address that it wants to gain access to. The forReads parameter specifies
-//   if a dmi range for read accesses or for write access must be returned.
-// - The 'forReads' parameter is necessary because read and write ranges do not have
-//   to have the same ranges. If they do, a slave can specify that the range is valid
-//   for all accesses with the type attribute in the tlm_dmi structure.
+//   the address that it wants to gain access to. The forReads parameter
+//   specifies if a dmi range for read accesses or for write access must be
+//   returned.
+// - The 'forReads' parameter is necessary because read and write ranges do
+//   not have to have the same ranges. If they do, a slave can specify that
+//   the range is valid for all accesses with the type attribute in the
+//   tlm_dmi structure.
 // - The bus, if any, needs to decode the address and forward the call to
 //   the corresponding slave. It needs to handle the address exactly as the
 //   slave would expect on a transaction call, e.g. mask the address according
@@ -91,7 +94,8 @@ public:
 class tlm_fw_direct_mem_if : public virtual sc_core::sc_interface
 {
 public:
-  virtual bool get_direct_mem_ptr(const sc_dt::uint64& address, bool forReads,
+  virtual bool get_direct_mem_ptr(const sc_dt::uint64& address,
+                                  bool forReads,
                                   tlm_dmi& dmi_data) = 0;
 };
 
@@ -156,7 +160,8 @@ public:
 ////////////////////////////////////////////////////////////////////////////
 
 // The forward non-blocking interface:
-template <typename TRANS = tlm_generic_payload, typename PHASE = tlm_phase>
+template <typename TRANS = tlm_generic_payload,
+          typename PHASE = tlm_phase>
 class tlm_fw_nb_transport_if
   : public virtual tlm_nonblocking_transport_if<TRANS, PHASE>
   , public virtual tlm_fw_direct_mem_if
@@ -183,5 +188,8 @@ class tlm_fw_transport_if
 class tlm_bw_transport_if
   : public virtual tlm_bw_direct_mem_if
 {};
+
+
+} // namespace tlm
 
 #endif /* __TLM_FW_BW_IFS_H__ */

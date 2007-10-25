@@ -26,8 +26,7 @@
 //#include "tlm_core.h"
 #include "tlm_h/tlm_annotated/tlm_annotated_ifs/tlm_annotated_master_slave_ifs.h"
 
-// TODO: delete this:
-using tlm_core::tlm_put_get_imp;
+namespace tlm {
 
 template< typename PUT_DATA , typename GET_DATA >
 class tlm_annotated_put_get_imp :
@@ -89,5 +88,7 @@ public:
     tlm_annotated_put_get_imp<RSP,REQ>( rsp , req ) {}
 
 };
+
+} // namespace tlm
 
 #endif

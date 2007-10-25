@@ -2,16 +2,11 @@
 #ifndef __TLM_ANNOTATED_FIFO_H__
 #define __TLM_ANNOTATED_FIFO_H__
 
-//#include "tlm_core.h"
+#include "tlm_h/tlm_core/tlm_fifo/tlm_fifo.h"
 #include "tlm_h/tlm_annotated/tlm_annotated_ifs/tlm_annotated_ifs.h"
 #include "tlm_peq.h"
 
-using analysis::analysis_port;
-using analysis::analysis_if;
-
-using tlm_core::tlm_fifo;
-using tlm_core::tlm_tag;
-
+namespace tlm {
 
 template< typename T >
 class tlm_internal_annotated_fifo :
@@ -226,4 +221,7 @@ public virtual tlm_annotated_get_peek_if < T  > {
   tlm_peq< tlm_tag<T> *> m_get_peq;
 
 };
+
+} // namespace tlm
+
 #endif

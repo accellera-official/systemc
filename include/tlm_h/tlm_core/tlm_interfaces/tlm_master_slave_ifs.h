@@ -20,11 +20,13 @@
 #ifndef __TLM_MASTER_SLAVE_IFS_H__
 #define __TLM_MASTER_SLAVE_IFS_H__
 
+#include "tlm_h/tlm_core/tlm_interfaces/tlm_core_ifs.h"
+
+namespace tlm {
+
 // 
 // req/rsp combined interfaces
 //
-
-#include "tlm_h/tlm_core/tlm_interfaces/tlm_core_ifs.h"
 
 // blocking
 
@@ -65,5 +67,7 @@ class tlm_slave_if :
   public virtual tlm_get_peek_if< REQ > ,
   public virtual tlm_blocking_slave_if< REQ , RSP > ,
   public virtual tlm_nonblocking_slave_if< REQ , RSP > {};
+
+} // namespace tlm
 
 #endif

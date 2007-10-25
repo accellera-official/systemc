@@ -22,6 +22,8 @@
 #include <systemc>
 #include "tlm_array.h"
 
+namespace tlm {
+
 //---------------------------------------------------------------------------
 // Classes and helper functions for the extension mechanism
 //---------------------------------------------------------------------------
@@ -291,5 +293,6 @@ protected:
   bool mDMI;
 };
 
+} // namespace tlm
 
 #endif /* __TLM_GP_H__ */

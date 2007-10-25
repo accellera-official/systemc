@@ -20,6 +20,8 @@
 #ifndef __TLM_DEBUG_PAYLOAD_H__
 #define __TLM_DEBUG_PAYLOAD_H__
 
+namespace tlm {
+
 class tlm_debug_payload
 {
 public:
@@ -37,6 +39,8 @@ public:
     // the data pointer in the generic payload):
     unsigned char* data;
 };
+
+} // namespace tlm
 
 #endif /* __TLM_DEBUG_PAYLOAD_H__ */
 

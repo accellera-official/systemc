@@ -23,9 +23,9 @@
 
 template <unsigned int BUSWIDTH = 32, typename TRANS = tlm::tlm_generic_payload>
 class SimpleMasterSocket :
-  public tlm_ports::tlm_master_socket<BUSWIDTH,
-                                      tlm::tlm_fw_nb_transport_if<TRANS, tlm::tlm_phase>,
-                                      tlm::tlm_bw_nb_transport_if<TRANS, tlm::tlm_phase> >
+  public tlm::tlm_master_socket<BUSWIDTH,
+                                tlm::tlm_fw_nb_transport_if<TRANS, tlm::tlm_phase>,
+                                tlm::tlm_bw_nb_transport_if<TRANS, tlm::tlm_phase> >
 {
 public:
   typedef TRANS transaction_type;

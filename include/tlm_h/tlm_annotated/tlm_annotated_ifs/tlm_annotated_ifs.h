@@ -2,27 +2,9 @@
 #ifndef __TLM_ANNOTATED_IFS_H__
 #define __TLM_ANNOTATED_IFS_H__
 
-//#include "tlm_core.h"
+#include "tlm_h/tlm_core/tlm_core.h"
 
-using tlm_core::tlm_transport_if;
-
-using tlm_core::tlm_nonblocking_put_if;
-using tlm_core::tlm_blocking_put_if;
-using tlm_core::tlm_put_if;
-
-using tlm_core::tlm_nonblocking_get_if;
-using tlm_core::tlm_blocking_get_if;
-using tlm_core::tlm_get_if;
-
-using tlm_core::tlm_nonblocking_peek_if;
-using tlm_core::tlm_blocking_peek_if;
-using tlm_core::tlm_peek_if;
-
-using tlm_core::tlm_nonblocking_get_peek_if;
-using tlm_core::tlm_blocking_get_peek_if;
-using tlm_core::tlm_get_peek_if;
-
-using tlm_core::tlm_tag;
+namespace tlm {
 
 template< typename REQ , typename RSP >
 class tlm_delayed_transport_if : public virtual sc_core::sc_interface {
@@ -84,7 +66,7 @@ template < typename T >
 class tlm_annotated_nonblocking_get_peek_if :
   public virtual tlm_annotated_nonblocking_get_if<T> ,
   public virtual tlm_nonblocking_peek_if< T > ,
-  tlm_nonblocking_get_peek_if< T > {};
+  public virtual tlm_nonblocking_get_peek_if< T > {};
 
 template < typename T >
 class tlm_annotated_get_peek_if :
@@ -94,5 +76,7 @@ class tlm_annotated_get_peek_if :
   public virtual tlm_annotated_nonblocking_get_peek_if< T > ,
   public virtual tlm_get_peek_if< T >
   {};
+
+} // namespace tlm
 
 #endif

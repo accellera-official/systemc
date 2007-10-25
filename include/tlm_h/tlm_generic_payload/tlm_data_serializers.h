@@ -20,6 +20,8 @@
 
 #include "tlm_helpers.h"
 
+namespace tlm {
+
 //
 // Copy from/to a byte array in host endianness
 //
@@ -106,4 +108,6 @@ TLM_COPY_TO_ARRAY( unsigned int );
 TLM_COPY_TO_ARRAY( unsigned long );
 TLM_COPY_TO_ARRAY( unsigned long long );
    
+} // namespace tlm
+
 #endif /* __TLM_DATA_SERIALIZERS_H__ */

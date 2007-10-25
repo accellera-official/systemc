@@ -4,6 +4,8 @@
 //#include <sys/param.h>
 //#include <cstring>
 
+namespace tlm {
+
 enum tlm_endianness { TLM_LITTLE_ENDIAN, TLM_BIG_ENDIAN };
 
 inline bool hostHasLittleEndianness()
@@ -82,5 +84,7 @@ inline DT swapIfNeeded(DT word, tlm_endianness endianness)
     return swap_bytes(word);
   }
 }
+
+} // namespace tlm
 
 #endif /* __TLM_HELPERS_H__ */

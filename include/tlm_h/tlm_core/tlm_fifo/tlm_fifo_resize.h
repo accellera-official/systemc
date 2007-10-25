@@ -30,6 +30,8 @@
 //
 ******************************************************************/
 
+namespace tlm {
+
 template < typename T>
 inline
 void
@@ -88,5 +90,7 @@ tlm_fifo<T>::nb_bound( unsigned int new_size ) {
   return ret;
 
 }
+
+} // namespace tlm
 
 #endif

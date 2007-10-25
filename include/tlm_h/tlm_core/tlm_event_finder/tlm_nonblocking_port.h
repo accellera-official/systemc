@@ -22,6 +22,8 @@
 #include "tlm_h/tlm_core/tlm_interfaces/tlm_core_ifs.h"
 #include "tlm_h/tlm_core/tlm_event_finder/tlm_event_finder.h"
 
+namespace tlm {
+
 template < typename T >
 class tlm_nonblocking_get_port :
 public sc_core::sc_port< tlm_nonblocking_get_if< T > , 1 >
@@ -82,4 +84,7 @@ public:
   }
 
 };
+
+} // namespace tlm
+
 #endif

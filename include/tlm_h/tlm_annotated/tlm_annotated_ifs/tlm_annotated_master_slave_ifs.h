@@ -27,11 +27,7 @@
 
 #include "tlm_h/tlm_annotated/tlm_annotated_ifs/tlm_annotated_ifs.h"
 
-// TODO: delete the following:
-using tlm_core::tlm_nonblocking_master_if;
-using tlm_core::tlm_nonblocking_slave_if;
-using tlm_core::tlm_master_if;
-using tlm_core::tlm_slave_if;
+namespace tlm {
 
 // nonblocking
 
@@ -63,4 +59,5 @@ class tlm_annotated_slave_if :
   public virtual tlm_annotated_nonblocking_slave_if< REQ , RSP > ,
   public virtual tlm_slave_if< REQ , RSP >{};
 
+} // namespace tlm
 #endif
