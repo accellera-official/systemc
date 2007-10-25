@@ -12,7 +12,7 @@ LIBS = $(LIBDIR) $(LIB_SC)
  
 CFLAGS = $(FLAGS) $(INCDIR)
 
-.PHONY: clean all check
+.PHONY: clean all run check announce
 
 all: announce $(OBJ_NAME).exe
 

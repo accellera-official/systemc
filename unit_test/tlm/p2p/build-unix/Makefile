@@ -7,7 +7,7 @@ SUBDIRS = \
 	../SimpleAT \
 	../SimpleAT_TA
 
-.PHONY: all clean check
+.PHONY: all clean check run
 
 all:
 	@for i in $(SUBDIRS); do \

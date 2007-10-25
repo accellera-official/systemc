@@ -2,14 +2,16 @@
 
 include ./Makefile.config
 
+export FLAG_BATCH = 1
+
 SUBDIRS = \
- 	../bus \
-	../bus_dmi \
- 	../gp_extension \
-	../p2p \
-	../transactor \
-        ../accessors \
-        ../data_types
+          ../bus \
+          ../bus_dmi \
+          ../gp_extension \
+          ../p2p \
+          ../transactor \
+          ../accessors \
+          ../data_types
 
 .PHONY: all clean run
 
@@ -20,6 +22,10 @@ all:
 run:
 	@for i in $(SUBDIRS); do \
         (cd $$i/build-windows && $(MAKE) run); done
+
+check:
+	@for i in $(SUBDIRS); do \
+        (cd $$i/build-windows && $(MAKE) check); done
 
 clean:
 	@if ( test ! -d "$(SYSTEMC_HOME)" ); \

@@ -3,15 +3,15 @@ include ./Makefile.config
 export FLAG_BATCH = 1
 
 SUBDIRS = \
- 	../bus \
-	../bus_dmi \
- 	../gp_extension \
-	../p2p \
-	../transactor \
-    ../accessors \
-    ../data_types
+          ../bus \
+          ../bus_dmi \
+          ../gp_extension \
+          ../p2p \
+          ../transactor \
+          ../accessors \
+          ../data_types
 
-.PHONY: all clean check
+.PHONY: all clean check run
 
 all:
 	@for i in $(SUBDIRS); do \

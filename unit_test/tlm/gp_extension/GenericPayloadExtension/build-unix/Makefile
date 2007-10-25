@@ -15,7 +15,7 @@ CFLAGS = $(FLAGS) $(INCDIR)
 OBJS   = $(OBJ_NAME).o tlm_master.o tlm_slave.o
 
 
-.PHONY: clean all check
+.PHONY: clean all check run announce
 
 all: announce $(OBJ_NAME).exe
 

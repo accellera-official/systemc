@@ -3,7 +3,7 @@ SUBDIRS = \
 	../GenericPayload \
 	../GenericPayloadExtension \
 
-.PHONY: all clean check
+.PHONY: all clean run check
 
 all:
 	@for i in $(SUBDIRS); do \
@@ -12,6 +12,10 @@ all:
 check:
 	@for i in $(SUBDIRS); do \
         (cd $$i/build-unix && $(MAKE) check); done
+
+run:
+	@for i in $(SUBDIRS); do \
+        (cd $$i/build-unix && $(MAKE) run); done
 
 clean:
 	@for i in $(SUBDIRS); do \
