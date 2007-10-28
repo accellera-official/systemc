@@ -29,16 +29,15 @@ public:
 	// constructor (a tlm_checker applies on a certain address space)
 	tlm_checker(sc_dt::uint64 start_address_range, // first address 
 				sc_dt::uint64 end_address_range,   // last address
-				unsigned int bus_data_width)
-		: m_bus_data_width(bus_data_width)
+				unsigned int bus_data_size_in_bytes)
+		: m_bus_data_size(bus_data_size_in_bytes)
 		, m_start_address_range(start_address_range)
 		, m_end_address_range(end_address_range)
 		, m_write_command_supported(true)
 		, m_read_command_supported(true)
 		, m_burst_supported(true)
-		, m_burst_mode_incremental_supported(true)
 		, m_burst_mode_streaming_supported(true)
-		, m_burst_mode_wrapping_supported(true)
+		, m_byte_enable_supported(true)
 		, m_response_status(TLM_OK_RESP)
 	{
 	}
@@ -47,12 +46,11 @@ public:
 	~tlm_checker(){}
 
 	// convenient methods to set the tlm_checker options
-	inline void write_command_not_supported() {m_write_command_supported = false;}
-	inline void read_command_not_supported() {m_read_command_supported = false;}
-	inline void burst_not_supported() {m_burst_supported = false;}
-	inline void burst_mode_incremental_not_supported() {m_burst_mode_incremental_supported = false;}
+	inline void write_command_not_supported()        {m_write_command_supported = false;}
+	inline void read_command_not_supported()         {m_read_command_supported = false;}
+	inline void burst_not_supported()                {m_burst_supported = false;}
 	inline void burst_mode_streaming_not_supported() {m_burst_mode_streaming_supported = false;}
-	inline void burst_mode_wrapping_not_supported() {m_burst_mode_wrapping_supported = false;}
+	inline void byte_enable_not_supported()          {m_byte_enable_supported = false;}
 
 	// main function to check if the transaction is valid 
 	bool transactionIsValid(tlm::tlm_generic_payload* gp)
@@ -76,12 +74,8 @@ private:
 		if((gp->get_command() == TLM_READ_COMMAND) && (m_read_command_supported == false))
 			return TLM_COMMAND_ERROR_RESP;
 
-		// Check 3: burst_data_size (bytes) bigger than bus_data_width (bits)
-		if(gp->get_burst_data_size() > (m_bus_data_width/8))
-			return TLM_BURST_ERROR_RESP;
-
-        // Check 4: check supported burst
-		if(gp->get_burst_length() > 1)
+    // Check 3-4: check supported burst and data length
+		if(gp->get_burst_length(m_bus_data_size) > 1)
 		{
 			if(m_burst_supported == false)
 			{
@@ -89,44 +83,40 @@ private:
 			}
 			else
 			{
-				if((gp->get_burst_mode() == TLM_INCREMENT_BURST) && m_burst_mode_incremental_supported == false)
-					return TLM_BURST_ERROR_RESP;
-				if((gp->get_burst_mode() == TLM_STREAMING_BURST) && m_burst_mode_streaming_supported == false)
-					return TLM_BURST_ERROR_RESP;
-				if((gp->get_burst_mode() == TLM_WRAPPING_BURST) && m_burst_mode_wrapping_supported == false)
+				if((gp->get_streaming_mode() == true) && (m_burst_mode_streaming_supported == false))
 					return TLM_BURST_ERROR_RESP;
 			}
 		}
 		
-		// Check 5: address has to be aligned on burst_data_size
-        if (gp->get_address() % gp->get_burst_data_size() != 0) 
-			return TLM_ADDRESS_ERROR_RESP;
-
-		// Check 6: check address within range (in case burst_mode is incremental)
-		if(gp->get_burst_mode() == TLM_INCREMENT_BURST)
+		// Check 5: check address within range (in case burst_mode is incremental)
+		if(gp->get_streaming_mode() == false)
 		{
-			unsigned int m_incr_address = m_bus_data_width/8; 
 			sc_dt::uint64 begin_address = gp->get_address();
-			sc_dt::uint64 end_address = begin_address + gp->get_burst_length()*m_incr_address;
+			sc_dt::uint64 end_address = begin_address + gp->get_length();
 			
 			if((begin_address < m_start_address_range) && (end_address > m_end_address_range))
 				return TLM_ADDRESS_ERROR_RESP;
 		}
 
+    // Check 6: check byte enables
+    if((gp->get_byte_enable() != NULL) && (m_byte_enable_supported == false))
+    {
+    	return TLM_BYTE_ENABLE_ERROR_RESP;
+    }
+    
 		return TLM_OK_RESP;
 	}
 
 private:
 
-	unsigned int m_bus_data_width;
+	unsigned int m_bus_data_size;
 	sc_dt::uint64 m_start_address_range;
 	sc_dt::uint64 m_end_address_range;
 	bool m_write_command_supported;
 	bool m_read_command_supported;
 	bool m_burst_supported;
-	bool m_burst_mode_incremental_supported;
 	bool m_burst_mode_streaming_supported;
-	bool m_burst_mode_wrapping_supported;
+	bool m_byte_enable_supported;
 
 	tlm_response_status m_response_status;
 
