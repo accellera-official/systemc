@@ -203,7 +203,7 @@ public:
 	  // Burst related methods
     inline bool                 get_streaming_mode() const {return m_streaming_mode;}
     inline void                 set_streaming_mode(const bool streaming_mode) {m_streaming_mode = streaming_mode; }
-	  inline unsigned int         get_burst_length(unsigned int bus_data_size){return ceil(double(m_length/bus_data_size)); }
+	  inline unsigned int         get_burst_length(unsigned int bus_data_size){return ceil((double)m_length/(double)bus_data_size); }
 	  inline unsigned int         get_bytes_burst_element(unsigned int count, unsigned int bus_data_size)
 	                              {
 		                              int remainder = m_length-(bus_data_size*count);
