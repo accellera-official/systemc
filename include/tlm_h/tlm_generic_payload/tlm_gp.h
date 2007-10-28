@@ -75,13 +75,7 @@ unsigned int tlm_extension<T>::ID = tlm_extension_base::register_extension();
 enum tlm_command {
     TLM_READ_COMMAND,
     TLM_WRITE_COMMAND,
-    TLM_NOP
-};
-
-enum tlm_burst_mode {
-    TLM_INCREMENT_BURST,
-    TLM_STREAMING_BURST,
-    TLM_WRAPPING_BURST
+    TLM_IGNORE_COMMAND
 };
 
 enum tlm_response_status {
@@ -90,7 +84,8 @@ enum tlm_response_status {
     TLM_GENERIC_ERROR_RESP = -1,
     TLM_ADDRESS_ERROR_RESP = -2,
     TLM_COMMAND_ERROR_RESP = -3,
-    TLM_BURST_ERROR_RESP = -4
+    TLM_BURST_ERROR_RESP = -4,
+    TLM_BYTE_ENABLE_ERROR_RESP = -5
 };
 
 //---------------------------------------------------------------------------
@@ -105,14 +100,15 @@ public:
     
     // Default constructor
     tlm_generic_payload() 
-        : m_command(TLM_NOP)
+        : m_command(TLM_IGNORE_COMMAND)
         , m_address(0)
         , m_data(0)
-        , m_burst_length(1)
-        , m_burst_data_size(0)
-        , m_burst_mode(TLM_INCREMENT_BURST)
+        , m_length(0)
         , m_response_status(TLM_INCOMPLETE_RESP)
+        , m_streaming_mode(false)
         , m_lock(false)
+        , m_byte_enable(NULL)
+        , m_byte_enable_length(0)
         , m_extensions(max_num_extensions())
         , mDMI(false)
     {
@@ -127,11 +123,12 @@ public:
         : m_command(x.get_command())
         , m_address(x.get_address())
         , m_data(x.get_data_ptr())
-        , m_burst_length(x.get_burst_length())
-        , m_burst_data_size(x.get_burst_data_size())
-        , m_burst_mode(x.get_burst_mode())
+        , m_length(x.get_length())
         , m_response_status(x.get_response_status())
+        , m_streaming_mode(x.get_streaming_mode())
         , m_lock(x.get_lock())
+        , m_byte_enable(x.get_byte_enable())
+        , m_byte_enable_length(x.get_byte_enable_length())
         , m_extensions(max_num_extensions())
         , mDMI(false)
     {
@@ -158,36 +155,70 @@ public:
     // TODO: review if this needs to be virtual
     //--------------
     virtual ~tlm_generic_payload() {}
-    
+       
     //----------------
-    // Setters & getters
+    // API (including setters & getters)
     //---------------
+
+	  // Command related method
+	  inline bool                 is_read() {return (m_command == TLM_READ_COMMAND);}
+	  inline void                 set_read() {m_command = TLM_READ_COMMAND;}
+	  inline bool                 is_write() {return (m_command == TLM_WRITE_COMMAND);}
+	  inline void                 set_write() {m_command = TLM_WRITE_COMMAND;}
+    inline tlm_command          get_command() const {return m_command;}
+    inline void                 set_command(const tlm_command command) {m_command = command;}
+
+	  // Address related methods
+	  inline sc_dt::uint64        get_address() const {return m_address;}
+    inline void                 set_address(const sc_dt::uint64 address){m_address = address;}
+
+	  // Data related methods
+	  inline unsigned char*       get_data_ptr() const {return m_data;}
+    inline void                 set_data_ptr(unsigned char* data) {m_data = data;}
+
+	  // Transaction length (in bytes) related methods
+	  inline unsigned int         get_length() const {return m_length;}
+    inline void                 set_length(const unsigned int length){m_length = length;}
+
+	  // Response status related methods
+	  inline bool                 is_response_ok() {return (m_response_status > 0);}
+	  inline bool                 is_response_error() {return (m_response_status <= 0);}
+	  inline tlm_response_status  get_response_status() const {return m_response_status;}
+    inline void                 set_response_status(const tlm_response_status response_status)
+                                                     {m_response_status = response_status;}  
+	inline const char*          get_response_string()
+	                            {
+	 	                           switch(m_response_status)
+		                           {
+		                           case TLM_OK_RESP:            return "TLM_OK_RESP"; break;
+		                           case TLM_INCOMPLETE_RESP:    return "TLM_INCOMPLETE_RESP"; break;
+		                           case TLM_GENERIC_ERROR_RESP: return "TLM_GENERIC_ERROR_RESP"; break;
+		                           case TLM_ADDRESS_ERROR_RESP: return "TLM_ADDRESS_ERROR_RESP"; break;
+		                           case TLM_COMMAND_ERROR_RESP: return "TLM_COMMAND_ERROR_RESP"; break;
+		                           case TLM_BURST_ERROR_RESP:   return "TLM_BURST_ERROR_RESP"; break;
+		                           case TLM_BYTE_ENABLE_ERROR_RESP: return "TLM_BYTE_ENABLE_ERROR_RESP"; break;	
+		                           }
+	                            }
+
+	  // Burst related methods
+    inline bool                 get_streaming_mode() const {return m_streaming_mode;}
+    inline void                 set_streaming_mode(const bool streaming_mode) {m_streaming_mode = streaming_mode; }
+	  inline unsigned int         get_burst_length(unsigned int bus_data_size){return ceil(double(m_length/bus_data_size)); }
+	  inline unsigned int         get_bytes_burst_element(unsigned int count, unsigned int bus_data_size)
+	                              {
+		                              int remainder = m_length-(bus_data_size*count);
+		                              if(remainder < bus_data_size) return remainder; else return bus_data_size;
+	                              }
     
-    tlm_command         get_command()         const {return m_command;}
-    sc_dt::uint64       get_address()         const {return m_address;}
-    unsigned int        get_burst_length()    const {return m_burst_length;}
-    unsigned int        get_burst_data_size() const {return m_burst_data_size;}
-    tlm_burst_mode      get_burst_mode()      const {return m_burst_mode;}
-    unsigned char*      get_data_ptr()        const {return m_data;}
-    tlm_response_status get_response_status() const {return m_response_status;}
-    bool                get_lock()            const {return m_lock;}
-    
-    void set_command(const tlm_command command)
-        {m_command = command;}
-    void set_address(const sc_dt::uint64 address)
-        {m_address = address;}
-    void set_burst_length(const unsigned int burst_length)
-        {m_burst_length = burst_length;}
-    void set_burst_data_size(const unsigned int burst_data_size)
-        {m_burst_data_size = burst_data_size;}
-    void set_burst_mode(const tlm_burst_mode burst_mode)
-        {m_burst_mode = burst_mode;}
-    void set_data_ptr(unsigned char* data)
-        {m_data = data;}
-    void set_response_status(const tlm_response_status response_status)
-        {m_response_status = response_status;}  
-	void set_lock(const bool lock)
-	    {m_lock = lock;}
+    // Lock related methods
+	  inline bool				          get_lock() const {return m_lock;}
+	  inline void                 set_lock(const bool lock){m_lock = lock;}
+
+    // Byte enable related methods
+	  inline bool*				        get_byte_enable() const {return m_byte_enable;}
+	  inline void                 set_byte_enable(bool* byte_enable){m_byte_enable = byte_enable;}
+	  inline unsigned int				  get_byte_enable_length() const {return m_byte_enable_length;}
+	  inline void                 set_byte_enable_length(const unsigned int byte_enable_length){m_byte_enable_length = byte_enable_length;}
     
     /* --------------------------------------------------------------------- */
     /* Generic Payload attributes:                                           */
@@ -195,41 +226,41 @@ public:
     /* - m_command         : Type of transaction. Three values supported:    */
     /*                       - TLM_WRITE_COMMAND                             */
     /*                       - TLM_READ_COMMAND                              */
-    /*                       - TLM_NOP                                       */
+    /*                       - TLM_IGNORE_COMMAND                            */
     /* - m_address         : Transaction base address (byte-addressing).     */
     /* - m_data            : When m_command = TLM_WRITE_COMMAND contains a   */
     /*                       pointer to the data to be written in the target.*/
     /*                       When m_command = TLM_READ_COMMAND contains a    */
     /*                       pointer where to copy the data read from the    */
     /*                       target.                                         */
-    /* - m_burst_length    : Number of data transfers in the transaction.    */
-    /*			             This is an element count, not a byte count.     */
-    /*                       Size in bytes of each data transfer is indicated*/
-    /*                       by the burst_data_size attribute.               */
-    /* - m_burst_data_size : Size in bytes of each data transfer in the      */
-    /*                       burst. It has to be smaller than or equal to    */
-    /*                       the data size of the port/socket that initiates */
-    /*                       the transaction.                                */
-    /* - m_burst_mode	   : Indicates how address has to be incremented for */
-    /*                       each data transfer in the burst.                */
-    /*                       Three modes supported:                          */
-    /*                             - TLM_INCREMENT_BURST                     */
-    /*                             - TLM_STREAMING_BURST                     */
-    /*                             - TLM_WRAPPING_BURST                      */
+    /* - m_length          : Total number of bytes of the transaction.       */
     /* - m_response_status : This attribute indicates whether an error has   */
     /*                       occurred during the transaction.                */
-    /*                       Values supported are: TBD                       */
+    /*                       Values supported are:                           */
+    /*                       - TLM_OK_RESP                                   */
+    /*                       - TLM_INCOMPLETE_RESP                           */
+    /*                       - TLM_GENERIC_ERROR_RESP                        */
+    /*                       - TLM_ADDRESS_ERROR_RESP                        */
+    /*                       - TLM_COMMAND_ERROR_RESP                        */
+    /*                       - TLM_BURST_ERROR_RESP                          */
+    /*                                                                       */
+    /* - m_streaming_mode  :                                                 */
+    /* - m_lock            :                                                 */
+    /* - m_byte_enable     :                                                 */
+    /* - m_byte_enable_length :                                              */
     /* --------------------------------------------------------------------- */
-    tlm_command          m_command;
+
+protected:
+	
+	  tlm_command          m_command;
     sc_dt::uint64        m_address;			
     unsigned char*       m_data;
-    unsigned int         m_burst_length;		
-    unsigned int         m_burst_data_size;	
-    tlm_burst_mode       m_burst_mode;
+    unsigned int         m_length;		
     tlm_response_status  m_response_status;
+    bool                 m_streaming_mode;
     bool                 m_lock;
-
-    // unsigned int*        m_byte_enable
+    bool*                m_byte_enable;
+    unsigned int         m_byte_enable_length;
     // int                  m_identifier
     
 public:
