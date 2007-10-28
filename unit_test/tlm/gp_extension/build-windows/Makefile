@@ -2,6 +2,8 @@
 SUBDIRS = \
 	../GenericPayload \
 	../GenericPayloadExtension \
+	../GenericPayloadSerializers \
+	../GenericPayloadBurst
 
 .PHONY: all clean run check
 
