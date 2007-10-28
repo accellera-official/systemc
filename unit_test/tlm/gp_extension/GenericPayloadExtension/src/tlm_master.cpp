@@ -19,6 +19,7 @@
 
 using namespace std;
 
+// Single WRITE transaction
 void tlm_master::test_single_write(bool use_ext1,
                                    bool use_ext2,
                                    bool use_ext3)
@@ -26,14 +27,12 @@ void tlm_master::test_single_write(bool use_ext1,
     unsigned int m_address = 0x10; 
     unsigned int m_data = 100;
     
-    cout << name() << " : Single WRITE transaction : ";
+	std::cout << name() << " : Single WRITE transaction : ";
     
-    m_gp.set_address(m_address);
     m_gp.set_command(tlm::TLM_WRITE_COMMAND);
-    m_gp.set_burst_data_size(bus_port.getBusDataWidth()/8); // in bytes
-    m_gp.set_burst_length(1);
-    m_gp.set_burst_mode(tlm::TLM_INCREMENT_BURST);
+    m_gp.set_address(m_address);
     m_gp.set_data_ptr((unsigned char*)&m_data);
+    m_gp.set_length(sizeof(m_data));
     
     // Add/clear extensions:
     if (use_ext1)
@@ -75,31 +74,29 @@ void tlm_master::test_single_write(bool use_ext1,
 
     bus_port->nb_transport(&m_gp);
     
-    if(m_gp.get_response_status() == tlm::TLM_OK_RESP)
+    if(m_gp.is_response_ok())
     {
-        cout << " OK " << endl;
+        std::cout << " OK " << std::endl;
     }
     else
     {
-        cout << " ERROR " << endl;
+        std::cout << m_gp.get_response_string() << std::endl;
     }
 }
 
+    
+// Single READ transaction
 void tlm_master::test_single_read()
 {
     unsigned int m_address = 0x10; 
     unsigned int m_data;
     
-    // Single READ transaction
+    std::cout << name() << " : Single READ transaction : ";
     
-    cout << name() << " : Single READ transaction : ";
-    
-    m_gp.set_address(m_address);
     m_gp.set_command(tlm::TLM_READ_COMMAND);
-    m_gp.set_burst_data_size(bus_port.getBusDataWidth()/8); // in bytes
-    m_gp.set_burst_length(1);
-    m_gp.set_burst_mode(tlm::TLM_INCREMENT_BURST);
+    m_gp.set_address(m_address);
     m_gp.set_data_ptr((unsigned char*)&m_data);
+    m_gp.set_length(sizeof(m_data));
     
 
     // Clear extension array using direct indexes:
@@ -109,13 +106,13 @@ void tlm_master::test_single_read()
 
     bus_port->nb_transport(&m_gp);
     
-    if(m_gp.get_response_status() == tlm::TLM_OK_RESP)
+    if(m_gp.is_response_ok())
     {
-        cout << " OK, data = "<< m_data << endl;
+        std::cout << " OK, data = "<< m_data << std::endl;
     }
     else
     {
-        cout << " ERROR " << endl;
+        std::cout << m_gp.get_response_string() << std::endl;
     }
 }
 
