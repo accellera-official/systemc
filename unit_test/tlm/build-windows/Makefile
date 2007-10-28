@@ -11,7 +11,8 @@ SUBDIRS = \
           ../p2p \
           ../transactor \
           ../accessors \
-          ../data_types
+          ../data_types \
+          ../static_extensions
 
 .PHONY: all clean run
 

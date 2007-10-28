@@ -15,52 +15,63 @@
 
  *****************************************************************************/
 
-#ifndef __SIMPLE_LT_SLAVE1_H__
-#define __SIMPLE_LT_SLAVE1_H__
+#ifndef __SIMPLE_LT_SLAVE2_H__
+#define __SIMPLE_LT_SLAVE2_H__
 
 #include "tlm.h"
+#include "simple_slave_socket.h"
+#include "my_extension.h"
+
 //#include <systemc>
 #include <cassert>
 #include <vector>
 //#include <iostream>
 
-class SimpleLTSlave1 :
-  public sc_core::sc_module,
-  public virtual tlm::tlm_fw_nb_transport_if<>
+class SimpleLTSlave_ext : public sc_core::sc_module
 {
 public:
-  typedef tlm::tlm_generic_payload transaction_type;
+  typedef my_extended_payload transaction_type;
   typedef tlm::tlm_phase phase_type;
   typedef tlm::tlm_sync_enum sync_enum_type;
-  typedef tlm::tlm_fw_nb_transport_if<> fw_interface_type;
-  typedef tlm::tlm_bw_nb_transport_if<> bw_interface_type;
-  typedef tlm::tlm_slave_socket<> slave_socket_type;
+  typedef SimpleSlaveSocket<32, transaction_type> slave_socket_type;
 
 public:
   slave_socket_type socket;
 
 public:
-  SC_HAS_PROCESS(SimpleLTSlave1);
-  SimpleLTSlave1(sc_core::sc_module_name name, bool invalidate = false) :
-      sc_core::sc_module(name),
-      socket("socket"),
-      m_invalidate(invalidate)
+  SC_HAS_PROCESS(SimpleLTSlave_ext);
+  SimpleLTSlave_ext(sc_core::sc_module_name name,
+                    sc_core::sc_time invalidate_dmi_time = sc_core::sc_time(25, sc_core::SC_NS)) :
+    sc_core::sc_module(name),
+    socket("socket")
   {
-    // Bind this slave's interface to the slave socket
-    socket(*this);
-    if (invalidate)
-    {
-        SC_METHOD(invalidate_dmi_method);
-        sensitive << m_invalidate_dmi_event;
-        dont_initialize();
-        m_invalidate_dmi_time = sc_core::sc_time(25, sc_core::SC_NS);
-    }
+    // register nb_transport method
+    REGISTER_NBTRANSPORT(socket, myNBTransport);
+    REGISTER_DMI(socket, myGetDMIPtr);
+
+    REGISTER_DEBUGTRANSPORT(socket, transport_dbg);
+    
+    SC_METHOD(invalidate_dmi_method);
+    sensitive << m_invalidate_dmi_event;
+    dont_initialize();
+    m_invalidate_dmi_time = invalidate_dmi_time;
   }
 
-  sync_enum_type nb_transport(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
+  sync_enum_type myNBTransport(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
   {
     assert(phase == tlm::BEGIN_REQ);
 
+    my_extension* tmp_ext;
+    trans.get_extension(tmp_ext);
+    if (!tmp_ext)
+    {
+        std::cout << name() << ": ERROR, extension not present" << std::endl;
+    }
+    else
+    {
+        std::cout << name() << ": OK, extension data = "
+                  << tmp_ext->m_data << std::endl;
+    }
     sc_dt::uint64 address = trans.get_address();
     assert(address < 400);
 
@@ -118,30 +129,32 @@ public:
     return num_bytes;
   }
 
-  bool get_direct_mem_ptr(const sc_dt::uint64& address,
-                          bool for_reads,
-                          tlm::tlm_dmi& dmi_data)
+  bool myGetDMIPtr(const sc_dt::uint64& address,
+                   bool for_reads,
+                   tlm::tlm_dmi& dmi_data)
   {
-      if (m_invalidate) m_invalidate_dmi_event.notify(m_invalidate_dmi_time);
-    if (address < 400) {
-      dmi_data.dmi_start_address = 0x0;
-      dmi_data.dmi_end_address = 399;
-      dmi_data.dmi_ptr = mMem;
-      dmi_data.read_latency = sc_core::sc_time(100, sc_core::SC_NS);
-      dmi_data.write_latency = sc_core::sc_time(10, sc_core::SC_NS);
-      dmi_data.type = tlm::tlm_dmi::READ_WRITE;
-      dmi_data.endianness =
-        (tlm::hostHasLittleEndianness() ? tlm::TLM_LITTLE_ENDIAN :
-                                          tlm::TLM_BIG_ENDIAN);
-      return true;
-
-    } else {
-      // should not happen
-      dmi_data.dmi_start_address = address;
-      dmi_data.dmi_end_address = address;
-      dmi_data.type = tlm::tlm_dmi::READ_WRITE;
-      return false;
-    }
+      // notify DMI invalidation, just to check if this reaches the
+      // initiators properly
+      m_invalidate_dmi_event.notify(m_invalidate_dmi_time);
+      if (address < 400) {
+          dmi_data.dmi_start_address = 0x0;
+          dmi_data.dmi_end_address = 399;
+          dmi_data.dmi_ptr = mMem;
+          dmi_data.read_latency = sc_core::sc_time(100, sc_core::SC_NS);
+          dmi_data.write_latency = sc_core::sc_time(10, sc_core::SC_NS);
+          dmi_data.type = tlm::tlm_dmi::READ_WRITE;
+          dmi_data.endianness =
+              (tlm::hostHasLittleEndianness() ? tlm::TLM_LITTLE_ENDIAN :
+               tlm::TLM_BIG_ENDIAN);
+          return true;
+          
+      } else {
+          // should not happen
+          dmi_data.dmi_start_address = address;
+          dmi_data.dmi_end_address = address;
+          dmi_data.type = tlm::tlm_dmi::READ_WRITE;
+          return false;
+      }
   }
 
   void invalidate_dmi_method()
@@ -152,7 +165,6 @@ public:
   }
 private:
   unsigned char mMem[400];
-  bool              m_invalidate;
   sc_core::sc_event m_invalidate_dmi_event;
   sc_core::sc_time  m_invalidate_dmi_time;
 };

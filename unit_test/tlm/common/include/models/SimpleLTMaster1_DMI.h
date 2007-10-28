@@ -235,10 +235,19 @@ public:
   void invalidate_direct_mem_ptr(sc_dt::uint64 start_range,
                                  sc_dt::uint64 end_range)
   {
-    if (start_range <= mDMIData.dmi_end_address &&
-         end_range >= mDMIData.dmi_start_address) {
-      invalidate(mDMIData);
-    }
+      // do the invalidation if there is an address range overlap
+      if (start_range <= mDMIData.dmi_end_address &&
+          end_range >= mDMIData.dmi_start_address) {
+          std::cout <<  name() << ": got DMI pointer invalidation"
+                    << " @ " << sc_core::sc_time_stamp() << std::endl;
+          
+          invalidate(mDMIData);
+      } else {
+          std::cout <<  name() << ": ignored DMI invalidation for addresses "
+                    << std::hex << start_range << ", "
+                    << end_range << std::dec
+                    << " @ " << sc_core::sc_time_stamp() << std::endl;
+      }
   }
 
   // Test for transport_dbg:
