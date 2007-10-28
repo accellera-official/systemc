@@ -27,11 +27,11 @@ tlm_slave::tlm_slave(sc_core::sc_module_name _name,
                      unsigned int end_address)
     : sc_core::sc_module(_name)
     , bus_port("bus_port")
-    , m_mem(m_end_address-m_start_address+1, tlm::TLM_LITTLE_ENDIAN)
-    , m_mem_size(m_end_address-m_start_address+1)
     , m_start_address(start_address)
     , m_end_address(end_address)
-    , m_checker(start_address, end_address, bus_port.getBusDataWidth())
+	, m_mem(end_address-start_address+1, tlm::TLM_LITTLE_ENDIAN)
+	, m_mem_size(end_address-start_address+1)
+    , m_checker(start_address, end_address, bus_port.getBusDataWidth()/8)
 {
     assert((m_end_address-m_start_address+1)%4 == 0);
     
@@ -39,8 +39,7 @@ tlm_slave::tlm_slave(sc_core::sc_module_name _name,
     
     m_incr_address = bus_port.getBusDataWidth()/8; // bus data width in bytes
     
-    m_checker.burst_mode_streaming_not_supported();
-    m_checker.burst_mode_wrapping_not_supported();
+	m_checker.burst_not_supported();
 }
 
 
@@ -86,24 +85,12 @@ void tlm_slave::nb_transport(tlm::tlm_generic_payload* gp)
         
         if(gp->get_command() == tlm::TLM_WRITE_COMMAND)
         {
-            for(unsigned int bl=0;bl<gp->get_burst_length();bl++)
-            {
-                m_mem.write(data, addr, gp->get_burst_data_size());
-                addr += m_incr_address; 
-                data += gp->get_burst_data_size();
-            }
-            
+			m_mem.write(data,addr,gp->get_length());
             m_response_status = tlm::TLM_OK_RESP;
         }
         else // TLM_READ_COMMAND
         {
-            for(unsigned int bl=0;bl<gp->get_burst_length();bl++)
-            {
-                m_mem.read(data, addr, gp->get_burst_data_size());
-                addr += m_incr_address; 
-                data += gp->get_burst_data_size();
-            }
-            
+			m_mem.read(data,addr,gp->get_length());
             m_response_status = tlm::TLM_OK_RESP;
         }
     }
