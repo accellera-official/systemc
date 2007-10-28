@@ -121,27 +121,22 @@ public:
           sc_core::wait(sc_core::SC_ZERO_TIME);
 	}
 
-    //
-    // Read data to address (data in host endianness)
+   	// Single WRITE transaction 
+    // Write data to address (data in host endianness)
     //
     template <typename DT>
     void write(unsigned int address, DT data)
     {
-    
-    	// Single WRITE transaction 
-    	
     	std::cout << name() << " : Single WRITE transaction : "; 
     
-    	m_gp.set_address(address);
     	m_gp.set_command(tlm::TLM_WRITE_COMMAND);
-    	m_gp.set_burst_data_size(sizeof(DT)); // in bytes
-    	m_gp.set_burst_length(1);
-    	m_gp.set_burst_mode(tlm::TLM_INCREMENT_BURST);
+    	m_gp.set_address(address);
     	m_gp.set_data_ptr((unsigned char*)&data);
+    	m_gp.set_length(sizeof(DT)); // in bytes
     
         bus_port->nb_transport(&m_gp);
     
-    	if(m_gp.get_response_status() == tlm::TLM_OK_RESP)
+    	if(m_gp.is_response_ok())
     	{
             std::cout << " OK " << std::endl;
             std::cout << "  writing " << sizeof(DT) << " bytes:\n"
@@ -152,32 +147,28 @@ public:
     	}
     	else
     	{
-            std::cout << " ERROR " << std::endl;
+			std::cout << m_gp.get_response_string() << std::endl;
     	}
     }
     
-    //
+   	// Single READ transaction 
     // Read data from address (returns data in host endianness)
     //
     template <typename DT>
     DT read(unsigned int address)
     {
     	unsigned int data = 0x0;
-    
-    	// Single READ transaction 
     	
     	std::cout << name() << " : Single READ transaction : "; 
     
-    	m_gp.set_address(address);
     	m_gp.set_command(tlm::TLM_READ_COMMAND);
-    	m_gp.set_burst_data_size(sizeof(DT)); // in bytes
-    	m_gp.set_burst_length(1);
-    	m_gp.set_burst_mode(tlm::TLM_INCREMENT_BURST);
+    	m_gp.set_address(address);
     	m_gp.set_data_ptr((unsigned char*)&data);
+    	m_gp.set_length(sizeof(DT)); // in bytes
     
         bus_port->nb_transport(&m_gp);
     
-    	if(m_gp.get_response_status() == tlm::TLM_OK_RESP)
+    	if(m_gp.is_response_ok() == tlm::TLM_OK_RESP)
     	{
             std::cout << " OK " << std::endl;
             std::cout << "  Reading " << sizeof(DT) << " bytes:\n"
@@ -187,7 +178,7 @@ public:
     	}
     	else
     	{
-            std::cout << " ERROR " << std::endl;
+			std::cout << m_gp.get_response_string() << std::endl;
     	}
         return data;
     }
