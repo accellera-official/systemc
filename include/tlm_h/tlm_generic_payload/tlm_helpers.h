@@ -6,24 +6,23 @@
 
 namespace tlm {
 
-enum tlm_endianness { TLM_LITTLE_ENDIAN, TLM_BIG_ENDIAN };
+enum tlm_endianness { TLM_UNKNOWN_ENDIAN, TLM_LITTLE_ENDIAN, TLM_BIG_ENDIAN };
 
 inline bool hostHasLittleEndianness()
 {
-#if defined(__sparc) || defined(macintosh) || defined(__hppa) || defined(__APPLE__)
+  static tlm_endianness host_endianness     = TLM_UNKNOWN_ENDIAN;
+  static bool           host_little_endian  = false;
+  
+  if ( host_endianness == TLM_UNKNOWN_ENDIAN )
+  {
+    const unsigned char   endian_array [ 2 ] = { 1, 0 };
+  
+          unsigned short  endian_short       = *(unsigned short *) endian_array;
+  
+    host_little_endian = ( endian_short == 1 );
+  }
 
-  return false; // HOST IS BIG ENDIAN
-
-#elif defined(__acorn) || defined(__mvs) || defined(_WIN32) || \
-  (defined(__alpha) && defined(__osf__)) || defined(__i386)
-
-  return true; // HOST IS LITTLE ENDIAN
-
-#else
-
-  return (__BYTE_ORDER == __LITTLE_ENDIAN);
-
-#endif
+  return host_little_endian;
 }
 
 inline bool hasHostEndianness(tlm_endianness endianness)
