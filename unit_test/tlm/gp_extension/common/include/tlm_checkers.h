@@ -38,7 +38,7 @@ public:
 		, m_burst_supported(true)
 		, m_burst_mode_streaming_supported(true)
 		, m_byte_enable_supported(true)
-		, m_response_status(TLM_OK_RESP)
+		, m_response_status(TLM_OK_RESPONSE)
 	{
 	}
 
@@ -57,7 +57,7 @@ public:
 	{
 		m_response_status = do_check(gp);
 
-		return (m_response_status == TLM_OK_RESP);
+		return (m_response_status == TLM_OK_RESPONSE);
 	}
 
 	tlm_response_status get_response_status() {return m_response_status;}
@@ -68,23 +68,23 @@ private:
 	{
 		// Check 1: Write transaction supported
 		if((gp->get_command() == TLM_WRITE_COMMAND) && (m_write_command_supported == false))
-			return TLM_COMMAND_ERROR_RESP;
+			return TLM_COMMAND_ERROR_RESPONSE;
 
 		// Check 2: Read transacion supported
 		if((gp->get_command() == TLM_READ_COMMAND) && (m_read_command_supported == false))
-			return TLM_COMMAND_ERROR_RESP;
+			return TLM_COMMAND_ERROR_RESPONSE;
 
     // Check 3-4: check supported burst and data length
 		if(gp->get_burst_length(m_bus_data_size) > 1)
 		{
 			if(m_burst_supported == false)
 			{
-				return TLM_BURST_ERROR_RESP;
+				return TLM_BURST_ERROR_RESPONSE;
 			}
 			else
 			{
 				if((gp->get_streaming_mode() == true) && (m_burst_mode_streaming_supported == false))
-					return TLM_BURST_ERROR_RESP;
+					return TLM_BURST_ERROR_RESPONSE;
 			}
 		}
 		
@@ -92,19 +92,19 @@ private:
 		if(gp->get_streaming_mode() == false)
 		{
 			sc_dt::uint64 begin_address = gp->get_address();
-			sc_dt::uint64 end_address = begin_address + gp->get_length();
+			sc_dt::uint64 end_address = begin_address + gp->get_data_length();
 			
 			if((begin_address < m_start_address_range) && (end_address > m_end_address_range))
-				return TLM_ADDRESS_ERROR_RESP;
+				return TLM_ADDRESS_ERROR_RESPONSE;
 		}
 
     // Check 6: check byte enables
-    if((gp->get_byte_enable() != NULL) && (m_byte_enable_supported == false))
+    if((gp->get_byte_enable_ptr() != NULL) && (m_byte_enable_supported == false))
     {
-    	return TLM_BYTE_ENABLE_ERROR_RESP;
+    	return TLM_BYTE_ENABLE_ERROR_RESPONSE;
     }
     
-		return TLM_OK_RESP;
+		return TLM_OK_RESPONSE;
 	}
 
 private:
