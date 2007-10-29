@@ -1,0 +1,22 @@
+master_1 : Single WRITE transaction :  OK 
+master_1 : Single READ transaction :  OK 
+master_1 : read and write 256-bit operation : OK  
+master_1 : Single WRITE transaction :  OK 
+master_1 : Single READ transaction :  OK 
+master_1 : read and write 128-bit operation : OK  
+master_1 : Single WRITE transaction :  OK 
+master_1 : Single READ transaction :  OK 
+master_1 : read and write 64-bit operation : OK  
+master_1 : Single WRITE transaction :  OK 
+master_1 : Single READ transaction :  OK 
+master_1 : read and write 48-bit operation : OK  
+master_1 : Single WRITE transaction :  OK 
+master_1 : Single READ transaction :  OK 
+master_1 : read and write 32-bit operation : OK  
+master_1 : Single WRITE transaction :  OK 
+master_1 : Single READ transaction :  OK 
+master_1 : read and write 16-bit operation : OK  
+master_1 : Single WRITE transaction :  OK 
+master_1 : Single READ transaction :  OK 
+master_1 : read and write 8-bit operation : OK  
+SystemC: simulation stopped by user.

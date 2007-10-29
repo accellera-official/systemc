@@ -48,19 +48,18 @@ public:
     
 private:
 
-    tlm_memory m_mem;
-	
-	sc_biguint<256>			reg256;
-	sc_biguint<128>			reg128;
-	unsigned long long		reg64;
-	sc_uint<48>				reg48;
-	unsigned int			reg32;
-	unsigned short			reg16;
-	unsigned char			reg8;
+    sc_biguint<256>     reg256;
+    sc_biguint<128>     reg128;
+    unsigned long long  reg64;
+    sc_uint<48>         reg48;
+    unsigned int        reg32;
+    unsigned short      reg16;
+    unsigned char       reg8;
 
-    unsigned int m_mem_size;
     unsigned int m_start_address;
     unsigned int m_end_address;
+    tlm_memory m_mem;
+    unsigned int m_mem_size;
     unsigned int m_incr_address;
 
 	tlm::tlm_checker m_checker;

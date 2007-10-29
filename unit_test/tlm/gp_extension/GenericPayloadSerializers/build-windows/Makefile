@@ -1,21 +1,15 @@
-include ../../../build-unix/Makefile.config
+include ../../../build-windows/Makefile.config
 
 OBJ_NAME = generic_payload_serializers
 
-INCDIR  = -I$(SYSTEMC_INC_DIR) -I$(TLM_INC_DIR) -I../include -I../../common/include
-SRCDIR  = ../src
-LIBDIR  = -L$(SYSTEMC_LIB_DIR)
-
-LIB_SC  = -lsystemc
-
-LIBS = $(LIBDIR) $(LIB_SC)
+MY_INCLUDES = /I../include /I../../common/include
+SRCDIR = ../src
  
-CFLAGS = $(FLAGS) $(INCDIR)
+CFLAGS = $(FLAGS) $(MY_INCLUDES)
 
-OBJS   = $(OBJ_NAME).o tlm_slave.o
+OBJS = $(OBJ_NAME).o tlm_slave.o
 
-
-.PHONY: clean all check run announce
+.PHONY: clean all run check announce
 
 all: announce $(OBJ_NAME).exe
 
@@ -32,17 +26,19 @@ check: announce $(OBJ_NAME).exe
 run: announce $(OBJ_NAME).exe
 	@./$(OBJ_NAME).exe
 
+
 $(OBJ_NAME).exe: $(OBJS)
-	$(LD) -o $@ $(OBJS) $(LIBS)
+	$(LD) /OUT:"$@" $(OBJS) $(LDFLAGS)
 
 $(OBJ_NAME).o: $(SRCDIR)/$(OBJ_NAME).cpp
-	$(GXX) $(CFLAGS) -c $< -o $@
-
-tlm_master.o: $(SRCDIR)/tlm_master.cpp
-	$(GXX) $(CFLAGS) -c $< -o $@
+	$(CC) /c $(CFLAGS) $< /Fo"$@"
 
 tlm_slave.o: $(SRCDIR)/tlm_slave.cpp
-	$(GXX) $(CFLAGS) -c $< -o $@
+	$(CC) /c $(CFLAGS) $< /Fo"$@"
+
 
 clean:
-	rm -f *.o *.log $(OBJ_NAME).exe
+	rm -f $(OBJ_NAME).exe *.o run.log diff.log *.idb *.pdb *ilk
+
+# DO NOT DELETE
+

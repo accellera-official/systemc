@@ -1,11 +1,10 @@
+include ../../build-unix/Makefile.config
+
+export FLAG_BATCH = 1
 
 SUBDIRS = \
-	../BaseSocketLT \
-	../CoreDecoupling \
-	../EndEventLT \
-	../RegisterSocketProcessLT \
-	../SimpleAT \
-	../SimpleAT_TA
+          ../BvsNB \
+          ../UTvsLT
 
 .PHONY: all clean run check
 

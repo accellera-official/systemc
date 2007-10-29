@@ -47,8 +47,10 @@ void tlm_slave::nb_transport(tlm::tlm_generic_payload* gp)
 
 	if(m_checker.transactionIsValid(gp))
 	{
-		unsigned int addr = (unsigned int)gp->get_address() - m_start_address;
-        unsigned char* data = gp->get_data_ptr();
+#ifdef TLM_MEMORY_ENABLE
+            unsigned int addr = (unsigned int)gp->get_address() - m_start_address;
+#endif
+            unsigned char* data = gp->get_data_ptr();
 
 		if(gp->get_command() == tlm::TLM_WRITE_COMMAND)
 		{

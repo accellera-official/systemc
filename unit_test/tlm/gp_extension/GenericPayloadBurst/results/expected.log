@@ -1,0 +1,16 @@
+master_1 : TEST 1 : write and read burst operation : length<64> , data_size<4> 
+master_1 : Incremental burst WRITE transaction :  ( slave : write : normal mode : burst_length<16> ) OK 
+master_1 : Incremental burst READ transaction :  ( slave : read : normal mode : burst_length<16> ) OK 
+master_1 : WR and RD arrays are equal : OK  
+
+master_1 : TEST 2 : write and read burst operation : length<66> , data_size<4> 
+master_1 : Incremental burst WRITE transaction :  ( slave : write : normal mode : burst_length<17> ) OK 
+master_1 : Incremental burst READ transaction :  ( slave : read : normal mode : burst_length<17> ) OK 
+master_1 : WR and RD arrays are equal : OK  
+
+master_1 : TEST 3 : write and read burst operation : length<66> , data_size<2> 
+master_1 : Incremental burst WRITE transaction :  ( slave : write : normal mode : burst_length<17> ) OK 
+master_1 : Incremental burst READ transaction :  ( slave : read : normal mode : burst_length<17> ) OK 
+master_1 : WR and RD arrays are equal : OK  
+
+SystemC: simulation stopped by user.

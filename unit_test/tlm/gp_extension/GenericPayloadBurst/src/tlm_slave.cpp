@@ -54,7 +54,7 @@ void tlm_slave::nb_transport(tlm::tlm_generic_payload* gp)
 			std::cout << " ( slave : write : normal mode : burst_length<";
 			std::cout << gp->get_burst_length(m_incr_address) << "> )";
 
-			for(int bl=0;bl<gp->get_burst_length(m_incr_address);bl++)
+			for(unsigned int bl=0;bl<gp->get_burst_length(m_incr_address);bl++)
 			{
 				m_mem.write(data,addr,gp->get_bytes_burst_element(bl,m_incr_address));
 				addr += m_incr_address;
@@ -68,7 +68,7 @@ void tlm_slave::nb_transport(tlm::tlm_generic_payload* gp)
 			std::cout << " ( slave : read : normal mode : burst_length<";
 			std::cout << gp->get_burst_length(m_incr_address) << "> )";
 			
-			for(int bl=0;bl<gp->get_burst_length(m_incr_address);bl++)
+			for(unsigned int bl=0;bl<gp->get_burst_length(m_incr_address);bl++)
 			{
 				m_mem.read(data,addr,gp->get_bytes_burst_element(bl,m_incr_address));
 				addr += m_incr_address;
