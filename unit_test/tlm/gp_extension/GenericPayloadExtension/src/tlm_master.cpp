@@ -32,7 +32,7 @@ void tlm_master::test_single_write(bool use_ext1,
     m_gp.set_command(tlm::TLM_WRITE_COMMAND);
     m_gp.set_address(m_address);
     m_gp.set_data_ptr((unsigned char*)&m_data);
-    m_gp.set_length(sizeof(m_data));
+    m_gp.set_data_length(sizeof(m_data));
     
     // Add/clear extensions:
     if (use_ext1)
@@ -96,7 +96,7 @@ void tlm_master::test_single_read()
     m_gp.set_command(tlm::TLM_READ_COMMAND);
     m_gp.set_address(m_address);
     m_gp.set_data_ptr((unsigned char*)&m_data);
-    m_gp.set_length(sizeof(m_data));
+    m_gp.set_data_length(sizeof(m_data));
     
 
     // Clear extension array using direct indexes:
