@@ -30,7 +30,7 @@ namespace tlm {
 // Helper function:
 inline unsigned int max_num_extensions(bool increment=false)
 {
-    static unsigned int max_num = 0;
+    static uint32_t max_num = 0;
     if (increment) ++max_num;
     return max_num;
 }
@@ -61,12 +61,12 @@ class tlm_extension : public tlm_extension_base
 public:
     virtual tlm_extension_base* clone() const = 0;
     virtual ~tlm_extension() {}
-    const static unsigned int ID;
+    const static uint32_t ID;
 };
 
 template <typename T>
 const
-unsigned int tlm_extension<T>::ID = tlm_extension_base::register_extension();
+uint32_t tlm_extension<T>::ID = tlm_extension_base::register_extension();
 
 //---------------------------------------------------------------------------
 // enumeration types
@@ -78,13 +78,13 @@ enum tlm_command {
 };
 
 enum tlm_response_status {
-    TLM_OK_RESP = 1,
-    TLM_INCOMPLETE_RESP = 0,
-    TLM_GENERIC_ERROR_RESP = -1,
-    TLM_ADDRESS_ERROR_RESP = -2,
-    TLM_COMMAND_ERROR_RESP = -3,
-    TLM_BURST_ERROR_RESP = -4,
-    TLM_BYTE_ENABLE_ERROR_RESP = -5
+    TLM_OK_RESPONSE = 1,
+    TLM_INCOMPLETE_RESPONSE = 0,
+    TLM_GENERIC_ERROR_RESPONSE = -1,
+    TLM_ADDRESS_ERROR_RESPONSE = -2,
+    TLM_COMMAND_ERROR_RESPONSE = -3,
+    TLM_BURST_ERROR_RESPONSE = -4,
+    TLM_BYTE_ENABLE_ERROR_RESPONSE = -5
 };
 
 //---------------------------------------------------------------------------
@@ -103,38 +103,34 @@ public:
         , m_address(0)
         , m_data(0)
         , m_length(0)
-        , m_response_status(TLM_INCOMPLETE_RESP)
+        , m_response_status(TLM_INCOMPLETE_RESPONSE)
         , m_streaming_mode(false)
         , m_lock(false)
-        , m_byte_enable(NULL)
+        , m_byte_enable(0)
         , m_byte_enable_length(0)
         , m_extensions(max_num_extensions())
-        , mDMI(false)
+        , m_dmi(false)
     {
     }
     
-    // FIXME: copy constructor, assignment operator, ... NOT needed
-    // OS: for cloning support a copy constructor is helpful, I think.
-    //     Please review.
-
-    // copy constructor
+    // Copy constructor
     tlm_generic_payload(const tlm_generic_payload& x)
         : m_command(x.get_command())
         , m_address(x.get_address())
         , m_data(x.get_data_ptr())
-        , m_length(x.get_length())
+        , m_length(x.get_data_length())
         , m_response_status(x.get_response_status())
         , m_streaming_mode(x.get_streaming_mode())
         , m_lock(x.get_lock())
-        , m_byte_enable(x.get_byte_enable())
+        , m_byte_enable(x.get_byte_enable_ptr())
         , m_byte_enable_length(x.get_byte_enable_length())
         , m_extensions(max_num_extensions())
-        , mDMI(false)
+        , m_dmi(false)
     {
         // copy all extensions
         if (m_extensions.size()>0)
         {
-            for(unsigned int i=0; i<m_extensions.size(); i++)
+            for(uint32_t i=0; i<m_extensions.size(); i++)
             {
                 if(x.get_extension(i))
                 {
@@ -170,67 +166,57 @@ public:
     // Address related methods
     inline sc_dt::uint64        get_address() const {return m_address;}
     inline void                 set_address(const sc_dt::uint64 address){m_address = address;}
-    
-    // Data related methods
-    inline unsigned char*       get_data_ptr() const {return m_data;}
-    inline void                 set_data_ptr(unsigned char* data) {m_data = data;}
-    
-    // Transaction length (in bytes) related methods
-    inline unsigned int         get_length() const {return m_length;}
-    inline void                 set_length(const unsigned int length){m_length = length;}
-    
+
+	  // Data related methods
+	  inline uint8_t*             get_data_ptr() const {return m_data;}
+    inline void                 set_data_ptr(uint8_t* data) {m_data = data;}
+
+	  // Transaction length (in bytes) related methods
+	  inline uint32_t             get_data_length() const {return m_length;}
+    inline void                 set_data_length(const uint32_t length){m_length = length;}
+
     // Response status related methods
     inline bool                 is_response_ok() {return (m_response_status > 0);}
     inline bool                 is_response_error() {return (m_response_status <= 0);}
     inline tlm_response_status  get_response_status() const {return m_response_status;}
     inline void                 set_response_status(const tlm_response_status response_status)
-        {m_response_status = response_status;}  
-    inline const char*          get_response_string()
-    {
-        switch(m_response_status)
-        {
-        case TLM_OK_RESP:            return "TLM_OK_RESP"; break;
-        case TLM_INCOMPLETE_RESP:    return "TLM_INCOMPLETE_RESP"; break;
-        case TLM_GENERIC_ERROR_RESP: return "TLM_GENERIC_ERROR_RESP"; break;
-        case TLM_ADDRESS_ERROR_RESP: return "TLM_ADDRESS_ERROR_RESP"; break;
-        case TLM_COMMAND_ERROR_RESP: return "TLM_COMMAND_ERROR_RESP"; break;
-        case TLM_BURST_ERROR_RESP:   return "TLM_BURST_ERROR_RESP"; break;
-        case TLM_BYTE_ENABLE_ERROR_RESP: return "TLM_BYTE_ENABLE_ERROR_RESP"; break;
-        }
-        // should never happen:
-        return "TLM_UNKNOWN_RESPONSE";
-    }
-    
-    // Burst related methods
+                                                     {m_response_status = response_status;}  
+	  inline std::string          get_response_string()
+	                              {
+	 	                             switch(m_response_status)
+		                             {
+		                             case TLM_OK_RESPONSE:            return "TLM_OK_RESPONSE"; break;
+		                             case TLM_INCOMPLETE_RESPONSE:    return "TLM_INCOMPLETE_RESPONSE"; break;
+		                             case TLM_GENERIC_ERROR_RESPONSE: return "TLM_GENERIC_ERROR_RESPONSE"; break;
+		                             case TLM_ADDRESS_ERROR_RESPONSE: return "TLM_ADDRESS_ERROR_RESPONSE"; break;
+		                             case TLM_COMMAND_ERROR_RESPONSE: return "TLM_COMMAND_ERROR_RESPONSE"; break;
+		                             case TLM_BURST_ERROR_RESPONSE:   return "TLM_BURST_ERROR_RESPONSE"; break;
+		                             case TLM_BYTE_ENABLE_ERROR_RESPONSE: return "TLM_BYTE_ENABLE_ERROR_RESPONSE"; break;	
+		                             }
+	                              }
+
+	  // Burst related methods
     inline bool                 get_streaming_mode() const {return m_streaming_mode;}
     inline void                 set_streaming_mode(const bool streaming_mode) {m_streaming_mode = streaming_mode; }
+	  inline uint32_t             get_burst_length(uint32_t bus_data_size)
+	                              {
+	                              	return (m_length+bus_data_size-1)/bus_data_size;
+	                              }
+	  inline uint32_t             get_nr_bytes_of_burst_element(uint32_t count, uint32_t bus_data_size)
+	                              {
+		                             int remainder = m_length-(bus_data_size*count);
+		                             if(remainder < bus_data_size) return remainder; else return bus_data_size;
+	                              }
     
-    // TODO:: this looks very slow: please review
-    inline unsigned int         get_burst_length(unsigned int bus_data_size)
-        {return (unsigned int)ceil((double)m_length/(double)bus_data_size); }
-    inline unsigned int         get_bytes_burst_element(unsigned int count,
-                                                        unsigned int bus_data_size)
-    {
-        unsigned int remainder = m_length-(bus_data_size*count);
-        if(remainder < bus_data_size)
-        {
-            return remainder;
-        }
-        else
-        {
-            return bus_data_size;
-        }
-    }
-    
-    // Lock related methods
-    inline bool                 get_lock() const {return m_lock;}
-    inline void                 set_lock(const bool lock){m_lock = lock;}
+      // Lock related methods
+	  inline bool	                get_lock() const {return m_lock;}
+	  inline void                 set_lock(const bool lock){m_lock = lock;}
 
-    // Byte enable related methods
-    inline bool*                get_byte_enable() const {return m_byte_enable;}
-    inline void                 set_byte_enable(bool* byte_enable){m_byte_enable = byte_enable;}
-    inline unsigned int				  get_byte_enable_length() const {return m_byte_enable_length;}
-    inline void                 set_byte_enable_length(const unsigned int byte_enable_length){m_byte_enable_length = byte_enable_length;}
+      // Byte enable related methods
+	  inline bool*                get_byte_enable_ptr() const {return m_byte_enable;}
+	  inline void                 set_byte_enable_ptr(bool* byte_enable){m_byte_enable = byte_enable;}
+	  inline uint32_t             get_byte_enable_length() const {return m_byte_enable_length;}
+	  inline void                 set_byte_enable_length(const uint32_t byte_enable_length){m_byte_enable_length = byte_enable_length;}
     
     /* --------------------------------------------------------------------- */
     /* Generic Payload attributes:                                           */
@@ -262,21 +248,19 @@ public:
     /* - m_byte_enable_length :                                              */
     /* --------------------------------------------------------------------- */
 
-protected:
+private:
 	
-	  tlm_command          m_command;
+    tlm_command          m_command;
     sc_dt::uint64        m_address;			
-    unsigned char*       m_data;
-    unsigned int         m_length;		
+    uint8_t*             m_data;
+    uint32_t             m_length;		
     tlm_response_status  m_response_status;
     bool                 m_streaming_mode;
     bool                 m_lock;
     bool*                m_byte_enable;
-    unsigned int         m_byte_enable_length;
-    // int                  m_identifier
+    uint32_t             m_byte_enable_length;
     
 public:
-
    
     /* --------------------------------------------------------------------- */
     /* Dynamic extension mechanism:                                          */
@@ -320,7 +304,7 @@ public:
         m_extensions[T::ID] = static_cast<tlm_extension_base*>(ext);
     }
     // non-templatized version with manual index:
-    void set_extension(unsigned int index, tlm_extension_base* ext)
+    void set_extension(uint32_t index, tlm_extension_base* ext)
     {
         resize_extensions();
         m_extensions[index] = ext;
@@ -332,7 +316,7 @@ public:
         ext = static_cast<T*>(m_extensions[T::ID]);
     }
     // Non-templatized version:
-     tlm_extension_base* get_extension(unsigned int index) const
+     tlm_extension_base* get_extension(uint32_t index) const
     {
         return m_extensions[index];
     }
@@ -344,7 +328,7 @@ public:
         m_extensions[T::ID] = static_cast<tlm_extension_base*>(0);
     }
     // Non-templatized version with manual index
-    void clear_extension(unsigned int index)
+    void clear_extension(uint32_t index)
     {
         if (index < m_extensions.size())
         {
@@ -368,11 +352,11 @@ protected:
 public:
   // This is the "DMI-hint" a slave can set this to true if it
   // wants to indicate that a DMI request would be supported:
-  void set_dmi_allowed(bool dmiAllowed) { mDMI = dmiAllowed; }
-  bool get_dmi_allowed() const { return mDMI; }
+  void set_dmi_allowed(bool dmiAllowed) { m_dmi = dmiAllowed; }
+  bool get_dmi_allowed() const { return m_dmi; }
 
 protected:
-  bool mDMI;
+  bool m_dmi;
 };
 
 } // namespace tlm
