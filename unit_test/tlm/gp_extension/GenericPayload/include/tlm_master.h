@@ -132,7 +132,7 @@ public:
     	m_gp.set_command(tlm::TLM_WRITE_COMMAND);
     	m_gp.set_address(address);
     	m_gp.set_data_ptr((unsigned char*)&data);
-    	m_gp.set_length(sizeof(DT)); // in bytes
+    	m_gp.set_data_length(sizeof(DT)); // in bytes
     
         bus_port->nb_transport(&m_gp);
     
@@ -164,11 +164,11 @@ public:
     	m_gp.set_command(tlm::TLM_READ_COMMAND);
     	m_gp.set_address(address);
     	m_gp.set_data_ptr((unsigned char*)&data);
-    	m_gp.set_length(sizeof(DT)); // in bytes
+    	m_gp.set_data_length(sizeof(DT)); // in bytes
     
         bus_port->nb_transport(&m_gp);
     
-    	if(m_gp.is_response_ok() == tlm::TLM_OK_RESP)
+    	if(m_gp.is_response_ok())
     	{
             std::cout << " OK " << std::endl;
             std::cout << "  Reading " << sizeof(DT) << " bytes:\n"
@@ -187,10 +187,6 @@ public:
 private:
     
     tlm::tlm_generic_payload  m_gp;
-    
-    // GP tests
-    void test_single_write();
-    void test_single_read();
     
 };
 
