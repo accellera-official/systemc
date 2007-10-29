@@ -49,21 +49,3 @@
 
 0020 - TLM ports master/slave need to be changed to initiator/target
        (2007-10-18 call)
-
-0023 - GP extension test (make run) fails on Intel Macintosh
-       make: *** [run] Error 139
-       [OS]: candidate is array bounds write violation in
-       tlm_annotated::tlm_generic_payload_ns::copy_data(unsigned char...
-       [OS]: fixed a wrong delete in ~tlm_memory, but did it help?
-       [CW]: I've udpated tlm_helper.h to generically detect endianness and no
-       longer see this problem.
-       
-0024 - GP extension test (./generic_payload_extension.exe) seg faults on Intel
-       Macintosh
-       [CW]: I've udpated tlm_helper.h to generically detect endianness and no
-       longer see this problem.
-
-0025 - GP test (make run) produces incorrect results on Intel Macintosh (not
-       correctly detecting endianness)
-       [CW]: I've udpated tlm_helper.h to generically detect endianness and no
-       longer see this problem.
