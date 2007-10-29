@@ -1,49 +1,31 @@
 include ../../build-unix/Makefile.config
 
-OBJ_NAME = transactor
+export FLAG_BATCH = 1
 
-INCDIR = -I$(SYSTEMC_INC_DIR) -I$(TLM_INC_DIR) -I../../common/include/SimpleSocket -I../../common/include/models -I../../common/include/utils -I../include/transactors -I../include/tlm_bus
-SRCDIR = ../src
-LIBDIR = -L$(SYSTEMC_LIB_DIR)
+SUBDIRS = \
+          ../BvsNB \
+          ../UTvsLT
 
-LIB_SC = -lsystemc
+.PHONY: all clean check run
 
-LIBS = $(LIBDIR) $(LIB_SC)
- 
-CFLAGS = $(FLAGS) $(INCDIR)
+all:
+	@for i in $(SUBDIRS); do \
+        (cd $$i/build-unix && $(MAKE)); done
 
-.PHONY: clean all check run announce
+check:
+	@for i in $(SUBDIRS); do \
+        (cd $$i/build-unix && $(MAKE) check); done
 
-all: announce $(OBJ_NAME).exe
-
-announce:
-	@if  ( test ! -d $(FLAG_BATCH) ); \
-	 	then echo; echo "$(OBJ_NAME):"; echo; \
-	 fi
-	
-check: announce $(OBJ_NAME).exe
-	@./$(OBJ_NAME).exe > run.log
-	@diff run.log ../results/expected.log > diff.log 2>&1;\
-	if [ -s diff.log ]; then echo "***ERROR:"; cat diff.log; else echo "OK"; fi
-
-run: announce $(OBJ_NAME).exe
-	@./$(OBJ_NAME).exe
-
-.c.o:
-	$(GCC) $(CFLAGS) -c $<
-.cpp.o:
-	$(GXX) $(CFLAGS) -c $< -o $@
-.cc.o:
-	$(GXX) $(CFLAGS) -c $< -o $@
-
-$(OBJ_NAME).exe: $(OBJ_NAME).o
-	$(LD) -o $@ $(OBJ_NAME).o $(LIBS)
-
-$(OBJ_NAME).o: $(SRCDIR)/$(OBJ_NAME).cpp
-	$(GXX) -c $(CFLAGS) $(SRCDIR)/$(OBJ_NAME).cpp
+run:
+	@for i in $(SUBDIRS); do \
+        (cd $$i/build-unix && $(MAKE) run); done
 
 clean:
-	rm -f *.o *.log $(OBJ_NAME).exe
-
-# DO NOT DELETE
-
+	@if ( test ! -d $(SYSTEMC_HOME) ); \
+		then echo 'SYSTEMC_HOME [$(SYSTEMC_HOME)] is not present. Update $(PWD)/Makefile.config'; \
+	elif ( test ! -d $(TLM_HOME) ); \
+		then echo 'TLM_HOME [$(TLM_HOME)] is not present. Update $(PWD)/Makefile.config'; \
+	else \
+		for i in $(SUBDIRS); do (cd $$i/build-unix && $(MAKE) clean); done; \
+    fi
+       	
