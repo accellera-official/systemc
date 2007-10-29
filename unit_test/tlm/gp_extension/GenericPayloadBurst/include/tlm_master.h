@@ -61,34 +61,26 @@ public:
 			rd_data[i] = 0;
 		}
 
-		std::cout << name() << " : TEST 1 : write and read burst operation : length<64> , data_size<4> " << std::endl;
+		std::cout << name() << " : TEST 1 : write and read burst operation : length 64 bytes \n";
 		// Write Burst transaction
-		writeIncrBurst<32>(0x0,wr_data,64);
+		writeBurst(0x0,wr_data,64);
 		// Read Burst transaction
-		readIncrBurst<32>(0x0,rd_data,64);
+		readBurst(0x0,rd_data,64);
 		// Compare wr_data and rd_data
 		compare_arrays(wr_data,rd_data,64);
 		std::cout << std::endl;
 
-		std::cout << name() << " : TEST 2 : write and read burst operation : length<66> , data_size<4> " << std::endl;
+		std::cout << name() << " : TEST 2 : write and read burst operation : length 66 bytes \n";
 		for(int i=0;i<66;i++) rd_data[i]=0;
 		// Write Burst transaction
-		writeIncrBurst<32>(0x0,wr_data,66);
+		writeBurst(0x100,wr_data,66);
 		// Read Burst transaction
-		readIncrBurst<32>(0x0,rd_data,66);
+		readBurst(0x100,rd_data,66);
 		// Compare wr_data and rd_data
 		compare_arrays(wr_data,rd_data,66);
 		std::cout << std::endl;
 
-		std::cout << name() << " : TEST 3 : write and read burst operation : length<66> , data_size<2> " << std::endl;
-		for(int i=0;i<66;i++) rd_data[i]=0;
-		// Write Burst transaction
-		writeIncrBurst<16>(0x0,wr_data,66);
-		// Read Burst transaction
-		readIncrBurst<16>(0x0,rd_data,66);
-		// Compare wr_data and rd_data
-		compare_arrays(wr_data,rd_data,66);
-		std::cout << std::endl;
+
 
 		delete [] wr_data;	wr_data = 0;
 		delete [] rd_data;	rd_data = 0;
@@ -101,27 +93,22 @@ private:
 
     tlm::tlm_generic_payload  m_gp;
 
-	template< int bits_data_size >
-	void writeIncrBurst(unsigned int base_address, unsigned char *data, unsigned int nr_bytes);
-
-	template< int bits_data_size >
-	void readIncrBurst(unsigned int base_address, unsigned char *data, unsigned int nr_bytes);
-
+	void writeBurst(unsigned int base_address, unsigned char *data, unsigned int nr_bytes);
+	void readBurst(unsigned int base_address, unsigned char *data, unsigned int nr_bytes);
 	void compare_arrays(unsigned char* wr_data, unsigned char* rd_data, unsigned int nr_bytes);
 };
 
 //
 // Incremental burst WRITE transaction 
 //
-template< int bits_data_size >
-void tlm_master::writeIncrBurst(unsigned int base_address, unsigned char *data, unsigned int nr_bytes)
+void tlm_master::writeBurst(unsigned int base_address, unsigned char *data, unsigned int nr_bytes)
 {
 	cout << name() << " : Incremental burst WRITE transaction : "; 
 
 	m_gp.set_command(tlm::TLM_WRITE_COMMAND);
 	m_gp.set_address(base_address);
 	m_gp.set_data_ptr(data);
-	m_gp.set_length(nr_bytes);
+	m_gp.set_data_length(nr_bytes);
 	
 	bus_port->nb_transport(&m_gp);
 	
@@ -138,15 +125,14 @@ void tlm_master::writeIncrBurst(unsigned int base_address, unsigned char *data, 
 //
 // Incremental burst READ transaction 
 //
-template< int bits_data_size >
-void tlm_master::readIncrBurst(unsigned int base_address, unsigned char *data, unsigned int nr_bytes)
+void tlm_master::readBurst(unsigned int base_address, unsigned char *data, unsigned int nr_bytes)
 {
 	std::cout << name() << " : Incremental burst READ transaction : "; 
 	
 	m_gp.set_command(tlm::TLM_READ_COMMAND);
 	m_gp.set_address(base_address);
 	m_gp.set_data_ptr(data);
-	m_gp.set_length(nr_bytes);
+	m_gp.set_data_length(nr_bytes);
 	
 	bus_port->nb_transport(&m_gp);
 	
@@ -165,7 +151,7 @@ void tlm_master::readIncrBurst(unsigned int base_address, unsigned char *data, u
 void tlm_master::compare_arrays(unsigned char* wr_data, unsigned char* rd_data, unsigned int nr_bytes)
 {
 	bool error_flag = false;
-	for(unsigned int i=0;i<nr_bytes;i++)
+	for(int i=0;i<nr_bytes;i++)
 	{
 		if(wr_data[i] != rd_data[i])
 			error_flag = true;
