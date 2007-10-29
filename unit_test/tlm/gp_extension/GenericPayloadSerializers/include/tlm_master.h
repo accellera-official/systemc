@@ -162,9 +162,9 @@ void tlm_master::compare_arrays(int nbits)
 	}
 
 	if(error_flag)
-		std::cout << name() << " : read and write " << nbits << "-bit operation : ERROR \n";
+		std::cout << name() << " : read and write " << nbits << "-bit operation : ERROR " << std::endl;
 	else
-		std::cout << name() << " : read and write " << nbits << "-bit operation : OK  \n";
+		std::cout << name() << " : read and write " << nbits << "-bit operation : OK  " << std::endl;
 
 	delete [] wr_data;	wr_data = 0;
 	delete [] aux_data;	aux_data = 0; 

@@ -61,7 +61,7 @@ public:
 			rd_data[i] = 0;
 		}
 
-		std::cout << name() << " : TEST 1 : write and read burst operation : length<64> , data_size<4> \n";
+		std::cout << name() << " : TEST 1 : write and read burst operation : length<64> , data_size<4> " << std::endl;
 		// Write Burst transaction
 		writeIncrBurst<32>(0x0,wr_data,64);
 		// Read Burst transaction
@@ -70,7 +70,7 @@ public:
 		compare_arrays(wr_data,rd_data,64);
 		std::cout << std::endl;
 
-		std::cout << name() << " : TEST 2 : write and read burst operation : length<66> , data_size<4> \n";
+		std::cout << name() << " : TEST 2 : write and read burst operation : length<66> , data_size<4> " << std::endl;
 		for(int i=0;i<66;i++) rd_data[i]=0;
 		// Write Burst transaction
 		writeIncrBurst<32>(0x0,wr_data,66);
@@ -80,7 +80,7 @@ public:
 		compare_arrays(wr_data,rd_data,66);
 		std::cout << std::endl;
 
-		std::cout << name() << " : TEST 3 : write and read burst operation : length<66> , data_size<2> \n";
+		std::cout << name() << " : TEST 3 : write and read burst operation : length<66> , data_size<2> " << std::endl;
 		for(int i=0;i<66;i++) rd_data[i]=0;
 		// Write Burst transaction
 		writeIncrBurst<16>(0x0,wr_data,66);
@@ -172,9 +172,9 @@ void tlm_master::compare_arrays(unsigned char* wr_data, unsigned char* rd_data, 
 	}
 		
 	if(error_flag)
-		std::cout << name() << " : WR and RD arrays are different : ERROR \n";
+		std::cout << name() << " : WR and RD arrays are different : ERROR " << std::endl;
 	else
-		std::cout << name() << " : WR and RD arrays are equal : OK  \n";
+		std::cout << name() << " : WR and RD arrays are equal : OK  " << std::endl;
 }
 
 #endif
