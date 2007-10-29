@@ -22,14 +22,16 @@
 // constructor
 tlm_slave::tlm_slave(sc_module_name _name, 
                    unsigned int start_address, 
-                   unsigned int end_address)
+                   unsigned int end_address,
+				   tlm::tlm_endianness endianness)
 	: sc_module(_name)
 	, bus_port("bus_port")
 	, m_start_address(start_address)
 	, m_end_address(end_address)
-	, m_mem(end_address-start_address+1, tlm::TLM_LITTLE_ENDIAN)
+	, m_mem(end_address-start_address+1, endianness)
 	, m_mem_size(end_address-start_address+1)
 	, m_checker(start_address, end_address, bus_port.getBusDataWidth()/8)
+	, m_endianness(endianness)
 {
 	assert((m_end_address-m_start_address+1)%4 == 0);
 	
@@ -51,76 +53,79 @@ void tlm_slave::nb_transport(tlm::tlm_generic_payload* gp)
             unsigned int addr = (unsigned int)gp->get_address() - m_start_address;
 #endif
             unsigned char* data = gp->get_data_ptr();
+		// Byte enables are supported
+		bool* m_be = gp->get_byte_enable_ptr();
+		unsigned int m_be_length = gp->get_byte_enable_length();
 
-		if(gp->get_command() == tlm::TLM_WRITE_COMMAND)
+		if(gp->is_write())
 		{
 #ifdef TLM_MEMORY_ENABLE
 			// copy data in memory
-			m_mem.write(data,addr,gp->get_length());
+			m_mem.write(data,addr,gp->get_data_length());
 #else				
 			// alternative copy data to a specific data type
-			switch(gp->get_length())
+			switch(gp->get_data_length())
 			{
 			case 1: // 8 bits
-				tlm::copy_from_array< unsigned char >(reg8,0,data);
+				tlm::copy_from_array< unsigned char >(reg8,0,data,m_be,m_be_length,m_endianness);
 				break;
 			case 2: // 16-bits
-				tlm::copy_from_array< unsigned short >(reg16,0,data);
+				tlm::copy_from_array< unsigned short >(reg16,0,data,m_be,m_be_length,m_endianness);
 				break;
 			case 4: // 32-bits 
-				tlm::copy_from_array< unsigned int >(reg32,0,data);
+				tlm::copy_from_array< unsigned int >(reg32,0,data,m_be,m_be_length,m_endianness);
 				break;
 			case 6: // 48-bits
-				tlm::copy_from_array< sc_uint<48> >(reg48,0,data);
+				tlm::copy_from_array< sc_uint<48> >(reg48,0,data,m_be,m_be_length,m_endianness);
 				break;
 			case 8: // 64-bits
-				tlm::copy_from_array< unsigned long long >(reg64,0,data);
+				tlm::copy_from_array< unsigned long long >(reg64,0,data,m_be,m_be_length,m_endianness);
 				break;
 			case 16: // 128-bits
-				tlm::copy_from_array< sc_biguint<128> >(reg128,0,data);
+				tlm::copy_from_array< sc_biguint<128> >(reg128,0,data,m_be,m_be_length,m_endianness);
 				break;
 			case 32: // 256-bits
 			default:
-				tlm::copy_from_array< sc_biguint<256> >(reg256,0,data);
+				tlm::copy_from_array< sc_biguint<256> >(reg256,0,data,m_be,m_be_length,m_endianness);
 				break;
 			}			
 #endif					
-			m_response_status = tlm::TLM_OK_RESP;
+			m_response_status = tlm::TLM_OK_RESPONSE;
 		}
 		else // TLM_READ_COMMAND
 		{
 #ifdef TLM_MEMORY_ENABLE
 			// copy data to GP
-			m_mem.read(data,addr,gp->get_length());
+			m_mem.read(data,addr,gp->get_data_length());
 #else				
 			// alternative copy data from a specific data type
-			switch(gp->get_length())
+			switch(gp->get_data_length())
 			{
 			case 1: // 8 bits
-				tlm::copy_to_array< unsigned char >(reg8,0,data);
+				tlm::copy_to_array< unsigned char >(reg8,0,data,m_be,m_be_length,m_endianness);
 				break;
 			case 2: // 16-bits
-				tlm::copy_to_array< unsigned short >(reg16,0,data);
+				tlm::copy_to_array< unsigned short >(reg16,0,data,m_be,m_be_length,m_endianness);
 				break;
 			case 4: // 32-bits 
-				tlm::copy_to_array< unsigned int >(reg32,0,data);
+				tlm::copy_to_array< unsigned int >(reg32,0,data,m_be,m_be_length,m_endianness);
 				break;
 			case 6: // 48-bits
-				tlm::copy_to_array< sc_uint<48> >(reg48,0,data);
+				tlm::copy_to_array< sc_uint<48> >(reg48,0,data,m_be,m_be_length,m_endianness);
 				break;
 			case 8: // 64-bits
-				tlm::copy_to_array< unsigned long long >(reg64,0,data);
+				tlm::copy_to_array< unsigned long long >(reg64,0,data,m_be,m_be_length,m_endianness);
 				break;
 			case 16: // 128-bits
-				tlm::copy_to_array< sc_biguint<128> >(reg128,0,data);
+				tlm::copy_to_array< sc_biguint<128> >(reg128,0,data,m_be,m_be_length,m_endianness);
 				break;
 			case 32: // 256-bits
 			default:
-				tlm::copy_to_array< sc_biguint<256> >(reg256,0,data);
+				tlm::copy_to_array< sc_biguint<256> >(reg256,0,data,m_be,m_be_length,m_endianness);
 				break;
 			}
 #endif					
-			m_response_status = tlm::TLM_OK_RESP;
+			m_response_status = tlm::TLM_OK_RESPONSE;
 		}
 	}
 	else
