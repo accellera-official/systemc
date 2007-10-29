@@ -160,65 +160,78 @@ public:
     // API (including setters & getters)
     //---------------
 
-	  // Command related method
-	  inline bool                 is_read() {return (m_command == TLM_READ_COMMAND);}
-	  inline void                 set_read() {m_command = TLM_READ_COMMAND;}
-	  inline bool                 is_write() {return (m_command == TLM_WRITE_COMMAND);}
-	  inline void                 set_write() {m_command = TLM_WRITE_COMMAND;}
+    // Command related method
+    inline bool                 is_read() {return (m_command == TLM_READ_COMMAND);}
+    inline void                 set_read() {m_command = TLM_READ_COMMAND;}
+    inline bool                 is_write() {return (m_command == TLM_WRITE_COMMAND);}
+    inline void                 set_write() {m_command = TLM_WRITE_COMMAND;}
     inline tlm_command          get_command() const {return m_command;}
     inline void                 set_command(const tlm_command command) {m_command = command;}
-
-	  // Address related methods
-	  inline sc_dt::uint64        get_address() const {return m_address;}
+    
+    // Address related methods
+    inline sc_dt::uint64        get_address() const {return m_address;}
     inline void                 set_address(const sc_dt::uint64 address){m_address = address;}
-
-	  // Data related methods
-	  inline unsigned char*       get_data_ptr() const {return m_data;}
+    
+    // Data related methods
+    inline unsigned char*       get_data_ptr() const {return m_data;}
     inline void                 set_data_ptr(unsigned char* data) {m_data = data;}
-
-	  // Transaction length (in bytes) related methods
-	  inline unsigned int         get_length() const {return m_length;}
+    
+    // Transaction length (in bytes) related methods
+    inline unsigned int         get_length() const {return m_length;}
     inline void                 set_length(const unsigned int length){m_length = length;}
-
-	  // Response status related methods
-	  inline bool                 is_response_ok() {return (m_response_status > 0);}
-	  inline bool                 is_response_error() {return (m_response_status <= 0);}
-	  inline tlm_response_status  get_response_status() const {return m_response_status;}
+    
+    // Response status related methods
+    inline bool                 is_response_ok() {return (m_response_status > 0);}
+    inline bool                 is_response_error() {return (m_response_status <= 0);}
+    inline tlm_response_status  get_response_status() const {return m_response_status;}
     inline void                 set_response_status(const tlm_response_status response_status)
-                                                     {m_response_status = response_status;}  
-	inline const char*          get_response_string()
-	                            {
-	 	                           switch(m_response_status)
-		                           {
-		                           case TLM_OK_RESP:            return "TLM_OK_RESP"; break;
-		                           case TLM_INCOMPLETE_RESP:    return "TLM_INCOMPLETE_RESP"; break;
-		                           case TLM_GENERIC_ERROR_RESP: return "TLM_GENERIC_ERROR_RESP"; break;
-		                           case TLM_ADDRESS_ERROR_RESP: return "TLM_ADDRESS_ERROR_RESP"; break;
-		                           case TLM_COMMAND_ERROR_RESP: return "TLM_COMMAND_ERROR_RESP"; break;
-		                           case TLM_BURST_ERROR_RESP:   return "TLM_BURST_ERROR_RESP"; break;
-		                           case TLM_BYTE_ENABLE_ERROR_RESP: return "TLM_BYTE_ENABLE_ERROR_RESP"; break;	
-		                           }
-	                            }
-
-	  // Burst related methods
+        {m_response_status = response_status;}  
+    inline const char*          get_response_string()
+    {
+        switch(m_response_status)
+        {
+        case TLM_OK_RESP:            return "TLM_OK_RESP"; break;
+        case TLM_INCOMPLETE_RESP:    return "TLM_INCOMPLETE_RESP"; break;
+        case TLM_GENERIC_ERROR_RESP: return "TLM_GENERIC_ERROR_RESP"; break;
+        case TLM_ADDRESS_ERROR_RESP: return "TLM_ADDRESS_ERROR_RESP"; break;
+        case TLM_COMMAND_ERROR_RESP: return "TLM_COMMAND_ERROR_RESP"; break;
+        case TLM_BURST_ERROR_RESP:   return "TLM_BURST_ERROR_RESP"; break;
+        case TLM_BYTE_ENABLE_ERROR_RESP: return "TLM_BYTE_ENABLE_ERROR_RESP"; break;
+        }
+        // should never happen:
+        return "TLM_UNKNOWN_RESPONSE";
+    }
+    
+    // Burst related methods
     inline bool                 get_streaming_mode() const {return m_streaming_mode;}
     inline void                 set_streaming_mode(const bool streaming_mode) {m_streaming_mode = streaming_mode; }
-	  inline unsigned int         get_burst_length(unsigned int bus_data_size){return ceil((double)m_length/(double)bus_data_size); }
-	  inline unsigned int         get_bytes_burst_element(unsigned int count, unsigned int bus_data_size)
-	                              {
-		                              int remainder = m_length-(bus_data_size*count);
-		                              if(remainder < bus_data_size) return remainder; else return bus_data_size;
-	                              }
+    
+    // TODO:: this looks very slow: please review
+    inline unsigned int         get_burst_length(unsigned int bus_data_size)
+        {return (unsigned int)ceil((double)m_length/(double)bus_data_size); }
+    inline unsigned int         get_bytes_burst_element(unsigned int count,
+                                                        unsigned int bus_data_size)
+    {
+        unsigned int remainder = m_length-(bus_data_size*count);
+        if(remainder < bus_data_size)
+        {
+            return remainder;
+        }
+        else
+        {
+            return bus_data_size;
+        }
+    }
     
     // Lock related methods
-	  inline bool				          get_lock() const {return m_lock;}
-	  inline void                 set_lock(const bool lock){m_lock = lock;}
+    inline bool                 get_lock() const {return m_lock;}
+    inline void                 set_lock(const bool lock){m_lock = lock;}
 
     // Byte enable related methods
-	  inline bool*				        get_byte_enable() const {return m_byte_enable;}
-	  inline void                 set_byte_enable(bool* byte_enable){m_byte_enable = byte_enable;}
-	  inline unsigned int				  get_byte_enable_length() const {return m_byte_enable_length;}
-	  inline void                 set_byte_enable_length(const unsigned int byte_enable_length){m_byte_enable_length = byte_enable_length;}
+    inline bool*                get_byte_enable() const {return m_byte_enable;}
+    inline void                 set_byte_enable(bool* byte_enable){m_byte_enable = byte_enable;}
+    inline unsigned int				  get_byte_enable_length() const {return m_byte_enable_length;}
+    inline void                 set_byte_enable_length(const unsigned int byte_enable_length){m_byte_enable_length = byte_enable_length;}
     
     /* --------------------------------------------------------------------- */
     /* Generic Payload attributes:                                           */

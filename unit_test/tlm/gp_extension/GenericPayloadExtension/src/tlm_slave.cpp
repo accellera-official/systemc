@@ -29,8 +29,8 @@ tlm_slave::tlm_slave(sc_core::sc_module_name _name,
     , bus_port("bus_port")
     , m_start_address(start_address)
     , m_end_address(end_address)
-	, m_mem(end_address-start_address+1, tlm::TLM_LITTLE_ENDIAN)
-	, m_mem_size(end_address-start_address+1)
+    , m_mem(end_address-start_address+1, tlm::TLM_LITTLE_ENDIAN)
+    , m_mem_size(end_address-start_address+1)
     , m_checker(start_address, end_address, bus_port.getBusDataWidth()/8)
 {
     assert((m_end_address-m_start_address+1)%4 == 0);

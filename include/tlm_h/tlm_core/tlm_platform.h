@@ -20,11 +20,15 @@
 
 /// standard scalar data types
 
-#ifndef _MSC_VER
+#if !defined(_MSC_VER)
 
+// Solaris seems to pick up the types from /usr/include/sys/int_types.h
+#if !defined(__sun)
 #include <stdint.h>
+#endif
 
 #else
+
 
 // 8-bit ints
 #if ( ! defined ( _INT8_T ) )

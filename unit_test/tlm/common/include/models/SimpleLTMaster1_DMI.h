@@ -271,15 +271,31 @@ public:
         
     if (n > 0)
     {
-        for (unsigned int i=0; i<n; i++) {
-            std::cout << std::setw(2) << std::setfill('0')
-                      << (int)data[i];
-            j++;
-            if (j==16) {
-                j=0;
-                std::cout << std::endl;
-            } else {
-                std::cout << " ";
+        // always align endianness, so that we don't get a diff when
+        // printing the raw data
+        int e_start = 0;
+        int e_end = 4;
+        int e_increment = 1;
+        if (!tlm::hostHasLittleEndianness())
+        {
+            e_start = 3;
+            e_end = -1;
+            e_increment = -1;
+        }
+        
+        for (unsigned int i=0; i<n; i+=4)
+        {
+            for (int k=e_start; k!=e_end; k+=e_increment)
+            {
+                std::cout << std::setw(2) << std::setfill('0')
+                          << (int)data[i+k];
+                j++;
+                if (j==16) {
+                    j=0;
+                    std::cout << std::endl;
+                } else {
+                    std::cout << " ";
+                }
             }
         }
     }
