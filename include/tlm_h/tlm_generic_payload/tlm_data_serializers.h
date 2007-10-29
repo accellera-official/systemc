@@ -33,37 +33,67 @@ namespace tlm {
 // (number of bytes read from the array is rounded to W/8)
 //
 template< class T >
-inline void copy_from_array( T& data, unsigned int index, unsigned char* m_data)
+inline void copy_from_array( T& data, 
+							 uint32_t index, 
+							 uint8_t* m_data,
+							 bool* m_be,
+							 uint32_t m_be_length,
+							 tlm_endianness endianness)
 {
   const int nr_bytes = data.length() / 8;
 
-  if (hostHasLittleEndianness()) {
-    for(int b = 0; b < nr_bytes; ++b) {
-      data.range(b*8+7, b*8) = sc_dt::sc_uint<8>(m_data[nr_bytes*index + b]); 
-    }
-
+  if(m_be == 0) {
+	  if (hasHostEndianness(endianness)) {
+		  for(int b = 0; b < nr_bytes; ++b)
+			  data.range(b*8+7, b*8) = sc_dt::sc_uint<8>(m_data[nr_bytes*index + b]); 
+	  } else {
+		  for(int b = 0; b < nr_bytes; ++b) 
+			  data.range(b*8+7, b*8) = sc_dt::sc_uint<8>(m_data[nr_bytes*index + (nr_bytes - b - 1)]); 
+	  }
   } else {
-    for(int b = 0; b < nr_bytes; ++b) {
-      data.range(b*8+7, b*8) = sc_dt::sc_uint<8>(m_data[nr_bytes*index + (nr_bytes - b - 1)]); 
-    }
+	  if (hasHostEndianness(endianness)) {
+		  for(int b = 0; b < nr_bytes; ++b) 
+			  if(m_be[b % m_be_length])
+				  data.range(b*8+7, b*8) = sc_dt::sc_uint<8>(m_data[nr_bytes*index + b]); 
+	  } else {
+		  for(int b = 0; b < nr_bytes; ++b) 
+			  if(m_be[(nr_bytes - b - 1) % m_be_length])
+				  data.range(b*8+7, b*8) = sc_dt::sc_uint<8>(m_data[nr_bytes*index + (nr_bytes - b - 1)]); 
+	  }
   }
+
 }
 
 template< class T >
-inline void copy_to_array( const T& data, unsigned int index, unsigned char* m_data)
+inline void copy_to_array( T& data, 
+						   uint32_t index, 
+						   uint8_t* m_data,
+						   bool* m_be,
+						   uint32_t m_be_length,
+						   tlm_endianness endianness)
 {
   const int nr_bytes = data.length() / 8;
 
-  if (hostHasLittleEndianness()) {
-    for(int b = 0; b < nr_bytes; ++b) {
-      m_data[nr_bytes*index + b] = sc_dt::sc_uint<8>(data.range(b*8+7,b*8));
-    }
-
+  if(m_be == 0) {
+	  if (hasHostEndianness(endianness)) {
+		  for(int b = 0; b < nr_bytes; ++b) 
+			  m_data[nr_bytes*index + b] = sc_dt::sc_uint<8>(data.range(b*8+7,b*8));
+	  } else {
+		  for(int b = 0; b < nr_bytes; ++b) 
+			  m_data[nr_bytes*index + (nr_bytes - b - 1)] = sc_dt::sc_uint<8>(data.range(b*8+7,b*8));
+	  }
   } else {
-    for(int b = 0; b < nr_bytes; ++b) {
-      m_data[nr_bytes*index + (nr_bytes - b - 1)] = sc_dt::sc_uint<8>(data.range(b*8+7,b*8));
-    }
+	  if (hasHostEndianness(endianness)) {
+		  for(int b = 0; b < nr_bytes; ++b) 
+			  if(m_be[b % m_be_length])
+				  m_data[nr_bytes*index + b] = sc_dt::sc_uint<8>(data.range(b*8+7,b*8));
+	  } else {
+		  for(int b = 0; b < nr_bytes; ++b) 
+			  if(m_be[(nr_bytes - b - 1) % m_be_length])
+				  m_data[nr_bytes*index + (nr_bytes - b - 1)] = sc_dt::sc_uint<8>(data.range(b*8+7,b*8));
+	  }
   }
+
 }
 
 
@@ -74,16 +104,41 @@ inline void copy_to_array( const T& data, unsigned int index, unsigned char* m_d
 //
 #define TLM_COPY_FROM_ARRAY( otype )  \
   template<> inline \
-  void copy_from_array( otype& data, unsigned int index, unsigned char* m_data) \
+  void copy_from_array( otype& data, uint32_t index, uint8_t* m_data, bool* m_be, uint32_t m_be_length, tlm_endianness endianness) \
   { \
-    data = reinterpret_cast<otype*>(m_data)[index]; \
+    if(m_be == 0) { \
+	  data = reinterpret_cast<otype*>(m_data)[index]; \
+	} else { \
+	  if (hasHostEndianness(endianness)) { \
+		  for(int b = 0; b < sizeof(otype); ++b) \
+			  if(m_be[b % m_be_length]) \
+				  reinterpret_cast<unsigned char*>(&data)[b] = m_data[sizeof(otype)*index + b]; \
+	  } else { \
+		  for(int b = 0; b < sizeof(otype); ++b) \
+			  if(m_be[(sizeof(otype) - b - 1) % m_be_length]) \
+				  reinterpret_cast<unsigned char*>(&data)[b] = m_data[sizeof(otype)*index + (sizeof(otype) - b - 1)]; \
+	  } \
+	} \
   }
 
+ 
 #define TLM_COPY_TO_ARRAY( otype ) \
   template<> inline \
-  void copy_to_array( const otype& data, unsigned int index, unsigned char* m_data) \
+  void copy_to_array( otype& data, uint32_t index, uint8_t* m_data, bool* m_be, uint32_t m_be_length, tlm_endianness endianness) \
   { \
-    reinterpret_cast<otype*>(m_data)[index] = data; \
+    if(m_be == 0) { \
+      reinterpret_cast<otype*>(m_data)[index] = data; \
+	} else { \
+	  if (hasHostEndianness(endianness)) { \
+		  for(int b = 0; b < sizeof(otype); ++b) \
+			  if(m_be[b % m_be_length]) \
+				  m_data[sizeof(otype)*index + b] = reinterpret_cast<unsigned char*>(&data)[b]; \
+	  } else { \
+		  for(int b = 0; b < sizeof(data); ++b) \
+			  if(m_be[(sizeof(otype) - b - 1) % m_be_length]) \
+				  m_data[sizeof(otype)*index + (sizeof(otype) - b - 1)] = reinterpret_cast<unsigned char*>(&data)[b]; \
+	  } \
+	} \
   }
 
 TLM_COPY_FROM_ARRAY( signed char );
@@ -108,6 +163,7 @@ TLM_COPY_TO_ARRAY( unsigned int );
 TLM_COPY_TO_ARRAY( unsigned long );
 TLM_COPY_TO_ARRAY( unsigned long long );
    
+
 } // namespace tlm
 
 #endif /* __TLM_DATA_SERIALIZERS_H__ */
