@@ -42,11 +42,10 @@ class tlm_extension_base
 public:
     virtual tlm_extension_base* clone() const = 0;
     virtual ~tlm_extension_base() {}
+protected:
     static unsigned int register_extension()
     {
-        static int extension_index = -1;
-        max_num_extensions(true);
-        return (unsigned int)++extension_index;
+        return (max_num_extensions(true) - 1);
     };
 };
 
