@@ -40,6 +40,7 @@ tlm_slave::tlm_slave(sc_core::sc_module_name _name,
     m_incr_address = bus_port.getBusDataWidth()/8; // bus data width in bytes
     
 	m_checker.burst_not_supported();
+	m_checker.byte_enable_not_supported();
 }
 
 
@@ -83,15 +84,15 @@ void tlm_slave::nb_transport(tlm::tlm_generic_payload* gp)
         unsigned int addr = (unsigned int)gp->get_address() - m_start_address;
         unsigned char* data = gp->get_data_ptr();
         
-        if(gp->get_command() == tlm::TLM_WRITE_COMMAND)
+		if(gp->is_write())
         {
-			m_mem.write(data,addr,gp->get_length());
-            m_response_status = tlm::TLM_OK_RESP;
+			m_mem.write(data,addr,gp->get_data_length());
+            m_response_status = tlm::TLM_OK_RESPONSE;
         }
         else // TLM_READ_COMMAND
         {
-			m_mem.read(data,addr,gp->get_length());
-            m_response_status = tlm::TLM_OK_RESP;
+			m_mem.read(data,addr,gp->get_data_length());
+            m_response_status = tlm::TLM_OK_RESPONSE;
         }
     }
     else
