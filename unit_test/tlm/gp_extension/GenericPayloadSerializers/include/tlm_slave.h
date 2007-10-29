@@ -38,7 +38,11 @@ public:
     SC_HAS_PROCESS(tlm_slave);
     
 	// constructor & destructor
-	tlm_slave(sc_module_name _name, unsigned int start_address, unsigned int end_address);
+	tlm_slave(sc_module_name _name, 
+		      unsigned int start_address, 
+			  unsigned int end_address,
+			  tlm::tlm_endianness endianness = tlm::TLM_LITTLE_ENDIAN);
+
 	~tlm_slave() { }
     
     // interface methods
@@ -63,6 +67,7 @@ private:
     unsigned int m_incr_address;
 
 	tlm::tlm_checker m_checker;
+	tlm::tlm_endianness m_endianness;
 
 }; 
 
