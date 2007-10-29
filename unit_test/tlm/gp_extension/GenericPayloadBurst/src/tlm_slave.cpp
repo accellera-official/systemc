@@ -36,6 +36,7 @@ tlm_slave::tlm_slave(sc_module_name _name,
 	m_incr_address = bus_port.getBusDataWidth()/8; // bus data width in bytes
 
 	m_checker.burst_mode_streaming_not_supported();
+	m_checker.byte_enable_not_supported();
 }
 
 void tlm_slave::nb_transport(tlm::tlm_generic_payload* gp)
@@ -48,33 +49,33 @@ void tlm_slave::nb_transport(tlm::tlm_generic_payload* gp)
 		unsigned int addr = (unsigned int)gp->get_address() - m_start_address;
         unsigned char* data = gp->get_data_ptr();
 
-		if(gp->get_command() == tlm::TLM_WRITE_COMMAND)
+		if(gp->is_write())
 		{
 			// Burst write transaction 
-			std::cout << " ( slave : write : normal mode : burst_length<";
+			std::cout << " ( slave : write : burst_length<";
 			std::cout << gp->get_burst_length(m_incr_address) << "> )";
 
 			for(unsigned int bl=0;bl<gp->get_burst_length(m_incr_address);bl++)
 			{
-				m_mem.write(data,addr,gp->get_bytes_burst_element(bl,m_incr_address));
+				m_mem.write(data,addr,gp->get_nr_bytes_of_burst_element(bl,m_incr_address));
 				addr += m_incr_address;
-				data += gp->get_bytes_burst_element(bl,m_incr_address);
+				data += gp->get_nr_bytes_of_burst_element(bl,m_incr_address);
 			}
-			m_response_status = tlm::TLM_OK_RESP;
+			m_response_status = tlm::TLM_OK_RESPONSE;
 		}
 		else // TLM_READ_COMMAND
 		{
 			// Burst read transaction 
-			std::cout << " ( slave : read : normal mode : burst_length<";
+			std::cout << " ( slave : read : burst_length<";
 			std::cout << gp->get_burst_length(m_incr_address) << "> )";
 			
 			for(unsigned int bl=0;bl<gp->get_burst_length(m_incr_address);bl++)
 			{
-				m_mem.read(data,addr,gp->get_bytes_burst_element(bl,m_incr_address));
+				m_mem.read(data,addr,gp->get_nr_bytes_of_burst_element(bl,m_incr_address));
 				addr += m_incr_address;
-				data += gp->get_bytes_burst_element(bl,m_incr_address);
+				data += gp->get_nr_bytes_of_burst_element(bl,m_incr_address);
 			}
-			m_response_status = tlm::TLM_OK_RESP;
+			m_response_status = tlm::TLM_OK_RESPONSE;
 		}
 	}
 	else
