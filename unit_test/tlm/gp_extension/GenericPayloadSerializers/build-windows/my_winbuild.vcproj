@@ -188,6 +188,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\tlm_master.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\tlm_slave.cpp"
 				>
 			</File>
@@ -199,10 +203,6 @@
 			>
 			<File
 				RelativePath="..\include\tlm_master.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\tlm_memory.h"
 				>
 			</File>
 			<File
