@@ -66,32 +66,32 @@ inline void copy_from_array( T& data,
 
 template< class T >
 inline void copy_to_array( T& data, 
-						   uint32_t index, 
-						   uint8_t* m_data,
-						   bool* m_be,
-						   uint32_t m_be_length,
-						   tlm_endianness endianness)
+                           uint32_t index, 
+                           uint8_t* m_data,
+                           bool* m_be,
+                           uint32_t m_be_length,
+                           tlm_endianness endianness)
 {
   const int nr_bytes = data.length() / 8;
 
   if(m_be == 0) {
-	  if (hasHostEndianness(endianness)) {
-		  for(int b = 0; b < nr_bytes; ++b) 
-			  m_data[nr_bytes*index + b] = sc_dt::sc_uint<8>(data.range(b*8+7,b*8));
-	  } else {
-		  for(int b = 0; b < nr_bytes; ++b) 
-			  m_data[nr_bytes*index + (nr_bytes - b - 1)] = sc_dt::sc_uint<8>(data.range(b*8+7,b*8));
-	  }
+      if (hasHostEndianness(endianness)) {
+          for(int b = 0; b < nr_bytes; ++b) 
+              m_data[nr_bytes*index + b] = (uint8_t)sc_dt::sc_uint<8>(data.range(b*8+7,b*8)).value();
+      } else {
+          for(int b = 0; b < nr_bytes; ++b) 
+              m_data[nr_bytes*index + (nr_bytes - b - 1)] = (uint8_t)sc_dt::sc_uint<8>(data.range(b*8+7,b*8)).value();
+      }
   } else {
-	  if (hasHostEndianness(endianness)) {
-		  for(int b = 0; b < nr_bytes; ++b) 
-			  if(m_be[b % m_be_length])
-				  m_data[nr_bytes*index + b] = sc_dt::sc_uint<8>(data.range(b*8+7,b*8));
-	  } else {
-		  for(int b = 0; b < nr_bytes; ++b) 
-			  if(m_be[(nr_bytes - b - 1) % m_be_length])
-				  m_data[nr_bytes*index + (nr_bytes - b - 1)] = sc_dt::sc_uint<8>(data.range(b*8+7,b*8));
-	  }
+      if (hasHostEndianness(endianness)) {
+          for(int b = 0; b < nr_bytes; ++b) 
+              if(m_be[b % m_be_length])
+                  m_data[nr_bytes*index + b] = (uint8_t)sc_dt::sc_uint<8>(data.range(b*8+7,b*8)).value();
+      } else {
+          for(int b = 0; b < nr_bytes; ++b) 
+              if(m_be[(nr_bytes - b - 1) % m_be_length])
+                  m_data[nr_bytes*index + (nr_bytes - b - 1)] = (uint8_t)sc_dt::sc_uint<8>(data.range(b*8+7,b*8)).value();
+      }
   }
 
 }
