@@ -123,7 +123,7 @@ public:
 
   void logEndTransaction(mytransaction_type& trans)
   {
-    if (trans.get_response_status() != tlm::TLM_OK_RESP) {
+    if (trans.get_response_status() != tlm::TLM_OK_RESPONSE) {
       std::cout << name() << ": Received error response @ "
                 << sc_core::sc_time_stamp() << std::endl;
 

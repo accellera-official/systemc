@@ -151,7 +151,7 @@ void tlm_master::readBurst(unsigned int base_address, unsigned char *data, unsig
 void tlm_master::compare_arrays(unsigned char* wr_data, unsigned char* rd_data, unsigned int nr_bytes)
 {
 	bool error_flag = false;
-	for(int i=0;i<nr_bytes;i++)
+	for(unsigned int i=0;i<nr_bytes;i++)
 	{
 		if(wr_data[i] != rd_data[i])
 			error_flag = true;

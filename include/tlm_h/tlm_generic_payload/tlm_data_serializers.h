@@ -110,11 +110,11 @@ inline void copy_to_array( T& data,
 	  data = reinterpret_cast<otype*>(m_data)[index]; \
 	} else { \
 	  if (hasHostEndianness(endianness)) { \
-		  for(int b = 0; b < sizeof(otype); ++b) \
+		  for(unsigned int b = 0; b < sizeof(otype); ++b) \
 			  if(m_be[b % m_be_length]) \
 				  reinterpret_cast<unsigned char*>(&data)[b] = m_data[sizeof(otype)*index + b]; \
 	  } else { \
-		  for(int b = 0; b < sizeof(otype); ++b) \
+		  for(unsigned int b = 0; b < sizeof(otype); ++b) \
 			  if(m_be[(sizeof(otype) - b - 1) % m_be_length]) \
 				  reinterpret_cast<unsigned char*>(&data)[b] = m_data[sizeof(otype)*index + (sizeof(otype) - b - 1)]; \
 	  } \
@@ -130,11 +130,11 @@ inline void copy_to_array( T& data,
       reinterpret_cast<otype*>(m_data)[index] = data; \
 	} else { \
 	  if (hasHostEndianness(endianness)) { \
-		  for(int b = 0; b < sizeof(otype); ++b) \
+		  for(unsigned int b = 0; b < sizeof(otype); ++b) \
 			  if(m_be[b % m_be_length]) \
 				  m_data[sizeof(otype)*index + b] = reinterpret_cast<unsigned char*>(&data)[b]; \
 	  } else { \
-		  for(int b = 0; b < sizeof(data); ++b) \
+		  for(unsigned int b = 0; b < sizeof(data); ++b) \
 			  if(m_be[(sizeof(otype) - b - 1) % m_be_length]) \
 				  m_data[sizeof(otype)*index + (sizeof(otype) - b - 1)] = reinterpret_cast<unsigned char*>(&data)[b]; \
 	  } \

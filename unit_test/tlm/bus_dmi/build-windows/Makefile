@@ -18,7 +18,7 @@ announce:
 	
 check: announce $(OBJ_NAME).exe
 	@./$(OBJ_NAME).exe > run.log
-	@diff run.log ../results/expected.log > diff.log 2>&1;\
+	@diff -w run.log ../results/expected.log > diff.log 2>&1;\
 	if [ -s diff.log ]; then echo "***ERROR:"; cat diff.log; else echo "OK"; fi
 
 run: announce $(OBJ_NAME).exe

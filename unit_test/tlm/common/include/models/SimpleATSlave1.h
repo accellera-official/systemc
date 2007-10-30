@@ -149,7 +149,7 @@ public:
     assert(trans);
 
     // Set response data
-    trans->set_response_status(tlm::TLM_OK_RESP);
+    trans->set_response_status(tlm::TLM_OK_RESPONSE);
     if (trans->get_command() == tlm::TLM_READ_COMMAND) {
        sc_dt::uint64 address = trans->get_address();
        assert(address < 400);

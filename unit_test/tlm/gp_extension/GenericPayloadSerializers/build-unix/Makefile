@@ -12,7 +12,7 @@ LIBS = $(LIBDIR) $(LIB_SC)
  
 CFLAGS = $(FLAGS) $(INCDIR)
 
-OBJS   = $(OBJ_NAME).o tlm_slave.o
+OBJS   = $(OBJ_NAME).o tlm_slave.o tlm_master.o
 
 
 .PHONY: clean all check run announce

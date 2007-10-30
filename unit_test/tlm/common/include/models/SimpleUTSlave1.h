@@ -72,7 +72,7 @@ public:
       wait(sc_core::sc_time(100, sc_core::SC_NS));
     }
 
-    trans.set_response_status(tlm::TLM_OK_RESP);
+    trans.set_response_status(tlm::TLM_OK_RESPONSE);
 
     trans.set_dmi_allowed(true);
   }

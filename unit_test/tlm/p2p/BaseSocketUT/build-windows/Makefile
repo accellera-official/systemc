@@ -13,7 +13,7 @@ all: $(OBJ_NAME).exe
 
 run:  $(OBJ_NAME).exe
 	./$(OBJ_NAME).exe > run.log
-	@diff run.log ../golden.log > diff.log 2>&1;\
+	@diff -w run.log ../golden.log > diff.log 2>&1;\
 	if [ -s diff.log ]; then echo "***ERROR:"; cat diff.log; else echo "OK"; fi
 
 .c.o:

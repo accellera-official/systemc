@@ -115,7 +115,7 @@ public:
       sc_core::sc_time t = sc_core::SC_ZERO_TIME;
 
       // Set response data
-      mCurrentTransaction->set_response_status(tlm::TLM_OK_RESP);
+      mCurrentTransaction->set_response_status(tlm::TLM_OK_RESPONSE);
       assert(mCurrentTransaction->get_command() == tlm::TLM_WRITE_COMMAND);
 
       sc_dt::uint64 address = mCurrentTransaction->get_address();

@@ -90,7 +90,7 @@ public:
     };
 
     tlm_status status;
-    if (trans.get_response_status() == tlm::TLM_OK_RESP) {
+    if (trans.get_response_status() == tlm::TLM_OK_RESPONSE) {
       status.set_ok();
 
     } else {

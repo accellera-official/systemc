@@ -79,10 +79,10 @@ public:
         tlm_response_type resp = port->transport(req);
 
         if (resp.get_status().is_ok()) {
-          trans->set_response_status(tlm::TLM_OK_RESP);
+          trans->set_response_status(tlm::TLM_OK_RESPONSE);
 
         } else {
-          trans->set_response_status(tlm::TLM_GENERIC_ERROR_RESP);
+          trans->set_response_status(tlm::TLM_GENERIC_ERROR_RESPONSE);
         }
 
         if (trans->get_command() == tlm::TLM_READ_COMMAND) {

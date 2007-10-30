@@ -166,57 +166,61 @@ public:
     // Address related methods
     inline sc_dt::uint64        get_address() const {return m_address;}
     inline void                 set_address(const sc_dt::uint64 address){m_address = address;}
-
-	  // Data related methods
-	  inline uint8_t*             get_data_ptr() const {return m_data;}
+    
+    // Data related methods
+    inline uint8_t*             get_data_ptr() const {return m_data;}
     inline void                 set_data_ptr(uint8_t* data) {m_data = data;}
-
-	  // Transaction length (in bytes) related methods
-	  inline uint32_t             get_data_length() const {return m_length;}
+    
+    // Transaction length (in bytes) related methods
+    inline uint32_t             get_data_length() const {return m_length;}
     inline void                 set_data_length(const uint32_t length){m_length = length;}
-
+    
     // Response status related methods
     inline bool                 is_response_ok() {return (m_response_status > 0);}
     inline bool                 is_response_error() {return (m_response_status <= 0);}
     inline tlm_response_status  get_response_status() const {return m_response_status;}
     inline void                 set_response_status(const tlm_response_status response_status)
-                                                     {m_response_status = response_status;}  
-	  inline std::string          get_response_string()
-	                              {
-	 	                             switch(m_response_status)
-		                             {
-		                             case TLM_OK_RESPONSE:            return "TLM_OK_RESPONSE"; break;
-		                             case TLM_INCOMPLETE_RESPONSE:    return "TLM_INCOMPLETE_RESPONSE"; break;
-		                             case TLM_GENERIC_ERROR_RESPONSE: return "TLM_GENERIC_ERROR_RESPONSE"; break;
-		                             case TLM_ADDRESS_ERROR_RESPONSE: return "TLM_ADDRESS_ERROR_RESPONSE"; break;
-		                             case TLM_COMMAND_ERROR_RESPONSE: return "TLM_COMMAND_ERROR_RESPONSE"; break;
-		                             case TLM_BURST_ERROR_RESPONSE:   return "TLM_BURST_ERROR_RESPONSE"; break;
-		                             case TLM_BYTE_ENABLE_ERROR_RESPONSE: return "TLM_BYTE_ENABLE_ERROR_RESPONSE"; break;	
-		                             }
-	                              }
-
-	  // Burst related methods
+        {m_response_status = response_status;}  
+    inline std::string          get_response_string()
+    {
+        switch(m_response_status)
+        {
+        case TLM_OK_RESPONSE:            return "TLM_OK_RESPONSE"; break;
+        case TLM_INCOMPLETE_RESPONSE:    return "TLM_INCOMPLETE_RESPONSE"; break;
+        case TLM_GENERIC_ERROR_RESPONSE: return "TLM_GENERIC_ERROR_RESPONSE"; break;
+        case TLM_ADDRESS_ERROR_RESPONSE: return "TLM_ADDRESS_ERROR_RESPONSE"; break;
+        case TLM_COMMAND_ERROR_RESPONSE: return "TLM_COMMAND_ERROR_RESPONSE"; break;
+        case TLM_BURST_ERROR_RESPONSE:   return "TLM_BURST_ERROR_RESPONSE"; break;
+        case TLM_BYTE_ENABLE_ERROR_RESPONSE: return "TLM_BYTE_ENABLE_ERROR_RESPONSE"; break;	
+        }
+        return "TLM_UNKNOWN_RESPONSE";
+    }
+    
+    // Burst related methods
     inline bool                 get_streaming_mode() const {return m_streaming_mode;}
     inline void                 set_streaming_mode(const bool streaming_mode) {m_streaming_mode = streaming_mode; }
-	  inline uint32_t             get_burst_length(uint32_t bus_data_size)
-	                              {
-	                              	return (m_length+bus_data_size-1)/bus_data_size;
-	                              }
-	  inline uint32_t             get_nr_bytes_of_burst_element(uint32_t count, uint32_t bus_data_size)
-	                              {
-		                             int remainder = m_length-(bus_data_size*count);
-		                             if(remainder < bus_data_size) return remainder; else return bus_data_size;
-	                              }
+    inline uint32_t             get_burst_length(uint32_t bus_data_size)
+    {
+        return (m_length+bus_data_size-1)/bus_data_size;
+    }
+    inline uint32_t             get_nr_bytes_of_burst_element(uint32_t count, uint32_t bus_data_size)
+    {
+        unsigned int remainder = m_length-(bus_data_size*count);
+        if(remainder < bus_data_size)
+            return remainder;
+        else
+            return bus_data_size;
+    }
     
-      // Lock related methods
-	  inline bool	                get_lock() const {return m_lock;}
-	  inline void                 set_lock(const bool lock){m_lock = lock;}
-
-      // Byte enable related methods
-	  inline bool*                get_byte_enable_ptr() const {return m_byte_enable;}
-	  inline void                 set_byte_enable_ptr(bool* byte_enable){m_byte_enable = byte_enable;}
-	  inline uint32_t             get_byte_enable_length() const {return m_byte_enable_length;}
-	  inline void                 set_byte_enable_length(const uint32_t byte_enable_length){m_byte_enable_length = byte_enable_length;}
+    // Lock related methods
+    inline bool	                get_lock() const {return m_lock;}
+    inline void                 set_lock(const bool lock){m_lock = lock;}
+    
+    // Byte enable related methods
+    inline bool*                get_byte_enable_ptr() const {return m_byte_enable;}
+    inline void                 set_byte_enable_ptr(bool* byte_enable){m_byte_enable = byte_enable;}
+    inline uint32_t             get_byte_enable_length() const {return m_byte_enable_length;}
+    inline void                 set_byte_enable_length(const uint32_t byte_enable_length){m_byte_enable_length = byte_enable_length;}
     
     /* --------------------------------------------------------------------- */
     /* Generic Payload attributes:                                           */

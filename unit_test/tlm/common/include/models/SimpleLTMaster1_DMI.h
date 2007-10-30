@@ -102,7 +102,7 @@ public:
 
   void logEndTransaction(transaction_type& trans)
   {
-    if (trans.get_response_status() != tlm::TLM_OK_RESP) {
+    if (trans.get_response_status() != tlm::TLM_OK_RESPONSE) {
       std::cout << name() << ": Received error response @ "
                 << sc_core::sc_time_stamp() << std::endl;
 
@@ -144,7 +144,7 @@ public:
           // We can handle the data here. As the logEndTransaction is assuming
           // something to happen in the data structure, we really need to
           // do this:
-          trans.set_response_status(tlm::TLM_OK_RESP);
+          trans.set_response_status(tlm::TLM_OK_RESPONSE);
           sc_dt::uint64 tmp = trans.get_address() - mDMIData.dmi_start_address;
           assert(hasHostEndianness(mDMIData.endianness));
           if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
