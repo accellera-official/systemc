@@ -81,7 +81,7 @@ public:
   void bind(tlm_master_socket& s)
   {
     // port
-    (*static_cast<port_type*>(this))(*static_cast<port_type*>(&s));
+    (*static_cast<port_type*>(&s))(*static_cast<port_type*>(this));
     // export
     mExport(s.mExport);
   }

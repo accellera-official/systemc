@@ -81,9 +81,9 @@ public:
   void bind(tlm_slave_socket& s)
   {
     // export
-    (*static_cast<export_type*>(this))(*static_cast<export_type*>(s));
+    (*static_cast<export_type*>(this))(*static_cast<export_type*>(&s));
     // port
-    mPort(s.mPort);
+    s.mPort(mPort);
   }
 
   void operator() (tlm_slave_socket& s)
