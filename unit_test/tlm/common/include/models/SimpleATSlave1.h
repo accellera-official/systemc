@@ -19,7 +19,7 @@
 #define __SIMPLE_AT_SLAVE1_H__
 
 #include "tlm.h"
-#include "simple_slave_socket.h"
+#include "simple_target_socket.h"
 //#include <systemc>
 #include <cassert>
 #include <vector>
@@ -30,12 +30,12 @@ class SimpleATSlave1 : public sc_core::sc_module
 {
 public:
   typedef tlm::tlm_generic_payload transaction_type;
-  typedef tlm::tlm_phase phase_type;
-  typedef tlm::tlm_sync_enum sync_enum_type;
-  typedef SimpleSlaveSocket<> slave_socket_type;
+  typedef tlm::tlm_phase           phase_type;
+  typedef tlm::tlm_sync_enum       sync_enum_type;
+  typedef SimpleTargetSocket<>     target_socket_type;
 
 public:
-  slave_socket_type socket;
+  target_socket_type socket;
 
 public:
   SC_HAS_PROCESS(SimpleATSlave1);

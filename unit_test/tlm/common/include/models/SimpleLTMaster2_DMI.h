@@ -19,7 +19,7 @@
 #define __SIMPLE_LT_MASTER2_DMI_H__
 
 #include "tlm.h"
-#include "simple_master_socket.h"
+#include "simple_initiator_socket.h"
 #include <systemc>
 #include <cassert>
 #include <iostream>
@@ -33,10 +33,10 @@ public:
   typedef tlm::tlm_dmi dmi_type;
   typedef tlm::tlm_phase phase_type;
   typedef tlm::tlm_sync_enum sync_enum_type;
-  typedef SimpleMasterSocket<> master_socket_type;
+  typedef SimpleInitiatorSocket<> initiator_socket_type;
 
 public:
-  master_socket_type socket;
+  initiator_socket_type socket;
 
 public:
   SC_HAS_PROCESS(SimpleLTMaster2_dmi);

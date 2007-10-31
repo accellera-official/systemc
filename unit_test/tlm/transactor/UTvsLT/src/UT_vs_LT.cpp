@@ -34,9 +34,9 @@ int sc_main(int argc, char* argv[])
   TransactorLT2UT transactorLT2UT("transactorLT2UT");
   TransactorUT2LT transactorUT2LT("transactorUT2LT");
 
-  master1.socket(transactorLT2UT.slaveSocket);
-  transactorLT2UT.masterSocket(transactorUT2LT.slaveSocket);
-  transactorUT2LT.masterSocket(slave1.socket);
+  master1.socket(transactorLT2UT.targetSocket);
+  transactorLT2UT.initiatorSocket(transactorUT2LT.targetSocket);
+  transactorUT2LT.initiatorSocket(slave1.socket);
 
   sc_core::sc_start();
 

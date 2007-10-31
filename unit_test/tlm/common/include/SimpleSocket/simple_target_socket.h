@@ -15,15 +15,15 @@
 
  *****************************************************************************/
 
-#ifndef __SIMPLE_SLAVE_SOCKET_H__
-#define __SIMPLE_SLAVE_SOCKET_H__
+#ifndef __SIMPLE_TARGET_SOCKET_H__
+#define __SIMPLE_TARGET_SOCKET_H__
 
 #include "simple_socket_utils.h"
 //#include "tlm.h"
 
 template <unsigned int BUSWIDTH = 32, typename TRANS = tlm::tlm_generic_payload>
-class SimpleSlaveSocket :
-  public tlm::tlm_slave_socket<BUSWIDTH,
+class SimpleTargetSocket :
+  public tlm::tlm_target_socket<BUSWIDTH,
                                tlm::tlm_fw_nb_transport_if<TRANS>,
                                tlm::tlm_bw_nb_transport_if<TRANS> >
 {
@@ -33,10 +33,10 @@ public:
   typedef tlm::tlm_sync_enum sync_enum_type;
   typedef tlm::tlm_fw_nb_transport_if<transaction_type, phase_type> fw_interface_type;
   typedef tlm::tlm_bw_nb_transport_if<transaction_type, phase_type> bw_interface_type;
-  typedef tlm::tlm_slave_socket<BUSWIDTH, fw_interface_type, bw_interface_type> base_type;
+  typedef tlm::tlm_target_socket<BUSWIDTH, fw_interface_type, bw_interface_type> base_type;
 
 public:
-  explicit SimpleSlaveSocket(const char* n = "") :
+  explicit SimpleTargetSocket(const char* n = "") :
     base_type(n),
     mProcess(this->name())
   {

@@ -19,7 +19,7 @@
 #define __TRANSACTOR_NB2B_H__
 
 #include "tlm.h"
-#include "simple_slave_socket.h"
+#include "simple_target_socket.h"
 #include "tlm_request.h"
 #include "tlm_response.h"
 #include "MyPEQ.h"
@@ -31,16 +31,16 @@ public:
   typedef tlm_request<unsigned long long, unsigned int, TLM_PASS_BY_POINTER> tlm_request_type;
   typedef tlm_response<unsigned int, TLM_PASS_BY_POINTER> tlm_response_type;
   typedef tlm::tlm_annotated_transport_if<tlm_request_type, tlm_response_type> tlm_transport_if;
-  typedef sc_core::sc_port<tlm_transport_if> master_port;
+  typedef sc_core::sc_port<tlm_transport_if> initiator_port;
 
   typedef tlm::tlm_generic_payload transaction_type;
   typedef tlm::tlm_phase phase_type;
   typedef tlm::tlm_sync_enum sync_enum_type;
-  typedef SimpleSlaveSocket<> slave_socket_type;
+  typedef SimpleTargetSocket<> target_socket_type;
 
 public:
-  slave_socket_type socket;
-  master_port port;
+  target_socket_type socket;
+  initiator_port port;
 
 public:
   SC_HAS_PROCESS(TransactorNB2B);

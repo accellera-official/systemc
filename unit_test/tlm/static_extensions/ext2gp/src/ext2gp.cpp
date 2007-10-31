@@ -28,8 +28,8 @@ int sc_main(int argc, char* argv[])
   adapt_ext2gp<32> bridge("bridge");
   SimpleLTSlave1  slave("slave", true);
 
-  master.socket(bridge.slave_socket);
-  bridge.master_socket(slave.socket);
+  master.socket(bridge.target_socket);
+  bridge.initiator_socket(slave.socket);
 
   sc_core::sc_start();
 

@@ -21,8 +21,8 @@
 //#include <systemc>
 #include "tlm.h"
 
-#include "simple_slave_socket.h"
-#include "simple_master_socket.h"
+#include "simple_target_socket.h"
+#include "simple_initiator_socket.h"
 #include "simple_socket_utils.h"
 
 #include "MyPEQ.h"
@@ -32,14 +32,14 @@ class SimpleBus : public sc_core::sc_module
 {
 public:
   typedef tlm::tlm_generic_payload transaction_type;
-  typedef tlm::tlm_phase phase_type;
-  typedef tlm::tlm_sync_enum sync_enum_type;
-  typedef SimpleSlaveSocket<> slave_socket_type;
-  typedef SimpleMasterSocket<> master_socket_type;
+  typedef tlm::tlm_phase           phase_type;
+  typedef tlm::tlm_sync_enum       sync_enum_type;
+  typedef SimpleTargetSocket<>     target_socket_type;
+  typedef SimpleInitiatorSocket<>  initiator_socket_type;
 
 public:
-  slave_socket_type slave_socket[NR_OF_MASTERS];
-  master_socket_type master_socket[NR_OF_SLAVES];
+  target_socket_type target_socket[NR_OF_MASTERS];
+  initiator_socket_type initiator_socket[NR_OF_SLAVES];
 
 public:
   SC_HAS_PROCESS(SimpleBus);
@@ -50,13 +50,13 @@ public:
     mResponsePEQ("responsePEQ")
   {
      for (unsigned int i = 0; i < NR_OF_MASTERS; ++i) {
-       REGISTER_NBTRANSPORT_USER(slave_socket[i], masterNBTransport, i);
-       REGISTER_DEBUGTRANSPORT_USER(slave_socket[i], transportDebug, i);
-       REGISTER_DMI_USER(slave_socket[i], getDMIPointer, i);
+       REGISTER_NBTRANSPORT_USER(target_socket[i], masterNBTransport, i);
+       REGISTER_DEBUGTRANSPORT_USER(target_socket[i], transportDebug, i);
+       REGISTER_DMI_USER(target_socket[i], getDMIPointer, i);
      }
      for (unsigned int i = 0; i < NR_OF_SLAVES; ++i) {
-       REGISTER_NBTRANSPORT(master_socket[i], slaveNBTransport);
-       REGISTER_INVALIDATEDMI(master_socket[i], invalidateDMIPointers);
+       REGISTER_NBTRANSPORT(initiator_socket[i], slaveNBTransport);
+       REGISTER_INVALIDATEDMI(initiator_socket[i], invalidateDMIPointers);
      }
 
      SC_THREAD(RequestThread);
@@ -133,13 +133,13 @@ public:
 
   sync_enum_type masterNBTransportLT(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
   {
-    master_socket_type* decodeSocket;
+    initiator_socket_type* decodeSocket;
 
     if (phase == tlm::BEGIN_REQ) {
       // new transaction: decode
       unsigned int portId = decode(trans.get_address());
       assert(portId < NR_OF_SLAVES);
-      decodeSocket = &master_socket[portId];
+      decodeSocket = &initiator_socket[portId];
       trans.set_address(trans.get_address() & getAddressMask(portId));
       addPendingTransaction(trans, decodeSocket);
 
@@ -200,7 +200,7 @@ public:
       while ((trans = mRequestPEQ.getNextTransaction())!=0) {
         unsigned int portId = decode(trans->get_address());
         assert(portId < NR_OF_SLAVES);
-        master_socket_type* decodeSocket = &master_socket[portId];
+        initiator_socket_type* decodeSocket = &initiator_socket[portId];
         trans->set_address(trans->get_address() & getAddressMask(portId));
 
         // Fill in the destination port
@@ -379,7 +379,7 @@ public:
   {
     unsigned int portId = decode(trans.address);
     assert(portId < NR_OF_SLAVES);
-    master_socket_type* decodeSocket = &master_socket[portId];
+    initiator_socket_type* decodeSocket = &initiator_socket[portId];
     trans.address &= getAddressMask(portId);
     
     return (*decodeSocket)->transport_dbg(trans);
@@ -417,7 +417,7 @@ public:
 
     unsigned int portId = decode(address);
     assert(portId < NR_OF_SLAVES);
-    master_socket_type* decodeSocket = &master_socket[portId];
+    initiator_socket_type* decodeSocket = &initiator_socket[portId];
     sc_dt::uint64 maskedAddress = address & getAddressMask(portId);
     
     bool result =
@@ -446,24 +446,24 @@ public:
     }
     
     for (unsigned int i = 0; i < NR_OF_MASTERS; ++i) {
-      (slave_socket[i])->invalidate_direct_mem_ptr(start_range, end_range);
+      (target_socket[i])->invalidate_direct_mem_ptr(start_range, end_range);
     }
   }
 
 private:
-  void addPendingTransaction(transaction_type& trans, master_socket_type* to)
+  void addPendingTransaction(transaction_type& trans, initiator_socket_type* to)
   {
     int masterId =
       simple_socket_utils::simple_socket_user::instance().get_user_id();
-    const ConnectionInfo info = { &slave_socket[masterId], to };
+    const ConnectionInfo info = { &target_socket[masterId], to };
     assert(mPendingTransactions.find(&trans) == mPendingTransactions.end());
     mPendingTransactions[&trans] = info;
   }
 
 private:
   struct ConnectionInfo {
-    slave_socket_type* from;
-    master_socket_type* to;
+    target_socket_type* from;
+    initiator_socket_type* to;
   };
   typedef std::map<transaction_type*, ConnectionInfo> PendingTransactions;
   typedef typename PendingTransactions::iterator PendingTransactionsIterator;

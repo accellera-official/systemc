@@ -29,10 +29,10 @@ public:
   typedef tlm::tlm_sync_enum sync_enum_type;
   typedef tlm::tlm_fw_nb_transport_if<> fw_interface_type;
   typedef tlm::tlm_bw_nb_transport_if<> bw_interface_type;
-  typedef tlm::tlm_slave_socket<> slave_socket_type;
+  typedef tlm::tlm_target_socket<> target_socket_type;
 
 public:
-  slave_socket_type socket;
+  target_socket_type socket;
   
 public:
   SimpleSlaveWrapper(sc_core::sc_module_name name) : 

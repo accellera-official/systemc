@@ -19,7 +19,7 @@
 #define __SIMPLE_LT_SLAVE2_H__
 
 #include "tlm.h"
-#include "simple_slave_socket.h"
+#include "simple_target_socket.h"
 #include "my_extension.h"
 
 //#include <systemc>
@@ -33,10 +33,10 @@ public:
   typedef my_extended_payload transaction_type;
   typedef tlm::tlm_phase phase_type;
   typedef tlm::tlm_sync_enum sync_enum_type;
-  typedef SimpleSlaveSocket<32, transaction_type> slave_socket_type;
+  typedef SimpleTargetSocket<32, transaction_type> target_socket_type;
 
 public:
-  slave_socket_type socket;
+  target_socket_type socket;
 
 public:
   SC_HAS_PROCESS(SimpleLTSlave_ext);

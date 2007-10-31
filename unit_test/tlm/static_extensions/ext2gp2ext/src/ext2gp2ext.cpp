@@ -31,10 +31,10 @@ int sc_main(int argc, char* argv[])
   adapt_gp2ext<32>   bridge2("bridge2");
   SimpleLTSlave_ext  slave("slave1");
 
-  master.socket(bridge1.slave_socket);
-  bridge1.master_socket(bus.slave_socket[0]);
-  bus.master_socket[0](bridge2.slave_socket);
-  bridge2.master_socket(slave.socket);
+  master.socket(bridge1.target_socket);
+  bridge1.initiator_socket(bus.target_socket[0]);
+  bus.initiator_socket[0](bridge2.target_socket);
+  bridge2.initiator_socket(slave.socket);
 
   sc_core::sc_start();
 

@@ -15,15 +15,15 @@
 
  *****************************************************************************/
 
-#ifndef __SIMPLE_MASTER_SOCKET_H__
-#define __SIMPLE_MASTER_SOCKET_H__
+#ifndef __SIMPLE_INITIATOR_SOCKET_H__
+#define __SIMPLE_INITIATOR_SOCKET_H__
 
 #include "simple_socket_utils.h"
 //#include "tlm.h"
 
 template <unsigned int BUSWIDTH = 32, typename TRANS = tlm::tlm_generic_payload>
-class SimpleMasterSocket :
-  public tlm::tlm_master_socket<BUSWIDTH,
+class SimpleInitiatorSocket :
+  public tlm::tlm_initiator_socket<BUSWIDTH,
                                 tlm::tlm_fw_nb_transport_if<TRANS, tlm::tlm_phase>,
                                 tlm::tlm_bw_nb_transport_if<TRANS, tlm::tlm_phase> >
 {
@@ -33,10 +33,10 @@ public:
   typedef tlm::tlm_sync_enum sync_enum_type;
   typedef tlm::tlm_fw_nb_transport_if<transaction_type, phase_type> fw_interface_type;
   typedef tlm::tlm_bw_nb_transport_if<transaction_type, phase_type> bw_interface_type;
-  typedef tlm::tlm_master_socket<BUSWIDTH, fw_interface_type, bw_interface_type> base_type;
+  typedef tlm::tlm_initiator_socket<BUSWIDTH, fw_interface_type, bw_interface_type> base_type;
 
 public:
-  explicit SimpleMasterSocket(const char* n = "") :
+  explicit SimpleInitiatorSocket(const char* n = "") :
     base_type(n),
     mProcess(this->name(), mEndEvent)
   {
@@ -130,7 +130,7 @@ private:
         case tlm::BEGIN_REQ: // fall-through
         case tlm::END_RESP: // fall-through
         default:
-          // A slave should never call nb_transport with these phases
+          // A target should never call nb_transport with these phases
           assert(0); exit(1);
           return tlm::TLM_REJECTED;
         };

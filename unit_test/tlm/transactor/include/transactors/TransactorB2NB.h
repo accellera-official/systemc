@@ -20,7 +20,7 @@
 
 //#include <systemc>
 #include "tlm.h"
-#include "simple_master_socket.h"
+#include "simple_initiator_socket.h"
 #include "tlm_request.h"
 #include "tlm_response.h"
 
@@ -39,11 +39,11 @@ public:
   typedef tlm::tlm_generic_payload transaction_type;
   typedef tlm::tlm_phase phase_type;
   typedef tlm::tlm_sync_enum sync_enum_type;
-  typedef SimpleMasterSocket<> master_socket_type;
+  typedef SimpleInitiatorSocket<> initiator_socket_type;
 
 public:
   slave_export port;
-  master_socket_type socket;
+  initiator_socket_type socket;
 
 public:
   SC_HAS_PROCESS(TransactorB2NB);

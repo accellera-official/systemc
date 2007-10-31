@@ -19,7 +19,7 @@
 #define __SIMPLE_LT_MASTER_EXT_H__
 
 #include "tlm.h"
-#include "simple_master_socket.h"
+#include "simple_initiator_socket.h"
 #include "my_extension.h"
 
 #include <systemc>
@@ -35,10 +35,10 @@ public:
   typedef tlm::tlm_dmi dmi_type;
   typedef tlm::tlm_phase phase_type;
   typedef tlm::tlm_sync_enum sync_enum_type;
-  typedef SimpleMasterSocket<32, transaction_type> master_socket_type;
+  typedef SimpleInitiatorSocket<32, transaction_type> initiator_socket_type;
 
 public:
-  master_socket_type socket;
+  initiator_socket_type socket;
 
 public:
   SC_HAS_PROCESS(SimpleLTMaster_ext);
@@ -227,7 +227,7 @@ public:
     case tlm::BEGIN_REQ: // fall-through
     case tlm::END_RESP: // fall-through
     default:
-      // A slave should never call nb_transport with these phases
+      // A target should never call nb_transport with these phases
       assert(0); exit(1);
       return tlm::TLM_REJECTED;
     };
@@ -259,7 +259,7 @@ public:
   }
 
   // Test for transport_dbg, this one should fail in bus_dmi as we address
-  // a slave that doesn't support transport_dbg:
+  // a target that doesn't support transport_dbg:
   // FIXME: use a configurable address
   void end_of_simulation()
   {

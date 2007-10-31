@@ -15,39 +15,39 @@
 
  *****************************************************************************/
 
-#ifndef __TLM_SLAVE_SOCKET_H__
-#define __TLM_SLAVE_SOCKET_H__
+#ifndef __TLM_INITIATOR_SOCKET_H__
+#define __TLM_INITIATOR_SOCKET_H__
 
-#include "tlm_h/tlm_annotated/tlm_fw_bw_ifs/tlm_fw_bw_ifs.h"
 //#include <systemc>
+#include "tlm_h/tlm_annotated/tlm_fw_bw_ifs/tlm_fw_bw_ifs.h"
 
 namespace tlm {
 
 template <unsigned int BUSWIDTH,
           typename FW_IF,
-          typename BW_IF> class tlm_master_socket;
+          typename BW_IF> class tlm_target_socket;
 
 template <unsigned int BUSWIDTH = 32,
           typename FW_IF = tlm_fw_nb_transport_if<>,
           typename BW_IF = tlm_bw_nb_transport_if<> >
-class tlm_slave_socket : public sc_core::sc_export<FW_IF>
+class tlm_initiator_socket : public sc_core::sc_port<FW_IF>
 {
 public:
-  typedef FW_IF fw_interface_type;
-  typedef BW_IF bw_interface_type;
-  typedef sc_core::sc_port<bw_interface_type> port_type;
-  typedef sc_core::sc_export<fw_interface_type> export_type;
-  typedef tlm_master_socket<BUSWIDTH,
+  typedef FW_IF                                 fw_interface_type;
+  typedef BW_IF                                 bw_interface_type;
+  typedef sc_core::sc_port<fw_interface_type>   port_type;
+  typedef sc_core::sc_export<bw_interface_type> export_type;
+  typedef tlm_target_socket<BUSWIDTH,
                             fw_interface_type,
-                            bw_interface_type> master_socket_type;
+                            bw_interface_type>  target_socket_type;
 
-  friend class tlm_master_socket<BUSWIDTH,
+  friend class tlm_target_socket<BUSWIDTH,
                                  fw_interface_type,
                                  bw_interface_type>;
 
 public:
-  tlm_slave_socket(const char* name) :
-    export_type(name)
+  tlm_initiator_socket(const char* name) :
+    port_type(name)
   {
   }
 
@@ -57,64 +57,58 @@ public:
   }
 
   //
-  // Bind slave socket to master socket
-  // - Binds the port of the master socket to the export of the slave socket
-  // - Binds the port of the slave socket to the export of the master socket
+  // Bind initiator socket to target socket
+  // - Binds the port of the initiator socket to the export of the target
+  //   socket
+  // - Binds the port of the target socket to the export of the initiator
+  //   socket
   //
-  void bind(master_socket_type& s)
+  void bind(target_socket_type& s)
   {
-    // master.port -> slave.export
-    (*static_cast<typename master_socket_type::port_type*>(&s))(*static_cast<export_type*>(this));
-    // slave.port -> master.export
-    mPort(s.mExport);
+    // initiator.port -> target.export
+    (*static_cast<port_type*>(this))(*static_cast<typename target_socket_type::export_type*>(&s));
+    // target.port -> initiator.export
+    s.mPort(mExport);
   }
 
-  void operator() (master_socket_type& s)
+  void operator() (target_socket_type& s)
   {
     bind(s);
   }
 
   //
-  // Bind slave socket to slave socket (hierarchical bind)
+  // Bind initiator socket to initiator socket (hierarchical bind)
   // - Binds both the export and the port
   //
-  void bind(tlm_slave_socket& s)
+  void bind(tlm_initiator_socket& s)
   {
-    // export
-    (*static_cast<export_type*>(this))(*static_cast<export_type*>(&s));
     // port
-    s.mPort(mPort);
+    (*static_cast<port_type*>(&s))(*static_cast<port_type*>(this));
+    // export
+    mExport(s.mExport);
   }
 
-  void operator() (tlm_slave_socket& s)
+  void operator() (tlm_initiator_socket& s)
   {
     bind(s);
   }
 
   //
   // Bind interface to socket
-  // - Binds the interface to the export
+  // - Binds the interface to the export of this socket
   //
-  void bind(fw_interface_type& ifs)
+  void bind(bw_interface_type& ifs)
   {
-    (*static_cast<export_type*>(this))(ifs);
+    mExport(ifs);
   }
 
-  void operator() (fw_interface_type& s)
+  void operator() (bw_interface_type& s)
   {
     bind(s);
   }
 
-  //
-  // Forward to 'operator->()' of port class
-  //
-  bw_interface_type* operator->()
-  {
-    return mPort.operator->();
-  }
-
 protected:
-  port_type mPort;
+  export_type mExport;
 };
 
 } // namespace tlm

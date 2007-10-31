@@ -4,8 +4,8 @@
 #include "tlm.h"
 #include "my_extension.h"
 
-#include "simple_master_socket.h"
-#include "simple_slave_socket.h"
+#include "simple_initiator_socket.h"
+#include "simple_target_socket.h"
 
 template <unsigned int BUSWIDTH = 32>
 class adapt_ext2gp : public sc_core::sc_module
@@ -13,24 +13,24 @@ class adapt_ext2gp : public sc_core::sc_module
     public:
     typedef my_extended_payload                        initiator_payload_type;
     typedef tlm::tlm_generic_payload                   target_payload_type;
-    typedef SimpleMasterSocket<BUSWIDTH,
-                               target_payload_type>    master_socket_type;
-    typedef SimpleSlaveSocket<BUSWIDTH,
-                              initiator_payload_type>  slave_socket_type;
+    typedef SimpleInitiatorSocket<BUSWIDTH,
+                               target_payload_type>    initiator_socket_type;
+    typedef SimpleTargetSocket<BUSWIDTH,
+                              initiator_payload_type>  target_socket_type;
     
-    slave_socket_type  slave_socket;
-    master_socket_type master_socket;
+    target_socket_type  target_socket;
+    initiator_socket_type initiator_socket;
 
     SC_HAS_PROCESS(adapt_ext2gp);
     adapt_ext2gp(sc_core::sc_module_name name_)
         : sc_core::sc_module(name_)
     {
-        REGISTER_NBTRANSPORT(slave_socket, forward_nb_transport);
-        REGISTER_DEBUGTRANSPORT(slave_socket, transport_debug);
-        REGISTER_DMI(slave_socket, get_dmi_pointer);
+        REGISTER_NBTRANSPORT(target_socket, forward_nb_transport);
+        REGISTER_DEBUGTRANSPORT(target_socket, transport_debug);
+        REGISTER_DMI(target_socket, get_dmi_pointer);
         
-        REGISTER_NBTRANSPORT(master_socket, backward_nb_transport);
-        REGISTER_INVALIDATEDMI(master_socket, invalidate_dmi_pointers);
+        REGISTER_NBTRANSPORT(initiator_socket, backward_nb_transport);
+        REGISTER_INVALIDATEDMI(initiator_socket, invalidate_dmi_pointers);
     }
 
     ///////////////
@@ -42,11 +42,11 @@ class adapt_ext2gp : public sc_core::sc_module
     // ignored by the GP target.
     tlm::tlm_sync_enum forward_nb_transport(initiator_payload_type& trans,
                                             tlm::tlm_phase& phase,
-                                             sc_core::sc_time& t)
+                                            sc_core::sc_time& t)
     {
-        return master_socket->nb_transport(static_cast<target_payload_type&>(trans),
-                                           phase,
-                                           t);
+        return initiator_socket->nb_transport(static_cast<target_payload_type&>(trans),
+                                              phase,
+                                              t);
     }
     // Backward direction: we can  assume here that the payload we get
     // as parameter is the same one that the initiator sent out. Thus, the
@@ -55,9 +55,9 @@ class adapt_ext2gp : public sc_core::sc_module
                                              tlm::tlm_phase& phase,
                                              sc_core::sc_time& t)
     {
-        return slave_socket->nb_transport(static_cast<initiator_payload_type&>(trans),
-                                          phase,
-                                          t);
+        return target_socket->nb_transport(static_cast<initiator_payload_type&>(trans),
+                                           phase,
+                                           t);
     }
 
     //////////////////////////
@@ -65,18 +65,21 @@ class adapt_ext2gp : public sc_core::sc_module
     //////////////////////////
     unsigned int transport_debug(tlm::tlm_debug_payload& trans)
     {
-        return master_socket->transport_dbg(trans);
+        return initiator_socket->transport_dbg(trans);
     }
     bool get_dmi_pointer(const sc_dt::uint64& address,
                        bool for_reads,
                        tlm::tlm_dmi& dmi_data)
     {
-      return master_socket->get_direct_mem_ptr(address, for_reads, dmi_data);
+      return initiator_socket->get_direct_mem_ptr(address,
+                                                  for_reads,
+                                                  dmi_data);
     }
     void invalidate_dmi_pointers(sc_dt::uint64 start_range,
                                  sc_dt::uint64 end_range)
     {
-        slave_socket->invalidate_direct_mem_ptr(start_range, end_range);
+        target_socket->invalidate_direct_mem_ptr(start_range,
+                                                 end_range);
     }
 };
 
@@ -86,13 +89,13 @@ class adapt_gp2ext : public sc_core::sc_module
     public:
     typedef tlm::tlm_generic_payload                   initiator_payload_type;
     typedef my_extended_payload                        target_payload_type;
-    typedef SimpleMasterSocket<BUSWIDTH,
-                               target_payload_type>    master_socket_type;
-    typedef SimpleSlaveSocket<BUSWIDTH,
-                              initiator_payload_type>  slave_socket_type;
+    typedef SimpleInitiatorSocket<BUSWIDTH,
+                               target_payload_type>    initiator_socket_type;
+    typedef SimpleTargetSocket<BUSWIDTH,
+                              initiator_payload_type>  target_socket_type;
     
-    slave_socket_type  slave_socket;
-    master_socket_type master_socket;
+    target_socket_type  target_socket;
+    initiator_socket_type initiator_socket;
 
     SC_HAS_PROCESS(adapt_gp2ext);
     adapt_gp2ext(sc_core::sc_module_name name_)
@@ -101,12 +104,12 @@ class adapt_gp2ext : public sc_core::sc_module
         // Optionally, we can initialize our private extension class
         // here, if required.
 
-        REGISTER_NBTRANSPORT(slave_socket, forward_nb_transport);
-        REGISTER_DEBUGTRANSPORT(slave_socket, transport_debug);
-        REGISTER_DMI(slave_socket, get_dmi_pointer);
+        REGISTER_NBTRANSPORT(target_socket, forward_nb_transport);
+        REGISTER_DEBUGTRANSPORT(target_socket, transport_debug);
+        REGISTER_DMI(target_socket, get_dmi_pointer);
         
-        REGISTER_NBTRANSPORT(master_socket, backward_nb_transport);
-        REGISTER_INVALIDATEDMI(master_socket, invalidate_dmi_pointers);
+        REGISTER_NBTRANSPORT(initiator_socket, backward_nb_transport);
+        REGISTER_INVALIDATEDMI(initiator_socket, invalidate_dmi_pointers);
     }
 
     ///////////////
@@ -120,7 +123,8 @@ class adapt_gp2ext : public sc_core::sc_module
     {
         // If the mandatory extension is not there, we need to add it.
         // Otherwise we don't touch the extension, so that we don't overwrite
-        // it in e.g. a nonGP->GP->nonGP (initiator->master->target) setup.
+        // it in e.g. a nonGP->GP->nonGP (initiator->interconnect->target)
+        // setup.
         // Note, however, that there might be situations where we might need to
         // re-initialize the extension, e.g. for mutable data fields in
         // different system setups.
@@ -129,7 +133,7 @@ class adapt_gp2ext : public sc_core::sc_module
             m_ext.m_data = 13;
             trans.set_extension(&m_ext);
         }
-        return master_socket->nb_transport(static_cast<target_payload_type&>(trans),
+        return initiator_socket->nb_transport(static_cast<target_payload_type&>(trans),
                                            phase,
                                            t);
     }
@@ -138,9 +142,9 @@ class adapt_gp2ext : public sc_core::sc_module
                                              tlm::tlm_phase& phase,
                                              sc_core::sc_time& t)
     {
-        return slave_socket->nb_transport(static_cast<initiator_payload_type&>(trans),
-                                          phase,
-                                          t);
+        return target_socket->nb_transport(static_cast<initiator_payload_type&>(trans),
+                                           phase,
+                                           t);
     }
 
     //////////////////////////
@@ -148,18 +152,21 @@ class adapt_gp2ext : public sc_core::sc_module
     //////////////////////////
     unsigned int transport_debug(tlm::tlm_debug_payload& trans)
     {
-        return master_socket->transport_dbg(trans);
+        return initiator_socket->transport_dbg(trans);
     }
     bool get_dmi_pointer(const sc_dt::uint64& address,
-                       bool for_reads,
-                       tlm::tlm_dmi& dmi_data)
+                         bool for_reads,
+                         tlm::tlm_dmi& dmi_data)
     {
-        return master_socket->get_direct_mem_ptr(address, for_reads, dmi_data);
+        return initiator_socket->get_direct_mem_ptr(address,
+                                                    for_reads,
+                                                    dmi_data);
     }
     void invalidate_dmi_pointers(sc_dt::uint64 start_range,
-                               sc_dt::uint64 end_range)
+                                 sc_dt::uint64 end_range)
     {
-        slave_socket->invalidate_direct_mem_ptr(start_range, end_range);
+        target_socket->invalidate_direct_mem_ptr(start_range,
+                                                 end_range);
     }
 
 private:

@@ -34,10 +34,10 @@ public:
   typedef tlm::tlm_sync_enum sync_enum_type;
   typedef tlm::tlm_fw_transport_if<> fw_interface_type;
   typedef tlm::tlm_bw_transport_if bw_interface_type;
-  typedef tlm::tlm_slave_socket<32, fw_interface_type, bw_interface_type> slave_socket_type;
+  typedef tlm::tlm_target_socket<32, fw_interface_type, bw_interface_type> target_socket_type;
 
 public:
-  slave_socket_type socket;
+  target_socket_type socket;
 
 public:
   SimpleUTSlave1(sc_core::sc_module_name name) :

@@ -78,18 +78,18 @@ int sc_main(int argc, char* argv[])
   SimpleBus<6, 6> bus("bus");
   AbstractionSwitch<6,6> abstractionSwitch("abstractionSwitch", bus);
 
-  master1.socket(bus.slave_socket[0]);
-  master2.socket(bus.slave_socket[1]);
-  master3.socket(bus.slave_socket[2]);
-  master4.socket(bus.slave_socket[3]);
-  master5.socket(bus.slave_socket[4]);
-  master6.socket(bus.slave_socket[5]);
-  bus.master_socket[0](slave1.socket);
-  bus.master_socket[1](slave2.socket);
-  bus.master_socket[2](slave3.socket);
-  bus.master_socket[3](slave4.socket);
-  bus.master_socket[4](slave5.socket);
-  bus.master_socket[5](slave6.socket);
+  master1.socket(bus.target_socket[0]);
+  master2.socket(bus.target_socket[1]);
+  master3.socket(bus.target_socket[2]);
+  master4.socket(bus.target_socket[3]);
+  master5.socket(bus.target_socket[4]);
+  master6.socket(bus.target_socket[5]);
+  bus.initiator_socket[0](slave1.socket);
+  bus.initiator_socket[1](slave2.socket);
+  bus.initiator_socket[2](slave3.socket);
+  bus.initiator_socket[3](slave4.socket);
+  bus.initiator_socket[4](slave5.socket);
+  bus.initiator_socket[5](slave6.socket);
 
   sc_core::sc_start();
 

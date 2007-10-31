@@ -19,7 +19,7 @@
 #define __SIMPLE_AT_MASTER1_H__
 
 #include "tlm.h"
-#include "simple_master_socket.h"
+#include "simple_initiator_socket.h"
 //#include <systemc>
 #include <cassert>
 #include <queue>
@@ -29,9 +29,9 @@ class SimpleATMaster1 : public sc_core::sc_module
 {
 public:
   typedef tlm::tlm_generic_payload transaction_type;
-  typedef tlm::tlm_phase phase_type;
-  typedef tlm::tlm_sync_enum sync_enum_type;
-  typedef SimpleMasterSocket<> master_socket_type;
+  typedef tlm::tlm_phase           phase_type;
+  typedef tlm::tlm_sync_enum       sync_enum_type;
+  typedef SimpleInitiatorSocket<>  initiator_socket_type;
 
 public:
   // extended transaction, holds tlm_generic_payload + data storage
@@ -63,7 +63,7 @@ public:
   };
 
 public:
-  master_socket_type socket;
+  initiator_socket_type socket;
 
 public:
   SC_HAS_PROCESS(SimpleATMaster1);

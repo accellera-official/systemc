@@ -19,7 +19,7 @@
 #define __TRANSACTOR_LT2UT_H__
 
 #include "tlm.h"
-#include "simple_slave_socket.h"
+#include "simple_target_socket.h"
 #include "MyPEQ.h"
 //#include <systemc>
 
@@ -30,28 +30,28 @@ class TransactorLT2UT :
 public:
   typedef tlm::tlm_fw_transport_if<> fw_interface_type;
   typedef tlm::tlm_bw_transport_if bw_interface_type;
-  typedef tlm::tlm_master_socket<32, fw_interface_type, bw_interface_type> master_socket_type;
+  typedef tlm::tlm_initiator_socket<32, fw_interface_type, bw_interface_type> initiator_socket_type;
 
   typedef tlm::tlm_generic_payload transaction_type;
   typedef tlm::tlm_phase phase_type;
   typedef tlm::tlm_sync_enum sync_enum_type;
-  typedef SimpleSlaveSocket<> slave_socket_type;
+  typedef SimpleTargetSocket<> target_socket_type;
 
 public:
-  slave_socket_type slaveSocket;
-  master_socket_type masterSocket;
+  target_socket_type targetSocket;
+  initiator_socket_type initiatorSocket;
 
 public:
   SC_HAS_PROCESS(TransactorLT2UT);
   TransactorLT2UT(sc_core::sc_module_name name) :
     sc_core::sc_module(name),
-    slaveSocket("slaveSocket"),
-    masterSocket("masterSocket"),
+    targetSocket("targetSocket"),
+    initiatorSocket("initiatorSocket"),
     mTransactionPEQ("transactionPEQ")
   {
-    REGISTER_NBTRANSPORT(slaveSocket, myNBTransport);
+    REGISTER_NBTRANSPORT(targetSocket, myNBTransport);
 
-    masterSocket(*this);
+    initiatorSocket(*this);
 
     SC_THREAD(run);
   }
@@ -63,11 +63,11 @@ public:
 
       transaction_type* trans;
       while ((trans = mTransactionPEQ.getNextTransaction())) {
-        masterSocket->b_transport(*trans);
+        initiatorSocket->b_transport(*trans);
 
         phase_type phase = tlm::BEGIN_RESP;
         sc_core::sc_time t = sc_core::SC_ZERO_TIME;
-        switch (slaveSocket->nb_transport(*trans, phase, t)) {
+        switch (targetSocket->nb_transport(*trans, phase, t)) {
         case tlm::TLM_COMPLETED:
           // Transaction Finished
           break;

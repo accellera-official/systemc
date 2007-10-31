@@ -35,10 +35,10 @@ public:
   typedef tlm::tlm_sync_enum sync_enum_type;
   typedef tlm::tlm_fw_nb_transport_if<> fw_interface_type;
   typedef tlm::tlm_bw_nb_transport_if<> bw_interface_type;
-  typedef tlm::tlm_master_socket<> master_socket_type;
+  typedef tlm::tlm_initiator_socket<> initiator_socket_type;
 
 public:
-  master_socket_type socket;
+  initiator_socket_type socket;
 
 public:
   SC_HAS_PROCESS(SimpleLTMaster1_dmi);

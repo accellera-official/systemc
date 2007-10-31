@@ -20,7 +20,7 @@
 
 //#include <systemc>
 #include "tlm.h"
-#include "simple_master_socket.h"
+#include "simple_initiator_socket.h"
 
 class TransactorUT2LT :
   public virtual tlm::tlm_fw_transport_if<>,
@@ -29,26 +29,26 @@ class TransactorUT2LT :
 public:
   typedef tlm::tlm_fw_transport_if<> fw_interface_type;
   typedef tlm::tlm_bw_transport_if bw_interface_type;
-  typedef tlm::tlm_slave_socket<32, fw_interface_type, bw_interface_type> slave_socket_type;
+  typedef tlm::tlm_target_socket<32, fw_interface_type, bw_interface_type> target_socket_type;
 
   typedef tlm::tlm_generic_payload transaction_type;
   typedef tlm::tlm_phase phase_type;
   typedef tlm::tlm_sync_enum sync_enum_type;
-  typedef SimpleMasterSocket<> master_socket_type;
+  typedef SimpleInitiatorSocket<> initiator_socket_type;
 
 
 public:
-  slave_socket_type slaveSocket;
-  master_socket_type masterSocket;
+  target_socket_type targetSocket;
+  initiator_socket_type initiatorSocket;
 
 public:
   SC_HAS_PROCESS(TransactorUT2LT);
   TransactorUT2LT(sc_core::sc_module_name name) :
     sc_core::sc_module(name),
-    slaveSocket("slaveSocket"),
-    masterSocket("masterSocket")
+    targetSocket("targetSocket"),
+    initiatorSocket("initiatorSocket")
   {
-    slaveSocket(*this);
+    targetSocket(*this);
   }
 
   void b_transport(transaction_type& trans)
@@ -56,7 +56,7 @@ public:
     phase_type phase = tlm::BEGIN_REQ;
     sc_core::sc_time t = sc_core::SC_ZERO_TIME;
 
-    switch (masterSocket->nb_transport(trans, phase, t)) {
+    switch (initiatorSocket->nb_transport(trans, phase, t)) {
     case tlm::TLM_COMPLETED:
       // Transaction Finished
       break;
@@ -64,7 +64,7 @@ public:
     case tlm::TLM_SYNC:
     case tlm::TLM_SYNC_CONTINUE:
       // Transaction not yet finished, wait for the end of it
-      wait(masterSocket.getEndEvent());
+      wait(initiatorSocket.getEndEvent());
       break;
 
     case tlm::TLM_REJECTED:
