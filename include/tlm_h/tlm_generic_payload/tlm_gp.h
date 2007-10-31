@@ -30,7 +30,7 @@ namespace tlm {
 // Helper function:
 inline unsigned int max_num_extensions(bool increment=false)
 {
-    static uint32_t max_num = 0;
+    static unsigned int max_num = 0;
     if (increment) ++max_num;
     return max_num;
 }
@@ -61,12 +61,12 @@ class tlm_extension : public tlm_extension_base
 public:
     virtual tlm_extension_base* clone() const = 0;
     virtual ~tlm_extension() {}
-    const static uint32_t ID;
+    const static unsigned int ID;
 };
 
 template <typename T>
 const
-uint32_t tlm_extension<T>::ID = tlm_extension_base::register_extension();
+unsigned int tlm_extension<T>::ID = tlm_extension_base::register_extension();
 
 //---------------------------------------------------------------------------
 // enumeration types
@@ -130,7 +130,7 @@ public:
         // copy all extensions
         if (m_extensions.size()>0)
         {
-            for(uint32_t i=0; i<m_extensions.size(); i++)
+            for(unsigned int i=0; i<m_extensions.size(); i++)
             {
                 if(x.get_extension(i))
                 {
@@ -165,15 +165,15 @@ public:
     
     // Address related methods
     inline sc_dt::uint64        get_address() const {return m_address;}
-    inline void                 set_address(const sc_dt::uint64 address){m_address = address;}
+    inline void                 set_address(const sc_dt::uint64 address) {m_address = address;}
     
     // Data related methods
-    inline uint8_t*             get_data_ptr() const {return m_data;}
-    inline void                 set_data_ptr(uint8_t* data) {m_data = data;}
+    inline unsigned char*       get_data_ptr() const {return m_data;}
+    inline void                 set_data_ptr(unsigned char* data) {m_data = data;}
     
     // Transaction length (in bytes) related methods
-    inline uint32_t             get_data_length() const {return m_length;}
-    inline void                 set_data_length(const uint32_t length){m_length = length;}
+    inline unsigned int         get_data_length() const {return m_length;}
+    inline void                 set_data_length(const unsigned int length) {m_length = length;}
     
     // Response status related methods
     inline bool                 is_response_ok() {return (m_response_status > 0);}
@@ -199,11 +199,11 @@ public:
     // Burst related methods
     inline bool                 get_streaming_mode() const {return m_streaming_mode;}
     inline void                 set_streaming_mode(const bool streaming_mode) {m_streaming_mode = streaming_mode; }
-    inline uint32_t             get_burst_length(uint32_t bus_data_size)
+    inline unsigned int         get_burst_length(unsigned int bus_data_size)
     {
         return (m_length+bus_data_size-1)/bus_data_size;
     }
-    inline uint32_t             get_nr_bytes_of_burst_element(uint32_t count, uint32_t bus_data_size)
+    inline unsigned int         get_nr_bytes_of_burst_element(unsigned int count, unsigned int bus_data_size)
     {
         unsigned int remainder = m_length-(bus_data_size*count);
         if(remainder < bus_data_size)
@@ -219,8 +219,8 @@ public:
     // Byte enable related methods
     inline bool*                get_byte_enable_ptr() const {return m_byte_enable;}
     inline void                 set_byte_enable_ptr(bool* byte_enable){m_byte_enable = byte_enable;}
-    inline uint32_t             get_byte_enable_length() const {return m_byte_enable_length;}
-    inline void                 set_byte_enable_length(const uint32_t byte_enable_length){m_byte_enable_length = byte_enable_length;}
+    inline unsigned int         get_byte_enable_length() const {return m_byte_enable_length;}
+    inline void                 set_byte_enable_length(const unsigned int byte_enable_length){m_byte_enable_length = byte_enable_length;}
     
     /* --------------------------------------------------------------------- */
     /* Generic Payload attributes:                                           */
@@ -256,13 +256,13 @@ private:
 	
     tlm_command          m_command;
     sc_dt::uint64        m_address;			
-    uint8_t*             m_data;
-    uint32_t             m_length;		
+    unsigned char*       m_data;
+    unsigned int         m_length;		
     tlm_response_status  m_response_status;
     bool                 m_streaming_mode;
     bool                 m_lock;
     bool*                m_byte_enable;
-    uint32_t             m_byte_enable_length;
+    unsigned int         m_byte_enable_length;
     
 public:
    
@@ -308,7 +308,7 @@ public:
         m_extensions[T::ID] = static_cast<tlm_extension_base*>(ext);
     }
     // non-templatized version with manual index:
-    void set_extension(uint32_t index, tlm_extension_base* ext)
+    void set_extension(unsigned int index, tlm_extension_base* ext)
     {
         resize_extensions();
         m_extensions[index] = ext;
@@ -320,7 +320,7 @@ public:
         ext = static_cast<T*>(m_extensions[T::ID]);
     }
     // Non-templatized version:
-     tlm_extension_base* get_extension(uint32_t index) const
+     tlm_extension_base* get_extension(unsigned int index) const
     {
         return m_extensions[index];
     }
@@ -332,7 +332,7 @@ public:
         m_extensions[T::ID] = static_cast<tlm_extension_base*>(0);
     }
     // Non-templatized version with manual index
-    void clear_extension(uint32_t index)
+    void clear_extension(unsigned int index)
     {
         if (index < m_extensions.size())
         {

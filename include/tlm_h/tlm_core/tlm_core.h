@@ -20,7 +20,6 @@
 #define __TLM_CORE_H__
 
 //#include <systemc>
-#include "tlm_platform.h"
 
 namespace tlm {
 
