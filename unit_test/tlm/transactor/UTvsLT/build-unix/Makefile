@@ -1,6 +1,6 @@
 include ../../../build-unix/Makefile.config
 
-OBJ_NAME = transactor
+OBJ_NAME = UT_vs_LT
 
 INCDIR = -I$(SYSTEMC_INC_DIR) -I$(TLM_INC_DIR) -I../../../common/include/SimpleSocket -I../../../common/include/models -I../../../common/include/utils -I../../include/transactors -I../../include/tlm_bus
 SRCDIR = ../src

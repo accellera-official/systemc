@@ -43,7 +43,7 @@ $(OBJ_NAME).o: $(SRCDIR)/$(OBJ_NAME).cpp
 	$(GXX) -c $(CFLAGS) $< -o $@
 
 clean:
-	rm -f $(OBJ_NAME).exe *.o run.log diff.log
+	rm -f *.o *.log $(OBJ_NAME).exe
 
 # DO NOT DELETE
 
