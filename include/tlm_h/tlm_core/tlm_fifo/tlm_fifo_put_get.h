@@ -20,10 +20,6 @@
 #ifndef __TLM_FIFO_PUT_GET_IF_H__
 #define __TLM_FIFO_PUT_GET_IF_H__
 
-#ifndef __TLM_FIFO_H__
-#include "tlm_h/tlm_core/tlm_fifo/tlm_fifo.h"
-#endif
-
 namespace tlm {
 
 /******************************************************************

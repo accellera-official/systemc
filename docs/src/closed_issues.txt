@@ -36,7 +36,23 @@
         ]
        [OS]: FIXED
 
-       
+0011 - explicitly sized variables (8, 16, 32, 64) should use explicitly sized
+       type [u]int[8,16,32,64]_t or sc_dt::[u]int64 over compiler dependent
+       types (char, short, long) as these vary by implementation <stdint.h>
+       [OS]: No, everything except long and 64-bit data types is compiler
+             and machine independent. We use standardized C++ data types
+             wherever possible.
+
+0012 - all 64-bit variables should use sc_dt::[u]int64 or [u]int64_t <stdint.h>
+       as long long is not part of the C++ standard
+       [OS]: use sc_dt::[u]int64 to be aligned with the SystemC kernel.
+
+0013 - there is a circular include file reference
+       /include/tlm_h/tlm_core/tlm_fifo/tlm_fifo.h
+       /include/tlm_h/tlm_core/tlm_fifo/tlm_fifo_put_get.h
+       [OS]: FIXED, tlm_fifo_*.h must not be included directly so the circular
+             include was not needed anyway.
+    
 0014 - We should consistently use #include <systemc>, not #include <systemc.h>.
        We stated in the meeting that we only supported SystemC versions >=
        2.1.v1, so I think we should use this include style to keep the SystemC
@@ -90,3 +106,7 @@
        correctly detecting endianness)
        [CW]: I've udpated tlm_helper.h to generically detect endianness and no
        longer see this problem.
+
+0020 - TLM ports master/slave need to be changed to initiator/target
+       (2007-10-18 call)
+       [OS]: FIXED

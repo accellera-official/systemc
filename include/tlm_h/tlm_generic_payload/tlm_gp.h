@@ -350,7 +350,7 @@ public:
         m_extensions.expand(max_num_extensions());
     }
 
-protected:
+private:
     tlm_array<tlm_extension_base*> m_extensions;
 
 public:
@@ -359,7 +359,7 @@ public:
   void set_dmi_allowed(bool dmiAllowed) { m_dmi = dmiAllowed; }
   bool get_dmi_allowed() const { return m_dmi; }
 
-protected:
+private:
   bool m_dmi;
 };
 

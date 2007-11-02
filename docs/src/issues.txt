@@ -14,19 +14,8 @@
        __BYTE_ORDER, __LITTLE_ENDIAN and __BIG_ENDIAN for gcc compilers. An
        addition can be made to tlm_platform.h for MSVC. (MacOSX runs on both
        big and little endian architectures)
+       [OS]: tlm_platform.h is gone, we need to find a different place.
 
-
-0011 - explicitly sized variables (8, 16, 32, 64) should use explicitly sized
-       type [u]int[8,16,32,64]_t or sc_dt::[u]int64 over compiler dependent
-       types (char, short, long) as these vary by implementation <stdint.h>
-
-0012 - all 64-bit variables should use sc_dt::[u]int64 or [u]int64_t <stdint.h>
-       as long long is not part of the C++ standard
-
-0013 - there is a circular include file reference
-       /include/tlm_h/tlm_core/tlm_fifo/tlm_fifo.h
-       /include/tlm_h/tlm_core/tlm_fifo/tlm_fifo_put_get.h
-       
 0016 - I think we need to review the changes in the tlm_core directory from TLM
        1.0 to now. There are quite a few changes, and the question is if we
        really want to have those, or if the changes are only artifacts of the
@@ -47,5 +36,3 @@
 0019 - TLM ports initiator/target ports do not appear to have the GP material
        integrated
 
-0020 - TLM ports master/slave need to be changed to initiator/target
-       (2007-10-18 call)

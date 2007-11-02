@@ -20,10 +20,6 @@
 #ifndef __TLM_FIFO_RESIZE_H__
 #define __TLM_FIFO_RESIZE_H__
 
-#ifndef __TLM_FIFO_H__
-#include "tlm_h/tlm_core/tlm_fifo/tlm_fifo.h"
-#endif
-
 /******************************************************************
 //
 // resize interface
