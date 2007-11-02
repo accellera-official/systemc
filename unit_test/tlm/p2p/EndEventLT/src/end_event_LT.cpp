@@ -15,21 +15,17 @@
 
  *****************************************************************************/
 
-//#include <iostream>
-
-//#include <systemc>
-
 #include "tlm.h"
 
-#include "SimpleLTMaster3.h"
-#include "SimpleLTSlave2.h"
+#include "SimpleLTInitiator3.h"
+#include "SimpleLTTarget2.h"
 
 int sc_main(int argc, char* argv[])
 {
-  SimpleLTMaster3 master("master");
-  SimpleLTSlave2 slave("slave");
+  SimpleLTInitiator3 initiator("initiator");
+  SimpleLTTarget2 target("target");
 
-  master.socket(slave.socket);
+  initiator.socket(target.socket);
 
   sc_core::sc_start();
 

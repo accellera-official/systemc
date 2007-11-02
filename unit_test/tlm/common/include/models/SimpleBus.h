@@ -27,7 +27,7 @@
 
 #include "MyPEQ.h"
 
-template <int NR_OF_MASTERS, int NR_OF_SLAVES>
+template <int NR_OF_INITIATORS, int NR_OF_TARGETS>
 class SimpleBus : public sc_core::sc_module
 {
 public:
@@ -38,8 +38,8 @@ public:
   typedef SimpleInitiatorSocket<>  initiator_socket_type;
 
 public:
-  target_socket_type target_socket[NR_OF_MASTERS];
-  initiator_socket_type initiator_socket[NR_OF_SLAVES];
+  target_socket_type target_socket[NR_OF_INITIATORS];
+  initiator_socket_type initiator_socket[NR_OF_TARGETS];
 
 public:
   SC_HAS_PROCESS(SimpleBus);
@@ -49,13 +49,13 @@ public:
     mRequestPEQ("requestPEQ"),
     mResponsePEQ("responsePEQ")
   {
-     for (unsigned int i = 0; i < NR_OF_MASTERS; ++i) {
-       REGISTER_NBTRANSPORT_USER(target_socket[i], masterNBTransport, i);
+     for (unsigned int i = 0; i < NR_OF_INITIATORS; ++i) {
+       REGISTER_NBTRANSPORT_USER(target_socket[i], initiatorNBTransport, i);
        REGISTER_DEBUGTRANSPORT_USER(target_socket[i], transportDebug, i);
        REGISTER_DMI_USER(target_socket[i], getDMIPointer, i);
      }
-     for (unsigned int i = 0; i < NR_OF_SLAVES; ++i) {
-       REGISTER_NBTRANSPORT(initiator_socket[i], slaveNBTransport);
+     for (unsigned int i = 0; i < NR_OF_TARGETS; ++i) {
+       REGISTER_NBTRANSPORT(initiator_socket[i], targetNBTransport);
        REGISTER_INVALIDATEDMI(initiator_socket[i], invalidateDMIPointers);
      }
 
@@ -75,7 +75,8 @@ public:
       return true;
 
     } else {
-      //FIXME: Not safe to switch to LT mode while there are pending transactions
+      //FIXME: Not safe to switch to LT mode while there are pending
+      //       transactions
       return false;
     }
   }
@@ -87,7 +88,7 @@ public:
     }
 
     // Switching from LT -> AT is always possible
-    // (END_REQ may not be forwarded to the master correctly)
+    // (END_REQ may not be forwarded to the initiator correctly)
     std::cout << name() << ": Switching to AT mode" << std::endl;
     mAbstraction = TLM_AT;
 
@@ -121,7 +122,7 @@ public:
   unsigned int decode(const sc_dt::uint64& address)
   {
     // decode address:
-    // - return master socket id
+    // - return initiator socket id
 
     return getPortId(address);
   }
@@ -131,14 +132,16 @@ public:
   // - forward each nb_transport call to the target/initiator
   //
 
-  sync_enum_type masterNBTransportLT(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
+  sync_enum_type initiatorNBTransportLT(transaction_type& trans,
+                                        phase_type& phase,
+                                        sc_core::sc_time& t)
   {
     initiator_socket_type* decodeSocket;
 
     if (phase == tlm::BEGIN_REQ) {
       // new transaction: decode
       unsigned int portId = decode(trans.get_address());
-      assert(portId < NR_OF_SLAVES);
+      assert(portId < NR_OF_TARGETS);
       decodeSocket = &initiator_socket[portId];
       trans.set_address(trans.get_address() & getAddressMask(portId));
       addPendingTransaction(trans, decodeSocket);
@@ -152,12 +155,13 @@ public:
 
     } else {
       std::cout << "ERROR: '" << name()
-                << "': Illegal phase received from master: " << phase << std::endl;
+                << "': Illegal phase received from initiator: " << phase << std::endl;
       assert(false); exit(1);
     }
 
     // FIXME: No limitation on number of pending transactions
-    //        All slaves (that return false) must support multiple transactions
+    //        All targets (that return false) must support multiple
+    //        transactions
     sync_enum_type r = (*decodeSocket)->nb_transport(trans, phase, t);
     if (r == tlm::TLM_COMPLETED) {
       // Transaction finished
@@ -167,11 +171,14 @@ public:
     return r;
   }
 
-  sync_enum_type slaveNBTransportLT(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
+  sync_enum_type targetNBTransportLT(transaction_type& trans,
+                                     phase_type& phase,
+                                     sc_core::sc_time& t)
   {
     if (phase != tlm::END_REQ && phase != tlm::BEGIN_RESP) {
       std::cout << "ERROR: '" << name()
-                << "': Illegal phase received from slave:" << phase << std::endl;
+                << "': Illegal phase received from target:" << phase
+                << std::endl;
       assert(false); exit(1);
     }
 
@@ -199,7 +206,7 @@ public:
       transaction_type* trans;
       while ((trans = mRequestPEQ.getNextTransaction())!=0) {
         unsigned int portId = decode(trans->get_address());
-        assert(portId < NR_OF_SLAVES);
+        assert(portId < NR_OF_TARGETS);
         initiator_socket_type* decodeSocket = &initiator_socket[portId];
         trans->set_address(trans->get_address() & getAddressMask(portId));
 
@@ -212,7 +219,7 @@ public:
         sc_core::sc_time t = sc_core::SC_ZERO_TIME;
 
         // FIXME: No limitation on number of pending transactions
-        //        All slaves (that return false) must support multiple transactions
+        //        All targets (that return false) must support multiple transactions
         switch ((*decodeSocket)->nb_transport(*trans, phase, t)) {
         case tlm::TLM_SYNC:
         case tlm::TLM_SYNC_CONTINUE:
@@ -301,7 +308,9 @@ public:
     }
   }
 
-  sync_enum_type masterNBTransportAT(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
+  sync_enum_type initiatorNBTransportAT(transaction_type& trans,
+                                        phase_type& phase,
+                                        sc_core::sc_time& t)
   {
     if (phase == tlm::BEGIN_REQ) {
       addPendingTransaction(trans, 0);
@@ -327,18 +336,18 @@ public:
 
     } else {
       std::cout << "ERROR: '" << name()
-                << "': Illegal phase received from master." << std::endl;
+                << "': Illegal phase received from initiator." << std::endl;
       assert(false); exit(1);
     }
 
     return tlm::TLM_SYNC;
   }
 
-  sync_enum_type slaveNBTransportAT(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
+  sync_enum_type targetNBTransportAT(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
   {
     if (phase != tlm::END_REQ && phase != tlm::BEGIN_RESP) {
       std::cout << "ERROR: '" << name()
-                << "': Illegal phase received from slave." << std::endl;
+                << "': Illegal phase received from target." << std::endl;
       assert(false); exit(1);
     }
 
@@ -355,30 +364,34 @@ public:
   // interface methods
   //
 
-  sync_enum_type masterNBTransport(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
+  sync_enum_type initiatorNBTransport(transaction_type& trans,
+                                      phase_type& phase,
+                                      sc_core::sc_time& t)
   {
     if (mAbstraction == TLM_LT) {
-      return masterNBTransportLT(trans, phase, t);
+      return initiatorNBTransportLT(trans, phase, t);
 
     } else { // TLM_AT
-      return masterNBTransportAT(trans, phase, t);
+      return initiatorNBTransportAT(trans, phase, t);
     }
   }
 
-  sync_enum_type slaveNBTransport(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
+  sync_enum_type targetNBTransport(transaction_type& trans,
+                                   phase_type& phase,
+                                   sc_core::sc_time& t)
   {
     if (mAbstraction == TLM_LT) {
-      return slaveNBTransportLT(trans, phase, t);
+      return targetNBTransportLT(trans, phase, t);
 
     } else { // TLM_AT
-      return slaveNBTransportAT(trans, phase, t);
+      return targetNBTransportAT(trans, phase, t);
     }
   }
 
   unsigned int transportDebug(tlm::tlm_debug_payload& trans)
   {
     unsigned int portId = decode(trans.address);
-    assert(portId < NR_OF_SLAVES);
+    assert(portId < NR_OF_TARGETS);
     initiator_socket_type* decodeSocket = &initiator_socket[portId];
     trans.address &= getAddressMask(portId);
     
@@ -391,7 +404,7 @@ public:
     sc_dt::uint64 addressMask = getAddressMask(portId);
 
     if (low > addressMask) {
-      // Range does not overlap with addressrange for this slave
+      // Range does not overlap with addressrange for this target
       return false;
     }
 
@@ -416,7 +429,7 @@ public:
     }
 
     unsigned int portId = decode(address);
-    assert(portId < NR_OF_SLAVES);
+    assert(portId < NR_OF_TARGETS);
     initiator_socket_type* decodeSocket = &initiator_socket[portId];
     sc_dt::uint64 maskedAddress = address & getAddressMask(portId);
     
@@ -441,21 +454,22 @@ public:
       simple_socket_utils::simple_socket_user::instance().get_user_id();
 
     if (!limitRange(portId, start_range, end_range)) {
-      // Range does not fall into address range of slave
+      // Range does not fall into address range of target
       return;
     }
     
-    for (unsigned int i = 0; i < NR_OF_MASTERS; ++i) {
+    for (unsigned int i = 0; i < NR_OF_INITIATORS; ++i) {
       (target_socket[i])->invalidate_direct_mem_ptr(start_range, end_range);
     }
   }
 
 private:
-  void addPendingTransaction(transaction_type& trans, initiator_socket_type* to)
+  void addPendingTransaction(transaction_type& trans,
+                             initiator_socket_type* to)
   {
-    int masterId =
+    int initiatorId =
       simple_socket_utils::simple_socket_user::instance().get_user_id();
-    const ConnectionInfo info = { &target_socket[masterId], to };
+    const ConnectionInfo info = { &target_socket[initiatorId], to };
     assert(mPendingTransactions.find(&trans) == mPendingTransactions.end());
     mPendingTransactions[&trans] = info;
   }

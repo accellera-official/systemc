@@ -7,7 +7,7 @@ SRCDIR = ../src
  
 CFLAGS = $(FLAGS) $(MY_INCLUDES)
 
-OBJS = $(OBJ_NAME).o tlm_slave.o
+OBJS = $(OBJ_NAME).o tlm_target.o
 
 .PHONY: clean all run check announce
 
@@ -33,7 +33,7 @@ $(OBJ_NAME).exe: $(OBJS)
 $(OBJ_NAME).o: $(SRCDIR)/$(OBJ_NAME).cpp
 	$(CC) /c $(CFLAGS) $< /Fo"$@"
 
-tlm_slave.o: $(SRCDIR)/tlm_slave.cpp
+tlm_target.o: $(SRCDIR)/tlm_target.cpp
 	$(CC) /c $(CFLAGS) $< /Fo"$@"
 
 

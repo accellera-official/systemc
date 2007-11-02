@@ -15,21 +15,17 @@
 
  *****************************************************************************/
 
-//#include <iostream>
-
-//#include <systemc>
-
 #include "tlm.h"
 
-#include "CoreDecouplingLTMaster.h"
-#include "ExplicitLTSlave.h"
+#include "CoreDecouplingLTInitiator.h"
+#include "ExplicitLTTarget.h"
 
 int sc_main(int argc, char* argv[])
 {
-  CoreDecouplingLTMaster master("master", 10);
-  ExplicitLTSlave slave("slave");
+  CoreDecouplingLTInitiator initiator("initiator", 10);
+  ExplicitLTTarget target("target");
 
-  master.socket(slave.socket);
+  initiator.socket(target.socket);
 
   sc_core::sc_start();
 

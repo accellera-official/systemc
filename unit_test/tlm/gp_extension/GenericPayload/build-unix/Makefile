@@ -12,7 +12,7 @@ LIBS = $(LIBDIR) $(LIB_SC)
  
 CFLAGS = $(FLAGS) $(INCDIR)
 
-OBJS   = $(OBJ_NAME).o tlm_slave.o
+OBJS   = $(OBJ_NAME).o tlm_target.o
 
 .PHONY: clean all check run announce
 
@@ -37,7 +37,7 @@ $(OBJ_NAME).exe: $(OBJS)
 $(OBJ_NAME).o: $(SRCDIR)/$(OBJ_NAME).cpp
 	$(GXX) $(CFLAGS) -c $< -o $@
 
-tlm_slave.o: $(SRCDIR)/tlm_slave.cpp
+tlm_target.o: $(SRCDIR)/tlm_target.cpp
 	$(GXX) $(CFLAGS) -c $< -o $@
 
 clean:

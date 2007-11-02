@@ -15,28 +15,24 @@
 
  *****************************************************************************/
 
-//#include <iostream>
-
-//#include <systemc>
-
 #include "tlm.h"
 
-#include "SimpleLTMaster1.h"
-#include "SimpleLTSlave1.h"
+#include "SimpleLTInitiator1.h"
+#include "SimpleLTTarget1.h"
 #include "TransactorLT2UT.h"
 #include "TransactorUT2LT.h"
 
 int sc_main(int argc, char* argv[])
 {
-  SimpleLTMaster1 master1("master1");
-  SimpleLTSlave1 slave1("slave1");
+  SimpleLTInitiator1 initiator1("initiator1");
+  SimpleLTTarget1 target1("target1");
 
   TransactorLT2UT transactorLT2UT("transactorLT2UT");
   TransactorUT2LT transactorUT2LT("transactorUT2LT");
 
-  master1.socket(transactorLT2UT.targetSocket);
+  initiator1.socket(transactorLT2UT.targetSocket);
   transactorLT2UT.initiatorSocket(transactorUT2LT.targetSocket);
-  transactorUT2LT.initiatorSocket(slave1.socket);
+  transactorUT2LT.initiatorSocket(target1.socket);
 
   sc_core::sc_start();
 

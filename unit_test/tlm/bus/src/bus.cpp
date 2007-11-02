@@ -18,17 +18,17 @@
 #include <systemc>
 #include "tlm.h"
 
-#include "SimpleLTMaster1.h"
-#include "SimpleLTSlave1.h"
-#include "SimpleLTMaster2.h"
-#include "SimpleLTSlave2.h"
-#include "SimpleLTMaster3.h"
-#include "SimpleATMaster1.h"
-#include "SimpleATSlave1.h"
-#include "SimpleATMaster2.h"
-#include "SimpleATSlave2.h"
-#include "CoreDecouplingLTMaster.h"
-#include "ExplicitLTSlave.h"
+#include "SimpleLTInitiator1.h"
+#include "SimpleLTTarget1.h"
+#include "SimpleLTInitiator2.h"
+#include "SimpleLTTarget2.h"
+#include "SimpleLTInitiator3.h"
+#include "SimpleATInitiator1.h"
+#include "SimpleATTarget1.h"
+#include "SimpleATInitiator2.h"
+#include "SimpleATTarget2.h"
+#include "CoreDecouplingLTInitiator.h"
+#include "ExplicitLTTarget.h"
 #include "SimpleBus.h"
 
 template <int X, int Y>
@@ -55,39 +55,39 @@ private:
 
 int sc_main(int argc, char* argv[])
 {
-  SimpleLTMaster1 master1("master1", 10, 0x0);
-  SimpleLTSlave1 slave1("slave1");
+  SimpleLTInitiator1 initiator1("initiator1", 10, 0x0);
+  SimpleLTTarget1 target1("target1");
 
-  SimpleLTMaster2 master2("master2", 10, 0x10000000);
-  SimpleLTSlave2 slave2("slave2");
+  SimpleLTInitiator2 initiator2("initiator2", 10, 0x10000000);
+  SimpleLTTarget2 target2("target2");
 
-  SimpleLTMaster3 master3("master3", 10, 0x20000000);
-  SimpleLTSlave2 slave3("slave3");
+  SimpleLTInitiator3 initiator3("initiator3", 10, 0x20000000);
+  SimpleLTTarget2 target3("target3");
 
-  SimpleATMaster1 master4("master4", 10, 0x30000000);
-  SimpleATSlave1 slave4("slave4");
+  SimpleATInitiator1 initiator4("initiator4", 10, 0x30000000);
+  SimpleATTarget1 target4("target4");
 
-  SimpleATMaster2 master5("master5", 10, 0x40000000);
-  SimpleATSlave2 slave5("slave5");
+  SimpleATInitiator2 initiator5("initiator5", 10, 0x40000000);
+  SimpleATTarget2 target5("target5");
 
-  CoreDecouplingLTMaster master6("master6", 10, 0x50000000);
-  ExplicitLTSlave slave6("slave6");
+  CoreDecouplingLTInitiator initiator6("initiator6", 10, 0x50000000);
+  ExplicitLTTarget target6("target6");
 
   SimpleBus<6, 6> bus("bus");
   AbstractionSwitch<6,6> abstractionSwitch("abstractionSwitch", bus);
 
-  master1.socket(bus.target_socket[0]);
-  master2.socket(bus.target_socket[1]);
-  master3.socket(bus.target_socket[2]);
-  master4.socket(bus.target_socket[3]);
-  master5.socket(bus.target_socket[4]);
-  master6.socket(bus.target_socket[5]);
-  bus.initiator_socket[0](slave1.socket);
-  bus.initiator_socket[1](slave2.socket);
-  bus.initiator_socket[2](slave3.socket);
-  bus.initiator_socket[3](slave4.socket);
-  bus.initiator_socket[4](slave5.socket);
-  bus.initiator_socket[5](slave6.socket);
+  initiator1.socket(bus.target_socket[0]);
+  initiator2.socket(bus.target_socket[1]);
+  initiator3.socket(bus.target_socket[2]);
+  initiator4.socket(bus.target_socket[3]);
+  initiator5.socket(bus.target_socket[4]);
+  initiator6.socket(bus.target_socket[5]);
+  bus.initiator_socket[0](target1.socket);
+  bus.initiator_socket[1](target2.socket);
+  bus.initiator_socket[2](target3.socket);
+  bus.initiator_socket[3](target4.socket);
+  bus.initiator_socket[4](target5.socket);
+  bus.initiator_socket[5](target6.socket);
 
   sc_core::sc_start();
 

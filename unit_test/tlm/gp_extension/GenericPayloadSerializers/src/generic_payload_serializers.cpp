@@ -17,27 +17,27 @@
 
 #include "systemc.h"
 
-#include "tlm_master.h"
-#include "tlm_slave.h"
+#include "tlm_initiator.h"
+#include "tlm_target.h"
 
 
 int sc_main(int argc, char* argv[])
 {
     // module instances
-    tlm_master*       master_1 = 0;
-    tlm_slave*        slave_1 = 0;
+    tlm_initiator*       initiator_1 = 0;
+    tlm_target*          target_1 = 0;
 
-	// construction
-	master_1 = new tlm_master("master_1");
-	slave_1  = new tlm_slave("slave_1", 0, 1023);
-
-	// connections
-	master_1->bus_port(slave_1->bus_port);
-
-	sc_start();
-
-    if (master_1) {delete master_1;}
-    if (slave_1) {delete slave_1;}
- 
+    // construction
+    initiator_1 = new tlm_initiator("initiator_1");
+    target_1  = new tlm_target("target_1", 0, 1023);
+    
+    // connections
+    initiator_1->bus_port(target_1->bus_port);
+    
+    sc_start();
+    
+    if (initiator_1) {delete initiator_1;}
+    if (target_1) {delete target_1;}
+    
     return 0;
 }

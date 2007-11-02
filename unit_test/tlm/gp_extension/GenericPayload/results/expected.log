@@ -1,4 +1,4 @@
-master_1 : Single WRITE transaction :  OK 
+initiator_1 : Single WRITE transaction :  OK 
   writing 4 bytes:
    - address = 10
    - data = 0x4030201
@@ -6,37 +6,37 @@ master_1 : Single WRITE transaction :  OK
 
 LE Initiator:
 
-master_1 : Single READ transaction :  OK 
+initiator_1 : Single READ transaction :  OK 
   Reading 4 bytes:
    - address = 10
    - data = 0x4030201
   Data (simulated endianness) = [ 0x1, 0x2, 0x3, 0x4 ]
-master_1 : Single READ transaction :  OK 
+initiator_1 : Single READ transaction :  OK 
   Reading 2 bytes:
    - address = 10
    - data = 0x201
   Data (simulated endianness) = [ 0x1, 0x2 ]
-master_1 : Single READ transaction :  OK 
+initiator_1 : Single READ transaction :  OK 
   Reading 2 bytes:
    - address = 12
    - data = 0x403
   Data (simulated endianness) = [ 0x3, 0x4 ]
-master_1 : Single READ transaction :  OK 
+initiator_1 : Single READ transaction :  OK 
   Reading 1 bytes:
    - address = 10
    - data = 0x1
   Data (simulated endianness) = [ 0x1 ]
-master_1 : Single READ transaction :  OK 
+initiator_1 : Single READ transaction :  OK 
   Reading 1 bytes:
    - address = 11
    - data = 0x2
   Data (simulated endianness) = [ 0x2 ]
-master_1 : Single READ transaction :  OK 
+initiator_1 : Single READ transaction :  OK 
   Reading 1 bytes:
    - address = 12
    - data = 0x3
   Data (simulated endianness) = [ 0x3 ]
-master_1 : Single READ transaction :  OK 
+initiator_1 : Single READ transaction :  OK 
   Reading 1 bytes:
    - address = 13
    - data = 0x4
@@ -45,37 +45,37 @@ master_1 : Single READ transaction :  OK
 
 BE Initiator:
 
-master_1 : Single READ transaction :  OK 
+initiator_1 : Single READ transaction :  OK 
   Reading 4 bytes:
    - address = 10
    - data = 0x4030201
   Data (simulated endianness) = [ 0x4, 0x3, 0x2, 0x1 ]
-master_1 : Single READ transaction :  OK 
+initiator_1 : Single READ transaction :  OK 
   Reading 2 bytes:
    - address = 12
    - data = 0x403
   Data (simulated endianness) = [ 0x4, 0x3 ]
-master_1 : Single READ transaction :  OK 
+initiator_1 : Single READ transaction :  OK 
   Reading 2 bytes:
    - address = 10
    - data = 0x201
   Data (simulated endianness) = [ 0x2, 0x1 ]
-master_1 : Single READ transaction :  OK 
+initiator_1 : Single READ transaction :  OK 
   Reading 1 bytes:
    - address = 13
    - data = 0x4
   Data (simulated endianness) = [ 0x4 ]
-master_1 : Single READ transaction :  OK 
+initiator_1 : Single READ transaction :  OK 
   Reading 1 bytes:
    - address = 12
    - data = 0x3
   Data (simulated endianness) = [ 0x3 ]
-master_1 : Single READ transaction :  OK 
+initiator_1 : Single READ transaction :  OK 
   Reading 1 bytes:
    - address = 11
    - data = 0x2
   Data (simulated endianness) = [ 0x2 ]
-master_1 : Single READ transaction :  OK 
+initiator_1 : Single READ transaction :  OK 
   Reading 1 bytes:
    - address = 10
    - data = 0x1

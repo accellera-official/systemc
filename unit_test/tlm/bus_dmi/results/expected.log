@@ -1,216 +1,216 @@
-master1: Send write request: A = 0x0, D = 0x0 @ 0 s
-slave1: Received write request: A = 0x0, D = 0x0 @ 0 s
-master2: Send write request: A = 0x10000000, D = 0x0 @ 0 s
-master3: Send write request: A = 0x20000000, D = 0x0 @ 0 s
-master4: Send write request: A = 0x30000000, D = 0x0 @ 0 s
-slave4: Received write request: A = 0x0, D = 0x0 @ 0 s
-master5: Send write request: A = 0x40000000, D = 0x0 @ 0 s
-slave5: Received write request: A = 0x0, D = 0x0 @ 0 s
-master6: Send write request: A = 0x50000000, D = 0x0 @ 0 s (0 s + 0 s)
-slave6: Received write request: A = 0x0, D = 0x0 @ 0 s
-master1: Received ok response @ 10 ns
-master1: Send write request: A = 0x4, D = 0x1 @ 10 ns
-master3: Received ok response @ 10 ns
-master3: Send write request: A = 0x20000004, D = 0x1 @ 10 ns
-master2: Received ok response @ 10 ns
-master2: Send write request: A = 0x10000004, D = 0x1 @ 10 ns
-master1: Received ok response @ 20 ns
-master1: Send write request: A = 0x8, D = 0x2 @ 20 ns
-master3: Received ok response @ 20 ns
-master3: Send write request: A = 0x20000008, D = 0x2 @ 20 ns
-master2: Received ok response @ 20 ns
-master2: Send write request: A = 0x10000008, D = 0x2 @ 20 ns
-master5: Send write request: A = 0x40000004, D = 0x1 @ 25 ns
-slave5: Received write request: A = 0x4, D = 0x1 @ 25 ns
-master4: Send write request: A = 0x30000004, D = 0x1 @ 25 ns
-slave4: Received write request: A = 0x4, D = 0x1 @ 25 ns
-master3: Received ok response @ 30 ns
-master3: Send write request: A = 0x2000000c, D = 0x3 @ 30 ns
-master2: Received ok response @ 30 ns
-master2: Send write request: A = 0x1000000c, D = 0x3 @ 30 ns
-master1: Received ok response @ 30 ns
-master1: Send write request: A = 0xc, D = 0x3 @ 30 ns
-master3: Received ok response @ 40 ns
-master3: Send write request: A = 0x20000010, D = 0x4 @ 40 ns
-master2: Received ok response @ 40 ns
-master2: Send write request: A = 0x10000010, D = 0x4 @ 40 ns
-master1: Received ok response @ 40 ns
-master1: Send write request: A = 0x10, D = 0x4 @ 40 ns
-master5: Send write request: A = 0x40000008, D = 0x2 @ 50 ns
-slave5: Received write request: A = 0x8, D = 0x2 @ 50 ns
-master3: Received ok response @ 50 ns
-master3: Send write request: A = 0x20000014, D = 0x5 @ 50 ns
-master2: Received ok response @ 50 ns
-master2: Send write request: A = 0x10000014, D = 0x5 @ 50 ns
-master1: Received ok response @ 50 ns
-master1: Send write request: A = 0x14, D = 0x5 @ 50 ns
-master6: Received ok response @ 50 ns (50 ns + 0 s)
-master6: Send write request: A = 0x50000004, D = 0x1 @ 50 ns (50 ns + 0 s)
-slave6: Received write request: A = 0x4, D = 0x1 @ 50 ns
-master4: Send write request: A = 0x30000008, D = 0x2 @ 50 ns
-slave4: Received write request: A = 0x8, D = 0x2 @ 50 ns
-master3: Received ok response @ 60 ns
-master3: Send write request: A = 0x20000018, D = 0x6 @ 60 ns
-master1: Received ok response @ 60 ns
-master1: Send write request: A = 0x18, D = 0x6 @ 60 ns
-master2: Received ok response @ 60 ns
-master2: Send write request: A = 0x10000018, D = 0x6 @ 60 ns
-master3: Received ok response @ 70 ns
-master3: Send write request: A = 0x2000001c, D = 0x7 @ 70 ns
-master1: Received ok response @ 70 ns
-master1: Send write request: A = 0x1c, D = 0x7 @ 70 ns
-master2: Received ok response @ 70 ns
-master2: Send write request: A = 0x1000001c, D = 0x7 @ 70 ns
-master5: Send write request: A = 0x4000000c, D = 0x3 @ 75 ns
-slave5: Received write request: A = 0xc, D = 0x3 @ 75 ns
-master4: Send write request: A = 0x3000000c, D = 0x3 @ 75 ns
-slave4: Received write request: A = 0xc, D = 0x3 @ 75 ns
-master3: Received ok response @ 80 ns
-master3: Send write request: A = 0x20000020, D = 0x8 @ 80 ns
-master1: Received ok response @ 80 ns
-master1: Send write request: A = 0x20, D = 0x8 @ 80 ns
-master2: Received ok response @ 80 ns
-master2: Send write request: A = 0x10000020, D = 0x8 @ 80 ns
-master3: Received ok response @ 90 ns
-master3: Send write request: A = 0x20000024, D = 0x9 @ 90 ns
-master1: Received ok response @ 90 ns
-master1: Send write request: A = 0x24, D = 0x9 @ 90 ns
-master2: Received ok response @ 90 ns
-master2: Send write request: A = 0x10000024, D = 0x9 @ 90 ns
-master2: Received ok response @ 100 ns
-master2: Send read request: A = 0x10000000 @ 100 ns
-master1: Received ok response @ 100 ns
-master1: Send read request: A = 0x0 @ 100 ns
-master5: Send write request: A = 0x40000010, D = 0x4 @ 100 ns
-slave5: Received write request: A = 0x10, D = 0x4 @ 100 ns
-master3: Received ok response @ 100 ns
-master3: Send read request: A = 0x20000000 @ 100 ns
-master6: Received ok response @ 100 ns (100 ns + 0 s)
-master6: Send write request: A = 0x50000008, D = 0x2 @ 100 ns (100 ns + 0 s)
-slave6: Received write request: A = 0x8, D = 0x2 @ 100 ns
-master4: Send write request: A = 0x30000010, D = 0x4 @ 100 ns
-slave4: Received write request: A = 0x10, D = 0x4 @ 100 ns
-master5: Received ok response @ 125 ns
-master5: Send write request: A = 0x40000014, D = 0x5 @ 125 ns
-slave5: Received write request: A = 0x14, D = 0x5 @ 125 ns
-master4: Send write request: A = 0x30000014, D = 0x5 @ 125 ns
-slave4: Received write request: A = 0x14, D = 0x5 @ 125 ns
-master4: Received ok response @ 135 ns
-master5: Send write request: A = 0x40000018, D = 0x6 @ 150 ns
-slave5: Received write request: A = 0x18, D = 0x6 @ 150 ns
-master6: Received ok response @ 150 ns (150 ns + 0 s)
-master6: Send write request: A = 0x5000000c, D = 0x3 @ 150 ns (150 ns + 0 s)
-slave6: Received write request: A = 0xc, D = 0x3 @ 150 ns
-master4: Send write request: A = 0x30000018, D = 0x6 @ 150 ns
-slave4: Received write request: A = 0x18, D = 0x6 @ 150 ns
-master5: Send write request: A = 0x4000001c, D = 0x7 @ 175 ns
-slave5: Received write request: A = 0x1c, D = 0x7 @ 175 ns
-master4: Send write request: A = 0x3000001c, D = 0x7 @ 175 ns
-slave4: Received write request: A = 0x1c, D = 0x7 @ 175 ns
-master2: Received ok response: D = 0x0 @ 200 ns
-master2: Send read request: A = 0x10000004 @ 200 ns
-master3: Received ok response: D = 0x0 @ 200 ns
-master3: Send read request: A = 0x20000004 @ 200 ns
-master5: Send write request: A = 0x40000020, D = 0x8 @ 200 ns
-slave5: Received write request: A = 0x20, D = 0x8 @ 200 ns
-master1: Received ok response: D = 0x0 @ 200 ns
-master1: Send read request: A = 0x4 @ 200 ns
-master6: Received ok response @ 200 ns (200 ns + 0 s)
-master6: Send write request: A = 0x50000010, D = 0x4 @ 200 ns (200 ns + 0 s)
-slave6: Received write request: A = 0x10, D = 0x4 @ 200 ns
-master4: Send write request: A = 0x30000020, D = 0x8 @ 200 ns
-slave4: Received write request: A = 0x20, D = 0x8 @ 200 ns
-master5: Send write request: A = 0x40000024, D = 0x9 @ 225 ns
-slave5: Received write request: A = 0x24, D = 0x9 @ 225 ns
-master4: Send write request: A = 0x30000024, D = 0x9 @ 225 ns
-slave4: Received write request: A = 0x24, D = 0x9 @ 225 ns
-master5: Received ok response @ 235 ns
-master4: Received ok response @ 245 ns
-master5: Send read request: A = 0x40000000 @ 250 ns
-slave5: Received read request: A = 0x0 @ 250 ns
-master6: Received ok response @ 250 ns (250 ns + 0 s)
-master6: Send write request: A = 0x50000014, D = 0x5 @ 250 ns (250 ns + 0 s)
-slave6: Received write request: A = 0x14, D = 0x5 @ 250 ns
-master4: Send read request: A = 0x30000000 @ 250 ns
-slave4: Received read request: A = 0x0 @ 250 ns
-master5: Send read request: A = 0x40000004 @ 275 ns
-slave5: Received read request: A = 0x4 @ 275 ns
-master4: Send read request: A = 0x30000004 @ 275 ns
-slave4: Received read request: A = 0x4 @ 275 ns
-master2: Received ok response: D = 0x1 @ 300 ns
-master2: Send read request: A = 0x10000008 @ 300 ns
-master5: Send read request: A = 0x40000008 @ 300 ns
-slave5: Received read request: A = 0x8 @ 300 ns
-master3: Received ok response: D = 0x1 @ 300 ns
-master3: Send read request: A = 0x20000008 @ 300 ns
-master1: Received ok response: D = 0x1 @ 300 ns
-master1: Send read request: A = 0x8 @ 300 ns
-master6: Received ok response @ 300 ns (300 ns + 0 s)
-master6: Send write request: A = 0x50000018, D = 0x6 @ 300 ns (300 ns + 0 s)
-slave6: Received write request: A = 0x18, D = 0x6 @ 300 ns
-master4: Send read request: A = 0x30000008 @ 300 ns
-slave4: Received read request: A = 0x8 @ 300 ns
-master5: Send read request: A = 0x4000000c @ 325 ns
-slave5: Received read request: A = 0xc @ 325 ns
-master4: Send read request: A = 0x3000000c @ 325 ns
-slave4: Received read request: A = 0xc @ 325 ns
-master5: Received ok response @ 345 ns
-master5: Send read request: A = 0x40000010 @ 350 ns
-slave5: Received read request: A = 0x10 @ 350 ns
-master6: Received ok response @ 350 ns (350 ns + 0 s)
-master6: Send write request: A = 0x5000001c, D = 0x7 @ 350 ns (350 ns + 0 s)
-slave6: Received write request: A = 0x1c, D = 0x7 @ 350 ns
-master4: Send read request: A = 0x30000010 @ 350 ns
-slave4: Received read request: A = 0x10 @ 350 ns
-master4: Received ok response @ 355 ns
-master5: Send read request: A = 0x40000014 @ 375 ns
-slave5: Received read request: A = 0x14 @ 375 ns
-master4: Send read request: A = 0x30000014 @ 375 ns
-slave4: Received read request: A = 0x14 @ 375 ns
-master2: Received ok response: D = 0x2 @ 400 ns
-master2: Send read request: A = 0x1000000c @ 400 ns
-master5: Send read request: A = 0x40000018 @ 400 ns
-slave5: Received read request: A = 0x18 @ 400 ns
-master3: Received ok response: D = 0x2 @ 400 ns
-master3: Send read request: A = 0x2000000c @ 400 ns
-master1: Received ok response: D = 0x2 @ 400 ns
-master1: Send read request: A = 0xc @ 400 ns
-master6: Received ok response @ 400 ns (400 ns + 0 s)
-master6: Send write request: A = 0x50000020, D = 0x8 @ 400 ns (400 ns + 0 s)
-slave6: Received write request: A = 0x20, D = 0x8 @ 400 ns
-master4: Send read request: A = 0x30000018 @ 400 ns
-slave4: Received read request: A = 0x18 @ 400 ns
-master5: Send read request: A = 0x4000001c @ 425 ns
-slave5: Received read request: A = 0x1c @ 425 ns
-master4: Send read request: A = 0x3000001c @ 425 ns
-slave4: Received read request: A = 0x1c @ 425 ns
-master5: Send read request: A = 0x40000020 @ 450 ns
-slave5: Received read request: A = 0x20 @ 450 ns
-master6: Received ok response @ 450 ns (450 ns + 0 s)
-master6: Send write request: A = 0x50000024, D = 0x9 @ 450 ns (450 ns + 0 s)
-slave6: Received write request: A = 0x24, D = 0x9 @ 450 ns
-master4: Send read request: A = 0x30000020 @ 450 ns
-slave4: Received read request: A = 0x20 @ 450 ns
-master5: Received ok response @ 455 ns
-master4: Received ok response @ 465 ns
-master5: Send read request: A = 0x40000024 @ 475 ns
-slave5: Received read request: A = 0x24 @ 475 ns
-master4: Send read request: A = 0x30000024 @ 475 ns
-slave4: Received read request: A = 0x24 @ 475 ns
-master2: Received ok response: D = 0x3 @ 500 ns
-master2: Send read request: A = 0x10000010 @ 500 ns
-master1: Received ok response: D = 0x3 @ 500 ns
-master1: Send read request: A = 0x10 @ 500 ns
-master3: Received ok response: D = 0x3 @ 500 ns
-master3: Send read request: A = 0x20000010 @ 500 ns
+initiator1: Send write request: A = 0x0, D = 0x0 @ 0 s
+target1: Received write request: A = 0x0, D = 0x0 @ 0 s
+initiator2: Send write request: A = 0x10000000, D = 0x0 @ 0 s
+initiator3: Send write request: A = 0x20000000, D = 0x0 @ 0 s
+initiator4: Send write request: A = 0x30000000, D = 0x0 @ 0 s
+target4: Received write request: A = 0x0, D = 0x0 @ 0 s
+initiator5: Send write request: A = 0x40000000, D = 0x0 @ 0 s
+target5: Received write request: A = 0x0, D = 0x0 @ 0 s
+initiator6: Send write request: A = 0x50000000, D = 0x0 @ 0 s (0 s + 0 s)
+target6: Received write request: A = 0x0, D = 0x0 @ 0 s
+initiator1: Received ok response @ 10 ns
+initiator1: Send write request: A = 0x4, D = 0x1 @ 10 ns
+initiator3: Received ok response @ 10 ns
+initiator3: Send write request: A = 0x20000004, D = 0x1 @ 10 ns
+initiator2: Received ok response @ 10 ns
+initiator2: Send write request: A = 0x10000004, D = 0x1 @ 10 ns
+initiator1: Received ok response @ 20 ns
+initiator1: Send write request: A = 0x8, D = 0x2 @ 20 ns
+initiator3: Received ok response @ 20 ns
+initiator3: Send write request: A = 0x20000008, D = 0x2 @ 20 ns
+initiator2: Received ok response @ 20 ns
+initiator2: Send write request: A = 0x10000008, D = 0x2 @ 20 ns
+initiator5: Send write request: A = 0x40000004, D = 0x1 @ 25 ns
+target5: Received write request: A = 0x4, D = 0x1 @ 25 ns
+initiator4: Send write request: A = 0x30000004, D = 0x1 @ 25 ns
+target4: Received write request: A = 0x4, D = 0x1 @ 25 ns
+initiator3: Received ok response @ 30 ns
+initiator3: Send write request: A = 0x2000000c, D = 0x3 @ 30 ns
+initiator2: Received ok response @ 30 ns
+initiator2: Send write request: A = 0x1000000c, D = 0x3 @ 30 ns
+initiator1: Received ok response @ 30 ns
+initiator1: Send write request: A = 0xc, D = 0x3 @ 30 ns
+initiator3: Received ok response @ 40 ns
+initiator3: Send write request: A = 0x20000010, D = 0x4 @ 40 ns
+initiator2: Received ok response @ 40 ns
+initiator2: Send write request: A = 0x10000010, D = 0x4 @ 40 ns
+initiator1: Received ok response @ 40 ns
+initiator1: Send write request: A = 0x10, D = 0x4 @ 40 ns
+initiator5: Send write request: A = 0x40000008, D = 0x2 @ 50 ns
+target5: Received write request: A = 0x8, D = 0x2 @ 50 ns
+initiator3: Received ok response @ 50 ns
+initiator3: Send write request: A = 0x20000014, D = 0x5 @ 50 ns
+initiator2: Received ok response @ 50 ns
+initiator2: Send write request: A = 0x10000014, D = 0x5 @ 50 ns
+initiator1: Received ok response @ 50 ns
+initiator1: Send write request: A = 0x14, D = 0x5 @ 50 ns
+initiator6: Received ok response @ 50 ns (50 ns + 0 s)
+initiator6: Send write request: A = 0x50000004, D = 0x1 @ 50 ns (50 ns + 0 s)
+target6: Received write request: A = 0x4, D = 0x1 @ 50 ns
+initiator4: Send write request: A = 0x30000008, D = 0x2 @ 50 ns
+target4: Received write request: A = 0x8, D = 0x2 @ 50 ns
+initiator3: Received ok response @ 60 ns
+initiator3: Send write request: A = 0x20000018, D = 0x6 @ 60 ns
+initiator1: Received ok response @ 60 ns
+initiator1: Send write request: A = 0x18, D = 0x6 @ 60 ns
+initiator2: Received ok response @ 60 ns
+initiator2: Send write request: A = 0x10000018, D = 0x6 @ 60 ns
+initiator3: Received ok response @ 70 ns
+initiator3: Send write request: A = 0x2000001c, D = 0x7 @ 70 ns
+initiator1: Received ok response @ 70 ns
+initiator1: Send write request: A = 0x1c, D = 0x7 @ 70 ns
+initiator2: Received ok response @ 70 ns
+initiator2: Send write request: A = 0x1000001c, D = 0x7 @ 70 ns
+initiator5: Send write request: A = 0x4000000c, D = 0x3 @ 75 ns
+target5: Received write request: A = 0xc, D = 0x3 @ 75 ns
+initiator4: Send write request: A = 0x3000000c, D = 0x3 @ 75 ns
+target4: Received write request: A = 0xc, D = 0x3 @ 75 ns
+initiator3: Received ok response @ 80 ns
+initiator3: Send write request: A = 0x20000020, D = 0x8 @ 80 ns
+initiator1: Received ok response @ 80 ns
+initiator1: Send write request: A = 0x20, D = 0x8 @ 80 ns
+initiator2: Received ok response @ 80 ns
+initiator2: Send write request: A = 0x10000020, D = 0x8 @ 80 ns
+initiator3: Received ok response @ 90 ns
+initiator3: Send write request: A = 0x20000024, D = 0x9 @ 90 ns
+initiator1: Received ok response @ 90 ns
+initiator1: Send write request: A = 0x24, D = 0x9 @ 90 ns
+initiator2: Received ok response @ 90 ns
+initiator2: Send write request: A = 0x10000024, D = 0x9 @ 90 ns
+initiator2: Received ok response @ 100 ns
+initiator2: Send read request: A = 0x10000000 @ 100 ns
+initiator1: Received ok response @ 100 ns
+initiator1: Send read request: A = 0x0 @ 100 ns
+initiator5: Send write request: A = 0x40000010, D = 0x4 @ 100 ns
+target5: Received write request: A = 0x10, D = 0x4 @ 100 ns
+initiator3: Received ok response @ 100 ns
+initiator3: Send read request: A = 0x20000000 @ 100 ns
+initiator6: Received ok response @ 100 ns (100 ns + 0 s)
+initiator6: Send write request: A = 0x50000008, D = 0x2 @ 100 ns (100 ns + 0 s)
+target6: Received write request: A = 0x8, D = 0x2 @ 100 ns
+initiator4: Send write request: A = 0x30000010, D = 0x4 @ 100 ns
+target4: Received write request: A = 0x10, D = 0x4 @ 100 ns
+initiator5: Received ok response @ 125 ns
+initiator5: Send write request: A = 0x40000014, D = 0x5 @ 125 ns
+target5: Received write request: A = 0x14, D = 0x5 @ 125 ns
+initiator4: Send write request: A = 0x30000014, D = 0x5 @ 125 ns
+target4: Received write request: A = 0x14, D = 0x5 @ 125 ns
+initiator4: Received ok response @ 135 ns
+initiator5: Send write request: A = 0x40000018, D = 0x6 @ 150 ns
+target5: Received write request: A = 0x18, D = 0x6 @ 150 ns
+initiator6: Received ok response @ 150 ns (150 ns + 0 s)
+initiator6: Send write request: A = 0x5000000c, D = 0x3 @ 150 ns (150 ns + 0 s)
+target6: Received write request: A = 0xc, D = 0x3 @ 150 ns
+initiator4: Send write request: A = 0x30000018, D = 0x6 @ 150 ns
+target4: Received write request: A = 0x18, D = 0x6 @ 150 ns
+initiator5: Send write request: A = 0x4000001c, D = 0x7 @ 175 ns
+target5: Received write request: A = 0x1c, D = 0x7 @ 175 ns
+initiator4: Send write request: A = 0x3000001c, D = 0x7 @ 175 ns
+target4: Received write request: A = 0x1c, D = 0x7 @ 175 ns
+initiator2: Received ok response: D = 0x0 @ 200 ns
+initiator2: Send read request: A = 0x10000004 @ 200 ns
+initiator3: Received ok response: D = 0x0 @ 200 ns
+initiator3: Send read request: A = 0x20000004 @ 200 ns
+initiator5: Send write request: A = 0x40000020, D = 0x8 @ 200 ns
+target5: Received write request: A = 0x20, D = 0x8 @ 200 ns
+initiator1: Received ok response: D = 0x0 @ 200 ns
+initiator1: Send read request: A = 0x4 @ 200 ns
+initiator6: Received ok response @ 200 ns (200 ns + 0 s)
+initiator6: Send write request: A = 0x50000010, D = 0x4 @ 200 ns (200 ns + 0 s)
+target6: Received write request: A = 0x10, D = 0x4 @ 200 ns
+initiator4: Send write request: A = 0x30000020, D = 0x8 @ 200 ns
+target4: Received write request: A = 0x20, D = 0x8 @ 200 ns
+initiator5: Send write request: A = 0x40000024, D = 0x9 @ 225 ns
+target5: Received write request: A = 0x24, D = 0x9 @ 225 ns
+initiator4: Send write request: A = 0x30000024, D = 0x9 @ 225 ns
+target4: Received write request: A = 0x24, D = 0x9 @ 225 ns
+initiator5: Received ok response @ 235 ns
+initiator4: Received ok response @ 245 ns
+initiator5: Send read request: A = 0x40000000 @ 250 ns
+target5: Received read request: A = 0x0 @ 250 ns
+initiator6: Received ok response @ 250 ns (250 ns + 0 s)
+initiator6: Send write request: A = 0x50000014, D = 0x5 @ 250 ns (250 ns + 0 s)
+target6: Received write request: A = 0x14, D = 0x5 @ 250 ns
+initiator4: Send read request: A = 0x30000000 @ 250 ns
+target4: Received read request: A = 0x0 @ 250 ns
+initiator5: Send read request: A = 0x40000004 @ 275 ns
+target5: Received read request: A = 0x4 @ 275 ns
+initiator4: Send read request: A = 0x30000004 @ 275 ns
+target4: Received read request: A = 0x4 @ 275 ns
+initiator2: Received ok response: D = 0x1 @ 300 ns
+initiator2: Send read request: A = 0x10000008 @ 300 ns
+initiator5: Send read request: A = 0x40000008 @ 300 ns
+target5: Received read request: A = 0x8 @ 300 ns
+initiator3: Received ok response: D = 0x1 @ 300 ns
+initiator3: Send read request: A = 0x20000008 @ 300 ns
+initiator1: Received ok response: D = 0x1 @ 300 ns
+initiator1: Send read request: A = 0x8 @ 300 ns
+initiator6: Received ok response @ 300 ns (300 ns + 0 s)
+initiator6: Send write request: A = 0x50000018, D = 0x6 @ 300 ns (300 ns + 0 s)
+target6: Received write request: A = 0x18, D = 0x6 @ 300 ns
+initiator4: Send read request: A = 0x30000008 @ 300 ns
+target4: Received read request: A = 0x8 @ 300 ns
+initiator5: Send read request: A = 0x4000000c @ 325 ns
+target5: Received read request: A = 0xc @ 325 ns
+initiator4: Send read request: A = 0x3000000c @ 325 ns
+target4: Received read request: A = 0xc @ 325 ns
+initiator5: Received ok response @ 345 ns
+initiator5: Send read request: A = 0x40000010 @ 350 ns
+target5: Received read request: A = 0x10 @ 350 ns
+initiator6: Received ok response @ 350 ns (350 ns + 0 s)
+initiator6: Send write request: A = 0x5000001c, D = 0x7 @ 350 ns (350 ns + 0 s)
+target6: Received write request: A = 0x1c, D = 0x7 @ 350 ns
+initiator4: Send read request: A = 0x30000010 @ 350 ns
+target4: Received read request: A = 0x10 @ 350 ns
+initiator4: Received ok response @ 355 ns
+initiator5: Send read request: A = 0x40000014 @ 375 ns
+target5: Received read request: A = 0x14 @ 375 ns
+initiator4: Send read request: A = 0x30000014 @ 375 ns
+target4: Received read request: A = 0x14 @ 375 ns
+initiator2: Received ok response: D = 0x2 @ 400 ns
+initiator2: Send read request: A = 0x1000000c @ 400 ns
+initiator5: Send read request: A = 0x40000018 @ 400 ns
+target5: Received read request: A = 0x18 @ 400 ns
+initiator3: Received ok response: D = 0x2 @ 400 ns
+initiator3: Send read request: A = 0x2000000c @ 400 ns
+initiator1: Received ok response: D = 0x2 @ 400 ns
+initiator1: Send read request: A = 0xc @ 400 ns
+initiator6: Received ok response @ 400 ns (400 ns + 0 s)
+initiator6: Send write request: A = 0x50000020, D = 0x8 @ 400 ns (400 ns + 0 s)
+target6: Received write request: A = 0x20, D = 0x8 @ 400 ns
+initiator4: Send read request: A = 0x30000018 @ 400 ns
+target4: Received read request: A = 0x18 @ 400 ns
+initiator5: Send read request: A = 0x4000001c @ 425 ns
+target5: Received read request: A = 0x1c @ 425 ns
+initiator4: Send read request: A = 0x3000001c @ 425 ns
+target4: Received read request: A = 0x1c @ 425 ns
+initiator5: Send read request: A = 0x40000020 @ 450 ns
+target5: Received read request: A = 0x20 @ 450 ns
+initiator6: Received ok response @ 450 ns (450 ns + 0 s)
+initiator6: Send write request: A = 0x50000024, D = 0x9 @ 450 ns (450 ns + 0 s)
+target6: Received write request: A = 0x24, D = 0x9 @ 450 ns
+initiator4: Send read request: A = 0x30000020 @ 450 ns
+target4: Received read request: A = 0x20 @ 450 ns
+initiator5: Received ok response @ 455 ns
+initiator4: Received ok response @ 465 ns
+initiator5: Send read request: A = 0x40000024 @ 475 ns
+target5: Received read request: A = 0x24 @ 475 ns
+initiator4: Send read request: A = 0x30000024 @ 475 ns
+target4: Received read request: A = 0x24 @ 475 ns
+initiator2: Received ok response: D = 0x3 @ 500 ns
+initiator2: Send read request: A = 0x10000010 @ 500 ns
+initiator1: Received ok response: D = 0x3 @ 500 ns
+initiator1: Send read request: A = 0x10 @ 500 ns
+initiator3: Received ok response: D = 0x3 @ 500 ns
+initiator3: Send read request: A = 0x20000010 @ 500 ns
 SystemC: simulation stopped by user.
-master1, <<SimpleLTMaster1>>:
+initiator1, <<SimpleLTInitiator1>>:
 
 Mem @0
 00 00 00 00 01 00 00 00 02 00 00 00 03 00 00 00
 04 00 00 00 05 00 00 00 06 00 00 00 07 00 00 00
 
-master2, <<SimpleLTMaster1>>:
+initiator2, <<SimpleLTInitiator1>>:
 
 Mem @10000000
 OK: debug transaction didn't give data.

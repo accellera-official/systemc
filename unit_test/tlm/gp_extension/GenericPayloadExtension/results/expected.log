@@ -1,31 +1,31 @@
-master_1 : Single WRITE transaction : 
+initiator_1 : Single WRITE transaction : 
  OK 
-master_1 : Single WRITE transaction : 
-slave_1: got extension 3 with value = 30
+initiator_1 : Single WRITE transaction : 
+target_1: got extension 3 with value = 30
  OK 
-master_1 : Single WRITE transaction : 
-slave_1: got extension 2 with value = 20
+initiator_1 : Single WRITE transaction : 
+target_1: got extension 2 with value = 20
  OK 
-master_1 : Single WRITE transaction : 
-slave_1: got extension 2 with value = 20
-slave_1: got extension 3 with value = 30
+initiator_1 : Single WRITE transaction : 
+target_1: got extension 2 with value = 20
+target_1: got extension 3 with value = 30
  OK 
-master_1 : Single WRITE transaction : 
-slave_1: got extension 1 with value = 10
+initiator_1 : Single WRITE transaction : 
+target_1: got extension 1 with value = 10
  OK 
-master_1 : Single WRITE transaction : 
-slave_1: got extension 1 with value = 10
-slave_1: got extension 3 with value = 30
+initiator_1 : Single WRITE transaction : 
+target_1: got extension 1 with value = 10
+target_1: got extension 3 with value = 30
  OK 
-master_1 : Single WRITE transaction : 
-slave_1: got extension 1 with value = 10
-slave_1: got extension 2 with value = 20
+initiator_1 : Single WRITE transaction : 
+target_1: got extension 1 with value = 10
+target_1: got extension 2 with value = 20
  OK 
-master_1 : Single WRITE transaction : 
-slave_1: got extension 1 with value = 10
-slave_1: got extension 2 with value = 20
-slave_1: got extension 3 with value = 30
+initiator_1 : Single WRITE transaction : 
+target_1: got extension 1 with value = 10
+target_1: got extension 2 with value = 20
+target_1: got extension 3 with value = 30
  OK 
-master_1 : Single READ transaction : 
+initiator_1 : Single READ transaction : 
  OK, data = 100
 SystemC: simulation stopped by user.

@@ -17,19 +17,19 @@
 
 #include "tlm.h"
 
-#include "SimpleLTMaster_ext.h"
-#include "SimpleLTSlave1.h"
+#include "SimpleLTInitiator_ext.h"
+#include "SimpleLTTarget1.h"
 #include "extension_adaptors.h"
 
 
 int sc_main(int argc, char* argv[])
 {
-  SimpleLTMaster_ext master("master", 10, 0x0);
-  adapt_ext2gp<32> bridge("bridge");
-  SimpleLTSlave1  slave("slave", true);
+  SimpleLTInitiator_ext initiator("initiator", 10, 0x0);
+  adapt_ext2gp<32>      bridge("bridge");
+  SimpleLTTarget1       target("target", true);
 
-  master.socket(bridge.target_socket);
-  bridge.initiator_socket(slave.socket);
+  initiator.socket(bridge.target_socket);
+  bridge.initiator_socket(target.socket);
 
   sc_core::sc_start();
 

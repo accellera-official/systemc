@@ -8,7 +8,6 @@ SUBDIRS = \
           ../gp_extension \
           ../p2p \
           ../transactor \
-          ../accessors \
           ../static_extensions
 
 .PHONY: all clean check run

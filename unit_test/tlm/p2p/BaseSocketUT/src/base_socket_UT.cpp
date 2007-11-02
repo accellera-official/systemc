@@ -21,15 +21,15 @@
 
 #include "tlm.h"
 
-#include "SimpleUTMaster1.h"
-#include "SimpleUTSlave1.h"
+#include "SimpleUTInitiator1.h"
+#include "SimpleUTTarget1.h"
 
 int sc_main(int argc, char* argv[])
 {
-  SimpleUTMaster1 master("master");
-  SimpleUTSlave1 slave("slave");
+  SimpleUTInitiator1 initiator("initiator");
+  SimpleUTTarget1 target("target");
 
-  master.socket(slave.socket);
+  initiator.socket(target.socket);
 
   sc_core::sc_start();
 

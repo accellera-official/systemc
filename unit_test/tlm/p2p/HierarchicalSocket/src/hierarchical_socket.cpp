@@ -21,15 +21,15 @@
 
 #include "tlm.h"
 
-#include "SimpleMasterWrapper.h"
-#include "SimpleSlaveWrapper.h"
+#include "SimpleInitiatorWrapper.h"
+#include "SimpleTargetWrapper.h"
 
 int sc_main(int argc, char* argv[])
 {
-  SimpleMasterWrapper master("masterWrapper");
-  SimpleSlaveWrapper slave("slaveWrapper");
+  SimpleInitiatorWrapper initiator("initiatorWrapper");
+  SimpleTargetWrapper target("targetWrapper");
 
-  master.socket(slave.socket);
+  initiator.socket(target.socket);
 
   sc_core::sc_start();
 

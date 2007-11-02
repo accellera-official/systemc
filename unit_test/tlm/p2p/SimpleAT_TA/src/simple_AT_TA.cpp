@@ -15,21 +15,17 @@
 
  *****************************************************************************/
 
-//#include <iostream>
-
-//#include <systemc>
-
 #include "tlm.h"
 
-#include "SimpleATMaster2.h"
-#include "SimpleATSlave2.h"
+#include "SimpleATInitiator2.h"
+#include "SimpleATTarget2.h"
 
 int sc_main(int argc, char* argv[])
 {
-  SimpleATMaster2 master("master");
-  SimpleATSlave2 slave("slave");
+  SimpleATInitiator2 initiator("initiator");
+  SimpleATTarget2 target("target");
 
-  master.socket(slave.socket);
+  initiator.socket(target.socket);
 
   sc_core::sc_start();
 
