@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="systemc"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		AdditionalIncludeDirectories="$(SYSTEMC)\..\src;$(TLM)\include"
+		PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+	/>
+	<UserMacro
+		Name="SYSTEMC"
+		Value="C:\ESLX\projects\systemc-2.2.0\msvc71"
+		PerformEnvironmentSet="true"
+	/>
+	<UserMacro
+		Name="SCV"
+		Value="C:\ESLX\projects\scv-1.0p2-sysc2.2\msvc71"
+		PerformEnvironmentSet="true"
+	/>
+	<UserMacro
+		Name="TLM"
+		Value="C:\ESLX\projects\TLMWG\tlm2"
+	/>
+</VisualStudioPropertySheet>
