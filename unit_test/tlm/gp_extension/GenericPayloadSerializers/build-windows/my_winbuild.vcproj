@@ -188,11 +188,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\tlm_master.cpp"
+				RelativePath="..\src\tlm_initiator.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\tlm_slave.cpp"
+				RelativePath="..\src\tlm_target.cpp"
 				>
 			</File>
 		</Filter>
@@ -201,14 +201,6 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
-			<File
-				RelativePath="..\include\tlm_master.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\tlm_slave.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
