@@ -121,8 +121,8 @@ void tlm_initiator::prepare_arrays(int nbits, T& reg, bool shift)
     }
     
     // test serializers in the initiator 
-    tlm::copy_from_array< T >(reg, 0, wr_data, 0, 0, tlm::TLM_LITTLE_ENDIAN);
-    tlm::copy_to_array< T >(reg, 0, aux_data, 0, 0, tlm::TLM_LITTLE_ENDIAN);
+    tlm::copy_from_array< T >(reg, 0, wr_data, 0, 0);
+    tlm::copy_to_array< T >(reg, 0, aux_data, 0, 0);
 }
 
 
