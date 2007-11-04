@@ -102,12 +102,11 @@ public:
         : m_command(TLM_IGNORE_COMMAND)
         , m_address(0)
         , m_data(0)
-        , m_length(0)
+        , m_length(1)
         , m_response_status(TLM_INCOMPLETE_RESPONSE)
-        , m_streaming_mode(false)
-        , m_lock(false)
         , m_byte_enable(0)
-        , m_byte_enable_length(0)
+        , m_byte_enable_length(1)
+        , m_streaming_width(0)
         , m_extensions(max_num_extensions())
         , m_dmi(false)
     {
@@ -120,10 +119,9 @@ public:
         , m_data(x.get_data_ptr())
         , m_length(x.get_data_length())
         , m_response_status(x.get_response_status())
-        , m_streaming_mode(x.get_streaming_mode())
-        , m_lock(x.get_lock())
         , m_byte_enable(x.get_byte_enable_ptr())
         , m_byte_enable_length(x.get_byte_enable_length())
+        , m_streaming_width(x.get_streaming_width())
         , m_extensions(max_num_extensions())
         , m_dmi(false)
     {
@@ -196,26 +194,10 @@ public:
         return "TLM_UNKNOWN_RESPONSE";
     }
     
-    // Burst related methods
-    inline bool                 get_streaming_mode() const {return m_streaming_mode;}
-    inline void                 set_streaming_mode(const bool streaming_mode) {m_streaming_mode = streaming_mode; }
-    inline unsigned int         get_burst_length(unsigned int bus_data_size)
-    {
-        return (m_length+bus_data_size-1)/bus_data_size;
-    }
-    inline unsigned int         get_nr_bytes_of_burst_element(unsigned int count, unsigned int bus_data_size)
-    {
-        unsigned int remainder = m_length-(bus_data_size*count);
-        if(remainder < bus_data_size)
-            return remainder;
-        else
-            return bus_data_size;
-    }
-    
-    // Lock related methods
-    inline bool	                get_lock() const {return m_lock;}
-    inline void                 set_lock(const bool lock){m_lock = lock;}
-    
+    // Streaming related methods
+    inline unsigned int         get_streaming_width() const {return m_streaming_width;}
+    inline void                 set_streaming_width(const unsigned int streaming_width) {m_streaming_width = streaming_width; }
+        
     // Byte enable related methods
     inline bool*                get_byte_enable_ptr() const {return m_byte_enable;}
     inline void                 set_byte_enable_ptr(bool* byte_enable){m_byte_enable = byte_enable;}
@@ -245,11 +227,16 @@ public:
     /*                       - TLM_ADDRESS_ERROR_RESP                        */
     /*                       - TLM_COMMAND_ERROR_RESP                        */
     /*                       - TLM_BURST_ERROR_RESP                          */
+    /*                       - TLM_BYTE_ENABLE_ERROR_RESP                    */
     /*                                                                       */
-    /* - m_streaming_mode  :                                                 */
-    /* - m_lock            :                                                 */
-    /* - m_byte_enable     :                                                 */
-    /* - m_byte_enable_length :                                              */
+    /* - m_byte_enable     : It can be used to create burst transfers where  */
+    /*                    the address increment between each beat is greater */
+    /*                    than the word length of each beat, or to place     */
+	/*                    words in selected byte lanes of a bus.             */
+    /* - m_byte_enable_length : For a read or a write command, the target    */
+    /*                    interpret the byte enable length attribute as the  */
+    /*                    number of elements in the bytes enable array.      */
+    /* - m_streaming_width  :                                                */
     /* --------------------------------------------------------------------- */
 
 private:
@@ -259,10 +246,9 @@ private:
     unsigned char*       m_data;
     unsigned int         m_length;		
     tlm_response_status  m_response_status;
-    bool                 m_streaming_mode;
-    bool                 m_lock;
     bool*                m_byte_enable;
     unsigned int         m_byte_enable_length;
+    unsigned int         m_streaming_width;
     
 public:
    
