@@ -53,13 +53,13 @@ void tlm_target::nb_transport(tlm::tlm_generic_payload* gp)
         {
             // Burst write transaction 
             std::cout << " ( target : write : burst_length<";
-            std::cout << gp->get_burst_length(m_incr_address) << "> )";
+			std::cout << get_burst_length(gp->get_data_length(), m_incr_address) << "> )";
             
-            for(unsigned int bl=0;bl<gp->get_burst_length(m_incr_address);bl++)
+			for(unsigned int bl=0;bl<get_burst_length(gp->get_data_length(), m_incr_address);bl++)
             {
-                m_mem.write(data,addr,gp->get_nr_bytes_of_burst_element(bl,m_incr_address));
+				m_mem.write(data,addr,get_nr_bytes_of_burst_element(bl, gp->get_data_length(), m_incr_address));
                 addr += m_incr_address;
-                data += gp->get_nr_bytes_of_burst_element(bl,m_incr_address);
+				data += get_nr_bytes_of_burst_element(bl, gp->get_data_length(), m_incr_address);
             }
             m_response_status = tlm::TLM_OK_RESPONSE;
         }
@@ -67,13 +67,13 @@ void tlm_target::nb_transport(tlm::tlm_generic_payload* gp)
         {
             // Burst read transaction 
             std::cout << " ( target : read : burst_length<";
-            std::cout << gp->get_burst_length(m_incr_address) << "> )";
+			std::cout << get_burst_length(gp->get_data_length(), m_incr_address) << "> )";
             
-            for(unsigned int bl=0;bl<gp->get_burst_length(m_incr_address);bl++)
+			for(unsigned int bl=0;bl<get_burst_length(gp->get_data_length(), m_incr_address);bl++)
             {
-                m_mem.read(data,addr,gp->get_nr_bytes_of_burst_element(bl,m_incr_address));
-                addr += m_incr_address;
-                data += gp->get_nr_bytes_of_burst_element(bl,m_incr_address);
+				m_mem.read(data,addr,get_nr_bytes_of_burst_element(bl, gp->get_data_length(), m_incr_address));
+				addr += m_incr_address;
+				data += get_nr_bytes_of_burst_element(bl, gp->get_data_length(), m_incr_address);
             }
             m_response_status = tlm::TLM_OK_RESPONSE;
         }
