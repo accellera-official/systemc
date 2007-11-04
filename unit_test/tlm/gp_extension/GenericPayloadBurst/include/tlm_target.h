@@ -57,6 +57,19 @@ private:
 
     tlm::tlm_checker m_checker;
 
+    unsigned int get_burst_length(unsigned int length, unsigned int bus_data_size)
+    {
+        return (length+bus_data_size-1)/bus_data_size;
+    }
+
+	unsigned int get_nr_bytes_of_burst_element(unsigned int count, unsigned int length, unsigned int bus_data_size)
+    {
+        unsigned int remainder = length-(bus_data_size*count);
+        if(remainder < bus_data_size)
+            return remainder;
+        else
+            return bus_data_size;
+    }
 }; 
 
 #endif
