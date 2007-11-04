@@ -22,165 +22,128 @@
 
 namespace tlm {
 
-//
-// Copy from/to a byte array in host endianness
-//
 
+// ///////////////////////////////////////////////////////////////////////// 
 //
-// Serialisation helper functions for standard SystemC data types:
-// sc_int<W>, sc_uint<W>, sc_bigint<W>, sc_biguint<W>
-// For these, the index is not in bytes but in units of W (bit lenght)
+// Copy a word from/to a byte array (GP) in host endianness 
+// taking into account byte-enables
+//
+// serialisation helper functions 
+// for standard SystemC data types : sc_int<W>, sc_uint<W>, sc_bigint<W>, sc_biguint<W>
+// for these, the index is not in bytes but in units of W (bit lenght)
 // (number of bytes read from the array is rounded to W/8)
 //
-template< typename T >
+template< class T >
 inline void copy_from_array( T& data, 
-                             unsigned int index, 
-                             unsigned char* m_data,
-                             bool* m_be,
-                             unsigned int m_be_length,
-                             tlm_endianness endianness)
+							 unsigned int index, 
+							 unsigned char* m_data,
+							 bool* m_be,
+							 unsigned int m_be_length)
 {
-    const int nr_bytes = data.length() / 8;
-    
-    if(m_be == 0)
-    {
-        if (hasHostEndianness(endianness))
-        {
-            for(int b = 0; b < nr_bytes; ++b)
-            {
-                data.range(b*8+7, b*8) = sc_dt::sc_uint<8>(m_data[nr_bytes*index + b]); 
-            }
-        }
-        else
-        {
-            for(int b = 0; b < nr_bytes; ++b)
-            {
-                data.range(b*8+7, b*8) = sc_dt::sc_uint<8>(m_data[nr_bytes*index + (nr_bytes - b - 1)]); 
-            }
-        }
+  const int nr_bytes = data.length() / 8;
+
+  if(m_be == 0){
+    if (hostHasLittleEndianness()){
+      for(int b = 0; b < nr_bytes; ++b) 
+          data.range(b*8+7, b*8) = sc_dt::sc_uint<8>(m_data[nr_bytes*index + b]); 
+    } else {
+      for(int b = 0; b < nr_bytes; ++b) 
+          data.range(b*8+7, b*8) = sc_dt::sc_uint<8>(m_data[nr_bytes*index + (nr_bytes - b - 1)]); 
     }
-    else
-    {
-        if (hasHostEndianness(endianness))
-        {
-            for(int b = 0; b < nr_bytes; ++b)
-            {
-                if(m_be[b % m_be_length])
-                {
-                    data.range(b*8+7, b*8) = sc_dt::sc_uint<8>(m_data[nr_bytes*index + b]);
-                }
-            }
-        }
-        else
-        {
-            for(int b = 0; b < nr_bytes; ++b)
-            {
-                if(m_be[(nr_bytes - b - 1) % m_be_length])
-                {
-                    data.range(b*8+7, b*8) = sc_dt::sc_uint<8>(m_data[nr_bytes*index + (nr_bytes - b - 1)]);
-                }
-            }
-        }
-    }
-    
+  } else {
+    if (hostHasLittleEndianness()){
+      for(int b = 0; b < nr_bytes; ++b)
+		  if(m_be[b % m_be_length])
+            data.range(b*8+7, b*8) = sc_dt::sc_uint<8>(m_data[nr_bytes*index + b]); 
+    } else {
+      for(int b = 0; b < nr_bytes; ++b) 
+          if(m_be[(nr_bytes - b - 1) % m_be_length])
+            data.range(b*8+7, b*8) = sc_dt::sc_uint<8>(m_data[nr_bytes*index + (nr_bytes - b - 1)]); 
+    }  
+  }
 }
 
 template< class T >
-inline void copy_to_array( T& data, 
+inline void copy_to_array( T& data,
                            unsigned int index, 
                            unsigned char* m_data,
                            bool* m_be,
-                           unsigned int m_be_length,
-                           tlm_endianness endianness)
+                           unsigned int m_be_length)
 {
-    const int nr_bytes = data.length() / 8;
-    
-    if(m_be == 0)
-    {
-        if (hasHostEndianness(endianness))
-        {
-            for(int b = 0; b < nr_bytes; ++b)
-            {
-                m_data[nr_bytes*index + b] = (unsigned char)sc_dt::sc_uint<8>(data.range(b*8+7,b*8)).value();
-            }
-        }
-        else
-        {
-            for(int b = 0; b < nr_bytes; ++b)
-            {
-                m_data[nr_bytes*index + (nr_bytes - b - 1)] = (unsigned char)sc_dt::sc_uint<8>(data.range(b*8+7,b*8)).value();
-            }
-        }
+  const int nr_bytes = data.length() / 8;
+
+  if(m_be == 0){
+    if (hostHasLittleEndianness()) {
+       for(int b = 0; b < nr_bytes; ++b) 
+          m_data[nr_bytes*index + b] = sc_dt::sc_uint<8>(data.range(b*8+7,b*8));
+    } else {
+       for(int b = 0; b < nr_bytes; ++b) 
+          m_data[nr_bytes*index + (nr_bytes - b - 1)] = sc_dt::sc_uint<8>(data.range(b*8+7,b*8));
     }
-    else
-    {
-        if (hasHostEndianness(endianness))
-        {
-            for(int b = 0; b < nr_bytes; ++b)
-            {
-                if(m_be[b % m_be_length])
-                {
-                    m_data[nr_bytes*index + b] = (unsigned char)sc_dt::sc_uint<8>(data.range(b*8+7,b*8)).value();
-                }
-            }
-        }
-        else
-        {
-            for(int b = 0; b < nr_bytes; ++b)
-            {
-                if(m_be[(nr_bytes - b - 1) % m_be_length])
-                {
-                    m_data[nr_bytes*index + (nr_bytes - b - 1)] = (unsigned char)sc_dt::sc_uint<8>(data.range(b*8+7,b*8)).value();
-                }
-            }
-        }
+  } else {
+    if (hostHasLittleEndianness()) {
+       for(int b = 0; b < nr_bytes; ++b) 
+		  if(m_be[b % m_be_length])
+            m_data[nr_bytes*index + b] = sc_dt::sc_uint<8>(data.range(b*8+7,b*8));
+    } else {
+       for(int b = 0; b < nr_bytes; ++b) 
+          if(m_be[(nr_bytes - b - 1) % m_be_length])
+            m_data[nr_bytes*index + (nr_bytes - b - 1)] = sc_dt::sc_uint<8>(data.range(b*8+7,b*8));
     }
+  }
 }
 
 
 //
-// Serialisation helper functions for standard C++ data types (up to 64 bits):
-// char, short, int, long, long long
-// For these, the index is not in bytes but in units of sizeof(T)
+// serialisation helper functions 
+// for standard C++ data types (up to 64 bits): char, short, int, long, long long
+// for these, the index is not in bytes but in units of sizeof(T)
 //
 #define TLM_COPY_FROM_ARRAY( otype )  \
-  template<> inline \
-  void copy_from_array( otype& data, unsigned int index, unsigned char* m_data, bool* m_be, unsigned int m_be_length, tlm_endianness endianness) \
-  { \
-    if(m_be == 0) { \
-	  data = reinterpret_cast<otype*>(m_data)[index]; \
-	} else { \
-	  if (hasHostEndianness(endianness)) { \
-		  for(unsigned int b = 0; b < sizeof(otype); ++b) \
-			  if(m_be[b % m_be_length]) \
-				  reinterpret_cast<unsigned char*>(&data)[b] = m_data[sizeof(otype)*index + b]; \
-	  } else { \
-		  for(unsigned int b = 0; b < sizeof(otype); ++b) \
-			  if(m_be[(sizeof(otype) - b - 1) % m_be_length]) \
-				  reinterpret_cast<unsigned char*>(&data)[b] = m_data[sizeof(otype)*index + (sizeof(otype) - b - 1)]; \
-	  } \
-	} \
-  }
+template<> inline \
+void copy_from_array( otype& data, \
+                      unsigned int index,  \
+                      unsigned char* m_data, \
+                      bool* m_be, \
+                      unsigned int m_be_length) \
+{ \
+  if(m_be == 0){ \
+    data = reinterpret_cast<otype*>(m_data)[index]; \
+  } else { \
+    if (hostHasLittleEndianness()){ \
+      for(int b = 0; b < sizeof(otype); ++b) \
+		  if(m_be[b % m_be_length]) \
+            reinterpret_cast<unsigned char*>(&data)[b] = m_data[sizeof(otype)*index + b]; \
+    } else { \
+      for(int b = 0; b < sizeof(otype); ++b) \
+          if(m_be[(sizeof(otype) - b - 1) % m_be_length]) \
+            reinterpret_cast<unsigned char*>(&data)[b] = m_data[sizeof(otype)*index + (sizeof(otype) - b - 1)]; \
+    }  \
+  } \
+}
 
- 
 #define TLM_COPY_TO_ARRAY( otype ) \
-  template<> inline \
-  void copy_to_array( otype& data, unsigned int index, unsigned char* m_data, bool* m_be, unsigned int m_be_length, tlm_endianness endianness) \
-  { \
-    if(m_be == 0) { \
-      reinterpret_cast<otype*>(m_data)[index] = data; \
-	} else { \
-	  if (hasHostEndianness(endianness)) { \
-		  for(unsigned int b = 0; b < sizeof(otype); ++b) \
-			  if(m_be[b % m_be_length]) \
-				  m_data[sizeof(otype)*index + b] = reinterpret_cast<unsigned char*>(&data)[b]; \
-	  } else { \
-		  for(unsigned int b = 0; b < sizeof(data); ++b) \
-			  if(m_be[(sizeof(otype) - b - 1) % m_be_length]) \
-				  m_data[sizeof(otype)*index + (sizeof(otype) - b - 1)] = reinterpret_cast<unsigned char*>(&data)[b]; \
-	  } \
-	} \
-  }
+template<> inline \
+void copy_to_array( otype& data, \
+                    unsigned int index,  \
+                    unsigned char* m_data, \
+                    bool* m_be, \
+                    unsigned int m_be_length) \
+{ \
+  if(m_be == 0){ \
+    reinterpret_cast<otype*>(m_data)[index] = data; \
+  } else { \
+    if (hostHasLittleEndianness()){ \
+      for(int b = 0; b < sizeof(otype); ++b) \
+		  if(m_be[b % m_be_length]) \
+            m_data[sizeof(otype)*index + b] = reinterpret_cast<unsigned char*>(&data)[b]; \
+    } else { \
+      for(int b = 0; b < sizeof(otype); ++b) \
+          if(m_be[(sizeof(otype) - b - 1) % m_be_length]) \
+            m_data[sizeof(otype)*index + (sizeof(otype) - b - 1)] = reinterpret_cast<unsigned char*>(&data)[b]; \
+    }  \
+  } \
+}
 
 TLM_COPY_FROM_ARRAY( signed char );
 TLM_COPY_FROM_ARRAY( signed short );
@@ -203,7 +166,10 @@ TLM_COPY_TO_ARRAY( unsigned short );
 TLM_COPY_TO_ARRAY( unsigned int );
 TLM_COPY_TO_ARRAY( unsigned long );
 TLM_COPY_TO_ARRAY( unsigned long long );
-   
+
+//
+//
+// ///////////////////////////////////////////////////////////////////////// 
 
 } // namespace tlm
 
