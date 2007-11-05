@@ -22,152 +22,220 @@
 
 namespace tlm {
 
+// ///////////////////////////////////////////////////////////////////////// 
+// -- Address helpers --
+//
+// Calculate the necessary offset in the GP array to retrieve the sub-word
+// pointed by the address, taking into account model and host endianness.
+//
+// Takes as input the following parameters:
+//  - address: GP address
+//  - bus_width: size in bytes of the interconnect (socket)
+//  - subword_size: size in bytes of the data to retrieve from GP data array
+//  - endianness: endianness of the model
+//
+// ///////////////////////////////////////////////////////////////////////// 
+
+inline unsigned int get_subword_offset(sc_dt::int64 address,
+									   unsigned int bus_width,
+									   unsigned int subword_size,
+									   tlm_endianness endianness)
+{
+	unsigned int offset = ((address%bus_width)/subword_size)*subword_size;
+	if(hasHostEndianness(endianness)) 
+	  return offset;
+	else
+	  return bus_width - offset - subword_size;
+}
+
+// ///////////////////////////////////////////////////////////////////////// 
 
 // ///////////////////////////////////////////////////////////////////////// 
 //
-// Copy a word from/to a byte array (GP) in host endianness 
-// taking into account byte-enables
+// -- Serialisation helper functions  --
 //
-// serialisation helper functions 
-// for standard SystemC data types : sc_int<W>, sc_uint<W>, sc_bigint<W>, sc_biguint<W>
-// for these, the index is not in bytes but in units of W (bit lenght)
-// (number of bytes read from the array is rounded to W/8)
+// Copy a word from/to a byte array (GP) taking into account byte-enables
+// 
+// These functions work for :
+//  - standard SystemC data types : sc_int<W>, sc_uint<W>, sc_bigint<W>, sc_biguint<W>
+//  - standard C++ data types (up to 64 bits): char, short, int, long, long long
+//  - char* as used in tlm_memory
+//
+// Serializers take as input the following parameters:
+//  - data_word: SystemC type, C++ type or char* (but its size has to be smaller than the bus width)
+//  - offset:  offset in bytes on the GP data array
+//  - nr_bytes:  number of bytes that are copied (normally ok if equal to data_word size)
+//  - m_data:    GP data array 
+//  - m_be:      GP byte-enable pointer
+//  - m_be_length: GP byte-enable length attribute
+//
+// ///////////////////////////////////////////////////////////////////////// 
+
+template<class T> 
+void copy_word_from_array( T& data_word, 
+                           unsigned int offset, 
+                           unsigned int nr_bytes,  
+						   unsigned char *m_data,
+                           bool *m_be, 
+                           unsigned int m_be_length); 
+
+template<class T>
+void copy_word_to_array( T& data_word, 
+                           unsigned int offset, 
+                           unsigned int nr_bytes,  
+						   unsigned char *m_data,
+                           bool *m_be, 
+                           unsigned int m_be_length); 
+
+// ///////////////////////////////////////////////////////////////////////// 
+// SystemC data types : sc_int<W>, sc_uint<W>, sc_bigint<W>, sc_biguint<W>
+// ///////////////////////////////////////////////////////////////////////// 
 //
 template< class T >
-inline void copy_from_array( T& data, 
-							 unsigned int index, 
-							 unsigned char* m_data,
-							 bool* m_be,
-							 unsigned int m_be_length)
+inline void copy_word_from_array( T& data_word, 
+                           unsigned int offset, 
+                           unsigned int nr_bytes,  
+						   unsigned char *m_data,
+                           bool *m_be, 
+                           unsigned int m_be_length) 
 {
-  const int nr_bytes = data.length() / 8;
-
-  if(m_be == 0){
-    if (hostHasLittleEndianness()){
-      for(int b = 0; b < nr_bytes; ++b) 
-          data.range(b*8+7, b*8) = sc_dt::sc_uint<8>(m_data[nr_bytes*index + b]); 
-    } else {
-      for(int b = 0; b < nr_bytes; ++b) 
-          data.range(b*8+7, b*8) = sc_dt::sc_uint<8>(m_data[nr_bytes*index + (nr_bytes - b - 1)]); 
-    }
-  } else {
-    if (hostHasLittleEndianness()){
-      for(int b = 0; b < nr_bytes; ++b)
-		  if(m_be[b % m_be_length])
-            data.range(b*8+7, b*8) = sc_dt::sc_uint<8>(m_data[nr_bytes*index + b]); 
-    } else {
-      for(int b = 0; b < nr_bytes; ++b) 
-          if(m_be[(nr_bytes - b - 1) % m_be_length])
-            data.range(b*8+7, b*8) = sc_dt::sc_uint<8>(m_data[nr_bytes*index + (nr_bytes - b - 1)]); 
-    }  
-  }
+	unsigned int data_size = data_word.length()/8;
+	assert(nr_bytes <= data_size);
+    if(m_be == 0) 
+      for(int b=0; b<nr_bytes; b++)
+        data_word.range(b*8+7, b*8) = sc_dt::sc_uint<8>(m_data[offset+b]); 
+    else
+      for(int b=0; b<nr_bytes; b++)
+        if(m_be[(offset + b) % m_be_length]) 
+          data_word.range(b*8+7, b*8) = sc_dt::sc_uint<8>(m_data[offset+b]);
 }
 
 template< class T >
-inline void copy_to_array( T& data,
-                           unsigned int index, 
-                           unsigned char* m_data,
-                           bool* m_be,
+inline void copy_word_to_array( T& data_word, 
+                           unsigned int offset, 
+                           unsigned int nr_bytes,  
+						   unsigned char *m_data,
+                           bool *m_be, 
                            unsigned int m_be_length)
 {
-  const int nr_bytes = data.length() / 8;
-
-  if(m_be == 0){
-    if (hostHasLittleEndianness()) {
-       for(int b = 0; b < nr_bytes; ++b) 
-          m_data[nr_bytes*index + b] = sc_dt::sc_uint<8>(data.range(b*8+7,b*8));
-    } else {
-       for(int b = 0; b < nr_bytes; ++b) 
-          m_data[nr_bytes*index + (nr_bytes - b - 1)] = sc_dt::sc_uint<8>(data.range(b*8+7,b*8));
-    }
-  } else {
-    if (hostHasLittleEndianness()) {
-       for(int b = 0; b < nr_bytes; ++b) 
-		  if(m_be[b % m_be_length])
-            m_data[nr_bytes*index + b] = sc_dt::sc_uint<8>(data.range(b*8+7,b*8));
-    } else {
-       for(int b = 0; b < nr_bytes; ++b) 
-          if(m_be[(nr_bytes - b - 1) % m_be_length])
-            m_data[nr_bytes*index + (nr_bytes - b - 1)] = sc_dt::sc_uint<8>(data.range(b*8+7,b*8));
-    }
-  }
+	unsigned int data_size = data_word.length()/8;	
+	assert(nr_bytes <= data_size);
+    if(m_be == 0) 
+      for(int b=0; b<nr_bytes; b++)
+        m_data[offset+b] = sc_dt::sc_uint<8>(data_word.range(b*8+7, b*8)); 
+    else
+      for(int b=0; b<nr_bytes; b++)
+        if(m_be[(offset + b) % m_be_length]) 
+          m_data[offset+b] = sc_dt::sc_uint<8>(data_word.range(b*8+7, b*8));
 }
-
-
 //
-// serialisation helper functions 
-// for standard C++ data types (up to 64 bits): char, short, int, long, long long
-// for these, the index is not in bytes but in units of sizeof(T)
+// ///////////////////////////////////////////////////////////////////////// 
+
+// ///////////////////////////////////////////////////////////////////////// 
+// Standard C++ data types (up to 64 bits): char, short, int, long, long long
+// ///////////////////////////////////////////////////////////////////////// 
 //
-#define TLM_COPY_FROM_ARRAY( otype )  \
+#define TLM_COPY_WORD_FROM_ARRAY( otype ) \
 template<> inline \
-void copy_from_array( otype& data, \
-                      unsigned int index,  \
-                      unsigned char* m_data, \
-                      bool* m_be, \
-                      unsigned int m_be_length) \
+void copy_word_from_array( otype& data_word, \
+	                       unsigned int offset, \
+						   unsigned int nr_bytes, \
+						   unsigned char *m_data, \
+						   bool *m_be, \
+						   unsigned int m_be_length) \
 { \
-  if(m_be == 0){ \
-    data = reinterpret_cast<otype*>(m_data)[index]; \
-  } else { \
-    if (hostHasLittleEndianness()){ \
-      for(int b = 0; b < sizeof(otype); ++b) \
-		  if(m_be[b % m_be_length]) \
-            reinterpret_cast<unsigned char*>(&data)[b] = m_data[sizeof(otype)*index + b]; \
-    } else { \
-      for(int b = 0; b < sizeof(otype); ++b) \
-          if(m_be[(sizeof(otype) - b - 1) % m_be_length]) \
-            reinterpret_cast<unsigned char*>(&data)[b] = m_data[sizeof(otype)*index + (sizeof(otype) - b - 1)]; \
-    }  \
-  } \
+	unsigned int data_size = sizeof(otype); \
+	assert(nr_bytes <= data_size); \
+    if(m_be == 0) \
+	  for(int b=0; b<nr_bytes; b++) \
+	    reinterpret_cast<unsigned char*>(&data_word)[b] = m_data[offset+b]; \
+	else \
+	  for(int b=0; b<nr_bytes; b++) \
+	    if(m_be[(offset + b) % m_be_length]) \
+		  reinterpret_cast<unsigned char*>(&data_word)[b] = m_data[offset+b]; \
 }
 
-#define TLM_COPY_TO_ARRAY( otype ) \
+#define TLM_COPY_WORD_TO_ARRAY( otype )  \
 template<> inline \
-void copy_to_array( otype& data, \
-                    unsigned int index,  \
-                    unsigned char* m_data, \
-                    bool* m_be, \
-                    unsigned int m_be_length) \
+void copy_word_to_array( otype& data_word, \
+	                       unsigned int offset, \
+						   unsigned int nr_bytes, \
+						   unsigned char *m_data, \
+						   bool *m_be, \
+						   unsigned int m_be_length) \
 { \
-  if(m_be == 0){ \
-    reinterpret_cast<otype*>(m_data)[index] = data; \
-  } else { \
-    if (hostHasLittleEndianness()){ \
-      for(int b = 0; b < sizeof(otype); ++b) \
-		  if(m_be[b % m_be_length]) \
-            m_data[sizeof(otype)*index + b] = reinterpret_cast<unsigned char*>(&data)[b]; \
-    } else { \
-      for(int b = 0; b < sizeof(otype); ++b) \
-          if(m_be[(sizeof(otype) - b - 1) % m_be_length]) \
-            m_data[sizeof(otype)*index + (sizeof(otype) - b - 1)] = reinterpret_cast<unsigned char*>(&data)[b]; \
-    }  \
-  } \
+	unsigned int data_size = sizeof(otype); \
+	assert(nr_bytes <= data_size); \
+    if(m_be == 0) \
+      for(int b=0; b<nr_bytes; b++) \
+        m_data[offset+b] = reinterpret_cast<unsigned char*>(&data_word)[b]; \
+	else \
+      for(int b=0; b<nr_bytes; b++) \
+        if(m_be[(offset+b) % m_be_length]) \
+          m_data[offset+b] = reinterpret_cast<unsigned char*>(&data_word)[b]; \
 }
 
-TLM_COPY_FROM_ARRAY( signed char );
-TLM_COPY_FROM_ARRAY( signed short );
-TLM_COPY_FROM_ARRAY( signed int );
-TLM_COPY_FROM_ARRAY( signed long );
-TLM_COPY_FROM_ARRAY( signed long long );
-TLM_COPY_FROM_ARRAY( unsigned char );
-TLM_COPY_FROM_ARRAY( unsigned short );
-TLM_COPY_FROM_ARRAY( unsigned int );
-TLM_COPY_FROM_ARRAY( unsigned long );
-TLM_COPY_FROM_ARRAY( unsigned long long );
+TLM_COPY_WORD_FROM_ARRAY( signed char );
+TLM_COPY_WORD_FROM_ARRAY( signed short );
+TLM_COPY_WORD_FROM_ARRAY( signed int );
+TLM_COPY_WORD_FROM_ARRAY( signed long );
+TLM_COPY_WORD_FROM_ARRAY( signed long long );
+TLM_COPY_WORD_FROM_ARRAY( unsigned char );
+TLM_COPY_WORD_FROM_ARRAY( unsigned short );
+TLM_COPY_WORD_FROM_ARRAY( unsigned int );
+TLM_COPY_WORD_FROM_ARRAY( unsigned long );
+TLM_COPY_WORD_FROM_ARRAY( unsigned long long );
 
-TLM_COPY_TO_ARRAY( signed char );
-TLM_COPY_TO_ARRAY( signed short );
-TLM_COPY_TO_ARRAY( signed int );
-TLM_COPY_TO_ARRAY( signed long );
-TLM_COPY_TO_ARRAY( signed long long );
-TLM_COPY_TO_ARRAY( unsigned char );
-TLM_COPY_TO_ARRAY( unsigned short );
-TLM_COPY_TO_ARRAY( unsigned int );
-TLM_COPY_TO_ARRAY( unsigned long );
-TLM_COPY_TO_ARRAY( unsigned long long );
+TLM_COPY_WORD_TO_ARRAY( signed char );
+TLM_COPY_WORD_TO_ARRAY( signed short );
+TLM_COPY_WORD_TO_ARRAY( signed int );
+TLM_COPY_WORD_TO_ARRAY( signed long );
+TLM_COPY_WORD_TO_ARRAY( signed long long );
+TLM_COPY_WORD_TO_ARRAY( unsigned char );
+TLM_COPY_WORD_TO_ARRAY( unsigned short );
+TLM_COPY_WORD_TO_ARRAY( unsigned int );
+TLM_COPY_WORD_TO_ARRAY( unsigned long );
+TLM_COPY_WORD_TO_ARRAY( unsigned long long );
 
 //
+// ///////////////////////////////////////////////////////////////////////// 
+
+
+// ///////////////////////////////////////////////////////////////////////// 
+// char* specialization
+// ///////////////////////////////////////////////////////////////////////// 
+//
+inline void copy_word_from_array( unsigned char* data_word, 
+	                       unsigned int offset, 
+						   unsigned int nr_bytes, 
+						   unsigned char *m_data, 
+						   bool *m_be, 
+						   unsigned int m_be_length) 
+{
+    if(m_be == 0) 
+      for(int b=0; b<nr_bytes; b++)
+        data_word[b] = m_data[offset+b]; 
+    else
+      for(int b=0; b<nr_bytes; b++)
+        if(m_be[(offset+b) % m_be_length]) 
+          data_word[b] = m_data[offset+b];
+}
+
+inline void copy_word_to_array( unsigned char* data_word, 
+	                       unsigned int offset, 
+						   unsigned int nr_bytes, 
+						   unsigned char *m_data, 
+						   bool *m_be, 
+						   unsigned int m_be_length) 
+{
+    if(m_be == 0) 
+      for(int b=0; b<nr_bytes; b++)
+        m_data[offset+b] = data_word[b]; 
+    else
+      for(int b=0; b<nr_bytes; b++)
+        if(m_be[(offset+b) % m_be_length]) 
+          m_data[offset+b] = data_word[b];
+}
 //
 // ///////////////////////////////////////////////////////////////////////// 
 
