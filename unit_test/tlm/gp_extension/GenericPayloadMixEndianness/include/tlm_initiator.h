@@ -55,14 +55,10 @@ public:
 
 		// The master stores the data in host-endianess (arithmetic mode), 
 		// but uses its m_endianess in the GP
-		//if(hasHostEndianness(m_endianness))
-		//{
-			wr_data = data;
-		//}
-		//else
-		//{
-		//	tlm::swap_and_copy_from_array(wr_data, reinterpret_cast<unsigned char*>(&data), 4, 0, 0);
-		//}
+		
+		//wr_data = data;
+		tlm::copy_word_from_array(wr_data, 0, 4, reinterpret_cast<unsigned char*>(&data), 0, 0);
+
 
 		// Test 1: Write and read to a Little-Endian slave
 		std::cout << std::endl;

@@ -50,6 +50,8 @@ public:
 
 		mem = new unsigned int [(end_address-start_address+1)/4];
 
+		socket_bus_width = socket.get_bus_width()/8;
+
 		m_checker.burst_mode_streaming_not_supported();
 	}
 
@@ -71,18 +73,22 @@ public:
 			bool*          m_be        = trans.get_byte_enable_ptr();
 			unsigned int   m_be_length = trans.get_byte_enable_length();
 
-			for(int b = 0; b < get_burst_length(m_length, socket.get_bus_width()/8); b++)
+			for(int b = 0; b < get_burst_length(m_length, socket_bus_width); b++)
 			{
-				unsigned int nr_bytes = get_nr_bytes_of_burst_element(b, m_length, socket.get_bus_width()/8);
+				unsigned int nr_bytes = get_nr_bytes_of_burst_element(b, m_length, socket_bus_width);
+				unsigned int offset = tlm::get_subword_offset(m_addr, socket_bus_width, nr_bytes, m_endianness);
+				
 
 				// The slave assumes that GP comes in its m_endianess,
 				// but stores the data in host-endianess (arithmetic mode) 
-				//if(hasHostEndianness(m_endianness))
-				//{
-					if(trans.is_write()) {
-						
-						//tlm::direct_copy_from_array( mem[b], m_data, nr_bytes, m_be, m_be_length);
-						tlm::copy_from_array( mem[b], b, m_data, m_be, m_be_length);
+					if(trans.is_write()) 
+					{						
+						tlm::copy_word_from_array( mem[b], 
+						                           offset, 
+												   nr_bytes, 
+												   m_data, 
+												   m_be, 
+												   m_be_length);
 
 						std::cout << name() << " : burst write : A = 0x"
 							<< std::hex << m_addr
@@ -91,35 +97,20 @@ public:
 
 					} else {
 						
-						//tlm::direct_copy_to_array( mem[b], m_data, nr_bytes, m_be, m_be_length);
-						tlm::copy_to_array( mem[b], b, m_data, m_be, m_be_length);
+						tlm::copy_word_to_array(   mem[b], 
+							                       offset, 
+												   nr_bytes, 
+												   m_data, 
+												   m_be, 
+												   m_be_length);
 
 						std::cout << name() << " : burst read : A = 0x"
 							<< std::hex << m_addr << std::dec
 							<< " @ " << sc_core::sc_time_stamp() << std::endl;
 					}
-				//} else {
-				//	if(trans.is_write()) 
-				//	{
-				//		tlm::swap_and_copy_from_array( mem[b], m_data, nr_bytes, m_be, m_be_length);
-
-				//		std::cout << name() << ": burst write : A = 0x"
-				//			<< std::hex << m_addr
-				//			<< ", D = 0x" << mem[b] << std::dec
-				//			<< " @ " << sc_core::sc_time_stamp() << std::endl;
-
-				//	} else {
-
-				//		tlm::swap_and_copy_to_array( mem[b], m_data, nr_bytes, m_be, m_be_length);
-
-				//		std::cout << name() << " : burst read : A = 0x"
-				//			<< std::hex << m_addr << std::dec
-				//			<< " @ " << sc_core::sc_time_stamp() << std::endl;
-				//	}
-				//}
 
 				m_addr += socket.get_bus_width()/8;
-				//m_data += nr_bytes;
+				m_data += nr_bytes;
 			}
 
 			m_response_status = tlm::TLM_OK_RESPONSE;
@@ -132,7 +123,7 @@ public:
 		trans.set_response_status(m_response_status);
 
 		// Time annotation
-		t += sc_core::sc_time(10*get_burst_length(trans.get_data_length(), socket.get_bus_width()/8), sc_core::SC_NS);
+		t += sc_core::sc_time(10*get_burst_length(trans.get_data_length(), socket_bus_width), sc_core::SC_NS);
 
     // LT slave
     // - always return true
@@ -149,6 +140,7 @@ private:
 
 	tlm::tlm_checker m_checker;
 	tlm::tlm_endianness m_endianness;
+	unsigned int   socket_bus_width;
 
     unsigned int get_burst_length(unsigned int length, unsigned int bus_data_size)
     {

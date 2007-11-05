@@ -37,7 +37,7 @@ tlm_target::tlm_target(sc_module_name _name,
     
     bus_port.bind(*this);
     
-    m_incr_address = bus_port.getBusDataWidth()/8; // bus data width in bytes
+    m_socket_width = bus_port.getBusDataWidth()/8; // bus data width in bytes
     
     m_checker.burst_not_supported();
 }
@@ -49,14 +49,14 @@ void tlm_target::nb_transport(tlm::tlm_generic_payload* gp)
     
     if(m_checker.transactionIsValid(gp))
     {
-#ifdef TLM_MEMORY_ENABLE
-        unsigned int addr = (unsigned int)gp->get_address() - m_start_address;
-#endif
+        unsigned int   addr = (unsigned int)gp->get_address() - m_start_address;
         unsigned char* data = gp->get_data_ptr();
-        // Byte enables are supported
-        bool* m_be = gp->get_byte_enable_ptr();
-        unsigned int m_be_length = gp->get_byte_enable_length();
+        bool*          m_be = gp->get_byte_enable_ptr();
+        unsigned int   m_be_length = gp->get_byte_enable_length();
         
+		//unsigned int sub_word = (addr%m_socket_width)/gp->get_data_length();
+		unsigned int offset;
+
         if(gp->is_write())
         {
 #ifdef TLM_MEMORY_ENABLE
@@ -67,26 +67,40 @@ void tlm_target::nb_transport(tlm::tlm_generic_payload* gp)
             switch(gp->get_data_length())
             {
             case 1: // 8 bits
-				tlm::copy_from_array< unsigned char >(reg8,0,data,m_be,m_be_length);
+				//tlm::copy_word_from_array< unsigned char >(reg8,sub_word,m_socket_width,1,data,m_be,m_be_length,m_endianness);
+				offset = get_subword_offset(addr, m_socket_width, 1, m_endianness);
+				tlm::copy_word_from_array< unsigned char >(reg8, offset, 1, data, m_be, m_be_length);
 				break;
 			case 2: // 16-bits
-				tlm::copy_from_array< unsigned short >(reg16,0,data,m_be,m_be_length);
+				//tlm::copy_word_from_array< unsigned short >(reg16,sub_word,m_socket_width,2,data,m_be,m_be_length,m_endianness);
+				offset = get_subword_offset(addr, m_socket_width, 2, m_endianness);
+				tlm::copy_word_from_array< unsigned short >(reg16, offset, 2, data, m_be, m_be_length);
 				break;
 			case 4: // 32-bits 
-				tlm::copy_from_array< unsigned int >(reg32,0,data,m_be,m_be_length);
+				//tlm::copy_word_from_array< unsigned int >(reg32,sub_word,m_socket_width,4,data,m_be,m_be_length,m_endianness);
+				offset = get_subword_offset(addr, m_socket_width, 4, m_endianness);
+				tlm::copy_word_from_array< unsigned int >(reg32, offset, 4, data, m_be, m_be_length);
 				break;
 			case 6: // 48-bits
-				tlm::copy_from_array< sc_uint<48> >(reg48,0,data,m_be,m_be_length);
+				//tlm::copy_word_from_array< sc_uint<48> >(reg48,sub_word,m_socket_width,6,data,m_be,m_be_length,m_endianness);
+				offset = get_subword_offset(addr, m_socket_width, 6, m_endianness);
+				tlm::copy_word_from_array< sc_uint<48> >(reg48, offset, 6, data, m_be, m_be_length);
 				break;
 			case 8: // 64-bits
-				tlm::copy_from_array< unsigned long long >(reg64,0,data,m_be,m_be_length);
+				//tlm::copy_word_from_array< unsigned long long >(reg64,sub_word,m_socket_width,8,data,m_be,m_be_length,m_endianness);
+				offset = get_subword_offset(addr, m_socket_width, 8, m_endianness);
+				tlm::copy_word_from_array< unsigned long long >(reg64, offset, 8, data, m_be, m_be_length);
 				break;
 			case 16: // 128-bits
-				tlm::copy_from_array< sc_biguint<128> >(reg128,0,data,m_be,m_be_length);
+				//tlm::copy_word_from_array< sc_biguint<128> >(reg128,sub_word,m_socket_width,16,data,m_be,m_be_length,m_endianness);
+				offset = get_subword_offset(addr, m_socket_width, 16, m_endianness);
+				tlm::copy_word_from_array< sc_biguint<128> >(reg128, offset, 16, data, m_be, m_be_length);
 				break;
 			case 32: // 256-bits
 			default:
-				tlm::copy_from_array< sc_biguint<256> >(reg256,0,data,m_be,m_be_length);
+				//tlm::copy_word_from_array< sc_biguint<256> >(reg256,sub_word,m_socket_width,32,data,m_be,m_be_length,m_endianness);
+				offset = get_subword_offset(addr, m_socket_width, 32, m_endianness);
+				tlm::copy_word_from_array< sc_biguint<256> >(reg256, offset, 32, data, m_be, m_be_length);
 				break;
 			}			
 #endif					
@@ -102,26 +116,40 @@ void tlm_target::nb_transport(tlm::tlm_generic_payload* gp)
 			switch(gp->get_data_length())
 			{
 			case 1: // 8 bits
-				tlm::copy_to_array< unsigned char >(reg8,0,data,m_be,m_be_length);
+				//tlm::copy_word_to_array< unsigned char >(reg8,sub_word,m_socket_width,1,data,m_be,m_be_length,m_endianness);
+				offset = get_subword_offset(addr, m_socket_width, 1, m_endianness);
+				tlm::copy_word_to_array< unsigned char >(reg8, offset, 1, data, m_be, m_be_length);
 				break;
 			case 2: // 16-bits
-				tlm::copy_to_array< unsigned short >(reg16,0,data,m_be,m_be_length);
+				//tlm::copy_word_to_array< unsigned short >(reg16,sub_word,m_socket_width,2,data,m_be,m_be_length,m_endianness);
+				offset = get_subword_offset(addr, m_socket_width, 2, m_endianness);
+				tlm::copy_word_to_array< unsigned short >(reg16, offset, 2, data, m_be, m_be_length);
 				break;
 			case 4: // 32-bits 
-				tlm::copy_to_array< unsigned int >(reg32,0,data,m_be,m_be_length);
+				//tlm::copy_word_to_array< unsigned int >(reg32,sub_word,m_socket_width,4,data,m_be,m_be_length,m_endianness);
+				offset = get_subword_offset(addr, m_socket_width, 4, m_endianness);
+				tlm::copy_word_to_array< unsigned int >(reg32, offset, 4, data, m_be, m_be_length);
 				break;
 			case 6: // 48-bits
-				tlm::copy_to_array< sc_uint<48> >(reg48,0,data,m_be,m_be_length);
+				//tlm::copy_word_to_array< sc_uint<48> >(reg48,sub_word,m_socket_width,6,data,m_be,m_be_length,m_endianness);
+				offset = get_subword_offset(addr, m_socket_width, 6, m_endianness);
+				tlm::copy_word_to_array< sc_uint<48> >(reg48, offset, 6, data, m_be, m_be_length);
 				break;
 			case 8: // 64-bits
-				tlm::copy_to_array< unsigned long long >(reg64,0,data,m_be,m_be_length);
+				//tlm::copy_word_to_array< unsigned long long >(reg64,sub_word,m_socket_width,8,data,m_be,m_be_length,m_endianness);
+				offset = get_subword_offset(addr, m_socket_width, 8, m_endianness);
+				tlm::copy_word_to_array< unsigned long long >(reg64, offset, 8, data, m_be, m_be_length);
 				break;
 			case 16: // 128-bits
-				tlm::copy_to_array< sc_biguint<128> >(reg128,0,data,m_be,m_be_length);
+				//tlm::copy_word_to_array< sc_biguint<128> >(reg128,sub_word,m_socket_width,16,data,m_be,m_be_length,m_endianness);
+				offset = get_subword_offset(addr, m_socket_width, 16, m_endianness);
+				tlm::copy_word_to_array< sc_biguint<128> >(reg128, offset, 16, data, m_be, m_be_length);
 				break;
 			case 32: // 256-bits
 			default:
-				tlm::copy_to_array< sc_biguint<256> >(reg256,0,data,m_be,m_be_length);
+				//tlm::copy_word_to_array< sc_biguint<256> >(reg256,sub_word,m_socket_width,32,data,m_be,m_be_length,m_endianness);
+				offset = get_subword_offset(addr, m_socket_width, 32, m_endianness);
+				tlm::copy_word_to_array< sc_biguint<256> >(reg256, offset, 32, data, m_be, m_be_length);
 				break;
             }
 #endif					

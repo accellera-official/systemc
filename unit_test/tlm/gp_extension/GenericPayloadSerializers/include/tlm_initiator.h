@@ -34,9 +34,10 @@ public:
     SC_HAS_PROCESS(tlm_initiator);
 
     // Constructor
-    tlm_initiator(sc_module_name _name)
+	tlm_initiator(sc_module_name _name, tlm::tlm_endianness endianness = tlm::TLM_LITTLE_ENDIAN)
         : sc_module(_name)
         , bus_port("bus_port")
+		, m_endianness(endianness)
     {
         SC_THREAD(main);
     }
@@ -89,40 +90,42 @@ private:
     bool          *be;
     unsigned int   be_length;
     
-    template< class T >
-	void prepare_arrays(int nbits, T& reg, bool shift = false);
     
     template< int W >
 	void write(unsigned int address, unsigned char *data, bool* be = 0, unsigned int be_length = 0);
     template< int W >
 	void read(unsigned int address, unsigned char *data, bool* be = 0, unsigned int be_length = 0);
-    
+
+	template< class T >
+	void prepare_address_and_data(int nbits, unsigned int& address, T& data);
+
+	void prepare_arrays(int nbits, bool shift = false);
     void compare_arrays(int nbits);
-    
+ 
+	tlm::tlm_endianness m_endianness;
+  
 };
 
+
+
+
+
 template< class T >
-void tlm_initiator::prepare_arrays(int nbits, T& reg, bool shift) 
+void tlm_initiator::prepare_address_and_data(int nbits, unsigned int& address, T& data)
 {
-    wr_data = new unsigned char [nbits/8]; 
-    aux_data = new unsigned char [nbits/8]; 
-    rd_data = new unsigned char [nbits/8];
-    be = new bool [nbits/8];
-    be_length = nbits/8;
-    
-    // Initialiaze arrays
-    for(int i=0;i<nbits/8;i++)
-    {
-        if(shift) {
-            wr_data[i] = i << 4;	aux_data[i] = 0; rd_data[i] = 0; be[i] = true;
-        } else {
-            wr_data[i] = i;	aux_data[i] = 0; rd_data[i] = 0; be[i] = true;
-        }
-    }
-    
+	address = 0;
+	if(hasHostEndianness(m_endianness) == false)
+	{
+		address += (bus_port.getBusDataWidth() - nbits)/8;
+	}
+
+	unsigned temp = address % (bus_port.getBusDataWidth()/8);
+	unsigned int sub_word = temp / (nbits/8);
+	unsigned int offset = tlm::get_subword_offset(address, bus_port.getBusDataWidth()/8, nbits/8, m_endianness);
+
     // test serializers in the initiator 
-    tlm::copy_from_array< T >(reg, 0, wr_data, 0, 0);
-    tlm::copy_to_array< T >(reg, 0, aux_data, 0, 0);
+	tlm::copy_word_from_array< T >(data, offset, nbits/8, wr_data, 0, 0);
+    tlm::copy_word_to_array< T >(data, offset, nbits/8, aux_data, 0, 0);
 }
 
 
@@ -134,7 +137,7 @@ void tlm_initiator::write(unsigned int address, unsigned char *data, bool* be, u
 {
     // Single WRITE transaction 
     
-    std::cout << name() << " : Single WRITE transaction : "; 
+	std::cout << name() << " : Single WRITE transaction : ADDRESS = 0x" << std::hex << address << std::dec << " : "; 
     
     m_gp.set_command(tlm::TLM_WRITE_COMMAND);
     m_gp.set_address(address);
@@ -162,7 +165,7 @@ template< int W >
 void tlm_initiator::read(unsigned int address, unsigned char *data, bool* be, unsigned int be_length)
 {
     // Single READ transaction 
-    std::cout << name() << " : Single READ transaction : "; 
+    std::cout << name() << " : Single READ transaction : ADDRESS = 0x" << std::hex << address << std::dec << " : ";  
     
     m_gp.set_command(tlm::TLM_READ_COMMAND);
     m_gp.set_address(address);

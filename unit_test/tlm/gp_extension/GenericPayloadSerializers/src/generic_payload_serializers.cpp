@@ -28,8 +28,10 @@ int sc_main(int argc, char* argv[])
     tlm_target*          target_1 = 0;
 
     // construction
-    initiator_1 = new tlm_initiator("initiator_1");
-    target_1  = new tlm_target("target_1", 0, 1023);
+	initiator_1 = new tlm_initiator("initiator_1", tlm::TLM_LITTLE_ENDIAN);
+    target_1  = new tlm_target("target_1", 0, 1023, tlm::TLM_LITTLE_ENDIAN);
+	//initiator_1 = new tlm_initiator("initiator_1", tlm::TLM_BIG_ENDIAN);
+    //target_1  = new tlm_target("target_1", 0, 1023, tlm::TLM_BIG_ENDIAN);
     
     // connections
     initiator_1->bus_port(target_1->bus_port);

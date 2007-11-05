@@ -19,110 +19,113 @@
 
 void tlm_initiator::test_without_be()
 {
+	unsigned int address = 0;
+
     // Test 256-bit access
     std::cout << std::endl;
-    prepare_arrays< sc_biguint<256> >(256, reg256);
-    write<256>(0,aux_data);
-    read<256>(0,rd_data);
+    prepare_arrays(256);
+    prepare_address_and_data< sc_biguint<256> >(256, address, reg256);  
+	write<256>(address,aux_data);
+    read<256>(address,rd_data);
     compare_arrays(256);
     
     // Test 128-bit access 
     std::cout << std::endl;
-    prepare_arrays< sc_bigint<128> >(128, reg128, true);
-    write<128>(0,aux_data);
-    read<128>(0,rd_data);
+    prepare_arrays(128, true);
+    prepare_address_and_data< sc_bigint<128> >(128, address, reg128);  
+    write<128>(address,aux_data);
+    read<128>(address,rd_data);
     compare_arrays(128);
     
     // Test 64-bit access 
     std::cout << std::endl;
-    prepare_arrays< sc_uint<64> >(64, reg64);
-    write<64>(0,aux_data);
-    read<64>(0,rd_data);
+    prepare_arrays(64);
+    prepare_address_and_data< sc_uint<64> >(64, address, reg64);  
+    write<64>(address,aux_data);
+    read<64>(address,rd_data);
     compare_arrays(64);
-    
-    // Test 48-bit access 
-    std::cout << std::endl;
-    prepare_arrays< sc_int<48> >(48, reg48, true);
-    write<48>(0,aux_data);
-    read<48>(0,rd_data);
-    compare_arrays(48);
     
     // Test 32-bit access 
     std::cout << std::endl;
-    prepare_arrays< unsigned int >(32, reg32);
-    write<32>(0,aux_data);
-    read<32>(0,rd_data);
+    prepare_arrays(32, true);
+    prepare_address_and_data< unsigned int >(32, address, reg32);
+    write<32>(address,aux_data);
+    read<32>(address,rd_data);
     compare_arrays(32);
     
     // Test 16-bit access 
     std::cout << std::endl;
-    prepare_arrays< short >(16, reg16, true);
-    write<16>(0,aux_data);
-    read<16>(0,rd_data);
+    prepare_arrays(16);
+	prepare_address_and_data< short >(16, address, reg16);
+    write<16>(address,aux_data);
+    read<16>(address,rd_data);
     compare_arrays(16);
     
     // Test 8-bit access 
     std::cout << std::endl;
-    prepare_arrays< unsigned char >(8, reg8);
-    write<8>(0,aux_data);
-    read<8>(0,rd_data);
+    prepare_arrays(8, true);
+    prepare_address_and_data< unsigned char >(8, address, reg8);
+    write<8>(address,aux_data);
+    read<8>(address,rd_data);
     compare_arrays(8);
 }
 
 void tlm_initiator::test_with_be()
 {
-    // Test 256-bit access
+	unsigned int address = 0;
+
+	// Test 256-bit access
     std::cout << std::endl;
-    prepare_arrays< sc_biguint<256> >(256, reg256, true);
-    write<256>(0,aux_data, be, be_length);
-    read<256>(0,rd_data, be, be_length);
+    prepare_arrays(256,true);
+    prepare_address_and_data< sc_biguint<256> >(256, address, reg256);  
+	write<256>(address,aux_data, be, be_length);
+    read<256>(address,rd_data, be, be_length);
     compare_arrays(256);
-    
+
     // Test 128-bit access 
     std::cout << std::endl;
-    prepare_arrays< sc_bigint<128> >(128, reg128);
-    write<128>(0,aux_data, be, be_length);
-    read<128>(0,rd_data, be, be_length);
+    prepare_arrays(128);
+    prepare_address_and_data< sc_bigint<128> >(128, address, reg128);  
+    write<128>(address,aux_data, be, be_length);
+    read<128>(address,rd_data, be, be_length);
     compare_arrays(128);
     
     // Test 64-bit access 
     std::cout << std::endl;
-    prepare_arrays< sc_uint<64> >(64, reg64, true);
-    write<64>(0,aux_data, be, be_length);
-    read<64>(0,rd_data, be, be_length);
+    prepare_arrays(64,true);
+    prepare_address_and_data< sc_uint<64> >(64, address, reg64);  
+    write<64>(address,aux_data, be, be_length);
+    read<64>(address,rd_data, be, be_length);
     compare_arrays(64);
-    
-    // Test 48-bit access 
-    std::cout << std::endl;
-    prepare_arrays< sc_int<48> >(48, reg48);
-    write<48>(0,aux_data, be, be_length);
-    read<48>(0,rd_data, be, be_length);
-    compare_arrays(48);
     
     // Test 32-bit access 
     std::cout << std::endl;
-    prepare_arrays< unsigned int >(32, reg32, true);
-    write<32>(0,aux_data, be, be_length);
-    read<32>(0,rd_data, be, be_length);
+    prepare_arrays(32);
+    prepare_address_and_data< unsigned int >(32, address, reg32);
+    write<32>(address,aux_data, be, be_length);
+    read<32>(address,rd_data, be, be_length);
     compare_arrays(32);
     
     // Test 16-bit access 
     std::cout << std::endl;
-    prepare_arrays< short >(16, reg16);
-    write<16>(0,aux_data, be, be_length);
-    read<16>(0,rd_data, be, be_length);
+    prepare_arrays(16,true);
+	prepare_address_and_data< short >(16, address, reg16);
+    write<16>(address,aux_data, be, be_length);
+    read<16>(address,rd_data, be, be_length);
     compare_arrays(16);
     
     // Test 8-bit access 
     std::cout << std::endl;
-    prepare_arrays< unsigned char >(8, reg8, true);
-    write<8>(0,aux_data, be, be_length);
-    read<8>(0,rd_data, be, be_length);
+    prepare_arrays(8);
+    prepare_address_and_data< unsigned char >(8, address, reg8);
+    write<8>(address,aux_data, be, be_length);
+    read<8>(address,rd_data, be, be_length);
     compare_arrays(8);
 }
 
 void tlm_initiator::test_customized_be()
 {
+ 	unsigned int address = 0;
     bool* aux_be = new bool [4];
     
     // Test 256-bit access - Customize byte-enables
@@ -134,9 +137,10 @@ void tlm_initiator::test_customized_be()
     aux_be[2] = true; 
     aux_be[3] = true;		
     std::cout << std::endl;
-    prepare_arrays< sc_biguint<256> >(256, reg256);
-    write<256>(0,aux_data, aux_be, 4);
-    read<256>(0,rd_data, aux_be, 4);
+    prepare_arrays(256);
+    prepare_address_and_data< sc_biguint<256> >(256, address, reg256);  
+	write<256>(address,aux_data, aux_be, 4);
+    read<256>(address,rd_data, aux_be, 4);
     compare_arrays(256);
     std::cout << name() << " : BE    ARRAY = "; 
     for(int i=0;i<4;i++){std::cout << (int)aux_be[i];}
@@ -151,9 +155,10 @@ void tlm_initiator::test_customized_be()
     aux_be[2] = false;
     aux_be[3] = false;		
     std::cout << std::endl;
-    prepare_arrays< sc_biguint<256> >(256, reg256, true);
-    write<256>(0,aux_data, aux_be, 4);
-    read<256>(0,rd_data, aux_be, 4);
+    prepare_arrays(256,true);
+    prepare_address_and_data< sc_biguint<256> >(256, address, reg256);  
+	write<256>(address,aux_data, aux_be, 4);
+    read<256>(address,rd_data, aux_be, 4);
     compare_arrays(256);
     std::cout << name() << " : BE    ARRAY = "; 
     for(int i=0;i<4;i++){std::cout << (int)aux_be[i];}
@@ -167,9 +172,10 @@ void tlm_initiator::test_customized_be()
     aux_be[2] = false;
     aux_be[3] = false;
     std::cout << std::endl;
-    prepare_arrays< sc_biguint<256> >(256, reg256, true);
-    write<256>(0,aux_data, aux_be, 4);
-    read<256>(0,rd_data);
+    prepare_arrays(256,true);
+    prepare_address_and_data< sc_biguint<256> >(256, address, reg256);  
+	write<256>(address,aux_data, aux_be, 4);
+    read<256>(address,rd_data);
     compare_arrays(256);
     std::cout << name() << " : BE    ARRAY = "; 
     for(int i=0;i<4;i++){std::cout << (int)aux_be[i];}
@@ -184,9 +190,10 @@ void tlm_initiator::test_customized_be()
     aux_be[0] = true; 
     aux_be[1] = true;
     std::cout << std::endl;
-    prepare_arrays< unsigned int >(32, reg32);
-    write<32>(0,aux_data, aux_be, 2);
-    read<32>(0,rd_data, aux_be, 2);
+    prepare_arrays(32);
+    prepare_address_and_data< unsigned int >(32, address, reg32);
+    write<32>(address,aux_data, aux_be, 2);
+    read<32>(address,rd_data, aux_be, 2);
     compare_arrays(32);
     std::cout << name() << " : BE    ARRAY = "; 
     for(int i=0;i<2;i++){std::cout << (int)aux_be[i];}
@@ -199,9 +206,10 @@ void tlm_initiator::test_customized_be()
     aux_be[0] = true;
     aux_be[1] = false;
     std::cout << std::endl;
-    prepare_arrays< unsigned int >(32, reg32, true);
-    write<32>(0,aux_data, aux_be, 2);
-    read<32>(0,rd_data, aux_be, 2);
+    prepare_arrays(32,true);
+    prepare_address_and_data< unsigned int >(32, address, reg32);
+    write<32>(address,aux_data, aux_be, 2);
+    read<32>(address,rd_data, aux_be, 2);
     compare_arrays(32);
     std::cout << name() << " : BE    ARRAY = "; 
     for(int i=0;i<2;i++){std::cout << (int)aux_be[i];}
@@ -213,9 +221,10 @@ void tlm_initiator::test_customized_be()
     aux_be[0] = true;
     aux_be[1] = false;
     std::cout << std::endl;
-    prepare_arrays< unsigned int >(32, reg32, true);
-    write<32>(0,aux_data, aux_be, 2);
-    read<32>(0,rd_data);
+    prepare_arrays(32,true);
+    prepare_address_and_data< unsigned int >(32, address, reg32);
+    write<32>(address,aux_data, aux_be, 2);
+    read<32>(address,rd_data);
     compare_arrays(32);
     std::cout << name() << " : BE    ARRAY = "; 
     for(int i=0;i<2;i++){std::cout << (int)aux_be[i];}
@@ -224,6 +233,26 @@ void tlm_initiator::test_customized_be()
     
     
     delete [] aux_be;
+}
+
+
+void tlm_initiator::prepare_arrays(int nbits, bool shift) 
+{
+    wr_data = new unsigned char [nbits/8]; 
+    aux_data = new unsigned char [nbits/8]; 
+    rd_data = new unsigned char [nbits/8];
+    be = new bool [nbits/8];
+    be_length = nbits/8;
+    
+    // Initialiaze arrays
+    for(int i=0;i<nbits/8;i++)
+    {
+        if(shift) {
+            wr_data[i] = i << 4;	aux_data[i] = 0; rd_data[i] = 0; be[i] = true;
+        } else {
+            wr_data[i] = i;	aux_data[i] = 0; rd_data[i] = 0; be[i] = true;
+        }
+    }
 }
 
 void tlm_initiator::compare_arrays(int nbits) 
