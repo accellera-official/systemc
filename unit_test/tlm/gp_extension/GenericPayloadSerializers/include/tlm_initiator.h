@@ -119,7 +119,7 @@ void tlm_initiator::prepare_address_and_data(int nbits, unsigned int& address, T
 		address += (bus_port.getBusDataWidth() - nbits)/8;
 	}
 
-	unsigned temp = address % (bus_port.getBusDataWidth()/8);
+	unsigned int temp = address % (bus_port.getBusDataWidth()/8);
 	unsigned int sub_word = temp / (nbits/8);
 	unsigned int offset = tlm::get_subword_offset(address, bus_port.getBusDataWidth()/8, nbits/8, m_endianness);
 
