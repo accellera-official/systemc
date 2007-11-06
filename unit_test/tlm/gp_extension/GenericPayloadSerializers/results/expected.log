@@ -1,44 +1,38 @@
 
  ###### TEST SERIALIZERS ###### 
 
-initiator_1 : Single WRITE transaction :  OK 
-initiator_1 : Single READ transaction :  OK 
+initiator_1 : Single WRITE transaction : ADDRESS = 0x0 :  OK 
+initiator_1 : Single READ transaction : ADDRESS = 0x0 :  OK 
 initiator_1 : read and write 256-bit operation : MATCH  
 initiator_1 : WRITE ARRAY = 0x000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f
 initiator_1 : READ  ARRAY = 0x000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f
 
-initiator_1 : Single WRITE transaction :  OK 
-initiator_1 : Single READ transaction :  OK 
+initiator_1 : Single WRITE transaction : ADDRESS = 0x0 :  OK 
+initiator_1 : Single READ transaction : ADDRESS = 0x0 :  OK 
 initiator_1 : read and write 128-bit operation : MATCH  
 initiator_1 : WRITE ARRAY = 0x00102030405060708090a0b0c0d0e0f0
 initiator_1 : READ  ARRAY = 0x00102030405060708090a0b0c0d0e0f0
 
-initiator_1 : Single WRITE transaction :  OK 
-initiator_1 : Single READ transaction :  OK 
+initiator_1 : Single WRITE transaction : ADDRESS = 0x0 :  OK 
+initiator_1 : Single READ transaction : ADDRESS = 0x0 :  OK 
 initiator_1 : read and write 64-bit operation : MATCH  
 initiator_1 : WRITE ARRAY = 0x0001020304050607
 initiator_1 : READ  ARRAY = 0x0001020304050607
 
-initiator_1 : Single WRITE transaction :  OK 
-initiator_1 : Single READ transaction :  OK 
-initiator_1 : read and write 48-bit operation : MATCH  
-initiator_1 : WRITE ARRAY = 0x001020304050
-initiator_1 : READ  ARRAY = 0x001020304050
-
-initiator_1 : Single WRITE transaction :  OK 
-initiator_1 : Single READ transaction :  OK 
+initiator_1 : Single WRITE transaction : ADDRESS = 0x0 :  OK 
+initiator_1 : Single READ transaction : ADDRESS = 0x0 :  OK 
 initiator_1 : read and write 32-bit operation : MATCH  
-initiator_1 : WRITE ARRAY = 0x00010203
-initiator_1 : READ  ARRAY = 0x00010203
+initiator_1 : WRITE ARRAY = 0x00102030
+initiator_1 : READ  ARRAY = 0x00102030
 
-initiator_1 : Single WRITE transaction :  OK 
-initiator_1 : Single READ transaction :  OK 
+initiator_1 : Single WRITE transaction : ADDRESS = 0x0 :  OK 
+initiator_1 : Single READ transaction : ADDRESS = 0x0 :  OK 
 initiator_1 : read and write 16-bit operation : MATCH  
-initiator_1 : WRITE ARRAY = 0x0010
-initiator_1 : READ  ARRAY = 0x0010
+initiator_1 : WRITE ARRAY = 0x0001
+initiator_1 : READ  ARRAY = 0x0001
 
-initiator_1 : Single WRITE transaction :  OK 
-initiator_1 : Single READ transaction :  OK 
+initiator_1 : Single WRITE transaction : ADDRESS = 0x0 :  OK 
+initiator_1 : Single READ transaction : ADDRESS = 0x0 :  OK 
 initiator_1 : read and write 8-bit operation : MATCH  
 initiator_1 : WRITE ARRAY = 0x00
 initiator_1 : READ  ARRAY = 0x00
@@ -46,44 +40,38 @@ initiator_1 : READ  ARRAY = 0x00
 
  ###### TEST SERIALIZERS WITH BYTE-ENABLES ###### 
 
-initiator_1 : Single WRITE transaction :  OK 
-initiator_1 : Single READ transaction :  OK 
+initiator_1 : Single WRITE transaction : ADDRESS = 0x0 :  OK 
+initiator_1 : Single READ transaction : ADDRESS = 0x0 :  OK 
 initiator_1 : read and write 256-bit operation : MATCH  
 initiator_1 : WRITE ARRAY = 0x00102030405060708090a0b0c0d0e0f000102030405060708090a0b0c0d0e0f0
 initiator_1 : READ  ARRAY = 0x00102030405060708090a0b0c0d0e0f000102030405060708090a0b0c0d0e0f0
 
-initiator_1 : Single WRITE transaction :  OK 
-initiator_1 : Single READ transaction :  OK 
+initiator_1 : Single WRITE transaction : ADDRESS = 0x0 :  OK 
+initiator_1 : Single READ transaction : ADDRESS = 0x0 :  OK 
 initiator_1 : read and write 128-bit operation : MATCH  
 initiator_1 : WRITE ARRAY = 0x000102030405060708090a0b0c0d0e0f
 initiator_1 : READ  ARRAY = 0x000102030405060708090a0b0c0d0e0f
 
-initiator_1 : Single WRITE transaction :  OK 
-initiator_1 : Single READ transaction :  OK 
+initiator_1 : Single WRITE transaction : ADDRESS = 0x0 :  OK 
+initiator_1 : Single READ transaction : ADDRESS = 0x0 :  OK 
 initiator_1 : read and write 64-bit operation : MATCH  
 initiator_1 : WRITE ARRAY = 0x0010203040506070
 initiator_1 : READ  ARRAY = 0x0010203040506070
 
-initiator_1 : Single WRITE transaction :  OK 
-initiator_1 : Single READ transaction :  OK 
-initiator_1 : read and write 48-bit operation : MATCH  
-initiator_1 : WRITE ARRAY = 0x000102030405
-initiator_1 : READ  ARRAY = 0x000102030405
-
-initiator_1 : Single WRITE transaction :  OK 
-initiator_1 : Single READ transaction :  OK 
+initiator_1 : Single WRITE transaction : ADDRESS = 0x0 :  OK 
+initiator_1 : Single READ transaction : ADDRESS = 0x0 :  OK 
 initiator_1 : read and write 32-bit operation : MATCH  
-initiator_1 : WRITE ARRAY = 0x00102030
-initiator_1 : READ  ARRAY = 0x00102030
+initiator_1 : WRITE ARRAY = 0x00010203
+initiator_1 : READ  ARRAY = 0x00010203
 
-initiator_1 : Single WRITE transaction :  OK 
-initiator_1 : Single READ transaction :  OK 
+initiator_1 : Single WRITE transaction : ADDRESS = 0x0 :  OK 
+initiator_1 : Single READ transaction : ADDRESS = 0x0 :  OK 
 initiator_1 : read and write 16-bit operation : MATCH  
-initiator_1 : WRITE ARRAY = 0x0001
-initiator_1 : READ  ARRAY = 0x0001
+initiator_1 : WRITE ARRAY = 0x0010
+initiator_1 : READ  ARRAY = 0x0010
 
-initiator_1 : Single WRITE transaction :  OK 
-initiator_1 : Single READ transaction :  OK 
+initiator_1 : Single WRITE transaction : ADDRESS = 0x0 :  OK 
+initiator_1 : Single READ transaction : ADDRESS = 0x0 :  OK 
 initiator_1 : read and write 8-bit operation : MATCH  
 initiator_1 : WRITE ARRAY = 0x00
 initiator_1 : READ  ARRAY = 0x00
@@ -92,48 +80,48 @@ initiator_1 : READ  ARRAY = 0x00
  ###### TEST SERIALIZERS WITH CUSTOMIZED BYTE-ENABLES ###### 
 
 initiator_1 : case when WRITE uses BE and READ uses same BE 
-initiator_1 : Single WRITE transaction :  OK 
-initiator_1 : Single READ transaction :  OK 
+initiator_1 : Single WRITE transaction : ADDRESS = 0x0 :  OK 
+initiator_1 : Single READ transaction : ADDRESS = 0x0 :  OK 
 initiator_1 : read and write 256-bit operation : MATCH  
 initiator_1 : WRITE ARRAY = 0x000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f
 initiator_1 : READ  ARRAY = 0x000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f
 initiator_1 : BE    ARRAY = 1111 : BE  LENGTH = 4
 
 initiator_1 : case when WRITE uses BE and READ uses same BE 
-initiator_1 : Single WRITE transaction :  OK 
-initiator_1 : Single READ transaction :  OK 
+initiator_1 : Single WRITE transaction : ADDRESS = 0x0 :  OK 
+initiator_1 : Single READ transaction : ADDRESS = 0x0 :  OK 
 initiator_1 : read and write 256-bit operation : DON'T MATCH 
 initiator_1 : WRITE ARRAY = 0x00102030405060708090a0b0c0d0e0f000102030405060708090a0b0c0d0e0f0
 initiator_1 : READ  ARRAY = 0x001000004050000080900000c0d00000001000004050000080900000c0d00000
 initiator_1 : BE    ARRAY = 1100 : BE  LENGTH = 4
 
 initiator_1 : case when WRITE uses BE and READ does not 
-initiator_1 : Single WRITE transaction :  OK 
-initiator_1 : Single READ transaction :  OK 
+initiator_1 : Single WRITE transaction : ADDRESS = 0x0 :  OK 
+initiator_1 : Single READ transaction : ADDRESS = 0x0 :  OK 
 initiator_1 : read and write 256-bit operation : DON'T MATCH 
 initiator_1 : WRITE ARRAY = 0x00102030405060708090a0b0c0d0e0f000102030405060708090a0b0c0d0e0f0
 initiator_1 : READ  ARRAY = 0x001002034050060780900a0bc0d00e0f001012134050161780901a1bc0d01e1f
 initiator_1 : BE    ARRAY = 1100 : BE  LENGTH = 4
 
 initiator_1 : case when WRITE uses BE and READ uses same BE 
-initiator_1 : Single WRITE transaction :  OK 
-initiator_1 : Single READ transaction :  OK 
+initiator_1 : Single WRITE transaction : ADDRESS = 0x0 :  OK 
+initiator_1 : Single READ transaction : ADDRESS = 0x0 :  OK 
 initiator_1 : read and write 32-bit operation : MATCH  
 initiator_1 : WRITE ARRAY = 0x00010203
 initiator_1 : READ  ARRAY = 0x00010203
 initiator_1 : BE    ARRAY = 11 : BE  LENGTH = 2
 
 initiator_1 : case when WRITE uses BE and READ uses same BE 
-initiator_1 : Single WRITE transaction :  OK 
-initiator_1 : Single READ transaction :  OK 
+initiator_1 : Single WRITE transaction : ADDRESS = 0x0 :  OK 
+initiator_1 : Single READ transaction : ADDRESS = 0x0 :  OK 
 initiator_1 : read and write 32-bit operation : DON'T MATCH 
 initiator_1 : WRITE ARRAY = 0x00102030
 initiator_1 : READ  ARRAY = 0x00002000
 initiator_1 : BE    ARRAY = 10 : BE  LENGTH = 2
 
 initiator_1 : case when WRITE uses BE and READ does not 
-initiator_1 : Single WRITE transaction :  OK 
-initiator_1 : Single READ transaction :  OK 
+initiator_1 : Single WRITE transaction : ADDRESS = 0x0 :  OK 
+initiator_1 : Single READ transaction : ADDRESS = 0x0 :  OK 
 initiator_1 : read and write 32-bit operation : DON'T MATCH 
 initiator_1 : WRITE ARRAY = 0x00102030
 initiator_1 : READ  ARRAY = 0x00012003

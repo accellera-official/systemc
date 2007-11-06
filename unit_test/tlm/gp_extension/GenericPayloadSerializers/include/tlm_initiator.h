@@ -34,10 +34,10 @@ public:
     SC_HAS_PROCESS(tlm_initiator);
 
     // Constructor
-	tlm_initiator(sc_module_name _name, tlm::tlm_endianness endianness = tlm::TLM_LITTLE_ENDIAN)
+    tlm_initiator(sc_module_name _name, tlm::tlm_endianness endianness = tlm::TLM_LITTLE_ENDIAN)
         : sc_module(_name)
         , bus_port("bus_port")
-		, m_endianness(endianness)
+        , m_endianness(endianness)
     {
         SC_THREAD(main);
     }
@@ -77,12 +77,12 @@ private:
     tlm::tlm_generic_payload  m_gp;
     
     sc_biguint<256> reg256;
-    sc_bigint<128>	reg128;
-    sc_uint<64>		reg64;
-    sc_int<48>		reg48;
-    unsigned int	reg32;
-    short			reg16;
-    unsigned char	reg8;
+    sc_bigint<128>  reg128;
+    sc_uint<64>	    reg64;
+    sc_int<48>	    reg48;
+    unsigned int    reg32;
+    short	    reg16;
+    unsigned char   reg8;
     
     unsigned char *wr_data; 
     unsigned char *aux_data; 
@@ -95,14 +95,14 @@ private:
 	void write(unsigned int address, unsigned char *data, bool* be = 0, unsigned int be_length = 0);
     template< int W >
 	void read(unsigned int address, unsigned char *data, bool* be = 0, unsigned int be_length = 0);
-
-	template< class T >
+    
+    template< class T >
 	void prepare_address_and_data(int nbits, unsigned int& address, T& data);
-
-	void prepare_arrays(int nbits, bool shift = false);
+    
+    void prepare_arrays(int nbits, bool shift = false);
     void compare_arrays(int nbits);
- 
-	tlm::tlm_endianness m_endianness;
+    
+    tlm::tlm_endianness m_endianness;
   
 };
 
@@ -113,18 +113,16 @@ private:
 template< class T >
 void tlm_initiator::prepare_address_and_data(int nbits, unsigned int& address, T& data)
 {
-	address = 0;
-	if(hasHostEndianness(m_endianness) == false)
-	{
-		address += (bus_port.getBusDataWidth() - nbits)/8;
-	}
-
-	unsigned int temp = address % (bus_port.getBusDataWidth()/8);
-	unsigned int sub_word = temp / (nbits/8);
-	unsigned int offset = tlm::get_subword_offset(address, bus_port.getBusDataWidth()/8, nbits/8, m_endianness);
-
+    address = 0;
+    if(hasHostEndianness(m_endianness) == false)
+    {
+        address += (bus_port.getBusDataWidth() - nbits)/8;
+    }
+    
+    unsigned int offset = tlm::get_subword_offset(address, bus_port.getBusDataWidth()/8, nbits/8, m_endianness);
+    
     // test serializers in the initiator 
-	tlm::copy_word_from_array< T >(data, offset, nbits/8, wr_data, 0, 0);
+    tlm::copy_word_from_array< T >(data, offset, nbits/8, wr_data, 0, 0);
     tlm::copy_word_to_array< T >(data, offset, nbits/8, aux_data, 0, 0);
 }
 
@@ -137,7 +135,7 @@ void tlm_initiator::write(unsigned int address, unsigned char *data, bool* be, u
 {
     // Single WRITE transaction 
     
-	std::cout << name() << " : Single WRITE transaction : ADDRESS = 0x" << std::hex << address << std::dec << " : "; 
+    std::cout << name() << " : Single WRITE transaction : ADDRESS = 0x" << std::hex << address << std::dec << " : "; 
     
     m_gp.set_command(tlm::TLM_WRITE_COMMAND);
     m_gp.set_address(address);
