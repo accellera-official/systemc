@@ -95,17 +95,17 @@ template< class T >
 inline void copy_word_from_array( T& data_word, 
                            unsigned int offset, 
                            unsigned int nr_bytes,  
-						   unsigned char *m_data,
+						               unsigned char *m_data,
                            bool *m_be, 
                            unsigned int m_be_length) 
 {
 	unsigned int data_size = data_word.length()/8;
 	assert(nr_bytes <= data_size);
     if(m_be == 0) 
-      for(int b=0; b<nr_bytes; b++)
+      for(unsigned int b=0; b<nr_bytes; b++)
         data_word.range(b*8+7, b*8) = sc_dt::sc_uint<8>(m_data[offset+b]); 
     else
-      for(int b=0; b<nr_bytes; b++)
+      for(unsigned int b=0; b<nr_bytes; b++)
         if(m_be[(offset + b) % m_be_length]) 
           data_word.range(b*8+7, b*8) = sc_dt::sc_uint<8>(m_data[offset+b]);
 }
@@ -114,17 +114,17 @@ template< class T >
 inline void copy_word_to_array( T& data_word, 
                            unsigned int offset, 
                            unsigned int nr_bytes,  
-						   unsigned char *m_data,
+						               unsigned char *m_data,
                            bool *m_be, 
                            unsigned int m_be_length)
 {
 	unsigned int data_size = data_word.length()/8;	
 	assert(nr_bytes <= data_size);
     if(m_be == 0) 
-      for(int b=0; b<nr_bytes; b++)
+      for(unsigned int b=0; b<nr_bytes; b++)
         m_data[offset+b] = sc_dt::sc_uint<8>(data_word.range(b*8+7, b*8)); 
     else
-      for(int b=0; b<nr_bytes; b++)
+      for(unsigned int b=0; b<nr_bytes; b++)
         if(m_be[(offset + b) % m_be_length]) 
           m_data[offset+b] = sc_dt::sc_uint<8>(data_word.range(b*8+7, b*8));
 }
@@ -139,18 +139,18 @@ inline void copy_word_to_array( T& data_word,
 template<> inline \
 void copy_word_from_array( otype& data_word, \
 	                       unsigned int offset, \
-						   unsigned int nr_bytes, \
-						   unsigned char *m_data, \
-						   bool *m_be, \
-						   unsigned int m_be_length) \
+						             unsigned int nr_bytes, \
+						             unsigned char *m_data, \
+						             bool *m_be, \
+						             unsigned int m_be_length) \
 { \
 	unsigned int data_size = sizeof(otype); \
 	assert(nr_bytes <= data_size); \
     if(m_be == 0) \
-	  for(int b=0; b<nr_bytes; b++) \
+	  for(unsigned int b=0; b<nr_bytes; b++) \
 	    reinterpret_cast<unsigned char*>(&data_word)[b] = m_data[offset+b]; \
 	else \
-	  for(int b=0; b<nr_bytes; b++) \
+	  for(unsigned int b=0; b<nr_bytes; b++) \
 	    if(m_be[(offset + b) % m_be_length]) \
 		  reinterpret_cast<unsigned char*>(&data_word)[b] = m_data[offset+b]; \
 }
@@ -159,18 +159,18 @@ void copy_word_from_array( otype& data_word, \
 template<> inline \
 void copy_word_to_array( otype& data_word, \
 	                       unsigned int offset, \
-						   unsigned int nr_bytes, \
-						   unsigned char *m_data, \
-						   bool *m_be, \
-						   unsigned int m_be_length) \
+						             unsigned int nr_bytes, \
+						             unsigned char *m_data, \
+						             bool *m_be, \
+						             unsigned int m_be_length) \
 { \
 	unsigned int data_size = sizeof(otype); \
 	assert(nr_bytes <= data_size); \
     if(m_be == 0) \
-      for(int b=0; b<nr_bytes; b++) \
+      for(unsigned int b=0; b<nr_bytes; b++) \
         m_data[offset+b] = reinterpret_cast<unsigned char*>(&data_word)[b]; \
 	else \
-      for(int b=0; b<nr_bytes; b++) \
+      for(unsigned int b=0; b<nr_bytes; b++) \
         if(m_be[(offset+b) % m_be_length]) \
           m_data[offset+b] = reinterpret_cast<unsigned char*>(&data_word)[b]; \
 }
@@ -207,32 +207,32 @@ TLM_COPY_WORD_TO_ARRAY( unsigned long long );
 //
 inline void copy_word_from_array( unsigned char* data_word, 
 	                       unsigned int offset, 
-						   unsigned int nr_bytes, 
-						   unsigned char *m_data, 
-						   bool *m_be, 
-						   unsigned int m_be_length) 
+						             unsigned int nr_bytes, 
+						             unsigned char *m_data, 
+						             bool *m_be, 
+						             unsigned int m_be_length) 
 {
     if(m_be == 0) 
       for(int b=0; b<nr_bytes; b++)
         data_word[b] = m_data[offset+b]; 
     else
-      for(int b=0; b<nr_bytes; b++)
+      for(unsigned int b=0; b<nr_bytes; b++)
         if(m_be[(offset+b) % m_be_length]) 
           data_word[b] = m_data[offset+b];
 }
 
 inline void copy_word_to_array( unsigned char* data_word, 
 	                       unsigned int offset, 
-						   unsigned int nr_bytes, 
-						   unsigned char *m_data, 
-						   bool *m_be, 
-						   unsigned int m_be_length) 
+						             unsigned int nr_bytes, 
+						             unsigned char *m_data, 
+						             bool *m_be, 
+						             unsigned int m_be_length) 
 {
     if(m_be == 0) 
-      for(int b=0; b<nr_bytes; b++)
+      for(unsigned int b=0; b<nr_bytes; b++)
         m_data[offset+b] = data_word[b]; 
     else
-      for(int b=0; b<nr_bytes; b++)
+      for(unsigned int b=0; b<nr_bytes; b++)
         if(m_be[(offset+b) % m_be_length]) 
           m_data[offset+b] = data_word[b];
 }
