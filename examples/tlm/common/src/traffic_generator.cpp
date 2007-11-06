@@ -126,7 +126,7 @@ traffic_generator::traffic_generator_thread(void)                     ///< traff
   while (true) {
     percentage              = rand() % 101;
     address                 = rand() % 4096;
-    aligned_address_mask    = ~(cache_line_size - 1);
+    aligned_address_mask    = ~(sc_dt::uint64)(cache_line_size - 1);
     cache_alligned_address  = address & aligned_address_mask; 
 
     memset(read_buffer, 0, cache_line_size);

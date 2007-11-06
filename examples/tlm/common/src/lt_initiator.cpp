@@ -69,8 +69,6 @@ lt_initiator::read(                     ///< read
   transaction.set_data_ptr(read_buffer);
   transaction.set_data_length(byte_count);
   transaction.set_response_status(tlm::TLM_INCOMPLETE_RESPONSE);
-  transaction.set_streaming_mode(false);
-  transaction.set_lock(false);
 
   sc_core::sc_time delay = sc_core::SC_ZERO_TIME;
   tlm::tlm_phase phase = tlm::BEGIN_REQ;
@@ -101,8 +99,6 @@ lt_initiator::write(                    ///< write
   transaction.set_data_ptr(write_buffer);
   transaction.set_data_length(byte_count);
   transaction.set_response_status(tlm::TLM_INCOMPLETE_RESPONSE);
-  transaction.set_streaming_mode(false);
-  transaction.set_lock(false);
 
   sc_core::sc_time delay = sc_core::SC_ZERO_TIME;
   tlm::tlm_phase phase = tlm::BEGIN_REQ;
