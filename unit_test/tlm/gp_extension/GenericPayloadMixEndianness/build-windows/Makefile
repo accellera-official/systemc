@@ -1,13 +1,13 @@
 include ../../../build-windows/Makefile.config
 
-OBJ_NAME = generic_payload_serializers
+OBJ_NAME = generic_payload_mixendianness
 
-MY_INCLUDES = /I../include /I../../common/include
+MY_INCLUDES = /I../include /I../../common/include /I../../../common/include/utils /I../../../common/include/models /I../../../common/include/SimpleSocket
 SRCDIR = ../src
  
 CFLAGS = $(FLAGS) $(MY_INCLUDES)
 
-OBJS = $(OBJ_NAME).o tlm_slave.o tlm_master.o
+OBJS = $(OBJ_NAME).o
 
 .PHONY: clean all run check announce
 
@@ -31,12 +31,6 @@ $(OBJ_NAME).exe: $(OBJS)
 	$(LD) /OUT:"$@" $(OBJS) $(LDFLAGS)
 
 $(OBJ_NAME).o: $(SRCDIR)/$(OBJ_NAME).cpp
-	$(CC) /c $(CFLAGS) $< /Fo"$@"
-
-tlm_slave.o: $(SRCDIR)/tlm_slave.cpp
-	$(CC) /c $(CFLAGS) $< /Fo"$@"
-
-tlm_master.o: $(SRCDIR)/tlm_master.cpp
 	$(CC) /c $(CFLAGS) $< /Fo"$@"
 
 

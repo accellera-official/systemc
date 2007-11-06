@@ -41,7 +41,8 @@ inline unsigned int get_subword_offset(sc_dt::int64 address,
                                        unsigned int subword_size,
                                        tlm_endianness endianness)
 {
-    unsigned int offset = ((address%bus_width)/subword_size)*subword_size;
+    unsigned int a = (unsigned int)address;
+    unsigned int offset = ((a%bus_width)/subword_size)*subword_size;
     if(hasHostEndianness(endianness)) 
         return offset;
     else
@@ -125,11 +126,11 @@ inline void copy_word_to_array( T& data_word,
     assert(nr_bytes <= data_size);
     if(m_be == 0) 
         for(unsigned int b=0; b<nr_bytes; b++)
-            m_data[offset+b] = sc_dt::sc_uint<8>(data_word.range(b*8+7, b*8)); 
+            m_data[offset+b] = (unsigned char)sc_dt::sc_uint<8>(data_word.range(b*8+7, b*8)).value(); 
     else
         for(unsigned int b=0; b<nr_bytes; b++)
             if(m_be[(offset + b) % m_be_length]) 
-                m_data[offset+b] = sc_dt::sc_uint<8>(data_word.range(b*8+7, b*8));
+                m_data[offset+b] = (unsigned char)sc_dt::sc_uint<8>(data_word.range(b*8+7, b*8)).value();
 }
 //
 // ///////////////////////////////////////////////////////////////////////// 

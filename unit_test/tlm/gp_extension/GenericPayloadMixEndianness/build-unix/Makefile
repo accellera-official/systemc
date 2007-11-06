@@ -45,11 +45,5 @@ $(OBJ_NAME).exe: $(OBJS)
 $(OBJ_NAME).o: $(SRCDIR)/$(OBJ_NAME).cpp
 	$(GXX) $(CFLAGS) -c $< -o $@
 
-tlm_master.o: $(SRCDIR)/tlm_master.cpp
-	$(GXX) $(CFLAGS) -c $< -o $@
-
-tlm_slave.o: $(SRCDIR)/tlm_slave.cpp
-	$(GXX) $(CFLAGS) -c $< -o $@
-
 clean:
 	rm -f *.o *.log $(OBJ_NAME).exe
