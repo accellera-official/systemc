@@ -42,6 +42,8 @@ namespace tlm_qk_dummy {
     {
       computeLocalQuantum();
     }
+
+    virtual ~tlm_quantumkeeper() {}
   
     void inc(const sc_core::sc_time& t)
     {
@@ -81,7 +83,7 @@ namespace tlm_qk_dummy {
     }
   
   protected:
-    void computeLocalQuantum()
+    virtual void computeLocalQuantum()
     {
       mLocalQuantum = mGlobalQuantum;
     }
