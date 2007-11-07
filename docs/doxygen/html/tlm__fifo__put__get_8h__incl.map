@@ -1,7 +1,0 @@
-<area shape="rect" href="$tlm__fifo_8h.html" title="tlm_h/tlm_core/tlm_fifo/tlm_fifo.h" alt="" coords="608,80,824,107">
-<area shape="rect" href="$tlm__fifo__ifs_8h.html" title="tlm_h/tlm_core/tlm_interfaces/tlm_fifo_ifs.h" alt="" coords="9,155,287,181">
-<area shape="rect" href="$circular__buffer_8h.html" title="tlm_h/tlm_core/tlm_fifo/circular_buffer.h" alt="" coords="311,155,567,181">
-<area shape="rect" href="$tlm__fifo__peek_8h.html" title="tlm_h/tlm_core/tlm_fifo/tlm_fifo_peek.h" alt="" coords="591,155,841,181">
-<area shape="rect" href="$tlm__fifo__resize_8h.html" title="tlm_h/tlm_core/tlm_fifo/tlm_fifo_resize.h" alt="" coords="865,155,1124,181">
-<area shape="rect" href="$tlm__core__ifs_8h.html" title="tlm_h/tlm_core/tlm_interfaces/tlm_core_ifs.h" alt="" coords="5,229,291,256">
-<area shape="rect" href="$tlm__tag_8h.html" title="tlm_h/tlm_core/tlm_interfaces/tlm_tag.h" alt="" coords="20,304,276,331">
