@@ -123,29 +123,83 @@ public:
         , m_byte_enable_length(x.get_byte_enable_length())
         , m_streaming_width(x.get_streaming_width())
         , m_extensions(max_num_extensions())
-        , m_dmi(false)
+        , m_dmi(x.get_dmi_allowed())
     {
         // copy all extensions
-        if (m_extensions.size()>0)
+        for(unsigned int i=0; i<m_extensions.size(); i++)
         {
-            for(unsigned int i=0; i<m_extensions.size(); i++)
-            {
-                if(x.get_extension(i))
-                {
-                    m_extensions[i] = x.get_extension(i)->clone();
-                }
-            }
+            m_extensions[i] = x.get_extension(i);
         }
     }
 
-    tlm_generic_payload* clone() const
+    // Assignment operator
+    tlm_generic_payload& operator= (const tlm_generic_payload& x)
     {
-        return new tlm_generic_payload(*this);
+        m_command =            x.get_command();
+        m_address =            x.get_address();
+        m_data =               x.get_data_ptr();
+        m_length =             x.get_data_length();
+        m_response_status =    x.get_response_status();
+        m_byte_enable =        x.get_byte_enable_ptr();
+        m_byte_enable_length = x.get_byte_enable_length();
+        m_streaming_width =    x.get_streaming_width();
+        m_dmi =                x.get_dmi_allowed();
+
+        // extension copy: all extension arrays must be of equal size by
+        // construction (i.e. it must either be constructed after C++
+        // static construction time, or the resize_extensions() method must
+        // have been called prior to using the object)
+        for(unsigned int i=0; i<m_extensions.size(); i++)
+        {
+            m_extensions[i] = x.get_extension(i);
+        }
+        return (*this);
     }
-    
+
+    // non-virtual deep-copying of the object
+    tlm_generic_payload* deep_copy() const
+    {
+        tlm_generic_payload* tmp = new tlm_generic_payload(*this);
+        // deep copy data
+        if(m_data && m_length)
+        {
+            unsigned char* tmp_data = new unsigned char[m_length];
+            tmp->set_data_ptr(tmp_data);
+            for(unsigned int i=0; i<m_length; i++)
+            {
+                tmp_data[i] = m_data[i];
+            }
+        }
+        // deep copy byte enables
+        if(m_byte_enable && m_byte_enable_length)
+        {
+            bool* tmp_byte_enable = new bool[m_byte_enable_length];
+            tmp->set_byte_enable_ptr(tmp_byte_enable);
+            tmp->set_byte_enable_length(m_byte_enable_length);
+            for (unsigned int i=0; i<m_byte_enable_length; i++)
+            {
+                tmp_byte_enable[i] = m_byte_enable[i];
+            }
+        }
+        // deep copy extensions
+        for(unsigned int i=0; i<m_extensions.size(); i++)
+        {
+            if(m_extensions[i])
+            {
+                tmp->set_extension(i, m_extensions[i]->clone());
+            }
+        }
+        return tmp;
+    }
+
+    // Virtual version of deep_copy()
+    virtual tlm_generic_payload* clone() const
+    {
+        return deep_copy();
+    }
+
     //--------------
     // Destructor
-    // TODO: review if this needs to be virtual
     //--------------
     virtual ~tlm_generic_payload() {}
        

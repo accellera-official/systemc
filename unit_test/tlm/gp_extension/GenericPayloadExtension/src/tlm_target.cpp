@@ -61,19 +61,29 @@ void tlm_target::nb_transport(tlm::tlm_generic_payload* gp)
     {
         std::cout << std::endl << name() << ": got extension 1 with value = " 
                   << ext1->data1;
+        delete ext1;
     }
     if (ext2)
     {
         std::cout << std::endl << name() << ": got extension 2 with value = " 
                   << ext2->data2;
+        delete ext2;
     }
     if (ext3)
     {
         std::cout << std::endl << name() << ": got extension 3 with value = " 
                   << ext3->data3;
+        delete ext3;
     }
     std::cout << std::endl;
-
+    if (gp_tmp->get_data_ptr())
+    {
+        delete[] gp_tmp->get_data_ptr();
+    }
+    if (gp_tmp->get_byte_enable_ptr())
+    {
+        delete[] gp_tmp->get_byte_enable_ptr();
+    }
     delete gp_tmp;
 
     // Generic Payload Protocol
@@ -84,14 +94,14 @@ void tlm_target::nb_transport(tlm::tlm_generic_payload* gp)
         unsigned int addr = (unsigned int)gp->get_address() - m_start_address;
         unsigned char* data = gp->get_data_ptr();
         
-		if(gp->is_write())
+        if(gp->is_write())
         {
-			m_mem.write(data,addr,gp->get_data_length());
+            m_mem.write(data,addr,gp->get_data_length());
             m_response_status = tlm::TLM_OK_RESPONSE;
         }
         else // TLM_READ_COMMAND
         {
-			m_mem.read(data,addr,gp->get_data_length());
+            m_mem.read(data,addr,gp->get_data_length());
             m_response_status = tlm::TLM_OK_RESPONSE;
         }
     }
