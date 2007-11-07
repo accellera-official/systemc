@@ -1,0 +1,3 @@
+<area shape="rect" href="$classtlm_1_1tlm__initiator__port__base.html#1d50c6b2bba444e1efddfa945bed1d88" title="Returns the vector of registered initiator port(s), reversed list." alt="" coords="236,5,609,32">
+<area shape="rect" href="$classtlm_1_1tlm__initiator__port__base.html#7dee8f560f1124d44236f9af7c5c91c5" title="Register the initiator port in the regular list." alt="" coords="265,56,580,83">
+<area shape="rect" href="$classtlm_1_1tlm__initiator__port__base.html#9e7eac7a67a6238dd0ae57de4f821acf" title="Register the initiator port in the reversed list." alt="" coords="235,107,611,133">
