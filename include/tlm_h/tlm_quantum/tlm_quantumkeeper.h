@@ -85,7 +85,15 @@ namespace tlm_qk_dummy {
   protected:
     virtual void computeLocalQuantum()
     {
-      mLocalQuantum = mGlobalQuantum;
+      if (mGlobalQuantum != sc_core::SC_ZERO_TIME) {
+        const sc_core::sc_time currentTime = sc_core::sc_time_stamp();
+        sc_dt::int64 tmp = static_cast<sc_dt::int64>(currentTime / mGlobalQuantum);
+        const sc_core::sc_time remainder = (tmp + 1) * mGlobalQuantum - currentTime;
+        mLocalQuantum = remainder;
+
+      } else {
+        mLocalQuantum = sc_core::SC_ZERO_TIME;
+      }
     }
   
   private:
