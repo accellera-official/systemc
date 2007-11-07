@@ -20,8 +20,6 @@
 
 namespace tlm_qk_dummy {
 
-  // FIMXE: Dummy template argument to be able to initialize
-  //        mGlobalQuantum in the headerfile
   template <typename Dummy>
   class tlm_quantumkeeper
   {
