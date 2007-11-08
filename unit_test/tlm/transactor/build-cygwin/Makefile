@@ -1,6 +1,4 @@
-include ../../build-unix/Makefile.config
-
-export FLAG_BATCH = 1
+include ../../build-cygwin/Makefile.config
 
 SUBDIRS = \
           ../BvsNB \

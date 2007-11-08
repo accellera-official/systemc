@@ -1,8 +1,8 @@
-include ../../../build-cygwin/Makefile.config
+include ../../build-cygwin/Makefile.config
 
-OBJ_NAME = B_vs_NB
+OBJ_NAME = bus_dmi
 
-MY_INCLUDES = /I../../../common/include/SimpleSocket /I../../../common/include/models -I../../../common/include/utils /I../../include/transactors /I../../include/tlm_bus
+MY_INCLUDES = /I../../common/include/SimpleSocket /I../../common/include/models -I../../common/include/utils
 SRCDIR = ../src
  
 CFLAGS = $(FLAGS) $(MY_INCLUDES)

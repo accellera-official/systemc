@@ -1,4 +1,4 @@
-include ../../../build-windows/Makefile.config
+include ../../../build-cygwin/Makefile.config
 
 OBJ_NAME = generic_payload
 
