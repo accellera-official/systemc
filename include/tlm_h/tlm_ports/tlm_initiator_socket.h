@@ -83,9 +83,9 @@ public:
   void bind(tlm_initiator_socket& s)
   {
     // port
-    (*static_cast<port_type*>(&s))(*static_cast<port_type*>(this));
+    (*static_cast<port_type*>(this))(*static_cast<port_type*>(&s));
     // export
-    mExport(s.mExport);
+    s.mExport(mExport);
   }
 
   void operator() (tlm_initiator_socket& s)

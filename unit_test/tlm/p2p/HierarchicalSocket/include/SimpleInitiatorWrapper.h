@@ -40,7 +40,7 @@ public:
     socket("socket"),
     child("child")
   {
-    socket(child.socket);
+    child.socket(socket);
   }
 
 protected:
