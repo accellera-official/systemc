@@ -45,7 +45,7 @@ public:
     mBaseAddress(baseAddress),
     mTransactionCount(0)
   {
-    tlm::tlm_quantumkeeper::setGlobalQuantum(sc_core::sc_time(500, sc_core::SC_NS));
+    tlm::tlm_quantumkeeper::set_global_quantum(sc_core::sc_time(500, sc_core::SC_NS));
     mQuantumKeeper.reset();
 
     // Initiator thread
@@ -80,17 +80,17 @@ public:
       std::cout << name() << ": Send write request: A = 0x"
                 << std::hex << (unsigned int)trans.get_address()
                 << ", D = 0x" << mData << std::dec
-                << " @ " << mQuantumKeeper.getCurrentTime()
+                << " @ " << mQuantumKeeper.get_current_time()
                 << " (" << sc_core::sc_time_stamp() << " + "
-                << mQuantumKeeper.getLocalTime() << ")"
+                << mQuantumKeeper.get_local_time() << ")"
                 << std::endl;
       
     } else {
       std::cout << name() << ": Send read request: A = 0x"
                 << std::hex << (unsigned int)trans.get_address()
-                << " @ " << mQuantumKeeper.getCurrentTime()
+                << " @ " << mQuantumKeeper.get_current_time()
                 << " (" << sc_core::sc_time_stamp() << " + "
-                << mQuantumKeeper.getLocalTime() << ")"
+                << mQuantumKeeper.get_local_time() << ")"
                 << std::endl;
     }
   }
@@ -99,9 +99,9 @@ public:
   {
     if (trans.get_response_status() != tlm::TLM_OK_RESPONSE) {
       std::cout << name() << ": Received error response @ "
-                << mQuantumKeeper.getCurrentTime()
+                << mQuantumKeeper.get_current_time()
                 << " (" << sc_core::sc_time_stamp() << " + "
-                << mQuantumKeeper.getLocalTime() << ")"
+                << mQuantumKeeper.get_local_time() << ")"
                 << std::endl;
 
     } else {
@@ -109,9 +109,9 @@ public:
       if (trans.get_command() == tlm::TLM_READ_COMMAND) {
           std::cout << ": D = 0x" << std::hex << mData << std::dec;
       }
-      std::cout << " @ " << mQuantumKeeper.getCurrentTime()
+      std::cout << " @ " << mQuantumKeeper.get_current_time()
                 << " (" << sc_core::sc_time_stamp() << " + "
-                << mQuantumKeeper.getLocalTime() << ")"
+                << mQuantumKeeper.get_local_time() << ")"
                 << std::endl;
     }
   }
@@ -127,11 +127,11 @@ public:
 
       logStartTransation(trans);
 
-      switch (socket->nb_transport(trans, phase, mQuantumKeeper.getLocalTime())) {
+      switch (socket->nb_transport(trans, phase, mQuantumKeeper.get_local_time())) {
       case tlm::TLM_COMPLETED:
         // Transaction finished
         // Target may have added a delay to the quantum -> sync if needed
-        if (mQuantumKeeper.needSync()) {
+        if (mQuantumKeeper.need_sync()) {
           std::cout << "Sync'ing..." << std::endl;
           mQuantumKeeper.sync();
         }

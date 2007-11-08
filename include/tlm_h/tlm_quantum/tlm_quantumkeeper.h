@@ -18,99 +18,169 @@
 #ifndef __TLM_QUANTUMKEEPER_H__
 #define __TLM_QUANTUMKEEPER_H__
 
-namespace tlm_qk_dummy {
-
-  template <typename Dummy>
-  class tlm_quantumkeeper
-  {
-  public:
-    static void setGlobalQuantum(const sc_core::sc_time& t)
-    {
-      mGlobalQuantum = t;
-    }
-  
-    static const sc_core::sc_time& getGlobalQuantum() 
-    {
-      return mGlobalQuantum;
-    }
-  
-  public:
-    tlm_quantumkeeper() :
-      mLocalTime(sc_core::SC_ZERO_TIME)
-    {
-      computeLocalQuantum();
-    }
-
-    virtual ~tlm_quantumkeeper() {}
-  
-    void inc(const sc_core::sc_time& t)
-    {
-      mLocalTime += t;
-    }
-  
-    bool needSync() const
-    {
-      return mLocalTime >= mLocalQuantum;
-    }
-  
-    void reset()
-    {
-      mLocalTime = sc_core::SC_ZERO_TIME;
-      computeLocalQuantum();
-    }
-  
-    sc_core::sc_time getCurrentTime() const
-    {
-      return sc_core::sc_time_stamp() + mLocalTime;
-    }
-  
-    const sc_core::sc_time& getLocalTime() const
-    {
-      return mLocalTime;
-    }
-  
-    sc_core::sc_time& getLocalTime()
-    {
-      return mLocalTime;
-    }
-  
-    void sync()
-    {
-      sc_core::wait(mLocalTime);
-      reset();
-    }
-  
-  protected:
-    virtual void computeLocalQuantum()
-    {
-      if (mGlobalQuantum != sc_core::SC_ZERO_TIME) {
-        const sc_core::sc_time currentTime = sc_core::sc_time_stamp();
-        sc_dt::int64 tmp = static_cast<sc_dt::int64>(currentTime / mGlobalQuantum);
-        const sc_core::sc_time remainder = (tmp + 1) * mGlobalQuantum - currentTime;
-        mLocalQuantum = remainder;
-
-      } else {
-        mLocalQuantum = sc_core::SC_ZERO_TIME;
-      }
-    }
-  
-  private:
-    static sc_core::sc_time mGlobalQuantum;
-  
-  private:
-    sc_core::sc_time mLocalQuantum;
-    sc_core::sc_time mLocalTime;
-  };
-  
-  template <typename Dummy>
-  sc_core::sc_time tlm_quantumkeeper<Dummy>::mGlobalQuantum = sc_core::SC_ZERO_TIME;
-
-  struct tlm_dummy {};
-} // namespace tlm_qk_dummy
-
 namespace tlm {
-typedef ::tlm_qk_dummy::tlm_quantumkeeper< ::tlm_qk_dummy::tlm_dummy >
-  tlm_quantumkeeper;
+
+  namespace tlm_qk_internal {
+
+    //
+    // tlm_quantumkeeper class
+    //
+    // The tlm_quantumkeeper class is used to keep track of the local time in an
+    // initiator (how much it has run ahead of the SystemC time), to synchronize
+    // with SystemC time etc.
+    //
+    // NOTE:
+    // The templated class tlm::tlm_qk_internal::tlm_quantumkeeper<Dummy> is an
+    // artifact of the implementation and not part of the core TLM standard. It
+    // should never be used directly, instead the class tlm::tlm_quantumkeeper
+    // should be used.
+    //
+    // The dummy template parameter is introduced to make it possible to
+    // initialize the static member (mGlobalQuantum) in the headerfile. This
+    // is only possible for template classes, otherwise the static member must
+    // be initialized in a source file.
+    //  
+    template <typename Dummy>
+    class tlm_quantumkeeper
+    {
+    public:
+      //
+      // Static setters/getters for the global quantum value.
+      //
+      // The global quantum is the maximum time an initiator can run ahead of
+      // systemC time. All initiators will synchronize on timingpoints that are
+      // multiples of the global quantum value.
+      //
+      static void set_global_quantum(const sc_core::sc_time& t)
+      {
+        mGlobalQuantum = t;
+      }
+    
+      static const sc_core::sc_time& get_global_quantum() 
+      {
+        return mGlobalQuantum;
+      }
+    
+    public:
+      tlm_quantumkeeper() :
+        mLocalTime(sc_core::SC_ZERO_TIME)
+      {
+        mLocalQuantum = compute_local_quantum();
+      }
+  
+      virtual ~tlm_quantumkeeper() {}
+    
+      //
+      // Increment the local time (the time the initiator is ahead of the
+      // systemC time) After incrementing the local time an initiator should
+      // check (with the need_sync method) if a sync is required.
+      //
+      void inc(const sc_core::sc_time& t)
+      {
+        mLocalTime += t;
+      }
+    
+      //
+      // Checks if a sync to systemC is required for this initiator. This will
+      // be the case if the local time becomes greater than the local (current)
+      // quantum value for this initiator.
+      //
+      bool need_sync() const
+      {
+        return mLocalTime >= mLocalQuantum;
+      }
+
+      //
+      // Synchronize to systemC. This call will do a wait for the time the
+      // initiator was running ahead of systemC time and reset the
+      // tlm_quantumkeeper.
+      //
+      void sync()
+      {
+        sc_core::wait(mLocalTime);
+        reset();
+      }
+    
+      //
+      // Resets the local time to SC_ZERO_TIME and computes the value of the
+      // next local quantum. This method should be called by an initiator after
+      // a wait because of a synchronization request by a target (TLM_SYNC,
+      // TLM_REJECTED or TLM_SYNC_CONTINUE).
+      //
+      void reset()
+      {
+        mLocalTime = sc_core::SC_ZERO_TIME;
+        mLocalQuantum = compute_local_quantum();
+      }
+    
+      //
+      // Helper function to get the current systemC time, taken the local time
+      // into account. The current systemC time is calculated as the time 
+      // returned by sc_time_stamp incremeneted with the time the initiator is
+      // running ahead.
+      //
+      sc_core::sc_time get_current_time() const
+      {
+        return sc_core::sc_time_stamp() + mLocalTime;
+      }
+    
+      //
+      // Helper functions to get the time the initiator is running ahead of
+      // systenC (local time). This time should be passed to a target in the
+      // nb_transport call
+      //
+      const sc_core::sc_time& get_local_time() const
+      {
+        return mLocalTime;
+      }
+    
+      sc_core::sc_time& get_local_time()
+      {
+        return mLocalTime;
+      }
+    
+    protected:
+      //
+      // This function will calculate the next value of the local quantum for
+      // this initiator. All initiators will synchronize on integer multiples
+      // of the global quantum value. The maximum value for the local quantum
+      // will be equal to the global quantum.
+      //
+      // The method can be overloaded in a derived object if an initiator wants
+      // to use another local quantum. This derived object should also take the
+      // global quantum into account. It's local quantum should not be set to a
+      // value that is larger than the quantum returned by the compute_local_quantum
+      // of it's base class.
+      //
+      virtual sc_core::sc_time compute_local_quantum()
+      {
+        if (mGlobalQuantum != sc_core::SC_ZERO_TIME) {
+          const sc_core::sc_time currentTime = sc_core::sc_time_stamp();
+          sc_dt::int64 tmp = static_cast<sc_dt::int64>(currentTime / mGlobalQuantum);
+          const sc_core::sc_time remainder = (tmp + 1) * mGlobalQuantum - currentTime;
+          return remainder;
+  
+        } else {
+          return sc_core::SC_ZERO_TIME;
+        }
+      }
+    
+    private:
+      static sc_core::sc_time mGlobalQuantum;
+    
+    protected:
+      sc_core::sc_time mLocalQuantum;
+      sc_core::sc_time mLocalTime;
+    };
+    
+    template <typename Dummy>
+    sc_core::sc_time tlm_quantumkeeper<Dummy>::mGlobalQuantum = sc_core::SC_ZERO_TIME;
+  
+    struct tlm_dummy {};
+
+  } // namespace tlm_qk_internal
+  
+  typedef tlm_qk_internal::tlm_quantumkeeper< tlm_qk_internal::tlm_dummy > tlm_quantumkeeper;
 
 } // namespace tlm
 
