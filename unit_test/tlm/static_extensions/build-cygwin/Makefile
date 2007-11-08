@@ -8,16 +8,16 @@ SUBDIRS = \
 
 all:
 	@for i in $(SUBDIRS); do \
-        (cd $$i/build-windows && $(MAKE)); done
+        (cd $$i/build-cygwin && $(MAKE)); done
 
 check:
 	@for i in $(SUBDIRS); do \
-        (cd $$i/build-windows && $(MAKE) check); done
+        (cd $$i/build-cygwin && $(MAKE) check); done
 
 run:
 	@for i in $(SUBDIRS); do \
-        (cd $$i/build-windows && $(MAKE) run); done
+        (cd $$i/build-cygwin && $(MAKE) run); done
 
 clean:
 	@for i in $(SUBDIRS); do \
-        (cd $$i/build-windows && $(MAKE) clean); done
+        (cd $$i/build-cygwin && $(MAKE) clean); done

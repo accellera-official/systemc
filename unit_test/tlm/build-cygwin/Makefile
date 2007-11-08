@@ -16,15 +16,15 @@ SUBDIRS = \
 
 all:
 	@for i in $(SUBDIRS); do \
-        (cd $$i/build-windows && $(MAKE)); done
+        (cd $$i/build-cygwin && $(MAKE)); done
 
 run:
 	@for i in $(SUBDIRS); do \
-        (cd $$i/build-windows && $(MAKE) run); done
+        (cd $$i/build-cygwin && $(MAKE) run); done
 
 check:
 	@for i in $(SUBDIRS); do \
-        (cd $$i/build-windows && $(MAKE) check); done
+        (cd $$i/build-cygwin && $(MAKE) check); done
 
 clean:
 	@if ( test ! -d "$(SYSTEMC_HOME)" ); \
@@ -32,6 +32,6 @@ clean:
 	elif ( test ! -d "$(TLM_HOME)" ); \
 		then echo 'TLM_HOME [$(TLM_HOME)] is not present. Update $(PWD)/Makefile.config'; \
 	else \
-		for i in $(SUBDIRS); do (cd $$i/build-windows && $(MAKE) clean); done; \
+		for i in $(SUBDIRS); do (cd $$i/build-cygwin && $(MAKE) clean); done; \
     fi
        	
