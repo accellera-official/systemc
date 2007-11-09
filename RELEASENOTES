@@ -1,0 +1,40 @@
+     Release Notes for the (preliminary) TLM 2.0 Draft 2 Kit Of 9 Nov 2007
+     =====================================================================
+
+CONTENTS
+========
+
+  1) What's changed in this kit?
+
+  2) Areas under construction
+
+
+1) What's changed in this kit?
+==============================
+
+Compared to the 29 Nov 2006 draft 1 kit, draft 2 has evolved in the following
+primary ways:
+  - Many of the features have undergone significant change:
+    - Untimed modeling
+    - Loosely timed modeling
+    - Approximately timed modeling
+    - The generic payload and its extension mechanism
+    - Non-intrusive (debug) transactions
+  - Several new features have been incorporated:
+    - Temporal decoupling
+    - Model synchronization
+    - Direct memory interface (DMI)
+  - Documentation (users manual) is provided
+  - Examples have been improved
+
+2) Areas under construction
+===========================
+
+This is a draft kit for public review so any of it is subject to change.  
+During the public review, there will be ongoing work to improve the 
+documentation and provide more examples.  Some of the planned investigations
+are:
+  - improve the analysis ports and integrate them with sockets
+  - extend DMI to support snooping and consider a direct channel for bus
+    bypass to non-memory models
+  - enforce payload modifiability rules

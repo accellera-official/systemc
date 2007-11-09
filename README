@@ -1,0 +1,66 @@
+                            2007-11-09
+                TLM 2.0 Draft 2 (OSCI-only release)
+                ===================================
+
+This is a preview of the TLM 2.0 Draft 2 kit for OSCI members only.  The TLM WG
+is refining the user manual, adding more examples and performing platform 
+testing in preparation for a public review release on November 30th.
+
+-------------------------------------------------------------------------------
+                IMPORTANT
+
+1. This draft represents a significant evolution since the draft 1 kit 
+   that was released a year ago.  Draft 2 is not, nor was it intended to be, 
+   backwards compatible with draft 1.
+
+2. This release is supported on the following platforms for which it has
+   been well tested:
+    o TBD
+
+-------------------------------------------------------------------------------
+
+For details, see the separate RELEASENOTES file.
+
+Licensing and Copyright
+
+   See the license agreement at http://www.systemc.org/about/org_docs/license
+   to determine your rights and responsibilities for using this kit.
+
+Installation
+
+   No installation required.
+
+Release Notes
+
+   See the separate RELEASENOTES file that provides up-to date
+   information about this release of TLM 2.0.
+
+User Documentation
+
+   You can find documentation for this release in the docs directory.  The
+   user manual (TLM_2_0_user_manual.pdf) is the best place to start; see 
+   docs/README.txt for a description and status of the other documentation.
+
+Build Support
+ 
+   Support for building the examples and unit tests is provided for 'unix', 
+   'msvc' and 'cygwin'.
+   
+Examples
+
+   A complete example of a loosely timed system is provided at:
+   examples/tlm/lt_min_system/; look in the docs/ subdirectory at
+   lt_min_system_example.ppt for a description and step-by-step instructions
+   for building and running it.
+
+   An example demonstrating the integration of legacy TLM1 models will be
+   added before draft 2 is released for public review.
+
+Unit Tests
+
+   See instructions in unit_test/README.txt
+
+Providing Feedback
+
+   Feedback regarding this kit would be greatly appreciated and can be 
+   submitted to tlm2_forum@lists.systemc.org.
