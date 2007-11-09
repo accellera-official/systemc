@@ -70,7 +70,7 @@ lt_processor_abstraction::lt_processor_abstraction(     ///< constructor
 
 //----------------------------------------------------------
 // Do initiator-socket to initiator-socket hierarchical binding 
-  processor_abstraction_socket(m_initiator.initiator_socket);
+  m_initiator.initiator_socket(processor_abstraction_socket);
 }
 
 //------------------------------------------------------------------------------
