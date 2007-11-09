@@ -15,10 +15,9 @@
 
  *****************************************************************************/
 
-#ifndef _TLM_TARGET_H
-#define _TLM_TARGET_H
+#ifndef __TLM_TARGET_H__
+#define __TLM_TARGET_H__
 
-#include "systemc.h"
 #include "tlm.h"
 
 #include "tlm_gp_export.h"
@@ -27,8 +26,8 @@
 
 
 class tlm_target
-	: public sc_module
-	, virtual public tlm::nb_transport_if<tlm::tlm_generic_payload>
+    : public sc_core::sc_module
+    , virtual public tlm::nb_transport_if<tlm::tlm_generic_payload>
 {
 public:
 
@@ -37,7 +36,7 @@ public:
     SC_HAS_PROCESS(tlm_target);
     
     // constructor & destructor
-    tlm_target(sc_module_name _name,
+    tlm_target(sc_core::sc_module_name name_,
                unsigned int start_address,
                unsigned int end_address);
     ~tlm_target() { }
@@ -57,12 +56,15 @@ private:
 
     tlm::tlm_checker m_checker;
 
-    unsigned int get_burst_length(unsigned int length, unsigned int bus_data_size)
+    unsigned int get_burst_length(unsigned int length,
+                                  unsigned int bus_data_size)
     {
         return (length+bus_data_size-1)/bus_data_size;
     }
 
-	unsigned int get_nr_bytes_of_burst_element(unsigned int count, unsigned int length, unsigned int bus_data_size)
+    unsigned int get_nr_bytes_of_burst_element(unsigned int count,
+                                               unsigned int length,
+                                               unsigned int bus_data_size)
     {
         unsigned int remainder = length-(bus_data_size*count);
         if(remainder < bus_data_size)

@@ -15,10 +15,8 @@
 
  *****************************************************************************/
 
-#ifndef _TLM_TARGET_H
-#define _TLM_TARGET_H
-
-#include "systemc.h"
+#ifndef __TLM_TARGET_H__
+#define __TLM_TARGET_H__
 
 #include "tlm.h"
 
@@ -28,8 +26,8 @@
 
 
 class tlm_target
-	: public sc_module
-	, virtual public tlm::nb_transport_if<tlm::tlm_generic_payload>
+    : public sc_core::sc_module
+    , virtual public tlm::nb_transport_if<tlm::tlm_generic_payload>
 {
 public:
 
@@ -38,7 +36,7 @@ public:
     SC_HAS_PROCESS(tlm_target);
     
     // constructor & destructor
-    tlm_target(sc_module_name _name, 
+    tlm_target(sc_core::sc_module_name name_, 
                unsigned int start_address, 
                unsigned int end_address,
                tlm::tlm_endianness endianness = tlm::TLM_LITTLE_ENDIAN);
@@ -52,22 +50,22 @@ public:
     
 private:
 
-    sc_biguint<256>     reg256;
-    sc_biguint<128>     reg128;
-    unsigned long long  reg64;
-    sc_uint<48>         reg48;
-    unsigned int        reg32;
-    unsigned short      reg16;
-    unsigned char       reg8;
+    sc_dt::sc_biguint<256>     reg256;
+    sc_dt::sc_biguint<128>     reg128;
+    unsigned long long         reg64;
+    sc_dt::sc_uint<48>         reg48;
+    unsigned int               reg32;
+    unsigned short             reg16;
+    unsigned char              reg8;
 
     unsigned int m_start_address;
     unsigned int m_end_address;
-    tlm_memory m_mem;
+    tlm_memory   m_mem;
     unsigned int m_mem_size;
     unsigned int m_socket_width;
 
-	tlm::tlm_checker m_checker;
-	tlm::tlm_endianness m_endianness;
+    tlm::tlm_checker m_checker;
+    tlm::tlm_endianness m_endianness;
 
 }; 
 

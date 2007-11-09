@@ -15,14 +15,12 @@
 
 *****************************************************************************/
 
+#ifndef __TLM_GP_EXPORT_H__
+#define __TLM_GP_EXPORT_H__
 
-#ifndef _TLM_GP_EXPORT_H
-#define _TLM_GP_EXPORT_H
 
-
-#include "systemc"
-#include "tlm_nb_transport_if.h"
 #include "tlm.h"
+#include "tlm_nb_transport_if.h"
 
 namespace tlm {
 
@@ -35,8 +33,8 @@ class tlm_gp_export
 public:
     
     // Constructor
-    tlm_gp_export(const char* name = 0) 
-        : sc_core::sc_export< interfaceType >(name)
+    tlm_gp_export(const char* name_ = 0) 
+        : sc_core::sc_export< interfaceType >(name_)
         , m_busdatawidth(busdatawidth)
     {
     }
@@ -45,8 +43,14 @@ public:
     ~tlm_gp_export() {}
     
     // binding operators
-    void bind(tlm_gp_export< busdatawidth >& ex)	{ sc_core::sc_export< interfaceType >::bind(ex); }
-    void bind( interfaceType& _if ) { sc_core::sc_export< interfaceType >::bind(_if); }
+    void bind(tlm_gp_export< busdatawidth >& ex)
+    {
+        sc_core::sc_export< interfaceType >::bind(ex);
+    }
+    void bind(interfaceType& if_)
+    {
+        sc_core::sc_export< interfaceType >::bind(if_);
+    }
     
     void operator() (tlm_gp_export< busdatawidth >& ex) { bind(ex); }
     void operator() ( interfaceType& _if ) { bind(_if); }

@@ -15,12 +15,11 @@
 
  *****************************************************************************/
 
-#ifndef _TLM_TARGET_H
-#define _TLM_TARGET_H
+#ifndef __TLM_TARGET_H__
+#define __TLM_TARGET_H__
 
 #include "tlm.h"
 #include "simple_target_socket.h"
-#include <cassert>
 
 #include "tlm_checkers.h"
 
@@ -34,11 +33,11 @@ public:
     SC_HAS_PROCESS(tlm_target);
     
     // constructor & destructor
-    tlm_target(sc_core::sc_module_name name, 
+    tlm_target(sc_core::sc_module_name name_, 
                unsigned int start_address, 
                unsigned int end_address,
                tlm::tlm_endianness endianness)
-        : sc_core::sc_module(name)
+        : sc_core::sc_module(name_)
         , socket("socket")
         , m_start_address(start_address)
         , m_end_address(end_address)
@@ -93,7 +92,8 @@ public:
                     std::cout << name() << " : burst write : A = 0x"
                               << std::hex << m_addr
                               << ", D = 0x" << mem[b] << std::dec
-                              << " @ " << sc_core::sc_time_stamp() << std::endl;
+                              << " @ " << sc_core::sc_time_stamp()
+                              << std::endl;
                     
                 } else {
                     
@@ -106,7 +106,8 @@ public:
                     
                     std::cout << name() << " : burst read : A = 0x"
                               << std::hex << m_addr << std::dec
-                              << " @ " << sc_core::sc_time_stamp() << std::endl;
+                              << " @ " << sc_core::sc_time_stamp()
+                              << std::endl;
                 }
                 
                 m_addr += socket.get_bus_width()/8;
@@ -123,7 +124,9 @@ public:
         trans.set_response_status(m_response_status);
         
         // Time annotation
-        t += sc_core::sc_time(10*get_burst_length(trans.get_data_length(), socket_bus_width), sc_core::SC_NS);
+        t += sc_core::sc_time(10*get_burst_length(trans.get_data_length(),
+                                                  socket_bus_width),
+                              sc_core::SC_NS);
         
         // LT slave
         // - always return true

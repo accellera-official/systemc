@@ -15,8 +15,8 @@
 
  *****************************************************************************/
 
-#ifndef _TLM_INITIATOR_H
-#define _TLM_INITIATOR_H
+#ifndef __TLM_INITIATOR_H__
+#define __TLM_INITIATOR_H__
 
 #include "systemc"
 
@@ -33,8 +33,8 @@ public:
     SC_HAS_PROCESS(tlm_initiator);
     
     // Constructor
-    tlm_initiator(sc_core::sc_module_name _name)
-        : sc_core::sc_module(_name)
+    tlm_initiator(sc_core::sc_module_name name_)
+        : sc_core::sc_module(name_)
         , bus_port("bus_port")
     {
         m_ext1.data1 = 10;

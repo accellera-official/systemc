@@ -15,7 +15,7 @@
 
  *****************************************************************************/
 
-#include "systemc.h"
+#include "systemc"
 
 #include "tlm_initiator.h"
 #include "tlm_target.h"
@@ -25,22 +25,32 @@
 
 int sc_main(int argc, char* argv[])
 {
-	// construction
-	tlm_initiator initiator_le("initiator_little_endian", tlm::TLM_LITTLE_ENDIAN, true);
-	tlm_initiator initiator_be("initiator_big_endian", tlm::TLM_BIG_ENDIAN, false);
-	
-	tlm_target target_le("target_little_endian", 0, 1023, tlm::TLM_LITTLE_ENDIAN);
-	tlm_target target_be("target_big_endian", 0, 1023, tlm::TLM_BIG_ENDIAN);
-
-	SimpleBus<2,2> bus("bus");
-
-	// connections
-	initiator_le.socket(bus.target_socket[0]);
-	initiator_be.socket(bus.target_socket[1]);
-	bus.initiator_socket[0](target_le.socket);
-	bus.initiator_socket[1](target_be.socket);
-
-	sc_start();
-
+    // construction
+    tlm_initiator initiator_le("initiator_little_endian",
+                               tlm::TLM_LITTLE_ENDIAN,
+                               true);
+    tlm_initiator initiator_be("initiator_big_endian",
+                               tlm::TLM_BIG_ENDIAN,
+                               false);
+    
+    tlm_target target_le("target_little_endian",
+                         0,
+                         1023,
+                         tlm::TLM_LITTLE_ENDIAN);
+    tlm_target target_be("target_big_endian", 
+                         0,
+                         1023,
+                         tlm::TLM_BIG_ENDIAN);
+    
+    SimpleBus<2,2> bus("bus");
+    
+    // connections
+    initiator_le.socket(bus.target_socket[0]);
+    initiator_be.socket(bus.target_socket[1]);
+    bus.initiator_socket[0](target_le.socket);
+    bus.initiator_socket[1](target_be.socket);
+    
+    sc_core::sc_start();
+    
     return 0;
 }

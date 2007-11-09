@@ -15,17 +15,14 @@
 
  *****************************************************************************/
 
-#ifndef _TLM_INITIATOR_H
-#define _TLM_INITIATOR_H
-
-#include "systemc.h"
-
-#include "tlm_gp_port.h"
+#ifndef __TLM_INITIATOR_H__
+#define __TLM_INITIATOR_H__
 
 #include "tlm.h"
+#include "tlm_gp_port.h"
 
 
-class tlm_initiator : public sc_module
+class tlm_initiator : public sc_core::sc_module
 {
 public:
     
@@ -34,8 +31,9 @@ public:
     SC_HAS_PROCESS(tlm_initiator);
 
     // Constructor
-    tlm_initiator(sc_module_name _name, tlm::tlm_endianness endianness = tlm::TLM_LITTLE_ENDIAN)
-        : sc_module(_name)
+    tlm_initiator(sc_core::sc_module_name name_,
+                  tlm::tlm_endianness endianness = tlm::TLM_LITTLE_ENDIAN)
+        : sc_core::sc_module(name_)
         , bus_port("bus_port")
         , m_endianness(endianness)
     {
@@ -55,17 +53,19 @@ public:
         std::cout << std::endl;
         
         std::cout << std::endl;
-        std::cout << " ###### TEST SERIALIZERS WITH BYTE-ENABLES ###### " << std::endl; 
+        std::cout << " ###### TEST SERIALIZERS WITH BYTE-ENABLES ###### "
+                  << std::endl; 
         test_with_be();
         std::cout << std::endl;
         
         std::cout << std::endl;
-        std::cout << " ###### TEST SERIALIZERS WITH CUSTOMIZED BYTE-ENABLES ###### " << std::endl; 
+        std::cout << " ###### TEST SERIALIZERS WITH CUSTOMIZED BYTE-ENABLES ###### "
+                  << std::endl; 
         test_customized_be();
         std::cout << std::endl;
         
-        sc_stop();
-        sc_core::wait(SC_ZERO_TIME);
+        sc_core::sc_stop();
+        sc_core::wait(sc_core::SC_ZERO_TIME);
     }
     
 private:
@@ -76,13 +76,13 @@ private:
     
     tlm::tlm_generic_payload  m_gp;
     
-    sc_biguint<256> reg256;
-    sc_bigint<128>  reg128;
-    sc_uint<64>	    reg64;
-    sc_int<48>	    reg48;
-    unsigned int    reg32;
-    short	    reg16;
-    unsigned char   reg8;
+    sc_dt::sc_biguint<256> reg256;
+    sc_dt::sc_bigint<128>  reg128;
+    sc_dt::sc_uint<64>	   reg64;
+    sc_dt::sc_int<48>	   reg48;
+    unsigned int           reg32;
+    short	           reg16;
+    unsigned char          reg8;
     
     unsigned char *wr_data; 
     unsigned char *aux_data; 
@@ -92,12 +92,20 @@ private:
     
     
     template< int W >
-	void write(unsigned int address, unsigned char *data, bool* be = 0, unsigned int be_length = 0);
+	void write(unsigned int address,
+                   unsigned char *data, 
+                   bool* be = 0,
+                   unsigned int be_length = 0);
     template< int W >
-	void read(unsigned int address, unsigned char *data, bool* be = 0, unsigned int be_length = 0);
+	void read(unsigned int address,
+                  unsigned char *data,
+                  bool* be = 0,
+                  unsigned int be_length = 0);
     
     template< class T >
-	void prepare_address_and_data(int nbits, unsigned int& address, T& data);
+	void prepare_address_and_data(int nbits,
+                                      unsigned int& address,
+                                      T& data);
     
     void prepare_arrays(int nbits, bool shift = false);
     void compare_arrays(int nbits);
@@ -111,7 +119,9 @@ private:
 
 
 template< class T >
-void tlm_initiator::prepare_address_and_data(int nbits, unsigned int& address, T& data)
+void tlm_initiator::prepare_address_and_data(int nbits,
+                                             unsigned int& address,
+                                             T& data)
 {
     address = 0;
     if(hasHostEndianness(m_endianness) == false)
@@ -131,11 +141,15 @@ void tlm_initiator::prepare_address_and_data(int nbits, unsigned int& address, T
 // Read data to address (data in host endianness)
 //
 template< int W >
-void tlm_initiator::write(unsigned int address, unsigned char *data, bool* be, unsigned int be_length)
+void tlm_initiator::write(unsigned int address,
+                          unsigned char *data,
+                          bool* be,
+                          unsigned int be_length)
 {
     // Single WRITE transaction 
     
-    std::cout << name() << " : Single WRITE transaction : ADDRESS = 0x" << std::hex << address << std::dec << " : "; 
+    std::cout << name() << " : Single WRITE transaction : ADDRESS = 0x"
+              << std::hex << address << std::dec << " : "; 
     
     m_gp.set_command(tlm::TLM_WRITE_COMMAND);
     m_gp.set_address(address);
@@ -160,10 +174,14 @@ void tlm_initiator::write(unsigned int address, unsigned char *data, bool* be, u
 // Read data from address (returns data in host endianness)
 //
 template< int W >
-void tlm_initiator::read(unsigned int address, unsigned char *data, bool* be, unsigned int be_length)
+void tlm_initiator::read(unsigned int address,
+                         unsigned char *data,
+                         bool* be,
+                         unsigned int be_length)
 {
     // Single READ transaction 
-    std::cout << name() << " : Single READ transaction : ADDRESS = 0x" << std::hex << address << std::dec << " : ";  
+    std::cout << name() << " : Single READ transaction : ADDRESS = 0x"
+              << std::hex << address << std::dec << " : ";  
     
     m_gp.set_command(tlm::TLM_READ_COMMAND);
     m_gp.set_address(address);

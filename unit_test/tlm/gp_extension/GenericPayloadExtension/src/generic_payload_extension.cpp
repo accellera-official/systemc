@@ -15,7 +15,7 @@
 
  *****************************************************************************/
 
-#include "systemc"
+#include <systemc>
 
 #include "tlm_initiator.h"
 #include "tlm_target.h"

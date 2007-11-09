@@ -14,8 +14,8 @@
   language governing rights and limitations under the License.
 
  *****************************************************************************/
-#ifndef _TLM_MEMORY_H
-#define _TLM_MEMORY_H
+#ifndef __TLM_MEMORY_H__
+#define __TLM_MEMORY_H__
 
 #include "tlm.h"
 

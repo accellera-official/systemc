@@ -19,13 +19,13 @@
 
 #include "tlm_extensions.h"
 
-#include "assert.h"
+#include <cassert>
 
 // constructor
-tlm_target::tlm_target(sc_core::sc_module_name _name, 
+tlm_target::tlm_target(sc_core::sc_module_name name_, 
                        unsigned int start_address, 
                        unsigned int end_address)
-    : sc_core::sc_module(_name)
+    : sc_core::sc_module(name_)
     , bus_port("bus_port")
     , m_start_address(start_address)
     , m_end_address(end_address)
@@ -39,8 +39,8 @@ tlm_target::tlm_target(sc_core::sc_module_name _name,
     
     m_incr_address = bus_port.getBusDataWidth()/8; // bus data width in bytes
     
-	m_checker.burst_not_supported();
-	m_checker.byte_enable_not_supported();
+    m_checker.burst_not_supported();
+    m_checker.byte_enable_not_supported();
 }
 
 

@@ -34,8 +34,8 @@ public:
     SC_HAS_PROCESS(tlm_initiator);
     
     // Constructor
-    tlm_initiator(sc_core::sc_module_name _name)
-        : sc_core::sc_module(_name)
+    tlm_initiator(sc_core::sc_module_name name_)
+        : sc_core::sc_module(name_)
         , bus_port("bus_port")
     {
         SC_THREAD(main);
@@ -64,68 +64,68 @@ public:
 
     void doLEReadAccesses(unsigned int address)
     {
-      // read word (4 bytes)
-      print(read<unsigned int>(address), tlm::TLM_LITTLE_ENDIAN);
-
-      // read subwords (2 bytes), lsb to msb
-      print(read<unsigned short>(address), tlm::TLM_LITTLE_ENDIAN);
-      print(read<unsigned short>(address + 2), tlm::TLM_LITTLE_ENDIAN);
-
-      // read subwords (1 byte), lsb to msb
-      print(read<unsigned char>(address), tlm::TLM_LITTLE_ENDIAN);
-      print(read<unsigned char>(address + 1), tlm::TLM_LITTLE_ENDIAN);
-      print(read<unsigned char>(address + 2), tlm::TLM_LITTLE_ENDIAN);
-      print(read<unsigned char>(address + 3), tlm::TLM_LITTLE_ENDIAN);
+        // read word (4 bytes)
+        print(read<unsigned int>(address), tlm::TLM_LITTLE_ENDIAN);
+        
+        // read subwords (2 bytes), lsb to msb
+        print(read<unsigned short>(address), tlm::TLM_LITTLE_ENDIAN);
+        print(read<unsigned short>(address + 2), tlm::TLM_LITTLE_ENDIAN);
+        
+        // read subwords (1 byte), lsb to msb
+        print(read<unsigned char>(address), tlm::TLM_LITTLE_ENDIAN);
+        print(read<unsigned char>(address + 1), tlm::TLM_LITTLE_ENDIAN);
+        print(read<unsigned char>(address + 2), tlm::TLM_LITTLE_ENDIAN);
+        print(read<unsigned char>(address + 3), tlm::TLM_LITTLE_ENDIAN);
     }
 
     void doBEReadAccesses(unsigned int address)
     {
-      // read word (4 bytes)
-      print(read<unsigned int>(address), tlm::TLM_BIG_ENDIAN);
-
-      // read subwords (2 bytes), lsb to msb
-      print(read<unsigned short>(address + 2), tlm::TLM_BIG_ENDIAN);
-      print(read<unsigned short>(address), tlm::TLM_BIG_ENDIAN);
-
-      // read subwords (1 byte), lsb to msb
-      print(read<unsigned char>(address + 3), tlm::TLM_BIG_ENDIAN);
-      print(read<unsigned char>(address + 2), tlm::TLM_BIG_ENDIAN);
-      print(read<unsigned char>(address + 1), tlm::TLM_BIG_ENDIAN);
-      print(read<unsigned char>(address), tlm::TLM_BIG_ENDIAN);
+        // read word (4 bytes)
+        print(read<unsigned int>(address), tlm::TLM_BIG_ENDIAN);
+        
+        // read subwords (2 bytes), lsb to msb
+        print(read<unsigned short>(address + 2), tlm::TLM_BIG_ENDIAN);
+        print(read<unsigned short>(address), tlm::TLM_BIG_ENDIAN);
+        
+        // read subwords (1 byte), lsb to msb
+        print(read<unsigned char>(address + 3), tlm::TLM_BIG_ENDIAN);
+        print(read<unsigned char>(address + 2), tlm::TLM_BIG_ENDIAN);
+        print(read<unsigned char>(address + 1), tlm::TLM_BIG_ENDIAN);
+        print(read<unsigned char>(address), tlm::TLM_BIG_ENDIAN);
     }
 
     void main()
-	{
-          //
-          // Write one word (4 bytes)
-          // 
-          write<unsigned int>(0x10, 0x04030201);
-
-          //
-          // LE initiator:
-          // - lsb lowest (byte) address
-          // - msb highest (byte) address
-          //
-          std::cout << "\n\nLE Initiator:\n" << std::endl;
-          doLEReadAccesses(0x10);
-
-          //
-          // BE initiator:
-          // - msb lowest (byte) address
-          // - lsb highest (byte) address
-          //
-          std::cout << "\n\nBE Initiator:\n" << std::endl;
-          doBEReadAccesses(0x10);
-
-          sc_core::sc_stop();
-          sc_core::wait(sc_core::SC_ZERO_TIME);
-	}
-
-   	// Single WRITE transaction 
+    {
+        //
+        // Write one word (4 bytes)
+        // 
+        write<unsigned int>(0x10, 0x04030201);
+        
+        //
+        // LE initiator:
+        // - lsb lowest (byte) address
+        // - msb highest (byte) address
+        //
+        std::cout << "\n\nLE Initiator:\n" << std::endl;
+        doLEReadAccesses(0x10);
+        
+        //
+        // BE initiator:
+        // - msb lowest (byte) address
+        // - lsb highest (byte) address
+        //
+        std::cout << "\n\nBE Initiator:\n" << std::endl;
+        doBEReadAccesses(0x10);
+        
+        sc_core::sc_stop();
+        sc_core::wait(sc_core::SC_ZERO_TIME);
+    }
+    
+    // Single WRITE transaction 
     // Write data to address (data in host endianness)
     //
     template <typename DT>
-    void write(unsigned int address, DT data)
+        void write(unsigned int address, DT data)
     {
     	std::cout << name() << " : Single WRITE transaction : "; 
     
@@ -151,11 +151,11 @@ public:
     	}
     }
     
-   	// Single READ transaction 
+    // Single READ transaction 
     // Read data from address (returns data in host endianness)
     //
     template <typename DT>
-    DT read(unsigned int address)
+        DT read(unsigned int address)
     {
     	unsigned int data = 0x0;
     	

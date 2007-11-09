@@ -17,8 +17,6 @@
 
 #include "tlm_initiator.h"
 
-using namespace std;
-
 // Single WRITE transaction
 void tlm_initiator::test_single_write(bool use_ext1,
                                       bool use_ext2,
@@ -27,7 +25,7 @@ void tlm_initiator::test_single_write(bool use_ext1,
     unsigned int m_address = 0x10; 
     unsigned int m_data = 100;
     
-	std::cout << name() << " : Single WRITE transaction : ";
+    std::cout << name() << " : Single WRITE transaction : ";
     
     m_gp.set_command(tlm::TLM_WRITE_COMMAND);
     m_gp.set_address(m_address);

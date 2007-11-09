@@ -15,27 +15,24 @@
 
  *****************************************************************************/
 
-#ifndef _TLM_INITIATOR_H
-#define _TLM_INITIATOR_H
-
-#include "systemc.h"
-
-#include "tlm_gp_port.h"
+#ifndef __TLM_INITIATOR_H__
+#define __TLM_INITIATOR_H__
 
 #include "tlm.h"
+#include "tlm_gp_port.h"
 
 
-class tlm_initiator : public sc_module
+class tlm_initiator : public sc_core::sc_module
 {
 public:
     
-	tlm::tlm_gp_port< 32 > bus_port; // bus data width in bits
-
+    tlm::tlm_gp_port< 32 > bus_port; // bus data width in bits
+    
     SC_HAS_PROCESS(tlm_initiator);
-
-	// Constructor
-    tlm_initiator(sc_module_name _name)
-        : sc_module(_name)
+    
+    // Constructor
+    tlm_initiator(sc_core::sc_module_name name_)
+        : sc_core::sc_module(name_)
         , bus_port("bus_port")
     {
         SC_THREAD(main);
@@ -61,7 +58,8 @@ public:
             rd_data[i] = 0;
         }
         
-        std::cout << name() << " : TEST 1 : write and read burst operation : length 64 bytes \n";
+        std::cout << name() << " : TEST 1 : write and read burst operation :"
+                  << " length 64 bytes \n";
         // Write Burst transaction
         writeBurst(0x0,wr_data,64);
         // Read Burst transaction
@@ -70,7 +68,8 @@ public:
         compare_arrays(wr_data,rd_data,64);
         std::cout << std::endl;
         
-        std::cout << name() << " : TEST 2 : write and read burst operation : length 66 bytes \n";
+        std::cout << name() << " : TEST 2 : write and read burst operation :"
+                  <<" length 66 bytes \n";
         for(int i=0;i<66;i++) rd_data[i]=0;
         // Write Burst transaction
         writeBurst(0x100,wr_data,66);
@@ -84,24 +83,32 @@ public:
         delete [] rd_data;	rd_data = 0;
         
         sc_core::sc_stop();
-        sc_core::wait(SC_ZERO_TIME);
+        sc_core::wait(sc_core::SC_ZERO_TIME);
     }
     
 private:
     
     tlm::tlm_generic_payload  m_gp;
     
-    void writeBurst(unsigned int base_address, unsigned char *data, unsigned int nr_bytes);
-    void readBurst(unsigned int base_address, unsigned char *data, unsigned int nr_bytes);
-    void compare_arrays(unsigned char* wr_data, unsigned char* rd_data, unsigned int nr_bytes);
+    void writeBurst(unsigned int base_address,
+                    unsigned char *data,
+                    unsigned int nr_bytes);
+    void readBurst(unsigned int base_address,
+                   unsigned char *data,
+                   unsigned int nr_bytes);
+    void compare_arrays(unsigned char* wr_data,
+                        unsigned char* rd_data,
+                        unsigned int nr_bytes);
 };
 
 //
 // Incremental burst WRITE transaction 
 //
-void tlm_initiator::writeBurst(unsigned int base_address, unsigned char *data, unsigned int nr_bytes)
+void tlm_initiator::writeBurst(unsigned int base_address,
+                               unsigned char *data,
+                               unsigned int nr_bytes)
 {
-    cout << name() << " : Incremental burst WRITE transaction : "; 
+    std::cout << name() << " : Incremental burst WRITE transaction : "; 
     
     m_gp.set_command(tlm::TLM_WRITE_COMMAND);
     m_gp.set_address(base_address);
@@ -123,7 +130,9 @@ void tlm_initiator::writeBurst(unsigned int base_address, unsigned char *data, u
 //
 // Incremental burst READ transaction 
 //
-void tlm_initiator::readBurst(unsigned int base_address, unsigned char *data, unsigned int nr_bytes)
+void tlm_initiator::readBurst(unsigned int base_address,
+                              unsigned char *data,
+                              unsigned int nr_bytes)
 {
     std::cout << name() << " : Incremental burst READ transaction : "; 
     
@@ -146,7 +155,9 @@ void tlm_initiator::readBurst(unsigned int base_address, unsigned char *data, un
 
 
 // Compare arrays
-void tlm_initiator::compare_arrays(unsigned char* wr_data, unsigned char* rd_data, unsigned int nr_bytes)
+void tlm_initiator::compare_arrays(unsigned char* wr_data,
+                                   unsigned char* rd_data,
+                                   unsigned int nr_bytes)
 {
     bool error_flag = false;
     for(unsigned int i=0;i<nr_bytes;i++)
@@ -156,9 +167,11 @@ void tlm_initiator::compare_arrays(unsigned char* wr_data, unsigned char* rd_dat
     }
     
     if(error_flag)
-        std::cout << name() << " : WR and RD arrays are different : ERROR " << std::endl;
+        std::cout << name() << " : WR and RD arrays are different : ERROR "
+                  << std::endl;
     else
-        std::cout << name() << " : WR and RD arrays are equal : OK  " << std::endl;
+        std::cout << name() << " : WR and RD arrays are equal : OK  "
+                  << std::endl;
 }
 
 #endif

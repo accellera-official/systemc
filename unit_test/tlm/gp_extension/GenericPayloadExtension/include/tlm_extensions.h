@@ -13,11 +13,10 @@
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
 
-  Author: Olaf Scheufen
 *****************************************************************************/
 
-#ifndef TLM_EXTENSIONS_H
-#define TLM_EXTENSIONS_H
+#ifndef __TLM_EXTENSIONS_H__
+#define __TLM_EXTENSIONS_H__
 
 #include "tlm.h"
 

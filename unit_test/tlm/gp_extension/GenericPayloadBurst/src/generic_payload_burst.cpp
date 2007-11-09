@@ -15,7 +15,7 @@
 
  *****************************************************************************/
 
-#include "systemc.h"
+#include "systemc"
 
 #include "tlm_initiator.h"
 #include "tlm_target.h"
@@ -34,7 +34,7 @@ int sc_main(int argc, char* argv[])
     // connections
     initiator_1->bus_port(target_1->bus_port);
     
-    sc_start();
+    sc_core::sc_start();
 
     if (initiator_1) {delete initiator_1;}
     if (target_1) {delete target_1;}

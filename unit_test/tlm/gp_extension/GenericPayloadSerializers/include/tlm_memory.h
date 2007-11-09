@@ -15,11 +15,10 @@
 
  *****************************************************************************/
 
-#ifndef _TLM_MEMORY_H
-#define _TLM_MEMORY_H
+#ifndef __TLM_MEMORY_H__
+#define __TLM_MEMORY_H__
 
 #include "tlm.h"
-#include <vector>
 
 //
 // TLM Memory: stores data as array of bytes
