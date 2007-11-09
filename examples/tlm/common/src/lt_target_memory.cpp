@@ -84,7 +84,7 @@ lt_target_memory::lt_target_memory             ///< constructor
       , m_refresh_rate  (clock_period * refresh_rate)
    {
       // Allocate an array for the target's memory
-      m_memory = new unsigned char[memory_size];
+       m_memory = new unsigned char[size_t(memory_size)];
       
       // clear the memory
       memset(m_memory, 0, memory_width * size_t(memory_size));
@@ -259,7 +259,7 @@ lt_target_memory::nb_transport(                 ///< non-blocking transport
   
   @note
     1. not implemented
-    2. currently generates a fatal report
+    2. currently generates a fatal report (OS: disabled)
     
 ==============================================================================*/
 
@@ -268,7 +268,8 @@ lt_target_memory::transport_dbg(            ///< transport debug
   tlm::tlm_debug_payload     &payload       ///< debug payload
 )
 {
-  REPORT_FATAL(report_source, __FUNCTION__, "routine not implemented");
+    // No error needed, disabled
+    //REPORT_FATAL(report_source, __FUNCTION__, "routine not implemented");
   return 0;
 }
 
@@ -288,7 +289,7 @@ lt_target_memory::transport_dbg(            ///< transport debug
   
   @note
     1. not implemented
-    2. currently generates a fatal report
+    2. currently generates a fatal report (OS: disabled)
     
 ==============================================================================*/
 
@@ -299,6 +300,8 @@ lt_target_memory::get_direct_mem_ptr(       ///< get direct memory pointer
   tlm::tlm_dmi               &dmi_data      ///< dmi data
 )
 {
-  REPORT_FATAL(report_source, __FUNCTION__, "routine not implemented");
-  return false;
+    // It's perfectly allowed to not support DMI, no need to
+    // throw an error:
+    // REPORT_FATAL(report_source, __FUNCTION__, "routine not implemented");
+    return false;
 }
