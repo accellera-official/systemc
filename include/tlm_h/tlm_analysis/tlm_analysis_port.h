@@ -1,3 +1,19 @@
+/*****************************************************************************
+
+  The following code is derived, directly or indirectly, from the SystemC
+  source code Copyright (c) 1996-2007 by all Contributors.
+  All Rights reserved.
+
+  The contents of this file are subject to the restrictions and limitations
+  set forth in the SystemC Open Source License Version 3.0 (the "License");
+  You may not use this file except in compliance with such restrictions and
+  limitations. You may obtain instructions on how to receive a copy of the
+  License at http://www.systemc.org/. Software distributed by Contributors
+  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
+  ANY KIND, either express or implied. See the License for the specific
+  language governing rights and limitations under the License.
+
+ *****************************************************************************/
 
 #ifndef __TLM_ANALYSIS_PORT_H__
 #define __TLM_ANALYSIS_PORT_H__
@@ -9,26 +25,26 @@ namespace tlm {
 
 
 template < typename T>
-class analysis_port :
+class tlm_analysis_port :
   public sc_core::sc_object ,
-  public virtual analysis_if< T >
+  public virtual tlm_analysis_if< T >
 {
  public:
-  analysis_port() : sc_core::sc_object() {}
-  analysis_port( const char *nm ) : sc_core::sc_object( nm ) {}
+  tlm_analysis_port() : sc_core::sc_object() {}
+  tlm_analysis_port( const char *nm ) : sc_core::sc_object( nm ) {}
 
   // bind and () work for both interfaces and analysis ports, since 
   // analysis ports implement the analysis interface
 
-  void bind( analysis_if<T> &_if ) {
+  void bind( tlm_analysis_if<T> &_if ) {
     m_interfaces.push_back( &_if );
   }
 
-  void operator() ( analysis_if<T> &_if ) { bind( _if ); }
+  void operator() ( tlm_analysis_if<T> &_if ) { bind( _if ); }
 
-  bool unbind( analysis_if<T> &_if ) {
+  bool unbind( tlm_analysis_if<T> &_if ) {
 
-    typename std::deque< analysis_if<T> *>::iterator i;
+    typename std::deque< tlm_analysis_if<T> *>::iterator i;
 
     for( i = m_interfaces.begin(); 
 	 i != m_interfaces.end();
@@ -48,7 +64,7 @@ class analysis_port :
   }
 
   void write( const T &t ) {
-    typename std::deque< analysis_if<T> * >::iterator i;
+    typename std::deque< tlm_analysis_if<T> * >::iterator i;
  
     for( i = m_interfaces.begin(); 
 	 i != m_interfaces.end();
@@ -61,7 +77,7 @@ class analysis_port :
   }
 
  private:
-  std::deque< analysis_if<T> * > m_interfaces;
+  std::deque< tlm_analysis_if<T> * > m_interfaces;
 
 };
 

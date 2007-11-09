@@ -42,11 +42,11 @@ namespace tlm {
 template< typename T>
 class tlm_peq :
   public sc_core::sc_module ,
-  public virtual delayed_analysis_if< T >
+  public virtual tlm_delayed_analysis_if< T >
 {
  public:
-  sc_core::sc_export< delayed_analysis_if< T > > delayed_analysis_export;
-  analysis_port< T > ap;
+  sc_core::sc_export< tlm_delayed_analysis_if< T > > delayed_analysis_export;
+  tlm_analysis_port< T > ap;
 
   SC_HAS_PROCESS( tlm_peq );
 
