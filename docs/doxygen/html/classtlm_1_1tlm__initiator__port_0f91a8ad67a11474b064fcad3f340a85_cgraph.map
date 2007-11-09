@@ -1,3 +1,0 @@
-<area shape="rect" href="$classtlm_1_1tlm__initiator__port__base.html#132dcae34a00ed578047d571927803bd" title="Creates the initiator port list from a non NULL initiator_port_type * list." alt="" coords="413,5,696,32">
-<area shape="rect" href="$classtlm_1_1tlm__initiator__port__base.html#1d50c6b2bba444e1efddfa945bed1d88" title="Returns the vector of registered initiator port(s), reversed list." alt="" coords="368,56,741,83">
-<area shape="rect" href="$classtlm_1_1tlm__initiator__port__base.html#3211d5ade6779f444375fba7ef62bc3e" title="Sets the vector of registered initiator port(s) (port propagation)." alt="" coords="399,107,711,133">
