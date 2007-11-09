@@ -149,15 +149,17 @@ namespace tlm {
       // The method can be overloaded in a derived object if an initiator wants
       // to use another local quantum. This derived object should also take the
       // global quantum into account. It's local quantum should not be set to a
-      // value that is larger than the quantum returned by the compute_local_quantum
-      // of it's base class.
+      // value that is larger than the quantum returned by the
+      // compute_local_quantum of it's base class.
       //
       virtual sc_core::sc_time compute_local_quantum()
       {
         if (mGlobalQuantum != sc_core::SC_ZERO_TIME) {
-          const sc_core::sc_time currentTime = sc_core::sc_time_stamp();
-          sc_dt::int64 tmp = static_cast<sc_dt::int64>(currentTime / mGlobalQuantum);
-          const sc_core::sc_time remainder = (double)(tmp + 1) * mGlobalQuantum - currentTime;
+          const sc_dt::uint64 currentTime = sc_core::sc_time_stamp().value();
+          const sc_dt::uint64 globalQuant = mGlobalQuantum.value();
+          const sc_core::sc_time remainder = sc_core::sc_time(
+                  (currentTime/globalQuant+1) * globalQuant - currentTime,
+                  false);
           return remainder;
   
         } else {
