@@ -15,8 +15,8 @@
 
  *****************************************************************************/
 
-#ifndef __SIMPLE_AT_SLAVE2_H__
-#define __SIMPLE_AT_SLAVE2_H__
+#ifndef __EXPLICIT_LT_TARGET_H__
+#define __EXPLICIT_LT_TARGET_H__
 
 #include "tlm.h"
 #include "simple_target_socket.h"
@@ -26,7 +26,7 @@
 #include <queue>
 //#include <iostream>
 
-class SimpleATSlave2 : public sc_core::sc_module
+class ExplicitLTTarget : public sc_core::sc_module
 {
 public:
   typedef tlm::tlm_generic_payload transaction_type;
@@ -38,35 +38,28 @@ public:
   target_socket_type socket;
 
 public:
-  SC_HAS_PROCESS(SimpleATSlave2);
-  SimpleATSlave2(sc_core::sc_module_name name) :
+  SC_HAS_PROCESS(ExplicitLTTarget);
+  ExplicitLTTarget(sc_core::sc_module_name name) :
     sc_core::sc_module(name),
     socket("socket"),
-    ACCEPT_DELAY(25, sc_core::SC_NS),
-    RESPONSE_DELAY(100, sc_core::SC_NS)
+    mCurrentTransaction(0)
   {
     // register nb_transport method
     REGISTER_NBTRANSPORT(socket, myNBTransport);
+    REGISTER_DEBUGTRANSPORT(socket, transport_dbg);
 
-    SC_METHOD(beginResponse)
-    sensitive << mBeginResponseEvent;
-    dont_initialize();
-
-    SC_METHOD(endResponse)
-    sensitive << mEndResponseEvent;
-    dont_initialize();
+    SC_THREAD(beginResponse)
   }
 
-  //
-  // Simple AT-TA slave
-  // - Request is accepted after fixed delay (relative to end of prev request phase)
-  // - Response is started after fixed delay (relative to end of prev resp phase)
-  //
   sync_enum_type myNBTransport(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
   {
     if (phase == tlm::BEGIN_REQ) {
       sc_dt::uint64 address = trans.get_address();
       assert(address < 400);
+
+      // This target only supports one transaction at a time
+      // This will only work with LT initiators
+      assert(mCurrentTransaction == 0);
 
       unsigned int& data = *reinterpret_cast<unsigned int*>(trans.get_data_ptr());
       if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
@@ -77,6 +70,14 @@ public:
 
         *reinterpret_cast<unsigned int*>(&mMem[address]) = data;
 
+        // Synchronization on demand (eg need to assert an interrupt)
+        mResponseEvent.notify(t);
+        mCurrentTransaction = &trans;
+
+        // End request phase
+        phase = tlm::END_REQ;
+        return tlm::TLM_SYNC_CONTINUE;
+
       } else {
         std::cout << name() << ": Received read request: A = 0x"
                   << std::hex << (unsigned int)address
@@ -84,29 +85,16 @@ public:
                   << std::endl;
 
         data = *reinterpret_cast<unsigned int*>(&mMem[address]);
+
+        // Finish transaction (use timing annotation)
+        t += sc_core::sc_time(100, sc_core::SC_NS);
+        return tlm::TLM_COMPLETED;
       }
-
-      // End request phase after accept delay
-      t += ACCEPT_DELAY;
-      phase = tlm::END_REQ;
-
-      if (mResponseQueue.empty()) {
-        // Start processing transaction after accept delay
-        // Notify begin of response phase after accept delay + response delay
-        mBeginResponseEvent.notify(t + RESPONSE_DELAY);
-      }
-      mResponseQueue.push(&trans);
-
-      // AT-noTA slave
-      // - always return false
-      // - immediately return delay to indicate end of phase
-      return tlm::TLM_SYNC_CONTINUE;
 
     } else if (phase == tlm::END_RESP) {
 
-      // response phase ends after t
-      mEndResponseEvent.notify(t);
-
+      // Transaction finished
+      mCurrentTransaction = 0;
       return tlm::TLM_COMPLETED;
     }
 
@@ -117,53 +105,66 @@ public:
 
   void beginResponse()
   {
-    assert(!mResponseQueue.empty());
-    // start response phase of oldest transaction
-    phase_type phase = tlm::BEGIN_RESP;
-    sc_core::sc_time t = sc_core::SC_ZERO_TIME;
-    transaction_type* trans = mResponseQueue.front();
-    assert(trans);
+    while (true) {
+      // Wait for next synchronization request
+      wait(mResponseEvent);
 
-    // Set response data
-    trans->set_response_status(tlm::TLM_OK_RESPONSE);
-    if (trans->get_command() == tlm::TLM_READ_COMMAND) {
-       sc_dt::uint64 address = trans->get_address();
-       assert(address < 400);
-      *reinterpret_cast<unsigned int*>(trans->get_data_ptr()) =
+      assert(mCurrentTransaction);
+      // start response phase
+      phase_type phase = tlm::BEGIN_RESP;
+      sc_core::sc_time t = sc_core::SC_ZERO_TIME;
+
+      // Set response data
+      mCurrentTransaction->set_response_status(tlm::TLM_OK_RESPONSE);
+      assert(mCurrentTransaction->get_command() == tlm::TLM_WRITE_COMMAND);
+
+      sc_dt::uint64 address = mCurrentTransaction->get_address();
+      assert(address < 400);
+      *reinterpret_cast<unsigned int*>(mCurrentTransaction->get_data_ptr()) =
         *reinterpret_cast<unsigned int*>(&mMem[address]);
-    }
 
-    if (socket->nb_transport(*trans, phase, t) == tlm::TLM_COMPLETED) {
-      // response phase ends after t
-      mEndResponseEvent.notify(t);
+      // We are synchronized, we can read/write sc_signals, wait,...
+      // Wait before sending the response
+      wait(50, sc_core::SC_NS);
+
+      if (socket->nb_transport(*mCurrentTransaction, phase, t)) {
+        mCurrentTransaction = 0;
+
+      } else {
+        // Initiator will call nb_transport(trans, END_RESP, t)
+      }
+    }
+  }
+
+  unsigned int transport_dbg(tlm::tlm_debug_payload& r)
+  {
+    if (r.address >= 400) return 0;
+
+    unsigned int tmp = (int)r.address;
+    unsigned int num_bytes;
+    if (tmp + r.num_bytes >= 400) {
+      num_bytes = 400 - tmp;
 
     } else {
-      // master will call nb_transport to indicate end of response phase
-      //FIXME: TLM_REJECTED not supported
+      num_bytes = r.num_bytes;
     }
-  }
+    if (r.do_read) {
+      for (unsigned int i = 0; i < num_bytes; ++i) {
+        r.data[i] = mMem[i + tmp];
+      }
 
-  void endResponse()
-  {
-    assert(!mResponseQueue.empty());
-    mResponseQueue.pop();
-
-    // Start processing next transaction when previous response is accepted.
-    // Notify begin of response phase after RESPONSE delay
-    if (!mResponseQueue.empty()) {
-      mBeginResponseEvent.notify(RESPONSE_DELAY);
+    } else {
+      for (unsigned int i = 0; i < num_bytes; ++i) {
+        mMem[i + tmp] = r.data[i];
+      }
     }
+    return num_bytes;
   }
-
-private:
-  const sc_core::sc_time ACCEPT_DELAY;
-  const sc_core::sc_time RESPONSE_DELAY;
 
 private:
   unsigned char mMem[400];
-  std::queue<transaction_type*> mResponseQueue;
-  sc_core::sc_event mBeginResponseEvent;
-  sc_core::sc_event mEndResponseEvent;
+  sc_core::sc_event mResponseEvent;
+  transaction_type* mCurrentTransaction;
 };
 
 #endif

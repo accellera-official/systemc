@@ -15,8 +15,8 @@
 
  *****************************************************************************/
 
-#ifndef __SIMPLE_LT_MASTER3_DMI_H__
-#define __SIMPLE_LT_MASTER3_DMI_H__
+#ifndef __SIMPLE_LT_INITIATOR3_DMI_H__
+#define __SIMPLE_LT_INITIATOR3_DMI_H__
 
 #include "tlm.h"
 #include "simple_initiator_socket.h"
@@ -25,7 +25,7 @@
 #include <iostream>
 #include <map>
 
-class SimpleLTMaster3_dmi : public sc_core::sc_module
+class SimpleLTInitiator3_dmi : public sc_core::sc_module
 {
 public:
   typedef tlm::tlm_generic_payload transaction_type;
@@ -38,8 +38,8 @@ public:
   initiator_socket_type socket;
 
 public:
-  SC_HAS_PROCESS(SimpleLTMaster3_dmi);
-  SimpleLTMaster3_dmi(sc_core::sc_module_name name,
+  SC_HAS_PROCESS(SimpleLTInitiator3_dmi);
+  SimpleLTInitiator3_dmi(sc_core::sc_module_name name,
                   unsigned int nrOfTransactions = 0x5,
                   unsigned int baseAddress = 0x0) :
     sc_core::sc_module(name),
@@ -55,7 +55,7 @@ public:
 
     REGISTER_INVALIDATEDMI(socket, invalidate_direct_mem_ptr);
 
-    // Master thread
+    // Initiator thread
     SC_THREAD(run);
   }
 

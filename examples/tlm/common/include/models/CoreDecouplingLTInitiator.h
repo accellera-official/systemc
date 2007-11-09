@@ -15,43 +15,40 @@
 
  *****************************************************************************/
 
-#ifndef __SIMPLE_UT_MASTER1_H__
-#define __SIMPLE_UT_MASTER1_H__
+#ifndef __CORE_DECOUPLING_LT_INITIATOR_H__
+#define __CORE_DECOUPLING_LT_INITIATOR_H__
 
-#include "tlm.h"     /// TLM definitions
-#include <cassert>   /// STD assert ()
-//#include <iostream>  /// STD I/O streams
+#include "tlm.h"
+#include "simple_initiator_socket.h"
+//#include <systemc>
+#include <cassert>
+//#include <iostream>
 
-class SimpleUTMaster1 :
-  public sc_core::sc_module,
-  public virtual tlm::tlm_bw_transport_if
+class CoreDecouplingLTInitiator : public sc_core::sc_module
 {
 public:
   typedef tlm::tlm_generic_payload transaction_type;
-  typedef tlm::tlm_phase phase_type;
-  typedef tlm::tlm_sync_enum sync_enum_type;
-  typedef tlm::tlm_fw_transport_if<> fw_interface_type;
-  typedef tlm::tlm_bw_transport_if bw_interface_type;
-  typedef tlm::tlm_initiator_socket<32, fw_interface_type, bw_interface_type> initiator_socket_type;
+  typedef tlm::tlm_phase           phase_type;
+  typedef SimpleInitiatorSocket<>  initiator_socket_type;
 
 public:
   initiator_socket_type socket;
 
 public:
-  SC_HAS_PROCESS(SimpleUTMaster1);
-  SimpleUTMaster1(sc_core::sc_module_name name,
-                  unsigned int nrOfTransactions = 0x5,
-                  unsigned int baseAddress = 0x0) :
+  SC_HAS_PROCESS(CoreDecouplingLTInitiator);
+  CoreDecouplingLTInitiator(sc_core::sc_module_name name,
+                            unsigned int nrOfTransactions = 0x5,
+                            unsigned int baseAddress = 0) :
     sc_core::sc_module(name),
     socket("socket"),
     mNrOfTransactions(nrOfTransactions),
     mBaseAddress(baseAddress),
     mTransactionCount(0)
   {
-    // Bind this master's interface to the master socket
-    socket(*this);
+    tlm::tlm_quantumkeeper::set_global_quantum(sc_core::sc_time(500, sc_core::SC_NS));
+    mQuantumKeeper.reset();
 
-    // Master thread
+    // Initiator thread
     SC_THREAD(run);
   }
 
@@ -83,12 +80,18 @@ public:
       std::cout << name() << ": Send write request: A = 0x"
                 << std::hex << (unsigned int)trans.get_address()
                 << ", D = 0x" << mData << std::dec
-                << " @ " << sc_core::sc_time_stamp() << std::endl;
-
+                << " @ " << mQuantumKeeper.get_current_time()
+                << " (" << sc_core::sc_time_stamp() << " + "
+                << mQuantumKeeper.get_local_time() << ")"
+                << std::endl;
+      
     } else {
       std::cout << name() << ": Send read request: A = 0x"
-                << std::hex << (unsigned int)trans.get_address() << std::dec
-                << " @ " << sc_core::sc_time_stamp() << std::endl;
+                << std::hex << (unsigned int)trans.get_address()
+                << " @ " << mQuantumKeeper.get_current_time()
+                << " (" << sc_core::sc_time_stamp() << " + "
+                << mQuantumKeeper.get_local_time() << ")"
+                << std::endl;
     }
   }
 
@@ -96,35 +99,61 @@ public:
   {
     if (trans.get_response_status() != tlm::TLM_OK_RESPONSE) {
       std::cout << name() << ": Received error response @ "
-                << sc_core::sc_time_stamp() << std::endl;
+                << mQuantumKeeper.get_current_time()
+                << " (" << sc_core::sc_time_stamp() << " + "
+                << mQuantumKeeper.get_local_time() << ")"
+                << std::endl;
 
     } else {
       std::cout << name() <<  ": Received ok response";
       if (trans.get_command() == tlm::TLM_READ_COMMAND) {
-        std::cout << ": D = 0x" << std::hex << mData << std::dec;
+          std::cout << ": D = 0x" << std::hex << mData << std::dec;
       }
-      std::cout << " @ " << sc_core::sc_time_stamp() << std::endl;
+      std::cout << " @ " << mQuantumKeeper.get_current_time()
+                << " (" << sc_core::sc_time_stamp() << " + "
+                << mQuantumKeeper.get_local_time() << ")"
+                << std::endl;
     }
   }
 
   void run()
   {
     transaction_type trans;
+    phase_type phase;
 
     while (initTransaction(trans)) {
+      // Create transaction and initialise phase and t
+      phase = tlm::BEGIN_REQ;
+
       logStartTransation(trans);
-      socket->b_transport(trans);
+
+      switch (socket->nb_transport(trans, phase, mQuantumKeeper.get_local_time())) {
+      case tlm::TLM_COMPLETED:
+        // Transaction finished
+        // Target may have added a delay to the quantum -> sync if needed
+        if (mQuantumKeeper.need_sync()) {
+          std::cout << "Sync'ing..." << std::endl;
+          mQuantumKeeper.sync();
+        }
+        break;
+
+      case tlm::TLM_SYNC:
+      case tlm::TLM_SYNC_CONTINUE:
+        // Transaction not yet finished, wait for the end of it
+        wait(socket.getEndEvent());
+        mQuantumKeeper.reset();
+        break;
+
+      case tlm::TLM_REJECTED:
+        // FIXME: Not supported (wait and retry same transaction)
+      default:
+        assert(0); exit(1);
+      };
+
       logEndTransaction(trans);
     }
     sc_core::sc_stop();
     wait();
-
-  }
-
-  void invalidate_direct_mem_ptr(sc_dt::uint64 start_range,
-                                 sc_dt::uint64 end_range)
-  {
-    // No DMI support: ignore
   }
 
 private:
@@ -133,6 +162,7 @@ private:
   unsigned int mBaseAddress;
   unsigned int mTransactionCount;
   unsigned int mData;
+  tlm::tlm_quantumkeeper mQuantumKeeper;
 };
 
 #endif

@@ -15,54 +15,48 @@
 
  *****************************************************************************/
 
-#ifndef __SIMPLE_LT_SLAVE1_H__
-#define __SIMPLE_LT_SLAVE1_H__
+#ifndef __SIMPLE_LT_TARGET2_H__
+#define __SIMPLE_LT_TARGET2_H__
 
 #include "tlm.h"
+#include "simple_target_socket.h"
 //#include <systemc>
 #include <cassert>
 #include <vector>
 //#include <iostream>
 
-class SimpleLTSlave1 :
-  public sc_core::sc_module,
-  public virtual tlm::tlm_fw_nb_transport_if<>
+class SimpleLTTarget2 : public sc_core::sc_module
 {
 public:
   typedef tlm::tlm_generic_payload transaction_type;
   typedef tlm::tlm_phase phase_type;
   typedef tlm::tlm_sync_enum sync_enum_type;
-  typedef tlm::tlm_fw_nb_transport_if<> fw_interface_type;
-  typedef tlm::tlm_bw_nb_transport_if<> bw_interface_type;
-  typedef tlm::tlm_target_socket<> target_socket_type;
+  typedef SimpleTargetSocket<> target_socket_type;
 
 public:
   target_socket_type socket;
 
 public:
-  SC_HAS_PROCESS(SimpleLTSlave1);
-  SimpleLTSlave1(sc_core::sc_module_name name, bool invalidate = false) :
-      sc_core::sc_module(name),
-      socket("socket"),
-      m_invalidate(invalidate)
+  SC_HAS_PROCESS(SimpleLTTarget2);
+  SimpleLTTarget2(sc_core::sc_module_name name) :
+    sc_core::sc_module(name),
+    socket("socket")
   {
-    // Bind this slave's interface to the slave socket
-    socket(*this);
-    if (invalidate)
-    {
-        SC_METHOD(invalidate_dmi_method);
-        sensitive << m_invalidate_dmi_event;
-        dont_initialize();
-        m_invalidate_dmi_time = sc_core::sc_time(25, sc_core::SC_NS);
-    }
+    // register nb_transport method
+    REGISTER_NBTRANSPORT(socket, myNBTransport);
+    REGISTER_DMI(socket, myGetDMIPtr);
+
+    // TODO: we don't register the transport_dbg callback here, so we
+    // can test if something bad happens
+    // REGISTER_DEBUGTRANSPORT(socket, transport_dbg);
   }
 
-  sync_enum_type nb_transport(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
+  sync_enum_type myNBTransport(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
   {
     assert(phase == tlm::BEGIN_REQ);
 
     sc_dt::uint64 address = trans.get_address();
-//    assert(address < 400);
+    assert(address < 400);
 
     unsigned int& data = *reinterpret_cast<unsigned int*>(trans.get_data_ptr());
     if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
@@ -87,7 +81,7 @@ public:
 
     trans.set_dmi_allowed(true);
 
-    // LT slave
+    // LT target
     // - always return true
     // - not necessary to update phase (if true is returned)
     return tlm::TLM_COMPLETED;
@@ -118,11 +112,10 @@ public:
     return num_bytes;
   }
 
-  bool get_direct_mem_ptr(const sc_dt::uint64& address,
-                          bool for_reads,
-                          tlm::tlm_dmi& dmi_data)
+  bool myGetDMIPtr(const sc_dt::uint64& address,
+                   bool for_reads,
+                   tlm::tlm_dmi& dmi_data)
   {
-      if (m_invalidate) m_invalidate_dmi_event.notify(m_invalidate_dmi_time);
     if (address < 400) {
       dmi_data.dmi_start_address = 0x0;
       dmi_data.dmi_end_address = 399;
@@ -143,18 +136,8 @@ public:
       return false;
     }
   }
-
-  void invalidate_dmi_method()
-  {
-      sc_dt::uint64 start_address = 0x0;
-      sc_dt::uint64 end_address = 399;
-      socket->invalidate_direct_mem_ptr(start_address, end_address);
-  }
 private:
   unsigned char mMem[400];
-  bool              m_invalidate;
-  sc_core::sc_event m_invalidate_dmi_event;
-  sc_core::sc_time  m_invalidate_dmi_time;
 };
 
 #endif

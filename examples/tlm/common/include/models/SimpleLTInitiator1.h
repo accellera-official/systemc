@@ -15,41 +15,43 @@
 
  *****************************************************************************/
 
-#ifndef __SIMPLE_LT_MASTER2_H__
-#define __SIMPLE_LT_MASTER2_H__
+#ifndef __SIMPLE_LT_INITIATOR1_H__
+#define __SIMPLE_LT_INITIATOR1_H__
 
-#include "tlm.h"
-#include "simple_initiator_socket.h"
-//#include <systemc>
-#include <cassert>
-//#include <iostream>
+#include "tlm.h"     /// TLM definitions
+#include <cassert>   /// STD assert ()
+//#include <iostream>  /// STD I/O streams
 
-class SimpleLTMaster2 : public sc_core::sc_module
+class SimpleLTInitiator1 :
+  public sc_core::sc_module,
+  public virtual tlm::tlm_bw_nb_transport_if<>
 {
 public:
   typedef tlm::tlm_generic_payload transaction_type;
   typedef tlm::tlm_phase phase_type;
   typedef tlm::tlm_sync_enum sync_enum_type;
-  typedef SimpleInitiatorSocket<> initiator_socket_type;
+  typedef tlm::tlm_fw_nb_transport_if<> fw_interface_type;
+  typedef tlm::tlm_bw_nb_transport_if<> bw_interface_type;
+  typedef tlm::tlm_initiator_socket<> initiator_socket_type;
 
 public:
   initiator_socket_type socket;
 
 public:
-  SC_HAS_PROCESS(SimpleLTMaster2);
-  SimpleLTMaster2(sc_core::sc_module_name name,
-                  unsigned int nrOfTransactions = 0x5,
-                  unsigned int baseAddress = 0x0) :
+  SC_HAS_PROCESS(SimpleLTInitiator1);
+  SimpleLTInitiator1(sc_core::sc_module_name name,
+                     unsigned int nrOfTransactions = 0x5,
+                     unsigned int baseAddress = 0x0) :
     sc_core::sc_module(name),
     socket("socket"),
     mNrOfTransactions(nrOfTransactions),
     mBaseAddress(baseAddress),
     mTransactionCount(0)
   {
-    // register nb_transport method
-    REGISTER_NBTRANSPORT(socket, myNBTransport);
+    // Bind this initiator's interface to the initiator socket
+    socket(*this);
 
-    // Master thread
+    // Initiator thread
     SC_THREAD(run);
   }
 
@@ -143,7 +145,7 @@ public:
 
   }
 
-  sync_enum_type myNBTransport(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
+  sync_enum_type nb_transport(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
   {
     switch (phase) {
     case tlm::END_REQ:
@@ -159,12 +161,17 @@ public:
     case tlm::BEGIN_REQ: // fall-through
     case tlm::END_RESP: // fall-through
     default:
-      // A slave should never call nb_transport with these phases
+      // A target should never call nb_transport with these phases
       assert(0); exit(1);
       return tlm::TLM_REJECTED;
     };
   }
 
+  void invalidate_direct_mem_ptr(sc_dt::uint64 start_range,
+                                 sc_dt::uint64 end_range)
+  {
+    // No DMI support: ignore
+  }
 
 private:
   sc_core::sc_event mEndEvent;

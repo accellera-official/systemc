@@ -15,8 +15,8 @@
 
  *****************************************************************************/
 
-#ifndef __SIMPLE_AT_SLAVE1_H__
-#define __SIMPLE_AT_SLAVE1_H__
+#ifndef __SIMPLE_AT_TARGET1_H__
+#define __SIMPLE_AT_TARGET1_H__
 
 #include "tlm.h"
 #include "simple_target_socket.h"
@@ -26,7 +26,7 @@
 #include <queue>
 //#include <iostream>
 
-class SimpleATSlave1 : public sc_core::sc_module
+class SimpleATTarget1 : public sc_core::sc_module
 {
 public:
   typedef tlm::tlm_generic_payload transaction_type;
@@ -38,8 +38,8 @@ public:
   target_socket_type socket;
 
 public:
-  SC_HAS_PROCESS(SimpleATSlave1);
-  SimpleATSlave1(sc_core::sc_module_name name) :
+  SC_HAS_PROCESS(SimpleATTarget1);
+  SimpleATTarget1(sc_core::sc_module_name name) :
     sc_core::sc_module(name),
     socket("socket"),
     ACCEPT_DELAY(25, sc_core::SC_NS),
@@ -62,9 +62,11 @@ public:
   }
 
   //
-  // Simple AT slave
-  // - Request is accepted after ACCEPT delay (relative to end of prev request phase)
-  // - Response is started after RESPONSE delay (relative to end of prev resp phase)
+  // Simple AT target
+  // - Request is accepted after ACCEPT delay (relative to end of prev request
+  //   phase)
+  // - Response is started after RESPONSE delay (relative to end of prev resp
+  //   phase)
   //
   sync_enum_type myNBTransport(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
   {
@@ -95,7 +97,7 @@ public:
       }
       mEndRequestQueue.push(&trans);
 
-      // AT-noTA slave
+      // AT-noTA target
       // - always return false
       // - seperate call to indicate end of phase (do not update phase or t)
       return tlm::TLM_SYNC;
@@ -123,7 +125,7 @@ public:
     assert(trans);
     mEndRequestQueue.pop();
     sync_enum_type r = socket->nb_transport(*trans, phase, t);
-    assert(r == tlm::TLM_SYNC); // FIXME: master should return TLM_SYNC?
+    assert(r == tlm::TLM_SYNC); // FIXME: initiator should return TLM_SYNC?
     assert(t == sc_core::SC_ZERO_TIME); // t must be SC_ZERO_TIME
 
     // Notify end of request phase for next transaction after ACCEPT delay
@@ -165,7 +167,7 @@ public:
 
     case tlm::TLM_SYNC:
     case tlm::TLM_SYNC_CONTINUE:
-     // master will call nb_transport to indicate end of response phase
+     // initiator will call nb_transport to indicate end of response phase
      break;
 
     case tlm::TLM_REJECTED:

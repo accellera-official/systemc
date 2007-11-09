@@ -15,8 +15,8 @@
 
  *****************************************************************************/
 
-#ifndef __SIMPLE_AT_MASTER2_H__
-#define __SIMPLE_AT_MASTER2_H__
+#ifndef __SIMPLE_AT_INITIATOR2_H__
+#define __SIMPLE_AT_INITIATOR2_H__
 
 #include "tlm.h"
 #include "simple_initiator_socket.h"
@@ -25,7 +25,7 @@
 #include <queue>
 //#include <iostream>
 
-class SimpleATMaster2 : public sc_core::sc_module
+class SimpleATInitiator2 : public sc_core::sc_module
 {
 public:
   typedef tlm::tlm_generic_payload transaction_type;
@@ -66,10 +66,10 @@ public:
   initiator_socket_type socket;
 
 public:
-  SC_HAS_PROCESS(SimpleATMaster2);
-  SimpleATMaster2(sc_core::sc_module_name name,
-                  unsigned int nrOfTransactions = 0x5,
-                  unsigned int baseAddress = 0) :
+  SC_HAS_PROCESS(SimpleATInitiator2);
+  SimpleATInitiator2(sc_core::sc_module_name name,
+                     unsigned int nrOfTransactions = 0x5,
+                     unsigned int baseAddress = 0) :
     sc_core::sc_module(name),
     socket("socket"),
     ACCEPT_DELAY(10, sc_core::SC_NS),
@@ -81,7 +81,7 @@ public:
     // register nb_transport method
     REGISTER_NBTRANSPORT(socket, myNBTransport);
 
-    // Master thread
+    // Initiator thread
     SC_THREAD(run);
   }
 
@@ -137,8 +137,9 @@ public:
   }
 
   //
-  // Simple AT Master
-  // - Request must be accepted by the slave before the next request cwn be send
+  // Simple AT Initiator
+  // - Request must be accepted by the target before the next request can be
+  //   send
   // - Responses can come out of order
   // - Responses will be accepted after fixed delay
   //
@@ -199,7 +200,7 @@ public:
 
         case tlm::END_RESP:   // fall-through
         default:
-          // A slave should never return with these phases
+          // A target should never return with these phases
           // If phase == END_RESP, nb_transport should have returned true
           assert(0); exit(1);
           break;
@@ -252,7 +253,7 @@ public:
     case tlm::BEGIN_REQ: // fall-through
     case tlm::END_RESP:  // fall-through
     default:
-      // A slave should never call nb_transport with these phases
+      // A target should never call nb_transport with these phases
       assert(0); exit(1);
       return tlm::TLM_REJECTED;
     };

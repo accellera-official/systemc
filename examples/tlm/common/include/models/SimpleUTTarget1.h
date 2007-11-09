@@ -15,8 +15,8 @@
 
  *****************************************************************************/
 
-#ifndef __SIMPLE_UT_SLAVE1_H__
-#define __SIMPLE_UT_SLAVE1_H__
+#ifndef __SIMPLE_UT_TARGET1_H__
+#define __SIMPLE_UT_TARGET1_H__
 
 #include "tlm.h"
 //#include <systemc>
@@ -24,7 +24,7 @@
 #include <vector>
 //#include <iostream>
 
-class SimpleUTSlave1 :
+class SimpleUTTarget1 :
   public sc_core::sc_module,
   public virtual tlm::tlm_fw_transport_if<>
 {
@@ -40,11 +40,11 @@ public:
   target_socket_type socket;
 
 public:
-  SimpleUTSlave1(sc_core::sc_module_name name) :
+  SimpleUTTarget1(sc_core::sc_module_name name) :
     sc_core::sc_module(name),
     socket("socket")
   {
-    // Bind this slave's interface to the slave socket
+    // Bind this target's interface to the target socket
     socket(*this);
   }
 
