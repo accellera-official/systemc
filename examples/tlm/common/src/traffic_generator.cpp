@@ -104,8 +104,8 @@ traffic_generator::traffic_generator_thread(void)                     ///< traff
 
   sc_dt::uint64 ir = m_config.m_icache_read_percent;                  ///< 
   sc_dt::uint64 dr = ir + m_config.m_dcache_read_percent;             ///< 
-  sc_dt::uint64 dw = dr + m_config.m_dcache_write_percent;            ///< 
-  sc_dt::uint64 sr = dw + m_config.m_scratch_read_percent;            ///< 
+//sc_dt::uint64 dw = dr + m_config.m_dcache_write_percent;            ///< 
+//sc_dt::uint64 sr = dw + m_config.m_scratch_read_percent;            ///< 
 
   unsigned int  cache_line_size = m_config.m_cache_line_size;         ///< cache line size
   unsigned char *read_buffer    = new unsigned char[cache_line_size]; ///< read buffer

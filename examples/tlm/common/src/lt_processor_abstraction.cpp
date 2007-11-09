@@ -27,7 +27,7 @@
 //#include "direct_execution.h"                    ///< Direct execution header
 #include "lt_processor_abstraction.h"              ///< Our header
 
-static char *msg_type = "lt_processor_abstraction";
+//static char *msg_type = "lt_processor_abstraction";
 
 //==============================================================================
 // Create traffic generator configuration structure  
