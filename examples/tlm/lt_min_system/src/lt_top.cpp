@@ -22,7 +22,7 @@
 =============================================================================*/
 #include "tlm.h"
 
-#include "lt_top.h"                          ///< our header
+#include "lt_top.h"                           ///< our header
 #include "lt_target_memory.h"                 ///< memory target
 #include "lt_initiator.h"                     ///< initiator
 #include "SimpleBus.h"                        ///< simple bus
