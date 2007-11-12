@@ -166,6 +166,7 @@ public:
         // Transaction Finished, wait for the returned delay
         wait(t);
         logEndTransaction(trans);
+        transPool.release(&trans);
         break;
 
       case tlm::TLM_SYNC:
@@ -275,7 +276,6 @@ public:
     assert(t == sc_core::SC_ZERO_TIME); // t must be SC_ZERO_TIME
 
     logEndTransaction(*trans);
-
     transPool.release(trans);
 
     if (!mEndResponseQueue.empty()) {

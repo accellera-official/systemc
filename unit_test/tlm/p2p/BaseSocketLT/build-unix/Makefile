@@ -2,13 +2,8 @@ include ../../../build-unix/Makefile.config
 
 OBJ_NAME = base_socket_LT
 
-INCDIR = -I$(SYSTEMC_INC_DIR) -I$(TLM_INC_DIR) -I../../../common/include/models
+INCDIR = -I../../../common/include/models
 SRCDIR = ../src
-LIBDIR = -L$(SYSTEMC_LIB_DIR)
-
-LIB_SC = -lsystemc
-
-LIBS = $(LIBDIR) $(LIB_SC)
  
 CFLAGS = $(FLAGS) $(INCDIR)
 
@@ -22,22 +17,15 @@ announce:
 	 fi
 	
 check: announce $(OBJ_NAME).exe
-	@./$(OBJ_NAME).exe > run.log
+	@$(VALGRIND) ./$(OBJ_NAME).exe > run.log
 	@diff run.log ../results/expected.log > diff.log 2>&1;\
 	if [ -s diff.log ]; then echo "***ERROR:"; cat diff.log; else echo "OK"; fi
 
 run: announce $(OBJ_NAME).exe
 	@./$(OBJ_NAME).exe
 
-.c.o:
-	$(GCC) $(CFLAGS) -c $<
-.cpp.o:
-	$(GXX) $(CFLAGS) -c $< -o $@
-.cc.o:
-	$(GXX) $(CFLAGS) -c $< -o $@
-
 $(OBJ_NAME).exe: $(OBJ_NAME).o
-	$(LD) -o $@ $(OBJ_NAME).o $(LIBS)
+	$(LD) -o $@ $(OBJ_NAME).o $(LDFLAGS)
 
 $(OBJ_NAME).o: $(SRCDIR)/$(OBJ_NAME).cpp
 	$(GXX) -c $(CFLAGS) $< -o $@

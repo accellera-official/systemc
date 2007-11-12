@@ -162,6 +162,7 @@ public:
         // Transaction Finished, wait for the returned delay
         wait(t);
         logEndTransaction(trans);
+        transPool.release(&trans);
         break;
 
       case tlm::TLM_SYNC:

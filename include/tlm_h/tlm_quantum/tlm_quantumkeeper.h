@@ -25,9 +25,9 @@ namespace tlm {
     //
     // tlm_quantumkeeper class
     //
-    // The tlm_quantumkeeper class is used to keep track of the local time in an
-    // initiator (how much it has run ahead of the SystemC time), to synchronize
-    // with SystemC time etc.
+    // The tlm_quantumkeeper class is used to keep track of the local time in
+    // an initiator (how much it has run ahead of the SystemC time), to
+    // synchronize with SystemC time etc.
     //
     // NOTE:
     // The templated class tlm::tlm_qk_internal::tlm_quantumkeeper<Dummy> is an
@@ -155,11 +155,11 @@ namespace tlm {
       virtual sc_core::sc_time compute_local_quantum()
       {
         if (mGlobalQuantum != sc_core::SC_ZERO_TIME) {
-          const sc_dt::uint64 currentTime = sc_core::sc_time_stamp().value();
-          const sc_dt::uint64 globalQuant = mGlobalQuantum.value();
-          const sc_core::sc_time remainder = sc_core::sc_time(
-                  (currentTime/globalQuant+1) * globalQuant - currentTime,
-                  false);
+          const sc_dt::uint64 current = sc_core::sc_time_stamp().value();
+          const sc_dt::uint64 gQuant = mGlobalQuantum.value();
+          const sc_dt::uint64 tmp = (current/gQuant+sc_dt::uint64(1)) * gQuant;
+          const sc_core::sc_time remainder = sc_core::sc_time(tmp - current,
+                                                              false);
           return remainder;
   
         } else {
