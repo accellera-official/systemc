@@ -341,17 +341,23 @@ public:
     /*                                                                       */
     /* --------------------------------------------------------------------- */
 
-    // Stick the pointer to an extension into the vector:
-    template <typename T> void set_extension(T* ext)
+    // Stick the pointer to an extension into the vector, return the
+    // previous value:
+    template <typename T> T* set_extension(T* ext)
     {
         resize_extensions();
+        T* tmp = static_cast<T*>(m_extensions[T::ID]);
         m_extensions[T::ID] = static_cast<tlm_extension_base*>(ext);
+        return tmp;
     }
     // non-templatized version with manual index:
-    void set_extension(unsigned int index, tlm_extension_base* ext)
+    tlm_extension_base* set_extension(unsigned int index,
+                                      tlm_extension_base* ext)
     {
         resize_extensions();
+        tlm_extension_base* tmp = m_extensions[index];
         m_extensions[index] = ext;
+        return tmp;
     }
 
     // Check for an extension, ext will point to 0 if not present

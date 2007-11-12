@@ -138,27 +138,37 @@ class adapt_gp2ext : public sc_core::sc_module
                                             tlm::tlm_phase& phase,
                                             sc_core::sc_time& t)
     {
-        // If the mandatory extension is not there, we need to add it.
+        // If the mandatory extension is not there, we need to add it and
+        // store it so that we can re-construc the original state.
         // Otherwise we don't touch the extension, so that we don't overwrite
         // it in e.g. a nonGP->GP->nonGP (initiator->interconnect->target)
         // setup.
         // Note, however, that there might be situations where we might need to
         // re-initialize the extension, e.g. for mutable data fields in
         // different system setups.
-        if (!trans.get_extension(my_extension::ID))
+        trans.get_extension(m_initiator_ext);
+        if (!m_initiator_ext)
         {
             m_ext.m_data = 13;
-            trans.set_extension(&m_ext);
+            m_initiator_ext = trans.set_extension(&m_ext);
         }
-        return initiator_socket->nb_transport(static_cast<target_payload_type&>(trans),
-                                           phase,
-                                           t);
+        tlm::tlm_sync_enum tmp =
+        initiator_socket->nb_transport(static_cast<target_payload_type&>(trans),
+                                       phase,
+                                       t);
+        if (tmp == tlm::TLM_COMPLETED ||
+            tmp == tlm::TLM_REJECTED)
+        {
+            m_initiator_ext = trans.set_extension(m_initiator_ext);            
+        }
+        return tmp;
     }
-    // Backward direction: only static_cast needed.
+    // Backward direction: only restore of original extension and static_cast.
     tlm::tlm_sync_enum backward_nb_transport(target_payload_type& trans,
                                              tlm::tlm_phase& phase,
                                              sc_core::sc_time& t)
     {
+        m_initiator_ext = trans.set_extension(m_initiator_ext);
         return target_socket->nb_transport(static_cast<initiator_payload_type&>(trans),
                                            phase,
                                            t);
@@ -187,7 +197,8 @@ class adapt_gp2ext : public sc_core::sc_module
     }
 
 private:
-    my_extension m_ext;
+    my_extension  m_ext;
+    my_extension* m_initiator_ext;
 };
 
 #endif
