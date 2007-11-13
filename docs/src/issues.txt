@@ -1,20 +1,9 @@
-0002 - The namespace for tlm_analysis needs to be renamed 'tlm_analysis'. It is
-       presently named 'analysis'.
-       [TW] Agreed. Further, we need to add the tlm_ prefix to the classnames.
-       [OS] No action is required for the namespaces, everything is now
-            natively in namespace tlm. I agree with the class names.
-
 0003 - /include/tlm_h/tlm_generic_payload/tlm_helpers.h needs to be renamed
        'tlm_gp_helpers.h' or promoted to tlm_core
        [OS]: namespace part is fixed.
 
 0004 - There are variables beginning with underscore characters (_)
-
-0005 - Endianness can be determined using #include <endian.h> which defines
-       __BYTE_ORDER, __LITTLE_ENDIAN and __BIG_ENDIAN for gcc compilers. An
-       addition can be made to tlm_platform.h for MSVC. (MacOSX runs on both
-       big and little endian architectures)
-       [OS]: tlm_platform.h is gone, we need to find a different place.
+       [TW] No specific instances noted - keep an eye out for them.
 
 0016 - I think we need to review the changes in the tlm_core directory from TLM
        1.0 to now. There are quite a few changes, and the question is if we
@@ -27,12 +16,6 @@
        understand it correctly, then the tlm_core is supposed to hold the TLM
        1.0 interfaces, which in my mind are not at the core of things for 2.0.
 
-0018 - TLM 2 requirement 8.5 specifies the examples and unit tests
-       (regressions) pass Purify.  Question: Who will be responsible for this?
-       [TW] I propose the primary code author be responsible for purify analysis;
-       if Purify isn't accessible, I think a comparable code quality tool may
-       be substituted.
-       
 0019 - TLM ports initiator/target ports do not appear to have the GP material
        integrated
 

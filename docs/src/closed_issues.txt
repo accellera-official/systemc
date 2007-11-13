@@ -5,6 +5,19 @@
        tlm_gp_array.h or promoted to tlm_core.
        [OS]: No change required.
 
+0002 - The namespace for tlm_analysis needs to be renamed 'tlm_analysis'. It is
+       presently named 'analysis'.
+       [TW] Agreed. Further, we need to add the tlm_ prefix to the classnames.
+       [OS] No action is required for the namespaces, everything is now
+            natively in namespace tlm. I agree with the class names.
+       [TW] tlm_ prefix added to class names.
+
+0005 - Endianness can be determined using #include <endian.h> which defines
+       __BYTE_ORDER, __LITTLE_ENDIAN and __BIG_ENDIAN for gcc compilers. An
+       addition can be made to tlm_platform.h for MSVC. (MacOSX runs on both
+       big and little endian architectures)
+       [OS]: tlm_platform.h is gone, we need to find a different place.
+       [TW]: GP serializers now have an alternative solution.
 
 0006 - The namespace for tlm_generic_payload needs to be renamed to
        'tlm_generic_payload'.  It is presently named 'tlm_generic_payload_ns'.
@@ -79,6 +92,12 @@
        could use e.g. namespace tlm_utils, but that's really optional.
        [OS]: FIXED.
 
+0018 - TLM 2 requirement 8.5 specifies the examples and unit tests
+       (regressions) pass Purify.  Question: Who will be responsible for this?
+       [TW] I propose the primary code author be responsible for purify analysis;
+       if Purify isn't accessible, I think a comparable code quality tool may
+       be substituted.
+       [TW] Olaf has provided details for using  valgrind.
 
 0021 - TLM 2 requriement 8.10 specifies that there are to be no open namespaces
        in the include files.Question: What are the implications on those in the

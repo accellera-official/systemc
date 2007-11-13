@@ -1,0 +1,29 @@
+Platforms we will test TLM 2.0 Draft 2 on:
+
+    o Linux (SuSE SLES9SP3) with GNU C++ compiler version gcc-3.4.4
+      [Trevor]
+
+
+Platforms for which SystemC 2.2.0 has been well tested:
+    o Sun Solaris 2.8 with GNU C++ compiler versions gcc-2.95.3,
+      gcc-3.2.3, and gcc-3.3.2
+    o Sun Solaris 2.8 with SUN C++ compiler versions SC6.1, SC6.2,
+      and Forte 7.
+       (Note: tests that use the new dynamic process feature do
+        not compile with SC6.1
+       )
+    o Linux (Redhat 6.2) with GNU C++ compiler versions gcc-2.95.3
+    o Linux (Redhat 7.2) with GNU C++ compiler version gcc-2.95.3
+    o Linux (Redhat 8.0) with GNU C++ compiler version gcc-2.95.3,
+      gcc-3.2.3 and gcc-3.3.2
+    o Linux (Redhat 9.0) with GNU C++ compiler version gcc-3.2.2
+    o Linux (2.6.9-34.EL kernel) with GNU C++ compiler versions gcc-3.4.5
+      and gcc-4.1.0
+    o 64-bit Linux (Redhat 2.6.9-5.0.3.EL) with GNU C++ compiler version
+      gcc-3.4.4
+    o HP-UX 11.00 with HP C++ compiler version A.03.39
+      (Note: +O1 is the highest safe optimization level)
+    o MacOSX (Tiger) with GNU C++ compiler version gcc-3.1, gcc-3.3, and
+      gcc-4.0.0
+    o Windows NT 4.0 (SP6a) with VC++ 7.0
+
