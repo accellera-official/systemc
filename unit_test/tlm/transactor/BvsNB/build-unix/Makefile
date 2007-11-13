@@ -2,7 +2,7 @@ include ../../../build-unix/Makefile.config
 
 OBJ_NAME = B_vs_NB
 
-INCDIR = -I../../../common/include/SimpleSocket -I../../../common/include/models -I../../../common/include/utils -I../../include/transactors -I../../include/tlm_bus
+INCDIR = -I../../../common/include/SimpleSocket -I../../../common/include/models -I../../../common/include/utils -I../../common/include/transactors -I../../common/include/tlm_bus
 SRCDIR = ../src
  
 CFLAGS = $(FLAGS) $(INCDIR)
