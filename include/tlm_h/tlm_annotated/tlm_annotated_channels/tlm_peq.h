@@ -19,8 +19,7 @@
 #define __TLM_PEQ_H__
 
 #include <map>
-#include "tlm_h/tlm_analysis/tlm_analysis_if.h"
-#include "tlm_h/tlm_analysis/tlm_analysis_port.h"
+#include "tlm_h/tlm_annotated/tlm_annotated_ifs/tlm_write_if.h"
 
 namespace tlm {
 
@@ -38,18 +37,18 @@ namespace tlm {
 //
 
 //
-// This peq implements a delayed write and has an analysis port
+// This peq implements a delayed write and has an write port
 //
 // If you post many transactions to the same time slot, this will result in
-// many transactions coming out of the analysis port in a single delta
+// many transactions coming out of the write port in a single delta
 //
-// If you want event driven semantics, stuff the output of the analysis port
-// into an analysis fifo ( if you want to guarantee no losses ) or
-// analysis buffer ( if you don't mind losses but you can't be bothered or are
+// If you want event driven semantics, stuff the output of the write port
+// into a fifo ( if you want to guarantee no losses ) or
+// buffer ( if you don't mind losses but you can't be bothered or are
 // not able to clear the fifo out ).
 //
 // For example, you can arrive at a blocking get interface by doing get on
-// an analysis fifo attached to the analysis port shown below
+// a fifo attached to the write port shown below
 //
 // We could even design a tlm_peq_fifo and/or tlm_peq_buffer with these
 // channels built in
@@ -58,17 +57,18 @@ namespace tlm {
 template< typename T>
 class tlm_peq :
   public sc_core::sc_module ,
-  public virtual tlm_delayed_analysis_if< T >
+  public virtual tlm_delayed_write_if< T >
 {
  public:
-  sc_core::sc_export< tlm_delayed_analysis_if< T > > delayed_analysis_export;
-  tlm_analysis_port< T > ap;
+  sc_core::sc_export< tlm_delayed_write_if< T > > delayed_write_export;
+  sc_core::sc_port< tlm_write_if< T > > write_port;
 
   SC_HAS_PROCESS( tlm_peq );
 
-  tlm_peq( sc_core::sc_module_name nm ) : sc_core::sc_module( nm ) , ap("ap") {
+  tlm_peq( sc_core::sc_module_name nm ) :
+    sc_core::sc_module( nm ) , write_port("write_port") {
 
-    delayed_analysis_export( *this );
+    delayed_write_export( *this );
 
     SC_METHOD( wake_up_method );
     dont_initialize();
@@ -125,7 +125,7 @@ class tlm_peq :
 	 p = *(m_map.begin()) )
     {
 
-      ap.write( p.second );
+      write_port.write( p.second );
       m_map.erase( m_map.begin() );
 
       if( m_map.size() == 0 ) {

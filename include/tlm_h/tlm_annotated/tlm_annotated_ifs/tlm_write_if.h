@@ -5,7 +5,7 @@
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 3.0 (the "License");
+  set forth in the SystemC Open Source License Version 2.4 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -15,14 +15,26 @@
 
  *****************************************************************************/
 
-#ifndef __TLM_ANNOTATED_H__
-#define __TLM_ANNOTATED_H__
+#ifndef __TLM_WRITE_IF_H__
+#define __TLM_WRITE_IF_H__
 
-#include "tlm_annotated_ifs/tlm_annotated_ifs.h"
-#include "tlm_annotated_ifs/tlm_write_if.h"
+#include <systemc>
 
-#include "tlm_annotated_channels/tlm_peq.h"
+namespace tlm {
 
-#include "tlm_fw_bw_ifs/tlm_fw_bw_ifs.h"
+template <typename T>
+class tlm_write_if : public virtual sc_core::sc_interface {
+public:
+  virtual void write(const T& t) = 0;
+};
 
-#endif /* TLM_ANNOTATED_HEADER */
+template <typename T>
+class tlm_delayed_write_if : public virtual sc_core::sc_interface {
+public:
+  virtual void write(const T& t, const sc_core::sc_time& time) = 0;
+};
+
+} // namespace tlm
+
+
+#endif

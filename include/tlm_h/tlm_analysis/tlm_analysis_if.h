@@ -18,22 +18,18 @@
 #ifndef __TLM_ANALYSIS_IF_H__
 #define __TLM_ANALYSIS_IF_H__
 
-//#include <systemc>
+#include "tlm_h/tlm_annotated/tlm_annotated_ifs/tlm_write_if.h"
 
 namespace tlm {
 
 template < typename T >
-class tlm_analysis_if : public virtual sc_core::sc_interface {
- public:
-  virtual void write( const T &t ) = 0;
+class analysis_if : public virtual tlm_write_if<T>
+{
 };
 
 template < typename T >
-class tlm_delayed_analysis_if : public virtual sc_core::sc_interface {
- public:
-
-  virtual void write( const T &transaction ,
-		      const sc_core::sc_time &time ) = 0;
+class delayed_analysis_if : public virtual tlm_delayed_write_if<T>
+{
 };
 
 } // namespace tlm
