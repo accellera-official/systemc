@@ -23,12 +23,12 @@
 namespace tlm {
 
 template < typename T >
-class analysis_if : public virtual tlm_write_if<T>
+class tlm_analysis_if : public virtual tlm_write_if<T>
 {
 };
 
 template < typename T >
-class delayed_analysis_if : public virtual tlm_delayed_write_if<T>
+class tlm_delayed_analysis_if : public virtual tlm_delayed_write_if<T>
 {
 };
 
