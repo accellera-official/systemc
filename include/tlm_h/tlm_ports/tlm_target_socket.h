@@ -47,7 +47,7 @@ public:
 
 public:
   tlm_target_socket(const char* name) :
-    export_type(name)
+    export_type(name), mPort((std::string(name) + "_port").c_str())
   {
   }
 
