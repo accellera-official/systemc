@@ -46,8 +46,9 @@ public:
                                  bw_interface_type>;
 
 public:
-  tlm_initiator_socket(const char* name) :
-    port_type(name), mExport((std::string(name) + "_export").c_str())
+  tlm_initiator_socket(const char* name)
+  : port_type(name)
+  , mExport(sc_core::sc_gen_unique_name((std::string(name) + "_export").c_str()))
   {
   }
 
