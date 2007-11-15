@@ -103,7 +103,7 @@ class lt_target_memory                                  ///< LT target memory
   bool                                        ///< success / failure
   get_direct_mem_ptr(                         ///< get direct memory pointer
     const sc_dt::uint64        &address,      ///< address
-    bool                       for_reads,     ///< for reads
+    tlm::tlm_dmi_mode          &dmi_mode,     ///< dmi read/write mode
     tlm::tlm_dmi               &dmi_data      ///< dmi data
   );
 

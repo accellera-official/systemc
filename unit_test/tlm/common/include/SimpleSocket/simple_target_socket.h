@@ -21,19 +21,27 @@
 #include "simple_socket_utils.h"
 //#include "tlm.h"
 
-template <unsigned int BUSWIDTH = 32, typename TRANS = tlm::tlm_generic_payload>
+template <unsigned int BUSWIDTH = 32,
+          typename TRANS = tlm::tlm_generic_payload,
+          typename DMI_MODE = tlm::tlm_dmi_mode>
 class SimpleTargetSocket :
   public tlm::tlm_target_socket<BUSWIDTH,
-                               tlm::tlm_fw_nb_transport_if<TRANS>,
-                               tlm::tlm_bw_nb_transport_if<TRANS> >
+                               tlm::tlm_fw_nb_transport_if<TRANS, tlm::tlm_phase, DMI_MODE>,
+                               tlm::tlm_bw_nb_transport_if<TRANS, tlm::tlm_phase> >
 {
 public:
-  typedef TRANS transaction_type;
-  typedef tlm::tlm_phase phase_type;
-  typedef tlm::tlm_sync_enum sync_enum_type;
-  typedef tlm::tlm_fw_nb_transport_if<transaction_type, phase_type> fw_interface_type;
-  typedef tlm::tlm_bw_nb_transport_if<transaction_type, phase_type> bw_interface_type;
-  typedef tlm::tlm_target_socket<BUSWIDTH, fw_interface_type, bw_interface_type> base_type;
+  typedef TRANS                                         transaction_type;
+  typedef DMI_MODE                                      dmi_mode_type;
+  typedef tlm::tlm_phase                                phase_type;
+  typedef tlm::tlm_sync_enum                            sync_enum_type;
+  typedef tlm::tlm_fw_nb_transport_if<transaction_type,
+                                      phase_type,
+                                      dmi_mode_type>    fw_interface_type;
+  typedef tlm::tlm_bw_nb_transport_if<transaction_type,
+                                      phase_type>       bw_interface_type;
+  typedef tlm::tlm_target_socket<BUSWIDTH,
+                                 fw_interface_type,
+                                 bw_interface_type>    base_type;
 
 public:
   explicit SimpleTargetSocket(const char* n = "") :
@@ -52,26 +60,34 @@ public:
   }
 
   template <typename MODULE>
-  void registerDebugTransport(MODULE* mod, unsigned int (MODULE::*cb)(tlm::tlm_debug_payload&), int id)
+  void registerDebugTransport(MODULE* mod,
+                              unsigned int (MODULE::*cb)(tlm::tlm_debug_payload&),
+                              int id)
   {
     mProcess.setTransportDebugPtr(mod, static_cast<typename Process::TransportDebugPtr>(cb));
     mProcess.setTransportDebugUserId(id);
   }
 
   template <typename MODULE>
-  void registerDMI(MODULE* mod, bool (MODULE::*cb)(const sc_dt::uint64&, bool for_reads, tlm::tlm_dmi&), int id)
+  void registerDMI(MODULE* mod, bool (MODULE::*cb)(const sc_dt::uint64&,
+                                                   dmi_mode_type& dmi_mode,
+                                                   tlm::tlm_dmi&), int id)
   {
     mProcess.setGetDMIPtr(mod, static_cast<typename Process::GetDMIPtr>(cb));
     mProcess.setGetDMIUserId(id);
   }
 
 private:
-  class Process : public tlm::tlm_fw_nb_transport_if<transaction_type, phase_type>
+  class Process : public tlm::tlm_fw_nb_transport_if<transaction_type, phase_type, dmi_mode_type>
   {
   public:
-    typedef sync_enum_type (sc_core::sc_module::*TransportPtr)(TRANS&, tlm::tlm_phase&, sc_core::sc_time&);
+    typedef sync_enum_type (sc_core::sc_module::*TransportPtr)(TRANS&,
+                                                               tlm::tlm_phase&,
+                                                               sc_core::sc_time&);
     typedef unsigned int (sc_core::sc_module::*TransportDebugPtr)(tlm::tlm_debug_payload&);
-    typedef bool (sc_core::sc_module::*GetDMIPtr)(const sc_dt::uint64&, bool for_reads, tlm::tlm_dmi&);
+    typedef bool (sc_core::sc_module::*GetDMIPtr)(const sc_dt::uint64&,
+                                                  dmi_mode_type& dmi_mode,
+                                                  tlm::tlm_dmi&);
       
     Process(const std::string& name) :
       mName(name),
@@ -125,7 +141,9 @@ private:
       }
     }
 
-    sync_enum_type nb_transport(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
+    sync_enum_type nb_transport(transaction_type& trans,
+                                phase_type& phase,
+                                sc_core::sc_time& t)
     {
       if (mTransportPtr) {
         // forward call
@@ -154,19 +172,21 @@ private:
       }
     }
 
-    bool get_direct_mem_ptr(const sc_dt::uint64& address, bool for_reads, tlm::tlm_dmi& dmi_data)
+    bool get_direct_mem_ptr(const sc_dt::uint64& address,
+                            dmi_mode_type& dmi_mode,
+                            tlm::tlm_dmi&  dmi_data)
     {
       if (mGetDMIPtr) {
         // forward call
         assert(mMod);
         simple_socket_utils::simple_socket_user::instance().set_user_id(mGetDMIUserId);
-        return (mMod->*mGetDMIPtr)(address, for_reads, dmi_data);
+        return (mMod->*mGetDMIPtr)(address, dmi_mode, dmi_data);
 
       } else {
         // No DMI support
+        dmi_mode.type = tlm::tlm_dmi_mode::READ_WRITE;
         dmi_data.dmi_start_address = 0x0;
         dmi_data.dmi_end_address = (sc_dt::uint64)-1;
-        dmi_data.type = tlm::tlm_dmi::READ_WRITE;
         return false;
       }
     }

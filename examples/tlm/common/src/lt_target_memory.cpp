@@ -282,7 +282,7 @@ lt_target_memory::transport_dbg(            ///< transport debug
     This routine is not currently implemented.
     
   @param address memory address
-  @param for_reads read flag
+  @param dmi_mode read/write flag
   @param dmi_data data reference
   
   @retval bool success / failure
@@ -296,7 +296,7 @@ lt_target_memory::transport_dbg(            ///< transport debug
 bool                                        ///< success / failure
 lt_target_memory::get_direct_mem_ptr(       ///< get direct memory pointer
   const sc_dt::uint64        &address,      ///< address
-  bool                       for_reads,     ///< for reads
+  tlm::tlm_dmi_mode          &dmi_mode,     ///< dmi read/write mode
   tlm::tlm_dmi               &dmi_data      ///< dmi data
 )
 {

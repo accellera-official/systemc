@@ -30,10 +30,13 @@
 class SimpleLTTarget_ext : public sc_core::sc_module
 {
 public:
-  typedef my_extended_payload transaction_type;
-  typedef tlm::tlm_phase phase_type;
-  typedef tlm::tlm_sync_enum sync_enum_type;
-  typedef SimpleTargetSocket<32, transaction_type> target_socket_type;
+  typedef my_extended_payload                   transaction_type;
+  typedef tlm::tlm_phase                        phase_type;
+  typedef tlm::tlm_sync_enum                    sync_enum_type;
+  typedef my_dmi_mode                           dmi_mode_type;
+  typedef SimpleTargetSocket<32,
+                             transaction_type,
+                             dmi_mode_type>     target_socket_type;
 
 public:
   target_socket_type socket;
@@ -130,19 +133,33 @@ public:
   }
 
   bool myGetDMIPtr(const sc_dt::uint64& address,
-                   bool for_reads,
-                   tlm::tlm_dmi& dmi_data)
+                   dmi_mode_type& dmi_mode,
+                   tlm::tlm_dmi&  dmi_data)
   {
       // notify DMI invalidation, just to check if this reaches the
       // initiators properly
       m_invalidate_dmi_event.notify(m_invalidate_dmi_time);
+
+      // Check for DMI extension:
+      if (dmi_mode.m_ext)
+      {
+        std::cout << name() << ": get_direct_mem_ptr OK, extension data = "
+                  << dmi_mode.m_ext->m_data << std::endl;
+      }
+      else
+      {
+          std::cout << name() << ", get_direct_mem_ptr ERROR: "
+                    << "didn't get pointer to extension"
+                    << std::endl;          
+      }
       if (address < 400) {
+          dmi_mode.type = tlm::tlm_dmi_mode::READ_WRITE;
+
           dmi_data.dmi_start_address = 0x0;
           dmi_data.dmi_end_address = 399;
           dmi_data.dmi_ptr = mMem;
           dmi_data.read_latency = sc_core::sc_time(100, sc_core::SC_NS);
           dmi_data.write_latency = sc_core::sc_time(10, sc_core::SC_NS);
-          dmi_data.type = tlm::tlm_dmi::READ_WRITE;
           dmi_data.endianness =
               (tlm::hostHasLittleEndianness() ? tlm::TLM_LITTLE_ENDIAN :
                tlm::TLM_BIG_ENDIAN);
@@ -152,7 +169,6 @@ public:
           // should not happen
           dmi_data.dmi_start_address = address;
           dmi_data.dmi_end_address = address;
-          dmi_data.type = tlm::tlm_dmi::READ_WRITE;
           return false;
       }
   }

@@ -52,15 +52,17 @@ public:
 // 
 // - An initiator that want to get direct access to a target's memory region
 //   can call the get_direct_mem_ptr method with the address parameter set to
-//   the address that it wants to gain access to. The for_reads parameter
-//   specifies if the initiator wants to read or write to the target's DMI
-//   region. The initiator is responsible for calling the method with a
-//   freshly initialized tlm_dmi object either by using a newly constructed
-//   object, or by calling an existing object's init() method.
-// - The 'for_reads' parameter is necessary because read and write ranges are
-//   not necessarily identical. If they are, a target can specify that the
-//   range is valid for all accesses with the type attribute in the tlm_dmi
-//   structure.
+//   the address that it wants to gain access to. The for_reads member of the
+//   tlm_dmi_mode field specifies if the initiator wants to read or write 
+//   to the target's DMI region. The initiator is responsible for calling the
+//   method with a freshly initialized tlm_dmi object either by using a newly
+//   constructed object, or by calling an existing object's init() method.
+// - The 'tlm_dmi_mode.for_reads' parameter is necessary because read and write
+//   ranges are not necessarily identical. If they are, a target can specify
+//   that the range is valid for all accesses with the type attribute in the
+//   tlm_dmi structure. The tlm_dmi_mode class is used as a separate class here
+//   so that we can templatized the interface and give users the means to add
+//   protocol specific (static) extensions to DMI requests.
 // - The interconnect, if any, needs to decode the address and forward the
 //   call to the corresponding target. It needs to handle the address exactly
 //   as the target would expect on a transaction call, e.g. mask the address
@@ -101,12 +103,13 @@ public:
 // required to set the DMI hint to true if a DMI request on the given address
 // with the given transaction type (read or write) would have succeeded.
 
+template <typename DMI_MODE = tlm_dmi_mode>
 class tlm_fw_direct_mem_if : public virtual sc_core::sc_interface
 {
 public:
   virtual bool get_direct_mem_ptr(const sc_dt::uint64& address,
-                                  bool for_reads,
-                                  tlm_dmi& dmi_data) = 0;
+                                  DMI_MODE& dmi_mode,
+                                  tlm_dmi&  dmi_data) = 0;
 };
 
 // The semantics of the backwards call is as follows:
@@ -178,11 +181,12 @@ public:
 ////////////////////////////////////////////////////////////////////////////
 
 // The forward non-blocking interface:
-template <typename TRANS = tlm_generic_payload,
-          typename PHASE = tlm_phase>
+template <typename TRANS    = tlm_generic_payload,
+          typename PHASE    = tlm_phase,
+          typename DMI_MODE = tlm_dmi_mode>
 class tlm_fw_nb_transport_if
   : public virtual tlm_nonblocking_transport_if<TRANS, PHASE>
-  , public virtual tlm_fw_direct_mem_if
+  , public virtual tlm_fw_direct_mem_if<DMI_MODE>
   , public virtual tlm_transport_dbg_if
 {};
 
@@ -195,10 +199,11 @@ class tlm_bw_nb_transport_if
 {};
 
 // The forward blocking interface:
-template <typename TRANS = tlm_generic_payload>
+template <typename TRANS    = tlm_generic_payload,
+          typename DMI_MODE = tlm_dmi_mode>
 class tlm_fw_transport_if
   : public virtual tlm_blocking_transport_if<TRANS>
-  , public virtual tlm_fw_direct_mem_if
+  , public virtual tlm_fw_direct_mem_if<DMI_MODE>
   , public virtual tlm_transport_dbg_if
 {};
 

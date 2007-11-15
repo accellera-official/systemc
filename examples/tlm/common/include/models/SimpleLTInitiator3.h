@@ -5,7 +5,7 @@
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.4 (the "License");
+  set forth in the SystemC Open Source License Version 3.0 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -27,10 +27,11 @@
 class SimpleLTInitiator3 : public sc_core::sc_module
 {
 public:
-  typedef tlm::tlm_generic_payload transaction_type;
-  typedef tlm::tlm_phase phase_type;
-  typedef tlm::tlm_sync_enum sync_enum_type;
-  typedef SimpleInitiatorSocket<> initiator_socket_type;
+  typedef tlm::tlm_generic_payload        transaction_type;
+  typedef tlm::tlm_dmi_mode               dmi_mode_type;
+  typedef tlm::tlm_phase                  phase_type;
+  typedef tlm::tlm_sync_enum              sync_enum_type;
+  typedef SimpleInitiatorSocket<>         initiator_socket_type;
 
 public:
   initiator_socket_type socket;

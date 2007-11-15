@@ -5,7 +5,7 @@
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.4 (the "License");
+  set forth in the SystemC Open Source License Version 3.0 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -29,10 +29,11 @@ class SimpleLTInitiator3_dmi : public sc_core::sc_module
 {
 public:
   typedef tlm::tlm_generic_payload transaction_type;
-  typedef tlm::tlm_dmi dmi_type;
-  typedef tlm::tlm_phase phase_type;
-  typedef tlm::tlm_sync_enum sync_enum_type;
-  typedef SimpleInitiatorSocket<> initiator_socket_type;
+  typedef tlm::tlm_dmi_mode        dmi_mode_type;
+  typedef tlm::tlm_dmi             dmi_type;
+  typedef tlm::tlm_phase           phase_type;
+  typedef tlm::tlm_sync_enum       sync_enum_type;
+  typedef SimpleInitiatorSocket<>  initiator_socket_type;
 
 public:
   initiator_socket_type socket;
@@ -150,9 +151,18 @@ public:
       if((trans.get_address() < dmi_data.first.dmi_start_address) ||
          (trans.get_address() > dmi_data.first.dmi_end_address) )
       {
+          dmi_mode_type tmp_mode;
+          if (trans.get_command() == tlm::TLM_READ_COMMAND)
+          {
+              tmp_mode.type = tlm::tlm_dmi_mode::READ;
+          }
+          else
+          {
+              tmp_mode.type = tlm::tlm_dmi_mode::WRITE;
+          }
           dmi_data.second =
             socket->get_direct_mem_ptr(trans.get_address(),
-                                       trans.get_command() == tlm::TLM_READ_COMMAND,
+                                       tmp_mode,
                                        dmi_data.first);
       }
       // Do DMI "transaction" if we have a valid region

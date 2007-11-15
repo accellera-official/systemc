@@ -29,12 +29,13 @@ class SimpleLTTarget1 :
   public virtual tlm::tlm_fw_nb_transport_if<>
 {
 public:
-  typedef tlm::tlm_generic_payload transaction_type;
-  typedef tlm::tlm_phase phase_type;
-  typedef tlm::tlm_sync_enum sync_enum_type;
+  typedef tlm::tlm_generic_payload      transaction_type;
+  typedef tlm::tlm_dmi_mode             dmi_mode_type;
+  typedef tlm::tlm_phase                phase_type;
+  typedef tlm::tlm_sync_enum            sync_enum_type;
   typedef tlm::tlm_fw_nb_transport_if<> fw_interface_type;
   typedef tlm::tlm_bw_nb_transport_if<> bw_interface_type;
-  typedef tlm::tlm_target_socket<> target_socket_type;
+  typedef tlm::tlm_target_socket<>      target_socket_type;
 
 public:
   target_socket_type socket;
@@ -119,17 +120,18 @@ public:
   }
 
   bool get_direct_mem_ptr(const sc_dt::uint64& address,
-                          bool for_reads,
-                          tlm::tlm_dmi& dmi_data)
+                          dmi_mode_type& dmi_mode,
+                          tlm::tlm_dmi&  dmi_data)
   {
       if (m_invalidate) m_invalidate_dmi_event.notify(m_invalidate_dmi_time);
     if (address < 400) {
+      dmi_mode.type = tlm::tlm_dmi_mode::READ_WRITE;
+      
       dmi_data.dmi_start_address = 0x0;
       dmi_data.dmi_end_address = 399;
       dmi_data.dmi_ptr = mMem;
       dmi_data.read_latency = sc_core::sc_time(100, sc_core::SC_NS);
       dmi_data.write_latency = sc_core::sc_time(10, sc_core::SC_NS);
-      dmi_data.type = tlm::tlm_dmi::READ_WRITE;
       dmi_data.endianness =
         (tlm::hostHasLittleEndianness() ? tlm::TLM_LITTLE_ENDIAN :
                                           tlm::TLM_BIG_ENDIAN);
@@ -139,7 +141,6 @@ public:
       // should not happen
       dmi_data.dmi_start_address = address;
       dmi_data.dmi_end_address = address;
-      dmi_data.type = tlm::tlm_dmi::READ_WRITE;
       return false;
     }
   }

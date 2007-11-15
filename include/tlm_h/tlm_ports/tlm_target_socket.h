@@ -38,8 +38,8 @@ public:
   typedef sc_core::sc_port<bw_interface_type>   port_type;
   typedef sc_core::sc_export<fw_interface_type> export_type;
   typedef tlm_initiator_socket<BUSWIDTH,
-                            fw_interface_type,
-                            bw_interface_type>  initiator_socket_type;
+                               fw_interface_type,
+                               bw_interface_type>  initiator_socket_type;
 
   friend class tlm_initiator_socket<BUSWIDTH,
                                     fw_interface_type,

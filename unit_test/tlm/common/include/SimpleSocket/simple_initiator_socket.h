@@ -21,19 +21,27 @@
 #include "simple_socket_utils.h"
 //#include "tlm.h"
 
-template <unsigned int BUSWIDTH = 32, typename TRANS = tlm::tlm_generic_payload>
+template <unsigned int BUSWIDTH = 32,
+          typename TRANS = tlm::tlm_generic_payload,
+          typename DMI_MODE = tlm::tlm_dmi_mode>
 class SimpleInitiatorSocket :
   public tlm::tlm_initiator_socket<BUSWIDTH,
-                                tlm::tlm_fw_nb_transport_if<TRANS, tlm::tlm_phase>,
+                                tlm::tlm_fw_nb_transport_if<TRANS, tlm::tlm_phase, DMI_MODE>,
                                 tlm::tlm_bw_nb_transport_if<TRANS, tlm::tlm_phase> >
 {
 public:
-  typedef TRANS transaction_type;
-  typedef tlm::tlm_phase phase_type;
-  typedef tlm::tlm_sync_enum sync_enum_type;
-  typedef tlm::tlm_fw_nb_transport_if<transaction_type, phase_type> fw_interface_type;
-  typedef tlm::tlm_bw_nb_transport_if<transaction_type, phase_type> bw_interface_type;
-  typedef tlm::tlm_initiator_socket<BUSWIDTH, fw_interface_type, bw_interface_type> base_type;
+  typedef TRANS                                         transaction_type;
+  typedef DMI_MODE                                      dmi_mode_type;
+  typedef tlm::tlm_phase                                phase_type;
+  typedef tlm::tlm_sync_enum                            sync_enum_type;
+  typedef tlm::tlm_fw_nb_transport_if<transaction_type,
+                                      phase_type,
+                                      dmi_mode_type>       fw_interface_type;
+  typedef tlm::tlm_bw_nb_transport_if<transaction_type,
+                                      phase_type>       bw_interface_type;
+  typedef tlm::tlm_initiator_socket<BUSWIDTH,
+                                    fw_interface_type,
+                                    bw_interface_type> base_type;
 
 public:
   explicit SimpleInitiatorSocket(const char* n = "") :
@@ -50,25 +58,35 @@ public:
 
   // REGISTER_XXX
   template <typename MODULE>
-  void registerNBTransport(MODULE* mod, sync_enum_type (MODULE::*cb)(transaction_type&, phase_type&, sc_core::sc_time&), int id)
+  void registerNBTransport(MODULE* mod,
+                           sync_enum_type (MODULE::*cb)(transaction_type&,
+                                                        phase_type&,
+                                                        sc_core::sc_time&),
+                           int id)
   {
     mProcess.setTransportPtr(mod, static_cast<typename Process::TransportPtr>(cb));
     mProcess.setTransportUserId(id);
   }
 
   template <typename MODULE>
-  void registerInvalidateDMI(MODULE* mod, void (MODULE::*cb)(sc_dt::uint64, sc_dt::uint64), int id)
+  void registerInvalidateDMI(MODULE* mod,
+                             void (MODULE::*cb)(sc_dt::uint64, sc_dt::uint64),
+                             int id)
   {
     mProcess.setInvalidateDMIPtr(mod, static_cast<typename Process::InvalidateDMIPtr>(cb));
     mProcess.setInvalidateDMIUserId(id);
   }
 
 private:
-  class Process : public tlm::tlm_bw_nb_transport_if<transaction_type, phase_type>
+  class Process : public tlm::tlm_bw_nb_transport_if<transaction_type,
+                                                     phase_type>
   {
   public:
-    typedef sync_enum_type (sc_core::sc_module::*TransportPtr)(TRANS&, tlm::tlm_phase&, sc_core::sc_time&);
-    typedef void (sc_core::sc_module::*InvalidateDMIPtr)(sc_dt::uint64, sc_dt::uint64);
+    typedef sync_enum_type (sc_core::sc_module::*TransportPtr)(TRANS&,
+                                                               tlm::tlm_phase&,
+                                                               sc_core::sc_time&);
+    typedef void (sc_core::sc_module::*InvalidateDMIPtr)(sc_dt::uint64,
+                                                         sc_dt::uint64);
       
     Process(const std::string& name, sc_core::sc_event& endEvent) :
       mName(name),

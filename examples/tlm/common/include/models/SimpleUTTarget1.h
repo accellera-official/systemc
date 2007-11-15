@@ -5,7 +5,7 @@
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.4 (the "License");
+  set forth in the SystemC Open Source License Version 3.0 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -29,12 +29,15 @@ class SimpleUTTarget1 :
   public virtual tlm::tlm_fw_transport_if<>
 {
 public:
-  typedef tlm::tlm_generic_payload transaction_type;
-  typedef tlm::tlm_phase phase_type;
-  typedef tlm::tlm_sync_enum sync_enum_type;
-  typedef tlm::tlm_fw_transport_if<> fw_interface_type;
-  typedef tlm::tlm_bw_transport_if bw_interface_type;
-  typedef tlm::tlm_target_socket<32, fw_interface_type, bw_interface_type> target_socket_type;
+  typedef tlm::tlm_generic_payload      transaction_type;
+  typedef tlm::tlm_dmi_mode             dmi_mode_type;
+  typedef tlm::tlm_phase                phase_type;
+  typedef tlm::tlm_sync_enum            sync_enum_type;
+  typedef tlm::tlm_fw_transport_if<>    fw_interface_type;
+  typedef tlm::tlm_bw_transport_if      bw_interface_type;
+  typedef tlm::tlm_target_socket<32,
+                                 fw_interface_type,
+                                 bw_interface_type> target_socket_type;
 
 public:
   target_socket_type socket;
@@ -103,16 +106,17 @@ public:
   }
 
   bool get_direct_mem_ptr(const sc_dt::uint64& address,
-                          bool forReads,
-                          tlm::tlm_dmi& dmi_data)
+                          dmi_mode_type& dmi_mode,
+                          tlm::tlm_dmi&  dmi_data)
   {
     if (address < 400) {
+      dmi_mode.type = tlm::tlm_dmi_mode::READ_WRITE;
+
       dmi_data.dmi_start_address = 0x0;
       dmi_data.dmi_end_address = 399;
       dmi_data.dmi_ptr = mMem;
       dmi_data.read_latency = sc_core::sc_time(100, sc_core::SC_NS);
       dmi_data.write_latency = sc_core::sc_time(10, sc_core::SC_NS);
-      dmi_data.type = tlm::tlm_dmi::READ_WRITE;
       dmi_data.endianness =
         (tlm::hostHasLittleEndianness() ? tlm::TLM_LITTLE_ENDIAN :
                                           tlm::TLM_BIG_ENDIAN);
@@ -122,7 +126,6 @@ public:
       // should not happen
       dmi_data.dmi_start_address = address;
       dmi_data.dmi_end_address = address;
-      dmi_data.type = tlm::tlm_dmi::READ_WRITE;
       return false;
     }
   }

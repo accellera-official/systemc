@@ -27,10 +27,11 @@
 class SimpleLTInitiator2 : public sc_core::sc_module
 {
 public:
-  typedef tlm::tlm_generic_payload transaction_type;
-  typedef tlm::tlm_phase phase_type;
-  typedef tlm::tlm_sync_enum sync_enum_type;
-  typedef SimpleInitiatorSocket<> initiator_socket_type;
+  typedef tlm::tlm_generic_payload        transaction_type;
+  typedef tlm::tlm_dmi_mode               dmi_mode_type;
+  typedef tlm::tlm_phase                  phase_type;
+  typedef tlm::tlm_sync_enum              sync_enum_type;
+  typedef SimpleInitiatorSocket<>         initiator_socket_type;
 
 public:
   initiator_socket_type socket;

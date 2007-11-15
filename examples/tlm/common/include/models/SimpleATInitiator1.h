@@ -5,7 +5,7 @@
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.4 (the "License");
+  set forth in the SystemC Open Source License Version 3.0 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -166,6 +166,7 @@ public:
         // Transaction Finished, wait for the returned delay
         wait(t);
         logEndTransaction(trans);
+        transPool.release(&trans);
         break;
 
       case tlm::TLM_SYNC:
@@ -275,7 +276,6 @@ public:
     assert(t == sc_core::SC_ZERO_TIME); // t must be SC_ZERO_TIME
 
     logEndTransaction(*trans);
-
     transPool.release(trans);
 
     if (!mEndResponseQueue.empty()) {

@@ -41,4 +41,15 @@ public:
 // pointer to the tlm_generic_payload extensions array.
 class my_extended_payload : public tlm::tlm_generic_payload {};
 
+
+// For DMI, we also want to give the get_direct_mem_ptr access to
+// the extension, because the address handling could depend on the
+// extension:
+
+class my_dmi_mode : public tlm::tlm_dmi_mode
+{
+public:
+    my_extension* m_ext;
+};
+
 #endif

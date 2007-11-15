@@ -20,10 +20,26 @@
 
 #include <systemc>
 
-// TODO: review, TLM_LITTLE_ENDIAN is defined there:
+// TLM_LITTLE_ENDIAN is defined there:
 #include "tlm_h/tlm_generic_payload/tlm_helpers.h"
 
 namespace tlm {
+
+
+// Class for signaling the requested access type to the target. The target
+// is allowed to promote READ or WRITE requests to READ_WRITE.
+//
+// The tlm_direct_mem_if is templated over this interface, so that the user
+// has the opportunity to stick extensions into the class. One application
+// example could be to communicate a CPU ID to the target for situations
+// where address handling might be different for each CPU.
+class tlm_dmi_mode
+{
+public:
+  enum Type { READ = 0x1, WRITE = 0x2, READ_WRITE = READ|WRITE };
+  Type type;
+    
+};
 
 class tlm_dmi
 {
@@ -39,7 +55,6 @@ public:
     dmi_ptr           = 0;
     dmi_start_address = 0x0;
     dmi_end_address   = (sc_dt::uint64)-1;
-    type              = READ_WRITE;
     read_latency      = sc_core::SC_ZERO_TIME;
     write_latency     = sc_core::SC_ZERO_TIME;
     endianness        = TLM_LITTLE_ENDIAN;
@@ -58,15 +73,6 @@ public:
   sc_dt::uint64 dmi_start_address;
   sc_dt::uint64 dmi_end_address;
 
-  // The type accesses this DMI range support. If the 'for_reads' parameter
-  // of the 'get_direct_mem_ptr' call is set to true, a target must set this
-  // attribute to READ (in case the range is only for read accesses) or
-  // READ_WRITE (in case the range supports both read and write accesses). If
-  // the 'for_reads' parameter is false a target must set this to WRITE or
-  // READ_WRITE.
-  enum Type { READ = 0x1, WRITE = 0x2, READ_WRITE = READ|WRITE };
-  Type type;
-    
   // These members define the latency of read/write transactions. The
   // initiator must initialize these members to zero before requesting a
   // dmi pointer, because both the interconnect as well as the target can

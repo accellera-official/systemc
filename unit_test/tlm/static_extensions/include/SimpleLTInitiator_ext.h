@@ -32,10 +32,13 @@ class SimpleLTInitiator_ext : public sc_core::sc_module
 {
 public:
   typedef my_extended_payload transaction_type;
-  typedef tlm::tlm_dmi dmi_type;
-  typedef tlm::tlm_phase phase_type;
-  typedef tlm::tlm_sync_enum sync_enum_type;
-  typedef SimpleInitiatorSocket<32, transaction_type> initiator_socket_type;
+  typedef my_dmi_mode         dmi_mode_type;
+  typedef tlm::tlm_dmi        dmi_type;
+  typedef tlm::tlm_phase      phase_type;
+  typedef tlm::tlm_sync_enum  sync_enum_type;
+  typedef SimpleInitiatorSocket<32,
+                                transaction_type,
+                                dmi_mode_type> initiator_socket_type;
 
 public:
   initiator_socket_type socket;
@@ -203,13 +206,16 @@ public:
               // Acquire DMI pointer if we get the hint:
               if (trans.get_dmi_allowed())
               {
+                  dmi_mode_type tmp_mode;
+                  tmp_mode.type = tlm::tlm_dmi_mode::WRITE;
+                  tmp_mode.m_ext = tmp_ext;
                   dmi_type tmp;
                   if (socket->get_direct_mem_ptr(trans.get_address(),
-                                                 trans.get_command() == tlm::TLM_READ_COMMAND,
+                                                 tmp_mode,
                                                  tmp))
                   {
                       // FIXME: No support for separate read/write ranges
-                      assert(mDMIData.type == tlm::tlm_dmi::READ_WRITE);
+                      assert(tmp_mode.type == tlm::tlm_dmi_mode::READ_WRITE);
                       mDMIData = tmp;
                   }
               }
