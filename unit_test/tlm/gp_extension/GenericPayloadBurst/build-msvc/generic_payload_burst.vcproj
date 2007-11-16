@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="winbuild"
+	Name="generic_payload_burst"
 	ProjectGUID="{A9CB1145-19F6-45B0-8783-BDC5A407C9B2}"
 	RootNamespace="winbuild"
 	Keyword="Win32Proj"
@@ -20,7 +20,7 @@
 			OutputDirectory="Debug"
 			IntermediateDirectory="Debug"
 			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;..\..\..\build-msvc\systemc.vsprops"
 			CharacterSet="2"
 			>
 			<Tool
@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/vmg"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SYSTEMC_INCLUDE)&quot;;..\..\..\..\..\include;..\..\common\include;..\include"
+				AdditionalIncludeDirectories="..\include;..\..\common\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -67,7 +67,7 @@
 				AdditionalDependencies="systemc.lib "
 				OutputFile="$(OutDir)/win-app.exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(SYSTEMC_LIB)\debug&quot;"
+				AdditionalLibraryDirectories="$(SYSTEMC)\SystemC\$(OutDir)"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/msvc71.pdb"
 				SubSystem="1"
@@ -103,7 +103,7 @@
 			OutputDirectory="Release"
 			IntermediateDirectory="Release"
 			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;..\..\..\build-msvc\systemc.vsprops"
 			CharacterSet="2"
 			>
 			<Tool
@@ -123,6 +123,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="..\include;..\..\common\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
@@ -143,6 +144,7 @@
 				Name="VCLinkerTool"
 				OutputFile="$(OutDir)/msvc71.exe"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="$(SYSTEMC)\SystemC\$(OutDir)"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"

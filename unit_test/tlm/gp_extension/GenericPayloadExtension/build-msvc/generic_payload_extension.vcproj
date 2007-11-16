@@ -196,15 +196,15 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\src\generic_packet_extension.cpp"
+				RelativePath="..\src\generic_payload_extension.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\tlm_master.cpp"
+				RelativePath="..\src\tlm_initiator.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\tlm_slave.cpp"
+				RelativePath="..\src\tlm_target.cpp"
 				>
 			</File>
 		</Filter>

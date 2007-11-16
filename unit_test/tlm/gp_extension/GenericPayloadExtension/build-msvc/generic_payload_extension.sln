@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual C++ Express 2005
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "generic_payload", "generic_payload.vcproj", "{A9CB1145-19F6-45B0-8783-BDC5A407C9B2}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "generic_payload_extension", "generic_payload_extension.vcproj", "{A9CB1145-19F6-45B0-8783-BDC5A407C9B2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
