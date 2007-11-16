@@ -46,8 +46,8 @@ tlm_target::tlm_target(sc_core::sc_module_name name_,
 
 void tlm_target::nb_transport(tlm::tlm_generic_payload* gp)
 {
-    // We also test cloning here:
-    tlm::tlm_generic_payload* gp_tmp = gp->clone();
+    // We also test deep_copy here:
+    tlm::tlm_generic_payload* gp_tmp = gp->deep_copy();
 
     // handle extensions:
     tlm_extension1* ext1;

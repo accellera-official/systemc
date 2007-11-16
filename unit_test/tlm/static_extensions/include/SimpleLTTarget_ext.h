@@ -30,13 +30,12 @@
 class SimpleLTTarget_ext : public sc_core::sc_module
 {
 public:
-  typedef my_extended_payload                   transaction_type;
+  typedef tlm::tlm_generic_payload              transaction_type;
   typedef tlm::tlm_phase                        phase_type;
   typedef tlm::tlm_sync_enum                    sync_enum_type;
   typedef my_dmi_mode                           dmi_mode_type;
   typedef SimpleTargetSocket<32,
-                             transaction_type,
-                             dmi_mode_type>     target_socket_type;
+                             my_extended_payload_types> target_socket_type;
 
 public:
   target_socket_type socket;

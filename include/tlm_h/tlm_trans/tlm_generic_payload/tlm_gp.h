@@ -192,12 +192,6 @@ public:
         return tmp;
     }
 
-    // Virtual version of deep_copy()
-    virtual tlm_generic_payload* clone() const
-    {
-        return deep_copy();
-    }
-
     //--------------
     // Destructor
     //--------------

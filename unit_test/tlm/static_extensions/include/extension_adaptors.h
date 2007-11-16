@@ -28,16 +28,14 @@ template <unsigned int BUSWIDTH = 32>
 class adapt_ext2gp : public sc_core::sc_module
 {
     public:
-    typedef my_extended_payload                        initiator_payload_type;
+    typedef tlm::tlm_generic_payload                   initiator_payload_type;
     typedef tlm::tlm_generic_payload                   target_payload_type;
     typedef my_dmi_mode                                initiator_dmi_mode_type;
     typedef tlm::tlm_dmi_mode                          target_dmi_mode_type;
     typedef SimpleInitiatorSocket<BUSWIDTH,
-                                  target_payload_type,
-                                  target_dmi_mode_type> initiator_socket_type;
+                                  tlm::tlm_generic_payload_types> initiator_socket_type;
     typedef SimpleTargetSocket<BUSWIDTH,
-                              initiator_payload_type,
-                              initiator_dmi_mode_type>  target_socket_type;
+                               my_extended_payload_types>  target_socket_type;
     
     target_socket_type  target_socket;
     initiator_socket_type initiator_socket;
@@ -65,9 +63,7 @@ class adapt_ext2gp : public sc_core::sc_module
                                             tlm::tlm_phase& phase,
                                             sc_core::sc_time& t)
     {
-        return initiator_socket->nb_transport(static_cast<target_payload_type&>(trans),
-                                              phase,
-                                              t);
+        return initiator_socket->nb_transport(trans, phase, t);
     }
     // Backward direction: we can  assume here that the payload we get
     // as parameter is the same one that the initiator sent out. Thus, the
@@ -76,9 +72,7 @@ class adapt_ext2gp : public sc_core::sc_module
                                              tlm::tlm_phase& phase,
                                              sc_core::sc_time& t)
     {
-        return target_socket->nb_transport(static_cast<initiator_payload_type&>(trans),
-                                           phase,
-                                           t);
+        return target_socket->nb_transport(trans, phase, t);
     }
     
     // DMI needs extension handling:
@@ -115,15 +109,13 @@ class adapt_gp2ext : public sc_core::sc_module
 {
     public:
     typedef tlm::tlm_generic_payload                   initiator_payload_type;
-    typedef my_extended_payload                        target_payload_type;
+    typedef tlm::tlm_generic_payload                   target_payload_type;
     typedef tlm::tlm_dmi_mode                          initiator_dmi_mode_type;
     typedef my_dmi_mode                                target_dmi_mode_type;
     typedef SimpleInitiatorSocket<BUSWIDTH,
-                                  target_payload_type,
-                                  target_dmi_mode_type> initiator_socket_type;
+                                  my_extended_payload_types> initiator_socket_type;
     typedef SimpleTargetSocket<BUSWIDTH,
-                               initiator_payload_type,
-                               initiator_dmi_mode_type> target_socket_type;
+                               tlm::tlm_generic_payload_types> target_socket_type;
     
     target_socket_type  target_socket;
     initiator_socket_type initiator_socket;
@@ -168,9 +160,7 @@ class adapt_gp2ext : public sc_core::sc_module
             m_initiator_ext = trans.set_extension(&m_ext);
         }
         tlm::tlm_sync_enum tmp =
-        initiator_socket->nb_transport(static_cast<target_payload_type&>(trans),
-                                       phase,
-                                       t);
+        initiator_socket->nb_transport(trans, phase, t);
         if (tmp == tlm::TLM_COMPLETED ||
             tmp == tlm::TLM_REJECTED)
         {
@@ -184,9 +174,7 @@ class adapt_gp2ext : public sc_core::sc_module
                                              sc_core::sc_time& t)
     {
         m_initiator_ext = trans.set_extension(m_initiator_ext);
-        return target_socket->nb_transport(static_cast<initiator_payload_type&>(trans),
-                                           phase,
-                                           t);
+        return target_socket->nb_transport(trans, phase, t);
     }
 
     //////////////////////////
