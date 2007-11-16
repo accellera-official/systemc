@@ -110,7 +110,7 @@
     /// Bits flags definitions
     enum status_flags {
       TLM_ERROR_FLAG       = 0x01ul << TLM_ERROR,           ///< Mask to set and reset TLM_ERROR flag
-      TLM_NO_RESPONSE_FLAG = 0x01ul << TLM_NO_RESPONSE,     ///< Mask to set and reset TLM_NO_RESPONSE flag
+      TLM_NO_RESPONSE_FLAG = 0x01ul << TLM_NO_RESPONSE      ///< Mask to set and reset TLM_NO_RESPONSE flag
     };
 
   };

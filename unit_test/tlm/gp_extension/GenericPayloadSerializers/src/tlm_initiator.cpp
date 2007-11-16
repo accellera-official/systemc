@@ -19,7 +19,7 @@
 
 void tlm_initiator::test_without_be()
 {
-    unsigned int address = 0;
+    sc_dt::uint64 address = 0;
 
     // Test 256-bit access
     std::cout << std::endl;
@@ -84,7 +84,7 @@ void tlm_initiator::test_without_be()
 
 void tlm_initiator::test_with_be()
 {
-    unsigned int address = 0;
+    sc_dt::uint64 address = 0;
     
     // Test 256-bit access
     std::cout << std::endl;
@@ -149,7 +149,7 @@ void tlm_initiator::test_with_be()
 
 void tlm_initiator::test_customized_be()
 {
-    unsigned int address = 0;
+    sc_dt::uint64 address = 0;
     bool* aux_be = new bool [4];
     
     // Test 256-bit access - Customize byte-enables

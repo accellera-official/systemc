@@ -92,19 +92,19 @@ private:
     
     
     template< int W >
-	void write(unsigned int address,
+	void write(sc_dt::uint64 address,
                    unsigned char *data, 
                    bool* be = 0,
                    unsigned int be_length = 0);
     template< int W >
-	void read(unsigned int address,
+	void read(sc_dt::uint64 address,
                   unsigned char *data,
                   bool* be = 0,
                   unsigned int be_length = 0);
     
     template< class T >
 	void prepare_address_and_data(int nbits,
-                                      unsigned int& address,
+                                      sc_dt::uint64& address,
                                       T& data);
     
     void prepare_arrays(int nbits, bool shift = false);
@@ -120,7 +120,7 @@ private:
 
 template< class T >
 void tlm_initiator::prepare_address_and_data(int nbits,
-                                             unsigned int& address,
+                                             sc_dt::uint64& address,
                                              T& data)
 {
     address = 0;
@@ -141,7 +141,7 @@ void tlm_initiator::prepare_address_and_data(int nbits,
 // Read data to address (data in host endianness)
 //
 template< int W >
-void tlm_initiator::write(unsigned int address,
+void tlm_initiator::write(sc_dt::uint64 address,
                           unsigned char *data,
                           bool* be,
                           unsigned int be_length)
@@ -174,7 +174,7 @@ void tlm_initiator::write(unsigned int address,
 // Read data from address (returns data in host endianness)
 //
 template< int W >
-void tlm_initiator::read(unsigned int address,
+void tlm_initiator::read(sc_dt::uint64 address,
                          unsigned char *data,
                          bool* be,
                          unsigned int be_length)

@@ -179,27 +179,27 @@ void copy_word_to_array( otype& data_word, \
                 m_data[offset+b] = reinterpret_cast<unsigned char*>(&data_word)[b]; \
 }
 
-TLM_COPY_WORD_FROM_ARRAY( signed char );
-TLM_COPY_WORD_FROM_ARRAY( signed short );
-TLM_COPY_WORD_FROM_ARRAY( signed int );
-TLM_COPY_WORD_FROM_ARRAY( signed long );
-TLM_COPY_WORD_FROM_ARRAY( signed long long );
-TLM_COPY_WORD_FROM_ARRAY( unsigned char );
-TLM_COPY_WORD_FROM_ARRAY( unsigned short );
-TLM_COPY_WORD_FROM_ARRAY( unsigned int );
-TLM_COPY_WORD_FROM_ARRAY( unsigned long );
-TLM_COPY_WORD_FROM_ARRAY( unsigned long long );
+TLM_COPY_WORD_FROM_ARRAY( signed char )
+TLM_COPY_WORD_FROM_ARRAY( signed short )
+TLM_COPY_WORD_FROM_ARRAY( signed int )
+TLM_COPY_WORD_FROM_ARRAY( signed long )
+TLM_COPY_WORD_FROM_ARRAY( signed long long )
+TLM_COPY_WORD_FROM_ARRAY( unsigned char )
+TLM_COPY_WORD_FROM_ARRAY( unsigned short )
+TLM_COPY_WORD_FROM_ARRAY( unsigned int )
+TLM_COPY_WORD_FROM_ARRAY( unsigned long )
+TLM_COPY_WORD_FROM_ARRAY( unsigned long long )
 
-TLM_COPY_WORD_TO_ARRAY( signed char );
-TLM_COPY_WORD_TO_ARRAY( signed short );
-TLM_COPY_WORD_TO_ARRAY( signed int );
-TLM_COPY_WORD_TO_ARRAY( signed long );
-TLM_COPY_WORD_TO_ARRAY( signed long long );
-TLM_COPY_WORD_TO_ARRAY( unsigned char );
-TLM_COPY_WORD_TO_ARRAY( unsigned short );
-TLM_COPY_WORD_TO_ARRAY( unsigned int );
-TLM_COPY_WORD_TO_ARRAY( unsigned long );
-TLM_COPY_WORD_TO_ARRAY( unsigned long long );
+TLM_COPY_WORD_TO_ARRAY( signed char )
+TLM_COPY_WORD_TO_ARRAY( signed short )
+TLM_COPY_WORD_TO_ARRAY( signed int )
+TLM_COPY_WORD_TO_ARRAY( signed long )
+TLM_COPY_WORD_TO_ARRAY( signed long long )
+TLM_COPY_WORD_TO_ARRAY( unsigned char )
+TLM_COPY_WORD_TO_ARRAY( unsigned short )
+TLM_COPY_WORD_TO_ARRAY( unsigned int )
+TLM_COPY_WORD_TO_ARRAY( unsigned long )
+TLM_COPY_WORD_TO_ARRAY( unsigned long long )
 
 //
 // ///////////////////////////////////////////////////////////////////////// 
