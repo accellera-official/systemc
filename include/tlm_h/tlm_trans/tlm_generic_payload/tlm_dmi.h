@@ -21,7 +21,7 @@
 #include <systemc>
 
 // TLM_LITTLE_ENDIAN is defined there:
-#include "tlm_h/tlm_generic_payload/tlm_helpers.h"
+#include "tlm_h/tlm_trans/tlm_generic_payload/tlm_helpers.h"
 
 namespace tlm {
 

@@ -22,7 +22,7 @@
 #ifndef __TLM_PUT_GET_IMP_H__
 #define __TLM_PUT_GET_IMP_H__
 
-#include "tlm_h/tlm_core/tlm_interfaces/tlm_master_slave_ifs.h"
+#include "tlm_h/tlm_req_rsp/tlm_1_interfaces/tlm_master_slave_ifs.h"
 
 namespace tlm {
 

@@ -18,9 +18,9 @@
 #ifndef __TLM_REQ_RSP_CHANNELS_H__
 #define __TLM_REQ_RSP_CHANNELS_H__
 
-#include "tlm_h/tlm_core/tlm_adapters/tlm_adapters.h"
-#include "tlm_h/tlm_core/tlm_fifo/tlm_fifo.h"
-#include "tlm_h/tlm_core/tlm_req_rsp/tlm_put_get_imp.h"
+#include "tlm_h/tlm_req_rsp/tlm_adapters/tlm_adapters.h"
+#include "tlm_h/tlm_req_rsp/tlm_channels/tlm_fifo/tlm_fifo.h"
+#include "tlm_h/tlm_req_rsp/tlm_channels/tlm_req_rsp_channels/tlm_put_get_imp.h"
 
 namespace tlm {
 

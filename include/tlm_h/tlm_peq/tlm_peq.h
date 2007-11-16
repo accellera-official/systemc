@@ -19,7 +19,7 @@
 #define __TLM_PEQ_H__
 
 #include <map>
-#include "tlm_h/tlm_annotated/tlm_annotated_ifs/tlm_write_if.h"
+#include "tlm_h/tlm_peq/tlm_write_if.h"
 
 namespace tlm {
 

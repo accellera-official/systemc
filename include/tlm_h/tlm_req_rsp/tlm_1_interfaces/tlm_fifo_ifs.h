@@ -23,7 +23,7 @@
 #ifndef __TLM_FIFO_IFS_H__
 #define __TLM_FIFO_IFS_H__
 
-#include "tlm_h/tlm_core/tlm_interfaces/tlm_core_ifs.h"
+#include "tlm_h/tlm_req_rsp/tlm_1_interfaces/tlm_core_ifs.h"
 
 namespace tlm {
 

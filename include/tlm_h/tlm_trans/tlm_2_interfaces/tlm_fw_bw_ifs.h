@@ -18,7 +18,7 @@
 #ifndef __TLM_FW_BW_IFS_H__
 #define __TLM_FW_BW_IFS_H__
 
-#include "tlm_h/tlm_generic_payload/tlm_generic_payload.h"
+#include "tlm_h/tlm_trans/tlm_generic_payload/tlm_generic_payload.h"
 #include <systemc>
 
 namespace tlm {

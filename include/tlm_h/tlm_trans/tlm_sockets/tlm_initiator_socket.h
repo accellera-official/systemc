@@ -19,7 +19,7 @@
 #define __TLM_INITIATOR_SOCKET_H__
 
 //#include <systemc>
-#include "tlm_h/tlm_annotated/tlm_fw_bw_ifs/tlm_fw_bw_ifs.h"
+#include "tlm_h/tlm_trans/tlm_2_interfaces/tlm_fw_bw_ifs.h"
 
 namespace tlm {
 

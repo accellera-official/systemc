@@ -20,11 +20,10 @@
 
 #include <systemc>    /// main SystemC header
 
-#include "tlm_h/tlm_core/tlm_core.h"
 #include "tlm_h/tlm_analysis/tlm_analysis.h"
-#include "tlm_h/tlm_annotated/tlm_annotated.h"
-#include "tlm_h/tlm_generic_payload/tlm_generic_payload.h"
-#include "tlm_h/tlm_ports/tlm_ports.h"
+#include "tlm_h/tlm_peq/tlm_peq.h"
 #include "tlm_h/tlm_quantum/tlm_quantum.h"
+#include "tlm_h/tlm_req_rsp/tlm_req_rsp.h"
+#include "tlm_h/tlm_trans/tlm_trans.h"
 
 #endif /* __TLM_H__ */

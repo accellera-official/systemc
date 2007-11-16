@@ -20,7 +20,7 @@
 
 //#include <systemc>
 
-#include "tlm_h/tlm_core/tlm_interfaces/tlm_tag.h"
+#include "tlm_h/tlm_req_rsp/tlm_1_interfaces/tlm_tag.h"
 
 namespace tlm {
 

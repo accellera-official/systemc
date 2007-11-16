@@ -34,8 +34,8 @@
 
 //#include <systemc>
 
-#include "tlm_h/tlm_core/tlm_interfaces/tlm_fifo_ifs.h"
-#include "tlm_h/tlm_core/tlm_fifo/circular_buffer.h"
+#include "tlm_h/tlm_req_rsp/tlm_1_interfaces/tlm_fifo_ifs.h"
+#include "tlm_h/tlm_req_rsp/tlm_channels/tlm_fifo/circular_buffer.h"
 
 namespace tlm {
 
@@ -268,9 +268,9 @@ tlm_fifo<T>::update()
 
 } // namespace tlm
 
-#include "tlm_h/tlm_core/tlm_fifo/tlm_fifo_put_get.h"
-#include "tlm_h/tlm_core/tlm_fifo/tlm_fifo_peek.h"
-#include "tlm_h/tlm_core/tlm_fifo/tlm_fifo_resize.h"
+#include "tlm_h/tlm_req_rsp/tlm_channels/tlm_fifo/tlm_fifo_put_get.h"
+#include "tlm_h/tlm_req_rsp/tlm_channels/tlm_fifo/tlm_fifo_peek.h"
+#include "tlm_h/tlm_req_rsp/tlm_channels/tlm_fifo/tlm_fifo_resize.h"
 
 #endif
 
