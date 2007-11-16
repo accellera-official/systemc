@@ -25,6 +25,7 @@
 #include "examples_rw_if.h"                        ///< Convenience R/W interface 
 #include "reporting.h"                             ///< Reporting convenience macros
 #include "traffic_generator.h"                     ///< Our header
+#include "mtrand.h"                                ///< Mersenne Twister random number generator
 
 static char *report_source = "traffic_generator";
 
@@ -121,11 +122,14 @@ traffic_generator::traffic_generator_thread(void)                     ///< traff
   }
 
   // set randam generator seed
-  srand (31415);
+  unsigned long init[4] = {0x00000123, 0x00000234, 0x00000345, 0x00000456};
+  unsigned long length  = 4;
+  MTRand_int32 irand(init, length);         // 32-bit int generator
+//  srand (31415);
 
   while (true) {
-    percentage              = rand() % 101;
-    address                 = rand() % 4096;
+    percentage              = irand() % 101;
+    address                 = irand() % 4096;
     aligned_address_mask    = ~(sc_dt::uint64)(cache_line_size - 1);
     cache_alligned_address  = address & aligned_address_mask; 
 
