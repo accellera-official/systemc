@@ -1,0 +1,7 @@
+<area shape="rect" href="$classtlm_1_1circular__buffer.html#b11e941e9f810313b827916f3cf6129f" title="tlm::circular_buffer::init" alt="" coords="277,5,435,32">
+<area shape="rect" href="$classtlm_1_1circular__buffer.html#107fbb88e3eae0f27364eff5775ad374" title="tlm::circular_buffer::peek_data" alt="" coords="255,56,457,83">
+<area shape="rect" href="$classtlm_1_1circular__buffer.html#87020999de4d20fb5ceb8e29ab79348b" title="tlm::circular_buffer::size" alt="" coords="556,81,721,108">
+<area shape="rect" href="$classtlm_1_1circular__buffer.html#a5d8e58517ef9f5ef0f173915e716821" title="tlm::circular_buffer::used" alt="" coords="271,157,441,184">
+<area shape="rect" href="$classtlm_1_1circular__buffer.html#6f1b36ed6172a376e5850732e6274ca8" title="tlm::circular_buffer::write" alt="" coords="272,208,440,235">
+<area shape="rect" href="$classtlm_1_1circular__buffer.html#5f0e42ce6f967e0b4a221985755122ca" title="tlm::circular_buffer::increment_write_pos" alt="" coords="507,183,771,209">
+<area shape="rect" href="$classtlm_1_1circular__buffer.html#0058b87d1ebbdb9053fc3169d4c6925f" title="tlm::circular_buffer::write_data" alt="" coords="537,233,740,260">
