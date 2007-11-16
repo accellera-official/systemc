@@ -6,7 +6,8 @@ MY_INCLUDES = /I../../../common/include/SimpleSocket \
 			  /I../../../common/include/models \
 			  /I../../../common/include/utils \
 			  /I../../common/include/transactors \
- 			  /I../../common/include/tlm_bus
+ 			  /I../../common/include/tlm_bus \
+ 			  /I../../common/include/tlm_annotated_ifs
 
 SRCDIR = ..\src
 SRCCOMMONDIR = ..\..\common\src

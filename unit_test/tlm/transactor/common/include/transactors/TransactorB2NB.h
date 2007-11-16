@@ -21,6 +21,7 @@
 //#include <systemc>
 #include "tlm.h"
 #include "simple_initiator_socket.h"
+#include "tlm_annotated_ifs.h"
 #include "tlm_request.h"
 #include "tlm_response.h"
 

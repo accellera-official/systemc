@@ -18,8 +18,6 @@
 #ifndef __TLM_ANNOTATED_IFS_H__
 #define __TLM_ANNOTATED_IFS_H__
 
-#include "tlm_h/tlm_core/tlm_core.h"
-
 namespace tlm {
 
 template< typename REQ , typename RSP >

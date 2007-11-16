@@ -18,7 +18,6 @@
 #ifndef __TLM_ANNOTATED_H__
 #define __TLM_ANNOTATED_H__
 
-#include "tlm_annotated_ifs/tlm_annotated_ifs.h"
 #include "tlm_annotated_ifs/tlm_write_if.h"
 
 #include "tlm_annotated_channels/tlm_peq.h"

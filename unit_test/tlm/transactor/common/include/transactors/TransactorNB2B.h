@@ -20,6 +20,7 @@
 
 #include "tlm.h"
 #include "simple_target_socket.h"
+#include "tlm_annotated_ifs.h"
 #include "tlm_request.h"
 #include "tlm_response.h"
 #include "MyPEQ.h"

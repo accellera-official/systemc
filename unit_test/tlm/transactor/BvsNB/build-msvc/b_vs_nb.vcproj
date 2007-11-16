@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/vmg"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\common\include\tlm_bus;..\..\common\include\transactors;..\..\..\common\include\SimpleSocket;..\..\..\common\include\models;..\..\..\common\include\utils"
+				AdditionalIncludeDirectories="..\..\common\include\tlm_annotated_ifs;..\..\common\include\tlm_bus;..\..\common\include\transactors;..\..\..\common\include\SimpleSocket;..\..\..\common\include\models;..\..\..\common\include\utils"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				StringPooling="true"
 				MinimalRebuild="true"
@@ -127,7 +127,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/vmg"
-				AdditionalIncludeDirectories="..\..\common\include\tlm_bus;..\..\common\include\transactors;..\..\..\common\include\SimpleSocket;..\..\..\common\include\models;..\..\..\common\include\utils"
+				AdditionalIncludeDirectories="..\..\common\include\tlm_annotated_ifs;..\..\common\include\tlm_bus;..\..\common\include\transactors;..\..\..\common\include\SimpleSocket;..\..\..\common\include\models;..\..\..\common\include\utils"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;SC_INCLUDE_FX"
 				StringPooling="false"
 				MinimalRebuild="false"
