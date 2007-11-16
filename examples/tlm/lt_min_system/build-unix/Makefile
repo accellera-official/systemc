@@ -8,7 +8,7 @@ SRCCOMMONDIR = ../../common/src
  
 CFLAGS = $(FLAGS) $(INCDIR)
 
-OBJS   = $(OBJ_NAME).o lt_initiator.o lt_processor_abstraction.o traffic_generator.o lt_target_memory.o lt_top.o
+OBJS   = $(OBJ_NAME).o lt_initiator.o lt_processor_abstraction.o traffic_generator.o lt_target_memory.o lt_top.o mtrand.o
 
 .PHONY: clean all check
 
@@ -46,6 +46,9 @@ traffic_generator.o: $(SRCCOMMONDIR)/traffic_generator.cpp
 	$(GXX) $(CFLAGS) -c $< -o $@
 
 lt_target_memory.o: $(SRCCOMMONDIR)/lt_target_memory.cpp
+	$(GXX) $(CFLAGS) -c $< -o $@
+
+mtrand.o: $(SRCCOMMONDIR)/mtrand.cpp
 	$(GXX) $(CFLAGS) -c $< -o $@
 
 clean:
