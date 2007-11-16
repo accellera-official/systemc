@@ -5,8 +5,8 @@ OBJ_NAME = B_vs_NB
 MY_INCLUDES = /I../../../common/include/SimpleSocket \
 			  /I../../../common/include/models \
 			  /I../../../common/include/utils \
-			  /I../../include/transactors \
- 			  /I../../include/tlm_bus
+			  /I../../common/include/transactors \
+ 			  /I../../common/include/tlm_bus
 
 SRCDIR = ..\src
 SRCCOMMONDIR = ..\..\common\src
