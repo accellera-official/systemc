@@ -217,6 +217,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\common\src\mtrand.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\common\src\traffic_generator.cpp"
 				>
 			</File>
@@ -244,6 +248,10 @@
 			</File>
 			<File
 				RelativePath="..\include\lt_top.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\include\mtrand.h"
 				>
 			</File>
 			<File
