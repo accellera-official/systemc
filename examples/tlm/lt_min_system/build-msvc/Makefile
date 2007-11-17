@@ -14,7 +14,7 @@ SRCCOMMONDIR = ..\..\common\src
 
 CFLAGS = $(FLAGS) $(MY_INCLUDES)
 
-OBJS   = $(OBJ_NAME).obj lt_initiator.obj lt_processor_abstraction.obj traffic_generator.obj lt_target_memory.obj lt_top.obj
+OBJS   = $(OBJ_NAME).obj lt_initiator.obj lt_processor_abstraction.obj traffic_generator.obj lt_target_memory.obj lt_top.obj mtrand.obj
 
 #.PHONY: clean all run check announce
 
@@ -53,6 +53,8 @@ traffic_generator.obj: $(SRCCOMMONDIR)\traffic_generator.cpp
 lt_target_memory.obj: $(SRCCOMMONDIR)\lt_target_memory.cpp
 	$(CC) /c $(CFLAGS) /Fo"$@" %s
 
+mtrand.obj: $(SRCCOMMONDIR)\mtrand.cpp
+	$(CC) /c $(CFLAGS) /Fo"$@" %s
 
 clean:
 	del $(OBJ_NAME).exe *.obj run.log diff.log *.idb *.pdb *ilk
