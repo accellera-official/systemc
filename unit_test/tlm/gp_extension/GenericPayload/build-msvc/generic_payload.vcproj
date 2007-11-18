@@ -196,11 +196,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\src\generic_packet.cpp"
+				RelativePath="..\src\generic_payload.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\tlm_slave.cpp"
+				RelativePath="..\src\tlm_target.cpp"
 				>
 			</File>
 		</Filter>
@@ -210,15 +210,7 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\include\tlm_master.h"
-				>
-			</File>
-			<File
 				RelativePath="..\include\tlm_memory.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\tlm_slave.h"
 				>
 			</File>
 		</Filter>
