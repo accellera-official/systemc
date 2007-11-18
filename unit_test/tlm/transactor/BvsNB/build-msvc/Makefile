@@ -26,7 +26,7 @@ announce:
 	
 check: announce $(OBJ_NAME).exe
 	@.\$(OBJ_NAME).exe > run.log
-	@(fc run.log ..\results\expected.log > diff.log ) & if ERRORLEVEL 1  (echo "***ERROR:" & type diff.log) else (echo "OK") 
+	@(fc run.log ..\results\expected.log > diff.log ) & if ERRORLEVEL 1  (echo "***ERROR:" & type diff.log) else (echo OK) 
 
 run: announce $(OBJ_NAME).exe
 	@.\$(OBJ_NAME).exe
