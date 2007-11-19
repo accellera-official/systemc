@@ -125,7 +125,7 @@ class tlm_peq :
 	 p = *(m_map.begin()) )
     {
 
-      write_port.write( p.second );
+      write_port->write( p.second );
       m_map.erase( m_map.begin() );
 
       if( m_map.size() == 0 ) {

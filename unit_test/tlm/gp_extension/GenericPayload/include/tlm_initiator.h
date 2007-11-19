@@ -47,7 +47,7 @@ public:
     }
 
     template <typename DT>
-    void print(DT value, tlm::tlm_endianness endianness)
+    void print_data(DT value, tlm::tlm_endianness endianness)
     {
       DT tmp = tlm::swapIfNeeded(value, endianness);
       std::cout << "  Data (simulated endianness) = [ ";
@@ -65,33 +65,33 @@ public:
     void doLEReadAccesses(unsigned int address)
     {
         // read word (4 bytes)
-        print(read<unsigned int>(address), tlm::TLM_LITTLE_ENDIAN);
+        print_data(read<unsigned int>(address), tlm::TLM_LITTLE_ENDIAN);
         
         // read subwords (2 bytes), lsb to msb
-        print(read<unsigned short>(address), tlm::TLM_LITTLE_ENDIAN);
-        print(read<unsigned short>(address + 2), tlm::TLM_LITTLE_ENDIAN);
+        print_data(read<unsigned short>(address), tlm::TLM_LITTLE_ENDIAN);
+        print_data(read<unsigned short>(address + 2), tlm::TLM_LITTLE_ENDIAN);
         
         // read subwords (1 byte), lsb to msb
-        print(read<unsigned char>(address), tlm::TLM_LITTLE_ENDIAN);
-        print(read<unsigned char>(address + 1), tlm::TLM_LITTLE_ENDIAN);
-        print(read<unsigned char>(address + 2), tlm::TLM_LITTLE_ENDIAN);
-        print(read<unsigned char>(address + 3), tlm::TLM_LITTLE_ENDIAN);
+        print_data(read<unsigned char>(address), tlm::TLM_LITTLE_ENDIAN);
+        print_data(read<unsigned char>(address + 1), tlm::TLM_LITTLE_ENDIAN);
+        print_data(read<unsigned char>(address + 2), tlm::TLM_LITTLE_ENDIAN);
+        print_data(read<unsigned char>(address + 3), tlm::TLM_LITTLE_ENDIAN);
     }
 
     void doBEReadAccesses(unsigned int address)
     {
         // read word (4 bytes)
-        print(read<unsigned int>(address), tlm::TLM_BIG_ENDIAN);
+        print_data(read<unsigned int>(address), tlm::TLM_BIG_ENDIAN);
         
         // read subwords (2 bytes), lsb to msb
-        print(read<unsigned short>(address + 2), tlm::TLM_BIG_ENDIAN);
-        print(read<unsigned short>(address), tlm::TLM_BIG_ENDIAN);
+        print_data(read<unsigned short>(address + 2), tlm::TLM_BIG_ENDIAN);
+        print_data(read<unsigned short>(address), tlm::TLM_BIG_ENDIAN);
         
         // read subwords (1 byte), lsb to msb
-        print(read<unsigned char>(address + 3), tlm::TLM_BIG_ENDIAN);
-        print(read<unsigned char>(address + 2), tlm::TLM_BIG_ENDIAN);
-        print(read<unsigned char>(address + 1), tlm::TLM_BIG_ENDIAN);
-        print(read<unsigned char>(address), tlm::TLM_BIG_ENDIAN);
+        print_data(read<unsigned char>(address + 3), tlm::TLM_BIG_ENDIAN);
+        print_data(read<unsigned char>(address + 2), tlm::TLM_BIG_ENDIAN);
+        print_data(read<unsigned char>(address + 1), tlm::TLM_BIG_ENDIAN);
+        print_data(read<unsigned char>(address), tlm::TLM_BIG_ENDIAN);
     }
 
     void main()

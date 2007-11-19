@@ -94,13 +94,13 @@ private:
     template< int W >
 	void write(sc_dt::uint64 address,
                    unsigned char *data, 
-                   bool* be = 0,
-                   unsigned int be_length = 0);
+                   bool* byte_enable = 0,
+                   unsigned int byte_enable_length = 0);
     template< int W >
 	void read(sc_dt::uint64 address,
                   unsigned char *data,
-                  bool* be = 0,
-                  unsigned int be_length = 0);
+                  bool* byte_enable = 0,
+                  unsigned int byte_enable_length = 0);
     
     template< class T >
 	void prepare_address_and_data(int nbits,
@@ -143,8 +143,8 @@ void tlm_initiator::prepare_address_and_data(int nbits,
 template< int W >
 void tlm_initiator::write(sc_dt::uint64 address,
                           unsigned char *data,
-                          bool* be,
-                          unsigned int be_length)
+                          bool* byte_enable,
+                          unsigned int byte_enable_length)
 {
     // Single WRITE transaction 
     
@@ -155,8 +155,8 @@ void tlm_initiator::write(sc_dt::uint64 address,
     m_gp.set_address(address);
     m_gp.set_data_ptr(data);
     m_gp.set_data_length(W/8);
-    m_gp.set_byte_enable_ptr(be);
-    m_gp.set_byte_enable_length(be_length);
+    m_gp.set_byte_enable_ptr(byte_enable);
+    m_gp.set_byte_enable_length(byte_enable_length);
     
     bus_port->nb_transport(&m_gp);
     
@@ -176,8 +176,8 @@ void tlm_initiator::write(sc_dt::uint64 address,
 template< int W >
 void tlm_initiator::read(sc_dt::uint64 address,
                          unsigned char *data,
-                         bool* be,
-                         unsigned int be_length)
+                         bool* byte_enable,
+                         unsigned int byte_enable_length)
 {
     // Single READ transaction 
     std::cout << name() << " : Single READ transaction : ADDRESS = 0x"
@@ -187,8 +187,8 @@ void tlm_initiator::read(sc_dt::uint64 address,
     m_gp.set_address(address);
     m_gp.set_data_ptr(data);
     m_gp.set_data_length(W/8);
-    m_gp.set_byte_enable_ptr(be);
-    m_gp.set_byte_enable_length(be_length);
+    m_gp.set_byte_enable_ptr(byte_enable);
+    m_gp.set_byte_enable_length(byte_enable_length);
     
     bus_port->nb_transport(&m_gp);
     

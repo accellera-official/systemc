@@ -26,6 +26,7 @@ class MyPEQ : public sc_core::sc_module
 {
 public:
   typedef tlm::tlm_generic_payload transaction_type;
+  typedef std::pair<const sc_core::sc_time, transaction_type*> pair_type;
 
 public:
   SC_HAS_PROCESS(MyPEQ);
@@ -35,7 +36,7 @@ public:
 
   void notify(transaction_type& trans, sc_core::sc_time& t)
   {
-    mScheduledEvents.insert(std::make_pair(t + sc_core::sc_time_stamp(), &trans));
+    mScheduledEvents.insert(pair_type(t + sc_core::sc_time_stamp(), &trans));
     mEvent.notify(t);
   }
 
@@ -64,7 +65,7 @@ public:
   }
 
 private:
-  std::multimap<sc_core::sc_time, transaction_type*> mScheduledEvents;
+  std::multimap<const sc_core::sc_time, transaction_type*> mScheduledEvents;
   sc_core::sc_event mEvent;
 };
 
