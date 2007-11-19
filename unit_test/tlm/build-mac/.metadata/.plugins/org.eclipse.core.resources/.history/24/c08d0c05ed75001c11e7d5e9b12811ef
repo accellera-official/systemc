@@ -1,3 +1,0 @@
-#Mon Oct 08 17:22:54 CDT 2007
-eclipse.preferences.version=1
-environment/project/cdt.managedbuild.config.macosx.exe.release.897953340=<?xml version\="1.0" encoding\="UTF-8"?>\n<environment append\="true">\n<variable delimiter\=";" name\="SYSTEMC_LIB_DIR" operation\="append" value\="lib-macosx-i386"/>\n<variable delimiter\=";" name\="SYSTEMC" operation\="replace" value\="/Users/charleswilson/Documents/SystemC/osci/systemc/2.3-gcc4.0"/>\n<variable name\="PWD" operation\="replace" value\="./Release"/>\n<variable name\="CWD" operation\="replace" value\="./Release"/>\n</environment>\n
