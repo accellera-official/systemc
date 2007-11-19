@@ -128,7 +128,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/vmg"
-				AdditionalIncludeDirectories="..\include;..\..\common\include"
+				AdditionalIncludeDirectories="..\..\common\include\utils;..\..\common\include\SimpleSocket;..\..\common\include\models"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;SC_INCLUDE_FX"
 				StringPooling="false"
 				MinimalRebuild="false"
