@@ -18,11 +18,11 @@
   @file traffic_generator.h
 
   @brief traffic generation class
-  
+
  ******************************************************************************/
 // Note: order of headers is important
 #include "tlm.h"                                   ///< TLM headers
-#include "examples_rw_if.h"                        ///< Convenience R/W interface 
+#include "examples_rw_if.h"                        ///< Convenience R/W interface
 #include "reporting.h"                             ///< Reporting convenience macros
 #include "traffic_generator.h"                     ///< Our header
 #include "mtrand.h"                                ///< Mersenne Twister random number generator
@@ -31,14 +31,14 @@ static char *report_source = "traffic_generator";
 
 /*==============================================================================
   @fn traffic_generator::traffic_generator
-  
+
   @brief traffic generator constructor
-  
+
   @details
-  
+
   @param name module name
   @param config traffic generator configuration
-  
+
   @retval void
 ==============================================================================*/
 
@@ -51,16 +51,16 @@ traffic_generator::traffic_generator                ///< constructor
 {
   SC_THREAD(traffic_generator_thread);
 }
-    
+
 /*==============================================================================
   @fn traffic_generator::~traffic_generator
-  
+
   @brief traffic generator destructor
-  
+
   @details
-  
+
   @param void
-  
+
   @retval void
 ==============================================================================*/
 
@@ -70,22 +70,22 @@ traffic_generator::~traffic_generator(void)          ///< destructor
 
 /*==============================================================================
   @fn traffic_generator::traffic_generator_thread
-  
+
   @brief traffic generation thread
-  
+
   @details
-  
+
   @param void
-  
+
   @retval void
-  
+
   @details
     The following transactions can be generated.
     - 1. i-cache reads (block reads of cache line size)
     - 2. d-cache reads and writes (block reads and writes of cache line size)
     - 3. reads and writes (using mixed sizes of 1, 2, 4 and 8 bytes)
     The number of active requests may be default  8.
-    A traffic_generator_config object must be initialized and passed to the 
+    A traffic_generator_config object must be initialized and passed to the
     constructor to configure the text, stack and scratch regions available
     and the percentage of reads/writes for each region.
 
@@ -98,20 +98,20 @@ traffic_generator::~traffic_generator(void)          ///< destructor
       - data writes       default  1%
 ==============================================================================*/
 
-void 
+void
 traffic_generator::traffic_generator_thread(void)                     ///< traffic generator thread
-{ 
-  REPORT_INFO(report_source,  __FUNCTION__,"traffic_generator_thread: starting");
+{
+  REPORT_INFO(report_source,  "traffic_generator_thread","traffic_generator_thread: starting");
 
-  sc_dt::uint64 ir = m_config.m_icache_read_percent;                  ///< 
-  sc_dt::uint64 dr = ir + m_config.m_dcache_read_percent;             ///< 
-//sc_dt::uint64 dw = dr + m_config.m_dcache_write_percent;            ///< 
-//sc_dt::uint64 sr = dw + m_config.m_scratch_read_percent;            ///< 
+  sc_dt::uint64 ir = m_config.m_icache_read_percent;                  ///<
+  sc_dt::uint64 dr = ir + m_config.m_dcache_read_percent;             ///<
+//sc_dt::uint64 dw = dr + m_config.m_dcache_write_percent;            ///<
+//sc_dt::uint64 sr = dw + m_config.m_scratch_read_percent;            ///<
 
   unsigned int  cache_line_size = m_config.m_cache_line_size;         ///< cache line size
   unsigned char *read_buffer    = new unsigned char[cache_line_size]; ///< read buffer
   unsigned char *write_buffer   = new unsigned char[cache_line_size]; ///< write buffer
-  unsigned int  percentage;                                           ///< 
+  unsigned int  percentage;                                           ///<
   sc_dt::uint64 address;                                              ///< raw address
   sc_dt::uint64 aligned_address_mask;                                 ///< cache aligned address mask
   sc_dt::uint64 cache_alligned_address;                               ///< cache aligned address
@@ -131,7 +131,7 @@ traffic_generator::traffic_generator_thread(void)                     ///< traff
     percentage              = irand() % 101;
     address                 = irand() % 4096;
     aligned_address_mask    = ~(sc_dt::uint64)(cache_line_size - 1);
-    cache_alligned_address  = address & aligned_address_mask; 
+    cache_alligned_address  = address & aligned_address_mask;
 
     memset(read_buffer, 0, cache_line_size);
 
@@ -139,7 +139,7 @@ traffic_generator::traffic_generator_thread(void)                     ///< traff
     {
       // i-cache Read
       rw_port->read
-        ( m_config.m_icache_base_address + (cache_alligned_address) 
+        ( m_config.m_icache_base_address + (cache_alligned_address)
         , cache_line_size
         , read_buffer);
     }
@@ -176,7 +176,7 @@ traffic_generator::traffic_generator_thread(void)                     ///< traff
         , write_buffer);
     } */
   }
-  
+
   // clean up, never reached
   delete[] read_buffer;
   delete[] write_buffer;
