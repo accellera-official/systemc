@@ -43,8 +43,8 @@ are:
   - extend DMI to support snooping and consider a direct channel for bus
     bypass to non-memory models
   - enforce payload modifiability rules
-
-Endianness support is an area the TLM WG is particularly interested in 
-receiving feedback about.
-
+  - some features of the generic payload need to be programmed differently 
+    depending on host endianness; helper functions will be provided to isolate
+    the modeler from these details; currently some tests don't produce expected
+    results on big endian hosts
 
