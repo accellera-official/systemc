@@ -1,33 +1,38 @@
-     Release Notes for the (preliminary) TLM 2.0 Draft 2 Kit Of 9 Nov 2007
-     =====================================================================
+            Release Notes for the TLM 2.0 Draft 2 Kit Of 21 Nov 2007
+            ========================================================
 
 CONTENTS
 ========
 
-  1) What's changed in this kit?
+  1) Supported SystemC versions
+  2) What's changed in this kit?
+  3) Areas under construction
+  4) Known issues
 
-  2) Areas under construction
 
+1) Supported SystemC versions
+=============================
+SystemC 2.1.v1 and 2.2.0 are supported and have been tested.
 
-1) What's changed in this kit?
+2) What's changed in this kit?
 ==============================
 
 Compared to the 29 Nov 2006 draft 1 kit, draft 2 has evolved in the following
 primary ways:
   - Many of the features have undergone significant change:
     - Untimed modeling
-    - Loosely timed modeling
     - Approximately timed modeling
     - The generic payload and its extension mechanism
     - Non-intrusive (debug) transactions
   - Several new features have been incorporated:
+    - Loosely timed modeling
     - Temporal decoupling
     - Model synchronization
     - Direct memory interface (DMI)
   - Documentation (users manual) is provided
   - Examples have been improved
 
-2) Areas under construction
+3) Areas under construction
 ===========================
 
 This is a draft kit for public review so any of it is subject to change.  
@@ -38,3 +43,13 @@ are:
   - extend DMI to support snooping and consider a direct channel for bus
     bypass to non-memory models
   - enforce payload modifiability rules
+
+Endianness support is an area the TLM WG is particularly interested in 
+receiving feedback about.
+
+4) Known issues
+===============
+
+The tlm_peq does not compile with the Sun Forte compiler due to documented
+issues with std::multimap.
+

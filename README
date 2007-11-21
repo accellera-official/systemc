@@ -1,10 +1,9 @@
-                            2007-11-09
-                TLM 2.0 Draft 2 (OSCI-only release)
-                ===================================
+                             2007-11-21
+                 TLM 2.0 Draft 2 for public review
+                 =================================
 
-This is a preview of the TLM 2.0 Draft 2 kit for OSCI members only.  The TLM WG
-is refining the user manual, adding more examples and performing platform 
-testing in preparation for a public review release on November 30th.
+This draft of the TLM 2.0 standard is being made available for public review
+through January 31, 2008.
 
 -------------------------------------------------------------------------------
                 IMPORTANT
@@ -13,9 +12,12 @@ testing in preparation for a public review release on November 30th.
    that was released a year ago.  Draft 2 is not, nor was it intended to be, 
    backwards compatible with draft 1.
 
-2. This release is supported on the following platforms for which it has
-   been well tested:
-    o TBD
+2. This release has been well tested on the following platforms:
+    o Linux (Redhat Enterprise 4) with GNU C++ compiler versions gcc-3.4.2,
+      gcc-4.2.0
+    o Linux (SuSE SLES9SP3) with GNU C++ compiler versions gcc-3.4.4, gcc-4.2.0
+    o MacOSX with GNU C++ compiler versions gcc-3.1, gcc-3.4.2, and gcc-4.0
+    o Windows XP (SP2) with VC++ 7.0 and 8.0
 
 -------------------------------------------------------------------------------
 
@@ -41,22 +43,39 @@ User Documentation
    user manual (TLM_2_0_user_manual.pdf) is the best place to start; see 
    docs/README.txt for a description and status of the other documentation.
 
+Directory Structure
+
+   The TLM kit's directory structure has been patterned after that used 
+   for the SystemC language and Verification library (SCV).
+
 Build Support
  
    Support for building the examples and unit tests is provided for 'unix', 
-   'msvc' and 'cygwin'.
+   'msvc' (project and make files) and 'cygwin'.
+
+   Makefiles work hierarchically.  Build is the default target; 'clean', 
+   'run' (executes built tests/examples) and 'check' (against expected 
+   results) targets are also provided.  The $TLM_HOME environment variable
+   should be set to this kit's location; $SYSTEMC_HOME and $TARGET_ARCH 
+   should point to your SystemC installation.
    
 Examples
 
    A complete example of a loosely timed system is provided at:
    examples/tlm/lt_min_system/; look in the docs/ subdirectory at
    lt_min_system_example.ppt for a description and step-by-step instructions
-   for building and running it.
+   for building and running it.  Similar examples are provided for untimed
+   modeling and TLM1 model integration.  
 
-   An example demonstrating the integration of legacy TLM1 models will be
-   added before draft 2 is released for public review.
+   More examples are in the works and will be incrementally made available 
+   via the OSCI web site (please request examples that would make applying 
+   this technology more apparent for you via the feedback forum described 
+   below).
 
 Unit Tests
+   The unit tests, though not as complete or documented as the examples, can be 
+   illustrative for other features of the kit such as payload extensions, AT 
+   modeling, transactors, temporal decoupling, direct memory interface, etc.
 
    See instructions in unit_test/README.txt
 
