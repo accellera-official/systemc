@@ -23,9 +23,3 @@ transactor
 
 - Example transactors: transport <-> nb_transport 
 
-
-
-To run the examples:
-- update the variables in Makefile.config
-- run 'make' to build the examples
-- run 'cd <example_dir>; ./test' to run an example
