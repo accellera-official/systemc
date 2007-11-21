@@ -47,9 +47,4 @@ are:
 Endianness support is an area the TLM WG is particularly interested in 
 receiving feedback about.
 
-4) Known issues
-===============
-
-The tlm_peq does not compile with the Sun Forte compiler due to documented
-issues with std::multimap.
 

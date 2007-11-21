@@ -82,7 +82,7 @@ class tlm_peq :
 
     int i = 0;
 
-    for( typename std::multimap< sc_core::sc_time , T>::const_iterator iter = m_map.begin();
+    for( typename std::multimap< const sc_core::sc_time , T>::const_iterator iter = m_map.begin();
 	 iter != m_map.end();
 	 ++iter ) {
 
@@ -108,11 +108,11 @@ class tlm_peq :
   }
 
  private:
-  typedef std::pair<sc_core::sc_time,T> pair_type;
+  typedef std::pair<const sc_core::sc_time, T> pair_type;
+  typedef std::multimap<const sc_core::sc_time, T> map_type;
 
   void wake_up_method() {
 
-    pair_type p;
     sc_core::sc_time now = sc_core::sc_time_stamp();
 
     // must be something there, and it must be scheduled for now
@@ -120,28 +120,25 @@ class tlm_peq :
     assert( m_map.size() > 0 );
     assert( (*(m_map.begin())).first == now );
 
-    for( p = *(m_map.begin());
-	 p.first == now;
-	 p = *(m_map.begin()) )
+    for( typename std::multimap<const sc_core::sc_time, T>::const_iterator iter = m_map.begin();
+	 (*iter).first == now;
+	 iter = m_map.begin() )
     {
 
-      write_port->write( p.second );
+      write_port->write( (*iter).second );
       m_map.erase( m_map.begin() );
 
       if( m_map.size() == 0 ) {
 	return;
       }
-
-      p = *(m_map.begin());
-
     }
 
-    m_wake_up.notify( p.first - now );
+    m_wake_up.notify( (*m_map.begin()).first - now );
 
   }
 
   sc_core::sc_event m_wake_up;
-  std::multimap< sc_core::sc_time , T> m_map;
+  map_type m_map;
 
 };
 

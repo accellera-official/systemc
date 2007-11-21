@@ -5,5 +5,6 @@ Platforms we will test TLM 2.0 Draft 2 on:
       [Trevor]
     o MacOSX with GNU C++ compiler versions gcc-3.1, gcc-3.4.2, and gcc-4.0
       [Charles]
-    o Windows XP (SP2) with VC++ 7.0 [Olaf] and 8.0 [Charles]
-
+    o Windows XP (SP2) with VC++ 7.1 [Olaf] and 8.0 [Charles]
+    o SunOS 5.9, with Sun Forte compiler 8.0, 10.0 and 11.0, known diffs [Olaf]
+    o SunOS 5.9, with GNU C++ compiler versions gcc-3.3.2, known diffs [Olaf]
