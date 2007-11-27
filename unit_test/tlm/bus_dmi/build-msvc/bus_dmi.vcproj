@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="bus_dmi"
-	ProjectGUID="{A9CB1145-19F6-45B0-8783-BDC5A407C9B2}"
+	ProjectGUID="{689F6302-A4F9-4B3D-B03E-BF61C301AB17}"
 	RootNamespace="winbuild"
 	Keyword="Win32Proj"
 	>
