@@ -2,13 +2,24 @@ include ../../build-unix/Makefile.config
 
 OBJ_NAME = lt_min_system
 
-INCDIR = -I../include -I../../common/include -I../../common/include/models -I../../common/include/SimpleSocket -I../../common/include/utils
-SRCDIR = ../src
-SRCCOMMONDIR = ../../common/src
+INCDIR =    -I../include \
+            -I../../common/include \
+            -I../../common/include/models \
+            -I../../common/include/SimpleSocket \
+            -I../../common/include/utils
+            
+SRCDIR          = ../src
+SRCCOMMONDIR    = ../../common/src
  
 CFLAGS = $(FLAGS) $(INCDIR)
 
-OBJS   = $(OBJ_NAME).o lt_initiator.o lt_processor_abstraction.o traffic_generator.o lt_target_memory.o lt_top.o mtrand.o
+OBJS   =    $(OBJ_NAME).o \
+            lt_initiator.o \
+            lt_processor_abstraction.o \
+            traffic_generator.o \
+            lt_target_memory.o \
+            lt_top.o \
+            mtrand.o
 
 .PHONY: clean all check
 
