@@ -148,8 +148,7 @@ void copy_word_from_array( otype& data_word, \
                            bool *m_be, \
                            unsigned int m_be_length) \
 { \
-    unsigned int data_size = sizeof(otype); \
-    assert(nr_bytes <= data_size); \
+    assert(nr_bytes <= sizeof(otype)); \
     if(m_be == 0) \
         for(unsigned int b=0; b<nr_bytes; b++) \
             reinterpret_cast<unsigned char*>(&data_word)[b] = m_data[offset+b]; \
@@ -168,8 +167,7 @@ void copy_word_to_array( otype& data_word, \
                          bool *m_be, \
                          unsigned int m_be_length) \
 { \
-    unsigned int data_size = sizeof(otype); \
-    assert(nr_bytes <= data_size); \
+    assert(nr_bytes <= sizeof(otype)); \
     if(m_be == 0) \
         for(unsigned int b=0; b<nr_bytes; b++) \
             m_data[offset+b] = reinterpret_cast<unsigned char*>(&data_word)[b]; \
