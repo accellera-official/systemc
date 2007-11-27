@@ -39,8 +39,6 @@
 
 namespace tlm {
 
-template <typename T> class tlm_annotated_fifo;
-
 template <typename T>
 class tlm_fifo :
   public virtual tlm_fifo_get_if<T>,
@@ -146,19 +144,6 @@ public:
     const char* kind() const
         { return kind_string; }
 
-
-    friend class tlm::tlm_annotated_fifo<T>;
-
-private: // some methods to support tlm_annotated_fifo !
-
-    bool nb_can_put( int count , tlm_tag<T> *t = 0 ) const {
-      if( m_size < 0 ) {
-	return true;
-      }
-      return m_num_readable + m_num_written + count <= m_size;
-    }
-
-    bool nb_get_no_notify( T& );
 
 protected:
     sc_core::sc_event &read_event( tlm_tag<T> *t = 0 ) {

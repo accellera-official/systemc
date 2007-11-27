@@ -18,11 +18,6 @@
 #ifndef __TLM_REQ_RSP_H__
 #define __TLM_REQ_RSP_H__
 
-namespace tlm {
-
-    template< typename T > class tlm_annotated_fifo;
-
-}
 // The unannotated TLM interfaces
 
 #include "tlm_1_interfaces/tlm_core_ifs.h"

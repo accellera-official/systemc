@@ -67,27 +67,6 @@ tlm_fifo<T>::nb_get( T& val_ )
 template <typename T>
 inline
 bool
-tlm_fifo<T>::nb_get_no_notify( T& val_ )
-{
-
-  if( is_empty() ) {
-    return false;
-  }
-
-  m_num_read++;
-  m_num_read_no_notify++;
-
-  request_update();
-
-  val_ = buffer->read();
-
-  return true;
-
-}
-
-template < typename T > 
-inline 
-bool
 tlm_fifo<T>::nb_can_get( tlm_tag<T> * ) const {
 
   return !is_empty();
