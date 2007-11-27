@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="ext2gp"
-	ProjectGUID="{A9CB1145-19F6-45B0-8783-BDC5A407C9B2}"
+	ProjectGUID="{5DC6D7A1-889D-4410-8011-F7D866D11E9C}"
 	RootNamespace="winbuild"
 	Keyword="Win32Proj"
 	>

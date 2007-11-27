@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="generic_payload_mix_endianness"
-	ProjectGUID="{A9CB1145-19F6-45B0-8783-BDC5A407C9B2}"
+	ProjectGUID="{2BC37F5A-AA5B-433C-938F-EB13DB08ECC5}"
 	RootNamespace="winbuild"
 	Keyword="Win32Proj"
 	>

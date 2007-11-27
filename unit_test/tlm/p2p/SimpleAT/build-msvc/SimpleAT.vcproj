@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="SimpleAt"
-	ProjectGUID="{A9CB1145-19F6-45B0-8783-BDC5A407C9B2}"
+	ProjectGUID="{BF0E054C-75FD-48DD-9558-2DB2DCD24D89}"
 	RootNamespace="winbuild"
 	Keyword="Win32Proj"
 	>

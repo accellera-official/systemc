@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="RegisterSocketProcessLT"
-	ProjectGUID="{A9CB1145-19F6-45B0-8783-BDC5A407C9B2}"
+	ProjectGUID="{4E722933-62BD-4585-B482-8FB54D724C21}"
 	RootNamespace="winbuild"
 	Keyword="Win32Proj"
 	>

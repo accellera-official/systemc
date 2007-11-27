@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="EndEventLT"
-	ProjectGUID="{A9CB1145-19F6-45B0-8783-BDC5A407C9B2}"
+	ProjectGUID="{5E883253-FAF4-41AE-88B8-B0E31DC8E43D}"
 	RootNamespace="winbuild"
 	Keyword="Win32Proj"
 	>

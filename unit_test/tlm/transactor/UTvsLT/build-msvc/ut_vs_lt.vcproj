@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="ut_vs_lt"
-	ProjectGUID="{A9CB1145-19F6-45B0-8783-BDC5A407C9B2}"
+	ProjectGUID="{97FC21DB-C43B-4852-AF7F-C071D18A7700}"
 	RootNamespace="winbuild"
 	Keyword="Win32Proj"
 	>

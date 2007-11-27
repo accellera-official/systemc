@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="b_vs_nb"
-	ProjectGUID="{A9CB1145-19F6-45B0-8783-BDC5A407C9B2}"
+	ProjectGUID="{9FC511A5-7B25-4E92-ADF1-0EB91267666F}"
 	RootNamespace="winbuild"
 	Keyword="Win32Proj"
 	>

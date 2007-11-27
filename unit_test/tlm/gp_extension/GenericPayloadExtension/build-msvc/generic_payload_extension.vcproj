@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="generic_payload_extension"
-	ProjectGUID="{A9CB1145-19F6-45B0-8783-BDC5A407C9B2}"
+	ProjectGUID="{D0ECDAC4-5B72-414D-B289-2FC510A1641F}"
 	RootNamespace="winbuild"
 	Keyword="Win32Proj"
 	>

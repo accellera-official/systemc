@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="generic_payload_serializers"
-	ProjectGUID="{A9CB1145-19F6-45B0-8783-BDC5A407C9B2}"
+	ProjectGUID="{316CECFB-12B7-4866-9409-E0A740B0B79D}"
 	RootNamespace="winbuild"
 	Keyword="Win32Proj"
 	>

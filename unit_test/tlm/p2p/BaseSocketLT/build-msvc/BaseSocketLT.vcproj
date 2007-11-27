@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="BaseSocketLT"
-	ProjectGUID="{A9CB1145-19F6-45B0-8783-BDC5A407C9B2}"
+	ProjectGUID="{0408630A-F2AF-4F1B-B078-A75E174B0C84}"
 	RootNamespace="winbuild"
 	Keyword="Win32Proj"
 	>
