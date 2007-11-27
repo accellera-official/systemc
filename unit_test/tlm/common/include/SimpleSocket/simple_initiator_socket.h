@@ -134,7 +134,7 @@ private:
         switch (phase) {
         case tlm::END_REQ:
           // Request phase ended
-          return tlm::TLM_SYNC;
+          return tlm::TLM_ACCEPTED;
         case tlm::BEGIN_RESP:
           assert(t == sc_core::SC_ZERO_TIME); // FIXME: can t != 0?    
           mEndEvent.notify(t);

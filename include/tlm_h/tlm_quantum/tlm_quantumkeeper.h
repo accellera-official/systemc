@@ -104,8 +104,8 @@ namespace tlm {
       //
       // Resets the local time to SC_ZERO_TIME and computes the value of the
       // next local quantum. This method should be called by an initiator after
-      // a wait because of a synchronization request by a target (TLM_SYNC,
-      // TLM_REJECTED or TLM_SYNC_CONTINUE).
+      // a wait because of a synchronization request by a target (TLM_ACCEPTED,
+      // TLM_REJECTED or TLM_UPDATED).
       //
       void reset()
       {

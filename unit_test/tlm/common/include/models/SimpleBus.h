@@ -222,8 +222,8 @@ public:
         // FIXME: No limitation on number of pending transactions
         //        All targets (that return false) must support multiple transactions
         switch ((*decodeSocket)->nb_transport(*trans, phase, t)) {
-        case tlm::TLM_SYNC:
-        case tlm::TLM_SYNC_CONTINUE:
+        case tlm::TLM_ACCEPTED:
+        case tlm::TLM_UPDATED:
           // Transaction not yet finished
           if (phase == tlm::BEGIN_REQ) {
             // Request phase not yet finished
@@ -294,8 +294,8 @@ public:
           wait(t);
           break;
 
-        case tlm::TLM_SYNC:
-        case tlm::TLM_SYNC_CONTINUE:
+        case tlm::TLM_ACCEPTED:
+        case tlm::TLM_UPDATED:
           // Transaction not yet finished
           wait(mEndResponseEvent);
         break;
@@ -341,7 +341,7 @@ public:
       assert(false); exit(1);
     }
 
-    return tlm::TLM_SYNC;
+    return tlm::TLM_ACCEPTED;
   }
 
   sync_enum_type targetNBTransportAT(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
@@ -358,7 +358,7 @@ public:
       mResponsePEQ.notify(trans, t);
     }
 
-    return tlm::TLM_SYNC;
+    return tlm::TLM_ACCEPTED;
   }
 
   //

@@ -246,8 +246,8 @@ void tlm_initiator::writeBurst(unsigned int address,
         wait(t);
         break;
         
-    case tlm::TLM_SYNC:
-    case tlm::TLM_SYNC_CONTINUE:
+    case tlm::TLM_ACCEPTED:
+    case tlm::TLM_UPDATED:
         // Transaction not yet finished, wait for the end of it
         wait(socket.getEndEvent());
         break;
@@ -296,8 +296,8 @@ void tlm_initiator::readBurst(unsigned int address,
         wait(t);
         break;
         
-    case tlm::TLM_SYNC:
-    case tlm::TLM_SYNC_CONTINUE:
+    case tlm::TLM_ACCEPTED:
+    case tlm::TLM_UPDATED:
         // Transaction not yet finished, wait for the end of it
         wait(socket.getEndEvent());
         break;

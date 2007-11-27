@@ -24,7 +24,7 @@
 namespace tlm {
 
 enum tlm_phase { BEGIN_REQ, END_REQ, BEGIN_RESP, END_RESP };
-enum tlm_sync_enum { TLM_REJECTED, TLM_SYNC, TLM_SYNC_CONTINUE, TLM_COMPLETED };
+enum tlm_sync_enum { TLM_REJECTED, TLM_ACCEPTED, TLM_UPDATED, TLM_COMPLETED };
 
 ////////////////////////////////////////////////////////////////////////////
 // Basic interfaces

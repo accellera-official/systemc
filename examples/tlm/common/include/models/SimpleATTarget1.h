@@ -100,7 +100,7 @@ public:
       // AT-noTA target
       // - always return false
       // - seperate call to indicate end of phase (do not update phase or t)
-      return tlm::TLM_SYNC;
+      return tlm::TLM_ACCEPTED;
 
     } else if (phase == tlm::END_RESP) {
 
@@ -125,7 +125,7 @@ public:
     assert(trans);
     mEndRequestQueue.pop();
     sync_enum_type r = socket->nb_transport(*trans, phase, t);
-    assert(r == tlm::TLM_SYNC); // FIXME: initiator should return TLM_SYNC?
+    assert(r == tlm::TLM_ACCEPTED); // FIXME: initiator should return TLM_ACCEPTED?
     assert(t == sc_core::SC_ZERO_TIME); // t must be SC_ZERO_TIME
 
     // Notify end of request phase for next transaction after ACCEPT delay
@@ -165,8 +165,8 @@ public:
       mEndResponseEvent.notify(t);
       break;
 
-    case tlm::TLM_SYNC:
-    case tlm::TLM_SYNC_CONTINUE:
+    case tlm::TLM_ACCEPTED:
+    case tlm::TLM_UPDATED:
      // initiator will call nb_transport to indicate end of response phase
      break;
 

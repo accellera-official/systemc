@@ -104,7 +104,7 @@ public:
       // AT-noTA target
       // - always return false
       // - immediately return delay to indicate end of phase
-      return tlm::TLM_SYNC_CONTINUE;
+      return tlm::TLM_UPDATED;
 
     } else if (phase == tlm::END_RESP) {
 

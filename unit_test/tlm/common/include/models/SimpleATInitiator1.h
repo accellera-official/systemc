@@ -169,8 +169,8 @@ public:
         transPool.release(&trans);
         break;
 
-      case tlm::TLM_SYNC:
-      case tlm::TLM_SYNC_CONTINUE:
+      case tlm::TLM_ACCEPTED:
+      case tlm::TLM_UPDATED:
         switch (phase) {
         case tlm::BEGIN_REQ:
           // Request phase not yet finished
@@ -229,7 +229,7 @@ public:
       assert(t == sc_core::SC_ZERO_TIME); // FIXME: can t != 0?
       // Request phase ended
       mEndRequestPhase.notify(sc_core::SC_ZERO_TIME);
-      return tlm::TLM_SYNC;
+      return tlm::TLM_ACCEPTED;
 
     case tlm::BEGIN_RESP:
     {
@@ -250,7 +250,7 @@ public:
         mEndResponseEvent.notify(ACCEPT_DELAY);
       }
       mEndResponseQueue.push(myTrans);
-      return tlm::TLM_SYNC;
+      return tlm::TLM_ACCEPTED;
     }
 
     case tlm::BEGIN_REQ: // fall-through

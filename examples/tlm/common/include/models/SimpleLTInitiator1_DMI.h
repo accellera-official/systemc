@@ -172,8 +172,8 @@ public:
               wait(t);
               break;
               
-          case tlm::TLM_SYNC:
-          case tlm::TLM_SYNC_CONTINUE:
+          case tlm::TLM_ACCEPTED:
+          case tlm::TLM_UPDATED:
               // Transaction not yet finished, wait for the end of it
               wait(mEndEvent);
               break;
@@ -209,7 +209,7 @@ public:
     switch (phase) {
     case tlm::END_REQ:
       // Request phase ended
-      return tlm::TLM_SYNC;
+      return tlm::TLM_ACCEPTED;
 
     case tlm::BEGIN_RESP:
       assert(t == sc_core::SC_ZERO_TIME); // FIXME: can t != 0?

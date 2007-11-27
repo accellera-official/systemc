@@ -72,8 +72,8 @@ public:
           // Transaction Finished
           break;
 
-        case tlm::TLM_SYNC:
-        case tlm::TLM_SYNC_CONTINUE:
+        case tlm::TLM_ACCEPTED:
+        case tlm::TLM_UPDATED:
           // Transaction not yet finished, wait for the end of it
           wait(mEndTransactionEvent);
           break;
@@ -99,7 +99,7 @@ public:
       assert(0); exit(1);
     }
 
-    return tlm::TLM_SYNC;
+    return tlm::TLM_ACCEPTED;
   }
 
   void invalidate_direct_mem_ptr(sc_dt::uint64 start_range,

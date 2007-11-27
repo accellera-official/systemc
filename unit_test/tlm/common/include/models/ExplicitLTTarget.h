@@ -76,7 +76,7 @@ public:
 
         // End request phase
         phase = tlm::END_REQ;
-        return tlm::TLM_SYNC_CONTINUE;
+        return tlm::TLM_UPDATED;
 
       } else {
         std::cout << name() << ": Received read request: A = 0x"
