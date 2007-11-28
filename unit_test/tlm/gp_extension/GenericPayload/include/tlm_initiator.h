@@ -180,7 +180,7 @@ public:
     	{
 			std::cout << m_gp.get_response_string() << std::endl;
     	}
-        return data;
+        return (DT)data;
     }
 
 

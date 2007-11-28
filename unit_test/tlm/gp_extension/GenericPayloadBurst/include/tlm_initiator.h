@@ -54,8 +54,8 @@ public:
         // Initialize arrays
         for(int i=0;i<66;i++)
         {
-            wr_data[i] = i;
-            rd_data[i] = 0;
+            wr_data[i] = (unsigned char)i;
+            rd_data[i] = (unsigned char)0;
         }
         
         std::cout << name() << " : TEST 1 : write and read burst operation :"

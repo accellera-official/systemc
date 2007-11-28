@@ -103,8 +103,8 @@ inline void copy_word_from_array( T& data_word,
                                   bool *m_be, 
                                   unsigned int m_be_length) 
 {
-    unsigned int data_size = data_word.length()/8;
-    assert(nr_bytes <= data_size);
+//    unsigned int data_size = data_word.length()/8;
+    assert(nr_bytes <= (unsigned int)(data_word.length()/8));
     if(m_be == 0) 
         for(unsigned int b=0; b<nr_bytes; b++)
             data_word.range(b*8+7, b*8) = sc_dt::sc_uint<8>(m_data[offset+b]); 
@@ -122,8 +122,8 @@ inline void copy_word_to_array( T& data_word,
                                 bool *m_be, 
                                 unsigned int m_be_length)
 {
-    unsigned int data_size = data_word.length()/8;	
-    assert(nr_bytes <= data_size);
+//    unsigned int data_size = data_word.length()/8;	
+    assert(nr_bytes <= (unsigned int)(data_word.length()/8));
     if(m_be == 0) 
         for(unsigned int b=0; b<nr_bytes; b++)
             m_data[offset+b] = (unsigned char)sc_dt::sc_uint<8>(data_word.range(b*8+7, b*8)).value(); 

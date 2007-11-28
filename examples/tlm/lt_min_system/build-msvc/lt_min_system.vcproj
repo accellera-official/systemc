@@ -51,10 +51,10 @@
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="0"
 				BrowseInformation="1"
-				WarningLevel="3"
+				WarningLevel="4"
 				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="4"
-				DisableSpecificWarnings="4100;4127;4267"
+				DisableSpecificWarnings="4100;4127;4267;4121;4512"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -138,7 +138,7 @@
 				WarningLevel="4"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
-				DisableSpecificWarnings="4100;4127;4267"
+				DisableSpecificWarnings="4100;4127;4267;4121;4512"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"

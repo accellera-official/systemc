@@ -49,9 +49,10 @@
 				RuntimeLibrary="1"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="0"
-				WarningLevel="0"
+				WarningLevel="4"
 				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="4"
+				DisableSpecificWarnings="4100;4127;4267;4121;4512"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -127,9 +128,10 @@
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
-				WarningLevel="3"
+				WarningLevel="4"
 				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="3"
+				DisableSpecificWarnings="4100;4127;4267;4121;4512"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
