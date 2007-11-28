@@ -3,7 +3,8 @@ include ./Makefile.config
 export FLAG_BATCH = 1
 
 SUBDIRS = \
-          ../lt_min_system
+          ../lt_min_system \
+          ../tlm_1_integration
 
 .PHONY: all clean check run
 
