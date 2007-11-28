@@ -2,9 +2,10 @@
 
 SUBDIRS = \
 	../GenericPayload \
+	../GenericPayloadBurst \
+	../GenericPayloadEndianness \
 	../GenericPayloadExtension \
 	../GenericPayloadSerializers \
-	../GenericPayloadBurst \
     ../GenericPayloadMixEndianness
 
 #.PHONY: all clean run check

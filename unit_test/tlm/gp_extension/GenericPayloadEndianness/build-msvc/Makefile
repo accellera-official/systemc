@@ -4,7 +4,7 @@ OBJ_NAME = generic_payload_endianness
 
 MY_INCLUDES = /I..\include \
               /I..\..\common\include \
-              /I..\..\common\include\SimpleSocket \
+              /I..\..\..\common\include\SimpleSocket \
               /I..\..\common\include\models \
               /I..\..\common\include\utils
 
@@ -22,11 +22,12 @@ all: announce $(OBJ_NAME).exe
 announce:
 	@if  not defined $(FLAG_BATCH) echo. , echo $(OBJ_NAME):  
 	
-	
+# NOTE: CHECK HAS BEEN DISABLED DUE TO NO EXPECTED.LOG	
 check: announce $(OBJ_NAME).exe
 	@.\$(OBJ_NAME).exe > run.log
-	@(fc run.log ..\results\expected.log > diff.log) & if ERRORLEVEL 1  (echo "***ERROR:" & type diff.log) else (echo OK) 
-
+#	@(fc run.log ..\results\expected.log > diff.log) & if ERRORLEVEL 1  (echo "***ERROR:" & type diff.log) else (echo OK) 
+	@(echo NOT CHECKED)
+	
 run: announce $(OBJ_NAME).exe
 	@.\$(OBJ_NAME).exe
 
