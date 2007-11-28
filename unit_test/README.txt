@@ -21,5 +21,5 @@ bus
 transactor
 ----------
 
-- Example transactors: transport <-> nb_transport 
+- Example transactors: transport <-> nb_transport
 
