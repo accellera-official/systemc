@@ -180,4 +180,4 @@ traffic_generator::traffic_generator_thread(void)                     ///< traff
   // clean up, never reached
   delete[] read_buffer;
   delete[] write_buffer;
-};
+}
