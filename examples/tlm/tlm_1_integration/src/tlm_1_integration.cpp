@@ -1,0 +1,61 @@
+/*****************************************************************************
+
+  The following code is derived, directly or indirectly, from the SystemC
+  source code Copyright (c) 1996-2007 by all Contributors.
+  All Rights reserved.
+
+  The contents of this file are subject to the restrictions and limitations
+  set forth in the SystemC Open Source License Version 3.0 (the "License");
+  You may not use this file except in compliance with such restrictions and
+  limitations. You may obtain instructions on how to receive a copy of the
+  License at http://www.systemc.org/. Software distributed by Contributors
+  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
+  ANY KIND, either express or implied. See the License for the specific
+  language governing rights and limitations under the License.
+
+ *****************************************************************************/
+
+/*=============================================================================
+  @file tlm_1_integration.cpp
+  
+  @brief TLM 1 - 2 integration example testbed
+  
+=============================================================================*/
+
+/*****************************************************************************
+  Original Authors:
+    Bill Bunton, ESLX
+    Charles Wilson, ESLX
+*****************************************************************************/
+
+#include "tlm.h"                              ///< TLM
+#include "tlm_1_integration_top.h"            ///< top module
+
+/*=============================================================================
+  @fn sc_main
+  
+  @brief entry point
+  
+  @details
+    This is the SystemC entry point. It is called (eventually) by main ().
+    
+  @param argc argument count
+  @param arvg argument vector
+  
+  @retval status typically 0
+=============================================================================*/
+int                                     ///< return status
+sc_main                                 ///< SystemC entry point
+( int   argc,                           ///< argument count
+  char  *argv[]                         ///< argument vector
+)
+{
+  // instantiate a top module
+  lt_top top("top");
+  
+  // start the simulation
+  sc_core::sc_start(1000,sc_core::SC_NS);
+  
+  // return okay status
+  return 0;
+}
