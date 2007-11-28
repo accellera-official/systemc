@@ -20,6 +20,13 @@
   @brief traffic generation class
 
  ******************************************************************************/
+
+/*****************************************************************************
+  Original Authors:
+    Bill Bunton, ESLX
+    Charles Wilson, ESLX
+*****************************************************************************/
+
 // Note: order of headers is important
 #include "tlm.h"                                   ///< TLM headers
 #include "examples_rw_if.h"                        ///< Convenience R/W interface

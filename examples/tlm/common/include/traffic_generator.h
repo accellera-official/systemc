@@ -37,6 +37,13 @@
  * - portion of traffic data reads           default  2%
  * - portion of traffic data writes          default  1%
  ******************************************************************************/
+
+/*****************************************************************************
+  Original Authors:
+    Bill Bunton, ESLX
+    Charles Wilson, ESLX
+*****************************************************************************/
+
 #ifndef __TRAFFIC_GENERATOR_H__
 #define __TRAFFIC_GENERATOR_H__
 

@@ -26,6 +26,13 @@
  *  required to allow other modules to read and write the socket by way of an export.
  *
  ******************************************************************************/
+
+/*****************************************************************************
+  Original Authors:
+    Bill Bunton, ESLX
+    Charles Wilson, ESLX
+*****************************************************************************/
+
 // Note: order of headers is important
 #include "tlm.h"                                   ///< TLM headers
 #include "examples_rw_if.h"                        ///< Convenience R/W interface 

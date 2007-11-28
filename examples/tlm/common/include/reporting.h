@@ -21,6 +21,13 @@
  * @brief
  * Convenience macros to simplify reporting.
  */
+
+/*****************************************************************************
+  Original Authors:
+    Bill Bunton, ESLX
+    Charles Wilson, ESLX
+*****************************************************************************/
+
 #ifndef __REPORTING_H__
 #define __REPORTING_H__
 
@@ -30,6 +37,35 @@
 using std::setfill;
 using std::setw;
 using namespace std;
+
+extern ostringstream reporting_os;                            ///< reporting output string
+
+#if ( defined ( REPORTING_OFF ) )
+
+#define REPORT_NEW(text) {}
+#define REPORT_APPEND(text) {}
+#define REPORT_OUTPUT(severity, source) {}
+
+#else /* REPORTING_OFF */
+
+#define REPORT_NEW(text) \
+{ \
+  reporting_os.str (""); \
+  reporting_os << text; \
+}
+
+#define REPORT_APPEND(text) \
+{ \
+  reporting_os << text; \
+}
+
+#define REPORT_OUTPUT(severity, source) \
+{ \
+  ostringstream os; \
+  os << sc_core::sc_time_stamp() << " - " << __FUNCTION__ << endl << "      " << reporting_os.str(); \
+  SC_REPORT_##severity (source, os.str().c_str());    \
+}
+#endif /* REPORTING_OFF */
 
 #define REPORT_INFO(source, routine, text)                 \
   { ostringstream os;                         \

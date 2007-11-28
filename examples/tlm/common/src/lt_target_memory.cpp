@@ -29,6 +29,12 @@
     2. get_direct_mem_ptr() not implemented
 ===============================================================================*/
 
+/*****************************************************************************
+  Original Authors:
+    Bill Bunton, ESLX
+    Charles Wilson, ESLX
+*****************************************************************************/
+
 // Note: includes are order dependent
 
 #include "tlm.h"                            ///< TLM headers

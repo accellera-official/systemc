@@ -32,6 +32,13 @@
   thread can be used to model device drivers or to implement directed test. 
    
 ===============================================================================*/
+
+/*****************************************************************************
+  Original Authors:
+    Bill Bunton, ESLX
+    Charles Wilson, ESLX
+*****************************************************************************/
+
 #ifndef __LT_PROCESSOR_ABSTRACTION_H__
 #define __LT_PROCESSOR_ABSTRACTION_H__
 

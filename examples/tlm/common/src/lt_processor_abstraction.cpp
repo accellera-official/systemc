@@ -18,6 +18,13 @@
 /*
  */
 //==============================================================================
+
+/*****************************************************************************
+  Original Authors:
+    Bill Bunton, ESLX
+    Charles Wilson, ESLX
+*****************************************************************************/
+
 // Note: order of headers is important
 #include "tlm.h"                                   ///< TLM headers
 #include "reporting.h"                             ///< Reporting convenience macros

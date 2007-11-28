@@ -27,6 +27,13 @@
  * required to allow other modules to read and write the socket by way of an export.
  *  
  */
+
+/*****************************************************************************
+  Original Authors:
+    Bill Bunton, ESLX
+    Charles Wilson, ESLX
+*****************************************************************************/
+
 #ifndef __LT_INITIATOR_H__
 #define __LT_INITIATOR_H__
 
