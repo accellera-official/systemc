@@ -145,7 +145,7 @@ private:
         default:
           // A target should never call nb_transport with these phases
           assert(0); exit(1);
-          return tlm::TLM_REJECTED;
+//          return tlm::TLM_REJECTED;   ///< unreachable code
         };
       }
     }
