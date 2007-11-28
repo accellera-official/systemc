@@ -1,6 +1,7 @@
 
 SUBDIRS = \
 	../GenericPayload \
+	../GenericPayloadEndianness \
 	../GenericPayloadExtension \
 	../GenericPayloadSerializers \
 	../GenericPayloadBurst \
@@ -13,7 +14,7 @@ all:
         (cd $$i/build-cygwin && $(MAKE)); done
 
 check:
-	@for i in $(SUBDIRS); do \
+	@for i in $(filter-out ../GenericPayloadEndianness, $(SUBDIRS)); do \
         (cd $$i/build-cygwin && $(MAKE) check); done
 
 run:

@@ -14,7 +14,7 @@ all:
         (cd $$i/build-unix && $(MAKE)); done
 
 check:
-	@for i in $(SUBDIRS); do \
+	@for i in $(filter-out ../GenericPayloadEndianness, $(SUBDIRS)); do \
         (cd $$i/build-unix && $(MAKE) check); done
 
 run:
