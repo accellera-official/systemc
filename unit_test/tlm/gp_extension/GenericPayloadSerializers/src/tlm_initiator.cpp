@@ -284,11 +284,15 @@ void tlm_initiator::prepare_arrays(int nbits, bool shift)
     for(int i=0;i<nbits/8;i++)
     {
         if(shift) {
-            wr_data[i] = i << 4;
-            aux_data[i] = 0; rd_data[i] = 0; be[i] = true;
+            wr_data[i] = (unsigned char)(i << 4);
+            aux_data[i] = 0;
+            rd_data[i] = 0;
+            be[i] = true;
         } else {
-            wr_data[i] = i;
-            aux_data[i] = 0; rd_data[i] = 0; be[i] = true;
+            wr_data[i] = (unsigned char)i;
+            aux_data[i] = 0;
+            rd_data[i] = 0;
+            be[i] = true;
         }
     }
 }
