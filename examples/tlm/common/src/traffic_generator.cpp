@@ -116,7 +116,7 @@ traffic_generator::traffic_generator_thread(void)                     ///< traff
   sc_dt::uint64 aligned_address_mask;                                 ///< cache aligned address mask
   sc_dt::uint64 cache_alligned_address;                               ///< cache aligned address
 
-  for (unsigned int i=0; i < cache_line_size; i++)
+  for (unsigned char i=0; i < cache_line_size; i++)
   {
     write_buffer[i] = i;
   }

@@ -150,7 +150,7 @@ private:
       } else {
         std::cerr << mName << ": no non-blocking callback registered" << std::endl;
         assert(0); exit(1);
-        return tlm::TLM_REJECTED;
+//        return tlm::TLM_REJECTED;   ///< unreachable code
       }
     }
 
