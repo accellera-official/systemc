@@ -112,6 +112,42 @@ protected:
   export_type mExport;
 };
 
+//
+// Convenience blocking and non-blocking socket classes
+//
+
+template <unsigned int BUSWIDTH = 32,
+          typename TYPES = tlm_generic_payload_types>
+class tlm_nb_initiator_socket :
+  public tlm_initiator_socket <32,
+                               tlm_fw_nb_transport_if<TYPES>,
+                               tlm_bw_nb_transport_if<TYPES> >
+{
+public:
+  tlm_nb_initiator_socket(const char* name) :
+    tlm_initiator_socket<32,
+                         tlm_fw_nb_transport_if<TYPES>,
+                         tlm_bw_nb_transport_if<TYPES> >(name)
+  {
+  }
+};
+
+template <unsigned int BUSWIDTH = 32,
+          typename TYPES = tlm_generic_payload_types>
+class tlm_b_initiator_socket :
+  public tlm_initiator_socket <32,
+                               tlm_fw_b_transport_if<TYPES>,
+                               tlm_bw_b_transport_if >
+{
+public:
+  tlm_b_initiator_socket(const char* name) :
+    tlm_initiator_socket<32,
+                         tlm_fw_b_transport_if<TYPES>,
+                         tlm_bw_b_transport_if >(name)
+  {
+  }
+};
+
 } // namespace tlm
 
 #endif

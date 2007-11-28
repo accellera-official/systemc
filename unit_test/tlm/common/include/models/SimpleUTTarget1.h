@@ -26,15 +26,15 @@
 
 class SimpleUTTarget1 :
   public sc_core::sc_module,
-  public virtual tlm::tlm_fw_transport_if<>
+  public virtual tlm::tlm_fw_b_transport_if<>
 {
 public:
   typedef tlm::tlm_generic_payload      transaction_type;
   typedef tlm::tlm_dmi_mode             dmi_mode_type;
   typedef tlm::tlm_phase                phase_type;
   typedef tlm::tlm_sync_enum            sync_enum_type;
-  typedef tlm::tlm_fw_transport_if<>    fw_interface_type;
-  typedef tlm::tlm_bw_transport_if      bw_interface_type;
+  typedef tlm::tlm_fw_b_transport_if<>    fw_interface_type;
+  typedef tlm::tlm_bw_b_transport_if      bw_interface_type;
   typedef tlm::tlm_target_socket<32,
                                  fw_interface_type,
                                  bw_interface_type> target_socket_type;
