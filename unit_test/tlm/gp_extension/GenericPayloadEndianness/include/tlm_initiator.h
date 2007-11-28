@@ -19,7 +19,7 @@
 #define __TLM_INITIATOR_H__
 
 #include "tlm.h"
-#include "tlm_gp_port.h"
+#include "simple_initiator_socket.h"
 
 #define WORD 4
 #define HALF 2
@@ -29,7 +29,7 @@ class tlm_initiator : public sc_core::sc_module
 {
 public:
     
-    tlm::tlm_gp_port< 32 > bus_port; // bus data width in bits
+    SimpleInitiatorSocket< 32 > socket;  // bus data width in bits
 
     SC_HAS_PROCESS(tlm_initiator);
 
@@ -37,12 +37,12 @@ public:
     tlm_initiator(sc_core::sc_module_name name_,
                   tlm::tlm_endianness endianness = tlm::TLM_LITTLE_ENDIAN)
         : sc_core::sc_module(name_)
-        , bus_port("bus_port")
+        , socket("socket")
         , m_endianness(endianness)
     {
         SC_THREAD(main);
 
-		m_socket_width = bus_port.getBusDataWidth()/8;
+		m_socket_width = socket.get_bus_width()/8;
     }
 
     // Destructor

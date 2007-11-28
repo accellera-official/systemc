@@ -1,20 +1,13 @@
 include ../../../build-unix/Makefile.config
 
-OBJ_NAME = generic_payload_mixendianness
+OBJ_NAME = generic_payload_endianness
 
-INCDIR  = -I$(SYSTEMC_INC_DIR) \
-          -I$(TLM_INC_DIR) \
-          -I../include \
-          -I../../common/include \
-          -I../../../common/include/utils \
-          -I../../../common/include/models \
-          -I../../../common/include/SimpleSocket
-           
+INCDIR  = -I../include -I../../common/include
 SRCDIR  = ../src
  
 CFLAGS = $(FLAGS) $(INCDIR)
 
-OBJS   = $(OBJ_NAME).o 
+OBJS   = $(OBJ_NAME).o tlm_initiator.o tlm_target.o
 
 
 .PHONY: clean all check run announce
@@ -38,6 +31,12 @@ $(OBJ_NAME).exe: $(OBJS)
 	$(LD) -o $@ $(OBJS) $(LDFLAGS)
 
 $(OBJ_NAME).o: $(SRCDIR)/$(OBJ_NAME).cpp
+	$(GXX) $(CFLAGS) -c $< -o $@
+
+tlm_initiator.o: $(SRCDIR)/tlm_initiator.cpp
+	$(GXX) $(CFLAGS) -c $< -o $@
+
+tlm_target.o: $(SRCDIR)/tlm_target.cpp
 	$(GXX) $(CFLAGS) -c $< -o $@
 
 clean:

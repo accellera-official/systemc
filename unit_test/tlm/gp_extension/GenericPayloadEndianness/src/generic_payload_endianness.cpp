@@ -34,7 +34,7 @@ int sc_main(int argc, char* argv[])
     //target_1  = new tlm_target("target_1", tlm::TLM_BIG_ENDIAN);
     
     // connections
-    initiator_1->bus_port(target_1->bus_port);
+	initiator_1->socket(target_1->socket);
     
     sc_core::sc_start();
     

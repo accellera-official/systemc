@@ -26,7 +26,10 @@ void tlm_initiator::write(sc_dt::uint64 address,
                           bool* byte_enable,
                           unsigned int byte_enable_length)
 {
-    // Single WRITE transaction 
+    tlm::tlm_phase phase;
+    sc_core::sc_time t;
+
+	// Single WRITE transaction 
     
     std::cout << name() << " : Single WRITE transaction : ADDRESS = 0x"
               << std::hex << address << std::dec << " : "; 
@@ -38,7 +41,25 @@ void tlm_initiator::write(sc_dt::uint64 address,
     m_gp.set_byte_enable_ptr(byte_enable);
     m_gp.set_byte_enable_length(byte_enable_length);
     
-    bus_port->nb_transport(&m_gp);
+    phase = tlm::BEGIN_REQ;
+    t = sc_core::SC_ZERO_TIME;
+    
+    switch (socket->nb_transport(m_gp, phase, t)) 
+    {
+    case tlm::TLM_COMPLETED:
+        // Transaction Finished, wait for the returned delay
+        wait(t);
+        break;
+    case tlm::TLM_SYNC:
+    case tlm::TLM_SYNC_CONTINUE:
+        // Transaction not yet finished, wait for the end of it
+        wait(socket.getEndEvent());
+        break;
+    case tlm::TLM_REJECTED:
+        // FIXME: Not supported (wait and retry same transaction)
+    default:
+        assert(0); exit(1);
+    };
     
     if(m_gp.is_response_ok())
     {
@@ -59,7 +80,10 @@ void tlm_initiator::read(sc_dt::uint64 address,
                          bool* byte_enable,
                          unsigned int byte_enable_length)
 {
-    // Single READ transaction 
+    tlm::tlm_phase phase;
+    sc_core::sc_time t;
+
+	// Single READ transaction 
     std::cout << name() << " : Single READ transaction : ADDRESS = 0x"
               << std::hex << address << std::dec << " : ";  
     
@@ -70,7 +94,25 @@ void tlm_initiator::read(sc_dt::uint64 address,
     m_gp.set_byte_enable_ptr(byte_enable);
     m_gp.set_byte_enable_length(byte_enable_length);
     
-    bus_port->nb_transport(&m_gp);
+    phase = tlm::BEGIN_REQ;
+    t = sc_core::SC_ZERO_TIME;
+    
+    switch (socket->nb_transport(m_gp, phase, t)) 
+    {
+    case tlm::TLM_COMPLETED:
+        // Transaction Finished, wait for the returned delay
+        wait(t);
+        break;
+    case tlm::TLM_SYNC:
+    case tlm::TLM_SYNC_CONTINUE:
+        // Transaction not yet finished, wait for the end of it
+        wait(socket.getEndEvent());
+        break;
+    case tlm::TLM_REJECTED:
+        // FIXME: Not supported (wait and retry same transaction)
+    default:
+        assert(0); exit(1);
+    };
     
     if(m_gp.is_response_ok())
     {

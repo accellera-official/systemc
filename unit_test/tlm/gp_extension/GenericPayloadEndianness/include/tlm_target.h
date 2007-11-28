@@ -19,17 +19,14 @@
 #define __TLM_TARGET_H__
 
 #include "tlm.h"
+#include "simple_target_socket.h"
 
-#include "tlm_gp_export.h"
 
-
-class tlm_target
-    : public sc_core::sc_module
-    , virtual public tlm::nb_transport_if<tlm::tlm_generic_payload>
+class tlm_target : public sc_core::sc_module
 {
 public:
 
-    tlm::tlm_gp_export< 32 > bus_port; // bus data width in bits
+    SimpleTargetSocket< 32 > socket; 
 
     SC_HAS_PROCESS(tlm_target);
     
@@ -40,10 +37,8 @@ public:
     ~tlm_target() { }
     
     // interface methods
-    void nb_transport(tlm::tlm_generic_payload* gp);
-    unsigned int transport_dbg(tlm::tlm_generic_payload* gp) {return 0;}
+    tlm::tlm_sync_enum myNBTransport(tlm::tlm_generic_payload& trans, tlm::tlm_phase& phase, sc_core::sc_time& t);
 
-    
 private:
 
     unsigned int        mem[2];
