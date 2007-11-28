@@ -1,4 +1,4 @@
-                             2007-11-21
+                             2007-11-28
                  TLM 2.0 Draft 2 for public review
                  =================================
 
@@ -15,13 +15,15 @@ through January 31, 2008.
 2. This release has been well tested on the following platforms:
     o Linux (Redhat Enterprise 4) with GNU C++ compiler versions gcc-3.4.2,
       gcc-4.2.0
+    o Linux (Fedora 6) with GNU C++ compiler version 4.1.2
     o Linux (SuSE SLES9SP3) with GNU C++ compiler versions gcc-3.4.4, gcc-4.2.0
     o MacOSX with GNU C++ compiler versions gcc-3.1, gcc-3.4.2, and gcc-4.0
+    o SunOS 5.9, with Sun Forte compiler 8.0, 10.0 and 11.0
+    o SunOS 5.9, with GNU C++ compiler versions gcc-3.3.2
     o Windows XP (SP2) with VC++ 7.0 and 8.0
+    
 
 -------------------------------------------------------------------------------
-
-For details, see the separate RELEASENOTES file.
 
 Licensing and Copyright
 
@@ -30,7 +32,8 @@ Licensing and Copyright
 
 Installation
 
-   No installation required.
+   No installation, as such, required; simply extract contents of the
+   downloaded package.
 
 Release Notes
 
@@ -39,9 +42,10 @@ Release Notes
 
 User Documentation
 
-   You can find documentation for this release in the docs directory.  The
-   user manual (TLM_2_0_user_manual.pdf) is the best place to start; see 
-   docs/README.txt for a description and status of the other documentation.
+   You can find documentation for this release in the docs directory.  It is
+   recommended that you start with the training presentation 
+   (TLM_2_0_training.pps) and then the user manual (TLM_2_0_user_manual.pdf).
+   See docs/README.txt for a description and status of the other documentation.
 
 Directory Structure
 
@@ -55,17 +59,18 @@ Build Support
 
    Makefiles work hierarchically.  Build is the default target; 'clean', 
    'run' (executes built tests/examples) and 'check' (against expected 
-   results) targets are also provided.  The $TLM_HOME environment variable
-   should be set to this kit's location; $SYSTEMC_HOME and $TARGET_ARCH 
-   should point to your SystemC installation.
+   results) targets are also provided.  On Unix/Linux/MacOS, the $TLM_HOME 
+   environment variable should be set to this kit's location; $SYSTEMC_HOME 
+   and $TARGET_ARCH should point to your SystemC installation.  On Windows,
+   the SYSTEMC and TLM environments variables should be used.
    
 Examples
 
    A complete example of a loosely timed system is provided at:
    examples/tlm/lt_min_system/; look in the docs/ subdirectory at
    lt_min_system_example.ppt for a description and step-by-step instructions
-   for building and running it.  Similar examples are provided for untimed
-   modeling and TLM1 model integration.  
+   for building and running it.  A TLM1 integration example has also been 
+   provided.
 
    More examples are in the works and will be incrementally made available 
    via the OSCI web site (please request examples that would make applying 
@@ -73,9 +78,11 @@ Examples
    below).
 
 Unit Tests
-   The unit tests, though not as complete or documented as the examples, can be 
-   illustrative for other features of the kit such as payload extensions, AT 
-   modeling, transactors, temporal decoupling, direct memory interface, etc.
+
+   The unit tests, though not as complete or documented as the examples, can 
+   be illustrative for other features of the kit such as payload extensions, 
+   UT & AT modeling, transactors, temporal decoupling, direct memory interface,
+   etc.
 
    See instructions in unit_test/README.txt
 

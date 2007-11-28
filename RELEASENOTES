@@ -1,4 +1,4 @@
-            Release Notes for the TLM 2.0 Draft 2 Kit Of 21 Nov 2007
+            Release Notes for the TLM 2.0 Draft 2 Kit Of 28 Nov 2007
             ========================================================
 
 CONTENTS
@@ -29,7 +29,7 @@ primary ways:
     - Temporal decoupling
     - Model synchronization
     - Direct memory interface (DMI)
-  - Documentation (users manual) is provided
+  - Documentation (training presentation and users manual) is provided
   - Examples have been improved
 
 3) Areas under construction
@@ -39,12 +39,17 @@ This is a draft kit for public review so any of it is subject to change.
 During the public review, there will be ongoing work to improve the 
 documentation and provide more examples.  Some of the planned investigations
 are:
+  - consider generic payload support for atomic transactions (i.e. locking);
+    reviewer opinion on whether atomic transaction support belongs in the
+    generic payload is specifically requested.
   - improve the analysis ports and integrate them with sockets
   - extend DMI to support snooping and consider a direct channel for bus
     bypass to non-memory models
   - enforce payload modifiability rules
   - some features of the generic payload need to be programmed differently 
     depending on host endianness; helper functions will be provided to isolate
-    the modeler from these details; currently some tests don't produce expected
-    results on big endian hosts
-
+    the modeler from these details; key issues are demonstrated in the 
+    gp_extension/GenericPayloadEndianness unit test, which produces
+    host-endian dependent results and therefore is not part of the automated
+    regression suite
+Additional detail on some of these topics can be found in the users manual.

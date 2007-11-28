@@ -1,3 +1,7 @@
+
+* TLM_2_0_training.pps
+  An introductory training overview of TLM 2.0 Draft 2.
+
 * TLM_2_0_user_manual.pdf
   The most current and comprehensive documentation on TLM 2.0 Draft 2.
 

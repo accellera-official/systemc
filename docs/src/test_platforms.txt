@@ -1,6 +1,7 @@
 Platforms we will test TLM 2.0 Draft 2 on:
     o Linux (Redhat Enterprise 4) with GNU C++ compiler versions gcc-3.4.2, 
       gcc-4.2.0 [Charles]
+    o Linux (Fedora 6) with GNU C++ compiler version 4.1.2 [Alan Fitch]
     o Linux (SuSE SLES9SP3) with GNU C++ compiler versions gcc-3.4.4, gcc-4.2.0
       [Trevor]
     o MacOSX with GNU C++ compiler versions gcc-3.1, gcc-3.4.2, and gcc-4.0
