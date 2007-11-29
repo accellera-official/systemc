@@ -109,7 +109,7 @@ adapter_tlm_2_1::nb_transport(                 ///< non-blocking transport
 
   // Error checking
   if (phase != tlm::BEGIN_REQ) {
-    REPORT_FATAL(report_source, __FUNCTION__, "phase not BEGIN_REQ");
+    REPORT_FATAL(report_source, "adapter_tlm_2_1::nb_transport", "phase not BEGIN_REQ");
   }
 
   // Perform the requested operation
@@ -124,7 +124,7 @@ adapter_tlm_2_1::nb_transport(                 ///< non-blocking transport
       msg << " L: " << internal << setw( 2 ) << setfill( '0' ) << dec << length;
       msg << " D: 0x";
 
-      REPORT_INFO(report_source, __FUNCTION__, msg.str());
+      REPORT_INFO(report_source, "adapter_tlm_2_1::nb_transport", msg.str());
 //-----------------------------------------------------------------------------
 // convert tlm 2 payload to tlm 1
 
@@ -149,7 +149,7 @@ adapter_tlm_2_1::nb_transport(                 ///< non-blocking transport
           << uppercase << hex << address;
       msg << " L: " << internal << setw( 2 ) << setfill( '0' ) << dec << length;
       
-      REPORT_INFO(report_source, __FUNCTION__, msg.str());
+      REPORT_INFO(report_source, "adapter_tlm_2_1::nb_transport", msg.str());
 
 //-----------------------------------------------------------------------------
 // convert tlm 2 payload to tlm 1
@@ -172,7 +172,7 @@ adapter_tlm_2_1::nb_transport(                 ///< non-blocking transport
 //-----------------------------------------------------------------------------
    default:
     {
-      REPORT_FATAL(report_source, __FUNCTION__, "invalid command");
+      REPORT_FATAL(report_source, "adapter_tlm_2_1::nb_transport", "invalid command");
       break;
     }
   }
@@ -200,7 +200,7 @@ adapter_tlm_2_1::transport_dbg(             ///< transport debug
 )
 {
     // No error needed, disabled
-    //REPORT_FATAL(report_source, __FUNCTION__, "routine not implemented");
+    //REPORT_FATAL(report_source, "adapter_tlm_2_1::transport_dbg", "routine not implemented");
   return 0;
 }
 
@@ -224,6 +224,6 @@ adapter_tlm_2_1::get_direct_mem_ptr(       ///< get direct memory pointer
 {
     // It's perfectly allowed to not support DMI, no need to
     // throw an error:
-    // REPORT_FATAL(report_source, __FUNCTION__, "routine not implemented");
+    // REPORT_FATAL(report_source, "adapter_tlm_2_1::get_direct_mem_ptr", "routine not implemented");
     return false;
 }

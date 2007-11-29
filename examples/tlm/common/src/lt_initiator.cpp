@@ -86,7 +86,7 @@ lt_initiator::read(                     ///< read
     return true;
   }
   else {
-    REPORT_FATAL(msg_type,  __FUNCTION__,"All requests must return complete");
+    REPORT_FATAL(msg_type, "lt_initiator::read","All requests must return complete");
      return false;
   }
 }
@@ -116,7 +116,7 @@ lt_initiator::write(                    ///< write
     return true;
   }
   else {
-    REPORT_FATAL(msg_type,  __FUNCTION__,"All requests must return complete");
+    REPORT_FATAL(msg_type, "lt_initiator::write","All requests must return complete");
     return false;
   }
 }
@@ -129,7 +129,7 @@ lt_initiator::nb_transport(                     ///< nb_transport
     tlm::tlm_generic_payload& transaction,      ///< transaction
     tlm::tlm_phase&           phase,            ///< transaction phase
     sc_core::sc_time&         time) {           ///< elapsed time
-  REPORT_FATAL(msg_type,  __FUNCTION__,"nb_transport: not implemented");
+  REPORT_FATAL(msg_type, "lt_initiator::nb_transport","nb_transport: not implemented");
   return tlm::TLM_COMPLETED;
 }
 
@@ -137,5 +137,5 @@ void
 lt_initiator::invalidate_direct_mem_ptr(        ///< invalidate_direct_mem_ptr
     sc_dt::uint64 start_range,                  ///< start range
     sc_dt::uint64 end_range) {                  ///< end range
-  REPORT_FATAL(msg_type, __FUNCTION__, "invalidate_direct_mem_ptr: not implemented");
+  REPORT_FATAL(msg_type, "lt_initiator::invalidate_direct_mem_ptr", "invalidate_direct_mem_ptr: not implemented");
 }

@@ -50,7 +50,7 @@ void tlm_1_master::run()
       msg << " A: 0x" << internal << setw( sizeof(address) * 2 ) 
           << setfill( '0' ) << uppercase << hex << address;
       msg << " D: 0x"<< hex << write_data ;
-      REPORT_INFO(report_source, __FUNCTION__, msg.str());
+      REPORT_INFO(report_source, "tlm_1_master::run", msg.str());
 
       initiator_port.write( address , write_data );   // TLM 1 write request 
 
@@ -74,7 +74,7 @@ void tlm_1_master::run()
           << setfill( '0' ) << uppercase << hex << address;
       msg << "     Read D: 0x"<< hex << read_data ;
       msg << " Expected D: 0x"<< hex << expected_data ;
-      REPORT_INFO(report_source, __FUNCTION__, msg.str());
+      REPORT_INFO(report_source, "tlm_1_master::run", msg.str());
 
       if (read_data != expected_data){
         cout << endl << "**** Read Data Error ****" << endl;

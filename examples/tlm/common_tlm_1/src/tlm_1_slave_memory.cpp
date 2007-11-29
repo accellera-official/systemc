@@ -48,7 +48,7 @@ basic_status tlm_1_mem_slave::write( const ADDRESS_TYPE &address , const DATA_TY
   msg << " A: 0x" << internal << setw( sizeof(address) * 2 ) 
       << setfill( '0' ) << uppercase << hex << address;
   msg << " D: 0x"<< hex << write_data ;
-  REPORT_INFO(report_source, __FUNCTION__, msg.str());
+  REPORT_INFO(report_source, "tlm_1_mem_slave::write", msg.str());
 
   memory[address] = write_data;
 
@@ -64,7 +64,7 @@ basic_status tlm_1_mem_slave::read( const ADDRESS_TYPE &address , DATA_TYPE &rea
   msg << " A: 0x" << internal << setw( sizeof(address) * 2 ) 
       << setfill( '0' ) << uppercase << hex << address;
   msg << " D: 0x"<< hex << read_data ;
-  REPORT_INFO(report_source, __FUNCTION__, msg.str());
+  REPORT_INFO(report_source, "tlm_1_mem_slave::read", msg.str());
 
 //  cout << name() << " reading from " << a << " value " << hex << d << endl;
   return basic_protocol::SUCCESS;
