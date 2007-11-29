@@ -1,7 +1,8 @@
 !include <.\Makefile.config>
 
 SUBDIRS = \
-          ..\lt_min_system
+          ..\lt_min_system \
+          ../tlm_1_integration
           
 #.PHONY: all clean run check
 
