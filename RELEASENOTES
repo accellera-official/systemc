@@ -39,9 +39,7 @@ This is a draft kit for public review so any of it is subject to change.
 During the public review, there will be ongoing work to improve the 
 documentation and provide more examples.  Some of the planned investigations
 are:
-  - consider generic payload support for atomic transactions (i.e. locking);
-    reviewer opinion on whether atomic transaction support belongs in the
-    generic payload is specifically requested.
+  - consider generic payload support for atomic transactions
   - improve the analysis ports and integrate them with sockets
   - extend DMI to support snooping and consider a direct channel for bus
     bypass to non-memory models
