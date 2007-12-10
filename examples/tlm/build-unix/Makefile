@@ -4,7 +4,8 @@ export FLAG_BATCH = 1
 
 SUBDIRS = \
           ../lt_min_system \
-          ../tlm_1_integration
+          ../tlm_1_integration \
+          ../tlm_1_integration_explicit_slave
 
 .PHONY: all clean check run
 
