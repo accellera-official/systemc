@@ -42,6 +42,7 @@ class basic_slave_base :
   >
 {
 using basic_if<ADDRESS , DATA >::write;
+using baisc_if<ADDRESS , DATA >::read;            ///< correction for GCC 4.1 supplied by Bishnupriya Bhattacharya (Cadence)
 public:
   typedef  tlm_transport_if<
     basic_request< ADDRESS , DATA > ,
