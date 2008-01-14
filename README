@@ -61,8 +61,9 @@ Build Support
    'run' (executes built tests/examples) and 'check' (against expected 
    results) targets are also provided.  On Unix/Linux/MacOS, the $TLM_HOME 
    environment variable should be set to this kit's location; $SYSTEMC_HOME 
-   and $TARGET_ARCH should point to your SystemC installation.  On Windows,
-   the SYSTEMC and TLM environments variables should be used.
+   and $TARGET_ARCH should be defined such that $SYSTEMC_HOME/lib-$TARGET_ARCH
+   is a directory containing the systemc library.  On Windows, the SYSTEMC and
+   TLM environments variables should be used.
    
 Examples
 
