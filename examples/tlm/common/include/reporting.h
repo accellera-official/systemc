@@ -67,27 +67,51 @@ extern ostringstream reporting_os;                            ///< reporting out
 }
 #endif /* REPORTING_OFF */
 
-#define REPORT_INFO(source, routine, text)                 \
-  { ostringstream os;                         \
-    os << sc_core::sc_time_stamp() << " - " << routine << endl << "      " << text; \
-    SC_REPORT_INFO(source, os.str().c_str());    \
+#define REPORT_INFO(source, routine, text) \
+  { ostringstream os; \
+    string        routine_string (routine); \
+    int  colon_location; \
+    if ((colon_location = routine_string.find("::")) != -1) \
+    { \
+      routine_string.erase(0, colon_location + 2); \
+    } \
+    os << sc_core::sc_time_stamp() << " - " << routine_string << endl << "      " << text; \
+    SC_REPORT_INFO(source, os.str().c_str()); \
   }
 
-#define REPORT_WARNING(source, routine, text)              \
-  { ostringstream os;                         \
-    os << sc_core::sc_time_stamp() << " - " << routine << endl << "      " << text; \
+#define REPORT_WARNING(source, routine, text) \
+  { ostringstream os; \
+    string        routine_string (routine); \
+    int  colon_location; \
+    if ((colon_location = routine_string.find("::")) != -1) \
+    { \
+      routine_string.erase(0, colon_location + 2); \
+    } \
+    os << sc_core::sc_time_stamp() << " - " << routine_string << endl << "      " << text; \
     SC_REPORT_WARNING(source, os.str().c_str()); \
   }
 
-#define REPORT_ERROR(source, routine, text)                \
-  { ostringstream os;                         \
-    os << sc_core::sc_time_stamp() << " - " << routine << endl << "      " << text; \
+#define REPORT_ERROR(source, routine, text) \
+  { ostringstream os; \
+    string        routine_string (routine); \
+    int  colon_location; \
+    if ((colon_location = routine_string.find("::")) != -1) \
+    { \
+      routine_string.erase(0, colon_location + 2); \
+    } \
+    os << sc_core::sc_time_stamp() << " - " << routine_string << endl << "      " << text; \
     SC_REPORT_ERROR(source, os.str().c_str());   \
   }
 
 #define REPORT_FATAL(source, routine, text)                \
   { ostringstream os;                         \
-    os << sc_core::sc_time_stamp() << " - " << routine << endl << "      " << text; \
+    string        routine_string (routine); \
+    int  colon_location; \
+    if ((colon_location = routine_string.find("::")) != -1) \
+    { \
+      routine_string.erase(0, colon_location + 2); \
+    } \
+    os << sc_core::sc_time_stamp() << " - " << routine_string << endl << "      " << text; \
     SC_REPORT_FATAL(source, os.str().c_str());   \
   }
 
