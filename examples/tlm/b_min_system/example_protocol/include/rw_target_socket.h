@@ -32,8 +32,8 @@
 #include "tlm.h"
 
 class rw_target_socket : public tlm::tlm_target_socket<64,
-                                                       tlm::tlm_fw_transport_if<>,
-                                                       tlm::tlm_bw_transport_if>
+                                                       tlm::tlm_fw_b_transport_if<>,
+                                                       tlm::tlm_bw_b_transport_if>
 {
   public:
 	

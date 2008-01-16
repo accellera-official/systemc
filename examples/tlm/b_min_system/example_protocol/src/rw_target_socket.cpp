@@ -28,7 +28,7 @@
 
 rw_target_socket::rw_target_socket(const char * name) 
     : tlm::tlm_target_socket<64,
-                             tlm::tlm_fw_transport_if<>,
-                             tlm::tlm_bw_transport_if>(name)
+                             tlm::tlm_fw_b_transport_if<>,
+                             tlm::tlm_bw_b_transport_if>(name)
 {
 }

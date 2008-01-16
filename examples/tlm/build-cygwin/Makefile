@@ -5,6 +5,7 @@ include ./Makefile.config
 export FLAG_BATCH = 1
 
 SUBDIRS = \
+          ../b_min_system \
           ../lt_min_system
 
 .PHONY: all clean run

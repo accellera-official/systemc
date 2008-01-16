@@ -2,6 +2,7 @@
 
 SUBDIRS = \
           ..\lt_min_system \
+          ..\b_min_system \
           ../tlm_1_integration
           
 #.PHONY: all clean run check

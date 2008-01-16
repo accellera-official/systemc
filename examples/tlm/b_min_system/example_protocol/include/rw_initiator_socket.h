@@ -33,8 +33,8 @@
 #include "rw_if.h"
 
 class rw_initiator_socket : public tlm::tlm_initiator_socket<64,
-                                                             tlm::tlm_fw_transport_if<>,
-                                                             tlm::tlm_bw_transport_if>,
+                                                             tlm::tlm_fw_b_transport_if<>,
+                                                             tlm::tlm_bw_b_transport_if>,
 						    public virtual rw_if
 {
   public:

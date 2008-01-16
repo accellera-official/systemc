@@ -3,6 +3,7 @@ include ./Makefile.config
 export FLAG_BATCH = 1
 
 SUBDIRS = \
+          ../b_min_system \
           ../lt_min_system \
           ../tlm_1_integration \
           ../tlm_1_integration_explicit_slave

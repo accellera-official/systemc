@@ -32,7 +32,7 @@
 #include "tlm.h"
 #include "rw_if.h"
 
-class rw_master_base : virtual public tlm::tlm_bw_transport_if
+class rw_master_base : virtual public tlm::tlm_bw_b_transport_if
 {
   public:
 		

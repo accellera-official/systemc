@@ -38,8 +38,8 @@
 
 template <int NR_OF_INITIATORS, int NR_OF_TARGETS>
 class rw_bus : public sc_module,
-               virtual public tlm::tlm_fw_transport_if<>,
-               virtual public tlm::tlm_bw_transport_if
+               virtual public tlm::tlm_fw_b_transport_if<>,
+               virtual public tlm::tlm_bw_b_transport_if
 {
 public:
   rw_target_socket      *target_socket[NR_OF_TARGETS];
