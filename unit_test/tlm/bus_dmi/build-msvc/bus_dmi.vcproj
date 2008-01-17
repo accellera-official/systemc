@@ -206,6 +206,54 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath="..\..\common\include\models\CoreDecouplingLTInitiator.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\include\models\ExplicitLTTarget.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\include\models\SimpleATInitiator1.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\include\models\SimpleATInitiator2.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\include\models\SimpleATTarget1.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\include\models\SimpleATTarget2.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\include\models\SimpleBus.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\include\models\SimpleLTInitiator1_DMI.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\include\models\SimpleLTInitiator2_DMI.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\include\models\SimpleLTInitiator3_DMI.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\include\models\SimpleLTTarget1.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\common\include\models\SimpleLTTarget2.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
