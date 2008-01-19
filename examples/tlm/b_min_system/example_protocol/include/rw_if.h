@@ -34,6 +34,9 @@
 class rw_if
 {
   public:
+	  
+	virtual ~rw_if() {}
+	
     /// read() - reads a transaction from the port and places the result
     /// in the read buffer.
 	/// returns true if there are no errors, else false

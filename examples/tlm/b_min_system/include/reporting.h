@@ -27,7 +27,7 @@
 #include <iomanip>
 #include <iostream>
 
-#define REPORT_HEAD " "<<name()<<"  "
+#define REPORT_HEAD "\t"<<name()<<"\t\t"
 #define HEX_ADDR std::internal<<std::setw(8)<<std::setfill('0')<<std::uppercase<<std::hex
 #define HEX_DATA std::internal<<std::setw(2)<<std::setfill('0')<<std::uppercase<<std::hex
 

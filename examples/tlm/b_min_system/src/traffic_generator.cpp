@@ -58,10 +58,10 @@ void traffic_generator::mem_test(sc_dt::uint64 base_address)
 		
 	for (unsigned int i=0; i<128; i++)
 	{
-		buffer[4] = (address >> 24) & 0xFF;
-		buffer[5] = (address >> 16) & 0xFF;
-		buffer[6] = (address >>  8) & 0xFF;
-		buffer[7] = (address      ) & 0xFF;
+		buffer[4] = (unsigned char)(address >> 24); // & 0xFF
+		buffer[5] = (unsigned char)(address >> 16);
+		buffer[6] = (unsigned char)(address >>  8);
+		buffer[7] = (unsigned char)(address      );
 		
 		std::cout << REPORT_HEAD << "Writing at address 0x" << HEX_ADDR << address << std::endl;
 		status = initiator_socket.write(base_address+address, 8, buffer);
@@ -77,10 +77,10 @@ void traffic_generator::mem_test(sc_dt::uint64 base_address)
 	address = base_address;
 	for (unsigned int i=0; i<128; i++)
 	{
-		ref_buffer[4] = (address >> 24) & 0xFF;
-		ref_buffer[5] = (address >> 16) & 0xFF;
-		ref_buffer[6] = (address >>  8) & 0xFF;
-		ref_buffer[7] = (address      ) & 0xFF;
+		ref_buffer[4] = (unsigned char)(address >> 24);
+		ref_buffer[5] = (unsigned char)(address >> 16);
+		ref_buffer[6] = (unsigned char)(address >>  8);
+		ref_buffer[7] = (unsigned char)(address      );
 				
 		std::cout << REPORT_HEAD << "Reading at address 0x" << HEX_ADDR << address << std::endl;
 		status = initiator_socket.read(base_address+address, 8, buffer);
