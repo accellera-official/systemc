@@ -5,8 +5,12 @@ export FLAG_BATCH = 1
 SUBDIRS = \
           ../b_min_system \
           ../lt_min_system \
+          ../lt_temporal_decoupling \
+          ../lt_direct_memory_interface \
           ../tlm_1_integration \
-          ../tlm_1_integration_explicit_slave
+          ../tlm_1_integration_explicit_slave \
+          ../at_basic_system \
+          ../at_lt_full_system
 
 .PHONY: all clean check run
 
