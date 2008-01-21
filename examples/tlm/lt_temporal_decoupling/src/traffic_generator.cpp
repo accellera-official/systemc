@@ -108,11 +108,6 @@ traffic_generator::traffic_generator_thread         ///< traffic_generator_threa
   unsigned int        write_count = 0;              ///< write counter
   
   message.str ("");
-  message << "starting " << name ();
-  
-  REPORT_INFO(filename,  __FUNCTION__, message.str());
-  
-  message.str ("");
   message << m_ID << " - random number seed: 0x" << internal << setw( sizeof(m_seed) * 2 ) << setfill( '0' ) 
           << uppercase << hex << m_seed;
   REPORT_INFO(filename, __FUNCTION__, message.str());
@@ -127,8 +122,9 @@ traffic_generator::traffic_generator_thread         ///< traffic_generator_threa
   
   MTRand_int32 irand(init, length);                  ///< 32-bit integer random number generator
 
-  // clear the write buffer
-  memset ( m_write_buffer, 0, buffer_size );
+  // clear the buffers
+  memset ( m_write_buffer,  0, buffer_size );
+  memset ( m_read_buffer,   0, buffer_size );
   
   // load the write buffer
   for ( unsigned int i = 0; i < buffer_size; i++ )
@@ -141,18 +137,19 @@ traffic_generator::traffic_generator_thread         ///< traffic_generator_threa
   {
     if ( irand() & 0x00000001 )
     {
-      // write
+      // queue command
       
       message.str ("");
-      message << m_ID << " - write queued";
+      message << m_ID << " - command queued";
       
       REPORT_INFO(filename,__FUNCTION__, message.str());
       
-      tlm::tlm_generic_payload *transaction  = new tlm::tlm_generic_payload;
+      tlm::tlm_generic_payload  *transaction  = new tlm::tlm_generic_payload;
+      bool                      command_write = irand() % 2;
       
-      transaction->set_command          (tlm::TLM_WRITE_COMMAND);
+      transaction->set_command          (command_write ? tlm::TLM_WRITE_COMMAND : tlm::TLM_READ_COMMAND);
       transaction->set_address          ((irand() % 4096) | ((irand() % 2) ? 0x10000000 : 0x00000000));
-      transaction->set_data_ptr         (m_write_buffer);
+      transaction->set_data_ptr         (command_write ? m_write_buffer : m_read_buffer);
       transaction->set_data_length      (buffer_size);
       transaction->set_response_status  (tlm::TLM_INCOMPLETE_RESPONSE);
 
@@ -162,10 +159,10 @@ traffic_generator::traffic_generator_thread         ///< traffic_generator_threa
     }
     else if ( write_count )
     {
-      // read
+      // dequeue response
       
       message.str ("");
-      message << m_ID << " - read queued";
+      message << m_ID << " - response dequeued";
       
       REPORT_INFO(filename,__FUNCTION__, message.str());
       
@@ -179,10 +176,11 @@ traffic_generator::traffic_generator_thread         ///< traffic_generator_threa
     }
     else
     {
+      // attempting to dequeue a response before issuing a command
       message.str ("");
-      message << m_ID << " - attempted read before write";
+      message << m_ID << " - attempted to dequeue response before issuing command";
       
-      REPORT_INFO(filename,__FUNCTION__, message.str());
+//    REPORT_INFO(filename,__FUNCTION__, message.str());
     }
   }
 
