@@ -1,0 +1,669 @@
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      1 - random number seed: 0xAFEDBEEF
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      1 - command queued
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      1 - response dequeued
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      2 - random number seed: 0xCAFEFEED
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      2 - command queued
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      2 - response dequeued
+
+Info: lt_target.cpp: 0 s - get_direct_mem_ptr
+      2 - DMI pointer request A: 0x0000000000000478
+
+Info: lt_target.cpp: 0 s - get_direct_mem_ptr
+      2 - DMI pointer request out of range
+
+Info: lt_initiator_direct_memory_interface.cpp: 0 s - initiator_thread
+      1 - can't get a DMI pointer
+
+Info: lt_target.cpp: 0 s - nb_transport
+      2 * BEGIN_REQ LT_Sync
+
+Info: lt_target.cpp: 0 s - get_direct_mem_ptr
+      1 - DMI pointer request A: 0x000000000000020A
+
+Info: lt_target.cpp: 0 s - get_direct_mem_ptr
+      1 - granting DMI pointer request
+
+Info: lt_initiator_direct_memory_interface.cpp: 0 s - initiator_thread
+      2 - got a DMI pointer
+
+Info: lt_initiator_direct_memory_interface.cpp: 0 s - initiator_thread
+      2 - bypassing target
+
+Info: lt_initiator_direct_memory_interface.cpp: 0 s - initiator_thread
+      2 - R* - A: 0x000000000000020A L: 08 D: 0x5A5A5A5A5A5A5A5A
+
+Info: lt_initiator_direct_memory_interface.cpp: 0 s - initiator_thread
+      2 - time updated
+
+Info: lt_initiator_direct_memory_interface.cpp: 0 s - initiator_thread
+      2 - Completed LT request
+      SC time    = 0 s
+      local time = 60 ns
+
+Info: lt_target.cpp: 0 s - begin_response
+      2 ** BEGIN_RESP start delay
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      2 - command queued
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      2 - response dequeued
+
+Info: lt_initiator_direct_memory_interface.cpp: 0 s - initiator_thread
+      2 - bypassing target
+
+Info: lt_initiator_direct_memory_interface.cpp: 0 s - initiator_thread
+      2 - W* - A: 0x0000000000000292 L: 08 D: 0x0001020304050607
+
+Info: lt_initiator_direct_memory_interface.cpp: 0 s - initiator_thread
+      2 - time updated
+
+Info: lt_initiator_direct_memory_interface.cpp: 0 s - initiator_thread
+      2 - Completed LT request
+      SC time    = 0 s
+      local time = 100 ns
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      2 - command queued
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      2 - response dequeued
+
+Info: lt_target.cpp: 0 s - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 0 s - memory_operation
+      1 - W - A: 0x0000000000000C10 L: 08 D: 0x0001020304050607
+
+Info: lt_initiator_direct_memory_interface.cpp: 0 s - initiator_thread
+      2 - Completed LT request
+      SC time    = 0 s
+      local time = 140 ns
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      2 - command queued
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      2 - response dequeued
+
+Info: lt_target.cpp: 0 s - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 0 s - memory_operation
+      2 - W - A: 0x00000000000004AD L: 08 D: 0x0001020304050607
+
+Info: lt_initiator_direct_memory_interface.cpp: 0 s - initiator_thread
+      2 - Completed LT request
+      SC time    = 0 s
+      local time = 195 ns
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      2 - command queued
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      2 - response dequeued
+
+Info: lt_target.cpp: 0 s - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 0 s - memory_operation
+      1 - W - A: 0x0000000000000F86 L: 08 D: 0x0001020304050607
+
+Info: lt_initiator_direct_memory_interface.cpp: 0 s - initiator_thread
+      2 - Completed LT request
+      SC time    = 0 s
+      local time = 235 ns
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      2 - command queued
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      2 - response dequeued
+
+Info: lt_initiator_direct_memory_interface.cpp: 0 s - initiator_thread
+      2 - bypassing target
+
+Info: lt_initiator_direct_memory_interface.cpp: 0 s - initiator_thread
+      2 - R* - A: 0x0000000000000771 L: 08 D: 0x5A5A5A5A5A5A5A5A
+
+Info: lt_initiator_direct_memory_interface.cpp: 0 s - initiator_thread
+      2 - time updated
+
+Info: lt_initiator_direct_memory_interface.cpp: 0 s - initiator_thread
+      2 - Completed LT request
+      SC time    = 0 s
+      local time = 295 ns
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      2 - command queued
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      2 - command queued
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      2 - command queued
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      2 - command queued
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      2 - response dequeued
+
+Info: lt_initiator_direct_memory_interface.cpp: 0 s - initiator_thread
+      2 - bypassing target
+
+Info: lt_initiator_direct_memory_interface.cpp: 0 s - initiator_thread
+      2 - W* - A: 0x00000000000001BE L: 08 D: 0x0001020304050607
+
+Info: lt_initiator_direct_memory_interface.cpp: 0 s - initiator_thread
+      2 - time updated
+
+Info: lt_initiator_direct_memory_interface.cpp: 0 s - initiator_thread
+      2 - Completed LT request
+      SC time    = 0 s
+      local time = 335 ns
+
+Info: lt_initiator_direct_memory_interface.cpp: 0 s - initiator_thread
+      2 - bypassing target
+
+Info: lt_initiator_direct_memory_interface.cpp: 0 s - initiator_thread
+      2 - R* - A: 0x00000000000005E8 L: 08 D: 0x5A5A5A5A5A5A5A5A
+
+Info: lt_initiator_direct_memory_interface.cpp: 0 s - initiator_thread
+      2 - time updated
+
+Info: lt_initiator_direct_memory_interface.cpp: 0 s - initiator_thread
+      2 - Completed LT request
+      SC time    = 0 s
+      local time = 395 ns
+
+Info: lt_target.cpp: 0 s - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 0 s - memory_operation
+      2 - W - A: 0x0000000000000066 L: 08 D: 0x0001020304050607
+
+Info: lt_initiator_direct_memory_interface.cpp: 0 s - initiator_thread
+      2 - Completed LT request
+      SC time    = 0 s
+      local time = 450 ns
+
+Info: lt_target.cpp: 0 s - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 0 s - memory_operation
+      1 - R - A: 0x0000000000000C1B L: 08 D: 0x5A5A5A5A5A5A5A5A
+
+Info: lt_initiator_direct_memory_interface.cpp: 0 s - initiator_thread
+      2 - Sync Local time to SC time
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      2 - response dequeued
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      2 - command queued
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      2 - command queued
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      2 - command queued
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      2 - command queued
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      2 - response dequeued
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      2 - response dequeued
+
+Info: lt_target.cpp: 75 ns - begin_response
+      2 ** BEGIN_RESP for queued response
+
+Info: lt_target.cpp: 75 ns - memory_operation
+      2 - R - A: 0x0000000000000478 L: 08 D: 0x5A5A5A5A5A5A5A5A
+
+Info: lt_initiator_direct_memory_interface.cpp: 75 ns - nb_transport
+      1 - LT target completing request
+
+Info: traffic_generator.cpp: 75 ns - traffic_generator_thread
+      1 - command queued
+
+Info: traffic_generator.cpp: 75 ns - traffic_generator_thread
+      1 - command queued
+
+Info: traffic_generator.cpp: 75 ns - traffic_generator_thread
+      1 - response dequeued
+
+Info: lt_initiator_direct_memory_interface.cpp: 75 ns - initiator_thread
+      1 - Completed LT request forced sync
+      local time       = 0 s
+      Reset local time = 0 s
+
+Info: lt_target.cpp: 75 ns - get_direct_mem_ptr
+      2 - DMI pointer request A: 0x000000000000033E
+
+Info: lt_target.cpp: 75 ns - get_direct_mem_ptr
+      2 - DMI pointer request out of range
+
+Info: lt_initiator_direct_memory_interface.cpp: 75 ns - initiator_thread
+      1 - can't get a DMI pointer
+
+Info: lt_target.cpp: 75 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 75 ns - memory_operation
+      2 - R - A: 0x000000000000033E L: 08 D: 0x5A5A5A5A5A5A5A5A
+
+Info: lt_initiator_direct_memory_interface.cpp: 75 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 75 ns
+      local time = 150 ns
+
+Info: lt_target.cpp: 75 ns - get_direct_mem_ptr
+      1 - DMI pointer request A: 0x000000000000010A
+
+Info: lt_target.cpp: 75 ns - get_direct_mem_ptr
+      1 - DMI invalidating pointer
+
+Info: lt_initiator_direct_memory_interface.cpp: 75 ns - invalidate_direct_mem_ptr
+      2 - DMI pointer invalidated
+
+Info: lt_target.cpp: 75 ns - get_direct_mem_ptr
+      1 - granting DMI pointer request
+
+Info: lt_initiator_direct_memory_interface.cpp: 75 ns - initiator_thread
+      1 - got a DMI pointer
+
+Info: lt_initiator_direct_memory_interface.cpp: 75 ns - initiator_thread
+      1 - bypassing target
+
+Info: lt_initiator_direct_memory_interface.cpp: 75 ns - initiator_thread
+      1 - R* - A: 0x000000000000010A L: 08 D: 0x5A5A5A5A5A5A5A5A
+
+Info: lt_initiator_direct_memory_interface.cpp: 75 ns - initiator_thread
+      1 - time updated
+
+Info: lt_initiator_direct_memory_interface.cpp: 75 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 75 ns
+      local time = 210 ns
+
+Info: traffic_generator.cpp: 75 ns - traffic_generator_thread
+      1 - response dequeued
+
+Info: traffic_generator.cpp: 75 ns - traffic_generator_thread
+      1 - command queued
+
+Info: traffic_generator.cpp: 75 ns - traffic_generator_thread
+      1 - command queued
+
+Info: traffic_generator.cpp: 75 ns - traffic_generator_thread
+      1 - response dequeued
+
+Info: lt_initiator_direct_memory_interface.cpp: 75 ns - initiator_thread
+      1 - bypassing target
+
+Info: lt_initiator_direct_memory_interface.cpp: 75 ns - initiator_thread
+      1 - R* - A: 0x00000000000007F6 L: 08 D: 0x5A5A5A5A5A5A5A5A
+
+Info: lt_initiator_direct_memory_interface.cpp: 75 ns - initiator_thread
+      1 - time updated
+
+Info: lt_initiator_direct_memory_interface.cpp: 75 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 75 ns
+      local time = 270 ns
+
+Info: lt_target.cpp: 75 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 75 ns - memory_operation
+      2 - W - A: 0x0000000000000ED2 L: 08 D: 0x0001020304050607
+
+Info: lt_initiator_direct_memory_interface.cpp: 75 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 75 ns
+      local time = 325 ns
+
+Info: traffic_generator.cpp: 75 ns - traffic_generator_thread
+      1 - command queued
+
+Info: traffic_generator.cpp: 75 ns - traffic_generator_thread
+      1 - command queued
+
+Info: traffic_generator.cpp: 75 ns - traffic_generator_thread
+      1 - response dequeued
+
+Info: traffic_generator.cpp: 75 ns - traffic_generator_thread
+      1 - response dequeued
+
+Info: lt_initiator_direct_memory_interface.cpp: 75 ns - initiator_thread
+      1 - bypassing target
+
+Info: lt_initiator_direct_memory_interface.cpp: 75 ns - initiator_thread
+      1 - R* - A: 0x000000000000077F L: 08 D: 0x5A5A5A5A5A5A5A5A
+
+Info: lt_initiator_direct_memory_interface.cpp: 75 ns - initiator_thread
+      1 - time updated
+
+Info: lt_initiator_direct_memory_interface.cpp: 75 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 75 ns
+      local time = 385 ns
+
+Info: lt_initiator_direct_memory_interface.cpp: 75 ns - initiator_thread
+      1 - bypassing target
+
+Info: lt_initiator_direct_memory_interface.cpp: 75 ns - initiator_thread
+      1 - R* - A: 0x00000000000000CB L: 08 D: 0x5A5A5A5A5A5A5A5A
+
+Info: lt_initiator_direct_memory_interface.cpp: 75 ns - initiator_thread
+      1 - time updated
+
+Info: lt_initiator_direct_memory_interface.cpp: 75 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 75 ns
+      local time = 445 ns
+
+Info: traffic_generator.cpp: 75 ns - traffic_generator_thread
+      1 - response dequeued
+
+Info: traffic_generator.cpp: 75 ns - traffic_generator_thread
+      1 - command queued
+
+Info: traffic_generator.cpp: 75 ns - traffic_generator_thread
+      1 - command queued
+
+Info: traffic_generator.cpp: 75 ns - traffic_generator_thread
+      1 - response dequeued
+
+Info: lt_target.cpp: 75 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 75 ns - memory_operation
+      2 - W - A: 0x0000000000000CE1 L: 08 D: 0x0001020304050607
+
+Info: lt_initiator_direct_memory_interface.cpp: 75 ns - initiator_thread
+      1 - Sync Local time to SC time
+
+Info: lt_initiator_direct_memory_interface.cpp: 500 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 500 ns
+      local time = 500 ns
+
+Info: lt_target.cpp: 500 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 500 ns - memory_operation
+      1 - R - A: 0x0000000000000D0E L: 08 D: 0x5A5A5A5A5A5A5A5A
+
+Info: lt_initiator_direct_memory_interface.cpp: 500 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 500 ns
+      local time = 560 ns
+
+Info: traffic_generator.cpp: 500 ns - traffic_generator_thread
+      1 - command queued
+
+Info: traffic_generator.cpp: 500 ns - traffic_generator_thread
+      1 - command queued
+
+Info: traffic_generator.cpp: 500 ns - traffic_generator_thread
+      1 - command queued
+
+Info: traffic_generator.cpp: 500 ns - traffic_generator_thread
+      1 - command queued
+
+Info: traffic_generator.cpp: 500 ns - traffic_generator_thread
+      1 - response dequeued
+
+Info: traffic_generator.cpp: 500 ns - traffic_generator_thread
+      1 - response dequeued
+
+Info: lt_target.cpp: 500 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 500 ns - memory_operation
+      2 - R - A: 0x0000000000000129 L: 08 D: 0x5A5A5A5A5A5A5A5A
+
+Info: lt_initiator_direct_memory_interface.cpp: 500 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 500 ns
+      local time = 635 ns
+
+Info: lt_target.cpp: 500 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 500 ns - memory_operation
+      2 - W - A: 0x000000000000088F L: 08 D: 0x0001020304050607
+
+Info: lt_initiator_direct_memory_interface.cpp: 500 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 500 ns
+      local time = 690 ns
+
+Info: lt_target.cpp: 500 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 500 ns - memory_operation
+      2 - W - A: 0x0000000000000CD3 L: 08 D: 0x0001020304050607
+
+Info: lt_initiator_direct_memory_interface.cpp: 500 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 500 ns
+      local time = 745 ns
+
+Info: lt_target.cpp: 500 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 500 ns - memory_operation
+      2 - W - A: 0x00000000000000F0 L: 08 D: 0x0001020304050607
+
+Info: lt_initiator_direct_memory_interface.cpp: 500 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 500 ns
+      local time = 800 ns
+
+Info: traffic_generator.cpp: 500 ns - traffic_generator_thread
+      1 - response dequeued
+
+Info: traffic_generator.cpp: 500 ns - traffic_generator_thread
+      1 - command queued
+
+Info: traffic_generator.cpp: 500 ns - traffic_generator_thread
+      1 - command queued
+
+Info: traffic_generator.cpp: 500 ns - traffic_generator_thread
+      1 - command queued
+
+Info: traffic_generator.cpp: 500 ns - traffic_generator_thread
+      1 - response dequeued
+
+Info: traffic_generator.cpp: 500 ns - traffic_generator_thread
+      1 - response dequeued
+
+Info: traffic_generator.cpp: 500 ns - traffic_generator_thread
+      1 - command queued
+
+Info: traffic_generator.cpp: 500 ns - traffic_generator_thread
+      1 - response dequeued
+
+Info: lt_target.cpp: 500 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 500 ns - memory_operation
+      2 - R - A: 0x000000000000055B L: 08 D: 0x5A5A5A5A5A5A5A5A
+
+Info: lt_initiator_direct_memory_interface.cpp: 500 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 500 ns
+      local time = 875 ns
+
+Info: lt_target.cpp: 500 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 500 ns - memory_operation
+      2 - R - A: 0x00000000000008A0 L: 08 D: 0x5A5A5A5A5A5A5A5A
+
+Info: lt_initiator_direct_memory_interface.cpp: 500 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 500 ns
+      local time = 950 ns
+
+Info: lt_initiator_direct_memory_interface.cpp: 500 ns - initiator_thread
+      1 - bypassing target
+
+Info: lt_initiator_direct_memory_interface.cpp: 500 ns - initiator_thread
+      1 - W* - A: 0x0000000000000551 L: 08 D: 0x0001020304050607
+
+Info: lt_initiator_direct_memory_interface.cpp: 500 ns - initiator_thread
+      1 - time updated
+
+Info: lt_initiator_direct_memory_interface.cpp: 500 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 500 ns
+      local time = 990 ns
+
+Info: lt_target.cpp: 500 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 500 ns - memory_operation
+      2 - R - A: 0x0000000000000FBD L: 08 D: 0x5A5A5A5A5A5A5A5A
+
+Info: lt_initiator_direct_memory_interface.cpp: 500 ns - initiator_thread
+      1 - Sync Local time to SC time
+
+Info: lt_initiator_direct_memory_interface.cpp: 510 ns - initiator_thread
+      2 - Completed LT request
+      SC time    = 510 ns
+      local time = 510 ns
+
+Info: lt_target.cpp: 510 ns - get_direct_mem_ptr
+      2 - DMI pointer request A: 0x0000000000000472
+
+Info: lt_target.cpp: 510 ns - get_direct_mem_ptr
+      2 - DMI pointer request out of range
+
+Info: lt_initiator_direct_memory_interface.cpp: 510 ns - initiator_thread
+      2 - can't get a DMI pointer
+
+Info: lt_target.cpp: 510 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 510 ns - memory_operation
+      2 - R - A: 0x0000000000000472 L: 08 D: 0x5A5A5A5A5A5A5A5A
+
+Info: lt_initiator_direct_memory_interface.cpp: 510 ns - initiator_thread
+      2 - Completed LT request
+      SC time    = 510 ns
+      local time = 585 ns
+
+Info: lt_target.cpp: 510 ns - get_direct_mem_ptr
+      2 - DMI pointer request A: 0x0000000000000975
+
+Info: lt_target.cpp: 510 ns - get_direct_mem_ptr
+      2 - granting DMI pointer request
+
+Info: lt_initiator_direct_memory_interface.cpp: 510 ns - initiator_thread
+      2 - got a DMI pointer
+
+Info: lt_initiator_direct_memory_interface.cpp: 510 ns - initiator_thread
+      2 - bypassing target
+
+Info: lt_initiator_direct_memory_interface.cpp: 510 ns - initiator_thread
+      2 - W* - A: 0x0000000010000975 L: 08 D: 0x0001020304050607
+
+Info: lt_initiator_direct_memory_interface.cpp: 510 ns - initiator_thread
+      2 - time updated
+
+Info: lt_initiator_direct_memory_interface.cpp: 510 ns - initiator_thread
+      2 - Completed LT request
+      SC time    = 510 ns
+      local time = 640 ns
+
+Info: lt_target.cpp: 510 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 510 ns - memory_operation
+      1 - R - A: 0x0000000000000868 L: 08 D: 0x5A5A5A5A5A5A5A5A
+
+Info: lt_initiator_direct_memory_interface.cpp: 510 ns - initiator_thread
+      2 - Completed LT request
+      SC time    = 510 ns
+      local time = 700 ns
+
+Info: lt_target.cpp: 510 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 510 ns - memory_operation
+      2 - R - A: 0x0000000000000467 L: 08 D: 0x5A5A5A5A5A5A5A5A
+
+Info: lt_initiator_direct_memory_interface.cpp: 510 ns - initiator_thread
+      2 - Completed LT request
+      SC time    = 510 ns
+      local time = 775 ns
+
+Info: traffic_generator.cpp: 510 ns - traffic_generator_thread
+      2 - response dequeued
+
+Info: traffic_generator.cpp: 510 ns - traffic_generator_thread
+      2 - command queued
+
+Info: traffic_generator.cpp: 510 ns - traffic_generator_thread
+      2 - response dequeued
+
+Info: traffic_generator.cpp: 510 ns - traffic_generator_thread
+      2 - command queued
+
+Info: lt_initiator_direct_memory_interface.cpp: 510 ns - initiator_thread
+      2 - bypassing target
+
+Info: lt_initiator_direct_memory_interface.cpp: 510 ns - initiator_thread
+      2 - W* - A: 0x00000000100009FE L: 08 D: 0x0001020304050607
+
+Info: lt_initiator_direct_memory_interface.cpp: 510 ns - initiator_thread
+      2 - time updated
+
+Info: lt_initiator_direct_memory_interface.cpp: 510 ns - initiator_thread
+      2 - Completed LT request
+      SC time    = 510 ns
+      local time = 830 ns
+
+Info: lt_target.cpp: 510 ns - nb_transport
+      2 * BEGIN_REQ LT_Sync
+
+Info: lt_target.cpp: 510 ns - begin_response
+      2 ** BEGIN_RESP start delay
+
+Info: lt_target.cpp: 565 ns - begin_response
+      2 ** BEGIN_RESP for queued response
+
+Info: lt_target.cpp: 565 ns - memory_operation
+      2 - W - A: 0x0000000000000192 L: 08 D: 0x0001020304050607
+
+Info: lt_initiator_direct_memory_interface.cpp: 565 ns - nb_transport
+      2 - LT target completing request
+
+Info: lt_initiator_direct_memory_interface.cpp: 565 ns - initiator_thread
+      2 - Completed LT request forced sync
+      local time       = 320 ns
+      Reset local time = 0 s
+
+Info: lt_initiator_direct_memory_interface.cpp: 1065 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 1065 ns
+      local time = 1065 ns
