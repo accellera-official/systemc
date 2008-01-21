@@ -1,0 +1,1119 @@
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      1 - random number seed: 0xAFEDBEEF
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      1 - command queued
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      1 - response dequeued
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      2 - random number seed: 0xCAFEFEED
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      2 - command queued
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      2 - response dequeued
+
+Info: at_target_4_phase.cpp: 0 s - nb_transport
+      2 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_target_4_phase.cpp: 0 s - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_target_4_phase.cpp: 10 ns - begin_response_method
+      2 - ** start BEGIN_RESP delay
+
+Info: at_target_4_phase.cpp: 10 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: at_initiator_4_phase.cpp: 10 ns - initiator_thread
+      1 - Target accepted AT request
+
+Info: at_initiator_4_phase.cpp: 10 ns - initiator_thread
+      2 - Target accepted AT request
+
+Info: at_target_4_phase.cpp: 60 ns - begin_response_method
+      2 - ** BEGIN_RESP for queued response
+
+Info: at_target_4_phase.cpp: 60 ns - memory_operation
+      R - A: 0x0000000000000478 L: 08 D: 0x0000000000000000
+
+Info: at_initiator_4_phase.cpp: 60 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_target_4_phase.cpp: 60 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: at_target_4_phase.cpp: 60 ns - memory_operation
+      R - A: 0x000000000000020A L: 08 D: 0x0000000000000000
+
+Info: at_initiator_4_phase.cpp: 60 ns - nb_transport
+      2 - AT target starting response
+
+Info: at_initiator_4_phase.cpp: 60 ns - m_send_end_rsp_method
+      2 - ** start END_RESP delay
+
+
+Info: at_target_4_phase.cpp: 60 ns - nb_transport
+      2 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator_4_phase.cpp: 60 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: traffic_generator.cpp: 60 ns - traffic_generator_thread
+      1 - command queued
+
+Info: traffic_generator.cpp: 60 ns - traffic_generator_thread
+      1 - response dequeued
+
+Info: at_target_4_phase.cpp: 60 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator_4_phase.cpp: 67 ns - m_send_end_rsp_method
+      2 - ** start END_RESP delay
+
+
+Info: at_target_4_phase.cpp: 70 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: at_initiator_4_phase.cpp: 70 ns - initiator_thread
+      1 - Target accepted AT request
+
+Info: at_target_4_phase.cpp: 74 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator_4_phase.cpp: 74 ns - m_send_end_rsp_method
+      2 - ** AT initiator send end response
+
+Info: traffic_generator.cpp: 74 ns - traffic_generator_thread
+      2 - command queued
+
+Info: traffic_generator.cpp: 74 ns - traffic_generator_thread
+      2 - response dequeued
+
+Info: at_target_4_phase.cpp: 74 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator_4_phase.cpp: 84 ns - initiator_thread
+      2 - Target accepted AT request
+
+Info: at_target_4_phase.cpp: 100 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: at_target_4_phase.cpp: 100 ns - memory_operation
+      
+      W - A: 0x0000000000000292 L: 08 D: 0x0001020304050607
+
+Info: at_initiator_4_phase.cpp: 100 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_target_4_phase.cpp: 100 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: at_initiator_4_phase.cpp: 100 ns - m_send_end_rsp_method
+      1 - ** start END_RESP delay
+
+
+Info: at_target_4_phase.cpp: 107 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator_4_phase.cpp: 107 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: traffic_generator.cpp: 107 ns - traffic_generator_thread
+      1 - command queued
+
+Info: traffic_generator.cpp: 107 ns - traffic_generator_thread
+      1 - response dequeued
+
+Info: at_target_4_phase.cpp: 107 ns - nb_transport
+      2 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_target_4_phase.cpp: 117 ns - begin_response_method
+      2 - ** start BEGIN_RESP delay
+
+Info: at_initiator_4_phase.cpp: 117 ns - initiator_thread
+      1 - Target accepted AT request
+
+Info: at_target_4_phase.cpp: 130 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: at_target_4_phase.cpp: 130 ns - memory_operation
+      
+      W - A: 0x0000000000000C10 L: 08 D: 0x0001020304050607
+
+Info: at_initiator_4_phase.cpp: 130 ns - nb_transport
+      2 - AT target starting response
+
+Info: at_initiator_4_phase.cpp: 130 ns - m_send_end_rsp_method
+      2 - ** start END_RESP delay
+
+
+Info: at_target_4_phase.cpp: 137 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator_4_phase.cpp: 137 ns - m_send_end_rsp_method
+      2 - ** AT initiator send end response
+
+Info: traffic_generator.cpp: 137 ns - traffic_generator_thread
+      2 - command queued
+
+Info: traffic_generator.cpp: 137 ns - traffic_generator_thread
+      2 - response dequeued
+
+Info: at_target_4_phase.cpp: 137 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_target_4_phase.cpp: 147 ns - begin_response_method
+      2 - ** BEGIN_RESP for queued response
+
+Info: at_target_4_phase.cpp: 147 ns - memory_operation
+      
+      W - A: 0x00000000000004AD L: 08 D: 0x0001020304050607
+
+Info: at_initiator_4_phase.cpp: 147 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_target_4_phase.cpp: 147 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: at_initiator_4_phase.cpp: 147 ns - m_send_end_rsp_method
+      1 - ** start END_RESP delay
+
+
+Info: at_initiator_4_phase.cpp: 147 ns - initiator_thread
+      2 - Target accepted AT request
+
+Info: at_target_4_phase.cpp: 154 ns - nb_transport
+      2 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator_4_phase.cpp: 154 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: traffic_generator.cpp: 154 ns - traffic_generator_thread
+      1 - command queued
+
+Info: traffic_generator.cpp: 154 ns - traffic_generator_thread
+      1 - response dequeued
+
+Info: at_target_4_phase.cpp: 154 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator_4_phase.cpp: 164 ns - initiator_thread
+      1 - Target accepted AT request
+
+Info: at_target_4_phase.cpp: 177 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: at_target_4_phase.cpp: 177 ns - memory_operation
+      
+      W - A: 0x0000000000000F86 L: 08 D: 0x0001020304050607
+
+Info: at_initiator_4_phase.cpp: 177 ns - nb_transport
+      2 - AT target starting response
+
+Info: at_target_4_phase.cpp: 177 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: at_initiator_4_phase.cpp: 177 ns - m_send_end_rsp_method
+      2 - ** start END_RESP delay
+
+
+Info: at_target_4_phase.cpp: 184 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator_4_phase.cpp: 184 ns - m_send_end_rsp_method
+      2 - ** AT initiator send end response
+
+Info: traffic_generator.cpp: 184 ns - traffic_generator_thread
+      2 - command queued
+
+Info: traffic_generator.cpp: 184 ns - traffic_generator_thread
+      2 - command queued
+
+Info: traffic_generator.cpp: 184 ns - traffic_generator_thread
+      2 - command queued
+
+Info: traffic_generator.cpp: 184 ns - traffic_generator_thread
+      2 - command queued
+
+Info: traffic_generator.cpp: 184 ns - traffic_generator_thread
+      2 - response dequeued
+
+Info: at_target_4_phase.cpp: 184 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator_4_phase.cpp: 194 ns - initiator_thread
+      2 - Target accepted AT request
+
+Info: at_target_4_phase.cpp: 194 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator_4_phase.cpp: 204 ns - initiator_thread
+      2 - Target accepted AT request
+
+Info: at_target_4_phase.cpp: 204 ns - nb_transport
+      2 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_target_4_phase.cpp: 214 ns - begin_response_method
+      2 - ** start BEGIN_RESP delay
+
+Info: at_initiator_4_phase.cpp: 214 ns - initiator_thread
+      2 - Target accepted AT request
+
+Info: at_target_4_phase.cpp: 214 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator_4_phase.cpp: 224 ns - initiator_thread
+      2 - Target accepted AT request
+
+Info: at_target_4_phase.cpp: 227 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: at_target_4_phase.cpp: 227 ns - memory_operation
+      R - A: 0x0000000000000771 L: 08 D: 0x0000000000000000
+
+Info: at_initiator_4_phase.cpp: 227 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_target_4_phase.cpp: 227 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: at_initiator_4_phase.cpp: 227 ns - m_send_end_rsp_method
+      1 - ** start END_RESP delay
+
+
+Info: at_target_4_phase.cpp: 234 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator_4_phase.cpp: 234 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: traffic_generator.cpp: 234 ns - traffic_generator_thread
+      1 - command queued
+
+Info: traffic_generator.cpp: 234 ns - traffic_generator_thread
+      1 - command queued
+
+Info: traffic_generator.cpp: 234 ns - traffic_generator_thread
+      1 - command queued
+
+Info: traffic_generator.cpp: 234 ns - traffic_generator_thread
+      1 - command queued
+
+Info: traffic_generator.cpp: 234 ns - traffic_generator_thread
+      1 - response dequeued
+
+Info: at_target_4_phase.cpp: 234 ns - nb_transport
+      2 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_target_4_phase.cpp: 244 ns - begin_response_method
+      2 - ** BEGIN_RESP for queued response
+
+Info: at_target_4_phase.cpp: 244 ns - memory_operation
+      
+      W - A: 0x0000000000000066 L: 08 D: 0x0001020304050607
+
+Info: at_initiator_4_phase.cpp: 244 ns - nb_transport
+      2 - AT target starting response
+
+Info: at_target_4_phase.cpp: 244 ns - begin_response_method
+      2 - ** start BEGIN_RESP delay
+
+Info: at_initiator_4_phase.cpp: 244 ns - m_send_end_rsp_method
+      2 - ** start END_RESP delay
+
+
+Info: at_initiator_4_phase.cpp: 244 ns - initiator_thread
+      1 - Target accepted AT request
+
+Info: at_target_4_phase.cpp: 244 ns - nb_transport
+      2 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_target_4_phase.cpp: 251 ns - nb_transport
+      2 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator_4_phase.cpp: 251 ns - m_send_end_rsp_method
+      2 - ** AT initiator send end response
+
+Info: traffic_generator.cpp: 251 ns - traffic_generator_thread
+      2 - response dequeued
+
+Info: at_initiator_4_phase.cpp: 254 ns - initiator_thread
+      1 - Target accepted AT request
+
+Info: at_target_4_phase.cpp: 254 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_target_4_phase.cpp: 257 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: at_target_4_phase.cpp: 257 ns - memory_operation
+      
+      W - A: 0x00000000000001BE L: 08 D: 0x0001020304050607
+
+Info: at_initiator_4_phase.cpp: 257 ns - nb_transport
+      2 - AT target starting response
+
+Info: at_target_4_phase.cpp: 257 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: at_initiator_4_phase.cpp: 257 ns - m_send_end_rsp_method
+      2 - ** start END_RESP delay
+
+
+Info: at_target_4_phase.cpp: 264 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator_4_phase.cpp: 264 ns - m_send_end_rsp_method
+      2 - ** AT initiator send end response
+
+Info: traffic_generator.cpp: 264 ns - traffic_generator_thread
+      2 - command queued
+
+Info: traffic_generator.cpp: 264 ns - traffic_generator_thread
+      2 - command queued
+
+Info: traffic_generator.cpp: 264 ns - traffic_generator_thread
+      2 - response dequeued
+
+Info: at_initiator_4_phase.cpp: 264 ns - initiator_thread
+      1 - Target accepted AT request
+
+Info: at_target_4_phase.cpp: 264 ns - nb_transport
+      2 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_target_4_phase.cpp: 264 ns - nb_transport
+      2 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator_4_phase.cpp: 274 ns - initiator_thread
+      1 - Target accepted AT request
+
+Info: at_initiator_4_phase.cpp: 284 ns - initiator_thread
+      2 - Target accepted AT request
+
+Info: at_target_4_phase.cpp: 284 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_target_4_phase.cpp: 294 ns - begin_response_method
+      2 - ** BEGIN_RESP for queued response
+
+Info: at_target_4_phase.cpp: 294 ns - memory_operation
+      R - A: 0x0000000000000472 L: 08 D: 0x0000000000000000
+
+Info: at_initiator_4_phase.cpp: 294 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_target_4_phase.cpp: 294 ns - begin_response_method
+      2 - ** start BEGIN_RESP delay
+
+Info: at_initiator_4_phase.cpp: 294 ns - m_send_end_rsp_method
+      1 - ** start END_RESP delay
+
+
+Info: at_initiator_4_phase.cpp: 294 ns - initiator_thread
+      2 - Target accepted AT request
+
+Info: at_target_4_phase.cpp: 301 ns - nb_transport
+      2 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator_4_phase.cpp: 301 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: traffic_generator.cpp: 301 ns - traffic_generator_thread
+      1 - response dequeued
+
+Info: at_target_4_phase.cpp: 307 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: at_target_4_phase.cpp: 307 ns - memory_operation
+      R - A: 0x00000000000005E8 L: 08 D: 0x0000000000000000
+
+Info: at_initiator_4_phase.cpp: 307 ns - nb_transport
+      2 - AT target starting response
+
+Info: at_target_4_phase.cpp: 307 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: at_initiator_4_phase.cpp: 307 ns - m_send_end_rsp_method
+      2 - ** start END_RESP delay
+
+
+Info: at_target_4_phase.cpp: 314 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator_4_phase.cpp: 314 ns - m_send_end_rsp_method
+      2 - ** AT initiator send end response
+
+Info: traffic_generator.cpp: 314 ns - traffic_generator_thread
+      2 - command queued
+
+Info: traffic_generator.cpp: 314 ns - traffic_generator_thread
+      2 - command queued
+
+Info: traffic_generator.cpp: 314 ns - traffic_generator_thread
+      2 - response dequeued
+
+Info: at_target_4_phase.cpp: 314 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_target_4_phase.cpp: 324 ns - begin_response_method
+      2 - ** BEGIN_RESP for queued response
+
+Info: at_target_4_phase.cpp: 324 ns - memory_operation
+      
+      W - A: 0x0000000000000975 L: 08 D: 0x0001020304050607
+
+Info: at_initiator_4_phase.cpp: 324 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_target_4_phase.cpp: 324 ns - begin_response_method
+      2 - ** start BEGIN_RESP delay
+
+Info: at_initiator_4_phase.cpp: 324 ns - m_send_end_rsp_method
+      1 - ** start END_RESP delay
+
+
+Info: at_initiator_4_phase.cpp: 324 ns - initiator_thread
+      2 - Target accepted AT request
+
+Info: at_target_4_phase.cpp: 324 ns - nb_transport
+      2 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_target_4_phase.cpp: 331 ns - nb_transport
+      2 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator_4_phase.cpp: 331 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: traffic_generator.cpp: 331 ns - traffic_generator_thread
+      1 - command queued
+
+Info: traffic_generator.cpp: 331 ns - traffic_generator_thread
+      1 - command queued
+
+Info: traffic_generator.cpp: 331 ns - traffic_generator_thread
+      1 - response dequeued
+
+Info: at_target_4_phase.cpp: 331 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator_4_phase.cpp: 334 ns - initiator_thread
+      2 - Target accepted AT request
+
+Info: at_initiator_4_phase.cpp: 341 ns - initiator_thread
+      1 - Target accepted AT request
+
+Info: at_target_4_phase.cpp: 341 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator_4_phase.cpp: 351 ns - initiator_thread
+      1 - Target accepted AT request
+
+Info: at_target_4_phase.cpp: 357 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: at_target_4_phase.cpp: 357 ns - memory_operation
+      R - A: 0x0000000000000C1B L: 08 D: 0x0000000000000000
+
+Info: at_initiator_4_phase.cpp: 357 ns - nb_transport
+      2 - AT target starting response
+
+Info: at_target_4_phase.cpp: 357 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: at_initiator_4_phase.cpp: 357 ns - m_send_end_rsp_method
+      2 - ** start END_RESP delay
+
+
+Info: at_target_4_phase.cpp: 364 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator_4_phase.cpp: 364 ns - m_send_end_rsp_method
+      2 - ** AT initiator send end response
+
+Info: traffic_generator.cpp: 364 ns - traffic_generator_thread
+      2 - response dequeued
+
+Info: at_target_4_phase.cpp: 374 ns - begin_response_method
+      2 - ** BEGIN_RESP for queued response
+
+Info: at_target_4_phase.cpp: 374 ns - memory_operation
+      R - A: 0x0000000000000467 L: 08 D: 0x0000000000000000
+
+Info: at_initiator_4_phase.cpp: 374 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_target_4_phase.cpp: 374 ns - begin_response_method
+      2 - ** start BEGIN_RESP delay
+
+Info: at_initiator_4_phase.cpp: 374 ns - m_send_end_rsp_method
+      1 - ** start END_RESP delay
+
+
+Info: at_target_4_phase.cpp: 381 ns - nb_transport
+      2 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator_4_phase.cpp: 381 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: traffic_generator.cpp: 381 ns - traffic_generator_thread
+      1 - response dequeued
+
+Info: at_target_4_phase.cpp: 407 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: at_target_4_phase.cpp: 407 ns - memory_operation
+      R - A: 0x0000000000000868 L: 08 D: 0x0000000000000000
+
+Info: at_initiator_4_phase.cpp: 407 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_target_4_phase.cpp: 407 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: at_initiator_4_phase.cpp: 407 ns - m_send_end_rsp_method
+      1 - ** start END_RESP delay
+
+
+Info: at_target_4_phase.cpp: 414 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator_4_phase.cpp: 414 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: traffic_generator.cpp: 414 ns - traffic_generator_thread
+      1 - command queued
+
+Info: traffic_generator.cpp: 414 ns - traffic_generator_thread
+      1 - command queued
+
+Info: traffic_generator.cpp: 414 ns - traffic_generator_thread
+      1 - response dequeued
+
+Info: at_target_4_phase.cpp: 414 ns - nb_transport
+      2 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_target_4_phase.cpp: 424 ns - begin_response_method
+      2 - ** BEGIN_RESP for queued response
+
+Info: at_target_4_phase.cpp: 424 ns - memory_operation
+      R - A: 0x000000000000033E L: 08 D: 0x0000000000000000
+
+Info: at_initiator_4_phase.cpp: 424 ns - nb_transport
+      2 - AT target starting response
+
+Info: at_target_4_phase.cpp: 424 ns - begin_response_method
+      2 - ** start BEGIN_RESP delay
+
+Info: at_initiator_4_phase.cpp: 424 ns - m_send_end_rsp_method
+      2 - ** start END_RESP delay
+
+
+Info: at_initiator_4_phase.cpp: 424 ns - initiator_thread
+      1 - Target accepted AT request
+
+Info: at_target_4_phase.cpp: 424 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_target_4_phase.cpp: 431 ns - nb_transport
+      2 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator_4_phase.cpp: 431 ns - m_send_end_rsp_method
+      2 - ** AT initiator send end response
+
+Info: traffic_generator.cpp: 431 ns - traffic_generator_thread
+      2 - command queued
+
+Info: traffic_generator.cpp: 431 ns - traffic_generator_thread
+      2 - command queued
+
+Info: traffic_generator.cpp: 431 ns - traffic_generator_thread
+      2 - command queued
+
+Info: traffic_generator.cpp: 431 ns - traffic_generator_thread
+      2 - command queued
+
+Info: traffic_generator.cpp: 431 ns - traffic_generator_thread
+      2 - response dequeued
+
+Info: at_target_4_phase.cpp: 431 ns - nb_transport
+      2 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator_4_phase.cpp: 434 ns - initiator_thread
+      1 - Target accepted AT request
+
+Info: at_initiator_4_phase.cpp: 441 ns - initiator_thread
+      2 - Target accepted AT request
+
+Info: at_target_4_phase.cpp: 441 ns - nb_transport
+      2 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator_4_phase.cpp: 451 ns - initiator_thread
+      2 - Target accepted AT request
+
+Info: at_target_4_phase.cpp: 451 ns - nb_transport
+      2 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_target_4_phase.cpp: 454 ns - begin_response_method
+      2 - ** BEGIN_RESP for queued response
+
+Info: at_target_4_phase.cpp: 454 ns - memory_operation
+      
+      W - A: 0x0000000000000ED2 L: 08 D: 0x0001020304050607
+
+Info: at_initiator_4_phase.cpp: 454 ns - nb_transport
+      2 - AT target starting response
+
+Info: at_target_4_phase.cpp: 454 ns - begin_response_method
+      2 - ** start BEGIN_RESP delay
+
+Info: at_initiator_4_phase.cpp: 454 ns - m_send_end_rsp_method
+      2 - ** start END_RESP delay
+
+
+Info: at_target_4_phase.cpp: 457 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: at_target_4_phase.cpp: 457 ns - memory_operation
+      R - A: 0x000000000000010A L: 08 D: 0x0000000000000000
+
+Info: at_initiator_4_phase.cpp: 457 ns - nb_transport
+      2 - AT target starting response
+
+Info: at_target_4_phase.cpp: 457 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: at_target_4_phase.cpp: 457 ns - nb_transport
+      2 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator_4_phase.cpp: 457 ns - m_send_end_rsp_method
+      2 - ** AT initiator send end response
+
+Info: at_initiator_4_phase.cpp: 457 ns - m_send_end_rsp_method
+      2 - ** start END_RESP delay
+
+
+Info: traffic_generator.cpp: 457 ns - traffic_generator_thread
+      2 - response dequeued
+
+Info: at_initiator_4_phase.cpp: 461 ns - initiator_thread
+      2 - Target accepted AT request
+
+Info: at_target_4_phase.cpp: 461 ns - nb_transport
+      2 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_target_4_phase.cpp: 464 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator_4_phase.cpp: 464 ns - m_send_end_rsp_method
+      2 - ** AT initiator send end response
+
+Info: traffic_generator.cpp: 464 ns - traffic_generator_thread
+      2 - response dequeued
+
+Info: at_initiator_4_phase.cpp: 471 ns - initiator_thread
+      2 - Target accepted AT request
+
+Info: at_target_4_phase.cpp: 484 ns - begin_response_method
+      2 - ** BEGIN_RESP for queued response
+
+Info: at_target_4_phase.cpp: 484 ns - memory_operation
+      
+      W - A: 0x0000000000000CE1 L: 08 D: 0x0001020304050607
+
+Info: at_initiator_4_phase.cpp: 484 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_target_4_phase.cpp: 484 ns - begin_response_method
+      2 - ** start BEGIN_RESP delay
+
+Info: at_initiator_4_phase.cpp: 484 ns - m_send_end_rsp_method
+      1 - ** start END_RESP delay
+
+
+Info: at_target_4_phase.cpp: 491 ns - nb_transport
+      2 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator_4_phase.cpp: 491 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: traffic_generator.cpp: 491 ns - traffic_generator_thread
+      1 - command queued
+
+Info: traffic_generator.cpp: 491 ns - traffic_generator_thread
+      1 - command queued
+
+Info: traffic_generator.cpp: 491 ns - traffic_generator_thread
+      1 - command queued
+
+Info: traffic_generator.cpp: 491 ns - traffic_generator_thread
+      1 - response dequeued
+
+Info: at_target_4_phase.cpp: 491 ns - nb_transport
+      2 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator_4_phase.cpp: 501 ns - initiator_thread
+      1 - Target accepted AT request
+
+Info: at_target_4_phase.cpp: 501 ns - nb_transport
+      2 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_target_4_phase.cpp: 507 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: at_target_4_phase.cpp: 507 ns - memory_operation
+      R - A: 0x00000000000007F6 L: 08 D: 0x0000000000000000
+
+Info: at_initiator_4_phase.cpp: 507 ns - nb_transport
+      2 - AT target starting response
+
+Info: at_target_4_phase.cpp: 507 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: at_initiator_4_phase.cpp: 507 ns - m_send_end_rsp_method
+      2 - ** start END_RESP delay
+
+
+Info: at_initiator_4_phase.cpp: 511 ns - initiator_thread
+      1 - Target accepted AT request
+
+Info: at_target_4_phase.cpp: 511 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_target_4_phase.cpp: 514 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator_4_phase.cpp: 514 ns - m_send_end_rsp_method
+      2 - ** AT initiator send end response
+
+Info: traffic_generator.cpp: 514 ns - traffic_generator_thread
+      2 - response dequeued
+
+Info: at_initiator_4_phase.cpp: 521 ns - initiator_thread
+      1 - Target accepted AT request
+
+Info: at_target_4_phase.cpp: 534 ns - begin_response_method
+      2 - ** BEGIN_RESP for queued response
+
+Info: at_target_4_phase.cpp: 534 ns - memory_operation
+      R - A: 0x0000000000000129 L: 08 D: 0x0000000000000000
+
+Info: at_initiator_4_phase.cpp: 534 ns - nb_transport
+      2 - AT target starting response
+
+Info: at_target_4_phase.cpp: 534 ns - begin_response_method
+      2 - ** start BEGIN_RESP delay
+
+Info: at_initiator_4_phase.cpp: 534 ns - m_send_end_rsp_method
+      2 - ** start END_RESP delay
+
+
+Info: at_target_4_phase.cpp: 541 ns - nb_transport
+      2 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator_4_phase.cpp: 541 ns - m_send_end_rsp_method
+      2 - ** AT initiator send end response
+
+Info: traffic_generator.cpp: 541 ns - traffic_generator_thread
+      2 - command queued
+
+Info: at_target_4_phase.cpp: 541 ns - nb_transport
+      2 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator_4_phase.cpp: 551 ns - initiator_thread
+      2 - Target accepted AT request
+
+Info: at_target_4_phase.cpp: 557 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: at_target_4_phase.cpp: 557 ns - memory_operation
+      R - A: 0x000000000000077F L: 08 D: 0x0000000000000000
+
+Info: at_initiator_4_phase.cpp: 557 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_target_4_phase.cpp: 557 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: at_initiator_4_phase.cpp: 557 ns - m_send_end_rsp_method
+      1 - ** start END_RESP delay
+
+
+Info: at_target_4_phase.cpp: 564 ns - begin_response_method
+      2 - ** BEGIN_RESP for queued response
+
+Info: at_target_4_phase.cpp: 564 ns - memory_operation
+      
+      W - A: 0x000000000000088F L: 08 D: 0x0001020304050607
+
+Info: at_initiator_4_phase.cpp: 564 ns - nb_transport
+      2 - AT target starting response
+
+Info: at_target_4_phase.cpp: 564 ns - begin_response_method
+      2 - ** start BEGIN_RESP delay
+
+Info: at_target_4_phase.cpp: 564 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator_4_phase.cpp: 564 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: at_initiator_4_phase.cpp: 564 ns - m_send_end_rsp_method
+      2 - ** start END_RESP delay
+
+
+Info: traffic_generator.cpp: 564 ns - traffic_generator_thread
+      1 - response dequeued
+
+Info: at_target_4_phase.cpp: 571 ns - nb_transport
+      2 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator_4_phase.cpp: 571 ns - m_send_end_rsp_method
+      2 - ** AT initiator send end response
+
+Info: at_target_4_phase.cpp: 594 ns - begin_response_method
+      2 - ** BEGIN_RESP for queued response
+
+Info: at_target_4_phase.cpp: 594 ns - memory_operation
+      
+      W - A: 0x0000000000000CD3 L: 08 D: 0x0001020304050607
+
+Info: at_initiator_4_phase.cpp: 594 ns - nb_transport
+      2 - AT target starting response
+
+Info: at_target_4_phase.cpp: 594 ns - begin_response_method
+      2 - ** start BEGIN_RESP delay
+
+Info: at_initiator_4_phase.cpp: 594 ns - m_send_end_rsp_method
+      2 - ** start END_RESP delay
+
+
+Info: at_target_4_phase.cpp: 601 ns - nb_transport
+      2 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator_4_phase.cpp: 601 ns - m_send_end_rsp_method
+      2 - ** AT initiator send end response
+
+Info: at_target_4_phase.cpp: 607 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: at_target_4_phase.cpp: 607 ns - memory_operation
+      R - A: 0x00000000000000CB L: 08 D: 0x0000000000000000
+
+Info: at_initiator_4_phase.cpp: 607 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_target_4_phase.cpp: 607 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: at_initiator_4_phase.cpp: 607 ns - m_send_end_rsp_method
+      1 - ** start END_RESP delay
+
+
+Info: at_target_4_phase.cpp: 614 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator_4_phase.cpp: 614 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: traffic_generator.cpp: 614 ns - traffic_generator_thread
+      1 - response dequeued
+
+Info: at_target_4_phase.cpp: 624 ns - begin_response_method
+      2 - ** BEGIN_RESP for queued response
+
+Info: at_target_4_phase.cpp: 624 ns - memory_operation
+      
+      W - A: 0x00000000000000F0 L: 08 D: 0x0001020304050607
+
+Info: at_initiator_4_phase.cpp: 624 ns - nb_transport
+      2 - AT target starting response
+
+Info: at_target_4_phase.cpp: 624 ns - begin_response_method
+      2 - ** start BEGIN_RESP delay
+
+Info: at_initiator_4_phase.cpp: 624 ns - m_send_end_rsp_method
+      2 - ** start END_RESP delay
+
+
+Info: at_target_4_phase.cpp: 631 ns - nb_transport
+      2 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator_4_phase.cpp: 631 ns - m_send_end_rsp_method
+      2 - ** AT initiator send end response
+
+Info: at_target_4_phase.cpp: 657 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: at_target_4_phase.cpp: 657 ns - memory_operation
+      R - A: 0x0000000000000D0E L: 08 D: 0x0000000000000000
+
+Info: at_initiator_4_phase.cpp: 657 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_target_4_phase.cpp: 657 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: at_initiator_4_phase.cpp: 657 ns - m_send_end_rsp_method
+      1 - ** start END_RESP delay
+
+
+Info: at_target_4_phase.cpp: 664 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator_4_phase.cpp: 664 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: traffic_generator.cpp: 664 ns - traffic_generator_thread
+      1 - command queued
+
+Info: traffic_generator.cpp: 664 ns - traffic_generator_thread
+      1 - response dequeued
+
+Info: at_target_4_phase.cpp: 664 ns - nb_transport
+      2 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_target_4_phase.cpp: 674 ns - begin_response_method
+      2 - ** BEGIN_RESP for queued response
+
+Info: at_target_4_phase.cpp: 674 ns - memory_operation
+      R - A: 0x000000000000055B L: 08 D: 0x0000000000000000
+
+Info: at_initiator_4_phase.cpp: 674 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_target_4_phase.cpp: 674 ns - begin_response_method
+      2 - ** start BEGIN_RESP delay
+
+Info: at_initiator_4_phase.cpp: 674 ns - m_send_end_rsp_method
+      1 - ** start END_RESP delay
+
+
+Info: at_initiator_4_phase.cpp: 674 ns - initiator_thread
+      1 - Target accepted AT request
+
+Info: at_target_4_phase.cpp: 681 ns - nb_transport
+      2 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator_4_phase.cpp: 681 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: traffic_generator.cpp: 681 ns - traffic_generator_thread
+      1 - command queued
+
+Info: at_target_4_phase.cpp: 681 ns - nb_transport
+      2 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_target_4_phase.cpp: 687 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: at_target_4_phase.cpp: 687 ns - memory_operation
+      
+      W - A: 0x0000000000000551 L: 08 D: 0x0001020304050607
+
+Info: at_initiator_4_phase.cpp: 687 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_initiator_4_phase.cpp: 687 ns - m_send_end_rsp_method
+      1 - ** start END_RESP delay
+
+
+Info: at_initiator_4_phase.cpp: 691 ns - initiator_thread
+      1 - Target accepted AT request
+
+Info: at_target_4_phase.cpp: 694 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator_4_phase.cpp: 694 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: at_target_4_phase.cpp: 724 ns - begin_response_method
+      2 - ** BEGIN_RESP for queued response
+
+Info: at_target_4_phase.cpp: 724 ns - memory_operation
+      R - A: 0x00000000000008A0 L: 08 D: 0x0000000000000000
+
+Info: at_initiator_4_phase.cpp: 724 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_target_4_phase.cpp: 724 ns - begin_response_method
+      2 - ** start BEGIN_RESP delay
+
+Info: at_initiator_4_phase.cpp: 724 ns - m_send_end_rsp_method
+      1 - ** start END_RESP delay
+
+
+Info: at_target_4_phase.cpp: 731 ns - nb_transport
+      2 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator_4_phase.cpp: 731 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: at_target_4_phase.cpp: 774 ns - begin_response_method
+      2 - ** BEGIN_RESP for queued response
+
+Info: at_target_4_phase.cpp: 774 ns - memory_operation
+      R - A: 0x0000000000000FBD L: 08 D: 0x0000000000000000
+
+Info: at_initiator_4_phase.cpp: 774 ns - nb_transport
+      2 - AT target starting response
+
+Info: at_target_4_phase.cpp: 774 ns - begin_response_method
+      2 - ** start BEGIN_RESP delay
+
+Info: at_initiator_4_phase.cpp: 774 ns - m_send_end_rsp_method
+      2 - ** start END_RESP delay
+
+
+Info: at_target_4_phase.cpp: 781 ns - nb_transport
+      2 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator_4_phase.cpp: 781 ns - m_send_end_rsp_method
+      2 - ** AT initiator send end response
+
+Info: at_target_4_phase.cpp: 804 ns - begin_response_method
+      2 - ** BEGIN_RESP for queued response
+
+Info: at_target_4_phase.cpp: 804 ns - memory_operation
+      
+      W - A: 0x00000000000009FE L: 08 D: 0x0001020304050607
+
+Info: at_initiator_4_phase.cpp: 804 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_target_4_phase.cpp: 804 ns - begin_response_method
+      2 - ** start BEGIN_RESP delay
+
+Info: at_initiator_4_phase.cpp: 804 ns - m_send_end_rsp_method
+      1 - ** start END_RESP delay
+
+
+Info: at_target_4_phase.cpp: 811 ns - nb_transport
+      2 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator_4_phase.cpp: 811 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: at_target_4_phase.cpp: 834 ns - begin_response_method
+      2 - ** BEGIN_RESP for queued response
+
+Info: at_target_4_phase.cpp: 834 ns - memory_operation
+      
+      W - A: 0x0000000000000192 L: 08 D: 0x0001020304050607
+
+Info: at_initiator_4_phase.cpp: 834 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_initiator_4_phase.cpp: 834 ns - m_send_end_rsp_method
+      1 - ** start END_RESP delay
+
+
+Info: at_target_4_phase.cpp: 841 ns - nb_transport
+      2 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator_4_phase.cpp: 841 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
