@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2007 by all Contributors.
+  source code Copyright (c) 1996-2008 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -437,10 +437,13 @@ public:
     bool result =
       (*decodeSocket)->get_direct_mem_ptr(maskedAddress, dmi_mode, dmi_data);
     
-    // Range must contain address
-    assert(dmi_data.dmi_start_address <= maskedAddress);
-    assert(dmi_data.dmi_end_address >= maskedAddress);
-
+    if (result)
+    {
+      // Range must contain address
+      assert(dmi_data.dmi_start_address <= maskedAddress);
+      assert(dmi_data.dmi_end_address >= maskedAddress);
+    }
+    
     // Should always succeed
     limitRange(portId, dmi_data.dmi_start_address, dmi_data.dmi_end_address);
 
