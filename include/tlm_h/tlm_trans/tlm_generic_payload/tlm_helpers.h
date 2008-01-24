@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2007 by all Contributors.
+  source code Copyright (c) 1996-2008 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -15,6 +15,16 @@
 
  *****************************************************************************/
 
+/* ---------------------------------------------------------------------------------------
+ @file tlm_helpers.h
+ 
+ @brief
+ 
+  Original Authors:
+    Charles Wilson, ESLX
+    
+--------------------------------------------------------------------------------------- */
+
 #ifndef __TLM_HELPERS_H__
 #define __TLM_HELPERS_H__
 
@@ -25,7 +35,24 @@ namespace tlm {
 
 enum tlm_endianness { TLM_UNKNOWN_ENDIAN, TLM_LITTLE_ENDIAN, TLM_BIG_ENDIAN };
 
-inline bool hostHasLittleEndianness()
+inline tlm_endianness getHostEndianness(void)
+{
+  static tlm_endianness host_endianness     = TLM_UNKNOWN_ENDIAN;
+  static bool           host_little_endian  = false;
+  
+  if ( host_endianness == TLM_UNKNOWN_ENDIAN )
+  {
+    const unsigned char   endian_array [ 2 ] = { 1, 0 };
+  
+          unsigned short  endian_short       = *(unsigned short *) endian_array;
+  
+    host_endianness = ( endian_short == 1 ) ? TLM_LITTLE_ENDIAN : TLM_BIG_ENDIAN;
+  }
+
+  return host_endianness;
+}
+
+inline bool hostHasLittleEndianness(void)
 {
   static tlm_endianness host_endianness     = TLM_UNKNOWN_ENDIAN;
   static bool           host_little_endian  = false;
