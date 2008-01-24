@@ -37,8 +37,7 @@ enum tlm_endianness { TLM_UNKNOWN_ENDIAN, TLM_LITTLE_ENDIAN, TLM_BIG_ENDIAN };
 
 inline tlm_endianness getHostEndianness(void)
 {
-  static tlm_endianness host_endianness     = TLM_UNKNOWN_ENDIAN;
-  static bool           host_little_endian  = false;
+  static tlm_endianness host_endianness = TLM_UNKNOWN_ENDIAN;
   
   if ( host_endianness == TLM_UNKNOWN_ENDIAN )
   {
