@@ -1,0 +1,692 @@
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      1 - random number seed: 0xAFEDBEEF
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      2 - random number seed: 0xCAFEFEED
+
+Info: lt_target.cpp: 0 s - nb_transport
+      2 * BEGIN_REQ LT_Sync
+
+ ******* INITIATOR 2 MADE A REQUEST *******
+ *******     to AT Target ID 1      *******
+
+Info: at_target_memory.cpp: 0 s - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: lt_target.cpp: 0 s - begin_response
+      2 ** BEGIN_RESP start delay
+
+Info: at_target_memory.cpp: 10 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: at_initiator.cpp: 10 ns - initiator_thread
+      2 - Target accepted LT or AT request
+
+Info: at_target_memory.cpp: 60 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: at_target_memory.cpp: 60 ns - memory_operation
+      R - A: 0x000000000000020A L: 08 D: 0x0000000000000000
+
+Info: at_initiator.cpp: 60 ns - nb_transport
+      2 - AT target starting response
+
+Info: at_initiator.cpp: 60 ns - m_send_end_rsp_method
+      2 - ** start END_RESP delay
+
+
+ ******* INITIATOR 2 MADE A REQUEST *******
+ *******     to AT Target ID 1      *******
+
+Info: at_target_memory.cpp: 67 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 67 ns - m_send_end_rsp_method
+      2 - ** AT initiator send end response
+
+ ******* INITIATOR 2 MADE A REQUEST *******
+ *******     to AT Target ID 1      *******
+
+Info: at_target_memory.cpp: 67 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: lt_target.cpp: 75 ns - begin_response
+      2 ** BEGIN_RESP for queued response
+
+Info: lt_target.cpp: 75 ns - memory_operation
+      2 - R - A: 0x0000000000000478 L: 08 address out-of-range, data zeroed
+
+Info: at_initiator.cpp: 75 ns - nb_transport
+      1 - LT target completing request
+
+Info: at_initiator.cpp: 75 ns - initiator_thread
+      1 - Target accepted LT or AT request
+
+ ******* INITIATOR 1 MADE A REQUEST *******
+ *******     to AT Target ID 1      *******
+
+Info: at_target_memory.cpp: 75 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_target_memory.cpp: 77 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: at_initiator.cpp: 77 ns - initiator_thread
+      2 - Target accepted LT or AT request
+
+Info: at_initiator.cpp: 87 ns - initiator_thread
+      1 - Target accepted LT or AT request
+
+Info: at_target_memory.cpp: 107 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: at_target_memory.cpp: 107 ns - memory_operation
+      
+      W - A: 0x0000000000000292 L: 08 D: 0x0001020304050607
+
+Info: at_initiator.cpp: 107 ns - nb_transport
+      2 - AT target starting response
+
+Info: at_target_memory.cpp: 107 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: at_initiator.cpp: 107 ns - m_send_end_rsp_method
+      2 - ** start END_RESP delay
+
+
+ ******* INITIATOR 2 MADE A REQUEST *******
+ *******     to AT Target ID 1      *******
+
+Info: at_target_memory.cpp: 114 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 114 ns - m_send_end_rsp_method
+      2 - ** AT initiator send end response
+
+Info: lt_target.cpp: 114 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 114 ns - memory_operation
+      2 - W - A: 0x00000000000004AD L: 08 D: 0x0001020304050607
+
+Info: at_target_memory.cpp: 137 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: at_target_memory.cpp: 137 ns - memory_operation
+      
+      W - A: 0x0000000000000C10 L: 08 D: 0x0001020304050607
+
+Info: at_initiator.cpp: 137 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_initiator.cpp: 137 ns - m_send_end_rsp_method
+      1 - ** start END_RESP delay
+
+
+ ******* INITIATOR 1 MADE A REQUEST *******
+ *******     to AT Target ID 1      *******
+
+Info: at_target_memory.cpp: 144 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 144 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+ ******* INITIATOR 1 MADE A REQUEST *******
+ *******     to AT Target ID 1      *******
+
+Info: at_target_memory.cpp: 144 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_target_memory.cpp: 154 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: at_initiator.cpp: 154 ns - initiator_thread
+      1 - Target accepted LT or AT request
+
+Info: at_initiator.cpp: 169 ns - initiator_thread
+      2 - Completed LT annotated request
+
+ ******* INITIATOR 2 MADE A REQUEST *******
+ *******     to AT Target ID 1      *******
+
+Info: at_target_memory.cpp: 169 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator.cpp: 179 ns - initiator_thread
+      2 - Target accepted LT or AT request
+
+Info: at_target_memory.cpp: 184 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: at_target_memory.cpp: 184 ns - memory_operation
+      
+      W - A: 0x0000000000000F86 L: 08 D: 0x0001020304050607
+
+Info: at_initiator.cpp: 184 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_target_memory.cpp: 184 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: at_initiator.cpp: 184 ns - m_send_end_rsp_method
+      1 - ** start END_RESP delay
+
+
+ ******* INITIATOR 1 MADE A REQUEST *******
+ *******     to AT Target ID 1      *******
+
+Info: at_target_memory.cpp: 191 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 191 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+ ******* INITIATOR 1 MADE A REQUEST *******
+ *******     to AT Target ID 1      *******
+
+Info: at_target_memory.cpp: 191 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator.cpp: 201 ns - initiator_thread
+      1 - Target accepted LT or AT request
+
+ ******* INITIATOR 1 MADE A REQUEST *******
+ *******     to AT Target ID 1      *******
+
+Info: at_target_memory.cpp: 201 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator.cpp: 211 ns - initiator_thread
+      1 - Target accepted LT or AT request
+
+Info: lt_target.cpp: 211 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 211 ns - memory_operation
+      2 - W - A: 0x0000000000000066 L: 08 D: 0x0001020304050607
+
+Info: at_target_memory.cpp: 234 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: at_target_memory.cpp: 234 ns - memory_operation
+      R - A: 0x0000000000000771 L: 08 D: 0x0000000000000000
+
+Info: at_initiator.cpp: 234 ns - nb_transport
+      2 - AT target starting response
+
+Info: at_target_memory.cpp: 234 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: at_initiator.cpp: 234 ns - m_send_end_rsp_method
+      2 - ** start END_RESP delay
+
+
+ ******* INITIATOR 2 MADE A REQUEST *******
+ *******     to AT Target ID 1      *******
+
+Info: at_target_memory.cpp: 241 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 241 ns - m_send_end_rsp_method
+      2 - ** AT initiator send end response
+
+Info: lt_target.cpp: 241 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 241 ns - memory_operation
+      2 - R - A: 0x0000000000000472 L: 08 address out-of-range, data zeroed
+
+Info: at_target_memory.cpp: 264 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: at_target_memory.cpp: 264 ns - memory_operation
+      
+      W - A: 0x00000000000001BE L: 08 D: 0x0001020304050607
+
+Info: at_initiator.cpp: 264 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_target_memory.cpp: 264 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: at_initiator.cpp: 264 ns - m_send_end_rsp_method
+      1 - ** start END_RESP delay
+
+
+Info: at_initiator.cpp: 266 ns - initiator_thread
+      1 - Completed LT annotated request
+
+ ******* INITIATOR 1 MADE A REQUEST *******
+ *******     to AT Target ID 1      *******
+
+Info: at_target_memory.cpp: 266 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+ ******* INITIATOR 1 MADE A REQUEST *******
+ *******     to AT Target ID 1      *******
+
+Info: at_target_memory.cpp: 271 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 271 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: at_initiator.cpp: 276 ns - initiator_thread
+      1 - Target accepted LT or AT request
+
+Info: lt_target.cpp: 276 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 276 ns - memory_operation
+      2 - R - A: 0x000000000000033E L: 08 address out-of-range, data zeroed
+
+Info: at_target_memory.cpp: 314 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: at_target_memory.cpp: 314 ns - memory_operation
+      R - A: 0x00000000000005E8 L: 08 D: 0x0000000000000000
+
+Info: at_initiator.cpp: 314 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_target_memory.cpp: 314 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: at_initiator.cpp: 314 ns - m_send_end_rsp_method
+      1 - ** start END_RESP delay
+
+
+Info: at_initiator.cpp: 316 ns - initiator_thread
+      2 - Completed LT annotated request
+
+Info: lt_target.cpp: 316 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 316 ns - memory_operation
+      2 - W - A: 0x0000000000000975 L: 08 D: 0x0001020304050607
+
+ ******* INITIATOR 1 MADE A REQUEST *******
+ *******     to AT Target ID 1      *******
+
+Info: at_target_memory.cpp: 321 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 321 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: at_initiator.cpp: 351 ns - initiator_thread
+      1 - Completed LT annotated request
+
+ ******* INITIATOR 1 MADE A REQUEST *******
+ *******     to AT Target ID 1      *******
+
+Info: at_target_memory.cpp: 351 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator.cpp: 361 ns - initiator_thread
+      1 - Target accepted LT or AT request
+
+ ******* INITIATOR 1 MADE A REQUEST *******
+ *******     to AT Target ID 1      *******
+
+Info: at_target_memory.cpp: 361 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_target_memory.cpp: 364 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: at_target_memory.cpp: 364 ns - memory_operation
+      R - A: 0x0000000000000C1B L: 08 D: 0x0000000000000000
+
+Info: at_initiator.cpp: 364 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_target_memory.cpp: 364 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: at_initiator.cpp: 364 ns - m_send_end_rsp_method
+      1 - ** start END_RESP delay
+
+
+ ******* INITIATOR 1 MADE A REQUEST *******
+ *******     to AT Target ID 1      *******
+
+Info: at_target_memory.cpp: 371 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 371 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: at_initiator.cpp: 371 ns - initiator_thread
+      2 - Completed LT annotated request
+
+ ******* INITIATOR 2 MADE A REQUEST *******
+ *******     to AT Target ID 1      *******
+
+Info: at_target_memory.cpp: 371 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator.cpp: 371 ns - initiator_thread
+      1 - Target accepted LT or AT request
+
+Info: lt_target.cpp: 371 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 371 ns - memory_operation
+      2 - W - A: 0x0000000000000ED2 L: 08 D: 0x0001020304050607
+
+Info: at_initiator.cpp: 381 ns - initiator_thread
+      2 - Target accepted LT or AT request
+
+Info: lt_target.cpp: 381 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 381 ns - memory_operation
+      2 - R - A: 0x0000000000000467 L: 08 address out-of-range, data zeroed
+
+Info: at_target_memory.cpp: 414 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: at_target_memory.cpp: 414 ns - memory_operation
+      R - A: 0x000000000000010A L: 08 D: 0x0000000000000000
+
+Info: at_initiator.cpp: 414 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_target_memory.cpp: 414 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: at_initiator.cpp: 414 ns - m_send_end_rsp_method
+      1 - ** start END_RESP delay
+
+
+ ******* INITIATOR 1 MADE A REQUEST *******
+ *******     to AT Target ID 1      *******
+
+Info: at_target_memory.cpp: 421 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 421 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: at_initiator.cpp: 426 ns - initiator_thread
+      1 - Completed LT annotated request
+
+ ******* INITIATOR 1 MADE A REQUEST *******
+ *******     to AT Target ID 1      *******
+
+Info: at_target_memory.cpp: 426 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator.cpp: 436 ns - initiator_thread
+      1 - Target accepted LT or AT request
+
+ ******* INITIATOR 1 MADE A REQUEST *******
+ *******     to AT Target ID 1      *******
+
+Info: at_target_memory.cpp: 436 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator.cpp: 446 ns - initiator_thread
+      1 - Target accepted LT or AT request
+
+Info: lt_target.cpp: 446 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 446 ns - memory_operation
+      2 - W - A: 0x0000000000000CE1 L: 08 D: 0x0001020304050607
+
+Info: at_initiator.cpp: 456 ns - initiator_thread
+      2 - Completed LT annotated request
+
+Info: lt_target.cpp: 456 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 456 ns - memory_operation
+      2 - W - A: 0x0000000000000CD3 L: 08 D: 0x0001020304050607
+
+Info: at_target_memory.cpp: 464 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: at_target_memory.cpp: 464 ns - memory_operation
+      R - A: 0x00000000000007F6 L: 08 D: 0x0000000000000000
+
+Info: at_initiator.cpp: 464 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_target_memory.cpp: 464 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: at_initiator.cpp: 464 ns - m_send_end_rsp_method
+      1 - ** start END_RESP delay
+
+
+ ******* INITIATOR 1 MADE A REQUEST *******
+ *******     to AT Target ID 1      *******
+
+Info: at_target_memory.cpp: 471 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 471 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: at_initiator.cpp: 501 ns - initiator_thread
+      1 - Completed LT annotated request
+
+ ******* INITIATOR 1 MADE A REQUEST *******
+ *******     to AT Target ID 1      *******
+
+Info: at_target_memory.cpp: 501 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator.cpp: 511 ns - initiator_thread
+      2 - Completed LT annotated request
+
+Info: lt_target.cpp: 511 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 511 ns - memory_operation
+      2 - W - A: 0x00000000000000F0 L: 08 D: 0x0001020304050607
+
+Info: at_initiator.cpp: 511 ns - initiator_thread
+      1 - Target accepted LT or AT request
+
+Info: lt_target.cpp: 511 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 511 ns - memory_operation
+      2 - R - A: 0x0000000000000129 L: 08 address out-of-range, data zeroed
+
+Info: at_target_memory.cpp: 514 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: at_target_memory.cpp: 514 ns - memory_operation
+      R - A: 0x0000000000000868 L: 08 D: 0x0000000000000000
+
+Info: at_initiator.cpp: 514 ns - nb_transport
+      2 - AT target starting response
+
+Info: at_target_memory.cpp: 514 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: at_initiator.cpp: 514 ns - m_send_end_rsp_method
+      2 - ** start END_RESP delay
+
+
+ ******* INITIATOR 2 MADE A REQUEST *******
+ *******     to AT Target ID 1      *******
+
+Info: at_target_memory.cpp: 521 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 521 ns - m_send_end_rsp_method
+      2 - ** AT initiator send end response
+
+Info: at_target_memory.cpp: 564 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: at_target_memory.cpp: 564 ns - memory_operation
+      R - A: 0x000000000000077F L: 08 D: 0x0000000000000000
+
+Info: at_initiator.cpp: 564 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_target_memory.cpp: 564 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: at_initiator.cpp: 564 ns - m_send_end_rsp_method
+      1 - ** start END_RESP delay
+
+
+Info: at_initiator.cpp: 566 ns - initiator_thread
+      2 - Completed LT annotated request
+
+Info: lt_target.cpp: 566 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 566 ns - memory_operation
+      2 - R - A: 0x000000000000055B L: 08 address out-of-range, data zeroed
+
+ ******* INITIATOR 1 MADE A REQUEST *******
+ *******     to AT Target ID 1      *******
+
+Info: at_target_memory.cpp: 571 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 571 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: at_initiator.cpp: 586 ns - initiator_thread
+      1 - Completed LT annotated request
+
+Info: lt_target.cpp: 586 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 586 ns - memory_operation
+      2 - W - A: 0x000000000000088F L: 08 D: 0x0001020304050607
+
+Info: at_target_memory.cpp: 614 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: at_target_memory.cpp: 614 ns - memory_operation
+      R - A: 0x00000000000000CB L: 08 D: 0x0000000000000000
+
+Info: at_initiator.cpp: 614 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_target_memory.cpp: 614 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: at_initiator.cpp: 614 ns - m_send_end_rsp_method
+      1 - ** start END_RESP delay
+
+
+ ******* INITIATOR 1 MADE A REQUEST *******
+ *******     to AT Target ID 1      *******
+
+Info: at_target_memory.cpp: 621 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 621 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: at_initiator.cpp: 641 ns - initiator_thread
+      2 - Completed LT annotated request
+
+Info: lt_target.cpp: 641 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 641 ns - memory_operation
+      2 - R - A: 0x00000000000008A0 L: 08 address out-of-range, data zeroed
+
+Info: at_initiator.cpp: 641 ns - initiator_thread
+      1 - Completed LT annotated request
+
+Info: at_target_memory.cpp: 664 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: at_target_memory.cpp: 664 ns - memory_operation
+      R - A: 0x0000000000000D0E L: 08 D: 0x0000000000000000
+
+Info: at_initiator.cpp: 664 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_initiator.cpp: 664 ns - m_send_end_rsp_method
+      1 - ** start END_RESP delay
+
+
+ ******* INITIATOR 1 MADE A REQUEST *******
+ *******     to AT Target ID 1      *******
+
+Info: at_target_memory.cpp: 671 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 671 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: at_initiator.cpp: 716 ns - initiator_thread
+      2 - Completed LT annotated request
+
+ ******* INITIATOR 2 MADE A REQUEST *******
+ *******     to AT Target ID 1      *******
+
+Info: at_target_memory.cpp: 716 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_target_memory.cpp: 726 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: at_initiator.cpp: 726 ns - initiator_thread
+      2 - Target accepted LT or AT request
+
+Info: lt_target.cpp: 726 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 726 ns - memory_operation
+      2 - R - A: 0x0000000000000FBD L: 08 address out-of-range, data zeroed
+
+Info: at_target_memory.cpp: 756 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: at_target_memory.cpp: 756 ns - memory_operation
+      
+      W - A: 0x0000000000000551 L: 08 D: 0x0001020304050607
+
+Info: at_initiator.cpp: 756 ns - nb_transport
+      2 - AT target starting response
+
+Info: at_initiator.cpp: 756 ns - m_send_end_rsp_method
+      2 - ** start END_RESP delay
+
+
+ ******* INITIATOR 2 MADE A REQUEST *******
+ *******     to AT Target ID 1      *******
+
+Info: at_target_memory.cpp: 763 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 763 ns - m_send_end_rsp_method
+      2 - ** AT initiator send end response
+
+Info: at_initiator.cpp: 801 ns - initiator_thread
+      2 - Completed LT annotated request
+
+Info: lt_target.cpp: 801 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 801 ns - memory_operation
+      2 - W - A: 0x00000000000009FE L: 08 D: 0x0001020304050607
+
+Info: at_initiator.cpp: 856 ns - initiator_thread
+      2 - Completed LT annotated request
+
+Info: lt_target.cpp: 856 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 856 ns - memory_operation
+      2 - W - A: 0x0000000000000192 L: 08 D: 0x0001020304050607
+
+Info: at_initiator.cpp: 911 ns - initiator_thread
+      2 - Completed LT annotated request
