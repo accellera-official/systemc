@@ -7,6 +7,7 @@ SUBDIRS = \
           ../lt_min_system \
           ../lt_temporal_decoupling \
           ../lt_direct_memory_interface \
+          ../lt_endianness \
           ../tlm_1_integration \
           ../tlm_1_integration_explicit_slave \
           ../at_basic_system \
