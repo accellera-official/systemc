@@ -1,0 +1,1082 @@
+
+Info: lt_target_endianness.cpp: 0 s - get_direct_mem_ptr
+      1 - DMI pointer request A: 0x00000000000009B5
+
+Info: lt_target_endianness.cpp: 0 s - get_direct_mem_ptr
+      1 - DMI pointer request out of range
+
+Info: lt_initiator_endianness.cpp: 0 s - initiator_thread
+      1 - can't get a DMI pointer
+
+Info: lt_target_endianness.cpp: 0 s - nb_transport
+      1 * BEGIN_REQ LT_Sync
+
+Info: lt_initiator_endianness.cpp: 0 s - initiator_thread
+      2 LE D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_target_endianness.cpp: 0 s - get_direct_mem_ptr
+      1 - DMI pointer request A: 0x0000000000000E50
+
+Info: lt_target_endianness.cpp: 0 s - get_direct_mem_ptr
+      1 - DMI pointer request out of range
+
+Info: lt_initiator_endianness.cpp: 0 s - initiator_thread
+      2 - can't get a DMI pointer
+
+Info: lt_target_endianness.cpp: 0 s - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 0 s - memory_operation
+      1 LE - W - A: 0x0000000000000E50 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_target_endianness.cpp: 0 s - memory_operation
+      1 - adjusting to target endianness (BE) D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_initiator_endianness.cpp: 0 s - initiator_thread
+      2 - Completed LT request
+      SC time    = 0 s
+      local time = 40 ns
+
+Info: lt_target_endianness.cpp: 0 s - get_direct_mem_ptr
+      2 - DMI pointer request A: 0x0000000000000F44
+
+Info: lt_target_endianness.cpp: 0 s - get_direct_mem_ptr
+      2 - granting DMI pointer request
+
+Info: lt_initiator_endianness.cpp: 0 s - initiator_thread
+      2 - got a DMI pointer
+
+Info: lt_initiator_endianness.cpp: 0 s - initiator_thread
+      2 - bypassing target
+
+Info: lt_initiator_endianness.cpp: 0 s - initiator_thread
+      2 LE - R* - A: 0x0000000010000F44 L: 16 D: 0x4445464748494A4B4C4D4E4F50515253
+
+Info: lt_initiator_endianness.cpp: 0 s - initiator_thread
+      2 - time updated
+
+Info: lt_initiator_endianness.cpp: 0 s - initiator_thread
+      2 - Completed LT request
+      SC time    = 0 s
+      local time = 115 ns
+
+Info: lt_initiator_endianness.cpp: 0 s - initiator_thread
+      2 LE D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_target_endianness.cpp: 0 s - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 0 s - memory_operation
+      1 LE - W - A: 0x0000000000000292 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_target_endianness.cpp: 0 s - memory_operation
+      1 - adjusting to target endianness (BE) D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_initiator_endianness.cpp: 0 s - initiator_thread
+      2 - Completed LT request
+      SC time    = 0 s
+      local time = 155 ns
+
+Info: lt_initiator_endianness.cpp: 0 s - initiator_thread
+      2 - bypassing target
+
+Info: lt_initiator_endianness.cpp: 0 s - initiator_thread
+      2 LE - R* - A: 0x00000000100008C3 L: 16 D: 0xC3C4C5C6C7C8C9CACBCCCDCECFD0D1D2
+
+Info: lt_initiator_endianness.cpp: 0 s - initiator_thread
+      2 - time updated
+
+Info: lt_initiator_endianness.cpp: 0 s - initiator_thread
+      2 - Completed LT request
+      SC time    = 0 s
+      local time = 230 ns
+
+Info: lt_target_endianness.cpp: 0 s - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 0 s - memory_operation
+      1 BE - R - A: 0x0000000000000CA8 L: 16 D: 0xA8A9AAABACADAEAFB0B1B2B3B4B5B6B7
+
+Info: lt_target_endianness.cpp: 0 s - memory_operation
+      1 - adjusting to host endianness (LE) D: 0xAFAEADACABAAA9A8B3B2B1B0B5B4B6B7
+
+Info: lt_initiator_endianness.cpp: 0 s - initiator_thread
+      2 - Completed LT request
+      SC time    = 0 s
+      local time = 290 ns
+
+Info: lt_initiator_endianness.cpp: 0 s - initiator_thread
+      2 LE D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_initiator_endianness.cpp: 0 s - initiator_thread
+      2 - bypassing target
+
+Info: lt_initiator_endianness.cpp: 0 s - initiator_thread
+      2 LE - W* - A: 0x0000000010000FB3 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_initiator_endianness.cpp: 0 s - initiator_thread
+      2 - time updated
+
+Info: lt_initiator_endianness.cpp: 0 s - initiator_thread
+      2 - Completed LT request
+      SC time    = 0 s
+      local time = 345 ns
+
+Info: lt_initiator_endianness.cpp: 0 s - initiator_thread
+      2 LE D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_target_endianness.cpp: 0 s - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 0 s - memory_operation
+      1 LE - W - A: 0x000000000000046A L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_target_endianness.cpp: 0 s - memory_operation
+      1 - adjusting to target endianness (BE) D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_initiator_endianness.cpp: 0 s - initiator_thread
+      2 - Completed LT request
+      SC time    = 0 s
+      local time = 385 ns
+
+Info: lt_initiator_endianness.cpp: 0 s - initiator_thread
+      2 LE D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_target_endianness.cpp: 0 s - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 0 s - memory_operation
+      1 LE - W - A: 0x000000000000042B L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_target_endianness.cpp: 0 s - memory_operation
+      1 - adjusting to target endianness (BE) D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_initiator_endianness.cpp: 0 s - initiator_thread
+      2 - Completed LT request
+      SC time    = 0 s
+      local time = 425 ns
+
+Info: lt_initiator_endianness.cpp: 0 s - initiator_thread
+      2 - bypassing target
+
+Info: lt_initiator_endianness.cpp: 0 s - initiator_thread
+      2 LE - R* - A: 0x0000000010000B12 L: 16 D: 0x12131415161718191A1B1C1D1E1F2021
+
+Info: lt_initiator_endianness.cpp: 0 s - initiator_thread
+      2 - time updated
+
+Info: lt_initiator_endianness.cpp: 0 s - initiator_thread
+      2 - Sync Local time to SC time
+
+Info: lt_target_endianness.cpp: 0 s - begin_response
+      1 ** BEGIN_RESP start delay
+
+Info: lt_target_endianness.cpp: 60 ns - begin_response
+      1 ** BEGIN_RESP for queued response
+
+Info: lt_target_endianness.cpp: 60 ns - memory_operation
+      1 BE - R - A: 0x00000000000009B5 L: 16 D: 0xB5B6B7B8B9BABBBCBDBEBFC0C1C2C3C4
+
+Info: lt_target_endianness.cpp: 60 ns - memory_operation
+      1 - adjusting to host endianness (LE) D: 0xBCBBBAB9B8B7B6B5C0BFBEBDC2C1C3C4
+
+Info: lt_initiator_endianness.cpp: 60 ns - nb_transport
+      1 - LT target completing request
+
+Info: lt_initiator_endianness.cpp: 60 ns - initiator_thread
+      1 - Completed LT request forced sync
+      local time       = 0 s
+      Reset local time = 0 s
+
+Info: lt_target_endianness.cpp: 60 ns - get_direct_mem_ptr
+      1 - DMI pointer request A: 0x0000000000000D23
+
+Info: lt_target_endianness.cpp: 60 ns - get_direct_mem_ptr
+      1 - DMI pointer request out of range
+
+Info: lt_initiator_endianness.cpp: 60 ns - initiator_thread
+      1 - can't get a DMI pointer
+
+Info: lt_target_endianness.cpp: 60 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 60 ns - memory_operation
+      1 BE - R - A: 0x0000000000000D23 L: 16 D: 0x232425262728292A2B2C2D2E2F303132
+
+Info: lt_target_endianness.cpp: 60 ns - memory_operation
+      1 - adjusting to host endianness (LE) D: 0x2A292827262524232E2D2C2B302F3132
+
+Info: lt_initiator_endianness.cpp: 60 ns - initiator_thread
+      1 - adjusting to initiator endianness (BE) D: 0x232425262728292A2B2C2D2E2F303132
+
+Info: lt_initiator_endianness.cpp: 60 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 60 ns
+      local time = 120 ns
+
+Info: lt_initiator_endianness.cpp: 60 ns - initiator_thread
+      1 BE D: 0x07060504030201000B0A09080D0C0E0F
+
+Info: lt_target_endianness.cpp: 60 ns - get_direct_mem_ptr
+      2 - DMI pointer request A: 0x0000000000000D15
+
+Info: lt_target_endianness.cpp: 60 ns - get_direct_mem_ptr
+      2 - DMI invalidating pointer
+
+Info: lt_target_endianness.cpp: 60 ns - get_direct_mem_ptr
+      2 - granting DMI pointer request
+
+Info: lt_initiator_endianness.cpp: 60 ns - initiator_thread
+      1 - got a DMI pointer
+
+Info: lt_initiator_endianness.cpp: 60 ns - initiator_thread
+      1 - bypassing target
+
+Info: lt_initiator_endianness.cpp: 60 ns - initiator_thread
+      1 BE - W* - A: 0x0000000010000D15 L: 16 D: 0x07060504030201000B0A09080D0C0E0F
+
+Info: lt_initiator_endianness.cpp: 60 ns - initiator_thread
+      1 - adjusting to target endianness (LE) D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_initiator_endianness.cpp: 60 ns - initiator_thread
+      1 - time updated
+
+Info: lt_initiator_endianness.cpp: 60 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 60 ns
+      local time = 175 ns
+
+Info: lt_target_endianness.cpp: 60 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 60 ns - memory_operation
+      1 BE - R - A: 0x0000000000000D99 L: 16 D: 0x999A9B9C9D9E9FA0A1A2A3A4A5A6A7A8
+
+Info: lt_target_endianness.cpp: 60 ns - memory_operation
+      1 - adjusting to host endianness (LE) D: 0xA09F9E9D9C9B9A99A4A3A2A1A6A5A7A8
+
+Info: lt_initiator_endianness.cpp: 60 ns - initiator_thread
+      1 - adjusting to initiator endianness (BE) D: 0x999A9B9C9D9E9FA0A1A2A3A4A5A6A7A8
+
+Info: lt_initiator_endianness.cpp: 60 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 60 ns
+      local time = 235 ns
+
+Info: lt_initiator_endianness.cpp: 60 ns - initiator_thread
+      1 BE D: 0x07060504030201000B0A09080D0C0E0F
+
+Info: lt_target_endianness.cpp: 60 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 60 ns - memory_operation
+      2 LE - W - A: 0x0000000000000284 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_initiator_endianness.cpp: 60 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 60 ns
+      local time = 290 ns
+
+Info: lt_initiator_endianness.cpp: 60 ns - initiator_thread
+      1 BE D: 0x07060504030201000B0A09080D0C0E0F
+
+Info: lt_target_endianness.cpp: 60 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 60 ns - memory_operation
+      1 LE - W - A: 0x000000000000046B L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_target_endianness.cpp: 60 ns - memory_operation
+      1 - adjusting to target endianness (BE) D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_initiator_endianness.cpp: 60 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 60 ns
+      local time = 330 ns
+
+Info: lt_initiator_endianness.cpp: 60 ns - initiator_thread
+      1 - bypassing target
+
+Info: lt_initiator_endianness.cpp: 60 ns - initiator_thread
+      1 LE - R* - A: 0x0000000010000EBD L: 16 D: 0xBDBEBFC0C1C2C3C4C5C6C7C8C9CACBCC
+
+Info: lt_initiator_endianness.cpp: 60 ns - initiator_thread
+      1 - adjusting to initiator endianness (BE) D: 0xC4C3C2C1C0BFBEBDC8C7C6C5CAC9CBCC
+
+Info: lt_initiator_endianness.cpp: 60 ns - initiator_thread
+      1 - time updated
+
+Info: lt_initiator_endianness.cpp: 60 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 60 ns
+      local time = 405 ns
+
+Info: lt_initiator_endianness.cpp: 60 ns - initiator_thread
+      1 BE D: 0x07060504030201000B0A09080D0C0E0F
+
+Info: lt_target_endianness.cpp: 60 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 60 ns - memory_operation
+      2 LE - W - A: 0x0000000000000759 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_initiator_endianness.cpp: 60 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 60 ns
+      local time = 460 ns
+
+Info: lt_initiator_endianness.cpp: 60 ns - initiator_thread
+      1 BE D: 0x07060504030201000B0A09080D0C0E0F
+
+Info: lt_target_endianness.cpp: 60 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 60 ns - memory_operation
+      2 LE - W - A: 0x00000000000001D6 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_initiator_endianness.cpp: 60 ns - initiator_thread
+      1 - Sync Local time to SC time
+
+Info: lt_initiator_endianness.cpp: 500 ns - initiator_thread
+      2 - Completed LT request
+      SC time    = 500 ns
+      local time = 500 ns
+
+Info: lt_target_endianness.cpp: 500 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 500 ns - memory_operation
+      1 BE - R - A: 0x0000000000000771 L: 16 D: 0x7172737475767778797A7B7C7D7E7F80
+
+Info: lt_target_endianness.cpp: 500 ns - memory_operation
+      1 - adjusting to host endianness (LE) D: 0x78777675747372717C7B7A797E7D7F80
+
+Info: lt_initiator_endianness.cpp: 500 ns - initiator_thread
+      2 - Completed LT request
+      SC time    = 500 ns
+      local time = 560 ns
+
+Info: lt_target_endianness.cpp: 500 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 500 ns - memory_operation
+      1 BE - R - A: 0x00000000000002BA L: 16 D: 0xBABBBCBDBEBFC0C1C2C3C4C5C6C7C8C9
+
+Info: lt_target_endianness.cpp: 500 ns - memory_operation
+      1 - adjusting to host endianness (LE) D: 0xC1C0BFBEBDBCBBBAC5C4C3C2C7C6C8C9
+
+Info: lt_initiator_endianness.cpp: 500 ns - initiator_thread
+      2 - Completed LT request
+      SC time    = 500 ns
+      local time = 620 ns
+
+Info: lt_target_endianness.cpp: 500 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 500 ns - memory_operation
+      2 LE - R - A: 0x000000000000030D L: 16 D: 0x0D0E0F101112131415161718191A1B1C
+
+Info: lt_initiator_endianness.cpp: 500 ns - initiator_thread
+      2 - Completed LT request
+      SC time    = 500 ns
+      local time = 695 ns
+
+Info: lt_initiator_endianness.cpp: 500 ns - initiator_thread
+      2 - bypassing target
+
+Info: lt_initiator_endianness.cpp: 500 ns - initiator_thread
+      2 LE - R* - A: 0x0000000010000BAC L: 16 D: 0xACADAEAFB0B1B2B3B4B5B6B7B8B9BABB
+
+Info: lt_initiator_endianness.cpp: 500 ns - initiator_thread
+      2 - time updated
+
+Info: lt_initiator_endianness.cpp: 500 ns - initiator_thread
+      2 - Completed LT request
+      SC time    = 500 ns
+      local time = 770 ns
+
+Info: lt_target_endianness.cpp: 500 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 500 ns - memory_operation
+      1 BE - R - A: 0x00000000000005E8 L: 16 D: 0xE8E9EAEBECEDEEEFF0F1F2F3F4F5F6F7
+
+Info: lt_target_endianness.cpp: 500 ns - memory_operation
+      1 - adjusting to host endianness (LE) D: 0xEFEEEDECEBEAE9E8F3F2F1F0F5F4F6F7
+
+Info: lt_initiator_endianness.cpp: 500 ns - initiator_thread
+      2 - Completed LT request
+      SC time    = 500 ns
+      local time = 830 ns
+
+Info: lt_initiator_endianness.cpp: 500 ns - initiator_thread
+      2 LE D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_target_endianness.cpp: 500 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 500 ns - memory_operation
+      1 LE - W - A: 0x0000000000000601 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_target_endianness.cpp: 500 ns - memory_operation
+      1 - adjusting to target endianness (BE) D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_initiator_endianness.cpp: 500 ns - initiator_thread
+      2 - Completed LT request
+      SC time    = 500 ns
+      local time = 870 ns
+
+Info: lt_initiator_endianness.cpp: 500 ns - initiator_thread
+      2 LE D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_target_endianness.cpp: 500 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 500 ns - memory_operation
+      1 LE - W - A: 0x0000000000000C3F L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_target_endianness.cpp: 500 ns - memory_operation
+      1 - adjusting to target endianness (BE) D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_initiator_endianness.cpp: 500 ns - initiator_thread
+      2 - Completed LT request
+      SC time    = 500 ns
+      local time = 910 ns
+
+Info: lt_initiator_endianness.cpp: 500 ns - initiator_thread
+      2 LE D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_target_endianness.cpp: 500 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 500 ns - memory_operation
+      1 LE - W - A: 0x000000000000093E L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_target_endianness.cpp: 500 ns - memory_operation
+      1 - adjusting to target endianness (BE) D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_initiator_endianness.cpp: 500 ns - initiator_thread
+      2 - Completed LT request
+      SC time    = 500 ns
+      local time = 950 ns
+
+Info: lt_target_endianness.cpp: 500 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 500 ns - memory_operation
+      1 BE - R - A: 0x0000000000000F65 L: 16 D: 0x65666768696A6B6C6D6E6F7071727374
+
+Info: lt_target_endianness.cpp: 500 ns - memory_operation
+      1 - adjusting to host endianness (LE) D: 0x6C6B6A6968676665706F6E6D72717374
+
+Info: lt_initiator_endianness.cpp: 500 ns - initiator_thread
+      2 - Sync Local time to SC time
+
+Info: lt_initiator_endianness.cpp: 515 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 515 ns
+      local time = 515 ns
+
+Info: lt_target_endianness.cpp: 515 ns - nb_transport
+      1 * BEGIN_REQ LT_Sync
+
+Info: lt_target_endianness.cpp: 515 ns - begin_response
+      1 ** BEGIN_RESP start delay
+
+Info: lt_target_endianness.cpp: 575 ns - begin_response
+      1 ** BEGIN_RESP for queued response
+
+Info: lt_target_endianness.cpp: 575 ns - memory_operation
+      1 BE - R - A: 0x0000000000000792 L: 16 D: 0x92939495969798999A9B9C9D9E9FA0A1
+
+Info: lt_target_endianness.cpp: 575 ns - memory_operation
+      1 - adjusting to host endianness (LE) D: 0x99989796959493929D9C9B9A9F9EA0A1
+
+Info: lt_initiator_endianness.cpp: 575 ns - nb_transport
+      1 - LT target completing request
+
+Info: lt_initiator_endianness.cpp: 575 ns - initiator_thread
+      1 - Completed LT request forced sync
+      local time       = 0 s
+      Reset local time = 0 s
+
+Info: lt_target_endianness.cpp: 575 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 575 ns - memory_operation
+      2 LE - R - A: 0x0000000000000276 L: 16 D: 0x767778797A7B7C7D7E7F808182830001
+
+Info: lt_initiator_endianness.cpp: 575 ns - initiator_thread
+      1 - adjusting to initiator endianness (BE) D: 0x7D7C7B7A7978777681807F7E83820001
+
+Info: lt_initiator_endianness.cpp: 575 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 575 ns
+      local time = 650 ns
+
+Info: lt_initiator_endianness.cpp: 575 ns - initiator_thread
+      1 - bypassing target
+
+Info: lt_initiator_endianness.cpp: 575 ns - initiator_thread
+      1 LE - R* - A: 0x0000000010000B32 L: 16 D: 0x32333435363738393A3B3C3D3E3F4041
+
+Info: lt_initiator_endianness.cpp: 575 ns - initiator_thread
+      1 - adjusting to initiator endianness (BE) D: 0x39383736353433323D3C3B3A3F3E4041
+
+Info: lt_initiator_endianness.cpp: 575 ns - initiator_thread
+      1 - time updated
+
+Info: lt_initiator_endianness.cpp: 575 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 575 ns
+      local time = 725 ns
+
+Info: lt_initiator_endianness.cpp: 575 ns - initiator_thread
+      1 BE D: 0x07060504030201000B0A09080D0C0E0F
+
+Info: lt_target_endianness.cpp: 575 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 575 ns - memory_operation
+      1 LE - W - A: 0x0000000000000217 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_target_endianness.cpp: 575 ns - memory_operation
+      1 - adjusting to target endianness (BE) D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_initiator_endianness.cpp: 575 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 575 ns
+      local time = 765 ns
+
+Info: lt_target_endianness.cpp: 575 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 575 ns - memory_operation
+      1 BE - R - A: 0x000000000000018B L: 16 D: 0x8B8C8D8E8F909192939495969798999A
+
+Info: lt_target_endianness.cpp: 575 ns - memory_operation
+      1 - adjusting to host endianness (LE) D: 0x9291908F8E8D8C8B969594939897999A
+
+Info: lt_initiator_endianness.cpp: 575 ns - initiator_thread
+      1 - adjusting to initiator endianness (BE) D: 0x8B8C8D8E8F909192939495969798999A
+
+Info: lt_initiator_endianness.cpp: 575 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 575 ns
+      local time = 825 ns
+
+Info: lt_initiator_endianness.cpp: 575 ns - initiator_thread
+      1 BE D: 0x07060504030201000B0A09080D0C0E0F
+
+Info: lt_target_endianness.cpp: 575 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 575 ns - memory_operation
+      1 LE - W - A: 0x0000000000000CA5 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_target_endianness.cpp: 575 ns - memory_operation
+      1 - adjusting to target endianness (BE) D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_initiator_endianness.cpp: 575 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 575 ns
+      local time = 865 ns
+
+Info: lt_initiator_endianness.cpp: 575 ns - initiator_thread
+      1 BE D: 0x07060504030201000B0A09080D0C0E0F
+
+Info: lt_target_endianness.cpp: 575 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 575 ns - memory_operation
+      2 LE - W - A: 0x00000000000005C6 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_initiator_endianness.cpp: 575 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 575 ns
+      local time = 920 ns
+
+Info: lt_target_endianness.cpp: 575 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 575 ns - memory_operation
+      1 BE - R - A: 0x0000000000000FDA L: 16 D: 0xDADBDCDDDEDFE0E1E2E3E4E5E6E7E8E9
+
+Info: lt_target_endianness.cpp: 575 ns - memory_operation
+      1 - adjusting to host endianness (LE) D: 0xE1E0DFDEDDDCDBDAE5E4E3E2E7E6E8E9
+
+Info: lt_initiator_endianness.cpp: 575 ns - initiator_thread
+      1 - adjusting to initiator endianness (BE) D: 0xDADBDCDDDEDFE0E1E2E3E4E5E6E7E8E9
+
+Info: lt_initiator_endianness.cpp: 575 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 575 ns
+      local time = 980 ns
+
+Info: lt_target_endianness.cpp: 575 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 575 ns - memory_operation
+      2 LE - R - A: 0x000000000000014D L: 16 D: 0x4D4E4F505152535455565758595A5B5C
+
+Info: lt_initiator_endianness.cpp: 575 ns - initiator_thread
+      1 - adjusting to initiator endianness (BE) D: 0x54535251504F4E4D585756555A595B5C
+
+Info: lt_initiator_endianness.cpp: 575 ns - initiator_thread
+      1 - Sync Local time to SC time
+
+Info: lt_initiator_endianness.cpp: 1010 ns - initiator_thread
+      2 - Completed LT request
+      SC time    = 1010 ns
+      local time = 1010 ns
+
+Info: lt_initiator_endianness.cpp: 1010 ns - initiator_thread
+      2 - bypassing target
+
+Info: lt_initiator_endianness.cpp: 1010 ns - initiator_thread
+      2 LE - R* - A: 0x00000000100009F3 L: 16 D: 0xF3F4F5F6F7F8F9FAFBFCFDFEFF000102
+
+Info: lt_initiator_endianness.cpp: 1010 ns - initiator_thread
+      2 - time updated
+
+Info: lt_initiator_endianness.cpp: 1010 ns - initiator_thread
+      2 - Completed LT request
+      SC time    = 1010 ns
+      local time = 1085 ns
+
+Info: lt_initiator_endianness.cpp: 1010 ns - initiator_thread
+      2 LE D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_initiator_endianness.cpp: 1010 ns - initiator_thread
+      2 - bypassing target
+
+Info: lt_initiator_endianness.cpp: 1010 ns - initiator_thread
+      2 LE - W* - A: 0x0000000010000975 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_initiator_endianness.cpp: 1010 ns - initiator_thread
+      2 - time updated
+
+Info: lt_initiator_endianness.cpp: 1010 ns - initiator_thread
+      2 - Completed LT request
+      SC time    = 1010 ns
+      local time = 1140 ns
+
+Info: lt_initiator_endianness.cpp: 1010 ns - initiator_thread
+      2 LE D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_target_endianness.cpp: 1010 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 1010 ns - memory_operation
+      1 LE - W - A: 0x0000000000000908 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_target_endianness.cpp: 1010 ns - memory_operation
+      1 - adjusting to target endianness (BE) D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_initiator_endianness.cpp: 1010 ns - initiator_thread
+      2 - Completed LT request
+      SC time    = 1010 ns
+      local time = 1180 ns
+
+Info: lt_target_endianness.cpp: 1010 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 1010 ns - memory_operation
+      1 BE - R - A: 0x0000000000000A75 L: 16 D: 0x75767778797A7B7C7D7E7F8081828384
+
+Info: lt_target_endianness.cpp: 1010 ns - memory_operation
+      1 - adjusting to host endianness (LE) D: 0x7C7B7A7978777675807F7E7D82818384
+
+Info: lt_initiator_endianness.cpp: 1010 ns - initiator_thread
+      2 - Completed LT request
+      SC time    = 1010 ns
+      local time = 1240 ns
+
+Info: lt_initiator_endianness.cpp: 1010 ns - initiator_thread
+      2 LE D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_target_endianness.cpp: 1010 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 1010 ns - memory_operation
+      1 LE - W - A: 0x00000000000008A5 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_target_endianness.cpp: 1010 ns - memory_operation
+      1 - adjusting to target endianness (BE) D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_initiator_endianness.cpp: 1010 ns - initiator_thread
+      2 - Completed LT request
+      SC time    = 1010 ns
+      local time = 1280 ns
+
+Info: lt_target_endianness.cpp: 1010 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 1010 ns - memory_operation
+      1 BE - R - A: 0x0000000000000527 L: 16 D: 0x2728292A2B2C2D2E2F30313233343536
+
+Info: lt_target_endianness.cpp: 1010 ns - memory_operation
+      1 - adjusting to host endianness (LE) D: 0x2E2D2C2B2A2928273231302F34333536
+
+Info: lt_initiator_endianness.cpp: 1010 ns - initiator_thread
+      2 - Completed LT request
+      SC time    = 1010 ns
+      local time = 1340 ns
+
+Info: lt_initiator_endianness.cpp: 1010 ns - initiator_thread
+      2 - bypassing target
+
+Info: lt_initiator_endianness.cpp: 1010 ns - initiator_thread
+      2 LE - R* - A: 0x0000000010000E55 L: 16 D: 0x55565758595A5B5C5D5E5F6061626364
+
+Info: lt_initiator_endianness.cpp: 1010 ns - initiator_thread
+      2 - time updated
+
+Info: lt_initiator_endianness.cpp: 1010 ns - initiator_thread
+      2 - Completed LT request
+      SC time    = 1010 ns
+      local time = 1415 ns
+
+Info: lt_target_endianness.cpp: 1010 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 1010 ns - memory_operation
+      1 BE - R - A: 0x000000000000010A L: 16 D: 0x0A0B0C0D0E0F10111213141516171819
+
+Info: lt_target_endianness.cpp: 1010 ns - memory_operation
+      1 - adjusting to host endianness (LE) D: 0x11100F0E0D0C0B0A1514131217161819
+
+Info: lt_initiator_endianness.cpp: 1010 ns - initiator_thread
+      2 - Completed LT request
+      SC time    = 1010 ns
+      local time = 1475 ns
+
+Info: lt_initiator_endianness.cpp: 1010 ns - initiator_thread
+      2 - bypassing target
+
+Info: lt_initiator_endianness.cpp: 1010 ns - initiator_thread
+      2 LE - R* - A: 0x0000000010000B18 L: 16 D: 0x18191A1B1C1D1E1F2021222324252627
+
+Info: lt_initiator_endianness.cpp: 1010 ns - initiator_thread
+      2 - time updated
+
+Info: lt_initiator_endianness.cpp: 1010 ns - initiator_thread
+      2 - Sync Local time to SC time
+
+Info: lt_initiator_endianness.cpp: 1055 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 1055 ns
+      local time = 1055 ns
+
+Info: lt_initiator_endianness.cpp: 1055 ns - initiator_thread
+      1 BE D: 0x07060504030201000B0A09080D0C0E0F
+
+Info: lt_initiator_endianness.cpp: 1055 ns - initiator_thread
+      1 - bypassing target
+
+Info: lt_initiator_endianness.cpp: 1055 ns - initiator_thread
+      1 BE - W* - A: 0x0000000010000B63 L: 16 D: 0x07060504030201000B0A09080D0C0E0F
+
+Info: lt_initiator_endianness.cpp: 1055 ns - initiator_thread
+      1 - adjusting to target endianness (LE) D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_initiator_endianness.cpp: 1055 ns - initiator_thread
+      1 - time updated
+
+Info: lt_initiator_endianness.cpp: 1055 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 1055 ns
+      local time = 1110 ns
+
+Info: lt_target_endianness.cpp: 1055 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 1055 ns - memory_operation
+      1 BE - R - A: 0x0000000000000D0E L: 16 D: 0x0E0F101112131415161718191A1B1C1D
+
+Info: lt_target_endianness.cpp: 1055 ns - memory_operation
+      1 - adjusting to host endianness (LE) D: 0x1514131211100F0E191817161B1A1C1D
+
+Info: lt_initiator_endianness.cpp: 1055 ns - initiator_thread
+      1 - adjusting to initiator endianness (BE) D: 0x0E0F101112131415161718191A1B1C1D
+
+Info: lt_initiator_endianness.cpp: 1055 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 1055 ns
+      local time = 1170 ns
+
+Info: lt_target_endianness.cpp: 1055 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 1055 ns - memory_operation
+      1 BE - R - A: 0x0000000000000EBF L: 16 D: 0xBFC0C1C2C3C4C5C6C7C8C9CACBCCCDCE
+
+Info: lt_target_endianness.cpp: 1055 ns - memory_operation
+      1 - adjusting to host endianness (LE) D: 0xC6C5C4C3C2C1C0BFCAC9C8C7CCCBCDCE
+
+Info: lt_initiator_endianness.cpp: 1055 ns - initiator_thread
+      1 - adjusting to initiator endianness (BE) D: 0xBFC0C1C2C3C4C5C6C7C8C9CACBCCCDCE
+
+Info: lt_initiator_endianness.cpp: 1055 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 1055 ns
+      local time = 1230 ns
+
+Info: lt_initiator_endianness.cpp: 1055 ns - initiator_thread
+      1 BE D: 0x07060504030201000B0A09080D0C0E0F
+
+Info: lt_target_endianness.cpp: 1055 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 1055 ns - memory_operation
+      2 LE - W - A: 0x000000000000006D L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_initiator_endianness.cpp: 1055 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 1055 ns
+      local time = 1285 ns
+
+Info: lt_initiator_endianness.cpp: 1055 ns - initiator_thread
+      1 BE D: 0x07060504030201000B0A09080D0C0E0F
+
+Info: lt_initiator_endianness.cpp: 1055 ns - initiator_thread
+      1 - bypassing target
+
+Info: lt_initiator_endianness.cpp: 1055 ns - initiator_thread
+      1 BE - W* - A: 0x000000001000088F L: 16 D: 0x07060504030201000B0A09080D0C0E0F
+
+Info: lt_initiator_endianness.cpp: 1055 ns - initiator_thread
+      1 - adjusting to target endianness (LE) D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_initiator_endianness.cpp: 1055 ns - initiator_thread
+      1 - time updated
+
+Info: lt_initiator_endianness.cpp: 1055 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 1055 ns
+      local time = 1340 ns
+
+Info: lt_initiator_endianness.cpp: 1055 ns - initiator_thread
+      1 BE D: 0x07060504030201000B0A09080D0C0E0F
+
+Info: lt_target_endianness.cpp: 1055 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 1055 ns - memory_operation
+      2 LE - W - A: 0x0000000000000475 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_initiator_endianness.cpp: 1055 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 1055 ns
+      local time = 1395 ns
+
+Info: lt_initiator_endianness.cpp: 1055 ns - initiator_thread
+      1 BE D: 0x07060504030201000B0A09080D0C0E0F
+
+Info: lt_target_endianness.cpp: 1055 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 1055 ns - memory_operation
+      2 LE - W - A: 0x0000000000000659 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_initiator_endianness.cpp: 1055 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 1055 ns
+      local time = 1450 ns
+
+Info: lt_target_endianness.cpp: 1055 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 1055 ns - memory_operation
+      1 BE - R - A: 0x00000000000002E3 L: 16 D: 0xE3E4E5E6E7E8E9EAEBECEDEEEFF0F1F2
+
+Info: lt_target_endianness.cpp: 1055 ns - memory_operation
+      1 - adjusting to host endianness (LE) D: 0xEAE9E8E7E6E5E4E3EEEDECEBF0EFF1F2
+
+Info: lt_initiator_endianness.cpp: 1055 ns - initiator_thread
+      1 - adjusting to initiator endianness (BE) D: 0xE3E4E5E6E7E8E9EAEBECEDEEEFF0F1F2
+
+Info: lt_initiator_endianness.cpp: 1055 ns - initiator_thread
+      1 - Sync Local time to SC time
+
+Info: lt_initiator_endianness.cpp: 1510 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 1510 ns
+      local time = 1510 ns
+
+Info: lt_target_endianness.cpp: 1510 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 1510 ns - memory_operation
+      2 LE - R - A: 0x00000000000007D2 L: 16 D: 0xD2D3D4D5D6D7D8D9DADBDCDDDEDFE0E1
+
+Info: lt_initiator_endianness.cpp: 1510 ns - initiator_thread
+      1 - adjusting to initiator endianness (BE) D: 0xD9D8D7D6D5D4D3D2DDDCDBDADFDEE0E1
+
+Info: lt_initiator_endianness.cpp: 1510 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 1510 ns
+      local time = 1585 ns
+
+Info: lt_target_endianness.cpp: 1510 ns - nb_transport
+      2 * BEGIN_REQ LT_Sync
+
+Info: lt_target_endianness.cpp: 1510 ns - begin_response
+      2 ** BEGIN_RESP start delay
+
+Info: lt_initiator_endianness.cpp: 1550 ns - initiator_thread
+      2 - Completed LT request
+      SC time    = 1550 ns
+      local time = 1550 ns
+
+Info: lt_target_endianness.cpp: 1550 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 1550 ns - memory_operation
+      1 BE - R - A: 0x00000000000007F6 L: 16 D: 0xF6F7F8F9FAFBFCFDFEFF000102030405
+
+Info: lt_target_endianness.cpp: 1550 ns - memory_operation
+      1 - adjusting to host endianness (LE) D: 0xFDFCFBFAF9F8F7F60100FFFE03020405
+
+Info: lt_initiator_endianness.cpp: 1550 ns - initiator_thread
+      2 - Completed LT request
+      SC time    = 1550 ns
+      local time = 1610 ns
+
+Info: lt_initiator_endianness.cpp: 1550 ns - initiator_thread
+      2 LE D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_target_endianness.cpp: 1550 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 1550 ns - memory_operation
+      1 LE - W - A: 0x0000000000000E33 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_target_endianness.cpp: 1550 ns - memory_operation
+      1 - adjusting to target endianness (BE) D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_initiator_endianness.cpp: 1550 ns - initiator_thread
+      2 - Completed LT request
+      SC time    = 1550 ns
+      local time = 1650 ns
+
+Info: lt_initiator_endianness.cpp: 1550 ns - initiator_thread
+      2 LE D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_target_endianness.cpp: 1550 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 1550 ns - memory_operation
+      2 LE - W - A: 0x00000000000002B4 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_initiator_endianness.cpp: 1550 ns - initiator_thread
+      2 - Completed LT request
+      SC time    = 1550 ns
+      local time = 1705 ns
+
+Info: lt_target_endianness.cpp: 1550 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 1550 ns - memory_operation
+      1 BE - R - A: 0x000000000000077F L: 16 D: 0x7F808182838485868788898A8B8C8D8E
+
+Info: lt_target_endianness.cpp: 1550 ns - memory_operation
+      1 - adjusting to host endianness (LE) D: 0x868584838281807F8A8988878C8B8D8E
+
+Info: lt_initiator_endianness.cpp: 1550 ns - initiator_thread
+      2 - Completed LT request
+      SC time    = 1550 ns
+      local time = 1765 ns
+
+Info: lt_initiator_endianness.cpp: 1550 ns - initiator_thread
+      2 LE D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_target_endianness.cpp: 1550 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 1550 ns - memory_operation
+      2 LE - W - A: 0x000000000000006C L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_initiator_endianness.cpp: 1550 ns - initiator_thread
+      2 - Completed LT request
+      SC time    = 1550 ns
+      local time = 1820 ns
+
+Info: lt_target_endianness.cpp: 1585 ns - begin_response
+      2 ** BEGIN_RESP for queued response
+
+Info: lt_target_endianness.cpp: 1585 ns - memory_operation
+      2 LE - R - A: 0x000000000000055B L: 16 D: 0x5B5C5D5E5F606162636465666768696A
+
+Info: lt_initiator_endianness.cpp: 1585 ns - nb_transport
+      1 - LT target completing request
+
+Info: lt_initiator_endianness.cpp: 1585 ns - initiator_thread
+      1 - Completed LT request forced sync
+      local time       = 75 ns
+      Reset local time = 0 s
+
+Info: lt_initiator_endianness.cpp: 1585 ns - initiator_thread
+      1 BE D: 0x07060504030201000B0A09080D0C0E0F
+
+Info: lt_target_endianness.cpp: 1585 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 1585 ns - memory_operation
+      1 LE - W - A: 0x0000000000000B58 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_target_endianness.cpp: 1585 ns - memory_operation
+      1 - adjusting to target endianness (BE) D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_initiator_endianness.cpp: 1585 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 1585 ns
+      local time = 1625 ns
+
+Info: lt_initiator_endianness.cpp: 1585 ns - initiator_thread
+      1 BE D: 0x07060504030201000B0A09080D0C0E0F
+
+Info: lt_target_endianness.cpp: 1585 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 1585 ns - memory_operation
+      2 LE - W - A: 0x0000000000000269 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_initiator_endianness.cpp: 1585 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 1585 ns
+      local time = 1680 ns
+
+Info: lt_initiator_endianness.cpp: 1585 ns - initiator_thread
+      1 BE D: 0x07060504030201000B0A09080D0C0E0F
+
+Info: lt_target_endianness.cpp: 1585 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 1585 ns - memory_operation
+      1 LE - W - A: 0x0000000000000A82 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_target_endianness.cpp: 1585 ns - memory_operation
+      1 - adjusting to target endianness (BE) D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_initiator_endianness.cpp: 1585 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 1585 ns
+      local time = 1720 ns
+
+Info: lt_target_endianness.cpp: 1585 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_target_endianness.cpp: 1585 ns - memory_operation
+      1 BE - R - A: 0x0000000000000A67 L: 16 D: 0x6768696A6B6C6D6E6F70717273747576
+
+Info: lt_target_endianness.cpp: 1585 ns - memory_operation
+      1 - adjusting to host endianness (LE) D: 0x6E6D6C6B6A6968677271706F74737576
+
+Info: lt_initiator_endianness.cpp: 1585 ns - initiator_thread
+      1 - adjusting to initiator endianness (BE) D: 0x6768696A6B6C6D6E6F70717273747576
+
+Info: lt_initiator_endianness.cpp: 1585 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 1585 ns
+      local time = 1780 ns
