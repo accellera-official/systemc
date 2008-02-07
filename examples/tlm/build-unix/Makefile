@@ -13,7 +13,8 @@ SUBDIRS = \
           ../at_basic_system \
           ../at_lt_full_system \
           ../gp_optional_extension \
-          ../gp_mandatory_extension
+          ../gp_mandatory_extension \
+          ../lt_at_switching
 
 .PHONY: all clean check run
 
