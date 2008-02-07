@@ -1,0 +1,1036 @@
+
+Info: lt_at_switch_target.cpp: 0 s - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_at_switch_target.cpp: 0 s - memory_operation
+      R - A: 0x00000000000009B5 L: 16 D: 0x00000000000000000000000000000000
+
+Info: lt_at_switch_target.cpp: 0 s - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_at_switch_target.cpp: 0 s - memory_operation
+      
+      W - A: 0x0000000000000E50 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: at_initiator.cpp: 40 ns - initiator_thread
+      2 - Completed LT annotated request
+
+Info: lt_target.cpp: 40 ns - nb_transport
+      2 * BEGIN_REQ LT_Sync
+
+Info: lt_target.cpp: 40 ns - begin_response
+      2 ** BEGIN_RESP start delay
+
+Info: at_initiator.cpp: 60 ns - initiator_thread
+      1 - Completed LT annotated request
+
+Info: lt_at_switch_target.cpp: 60 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_at_switch_target.cpp: 60 ns - memory_operation
+      R - A: 0x0000000000000D23 L: 16 D: 0x00000000000000000000000000000000
+
+Info: lt_target.cpp: 115 ns - begin_response
+      2 ** BEGIN_RESP for queued response
+
+Info: lt_target.cpp: 115 ns - memory_operation
+      2 - R - A: 0x0000000000000F44 L: 16 address out-of-range, data zeroed
+
+Info: at_initiator.cpp: 115 ns - nb_transport
+      2 - LT target completing request
+
+Info: at_initiator.cpp: 115 ns - initiator_thread
+      2 - Target accepted LT or AT request
+
+Info: lt_at_switch_target.cpp: 115 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_at_switch_target.cpp: 115 ns - memory_operation
+      
+      W - A: 0x0000000000000292 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: at_initiator.cpp: 120 ns - initiator_thread
+      1 - Completed LT annotated request
+
+Info: lt_target.cpp: 120 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 120 ns - memory_operation
+      2 - W - A: 0x0000000000000D15 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: at_initiator.cpp: 155 ns - initiator_thread
+      2 - Completed LT annotated request
+
+Info: lt_target.cpp: 155 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 155 ns - memory_operation
+      2 - R - A: 0x00000000000008C3 L: 16 address out-of-range, data zeroed
+
+Info: at_initiator.cpp: 175 ns - initiator_thread
+      1 - Completed LT annotated request
+
+Info: lt_at_switch_target.cpp: 175 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_at_switch_target.cpp: 175 ns - memory_operation
+      R - A: 0x0000000000000D99 L: 16 D: 0x00000000000000000000000000000000
+
+Info: at_initiator.cpp: 230 ns - initiator_thread
+      2 - Completed LT annotated request
+
+Info: lt_at_switch_target.cpp: 230 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_at_switch_target.cpp: 230 ns - memory_operation
+      R - A: 0x0000000000000CA8 L: 16 D: 0x00000000000000000000000000000000
+
+Info: at_initiator.cpp: 235 ns - initiator_thread
+      1 - Completed LT annotated request
+
+Info: lt_target.cpp: 235 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 235 ns - memory_operation
+      2 - W - A: 0x0000000000000284 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: at_initiator.cpp: 290 ns - initiator_thread
+      2 - Completed LT annotated request
+
+Info: lt_target.cpp: 290 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 290 ns - memory_operation
+      2 - W - A: 0x0000000000000FB3 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: at_initiator.cpp: 290 ns - initiator_thread
+      1 - Completed LT annotated request
+
+Info: lt_at_switch_target.cpp: 290 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_at_switch_target.cpp: 290 ns - memory_operation
+      
+      W - A: 0x000000000000046B L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: at_initiator.cpp: 330 ns - initiator_thread
+      1 - Completed LT annotated request
+
+Info: lt_target.cpp: 330 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 330 ns - memory_operation
+      2 - R - A: 0x0000000000000EBD L: 16 address out-of-range, data zeroed
+
+Info: at_initiator.cpp: 345 ns - initiator_thread
+      2 - Completed LT annotated request
+
+Info: lt_at_switch_target.cpp: 345 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_at_switch_target.cpp: 345 ns - memory_operation
+      
+      W - A: 0x000000000000046A L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: at_initiator.cpp: 385 ns - initiator_thread
+      2 - Completed LT annotated request
+
+Info: lt_at_switch_target.cpp: 385 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_at_switch_target.cpp: 385 ns - memory_operation
+      
+      W - A: 0x000000000000042B L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: at_initiator.cpp: 405 ns - initiator_thread
+      1 - Completed LT annotated request
+
+Info: lt_target.cpp: 405 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 405 ns - memory_operation
+      2 - W - A: 0x0000000000000759 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: at_initiator.cpp: 425 ns - initiator_thread
+      2 - Completed LT annotated request
+
+Info: lt_target.cpp: 425 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 425 ns - memory_operation
+      2 - R - A: 0x0000000000000B12 L: 16 address out-of-range, data zeroed
+
+Info: at_initiator.cpp: 460 ns - initiator_thread
+      1 - Completed LT annotated request
+
+Info: lt_target.cpp: 460 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 460 ns - memory_operation
+      2 - W - A: 0x00000000000001D6 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: at_initiator.cpp: 500 ns - initiator_thread
+      2 - Completed LT annotated request
+
+Info: lt_at_switch_target.cpp: 500 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_at_switch_target.cpp: 500 ns - memory_operation
+      R - A: 0x0000000000000771 L: 16 D: 0x00000000000000000000000000000000
+
+Info: lt_at_switch_target.cpp: 500 ns - LT2AT_switch_stimulus
+      1 - ** Switching Target from LT Annotated to AT 4-phase **
+
+Info: at_initiator.cpp: 515 ns - initiator_thread
+      1 - Completed LT annotated request
+
+Info: lt_at_switch_target.cpp: 515 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: lt_at_switch_target.cpp: 525 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: at_initiator.cpp: 525 ns - initiator_thread
+      1 - Target accepted LT or AT request
+
+Info: lt_target.cpp: 525 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 525 ns - memory_operation
+      2 - R - A: 0x0000000000000276 L: 16 address out-of-range, data zeroed
+
+Info: at_initiator.cpp: 560 ns - initiator_thread
+      2 - Completed LT annotated request
+
+Info: lt_at_switch_target.cpp: 560 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator.cpp: 570 ns - initiator_thread
+      2 - Target accepted LT or AT request
+
+Info: lt_target.cpp: 570 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 570 ns - memory_operation
+      2 - R - A: 0x000000000000030D L: 16 address out-of-range, data zeroed
+
+Info: lt_at_switch_target.cpp: 575 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: lt_at_switch_target.cpp: 575 ns - memory_operation
+      R - A: 0x0000000000000792 L: 16 D: 0x00000000000000000000000000000000
+
+Info: at_initiator.cpp: 575 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_initiator.cpp: 575 ns - nb_transport
+      1 - ** transaction ptr not valid BEGIN_RESP
+
+Info: lt_at_switch_target.cpp: 575 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: lt_at_switch_target.cpp: 582 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 582 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: at_initiator.cpp: 600 ns - initiator_thread
+      1 - Completed LT annotated request
+
+Info: lt_target.cpp: 600 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 600 ns - memory_operation
+      2 - R - A: 0x0000000000000B32 L: 16 address out-of-range, data zeroed
+
+Info: lt_at_switch_target.cpp: 625 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: lt_at_switch_target.cpp: 625 ns - memory_operation
+      R - A: 0x00000000000002BA L: 16 D: 0x00000000000000000000000000000000
+
+Info: at_initiator.cpp: 625 ns - nb_transport
+      2 - AT target starting response
+
+Info: at_initiator.cpp: 625 ns - nb_transport
+      2 - ** transaction ptr not valid BEGIN_RESP
+
+Info: lt_at_switch_target.cpp: 632 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 632 ns - m_send_end_rsp_method
+      2 - ** AT initiator send end response
+
+Info: at_initiator.cpp: 645 ns - initiator_thread
+      2 - Completed LT annotated request
+
+Info: lt_target.cpp: 645 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 645 ns - memory_operation
+      2 - R - A: 0x0000000000000BAC L: 16 address out-of-range, data zeroed
+
+Info: at_initiator.cpp: 675 ns - initiator_thread
+      1 - Completed LT annotated request
+
+Info: lt_at_switch_target.cpp: 675 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: lt_at_switch_target.cpp: 685 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: at_initiator.cpp: 685 ns - initiator_thread
+      1 - Target accepted LT or AT request
+
+Info: lt_at_switch_target.cpp: 685 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator.cpp: 695 ns - initiator_thread
+      1 - Target accepted LT or AT request
+
+Info: lt_at_switch_target.cpp: 695 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator.cpp: 705 ns - initiator_thread
+      1 - Target accepted LT or AT request
+
+Info: lt_target.cpp: 705 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 705 ns - memory_operation
+      2 - W - A: 0x00000000000005C6 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_at_switch_target.cpp: 715 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: lt_at_switch_target.cpp: 715 ns - memory_operation
+      
+      W - A: 0x0000000000000217 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: at_initiator.cpp: 715 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_initiator.cpp: 715 ns - nb_transport
+      1 - ** transaction ptr not valid BEGIN_RESP
+
+Info: lt_at_switch_target.cpp: 715 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: at_initiator.cpp: 720 ns - initiator_thread
+      2 - Completed LT annotated request
+
+Info: lt_at_switch_target.cpp: 720 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: lt_at_switch_target.cpp: 722 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 722 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: at_initiator.cpp: 730 ns - initiator_thread
+      2 - Target accepted LT or AT request
+
+Info: lt_at_switch_target.cpp: 730 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator.cpp: 740 ns - initiator_thread
+      2 - Target accepted LT or AT request
+
+Info: lt_at_switch_target.cpp: 740 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator.cpp: 750 ns - initiator_thread
+      2 - Target accepted LT or AT request
+
+Info: at_initiator.cpp: 760 ns - initiator_thread
+      1 - Completed LT annotated request
+
+Info: lt_at_switch_target.cpp: 765 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: lt_at_switch_target.cpp: 765 ns - memory_operation
+      R - A: 0x000000000000018B L: 16 D: 0x00000000000000000000000000000000
+
+Info: at_initiator.cpp: 765 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_initiator.cpp: 765 ns - nb_transport
+      1 - ** transaction ptr not valid BEGIN_RESP
+
+Info: lt_at_switch_target.cpp: 765 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: lt_at_switch_target.cpp: 772 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 772 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: lt_at_switch_target.cpp: 795 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: lt_at_switch_target.cpp: 795 ns - memory_operation
+      
+      W - A: 0x0000000000000CA5 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: at_initiator.cpp: 795 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_initiator.cpp: 795 ns - nb_transport
+      1 - ** transaction ptr not valid BEGIN_RESP
+
+Info: lt_at_switch_target.cpp: 795 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: lt_at_switch_target.cpp: 802 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 802 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: lt_at_switch_target.cpp: 802 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator.cpp: 812 ns - initiator_thread
+      1 - Target accepted LT or AT request
+
+Info: lt_at_switch_target.cpp: 812 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator.cpp: 822 ns - initiator_thread
+      1 - Target accepted LT or AT request
+
+Info: lt_target.cpp: 822 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 822 ns - memory_operation
+      2 - R - A: 0x00000000000009F3 L: 16 address out-of-range, data zeroed
+
+Info: lt_at_switch_target.cpp: 845 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: lt_at_switch_target.cpp: 845 ns - memory_operation
+      R - A: 0x00000000000005E8 L: 16 D: 0x00000000000000000000000000000000
+
+Info: at_initiator.cpp: 845 ns - nb_transport
+      2 - AT target starting response
+
+Info: at_initiator.cpp: 845 ns - nb_transport
+      2 - ** transaction ptr not valid BEGIN_RESP
+
+Info: lt_at_switch_target.cpp: 845 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: lt_at_switch_target.cpp: 852 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 852 ns - m_send_end_rsp_method
+      2 - ** AT initiator send end response
+
+Info: lt_at_switch_target.cpp: 875 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: lt_at_switch_target.cpp: 875 ns - memory_operation
+      
+      W - A: 0x0000000000000601 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: at_initiator.cpp: 875 ns - nb_transport
+      2 - AT target starting response
+
+Info: at_initiator.cpp: 875 ns - nb_transport
+      2 - ** transaction ptr not valid BEGIN_RESP
+
+Info: lt_at_switch_target.cpp: 875 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: lt_at_switch_target.cpp: 882 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 882 ns - m_send_end_rsp_method
+      2 - ** AT initiator send end response
+
+Info: at_initiator.cpp: 897 ns - initiator_thread
+      1 - Completed LT annotated request
+
+Info: lt_target.cpp: 897 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 897 ns - memory_operation
+      2 - W - A: 0x0000000000000975 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_at_switch_target.cpp: 905 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: lt_at_switch_target.cpp: 905 ns - memory_operation
+      
+      W - A: 0x0000000000000C3F L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: at_initiator.cpp: 905 ns - nb_transport
+      2 - AT target starting response
+
+Info: at_initiator.cpp: 905 ns - nb_transport
+      2 - ** transaction ptr not valid BEGIN_RESP
+
+Info: lt_at_switch_target.cpp: 905 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: lt_at_switch_target.cpp: 912 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 912 ns - m_send_end_rsp_method
+      2 - ** AT initiator send end response
+
+Info: lt_at_switch_target.cpp: 912 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator.cpp: 922 ns - initiator_thread
+      2 - Target accepted LT or AT request
+
+Info: lt_target.cpp: 922 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 922 ns - memory_operation
+      2 - R - A: 0x000000000000014D L: 16 address out-of-range, data zeroed
+
+Info: lt_at_switch_target.cpp: 935 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: lt_at_switch_target.cpp: 935 ns - memory_operation
+      
+      W - A: 0x000000000000093E L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: at_initiator.cpp: 935 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_initiator.cpp: 935 ns - nb_transport
+      1 - ** transaction ptr not valid BEGIN_RESP
+
+Info: lt_at_switch_target.cpp: 935 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: lt_at_switch_target.cpp: 942 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 942 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: at_initiator.cpp: 952 ns - initiator_thread
+      1 - Completed LT annotated request
+
+Info: lt_at_switch_target.cpp: 952 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator.cpp: 962 ns - initiator_thread
+      1 - Target accepted LT or AT request
+
+Info: lt_at_switch_target.cpp: 962 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator.cpp: 972 ns - initiator_thread
+      1 - Target accepted LT or AT request
+
+Info: lt_at_switch_target.cpp: 972 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator.cpp: 982 ns - initiator_thread
+      1 - Target accepted LT or AT request
+
+Info: lt_at_switch_target.cpp: 982 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: lt_at_switch_target.cpp: 985 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: lt_at_switch_target.cpp: 985 ns - memory_operation
+      R - A: 0x0000000000000F65 L: 16 D: 0x00000000000000000000000000000000
+
+Info: at_initiator.cpp: 985 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_initiator.cpp: 985 ns - nb_transport
+      1 - ** transaction ptr not valid BEGIN_RESP
+
+Info: lt_at_switch_target.cpp: 985 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: lt_at_switch_target.cpp: 992 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 992 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: at_initiator.cpp: 992 ns - initiator_thread
+      1 - Target accepted LT or AT request
+
+Info: lt_target.cpp: 992 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 992 ns - memory_operation
+      2 - R - A: 0x0000000000000E55 L: 16 address out-of-range, data zeroed
+
+Info: at_initiator.cpp: 997 ns - initiator_thread
+      2 - Completed LT annotated request
+
+Info: lt_target.cpp: 997 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 997 ns - memory_operation
+      2 - W - A: 0x0000000000000B63 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_at_switch_target.cpp: 1035 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: lt_at_switch_target.cpp: 1035 ns - memory_operation
+      R - A: 0x0000000000000FDA L: 16 D: 0x00000000000000000000000000000000
+
+Info: at_initiator.cpp: 1035 ns - nb_transport
+      2 - AT target starting response
+
+Info: at_initiator.cpp: 1035 ns - nb_transport
+      2 - ** transaction ptr not valid BEGIN_RESP
+
+Info: lt_at_switch_target.cpp: 1035 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: lt_at_switch_target.cpp: 1042 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 1042 ns - m_send_end_rsp_method
+      2 - ** AT initiator send end response
+
+Info: at_initiator.cpp: 1052 ns - initiator_thread
+      2 - Completed LT annotated request
+
+Info: lt_at_switch_target.cpp: 1052 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator.cpp: 1062 ns - initiator_thread
+      2 - Target accepted LT or AT request
+
+Info: lt_at_switch_target.cpp: 1062 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: lt_at_switch_target.cpp: 1065 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: lt_at_switch_target.cpp: 1065 ns - memory_operation
+      
+      W - A: 0x0000000000000908 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: at_initiator.cpp: 1065 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_initiator.cpp: 1065 ns - nb_transport
+      1 - ** transaction ptr not valid BEGIN_RESP
+
+Info: lt_at_switch_target.cpp: 1065 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: at_initiator.cpp: 1067 ns - initiator_thread
+      1 - Completed LT annotated request
+
+Info: lt_at_switch_target.cpp: 1067 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: lt_at_switch_target.cpp: 1072 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 1072 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: at_initiator.cpp: 1072 ns - initiator_thread
+      2 - Target accepted LT or AT request
+
+Info: lt_target.cpp: 1072 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 1072 ns - memory_operation
+      2 - W - A: 0x000000000000006D L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: at_initiator.cpp: 1082 ns - initiator_thread
+      1 - Target accepted LT or AT request
+
+Info: lt_target.cpp: 1082 ns - nb_transport
+      2 * BEGIN_REQ LT_Sync
+
+Info: lt_target.cpp: 1082 ns - begin_response
+      2 ** BEGIN_RESP start delay
+
+Info: lt_at_switch_target.cpp: 1115 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: lt_at_switch_target.cpp: 1115 ns - memory_operation
+      R - A: 0x0000000000000A75 L: 16 D: 0x00000000000000000000000000000000
+
+Info: at_initiator.cpp: 1115 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_initiator.cpp: 1115 ns - nb_transport
+      1 - ** transaction ptr not valid BEGIN_RESP
+
+Info: lt_at_switch_target.cpp: 1115 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: lt_at_switch_target.cpp: 1122 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 1122 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: at_initiator.cpp: 1127 ns - initiator_thread
+      2 - Completed LT annotated request
+
+Info: lt_target.cpp: 1127 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 1127 ns - memory_operation
+      2 - W - A: 0x000000000000088F L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_at_switch_target.cpp: 1145 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: lt_at_switch_target.cpp: 1145 ns - memory_operation
+      
+      W - A: 0x00000000000008A5 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: at_initiator.cpp: 1145 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_initiator.cpp: 1145 ns - nb_transport
+      1 - ** transaction ptr not valid BEGIN_RESP
+
+Info: lt_at_switch_target.cpp: 1145 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: lt_at_switch_target.cpp: 1152 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 1152 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: lt_target.cpp: 1157 ns - begin_response
+      2 ** BEGIN_RESP for queued response
+
+Info: lt_target.cpp: 1157 ns - memory_operation
+      2 - R - A: 0x0000000000000B18 L: 16 address out-of-range, data zeroed
+
+Info: at_initiator.cpp: 1157 ns - nb_transport
+      1 - LT target completing request
+
+Info: at_initiator.cpp: 1157 ns - initiator_thread
+      1 - Target accepted LT or AT request
+
+Info: lt_at_switch_target.cpp: 1157 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator.cpp: 1167 ns - initiator_thread
+      1 - Target accepted LT or AT request
+
+Info: lt_at_switch_target.cpp: 1167 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator.cpp: 1177 ns - initiator_thread
+      1 - Target accepted LT or AT request
+
+Info: lt_target.cpp: 1177 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 1177 ns - memory_operation
+      2 - W - A: 0x00000000000002B4 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: at_initiator.cpp: 1182 ns - initiator_thread
+      2 - Completed LT annotated request
+
+Info: lt_target.cpp: 1182 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 1182 ns - memory_operation
+      2 - W - A: 0x0000000000000475 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_at_switch_target.cpp: 1195 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: lt_at_switch_target.cpp: 1195 ns - memory_operation
+      R - A: 0x0000000000000527 L: 16 D: 0x00000000000000000000000000000000
+
+Info: at_initiator.cpp: 1195 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_initiator.cpp: 1195 ns - nb_transport
+      1 - ** transaction ptr not valid BEGIN_RESP
+
+Info: lt_at_switch_target.cpp: 1195 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: lt_at_switch_target.cpp: 1202 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 1202 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: at_initiator.cpp: 1232 ns - initiator_thread
+      1 - Completed LT annotated request
+
+Info: lt_at_switch_target.cpp: 1232 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator.cpp: 1237 ns - initiator_thread
+      2 - Completed LT annotated request
+
+Info: lt_target.cpp: 1237 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 1237 ns - memory_operation
+      2 - W - A: 0x0000000000000659 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: at_initiator.cpp: 1242 ns - initiator_thread
+      1 - Target accepted LT or AT request
+
+Info: lt_target.cpp: 1242 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 1242 ns - memory_operation
+      2 - W - A: 0x000000000000006C L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_at_switch_target.cpp: 1245 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: lt_at_switch_target.cpp: 1245 ns - memory_operation
+      R - A: 0x0000000000000D0E L: 16 D: 0x00000000000000000000000000000000
+
+Info: at_initiator.cpp: 1245 ns - nb_transport
+      2 - AT target starting response
+
+Info: at_initiator.cpp: 1245 ns - nb_transport
+      2 - ** transaction ptr not valid BEGIN_RESP
+
+Info: lt_at_switch_target.cpp: 1245 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: lt_at_switch_target.cpp: 1252 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 1252 ns - m_send_end_rsp_method
+      2 - ** AT initiator send end response
+
+Info: at_initiator.cpp: 1292 ns - initiator_thread
+      2 - Completed LT annotated request
+
+Info: lt_at_switch_target.cpp: 1292 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: lt_at_switch_target.cpp: 1295 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: lt_at_switch_target.cpp: 1295 ns - memory_operation
+      R - A: 0x0000000000000EBF L: 16 D: 0x00000000000000000000000000000000
+
+Info: at_initiator.cpp: 1295 ns - nb_transport
+      2 - AT target starting response
+
+Info: at_initiator.cpp: 1295 ns - nb_transport
+      2 - ** transaction ptr not valid BEGIN_RESP
+
+Info: lt_at_switch_target.cpp: 1295 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: at_initiator.cpp: 1297 ns - initiator_thread
+      1 - Completed LT annotated request
+
+Info: lt_at_switch_target.cpp: 1302 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 1302 ns - m_send_end_rsp_method
+      2 - ** AT initiator send end response
+
+Info: at_initiator.cpp: 1302 ns - initiator_thread
+      2 - Target accepted LT or AT request
+
+Info: lt_target.cpp: 1302 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 1302 ns - memory_operation
+      2 - R - A: 0x00000000000007D2 L: 16 address out-of-range, data zeroed
+
+Info: lt_at_switch_target.cpp: 1345 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: lt_at_switch_target.cpp: 1345 ns - memory_operation
+      R - A: 0x000000000000010A L: 16 D: 0x00000000000000000000000000000000
+
+Info: at_initiator.cpp: 1345 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_initiator.cpp: 1345 ns - nb_transport
+      1 - ** transaction ptr not valid BEGIN_RESP
+
+Info: lt_at_switch_target.cpp: 1345 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: lt_at_switch_target.cpp: 1352 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 1352 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: at_initiator.cpp: 1377 ns - initiator_thread
+      2 - Completed LT annotated request
+
+Info: lt_target.cpp: 1377 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 1377 ns - memory_operation
+      2 - R - A: 0x000000000000055B L: 16 address out-of-range, data zeroed
+
+Info: lt_at_switch_target.cpp: 1395 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: lt_at_switch_target.cpp: 1395 ns - memory_operation
+      R - A: 0x00000000000007F6 L: 16 D: 0x00000000000000000000000000000000
+
+Info: at_initiator.cpp: 1395 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_initiator.cpp: 1395 ns - nb_transport
+      1 - ** transaction ptr not valid BEGIN_RESP
+
+Info: lt_at_switch_target.cpp: 1395 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: lt_at_switch_target.cpp: 1402 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 1402 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: lt_at_switch_target.cpp: 1425 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: lt_at_switch_target.cpp: 1425 ns - memory_operation
+      
+      W - A: 0x0000000000000E33 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: at_initiator.cpp: 1425 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_initiator.cpp: 1425 ns - nb_transport
+      1 - ** transaction ptr not valid BEGIN_RESP
+
+Info: lt_at_switch_target.cpp: 1425 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: lt_at_switch_target.cpp: 1432 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 1432 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: at_initiator.cpp: 1452 ns - initiator_thread
+      2 - Completed LT annotated request
+
+Info: lt_at_switch_target.cpp: 1452 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator.cpp: 1462 ns - initiator_thread
+      2 - Target accepted LT or AT request
+
+Info: lt_target.cpp: 1462 ns - nb_transport
+      2 * BEGIN_REQ LT_Annotated
+
+Info: lt_target.cpp: 1462 ns - memory_operation
+      2 - W - A: 0x0000000000000269 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: lt_at_switch_target.cpp: 1475 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: lt_at_switch_target.cpp: 1475 ns - memory_operation
+      R - A: 0x000000000000077F L: 16 D: 0x00000000000000000000000000000000
+
+Info: at_initiator.cpp: 1475 ns - nb_transport
+      1 - AT target starting response
+
+Info: at_initiator.cpp: 1475 ns - nb_transport
+      1 - ** transaction ptr not valid BEGIN_RESP
+
+Info: lt_at_switch_target.cpp: 1475 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: lt_at_switch_target.cpp: 1482 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 1482 ns - m_send_end_rsp_method
+      1 - ** AT initiator send end response
+
+Info: lt_at_switch_target.cpp: 1500 ns - LT2AT_switch_stimulus
+      1 - ** Switching Target from AT 4-phase to LT Annotated **
+
+Info: at_initiator.cpp: 1517 ns - initiator_thread
+      2 - Completed LT annotated request
+
+Info: lt_at_switch_target.cpp: 1517 ns - nb_transport
+      1 - ** BEGIN_REQ AT 4 Phase
+
+Info: lt_at_switch_target.cpp: 1525 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: lt_at_switch_target.cpp: 1525 ns - memory_operation
+      R - A: 0x00000000000002E3 L: 16 D: 0x00000000000000000000000000000000
+
+Info: at_initiator.cpp: 1525 ns - nb_transport
+      2 - AT target starting response
+
+Info: at_initiator.cpp: 1525 ns - nb_transport
+      2 - ** transaction ptr not valid BEGIN_RESP
+
+Info: lt_at_switch_target.cpp: 1525 ns - begin_response_method
+      1 - ** start BEGIN_RESP delay
+
+Info: lt_at_switch_target.cpp: 1532 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 1532 ns - m_send_end_rsp_method
+      2 - ** AT initiator send end response
+
+Info: lt_at_switch_target.cpp: 1555 ns - begin_response_method
+      1 - ** BEGIN_RESP for queued response
+
+Info: lt_at_switch_target.cpp: 1555 ns - memory_operation
+      
+      W - A: 0x0000000000000B58 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: at_initiator.cpp: 1555 ns - nb_transport
+      2 - AT target starting response
+
+Info: at_initiator.cpp: 1555 ns - nb_transport
+      2 - ** transaction ptr not valid BEGIN_RESP
+
+Info: lt_at_switch_target.cpp: 1562 ns - nb_transport
+      1 - ** END_RESP received AT 4 Phase 
+
+Info: at_initiator.cpp: 1562 ns - m_send_end_rsp_method
+      2 - ** AT initiator send end response
+
+Info: lt_at_switch_target.cpp: 1562 ns - lt_begin_response_method
+      1 ** BEGIN_RESP for LT queued response
+
+Info: lt_at_switch_target.cpp: 1562 ns - memory_operation
+      
+      W - A: 0x0000000000000A82 L: 16 D: 0x000102030405060708090A0B0C0D0E0F
+
+Info: at_initiator.cpp: 1562 ns - nb_transport
+      2 - LT target completing request
+
+Info: at_initiator.cpp: 1562 ns - initiator_thread
+      2 - Target accepted LT or AT request
+
+Info: lt_at_switch_target.cpp: 1562 ns - nb_transport
+      1 * BEGIN_REQ LT_Annotated
+
+Info: lt_at_switch_target.cpp: 1562 ns - memory_operation
+      R - A: 0x0000000000000A67 L: 16 D: 0x00000000000000000000000000000000
+
+Info: at_initiator.cpp: 1622 ns - initiator_thread
+      2 - Completed LT annotated request
+SystemC: simulation stopped by user.
