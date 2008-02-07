@@ -12,7 +12,8 @@ SUBDIRS = \
           ../tlm_1_integration_explicit_slave \
           ../at_basic_system \
           ../at_lt_full_system \
-          ../gp_optional_extension
+          ../gp_optional_extension \
+          ../gp_mandatory_extension
 
 .PHONY: all clean check run
 
