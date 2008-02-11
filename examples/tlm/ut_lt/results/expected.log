@@ -1,0 +1,241 @@
+
+Info: ut_initiator.cpp: 0 s - report_start
+      W - 2 - A: 0x0000000010000626 L: 01 D: 0x00
+
+Info: adapter_ut_lt.cpp: 0 s - write
+      bridging UT write command to LT
+
+Info: adapter_lt_ut.cpp: 0 s - nb_transport
+      W - A: 0x0000000000000626 L: 01 D: 0x
+
+Info: ut_target.cpp: 0 s - b_transport
+      W - 2 - A: 0x0000000000000626 L: 01
+
+Info: adapter_lt_ut.cpp: 0 s - get_direct_mem_ptr
+      bridging LT DMI pointer request to UT
+
+Info: ut_target.cpp: 0 s - get_direct_mem_ptr
+      target does not support DMI
+
+Info: lt_initiator.cpp: 0 s - initiator_thread
+      1 - can't get a DMI pointer
+
+Info: adapter_lt_ut.cpp: 0 s - nb_transport
+      R - A: 0x0000000000000407 L: 08
+
+Info: ut_target.cpp: 20 ns - b_transport
+      R - 2 - A: 0x0000000000000407 L: 08 D: 0x0000000000000000
+
+Info: lt_initiator.cpp: 20 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 20 ns
+      local time = 20 ns
+
+Info: adapter_lt_ut.cpp: 20 ns - get_direct_mem_ptr
+      bridging LT DMI pointer request to UT
+
+Info: ut_target.cpp: 20 ns - get_direct_mem_ptr
+      target does not support DMI
+
+Info: lt_initiator.cpp: 20 ns - initiator_thread
+      1 - can't get a DMI pointer
+
+Info: adapter_lt_ut.cpp: 20 ns - nb_transport
+      R - A: 0x0000000000000DC5 L: 08
+
+Info: ut_target.cpp: 40 ns - b_transport
+      R - 2 - A: 0x0000000000000DC5 L: 08 D: 0x0000000000000000
+
+Info: lt_initiator.cpp: 40 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 40 ns
+      local time = 40 ns
+
+Info: lt_initiator.cpp: 40 ns - initiator_thread
+      1 - can't get a DMI pointer
+
+Info: lt_target_memory: 40 ns - nb_transport
+      R - 1 - A: 0x0000000000000841 L: 08 D: 0x0000000000000000
+
+Info: lt_initiator.cpp: 40 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 40 ns
+      local time = 100 ns
+
+Info: adapter_lt_ut.cpp: 40 ns - get_direct_mem_ptr
+      bridging LT DMI pointer request to UT
+
+Info: ut_target.cpp: 40 ns - get_direct_mem_ptr
+      target does not support DMI
+
+Info: lt_initiator.cpp: 40 ns - initiator_thread
+      1 - can't get a DMI pointer
+
+Info: adapter_lt_ut.cpp: 40 ns - nb_transport
+      R - A: 0x0000000000000E85 L: 08
+
+Info: adapter_ut_lt.cpp: 50 ns - write
+      returning write status to UT initiator
+
+Info: ut_initiator.cpp: 50 ns - report_end
+      2: TLM_OK_RESPONSE received
+
+Info: ut_initiator.cpp: 50 ns - report_start
+      W - 2 - A: 0x0000000000000BD4 L: 01 D: 0x01
+
+Info: adapter_ut_lt.cpp: 50 ns - write
+      bridging UT write command to LT
+
+Info: lt_target_memory: 50 ns - nb_transport
+      W - 1 - A: 0x0000000000000BD4 L: 01 D: 0x01
+
+Info: ut_target.cpp: 60 ns - b_transport
+      R - 2 - A: 0x0000000000000E85 L: 08 D: 0x0000000000000000
+
+Info: lt_initiator.cpp: 60 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 60 ns
+      local time = 120 ns
+
+Info: lt_initiator.cpp: 60 ns - initiator_thread
+      1 - can't get a DMI pointer
+
+Info: lt_target_memory: 60 ns - nb_transport
+      R - 1 - A: 0x0000000000000233 L: 08 D: 0x0000000000000000
+
+Info: lt_initiator.cpp: 60 ns - initiator_thread
+      1 - Completed LT request
+      SC time    = 60 ns
+      local time = 180 ns
+
+Info: adapter_ut_lt.cpp: 90 ns - write
+      returning write status to UT initiator
+
+Info: ut_initiator.cpp: 90 ns - report_end
+      2: TLM_OK_RESPONSE received
+
+Info: ut_initiator.cpp: 90 ns - report_start
+      W - 2 - A: 0x0000000000000FF1 L: 01 D: 0x02
+
+Info: adapter_ut_lt.cpp: 90 ns - write
+      bridging UT write command to LT
+
+Info: lt_target_memory: 90 ns - nb_transport
+      W - 1 - A: 0x0000000000000FF1 L: 01 D: 0x02
+
+Info: adapter_ut_lt.cpp: 130 ns - write
+      returning write status to UT initiator
+
+Info: ut_initiator.cpp: 130 ns - report_end
+      2: TLM_OK_RESPONSE received
+
+Info: ut_initiator.cpp: 130 ns - report_start
+      W - 2 - A: 0x0000000010000885 L: 01 D: 0x03
+
+Info: adapter_ut_lt.cpp: 130 ns - write
+      bridging UT write command to LT
+
+Info: adapter_lt_ut.cpp: 130 ns - nb_transport
+      W - A: 0x0000000000000885 L: 01 D: 0x
+
+Info: ut_target.cpp: 130 ns - b_transport
+      W - 2 - A: 0x0000000000000885 L: 01
+
+Info: adapter_ut_lt.cpp: 180 ns - write
+      returning write status to UT initiator
+
+Info: ut_initiator.cpp: 180 ns - report_end
+      2: TLM_OK_RESPONSE received
+
+Info: ut_initiator.cpp: 180 ns - report_start
+      W - 2 - A: 0x0000000000000E57 L: 01 D: 0x04
+
+Info: adapter_ut_lt.cpp: 180 ns - write
+      bridging UT write command to LT
+
+Info: lt_target_memory: 180 ns - nb_transport
+      W - 1 - A: 0x0000000000000E57 L: 01 D: 0x04
+
+Info: adapter_ut_lt.cpp: 220 ns - write
+      returning write status to UT initiator
+
+Info: ut_initiator.cpp: 220 ns - report_end
+      2: TLM_OK_RESPONSE received
+
+Info: ut_initiator.cpp: 220 ns - report_start
+      R - 2 - A: 0x0000000010000CF4 L: 01
+
+Info: adapter_ut_lt.cpp: 220 ns - read
+      bridging UT read command to LT
+
+Info: adapter_lt_ut.cpp: 220 ns - nb_transport
+      R - A: 0x0000000000000CF4 L: 01
+
+Info: ut_target.cpp: 240 ns - b_transport
+      R - 2 - A: 0x0000000000000CF4 L: 01 D: 0x00
+
+Info: adapter_ut_lt.cpp: 240 ns - read
+      returning read status to UT initiator
+
+Info: ut_initiator.cpp: 240 ns - report_end
+      2: TLM_OK_RESPONSE received D: 0x00
+
+Info: ut_initiator.cpp: 240 ns - report_start
+      R - 2 - A: 0x00000000000005D4 L: 01
+
+Info: adapter_ut_lt.cpp: 240 ns - read
+      bridging UT read command to LT
+
+Info: lt_target_memory: 240 ns - nb_transport
+      R - 1 - A: 0x00000000000005D4 L: 01 D: 0x00
+
+Info: adapter_ut_lt.cpp: 300 ns - read
+      returning read status to UT initiator
+
+Info: ut_initiator.cpp: 300 ns - report_end
+      2: TLM_OK_RESPONSE received D: 0x00
+
+Info: ut_initiator.cpp: 300 ns - report_start
+      R - 2 - A: 0x0000000000000CAD L: 01
+
+Info: adapter_ut_lt.cpp: 300 ns - read
+      bridging UT read command to LT
+
+Info: lt_target_memory: 300 ns - nb_transport
+      R - 1 - A: 0x0000000000000CAD L: 01 D: 0x00
+
+Info: adapter_ut_lt.cpp: 360 ns - read
+      returning read status to UT initiator
+
+Info: ut_initiator.cpp: 360 ns - report_end
+      2: TLM_OK_RESPONSE received D: 0x00
+
+Info: ut_initiator.cpp: 360 ns - report_start
+      R - 2 - A: 0x0000000000000A96 L: 01
+
+Info: adapter_ut_lt.cpp: 360 ns - read
+      bridging UT read command to LT
+
+Info: lt_target_memory: 360 ns - nb_transport
+      R - 1 - A: 0x0000000000000A96 L: 01 D: 0x00
+
+Info: adapter_ut_lt.cpp: 420 ns - read
+      returning read status to UT initiator
+
+Info: ut_initiator.cpp: 420 ns - report_end
+      2: TLM_OK_RESPONSE received D: 0x00
+
+Info: ut_initiator.cpp: 420 ns - report_start
+      R - 2 - A: 0x0000000000000240 L: 01
+
+Info: adapter_ut_lt.cpp: 420 ns - read
+      bridging UT read command to LT
+
+Info: lt_target_memory: 420 ns - nb_transport
+      R - 1 - A: 0x0000000000000240 L: 01 D: 0x00
+
+Info: adapter_ut_lt.cpp: 480 ns - read
+      returning read status to UT initiator
+
+Info: ut_initiator.cpp: 480 ns - report_end
+      2: TLM_OK_RESPONSE received D: 0x00
