@@ -1,0 +1,55 @@
+Subject:
+[tlmwg] IFX feedback on TLM2.0 draft2
+From:
+<thomas.wilde@infineon.com>
+Date:
+Thu, 31 Jan 2008 17:19:44 +0100
+To:
+<tlmwg@lists.systemc.org>
+
+Trevor and WG,
+ 
+the Infineon TLM2D2 review feedback is already presented as part of the consolidated SPRINT feedback document.
+ 
+Some points IFX especially emphasizes:
+ 
+1. 
+We consider it crucial for interoperability to acieve a (de-facto) standard for most common real protocols in addition to GP.
+It is clear that GP cannot be a superset of all possible protocol features. At the same time the restriction of GP to a certain, common subset makes it necessary to implement protocol specific features with extensions. And here everyone is free to implement whatever they like. So there can be N different representations of protocol ABC.
+Altough the subject is the same (ABC) we have not necessarily interoperability: here we are not far beyond TLM1: there is a standardized way for HOW to communicate but no for WHAT (in  terms of extensions).
+If we want a large degree of out-of-the box interoperability, EDA and SoC companies need to align on the representation (and associated semantics) of real protocols on top of GP.
+ 
+ 
+2.
+Multiport scenarios are not supported very well.  Each target module with more than one socket needs to provide additional functionality to manage FW/BW path association as there is no way to indicate on which socket the transaction was received.
+The unit tests, the examples and the Doulos tutorial all had to implement a convenience layer to achieve multiport functionality. This hints that there is something missing in the standard that is likely to be implemented by many people anyway. So it should be possibly in.
+ 
+Another multi-port (or rather multi-socket) aspect is the restriction to a 1-to-1 connection of sockets. For sockets sharing the same BUSWIDTH and protocol type it should be possible to have a 1-to-many connection similar to hierarchical channels (i.e. allowing to use something like socket[n] )
+ 
+ 
+3.
+To repeat a thread subject from the reflector: "Endianness is overly complex"
+There should be a robust set of helper functions/serializers that one can easily understand and which hide endianness handling.
+(We don't mind if not any exotic case is covered by the helpers.)
+A clear endianness strategy (what is automatically fixed by the helpers and what not) could also facilitate using the debug and DMI interfaces.
+If only the helpers were used along with GP, then exotic cases don't need to be considered when interpreting the raw memory supplied by DMI and debug.
+ 
+4.
+Analysis/Debug
+The offered capabilities are too basic and restrict usability. In general this rather refers to "monitoring capabilities" and can not really be assigned to Analysis or Debug alone.)
+It should be emphasized anyway, that TLM2 compliant EDA tools could offer much more sophisticated monitoring/analysis features, if they could rely on more capable interfaces.
+Please refer to the respective sections of the SPRINT document for details.
+ 
+Thomas Wilde            
+Infineon Technologies   
+
+COM BTS MT SD          
+Email: thomas.wilde@infineon.com
+Am Campeon 1-12
+85579 Neubiberg        
+
+Infineon Technologies AG
+Vorsitzender des Aufsichtsrats: Max Dietrich Kley
+Vorstand: Dr. Wolfgang Ziebart (Vors.), Peter Bauer, Prof. Dr. Hermann Eul, Dr. Reinhard Ploss
+Sitz der Gesellschaft: Neubiberg
+Registergericht: München HRB 126492
