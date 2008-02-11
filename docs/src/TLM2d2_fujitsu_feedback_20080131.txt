@@ -5,19 +5,18 @@ Kazumasa Nakamura <kz_nakamura@jp.fujitsu.com>
 
 Here is the feedback for TLM2 Draft2, from Fujitsu.
 
-(1) TLM2-draft2 kit Windows version is very slow.
-    It cannot run with optimized mode. Only runnable with debug mode.
-    Please make it usable with optimized mode.
+1.1 TLM2-draft2 kit Windows version is very slow.
 
     ex.: Windows=76sec, Linux=4.1sec for 1,000,000 times addition.
+    
+1.2 It cannot run with optimized mode.
+Only runnable with debug mode. Please make it usable with optimized mode.
 
-(2) Continuous support and maintain of the simple bus example.
-    It should be standard deliverable from OSCI, in order to
-    keep EDA tool independent description for buses.
+2. Continuous support and maintain of the simple bus example.
+It should be standard deliverable from OSCI, in order to keep EDA tool independent description for buses.
 
-(3) Add more sample programs and/or examples.
-    It is difficult to understand overall view from the protocol
-    description which is current context in the document.
+3. Add more sample programs and/or examples.
+It is difficult to understand overall view from the protocol description which is current context in the document.
 
 These feedback is based on our presentation material at the
 Japan SystemC User's Forum, which is held in Yokohama, on Jan. 25th.
