@@ -98,8 +98,6 @@ class lt_target                                     ///< lt_target
   ( tlm::tlm_debug_payload  &payload                ///< debug payload
   );
 
-  // get_direct_mem_ptr() not implmented
-  
   bool                                              ///< success / failure
   get_direct_mem_ptr                                ///< get direct memory pointer
   ( const sc_dt::uint64        &address             ///< address
@@ -130,9 +128,6 @@ class lt_target                                     ///< lt_target
         bool                m_DMI_granted;          ///< DMI pointer granted
 
         unsigned char       *m_memory;              ///< memory
-
-        std::queue<gp_ptr>  m_response_queue;       ///< response queue
-        sc_core::sc_event   m_begin_response_event; ///< response event
 };
 
 #endif /* __LT_TARGET_H__ */

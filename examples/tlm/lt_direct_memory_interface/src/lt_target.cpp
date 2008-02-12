@@ -85,10 +85,6 @@ lt_target::lt_target                                ///< constructor
       
   // Bind the socket's export to the interface
   m_memory_socket(*this);
-
-  SC_METHOD(begin_response)
-
-  sensitive << m_begin_response_event;
 }
 
 /*=============================================================================
@@ -125,7 +121,8 @@ lt_target::~lt_target                               ///< destructor
   
   @retval tlm::tlm_sync_enum synchronization state
   
-  @note this switches from annotated to synchronized timing every 20 time
+  @note
+    set the dmi_allowed flag for read and write requests 9.17.b
   
 =============================================================================*/
 tlm::tlm_sync_enum                                  ///< synchronization state
@@ -134,70 +131,56 @@ lt_target::nb_transport                             ///< non-blocking transport
 , tlm::tlm_phase           &phase                   ///< transaction phase
 , sc_core::sc_time         &delay_time)             ///< time it should take for transport
 {
-  std::ostringstream  msg;                          ///< log message
-  tlm::tlm_sync_enum  return_status = tlm::TLM_REJECTED;
-  
-  static unsigned long  request_count = 0;          ///< request counter
+  tlm::tlm_sync_enum  return_status = tlm::TLM_REJECTED;  ///< return status
+  bool                dmi_operation = false;              ///< DMI capable operation flag
+  std::ostringstream  msg;                                ///< log message
   
   switch (phase)
   {
     case tlm::BEGIN_REQ:
     {
-      // see how we should handle this one
-      if(request_count++ % 20)
+      // LT_Annotated
+      msg.str ("");
+      msg << m_ID << " * BEGIN_REQ LT_Annotated";
+      
+      REPORT_INFO(filename,  __FUNCTION__, msg.str());
+      memory_operation(gp);
+
+      phase = tlm::BEGIN_RESP;           // update phase 
+
+      switch (gp.get_command())
       {
-        // LT_Annotated
-        msg.str ("");
-        msg << m_ID << " * BEGIN_REQ LT_Annotated";
-        
-        REPORT_INFO(filename,  __FUNCTION__, msg.str());
-        memory_operation(gp);
-
-        phase = tlm::BEGIN_RESP;           // update phase 
-
-        switch (gp.get_command())
+        case tlm::TLM_READ_COMMAND:
         {
-          case tlm::TLM_READ_COMMAND:
-          {
-            delay_time += m_accept_delay + m_read_response_delay;
-            break;
-          }
+          delay_time += m_accept_delay + m_read_response_delay;
+          dmi_operation = true;
+          break;
+        }
+      
+        case tlm::TLM_WRITE_COMMAND:
+        {
+          delay_time += m_accept_delay + m_write_response_delay;
+          dmi_operation = true;
+          break;
+        }
         
-          case tlm::TLM_WRITE_COMMAND:
-          {
-            delay_time += m_accept_delay + m_write_response_delay;
-            break;
-          }
+        default:
+        {
+          msg.str ("");
+          msg << m_ID << " - Invalid GP request";
           
-          default:
-          {
-            msg.str ("");
-            msg << m_ID << " - Invalid GP request";
-            
-            REPORT_FATAL(filename, __FUNCTION__, msg.str());
-            break;
-          }
+          REPORT_FATAL(filename, __FUNCTION__, msg.str());
+          break;
         }
-        
-        return_status = tlm::TLM_COMPLETED;
       }
-      else
+      
+      if (dmi_operation)
       {
-        // LT_sync
-        msg.str ("");
-        msg << m_ID << " * BEGIN_REQ LT_Sync";
-        
-        REPORT_INFO(filename, __FUNCTION__, msg.str());
-        
-        if (m_response_queue.empty())
-        {
-          m_begin_response_event.notify(sc_core::SC_ZERO_TIME);
-        }
-        
-        m_response_queue.push(&gp);
-        
-        return_status = tlm::TLM_ACCEPTED;
+        // indicate that DMI is available for this operation 9.17.b
+        gp.set_dmi_allowed (true);
       }
+      
+      return_status = tlm::TLM_COMPLETED;
       
       break;
     }
@@ -239,107 +222,6 @@ lt_target::nb_transport                             ///< non-blocking transport
     }
   }
   return return_status;  
-}
-
-/*=============================================================================
-  @fn lt_target::begin_response
-  
-  @brief response processing
-  
-  @details
-    This routine handles response processing.
-    
-  @param none
-  
-  @retval none
-=============================================================================*/
-void
-lt_target::begin_response                           ///< begin_response
-( void
-)
-{
-  static bool begin_response_queue_active  = false;
-
-  std::ostringstream        msg;                    ///< log message
-  tlm::tlm_generic_payload  *transaction_ptr;
-
-  if (begin_response_queue_active)
-  {
-    msg.str ("");
-    msg << m_ID << " ** BEGIN_RESP for queued response";
-    
-    REPORT_INFO(filename,  __FUNCTION__, msg.str());
-
-    transaction_ptr = m_response_queue.front();
-    m_response_queue.pop();
-
-    memory_operation(*transaction_ptr);
-
-    transaction_ptr->set_response_status(tlm::TLM_OK_RESPONSE);
-    
-    tlm::tlm_phase phase    = tlm::BEGIN_RESP; 
-    sc_core::sc_time delay  = sc_core::SC_ZERO_TIME;
-
-    // Response call to nb_transport and decode return status
-
-    switch (m_memory_socket->nb_transport(*transaction_ptr, phase, delay))
-    {
-      case tlm::TLM_COMPLETED:  // no acction required operation is complete 
-      {                       
-        break;
-      }
-
-      case tlm::TLM_ACCEPTED:   
-      case tlm::TLM_UPDATED:   
-      case tlm::TLM_REJECTED:   
-      default: 
-      {
-        msg.str ("");
-        msg << m_ID << " - Invalid reponse for LT BEGIN_REPONSE";
-        
-        REPORT_FATAL(filename, __FUNCTION__, msg.str());      
-        
-        break;
-      }
-    }
-  }
-
-  // check queue for another transaction
-
-  if (m_response_queue.empty())
-  {
-    begin_response_queue_active = false;
-  }
-  else
-  {
-    begin_response_queue_active = true;
-    
-    msg.str ("");
-    msg << m_ID << " ** BEGIN_RESP start delay";
-    
-    REPORT_INFO(filename,  __FUNCTION__, msg.str());
-
-    transaction_ptr = m_response_queue.front();
-
-    if (transaction_ptr->get_command() == tlm::TLM_READ_COMMAND)
-    {
-      m_begin_response_event.notify (m_accept_delay + m_read_response_delay);
-    }
-    else if (transaction_ptr->get_command() == tlm::TLM_WRITE_COMMAND)
-    {
-      m_begin_response_event.notify (m_accept_delay + m_write_response_delay);
-    }
-    else
-    {
-      msg.str ("");
-      msg << m_ID << " - Invalid GP Command";
-    
-      REPORT_FATAL(filename, __FUNCTION__, msg.str());
-    }
-
-    sc_core::next_trigger(m_begin_response_event);
-    return;
-  }
 }
 
 /*=============================================================================
