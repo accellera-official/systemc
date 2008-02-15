@@ -37,13 +37,13 @@
 
 // Note: includes are order dependent
 
-#include "tlm.h"                            ///< TLM headers
-#include "lt_target_memory.h"               ///< our class header
-#include "reporting.h"                      ///< Reporting convenience macros
+#include "tlm.h"                                      ///< TLM headers
+#include "lt_target_memory.h"                         ///< our class header
+#include "reporting.h"                                ///< Reporting convenience macros
 
 using namespace  std;
 
-static const char *report_source = "lt_target_memory";
+static const char *filename = "lt_target_memory";     ///< filename
 
 /*==============================================================================
   @fn lt_target_memory
@@ -67,37 +67,39 @@ static const char *report_source = "lt_target_memory";
   
   @note
     1. memory is initialized to 0
+    
 ==============================================================================*/
 
-lt_target_memory::lt_target_memory             ///< constructor
-   (  sc_core::sc_module_name  module_name     ///< module name 
-    , sc_dt::uint64   base_address             ///< memory base address 64-bit
-    , sc_dt::uint64   memory_size              ///< memory size 64-bit
-    , unsigned int    memory_width             ///< memory width (bytes)(2, 4, 8, 16)
-    , sc_core::sc_time  clock_period           ///< clock period for delays
-    , unsigned int   read_clocks               ///< number of clocks for read
-    , unsigned int   write_clocks              ///< number of clocks for write
-    , unsigned int   refresh_clocks            ///< number of clocks for refresh
-    , unsigned int   refresh_rate              ///< frequency of refresh
-    ) : sc_module        (module_name)
-      , m_memory_socket ("memory_socket")
-      , m_base_address  (base_address)
-      , m_memory_size   (memory_size)
-      , m_memory_width  (memory_width)
-      , m_read_delay    (clock_period * read_clocks)
-      , m_write_delay   (clock_period * write_clocks)
-      , m_refresh_delay (clock_period * read_clocks)
-      , m_refresh_rate  (clock_period * refresh_rate)
-   {
-      // Allocate an array for the target's memory
-       m_memory = new unsigned char[size_t(memory_size)];
-      
-      // clear the memory
-      memset(m_memory, 0, memory_width * size_t(memory_size));
-      
-      // Bind the socket's export to the interface
-      m_memory_socket(*this);
-   }
+lt_target_memory::lt_target_memory                    ///< constructor
+(  sc_core::sc_module_name  module_name               ///< module name 
+, sc_dt::uint64             base_address              ///< memory base address 64-bit
+, sc_dt::uint64             memory_size               ///< memory size 64-bit
+, unsigned int              memory_width              ///< memory width (bytes)(2, 4, 8, 16)
+, sc_core::sc_time          clock_period              ///< clock period for delays
+, unsigned int              read_clocks               ///< number of clocks for read
+, unsigned int              write_clocks              ///< number of clocks for write
+, unsigned int              refresh_clocks            ///< number of clocks for refresh
+, unsigned int              refresh_rate              ///< frequency of refresh
+)
+: sc_module       (module_name)                       ///< module name
+, m_memory_socket ("memory_socket")                   ///< socket
+, m_base_address  (base_address)                      ///< base address
+, m_memory_size   (memory_size)                       ///< memory size (bytes)
+, m_memory_width  (memory_width)                      ///< memory width (bytes)
+, m_read_delay    (clock_period * read_clocks)        ///< read delay
+, m_write_delay   (clock_period * write_clocks)       ///< write delay
+, m_refresh_delay (clock_period * read_clocks)        ///< refresh delay
+, m_refresh_rate  (clock_period * refresh_rate)       ///< refresh rate
+{
+  // Allocate an array for the target's memory
+   m_memory = new unsigned char[size_t(memory_size)];
+  
+  // clear the memory
+  memset(m_memory, 0, memory_width * size_t(memory_size));
+  
+  // Bind the socket's export to the interface
+  m_memory_socket(*this);
+}
      
 /*==============================================================================
   @fn ~lt_target_memory
@@ -112,7 +114,9 @@ lt_target_memory::lt_target_memory             ///< constructor
   @retval void
 ==============================================================================*/
 
-lt_target_memory::~lt_target_memory(void)      ///< destructor
+lt_target_memory::~lt_target_memory                   ///< destructor
+( void
+)
 {
   // Free up the target's memory array
   delete [] m_memory;
@@ -138,24 +142,28 @@ lt_target_memory::~lt_target_memory(void)      ///< destructor
     
 ==============================================================================*/
 
-tlm::tlm_sync_enum                              ///< synchronization state
-lt_target_memory::nb_transport(                 ///< non-blocking transport
-    tlm::tlm_generic_payload &gp                ///< generic payoad pointer
-  , tlm::tlm_phase           &phase             ///< transaction phase
-  , sc_core::sc_time         &delay_time)       ///< time it should take for transport
+tlm::tlm_sync_enum                                    ///< synchronization state
+lt_target_memory::nb_transport                        ///< non-blocking transport
+( tlm::tlm_generic_payload &gp                        ///< generic payoad pointer
+, tlm::tlm_phase           &phase                     ///< transaction phase
+, sc_core::sc_time         &delay_time                ///< time it should take for transport
+)
 {
   // Access the required attributes from the payload
   
-  sc_dt::uint64      address = gp.get_address();         ///< memory address
-  tlm::tlm_command   command = gp.get_command();         ///< memory command
-  unsigned char      *data   = gp.get_data_ptr();        ///< data pointer
-  int                length  = gp.get_data_length();     ///< data length
-  tlm::tlm_sync_enum result  = tlm::TLM_COMPLETED;       ///< routine result (always TLM_COMPLETED)
-  std::ostringstream msg;                                ///< log message
+  sc_dt::uint64             address   = gp.get_address();     ///< memory address
+  tlm::tlm_command          command   = gp.get_command();     ///< memory command
+  unsigned char             *data     = gp.get_data_ptr();    ///< data pointer
+  int                       length    = gp.get_data_length(); ///< data length
+  
+  tlm::tlm_sync_enum        result    = tlm::TLM_COMPLETED;   ///< routine result (always TLM_COMPLETED)
+  tlm::tlm_response_status  response  = tlm::TLM_OK_RESPONSE; ///< operation response
+  std::ostringstream        msg;                              ///< log message
 
   // Error checking
-  if (phase != tlm::BEGIN_REQ) {
-    REPORT_FATAL(report_source, __FUNCTION__, "phase not BEGIN_REQ");
+  if (phase != tlm::BEGIN_REQ)
+  {
+    REPORT_FATAL(filename, __FUNCTION__, "phase not BEGIN_REQ");
   }
 
   // Perform the requested operation
@@ -163,7 +171,7 @@ lt_target_memory::nb_transport(                 ///< non-blocking transport
   {
     default:
     {
-      REPORT_FATAL(report_source, __FUNCTION__, "invalid command");
+      REPORT_FATAL(filename, __FUNCTION__, "invalid command");
       break;
     }
       
@@ -177,7 +185,7 @@ lt_target_memory::nb_transport(                 ///< non-blocking transport
       {
         msg << internal << setw( 2 ) << setfill( '0' ) << uppercase << hex << (int)data[i];
       }
-      REPORT_INFO(report_source, __FUNCTION__, msg.str());
+      REPORT_INFO(filename, __FUNCTION__, msg.str());
       
       delay_time += m_write_delay;
       
@@ -187,7 +195,11 @@ lt_target_memory::nb_transport(                 ///< non-blocking transport
       if  (  (address < 0)
           || (address >= m_memory_size))
       {
-        // ignore out-of-bounds writes
+        // address out-of-bounds
+        msg << " address out-of-range";
+        
+        // set error response (9.9.d)
+        response = tlm::TLM_ADDRESS_ERROR_RESPONSE;
       }
       else
       {
@@ -195,6 +207,11 @@ lt_target_memory::nb_transport(                 ///< non-blocking transport
         {
           if ( address >= m_memory_size )
           {
+            msg << " address went out of bounds";
+            
+            // set error response (9.9.d)
+            response = tlm::TLM_ADDRESS_ERROR_RESPONSE;
+            
             break;
           }
           
@@ -221,8 +238,11 @@ lt_target_memory::nb_transport(                 ///< non-blocking transport
       if  (  (address < 0)
           || (address >= m_memory_size))
       {
-        // out-of-bounds read
+        // address out-of-bounds
         msg << " address out-of-range, data zeroed";
+        
+        // set error response (9.9.d)
+        response = tlm::TLM_ADDRESS_ERROR_RESPONSE;
       }
       else
       {
@@ -231,7 +251,12 @@ lt_target_memory::nb_transport(                 ///< non-blocking transport
         {
           if ( address >= m_memory_size )
           {
-            // ignore out-of-bounds reads
+            // out-of-bounds reads
+            msg << " address went out of bounds";
+            
+            // set error response (9.9.d)
+            response = tlm::TLM_ADDRESS_ERROR_RESPONSE;
+            
             break;
           }
           
@@ -240,14 +265,15 @@ lt_target_memory::nb_transport(                 ///< non-blocking transport
         }
       }
 
-      REPORT_INFO(report_source, __FUNCTION__, msg.str());
+      REPORT_INFO(filename, __FUNCTION__, msg.str());
       break;
     }
   }
 
   // Set parameters to indicate all is well
   phase = tlm::BEGIN_RESP;
-  gp.set_response_status(tlm::TLM_OK_RESPONSE);
+  gp.set_response_status(response);
+  
   return result; 
 }
 
@@ -269,13 +295,13 @@ lt_target_memory::nb_transport(                 ///< non-blocking transport
     
 ==============================================================================*/
 
-unsigned int                                ///< result
-lt_target_memory::transport_dbg(            ///< transport debug
-  tlm::tlm_debug_payload     &payload       ///< debug payload
+unsigned int                                          ///< result
+lt_target_memory::transport_dbg                       ///< transport debug
+( tlm::tlm_debug_payload  &payload                    ///< debug payload
 )
 {
-    // No error needed, disabled
-    //REPORT_FATAL(report_source, __FUNCTION__, "routine not implemented");
+  REPORT_INFO(filename, __FUNCTION__, "not implemented");
+  
   return 0;
 }
 
@@ -299,15 +325,14 @@ lt_target_memory::transport_dbg(            ///< transport debug
     
 ==============================================================================*/
 
-bool                                        ///< success / failure
-lt_target_memory::get_direct_mem_ptr(       ///< get direct memory pointer
-  const sc_dt::uint64        &address,      ///< address
-  tlm::tlm_dmi_mode          &dmi_mode,     ///< dmi read/write mode
-  tlm::tlm_dmi               &dmi_data      ///< dmi data
+bool                                                  ///< success / failure
+lt_target_memory::get_direct_mem_ptr                  ///< get direct memory pointer
+( const sc_dt::uint64        &address                 ///< address
+, tlm::tlm_dmi_mode          &dmi_mode                ///< dmi read/write mode
+, tlm::tlm_dmi               &dmi_data                ///< dmi data
 )
 {
-    // It's perfectly allowed to not support DMI, no need to
-    // throw an error:
-    // REPORT_FATAL(report_source, __FUNCTION__, "routine not implemented");
-    return false;
+  REPORT_INFO(filename, __FUNCTION__, "not implemented");
+
+  return false;
 }
