@@ -31,9 +31,6 @@ Info: lt_initiator_temporal_decoupling.cpp: 0 s - initiator_thread
       SC time    = 0 s
       local time = 60 ns
 
-Info: lt_target.cpp: 0 s - begin_response
-      2 ** BEGIN_RESP start delay
-
 Info: traffic_generator.cpp: 0 s - traffic_generator_thread
       2 - command queued
 
@@ -197,194 +194,6 @@ Info: traffic_generator.cpp: 0 s - traffic_generator_thread
 Info: traffic_generator.cpp: 0 s - traffic_generator_thread
       2 - response dequeued
 
-Info: lt_target.cpp: 75 ns - begin_response
-      2 ** BEGIN_RESP for queued response
-
-Info: lt_target.cpp: 75 ns - memory_operation
-      2 - R - A: 0x0000000000000478 L: 08 address out-of-range, data zeroed
-
-Info: lt_initiator_temporal_decoupling.cpp: 75 ns - nb_transport
-      1 - LT target completing request
-
-Info: traffic_generator.cpp: 75 ns - traffic_generator_thread
-      1 - command queued
-
-Info: traffic_generator.cpp: 75 ns - traffic_generator_thread
-      1 - command queued
-
-Info: traffic_generator.cpp: 75 ns - traffic_generator_thread
-      1 - response dequeued
-
-Info: lt_initiator_temporal_decoupling.cpp: 75 ns - initiator_thread
-      1 - Completed LT request forced sync
-      local time       = 0 s
-      Reset local time = 0 s
-
-Info: lt_target.cpp: 75 ns - nb_transport
-      2 * BEGIN_REQ LT_Annotated
-
-Info: lt_target.cpp: 75 ns - memory_operation
-      2 - R - A: 0x000000000000033E L: 08 address out-of-range, data zeroed
-
-Info: lt_initiator_temporal_decoupling.cpp: 75 ns - initiator_thread
-      1 - Completed LT request
-      SC time    = 75 ns
-      local time = 150 ns
-
-Info: lt_target.cpp: 75 ns - nb_transport
-      1 * BEGIN_REQ LT_Annotated
-
-Info: lt_target.cpp: 75 ns - memory_operation
-      1 - R - A: 0x000000000000010A L: 08 D: 0x0000000000000000
-
-Info: lt_initiator_temporal_decoupling.cpp: 75 ns - initiator_thread
-      1 - Completed LT request
-      SC time    = 75 ns
-      local time = 210 ns
-
-Info: traffic_generator.cpp: 75 ns - traffic_generator_thread
-      1 - response dequeued
-
-Info: traffic_generator.cpp: 75 ns - traffic_generator_thread
-      1 - command queued
-
-Info: traffic_generator.cpp: 75 ns - traffic_generator_thread
-      1 - command queued
-
-Info: traffic_generator.cpp: 75 ns - traffic_generator_thread
-      1 - response dequeued
-
-Info: lt_target.cpp: 75 ns - nb_transport
-      1 * BEGIN_REQ LT_Annotated
-
-Info: lt_target.cpp: 75 ns - memory_operation
-      1 - R - A: 0x00000000000007F6 L: 08 D: 0x0000000000000000
-
-Info: lt_initiator_temporal_decoupling.cpp: 75 ns - initiator_thread
-      1 - Completed LT request
-      SC time    = 75 ns
-      local time = 270 ns
-
-Info: lt_target.cpp: 75 ns - nb_transport
-      2 * BEGIN_REQ LT_Annotated
-
-Info: lt_target.cpp: 75 ns - memory_operation
-      2 - W - A: 0x0000000000000ED2 L: 08 D: 0x0001020304050607
-
-Info: lt_initiator_temporal_decoupling.cpp: 75 ns - initiator_thread
-      1 - Completed LT request
-      SC time    = 75 ns
-      local time = 325 ns
-
-Info: traffic_generator.cpp: 75 ns - traffic_generator_thread
-      1 - command queued
-
-Info: traffic_generator.cpp: 75 ns - traffic_generator_thread
-      1 - command queued
-
-Info: traffic_generator.cpp: 75 ns - traffic_generator_thread
-      1 - response dequeued
-
-Info: traffic_generator.cpp: 75 ns - traffic_generator_thread
-      1 - response dequeued
-
-Info: lt_target.cpp: 75 ns - nb_transport
-      1 * BEGIN_REQ LT_Annotated
-
-Info: lt_target.cpp: 75 ns - memory_operation
-      1 - R - A: 0x000000000000077F L: 08 D: 0x0000000000000000
-
-Info: lt_initiator_temporal_decoupling.cpp: 75 ns - initiator_thread
-      1 - Completed LT request
-      SC time    = 75 ns
-      local time = 385 ns
-
-Info: lt_target.cpp: 75 ns - nb_transport
-      1 * BEGIN_REQ LT_Annotated
-
-Info: lt_target.cpp: 75 ns - memory_operation
-      1 - R - A: 0x00000000000000CB L: 08 D: 0x0000000000000000
-
-Info: lt_initiator_temporal_decoupling.cpp: 75 ns - initiator_thread
-      1 - Completed LT request
-      SC time    = 75 ns
-      local time = 445 ns
-
-Info: traffic_generator.cpp: 75 ns - traffic_generator_thread
-      1 - response dequeued
-
-Info: traffic_generator.cpp: 75 ns - traffic_generator_thread
-      1 - command queued
-
-Info: traffic_generator.cpp: 75 ns - traffic_generator_thread
-      1 - command queued
-
-Info: traffic_generator.cpp: 75 ns - traffic_generator_thread
-      1 - response dequeued
-
-Info: lt_target.cpp: 75 ns - nb_transport
-      2 * BEGIN_REQ LT_Annotated
-
-Info: lt_target.cpp: 75 ns - memory_operation
-      2 - W - A: 0x0000000000000CE1 L: 08 D: 0x0001020304050607
-
-Info: lt_initiator_temporal_decoupling.cpp: 75 ns - initiator_thread
-      1 - Sync Local time to SC time
-
-Info: lt_initiator_temporal_decoupling.cpp: 500 ns - initiator_thread
-      1 - Completed LT request
-      SC time    = 500 ns
-      local time = 500 ns
-
-Info: lt_target.cpp: 500 ns - nb_transport
-      1 * BEGIN_REQ LT_Annotated
-
-Info: lt_target.cpp: 500 ns - memory_operation
-      1 - R - A: 0x0000000000000D0E L: 08 D: 0x0000000000000000
-
-Info: lt_initiator_temporal_decoupling.cpp: 500 ns - initiator_thread
-      1 - Completed LT request
-      SC time    = 500 ns
-      local time = 560 ns
-
-Info: traffic_generator.cpp: 500 ns - traffic_generator_thread
-      1 - command queued
-
-Info: traffic_generator.cpp: 500 ns - traffic_generator_thread
-      1 - command queued
-
-Info: traffic_generator.cpp: 500 ns - traffic_generator_thread
-      1 - command queued
-
-Info: traffic_generator.cpp: 500 ns - traffic_generator_thread
-      1 - command queued
-
-Info: traffic_generator.cpp: 500 ns - traffic_generator_thread
-      1 - response dequeued
-
-Info: traffic_generator.cpp: 500 ns - traffic_generator_thread
-      1 - response dequeued
-
-Info: lt_target.cpp: 500 ns - nb_transport
-      2 * BEGIN_REQ LT_Annotated
-
-Info: lt_target.cpp: 500 ns - memory_operation
-      2 - R - A: 0x0000000000000129 L: 08 address out-of-range, data zeroed
-
-Info: lt_initiator_temporal_decoupling.cpp: 500 ns - initiator_thread
-      1 - Completed LT request
-      SC time    = 500 ns
-      local time = 635 ns
-
-Info: lt_target.cpp: 500 ns - nb_transport
-      2 * BEGIN_REQ LT_Sync
-
-Info: lt_target.cpp: 500 ns - begin_response
-      2 ** BEGIN_RESP start delay
-
-Info: traffic_generator.cpp: 500 ns - traffic_generator_thread
-      1 - response dequeued
-
 Info: lt_initiator_temporal_decoupling.cpp: 510 ns - initiator_thread
       2 - Completed LT request
       SC time    = 510 ns
@@ -441,7 +250,7 @@ Info: traffic_generator.cpp: 510 ns - traffic_generator_thread
       2 - command queued
 
 Info: traffic_generator.cpp: 510 ns - traffic_generator_thread
-      2 - command queued
+      2 - response dequeued
 
 Info: traffic_generator.cpp: 510 ns - traffic_generator_thread
       2 - response dequeued
@@ -450,121 +259,20 @@ Info: lt_target.cpp: 510 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
 
 Info: lt_target.cpp: 510 ns - memory_operation
-      2 - R - A: 0x000000000000055B L: 08 address out-of-range, data zeroed
+      2 - R - A: 0x000000000000033E L: 08 address out-of-range, data zeroed
 
 Info: lt_initiator_temporal_decoupling.cpp: 510 ns - initiator_thread
       2 - Completed LT request
       SC time    = 510 ns
       local time = 850 ns
-
-Info: lt_target.cpp: 510 ns - nb_transport
-      2 * BEGIN_REQ LT_Annotated
-
-Info: lt_target.cpp: 510 ns - memory_operation
-      2 - R - A: 0x00000000000008A0 L: 08 address out-of-range, data zeroed
-
-Info: lt_initiator_temporal_decoupling.cpp: 510 ns - initiator_thread
-      2 - Completed LT request
-      SC time    = 510 ns
-      local time = 925 ns
 
 Info: lt_target.cpp: 510 ns - nb_transport
       1 * BEGIN_REQ LT_Annotated
 
 Info: lt_target.cpp: 510 ns - memory_operation
-      1 - W - A: 0x0000000000000551 L: 08 D: 0x0001020304050607
+      1 - R - A: 0x000000000000010A L: 08 D: 0x0000000000000000
 
 Info: lt_initiator_temporal_decoupling.cpp: 510 ns - initiator_thread
       2 - Completed LT request
       SC time    = 510 ns
-      local time = 965 ns
-
-Info: lt_target.cpp: 555 ns - begin_response
-      2 ** BEGIN_RESP for queued response
-
-Info: lt_target.cpp: 555 ns - memory_operation
-      2 - W - A: 0x000000000000088F L: 08 D: 0x0001020304050607
-
-Info: lt_initiator_temporal_decoupling.cpp: 555 ns - nb_transport
-      1 - LT target completing request
-
-Info: traffic_generator.cpp: 555 ns - traffic_generator_thread
-      1 - response dequeued
-
-Info: lt_initiator_temporal_decoupling.cpp: 555 ns - initiator_thread
-      1 - Completed LT request forced sync
-      local time       = 135 ns
-      Reset local time = 0 s
-
-Info: lt_target.cpp: 555 ns - nb_transport
-      2 * BEGIN_REQ LT_Annotated
-
-Info: lt_target.cpp: 555 ns - memory_operation
-      2 - W - A: 0x0000000000000CD3 L: 08 D: 0x0001020304050607
-
-Info: lt_initiator_temporal_decoupling.cpp: 555 ns - initiator_thread
-      1 - Completed LT request
-      SC time    = 555 ns
-      local time = 610 ns
-
-Info: lt_target.cpp: 555 ns - nb_transport
-      2 * BEGIN_REQ LT_Annotated
-
-Info: lt_target.cpp: 555 ns - memory_operation
-      2 - W - A: 0x00000000000000F0 L: 08 D: 0x0001020304050607
-
-Info: lt_initiator_temporal_decoupling.cpp: 555 ns - initiator_thread
-      1 - Completed LT request
-      SC time    = 555 ns
-      local time = 665 ns
-
-Info: traffic_generator.cpp: 555 ns - traffic_generator_thread
-      1 - command queued
-
-Info: traffic_generator.cpp: 555 ns - traffic_generator_thread
-      1 - response dequeued
-
-Info: traffic_generator.cpp: 555 ns - traffic_generator_thread
-      1 - response dequeued
-
-Info: lt_target.cpp: 555 ns - nb_transport
-      2 * BEGIN_REQ LT_Annotated
-
-Info: lt_target.cpp: 555 ns - memory_operation
-      2 - R - A: 0x0000000000000FBD L: 08 address out-of-range, data zeroed
-
-Info: lt_initiator_temporal_decoupling.cpp: 555 ns - initiator_thread
-      1 - Completed LT request
-      SC time    = 555 ns
-      local time = 740 ns
-
-Info: traffic_generator.cpp: 555 ns - traffic_generator_thread
-      1 - command queued
-
-Info: traffic_generator.cpp: 555 ns - traffic_generator_thread
-      1 - response dequeued
-
-Info: lt_target.cpp: 555 ns - nb_transport
-      2 * BEGIN_REQ LT_Annotated
-
-Info: lt_target.cpp: 555 ns - memory_operation
-      2 - W - A: 0x00000000000009FE L: 08 D: 0x0001020304050607
-
-Info: lt_initiator_temporal_decoupling.cpp: 555 ns - initiator_thread
-      1 - Completed LT request
-      SC time    = 555 ns
-      local time = 795 ns
-
-Info: traffic_generator.cpp: 555 ns - traffic_generator_thread
-      1 - command queued
-
-Info: lt_target.cpp: 555 ns - nb_transport
-      2 * BEGIN_REQ LT_Annotated
-
-Info: lt_target.cpp: 555 ns - memory_operation
-      2 - W - A: 0x0000000000000192 L: 08 D: 0x0001020304050607
-
-Info: lt_initiator_temporal_decoupling.cpp: 555 ns - initiator_thread
-      1 - Completed LT request
-      SC time    = 555 ns
-      local time = 850 ns
+      local time = 910 ns

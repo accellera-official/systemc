@@ -86,8 +86,6 @@ lt_target::lt_target                                ///< constructor
   m_memory_socket(*this);
 
   SC_METHOD(begin_response)
-
-  sensitive << m_begin_response_event;
 }
 
 /*=============================================================================
