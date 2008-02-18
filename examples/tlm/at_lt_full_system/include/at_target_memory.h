@@ -77,9 +77,9 @@ public:
   tlm::tlm_sync_enum                         ///< sync status
   nb_transport                               ///< non-blocking transport
   (
-     tlm::tlm_generic_payload &gp            ///< generic payoad pointer
-  ,  tlm::tlm_phase           &phase         ///< transaction phase
-  ,  sc_core::sc_time         &delay_time    ///< time it should take for transport
+     tlm::tlm_generic_payload& transaction   ///< generic payoad pointer
+  ,  tlm::tlm_phase&           phase         ///< transaction phase
+  ,  sc_core::sc_time&         time          ///< time it should take for transport
   );
 
 //------------------------------------------------------------------------------
@@ -88,7 +88,7 @@ public:
   private:
   void memory_operation                      ///< memory operation 
   (
-    tlm::tlm_generic_payload  &gp            ///< generic payload
+    tlm::tlm_generic_payload&  gp            ///< generic payload
   );
 
 //------------------------------------------------------------------------------

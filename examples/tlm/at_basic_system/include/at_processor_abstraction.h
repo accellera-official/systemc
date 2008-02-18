@@ -59,6 +59,7 @@ class at_processor_abstraction                    ///< at_processor_abstraction
     sc_core::sc_module_name name                ///< name
   , const unsigned int      ID                  ///< initiator ID
   , const unsigned int      seed                ///< random number generator seed
+  , const unsigned int      message_count       ///< number of messages to generate
   );
 
   ~at_processor_abstraction(void);              ///< destructor

@@ -31,7 +31,7 @@
 
 #include "tlm.h"                                    ///< TLM headers
 
-const unsigned int  buffer_size = 8;                ///< buffer size
+const unsigned int  buffer_size = 16;               ///< buffer size
 
 class traffic_generator                             ///< traffic_generator
 : public sc_core::sc_module                         ///< sc_module
@@ -55,6 +55,7 @@ class traffic_generator                             ///< traffic_generator
   ( sc_core::sc_module_name name                    ///< module name
   , const unsigned int      ID                      ///< initiator ID
   , const unsigned long     seed                    ///< random number generator seed
+  , const unsigned int      message_count           ///< number of messages to generate
   );
   
   ~traffic_generator                                ///< destructor
@@ -67,9 +68,11 @@ class traffic_generator                             ///< traffic_generator
   
   const unsigned int  m_ID;                         ///< initiator ID
   const unsigned long m_seed;                       ///< random number generator seed
+  const unsigned int  m_message_count;              ///< number of messages to generate
   
   unsigned char       *m_read_buffer;               ///< read buffer 
   unsigned char       *m_write_buffer;              ///< write buffer
+  unsigned int        m_queue_depth;                ///< sc_fifo depth
   
   void
   traffic_generator_thread                          ///< traffic_generator_thread
