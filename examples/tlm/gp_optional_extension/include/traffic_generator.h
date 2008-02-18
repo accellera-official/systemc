@@ -20,9 +20,6 @@
  
  @brief traffic_generator class header
  
- @detail This traffic generator includes an optional extension to the generic payload.
-   This extension sets the string variable defined in 'gp_extension'.
-
   Original Authors:
     Bill Bunton, ESLX
     Charles Wilson, ESLX
@@ -33,9 +30,10 @@
 #define __TRAFFIC_GENERATOR_H__
 
 #include "tlm.h"                                    ///< TLM headers
-#include "gp_extension.h"                           ///< Header for optional extension
+#include "my_initiator_id_extension.h"              ///< Header for optional extension
+#include <sstream>
 
-const unsigned int  buffer_size = 8;                ///< buffer size
+const unsigned int  buffer_size = 16;               ///< buffer size
 
 class traffic_generator                             ///< traffic_generator
 : public sc_core::sc_module                         ///< sc_module
@@ -48,8 +46,8 @@ class traffic_generator                             ///< traffic_generator
   
   public:
 
-  sc_core::sc_port<sc_core::sc_fifo_out_if <gp_ptr>, 1 > request_out_port; 
-  sc_core::sc_port<sc_core::sc_fifo_in_if  <gp_ptr>, 1 > response_in_port;
+  sc_core::sc_port<sc_core::sc_fifo_out_if <gp_ptr> > request_out_port; 
+  sc_core::sc_port<sc_core::sc_fifo_in_if  <gp_ptr> > response_in_port;
 
   // Constructors / Destructor 
 
@@ -59,6 +57,7 @@ class traffic_generator                             ///< traffic_generator
   ( sc_core::sc_module_name name                    ///< module name
   , const unsigned int      ID                      ///< initiator ID
   , const unsigned long     seed                    ///< random number generator seed
+  , const unsigned int      message_count           ///< number of messages to generate
   );
   
   ~traffic_generator                                ///< destructor
@@ -69,14 +68,15 @@ class traffic_generator                             ///< traffic_generator
 
   private:
   
-  const unsigned int  m_ID;                         ///< initiator ID
-  const unsigned long m_seed;                       ///< random number generator seed
+  const unsigned int    m_ID;                       ///< initiator ID
+  const unsigned long   m_seed;                     ///< random number generator seed
+  const unsigned int    m_message_count;            ///< number of messages to generate
   
-  unsigned char       *m_read_buffer;               ///< read buffer 
-  unsigned char       *m_write_buffer;              ///< write buffer
+  unsigned char        *m_read_buffer;              ///< read buffer 
+  unsigned char        *m_write_buffer;             ///< write buffer
+  unsigned int          m_queue_depth;              ///< sc_fifo depth
+  std::ostringstream    m_initiator_id;             ///< initiator id string
 
-  gp_extension        m_gp_ext;
-  
   void
   traffic_generator_thread                          ///< traffic_generator_thread
   ( void

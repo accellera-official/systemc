@@ -96,9 +96,9 @@ private:
   sc_core::sc_event                       m_req_accepted_event; ///< request accpeted event
   std::set<tlm::tlm_generic_payload *>    m_wait_rsp_set;       ///< wait for response queue
   std::queue<tlm::tlm_generic_payload *>  m_send_end_rsp_queue; ///< send end response queue
-  std::set<tlm::tlm_generic_payload *>    m_wait_2phase_begin_rsp_set; ///< wait for 2 phase rsp
   sc_core::sc_event                       m_send_end_rsp_event; ///< send end response event
   unsigned int                            m_ID;                 ///< initiator ID
   sc_core::sc_time                        m_end_rsp_delay;      ///< end response delay
+  bool                                    detect_2_phase_target;///< determines whether AT target is 2 or 4phase 
 }; 
  #endif /* __AT_INITIATOR_H__ */
