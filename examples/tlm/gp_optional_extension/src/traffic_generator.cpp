@@ -20,8 +20,6 @@
  
  @brief traffic generation routines
  
- @detail This traffic generator also implements a gp optional extension
-
   Original Authors:
     Bill Bunton, ESLX
     Charles Wilson, ESLX
@@ -37,7 +35,14 @@
 
 using namespace std;
 
+#define SUPPRESS_INFO
+
+#ifdef  SUPPRESS_INFO
+#undef  REPORT_INFO
+#define REPORT_INFO(x,y,z)
+#else   /* SUPPRESS_INFO */
 static char *filename = "traffic_generator.cpp";
+#endif  /* SUPPRESS_INFO */
 
 /*=============================================================================
   @fn traffic_generator::traffic_generator
@@ -47,9 +52,10 @@ static char *filename = "traffic_generator.cpp";
   @details
     This routine initialized a traffic_generator class instance.
     
-  @param name module name
-  @param ID   initiator ID
-  @param seed random number generator seed
+  @param name           module name
+  @param ID             initiator ID
+  @param seed           random number generator seed
+  @param message_count  number of messages to generate
   
   @retval none
 =============================================================================*/
@@ -57,20 +63,21 @@ traffic_generator::traffic_generator                ///< constructor
 ( sc_core::sc_module_name name                      ///< module name
 , const unsigned int      ID                        ///< initiator ID
 , const unsigned long     seed                      ///< random number generator seed
+, const unsigned int      message_count             ///< number of messages to generate
 )
-: sc_module (name)                                  ///< module name
-, m_ID      (ID)                                    ///< initiator ID
-, m_seed    (seed)                                  ///< random number generator seed
+: sc_module       (name)                            ///< module name
+, m_ID            (ID)                              ///< initiator ID
+, m_seed          (seed)                            ///< random number generator seed
+, m_message_count (message_count)                   ///< number of messages to generate
 {
+  
   m_read_buffer   = new unsigned char [buffer_size];
   m_write_buffer  = new unsigned char [buffer_size];
-
+  
   // initialize the gp extension string type
-  std::ostringstream initiator_id;
-  initiator_id << endl << " ******* INITIATOR " 
-               << m_ID 
-               << " MADE A REQUEST *******";
-  m_gp_ext.m_initiator_ID = initiator_id.str();
+  m_initiator_id << endl << " ******* INITIATOR "
+                 << m_ID
+                 << " MADE A REQUEST *******";
 
   SC_THREAD(traffic_generator_thread);
 }
@@ -114,8 +121,7 @@ traffic_generator::traffic_generator_thread         ///< traffic_generator_threa
 )
 {
   std::ostringstream  message;                      ///< log message
-  unsigned int        write_count = 0;              ///< write counter
-  
+    
   message.str ("");
   message << m_ID << " - random number seed: 0x" << internal << setw( sizeof(m_seed) * 2 ) << setfill( '0' ) 
           << uppercase << hex << m_seed;
@@ -141,12 +147,23 @@ traffic_generator::traffic_generator_thread         ///< traffic_generator_threa
     m_write_buffer [ i ] = (unsigned char)(i);
   }
 
-  // do 32 reads and writes (in some random combination)
-  for ( unsigned int i = 0; i < 32; i++ )
+  m_queue_depth   = request_out_port->num_free();
+
+  unsigned int  chunks = m_message_count / m_queue_depth;                   ///< number of queue fills
+  unsigned int  excess = m_message_count - ((chunks - 1) * m_queue_depth);  ///< size of last fill
+  unsigned int  command_queued    = 1;                                      ///< queued counter
+  unsigned int  command_dequeued  = 1;                                      ///< dequeued counter
+  
+  // process the chunks
+  for (unsigned int chunk = chunks; chunk; chunk--)
   {
-    if ( irand() & 0x00000001 )
+    // queue commands  
+    for (unsigned int count = (chunk != 1) ? m_queue_depth : excess; count; count--)
     {
-      // queue command
+      message.str ("");
+      message << m_ID << " - command " << dec << command_queued++ << " queued";
+      
+      REPORT_INFO(filename,__FUNCTION__, message.str());
       
       tlm::tlm_generic_payload  *transaction  = new tlm::tlm_generic_payload;
       bool                      command_write = irand() % 2;
@@ -157,31 +174,32 @@ traffic_generator::traffic_generator_thread         ///< traffic_generator_threa
       transaction->set_data_length      (buffer_size);
       transaction->set_response_status  (tlm::TLM_INCOMPLETE_RESPONSE);
 
-      transaction->set_extension        (&m_gp_ext); // register the extension
+      // set the extension
+      gp_extension::my_initiator_id_extension  *m_initiator_id_ext = 
+        new gp_extension::my_initiator_id_extension;    // extension
+      std::ostringstream initiator_id;
+      m_initiator_id_ext->m_initiator_ID = m_initiator_id.str();
+      transaction->set_extension        (m_initiator_id_ext); // register the extension
 
       request_out_port->write (transaction);
-      
-      write_count++;
     }
-    else if ( write_count )
+    
+    // dequeue responses
+    for (unsigned int count = (chunk != 1) ? m_queue_depth : excess; count; count--)
     {
-      // dequeue response
+      message.str ("");
+      message << m_ID << " - response " << dec << command_dequeued++ << " dequeued";
+      
+      REPORT_INFO(filename,__FUNCTION__, message.str());
       
       tlm::tlm_generic_payload *transaction;
+      gp_extension::my_initiator_id_extension *m_initiator_id_ext;
       
       response_in_port->read(transaction);
-      
+      transaction->get_extension(m_initiator_id_ext);
+
+      delete m_initiator_id_ext;
       delete transaction;
-      
-      write_count--;
-    }
-    else
-    {
-      // attempting to dequeue a response before issuing a command
-      message.str ("");
-      message << m_ID << " - attempted to dequeue response before issuing command";
-      
-//    REPORT_INFO(filename,__FUNCTION__, message.str());
     }
   }
 

@@ -290,10 +290,18 @@ lt_initiator::initiator_thread                      ///< initiator thread
           response_out_port->write(transaction_ptr);
           
           msg.str ("");
-          msg << m_ID << " - Completed LT request" << endl;
-          msg << "      SC time    = " << sc_core::sc_time_stamp() << endl;
-          msg << "      local time = " << m_QuantumKeeper.get_current_time();
-              
+          
+          if (transaction_ptr->get_response_status() != tlm::TLM_OK_RESPONSE)
+          {
+            msg << m_ID << " operation failed";
+          }
+          else
+          {
+            msg << m_ID << " - Completed LT request" << endl;
+            msg << "      SC time    = " << sc_core::sc_time_stamp() << endl;
+            msg << "      local time = " << m_QuantumKeeper.get_current_time();
+          }
+          
           REPORT_INFO (filename, __FUNCTION__, msg.str());
 
           break;

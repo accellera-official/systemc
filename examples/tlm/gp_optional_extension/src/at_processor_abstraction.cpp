@@ -72,9 +72,10 @@
   @retval none
 =============================================================================*/
 at_processor_abstraction::at_processor_abstraction ///< constructor
-( sc_core::sc_module_name 	      name             ///< module name
-, const unsigned int              ID               ///< initiator ID
-, const unsigned int              seed             ///< random number generator seed
+( sc_core::sc_module_name name                     ///< module name
+, const unsigned int      ID                       ///< initiator ID
+, const unsigned int      seed                     ///< random number generator seed
+, const unsigned int      message_count            ///< number of messages to generate
 )
   : sc_module                                      ///< SC base
     ( name                                         ///< module name
@@ -101,7 +102,9 @@ at_processor_abstraction::at_processor_abstraction ///< constructor
   , m_traffic_generator                           
     ( "m_traffic_generator"                        ///< traffic generator name
     , ID                                           ///< set traffic generator ID to processor ID
-    , seed)                                        ///< set seed value
+    , seed                                         ///< set seed value
+    , message_count                                ///< output message count
+    )
 {
 
 /*=============================================================================

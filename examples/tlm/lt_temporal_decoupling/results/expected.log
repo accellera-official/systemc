@@ -75,7 +75,7 @@ Info: lt_target.cpp: 0 s - nb_transport
       2 * BEGIN_REQ LT_Annotated
 
 Info: lt_target.cpp: 0 s - memory_operation
-      2 - W - A: 0x00000000000004AD L: 08 D: 0x0001020304050607
+      2 - W - A: 0x00000000000004AD L: 08 D: 0x0001020304050607 address out-of-range
 
 Info: lt_initiator_temporal_decoupling.cpp: 0 s - initiator_thread
       2 - Completed LT request
@@ -157,7 +157,7 @@ Info: lt_target.cpp: 0 s - nb_transport
       2 * BEGIN_REQ LT_Annotated
 
 Info: lt_target.cpp: 0 s - memory_operation
-      2 - W - A: 0x0000000000000066 L: 08 D: 0x0001020304050607
+      2 - W - A: 0x0000000000000066 L: 08 D: 0x0001020304050607 address out-of-range
 
 Info: lt_initiator_temporal_decoupling.cpp: 0 s - initiator_thread
       2 - Completed LT request
@@ -214,7 +214,7 @@ Info: lt_target.cpp: 510 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
 
 Info: lt_target.cpp: 510 ns - memory_operation
-      2 - W - A: 0x0000000000000975 L: 08 D: 0x0001020304050607
+      2 - W - A: 0x0000000000000975 L: 08 D: 0x0001020304050607 address out-of-range
 
 Info: lt_initiator_temporal_decoupling.cpp: 510 ns - initiator_thread
       2 - Completed LT request

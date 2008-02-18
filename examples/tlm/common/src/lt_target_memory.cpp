@@ -31,8 +31,8 @@
 
 /*****************************************************************************
   Original Authors:
-    Bill Bunton, ESLX
     Charles Wilson, ESLX
+    Bill Bunton, ESLX
 *****************************************************************************/
 
 // Note: includes are order dependent
@@ -154,7 +154,7 @@ lt_target_memory::nb_transport                        ///< non-blocking transpor
   sc_dt::uint64             address   = gp.get_address();     ///< memory address
   tlm::tlm_command          command   = gp.get_command();     ///< memory command
   unsigned char             *data     = gp.get_data_ptr();    ///< data pointer
-  int                       length    = gp.get_data_length(); ///< data length
+  unsigned int              length    = gp.get_data_length(); ///< data length
   
   tlm::tlm_sync_enum        result    = tlm::TLM_COMPLETED;   ///< routine result (always TLM_COMPLETED)
   tlm::tlm_response_status  response  = tlm::TLM_OK_RESPONSE; ///< operation response
@@ -181,11 +181,10 @@ lt_target_memory::nb_transport                        ///< non-blocking transpor
       msg << " A: 0x" << internal << setw( sizeof(address) * 2 ) << setfill( '0' ) << uppercase << hex << address;
       msg << " L: " << internal << setw( 2 ) << setfill( '0' ) << dec << length;
       msg << " D: 0x";
-      for (int i = 0; i < length; i++)
+      for (unsigned int i = 0; i < length; i++)
       {
         msg << internal << setw( 2 ) << setfill( '0' ) << uppercase << hex << (int)data[i];
       }
-      REPORT_INFO(filename, __FUNCTION__, msg.str());
       
       delay_time += m_write_delay;
       
@@ -203,7 +202,7 @@ lt_target_memory::nb_transport                        ///< non-blocking transpor
       }
       else
       {
-        for (int i = 0; i < length; i++)
+        for (unsigned int i = 0; i < length; i++)
         {
           if ( address >= m_memory_size )
           {
@@ -218,6 +217,9 @@ lt_target_memory::nb_transport                        ///< non-blocking transpor
           m_memory[address++] = data[i];
         }
       }
+
+      REPORT_INFO(filename, __FUNCTION__, msg.str());
+      
       break;
     }
     
@@ -247,7 +249,7 @@ lt_target_memory::nb_transport                        ///< non-blocking transpor
       else
       {
         msg << " D: 0x";
-        for (int i = 0; i < length; i++)
+        for (unsigned int i = 0; i < length; i++)
         {
           if ( address >= m_memory_size )
           {

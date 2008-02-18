@@ -30,12 +30,10 @@ Info: lt_target.cpp: 0 s - nb_transport
       2 * BEGIN_REQ LT_Annotated
 
 Info: lt_target.cpp: 0 s - memory_operation
-      2 - R - A: 0x0000000000000478 L: 08 D: 0x5A5A5A5A5A5A5A5A
+      2 - R - A: 0x0000000000000478 L: 08 address out-of-range, data zeroed
 
 Info: lt_initiator_direct_memory_interface.cpp: 0 s - initiator_thread
-      1 - Completed LT request
-      SC time    = 0 s
-      local time = 75 ns
+      1 operation failed
 
 Info: lt_target.cpp: 0 s - get_direct_mem_ptr
       1 - DMI pointer request A: 0x000000000000020A
@@ -137,12 +135,10 @@ Info: lt_target.cpp: 0 s - nb_transport
       2 * BEGIN_REQ LT_Annotated
 
 Info: lt_target.cpp: 0 s - memory_operation
-      2 - W - A: 0x00000000000004AD L: 08 D: 0x0001020304050607
+      2 - W - A: 0x00000000000004AD L: 08 D: 0x0001020304050607 address out-of-range
 
 Info: lt_initiator_direct_memory_interface.cpp: 0 s - initiator_thread
-      1 - Completed LT request
-      SC time    = 0 s
-      local time = 170 ns
+      1 operation failed
 
 Info: lt_target.cpp: 0 s - get_direct_mem_ptr
       1 - DMI pointer request A: 0x0000000000000F86
@@ -243,12 +239,10 @@ Info: lt_target.cpp: 0 s - nb_transport
       2 * BEGIN_REQ LT_Annotated
 
 Info: lt_target.cpp: 0 s - memory_operation
-      2 - W - A: 0x0000000000000066 L: 08 D: 0x0001020304050607
+      2 - W - A: 0x0000000000000066 L: 08 D: 0x0001020304050607 address out-of-range
 
 Info: lt_initiator_direct_memory_interface.cpp: 0 s - initiator_thread
-      2 - Completed LT request
-      SC time    = 0 s
-      local time = 295 ns
+      2 operation failed
 
 Info: lt_target.cpp: 0 s - nb_transport
       1 * BEGIN_REQ LT_Annotated
@@ -304,23 +298,19 @@ Info: lt_target.cpp: 0 s - nb_transport
       2 * BEGIN_REQ LT_Annotated
 
 Info: lt_target.cpp: 0 s - memory_operation
-      2 - R - A: 0x0000000000000472 L: 08 D: 0x5A5A5A5A5A5A5A5A
+      2 - R - A: 0x0000000000000472 L: 08 address out-of-range, data zeroed
 
 Info: lt_initiator_direct_memory_interface.cpp: 0 s - initiator_thread
-      1 - Completed LT request
-      SC time    = 0 s
-      local time = 305 ns
+      1 operation failed
 
 Info: lt_target.cpp: 0 s - nb_transport
       2 * BEGIN_REQ LT_Annotated
 
 Info: lt_target.cpp: 0 s - memory_operation
-      2 - W - A: 0x0000000000000975 L: 08 D: 0x0001020304050607
+      2 - W - A: 0x0000000000000975 L: 08 D: 0x0001020304050607 address out-of-range
 
 Info: lt_initiator_direct_memory_interface.cpp: 0 s - initiator_thread
-      1 - Completed LT request
-      SC time    = 0 s
-      local time = 360 ns
+      1 operation failed
 
 Info: lt_target.cpp: 0 s - nb_transport
       1 * BEGIN_REQ LT_Annotated
@@ -337,23 +327,19 @@ Info: lt_target.cpp: 0 s - nb_transport
       2 * BEGIN_REQ LT_Annotated
 
 Info: lt_target.cpp: 0 s - memory_operation
-      2 - R - A: 0x0000000000000467 L: 08 D: 0x5A5A5A5A5A5A5A5A
+      2 - R - A: 0x0000000000000467 L: 08 address out-of-range, data zeroed
 
 Info: lt_initiator_direct_memory_interface.cpp: 0 s - initiator_thread
-      1 - Completed LT request
-      SC time    = 0 s
-      local time = 495 ns
+      1 operation failed
 
 Info: lt_target.cpp: 0 s - nb_transport
       2 * BEGIN_REQ LT_Annotated
 
 Info: lt_target.cpp: 0 s - memory_operation
-      2 - R - A: 0x000000000000033E L: 08 D: 0x5A5A5A5A5A5A5A5A
+      2 - R - A: 0x000000000000033E L: 08 address out-of-range, data zeroed
 
 Info: lt_initiator_direct_memory_interface.cpp: 0 s - initiator_thread
-      2 - Completed LT request
-      SC time    = 0 s
-      local time = 430 ns
+      2 operation failed
 
 Info: lt_initiator_direct_memory_interface.cpp: 0 s - initiator_thread
       2 - bypassing target
@@ -444,56 +430,46 @@ Info: lt_target.cpp: 550 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
 
 Info: lt_target.cpp: 550 ns - memory_operation
-      2 - W - A: 0x0000000000000ED2 L: 08 D: 0x0001020304050607
+      2 - W - A: 0x0000000000000ED2 L: 08 D: 0x0001020304050607 address out-of-range
 
 Info: lt_initiator_direct_memory_interface.cpp: 550 ns - initiator_thread
-      2 - Completed LT request
-      SC time    = 550 ns
-      local time = 605 ns
+      2 operation failed
 
 Info: lt_target.cpp: 550 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
 
 Info: lt_target.cpp: 550 ns - memory_operation
-      2 - R - A: 0x0000000000000129 L: 08 D: 0x5A5A5A5A5A5A5A5A
+      2 - R - A: 0x0000000000000129 L: 08 address out-of-range, data zeroed
 
 Info: lt_initiator_direct_memory_interface.cpp: 550 ns - initiator_thread
-      2 - Completed LT request
-      SC time    = 550 ns
-      local time = 680 ns
+      2 operation failed
 
 Info: lt_target.cpp: 550 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
 
 Info: lt_target.cpp: 550 ns - memory_operation
-      2 - W - A: 0x000000000000088F L: 08 D: 0x0001020304050607
+      2 - W - A: 0x000000000000088F L: 08 D: 0x0001020304050607 address out-of-range
 
 Info: lt_initiator_direct_memory_interface.cpp: 550 ns - initiator_thread
-      2 - Completed LT request
-      SC time    = 550 ns
-      local time = 735 ns
+      2 operation failed
 
 Info: lt_target.cpp: 550 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
 
 Info: lt_target.cpp: 550 ns - memory_operation
-      2 - W - A: 0x0000000000000CD3 L: 08 D: 0x0001020304050607
+      2 - W - A: 0x0000000000000CD3 L: 08 D: 0x0001020304050607 address out-of-range
 
 Info: lt_initiator_direct_memory_interface.cpp: 550 ns - initiator_thread
-      2 - Completed LT request
-      SC time    = 550 ns
-      local time = 790 ns
+      2 operation failed
 
 Info: lt_target.cpp: 550 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
 
 Info: lt_target.cpp: 550 ns - memory_operation
-      2 - W - A: 0x00000000000000F0 L: 08 D: 0x0001020304050607
+      2 - W - A: 0x00000000000000F0 L: 08 D: 0x0001020304050607 address out-of-range
 
 Info: lt_initiator_direct_memory_interface.cpp: 550 ns - initiator_thread
-      2 - Completed LT request
-      SC time    = 550 ns
-      local time = 845 ns
+      2 operation failed
 
 Info: traffic_generator.cpp: 550 ns - traffic_generator_thread
       2 - response dequeued
@@ -508,23 +484,19 @@ Info: lt_target.cpp: 550 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
 
 Info: lt_target.cpp: 550 ns - memory_operation
-      2 - R - A: 0x000000000000055B L: 08 D: 0x5A5A5A5A5A5A5A5A
+      2 - R - A: 0x000000000000055B L: 08 address out-of-range, data zeroed
 
 Info: lt_initiator_direct_memory_interface.cpp: 550 ns - initiator_thread
-      2 - Completed LT request
-      SC time    = 550 ns
-      local time = 920 ns
+      2 operation failed
 
 Info: lt_target.cpp: 550 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
 
 Info: lt_target.cpp: 550 ns - memory_operation
-      2 - R - A: 0x00000000000008A0 L: 08 D: 0x5A5A5A5A5A5A5A5A
+      2 - R - A: 0x00000000000008A0 L: 08 address out-of-range, data zeroed
 
 Info: lt_initiator_direct_memory_interface.cpp: 550 ns - initiator_thread
-      2 - Completed LT request
-      SC time    = 550 ns
-      local time = 995 ns
+      2 operation failed
 
 Info: lt_initiator_direct_memory_interface.cpp: 555 ns - initiator_thread
       1 - Completed LT request
@@ -549,12 +521,10 @@ Info: lt_target.cpp: 555 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
 
 Info: lt_target.cpp: 555 ns - memory_operation
-      2 - W - A: 0x0000000000000CE1 L: 08 D: 0x0001020304050607
+      2 - W - A: 0x0000000000000CE1 L: 08 D: 0x0001020304050607 address out-of-range
 
 Info: lt_initiator_direct_memory_interface.cpp: 555 ns - initiator_thread
-      1 - Completed LT request
-      SC time    = 555 ns
-      local time = 670 ns
+      1 operation failed
 
 Info: lt_target.cpp: 555 ns - nb_transport
       1 * BEGIN_REQ LT_Annotated
@@ -603,12 +573,10 @@ Info: lt_target.cpp: 555 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
 
 Info: lt_target.cpp: 555 ns - memory_operation
-      2 - R - A: 0x0000000000000FBD L: 08 D: 0x5A5A5A5A5A5A5A5A
+      2 - R - A: 0x0000000000000FBD L: 08 address out-of-range, data zeroed
 
 Info: lt_initiator_direct_memory_interface.cpp: 555 ns - initiator_thread
-      1 - Completed LT request
-      SC time    = 555 ns
-      local time = 845 ns
+      1 operation failed
 
 Info: traffic_generator.cpp: 555 ns - traffic_generator_thread
       1 - command queued
@@ -623,20 +591,16 @@ Info: lt_target.cpp: 555 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
 
 Info: lt_target.cpp: 555 ns - memory_operation
-      2 - W - A: 0x00000000000009FE L: 08 D: 0x0001020304050607
+      2 - W - A: 0x00000000000009FE L: 08 D: 0x0001020304050607 address out-of-range
 
 Info: lt_initiator_direct_memory_interface.cpp: 555 ns - initiator_thread
-      1 - Completed LT request
-      SC time    = 555 ns
-      local time = 900 ns
+      1 operation failed
 
 Info: lt_target.cpp: 555 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
 
 Info: lt_target.cpp: 555 ns - memory_operation
-      2 - W - A: 0x0000000000000192 L: 08 D: 0x0001020304050607
+      2 - W - A: 0x0000000000000192 L: 08 D: 0x0001020304050607 address out-of-range
 
 Info: lt_initiator_direct_memory_interface.cpp: 555 ns - initiator_thread
-      1 - Completed LT request
-      SC time    = 555 ns
-      local time = 955 ns
+      1 operation failed

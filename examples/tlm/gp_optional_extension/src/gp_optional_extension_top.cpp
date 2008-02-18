@@ -89,12 +89,14 @@ gp_optional_extension_top::gp_optional_extension_top  ///< constructor
     ( "m_at_initiator_1"                    ///< module name
     , 1                                     ///< initiator ID
     , 0xAFEDBEEF                            ///< random number generator seed
+    ,32                                     ///< message count
     )
 
   , m_at_initiator_2                        ///< initiator 2
     ( "m_at_initiator_2"                    ///< module name
     , 2                                     ///< initiator ID
     , 0xCAFEFEED                            ///< random number generator seed
+    ,32                                     ///< message count
     )
 
 {

@@ -30,7 +30,6 @@
        - begin response
        - end response
        where timing is explicit
-    Target also supports a gp optional extension.
 
  ******************************************************************************/
 
@@ -45,7 +44,7 @@
 #include "tlm.h"                            ///< TLM headers
 #include "at_target_memory.h"               ///< our class header
 #include "reporting.h"                      ///< Reporting convenience macros
-#include "gp_extension.h"                   ///< GP optional extension
+#include "my_initiator_id_extension.h"      ///< GP optional extension
 
 using namespace std;                        ///< allows access to std entities 
 using namespace sc_core;                    ///< allows access to sc_core entities
@@ -148,115 +147,125 @@ at_target_memory::~at_target_memory(void)      ///< destructor
 =============================================================================*/
 tlm::tlm_sync_enum                            ///< synchronization state
 at_target_memory::nb_transport                ///< non-blocking transport
-( tlm::tlm_generic_payload  &gp               ///< generic payoad pointer
-, tlm::tlm_phase            &phase            ///< transaction phase
-, sc_time                   &delay_time)      ///< time it should take for transport
+( tlm::tlm_generic_payload& transaction_ref   ///< generic payoad pointer
+, tlm::tlm_phase&           phase             ///< transaction phase
+, sc_time&                  delay)            ///< time it should take for transport
 {
   std::ostringstream       msg;               // log message
   tlm::tlm_sync_enum       return_status = tlm::TLM_REJECTED;
 
   // test for extension
-  gp_extension* gp_ext;
-  gp.get_extension(gp_ext);
+  gp_extension::my_initiator_id_extension* gp_ext;
+  transaction_ref.get_extension(gp_ext);
   if (gp_ext) {
     // if extension exists, print out the string
     std::cout << gp_ext->m_initiator_ID << std::endl;
     std::cout << " *******     to AT Target ID " << m_ID << "      *******"<< std::endl;
   }
 
-  switch (phase) 
-  {
-    case tlm::BEGIN_REQ: 
+  // non-supported feature check
+  // return error for byte enable; this target does not support
+  if (transaction_ref.get_byte_enable_ptr()){
+    transaction_ref.set_response_status(tlm::TLM_BYTE_ENABLE_ERROR_RESPONSE);
+  }
+  else if (transaction_ref.get_streaming_width()) {
+    transaction_ref.set_response_status(tlm::TLM_BURST_ERROR_RESPONSE);
+  }
+  else {
+    switch (phase) 
     {
-      if (m_model_style == AT_2_Phase_Annotated_e)      // ## AT_2_Phase_Annotated
-      { 
-        msg.str ("");
-	      msg << m_ID << " - ** BEGIN_REQ AT 2 Phase Annotated";
-        REPORT_INFO(filename,  __FUNCTION__, msg.str());
-
-        if (m_response_queue.empty())
-        {
-          m_begin_response_event.notify(SC_ZERO_TIME);
-        }
-        m_response_queue.push(&gp);
-
-        phase       = tlm::END_REQ;   // update phase and time  
-        delay_time  = m_accept_delay;  
-        return_status =  tlm::TLM_UPDATED;
-      }
-      else 
+      case tlm::BEGIN_REQ: 
       {
-        msg.str ("");
-        msg << m_ID << " - ** BEGIN_REQ AT 4 Phase";
-        REPORT_INFO(filename,  __FUNCTION__, msg.str());
-
-        if (m_end_request_queue.empty()){
-          m_end_request_event.notify(SC_ZERO_TIME);
-        }
-        m_end_request_queue.push(&gp);
-
-        return_status = tlm::TLM_ACCEPTED;
-      }
-      break;
-    }
-
-    // declare a transaction pointer to store the value we get back from queue
-    tlm::tlm_generic_payload *transaction_ptr;  
-    case tlm::END_RESP: 
-    {
-      if (m_model_style == AT_4_Phase_e)
-      {
-        transaction_ptr = m_end_response_queue.front();
-        if (transaction_ptr != &gp)
-        {    
+        if (m_model_style == AT_2_Phase_Annotated_e)      // ## AT_2_Phase_Annotated
+        { 
           msg.str ("");
-	        msg << m_ID << " - Unexpected END_RESP";
-          REPORT_FATAL(filename,  __FUNCTION__, msg.str());
+    	      msg << m_ID << " - ** BEGIN_REQ AT 2 Phase Annotated";
+          REPORT_INFO(filename,  __FUNCTION__, msg.str());
+
+          if (m_response_queue.empty())
+          {
+            m_begin_response_event.notify(SC_ZERO_TIME);
+          }
+          m_response_queue.push(&transaction_ref);
+
+          phase       = tlm::END_REQ;   // update phase and time  
+          delay       = m_accept_delay;  
+          return_status =  tlm::TLM_UPDATED;
         }
-        m_end_response_queue.pop();
-        m_end_response_event.notify(SC_ZERO_TIME);
-        msg.str ("");
-	      msg << m_ID << " - ** END_RESP received AT 4 Phase ";
-        REPORT_INFO(filename, __FUNCTION__, msg.str());
-        return_status = tlm::TLM_COMPLETED;
+        else 
+        {
+          msg.str ("");
+          msg << m_ID << " - ** BEGIN_REQ AT 4 Phase";
+          REPORT_INFO(filename,  __FUNCTION__, msg.str());
+
+          if (m_end_request_queue.empty()){
+            m_end_request_event.notify(SC_ZERO_TIME);
+          }
+          m_end_request_queue.push(&transaction_ref);
+
+          return_status = tlm::TLM_ACCEPTED;
+        }
+        break;
       }
-      else 
+
+      // declare a transaction pointer to store the value we get back from queue
+      tlm::tlm_generic_payload *transaction_ptr;  
+      case tlm::END_RESP: 
+      {
+        if (m_model_style == AT_4_Phase_e)
+        {
+          transaction_ptr = m_end_response_queue.front();
+          if (transaction_ptr != &transaction_ref)
+          {    
+            msg.str ("");
+    	        msg << m_ID << " - Unexpected END_RESP";
+            REPORT_FATAL(filename,  __FUNCTION__, msg.str());
+          }
+          m_end_response_queue.pop();
+          m_end_response_event.notify(SC_ZERO_TIME);
+          msg.str ("");
+    	      msg << m_ID << " - ** END_RESP received AT 4 Phase ";
+          REPORT_INFO(filename, __FUNCTION__, msg.str());
+          return_status = tlm::TLM_COMPLETED;
+        }
+        else 
+        {
+          msg.str ("");
+    	      msg << m_ID << " - END_RESP is invalid";
+          REPORT_FATAL(filename, __FUNCTION__, msg.str());
+          return_status = tlm::TLM_REJECTED; 
+        }
+        break;
+      }
+
+      case tlm::BEGIN_RESP: 
       {
         msg.str ("");
-	      msg << m_ID << " - END_RESP is invalid";
+        msg << m_ID << " - ** BEGIN_RESP is invalid phase for Target";
         REPORT_FATAL(filename, __FUNCTION__, msg.str());
         return_status = tlm::TLM_REJECTED; 
+        break;
       }
-      break;
-    }
 
-    case tlm::BEGIN_RESP: 
-    {
-      msg.str ("");
-      msg << m_ID << " - ** BEGIN_RESP is invalid phase for Target";
-      REPORT_FATAL(filename, __FUNCTION__, msg.str());
-      return_status = tlm::TLM_REJECTED; 
-      break;
-    }
+      case tlm::END_REQ: 
+      {
+        msg.str ("");
+        msg << m_ID << " - ** END_REQ is invalid phase for Target";
+        REPORT_FATAL(filename, __FUNCTION__, msg.str());
+        return_status = tlm::TLM_REJECTED; 
+        break;
+      }
 
-    case tlm::END_REQ: 
-    {
-      msg.str ("");
-      msg << m_ID << " - ** END_REQ is invalid phase for Target";
-      REPORT_FATAL(filename, __FUNCTION__, msg.str());
-      return_status = tlm::TLM_REJECTED; 
-      break;
-    }
-
-    default: 
-    {
-      msg.str ("");
-      msg << m_ID << " - invalid phase for TLM2 GP";
-      REPORT_FATAL(filename, __FUNCTION__, msg.str());
-      return_status = tlm::TLM_REJECTED; 
-      break;
-    }
-  } //  end phase switch 
+      default: 
+      {
+        msg.str ("");
+        msg << m_ID << " - invalid phase for TLM2 GP";
+        REPORT_FATAL(filename, __FUNCTION__, msg.str());
+        return_status = tlm::TLM_REJECTED; 
+        break;
+      }
+    } //  end phase switch 
+  } // end if
   return return_status;
 } // end inboud (forwared) nb_transport 
 
@@ -304,7 +313,7 @@ void at_target_memory::end_request_method(void)  ///< end request processing
       default: 
       {
         msg.str ("");
-	      msg << m_ID << " - invalid reponse for END_REQ";
+	      msg << m_ID << " - invalid response for END_REQ";
         REPORT_FATAL(filename,  __FUNCTION__, msg.str());
         break;
       }
@@ -384,7 +393,7 @@ void at_target_memory::begin_response_method(void)
       default: 
       {
         msg.str ("");
-	      msg << m_ID << " - Invalid response for BEGIN_REPONSE";
+	      msg << m_ID << " - Invalid response for BEGIN_RESPONSE";
         REPORT_FATAL(filename,  __FUNCTION__, msg.str());
         break;
       }
@@ -485,17 +494,17 @@ at_target_memory::get_direct_mem_ptr          ///< get direct memory pointer
   @retval bool success/failure
 ==============================================================================*/
 void at_target_memory::memory_operation
-( tlm::tlm_generic_payload  &gp  
+( tlm::tlm_generic_payload  &transaction_ref  
 )    
 {
   std::ostringstream       msg;               // log message
 
   // Perform the requested operation
   // Access the required attributes from the payload
-  sc_dt::uint64      address = gp.get_address();         ///< memory address
-  tlm::tlm_command   command = gp.get_command();         ///< memory command
-  unsigned char      *data   = gp.get_data_ptr();        ///< data pointer
-  int                length  = gp.get_data_length();     ///< data length
+  sc_dt::uint64      address = transaction_ref.get_address();    ///< memory address
+  tlm::tlm_command   command = transaction_ref.get_command();    ///< memory command
+  unsigned char      *data   = transaction_ref.get_data_ptr();   ///< data pointer
+  int                length  = transaction_ref.get_data_length();///< data length
 
   switch (command)
   {
@@ -584,7 +593,7 @@ void at_target_memory::memory_operation
     }
   }
 
-  gp.set_response_status(tlm::TLM_OK_RESPONSE);
+  transaction_ref.set_response_status(tlm::TLM_OK_RESPONSE);
   return;
 
 } // end memory_operation

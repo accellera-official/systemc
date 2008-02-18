@@ -72,6 +72,7 @@ at_initiator::at_initiator                    ///< constructor
 , initiator_socket("initiator_socket")        ///< initiator socket
 , m_ID            (ID)                        ///< initialize initiator ID
 , m_end_rsp_delay (end_rsp_delay)             ///< initialize delay
+, detect_2_phase_target(false)                ///< initiatlize AT target detection
 { 
   // bind initiator to the export
   initiator_socket (*this);                     
@@ -81,6 +82,7 @@ at_initiator::at_initiator                    ///< constructor
 
   // register method process
   SC_METHOD(m_send_end_rsp_method)              
+    sensitive << m_send_end_rsp_event;
 }
 
 /*==============================================================================
@@ -169,7 +171,8 @@ void at_initiator::initiator_thread(void)     ///< initiator thread
             msg.str ("");
             msg << m_ID << " - * END_REQ AT 2 phase annotated";
             REPORT_INFO (filename, __FUNCTION__, msg.str() );
-	        m_wait_2phase_begin_rsp_set.insert(transaction_ptr);
+	    detect_2_phase_target = true;
+	    m_wait_rsp_set.insert(transaction_ptr);
             wait (delay);            // wait delay specified by target
             break;
           }
@@ -269,44 +272,46 @@ at_initiator::nb_transport                                // inbound nb_transpor
       // The following block handles out of order response from a target, and
       // relative out of order responses of a target over another target (multiple
       // target system)
-      if ((!m_wait_2phase_begin_rsp_set.empty()) || (!m_wait_rsp_set.empty()))
+      if (!m_wait_rsp_set.empty())
       {
         // check to see if incoming transaction matches one from 2 phase queue
         std::set<tlm::tlm_generic_payload *>::iterator set_iterator;
-        set_iterator = m_wait_2phase_begin_rsp_set.find(&transaction_ref);
-        // check to see if incoming transaction matches one from 2 phase queue
-	      if (set_iterator != m_wait_2phase_begin_rsp_set.end())
+        set_iterator = m_wait_rsp_set.find(&transaction_ref);
+	      if (set_iterator != m_wait_rsp_set.end())
         {
-	        m_wait_2phase_begin_rsp_set.erase(set_iterator);
-          response_out_port->write(&transaction_ref); // put the GP on the rsp fifo port
-          phase = tlm::END_RESP;                      // set appropriate return phase
-          delay = m_end_rsp_delay;                    // wait for the response delay
-          msg.str("");
-          msg << m_ID << " - * END_RESP AT 2 phase annotated";
-          REPORT_INFO (filename, __FUNCTION__, msg.str() );
-          status = tlm::TLM_COMPLETED;                // return status
-          break;
-        }
-        // if not 2 phase, check 4 phase queue
-        else if(!m_wait_rsp_set.empty()) 
-        {
-		      set_iterator = m_wait_rsp_set.find(&transaction_ref);
-		      if (set_iterator != m_wait_rsp_set.end())     // 4 phase target response
+	        m_wait_rsp_set.erase(set_iterator);
+          // phase 2
+		      if (detect_2_phase_target) 
           {
-		        m_wait_rsp_set.erase(set_iterator);
+            response_out_port->write(&transaction_ref); // put the GP on the rsp fifo port
+            phase = tlm::END_RESP;                      // set appropriate return phase
+            delay = m_end_rsp_delay;                    // wait for the response delay
+            msg.str("");
+            msg << m_ID << " - * END_RESP AT 2 phase annotated";
+            REPORT_INFO (filename, __FUNCTION__, msg.str() );
+            status = tlm::TLM_COMPLETED;                // return status
+		      }
+          // 4 phase
+		      else 
+          {
+		        if (m_send_end_rsp_queue.empty()) 
+		        {
+		          m_send_end_rsp_event.notify(m_end_rsp_delay);
+		        }
             m_send_end_rsp_queue.push(&transaction_ref);// put transaction onto rsp queue
-            m_send_end_rsp_event.notify(SC_ZERO_TIME);  // notify handshake phase
             msg.str("");
             msg << m_ID << " - AT target starting response";
             REPORT_INFO (filename, __FUNCTION__, msg.str() );
             status = tlm::TLM_ACCEPTED;
-            break;
           }
+          //break;
         }
       }
+    //}
       // check LT req_accepted_queue; if this is an LT target, return TLM_COMPLETED
       // status.  No further phases are required.
-      else if(!m_req_accepted_queue.empty())
+      //else if(!m_req_accepted_queue.empty())
+    if(!m_req_accepted_queue.empty() && (status == tlm::TLM_REJECTED))
       {
         trans_ptr = m_req_accepted_queue.front();     
         if (trans_ptr == &transaction_ref)            // LT target completing request
@@ -371,12 +376,11 @@ at_initiator::nb_transport                                // inbound nb_transpor
 ==============================================================================*/
 void at_initiator::m_send_end_rsp_method(void)  ///< send end response method
 {
-  static bool m_send_end_rsp_active = false;    // set state of end rsp queue
   tlm::tlm_generic_payload* transaction_ptr;
   std::ostringstream        msg;                // log message
 
   // if there are items in the end response queue, start processing
-  if (m_send_end_rsp_active) 
+  if (!m_send_end_rsp_queue.empty())
   {
     transaction_ptr = m_send_end_rsp_queue.front();
     m_send_end_rsp_queue.pop();
@@ -402,7 +406,7 @@ void at_initiator::m_send_end_rsp_method(void)  ///< send end response method
       default: 
       {
         msg.str ("");
-        msg << m_ID << " - Invalid reponse for END_RESP";
+        msg << m_ID << " - Invalid response for END_RESP";
         REPORT_INFO (filename, __FUNCTION__, msg.str() );
         break;
       }
@@ -410,20 +414,10 @@ void at_initiator::m_send_end_rsp_method(void)  ///< send end response method
   } // end if m_send_end_rsp_active
 
   // check queue for another transaction
-  if (m_send_end_rsp_queue.empty()){
-    m_send_end_rsp_active = false;
-    next_trigger(m_send_end_rsp_event);
-  }
-  else {
-    m_send_end_rsp_active = true;
-    msg.str ("");
-    msg << m_ID << " - ** start END_RESP delay" << endl;
-    REPORT_INFO (filename, __FUNCTION__, msg.str() );
-
+  if (!m_send_end_rsp_queue.empty())
+  {
     m_send_end_rsp_event.notify (m_end_rsp_delay);
-    next_trigger(m_send_end_rsp_event);
   }
-
     return;
 } // end End_Response_method
 
@@ -453,6 +447,6 @@ void at_initiator::invalidate_direct_mem_ptr   // invalidate_direct_mem_ptr
 
   msg.str ("");
   msg << m_ID << " - invalidate_direct_mem_ptr: not implemented";
-  REPORT_FATAL(filename, __FUNCTION__, msg.str());
+  REPORT_INFO(filename, __FUNCTION__, msg.str());
 }
 

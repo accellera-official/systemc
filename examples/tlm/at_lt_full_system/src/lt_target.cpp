@@ -21,20 +21,20 @@
  @brief LT target memory routines
  
   Original Authors:
-    Bill Bunton, ESLX
     Charles Wilson, ESLX
+    Bill Bunton, ESLX
     
 --------------------------------------------------------------------------------------- */
 
 // Note: includes are order dependent
 
-#include "tlm.h"                            // TLM headers
-#include "lt_target.h"
-#include "reporting.h"
+#include "tlm.h"                                      ///< TLM headers
+#include "lt_target.h"                                ///< our headers
+#include "reporting.h"                                ///< reporting convenience macros
                     
 using namespace  std;
 
-static const char *filename = "lt_target.cpp";
+static const char *filename = "lt_target.cpp";        ///< filename
 
 /*=============================================================================
   @fn lt_target::lt_target
@@ -66,15 +66,16 @@ lt_target::lt_target                                ///< constructor
 , const sc_core::sc_time    accept_delay            ///< accept delay (SC_TIME)
 , const sc_core::sc_time    read_response_delay     ///< read response delay (SC_TIME)
 , const sc_core::sc_time    write_response_delay    ///< write response delay (SC_TIME)
-) : sc_module               (module_name)           ///< module name
-  , m_ID                    (ID)                    ///< target ID
-  , m_memory_socket         (memory_socket)         ///< socket name
-  , m_base_address          (base_address)          ///< base address
-  , m_memory_size           (memory_size)           ///< memory size (bytes)
-  , m_memory_width          (memory_width)          ///< memory width (bytes)
-  , m_accept_delay          (accept_delay)          ///< accept delay
-  , m_read_response_delay   (read_response_delay)   ///< read response delay
-  , m_write_response_delay  (write_response_delay)  ///< write response delay
+)
+: sc_module               (module_name)             ///< module name
+, m_ID                    (ID)                      ///< target ID
+, m_memory_socket         (memory_socket)           ///< socket name
+, m_base_address          (base_address)            ///< base address
+, m_memory_size           (memory_size)             ///< memory size (bytes)
+, m_memory_width          (memory_width)            ///< memory width (bytes)
+, m_accept_delay          (accept_delay)            ///< accept delay
+, m_read_response_delay   (read_response_delay)     ///< read response delay
+, m_write_response_delay  (write_response_delay)    ///< write response delay
 {
   // Allocate an array for the target's memory
   m_memory = new unsigned char[size_t(m_memory_size)];
@@ -399,11 +400,13 @@ lt_target::memory_operation                         ///< memory_operation
   // Perform the requested operation
   // Access the required attributes from the payload
 
-  sc_dt::uint64      address = gp.get_address();      ///< memory address
-  tlm::tlm_command   command = gp.get_command();      ///< memory command
-  unsigned char      *data   = gp.get_data_ptr();     ///< data pointer
-  int                length  = gp.get_data_length();  ///< data length
-  std::ostringstream msg;                             ///< log message
+  sc_dt::uint64             address   = gp.get_address();     ///< memory address
+  tlm::tlm_command          command   = gp.get_command();     ///< memory command
+  unsigned char             *data     = gp.get_data_ptr();    ///< data pointer
+  unsigned int              length    = gp.get_data_length(); ///< data length
+  
+  tlm::tlm_response_status  response  = tlm::TLM_OK_RESPONSE; ///< operation response
+  std::ostringstream        msg;                              ///< log message
 
   switch (command)
   {
@@ -425,12 +428,10 @@ lt_target::memory_operation                         ///< memory_operation
       msg << " L: " << internal << setw( 2 ) << setfill( '0' ) << dec << length;
       msg << " D: 0x";
       
-      for (int i = 0; i < length; i++)
+      for (unsigned int i = 0; i < length; i++)
       {
         msg << internal << setw( 2 ) << setfill( '0' ) << uppercase << hex << (int)data[i];
       }
-      
-      REPORT_INFO(filename, __FUNCTION__, msg.str());
 
       // global -> local address
       address -= m_base_address;
@@ -438,20 +439,31 @@ lt_target::memory_operation                         ///< memory_operation
       if  (  (address < 0)
       || (address >= m_memory_size))
       {
-        // ignore out-of-bounds writes
+        // address out-of-bounds
+        msg << " address out-of-range";
+        
+        // set error response (9.9.d)
+        response = tlm::TLM_ADDRESS_ERROR_RESPONSE;
       }
       else
       {
-        for (int i = 0; i < length; i++)
+        for (unsigned int i = 0; i < length; i++)
         {
           if ( address >= m_memory_size )
           {
+            msg << " address went out of bounds";
+            
+            // set error response (9.9.d)
+            response = tlm::TLM_ADDRESS_ERROR_RESPONSE;
+            
             break;
           }
 
           m_memory[address++] = data[i];
         }
       }
+      
+      REPORT_INFO(filename, __FUNCTION__, msg.str());
       
       break;
     }
@@ -473,18 +485,26 @@ lt_target::memory_operation                         ///< memory_operation
       if  ( (address < 0)
       || (address >= m_memory_size))
       {
-        // out-of-bounds read
+        // address out-of-bounds
         msg << " address out-of-range, data zeroed";
+        
+        // set error response (9.9.d)
+        response = tlm::TLM_ADDRESS_ERROR_RESPONSE;
       }
       else
       {
         msg << " D: 0x";
         
-        for (int i = 0; i < length; i++)
+        for (unsigned int i = 0; i < length; i++)
         {
           if ( address >= m_memory_size )
           {
-            // ignore out-of-bounds reads
+            // out-of-bounds reads
+            msg << " address went out of bounds";
+            
+            // set error response (9.9.d)
+            response = tlm::TLM_ADDRESS_ERROR_RESPONSE;
+            
             break;
           }
 
@@ -500,7 +520,7 @@ lt_target::memory_operation                         ///< memory_operation
     }
   }
 
-  gp.set_response_status(tlm::TLM_OK_RESPONSE);
+  gp.set_response_status(response);
   
   return;
 }

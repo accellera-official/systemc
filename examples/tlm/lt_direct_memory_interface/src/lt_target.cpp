@@ -373,14 +373,14 @@ lt_target::memory_operation                         ///< memory_operation
 ( tlm::tlm_generic_payload  &gp                     ///< generic payload
 )    
 {
-  // Perform the requested operation
   // Access the required attributes from the payload
-
-  sc_dt::uint64      address = gp.get_address();      ///< memory address
-  tlm::tlm_command   command = gp.get_command();      ///< memory command
-  unsigned char      *data   = gp.get_data_ptr();     ///< data pointer
-  int                length  = gp.get_data_length();  ///< data length
-  std::ostringstream msg;                             ///< log message
+  sc_dt::uint64             address   = gp.get_address();     ///< memory address
+  tlm::tlm_command          command   = gp.get_command();     ///< memory command
+  unsigned char             *data     = gp.get_data_ptr();    ///< data pointer
+  unsigned int              length    = gp.get_data_length(); ///< data length
+  
+  tlm::tlm_response_status  response  = tlm::TLM_OK_RESPONSE; ///< operation response
+  std::ostringstream        msg;                              ///< log message
 
   switch (command)
   {
@@ -402,23 +402,42 @@ lt_target::memory_operation                         ///< memory_operation
       msg << " L: " << internal << setw( 2 ) << setfill( '0' ) << dec << length;
       msg << " D: 0x";
       
-      for (int i = 0; i < length; i++)
+      for (unsigned int i = 0; i < length; i++)
       {
         msg << internal << setw( 2 ) << setfill( '0' ) << uppercase << hex << (int)data[i];
       }
+
+      // global -> local address
+      address -= m_base_address;
+
+      if  (  (address < 0)
+          || (address >= m_memory_size))
+      {
+        // address out-of-bounds
+        msg << " address out-of-range";
+        
+        // set error response (9.9.d)
+        response = tlm::TLM_ADDRESS_ERROR_RESPONSE;
+      }
+      else
+      {
+        for (unsigned int i = 0; i < length; i++)
+        {
+          if ( address >= m_memory_size )
+          {
+            msg << " address went out of bounds";
+            
+            // set error response (9.9.d)
+            response = tlm::TLM_ADDRESS_ERROR_RESPONSE;
+            
+            break;
+          }
+          
+          m_memory[address++] = data[i];
+        }
+      }
       
       REPORT_INFO(filename, __FUNCTION__, msg.str());
-
-      for (int i = 0; i < length; i++)
-      {
-        if ( address >= m_memory_size )
-        {
-          // ignore write overruns
-          break;
-        }
-
-        m_memory[address++] = data[i];
-      }
       
       break;
     }
@@ -434,28 +453,45 @@ lt_target::memory_operation                         ///< memory_operation
       // clear read buffer
       memset(data, 0, length);
 
-      msg << " D: 0x";
-      
-      for (int i = 0; i < length; i++)
-      {
-        if ( address >= m_memory_size )
-        {
-          // ignore out-of-bounds reads
-          break;
-        }
-
-        data[i] = m_memory[address++];
+      // global -> local address
+      address -= m_base_address;
         
-        msg << internal << setw( 2 ) << setfill( '0' ) << uppercase << hex << (int)data[i];
+      if  (  (address < 0)
+          || (address >= m_memory_size))
+      {
+        // address out-of-bounds
+        msg << " address out-of-range, data zeroed";
+        
+        // set error response (9.9.d)
+        response = tlm::TLM_ADDRESS_ERROR_RESPONSE;
+      }
+      else
+      {
+        msg << " D: 0x";
+        for (unsigned int i = 0; i < length; i++)
+        {
+          if ( address >= m_memory_size )
+          {
+            // out-of-bounds reads
+            msg << " address went out of bounds";
+            
+            // set error response (9.9.d)
+            response = tlm::TLM_ADDRESS_ERROR_RESPONSE;
+            
+            break;
+          }
+          
+          data[i] = m_memory[address++];
+          msg << internal << setw( 2 ) << setfill( '0' ) << uppercase << hex << (int)data[i];
+        }
       }
 
       REPORT_INFO(filename, __FUNCTION__, msg.str());
-      
       break;
     }
   }
 
-  gp.set_response_status(tlm::TLM_OK_RESPONSE);
+  gp.set_response_status(response);
   
   return;
 }
