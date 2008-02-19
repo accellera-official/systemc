@@ -36,7 +36,8 @@
 #ifndef __LT_AT_SWITCH_TARGET_H__ 
 #define __LT_AT_SWITCH_TARGET_H__
 
-#include <queue>                          ///< queue header from std lib
+#include "tlm.h"                                      ///< TLM headers
+#include <queue>                                      ///< queue header from std lib
 
 enum e_target_mode                        ///< Enumerated model state; in LT or AT
 {

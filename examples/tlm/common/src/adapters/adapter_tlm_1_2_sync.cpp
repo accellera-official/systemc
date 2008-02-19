@@ -33,11 +33,11 @@
     Charles Wilson, ESLX
 *****************************************************************************/
 
-// Note: order of headers is important
-#include "tlm.h"                                  ///< TLM headers
-#include "reporting.h"                            ///< Reporting convenience macros
-#include "adapter_tlm_1_2_sync.h"                 ///< Our header
-static char *msg_type = "/TLM2/Examples/adapter_tlm_1_2_sync";
+#include "reporting.h"                                ///< Reporting convenience macros
+#include "adapter_tlm_1_2_sync.h"                     ///< Our header
+#include "tlm.h"                                      ///< TLM headers
+
+static const char *msg_type = "/TLM2/Examples/adapter_tlm_1_2_sync";  ///< filename for reporting
 
 //------------------------------------------------------------------------------
 //  constructor and destructor

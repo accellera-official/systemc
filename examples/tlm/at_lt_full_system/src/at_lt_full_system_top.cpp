@@ -28,12 +28,11 @@
     Anna Keist, ESLX
 *****************************************************************************/
 
-#include "tlm.h"                              ///< TLM header
-
-#include "at_lt_full_system_top.h"            ///< our header
-#include "at_target_memory.h"                 ///< memory target
-#include "at_processor_abstraction.h"         ///< initiator
-#include "SimpleBus.h"                        ///< simple bus
+#include "at_lt_full_system_top.h"                    ///< our header
+#include "at_target_memory.h"                         ///< memory target
+#include "at_processor_abstraction.h"                 ///< initiator
+#include "SimpleBus.h"                                ///< simple bus
+#include "tlm.h"                                      ///< TLM header
 
 /*=============================================================================
   @fn at_lt_full_system_top::at_lt_full_system_top

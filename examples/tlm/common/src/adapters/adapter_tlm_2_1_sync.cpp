@@ -28,15 +28,14 @@
     Charles Wilson, ESLX
 *****************************************************************************/
 
-// Note: includes are order dependent
-#include "tlm.h"                            ///< TLM headers
 #include <systemc>
-#include "adapter_tlm_2_1_sync.h"           ///< our class header
-#include "reporting.h"                      ///< Reporting convenience macros
+#include "adapter_tlm_2_1_sync.h"                     ///< our class header
+#include "reporting.h"                                ///< Reporting convenience macros
+#include "tlm.h"                                      ///< TLM headers
 
 using namespace  std;
 
-static const char *report_source = "adapter_tlm_2_1_sync";
+static const char *report_source = "adapter_tlm_2_1_sync";  ///< filenaem for reporting
 
 /*==============================================================================
   @fn adapter_tlm_2_1_sync

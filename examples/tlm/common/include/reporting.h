@@ -31,14 +31,15 @@
 #ifndef __REPORTING_H__
 #define __REPORTING_H__
 
-#include <sstream>
-#include <iomanip>
+#include "tlm.h"                                      ///< TLM headers
+#include <sstream>                                    ///< string streams
+#include <iomanip>                                    ///< IO manipulation
 
 using std::setfill;
 using std::setw;
 using namespace std;
 
-extern ostringstream reporting_os;                            ///< reporting output string
+extern ostringstream reporting_os;                     ///< reporting output string
 
 #if ( defined ( REPORTING_OFF ) )
 

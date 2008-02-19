@@ -25,16 +25,15 @@
     Charles Wilson, ESLX
 *****************************************************************************/
 
-// Note: order of headers is important
-#include "tlm.h"                                   ///< TLM headers
-#include "reporting.h"                             ///< Reporting convenience macros
-#include "examples_rw_if.h"                        ///< R/W interface for ports
-#include "traffic_generator.h"                     ///< Traffic generator header
-#include "lt_initiator.h"                          ///< Initiator header
-//#include "direct_execution.h"                    ///< Direct execution header
-#include "lt_processor_abstraction.h"              ///< Our header
+#include "reporting.h"                                ///< Reporting convenience macros
+#include "examples_rw_if.h"                           ///< R/W interface for ports
+#include "traffic_generator.h"                        ///< Traffic generator header
+#include "lt_initiator.h"                             ///< Initiator header
+//#include "direct_execution.h"                       ///< Direct execution header
+#include "lt_processor_abstraction.h"                 ///< Our header
+#include "tlm.h"                                      ///< TLM headers
 
-//static char *msg_type = "lt_processor_abstraction";
+//static const char *msg_type = "lt_processor_abstraction"; ///< filename for reporting
 
 //==============================================================================
 // Create traffic generator configuration structure  

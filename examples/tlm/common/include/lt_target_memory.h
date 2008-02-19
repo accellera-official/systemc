@@ -42,6 +42,8 @@
     Charles Wilson, ESLX
 *****************************************************************************/
 
+#include "tlm.h"                                      ///< TLM headers
+
 class lt_target_memory                                  ///< LT target memory
   :         public sc_core::sc_module                   ///< module base clase
   , virtual public tlm::tlm_fw_nb_transport_if<>        ///< target socket

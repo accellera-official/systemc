@@ -28,8 +28,8 @@
     Anna Keist, ESLX
 *****************************************************************************/
 
-#include "tlm.h"                        ///< TLM header
-#include "at_basic_system_top.h"        ///< top module
+#include "at_basic_system_top.h"                      ///< top module
+#include "tlm.h"                                      ///< TLM header
 
 /*=============================================================================
   @fn sc_main

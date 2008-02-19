@@ -36,7 +36,8 @@
 #ifndef __AT_TARGET_MEMORY_H__ 
 #define __AT_TARGET_MEMORY_H__
 
-#include <queue>                          ///< queue header from std lib
+#include "tlm.h"                                      ///< TLM headers
+#include <queue>                                      ///< queue header from std lib
 #include "my_initiator_id_type.h"
 
 //==============================================================================

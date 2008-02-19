@@ -29,7 +29,8 @@
 #ifndef __LT_TARGET_H__ 
 #define __LT_TARGET_H__
 
-#include <queue>                                    ///< standard queue
+#include "tlm.h"                                      ///< TLM headers
+#include <queue>                                      ///< standard queue
 #include "my_initiator_id_type.h"
 
 enum Model_Style_emum

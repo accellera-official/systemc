@@ -34,12 +34,13 @@
 #ifndef __AT_INITIATOR_H__
 #define __AT_INITIATOR_H__
 
-#include <queue>                                    ///< standard queue
-#include <set>                                      ///< standard set
+#include "tlm.h"                                      ///< TLM headers
+#include <queue>                                      ///< standard queue
+#include <set>                                        ///< standard set
 
-class at_initiator                                  ///< at_initiator 
-  :         public sc_core::sc_module               ///< module base class 
-  , virtual public tlm::tlm_bw_nb_transport_if<>    ///< initiator socket
+class at_initiator                                    ///< at_initiator 
+  :         public sc_core::sc_module                 ///< module base class 
+  , virtual public tlm::tlm_bw_nb_transport_if<>      ///< initiator socket
 {
   SC_HAS_PROCESS(at_initiator);
 

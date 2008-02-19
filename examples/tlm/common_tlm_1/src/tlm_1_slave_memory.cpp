@@ -21,11 +21,10 @@
     Charles Wilson, ESLX
 *****************************************************************************/
 
-#include "tlm_1_slave_memory.h"             ///< TLM 1 slave memory
+#include "tlm_1_slave_memory.h"                       ///< TLM 1 slave memory
+#include "reporting.h"                                ///< Reporting convenience macros
 
-#include "reporting.h"                      ///< Reporting convenience macros
-
-static const char *report_source = "tlm_1_mem_slave";
+static const char *report_source = "tlm_1_mem_slave"; ///< filename for reporting
 
 using basic_protocol::basic_status;
 
@@ -48,7 +47,7 @@ basic_status tlm_1_mem_slave::write( const ADDRESS_TYPE &address , const DATA_TY
   msg << " A: 0x" << internal << setw( sizeof(address) * 2 ) 
       << setfill( '0' ) << uppercase << hex << address;
   msg << " D: 0x"<< hex << write_data ;
-  REPORT_INFO(report_source, "tlm_1_mem_slave::write", msg.str());
+  REPORT_INFO(report_source, __FUNCTION__, msg.str());
 
   memory[address] = write_data;
 
@@ -64,7 +63,7 @@ basic_status tlm_1_mem_slave::read( const ADDRESS_TYPE &address , DATA_TYPE &rea
   msg << " A: 0x" << internal << setw( sizeof(address) * 2 ) 
       << setfill( '0' ) << uppercase << hex << address;
   msg << " D: 0x"<< hex << read_data ;
-  REPORT_INFO(report_source, "tlm_1_mem_slave::read", msg.str());
+  REPORT_INFO(report_source, __FUNCTION__, msg.str());
 
 //  cout << name() << " reading from " << a << " value " << hex << d << endl;
   return basic_protocol::SUCCESS;

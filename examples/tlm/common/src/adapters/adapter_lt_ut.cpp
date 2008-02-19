@@ -26,11 +26,11 @@
     
 --------------------------------------------------------------------------------------- */
 
-#include "tlm.h"                                      ///< TLM headers
 #include "adapter_lt_ut.h"                            ///< our class header
 #include "reporting.h"                                ///< Reporting convenience macros
+#include "tlm.h"                                      ///< TLM headers
 
-static const char *filename = "adapter_lt_ut.cpp";    ///< filename string
+static const char *filename = "adapter_lt_ut.cpp";    ///< filename for reporting
 
 /*==============================================================================
   @fn adapter_lt_ut::adapter_lt_ut

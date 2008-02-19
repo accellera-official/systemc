@@ -26,11 +26,11 @@
     
 --------------------------------------------------------------------------------------- */
 
-#include "tlm.h"                                    ///< TLM headers
-#include "lt_direct_memory_interface_top.h"         ///< our header
-#include "lt_target.h"                              ///< LT target
-#include "lt_processor_abstraction.h"               ///< LT processor abstraction
-#include "SimpleBus.h"                              ///< simple bus
+#include "lt_direct_memory_interface_top.h"           ///< our header
+#include "lt_target.h"                                ///< LT target
+#include "lt_processor_abstraction.h"                 ///< LT processor abstraction
+#include "SimpleBus.h"                                ///< simple bus
+#include "tlm.h"                                      ///< TLM headers
 
 /*=============================================================================
   @fn lt_direct_memory_interface_top::lt_direct_memory_interface_top

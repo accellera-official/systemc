@@ -34,8 +34,9 @@
 #ifndef __AT_INITIATOR_H__
 #define __AT_INITIATOR_H__
 
-#include <queue>                                    ///< standard queue
-#include <set>                                      ///< standard set
+#include "tlm.h"                                      ///< TLM headers
+#include <queue>                                      ///< standard queue
+#include <set>                                        ///< standard set
 #include "my_initiator_id_type.h"
 
 class at_initiator                                  ///< at_initiator 

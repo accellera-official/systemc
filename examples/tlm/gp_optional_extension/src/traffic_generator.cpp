@@ -26,12 +26,10 @@
     
 --------------------------------------------------------------------------------------- */
 
-// Note: order of headers is important
-
-#include "tlm.h"                                    ///< TLM headers
-#include "reporting.h"                              ///< report output
-#include "traffic_generator.h"                      ///< traffic generator
-#include "mtrand.h"                                 ///< Mersenne Twister random number generator
+#include "reporting.h"                                ///< report output
+#include "traffic_generator.h"                        ///< traffic generator
+#include "mtrand.h"                                   ///< Mersenne Twister random number generator
+#include "tlm.h"                                      ///< TLM headers
 
 using namespace std;
 

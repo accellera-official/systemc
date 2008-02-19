@@ -38,16 +38,14 @@
     Anna Keist, ESLX
 *****************************************************************************/
 
-// Note: includes are order dependent
+#include "lt_at_switch_target.h"                      ///< our class header
+#include "reporting.h"                                ///< Reporting convenience macros
+#include "tlm.h"                                      ///< TLM headers
 
-#include "tlm.h"                            ///< TLM headers
-#include "lt_at_switch_target.h"            ///< our class header
-#include "reporting.h"                      ///< Reporting convenience macros
+using namespace std;                                  ///< allows access to std entities 
+using namespace sc_core;                              ///< allows access to sc_core entities
 
-using namespace std;                        ///< allows access to std entities 
-using namespace sc_core;                    ///< allows access to sc_core entities
-
-static const char *filename = "lt_at_switch_target.cpp"; // used for reporting
+static const char *filename = "lt_at_switch_target.cpp"; ///< filename used for reporting
 
 /*==============================================================================
   @fn lt_at_switch_target

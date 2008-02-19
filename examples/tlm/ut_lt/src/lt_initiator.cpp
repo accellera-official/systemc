@@ -26,14 +26,14 @@
     
 --------------------------------------------------------------------------------------- */
 
-#include "tlm.h"                                      ///< TLM headers
 #include "reporting.h"                                ///< report output
 #include "lt_initiator.h"                             ///< LT initiator with temporal decoupling
+#include "tlm.h"                                      ///< TLM headers
 
 using namespace sc_core;
 using namespace std;
 
-static const char *filename = "lt_initiator.cpp";     ///< filename
+static const char *filename = "lt_initiator.cpp";     ///< filename for reporting
 
 /*=============================================================================
   @fn lt_initiator::lt_initiator

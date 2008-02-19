@@ -29,8 +29,9 @@
 #include "ut_target.h"                                ///< our header file
 #include <vector>                                     ///< STD vector
 #include "reporting.h"                                ///< reporting output
+#include "tlm.h"                                      ///< TLM headers
 
-static const char  *filename = "ut_target.cpp";       ///< filename string
+static const char  *filename = "ut_target.cpp";       ///< filename for reporting
 
 /*==============================================================================
   @fn ut_target::ut_target

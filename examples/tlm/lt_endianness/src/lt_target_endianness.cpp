@@ -26,17 +26,15 @@
     
 --------------------------------------------------------------------------------------- */
 
-// Note: includes are order dependent
-
-#include "tlm.h"                                    ///< TLM headers
-#include "lt_target_endianness.h"                   ///< our headers
-#include "reporting.h"                              ///< reporting headers
-#include "lt_endian_structure.h"                    ///< LT endian structure
-#include "get_host_endianness.h"                    ///< get_host_endianness helper routine
+#include "lt_target_endianness.h"                     ///< our headers
+#include "reporting.h"                                ///< reporting headers
+#include "lt_endian_structure.h"                      ///< LT endian structure
+#include "get_host_endianness.h"                      ///< get_host_endianness helper routine
+#include "tlm.h"                                      ///< TLM headers
                     
 using namespace  std;
 
-static const char *filename = "lt_target_endianness.cpp";
+static const char *filename = "lt_target_endianness.cpp"; ///< filename for reporting
 
 /*=============================================================================
   @fn lt_target::lt_target

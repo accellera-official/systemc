@@ -28,13 +28,12 @@
 
 *****************************************************************************/
 
-// Note: order of headers is important
-#include "tlm.h"                                      ///< TLM headers
 #include "examples_rw_if.h"                           ///< Convenience R/W interface 
 #include "reporting.h"                                ///< Reporting convenience macros
 #include "lt_initiator.h"                             ///< Our header
+#include "tlm.h"                                      ///< TLM headers
 
-static const char *filename = "/TLM2/Examples/lt_initiator";  ///< filename
+static const char *filename = "/TLM2/Examples/lt_initiator";  ///< filename for reporting
 
 //------------------------------------------------------------------------------
 //  constructor and destructor

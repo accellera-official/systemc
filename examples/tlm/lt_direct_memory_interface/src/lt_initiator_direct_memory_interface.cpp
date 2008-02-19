@@ -28,15 +28,14 @@
 
 //==============================================================================
 
-// Note: order of headers is important
-#include "tlm.h"                                    ///< TLM headers
-#include "reporting.h"                              ///< report output
-#include "lt_initiator_direct_memory_interface.h"   ///< LT initiator with temporal decoupling
+#include "reporting.h"                                ///< report output
+#include "lt_initiator_direct_memory_interface.h"     ///< LT initiator with temporal decoupling
+#include "tlm.h"                                      ///< TLM headers
 
 using namespace sc_core;
 using namespace std;
 
-const char *filename = "lt_initiator_direct_memory_interface.cpp";
+static const char *filename = "lt_initiator_direct_memory_interface.cpp"; ///< filename for reporting
 
 /*=============================================================================
   @fn lt_initiator::lt_initiator

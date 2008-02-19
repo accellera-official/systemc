@@ -18,8 +18,9 @@
 #include "ut_initiator.h"                             ///< our header file
 #include "reporting.h"                                ///< reporting output
 #include "mtrand.h"                                   ///< random number generation
+#include "tlm.h"                                      ///< TLM headers
 
-static const char  *filename = "ut_initiator.cpp";    ///< filename string
+static const char  *filename = "ut_initiator.cpp";    ///< filename for reporting
 
 /* ---------------------------------------------------------------------------------------
  @file ut_initiator.cpp

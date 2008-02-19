@@ -26,11 +26,9 @@
     
 --------------------------------------------------------------------------------------- */
 
-// Note: includes are order dependent
-
-#include "tlm.h"                                      ///< TLM headers
 #include "lt_target.h"                                ///< our header
 #include "reporting.h"                                ///< reporting convience macros
+#include "tlm.h"                                      ///< TLM headers
                     
 using namespace  std;
 

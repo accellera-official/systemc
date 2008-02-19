@@ -28,12 +28,11 @@
     Anna Keist, ESLX
 *****************************************************************************/
 
-#include "tlm.h"                              ///< TLM header
-
 #include "lt_at_switch_top.h"                 ///< our header
 #include "lt_at_switch_target.h"              ///< memory target
 #include "at_processor_abstraction.h"         ///< initiator
 #include "SimpleBus.h"                        ///< simple bus
+#include "tlm.h"                              ///< TLM header
 
 /*=============================================================================
   @fn lt_at_switch_top::lt_at_switch_top

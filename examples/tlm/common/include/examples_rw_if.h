@@ -36,6 +36,8 @@
 #ifndef __EXAMPLES_RW_IF_H__
 #define __EXAMPLES_RW_IF_H__
 
+#include "tlm.h"                                      ///< TLM headers
+
 class examples_rw_if : virtual public sc_core::sc_interface {
   public:
     /// read() - reads a transaction from the socket and places the result

@@ -26,11 +26,11 @@
     
 --------------------------------------------------------------------------------------- */
 
-#include "tlm.h"                                    ///< TLM headers
-#include "lt_temporal_decoupling_top.h"             ///< our header
-#include "lt_target.h"                              ///< LT target
-#include "lt_processor_abstraction.h"               ///< LT processor abstraction
-#include "SimpleBus.h"                              ///< simple bus
+#include "lt_temporal_decoupling_top.h"               ///< our header
+#include "lt_target.h"                                ///< LT target
+#include "lt_processor_abstraction.h"                 ///< LT processor abstraction
+#include "SimpleBus.h"                                ///< simple bus
+#include "tlm.h"                                      ///< TLM headers
 
 /*=============================================================================
   @fn lt_temporal_decoupling_top::lt_temporal_decoupling_top

@@ -36,8 +36,9 @@
 #ifndef __AT_INITIATOR_4_PHASE_H__
 #define __AT_INITIATOR_4_PHASE_H__
 
-#include <queue>                                    ///< standard queue
-#include <set>                                      ///< standard set
+#include "tlm.h"                                      ///< TLM headers
+#include <queue>                                      ///< standard queue
+#include <set>                                        ///< standard set
 
 class at_initiator_4_phase                          ///< at_initiator_4_phase 
   :         public sc_core::sc_module               ///< module base class 

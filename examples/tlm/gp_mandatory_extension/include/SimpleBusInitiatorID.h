@@ -18,7 +18,6 @@
 #ifndef __SIMPLEBUSINITIATORID_H__
 #define __SIMPLEBUSINITIATORID_H__
 
-//#include <systemc>
 #include "tlm.h"
 
 #include "simple_target_socket.h"

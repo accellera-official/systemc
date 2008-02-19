@@ -37,10 +37,9 @@
     Anna Keist, ESLX
 *****************************************************************************/
 
-// Note: order of headers is important
-#include "tlm.h"                              // TLM headers
-#include "reporting.h"                        // Reporting convenience macros
-#include "at_initiator_4_phase.h"             // Our header
+#include "at_initiator_4_phase.h"                     ///< Our header
+#include "reporting.h"                                ///< Reporting convenience macros
+#include "tlm.h"                                      ///< TLM headers
 
 using namespace sc_core;
 

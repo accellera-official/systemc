@@ -26,8 +26,8 @@
     
 --------------------------------------------------------------------------------------- */
 
-#include "tlm.h"                                    ///< TLM headers
-#include "lt_endianness_top.h"                      ///< top module
+#include "lt_endianness_top.h"                        ///< top module
+#include "tlm.h"                                      ///< TLM headers
 
 /*=============================================================================
   @fn sc_main

@@ -28,17 +28,16 @@
 
 //==============================================================================
 
-// Note: order of headers is important
-#include "tlm.h"                                    ///< TLM headers
-#include "reporting.h"                              ///< report output
-#include "lt_initiator_endianness.h"                ///< LT initiator with endianness handling
-#include "lt_endian_structure.h"                    ///< LT endian structure
-#include "get_host_endianness.h"                    ///< get_host_endianness helper routine
+#include "reporting.h"                                ///< report output
+#include "lt_initiator_endianness.h"                  ///< LT initiator with endianness handling
+#include "lt_endian_structure.h"                      ///< LT endian structure
+#include "get_host_endianness.h"                      ///< get_host_endianness helper routine
+#include "tlm.h"                                      ///< TLM headers
 
 using namespace sc_core;
 using namespace std;
 
-const char *filename = "lt_initiator_endianness.cpp";
+static const char *filename = "lt_initiator_endianness.cpp";  ///< filename for reporting
 
 /*=============================================================================
   @fn lt_initiator::lt_initiator

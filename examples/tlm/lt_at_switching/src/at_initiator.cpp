@@ -40,14 +40,13 @@
     Anna Keist, ESLX
 *****************************************************************************/
 
-// Note: order of headers is important
-#include "tlm.h"                              // TLM headers
-#include "reporting.h"                        // Reporting convenience macros
-#include "at_initiator.h"                     // Our header
+#include "reporting.h"                                ///< Reporting convenience macros
+#include "at_initiator.h"                             ///< Our header
+#include "tlm.h"                                      ///< TLM headers
 
 using namespace sc_core;
 
-const char *filename = "at_initiator.cpp";
+static const char *filename = "at_initiator.cpp";     ///< filename for reporting
 
 /*==============================================================================
   @fn at_initiator::at_initiator

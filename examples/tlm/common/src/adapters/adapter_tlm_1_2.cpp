@@ -91,7 +91,7 @@ basic_status                            ///TLM 1 status ERROR or SUCCESS
     return basic_protocol::SUCCESS;
   }
   else {
-    REPORT_FATAL(msg_type, "adapter_tlm_1_2::read","All requests must return complete");
+    REPORT_FATAL(msg_type,  __FUNCTION__,"All requests must return complete");
      return basic_protocol::ERROR;
   }
 }
@@ -138,7 +138,7 @@ basic_status                            ///< TLM 1 status ERROR or SUCCESS
     return basic_protocol::SUCCESS;
   }
   else {
-    REPORT_FATAL(msg_type, "adapter_tlm_1_2::write","All requests must return complete");
+    REPORT_FATAL(msg_type,  __FUNCTION__,"All requests must return complete");
     return basic_protocol::ERROR;
   }
 }
@@ -151,7 +151,7 @@ adapter_tlm_1_2::nb_transport(                  ///< nb_transport
     tlm::tlm_generic_payload& transaction,      ///< transaction
     tlm::tlm_phase&           phase,            ///< transaction phase
     sc_core::sc_time&         time) {           ///< elapsed time
-  REPORT_FATAL(msg_type, "adapter_tlm_1_2::nb_transport","nb_transport: not implemented");
+  REPORT_FATAL(msg_type,  __FUNCTION__,"nb_transport: not implemented");
   return tlm::TLM_COMPLETED;
 }
 
@@ -159,5 +159,5 @@ void
 adapter_tlm_1_2::invalidate_direct_mem_ptr(        ///< invalidate_direct_mem_ptr
     sc_dt::uint64 start_range,                  ///< start range
     sc_dt::uint64 end_range) {                  ///< end range
-  REPORT_FATAL(msg_type, "adapter_tlm_1_2::invalidate_direct_mem_ptr", "invalidate_direct_mem_ptr: not implemented");
+  REPORT_FATAL(msg_type, __FUNCTION__, "invalidate_direct_mem_ptr: not implemented");
 }

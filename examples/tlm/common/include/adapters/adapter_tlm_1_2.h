@@ -37,8 +37,9 @@
 #ifndef __ADAPTER_TLM_1_2_H__
 #define __ADAPTER_TLM_1_2_H__
 
-#include "basic_protocol.h"                       // TLM 1 base protocol 
-#include "basic_slave_base.h"                     // TLM 1 slave base 
+#include "tlm.h"                                      ///< TLM headers
+#include "basic_protocol.h"                           ///< TLM 1 base protocol 
+#include "basic_slave_base.h"                         ///< TLM 1 slave base 
 
 using basic_protocol::basic_status;
 using basic_protocol::basic_slave_base;

@@ -29,7 +29,8 @@
 #ifndef __LT_INITIATOR_DIRECT_MEMORY_INTERFACE_H__
 #define __LT_INITIATOR_DIRECT_MEMORY_INTERFACE_H__
 
-#include <queue>                                    ///< standard queue
+#include "tlm.h"                                      ///< TLM headers
+#include <queue>                                      ///< standard queue
 
 class lt_initiator                                  ///< lt_initiator
 :         public sc_core::sc_module                 ///< SC module

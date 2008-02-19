@@ -28,8 +28,8 @@
     Anna Keist, ESLX
 *****************************************************************************/
 
-#include "tlm.h"                        ///< TLM header
-#include "lt_at_switch_top.h"           ///< top module
+#include "lt_at_switch_top.h"                         ///< top module
+#include "tlm.h"                                      ///< TLM header
 
 // temp spot for global structure
 struct global_target_switch {

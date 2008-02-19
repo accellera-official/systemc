@@ -28,8 +28,8 @@
     Anna Keist, ESLX
 *****************************************************************************/
 
-#include "tlm.h"                        ///< TLM header
-#include "gp_mandatory_extension_top.h" ///< top module
+#include "gp_mandatory_extension_top.h"               ///< top module
+#include "tlm.h"                                      ///< TLM header
 
 /*=============================================================================
   @fn sc_main

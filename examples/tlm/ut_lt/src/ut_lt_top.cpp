@@ -25,12 +25,11 @@
     
 --------------------------------------------------------------------------------------- */
 
-#include "tlm.h"
-
-#include "ut_lt_top.h"                              ///< our header
-#include "lt_target_memory.h"                       ///< memory target
-#include "lt_initiator.h"                           ///< initiator
-#include "SimpleBus.h"                              ///< simple bus
+#include "ut_lt_top.h"                                ///< our header
+#include "lt_target_memory.h"                         ///< memory target
+#include "lt_initiator.h"                             ///< initiator
+#include "SimpleBus.h"                                ///< simple bus
+#include "tlm.h"                                      ///< TLM headers
 
 /*=============================================================================
   @fn ut_lt_top::ut_lt_top

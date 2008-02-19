@@ -42,8 +42,9 @@
 #ifndef __LT_PROCESSOR_ABSTRACTION_H__
 #define __LT_PROCESSOR_ABSTRACTION_H__
 
-#include "lt_initiator.h"
-#include "traffic_generator.h"
+#include "tlm.h"                                      ///< TLM headers
+#include "lt_initiator.h"                             ///< LT initiator
+#include "traffic_generator.h"                        ///< traffic generator
 //#include "direct_execution.h"
 
 class lt_processor_abstraction                     ///< lt_processor_abstraction 

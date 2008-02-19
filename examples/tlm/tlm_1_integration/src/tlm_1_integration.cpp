@@ -28,8 +28,8 @@
     Charles Wilson, ESLX
 *****************************************************************************/
 
-#include "tlm.h"                              ///< TLM
-#include "tlm_1_integration_top.h"            ///< top module
+#include "tlm_1_integration_top.h"                    ///< top module
+#include "tlm.h"                                      ///< TLM
 
 /*=============================================================================
   @fn sc_main

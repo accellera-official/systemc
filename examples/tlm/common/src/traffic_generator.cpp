@@ -27,14 +27,13 @@
     Charles Wilson, ESLX
 *****************************************************************************/
 
-// Note: order of headers is important
-#include "tlm.h"                                   ///< TLM headers
-#include "examples_rw_if.h"                        ///< Convenience R/W interface
-#include "reporting.h"                             ///< Reporting convenience macros
-#include "traffic_generator.h"                     ///< Our header
-#include "mtrand.h"                                ///< Mersenne Twister random number generator
+#include "examples_rw_if.h"                           ///< Convenience R/W interface
+#include "reporting.h"                                ///< Reporting convenience macros
+#include "traffic_generator.h"                        ///< Our header
+#include "mtrand.h"                                   ///< Mersenne Twister random number generator
+#include "tlm.h"                                      ///< TLM headers
 
-static char *report_source = "traffic_generator";
+static const char *report_source = "traffic_generator"; ///< filename for reporting
 
 /*==============================================================================
   @fn traffic_generator::traffic_generator

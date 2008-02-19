@@ -26,12 +26,10 @@
     
 --------------------------------------------------------------------------------------- */
 
-// Note: order of headers is important
-
-#include "tlm.h"                                    ///< TLM headers
-#include "reporting.h"                              ///< report output
-#include "traffic_generator.h"                      ///< traffic generator
-#include "mtrand.h"                                 ///< Mersenne Twister random number generator
+#include "reporting.h"                                ///< report output
+#include "traffic_generator.h"                        ///< traffic generator
+#include "mtrand.h"                                   ///< Mersenne Twister random number generator
+#include "tlm.h"                                      ///< TLM headers
 
 using namespace std;
 
@@ -41,7 +39,7 @@ using namespace std;
 #undef  REPORT_INFO
 #define REPORT_INFO(x,y,z)
 #else   /* SUPPRESS_INFO */
-static char *filename = "traffic_generator.cpp";
+static char *filename = "traffic_generator.cpp";      ///< filename used for reporting
 #endif  /* SUPPRESS_INFO */
 
 /*=============================================================================

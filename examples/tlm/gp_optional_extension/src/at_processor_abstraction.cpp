@@ -28,12 +28,10 @@
     Anna Keist, ESLX
 *****************************************************************************/
 
-// Note: order of headers is important
-#include "tlm.h"                               ///< TLM header
-#include "traffic_generator.h"                 ///< TLM traffic generator
-#include "at_initiator.h"              ///< AT initiator
-#include "at_processor_abstraction.h"          ///< AT processor abstraction
-
+#include "traffic_generator.h"                        ///< TLM traffic generator
+#include "at_processor_abstraction.h"                 ///< AT processor abstraction
+#include "at_initiator.h"                             ///< AT initiator
+#include "tlm.h"                                      ///< TLM header
 
 /*==============================================================================
   @fn at_processor_abstraction::at_processor_abstraction

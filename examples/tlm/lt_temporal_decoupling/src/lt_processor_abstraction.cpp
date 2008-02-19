@@ -26,11 +26,10 @@
     
 --------------------------------------------------------------------------------------- */
 
-// Note: order of headers is important
-#include "tlm.h"
-#include "traffic_generator.h"
-#include "lt_initiator_temporal_decoupling.h"  
-#include "lt_processor_abstraction.h" 
+#include "traffic_generator.h"                        ///< traffic generator
+#include "lt_initiator_temporal_decoupling.h"         ///< LT initiator
+#include "lt_processor_abstraction.h"                 ///< LT processor abstraction
+#include "tlm.h"                                      ///< TLM headers
 
 /*=============================================================================
   @fn lt_processor_abstraction::lt_processor_abstraction

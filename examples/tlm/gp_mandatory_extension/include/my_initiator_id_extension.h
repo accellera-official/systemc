@@ -32,8 +32,8 @@
 #ifndef __MY_INITIATOR_ID_EXTENSION_H__
 #define __MY_INITIATOR_ID_EXTENSION_H__
 
+#include "tlm.h"                                      ///< top tlm header
 #include <string>
-#include "tlm.h"                                    ///< top tlm header
 
 namespace gp_extension {
 class my_initiator_id_extension                                 ///< extension class 

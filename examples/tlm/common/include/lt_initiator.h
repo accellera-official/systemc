@@ -37,7 +37,8 @@
 #ifndef __LT_INITIATOR_H__
 #define __LT_INITIATOR_H__
 
- #include "examples_rw_if.h"
+#include "tlm.h"                                      ///< TLM headers
+#include "examples_rw_if.h"                           ///< examples read/write interface
  
 class lt_initiator                                 ///< lt_initiator 
   : public sc_core::sc_module                      ///< module base class

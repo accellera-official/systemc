@@ -25,13 +25,13 @@
     
 --------------------------------------------------------------------------------------- */
 
-#include "tlm.h"                                      ///< TLM headers
-#include "lt_target_memory.h"                         ///< our class header
-#include "reporting.h"                                ///< Reporting convenience macros
+#include "lt_target_memory.h"                           ///< our class header
+#include "reporting.h"                                  ///< Reporting convenience macros
+#include "tlm.h"                                        ///< TLM headers
 
 using namespace  std;
 
-static const char *filename = "lt_target_memory";     ///< filename
+static const char *filename = "lt_target_memory";       ///< filename for reporting
 
 /*==============================================================================
   @fn lt_target_memory::lt_target_memory

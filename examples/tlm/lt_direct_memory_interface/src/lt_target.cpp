@@ -26,15 +26,13 @@
     
 --------------------------------------------------------------------------------------- */
 
-// Note: includes are order dependent
-
-#include "tlm.h"                            // TLM headers
-#include "lt_target.h"
-#include "reporting.h"
+#include "lt_target.h"                                ///< LT target
+#include "reporting.h"                                ///< reporting
+#include "tlm.h"                                      ///< TLM headers
                     
 using namespace  std;
 
-static const char *filename = "lt_target.cpp";
+static const char *filename = "lt_target.cpp";        ///< filename for reporting
 
 /*=============================================================================
   @fn lt_target::lt_target

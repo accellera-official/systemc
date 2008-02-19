@@ -28,12 +28,11 @@
     Anna Keist, ESLX
 *****************************************************************************/
 
-#include "tlm.h"                              ///< TLM header
-
-#include "gp_mandatory_extension_top.h"       ///< our header
-#include "at_target_memory.h"                 ///< memory target
-#include "at_processor_abstraction.h"         ///< initiator
-#include "SimpleBusInitiatorID.h"                        ///< simple bus
+#include "gp_mandatory_extension_top.h"               ///< our header
+#include "at_target_memory.h"                         ///< memory target
+#include "at_processor_abstraction.h"                 ///< initiator
+#include "SimpleBusInitiatorID.h"                     ///< simple bus
+#include "tlm.h"                                      ///< TLM header
 
 /*=============================================================================
   @fn gp_mandatory_extension_top::gp_mandatory_extension_top

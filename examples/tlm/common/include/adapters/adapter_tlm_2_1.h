@@ -24,6 +24,7 @@
 #ifndef __ADAPTER_TLM_2_1_H__ 
 #define __ADAPTER_TLM_2_1_H__
 
+#include "tlm.h"                                      ///< TLM headers
 //#include "bus_types.h"
 #include "basic_initiator_port.h"
 

@@ -47,6 +47,8 @@
 #ifndef __TRAFFIC_GENERATOR_H__
 #define __TRAFFIC_GENERATOR_H__
 
+#include "tlm.h"                                      ///< TLM headers
+
 //==============================================================================
 // struct traffic_generator_config
 //
