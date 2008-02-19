@@ -26,8 +26,6 @@
     
 --------------------------------------------------------------------------------------- */
 
-//==============================================================================
-
 #include "tlm.h"                                      ///< TLM headers
 #include "reporting.h"                                ///< report output
 #include "lt_initiator.h"                             ///< LT initiator with temporal decoupling
@@ -115,7 +113,15 @@ lt_initiator::initiator_thread                      ///< initiator thread
 
     // setup request 
     tlm::tlm_phase phase  = tlm::BEGIN_REQ;         // Create phase objects 
-    sc_time delay         = SC_ZERO_TIME;           // Create delay objects
+    
+    msg.str ("");
+    msg << m_ID << " "
+        << ((transaction_ptr->get_command () == tlm::TLM_READ_COMMAND) ? "R" : "W")
+        << " A: 0x" << internal << setw( sizeof(transaction_ptr->get_address ()) * 2 ) << setfill( '0' ) 
+        << uppercase << hex << transaction_ptr->get_address ()
+        << " L: " << internal << setw( 2 ) << setfill( '0' ) << dec << transaction_ptr->get_data_length ();
+
+    REPORT_INFO (filename, __FUNCTION__, msg.str() );
     
     // see if we've already gotten a DMI pointer for this range
     if ( ! m_DMI_active )

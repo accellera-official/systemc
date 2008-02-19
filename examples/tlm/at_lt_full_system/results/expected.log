@@ -1,6 +1,12 @@
 
+Info: at_initiator.cpp: 0 s - initiator_thread
+      1 R A: 0x00000000000009B5 L: 16
+
 Info: at_target_memory.cpp: 0 s - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator.cpp: 0 s - initiator_thread
+      2 W A: 0x0000000000000E50 L: 16
 
 Info: at_target_memory.cpp: 0 s - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
@@ -11,11 +17,17 @@ Info: at_target_memory.cpp: 10 ns - begin_response_method
 Info: at_initiator.cpp: 10 ns - initiator_thread
       1 - Target accepted LT or AT request
 
+Info: at_initiator.cpp: 10 ns - initiator_thread
+      1 R A: 0x0000000000000D23 L: 16
+
 Info: at_target_memory.cpp: 10 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator.cpp: 20 ns - initiator_thread
       2 - Target accepted LT or AT request
+
+Info: at_initiator.cpp: 20 ns - initiator_thread
+      2 R A: 0x0000000010000F44 L: 16
 
 Info: lt_target.cpp: 20 ns - nb_transport
       2 * BEGIN_REQ LT_Sync
@@ -25,6 +37,9 @@ Info: lt_target.cpp: 20 ns - begin_response
 
 Info: at_initiator.cpp: 30 ns - initiator_thread
       1 - Target accepted LT or AT request
+
+Info: at_initiator.cpp: 30 ns - initiator_thread
+      1 W A: 0x0000000010000D15 L: 16
 
 Info: lt_target.cpp: 30 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
@@ -55,6 +70,9 @@ Info: at_initiator.cpp: 67 ns - m_send_end_rsp_method
 
 Info: at_initiator.cpp: 85 ns - initiator_thread
       1 - Completed LT annotated request
+
+Info: at_initiator.cpp: 85 ns - initiator_thread
+      1 R A: 0x0000000000000D99 L: 16
 
 Info: at_target_memory.cpp: 85 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
@@ -87,11 +105,17 @@ Info: at_initiator.cpp: 95 ns - nb_transport
 Info: at_initiator.cpp: 95 ns - initiator_thread
       2 - Target accepted LT or AT request
 
+Info: at_initiator.cpp: 95 ns - initiator_thread
+      2 W A: 0x0000000000000292 L: 16
+
 Info: at_target_memory.cpp: 95 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator.cpp: 95 ns - initiator_thread
       1 - Target accepted LT or AT request
+
+Info: at_initiator.cpp: 95 ns - initiator_thread
+      1 W A: 0x0000000010000284 L: 16
 
 Info: lt_target.cpp: 95 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
@@ -107,6 +131,9 @@ Info: at_initiator.cpp: 97 ns - m_send_end_rsp_method
 
 Info: at_initiator.cpp: 105 ns - initiator_thread
       2 - Target accepted LT or AT request
+
+Info: at_initiator.cpp: 105 ns - initiator_thread
+      2 R A: 0x00000000100008C3 L: 16
 
 Info: lt_target.cpp: 105 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
@@ -138,11 +165,17 @@ Info: at_initiator.cpp: 147 ns - m_send_end_rsp_method
 Info: at_initiator.cpp: 150 ns - initiator_thread
       1 - Completed LT annotated request
 
+Info: at_initiator.cpp: 150 ns - initiator_thread
+      1 W A: 0x000000000000046B L: 16
+
 Info: at_target_memory.cpp: 150 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator.cpp: 160 ns - initiator_thread
       1 - Target accepted LT or AT request
+
+Info: at_initiator.cpp: 160 ns - initiator_thread
+      1 R A: 0x0000000010000EBD L: 16
 
 Info: lt_target.cpp: 160 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
@@ -152,6 +185,9 @@ Info: lt_target.cpp: 160 ns - memory_operation
 
 Info: at_initiator.cpp: 180 ns - initiator_thread
       2 - Completed LT annotated request
+
+Info: at_initiator.cpp: 180 ns - initiator_thread
+      2 R A: 0x0000000000000CA8 L: 16
 
 Info: at_target_memory.cpp: 180 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
@@ -173,6 +209,9 @@ Info: at_target_memory.cpp: 190 ns - begin_response_method
 
 Info: at_initiator.cpp: 190 ns - initiator_thread
       2 - Target accepted LT or AT request
+
+Info: at_initiator.cpp: 190 ns - initiator_thread
+      2 W A: 0x0000000010000FB3 L: 16
 
 Info: lt_target.cpp: 190 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
@@ -211,6 +250,9 @@ Info: at_initiator.cpp: 227 ns - m_send_end_rsp_method
 Info: at_initiator.cpp: 235 ns - initiator_thread
       1 - Completed LT annotated request
 
+Info: at_initiator.cpp: 235 ns - initiator_thread
+      1 W A: 0x0000000010000759 L: 16
+
 Info: lt_target.cpp: 235 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
 
@@ -219,6 +261,9 @@ Info: lt_target.cpp: 235 ns - memory_operation
 
 Info: at_initiator.cpp: 245 ns - initiator_thread
       2 - Completed LT annotated request
+
+Info: at_initiator.cpp: 245 ns - initiator_thread
+      2 W A: 0x000000000000046A L: 16
 
 Info: at_target_memory.cpp: 245 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
@@ -242,6 +287,9 @@ Info: at_target_memory.cpp: 250 ns - begin_response_method
 Info: at_initiator.cpp: 255 ns - initiator_thread
       2 - Target accepted LT or AT request
 
+Info: at_initiator.cpp: 255 ns - initiator_thread
+      2 W A: 0x000000000000042B L: 16
+
 Info: at_target_memory.cpp: 255 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
@@ -254,6 +302,9 @@ Info: at_initiator.cpp: 257 ns - m_send_end_rsp_method
 Info: at_initiator.cpp: 265 ns - initiator_thread
       2 - Target accepted LT or AT request
 
+Info: at_initiator.cpp: 265 ns - initiator_thread
+      2 R A: 0x0000000010000B12 L: 16
+
 Info: lt_target.cpp: 265 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
 
@@ -262,6 +313,9 @@ Info: lt_target.cpp: 265 ns - memory_operation
 
 Info: at_initiator.cpp: 290 ns - initiator_thread
       1 - Completed LT annotated request
+
+Info: at_initiator.cpp: 290 ns - initiator_thread
+      1 W A: 0x00000000100001D6 L: 16
 
 Info: lt_target.cpp: 290 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
@@ -315,17 +369,26 @@ Info: at_initiator.cpp: 337 ns - m_send_end_rsp_method
 Info: at_initiator.cpp: 340 ns - initiator_thread
       2 - Completed LT annotated request
 
+Info: at_initiator.cpp: 340 ns - initiator_thread
+      2 R A: 0x0000000000000771 L: 16
+
 Info: at_target_memory.cpp: 340 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator.cpp: 345 ns - initiator_thread
       1 - Completed LT annotated request
 
+Info: at_initiator.cpp: 345 ns - initiator_thread
+      1 R A: 0x0000000000000792 L: 16
+
 Info: at_target_memory.cpp: 345 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator.cpp: 350 ns - initiator_thread
       2 - Target accepted LT or AT request
+
+Info: at_initiator.cpp: 350 ns - initiator_thread
+      2 R A: 0x00000000000002BA L: 16
 
 Info: at_target_memory.cpp: 350 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
@@ -349,6 +412,9 @@ Info: at_target_memory.cpp: 360 ns - begin_response_method
 Info: at_initiator.cpp: 360 ns - initiator_thread
       1 - Target accepted LT or AT request
 
+Info: at_initiator.cpp: 360 ns - initiator_thread
+      1 R A: 0x0000000010000276 L: 16
+
 Info: lt_target.cpp: 360 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
 
@@ -363,6 +429,9 @@ Info: at_initiator.cpp: 367 ns - m_send_end_rsp_method
 
 Info: at_initiator.cpp: 370 ns - initiator_thread
       2 - Target accepted LT or AT request
+
+Info: at_initiator.cpp: 370 ns - initiator_thread
+      2 R A: 0x000000001000030D L: 16
 
 Info: lt_target.cpp: 370 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
@@ -394,6 +463,9 @@ Info: at_initiator.cpp: 417 ns - m_send_end_rsp_method
 Info: at_initiator.cpp: 435 ns - initiator_thread
       1 - Completed LT annotated request
 
+Info: at_initiator.cpp: 435 ns - initiator_thread
+      1 R A: 0x0000000010000B32 L: 16
+
 Info: lt_target.cpp: 435 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
 
@@ -402,6 +474,9 @@ Info: lt_target.cpp: 435 ns - memory_operation
 
 Info: at_initiator.cpp: 445 ns - initiator_thread
       2 - Completed LT annotated request
+
+Info: at_initiator.cpp: 445 ns - initiator_thread
+      2 R A: 0x0000000010000BAC L: 16
 
 Info: lt_target.cpp: 445 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
@@ -445,6 +520,9 @@ Info: at_initiator.cpp: 510 ns - nb_transport
 Info: at_initiator.cpp: 510 ns - initiator_thread
       1 - Completed LT annotated request
 
+Info: at_initiator.cpp: 510 ns - initiator_thread
+      1 W A: 0x0000000000000217 L: 16
+
 Info: at_target_memory.cpp: 510 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
@@ -457,6 +535,9 @@ Info: at_initiator.cpp: 517 ns - m_send_end_rsp_method
 Info: at_initiator.cpp: 520 ns - initiator_thread
       2 - Completed LT annotated request
 
+Info: at_initiator.cpp: 520 ns - initiator_thread
+      2 R A: 0x00000000000005E8 L: 16
+
 Info: at_target_memory.cpp: 520 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
@@ -466,17 +547,26 @@ Info: at_target_memory.cpp: 520 ns - begin_response_method
 Info: at_initiator.cpp: 520 ns - initiator_thread
       1 - Target accepted LT or AT request
 
+Info: at_initiator.cpp: 520 ns - initiator_thread
+      1 R A: 0x000000000000018B L: 16
+
 Info: at_target_memory.cpp: 520 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator.cpp: 530 ns - initiator_thread
       2 - Target accepted LT or AT request
 
+Info: at_initiator.cpp: 530 ns - initiator_thread
+      2 W A: 0x0000000000000601 L: 16
+
 Info: at_target_memory.cpp: 530 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator.cpp: 540 ns - initiator_thread
       1 - Target accepted LT or AT request
+
+Info: at_initiator.cpp: 540 ns - initiator_thread
+      1 W A: 0x0000000000000CA5 L: 16
 
 Info: at_target_memory.cpp: 540 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
@@ -500,6 +590,9 @@ Info: at_target_memory.cpp: 550 ns - begin_response_method
 Info: at_initiator.cpp: 550 ns - initiator_thread
       2 - Target accepted LT or AT request
 
+Info: at_initiator.cpp: 550 ns - initiator_thread
+      2 W A: 0x0000000000000C3F L: 16
+
 Info: at_target_memory.cpp: 550 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
@@ -511,6 +604,9 @@ Info: at_initiator.cpp: 557 ns - m_send_end_rsp_method
 
 Info: at_initiator.cpp: 560 ns - initiator_thread
       1 - Target accepted LT or AT request
+
+Info: at_initiator.cpp: 560 ns - initiator_thread
+      1 W A: 0x00000000100005C6 L: 16
 
 Info: lt_target.cpp: 560 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
@@ -610,17 +706,26 @@ Info: at_target_memory.cpp: 717 ns - nb_transport
 Info: at_initiator.cpp: 717 ns - m_send_end_rsp_method
       1 - ** AT initiator send end response
 
+Info: at_initiator.cpp: 717 ns - initiator_thread
+      1 W A: 0x000000000000093E L: 16
+
 Info: at_target_memory.cpp: 717 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator.cpp: 727 ns - initiator_thread
       1 - Target accepted LT or AT request
 
+Info: at_initiator.cpp: 727 ns - initiator_thread
+      1 R A: 0x0000000000000F65 L: 16
+
 Info: at_target_memory.cpp: 727 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator.cpp: 737 ns - initiator_thread
       1 - Target accepted LT or AT request
+
+Info: at_initiator.cpp: 737 ns - initiator_thread
+      1 R A: 0x00000000100009F3 L: 16
 
 Info: lt_target.cpp: 737 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
@@ -650,11 +755,17 @@ Info: at_target_memory.cpp: 747 ns - nb_transport
 Info: at_initiator.cpp: 747 ns - m_send_end_rsp_method
       2 - ** AT initiator send end response
 
+Info: at_initiator.cpp: 747 ns - initiator_thread
+      2 R A: 0x0000000000000FDA L: 16
+
 Info: at_target_memory.cpp: 747 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator.cpp: 757 ns - initiator_thread
       2 - Target accepted LT or AT request
+
+Info: at_initiator.cpp: 757 ns - initiator_thread
+      2 R A: 0x000000001000014D L: 16
 
 Info: lt_target.cpp: 757 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
@@ -687,6 +798,9 @@ Info: at_initiator.cpp: 777 ns - m_send_end_rsp_method
 Info: at_initiator.cpp: 812 ns - initiator_thread
       1 - Completed LT annotated request
 
+Info: at_initiator.cpp: 812 ns - initiator_thread
+      1 W A: 0x0000000010000975 L: 16
+
 Info: lt_target.cpp: 812 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
 
@@ -717,6 +831,9 @@ Info: at_initiator.cpp: 827 ns - m_send_end_rsp_method
 Info: at_initiator.cpp: 832 ns - initiator_thread
       2 - Completed LT annotated request
 
+Info: at_initiator.cpp: 832 ns - initiator_thread
+      2 W A: 0x0000000010000B63 L: 16
+
 Info: lt_target.cpp: 832 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
 
@@ -725,6 +842,9 @@ Info: lt_target.cpp: 832 ns - memory_operation
 
 Info: at_initiator.cpp: 867 ns - initiator_thread
       1 - Completed LT annotated request
+
+Info: at_initiator.cpp: 867 ns - initiator_thread
+      1 W A: 0x0000000000000908 L: 16
 
 Info: at_target_memory.cpp: 867 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
@@ -753,11 +873,17 @@ Info: at_target_memory.cpp: 877 ns - begin_response_method
 Info: at_initiator.cpp: 877 ns - initiator_thread
       1 - Target accepted LT or AT request
 
+Info: at_initiator.cpp: 877 ns - initiator_thread
+      1 R A: 0x0000000000000A75 L: 16
+
 Info: at_target_memory.cpp: 877 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator.cpp: 887 ns - initiator_thread
       2 - Completed LT annotated request
+
+Info: at_initiator.cpp: 887 ns - initiator_thread
+      2 R A: 0x0000000000000D0E L: 16
 
 Info: at_target_memory.cpp: 887 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
@@ -765,11 +891,17 @@ Info: at_target_memory.cpp: 887 ns - nb_transport
 Info: at_initiator.cpp: 887 ns - initiator_thread
       1 - Target accepted LT or AT request
 
+Info: at_initiator.cpp: 887 ns - initiator_thread
+      1 W A: 0x00000000000008A5 L: 16
+
 Info: at_target_memory.cpp: 887 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator.cpp: 897 ns - initiator_thread
       2 - Target accepted LT or AT request
+
+Info: at_initiator.cpp: 897 ns - initiator_thread
+      2 R A: 0x0000000000000EBF L: 16
 
 Info: at_target_memory.cpp: 897 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
@@ -793,6 +925,9 @@ Info: at_target_memory.cpp: 907 ns - begin_response_method
 Info: at_initiator.cpp: 907 ns - initiator_thread
       1 - Target accepted LT or AT request
 
+Info: at_initiator.cpp: 907 ns - initiator_thread
+      1 R A: 0x0000000000000527 L: 16
+
 Info: at_target_memory.cpp: 907 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
@@ -805,6 +940,9 @@ Info: at_initiator.cpp: 914 ns - m_send_end_rsp_method
 Info: at_initiator.cpp: 917 ns - initiator_thread
       2 - Target accepted LT or AT request
 
+Info: at_initiator.cpp: 917 ns - initiator_thread
+      2 W A: 0x000000001000006D L: 16
+
 Info: lt_target.cpp: 917 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
 
@@ -813,6 +951,9 @@ Info: lt_target.cpp: 917 ns - memory_operation
 
 Info: at_initiator.cpp: 927 ns - initiator_thread
       1 - Target accepted LT or AT request
+
+Info: at_initiator.cpp: 927 ns - initiator_thread
+      1 R A: 0x0000000010000E55 L: 16
 
 Info: lt_target.cpp: 927 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
@@ -844,6 +985,9 @@ Info: at_initiator.cpp: 964 ns - m_send_end_rsp_method
 Info: at_initiator.cpp: 972 ns - initiator_thread
       2 - Completed LT annotated request
 
+Info: at_initiator.cpp: 972 ns - initiator_thread
+      2 W A: 0x000000001000088F L: 16
+
 Info: lt_target.cpp: 972 ns - nb_transport
       2 * BEGIN_REQ LT_Sync
 
@@ -852,6 +996,9 @@ Info: lt_target.cpp: 972 ns - begin_response
 
 Info: at_initiator.cpp: 1002 ns - initiator_thread
       1 - Completed LT annotated request
+
+Info: at_initiator.cpp: 1002 ns - initiator_thread
+      1 R A: 0x000000000000010A L: 16
 
 Info: at_target_memory.cpp: 1002 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
@@ -873,6 +1020,9 @@ Info: at_target_memory.cpp: 1007 ns - begin_response_method
 
 Info: at_initiator.cpp: 1012 ns - initiator_thread
       1 - Target accepted LT or AT request
+
+Info: at_initiator.cpp: 1012 ns - initiator_thread
+      1 R A: 0x0000000010000B18 L: 16
 
 Info: lt_target.cpp: 1012 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
@@ -897,6 +1047,9 @@ Info: at_initiator.cpp: 1027 ns - nb_transport
 
 Info: at_initiator.cpp: 1027 ns - initiator_thread
       2 - Target accepted LT or AT request
+
+Info: at_initiator.cpp: 1027 ns - initiator_thread
+      2 W A: 0x0000000010000475 L: 16
 
 Info: lt_target.cpp: 1027 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
@@ -929,6 +1082,9 @@ Info: at_initiator.cpp: 1044 ns - m_send_end_rsp_method
 Info: at_initiator.cpp: 1082 ns - initiator_thread
       2 - Completed LT annotated request
 
+Info: at_initiator.cpp: 1082 ns - initiator_thread
+      2 W A: 0x0000000010000659 L: 16
+
 Info: lt_target.cpp: 1082 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
 
@@ -953,6 +1109,9 @@ Info: at_target_memory.cpp: 1087 ns - begin_response_method
 Info: at_initiator.cpp: 1087 ns - initiator_thread
       1 - Completed LT annotated request
 
+Info: at_initiator.cpp: 1087 ns - initiator_thread
+      1 R A: 0x00000000000007F6 L: 16
+
 Info: at_target_memory.cpp: 1087 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
@@ -965,11 +1124,17 @@ Info: at_initiator.cpp: 1094 ns - m_send_end_rsp_method
 Info: at_initiator.cpp: 1097 ns - initiator_thread
       1 - Target accepted LT or AT request
 
+Info: at_initiator.cpp: 1097 ns - initiator_thread
+      1 W A: 0x0000000000000E33 L: 16
+
 Info: at_target_memory.cpp: 1097 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator.cpp: 1107 ns - initiator_thread
       1 - Target accepted LT or AT request
+
+Info: at_initiator.cpp: 1107 ns - initiator_thread
+      1 W A: 0x00000000100002B4 L: 16
 
 Info: lt_target.cpp: 1107 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
@@ -995,6 +1160,9 @@ Info: at_target_memory.cpp: 1137 ns - begin_response_method
 Info: at_initiator.cpp: 1137 ns - initiator_thread
       2 - Completed LT annotated request
 
+Info: at_initiator.cpp: 1137 ns - initiator_thread
+      2 R A: 0x00000000000002E3 L: 16
+
 Info: at_target_memory.cpp: 1137 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
@@ -1007,6 +1175,9 @@ Info: at_initiator.cpp: 1144 ns - m_send_end_rsp_method
 Info: at_initiator.cpp: 1147 ns - initiator_thread
       2 - Target accepted LT or AT request
 
+Info: at_initiator.cpp: 1147 ns - initiator_thread
+      2 R A: 0x00000000100007D2 L: 16
+
 Info: lt_target.cpp: 1147 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
 
@@ -1016,11 +1187,17 @@ Info: lt_target.cpp: 1147 ns - memory_operation
 Info: at_initiator.cpp: 1162 ns - initiator_thread
       1 - Completed LT annotated request
 
+Info: at_initiator.cpp: 1162 ns - initiator_thread
+      1 R A: 0x000000000000077F L: 16
+
 Info: at_target_memory.cpp: 1162 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator.cpp: 1172 ns - initiator_thread
       1 - Target accepted LT or AT request
+
+Info: at_initiator.cpp: 1172 ns - initiator_thread
+      1 W A: 0x000000001000006C L: 16
 
 Info: lt_target.cpp: 1172 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
@@ -1051,6 +1228,9 @@ Info: at_initiator.cpp: 1194 ns - m_send_end_rsp_method
 
 Info: at_initiator.cpp: 1222 ns - initiator_thread
       2 - Completed LT annotated request
+
+Info: at_initiator.cpp: 1222 ns - initiator_thread
+      2 R A: 0x000000001000055B L: 16
 
 Info: lt_target.cpp: 1222 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
@@ -1107,11 +1287,17 @@ Info: at_initiator.cpp: 1274 ns - m_send_end_rsp_method
 Info: at_initiator.cpp: 1297 ns - initiator_thread
       2 - Completed LT annotated request
 
+Info: at_initiator.cpp: 1297 ns - initiator_thread
+      2 W A: 0x0000000000000B58 L: 16
+
 Info: at_target_memory.cpp: 1297 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator.cpp: 1307 ns - initiator_thread
       2 - Target accepted LT or AT request
+
+Info: at_initiator.cpp: 1307 ns - initiator_thread
+      2 W A: 0x0000000010000269 L: 16
 
 Info: lt_target.cpp: 1307 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
@@ -1143,6 +1329,9 @@ Info: at_initiator.cpp: 1324 ns - m_send_end_rsp_method
 Info: at_initiator.cpp: 1362 ns - initiator_thread
       2 - Completed LT annotated request
 
+Info: at_initiator.cpp: 1362 ns - initiator_thread
+      2 W A: 0x0000000000000A82 L: 16
+
 Info: at_target_memory.cpp: 1362 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
@@ -1163,6 +1352,9 @@ Info: at_target_memory.cpp: 1367 ns - begin_response_method
 
 Info: at_initiator.cpp: 1372 ns - initiator_thread
       2 - Target accepted LT or AT request
+
+Info: at_initiator.cpp: 1372 ns - initiator_thread
+      2 R A: 0x0000000000000A67 L: 16
 
 Info: at_target_memory.cpp: 1372 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase

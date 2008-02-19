@@ -17,8 +17,14 @@ Info: traffic_generator.cpp: 0 s - traffic_generator_thread
 Info: traffic_generator.cpp: 0 s - traffic_generator_thread
       2 - response dequeued
 
+Info: lt_initiator_temporal_decoupling.cpp: 0 s - initiator_thread
+      1 R A: 0x0000000010000478 L: 08
+
 Info: lt_target.cpp: 0 s - nb_transport
       2 * BEGIN_REQ LT_Sync
+
+Info: lt_initiator_temporal_decoupling.cpp: 0 s - initiator_thread
+      2 R A: 0x000000000000020A L: 08
 
 Info: lt_target.cpp: 0 s - nb_transport
       1 * BEGIN_REQ LT_Annotated
@@ -37,6 +43,9 @@ Info: traffic_generator.cpp: 0 s - traffic_generator_thread
 Info: traffic_generator.cpp: 0 s - traffic_generator_thread
       2 - response dequeued
 
+Info: lt_initiator_temporal_decoupling.cpp: 0 s - initiator_thread
+      2 W A: 0x0000000000000292 L: 08
+
 Info: lt_target.cpp: 0 s - nb_transport
       1 * BEGIN_REQ LT_Annotated
 
@@ -53,6 +62,9 @@ Info: traffic_generator.cpp: 0 s - traffic_generator_thread
 
 Info: traffic_generator.cpp: 0 s - traffic_generator_thread
       2 - response dequeued
+
+Info: lt_initiator_temporal_decoupling.cpp: 0 s - initiator_thread
+      2 W A: 0x0000000000000C10 L: 08
 
 Info: lt_target.cpp: 0 s - nb_transport
       1 * BEGIN_REQ LT_Annotated
@@ -71,6 +83,9 @@ Info: traffic_generator.cpp: 0 s - traffic_generator_thread
 Info: traffic_generator.cpp: 0 s - traffic_generator_thread
       2 - response dequeued
 
+Info: lt_initiator_temporal_decoupling.cpp: 0 s - initiator_thread
+      2 W A: 0x00000000100004AD L: 08
+
 Info: lt_target.cpp: 0 s - nb_transport
       2 * BEGIN_REQ LT_Annotated
 
@@ -88,6 +103,9 @@ Info: traffic_generator.cpp: 0 s - traffic_generator_thread
 Info: traffic_generator.cpp: 0 s - traffic_generator_thread
       2 - response dequeued
 
+Info: lt_initiator_temporal_decoupling.cpp: 0 s - initiator_thread
+      2 W A: 0x0000000000000F86 L: 08
+
 Info: lt_target.cpp: 0 s - nb_transport
       1 * BEGIN_REQ LT_Annotated
 
@@ -104,6 +122,9 @@ Info: traffic_generator.cpp: 0 s - traffic_generator_thread
 
 Info: traffic_generator.cpp: 0 s - traffic_generator_thread
       2 - response dequeued
+
+Info: lt_initiator_temporal_decoupling.cpp: 0 s - initiator_thread
+      2 R A: 0x0000000000000771 L: 08
 
 Info: lt_target.cpp: 0 s - nb_transport
       1 * BEGIN_REQ LT_Annotated
@@ -131,6 +152,9 @@ Info: traffic_generator.cpp: 0 s - traffic_generator_thread
 Info: traffic_generator.cpp: 0 s - traffic_generator_thread
       2 - response dequeued
 
+Info: lt_initiator_temporal_decoupling.cpp: 0 s - initiator_thread
+      2 W A: 0x00000000000001BE L: 08
+
 Info: lt_target.cpp: 0 s - nb_transport
       1 * BEGIN_REQ LT_Annotated
 
@@ -141,6 +165,9 @@ Info: lt_initiator_temporal_decoupling.cpp: 0 s - initiator_thread
       2 - Completed LT request
       SC time    = 0 s
       local time = 335 ns
+
+Info: lt_initiator_temporal_decoupling.cpp: 0 s - initiator_thread
+      2 R A: 0x00000000000005E8 L: 08
 
 Info: lt_target.cpp: 0 s - nb_transport
       1 * BEGIN_REQ LT_Annotated
@@ -153,6 +180,9 @@ Info: lt_initiator_temporal_decoupling.cpp: 0 s - initiator_thread
       SC time    = 0 s
       local time = 395 ns
 
+Info: lt_initiator_temporal_decoupling.cpp: 0 s - initiator_thread
+      2 W A: 0x0000000010000066 L: 08
+
 Info: lt_target.cpp: 0 s - nb_transport
       2 * BEGIN_REQ LT_Annotated
 
@@ -163,6 +193,9 @@ Info: lt_initiator_temporal_decoupling.cpp: 0 s - initiator_thread
       2 - Completed LT request
       SC time    = 0 s
       local time = 450 ns
+
+Info: lt_initiator_temporal_decoupling.cpp: 0 s - initiator_thread
+      2 R A: 0x0000000000000C1B L: 08
 
 Info: lt_target.cpp: 0 s - nb_transport
       1 * BEGIN_REQ LT_Annotated
@@ -199,6 +232,9 @@ Info: lt_initiator_temporal_decoupling.cpp: 510 ns - initiator_thread
       SC time    = 510 ns
       local time = 510 ns
 
+Info: lt_initiator_temporal_decoupling.cpp: 510 ns - initiator_thread
+      2 R A: 0x0000000010000472 L: 08
+
 Info: lt_target.cpp: 510 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
 
@@ -209,6 +245,9 @@ Info: lt_initiator_temporal_decoupling.cpp: 510 ns - initiator_thread
       2 - Completed LT request
       SC time    = 510 ns
       local time = 585 ns
+
+Info: lt_initiator_temporal_decoupling.cpp: 510 ns - initiator_thread
+      2 W A: 0x0000000010000975 L: 08
 
 Info: lt_target.cpp: 510 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
@@ -221,6 +260,9 @@ Info: lt_initiator_temporal_decoupling.cpp: 510 ns - initiator_thread
       SC time    = 510 ns
       local time = 640 ns
 
+Info: lt_initiator_temporal_decoupling.cpp: 510 ns - initiator_thread
+      2 R A: 0x0000000000000868 L: 08
+
 Info: lt_target.cpp: 510 ns - nb_transport
       1 * BEGIN_REQ LT_Annotated
 
@@ -231,6 +273,9 @@ Info: lt_initiator_temporal_decoupling.cpp: 510 ns - initiator_thread
       2 - Completed LT request
       SC time    = 510 ns
       local time = 700 ns
+
+Info: lt_initiator_temporal_decoupling.cpp: 510 ns - initiator_thread
+      2 R A: 0x0000000010000467 L: 08
 
 Info: lt_target.cpp: 510 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
@@ -255,6 +300,9 @@ Info: traffic_generator.cpp: 510 ns - traffic_generator_thread
 Info: traffic_generator.cpp: 510 ns - traffic_generator_thread
       2 - response dequeued
 
+Info: lt_initiator_temporal_decoupling.cpp: 510 ns - initiator_thread
+      2 R A: 0x000000001000033E L: 08
+
 Info: lt_target.cpp: 510 ns - nb_transport
       2 * BEGIN_REQ LT_Annotated
 
@@ -265,6 +313,9 @@ Info: lt_initiator_temporal_decoupling.cpp: 510 ns - initiator_thread
       2 - Completed LT request
       SC time    = 510 ns
       local time = 850 ns
+
+Info: lt_initiator_temporal_decoupling.cpp: 510 ns - initiator_thread
+      2 R A: 0x000000000000010A L: 08
 
 Info: lt_target.cpp: 510 ns - nb_transport
       1 * BEGIN_REQ LT_Annotated

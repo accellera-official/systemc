@@ -70,6 +70,7 @@ lt_initiator::read                                    ///< read
 {
   tlm::tlm_generic_payload  transaction;              ///< transaction
   bool                      success       = false;    ///< success flag
+  std::ostringstream        msg;                      ///< log message
 
   // Build transaction 
   transaction.set_read            ();
@@ -80,6 +81,14 @@ lt_initiator::read                                    ///< read
 
   sc_core::sc_time delay  = sc_core::SC_ZERO_TIME;
   tlm::tlm_phase phase    = tlm::BEGIN_REQ;
+    
+  msg.str ("");
+  msg << "R -"
+      << " A: 0x" << internal << setw( sizeof(transaction.get_address ()) * 2 ) << setfill( '0' ) 
+      << uppercase << hex << transaction.get_address ()
+      << " L: " << internal << setw( 2 ) << setfill( '0' ) << dec << transaction.get_data_length ();
+
+  REPORT_INFO (filename, __FUNCTION__, msg.str() );
 
   if (initiator_socket->nb_transport( transaction
                                     , phase
@@ -113,6 +122,7 @@ lt_initiator::write                                   ///< write
 {
   tlm::tlm_generic_payload  transaction;              ///< transaction
   bool                      success       = false;    ///< success flag
+  std::ostringstream        msg;                      ///< log message
 
   transaction.set_write           ();
   transaction.set_address         (bus_address);  
@@ -122,6 +132,14 @@ lt_initiator::write                                   ///< write
 
   sc_core::sc_time delay  = sc_core::SC_ZERO_TIME;
   tlm::tlm_phase phase    = tlm::BEGIN_REQ;
+    
+  msg.str ("");
+  msg << "W -"
+      << " A: 0x" << internal << setw( sizeof(transaction.get_address ()) * 2 ) << setfill( '0' ) 
+      << uppercase << hex << transaction.get_address ()
+      << " L: " << internal << setw( 2 ) << setfill( '0' ) << dec << transaction.get_data_length ();
+
+  REPORT_INFO (filename, __FUNCTION__, msg.str() );
 
   if (initiator_socket->nb_transport( transaction
                                     , phase

@@ -115,10 +115,18 @@ lt_initiator::initiator_thread                      ///< initiator thread
     transaction_ptr = request_in_port->read();      // get request from input fifo 
 
     // setup request 
-    tlm::tlm_phase phase  = tlm::BEGIN_REQ;         // Create phase objects 
-    sc_time delay         = SC_ZERO_TIME;           // Create delay objects 
+    tlm::tlm_phase phase  = tlm::BEGIN_REQ;         // Create phase objects
+    
+    msg.str ("");
+    msg << m_ID << " "
+        << ((transaction_ptr->get_command () == tlm::TLM_READ_COMMAND) ? "R" : "W")
+        << " A: 0x" << internal << setw( sizeof(transaction_ptr->get_address ()) * 2 ) << setfill( '0' ) 
+        << uppercase << hex << transaction_ptr->get_address ()
+        << " L: " << internal << setw( 2 ) << setfill( '0' ) << dec << transaction_ptr->get_data_length ();
 
-    // make the non blocking call and decode returned status (tlm_sync_enum) 
+    REPORT_INFO (filename, __FUNCTION__, msg.str() );
+
+    // make the non-blocking call and decode returned status (tlm_sync_enum) 
     switch (initiator_socket->nb_transport
             ( *transaction_ptr
             , phase
@@ -149,6 +157,7 @@ lt_initiator::initiator_thread                      ///< initiator thread
       }
 
       case tlm::TLM_ACCEPTED:                       // LT target accepted request
+      case tlm::TLM_UPDATED:
       {
         m_req_accepted_queue.push(transaction_ptr); 
         wait (m_req_accepted_event); 
@@ -166,7 +175,6 @@ lt_initiator::initiator_thread                      ///< initiator thread
         break;
       }
 
-      case tlm::TLM_UPDATED:
       case tlm::TLM_REJECTED: 
       default:
       {

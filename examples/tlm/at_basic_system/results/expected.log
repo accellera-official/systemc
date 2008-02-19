@@ -1,6 +1,12 @@
 
+Info: at_initiator_4_phase.cpp: 0 s - initiator_thread
+      1 R A: 0x00000000000009B5 L: 16
+
 Info: at_target_4_phase.cpp: 0 s - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator_4_phase.cpp: 0 s - initiator_thread
+      2 W A: 0x0000000000000E50 L: 16
 
 Info: at_target_4_phase.cpp: 0 s - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
@@ -11,11 +17,17 @@ Info: at_target_4_phase.cpp: 10 ns - begin_response_method
 Info: at_initiator_4_phase.cpp: 10 ns - initiator_thread
       1 - Target accepted LT or AT request
 
+Info: at_initiator_4_phase.cpp: 10 ns - initiator_thread
+      1 R A: 0x0000000000000D23 L: 16
+
 Info: at_target_4_phase.cpp: 10 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator_4_phase.cpp: 20 ns - initiator_thread
       2 - Target accepted LT or AT request
+
+Info: at_initiator_4_phase.cpp: 20 ns - initiator_thread
+      2 R A: 0x0000000010000F44 L: 16
 
 Info: at_target_4_phase.cpp: 20 ns - nb_transport
       2 - ** BEGIN_REQ AT 4 Phase
@@ -26,23 +38,35 @@ Info: at_target_4_phase.cpp: 30 ns - begin_response_method
 Info: at_initiator_4_phase.cpp: 30 ns - initiator_thread
       2 - Target accepted LT or AT request
 
+Info: at_initiator_4_phase.cpp: 30 ns - initiator_thread
+      2 W A: 0x0000000000000292 L: 16
+
 Info: at_target_4_phase.cpp: 30 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator_4_phase.cpp: 30 ns - initiator_thread
       1 - Target accepted LT or AT request
 
+Info: at_initiator_4_phase.cpp: 30 ns - initiator_thread
+      1 W A: 0x0000000010000D15 L: 16
+
 Info: at_target_4_phase.cpp: 30 ns - nb_transport
       2 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator_4_phase.cpp: 40 ns - initiator_thread
       2 - Target accepted LT or AT request
 
+Info: at_initiator_4_phase.cpp: 40 ns - initiator_thread
+      2 R A: 0x00000000100008C3 L: 16
+
 Info: at_target_4_phase.cpp: 40 ns - nb_transport
       2 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator_4_phase.cpp: 40 ns - initiator_thread
       1 - Target accepted LT or AT request
+
+Info: at_initiator_4_phase.cpp: 40 ns - initiator_thread
+      1 R A: 0x0000000000000D99 L: 16
 
 Info: at_target_4_phase.cpp: 40 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
@@ -50,11 +74,17 @@ Info: at_target_4_phase.cpp: 40 ns - nb_transport
 Info: at_initiator_4_phase.cpp: 50 ns - initiator_thread
       2 - Target accepted LT or AT request
 
+Info: at_initiator_4_phase.cpp: 50 ns - initiator_thread
+      2 R A: 0x0000000000000CA8 L: 16
+
 Info: at_target_4_phase.cpp: 50 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator_4_phase.cpp: 50 ns - initiator_thread
       1 - Target accepted LT or AT request
+
+Info: at_initiator_4_phase.cpp: 50 ns - initiator_thread
+      1 W A: 0x0000000010000284 L: 16
 
 Info: at_target_4_phase.cpp: 50 ns - nb_transport
       2 - ** BEGIN_REQ AT 4 Phase
@@ -74,11 +104,17 @@ Info: at_target_4_phase.cpp: 60 ns - begin_response_method
 Info: at_initiator_4_phase.cpp: 60 ns - initiator_thread
       1 - Target accepted LT or AT request
 
+Info: at_initiator_4_phase.cpp: 60 ns - initiator_thread
+      1 W A: 0x000000000000046B L: 16
+
 Info: at_target_4_phase.cpp: 60 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator_4_phase.cpp: 60 ns - initiator_thread
       2 - Target accepted LT or AT request
+
+Info: at_initiator_4_phase.cpp: 60 ns - initiator_thread
+      2 W A: 0x0000000010000FB3 L: 16
 
 Info: at_target_4_phase.cpp: 60 ns - nb_transport
       2 - ** BEGIN_REQ AT 4 Phase
@@ -92,11 +128,17 @@ Info: at_initiator_4_phase.cpp: 67 ns - m_send_end_rsp_method
 Info: at_initiator_4_phase.cpp: 70 ns - initiator_thread
       1 - Target accepted LT or AT request
 
+Info: at_initiator_4_phase.cpp: 70 ns - initiator_thread
+      1 R A: 0x0000000010000EBD L: 16
+
 Info: at_target_4_phase.cpp: 70 ns - nb_transport
       2 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator_4_phase.cpp: 70 ns - initiator_thread
       2 - Target accepted LT or AT request
+
+Info: at_initiator_4_phase.cpp: 70 ns - initiator_thread
+      2 W A: 0x000000000000046A L: 16
 
 Info: at_target_4_phase.cpp: 70 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
@@ -116,11 +158,17 @@ Info: at_target_4_phase.cpp: 80 ns - begin_response_method
 Info: at_initiator_4_phase.cpp: 80 ns - initiator_thread
       2 - Target accepted LT or AT request
 
+Info: at_initiator_4_phase.cpp: 80 ns - initiator_thread
+      2 W A: 0x000000000000042B L: 16
+
 Info: at_target_4_phase.cpp: 80 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator_4_phase.cpp: 80 ns - initiator_thread
       1 - Target accepted LT or AT request
+
+Info: at_initiator_4_phase.cpp: 80 ns - initiator_thread
+      1 W A: 0x0000000010000759 L: 16
 
 Info: at_target_4_phase.cpp: 80 ns - nb_transport
       2 - ** BEGIN_REQ AT 4 Phase
@@ -147,11 +195,17 @@ Info: at_target_4_phase.cpp: 90 ns - begin_response_method
 Info: at_initiator_4_phase.cpp: 90 ns - initiator_thread
       1 - Target accepted LT or AT request
 
+Info: at_initiator_4_phase.cpp: 90 ns - initiator_thread
+      1 W A: 0x00000000100001D6 L: 16
+
 Info: at_target_4_phase.cpp: 90 ns - nb_transport
       2 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator_4_phase.cpp: 90 ns - initiator_thread
       2 - Target accepted LT or AT request
+
+Info: at_initiator_4_phase.cpp: 90 ns - initiator_thread
+      2 R A: 0x0000000010000B12 L: 16
 
 Info: at_target_4_phase.cpp: 90 ns - nb_transport
       2 - ** BEGIN_REQ AT 4 Phase
@@ -164,6 +218,9 @@ Info: at_initiator_4_phase.cpp: 97 ns - m_send_end_rsp_method
 
 Info: at_initiator_4_phase.cpp: 100 ns - initiator_thread
       1 - Target accepted LT or AT request
+
+Info: at_initiator_4_phase.cpp: 100 ns - initiator_thread
+      1 R A: 0x0000000000000792 L: 16
 
 Info: at_target_4_phase.cpp: 100 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
@@ -184,11 +241,17 @@ Info: at_target_4_phase.cpp: 110 ns - begin_response_method
 Info: at_initiator_4_phase.cpp: 110 ns - initiator_thread
       2 - Target accepted LT or AT request
 
+Info: at_initiator_4_phase.cpp: 110 ns - initiator_thread
+      2 R A: 0x0000000000000771 L: 16
+
 Info: at_target_4_phase.cpp: 110 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator_4_phase.cpp: 110 ns - initiator_thread
       1 - Target accepted LT or AT request
+
+Info: at_initiator_4_phase.cpp: 110 ns - initiator_thread
+      1 R A: 0x0000000010000276 L: 16
 
 Info: at_target_4_phase.cpp: 110 ns - nb_transport
       2 - ** BEGIN_REQ AT 4 Phase
@@ -202,11 +265,17 @@ Info: at_initiator_4_phase.cpp: 117 ns - m_send_end_rsp_method
 Info: at_initiator_4_phase.cpp: 120 ns - initiator_thread
       2 - Target accepted LT or AT request
 
+Info: at_initiator_4_phase.cpp: 120 ns - initiator_thread
+      2 R A: 0x00000000000002BA L: 16
+
 Info: at_target_4_phase.cpp: 120 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator_4_phase.cpp: 120 ns - initiator_thread
       1 - Target accepted LT or AT request
+
+Info: at_initiator_4_phase.cpp: 120 ns - initiator_thread
+      1 R A: 0x0000000010000B32 L: 16
 
 Info: at_target_4_phase.cpp: 120 ns - nb_transport
       2 - ** BEGIN_REQ AT 4 Phase
@@ -214,11 +283,17 @@ Info: at_target_4_phase.cpp: 120 ns - nb_transport
 Info: at_initiator_4_phase.cpp: 130 ns - initiator_thread
       2 - Target accepted LT or AT request
 
+Info: at_initiator_4_phase.cpp: 130 ns - initiator_thread
+      2 R A: 0x000000001000030D L: 16
+
 Info: at_target_4_phase.cpp: 130 ns - nb_transport
       2 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator_4_phase.cpp: 130 ns - initiator_thread
       1 - Target accepted LT or AT request
+
+Info: at_initiator_4_phase.cpp: 130 ns - initiator_thread
+      1 W A: 0x0000000000000217 L: 16
 
 Info: at_target_4_phase.cpp: 130 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
@@ -238,11 +313,17 @@ Info: at_target_4_phase.cpp: 140 ns - begin_response_method
 Info: at_initiator_4_phase.cpp: 140 ns - initiator_thread
       1 - Target accepted LT or AT request
 
+Info: at_initiator_4_phase.cpp: 140 ns - initiator_thread
+      1 R A: 0x000000000000018B L: 16
+
 Info: at_target_4_phase.cpp: 140 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator_4_phase.cpp: 140 ns - initiator_thread
       2 - Target accepted LT or AT request
+
+Info: at_initiator_4_phase.cpp: 140 ns - initiator_thread
+      2 R A: 0x0000000010000BAC L: 16
 
 Info: at_target_4_phase.cpp: 140 ns - nb_transport
       2 - ** BEGIN_REQ AT 4 Phase
@@ -256,11 +337,17 @@ Info: at_initiator_4_phase.cpp: 147 ns - m_send_end_rsp_method
 Info: at_initiator_4_phase.cpp: 150 ns - initiator_thread
       1 - Target accepted LT or AT request
 
+Info: at_initiator_4_phase.cpp: 150 ns - initiator_thread
+      1 W A: 0x0000000000000CA5 L: 16
+
 Info: at_target_4_phase.cpp: 150 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator_4_phase.cpp: 150 ns - initiator_thread
       2 - Target accepted LT or AT request
+
+Info: at_initiator_4_phase.cpp: 150 ns - initiator_thread
+      2 R A: 0x00000000000005E8 L: 16
 
 Info: at_target_4_phase.cpp: 150 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
@@ -279,6 +366,9 @@ Info: at_target_4_phase.cpp: 160 ns - begin_response_method
 
 Info: at_initiator_4_phase.cpp: 160 ns - initiator_thread
       1 - Target accepted LT or AT request
+
+Info: at_initiator_4_phase.cpp: 160 ns - initiator_thread
+      1 W A: 0x00000000100005C6 L: 16
 
 Info: at_target_4_phase.cpp: 160 ns - nb_transport
       2 - ** BEGIN_REQ AT 4 Phase
@@ -305,6 +395,9 @@ Info: at_target_4_phase.cpp: 170 ns - begin_response_method
 Info: at_initiator_4_phase.cpp: 170 ns - initiator_thread
       2 - Target accepted LT or AT request
 
+Info: at_initiator_4_phase.cpp: 170 ns - initiator_thread
+      2 W A: 0x0000000000000601 L: 16
+
 Info: at_target_4_phase.cpp: 170 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
@@ -319,6 +412,9 @@ Info: at_initiator_4_phase.cpp: 177 ns - m_send_end_rsp_method
 
 Info: at_initiator_4_phase.cpp: 180 ns - initiator_thread
       2 - Target accepted LT or AT request
+
+Info: at_initiator_4_phase.cpp: 180 ns - initiator_thread
+      2 W A: 0x0000000000000C3F L: 16
 
 Info: at_target_4_phase.cpp: 180 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
@@ -729,17 +825,26 @@ Info: at_target_4_phase.cpp: 627 ns - nb_transport
 Info: at_initiator_4_phase.cpp: 627 ns - m_send_end_rsp_method
       1 - ** AT initiator send end response
 
+Info: at_initiator_4_phase.cpp: 627 ns - initiator_thread
+      1 W A: 0x000000000000093E L: 16
+
 Info: at_target_4_phase.cpp: 627 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator_4_phase.cpp: 637 ns - initiator_thread
       1 - Target accepted LT or AT request
 
+Info: at_initiator_4_phase.cpp: 637 ns - initiator_thread
+      1 R A: 0x0000000000000F65 L: 16
+
 Info: at_target_4_phase.cpp: 637 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator_4_phase.cpp: 647 ns - initiator_thread
       1 - Target accepted LT or AT request
+
+Info: at_initiator_4_phase.cpp: 647 ns - initiator_thread
+      1 R A: 0x00000000100009F3 L: 16
 
 Info: at_target_4_phase.cpp: 647 ns - nb_transport
       2 - ** BEGIN_REQ AT 4 Phase
@@ -750,11 +855,17 @@ Info: at_target_4_phase.cpp: 657 ns - begin_response_method
 Info: at_initiator_4_phase.cpp: 657 ns - initiator_thread
       1 - Target accepted LT or AT request
 
+Info: at_initiator_4_phase.cpp: 657 ns - initiator_thread
+      1 W A: 0x0000000010000975 L: 16
+
 Info: at_target_4_phase.cpp: 657 ns - nb_transport
       2 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator_4_phase.cpp: 667 ns - initiator_thread
       1 - Target accepted LT or AT request
+
+Info: at_initiator_4_phase.cpp: 667 ns - initiator_thread
+      1 W A: 0x0000000000000908 L: 16
 
 Info: at_target_4_phase.cpp: 667 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
@@ -780,17 +891,26 @@ Info: at_initiator_4_phase.cpp: 677 ns - m_send_end_rsp_method
 Info: at_initiator_4_phase.cpp: 677 ns - initiator_thread
       1 - Target accepted LT or AT request
 
+Info: at_initiator_4_phase.cpp: 677 ns - initiator_thread
+      1 R A: 0x0000000000000A75 L: 16
+
 Info: at_target_4_phase.cpp: 677 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator_4_phase.cpp: 687 ns - initiator_thread
       1 - Target accepted LT or AT request
 
+Info: at_initiator_4_phase.cpp: 687 ns - initiator_thread
+      1 W A: 0x00000000000008A5 L: 16
+
 Info: at_target_4_phase.cpp: 687 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator_4_phase.cpp: 697 ns - initiator_thread
       1 - Target accepted LT or AT request
+
+Info: at_initiator_4_phase.cpp: 697 ns - initiator_thread
+      1 R A: 0x0000000000000527 L: 16
 
 Info: at_target_4_phase.cpp: 697 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
@@ -829,6 +949,9 @@ Info: at_target_4_phase.cpp: 707 ns - begin_response_method
 Info: at_initiator_4_phase.cpp: 707 ns - initiator_thread
       1 - Target accepted LT or AT request
 
+Info: at_initiator_4_phase.cpp: 707 ns - initiator_thread
+      1 R A: 0x0000000010000E55 L: 16
+
 Info: at_target_4_phase.cpp: 707 ns - nb_transport
       2 - ** BEGIN_REQ AT 4 Phase
 
@@ -841,11 +964,17 @@ Info: at_initiator_4_phase.cpp: 714 ns - m_send_end_rsp_method
 Info: at_initiator_4_phase.cpp: 717 ns - initiator_thread
       1 - Target accepted LT or AT request
 
+Info: at_initiator_4_phase.cpp: 717 ns - initiator_thread
+      1 R A: 0x000000000000010A L: 16
+
 Info: at_target_4_phase.cpp: 717 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator_4_phase.cpp: 727 ns - initiator_thread
       1 - Target accepted LT or AT request
+
+Info: at_initiator_4_phase.cpp: 727 ns - initiator_thread
+      1 R A: 0x0000000010000B18 L: 16
 
 Info: at_target_4_phase.cpp: 727 ns - nb_transport
       2 - ** BEGIN_REQ AT 4 Phase
@@ -885,8 +1014,14 @@ Info: at_initiator_4_phase.cpp: 737 ns - m_send_end_rsp_method
 Info: at_initiator_4_phase.cpp: 737 ns - initiator_thread
       1 - Target accepted LT or AT request
 
+Info: at_initiator_4_phase.cpp: 737 ns - initiator_thread
+      1 R A: 0x00000000000007F6 L: 16
+
 Info: at_target_4_phase.cpp: 737 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
+
+Info: at_initiator_4_phase.cpp: 737 ns - initiator_thread
+      2 R A: 0x0000000000000FDA L: 16
 
 Info: at_target_4_phase.cpp: 737 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
@@ -900,11 +1035,17 @@ Info: at_initiator_4_phase.cpp: 744 ns - m_send_end_rsp_method
 Info: at_initiator_4_phase.cpp: 747 ns - initiator_thread
       1 - Target accepted LT or AT request
 
+Info: at_initiator_4_phase.cpp: 747 ns - initiator_thread
+      1 W A: 0x0000000000000E33 L: 16
+
 Info: at_target_4_phase.cpp: 747 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator_4_phase.cpp: 757 ns - initiator_thread
       2 - Target accepted LT or AT request
+
+Info: at_initiator_4_phase.cpp: 757 ns - initiator_thread
+      2 R A: 0x000000001000014D L: 16
 
 Info: at_target_4_phase.cpp: 757 ns - nb_transport
       2 - ** BEGIN_REQ AT 4 Phase
@@ -931,17 +1072,26 @@ Info: at_initiator_4_phase.cpp: 767 ns - m_send_end_rsp_method
 Info: at_initiator_4_phase.cpp: 767 ns - initiator_thread
       1 - Target accepted LT or AT request
 
+Info: at_initiator_4_phase.cpp: 767 ns - initiator_thread
+      1 W A: 0x00000000100002B4 L: 16
+
 Info: at_target_4_phase.cpp: 767 ns - nb_transport
       2 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator_4_phase.cpp: 767 ns - initiator_thread
       2 - Target accepted LT or AT request
 
+Info: at_initiator_4_phase.cpp: 767 ns - initiator_thread
+      2 W A: 0x0000000010000B63 L: 16
+
 Info: at_target_4_phase.cpp: 767 ns - nb_transport
       2 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator_4_phase.cpp: 777 ns - initiator_thread
       1 - Target accepted LT or AT request
+
+Info: at_initiator_4_phase.cpp: 777 ns - initiator_thread
+      1 R A: 0x000000000000077F L: 16
 
 Info: at_target_4_phase.cpp: 777 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
@@ -961,11 +1111,17 @@ Info: at_target_4_phase.cpp: 787 ns - begin_response_method
 Info: at_initiator_4_phase.cpp: 787 ns - initiator_thread
       2 - Target accepted LT or AT request
 
+Info: at_initiator_4_phase.cpp: 787 ns - initiator_thread
+      2 R A: 0x0000000000000D0E L: 16
+
 Info: at_target_4_phase.cpp: 787 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator_4_phase.cpp: 787 ns - initiator_thread
       1 - Target accepted LT or AT request
+
+Info: at_initiator_4_phase.cpp: 787 ns - initiator_thread
+      1 W A: 0x000000001000006C L: 16
 
 Info: at_target_4_phase.cpp: 787 ns - nb_transport
       2 - ** BEGIN_REQ AT 4 Phase
@@ -979,6 +1135,9 @@ Info: at_initiator_4_phase.cpp: 794 ns - m_send_end_rsp_method
 Info: at_initiator_4_phase.cpp: 797 ns - initiator_thread
       2 - Target accepted LT or AT request
 
+Info: at_initiator_4_phase.cpp: 797 ns - initiator_thread
+      2 R A: 0x0000000000000EBF L: 16
+
 Info: at_target_4_phase.cpp: 797 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
@@ -987,6 +1146,9 @@ Info: at_initiator_4_phase.cpp: 797 ns - initiator_thread
 
 Info: at_initiator_4_phase.cpp: 807 ns - initiator_thread
       2 - Target accepted LT or AT request
+
+Info: at_initiator_4_phase.cpp: 807 ns - initiator_thread
+      2 W A: 0x000000001000006D L: 16
 
 Info: at_target_4_phase.cpp: 807 ns - nb_transport
       2 - ** BEGIN_REQ AT 4 Phase
@@ -1012,11 +1174,17 @@ Info: at_initiator_4_phase.cpp: 817 ns - m_send_end_rsp_method
 Info: at_initiator_4_phase.cpp: 817 ns - initiator_thread
       2 - Target accepted LT or AT request
 
+Info: at_initiator_4_phase.cpp: 817 ns - initiator_thread
+      2 W A: 0x000000001000088F L: 16
+
 Info: at_target_4_phase.cpp: 817 ns - nb_transport
       2 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator_4_phase.cpp: 827 ns - initiator_thread
       2 - Target accepted LT or AT request
+
+Info: at_initiator_4_phase.cpp: 827 ns - initiator_thread
+      2 W A: 0x0000000010000475 L: 16
 
 Info: at_target_4_phase.cpp: 827 ns - nb_transport
       2 - ** BEGIN_REQ AT 4 Phase
@@ -1035,6 +1203,9 @@ Info: at_target_4_phase.cpp: 837 ns - begin_response_method
 
 Info: at_initiator_4_phase.cpp: 837 ns - initiator_thread
       2 - Target accepted LT or AT request
+
+Info: at_initiator_4_phase.cpp: 837 ns - initiator_thread
+      2 W A: 0x0000000010000659 L: 16
 
 Info: at_target_4_phase.cpp: 837 ns - nb_transport
       2 - ** BEGIN_REQ AT 4 Phase
@@ -1061,6 +1232,9 @@ Info: at_initiator_4_phase.cpp: 844 ns - m_send_end_rsp_method
 Info: at_initiator_4_phase.cpp: 847 ns - initiator_thread
       2 - Target accepted LT or AT request
 
+Info: at_initiator_4_phase.cpp: 847 ns - initiator_thread
+      2 R A: 0x00000000000002E3 L: 16
+
 Info: at_target_4_phase.cpp: 847 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
@@ -1073,17 +1247,26 @@ Info: at_initiator_4_phase.cpp: 851 ns - m_send_end_rsp_method
 Info: at_initiator_4_phase.cpp: 857 ns - initiator_thread
       2 - Target accepted LT or AT request
 
+Info: at_initiator_4_phase.cpp: 857 ns - initiator_thread
+      2 R A: 0x00000000100007D2 L: 16
+
 Info: at_target_4_phase.cpp: 857 ns - nb_transport
       2 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator_4_phase.cpp: 867 ns - initiator_thread
       2 - Target accepted LT or AT request
 
+Info: at_initiator_4_phase.cpp: 867 ns - initiator_thread
+      2 R A: 0x000000001000055B L: 16
+
 Info: at_target_4_phase.cpp: 867 ns - nb_transport
       2 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator_4_phase.cpp: 877 ns - initiator_thread
       2 - Target accepted LT or AT request
+
+Info: at_initiator_4_phase.cpp: 877 ns - initiator_thread
+      2 W A: 0x0000000000000B58 L: 16
 
 Info: at_target_4_phase.cpp: 877 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
@@ -1102,6 +1285,9 @@ Info: at_target_4_phase.cpp: 887 ns - begin_response_method
 
 Info: at_initiator_4_phase.cpp: 887 ns - initiator_thread
       2 - Target accepted LT or AT request
+
+Info: at_initiator_4_phase.cpp: 887 ns - initiator_thread
+      2 W A: 0x0000000010000269 L: 16
 
 Info: at_target_4_phase.cpp: 887 ns - nb_transport
       2 - ** BEGIN_REQ AT 4 Phase
@@ -1133,11 +1319,17 @@ Info: at_initiator_4_phase.cpp: 897 ns - m_send_end_rsp_method
 Info: at_initiator_4_phase.cpp: 897 ns - initiator_thread
       2 - Target accepted LT or AT request
 
+Info: at_initiator_4_phase.cpp: 897 ns - initiator_thread
+      2 W A: 0x0000000000000A82 L: 16
+
 Info: at_target_4_phase.cpp: 897 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase
 
 Info: at_initiator_4_phase.cpp: 907 ns - initiator_thread
       2 - Target accepted LT or AT request
+
+Info: at_initiator_4_phase.cpp: 907 ns - initiator_thread
+      2 R A: 0x0000000000000A67 L: 16
 
 Info: at_target_4_phase.cpp: 907 ns - nb_transport
       1 - ** BEGIN_REQ AT 4 Phase

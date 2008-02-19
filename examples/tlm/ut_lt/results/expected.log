@@ -11,6 +11,9 @@ Info: adapter_lt_ut.cpp: 0 s - nb_transport
 Info: ut_target.cpp: 0 s - b_transport
       W - 2 - A: 0x0000000000000626 L: 01
 
+Info: lt_initiator.cpp: 0 s - initiator_thread
+      1 R A: 0x0000000010000407 L: 08
+
 Info: adapter_lt_ut.cpp: 0 s - get_direct_mem_ptr
       bridging LT DMI pointer request to UT
 
@@ -30,6 +33,9 @@ Info: lt_initiator.cpp: 20 ns - initiator_thread
       1 - Completed LT request
       SC time    = 20 ns
       local time = 20 ns
+
+Info: lt_initiator.cpp: 20 ns - initiator_thread
+      1 R A: 0x0000000010000DC5 L: 08
 
 Info: adapter_lt_ut.cpp: 20 ns - get_direct_mem_ptr
       bridging LT DMI pointer request to UT
@@ -52,6 +58,9 @@ Info: lt_initiator.cpp: 40 ns - initiator_thread
       local time = 40 ns
 
 Info: lt_initiator.cpp: 40 ns - initiator_thread
+      1 R A: 0x0000000000000841 L: 08
+
+Info: lt_initiator.cpp: 40 ns - initiator_thread
       1 - can't get a DMI pointer
 
 Info: lt_target_memory: 40 ns - nb_transport
@@ -61,6 +70,9 @@ Info: lt_initiator.cpp: 40 ns - initiator_thread
       1 - Completed LT request
       SC time    = 40 ns
       local time = 100 ns
+
+Info: lt_initiator.cpp: 40 ns - initiator_thread
+      1 R A: 0x0000000010000E85 L: 08
 
 Info: adapter_lt_ut.cpp: 40 ns - get_direct_mem_ptr
       bridging LT DMI pointer request to UT
@@ -96,6 +108,9 @@ Info: lt_initiator.cpp: 60 ns - initiator_thread
       1 - Completed LT request
       SC time    = 60 ns
       local time = 120 ns
+
+Info: lt_initiator.cpp: 60 ns - initiator_thread
+      1 R A: 0x0000000000000233 L: 08
 
 Info: lt_initiator.cpp: 60 ns - initiator_thread
       1 - can't get a DMI pointer
