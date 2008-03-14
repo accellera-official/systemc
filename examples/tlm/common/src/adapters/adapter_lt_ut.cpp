@@ -195,7 +195,7 @@ adapter_lt_ut::nb_transport                           ///< non-blocking transpor
 
 unsigned int                                          ///< result
 adapter_lt_ut::transport_dbg                          ///< transport debug
-(  tlm::tlm_debug_payload     &payload                ///< debug payload
+(  tlm::tlm_generic_payload     &payload              ///< payload
 )
 {
   REPORT_ERROR(filename, __FUNCTION__, "not implemented");
@@ -209,7 +209,6 @@ adapter_lt_ut::transport_dbg                          ///< transport debug
   @brief get direct memory pointer
   
   @param address  DMI address
-  @param dmi_mode DMI read/write mode
   @param dmi_data DMI data
   
   @retval bool  success/failure flag
@@ -218,9 +217,8 @@ adapter_lt_ut::transport_dbg                          ///< transport debug
 
 bool                                                  ///< success / failure
 adapter_lt_ut::get_direct_mem_ptr                     ///< get direct memory pointer
-( const sc_dt::uint64     &address                    ///< DMI address
-,       tlm::tlm_dmi_mode &dmi_mode                   ///< DMI read/write mode
-,       tlm::tlm_dmi      &dmi_data                   ///< DMI data
+( tlm::tlm_generic_payload   &payload,                ///< address + extensions
+  tlm::tlm_dmi               &dmi_data                ///< DMI data
 )
 {
   bool  success = false;                              ///< success flag
@@ -228,8 +226,7 @@ adapter_lt_ut::get_direct_mem_ptr                     ///< get direct memory poi
   REPORT_INFO(filename,  __FUNCTION__, "bridging LT DMI pointer request to UT");
   
   // pass through the DMI pointer request
-  success = initiator_socket->get_direct_mem_ptr  ( address
-                                                  , dmi_mode
+  success = initiator_socket->get_direct_mem_ptr  ( payload
                                                   , dmi_data );
   
   return success;

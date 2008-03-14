@@ -136,26 +136,26 @@ public:
     }
   }
 
-  unsigned int transport_dbg(tlm::tlm_debug_payload& r)
+  unsigned int transport_dbg(tlm::tlm_generic_payload &r)
   {
-    if (r.address >= 400) return 0;
+    if (r.get_address() >= 400) return 0;
 
-    unsigned int tmp = (int)r.address;
+    unsigned int tmp = (int)r.get_address();
     unsigned int num_bytes;
-    if (tmp + r.num_bytes >= 400) {
+    if (tmp + r.get_data_length() >= 400) {
       num_bytes = 400 - tmp;
 
     } else {
-      num_bytes = r.num_bytes;
+      num_bytes = r.get_data_length();
     }
     if (r.do_read) {
       for (unsigned int i = 0; i < num_bytes; ++i) {
-        r.data[i] = mMem[i + tmp];
+        r.get_data_ptr()[i] = mMem[i + tmp];
       }
 
     } else {
       for (unsigned int i = 0; i < num_bytes; ++i) {
-        mMem[i + tmp] = r.data[i];
+        mMem[i + tmp] = r.get_data_ptr()[i];
       }
     }
     return num_bytes;

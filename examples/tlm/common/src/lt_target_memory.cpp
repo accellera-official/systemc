@@ -297,7 +297,7 @@ lt_target_memory::nb_transport                        ///< non-blocking transpor
 
 unsigned int                                          ///< result
 lt_target_memory::transport_dbg                       ///< transport debug
-( tlm::tlm_debug_payload  &payload                    ///< debug payload
+( tlm::tlm_generic_payload  &payload                  ///< payload
 )
 {
   REPORT_INFO(filename, __FUNCTION__, "not implemented");
@@ -314,7 +314,6 @@ lt_target_memory::transport_dbg                       ///< transport debug
     This routine is not currently implemented.
     
   @param address memory address
-  @param dmi_mode read/write flag
   @param dmi_data data reference
   
   @retval bool success / failure
@@ -327,8 +326,7 @@ lt_target_memory::transport_dbg                       ///< transport debug
 
 bool                                                  ///< success / failure
 lt_target_memory::get_direct_mem_ptr                  ///< get direct memory pointer
-( const sc_dt::uint64        &address                 ///< address
-, tlm::tlm_dmi_mode          &dmi_mode                ///< dmi read/write mode
+( tlm::tlm_generic_payload   &payload                 ///< address + extensions
 , tlm::tlm_dmi               &dmi_data                ///< dmi data
 )
 {

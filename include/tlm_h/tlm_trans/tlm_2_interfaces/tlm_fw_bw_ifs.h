@@ -50,19 +50,19 @@ public:
 
 // The semantics of the forward interface are as follows:
 // 
-// - An initiator that want to get direct access to a target's memory region
-//   can call the get_direct_mem_ptr method with the address parameter set to
-//   the address that it wants to gain access to. The for_reads member of the
-//   tlm_dmi_mode field specifies if the initiator wants to read or write 
+// - An initiator that wants to get direct access to a target's memory region
+//   can call the get_direct_mem_ptr method with the 'trans' parameter set to
+//   the address that it wants to gain access to. It sets the trans.m_command
+//   to specify if the initiator intended use (read or write)
 //   to the target's DMI region. The initiator is responsible for calling the
 //   method with a freshly initialized tlm_dmi object either by using a newly
 //   constructed object, or by calling an existing object's init() method.
-// - The 'tlm_dmi_mode.for_reads' parameter is necessary because read and write
-//   ranges are not necessarily identical. If they are, a target can specify
-//   that the range is valid for all accesses with the type attribute in the
-//   tlm_dmi structure. The tlm_dmi_mode class is used as a separate class here
-//   so that we can templatized the interface and give users the means to add
-//   protocol specific (static) extensions to DMI requests.
+// - Although a reference to a complete 'TRANS' type is passed to the get_
+//   direct_mem_ptr call, only the address command, and extension fields are of
+//   interest in most cases.
+// - Read and write ranges are not necessarily identical. If they are, a target
+//   can specify that the range is valid for all accesses with the tlm_data
+//   m_type attribute in the.
 // - The interconnect, if any, needs to decode the address and forward the
 //   call to the corresponding target. It needs to handle the address exactly
 //   as the target would expect on a transaction call, e.g. mask the address
@@ -103,12 +103,11 @@ public:
 // required to set the DMI hint to true if a DMI request on the given address
 // with the given transaction type (read or write) would have succeeded.
 
-template <typename DMI_MODE = tlm_dmi_mode>
+template <typename TRANS = tlm_generic_payload>
 class tlm_fw_direct_mem_if : public virtual sc_core::sc_interface
 {
 public:
-  virtual bool get_direct_mem_ptr(const sc_dt::uint64& address,
-                                  DMI_MODE& dmi_mode,
+  virtual bool get_direct_mem_ptr(TRANS& trans,
                                   tlm_dmi&  dmi_data) = 0;
 };
 
@@ -155,25 +154,28 @@ public:
 // must happen in the course of the method.
 //
 // Semantics:
-// - The initiator calls the transport_dbg method with the following arguments:
+// - The initiator calls the transport_dbg method with transaction 'trans' as
+//   argument. The commonly used parts of trans for debug are:
 //   . address: The start address that it wants to peek or poke.
-//   . num_bytes: The number of bytes that it requests to read or write.
-//   . do_read: Indicates a read or write access.
-//   . data: A pointer to the initiator-allocated data buffer, which must be
-//           at least num_bytes large. The data is always organized in the
-//           endianness of the machine.
+//   . length:  The number of bytes that it requests to read or write.
+//   . command: Indicates a read or write access.
+//   . data:    A pointer to the initiator-allocated data buffer, which must
+//              be at least num_bytes large. The data is always organized in
+//              the endianness of the machine.
+//   . extensions: Any extension that could affect the transaction.
 // - The interconnect, if any, will decode the address and forward the call to
 //   the appropriate target.
 // - The target must return the number of successfully transmitted bytes, where
 //   this number must be <= num_bytes. Thus, a target can safely return 0 if it
 //   does not support debug transactions.
 //
+template <typename TRANS = tlm_generic_payload>
 class tlm_transport_dbg_if : public virtual sc_core::sc_interface
 {
 public:
   // The return value of defines the number of bytes successfully
   // transferred.
-  virtual unsigned int transport_dbg(tlm_debug_payload& r) = 0;
+  virtual unsigned int transport_dbg(TRANS& trans) = 0;
 };
 
 ////////////////////////////////////////////////////////////////////////////
@@ -184,7 +186,6 @@ struct tlm_generic_payload_types
 {
   typedef tlm_generic_payload tlm_payload_type;
   typedef tlm_phase tlm_phase_type;
-  typedef tlm_dmi_mode tlm_dmi_mode_type;
 };
 
 // The forward non-blocking interface:
@@ -192,8 +193,8 @@ template <typename TYPES = tlm_generic_payload_types>
 class tlm_fw_nb_transport_if
   : public virtual tlm_nonblocking_transport_if<typename TYPES::tlm_payload_type,
                                                 typename TYPES::tlm_phase_type>
-  , public virtual tlm_fw_direct_mem_if<typename TYPES::tlm_dmi_mode_type>
-  , public virtual tlm_transport_dbg_if
+  , public virtual tlm_fw_direct_mem_if<typename TYPES::tlm_payload_type>
+  , public virtual tlm_transport_dbg_if<typename TYPES::tlm_payload_type>
 {};
 
 // The backward non-blocking interface:
@@ -208,8 +209,8 @@ class tlm_bw_nb_transport_if
 template <typename TYPES = tlm_generic_payload_types>
 class tlm_fw_b_transport_if
   : public virtual tlm_blocking_transport_if<typename TYPES::tlm_payload_type>
-  , public virtual tlm_fw_direct_mem_if<typename TYPES::tlm_dmi_mode_type>
-  , public virtual tlm_transport_dbg_if
+  , public virtual tlm_fw_direct_mem_if<typename TYPES::tlm_payload_type>
+  , public virtual tlm_transport_dbg_if<typename TYPES::tlm_payload_type>
 {};
 
 // The backward blocking interface:

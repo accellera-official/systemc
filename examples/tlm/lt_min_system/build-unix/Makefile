@@ -5,12 +5,12 @@ OBJ_NAME = lt_min_system
 INCDIR =    -I../include \
             -I../../common/include \
             -I../../common/include/models \
-            -I../../common/include/SimpleSocket \
-            -I../../common/include/utils
+            -I../../common/include/utils \
+            -I../../common/include/SimpleSocket
             
 SRCDIR          = ../src
 SRCCOMMONDIR    = ../../common/src
- 
+
 CFLAGS = $(FLAGS) $(INCDIR)
 
 OBJS   =    $(OBJ_NAME).o \

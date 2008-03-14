@@ -64,11 +64,10 @@ public:
   // Not implemented for now
 
   // debug interface
-  unsigned int transport_dbg(tlm::tlm_debug_payload & payload);
+  unsigned int transport_dbg(tlm::tlm_generic_payload & payload);
 
   // DMI interface
-  bool get_direct_mem_ptr(const sc_dt::uint64  & address, 
-		                  tlm::tlm_dmi_mode    & dmi_mode,
+  bool get_direct_mem_ptr(tlm::tlm_generic_payload &payload,
                           tlm::tlm_dmi         & dmi_data);
 
 private:

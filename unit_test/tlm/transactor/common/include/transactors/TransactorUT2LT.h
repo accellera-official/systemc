@@ -34,7 +34,6 @@ public:
                                  bw_interface_type> target_socket_type;
 
   typedef tlm::tlm_generic_payload     transaction_type;
-  typedef tlm::tlm_dmi_mode            dmi_mode_type;
   typedef tlm::tlm_phase               phase_type;
   typedef tlm::tlm_sync_enum           sync_enum_type;
   typedef SimpleInitiatorSocket<>      initiator_socket_type;
@@ -77,19 +76,17 @@ public:
     };
   }
 
-  unsigned int transport_dbg(tlm::tlm_debug_payload& r)
+  unsigned int transport_dbg(transaction_type&)
   {
     return 0;
   }
 
-  bool get_direct_mem_ptr(const sc_dt::uint64& address,
-                          dmi_mode_type& dmi_mode,
+  bool get_direct_mem_ptr(transaction_type& trans,
                           tlm::tlm_dmi& dmi_data)
   {
-    dmi_mode.type = tlm::tlm_dmi_mode::READ_WRITE;
-
-    dmi_data.dmi_start_address = 0x0;
-    dmi_data.dmi_end_address = (sc_dt::uint64)-1;
+    dmi_data.allow_read_write();
+    dmi_data.set_start_address(0x0);
+    dmi_data.set_end_address((sc_dt::uint64)-1);
     return false;
   }
 

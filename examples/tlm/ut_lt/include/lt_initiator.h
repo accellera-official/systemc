@@ -84,7 +84,6 @@ class lt_initiator                                  ///< lt_initiator
   private:
 
   tlm::tlm_dmi            m_DMI_read_write;         ///< DMI read/write block
-  tlm::tlm_dmi_mode       m_DMI_mode;               ///< DMI mode (read, write, read/write)
   tlm::tlm_quantumkeeper  m_QuantumKeeper;          ///< quantum keeper
   std::queue<gp_ptr>      m_req_accepted_queue;     ///< request accepted queue
   sc_core::sc_event       m_req_accepted_event;     ///< request accepted event

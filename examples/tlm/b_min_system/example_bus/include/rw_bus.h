@@ -51,10 +51,9 @@ public:
   // Forward interfaces
   virtual void b_transport(tlm::tlm_generic_payload & trans);
   
-  unsigned int transport_dbg(tlm::tlm_debug_payload & payload);
+  unsigned int transport_dbg(tlm::tlm_generic_payload  &gp);
 
-  bool get_direct_mem_ptr(const sc_dt::uint64  & address, 
-  		                  tlm::tlm_dmi_mode    & dmi_mode,
+  bool get_direct_mem_ptr(tlm::tlm_generic_payload & trans, 
                           tlm::tlm_dmi         & dmi_data);
 
   // Backward interface

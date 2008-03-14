@@ -175,15 +175,20 @@ lt_initiator::initiator_thread                      ///< initiator thread
       REPORT_INFO ( filename, __FUNCTION__, msg.str() );
     }
     
+    //DMI call may modify address. Keep a copy.
+	sc_dt::uint64 address   = transaction_ptr->get_address();
+
     // see if we've already gotten a DMI pointer for this range
     if ( ! m_DMI_active )
     {
+      tlm::tlm_command command = transaction_ptr->get_command();
       // see if we can acquire a DMI pointer
-      m_DMI_mode.type = tlm::tlm_dmi_mode::WRITE;
-      m_DMI_active    = initiator_socket->get_direct_mem_ptr ( transaction_ptr->get_address()
-                                                              , m_DMI_mode
+      transaction_ptr->set_write();
+      m_DMI_active    = initiator_socket->get_direct_mem_ptr ( *transaction_ptr
                                                               , m_DMI_read_write );
-      
+      transaction_ptr->set_address(address);
+      transaction_ptr->set_command(command);
+
       if ( m_DMI_active )
       {
         msg.str ("");
@@ -200,12 +205,10 @@ lt_initiator::initiator_thread                      ///< initiator thread
       }
     }
     
-    sc_dt::uint64 address   = transaction_ptr->get_address();
-    
     // see if we have a DMI pointer and the address is in it's range
     if (    ( m_DMI_active )
-        &&  ( address >= m_DMI_read_write.dmi_start_address )
-        &&  ( address <= m_DMI_read_write.dmi_end_address ) )
+        &&  ( address >= m_DMI_read_write.get_start_address ())
+        &&  ( address <= m_DMI_read_write.get_end_address ()) )
     {
       msg.str ("");
       msg << m_ID << " - " << "bypassing target";
@@ -214,10 +217,10 @@ lt_initiator::initiator_thread                      ///< initiator thread
 
       unsigned char *data     = transaction_ptr->get_data_ptr();    ///< data pointer
       unsigned int  length    = transaction_ptr->get_data_length(); ///< data length
-      sc_dt::uint64 dmi_size  = m_DMI_read_write.dmi_end_address
-                              - m_DMI_read_write.dmi_start_address; ///< DMI memory size
+      sc_dt::uint64 dmi_size  = m_DMI_read_write.get_end_address()
+                              - m_DMI_read_write.get_start_address(); ///< DMI memory size
       sc_dt::uint64  offset   = address
-                              - m_DMI_read_write.dmi_start_address; ///< offset to data
+                              - m_DMI_read_write.get_start_address(); ///< offset to data
 
       // process the command
       switch ( transaction_ptr->get_command () )
@@ -225,7 +228,7 @@ lt_initiator::initiator_thread                      ///< initiator thread
         case tlm::TLM_READ_COMMAND:
         {
           msg.str ("");
-          msg << m_ID << " " << ((m_DMI_read_write.endianness == tlm::TLM_LITTLE_ENDIAN) ? "L" : "B") << "E" << " - R* -";
+          msg << m_ID << " " << (hasHostEndianness(tlm::TLM_LITTLE_ENDIAN) ? "L" : "B") << "E" << " - R* -";
           msg << " A: 0x" << internal << setw( sizeof(address) * 2 ) << setfill( '0' ) 
               << uppercase << hex << address;
           msg << " L: " << internal << setw( 2 ) << setfill( '0' ) << dec << length;
@@ -242,7 +245,7 @@ lt_initiator::initiator_thread                      ///< initiator thread
               break;
             }
 
-            trans_data.buffer[i] = m_DMI_read_write.dmi_ptr [offset + i];
+            trans_data.buffer[i] = m_DMI_read_write.get_dmi_ptr() [offset + i];
              
             msg << internal << setw( 2 ) << setfill( '0' ) << uppercase << hex << (unsigned int)trans_data.buffer[i];
           }
@@ -250,7 +253,7 @@ lt_initiator::initiator_thread                      ///< initiator thread
           REPORT_INFO(filename, __FUNCTION__, msg.str());
           
           // adjust data to initiator endianness
-          if ( m_endianness != m_DMI_read_write.endianness )
+          if ( !hasHostEndianness(m_endianness) )
           {
             // adjust the data
             
@@ -275,7 +278,7 @@ lt_initiator::initiator_thread                      ///< initiator thread
           memcpy (data, trans_data.buffer, length);
       
           // update time
-          m_QuantumKeeper.inc (m_DMI_read_write.read_latency);
+          m_QuantumKeeper.inc (m_DMI_read_write.get_read_latency());
 
           break;
         }
@@ -297,7 +300,7 @@ lt_initiator::initiator_thread                      ///< initiator thread
           REPORT_INFO(filename, __FUNCTION__, msg.str());
       
           // adjust data to target endianness
-          if ( m_endianness != m_DMI_read_write.endianness )
+          if ( !hasHostEndianness(m_endianness) )
           {
             // adjust the data
             
@@ -307,7 +310,7 @@ lt_initiator::initiator_thread                      ///< initiator thread
             
             msg.str ("");
             msg << m_ID << " - adjusting to target endianness";
-            msg << " (" << ((m_DMI_read_write.endianness == tlm::TLM_LITTLE_ENDIAN) ? "L" : "B") << "E)";
+            msg << " (" << (hasHostEndianness(tlm::TLM_LITTLE_ENDIAN) ? "L" : "B") << "E)";
             msg << " D: 0x";
              
             for (unsigned int i = 0; i < length; i++)
@@ -325,11 +328,11 @@ lt_initiator::initiator_thread                      ///< initiator thread
               break;
             }
 
-            m_DMI_read_write.dmi_ptr [offset + i] = trans_data.buffer[i];
+            m_DMI_read_write.get_dmi_ptr() [offset + i] = trans_data.buffer[i];
           }
           
           // update time
-          m_QuantumKeeper.inc (m_DMI_read_write.write_latency);
+          m_QuantumKeeper.inc (m_DMI_read_write.get_write_latency());
 
           break;
         }
@@ -588,10 +591,10 @@ lt_initiator::invalidate_direct_mem_ptr             ///< invalidate_direct_mem_p
   std::ostringstream        msg;                    ///< log message
 
   if (    ( m_DMI_active )
-      &&  ( m_DMI_read_write.dmi_start_address  >= start_range  )
-      &&  ( m_DMI_read_write.dmi_start_address  <= end_range    )
-      &&  ( m_DMI_read_write.dmi_end_address    >= start_range  )
-      &&  ( m_DMI_read_write.dmi_end_address    <= end_range    ) )
+      &&  ( m_DMI_read_write.get_start_address  ()>= start_range  )
+      &&  ( m_DMI_read_write.get_start_address  ()<= end_range    )
+      &&  ( m_DMI_read_write.get_end_address    ()>= start_range  )
+      &&  ( m_DMI_read_write.get_end_address    ()<= end_range    ) )
   {
     msg.str ("");
     msg << m_ID << " - DMI pointer invalidated";

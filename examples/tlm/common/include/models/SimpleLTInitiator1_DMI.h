@@ -30,7 +30,6 @@ class SimpleLTInitiator1_dmi :
 {
 public:
   typedef tlm::tlm_generic_payload      transaction_type;
-  typedef tlm::tlm_dmi_mode             dmi_mode_type;
   typedef tlm::tlm_dmi                  dmi_type;
   typedef tlm::tlm_phase                phase_type;
   typedef tlm::tlm_sync_enum            sync_enum_type;
@@ -140,29 +139,28 @@ public:
       ///////////////////////////////////////////////////////////
 
       // Check if the address is covered by our DMI region
-      if ( (trans.get_address() >= mDMIData.dmi_start_address) &&
-           (trans.get_address() <= mDMIData.dmi_end_address) ) {
+      if ( (trans.get_address() >= mDMIData.get_start_address()) &&
+           (trans.get_address() <= mDMIData.get_end_address()) ) {
           // We can handle the data here. As the logEndTransaction is assuming
           // something to happen in the data structure, we really need to
           // do this:
           trans.set_response_status(tlm::TLM_OK_RESPONSE);
-          sc_dt::uint64 tmp = trans.get_address() - mDMIData.dmi_start_address;
-          assert(hasHostEndianness(mDMIData.endianness));
+          sc_dt::uint64 tmp = trans.get_address() - mDMIData.get_start_address();
           if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
-              *(unsigned int*)&mDMIData.dmi_ptr[tmp] = mData;
+              *(unsigned int*)&mDMIData.get_dmi_ptr()[tmp] = mData;
 
           } else {
-              mData = *(unsigned int*)&mDMIData.dmi_ptr[tmp];
+              mData = *(unsigned int*)&mDMIData.get_dmi_ptr()[tmp];
           }
           
           // Do the wait immediately. Note that doing the wait here eats almost
           // all the performance anyway, so we only gain something if we're
           // using temporal decoupling.
           if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
-            wait(mDMIData.write_latency);
+            wait(mDMIData.get_write_latency());
 
           } else {
-            wait(mDMIData.read_latency);
+            wait(mDMIData.get_read_latency());
           }
           
       } else { // we need a full transaction
@@ -187,12 +185,10 @@ public:
           if (trans.get_dmi_allowed())
           {
               dmi_type tmp;
-              dmi_mode_type tmp_mode;
-              tmp_mode.type = tlm::tlm_dmi_mode::WRITE;
-              if ( socket->get_direct_mem_ptr(trans.get_address(),
-                                              tmp_mode,
+              trans.set_write();
+              if ( socket->get_direct_mem_ptr(trans,
                                               tmp) &&
-                   (tmp_mode.type != tlm::tlm_dmi_mode::READ))
+                   tmp.is_read_write_allowed())
               {
                   mDMIData = tmp;
               }
@@ -228,8 +224,8 @@ public:
 
   void invalidate(dmi_type& dmiData)
   {
-    dmiData.dmi_start_address = 1;
-    dmiData.dmi_end_address = 0;
+    dmiData.set_start_address(1);
+    dmiData.set_end_address(0);
   }
 
   // Invalidate DMI pointer(s)
@@ -237,8 +233,8 @@ public:
                                  sc_dt::uint64 end_range)
   {
       // do the invalidation if there is an address range overlap
-      if (start_range <= mDMIData.dmi_end_address &&
-          end_range >= mDMIData.dmi_start_address) {
+      if (start_range <= mDMIData.get_end_address ()&&
+          end_range >= mDMIData.get_start_address()) {
           std::cout <<  name() << ": got DMI pointer invalidation"
                     << " @ " << sc_core::sc_time_stamp() << std::endl;
           
@@ -259,11 +255,11 @@ public:
               << std::endl;
     unsigned char data[32];
 
-    tlm::tlm_debug_payload trans;
-    trans.address = mBaseAddress;
-    trans.num_bytes = 32;
-    trans.data = data;
-    trans.do_read = true;
+    tlm::tlm_generic_payload trans;
+    trans.set_address( mBaseAddress );
+    trans.set_data_length( 32 );
+    trans.set_data_ptr( data );
+    trans.set_read();
 
     unsigned int n = socket->transport_dbg(trans);
         

@@ -35,21 +35,10 @@ public:
     int m_data;
 };
 
-// For DMI, we also want to give the get_direct_mem_ptr access to
-// the extension, because the address handling could depend on the
-// extension:
-
-class my_dmi_mode : public tlm::tlm_dmi_mode
-{
-public:
-    my_extension* m_ext;
-};
-
 struct my_extended_payload_types
 {
   typedef tlm::tlm_generic_payload_types::tlm_payload_type tlm_payload_type;
   typedef tlm::tlm_generic_payload_types::tlm_phase_type tlm_phase_type;
-  typedef my_dmi_mode tlm_dmi_mode_type;
 };
 
 #endif

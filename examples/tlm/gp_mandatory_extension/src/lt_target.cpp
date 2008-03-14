@@ -345,7 +345,7 @@ lt_target::begin_response                           ///< begin_response
 =============================================================================*/
 unsigned int                                        ///< result
 lt_target::transport_dbg                            ///< transport debug
-( tlm::tlm_debug_payload     &payload               ///< debug payload
+( tlm::tlm_generic_payload   &payload               ///< debug payload
 )
 {
   REPORT_ERROR(filename, __FUNCTION__, "not implemented");
@@ -369,9 +369,8 @@ lt_target::transport_dbg                            ///< transport debug
 =============================================================================*/
 bool                                                ///< success / failure
 lt_target::get_direct_mem_ptr                       ///< get direct memory pointer
-  (const sc_dt::uint64        &address              ///< address
-  ,tlm::tlm_dmi_mode          &mode                 ///< dmi read/write mode
-  ,tlm::tlm_dmi               &data                 ///< dmi data
+  (tlm::tlm_generic_payload   &payload,             ///< address + extensions
+   tlm::tlm_dmi               &data                 ///< dmi data
   )
 {
     return false;

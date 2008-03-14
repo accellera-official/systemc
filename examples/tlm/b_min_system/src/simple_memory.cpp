@@ -143,7 +143,7 @@ bool simple_memory::write(sc_dt::uint64   bus_address,
   Transport Debug Implementation (not supported here)
 ==============================================================================*/
 
-unsigned int simple_memory::transport_dbg(tlm::tlm_debug_payload & payload)
+unsigned int simple_memory::transport_dbg(tlm::tlm_generic_payload & payload)
 {
 	// It's perfectly allowed to not support Transport Debug, no need to
 	// throw an error
@@ -155,8 +155,7 @@ unsigned int simple_memory::transport_dbg(tlm::tlm_debug_payload & payload)
   DMI interface implementation (not supported here)
 ==============================================================================*/
 
-bool simple_memory::get_direct_mem_ptr(const sc_dt::uint64  & address, 
-		                               tlm::tlm_dmi_mode    & dmi_mode,
+bool simple_memory::get_direct_mem_ptr(tlm::tlm_generic_payload &payload,
                                        tlm::tlm_dmi         & dmi_data)
 {
     // It's perfectly allowed to not support DMI, no need to

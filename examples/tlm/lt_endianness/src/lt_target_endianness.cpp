@@ -365,7 +365,7 @@ lt_target::begin_response                           ///< begin_response
 =============================================================================*/
 unsigned int                                        ///< result
 lt_target::transport_dbg                            ///< transport debug
-( tlm::tlm_debug_payload     &payload               ///< debug payload
+( tlm::tlm_generic_payload   &payload               ///< debug payload
 )
 {
   // No error needed, disabled
@@ -394,9 +394,8 @@ lt_target::transport_dbg                            ///< transport debug
 =============================================================================*/
 bool                                                ///< success / failure
 lt_target::get_direct_mem_ptr                       ///< get direct memory pointer
-  (const sc_dt::uint64        &address              ///< address
-  ,tlm::tlm_dmi_mode          &mode                 ///< dmi read/write mode
-  ,tlm::tlm_dmi               &data                 ///< dmi data
+  (tlm::tlm_generic_payload   &payload,             ///< address + extensions
+   tlm::tlm_dmi               &data                 ///< dmi data
   )
 {
   std::ostringstream  msg;                          ///< log message
@@ -405,7 +404,7 @@ lt_target::get_direct_mem_ptr                       ///< get direct memory point
   const sc_dt::uint64 block_size    = m_memory_size / 2;              ///< DMI block size
   const sc_dt::uint64 address_start = block_size * (m_ID - 1);        ///< starting DMI address
   const sc_dt::uint64 address_end   = address_start + block_size - 1; ///< ending DMI address
-  
+  const sc_dt::uint64 address       = payload.get_address();
   msg.str ("");
   msg << m_ID << " - DMI pointer request A: 0x"
       << internal << setw( sizeof(address) * 2 ) << setfill( '0' ) 
@@ -414,8 +413,8 @@ lt_target::get_direct_mem_ptr                       ///< get direct memory point
   REPORT_INFO ( filename, __FUNCTION__, msg.str() );
   
   // set the start and end addresses (TLM 2.0 s4.3.5.f)
-  data.dmi_start_address  = address_start;
-  data.dmi_end_address    = address_end;
+  data.set_start_address(address_start);
+  data.set_end_address(address_end);
 
   // range check the address
   if (    ( address < address_start )
@@ -459,25 +458,26 @@ lt_target::get_direct_mem_ptr                       ///< get direct memory point
       
       REPORT_INFO ( filename, __FUNCTION__, msg.str() );
   
-      switch ( mode.type )
+      switch ( payload.get_command() )
       {
-        case tlm::tlm_dmi_mode::READ:
-        case tlm::tlm_dmi_mode::WRITE:
-        case tlm::tlm_dmi_mode::READ_WRITE:
+        case tlm::TLM_READ_COMMAND:
+        case tlm::TLM_WRITE_COMMAND:
         {
           // upgrade DMI access mode
-          mode.type = tlm::tlm_dmi_mode::READ_WRITE;
+          data.allow_read_write();
+          m_DMI_granted       = true;
+          success             = true;
         }
+		break;
+		default:
+			success           = false;
       }
       
       // fill out the remainder of the DMI data block
-      data.dmi_ptr        = m_memory;
-      data.read_latency   = m_accept_delay + m_read_response_delay;
-      data.write_latency  = m_accept_delay + m_write_response_delay;
-      data.endianness     = m_endianness;
+      data.set_dmi_ptr(m_memory);
+      data.set_read_latency(m_accept_delay + m_read_response_delay);
+      data.set_write_latency(m_accept_delay + m_write_response_delay);
       
-      m_DMI_granted       = true;
-      success             = true;
     }
   }
   

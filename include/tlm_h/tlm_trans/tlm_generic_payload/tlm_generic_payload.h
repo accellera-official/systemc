@@ -24,7 +24,5 @@
 
 #include "tlm_dmi.h"
 
-#include "tlm_debug_payload.h"
-
 #endif
 

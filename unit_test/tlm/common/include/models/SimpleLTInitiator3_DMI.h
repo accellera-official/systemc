@@ -29,7 +29,6 @@ class SimpleLTInitiator3_dmi : public sc_core::sc_module
 {
 public:
   typedef tlm::tlm_generic_payload transaction_type;
-  typedef tlm::tlm_dmi_mode        dmi_mode_type;
   typedef tlm::tlm_dmi             dmi_type;
   typedef tlm::tlm_phase           phase_type;
   typedef tlm::tlm_sync_enum       sync_enum_type;
@@ -49,10 +48,10 @@ public:
     mBaseAddress(baseAddress),
     mTransactionCount(0)
   {
-    mDMIDataReads.first.dmi_start_address = 1;
-    mDMIDataReads.first.dmi_end_address = 0;
-    mDMIDataWrites.first.dmi_start_address = 1;
-    mDMIDataWrites.first.dmi_end_address = 0;
+    mDMIDataReads.first.set_start_address(1);
+    mDMIDataReads.first.set_end_address(0);
+    mDMIDataWrites.first.set_start_address(1);
+    mDMIDataWrites.first.set_end_address(0);
 
     REGISTER_INVALIDATEDMI(socket, invalidate_direct_mem_ptr);
 
@@ -148,52 +147,43 @@ public:
       std::pair<dmi_type, bool>& dmi_data = getDMIData(trans);
 
       // Check if we need to acquire a DMI pointer
-      if((trans.get_address() < dmi_data.first.dmi_start_address) ||
-         (trans.get_address() > dmi_data.first.dmi_end_address) )
+      if((trans.get_address() < dmi_data.first.get_start_address()) ||
+         (trans.get_address() > dmi_data.first.get_end_address()) )
       {
-          dmi_mode_type tmp_mode;
-          if (trans.get_command() == tlm::TLM_READ_COMMAND)
-          {
-              tmp_mode.type = tlm::tlm_dmi_mode::READ;
-          }
-          else
-          {
-              tmp_mode.type = tlm::tlm_dmi_mode::WRITE;
-          }
+          sc_dt::uint64 address = trans.get_address(); //save original address
           dmi_data.second =
-            socket->get_direct_mem_ptr(trans.get_address(),
-                                       tmp_mode,
+            socket->get_direct_mem_ptr(trans,
                                        dmi_data.first);
+          trans.set_address(address);
       }
       // Do DMI "transaction" if we have a valid region
       if (dmi_data.second &&
-          (trans.get_address() >= dmi_data.first.dmi_start_address) &&
-          (trans.get_address() <= dmi_data.first.dmi_end_address) )
+          (trans.get_address() >= dmi_data.first.get_start_address()) &&
+          (trans.get_address() <= dmi_data.first.get_end_address()) )
       {
           // We can handle the data here. As the logEndTransaction is assuming
           // something to happen in the data structure, we really need to
           // do this:
           trans.set_response_status(tlm::TLM_OK_RESPONSE);
 
-          sc_dt::uint64 tmp = trans.get_address() - dmi_data.first.dmi_start_address;
-          assert(hasHostEndianness(dmi_data.first.endianness));
+          sc_dt::uint64 tmp = trans.get_address() - dmi_data.first.get_start_address();
           if (trans.get_command() == tlm::TLM_WRITE_COMMAND)
           {
-              *(unsigned int*)&dmi_data.first.dmi_ptr[tmp] = mData;
+              *(unsigned int*)&dmi_data.first.get_dmi_ptr()[tmp] = mData;
           }
           else
           {
-              mData = *(unsigned int*)&dmi_data.first.dmi_ptr[tmp];
+              mData = *(unsigned int*)&dmi_data.first.get_dmi_ptr()[tmp];
           }
           
           // Do the wait immediately. Note that doing the wait here eats almost
           // all the performance anyway, so we only gain something if we're
           // using temporal decoupling.
           if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
-            wait(dmi_data.first.write_latency);
+            wait(dmi_data.first.get_write_latency());
 
           } else {
-            wait(dmi_data.first.read_latency);
+            wait(dmi_data.first.get_read_latency());
           }
       }
       else // we need a full transaction
@@ -229,12 +219,12 @@ public:
                                  sc_dt::uint64 end_range)
   {
     // FIXME: probably faster to always invalidate everything?
-    if (start_range <= mDMIDataReads.first.dmi_end_address &&
-        end_range >= mDMIDataReads.first.dmi_start_address) {
+    if (start_range <= mDMIDataReads.first.get_end_address ()&&
+        end_range >= mDMIDataReads.first.get_start_address()) {
         mDMIDataReads.second = false;
     }
-    if (start_range <= mDMIDataWrites.first.dmi_end_address &&
-        end_range >= mDMIDataWrites.first.dmi_start_address) {
+    if (start_range <= mDMIDataWrites.first.get_end_address ()&&
+        end_range >= mDMIDataWrites.first.get_start_address()) {
       mDMIDataWrites.second = false;
     }
   }

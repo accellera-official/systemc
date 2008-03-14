@@ -30,8 +30,6 @@ class adapt_ext2gp : public sc_core::sc_module
     public:
     typedef tlm::tlm_generic_payload                   initiator_payload_type;
     typedef tlm::tlm_generic_payload                   target_payload_type;
-    typedef my_dmi_mode                                initiator_dmi_mode_type;
-    typedef tlm::tlm_dmi_mode                          target_dmi_mode_type;
     typedef SimpleInitiatorSocket<BUSWIDTH,
                                   tlm::tlm_generic_payload_types> initiator_socket_type;
     typedef SimpleTargetSocket<BUSWIDTH,
@@ -75,24 +73,18 @@ class adapt_ext2gp : public sc_core::sc_module
         return target_socket->nb_transport(trans, phase, t);
     }
     
-    // DMI needs extension handling:
-    bool get_dmi_pointer(const sc_dt::uint64& address,
-                         initiator_dmi_mode_type& dmi_mode,
+    bool get_dmi_pointer(target_payload_type& trans,
                          tlm::tlm_dmi& dmi_data)
     {
-        target_dmi_mode_type tmp_mode;
-        tmp_mode.type = dmi_mode.type;
-        bool tmp_ret = initiator_socket->get_direct_mem_ptr(address,
-                                                            tmp_mode,
+        bool tmp_ret = initiator_socket->get_direct_mem_ptr(trans,
                                                             dmi_data);
-        dmi_mode.type = tmp_mode.type;
         return tmp_ret;
     }
 
     //////////////////////////
     // simple call forwarders:
     //////////////////////////
-    unsigned int transport_debug(tlm::tlm_debug_payload& trans)
+    unsigned int transport_debug(target_payload_type& trans)
     {
         return initiator_socket->transport_dbg(trans);
     }
@@ -110,8 +102,6 @@ class adapt_gp2ext : public sc_core::sc_module
     public:
     typedef tlm::tlm_generic_payload                   initiator_payload_type;
     typedef tlm::tlm_generic_payload                   target_payload_type;
-    typedef tlm::tlm_dmi_mode                          initiator_dmi_mode_type;
-    typedef my_dmi_mode                                target_dmi_mode_type;
     typedef SimpleInitiatorSocket<BUSWIDTH,
                                   my_extended_payload_types> initiator_socket_type;
     typedef SimpleTargetSocket<BUSWIDTH,
@@ -177,25 +167,34 @@ class adapt_gp2ext : public sc_core::sc_module
         return target_socket->nb_transport(trans, phase, t);
     }
 
+    bool get_dmi_pointer(target_payload_type& trans,
+                         tlm::tlm_dmi& dmi_data)
+    {
+        // If the mandatory extension is not there, we need to add it and
+        // store it so that we can re-construc the original state.
+        // Otherwise we don't touch the extension, so that we don't overwrite
+        // it in e.g. a nonGP->GP->nonGP (initiator->interconnect->target)
+        // setup.
+        my_extension* tmp_ext;
+        trans.get_extension(tmp_ext);
+        if (!tmp_ext)
+        {
+            trans.set_extension(&m_ext);
+        }
+        bool tmp_ret = initiator_socket->get_direct_mem_ptr(trans,
+                                                            dmi_data);
+        if(!tmp_ext)
+        {
+            trans.clear_extension(tmp_ext);
+        }
+        return tmp_ret;
+    }
     //////////////////////////
     // simple call forwarders:
     //////////////////////////
-    unsigned int transport_debug(tlm::tlm_debug_payload& trans)
+    unsigned int transport_debug(target_payload_type& trans)
     {
         return initiator_socket->transport_dbg(trans);
-    }
-    bool get_dmi_pointer(const sc_dt::uint64& address,
-                         initiator_dmi_mode_type& dmi_mode,
-                         tlm::tlm_dmi& dmi_data)
-    {
-        target_dmi_mode_type tmp_mode;
-        tmp_mode.type = dmi_mode.type;
-        tmp_mode.m_ext = &m_ext;
-        bool tmp_ret = initiator_socket->get_direct_mem_ptr(address,
-                                                            tmp_mode,
-                                                            dmi_data);
-        dmi_mode.type = tmp_mode.type;
-        return tmp_ret;
     }
     void invalidate_dmi_pointers(sc_dt::uint64 start_range,
                                  sc_dt::uint64 end_range)

@@ -30,7 +30,6 @@ class SimpleTargetSocket :
 {
 public:
   typedef typename TYPES::tlm_payload_type              transaction_type;
-  typedef typename TYPES::tlm_dmi_mode_type             dmi_mode_type;
   typedef typename TYPES::tlm_phase_type                phase_type;
   typedef tlm::tlm_sync_enum                            sync_enum_type;
   typedef tlm::tlm_fw_nb_transport_if<TYPES>            fw_interface_type;
@@ -57,7 +56,7 @@ public:
 
   template <typename MODULE>
   void registerDebugTransport(MODULE* mod,
-                              unsigned int (MODULE::*cb)(tlm::tlm_debug_payload&),
+                              unsigned int (MODULE::*cb)(transaction_type&),
                               int id)
   {
     mProcess.setTransportDebugPtr(mod, static_cast<typename Process::TransportDebugPtr>(cb));
@@ -65,8 +64,7 @@ public:
   }
 
   template <typename MODULE>
-  void registerDMI(MODULE* mod, bool (MODULE::*cb)(const sc_dt::uint64&,
-                                                   dmi_mode_type& dmi_mode,
+  void registerDMI(MODULE* mod, bool (MODULE::*cb)(transaction_type&,
                                                    tlm::tlm_dmi&), int id)
   {
     mProcess.setGetDMIPtr(mod, static_cast<typename Process::GetDMIPtr>(cb));
@@ -80,9 +78,8 @@ private:
     typedef sync_enum_type (sc_core::sc_module::*TransportPtr)(transaction_type&,
                                                                tlm::tlm_phase&,
                                                                sc_core::sc_time&);
-    typedef unsigned int (sc_core::sc_module::*TransportDebugPtr)(tlm::tlm_debug_payload&);
-    typedef bool (sc_core::sc_module::*GetDMIPtr)(const sc_dt::uint64&,
-                                                  dmi_mode_type& dmi_mode,
+    typedef unsigned int (sc_core::sc_module::*TransportDebugPtr)(transaction_type&);
+    typedef bool (sc_core::sc_module::*GetDMIPtr)(transaction_type&,
                                                   tlm::tlm_dmi&);
       
     Process(const std::string& name) :
@@ -154,7 +151,7 @@ private:
       }
     }
 
-    unsigned int transport_dbg(tlm::tlm_debug_payload& trans)
+    unsigned int transport_dbg(transaction_type& trans)
     {
       if (mTransportDebugPtr) {
         // forward call
@@ -168,21 +165,20 @@ private:
       }
     }
 
-    bool get_direct_mem_ptr(const sc_dt::uint64& address,
-                            dmi_mode_type& dmi_mode,
+    bool get_direct_mem_ptr(transaction_type &trans,
                             tlm::tlm_dmi&  dmi_data)
     {
       if (mGetDMIPtr) {
         // forward call
         assert(mMod);
         simple_socket_utils::simple_socket_user::instance().set_user_id(mGetDMIUserId);
-        return (mMod->*mGetDMIPtr)(address, dmi_mode, dmi_data);
+        return (mMod->*mGetDMIPtr)(trans, dmi_data);
 
       } else {
         // No DMI support
-        dmi_mode.type = tlm::tlm_dmi_mode::READ_WRITE;
-        dmi_data.dmi_start_address = 0x0;
-        dmi_data.dmi_end_address = (sc_dt::uint64)-1;
+        dmi_data.allow_read_write();
+        dmi_data.set_start_address(0x0);
+        dmi_data.set_end_address((sc_dt::uint64)-1);
         return false;
       }
     }

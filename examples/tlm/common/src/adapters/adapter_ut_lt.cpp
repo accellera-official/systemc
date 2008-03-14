@@ -302,7 +302,7 @@ adapter_ut_lt::b_transport                            ///< b_transport
 
 unsigned int                                          ///< bytes returned
 adapter_ut_lt::transport_dbg                          ///< transport_dbg
-( tlm::tlm_debug_payload    &payload                  ///< debug payload
+( tlm::tlm_generic_payload  &payload                  ///< debug payload
 )
 {
   REPORT_ERROR(filename,  __FUNCTION__, "not implemented");
@@ -316,7 +316,6 @@ adapter_ut_lt::transport_dbg                          ///< transport_dbg
   @brief get direct memory pointer
   
   @param address  DMI address
-  @param dmi_mode DMI read/write mode
   @param dmi_data DMI data
   
   @retval bool  success/failure flag
@@ -325,8 +324,7 @@ adapter_ut_lt::transport_dbg                          ///< transport_dbg
 
 bool                                                  ///< success/failure
 adapter_ut_lt::get_direct_mem_ptr                     ///< get_direct_mem_ptr
-( const sc_dt::uint64       &address,                 ///< DMI address
-        tlm::tlm_dmi_mode   &dmi_mode,                ///< DMI mode
+( tlm::tlm_generic_payload   &payload,                ///< address + extensions
         tlm::tlm_dmi        &dmi_data                 ///< DMI data
 )
 {
@@ -335,8 +333,7 @@ adapter_ut_lt::get_direct_mem_ptr                     ///< get_direct_mem_ptr
   REPORT_INFO(filename,  __FUNCTION__, "bridging UT DMI pointer request to LT");
   
   // pass through the DMI pointer request  
-  success = adapter_socket->get_direct_mem_ptr  ( address
-                                                , dmi_mode
+  success = adapter_socket->get_direct_mem_ptr  ( payload
                                                 , dmi_data );
   
 //  REPORT_ERROR(filename,  __FUNCTION__, "not implemented");

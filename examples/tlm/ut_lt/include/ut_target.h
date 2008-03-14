@@ -71,13 +71,12 @@ class ut_target                                       ///< UT target class
 
   unsigned int                                        ///< ???
   transport_dbg                                       ///< transport_dbg
-  ( tlm::tlm_debug_payload  &r                        ///< debug payload
+  ( tlm::tlm_generic_payload  &r                      ///< debug payload
   );
 
   bool                                                ///< success/failure
   get_direct_mem_ptr                                  ///< get_direct_mem_ptr
-  ( const sc_dt::uint64     &address,                 ///< DMI address
-          tlm::tlm_dmi_mode &dmi_mode,                ///< DMI mode
+  ( tlm::tlm_generic_payload   &payload,              ///< address + extensions
           tlm::tlm_dmi      &dmi_data                 ///< DMI data
   );
 

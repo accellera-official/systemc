@@ -38,8 +38,6 @@ struct my_initiator_id_type                       ///< new protocol class
 {
   typedef tlm::tlm_generic_payload tlm_payload_type;
   typedef tlm::tlm_phase           tlm_phase_type;
-  typedef tlm::tlm_dmi_mode        tlm_dmi_mode_type;
-
 }; 
  
 #endif /* __MY_INITIATOR_ID_TYPE_H__ */

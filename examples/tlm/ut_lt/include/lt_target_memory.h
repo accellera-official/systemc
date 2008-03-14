@@ -88,13 +88,12 @@ class lt_target_memory                                  ///< LT target memory
   
   unsigned int                                ///< result
   transport_dbg(                              ///< transport debug
-    tlm::tlm_debug_payload     &payload       ///< debug payload
+    tlm::tlm_generic_payload   &payload       ///< debug payload
   );
   
   bool                                        ///< success / failure
   get_direct_mem_ptr(                         ///< get direct memory pointer
-    const sc_dt::uint64        &address,      ///< address
-    tlm::tlm_dmi_mode          &dmi_mode,     ///< dmi read/write mode
+    tlm::tlm_generic_payload   &payload,      ///< address + extensions
     tlm::tlm_dmi               &dmi_data      ///< dmi data
   );
 };

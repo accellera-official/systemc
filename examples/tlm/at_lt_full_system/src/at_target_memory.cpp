@@ -439,7 +439,7 @@ void at_target_memory::begin_response_method(void)
 
 unsigned int                                ///< result
 at_target_memory::transport_dbg             ///< transport debug
-( tlm::tlm_debug_payload     &payload       ///< debug payload
+( tlm::tlm_generic_payload  &gp             ///< generic payload
 )
 {
   return 0;
@@ -461,9 +461,8 @@ at_target_memory::transport_dbg             ///< transport debug
 ==============================================================================*/
 bool                                          ///< success / failure
 at_target_memory::get_direct_mem_ptr          ///< get direct memory pointer
-(const sc_dt::uint64        &address          ///< address
-,tlm::tlm_dmi_mode          &dmi_mode         ///< dmi read/write mode
-,tlm::tlm_dmi               &dmi_data         ///< dmi data
+(tlm::tlm_generic_payload   &payload,         ///< address + extensions
+ tlm::tlm_dmi               &dmi_data         ///< dmi data
 )
 {
     return false;

@@ -32,7 +32,6 @@ class SimpleBus : public sc_core::sc_module
 {
 public:
   typedef tlm::tlm_generic_payload transaction_type;
-  typedef tlm::tlm_dmi_mode        dmi_mode_type;
   typedef tlm::tlm_phase           phase_type;
   typedef tlm::tlm_sync_enum       sync_enum_type;
   typedef SimpleTargetSocket<>     target_socket_type;
@@ -389,12 +388,12 @@ public:
     }
   }
 
-  unsigned int transportDebug(tlm::tlm_debug_payload& trans)
+  unsigned int transportDebug(tlm::tlm_generic_payload & trans)
   {
-    unsigned int portId = decode(trans.address);
+    unsigned int portId = decode(trans.get_address());
     assert(portId < NR_OF_TARGETS);
     initiator_socket_type* decodeSocket = &initiator_socket[portId];
-    trans.address &= getAddressMask(portId);
+    trans.set_address(trans.get_address() & getAddressMask(portId));
     
     return (*decodeSocket)->transport_dbg(trans);
   }
@@ -419,14 +418,14 @@ public:
     return true;
   }
 
-  bool getDMIPointer(const sc_dt::uint64& address,
-                     dmi_mode_type& dmi_mode,
+  bool getDMIPointer(tlm::tlm_generic_payload   &payload,
                      tlm::tlm_dmi&  dmi_data)
   {
+    sc_dt::uint64 address = payload.get_address();
     if (mAbstraction == TLM_AT) {
       // DMI not supported if the bus operates in AT mode
-      dmi_data.dmi_start_address = 0x0;
-      dmi_data.dmi_end_address = (sc_dt::uint64)-1;
+      dmi_data.set_start_address(0x0);
+      dmi_data.set_end_address((sc_dt::uint64)-1);
     }
 
     unsigned int portId = decode(address);
@@ -434,18 +433,26 @@ public:
     initiator_socket_type* decodeSocket = &initiator_socket[portId];
     sc_dt::uint64 maskedAddress = address & getAddressMask(portId);
     
+    payload.set_address(maskedAddress);
     bool result =
-      (*decodeSocket)->get_direct_mem_ptr(maskedAddress, dmi_mode, dmi_data);
+      (*decodeSocket)->get_direct_mem_ptr(payload, dmi_data);
     
     if (result)
     {
       // Range must contain address
-      assert(dmi_data.dmi_start_address <= maskedAddress);
-      assert(dmi_data.dmi_end_address >= maskedAddress);
+      assert(dmi_data.get_start_address() <= maskedAddress);
+      assert(dmi_data.get_end_address() >= maskedAddress);
     }
     
+    
+    sc_dt::uint64 start, end;
+	start = dmi_data.get_start_address();
+	end = dmi_data.get_end_address();
     // Should always succeed
-    limitRange(portId, dmi_data.dmi_start_address, dmi_data.dmi_end_address);
+	limitRange(portId, start, end);
+    
+	dmi_data.set_start_address(start);
+	dmi_data.set_end_address(end);
 
     return result;
   }

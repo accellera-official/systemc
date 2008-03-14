@@ -230,7 +230,7 @@ ut_target::b_transport                                ///< b_transport
 ==============================================================================*/
 unsigned int                                          ///< byte count
 ut_target::transport_dbg                              ///< transport_dbg
-( tlm::tlm_debug_payload  &trans                      ///< debug payload
+( tlm::tlm_generic_payload &trans                     ///< debug payload
 )
 {
   REPORT_ERROR(filename, __FUNCTION__, "not implemented");
@@ -244,7 +244,6 @@ ut_target::transport_dbg                              ///< transport_dbg
   @brief get direct memory pointer
   
   @param address  memory address
-  @param dmi_mode read/write flag
   @param dmi_data data reference
   
   @retval bool success / failure
@@ -255,9 +254,8 @@ ut_target::transport_dbg                              ///< transport_dbg
 ==============================================================================*/
 bool                                                  ///< success/failure
 ut_target::get_direct_mem_ptr                         ///< get_direct_mem_ptr
-( const sc_dt::uint64     &address                    ///< DMI address
-,       tlm::tlm_dmi_mode &dmi_mode                   ///< DMI mode
-,       tlm::tlm_dmi      &dmi_data                   ///< DMI data
+( tlm::tlm_generic_payload   &payload,                ///< address + extensions
+  tlm::tlm_dmi               &dmi_data                ///< DMI data
 )
 {
   REPORT_INFO(filename, __FUNCTION__, "target does not support DMI");

@@ -30,7 +30,6 @@ class SimpleUTTarget1 :
 {
 public:
   typedef tlm::tlm_generic_payload      transaction_type;
-  typedef tlm::tlm_dmi_mode             dmi_mode_type;
   typedef tlm::tlm_phase                phase_type;
   typedef tlm::tlm_sync_enum            sync_enum_type;
   typedef tlm::tlm_fw_b_transport_if<>    fw_interface_type;
@@ -80,53 +79,49 @@ public:
     trans.set_dmi_allowed(true);
   }
 
-  unsigned int transport_dbg(tlm::tlm_debug_payload& r)
+  unsigned int transport_dbg(transaction_type& r)
   {
-    if (r.address >= 400) return 0;
+    if (r.get_address() >= 400) return 0;
 
-    unsigned int tmp = (int)r.address;
+    unsigned int tmp = (int)r.get_address();
     unsigned int num_bytes;
-    if (tmp + r.num_bytes >= 400) {
+    if (tmp + r.get_data_length() >= 400) {
       num_bytes = 400 - tmp;
 
     } else {
-      num_bytes = r.num_bytes;
+      num_bytes = r.get_data_length();
     }
-    if (r.do_read) {
+    if (r.is_read()) {
       for (unsigned int i = 0; i < num_bytes; ++i) {
-        r.data[i] = mMem[i + tmp];
+        r.get_data_ptr()[i] = mMem[i + tmp];
       }
 
     } else {
       for (unsigned int i = 0; i < num_bytes; ++i) {
-        mMem[i + tmp] = r.data[i];
+        mMem[i + tmp] = r.get_data_ptr()[i];
       }
     }
     return num_bytes;
   }
 
-  bool get_direct_mem_ptr(const sc_dt::uint64& address,
-                          dmi_mode_type& dmi_mode,
+  bool get_direct_mem_ptr(transaction_type& trans,
                           tlm::tlm_dmi&  dmi_data)
   {
-    if (address < 400) {
-      dmi_mode.type = tlm::tlm_dmi_mode::READ_WRITE;
-
-      dmi_data.dmi_start_address = 0x0;
-      dmi_data.dmi_end_address = 399;
-      dmi_data.dmi_ptr = mMem;
-      dmi_data.read_latency = sc_core::sc_time(100, sc_core::SC_NS);
-      dmi_data.write_latency = sc_core::sc_time(10, sc_core::SC_NS);
-      dmi_data.endianness =
-        (tlm::hostHasLittleEndianness() ? tlm::TLM_LITTLE_ENDIAN :
-                                          tlm::TLM_BIG_ENDIAN);
+    if (trans.get_address() < 400) {
+      dmi_data.allow_read_write();
+      dmi_data.set_start_address(0x0);
+      dmi_data.set_end_address(399);
+      dmi_data.set_dmi_ptr(mMem);
+      dmi_data.set_read_latency(sc_core::sc_time(100, sc_core::SC_NS));
+      dmi_data.set_write_latency(sc_core::sc_time(10, sc_core::SC_NS));
       return true;
 
     } else {
       // should not happen
-      dmi_data.dmi_start_address = address;
-      dmi_data.dmi_end_address = address;
+      dmi_data.set_start_address(trans.get_address());
+      dmi_data.set_end_address(trans.get_address());
       return false;
+
     }
   }
 

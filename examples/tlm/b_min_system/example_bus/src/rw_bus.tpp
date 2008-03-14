@@ -96,39 +96,47 @@ void rw_bus<NR_OF_INITIATORS, NR_OF_TARGETS>::b_transport(tlm::tlm_generic_paylo
 ==============================================================================*/
 
 template <int NR_OF_INITIATORS, int NR_OF_TARGETS>
-unsigned int rw_bus<NR_OF_INITIATORS, NR_OF_TARGETS>::transport_dbg(tlm::tlm_debug_payload & payload)
+unsigned int rw_bus<NR_OF_INITIATORS, NR_OF_TARGETS>::transport_dbg(tlm::tlm_generic_payload & payload)
 {
-	unsigned int initiatorSocketId = getSocketId(payload.address);
+	unsigned int initiatorSocketId = getSocketId(payload.get_address());
 		
 	if (initiatorSocketId >= NR_OF_INITIATORS)
 	{
 		cerr << name() << ": ERROR, no socketId corresponding to address 0x";
-		cerr << hex << payload.address << endl;
+		cerr << hex << payload.get_address() << endl;
 	}
 		
-	payload.address = (payload.address - getAddressOffset(initiatorSocketId));
+	payload.set_address( payload.get_address() - getAddressOffset(initiatorSocketId) );
 	
 	return (*initiator_socket[initiatorSocketId])->transport_dbg(payload);
 }
 
 template <int NR_OF_INITIATORS, int NR_OF_TARGETS>
-bool rw_bus<NR_OF_INITIATORS, NR_OF_TARGETS>::get_direct_mem_ptr(const sc_dt::uint64  & address, 
-  		                                                         tlm::tlm_dmi_mode    & dmi_mode,
+bool rw_bus<NR_OF_INITIATORS, NR_OF_TARGETS>::get_direct_mem_ptr(tlm::tlm_generic_payload  & trans, 
                                                                  tlm::tlm_dmi         & dmi_data)
 {
-	unsigned int initiatorSocketId = getSocketId(address);
+	unsigned int initiatorSocketId = getSocketId(trans.get_address());
 			
 	if (initiatorSocketId >= NR_OF_INITIATORS)
 	{
 		cerr << name() << ": ERROR, no socketId corresponding to address 0x";
-		cerr << hex << address << endl;
+		cerr << hex << trans.get_address() << endl;
 	}
 		
-	sc_dt::uint64 target_address = (address - getAddressOffset(initiatorSocketId));
+	sc_dt::uint64 target_address = (trans.get_address() - getAddressOffset(initiatorSocketId));
 	
-	bool result = (*initiator_socket[initiatorSocketId])->get_direct_mem_ptr(target_address, dmi_mode, dmi_data);
+	trans.set_address(target_address);
 	
-	limitRange(initiatorSocketId, dmi_data.dmi_start_address, dmi_data.dmi_end_address);
+	bool result = (*initiator_socket[initiatorSocketId])->get_direct_mem_ptr(trans, dmi_data);
+	
+	sc_dt::uint64 start, end;
+	start = dmi_data.get_start_address();
+	end = dmi_data.get_end_address();
+	
+	limitRange(initiatorSocketId, start, end);
+	
+	dmi_data.set_start_address(start);
+	dmi_data.set_end_address(end);
 	
 	return result;
 }
