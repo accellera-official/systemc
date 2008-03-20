@@ -35,7 +35,7 @@
 
 class lt_processor_abstraction                      ///< lt_processor_abstraction
   : public sc_core::sc_module                       ///< SC module
-  , virtual public tlm::tlm_bw_nb_transport_if<>    ///< backward non-blocking interface
+  , virtual public tlm::tlm_bw_transport_if<>       ///< backward non-blocking interface
 {
   public:
   
@@ -89,7 +89,7 @@ class lt_processor_abstraction                      ///< lt_processor_abstractio
   , sc_core::sc_time          &delta
   )
   {
-    return tlm::TLM_REJECTED;
+    return tlm::TLM_COMPLETED;
   }
 };
 

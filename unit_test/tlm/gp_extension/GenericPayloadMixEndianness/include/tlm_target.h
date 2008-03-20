@@ -69,7 +69,7 @@ public:
             unsigned int   m_addr      = (unsigned int)trans.get_address() - m_start_address;
             unsigned char* m_data      = trans.get_data_ptr();
             unsigned int   m_length    = trans.get_data_length();
-            bool*          m_be        = trans.get_byte_enable_ptr();
+            unsigned char* m_be        = trans.get_byte_enable_ptr();
             unsigned int   m_be_length = trans.get_byte_enable_length();
             
             for(unsigned int b=0; b<get_burst_length(m_length, socket_bus_width); b++)

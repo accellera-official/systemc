@@ -78,24 +78,24 @@ static const char *filename = "at_target_memory.cpp"; ///< filename used for rep
 at_target_memory::at_target_memory
 ( sc_core::sc_module_name module_name                 ///< module name
 , const unsigned int            ID                    ///< target ID
-, const char                	  *memory_socket        ///< socket name
-, sc_dt::uint64             	  base_address          ///< base address
-, sc_dt::uint64             	  memory_size           ///< memory size (bytes)
-, unsigned int              	  memory_width          ///< memory width (bytes)
-, const sc_core::sc_time    	  accept_delay          ///< accept delay
-, const sc_core::sc_time    	  read_response_delay   ///< read response delay
-, const sc_core::sc_time    	  write_response_delay  ///< write response delay
+, const char                     *memory_socket        ///< socket name
+, sc_dt::uint64                   base_address          ///< base address
+, sc_dt::uint64                   memory_size           ///< memory size (bytes)
+, unsigned int                    memory_width          ///< memory width (bytes)
+, const sc_core::sc_time          accept_delay          ///< accept delay
+, const sc_core::sc_time          read_response_delay   ///< read response delay
+, const sc_core::sc_time          write_response_delay  ///< write response delay
 , const e_AT_target_model_style model_style           ///< model style (2 or 4 phase)
-) : sc_module              	(module_name)             ///< initializing module name
+) : sc_module               (module_name)             ///< initializing module name
   , m_ID                    (ID)                      ///< initializing target ID
-  , m_memory_socket        	(memory_socket)           ///< initializing memory socket
-  , m_base_address         	(base_address)            ///< initializing target base address
-  , m_memory_size          	(memory_size)             ///< initializing target memory size
-  , m_memory_width         	(memory_width)            ///< initializing target memory width
-  , m_accept_delay         	(accept_delay)            ///< initializing accept delay
-  , m_read_response_delay  	(read_response_delay)     ///< initializing read response delay
-  , m_write_response_delay 	(write_response_delay)    ///< initializing write response delay
-  , m_model_style          	(model_style)             ///< initializing the target model style
+  , m_memory_socket         (memory_socket)           ///< initializing memory socket
+  , m_base_address          (base_address)            ///< initializing target base address
+  , m_memory_size           (memory_size)             ///< initializing target memory size
+  , m_memory_width          (memory_width)            ///< initializing target memory width
+  , m_accept_delay          (accept_delay)            ///< initializing accept delay
+  , m_read_response_delay   (read_response_delay)     ///< initializing read response delay
+  , m_write_response_delay  (write_response_delay)    ///< initializing write response delay
+  , m_model_style           (model_style)             ///< initializing the target model style
   , begin_response_QActive  (false)                   ///< initializing begin response queue state
   , end_request_QActive     (false)                   ///< initializing end request queue state                   
   {
@@ -149,7 +149,7 @@ at_target_memory::nb_transport                ///< non-blocking transport
 , sc_time&                  delay)            ///< time it should take for transport
 {
   std::ostringstream       msg;               // log message
-  tlm::tlm_sync_enum       return_status = tlm::TLM_REJECTED;
+  tlm::tlm_sync_enum       return_status = tlm::TLM_COMPLETED;
 
   // non-supported feature check
   // return error for byte enable; this target does not support
@@ -167,7 +167,7 @@ at_target_memory::nb_transport                ///< non-blocking transport
         if (m_model_style == AT_2_Phase_Annotated_e)      // ## AT_2_Phase_Annotated
         { 
           msg.str ("");
-    	      msg << m_ID << " - ** BEGIN_REQ AT 2 Phase Annotated";
+          msg << m_ID << " - ** BEGIN_REQ AT 2 Phase Annotated";
           REPORT_INFO(filename,  __FUNCTION__, msg.str());
 
           if (m_response_queue.empty())
@@ -206,22 +206,22 @@ at_target_memory::nb_transport                ///< non-blocking transport
           if (transaction_ptr != &transaction_ref)
           {    
             msg.str ("");
-    	        msg << m_ID << " - Unexpected END_RESP";
+            msg << m_ID << " - Unexpected END_RESP";
             REPORT_FATAL(filename,  __FUNCTION__, msg.str());
           }
           m_end_response_queue.pop();
           m_end_response_event.notify(SC_ZERO_TIME);
           msg.str ("");
-    	      msg << m_ID << " - ** END_RESP received AT 4 Phase ";
+          msg << m_ID << " - ** END_RESP received AT 4 Phase ";
           REPORT_INFO(filename, __FUNCTION__, msg.str());
           return_status = tlm::TLM_COMPLETED;
         }
         else 
         {
           msg.str ("");
-    	      msg << m_ID << " - END_RESP is invalid";
+          msg << m_ID << " - END_RESP is invalid";
           REPORT_FATAL(filename, __FUNCTION__, msg.str());
-          return_status = tlm::TLM_REJECTED; 
+          return_status = tlm::TLM_COMPLETED; 
         }
         break;
       }
@@ -231,7 +231,7 @@ at_target_memory::nb_transport                ///< non-blocking transport
         msg.str ("");
         msg << m_ID << " - ** BEGIN_RESP is invalid phase for Target";
         REPORT_FATAL(filename, __FUNCTION__, msg.str());
-        return_status = tlm::TLM_REJECTED; 
+        return_status = tlm::TLM_COMPLETED; 
         break;
       }
 
@@ -240,7 +240,7 @@ at_target_memory::nb_transport                ///< non-blocking transport
         msg.str ("");
         msg << m_ID << " - ** END_REQ is invalid phase for Target";
         REPORT_FATAL(filename, __FUNCTION__, msg.str());
-        return_status = tlm::TLM_REJECTED; 
+        return_status = tlm::TLM_COMPLETED; 
         break;
       }
 
@@ -249,7 +249,7 @@ at_target_memory::nb_transport                ///< non-blocking transport
         msg.str ("");
         msg << m_ID << " - invalid phase for TLM2 GP";
         REPORT_FATAL(filename, __FUNCTION__, msg.str());
-        return_status = tlm::TLM_REJECTED; 
+        return_status = tlm::TLM_COMPLETED; 
         break;
       }
     } //  end phase switch 
@@ -301,7 +301,7 @@ void at_target_memory::end_request_method(void)  ///< end request processing
       default: 
       {
         msg.str ("");
-	      msg << m_ID << " - invalid response for END_REQ";
+        msg << m_ID << " - invalid response for END_REQ";
         REPORT_FATAL(filename,  __FUNCTION__, msg.str());
         break;
       }
@@ -377,11 +377,10 @@ void at_target_memory::begin_response_method(void)
       }
 
       case tlm::TLM_UPDATED:   
-      case tlm::TLM_REJECTED:   
       default: 
       {
         msg.str ("");
-	      msg << m_ID << " - Invalid response for BEGIN_RESPONSE";
+        msg << m_ID << " - Invalid response for BEGIN_RESPONSE";
         REPORT_FATAL(filename,  __FUNCTION__, msg.str());
         break;
       }

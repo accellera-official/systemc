@@ -128,5 +128,5 @@ lt_processor_abstraction::nb_transport              ///< nb_transport
 , sc_core::sc_time          &delay                  ///< delay
 )
 {
-  return tlm::TLM_REJECTED;
+  return tlm::TLM_COMPLETED;
 }

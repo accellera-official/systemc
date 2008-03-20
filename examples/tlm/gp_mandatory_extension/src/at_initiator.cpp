@@ -200,11 +200,10 @@ void at_initiator::initiator_thread(void)     ///< initiator thread
         break;
       } // end case TLM_UPDATED
 
-      case tlm::TLM_REJECTED: 
       default:
       {
         msg.str ("");
-        msg << m_ID << " - TLM_REJECTED invalid response";
+        msg << m_ID << " - invalid response";
         REPORT_FATAL (filename, __FUNCTION__, msg.str() );
         break;
       }
@@ -241,7 +240,7 @@ at_initiator::nb_transport                                // inbound nb_transpor
 , sc_time&                   delay                        // delay
 )
 {
-  tlm::tlm_sync_enum        status = tlm::TLM_REJECTED;   // return status reject by default
+  tlm::tlm_sync_enum        status = tlm::TLM_COMPLETED;
   tlm::tlm_generic_payload *trans_ptr;
   std::ostringstream       msg;               // log message
 
@@ -320,7 +319,8 @@ at_initiator::nb_transport                                // inbound nb_transpor
       // check LT req_accepted_queue; if this is an LT target, return TLM_COMPLETED
       // status.  No further phases are required.
       //else if(!m_req_accepted_queue.empty())
-    if(!m_req_accepted_queue.empty() && (status == tlm::TLM_REJECTED))
+#error FIXME TLM_REJECTED removed
+//      if(!m_req_accepted_queue.empty() && (status == tlm::TLM_REJECTED))
       {
         trans_ptr = m_req_accepted_queue.front();     
         if (trans_ptr == &transaction_ref)            // LT target completing request
@@ -411,7 +411,6 @@ void at_initiator::m_send_end_rsp_method(void)  ///< send end response method
 
       case tlm::TLM_ACCEPTED: 
       case tlm::TLM_UPDATED:   
-      case tlm::TLM_REJECTED:   
       default: 
       {
         msg.str ("");

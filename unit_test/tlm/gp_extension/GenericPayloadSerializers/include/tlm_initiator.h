@@ -87,19 +87,19 @@ private:
     unsigned char *wr_data; 
     unsigned char *aux_data; 
     unsigned char *rd_data; 
-    bool          *be;
+    unsigned char *be;
     unsigned int   be_length;
     
     
     template< int W >
 	void write(sc_dt::uint64 address,
                    unsigned char *data, 
-                   bool* byte_enable = 0,
+                   unsigned char* byte_enable = 0,
                    unsigned int byte_enable_length = 0);
     template< int W >
 	void read(sc_dt::uint64 address,
                   unsigned char *data,
-                  bool* byte_enable = 0,
+                  unsigned char* byte_enable = 0,
                   unsigned int byte_enable_length = 0);
     
     template< class T >
@@ -143,7 +143,7 @@ void tlm_initiator::prepare_address_and_data(int nbits,
 template< int W >
 void tlm_initiator::write(sc_dt::uint64 address,
                           unsigned char *data,
-                          bool* byte_enable,
+                          unsigned char* byte_enable,
                           unsigned int byte_enable_length)
 {
     // Single WRITE transaction 
@@ -176,7 +176,7 @@ void tlm_initiator::write(sc_dt::uint64 address,
 template< int W >
 void tlm_initiator::read(sc_dt::uint64 address,
                          unsigned char *data,
-                         bool* byte_enable,
+                         unsigned char* byte_enable,
                          unsigned int byte_enable_length)
 {
     // Single READ transaction 

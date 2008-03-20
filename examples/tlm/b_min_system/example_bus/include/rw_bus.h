@@ -65,8 +65,8 @@ private:
   sc_dt::uint64 getAddressOffset(unsigned int socketId);
   sc_dt::uint64 getAddressMask(unsigned int socketId);
   void          limitRange(unsigned int    socketId, 
-  		                   sc_dt::uint64 & low, 
-  		                   sc_dt::uint64 & high);
+                           sc_dt::uint64 & low, 
+                           sc_dt::uint64 & high);
 };
 
 #include "../src/rw_bus.tpp"

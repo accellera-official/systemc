@@ -34,7 +34,7 @@
 
 class lt_initiator                                  ///< lt_initiator
 :         public sc_core::sc_module                 ///< SC module
-, virtual public tlm::tlm_bw_nb_transport_if<>      ///< initiator socket
+, virtual public tlm::tlm_bw_transport_if<>         ///< initiator socket
 {
   SC_HAS_PROCESS(lt_initiator);
 

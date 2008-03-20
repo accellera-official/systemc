@@ -25,15 +25,15 @@ template <unsigned int BUSWIDTH = 32,
           typename TYPES = tlm::tlm_generic_payload_types>
 class SimpleInitiatorSocket :
   public tlm::tlm_initiator_socket<BUSWIDTH,
-                                   tlm::tlm_fw_nb_transport_if<TYPES>,
-                                   tlm::tlm_bw_nb_transport_if<TYPES> >
+                                   tlm::tlm_fw_transport_if<TYPES>,
+                                   tlm::tlm_bw_transport_if<TYPES> >
 {
 public:
   typedef typename TYPES::tlm_payload_type              transaction_type;
   typedef typename TYPES::tlm_phase_type                phase_type;
   typedef tlm::tlm_sync_enum                            sync_enum_type;
-  typedef tlm::tlm_fw_nb_transport_if<TYPES>            fw_interface_type;
-  typedef tlm::tlm_bw_nb_transport_if<TYPES>            bw_interface_type;
+  typedef tlm::tlm_fw_transport_if<TYPES>               fw_interface_type;
+  typedef tlm::tlm_bw_transport_if<TYPES>               bw_interface_type;
   typedef tlm::tlm_initiator_socket<BUSWIDTH,
                                     fw_interface_type,
                                     bw_interface_type>  base_type;
@@ -73,7 +73,7 @@ public:
   }
 
 private:
-  class Process : public tlm::tlm_bw_nb_transport_if<TYPES>
+  class Process : public tlm::tlm_bw_transport_if<TYPES>
   {
   public:
     typedef sync_enum_type (sc_core::sc_module::*TransportPtr)(transaction_type&,
@@ -144,7 +144,7 @@ private:
         default:
           // A target should never call nb_transport with these phases
           assert(0); exit(1);
-//          return tlm::TLM_REJECTED;   ///< unreachable code
+//          return tlm::TLM_COMPLETED;   ///< unreachable code
         };
       }
     }

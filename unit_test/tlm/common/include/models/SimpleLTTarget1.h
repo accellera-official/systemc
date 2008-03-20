@@ -26,14 +26,14 @@
 
 class SimpleLTTarget1 :
   public sc_core::sc_module,
-  public virtual tlm::tlm_fw_nb_transport_if<>
+  public virtual tlm::tlm_fw_transport_if<>
 {
 public:
   typedef tlm::tlm_generic_payload      transaction_type;
   typedef tlm::tlm_phase                phase_type;
   typedef tlm::tlm_sync_enum            sync_enum_type;
-  typedef tlm::tlm_fw_nb_transport_if<> fw_interface_type;
-  typedef tlm::tlm_bw_nb_transport_if<> bw_interface_type;
+  typedef tlm::tlm_fw_transport_if<>    fw_interface_type;
+  typedef tlm::tlm_bw_transport_if<>    bw_interface_type;
   typedef tlm::tlm_target_socket<>      target_socket_type;
 
 public:
@@ -61,6 +61,15 @@ public:
   {
     assert(phase == tlm::BEGIN_REQ);
 
+    b_transport(trans, t);      //We never block, so call b_transport
+    // LT target
+    // - always return true
+    // - not necessary to update phase (if true is returned)
+    return tlm::TLM_COMPLETED;
+  }
+
+  void b_transport(transaction_type& trans, sc_core::sc_time& t)
+  {
     sc_dt::uint64 address = trans.get_address();
     assert(address < 400);
 
@@ -86,11 +95,6 @@ public:
     trans.set_response_status(tlm::TLM_OK_RESPONSE);
 
     trans.set_dmi_allowed(true);
-
-    // LT target
-    // - always return true
-    // - not necessary to update phase (if true is returned)
-    return tlm::TLM_COMPLETED;
   }
 
   unsigned int transport_dbg(transaction_type& r)

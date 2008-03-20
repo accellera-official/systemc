@@ -24,7 +24,7 @@
 namespace tlm {
 
 enum tlm_phase { BEGIN_REQ, END_REQ, BEGIN_RESP, END_RESP };
-enum tlm_sync_enum { TLM_REJECTED, TLM_ACCEPTED, TLM_UPDATED, TLM_COMPLETED };
+enum tlm_sync_enum { TLM_ACCEPTED, TLM_UPDATED, TLM_COMPLETED };
 
 ////////////////////////////////////////////////////////////////////////////
 // Basic interfaces
@@ -41,7 +41,8 @@ public:
 template <typename TRANS = tlm_generic_payload>
 class tlm_blocking_transport_if : public virtual sc_core::sc_interface {
 public:
-  virtual void b_transport(TRANS& trans) = 0;
+  virtual void b_transport(TRANS& trans,
+                           sc_core::sc_time& t) = 0;
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -188,36 +189,23 @@ struct tlm_generic_payload_types
   typedef tlm_phase tlm_phase_type;
 };
 
-// The forward non-blocking interface:
+// The forward interface:
 template <typename TYPES = tlm_generic_payload_types>
-class tlm_fw_nb_transport_if
+class tlm_fw_transport_if
   : public virtual tlm_nonblocking_transport_if<typename TYPES::tlm_payload_type,
                                                 typename TYPES::tlm_phase_type>
+  , public virtual tlm_blocking_transport_if<typename TYPES::tlm_payload_type>
   , public virtual tlm_fw_direct_mem_if<typename TYPES::tlm_payload_type>
   , public virtual tlm_transport_dbg_if<typename TYPES::tlm_payload_type>
 {};
 
-// The backward non-blocking interface:
+// The backward interface:
 template <typename TYPES = tlm_generic_payload_types>
-class tlm_bw_nb_transport_if
+class tlm_bw_transport_if
   : public virtual tlm_nonblocking_transport_if<typename TYPES::tlm_payload_type,
                                                 typename TYPES::tlm_phase_type>
   , public virtual tlm_bw_direct_mem_if
 {};
-
-// The forward blocking interface:
-template <typename TYPES = tlm_generic_payload_types>
-class tlm_fw_b_transport_if
-  : public virtual tlm_blocking_transport_if<typename TYPES::tlm_payload_type>
-  , public virtual tlm_fw_direct_mem_if<typename TYPES::tlm_payload_type>
-  , public virtual tlm_transport_dbg_if<typename TYPES::tlm_payload_type>
-{};
-
-// The backward blocking interface:
-class tlm_bw_b_transport_if
-  : public virtual tlm_bw_direct_mem_if
-{};
-
 
 } // namespace tlm
 

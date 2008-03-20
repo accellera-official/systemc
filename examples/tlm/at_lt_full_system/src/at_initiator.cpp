@@ -179,8 +179,8 @@ void at_initiator::initiator_thread(void)     ///< initiator thread
             msg.str ("");
             msg << m_ID << " - * END_REQ AT 2 phase annotated";
             REPORT_INFO (filename, __FUNCTION__, msg.str() );
-	          detect_2_phase_target = true;
-	          m_wait_rsp_set.insert(transaction_ptr);
+            detect_2_phase_target = true;
+            m_wait_rsp_set.insert(transaction_ptr);
             wait (delay);            // wait delay specified by target
             break;
           }
@@ -199,11 +199,10 @@ void at_initiator::initiator_thread(void)     ///< initiator thread
         break;
       } // end case TLM_UPDATED
 
-      case tlm::TLM_REJECTED: 
       default:
       {
         msg.str ("");
-        msg << m_ID << " - TLM_REJECTED invalid response";
+        msg << m_ID << " - invalid response";
         REPORT_FATAL (filename, __FUNCTION__, msg.str() );
         break;
       }
@@ -240,7 +239,7 @@ at_initiator::nb_transport                                // inbound nb_transpor
 , sc_time&                   delay                        // delay
 )
 {
-  tlm::tlm_sync_enum        status = tlm::TLM_REJECTED;   // return status reject by default
+  tlm::tlm_sync_enum        status = tlm::TLM_COMPLETED;
   tlm::tlm_generic_payload *trans_ptr;
   std::ostringstream       msg;               // log message
 
@@ -263,19 +262,19 @@ at_initiator::nb_transport                                // inbound nb_transpor
       }
       // if we have the right transaction, put it on the wait response queue
       // and send back the appropriate status
-	    m_wait_rsp_set.insert(&transaction_ref);
+      m_wait_rsp_set.insert(&transaction_ref);
       m_req_accepted_event.notify(SC_ZERO_TIME);      // release reqeuster thread
       status = tlm::TLM_ACCEPTED;
       break;
     }
 
     // Either LT target completing request, or
-    //        AT target beginning response phase	
+    //        AT target beginning response phase
     case tlm::BEGIN_RESP: 
     { 
       // check AT 2 phase and 4 phase queues; if this is an AT 2-phase target, return 
-	    // TLM_COMPLETED status and END_RESP phase.  No further phases are required.
-	    // If this is an AT 4-phase target, return TLM_ACCEPTED status.  An additional
+      // TLM_COMPLETED status and END_RESP phase.  No further phases are required.
+      // If this is an AT 4-phase target, return TLM_ACCEPTED status.  An additional
       // handshake phase is required.
       // The following block handles out of order response from a target, and
       // relative out of order responses of a target over another target (multiple
@@ -285,11 +284,11 @@ at_initiator::nb_transport                                // inbound nb_transpor
         // check to see if incoming transaction matches one from 2 phase queue
         std::set<tlm::tlm_generic_payload *>::iterator set_iterator;
         set_iterator = m_wait_rsp_set.find(&transaction_ref);
-	      if (set_iterator != m_wait_rsp_set.end())
+        if (set_iterator != m_wait_rsp_set.end())
         {
-	        m_wait_rsp_set.erase(set_iterator);
+          m_wait_rsp_set.erase(set_iterator);
           // phase 2
-		      if (detect_2_phase_target) 
+          if (detect_2_phase_target) 
           {
             response_out_port->write(&transaction_ref); // put the GP on the rsp fifo port
             phase = tlm::END_RESP;                      // set appropriate return phase
@@ -298,14 +297,14 @@ at_initiator::nb_transport                                // inbound nb_transpor
             msg << m_ID << " - * END_RESP AT 2 phase annotated";
             REPORT_INFO (filename, __FUNCTION__, msg.str() );
             status = tlm::TLM_COMPLETED;                // return status
-		      }
+          }
           // 4 phase
-		      else 
+          else 
           {
-		        if (m_send_end_rsp_queue.empty()) 
-		        {
-		          m_send_end_rsp_event.notify(m_end_rsp_delay);
-		        }
+            if (m_send_end_rsp_queue.empty()) 
+            {
+              m_send_end_rsp_event.notify(m_end_rsp_delay);
+            }
             m_send_end_rsp_queue.push(&transaction_ref);// put transaction onto rsp queue
             msg.str("");
             msg << m_ID << " - AT target starting response";
@@ -319,7 +318,8 @@ at_initiator::nb_transport                                // inbound nb_transpor
       // check LT req_accepted_queue; if this is an LT target, return TLM_COMPLETED
       // status.  No further phases are required.
       //else if(!m_req_accepted_queue.empty())
-    if(!m_req_accepted_queue.empty() && (status == tlm::TLM_REJECTED))
+#error FIXME. TLM_REJECTED was removed
+//    if(!m_req_accepted_queue.empty() && (status == tlm::TLM_REJECTED))
       {
         trans_ptr = m_req_accepted_queue.front();     
         if (trans_ptr == &transaction_ref)            // LT target completing request
@@ -410,7 +410,6 @@ void at_initiator::m_send_end_rsp_method(void)  ///< send end response method
 
       case tlm::TLM_ACCEPTED: 
       case tlm::TLM_UPDATED:   
-      case tlm::TLM_REJECTED:   
       default: 
       {
         msg.str ("");

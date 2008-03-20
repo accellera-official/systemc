@@ -27,8 +27,8 @@ public:
   typedef tlm::tlm_generic_payload transaction_type;
   typedef tlm::tlm_phase phase_type;
   typedef tlm::tlm_sync_enum sync_enum_type;
-  typedef tlm::tlm_fw_nb_transport_if<> fw_interface_type;
-  typedef tlm::tlm_bw_nb_transport_if<> bw_interface_type;
+  typedef tlm::tlm_fw_transport_if<> fw_interface_type;
+  typedef tlm::tlm_bw_transport_if<> bw_interface_type;
   typedef tlm::tlm_initiator_socket<> initiator_socket_type;
 
 public:

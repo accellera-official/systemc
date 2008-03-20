@@ -151,8 +151,7 @@ class adapt_gp2ext : public sc_core::sc_module
         }
         tlm::tlm_sync_enum tmp =
         initiator_socket->nb_transport(trans, phase, t);
-        if (tmp == tlm::TLM_COMPLETED ||
-            tmp == tlm::TLM_REJECTED)
+        if (tmp == tlm::TLM_COMPLETED)
         {
             m_initiator_ext = trans.set_extension(m_initiator_ext);            
         }

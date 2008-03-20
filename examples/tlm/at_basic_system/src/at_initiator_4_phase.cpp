@@ -166,11 +166,10 @@ void at_initiator_4_phase::initiator_thread(void)     ///< initiator thread
         REPORT_FATAL (filename, __FUNCTION__, msg.str() );
         break;
       }
-      case tlm::TLM_REJECTED: 
       default:
       {
         msg.str ("");
-        msg << m_ID << " - TLM_REJECTED invalid response";
+        msg << m_ID << " - invalid response";
         REPORT_FATAL (filename, __FUNCTION__, msg.str() );
         break;
       }
@@ -207,7 +206,7 @@ at_initiator_4_phase::nb_transport                                // inbound nb_
 , sc_time&                   delay                        // delay
 )
 {
-  tlm::tlm_sync_enum        status = tlm::TLM_REJECTED;   // return status reject by default
+  tlm::tlm_sync_enum        status = tlm::TLM_COMPLETED;
   tlm::tlm_generic_payload *trans_ptr;
   std::ostringstream       msg;               // log message
 
@@ -230,13 +229,13 @@ at_initiator_4_phase::nb_transport                                // inbound nb_
       }
       // if we have the right transaction, put it on the wait response queue
       // and send back the appropriate status
-	    m_wait_rsp_set.insert(&transaction_ref);
+      m_wait_rsp_set.insert(&transaction_ref);
       m_req_accepted_event.notify(SC_ZERO_TIME);      // release reqeuster thread
       status = tlm::TLM_ACCEPTED;
       break;
     }
 
-    // AT target beginning response phase	
+    // AT target beginning response phase
     case tlm::BEGIN_RESP: 
     { 
       // check AT wait rsp queue; If this is an AT 4-phase target, return TLM_ACCEPTED 
@@ -249,13 +248,13 @@ at_initiator_4_phase::nb_transport                                // inbound nb_
         // check to see if incoming transaction matches one from 4 phase queue
         std::set<tlm::tlm_generic_payload *>::iterator set_iterator;
         set_iterator = m_wait_rsp_set.find(&transaction_ref);
-	if (set_iterator != m_wait_rsp_set.end())
+        if (set_iterator != m_wait_rsp_set.end())
         {
-	  m_wait_rsp_set.erase(set_iterator);
-	  if (m_send_end_rsp_queue.empty()) 
-	  {
-	    m_send_end_rsp_event.notify(m_end_rsp_delay);
-	  }
+          m_wait_rsp_set.erase(set_iterator);
+          if (m_send_end_rsp_queue.empty()) 
+          {
+            m_send_end_rsp_event.notify(m_end_rsp_delay);
+          }
           m_send_end_rsp_queue.push(&transaction_ref);// put transaction onto rsp queue
           msg.str("");
           msg << m_ID << " - AT target starting response";
@@ -339,7 +338,6 @@ void at_initiator_4_phase::m_send_end_rsp_method(void)  ///< send end response m
 
       case tlm::TLM_ACCEPTED: 
       case tlm::TLM_UPDATED:   
-      case tlm::TLM_REJECTED:   
       default: 
       {
         msg.str ("");

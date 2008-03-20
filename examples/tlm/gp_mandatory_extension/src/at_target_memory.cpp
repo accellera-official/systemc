@@ -151,7 +151,7 @@ at_target_memory::nb_transport                ///< non-blocking transport
 , sc_time&                  delay)            ///< time it should take for transport
 {
   std::ostringstream       msg;               // log message
-  tlm::tlm_sync_enum       return_status = tlm::TLM_REJECTED;
+  tlm::tlm_sync_enum       return_status = tlm::TLM_COMPLETED;
 
   // test for extension
   gp_extension::my_initiator_id_extension* gp_ext;
@@ -232,7 +232,7 @@ at_target_memory::nb_transport                ///< non-blocking transport
           msg.str ("");
     	      msg << m_ID << " - END_RESP is invalid";
           REPORT_FATAL(filename, __FUNCTION__, msg.str());
-          return_status = tlm::TLM_REJECTED; 
+          return_status = tlm::TLM_COMPLETED; 
         }
         break;
       }
@@ -242,7 +242,7 @@ at_target_memory::nb_transport                ///< non-blocking transport
         msg.str ("");
         msg << m_ID << " - ** BEGIN_RESP is invalid phase for Target";
         REPORT_FATAL(filename, __FUNCTION__, msg.str());
-        return_status = tlm::TLM_REJECTED; 
+        return_status = tlm::TLM_COMPLETED;
         break;
       }
 
@@ -251,7 +251,7 @@ at_target_memory::nb_transport                ///< non-blocking transport
         msg.str ("");
         msg << m_ID << " - ** END_REQ is invalid phase for Target";
         REPORT_FATAL(filename, __FUNCTION__, msg.str());
-        return_status = tlm::TLM_REJECTED; 
+        return_status = tlm::TLM_COMPLETED; 
         break;
       }
 
@@ -260,7 +260,7 @@ at_target_memory::nb_transport                ///< non-blocking transport
         msg.str ("");
         msg << m_ID << " - invalid phase for TLM2 GP";
         REPORT_FATAL(filename, __FUNCTION__, msg.str());
-        return_status = tlm::TLM_REJECTED; 
+        return_status = tlm::TLM_COMPLETED; 
         break;
       }
     } //  end phase switch 
@@ -388,7 +388,6 @@ void at_target_memory::begin_response_method(void)
       }
 
       case tlm::TLM_UPDATED:   
-      case tlm::TLM_REJECTED:   
       default: 
       {
         msg.str ("");

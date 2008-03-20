@@ -36,8 +36,8 @@ class rw_slave_base : virtual public tlm::tlm_fw_b_transport_if<>,
                       public rw_if
 {
   public:
-		
-	virtual void b_transport(tlm::tlm_generic_payload & trans);
+
+      virtual void b_transport(tlm::tlm_generic_payload & trans);
 };
 
 #endif /* __RW_SLAVE_BASE_H__ */

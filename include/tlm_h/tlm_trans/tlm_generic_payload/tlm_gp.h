@@ -102,10 +102,10 @@ public:
         : m_command(TLM_IGNORE_COMMAND)
         , m_address(0)
         , m_data(0)
-        , m_length(1)
+        , m_length(0)
         , m_response_status(TLM_INCOMPLETE_RESPONSE)
         , m_byte_enable(0)
-        , m_byte_enable_length(1)
+        , m_byte_enable_length(0)
         , m_streaming_width(0)
         , m_extensions(max_num_extensions())
         , m_dmi(false)
@@ -173,7 +173,7 @@ public:
         // deep copy byte enables
         if(m_byte_enable && m_byte_enable_length)
         {
-            bool* tmp_byte_enable = new bool[m_byte_enable_length];
+            unsigned char* tmp_byte_enable = new unsigned char[m_byte_enable_length];
             tmp->set_byte_enable_ptr(tmp_byte_enable);
             tmp->set_byte_enable_length(m_byte_enable_length);
             for (unsigned int i=0; i<m_byte_enable_length; i++)
@@ -202,9 +202,9 @@ public:
     //---------------
 
     // Command related method
-    inline bool                 is_read() {return (m_command == TLM_READ_COMMAND);}
+    inline bool                 is_read() const {return (m_command == TLM_READ_COMMAND);}
     inline void                 set_read() {m_command = TLM_READ_COMMAND;}
-    inline bool                 is_write() {return (m_command == TLM_WRITE_COMMAND);}
+    inline bool                 is_write() const {return (m_command == TLM_WRITE_COMMAND);}
     inline void                 set_write() {m_command = TLM_WRITE_COMMAND;}
     inline tlm_command          get_command() const {return m_command;}
     inline void                 set_command(const tlm_command command) {m_command = command;}
@@ -222,12 +222,12 @@ public:
     inline void                 set_data_length(const unsigned int length) {m_length = length;}
     
     // Response status related methods
-    inline bool                 is_response_ok() {return (m_response_status > 0);}
-    inline bool                 is_response_error() {return (m_response_status <= 0);}
+    inline bool                 is_response_ok() const {return (m_response_status > 0);}
+    inline bool                 is_response_error() const {return (m_response_status <= 0);}
     inline tlm_response_status  get_response_status() const {return m_response_status;}
     inline void                 set_response_status(const tlm_response_status response_status)
         {m_response_status = response_status;}  
-    inline std::string          get_response_string()
+    inline std::string          get_response_string() const
     {
         switch(m_response_status)
         {
@@ -247,8 +247,8 @@ public:
     inline void                 set_streaming_width(const unsigned int streaming_width) {m_streaming_width = streaming_width; }
         
     // Byte enable related methods
-    inline bool*                get_byte_enable_ptr() const {return m_byte_enable;}
-    inline void                 set_byte_enable_ptr(bool* byte_enable){m_byte_enable = byte_enable;}
+    inline unsigned char*       get_byte_enable_ptr() const {return m_byte_enable;}
+    inline void                 set_byte_enable_ptr(unsigned char* byte_enable){m_byte_enable = byte_enable;}
     inline unsigned int         get_byte_enable_length() const {return m_byte_enable_length;}
     inline void                 set_byte_enable_length(const unsigned int byte_enable_length){m_byte_enable_length = byte_enable_length;}
     
@@ -280,7 +280,7 @@ public:
     /* - m_byte_enable     : It can be used to create burst transfers where  */
     /*                    the address increment between each beat is greater */
     /*                    than the word length of each beat, or to place     */
-	/*                    words in selected byte lanes of a bus.             */
+    /*                    words in selected byte lanes of a bus.             */
     /* - m_byte_enable_length : For a read or a write command, the target    */
     /*                    interpret the byte enable length attribute as the  */
     /*                    number of elements in the bytes enable array.      */
@@ -288,13 +288,13 @@ public:
     /* --------------------------------------------------------------------- */
 
 private:
-	
+
     tlm_command          m_command;
-    sc_dt::uint64        m_address;			
+    sc_dt::uint64        m_address;
     unsigned char*       m_data;
-    unsigned int         m_length;		
+    unsigned int         m_length;
     tlm_response_status  m_response_status;
-    bool*                m_byte_enable;
+    unsigned char*       m_byte_enable;
     unsigned int         m_byte_enable_length;
     unsigned int         m_streaming_width;
     
@@ -359,14 +359,25 @@ public:
     {
         ext = static_cast<T*>(m_extensions[T::ID]);
     }
+    template <typename T> T* get_extension() const
+    {
+        T *ext;
+        get_extension(ext);
+        return ext;
+    }
     // Non-templatized version:
-     tlm_extension_base* get_extension(unsigned int index) const
+    tlm_extension_base* get_extension(unsigned int index) const
     {
         return m_extensions[index];
     }
 
     // Clear extension, the argument is needed to find the right index:
     template <typename T> void clear_extension(const T* ext)
+    {
+        resize_extensions();
+        m_extensions[T::ID] = static_cast<tlm_extension_base*>(0);
+    }
+    template <typename T> void clear_extension()
     {
         resize_extensions();
         m_extensions[T::ID] = static_cast<tlm_extension_base*>(0);

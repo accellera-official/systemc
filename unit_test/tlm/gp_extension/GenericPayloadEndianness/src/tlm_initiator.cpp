@@ -23,7 +23,7 @@
 void tlm_initiator::write(sc_dt::uint64 address,
                           unsigned char *data,
 				          unsigned int nr_bytes,
-                          bool* byte_enable,
+                          unsigned char* byte_enable,
                           unsigned int byte_enable_length)
 {
     tlm::tlm_phase phase;
@@ -55,8 +55,6 @@ void tlm_initiator::write(sc_dt::uint64 address,
         // Transaction not yet finished, wait for the end of it
         wait(socket.getEndEvent());
         break;
-    case tlm::TLM_REJECTED:
-        // FIXME: Not supported (wait and retry same transaction)
     default:
         assert(0); exit(1);
     };
@@ -77,7 +75,7 @@ void tlm_initiator::write(sc_dt::uint64 address,
 void tlm_initiator::read(sc_dt::uint64 address,
                          unsigned char *data,
 				         unsigned int nr_bytes,
-                         bool* byte_enable,
+                         unsigned char* byte_enable,
                          unsigned int byte_enable_length)
 {
     tlm::tlm_phase phase;
@@ -108,8 +106,6 @@ void tlm_initiator::read(sc_dt::uint64 address,
         // Transaction not yet finished, wait for the end of it
         wait(socket.getEndEvent());
         break;
-    case tlm::TLM_REJECTED:
-        // FIXME: Not supported (wait and retry same transaction)
     default:
         assert(0); exit(1);
     };

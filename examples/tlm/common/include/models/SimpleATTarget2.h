@@ -116,7 +116,7 @@ public:
 
     // Not possible
     assert(0); exit(1);
-    return tlm::TLM_REJECTED;
+    return tlm::TLM_COMPLETED;
   }
 
   void beginResponse()
@@ -143,7 +143,6 @@ public:
 
     } else {
       // initiator will call nb_transport to indicate end of response phase
-      //FIXME: TLM_REJECTED not supported
     }
   }
 

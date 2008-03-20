@@ -57,7 +57,7 @@ using basic_protocol::basic_initiator_port;
 
 class adapter_tlm_2_1_sync                            ///< LT target memory
   :         public sc_core::sc_module                 ///< module base clase
-  , virtual public tlm::tlm_fw_nb_transport_if<>      ///< target socket
+  , virtual public tlm::tlm_fw_transport_if<>         ///< target socket
 {
    SC_HAS_PROCESS( adapter_tlm_2_1_sync );
 

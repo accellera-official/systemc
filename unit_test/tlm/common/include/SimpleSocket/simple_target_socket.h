@@ -25,15 +25,15 @@ template <unsigned int BUSWIDTH = 32,
           typename TYPES = tlm::tlm_generic_payload_types>
 class SimpleTargetSocket :
   public tlm::tlm_target_socket<BUSWIDTH,
-                               tlm::tlm_fw_nb_transport_if<TYPES>,
-                               tlm::tlm_bw_nb_transport_if<TYPES> >
+                               tlm::tlm_fw_transport_if<TYPES>,
+                               tlm::tlm_bw_transport_if<TYPES> >
 {
 public:
   typedef typename TYPES::tlm_payload_type              transaction_type;
   typedef typename TYPES::tlm_phase_type                phase_type;
   typedef tlm::tlm_sync_enum                            sync_enum_type;
-  typedef tlm::tlm_fw_nb_transport_if<TYPES>            fw_interface_type;
-  typedef tlm::tlm_bw_nb_transport_if<TYPES>            bw_interface_type;
+  typedef tlm::tlm_fw_transport_if<TYPES>               fw_interface_type;
+  typedef tlm::tlm_bw_transport_if<TYPES>               bw_interface_type;
   typedef tlm::tlm_target_socket<BUSWIDTH,
                                  fw_interface_type,
                                  bw_interface_type>     base_type;
@@ -50,7 +50,14 @@ public:
   template <typename MODULE>
   void registerNBTransport(MODULE* mod, sync_enum_type (MODULE::*cb)(transaction_type&, phase_type&, sc_core::sc_time&), int id)
   {
-    mProcess.setTransportPtr(mod, static_cast<typename Process::TransportPtr>(cb));
+    mProcess.setNBTransportPtr(mod, static_cast<typename Process::NBTransportPtr>(cb));
+    mProcess.setTransportUserId(id);
+  }
+
+  template <typename MODULE>
+  void registerBTransport(MODULE* mod, void (MODULE::*cb)(transaction_type&, sc_core::sc_time&), int id)
+  {
+    mProcess.setBTransportPtr(mod, static_cast<typename Process::BTransportPtr>(cb));
     mProcess.setTransportUserId(id);
   }
 
@@ -72,12 +79,14 @@ public:
   }
 
 private:
-  class Process : public tlm::tlm_fw_nb_transport_if<TYPES>
+  class Process : public tlm::tlm_fw_transport_if<TYPES>
   {
   public:
-    typedef sync_enum_type (sc_core::sc_module::*TransportPtr)(transaction_type&,
-                                                               tlm::tlm_phase&,
-                                                               sc_core::sc_time&);
+    typedef sync_enum_type (sc_core::sc_module::*NBTransportPtr)(transaction_type&,
+                                                                 tlm::tlm_phase&,
+                                                                 sc_core::sc_time&);
+    typedef void (sc_core::sc_module::*BTransportPtr)(transaction_type&,
+                                                       sc_core::sc_time&);
     typedef unsigned int (sc_core::sc_module::*TransportDebugPtr)(transaction_type&);
     typedef bool (sc_core::sc_module::*GetDMIPtr)(transaction_type&,
                                                   tlm::tlm_dmi&);
@@ -85,7 +94,8 @@ private:
     Process(const std::string& name) :
       mName(name),
       mMod(0),
-      mTransportPtr(0),
+      mNBTransportPtr(0),
+      mBTransportPtr(0),
       mTransportDebugPtr(0),
       mGetDMIPtr(0),
       mTransportUserId(0),
@@ -98,22 +108,34 @@ private:
     void setTransportDebugUserId(int id) { mTransportDebugUserId = id; }
     void setGetDMIUserId(int id) { mGetDMIUserId = id; }
 
-    void setTransportPtr(sc_core::sc_module* mod, TransportPtr p)
+    void setNBTransportPtr(sc_core::sc_module* mod, NBTransportPtr p)
     {
-      if (mTransportPtr) {
-	std::cerr << mName << ": non-blocking callback allready registered" << std::endl;
+      if (mNBTransportPtr) {
+        std::cerr << mName << ": non-blocking callback allready registered" << std::endl;
 
       } else {
         assert(!mMod || mMod == mod);
         mMod = mod;
-        mTransportPtr = p;
+        mNBTransportPtr = p;
+      }
+    }
+
+    void setNBTransportPtr(sc_core::sc_module* mod, BTransportPtr p)
+    {
+      if (mBTransportPtr) {
+        std::cerr << mName << ": non-blocking callback allready registered" << std::endl;
+
+      } else {
+        assert(!mMod || mMod == mod);
+        mMod = mod;
+        mBTransportPtr = p;
       }
     }
 
     void setTransportDebugPtr(sc_core::sc_module* mod, TransportDebugPtr p)
     {
       if (mTransportDebugPtr) {
-	std::cerr << mName << ": debug callback allready registered" << std::endl;
+        std::cerr << mName << ": debug callback allready registered" << std::endl;
 
       } else {
         assert(!mMod || mMod == mod);
@@ -125,7 +147,7 @@ private:
     void setGetDMIPtr(sc_core::sc_module* mod, GetDMIPtr p)
     {
       if (mGetDMIPtr) {
-	std::cerr << mName << ": get DMI pointer callback allready registered" << std::endl;
+        std::cerr << mName << ": get DMI pointer callback allready registered" << std::endl;
 
       } else {
         assert(!mMod || mMod == mod);
@@ -138,16 +160,31 @@ private:
                                 phase_type& phase,
                                 sc_core::sc_time& t)
     {
-      if (mTransportPtr) {
+      if (mNBTransportPtr) {
         // forward call
         assert(mMod);
         simple_socket_utils::simple_socket_user::instance().set_user_id(mTransportUserId);
-        return (mMod->*mTransportPtr)(trans, phase, t);
+        return (mMod->*mNBTransportPtr)(trans, phase, t);
 
       } else {
         std::cerr << mName << ": no non-blocking callback registered" << std::endl;
         assert(0); exit(1);
-//        return tlm::TLM_REJECTED;   ///< unreachable code
+//        return tlm::TLM_COMPLETED;   ///< unreachable code
+      }
+    }
+
+    void b_transport(transaction_type& trans, sc_core::sc_time& t)
+    {
+      if (mBTransportPtr) {
+        // forward call
+        assert(mMod);
+        simple_socket_utils::simple_socket_user::instance().set_user_id(mTransportUserId);
+        return (mMod->*mBTransportPtr)(trans, t);
+
+      } else {
+        std::cerr << mName << ": no blocking callback registered" << std::endl;
+        assert(0); exit(1);
+//        return tlm::TLM_COMPLETED;   ///< unreachable code
       }
     }
 
@@ -186,7 +223,8 @@ private:
   private:
     const std::string mName;
     sc_core::sc_module* mMod;
-    TransportPtr mTransportPtr;
+    NBTransportPtr mNBTransportPtr;
+    BTransportPtr mBTransportPtr;
     TransportDebugPtr mTransportDebugPtr;
     GetDMIPtr mGetDMIPtr;
     int mTransportUserId;

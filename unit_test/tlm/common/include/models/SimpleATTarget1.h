@@ -112,7 +112,7 @@ public:
 
     // Not possible
     assert(0); exit(1);
-    return tlm::TLM_REJECTED;
+    return tlm::TLM_COMPLETED;
   }
 
   void endRequest()
@@ -170,8 +170,6 @@ public:
      // initiator will call nb_transport to indicate end of response phase
      break;
 
-    case tlm::TLM_REJECTED:
-      // FIXME: Not supported (wait and retry same transaction)
     default:
       assert(0); exit(1);
     };

@@ -43,7 +43,7 @@ using basic_protocol::basic_initiator_port;
 
   @Details
     This class provides a tlm_slave_socket for the initiator to bind.
-    It implements the tlm_fw_nb_transport_if to provide master to slave
+    It implements the tlm_fw_transport_if to provide master to slave
     communications.
 
   @Note
@@ -56,7 +56,7 @@ using basic_protocol::basic_initiator_port;
 
 class adapter_tlm_2_1                                  ///< LT target memory
   :         public sc_core::sc_module                  ///< module base clase
-  , virtual public tlm::tlm_fw_nb_transport_if<>       ///< target socket
+  , virtual public tlm::tlm_fw_transport_if<>          ///< target socket
 {
  
 //==============================================================================

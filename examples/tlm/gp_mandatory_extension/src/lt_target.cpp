@@ -133,7 +133,7 @@ lt_target::nb_transport                             ///< non-blocking transport
 , sc_core::sc_time         &delay_time)             ///< time it should take for transport
 {
   std::ostringstream  msg;                          ///< log message
-  tlm::tlm_sync_enum  return_status = tlm::TLM_REJECTED;
+  tlm::tlm_sync_enum  return_status = tlm::TLM_COMPLETED;
   
   static unsigned long  request_count = 0;          ///< request counter
   
@@ -280,7 +280,6 @@ lt_target::begin_response                           ///< begin_response
 
       case tlm::TLM_ACCEPTED:   
       case tlm::TLM_UPDATED:   
-      case tlm::TLM_REJECTED:   
       default: 
       {
         msg.str ("");

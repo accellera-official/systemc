@@ -326,11 +326,10 @@ lt_initiator::initiator_thread                      ///< initiator thread
         }
 
         case tlm::TLM_UPDATED:
-        case tlm::TLM_REJECTED: 
         default:
         {
           msg.str ("");
-          msg << m_ID << " - TLM_REJECTED invalid response";
+          msg << m_ID << " - invalid response";
           
           REPORT_FATAL(filename,  __FUNCTION__, msg.str());
           
@@ -364,7 +363,7 @@ lt_initiator::nb_transport                          ///< nb_transport
 )
 {
   std::ostringstream        msg;                    ///< log message
-  tlm::tlm_sync_enum        return_status = tlm::TLM_REJECTED;
+  tlm::tlm_sync_enum        return_status = tlm::TLM_COMPLETED;
   
   tlm::tlm_generic_payload  *trans_ptr;
 

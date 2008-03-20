@@ -129,7 +129,7 @@ lt_target::nb_transport                             ///< non-blocking transport
 , tlm::tlm_phase           &phase                   ///< transaction phase
 , sc_core::sc_time         &delay_time)             ///< time it should take for transport
 {
-  tlm::tlm_sync_enum  return_status = tlm::TLM_REJECTED;  ///< return status
+  tlm::tlm_sync_enum  return_status = tlm::TLM_COMPLETED;  ///< return status
   bool                dmi_operation = false;              ///< DMI capable operation flag
   std::ostringstream  msg;                                ///< log message
   

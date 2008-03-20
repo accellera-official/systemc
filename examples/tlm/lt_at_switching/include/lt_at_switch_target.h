@@ -49,7 +49,7 @@ enum e_target_mode                        ///< Enumerated model state; in LT or 
 //==============================================================================
 class lt_at_switch_target                       ///< LT target memory
 :         public sc_core::sc_module             ///< module base clase
-, virtual public tlm::tlm_fw_nb_transport_if<>  ///< target socket
+, virtual public tlm::tlm_fw_transport_if<>     ///< target socket
 {
   SC_HAS_PROCESS(lt_at_switch_target);
 

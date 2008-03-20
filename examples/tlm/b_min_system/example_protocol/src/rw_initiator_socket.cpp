@@ -41,21 +41,21 @@ rw_initiator_socket::rw_initiator_socket(const char * name)
 =============================================================================*/
 
 bool rw_initiator_socket::read(sc_dt::uint64  bus_address, 
-		                     unsigned int   byte_count, 
-		                     unsigned char* read_buffer)
+                             unsigned int   byte_count, 
+                             unsigned char* read_buffer)
 {
-	tlm::tlm_generic_payload transaction;
+    tlm::tlm_generic_payload transaction;
 
-	// Build transaction 
-	transaction.set_read();
-	transaction.set_address(bus_address);  
-	transaction.set_data_ptr(read_buffer);
-	transaction.set_data_length(byte_count);
-	
-	// Call blocking transport
-	(*this)->b_transport(transaction);
-	
-	return true; // to be modified
+    // Build transaction 
+    transaction.set_read();
+    transaction.set_address(bus_address);  
+    transaction.set_data_ptr(read_buffer);
+    transaction.set_data_length(byte_count);
+
+    // Call blocking transport
+    (*this)->b_transport(transaction);
+
+    return true; // to be modified
 }
 
 /*=============================================================================
@@ -66,19 +66,19 @@ bool rw_initiator_socket::read(sc_dt::uint64  bus_address,
 =============================================================================*/
 
 bool rw_initiator_socket::write(sc_dt::uint64  bus_address, 
-		                      unsigned int   byte_count, 
-		                      unsigned char* read_buffer)
+                              unsigned int   byte_count, 
+                              unsigned char* read_buffer)
 {
-	tlm::tlm_generic_payload transaction;
+    tlm::tlm_generic_payload transaction;
 
-	// Build transaction 
-	transaction.set_write();
-	transaction.set_address(bus_address);  
-	transaction.set_data_ptr(read_buffer);
-	transaction.set_data_length(byte_count);
-	
-	// Call blocking transport
-	(*this)->b_transport(transaction);
-	
-	return transaction.is_response_ok();
+    // Build transaction 
+    transaction.set_write();
+    transaction.set_address(bus_address);  
+    transaction.set_data_ptr(read_buffer);
+    transaction.set_data_length(byte_count);
+
+    // Call blocking transport
+    (*this)->b_transport(transaction);
+
+    return transaction.is_response_ok();
 }

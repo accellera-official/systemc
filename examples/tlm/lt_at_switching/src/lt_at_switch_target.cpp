@@ -159,7 +159,7 @@ lt_at_switch_target::nb_transport                ///< non-blocking transport
 , sc_time&                  delay)            ///< time it should take for transport
 {
   std::ostringstream       msg;               // log message
-  tlm::tlm_sync_enum       return_status = tlm::TLM_REJECTED;
+  tlm::tlm_sync_enum       return_status = tlm::TLM_COMPLETED;
 
   // non-supported feature check
   // return error for byte enable; this target does not support
@@ -240,7 +240,7 @@ lt_at_switch_target::nb_transport                ///< non-blocking transport
           msg.str ("");
     	      msg << m_ID << " - END_RESP is invalid";
           REPORT_FATAL(filename, __FUNCTION__, msg.str());
-          return_status = tlm::TLM_REJECTED; 
+          return_status = tlm::TLM_COMPLETED; 
         }
         break;
       }
@@ -250,7 +250,7 @@ lt_at_switch_target::nb_transport                ///< non-blocking transport
         msg.str ("");
         msg << m_ID << " - ** BEGIN_RESP is invalid phase for Target";
         REPORT_FATAL(filename, __FUNCTION__, msg.str());
-        return_status = tlm::TLM_REJECTED; 
+        return_status = tlm::TLM_COMPLETED; 
         break;
       }
 
@@ -259,7 +259,7 @@ lt_at_switch_target::nb_transport                ///< non-blocking transport
         msg.str ("");
         msg << m_ID << " - ** END_REQ is invalid phase for Target";
         REPORT_FATAL(filename, __FUNCTION__, msg.str());
-        return_status = tlm::TLM_REJECTED; 
+        return_status = tlm::TLM_COMPLETED; 
         break;
       }
 
@@ -268,7 +268,7 @@ lt_at_switch_target::nb_transport                ///< non-blocking transport
         msg.str ("");
         msg << m_ID << " - invalid phase for TLM2 GP";
         REPORT_FATAL(filename, __FUNCTION__, msg.str());
-        return_status = tlm::TLM_REJECTED; 
+        return_status = tlm::TLM_COMPLETED; 
         break;
       }
     } //  end phase switch 
@@ -397,7 +397,6 @@ void lt_at_switch_target::begin_response_method(void)
       }
 
       case tlm::TLM_UPDATED:   
-      case tlm::TLM_REJECTED:   
       default: 
       {
         msg.str ("");
@@ -499,7 +498,6 @@ void lt_at_switch_target::lt_begin_response_method       ///< begin_response
 
       case tlm::TLM_ACCEPTED:   
       case tlm::TLM_UPDATED:   
-      case tlm::TLM_REJECTED:   
       default: 
       {
         msg.str ("");

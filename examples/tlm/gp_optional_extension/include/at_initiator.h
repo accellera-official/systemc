@@ -40,7 +40,7 @@
 
 class at_initiator                                    ///< at_initiator 
   :         public sc_core::sc_module                 ///< module base class 
-  , virtual public tlm::tlm_bw_nb_transport_if<>      ///< initiator socket
+  , virtual public tlm::tlm_bw_transport_if<>         ///< initiator socket
 {
   SC_HAS_PROCESS(at_initiator);
 

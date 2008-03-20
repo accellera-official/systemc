@@ -80,7 +80,7 @@ void copy_word_from_array( T& data_word,
                            unsigned int offset, 
                            unsigned int nr_bytes,  
                            unsigned char *m_data,
-                           bool *m_be, 
+                           unsigned char *m_be, 
                            unsigned int m_be_length); 
 
 template<class T>
@@ -88,7 +88,7 @@ void copy_word_to_array( T& data_word,
                          unsigned int offset, 
                          unsigned int nr_bytes,  
                          unsigned char *m_data,
-                         bool *m_be, 
+                         unsigned char *m_be, 
                          unsigned int m_be_length); 
 
 // ///////////////////////////////////////////////////////////////////////// 
@@ -100,7 +100,7 @@ inline void copy_word_from_array( T& data_word,
                                   unsigned int offset, 
                                   unsigned int nr_bytes,  
                                   unsigned char *m_data,
-                                  bool *m_be, 
+                                  unsigned char *m_be, 
                                   unsigned int m_be_length) 
 {
 //    unsigned int data_size = data_word.length()/8;
@@ -119,7 +119,7 @@ inline void copy_word_to_array( T& data_word,
                                 unsigned int offset, 
                                 unsigned int nr_bytes,  
                                 unsigned char *m_data,
-                                bool *m_be, 
+                                unsigned char *m_be, 
                                 unsigned int m_be_length)
 {
 //    unsigned int data_size = data_word.length()/8;	
@@ -145,7 +145,7 @@ void copy_word_from_array( otype& data_word, \
                            unsigned int offset, \
                            unsigned int nr_bytes, \
                            unsigned char *m_data, \
-                           bool *m_be, \
+                           unsigned char *m_be, \
                            unsigned int m_be_length) \
 { \
     assert(nr_bytes <= sizeof(otype)); \
@@ -164,7 +164,7 @@ void copy_word_to_array( otype& data_word, \
                          unsigned int offset, \
                          unsigned int nr_bytes, \
                          unsigned char *m_data, \
-                         bool *m_be, \
+                         unsigned char *m_be, \
                          unsigned int m_be_length) \
 { \
     assert(nr_bytes <= sizeof(otype)); \
@@ -211,7 +211,7 @@ inline void copy_word_from_array( unsigned char* data_word,
                                   unsigned int offset, 
                                   unsigned int nr_bytes, 
                                   unsigned char *m_data, 
-                                  bool *m_be, 
+                                  unsigned char *m_be, 
                                   unsigned int m_be_length) 
 {
     if(m_be == 0) 
@@ -227,7 +227,7 @@ inline void copy_word_to_array( unsigned char* data_word,
                                 unsigned int offset, 
                                 unsigned int nr_bytes, 
                                 unsigned char *m_data, 
-                                bool *m_be, 
+                                unsigned char *m_be, 
                                 unsigned int m_be_length) 
 {
     if(m_be == 0) 

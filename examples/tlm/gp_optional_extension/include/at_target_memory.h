@@ -21,7 +21,7 @@
 
   @Details
     This class provides a tlm_slave_socket for the initiator to bind.
-    It implements the tlm_fw_nb_transport_if to provide master to slave
+    It implements the tlm_fw_transport_if to provide master to slave
     communications.
 
   @Note
@@ -48,7 +48,7 @@ enum e_AT_target_model_style              ///< Enumerated model styles
 
 class at_target_memory                          ///< LT target memory
 :         public sc_core::sc_module             ///< module base clase
-, virtual public tlm::tlm_fw_nb_transport_if<>  ///< target socket
+, virtual public tlm::tlm_fw_transport_if<>     ///< target socket
 {
   SC_HAS_PROCESS(at_target_memory);
 

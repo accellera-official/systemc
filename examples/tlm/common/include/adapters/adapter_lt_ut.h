@@ -29,14 +29,16 @@
 #ifndef __ADAPTER_LT_UT_H__ 
 #define __ADAPTER_LT_UT_H__
 
+#error adapter no longer needed
+
 #include "tlm.h"                                      ///< TLM headers
 #include "ut_initiator.h"                             ///< UT initiator header
 #include "SimpleBus.h"                                ///< SimpleBus
 
 class adapter_lt_ut                                   ///< LT to UT adapter
 :         public sc_core::sc_module                   ///< module base clase
-, virtual public tlm::tlm_fw_nb_transport_if<>        ///< target socket
-, virtual public tlm::tlm_bw_b_transport_if           ///< initiator socket
+, virtual public tlm::tlm_fw_transport_if<>           ///< target socket
+, virtual public tlm::tlm_bw_transport_if           ///< initiator socket
 {
   // sockets and ports 
 

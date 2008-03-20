@@ -116,13 +116,6 @@ basic_status                            ///< TLM 1 status ERROR or SUCCESS
       break;
       }
 
-    case tlm::TLM_REJECTED:
-      {
-      REPORT_FATAL(msg_type, "tlm 1 base read" ,"TLM_REJECTED all requests must complete");
-      return_status =  basic_protocol::ERROR;
-      break;
-      }
-
     default:
       {
       REPORT_FATAL(msg_type,  "tlm 1 base read","All requests must return complete");
@@ -195,13 +188,6 @@ basic_status                            ///< TLM 1 status ERROR or SUCCESS
       break;
       }
 
-    case tlm::TLM_REJECTED:
-      {
-      REPORT_FATAL(msg_type, "tlm 1 base write", "TLM_REJECTED all requests must complete");
-      return_status = basic_protocol::ERROR;
-      break;
-      }
-
     default:
       {
       REPORT_FATAL(msg_type,  "tlm 1 base write","All requests must return complete");
@@ -217,7 +203,7 @@ basic_status                            ///< TLM 1 status ERROR or SUCCESS
 /*==============================================================================
   @fn nb_transport 
   
-  @brief Implementation of the tlm_bw_nb_transport_if
+  @brief Implementation of the tlm_bw_transport_if
   
   @details
   This method implements the nb_transport backward interface to receive status. 
@@ -247,7 +233,7 @@ adapter_tlm_1_2_sync::nb_transport(             ///< non-blocking transport
     default:                  // A target should never BEGIN_REQ or END_RESP
       {
       REPORT_FATAL(msg_type, "backward nb interface", "Unexpected status");
-      return tlm::TLM_REJECTED;
+      return tlm::TLM_COMPLETED;
       }
     };
   }

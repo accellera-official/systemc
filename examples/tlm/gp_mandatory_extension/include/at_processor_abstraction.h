@@ -48,7 +48,7 @@
 
 class at_processor_abstraction                    ///< at_processor_abstraction
   : public sc_core::sc_module                     ///< module base class
-  , virtual public tlm::tlm_bw_nb_transport_if    ///< initiator socket interface
+  , virtual public tlm::tlm_bw_transport_if       ///< initiator socket interface
                    <my_initiator_id_type>
 {
   public:
@@ -83,7 +83,7 @@ class at_processor_abstraction                    ///< at_processor_abstraction
  mandatory virtual implementations  
  @note
   Both functions, invalidate_direct_mem_ptr and nb_transport are required
-  for our socket interface, tlm::tlm_bw_nb_transport_if<>.  The actual
+  for our socket interface, tlm::tlm_bw_transport_if<>.  The actual
   implementation is found in the initiator.
 
 ==============================================================================*/
@@ -96,7 +96,7 @@ class at_processor_abstraction                    ///< at_processor_abstraction
   , tlm::tlm_phase            &phase
   , sc_core::sc_time          &delta
   )
-  {return tlm::TLM_REJECTED;}        ///< return a valid TLM sync value
+  {return tlm::TLM_COMPLETED;}        ///< return a valid TLM sync value
 
 };
 #endif /* __AT_PROCESSOR_ABSTRACTION_H__ */

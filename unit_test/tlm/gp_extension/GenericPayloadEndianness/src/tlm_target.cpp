@@ -36,7 +36,7 @@ tlm::tlm_sync_enum tlm_target::myNBTransport(tlm::tlm_generic_payload& trans, tl
     unsigned char*    data          = trans.get_data_ptr();
     unsigned int      data_length   = trans.get_data_length();
     unsigned int      data_offset   = 0;
-    bool*             m_be          = trans.get_byte_enable_ptr();
+    unsigned char*    m_be          = trans.get_byte_enable_ptr();
     unsigned int      m_be_length   = trans.get_byte_enable_length();
     unsigned int      m_be_offset   = 0;
     

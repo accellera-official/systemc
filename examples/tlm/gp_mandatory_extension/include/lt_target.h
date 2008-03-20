@@ -40,7 +40,7 @@ enum Model_Style_emum
 
 class lt_target                                     ///< lt_target
 :         public sc_core::sc_module                 ///< module base clase
-, virtual public tlm::tlm_fw_nb_transport_if        ///< target socket interface
+, virtual public tlm::tlm_fw_transport_if           ///< target socket interface
                       <my_initiator_id_type>
 {
   SC_HAS_PROCESS(lt_target);

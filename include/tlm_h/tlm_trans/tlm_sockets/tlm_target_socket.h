@@ -29,8 +29,8 @@ template <unsigned int BUSWIDTH,
           typename BW_IF> class tlm_initiator_socket;
 
 template <unsigned int BUSWIDTH = 32,
-          typename FW_IF = tlm_fw_nb_transport_if<>,
-          typename BW_IF = tlm_bw_nb_transport_if<> >
+          typename FW_IF = tlm_fw_transport_if<>,
+          typename BW_IF = tlm_bw_transport_if<> >
 class tlm_target_socket : public sc_core::sc_export<FW_IF>
 {
 public:
@@ -40,7 +40,7 @@ public:
   typedef sc_core::sc_export<fw_interface_type> export_type;
   typedef tlm_initiator_socket<BUSWIDTH,
                                fw_interface_type,
-                               bw_interface_type>  initiator_socket_type;
+                               bw_interface_type> initiator_socket_type;
 
   friend class tlm_initiator_socket<BUSWIDTH,
                                     fw_interface_type,
@@ -128,32 +128,16 @@ protected:
 
 template <unsigned int BUSWIDTH = 32,
           typename TYPES = tlm_generic_payload_types>
-class tlm_nb_target_socket :
+class tlm_conv_target_socket :
   public tlm_target_socket <BUSWIDTH,
-                            tlm_fw_nb_transport_if<TYPES>,
-                            tlm_bw_nb_transport_if<TYPES> >
+                            tlm_fw_transport_if<TYPES>,
+                            tlm_bw_transport_if<TYPES> >
 {
 public:
-  tlm_nb_target_socket(const char* name) :
+  tlm_conv_target_socket(const char* name) :
     tlm_target_socket<BUSWIDTH,
-                      tlm_fw_nb_transport_if<TYPES>,
-                      tlm_bw_nb_transport_if<TYPES> >(name)
-  {
-  }
-};
-
-template <unsigned int BUSWIDTH = 32,
-          typename TYPES = tlm_generic_payload_types>
-class tlm_b_target_socket :
-  public tlm_target_socket <BUSWIDTH,
-                            tlm_fw_b_transport_if<TYPES>,
-                            tlm_bw_b_transport_if >
-{
-public:
-  tlm_b_target_socket(const char* name) :
-    tlm_target_socket<BUSWIDTH,
-                      tlm_fw_b_transport_if<TYPES>,
-                      tlm_bw_b_transport_if >(name)
+                      tlm_fw_transport_if<TYPES>,
+                      tlm_bw_transport_if<TYPES> >(name)
   {
   }
 };

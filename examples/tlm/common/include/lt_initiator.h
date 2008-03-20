@@ -42,7 +42,7 @@
  
 class lt_initiator                                 ///< lt_initiator 
   : public sc_core::sc_module                      ///< module base class
-  , virtual public tlm::tlm_bw_nb_transport_if<>   ///< initiator socket
+  , virtual public tlm::tlm_bw_transport_if<>      ///< initiator socket
   , virtual public examples_rw_if                  ///< export for socket msgs
 {
   public:

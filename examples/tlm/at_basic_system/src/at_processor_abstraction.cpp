@@ -70,7 +70,7 @@
   @retval none
 =============================================================================*/
 at_processor_abstraction::at_processor_abstraction ///< constructor
-( sc_core::sc_module_name 	      name             ///< module name
+( sc_core::sc_module_name         name             ///< module name
 , const unsigned int              ID               ///< initiator ID
 , const unsigned int              seed             ///< random number generator seed
 , const unsigned int              message_count    ////< number of messages to generate
@@ -109,7 +109,7 @@ at_processor_abstraction::at_processor_abstraction ///< constructor
  Bind internal ports
  ------------------  request_fifo   -----------
  |                 | ------------>  |         |
- |Traffic Generator|         	      |Initiator|
+ |Traffic Generator|                |Initiator|
  |                 | response_fifo  |         |
  |                 | <------------  |         |
  ------------------                 -----------

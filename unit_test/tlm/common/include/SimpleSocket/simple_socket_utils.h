@@ -50,6 +50,12 @@ namespace simple_socket_utils {
 #define REGISTER_NBTRANSPORT_USER(socket, process, id) \
   socket.registerNBTransport(this, &SC_CURRENT_USER_MODULE::process, id)
 
+#define REGISTER_BTRANSPORT(socket, process) \
+  socket.registerBTransport(this, &SC_CURRENT_USER_MODULE::process, 0)
+
+#define REGISTER_BTRANSPORT_USER(socket, process, id) \
+  socket.registerBTransport(this, &SC_CURRENT_USER_MODULE::process, id)
+
 #define REGISTER_DEBUGTRANSPORT(socket, process) \
   socket.registerDebugTransport(this, &SC_CURRENT_USER_MODULE::process, 0)
 

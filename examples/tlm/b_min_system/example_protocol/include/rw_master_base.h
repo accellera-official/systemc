@@ -35,7 +35,7 @@
 class rw_master_base : virtual public tlm::tlm_bw_b_transport_if
 {
   public:
-		
+	
 };
 
 #endif /* __RW_MASTER_BASE_H__ */

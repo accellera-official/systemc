@@ -100,7 +100,7 @@ public:
 
     // Not possible
     assert(0); exit(1);
-    return tlm::TLM_REJECTED;
+    return tlm::TLM_COMPLETED;
   }
 
   void beginResponse()

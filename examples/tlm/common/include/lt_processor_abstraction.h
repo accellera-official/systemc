@@ -49,7 +49,7 @@
 
 class lt_processor_abstraction                     ///< lt_processor_abstraction 
   : public sc_core::sc_module                      ///< module base class
-  , virtual public tlm::tlm_bw_nb_transport_if<>   ///< initiator socket
+  , virtual public tlm::tlm_bw_transport_if<>      ///< initiator socket
 {
   public:
 //==============================================================================
@@ -85,7 +85,7 @@ class lt_processor_abstraction                     ///< lt_processor_abstraction
   , tlm::tlm_phase            &phase
   , sc_core::sc_time          &delta
   )
-  {return tlm::TLM_REJECTED;}
+  {return tlm::TLM_COMPLETED;}
 
 };
 #endif /* __LT_PROCESSOR_ABSTRACTION_H__ */

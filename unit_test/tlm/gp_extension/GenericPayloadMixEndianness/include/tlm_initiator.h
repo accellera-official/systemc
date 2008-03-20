@@ -208,13 +208,13 @@ private:
     void writeBurst(unsigned int address, 
                     unsigned char *data, 
                     unsigned int nr_bytes,
-                    bool* be = 0, 
+                    unsigned char* be = 0, 
                     unsigned int be_length = 0);
     
     void readBurst(unsigned int address, 
                    unsigned char *data, 
                    unsigned int nr_bytes,
-                   bool* be = 0, 
+                   unsigned char* be = 0, 
                    unsigned int be_length = 0);
 
 };
@@ -223,7 +223,7 @@ private:
 void tlm_initiator::writeBurst(unsigned int address, 
                                unsigned char *data, 
                                unsigned int nr_bytes,
-                               bool* be, 
+                               unsigned char* be, 
                                unsigned int be_length)
 {
     tlm::tlm_phase phase;
@@ -252,8 +252,6 @@ void tlm_initiator::writeBurst(unsigned int address,
         wait(socket.getEndEvent());
         break;
         
-    case tlm::TLM_REJECTED:
-        // FIXME: Not supported (wait and retry same transaction)
     default:
         assert(0); exit(1);
     };
@@ -273,7 +271,7 @@ void tlm_initiator::writeBurst(unsigned int address,
 void tlm_initiator::readBurst(unsigned int address, 
                               unsigned char *data, 
                               unsigned int nr_bytes,
-                              bool* be, 
+                              unsigned char* be, 
                               unsigned int be_length)
 {
     tlm::tlm_phase phase;
@@ -302,8 +300,6 @@ void tlm_initiator::readBurst(unsigned int address,
         wait(socket.getEndEvent());
         break;
         
-    case tlm::TLM_REJECTED:
-        // FIXME: Not supported (wait and retry same transaction)
     default:
         assert(0); exit(1);
     };

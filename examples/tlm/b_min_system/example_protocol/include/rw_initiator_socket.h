@@ -35,11 +35,11 @@
 class rw_initiator_socket : public tlm::tlm_initiator_socket<64,
                                                              tlm::tlm_fw_b_transport_if<>,
                                                              tlm::tlm_bw_b_transport_if>,
-						    public virtual rw_if
+                            public virtual rw_if
 {
   public:
-	rw_initiator_socket(const char * name);
-	
+    rw_initiator_socket(const char * name);
+
     virtual bool read(
         sc_dt::uint64     bus_address     ///< bus address
       , unsigned int      byte_count      ///< data transfer size

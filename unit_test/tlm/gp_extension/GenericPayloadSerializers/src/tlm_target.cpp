@@ -52,7 +52,7 @@ void tlm_target::nb_transport(tlm::tlm_generic_payload* gp)
     {
         unsigned int   addr = (unsigned int)gp->get_address() - m_start_address;
         unsigned char* data = gp->get_data_ptr();
-        bool*          m_be = gp->get_byte_enable_ptr();
+        unsigned char* m_be = gp->get_byte_enable_ptr();
         unsigned int   m_be_length = gp->get_byte_enable_length();
         
         unsigned int offset;

@@ -36,8 +36,8 @@ class rw_target_socket : public tlm::tlm_target_socket<64,
                                                        tlm::tlm_bw_b_transport_if>
 {
   public:
-	
-	rw_target_socket(const char * name);
+
+    rw_target_socket(const char * name);
 };
 
 #endif /* __RW_TARGET_SOCKET_H__ */

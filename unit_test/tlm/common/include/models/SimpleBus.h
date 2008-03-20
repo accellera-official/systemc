@@ -256,8 +256,6 @@ public:
           wait(t);
           break;
 
-        case tlm::TLM_REJECTED:
-          // FIXME: Not supported (wait and retry same transaction)
         default:
           assert(0); exit(1);
         };
@@ -299,8 +297,6 @@ public:
           wait(mEndResponseEvent);
         break;
 
-        case tlm::TLM_REJECTED:
-          // FIXME: Not supported (wait and retry same transaction)
         default:
           assert(0); exit(1);
         };

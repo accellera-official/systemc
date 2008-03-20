@@ -51,7 +51,7 @@ typedef unsigned int DATA_TYPE;         // define data type of TLM1
 
 class adapter_tlm_1_2                              ///< adapter_tlm_1_2 
   : public sc_core::sc_module                      ///< module base class
-  , virtual public tlm::tlm_bw_nb_transport_if<>   ///< initiator socket
+  , virtual public tlm::tlm_bw_transport_if<>      ///< initiator socket
   , virtual public basic_slave_base< ADDRESS_TYPE , DATA_TYPE >  ///< 
 {
   public:

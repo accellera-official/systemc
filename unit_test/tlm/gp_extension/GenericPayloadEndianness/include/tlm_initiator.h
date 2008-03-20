@@ -126,14 +126,14 @@ public:
 										 0, 0);
 			if(tlm::hostHasLittleEndianness())
 			{
-			be[0] = be[1] = be[2] = be[3] = be[4] = be[5] = true;
-			be[6] = be[7] = false;
+              be[0] = be[1] = be[2] = be[3] = be[4] = be[5] = true;
+              be[6] = be[7] = false;
 			}
 			else
 			{
-			be[0] = be[1] = be[2] = be[3] = true;
-			be[4] = be[5] = false;
-			be[6] = be[7] = true;
+              be[0] = be[1] = be[2] = be[3] = true;
+              be[4] = be[5] = false;
+              be[6] = be[7] = true;
 			}
 
 			write(address,wr_data,8,be, 8);
@@ -241,7 +241,7 @@ private:
 
     unsigned char wr_data[8];
     unsigned char rd_data[8];
-    bool          be[8];
+    unsigned char be[8];
     unsigned int  be_length;
 
     tlm::tlm_endianness m_endianness;
@@ -250,13 +250,13 @@ private:
 	void write(sc_dt::uint64 address,
                    unsigned char *data,
 				   unsigned int nr_bytes,
-                   bool* byte_enable = 0,
+                   unsigned char* byte_enable = 0,
                    unsigned int byte_enable_length = 0);
     
 	void read(sc_dt::uint64 address,
                   unsigned char *data,
                   unsigned int nr_bytes,
-                  bool* byte_enable = 0,
+                  unsigned char* byte_enable = 0,
                   unsigned int byte_enable_length = 0);
 
 	void compare_arrays(unsigned char* wrdata, unsigned char* rddata, int nbytes) ;

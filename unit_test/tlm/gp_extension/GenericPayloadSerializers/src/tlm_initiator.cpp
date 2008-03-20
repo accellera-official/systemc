@@ -150,7 +150,7 @@ void tlm_initiator::test_with_be()
 void tlm_initiator::test_customized_be()
 {
     sc_dt::uint64 address = 0;
-    bool* aux_be = new bool [4];
+    unsigned char* aux_be = new unsigned char [4];
     
     // Test 256-bit access - Customize byte-enables
     
@@ -277,7 +277,7 @@ void tlm_initiator::prepare_arrays(int nbits, bool shift)
     wr_data = new unsigned char [nbits/8]; 
     aux_data = new unsigned char [nbits/8]; 
     rd_data = new unsigned char [nbits/8];
-    be = new bool [nbits/8];
+    be = new unsigned char [nbits/8];
     be_length = nbits/8;
     
     // Initialiaze arrays
