@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -38,6 +38,15 @@
  *****************************************************************************/
 
 
+// $Log: sc_prim_channel.cpp,v $
+// Revision 1.4  2006/01/26 21:00:50  acg
+//  Andy Goodrich: conversion to use sc_event::notify(SC_ZERO_TIME) instead of
+//  sc_event::notify_delayed()
+//
+// Revision 1.3  2006/01/13 18:47:42  acg
+// Added $Log command so that CVS comments are reproduced in the source.
+//
+
 #include "sysc/communication/sc_prim_channel.h"
 #include "sysc/communication/sc_communication_ids.h"
 #include "sysc/kernel/sc_simcontext.h"
@@ -55,7 +64,7 @@ namespace sc_core {
 sc_prim_channel::sc_prim_channel()
 : sc_object( 0 ),
   m_registry( simcontext()->get_prim_channel_registry() ),
-  m_update_requested( false )
+  m_update_next_p( 0 )
 {
     m_registry->insert( *this );
 }
@@ -63,7 +72,7 @@ sc_prim_channel::sc_prim_channel()
 sc_prim_channel::sc_prim_channel( const char* name_ )
 : sc_object( name_ ),
   m_registry( simcontext()->get_prim_channel_registry() ),
-  m_update_requested( false )
+  m_update_next_p( 0 )
 {
     m_registry->insert( *this );
 }
@@ -150,7 +159,7 @@ sc_prim_channel::simulation_done()
 void
 sc_prim_channel_registry::insert( sc_prim_channel& prim_channel_ )
 {
-    if( m_simc->is_running() ) {
+    if( sc_is_running() ) {
 	SC_REPORT_ERROR( SC_ID_INSERT_PRIM_CHANNEL_, "simulation running" );
     }
 
@@ -166,17 +175,6 @@ sc_prim_channel_registry::insert( sc_prim_channel& prim_channel_ )
     // insert
     m_prim_channel_vec.push_back( &prim_channel_ );
 
-    // resize update array, if needed
-    if( m_update_size < size() ) {
-	m_update_size *= 2;
-	sc_prim_channel** tmp = new sc_prim_channel*[m_update_size];
-	assert( m_update_last < m_update_size / 2 );
-	for( int i = m_update_last; i >= 0; -- i ) {
-	    tmp[i] = m_update_array[i];
-	}
-	delete[] m_update_array;
-	m_update_array = tmp;
-    }
 }
 
 void
@@ -194,18 +192,15 @@ sc_prim_channel_registry::remove( sc_prim_channel& prim_channel_ )
 
     // remove
     m_prim_channel_vec[i] = m_prim_channel_vec[size() - 1];
-    m_prim_channel_vec.decr_count();
+    m_prim_channel_vec.resize(size()-1);
 }
 
 
 // constructor
 
 sc_prim_channel_registry::sc_prim_channel_registry( sc_simcontext& simc_ )
-: m_simc( &simc_ )
+: m_simc( &simc_ ), m_update_list_p((sc_prim_channel*)sc_prim_channel::list_end)
 {
-    m_update_size = 16;
-    m_update_array = new sc_prim_channel*[m_update_size];
-    m_update_last = -1;
 }
 
 
@@ -213,7 +208,6 @@ sc_prim_channel_registry::sc_prim_channel_registry( sc_simcontext& simc_ )
 
 sc_prim_channel_registry::~sc_prim_channel_registry()
 {
-    delete[] m_update_array;
 }
 
 // called when construction is done

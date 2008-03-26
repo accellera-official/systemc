@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -32,6 +32,12 @@
   Description of Modification:
 
  *****************************************************************************/
+// $Log: sc_mempool.cpp,v $
+// Revision 1.3  2006/01/13 18:53:10  acg
+// Andy Goodrich: Added $Log command so that CVS comments are reproduced in
+// the source.
+//
+
 
 
 //  <sc_mempool> is a class that manages the memory for small objects,
@@ -211,8 +217,8 @@ class sc_mempool_int {
 public:
     sc_mempool_int(int blksz, int npools, int incr);
     ~sc_mempool_int();
-    void* do_allocate(size_t);
-    void  do_release(void*, size_t);
+    void* do_allocate(std::size_t);
+    void  do_release(void*, std::size_t);
 
     void display_statistics();
     
@@ -255,7 +261,7 @@ sc_mempool_int::~sc_mempool_int()
 static sc_mempool_int* the_mempool = 0;
 
 void*
-sc_mempool_int::do_allocate(size_t sz)
+sc_mempool_int::do_allocate(std::size_t sz)
 {
     int which_allocator = cell_size_to_allocator[(sz - 1) / increment + 1];
     void* p = allocators[which_allocator]->allocate();
@@ -263,7 +269,7 @@ sc_mempool_int::do_allocate(size_t sz)
 }
 
 void
-sc_mempool_int::do_release(void* p, size_t sz)
+sc_mempool_int::do_release(void* p, std::size_t sz)
 {
     int which_allocator = cell_size_to_allocator[(sz - 1) / increment + 1];
     allocators[which_allocator]->release(p);
@@ -280,7 +286,7 @@ sc_mempool_int::display_statistics()
 /****************************************************************************/
 
 void*
-sc_mempool::allocate(size_t sz)
+sc_mempool::allocate(std::size_t sz)
 {
     if (use_default_new)
         return ::operator new(sz);
@@ -302,7 +308,7 @@ sc_mempool::allocate(size_t sz)
 }
 
 void
-sc_mempool::release(void* p, size_t sz)
+sc_mempool::release(void* p, std::size_t sz)
 {
     if (p) {
         

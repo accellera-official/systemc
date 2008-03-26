@@ -34,10 +34,10 @@
  *****************************************************************************/
 
 #include "systemc.h"
-#include "./scx_signal_int.h"
-#include "./scx_signal_uint.h"
-#include "./scx_signal_signed.h"
-#include "./scx_signal_unsigned.h"
+#include "scx_signal_int.h"
+#include "scx_signal_signed.h"
+#include "scx_signal_uint.h"
+#include "scx_signal_unsigned.h"
 
 
 #define DISPLAY(exp,base) cout << #exp << " = " << base << exp << endl;
@@ -257,7 +257,7 @@ int sc_main( int argc, char* argv[] )
 	sc_clock clock;
 	DUT      dut("dut");
 	dut.m_clk(clock);
-	sc_start(-1);
+	sc_start();
 
 	return 0;
 }

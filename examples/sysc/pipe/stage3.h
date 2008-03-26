@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2004 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -46,9 +46,9 @@ struct stage3: sc_module {
 
     //Constructor
     SC_CTOR( stage3 ){
-        SC_METHOD( power );    //declare power as SC_METHOD and 
+        SC_METHOD( power );      //declare power as SC_METHOD and 
         dont_initialize();
-        sensitive_pos << clk;  //make it sensitive to positive clock edge 
+        sensitive << clk.pos();  //make it sensitive to positive clock edge 
     }
 
 };

@@ -30,7 +30,7 @@ SC_WARNING  The report indicates a potentially incorrect condition.
 
 SC_ERROR    The report indicates a definite problem during execution.
             The default configuration forces a throw of a C++
-            exception sc_report with the corresponding report
+            exception sc_exception with the corresponding report
             information attached.
 
 SC_FATAL    The report indicates a problem which cannot be recovered
@@ -64,8 +64,9 @@ SC_UNSPECIFIED  Take the action specified by a configuration rule of a lower
 SC_DO_NOTHING   Don't take any actions for the report, the action will be
                 ignored, if other actions are given.
 
-SC_THROW        Throw a C++ exception (sc_report) that represents the
-                report. 
+SC_THROW        Throw a C++ exception (sc_exception) that represents the
+                report. The method sc_exception::get_report() can be used to
+                access the report instance later.
 
 SC_LOG          Print the report into the report log, typically a file on
                 disk. The actual behaviour is defined by the report handler
@@ -342,14 +343,14 @@ suppress(prev) would be called when it completes execution.
 
 The class sc_report the report representation.
 
-The class sc_report is derived from the std::exception class.  An instance of 
-the class could be accessed either through its cached copy or in the catch 
-block of C++ "try {} catch (const sc_report & ex) {}" construction. 
-
+An instance of the class could be accessed either through its cached copy or
+in the catch block of C++ "try {} catch (const sc_exception & ex) {}"
+construction. To access the report the method sc_exception::get_report() is
+available.
 Use sc_report_handler::get_cached_report() to access the cached copy of the
 report.
 Instances of the sc_report can be copied by copy constructor and assignment
-operator means. 
+operator means. It is not allowed to create an empty report.
 
 
 The sc_report Class
@@ -408,7 +409,7 @@ WARNING    SC_LOG | SC_DISPLAY
 ERROR      SC_LOG | SC_CACHE_REPORT | SC_THROW
 FATAL      SC_LOG | SC_DISPLAY | SC_CACHE_REPORT | SC_ABORT
 
-The error level reports are displayed by the default handler of sc_report
+The error level reports are displayed by the default handler of sc_exception
 type exceptions.
 
 The following macros are globally visible as part of the standard and should
@@ -524,9 +525,9 @@ accessed:
         {
             do_something();
         }
-        catch (const sc_report & e)
+        catch (const sc_exception & e)
         {
-            cerr << e.get_msg() << endl;
+            cerr << e.get_report().get_msg() << endl;
         }
     }
 

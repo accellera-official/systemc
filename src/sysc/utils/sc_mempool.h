@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -33,6 +33,12 @@
 
  *****************************************************************************/
 
+// $Log: sc_mempool.h,v $
+// Revision 1.3  2006/01/13 18:53:11  acg
+// Andy Goodrich: Added $Log command so that CVS comments are reproduced in
+// the source.
+//
+
 #ifndef SC_MEMPOOL_H
 #define SC_MEMPOOL_H
 
@@ -51,8 +57,8 @@ class sc_mempool
 {
 public:
 
-    static void* allocate( size_t sz );
-    static void release( void* p, size_t sz );
+    static void* allocate( std::size_t sz );
+    static void release( void* p, std::size_t sz );
     static void display_statistics();
 };
 
@@ -67,16 +73,16 @@ class sc_mpobject
 {
 public:
 
-    static void* operator new( size_t sz )
+    static void* operator new( std::size_t sz )
 	{ return sc_mempool::allocate( sz ); }
 
-    static void operator delete( void* p, size_t sz )
+    static void operator delete( void* p, std::size_t sz )
 	{ sc_mempool::release( p, sz ); }
 
-    static void* operator new[]( size_t sz )
+    static void* operator new[]( std::size_t sz )
 	{ return sc_mempool::allocate( sz ); }
 
-    static void operator delete[]( void* p, size_t sz )
+    static void operator delete[]( void* p, std::size_t sz )
 	{ sc_mempool::release( p, sz ); }
 };
 

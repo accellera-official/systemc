@@ -38,6 +38,7 @@ H_FILES = \
 	sc_hash.h \
 	sc_iostream.h \
 	sc_list.h \
+	sc_machine.h \
 	sc_mempool.h \
 	sc_pq.h \
 	sc_report.h \

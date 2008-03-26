@@ -721,7 +721,7 @@ With m_address = 0x78, and m_timeout = 100, the direct master performs:
 
       if (m_verbose)
 	sb_fprintf(stdout, "%f %s : mem[%x:%x] = (%x, %x, %x, %x)\n",
-		   sc_simulation_time(), name(), m_address, m_address+15, 
+		   sc_time_stamp(), name(), m_address, m_address+15, 
 		   mydata[0], mydata[1], mydata[2], mydata[3]);
 
       wait(m_timeout, SC_NS);
@@ -752,7 +752,7 @@ performs:
 	wait();
       if (bus_port->get_status(m_unique_priority) == SIMPLE_BUS_ERROR)
 	sb_fprintf(stdout, "%f %s : ERROR cannot read from %x\n",
-		   sc_simulation_time(), name(), addr);
+		   sc_time_stamp(), name(), addr);
 
       mydata += cnt;
       cnt++;
@@ -763,7 +763,7 @@ performs:
 	wait();
       if (bus_port->get_status(m_unique_priority) == SIMPLE_BUS_ERROR)
 	sb_fprintf(stdout, "%f %s : ERROR cannot write to %x\n",
-		   sc_simulation_time(), name(), addr);
+		   sc_time_stamp(), name(), addr);
  
       wait(m_timeout, SC_NS);
       wait(); // ... for the next rising clock edge
@@ -794,7 +794,7 @@ With m_address = 0x4c and m_timeout = 300, the blocking master performs:
 				    m_address, mylength, m_lock);
       if (status == SIMPLE_BUS_ERROR)
 	sb_fprintf(stdout, "%f %s : blocking-read failed at address %x\n",
-		   sc_simulation_time(), name(), m_address);
+		   sc_time_stamp(), name(), m_address);
 
       for (i = 0; i < mylength; ++i)
 	{
@@ -806,7 +806,7 @@ With m_address = 0x4c and m_timeout = 300, the blocking master performs:
 				     m_address, mylength, m_lock);
       if (status == SIMPLE_BUS_ERROR)
 	sb_fprintf(stdout, "%f %s : blocking-write failed at address %x\n", 
-		   sc_simulation_time(), name(), m_address);
+		   sc_time_stamp(), name(), m_address);
 
       wait(m_timeout, SC_NS);
     }

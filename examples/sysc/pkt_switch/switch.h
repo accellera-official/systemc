@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2004 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -54,7 +54,7 @@ struct mcast_pkt_switch : sc_module {
       sensitive << in1;
       sensitive << in2;
       sensitive << in3;
-      sensitive_pos << switch_cntrl;
+      sensitive << switch_cntrl.pos();
     }  
 
   void entry();  

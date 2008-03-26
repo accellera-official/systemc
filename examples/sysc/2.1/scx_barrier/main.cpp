@@ -45,8 +45,6 @@ SC_MODULE(X)
 {
 	SC_CTOR(X)
 	{
-		sc_thread_handle last_thread;
-
 		SC_THREAD(a);
 		SC_THREAD(b);
 		SC_THREAD(c);
@@ -57,18 +55,18 @@ SC_MODULE(X)
 	{
 		wait(5.0, SC_NS);
 		m_barrier.wait();
-		printf("%f - a\n", sc_simulation_time());
+		printf("%f - a\n", sc_time_stamp().to_double());
 	}
 	void b()
 	{
 		wait(11.0, SC_NS);
 		m_barrier.wait();
-		printf("%f - b\n", sc_simulation_time());
+		printf("%f - b\n", sc_time_stamp().to_double());
 	}
 	void c()
 	{
 		m_barrier.wait();
-		printf("%f - c\n", sc_simulation_time());
+		printf("%f - c\n", sc_time_stamp().to_double());
 	}
 	scx_barrier   m_barrier;
 };
@@ -78,7 +76,7 @@ int sc_main( int argc, char* argv[] )
 	sc_clock clock;
 	X x("x");
 
-	sc_start(1000);
+	sc_start(1000, SC_NS);
 
 	cout << "Program completed" << endl;
 	return 0;

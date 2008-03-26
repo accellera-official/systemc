@@ -1,8 +1,10 @@
 #ifndef BOOST_DETAIL_ATOMIC_COUNT_HPP_INCLUDED
 #define BOOST_DETAIL_ATOMIC_COUNT_HPP_INCLUDED
 
-#if _MSC_VER >= 1020
-#pragma once
+// MS compatible compilers support #pragma once
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+# pragma once
 #endif
 
 //
@@ -10,10 +12,9 @@
 //
 //  Copyright (c) 2001, 2002 Peter Dimov and Multi Media Ltd.
 //
-//  Permission to copy, use, modify, sell and distribute this software
-//  is granted provided this copyright notice appears in all copies.
-//  This software is provided "as is" without express or implied
-//  warranty, and with no claim as to its suitability for any purpose.
+// Distributed under the Boost Software License, Version 1.0. (See
+// accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
 //
 //  typedef <implementation-defined> boost::detail::atomic_count;
 //
@@ -72,9 +73,6 @@
 //      are called driven by smart_ptr interface...
 //
 
-//  Note: atomic_count_linux.hpp has been disabled by default; see the
-//        comments inside for more info.
-
 #include <sysc/packages/boost/config.hpp>
 
 #ifndef BOOST_HAS_THREADS
@@ -91,32 +89,19 @@ typedef long atomic_count;
 
 }
 
-#elif defined(BOOST_USE_ASM_ATOMIC_H)
-#  include <sysc/packages/boost/detail/atomic_count_linux.hpp>
 #elif defined(BOOST_AC_USE_PTHREADS)
 #  include <sysc/packages/boost/detail/atomic_count_pthreads.hpp>
 #elif defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
 #  include <sysc/packages/boost/detail/atomic_count_win32.hpp>
-#elif defined(__GLIBCPP__)
+#elif defined(__GLIBCPP__) || defined(__GLIBCXX__)
 #  include <sysc/packages/boost/detail/atomic_count_gcc.hpp>
 #elif defined(BOOST_HAS_PTHREADS)
 #  define BOOST_AC_USE_PTHREADS
 #  include <sysc/packages/boost/detail/atomic_count_pthreads.hpp>
 #else
 
-// #warning Unrecognized platform, detail::atomic_count will not be thread safe
-
-namespace boost
-{
-
-namespace detail
-{
-
-typedef long atomic_count;
-
-}
-
-}
+// Use #define BOOST_DISABLE_THREADS to avoid the error
+#error Unrecognized threading platform
 
 #endif
 

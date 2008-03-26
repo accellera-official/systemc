@@ -1,9 +1,11 @@
 //  Boost compiler configuration selection header file
 
-//  (C) Copyright Boost.org 2001. Permission to copy, use, modify, sell and
-//  distribute this software is granted provided this copyright notice appears
-//  in all copies. This software is provided "as is" without express or implied
-//  warranty, and with no claim as to its suitability for any purpose.
+//  (C) Copyright John Maddock 2001 - 2003. 
+//  (C) Copyright Jens Maurer 2001 - 2002. 
+//  Use, modification and distribution are subject to the 
+//  Boost Software License, Version 1.0. (See accompanying file 
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
 
 //  See http://www.boost.org for most recent version.
 
@@ -24,18 +26,14 @@
 #  define BOOST_STDLIB_CONFIG "sysc/packages/boost/config/stdlib/stlport.hpp"
 
 #elif defined(__LIBCOMO__)
-// Commeau STL:
+// Comeau STL:
 #define BOOST_STDLIB_CONFIG "sysc/packages/boost/config/stdlib/libcomo.hpp"
 
 #elif defined(__STD_RWCOMPILER_H__) || defined(_RWSTD_VER)
 // Rogue Wave library:
 #  define BOOST_STDLIB_CONFIG "sysc/packages/boost/config/stdlib/roguewave.hpp"
 
-#elif (defined(_YVALS) && !defined(__IBMCPP__)) || defined(_CPPLIB_VER)
-// Dinkumware Library:
-#  define BOOST_STDLIB_CONFIG "sysc/packages/boost/config/stdlib/dinkumware.hpp"
-
-#elif defined(__GLIBCPP__)
+#elif defined(__GLIBCPP__) || defined(__GLIBCXX__)
 // GNU libstdc++ 3
 #  define BOOST_STDLIB_CONFIG "sysc/packages/boost/config/stdlib/libstdcpp3.hpp"
 
@@ -55,11 +53,16 @@
 // Modena C++ standard library
 #  define BOOST_STDLIB_CONFIG "sysc/packages/boost/config/stdlib/modena.hpp"
 
+#elif (defined(_YVALS) && !defined(__IBMCPP__)) || defined(_CPPLIB_VER)
+// Dinkumware Library (this has to appear after any possible replacement libraries):
+#  define BOOST_STDLIB_CONFIG "sysc/packages/boost/config/stdlib/dinkumware.hpp"
+
 #elif defined (BOOST_ASSERT_CONFIG)
 // this must come last - generate an error if we don't
 // recognise the library:
 #  error "Unknown standard library - please configure and report the results to boost.org"
 
 #endif
+
 
 

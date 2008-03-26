@@ -104,23 +104,21 @@ H_FILES = \
 	sc_cor.h \
 	sc_dynamic_processes.h \
 	sc_event.h \
+	sc_except.h \
 	sc_externs.h \
 	sc_join.h \
 	sc_kernel_ids.h \
-	sc_lambda.h \
-	sc_lambda_defs.h \
-	sc_lambda_exps.h \
-	sc_lambda_friends.h \
 	sc_macros.h \
 	sc_module.h \
 	sc_module_name.h \
 	sc_object.h \
 	sc_process.h \
-	sc_process_b.h \
-	sc_process_base.h \
-	sc_process_host.h \
+	sc_process_handle.h \
+	sc_reset.h \
 	sc_runnable.h \
 	sc_sensitive.h \
+	sc_spawn.h \
+	sc_spawn_options.h \
 	sc_simcontext.h \
 	sc_time.h \
 	sc_ver.h \
@@ -132,12 +130,12 @@ NO_H_FILES = \
 	sc_cor_fiber.h \
 	sc_cor_pthread.h \
 	sc_cor_qt.h \
-	sc_except.h \
+	sc_cthread_process.h \
 	sc_macros_int.h \
+	sc_method_process.h \
 	sc_module_registry.h \
 	sc_name_gen.h \
 	sc_object_manager.h \
-	sc_process_int.h \
 	sc_runnable_int.h \
 	sc_simcontext_int.h
 
@@ -149,21 +147,23 @@ CXX_FILES = \
 	sc_cor_fiber.cpp \
 	sc_cor_pthread.cpp \
 	sc_cor_qt.cpp \
+	sc_cthread_process.cpp \
 	sc_event.cpp \
 	sc_join.cpp \
-	sc_lambda.cpp \
 	sc_main.cpp \
 	sc_main_main.cpp \
+	sc_method_process.cpp \
 	sc_module.cpp \
 	sc_module_name.cpp \
 	sc_module_registry.cpp \
 	sc_name_gen.cpp \
 	sc_object.cpp \
 	sc_object_manager.cpp \
-	sc_process_base.cpp \
-	sc_process_int.cpp \
+	sc_process.cpp \
+	sc_reset.cpp \
 	sc_sensitive.cpp \
 	sc_simcontext.cpp \
+	sc_thread_process.cpp \
 	sc_time.cpp \
 	sc_ver.cpp \
 	sc_wait.cpp \
@@ -184,15 +184,17 @@ libkernel_a_AR = $(AR) cru
 libkernel_a_LIBADD =
 am__objects_1 =
 am__objects_2 = sc_attribute.$(OBJEXT) sc_cor_fiber.$(OBJEXT) \
-	sc_cor_pthread.$(OBJEXT) sc_cor_qt.$(OBJEXT) sc_event.$(OBJEXT) \
-	sc_join.$(OBJEXT) sc_lambda.$(OBJEXT) sc_main.$(OBJEXT) \
-	sc_main_main.$(OBJEXT) sc_module.$(OBJEXT) \
+	sc_cor_pthread.$(OBJEXT) sc_cor_qt.$(OBJEXT) \
+	sc_cthread_process.$(OBJEXT) sc_event.$(OBJEXT) \
+	sc_join.$(OBJEXT) sc_main.$(OBJEXT) sc_main_main.$(OBJEXT) \
+	sc_method_process.$(OBJEXT) sc_module.$(OBJEXT) \
 	sc_module_name.$(OBJEXT) sc_module_registry.$(OBJEXT) \
 	sc_name_gen.$(OBJEXT) sc_object.$(OBJEXT) \
-	sc_object_manager.$(OBJEXT) sc_process_base.$(OBJEXT) \
-	sc_process_int.$(OBJEXT) sc_sensitive.$(OBJEXT) \
-	sc_simcontext.$(OBJEXT) sc_time.$(OBJEXT) sc_ver.$(OBJEXT) \
-	sc_wait.$(OBJEXT) sc_wait_cthread.$(OBJEXT)
+	sc_object_manager.$(OBJEXT) sc_process.$(OBJEXT) \
+	sc_reset.$(OBJEXT) sc_sensitive.$(OBJEXT) \
+	sc_simcontext.$(OBJEXT) sc_thread_process.$(OBJEXT) \
+	sc_time.$(OBJEXT) sc_ver.$(OBJEXT) sc_wait.$(OBJEXT) \
+	sc_wait_cthread.$(OBJEXT)
 am_libkernel_a_OBJECTS = $(am__objects_1) $(am__objects_2)
 libkernel_a_OBJECTS = $(am_libkernel_a_OBJECTS)
 DEFAULT_INCLUDES =  -I. -I$(srcdir)
@@ -389,6 +391,7 @@ uninstall-am: uninstall-info-am uninstall-local
 	mostlyclean-generic tags uninstall uninstall-am \
 	uninstall-info-am uninstall-local
 
+	sc_thread_process.h 
 
 install-data-local:
 	@$(NORMAL_INSTALL)

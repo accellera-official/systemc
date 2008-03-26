@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -37,6 +37,14 @@
  *****************************************************************************/
 
 
+// $Log: sc_module_registry.cpp,v $
+// Revision 1.4  2006/01/26 21:04:54  acg
+//  Andy Goodrich: deprecation message changes and additional messages.
+//
+// Revision 1.3  2006/01/13 18:44:30  acg
+// Added $Log to record CVS changes into the source.
+//
+
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/kernel/sc_module.h"
 #include "sysc/kernel/sc_module_registry.h"
@@ -54,7 +62,7 @@ namespace sc_core {
 void
 sc_module_registry::insert( sc_module& module_ )
 {
-    if( m_simc->is_running() ) {
+    if( sc_is_running() ) {
 	SC_REPORT_ERROR( SC_ID_INSERT_MODULE_, "simulation running" );
     }
 
@@ -86,7 +94,7 @@ sc_module_registry::remove( sc_module& module_ )
 
     // remove
     m_module_vec[i] = m_module_vec[size() - 1];
-    m_module_vec.decr_count();
+    m_module_vec.resize(m_module_vec.size()-1);
 }
 
 

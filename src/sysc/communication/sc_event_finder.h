@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -33,6 +33,36 @@
   Description of Modification:
     
  *****************************************************************************/
+//$Log: sc_event_finder.h,v $
+//Revision 1.4  2006/02/02 23:42:37  acg
+// Andy Goodrich: implemented a much better fix to the sc_event_finder
+// proliferation problem. This new version allocates only a single event
+// finder for each port for each type of event, e.g., pos(), neg(), and
+// value_change(). The event finder persists as long as the port does,
+// which is what the LRM dictates. Because only a single instance is
+// allocated for each event type per port there is not a potential
+// explosion of storage as was true in the 2.0.1/2.1 versions.
+//
+//Revision 1.3  2006/02/02 20:43:09  acg
+// Andy Goodrich: Added an existence linked list to sc_event_finder so that
+// the dynamically allocated instances can be freed after port binding
+// completes. This replaces the individual deletions in ~sc_bind_ef, as these
+// caused an exception if an sc_event_finder instance was used more than
+// once, due to a double freeing of the instance.
+//
+//Revision 1.2  2006/01/03 23:18:26  acg
+//Changed copyright to include 2006.
+//
+//Revision 1.1.1.1  2005/12/19 23:16:43  acg
+//First check in of SystemC 2.1 into its own archive.
+//
+//Revision 1.10  2005/09/15 23:01:51  acg
+//Added std:: prefix to appropriate methods and types to get around
+//issues with the Edison Front End.
+//
+//Revision 1.9  2005/06/10 22:43:55  acg
+//Added CVS change log annotation.
+//
 
 #ifndef SC_EVENT_FINDER
 #define SC_EVENT_FINDER
@@ -49,8 +79,9 @@ namespace sc_core {
 // ----------------------------------------------------------------------------
 
 class sc_event_finder
-: public sc_event
 {
+  friend class sc_simcontext;
+
 public:
 
     const sc_port_base& port() const
@@ -59,7 +90,7 @@ public:
     // destructor (does nothing)
     virtual ~sc_event_finder();
 
-    virtual const sc_event& find_event() const = 0;
+    virtual const sc_event& find_event( sc_interface* if_p = 0 ) const = 0;
 
 protected:
     
@@ -69,9 +100,9 @@ protected:
     // error reporting
     void report_error( const char* id, const char* add_msg = 0 ) const;
 
-private:
 
-    const sc_port_base& m_port;
+private:
+    const  sc_port_base&    m_port;    // port providing the event.
 
 private:
 
@@ -106,7 +137,7 @@ public:
     virtual ~sc_event_finder_t()
         {}
 
-    virtual const sc_event& find_event() const;
+    virtual const sc_event& find_event( sc_interface* if_p = 0 ) const;
 
 private:
 
@@ -126,11 +157,12 @@ private:
 template <class IF>
 inline
 const sc_event&
-sc_event_finder_t<IF>::find_event() const
+sc_event_finder_t<IF>::find_event( sc_interface* if_p ) const
 {
-    const IF* iface = DCAST<const IF*>( port().get_interface() );
+    const IF* iface = ( if_p ) ? DCAST<const IF*>( if_p ) :
+		                 DCAST<const IF*>( port().get_interface() );
     if( iface == 0 ) {
-	report_error( SC_ID_FIND_EVENT_, "port is not bound" );
+		report_error( SC_ID_FIND_EVENT_, "port is not bound" );
     }
     return (CCAST<IF*>( iface )->*m_event_method) ();
 }

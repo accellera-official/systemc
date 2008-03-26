@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2004 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -65,7 +65,7 @@ SC_MODULE(simple_bus_master_non_blocking)
   {
     // process declaration
     SC_THREAD(main_action);
-    sensitive_pos << clock;
+    sensitive << clock.pos();
   }
   
   // process

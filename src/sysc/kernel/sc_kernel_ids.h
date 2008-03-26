@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -32,6 +32,19 @@
   Description of Modification:
     
  *****************************************************************************/
+
+// $Log: sc_kernel_ids.h,v $
+// Revision 1.5  2006/01/25 00:31:19  acg
+//  Andy Goodrich: Changed over to use a standard message id of
+//  SC_ID_IEEE_1666_DEPRECATION for all deprecation messages.
+//
+// Revision 1.4  2006/01/24 20:49:04  acg
+// Andy Goodrich: changes to remove the use of deprecated features within the
+// simulator, and to issue warning messages when deprecated features are used.
+//
+// Revision 1.3  2006/01/13 18:44:29  acg
+// Added $Log to record CVS changes into the source.
+//
 
 #ifndef SC_KERNEL_IDS_H
 #define SC_KERNEL_IDS_H
@@ -90,8 +103,6 @@ SC_DEFINE_MESSAGE(SC_ID_SET_DEFAULT_TIME_UNIT_       , 515,
 	"set default time unit failed" )
 SC_DEFINE_MESSAGE(SC_ID_DEFAULT_TIME_UNIT_CHANGED_   , 516,
 	"default time unit changed to time resolution" )
-SC_DEFINE_MESSAGE(SC_ID_WAIT_UNTIL_NOT_ALLOWED_      , 518,
-    "wait_until() is only allowed in SC_CTHREADs" )
 SC_DEFINE_MESSAGE(SC_ID_WAIT_NOT_ALLOWED_            , 519,
 	"wait() is only allowed in SC_THREADs and SC_CTHREADs" )
 SC_DEFINE_MESSAGE(SC_ID_NEXT_TRIGGER_NOT_ALLOWED_    , 520,
@@ -101,7 +112,7 @@ SC_DEFINE_MESSAGE(SC_ID_IMMEDIATE_NOTIFICATION_      , 521,
 SC_DEFINE_MESSAGE(SC_ID_HALT_NOT_ALLOWED_            , 522,
 	"halt() is only allowed in SC_CTHREADs" )
 SC_DEFINE_MESSAGE(SC_ID_WATCHING_NOT_ALLOWED_        , 523,
-	"watching() is only allowed in SC_CTHREADs" )
+	"watching() has been deprecated, use reset_signal_is()" )
 SC_DEFINE_MESSAGE(SC_ID_DONT_INITIALIZE_             , 524,
 	"dont_initialize() has no effect for SC_CTHREADs" )
 SC_DEFINE_MESSAGE(SC_ID_WAIT_N_INVALID_              , 525,
@@ -129,8 +140,6 @@ SC_DEFINE_MESSAGE(SC_ID_CYCLE_MISSES_EVENTS_         , 537,
          "the simulation contains timed-events but they are "
          "ignored by sc_cycle() ==> the simulation will be "
 	 "incorrect" )
-SC_DEFINE_MESSAGE(SC_ID_SC_CYCLE_DEPRECATED_         , 540,
-	"sc_cycle is deprecated: use sc_start(...) instead" )
 SC_DEFINE_MESSAGE(SC_ID_MODULE_METHOD_AFTER_START_   , 541,
 	"call to SC_METHOD in sc_module while simulation running" )
 SC_DEFINE_MESSAGE(SC_ID_MODULE_THREAD_AFTER_START_   , 542,
@@ -145,14 +154,20 @@ SC_DEFINE_MESSAGE(SC_ID_SIMULATION_START_AFTER_STOP_  , 546,
 	"sc_start called after sc_stop has been called" ) 
 SC_DEFINE_MESSAGE(SC_ID_STOP_MODE_AFTER_START_        , 547,
 	"attempt to set sc_stop mode  after start will be ignored" ) 
-SC_DEFINE_MESSAGE(SC_ID_WAIT_ON_METHOD_HANDLE_        , 560,
-	"Attempt to wait on process handle associated with method process" ) 
+SC_DEFINE_MESSAGE(SC_ID_METHOD_TERMINATION_EVENT_        , 560,
+	"Attempt to get terminated event for a method process" ) 
 SC_DEFINE_MESSAGE(SC_ID_JOIN_ON_METHOD_HANDLE_        , 561,
 	"Attempt to register method process with sc_join object" ) 
-SC_DEFINE_MESSAGE(SC_ID_SC_INITIALIZE_DEPRECATED_     , 562,
-	"sc_initialize is deprecated: use sc_start(0) instead" )
-SC_DEFINE_MESSAGE(SC_ID_NULL_PROCESS_HANDLE           , 563,
-	"Attempt to set sc_process_handle to null target" )
+SC_DEFINE_MESSAGE(SC_ID_NO_PROCESS_SEMANTICS_         , 563,
+	"Attempt to invoke process with no semantics() method" )
+SC_DEFINE_MESSAGE(SC_ID_EVENT_ON_NULL_PROCESS_         , 564,
+	"Attempt to get an event for non-existent process" )
+SC_DEFINE_MESSAGE(SC_ID_MULTIPLE_RESETS_,         565,
+	"Attempt to set more than one signal as reset for a process" )
+SC_DEFINE_MESSAGE(SC_ID_UNKNOWN_PROCESS_TYPE_,       566,
+	"Unknown process type" )
+SC_DEFINE_MESSAGE(SC_ID_RESET_SIGNAL_IS_NOT_ALLOWED_ , 567,
+	"reset_signal_is() is only allowed for SC_CTHREADs" )
 
 #endif
 

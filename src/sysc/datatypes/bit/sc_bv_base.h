@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -32,6 +32,12 @@
   Description of Modification:
 
  *****************************************************************************/
+
+// $Log: sc_bv_base.h,v $
+// Revision 1.3  2006/01/13 18:53:53  acg
+// Andy Goodrich: added $Log command so that CVS comments are reproduced in
+// the source.
+//
 
 #ifndef SC_BV_BASE_H
 #define SC_BV_BASE_H
@@ -219,16 +225,16 @@ public:
     sc_logic_value_t get_bit( int i ) const;
     void set_bit( int i, sc_logic_value_t value );
 
-    unsigned long get_word( int i ) const
+    sc_digit get_word( int i ) const
 	{ return m_data[i]; }
 
-    void set_word( int i, unsigned long w )
+    void set_word( int i, sc_digit w )
 	{ m_data[i] = w; }
 
-    unsigned long get_cword( int i ) const
-	{ return UL_ZERO; }
+    sc_digit get_cword( int i ) const
+	{ return SC_DIGIT_ZERO; }
 
-    void set_cword( int i, unsigned long w );
+    void set_cword( int i, sc_digit w );
 
     void clean_tail();
 
@@ -240,9 +246,9 @@ public:
 
 protected:
 
-    int            m_len;  // length in bits
-    int            m_size; // size of data array
-    unsigned long* m_data; // data array
+    int     m_len;  // length in bits
+    int     m_size; // size of data array
+    sc_digit* m_data; // data array
 };
 
 
@@ -280,18 +286,18 @@ inline
 sc_logic_value_t
 sc_bv_base::get_bit( int i ) const
 {
-    int wi = i / UL_SIZE;
-    int bi = i % UL_SIZE;
-    return sc_logic_value_t( m_data[wi] >> bi & UL_ONE );
+    int wi = i / SC_DIGIT_SIZE;
+    int bi = i % SC_DIGIT_SIZE;
+    return sc_logic_value_t( m_data[wi] >> bi & SC_DIGIT_ONE );
 }
 
 inline
 void
 sc_bv_base::set_bit( int i, sc_logic_value_t value )
 {
-    int wi = i / UL_SIZE;
-    int bi = i % UL_SIZE;
-    unsigned long mask = UL_ONE << bi;
+    int wi = i / SC_DIGIT_SIZE;
+    int bi = i % SC_DIGIT_SIZE;
+    sc_digit mask = SC_DIGIT_ONE << bi;
     m_data[wi] |= mask; // set bit to 1
     m_data[wi] &= value << bi | ~mask;
 }
@@ -299,7 +305,7 @@ sc_bv_base::set_bit( int i, sc_logic_value_t value )
 
 inline
 void
-sc_bv_base::set_cword( int i, unsigned long w )
+sc_bv_base::set_cword( int i, sc_digit w )
 {
     if( w ) {
 	SC_REPORT_WARNING( sc_core::SC_ID_SC_BV_CANNOT_CONTAIN_X_AND_Z_, 0 );
@@ -312,8 +318,8 @@ void
 sc_bv_base::clean_tail()
 {
     int wi = m_size - 1;
-    int bi = m_len % UL_SIZE;
-	if ( bi != 0 ) m_data[wi] &= ~UL_ZERO >> (UL_SIZE - bi);
+    int bi = m_len % SC_DIGIT_SIZE;
+	if ( bi != 0 ) m_data[wi] &= ~SC_DIGIT_ZERO >> (SC_DIGIT_SIZE - bi);
 }
 
 } // namespace sc_dt

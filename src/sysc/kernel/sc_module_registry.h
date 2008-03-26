@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -36,11 +36,14 @@
 
  *****************************************************************************/
 
+// $Log: sc_module_registry.h,v $
+// Revision 1.3  2006/01/13 18:44:30  acg
+// Added $Log to record CVS changes into the source.
+//
+
 #ifndef SC_MODULE_REGISTRY_H
 #define SC_MODULE_REGISTRY_H
 
-
-#include "sysc/utils/sc_vector.h"
 
 namespace sc_core {
 
@@ -90,8 +93,8 @@ private:
 
 private:
 
-    sc_simcontext*         m_simc;
-    sc_pvector<sc_module*> m_module_vec;
+    sc_simcontext*          m_simc;
+    std::vector<sc_module*> m_module_vec;
 
 private:
 

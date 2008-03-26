@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -34,6 +34,11 @@
  *****************************************************************************/
 
 
+// $Log: sc_signal_resolved_ports.cpp,v $
+// Revision 1.3  2006/01/13 18:47:42  acg
+// Added $Log command so that CVS comments are reproduced in the source.
+//
+
 #include <stdio.h>
 
 #include "sysc/communication/sc_communication_ids.h"
@@ -57,7 +62,7 @@ sc_in_resolved::end_of_elaboration()
     // check if bound channel is a resolved signal
     if( DCAST<sc_signal_resolved*>( get_interface() ) == 0 ) {
 	char msg[BUFSIZ];
-	sprintf( msg, "%s (%s)", name(), kind() );
+	std::sprintf( msg, "%s (%s)", name(), kind() );
 	SC_REPORT_ERROR( SC_ID_RESOLVED_PORT_NOT_BOUND_, msg );
     }
 }
@@ -78,7 +83,7 @@ sc_inout_resolved::end_of_elaboration()
     // check if bound channel is a resolved signal
     if( DCAST<sc_signal_resolved*>( get_interface() ) == 0 ) {
 	char msg[BUFSIZ];
-	sprintf( msg, "%s (%s)", name(), kind() );
+	std::sprintf( msg, "%s (%s)", name(), kind() );
 	SC_REPORT_ERROR( SC_ID_RESOLVED_PORT_NOT_BOUND_, msg );
     }
 }

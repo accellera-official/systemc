@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -33,6 +33,12 @@
 
  *****************************************************************************/
 
+// $Log: scfx_ieee.h,v $
+// Revision 1.3  2006/01/13 18:53:58  acg
+// Andy Goodrich: added $Log command so that CVS comments are reproduced in
+// the source.
+//
+
 #ifndef SCFX_IEEE_H
 #define SCFX_IEEE_H
 
@@ -51,17 +57,6 @@ class scfx_ieee_float;
 
 
 // ----------------------------------------------------------------------------
-//  Little or big endian machine?
-// ----------------------------------------------------------------------------
-
-#if defined( i386 ) || defined(WIN32)
-# define SCFX_LITTLE_ENDIAN
-#elif defined( __ppc__ ) || defined( sparc ) || defined( __hppa )
-# define SCFX_BIG_ENDIAN
-#endif
-
-
-// ----------------------------------------------------------------------------
 //  UNION : ieee_double
 //
 //  IEEE 754 double-precision format.
@@ -74,12 +69,12 @@ union ieee_double
 
     struct
     {
-#if defined( SCFX_BIG_ENDIAN )
+#if defined( SC_BIG_ENDIAN )
         unsigned negative:1;
         unsigned exponent:11;
         unsigned mantissa0:20;
         unsigned mantissa1:32;
-#elif defined( SCFX_LITTLE_ENDIAN )
+#elif defined( SC_LITTLE_ENDIAN )
         unsigned mantissa1:32;
         unsigned mantissa0:20;
         unsigned exponent:11;
@@ -414,11 +409,11 @@ union ieee_float
 
     struct
     {
-#if defined( SCFX_BIG_ENDIAN )
+#if defined( SC_BIG_ENDIAN )
         unsigned negative:1;
         unsigned exponent:8;
         unsigned mantissa:23;
-#elif defined( SCFX_LITTLE_ENDIAN )
+#elif defined( SC_LITTLE_ENDIAN )
         unsigned mantissa:23;
         unsigned exponent:8;
         unsigned negative:1;

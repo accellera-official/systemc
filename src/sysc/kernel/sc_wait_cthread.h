@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -36,6 +36,22 @@
 
 /* 
 $Log: sc_wait_cthread.h,v $
+Revision 1.2  2006/01/03 23:18:45  acg
+Changed copyright to include 2006.
+
+Revision 1.1.1.1  2005/12/19 23:16:44  acg
+First check in of SystemC 2.1 into its own archive.
+
+Revision 1.10  2005/09/02 19:03:30  acg
+Changes for dynamic processes. Removal of lambda support.
+
+Revision 1.9  2005/04/04 00:16:08  acg
+Changes for directory name change to sys from systemc.
+Changes for sc_string going to std::string.
+Changes for sc_pvector going to std::vector.
+Changes for reference pools for bit and part selections.
+Changes for const sc_concatref support.
+
 Revision 1.6  2005/01/10 17:52:20  acg
 Addition of namespace specifications.
 
@@ -50,8 +66,10 @@ Andy Goodrich, Forte Design Systems, Inc.
 #define SC_WAIT_CTHREAD_H
 
 
-#include "sysc/kernel/sc_lambda.h"
 #include "sysc/kernel/sc_simcontext.h"
+#include "sysc/datatypes/bit/sc_logic.h"
+#include "sysc/communication/sc_signal_ifs.h"
+
 
 namespace sc_core 
 {
@@ -67,20 +85,6 @@ extern
 void
 wait( int,
       sc_simcontext* = sc_get_curr_simcontext() );
-
-
-extern
-void
-wait_until( const sc_lambda_ptr&,
-	    sc_simcontext* = sc_get_curr_simcontext() );
-
-inline
-void
-wait_until( const sc_signal_bool_deval& s,
-	    sc_simcontext* simc = sc_get_curr_simcontext() )
-{
-    wait_until( sc_lambda_ptr( s ), simc );
-}
 
 
 extern
@@ -105,44 +109,6 @@ at_negedge( const sc_signal_in_if<sc_dt::sc_logic>&,
 
 
 
-inline
-void
-watching( const sc_lambda_ptr& lambda,
-	  sc_simcontext* simc = sc_get_curr_simcontext() )
-{
-    (*simc->m_watching_fn)( lambda, simc );
-}
-
-inline
-void
-watching( const sc_signal_bool_deval& s,
-	  sc_simcontext* simc = sc_get_curr_simcontext() )
-{
-    (*simc->m_watching_fn)( sc_lambda_ptr( s ), simc );
-}
-
-
-extern
-void
-__open_watching( sc_cthread_handle );
-
-extern
-void
-__close_watching( sc_cthread_handle );
-
-extern
-int
-__watch_level( sc_cthread_handle );
-
-extern
-void
-__watching_first( sc_cthread_handle );
-
-extern
-void
-__sanitycheck_watchlists( sc_cthread_handle );
-
-
 class sc_watch
 {
 public:
@@ -154,12 +120,10 @@ public:
         sc_curr_proc_handle cpi = simc->get_curr_proc_info();
         assert( SC_CTHREAD_PROC_ == cpi->kind );
         cthread_h = RCAST<sc_cthread_handle>( cpi->process_handle );
-        __open_watching( cthread_h );
     }
 
     ~sc_watch()
     {
-        __close_watching( cthread_h );
     }
 };
 

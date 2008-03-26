@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -38,6 +38,16 @@
 
  *****************************************************************************/
 
+// $Log: sc_sensitive.h,v $
+// Revision 1.4  2006/04/11 23:13:21  acg
+//   Andy Goodrich: Changes for reduced reset support that only includes
+//   sc_cthread, but has preliminary hooks for expanding to method and thread
+//   processes also.
+//
+// Revision 1.3  2006/01/13 18:44:30  acg
+// Added $Log to record CVS changes into the source.
+//
+
 #ifndef SC_SENSITIVE_H
 #define SC_SENSITIVE_H
 
@@ -50,6 +60,7 @@ namespace sc_dt
 
 namespace sc_core {
 
+class sc_process_handle;
 class sc_event;
 class sc_event_finder;
 class sc_interface;
@@ -91,8 +102,11 @@ private:
 public:
 
     // changing between process handles
+    sc_sensitive& operator << ( sc_process_handle );
+#if 0
     sc_sensitive& operator << ( sc_method_handle );
     sc_sensitive& operator << ( sc_thread_handle );
+#endif // 0
 
     sc_sensitive& operator () ( const sc_event& );
     sc_sensitive& operator () ( const sc_interface& );
@@ -114,7 +128,7 @@ public:
 
     static void make_static_sensitivity( sc_process_b*, const sc_event& );
     static void make_static_sensitivity( sc_process_b*, const sc_interface& );
-    static void make_static_sensitivity( sc_process_b*, const sc_port_base& );
+    static void make_static_sensitivity( sc_process_b*, const sc_port_base&);
     static void make_static_sensitivity( sc_process_b*, sc_event_finder& );
 
     void reset();
@@ -123,7 +137,7 @@ private:
 
     sc_module*                                m_module;
     enum { SC_NONE_, SC_METHOD_, SC_THREAD_ } m_mode;
-    sc_process_b*                             m_handle;
+    sc_process_b*                          m_handle;
 
 private:
 
@@ -166,6 +180,7 @@ private:
 public:
 
     // changing between process handles
+    sc_sensitive_pos& operator << ( sc_process_handle );
     sc_sensitive_pos& operator << ( sc_method_handle );
     sc_sensitive_pos& operator << ( sc_thread_handle );
 
@@ -189,7 +204,7 @@ private:
 
     sc_module*                                m_module;
     enum { SC_NONE_, SC_METHOD_, SC_THREAD_ } m_mode;
-    sc_process_b*                             m_handle;
+    sc_process_b*                          m_handle;
 
 private:
 
@@ -231,6 +246,7 @@ private:
 public:
 
     // changing between process handles
+    sc_sensitive_neg& operator << ( sc_process_handle );
     sc_sensitive_neg& operator << ( sc_method_handle );
     sc_sensitive_neg& operator << ( sc_thread_handle );
 
@@ -254,7 +270,7 @@ private:
 
     sc_module*                                m_module;
     enum { SC_NONE_, SC_METHOD_, SC_THREAD_ } m_mode;
-    sc_process_b*                             m_handle;
+    sc_process_b*                          m_handle;
 
 private:
 

@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -33,6 +33,16 @@
 
  *****************************************************************************/
 
+// $Log: sc_context.h,v $
+// Revision 1.4  2006/03/21 00:00:31  acg
+//   Andy Goodrich: changed name of sc_get_current_process_base() to be
+//   sc_get_current_process_b() since its returning an sc_process_b instance.
+//
+// Revision 1.3  2006/01/13 18:53:57  acg
+// Andy Goodrich: added $Log command so that CVS comments are reproduced in
+// the source.
+//
+
 #ifndef SC_CONTEXT_H
 #define SC_CONTEXT_H
 
@@ -41,11 +51,11 @@
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/utils/sc_hash.h"
 
-
 namespace sc_core {
 	class sc_process_b;
 }
 
+using sc_core::default_ptr_hash_fn;
 
 namespace sc_dt
 {
@@ -91,7 +101,7 @@ private:
 
     sc_core::sc_phash<const sc_core::sc_process_b*,const T*> m_map;
     const sc_core::sc_process_b*                             m_proc;
-    const T*                                                 m_value_ptr;
+    const T*                                                    m_value_ptr;
 
 };
 
@@ -119,7 +129,7 @@ template <class T>
 class sc_context
 {
     sc_context( const sc_context<T>& );
-    void* operator new( size_t );
+    void* operator new( std::size_t );
 
 public:
 
@@ -156,7 +166,8 @@ template <class T>
 inline
 sc_global<T>::sc_global()
 : m_proc( 
-	reinterpret_cast<const sc_core::sc_process_b*>( -1 ) ), m_value_ptr( 0 )
+	reinterpret_cast<const sc_core::sc_process_b*>( -1 ) ), 
+	m_value_ptr( 0 )
 {}
 
 
@@ -165,7 +176,7 @@ inline
 void
 sc_global<T>::update()
 {
-    const sc_core::sc_process_b* p = sc_core::sc_get_curr_process_handle();
+    const sc_core::sc_process_b* p = sc_core::sc_get_current_process_b();
     if( p != m_proc )
     {
         const T* vp = m_map[p];
@@ -223,10 +234,11 @@ sc_context<T>::sc_context( const sc_context<T>& )
 template <class T>
 inline
 void*
-sc_context<T>::operator new( size_t )
+sc_context<T>::operator new( std::size_t )
 {
     // this method should never be called
     SC_REPORT_FATAL( sc_core::SC_ID_INTERNAL_ERROR_, "should never be called" );
+    return (void*)0;
 }
 
 

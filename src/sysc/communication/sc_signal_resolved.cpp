@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -34,6 +34,15 @@
  *****************************************************************************/
 
 
+// $Log: sc_signal_resolved.cpp,v $
+// Revision 1.4  2006/03/21 00:00:27  acg
+//   Andy Goodrich: changed name of sc_get_current_process_base() to be
+//   sc_get_current_process_b() since its returning an sc_process_b instance.
+//
+// Revision 1.3  2006/01/13 18:47:42  acg
+// Added $Log command so that CVS comments are reproduced in the source.
+//
+
 #include "sysc/communication/sc_signal_resolved.h"
 
 namespace sc_core {
@@ -62,7 +71,7 @@ sc_logic_resolution_tbl[4][4] =
 
 void
 sc_logic_resolve::resolve( sc_dt::sc_logic& result_,
-			   const sc_pvector<sc_dt::sc_logic*>& values_ )
+			   const std::vector<sc_dt::sc_logic*>& values_ )
 {
     int sz = values_.size();
 
@@ -102,7 +111,7 @@ sc_signal_resolved::~sc_signal_resolved()
 void
 sc_signal_resolved::write( const data_type& value_ )
 {
-    sc_process_b* cur_proc = sc_get_curr_process_handle();
+    sc_process_b* cur_proc = sc_get_current_process_b();
 
     bool value_changed = false;
     bool found = false;

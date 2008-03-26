@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2004 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -51,7 +51,7 @@ void simple_bus_master_non_blocking::main_action()
 	wait();
       if (bus_port->get_status(m_unique_priority) == SIMPLE_BUS_ERROR)
 	sb_fprintf(stdout, "%g %s : ERROR cannot read from %x\n",
-		   sc_simulation_time(), name(), addr);
+		   sc_time_stamp().to_double(), name(), addr);
 
       mydata += cnt;
       cnt++;
@@ -62,7 +62,7 @@ void simple_bus_master_non_blocking::main_action()
 	wait();
       if (bus_port->get_status(m_unique_priority) == SIMPLE_BUS_ERROR)
 	sb_fprintf(stdout, "%g %s : ERROR cannot write to %x\n",
-		   sc_simulation_time(), name(), addr);
+		   sc_time_stamp().to_double(), name(), addr);
  
       wait(m_timeout, SC_NS);
       wait(); // ... for the next rising clock edge

@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -74,7 +74,6 @@
 #include "sysc/datatypes/int/sc_uint_base.h"
 #include "sysc/datatypes/fx/fx.h"
 #include "sysc/tracing/sc_wif_trace.h"
-#include "sysc/utils/sc_string.h"
 
 namespace sc_core {
 
@@ -133,17 +132,17 @@ wif_trace::print_variable_declaration_line( FILE* f )
     char buf[2000];
 
     if( bit_width < 0 ) {
-        sprintf( buf, "Traced object \"%s\" has < 0 Bits, cannot be traced.",
+        std::sprintf( buf, "Traced object \"%s\" has < 0 Bits, cannot be traced.",
 	      name.c_str() );
-        wif_put_error_message( buf, false );
+        put_error_message( buf, false );
     } else {
-        fprintf( f, "declare  %s   \"%s\"  %s  ",
+        std::fprintf( f, "declare  %s   \"%s\"  %s  ",
 	    wif_name.c_str(), name.c_str(), wif_type );
 	if( bit_width > 0 ) {
-	    fprintf( f, "0 %d ", bit_width - 1 );
+	    std::fprintf( f, "0 %d ", bit_width - 1 );
 	}
-	fprintf( f, "variable ;\n" );
-	fprintf( f, "start_trace %s ;\n", wif_name.c_str() );
+	std::fprintf( f, "variable ;\n" );
+	std::fprintf( f, "start_trace %s ;\n", wif_name.c_str() );
     }
 }
 
@@ -222,7 +221,7 @@ void wif_uint64_trace::write(FILE* f)
         }
     }
     buf[bitindex] = '\0';
-    fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf); 
+    std::fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf); 
     old_value = object;
 }
 
@@ -288,7 +287,7 @@ void wif_int64_trace::write(FILE* f)
         }
     }
     buf[bitindex] = '\0';
-    fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf); 
+    std::fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf); 
     old_value = object;
 }
 
@@ -332,9 +331,9 @@ void
 wif_bool_trace::write( FILE* f )
 {
     if( object == true ) {
-	fprintf( f, "assign %s \'1\' ;\n", wif_name.c_str() );
+	std::fprintf( f, "assign %s \'1\' ;\n", wif_name.c_str() );
     } else {
-	fprintf( f, "assign %s \'0\' ;\n", wif_name.c_str() );
+	std::fprintf( f, "assign %s \'0\' ;\n", wif_name.c_str() );
     }
     old_value = object;
 }
@@ -372,9 +371,9 @@ bool wif_sc_bit_trace::changed()
 void wif_sc_bit_trace::write(FILE* f)
 {
     if (object == true) {
-        fprintf(f, "assign %s \'1\' ;\n", wif_name.c_str());
+        std::fprintf(f, "assign %s \'1\' ;\n", wif_name.c_str());
     } else {
-	fprintf(f, "assign %s \'0\' ;\n", wif_name.c_str());
+	std::fprintf(f, "assign %s \'0\' ;\n", wif_name.c_str());
     }
     old_value = object;
 }
@@ -415,10 +414,10 @@ bool wif_sc_logic_trace::changed()
 void wif_sc_logic_trace::write(FILE* f)
 {
     char wif_char;
-    fprintf(f, "assign %s \'", wif_name.c_str());
+    std::fprintf(f, "assign %s \'", wif_name.c_str());
     wif_char = map_sc_logic_state_to_wif_state(object.to_char());
-    fputc(wif_char, f); 
-    fprintf(f,"\' ;\n");
+    std::fputc(wif_char, f); 
+    std::fprintf(f,"\' ;\n");
     old_value = object;
 }
 
@@ -463,7 +462,7 @@ void wif_sc_unsigned_trace::write(FILE* f)
         *buf_ptr++ = "01"[(object)[bitindex]];
     }
     *buf_ptr = '\0';
-    fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf); 
+    std::fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf); 
     old_value = object;
 }
 
@@ -514,7 +513,7 @@ void wif_sc_signed_trace::write(FILE* f)
     }
     *buf_ptr = '\0';
 
-    fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf); 
+    std::fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf); 
     old_value = object;
 }
 
@@ -564,7 +563,7 @@ void wif_sc_uint_base_trace::write(FILE* f)
         *buf_ptr++ = "01"[(object)[bitindex]];
     }
     *buf_ptr = '\0';
-    fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf); 
+    std::fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf); 
     old_value = object;
 }
 
@@ -615,7 +614,7 @@ void wif_sc_int_base_trace::write(FILE* f)
     }
     *buf_ptr = '\0';
 
-    fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf); 
+    std::fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf); 
     old_value = object;
 }
 
@@ -664,7 +663,7 @@ wif_sc_fxval_trace::changed()
 void
 wif_sc_fxval_trace::write( FILE* f )
 {
-    fprintf( f, "assign  %s %f ; \n", wif_name.c_str(), object.to_double() );
+    std::fprintf( f, "assign  %s %f ; \n", wif_name.c_str(), object.to_double() );
     old_value = object;
 }
 
@@ -708,7 +707,7 @@ wif_sc_fxval_fast_trace::changed()
 void
 wif_sc_fxval_fast_trace::write( FILE* f )
 {
-    fprintf( f, "assign  %s %f ; \n", wif_name.c_str(), object.to_double() );
+    std::fprintf( f, "assign  %s %f ; \n", wif_name.c_str(), object.to_double() );
     old_value = object;
 }
 
@@ -764,7 +763,7 @@ wif_sc_fxnum_trace::write( FILE* f )
     }
     *buf_ptr = '\0';
 
-    fprintf( f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf );
+    std::fprintf( f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf );
     old_value = object;
 }
 
@@ -827,7 +826,7 @@ wif_sc_fxnum_fast_trace::write( FILE* f )
     }
     *buf_ptr = '\0';
 
-    fprintf( f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf );
+    std::fprintf( f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf );
     old_value = object;
 }
 
@@ -898,7 +897,7 @@ void wif_unsigned_int_trace::write(FILE* f)
         }
     }
     buf[bitindex] = '\0';
-    fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf); 
+    std::fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf); 
     old_value = object;
 }
 
@@ -965,7 +964,7 @@ void wif_unsigned_short_trace::write(FILE* f)
         }
     }
     buf[bitindex] = '\0';
-    fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf); 
+    std::fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf); 
     old_value = object;
 }
 
@@ -1030,7 +1029,7 @@ void wif_unsigned_char_trace::write(FILE* f)
         }
     }
     buf[bitindex] = '\0';
-    fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf); 
+    std::fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf); 
     old_value = object;
 }
 
@@ -1095,7 +1094,7 @@ void wif_unsigned_long_trace::write(FILE* f)
         }
     }
     buf[bitindex] = '\0';
-    fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf); 
+    std::fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf); 
     old_value = object;
 }
 
@@ -1160,7 +1159,7 @@ void wif_signed_int_trace::write(FILE* f)
         }
     }
     buf[bitindex] = '\0';
-    fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf); 
+    std::fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf); 
     old_value = object;
 }
 
@@ -1225,7 +1224,7 @@ void wif_signed_short_trace::write(FILE* f)
         }
     }
     buf[bitindex] = '\0';
-    fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf); 
+    std::fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf); 
     old_value = object;
 }
 
@@ -1290,7 +1289,7 @@ void wif_signed_char_trace::write(FILE* f)
         }
     }
     buf[bitindex] = '\0';
-    fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf); 
+    std::fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf); 
     old_value = object;
 }
 
@@ -1354,7 +1353,7 @@ void wif_signed_long_trace::write(FILE* f)
         }
     }
     buf[bitindex] = '\0';
-    fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf); 
+    std::fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf); 
     old_value = object;
 }
 
@@ -1391,7 +1390,7 @@ bool wif_float_trace::changed()
 
 void wif_float_trace::write(FILE* f)
 {
-    fprintf(f,"assign  %s %f ; \n", wif_name.c_str(), object);
+    std::fprintf(f,"assign  %s %f ; \n", wif_name.c_str(), object);
     old_value = object;
 }
 
@@ -1427,7 +1426,7 @@ bool wif_double_trace::changed()
 
 void wif_double_trace::write(FILE* f)
 {
-    fprintf(f,"assign  %s %f ; \n", wif_name.c_str(), object);
+    std::fprintf(f,"assign  %s %f ; \n", wif_name.c_str(), object);
     old_value = object;
 }
 
@@ -1474,16 +1473,16 @@ wif_enum_trace::wif_enum_trace(const unsigned& object_,
 
 void wif_enum_trace::print_variable_declaration_line(FILE* f)
 {
-    fprintf(f, "type scalar \"%s\" enum ", wif_type);
+    std::fprintf(f, "type scalar \"%s\" enum ", wif_type);
 
     for (unsigned i = 0; i < nliterals; i++)
-      fprintf(f, "\"%s\", ", literals[i]);
-    fprintf(f, "\"SC_WIF_UNDEF\" ;\n");
+      std::fprintf(f, "\"%s\", ", literals[i]);
+    std::fprintf(f, "\"SC_WIF_UNDEF\" ;\n");
 
-    fprintf(f, "declare  %s   \"%s\"  \"%s\" ",
+    std::fprintf(f, "declare  %s   \"%s\"  \"%s\" ",
 	    wif_name.c_str(), name.c_str(), wif_type);
-    fprintf(f, "variable ;\n");
-    fprintf(f, "start_trace %s ;\n", wif_name.c_str());
+    std::fprintf(f, "variable ;\n");
+    std::fprintf(f, "start_trace %s ;\n", wif_name.c_str());
 }
 
 bool wif_enum_trace::changed()
@@ -1498,15 +1497,15 @@ void wif_enum_trace::write(FILE* f)
 
     if (object >= nliterals) { // Note unsigned value is always greater than 0
         if (!warning_issued) {
-	    sprintf(buf, "Tracing error: Value of enumerated type undefined");
-	    wif_put_error_message(buf, false);
+	    std::sprintf(buf, "Tracing error: Value of enumerated type undefined");
+	    put_error_message(buf, false);
 	    warning_issued = true;
 	}
-	fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(),
+	std::fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(),
 		"SC_WIF_UNDEF");
     }
     else 
-        fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(),
+        std::fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(),
 		literals[object]);
     old_value = object;
 }
@@ -1534,7 +1533,7 @@ public:
 
     void write( FILE* f )
     {
-       fprintf( f,
+       std::fprintf( f,
 		"assign %s \"%s\" ;\n",
 		wif_name.c_str(),
 		object.to_string().c_str() );
@@ -1590,28 +1589,28 @@ void wif_trace_file::initialize()
     char buf[2000];
 
     // init
-    fprintf(fp, "init ;\n\n");
+    std::fprintf(fp, "init ;\n\n");
 
     //timescale:
-    if     (timescale_unit == 1e-15) sprintf(buf,"0");
-    else if(timescale_unit == 1e-14) sprintf(buf,"1");
-    else if(timescale_unit == 1e-13) sprintf(buf,"2");
-    else if(timescale_unit == 1e-12) sprintf(buf,"3");
-    else if(timescale_unit == 1e-11) sprintf(buf,"4");
-    else if(timescale_unit == 1e-10) sprintf(buf,"5");
-    else if(timescale_unit == 1e-9)  sprintf(buf,"6");
-    else if(timescale_unit == 1e-8)  sprintf(buf,"7");
-    else if(timescale_unit == 1e-7)  sprintf(buf,"8");
-    else if(timescale_unit == 1e-6)  sprintf(buf,"9");
-    else if(timescale_unit == 1e-5)  sprintf(buf,"10");
-    else if(timescale_unit == 1e-4)  sprintf(buf,"11");
-    else if(timescale_unit == 1e-3)  sprintf(buf,"12");
-    else if(timescale_unit == 1e-2)  sprintf(buf,"13");
-    else if(timescale_unit == 1e-1)  sprintf(buf,"14");
-    else if(timescale_unit == 1e0)   sprintf(buf,"15");
-    else if(timescale_unit == 1e1)   sprintf(buf,"16");
-    else if(timescale_unit == 1e2)   sprintf(buf,"17");
-    fprintf(fp,"header  %s \"%s\" ;\n\n", buf, sc_version());
+    if     (timescale_unit == 1e-15) std::sprintf(buf,"0");
+    else if(timescale_unit == 1e-14) std::sprintf(buf,"1");
+    else if(timescale_unit == 1e-13) std::sprintf(buf,"2");
+    else if(timescale_unit == 1e-12) std::sprintf(buf,"3");
+    else if(timescale_unit == 1e-11) std::sprintf(buf,"4");
+    else if(timescale_unit == 1e-10) std::sprintf(buf,"5");
+    else if(timescale_unit == 1e-9)  std::sprintf(buf,"6");
+    else if(timescale_unit == 1e-8)  std::sprintf(buf,"7");
+    else if(timescale_unit == 1e-7)  std::sprintf(buf,"8");
+    else if(timescale_unit == 1e-6)  std::sprintf(buf,"9");
+    else if(timescale_unit == 1e-5)  std::sprintf(buf,"10");
+    else if(timescale_unit == 1e-4)  std::sprintf(buf,"11");
+    else if(timescale_unit == 1e-3)  std::sprintf(buf,"12");
+    else if(timescale_unit == 1e-2)  std::sprintf(buf,"13");
+    else if(timescale_unit == 1e-1)  std::sprintf(buf,"14");
+    else if(timescale_unit == 1e0)   std::sprintf(buf,"15");
+    else if(timescale_unit == 1e1)   std::sprintf(buf,"16");
+    else if(timescale_unit == 1e2)   std::sprintf(buf,"17");
+    std::fprintf(fp,"header  %s \"%s\" ;\n\n", buf, sc_version());
 
     //date:
     time_t long_time;
@@ -1619,12 +1618,12 @@ void wif_trace_file::initialize()
     struct tm* p_tm;
     p_tm = localtime(&long_time);
     strftime(buf, 199, "%b %d, %Y       %H:%M:%S", p_tm);
-    fprintf(fp, "comment \"ASCII WIF file produced on date:  %s\" ;\n", buf);
+    std::fprintf(fp, "comment \"ASCII WIF file produced on date:  %s\" ;\n", buf);
  
     //version:
-    fprintf(fp, "comment \"Created by %s\" ;\n", sc_version());
+    std::fprintf(fp, "comment \"Created by %s\" ;\n", sc_version());
     //conversion info
-    fprintf(fp, "comment \"Convert this file to binary WIF format using a2wif\" ;\n\n");
+    std::fprintf(fp, "comment \"Convert this file to binary WIF format using a2wif\" ;\n\n");
 
 
     running_regression = ( getenv( "SYSTEMC_REGRESSION" ) != NULL );
@@ -1634,13 +1633,13 @@ void wif_trace_file::initialize()
     }
 
     // Define the two types we need to represent bool and sc_logic
-    fprintf(fp, "type scalar \"BIT\" enum '0', '1' ;\n");
-    fprintf(fp, "type scalar \"MVL\" enum '0', '1', 'X', 'Z', '?' ;\n");
-    fprintf(fp, "\n");
+    std::fprintf(fp, "type scalar \"BIT\" enum '0', '1' ;\n");
+    std::fprintf(fp, "type scalar \"MVL\" enum '0', '1', 'X', 'Z', '?' ;\n");
+    std::fprintf(fp, "\n");
 
     //variable definitions:
     int i;
-    for (i = 0; i < traces.size(); i++) {
+    for (i = 0; i < (int)traces.size(); i++) {
         wif_trace* t = traces[i];
         t->set_width(); //needed for all vectors
         t->print_variable_declaration_line(fp);
@@ -1650,7 +1649,7 @@ void wif_trace_file::initialize()
     previous_time = inittime/timescale_unit;
 
     // Dump all values at initial time
-    sprintf(buf,
+    std::sprintf(buf,
             "All initial values are dumped below at time "
             "%g sec = %g timescale units.",
             inittime,
@@ -1662,55 +1661,11 @@ void wif_trace_file::initialize()
 			    &previous_time_units_high,
 			    &previous_time_units_low );
 
-    for (i = 0; i < traces.size(); i++) {
+    for (i = 0; i < (int)traces.size(); i++) {
         wif_trace* t = traces[i];
         t->write(fp);
     }
 }
-
-
-void wif_trace_file::sc_set_wif_time_unit(int exponent10_seconds)
-{
-    if(initialized){
-        wif_put_error_message("WIF trace timescale unit cannot be changed once tracing has begun.\n"
-                              "To change the scale, create a new trace file.",
-                              false);
-        return;
-    }
-
-    if(exponent10_seconds < -15 || exponent10_seconds >  2){
-        wif_put_error_message(
-	    "set_wif_time_unit() has valid exponent range -15...+2.", false);
-        return;
-    }
-
-    if     (exponent10_seconds == -15) timescale_unit = 1e-15;
-    else if(exponent10_seconds == -14) timescale_unit = 1e-14;
-    else if(exponent10_seconds == -13) timescale_unit = 1e-13;
-    else if(exponent10_seconds == -12) timescale_unit = 1e-12;
-    else if(exponent10_seconds == -11) timescale_unit = 1e-11;
-    else if(exponent10_seconds == -10) timescale_unit = 1e-10;
-    else if(exponent10_seconds ==  -9) timescale_unit = 1e-9;
-    else if(exponent10_seconds ==  -8) timescale_unit = 1e-8;
-    else if(exponent10_seconds ==  -7) timescale_unit = 1e-7;
-    else if(exponent10_seconds ==  -6) timescale_unit = 1e-6;
-    else if(exponent10_seconds ==  -5) timescale_unit = 1e-5;
-    else if(exponent10_seconds ==  -4) timescale_unit = 1e-4;
-    else if(exponent10_seconds ==  -3) timescale_unit = 1e-3;
-    else if(exponent10_seconds ==  -2) timescale_unit = 1e-2;
-    else if(exponent10_seconds ==  -1) timescale_unit = 1e-1;
-    else if(exponent10_seconds ==   0) timescale_unit = 1e0;
-    else if(exponent10_seconds ==   1) timescale_unit = 1e1;
-    else if(exponent10_seconds ==   2) timescale_unit = 1e2;
-
-    char buf[200];
-    sprintf(buf,
-	    "Note: WIF trace timescale unit is set by user to 1e%d sec.\n",
-	    exponent10_seconds);
-    ::std::cout << buf << ::std::flush;
-    timescale_set_by_user = true;
-}
-
 
 // ----------------------------------------------------------------------------
 
@@ -1719,7 +1674,7 @@ void                                                                          \
 wif_trace_file::trace( const tp& object_, const std::string& name_ )     \
 {                                                                             \
     if( initialized ) {                                                       \
-        wif_put_error_message(                                                \
+        put_error_message(                                                \
 	    "No traces can be added once simulation has started.\n"           \
             "To add traces, create a new wif trace file.", false );           \
     }                                                                         \
@@ -1740,7 +1695,7 @@ void                                                                          \
 wif_trace_file::trace(const sc_dt::tp& object_, const std::string& name_)\
 {                                                                             \
     if( initialized ) {                                                       \
-        wif_put_error_message(                                                \
+        put_error_message(                                                \
 	    "No traces can be added once simulation has started.\n"               \
             "To add traces, create a new wif trace file.", false );           \
     }                                                                         \
@@ -1774,7 +1729,7 @@ wif_trace_file::trace( const tp&        object_,                              \
                        int              width_ )                              \
 {                                                                             \
     if( initialized ) {                                                       \
-        wif_put_error_message(                                                \
+        put_error_message(                                                \
 	    "No traces can be added once simulation has started.\n"           \
             "To add traces, create a new wif trace file.", false );           \
     }                                                                         \
@@ -1793,7 +1748,7 @@ wif_trace_file::trace( const unsigned tp& object_,                            \
                        int                width_ )                            \
 {                                                                             \
     if( initialized ) {                                                       \
-        wif_put_error_message(                                                \
+        put_error_message(                                                \
 	    "No traces can be added once simulation has started.\n"           \
             "To add traces, create a new wif trace file.", false );           \
     }                                                                         \
@@ -1826,7 +1781,7 @@ wif_trace_file::trace( const sc_dt::tp& object_,                              \
                        int                width_ )                            \
 {                                                                             \
     if( initialized ) {                                                       \
-        wif_put_error_message(                                                \
+        put_error_message(                                                \
 	    "No traces can be added once simulation has started.\n"           \
             "To add traces, create a new wif trace file.", false );           \
     }                                                                         \
@@ -1848,7 +1803,7 @@ wif_trace_file::trace( const unsigned& object_,
 		       const char** enum_literals_ )
 {
     if( initialized ) {
-        wif_put_error_message(
+        put_error_message(
 	    "No traces can be added once simulation has started.\n"
 	    "To add traces, create a new wif trace file.", false );
     }
@@ -1879,7 +1834,7 @@ void
 wif_trace_file::write_comment(const std::string& comment)
 {
     //no newline in comments allowed
-    fprintf(fp, "comment \"%s\" ;\n", comment.c_str());
+    std::fprintf(fp, "comment \"%s\" ;\n", comment.c_str());
 }
 
 
@@ -1920,17 +1875,17 @@ wif_trace_file::cycle(bool this_is_a_delta_cycle)
     // than 2^32 delta cycles - seems realistic
     
     bool time_printed = false;
-    wif_trace* const* const l_traces = traces.raw_data();
-    for (int i = 0; i < traces.size(); i++) {
+    wif_trace* const* const l_traces = &traces[0];
+    for (int i = 0; i < (int)traces.size(); i++) {
         wif_trace* t = l_traces[i];
         if(t->changed()){
             if(time_printed == false){
                 if(delta_units_high){
-                    fprintf(fp, "delta_time %u%09u ;\n", delta_units_high,
+                    std::fprintf(fp, "delta_time %u%09u ;\n", delta_units_high,
 			    delta_units_low);
                 }
                 else{ 
-                    fprintf(fp, "delta_time %u ;\n", delta_units_low);
+                    std::fprintf(fp, "delta_time %u ;\n", delta_units_low);
                 }
                 time_printed = true;
             }
@@ -1941,7 +1896,7 @@ wif_trace_file::cycle(bool this_is_a_delta_cycle)
     }
 
     if(time_printed) {
-        fprintf(fp, "\n");     // Put another newline
+        std::fprintf(fp, "\n");     // Put another newline
 	// We update previous_time_units only when we print time because
 	// this field stores the previous time that was printed, not the
 	// previous time this function was called
@@ -1956,7 +1911,7 @@ void
 wif_trace_file::create_wif_name(std::string* ptr_to_str)
 {
     char buf[50];
-    sprintf(buf,"O%d", wif_name_index);
+    std::sprintf(buf,"O%d", wif_name_index);
     *ptr_to_str = buf; 
     wif_name_index++;
 }
@@ -1965,7 +1920,7 @@ std::string
 wif_trace_file::obtain_new_index()
 {
     char buf[32];
-    sprintf( buf, "O%d", wif_name_index ++ );
+    std::sprintf( buf, "O%d", wif_name_index ++ );
     return std::string( buf );
 }
 
@@ -1973,7 +1928,7 @@ wif_trace_file::obtain_new_index()
 wif_trace_file::~wif_trace_file()
 {
     int i;
-    for (i = 0; i < traces.size(); i++) {
+    for (i = 0; i < (int)traces.size(); i++) {
         wif_trace* t = traces[i];
         delete t;
     }
@@ -2011,9 +1966,10 @@ map_sc_logic_state_to_wif_state(char in_char)
 }
 
 
+#if 0
 // no output should be done directly to ::std::cout, cerr, etc.
 void
-wif_put_error_message(const char* msg, bool just_warning)
+put_error_message(const char* msg, bool just_warning)
 {
     if(just_warning){
 	::std::cout << "WIF Trace Warning:\n" << msg << "\n" << ::std::endl;
@@ -2022,6 +1978,7 @@ wif_put_error_message(const char* msg, bool just_warning)
 	::std::cout << "WIF Trace ERROR:\n" << msg << "\n" << ::std::endl;
     }
 }
+#endif // 0
 
 // Create the trace file
 sc_trace_file*

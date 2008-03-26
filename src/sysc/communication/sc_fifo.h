@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -32,6 +32,28 @@
   Description of Modification:
     
  *****************************************************************************/
+//$Log: sc_fifo.h,v $
+//Revision 1.4  2006/01/24 20:46:31  acg
+//Andy Goodrich: changes to eliminate use of deprecated features. For instance,
+//using notify(SC_ZERO_TIME) in place of notify_delayed().
+//
+//Revision 1.3  2006/01/13 20:41:59  acg
+//Andy Goodrich: Changes to add port registration to the things that are
+//checked when SC_NO_WRITE_CHECK is not defined.
+//
+//Revision 1.2  2006/01/03 23:18:26  acg
+//Changed copyright to include 2006.
+//
+//Revision 1.1.1.1  2005/12/19 23:16:43  acg
+//First check in of SystemC 2.1 into its own archive.
+//
+//Revision 1.12  2005/09/15 23:01:51  acg
+//Added std:: prefix to appropriate methods and types to get around
+//issues with the Edison Front End.
+//
+//Revision 1.11  2005/06/10 22:43:55  acg
+//Added CVS change log annotation.
+//
 
 #ifndef SC_FIFO_H
 #define SC_FIFO_H
@@ -284,11 +306,11 @@ inline
 void
 sc_fifo<T>::trace( sc_trace_file* tf ) const
 {
-#ifdef DEBUG_SYSTEMC
+#if defined(DEBUG_SYSTEMC)
     char buf[32];
     std::string nm = name();
     for( int i = 0; i < m_size; ++ i ) {
-	sprintf( buf, "_%d", i );
+	std::sprintf( buf, "_%d", i );
 	sc_trace( tf, m_buf[i], nm + buf );
     }
 #endif
@@ -333,11 +355,11 @@ void
 sc_fifo<T>::update()
 {
     if( m_num_read > 0 ) {
-	m_data_read_event.notify_delayed();
+	m_data_read_event.notify(SC_ZERO_TIME);
     }
 
     if( m_num_written > 0 ) {
-	m_data_written_event.notify_delayed();
+	m_data_written_event.notify(SC_ZERO_TIME);
     }
 
     m_num_readable = m_size - m_free;

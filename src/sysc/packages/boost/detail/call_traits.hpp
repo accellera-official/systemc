@@ -1,10 +1,9 @@
 //  (C) Copyright Steve Cleary, Beman Dawes, Howard Hinnant & John Maddock 2000.
-//  Permission to copy, use, modify, sell and
-//  distribute this software is granted provided this copyright notice appears
-//  in all copies. This software is provided "as is" without express or implied
-//  warranty, and with no claim as to its suitability for any purpose.
-
-//  See http://www.boost.org for most recent version including documentation.
+//  Use, modification and distribution are subject to the Boost Software License,
+//  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+//  http://www.boost.org/LICENSE_1_0.txt).
+//
+//  See http://www.boost.org/libs/utility for most recent version including documentation.
 
 // call_traits: defines typedefs for function usage
 // (see libs/utility/call_traits.htm)
@@ -22,13 +21,11 @@
 #ifndef BOOST_CONFIG_HPP
 #include <sysc/packages/boost/config.hpp>
 #endif
+#include <cstddef>
 
-#ifndef BOOST_ARITHMETIC_TYPE_TRAITS_HPP
-#include <sysc/packages/boost/type_traits/arithmetic_traits.hpp>
-#endif
-#ifndef BOOST_COMPOSITE_TYPE_TRAITS_HPP
-#include <sysc/packages/boost/type_traits/composite_traits.hpp>
-#endif
+#include <sysc/packages/boost/type_traits/is_arithmetic.hpp>
+#include <sysc/packages/boost/type_traits/is_pointer.hpp>
+#include <sysc/packages/boost/detail/workaround.hpp>
 
 namespace boost{
 
@@ -95,7 +92,7 @@ struct call_traits<T&>
    typedef T& param_type;  // hh removed const
 };
 
-#if defined(__BORLANDC__) && (__BORLANDC__ <= 0x560)
+#if BOOST_WORKAROUND( __BORLANDC__,  BOOST_TESTED_AT( 0x570 ) )
 // these are illegal specialisations; cv-qualifies applied to
 // references have no effect according to [8.3.2p1],
 // C++ Builder requires them though as it treats cv-qualified
@@ -125,7 +122,7 @@ struct call_traits<T&const volatile>
    typedef T& param_type;  // hh removed const
 };
 #endif
-#ifndef __SUNPRO_CC
+#if !defined(BOOST_NO_ARRAY_TYPE_SPECIALIZATIONS)
 template <typename T, std::size_t N>
 struct call_traits<T [N]>
 {

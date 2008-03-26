@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -33,6 +33,11 @@
 
  *****************************************************************************/
 
+// $Log: sc_time.h,v $
+// Revision 1.3  2006/01/13 18:44:30  acg
+// Added $Log to record CVS changes into the source.
+//
+
 #ifndef SC_TIME_H
 #define SC_TIME_H
 
@@ -45,6 +50,15 @@
 namespace sc_core {
 
 class sc_simcontext;
+
+// friend operator declarations
+
+    const sc_time operator + ( const sc_time&, const sc_time& );
+    const sc_time operator - ( const sc_time&, const sc_time& );
+    const sc_time operator * ( const sc_time&, double );
+    const sc_time operator * ( double, const sc_time& );
+    const sc_time operator / ( const sc_time&, double );
+    double        operator / ( const sc_time&, const sc_time& );
 
 
 // ----------------------------------------------------------------------------
@@ -127,7 +141,7 @@ public:
 
     // print function
 
-    void print( ::std::ostream& ) const;
+    void print( ::std::ostream& os = std::cout ) const;
 
 private:
 

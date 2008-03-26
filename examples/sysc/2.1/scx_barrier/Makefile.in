@@ -94,7 +94,9 @@ CXX_FILES = \
 	main.cpp 
 
 
-H_FILES = 
+H_FILES = \
+	scx_barrier.h
+
 
 check_PROGRAMS = scx_barrier
 TESTS = $(check_PROGRAMS) 
@@ -130,6 +132,11 @@ CXXLD = $(CXX)
 CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) \
 	-o $@
 CXXFLAGS = @CXXFLAGS@
+CFLAGS = @CFLAGS@
+COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+CCLD = $(CC)
+LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 DIST_SOURCES = $(scx_barrier_SOURCES)
 DIST_COMMON = Makefile.am Makefile.in
 SOURCES = $(scx_barrier_SOURCES)

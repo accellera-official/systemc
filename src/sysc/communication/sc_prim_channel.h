@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -34,13 +34,26 @@
   Description of Modification: phase callbacks
     
  *****************************************************************************/
+//$Log: sc_prim_channel.h,v $
+//Revision 1.2  2006/01/03 23:18:26  acg
+//Changed copyright to include 2006.
+//
+//Revision 1.1.1.1  2005/12/19 23:16:43  acg
+//First check in of SystemC 2.1 into its own archive.
+//
+//Revision 1.10  2005/07/30 03:44:11  acg
+//Changes from 2.1.
+//
+//Revision 1.9  2005/06/10 22:43:55  acg
+//Added CVS change log annotation.
+//
 
 #ifndef SC_PRIM_CHANNEL_H
 #define SC_PRIM_CHANNEL_H
 
 #include "sysc/kernel/sc_object.h"
 #include "sysc/kernel/sc_wait.h"
-#include "sysc/utils/sc_vector.h"
+#include "sysc/kernel/sc_wait_cthread.h"
 
 namespace sc_core {
 
@@ -56,14 +69,16 @@ class sc_prim_channel
     friend class sc_prim_channel_registry;
 
 public:
+    enum { list_end = 0xdb };
+public:
     virtual const char* kind() const
         { return "sc_prim_channel"; }
 
     inline bool update_requested() 
-	{ return m_update_requested; }
+	{ return m_update_next_p != (sc_prim_channel*)list_end; }
 
-    // request the update method (to be executed during the update phase)
-    void request_update();
+    // request the update method to be executed during the update phase
+    inline void request_update();
 
 
 protected:
@@ -93,7 +108,6 @@ protected:
 protected:
 
     // to avoid calling sc_get_curr_simcontext()
-
 
     // static sensitivity for SC_THREADs and SC_CTHREADs
 
@@ -135,6 +149,9 @@ protected:
 
     void wait( double v, sc_time_unit tu, sc_event_and_list& el )
         { sc_core::wait( sc_time( v, tu, simcontext() ), el, simcontext() ); }
+
+    void wait( int n )
+        { sc_core::wait( n, simcontext() ); }
 
 
     // static sensitivity for SC_METHODs
@@ -187,6 +204,12 @@ protected:
     bool timed_out()
 	{ return sc_core::timed_out( simcontext() ); }
 
+
+    // delta count maintenance
+
+    sc_dt::uint64 delta_count()
+	{ return simcontext()->m_delta_count; }
+
 private:
 
     // called during the update phase of a delta cycle (if requested)
@@ -210,9 +233,8 @@ private:
 
 private:
 
-    sc_prim_channel_registry* m_registry;
-
-    bool m_update_requested;
+    sc_prim_channel_registry* m_registry;      // Update list manager.
+    sc_prim_channel*          m_update_next_p; // Next entry in update list.
 };
 
 
@@ -232,10 +254,11 @@ public:
     void insert( sc_prim_channel& );
     void remove( sc_prim_channel& );
 
+
     int size() const
         { return m_prim_channel_vec.size(); }
 
-    void request_update( sc_prim_channel& );
+    inline void request_update( sc_prim_channel& );
 
 private:
 
@@ -246,7 +269,7 @@ private:
     ~sc_prim_channel_registry();
 
     // called during the update phase of a delta cycle
-    void perform_update();
+    inline void perform_update();
 
     // called when construction is done
     void construction_done();
@@ -267,16 +290,49 @@ private:
 
 private:
 
-    sc_simcontext*               m_simc;
-    sc_pvector<sc_prim_channel*> m_prim_channel_vec;
+    sc_simcontext*                m_simc;
+    std::vector<sc_prim_channel*> m_prim_channel_vec;
 
-    sc_prim_channel** m_update_array;
-    int               m_update_size;
-    int               m_update_last;
+    sc_prim_channel*              m_update_list_p;
 };
 
 
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
+
+// ----------------------------------------------------------------------------
+//  CLASS : sc_prim_channel_registry
+//
+//  Registry for all primitive channels.
+//  FOR INTERNAL USE ONLY!
+// ----------------------------------------------------------------------------
+
+inline
+void
+sc_prim_channel_registry::request_update( sc_prim_channel& prim_channel_ )
+{
+    prim_channel_.m_update_next_p = m_update_list_p;
+    m_update_list_p = &prim_channel_;
+}
+
+
+// called during the update phase of a delta cycle
+
+inline
+void
+sc_prim_channel_registry::perform_update()
+{
+    sc_prim_channel* next_p; // Next update to perform.
+    sc_prim_channel* now_p;  // Update now performing.
+
+    now_p = m_update_list_p;
+    m_update_list_p = (sc_prim_channel*)sc_prim_channel::list_end;
+    for ( ; now_p != (sc_prim_channel*)sc_prim_channel::list_end; 
+    	now_p = next_p )
+    {
+        next_p = now_p->m_update_next_p;
+	now_p->perform_update();
+    }
+}
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_prim_channel
@@ -290,9 +346,8 @@ inline
 void
 sc_prim_channel::request_update()
 {
-    if( ! m_update_requested ) {
+    if( ! m_update_next_p ) {
 	m_registry->request_update( *this );
-	m_update_requested = true;
     }
 }
 
@@ -304,36 +359,9 @@ void
 sc_prim_channel::perform_update()
 {
     update();
-    m_update_requested = false;
+    m_update_next_p = 0;
 }
 
-
-// ----------------------------------------------------------------------------
-//  CLASS : sc_prim_channel_registry
-//
-//  Registry for all primitive channels.
-//  FOR INTERNAL USE ONLY!
-// ----------------------------------------------------------------------------
-
-inline
-void
-sc_prim_channel_registry::request_update( sc_prim_channel& prim_channel_ )
-{
-    m_update_array[++ m_update_last] = &prim_channel_;
-}
-
-
-// called during the update phase of a delta cycle
-
-inline
-void
-sc_prim_channel_registry::perform_update()
-{
-    for( int i = m_update_last; i >= 0; -- i ) {
-	m_update_array[i]->perform_update();
-    }
-    m_update_last = -1;
-}
 
 } // namespace sc_core
 

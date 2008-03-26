@@ -95,7 +95,7 @@ INCLUDES = -I$(top_srcdir)/src
 MAIN_LIBRARY = libsystemc.a
 
 H_FILES = \
-    systemc \
+	systemc \
 	systemc.h
 
 

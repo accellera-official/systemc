@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -34,6 +34,16 @@
  *****************************************************************************/
 
 
+// $Log: sc_bv_base.cpp,v $
+// Revision 1.4  2006/04/11 23:12:26  acg
+//   Andy Goodrich: Fixed bug in parsing of extended string constants like
+//   0bus1110011.
+//
+// Revision 1.3  2006/01/13 18:53:53  acg
+// Andy Goodrich: added $Log command so that CVS comments are reproduced in
+// the source.
+//
+
 #include "sysc/datatypes/bit/sc_bit_ids.h"
 #include "sysc/datatypes/bit/sc_bv_base.h"
 #include "sysc/datatypes/fx/sc_fix.h"
@@ -58,10 +68,10 @@ sc_bv_base::init( int length_, bool init_value )
     }
     // allocate memory for the data and control words
     m_len = length_;
-    m_size = (m_len - 1) / UL_SIZE + 1;
-    m_data = new unsigned long[m_size];
+    m_size = (m_len - 1) / SC_DIGIT_SIZE + 1;
+    m_data = new sc_digit[m_size];
     // initialize the bits to 'init_value'
-    unsigned long dw = init_value ? ~UL_ZERO : UL_ZERO;
+    sc_digit dw = init_value ? ~SC_DIGIT_ZERO : SC_DIGIT_ZERO;
     int sz = m_size;
     for( int i = 0; i < sz; ++ i ) {
 	m_data[i] = dw;
@@ -115,7 +125,7 @@ sc_bv_base::sc_bv_base( const char* a, int length_ )
 sc_bv_base::sc_bv_base( const sc_bv_base& a )
     : m_len( a.m_len ),
       m_size( a.m_size ),
-      m_data( new unsigned long[m_size] )
+      m_data( new sc_digit[m_size] )
 {
     // copy the bits
     int sz = m_size;
@@ -158,7 +168,7 @@ sc_bv_base::operator <<= ( int n )
 {
     if( n < 0 ) {
 	char msg[BUFSIZ];
-	sprintf( msg,
+	std::sprintf( msg,
 		 "left shift operation is only allowed with positive "
 		 "shift values, shift value = %d", n );
 	SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
@@ -166,13 +176,13 @@ sc_bv_base::operator <<= ( int n )
     int sz = m_size;
     if( n >= m_len ) {
 	for( int i = 0; i < sz; ++ i ) {
-	    m_data[i] = UL_ZERO;
+	    m_data[i] = SC_DIGIT_ZERO;
 	}
 	// clean_tail();
 	return *this;
     }
-    int wn = n / UL_SIZE;
-    int bn = n % UL_SIZE;
+    int wn = n / SC_DIGIT_SIZE;
+    int bn = n % SC_DIGIT_SIZE;
     if( wn != 0 ) {
 	// shift words
 	int i = sz - 1;
@@ -180,14 +190,14 @@ sc_bv_base::operator <<= ( int n )
 	    m_data[i] = m_data[i - wn];
 	}
 	for( ; i >= 0; -- i ) {
-	    m_data[i] = UL_ZERO;
+	    m_data[i] = SC_DIGIT_ZERO;
 	}
     }
     if( bn != 0 ) {
 	// shift bits
 	for( int i = sz - 1; i >= 1; -- i ) {
 	    m_data[i] <<= bn;
-	    m_data[i] |= m_data[i - 1] >> (UL_SIZE - bn);
+	    m_data[i] |= m_data[i - 1] >> (SC_DIGIT_SIZE - bn);
 	}
 	m_data[0] <<= bn;
     }
@@ -203,7 +213,7 @@ sc_bv_base::operator >>= ( int n )
 {
     if( n < 0 ) {
 	char msg[BUFSIZ];
-	sprintf( msg,
+	std::sprintf( msg,
 		 "right shift operation is only allowed with positive "
 		 "shift values, shift value = %d", n );
 	SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
@@ -211,13 +221,13 @@ sc_bv_base::operator >>= ( int n )
     int sz = m_size;
     if( n >= m_len ) {
 	for( int i = 0; i < sz; ++ i ) {
-	    m_data[i] = UL_ZERO;
+	    m_data[i] = SC_DIGIT_ZERO;
 	}
 	// clean_tail();
 	return *this;
     }
-    int wn = n / UL_SIZE;
-    int bn = n % UL_SIZE;
+    int wn = n / SC_DIGIT_SIZE;
+    int bn = n % SC_DIGIT_SIZE;
     if( wn != 0 ) {
 	// shift words
 	int i = 0;
@@ -225,14 +235,14 @@ sc_bv_base::operator >>= ( int n )
 	    m_data[i] = m_data[i + wn];
 	}
 	for( ; i < sz; ++ i ) {
-	    m_data[i] = UL_ZERO;
+	    m_data[i] = SC_DIGIT_ZERO;
 	}
     }
     if( bn != 0 ) {
 	// shift bits
 	for( int i = 0; i < (sz - 1); ++ i ) {
 	    m_data[i] >>= bn;
-	    m_data[i] |= m_data[i + 1] << (UL_SIZE - bn);
+	    m_data[i] |= m_data[i + 1] << (SC_DIGIT_SIZE - bn);
 	}
 	m_data[sz - 1] >>= bn;
     }
@@ -248,7 +258,7 @@ sc_bv_base::lrotate( int n )
 {
     if( n < 0 ) {
 	char msg[BUFSIZ];
-	sprintf( msg,
+	std::sprintf( msg,
 		 "left rotate operation is only allowed with positive "
 		 "rotate values, rotate value = %d", n );
 	SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
@@ -267,7 +277,7 @@ sc_bv_base::rrotate( int n )
 {
     if( n < 0 ) {
 	char msg[BUFSIZ];
-	sprintf( msg,
+	std::sprintf( msg,
 		 "right rotate operation is only allowed with positive "
 		 "rotate values, rotate value = %d", n );
 	SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
@@ -292,10 +302,12 @@ convert_to_bin( const char* s )
     //         because this is seen as a hexadecimal encoding prefix!
 
     if( s == 0 ) {
-	SC_REPORT_ERROR(sc_core::SC_ID_CANNOT_CONVERT_, "character string is zero" );
+	SC_REPORT_ERROR(sc_core::SC_ID_CANNOT_CONVERT_, 
+	    "character string is zero" );
     }
     if( *s == 0 ) {
-	SC_REPORT_ERROR(sc_core::SC_ID_CANNOT_CONVERT_, "character string is empty");
+	SC_REPORT_ERROR(sc_core::SC_ID_CANNOT_CONVERT_, 
+	    "character string is empty");
     }
 
     int n = strlen( s );
@@ -307,14 +319,18 @@ convert_to_bin( const char* s )
     {
         if (s[i+1] == 'b' || s[i+1] == 'B' )
 	{
-	    std::string str( &s[2] );
-	    str += "F";
-	    return str;
+	    if ( s[i+2] == '0' || s[i+2] == '1' )
+	    {
+		std::string str( &s[2] );
+	        str += "F";
+	        return str;
+	    }
 	}
-        else if ( s[i+1] == 'c' || s[i+1] == 'C' ||
-	          s[i+1] == 'd' || s[i+1] == 'D' ||
-	          s[i+1] == 'o' || s[i+1] == 'O' ||
-	          s[i+1] == 'x' || s[i+1] == 'X') 
+        if ( s[i+1] == 'b' || s[i+1] == 'B' ||
+	     s[i+1] == 'c' || s[i+1] == 'C' ||
+	     s[i+1] == 'd' || s[i+1] == 'D' ||
+	     s[i+1] == 'o' || s[i+1] == 'O' ||
+	     s[i+1] == 'x' || s[i+1] == 'X') 
         {
 	    try {
 		// worst case length = n * 4
@@ -329,7 +345,7 @@ convert_to_bin( const char* s )
 		return std::string( p );
 	    } catch( sc_core::sc_report ) {
 		char msg[BUFSIZ];
-		sprintf( msg, "character string '%s' is not valid", s );
+		std::sprintf( msg, "character string '%s' is not valid", s );
 		SC_REPORT_ERROR( sc_core::SC_ID_CANNOT_CONVERT_, msg );
 		// never reached
 		return std::string();

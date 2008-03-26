@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -32,6 +32,16 @@
   Description of Modification:
     
  *****************************************************************************/
+//$Log: sc_semaphore.h,v $
+//Revision 1.2  2006/01/03 23:18:26  acg
+//Changed copyright to include 2006.
+//
+//Revision 1.1.1.1  2005/12/19 23:16:43  acg
+//First check in of SystemC 2.1 into its own archive.
+//
+//Revision 1.9  2005/06/10 22:43:55  acg
+//Added CVS change log annotation.
+//
 
 #ifndef SC_SEMAPHORE_H
 #define SC_SEMAPHORE_H
@@ -92,8 +102,8 @@ protected:
 
 protected:
 
-    int      m_value;  // current value of the semaphore
-    sc_event m_free;
+    sc_event m_free;        // event to block on when m_value is negative
+    int      m_value;       // current value of the semaphore
 
 private:
 

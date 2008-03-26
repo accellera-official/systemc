@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -41,6 +41,12 @@
 
  *****************************************************************************/
 
+// $Log: sc_proxy.h,v $
+// Revision 1.3  2006/01/13 18:53:53  acg
+// Andy Goodrich: added $Log command so that CVS comments are reproduced in
+// the source.
+//
+
 #ifndef SC_PROXY_H
 #define SC_PROXY_H
 
@@ -75,11 +81,11 @@ template <class X, class Y> class sc_concref_r;
 template <class X, class Y> class sc_concref;
 
 
-const int UL_SIZE = BITS_PER_BYTE * sizeof( unsigned long );
+const int SC_DIGIT_SIZE = BITS_PER_BYTE * sizeof( sc_digit );
 
-const unsigned long UL_ZERO = 0ul;
-const unsigned long UL_ONE  = 1ul;
-const unsigned long UL_TWO  = 2ul;
+const sc_digit SC_DIGIT_ZERO = (sc_digit)0;
+const sc_digit SC_DIGIT_ONE  = (sc_digit)1;
+const sc_digit SC_DIGIT_TWO  = (sc_digit)2;
 
 
 // assignment functions; forward declarations
@@ -90,9 +96,7 @@ void
 assign_p_( sc_proxy<X>& px, const sc_proxy<Y>& py );
 
 // Vector types that are not derived from sc_proxy must have a length()
-// function and an operator []. The vector argument type must support
-// accessing bits that are beyond the msb. The vector argument type
-// decides what to do there (e.g. sign extension or zero padding).
+// function and an operator []. 
 
 template <class X, class T>
 inline
@@ -154,14 +158,12 @@ public:
     X& assign_( const sc_int_base& a )
 	{ return assign_( (int64) a ); }
 
+    X& assign_( unsigned int a );
+    X& assign_( int a );
+
     X& assign_( unsigned long a );
+
     X& assign_( long a );
-
-    X& assign_( unsigned int a )
-	{ return assign_( (unsigned long) a ); }
-
-    X& assign_( int a )
-	{ return assign_( (long) a ); }
 
     X& assign_( uint64 a );
     X& assign_( int64 a );
@@ -425,7 +427,7 @@ public:
     int to_signed() const
 	{ return to_int(); }
 
-    unsigned to_unsigned() const
+    sc_digit to_unsigned() const
 	{ return to_uint(); }
 
 #endif
@@ -450,7 +452,7 @@ protected:
     void check_bounds( int n ) const;  // check if bit n accessible
     void check_wbounds( int n ) const; // check if word n accessible
 
-    unsigned long to_anything_unsigned() const;
+    sc_digit to_anything_unsigned() const;
     int64 to_anything_signed() const;
 };
 
@@ -628,7 +630,7 @@ DECL_REL_OP_T(int64)
 template <class X>
 inline
 void
-get_words_( const X& x, int wi, unsigned long& x_dw, unsigned long& x_cw )
+get_words_( const X& x, int wi, sc_digit& x_dw, sc_digit& x_cw )
 {
     x_dw = x.get_word( wi );
     x_cw = x.get_cword( wi );
@@ -637,7 +639,7 @@ get_words_( const X& x, int wi, unsigned long& x_dw, unsigned long& x_cw )
 template <class X>
 inline
 void
-set_words_( X& x, int wi, unsigned long x_dw, unsigned long x_cw )
+set_words_( X& x, int wi, sc_digit x_dw, sc_digit x_cw )
 {
     x.set_word( wi, x_dw );
     x.set_cword( wi, x_cw );
@@ -649,9 +651,9 @@ void
 extend_sign_w_( X& x, int wi, bool sign )
 {
     int sz = x.size();
-    unsigned long sgn = (sign ? ~UL_ZERO : UL_ZERO);
+    unsigned int sgn = (sign ? ~SC_DIGIT_ZERO : SC_DIGIT_ZERO);
     for( int i = wi; i < sz; ++ i ) {
-	set_words_( x, i, sgn, UL_ZERO );
+	set_words_( x, i, sgn, SC_DIGIT_ZERO );
     }
 }
 
@@ -678,7 +680,8 @@ assign_p_( sc_proxy<X>& px, const sc_proxy<Y>& py )
     }
 }
 
-// Vector types that are not derived from sc_proxy must have a length()
+// Vector types that are not derived from sc_proxy, sc_int_base,
+// sc_uint_base, sc_signed, or sc_unsigned, must have a length()
 // function and an operator []. The vector argument type must support
 // accessing bits that are beyond the msb. The vector argument type
 // decides what to do there (e.g. sign extension or zero padding).
@@ -689,9 +692,89 @@ void
 assign_v_( sc_proxy<X>& px, const T& a )
 {
     X& x = px.back_cast();
-    int len = x.length();
-    for( int i = 0 ; i < len; ++ i ) {
+    int i;
+    int len_x = x.length();
+    int len_a = a.length();
+    if ( len_a > len_x ) len_a = len_x;
+    for( i = 0 ; i < len_a; ++ i ) {
         x.set_bit( i, sc_logic_value_t( (bool) a[i] ) );
+    }
+    for( ; i < len_x; ++ i ) {
+        x.set_bit( i, sc_logic_value_t( false ) );
+    }
+}
+
+template <class X>
+inline
+void
+assign_v_( sc_proxy<X>& px, const sc_int_base& a )
+{
+    X& x = px.back_cast();
+	int i;
+    bool sign = a < 0;
+    int len_x = x.length();
+    int len_a = a.length();
+    if ( len_a > len_x ) len_a = len_x;
+    for( i = 0 ; i < len_a; ++ i ) {
+        x.set_bit( i, sc_logic_value_t( (bool) a[i] ) );
+    }
+    for( ; i < len_x; ++ i ) {
+        x.set_bit( i, sc_logic_value_t( sign ) );
+    }
+}
+
+template <class X>
+inline
+void
+assign_v_( sc_proxy<X>& px, const sc_signed& a )
+{
+    X& x = px.back_cast();
+	int i;
+    bool sign = a < 0;
+    int len_x = x.length();
+    int len_a = a.length();
+    if ( len_a > len_x ) len_a = len_x;
+    for( i = 0 ; i < len_a; ++ i ) {
+        x.set_bit( i, sc_logic_value_t( (bool) a[i] ) );
+    }
+    for( ; i < len_x; ++ i ) {
+        x.set_bit( i, sc_logic_value_t( sign ) );
+    }
+}
+
+template <class X>
+inline
+void
+assign_v_( sc_proxy<X>& px, const sc_uint_base& a )
+{
+    X& x = px.back_cast();
+	int i;
+    int len_x = x.length();
+    int len_a = a.length();
+    if ( len_a > len_x ) len_a = len_x;
+    for( i = 0 ; i < len_a; ++ i ) {
+        x.set_bit( i, sc_logic_value_t( (bool) a[i] ) );
+    }
+    for( ; i < len_x; ++ i ) {
+        x.set_bit( i, sc_logic_value_t( false ) );
+    }
+}
+
+template <class X>
+inline
+void
+assign_v_( sc_proxy<X>& px, const sc_unsigned& a )
+{
+    X& x = px.back_cast();
+	int i;
+    int len_x = x.length();
+    int len_a = a.length();
+    if ( len_a > len_x ) len_a = len_x;
+    for( i = 0 ; i < len_a; ++ i ) {
+        x.set_bit( i, sc_logic_value_t( (bool) a[i] ) );
+    }
+    for( ; i < len_x; ++ i ) {
+        x.set_bit( i, sc_logic_value_t( false ) );
     }
 }
 
@@ -711,7 +794,7 @@ sc_proxy<X>::assign_( const char* a )
     int i = 0;
     for( ; i < min_len; ++ i ) {
 	char c = s[s_len - i - 1];
-	x.set_bit( i, sc_logic::char_to_logic[(unsigned int)c] );
+	x.set_bit( i, sc_logic::char_to_logic[(int)c] );
     }
     // if formatted, fill the rest with sign(s), otherwise fill with zeros
     sc_logic_value_t fill = (s[s_len] == 'F' ? sc_logic_value_t( s[0] - '0' )
@@ -753,10 +836,10 @@ sc_proxy<X>::assign_( const sc_logic* a )
 template <class X>
 inline
 X&
-sc_proxy<X>::assign_( unsigned long a )
+sc_proxy<X>::assign_( unsigned int a )
 {
     X& x = back_cast();
-    set_words_( x, 0, a, UL_ZERO );
+    set_words_( x, 0, (sc_digit)a, SC_DIGIT_ZERO );
     // extend with zeros
     extend_sign_w_( x, 1, false );
     x.clean_tail();
@@ -766,27 +849,91 @@ sc_proxy<X>::assign_( unsigned long a )
 template <class X>
 inline
 X&
-sc_proxy<X>::assign_( long a )
+sc_proxy<X>::assign_( int a )
 {
     X& x = back_cast();
-    set_words_( x, 0, (unsigned long) a, UL_ZERO );
+    set_words_( x, 0, (sc_digit) a, SC_DIGIT_ZERO );
     // extend with sign(a)
     extend_sign_w_( x, 1, (a < 0) );
     x.clean_tail();
     return x;
 }
 
+#if defined(SC_LONG_64)
+	template <class X>
+	inline
+	X&
+	sc_proxy<X>::assign_( unsigned long a )
+	{
+		X& x = back_cast();
+		set_words_( x, 0, ((sc_digit) a & ~SC_DIGIT_ZERO), SC_DIGIT_ZERO );
+		if( x.size() > 1 ) {
+			set_words_( x, 1,
+				((sc_digit) (a >> SC_DIGIT_SIZE) & ~SC_DIGIT_ZERO),
+					SC_DIGIT_ZERO );
+		// extend with zeros
+		extend_sign_w_( x, 2, false );
+		}
+		x.clean_tail();
+		return x;
+	}
+
+	template <class X>
+	inline
+	X&
+	sc_proxy<X>::assign_( long a )
+	{
+		X& x = back_cast();
+		set_words_( x, 0, ((sc_digit) a & ~SC_DIGIT_ZERO), SC_DIGIT_ZERO );
+		if( x.size() > 1 ) {
+			set_words_( x, 1,
+				((sc_digit) ((uint64) a >> SC_DIGIT_SIZE) & ~SC_DIGIT_ZERO),
+				SC_DIGIT_ZERO );
+		// extend with sign(a)
+		extend_sign_w_( x, 2, (a < 0) );
+		}
+		x.clean_tail();
+		return x;
+	}
+
+#else
+    template <class X>
+    inline
+    X&
+    sc_proxy<X>::assign_( unsigned long a )
+    {
+        X& x = back_cast();
+        set_words_( x, 0, (sc_digit)a, SC_DIGIT_ZERO );
+        // extend with zeros
+        extend_sign_w_( x, 1, false );
+        x.clean_tail();
+        return x;
+    }
+
+    template <class X>
+    inline
+    X&
+    sc_proxy<X>::assign_( long a )
+    {
+        X& x = back_cast();
+        set_words_( x, 0, (sc_digit) a, SC_DIGIT_ZERO );
+        // extend with sign(a)
+        extend_sign_w_( x, 1, (a < 0) );
+        x.clean_tail();
+        return x;
+    }
+#endif
 template <class X>
 inline
 X&
 sc_proxy<X>::assign_( uint64 a )
 {
     X& x = back_cast();
-    set_words_( x, 0, ((unsigned long) a & ~UL_ZERO), UL_ZERO );
+    set_words_( x, 0, ((sc_digit) a & ~SC_DIGIT_ZERO), SC_DIGIT_ZERO );
     if( x.size() > 1 ) {
 	set_words_( x, 1,
-		    ((unsigned long) (a >> UL_SIZE) & ~UL_ZERO),
-		    UL_ZERO );
+		    ((sc_digit) (a >> SC_DIGIT_SIZE) & ~SC_DIGIT_ZERO),
+		    SC_DIGIT_ZERO );
 	// extend with zeros
 	extend_sign_w_( x, 2, false );
     }
@@ -800,11 +947,11 @@ X&
 sc_proxy<X>::assign_( int64 a )
 {
     X& x = back_cast();
-    set_words_( x, 0, ((unsigned long) a & ~UL_ZERO), UL_ZERO );
+    set_words_( x, 0, ((sc_digit) a & ~SC_DIGIT_ZERO), SC_DIGIT_ZERO );
     if( x.size() > 1 ) {
 	set_words_( x, 1,
-		    ((unsigned long) ((uint64) a >> UL_SIZE) & ~UL_ZERO),
-		    UL_ZERO );
+		    ((sc_digit) ((uint64) a >> SC_DIGIT_SIZE) & ~SC_DIGIT_ZERO),
+		    SC_DIGIT_ZERO );
 	// extend with sign(a)
 	extend_sign_w_( x, 2, (a < 0) );
     }
@@ -825,7 +972,7 @@ sc_proxy<X>::b_not()
     X& x = back_cast();
     int sz = x.size();
     for( int i = 0; i < sz; ++ i ) {
-	unsigned long x_dw, x_cw;
+	sc_digit x_dw, x_cw;
 	get_words_( x, i, x_dw, x_cw );
 	x.set_word( i, x_cw | ~x_dw );
     }
@@ -846,11 +993,11 @@ b_and_assign_( sc_proxy<X>& px, const sc_proxy<Y>& py )
     assert( x.length() == y.length() );
     int sz = x.size();
     for( int i = 0; i < sz; ++ i ) {
-	unsigned long x_dw, x_cw, y_dw, y_cw;
+	sc_digit x_dw, x_cw, y_dw, y_cw;
 	get_words_( x, i, x_dw, x_cw );
 	get_words_( y, i, y_dw, y_cw );
-	unsigned long cw = x_dw & y_cw | x_cw & y_dw | x_cw & y_cw;
-	unsigned long dw = cw | x_dw & y_dw;
+	sc_digit cw = x_dw & y_cw | x_cw & y_dw | x_cw & y_cw;
+	sc_digit dw = cw | x_dw & y_dw;
 	set_words_( x, i, dw, cw );
     }
     // tail cleaning not needed
@@ -870,11 +1017,11 @@ b_or_assign_( sc_proxy<X>& px, const sc_proxy<Y>& py )
     assert( x.length() == y.length() );
     int sz = x.size();
     for( int i = 0; i < sz; ++ i ) {
-	unsigned long x_dw, x_cw, y_dw, y_cw;
+	sc_digit x_dw, x_cw, y_dw, y_cw;
 	get_words_( x, i, x_dw, x_cw );
 	get_words_( y, i, y_dw, y_cw );
-	unsigned long cw = x_cw & y_cw | x_cw & ~y_dw | ~x_dw & y_cw;
-	unsigned long dw = cw | x_dw | y_dw;
+	sc_digit cw = x_cw & y_cw | x_cw & ~y_dw | ~x_dw & y_cw;
+	sc_digit dw = cw | x_dw | y_dw;
 	set_words_( x, i, dw, cw );
     }
     // tail cleaning not needed
@@ -894,11 +1041,11 @@ b_xor_assign_( sc_proxy<X>& a, const sc_proxy<Y>& b )
     assert( x.length() == y.length() );
     int sz = x.size();
     for( int i = 0; i < sz; ++ i ) {
-	unsigned long x_dw, x_cw, y_dw, y_cw;
+	sc_digit x_dw, x_cw, y_dw, y_cw;
 	get_words_( x, i, x_dw, x_cw );
 	get_words_( y, i, y_dw, y_cw );
-	unsigned long cw = x_cw | y_cw;
-	unsigned long dw = cw | x_dw ^ y_dw;
+	sc_digit cw = x_cw | y_cw;
+	sc_digit dw = cw | x_dw ^ y_dw;
 	set_words_( x, i, dw, cw );
     }
     // tail cleaning not needed
@@ -916,7 +1063,7 @@ sc_proxy<X>::operator <<= ( int n )
     X& x = back_cast();
     if( n < 0 ) {
 	char msg[BUFSIZ];
-	sprintf( msg,
+	std::sprintf( msg,
 		 "left shift operation is only allowed with positive "
 		 "shift values, shift value = %d", n );
 	SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
@@ -927,8 +1074,8 @@ sc_proxy<X>::operator <<= ( int n )
 	return x;
     }
     int sz = x.size();
-    int wn = n / UL_SIZE;
-    int bn = n % UL_SIZE;
+    int wn = n / SC_DIGIT_SIZE;
+    int bn = n % SC_DIGIT_SIZE;
     if( wn != 0 ) {
 	// shift words
 	int i = sz - 1;
@@ -936,21 +1083,21 @@ sc_proxy<X>::operator <<= ( int n )
 	    set_words_( x, i, x.get_word( i - wn ), x.get_cword( i - wn ) );
 	}
 	for( ; i >= 0; -- i ) {
-	    set_words_( x, i, UL_ZERO, UL_ZERO );
+	    set_words_( x, i, SC_DIGIT_ZERO, SC_DIGIT_ZERO );
 	}
     }
     if( bn != 0 ) {
 	// shift bits
 	for( int i = sz - 1; i >= 1; -- i ) {
-	    unsigned long x_dw, x_cw;
+	    sc_digit x_dw, x_cw;
 	    get_words_( x, i, x_dw, x_cw );
 	    x_dw <<= bn;
-	    x_dw |= x.get_word( i - 1 ) >> (UL_SIZE - bn);
+	    x_dw |= x.get_word( i - 1 ) >> (SC_DIGIT_SIZE - bn);
 	    x_cw <<= bn;
-	    x_cw |= x.get_cword( i - 1 ) >> (UL_SIZE - bn);
+	    x_cw |= x.get_cword( i - 1 ) >> (SC_DIGIT_SIZE - bn);
 	    set_words_( x, i, x_dw, x_cw );
 	}
-	unsigned long x_dw, x_cw;
+	sc_digit x_dw, x_cw;
 	get_words_( x, 0, x_dw, x_cw );
 	x_dw <<= bn;
 	x_cw <<= bn;
@@ -972,7 +1119,7 @@ sc_proxy<X>::operator >>= ( int n )
     X& x = back_cast();
     if( n < 0 ) {
 	char msg[BUFSIZ];
-	sprintf( msg,
+	std::sprintf( msg,
 		 "right shift operation is only allowed with positive "
 		 "shift values, shift value = %d", n );
 	SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
@@ -983,8 +1130,8 @@ sc_proxy<X>::operator >>= ( int n )
 	return x;
     }
     int sz = x.size();
-    int wn = n / UL_SIZE;
-    int bn = n % UL_SIZE;
+    int wn = n / SC_DIGIT_SIZE;
+    int bn = n % SC_DIGIT_SIZE;
     if( wn != 0 ) {
 	// shift words
 	int i = 0;
@@ -992,21 +1139,21 @@ sc_proxy<X>::operator >>= ( int n )
 	    set_words_( x, i, x.get_word( i + wn ), x.get_cword( i + wn ) );
 	}
 	for( ; i < sz; ++ i ) {
-	    set_words_( x, i, UL_ZERO, UL_ZERO );
+	    set_words_( x, i, SC_DIGIT_ZERO, SC_DIGIT_ZERO );
 	}
     }
     if( bn != 0 ) {
 	// shift bits
 	for( int i = 0; i < (sz - 1); ++ i ) {
-	    unsigned long x_dw, x_cw;
+	    sc_digit x_dw, x_cw;
 	    get_words_( x, i, x_dw, x_cw );
 	    x_dw >>= bn;
-	    x_dw |= x.get_word( i + 1 ) << (UL_SIZE - bn);
+	    x_dw |= x.get_word( i + 1 ) << (SC_DIGIT_SIZE - bn);
 	    x_cw >>= bn;
-	    x_cw |= x.get_cword( i + 1 ) << (UL_SIZE - bn);
+	    x_cw |= x.get_cword( i + 1 ) << (SC_DIGIT_SIZE - bn);
 	    set_words_( x, i, x_dw, x_cw );
 	}
-	unsigned long x_dw, x_cw;
+	sc_digit x_dw, x_cw;
 	get_words_( x, sz - 1, x_dw, x_cw );
 	x_dw >>= bn;
 	x_cw >>= bn;
@@ -1224,21 +1371,21 @@ sc_proxy<X>::check_wbounds( int n ) const  // check if word n accessible
 
 template <class X>
 inline
-unsigned long
+sc_digit
 sc_proxy<X>::to_anything_unsigned() const
 {
     // only 0 word is returned
     // can't convert logic values other than 0 and 1
     const X& x = back_cast();
     int len = x.length();
-    if( x.get_cword( 0 ) != UL_ZERO ) {
+    if( x.get_cword( 0 ) != SC_DIGIT_ZERO ) {
 	SC_REPORT_WARNING( sc_core::SC_ID_VECTOR_CONTAINS_LOGIC_VALUE_, 0 );
     }
-    unsigned long w = x.get_word( 0 );
-    if( len >= UL_SIZE ) {
+    sc_digit w = x.get_word( 0 );
+    if( len >= SC_DIGIT_SIZE ) {
 	return w;
     }
-    return ( w & (~UL_ZERO >> (UL_SIZE - len)) );
+    return ( w & (~SC_DIGIT_ZERO >> (SC_DIGIT_SIZE - len)) );
 }
 
 template <class X>
@@ -1250,26 +1397,26 @@ sc_proxy<X>::to_uint64() const
     // can't convert logic values other than 0 and 1
     const X& x = back_cast();
     int len = x.length();
-    if( x.get_cword( 0 ) != UL_ZERO ) {
+    if( x.get_cword( 0 ) != SC_DIGIT_ZERO ) {
 	SC_REPORT_WARNING( sc_core::SC_ID_VECTOR_CONTAINS_LOGIC_VALUE_, 0 );
     }
     uint64 w = x.get_word( 0 );
-    if( len > UL_SIZE ) 
+    if( len > SC_DIGIT_SIZE ) 
     {
-	if( x.get_cword( 1 ) != UL_ZERO ) {
+	if( x.get_cword( 1 ) != SC_DIGIT_ZERO ) {
 	    SC_REPORT_WARNING( sc_core::SC_ID_VECTOR_CONTAINS_LOGIC_VALUE_, 0 );
 	}
 	uint64 w1 = x.get_word( 1 );
-        w = w | (w1 << UL_SIZE);	
+        w = w | (w1 << SC_DIGIT_SIZE);	
 	return w;
     }
-    else if( len == UL_SIZE ) 
+    else if( len == SC_DIGIT_SIZE ) 
     {
 	return w;
     }
     else
     {
-	return ( w & (~UL_ZERO >> (UL_SIZE - len)) );
+	return ( w & (~SC_DIGIT_ZERO >> (SC_DIGIT_SIZE - len)) );
     }
 }
 
@@ -1282,7 +1429,7 @@ sc_proxy<X>::to_anything_signed() const
     // can't convert logic values other than 0 and 1
     const X& x = back_cast();
     int len = x.length();
-    if( x.get_cword( 0 ) != UL_ZERO ) {
+    if( x.get_cword( 0 ) != SC_DIGIT_ZERO ) {
 	SC_REPORT_WARNING( sc_core::SC_ID_VECTOR_CONTAINS_LOGIC_VALUE_, 0 );
     }
     int64 w = x.get_word( 0 );

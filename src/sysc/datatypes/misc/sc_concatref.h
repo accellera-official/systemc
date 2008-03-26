@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -39,6 +39,12 @@
   mixed mode concatenations on the left and right sides of an assignment.
 
  *****************************************************************************/
+
+// $Log: sc_concatref.h,v $
+// Revision 1.3  2006/01/13 18:54:01  acg
+// Andy Goodrich: added $Log command so that CVS comments are reproduced in
+// the source.
+//
 
 #ifndef SC_CONCATREF_H
 #define SC_CONCATREF_H
@@ -130,14 +136,14 @@ public:
         m_right_p->concat_clear_data(to_ones); 
     }
 
-    virtual bool concat_get_ctrl( unsigned long* dst_p, int low_i ) const
+    virtual bool concat_get_ctrl( sc_digit* dst_p, int low_i ) const
     {
         bool rnz = m_right_p->concat_get_ctrl( dst_p, low_i );
         bool lnz = m_left_p->concat_get_ctrl( dst_p, low_i+m_len_r );
         return rnz || lnz;
     }
 
-    virtual bool concat_get_data( unsigned long* dst_p, int low_i ) const
+    virtual bool concat_get_data( sc_digit* dst_p, int low_i ) const
     {
         bool rnz = m_right_p->concat_get_data( dst_p, low_i );
         bool lnz = m_left_p->concat_get_data( dst_p, low_i+m_len_r );
@@ -211,8 +217,8 @@ public:
             result_p->nbits = result_p->num_bits(m_len);
             result_p->ndigits = (result_p->nbits+BITS_PER_DIGIT-1) / 
                 BITS_PER_DIGIT;
-            result_p->digit = (unsigned long*)
-                sc_core::sc_temp_heap.allocate( 4*result_p->ndigits );
+            result_p->digit = (sc_digit*)sc_core::sc_temp_heap.allocate( 
+                sizeof(sc_digit)*result_p->ndigits );
             right_non_zero = m_right_p->concat_get_data( result_p->digit, 0 );
             left_non_zero = m_left_p->concat_get_data(result_p->digit, m_len_r); 
             if ( left_non_zero || right_non_zero ) 
@@ -470,17 +476,61 @@ xnor_reduce( const sc_concatref& a )
 //
 // Because sc_concatref has implicit casts to both uint64 and sc_unsigned
 // it is necessary to disambiguate the use of the shift operators. We do
-// this in favor of sc_usigned so that precision is not lost. To get an
+// this in favor of sc_unsigned so that precision is not lost. To get an
 // integer-based result use a cast to uint64 before performing the shift.
 
-inline const sc_unsigned operator << ( const sc_concatref& target, int shift )
+inline const sc_unsigned operator << (const sc_concatref& target, uint64 shift)
 {
-	return target.value() << shift;
+    return target.value() << (int)shift;
 }
 
-inline const sc_unsigned operator >> ( const sc_concatref& target, int shift )
+inline const sc_unsigned operator << (const sc_concatref& target, int64 shift)
 {
-	return target.value() >> shift;
+    return target.value() << (int)shift;
+}
+
+inline const sc_unsigned operator << ( 
+    const sc_concatref& target, unsigned long shift )
+{
+    return target.value() << (int)shift;
+}
+
+inline const sc_unsigned operator << ( 
+    const sc_concatref& target, unsigned int shift )
+{
+    return target.value() << (int)shift;
+}
+
+inline const sc_unsigned operator << ( const sc_concatref& target, long shift )
+{
+    return target.value() << (int)shift;
+}
+
+inline const sc_unsigned operator >> (const sc_concatref& target, uint64 shift)
+{
+    return target.value() >> (int)shift;
+}
+
+inline const sc_unsigned operator >> (const sc_concatref& target, int64 shift)
+{
+    return target.value() >> (int)shift;
+}
+
+inline const sc_unsigned operator >> ( 
+    const sc_concatref& target, unsigned long shift )
+{
+    return target.value() >> (int)shift;
+}
+
+inline const sc_unsigned operator >> ( 
+    const sc_concatref& target, unsigned int shift )
+{
+    return target.value() >> (int)shift;
+}
+
+inline const sc_unsigned operator >> ( const sc_concatref& target, long shift )
+{
+    return target.value() >> (int)shift;
 }
 
 
@@ -540,7 +590,7 @@ class sc_concat_bool : public sc_value_base
         return 1; 
     }
 
-    virtual bool concat_get_ctrl( unsigned long* dst_p, int low_i ) const
+    virtual bool concat_get_ctrl( sc_digit* dst_p, int low_i ) const
     {
         int bit = 1 << (low_i % BITS_PER_DIGIT); 
         int word_i = low_i / BITS_PER_DIGIT;
@@ -548,7 +598,7 @@ class sc_concat_bool : public sc_value_base
         return false;
     }
 
-    virtual bool concat_get_data( unsigned long* dst_p, int low_i ) const
+    virtual bool concat_get_data( sc_digit* dst_p, int low_i ) const
     {
         int bit = 1 << (low_i % BITS_PER_DIGIT); 
         int word_i = low_i / BITS_PER_DIGIT;

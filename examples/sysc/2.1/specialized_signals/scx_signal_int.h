@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2004 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -34,7 +34,13 @@
  *****************************************************************************/
 
 /* 
-$Log: sc_signal_int.h,v $
+$Log: scx_signal_int.h,v $
+Revision 1.2  2005/12/26 20:11:14  acg
+Fixed up copyright.
+
+Revision 1.1.1.1  2005/12/19 23:16:42  acg
+First check in of SystemC 2.1 into its own archive.
+
 Revision 1.21  2005/03/21 22:31:32  acg
 Changes to sc_core namespace.
 
@@ -849,7 +855,7 @@ class sc_in<sc_dt::sc_int<W> > :
     virtual inline void end_of_elaboration()
         {
             if( m_traces != 0 ) {
-                for( int i = 0; i < m_traces->size(); ++ i ) {
+                for( unsigned int i = 0; i < m_traces->size(); ++ i ) {
                     sc_trace_params* p = (*m_traces)[i];
                     sc_trace( p->tf, read(), p->name );
                 }
@@ -879,16 +885,18 @@ class sc_in<sc_dt::sc_int<W> > :
         { return (*this)->read().concat_length( xz_present_p ); }
     virtual inline sc_dt::uint64 concat_get_uint64() const
         { return (*this)->read().concat_get_uint64(); }
-    virtual inline bool concat_get_ctrl( unsigned long* dst_p, int low_i ) const
+    virtual 
+	inline bool concat_get_ctrl( sc_dt::sc_digit* dst_p, int low_i ) const
         { return (*this)->read().concat_get_ctrl(dst_p, low_i); }
-    virtual inline bool concat_get_data( unsigned long* dst_p, int low_i ) const
+    virtual 
+	inline bool concat_get_data( sc_dt::sc_digit* dst_p, int low_i ) const
         { return (*this)->read().concat_get_data(dst_p, low_i); }
 
   protected:
     void remove_traces() const
         {
             if( m_traces != 0 ) {
-                for( int i = m_traces->size() - 1; i >= 0; -- i ) {
+                for( unsigned int i = m_traces->size() - 1; i >= 0; -- i ) {
                     delete (*m_traces)[i];
                 }
                 delete m_traces;
@@ -1110,7 +1118,7 @@ class sc_inout<sc_dt::sc_int<W> > :
                 m_init_val_p = 0;
             }
             if( m_traces != 0 ) {
-                for( int i = 0; i < m_traces->size(); ++ i ) {
+                for( unsigned int i = 0; i < m_traces->size(); ++ i ) {
                     sc_trace_params* p = (*m_traces)[i];
                     sc_trace( p->tf, read(), p->name );
                 }
@@ -1155,9 +1163,11 @@ class sc_inout<sc_dt::sc_int<W> > :
         { return (*this)->read().concat_length( xz_present_p ); }
     virtual inline sc_dt::uint64 concat_get_uint64() const
         { return (*this)->read().concat_get_uint64(); }
-    virtual inline bool concat_get_ctrl( unsigned long* dst_p, int low_i ) const
+    virtual 
+	inline bool concat_get_ctrl( sc_dt::sc_digit* dst_p, int low_i ) const
         { return (*this)->read().concat_get_ctrl(dst_p, low_i); }
-    virtual inline bool concat_get_data( unsigned long* dst_p, int low_i ) const
+    virtual 
+	inline bool concat_get_data( sc_dt::sc_digit* dst_p, int low_i ) const
         { return (*this)->read().concat_get_data(dst_p, low_i); }
     virtual inline void concat_set(sc_dt::int64 src, int low_i)
         { *this = src >> (( low_i < 64 ) ? low_i : 63); }
@@ -1220,7 +1230,7 @@ class sc_inout<sc_dt::sc_int<W> > :
     void remove_traces() const
         {
             if( m_traces != 0 ) {
-                for( int i = m_traces->size() - 1; i >= 0; -- i ) {
+                for( unsigned int i = m_traces->size() - 1; i >= 0; -- i ) {
                     delete (*m_traces)[i];
                 }
                 delete m_traces;

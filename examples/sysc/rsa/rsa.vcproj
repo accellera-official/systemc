@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="7.10"
 	Name="rsa"
-	ProjectGUID="{202689BA-4FAD-4CE1-A154-4FCA47318922}"
+	ProjectGUID="{99D7F4F7-B5B9-486E-B0B3-00E0F553B26C}"
 	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
@@ -20,7 +20,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/vmg"
 				Optimization="0"
-                                AdditionalIncludeDirectories="../../../src"
+				AdditionalIncludeDirectories="$(SYSTEMC)\..\src"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;NOGDI"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -37,7 +37,7 @@
 				AdditionalDependencies="systemc.lib"
 				OutputFile="$(OutDir)/rsa.exe"
 				LinkIncremental="2"
-                                AdditionalLibraryDirectories="../../../msvc71/systemc/debug"
+				AdditionalLibraryDirectories="$(SYSTEMC)\SystemC\Debug"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/rsa.pdb"
 				SubSystem="1"
@@ -71,19 +71,27 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="/vmg"
+				AdditionalIncludeDirectories="$(SYSTEMC)\..\src"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				MinimalRebuild="TRUE"
+				BasicRuntimeChecks="3"
 				RuntimeLibrary="4"
+				BufferSecurityCheck="FALSE"
+				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="TRUE"
+				Detect64BitPortabilityProblems="FALSE"
 				DebugInformationFormat="3"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="systemc.lib"
 				OutputFile="$(OutDir)/rsa.exe"
 				LinkIncremental="1"
-				GenerateDebugInformation="TRUE"
+				AdditionalLibraryDirectories="$(SYSTEMC)\SystemC\Release"
+				GenerateDebugInformation="FALSE"
 				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"

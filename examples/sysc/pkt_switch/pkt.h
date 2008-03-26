@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2004 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -60,7 +60,11 @@ operator << ( ostream& os, const pkt& a )
 
 inline
 void
-sc_trace( sc_trace_file* tf, const pkt& a, const std::string& name )
+#if defined(SC_API_VERSION_STRING)
+    sc_trace( sc_trace_file* tf, const pkt& a, const std::string& name )
+#else
+    sc_trace( sc_trace_file* tf, const pkt& a, const sc_string& name )
+#endif
 {
   sc_trace( tf, a.data, name + ".data" );
   sc_trace( tf, a.id, name + ".id" );

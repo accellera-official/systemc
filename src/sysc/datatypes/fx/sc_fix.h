@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -32,6 +32,12 @@
   Description of Modification:
 
  *****************************************************************************/
+
+// $Log: sc_fix.h,v $
+// Revision 1.3  2006/01/13 18:53:57  acg
+// Andy Goodrich: added $Log command so that CVS comments are reproduced in
+// the source.
+//
 
 #ifndef SC_FIX_H
 #define SC_FIX_H

@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -41,6 +41,12 @@
 
  *****************************************************************************/
 
+// $Log: sc_nbexterns.h,v $
+// Revision 1.3  2006/01/13 18:49:32  acg
+// Added $Log command so that CVS check in comments are reproduced in the
+// source.
+//
+
 #ifndef SC_NBEXTERNS_H
 #define SC_NBEXTERNS_H
 
@@ -53,55 +59,55 @@ namespace sc_dt
 
 extern 
 void add_on_help(small_type &us, 
-                 int unb, int und, unsigned long *ud, 
+                 int unb, int und, sc_digit *ud, 
                  small_type vs, 
-                 int vnb, int vnd, const unsigned long *vd);
+                 int vnb, int vnd, const sc_digit *vd);
 
 extern 
 void mul_on_help_signed(small_type &us,
-                        int unb, int und, unsigned long *ud, 
-                        int vnb, int vnd, const unsigned long *vd);
+                        int unb, int und, sc_digit *ud, 
+                        int vnb, int vnd, const sc_digit *vd);
 
 void div_on_help_signed(small_type &us,
-                        int unb, int und, unsigned long *ud, 
-                        int vnb, int vnd, const unsigned long *vd);
+                        int unb, int und, sc_digit *ud, 
+                        int vnb, int vnd, const sc_digit *vd);
 
 extern 
 void mod_on_help_signed(small_type &us,
-                        int unb, int und, unsigned long *ud, 
-                        int vnb, int vnd, const unsigned long *vd);
+                        int unb, int und, sc_digit *ud, 
+                        int vnb, int vnd, const sc_digit *vd);
 
 extern 
 void mul_on_help_unsigned(small_type &us,
-                          int unb, int und, unsigned long *ud, 
-                          int vnb, int vnd, const unsigned long *vd);
+                          int unb, int und, sc_digit *ud, 
+                          int vnb, int vnd, const sc_digit *vd);
 
 void div_on_help_unsigned(small_type &us,
-                          int unb, int und, unsigned long *ud, 
-                          int vnb, int vnd, const unsigned long *vd);
+                          int unb, int und, sc_digit *ud, 
+                          int vnb, int vnd, const sc_digit *vd);
 
 extern 
 void mod_on_help_unsigned(small_type &us,
-                          int unb, int und, unsigned long *ud, 
-                          int vnb, int vnd, const unsigned long *vd);
+                          int unb, int und, sc_digit *ud, 
+                          int vnb, int vnd, const sc_digit *vd);
 
 extern 
 void and_on_help(small_type us, 
-                 int unb, int und, unsigned long *ud, 
+                 int unb, int und, sc_digit *ud, 
                  small_type vs,
-                 int vnb, int vnd, const unsigned long *vd);
+                 int vnb, int vnd, const sc_digit *vd);
 
 extern 
 void or_on_help(small_type us, 
-                int unb, int und, unsigned long *ud, 
+                int unb, int und, sc_digit *ud, 
                 small_type vs,
-                int vnb, int vnd, const unsigned long *vd);
+                int vnb, int vnd, const sc_digit *vd);
 
 extern 
 void xor_on_help(small_type us, 
-                 int unb, int und, unsigned long *ud, 
+                 int unb, int und, sc_digit *ud, 
                  small_type vs,
-                 int vnb, int vnd, const unsigned long *vd);
+                 int vnb, int vnd, const sc_digit *vd);
 
 } // namespace sc_dt
 

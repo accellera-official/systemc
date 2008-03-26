@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -33,10 +33,20 @@
 
  *****************************************************************************/
 
+// $Log: sc_dynamic_processes.h,v $
+// Revision 1.4  2006/04/11 23:13:20  acg
+//   Andy Goodrich: Changes for reduced reset support that only includes
+//   sc_cthread, but has preliminary hooks for expanding to method and thread
+//   processes also.
+//
+// Revision 1.3  2006/01/13 18:44:29  acg
+// Added $Log to record CVS changes into the source.
+//
+
 #ifndef SC_DYNAMIC_PROCESSES_H
 #define SC_DYNAMIC_PROCESSES_H
 
-#include "sysc/kernel/sc_process_base.h"
+#include "sysc/kernel/sc_spawn.h"
 #include "sysc/kernel/sc_join.h"
 #include "sysc/kernel/sc_boost.h"
 

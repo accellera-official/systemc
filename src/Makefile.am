@@ -33,7 +33,7 @@
 include $(top_srcdir)/config/Make-rules
 
 H_FILES = \
-    systemc \
+	systemc \
 	systemc.h
 
 noinst_HEADERS = $(H_FILES)

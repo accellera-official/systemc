@@ -36,6 +36,7 @@ SUBDIRS = \
 	bind \
 	config \
 	detail \
+	mpl \
 	utility \
 	.
 
@@ -45,7 +46,9 @@ H_FILES = \
 	checked_delete.hpp \
 	config.hpp \
 	current_function.hpp \
+	get_pointer.hpp \
 	mem_fn.hpp \
+	non_type.hpp \
 	ref.hpp \
 	shared_ptr.hpp \
 	throw_exception.hpp \

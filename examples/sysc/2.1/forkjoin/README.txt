@@ -14,7 +14,6 @@ The user-visible constructs for dynamic process creation and synchronization are
    sc_spawn(...)
    sc_spawn_options(...)
    SC_FORK
-   SC_CJOIN
    SC_JOIN
    sc_process_handle::wait()
    sc_bind(...)
@@ -145,20 +144,11 @@ A Fork/Join construct is provided:
       ...  
   SC_JOIN
 
-or by SC_FORK
-      sc_spawn(...) , 
-      sc_spawn(...) , 
-      ...  
-  SC_CJOIN
-
 Please note that individual sc_spawn(...) sections are separated by
 commas and that there is no curly braces ("{","}") used, nor a
-semicolon at the end of SC_JOIN (or SC_CJOIN). 
+semicolon at the end of SC_JOIN. 
 
 The code will only wait until all spawned processes have returned.
-The difference between SC_JOIN and SC_CJOIN is that SC_JOIN is used
-with an SC_THREAD that has no sensitivity list, and SC_CJOIN is used
-with an SC_THREAD that has a sensitivity list, or with SC_CTHREAD.
 
 It is also possible to wait for an individual spawned process to
 finish with the sc_process_handle::wait()  function:
@@ -167,7 +157,7 @@ finish with the sc_process_handle::wait()  function:
   ...
   h.wait();
 
-Note that SC_FORK/SC_JOIN, SC_FORK/SC_CJOIN and sc_process_handle::wait()
+Note that SC_FORK/SC_JOIN as well as sc_process_handle::wait()
 indirectly calls wait(some_event) and therefore can only be used
 within a thread context. If you call SC_FORK/SC_JOIN within a method
 context or outside any process, then SystemC will produce a runtime

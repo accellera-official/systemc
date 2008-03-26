@@ -39,6 +39,7 @@ H_FILES = \
 	comeau.hpp \
 	common_edg.hpp \
 	compaq_cxx.hpp \
+	digitalmars.hpp \
 	gcc.hpp \
 	greenhills.hpp \
 	hp_acc.hpp \
@@ -49,7 +50,7 @@ H_FILES = \
 	sgi_mipspro.hpp \
 	sunpro_cc.hpp \
 	vacpp.hpp \
-	visualc.hpp 
+	visualc.hpp
 
 noinst_HEADERS = $(H_FILES)
 

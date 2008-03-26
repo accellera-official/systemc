@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -32,6 +32,12 @@
   Description of Modification:
 
  *****************************************************************************/
+
+// $Log: sc_bit_proxies.h,v $
+// Revision 1.3  2006/01/13 18:53:53  acg
+// Andy Goodrich: added $Log command so that CVS comments are reproduced in
+// the source.
+//
 
 #ifndef SC_BIT_PROXIES_H
 #define SC_BIT_PROXIES_H
@@ -123,12 +129,12 @@ public:
 	{ return 1; }
 
     int size() const
-	{ return ( (length() - 1) / UL_SIZE + 1 ); }
+	{ return ( (length() - 1) / SC_DIGIT_SIZE + 1 ); }
 
     sc_logic_value_t get_bit( int n ) const;
 
-    unsigned long get_word( int i ) const;
-    unsigned long get_cword( int i ) const;
+    sc_digit get_word( int i ) const;
+    sc_digit get_cword( int i ) const;
 
 
     // other methods
@@ -558,8 +564,8 @@ public:
 
     void set_bit( int n, sc_logic_value_t value );
 
-    void set_word( int i, unsigned long w );
-    void set_cword( int i, unsigned long w );
+    void set_word( int i, sc_digit w );
+    void set_cword( int i, sc_digit w );
 
     void clean_tail()
 	{ this->m_obj.clean_tail(); }
@@ -665,16 +671,16 @@ public:
 	{ return m_len; }
 
     int size() const
-	{ return ( (length() - 1) / UL_SIZE + 1 ); }
+	{ return ( (length() - 1) / SC_DIGIT_SIZE + 1 ); }
 
     sc_logic_value_t get_bit( int n ) const;
     void set_bit( int n, sc_logic_value_t value );
 
-    unsigned long get_word( int i )const;
-    void set_word( int i, unsigned long w );
+    sc_digit get_word( int i )const;
+    void set_word( int i, sc_digit w );
 
-    unsigned long get_cword( int i ) const;
-    void set_cword( int i, unsigned long w );
+    sc_digit get_cword( int i ) const;
+    void set_cword( int i, sc_digit w );
 
     void clean_tail()
 	{ m_obj.clean_tail(); }
@@ -1144,16 +1150,16 @@ public:
 	{ return ( m_left.length() + m_right.length() ); }
 
     int size() const
-	{ return ( (length() - 1) / UL_SIZE + 1 ); }
+	{ return ( (length() - 1) / SC_DIGIT_SIZE + 1 ); }
 
     sc_logic_value_t get_bit( int n ) const;
     void set_bit( int n, sc_logic_value_t value );
 
-    unsigned long get_word( int i ) const;
-    void set_word( int i, unsigned long w );
+    sc_digit get_word( int i ) const;
+    void set_word( int i, sc_digit w );
 
-    unsigned long get_cword( int i ) const;
-    void set_cword( int i, unsigned long w );
+    sc_digit get_cword( int i ) const;
+    void set_cword( int i, sc_digit w );
 
     void clean_tail()
 	{ m_left.clean_tail(); m_right.clean_tail(); }
@@ -1958,11 +1964,11 @@ sc_bitref_r<T>::get_bit( int n ) const
 
 template <class T>
 inline
-unsigned long
+sc_digit
 sc_bitref_r<T>::get_word( int n ) const
 {
     if( n == 0 ) {
-	return ( get_bit( n ) & UL_ONE );
+	return ( get_bit( n ) & SC_DIGIT_ONE );
     } else {
 	SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, 0 );
 	// never reached
@@ -1972,11 +1978,11 @@ sc_bitref_r<T>::get_word( int n ) const
 
 template <class T>
 inline
-unsigned long
+sc_digit
 sc_bitref_r<T>::get_cword( int n ) const
 {
     if( n == 0 ) {
-	return ( get_bit( n ) & UL_TWO );
+	return ( get_bit( n ) & SC_DIGIT_TWO );
     } else {
 	SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, 0 );
 	// never reached
@@ -2344,7 +2350,7 @@ sc_bitref<X>::set_bit( int n, sc_logic_value_t value )
 template <class X>
 inline
 void
-sc_bitref<X>::set_word( int n, unsigned long w )
+sc_bitref<X>::set_word( int n, sc_digit w )
 {
     if( n == 0 ) {
 	this->m_obj.set_word( this->m_index, w );
@@ -2356,7 +2362,7 @@ sc_bitref<X>::set_word( int n, unsigned long w )
 template <class X>
 inline
 void
-sc_bitref<X>::set_cword( int n, unsigned long w )
+sc_bitref<X>::set_cword( int n, sc_digit w )
 {
     if( n == 0 ) {
 	this->m_obj.set_cword( this->m_index, w );
@@ -2517,24 +2523,24 @@ sc_subref_r<X>::set_bit( int n, sc_logic_value_t value )
 
 template <class X>
 inline
-unsigned long
+sc_digit
 sc_subref_r<X>::get_word( int i ) const
 {
     int n1 = 0;
     int n2 = 0;
-    unsigned long result = 0;
+    sc_digit result = 0;
     int k = 0;
     if( reversed() ) {
-	n1 = m_lo - i * UL_SIZE;
-	n2 = sc_max( n1 - UL_SIZE, m_hi - 1 );
+	n1 = m_lo - i * SC_DIGIT_SIZE;
+	n2 = sc_max( n1 - SC_DIGIT_SIZE, m_hi - 1 );
 	for( int n = n1; n > n2; n -- ) {
-	    result |= (m_obj[n].value() & UL_ONE) << k ++;
+	    result |= (m_obj[n].value() & SC_DIGIT_ONE) << k ++;
 	}
     } else {
-	n1 = m_lo + i * UL_SIZE;
-	n2 = sc_min( n1 + UL_SIZE, m_hi + 1 );
+	n1 = m_lo + i * SC_DIGIT_SIZE;
+	n2 = sc_min( n1 + SC_DIGIT_SIZE, m_hi + 1 );
 	for( int n = n1; n < n2; n ++ ) {
-	    result |= (m_obj[n].value() & UL_ONE) << k ++;
+	    result |= (m_obj[n].value() & SC_DIGIT_ONE) << k ++;
 	}
     }
     return result;
@@ -2543,24 +2549,24 @@ sc_subref_r<X>::get_word( int i ) const
 template <class X>
 inline
 void
-sc_subref_r<X>::set_word( int i, unsigned long w )
+sc_subref_r<X>::set_word( int i, sc_digit w )
 {
     int n1 = 0;
     int n2 = 0;
     int k = 0;
     if( reversed() ) {
-	n1 = m_lo - i * UL_SIZE;
-	n2 = sc_max( n1 - UL_SIZE, m_hi - 1 );
+	n1 = m_lo - i * SC_DIGIT_SIZE;
+	n2 = sc_max( n1 - SC_DIGIT_SIZE, m_hi - 1 );
 	for( int n = n1; n > n2; n -- ) {
-	    m_obj.set_bit( n, sc_logic_value_t( (w >> k ++) & UL_ONE |
-						m_obj[n].value() & UL_TWO ) );
+	    m_obj.set_bit( n, sc_logic_value_t( (w >> k ++) & SC_DIGIT_ONE |
+						m_obj[n].value() & SC_DIGIT_TWO ) );
 	}
     } else {
-	n1 = m_lo + i * UL_SIZE;
-	n2 = sc_min( n1 + UL_SIZE, m_hi + 1 );
+	n1 = m_lo + i * SC_DIGIT_SIZE;
+	n2 = sc_min( n1 + SC_DIGIT_SIZE, m_hi + 1 );
 	for( int n = n1; n < n2; n ++ ) {
-	    m_obj.set_bit( n, sc_logic_value_t( (w >> k ++) & UL_ONE |
-						m_obj[n].value() & UL_TWO ) );
+	    m_obj.set_bit( n, sc_logic_value_t( (w >> k ++) & SC_DIGIT_ONE |
+						m_obj[n].value() & SC_DIGIT_TWO ) );
 	}
     }
 }
@@ -2568,24 +2574,24 @@ sc_subref_r<X>::set_word( int i, unsigned long w )
 
 template <class X>
 inline
-unsigned long
+sc_digit
 sc_subref_r<X>::get_cword( int i ) const
 {
     int n1 = 0;
     int n2 = 0;
-    unsigned long result = 0;
+    sc_digit result = 0;
     int k = 0;
     if( reversed() ) {
-	n1 = m_lo - i * UL_SIZE;
-	n2 = sc_max( n1 - UL_SIZE, m_hi - 1 );
+	n1 = m_lo - i * SC_DIGIT_SIZE;
+	n2 = sc_max( n1 - SC_DIGIT_SIZE, m_hi - 1 );
 	for( int n = n1; n > n2; n -- ) {
-	    result |= ((m_obj[n].value() & UL_TWO) >> 1) << k ++;
+	    result |= ((m_obj[n].value() & SC_DIGIT_TWO) >> 1) << k ++;
 	}
     } else {
-	n1 = m_lo + i * UL_SIZE;
-	n2 = sc_min( n1 + UL_SIZE, m_hi + 1 );
+	n1 = m_lo + i * SC_DIGIT_SIZE;
+	n2 = sc_min( n1 + SC_DIGIT_SIZE, m_hi + 1 );
 	for( int n = n1; n < n2; n ++ ) {
-	    result |= ((m_obj[n].value() & UL_TWO) >> 1) << k ++;
+	    result |= ((m_obj[n].value() & SC_DIGIT_TWO) >> 1) << k ++;
 	}
     }
     return result;
@@ -2594,24 +2600,24 @@ sc_subref_r<X>::get_cword( int i ) const
 template <class X>
 inline
 void
-sc_subref_r<X>::set_cword( int i, unsigned long w )
+sc_subref_r<X>::set_cword( int i, sc_digit w )
 {
     int n1 = 0;
     int n2 = 0;
     int k = 0;
     if( reversed() ) {
-	n1 = m_lo - i * UL_SIZE;
-	n2 = sc_max( n1 - UL_SIZE, m_hi - 1 );
+	n1 = m_lo - i * SC_DIGIT_SIZE;
+	n2 = sc_max( n1 - SC_DIGIT_SIZE, m_hi - 1 );
 	for( int n = n1; n > n2; n -- ) {
-	    m_obj.set_bit( n, sc_logic_value_t( ((w >> k ++) & UL_ONE) << 1 |
-						m_obj[n].value() & UL_ONE ) );
+	    m_obj.set_bit( n, sc_logic_value_t( ((w >> k ++) & SC_DIGIT_ONE) << 1 |
+						m_obj[n].value() & SC_DIGIT_ONE ) );
 	}
     } else {
-	n1 = m_lo + i * UL_SIZE;
-	n2 = sc_min( n1 + UL_SIZE, m_hi + 1 );
+	n1 = m_lo + i * SC_DIGIT_SIZE;
+	n2 = sc_min( n1 + SC_DIGIT_SIZE, m_hi + 1 );
 	for( int n = n1; n < n2; n ++ ) {
-	    m_obj.set_bit( n, sc_logic_value_t( ((w >> k ++) & UL_ONE) << 1 |
-						m_obj[n].value() & UL_ONE ) );
+	    m_obj.set_bit( n, sc_logic_value_t( ((w >> k ++) & SC_DIGIT_ONE) << 1 |
+						m_obj[n].value() & SC_DIGIT_ONE ) );
 	}
     }
 }
@@ -2626,7 +2632,7 @@ sc_subref_r<X>::is_01() const
 {
     int sz = size();
     for( int i = 0; i < sz; ++ i ) {
-	if( get_cword( i ) != UL_ZERO ) {
+	if( get_cword( i ) != SC_DIGIT_ZERO ) {
 	    return false;
 	}
     }
@@ -3035,7 +3041,7 @@ sc_concref_r<X,Y>::set_bit( int n, sc_logic_value_t v )
 
 template <class X, class Y>
 inline
-unsigned long
+sc_digit
 sc_concref_r<X,Y>::get_word( int i ) const
 {
     if( i < 0 || i >= size() ) {
@@ -3044,21 +3050,21 @@ sc_concref_r<X,Y>::get_word( int i ) const
     // 0 <= i < size()
     Y& r = m_right;
     int r_len = r.length();
-    int border = r_len / UL_SIZE;
+    int border = r_len / SC_DIGIT_SIZE;
     if( i < border ) {
 	return r.get_word( i );
     }
     // border <= i < size()
     X& l = m_left;
-    int shift = r_len % UL_SIZE;
+    int shift = r_len % SC_DIGIT_SIZE;
     int j = i - border;
     if( shift == 0 ) {
 	return l.get_word( j );
     }
     // border <= i < size() && shift != 0
-    int nshift = UL_SIZE - shift;
+    int nshift = SC_DIGIT_SIZE - shift;
     if( i == border ) {
-	unsigned long rl_mask = ~UL_ZERO >> nshift;
+	sc_digit rl_mask = ~SC_DIGIT_ZERO >> nshift;
 	return ( (r.get_word( i ) & rl_mask) | (l.get_word( 0 ) << shift) );
     }
     // border < i < size() && shift != 0
@@ -3071,7 +3077,7 @@ sc_concref_r<X,Y>::get_word( int i ) const
 template <class X, class Y>
 inline
 void
-sc_concref_r<X,Y>::set_word( int i, unsigned long w )
+sc_concref_r<X,Y>::set_word( int i, sc_digit w )
 {
     if( i < 0 || i >= size() ) {
 	SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, 0 );
@@ -3079,30 +3085,30 @@ sc_concref_r<X,Y>::set_word( int i, unsigned long w )
     // 0 <= i < size()
     Y& r = m_right;
     int r_len = r.length();
-    int border = r_len / UL_SIZE;
+    int border = r_len / SC_DIGIT_SIZE;
     if( i < border ) {
 	r.set_word( i, w );
 	return;
     }
     // border <= i < size()
     X& l = m_left;
-    int shift = r_len % UL_SIZE;
+    int shift = r_len % SC_DIGIT_SIZE;
     int j = i - border;
     if( shift == 0 ) {
 	l.set_word( j, w );
 	return;
     }
     // border <= i < size() && shift != 0
-    int nshift = UL_SIZE - shift;
-    unsigned long lh_mask = ~UL_ZERO << nshift;
+    int nshift = SC_DIGIT_SIZE - shift;
+    sc_digit lh_mask = ~SC_DIGIT_ZERO << nshift;
     if( i == border ) {
-	unsigned long rl_mask = ~UL_ZERO >> nshift;
+	sc_digit rl_mask = ~SC_DIGIT_ZERO >> nshift;
 	r.set_word( i, w & rl_mask );
 	l.set_word( 0, (l.get_word( 0 ) & lh_mask) | (w >> shift) );
 	return;
     }
     // border < i < size() && shift != 0
-    unsigned long ll_mask = ~UL_ZERO >> shift;
+    sc_digit ll_mask = ~SC_DIGIT_ZERO >> shift;
     l.set_word( j - 1, (l.get_word( j - 1 ) & ll_mask) | (w << nshift) );
     l.set_word( j, (l.get_word( j ) & lh_mask) | (w >> shift) );
 }
@@ -3110,7 +3116,7 @@ sc_concref_r<X,Y>::set_word( int i, unsigned long w )
 
 template <class X, class Y>
 inline
-unsigned long
+sc_digit
 sc_concref_r<X,Y>::get_cword( int i ) const
 {
     if( i < 0 || i >= size() ) {
@@ -3119,21 +3125,21 @@ sc_concref_r<X,Y>::get_cword( int i ) const
     // 0 <= i < size()
     Y& r = m_right;
     int r_len = r.length();
-    int border = r_len / UL_SIZE;
+    int border = r_len / SC_DIGIT_SIZE;
     if( i < border ) {
 	return r.get_cword( i );
     }
     // border <= i < size()
     X& l = m_left;
-    int shift = r_len % UL_SIZE;
+    int shift = r_len % SC_DIGIT_SIZE;
     int j = i - border;
     if( shift == 0 ) {
 	return l.get_cword( j );
     }
     // border <= i < size() && shift != 0
-    int nshift = UL_SIZE - shift;
+    int nshift = SC_DIGIT_SIZE - shift;
     if( i == border ) {
-	unsigned long rl_mask = ~UL_ZERO >> nshift;
+	sc_digit rl_mask = ~SC_DIGIT_ZERO >> nshift;
 	return ( (r.get_cword( i ) & rl_mask) | (l.get_cword( 0 ) << shift) );
     }
     // border < i < size() && shift != 0
@@ -3146,7 +3152,7 @@ sc_concref_r<X,Y>::get_cword( int i ) const
 template <class X, class Y>
 inline
 void
-sc_concref_r<X,Y>::set_cword( int i, unsigned long w )
+sc_concref_r<X,Y>::set_cword( int i, sc_digit w )
 {
     if( i < 0 || i >= size() ) {
 	SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, 0 );
@@ -3154,30 +3160,30 @@ sc_concref_r<X,Y>::set_cword( int i, unsigned long w )
     // 0 <= i < size()
     Y& r = m_right;
     int r_len = r.length();
-    int border = r_len / UL_SIZE;
+    int border = r_len / SC_DIGIT_SIZE;
     if( i < border ) {
 	r.set_cword( i, w );
 	return;
     }
     // border <= i < size()
     X& l = m_left;
-    int shift = r_len % UL_SIZE;
+    int shift = r_len % SC_DIGIT_SIZE;
     int j = i - border;
     if( shift == 0 ) {
 	l.set_cword( j, w );
 	return;
     }
     // border <= i < size() && shift != 0
-    int nshift = UL_SIZE - shift;
-    unsigned long lh_mask = ~UL_ZERO << nshift;
+    int nshift = SC_DIGIT_SIZE - shift;
+    sc_digit lh_mask = ~SC_DIGIT_ZERO << nshift;
     if( i == border ) {
-	unsigned long rl_mask = ~UL_ZERO >> nshift;
+	sc_digit rl_mask = ~SC_DIGIT_ZERO >> nshift;
 	r.set_cword( i, w & rl_mask );
 	l.set_cword( 0, (l.get_cword( 0 ) & lh_mask) | (w >> shift) );
 	return;
     }
     // border < i < size() && shift != 0
-    unsigned long ll_mask = ~UL_ZERO >> shift;
+    sc_digit ll_mask = ~SC_DIGIT_ZERO >> shift;
     l.set_cword( j - 1, (l.get_cword( j - 1 ) & ll_mask) | (w << nshift) );
     l.set_cword( j, (l.get_cword( j ) & lh_mask) | (w >> shift) );
 }

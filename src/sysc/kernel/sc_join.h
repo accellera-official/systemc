@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -33,10 +33,20 @@
 
  *****************************************************************************/
 
+// $Log: sc_join.h,v $
+// Revision 1.5  2006/04/28 21:38:27  acg
+//  Andy Goodrich: fixed loop constraint that was using sizeof(sc_thread_handle)
+//  rather than sizeof(sc_process_handle).
+//
+// Revision 1.4  2006/01/13 18:44:29  acg
+// Added $Log to record CVS changes into the source.
+//
+
 #ifndef SC_JOIN_H
 #define SC_JOIN_H
 
-#include "sysc/kernel/sc_process_base.h"
+#include "sysc/kernel/sc_process.h"
+#include "sysc/kernel/sc_wait.h"
 
 namespace sc_core {
 
@@ -48,18 +58,19 @@ namespace sc_core {
 // and upon their completion an event notification will occur.
 //==============================================================================
 class sc_join : public sc_process_monitor {
-    friend class sc_process_base;
+    friend class sc_process_b;
+    friend class sc_process_handle;
   public:
     inline sc_join();
 	virtual inline ~sc_join();
-    void add_process( const sc_process_handle& process_h );
+    void add_process( sc_process_handle process_h );
 	inline int process_count();
     virtual void signal(sc_thread_handle thread_p, int type);
     inline void wait();
     inline void wait_clocked();
 
   protected: 
-    void add_process( sc_process_base* process_p );
+    void add_process( sc_process_b* process_p );
 
   protected:
     sc_event m_join_event;  // Event to notify when all threads have reported.
@@ -86,8 +97,9 @@ inline void sc_join::wait_clocked()
 
 #define SC_CJOIN \
     }; \
-    sc_join           join; \
-	for ( unsigned int i = 0; i < sizeof(forkees)/sizeof(sc_thread_handle); \
+    sc_core::sc_join           join; \
+	for ( unsigned int i = 0; \
+	    i < sizeof(forkees)/sizeof(sc_core::sc_process_handle); \
 		i++ ) \
 		join.add_process(forkees[i]); \
 	join.wait_clocked(); \
@@ -95,12 +107,13 @@ inline void sc_join::wait_clocked()
 
 #define SC_FORK \
 { \
-	sc_process_handle forkees[] = {
+	sc_core::sc_process_handle forkees[] = {
 
 #define SC_JOIN \
     }; \
-    sc_join           join; \
-	for ( unsigned int i = 0; i < sizeof(forkees)/sizeof(sc_thread_handle); \
+    sc_core::sc_join           join; \
+	for ( unsigned int i = 0; \
+	    i < sizeof(forkees)/sizeof(sc_core::sc_process_handle); \
 		i++ ) \
 		join.add_process(forkees[i]); \
 	join.wait(); \

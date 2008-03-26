@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -32,6 +32,20 @@
   Description of Modification:
     
  *****************************************************************************/
+//$Log: sc_signal_rv_ports.h,v $
+//Revision 1.2  2006/01/03 23:18:27  acg
+//Changed copyright to include 2006.
+//
+//Revision 1.1.1.1  2005/12/19 23:16:43  acg
+//First check in of SystemC 2.1 into its own archive.
+//
+//Revision 1.11  2005/09/15 23:01:52  acg
+//Added std:: prefix to appropriate methods and types to get around
+//issues with the Edison Front End.
+//
+//Revision 1.10  2005/06/10 22:43:56  acg
+//Added CVS change log annotation.
+//
 
 #ifndef SC_SIGNAL_RV_PORTS_H
 #define SC_SIGNAL_RV_PORTS_H
@@ -150,7 +164,7 @@ sc_in_rv<W>::end_of_elaboration()
     // check if bound channel is a resolved signal
     if( DCAST<sc_signal_rv<W>*>( this->get_interface() ) == 0 ) {
 	char msg[BUFSIZ];
-	sprintf( msg, "%s (%s)", this->name(), kind() );
+	std::sprintf( msg, "%s (%s)", this->name(), kind() );
 	SC_REPORT_ERROR( SC_ID_RESOLVED_PORT_NOT_BOUND_, msg );
     }
 }
@@ -270,7 +284,7 @@ sc_inout_rv<W>::end_of_elaboration()
     // check if bound channel is a resolved signal
     if( DCAST<sc_signal_rv<W>*>( this->get_interface() ) == 0 ) {
 	char msg[BUFSIZ];
-	sprintf( msg, "%s (%s)", this->name(), kind() );
+	std::sprintf( msg, "%s (%s)", this->name(), kind() );
 	SC_REPORT_ERROR( SC_ID_RESOLVED_PORT_NOT_BOUND_, msg );
     }
 }

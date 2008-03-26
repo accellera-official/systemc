@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -48,18 +48,63 @@
 
  *****************************************************************************/
 
+// $Log: sc_module.h,v $
+// Revision 1.7  2006/04/11 23:13:21  acg
+//   Andy Goodrich: Changes for reduced reset support that only includes
+//   sc_cthread, but has preliminary hooks for expanding to method and thread
+//   processes also.
+//
+// Revision 1.6  2006/03/15 17:53:34  acg
+//  Andy Goodrich, Forte Design
+//  Reordered includes to pick up <cassert> for use by sc_process_name.h
+//
+// Revision 1.5  2006/03/14 23:56:58  acg
+//   Andy Goodrich: This fixes a bug when an exception is thrown in
+//   sc_module::sc_module() for a dynamically allocated sc_module
+//   object. We are calling sc_module::end_module() on a module that has
+//   already been deleted. The scenario runs like this:
+//
+//   a) the sc_module constructor is entered
+//   b) the exception is thrown
+//   c) the exception processor deletes the storage for the sc_module
+//   d) the stack is unrolled causing the sc_module_name instance to be deleted
+//   e) ~sc_module_name() calls end_module() with its pointer to the sc_module
+//   f) because the sc_module has been deleted its storage is corrupted,
+//      either by linking it to a free space chain, or by reuse of some sort
+//   g) the m_simc field is garbage
+//   h) the m_object_manager field is also garbage
+//   i) an exception occurs
+//
+//   This does not happen for automatic sc_module instances since the
+//   storage for the module is not reclaimed its just part of the stack.
+//
+//   I am fixing this by having the destructor for sc_module clear the
+//   module pointer in its sc_module_name instance. That cuts things at
+//   step (e) above, since the pointer will be null if the module has
+//   already been deleted. To make sure the module stack is okay, I call
+//   end-module() in ~sc_module in the case where there is an
+//   sc_module_name pointer lying around.
+//
+// Revision 1.4  2006/01/24 20:49:05  acg
+// Andy Goodrich: changes to remove the use of deprecated features within the
+// simulator, and to issue warning messages when deprecated features are used.
+//
+// Revision 1.3  2006/01/13 18:44:30  acg
+// Added $Log to record CVS changes into the source.
+//
+
 #ifndef SC_MODULE_H
 #define SC_MODULE_H
 
 #include "sysc/kernel/sc_kernel_ids.h"
-#include "sysc/kernel/sc_lambda.h"
-#include "sysc/kernel/sc_module_name.h"
 #include "sysc/kernel/sc_process.h"
+#include "sysc/kernel/sc_module_name.h"
 #include "sysc/kernel/sc_sensitive.h"
 #include "sysc/kernel/sc_time.h"
 #include "sysc/kernel/sc_wait.h"
 #include "sysc/kernel/sc_wait_cthread.h"
-#include "sysc/kernel/sc_process_host.h"
+#include "sysc/kernel/sc_process.h"
+#include "sysc/kernel/sc_process_handle.h"
 #include "sysc/utils/sc_list.h"
 #include "sysc/utils/sc_string.h"
 
@@ -97,12 +142,13 @@ extern const sc_bind_proxy SC_BIND_PROXY_NIL;
 // ----------------------------------------------------------------------------
 
 class sc_module
-: public sc_process_host
+: public sc_object, public sc_process_host
 {
     friend class sc_module_name;
     friend class sc_module_registry;
     friend class sc_object;
     friend class sc_port_registry;
+	friend class sc_process_b;
     friend class sc_simcontext;
 
 public:
@@ -178,15 +224,19 @@ protected:
     // to prevent initialization for SC_METHODs and SC_THREADs
     void dont_initialize();
 
+    // positional binding code - used by operator ()
+
+    void positional_bind( sc_interface& );
+    void positional_bind( sc_port_base& );
+
     // set reset sensitivity for SC_CTHREADs
     void reset_signal_is( const sc_in<bool>& port, bool level );
-    void reset_signal_is( const sc_signal<bool>& sig, bool level );
+    void reset_signal_is( const sc_signal_in_if<bool>& iface, bool level );
 
     // static sensitivity for SC_THREADs and SC_CTHREADs
 
     void wait()
         { ::sc_core::wait( simcontext() ); }
-
 
     // dynamic sensitivity for SC_THREADs and SC_CTHREADs
 
@@ -274,7 +324,7 @@ protected:
     // for SC_METHODs and SC_THREADs and SC_CTHREADs
 
     bool timed_out()
-	{ return ::sc_core::timed_out( simcontext() ); }
+        { return ::sc_core::timed_out(); }
 
 
     // for SC_CTHREADs
@@ -284,12 +334,6 @@ protected:
 
     void wait( int n )
         { ::sc_core::wait( n, simcontext() ); }
-
-    void wait_until( const sc_lambda_ptr& l )
-        { ::sc_core::wait_until( l, simcontext() ); }
-
-    void wait_until( const sc_signal_bool_deval& s )
-        { ::sc_core::wait_until( s, simcontext() ); }
 
     void at_posedge( const sc_signal_in_if<bool>& s )
 	{ ::sc_core::at_posedge( s, simcontext() ); }
@@ -303,12 +347,9 @@ protected:
     void at_negedge( const sc_signal_in_if<sc_dt::sc_logic>& s )
 	{ ::sc_core::at_negedge( s, simcontext() ); }
 
-    void watching( const sc_lambda_ptr& l )
-        { ::sc_core::watching( l, simcontext() ); }
-
-    void watching( const sc_signal_bool_deval& s )
-        { ::sc_core::watching( s, simcontext() ); }
-
+    // Catch uses of watching:
+    void watching( bool expr )
+        { SC_REPORT_ERROR(SC_ID_WATCHING_NOT_ALLOWED_,""); }
 
     // These are protected so that user derived classes can refer to them.
     sc_sensitive     sensitive;
@@ -316,7 +357,7 @@ protected:
     sc_sensitive_neg sensitive_neg;
 
     // Function to set the stack size of the current (c)thread process.
-    void set_stack_size( size_t );
+    void set_stack_size( std::size_t );
 
     int append_port( sc_port_base* );
 
@@ -325,11 +366,12 @@ private:
 
 private:
 
-    bool                       m_end_module_called;
-    sc_pvector<sc_port_base*>* m_port_vec;
-    int                        m_port_index;
-    sc_name_gen*               m_name_gen;
-    sc_pvector<sc_object*>     m_child_objects;
+    bool                        m_end_module_called;
+    std::vector<sc_port_base*>* m_port_vec;
+    int                         m_port_index;
+    sc_name_gen*                m_name_gen;
+    std::vector<sc_object*>     m_child_objects;
+    sc_module_name*             m_module_name_p;
 
 public:
 
@@ -423,32 +465,34 @@ extern sc_module* sc_module_dynalloc(sc_module*);
 #define SC_HAS_PROCESS(user_module_name)                                      \
     typedef user_module_name SC_CURRENT_USER_MODULE
 
-
 #define declare_method_process(handle, name, host_tag, func)        \
     {		                                                    \
-        ::sc_core::sc_method_process* handle =                      \
-		simcontext()->register_method_process( name,        \
-                     SC_MAKE_FUNC_PTR( host_tag, func ), this );    \
-        sensitive << handle;                  \
-        sensitive_pos << handle;              \
-        sensitive_neg << handle;              \
+        ::sc_core::sc_process_handle handle =                      \
+	    sc_core::sc_get_curr_simcontext()->create_method_process( \
+		name,  false, SC_MAKE_FUNC_PTR( host_tag, func ), \
+		this, 0 ); \
+        sensitive << handle;                                        \
+        sensitive_pos << handle;                                    \
+        sensitive_neg << handle;                                    \
     }
 
 #define declare_thread_process(handle, name, host_tag, func)        \
     {                                                               \
-        ::sc_core::sc_thread_process* handle =                      \
-	    simcontext()->register_thread_process( name,            \
-	    SC_MAKE_FUNC_PTR( host_tag, func ), this );             \
-        sensitive << handle;                  \
-        sensitive_pos << handle;              \
-        sensitive_neg << handle;              \
+        ::sc_core::sc_process_handle handle =                      \
+	     sc_core::sc_get_curr_simcontext()->create_thread_process( \
+                 name,  false,           \
+                 SC_MAKE_FUNC_PTR( host_tag, func ), this, 0 ); \
+        sensitive << handle;                                        \
+        sensitive_pos << handle;                                    \
+        sensitive_neg << handle;                                    \
     }
 
 #define declare_cthread_process(handle, name, host_tag, func, edge) \
     {                                                               \
-        ::sc_core::sc_cthread_process* handle =                     \
-	    simcontext()->register_cthread_process(name,            \
-	    SC_MAKE_FUNC_PTR( host_tag, func ), this );             \
+        ::sc_core::sc_process_handle handle =                     \
+	     sc_core::sc_get_curr_simcontext()->create_cthread_process( \
+            name,  false,          \
+                     SC_MAKE_FUNC_PTR( host_tag, func ), this, 0 ); \
         sensitive.operator() ( handle, edge );\
     }
 

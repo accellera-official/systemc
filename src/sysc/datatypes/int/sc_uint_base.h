@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -48,6 +48,12 @@
 
  *****************************************************************************/
 
+// $Log: sc_uint_base.h,v $
+// Revision 1.3  2006/01/13 18:49:32  acg
+// Added $Log command so that CVS check in comments are reproduced in the
+// source.
+//
+
 #ifndef SC_UINT_BASE_H
 #define SC_UINT_BASE_H
 
@@ -90,6 +96,14 @@ class sc_fxnum_fast;
 
 extern const uint_type mask_int[SC_INTWIDTH][SC_INTWIDTH];
 
+// friend operator declarations
+    inline bool operator == ( const sc_uint_base& a, const sc_uint_base& b );
+    inline bool operator != ( const sc_uint_base& a, const sc_uint_base& b );
+    inline bool operator <  ( const sc_uint_base& a, const sc_uint_base& b );
+    inline bool operator <= ( const sc_uint_base& a, const sc_uint_base& b );
+    inline bool operator >  ( const sc_uint_base& a, const sc_uint_base& b );
+    inline bool operator >= ( const sc_uint_base& a, const sc_uint_base& b );
+
 
 
 // ----------------------------------------------------------------------------
@@ -127,23 +141,23 @@ public:
 
     // destructor
 
-    virtual ~sc_uint_bitref_r() 
+    virtual ~sc_uint_bitref_r()
 	{}
 
     // concatenation support
 
     virtual int concat_length(bool* xz_present_p) const
 	{ if ( xz_present_p ) *xz_present_p = false; return 1; }
-    virtual bool concat_get_ctrl( unsigned long* dst_p, int low_i ) const    
-        { 
+    virtual bool concat_get_ctrl( sc_digit* dst_p, int low_i ) const
+        {
             int  bit_mask = 1 << (low_i % BITS_PER_DIGIT);
             int  word_i = low_i / BITS_PER_DIGIT;
 
 	    dst_p[word_i] &= ~bit_mask;
 	    return false;
         }
-    virtual bool concat_get_data( unsigned long* dst_p, int low_i ) const    
-        { 
+    virtual bool concat_get_data( sc_digit* dst_p, int low_i ) const
+        {
             int  bit_mask = 1 << (low_i % BITS_PER_DIGIT);
 	    bool result;             // True is non-zero.
             int  word_i = low_i / BITS_PER_DIGIT;
@@ -288,11 +302,11 @@ public:
     sc_uint_subref_r( const sc_uint_subref_r& init ) :
         m_left(init.m_left), m_obj_p(init.m_obj_p), m_right(init.m_right)
 	{}
-    
+
 protected:
-    sc_uint_subref_r() 
+    sc_uint_subref_r()
 	{}
- 
+
     // initializer for sc_core::sc_vpool:
 
     void initialize( const sc_uint_base* obj_p, int left_i, int right_i )
@@ -306,7 +320,7 @@ public:
 
     // destructor
 
-    virtual ~sc_uint_subref_r() 
+    virtual ~sc_uint_subref_r()
 	{}
 
     // capacity
@@ -323,8 +337,8 @@ public:
 
     virtual int concat_length(bool* xz_present_p) const
 	{ if ( xz_present_p ) *xz_present_p = false; return length(); }
-    virtual bool concat_get_ctrl( unsigned long* dst_p, int low_i ) const;
-    virtual bool concat_get_data( unsigned long* dst_p, int low_i ) const;
+    virtual bool concat_get_ctrl( sc_digit* dst_p, int low_i ) const;
+    virtual bool concat_get_data( sc_digit* dst_p, int low_i ) const;
     virtual uint64 concat_get_uint64() const
 	{ return (uint64)operator uint_type(); }
 
@@ -419,7 +433,7 @@ protected:
 public:
     sc_uint_subref( const sc_uint_subref& init ) : sc_uint_subref_r(init)
         {}
-  
+
 public:
 
     // assignment operators
@@ -547,7 +561,7 @@ public:
 
     template<class T>
     explicit sc_uint_base( const sc_generic_base<T>& a )
-	: m_val( a->to_uint64() ), m_len( a->length() ), 
+	: m_val( a->to_uint64() ), m_len( a->length() ),
 	  m_ulen( SC_INTWIDTH - m_len )
 	{ check_length(); extend_sign(); }
 
@@ -689,7 +703,7 @@ public:
 
 
     // bit selection
-  
+
     sc_uint_bitref&         operator [] ( int i );
     const sc_uint_bitref_r& operator [] ( int i ) const;
 
@@ -707,7 +721,7 @@ public:
 
 
     // bit access, without bounds checking or sign extension
-  
+
     bool test( int i ) const
 	{ return ( 0 != (m_val & (UINT_ONE << i)) ); }
 
@@ -732,8 +746,8 @@ public:
 
     virtual int concat_length(bool* xz_present_p) const
 	{ if ( xz_present_p ) *xz_present_p = false; return length(); }
-    virtual bool concat_get_ctrl( unsigned long* dst_p, int low_i ) const;
-    virtual bool concat_get_data( unsigned long* dst_p, int low_i ) const;
+    virtual bool concat_get_ctrl( sc_digit* dst_p, int low_i ) const;
+    virtual bool concat_get_data( sc_digit* dst_p, int low_i ) const;
     virtual uint64 concat_get_uint64() const
         { return m_val; }
     virtual void concat_set(int64 src, int low_i);
@@ -795,10 +809,10 @@ public:
 
 
 #ifndef _32BIT_
-    long long_low() const 
+    long long_low() const
 	{ return (long) (m_val & UINT64_32ONES); }
 
-    long long_high() const 
+    long long_high() const
 	{ return (long) ((m_val >> 32) & UINT64_32ONES); }
 #endif
 
@@ -954,7 +968,7 @@ operator >> ( ::std::istream& is, sc_uint_bitref& a )
 // ----------------------------------------------------------------------------
 
 // implicit conversion to uint_type
-  
+
 inline
 sc_uint_subref_r::operator uint_type() const
 {

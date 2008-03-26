@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -36,51 +36,249 @@
 #ifndef SYSTEMC_H
 #define SYSTEMC_H
 
+// INCLUDE SYSTEM (std) DEFINITIONS:
+
+#include <cassert>
+#include <climits>
+#include <cmath> // math.h?
+#include <cstddef>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <exception>
+#include <fstream>
+#include <iostream>
+#include <memory>
+#include <string>
+#if defined(__EDG__)
+#   include <strstream>
+#endif // defined(__EDG__)
+#include <typeinfo>
+#include <utility>
+#include <vector>
+
+// USINGS FOR I/O STREAM SUPPORT:
+
+#if !(defined( _MSC_VER ) && _MSC_VER < 1300) && !defined( __BORLANDC__ )
+#   if defined(__GNUC__) && (__GNUC__ == 2) // Maintain compatibility for 2.95.x
+    	using std::strstream;
+    	using std::strstreambuf;
+    	using std::istrstream;
+    	using std::ostrstream;
+#   endif
+
+    using std::ios;
+    using std::streambuf;
+    using std::streampos;
+    using std::streamsize;
+    using std::iostream;
+    using std::istream;
+    using std::ostream;
+    using std::cin;
+    using std::cout;
+    using std::cerr;
+    using std::endl;
+    using std::flush;
+    using std::dec;
+    using std::hex;
+    using std::oct;
+#   if defined(linux)
+        using std::noshowbase;
+        using std::showbase;
+#   endif // defined(linux)
+
+
+    using std::fstream;
+    using std::ifstream;
+    using std::ofstream;
+    
+//  from <cstdio>:
+
+#   if !defined( _MSC_VER )
+        using std::size_t;
+        using std::FILE;
+        using std::fpos_t;
+	using std::fclose;
+	using std::clearerr;
+#   endif // defined(_MSC_VER)
+
+    using std::remove;
+    using std::rename;
+    using std::tmpfile;
+    using std::tmpnam;
+    using std::fflush;
+    using std::fopen;
+    using std::freopen;
+    using std::setbuf;
+    using std::setvbuf;
+    using std::fprintf;
+    using std::fscanf;
+    using std::printf;
+    using std::scanf;
+    using std::sprintf;
+    using std::sscanf;
+    using std::vfprintf;
+    using std::vprintf;
+    using std::vsprintf;
+    using std::fgetc;
+    using std::fgets;
+    using std::fputc;
+    using std::fputs;
+    using std::getc;
+    using std::getchar;
+    using std::gets;
+    using std::putc;
+    using std::putchar;
+    using std::puts;
+    using std::ungetc;
+    using std::fread;
+    using std::fwrite;
+    using std::fgetpos;
+    using std::fseek;
+    using std::fsetpos;
+    using std::ftell;
+    using std::rewind;
+    using std::feof;
+    using std::ferror;
+    using std::perror;
+
+//  from <cstdlib>:
+
+    using std::div_t;
+    using std::ldiv_t;
+
+    using std::atof;
+    using std::atoi;
+    using std::atol;
+    using std::strtod;
+    using std::strtol;
+    using std::strtoul;
+    using std::rand;
+    using std::srand;
+    using std::calloc;
+    using std::free;
+    using std::malloc;
+    using std::realloc;
+    using std::abort;
+    using std::atexit;
+    using std::exit;
+    using std::getenv;
+    using std::system;
+    using std::bsearch;
+    using std::qsort;
+    using std::abs;
+    using std::div;
+    using std::labs;
+    using std::ldiv;
+    using std::mblen;
+    using std::mbtowc;
+    using std::wctomb;
+    using std::mbstowcs;
+    using std::wcstombs;
+
+//  from <cstring>:
+
+    using std::memcpy;
+    using std::memmove;
+    using std::strcpy;
+    using std::strncpy;
+    using std::strcat;
+    using std::strncat;
+    using std::memcmp;
+    using std::strcmp;
+    using std::strcoll;
+    using std::strncmp;
+    using std::strxfrm;
+    using std::memchr;
+    using std::strchr;
+    using std::strcspn;
+    using std::strpbrk;
+    using std::strrchr;
+    using std::strspn;
+    using std::strstr;
+    using std::strtok;
+    using std::memset;
+    using std::strerror;
+    using std::strlen;
+
+#else
+#if defined( _MSC_VER )
+    // VC++6 with standard library
+
+   using std::ios;
+   using std::streambuf;
+   using std::streampos;
+   using std::streamsize;
+   using std::iostream;
+   using std::istream;
+   using std::ostream;
+   using std::strstream;
+   using std::strstreambuf;
+   using std::istrstream;
+   using std::ostrstream;
+   using std::cin;
+   using std::cout;
+   using std::cerr;
+   using std::endl;
+   using std::flush;
+   using std::dec;
+   using std::hex;
+   using std::oct;
+
+   using std::fstream;
+   using std::ifstream;
+   using std::ofstream;
+
+#endif // MSC
+#endif // Everyone else
+
+// INCLUDE SYSTEMC DEFINITIONS for sc_dt AND sc_core NAMESPACES:
+
 #include "systemc"
 
 // USINGS FOR THE sc_dt NAMESPACE:
 
-using sc_dt::sc_bit;
-using sc_dt::sc_logic;
-using sc_dt::sc_bv_base;
-using sc_dt::sc_bv;
-using sc_dt::sc_lv_base;
-using sc_dt::sc_lv;
-using sc_dt::int64;
-using sc_dt::uint64;
-
-using sc_dt::sc_numrep;
-using sc_dt::SC_NOBASE;
 using sc_dt::SC_BIN;
-using sc_dt::SC_OCT;
+using sc_dt::SC_BIN_SM;
+using sc_dt::SC_BIN_US;
+using sc_dt::SC_CSD;
 using sc_dt::SC_DEC;
 using sc_dt::SC_HEX;
-using sc_dt::SC_BIN_US;
-using sc_dt::SC_BIN_SM;
-using sc_dt::SC_OCT_US;
-using sc_dt::SC_OCT_SM;
-using sc_dt::SC_HEX_US;
 using sc_dt::SC_HEX_SM;
-using sc_dt::SC_CSD;
-using sc_dt::sc_io_show_base;
-using sc_dt::sc_string_old;
-
+using sc_dt::SC_HEX_US;
 using sc_dt::SC_LOGIC_0;
 using sc_dt::SC_LOGIC_1;
-using sc_dt::SC_LOGIC_Z;
 using sc_dt::SC_LOGIC_X;
-
-using sc_dt::sc_length_param;
-using sc_dt::sc_length_context;
-using sc_dt::sc_signed;
+using sc_dt::SC_LOGIC_Z;
+using sc_dt::SC_NOBASE;
+using sc_dt::SC_OCT;
+using sc_dt::SC_OCT_SM;
+using sc_dt::SC_OCT_US;
+using sc_dt::int64;
+using sc_dt::sc_abs;
 using sc_dt::sc_bigint;
-using sc_dt::sc_unsigned;
 using sc_dt::sc_biguint;
-using sc_dt::sc_int_base;
+using sc_dt::sc_bit;
+using sc_dt::sc_bv;
+using sc_dt::sc_bv_base;
+using sc_dt::sc_digit;
 using sc_dt::sc_int;
-using sc_dt::sc_uint_base;
+using sc_dt::sc_int_base;
+using sc_dt::sc_io_show_base;
+using sc_dt::sc_length_context;
+using sc_dt::sc_length_param;
+using sc_dt::sc_logic;
+using sc_dt::sc_lv;
+using sc_dt::sc_lv_base;
+using sc_dt::sc_max;
+using sc_dt::sc_min;
+using sc_dt::sc_numrep;
+using sc_dt::sc_signed;
+using sc_dt::sc_string_old;
 using sc_dt::sc_uint;
-
+using sc_dt::sc_uint_base;
+using sc_dt::sc_unsigned;
+using sc_dt::uint64;
 // #ifdef SC_DT_DEPRECATED
 using sc_dt::sc_logic_0;
 using sc_dt::sc_logic_1;
@@ -166,93 +364,11 @@ using namespace sc_core;
     using ::sc_core::wait;
 #endif // !defined( __HP_aCC )
 
-
-// USINGS FOR I/O STREAM SUPPORT:
-
-#if !defined( _MSC_VER ) && !defined( __BORLANDC__ )
-#   if defined(__GNUC__) && (__GNUC__ == 2) // Maintain compatibility for 2.95.x
-    	using std::strstream;
-    	using std::strstreambuf;
-    	using std::istrstream;
-    	using std::ostrstream;
-#   endif
-
-    using std::ios;
-    using std::streambuf;
-    using std::streampos;
-    using std::streamsize;
-    using std::iostream;
-    using std::istream;
-    using std::ostream;
-    using std::cin;
-    using std::cout;
-    using std::cerr;
-    using std::endl;
-    using std::flush;
-    using std::dec;
-    using std::hex;
-    using std::oct;
-#   if defined(linux)
-        using std::noshowbase;
-        using std::showbase;
-#   endif // defined(linux)
-
-
-    using std::fstream;
-    using std::ifstream;
-    using std::ofstream;
-
-    using std::size_t;
-
-    using std::memchr;
-    using std::memcmp;
-    using std::memcpy;
-    using std::memmove;
-    using std::memset;
-    using std::strcat;
-    using std::strncat;
-    using std::strchr;
-    using std::strrchr;
-    using std::strcmp;
-    using std::strncmp;
-    using std::strcpy;
-    using std::strncpy;
-    using std::strcspn;
-    using std::strspn;
-    using std::strlen;
-    using std::strpbrk;
-    using std::strstr;
-    using std::strtok;
-
-#else
-#if defined( _MSC_VER )
-    // VC++6 with standard library
-
-   using std::ios;
-   using std::streambuf;
-   using std::streampos;
-   using std::streamsize;
-   using std::iostream;
-   using std::istream;
-   using std::ostream;
-   using std::strstream;
-   using std::strstreambuf;
-   using std::istrstream;
-   using std::ostrstream;
-   using std::cin;
-   using std::cout;
-   using std::cerr;
-   using std::endl;
-   using std::flush;
-   using std::dec;
-   using std::hex;
-   using std::oct;
-
-   using std::fstream;
-   using std::ifstream;
-   using std::ofstream;
-
-#endif // MSC
-#endif // Everyone else
+#ifdef SC_USE_SC_STRING_OLD
+	typedef sc_dt::sc_string_old sc_string;
+#endif
+#ifdef SC_USE_STD_STRING
+	typedef ::std::string sc_string;
+#endif
 
 #endif

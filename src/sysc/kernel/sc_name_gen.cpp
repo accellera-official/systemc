@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -33,6 +33,11 @@
 
  *****************************************************************************/
 
+
+// $Log: sc_name_gen.cpp,v $
+// Revision 1.3  2006/01/13 18:44:30  acg
+// Added $Log to record CVS changes into the source.
+//
 
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/kernel/sc_name_gen.h"
@@ -72,12 +77,12 @@ sc_name_gen::gen_unique_name( const char* basename_, bool preserve_first )
 	c = new int( 0 );
 	m_unique_name_map.insert( CCAST<char*>( basename_ ), c );
 	if (preserve_first) {
-	    sprintf( m_unique_name, "%s", basename_ );
+	    std::sprintf( m_unique_name, "%s", basename_ );
 	} else {    
-            sprintf( m_unique_name, "%s_%d", basename_, *c );
+            std::sprintf( m_unique_name, "%s_%d", basename_, *c );
         }
     } else {
-        sprintf( m_unique_name, "%s_%d", basename_, ++ (*c) );
+        std::sprintf( m_unique_name, "%s_%d", basename_, ++ (*c) );
     }
     return m_unique_name;
 }

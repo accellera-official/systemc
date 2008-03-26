@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2004 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -66,7 +66,7 @@ public:
     // process declaration
     SC_METHOD(wait_loop);
     dont_initialize();
-    sensitive_pos << clock;
+    sensitive << clock.pos();
 
     sc_assert(m_start_address <= m_end_address);
     sc_assert((m_end_address-m_start_address+1)%4 == 0);

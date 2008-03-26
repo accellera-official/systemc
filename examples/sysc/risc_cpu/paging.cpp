@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2004 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -45,7 +45,7 @@ void paging::entry()
  int	 	dataout_tmp =0;
 
  while (true) {
-    	wait_until(paging_csin.delayed() == true); 
+    	do { wait(); } while ( !(paging_csin == true) ); 
 	address = logical_address.read();
         address_conversion_factor = paging_din.read(); 
 
@@ -65,7 +65,7 @@ void paging::entry()
 			paging_weout.write(false);
 			physical_address.write(logical_address.read());
 			wait();
-			wait_until(icache_validin.delayed() == true);
+			do { wait(); } while ( !(icache_validin == true) );
 			dataout_tmp = icache_din.read();
 			
 			if (PRINT_PU){

@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -34,10 +34,38 @@
  *****************************************************************************/
 
 
+// $Log: sc_signal_ports.cpp,v $
+// Revision 1.7  2006/04/18 18:01:26  acg
+//  Andy Goodrich: added an add_trace_internal() method to the various port
+//  classes so that sc_trace has something to call that won't emit an
+//  IEEE 1666 deprecation message.
+//
+// Revision 1.6  2006/02/02 23:42:37  acg
+//  Andy Goodrich: implemented a much better fix to the sc_event_finder
+//  proliferation problem. This new version allocates only a single event
+//  finder for each port for each type of event, e.g., pos(), neg(), and
+//  value_change(). The event finder persists as long as the port does,
+//  which is what the LRM dictates. Because only a single instance is
+//  allocated for each event type per port there is not a potential
+//  explosion of storage as was true in the 2.0.1/2.1 versions.
+//
+// Revision 1.5  2006/01/25 00:31:11  acg
+//  Andy Goodrich: Changed over to use a standard message id of
+//  SC_ID_IEEE_1666_DEPRECATION for all deprecation messages.
+//
+// Revision 1.4  2006/01/24 20:46:32  acg
+// Andy Goodrich: changes to eliminate use of deprecated features. For instance,
+// using notify(SC_ZERO_TIME) in place of notify_delayed().
+//
+// Revision 1.3  2006/01/13 18:47:42  acg
+// Added $Log command so that CVS comments are reproduced in the source.
+//
+
 #include "sysc/communication/sc_signal_ports.h"
 #include "sysc/datatypes/int/sc_signed.h"
 #include "sysc/datatypes/int/sc_unsigned.h"
 #include "sysc/datatypes/bit/sc_lv_base.h"
+#include "sysc/utils/sc_utils_ids.h"
 
 namespace sc_core {
 
@@ -53,10 +81,10 @@ void
 sc_in<bool>::end_of_elaboration()
 {
     if( m_traces != 0 ) {
-	for( int i = 0; i < m_traces->size(); ++ i ) {
+	for( int i = 0; i < (int)m_traces->size(); ++ i ) {
 	    sc_trace_params* p = (*m_traces)[i];
 	    in_if_type* iface = DCAST<in_if_type*>( get_interface() );
-	    sc_trace( p->tf, iface->get_data_ref(), p->name );
+	    sc_trace( p->tf, iface->read(), p->name );
 	}
 	remove_traces();
     }
@@ -65,7 +93,7 @@ sc_in<bool>::end_of_elaboration()
 // called by sc_trace
 
 void
-sc_in<bool>::add_trace(sc_trace_file* tf_, 
+sc_in<bool>::add_trace_internal(sc_trace_file* tf_, 
 	const std::string& name_) const
 {
     if( tf_ != 0 ) {
@@ -74,6 +102,14 @@ sc_in<bool>::add_trace(sc_trace_file* tf_,
 	}
 	m_traces->push_back( new sc_trace_params( tf_, name_ ) );
     }
+}
+
+void
+sc_in<bool>::add_trace(sc_trace_file* tf_, 
+	const std::string& name_) const
+{
+    sc_deprecated_add_trace();
+	add_trace_internal(tf_, name_);
 }
 
 void
@@ -127,10 +163,10 @@ void
 sc_in<sc_dt::sc_logic>::end_of_elaboration()
 {
     if( m_traces != 0 ) {
-	for( int i = 0; i < m_traces->size(); ++ i ) {
+	for( int i = 0; i < (int)m_traces->size(); ++ i ) {
 	    sc_trace_params* p = (*m_traces)[i];
 	    in_if_type* iface = DCAST<in_if_type*>( get_interface() );
-	    sc_trace( p->tf, iface->get_data_ref(), p->name );
+	    sc_trace( p->tf, iface->read(), p->name );
 	}
 	remove_traces();
     }
@@ -140,7 +176,7 @@ sc_in<sc_dt::sc_logic>::end_of_elaboration()
 // called by sc_trace
 
 void
-sc_in<sc_dt::sc_logic>::add_trace( sc_trace_file* tf_, 
+sc_in<sc_dt::sc_logic>::add_trace_internal( sc_trace_file* tf_, 
     const std::string& name_ ) const
 {
     if( tf_ != 0 ) {
@@ -149,6 +185,14 @@ sc_in<sc_dt::sc_logic>::add_trace( sc_trace_file* tf_,
 	}
 	m_traces->push_back( new sc_trace_params( tf_, name_ ) );
     }
+}
+
+void
+sc_in<sc_dt::sc_logic>::add_trace( sc_trace_file* tf_, 
+    const std::string& name_ ) const
+{
+    sc_deprecated_add_trace();
+    add_trace_internal(tf_, name_);
 }
 
 void
@@ -200,6 +244,9 @@ sc_in<sc_dt::sc_logic>::vbind( sc_port_base& parent_ )
 
 sc_inout<bool>::~sc_inout()
 {
+    if ( m_change_finder_p ) delete m_change_finder_p;
+    if ( m_neg_finder_p ) delete m_neg_finder_p;
+    if ( m_pos_finder_p ) delete m_pos_finder_p;
     if( m_init_val != 0 ) {
 	delete m_init_val;
     }
@@ -235,19 +282,20 @@ sc_inout<bool>::end_of_elaboration()
 	m_init_val = 0;
     }
     if( m_traces != 0 ) {
-	for( int i = 0; i < m_traces->size(); ++ i ) {
+	for( int i = 0; i < (int)m_traces->size(); ++ i ) {
 	    sc_trace_params* p = (*m_traces)[i];
 	    in_if_type* iface = DCAST<in_if_type*>( get_interface() );
-	    sc_trace( p->tf, iface->get_data_ref(), p->name );
+	    sc_trace( p->tf, iface->read(), p->name );
 	}
 	remove_traces();
     }
 }
 
+
 // called by sc_trace
 
 void
-sc_inout<bool>::add_trace( sc_trace_file* tf_, 
+sc_inout<bool>::add_trace_internal( sc_trace_file* tf_, 
     const std::string& name_ ) const
 {
     if( tf_ != 0 ) {
@@ -256,6 +304,14 @@ sc_inout<bool>::add_trace( sc_trace_file* tf_,
 	}
 	m_traces->push_back( new sc_trace_params( tf_, name_ ) );
     }
+}
+
+void
+sc_inout<bool>::add_trace( sc_trace_file* tf_, 
+    const std::string& name_ ) const
+{
+    sc_deprecated_add_trace();
+    add_trace_internal(tf_, name_);
 }
 
 void
@@ -281,6 +337,9 @@ sc_inout<bool>::remove_traces() const
 
 sc_inout<sc_dt::sc_logic>::~sc_inout()
 {
+    if ( m_change_finder_p ) delete m_change_finder_p;
+    if ( m_neg_finder_p ) delete m_neg_finder_p;
+    if ( m_pos_finder_p ) delete m_pos_finder_p;
     if( m_init_val != 0 ) {
 	delete m_init_val;
     }
@@ -316,10 +375,10 @@ sc_inout<sc_dt::sc_logic>::end_of_elaboration()
 	m_init_val = 0;
     }
     if( m_traces != 0 ) {
-	for( int i = 0; i < m_traces->size(); ++ i ) {
+	for( int i = 0; i < (int)m_traces->size(); ++ i ) {
 	    sc_trace_params* p = (*m_traces)[i];
 	    in_if_type* iface = DCAST<in_if_type*>( get_interface() );
-	    sc_trace( p->tf, iface->get_data_ref(), p->name );
+	    sc_trace( p->tf, iface->read(), p->name );
 	}
 	remove_traces();
     }
@@ -329,7 +388,7 @@ sc_inout<sc_dt::sc_logic>::end_of_elaboration()
 // called by sc_trace
 
 void
-sc_inout<sc_dt::sc_logic>::add_trace( sc_trace_file* tf_,
+sc_inout<sc_dt::sc_logic>::add_trace_internal( sc_trace_file* tf_,
 			       const std::string& name_ ) const
 {
     if( tf_ != 0 ) {
@@ -338,6 +397,15 @@ sc_inout<sc_dt::sc_logic>::add_trace( sc_trace_file* tf_,
 	}
 	m_traces->push_back( new sc_trace_params( tf_, name_ ) );
     }
+}
+
+
+void
+sc_inout<sc_dt::sc_logic>::add_trace( sc_trace_file* tf_,
+			       const std::string& name_ ) const
+{
+    sc_deprecated_add_trace();
+    add_trace_internal(tf_, name_);
 }
 
 void
@@ -352,6 +420,16 @@ sc_inout<sc_dt::sc_logic>::remove_traces() const
     }
 }
 
+void sc_deprecated_add_trace()
+{
+    static bool warn_add_trace_deprecated=true;
+    if ( warn_add_trace_deprecated )
+    {
+        warn_add_trace_deprecated=false;
+	SC_REPORT_INFO(SC_ID_IEEE_1666_DEPRECATION_,
+	    "sc_signal<T>::addtrace() is deprecated");
+    }
+}
 } // namespace sc_core
 
 // Taf!

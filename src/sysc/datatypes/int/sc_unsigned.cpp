@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -41,6 +41,12 @@
  *****************************************************************************/
 
 
+// $Log: sc_unsigned.cpp,v $
+// Revision 1.3  2006/01/13 18:49:32  acg
+// Added $Log command so that CVS check in comments are reproduced in the
+// source.
+//
+
 #include <ctype.h>
 #include <math.h>
 
@@ -76,7 +82,7 @@ void
 sc_unsigned::invalid_index( int i ) const
 {
     char msg[BUFSIZ];
-    sprintf( msg,
+    std::sprintf( msg,
          "sc_biguint bit selection: index = %d violates "
          "0 <= index <= %d",
          i, nbits - 2 );
@@ -87,7 +93,7 @@ void
 sc_unsigned::invalid_range( int l, int r ) const
 {
     char msg[BUFSIZ];
-    sprintf( msg,
+    std::sprintf( msg,
          "sc_biguint part selection: left = %d, right = %d \n"
          "  violates either (0 <= left <= %d) or (0 <= right <= %d)",
          l, r, nbits-2, nbits-2 );
@@ -107,12 +113,12 @@ sc_unsigned::invalid_range( int l, int r ) const
 // Insert this object's value at the specified place in a vector of big style
 // values.
 
-bool sc_unsigned::concat_get_ctrl( unsigned long* dst_p, int low_i ) const
+bool sc_unsigned::concat_get_ctrl( sc_digit* dst_p, int low_i ) const
 {
-    int           dst_i;        // Index to next word to set in dst_p.
-    int           end_i;        // Index of high order word to set.
-    int           left_shift;   // Amount to shift value left.
-    unsigned long mask;         // Mask for partial word sets.
+    int      dst_i;        // Index to next word to set in dst_p.
+    int      end_i;        // Index of high order word to set.
+    int      left_shift;   // Amount to shift value left.
+    sc_digit mask;         // Mask for partial word sets.
 
 
     // CALCULATE METRICS FOR DATA MOVEMENT:
@@ -133,19 +139,19 @@ bool sc_unsigned::concat_get_ctrl( unsigned long* dst_p, int low_i ) const
     return false;
 }
 
-bool sc_unsigned::concat_get_data( unsigned long* dst_p, int low_i ) const
+bool sc_unsigned::concat_get_data( sc_digit* dst_p, int low_i ) const
 {
-    int           dst_i;        // Index to next word to set in dst_p.
-    int           end_i;        // Index of high order word to set.
-    int           high_i;       // Index w/in word of high order bit.
-    int           left_shift;   // Amount to shift value left.
-    unsigned long left_word;    // High word component for set.
-    unsigned long mask;         // Mask for partial word sets.
-    bool	  result;       // True if inserting non-zero data.
-    int           right_shift;  // Amount to shift value right.
-    unsigned long right_word;   // Low word component for set.
-    int           real_bits;    // nbits - 1.
-    int           src_i;        // Index to next word to get from digit.
+    int      dst_i;        // Index to next word to set in dst_p.
+    int      end_i;        // Index of high order word to set.
+    int      high_i;       // Index w/in word of high order bit.
+    int      left_shift;   // Amount to shift value left.
+    sc_digit left_word;    // High word component for set.
+    sc_digit mask;         // Mask for partial word sets.
+    bool     result;       // True if inserting non-zero data.
+    int      right_shift;  // Amount to shift value right.
+    sc_digit right_word;   // Low word component for set.
+    int      real_bits;    // nbits - 1.
+    int      src_i;        // Index to next word to get from digit.
 
 
     // CALCULATE METRICS FOR DATA MOVEMENT:
@@ -323,7 +329,7 @@ bool sc_unsigned::and_reduce() const
     for ( i = 0; i < ndigits-1; i++ )
         if ( (digit[i] & DIGIT_MASK) != DIGIT_MASK ) return false;
     if ( (digit[i] & ~(-1 << (nbits % BITS_PER_DIGIT))) ==
-        (unsigned long)~(-1 << (nbits % BITS_PER_DIGIT)))
+        (sc_digit)~(-1 << (nbits % BITS_PER_DIGIT)))
 		return true;
     return false;
 }
@@ -370,7 +376,7 @@ sc_unsigned::operator = ( const char* a )
         return this->operator = ( aa );
     } catch( sc_core::sc_report ) {
         char msg[BUFSIZ];
-        sprintf( msg, "character string '%s' is not valid", a );
+        std::sprintf( msg, "character string '%s' is not valid", a );
         SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_, msg );
         // never reached
     }
@@ -443,9 +449,9 @@ sc_unsigned::operator=(double v)
   register int i = 0;
   while (floor(v) && (i < ndigits)) {
 #ifndef WIN32
-    digit[i++] = (unsigned long) floor(remainder(v, DIGIT_RADIX));
+    digit[i++] = (sc_digit) floor(remainder(v, DIGIT_RADIX));
 #else
-    digit[i++] = (unsigned long) floor(fmod(v, DIGIT_RADIX));
+    digit[i++] = (sc_digit) floor(fmod(v, DIGIT_RADIX));
 #endif
     v /= DIGIT_RADIX;
   }
@@ -756,20 +762,29 @@ operator>=(const sc_uint_base& u, const sc_unsigned& v)
 
 #define CONVERT_LONG(u) \
 small_type u ## s = get_sign(u);                   \
-unsigned long u ## d[DIGITS_PER_ULONG];                    \
+sc_digit u ## d[DIGITS_PER_ULONG];                    \
 from_uint(DIGITS_PER_ULONG, u ## d, (unsigned long) u); 
 
 #define CONVERT_LONG_2(u) \
-unsigned long u ## d[DIGITS_PER_ULONG];                     \
+sc_digit u ## d[DIGITS_PER_ULONG];                     \
 from_uint(DIGITS_PER_ULONG, u ## d, (unsigned long) u); 
+
+#define CONVERT_INT(u) \
+small_type u ## s = get_sign(u);                        \
+sc_digit u ## d[DIGITS_PER_UINT];                    \
+from_uint(DIGITS_PER_UINT, u ## d, (unsigned int) u); 
+
+#define CONVERT_INT_2(u) \
+sc_digit u ## d[DIGITS_PER_UINT];                     \
+from_uint(DIGITS_PER_UINT, u ## d, (unsigned int) u); 
 
 #define CONVERT_INT64(u) \
 small_type u ## s = get_sign(u);                   \
-unsigned long u ## d[DIGITS_PER_UINT64];              \
+sc_digit u ## d[DIGITS_PER_UINT64];              \
 from_uint(DIGITS_PER_UINT64, u ## d, (uint64) u); 
 
 #define CONVERT_INT64_2(u) \
-unsigned long u ## d[DIGITS_PER_UINT64];              \
+sc_digit u ## d[DIGITS_PER_UINT64];              \
 from_uint(DIGITS_PER_UINT64, u ## d, (uint64) u); 
 
 
@@ -1950,9 +1965,9 @@ operator>=(const sc_signed& u, const sc_unsigned& v)
 
 int
 compare_unsigned(small_type us, 
-                 int unb, int und, const unsigned long *ud, 
+                 int unb, int und, const sc_digit *ud, 
                  small_type vs, 
-                 int vnb, int vnd, const unsigned long *vd,
+                 int vnb, int vnd, const sc_digit *vd,
                  small_type if_u_signed, 
                  small_type if_v_signed)
 {
@@ -1986,9 +2001,9 @@ compare_unsigned(small_type us,
     int nd = (us == SC_NEG ? und : vnd);
 
 #ifdef SC_MAX_NBITS
-    unsigned long d[MAX_NDIGITS];
+    sc_digit d[MAX_NDIGITS];
 #else
-    unsigned long *d = new unsigned long[nd];
+    sc_digit *d = new sc_digit[nd];
 #endif
 
     if (us == SC_NEG) {
@@ -2034,9 +2049,9 @@ sc_unsigned::iszero() const
     // check that.
 
 #ifdef SC_MAX_NBITS
-    unsigned long d[MAX_NDIGITS];
+    sc_digit d[MAX_NDIGITS];
 #else
-    unsigned long *d = new unsigned long[ndigits];
+    sc_digit *d = new sc_digit[ndigits];
 #endif
 
     vec_copy(ndigits, d, digit);

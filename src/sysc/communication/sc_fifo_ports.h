@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -32,6 +32,20 @@
   Description of Modification:
     
  *****************************************************************************/
+//$Log: sc_fifo_ports.h,v $
+//Revision 1.2  2006/01/03 23:18:26  acg
+//Changed copyright to include 2006.
+//
+//Revision 1.1.1.1  2005/12/19 23:16:43  acg
+//First check in of SystemC 2.1 into its own archive.
+//
+//Revision 1.10  2005/09/15 23:01:51  acg
+//Added std:: prefix to appropriate methods and types to get around
+//issues with the Edison Front End.
+//
+//Revision 1.9  2005/06/10 22:43:55  acg
+//Added CVS change log annotation.
+//
 
 #ifndef SC_FIFO_PORTS_H
 #define SC_FIFO_PORTS_H
@@ -50,20 +64,20 @@ namespace sc_core {
 
 template <class T>
 class sc_fifo_in
-: public sc_port<sc_fifo_in_if<T>,0>
+: public sc_port<sc_fifo_in_if<T>,0,SC_ONE_OR_MORE_BOUND>
 {
 public:
 
     // typedefs
 
-    typedef T                        data_type;
+    typedef T                                       data_type;
 
-    typedef sc_fifo_in_if<data_type> if_type;
-    typedef sc_port<if_type,0>       base_type;
-    typedef sc_fifo_in<data_type>    this_type;
+    typedef sc_fifo_in_if<data_type>                if_type;
+    typedef sc_port<if_type,0,SC_ONE_OR_MORE_BOUND> base_type;
+    typedef sc_fifo_in<data_type>                   this_type;
 
-    typedef if_type                  in_if_type;
-    typedef sc_port_b<in_if_type>    in_port_type;
+    typedef if_type                                 in_if_type;
+    typedef sc_port_b<in_if_type>                   in_port_type;
 
 public:
 
@@ -166,20 +180,20 @@ private:
 
 template <class T>
 class sc_fifo_out
-: public sc_port<sc_fifo_out_if<T>,0>
+: public sc_port<sc_fifo_out_if<T>,0,SC_ONE_OR_MORE_BOUND>
 {
 public:
 
     // typedefs
 
-    typedef T                         data_type;
+    typedef T                                        data_type;
 
-    typedef sc_fifo_out_if<data_type> if_type;
-    typedef sc_port<if_type,0>        base_type;
-    typedef sc_fifo_out<data_type>    this_type;
+    typedef sc_fifo_out_if<data_type>                if_type;
+    typedef sc_port<if_type,0,SC_ONE_OR_MORE_BOUND>  base_type;
+    typedef sc_fifo_out<data_type>                   this_type;
 
-    typedef if_type                   out_if_type;
-    typedef sc_port_b<out_if_type>    out_port_type;
+    typedef if_type                                  out_if_type;
+    typedef sc_port_b<out_if_type>                   out_port_type;
 
 public:
 

@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -28,18 +28,52 @@
   MODIFICATION LOG - modifiers, enter your name, affiliation, date and
   changes you are making here.
 
-      Name, Affiliation, Date: Andy Goodrich, Forte
+      Name, Affiliation, Date: Andy Goodrich, Forte Design Systems
                                Bishnupriya Bhattacharya, Cadence Design Systems,
                                25 August, 2003
   Description of Modification: phase callbacks
+
+      Name, Affiliation, Date: Andy Goodrich, Forte Design Systems
+	  						   12 December, 2005
+  Description of Modification: multiport binding policy changes
     
  *****************************************************************************/
 
 
-#include "sysc/kernel/sc_lambda.h"
-#include "sysc/kernel/sc_process_int.h"
+// $Log: sc_port.cpp,v $
+// Revision 1.9  2006/02/02 20:43:09  acg
+//  Andy Goodrich: Added an existence linked list to sc_event_finder so that
+//  the dynamically allocated instances can be freed after port binding
+//  completes. This replaces the individual deletions in ~sc_bind_ef, as these
+//  caused an exception if an sc_event_finder instance was used more than
+//  once, due to a double freeing of the instance.
+//
+// Revision 1.7  2006/01/26 21:00:50  acg
+//  Andy Goodrich: conversion to use sc_event::notify(SC_ZERO_TIME) instead of
+//  sc_event::notify_delayed()
+//
+// Revision 1.6  2006/01/25 00:31:11  acg
+//  Andy Goodrich: Changed over to use a standard message id of
+//  SC_ID_IEEE_1666_DEPRECATION for all deprecation messages.
+//
+// Revision 1.5  2006/01/24 20:46:31  acg
+// Andy Goodrich: changes to eliminate use of deprecated features. For instance,
+// using notify(SC_ZERO_TIME) in place of notify_delayed().
+//
+// Revision 1.4  2006/01/13 20:41:59  acg
+// Andy Goodrich: Changes to add port registration to the things that are
+// checked when SC_NO_WRITE_CHECK is not defined.
+//
+// Revision 1.3  2006/01/13 18:47:42  acg
+// Added $Log command so that CVS comments are reproduced in the source.
+//
+
 #include "sysc/kernel/sc_simcontext.h"
+#include "sysc/kernel/sc_module.h"
+#include "sysc/kernel/sc_method_process.h"
+#include "sysc/kernel/sc_thread_process.h"
 #include "sysc/communication/sc_communication_ids.h"
+#include "sysc/utils/sc_utils_ids.h"
 #include "sysc/communication/sc_event_finder.h"
 #include "sysc/communication/sc_port.h"
 #include "sysc/communication/sc_signal_ifs.h"
@@ -94,7 +128,7 @@ struct sc_bind_ef
     // destructor
     ~sc_bind_ef();
 
-    sc_process_b*    handle;
+    sc_process_b* handle;
     sc_event_finder* event_finder;
 };
 
@@ -114,9 +148,6 @@ sc_bind_ef::sc_bind_ef( sc_process_b* handle_,
 
 sc_bind_ef::~sc_bind_ef()
 {
-    if( event_finder != 0 ) {
-	delete event_finder;
-    }
 }
 
 
@@ -127,22 +158,26 @@ sc_bind_ef::~sc_bind_ef()
 struct sc_bind_info
 {
     // constructor
-    explicit sc_bind_info( int max_size_ );
+    explicit sc_bind_info( int max_size_, 
+	sc_port_policy policy_=SC_ONE_OR_MORE_BOUND );
 
     // destructor
     ~sc_bind_info();
 
-    int size() const;
+    int            max_size() const;
+    sc_port_policy policy() const; 
+    int            size() const;
 
-    int                       max_size;
-    sc_pvector<sc_bind_elem*> vec;
-    bool                      has_parent;
-    int                       last_add;
-    bool                      is_leaf;
-    bool                      complete;
+    int                        m_max_size;
+    sc_port_policy             m_policy;
+    std::vector<sc_bind_elem*> vec;
+    bool                       has_parent;
+    int                        last_add;
+    bool                       is_leaf;
+    bool                       complete;
 
-    sc_pvector<sc_bind_ef*>   thread_vec;
-    sc_pvector<sc_bind_ef*>   method_vec;
+    std::vector<sc_bind_ef*>   thread_vec;
+    std::vector<sc_bind_ef*>   method_vec;
 };
 
 
@@ -150,8 +185,9 @@ struct sc_bind_info
 
 // constructor
 
-sc_bind_info::sc_bind_info( int max_size_ )
-: max_size( max_size_ ),
+sc_bind_info::sc_bind_info( int max_size_, sc_port_policy policy_ )
+: m_max_size( max_size_ ),
+  m_policy( policy_ ),
   has_parent( false ),
   last_add( -1 ),
   is_leaf( true ),
@@ -170,10 +206,23 @@ sc_bind_info::~sc_bind_info()
 
 
 int
+sc_bind_info::max_size() const
+{
+    return m_max_size ? m_max_size : vec.size();
+}
+
+sc_port_policy 
+sc_bind_info::policy() const
+{
+    return m_policy;
+}
+
+int
 sc_bind_info::size() const
 {
     return vec.size();
 }
+
 
 
 // ----------------------------------------------------------------------------
@@ -182,6 +231,23 @@ sc_bind_info::size() const
 //  Abstract base class for class sc_port_b.
 // ----------------------------------------------------------------------------
 
+// This method exists to get around a problem in VCC 6.0 where you cannot
+// have  a friend class that is templated. So sc_port_b<IF> calls this class
+// instead of sc_process_b::add_static_event.
+
+void sc_port_base::add_static_event(
+    sc_method_handle process_p, const sc_event& event ) const
+{
+    process_p->add_static_event( event );
+}
+
+void sc_port_base::add_static_event(
+    sc_thread_handle process_p, const sc_event& event ) const
+{
+    process_p->add_static_event( event );
+}
+
+
 // error reporting
 
 void
@@ -189,9 +255,9 @@ sc_port_base::report_error( const char* id, const char* add_msg ) const
 {
     char msg[BUFSIZ];
     if( add_msg != 0 ) {
-	sprintf( msg, "%s: port '%s' (%s)", add_msg, name(), kind() );
+	std::sprintf( msg, "%s: port '%s' (%s)", add_msg, name(), kind() );
     } else {
-	sprintf( msg, "port '%s' (%s)", name(), kind() );
+	std::sprintf( msg, "port '%s' (%s)", name(), kind() );
     }
     SC_REPORT_ERROR( id, msg );
 }
@@ -199,16 +265,20 @@ sc_port_base::report_error( const char* id, const char* add_msg ) const
 
 // constructors
 
-sc_port_base::sc_port_base( int max_size_ )
-: sc_object( sc_gen_unique_name( "port" ) ),
-  m_bind_info( new sc_bind_info( max_size_ ) )
+sc_port_base::sc_port_base( 
+    int max_size_, sc_port_policy policy 
+) : 
+    sc_object( sc_gen_unique_name( "port" ) ),
+    m_bind_info( new sc_bind_info( max_size_, policy ) )
 {
     simcontext()->get_port_registry()->insert( this );
 }
 
-sc_port_base::sc_port_base( const char* name_, int max_size_ )
-: sc_object( name_ ),
-  m_bind_info( new sc_bind_info( max_size_ ) )
+sc_port_base::sc_port_base( 
+    const char* name_, int max_size_, sc_port_policy policy 
+) : 
+    sc_object( name_ ),
+    m_bind_info( new sc_bind_info( max_size_, policy ) )
 {
     simcontext()->get_port_registry()->insert( this );
 }
@@ -235,18 +305,6 @@ sc_port_base::bind( sc_interface& interface_ )
 	report_error( SC_ID_BIND_IF_TO_PORT_, "simulation running" );
     }
 
-    if( m_bind_info->size() == m_bind_info->max_size &&
-	m_bind_info->max_size > 0 ) {
-	report_error( SC_ID_BIND_IF_TO_PORT_, "maximum reached" );
-    }
-
-    // check if interface is already bound to this port
-    for( int i = m_bind_info->size() - 1; i >= 0; -- i ) {
-	if( &interface_ == m_bind_info->vec[i]->iface ) {
-	    report_error( SC_ID_BIND_IF_TO_PORT_, "already bound" );
-	}
-    }
-
     m_bind_info->vec.push_back( new sc_bind_elem( &interface_ ) );
     
     if( ! m_bind_info->has_parent ) {
@@ -267,21 +325,18 @@ sc_port_base::bind( this_type& parent_ )
 	report_error( SC_ID_BIND_PORT_TO_PORT_, "simulation running" );
     }
 
-    if( m_bind_info->size() == m_bind_info->max_size &&
-	m_bind_info->max_size > 0 ) {
-	report_error( SC_ID_BIND_PORT_TO_PORT_, "maximum reached" );
-    }
-
     if( &parent_ == this ) {
 	report_error( SC_ID_BIND_PORT_TO_PORT_, "same port" );
     }
 
     // check if parent port is already bound to this port
+#if 0
     for( int i = m_bind_info->size() - 1; i >= 0; -- i ) {
 	if( &parent_ == m_bind_info->vec[i]->parent ) {
 	    report_error( SC_ID_BIND_PORT_TO_PORT_, "already bound" );
 	}
     }
+#endif // 
 
     m_bind_info->vec.push_back( new sc_bind_elem( &parent_ ) );
     m_bind_info->has_parent = true;
@@ -352,8 +407,8 @@ sc_port_base::make_sensitive( sc_thread_handle handle_,
 			      sc_event_finder* event_finder_ ) const
 {
     assert( m_bind_info != 0 );
-    m_bind_info->thread_vec.push_back( new sc_bind_ef( handle_,
-						       event_finder_ ) );
+    m_bind_info->thread_vec.push_back( 
+	new sc_bind_ef( (sc_process_b*)handle_, event_finder_ ) );
 }
 
 void
@@ -361,8 +416,8 @@ sc_port_base::make_sensitive( sc_method_handle handle_,
 			      sc_event_finder* event_finder_ ) const
 {
     assert( m_bind_info != 0 );
-    m_bind_info->method_vec.push_back( new sc_bind_ef( handle_,
-						       event_finder_ ) );
+    m_bind_info->method_vec.push_back( 
+	new sc_bind_ef( (sc_process_b*)handle_, event_finder_ ) );
 }
 
 
@@ -382,19 +437,22 @@ sc_port_base::first_parent()
 void
 sc_port_base::insert_parent( int i )
 {
-    sc_pvector<sc_bind_elem*>& vec = m_bind_info->vec;
+    std::vector<sc_bind_elem*>& vec = m_bind_info->vec;
 
     this_type* parent = vec[i]->parent;
 
-    vec[i]->iface = parent->m_bind_info->vec[0]->iface;
-    vec[i]->parent = 0;
 
+    // IF OUR PARENT HAS NO BINDING THEN IGNORE IT:
+    //
+    // Note that the zeroing of the parent pointer must occur before this
+    // test
+
+    vec[i]->parent = 0;
+    if ( parent->m_bind_info->vec.size() == 0 ) return;
+
+    vec[i]->iface = parent->m_bind_info->vec[0]->iface;
     int n = parent->m_bind_info->size() - 1;
     if( n > 0 ) {
-	if( m_bind_info->size() + n > m_bind_info->max_size &&
-	    m_bind_info->max_size > 0 ) {
-	    report_error( SC_ID_COMPLETE_BINDING_, "maximum reached" );
-	}
 	// resize the bind vector (by adding new elements)
 	for( int k = 0; k < n; ++ k ) {
 	    vec.push_back( new sc_bind_elem() );
@@ -418,81 +476,112 @@ sc_port_base::insert_parent( int i )
 void
 sc_port_base::complete_binding()
 {
+    char msg_buffer[128]; // For error message construction.
+
+    // IF BINDING HAS ALREADY BEEN COMPLETED IGNORE THIS CALL:
+
     assert( m_bind_info != 0 );
-    
     if( m_bind_info->complete ) {
-	return;
+        return;
     }
-    
-    if( m_bind_info->size() == 0 ) {
-	report_error( SC_ID_COMPLETE_BINDING_, "port not bound" );
-    }
+
+    // COMPLETE BINDING OF OUR PARENT PORTS SO THAT WE CAN USE THAT INFORMATION:
 
     int i = first_parent();
     while( i >= 0 ) {
-	m_bind_info->vec[i]->parent->complete_binding();
-	insert_parent( i );
-	i = first_parent();
+        m_bind_info->vec[i]->parent->complete_binding();
+        insert_parent( i );
+        i = first_parent();
     }
 
-    int size;
+    // LOOP OVER BINDING INFORMATION TO COMPLETE THE BINDING PROCESS:
 
+    int size;
     for( int j = 0; j < m_bind_info->size(); ++ j ) {
         sc_interface* iface = m_bind_info->vec[j]->iface;
 
-	// check the state
-	if( iface == 0 || m_bind_info->vec[j]->parent != 0 ) {
-	    report_error( SC_ID_COMPLETE_BINDING_, "inconsistent state" );
-	}
+	// if the interface is zero this was for an unbound port.
+	if ( iface == 0 ) continue;
 
-	if( j > m_bind_info->last_add ) {
-	    // add (cache) the interface
-	    add_interface( iface );
-	}
-	
-	if( m_bind_info->is_leaf ) {
-	    // only register "leaf" ports (ports without children)
-	    iface->register_port( *this, if_typename() );
-	}
+	// add (cache) the interface
+        if( j > m_bind_info->last_add ) {
+            add_interface( iface );
+        }
+        
+	// only register "leaf" ports (ports without children)
+        if( m_bind_info->is_leaf ) {
+            iface->register_port( *this, if_typename() );
+        }
 
-	// complete static sensitivity for methods
-	size = m_bind_info->method_vec.size();
-	for( int k = 0; k < size; ++ k ) {
-	    sc_bind_ef* p = m_bind_info->method_vec[k];
-	    const sc_event& event = ( p->event_finder != 0 )
-                                  ? p->event_finder->find_event()
+        // complete static sensitivity for methods
+        size = m_bind_info->method_vec.size();
+        for( int k = 0; k < size; ++ k ) {
+            sc_bind_ef* p = m_bind_info->method_vec[k];
+            const sc_event& event = ( p->event_finder != 0 )
+                                  ? p->event_finder->find_event(iface)
                                   : iface->default_event();
-	    p->handle->add_static_event( event );
-	}
+            p->handle->add_static_event( event );
+        }
 
-	// complete static sensitivity for threads
-	size = m_bind_info->thread_vec.size();
-	for( int k = 0; k < size; ++ k ) {
-	    sc_bind_ef* p = m_bind_info->thread_vec[k];
-	    const sc_event& event = ( p->event_finder != 0 )
-                                  ? p->event_finder->find_event()
+        // complete static sensitivity for threads
+        size = m_bind_info->thread_vec.size();
+        for( int k = 0; k < size; ++ k ) {
+            sc_bind_ef* p = m_bind_info->thread_vec[k];
+            const sc_event& event = ( p->event_finder != 0 )
+                                  ? p->event_finder->find_event(iface)
                                   : iface->default_event();
-	    p->handle->add_static_event( event );
-	}
+            p->handle->add_static_event( event );
+        }
+
     }
 
-    // cleanup
+    // MAKE SURE THE PROPER NUMBER OF BINDINGS OCCURRED:
+    //
+    // Make sure there are enough bindings, and not too many.
+
+    int actual_binds = interface_count();
+
+    if ( actual_binds > m_bind_info->max_size() )
+    {
+	sprintf(msg_buffer, "%d binds exceeds maximum of %d allowed",
+	    actual_binds, m_bind_info->max_size() );
+	report_error( SC_ID_COMPLETE_BINDING_, msg_buffer );
+    }
+    switch ( m_bind_info->policy() )
+    {
+      case SC_ONE_OR_MORE_BOUND:
+        if ( actual_binds < 1 ) {
+            report_error( SC_ID_COMPLETE_BINDING_, "port not bound" );
+        }
+        break;
+      case SC_ALL_BOUND:
+        if ( actual_binds < m_bind_info->max_size() || actual_binds < 1 ) {
+	    sprintf(msg_buffer, "%d actual binds is less than required %d",
+	        actual_binds, m_bind_info->max_size() ); 
+            report_error( SC_ID_COMPLETE_BINDING_, msg_buffer );
+        }
+        break;
+      default:  // SC_ZERO_OR_MORE_BOUND:
+        break;
+    }
+
+
+    // CLEAN UP: FREE BINDING STORAGE:
 
     size = m_bind_info->method_vec.size();
     for( int k = 0; k < size; ++ k ) {
         delete m_bind_info->method_vec[k];
     }
-    m_bind_info->method_vec.erase_all();
+    m_bind_info->method_vec.resize(0);
 
     size = m_bind_info->thread_vec.size();
     for( int k = 0; k < size; ++ k ) {
         delete m_bind_info->thread_vec[k];
     }
-    m_bind_info->thread_vec.erase_all();
+    m_bind_info->thread_vec.resize(0);
 
     m_bind_info->complete = true;
 }
-
 void
 sc_port_base::construction_done()
 {
@@ -532,11 +621,11 @@ sc_port_base::simulation_done()
 void
 sc_port_registry::insert( sc_port_base* port_ )
 {
-    if( m_simc->is_running() ) {
+    if( sc_is_running() ) {
 	port_->report_error( SC_ID_INSERT_PORT_, "simulation running" );
     }
 
-#ifdef DEBUG_SYSTEMC
+#if defined(DEBUG_SYSTEMC)
     // check if port_ is already inserted
     for( int i = size() - 1; i >= 0; -- i ) {
 	if( port_ == m_port_vec[i] ) {
@@ -571,15 +660,7 @@ sc_port_registry::remove( sc_port_base* port_ )
 
     // remove
     m_port_vec[i] = m_port_vec[size() - 1];
-    m_port_vec.decr_count();
-}
-
-
-void
-sc_port_registry::add_lambda_for_resolution( const sc_lambda_ptr& lambda_ )
-{
-    sc_lambda_ptr* lambda_copy = new sc_lambda_ptr( lambda_ );
-    m_unresolved_lambdas->push_back( lambda_copy );
+    m_port_vec.resize(size()-1);
 }
 
 
@@ -588,7 +669,6 @@ sc_port_registry::add_lambda_for_resolution( const sc_lambda_ptr& lambda_ )
 sc_port_registry::sc_port_registry( sc_simcontext& simc_ )
 : m_simc( &simc_ )
 {
-    m_unresolved_lambdas = new sc_pvector<sc_lambda_ptr*>;
 }
 
 
@@ -596,7 +676,6 @@ sc_port_registry::sc_port_registry( sc_simcontext& simc_ )
 
 sc_port_registry::~sc_port_registry()
 {
-    delete_unresolved_lambdas();
 }
 
 // called when construction is done
@@ -609,16 +688,23 @@ sc_port_registry::construction_done()
     }
 }
 
+// called when when elaboration is done
+
+void
+sc_port_registry::complete_binding()
+{
+    for( int i = size() - 1; i >= 0; -- i ) {
+        m_port_vec[i]->complete_binding();
+    }
+}
+
+
 // called when elaboration is done
 
 void
 sc_port_registry::elaboration_done()
 {
-    for( int i = size() - 1; i >= 0; -- i ) {
-        m_port_vec[i]->complete_binding();
-    }
-
-    resolve_lambdas();
+    complete_binding();
 
     for( int i = size() - 1; i >= 0; -- i ) {
         m_port_vec[i]->elaboration_done();
@@ -645,114 +731,22 @@ sc_port_registry::simulation_done()
     }
 }
 
-void
-sc_port_registry::resolve_lambdas()
-{
-    int sz = m_unresolved_lambdas->size();
-    for( int i = 0; i < sz; ++ i ) {
-        sc_lambda_ptr* lambda_copy = m_unresolved_lambdas->fetch( i );
-        (*lambda_copy)->replace_ports( &replace_port, this );
-    }
-    delete_unresolved_lambdas();
-}
-
-void
-sc_port_registry::delete_unresolved_lambdas()
-{
-    if( m_unresolved_lambdas != 0 ) {
-	int sz = m_unresolved_lambdas->size();
-        for( int i = 0; i < sz; ++ i ) {
-            delete m_unresolved_lambdas->fetch( i );
-        }
-        delete m_unresolved_lambdas;
-	m_unresolved_lambdas = 0;
-    }
-}
-
-
 // This is a static member function.
 
 void
-sc_port_registry::replace_port( sc_port_registry* registry,
-				sc_lambda_rand* rand )
+sc_port_registry::replace_port( sc_port_registry* registry )
 {
-    switch( rand->rand_ty ) {
-    case SC_LAMBDA_RAND_SIGNAL_BOOL: {
-	// the tricky part, reversed
-	const sc_port_base* pb = RCAST<const sc_port_base*>( rand->edgy_sig );
-	// check if pb is a port
-	bool is_port = false;
-	for( int i = registry->size() - 1; i >= 0; -- i ) {
-	    if( pb == registry->m_port_vec[i] ) {
-		is_port = true;
-		break;
-	    }
-	}
-	if( ! is_port ) {
-	    break;
-	}
-	// cast pb to the appropriate port type
-	const sc_port_b<sc_signal_in_if<bool> >* in_port =
-            DCAST<const sc_port_b<sc_signal_in_if<bool> >*>( pb );
-	if( in_port != 0 ) {
-	    rand->edgy_sig =
-                DCAST<const sc_signal_in_if<bool>*>(
-		    in_port->get_interface() );
-	    assert( rand->edgy_sig != 0 );
-	    break;
-	}
-	const sc_port_b<sc_signal_inout_if<bool> >* inout_port =
-            DCAST<const sc_port_b<sc_signal_inout_if<bool> >*>( pb );
-        if( inout_port != 0 ) {
-	    rand->edgy_sig =
-                DCAST<const sc_signal_in_if<bool>*>(
-		    inout_port->get_interface() );
-	    assert( rand->edgy_sig != 0 );
-	    break;
-	}
-	// this should not happen
-	assert( false );
-	break;
-    }
-    case SC_LAMBDA_RAND_SIGNAL_SUL: {
-	// the tricky part, reversed
-	const sc_port_base* pb = RCAST<const sc_port_base*>( rand->sul_sig );
-	// check if pb is a port
-	bool is_port = false;
-	for( int i = registry->size() - 1; i >= 0; -- i ) {
-	    if( pb == registry->m_port_vec[i] ) {
-		is_port = true;
-		break;
-	    }
-	}
-	if( ! is_port ) {
-	    break;
-	}
-	// cast pb to the appropriate port type
-	const sc_port_b<sc_signal_in_if<sc_dt::sc_logic> >* in_port =
-            DCAST<const sc_port_b<sc_signal_in_if<sc_dt::sc_logic> >*>( pb );
-	if( in_port != 0 ) {
-	    rand->sul_sig =
-                DCAST<const sc_signal_in_if<sc_dt::sc_logic>*>(
-		    in_port->get_interface() );
-	    assert( rand->sul_sig != 0 );
-	    break;
-	}
-	const sc_port_b<sc_signal_inout_if<sc_dt::sc_logic> >* inout_port =
-            DCAST<const sc_port_b<sc_signal_inout_if<sc_dt::sc_logic> >*>( pb );
-        if( inout_port != 0 ) {
-	    rand->sul_sig =
-                DCAST<const sc_signal_in_if<sc_dt::sc_logic>*>(
-		    inout_port->get_interface() );
-	    assert( rand->sul_sig != 0 );
-	    break;
-	}
-	// this should not happen
-	assert( false );
-	break;
-    }
-    default:
-        break;
+}
+
+void sc_warn_port_constructor()
+{
+    static bool warn_port_constructor=true;
+    if ( warn_port_constructor )
+    {
+        warn_port_constructor = false;
+        SC_REPORT_INFO(SC_ID_IEEE_1666_DEPRECATION_, 
+	    "interface and/or port binding in port constructors is deprecated" 
+	);
     }
 }
 

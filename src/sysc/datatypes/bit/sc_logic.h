@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -33,6 +33,12 @@
   Description of Modification:
 
  *****************************************************************************/
+
+// $Log: sc_logic.h,v $
+// Revision 1.3  2006/01/13 18:53:53  acg
+// Andy Goodrich: added $Log command so that CVS comments are reproduced in
+// the source.
+//
 
 #ifndef SC_LOGIC_H
 #define SC_LOGIC_H
@@ -66,6 +72,112 @@ enum sc_logic_value_t
     Log_Z,
     Log_X
 };
+
+
+// friend operator declarations
+    // bitwise and
+
+    inline const sc_logic operator & ( const sc_logic& a, const sc_logic& b );
+
+    inline const sc_logic operator & ( const sc_logic& a, sc_logic_value_t b );
+
+    inline const sc_logic operator & ( const sc_logic& a, bool b );
+
+    inline const sc_logic operator & ( const sc_logic& a, char b );
+
+    inline const sc_logic operator & ( const sc_logic& a, int b );
+
+    inline const sc_logic operator & ( sc_logic_value_t a, const sc_logic& b );
+
+    inline const sc_logic operator & ( bool a, const sc_logic& b );
+
+    inline const sc_logic operator & ( char a, const sc_logic& b );
+
+    inline const sc_logic operator & ( int a, const sc_logic& b );
+
+
+    // bitwise or
+
+    inline const sc_logic operator | ( const sc_logic& a, const sc_logic& b );
+
+    inline const sc_logic operator | ( const sc_logic& a, sc_logic_value_t b );
+
+    inline const sc_logic operator | ( const sc_logic& a, bool b );
+
+    inline const sc_logic operator | ( const sc_logic& a, char b );
+
+    inline const sc_logic operator | ( const sc_logic& a, int b );
+
+    inline const sc_logic operator | ( sc_logic_value_t a, const sc_logic& b );
+
+    inline const sc_logic operator | ( bool a, const sc_logic& b );
+
+    inline const sc_logic operator | ( char a, const sc_logic& b );
+
+    inline const sc_logic operator | ( int a, const sc_logic& b );
+
+
+    // bitwise xor
+
+    inline const sc_logic operator ^ ( const sc_logic& a, const sc_logic& b );
+
+    inline const sc_logic operator ^ ( const sc_logic& a, sc_logic_value_t b );
+
+    inline const sc_logic operator ^ ( const sc_logic& a, bool b );
+
+    inline const sc_logic operator ^ ( const sc_logic& a, char b );
+
+    inline const sc_logic operator ^ ( const sc_logic& a, int b );
+
+    inline const sc_logic operator ^ ( sc_logic_value_t a, const sc_logic& b );
+
+    inline const sc_logic operator ^ ( bool a, const sc_logic& b );
+
+    inline const sc_logic operator ^ ( char a, const sc_logic& b );
+
+    inline const sc_logic operator ^ ( int a, const sc_logic& b );
+
+
+    // relational operators and functions
+
+    inline bool operator == ( const sc_logic& a, const sc_logic& b );
+
+    inline bool operator == ( const sc_logic& a, sc_logic_value_t b );
+
+    inline bool operator == ( const sc_logic& a, bool b );
+
+    inline bool operator == ( const sc_logic& a, char b );
+
+    inline bool operator == ( const sc_logic& a, int b );
+
+    inline bool operator == ( sc_logic_value_t a, const sc_logic& b );
+
+    inline bool operator == ( bool a, const sc_logic& b );
+
+    inline bool operator == ( char a, const sc_logic& b );
+
+    inline bool operator == ( int a, const sc_logic& b );
+
+
+    inline bool operator != ( const sc_logic& a, const sc_logic& b );
+
+    inline bool operator != ( const sc_logic& a, sc_logic_value_t b );
+
+    inline bool operator != ( const sc_logic& a, bool b );
+
+    inline bool operator != ( const sc_logic& a, char b );
+
+    inline bool operator != ( const sc_logic& a, int b );
+
+    inline bool operator != ( sc_logic_value_t a, const sc_logic& b );
+
+    inline bool operator != ( bool a, const sc_logic& b );
+
+    inline bool operator != ( char a, const sc_logic& b );
+
+    inline bool operator != ( int a, const sc_logic& b );
+
+
 
 
 // ----------------------------------------------------------------------------
@@ -432,19 +544,19 @@ public:
 
     // memory (de)allocation
 
-    static void* operator new( size_t, void* p ) // placement new
+    static void* operator new( std::size_t, void* p ) // placement new
 	{ return p; }
 
-    static void* operator new( size_t sz )
+    static void* operator new( std::size_t sz )
 	{ return sc_core::sc_mempool::allocate( sz ); }
 
-    static void operator delete( void* p, size_t sz )
+    static void operator delete( void* p, std::size_t sz )
 	{ sc_core::sc_mempool::release( p, sz ); }
 
-    static void* operator new [] ( size_t sz )
+    static void* operator new [] ( std::size_t sz )
 	{ return sc_core::sc_mempool::allocate( sz ); }
 
-    static void operator delete [] ( void* p, size_t sz )
+    static void operator delete [] ( void* p, std::size_t sz )
 	{ sc_core::sc_mempool::release( p, sz ); }
 
 private:

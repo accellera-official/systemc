@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -32,6 +32,11 @@
   Description of Modification:
 
  *****************************************************************************/
+
+// $Log: sc_cor_pthread.h,v $
+// Revision 1.3  2006/01/13 18:44:29  acg
+// Added $Log to record CVS changes into the source.
+//
 
 #ifndef SC_COR_PTHREAD_H
 #define SC_COR_PTHREAD_H
@@ -75,8 +80,6 @@ class sc_cor_pthread : public sc_cor
 
   public:
 	static sc_cor_pthread* m_active_cor_p;	   // Active coroutine.
-	static pthread_cond_t  m_create_condition; // See note 1 above.
-	static pthread_mutex_t m_create_mutex;     // See note 1 above.
 
   public:
 	sc_cor_fn*          m_cor_fn;		// Core function.

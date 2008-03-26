@@ -62,9 +62,9 @@
 // Handles cases 3 and 4 and returns the result.
 CLASS_TYPE
 ADD_HELPER(small_type us, int unb, int und,
-           const unsigned long *ud, 
+           const sc_digit *ud, 
            small_type vs, int vnb, int vnd,
-           const unsigned long *vd)
+           const sc_digit *vd)
 {
 
   und = vec_skip_leading_zeros(und, ud);
@@ -75,9 +75,9 @@ ADD_HELPER(small_type us, int unb, int und,
 
 #ifdef SC_MAX_NBITS
   test_bound(nb);
-  unsigned long d[MAX_NDIGITS];
+  sc_digit d[MAX_NDIGITS];
 #else
-  unsigned long *d = new unsigned long[nd];
+  sc_digit *d = new sc_digit[nd];
 #endif
   
   d[nd - 1] = d[nd - 2] = 0;
@@ -88,7 +88,7 @@ ADD_HELPER(small_type us, int unb, int und,
     ++nb;
 
     if ((und == 1) && (vnd == 1)) {
-      unsigned long carry = (*ud) + (*vd);
+      sc_digit carry = (*ud) + (*vd);
       d[0] = carry & DIGIT_MASK;
       d[1] = carry >> BITS_PER_DIGIT;
     }
@@ -142,9 +142,9 @@ ADD_HELPER(small_type us, int unb, int und,
 CLASS_TYPE 
 MUL_HELPER(small_type s, 
            int unb, int und, 
-           const unsigned long *ud, 
+           const sc_digit *ud, 
            int vnb, int vnd,
-           const unsigned long *vd)
+           const sc_digit *vd)
 {
 
   und = vec_skip_leading_zeros(und, ud);
@@ -155,15 +155,15 @@ MUL_HELPER(small_type s,
   
 #ifdef SC_MAX_NBITS
   test_bound(nb);
-  unsigned long d[MAX_NDIGITS];
+  sc_digit d[MAX_NDIGITS];
 #else
-  unsigned long *d = new unsigned long[nd];
+  sc_digit *d = new sc_digit[nd];
 #endif
 
   vec_zero(nd, d);
     
-  unsigned long ud0 = (*ud);
-  unsigned long vd0 = (*vd);
+  sc_digit ud0 = (*ud);
+  sc_digit vd0 = (*vd);
 
   if ((vnd == 1) && (vd0 == 1))
     vec_copy(und, d, ud);
@@ -200,9 +200,9 @@ MUL_HELPER(small_type s,
 CLASS_TYPE 
 DIV_HELPER(small_type s, 
            int unb, int und, 
-           const unsigned long *ud, 
+           const sc_digit *ud, 
            int vnb, int vnd,
-           const unsigned long *vd)
+           const sc_digit *vd)
 {
 
   und = vec_skip_leading_zeros(und, ud);
@@ -218,14 +218,14 @@ DIV_HELPER(small_type s,
   int nd = sc_max(und, vnd) + 1;
 
 #ifdef SC_MAX_NBITS
-  unsigned long d[MAX_NDIGITS + 1];
+  sc_digit d[MAX_NDIGITS + 1];
 #else
-  unsigned long *d = new unsigned long[nd];
+  sc_digit *d = new sc_digit[nd];
 #endif
 
   vec_zero(nd, d);
 
-  unsigned long vd0 = (*vd);
+  sc_digit vd0 = (*vd);
 
   // u = v => u / v = 1 - case 3
   if (cmp_res == 0)
@@ -258,9 +258,9 @@ DIV_HELPER(small_type s,
 CLASS_TYPE 
 MOD_HELPER(small_type us, 
            int unb, int und, 
-           const unsigned long *ud, 
+           const sc_digit *ud, 
            int vnb, int vnd,
-           const unsigned long *vd)
+           const sc_digit *vd)
 {
 
   und = vec_skip_leading_zeros(und, ud);
@@ -272,7 +272,7 @@ MOD_HELPER(small_type us,
   if (cmp_res == 0) 
     return CLASS_TYPE();
 
-  unsigned long vd0 = (*vd);
+  sc_digit vd0 = (*vd);
 
   if ((cmp_res > 0) && (vnd == 1) && (vd0 == 1))
     return CLASS_TYPE();
@@ -281,9 +281,9 @@ MOD_HELPER(small_type us,
   int nd = sc_max(und, vnd) + 1;
 
 #ifdef SC_MAX_NBITS
-  unsigned long d[MAX_NDIGITS + 1];
+  sc_digit d[MAX_NDIGITS + 1];
 #else
-  unsigned long *d = new unsigned long[nd];
+  sc_digit *d = new sc_digit[nd];
 #endif
 
   vec_zero(nd, d);
@@ -321,25 +321,25 @@ MOD_HELPER(small_type us,
 CLASS_TYPE 
 AND_HELPER(small_type us, 
            int unb, int und, 
-           const unsigned long *ud, 
+           const sc_digit *ud, 
            small_type vs,
            int vnb, int vnd,
-           const unsigned long *vd)
+           const sc_digit *vd)
 {
 
   int nb = sc_max(unb, vnb);
   int nd = sc_max(und, vnd);
 
 #ifdef SC_MAX_NBITS
-  unsigned long dbegin[MAX_NDIGITS];
+  sc_digit dbegin[MAX_NDIGITS];
 #else
-  unsigned long *dbegin = new unsigned long[nd];
+  sc_digit *dbegin = new sc_digit[nd];
 #endif
 
-  unsigned long *d = dbegin;
+  sc_digit *d = dbegin;
 
-  register const unsigned long *x;
-  register const unsigned long *y;
+  register const sc_digit *x;
+  register const sc_digit *y;
   int xnd;
   int ynd;
   small_type xs;
@@ -362,8 +362,8 @@ AND_HELPER(small_type us,
     xs = vs;
   }
 
-  const unsigned long *xend = (x + xnd);
-  const unsigned long *yend = (y + ynd);
+  const sc_digit *xend = (x + xnd);
+  const sc_digit *yend = (y + ynd);
 
   // x is longer than y.
 
@@ -382,8 +382,8 @@ AND_HELPER(small_type us,
     }
     else {  // case 3
 
-      register unsigned long xcarry = 1;
-      register unsigned long ycarry = 1;
+      register sc_digit xcarry = 1;
+      register sc_digit ycarry = 1;
 
       while (y < yend) {
         xcarry += (~(*x++) & DIGIT_MASK);
@@ -407,7 +407,7 @@ AND_HELPER(small_type us,
 
     if (xs > 0) { // case 4
 
-      register unsigned long ycarry = 1;
+      register sc_digit ycarry = 1;
 
       while (y < yend) {
         ycarry += (~(*y++) & DIGIT_MASK);
@@ -424,7 +424,7 @@ AND_HELPER(small_type us,
     }
     else {  // case 5
 
-      register unsigned long xcarry = 1;
+      register sc_digit xcarry = 1;
 
       while (y < yend) {
         xcarry += (~(*x++) & DIGIT_MASK);
@@ -453,25 +453,25 @@ AND_HELPER(small_type us,
 CLASS_TYPE 
 OR_HELPER(small_type us, 
           int unb, int und, 
-          const unsigned long *ud, 
+          const sc_digit *ud, 
           small_type vs,
           int vnb, int vnd,
-          const unsigned long *vd)
+          const sc_digit *vd)
 {
   
   int nb = sc_max(unb, vnb);
   int nd = sc_max(und, vnd);
 
 #ifdef SC_MAX_NBITS
-  unsigned long dbegin[MAX_NDIGITS];
+  sc_digit dbegin[MAX_NDIGITS];
 #else
-  unsigned long *dbegin = new unsigned long[nd];
+  sc_digit *dbegin = new sc_digit[nd];
 #endif
 
-  unsigned long *d = dbegin;
+  sc_digit *d = dbegin;
 
-  register const unsigned long *x;
-  register const unsigned long *y;
+  register const sc_digit *x;
+  register const sc_digit *y;
   int xnd;
   int ynd;
   small_type xs;
@@ -494,8 +494,8 @@ OR_HELPER(small_type us,
     xs = vs;
   }
 
-  const unsigned long *xend = (x + xnd);
-  const unsigned long *yend = (y + ynd);
+  const sc_digit *xend = (x + xnd);
+  const sc_digit *yend = (y + ynd);
 
   // x is longer than y.
 
@@ -514,8 +514,8 @@ OR_HELPER(small_type us,
     }
     else {  // case 4
 
-      register unsigned long xcarry = 1;
-      register unsigned long ycarry = 1;
+      register sc_digit xcarry = 1;
+      register sc_digit ycarry = 1;
 
       while (y < yend) {
         xcarry += (~(*x++) & DIGIT_MASK);
@@ -540,7 +540,7 @@ OR_HELPER(small_type us,
 
     if (xs > 0) { // case 5
 
-      register unsigned long ycarry = 1;
+      register sc_digit ycarry = 1;
 
       while (y < yend) {
         ycarry += (~(*y++) & DIGIT_MASK);
@@ -557,7 +557,7 @@ OR_HELPER(small_type us,
     }
     else {  // case 6
 
-      register unsigned long xcarry = 1;
+      register sc_digit xcarry = 1;
 
       while (y < yend) {
         xcarry += (~(*x++) & DIGIT_MASK);
@@ -589,25 +589,25 @@ OR_HELPER(small_type us,
 CLASS_TYPE 
 XOR_HELPER(small_type us, 
            int unb, int und, 
-           const unsigned long *ud, 
+           const sc_digit *ud, 
            small_type vs,
            int vnb, int vnd,
-           const unsigned long *vd)
+           const sc_digit *vd)
 {
   
   int nb = sc_max(unb, vnb);
   int nd = sc_max(und, vnd);
 
 #ifdef SC_MAX_NBITS
-  unsigned long dbegin[MAX_NDIGITS];
+  sc_digit dbegin[MAX_NDIGITS];
 #else
-  unsigned long *dbegin = new unsigned long[nd];
+  sc_digit *dbegin = new sc_digit[nd];
 #endif
 
-  unsigned long *d = dbegin;
+  sc_digit *d = dbegin;
 
-  register const unsigned long *x;
-  register const unsigned long *y;
+  register const sc_digit *x;
+  register const sc_digit *y;
   int xnd;
   int ynd;
   small_type xs;
@@ -630,8 +630,8 @@ XOR_HELPER(small_type us,
     xs = vs;
   }
 
-  const unsigned long *xend = (x + xnd);
-  const unsigned long *yend = (y + ynd);
+  const sc_digit *xend = (x + xnd);
+  const sc_digit *yend = (y + ynd);
 
   // x is longer than y.
 
@@ -650,8 +650,8 @@ XOR_HELPER(small_type us,
     }
     else {  // case 4
 
-      register unsigned long xcarry = 1;
-      register unsigned long ycarry = 1;
+      register sc_digit xcarry = 1;
+      register sc_digit ycarry = 1;
 
       while (y < yend) {
         xcarry += (~(*x++) & DIGIT_MASK);
@@ -675,7 +675,7 @@ XOR_HELPER(small_type us,
 
     if (xs > 0) { // case 5
 
-      register unsigned long ycarry = 1;
+      register sc_digit ycarry = 1;
 
       while (y < yend) {
         ycarry += (~(*y++) & DIGIT_MASK);
@@ -692,7 +692,7 @@ XOR_HELPER(small_type us,
     }
     else {  // case 6
 
-      register unsigned long xcarry = 1;
+      register sc_digit xcarry = 1;
 
       while (y < yend) {
         xcarry += (~(*x++) & DIGIT_MASK);

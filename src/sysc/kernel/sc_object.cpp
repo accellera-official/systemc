@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -44,9 +44,18 @@
  *****************************************************************************/
 
 
+// $Log: sc_object.cpp,v $
+// Revision 1.4  2006/03/21 00:00:34  acg
+//   Andy Goodrich: changed name of sc_get_current_process_base() to be
+//   sc_get_current_process_b() since its returning an sc_process_b instance.
+//
+// Revision 1.3  2006/01/13 18:44:30  acg
+// Added $Log to record CVS changes into the source.
+//
+
 #include <stdio.h>
 #include <cstdlib>
-#include <assert.h>
+#include <cassert>
 #include <ctype.h>
 
 #include "sysc/kernel/sc_externs.h"
@@ -54,13 +63,12 @@
 #include "sysc/kernel/sc_module.h"
 #include "sysc/kernel/sc_object.h"
 #include "sysc/kernel/sc_object_manager.h"
-#include "sysc/kernel/sc_process_b.h"
+#include "sysc/kernel/sc_process_handle.h"
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/utils/sc_hash.h"
 #include "sysc/utils/sc_iostream.h"
 #include "sysc/utils/sc_list.h"
 #include "sysc/utils/sc_mempool.h"
-#include "sysc/utils/sc_vector.h"
 
 namespace sc_core {
 
@@ -105,7 +113,7 @@ static int sc_object_num = 0;
 static char*
 sc_object_newname(char* name)
 {
-    sprintf(name, "{%d}", sc_object_num);
+    std::sprintf(name, "{%d}", sc_object_num);
     sc_object_num++;
     return name;
 }
@@ -120,19 +128,17 @@ sc_object::sc_object_init(const char* nm)
     const char* parentname_p;           // Parent path name 
     bool        put_in_table;           // True if should put in object table 
  
-    /* Make the current simcontext the simcontext for this object */ 
-
     // SET UP POINTERS TO OBJECT MANAGER, PARENT, AND SIMULATION CONTEXT: 
+	//
+    // Make the current simcontext the simcontext for this object 
 
     m_simc = sc_get_curr_simcontext(); 
     m_attr_cltn_p = 0; 
     sc_object_manager* object_manager = m_simc->get_object_manager(); 
     sc_object*         parent_p = object_manager->hierarchy_curr(); 
     if (!parent_p) { 
-      sc_process_b* curr_proc = m_simc->get_curr_proc_info()->process_handle; 
-      if (curr_proc) { 
-        parent_p = (sc_object*)curr_proc; 
-      } 
+        sc_object* proc = (sc_object*)sc_get_current_process_b();
+        parent_p = proc; 
     } 
     m_parent = parent_p; 
 
@@ -153,7 +159,7 @@ sc_object::sc_object_init(const char* nm)
         put_in_table = false; 
     } 
     if (parent_p) { 
-        sprintf(pathname, "%s%c%s", parentname_p, 
+        std::sprintf(pathname, "%s%c%s", parentname_p, 
                 SC_HIERARCHY_CHAR, leafname_p 
         ); 
     } else { 
@@ -173,7 +179,7 @@ sc_object::sc_object_init(const char* nm)
         clash = true; 
         leafname_p = sc_gen_unique_name(leafname_p); 
         if (parent_p) { 
-            sprintf(pathname, "%s%c%s", parentname_p, 
+            std::sprintf(pathname, "%s%c%s", parentname_p, 
                     SC_HIERARCHY_CHAR, leafname_p 
             ); 
         } else { 
@@ -205,8 +211,7 @@ sc_object::sc_object_init(const char* nm)
         if( curr_module != 0 ) { 
             curr_module->add_child_object( this ); 
         } else { 
-            sc_process_b* curr_proc = 
-                m_simc->get_curr_proc_info()->process_handle; 
+            sc_process_b* curr_proc = sc_get_current_process_b();
             if (curr_proc) { 
                 curr_proc->add_child_object( this ); 
             } else { 
@@ -218,7 +223,7 @@ sc_object::sc_object_init(const char* nm)
 
 sc_object::sc_object() : m_parent(0)
 {
-    sc_object_init(0);
+    sc_object_init( sc_gen_unique_name("object") );
 }
 
 static bool
@@ -231,8 +236,13 @@ sc_object::sc_object(const char* nm) : m_parent(0)
 {
     int namebuf_alloc = 0;
     char* namebuf = 0;
+	const char* p;
 
-    const char* p = nm;
+	// null name or "" uses machine generated name.
+    if ( !nm || strlen(nm) == 0 )
+	nm = sc_gen_unique_name("object");
+    p = nm;
+
     if (nm && sc_enable_name_checking) {
         namebuf_alloc = 1 + strlen(nm);
         namebuf = (char*) sc_mempool::allocate(namebuf_alloc);

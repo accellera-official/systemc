@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -34,7 +34,17 @@
  *****************************************************************************/
 
 
+// $Log: sc_event_queue.cpp,v $
+// Revision 1.4  2006/01/26 21:00:50  acg
+//  Andy Goodrich: conversion to use sc_event::notify(SC_ZERO_TIME) instead of
+//  sc_event::notify_delayed()
+//
+// Revision 1.3  2006/01/13 18:47:42  acg
+// Added $Log command so that CVS comments are reproduced in the source.
+//
+
 #include "sysc/communication/sc_event_queue.h"
+#include "sysc/kernel/sc_method_process.h"
 
 namespace sc_core {
 
@@ -54,7 +64,7 @@ sc_time_compare( const void* p1, const void* p2 )
 }
 
 sc_event_queue::sc_event_queue()
-    : sc_module( sc_gen_unique_name( "sc_event_queue" ) ),
+    : sc_module( sc_gen_unique_name( "event_queue" ) ),
       m_ppq( 128, sc_time_compare ),
       m_pending_delta(0)
     
@@ -94,7 +104,7 @@ void sc_event_queue::cancel_all()
 
 void sc_event_queue::notify (const sc_time& when)
 {
-    m_delta = sc_get_curr_simcontext()->delta_count();
+    m_delta = sc_delta_count();
     sc_time* t = new sc_time( when+sc_time_stamp() );
     if ( m_ppq.size()==0 || *t < *m_ppq.top() ) {
 	m_e.notify( when );

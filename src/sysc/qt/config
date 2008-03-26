@@ -84,7 +84,7 @@ case $1 in
 	iX86*)
 		case $1 in
 			iX86-ss*)
-				: "Assemlber comments '//'"
+				: "Assembler comments '//'"
 				sed 's/\/\*/\/\//' < md/i386.s > qtmds.s
 #				sed 's/\/\*/\/\//' < md/i386_b.s > qtmdb.s
 				;;

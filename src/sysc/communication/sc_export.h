@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -34,6 +34,11 @@
     
  *****************************************************************************/
 
+// $Log: sc_export.h,v $
+// Revision 1.3  2006/01/13 18:47:42  acg
+// Added $Log command so that CVS comments are reproduced in the source.
+//
+
 #ifndef SC_EXPORT_H
 #define SC_EXPORT_H
 #include <typeinfo>
@@ -41,7 +46,6 @@
 #include "sysc/communication/sc_communication_ids.h"
 #include "sysc/communication/sc_interface.h"
 #include "sysc/kernel/sc_object.h"
-#include "sysc/kernel/sc_simcontext.h"
 
 namespace sc_core {
 
@@ -117,24 +121,9 @@ public: // constructors:
 	m_interface_p = 0;
     }
 
-    sc_export( const char* name_ ) : sc_export_base(name_)
+    explicit sc_export( const char* name_ ) : sc_export_base(name_)
     {
 	m_interface_p = 0;
-    }
-
-    sc_export( IF& interface_ ) : sc_export_base()
-    {
-	m_interface_p = &interface_;
-    }
-
-    sc_export( const char* name_, IF& interface_ ) : sc_export_base(name_)
-    {
-	m_interface_p = &interface_;
-    }
-
-    explicit sc_export( this_type& child_ ) : sc_export_base()
-    {
-	m_interface_p = child_.m_interface_p;
     }
 
 public: // destructor:
@@ -261,8 +250,8 @@ private:
 
 private:
 
-    sc_simcontext*              m_simc;
-    sc_pvector<sc_export_base*>   	m_export_vec;
+    sc_simcontext*               m_simc;
+    std::vector<sc_export_base*> m_export_vec;
 
 private:
 

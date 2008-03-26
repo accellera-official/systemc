@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -35,6 +35,12 @@
  *****************************************************************************/
 
 
+// $Log: sc_hash.cpp,v $
+// Revision 1.3  2006/01/13 18:53:10  acg
+// Andy Goodrich: Added $Log command so that CVS comments are reproduced in
+// the source.
+//
+
 #include <assert.h>
 #include <cstdlib>
 
@@ -60,8 +66,8 @@ private:
     sc_phash_elem() { }
     ~sc_phash_elem() { }
 
-    static void* operator new(size_t sz)            { return sc_mempool::allocate(sz); }
-    static void operator delete(void* p, size_t sz) { sc_mempool::release(p, sz);      }
+    static void* operator new(std::size_t sz)            { return sc_mempool::allocate(sz); }
+    static void operator delete(void* p, std::size_t sz) { sc_mempool::release(p, sz);      }
 };
 
 
@@ -599,14 +605,14 @@ sc_phash_base_iter::set_contents( void* c )
 unsigned 
 default_ptr_hash_fn(const void* p)
 {
-    return ((unsigned)(p) >> 2) * 2654435789U;
+    return ((unsigned long)(p) >> 2) * 2654435789U;
 
 }
 
 unsigned
 default_int_hash_fn(const void* p)
 {
-    return (unsigned)(p) * 3141592661U;
+    return (unsigned long)(p) * 3141592661U;
 }
 
 

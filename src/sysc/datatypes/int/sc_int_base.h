@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -43,11 +43,17 @@
                                - Merged the code for 64- and 32-bit versions
                                  via the constants in sc_nbdefs.h.
                                - Eliminated redundant file inclusions.
-    
+
       Name, Affiliation, Date:
   Description of Modification:
 
  *****************************************************************************/
+
+// $Log: sc_int_base.h,v $
+// Revision 1.3  2006/01/13 18:49:31  acg
+// Added $Log command so that CVS check in comments are reproduced in the
+// source.
+//
 
 #ifndef SC_INT_BASE_H
 #define SC_INT_BASE_H
@@ -89,6 +95,21 @@ class sc_fxnum_fast;
 
 extern const uint_type mask_int[SC_INTWIDTH][SC_INTWIDTH];
 
+// friend operator declarations
+    // relational operators
+
+    inline bool operator == ( const sc_int_base& a, const sc_int_base& b );
+
+    inline bool operator != ( const sc_int_base& a, const sc_int_base& b );
+
+    inline bool operator <  ( const sc_int_base& a, const sc_int_base& b );
+
+    inline bool operator <= ( const sc_int_base& a, const sc_int_base& b );
+
+    inline bool operator >  ( const sc_int_base& a, const sc_int_base& b );
+
+    inline bool operator >= ( const sc_int_base& a, const sc_int_base& b );
+
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_int_bitref_r
@@ -103,7 +124,7 @@ class sc_int_bitref_r : public sc_value_base
 protected:
 
     // constructor
-  
+
     sc_int_bitref_r()
         {}
 
@@ -118,14 +139,14 @@ protected:
 public:
 
     // copy constructor
-  
-    sc_int_bitref_r( const sc_int_bitref_r& a ) : 
+
+    sc_int_bitref_r( const sc_int_bitref_r& a ) :
         m_index(a.m_index), m_obj_p(a.m_obj_p)
         {}
 
     // destructor
 
-    virtual ~sc_int_bitref_r() 
+    virtual ~sc_int_bitref_r()
 	{}
 
     // capacity
@@ -142,16 +163,16 @@ public:
 
     virtual int concat_length( bool *xz_present_p ) const
 	{ if (xz_present_p) *xz_present_p = false; return 1; }
-    virtual bool concat_get_ctrl( unsigned long* dst_p, int low_i ) const
-        { 
+    virtual bool concat_get_ctrl( sc_digit* dst_p, int low_i ) const
+        {
 	    int bit_mask = 1 << (low_i % BITS_PER_DIGIT);
 	    int word_i = low_i / BITS_PER_DIGIT;
 
 	    dst_p[word_i] &= ~bit_mask;
 	    return false;
 	}
-    virtual bool concat_get_data( unsigned long* dst_p, int low_i ) const
-        { 
+    virtual bool concat_get_data( sc_digit* dst_p, int low_i ) const
+        {
 	    bool non_zero;
 	    int bit_mask = 1 << (low_i % BITS_PER_DIGIT);
 	    int word_i = low_i / BITS_PER_DIGIT;
@@ -225,7 +246,7 @@ class sc_int_bitref
 
 
     // constructor
-  
+
     sc_int_bitref()
       {}
 
@@ -233,7 +254,7 @@ class sc_int_bitref
 public:
 
     // copy constructor
-  
+
     sc_int_bitref( const sc_int_bitref& a ) : sc_int_bitref_r( a )
       {}
 
@@ -286,7 +307,7 @@ class sc_int_subref_r : public sc_value_base
 protected:
 
     // constructor
-  
+
     sc_int_subref_r()
         {}
 
@@ -299,17 +320,17 @@ protected:
 	m_right = right_i;
     }
 
-  
+
 public:
     // copy constructor
 
-    sc_int_subref_r( const sc_int_subref_r& a ) : 
+    sc_int_subref_r( const sc_int_subref_r& a ) :
         m_left( a.m_left ), m_obj_p( a.m_obj_p ), m_right( a.m_right )
         {}
 
     // destructor
 
-    virtual ~sc_int_subref_r() 
+    virtual ~sc_int_subref_r()
 	{}
 
     // capacity
@@ -326,8 +347,8 @@ public:
 
     virtual int concat_length(bool* xz_present_p) const
 	{ if ( xz_present_p ) *xz_present_p = false; return length(); }
-    virtual bool concat_get_ctrl( unsigned long* dst_p, int low_i ) const;
-    virtual bool concat_get_data( unsigned long* dst_p, int low_i ) const;
+    virtual bool concat_get_ctrl( sc_digit* dst_p, int low_i ) const;
+    virtual bool concat_get_data( sc_digit* dst_p, int low_i ) const;
     virtual uint64 concat_get_uint64() const
     {
 	int    len = length();
@@ -422,7 +443,7 @@ protected:
     // constructor
     sc_int_subref()
         {}
-  
+
 public:
 
     // copy constructor
@@ -666,7 +687,7 @@ public:
 
     const sc_int_base operator ++ ( int ) // postfix
 	{ sc_int_base tmp( *this ); ++ m_val; extend_sign(); return tmp; }
- 
+
     sc_int_base& operator -- () // prefix
 	{ -- m_val; extend_sign(); return *this; }
 
@@ -739,10 +760,10 @@ public:
 
     virtual int concat_length(bool* xz_present_p) const
 	{ if ( xz_present_p ) *xz_present_p = false; return length(); }
-    virtual bool concat_get_ctrl( unsigned long* dst_p, int low_i ) const;
-    virtual bool concat_get_data( unsigned long* dst_p, int low_i ) const;
+    virtual bool concat_get_ctrl( sc_digit* dst_p, int low_i ) const;
+    virtual bool concat_get_data( sc_digit* dst_p, int low_i ) const;
     virtual uint64 concat_get_uint64() const
-	{ 
+	{
 	    if ( m_len < 64 )
 		return (uint64)(m_val & ~((uint_type)-1 << m_len));
 	    else
@@ -895,7 +916,7 @@ operator << ( ::std::ostream& os, const sc_int_bitref_r& a )
 // assignment operators
 
 inline
-sc_int_bitref& 
+sc_int_bitref&
 sc_int_bitref::operator = ( const sc_int_bitref_r& b )
 {
     m_obj_p->set( m_index, (bool) b );
@@ -904,7 +925,7 @@ sc_int_bitref::operator = ( const sc_int_bitref_r& b )
 }
 
 inline
-sc_int_bitref& 
+sc_int_bitref&
 sc_int_bitref::operator = ( const sc_int_bitref& b )
 {
     m_obj_p->set( m_index, (bool) b );
@@ -913,7 +934,7 @@ sc_int_bitref::operator = ( const sc_int_bitref& b )
 }
 
 inline
-sc_int_bitref& 
+sc_int_bitref&
 sc_int_bitref::operator = ( bool b )
 {
     m_obj_p->set( m_index, b );
@@ -923,7 +944,7 @@ sc_int_bitref::operator = ( bool b )
 
 
 inline
-sc_int_bitref& 
+sc_int_bitref&
 sc_int_bitref::operator &= ( bool b )
 {
     if( ! b ) {
@@ -934,7 +955,7 @@ sc_int_bitref::operator &= ( bool b )
 }
 
 inline
-sc_int_bitref& 
+sc_int_bitref&
 sc_int_bitref::operator |= ( bool b )
 {
     if( b ) {
@@ -975,7 +996,7 @@ operator >> ( ::std::istream& is, sc_int_bitref& a )
 // implicit conversion to int_type
 
 inline
-sc_int_subref_r::operator uint_type() const 
+sc_int_subref_r::operator uint_type() const
 {
     uint_type /*int_type*/ val = m_obj_p->m_val;
     int uleft = SC_INTWIDTH - (m_left + 1);

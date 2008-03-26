@@ -1,7 +1,9 @@
-//  (C) Copyright Boost.org 2001. Permission to copy, use, modify, sell and
-//  distribute this software is granted provided this copyright notice appears
-//  in all copies. This software is provided "as is" without express or implied
-//  warranty, and with no claim as to its suitability for any purpose.
+//  (C) Copyright John Maddock 2001 - 2002. 
+//  (C) Copyright Darin Adler 2001. 
+//  (C) Copyright Jens Maurer 2001. 
+//  Use, modification and distribution are subject to the 
+//  Boost Software License, Version 1.0. (See accompanying file 
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org for most recent version.
 
@@ -49,11 +51,14 @@
 // If the streams are not native, and we have a "using ::x" compiler bug
 // then the io stream facets are not available in namespace std::
 //
-#if !defined(_STLP_OWN_IOSTREAMS) && defined(_STLP_USE_NAMESPACES) && defined(BOOST_NO_USING_TEMPLATE) && !defined(__BORLANDC__)
-#  define BOOST_NO_STD_LOCALE
-#endif
-#if !defined(__SGI_STL_OWN_IOSTREAMS) && defined(__STL_USE_NAMESPACES) && defined(BOOST_NO_USING_TEMPLATE) && !defined(__BORLANDC__)
-#  define BOOST_NO_STD_LOCALE
+#ifdef _STLPORT_VERSION
+#  if !(_STLPORT_VERSION >= 0x500) && !defined(_STLP_OWN_IOSTREAMS) && defined(_STLP_USE_NAMESPACES) && defined(BOOST_NO_USING_TEMPLATE) && !defined(__BORLANDC__)
+#     define BOOST_NO_STD_LOCALE
+#  endif
+#else
+#  if !defined(__SGI_STL_OWN_IOSTREAMS) && defined(__STL_USE_NAMESPACES) && defined(BOOST_NO_USING_TEMPLATE) && !defined(__BORLANDC__)
+#     define BOOST_NO_STD_LOCALE
+#  endif
 #endif
 
 //
@@ -69,8 +74,25 @@
 //
 #define BOOST_HAS_PARTIAL_STD_ALLOCATOR
 
-#if !defined(_STLP_MEMBER_TEMPLATE_CLASSES)
+#if !defined(_STLP_MEMBER_TEMPLATE_CLASSES) || defined(_STLP_DONT_SUPPORT_REBIND_MEMBER_TEMPLATE)
 #  define BOOST_NO_STD_ALLOCATOR
+#endif
+
+#if defined(_STLP_NO_MEMBER_TEMPLATE_KEYWORD) && defined(BOOST_MSVC) && (BOOST_MSVC <= 1300)
+#  define BOOST_NO_STD_ALLOCATOR
+#endif
+
+//
+// If STLport thinks there is no wchar_t at all, then we have to disable
+// the support for the relevant specilazations of std:: templates.
+//
+#if !defined(_STLP_HAS_WCHAR_T) && !defined(_STLP_WCHAR_T_IS_USHORT)
+#  ifndef  BOOST_NO_STD_WSTRING
+#     define BOOST_NO_STD_WSTRING
+#  endif
+#  ifndef  BOOST_NO_STD_WSTREAMBUF
+#     define BOOST_NO_STD_WSTREAMBUF
+#  endif
 #endif
 
 //
@@ -90,7 +112,7 @@
 // BCB6 does cause problems. If we detect C++ Builder, then don't define 
 // BOOST_NO_STDC_NAMESPACE
 //
-#if !defined(__BORLANDC__)
+#if !defined(__BORLANDC__) && !defined(__DMC__)
 //
 // If STLport is using it's own namespace, and the real names are in
 // the global namespace, then we duplicate STLport's using declarations
@@ -105,9 +127,9 @@
 #     define BOOST_NO_STDC_NAMESPACE
 #     define BOOST_NO_EXCEPTION_STD_NAMESPACE
 #  endif
-#elif __BORLANDC__ < 0x560
+#elif defined(__BORLANDC__) && __BORLANDC__ < 0x560
 // STLport doesn't import std::abs correctly:
-#include <cstdlib>
+#include <stdlib.h>
 namespace std { using ::abs; }
 // and strcmp/strcpy don't get imported either ('cos they are macros)
 #include <string.h>
@@ -137,7 +159,17 @@ namespace std{ using _STLP_VENDOR_CSTD::strcmp; using _STLP_VENDOR_CSTD::strcpy;
 //
 #if defined(_STLP_NO_NATIVE_WIDE_FUNCTIONS) && !defined(BOOST_NO_STDC_NAMESPACE)
 #  define BOOST_NO_CWCHAR
-#  define BOOST_NO_CWTYPE
+#  define BOOST_NO_CWCTYPE
+#endif
+
+//
+// If STLport for some reason was configured so that it thinks that wchar_t
+// is not an intrinsic type, then we have to disable the support for it as
+// well (we would be missing required specializations otherwise).
+//
+#if !defined( _STLP_HAS_WCHAR_T) || defined(_STLP_WCHAR_T_IS_USHORT)
+#  undef  BOOST_NO_INTRINSIC_WCHAR_T
+#  define BOOST_NO_INTRINSIC_WCHAR_T
 #endif
 
 //
@@ -148,8 +180,18 @@ namespace std{ using _STLP_VENDOR_CSTD::strcmp; using _STLP_VENDOR_CSTD::strcpy;
 #  undef BOOST_HAS_HASH
 #endif
 
+//
+// gcc-2.95.3/STLPort does not like the using declarations we use to get ADL with std::min/max
+//
+#if defined(__GNUC__) && (__GNUC__ < 3)
+#  include <algorithm> // for std::min and std::max
+#  define BOOST_USING_STD_MIN() ((void)0)
+#  define BOOST_USING_STD_MAX() ((void)0)
+namespace boost { using std::min; using std::max; }
+#endif
 
 #define BOOST_STDLIB "STLPort standard library version " BOOST_STRINGIZE(__SGI_STL_PORT)
+
 
 
 

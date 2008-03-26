@@ -22,7 +22,15 @@
 //****************************************************************************
 //****************************************************************************
 
-
+// $Log: scx_mutex_w_policy.cpp,v $
+// Revision 1.3  2006/03/21 01:31:34  acg
+//  Andy Goodrich: changed over to sc_get_current_process_b() from
+//  sc_get_current_process_base() since the function's name changed.
+//
+// Revision 1.2  2006/02/04 00:09:35  acg
+//   Andy Goodrich: changed over to sc_get_current_process_b() from
+//   sc_get_curr_process_handle() to eliminate deprecation warning.
+//
 
 
 
@@ -56,13 +64,13 @@ public:
       wait(my_event); 
     } 
 
-    m_owner = sc_get_curr_process_handle(); 
+    m_owner = sc_get_current_process_b();
     return 0; 
   }
 
   virtual int unlock()
   { 
-    if (m_owner != sc_get_curr_process_handle()) return -1; 
+    if (m_owner != sc_get_current_process_b()) return -1; 
 
     m_owner = 0; 
     sc_event* e = next_event(); 

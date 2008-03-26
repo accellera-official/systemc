@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -34,11 +34,17 @@
 
  *****************************************************************************/
 
+// $Log: sc_nbutils.h,v $
+// Revision 1.3  2006/01/13 18:49:32  acg
+// Added $Log command so that CVS check in comments are reproduced in the
+// source.
+//
+
 #ifndef SC_NBUTILS_H
 #define SC_NBUTILS_H
 
 
-#if !defined(__ppc__) && !defined(_MSC_VER) && !defined(i386) && !defined(__hpux) && !defined( __BORLANDC__ )
+#if !defined(__ppc__) && !defined(_MSC_VER) && !defined(__x86_64__) && !defined(i386) && !defined(__hpux) && !defined( __BORLANDC__ )
 #include <ieeefp.h>
 #else
 #include <cmath>
@@ -71,7 +77,7 @@ is_valid_base(sc_numrep base)
 		       "base ending in _US and _SM is not supported yet" );
     default:
       char msg[BUFSIZ];
-      sprintf( msg, "is_valid_base( sc_numrep base ) : "
+      std::sprintf( msg, "is_valid_base( sc_numrep base ) : "
 	       "base = %s is not valid",
 	       to_string( base ).c_str() );
       SC_REPORT_ERROR( sc_core::SC_ID_VALUE_NOT_VALID_, msg );
@@ -86,14 +92,14 @@ fsm_move(char c, small_type &b, small_type &s, small_type &state);
 // Parse a character string into its equivalent binary bits.
 extern
 void parse_binary_bits( 
-    const char* src_p, int dst_n, unsigned long* data_p, unsigned long* ctrl_p=0
+    const char* src_p, int dst_n, sc_digit* data_p, sc_digit* ctrl_p=0
 );
 
 
 // Parse a character string into its equivalent hexadecimal bits.
 extern
 void parse_hex_bits( 
-    const char* src_p, int dst_n, unsigned long* data_p, unsigned long* ctrl_p=0
+    const char* src_p, int dst_n, sc_digit* data_p, sc_digit* ctrl_p=0
 );
 
 
@@ -105,7 +111,7 @@ get_base_and_sign(const char *v, small_type &base, small_type &sign);
 // Create a number out of v in base.
 extern 
 small_type 
-vec_from_str(int unb, int und, unsigned long *u, 
+vec_from_str(int unb, int und, sc_digit *u, 
              const char *v, sc_numrep base = SC_NOBASE) ;
 
 
@@ -125,27 +131,27 @@ vec_from_str(int unb, int und, unsigned long *u,
 
 extern 
 void 
-vec_add(int ulen, const unsigned long *u, 
-        int vlen, const unsigned long *v, unsigned long *w);
+vec_add(int ulen, const sc_digit *u, 
+        int vlen, const sc_digit *v, sc_digit *w);
 
 extern 
 void 
-vec_add_on(int ulen, unsigned long *u, 
-           int vlen, const unsigned long *v);
+vec_add_on(int ulen, sc_digit *u, 
+           int vlen, const sc_digit *v);
 
 extern 
 void 
-vec_add_on2(int ulen, unsigned long *u, 
-            int vlen, const unsigned long *v);
+vec_add_on2(int ulen, sc_digit *u, 
+            int vlen, const sc_digit *v);
 
 extern 
 void 
-vec_add_small(int ulen, const unsigned long *u,
-              unsigned long v, unsigned long *w);
+vec_add_small(int ulen, const sc_digit *u,
+              sc_digit v, sc_digit *w);
 
 extern 
 void 
-vec_add_small_on(int ulen, unsigned long *u, unsigned long v);
+vec_add_small_on(int ulen, sc_digit *u, sc_digit v);
 
 
 // ----------------------------------------------------------------------------
@@ -154,27 +160,27 @@ vec_add_small_on(int ulen, unsigned long *u, unsigned long v);
 
 extern 
 void 
-vec_sub(int ulen, const unsigned long *u, 
-        int vlen, const unsigned long *v, unsigned long *w);
+vec_sub(int ulen, const sc_digit *u, 
+        int vlen, const sc_digit *v, sc_digit *w);
 
 extern 
 void 
-vec_sub_on(int ulen, unsigned long *u, 
-           int vlen, const unsigned long *v);
+vec_sub_on(int ulen, sc_digit *u, 
+           int vlen, const sc_digit *v);
 
 extern 
 void 
-vec_sub_on2(int ulen, unsigned long *u,
-            int vlen, const unsigned long *v);
+vec_sub_on2(int ulen, sc_digit *u,
+            int vlen, const sc_digit *v);
 
 extern 
 void 
-vec_sub_small(int ulen, const unsigned long *u,
-              unsigned long v, unsigned long *w);
+vec_sub_small(int ulen, const sc_digit *u,
+              sc_digit v, sc_digit *w);
 
 extern 
 void 
-vec_sub_small_on(int ulen, unsigned long *u, unsigned long v);
+vec_sub_small_on(int ulen, sc_digit *u, sc_digit v);
 
 
 // ----------------------------------------------------------------------------
@@ -183,17 +189,17 @@ vec_sub_small_on(int ulen, unsigned long *u, unsigned long v);
 
 extern 
 void 
-vec_mul(int ulen, const unsigned long *u, 
-        int vlen, const unsigned long *v, unsigned long *w);
+vec_mul(int ulen, const sc_digit *u, 
+        int vlen, const sc_digit *v, sc_digit *w);
 
 extern 
 void 
-vec_mul_small(int ulen, const unsigned long *u,
-              unsigned long v, unsigned long *w);
+vec_mul_small(int ulen, const sc_digit *u,
+              sc_digit v, sc_digit *w);
 
 extern 
 void 
-vec_mul_small_on(int ulen, unsigned long *u, unsigned long v);
+vec_mul_small_on(int ulen, sc_digit *u, sc_digit v);
 
 
 // ----------------------------------------------------------------------------
@@ -202,13 +208,13 @@ vec_mul_small_on(int ulen, unsigned long *u, unsigned long v);
 
 extern 
 void 
-vec_div_large(int ulen, const unsigned long *u, 
-              int vlen, const unsigned long *v, unsigned long *w);
+vec_div_large(int ulen, const sc_digit *u, 
+              int vlen, const sc_digit *v, sc_digit *w);
 
 extern 
 void 
-vec_div_small(int ulen, const unsigned long *u, 
-              unsigned long v, unsigned long *w);
+vec_div_small(int ulen, const sc_digit *u, 
+              sc_digit v, sc_digit *w);
 
 
 // ----------------------------------------------------------------------------
@@ -217,31 +223,31 @@ vec_div_small(int ulen, const unsigned long *u,
 
 extern 
 void 
-vec_rem_large(int ulen, const unsigned long *u, 
-              int vlen, const unsigned long *v, unsigned long *w);
+vec_rem_large(int ulen, const sc_digit *u, 
+              int vlen, const sc_digit *v, sc_digit *w);
 
 extern 
-unsigned long 
-vec_rem_small(int ulen, const unsigned long *u, unsigned long v);
+sc_digit 
+vec_rem_small(int ulen, const sc_digit *u, sc_digit v);
 
 extern 
-unsigned long 
-vec_rem_on_small(int ulen, unsigned long *u, unsigned long v);
+sc_digit 
+vec_rem_on_small(int ulen, sc_digit *u, sc_digit v);
 
 
 // ----------------------------------------------------------------------------
-//  Functions to convert between vectors of char and unsigned long.
+//  Functions to convert between vectors of char and sc_digit.
 // ----------------------------------------------------------------------------
 
 extern 
 int 
-vec_to_char(int ulen, const unsigned long *u, 
+vec_to_char(int ulen, const sc_digit *u, 
             int vlen, uchar *v);
 
 extern 
 void 
 vec_from_char(int ulen, const uchar *u,
-              int vlen, unsigned long *v);
+              int vlen, sc_digit *v);
 
 
 // ----------------------------------------------------------------------------
@@ -250,15 +256,15 @@ vec_from_char(int ulen, const uchar *u,
 
 extern 
 void 
-vec_shift_left(int ulen, unsigned long *u, int nsl);
+vec_shift_left(int ulen, sc_digit *u, int nsl);
 
 extern 
 void 
-vec_shift_right(int vlen, unsigned long *u, int nsr, unsigned long fill = 0);
+vec_shift_right(int vlen, sc_digit *u, int nsr, sc_digit fill = 0);
 
 extern
 void 
-vec_reverse(int unb, int und, unsigned long *ud, 
+vec_reverse(int unb, int und, sc_digit *ud, 
             int l, int r = 0);
 
 
@@ -268,8 +274,8 @@ vec_reverse(int unb, int und, unsigned long *ud,
 
 // Return the low half part of d.
 inline 
-unsigned long 
-low_half(unsigned long d) 
+sc_digit 
+low_half(sc_digit d) 
 {
   return (d & HALF_DIGIT_MASK);
 }
@@ -280,15 +286,15 @@ low_half(unsigned long d)
 // make sure that the result contains BITS_PER_HALF_DIGIT if
 // necessary. This is done by high_half_masked().
 inline 
-unsigned long 
-high_half(unsigned long d) 
+sc_digit 
+high_half(sc_digit d) 
 {
   return (d >> BITS_PER_HALF_DIGIT);
 }
 
 inline
-unsigned long
-high_half_masked(unsigned long d)
+sc_digit
+high_half_masked(sc_digit d)
 {
   return (high_half(d) & HALF_DIGIT_MASK);
 }
@@ -296,26 +302,26 @@ high_half_masked(unsigned long d)
 // Concatenate the high part h and low part l. Assumes that h and l
 // are less than or equal to HALF_DIGIT_MASK;
 inline 
-unsigned long 
-concat(unsigned long h, unsigned long l) 
+sc_digit 
+concat(sc_digit h, sc_digit l) 
 {
   return ((h << BITS_PER_HALF_DIGIT) | l);
 }
 
 // Create a number with n 1's.
 inline
-unsigned long
+sc_digit
 one_and_ones(int n)
 {
-  return (((unsigned long) 1 << n) - 1);
+  return (((sc_digit) 1 << n) - 1);
 }
 
 // Create a number with one 1 and n 0's.
 inline
-unsigned long
+sc_digit
 one_and_zeros(int n)
 {
-  return ((unsigned long) 1 << n);
+  return ((sc_digit) 1 << n);
 }
 
 
@@ -351,8 +357,8 @@ bit_ord(int i)
 // - Every digit is less than or equal to DIGIT_MASK;
 inline 
 int
-vec_cmp(int ulen, const unsigned long *u, 
-        int vlen, const unsigned long *v)
+vec_cmp(int ulen, const sc_digit *u, 
+        int vlen, const sc_digit *v)
 {
 
 #ifdef DEBUG_SYSTEMC
@@ -394,7 +400,7 @@ vec_cmp(int ulen, const unsigned long *u,
 // A negative value of -1 indicates that every digit in u is zero.
 inline
 int
-vec_find_first_nonzero(int ulen, const unsigned long *u)
+vec_find_first_nonzero(int ulen, const sc_digit *u)
 {
 
 #ifdef DEBUG_SYSTEMC
@@ -415,7 +421,7 @@ vec_find_first_nonzero(int ulen, const unsigned long *u)
 // - the returned value is non-negative.
 inline 
 int
-vec_skip_leading_zeros(int ulen, const unsigned long *u)
+vec_skip_leading_zeros(int ulen, const sc_digit *u)
 {
 
 #ifdef DEBUG_SYSTEMC
@@ -433,8 +439,8 @@ vec_skip_leading_zeros(int ulen, const unsigned long *u)
 //  r > 0 if u > v
 inline 
 int 
-vec_skip_and_cmp(int ulen, const unsigned long *u, 
-                 int vlen, const unsigned long *v)
+vec_skip_and_cmp(int ulen, const sc_digit *u, 
+                 int vlen, const sc_digit *v)
 {
 
 #ifdef DEBUG_SYSTEMC
@@ -452,7 +458,7 @@ vec_skip_and_cmp(int ulen, const unsigned long *u,
 // Set u[i] = 0 where i = from ... (ulen - 1).
 inline
 void
-vec_zero(int from, int ulen, unsigned long *u)
+vec_zero(int from, int ulen, sc_digit *u)
 {
 
 #ifdef DEBUG_SYSTEMC
@@ -467,7 +473,7 @@ vec_zero(int from, int ulen, unsigned long *u)
 // Set u[i] = 0 where i = 0 .. (ulen - 1).
 inline
 void
-vec_zero(int ulen, unsigned long *u)
+vec_zero(int ulen, sc_digit *u)
 {
   vec_zero(0, ulen, u);
 }
@@ -475,7 +481,7 @@ vec_zero(int ulen, unsigned long *u)
 // Copy n digits from v to u.
 inline
 void
-vec_copy(int n, unsigned long *u, const unsigned long *v)
+vec_copy(int n, sc_digit *u, const sc_digit *v)
 {
 
 #ifdef DEBUG_SYSTEMC
@@ -489,8 +495,8 @@ vec_copy(int n, unsigned long *u, const unsigned long *v)
 // Copy v to u, where ulen >= vlen, and zero the rest of the digits in u.
 inline
 void
-vec_copy_and_zero(int ulen, unsigned long *u, 
-                  int vlen, const unsigned long *v)
+vec_copy_and_zero(int ulen, sc_digit *u, 
+                  int vlen, const sc_digit *v)
 {
 
 #ifdef DEBUG_SYSTEMC
@@ -507,14 +513,14 @@ vec_copy_and_zero(int ulen, unsigned long *u,
 // 2's-complement the digits in u.
 inline
 void
-vec_complement(int ulen, unsigned long *u)
+vec_complement(int ulen, sc_digit *u)
 {
 
 #ifdef DEBUG_SYSTEMC
   assert((ulen > 0) && (u != NULL));
 #endif
 
-  register unsigned long carry = 1;
+  register sc_digit carry = 1;
 
   for (register int i = 0; i < ulen; ++i) {
     carry += (~u[i] & DIGIT_MASK);
@@ -534,7 +540,7 @@ vec_complement(int ulen, unsigned long *u)
 template< class Type >
 inline
 void
-from_uint(int ulen, unsigned long *u, Type v)
+from_uint(int ulen, sc_digit *u, Type v)
 {
 
 #ifdef DEBUG_SYSTEMC
@@ -547,9 +553,9 @@ from_uint(int ulen, unsigned long *u, Type v)
 
   while (v && (i < ulen)) {
 #ifndef WIN32
-    u[i++] = static_cast<unsigned long>( v & DIGIT_MASK );
+    u[i++] = static_cast<sc_digit>( v & DIGIT_MASK );
 #else
-    u[i++] = ((unsigned long) v) & DIGIT_MASK;
+    u[i++] = ((sc_digit) v) & DIGIT_MASK;
 #endif
     v >>= BITS_PER_DIGIT;
   }
@@ -609,7 +615,7 @@ test_bound(int nb)
 {
   if (nb > SC_MAX_NBITS) {
       char msg[BUFSIZ];
-      sprintf( msg, "test_bound( int nb ) : "
+      std::sprintf( msg, "test_bound( int nb ) : "
 	       "nb = %d > SC_MAX_NBITS = %d is not valid",
 	       nb, SC_MAX_NBITS );
       SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
@@ -638,7 +644,7 @@ div_by_zero(Type s)
 // else return s.
 inline
 small_type 
-check_for_zero(small_type s, int ulen, const unsigned long *u)
+check_for_zero(small_type s, int ulen, const sc_digit *u)
 {
 
 #ifdef DEBUG_SYSTEMC
@@ -657,7 +663,7 @@ check_for_zero(small_type s, int ulen, const unsigned long *u)
 // else return false.
 inline
 bool
-check_for_zero(int ulen, const unsigned long *u)
+check_for_zero(int ulen, const sc_digit *u)
 {
 
 #ifdef DEBUG_SYSTEMC
@@ -674,7 +680,7 @@ check_for_zero(int ulen, const unsigned long *u)
 
 inline
 small_type
-make_zero(int nd, unsigned long *d)
+make_zero(int nd, sc_digit *d)
 {
   vec_zero(nd, d);
   return SC_ZERO;
@@ -692,7 +698,7 @@ make_zero(int nd, unsigned long *d)
 // Trim the extra leading bits of a signed or unsigned number.
 inline
 void
-trim(small_type added, int nb, int nd, unsigned long *d)
+trim(small_type added, int nb, int nd, sc_digit *d)
 {
 #ifdef DEBUG_SYSTEMC
   assert((nb > 0) && (nd > 0) && (d != NULL));
@@ -706,7 +712,7 @@ trim(small_type added, int nb, int nd, unsigned long *d)
 inline
 void
 convert_SM_to_2C_trimmed(small_type added, 
-                         small_type s, int nb, int nd, unsigned long *d)
+                         small_type s, int nb, int nd, sc_digit *d)
 {
   if (s == SC_NEG) {
     vec_complement(nd, d);
@@ -718,7 +724,7 @@ convert_SM_to_2C_trimmed(small_type added,
 // 2's complement representation but do not trim the extra bits.
 inline
 void
-convert_SM_to_2C(small_type s, int nd, unsigned long *d)
+convert_SM_to_2C(small_type s, int nd, sc_digit *d)
 {
   if (s == SC_NEG)
     vec_complement(nd, d);
@@ -733,7 +739,7 @@ convert_SM_to_2C(small_type s, int nd, unsigned long *d)
 // Trim the extra leading bits off a signed number.
 inline
 void
-trim_signed(int nb, int nd, unsigned long *d)
+trim_signed(int nb, int nd, sc_digit *d)
 {
 #ifdef DEBUG_SYSTEMC
   assert((nb > 0) && (nd > 0) && (d != NULL));
@@ -747,7 +753,7 @@ trim_signed(int nb, int nd, unsigned long *d)
 // actual size, without zeros eliminated.
 inline
 small_type
-convert_signed_2C_to_SM(int nb, int nd, unsigned long *d)
+convert_signed_2C_to_SM(int nb, int nd, sc_digit *d)
 {
 
 #ifdef DEBUG_SYSTEMC
@@ -783,7 +789,7 @@ convert_signed_2C_to_SM(int nb, int nd, unsigned long *d)
 // actual size, without zeros eliminated.
 inline
 small_type 
-convert_signed_SM_to_2C_to_SM(small_type s, int nb, int nd, unsigned long *d)
+convert_signed_SM_to_2C_to_SM(small_type s, int nb, int nd, sc_digit *d)
 {
   convert_SM_to_2C(s, nd, d);
   return convert_signed_2C_to_SM(nb, nd, d);
@@ -793,7 +799,7 @@ convert_signed_SM_to_2C_to_SM(small_type s, int nb, int nd, unsigned long *d)
 // complement representation and trim the extra bits.
 inline
 void
-convert_signed_SM_to_2C_trimmed(small_type s, int nb, int nd, unsigned long *d)
+convert_signed_SM_to_2C_trimmed(small_type s, int nb, int nd, sc_digit *d)
 {
   convert_SM_to_2C_trimmed(1, s, nb, nd, d);
 }
@@ -802,7 +808,7 @@ convert_signed_SM_to_2C_trimmed(small_type s, int nb, int nd, unsigned long *d)
 // complement representation but do not trim the extra bits.
 inline
 void
-convert_signed_SM_to_2C(small_type s, int nd, unsigned long *d)
+convert_signed_SM_to_2C(small_type s, int nd, sc_digit *d)
 {
   convert_SM_to_2C(s, nd, d);
 }
@@ -816,7 +822,7 @@ convert_signed_SM_to_2C(small_type s, int nd, unsigned long *d)
 // Trim the extra leading bits off an unsigned number.
 inline
 void
-trim_unsigned(int nb, int nd, unsigned long *d)
+trim_unsigned(int nb, int nd, sc_digit *d)
 {
 #ifdef DEBUG_SYSTEMC
   assert((nb > 0) && (nd > 0) && (d != NULL));
@@ -830,7 +836,7 @@ trim_unsigned(int nb, int nd, unsigned long *d)
 // actual size, without zeros eliminated.
 inline
 small_type
-convert_unsigned_2C_to_SM(int nb, int nd, unsigned long *d)
+convert_unsigned_2C_to_SM(int nb, int nd, sc_digit *d)
 {
   trim_unsigned(nb, nd, d);
   return check_for_zero(SC_POS, nd, d);
@@ -842,7 +848,7 @@ convert_unsigned_2C_to_SM(int nb, int nd, unsigned long *d)
 // actual size, without zeros eliminated.
 inline
 small_type
-convert_unsigned_SM_to_2C_to_SM(small_type s, int nb, int nd, unsigned long *d)
+convert_unsigned_SM_to_2C_to_SM(small_type s, int nb, int nd, sc_digit *d)
 {
   convert_SM_to_2C(s, nd, d);
   return convert_unsigned_2C_to_SM(nb, nd, d);
@@ -852,7 +858,7 @@ convert_unsigned_SM_to_2C_to_SM(small_type s, int nb, int nd, unsigned long *d)
 // 2's complement representation and trim the extra bits.
 inline
 void
-convert_unsigned_SM_to_2C_trimmed(small_type s, int nb, int nd, unsigned long *d)
+convert_unsigned_SM_to_2C_trimmed(small_type s, int nb, int nd, sc_digit *d)
 {
   convert_SM_to_2C_trimmed(0, s, nb, nd, d);
 }
@@ -861,7 +867,7 @@ convert_unsigned_SM_to_2C_trimmed(small_type s, int nb, int nd, unsigned long *d
 // 2's complement representation but do not trim the extra bits.
 inline
 void
-convert_unsigned_SM_to_2C(small_type s, int nd, unsigned long *d)
+convert_unsigned_SM_to_2C(small_type s, int nd, sc_digit *d)
 {
   convert_SM_to_2C(s, nd, d);
 }
@@ -875,8 +881,8 @@ convert_unsigned_SM_to_2C(small_type s, int nd, unsigned long *d)
 inline
 void
 copy_digits_signed(small_type &us, 
-                   int unb, int und, unsigned long *ud,
-                   int vnb, int vnd, const unsigned long *vd)
+                   int unb, int und, sc_digit *ud,
+                   int vnb, int vnd, const sc_digit *vd)
 {
 
   if (und <= vnd) {
@@ -896,8 +902,8 @@ copy_digits_signed(small_type &us,
 inline
 void
 copy_digits_unsigned(small_type &us, 
-                     int unb, int und, unsigned long *ud,
-                     int vnb, int vnd, const unsigned long *vd)
+                     int unb, int und, sc_digit *ud,
+                     int vnb, int vnd, const sc_digit *vd)
 {
 
   if (und <= vnd)
@@ -918,7 +924,7 @@ copy_digits_unsigned(small_type &us,
 // A version of set(i, v) without bound checking.
 inline
 void
-safe_set(int i, bool v, unsigned long *d)
+safe_set(int i, bool v, sc_digit *d)
 {
 
 #ifdef DEBUG_SYSTEMC
@@ -945,7 +951,7 @@ void
 is_bad_double(double v)
 {
 // Windows throws exception.
-#if !defined(WIN32) && !defined(i386) && !defined( __EDG__ )
+#if !defined(WIN32) && !defined(i386) && !defined(__x86_64__) && !defined( __EDG__ )
 #if defined( __hpux ) && defined( isfinite )
   // HP-UX 11.00 does not have finite anymore
   if( ! isfinite( v ) ) {

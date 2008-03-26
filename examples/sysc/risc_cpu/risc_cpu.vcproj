@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="7.10"
 	Name="risc_cpu"
-	ProjectGUID="{AFB2AE0D-B47A-42E5-9023-193E8F593042}"
+	ProjectGUID="{7E89CFF9-22EE-45E4-942B-100C34D8AD72}"
 	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
@@ -20,7 +20,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/vmg"
 				Optimization="0"
-                                AdditionalIncludeDirectories="../../../src"
+				AdditionalIncludeDirectories="$(SYSTEMC)\..\src"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;NOGDI"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -37,7 +37,7 @@
 				AdditionalDependencies="systemc.lib"
 				OutputFile="$(OutDir)/risc_cpu.exe"
 				LinkIncremental="2"
-                                AdditionalLibraryDirectories="../../../msvc71/systemc/debug"
+				AdditionalLibraryDirectories="$(SYSTEMC)\SystemC\Debug"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/risc_cpu.pdb"
 				SubSystem="1"
@@ -71,19 +71,27 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="/vmg"
+				AdditionalIncludeDirectories="$(SYSTEMC)\..\src"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				MinimalRebuild="TRUE"
+				BasicRuntimeChecks="3"
 				RuntimeLibrary="4"
+				BufferSecurityCheck="FALSE"
+				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="TRUE"
+				Detect64BitPortabilityProblems="FALSE"
 				DebugInformationFormat="3"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="systemc.lib"
 				OutputFile="$(OutDir)/risc_cpu.exe"
 				LinkIncremental="1"
-				GenerateDebugInformation="TRUE"
+				AdditionalLibraryDirectories="$(SYSTEMC)\SystemC\Release"
+				GenerateDebugInformation="FALSE"
 				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"

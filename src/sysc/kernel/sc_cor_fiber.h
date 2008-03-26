@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -33,6 +33,11 @@
 
  *****************************************************************************/
 
+// $Log: sc_cor_fiber.h,v $
+// Revision 1.3  2006/01/13 18:44:29  acg
+// Added $Log to record CVS changes into the source.
+//
+
 #ifndef SC_COR_FIBER_H
 #define SC_COR_FIBER_H
 
@@ -46,6 +51,9 @@ namespace sc_core {
 
 class sc_cor_pkg_fiber;
 
+#if( defined(_MSC_VER) && _MSC_VER >= 1300 )
+typedef std::size_t size_t;
+#endif
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_cor_fiber
@@ -56,9 +64,6 @@ class sc_cor_pkg_fiber;
 class sc_cor_fiber
 : public sc_cor
 {
-#if( defined(_MSC_VER) && _MSC_VER >= 1300 )
-typedef std::size_t size_t;
-#endif
 
 public:
 
@@ -72,7 +77,7 @@ public:
 
 public:
 
-    size_t            m_stack_size;  // stack size
+    std::size_t            m_stack_size;  // stack size
     PVOID             m_fiber;       // fiber
 
     sc_cor_pkg_fiber* m_pkg;         // the creating coroutine package
@@ -94,11 +99,7 @@ private:
 class sc_cor_pkg_fiber
 : public sc_cor_pkg
 {
-#if( defined(_MSC_VER) && _MSC_VER >= 1300 )
-typedef std::size_t size_t;
-#endif
-
-public:
+  public:
 
     // constructor
     sc_cor_pkg_fiber( sc_simcontext* simc );
@@ -107,7 +108,7 @@ public:
     virtual ~sc_cor_pkg_fiber();
 
     // create a new coroutine
-    virtual sc_cor* create( size_t stack_size, sc_cor_fn* fn, void* arg );
+    virtual sc_cor* create( std::size_t stack_size, sc_cor_fn* fn, void* arg );
 
     // yield to the next coroutine
     virtual void yield( sc_cor* next_cor );

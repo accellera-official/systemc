@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -33,6 +33,22 @@
   Description of Modification:
 
  *****************************************************************************/
+// $Log: scfx_string.h,v $
+// Revision 1.2  2006/01/03 23:18:34  acg
+// Changed copyright to include 2006.
+//
+// Revision 1.1.1.1  2005/12/19 23:16:43  acg
+// First check in of SystemC 2.1 into its own archive.
+//
+// Revision 1.9  2005/09/15 23:02:03  acg
+// Added std:: prefix to appropriate methods and types to get around
+// issues with the Edison Front End.
+//
+// Revision 1.8  2005/06/07 17:27:02  acg
+// Fixed bug in scfx_string::operator += where an array reference was used
+// rather than the [] operator.  This meant that the buffer may have been
+// accessed beyond its allocated storage.
+//
 
 #ifndef SCFX_STRING_H
 #define SCFX_STRING_H
@@ -55,7 +71,7 @@ class scfx_string;
 
 class scfx_string
 {
-    void resize( size_t );
+    void resize( std::size_t );
 
 public:
 
@@ -80,8 +96,8 @@ public:
 
 private:
 
-    size_t m_len;
-    size_t m_alloc;
+    std::size_t m_len;
+    std::size_t m_alloc;
     char*  m_buffer;
 };
 
@@ -90,7 +106,7 @@ private:
 
 inline
 void
-scfx_string::resize( size_t i )
+scfx_string::resize( std::size_t i )
 {
     do {
 	m_alloc *= 2;

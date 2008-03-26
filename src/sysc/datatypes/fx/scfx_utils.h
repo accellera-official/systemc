@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -33,6 +33,12 @@
 
  *****************************************************************************/
 
+// $Log: scfx_utils.h,v $
+// Revision 1.3  2006/01/13 18:53:58  acg
+// Andy Goodrich: added $Log command so that CVS comments are reproduced in
+// the source.
+//
+
 #ifndef SCFX_UTILS_H
 #define SCFX_UTILS_H
 
@@ -56,6 +62,9 @@ int
 scfx_find_msb( unsigned long x )
 {
     int i = 0;
+#   if defined(SC_LONG_64)
+        MSB_STATEMENT( 32 );
+#   endif // defined(SC_LONG_64)
     MSB_STATEMENT( 16 );
     MSB_STATEMENT( 8 );
     MSB_STATEMENT( 4 );
@@ -72,7 +81,13 @@ inline
 int
 scfx_find_lsb( unsigned long x )
 {
-    int i = 31;
+    int i;
+#   if defined(SC_LONG_64)
+        i = 63;
+        LSB_STATEMENT( 32 );
+#   else
+        i = 31;
+#   endif // defined(SC_LONG_64)
     LSB_STATEMENT( 16 );
     LSB_STATEMENT( 8 );
     LSB_STATEMENT( 4 );

@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -33,6 +33,12 @@
   Description of Modification:
 
  *****************************************************************************/
+
+// $Log: sc_nbdefs.h,v $
+// Revision 1.3  2006/01/13 18:49:32  acg
+// Added $Log command so that CVS check in comments are reproduced in the
+// source.
+//
 
 #ifndef SC_NBDEFS_H
 #define SC_NBDEFS_H
@@ -113,6 +119,15 @@ extern const int MAX_NDIGITS;
 // result of any operation.
 #endif
 
+// Support for "digit" vectors used to hold the values of sc_signed,
+// sc_unsigned, sc_bv_base,  and sc_lv_base data types. This type is also used 
+// in the concatenation support. An sc_digit is currently an unsigned 32-bit 
+// quantity. The typedef used is an unsigned int, rather than an unsigned long,
+// since the unsigned long data type varies in size between 32-bit and 64-bit 
+// machines.
+
+typedef unsigned int sc_digit;	// 32-bit unsigned integer
+
 // Support for the long long type. This type is not in the standard
 // but is usually supported by compilers.
 #ifndef WIN32
@@ -133,21 +148,21 @@ extern const int MAX_NDIGITS;
 // Bits per ...
 // will be deleted in the future. Use numeric_limits instead
 #define BITS_PER_CHAR    8
-#define BITS_PER_INT    32
-#define BITS_PER_LONG   32
-#define BITS_PER_INT64  64
-#define BITS_PER_UINT   32
-#define BITS_PER_ULONG  32
-#define BITS_PER_UINT64 64
+#define BITS_PER_INT    (sizeof(int) * BITS_PER_CHAR)
+#define BITS_PER_LONG   (sizeof(long) * BITS_PER_CHAR)
+#define BITS_PER_INT64  (sizeof(long long) * BITS_PER_CHAR)
+#define BITS_PER_UINT   (sizeof(unsigned int) * BITS_PER_CHAR)
+#define BITS_PER_ULONG  (sizeof(unsigned long) * BITS_PER_CHAR)
+#define BITS_PER_UINT64 (sizeof(unsigned long long) * BITS_PER_CHAR)
 
 // Digits per ...
 #define DIGITS_PER_CHAR   1
-#define DIGITS_PER_INT    2
-#define DIGITS_PER_LONG   2
-#define DIGITS_PER_INT64  3
-#define DIGITS_PER_UINT   2
-#define DIGITS_PER_ULONG  2
-#define DIGITS_PER_UINT64 3
+#define DIGITS_PER_INT    ((BITS_PER_INT+29)/30)
+#define DIGITS_PER_LONG   ((BITS_PER_LONG+29)/30)
+#define DIGITS_PER_INT64  ((BITS_PER_INT64+29)/30)
+#define DIGITS_PER_UINT   ((BITS_PER_UINT+29)/30)
+#define DIGITS_PER_ULONG  ((BITS_PER_ULONG+29)/30)
+#define DIGITS_PER_UINT64 ((BITS_PER_UINT64+29)/30)
 
 // Above, BITS_PER_X is mainly used for sc_signed, and BITS_PER_UX is
 // mainly used for sc_unsigned.

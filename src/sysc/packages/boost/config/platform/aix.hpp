@@ -1,7 +1,7 @@
-//  (C) Copyright Boost.org 2001. Permission to copy, use, modify, sell and
-//  distribute this software is granted provided this copyright notice appears
-//  in all copies. This software is provided "as is" without express or implied
-//  warranty, and with no claim as to its suitability for any purpose.
+//  (C) Copyright John Maddock 2001 - 2002. 
+//  Use, modification and distribution are subject to the 
+//  Boost Software License, Version 1.0. (See accompanying file 
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org for most recent version.
 
@@ -14,7 +14,7 @@
 #define BOOST_HAS_NANOSLEEP
 #define BOOST_HAS_CLOCK_GETTIME
 
-// This needs support in "boost/cstdint.hpp" exactly like FreeBSD.
+// This needs support in "sysc/packages/boost/cstdint.hpp" exactly like FreeBSD.
 // This platform has header named <inttypes.h> which includes all
 // the things needed.
 #define BOOST_HAS_STDINT_H
@@ -27,6 +27,7 @@
 
 // boilerplate code:
 #include <sysc/packages/boost/config/posix_features.hpp>
+
 
 
 

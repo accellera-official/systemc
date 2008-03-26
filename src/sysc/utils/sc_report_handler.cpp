@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -34,8 +34,26 @@
 
  *****************************************************************************/
 
+// $Log: sc_report_handler.cpp,v $
+// Revision 1.6  2006/03/21 00:00:37  acg
+//   Andy Goodrich: changed name of sc_get_current_process_base() to be
+//   sc_get_current_process_b() since its returning an sc_process_b instance.
+//
+// Revision 1.5  2006/01/31 21:42:07  acg
+//  Andy Goodrich: Added checks for SC_DEPRECATED_WARNINGS being defined as
+//  DISABLED. If so, we turn off the /IEEE_Std_1666/deprecated message group.
+//
+// Revision 1.4  2006/01/26 21:08:17  acg
+//  Andy Goodrich: conversion to use sc_is_running instead of deprecated
+//  sc_simcontext::is_running()
+//
+// Revision 1.3  2006/01/13 18:53:11  acg
+// Andy Goodrich: Added $Log command so that CVS comments are reproduced in
+// the source.
+//
+
 #include "sysc/utils/sc_iostream.h"
-#include "sysc/kernel/sc_process_int.h"
+#include "sysc/kernel/sc_process.h"
 #include "sysc/kernel/sc_simcontext_int.h"
 #include "sysc/utils/sc_stop_here.h"
 #include "sysc/utils/sc_report_handler.h"
@@ -59,7 +77,7 @@ const std::string sc_report_compose_message(const sc_report& rep)
     if ( rep.get_id() >= 0 ) // backward compatibility with 2.0+
     {
 	char idstr[64];
-	sprintf(idstr, "(%c%d) ",
+	std::sprintf(idstr, "(%c%d) ",
 		"IWEF"[rep.get_severity()], rep.get_id());
 	str += idstr;
     }
@@ -76,11 +94,11 @@ const std::string sc_report_compose_message(const sc_report& rep)
 	str += "\nIn file: ";
 	str += rep.get_file_name();
 	str += ":";
-	sprintf(line_number_str, "%d", rep.get_line_number());
+	std::sprintf(line_number_str, "%d", rep.get_line_number());
 	str += line_number_str;
 	sc_simcontext* simc = sc_get_curr_simcontext();
 
-	if( simc && simc->is_running() )
+	if( simc && sc_is_running() )
 	{
 	    const char* proc_name = rep.get_process_name();
 
@@ -135,11 +153,11 @@ void sc_report_handler::default_handler(const sc_report& rep,
     }
     if ( actions & SC_STOP )
     {
-	sc_stop_here((int)rep.get_msg_type(), rep.get_severity());
+	sc_stop_here(rep.get_msg_type(), rep.get_severity());
 	sc_stop();
     }
     if ( actions & SC_INTERRUPT )
-	sc_interrupt_here((int)rep.get_msg_type(), rep.get_severity());
+	sc_interrupt_here(rep.get_msg_type(), rep.get_severity());
 
     if ( actions & SC_ABORT )
 	abort();
@@ -244,13 +262,10 @@ sc_actions sc_report_handler::execute(sc_msg_def* md, sc_severity severity_)
 	call_count = sev_call_count + severity_;
     }
     if ( *limit == 0 )
-	;// stop limit disabled
-    else if ( *limit == UINT_MAX )
     {
-	if ( severity_ >= SC_FATAL ) // sc_stop disabled, but FATAL+ sc_stops
-	    actions |= SC_STOP; // force sc_stop()
+	// stop limit disabled
     }
-    else
+    else if ( *limit != UINT_MAX )
     {
 	if ( *call_count >= *limit )
 	    actions |= SC_STOP; // force sc_stop()
@@ -277,6 +292,8 @@ void sc_report_handler::report(sc_severity severity_,
 
     handler(rep, actions);
 }
+
+// The following method is never called by the simulator.
 
 void sc_report_handler::initialize()
 {
@@ -307,6 +324,14 @@ void sc_report_handler::initialize()
 	    items->md[i].sev_call_count[SC_FATAL]   = 0;
 	}
 	items = items->next;
+    }
+
+    // PROCESS ANY ENVIRONMENTAL OVERRIDES:
+
+    const char* deprecation_warn = std::getenv("SC_DEPRECATION_WARNINGS");
+    if ( (deprecation_warn!=0) && !strcmp(deprecation_warn,"DISABLE") )
+    {
+        set_actions("/IEEE_Std_1666/deprecated", SC_DO_NOTHING);
     }
 }
 
@@ -508,7 +533,7 @@ void sc_report_handler::set_handler(sc_report_handler_proc handler_)
 
 sc_report* sc_report_handler::get_cached_report()
 {
-    sc_process_b * proc = sc_get_curr_process_handle();
+    sc_process_b * proc = sc_get_current_process_b();
 
     if ( proc )
 	return proc->get_last_report();
@@ -518,7 +543,7 @@ sc_report* sc_report_handler::get_cached_report()
 
 void sc_report_handler::clear_cached_report()
 {
-    sc_process_b * proc = sc_get_curr_process_handle();
+    sc_process_b * proc = sc_get_current_process_b();
 
     if ( proc )
 	proc->set_last_report(0);
@@ -565,7 +590,7 @@ const char * sc_report_handler::get_log_file_name()
 
 void sc_report_handler::cache_report(const sc_report& rep)
 {
-    sc_process_b * proc = sc_get_curr_process_handle();
+    sc_process_b * proc = sc_get_current_process_b();
     if ( proc )
 	proc->set_last_report(new sc_report(rep));
     else
@@ -606,6 +631,8 @@ sc_actions sc_report_handler::sev_actions[SC_MAX_SEVERITY] =
     /* error */ SC_DEFAULT_ERROR_ACTIONS,
     /* fatal */ SC_DEFAULT_FATAL_ACTIONS
 };
+
+// Note that SC_FATAL has a limit of 1 by default
 
 sc_actions sc_report_handler::sev_limit[SC_MAX_SEVERITY] =
 {

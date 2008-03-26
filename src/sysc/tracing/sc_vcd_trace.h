@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -50,15 +50,11 @@
 
 #include <cstdio>
 #include "sysc/tracing/sc_trace.h"
-#include "sysc/utils/sc_vector.h"
 
 namespace sc_core {
 
 class vcd_trace;  // defined in vcd_trace.cpp
 template<class T> class vcd_T_trace;
-
-// Print VCD error message
-void vcd_put_error_message(const char* msg, bool just_warning);
 
 
 // ----------------------------------------------------------------------------
@@ -73,7 +69,9 @@ class vcd_trace_file
 public:
 
     enum vcd_enum {VCD_WIRE=0, VCD_REAL=1, VCD_LAST};
-    void sc_set_vcd_time_unit(int exponent10_seconds); // -7 -> 100ns
+	// sc_set_vcd_time_unit is deprecated.
+    inline void sc_set_vcd_time_unit(int exponent10_seconds)
+    	{ set_time_unit(exponent10_seconds); }
 
     // Create a Vcd trace file.
     // `Name' forms the base of the name to which `.vcd' is added.
@@ -173,7 +171,7 @@ protected:
     	vcd_enum type=VCD_WIRE)
     {
       if(initialized)
-         vcd_put_error_message("No traces can be added once simulation has"
+         put_error_message("No traces can be added once simulation has"
          " started.\nTo add traces, create a new vcd trace file.", false);
       else
         traces.push_back(new vcd_T_trace<T>(object, name, obtain_name(),type));
@@ -200,7 +198,7 @@ protected:
 
     // Write trace info for cycle.
      void cycle(bool delta_cycle);
-    
+
 private:
 
     // Initialize the tracing
@@ -211,8 +209,6 @@ private:
     // Pointer to the file that needs to be written
     FILE* fp;
 
-    double timescale_unit;      // in seconds
-    bool timescale_set_by_user; // = 1 means set by user
     bool trace_delta_cycles;    // = 1 means trace the delta cycles
 
     unsigned vcd_name_index;    // Number of variables traced
@@ -222,8 +218,7 @@ private:
 public:
 
     // Array to store the variables traced
-    sc_pvector<vcd_trace*> traces;
-    bool initialized;           // = 1 means initialized
+    std::vector<vcd_trace*> traces;
     // same as create_vcd_name (corrected style)
     std::string obtain_name();
 };

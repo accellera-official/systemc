@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2004 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -47,11 +47,11 @@ void sink::entry()
 
  while(true)
  { 
-   wait_until(data_ready.delayed() == true);
+   do { wait(); } while ( !(data_ready == true) );
    fprintf(fp_real,"%e  \n",in_real.read());
    fprintf(fp_imag,"%e  \n",in_imag.read());
    data_ack.write(true);
-   wait_until(data_ready.delayed() == false);
+   do { wait(); } while ( !(data_ready == false) );
    data_ack.write(false); 
  }
 }

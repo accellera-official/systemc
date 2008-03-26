@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -37,6 +37,12 @@
  *****************************************************************************/
 
 
+// $Log: sc_stop_here.cpp,v $
+// Revision 1.3  2006/01/13 18:53:11  acg
+// Andy Goodrich: Added $Log command so that CVS comments are reproduced in
+// the source.
+//
+
 #include "sysc/utils/sc_stop_here.h"
 
 
@@ -50,27 +56,27 @@ namespace sc_core {
 // ----------------------------------------------------------------------------
 
 void
-sc_interrupt_here( int id, sc_severity severity )
+sc_interrupt_here( const char* id, sc_severity severity )
 {
     // you can set a breakpoint at some of the lines below, either to
     // interrupt with any severity, or to interrupt with a specific severity
 
     switch( severity ) {
       case SC_INFO: 
-	static int info_id;
+	static const char* info_id;
 	info_id = id;
 	break;
       case SC_WARNING: 
-	static int warning_id;
+	static const char* warning_id;
 	warning_id = id;
 	break;
       case SC_ERROR: 
-	static int error_id;
+	static const char* error_id;
 	error_id = id;
 	break;
       default:
       case SC_FATAL: 
-	static int fatal_id;
+	static const char* fatal_id;
 	fatal_id = id;
 	break;
     }
@@ -85,27 +91,27 @@ sc_interrupt_here( int id, sc_severity severity )
 // ----------------------------------------------------------------------------
 
 void
-sc_stop_here( int id, sc_severity severity )
+sc_stop_here( const char* id, sc_severity severity )
 {
     // you can set a breakpoint at some of the lines below, either to
     // stop with any severity, or to stop with a specific severity
 
     switch( severity ) {
       case SC_INFO: 
-	static int info_id;
+	static const char* info_id;
 	info_id = id;
 	break;
       case SC_WARNING: 
-	static int warning_id;
+	static const char* warning_id;
 	warning_id = id;
 	break;
       case SC_ERROR: 
-	static int error_id;
+	static const char* error_id;
 	error_id = id;
 	break;
       default:
       case SC_FATAL: 
-	static int fatal_id;
+	static const char* fatal_id;
 	fatal_id = id;
 	break;
     }

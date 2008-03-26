@@ -33,16 +33,15 @@
 CXX_FILES = \
 	main.cpp \
 	scx_signal_int.cpp \
-	scx_signal_signed.cpp \
 	scx_signal_uint.cpp \
-	scx_signal_unsigned.cpp
+	scx_signal_signed.cpp \
+	scx_signal_unsigned.cpp 
 
 H_FILES = \
 	scx_signal_int.h \
-	scx_signal_signed.h \
 	scx_signal_uint.h \
-	scx_signal_unsigned.h
-
+	scx_signal_signed.h \
+	scx_signal_unsigned.h 
 
 check_PROGRAMS = specialized_signals
 TESTS = $(check_PROGRAMS) 

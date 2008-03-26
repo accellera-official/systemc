@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2004 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -73,7 +73,7 @@ void floating::entry(){
 
   wait(3);
   while(true) {
-        wait_until(in_valid.delayed() == true);
+        do { wait(); } while ( !(in_valid == true) );
 	dest_tmp = dest.read();
  	opcode_tmp = opcode.read();
 

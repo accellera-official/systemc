@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2004 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -41,8 +41,6 @@
 #include "display.h"
 #include "numgen.h"
 
-#define NS * 1e-9
-
 int sc_main(int ac, char *av[])
 {
   //Signals
@@ -76,12 +74,12 @@ int sc_main(int ac, char *av[])
   display D("display");             //instance of `display' module
   D(powr, clk);                     //Positional port binding 
 
-  sc_start(0);                  //Initialize simulation
+  sc_start(0, SC_NS);               //Initialize simulation
   for(int i = 0; i < 50; i++){
       clk.write(1);
-      sc_start( 10 NS );
+      sc_start( 10, SC_NS );
       clk.write(0);
-      sc_start( 10 NS );
+      sc_start( 10, SC_NS );
   }
 
   return 0;

@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -34,6 +34,12 @@
  *****************************************************************************/
 
 
+// $Log: sc_string.h,v $
+// Revision 1.3  2006/01/13 18:53:11  acg
+// Andy Goodrich: Added $Log command so that CVS comments are reproduced in
+// the source.
+//
+
 #ifndef SC_STRING_H
 #define SC_STRING_H
 
@@ -56,6 +62,10 @@ namespace sc_dt {
 
 // forward class declarations
 class sc_string_rep;
+
+// friend operator declarations
+    sc_string_old operator + ( const char* s, const sc_string_old& t );
+
 
 // ----------------------------------------------------------------------------
 //  ENUM : sc_numrep
@@ -100,11 +110,11 @@ const std::string to_string( sc_numrep );
 // value is displayed via the supplied stream operator.
 //     stream_object = reference to the i/o stream to return showbase value for.
 //------------------------------------------------------------------------------
-#if defined(__GNUC__)  // GNU C++ compiler.
-    inline sc_numrep sc_io_base( systemc_ostream& stream_object, 
+#if defined(__GNUC__) || defined(_MSC_VER)
+    inline sc_numrep sc_io_base( systemc_ostream& stream_object,
         sc_numrep def_base )
     {
-	::std::ios::fmtflags flags = 
+	::std::ios::fmtflags flags =
 	    stream_object.flags() & ::std::ios::basefield;
 	if ( flags & ::std::ios::dec ) return  SC_DEC;
 	if ( flags & ::std::ios::hex ) return  SC_HEX;
@@ -113,17 +123,17 @@ const std::string to_string( sc_numrep );
     }
     inline bool sc_io_show_base( systemc_ostream& stream_object )
     {
-	return stream_object.flags() & ::std::ios::showbase;
+	return (stream_object.flags() & ::std::ios::showbase) != 0 ;
     }
 #else   // Other
-    inline sc_numrep sc_io_base( systemc_ostream& stream_object, 
-        sc_numrep def_base ) 
-    { 
-        return SC_DEC; 
+    inline sc_numrep sc_io_base( systemc_ostream& stream_object,
+        sc_numrep def_base )
+    {
+        return SC_DEC;
     }
-    inline bool sc_io_show_base( systemc_ostream& stream_object ) 
-    { 
-        return false; 
+    inline bool sc_io_show_base( systemc_ostream& stream_object )
+    {
+        return false;
     }
 #endif
 
@@ -134,7 +144,7 @@ const std::string to_string( sc_numrep );
 //  String class (yet another).
 // ----------------------------------------------------------------------------
 
-class sc_string_old 
+class sc_string_old
 {
     friend systemc_ostream& operator << (systemc_ostream& os, const sc_string_old& a);
     friend systemc_istream& operator >> ( systemc_istream& is, sc_string_old& a );
@@ -220,7 +230,7 @@ public:
     //       should produce: a=1, s is string
     //       it should be safe: if less arguments specified
     //       it should print %specifier; extra arguments should be ignored
-    // TODO: if the type of the argument is incompatible with format 
+    // TODO: if the type of the argument is incompatible with format
     //       specifier it should be ignored
     //
     // must have it inlined because of some compilers
@@ -233,7 +243,7 @@ public:
 	    do
 	    {
 		index = temp.pos("%");
-		if(index == last_char) 
+		if(index == last_char)
 		    return *this;
 		temp = substr(index,last_char);
 	    } while(temp[0] != '%');
@@ -243,7 +253,7 @@ public:
 	}
     sc_string_old& fmt(const sc_string_old& s);
     //
-    // find position of substring in this string 
+    // find position of substring in this string
     // returns -1 if not found
     //
     int pos(const sc_string_old& sub_string)const;
@@ -256,7 +266,7 @@ public:
     //
     sc_string_old& insert(const sc_string_old& sub_string, unsigned index);
     //
-    // returns true if the character at byte index in this string matches 
+    // returns true if the character at byte index in this string matches
     // any character in the delimiters string
     //
     bool is_delimiter(const sc_string_old& str, unsigned index)const;

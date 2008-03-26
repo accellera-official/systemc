@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2004 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -235,7 +235,7 @@ int sc_main(int ac, char *av[])
   ////////////////////////////////////////////////////////////////////////////
   // 				MAIN PROGRAM 
   ////////////////////////////////////////////////////////////////////////////
-  sc_clock clk("Clock", 1, 0.5, 0.0);
+  sc_clock clk("Clock", 1, SC_NS, 0.5, 0.0, SC_NS);
 
   printf("/////////////////////////////////////////////////////////////////////////\n");
   printf("//  This code is written at SYNOPSYS, Inc.\n");
@@ -355,7 +355,7 @@ int sc_main(int ac, char *av[])
 
   time_t tbuffer = time(NULL);
 
-  sc_start(clk, -1);
+  sc_start();
 
   cout << "Time for simulation = " << (time(NULL) - tbuffer) << endl;
 

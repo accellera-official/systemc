@@ -1,9 +1,10 @@
 //  Boost compiler configuration selection header file
 
-//  (C) Copyright Boost.org 2001. Permission to copy, use, modify, sell and
-//  distribute this software is granted provided this copyright notice appears
-//  in all copies. This software is provided "as is" without express or implied
-//  warranty, and with no claim as to its suitability for any purpose.
+//  (C) Copyright John Maddock 2001 - 2002. 
+//  (C) Copyright Jens Maurer 2001. 
+//  Use, modification and distribution are subject to the 
+//  Boost Software License, Version 1.0. (See accompanying file 
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org for most recent version.
 
@@ -16,7 +17,7 @@
 // linux:
 #  define BOOST_PLATFORM_CONFIG "sysc/packages/boost/config/platform/linux.hpp"
 
-#elif defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__)
+#elif defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__DragonFly__)
 // BSD:
 #  define BOOST_PLATFORM_CONFIG "sysc/packages/boost/config/platform/bsd.hpp"
 
@@ -48,7 +49,7 @@
 // MacOS
 #  define BOOST_PLATFORM_CONFIG "sysc/packages/boost/config/platform/macos.hpp"
 
-#elif defined(__IBMCPP__)
+#elif defined(__IBMCPP__) || defined(_AIX)
 // IBM
 #  define BOOST_PLATFORM_CONFIG "sysc/packages/boost/config/platform/aix.hpp"
 
@@ -69,7 +70,7 @@
 #     define BOOST_HAS_UNISTD_H
 #  endif
 
-#  include <sysc/packages/sysc/packages/boost/config/posix_features.hpp>
+#  include <sysc/packages/boost/config/posix_features.hpp>
 
 #  endif
 
@@ -80,5 +81,6 @@
 #  endif
 
 #endif
+
 
 

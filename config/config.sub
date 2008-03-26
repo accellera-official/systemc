@@ -183,7 +183,7 @@ case $basic_machine in
 	      | sparclite-* | pdp11-* | sh-* | powerpc-* | powerpcle-* \
 	      | sparc64-* | mips64-* | mipsel-* \
 	      | mips64el-* | mips64orion-* | mips64orionel-*  \
-	      | mipstx39-* | mipstx39el-* \
+	      | mipstx39-* | mipstx39el-* | x86_64-* \
 	      | f301-*)
 		;;
 	# Recognize the various machine names and aliases which stand

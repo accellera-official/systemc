@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2004 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -58,8 +58,8 @@ sc_main(int argc, char *argv[])
   
   sc_signal<bool> switch_cntrl;
 
-  sc_clock clock1("CLOCK1", 75, 0.5, 0.0);
-  sc_clock clock2("CLOCK2", 30, 0.5, 10.0);
+  sc_clock clock1("CLOCK1", 75, SC_NS, 0.5, 0.0, SC_NS);
+  sc_clock clock2("CLOCK2", 30, SC_NS, 0.5, 10.0, SC_NS);
 
   // Module instiatiations follow
   // Note that modules can be connected by hooking up ports 
@@ -73,7 +73,7 @@ sc_main(int argc, char *argv[])
 
   sender sender1("SENDER1");
   // hooking up signals to ports by position
-  sender1 << pkt_in1 << id1 << clock1;
+  sender1(pkt_in1, id1, clock1);
 
   sender sender2("SENDER2");
   // hooking up signals to ports by name
@@ -83,7 +83,7 @@ sc_main(int argc, char *argv[])
 
   sender sender3("SENDER3");
   // hooking up signals to ports by position
-  sender3 << pkt_in3 << id3 << clock1;
+  sender3( pkt_in3, id3, clock1 );
   
   switch_clk switch_clk1("SWITCH_CLK");
   // hooking up signals to ports by name
@@ -109,7 +109,7 @@ sc_main(int argc, char *argv[])
 
   receiver receiver1("RECEIVER1");
   // hooking up signals to ports by position
-  receiver1 << pkt_out1 << id1;
+  receiver1( pkt_out1, id1 );
 
   receiver receiver2("RECEIVER2");
   // hooking up signals to ports by name
@@ -118,9 +118,9 @@ sc_main(int argc, char *argv[])
 
   receiver receiver3("RECEIVER3");
   // hooking up signals to ports by position
-  receiver3 << pkt_out3 << id3;
+  receiver3( pkt_out3, id3 );
 
-  sc_start(0);
+  sc_start(0, SC_NS);
 
 #if !defined(__SUNPRO_CC)
   id0.write(0); 
@@ -135,7 +135,7 @@ sc_main(int argc, char *argv[])
   id0.write(sc_int<4>(2));
   id0.write(sc_int<4>(3));
 #endif
-  sc_clock::start(-1);
+  sc_start();
   return 0;
 
 }

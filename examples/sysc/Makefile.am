@@ -41,7 +41,7 @@ SUBDIRS = \
 	simple_perf \
 	2.1
 
-EXAMPLES_DIR = $(prefix)/examples/systemc
+EXAMPLES_DIR = $(prefix)/examples/sysc
 
 install-data-local:
 	@$(NORMAL_INSTALL)

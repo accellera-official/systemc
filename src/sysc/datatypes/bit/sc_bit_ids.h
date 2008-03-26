@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -32,6 +32,20 @@
   Description of Modification:
     
  *****************************************************************************/
+
+// $Log: sc_bit_ids.h,v $
+// Revision 1.5  2006/01/25 00:31:15  acg
+//  Andy Goodrich: Changed over to use a standard message id of
+//  SC_ID_IEEE_1666_DEPRECATION for all deprecation messages.
+//
+// Revision 1.4  2006/01/24 20:50:55  acg
+// Andy Goodrich: added warnings indicating that sc_bit is deprecated and that
+// the C bool data type should be used in its place.
+//
+// Revision 1.3  2006/01/13 18:53:53  acg
+// Andy Goodrich: added $Log command so that CVS comments are reproduced in
+// the source.
+//
 
 #ifndef SC_BIT_IDS_H
 #define SC_BIT_IDS_H
@@ -81,9 +95,6 @@ SC_DEFINE_MESSAGE( SC_ID_LOGIC_Z_TO_BOOL_, 211,
 		"sc_logic value 'Z' cannot be converted to bool" )
 SC_DEFINE_MESSAGE( SC_ID_LOGIC_X_TO_BOOL_, 212,
 		"sc_logic value 'X' cannot be converted to bool" )
-
-
-
 
 #endif
 

@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -35,6 +35,13 @@
  *****************************************************************************/
 
 
+// $Log: scfx_rep.cpp,v $
+// Revision 1.3  2006/01/13 18:53:58  acg
+// Andy Goodrich: added $Log command so that CVS comments are reproduced in
+// the source.
+//
+
+#include "sysc/utils/sc_machine.h"
 #include "sysc/datatypes/fx/scfx_rep.h"
 
 #include "sysc/datatypes/fx/scfx_ieee.h"
@@ -120,18 +127,28 @@ scfx_rep::scfx_rep( long a )
     if( a != 0 )
     {
         m_mant.clear();
-	m_wp = m_msw = m_lsw = 2;
 	m_state = normal;
-	if( a > 0 )
-	{
-	    m_mant[2] = a;
+        if ( a > 0 )
+        {
 	    m_sign = 1;
-	}
-	else
-	{
-	    m_mant[2] = -a;
-	    m_sign = -1;
-	}
+        }
+        else
+        {
+            a = -a;
+            m_sign = -1;
+        } 
+#       if defined(SC_LONG_64)
+            m_wp = 1;
+            m_mant[1] = static_cast<word>( a );
+            m_mant[2] = static_cast<word>( a >> bits_in_word );
+	    find_sw();
+#       else
+            m_wp = 2;
+            m_msw = 2;
+            m_lsw = 2;
+            m_mant[2] = a;
+#       endif
+
     }
     else
         set_zero();
@@ -145,7 +162,17 @@ scfx_rep::scfx_rep( unsigned long a )
         m_mant.clear();
 	m_wp = m_msw = m_lsw = 2;
 	m_state = normal;
-	m_mant[2] = a;
+#       if defined(SC_LONG_64)
+	    m_wp = 1;
+	    m_mant[1] = static_cast<word>( a );
+	    m_mant[2] = static_cast<word>( a >> bits_in_word );
+	    find_sw();
+#       else
+	    m_wp = 2;
+	    m_msw = 2;
+	    m_lsw = 2;
+	    m_mant[2] = a;
+#	endif
 	m_sign = 1;
     }
     else
@@ -317,7 +344,7 @@ static scfx_rep_node* list = 0;
 
 
 void*
-scfx_rep::operator new( size_t size )
+scfx_rep::operator new( std::size_t size )
 {
     const int ALLOC_SIZE = 1024;
 
@@ -339,7 +366,7 @@ scfx_rep::operator new( size_t size )
 }
 
 
-void scfx_rep::operator delete( void* ptr, size_t size )
+void scfx_rep::operator delete( void* ptr, std::size_t size )
 {
     if( size != sizeof( scfx_rep ) )
     {
@@ -601,7 +628,7 @@ scfx_rep::from_string( const char* s, int cte_wl )
 	}
         case 10:
 	{
-	    unsigned long carry, temp;
+	    word carry, temp;
 	    int length = int_digits + frac_digits;
 	    resize_to( sc_max( min_mant, n_word( 4 * length ) ) );
 
@@ -1460,15 +1487,15 @@ sub_scfx_rep( const scfx_rep& lhs, const scfx_rep& rhs, int max_wl )
 //  MUL
 // ----------------------------------------------------------------------------
 
-union long_short
+union word_short
 {
     word l;
     struct
     {
-#if defined( SCFX_BIG_ENDIAN )
+#if defined( SC_BIG_ENDIAN )
         half_word u;
         half_word l;
-#elif defined( SCFX_LITTLE_ENDIAN )
+#elif defined( SC_LITTLE_ENDIAN )
         half_word l;
         half_word u;
 #endif
@@ -1476,9 +1503,9 @@ union long_short
 };
 
 
-#if defined( SCFX_BIG_ENDIAN )
+#if defined( SC_BIG_ENDIAN )
 static const int half_word_incr = -1;
-#elif defined( SCFX_LITTLE_ENDIAN )
+#elif defined( SC_LITTLE_ENDIAN )
 static const int half_word_incr = 1;
 #endif
 
@@ -1539,7 +1566,7 @@ multiply( scfx_rep& result, const scfx_rep& lhs, const scfx_rep& rhs,
 
     for( i1 = 0; i1 * half_word_incr < len_lhs; i1 += half_word_incr )
     {
-	register long_short ls;
+	register word_short ls;
 	ls.l = 0;
 
 	half_word v1 = s1[i1];
@@ -2308,20 +2335,20 @@ compare_msw_ff( const scfx_rep& lhs, const scfx_rep& rhs )
 unsigned int
 scfx_rep::divide_by_ten()
 {
-#if defined( SCFX_BIG_ENDIAN )
+#if defined( SC_BIG_ENDIAN )
     half_word* hw = (half_word*) &m_mant[m_msw];
-#elif defined( SCFX_LITTLE_ENDIAN )
+#elif defined( SC_LITTLE_ENDIAN )
     half_word* hw = ( (half_word*) &m_mant[m_msw] ) + 1;
 #endif
 
     unsigned int remainder = 0;
 
-    long_short ls;
+    word_short ls;
     ls.l = 0;
 
-#if defined( SCFX_BIG_ENDIAN )
+#if defined( SC_BIG_ENDIAN )
     for( int i = 0, end = ( m_msw - m_wp + 1 ) * 2; i < end; i ++ )
-#elif defined( SCFX_LITTLE_ENDIAN )
+#elif defined( SC_LITTLE_ENDIAN )
     for( int i = 0, end = -( m_msw - m_wp + 1 ) * 2; i > end; i -- )
 #endif
     {
@@ -2732,7 +2759,7 @@ scfx_rep::dump( ::std::ostream& os ) const
     for( int i = size() - 1; i >= 0; i -- )
     {
 	char buf[BUFSIZ];
-	sprintf( buf, " %d: %10u (%8x)", i, (int) m_mant[i], (int) m_mant[i] );
+	std::sprintf( buf, " %d: %10u (%8x)", i, (int) m_mant[i], (int) m_mant[i] );
 	os << buf << ::std::endl;
     }
 

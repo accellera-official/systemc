@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -45,10 +45,41 @@
  *****************************************************************************/
 
 
+// $Log: sc_clock.cpp,v $
+// Revision 1.8  2006/04/18 23:36:50  acg
+//  Andy Goodrich: made add_trace_internal public until I can figure out
+//  how to do a friend specification for sc_trace in an environment where
+//  there are partial template and full template specifications for its
+//  arguments.
+//
+// Revision 1.7  2006/04/17 16:38:42  acg
+//  Andy Goodrich: added more context to the deprecation message for the
+//  sc_clock constructor.
+//
+// Revision 1.6  2006/01/25 00:31:11  acg
+//  Andy Goodrich: Changed over to use a standard message id of
+//  SC_ID_IEEE_1666_DEPRECATION for all deprecation messages.
+//
+// Revision 1.5  2006/01/24 20:43:24  acg
+// Andy Goodrich: convert notify_delayed() calls into notify_internal() calls.
+// notify_internal() is an implementation dependent version of notify_delayed()
+// that is simpler, and does not trigger the deprecation warning one would get
+// using notify_delayed().
+//
+// Revision 1.4  2006/01/18 21:42:26  acg
+// Andy Goodrich: Changes for check writer support, and tightening up sc_clock
+// port usage.
+//
+// Revision 1.3  2006/01/13 18:47:41  acg
+// Added $Log command so that CVS comments are reproduced in the source.
+//
+
 #include "sysc/communication/sc_clock.h"
 #include "sysc/communication/sc_communication_ids.h"
 #include "sysc/kernel/sc_simcontext.h"
-#include "sysc/kernel/sc_process_base.h"
+#include "sysc/kernel/sc_process.h"
+#include "sysc/kernel/sc_spawn.h"
+#include "sysc/utils/sc_utils_ids.h"
 
 namespace sc_core {
 
@@ -68,7 +99,7 @@ sc_clock::sc_clock()
 	  SC_ZERO_TIME,
 	  true );
 
-    m_next_posedge_event.notify_delayed( m_start_time );
+    m_next_posedge_event.notify_internal( m_start_time );
 }
 
 sc_clock::sc_clock( const char* name_ )
@@ -79,7 +110,7 @@ sc_clock::sc_clock( const char* name_ )
 	  SC_ZERO_TIME,
 	  true );
 
-    m_next_posedge_event.notify_delayed( m_start_time );
+    m_next_posedge_event.notify_internal( m_start_time );
 }
 
 sc_clock::sc_clock( const char* name_,
@@ -96,10 +127,10 @@ sc_clock::sc_clock( const char* name_,
 
     if( posedge_first_ ) {
 	// posedge first
-	m_next_posedge_event.notify_delayed( m_start_time );
+	m_next_posedge_event.notify_internal( m_start_time );
     } else {
 	// negedge first
-	m_next_negedge_event.notify_delayed( m_start_time );
+	m_next_negedge_event.notify_internal( m_start_time );
     }
 }
 
@@ -115,7 +146,7 @@ sc_clock::sc_clock( const char* name_,
 	  true );
 
     // posedge first
-    m_next_posedge_event.notify_delayed( m_start_time );
+    m_next_posedge_event.notify_internal( m_start_time );
 }
 
 sc_clock::sc_clock( const char* name_,
@@ -134,10 +165,10 @@ sc_clock::sc_clock( const char* name_,
 
     if( posedge_first_ ) {
 	// posedge first
-	m_next_posedge_event.notify_delayed( m_start_time );
+	m_next_posedge_event.notify_internal( m_start_time );
     } else {
 	// negedge first
-	m_next_negedge_event.notify_delayed( m_start_time );
+	m_next_negedge_event.notify_internal( m_start_time );
     }
 }
 
@@ -149,6 +180,16 @@ sc_clock::sc_clock( const char* name_,
 		    bool           posedge_first_ )
 : sc_signal<bool>( name_ )
 {
+    static bool warn_sc_clock=true;
+    if ( warn_sc_clock )
+    {
+        warn_sc_clock = false;
+	SC_REPORT_INFO(SC_ID_IEEE_1666_DEPRECATION_, 
+	   "\n    sc_clock(const char*, double, double, double, bool)\n"
+	   "    is deprecated use a form that includes sc_time or\n"
+	   "    sc_time_unit");
+    }
+
     init( sc_time( period_, true ),
 	  duty_cycle_,
 	  sc_time( start_time_, true ),
@@ -156,10 +197,10 @@ sc_clock::sc_clock( const char* name_,
 
     if( posedge_first_ ) {
 	// posedge first
-	m_next_posedge_event.notify_delayed( m_start_time );
+	m_next_posedge_event.notify_internal( m_start_time );
     } else {
 	// negedge first
-	m_next_negedge_event.notify_delayed( m_start_time );
+	m_next_negedge_event.notify_internal( m_start_time );
     }
 }
 
@@ -215,6 +256,14 @@ void sc_clock::before_end_of_elaboration()
 sc_clock::~sc_clock()
 {}
 
+void sc_clock::register_port( sc_port_base& port, const char* if_typename_ )
+{
+    std::string nm( if_typename_ );
+    if( nm == typeid( sc_signal_inout_if<bool> ).name() ) {
+	    SC_REPORT_ERROR(SC_ID_ATTEMPT_TO_BIND_CLOCK_TO_OUTPUT_, "");
+    }
+}
+
 void
 sc_clock::write( const bool& value)
 {
@@ -239,9 +288,9 @@ sc_clock::report_error( const char* id, const char* add_msg ) const
 {
     char msg[BUFSIZ];
     if( add_msg != 0 ) {
-	sprintf( msg, "%s: clock '%s'", add_msg, name() );
+	std::sprintf( msg, "%s: clock '%s'", add_msg, name() );
     } else {
-	sprintf( msg, "clock '%s'", name() );
+	std::sprintf( msg, "clock '%s'", name() );
     }
     SC_REPORT_ERROR( id, msg );
 }

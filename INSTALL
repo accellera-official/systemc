@@ -1,5 +1,5 @@
-                INSTALL NOTES FOR SystemC Release 2.1 v1
-                ----------------------------------------
+                INSTALL NOTES FOR SystemC Release 2.2
+                -------------------------------------
 
 Contents:
 
@@ -19,18 +19,26 @@ SystemC can be installed on the following UNIX platforms
   1. Sun Solaris 2.8 with GNU C++ compiler versions gcc-2.95.3, 
      and gcc-3.2.3
 
-  2. Sun Solaris 2.8 with Sun C++ compiler version Forte 8.
+  2. Sun Solaris 2.8 with Sun Forte 10 C++ compiler (version 5.7). 
 
-  3. Linux (Redhat 7.2) with GNU C++ compiler version gcc-2.95.3.
+  3. Linux (Redhat 6.2) with GNU C++ compiler versions gcc-2.95.3.
 
-  4. Linux (Redhat 8.0) with GNU C++ compiler version gcc-2.95.3, 
+  4. Linux (Redhat 7.2) with GNU C++ compiler version gcc-2.95.3.
+
+  5. Linux (Redhat 8.0) with GNU C++ compiler version gcc-2.95.3, 
      and gcc-3.2.3.
 
-  5. Linux (Redhat ee21) with GNU C++ compiler version gcc-3.2.3.
+  6. Linux (Redhat 9.0) with GNU C++ compiler version gcc-3.2.2.
+  
+  7. Linux (2.6.9-34.EL kernel) with GNU C++ compiler versions gcc-3.4.5
+     and gcc-4.1.0
 
-  6. HP-UX 11.00 with HP C++ compiler version A.3.63
+  8. 64-bit Linux (Redhat EL) with GNU C++ compiler version gcc-3.4.4.
 
-  7. MacOS X (Panther) with GNU C++ compiler versions gcc-3.1, gcc-3.3
+  9. HP-UX 11.01 with HP C++ compiler version A.03.65.
+
+  10. MacOS X (Tiger) with GNU C++ compiler versions gcc-3.1, gcc-3.3,
+     and gcc-4.0
 
 
 Sources for Compilers and Related Tools
@@ -47,17 +55,28 @@ following tools:
 
      or GNU C++ compiler version gcc-3.2.3:
        
+     or GNU C++ compiler version gcc-3.4.5:
+       
+     or GNU C++ compiler version gcc-4.1.0:
+       
 
      or GNU C++ compiler version gcc-3.1 for MacOS X:
        gcc version 3.1 20020420 (prerelease)
 
      or GNU C++ compiler version gcc-3.3 for MacOS X:
-	   gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
+       gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
 
-     or Sun C++ compiler version Forte 8
+     or Sun C++ compiler version SC 6.1:
+       CC: Sun WorkShop 6 update 1 C++ 5.2 Patch 109508-07 2001/12/13
 
-     or HP C++ compiler version A.03.63:
-       aCC: HP ANSI C++ A.03.63
+     or Sun C++ compiler version SC6.2:
+       CC: Sun WorkShop 6 update 2 C++ 5.3 Patch 111685-05 2002/02/03
+
+     or Sun C++ compiler version Forte 7:
+       CC: Forte Developer 7 C++ 5.4 Patch 111715-05 2003/02/09
+
+     or HP C++ compiler version A.03.39:
+       aCC: HP ANSI C++ B3910B A.03.39
 
   2. GNU Make (gmake)
 
@@ -74,7 +93,7 @@ Basic SystemC Installation
 
 To install SystemC on a UNIX system, do the following steps:
 
-  1. Change to the top level directory (systemc-2.1)
+  1. Change to the top level directory (systemc-2.2)
 
   2. Create a temporary directory, e.g.,
 
@@ -90,7 +109,7 @@ To install SystemC on a UNIX system, do the following steps:
 
         > setenv CXX g++
 
-     For Forte 8 on Solaris:
+     For SC6.1 or SC6.2 on Solaris:
 
         > setenv CXX CC
 
@@ -122,16 +141,16 @@ To install SystemC on a UNIX system, do the following steps:
      need to use the `sh ../configure' command instead of '../configure'.
      Otherwise, `csh' will attempt to `configure' itself.
 
-     SystemC 2.1 includes a fixed-point package that is always built.
+     SystemC 2.2 includes a fixed-point package that is always built.
      When compiling your applications with fixed-point types, you still have
      to use compiler flag -DSC_INCLUDE_FX. Note that compile times increase
      significantly when using this compiler flag.
 
      In case you want to install the package in another place than the
-     top level directory (systemc-2.1), configure the package e.g. as
+     top level directory (systemc-2.2), configure the package e.g. as
      follows:
 
-        > ../configure --prefix=/usr/local/systemc-2.1
+        > ../configure --prefix=/usr/local/systemc-2.2
 
      Note: make sure you have created the target directory before installing
            the package. Do _not_ use /usr/local as a prefix.
@@ -352,84 +371,6 @@ Use the `--help' option to print a list.
 2. Installation Notes for Windows
 ---------------------------------
 
-This release has been ported to Windows 2000/ Windows XP and Visual C++ 
-versions 6.0 and 7.1.
-
-The SystemC distribution may be downloaded from the SystemC web site and
-includes project and workspace files for Visual C++. You can use these 
-project and workspace files to build the SystemC library and a set of 
-example applications. Extract the download to an appropriate directory
-on your PC, this should create a top-level directory named 'systemc-2.1'.
-
-Visual C++ 6.0
---------------
-The download directory contains two subdirectories: 'msvc60' and
-'examples'.
-
-The 'msvc60' directory contains the project and workspace files to
-compile the 'systemc.lib' library. Double-click on the 'systemc.dsw'
-file to launch Visual C++ 6.0 with the workspace file. The workspace file
-will have the proper switches set to compile for Visual C++ 6.0.
-Select `Build systemc.lib' under the Build menu or press F7 to build
-'systemc.lib'.
-
-The 'examples' directory contains the project and workspace files to
-compile the SystemC examples. Go to one of the examples subdirectories
-and double-click on the .dsw file to launch Visual C++ with the
-workspace file. The workspace file will have the proper switches set
-to compile for Visual C++ 6.0. Select 'Build <example>.exe' under the
-Build menu or press F7 to build the example executable.
-
-To create a new design, first create a new project by using the 'New'
-menu item under the 'File' menu. Select the Projects tab on the dialog
-box that appears and select a Win32 Console Application. Create an
-empty project.
-
-For your own SystemC applications, make sure that the Run Time Type
-Information switch is on by using the 'Settings...' menu item under
-the 'Project' menu. Select the C/C++ tab, and select the 'C++
-Language' category. Make sure that the 'Enable Run Time Type
-Information (RTTI)' checkbox is checked. The systemc library needs to
-be included during linking. Select the 'Link' tab from the 'Project' ->
-'Settings' menu. Add 'systemc.lib' to the end of the list of libraries
-in the 'Object/library modules:' box.
-
-Also make sure that the compiler and linker can find the SystemC header 
-and library files respectively. There are two ways to do this:
-
-To update the include file and library directory search paths for all
-projects:
-
-  Select Tools -> Options menu and the Directories tab
-   
-  Select show directories for: Library files
-
-  Select the 'New' icon and browse to: ...\systemc-2.1\msvc60\systemc\debug
-
-  Select show directories for: Include files
-
-  Select the 'New' icon and browse to: ...\systemc-2.1\src
-
-To add the include file and library directory search paths for the current
-project only:
-
-  Select Project -> Settings menu and the C/C++ tab. 
-  
-  Select the 'Preprocessor' category and type the path to the SystemC 'src' 
-  directory in the text entry field labeled
-  'Additional include directories' (e.g. the examples use '../../../src').
-
-  Select the Link tab.
-  
-  Select the 'Input' category and type the path to the SystemC library: 
-  ...\systemc-2.1\msvc60\systemc\debug
-  
-
-Next add the source files to the project by using the `Add To
-Project>Files...' menu item under the `Project' menu. Make sure that
-the files are added to the new project directory just created. 
-
-
 Visual C++ 7.1
 --------------
 The download directory contains two subdirectories: 'msvc71' and
@@ -481,7 +422,8 @@ Creating SystemC Applications
 
 
 Also make sure that the compiler and linker can find the SystemC header 
-and library files respectively. There are two ways to do this:
+and library files respectively. There are two ways to do this, both can
+refer to an environment variable pointing to the SystemC install path:
 
 To update the include file and library directory search paths for all
 projects:
@@ -490,11 +432,11 @@ projects:
    
 2. Select show directories for: Library files
 
-3. Select the 'New' icon and browse to: C:\apps\systemc-2.0.1\msvc71\systemc\debug
+3. Select the 'New' icon and enter: $(SYSTEMC)\SystemC\Debug
 
 4. Select show directories for: Include files
 
-5. Select the 'New' icon and browse to: C:\apps\systemc-2.0.1\src
+5. Select the 'New' icon and enter: $(SYSTEMC)\..\src
 
 To add the include file and library directory search paths for the current
 project only:
@@ -504,13 +446,23 @@ project only:
   
 2. From the C/C++ tab, select the General properties and type the path to the 
    SystemC 'src' directory in the text entry field labeled
-  'Additional include directories' (e.g. the examples use '../../../src').
+  'Additional include directories' (e.g. the examples use '$(SYSTEMC)\..\src').
 
 3. From the Linker tab, select the General properties and type the path to 
-   the SystemC library:   ...\systemc-2.1\msvc71\systemc\debug'systemc.lib' 
-   in the 'Additional Library Directories:' box.
+   the SystemC library in the text entry field labeled 
+   'Additional Library Directories 
+   (e.g. the examples use '$(SYSTEMC)\SystemC\Debug').
+   
+4. From the Linker tab, select the Input properties and enter 'systemc.lib'
+   in the 'Additional Dependencies' text entry field.
 
-9. Click OK
+5. Click OK
+
+To set the SYSTEMC environment variable, right-click on the 'My Computer' icon
+and select the properties menu. Select the 'Advanced' tab from the 
+'System Properties' page and click the 'Environment Variables' button. Create
+a new environment variable named 'SYSTEMC' with a variable value that contains
+the path to the SystemC install (e.g. 'C:\apps\systemc-2.2\msvc71').
+Click OK to save the environment variable (note the environment variable must
+be set before starting Visual C++).
   
-
-

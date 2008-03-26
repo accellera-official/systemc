@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2004 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -42,12 +42,12 @@ void display::entry(){
   tmp1 = result.read();
   cout << "Display : " << tmp1 << " " 
        /* << " at time " << sc_time_stamp() << endl; */
-       << " at time " << sc_simulation_time() << endl;
+       << " at time " << sc_time_stamp().to_double() << endl;
   i++;
   if(i == 24) {
     cout << "Simulation of " << i << " items finished" 
 	 /* << " at time " << sc_time_stamp() << endl; */
-	 << " at time " << sc_simulation_time() << endl;
+	 << " at time " << sc_time_stamp().to_double() << endl;
     sc_stop();
   };
 }

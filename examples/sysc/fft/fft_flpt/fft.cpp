@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2004 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -51,7 +51,7 @@ void fft::entry()
       while( index < 16 )
       {
        data_req.write(true);
-       wait_until(data_valid.delayed() == true);
+       do { wait(); } while (data_valid == true);
        sample[index][0] = in_real.read();
        sample[index][1] = in_imag.read();
        index++;
@@ -183,7 +183,7 @@ void fft::entry()
        out_real.write(sample[index][0]);
        out_imag.write(sample[index][1]);
        data_ready.write(true);
-       wait_until(data_ack.delayed() == true);
+       do { wait(); } while ( !(data_ack == true) );
        data_ready.write(false);
        i++;
        wait();

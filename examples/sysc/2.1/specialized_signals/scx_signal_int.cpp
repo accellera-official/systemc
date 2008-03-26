@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2004 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -34,7 +34,13 @@
  *****************************************************************************/
 
 /* 
-$Log: sc_signal_int.cpp,v $
+$Log: scx_signal_int.cpp,v $
+Revision 1.2  2005/12/26 20:11:14  acg
+Fixed up copyright.
+
+Revision 1.1.1.1  2005/12/19 23:16:42  acg
+First check in of SystemC 2.1 into its own archive.
+
 Revision 1.11  2005/04/11 19:05:36  acg
 Change to sc_clock for Microsoft VCC 6.0. Changes for namespaces
 
@@ -60,7 +66,7 @@ Andy Goodrich - Forte Design Systems, Inc.
 #include "sysc/communication/sc_signal_ports.h"
 #include "sysc/communication/sc_signal.h"
 #include "sysc/kernel/sc_event.h"
-#include "sysc/kernel/sc_process_b.h"
+#include "sysc/kernel/sc_process.h"
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_macros.h"
 #include "sysc/tracing/sc_trace.h"

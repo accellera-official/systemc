@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2004 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -108,15 +108,15 @@ public:
 
     // Demo of a function rather than method call, & use return value ...
     
-    sc_spawn(&r, sc_bind(&test_function, 3.14159)).wait();
+    wait( sc_spawn(&r, sc_bind(&test_function, 3.14159)).terminated_event());
 
     cout << "Returned int is " << r << endl;
 
 	sc_process_handle handle1 = sc_spawn(sc_bind(&void_function, 1.2345));
-	handle1.wait();
+	wait(handle1.terminated_event());
 
     double d = 9.8765;
-    sc_spawn(&r, sc_bind(&ref_function, sc_cref(d))).wait();
+    wait( sc_spawn(&r, sc_bind(&ref_function, sc_cref(d))).terminated_event() );
 
     cout << "Returned int is " << r << endl;
 
@@ -148,7 +148,7 @@ public:
 int sc_main (int argc , char *argv[]) 
 {
   top top1("Top1");
-  sc_start(-1);
+  sc_start();
 
   return 0;
 }

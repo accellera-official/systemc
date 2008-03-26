@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -33,6 +33,11 @@
 
  *****************************************************************************/
 
+
+// $Log: sc_cor_fiber.cpp,v $
+// Revision 1.3  2006/01/13 18:44:29  acg
+// Added $Log to record CVS changes into the source.
+//
 
 #ifdef WIN32
 
@@ -114,7 +119,7 @@ sc_cor_pkg_fiber::~sc_cor_pkg_fiber()
 // create a new coroutine
 
 sc_cor*
-sc_cor_pkg_fiber::create( size_t stack_size, sc_cor_fn* fn, void* arg )
+sc_cor_pkg_fiber::create( std::size_t stack_size, sc_cor_fn* fn, void* arg )
 {
     sc_cor_fiber* cor = new sc_cor_fiber;
     cor->m_pkg = this;

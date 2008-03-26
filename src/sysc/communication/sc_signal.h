@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -21,17 +21,9 @@
 
   Original Author: Martin Janssen, Synopsys, Inc., 2001-05-21
 
+  Modification log appears at the end of the file
  *****************************************************************************/
 
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-    
- *****************************************************************************/
 
 #ifndef SC_SIGNAL_H
 #define SC_SIGNAL_H
@@ -40,24 +32,27 @@
 #include "sysc/communication/sc_port.h"
 #include "sysc/communication/sc_prim_channel.h"
 #include "sysc/communication/sc_signal_ifs.h"
+#include "sysc/utils/sc_string.h"
 #include "sysc/kernel/sc_event.h"
-#include "sysc/kernel/sc_process_b.h"
+#include "sysc/kernel/sc_process.h"
+#include "sysc/kernel/sc_reset.h"
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/datatypes/bit/sc_logic.h"
 #include "sysc/tracing/sc_trace.h"
-#include "sysc/utils/sc_string.h"
 #include <typeinfo>
 
 namespace sc_core {
 
 // to avoid code bloat in sc_signal<T>
 
+extern void sc_deprecated_get_data_ref();
+extern void sc_deprecated_get_new_value();
+extern void sc_deprecated_trace();
+
 extern
 void
-sc_signal_invalid_writer( const char* name,
-			  const char* kind,
-			  const char* first_writer,
-			  const char* second_writer );
+sc_signal_invalid_writer(
+    sc_object* target, sc_object* first_writer, sc_object* second_writer );
 
 
 // ----------------------------------------------------------------------------
@@ -71,27 +66,27 @@ class sc_signal
 : public sc_signal_inout_if<T>,
   public sc_prim_channel
 {
-public:
-
-    // constructors
+  public: // constructors and destructor:
 
     sc_signal()
 	: sc_prim_channel( sc_gen_unique_name( "signal" ) ),
-          m_output( 0 ), m_cur_val( T() ), m_new_val( T() ),
-          m_delta( ~sc_dt::UINT64_ONE ), m_writer( 0 )
+	  m_change_event_p( 0 ), m_cur_val( T() ), 
+	  m_delta( ~sc_dt::UINT64_ONE ), m_new_val( T() ), m_output( 0 ), 
+	  m_writer( 0 ) 
 	{}
 
     explicit sc_signal( const char* name_ )
 	: sc_prim_channel( name_ ),
-          m_output( 0 ), m_cur_val( T() ), m_new_val( T() ),
-          m_delta( ~sc_dt::UINT64_ONE ), m_writer( 0 )
-	{}
+	  m_change_event_p( 0 ), m_cur_val( T() ), 
+	  m_delta( ~sc_dt::UINT64_ONE ), m_new_val( T() ), m_output( 0 ), 
+	  m_writer( 0 ) 
+    {}
 
-
-    // destructor (does nothing)
 
     virtual ~sc_signal()
-	{}
+	{
+	    if ( !m_change_event_p ) delete m_change_event_p;
+	}
 
 
     // interface methods
@@ -101,12 +96,18 @@ public:
 
     // get the default event
     virtual const sc_event& default_event() const
-	{ return m_value_changed_event; }
+	{ 
+	    if ( !m_change_event_p ) m_change_event_p = new sc_event; 
+	    return *m_change_event_p; 
+	}
 
 
     // get the value changed event
     virtual const sc_event& value_changed_event() const
-	{ return m_value_changed_event; }
+	{ 
+	    if ( !m_change_event_p ) m_change_event_p = new sc_event; 
+	    return *m_change_event_p; 
+	}
 
 
     // read the current value
@@ -115,12 +116,12 @@ public:
 
     // get a reference to the current value (for tracing)
     virtual const T& get_data_ref() const
-        { return m_cur_val; }
+        { sc_deprecated_get_data_ref(); return m_cur_val; }
 
 
     // was there an event?
     virtual bool event() const
-        { return ( simcontext()->delta_count() == m_delta + 1 ); }
+        { return simcontext()->event_occurred(m_delta); }
 
     // write the new value
     virtual void write( const T& );
@@ -144,11 +145,12 @@ public:
 
 
     void trace( sc_trace_file* tf ) const
-#ifdef DEBUG_SYSTEMC
-	{ sc_trace( tf, get_data_ref(), name() ); }
-#else
-	{}
-#endif
+	{ 
+	    sc_deprecated_trace();
+#           ifdef DEBUG_SYSTEMC
+	        sc_trace( tf, read(), name() ); 
+#	    endif
+	}
 
 
     virtual void print( ::std::ostream& = ::std::cout ) const;
@@ -161,20 +163,16 @@ protected:
 
     virtual void update();
 
-    void check_writer();
-
 protected:
 
-    sc_port_base* m_output; // used for static design rule checking
+    mutable sc_event*  m_change_event_p;
+    T                  m_cur_val;
+    sc_dt::uint64      m_delta;   // delta of last event
+    T                  m_new_val;
+    sc_port_base*      m_output; // used for static design rule checking
+    sc_object*         m_writer; // used for dynamic design rule checking
 
-    T             m_cur_val;
-    T             m_new_val;
 
-    sc_event      m_value_changed_event;
-
-    sc_dt::uint64 m_delta; // delta of last event
-
-    sc_process_b* m_writer; // used for dynamic design rule checking
 
 private:
 
@@ -191,17 +189,17 @@ inline
 void
 sc_signal<T>::register_port( sc_port_base& port_, const char* if_typename_ )
 {
-#ifdef DEBUG_SYSTEMC
-    std::string nm( if_typename_ );
-    if( nm == typeid( sc_signal_inout_if<T> ).name() ) {
-	// an out or inout port; only one can be connected
-	if( m_output != 0 ) {
-	    sc_signal_invalid_writer( name(), kind(),
-				      m_output->name(), port_.name() );
+    if ( sc_get_curr_simcontext()->write_check() )
+    {
+	std::string nm( if_typename_ );
+	if( nm == typeid( sc_signal_inout_if<T> ).name() ) {
+	    // an out or inout port; only one can be connected
+	    if( m_output != 0) {
+		sc_signal_invalid_writer( this, m_output, &port_ );
+	    }
+	    m_output = &port_;
 	}
-	m_output = &port_;
     }
-#endif
 }
 
 
@@ -212,9 +210,13 @@ inline
 void
 sc_signal<T>::write( const T& value_ )
 {
-#ifdef DEBUG_SYSTEMC
-    check_writer();
-#endif
+    sc_object* writer = sc_get_curr_simcontext()->get_current_writer();
+    if( m_writer == 0 ) {
+	m_writer = writer;
+    } else if( m_writer != writer ) {
+	sc_signal_invalid_writer( this, m_writer, writer );
+    }
+
     m_new_val = value_;
     if( !( m_new_val == m_cur_val ) ) {
 	request_update();
@@ -248,23 +250,8 @@ sc_signal<T>::update()
 {
     if( !( m_new_val == m_cur_val ) ) {
 	m_cur_val = m_new_val;
-	m_value_changed_event.notify_delayed();
-	m_delta = simcontext()->delta_count();
-    }
-}
-
-
-template <class T>
-inline
-void
-sc_signal<T>::check_writer()
-{
-    sc_process_b* writer = sc_get_curr_process_handle();
-    if( m_writer == 0 ) {
-	m_writer = writer;
-    } else if( m_writer != writer ) {
-	sc_signal_invalid_writer( name(), kind(),
-				  m_writer->name(), writer->name() );
+	if ( m_change_event_p ) m_change_event_p->notify_next_delta();
+	m_delta = delta_count();
     }
 }
 
@@ -275,38 +262,42 @@ sc_signal<T>::check_writer()
 //  Specialization of sc_signal<T> for type bool.
 // ----------------------------------------------------------------------------
 
+class sc_reset;
+
 template <>
 class sc_signal<bool>
 : public sc_signal_inout_if<bool>,
-  public sc_prim_channel 
+  public sc_prim_channel
 {
-public:
-
-    // constructors
+public: // constructors and destructor:
 
     sc_signal()
 	: sc_prim_channel( sc_gen_unique_name( "signal" ) ),
-          m_output( 0 ),
+	  m_change_event_p( 0 ),
           m_cur_val( false ),
-          m_new_val( false ),
           m_delta( ~sc_dt::UINT64_ONE ),
+	  m_negedge_event_p( 0 ),
+          m_new_val( false ),
+          m_output( 0 ),
+	  m_posedge_event_p( 0 ),
+          m_reset_p( 0 ),
           m_writer( 0 )
 	{}
 
     explicit sc_signal( const char* name_ )
 	: sc_prim_channel( name_ ),
-          m_output( 0 ),
+	  m_change_event_p( 0 ),
           m_cur_val( false ),
-          m_new_val( false ),
           m_delta( ~sc_dt::UINT64_ONE ),
+	  m_negedge_event_p( 0 ),
+          m_new_val( false ),
+          m_output( 0 ),
+	  m_posedge_event_p( 0 ),
+          m_reset_p( 0 ),
           m_writer( 0 )
 	{}
 
-
-    // destructor (does nothing)
-
-    virtual ~sc_signal()
-	{}
+    virtual ~sc_signal();
 
 
     // interface methods
@@ -316,20 +307,34 @@ public:
 
     // get the default event
     virtual const sc_event& default_event() const
-	{ return m_value_changed_event; }
+	{ 
+	    if ( !m_change_event_p ) m_change_event_p = new sc_event; 
+	    return *m_change_event_p; 
+	}
 
 
     // get the value changed event
     virtual const sc_event& value_changed_event() const
-	{ return m_value_changed_event; }
+	{ 
+	    if ( !m_change_event_p ) m_change_event_p = new sc_event; 
+	    return *m_change_event_p; 
+	}
 
     // get the positive edge event
     virtual const sc_event& posedge_event() const
-	{ return m_posedge_event; }
+	{ 
+	    if ( !m_posedge_event_p )
+	        m_posedge_event_p = new sc_event; 
+	    return *m_posedge_event_p; 
+	}
 
     // get the negative edge event
     virtual const sc_event& negedge_event() const
-	{ return m_negedge_event; }
+	{ 
+	    if ( !m_negedge_event_p )
+	        m_negedge_event_p = new sc_event; 
+	    return *m_negedge_event_p; 
+	}
 
 
     // read the current value
@@ -338,12 +343,12 @@ public:
 
     // get a reference to the current value (for tracing)
     virtual const bool& get_data_ref() const
-        { return m_cur_val; }
+        { sc_deprecated_get_data_ref(); return m_cur_val; }
 
 
     // was there a value changed event?
     virtual bool event() const
-        { return ( simcontext()->delta_count() == m_delta + 1 ); }
+        { return simcontext()->event_occurred(m_delta); }
 
     // was there a positive edge event?
     virtual bool posedge() const
@@ -353,13 +358,12 @@ public:
     virtual bool negedge() const
 	{ return ( event() && ! m_cur_val ); }
 
+    // reset creation
+
+    virtual sc_reset* is_reset() const;
 
     // write the new value
     virtual void write( const bool& );
-
-
-    // delayed evaluation
-    virtual const sc_signal_bool_deval& delayed() const;
 
     // other methods
 
@@ -379,11 +383,12 @@ public:
 
 
     void trace( sc_trace_file* tf ) const
-#ifdef DEBUG_SYSTEMC
-	{ sc_trace( tf, get_data_ref(), name() ); }
-#else
-	{}
-#endif
+	{
+	    sc_deprecated_trace();
+#           ifdef DEBUG_SYSTEMC
+	        sc_trace( tf, read(), name() ); 
+#           endif
+	}
 
 
     virtual void print( ::std::ostream& = ::std::cout ) const;
@@ -396,24 +401,18 @@ protected:
 
     virtual void update();
 
-    void check_writer();
-
     virtual bool is_clock() const { return false; }
 
 protected:
-
-    sc_port_base* m_output; // used for static design rule checking
-
-    bool          m_cur_val;
-    bool          m_new_val;
-
-    sc_event      m_value_changed_event;
-    sc_event      m_posedge_event;
-    sc_event      m_negedge_event;
-
-    sc_dt::uint64 m_delta; // delta of last event
-
-    sc_process_b* m_writer; // used for dynamic design rule checking
+    mutable sc_event* m_change_event_p;  // value change event if present.
+    bool              m_cur_val;         // current value of object.
+    sc_dt::uint64     m_delta;           // delta of last event
+    mutable sc_event* m_negedge_event_p; // negative edge event if present.
+    bool              m_new_val;         // next value of object.
+    sc_port_base*     m_output;          // used for static design rule checking
+    mutable sc_event* m_posedge_event_p; // positive edge event if present.
+    mutable sc_reset* m_reset_p;         // reset mechanism if present.
+    sc_object*        m_writer;          // process writing this object's value.
 
 private:
 
@@ -428,17 +427,17 @@ inline
 void
 sc_signal<bool>::register_port( sc_port_base& port_, const char* if_typename_ )
 {
-#ifdef DEBUG_SYSTEMC
-    std::string nm( if_typename_ );
-    if( nm == typeid( sc_signal_inout_if<bool> ).name() ) {
-	// an out or inout port; only one can be connected
-	if( m_output != 0 ) {
-	    sc_signal_invalid_writer( name(), kind(),
-				      m_output->name(), port_.name() );
+    if ( sc_get_curr_simcontext()->write_check() )
+    {
+	std::string nm( if_typename_ );
+	if( nm == typeid( sc_signal_inout_if<bool> ).name() ) {
+	    // an out or inout port; only one can be connected
+	    if( m_output != 0 ) {
+		sc_signal_invalid_writer( this, m_output, &port_ );
+	    }
+	    m_output = &port_;
 	}
-	m_output = &port_;
     }
-#endif
 }
 
 
@@ -448,24 +447,17 @@ inline
 void
 sc_signal<bool>::write( const bool& value_ )
 {
-#ifdef DEBUG_SYSTEMC
-    check_writer();
-#endif
+    sc_object* writer = sc_get_curr_simcontext()->get_current_writer();
+    if( m_writer == 0 ) {
+	m_writer = writer;
+    } else if( m_writer != writer ) {
+	sc_signal_invalid_writer( this, m_writer, writer );
+    }
+
     m_new_val = value_;
     if( !( m_new_val == m_cur_val ) ) {
 	request_update();
     }
-}
-
-
-// delayed evaluation
-
-inline
-const sc_signal_bool_deval&
-sc_signal<bool>::delayed() const
-{
-    const sc_signal_in_if<bool>* iface = this;
-    return RCAST<const sc_signal_bool_deval&>( *iface );
 }
 
 
@@ -491,29 +483,18 @@ void
 sc_signal<bool>::update()
 {
     if( !( m_new_val == m_cur_val ) ) {
-	m_cur_val = m_new_val;
-	m_value_changed_event.notify_delayed();
-	if( m_cur_val ) {
-	    m_posedge_event.notify_delayed();
-	} else {
-	    m_negedge_event.notify_delayed();
-	}
-	m_delta = simcontext()->delta_count();
-    }
-}
+        // order of execution below is important, the notify_processes() call
+        // must come after the update of m_cur_val for things to work properly!
+        m_cur_val = m_new_val;
+	if ( m_reset_p ) m_reset_p->notify_processes();
 
-
-inline
-void
-sc_signal<bool>::check_writer()
-{
-    if (is_clock()) return;
-    sc_process_b* writer = sc_get_curr_process_handle();
-    if( m_writer == 0 ) {
-	m_writer = writer;
-    } else if( m_writer != writer ) {
-	sc_signal_invalid_writer( name(), kind(),
-				  m_writer->name(), writer->name() );
+        if ( m_change_event_p ) m_change_event_p->notify_next_delta();
+        if( m_cur_val ) {
+            if ( m_posedge_event_p ) m_posedge_event_p->notify_next_delta();
+        } else {
+            if ( m_negedge_event_p ) m_negedge_event_p->notify_next_delta();
+        }
+        m_delta = delta_count();
     }
 }
 
@@ -529,33 +510,38 @@ class sc_signal<sc_dt::sc_logic>
 : public sc_signal_inout_if<sc_dt::sc_logic>,
   public sc_prim_channel
 {
-public:
-
-    // constructors
+  public: // constructors and destructor:
 
     sc_signal()
 	: sc_prim_channel( sc_gen_unique_name( "signal" ) ),
-          m_output( 0 ),
+	  m_change_event_p( 0 ),
 	  m_cur_val(),
-	  m_new_val(),
           m_delta( ~sc_dt::UINT64_ONE ),
+	  m_negedge_event_p( 0 ),
+	  m_new_val(),
+          m_output( 0 ),
+	  m_posedge_event_p( 0 ),
 	  m_writer( 0 )
 	{}
 
     explicit sc_signal( const char* name_ )
 	: sc_prim_channel( name_ ),
-          m_output( 0 ),
+	  m_change_event_p( 0 ),
 	  m_cur_val(),
-	  m_new_val(),
           m_delta( ~sc_dt::UINT64_ONE ),
+	  m_negedge_event_p( 0 ),
+	  m_new_val(),
+          m_output( 0 ),
+	  m_posedge_event_p( 0 ),
 	  m_writer( 0 )
 	{}
 
-
-    // destructor (does nothing)
-
     virtual ~sc_signal()
-	{}
+	{
+	    if ( !m_change_event_p ) delete m_change_event_p;
+	    if ( !m_negedge_event_p ) delete m_negedge_event_p;
+	    if ( !m_posedge_event_p ) delete m_posedge_event_p;
+	}
 
 
     // interface methods
@@ -565,20 +551,34 @@ public:
 
     // get the default event
     virtual const sc_event& default_event() const
-	{ return m_value_changed_event; }
+	{ 
+	    if ( !m_change_event_p ) m_change_event_p = new sc_event; 
+	    return *m_change_event_p; 
+	}
 
 
     // get the value changed event
     virtual const sc_event& value_changed_event() const
-	{ return m_value_changed_event; }
+	{ 
+	    if ( !m_change_event_p ) m_change_event_p = new sc_event; 
+	    return *m_change_event_p; 
+	}
 
     // get the positive edge event
     virtual const sc_event& posedge_event() const
-	{ return m_posedge_event; }
+	{ 
+	    if ( !m_posedge_event_p )
+	        m_posedge_event_p = new sc_event; 
+	    return *m_posedge_event_p; 
+	}
 
     // get the negative edge event
     virtual const sc_event& negedge_event() const
-	{ return m_negedge_event; }
+	{ 
+	    if ( !m_negedge_event_p )
+	        m_negedge_event_p = new sc_event; 
+	    return *m_negedge_event_p; 
+	}
 
 
     // read the current value
@@ -587,12 +587,12 @@ public:
 
     // get a reference to the current value (for tracing)
     virtual const sc_dt::sc_logic& get_data_ref() const
-        { return m_cur_val; }
+        { sc_deprecated_get_data_ref(); return m_cur_val; }
 
 
     // was there an event?
     virtual bool event() const
-        { return ( simcontext()->delta_count() == m_delta + 1 ); }
+        { return simcontext()->event_occurred(m_delta); }
 
     // was there a positive edge event?
     virtual bool posedge() const
@@ -605,10 +605,6 @@ public:
 
     // write the new value
     virtual void write( const sc_dt::sc_logic& );
-
-
-    // delayed evaluation
-    virtual const sc_signal_logic_deval& delayed() const;
 
 
     // other methods
@@ -629,12 +625,12 @@ public:
 
 
     void trace( sc_trace_file* tf ) const
-#ifdef DEBUG_SYSTEMC
-	{ sc_trace( tf, get_data_ref(), name() ); }
-#else
-	{}
-#endif
-
+	{
+	    sc_deprecated_trace();
+#           ifdef DEBUG_SYSTEMC
+	        sc_trace( tf, read(), name() ); 
+#           endif
+	}
 
     virtual void print( ::std::ostream& = ::std::cout ) const;
     virtual void dump( ::std::ostream& = ::std::cout ) const;
@@ -646,22 +642,16 @@ protected:
 
     virtual void update();
 
-    void check_writer();
-
 protected:
 
-    sc_port_base* m_output; // used for static design rule checking
-
-    sc_dt::sc_logic      m_cur_val;
-    sc_dt::sc_logic      m_new_val;
-
-    sc_event             m_value_changed_event;
-    sc_event             m_posedge_event;
-    sc_event             m_negedge_event;
-
-    sc_dt::uint64 m_delta; // delta of last event
-
-    sc_process_b* m_writer; // used for dynamic design rule checking
+    mutable sc_event* m_change_event_p;  // value change event if present.
+    sc_dt::sc_logic   m_cur_val;         // current value of object.
+    sc_dt::uint64     m_delta;           // delta of last event
+    mutable sc_event* m_negedge_event_p; // negative edge event if present.
+    sc_dt::sc_logic   m_new_val;         // next value of object.
+    sc_port_base*     m_output;          // used for static design rule checking
+    mutable sc_event* m_posedge_event_p; // positive edge event if present.
+    sc_object*        m_writer;          // process writing this object's value.
 
 private:
 
@@ -677,17 +667,17 @@ void
 sc_signal<sc_dt::sc_logic>::register_port( sc_port_base& port_,
 				    const char* if_typename_ )
 {
-#ifdef DEBUG_SYSTEMC
-    std::string nm( if_typename_ );
-    if( nm == typeid( sc_signal_inout_if<sc_dt::sc_logic> ).name() ) {
-	// an out or inout port; only one can be connected
-	if( m_output != 0 ) {
-	    sc_signal_invalid_writer( name(), kind(),
-				      m_output->name(), port_.name() );
+    if ( sc_get_curr_simcontext()->write_check() )
+    {
+	std::string nm( if_typename_ );
+	if( nm == typeid( sc_signal_inout_if<sc_dt::sc_logic> ).name() ) {
+	    // an out or inout port; only one can be connected
+	    if( m_output != 0 ) {
+		sc_signal_invalid_writer( this, m_output, &port_ );
+	    }
+	    m_output = &port_;
 	}
-	m_output = &port_;
     }
-#endif
 }
 
 
@@ -697,24 +687,17 @@ inline
 void
 sc_signal<sc_dt::sc_logic>::write( const sc_dt::sc_logic& value_ )
 {
-#ifdef DEBUG_SYSTEMC
-    check_writer();
-#endif
+    sc_object* writer = sc_get_curr_simcontext()->get_current_writer();
+    if( m_writer == 0 ) {
+	m_writer = writer;
+    } else if( m_writer != writer ) {
+	sc_signal_invalid_writer( this, m_writer, writer );
+    }
+
     m_new_val = value_;
     if( !( m_new_val == m_cur_val ) ) {
 	request_update();
     }
-}
-
-
-// delayed evaluation
-
-inline
-const sc_signal_logic_deval&
-sc_signal<sc_dt::sc_logic>::delayed() const
-{
-    const sc_signal_in_if<sc_dt::sc_logic>* iface = this;
-    return RCAST<const sc_signal_logic_deval&>( *iface );
 }
 
 
@@ -741,31 +724,15 @@ sc_signal<sc_dt::sc_logic>::update()
 {
     if( !( m_new_val == m_cur_val ) ) {
 	m_cur_val = m_new_val;
-	m_value_changed_event.notify_delayed();
-	if( m_cur_val == sc_dt::SC_LOGIC_1 ) {
-	    m_posedge_event.notify_delayed();
-	} else if( m_cur_val == sc_dt::SC_LOGIC_0 ) {
-	    m_negedge_event.notify_delayed();
+	if ( m_change_event_p ) m_change_event_p->notify_next_delta();
+	if( m_posedge_event_p && (m_cur_val == sc_dt::SC_LOGIC_1) ) {
+	    m_posedge_event_p->notify_next_delta();
+	} else if( m_negedge_event_p && (m_cur_val == sc_dt::SC_LOGIC_0) ) {
+	    m_negedge_event_p->notify_next_delta();
 	}
-	m_delta = simcontext()->delta_count();
+	m_delta = delta_count();
     }
 }
-
-
-
-inline
-void
-sc_signal<sc_dt::sc_logic>::check_writer()
-{
-    sc_process_b* writer = sc_get_curr_process_handle();
-    if( m_writer == 0 ) {
-	m_writer = writer;
-    } else if( m_writer != writer ) {
-	sc_signal_invalid_writer( name(), kind(),
-				  m_writer->name(), writer->name() );
-    }
-}
-
 
 // ----------------------------------------------------------------------------
 
@@ -778,6 +745,74 @@ operator << ( ::std::ostream& os, const sc_signal<T>& a )
 }
 
 } // namespace sc_core
+
+/*****************************************************************************
+
+  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+  changes you are making here.
+
+      Name, Affiliation, Date:
+  Description of Modification:
+    
+ *****************************************************************************/
+//$Log: sc_signal.h,v $
+//Revision 1.12  2006/04/11 23:11:57  acg
+//  Andy Goodrich: Changes for reset support that only includes
+//  sc_cthread_process instances.
+//
+//Revision 1.11  2006/03/13 20:19:44  acg
+// Andy Goodrich: changed sc_event instances into pointers to sc_event instances
+// that are allocated as needed. This saves considerable storage for large
+// numbers of signals, etc.
+//
+//Revision 1.10  2006/01/26 21:00:50  acg
+// Andy Goodrich: conversion to use sc_event::notify(SC_ZERO_TIME) instead of
+// sc_event::notify_delayed()
+//
+//Revision 1.9  2006/01/24 20:45:41  acg
+//Andy Goodrich: converted notify_delayed() calls into notify_next_delta() calls
+//to eliminate deprecation warnings. notify_next_delta() is an implemenation-
+//dependent method of sc_event. It is simpler than notify_delayed(), and should
+//speed up simulation speeds.
+//
+//Revision 1.8  2006/01/19 19:18:25  acg
+//Andy Goodrich: eliminated check_writer in favor of inline code within the
+//write() method since we always execute the check_writer code even when
+//check writing is turned off.
+//
+//Revision 1.7  2006/01/19 00:30:57  acg
+//Andy Goodrich: Yet another implementation for disabling write checks on
+//signals. This version uses an environment variable, SC_SIGNAL_WRITE_CHECK,
+//that when set to DISABLE will turn off write checking.
+//
+//Revision 1.6  2006/01/18 21:42:26  acg
+//Andy Goodrich: Changes for check writer support, and tightening up sc_clock
+//port usage.
+//
+//Revision 1.5  2006/01/13 20:41:59  acg
+//Andy Goodrich: Changes to add port registration to the things that are
+//checked when SC_NO_WRITE_CHECK is not defined.
+//
+//Revision 1.4  2006/01/13 18:47:20  acg
+//Reversed sense of multiwriter signal check. It now defaults to ON unless the
+//user defines SC_NO_WRITE_CHEK before inclusion of the file.
+//
+//Revision 1.3  2006/01/03 23:18:26  acg
+//Changed copyright to include 2006.
+//
+//Revision 1.2  2005/12/20 21:58:18  acg
+//Removed Makefile.in, changed the event() methods to use sc_simcontext::event_occurred.
+//
+//Revision 1.1.1.1  2005/12/19 23:16:43  acg
+//First check in of SystemC 2.1 into its own archive.
+//
+//Revision 1.19  2005/09/15 23:01:51  acg
+//Added std:: prefix to appropriate methods and types to get around
+//issues with the Edison Front End.
+//
+//Revision 1.18  2005/06/10 22:43:55  acg
+//Added CVS change log annotation.
+//
 
 #endif
 

@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -36,6 +36,22 @@
 
 /* 
 $Log: sc_wait.h,v $
+Revision 1.2  2006/01/03 23:18:45  acg
+Changed copyright to include 2006.
+
+Revision 1.1.1.1  2005/12/19 23:16:44  acg
+First check in of SystemC 2.1 into its own archive.
+
+Revision 1.10  2005/07/30 03:45:05  acg
+Changes from 2.1, including changes for sc_process_handle.
+
+Revision 1.9  2005/04/04 00:16:08  acg
+Changes for directory name change to sys from systemc.
+Changes for sc_string going to std::string.
+Changes for sc_pvector going to std::vector.
+Changes for reference pools for bit and part selections.
+Changes for const sc_concatref support.
+
 Revision 1.6  2004/10/13 18:13:22  acg
 sc_ver.h - updated version number. sc_wait.h remove inclusion of
 sysc/kernel/sc_event.h because it is not necessary.
@@ -43,7 +59,7 @@ sysc/kernel/sc_event.h because it is not necessary.
 Revision 1.5  2004/09/27 20:49:10  acg
 Andy Goodrich, Forte Design Systems, Inc.
    - Added a $Log comment so that CVS checkin comments appear in the
-     checkout source.
+        checkout source.
 
 */
 

@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2004 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -64,7 +64,7 @@ SC_MODULE(dpipe) {
         m_in(m_pipe[0]);
         m_out(m_pipe[N-1]);
         SC_METHOD(rachet);
-        sensitive_pos << m_clk;
+        sensitive << m_clk.pos();
     }
 
     void rachet()
@@ -90,14 +90,15 @@ SC_MODULE(Reader)
     SC_CTOR(Reader)
     {
         SC_METHOD(extract)
-        sensitive_pos << m_clk;
+        sensitive << m_clk.pos();
         dont_initialize();
     }
 
   protected:
     void extract()
     {
-        cout << sc_simulation_time() << ": " << m_from_pipe.read() << endl;
+        cout << sc_time_stamp().to_double() << ": " << m_from_pipe.read() 
+	     << endl;
     }
 
   public:
@@ -114,7 +115,7 @@ SC_MODULE(Writer)
     SC_CTOR(Writer)
     {
         SC_METHOD(insert)
-        sensitive_pos << m_clk;
+        sensitive << m_clk.pos();
         m_counter = 0;
     }
 
@@ -146,7 +147,7 @@ int sc_main(int argc, char* argv[])
     writer.m_clk(clock);
     writer.m_to_pipe(delay.m_in);
 
-    sc_start(10);
+    sc_start(10, SC_NS);
 
     return 0;
 }

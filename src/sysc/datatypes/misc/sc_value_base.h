@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -33,13 +33,19 @@
 
  *****************************************************************************/
 
+// $Log: sc_value_base.h,v $
+// Revision 1.3  2006/01/13 18:54:01  acg
+// Andy Goodrich: added $Log command so that CVS comments are reproduced in
+// the source.
+//
+
 #ifndef SC_VALUE_BASE_H
 #define SC_VALUE_BASE_H
 
 
 #include "sysc/datatypes/int/sc_nbdefs.h"
 
-namespace sc_dt 
+namespace sc_dt
 {
 
 class sc_signed;
@@ -59,14 +65,16 @@ class sc_value_base
     friend class sc_concatref;
   private: 
     virtual void concat_clear_data( bool to_ones=false );
-    virtual bool concat_get_ctrl( unsigned long* dst_p, int low_i ) const;
-    virtual bool concat_get_data( unsigned long* dst_p, int low_i ) const;
+    virtual bool concat_get_ctrl( sc_digit* dst_p, int low_i ) const;
+    virtual bool concat_get_data( sc_digit* dst_p, int low_i ) const;
     virtual uint64 concat_get_uint64() const;
     virtual int concat_length(bool* xz_present_p=0) const;
     virtual void concat_set( int64 src, int low_i );
     virtual void concat_set( const sc_signed& src, int low_i );
     virtual void concat_set( const sc_unsigned& src, int low_i );
     virtual void concat_set( uint64 src, int low_i );
+  public:
+    virtual ~sc_value_base() {};
 };
 
 

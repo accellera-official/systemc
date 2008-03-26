@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2004 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -44,7 +44,7 @@ SC_MODULE(display) {
     {
       SC_METHOD(entry);
       dont_initialize();
-      sensitive_pos(output_data_ready);
+      sensitive << output_data_ready.pos();
       i = 0;
     }
 

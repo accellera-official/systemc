@@ -1,5 +1,5 @@
-                Release Notes for SystemC Release 2.1 v1
-                ========================================
+                Release Notes for SystemC Release 2.2.0
+                =======================================
 
 CONTENTS
 ========
@@ -12,7 +12,7 @@ CONTENTS
 
   4) Incompatibitilies with previous releases
 
-  5) Incompatibilities with the OSCI SystemC 2.1 Language Reference Manual
+  5) Fixes to match the IEEE 1666 SystemC Language Reference Manual
 
   6) Beta features
 
@@ -26,620 +26,256 @@ CONTENTS
 1) What's new in this release?
 ==============================
 
-Compared to the 2.0.1 Production release, this release has the following
+Compared to the 04feb06_beta release, this release has the following
 new items:
 
-  - Several bug fixes and enhancements. See Section 2) for details.
-
-  - Several other code changes. See Section 3) for details.
+  - Changed sc_event usage in signals to be dynamically allocated instead
+    of statically being part of signal storage to save space.
+  - Changed name of sc_get_current_process_base() function to be 
+    sc_get_current_process_b() since it returns an sc_process_b.
+  - Changed the type of m_writer field in sc_signal to be an sc_object
+    rather than an sc_process_b for more opaqness.
+  - Added declarations for functions in scx_rep.h, sc_signed.h, sc_unsigned.h,
+    sc_process.h, sc_simcontext.cpp to keep gcc 4.x happy
+  - Hid the definitions of the sc_cthread_process, sc_method_process,
+    and sc_thread_process classes from the user. That is, the files
+    containing these classes do not get copied into the include directory
+    when an install occurs. The specific changes are:
+    a) Three new methods were added to sc_simcontext to create processes:
+         o create_cthread_process()
+         o create_method_process()
+         o create_thread_process()
+       These all return an sc_process_handle. These methods are now
+       called by the process macros, e.g., SC_CTHREAD, and by sc_spawn()
+       when processes are created.
+    b) Three methods were removed from sc_simcontext that were previously
+       used to register processes:
+         o register_cthread_process()
+         o register_method_process()
+         o register_thread_process()
+       These are no longer called, since you cannot create a process 
+       without calling one of the three new create_XXXX_process methods.
+    c) A new << operator was added to sc_sensitive, sc_sensitive_neg,
+       and sc_sensitive_pos classes:
+         o operator << ( sc_process_handle )
+       This new operator is now used to set the process in the SC_METHOD,
+       SC_CTHREAD, and SC_THREAD macros.
+    d) The << operators for process handles have been removed from the
+       sc_sensitive, sc_sensitive_neg, and sc_sensitive_pos classes:
+         o operator << ( sc_cthread_handle )
+         o operator << ( sc_module_handle )
+         o operator << ( sc_thread_handle )
+       These are no longer needed since one can use an sc_process_handle
+       instance to set the process.
+       
+  - Bug fixes, see next section.
+     
 
 2) Bug fixes and enhancements
 =============================
 
 Following is the list of bug fixes and enhancements for this release:
 
-  - sc_start() after simulation has reached its internal maximum time 
-    value would overflow simulation time.
-  - sc_trace for uint64, int64 missing
-  - sc_set_time_resolution not properly affecting VCD dump information.
-  - The value of sc_clock needs to be updated during update phase
-    not evaluate (execution) phase to prevent race conditions.
-  - sc_string_old subscript operator may modify multiple instance
-    because of copy semantics.
-  - Cpu risc example not shipped anymore
-  - Error in sc_bv char constructor
-  - sc_biguint partial selection bug
-  - Missing terminating null char in >> operator for sc_string_old.
-  - The constructor sc_module(const sc_module&) is not defined
-  - Signal initialized in module CTOR not registered with its
-    module.
-  - Deletion of main fiber should not occur in ~sc_cor_fiber
-  - Need ability to compile with Wno-deprecated
-  - Tracing ports after end of elaboration had no effect
-  - Wait statements in sc_module ctor led to crashes 
-  - SystemC types now recognize stream i/o directives like hex and oct.
+    - Fixed a bug when an exception is thrown in
+      sc_module::sc_module() for a dynamically allocated sc_module
+      object. We were calling sc_module::end_module() on a module that has
+      already been deleted. The scenario runs like this:
   
+      a) the sc_module constructor is entered
+      b) the exception is thrown
+      c) the exception processor deletes the storage for the sc_module
+      d) the stack is unrolled causing the sc_module_name instance to be deleted   
+      e) ~sc_module_name() calls end_module() with its pointer to the sc_module
+      f) because the sc_module has been deleted its storage is corrupted,
+         either by linking it to a free space chain, or by reuse of some sort
+      g) the m_simc field is garbage
+      h) the m_object_manager field is also garbage
+      i) an exception occurs
+
+      This does not happen for automatic sc_module instances since the
+      ~sc_module_name() will no longer call sc_module::end_module() 
+      if the sc_module instance has been deleted. This caused an
+      exception on certain Linux platforms.
+
+
 3) New features
 ===============
 
-Here is an overview of changes in 2.1 v1 compared to 2.0.1:
+Here is an overview of changes in 2.2.0 compared to 2.1.v1:
 
-    - SYSTEMC GLOBALS ARE NOW CONTAINED IN THE sc_core NAMESPACE
+    - SUPPORT FOR 64-BIT LINUX
 
-        SystemC globals that are not part of the sc_dt namespace
-        are now part of the sc_core namespace. The header systemc.h
-        will make the members of the sc_core namespace globally 
-        visible, so no change will be necessary to most programs.
-        The one exception is the wait() function when it appears
-        outside of an sc_module. 
-        
-        In addition, a new header, systemc, includes the SystemC
-        environment without the using statements that globally
-        expose the environment. Users who include systemc rather
-        than systemc.h are responsible for their own usings, or 
-        properly prefixing their use of systemc entities. This
-        change also required a change in the directory structure
-        for systemc examples, headers, and sources.
-        
-        See the incompatibilities section below for details on
-        how these changes may affect existing programs.
+        64-bit native mode for Linux is now a beta SystemC platform. The
+        implementation uses Posix threads for thread support. The major
+        code change is the use of the sc_digit data type to represent
+        values that were previously unsigned long. These occurred in 
+        the concatenation code and the internal representations for
+        sc_signed, sc_unsigned, bit classes, and some fixed point classes.
 
-    - CONVERSION TO C++ STANDARD LIBRARY DATA TYPES
-
-        SystemC version 2.1 v1 uses the string and vector data types
-        from the C++ standard library in place of the sc_string
-        and sc_pvector data types that were used in 2.0.1. For 
-		compatibility the original sc_string data type is now 
-		called sc_dt::sc_string_old. By default the sc_string data 
-		type is no longer defined. Users can force the definition
-		by using either of the two #defines shown below:
-		  SC_USE_STD_STRING - define sc_string to be std::string
-		  SC_USE_SC_STRING_OLD - define sc_string to be sc_string_old
-		The sc_pvector data type is still provided for compatiblity, 
-		but is not used by the SystemC library.
-
-    - SUPPORT FOR PROGRAMS WITH THEIR OWN main() FUNCTION
-
-        SystemC version 2.1 v1 simplifies creation of simulations 
-        where there is a need of customized main function. To make 
-        possible to define the main function use code like in 
-        the example below: 
-
-          #include <systemc.h>
-
-          int main(int argc, char** argv)
-          {
-              ... do something ...
-              // pass the control to SystemC
-              int exit_code = sc_elab_and_sim(argc, argv);
-              ... do something more ...
-              return errors ? ... : exit_code;
-          }
-
-        The call sc_elab_and_sim will perform normal SystemC 
-        processing. At the moment it is not possible to call 
-        sc_elab_and_sim multiple times. The user still has to 
-        provide sc_main function. 
-
-
-    - GETTING COPIES OF THE START UP ARGUMENTS:
-
-        SystemC version 2.1 v1 allows access to the startup 
-        arguments of a simulation run via the functions 
-        sc_argc() and sc_argv():
-
-          int sc_argc();
-          const char * const * sc_argv();
-
-    - OBJECT CODE RELEASE TAGGING 
-
-        Source code compiled against the 2.1 v1 headers will 
-        result in object code which reference a set of global 
-        symbols which encode the version and vendor tags of the 
-        library it was compiled against. This will result in link time
-        errors for objects which are linked with a library other than
-        the one they were compiled against.The vendors of customized 
-        versions of SystemC library have to provide own tags in 
-        addition to the 2.1 v1 tags, depending on whether the binary
-        interface was changed. The interface can be found 
-        in src/sysc/kernel/sc_ver.h and src/sysc/kernel/sc_ver.cpp.
-
-
-    - VERSION NUMBER IN A STANDARD FORMAT
-
-        The version of the SystemC library being executed may 
-        now be acquired in a standard machine readable format. 
-        The sc_release() function will return a character string 
-        specifying the release using the following syntax:
-
-          <major_no>.<minor>.<patch>-<vendor>
-
-        where:
-          <major_no> is the major release number, e.g., 2
-          <minor_no> is the minor release number, e.g., 1
-          <patch>    is the optional patch or beta designation, e.g., 0 
-                     or 01may2005_beta
-          <vendor>   is a string designating the vendor, e.g., OSCI
-
-
-    - INTEGER BIT AND PART SELECTIONS ARE NOW UNSIGNED
-
-        In SystemC 2.1 v1 bit and part selections on integer types
-        (e.g., sc_int<W>, sc_bigint<W>) are treated as unsigned
-        rather than signed. This means that there will no longer
-        be sign propogation when these types are assigned to
-        other values or cast to other types. To get the behavior
-        seen in 2.0.1 bit and part selections should be cast to 
-        either an sc_int<W> or sc_bigint<W> of the appropriate 
-        size. For example, 
-            sc_int<10> x;
-            int        y;
-            . . .
-            y = (sc_int<3>)x(4,2);
-        If the size is unknown then an intermediate variable should
-        be used, for example,
-            sc_bigint<10> x;
-            sc_bigint<12> y;
-            .  .  .
-            sc_signed tmp(3) = x(4,2);
-            y = tmp;
-
-    - HETEROGENEOUS CONCATENATION
-        
-        SystemC 2.1 v1 adds the ability to concatenate the long data 
-        types sc_biguint<W>, and sc_bigint<W>. You no longer have 
-        to copy to and from sc_bv<W> instances. In addition, you 
-        may now use any combination of the following data types, 
-        or bit and part selects of these data types, in a 
-        concatenation:
-            (a) sc_int<W>
-            (b) sc_uint<W>
-            (c) sc_bigint<W>
-            (d) sc_biguint<W>
-
-        sc_bv<W> and sc_lv<W> still form a seperate group for 
-        concatenation purposes. This will be rectified in a future
-        release of SystemC.
-
-    - DYNAMIC PROCESSES ARE NOW SUPPORTED:
-
-        Thread and method processes may now 
-        be created at elaboration, or during actual simulation via 
-        the new function sc_spawn. 
-        See examples/sysc/2.1/forkjoin for an example of the use of
-        dynamic processes. The examples/sysc/2.1/forkjoin/README.txt
-        contains a detailed description.
-
-    - sc_cycle(...) DEPRECATED USE sc_start(...) INSTEAD
-        
-        The use of sc_cycle() is discouraged starting with 
-        release 2.1 v1. A call to sc_start() with the equivalent 
-        argument should be used.  For instance, the call 
-        sc_start(0) will perform delta cycles without advancing 
-        time. 
-
-        Applications using sc_cycle() still work, however a 
-        warning message is generated:
-
-            Warning: (W540) sc_cycle is deprecated: 
-                use sc_start(...) instead
-
-        If you do not want to replace sc_cycle() calls and if 
-        you also must make sure that the output is identical to 
-        previous SystemC releases, then you can suppress the 
-        message using the following call:
-
-            sc_report_handler::set_actions( 
-                SC_ID_SC_CYCLE_DEPRECATED_, SC_DO_NOTHING );      
-
-    - sc_start(0) NOW IMPLEMENTS THE SEMANTICS FORMERLY PROVIDED BY sc_cycle(0)
-
-        Calling sc_start with an argument of 0 will perform delta cycles
-        based on pending events and assignments, but it will not advance
-        simulation time. This function was previously performed by sc_cycle(0),
-        which has been deprecated.
-
-    - sc_stop() SEMANTICS CHANGE
-
-    The semantics of sc_stop() has been tightened in 2.1 v1. When invoked
-    from a process, control always returns to the invoking process,
-    and after the invoking process returns/suspends, the current
-    delta cycle is either completed, or not, depending on the
-    specified stop mode. The stop mode can be specified with the new
-    function sc_set_stop_mode:
-            void sc_set_stop_mode( sc_stop_mode mode )
-        where mode may have one of the following values:
-            SC_STOP_IMMEDIATE - stop immediately 
-            SC_STOP_FINISH_DELTA - finish the current delta cycle
-        If the stop mode is SC_STOP_IMMEDIATE, no more processes are 
-    executed, and the update phase is not executed. If the stop mode 
-    is SC_STOP_FINISH_DELTA, all processes that can be run in the
-    current delta cycle are executed, and the update phase of the 
-    current delta cycle is also executed before simulation stops,
-    and control returns to sc_main().  The default stop mode is 
-    SC_STOP_FINISH_DELTA. When sc_stop() is invoked from one of 
-    the phase callbacks (e.g., start_of_simulation), the current 
-    phase is completed before simulation stops. 
-
-    If the start_of_simulation callbacks have happened before,
-    then sc_stop() also triggers the end_of_simulation
-    callbacks just before control returns to sc_main().
-
-    - CALLING sc_start() AFTER sc_stop() IS AN ERROR
-
-        After sc_stop has been called a call to sc_start will
-        produce an error message.
-
-    - CALLING sc_stop() AFTER sc_stop() PRODUCES A WARNING
-
-        After sc_stop has been called another call to sc_stop will 
-        produce a warning message.
-
-    - NEW ERROR REPORTING MECHANISM
-
-        SystemC 2.1 v1 introduces a new exception reporting API. See 
-        the file examples/sysc/2.1/sc_report/README.txt for details. 
-        The API deprecates the following methods of the class sc_report:
-
-          void register_id(int, const char*)
-          const char* get_message(int)     
-          bool is_suppressed(int)
-          void suppress_id(int, bool)
-          void suppress_infos(bool)       
-          void suppress_warnings(bool)
-          void make_warnings_errors(bool)
-
-        These calls are still present and fully functional but 
-        they will be removed in an upcoming release.
-
-        The sc_report class serves as the exception mechanism for the
-        new reporting mechanism. It is derived from the std::exception
-        class. The 2.0.1 sc_exception class has been deprecated by making
-        it a typedef for std::exception.
-
-
-    - sc_event_queue CLASS
-
-        A new class, sc_event_queue, has been provided for exactly 
-        accounting for event notifications. The sc_event_queue 
-        class has a similiar interface like an sc_event but has 
-        different semantics: it can carry any number of pending 
-        notifications. The general rule is that _every_ call to 
-        notify() will cause a corresponding trigger at the 
-        specified wall-clock time that can be observed (the only 
-        exception is when notifications are explicitly cancelled). 
-
-        If multiple notifications are pending at the same 
-        wall-clock time, then the event queue will trigger in 
-        different delta cycles in order to ensure that sensitive 
-        processes can notice each trigger. The first trigger 
-        happens in the earliest delta cycle possible which is the 
-        same behavior as a normal timed event. 
-
-        Adding event notifications: add an event to the 
-        event-queue with the notify() function. For example 
-
-            sc_event_queue E ("E");
-            E.notify( 10,SC_NS );
-
-        will add an event to E scheduled to occur 10 ns from now.
-
-        Waiting for events: use the event queue similarly to signals
-        and ports, for example
-
-            SC_METHOD( proc );
-            sensitive << E;
-
-        or
-
-           SC_THREAD( proc );
-           ...
-           void proc() { 
-               ...  
-               wait(E.default_event())
-           }
-
-        You can cancel all events from the queue with method 
-        cancel_all().
-
-
-    - NOTIFICATION CALLBACKS FOR SIMULATOR PHASES 
-
-        There are three new callbacks provided via virtual methods 
-        for classes derived from sc_module, sc_port, sc_export, and
-        sc_prim_channel. These callbacks will be invoked by the 
-        SystemC simulation kernel when certain phases of the 
-        simulation process occur. The new methods are:
-
-        void before_end_of_elaboration()
-          This method is called just before the end of elaboration 
-          processing is to be done by the simulator. It is the last
-		  opportunity to perform port binding and create static
-		  processes.
-         
-        void start_of_simulation()
-          This method is called just before the start of simulation. It 
-          is intended to allow users to set up variable traces and other
-          verification functions that should be done at the start of 
-          simulation.
-
-        void end_of_simulation()
-          If a call to sc_stop() had been made this method will be called 
-          as part of the clean up process as the simulation ends. It is
-          intended to allow users to perform final outputs, close files,
-          storage, etc. 
-        
-        It is also possible to test whether the callbacks to the
-        start_of_simulation methods or end_of_simulation methods
-        have occured. The boolean functions sc_start_of_simulation_invoked()
-        and sc_end_of_simulation_invoked() will return true if their 
-        respective callbacks have occurred.
-
-    - SUPPORT FOR MacOS X
-
-        MacOS X is now a supported SystemC platform. See the INSTALL
-        file for details.
-
-    - POSIX THREAD SUPPORT
-
-        SystemC 2.1 v1 contains a version of thread support based 
-        on Posix threads. To create a version of SystemC which 
-        uses Posix threads in place of quick threads use the
-        gmake commands
-           gmake pthreads
-           gmake install
-        when creating SystemC. 
-
-        To build a debug library use the gmake commands
-           gmake pthreads_debug
-           gmake install
-        
-        To test the examples use the
-        gmake command
-           gmake pthreads_check
-
-    - PORTS WHICH EXPORT AN INTERFACE RATHER THAN IMPORT IT: sc_export
-
-        A new class, sc_export<IF>, has been added which allows an 
-        interface to be exported from a module to its parent. The 
-        characteristics of sc_export<IF> are very similar to those
-        of sc_port<IF>, except that the flow of information takes
-        place in the opposite direction. The binding of sc_export<IF>
-        instances is done in the opposite direction from sc_port<IF>.
-        So the binding of sc_export<IF> is parent(child) rather than 
-        child(parent) as is true of sc_port<IF>. There is an example
-        of sc_export's use in examples/sysc/2.1/sc_export, and a 
-        detailed description in examples/sysc/2.1/sc_export/README.txt.
-
-    - NEW sc_generic_base<T> CLASS
-      
-        A new templated class, sc_generic_base, has been added.
-        This class has a single template argument, which is the
-        name of the class it serves as a base class for. For
-        example the definition for a user-defined class, MyClass, 
-        might be:
-             class MyClass : public sc_generic_base<MyClass>
-        The native SystemC data types have support for assignments
-        from sc_generic_base class instances, as well as 
-        constructor initializations. The only requirement on the
-        class being derived from sc_generic base is that it define
-        the following methods:
-           uint64 to_uint64()
-              This method returns the value of the variable as
-              a uint64 value.
-           void to_sc_signed( sc_signed& value_to_fill_in )
-              This method returns the value of the variable in
-              the supplied sc_signed instance.
-           void to_sc_unsigned( sc_unsigned& value_to_fill_in );
-              This method returns the value of the variable in
-              the supplied sc_unsigned instance.
-        These methods may be declared inline and/or const if that 
-        is desired, but that is not a requirement.
-
-
-    - NEW reset_signal_is() METHOD
-      
-        The sc_module class has a new method, reset_signal_is. 
-        This method is use to specify the reset signal and level
-        for an SC_CTHREAD instance. It operates temporally in 
-        a manner similar to the dont_initialize method. A call
-        to reset_signal_is() will affect the previously defined
-        SC_CTHREAD instance. A typical usage would be:
-             SC_CTOR(MyMod)
-             {
-                 SC_CTHREAD(my_thread,m_clk.pos());
-                 // m_reset high is reset signal
-                 reset_signal_is(m_reset,true); 
-             }
-        The first argument of reset_signal_is() is a boolean
-        signal or port. The second argument is a boolean value,
-        true for reset high, false for reset low.
-
-    - SUPPORT FOR ISDB FORMAT TRACING HAS BEEN REMOVED
-
-        The support for tracing variables in ISDB format has been
-        removed.
-
-    - EXAMPLES NOW USE configure
-
-        The examples shipped with SystemC 2.1 v1 now use configure. 
-        This means that there are no longer platform dependent 
-        Makefiles, and the example binaries reside in an examples
-        subdirectory within the object directory used to create 
-        your version of SystemC. See the INSTALL file for details.
-
-    - NEW packages SUBDIRECTORY
-      
-        A new subdirectory have been added, sysc/src/packages.
-        Its subdirectories contain packages providing SystemC
-        support for various applications. Initially, there is 
-        one subdirectory:
-          - boost - provides Boost library support that is used
-                    to implement dynamic processes.
-    - NEW EXAMPLES
-      
-        New examples have been added to the examples directory
-        under the the subdirectory 2.1 v1. These examples illustrate
-        new features and capabilities that were added for the
-        2.1 v1 release:
-          - A fork-join example illustrating the use of the 
-            dynamic processes package.
-          - Two sc_export examples, sc_export, and dpipe, illustrating 
-            its use.
-          - An scx_barrier example illustrating its use.
-          - An scx_mutex_w_policy example illustrating its use.
-          - An sc_report example illustrating use of its new interface.
-          - A sc_module::reset_signal_is example illustrating how to get
-            synchronous resets of threads. This mechanism deprecates the
-            use of global watching statements for this purpose.
-          - An example illustrating specialized signals for SystemC integer
-            datatypes, e.g., sc_uint<W>, sc_bigint<W>.
 
 4) Incompatibilities with previous releases
 ===========================================
 
-Here is a list of known incompatibilities between this release and 2.0.1:
+Here is a list of known incompatibilities between this release and 2.1.v1:
 
-  - Bit and part selections on integer types (e.g., sc_int<W>, 
-    sc_bigint<W>) are now unsigned values. See the new features section
-    for details.
-
-  - The location of SystemC examples, headers and sources has changed.
-    Formally these were in:
-       examples/systemc
-       include/systemc
-       src/systemc
-    They now reside in
-       examples/sysc
-       include/sysc
-       src/sysc
-    This change was necessitated by the creation of the systemc header
-    file. This file includes the SystemC environment but does not
-    expose it via using statements.
-
-  - sc_string is not defined by default. It has been replaced with 
-    std::string, the standard C++ library class string. To use the
-    the capabilities of sc_string from 2.0.1 define the symbol
-	SC_USE_SC_STRING_OLD before including systemc.h. Similarly, to
-	have sc_string become a typedef for std::string define the 
-	symbol SC_USE_STD_STRING.
-
-  - sc_module::get_child_objects() now returns a constant reference to
-    a C++ standard library vector object (std::vector) rather than an
-    sc_pvector object. If access if made to the sc_object instances
-    using the [] operator, e.g., objects[i], this change should be 
-    transparent. However, if access is via iterators then those iterators
-    must be declared to be of type std::vector::iterator, and the rules
-    for that iterator type followed.
-
-  - Invocations of the wait() function in SystemC outside of an sc_module
-    instance must now be prefixed with the sc_core:: namespace. Thus
-       wait()
-    should now be 
-       sc_core::wait()
-    This only affects uses of wait that are not part of an sc_module.
-
-  - Concatenation of sc_int<W> data types produce an unsigned result in 
-    release 2.1 v1, where the result was signed in release 2.0.1. This change
-    was made when concatenation of heterogeneous data types was added (see
-    section 3 above.) 
+  - Lambda expressions, and the functions and methods associated with
+    them, have been removed to comply with the SystemC standard. 
     
-  - When used in an expression concatenations of sc_int<W> and sc_uint<W> 
-    now produce an sc_unsigned or sc_signed result rather than int64 or
-    uint64. Concatenations appearing stand-alone will result in a uint64 or
-    sc_unsigned depending upon the context of their usage. This means that
-    for most usages of concatenations the proper context wil be set, but
-    that there are some uses that will now result in an sc_signed or 
-    sc_unsigned value. To get the desired result in those cases use a
-    cast to the desired C++ integer type, e.g., int, uint64, etc. For
-    instance,
-        (a,b,c) will match any C++ integer type.
-        (a,b,c) & 0xff yields an sc_unsigned instance.
-        (int)(a,b,c) & 0xff yields an int instance.
-        (a,b,c) << 10 yields an sc_unsigned instance.
-        (uint64)(a,b,c) << 10 yields a uint64 instance.
+      o The deferred() method has been removed from the signal and port
+        classes that took bool or sc_logic templates. The deferred()
+        method was used to generate lambda expressions and so is 
+        obsolete.
 
-  - sc_start(0) will run delta cycles without advancing time in 2.1 v1, 
-    whereas in 2.0.1, it was equivalent to sc_start()/sc_start(-1) and 
-    ran the simulation forever. 
+      o The watching() function has been removed. The major use of the
+        watching() function was to provide reset semantics for 
+        SC_CTHREAD instances. This is accomplished in SystemC 2.2.0 by 
+        using the reset_signal_is() method of the sc_module class. 
 
-  - 2.1 v1 will report error or warning message for the following scenarios, 
-    while 2.0.1 did not: 
-      o sc_start() after sc_stop() is an error; 
-      o sc_start() at max simulation time is an error; 
-      o sc_stop() after sc_stop() is a warning; 
-      o sc_cycle() is a warning.
+      o The wait_until() function has been removed. Calls to wait_until() 
+        can be replaced by a do-while loop. Given a wait_until() call like
+            wait_until( valid.deferred() == true );
+        replace it with
+            do { wait(); } while ( !(valid == true) );
+        Note the removal of the deferred() invocation and the reversal
+        of the sense of the expression. The general algorithm for 
+        converting a wait_until call: wait_until(expr) is:
+          o Remove the deferred() method calls in the expression, leaving
+            the ports and signals the calls were for.
+          o Replace the wait_until text with 
+                do { wait(); } while
+          o Reverse the sense of the expression:
+                do { wait(); } while ( !(expr) );
 
-  - Designs with sc_stop() may see more output at the end compared to 
-    2.0.1. This is because the default mode for sc_stop() in 2.1 v1 is to 
-    complete the current evaluate phase, while in 2.0.1, sc_stop() did 
-    not complete the current evaluate phase. Hence more processes may 
-    run at the end in 2.1 v1. Designs with sc_stop() that exclusively use 
-    immediate event notification may run forever. Such designs have to 
-    be modified to set up the stop mode as SC_STOP_IMMEDIATE using 
-    "sc_set_stop_mode(SC_STOP_IMMEDIATE)". An example can be seen in the 
-    reference regression suite at systemc/kernel/sc_event/test01.
+  - The check for multiple writers of a signal now defaults on rather than
+    off. This means that if two separate processes write to a signal an 
+    error will be reported. To turn off the check, reverting to the
+    behavior of previous releases, one needs set an environment variable:
+        setenv SC_SIGNAL_WRITE_CHECK DISABLE
+    When set SystemC programs will not perform the write check.
+    
+  - The signature for the find_event() virutal method in sc_event_finder
+    has changed. An additional optional sc_interface pointer has been
+    added as an argument. So the signature is now:
 
-5) Incompatibilities with the OSCI SystemC 2.1 Language Reference Manual
-========================================================================
+    virtual sc_event& find_event( sc_interface* p = 0 ) const;
 
-- The OSCI SystemC 2.1 v1 open-source proof-of-concept 
-  implementation contains a number of incompatibilities with the 
-  OSCI SystemC 2.1 Language Reference Manual. As the LRM is the 
-  definitive statement of the standard, these are considered 
-  flaws in the implementation. The known incompatibilities are: 
-  2.1 v1 does not implement the pure virtual function 
+    The additional argument is used to specify the interface to return
+    the sc_event instance for when using multi-interface ports.
+
+  - The function for setting the time unit associated with a trace file
+    has changed. It now has the signature:
+       void set_time_unit( double v, sc_time_unit tu )
+    rather than
+       void set_time_unit( int exponent10_seconds )
+
+    To map an old-style call into a new one use the following table:
+
+       Old New v New tu | Old New v New tu | Old New v New tu
+       --- ----- ------ | --- ----- ------ | --- ----- ------
+       -15    1.0 SC_FS |  -9   1.0 SC_NS  |  -3   1.0 SC_MS
+       -14   10.0 SC_FS |  -8  10.0 SC_NS  |  -2  10.0 SC_MS
+       -13  100.0 SC_FS |  -7 100.0 SC_NS  |  -1 100.0 SC_MS
+       -12    1.0 SC_PS |  -6   1.0 SC_US  |   0   1.0 SC_SEC
+       -11   10.0 SC_PS |  -5  10.0 SC_US  |   1  10.0 SC_SEC
+       -10  100.0 SC_PS |  -4 100.0 SC_US  |   2 100.0 SC_SEC
+
+  - Three methods were removed from sc_simcontext that were previously
+     used to register processes:
+       o register_cthread_process()
+       o register_method_process()
+       o register_thread_process()
+     These are no longer called, since you cannot create a process 
+     without calling one of the three new create_XXXX_process methods.
+
+  - The << operators for process handles have been removed from the
+    sc_sensitive, sc_sensitive_neg, and sc_sensitive_pos classes:
+      o operator << ( sc_cthread_handle )
+      o operator << ( sc_module_handle )
+      o operator << ( sc_thread_handle )
+    These are no longer needed since one can use an sc_process_handle
+    instance to set the process.
+
+5) Fixes to match with the IEEE 1666 SystemC Language Reference Manual
+======================================================================
+
+- The OSCI SystemC 2.2.0 open-source proof-of-concept implementation is 
+  now compliant with the IEEE 1666 SystemC Language Reference Manual(LRM)
+  in a number of areas that SystemC 2.1.v1 was not. 
+  
+  The IEEE 1666 LRM is the official standard for the SystemC language. 
+  It is a very useful reference document for all SystemC users, and it 
+  can be freely downloaded it at the URL below:
+  
+      http://standards.ieee.org/getieee/1666/index.html
+  
+- The changes from 2.1.v1 
+  are:
+
+- 2.2.0 does implement the pure virtual function 
   set_time_unit of class sc_trace_file that replaces the member 
   functions sc_set_vcd_time_unit and sc_set_wif_time_unit of 
   classes vcd_trace_file and wif_trace_file, respectively. 
 
-- 2.1 v1 does not implement the valid, name, proc_kind, 
+- 2.2.0 does implement the valid, name, proc_kind, 
   get_child_object, get_parent_object, dynamic, 
   terminated_event, operator==, operator!= members of the 
   class sc_process_handle. 
 
-- 2.1 v1 has not removed member function wait() from class 
+- 2.2.0 has removed member function wait() from class 
   sc_process_handle. 
 
-- 2.1 v1 has not implemented the sc_get_current_process_handle 
+- 2.2.0 has implemented the sc_get_current_process_handle 
   function. 
 
-- 2.1 v1 has not implemented the kind member function of class 
-  sc_event_queue and has not changed the default constructor name 
+- 2.2.0 has implemented the kind member function of class 
+  sc_event_queue and has changed the default constructor name 
   seed to "event_queue". 
 
-- 2.1 v1 has not implemented the get_parent_object and 
+- 2.2.0 has implemented the get_parent_object and 
   get_child_objects member functions of class sc_object 
 
-- 2.1 v1 has not implemented the the behavior of sc_object 
+- 2.2.0 has implemented the the behavior of sc_object 
   constructors and sc_gen_unique_name such that every sc_object 
   is registered in the object hierarchy and has a unique 
   hierarchical name of the form seed_N. 
 
-- 2.1 v1 has not implemented the sc_find_object function and 
+- 2.2.0 has implemented the sc_find_object function and 
   sc_get_top_level_objects. 
 
-- 2.1 v1 has not removed the constructors of class sc_export that 
+- 2.2.0 has removed the constructors of class sc_export that 
   bind the export at the time of construction. 
 
-- 2.1 v1 has not made constructor sc_export( const char* ) 
+- 2.2.0 has made constructor sc_export( const char* ) 
   explicit. 
 
-- In 2.1 v1, a call to function sc_spawn during what would have 
+- In 2.2.0 a call to function sc_spawn during what would have 
   been the final update phase causes the spawned process to run 
   in the next evaluation phase, potentially causing simulation to 
   continue. 
 
-- 2.1 v1 has not changed the type of the first parameter to 
+- 2.2.0 has changed the type of the first parameter to 
   functions sc_stop_here and sc_interrupt_here from int to const 
   char*. 
 
-- 2.1 v1 has not removed the initialize and release member 
+- 2.2.0 has removed the initialize and release member 
   functions of class sc_report_handler. 
 
 
 
-6) Beta features
+6) Dynamic Process Support
+==========================
+
+SystemC 2.2.0 contains support for dynamic processes, allowing users 
+to spawn processes during the execution of a SystemC model. To enable
+dynamic process support one must define the following symbol before
+including systemc.h:
+
+    #define SC_INCLUDE_DYNAMIC_PROCESSES
+
+An example of dynamic process use is contained in the directory
+examples/2.1/sysc/forkjoin.
+
+7) Beta features
 ================
 
 In this section the beta features of this release are listed.
@@ -661,30 +297,30 @@ In this section the beta features of this release are listed.
     support, and an example, in the examples directory under
     examples/sysc/2.1/scx_mutex_w_policy.
 
-7) Deprecated features
+8) Deprecated features
 ======================
 
-In this section the deprecated features of this release are listed.
+In this section the deprecated features of this release compared with 
+2.1.v1 are listed.
 
-  - deprecated and fully functional
+  - Lambda expressions and watching() and wait_until() have been removed.
+    See section 4 above for details.
 
-    o The ! operator of datatype sc_logic is deprecated. Use the ~
-    o sc_cycle(...) has been deprecated in favor of sc_start(...)
-    o sc_report has the following methods deprecated in favor of
-      its new interface:
-          void register_id(int, const char*)
-          const char* get_message(int)
-          bool is_suppressed(int)
-          void suppress_id(int, bool)
-          void suppress_infos(bool)
-          void suppress_warnings(bool)
-          void make_warnings_errors(bool)
+  - There are now warning messages for the many of the deprecated features 
+    in Annex C of the IEEE 1666 SystemC Language Reference Manual (see
+    docs/LRM.pdf). These messages may be turned off in two ways:
+    
+    (1) Setting the environment variable SC_DEPRECATION_WARNINGS to DISABLE:
+    
+        setenv SC_DEPRECATION_WARNINGS DISABLE
+        
+    (2) By using the following call as the first line of sc_main:
 
-  - deprecated and removed
-    o None
+            sc_report_handler::set_actions("/IEEE_Std_1666/deprecated", 
+                SC_DO_NOTHING);
 
 
-8) Known Problems       
+9) Known Problems       
 =================
 
   - The use of the DEBUG_SYSTEMC macro does not work properly with certain
@@ -696,8 +332,8 @@ In this section the deprecated features of this release are listed.
     is built.
 
 
-9) Fixed-point library
-======================
+10) Fixed-point library
+=======================
 
 (No change from 2.0.1 Production.)
 

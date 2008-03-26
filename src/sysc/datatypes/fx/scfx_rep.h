@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -34,6 +34,16 @@
 
  *****************************************************************************/
 
+// $Log: scfx_rep.h,v $
+// Revision 1.4  2006/03/13 20:24:27  acg
+//  Andy Goodrich: Addition of function declarations, e.g., neg_scfx_rep(),
+//  to keep gcc 4.x happy.
+//
+// Revision 1.3  2006/01/13 18:53:58  acg
+// Andy Goodrich: added $Log command so that CVS comments are reproduced in
+// the source.
+//
+
 #ifndef SCFX_REP_H
 #define SCFX_REP_H
 
@@ -56,6 +66,17 @@ class scfx_rep;
 class sc_bv_base;
 class sc_signed;
 class sc_unsigned;
+
+// function declarations
+void multiply( scfx_rep&, const scfx_rep&, const scfx_rep&, int );
+scfx_rep*  neg_scfx_rep( const scfx_rep& );
+scfx_rep* mult_scfx_rep( const scfx_rep&, const scfx_rep&, int );
+scfx_rep*  div_scfx_rep( const scfx_rep&, const scfx_rep&, int );
+scfx_rep*  add_scfx_rep( const scfx_rep&, const scfx_rep&, int );
+scfx_rep*  sub_scfx_rep( const scfx_rep&, const scfx_rep&, int );
+scfx_rep*  lsh_scfx_rep( const scfx_rep&, int );
+scfx_rep*  rsh_scfx_rep( const scfx_rep&, int );
+int        cmp_scfx_rep( const scfx_rep&, const scfx_rep& );
 
 
 const int min_mant = 4;
@@ -130,8 +151,8 @@ public:
     ~scfx_rep();
 
 
-    void* operator new( size_t );
-    void  operator delete( void*, size_t );
+    void* operator new( std::size_t );
+    void  operator delete( void*, std::size_t );
 
 
     void from_string( const char*, int );
@@ -485,10 +506,10 @@ scfx_rep::o_extend( const scfx_index& x, sc_enc enc )
 
     SC_ASSERT_( wi >= 0 && wi < size(), "word index out of range" );
     
-    if( enc == SC_US_ || ( m_mant[wi] & ( 1 << bi ) ) == 0 )
+    if( enc == SC_US_ || ( m_mant[wi] & ( ((word)1) << bi ) ) == 0 )
     {
         if( bi != bits_in_word - 1 )
-	    m_mant[wi] &= ~( -1 << ( bi + 1 ) );
+	    m_mant[wi] &= ~( ((word)-1) << ( bi + 1 ) );
 	for( int i = wi + 1; i < size(); ++ i )
 	    m_mant[i] = 0;
 	m_sign = 1;
@@ -496,7 +517,7 @@ scfx_rep::o_extend( const scfx_index& x, sc_enc enc )
     else
     {
         if( bi != bits_in_word - 1 )
-	    m_mant[wi] |= ( -1 << ( bi + 1 ) );
+	    m_mant[wi] |= ( ((word)-1) << ( bi + 1 ) );
 	for( int i = wi + 1; i < size(); ++ i )
 	    m_mant[i] = static_cast<word>( -1 );
 	m_sign = -1;
@@ -512,7 +533,7 @@ scfx_rep::o_bit_at( const scfx_index& x ) const
     
     SC_ASSERT_( wi >= 0 && wi < size(), "word index out of range" );
 
-    return ( m_mant[wi] & ( 1 << bi ) ) != 0;
+    return ( m_mant[wi] & ( ((word)1) << bi ) ) != 0;
 }
 
 inline
@@ -526,7 +547,7 @@ scfx_rep::o_zero_left( const scfx_index& x ) const
 
     bool zero = true;
     if( bi != bits_in_word - 1 )
-        zero = ( m_mant[wi] & ( -1 << ( bi + 1 ) ) ) == 0;
+        zero = ( m_mant[wi] & ( ((word)-1) << ( bi + 1 ) ) ) == 0;
     for( int i = wi + 1; i < size(); ++ i )
 	zero = zero && m_mant[i] == 0;
 
@@ -542,7 +563,7 @@ scfx_rep::o_zero_right( const scfx_index& x ) const
 
     SC_ASSERT_( wi >= 0 && wi < size(), "word index out of range" );
 
-    bool zero = ( m_mant[wi] & ~( -1 << bi ) ) == 0;
+    bool zero = ( m_mant[wi] & ~( ((word)-1) << bi ) ) == 0;
     for( int i = wi - 1; i >= 0; -- i )
 	zero = zero && m_mant[i] == 0;
 
@@ -562,7 +583,7 @@ scfx_rep::o_set_low( const scfx_index& x, sc_enc enc )
 
     if( enc == SC_TC_ )
     {
-	m_mant[wi] |= ( 1 << bi );
+	m_mant[wi] |= ( ((word)1) << bi );
 	m_sign = -1;
     }
     else
@@ -587,11 +608,11 @@ scfx_rep::o_set_high( const scfx_index& x, const scfx_index& x2,
     for( i = 0; i < size(); ++ i )
 	m_mant[i] = static_cast<word>( -1 );
 
-    m_mant[wi] &= ~( -1 << bi );
+    m_mant[wi] &= ~( ((word)-1) << bi );
     for( i = wi + 1; i < size(); ++ i )
 	m_mant[i] = 0;
 
-    m_mant[wi2] &= ( -1 << bi2 );
+    m_mant[wi2] &= ( ((word)-1) << bi2 );
     for( i = wi2 - 1; i >= 0; -- i )
 	m_mant[i] = 0;
     
@@ -599,7 +620,7 @@ scfx_rep::o_set_high( const scfx_index& x, const scfx_index& x2,
 	m_sign = sign;
     else
     {
-	m_mant[wi] |= ( 1 << bi );
+	m_mant[wi] |= ( ((word)1) << bi );
 	m_sign = 1;
     }
 }
@@ -620,9 +641,9 @@ scfx_rep::o_set( const scfx_index& x, const scfx_index& x3,
     if( bi3 != bits_in_word - 1 )
     {
 	if( under )
-	    m_mant[wi3] &= ~( -1 << ( bi3 + 1 ) );
+	    m_mant[wi3] &= ~( ((word)-1) << ( bi3 + 1 ) );
 	else
-	    m_mant[wi3] |= ( -1 << ( bi3 + 1 ) );
+	    m_mant[wi3] |= ( ((word)-1) << ( bi3 + 1 ) );
     }
     for( int i = wi3 + 1; i < size(); ++ i )
     {
@@ -635,9 +656,9 @@ scfx_rep::o_set( const scfx_index& x, const scfx_index& x3,
     if( enc == SC_TC_ )
     {
 	if( under )
-	    m_mant[wi] |= ( 1 << bi );
+	    m_mant[wi] |= ( ((word)1) << bi );
 	else
-	    m_mant[wi] &= ~( 1 << bi );
+	    m_mant[wi] &= ~( ((word)1) << bi );
     }
 }
 
@@ -648,7 +669,7 @@ scfx_rep::o_invert( const scfx_index& x2 )
     int wi2 = x2.wi();
     int bi2 = x2.bi();
 
-    m_mant[wi2] ^= ( -1 << bi2 );
+    m_mant[wi2] ^= ( ((word)-1) << bi2 );
     for( int i = wi2 + 1; i < size(); ++ i )
 	m_mant[i] = ~ m_mant[i];
 }
@@ -663,9 +684,9 @@ scfx_rep::q_bit( const scfx_index& x ) const
     SC_ASSERT_( wi >= 0 && wi < size(), "word index out of range" );
 
     if( bi != 0 )
-        return ( m_mant[wi] & ( 1 << ( bi - 1 ) ) ) != 0;
+        return ( m_mant[wi] & ( ((word)1) << ( bi - 1 ) ) ) != 0;
     else if( wi != 0 )
-        return ( m_mant[wi - 1] & ( 1 << ( bits_in_word - 1 ) ) ) != 0;
+        return ( m_mant[wi - 1] & ( ((word)1) << ( bits_in_word - 1 ) ) ) != 0;
     else
         return false;
 }
@@ -679,7 +700,7 @@ scfx_rep::q_clear( const scfx_index& x )
     
     SC_ASSERT_( wi >= 0 && wi < size(), "word index out of range" );
 
-    m_mant[wi] &= ( -1 << bi );
+    m_mant[wi] &= ( ((word)-1) << bi );
     for( int i = wi - 1; i >= 0; -- i )
         m_mant[i] = 0;
 }
@@ -694,7 +715,7 @@ scfx_rep::q_incr( const scfx_index& x )
     SC_ASSERT_( wi >= 0 && wi < size(), "word index out of range" );
 
     word old_val = m_mant[wi];
-    m_mant[wi] += ( 1 << bi );
+    m_mant[wi] += ( ((word)1) << bi );
     if( m_mant[wi] <= old_val )
     {
         if( wi + 1 == size() )
@@ -717,7 +738,7 @@ scfx_rep::q_odd( const scfx_index& x ) const
 
     SC_ASSERT_( wi >= 0 && wi < size(), "word index out of range" );
 
-    return ( m_mant[wi] & ( 1 << bi ) ) != 0;
+    return ( m_mant[wi] & ( ((word)1) << bi ) ) != 0;
 }
 
 inline
@@ -733,13 +754,13 @@ scfx_rep::q_zero( const scfx_index& x ) const
 
     if( bi != 0 )
     {
-        zero = ( m_mant[wi] & ~( -1 << (bi - 1) ) ) == 0;
+        zero = ( m_mant[wi] & ~( ((word)-1) << (bi - 1) ) ) == 0;
 	for( int i = wi - 1; i >= 0; -- i )
 	    zero = zero && m_mant[i] == 0;
     }
     else if( wi != 0 )
     {
-        zero = ( m_mant[wi - 1] & ~( -1 << (bits_in_word - 1) ) ) == 0;
+        zero = ( m_mant[wi - 1] & ~( ((word)-1) << (bits_in_word - 1) ) ) == 0;
 	for( int i = wi - 2; i >= 0; -- i )
 	    zero = zero && m_mant[i] == 0;
     }

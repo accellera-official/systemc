@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -21,22 +21,7 @@
 
   Original Author: Martin Janssen, Synopsys, Inc., 2001-05-21
 
- *****************************************************************************/
-
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:  Jason Elbaum, Motorola, Inc., 2001-11-12
-  Description of Modification:  Added a static, private, otherwise
-                                unused data member to the sc_in
-                                and sc_inout classes to address
-                                a bug in the GNU compiler *only*.
-                                This works around a bug in g++ 2.95.2
-                                regarding implicit casting from a
-                                templated class to a C++ intrinsic type.
-
+  Change log appears at end of file
  *****************************************************************************/
 
 #ifndef SC_SIGNAL_PORTS_H
@@ -58,6 +43,8 @@ namespace sc_core {
 //  FOR INTERNAL USE ONLY!
 // ----------------------------------------------------------------------------
 
+extern void sc_deprecated_add_trace();
+
 struct sc_trace_params
 {
     sc_trace_file*        tf;
@@ -69,7 +56,7 @@ struct sc_trace_params
 };
 
 
-typedef sc_pvector<sc_trace_params*> sc_trace_params_vec;
+typedef std::vector<sc_trace_params*> sc_trace_params_vec;
 
 
 // ----------------------------------------------------------------------------
@@ -80,72 +67,85 @@ typedef sc_pvector<sc_trace_params*> sc_trace_params_vec;
 
 template <class T>
 class sc_in
-: public sc_port<sc_signal_in_if<T>,1>
+: public sc_port<sc_signal_in_if<T>,1,SC_ONE_OR_MORE_BOUND>
 {
 public:
 
     // typedefs
 
-    typedef T                             data_type;
+    typedef T                                             data_type;
 
-    typedef sc_signal_in_if<data_type>    if_type;
-    typedef sc_port<if_type,1>            base_type;
-    typedef sc_in<data_type>              this_type;
+    typedef sc_signal_in_if<data_type>                    if_type;
+    typedef sc_port<if_type,1,SC_ONE_OR_MORE_BOUND>       base_type;
+    typedef sc_in<data_type>                              this_type;
 
-    typedef if_type                       in_if_type;
-    typedef base_type                     in_port_type;
-    typedef sc_signal_inout_if<data_type> inout_if_type;
-    typedef sc_port<inout_if_type,1>      inout_port_type;
+    typedef if_type                                       in_if_type;
+    typedef base_type                                     in_port_type;
+    typedef sc_signal_inout_if<data_type>                 inout_if_type;
+    typedef sc_port<inout_if_type,1,SC_ONE_OR_MORE_BOUND> inout_port_type;
 
 public:
 
     // constructors
 
     sc_in()
-	: base_type(), m_traces( 0 )
+	: base_type(), m_traces( 0 ),
+	  m_change_finder_p(0)
 	{}
 
     explicit sc_in( const char* name_ )
-	: base_type( name_ ), m_traces( 0 )
+	: base_type( name_ ), m_traces( 0 ),
+	  m_change_finder_p(0)
 	{}
 
     explicit sc_in( const in_if_type& interface_ )
-        : base_type( CCAST<in_if_type&>( interface_ ) ), m_traces( 0 )
+        : base_type( CCAST<in_if_type&>( interface_ ) ), m_traces( 0 ),
+	  m_change_finder_p(0)
         {}
 
     sc_in( const char* name_, const in_if_type& interface_ )
-	: base_type( name_, CCAST<in_if_type&>( interface_ ) ), m_traces( 0 )
+	: base_type( name_, CCAST<in_if_type&>( interface_ ) ), m_traces( 0 ),
+	  m_change_finder_p(0)
 	{}
 
     explicit sc_in( in_port_type& parent_ )
-	: base_type( parent_ ), m_traces( 0 )
+	: base_type( parent_ ), m_traces( 0 ),
+	  m_change_finder_p(0)
 	{}
 
     sc_in( const char* name_, in_port_type& parent_ )
-	: base_type( name_, parent_ ), m_traces( 0 )
+	: base_type( name_, parent_ ), m_traces( 0 ),
+	  m_change_finder_p(0)
 	{}
 
     explicit sc_in( inout_port_type& parent_ )
-	: base_type(), m_traces( 0 )
+	: base_type(), m_traces( 0 ),
+	  m_change_finder_p(0)
 	{ sc_port_base::bind( parent_ ); }
 
     sc_in( const char* name_, inout_port_type& parent_ )
-	: base_type( name_ ), m_traces( 0 )
+	: base_type( name_ ), m_traces( 0 ),
+	  m_change_finder_p(0)
 	{ sc_port_base::bind( parent_ ); }
 
     sc_in( this_type& parent_ )
-	: base_type( parent_ ), m_traces( 0 )
+	: base_type( parent_ ), m_traces( 0 ),
+	  m_change_finder_p(0)
 	{}
 
     sc_in( const char* name_, this_type& parent_ )
-	: base_type( name_, parent_ ), m_traces( 0 )
+	: base_type( name_, parent_ ), m_traces( 0 ),
+	  m_change_finder_p(0)
 	{}
 
 
     // destructor
 
     virtual ~sc_in()
-	{ remove_traces(); }
+	{
+	    remove_traces();
+	    if ( m_change_finder_p ) delete m_change_finder_p;
+	}
 
 
     // bind to in interface
@@ -208,8 +208,12 @@ public:
 
     sc_event_finder& value_changed() const
     {
-	return *new sc_event_finder_t<in_if_type>(
-	    *this, &in_if_type::value_changed_event );
+        if ( !m_change_finder_p )
+	{
+	    m_change_finder_p = new sc_event_finder_t<in_if_type>(
+	        *this, &in_if_type::value_changed_event );
+	}
+	return *m_change_finder_p;
     }
 
 
@@ -223,8 +227,10 @@ public:
         { return "sc_in"; }
 
 
-    // called by sc_trace
     void add_trace( sc_trace_file*, const std::string& ) const;
+
+    // called by sc_trace
+    void add_trace_internal( sc_trace_file*, const std::string& ) const;
 
 protected:
 
@@ -237,6 +243,9 @@ protected:
     // called by pbind (for internal use only)
     virtual int vbind( sc_interface& );
     virtual int vbind( sc_port_base& );
+
+private:
+  mutable sc_event_finder* m_change_finder_p;
 
 private:
 
@@ -270,10 +279,10 @@ void
 sc_in<T>::end_of_elaboration()
 {
     if( m_traces != 0 ) {
-	for( int i = 0; i < m_traces->size(); ++ i ) {
+	for( int i = 0; i < (int)m_traces->size(); ++ i ) {
 	    sc_trace_params* p = (*m_traces)[i];
 	    in_if_type* iface = DCAST<in_if_type*>( this->get_interface() );
-	    sc_trace( p->tf, iface->get_data_ref(), p->name );
+	    sc_trace( p->tf, iface->read(), p->name );
 	}
 	remove_traces();
     }
@@ -285,7 +294,8 @@ sc_in<T>::end_of_elaboration()
 template <class T>
 inline
 void
-sc_in<T>::add_trace( sc_trace_file* tf_, const std::string& name_ ) const
+sc_in<T>::add_trace_internal( sc_trace_file* tf_, const std::string& name_ ) 
+const
 {
     if( tf_ != 0 ) {
 	if( m_traces == 0 ) {
@@ -298,10 +308,20 @@ sc_in<T>::add_trace( sc_trace_file* tf_, const std::string& name_ ) const
 template <class T>
 inline
 void
+sc_in<T>::add_trace( sc_trace_file* tf_, const std::string& name_ ) 
+const
+{
+    sc_deprecated_add_trace();
+    add_trace_internal(tf_, name_);
+}
+
+template <class T>
+inline
+void
 sc_in<T>::remove_traces() const
 {
     if( m_traces != 0 ) {
-	for( int i = m_traces->size() - 1; i >= 0; -- i ) {
+	for( int i = (int)m_traces->size() - 1; i >= 0; -- i ) {
 	    delete (*m_traces)[i];
 	}
 	delete m_traces;
@@ -347,79 +367,95 @@ sc_in<T>::vbind( sc_port_base& parent_ )
 // ----------------------------------------------------------------------------
 
 template <>
-class sc_in<bool>
-: public sc_port<sc_signal_in_if<bool>,1> 
+class sc_in<bool> : 
+    public sc_port<sc_signal_in_if<bool>,1,SC_ONE_OR_MORE_BOUND>
 {
 public:
 
     // typedefs
 
-    typedef bool                          data_type;
+    typedef bool                                           data_type;
 
-    typedef sc_signal_in_if<data_type>    if_type;
-    typedef sc_port<if_type,1>            base_type;
-    typedef sc_in<data_type>              this_type;
+    typedef sc_signal_in_if<data_type>                     if_type;
+    typedef sc_port<if_type,1,SC_ONE_OR_MORE_BOUND>        base_type;
+    typedef sc_in<data_type>                               this_type;
 
-    typedef if_type                       in_if_type;
-    typedef base_type                     in_port_type;
-    typedef sc_signal_inout_if<data_type> inout_if_type;
-    typedef sc_port<inout_if_type,1>      inout_port_type;
+    typedef if_type                                        in_if_type;
+    typedef base_type                                      in_port_type;
+    typedef sc_signal_inout_if<data_type>                  inout_if_type;
+    typedef sc_port<inout_if_type,1,SC_ONE_OR_MORE_BOUND>  inout_port_type;
 
 public:
 
     // constructors
 
     sc_in()
-	: base_type(), m_traces( 0 )
+	: base_type(), m_traces( 0 ), m_change_finder_p(0), 
+	  m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
     explicit sc_in( const char* name_ )
-	: base_type( name_ ), m_traces( 0 )
+	: base_type( name_ ), m_traces( 0 ), m_change_finder_p(0), 
+	  m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
     explicit sc_in( const in_if_type& interface_ )
-	: base_type( CCAST<in_if_type&>( interface_ ) ), m_traces( 0 )
+	: base_type( CCAST<in_if_type&>( interface_ ) ), m_traces( 0 ), 
+	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
     sc_in( const char* name_, const in_if_type& interface_ )
-	: base_type( name_, CCAST<in_if_type&>( interface_ ) ), m_traces( 0 )
+	: base_type( name_, CCAST<in_if_type&>( interface_ ) ), m_traces( 0 ),
+	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
     explicit sc_in( in_port_type& parent_ )
-	: base_type( parent_ ), m_traces( 0 )
+	: base_type( parent_ ), m_traces( 0 ),
+	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
     sc_in( const char* name_, in_port_type& parent_ )
-	: base_type( name_, parent_ ), m_traces( 0 )
+	: base_type( name_, parent_ ), m_traces( 0 ),
+	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
     explicit sc_in( inout_port_type& parent_ )
-	: base_type(), m_traces( 0 )
+	: base_type(), m_traces( 0 ),
+	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{ sc_port_base::bind( parent_ ); }
 
     sc_in( const char* name_, inout_port_type& parent_ )
-	: base_type( name_ ), m_traces( 0 )
+	: base_type( name_ ), m_traces( 0 ),
+	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{ sc_port_base::bind( parent_ ); }
 
     sc_in( this_type& parent_ )
-	: base_type( parent_ ), m_traces( 0 )
+	: base_type( parent_ ), m_traces( 0 ),
+	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
 #if defined(TESTING)
     sc_in( const this_type& parent_ )
-	: base_type( *(in_if_type*)parent_.get_interface() ) , m_traces( 0 )
+	: base_type( *(in_if_type*)parent_.get_interface() ) , m_traces( 0 ),
+	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 #endif 
 
     sc_in( const char* name_, this_type& parent_ )
-	: base_type( name_, parent_ ), m_traces( 0 )
+	: base_type( name_, parent_ ), m_traces( 0 ),
+	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
 
     // destructor
 
     virtual ~sc_in()
-	{ remove_traces(); }
+	{
+	    remove_traces();
+	    if ( m_change_finder_p ) delete m_change_finder_p;
+	    if ( m_neg_finder_p ) delete m_neg_finder_p;
+	    if ( m_pos_finder_p ) delete m_pos_finder_p;
+	}
 
 
     // bind to in interface
@@ -486,16 +522,24 @@ public:
 
     sc_event_finder& pos() const
     {
-	return *new sc_event_finder_t<in_if_type>(
-	    *this, &in_if_type::posedge_event );
+        if ( !m_pos_finder_p )
+	{
+	    m_pos_finder_p = new sc_event_finder_t<in_if_type>(
+	        *this, &in_if_type::posedge_event );
+	} 
+	return *m_pos_finder_p;
     }
 
     // use for negative edge sensitivity
 
     sc_event_finder& neg() const
     {
-	return *new sc_event_finder_t<in_if_type>(
-	    *this, &in_if_type::negedge_event );
+        if ( !m_neg_finder_p )
+	{
+	    m_neg_finder_p = new sc_event_finder_t<in_if_type>(
+	        *this, &in_if_type::negedge_event );
+	} 
+	return *m_neg_finder_p;
     }
 
 
@@ -514,16 +558,16 @@ public:
     bool negedge() const
         { return (*this)->negedge(); }
 
-
-    // delayed evaluation
-    const sc_signal_bool_deval& delayed() const;
-
     // (other) event finder method(s)
 
     sc_event_finder& value_changed() const
     {
-	return *new sc_event_finder_t<in_if_type>(
-	    *this, &in_if_type::value_changed_event );
+        if ( !m_change_finder_p )
+	{
+	    m_change_finder_p = new sc_event_finder_t<in_if_type>(
+	        *this, &in_if_type::value_changed_event );
+	}
+	return *m_change_finder_p;
     }
 
 
@@ -537,8 +581,10 @@ public:
         { return "sc_in"; }
 
 
-    // called by sc_trace
     void add_trace( sc_trace_file*, const std::string& ) const;
+
+    // called by sc_trace
+    void add_trace_internal( sc_trace_file*, const std::string& ) const;
 
 protected:
 
@@ -551,6 +597,11 @@ protected:
     // called by pbind (for internal use only)
     virtual int vbind( sc_interface& );
     virtual int vbind( sc_port_base& );
+
+private:
+  mutable sc_event_finder* m_change_finder_p;
+  mutable sc_event_finder* m_neg_finder_p;
+  mutable sc_event_finder* m_pos_finder_p;
 
 private:
 
@@ -571,25 +622,6 @@ private:
 };
 
 
-// IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
-
-// delayed evaluation
-
-inline
-const sc_signal_bool_deval&
-sc_in<bool>::delayed() const
-{
-    const in_if_type* iface = DCAST<const in_if_type*>( get_interface() );
-    if( iface != 0 ) {
-	return RCAST<const sc_signal_bool_deval&>( *iface );
-    } else {
-	// the tricky part
-	const sc_port_base* pb = this;
-	return RCAST<const sc_signal_bool_deval&>( *pb );
-    }
-}
-
-
 // ----------------------------------------------------------------------------
 //  CLASS : sc_in<sc_dt::sc_logic>
 //
@@ -598,72 +630,87 @@ sc_in<bool>::delayed() const
 
 template <>
 class sc_in<sc_dt::sc_logic>
-: public sc_port<sc_signal_in_if<sc_dt::sc_logic>,1>
+: public sc_port<sc_signal_in_if<sc_dt::sc_logic>,1,SC_ONE_OR_MORE_BOUND>
 {
 public:
 
     // typedefs
 
-    typedef sc_dt::sc_logic               data_type;
+    typedef sc_dt::sc_logic                               data_type;
 
-    typedef sc_signal_in_if<data_type>    if_type;
-    typedef sc_port<if_type,1>            base_type;
-    typedef sc_in<data_type>              this_type;
+    typedef sc_signal_in_if<data_type>                    if_type;
+    typedef sc_port<if_type,1,SC_ONE_OR_MORE_BOUND>       base_type;
+    typedef sc_in<data_type>                              this_type;
 
-    typedef if_type                       in_if_type;
-    typedef base_type                     in_port_type;
-    typedef sc_signal_inout_if<data_type> inout_if_type;
-    typedef sc_port<inout_if_type,1>      inout_port_type;
+    typedef if_type                                       in_if_type;
+    typedef base_type                                     in_port_type;
+    typedef sc_signal_inout_if<data_type>                 inout_if_type;
+    typedef sc_port<inout_if_type,1,SC_ONE_OR_MORE_BOUND> inout_port_type;
 
 public:
 
     // constructors
 
     sc_in()
-	: base_type(), m_traces( 0 )
+	: base_type(), m_traces( 0 ),
+	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
     explicit sc_in( const char* name_ )
-	: base_type( name_ ), m_traces( 0 )
+	: base_type( name_ ), m_traces( 0 ),
+	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
     explicit sc_in( const in_if_type& interface_ )
-	: base_type( CCAST<in_if_type&>( interface_ ) ), m_traces( 0 )
+	: base_type( CCAST<in_if_type&>( interface_ ) ), m_traces( 0 ),
+	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
     sc_in( const char* name_, const in_if_type& interface_ )
-	: base_type( name_, CCAST<in_if_type&>( interface_ ) ), m_traces( 0 )
+	: base_type( name_, CCAST<in_if_type&>( interface_ ) ), m_traces( 0 ),
+	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
     explicit sc_in( in_port_type& parent_ )
-	: base_type( parent_ ), m_traces( 0 )
+	: base_type( parent_ ), m_traces( 0 ),
+	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
     sc_in( const char* name_, in_port_type& parent_ )
-	: base_type( name_, parent_ ), m_traces( 0 )
+	: base_type( name_, parent_ ), m_traces( 0 ),
+	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
     explicit sc_in( inout_port_type& parent_ )
-	: base_type(), m_traces( 0 )
+	: base_type(), m_traces( 0 ),
+	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{ sc_port_base::bind( parent_ ); }
 
     sc_in( const char* name_, inout_port_type& parent_ )
-	: base_type( name_ ), m_traces( 0 )
+	: base_type( name_ ), m_traces( 0 ),
+	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{ sc_port_base::bind( parent_ ); }
 
     sc_in( this_type& parent_ )
-	: base_type( parent_ ), m_traces( 0 )
+	: base_type( parent_ ), m_traces( 0 ),
+	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
     sc_in( const char* name_, this_type& parent_ )
-	: base_type( name_, parent_ ), m_traces( 0 )
+	: base_type( name_, parent_ ), m_traces( 0 ),
+	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
 
     // destructor
 
     virtual ~sc_in()
-	{ remove_traces(); }
+	{
+	    remove_traces();
+	    if ( m_change_finder_p ) delete m_change_finder_p;
+	    if ( m_neg_finder_p ) delete m_neg_finder_p;
+	    if ( m_pos_finder_p ) delete m_pos_finder_p;
+	}
 
 
     // bind to in interface
@@ -730,16 +777,24 @@ public:
 
     sc_event_finder& pos() const
     {
-	return *new sc_event_finder_t<in_if_type>(
-	    *this, &in_if_type::posedge_event );
+        if ( !m_pos_finder_p )
+	{
+	    m_pos_finder_p = new sc_event_finder_t<in_if_type>(
+	        *this, &in_if_type::posedge_event );
+	} 
+	return *m_pos_finder_p;
     }
 
     // use for negative edge sensitivity
 
     sc_event_finder& neg() const
     {
-	return *new sc_event_finder_t<in_if_type>(
-	    *this, &in_if_type::negedge_event );
+        if ( !m_neg_finder_p )
+	{
+	    m_neg_finder_p = new sc_event_finder_t<in_if_type>(
+	        *this, &in_if_type::negedge_event );
+	} 
+	return *m_neg_finder_p;
     }
 
 
@@ -758,17 +813,16 @@ public:
     bool negedge() const
         { return (*this)->negedge(); }
 
-
-    // delayed evaluation
-    const sc_signal_logic_deval& delayed() const;
-
-
     // (other) event finder method(s)
 
     sc_event_finder& value_changed() const
     {
-	return *new sc_event_finder_t<in_if_type>(
-	    *this, &in_if_type::value_changed_event );
+        if ( !m_change_finder_p )
+	{
+	    m_change_finder_p = new sc_event_finder_t<in_if_type>(
+	        *this, &in_if_type::value_changed_event );
+	}
+	return *m_change_finder_p;
     }
 
 
@@ -782,8 +836,10 @@ public:
         { return "sc_in"; }
 
 
-    // called by sc_trace
     void add_trace( sc_trace_file*, const std::string& ) const;
+
+    // called by sc_trace
+    void add_trace_internal( sc_trace_file*, const std::string& ) const;
 
 protected:
 
@@ -796,6 +852,11 @@ protected:
     // called by pbind (for internal use only)
     virtual int vbind( sc_interface& );
     virtual int vbind( sc_port_base& );
+
+private:
+  mutable sc_event_finder* m_change_finder_p;
+  mutable sc_event_finder* m_neg_finder_p;
+  mutable sc_event_finder* m_pos_finder_p;
 
 private:
 
@@ -813,25 +874,6 @@ private:
 };
 
 
-// IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
-
-// delayed evaluation
-
-inline
-const sc_signal_logic_deval&
-sc_in<sc_dt::sc_logic>::delayed() const
-{
-    const in_if_type* iface = DCAST<const in_if_type*>( get_interface() );
-    if( iface != 0 ) {
-	return RCAST<const sc_signal_logic_deval&>( *iface );
-    } else {
-	// the tricky part
-	const sc_port_base* pb = this;
-	return RCAST<const sc_signal_logic_deval&>( *pb );
-    }
-}
-
-
 // ----------------------------------------------------------------------------
 //  CLASS : sc_inout<T>
 //
@@ -840,57 +882,65 @@ sc_in<sc_dt::sc_logic>::delayed() const
 
 template <class T>
 class sc_inout
-: public sc_port<sc_signal_inout_if<T>,1>
+: public sc_port<sc_signal_inout_if<T>,1,SC_ONE_OR_MORE_BOUND>
 {
 public:
 
     // typedefs
 
-    typedef T                             data_type;
+    typedef T                                          data_type;
 
-    typedef sc_signal_inout_if<data_type> if_type;
-    typedef sc_port<if_type,1>            base_type;
-    typedef sc_inout<data_type>           this_type;
+    typedef sc_signal_inout_if<data_type>              if_type;
+    typedef sc_port<if_type,1,SC_ONE_OR_MORE_BOUND>    base_type;
+    typedef sc_inout<data_type>                        this_type;
 
-    typedef sc_signal_in_if<data_type>    in_if_type;
-    typedef sc_port<in_if_type,1>         in_port_type;
-    typedef if_type                       inout_if_type;
-    typedef base_type                     inout_port_type;
+    typedef sc_signal_in_if<data_type>                 in_if_type;
+    typedef sc_port<in_if_type,1,SC_ONE_OR_MORE_BOUND> in_port_type;
+    typedef if_type                                    inout_if_type;
+    typedef base_type                                  inout_port_type;
 
 public:
 
     // constructors
 
     sc_inout()
-	: base_type(), m_init_val( 0 ), m_traces( 0 )
+	: base_type(), m_init_val( 0 ), m_traces( 0 ),
+	  m_change_finder_p(0)
 	{}
 
     explicit sc_inout( const char* name_ )
-	: base_type( name_ ), m_init_val( 0 ), m_traces( 0 )
+	: base_type( name_ ), m_init_val( 0 ), m_traces( 0 ),
+	  m_change_finder_p(0)
 	{}
 
     explicit sc_inout( inout_if_type& interface_ )
-	: base_type( interface_ ), m_init_val( 0 ), m_traces( 0 )
+	: base_type( interface_ ), m_init_val( 0 ), m_traces( 0 ),
+	  m_change_finder_p(0)
 	{}
 
     sc_inout( const char* name_, inout_if_type& interface_ )
-	: base_type( name_, interface_ ), m_init_val( 0 ), m_traces( 0 )
+	: base_type( name_, interface_ ), m_init_val( 0 ), m_traces( 0 ),
+	  m_change_finder_p(0)
 	{}
 
     explicit sc_inout( inout_port_type& parent_ )
-	: base_type( parent_ ), m_init_val( 0 ), m_traces( 0 )
+	: base_type( parent_ ), m_init_val( 0 ), m_traces( 0 ),
+	  m_change_finder_p(0)
 	{}
 
     sc_inout( const char* name_, inout_port_type& parent_ )
-	: base_type( name_, parent_ ), m_init_val( 0 ), m_traces( 0 )
+	: base_type( name_, parent_ ), m_init_val( 0 ), m_traces( 0 ),
+	  m_change_finder_p(0)
 	{}
 
     sc_inout( this_type& parent_ )
-	: base_type( parent_ ), m_init_val( 0 ), m_traces( 0 )
+	: base_type( parent_ ), m_init_val( 0 ), m_traces( 0 ),
+	  m_change_finder_p(0)
 	{}
 
     sc_inout( const char* name_, this_type& parent_ )
-	: base_type( name_, parent_ ), m_init_val( 0 ), m_traces( 0 )
+	: base_type( name_, parent_ ), m_init_val( 0 ), m_traces( 0 ),
+	  m_change_finder_p(0)
 	{}
 
 
@@ -968,8 +1018,12 @@ public:
 
     sc_event_finder& value_changed() const
     {
-	return *new sc_event_finder_t<in_if_type>(
-	    *this, &in_if_type::value_changed_event );
+        if ( !m_change_finder_p )
+	{
+	    m_change_finder_p = new sc_event_finder_t<in_if_type>(
+	        *this, &in_if_type::value_changed_event );
+	}
+	return *m_change_finder_p;
     }
 
     virtual const char* kind() const
@@ -982,6 +1036,8 @@ protected:
 public:
 
     // called by sc_trace
+    void add_trace_internal( sc_trace_file*, const std::string& ) const;
+
     void add_trace( sc_trace_file*, const std::string& ) const;
 
 protected:
@@ -989,6 +1045,9 @@ protected:
     void remove_traces() const;
 
     mutable sc_trace_params_vec* m_traces;
+
+private:
+  mutable sc_event_finder* m_change_finder_p;
 
 private:
 
@@ -1019,6 +1078,7 @@ template <class T>
 inline
 sc_inout<T>::~sc_inout()
 {
+    if ( m_change_finder_p ) delete m_change_finder_p;
     if( m_init_val != 0 ) {
 	delete m_init_val;
     }
@@ -1058,10 +1118,10 @@ sc_inout<T>::end_of_elaboration()
 	m_init_val = 0;
     }
     if( m_traces != 0 ) {
-	for( int i = 0; i < m_traces->size(); ++ i ) {
+	for( int i = 0; i < (int)m_traces->size(); ++ i ) {
 	    sc_trace_params* p = (*m_traces)[i];
 	    in_if_type* iface = DCAST<in_if_type*>( this->get_interface() );
-	    sc_trace( p->tf, iface->get_data_ref(), p->name );
+	    sc_trace( p->tf, iface->read(), p->name );
 	}
 	remove_traces();
     }
@@ -1073,7 +1133,8 @@ sc_inout<T>::end_of_elaboration()
 template <class T>
 inline
 void
-sc_inout<T>::add_trace( sc_trace_file* tf_, const std::string& name_) const
+sc_inout<T>::add_trace_internal( sc_trace_file* tf_, const std::string& name_) 
+const
 {
     if( tf_ != 0 ) {
 	    if( m_traces == 0 ) {
@@ -1081,6 +1142,15 @@ sc_inout<T>::add_trace( sc_trace_file* tf_, const std::string& name_) const
 	    }
 	    m_traces->push_back( new sc_trace_params( tf_, name_ ) );
     }
+}
+
+template <class T>
+inline
+void
+sc_inout<T>::add_trace( sc_trace_file* tf_, const std::string& name_) const
+{
+    sc_deprecated_add_trace();
+    add_trace_internal(tf_, name_);
 }
 
 template <class T>
@@ -1105,58 +1175,66 @@ sc_inout<T>::remove_traces() const
 // ----------------------------------------------------------------------------
 
 template <>
-class sc_inout<bool>
-: public sc_port<sc_signal_inout_if<bool>,1>
+class sc_inout<bool> : 
+    public sc_port<sc_signal_inout_if<bool>,1,SC_ONE_OR_MORE_BOUND>
 {
 public:
 
     // typedefs
 
-    typedef bool                          data_type;
+    typedef bool                                       data_type;
 
-    typedef sc_signal_inout_if<data_type> if_type;
-    typedef sc_port<if_type,1>            base_type;
-    typedef sc_inout<data_type>           this_type;
+    typedef sc_signal_inout_if<data_type>              if_type;
+    typedef sc_port<if_type,1,SC_ONE_OR_MORE_BOUND>    base_type;
+    typedef sc_inout<data_type>                        this_type;
 
-    typedef sc_signal_in_if<data_type>    in_if_type;
-    typedef sc_port<in_if_type,1>         in_port_type;
-    typedef if_type                       inout_if_type;
-    typedef base_type                     inout_port_type;
+    typedef sc_signal_in_if<data_type>                 in_if_type;
+    typedef sc_port<in_if_type,1,SC_ONE_OR_MORE_BOUND> in_port_type;
+    typedef if_type                                    inout_if_type;
+    typedef base_type                                  inout_port_type;
 
 public:
 
     // constructors
 
     sc_inout()
-	: base_type(), m_init_val( 0 ), m_traces( 0 )
+	: base_type(), m_init_val( 0 ), m_traces( 0 ),
+	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
     explicit sc_inout( const char* name_ )
-	: base_type( name_ ), m_init_val( 0 ), m_traces( 0 )
+	: base_type( name_ ), m_init_val( 0 ), m_traces( 0 ),
+	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
     explicit sc_inout( inout_if_type& interface_ )
-	: base_type( interface_ ), m_init_val( 0 ), m_traces( 0 )
+	: base_type( interface_ ), m_init_val( 0 ), m_traces( 0 ),
+	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
     sc_inout( const char* name_, inout_if_type& interface_ )
-	: base_type( name_, interface_ ), m_init_val( 0 ), m_traces( 0 )
+	: base_type( name_, interface_ ), m_init_val( 0 ), m_traces( 0 ),
+	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
     explicit sc_inout( inout_port_type& parent_ )
-	: base_type( parent_ ), m_init_val( 0 ), m_traces( 0 )
+	: base_type( parent_ ), m_init_val( 0 ), m_traces( 0 ),
+	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
     sc_inout( const char* name_, inout_port_type& parent_ )
-	: base_type( name_, parent_ ), m_init_val( 0 ), m_traces( 0 )
+	: base_type( name_, parent_ ), m_init_val( 0 ), m_traces( 0 ),
+	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
     sc_inout( this_type& parent_ )
-	: base_type( parent_ ), m_init_val( 0 ), m_traces( 0 )
+	: base_type( parent_ ), m_init_val( 0 ), m_traces( 0 ),
+	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
     sc_inout( const char* name_, this_type& parent_ )
-	: base_type( name_, parent_ ), m_init_val( 0 ), m_traces( 0 )
+	: base_type( name_, parent_ ), m_init_val( 0 ), m_traces( 0 ),
+	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
 
@@ -1202,16 +1280,24 @@ public:
 
     sc_event_finder& pos() const
     {
-	return *new sc_event_finder_t<in_if_type>(
-	    *this, &in_if_type::posedge_event );
+        if ( !m_pos_finder_p )
+	{
+	    m_pos_finder_p = new sc_event_finder_t<in_if_type>(
+	        *this, &in_if_type::posedge_event );
+	} 
+	return *m_pos_finder_p;
     }
 
     // use for negative edge sensitivity
 
     sc_event_finder& neg() const
     {
-	return *new sc_event_finder_t<in_if_type>(
-	    *this, &in_if_type::negedge_event );
+        if ( !m_neg_finder_p )
+	{
+	    m_neg_finder_p = new sc_event_finder_t<in_if_type>(
+	        *this, &in_if_type::negedge_event );
+	} 
+	return *m_neg_finder_p;
     }
 
 
@@ -1229,10 +1315,6 @@ public:
 
     bool negedge() const
         { return (*this)->negedge(); }
-
-
-    // delayed evaluation
-    const sc_signal_bool_deval& delayed() const;
 
     // write the new value
 
@@ -1274,8 +1356,12 @@ public:
 
     sc_event_finder& value_changed() const
     {
-	return *new sc_event_finder_t<in_if_type>(
-	    *this, &in_if_type::value_changed_event );
+        if ( !m_change_finder_p )
+	{
+	    m_change_finder_p = new sc_event_finder_t<in_if_type>(
+	        *this, &in_if_type::value_changed_event );
+	}
+	return *m_change_finder_p;
     }
 
     virtual const char* kind() const
@@ -1288,6 +1374,8 @@ protected:
 public:
 
     // called by sc_trace
+    void add_trace_internal( sc_trace_file*, const std::string& ) const;
+
     void add_trace( sc_trace_file*, const std::string& ) const;
 
 protected:
@@ -1295,6 +1383,11 @@ protected:
     void remove_traces() const;
 
     mutable sc_trace_params_vec* m_traces;
+
+private:
+  mutable sc_event_finder* m_change_finder_p;
+  mutable sc_event_finder* m_neg_finder_p;
+  mutable sc_event_finder* m_pos_finder_p;
 
 private:
 
@@ -1309,25 +1402,6 @@ private:
     static data_type dummy;
 #endif
 };
-
-
-// IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
-
-// delayed evaluation
-
-inline
-const sc_signal_bool_deval&
-sc_inout<bool>::delayed() const
-{
-    const in_if_type* iface = DCAST<const in_if_type*>( get_interface() );
-    if( iface != 0 ) {
-	return RCAST<const sc_signal_bool_deval&>( *iface );
-    } else {
-	// the tricky part
-	const sc_port_base* pb = this;
-	return RCAST<const sc_signal_bool_deval&>( *pb );
-    }
-}
 
 
 // ----------------------------------------------------------------------------
@@ -1338,57 +1412,65 @@ sc_inout<bool>::delayed() const
 
 template <>
 class sc_inout<sc_dt::sc_logic>
-: public sc_port<sc_signal_inout_if<sc_dt::sc_logic>,1>
+: public sc_port<sc_signal_inout_if<sc_dt::sc_logic>,1,SC_ONE_OR_MORE_BOUND>
 {
 public:
 
     // typedefs
 
-    typedef sc_dt::sc_logic               data_type;
+    typedef sc_dt::sc_logic                            data_type;
 
-    typedef sc_signal_inout_if<data_type> if_type;
-    typedef sc_port<if_type,1>            base_type;
-    typedef sc_inout<data_type>           this_type;
+    typedef sc_signal_inout_if<data_type>              if_type;
+    typedef sc_port<if_type,1,SC_ONE_OR_MORE_BOUND>    base_type;
+    typedef sc_inout<data_type>                        this_type;
 
-    typedef sc_signal_in_if<data_type>    in_if_type;
-    typedef sc_port<in_if_type,1>         in_port_type;
-    typedef if_type                       inout_if_type;
-    typedef base_type                     inout_port_type;
+    typedef sc_signal_in_if<data_type>                 in_if_type;
+    typedef sc_port<in_if_type,1,SC_ONE_OR_MORE_BOUND> in_port_type;
+    typedef if_type                                    inout_if_type;
+    typedef base_type                                  inout_port_type;
 
 public:
 
     // constructors
 
     sc_inout()
-	: base_type(), m_init_val( 0 ), m_traces( 0 )
+	: base_type(), m_init_val( 0 ), m_traces( 0 ),
+	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
     explicit sc_inout( const char* name_ )
-	: base_type( name_ ), m_init_val( 0 ), m_traces( 0 )
+	: base_type( name_ ), m_init_val( 0 ), m_traces( 0 ),
+	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
     explicit sc_inout( inout_if_type& interface_ )
-	: base_type( interface_ ), m_init_val( 0 ), m_traces( 0 )
+	: base_type( interface_ ), m_init_val( 0 ), m_traces( 0 ),
+	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
     sc_inout( const char* name_, inout_if_type& interface_ )
-	: base_type( name_, interface_ ), m_init_val( 0 ), m_traces( 0 )
+	: base_type( name_, interface_ ), m_init_val( 0 ), m_traces( 0 ),
+	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
     explicit sc_inout( inout_port_type& parent_ )
-	: base_type( parent_ ), m_init_val( 0 ), m_traces( 0 )
+	: base_type( parent_ ), m_init_val( 0 ), m_traces( 0 ),
+	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
     sc_inout( const char* name_, inout_port_type& parent_ )
-	: base_type( name_, parent_ ), m_init_val( 0 ), m_traces( 0 )
+	: base_type( name_, parent_ ), m_init_val( 0 ), m_traces( 0 ),
+	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
     sc_inout( this_type& parent_ )
-	: base_type( parent_ ), m_init_val( 0 ), m_traces( 0 )
+	: base_type( parent_ ), m_init_val( 0 ), m_traces( 0 ),
+	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
     sc_inout( const char* name_, this_type& parent_ )
-	: base_type( name_, parent_ ), m_init_val( 0 ), m_traces( 0 )
+	: base_type( name_, parent_ ), m_init_val( 0 ), m_traces( 0 ),
+	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
 
@@ -1434,16 +1516,24 @@ public:
 
     sc_event_finder& pos() const
     {
-	return *new sc_event_finder_t<in_if_type>(
-	    *this, &in_if_type::posedge_event );
+        if ( !m_pos_finder_p )
+	{
+	    m_pos_finder_p = new sc_event_finder_t<in_if_type>(
+	        *this, &in_if_type::posedge_event );
+	} 
+	return *m_pos_finder_p;
     }
 
     // use for negative edge sensitivity
 
     sc_event_finder& neg() const
     {
-	return *new sc_event_finder_t<in_if_type>(
-	    *this, &in_if_type::negedge_event );
+        if ( !m_neg_finder_p )
+	{
+	    m_neg_finder_p = new sc_event_finder_t<in_if_type>(
+	        *this, &in_if_type::negedge_event );
+	} 
+	return *m_neg_finder_p;
     }
 
 
@@ -1461,11 +1551,6 @@ public:
 
     bool negedge() const
         { return (*this)->negedge(); }
-
-
-    // delayed evaluation
-    const sc_signal_logic_deval& delayed() const;
-
 
     // write the new value
 
@@ -1507,8 +1592,12 @@ public:
 
     sc_event_finder& value_changed() const
     {
-	return *new sc_event_finder_t<in_if_type>(
-	    *this, &in_if_type::value_changed_event );
+        if ( !m_change_finder_p )
+	{
+	    m_change_finder_p = new sc_event_finder_t<in_if_type>(
+	        *this, &in_if_type::value_changed_event );
+	}
+        return *m_change_finder_p;
     }
 
     virtual const char* kind() const
@@ -1521,6 +1610,8 @@ protected:
 public:
 
     // called by sc_trace
+    void add_trace_internal( sc_trace_file*, const std::string& ) const;
+
     void add_trace( sc_trace_file*, const std::string& ) const;
 
 protected:
@@ -1528,6 +1619,11 @@ protected:
     void remove_traces() const;
 
     mutable sc_trace_params_vec* m_traces;
+
+private:
+  mutable sc_event_finder* m_change_finder_p;
+  mutable sc_event_finder* m_neg_finder_p;
+  mutable sc_event_finder* m_pos_finder_p;
 
 private:
 
@@ -1542,25 +1638,6 @@ private:
     static data_type dummy;
 #endif
 };
-
-
-// IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
-
-// delayed evaluation
-
-inline
-const sc_signal_logic_deval&
-sc_inout<sc_dt::sc_logic>::delayed() const
-{
-    const in_if_type* iface = DCAST<const in_if_type*>( get_interface() );
-    if( iface != 0 ) {
-	return RCAST<const sc_signal_logic_deval&>( *iface );
-    } else {
-	// the tricky part
-	const sc_port_base* pb = this;
-	return RCAST<const sc_signal_logic_deval&>( *pb );
-    }
-}
 
 
 // ----------------------------------------------------------------------------
@@ -1679,9 +1756,9 @@ sc_trace(sc_trace_file* tf, const sc_in<T>& port, const std::string& name)
     }
 
     if ( iface )
-	sc_trace( tf, iface->get_data_ref(), name );
+	sc_trace( tf, iface->read(), name );
     else
-	port.add_trace( tf, name );
+	port.add_trace_internal( tf, name );
 }
 
 template <class T>
@@ -1697,12 +1774,77 @@ sc_trace( sc_trace_file* tf, const sc_inout<T>& port,
     }
 
     if ( iface )
-	sc_trace( tf, iface->get_data_ref(), name );
+	sc_trace( tf, iface->read(), name );
     else
-	port.add_trace( tf, name );
+	port.add_trace_internal( tf, name );
 }
 
 } // namespace sc_core
+
+/*****************************************************************************
+
+  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+  changes you are making here.
+
+      Name, Affiliation, Date:  Jason Elbaum, Motorola, Inc., 2001-11-12
+  Description of Modification:  Added a static, private, otherwise
+                                unused data member to the sc_in
+                                and sc_inout classes to address
+                                a bug in the GNU compiler *only*.
+                                This works around a bug in g++ 2.95.2
+                                regarding implicit casting from a
+                                templated class to a C++ intrinsic type.
+
+ *****************************************************************************/
+//$Log: sc_signal_ports.h,v $
+//Revision 1.11  2006/04/18 23:36:50  acg
+// Andy Goodrich: made add_trace_internal public until I can figure out
+// how to do a friend specification for sc_trace in an environment where
+// there are partial template and full template specifications for its
+// arguments.
+//
+//Revision 1.10  2006/04/18 18:01:26  acg
+// Andy Goodrich: added an add_trace_internal() method to the various port
+// classes so that sc_trace has something to call that won't emit an
+// IEEE 1666 deprecation message.
+//
+//Revision 1.9  2006/03/13 20:19:44  acg
+// Andy Goodrich: changed sc_event instances into pointers to sc_event instances
+// that are allocated as needed. This saves considerable storage for large
+// numbers of signals, etc.
+//
+//Revision 1.8  2006/02/02 23:42:37  acg
+// Andy Goodrich: implemented a much better fix to the sc_event_finder
+// proliferation problem. This new version allocates only a single event
+// finder for each port for each type of event, e.g., pos(), neg(), and
+// value_change(). The event finder persists as long as the port does,
+// which is what the LRM dictates. Because only a single instance is
+// allocated for each event type per port there is not a potential
+// explosion of storage as was true in the 2.0.1/2.1 versions.
+//
+//Revision 1.7  2006/02/02 21:38:12  acg
+// Andy Goodrich: fix to the comment log.
+//
+//Revision 1.4  2006/01/24 20:46:32  acg
+//Andy Goodrich: changes to eliminate use of deprecated features. For instance,
+//using notify(SC_ZERO_TIME) in place of notify_delayed().
+//
+//Revision 1.3  2006/01/13 18:47:42  acg
+//Added $Log command so that CVS comments are reproduced in the source.
+//
+//Revision 1.2  2006/01/03 23:18:26  acg
+//Changed copyright to include 2006.
+//
+//Revision 1.1.1.1  2005/12/19 23:16:43  acg
+//First check in of SystemC 2.1 into its own archive.
+//
+//Revision 1.18  2005/09/15 23:01:52  acg
+//Added std:: prefix to appropriate methods and types to get around
+//issues with the Edison Front End.
+//
+//Revision 1.17  2005/06/10 22:43:55  acg
+//Added CVS change log annotation.
+//
 
 #endif
 

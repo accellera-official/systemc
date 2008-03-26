@@ -1,7 +1,11 @@
-//  (C) Copyright Boost.org 2001. Permission to copy, use, modify, sell and
-//  distribute this software is granted provided this copyright notice appears
-//  in all copies. This software is provided "as is" without express or implied
-//  warranty, and with no claim as to its suitability for any purpose.
+//  (C) Copyright John Maddock 2001 - 2002. 
+//  (C) Copyright Jens Maurer 2001. 
+//  (C) Copyright David Abrahams 2002. 
+//  (C) Copyright Aleksey Gurtovoy 2002. 
+//  (C) Copyright Markus Schoepflin 2005.
+//  Use, modification and distribution are subject to the 
+//  Boost Software License, Version 1.0. (See accompanying file 
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org for most recent version.
 
@@ -16,6 +20,7 @@
 
 #if (__EDG_VERSION__ <= 238)
 #   define BOOST_NO_INTEGRAL_INT64_T
+#   define BOOST_NO_SFINAE
 #endif
 
 #if (__EDG_VERSION__ <= 240)
@@ -26,8 +31,16 @@
 #   define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 #endif
 
-#if (__EDG_VERSION__ <= 245) && !defined(BOOST_NO_TEMPLATE_TEMPLATES)
+#if (__EDG_VERSION__ <= 244) && !defined(BOOST_NO_TEMPLATE_TEMPLATES)
 #   define BOOST_NO_TEMPLATE_TEMPLATES
+#endif 
+
+#if (__EDG_VERSION__ < 300) && !defined(BOOST_NO_IS_ABSTRACT)
+#   define BOOST_NO_IS_ABSTRACT
+#endif 
+
+#if (__EDG_VERSION__ <= 303) && !defined(BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL)
+#   define BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL
 #endif 
 
 // See also kai.hpp which checks a Kai-specific symbol for EH
@@ -44,5 +57,6 @@
 // However, some libraries have insufficient "long long" support
 // #define BOOST_HAS_LONG_LONG
 #endif
+
 
 

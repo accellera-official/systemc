@@ -4,12 +4,11 @@
 //
 //  weak_ptr.hpp
 //
-//  Copyright (c) 2001, 2002 Peter Dimov
+//  Copyright (c) 2001, 2002, 2003 Peter Dimov
 //
-//  Permission to copy, use, modify, sell and distribute this software
-//  is granted provided this copyright notice appears in all copies.
-//  This software is provided "as is" without express or implied
-//  warranty, and with no claim as to its suitability for any purpose.
+// Distributed under the Boost Software License, Version 1.0. (See
+// accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
 //
 //  See http://www.boost.org/libs/smart_ptr/weak_ptr.htm for documentation.
 //
@@ -24,7 +23,7 @@
 namespace boost
 {
 
-template<typename T> class weak_ptr
+template<class T> class weak_ptr
 {
 private:
 
@@ -35,33 +34,52 @@ public:
 
     typedef T element_type;
 
-    weak_ptr(): px(0), pn()
+    weak_ptr(): px(0), pn() // never throws in 1.30+
     {
     }
 
 //  generated copy constructor, assignment, destructor are fine
 
-    template<typename Y>
-    weak_ptr(weak_ptr<Y> const & r): px(r.px), pn(r.pn) // never throws
+
+//
+//  The "obvious" converting constructor implementation:
+//
+//  template<class Y>
+//  weak_ptr(weak_ptr<Y> const & r): px(r.px), pn(r.pn) // never throws
+//  {
+//  }
+//
+//  has a serious problem.
+//
+//  r.px may already have been invalidated. The px(r.px)
+//  conversion may require access to *r.px (virtual inheritance).
+//
+//  It is not possible to avoid spurious access violations since
+//  in multithreaded programs r.px may be invalidated at any point.
+//
+
+    template<class Y>
+    weak_ptr(weak_ptr<Y> const & r): pn(r.pn) // never throws
     {
+        px = r.lock().get();
     }
 
-    template<typename Y>
+    template<class Y>
     weak_ptr(shared_ptr<Y> const & r): px(r.px), pn(r.pn) // never throws
     {
     }
 
 #if !defined(BOOST_MSVC) || (BOOST_MSVC > 1200)
 
-    template<typename Y>
+    template<class Y>
     weak_ptr & operator=(weak_ptr<Y> const & r) // never throws
     {
-        px = r.px;
+        px = r.lock().get();
         pn = r.pn;
         return *this;
     }
 
-    template<typename Y>
+    template<class Y>
     weak_ptr & operator=(shared_ptr<Y> const & r) // never throws
     {
         px = r.px;
@@ -71,14 +89,33 @@ public:
 
 #endif
 
-    void reset()
+    shared_ptr<T> lock() const // never throws
     {
-        this_type().swap(*this);
-    }
+#if defined(BOOST_HAS_THREADS)
 
-    T * get() const // never throws; deprecated, removal pending, don't use
-    {
-        return pn.use_count() == 0? 0: px;
+        // optimization: avoid throw overhead
+        if(expired())
+        {
+            return shared_ptr<element_type>();
+        }
+
+        try
+        {
+            return shared_ptr<element_type>(*this);
+        }
+        catch(bad_weak_ptr const &)
+        {
+            // Q: how can we get here?
+            // A: another thread may have invalidated r after the use_count test above.
+            return shared_ptr<element_type>();
+        }
+
+#else
+
+        // optimization: avoid try/catch overhead when single threaded
+        return expired()? shared_ptr<element_type>(): shared_ptr<element_type>(*this);
+
+#endif
     }
 
     long use_count() const // never throws
@@ -91,13 +128,24 @@ public:
         return pn.use_count() == 0;
     }
 
+    void reset() // never throws in 1.30+
+    {
+        this_type().swap(*this);
+    }
+
     void swap(this_type & other) // never throws
     {
         std::swap(px, other.px);
         pn.swap(other.pn);
     }
 
-    bool less(this_type const & rhs) const // implementation detail, never throws
+    void _internal_assign(T * px2, detail::shared_count const & pn2)
+    {
+        px = px2;
+        pn = pn2;
+    }
+
+    template<class Y> bool _internal_less(weak_ptr<Y> const & rhs) const
     {
         return pn < rhs.pn;
     }
@@ -109,8 +157,8 @@ public:
 
 private:
 
-    template<typename Y> friend class weak_ptr;
-    template<typename Y> friend class shared_ptr;
+    template<class Y> friend class weak_ptr;
+    template<class Y> friend class shared_ptr;
 
 #endif
 
@@ -119,30 +167,9 @@ private:
 
 };  // weak_ptr
 
-template<class T, class U> inline bool operator==(weak_ptr<T> const & a, weak_ptr<U> const & b)
+template<class T, class U> inline bool operator<(weak_ptr<T> const & a, weak_ptr<U> const & b)
 {
-    return a.get() == b.get();
-}
-
-template<class T, class U> inline bool operator!=(weak_ptr<T> const & a, weak_ptr<U> const & b)
-{
-    return a.get() != b.get();
-}
-
-#if __GNUC__ == 2 && __GNUC_MINOR__ <= 96
-
-// Resolve the ambiguity between our op!= and the one in rel_ops
-
-template<typename T> inline bool operator!=(weak_ptr<T> const & a, weak_ptr<T> const & b)
-{
-    return a.get() != b.get();
-}
-
-#endif
-
-template<class T> inline bool operator<(weak_ptr<T> const & a, weak_ptr<T> const & b)
-{
-    return a.less(b);
+    return a._internal_less(b);
 }
 
 template<class T> void swap(weak_ptr<T> & a, weak_ptr<T> & b)
@@ -150,27 +177,11 @@ template<class T> void swap(weak_ptr<T> & a, weak_ptr<T> & b)
     a.swap(b);
 }
 
-template<class T> shared_ptr<T> make_shared(weak_ptr<T> const & r) // never throws
+// deprecated, provided for backward compatibility
+template<class T> shared_ptr<T> make_shared(weak_ptr<T> const & r)
 {
-    // optimization: avoid throw overhead
-    if(r.use_count() == 0)
-    {
-        return shared_ptr<T>();
-    }
-
-    try
-    {
-        return shared_ptr<T>(r);
-    }
-    catch(use_count_is_zero const &)
-    {
-        return shared_ptr<T>();
-    }
+    return r.lock();
 }
-
-// Note: there is no get_pointer overload for weak_ptr.
-// This is intentional. Even get() will disappear in a
-// future release; these accessors are too error-prone.
 
 } // namespace boost
 

@@ -107,7 +107,7 @@ H_FILES = \
 	linux.hpp \
 	macos.hpp \
 	solaris.hpp \
-	win32.hpp 
+	win32.hpp
 
 
 noinst_HEADERS = $(H_FILES)

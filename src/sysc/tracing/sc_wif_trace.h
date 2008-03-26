@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -60,20 +60,19 @@
 #include <cstdio>
 #include "sysc/datatypes/int/sc_nbdefs.h"
 #include "sysc/tracing/sc_trace.h"
-#include "sysc/utils/sc_vector.h"
 
 namespace sc_core {
 
 class wif_trace;  // defined in wif_trace.cc
 template<class T> class wif_T_trace;
 
-void wif_put_error_message(const char* msg, bool just_warning);
-
 class wif_trace_file : public sc_trace_file{
 public:
     enum wif_enum {WIF_BIT=0, WIF_MVL=1, WIF_REAL=2, WIF_LAST};
 
-    void sc_set_wif_time_unit(int exponent10_seconds); // -7 -> 100ns
+	// sc_set_wif_time_unit is deprecated.
+    inline void sc_set_wif_time_unit(int exponent10_seconds)
+        { set_time_unit(exponent10_seconds); }
 
     // Create a wif trace file.
     // `Name' forms the base of the name to which `.awif' is added.
@@ -170,7 +169,7 @@ protected:
     void traceT(const T& object, const std::string& name, wif_enum type)
     {
       if(initialized)
-        wif_put_error_message("No traces can be added once simulation has"
+        put_error_message("No traces can be added once simulation has"
         " started.\nTo add traces, create a new wif trace file.", false);
       else
         traces.push_back(new wif_T_trace<T>(object, name,
@@ -199,7 +198,7 @@ protected:
 
     // Write trace info for cycle.
      void cycle(bool delta_cycle);
-    
+
 private:
     // Initialize the tracing mechanism
     void initialize();
@@ -210,8 +209,6 @@ private:
     // Pointer to the file that needs to be written
     FILE* fp;
 
-    double timescale_unit;      // in seconds
-    bool timescale_set_by_user; // = 1 means set by user
     bool trace_delta_cycles;    // = 1 means trace the delta cycles
 
     unsigned wif_name_index;    // Number of variables traced
@@ -221,12 +218,11 @@ private:
 
 public:
 
-    bool initialized;           // = 1 means initialized
     // same as create_wif_name (corrected style)
     std::string obtain_new_index();
 
     // Array to store the variables traced
-    sc_pvector<wif_trace*> traces;
+    std::vector<wif_trace*> traces;
 };
 
 // Create WIF file

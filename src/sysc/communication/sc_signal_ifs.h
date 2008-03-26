@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -32,6 +32,27 @@
   Description of Modification:
     
  *****************************************************************************/
+//$Log: sc_signal_ifs.h,v $
+//Revision 1.3  2006/04/11 23:11:57  acg
+//  Andy Goodrich: Changes for reset support that only includes
+//  sc_cthread_process instances.
+//
+//Revision 1.2  2006/01/03 23:18:26  acg
+//Changed copyright to include 2006.
+//
+//Revision 1.1.1.1  2005/12/19 23:16:43  acg
+//First check in of SystemC 2.1 into its own archive.
+//
+//Revision 1.10  2005/09/15 23:01:51  acg
+//Added std:: prefix to appropriate methods and types to get around
+//issues with the Edison Front End.
+//
+//Revision 1.9  2005/06/29 18:12:12  acg
+//Added $log.
+//
+//Revision 1.8  2005/06/10 22:43:55  acg
+//Added CVS change log annotation.
+//
 
 #ifndef SC_SIGNAL_IFS_H
 #define SC_SIGNAL_IFS_H
@@ -98,6 +119,8 @@ private:
 //  Specialization of sc_signal_in_if<T> for type bool.
 // ----------------------------------------------------------------------------
 
+class sc_reset;
+
 template <>
 class sc_signal_in_if<bool>
 : virtual public sc_interface
@@ -130,9 +153,8 @@ public:
     // was there a negative edge event?
     virtual bool negedge() const = 0;
 
-
-    // delayed evaluation
-    virtual const sc_signal_bool_deval& delayed() const = 0;
+	// designate this object as a reset signal.
+	virtual sc_reset* is_reset() const = 0; 
 
 protected:
 
@@ -188,9 +210,6 @@ public:
     virtual bool negedge() const = 0;
 
 
-    // delayed evaluation
-    virtual const sc_signal_logic_deval& delayed() const = 0;
-
 protected:
 
     // constructor
@@ -208,6 +227,25 @@ private:
 
 
 // ----------------------------------------------------------------------------
+//  CLASS : sc_signal_write_if<T>
+//
+//  The standard output interface class.
+// ----------------------------------------------------------------------------
+template< typename T >
+class sc_signal_write_if : public virtual sc_interface
+{
+public:
+	sc_signal_write_if() {}
+    // write the new value
+    virtual void write( const T& ) = 0;
+private:
+    // disabled
+    sc_signal_write_if( const sc_signal_write_if<T>& );
+    sc_signal_write_if<T>& operator = ( const sc_signal_write_if<T>& );
+};
+
+
+// ----------------------------------------------------------------------------
 //  CLASS : sc_signal_inout_if<T>
 //
 //  The sc_signal<T> input/output interface class.
@@ -215,12 +253,8 @@ private:
 
 template <class T>
 class sc_signal_inout_if
-: public sc_signal_in_if<T>
+: public sc_signal_in_if<T>, public sc_signal_write_if<T>
 {
-public:
-
-    // write the new value
-    virtual void write( const T& ) = 0;
 
 protected:
 

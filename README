@@ -1,29 +1,38 @@
-                SystemC Class Library (Rel. 2.1 v1)
-                ===================================
+                SystemC Class Library (Rel. 2.2.0)
+                ==================================
 
-This is the 14 July 2005 release of the SystemC 2.1 Class Library.
+This is the beta release of the SystemC 2.2.0 Class Library.
 
 -------------------------------------------------------------------------------
                 IMPORTANT
 
-1. This is the 14 July 2005 release of SystemC 2.1. This release contains bug 
-   fixes for SystemC 2.0.1 Production as well as code changes to reflect the
-   proposed SystemC language to be submitted to the IEEE for standardization.
+1. This is the beta release of SystemC 2.2.0. This release contains bug 
+   fixes for SystemC 2.1.v1 as well as adding IEEE 1666(tm) compliance
+   features.
 
 2. This release is supported on the following platforms for which it has
    been well tested:
     o Sun Solaris 2.8 with GNU C++ compiler versions gcc-2.95.3, 
       gcc-3.2.3, and gcc-3.3.2
-    o Sun Solaris 2.8 with SUN Studio 8 C++ compiler.
+    o Sun Solaris 2.8 with SUN C++ compiler versions SC6.1, SC6.2,
+      and Forte 7.
+       (Note: tests that use the new dynamic process feature do 
+        not compile with SC6.1
+       )
+    o Linux (Redhat 6.2) with GNU C++ compiler versions gcc-2.95.3
     o Linux (Redhat 7.2) with GNU C++ compiler version gcc-2.95.3
     o Linux (Redhat 8.0) with GNU C++ compiler version gcc-2.95.3,
       gcc-3.2.3 and gcc-3.3.2
-    o Linux (Redhat ee21) with GNU C++ compiler version gcc-3.2.3
-    o HP-UX 11.00 with HP C++ compiler version A.03.63
+    o Linux (Redhat 9.0) with GNU C++ compiler version gcc-3.2.2
+    o Linux (2.6.9-34.EL kernel) with GNU C++ compiler versions gcc-3.4.5
+      and gcc-4.1.0
+    o 64-bit Linux (Redhat 2.6.9-5.0.3.EL) with GNU C++ compiler version 
+      gcc-3.4.4
+    o HP-UX 11.00 with HP C++ compiler version A.03.39
       (Note: +O1 is the highest safe optimization level)
-    o MacOSX (Jaguar) with GNU C++ compiler version gcc-3.1, and gcc-3.3
-    o Windows XP with VC++ 6.0
-    o Windows XP with VC++ 7.1 
+    o MacOSX (Tiger) with GNU C++ compiler version gcc-3.1, gcc-3.3, and
+      gcc-4.0.0
+    o Windows NT 4.0 (SP6a) with VC++ 7.0 
 
 -------------------------------------------------------------------------------
 

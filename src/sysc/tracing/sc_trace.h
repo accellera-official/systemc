@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -50,7 +50,7 @@
 #include <cstdio>
 
 #include "sysc/datatypes/int/sc_nbdefs.h"
-#include "sysc/utils/sc_string.h"
+#include "sysc/kernel/sc_time.h"
 
 // Some forward declarations
 namespace sc_dt
@@ -75,6 +75,10 @@ class sc_logic_resolve;
 class sc_time;
 
 template <class T> class sc_signal_in_if;
+
+// Write error message
+void put_error_message(const char* msg, bool just_warning);
+
 
 // Base class for all kinds of trace files. 
 
@@ -152,6 +156,10 @@ public:
     // Also trace transitions between delta cycles if flag is true.
     virtual void delta_cycles( bool flag );
 
+    // Set time unit.
+    virtual void set_time_unit( int exponent10_seconds ); // deprecated.
+    virtual void set_time_unit( double v, sc_time_unit tu );
+
 protected:
 
     // Write trace info for cycle
@@ -160,6 +168,11 @@ protected:
     // Flush results and close file
     virtual ~sc_trace_file()
 	{ /* Intentionally blank */ };
+
+protected:
+    bool   initialized;           // = true means initialized
+    double timescale_unit;        // in seconds
+    bool   timescale_set_by_user; // = true means set by user
 };
 
 /*****************************************************************************/
@@ -290,7 +303,7 @@ sc_trace( sc_trace_file* tf,
 	  const sc_signal_in_if<T>& object,
 	  const std::string& name )
 {
-    sc_trace( tf, object.get_data_ref(), name );
+    sc_trace( tf, object.read(), name );
 }
 
 template< class T >
@@ -300,7 +313,7 @@ sc_trace( sc_trace_file* tf,
 	  const sc_signal_in_if<T>& object,
 	  const char* name )
 {
-    sc_trace( tf, object.get_data_ref(), name );
+    sc_trace( tf, object.read(), name );
 }
 
 
@@ -371,7 +384,7 @@ sc_write_comment( sc_trace_file* tf, const std::string& comment )
 }
 
 
-// Equivalent of fprintf for trace files!
+// Equivalent of std::fprintf for trace files!
 
 #ifdef __GNUC__
 void tprintf( sc_trace_file* tf,  const char* format, ... )

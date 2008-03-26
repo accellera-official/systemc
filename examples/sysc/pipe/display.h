@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2004 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -46,7 +46,7 @@ struct display : sc_module {
     SC_CTOR( display ) {
 	SC_METHOD( print_result ); // declare print_result as SC_METHOD and 
         dont_initialize();
-	sensitive_pos << clk;      // make it sensitive to positive clock edge
+	sensitive << clk.pos();    // make it sensitive to positive clock edge
     }
 	
 };

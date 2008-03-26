@@ -33,7 +33,8 @@
 CXX_FILES = \
 	main.cpp 
 
-H_FILES = 
+H_FILES = \
+	scx_barrier.h
 
 check_PROGRAMS = scx_barrier
 TESTS = $(check_PROGRAMS) 

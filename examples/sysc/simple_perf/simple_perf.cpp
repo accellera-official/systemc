@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2004 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -260,6 +260,6 @@ int sc_main (int argc , char *argv[])
     size = 100000;
 
   top top1("Top1", size);
-  sc_start(-1);
+  sc_start();
   return 0;
 }

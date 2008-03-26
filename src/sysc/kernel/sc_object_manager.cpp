@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -34,16 +34,20 @@
  *****************************************************************************/
 
 
+// $Log: sc_object_manager.cpp,v $
+// Revision 1.3  2006/01/13 18:44:30  acg
+// Added $Log to record CVS changes into the source.
+//
+
 #include <stdio.h>
 #include <cstdlib>
-#include <assert.h>
+#include <cassert>
 #include <ctype.h>
 
 #include "sysc/utils/sc_iostream.h"
 #include "sysc/kernel/sc_object.h"
 #include "sysc/utils/sc_hash.h"
 #include "sysc/utils/sc_list.h"
-#include "sysc/utils/sc_vector.h"
 #include "sysc/utils/sc_mempool.h"
 #include "sysc/kernel/sc_object_manager.h"
 #include "sysc/kernel/sc_kernel_ids.h"

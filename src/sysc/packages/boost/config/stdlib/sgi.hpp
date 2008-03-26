@@ -1,7 +1,9 @@
-//  (C) Copyright Boost.org 2001. Permission to copy, use, modify, sell and
-//  distribute this software is granted provided this copyright notice appears
-//  in all copies. This software is provided "as is" without express or implied
-//  warranty, and with no claim as to its suitability for any purpose.
+//  (C) Copyright John Maddock 2001 - 2003. 
+//  (C) Copyright Darin Adler 2001. 
+//  (C) Copyright Jens Maurer 2001 - 2003. 
+//  Use, modification and distribution are subject to the 
+//  Boost Software License, Version 1.0. (See accompanying file 
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org for most recent version.
 
@@ -56,7 +58,7 @@
 //
 // SGI's new iostreams have missing "const" in messages<>::open
 //
-#if defined(__sgi) && (_COMPILER_VERSION <= 730) && defined(__STL_USE_NEW_IOSTREAMS)
+#if defined(__sgi) && (_COMPILER_VERSION <= 740) && defined(__STL_USE_NEW_IOSTREAMS)
 #  define BOOST_NO_STD_MESSAGES
 #endif
 
@@ -104,4 +106,6 @@
 #define BOOST_HAS_SGI_TYPE_TRAITS
 
 #define BOOST_STDLIB "SGI standard library"
+
+
 

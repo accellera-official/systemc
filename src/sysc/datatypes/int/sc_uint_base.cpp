@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -35,6 +35,12 @@
  *****************************************************************************/
 
 
+// $Log: sc_uint_base.cpp,v $
+// Revision 1.3  2006/01/13 18:49:32  acg
+// Added $Log command so that CVS check in comments are reproduced in the
+// source.
+//
+
 #include "sysc/kernel/sc_macros.h"
 #include "sysc/datatypes/int/sc_signed.h"
 #include "sysc/datatypes/int/sc_unsigned.h"
@@ -56,7 +62,7 @@ void
 sc_uint_concref_invalid_length( int length )
 {
     char msg[BUFSIZ];
-    sprintf( msg,
+    std::sprintf( msg,
 	     "sc_uint_concref<T1,T2> initialization: length = %d "
 	     "violates 1 <= length <= %d",
 	     length, SC_INTWIDTH );
@@ -124,12 +130,12 @@ sc_uint_bitref::scan( ::std::istream& is )
 //  Proxy class for sc_uint part selection (l-value).
 // ----------------------------------------------------------------------------
 
-bool sc_uint_subref_r::concat_get_ctrl( unsigned long* dst_p, int low_i ) const
+bool sc_uint_subref_r::concat_get_ctrl( sc_digit* dst_p, int low_i ) const
 {
     int       dst_i;	   // Word in dst_p now processing.
     int       end_i;	   // Highest order word in dst_p to process.
     int       left_shift;  // Left shift for val.
-    uint_type mask;	       // Mask for bits to extract or keep.
+    sc_digit  mask;	   // Mask for bits to extract or keep.
 
     dst_i = low_i / BITS_PER_DIGIT;
     left_shift = low_i % BITS_PER_DIGIT;
@@ -144,13 +150,13 @@ bool sc_uint_subref_r::concat_get_ctrl( unsigned long* dst_p, int low_i ) const
     return false;
 }
 
-bool sc_uint_subref_r::concat_get_data( unsigned long* dst_p, int low_i ) const
+bool sc_uint_subref_r::concat_get_data( sc_digit* dst_p, int low_i ) const
 {
     int       dst_i;	   // Word in dst_p now processing.
     int       end_i;	   // Highest order word in dst_p to process.
     int       high_i;	   // Index of high order bit in dst_p to set.
     int       left_shift;  // Left shift for val.
-    uint_type mask;	   // Mask for bits to extract or keep.
+    sc_digit  mask;	   // Mask for bits to extract or keep.
     bool      result;	   // True if inserting non-zero value.
     uint_type val;	   // Selection value extracted from m_obj_p.
 
@@ -310,7 +316,7 @@ void
 sc_uint_base::invalid_length() const
 {
     char msg[BUFSIZ];
-    sprintf( msg,
+    std::sprintf( msg,
 	     "sc_uint[_base] initialization: length = %d violates "
 	     "1 <= length <= %d",
 	     m_len, SC_INTWIDTH );
@@ -321,7 +327,7 @@ void
 sc_uint_base::invalid_index( int i ) const
 {
     char msg[BUFSIZ];
-    sprintf( msg,
+    std::sprintf( msg,
 	     "sc_uint[_base] bit selection: index = %d violates "
 	     "0 <= index <= %d",
 	     i, m_len - 1 );
@@ -332,7 +338,7 @@ void
 sc_uint_base::invalid_range( int l, int r ) const
 {
     char msg[BUFSIZ];
-    sprintf( msg,
+    std::sprintf( msg,
 	     "sc_uint[_base] part selection: left = %d, right = %d violates "
 	     "0 <= right <= left <= %d",
 	     l, r, m_len - 1 );
@@ -346,7 +352,7 @@ sc_uint_base::check_value() const
     uint_type limit = (~UINT_ZERO >> m_ulen);
     if( m_val > limit ) {
 	char msg[BUFSIZ];
-	sprintf( msg, "sc_uint[_base]: value does not fit into a length of %d",
+	std::sprintf( msg, "sc_uint[_base]: value does not fit into a length of %d",
 		 m_len );
 	SC_REPORT_WARNING( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
     }
@@ -499,7 +505,7 @@ sc_uint_base::operator = ( const char* a )
 	return this->operator = ( aa );
     } catch( sc_core::sc_report ) {
 	char msg[BUFSIZ];
-	sprintf( msg, "character string '%s' is not valid", a );
+	std::sprintf( msg, "character string '%s' is not valid", a );
 	SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_, msg );
 	// never reached
 	return *this;
@@ -555,12 +561,12 @@ sc_uint_base::xor_reduce() const
 }
 
 
-bool sc_uint_base::concat_get_ctrl( unsigned long* dst_p, int low_i ) const
+bool sc_uint_base::concat_get_ctrl( sc_digit* dst_p, int low_i ) const
 {    
     int       dst_i;       // Word in dst_p now processing.
     int       end_i;       // Highest order word in dst_p to process.
     int       left_shift;  // Left shift for val.
-    uint_type mask;        // Mask for bits to extract or keep.
+    sc_digit  mask;        // Mask for bits to extract or keep.
 
     dst_i = low_i / BITS_PER_DIGIT;
     left_shift = low_i % BITS_PER_DIGIT;
@@ -576,15 +582,15 @@ bool sc_uint_base::concat_get_ctrl( unsigned long* dst_p, int low_i ) const
     return false;
 }
 
-bool sc_uint_base::concat_get_data( unsigned long* dst_p, int low_i ) const
+bool sc_uint_base::concat_get_data( sc_digit* dst_p, int low_i ) const
 {    
     int       dst_i;       // Word in dst_p now processing.
     int       end_i;       // Highest order word in dst_p to process.
     int       high_i;      // Index of high order bit in dst_p to set.
     int       left_shift;  // Left shift for val.
-    uint_type mask;        // Mask for bits to extract or keep.
+    sc_digit  mask;        // Mask for bits to extract or keep.
     bool      result;	   // True if inserting non-zero value.
-    uint_type val;         // Value for this object.
+    sc_digit  val;         // Value for this object.
 
     dst_i = low_i / BITS_PER_DIGIT;
     left_shift = low_i % BITS_PER_DIGIT;

@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -33,6 +33,11 @@
 
  *****************************************************************************/
 
+// $Log: sc_event_queue.h,v $
+// Revision 1.3  2006/01/13 18:47:42  acg
+// Added $Log command so that CVS comments are reproduced in the source.
+//
+
 #ifndef SC_EVENT_QUEUE_H
 #define SC_EVENT_QUEUE_H
 
@@ -59,11 +64,9 @@
 #include "sysc/communication/sc_interface.h"
 #include "sysc/kernel/sc_module.h"
 #include "sysc/kernel/sc_event.h"
+#include "sysc/communication/sc_port.h"
 
 namespace sc_core {
-
-template <class IF, int N>
-class sc_port;
 
 
 // ---------------------------------------------------------------------------
@@ -95,6 +98,8 @@ class sc_event_queue:
     sc_event_queue( sc_module_name name_ );
     ~sc_event_queue();
 
+    // API of sc_object
+    inline virtual const char* kind() const { return "sc_event_queue"; }
 
     //
     // API of sc_event_queue_if
@@ -153,7 +158,7 @@ const sc_event& sc_event_queue::default_event() const
 //
 // Using event queue as a port
 //
-typedef sc_port<sc_event_queue_if,1> sc_event_queue_port;
+typedef sc_port<sc_event_queue_if,1,SC_ONE_OR_MORE_BOUND> sc_event_queue_port;
 
 } // namespace sc_core
 

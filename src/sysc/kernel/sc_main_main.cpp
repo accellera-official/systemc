@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -34,10 +34,20 @@
  *****************************************************************************/
 
 
+// $Log: sc_main_main.cpp,v $
+// Revision 1.4  2006/01/25 00:31:19  acg
+//  Andy Goodrich: Changed over to use a standard message id of
+//  SC_ID_IEEE_1666_DEPRECATION for all deprecation messages.
+//
+// Revision 1.3  2006/01/13 18:44:29  acg
+// Added $Log to record CVS changes into the source.
+//
+
 #include "sysc/kernel/sc_cmnhdr.h"
 #include "sysc/kernel/sc_externs.h"
 #include "sysc/utils/sc_iostream.h"
 #include "sysc/utils/sc_report.h"
+#include "sysc/utils/sc_report_handler.h"
 
 namespace sc_core {
 
@@ -99,6 +109,19 @@ sc_elab_and_sim( int argc, char* argv[] )
     catch( ... )
     {
         message_function( "UNKNOWN EXCEPTION OCCURED" );
+    }
+
+    // IF DEPRECATION WARNINGS WERE ISSUED TELL THE USER HOW TO TURN THEM OFF 
+
+    if ( sc_report_handler::get_count("/IEEE_Std_1666/deprecated") > 0 )
+    {
+        SC_REPORT_INFO("/IEEE_Std_1666/deprecated",
+          "You can turn off warnings about\n" \
+		  "             IEEE 1666 deprecated features by placing this method " \
+		  "call as the\n" \
+		  "             first statement in your sc_main() function:\n" \
+          "\n  sc_report_handler::set_actions(\"/IEEE_Std_1666/deprecated\", " \
+          "SC_DO_NOTHING);\n\n" );
     }
 
     delete [] argv_copy;

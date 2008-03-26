@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2004 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -47,7 +47,7 @@ void dcache::entry()
 
 
   while (true) {
-    	wait_until(cs.delayed() == true); 
+    	do { wait(); } while ( !(cs == true) ); 
      	dest_tmp = dest.read();
         reg_tmp = dest.read();
     	address = addr.read();

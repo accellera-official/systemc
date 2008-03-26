@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -33,6 +33,11 @@
 
  *****************************************************************************/
 
+// $Log: sc_cor_pthread.cpp,v $
+// Revision 1.3  2006/01/13 18:44:29  acg
+// Added $Log to record CVS changes into the source.
+//
+
 #if defined(SC_USE_PTHREADS)
 
 // ORDER OF THE INCLUDES AND namespace sc_core IS IMPORTANT!!!
@@ -52,7 +57,8 @@ namespace sc_core {
 #   define PTHREAD_NULL NULL
 #endif // !defined(__hpux)
 
-#define DEBUGF if (0) std::cout
+#define DEBUGF \
+    if (0) std::cout << "sc_cor_pthread.cpp(" << __LINE__ << ") "
 
 // ----------------------------------------------------------------------------
 //  File static variables.
@@ -90,6 +96,9 @@ sc_cor_pthread::sc_cor_pthread()
 
 sc_cor_pthread::~sc_cor_pthread()
 {
+    DEBUGF << this << ": sc_cor_pthread::~sc_cor_pthread()" << std::endl;
+	pthread_cond_destroy( &m_pt_condition);
+	pthread_mutex_destroy( &m_mutex );
 }
 
 
@@ -114,19 +123,19 @@ void* sc_cor_pthread::invoke_module_method(void* context_p)
     // wait point.
 
     pthread_mutex_lock( &create_mutex );
+	DEBUGF << p << ": child signalling main thread " << endl;
     pthread_cond_signal( &create_condition );
     pthread_mutex_lock( &p->m_mutex );
     pthread_mutex_unlock( &create_mutex );
-    // DEBUGF("%08x: wait %d\n", (int)p, __LINE__);
     pthread_cond_wait( &p->m_pt_condition, &p->m_mutex );
-    // DEBUGF("%08x: back from wait %d\n", (int)p, __LINE__);
     pthread_mutex_unlock( &p->m_mutex );
 
 
     // CALL THE SYSTEMC CODE THAT WILL ACTUALLY START THE THREAD OFF:
 
-    DEBUGF << p << ": about to invoke real method <<  active_cor_p"<< std::endl;
     active_cor_p = p;
+    DEBUGF << p << ": about to invoke real method " 
+	   << active_cor_p << std::endl;
     (p->m_cor_fn)(p->m_cor_fn_arg);
 
     return 0;
@@ -154,6 +163,7 @@ sc_cor_pkg_pthread::sc_cor_pkg_pthread( sc_simcontext* simc )
         pthread_mutex_init( &create_mutex, PTHREAD_NULL );
         assert( active_cor_p == 0 );
         main_cor.m_pkg_p = this;
+		DEBUGF << &main_cor << ": is main co-routine" << std::endl;
         active_cor_p = &main_cor;
     }
 }
@@ -175,7 +185,8 @@ sc_cor*
 sc_cor_pkg_pthread::create( std::size_t stack_size, sc_cor_fn* fn, void* arg )
 {
     sc_cor_pthread* cor_p = new sc_cor_pthread;
-    DEBUGF << cor_p << ": sc_cor_pkg_pthread::create()" << std::endl;
+    DEBUGF << &main_cor << ": sc_cor_pkg_pthread::create(" 
+	       << cor_p << ")" << std::endl;
 
 
     // INITIALIZE OBJECT'S FIELDS FROM ARGUMENT LIST:
@@ -183,6 +194,19 @@ sc_cor_pkg_pthread::create( std::size_t stack_size, sc_cor_fn* fn, void* arg )
     cor_p->m_pkg_p = this;
     cor_p->m_cor_fn = fn;
     cor_p->m_cor_fn_arg = arg;
+
+
+	// SET UP THREAD CREATION ATTRIBUTES:
+	//
+	// Use default values except for stack size. If stack size is non-zero
+	// set it.
+
+    pthread_attr_t attr;
+	pthread_attr_init( &attr ); 
+	if ( stack_size != 0 )
+	{
+		pthread_attr_setstacksize( &attr, stack_size );
+	}
 
 
     // ALLOCATE THE POSIX THREAD TO USE AND FORCE SEQUENTIAL EXECUTION:
@@ -198,18 +222,23 @@ sc_cor_pkg_pthread::create( std::size_t stack_size, sc_cor_fn* fn, void* arg )
     // the main thread continues execution.
 
     pthread_mutex_lock( &create_mutex );
-    if ( pthread_create( &cor_p->m_thread, PTHREAD_NULL,
+    DEBUGF << &main_cor << ": about to create actual thread " 
+	       << cor_p << std::endl;
+    if ( pthread_create( &cor_p->m_thread, &attr,
              &sc_cor_pthread::invoke_module_method, (void*)cor_p ) )
     {
-        fprintf(stderr, "ERROR - could not create thread\n");
+        std::fprintf(stderr, "ERROR - could not create thread\n");
     }
 
-    DEBUGF << cor_p << ": wait() " << __LINE__ << std::endl;
+    DEBUGF << &main_cor << ": main thread waiting for signal from " 
+	       << cor_p << std::endl;
     pthread_cond_wait( &create_condition, &create_mutex );
-    DEBUGF << cor_p << ": back from wait() " << __LINE__ << std::endl;
+	DEBUGF << &main_cor << ": main thread signaled by " 
+	       << cor_p << endl;
+	pthread_attr_destroy( &attr ); 
     pthread_mutex_unlock( &create_mutex );
-    DEBUGF << cor_p << ": exiting sc_cor_pkg_pthread::create() "
-	       << __LINE__ << std::endl;
+    DEBUGF << &main_cor << ": exiting sc_cor_pkg_pthread::create(" 
+	       << cor_p << ")" << std::endl;
 
     return cor_p;
 }
@@ -233,15 +262,12 @@ sc_cor_pkg_pthread::yield( sc_cor* next_cor_p )
         pthread_cond_signal( &to_p->m_pt_condition );
         pthread_mutex_lock( &from_p->m_mutex );
         pthread_mutex_unlock( &to_p->m_mutex );
-		DEBUGF << from_p << ": wait " << __LINE__ << " "
-		       << &from_p << std::endl;
         pthread_cond_wait( &from_p->m_pt_condition, &from_p->m_mutex );
-		DEBUGF << from_p << ": back from wait " << __LINE__ << " "
-		       << &from_p << std::endl;
         pthread_mutex_unlock( &from_p->m_mutex );
     }
 
-    active_cor_p = from_p; // When we come out of wait restore ourselves as active.
+    active_cor_p = from_p; // When we come out of wait make ourselves active.
+	DEBUGF << from_p << " restarting after yield to " << to_p << std::endl;
 }
 
 
@@ -256,8 +282,6 @@ sc_cor_pkg_pthread::abort( sc_cor* next_cor_p )
     pthread_mutex_lock( &n_p->m_mutex );
     pthread_cond_signal( &n_p->m_pt_condition );
     pthread_mutex_unlock( &n_p->m_mutex );
-
-    active_cor_p = n_p;
 }
 
 

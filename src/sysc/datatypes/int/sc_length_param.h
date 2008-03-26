@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -17,7 +17,7 @@
 
 /*****************************************************************************
 
-  sc_length_param.h - 
+  sc_length_param.h -
 
   Original Author: Martin Janssen, Synopsys, Inc., 2002-03-19
 
@@ -33,6 +33,12 @@
 
  *****************************************************************************/
 
+// $Log: sc_length_param.h,v $
+// Revision 1.3  2006/01/13 18:49:32  acg
+// Added $Log command so that CVS check in comments are reproduced in the
+// source.
+//
+
 #ifndef SC_LENGTH_PARAM_H
 #define SC_LENGTH_PARAM_H
 
@@ -45,6 +51,12 @@ namespace sc_dt
 
 // classes defined in this module
 class sc_length_param;
+
+// friend operator declarations
+    bool operator == ( const sc_length_param&,
+                              const sc_length_param& );
+    bool operator != ( const sc_length_param&,
+			      const sc_length_param& );
 
 
 // ----------------------------------------------------------------------------

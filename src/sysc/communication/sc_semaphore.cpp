@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -34,6 +34,11 @@
  *****************************************************************************/
 
 
+// $Log: sc_semaphore.cpp,v $
+// Revision 1.3  2006/01/13 18:47:42  acg
+// Added $Log command so that CVS comments are reproduced in the source.
+//
+
 #include "sysc/communication/sc_communication_ids.h"
 #include "sysc/communication/sc_semaphore.h"
 #include "sysc/kernel/sc_simcontext.h"
@@ -53,9 +58,9 @@ sc_semaphore::report_error( const char* id, const char* add_msg ) const
 {
     char msg[BUFSIZ];
     if( add_msg != 0 ) {
-	sprintf( msg, "%s: semaphore '%s'", add_msg, name() );
+	std::sprintf( msg, "%s: semaphore '%s'", add_msg, name() );
     } else {
-	sprintf( msg, "semaphore '%s'", name() );
+	std::sprintf( msg, "semaphore '%s'", name() );
     }
     SC_REPORT_ERROR( id, msg );
 }
@@ -114,7 +119,7 @@ sc_semaphore::trywait()
 int
 sc_semaphore::post()
 {
-    ++ m_value;
+    ++m_value;
     m_free.notify();
     return 0;
 }

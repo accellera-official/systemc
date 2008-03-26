@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -33,15 +33,20 @@
 
  *****************************************************************************/
 
+// $Log: sc_object_manager.h,v $
+// Revision 1.3  2006/01/13 18:44:30  acg
+// Added $Log to record CVS changes into the source.
+//
+
 #ifndef SC_OBJECT_MANAGER_H
 #define SC_OBJECT_MANAGER_H
+
+#include "sysc/utils/sc_vector.h"
 
 namespace sc_core {
 
 class sc_module_name;
 template <class K, class C> class sc_phash;
-template <class T> class sc_plist;
-template <class T> class sc_pvector;
 
 
 // ----------------------------------------------------------------------------

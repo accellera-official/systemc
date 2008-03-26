@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2004 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -62,7 +62,7 @@ class scx_barrier {
         }
         else
         {
-            m_barrier_event.notify_delayed();
+            m_barrier_event.notify(SC_ZERO_TIME);
             ::sc_core::wait(m_barrier_event);
         }
     }

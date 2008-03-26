@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -35,6 +35,24 @@
 
 /* 
 $Log: sc_communication_ids.h,v $
+Revision 1.5  2006/01/25 00:31:11  acg
+ Andy Goodrich: Changed over to use a standard message id of
+ SC_ID_IEEE_1666_DEPRECATION for all deprecation messages.
+
+Revision 1.4  2006/01/24 20:46:31  acg
+Andy Goodrich: changes to eliminate use of deprecated features. For instance,
+using notify(SC_ZERO_TIME) in place of notify_delayed().
+
+Revision 1.3  2006/01/18 21:42:26  acg
+Andy Goodrich: Changes for check writer support, and tightening up sc_clock
+port usage.
+
+Revision 1.2  2006/01/03 23:18:26  acg
+Changed copyright to include 2006.
+
+Revision 1.1.1.1  2005/12/19 23:16:43  acg
+First check in of SystemC 2.1 into its own archive.
+
 Revision 1.12  2005/04/03 22:52:51  acg
 Namespace changes.
 
@@ -115,19 +133,21 @@ SC_DEFINE_MESSAGE( SC_ID_INVALID_SEMAPHORE_VALUE_,  119,
 SC_DEFINE_MESSAGE( SC_ID_SC_EXPORT_HAS_NO_INTERFACE_,  120,
 			"sc_export instance has no interface" )
 SC_DEFINE_MESSAGE( SC_ID_SC_EXPORT_AFTER_START_,  121,
-			"insert sc_export failed, sc_export instance after simulation has started" )
+    "insert sc_export failed, sc_export instance after simulation has started" )
 SC_DEFINE_MESSAGE( SC_ID_SC_EXPORT_ALREADY_REGISTERED_,  122,
-			"insert sc_export failed, sc_export already inserted" )
+    "insert sc_export failed, sc_export already inserted" )
 SC_DEFINE_MESSAGE( SC_ID_SC_EXPORT_NOT_REGISTERED_,  123,
-			"remove sc_export failed, sc_export not registered" )
+    "remove sc_export failed, sc_export not registered" )
 SC_DEFINE_MESSAGE( SC_ID_SC_EXPORT_NOT_BOUND_AFTER_CONSTRUCTION_,  124,
-			"sc_export instance not bound to interface at end of construction" )
+    "sc_export instance not bound to interface at end of construction" )
 SC_DEFINE_MESSAGE( SC_ID_ATTEMPT_TO_WRITE_TO_CLOCK_,  125,
-			"attempt to write the value of an sc_clock instance" )
+   "attempt to write the value of an sc_clock instance" )
 SC_DEFINE_MESSAGE( SC_ID_SC_EXPORT_ALREADY_BOUND_,  126,
-                    "sc_export instance already bound" )
+    "sc_export instance already bound" )
 SC_DEFINE_MESSAGE( SC_ID_OPERATION_ON_NON_SPECIALIZED_SIGNAL_,  127,
-			"attempted specalized signal operation on non-specialized signal" )
+    "attempted specalized signal operation on non-specialized signal" )
+SC_DEFINE_MESSAGE( SC_ID_ATTEMPT_TO_BIND_CLOCK_TO_OUTPUT_,  128,
+    "attempted to bind sc_clock instance to sc_inout or sc_out" )
 
 #endif
 

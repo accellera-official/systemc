@@ -102,7 +102,7 @@ SUBDIRS = \
 	2.1
 
 
-EXAMPLES_DIR = $(prefix)/examples/systemc
+EXAMPLES_DIR = $(prefix)/examples/sysc
 subdir = examples/sysc
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_CLEAN_FILES =

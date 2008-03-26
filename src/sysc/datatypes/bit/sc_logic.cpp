@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -35,6 +35,12 @@
  *****************************************************************************/
 
 
+// $Log: sc_logic.cpp,v $
+// Revision 1.3  2006/01/13 18:53:53  acg
+// Andy Goodrich: added $Log command so that CVS comments are reproduced in
+// the source.
+//
+
 #include "sysc/utils/sc_string.h"
 #include "sysc/datatypes/bit/sc_bit_ids.h"
 #include "sysc/datatypes/bit/sc_logic.h"
@@ -55,7 +61,7 @@ void
 sc_logic::invalid_value( sc_logic_value_t v )
 {
     char msg[BUFSIZ];
-    sprintf( msg, "sc_logic( %d )", v );
+    std::sprintf( msg, "sc_logic( %d )", v );
     SC_REPORT_ERROR( sc_core::SC_ID_VALUE_NOT_VALID_, msg );
 }
 
@@ -63,7 +69,7 @@ void
 sc_logic::invalid_value( char c )
 {
     char msg[BUFSIZ];
-    sprintf( msg, "sc_logic( '%c' )", c );
+    std::sprintf( msg, "sc_logic( '%c' )", c );
     SC_REPORT_ERROR( sc_core::SC_ID_VALUE_NOT_VALID_, msg );
 }
 
@@ -71,7 +77,7 @@ void
 sc_logic::invalid_value( int i )
 {
     char msg[BUFSIZ];
-    sprintf( msg, "sc_logic( %d )", i );
+    std::sprintf( msg, "sc_logic( %d )", i );
     SC_REPORT_ERROR( sc_core::SC_ID_VALUE_NOT_VALID_, msg );
 }
 

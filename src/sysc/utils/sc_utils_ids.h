@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -36,6 +36,24 @@
     
  *****************************************************************************/
 
+// $Log: sc_utils_ids.h,v $
+// Revision 1.6  2006/01/25 00:31:27  acg
+//  Andy Goodrich: Changed over to use a standard message id of
+//  SC_ID_IEEE_1666_DEPRECATION for all deprecation messages.
+//
+// Revision 1.5  2006/01/24 22:01:35  acg
+//  Andy Goodrich: consolidated all IEEE 1666 compliance messages to use the
+//  SC_ID_IEEE_1666_DEPRECATION_ message type.
+//
+// Revision 1.4  2006/01/24 20:53:41  acg
+// Andy Goodrich: added warnings indicating that use of integer ids in reports
+// is deprecated. Added tracing/sc_trace_ids.h to message list.
+//
+// Revision 1.3  2006/01/13 18:53:11  acg
+// Andy Goodrich: Added $Log command so that CVS comments are reproduced in
+// the source.
+//
+
 #ifndef SC_UTILS_IDS_H
 #define SC_UTILS_IDS_H
 
@@ -59,6 +77,8 @@ SC_DEFINE_MESSAGE(SC_ID_FRONT_ON_EMPTY_LIST_,
 		  802, "attempt to take front() on an empty list")
 SC_DEFINE_MESSAGE(SC_ID_BACK_ON_EMPTY_LIST_,
 		  803, "attempt to take back() on an empty list")
+SC_DEFINE_MESSAGE(SC_ID_IEEE_1666_DEPRECATION_,
+		  804, "/IEEE_Std_1666/deprecated" )
 
 
 #endif

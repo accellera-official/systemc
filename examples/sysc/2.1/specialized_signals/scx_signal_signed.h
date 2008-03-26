@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2004 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -34,7 +34,36 @@
  *****************************************************************************/
 
 /* 
-$Log: sc_signal_signed.h,v $
+$Log: scx_signal_signed.h,v $
+Revision 1.3  2006/03/21 01:31:48  acg
+ Andy Goodrich: changed over to sc_get_current_process_b() from
+ sc_get_current_process_base() since the function's name changed.
+
+Revision 1.2  2005/12/26 20:11:14  acg
+Fixed up copyright.
+
+Revision 1.1.1.1  2005/12/19 23:16:42  acg
+First check in of SystemC 2.1 into its own archive.
+
+Revision 1.29  2005/09/15 23:01:52  acg
+Added std:: prefix to appropriate methods and types to get around
+issues with the Edison Front End.
+
+Revision 1.28  2005/07/30 03:44:11  acg
+Changes from 2.1.
+
+Revision 1.27  2005/05/09 17:17:12  acg
+Changes from 2.1.
+
+Revision 1.26  2005/05/08 19:04:06  acg
+Fix bug in concat_set(int64,off). Other changes from 2.1 examples usage.
+
+Revision 1.25  2005/05/03 20:05:16  acg
+Prefixed with sc_dt some sc_signed instances that were missed.
+
+Revision 1.24  2005/05/03 19:50:20  acg
+Name space version.
+
 Revision 1.22  2005/03/21 22:31:32  acg
 Changes to sc_core namespace.
 
@@ -370,7 +399,7 @@ class sc_signal<sc_dt::sc_bigint<W> > :
     sc_dt::uint64      m_event_delta;     // Delta cycle of last event.
     sc_dt::sc_signed   m_new_val;         // New value for this object instance.
     sc_port_base*      m_output_p;        // Single write port verify field.
-    sc_process_b*      m_writer_p;        // Single writer verify field.
+    sc_process_b*   m_writer_p;        // Single writer verify field.
 };
 
 
@@ -447,7 +476,7 @@ inline void sc_signal<sc_dt::sc_bigint<W> >::base_write( sc_dt::uint64 value )
 SC_TEMPLATE
 inline void sc_signal<sc_dt::sc_bigint<W> >::check_writer()
 {
-    sc_process_b* writer_p = sc_get_curr_process_handle();
+    sc_process_b* writer_p = sc_get_current_process_b();
     if( m_writer_p == 0 ) 
     {   
         m_writer_p = writer_p;
@@ -803,7 +832,8 @@ inline void sc_signal<sc_dt::sc_bigint<W> >::write_part(
 //==============================================================================
 SC_TEMPLATE
 class sc_in<sc_dt::sc_bigint<W> > : 
-    public sc_port<sc_signal_in_if<sc_dt::sc_bigint<W> >, 1>,
+    public sc_port<sc_signal_in_if<sc_dt::sc_bigint<W> >, 1, 
+                   SC_ONE_OR_MORE_BOUND>,
     public sc_dt::sc_value_base
 {
   public:
@@ -812,11 +842,11 @@ class sc_in<sc_dt::sc_bigint<W> > :
 
     typedef sc_dt::sc_bigint<W>                      data_type;
     typedef sc_signal_in_if<sc_dt::sc_bigint<W> >    if_type;
-    typedef sc_port<if_type,1>              base_type;
+    typedef sc_port<if_type,1,SC_ONE_OR_MORE_BOUND>  base_type;
     typedef sc_in<sc_dt::sc_bigint<W> >              this_type;
 
-    typedef if_type                         in_if_type;
-    typedef base_type                       in_port_type;
+    typedef if_type                                  in_if_type;
+    typedef base_type                                in_port_type;
     typedef sc_signal_inout_if<sc_dt::sc_bigint<W> > inout_if_type;
     typedef sc_inout<sc_dt::sc_bigint<W> >           inout_port_type;
 
@@ -984,7 +1014,7 @@ class sc_in<sc_dt::sc_bigint<W> > :
     virtual inline void end_of_elaboration()
         {
             if( m_traces != 0 ) {
-                for( int i = 0; i < m_traces->size(); ++ i ) {
+                for( unsigned int i = 0; i < m_traces->size(); ++ i ) {
                     sc_trace_params* p = (*m_traces)[i];
                     sc_trace( p->tf, read(), p->name );
                 }
@@ -1014,16 +1044,16 @@ class sc_in<sc_dt::sc_bigint<W> > :
         { return (*this)->read().concat_length( xz_present_p ); }
     virtual inline sc_dt::uint64 concat_get_uint64() const
         { return (*this)->read().concat_get_uint64(); }
-    virtual inline bool concat_get_ctrl( unsigned long* dst_p, int low_i ) const
+    virtual inline bool concat_get_ctrl( sc_dt::sc_digit* dst_p, int low_i ) const
         { return (*this)->read().concat_get_ctrl(dst_p, low_i); }
-    virtual inline bool concat_get_data( unsigned long* dst_p, int low_i ) const
+    virtual inline bool concat_get_data( sc_dt::sc_digit* dst_p, int low_i ) const
         { return (*this)->read().concat_get_data(dst_p, low_i); }
 
   protected:
     void remove_traces() const
         {
             if( m_traces != 0 ) {
-                for( int i = m_traces->size() - 1; i >= 0; -- i ) {
+                for( unsigned int i = m_traces->size() - 1; i >= 0; -- i ) {
                     delete (*m_traces)[i];
                 }
                 delete m_traces;
@@ -1071,20 +1101,21 @@ inline std::ostream& operator << (
 //==============================================================================
 SC_TEMPLATE
 class sc_inout<sc_dt::sc_bigint<W> > : 
-    public sc_port<sc_signal_inout_if<sc_dt::sc_bigint<W> >, 1>,
+    public sc_port<sc_signal_inout_if<sc_dt::sc_bigint<W> >, 1,
+                   SC_ONE_OR_MORE_BOUND>,
     public sc_dt::sc_value_base
 {
   public:
 
     // typedefs
 
-    typedef sc_dt::sc_bigint<W>                    data_type;
+    typedef sc_dt::sc_bigint<W>                      data_type;
     typedef sc_signal_inout_if<sc_dt::sc_bigint<W> > if_type;
-    typedef sc_port<if_type,1>              base_type;
-    typedef sc_inout<sc_dt::sc_bigint<W> >         this_type;
+    typedef sc_port<if_type,1,SC_ONE_OR_MORE_BOUND>  base_type;
+    typedef sc_inout<sc_dt::sc_bigint<W> >           this_type;
 
-    typedef if_type                         inout_if_type;
-    typedef base_type                       inout_port_type;
+    typedef if_type                                  inout_if_type;
+    typedef base_type                                inout_port_type;
 
   public:
 
@@ -1246,7 +1277,7 @@ class sc_inout<sc_dt::sc_bigint<W> > :
                 m_init_val_p = 0;
             }
             if( m_traces != 0 ) {
-                for( int i = 0; i < m_traces->size(); ++ i ) {
+                for( unsigned int i = 0; i < m_traces->size(); ++ i ) {
                     sc_trace_params* p = (*m_traces)[i];
                     sc_trace( p->tf, read(), p->name );
                 }
@@ -1291,29 +1322,29 @@ class sc_inout<sc_dt::sc_bigint<W> > :
         { return (*this)->read().concat_length( xz_present_p ); }
     virtual inline sc_dt::uint64 concat_get_uint64() const
         { return (*this)->read().concat_get_uint64(); }
-    virtual inline bool concat_get_ctrl( unsigned long* dst_p, int low_i ) const
+    virtual inline bool concat_get_ctrl( sc_dt::sc_digit* dst_p, int low_i ) const
         { return (*this)->read().concat_get_ctrl(dst_p, low_i); }
-    virtual inline bool concat_get_data( unsigned long* dst_p, int low_i ) const
+    virtual inline bool concat_get_data( sc_dt::sc_digit* dst_p, int low_i ) const
         { return (*this)->read().concat_get_data(dst_p, low_i); }
     virtual inline void concat_set(sc_dt::int64 src, int low_i)
-        { *this = src >> (low_i < 64) ? low_i : 63; }
+		{ *this = (src >> ((low_i < 64) ? low_i : 63)); }
 #if 0 // ####
     virtual inline void concat_set(const sc_dt::sc_lv_base& src, int low_i)
         { *this = src >> low_i; }
 #endif // 0 ####
     virtual inline void concat_set(const sc_dt::sc_signed& src, int low_i)
-        { *this = src >> low_i; }
+        { *this = (src >> low_i); }
     virtual inline void concat_set(const sc_dt::sc_unsigned& src, int low_i)
-        { *this = src >> low_i; }
+        { *this = (src >> low_i); }
     virtual inline void concat_set(sc_dt::uint64 src, int low_i)
-        { *this = (low_i < 64) ? src >> low_i : (sc_dt::uint64)0; }
+        { *this = ((low_i < 64) ? (src >> low_i) : (sc_dt::uint64)0); }
 
 
   public: // assignment operators:
     inline void operator = ( const this_type& new_val )
         { (*this)->write( new_val.read() ); }
     inline void operator = ( const char* new_val )
-        { sc_signed aa(W); aa = new_val; (*this)->write( aa ); }
+        { sc_dt::sc_signed aa(W); aa = new_val; (*this)->write( aa ); }
     inline void operator = ( sc_dt::uint64 new_val )
         { (*this)->write(new_val); }
     inline void operator = ( sc_dt::int64 new_val )
@@ -1357,7 +1388,7 @@ class sc_inout<sc_dt::sc_bigint<W> > :
     void remove_traces() const
         {
             if( m_traces != 0 ) {
-                for( int i = m_traces->size() - 1; i >= 0; -- i ) {
+                for( unsigned int i = m_traces->size() - 1; i >= 0; -- i ) {
                     delete (*m_traces)[i];
                 }
                 delete m_traces;
@@ -1464,7 +1495,7 @@ class sc_out<sc_dt::sc_bigint<W> > : public sc_inout<sc_dt::sc_bigint<W> >
     inline void operator = ( const this_type& new_val )
         { (*this)->write( (const sc_dt::sc_signed&)new_val ); }
     inline void operator = ( const char* new_val )
-        { sc_signed aa(W); aa = new_val; (*this)->write( aa ); }
+        { sc_dt::sc_signed aa(W); aa = new_val; (*this)->write( aa ); }
     inline void operator = ( sc_dt::uint64 new_val )
         { (*this)->write(new_val); }
     inline void operator = ( sc_dt::int64 new_val )
@@ -1536,7 +1567,7 @@ inline void sc_signed_sigref::operator = ( sc_dt::uint64 v )
 
 inline void sc_signed_sigref::operator = ( const char* v )
 {
-	sc_signed tmp(length()); tmp = v; *this = tmp;
+	sc_dt::sc_signed tmp(length()); tmp = v; *this = tmp;
 }
 
 inline void sc_signed_sigref:: operator = ( sc_dt::int64 v )

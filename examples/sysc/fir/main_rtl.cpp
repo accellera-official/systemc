@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2004 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -64,7 +64,7 @@ int sc_main (int argc , char *argv[]) {
   display1.output_data_ready(output_data_ready);
   display1.result(result); 
 
-  sc_start(clock, -1);
+  sc_start();
   return 0;
 }
 

@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -38,12 +38,49 @@
 
  *****************************************************************************/
 
-#include "sysc/kernel/sc_process_int.h"
+// $Log: sc_report.cpp,v $
+// Revision 1.7  2006/03/21 00:00:37  acg
+//   Andy Goodrich: changed name of sc_get_current_process_base() to be
+//   sc_get_current_process_b() since its returning an sc_process_b instance.
+//
+// Revision 1.6  2006/01/25 00:31:27  acg
+//  Andy Goodrich: Changed over to use a standard message id of
+//  SC_ID_IEEE_1666_DEPRECATION for all deprecation messages.
+//
+// Revision 1.5  2006/01/24 22:02:30  acg
+//  Andy Goodrich: switch deprecated features warnings to use a single message
+//  id, SC_ID_IEEE_1666_DEPRECATION_.
+//
+// Revision 1.4  2006/01/24 20:53:41  acg
+// Andy Goodrich: added warnings indicating that use of integer ids in reports
+// is deprecated. Added tracing/sc_trace_ids.h to message list.
+//
+// Revision 1.3  2006/01/13 18:53:11  acg
+// Andy Goodrich: Added $Log command so that CVS comments are reproduced in
+// the source.
+//
+
+#include "sysc/kernel/sc_process.h"
 #include "sysc/kernel/sc_simcontext_int.h"
 #include "sysc/utils/sc_stop_here.h"
 #include "sysc/utils/sc_report.h"
+#include "sysc/utils/sc_utils_ids.h"
 
 namespace sc_core {
+
+
+static void sc_deprecated_report_ids(const char* method)
+{
+    static bool warn_report_ids_deprecated=true;
+    if ( warn_report_ids_deprecated )
+    {
+        std::string message;
+	message = "integer report ids are deprecated, use string values: ";
+	message += method;
+        warn_report_ids_deprecated=false;
+	SC_REPORT_INFO(SC_ID_IEEE_1666_DEPRECATION_, message.c_str());
+    }
+}
 
 static char empty_str[] = "";
 static inline char * empty_dup(const char * p)
@@ -74,7 +111,7 @@ sc_report::sc_report(sc_severity severity_,
   file(empty_dup(file_)),
   line(line_),
   timestamp(new sc_time(sc_time_stamp())),
-  process(sc_get_curr_process_handle()),
+  process(sc_get_current_process_b()),
   m_what(strdup(sc_report_compose_message(*this).c_str()))
 {
 }
@@ -169,6 +206,7 @@ void sc_report_handler::report(sc_severity severity_,
 
 void sc_report::register_id( int id, const char* msg )
 {
+    sc_deprecated_report_ids("sc_report::register_id()");
     if( id < 0 ) {
 	SC_REPORT_ERROR( SC_ID_REGISTER_ID_FAILED_,
 			 "invalid report id" );
@@ -199,6 +237,7 @@ void sc_report::register_id( int id, const char* msg )
 
 const char* sc_report::get_message( int id )
 {
+    sc_deprecated_report_ids("sc_report::get_message()");
     sc_msg_def* md = sc_report_handler::mdlookup(id);
 
     return md ? md->msg_type: unknown_id;
@@ -206,6 +245,7 @@ const char* sc_report::get_message( int id )
 
 bool sc_report::is_suppressed( int id )
 {
+    sc_deprecated_report_ids("sc_report::is_suppressed()");
     sc_msg_def* md = sc_report_handler::mdlookup(id);
 
     return md ? md->actions == SC_DO_NOTHING: false; // only do-nothing set
@@ -213,6 +253,7 @@ bool sc_report::is_suppressed( int id )
 
 void sc_report::suppress_id(int id_, bool suppress)
 {
+    sc_deprecated_report_ids("sc_report::suppress_id()");
     sc_msg_def* md = sc_report_handler::mdlookup(id_);
 
     if ( md )
@@ -221,18 +262,21 @@ void sc_report::suppress_id(int id_, bool suppress)
 
 void sc_report::suppress_infos(bool suppress)
 {
+    sc_deprecated_report_ids("sc_report::supress_infos");
     sc_report_handler::sev_actions[SC_INFO] =
 	suppress ? SC_DO_NOTHING: SC_DEFAULT_INFO_ACTIONS;
 }
 
 void sc_report::suppress_warnings(bool suppress)
 {
+    sc_deprecated_report_ids("sc_report::suppress_warnings");
     sc_report_handler::sev_actions[SC_WARNING] =
 	suppress ? SC_DO_NOTHING: SC_DEFAULT_WARNING_ACTIONS;
 }
 
 void sc_report::make_warnings_errors(bool flag)
 {
+    sc_deprecated_report_ids("sc_report::make_warnings_errors");
     warnings_are_errors = flag;
 }
 

@@ -2,7 +2,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -35,7 +35,17 @@
     
  *****************************************************************************/
 
+// $Log: sc_export.cpp,v $
+// Revision 1.4  2006/01/26 21:00:50  acg
+//  Andy Goodrich: conversion to use sc_event::notify(SC_ZERO_TIME) instead of
+//  sc_event::notify_delayed()
+//
+// Revision 1.3  2006/01/13 18:47:42  acg
+// Added $Log command so that CVS comments are reproduced in the source.
+//
+
 #include "sysc/communication/sc_export.h"
+#include "sysc/kernel/sc_simcontext.h"
 
 namespace sc_core {
 
@@ -95,7 +105,7 @@ sc_export_base::end_of_simulation()
 void
 sc_export_registry::insert( sc_export_base* export_ )
 {
-    if( m_simc->is_running() ) {
+    if( sc_is_running() ) {
 	SC_REPORT_ERROR(SC_ID_SC_EXPORT_AFTER_START_, export_->name());
     }
 
@@ -139,7 +149,7 @@ sc_export_registry::remove( sc_export_base* export_ )
 
     // remove
     m_export_vec[i] = m_export_vec[size() - 1];
-    m_export_vec.decr_count();
+    m_export_vec.resize(size()-1);
 }
 
 // constructor

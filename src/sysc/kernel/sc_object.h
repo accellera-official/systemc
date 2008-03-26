@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -35,6 +35,16 @@
                                  100 bytes of storage for each normal sc_object.
 
  *****************************************************************************/
+
+// $Log: sc_object.h,v $
+// Revision 1.4  2006/04/11 23:13:21  acg
+//   Andy Goodrich: Changes for reduced reset support that only includes
+//   sc_cthread, but has preliminary hooks for expanding to method and thread
+//   processes also.
+//
+// Revision 1.3  2006/01/13 18:44:30  acg
+// Added $Log to record CVS changes into the source.
+//
 
 #ifndef SC_OBJECT_H
 #define SC_OBJECT_H
@@ -99,7 +109,11 @@ public:
           sc_attr_cltn& attr_cltn();
     const sc_attr_cltn& attr_cltn() const;
 
-    sc_object* get_parent() const { return m_parent; }
+    virtual const std::vector<sc_object*>& get_child_objects() const
+        { return *(new std::vector<sc_object*>); }
+
+    sc_object* get_parent() const { return m_parent; } 
+    sc_object* get_parent_object() const { return m_parent; }
 
 protected:
 
@@ -125,6 +139,13 @@ private:
 
 extern const char SC_HIERARCHY_CHAR;
 extern bool sc_enable_name_checking;
+
+
+inline 
+sc_object* sc_get_parent( const sc_object* obj_p ) 
+{ 
+	return obj_p->get_parent_object(); 
+}
 
 } // namespace sc_core
 

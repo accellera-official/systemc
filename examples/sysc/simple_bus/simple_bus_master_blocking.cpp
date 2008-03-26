@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2004 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -49,7 +49,7 @@ void simple_bus_master_blocking::main_action()
 				    m_address, mylength, m_lock);
       if (status == SIMPLE_BUS_ERROR)
 	sb_fprintf(stdout, "%g %s : blocking-read failed at address %x\n",
-		   sc_simulation_time(), name(), m_address);
+		   sc_time_stamp().to_double(), name(), m_address);
 
       for (i = 0; i < mylength; ++i)
 	{
@@ -61,7 +61,7 @@ void simple_bus_master_blocking::main_action()
 				     m_address, mylength, m_lock);
       if (status == SIMPLE_BUS_ERROR)
 	sb_fprintf(stdout, "%g %s : blocking-write failed at address %x\n",
-		   sc_simulation_time(), name(), m_address);
+		   sc_time_stamp().to_double(), name(), m_address);
 
       wait(m_timeout, SC_NS);
     }

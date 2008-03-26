@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2004 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -52,7 +52,7 @@ void stimulus::entry() {
       sample.write( (int)send_value1 );
       cout << "Stimuli : " << (int)send_value1 << " at time "
 	   /* << sc_time_stamp() << endl; */
-	   << sc_simulation_time() << endl;
+	   << sc_time_stamp().to_double() << endl;
       send_value1++;
     };
   }

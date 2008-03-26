@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -32,6 +32,12 @@
   Description of Modification:
     
  *****************************************************************************/
+
+// $Log: sc_int_ids.h,v $
+// Revision 1.3  2006/01/13 18:49:31  acg
+// Added $Log command so that CVS check in comments are reproduced in the
+// source.
+//
 
 #ifndef SC_INT_IDS_H
 #define SC_INT_IDS_H

@@ -1,7 +1,8 @@
-//  (C) Copyright Boost.org 2001. Permission to copy, use, modify, sell and
-//  distribute this software is granted provided this copyright notice appears
-//  in all copies. This software is provided "as is" without express or implied
-//  warranty, and with no claim as to its suitability for any purpose.
+//  (C) Copyright John Maddock 2001 - 2003. 
+//  (C) Copyright Jens Maurer 2001 - 2003. 
+//  Use, modification and distribution are subject to the 
+//  Boost Software License, Version 1.0. (See accompanying file 
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org for most recent version.
 
@@ -25,18 +26,20 @@
 #  endif
 #endif
 
-//
-// como on linux doesn't have std:: c functions:
-//
-#ifdef __COMO__
-#  define BOOST_NO_STDC_NAMESPACE
-#endif
+#if defined(__LIBCOMO__)
+   //
+   // como on linux doesn't have std:: c functions:
+   // NOTE: versions of libcomo prior to beta28 have octal version numbering,
+   // e.g. version 25 is 21 (dec)
+   //
+#  if __LIBCOMO_VERSION__ <= 20
+#    define BOOST_NO_STDC_NAMESPACE
+#  endif
 
-//
-// Intel on linux doesn't have swprintf in std::
-//
-#ifdef  __ICC
-#  define BOOST_NO_STDC_NAMESPACE
+#  if __LIBCOMO_VERSION__ <= 21
+#    define BOOST_NO_SWPRINTF
+#  endif
+
 #endif
 
 //
@@ -91,4 +94,5 @@
 #     define __inline__ inline
 #  endif
 #endif
+
 

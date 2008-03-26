@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2004 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -44,7 +44,7 @@ simple_bus_arbiter::arbitrate(const simple_bus_request_vec &requests)
 
   if (m_verbose) 
     { // shows the list of pending requests
-      sb_fprintf(stdout, "%g %s :", sc_simulation_time(), name());
+      sb_fprintf(stdout, "%g %s :", sc_time_stamp().to_double(), name());
       for (i = 0; i < requests.size(); ++i)
 	{
 	  simple_bus_request *request = requests[i];

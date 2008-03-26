@@ -105,7 +105,7 @@ H_FILES = \
 	roguewave.hpp \
 	sgi.hpp \
 	stlport.hpp \
-	vacpp.hpp 
+	vacpp.hpp
 
 
 noinst_HEADERS = $(H_FILES)

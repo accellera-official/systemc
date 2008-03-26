@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -43,12 +43,10 @@ extern const char* sc_copyright();
 extern const char* sc_release();
 extern const char* sc_version();
 
-// This is kept as yyyymmdd to allow comparisons.
+#define SYSTEMC_VERSION 20060505
 
-#define SYSTEMC_VERSION 20050714
-
-#define SC_RELEASE_STRING "2.1.v1"
-#define SC_API_VERSION_STRING sc_api_version_2_1_0
+#define SC_RELEASE_STRING "2.2.05jun06_beta"
+#define SC_API_VERSION_STRING sc_api_version_2_2_0
 
 
 // THIS CLASS AND STATIC INSTANCE BELOW DETECTS BAD REV OBJECTS AT LINK TIME

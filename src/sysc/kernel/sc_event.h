@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -33,13 +33,32 @@
 
  *****************************************************************************/
 
+// $Log: sc_event.h,v $
+// Revision 1.6  2006/04/11 23:13:20  acg
+//   Andy Goodrich: Changes for reduced reset support that only includes
+//   sc_cthread, but has preliminary hooks for expanding to method and thread
+//   processes also.
+//
+// Revision 1.5  2006/01/24 20:56:00  acg
+//  Andy Goodrich: fixed up CVS comment.
+//
+// Revision 1.4  2006/01/24 20:48:14  acg
+// Andy Goodrich: added deprecation warnings for notify_delayed(). Added two
+// new implementation-dependent methods, notify_next_delta() & notify_internal()
+// to replace calls to notify_delayed() from within the simulator. These two
+// new methods are simpler than notify_delayed() and should speed up simulations
+//
+// Revision 1.3  2006/01/13 18:44:29  acg
+// Added $Log to record CVS changes into the source.
+//
+
 #ifndef SC_EVENT_H
 #define SC_EVENT_H
 
 
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/kernel/sc_simcontext.h"
-#include "sysc/utils/sc_vector.h"
+#include "sysc/datatypes/bit/sc_logic.h"
 
 namespace sc_core {
 
@@ -48,6 +67,10 @@ class sc_event_timed;
 class sc_event_list;
 class sc_event_or_list;
 class sc_event_and_list;
+
+// friend function declarations
+    int sc_notify_time_compare( const void*, const void* );
+
 
 
 // ----------------------------------------------------------------------------
@@ -65,6 +88,9 @@ class sc_event
     friend class sc_process_b;
     friend class sc_method_process;
     friend class sc_thread_process;
+	template<typename IF> friend class sc_signal;
+	friend class sc_signal<bool>;
+	friend class sc_signal<sc_dt::sc_logic>;
 
 public:
 
@@ -72,6 +98,7 @@ public:
     ~sc_event();
 
     void cancel();
+
 
     void notify();
     void notify( const sc_time& );
@@ -84,21 +111,25 @@ public:
     sc_event_or_list&  operator | ( const sc_event& ) const;
     sc_event_and_list& operator & ( const sc_event& ) const;
 
+
 private:
-
-    void reset();
-
-    void trigger();
 
     void add_static( sc_method_handle ) const;
     void add_static( sc_thread_handle ) const;
     void add_dynamic( sc_method_handle ) const;
     void add_dynamic( sc_thread_handle ) const;
 
+    void notify_internal( const sc_time& );
+    void notify_next_delta();
+
     bool remove_static( sc_method_handle ) const;
     bool remove_static( sc_thread_handle ) const;
     bool remove_dynamic( sc_method_handle ) const;
     bool remove_dynamic( sc_thread_handle ) const;
+
+    void reset();
+
+    void trigger();
 
 private:
 
@@ -106,13 +137,13 @@ private:
 
     sc_simcontext*  m_simc;
     notify_t        m_notify_type;
-    int             m_delta;
+    int             m_delta_event_index;
     sc_event_timed* m_timed;
 
-    mutable sc_pvector<sc_method_handle> m_methods_static;
-    mutable sc_pvector<sc_method_handle> m_methods_dynamic;
-    mutable sc_pvector<sc_thread_handle> m_threads_static;
-    mutable sc_pvector<sc_thread_handle> m_threads_dynamic;
+    mutable std::vector<sc_method_handle> m_methods_static;
+    mutable std::vector<sc_method_handle> m_methods_dynamic;
+    mutable std::vector<sc_thread_handle> m_threads_static;
+    mutable std::vector<sc_thread_handle> m_threads_dynamic;
 
 private:
 
@@ -121,6 +152,7 @@ private:
     sc_event& operator = ( const sc_event& );
 };
 
+extern sc_event sc_non_event; // Event that never happens.
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_event_timed
@@ -150,10 +182,10 @@ private:
     const sc_time& notify_time() const
         { return m_notify_time; }
 
-    static void* operator new( size_t )
+    static void* operator new( std::size_t )
         { return allocate(); }
 
-    static void operator delete( void* p, size_t )
+    static void operator delete( void* p, std::size_t )
         { deallocate( p ); }
 
 private:
@@ -182,7 +214,7 @@ inline
 sc_event::sc_event()
 : m_simc( sc_get_curr_simcontext() ),
   m_notify_type( NONE ),
-  m_delta( -1 ),
+  m_delta_event_index( -1 ),
   m_timed( 0 )
 {}
 
@@ -191,7 +223,6 @@ sc_event::~sc_event()
 {
     cancel();
 }
-
 
 inline
 void
@@ -203,35 +234,31 @@ sc_event::notify( double v, sc_time_unit tu )
 
 inline
 void
-sc_event::notify_delayed()
+sc_event::notify_internal( const sc_time& t )
+{
+    if( t == SC_ZERO_TIME ) {
+        // add this event to the delta events set
+        m_delta_event_index = m_simc->add_delta_event( this );
+        m_notify_type = DELTA;
+    } else {
+        sc_event_timed* et =
+		new sc_event_timed( this, m_simc->time_stamp() + t );
+        m_simc->add_timed_event( et );
+        m_timed = et;
+        m_notify_type = TIMED;
+    }
+}
+
+inline
+void
+sc_event::notify_next_delta()
 {
     if( m_notify_type != NONE ) {
         SC_REPORT_ERROR( SC_ID_NOTIFY_DELAYED_, 0 );
     }
     // add this event to the delta events set
-    m_delta = m_simc->add_delta_event( this );
+    m_delta_event_index = m_simc->add_delta_event( this );
     m_notify_type = DELTA;
-}
-
-inline
-void
-sc_event::notify_delayed( const sc_time& t )
-{
-    if( m_notify_type != NONE ) {
-        SC_REPORT_ERROR( SC_ID_NOTIFY_DELAYED_, 0 );
-    }
-    if( t == SC_ZERO_TIME ) {
-        // add this event to the delta events set
-        m_delta = m_simc->add_delta_event( this );
-        m_notify_type = DELTA;
-    } else {
-        // add this event to the timed events set
-        sc_event_timed* et = new sc_event_timed( this,
-                                                 m_simc->time_stamp() + t );
-        m_simc->add_timed_event( et );
-        m_timed = et;
-        m_notify_type = TIMED;
-    }
 }
 
 inline
@@ -272,29 +299,12 @@ sc_event::add_dynamic( sc_thread_handle thread_h ) const
 
 
 // ----------------------------------------------------------------------------
-//  Functional notation for notifying events.
+//  Deprecated functional notation for notifying events.
 // ----------------------------------------------------------------------------
 
-inline
-void
-notify( sc_event& e )
-{
-    e.notify();
-}
-
-inline
-void
-notify( const sc_time& t, sc_event& e )
-{
-    e.notify( t );
-}
-
-inline
-void
-notify( double v, sc_time_unit tu, sc_event& e )
-{
-    e.notify( v, tu );
-}
+extern void notify( sc_event& e );
+extern void notify( const sc_time& t, sc_event& e );
+extern void notify( double v, sc_time_unit tu, sc_event& e );
 
 
 // ----------------------------------------------------------------------------
@@ -305,6 +315,7 @@ notify( double v, sc_time_unit tu, sc_event& e )
 
 class sc_event_list
 {
+    friend class sc_process_b;
     friend class sc_method_process;
     friend class sc_thread_process;
 
@@ -328,9 +339,9 @@ protected:
 
 private:
 
-    sc_pvector<const sc_event*> m_events;
-    bool                        m_and_list;
-    bool                        m_auto_delete;
+    std::vector<const sc_event*> m_events;
+    bool                         m_and_list;
+    bool                         m_auto_delete;
 
 private:
 
@@ -389,6 +400,7 @@ class sc_event_or_list
 : public sc_event_list
 {
     friend class sc_event;
+	friend class sc_process_b;
     friend class sc_method_process;
     friend class sc_thread_process;
 
@@ -449,6 +461,7 @@ class sc_event_and_list
 : public sc_event_list
 {
     friend class sc_event;
+	friend class sc_process_b;
     friend class sc_method_process;
     friend class sc_thread_process;
 

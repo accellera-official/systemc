@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -33,6 +33,19 @@
 
  *****************************************************************************/
 
+// $Log: sc_bit.h,v $
+// Revision 1.5  2006/04/12 20:17:52  acg
+//  Andy Goodrich: enabled deprecation message for sc_bit.
+//
+// Revision 1.4  2006/01/24 20:50:55  acg
+// Andy Goodrich: added warnings indicating that sc_bit is deprecated and that
+// the C bool data type should be used in its place.
+//
+// Revision 1.3  2006/01/13 18:53:53  acg
+// Andy Goodrich: added $Log command so that CVS comments are reproduced in
+// the source.
+//
+
 #ifndef SC_BIT_H
 #define SC_BIT_H
 
@@ -49,6 +62,167 @@ class sc_bit;
 
 // forward class declarations
 class sc_logic;
+
+extern void sc_deprecated_sc_bit();
+
+// friend operator declarations
+
+    // relational operators and functions
+
+    // MANDATORY
+
+    inline bool operator == ( const sc_bit& a, const sc_bit& b );
+    inline bool operator == ( const sc_bit& a, int b );
+    inline bool operator == ( const sc_bit& a, bool b );
+    inline bool operator == ( const sc_bit& a, char b );
+    inline bool operator == ( int a, const sc_bit& b );
+    inline bool operator == ( bool a, const sc_bit& b );
+    inline bool operator == ( char a, const sc_bit& b );
+
+    // OPTIONAL
+
+    inline bool equal( const sc_bit& a, const sc_bit& b );
+    inline bool equal( const sc_bit& a, int b );
+    inline bool equal( const sc_bit& a, bool b );
+    inline bool equal( const sc_bit& a, char b );
+    inline bool equal( int a, const sc_bit& b );
+    inline bool equal( bool a, const sc_bit& b );
+    inline bool equal( char a, const sc_bit& b );
+
+    // MANDATORY
+
+    inline bool operator != ( const sc_bit& a, const sc_bit& b );
+    inline bool operator != ( const sc_bit& a, int b );
+    inline bool operator != ( const sc_bit& a, bool b );
+    inline bool operator != ( const sc_bit& a, char b );
+    inline bool operator != ( int a, const sc_bit& b );
+    inline bool operator != ( bool a, const sc_bit& b );
+    inline bool operator != ( char a, const sc_bit& b );
+
+    // OPTIONAL
+
+    inline bool not_equal( const sc_bit& a, const sc_bit& b );
+    inline bool not_equal( const sc_bit& a, int b );
+    inline bool not_equal( const sc_bit& a, bool b );
+    inline bool not_equal( const sc_bit& a, char b );
+    inline bool not_equal( int a, const sc_bit& b );
+    inline bool not_equal( bool a, const sc_bit& b );
+    inline bool not_equal( char a, const sc_bit& b );
+
+
+    // bitwise operators and functions
+
+    // bitwise complement
+
+    // MANDATORY
+
+    inline const sc_bit operator ~ ( const sc_bit& a );
+
+    // OPTIONAL
+
+    inline const sc_bit b_not( const sc_bit& a );
+
+    // RECOMMENDED
+
+    inline void b_not( sc_bit& r, const sc_bit& a );
+
+
+    // bitwise or
+
+    // MANDATORY
+
+    inline const sc_bit operator | ( const sc_bit& a, const sc_bit& b );
+    inline const sc_bit operator | ( const sc_bit& a, int b );
+    inline const sc_bit operator | ( const sc_bit& a, bool b );
+    inline const sc_bit operator | ( const sc_bit& a, char b );
+    inline const sc_bit operator | ( int a, const sc_bit& b );
+    inline const sc_bit operator | ( bool a, const sc_bit& b );
+    inline const sc_bit operator | ( char a, const sc_bit& b );
+
+    // OPTIONAL
+
+    inline const sc_bit b_or( const sc_bit& a, const sc_bit& b );
+    inline const sc_bit b_or( const sc_bit& a, int b );
+    inline const sc_bit b_or( const sc_bit& a, bool b );
+    inline const sc_bit b_or( const sc_bit& a, char b );
+    inline const sc_bit b_or( int a, const sc_bit& b );
+    inline const sc_bit b_or( bool a, const sc_bit& b );
+    inline const sc_bit b_or( char a, const sc_bit& b );
+
+    // RECOMMENDED
+
+    inline void b_or( sc_bit& r, const sc_bit& a, const sc_bit& b );
+    inline void b_or( sc_bit& r, const sc_bit& a, int b );
+    inline void b_or( sc_bit& r, const sc_bit& a, bool b );
+    inline void b_or( sc_bit& r, const sc_bit& a, char b );
+    inline void b_or( sc_bit& r, int a, const sc_bit& b );
+    inline void b_or( sc_bit& r, bool a, const sc_bit& b );
+    inline void b_or( sc_bit& r, char a, const sc_bit& b );
+
+
+    // bitwise and
+
+    // MANDATORY
+
+    inline const sc_bit operator & ( const sc_bit& a, const sc_bit& b );
+    inline const sc_bit operator & ( const sc_bit& a, int b );
+    inline const sc_bit operator & ( const sc_bit& a, bool b );
+    inline const sc_bit operator & ( const sc_bit& a, char b );
+    inline const sc_bit operator & ( int a, const sc_bit& b );
+    inline const sc_bit operator & ( bool a, const sc_bit& b );
+    inline const sc_bit operator & ( char a, const sc_bit& b );
+    // OPTIONAL
+
+    inline const sc_bit b_and( const sc_bit& a, const sc_bit& b );
+    inline const sc_bit b_and( const sc_bit& a, int b );
+    inline const sc_bit b_and( const sc_bit& a, bool b );
+    inline const sc_bit b_and( const sc_bit& a, char b );
+    inline const sc_bit b_and( int a, const sc_bit& b );
+    inline const sc_bit b_and( bool a, const sc_bit& b );
+    inline const sc_bit b_and( char a, const sc_bit& b );
+
+    // RECOMMENDED
+
+    inline void b_and( sc_bit& r, const sc_bit& a, const sc_bit& b );
+    inline void b_and( sc_bit& r, const sc_bit& a, int b );
+    inline void b_and( sc_bit& r, const sc_bit& a, bool b );
+    inline void b_and( sc_bit& r, const sc_bit& a, char b );
+    inline void b_and( sc_bit& r, int a, const sc_bit& b );
+    inline void b_and( sc_bit& r, bool a, const sc_bit& b );
+    inline void b_and( sc_bit& r, char a, const sc_bit& b );
+
+
+    // bitwise exor
+
+    // MANDATORY
+
+    inline const sc_bit operator ^ ( const sc_bit& a, const sc_bit& b );
+    inline const sc_bit operator ^ ( const sc_bit& a, int b );
+    inline const sc_bit operator ^ ( const sc_bit& a, bool b );
+    inline const sc_bit operator ^ ( const sc_bit& a, char b );
+    inline const sc_bit operator ^ ( int a, const sc_bit& b );
+    inline const sc_bit operator ^ ( bool a, const sc_bit& b );
+    inline const sc_bit operator ^ ( char a, const sc_bit& b );
+
+    // OPTIONAL
+
+    inline const sc_bit b_xor( const sc_bit& a, const sc_bit& b );
+    inline const sc_bit b_xor( const sc_bit& a, int b );
+    inline const sc_bit b_xor( const sc_bit& a, bool b );
+    inline const sc_bit b_xor( const sc_bit& a, char b );
+    inline const sc_bit b_xor( int a, const sc_bit& b );
+    inline const sc_bit b_xor( bool a, const sc_bit& b );
+    inline const sc_bit b_xor( char a, const sc_bit& b );
+
+    // RECOMMENDED
+
+    inline void b_xor( sc_bit& r, const sc_bit& a, const sc_bit& b );
+    inline void b_xor( sc_bit& r, const sc_bit& a, int b );
+    inline void b_xor( sc_bit& r, const sc_bit& a, bool b );
+    inline void b_xor( sc_bit& r, const sc_bit& a, char b );
+    inline void b_xor( sc_bit& r, int a, const sc_bit& b );
+    inline void b_xor( sc_bit& r, bool a, const sc_bit& b );
+    inline void b_xor( sc_bit& r, char a, const sc_bit& b );
 
 
 // ----------------------------------------------------------------------------
@@ -88,23 +262,33 @@ public:
 
     sc_bit()
 	: m_val( false )
-	{}
+	{
+	    sc_deprecated_sc_bit();
+	}
 
     explicit sc_bit( uint64 a )
 	: m_val( a )
-	{}
+	{
+	    sc_deprecated_sc_bit();
+	}
 
     explicit sc_bit( bool a )
 	: m_val( a )
-	{}
+	{
+	    sc_deprecated_sc_bit();
+	}
 
     explicit sc_bit( int a )
 	: m_val( to_value( a ) )
-	{}
+	{
+	    sc_deprecated_sc_bit();
+	}
 
     explicit sc_bit( char a )
 	: m_val( to_value( a ) )
-	{}
+	{
+	    sc_deprecated_sc_bit();
+	}
 
     explicit sc_bit( const sc_logic& a );  // non-VSIA
 

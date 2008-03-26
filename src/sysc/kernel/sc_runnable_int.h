@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -35,11 +35,22 @@
 
  *****************************************************************************/
 
+// $Log: sc_runnable_int.h,v $
+// Revision 1.4  2006/04/20 17:08:17  acg
+//  Andy Goodrich: Changed loop end checks to use non-zero unique values
+//                 rather than erroneous check for zero values.
+//
+// Revision 1.3  2006/01/13 18:44:30  acg
+// Added $Log to record CVS changes into the source.
+//
+
 #ifndef SC_RUNNABLE_INT_H
 #define SC_RUNNABLE_INT_H
 
 
 #include "sysc/kernel/sc_runnable.h"
+#include "sysc/kernel/sc_method_process.h"
+#include "sysc/kernel/sc_thread_process.h"
 
 namespace sc_core {
 
@@ -68,8 +79,8 @@ inline void sc_runnable::init()
     if ( !m_methods_push_head )
     {
         m_methods_push_head = 
-            new sc_method_process(0, 0, 0);
-        m_methods_push_head->do_initialize(false);
+            new sc_method_process((const char*)0, true, (SC_ENTRY_FUNC)0, 0, 0);
+        m_methods_push_head->dont_initialize(true);
     }
     m_methods_push_tail = m_methods_push_head;
 	m_methods_push_head->set_next_runnable(SC_NO_METHODS);
@@ -78,8 +89,8 @@ inline void sc_runnable::init()
     if ( !m_threads_push_head )
     {
         m_threads_push_head = 
-            new sc_thread_process(0, 0, 0);
-        m_threads_push_head->do_initialize(false);
+            new sc_thread_process((const char*)0, true, (SC_ENTRY_FUNC)0, 0, 0);
+        m_threads_push_head->dont_initialize(true);
     }
 	m_threads_push_head->set_next_runnable(SC_NO_THREADS);
     m_threads_push_tail = m_threads_push_head;
@@ -240,7 +251,8 @@ inline void sc_runnable::remove_method( sc_method_handle remove_p )
     sc_method_handle prior_p;   // Method prior to now_p.
 
     prior_p = m_methods_push_head;
-    for ( now_p = m_methods_push_head; now_p; now_p = now_p->next_runnable() )
+    for ( now_p = m_methods_push_head; now_p!= SC_NO_METHODS; 
+	    now_p = now_p->next_runnable() )
     {
         if ( remove_p == now_p )
         {
@@ -270,7 +282,8 @@ inline void sc_runnable::remove_thread( sc_thread_handle remove_p )
     sc_thread_handle prior_p;   // Thread prior to now_p.
 
     prior_p = m_threads_push_head;
-    for ( now_p = m_threads_push_head; now_p; now_p = now_p->next_runnable() )
+    for ( now_p = m_threads_push_head; now_p != SC_NO_THREADS; 
+	    now_p = now_p->next_runnable() )
     {
         if ( remove_p == now_p )
         {

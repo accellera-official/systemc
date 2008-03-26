@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2004 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -49,7 +49,8 @@ void simple_bus_master_direct::main_action()
 
       if (m_verbose)
       	sb_fprintf(stdout, "%g %s : mem[%x:%x] = (%x, %x, %x, %x)\n",
-		      sc_simulation_time(), name(), m_address, m_address+15, 
+		      sc_time_stamp().to_double(), name(), m_address, 
+		      m_address+15, 
 		      mydata[0], mydata[1], mydata[2], mydata[3]);
 
       wait(m_timeout, SC_NS);

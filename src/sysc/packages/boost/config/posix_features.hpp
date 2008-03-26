@@ -1,13 +1,20 @@
-//  (C) Copyright Boost.org 2001. Permission to copy, use, modify, sell and
-//  distribute this software is granted provided this copyright notice appears
-//  in all copies. This software is provided "as is" without express or implied
-//  warranty, and with no claim as to its suitability for any purpose.
+//  (C) Copyright John Maddock 2001 - 2003. 
+//  Use, modification and distribution are subject to the 
+//  Boost Software License, Version 1.0. (See accompanying file 
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
 
 //  See http://www.boost.org for most recent version.
 
-// All POSIX feature tests go in this file:
+// All POSIX feature tests go in this file,
+// Note that we test _POSIX_C_SOURCE and _XOPEN_SOURCE as well
+// _POSIX_VERSION and _XOPEN_VERSION: on some systems POSIX API's
+// may be present but none-functional unless _POSIX_C_SOURCE and
+// _XOPEN_SOURCE have been defined to the right value (it's up
+// to the user to do this *before* including any header, although
+// in most cases the compiler will do this for you).
 
-#  ifdef BOOST_HAS_UNISTD_H
+#  if defined(BOOST_HAS_UNISTD_H)
 #     include <unistd.h>
 
       // XOpen has <nl_types.h>, but is this the correct version check?
@@ -25,13 +32,17 @@
 #        define BOOST_HAS_DIRENT_H
 #     endif
 
+      // POSIX version 3 requires <signal.h> to have sigaction:
+#     if defined(_POSIX_VERSION) && (_POSIX_VERSION >= 199506L)
+#        define BOOST_HAS_SIGACTION
+#     endif
       // POSIX defines _POSIX_THREADS > 0 for pthread support,
       // however some platforms define _POSIX_THREADS without
       // a value, hence the (_POSIX_THREADS+0 >= 0) check.
       // Strictly speaking this may catch platforms with a
       // non-functioning stub <pthreads.h>, but such occurrences should
       // occur very rarely if at all.
-#     if defined(_POSIX_THREADS) && (_POSIX_THREADS+0 >= 0) && !defined(BOOST_HAS_WINTHREADS)
+#     if defined(_POSIX_THREADS) && (_POSIX_THREADS+0 >= 0) && !defined(BOOST_HAS_WINTHREADS) && !defined(BOOST_HAS_MPTASKS)
 #        define BOOST_HAS_PTHREADS
 #     endif
 
@@ -65,7 +76,12 @@
       // in issue 4, version 2 (_XOPEN_VERSION > 500).
 #     if defined(_XOPEN_VERSION) && (_XOPEN_VERSION+0 >= 500)
 #        define BOOST_HAS_GETTIMEOFDAY
-#        define BOOST_HAS_PTHREAD_MUTEXATTR_SETTYPE
+#        if defined(_XOPEN_SOURCE) && (_XOPEN_SOURCE+0 >= 500)
+#           define BOOST_HAS_PTHREAD_MUTEXATTR_SETTYPE
+#        endif
 #     endif
 
 #  endif
+
+
+

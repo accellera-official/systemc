@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -34,12 +34,29 @@
  *****************************************************************************/
 
 
+// $Log: sc_time.cpp,v $
+// Revision 1.6  2006/01/26 21:04:55  acg
+//  Andy Goodrich: deprecation message changes and additional messages.
+//
+// Revision 1.5  2006/01/25 00:31:19  acg
+//  Andy Goodrich: Changed over to use a standard message id of
+//  SC_ID_IEEE_1666_DEPRECATION for all deprecation messages.
+//
+// Revision 1.4  2006/01/24 20:49:05  acg
+// Andy Goodrich: changes to remove the use of deprecated features within the
+// simulator, and to issue warning messages when deprecated features are used.
+//
+// Revision 1.3  2006/01/13 18:44:30  acg
+// Added $Log to record CVS changes into the source.
+//
+
 #include <math.h>
 #include <stdio.h>
 
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_time.h"
+#include "sysc/utils/sc_utils_ids.h"
 
 namespace sc_core {
 
@@ -177,9 +194,9 @@ sc_time::to_string() const
     }
     char buf[BUFSIZ];
 #if !defined( _MSC_VER )
-    sprintf( buf, "%llu", val );
+    std::sprintf( buf, "%llu", val );
 #else
-    sprintf( buf, "%I64u", val );
+    std::sprintf( buf, "%I64u", val );
 #endif
     std::string result( buf );
     if( n >= 15 ) {
@@ -254,7 +271,7 @@ sc_set_time_resolution( double v, sc_time_unit tu )
     sc_simcontext* simc = sc_get_curr_simcontext();
 
     // can only be specified during elaboration
-    if( simc->is_running() ) {
+    if( sc_is_running() ) {
 	SC_REPORT_ERROR( SC_ID_SET_TIME_RESOLUTION_, "simulation running" );
     }
 
@@ -303,6 +320,14 @@ sc_get_time_resolution()
 void
 sc_set_default_time_unit( double v, sc_time_unit tu )
 {
+    static bool warn_default_time_unit=true;
+    if ( warn_default_time_unit )
+    {
+        warn_default_time_unit=false;
+        SC_REPORT_INFO(SC_ID_IEEE_1666_DEPRECATION_,
+	    "deprecated function: sc_set_default_time_unit");
+    }
+    
     // first perform the necessary checks
 
     // must be positive
@@ -320,7 +345,7 @@ sc_set_default_time_unit( double v, sc_time_unit tu )
     sc_simcontext* simc = sc_get_curr_simcontext();
 
     // can only be specified during elaboration
-    if( simc->is_running() ) {
+    if( sc_is_running() ) {
 	SC_REPORT_ERROR( SC_ID_SET_DEFAULT_TIME_UNIT_, "simulation running" );
     }
 
@@ -352,6 +377,13 @@ sc_set_default_time_unit( double v, sc_time_unit tu )
 sc_time
 sc_get_default_time_unit()
 {
+    bool warn_get_default_time_unit = true;
+    if ( warn_get_default_time_unit )
+    {
+        warn_get_default_time_unit=false;
+        SC_REPORT_INFO(SC_ID_IEEE_1666_DEPRECATION_,
+            "deprecated function: sc_get_default_time_unit");
+    }
     return sc_time( sc_get_curr_simcontext()->m_time_params->default_time_unit,
 		    false );
 }

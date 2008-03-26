@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2004 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -51,7 +51,7 @@ int sc_main(int ac, char* av[])
  sc_signal<bool> data_req;
  sc_signal<bool> data_ready;
 
- sc_clock clock("CLOCK", 10, 0.5, 0.0);
+ sc_clock clock("CLOCK", 10, SC_NS, 0.5, 0.0, SC_NS);
 
  fft FFT1("FFTPROCESS"); 
  FFT1.in_real(in_real);
@@ -78,7 +78,7 @@ int sc_main(int ac, char* av[])
  SINK1.in_imag(out_imag);
  SINK1.CLK(clock);
 
- sc_start(clock,-1);
+ sc_start();
  return 0;
 
 }

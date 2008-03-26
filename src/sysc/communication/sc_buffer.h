@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -33,6 +33,43 @@
   Description of Modification:
     
  *****************************************************************************/
+//$Log: sc_buffer.h,v $
+//Revision 1.8  2006/03/13 20:19:43  acg
+// Andy Goodrich: changed sc_event instances into pointers to sc_event instances
+// that are allocated as needed. This saves considerable storage for large
+// numbers of signals, etc.
+//
+//Revision 1.7  2006/01/26 21:00:49  acg
+// Andy Goodrich: conversion to use sc_event::notify(SC_ZERO_TIME) instead of
+// sc_event::notify_delayed()
+//
+//Revision 1.6  2006/01/24 20:46:31  acg
+//Andy Goodrich: changes to eliminate use of deprecated features. For instance,
+//using notify(SC_ZERO_TIME) in place of notify_delayed().
+//
+//Revision 1.5  2006/01/19 19:18:25  acg
+//Andy Goodrich: eliminated check_writer in favor of inline code within the
+//write() method since we always execute the check_writer code even when
+//check writing is turned off.
+//
+//Revision 1.4  2006/01/19 00:30:57  acg
+//Andy Goodrich: Yet another implementation for disabling write checks on
+//signals. This version uses an environment variable, SC_SIGNAL_WRITE_CHECK,
+//that when set to DISABLE will turn off write checking.
+//
+//Revision 1.3  2006/01/13 18:47:20  acg
+//Reversed sense of multiwriter signal check. It now defaults to ON unless the
+//user defines SC_NO_WRITE_CHEK before inclusion of the file.
+//
+//Revision 1.2  2006/01/03 23:18:26  acg
+//Changed copyright to include 2006.
+//
+//Revision 1.1.1.1  2005/12/19 23:16:43  acg
+//First check in of SystemC 2.1 into its own archive.
+//
+//Revision 1.9  2005/06/10 22:43:55  acg
+//Added CVS change log annotation.
+//
 
 #ifndef SC_BUFFER_H
 #define SC_BUFFER_H
@@ -112,9 +149,13 @@ inline
 void
 sc_buffer<T>::write( const T& value_ )
 {
-#ifdef DEBUG_SYSTEMC
-    this->check_writer();
-#endif
+    sc_object* writer = sc_get_curr_simcontext()->get_current_writer();
+    if( sc_signal<T>::m_writer == 0 ) {
+	sc_signal<T>::m_writer = writer;
+    } else if( sc_signal<T>::m_writer != writer ) {
+	sc_signal_invalid_writer( this, sc_signal<T>::m_writer, writer );
+    }
+
     this->m_new_val = value_;
     this->request_update();
 }
@@ -126,8 +167,9 @@ void
 sc_buffer<T>::update()
 {
     this->m_cur_val = this->m_new_val;
-    this->m_value_changed_event.notify_delayed();
-    this->m_delta = this->simcontext()->delta_count();
+    if ( sc_signal<T>::m_change_event_p )
+	    sc_signal<T>::m_change_event_p->notify(SC_ZERO_TIME);
+    this->m_delta = sc_delta_count();
 }
 
 } // namespace sc_core

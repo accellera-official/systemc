@@ -1,7 +1,10 @@
-//  (C) Copyright Boost.org 2001. Permission to copy, use, modify, sell and
-//  distribute this software is granted provided this copyright notice appears
-//  in all copies. This software is provided "as is" without express or implied
-//  warranty, and with no claim as to its suitability for any purpose.
+//  (C) Copyright John Maddock 2001 - 2003. 
+//  (C) Copyright Bill Kempf 2001. 
+//  (C) Copyright Aleksey Gurtovoy 2003. 
+//  (C) Copyright Rene Rivera 2005.
+//  Use, modification and distribution are subject to the 
+//  Boost Software License, Version 1.0. (See accompanying file 
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org for most recent version.
 
@@ -9,70 +12,47 @@
 
 #define BOOST_PLATFORM "Win32"
 
-#if defined BOOST_DECL_EXPORTS
-#  if defined BOOST_DECL_IMPORTS
-#     error Not valid to define both BOOST_DECL_EXPORTS and BOOST_DECL_IMPORTS
-#  endif
-#  define BOOST_DECL __declspec(dllexport)
-#elif defined BOOST_DECL_IMPORTS
-#  define BOOST_DECL __declspec(dllimport)
-#else
-#  define BOOST_DECL
+//  Get the information about the MinGW runtime, i.e. __MINGW32_*VERSION.
+#if defined(__MINGW32__)
+#  include <_mingw.h>
 #endif
 
 #if defined(__GNUC__) && !defined(BOOST_NO_SWPRINTF)
 #  define BOOST_NO_SWPRINTF
 #endif
 
-#ifndef BOOST_DISABLE_WIN32
+#if !defined(__GNUC__) && !defined(BOOST_HAS_DECLSPEC)
+#  define BOOST_HAS_DECLSPEC
+#endif
+
+#if defined(__MINGW32__) && ((__MINGW32_MAJOR_VERSION > 2) || ((__MINGW32_MAJOR_VERSION == 2) && (__MINGW32_MINOR_VERSION >= 0)))
+#  define BOOST_HAS_STDINT_H
+#  define __STDC_LIMIT_MACROS
+#  define BOOST_HAS_DIRENT_H
+#  define BOOST_HAS_UNISTD_H
+#endif
+
 //
 // Win32 will normally be using native Win32 threads,
-// but there is a pthread library avaliable as an option:
+// but there is a pthread library avaliable as an option,
+// we used to disable this when BOOST_DISABLE_WIN32 was 
+// defined but no longer - this should allow some
+// files to be compiled in strict mode - while maintaining
+// a consistent setting of BOOST_HAS_THREADS across
+// all translation units (needed for shared_ptr etc).
 //
+
+#ifdef _WIN32_WCE
+#  define BOOST_NO_ANSI_APIS
+#endif
+
 #ifndef BOOST_HAS_PTHREADS
 #  define BOOST_HAS_WINTHREADS
 #endif
 
+#ifndef BOOST_DISABLE_WIN32
 // WEK: Added
 #define BOOST_HAS_FTIME
+#define BOOST_WINDOWS 1
 
 #endif
-
-//
-// disable min/max macros:
-//
-#ifdef min
-#  undef min
-#endif
-#ifdef max
-#  undef max
-#endif
-#ifndef NOMINMAX
-#  define NOMINMAX
-#endif
-
-#ifdef BOOST_MSVC
-namespace std{
-  // Apparently, something in the Microsoft libraries requires the "long"
-  // overload, because it calls the min/max functions with arguments of
-  // slightly different type.  (If this proves to be incorrect, this
-  // whole "BOOST_MSVC" section can be removed.)
-  inline long min(long __a, long __b) {
-    return __b < __a ? __b : __a;
-  }
-  inline long max(long __a, long __b) {
-    return  __a < __b ? __b : __a;
-  }
-  // The "long double" overload is required, otherwise user code calling
-  // min/max for floating-point numbers will use the "long" overload.
-  // (SourceForge bug #495495)
-  inline long double min(long double __a, long double __b) {
-    return __b < __a ? __b : __a;
-  }
-  inline long double max(long double __a, long double __b) {
-    return  __a < __b ? __b : __a;
-  }
-}
-using std::min;
-using std::max;
-#     endif

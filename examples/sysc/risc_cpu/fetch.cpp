@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2004 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -56,7 +56,7 @@ void fetch::entry()
    address.write(addr_tmp);
    wait(memory_latency); 		// For data to appear
 
-   wait_until((bios_valid.delayed() == true) || (icache_valid.delayed() == true));
+   do { wait(); } while ( !((bios_valid == true) || (icache_valid == true)) );
    if (stall_fetch.read() == true) {
    	datai_tmp = 0;
    } else {
@@ -120,7 +120,7 @@ void fetch::entry()
 		addr_tmp = branch_address.read();
     		ram_we.write(false);
     		wait(memory_latency); 
-		wait_until((bios_valid.delayed() == true) || (icache_valid.delayed() == true));
+		do { wait(); } while ( !((bios_valid == true) || (icache_valid == true)) );
     		datai_tmp = ramdata.read();
 
    		cout.setf(ios::hex,ios::basefield);
@@ -144,7 +144,7 @@ void fetch::entry()
     		address.write(addr_tmp);
     		ram_we.write(false);
     		wait(memory_latency); // For data to appear
-		wait_until((bios_valid.delayed() == true) || (icache_valid.delayed() == true));
+		do { wait(); } while ( !((bios_valid == true) || (icache_valid == true)) );
     		datai_tmp = ramdata.read();
 
    		cout.setf(ios::hex,ios::basefield);

@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2004 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -40,7 +40,7 @@ int sc_main(int, char **)
 {
   simple_bus_test top("top");
 
-  sc_start(10000);
+  sc_start(10000, SC_NS);
 
   return 0;
 }

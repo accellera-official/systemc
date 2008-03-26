@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -34,6 +34,12 @@
  *****************************************************************************/
 
 
+// $Log: sc_lv_base.cpp,v $
+// Revision 1.3  2006/01/13 18:53:53  acg
+// Andy Goodrich: added $Log command so that CVS comments are reproduced in
+// the source.
+//
+
 #include "sysc/datatypes/bit/sc_bit_ids.h"
 #include "sysc/datatypes/bit/sc_lv_base.h"
 
@@ -47,11 +53,11 @@ namespace sc_dt
 //  Arbitrary size logic vector base class.
 // ----------------------------------------------------------------------------
 
-static const unsigned long data_array[] =
-    { UL_ZERO, ~UL_ZERO, UL_ZERO, ~UL_ZERO };
+static const sc_digit data_array[] =
+    { SC_DIGIT_ZERO, ~SC_DIGIT_ZERO, SC_DIGIT_ZERO, ~SC_DIGIT_ZERO };
 
-static const unsigned long ctrl_array[] =
-    { UL_ZERO, UL_ZERO, ~UL_ZERO, ~UL_ZERO };
+static const sc_digit ctrl_array[] =
+    { SC_DIGIT_ZERO, SC_DIGIT_ZERO, ~SC_DIGIT_ZERO, ~SC_DIGIT_ZERO };
 
 
 void
@@ -63,12 +69,12 @@ sc_lv_base::init( int length_, const sc_logic& init_value )
     }
     // allocate memory for the data and control words
     m_len = length_;
-    m_size = (m_len - 1) / UL_SIZE + 1;
-    m_data = new unsigned long[m_size * 2];
+    m_size = (m_len - 1) / SC_DIGIT_SIZE + 1;
+    m_data = new sc_digit[m_size * 2];
     m_ctrl = m_data + m_size;
     // initialize the bits to 'init_value'
-    unsigned long dw = data_array[init_value.value()];
-    unsigned long cw = ctrl_array[init_value.value()];
+    sc_digit dw = data_array[init_value.value()];
+    sc_digit cw = ctrl_array[init_value.value()];
     int sz = m_size;
     for( int i = 0; i < sz; ++ i ) {
 	m_data[i] = dw;
@@ -88,7 +94,7 @@ sc_lv_base::assign_from_string( const std::string& s )
     int i = 0;
     for( ; i < min_len; ++ i ) {
 	char c = s[s_len - i - 1];
-	set_bit( i, sc_logic::char_to_logic[(unsigned int)c] );
+	set_bit( i, sc_logic::char_to_logic[(int)c] );
     }
     // if formatted, fill the rest with sign(s), otherwise fill with zeros
     sc_logic_value_t fill = (s[s_len] == 'F' ? sc_logic_value_t( s[0] - '0' )
@@ -119,7 +125,7 @@ sc_lv_base::sc_lv_base( const char* a, int length_ )
 sc_lv_base::sc_lv_base( const sc_lv_base& a )
     : m_len( a.m_len ),
       m_size( a.m_size ),
-      m_data( new unsigned long[m_size * 2] ),
+      m_data( new sc_digit[m_size * 2] ),
       m_ctrl( m_data + m_size )
 {
     // copy the bits

@@ -49,14 +49,14 @@ uint64 sc_unsigned_subref_r::concat_get_uint64() const // #### Speed up!
 }
 
 
-bool sc_unsigned_subref_r::concat_get_ctrl(unsigned long* dst_p, int low_i) const
+bool sc_unsigned_subref_r::concat_get_ctrl(sc_digit* dst_p, int low_i) const
     // #### Speed up!
 {
     sc_unsigned a( m_obj_p, m_left, m_right );  
     return a.concat_get_ctrl( dst_p, low_i );
 }
 
-bool sc_unsigned_subref_r::concat_get_data(unsigned long* dst_p, int low_i) const
+bool sc_unsigned_subref_r::concat_get_data(sc_digit* dst_p, int low_i) const
     // #### Speed up!
 {
     sc_unsigned a( m_obj_p, m_left, m_right );  
@@ -243,9 +243,9 @@ sc_unsigned_subref::operator = ( double v )
     int nd = DIV_CEIL(nb);
 
 #ifdef SC_MAX_NBITS
-    unsigned long d[MAX_NDIGITS];
+    sc_digit d[MAX_NDIGITS];
 #else
-    unsigned long *d = new unsigned long[nd];
+    sc_digit *d = new sc_digit[nd];
 #endif
 
     if (v < 0)
@@ -255,16 +255,16 @@ sc_unsigned_subref::operator = ( double v )
 
     while (floor(v) && (i < nd)) {
 #ifndef WIN32
-	d[i++] = (unsigned long) floor(remainder(v, DIGIT_RADIX));
+	d[i++] = (sc_digit) floor(remainder(v, DIGIT_RADIX));
 #else
-	d[i++] = (unsigned long) floor(fmod(v, DIGIT_RADIX));
+	d[i++] = (sc_digit) floor(fmod(v, DIGIT_RADIX));
 #endif
 	v /= DIGIT_RADIX;
     }
 
     vec_zero(i, nd, d);
 
-    unsigned long val = 1;  // Bit value.
+    sc_digit val = 1;  // Bit value.
     int j = 0;   // Current digit in d.
 
     i = 0;  // Current bit in d.

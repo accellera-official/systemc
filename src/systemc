@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2004 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -33,17 +33,25 @@
 
  *****************************************************************************/
 
+// $Log: systemc,v $
+// Revision 1.5  2006/04/11 23:11:16  acg
+//   Andy Goodrich: remove inclusions that exposed sc_method_process,
+//   sc_thread_process, and sc_cthread_process internals.
+//
+// Revision 1.4  2006/01/25 00:48:29  acg
+//  Andy Goodrich: added capture of CVS logging messages in the source.
+//
+
 #ifndef SYSTEMC_INCLUDED
 #define SYSTEMC_INCLUDED
-
 
 // include this file first
 #include "sysc/kernel/sc_cmnhdr.h"
 
 #include "sysc/kernel/sc_externs.h"
 #include "sysc/kernel/sc_module.h"
-#include "sysc/kernel/sc_process_b.h"
 #include "sysc/kernel/sc_simcontext.h"
+#include "sysc/kernel/sc_process_handle.h"
 #include "sysc/kernel/sc_ver.h"
 
 #include "sysc/communication/sc_buffer.h"
@@ -87,5 +95,6 @@
 #include "sysc/tracing/sc_wif_trace.h"
 
 #include "sysc/utils/sc_iostream.h"
+#include "sysc/utils/sc_utils_ids.h"
 
 #endif // !defined(SYSTEMC_INCLUDED)

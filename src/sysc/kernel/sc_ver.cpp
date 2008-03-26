@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -34,6 +34,11 @@
  *****************************************************************************/
 
 
+// $Log: sc_ver.cpp,v $
+// Revision 1.3  2006/01/13 18:44:30  acg
+// Added $Log to record CVS changes into the source.
+//
+
 #include "sysc/kernel/sc_ver.h"
 #include "sysc/utils/sc_iostream.h"
 
@@ -41,7 +46,7 @@ namespace sc_core {
 
 static
 const char copyright[] =
-    "        Copyright (c) 1996-2005 by all Contributors\n"
+    "        Copyright (c) 1996-2006 by all Contributors\n"
     "                    ALL RIGHTS RESERVED";
 
 static

@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -37,6 +37,30 @@
   Description of Modification:
     
  *****************************************************************************/
+//$Log: sc_clock.h,v $
+//Revision 1.5  2006/01/25 00:31:11  acg
+// Andy Goodrich: Changed over to use a standard message id of
+// SC_ID_IEEE_1666_DEPRECATION for all deprecation messages.
+//
+//Revision 1.4  2006/01/24 20:43:25  acg
+// Andy Goodrich: convert notify_delayed() calls into notify_internal() calls.
+// notify_internal() is an implementation dependent version of notify_delayed()
+// that is simpler, and does not trigger the deprecation warning one would get
+// using notify_delayed().
+//
+//Revision 1.3  2006/01/18 21:42:26  acg
+//Andy Goodrich: Changes for check writer support, and tightening up sc_clock
+//port usage.
+//
+//Revision 1.2  2006/01/03 23:18:26  acg
+//Changed copyright to include 2006.
+//
+//Revision 1.1.1.1  2005/12/19 23:16:43  acg
+//First check in of SystemC 2.1 into its own archive.
+//
+//Revision 1.14  2005/06/10 22:43:55  acg
+//Added CVS change log annotation.
+//
 
 #ifndef SC_CLOCK_H
 #define SC_CLOCK_H
@@ -97,6 +121,7 @@ public:
     // destructor (does nothing)
     virtual ~sc_clock();
 
+    virtual void register_port( sc_port_base&, const char* if_type );
     virtual void write( const bool& );
 
     // get the period
@@ -187,20 +212,18 @@ inline
 void
 sc_clock::posedge_action()
 {
-    //m_posedge_event.notify_delayed();
-    //m_value_changed_event.notify_delayed();
-    m_next_negedge_event.notify_delayed( m_negedge_time );
-    sc_signal<bool>::write(true);
+    m_next_negedge_event.notify_internal( m_negedge_time );
+	m_new_val = true;
+	request_update();
 }
 
 inline
 void
 sc_clock::negedge_action()
 {
-    //m_negedge_event.notify_delayed();
-    //m_value_changed_event.notify_delayed();
-    m_next_posedge_event.notify_delayed( m_posedge_time );
-    sc_signal<bool>::write(false);
+    m_next_posedge_event.notify_internal( m_posedge_time );
+	m_new_val = false;
+	request_update();
 }
 
 

@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -34,6 +34,12 @@
 
  *****************************************************************************/
 
+// $Log: scfx_mant.h,v $
+// Revision 1.3  2006/01/13 18:53:58  acg
+// Andy Goodrich: added $Log command so that CVS comments are reproduced in
+// the source.
+//
+
 #ifndef SCFX_MANT_H
 #define SCFX_MANT_H
 
@@ -51,7 +57,7 @@ class scfx_mant;
 class scfx_mant_ref;
 
 
-typedef unsigned long  word;
+typedef unsigned int  word;       // Using int because of 64-bit machines.
 typedef unsigned short half_word;
 
 
@@ -69,7 +75,7 @@ class scfx_mant
 
 public:
 
-    explicit scfx_mant( size_t );
+    explicit scfx_mant( std::size_t );
              scfx_mant( const scfx_mant& );
 
     scfx_mant& operator = ( const scfx_mant& );
@@ -92,11 +98,11 @@ public:
 
 private:
 
-    static word* alloc( size_t );
-    static void free( word*, size_t );
+    static word* alloc( std::size_t );
+    static void free( word*, std::size_t );
 
-    static word* alloc_word( size_t size );
-    static void free_word( word* array, size_t size );
+    static word* alloc_word( std::size_t size );
+    static void free_word( word* array, std::size_t size );
 
 };
 
@@ -113,22 +119,22 @@ scfx_mant::size() const
 
 inline
 word*
-scfx_mant::alloc( size_t size )
+scfx_mant::alloc( std::size_t size )
 {
-#if defined( SCFX_BIG_ENDIAN )
+#if defined( SC_BIG_ENDIAN )
     return alloc_word( size ) + ( size - 1 );
-#elif defined( SCFX_LITTLE_ENDIAN )
+#elif defined( SC_LITTLE_ENDIAN )
     return alloc_word( size );
 #endif
 }
 
 inline
 void
-scfx_mant::free( word* mant, size_t size )
+scfx_mant::free( word* mant, std::size_t size )
 {
-#if defined( SCFX_BIG_ENDIAN )
+#if defined( SC_BIG_ENDIAN )
     free_word( mant - ( size - 1 ), size );
-#elif defined( SCFX_LITTLE_ENDIAN )
+#elif defined( SC_LITTLE_ENDIAN )
     free_word( mant, size );
 #endif
 }
@@ -138,9 +144,9 @@ word
 scfx_mant::operator[]( int i ) const
 {
     SC_ASSERT_( i >= 0 && i < m_size, "mantissa index out of range" );
-#if defined( SCFX_BIG_ENDIAN )
+#if defined( SC_BIG_ENDIAN )
     return m_array[-i];
-#elif defined( SCFX_LITTLE_ENDIAN )
+#elif defined( SC_LITTLE_ENDIAN )
     return m_array[i];
 #endif
 }
@@ -150,15 +156,15 @@ word&
 scfx_mant::operator[]( int i )
 {
     SC_ASSERT_( i >= 0 && i < m_size, "mantissa index out of range" );
-#if defined( SCFX_BIG_ENDIAN )
+#if defined( SC_BIG_ENDIAN )
     return m_array[-i];
-#elif defined( SCFX_LITTLE_ENDIAN )
+#elif defined( SC_LITTLE_ENDIAN )
     return m_array[i];
 #endif
 }
 
 inline
-scfx_mant::scfx_mant( size_t size )
+scfx_mant::scfx_mant( std::size_t size )
 {
     m_array = alloc( m_size = size );
 }
@@ -238,17 +244,17 @@ scfx_mant::resize_to( int size, int restore )
 		{
 		    if( i < end )
 		    {
-#if defined( SCFX_BIG_ENDIAN )
+#if defined( SC_BIG_ENDIAN )
 		        p[-i] = m_array[-i];
-#elif defined( SCFX_LITTLE_ENDIAN )
+#elif defined( SC_LITTLE_ENDIAN )
 			p[i] = m_array[i];
 #endif
 		    }
 		    else
 		    {
-#if defined( SCFX_BIG_ENDIAN )
+#if defined( SC_BIG_ENDIAN )
 		        p[-i] = 0;
-#elif defined( SCFX_LITTLE_ENDIAN )
+#elif defined( SC_LITTLE_ENDIAN )
 			p[i] = 0;
 #endif
 		    }
@@ -260,17 +266,17 @@ scfx_mant::resize_to( int size, int restore )
 		{
 		    if( i < end )
 		    {
-#if defined( SCFX_BIG_ENDIAN )
+#if defined( SC_BIG_ENDIAN )
 		        p[-size+1+i] = m_array[-m_size+1+i];
-#elif defined( SCFX_LITTLE_ENDIAN )
+#elif defined( SC_LITTLE_ENDIAN )
 			p[size-1-i] = m_array[m_size-1-i];
 #endif
 		    }
 		    else
 		    {
-#if defined( SCFX_BIG_ENDIAN )
+#if defined( SC_BIG_ENDIAN )
 		        p[-size+1+i] = 0;
-#elif defined( SCFX_LITTLE_ENDIAN )
+#elif defined( SC_LITTLE_ENDIAN )
 			p[size-1-i] = 0;
 #endif
 		    }
@@ -290,9 +296,9 @@ scfx_mant::half_at( int i ) const
 {
     SC_ASSERT_( ( i >> 1 ) >= 0 && ( i >> 1 ) < m_size,
 		"mantissa index out of range" );
-#if defined( SCFX_BIG_ENDIAN )
+#if defined( SC_BIG_ENDIAN )
     return reinterpret_cast<half_word*>( m_array )[-i];
-#elif defined( SCFX_LITTLE_ENDIAN )
+#elif defined( SC_LITTLE_ENDIAN )
     return reinterpret_cast<half_word*>( m_array )[i];
 #endif
 }
@@ -303,9 +309,9 @@ scfx_mant::half_at( int i )
 {
     SC_ASSERT_( ( i >> 1 ) >= 0 && ( i >> 1 ) < m_size,
 		"mantissa index out of range" );
-#if defined( SCFX_BIG_ENDIAN )
+#if defined( SC_BIG_ENDIAN )
     return reinterpret_cast<half_word*>( m_array )[-i];
-#elif defined( SCFX_LITTLE_ENDIAN )
+#elif defined( SC_LITTLE_ENDIAN )
     return reinterpret_cast<half_word*>( m_array )[i];
 #endif
 }
@@ -315,9 +321,9 @@ half_word*
 scfx_mant::half_addr( int i ) const
 {
     SC_ASSERT_( i >= 0 && i < m_size, "mantissa index out of range" );
-#if defined( SCFX_BIG_ENDIAN )
+#if defined( SC_BIG_ENDIAN )
     return reinterpret_cast<half_word*>( m_array - i ) + 1;
-#elif defined( SCFX_LITTLE_ENDIAN )
+#elif defined( SC_LITTLE_ENDIAN )
     return reinterpret_cast<half_word*>( m_array + i );
 #endif
 }
@@ -390,7 +396,7 @@ private:
     scfx_mant_ref( const scfx_mant_ref& );
     scfx_mant_ref& operator = ( const scfx_mant_ref& );
 
-    void* operator new( size_t sz ) { return ::operator new( sz ); }
+    void* operator new( std::size_t sz ) { return ::operator new( sz ); }
 
 };
 

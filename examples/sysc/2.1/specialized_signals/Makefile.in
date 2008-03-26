@@ -93,16 +93,16 @@ install_sh = @install_sh@
 CXX_FILES = \
 	main.cpp \
 	scx_signal_int.cpp \
-	scx_signal_signed.cpp \
 	scx_signal_uint.cpp \
-	scx_signal_unsigned.cpp
+	scx_signal_signed.cpp \
+	scx_signal_unsigned.cpp 
 
 
 H_FILES = \
 	scx_signal_int.h \
-	scx_signal_signed.h \
 	scx_signal_uint.h \
-	scx_signal_unsigned.h
+	scx_signal_signed.h \
+	scx_signal_unsigned.h 
 
 
 check_PROGRAMS = specialized_signals
@@ -120,7 +120,7 @@ mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_CLEAN_FILES =
 check_PROGRAMS = specialized_signals$(EXEEXT)
 am__objects_1 = main.$(OBJEXT) scx_signal_int.$(OBJEXT) \
-	scx_signal_signed.$(OBJEXT) scx_signal_uint.$(OBJEXT) \
+	scx_signal_uint.$(OBJEXT) scx_signal_signed.$(OBJEXT) \
 	scx_signal_unsigned.$(OBJEXT)
 am__objects_2 =
 am_specialized_signals_OBJECTS = $(am__objects_1) $(am__objects_2)

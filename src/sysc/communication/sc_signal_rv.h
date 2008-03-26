@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -32,6 +32,24 @@
   Description of Modification:
     
  *****************************************************************************/
+//$Log: sc_signal_rv.h,v $
+//Revision 1.3  2006/03/21 00:00:27  acg
+//  Andy Goodrich: changed name of sc_get_current_process_base() to be
+//  sc_get_current_process_b() since its returning an sc_process_b instance.
+//
+//Revision 1.2  2006/01/03 23:18:26  acg
+//Changed copyright to include 2006.
+//
+//Revision 1.1.1.1  2005/12/19 23:16:43  acg
+//First check in of SystemC 2.1 into its own archive.
+//
+//Revision 1.10  2005/09/15 23:01:52  acg
+//Added std:: prefix to appropriate methods and types to get around
+//issues with the Edison Front End.
+//
+//Revision 1.9  2005/06/10 22:43:55  acg
+//Added CVS change log annotation.
+//
 
 #ifndef SC_SIGNAL_RV_H
 #define SC_SIGNAL_RV_H
@@ -59,7 +77,7 @@ class sc_lv_resolve
 public:
 
     // resolves sc_dt::sc_lv<W> values and returns the resolved value
-    static void resolve(sc_dt::sc_lv<W>&, const sc_pvector<sc_dt::sc_lv<W>*>&);
+    static void resolve(sc_dt::sc_lv<W>&, const std::vector<sc_dt::sc_lv<W>*>&);
 };
 
 
@@ -71,7 +89,7 @@ template <int W>
 inline
 void
 sc_lv_resolve<W>::resolve( sc_dt::sc_lv<W>& result_,
-			   const sc_pvector<sc_dt::sc_lv<W>*>& values_ )
+			   const std::vector<sc_dt::sc_lv<W>*>& values_ )
 {
     int sz = values_.size();
 
@@ -154,8 +172,8 @@ protected:
 
 protected:
 
-    sc_pvector<sc_process_b*> m_proc_vec; // processes writing to this signal
-    sc_pvector<data_type*>    m_val_vec;  // new values written to this signal
+    std::vector<sc_process_b*> m_proc_vec; // processes writing this signal
+    std::vector<data_type*>       m_val_vec;  // new values written this signal
 
 private:
 
@@ -186,7 +204,7 @@ inline
 void
 sc_signal_rv<W>::write( const data_type& value_ )
 {
-    sc_process_b* cur_proc = sc_get_curr_process_handle();
+    sc_process_b* cur_proc = sc_get_current_process_b();
 
     bool value_changed = false;
     bool found = false;

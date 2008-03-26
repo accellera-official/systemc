@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -37,6 +37,12 @@
  *****************************************************************************/
 
 
+// $Log: sc_nbexterns.cpp,v $
+// Revision 1.3  2006/01/13 18:49:32  acg
+// Added $Log command so that CVS check in comments are reproduced in the
+// source.
+//
+
 #include "sysc/datatypes/int/sc_nbexterns.h"
 #include "sysc/kernel/sc_macros.h"
 
@@ -51,9 +57,9 @@ namespace sc_dt
 // Handles the cases 3 and 4 and returns the result in u.
 void
 add_on_help(small_type &us, int /* unb */, int und,
-            unsigned long *ud, 
+            sc_digit *ud, 
             small_type vs, int /* vnb */, int vnd,
-            const unsigned long *vd)
+            const sc_digit *vd)
 {
 
   vnd = vec_skip_leading_zeros(vnd, vd);
@@ -115,9 +121,9 @@ vice versa.
 void
 mul_on_help_signed(small_type &us, 
                    int unb, int und, 
-                   unsigned long *ud, 
+                   sc_digit *ud, 
                    int vnb, int vnd,
-                   const unsigned long *vd)
+                   const sc_digit *vd)
 {
 #define CONVERT_SM_to_2C_to_SM convert_signed_SM_to_2C_to_SM
 #define COPY_DIGITS copy_digits_signed
@@ -129,8 +135,8 @@ mul_on_help_signed(small_type &us,
     und = vec_skip_leading_zeros(und, ud);
     vnd = vec_skip_leading_zeros(vnd, vd);
     
-    unsigned long ud0 = (*ud);
-    unsigned long vd0 = (*vd);
+    sc_digit ud0 = (*ud);
+    sc_digit vd0 = (*vd);
     
     if ((vnd == 1) && (vd0 == 1)) {
       us = CONVERT_SM_to_2C_to_SM(us, unb, old_und, ud);
@@ -145,7 +151,7 @@ mul_on_help_signed(small_type &us,
     if ((und == 1) && (vnd == 1) && 
         (ud0 < HALF_DIGIT_RADIX) && (vd0 < HALF_DIGIT_RADIX)) {
       
-      unsigned long d = ud0 * vd0;
+      sc_digit d = ud0 * vd0;
       COPY_DIGITS(us, unb, old_und, ud, unb + vnb, 1, &d);
       return;
       
@@ -154,9 +160,9 @@ mul_on_help_signed(small_type &us,
     int nd = und + vnd;
     
 #ifdef SC_MAX_NBITS
-    unsigned long d[MAX_NDIGITS];
+    sc_digit d[MAX_NDIGITS];
 #else
-    unsigned long *d = new unsigned long[nd];
+    sc_digit *d = new sc_digit[nd];
 #endif
   
     vec_zero(nd, d);
@@ -190,9 +196,9 @@ mul_on_help_signed(small_type &us,
 void
 mul_on_help_unsigned(small_type &us, 
                      int unb, int und, 
-                     unsigned long *ud, 
+                     sc_digit *ud, 
                      int vnb, int vnd,
-                     const unsigned long *vd)
+                     const sc_digit *vd)
 {
 #define CONVERT_SM_to_2C_to_SM convert_unsigned_SM_to_2C_to_SM
 #define COPY_DIGITS copy_digits_unsigned
@@ -204,8 +210,8 @@ mul_on_help_unsigned(small_type &us,
     und = vec_skip_leading_zeros(und, ud);
     vnd = vec_skip_leading_zeros(vnd, vd);
     
-    unsigned long ud0 = (*ud);
-    unsigned long vd0 = (*vd);
+    sc_digit ud0 = (*ud);
+    sc_digit vd0 = (*vd);
     
     if ((vnd == 1) && (vd0 == 1)) {
       us = CONVERT_SM_to_2C_to_SM(us, unb, old_und, ud);
@@ -220,7 +226,7 @@ mul_on_help_unsigned(small_type &us,
     if ((und == 1) && (vnd == 1) && 
         (ud0 < HALF_DIGIT_RADIX) && (vd0 < HALF_DIGIT_RADIX)) {
       
-      unsigned long d = ud0 * vd0;
+      sc_digit d = ud0 * vd0;
       COPY_DIGITS(us, unb, old_und, ud, unb + vnb, 1, &d);
       return;
       
@@ -229,9 +235,9 @@ mul_on_help_unsigned(small_type &us,
     int nd = und + vnd;
     
 #ifdef SC_MAX_NBITS
-    unsigned long d[MAX_NDIGITS];
+    sc_digit d[MAX_NDIGITS];
 #else
-    unsigned long *d = new unsigned long[nd];
+    sc_digit *d = new sc_digit[nd];
 #endif
   
     vec_zero(nd, d);
@@ -269,9 +275,9 @@ mul_on_help_unsigned(small_type &us,
 void
 div_on_help_signed(small_type &us, 
                    int unb, int und, 
-                   unsigned long *ud, 
+                   sc_digit *ud, 
                    int vnb, int vnd,
-                   const unsigned long *vd)
+                   const sc_digit *vd)
 {
 #define CONVERT_SM_to_2C_to_SM convert_signed_SM_to_2C_to_SM
 #define COPY_DIGITS copy_digits_signed
@@ -291,7 +297,7 @@ div_on_help_signed(small_type &us,
       return;
     }
     
-    unsigned long vd0 = (*vd);
+    sc_digit vd0 = (*vd);
     
     if ((cmp_res > 0) && (vnd == 1) && (vd0 == 1))  {
       us = CONVERT_SM_to_2C_to_SM(us, unb, old_und, ud);
@@ -302,9 +308,9 @@ div_on_help_signed(small_type &us,
     int nd = sc_max(und, vnd) + 1;
     
 #ifdef SC_MAX_NBITS
-    unsigned long d[MAX_NDIGITS + 1];
+    sc_digit d[MAX_NDIGITS + 1];
 #else
-    unsigned long *d = new unsigned long[nd];
+    sc_digit *d = new sc_digit[nd];
 #endif
     
     vec_zero(nd, d);
@@ -339,9 +345,9 @@ div_on_help_signed(small_type &us,
 void
 div_on_help_unsigned(small_type &us, 
                      int unb, int und, 
-                     unsigned long *ud, 
+                     sc_digit *ud, 
                      int vnb, int vnd,
-                     const unsigned long *vd)
+                     const sc_digit *vd)
 {
 #define CONVERT_SM_to_2C_to_SM convert_unsigned_SM_to_2C_to_SM
 #define COPY_DIGITS copy_digits_unsigned
@@ -361,7 +367,7 @@ div_on_help_unsigned(small_type &us,
       return;
     }
     
-    unsigned long vd0 = (*vd);
+    sc_digit vd0 = (*vd);
     
     if ((cmp_res > 0) && (vnd == 1) && (vd0 == 1))  {
       us = CONVERT_SM_to_2C_to_SM(us, unb, old_und, ud);
@@ -372,9 +378,9 @@ div_on_help_unsigned(small_type &us,
     int nd = sc_max(und, vnd) + 1;
     
 #ifdef SC_MAX_NBITS
-    unsigned long d[MAX_NDIGITS + 1];
+    sc_digit d[MAX_NDIGITS + 1];
 #else
-    unsigned long *d = new unsigned long[nd];
+    sc_digit *d = new sc_digit[nd];
 #endif
     
     vec_zero(nd, d);
@@ -413,9 +419,9 @@ div_on_help_unsigned(small_type &us,
 void
 mod_on_help_signed(small_type &us, 
                    int unb, int und, 
-                   unsigned long *ud, 
+                   sc_digit *ud, 
                    int /* vnb */, int vnd,
-                   const unsigned long *vd)
+                   const sc_digit *vd)
 {
 
 #define COPY_DIGITS copy_digits_signed
@@ -442,7 +448,7 @@ mod_on_help_signed(small_type &us,
     
     // else if u > v - case 5
     
-    unsigned long vd0 = (*vd);
+    sc_digit vd0 = (*vd);
     
     if ((vnd == 1) && (vd0 == 1)) {
       us = SC_ZERO;
@@ -454,9 +460,9 @@ mod_on_help_signed(small_type &us,
     int nd = sc_max(und, vnd) + 1;
     
 #ifdef SC_MAX_NBITS
-    unsigned long d[MAX_NDIGITS + 1];
+    sc_digit d[MAX_NDIGITS + 1];
 #else
-    unsigned long *d = new unsigned long[nd];
+    sc_digit *d = new sc_digit[nd];
 #endif
     
     vec_zero(nd, d);
@@ -491,9 +497,9 @@ mod_on_help_signed(small_type &us,
 void
 mod_on_help_unsigned(small_type &us, 
                      int unb, int und, 
-                     unsigned long *ud, 
+                     sc_digit *ud, 
                      int /* vnb */, int vnd,
-                     const unsigned long *vd)
+                     const sc_digit *vd)
 {
 
 #define COPY_DIGITS copy_digits_unsigned
@@ -520,7 +526,7 @@ mod_on_help_unsigned(small_type &us,
     
     // else if u > v - case 5
     
-    unsigned long vd0 = (*vd);
+    sc_digit vd0 = (*vd);
     
     if ((vnd == 1) && (vd0 == 1)) {
       us = SC_ZERO;
@@ -532,9 +538,9 @@ mod_on_help_unsigned(small_type &us,
     int nd = sc_max(und, vnd) + 1;
     
 #ifdef SC_MAX_NBITS
-    unsigned long d[MAX_NDIGITS + 1];
+    sc_digit d[MAX_NDIGITS + 1];
 #else
-    unsigned long *d = new unsigned long[nd];
+    sc_digit *d = new sc_digit[nd];
 #endif
     
     vec_zero(nd, d);
@@ -574,14 +580,14 @@ mod_on_help_unsigned(small_type &us,
 void
 and_on_help(small_type us, 
             int /* unb */, int und, 
-            unsigned long *ud, 
+            sc_digit *ud, 
             small_type vs,
             int /* vnb */, int vnd,
-            const unsigned long *vd)
+            const sc_digit *vd)
 {
 
-  register unsigned long *x = ud;
-  register const unsigned long *y = vd;
+  register sc_digit *x = ud;
+  register const sc_digit *y = vd;
   int xnd = und;
   int ynd = vnd;
 
@@ -589,8 +595,8 @@ and_on_help(small_type us,
   if (xnd < ynd)
     ynd = xnd;
 
-  const unsigned long *xend = (x + xnd);
-  const unsigned long *yend = (y + ynd);
+  const sc_digit *xend = (x + xnd);
+  const sc_digit *yend = (y + ynd);
 
   // x is longer than y.
 
@@ -609,8 +615,8 @@ and_on_help(small_type us,
     }
     else {  // case 3
 
-      register unsigned long xcarry = 1;
-      register unsigned long ycarry = 1;
+      register sc_digit xcarry = 1;
+      register sc_digit ycarry = 1;
 
       while (y < yend) {
         xcarry += (~(*x) & DIGIT_MASK);
@@ -634,7 +640,7 @@ and_on_help(small_type us,
 
     if (us > 0) { // case 4
 
-      register unsigned long ycarry = 1;
+      register sc_digit ycarry = 1;
 
       while (y < yend) {
         ycarry += (~(*y++) & DIGIT_MASK);
@@ -651,7 +657,7 @@ and_on_help(small_type us,
     }
     else {  // case 5
 
-      register unsigned long xcarry = 1;
+      register sc_digit xcarry = 1;
 
       while (y < yend) {
         xcarry += (~(*x) & DIGIT_MASK);
@@ -675,22 +681,22 @@ and_on_help(small_type us,
 void
 or_on_help(small_type us, 
            int /* unb */, int und, 
-           unsigned long *ud, 
+           sc_digit *ud, 
            small_type vs,
            int /* vnb */, int vnd,
-           const unsigned long *vd)
+           const sc_digit *vd)
 {
   
-  register unsigned long *x = ud;
-  register const unsigned long *y = vd;
+  register sc_digit *x = ud;
+  register const sc_digit *y = vd;
   int xnd = und;
   int ynd = vnd;
 
   if (xnd < ynd)
     ynd = xnd;
 
-  const unsigned long *xend = (x + xnd);
-  const unsigned long *yend = (y + ynd);
+  const sc_digit *xend = (x + xnd);
+  const sc_digit *yend = (y + ynd);
 
   // x is longer than y.
 
@@ -708,8 +714,8 @@ or_on_help(small_type us,
     }
     else {  // case 4
 
-      register unsigned long xcarry = 1;
-      register unsigned long ycarry = 1;
+      register sc_digit xcarry = 1;
+      register sc_digit ycarry = 1;
 
       while (y < yend) {
         xcarry += (~(*x) & DIGIT_MASK);
@@ -733,7 +739,7 @@ or_on_help(small_type us,
 
     if (us > 0) { // case 5
 
-      register unsigned long ycarry = 1;
+      register sc_digit ycarry = 1;
 
       while (y < yend) {
         ycarry += (~(*y++) & DIGIT_MASK);
@@ -752,7 +758,7 @@ or_on_help(small_type us,
     }
     else {  // case 6
 
-      register unsigned long xcarry = 1;
+      register sc_digit xcarry = 1;
 
       while (y < yend) {
         xcarry += (~(*x) & DIGIT_MASK);
@@ -778,22 +784,22 @@ or_on_help(small_type us,
 void
 xor_on_help(small_type us, 
             int /* unb */, int und, 
-            unsigned long *ud, 
+            sc_digit *ud, 
             small_type vs,
             int /* vnb */, int vnd,
-            const unsigned long *vd)
+            const sc_digit *vd)
 {
   
-  register unsigned long *x = ud;
-  register const unsigned long *y = vd;
+  register sc_digit *x = ud;
+  register const sc_digit *y = vd;
   int xnd = und;
   int ynd = vnd;
 
   if (xnd < ynd)
     ynd = xnd;
 
-  const unsigned long *xend = (x + xnd);
-  const unsigned long *yend = (y + ynd);
+  const sc_digit *xend = (x + xnd);
+  const sc_digit *yend = (y + ynd);
 
   // x is longer than y.
 
@@ -814,8 +820,8 @@ xor_on_help(small_type us,
     }
     else {  // case 4
 
-      register unsigned long xcarry = 1;
-      register unsigned long ycarry = 1;
+      register sc_digit xcarry = 1;
+      register sc_digit ycarry = 1;
 
       while (y < yend) {
         xcarry += (~(*x) & DIGIT_MASK);
@@ -838,7 +844,7 @@ xor_on_help(small_type us,
 
     if (us > 0) { // case 5
 
-      register unsigned long ycarry = 1;
+      register sc_digit ycarry = 1;
 
       while (y < yend) {
         ycarry += (~(*y++) & DIGIT_MASK);
@@ -857,7 +863,7 @@ xor_on_help(small_type us,
     }
     else {  // case 6
 
-      register unsigned long xcarry = 1;
+      register sc_digit xcarry = 1;
 
       while (y < yend) {
         xcarry += (~(*x) & DIGIT_MASK);

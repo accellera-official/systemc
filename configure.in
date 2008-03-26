@@ -111,6 +111,24 @@ echo "$as_me: error: \"sorry...compiler not supported\"" >&2;}
 	AS=as
         QT_ARCH="sparc-os2"
         ;;
+    x86_64*linux*)
+        case "$CXX_COMP" in
+            c++ | g++)
+                EXTRA_CXXFLAGS="-Wall -DSC_USE_PTHREADS"
+                DEBUG_CXXFLAGS="-g"
+                OPT_CXXFLAGS="-O3"
+                TARGET_ARCH="linux64"
+				LD_FLAGS="-lpthread"
+        	CC="$CXX"
+        	CFLAGS="$EXTRA_CXXFLAGS $OPT_CXXFLAGS"
+                ;;
+            *)
+                AC_MSG_ERROR("sorry...compiler not supported")
+		;;
+        esac
+	AS=as
+        QT_ARCH="pthreads"
+        ;;
     *linux*)
         case "$CXX_COMP" in
             c++ | g++)
@@ -226,8 +244,12 @@ AC_OUTPUT(
  src/sysc/packages/boost/config/compiler/Makefile 
  src/sysc/packages/boost/config/platform/Makefile 
  src/sysc/packages/boost/config/stdlib/Makefile 
+ src/sysc/packages/boost/mpl/Makefile 
+ src/sysc/packages/boost/mpl/aux_/Makefile 
+ src/sysc/packages/boost/mpl/aux_/config/Makefile 
  src/sysc/packages/boost/detail/Makefile 
  src/sysc/packages/boost/utility/Makefile 
+ src/sysc/packages/boost/utility/detail/Makefile 
  examples/Makefile 
  examples/sysc/Makefile 
  examples/sysc/fir/Makefile 

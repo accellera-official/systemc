@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2006 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -34,6 +34,15 @@
  *****************************************************************************/
 
 
+// $Log: sc_mutex.cpp,v $
+// Revision 1.4  2006/03/21 00:00:27  acg
+//   Andy Goodrich: changed name of sc_get_current_process_base() to be
+//   sc_get_current_process_b() since its returning an sc_process_b instance.
+//
+// Revision 1.3  2006/01/13 18:47:42  acg
+// Added $Log command so that CVS comments are reproduced in the source.
+//
+
 #include "sysc/communication/sc_mutex.h"
 #include "sysc/kernel/sc_simcontext.h"
 
@@ -58,6 +67,11 @@ sc_mutex::sc_mutex( const char* name_ )
 {}
 
 
+// destructor
+
+sc_mutex::~sc_mutex()
+{}
+
 // interface methods
 
 // blocks until mutex could be locked
@@ -68,7 +82,7 @@ sc_mutex::lock()
     while( in_use() ) {
 	wait( m_free );
     }
-    m_owner = sc_get_curr_process_handle();
+    m_owner = sc_get_current_process_b();
     return 0;
 }
 
@@ -81,7 +95,7 @@ sc_mutex::trylock()
     if( in_use() ) {
 	return -1;
     }
-    m_owner = sc_get_curr_process_handle();
+    m_owner = sc_get_current_process_b();
     return 0;
 }
 
@@ -91,7 +105,7 @@ sc_mutex::trylock()
 int
 sc_mutex::unlock()
 {
-    if( m_owner != sc_get_curr_process_handle() ) {
+    if( m_owner != sc_get_current_process_b() ) {
 	return -1;
     }
     m_owner = 0;
