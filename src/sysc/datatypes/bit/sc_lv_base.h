@@ -37,6 +37,9 @@
  *****************************************************************************/
 
 // $Log: sc_lv_base.h,v $
+// Revision 1.1.1.1  2006/12/15 20:31:36  acg
+// SystemC 2.2
+//
 // Revision 1.3  2006/01/13 18:53:53  acg
 // Andy Goodrich: added $Log command so that CVS comments are reproduced in
 // the source.
@@ -236,15 +239,19 @@ public:
     sc_digit get_word( int wi ) const
 	{ return m_data[wi]; }
 
+	// note the test for out of range access here. this is necessary 
+	// because of the hair-brained way concatenations are set up.
+	// an extend_sign on a concatenation uses the whole length of 
+	// the concatenation to determine how many words to set.
     void set_word( int wi, sc_digit w )
-	{ m_data[wi] = w; }
+	{ assert ( wi < m_size ); m_data[wi] = w; }
 	 
 
     sc_digit get_cword( int wi ) const
 	{ return m_ctrl[wi]; }
 
     void set_cword( int wi, sc_digit w )
-	{ m_ctrl[wi] = w; }
+	{ assert ( wi < m_size ); m_ctrl[wi] = w; }
 
     void clean_tail();
 

@@ -38,6 +38,9 @@
 
 
 // $Log: sc_utils_ids.cpp,v $
+// Revision 1.1.1.1  2006/12/15 20:31:39  acg
+// SystemC 2.2
+//
 // Revision 1.6  2006/01/31 21:42:07  acg
 //  Andy Goodrich: Added checks for SC_DEPRECATED_WARNINGS being defined as
 //  DISABLED. If so, we turn off the /IEEE_Std_1666/deprecated message group.

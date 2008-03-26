@@ -23,6 +23,9 @@
 //****************************************************************************
 
 // $Log: scx_mutex_w_policy.cpp,v $
+// Revision 1.1.1.1  2006/12/15 20:31:29  acg
+// SystemC 2.2
+//
 // Revision 1.3  2006/03/21 01:31:34  acg
 //  Andy Goodrich: changed over to sc_get_current_process_b() from
 //  sc_get_current_process_base() since the function's name changed.

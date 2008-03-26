@@ -10,8 +10,8 @@
 //
 // See http://www.boost.org/libs/mpl for documentation.
 
-// $Source: /Users/acg/CVSROOT/systemc-2.1/src/sysc/packages/boost/mpl/aux_/config/gcc.hpp,v $
-// $Date: 2005/12/19 23:16:45 $
+// $Source: /Users/acg/CVSROOT/systemc-2.2/src/sysc/packages/boost/mpl/aux_/config/gcc.hpp,v $
+// $Date: 2006/12/15 20:31:38 $
 // $Revision: 1.1.1.1 $
 
 #if defined(__GNUC__) && !defined(__EDG_VERSION__)

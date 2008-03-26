@@ -114,11 +114,10 @@ echo "$as_me: error: \"sorry...compiler not supported\"" >&2;}
     x86_64*linux*)
         case "$CXX_COMP" in
             c++ | g++)
-                EXTRA_CXXFLAGS="-Wall -DSC_USE_PTHREADS"
+                EXTRA_CXXFLAGS="-Wall"
                 DEBUG_CXXFLAGS="-g"
                 OPT_CXXFLAGS="-O3"
                 TARGET_ARCH="linux64"
-				LD_FLAGS="-lpthread"
         	CC="$CXX"
         	CFLAGS="$EXTRA_CXXFLAGS $OPT_CXXFLAGS"
                 ;;
@@ -127,7 +126,7 @@ echo "$as_me: error: \"sorry...compiler not supported\"" >&2;}
 		;;
         esac
 	AS=as
-        QT_ARCH="pthreads"
+        QT_ARCH="x86_64"
         ;;
     *linux*)
         case "$CXX_COMP" in

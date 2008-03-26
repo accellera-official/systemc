@@ -1,12 +1,12 @@
                 SystemC Class Library (Rel. 2.2.0)
                 ==================================
 
-This is the beta release of the SystemC 2.2.0 Class Library.
+This is the release of the SystemC 2.2.0 Class Library.
 
 -------------------------------------------------------------------------------
                 IMPORTANT
 
-1. This is the beta release of SystemC 2.2.0. This release contains bug 
+1. This is the release of SystemC 2.2.0. This release contains bug 
    fixes for SystemC 2.1.v1 as well as adding IEEE 1666(tm) compliance
    features.
 

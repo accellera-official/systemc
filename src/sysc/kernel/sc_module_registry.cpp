@@ -38,6 +38,9 @@
 
 
 // $Log: sc_module_registry.cpp,v $
+// Revision 1.1.1.1  2006/12/15 20:31:37  acg
+// SystemC 2.2
+//
 // Revision 1.4  2006/01/26 21:04:54  acg
 //  Andy Goodrich: deprecation message changes and additional messages.
 //

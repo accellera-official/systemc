@@ -34,6 +34,21 @@
  *****************************************************************************/
 
 // $Log: sc_bit_proxies.h,v $
+// Revision 1.3  2007/01/18 19:29:18  acg
+//  Andy Goodrich: fixed bug in concatenations of bit selects on sc_lv and
+//  sc_bv types. The offending code was in sc_bitref<X>::set_word and
+//  sc_bitref<X>::get_word. These methods were not writing the bit they
+//  represented, but rather writing an entire word whose index was the
+//  index of the bit they represented. This not only did not write the
+//  correct bit, but clobbered a word that might not even be in the
+//  variable the reference was for.
+//
+// Revision 1.2  2007/01/17 22:45:08  acg
+//  Andy Goodrich: fixed sc_bitref<X>::set_bit().
+//
+// Revision 1.1.1.1  2006/12/15 20:31:36  acg
+// SystemC 2.2
+//
 // Revision 1.3  2006/01/13 18:53:53  acg
 // Andy Goodrich: added $Log command so that CVS comments are reproduced in
 // the source.
@@ -2346,17 +2361,22 @@ sc_bitref<X>::set_bit( int n, sc_logic_value_t value )
     }
 }
 
-
 template <class X>
 inline
 void
 sc_bitref<X>::set_word( int n, sc_digit w )
 {
+    unsigned int bi = this->m_index % (8*sizeof(sc_digit));
+    sc_digit     temp;
+    unsigned int wi = this->m_index / (8*sizeof(sc_digit));
     if( n == 0 ) {
-	this->m_obj.set_word( this->m_index, w );
+        temp = this->m_obj.get_word(wi);
+        temp = (temp & ~(1 << bi)) | ((w&1) << bi);
+        this->m_obj.set_word(wi, temp);
     } else {
-	SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, 0 );
+        SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, 0 );
     }
+
 }
 
 template <class X>
@@ -2364,13 +2384,17 @@ inline
 void
 sc_bitref<X>::set_cword( int n, sc_digit w )
 {
+    unsigned int bi = this->m_index % (8*sizeof(sc_digit));
+    sc_digit     temp;
+    unsigned int wi = this->m_index / (8*sizeof(sc_digit));
     if( n == 0 ) {
-	this->m_obj.set_cword( this->m_index, w );
+        temp = this->m_obj.get_cword(wi);
+        temp = (temp & ~(1 << bi)) | ((w&1) << bi);
+        this->m_obj.set_cword(wi, temp);
     } else {
-	SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, 0 );
+        SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, 0 );
     }
 }
-
 
 // other methods
 
@@ -3110,7 +3134,8 @@ sc_concref_r<X,Y>::set_word( int i, sc_digit w )
     // border < i < size() && shift != 0
     sc_digit ll_mask = ~SC_DIGIT_ZERO >> shift;
     l.set_word( j - 1, (l.get_word( j - 1 ) & ll_mask) | (w << nshift) );
-    l.set_word( j, (l.get_word( j ) & lh_mask) | (w >> shift) );
+    if ( j < l.size() )
+	l.set_word( j, (l.get_word( j ) & lh_mask) | (w >> shift) );
 }
 
 
@@ -3185,7 +3210,8 @@ sc_concref_r<X,Y>::set_cword( int i, sc_digit w )
     // border < i < size() && shift != 0
     sc_digit ll_mask = ~SC_DIGIT_ZERO >> shift;
     l.set_cword( j - 1, (l.get_cword( j - 1 ) & ll_mask) | (w << nshift) );
-    l.set_cword( j, (l.get_cword( j ) & lh_mask) | (w >> shift) );
+    if ( j < l.size() )
+	l.set_cword( j, (l.get_cword( j ) & lh_mask) | (w >> shift) );
 }
 
 

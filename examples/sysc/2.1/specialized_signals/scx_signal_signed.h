@@ -35,6 +35,9 @@
 
 /* 
 $Log: scx_signal_signed.h,v $
+Revision 1.1.1.1  2006/12/15 20:31:29  acg
+SystemC 2.2
+
 Revision 1.3  2006/03/21 01:31:48  acg
  Andy Goodrich: changed over to sc_get_current_process_b() from
  sc_get_current_process_base() since the function's name changed.
@@ -780,7 +783,7 @@ inline sc_signed_sigref& sc_signal<sc_dt::sc_bigint<W> >::select_part(
     int left, int right)
 {
     sc_signed_sigref* result_p = sc_signed_sigref::m_pool.allocate();
-    result_p->initialize(this, left, right);
+    result_p->initialize(DCAST<sc_signed_part_if*>(this), left, right);
     return *result_p;
 }
 

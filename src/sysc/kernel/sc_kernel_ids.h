@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: sc_kernel_ids.h,v $
+// Revision 1.1.1.1  2006/12/15 20:31:37  acg
+// SystemC 2.2
+//
 // Revision 1.5  2006/01/25 00:31:19  acg
 //  Andy Goodrich: Changed over to use a standard message id of
 //  SC_ID_IEEE_1666_DEPRECATION for all deprecation messages.
@@ -168,7 +171,8 @@ SC_DEFINE_MESSAGE(SC_ID_UNKNOWN_PROCESS_TYPE_,       566,
 	"Unknown process type" )
 SC_DEFINE_MESSAGE(SC_ID_RESET_SIGNAL_IS_NOT_ALLOWED_ , 567,
 	"reset_signal_is() is only allowed for SC_CTHREADs" )
-
+SC_DEFINE_MESSAGE(SC_ID_NEGATIVE_SIMULATION_TIME_, 568,
+	"negative simulation interval specified in sc_start call" )
 #endif
 
 // Taf!

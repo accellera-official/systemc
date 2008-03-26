@@ -41,6 +41,9 @@
 
 
 // $Log: sc_port.cpp,v $
+// Revision 1.1.1.1  2006/12/15 20:31:35  acg
+// SystemC 2.2
+//
 // Revision 1.9  2006/02/02 20:43:09  acg
 //  Andy Goodrich: Added an existence linked list to sc_event_finder so that
 //  the dynamically allocated instances can be freed after port binding

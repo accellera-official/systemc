@@ -43,9 +43,9 @@ extern const char* sc_copyright();
 extern const char* sc_release();
 extern const char* sc_version();
 
-#define SYSTEMC_VERSION 20060505
+#define SYSTEMC_VERSION 20070314
 
-#define SC_RELEASE_STRING "2.2.05jun06_beta"
+#define SC_RELEASE_STRING "2.2.0"
 #define SC_API_VERSION_STRING sc_api_version_2_2_0
 
 

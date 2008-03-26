@@ -35,6 +35,9 @@
 
 
 // $Log: sc_signal_ports.cpp,v $
+// Revision 1.1.1.1  2006/12/15 20:31:35  acg
+// SystemC 2.2
+//
 // Revision 1.7  2006/04/18 18:01:26  acg
 //  Andy Goodrich: added an add_trace_internal() method to the various port
 //  classes so that sc_trace has something to call that won't emit an

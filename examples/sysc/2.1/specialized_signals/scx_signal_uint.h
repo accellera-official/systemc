@@ -35,6 +35,9 @@
 
 /* 
 $Log: scx_signal_uint.h,v $
+Revision 1.1.1.1  2006/12/15 20:31:29  acg
+SystemC 2.2
+
 Revision 1.4  2006/04/05 23:47:02  acg
   Andy Goodrich: changed sc_get_current_process_base calls into
     sc_get_current_process_b calls.

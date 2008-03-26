@@ -36,6 +36,9 @@
  *****************************************************************************/
 
 // $Log: sc_runnable_int.h,v $
+// Revision 1.1.1.1  2006/12/15 20:31:37  acg
+// SystemC 2.2
+//
 // Revision 1.4  2006/04/20 17:08:17  acg
 //  Andy Goodrich: Changed loop end checks to use non-zero unique values
 //                 rather than erroneous check for zero values.

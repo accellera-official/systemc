@@ -35,6 +35,9 @@
 
 
 // $Log: sc_event.cpp,v $
+// Revision 1.2  2007/01/12 21:04:53  acg
+//  Andy Goodrich: fix for Microsoft compiler.
+//
 // Revision 1.7  2006/04/11 23:13:20  acg
 //   Andy Goodrich: Changes for reduced reset support that only includes
 //   sc_cthread, but has preliminary hooks for expanding to method and thread
@@ -56,7 +59,6 @@
 // Revision 1.3  2006/01/13 18:44:29  acg
 // Added $Log to record CVS changes into the source.
 //
-
 #include "sysc/kernel/sc_event.h"
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/kernel/sc_process.h"
@@ -148,7 +150,7 @@ static void sc_warn_notify_delayed()
     {
         warn_notify_delayed = false;
         SC_REPORT_INFO(SC_ID_IEEE_1666_DEPRECATION_,
-	    "notify_delayed(...) is deprecated, use notify(sc_time) instead" ); 
+      "notify_delayed(...) is deprecated, use notify(sc_time) instead" );
     }
 }
 
@@ -204,7 +206,7 @@ sc_event::trigger()
     int size;
 
     // trigger the static sensitive methods
-    
+
     if( ( size = m_methods_static.size() ) != 0 ) {
         sc_method_handle* l_methods_static = &m_methods_static[0];
         int i = size - 1;
@@ -217,7 +219,7 @@ sc_event::trigger()
     }
 
     // trigger the dynamic sensitive methods
-    
+
     if( ( size = m_methods_dynamic.size() ) != 0 ) {
         sc_method_handle* l_methods_dynamic = &m_methods_dynamic[0];
         int i = size - 1;
@@ -231,7 +233,7 @@ sc_event::trigger()
     }
 
     // trigger the static sensitive threads
-    
+
     if( ( size = m_threads_static.size() ) != 0 ) {
         sc_thread_handle* l_threads_static = &m_threads_static[0];
         int i = size - 1;
@@ -244,7 +246,7 @@ sc_event::trigger()
     }
 
     // trigger the dynamic sensitive threads
-    
+
     if( ( size = m_threads_dynamic.size() ) != 0 ) {
         sc_thread_handle* l_threads_dynamic = &m_threads_dynamic[0];
         int i = size - 1;
@@ -266,14 +268,16 @@ sc_event::trigger()
 bool
 sc_event::remove_static( sc_method_handle method_h_ ) const
 {
-    int size = m_methods_static.size();
-    sc_method_handle* l_methods_static = &m_methods_static[0];
-    for( int i = size - 1; i >= 0; -- i ) {
-        if( l_methods_static[i] == method_h_ ) {
-            l_methods_static[i] = l_methods_static[size - 1];
-            m_methods_static.resize(size-1);
-            return true;
-        }
+    int size;
+    if ( ( size = m_methods_static.size() ) != 0 ) {
+      sc_method_handle* l_methods_static = &m_methods_static[0];
+      for( int i = size - 1; i >= 0; -- i ) {
+          if( l_methods_static[i] == method_h_ ) {
+              l_methods_static[i] = l_methods_static[size - 1];
+              m_methods_static.resize(size-1);
+              return true;
+          }
+      }
     }
     return false;
 }
@@ -281,14 +285,16 @@ sc_event::remove_static( sc_method_handle method_h_ ) const
 bool
 sc_event::remove_static( sc_thread_handle thread_h_ ) const
 {
-    int size = m_threads_static.size();
-    sc_thread_handle* l_threads_static = &m_threads_static[0];
-    for( int i = size - 1; i >= 0; -- i ) {
-        if( l_threads_static[i] == thread_h_ ) {
-            l_threads_static[i] = l_threads_static[size - 1];
-            m_threads_static.resize(size-1);
-            return true;
-        }
+    int size;
+    if ( ( size = m_threads_static.size() ) != 0 ) {
+      sc_thread_handle* l_threads_static = &m_threads_static[0];
+      for( int i = size - 1; i >= 0; -- i ) {
+          if( l_threads_static[i] == thread_h_ ) {
+              l_threads_static[i] = l_threads_static[size - 1];
+              m_threads_static.resize(size-1);
+              return true;
+          }
+      }
     }
     return false;
 }
@@ -296,14 +302,16 @@ sc_event::remove_static( sc_thread_handle thread_h_ ) const
 bool
 sc_event::remove_dynamic( sc_method_handle method_h_ ) const
 {
-    int size = m_methods_dynamic.size();
-    sc_method_handle* l_methods_dynamic = &m_methods_dynamic[0];
-    for( int i = size - 1; i >= 0; -- i ) {
-        if( l_methods_dynamic[i] == method_h_ ) {
-            l_methods_dynamic[i] = l_methods_dynamic[size - 1];
-            m_methods_dynamic.resize(size-1);
-            return true;
-        }
+    int size;
+    if ( ( size = m_methods_dynamic.size() ) != 0 ) {
+      sc_method_handle* l_methods_dynamic = &m_methods_dynamic[0];
+      for( int i = size - 1; i >= 0; -- i ) {
+          if( l_methods_dynamic[i] == method_h_ ) {
+              l_methods_dynamic[i] = l_methods_dynamic[size - 1];
+              m_methods_dynamic.resize(size-1);
+              return true;
+          }
+      }
     }
     return false;
 }
@@ -311,14 +319,16 @@ sc_event::remove_dynamic( sc_method_handle method_h_ ) const
 bool
 sc_event::remove_dynamic( sc_thread_handle thread_h_ ) const
 {
-    int size = m_threads_dynamic.size();
-    sc_thread_handle* l_threads_dynamic = &m_threads_dynamic[0];
-    for( int i = size - 1; i >= 0; -- i ) {
-        if( l_threads_dynamic[i] == thread_h_ ) {
-            l_threads_dynamic[i] = l_threads_dynamic[size - 1];
-            m_threads_dynamic.resize(size-1);
-            return true;
-        }
+    int size;
+    if ( ( size= m_threads_dynamic.size() ) != 0 ) {
+      sc_thread_handle* l_threads_dynamic = &m_threads_dynamic[0];
+      for( int i = size - 1; i >= 0; -- i ) {
+          if( l_threads_dynamic[i] == thread_h_ ) {
+              l_threads_dynamic[i] = l_threads_dynamic[size - 1];
+              m_threads_dynamic.resize(size-1);
+              return true;
+          }
+      }
     }
     return false;
 }
@@ -382,12 +392,14 @@ void
 sc_event_list::push_back( const sc_event& e )
 {
     // make sure e is not already in the list
-    const sc_event** l_events = &m_events[0];
-    for( int i = m_events.size() - 1; i >= 0; -- i ) {
-        if( &e == l_events[i] ) {
-            // event already in the list; ignore
-            return;
-        }
+    if ( m_events.size() != 0 ) {
+      const sc_event** l_events = &m_events[0];
+      for( int i = m_events.size() - 1; i >= 0; -- i ) {
+          if( &e == l_events[i] ) {
+              // event already in the list; ignore
+              return;
+          }
+      }
     }
     m_events.push_back( &e );
 }
@@ -396,45 +408,53 @@ sc_event_list::push_back( const sc_event& e )
 void
 sc_event_list::add_dynamic( sc_method_handle method_h )
 {
-    const sc_event** l_events = &m_events[0];
-    for( int i = m_events.size() - 1; i >= 0; -- i ) {
-        l_events[i]->add_dynamic( method_h );
-    }
+    if ( m_events.size() != 0 ) {
+      const sc_event** l_events = &m_events[0];
+      for( int i = m_events.size() - 1; i >= 0; -- i ) {
+          l_events[i]->add_dynamic( method_h );
+      }
+  }
 }
 
 void
 sc_event_list::add_dynamic( sc_thread_handle thread_h )
 {
-    const sc_event** l_events = &m_events[0];
-    for( int i = m_events.size() - 1; i >= 0; -- i ) {
-        l_events[i]->add_dynamic( thread_h );
-    }
+    if ( m_events.size() != 0 ) {
+      const sc_event** l_events = &m_events[0];
+      for( int i = m_events.size() - 1; i >= 0; -- i ) {
+          l_events[i]->add_dynamic( thread_h );
+      }
+  }
 }
 
 void
 sc_event_list::remove_dynamic( sc_method_handle method_h,
                                const sc_event* e_not )
 {
-    const sc_event** l_events = &m_events[0];
-    for( int i = m_events.size() - 1; i >= 0; -- i ) {
-        const sc_event* e = l_events[i];
-        if( e != e_not ) {
-            e->remove_dynamic( method_h );
-        }
-    }
+    if ( m_events.size() != 0 ) {
+      const sc_event** l_events = &m_events[0];
+      for( int i = m_events.size() - 1; i >= 0; -- i ) {
+          const sc_event* e = l_events[i];
+          if( e != e_not ) {
+              e->remove_dynamic( method_h );
+          }
+      }
+  }
 }
 
 void
 sc_event_list::remove_dynamic( sc_thread_handle thread_h,
                                const sc_event* e_not )
 {
-    const sc_event** l_events = &m_events[0];
-    for( int i = m_events.size() - 1; i >= 0; -- i ) {
-        const sc_event* e = l_events[i];
-        if( e != e_not ) {
-            e->remove_dynamic( thread_h );
-        }
-    }
+    if ( m_events.size() != 0 ) {
+      const sc_event** l_events = &m_events[0];
+      for( int i = m_events.size() - 1; i >= 0; -- i ) {
+          const sc_event* e = l_events[i];
+          if( e != e_not ) {
+              e->remove_dynamic( thread_h );
+          }
+      }
+  }
 }
 
 // ----------------------------------------------------------------------------
@@ -446,9 +466,9 @@ static void sc_warn_notify()
     static bool warn_notify=true;
     if ( warn_notify )
     {
-	SC_REPORT_INFO(SC_ID_IEEE_1666_DEPRECATION_,
-	    "the notify() function is deprecated use sc_event::notify()" );
-	warn_notify = false;
+  SC_REPORT_INFO(SC_ID_IEEE_1666_DEPRECATION_,
+      "the notify() function is deprecated use sc_event::notify()" );
+  warn_notify = false;
     }
 }
 

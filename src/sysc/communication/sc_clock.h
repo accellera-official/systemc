@@ -38,6 +38,9 @@
     
  *****************************************************************************/
 //$Log: sc_clock.h,v $
+//Revision 1.1.1.1  2006/12/15 20:31:35  acg
+//SystemC 2.2
+//
 //Revision 1.5  2006/01/25 00:31:11  acg
 // Andy Goodrich: Changed over to use a standard message id of
 // SC_ID_IEEE_1666_DEPRECATION for all deprecation messages.

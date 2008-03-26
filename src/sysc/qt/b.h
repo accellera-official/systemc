@@ -1,5 +1,5 @@
 #ifndef B_H
-#define B_H	"$Header: /Users/acg/CVSROOT/systemc-2.1/src/sysc/qt/b.h,v 1.1.1.1 2005/12/19 23:16:45 acg Exp $"
+#define B_H	"$Header: /Users/acg/CVSROOT/systemc-2.2/src/sysc/qt/b.h,v 1.1.1.1 2006/12/15 20:31:38 acg Exp $"
 
 #include "copyright.h"
 

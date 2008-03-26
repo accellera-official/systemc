@@ -42,6 +42,9 @@
 
 
 // $Log: sc_signed.cpp,v $
+// Revision 1.1.1.1  2006/12/15 20:31:36  acg
+// SystemC 2.2
+//
 // Revision 1.3  2006/01/13 18:49:32  acg
 // Added $Log command so that CVS check in comments are reproduced in the
 // source.
@@ -228,7 +231,7 @@ bool sc_signed::concat_get_data( sc_digit* dst_p, int low_i ) const
         if ( dst_i == end_i )
         {
             mask = ~(-1 << nbits) << left_shift;
-            right_word = ~digit[0] + 1;
+            right_word = (digit[0] ^ DIGIT_MASK) + 1;
             dst_p[dst_i] = ( dst_p[dst_i] & ~mask ) | 
                 ((right_word << left_shift) & mask);
         }
@@ -241,13 +244,13 @@ bool sc_signed::concat_get_data( sc_digit* dst_p, int low_i ) const
             carry = 1;
             for ( src_i = 0; dst_i < end_i; dst_i++, src_i++ )
             {
-                right_word = ~digit[src_i] + carry;
+                right_word = (digit[src_i] ^ DIGIT_MASK) + carry;
                 dst_p[dst_i] = right_word &  DIGIT_MASK;
                 carry = right_word >> BITS_PER_DIGIT;
             }
             high_i = high_i % BITS_PER_DIGIT;
-            mask = ~(-2 << high_i) & DIGIT_MASK;
-            right_word = ~digit[src_i] + carry;
+            mask = (~(-2 << high_i)) & DIGIT_MASK;
+            right_word = (digit[src_i] ^ DIGIT_MASK) + carry;
             dst_p[dst_i] = right_word & mask;
         }
 
@@ -260,24 +263,24 @@ bool sc_signed::concat_get_data( sc_digit* dst_p, int low_i ) const
             right_shift = BITS_PER_DIGIT - left_shift;
             mask = ~(-1 << left_shift);
             carry = 1;
-            right_word = ~digit[0] + carry;
+            right_word = (digit[0] ^ DIGIT_MASK) + carry;
             dst_p[dst_i] = (dst_p[dst_i] & mask) | 
                 ((right_word << left_shift) & DIGIT_MASK);
+	    carry = right_word >> BITS_PER_DIGIT;
             for ( src_i = 1, dst_i++; dst_i < end_i; dst_i++, src_i++ )
             {
-                carry = right_word >> BITS_PER_DIGIT;
-                left_word = ~digit[src_i] + carry;
+                left_word = (digit[src_i] ^ DIGIT_MASK) + carry;
                 dst_p[dst_i] = ((left_word << left_shift)&DIGIT_MASK) |
                     (right_word >> right_shift);
                 carry = left_word >> BITS_PER_DIGIT;
                 right_word = left_word & DIGIT_MASK;
             }
-            left_word = ~digit[src_i] + carry;
+            left_word = (digit[src_i] ^ DIGIT_MASK) + carry;
             mask = ~(-2 << high_i) & DIGIT_MASK;
             dst_p[dst_i] = ((left_word << left_shift) |
                 (right_word >> right_shift)) & mask;
         }
-		break;
+	break;
 
 
       // VALUE IS ZERO:
@@ -398,23 +401,28 @@ void sc_signed::concat_set(uint64 src, int low_i)
 
 bool sc_signed::and_reduce() const 
 {
-    int i;    // Digit examining.
+    sc_digit current; // Current digit examining.
+    int      i;       // Index of digit examining.
 
-    for ( i = 0; i < ndigits-1; i++ )  
-        if ( (digit[i] & DIGIT_MASK) != DIGIT_MASK ) return false;
-    if ( (digit[i] & ~(-1 << (nbits % BITS_PER_DIGIT))) == 
-        (sc_digit)~(-1 << (nbits % BITS_PER_DIGIT)) ) 
+    if ( sgn == SC_NEG )
+    {
+	current = (1 << BITS_PER_DIGIT);
+	for ( i = 0; i < ndigits-1; i++ )  
+	{
+	    current = (current >> BITS_PER_DIGIT) + (digit[i]^DIGIT_MASK);
+	    if ( (current & DIGIT_MASK) != DIGIT_MASK ) return false;
+	}
+	current = (current >> BITS_PER_DIGIT) + (digit[i]^DIGIT_MASK);
+	if ( (current & ~(-1 << (nbits % BITS_PER_DIGIT))) == 
+	    (sc_digit) ~(-1 << (nbits % BITS_PER_DIGIT)) ) 
 		return true;
-
+    }
     return false;
 }
 
 bool sc_signed::or_reduce() const 
 {
-// #### use sgn?
-    for ( int i = 0; i < ndigits; i++ )
-        if ( digit[i] ) return true;
-    return false;
+    return sgn == SC_ZERO ? false : true;
 }
 
 bool sc_signed::xor_reduce() const 

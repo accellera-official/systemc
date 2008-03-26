@@ -35,6 +35,9 @@
 
 
 // $Log: sc_bv_base.cpp,v $
+// Revision 1.1.1.1  2006/12/15 20:31:36  acg
+// SystemC 2.2
+//
 // Revision 1.4  2006/04/11 23:12:26  acg
 //   Andy Goodrich: Fixed bug in parsing of extended string constants like
 //   0bus1110011.

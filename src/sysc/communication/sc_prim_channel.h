@@ -35,6 +35,9 @@
     
  *****************************************************************************/
 //$Log: sc_prim_channel.h,v $
+//Revision 1.1.1.1  2006/12/15 20:31:35  acg
+//SystemC 2.2
+//
 //Revision 1.2  2006/01/03 23:18:26  acg
 //Changed copyright to include 2006.
 //
@@ -259,6 +262,11 @@ public:
         { return m_prim_channel_vec.size(); }
 
     inline void request_update( sc_prim_channel& );
+
+    bool pending_updates() const 
+        { return m_update_list_p != 
+		(sc_prim_channel*)sc_prim_channel::list_end; 
+	}
 
 private:
 

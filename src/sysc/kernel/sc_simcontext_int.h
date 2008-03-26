@@ -37,6 +37,9 @@
  *****************************************************************************/
 
 // $Log: sc_simcontext_int.h,v $
+// Revision 1.1.1.1  2006/12/15 20:31:37  acg
+// SystemC 2.2
+//
 // Revision 1.5  2006/01/19 00:29:52  acg
 // Andy Goodrich: Yet another implementation for signal write checking. This
 // one uses an environment variable SC_SIGNAL_WRITE_CHECK, that when set to

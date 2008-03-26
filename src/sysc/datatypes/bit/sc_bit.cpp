@@ -35,6 +35,9 @@
 
 
 // $Log: sc_bit.cpp,v $
+// Revision 1.1.1.1  2006/12/15 20:31:36  acg
+// SystemC 2.2
+//
 // Revision 1.6  2006/04/12 20:17:52  acg
 //  Andy Goodrich: enabled deprecation message for sc_bit.
 //

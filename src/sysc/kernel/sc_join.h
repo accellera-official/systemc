@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: sc_join.h,v $
+// Revision 1.1.1.1  2006/12/15 20:31:37  acg
+// SystemC 2.2
+//
 // Revision 1.5  2006/04/28 21:38:27  acg
 //  Andy Goodrich: fixed loop constraint that was using sizeof(sc_thread_handle)
 //  rather than sizeof(sc_process_handle).

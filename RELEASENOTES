@@ -1,5 +1,5 @@
-                Release Notes for SystemC Release 2.2.0
-                =======================================
+        Release Notes for SystemC 2.2.0 Release Of 14 Mar 2007
+        ======================================================
 
 CONTENTS
 ========
@@ -14,9 +14,9 @@ CONTENTS
 
   5) Fixes to match the IEEE 1666 SystemC Language Reference Manual
 
-  6) Beta features
+  6) Dynamic process support
 
-  7) Deprecated features
+  7) Experimental features
 
   8) Known problems
 
@@ -26,48 +26,9 @@ CONTENTS
 1) What's new in this release?
 ==============================
 
-Compared to the 04feb06_beta release, this release has the following
+Compared to the 05 June 2006 release, this release has the following
 new items:
 
-  - Changed sc_event usage in signals to be dynamically allocated instead
-    of statically being part of signal storage to save space.
-  - Changed name of sc_get_current_process_base() function to be 
-    sc_get_current_process_b() since it returns an sc_process_b.
-  - Changed the type of m_writer field in sc_signal to be an sc_object
-    rather than an sc_process_b for more opaqness.
-  - Added declarations for functions in scx_rep.h, sc_signed.h, sc_unsigned.h,
-    sc_process.h, sc_simcontext.cpp to keep gcc 4.x happy
-  - Hid the definitions of the sc_cthread_process, sc_method_process,
-    and sc_thread_process classes from the user. That is, the files
-    containing these classes do not get copied into the include directory
-    when an install occurs. The specific changes are:
-    a) Three new methods were added to sc_simcontext to create processes:
-         o create_cthread_process()
-         o create_method_process()
-         o create_thread_process()
-       These all return an sc_process_handle. These methods are now
-       called by the process macros, e.g., SC_CTHREAD, and by sc_spawn()
-       when processes are created.
-    b) Three methods were removed from sc_simcontext that were previously
-       used to register processes:
-         o register_cthread_process()
-         o register_method_process()
-         o register_thread_process()
-       These are no longer called, since you cannot create a process 
-       without calling one of the three new create_XXXX_process methods.
-    c) A new << operator was added to sc_sensitive, sc_sensitive_neg,
-       and sc_sensitive_pos classes:
-         o operator << ( sc_process_handle )
-       This new operator is now used to set the process in the SC_METHOD,
-       SC_CTHREAD, and SC_THREAD macros.
-    d) The << operators for process handles have been removed from the
-       sc_sensitive, sc_sensitive_neg, and sc_sensitive_pos classes:
-         o operator << ( sc_cthread_handle )
-         o operator << ( sc_module_handle )
-         o operator << ( sc_thread_handle )
-       These are no longer needed since one can use an sc_process_handle
-       instance to set the process.
-       
   - Bug fixes, see next section.
      
 
@@ -76,27 +37,67 @@ new items:
 
 Following is the list of bug fixes and enhancements for this release:
 
-    - Fixed a bug when an exception is thrown in
-      sc_module::sc_module() for a dynamically allocated sc_module
-      object. We were calling sc_module::end_module() on a module that has
-      already been deleted. The scenario runs like this:
-  
-      a) the sc_module constructor is entered
-      b) the exception is thrown
-      c) the exception processor deletes the storage for the sc_module
-      d) the stack is unrolled causing the sc_module_name instance to be deleted   
-      e) ~sc_module_name() calls end_module() with its pointer to the sc_module
-      f) because the sc_module has been deleted its storage is corrupted,
-         either by linking it to a free space chain, or by reuse of some sort
-      g) the m_simc field is garbage
-      h) the m_object_manager field is also garbage
-      i) an exception occurs
+     - CHANGES FOR GCC 4.X
 
-      This does not happen for automatic sc_module instances since the
-      ~sc_module_name() will no longer call sc_module::end_module() 
-      if the sc_module instance has been deleted. This caused an
-      exception on certain Linux platforms.
+       src/sysc/datatypes/bit/sc_logic.h:
 
+         Prefixed references to the logic tables within sc_logic with the 
+         class name.
+
+       src/sysc/kernel/sc_module.h
+
+         The process creation macros now have a prefix of this-> on 
+         references to sensitive, sensitive_pos and sensitive_neg. 
+         This is required with gcc 4.x when a module is a parent of a class 
+         that is no sc_module:
+            class B: public sc_module;
+            class A: public B;
+
+     - CONCATENATION BUG IN sc_bitref<X> CLASS
+       
+       src/sysc/datatypes/bit/sc_bit_proxies.h
+
+         Bug fixed in sc_bitref<X>::set_word() and sc_bit_ref<X>::set_cword()
+         methods. These methods are called by the bit concatenation code to
+         set the bit represented by the reference. However the code in the
+         set_word() and set_cword() methods was setting all the bits in the
+         word whose index was the bit index of the bit the bit reference
+         was representing. The code now sets only the bit specified in
+         the bit reference.
+
+     - PART SELECTION BUG
+
+       src/sysc/datatypes/int/sc_nbcommon.inc:
+
+         Fixed case where part selections for an sc_signed number were 
+         incorrectly returning a signed value rather than an unsigned one.
+         Removed a redundant piece of code that was #if'ed out, and would 
+         never be used since a copy of it already existed.
+
+     - CONCATENATION BUG IN sc_signed CLASS
+     
+       src/sysc/datatypes/int/sc_signed.cpp:
+
+         Bug fixed in concat_get_data for sc_signed values. The individual 
+         digits for a negative sc_signed value were not being masked properly, 
+         resulting in an incorrect sign propagation during two's complement 
+         conversion.
+
+     - AND REDUCTION BUG in sc_unsigned CLASS
+
+       src/sysc/datatypes/int/sc_unsigned.cpp:
+
+         Bug fixed where the code for reduce_and was not taking into account 
+         the fact that there is a bonus bit on top of sc_unsigned values that 
+         is always 0.
+
+     - BUG INVOLVING ARITHMETIC EXPRESSIONS CONTAINING sc_concatref INSTANCES
+
+       src/sysc/datatypes/misc/sc_concatref.h:
+
+       Changed operators that act on an sc_concatref and a signed value to 
+       returned sc_signed results. Previously they were returning sc_unsigned 
+       results which is incorrect.
 
 3) New features
 ===============
@@ -105,12 +106,19 @@ Here is an overview of changes in 2.2.0 compared to 2.1.v1:
 
     - SUPPORT FOR 64-BIT LINUX
 
-        64-bit native mode for Linux is now a beta SystemC platform. The
-        implementation uses Posix threads for thread support. The major
-        code change is the use of the sc_digit data type to represent
-        values that were previously unsigned long. These occurred in 
-        the concatenation code and the internal representations for
-        sc_signed, sc_unsigned, bit classes, and some fixed point classes.
+        src/sysc/qt/md/iX86_64.h
+        src/sysc/qt/md/iX86_64.s
+        src/sysc/qt/config
+        configure.in
+
+          64-bit native mode for Linux is now a SystemC platform. The
+          implementation uses quick threads for thread support. The major
+          code change is the use of the sc_digit data type to represent
+          values that were previously unsigned long. These occurred in 
+          the concatenation code and the internal representations for
+          sc_signed, sc_unsigned, bit classes, and some fixed point 
+          classes.
+
 
 
 4) Incompatibilities with previous releases
@@ -260,7 +268,18 @@ Here is a list of known incompatibilities between this release and 2.1.v1:
 - 2.2.0 has removed the initialize and release member 
   functions of class sc_report_handler. 
 
-
+- Calling sc_start() with a zero time value, sc_start(SC_ZERO_TIME) will
+  result in the execution of a single delta cycle. Previously, the call
+  would have executed one or more delta cycles, until there was no more
+  pending activity at the current simulation time. To allow users to 
+  get the old behavior a new function, sc_pending_activity_at_current_time() 
+  has been added. It returns a value of true if there is still activity
+  possible before simulation time is advanced, and false it not. So to
+  get the previous behavior of sc_start(SC_ZERO_TIME) one needs the 
+  following loop:
+     do { 
+         sc_start(SC_ZERO_TIME); 
+     } while ( sc_pending_activity_at_current_time(); }
 
 6) Dynamic Process Support
 ==========================
@@ -275,10 +294,10 @@ including systemc.h:
 An example of dynamic process use is contained in the directory
 examples/2.1/sysc/forkjoin.
 
-7) Beta features
-================
+7) Experimental features
+========================
 
-In this section the beta features of this release are listed.
+In this section the experimental features of this release are listed.
 
   - a new class scx_barrier has been added to provide barrier 
     synchronization for dynamic processes. The header defining

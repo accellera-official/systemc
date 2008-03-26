@@ -756,6 +756,9 @@ operator << ( ::std::ostream& os, const sc_signal<T>& a )
     
  *****************************************************************************/
 //$Log: sc_signal.h,v $
+//Revision 1.1.1.1  2006/12/15 20:31:35  acg
+//SystemC 2.2
+//
 //Revision 1.12  2006/04/11 23:11:57  acg
 //  Andy Goodrich: Changes for reset support that only includes
 //  sc_cthread_process instances.

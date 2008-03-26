@@ -35,6 +35,9 @@
 
 
 // $Log: sc_time.cpp,v $
+// Revision 1.1.1.1  2006/12/15 20:31:37  acg
+// SystemC 2.2
+//
 // Revision 1.6  2006/01/26 21:04:55  acg
 //  Andy Goodrich: deprecation message changes and additional messages.
 //

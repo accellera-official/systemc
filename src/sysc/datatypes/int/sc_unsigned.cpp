@@ -42,6 +42,12 @@
 
 
 // $Log: sc_unsigned.cpp,v $
+// Revision 1.2  2007/02/22 21:34:49  acg
+//  Andy Goodrich: cleaned up comments in concat_get_ctrl and concat_get_data.
+//
+// Revision 1.1.1.1  2006/12/15 20:31:36  acg
+// SystemC 2.2
+//
 // Revision 1.3  2006/01/13 18:49:32  acg
 // Added $Log command so that CVS check in comments are reproduced in the
 // source.
@@ -128,7 +134,10 @@ bool sc_unsigned::concat_get_ctrl( sc_digit* dst_p, int low_i ) const
     left_shift = low_i % BITS_PER_DIGIT;
 
 
-    // ALL DATA TO BE MOVED IS IN A SINGLE WORD:
+    // MOVE FIRST WORD (IT MAY BE PARTIAL) AND THEN ANY OTHERS:
+    // 
+    // We may "clobber" upper bits, but they will be written at some point
+    // anyway.
 
     mask = ~(-1 << left_shift);
     dst_p[dst_i] = ( dst_p[dst_i] & ~mask );
@@ -326,19 +335,18 @@ bool sc_unsigned::and_reduce() const
 {
     int i;   // Digit examining.
 
+	if ( sgn == SC_ZERO ) return false;
     for ( i = 0; i < ndigits-1; i++ )
         if ( (digit[i] & DIGIT_MASK) != DIGIT_MASK ) return false;
-    if ( (digit[i] & ~(-1 << (nbits % BITS_PER_DIGIT))) ==
-        (sc_digit)~(-1 << (nbits % BITS_PER_DIGIT)))
+    if ( (digit[i] & ~(-1 << ((nbits-1) % BITS_PER_DIGIT))) ==
+        (sc_digit)~(-1 << ((nbits-1) % BITS_PER_DIGIT)))
 		return true;
     return false;
 }
 
 bool sc_unsigned::or_reduce() const
 {
-    for ( int i = 0; i < ndigits; i++ )
-        if ( digit[i] ) return true;
-    return false;
+	return ( sgn == SC_ZERO ) ? false : true;
 }
 
 bool sc_unsigned::xor_reduce() const
@@ -347,7 +355,7 @@ bool sc_unsigned::xor_reduce() const
     int odd; // Flag for odd number of digits.
 
     odd = 0;
-    for ( i = 0; i < nbits; i++ )
+    for ( i = 0; i < nbits-1; i++ )
 	if ( test(i) ) odd = ~odd;
     return odd ? true : false;
 }

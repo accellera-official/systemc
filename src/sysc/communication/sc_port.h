@@ -42,6 +42,9 @@
 
 /* 
 $Log: sc_port.h,v $
+Revision 1.1.1.1  2006/12/15 20:31:35  acg
+SystemC 2.2
+
 Revision 1.3  2006/01/24 20:46:31  acg
 Andy Goodrich: changes to eliminate use of deprecated features. For instance,
 using notify(SC_ZERO_TIME) in place of notify_delayed().

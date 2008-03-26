@@ -36,6 +36,9 @@
 
 /* 
 $Log: sc_wait.cpp,v $
+Revision 1.1.1.1  2006/12/15 20:31:37  acg
+SystemC 2.2
+
 Revision 1.7  2006/02/02 20:20:39  acg
  Andy Goodrich: warnings for SC_THREAD waits.
 

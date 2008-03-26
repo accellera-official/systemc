@@ -69,6 +69,9 @@
  *****************************************************************************/
 
 // $Log: sc_unsigned.h,v $
+// Revision 1.1.1.1  2006/12/15 20:31:36  acg
+// SystemC 2.2
+//
 // Revision 1.4  2006/03/13 20:25:27  acg
 //  Andy Goodrich: Addition of function declarations, e.g., xor_signed_friend()
 //  to keep gcc 4.x happy.
@@ -441,7 +444,7 @@ sc_unsigned xor_unsigned_friend(small_type us,
 
   // Unary arithmetic operators
   sc_unsigned operator + (const sc_unsigned& u);
-    sc_signed operator - (const sc_unsigned& u);
+  sc_signed operator - (const sc_unsigned& u);
 
   // LOGICAL OPERATORS:
 

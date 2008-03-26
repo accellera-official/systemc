@@ -41,6 +41,9 @@
  *****************************************************************************/
 
 // $Log: sc_concatref.h,v $
+// Revision 1.1.1.1  2006/12/15 20:31:36  acg
+// SystemC 2.2
+//
 // Revision 1.3  2006/01/13 18:54:01  acg
 // Andy Goodrich: added $Log command so that CVS comments are reproduced in
 // the source.
@@ -262,7 +265,7 @@ public:
     sc_unsigned operator + () const
         { return value(); } 
 
-    sc_unsigned operator - () const
+    sc_signed operator - () const
         { return -value(); } 
 
     sc_unsigned operator ~ () const
@@ -636,15 +639,15 @@ class sc_concat_bool : public sc_value_base
     { \
         return a.value() OP b.value(); \
     }  \
-    SC_CONCAT_OP_TYPE(RESULT,OP,int) \
-    SC_CONCAT_OP_TYPE(RESULT,OP,long) \
-    SC_CONCAT_OP_TYPE(RESULT,OP,int64) \
+    SC_CONCAT_OP_TYPE(const sc_signed,OP,int) \
+    SC_CONCAT_OP_TYPE(const sc_signed,OP,long) \
+    SC_CONCAT_OP_TYPE(const sc_signed,OP,int64) \
     SC_CONCAT_OP_TYPE(RESULT,OP,unsigned int) \
     SC_CONCAT_OP_TYPE(RESULT,OP,unsigned long) \
     SC_CONCAT_OP_TYPE(RESULT,OP,uint64) \
-    SC_CONCAT_OP_TYPE(RESULT,OP,const sc_int_base&) \
+    SC_CONCAT_OP_TYPE(const sc_signed,OP,const sc_int_base&) \
     SC_CONCAT_OP_TYPE(RESULT,OP,const sc_uint_base&) \
-    SC_CONCAT_OP_TYPE(RESULT,OP,const sc_signed&) \
+    SC_CONCAT_OP_TYPE(const sc_signed,OP,const sc_signed&) \
     SC_CONCAT_OP_TYPE(RESULT,OP,const sc_unsigned&) \
     inline RESULT operator OP ( const sc_concatref& a, bool b ) \
     { \
@@ -655,20 +658,44 @@ class sc_concat_bool : public sc_value_base
         return (int)a OP b.value(); \
     } 
 
+#define SC_CONCAT_BOOL_OP(OP) \
+    inline bool operator OP ( const sc_concatref& a, const sc_concatref& b ) \
+    { \
+        return a.value() OP b.value(); \
+    }  \
+    SC_CONCAT_OP_TYPE(bool,OP,int) \
+    SC_CONCAT_OP_TYPE(bool,OP,long) \
+    SC_CONCAT_OP_TYPE(bool,OP,int64) \
+    SC_CONCAT_OP_TYPE(bool,OP,unsigned int) \
+    SC_CONCAT_OP_TYPE(bool,OP,unsigned long) \
+    SC_CONCAT_OP_TYPE(bool,OP,uint64) \
+    SC_CONCAT_OP_TYPE(bool,OP,const sc_int_base&) \
+    SC_CONCAT_OP_TYPE(bool,OP,const sc_uint_base&) \
+    SC_CONCAT_OP_TYPE(bool,OP,const sc_signed&) \
+    SC_CONCAT_OP_TYPE(bool,OP,const sc_unsigned&) \
+    inline bool operator OP ( const sc_concatref& a, bool b ) \
+    { \
+        return a.value() OP (int)b; \
+    } \
+    inline bool operator OP ( bool a, const sc_concatref& b ) \
+    { \
+        return (int)a OP b.value(); \
+    } 
+
 SC_CONCAT_OP(const sc_unsigned,+)
-SC_CONCAT_OP(const sc_unsigned,-)
+SC_CONCAT_OP(const sc_signed,-)
 SC_CONCAT_OP(const sc_unsigned,*)
 SC_CONCAT_OP(const sc_unsigned,/)
 SC_CONCAT_OP(const sc_unsigned,%)
 SC_CONCAT_OP(const sc_unsigned,&)
 SC_CONCAT_OP(const sc_unsigned,|)
 SC_CONCAT_OP(const sc_unsigned,^)
-SC_CONCAT_OP(bool,==)
-SC_CONCAT_OP(bool,<=)
-SC_CONCAT_OP(bool,>=)
-SC_CONCAT_OP(bool,!=)
-SC_CONCAT_OP(bool,>)
-SC_CONCAT_OP(bool,<)
+SC_CONCAT_BOOL_OP(==)
+SC_CONCAT_BOOL_OP(<=)
+SC_CONCAT_BOOL_OP(>=)
+SC_CONCAT_BOOL_OP(!=)
+SC_CONCAT_BOOL_OP(>)
+SC_CONCAT_BOOL_OP(<)
 
 #undef SC_CONCAT_OP
 #undef SC_CONCAT_OP_TYPE

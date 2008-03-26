@@ -34,6 +34,9 @@
     
  *****************************************************************************/
 //$Log: sc_buffer.h,v $
+//Revision 1.1.1.1  2006/12/15 20:31:35  acg
+//SystemC 2.2
+//
 //Revision 1.8  2006/03/13 20:19:43  acg
 // Andy Goodrich: changed sc_event instances into pointers to sc_event instances
 // that are allocated as needed. This saves considerable storage for large

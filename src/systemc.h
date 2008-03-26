@@ -367,6 +367,7 @@ using namespace sc_core;
 #ifdef SC_USE_SC_STRING_OLD
 	typedef sc_dt::sc_string_old sc_string;
 #endif
+
 #ifdef SC_USE_STD_STRING
 	typedef ::std::string sc_string;
 #endif

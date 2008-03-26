@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: scfx_rep.h,v $
+// Revision 1.1.1.1  2006/12/15 20:31:36  acg
+// SystemC 2.2
+//
 // Revision 1.4  2006/03/13 20:24:27  acg
 //  Andy Goodrich: Addition of function declarations, e.g., neg_scfx_rep(),
 //  to keep gcc 4.x happy.

@@ -52,6 +52,9 @@
                                
  *****************************************************************************/
 // $Log: sc_simcontext.h,v $
+// Revision 1.1.1.1  2006/12/15 20:31:37  acg
+// SystemC 2.2
+//
 // Revision 1.11  2006/04/11 23:13:21  acg
 //   Andy Goodrich: Changes for reduced reset support that only includes
 //   sc_cthread, but has preliminary hooks for expanding to method and thread
@@ -147,6 +150,7 @@ void    sc_set_time_resolution( double, sc_time_unit );
 sc_time sc_get_time_resolution();
 void    sc_set_default_time_unit( double, sc_time_unit );
 sc_time sc_get_default_time_unit();
+bool sc_pending_activity_at_current_time();
 
 // simulation status codes
 
@@ -185,6 +189,7 @@ class sc_simcontext
     friend bool sc_is_running( const sc_simcontext* simc_p );
 
     friend bool sc_end_of_simulation_invoked();
+    friend bool sc_pending_activity_at_current_time();
     friend bool sc_start_of_simulation_invoked();
 
     void init();
@@ -277,7 +282,7 @@ private:
     void add_child_object( sc_object* );
     void remove_child_object( sc_object* );
 
-    void crunch();
+    void crunch(bool once=false);
 
     int add_delta_event( sc_event* );
     void remove_delta_event( sc_event* );

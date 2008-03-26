@@ -58,6 +58,9 @@
 				 execution problem with using sc_pvector.
  *****************************************************************************/
 // $Log: sc_simcontext.cpp,v $
+// Revision 1.1.1.1  2006/12/15 20:31:37  acg
+// SystemC 2.2
+//
 // Revision 1.17  2006/04/11 23:13:21  acg
 //   Andy Goodrich: Changes for reduced reset support that only includes
 //   sc_cthread, but has preliminary hooks for expanding to method and thread
@@ -493,13 +496,13 @@ sc_simcontext::~sc_simcontext()
 }
 
 inline void
-sc_simcontext::crunch()
+sc_simcontext::crunch( bool once )
 {
 #ifdef DEBUG_SYSTEMC
     int num_deltas = 0;  // number of delta cycles
 #endif
 
-    while( true ) {
+    while ( true ) {
 
 	// EVALUATE PHASE
 	
@@ -538,7 +541,7 @@ sc_simcontext::crunch()
 
 	    // check for call(s) to sc_stop
 	    if( m_forced_stop ) {
-		if ( stop_mode == SC_STOP_IMMEDIATE ) return; 
+		if ( stop_mode == SC_STOP_IMMEDIATE ) return;
 	    }
 
 	    if( m_runnable->is_empty() ) {
@@ -600,8 +603,12 @@ sc_simcontext::crunch()
 	    break;
 	}
 
+	// IF ONLY DOING ONE CYCLE, WE ARE DONE. OTHERWISE GET NEW CALLBACKS
+
+	if ( once ) break;
+
 	m_runnable->toggle();
-    }
+    } 
 }
 
 inline
@@ -612,7 +619,7 @@ sc_simcontext::cycle( const sc_time& t)
 
     m_in_simulator_control = true;
     m_runnable->toggle();
-    crunch();
+    crunch(); 
     trace_cycle( /* delta cycle? */ false );
     m_curr_time += t;
     next_event_time = next_time();
@@ -813,6 +820,10 @@ sc_simcontext::simulate( const sc_time& duration )
 	SC_REPORT_ERROR(SC_ID_SIMULATION_TIME_OVERFLOW_, "");
 	return;
     }
+    else if ( duration < SC_ZERO_TIME )
+    {
+	SC_REPORT_ERROR(SC_ID_NEGATIVE_SIMULATION_TIME_,"");
+    }
     m_in_simulator_control = true;
 
     sc_time until_t = m_curr_time + duration;
@@ -829,7 +840,7 @@ sc_simcontext::simulate( const sc_time& duration )
     if ( duration == SC_ZERO_TIME ) 
     {
         m_runnable->toggle();
-  	crunch();
+  	crunch( true );
 	if( m_error ) return;
 	if( m_something_to_trace ) trace_cycle( /* delta cycle? */ false );
 	if( m_forced_stop ) 
@@ -1268,6 +1279,16 @@ sc_get_curr_process_handle()
     return sc_get_curr_simcontext()->get_curr_proc_info()->process_handle;
 }
 
+// Return indication if there are more processes to execute in this delta phase
+
+bool
+sc_pending_activity_at_current_time()
+{
+    sc_simcontext* c_p = sc_get_curr_simcontext();
+    return (c_p->m_delta_events.size() != 0) ||
+    	    !c_p->m_runnable->is_empty() ||
+	    c_p->m_prim_channel_registry->pending_updates();
+}
 
 // Set the random seed for controlled randomization -- not yet implemented
 

@@ -36,6 +36,9 @@
 
 /* 
 $Log: sc_wait_cthread.cpp,v $
+Revision 1.1.1.1  2006/12/15 20:31:37  acg
+SystemC 2.2
+
 Revision 1.3  2006/03/13 20:26:51  acg
  Andy Goodrich: Addition of forward class declarations, e.g.,
  sc_reset, to keep gcc 4.x happy.

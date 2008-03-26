@@ -35,6 +35,9 @@
 
 
 // $Log: sc_vector.h,v $
+// Revision 1.2  2007/01/12 21:04:58  acg
+//  Andy Goodrich: fix for Microsoft compiler.
+//
 // Revision 1.3  2006/01/13 18:53:11  acg
 // Andy Goodrich: Added $Log command so that CVS comments are reproduced in
 // the source.
@@ -94,10 +97,10 @@ public:
         { return (const_iterator) &ACCESS(0); }
 
     iterator end()
-        { return (iterator) &ACCESS(m_vector.size()); }
+        { return static_cast<iterator> (&ACCESS(m_vector.size()-1)+1); }
 
     const_iterator end() const
-        { return (const_iterator) &ACCESS(m_vector.size()); }
+        { return static_cast<const_iterator> (&ACCESS(m_vector.size()-1)+1); }
 
 
     sc_pvector<T>& operator = ( const sc_pvector<T>& rhs )

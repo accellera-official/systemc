@@ -36,6 +36,9 @@
 
 
 // $Log: sc_event_finder.cpp,v $
+// Revision 1.1.1.1  2006/12/15 20:31:35  acg
+// SystemC 2.2
+//
 // Revision 1.7  2006/02/02 23:42:37  acg
 //  Andy Goodrich: implemented a much better fix to the sc_event_finder
 //  proliferation problem. This new version allocates only a single event

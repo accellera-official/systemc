@@ -1797,6 +1797,9 @@ sc_trace( sc_trace_file* tf, const sc_inout<T>& port,
 
  *****************************************************************************/
 //$Log: sc_signal_ports.h,v $
+//Revision 1.1.1.1  2006/12/15 20:31:35  acg
+//SystemC 2.2
+//
 //Revision 1.11  2006/04/18 23:36:50  acg
 // Andy Goodrich: made add_trace_internal public until I can figure out
 // how to do a friend specification for sc_trace in an environment where

@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: sc_context.h,v $
+// Revision 1.1.1.1  2006/12/15 20:31:36  acg
+// SystemC 2.2
+//
 // Revision 1.4  2006/03/21 00:00:31  acg
 //   Andy Goodrich: changed name of sc_get_current_process_base() to be
 //   sc_get_current_process_b() since its returning an sc_process_b instance.

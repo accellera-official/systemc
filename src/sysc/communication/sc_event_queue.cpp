@@ -35,6 +35,9 @@
 
 
 // $Log: sc_event_queue.cpp,v $
+// Revision 1.1.1.1  2006/12/15 20:31:35  acg
+// SystemC 2.2
+//
 // Revision 1.4  2006/01/26 21:00:50  acg
 //  Andy Goodrich: conversion to use sc_event::notify(SC_ZERO_TIME) instead of
 //  sc_event::notify_delayed()
@@ -61,19 +64,6 @@ sc_time_compare( const void* p1, const void* p2 )
     } else {
 	return 0;
     }  
-}
-
-sc_event_queue::sc_event_queue()
-    : sc_module( sc_gen_unique_name( "event_queue" ) ),
-      m_ppq( 128, sc_time_compare ),
-      m_pending_delta(0)
-    
-{
-    m_delta=0;
-    SC_METHOD( fire_event );
-    sensitive << m_e;
-    dont_initialize();
-    end_module();
 }
 
 sc_event_queue::sc_event_queue( sc_module_name name_ )

@@ -81,24 +81,19 @@ case $1 in
 		iter_bench_load=100000000
 		;;
 
-	iX86*)
+	x86_64*)
 		case $1 in
 			iX86-ss*)
 				: "Assembler comments '//'"
-				sed 's/\/\*/\/\//' < md/i386.s > qtmds.s
-#				sed 's/\/\*/\/\//' < md/i386_b.s > qtmdb.s
+				sed 's/\/\*/\/\//' < md/i386_64.s > qtmds.s
 				;;
 				
 			*)
-				ln -s md/i386.s qtmds.s
-#				ln -s md/i386_b.s qtmdb.s
+				ln -s md/iX86_64.s qtmds.s
 				;;
 		esac
-		: "Intel 80386 and compatibles (not '286...)"
-#		ln -s md/default.Makefile Makefile.md
-#		ln -s md/i386.h qtmd.h
+		: "Intel X386 64-bit and compatibles"
 		ln -s md/null.c qtmdc.c
-#		ln -s md/i386.README README.md
 		iter_init=10000000
 		iter_runone=1000000
 		iter_blockint=1000000
@@ -116,6 +111,43 @@ case $1 in
 		iter_bench_add=100000000
 		iter_bench_load=10000000
 		;;
+
+    iX86*)
+        case $1 in
+            iX86-ss*)
+                : "Assembler comments '//'"
+                sed 's/\/\*/\/\//' < md/i386.s > qtmds.s
+#               sed 's/\/\*/\/\//' < md/i386_b.s > qtmdb.s
+                ;;
+                
+            *)
+                ln -s md/i386.s qtmds.s
+#               ln -s md/i386_b.s qtmdb.s
+                ;;
+        esac
+        : "Intel 80386 and compatibles (not '286...)"
+#       ln -s md/default.Makefile Makefile.md
+#       ln -s md/i386.h qtmd.h
+        ln -s md/null.c qtmdc.c
+#       ln -s md/i386.README README.md
+        iter_init=10000000
+        iter_runone=1000000
+        iter_blockint=1000000
+        iter_blockfloat=1000000
+        iter_vainit0=1000000
+        iter_vainit2=1000000
+        iter_vainit4=1000000
+        iter_vainit8=1000000
+        iter_vastart0=1000000
+        iter_vastart2=1000000
+        iter_vastart4=1000000
+        iter_vastart8=1000000
+        iter_bench_call_reg=1000000
+        iter_bench_call_imm=1000000
+        iter_bench_add=100000000
+        iter_bench_load=10000000
+        ;;
+
 
 	m68k)
 		: "Motorola 68000 family -- incomplete!"

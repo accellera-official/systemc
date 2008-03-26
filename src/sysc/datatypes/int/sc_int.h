@@ -50,6 +50,9 @@
  *****************************************************************************/
 
 // $Log: sc_int.h,v $
+// Revision 1.1.1.1  2006/12/15 20:31:36  acg
+// SystemC 2.2
+//
 // Revision 1.3  2006/01/13 18:49:31  acg
 // Added $Log command so that CVS check in comments are reproduced in the
 // source.

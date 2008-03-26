@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_cthread_process.cpp,v $
+// Revision 1.1.1.1  2006/12/15 20:31:37  acg
+// SystemC 2.2
+//
 // Revision 1.5  2006/04/11 23:13:20  acg
 //   Andy Goodrich: Changes for reduced reset support that only includes
 //   sc_cthread, but has preliminary hooks for expanding to method and thread

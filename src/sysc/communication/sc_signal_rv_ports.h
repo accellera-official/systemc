@@ -33,6 +33,9 @@
     
  *****************************************************************************/
 //$Log: sc_signal_rv_ports.h,v $
+//Revision 1.1.1.1  2006/12/15 20:31:35  acg
+//SystemC 2.2
+//
 //Revision 1.2  2006/01/03 23:18:27  acg
 //Changed copyright to include 2006.
 //

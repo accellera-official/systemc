@@ -279,19 +279,19 @@ CLASS_TYPE::operator=(const OTHER_CLASS_TYPE& v)
 }
 
 
-// Assignment from a subref v of the same type.
+// Assignment from an sc_unsigned_subref_r
 const CLASS_TYPE& 
-CLASS_TYPE::operator=(const CLASS_TYPE_SUBREF& v)
+CLASS_TYPE::operator=(const sc_unsigned_subref_r& v)
 {
-  return operator=(CLASS_TYPE(v));
+  return operator=(sc_unsigned(v));
 }
 
 
-// Assignment from a subref v of the different type.
+// Assignment from an sc_signed_subref_r
 const CLASS_TYPE& 
-CLASS_TYPE::operator=(const OTHER_CLASS_TYPE_SUBREF& v)
+CLASS_TYPE::operator=(const sc_signed_subref_r& v)
 {
-  return operator=(OTHER_CLASS_TYPE(v));
+  return operator=(sc_unsigned(v));
 }
 
 
@@ -2663,157 +2663,6 @@ CLASS_TYPE::CLASS_TYPE(small_type s, int nb,
 #endif
 }
 
-
-#if 0 // Using this code you get unsigned part selections.
-
-// This constructor is mainly used in finding a "range" of bits from a
-// number of type CLASS_TYPE. The function range(l, r) can have
-// arbitrary precedence between l and r. If l is smaller than r, then
-// the output is the reverse of range(r, l). 
-sc_unsigned::sc_unsigned(const CLASS_TYPE* u, int l, int r)
-{
-  bool reversed = false;
-
-  if( l < r ) {
-    reversed = true;
-    int tmp = l;
-    l = r;
-    r = tmp;
-  }
-
-  // at this point, l >= r
-
-  // make sure that l and r point to the bits of u
-  r = sc_max( r, 0 );
-  l = sc_min( l, u->nbits - 1 );
-    
-  nbits = num_bits( l - r + 1 );
-
-  // nbits can still be <= 0 because l and r have just been updated
-  // with the bounds of u.
-
-  // if u == 0 or the range is out of bounds, return 0
-  if( u->sgn == SC_ZERO || nbits <= num_bits( 0 ) ) {
-    sgn = SC_ZERO;
-    if( nbits <= num_bits( 0 ) ) {
-      nbits = 1;
-    }
-    ndigits = DIV_CEIL( nbits );
-#ifndef SC_MAX_NBITS
-    digit = new sc_digit[ndigits];
-#endif
-    vec_zero( ndigits, digit );
-    return;
-  }
-
-  // The rest will be executed if u is not zero.
-
-  ndigits = DIV_CEIL(nbits);
-  
-  // The number of bits up to and including l and r, respectively.
-  int nl = l + 1; 
-  int nr = r + 1; 
-  
-  // The indices of the digits that have lth and rth bits, respectively.
-  int left_digit = DIV_CEIL(nl) - 1;
-  int right_digit = DIV_CEIL(nr) - 1;
-  
-  int nd;
-
-  // The range is performed on the 2's complement representation, so
-  // first get the indices for that.
-  if (u->sgn == SC_NEG)
-    nd = left_digit + 1;
-  else
-    nd = left_digit - right_digit + 1;
-
-  // Allocate memory for the range.
-#ifdef SC_MAX_NBITS
-  sc_digit d[MAX_NDIGITS];
-#else
-  digit = new sc_digit[ndigits];
-  sc_digit *d = new sc_digit[nd];
-#endif
-  
-  // Getting the range on the 2's complement representation.
-  if (u->sgn == SC_NEG) {
-    
-    vec_copy(nd, d, u->digit);
-    vec_complement(nd, d);  // d = -d;
-    vec_shift_right(nd, d, r, DIGIT_MASK);
-    
-  }
-  else {
-    
-    for (register int i = right_digit; i <= left_digit; ++i)
-      d[i - right_digit] = u->digit[i];
-    
-    vec_shift_right(nd, d, r - right_digit * BITS_PER_DIGIT, 0);
-    
-  }
-  
-  vec_zero(ndigits, digit);
-
-  if (! reversed)
-    vec_copy(sc_min(nd, ndigits), digit, d);
-  
-  else {
-
-    // If l < r, i.e., reversed is set, reverse the bits of digit.  d
-    // will be used as a temporary store. The following code tries to
-    // minimize the use of bit_ord and digit_ord, which use mod and
-    // div operators. Since these operators are function calls to
-    // standard library routines, they are slow. The main idea in
-    // reversing is "read bits out of d from left to right and push
-    // them into digit using right shifting."
-
-    // Take care of the last digit.
-    int nd_less_1 = nd - 1;
-
-    // Deletions will start from the left end and move one position
-    // after each deletion.
-    register sc_digit del_mask = one_and_zeros(bit_ord(l - r));
-      
-    while (del_mask) {
-      vec_shift_right(ndigits, digit, 1, ((d[nd_less_1] & del_mask) != 0));
-      del_mask >>= 1;
-    }
-
-    // Take care of the other digits if any.
-
-    // Insertion to digit will always occur at the left end.
-    sc_digit ins_mask = one_and_zeros(BITS_PER_DIGIT - 1);
-
-    for (register int j = nd - 2; j >= 0; --j) { // j = nd - 2
-
-      // Deletions will start from the left end and move one position
-      // after each deletion.
-      del_mask = ins_mask;
-
-      while (del_mask) {
-        vec_shift_right(ndigits, digit, 1, ((d[j] & del_mask) != 0));
-        del_mask >>= 1;
-      }
-    }
-
-    if (u->sgn == SC_NEG)
-      vec_shift_right(ndigits, digit, 
-                      ndigits * BITS_PER_DIGIT - length(), DIGIT_MASK);
-    else
-      vec_shift_right(ndigits, digit, 
-                      ndigits * BITS_PER_DIGIT - length(), 0);
-
-
-  }  // if reversed.
-
-  convert_2C_to_SM();
-  
-#ifndef SC_MAX_NBITS
-  delete [] d;
-#endif
-}
-#else // if 0 - Using the code below you get signed part selects.
-
 // This constructor is mainly used in finding a "range" of bits from a
 // number of type CLASS_TYPE. The function range(l, r) can have
 // arbitrary precedence between l and r. If l is smaller than r, then
@@ -3108,7 +2957,6 @@ CLASS_TYPE::CLASS_TYPE(const OTHER_CLASS_TYPE* u, int l, int r)
 #endif
 }
 
-#endif // if 0  
 
 // Print out all the physical attributes.
 void

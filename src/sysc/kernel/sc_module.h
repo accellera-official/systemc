@@ -49,6 +49,13 @@
  *****************************************************************************/
 
 // $Log: sc_module.h,v $
+// Revision 1.2  2007/01/24 20:14:12  acg
+//  Andy Goodrich: improved comment about using this-> in the macros that
+//  access sensitive.
+//
+// Revision 1.1.1.1  2006/12/15 20:31:37  acg
+// SystemC 2.2
+//
 // Revision 1.7  2006/04/11 23:13:21  acg
 //   Andy Goodrich: Changes for reduced reset support that only includes
 //   sc_cthread, but has preliminary hooks for expanding to method and thread
@@ -465,15 +472,25 @@ extern sc_module* sc_module_dynalloc(sc_module*);
 #define SC_HAS_PROCESS(user_module_name)                                      \
     typedef user_module_name SC_CURRENT_USER_MODULE
 
+// The this-> construct on sensitive operators in the macros below is
+// required for gcc 4.x when a templated class has a templated parent that is
+// derived from sc_module:
+//
+// template<typename X>
+// class B : public sc_module;
+// template<typename X>
+// class A : public B<X>
+
+
 #define declare_method_process(handle, name, host_tag, func)        \
     {		                                                    \
         ::sc_core::sc_process_handle handle =                      \
 	    sc_core::sc_get_curr_simcontext()->create_method_process( \
 		name,  false, SC_MAKE_FUNC_PTR( host_tag, func ), \
 		this, 0 ); \
-        sensitive << handle;                                        \
-        sensitive_pos << handle;                                    \
-        sensitive_neg << handle;                                    \
+        this->sensitive << handle;                                        \
+        this->sensitive_pos << handle;                                    \
+        this->sensitive_neg << handle;                                    \
     }
 
 #define declare_thread_process(handle, name, host_tag, func)        \
@@ -482,9 +499,9 @@ extern sc_module* sc_module_dynalloc(sc_module*);
 	     sc_core::sc_get_curr_simcontext()->create_thread_process( \
                  name,  false,           \
                  SC_MAKE_FUNC_PTR( host_tag, func ), this, 0 ); \
-        sensitive << handle;                                        \
-        sensitive_pos << handle;                                    \
-        sensitive_neg << handle;                                    \
+        this->sensitive << handle;                                        \
+        this->sensitive_pos << handle;                                    \
+        this->sensitive_neg << handle;                                    \
     }
 
 #define declare_cthread_process(handle, name, host_tag, func, edge) \
@@ -493,7 +510,7 @@ extern sc_module* sc_module_dynalloc(sc_module*);
 	     sc_core::sc_get_curr_simcontext()->create_cthread_process( \
             name,  false,          \
                      SC_MAKE_FUNC_PTR( host_tag, func ), this, 0 ); \
-        sensitive.operator() ( handle, edge );\
+        this->sensitive.operator() ( handle, edge );\
     }
 
 #define SC_CTHREAD(func, edge)                                                \

@@ -36,6 +36,9 @@
 
 
 // $Log: sc_module_name.cpp,v $
+// Revision 1.1.1.1  2006/12/15 20:31:37  acg
+// SystemC 2.2
+//
 // Revision 1.4  2006/03/14 23:56:58  acg
 //   Andy Goodrich: This fixes a bug when an exception is thrown in
 //   sc_module::sc_module() for a dynamically allocated sc_module
