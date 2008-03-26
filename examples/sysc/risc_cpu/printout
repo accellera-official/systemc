@@ -1,0 +1,38 @@
+0x00000000
+0x00000000
+0x00000000
+0x00000000
+0x00000000
+0xf160000a	/* movi R6, 10 * pc = 0x5=5/
+0x00000000					/* REGISTER DUMP * pc = 6/
+0xf160000a	/* movi R6, 10 * pc = 0x7=7/
+0x00000000					/* REGISTER DUMP * pc = 8/
+0xf160000a	/* movi R6, 10 * pc = 0x9=9/
+0x00000000					/* REGISTER DUMP * pc = 10/
+0xf160000a	/* movi R6, 10 * pc = 0xb=11/
+0x00000000					/* REGISTER DUMP * pc = 12/
+0xf160000a	/* movi R6, 10 * pc = 0xd=13/
+0x00000000					/* REGISTER DUMP * pc = 14/
+0xf160000a	/* movi R6, 10 * pc = 0xf=15/
+0x00000000					/* REGISTER DUMP * pc = 16/
+0xf1500005	/* movi R5, 5 * pc = 0x11=17/
+0x00000000					/* REGISTER DUMP * pc = 18/
+0x0f550000	/* mov R5, R5 * pc = 0x13=19/
+0x00000000					/* REGISTER DUMP * pc = 20/
+0x0f550000	/* mov R5, R5 * pc = 0x15=21/
+0x00000000					/* REGISTER DUMP * pc = 22/
+0x0f550000	/* mov R5, R5 * pc = 0x17=23/
+0x00000000					/* REGISTER DUMP * pc = 24/
+0x0f550000	/* mov R5, R5 * pc = 0x19=25/
+0x00000000					/* REGISTER DUMP * pc = 26/
+0x0f550000	/* mov R5, R5 * pc = 0x1b=27/
+0x00000000					/* REGISTER DUMP * pc = 28/
+0x02550001	/* addi R5, R5, 1 * pc = 0x1d=29/
+0x00000000					/* REGISTER DUMP * pc = 30/
+0x1156fffa	/* bne R5, R6, -6  * pc = 0x1f=31/
+0x00000000					/* REGISTER DUMP * pc = 32/
+0x01123000	/* add R1, R2, R3 * pc = 0x21=33/
+0x00000000					/* REGISTER DUMP * pc = 34/
+0x01234000	/* add R2, R3, R4 * pc = 0x23=35/
+0x00000000					/* REGISTER DUMP * pc = 36/
+0xffffffff

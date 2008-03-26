@@ -1,0 +1,4 @@
+           DEFS	= -I.
+       INCLUDES	= -I$(top_srcdir)/src
+
+   MAIN_LIBRARY	= libsystemc.a

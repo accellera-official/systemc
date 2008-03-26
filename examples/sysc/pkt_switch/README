@@ -1,0 +1,114 @@
+=========================================================================
+	        README for MULTICAST HELIX PACKET SWITCH
+=========================================================================
+
+Overview:
+=========
+
+  This example demonstrates a  4x4 multicast  helix packet switch. This 
+  example was developed and tested on Solaris2.5.
+
+  The switch uses  a  self routing ring  of shift registers to transfer
+  cells from one port to another in a pipelined fashion, resolving output 
+  contention and efficiently handling multicast cells. Input and output
+  ports have fifo buffers of depth four each. 
+
+  This is a simplified model.
+
+  Following is a block diagram of the switch:
+
+        +-----------------------------------------------------------+
+        |     fifo				     fifo	    |
+	|    +-------+				     +-------+	    |						    
+    IN0 |--->| | | | |-----------+	   +---------| | | | |<-----| IN2						    
+        |    +-------+    	 |	   |	     +-------+      |
+ 	|    fifo	         |	   |	     fifo	    |
+	|    +-------+		 |	   |	     +-------+	    |			    
+   OUT0 |<---| | | | |<-------+	 |	   |  +----->| | | | |----->| OUT2				    
+        |    +-------+        |  V	   V  |	     +-------+      |
+        |	            +-----+      +-----+	  	    |
+	|                   | R0  |<-----| R2  |	            |
+	|	      	    +-----+	 +-----+	   	    |
+        |		      |  Shift Reg  ^		            |
+	|                     v    Ring     |	                    |
+        |	            +-----+      +-----+  		    |
+	|                   | R1  |----->| R3  |	            |
+	|	   	    +-----+	 +-----+	  	    |
+        |    fifo	      ^ |	   ^  |	    fifo	    |
+	|    +-------+	      | |	   |  |	    +-------+	    |		    
+    IN1 |--->| | | | |--------+	|	   |  +---->| | | | |<------| IN3				    
+        |    +-------+          |	   |	    +-------+       |
+ 	|    fifo	        |	   |	    fifo	    |
+	|    +-------+	        |	   |	    +-------+	    |			    
+   OUT1 |<---| | | | |<---------+	   +--------| | | | |------>| OUT3				    
+        |    +-------+ 				    +-------+	    |
+	| 							    |
+	+-----------------------------------------------------------+
+
+
+Input and ouput signals are 16-bit packets with the following structure:
+
+
+   I<-ad(4)->I<-id(4)->I<---data(8)--->I
+   +-----------------------------------+
+   | | | | | | | | | | | | | | | | | | | 
+   +-----------------------------------+
+
+Input and output ports are of signals of type pkt. For instance:
+	...
+	sc_in<pkt> in0;
+	...
+
+where pkt is a user defined structure in SystemC:
+
+struct pkt {
+       sc_int<8> data;
+       sc_int<4> id;
+       bool dest0;
+       bool dest1;
+       bool dest2;
+       bool dest3;
+
+       inline bool operator == (const pkt& rhs) const
+   {
+     return (rhs.data == data && rhs.id == id && rhs.dest0 == dest0 && 
+     rhs.dest1 == dest1 && rhs.dest2 == dest2 && rhs.dest3 == dest3);
+   }
+}
+
+Each input port is connected to a sender process. Each output port is connected
+to a receiver process. The sender and receiver processes are given distinguish
+id numbers during instantiations.
+
+A sender process, writes a random value to data, and sends it to one or more
+of the four receivers. Each packet also contains a sender id field. Sender 
+processes send packets at random intervals, varying from 1 to 4 units of it's
+clock.
+
+A receiver process is activated whenever a packet arrives. It then displays
+the contents of the packet and the receiver id.
+
+
+Simulation:
+==========
+
+ Executable can be built using the gmake command. Please make sure that
+ the variable "SYSTEMC"  within  the  file Makefile.defs points to your 
+ installation of SystemC. The simulation run displays the sequence in 
+ which the packets are sent and received along with the contents of the
+ packets.
+
+ At the end of the simulation, a report is displayed which shows the 
+ total no. of packets received, packets dropped and percentage
+ of packets dropped.
+
+ It may be a good idea to direct the simulation outputs to a file and then
+ can view the simulation results in that file.
+ 
+ The performance(% packets dropped) depends upon a number of factors:
+
+   - the traffic 
+   - fifo buffer size
+   - speed of the switch, relative to the activity rates on 
+     the input ports
+  

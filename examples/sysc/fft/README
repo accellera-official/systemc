@@ -1,0 +1,155 @@
+========================================================================
+				README for FFT
+========================================================================
+ 
+  This example demonstrates a simple synchronous system for a 16-point 
+  FFT computation. This example was developed and tested on Solaris2.5.
+
+  Following are the components of the system:
+
+  a. source : Reads in real and imaginary samples from the files "in_real"
+ 	      and  "in_imag". Interacts with the process "fft". The input 
+	      files need to be in ASCII format.
+
+  b. fft : The main block in the system. Computes 16-point fft. More about
+	   this block later.
+
+  c. sink : Reads the real and imaginary components of the output transform
+ 	    values, and writes those to the files "out_real" and "out_imag" 
+            respectively. Output files are produced in ASCII format.
+
+      	 +--------------------------------------------------+
+      	 | +-----------+     +-----------+   +-----------+  |
+      	 | |           |     |           |   |           |  |
+      	 | | source    |-----| FFT       |---| sink      |  |
+      	 | |           |     |           |   |           |  |
+      	 | +-----------+     +-----------+   +-----------+  |
+      	 |     main                                         |
+      	 +--------------------------------------------------+
+
+  You can find the floating point and fixed point versions in the following 
+  directories, respectively:
+
+   ./fft_flpt/
+   ./fft_fxpt/
+
+Steps: 
+------
+i.  Variable "SYSTEMC" within the file Makefile.defs should points to your 
+    installation of SystemC.
+
+ii. Choose the appropriate Makefile, i.e.,
+
+       Makefile.gcc   for gccsparcOS5
+       Makefile.hp    for hpux10
+       Makefile.linux for linux
+       Makefile.sun   for sparcOS5
+
+iii. Build the executable, using the Makefile. For instance,
+
+       > make -f Makefile.gcc
+
+iv.  Prepare complex input sequence in the files "in_real" & "in_imag" and 
+     run the simulation.
+
+       > run.x
+
+Verification:
+-------------
+
+  As a sanity check, the block was tested with a DC signal and an Impulse
+  wave.
+  
+  A COSSAP testbench, using cossap block "DFT_QC", was used to verify the 
+  results in a general case. Results of the fixed point block are within 
+  a certain range of the precise result, as allowed by the finite precision
+  arithmetic.
+
+  Some sample input files are included in each directory. Corresponding 
+  result files are also provided with the extension ".golden".
+
+The FFT Block:
+--------------
+                           ---------------
+           in_real  ----->|               |-----> out_real 
+                          |               |
+                          |               |
+           in_imag  ----->|               |-----> out_imag 
+                          |               |
+                          |   FFT BLOCK   |
+           data_req <-----|   (16-point)  |-----> data_ready
+                          |               |
+                          |               |
+         data_valid ----->|               |<----- data_ack
+                          |               |
+                           ---------------
+    Data Read:
+
+    The block initiates the reading of a sample by sending a "data_req" 
+    signal to the source of input data. It waits for "data_valid" signal
+    from the data source to become high; then it lowers the "data_req" 
+    signal and  reads the real and imaginary data samples from it's input 
+    ports "in_real" and "in_imag" respectively. 
+
+    The block reads in 16 samples of input data in this fashion.
+
+    FFT Computation:
+
+    This block computes 16-point FFT on a sequence of complex inputs, 
+    using radix-2 decimation in frequency algorithm.
+
+    This block performs finite precision arithmetic. The input data is
+    read as a signed 16-bit fixed point number, with 10 fractional bits. 
+    Twiddle factors and output values have the same representation. 
+
+    Internal to the block, computation is performed using fixed point 
+    arithmetic. The input samples and output transforms, are externally 
+    inferred as 16-bit integers.
+
+    Data Write:
+
+    Once the FFT calculation is performed, the block writes the tran-
+    sform values to a sink. It puts the real and imaginary components 
+    of transform value on it's output ports "out_real" and "out_imag"
+    respectively, and sends a "data_ready" signal to the sink. It waits
+    for "data_ack" signal from the sink to go high and then it writes 
+    the next value.
+
+    The block writes the 16 transform values to the output ports in 
+    this manner and then it goes to the next Read-Compute-Write cycle.
+
+Floating Point Version
+----------------------
+  The floating point version is the first step, in modeling this block, 
+  where the emphasis is to prove the algorithm and verify the results, 
+  while working at the highest level of abstraction. This does not reflect
+  anything about the target architecture. 
+
+Fixed Point Version
+-------------------
+  The fixed point version is the next step, taking closer to the RTL 
+  level. This is refined from the floating point version, where all 
+  data are refined from infinite precision representation to finite 
+  bitwidth representation. All computation is performed using the 
+  fixed-point arithmetic.
+
+Future Extensions/Limitations:
+------------------------------
+
+  * Control refinement would be the next step, leading to the RTL 
+    version of the block.
+
+  * This example does not handle overflow and underflow in the fixed 
+    point version.
+
+  * The current block is a 16-point FFT block. It could be extended 
+    to a general N-point FFT, with N as a parameter.
+
+  * In the present model, not much attention is paid to the quality of 
+    the target hardware. For instance: instead of computing the w-values
+    within the block, it could be precalculated outside, and stored in a 
+    ROM. Several HW optimizations(for area and speed) can be tried out, 
+    once the RTL version of the block is ready.
+
+========================================================================
+

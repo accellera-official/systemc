@@ -1,0 +1,61 @@
+README for FIR
+===================================================================
+
+
+The example shows how to use the C++
+modeling with SystemC to model hardware properties. One important aspect of
+modeling with the Systemc classes is that you can use the same
+environment  for different levels of abstraction, from very abstract down to 
+RT-level.
+
+My example  models a simple FIR filter which reads in samples with each 
+input_valid signal and writing out the result when output_data_ready is 
+high. The filter is a 16 tap FIR filter(fir.cc). The test bench feeds simply 
+ascending values into the FIR(stimulus.cc) and the output is
+sampled (display.cc) and displayed with print statements.
+
+The basic structure looks like this:
+
++--------------------------------------------------+
+| +-----------+     +-----------+   +-----------+  |
+| |           |	    |           |   |           |  |
+| | stimuli   |---->| FIR       |-->| display   |  |
+| |           |	    |           |   |           |  |
+| +-----------+	    +-----------+   +-----------+  |
+|                                                  |
+|                                                  |
+|     main                                         |
++--------------------------------------------------+
+
+In order to compile the example you have to execute 'make'. Please
+note that the file Makefile.defs contains the location of the SystemC
+class library, which might be different for you, depending on your
+installation. Once the compilation is finished, you will find an
+executable 'run.x'. 
+
+Once I have evaluated the functionality for the FIR it might be
+interesting  to "refine" the model further to get an better idea about
+the  complexity of the design. When modeling with C++ using SystemC
+one can easily refine the FIR filter into a RTL style model.
+
+I have refined the FIR process under the assumption that I use 4 
+cycles to do the whole computation. The structure looks now like 
+this:
+
++---------------------------------------------------+
+| +-----------+     +------------+   +-----------+  |
+| |           |	    | FIR_top    |   |           |  |
+| | stimuli   |	    | +--------+ |   | display   |  |
+| |           |	    | |FIR_FSM | |   |           |  |
+| +-----------+	    | +--------+ |   +-----------+  |
+|                   | +--------+ |                  |
+|                   | |FIR_data| |                  |
+|                   | +--------+ |                  |
+|     main          +------------+                  |
++---------------------------------------------------+
+
+I have modeled a state machine(fir_fsm.cc) and a datapath(fir_data.cc)
+in order to distribute the operations into 4 cycles, which makes the
+model more difficult to read, but this models now a "RTL" like view to
+the architecture for this design.
+

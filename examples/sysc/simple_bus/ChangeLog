@@ -1,0 +1,30 @@
+2001-10-19  Ric Hilderink  <ric@synopsys.com>
+
+	* Simple bus version 2 released.
+	
+	This version is a drastic simplification of the first version,
+	focussing on the most elementary features and capabilities of a
+	bus modeled at the Transaction-Level with SystemC 2.0.
+	
+2001-11-09  Martin Janssen  <mjanssen@synopsys.com>
+
+	* Simple bus version 2.1 released.
+
+	This version supports the Windows NT platform, in addition to
+        the UNIX platforms already supported in the previous release.
+
+2001-11-27  Martin Janssen  <mjanssen@synopsys.com>
+
+	* Simple bus version 2.2 released.
+
+	This version includes improvements in the README file and in
+        the verbose output of the bus arbiter model.
+
+2002-01-28  Holger Keding  <keding@synopsys.com>
+
+	* Simple bus version 2.3 released.
+
+	This version uses byte addressing throughout all models. 
+        Also, before simulation starts this version is performing a 
+        one-time check for overlapping address spaces of the slaves 
+        attached to the bus.

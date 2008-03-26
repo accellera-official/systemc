@@ -1,0 +1,52 @@
+Information : Reset state
+Information : Reset state
+Stimuli : 0 at time 9
+Display : 0  at time 13
+Stimuli : 1 at time 19
+Display : -6  at time 23
+Stimuli : 2 at time 29
+Display : -16  at time 33
+Stimuli : 3 at time 39
+Display : -13  at time 43
+Stimuli : 4 at time 49
+Display : 6  at time 53
+Stimuli : 5 at time 59
+Display : 7  at time 63
+Stimuli : 6 at time 69
+Display : -33  at time 73
+Stimuli : 7 at time 79
+Display : -50  at time 83
+Stimuli : 8 at time 89
+Display : 87  at time 93
+Stimuli : 9 at time 99
+Display : 446  at time 103
+Stimuli : 10 at time 109
+Display : 959  at time 113
+Stimuli : 11 at time 119
+Display : 1495  at time 123
+Stimuli : 12 at time 129
+Display : 1990  at time 133
+Stimuli : 13 at time 139
+Display : 2467  at time 143
+Stimuli : 14 at time 149
+Display : 2960  at time 153
+Stimuli : 15 at time 159
+Display : 3466  at time 163
+Stimuli : 16 at time 169
+Display : 3968  at time 173
+Stimuli : 17 at time 179
+Display : 4470  at time 183
+Stimuli : 18 at time 189
+Display : 4972  at time 193
+Stimuli : 19 at time 199
+Display : 5474  at time 203
+Stimuli : 20 at time 209
+Display : 5976  at time 213
+Stimuli : 21 at time 219
+Display : 6478  at time 223
+Stimuli : 22 at time 229
+Display : 6980  at time 233
+Stimuli : 23 at time 239
+Display : 7482  at time 243
+Simulation of 24 items finished at time 243
+SystemC: simulation stopped by user.

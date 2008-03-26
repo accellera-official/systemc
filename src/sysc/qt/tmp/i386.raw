@@ -1,0 +1,12 @@
+iX86 1 10000000       25.73 real        25.17 user         0.07 sys  
+iX86 6 1000000       22.96 real        22.47 user         0.08 sys  
+iX86 7 1000000       10.61 real        10.27 user         0.09 sys  
+iX86 8 1000000       10.61 real        10.27 user         0.09 sys  
+iX86 14 1000000       16.04 real        15.64 user         0.08 sys  
+iX86 15 1000000       18.48 real        18.02 user         0.08 sys  
+iX86 16 1000000       22.41 real        21.91 user         0.08 sys  
+iX86 17 1000000       29.52 real        28.94 user         0.07 sys  
+iX86 10 1000000       40.61 real        39.86 user         0.08 sys  
+iX86 11 1000000       43.19 real        42.27 user         0.08 sys  
+iX86 12 1000000       47.14 real        46.15 user         0.08 sys  
+iX86 13 1000000       47.14 crash        100000 crash         100000 crash  
