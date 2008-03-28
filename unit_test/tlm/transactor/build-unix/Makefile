@@ -3,8 +3,7 @@ include ../../build-unix/Makefile.config
 export FLAG_BATCH = 1
 
 SUBDIRS = \
-          ../BvsNB \
-          ../UTvsLT
+          ../BvsNB
 
 .PHONY: all clean check run
 

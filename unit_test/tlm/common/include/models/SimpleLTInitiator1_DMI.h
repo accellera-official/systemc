@@ -163,27 +163,13 @@ public:
             wait(mDMIData.get_read_latency());
           }
           
-	      logEndTransaction(trans);
+          logEndTransaction(trans);
 
       } else { // we need a full transaction
           sc_dt::uint64 addr = trans.get_address(); //Save address before it is mutated
-          switch (socket->nb_transport(trans, phase, t)) {
-          case tlm::TLM_COMPLETED:
-              // Transaction Finished, wait for the returned delay
-              wait(t);
-              break;
-              
-          case tlm::TLM_ACCEPTED:
-          case tlm::TLM_UPDATED:
-              // Transaction not yet finished, wait for the end of it
-              wait(mEndEvent);
-              break;
-
-          default:
-            assert(0); exit(1);
-          };
-
-		  logEndTransaction(trans);
+          socket->b_transport(trans, t);
+          wait(t);
+          logEndTransaction(trans);
           
 		  // Acquire DMI pointer if we get the hint:
           if (trans.get_dmi_allowed())
@@ -204,26 +190,11 @@ public:
     wait();
   }
 
-  sync_enum_type nb_transport(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
+  sync_enum_type nb_transport_bw(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
   {
-    switch (phase) {
-    case tlm::END_REQ:
-      // Request phase ended
-      return tlm::TLM_ACCEPTED;
-
-    case tlm::BEGIN_RESP:
-      assert(t == sc_core::SC_ZERO_TIME); // FIXME: can t != 0?
-      mEndEvent.notify(t);
-      // Not needed to update the phase if true is returned
-      return tlm::TLM_COMPLETED;
-
-    case tlm::BEGIN_REQ: // fall-through
-    case tlm::END_RESP: // fall-through
-    default:
-      // A target should never call nb_transport with these phases
+      // We should never be called
       assert(0); exit(1);
       return tlm::TLM_COMPLETED;
-    };
   }
 
   void invalidate(dmi_type& dmiData)

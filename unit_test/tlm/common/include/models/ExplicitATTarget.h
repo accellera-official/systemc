@@ -15,8 +15,8 @@
 
  *****************************************************************************/
 
-#ifndef __EXPLICIT_LT_TARGET_H__
-#define __EXPLICIT_LT_TARGET_H__
+#ifndef __EXPLICIT_AT_TARGET_H__
+#define __EXPLICIT_AT_TARGET_H__
 
 #include "tlm.h"
 #include "simple_target_socket.h"
@@ -26,27 +26,27 @@
 #include <queue>
 //#include <iostream>
 
-class ExplicitLTTarget : public sc_core::sc_module
+class ExplicitATTarget : public sc_core::sc_module
 {
 public:
-  typedef tlm::tlm_generic_payload transaction_type;
-  typedef tlm::tlm_phase           phase_type;
-  typedef tlm::tlm_sync_enum       sync_enum_type;
-  typedef SimpleTargetSocket<>     target_socket_type;
+  typedef tlm::tlm_generic_payload                 transaction_type;
+  typedef tlm::tlm_phase                           phase_type;
+  typedef tlm::tlm_sync_enum                       sync_enum_type;
+  typedef SimpleTargetSocket<ExplicitATTarget>     target_socket_type;
 
 public:
   target_socket_type socket;
 
 public:
-  SC_HAS_PROCESS(ExplicitLTTarget);
-  ExplicitLTTarget(sc_core::sc_module_name name) :
+  SC_HAS_PROCESS(ExplicitATTarget);
+  ExplicitATTarget(sc_core::sc_module_name name) :
     sc_core::sc_module(name),
     socket("socket"),
     mCurrentTransaction(0)
   {
     // register nb_transport method
-    REGISTER_NBTRANSPORT(socket, myNBTransport);
-    REGISTER_DEBUGTRANSPORT(socket, transport_dbg);
+    socket.registerNBTransport(this, &ExplicitATTarget::myNBTransport);
+    socket.registerDebugTransport(this, &ExplicitATTarget::transport_dbg);
 
     SC_THREAD(beginResponse)
   }
@@ -127,7 +127,7 @@ public:
       // Wait before sending the response
       wait(50, sc_core::SC_NS);
 
-      if (socket->nb_transport(*mCurrentTransaction, phase, t)) {
+      if (socket->nb_transport_bw(*mCurrentTransaction, phase, t)) {
         mCurrentTransaction = 0;
 
       } else {

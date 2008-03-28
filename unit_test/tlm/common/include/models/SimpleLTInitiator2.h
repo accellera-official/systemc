@@ -27,10 +27,10 @@
 class SimpleLTInitiator2 : public sc_core::sc_module
 {
 public:
-  typedef tlm::tlm_generic_payload        transaction_type;
-  typedef tlm::tlm_phase                  phase_type;
-  typedef tlm::tlm_sync_enum              sync_enum_type;
-  typedef SimpleInitiatorSocket<>         initiator_socket_type;
+  typedef tlm::tlm_generic_payload                  transaction_type;
+  typedef tlm::tlm_phase                            phase_type;
+  typedef tlm::tlm_sync_enum                        sync_enum_type;
+  typedef SimpleInitiatorSocket<SimpleLTInitiator2> initiator_socket_type;
 
 public:
   initiator_socket_type socket;
@@ -46,9 +46,6 @@ public:
     mBaseAddress(baseAddress),
     mTransactionCount(0)
   {
-    // register nb_transport method
-    REGISTER_NBTRANSPORT(socket, myNBTransport);
-
     // Initiator thread
     SC_THREAD(run);
   }
@@ -108,31 +105,16 @@ public:
   void run()
   {
     transaction_type trans;
-    phase_type phase;
     sc_core::sc_time t;
 
     while (initTransaction(trans)) {
-      // Create transaction and initialise phase and t
-      phase = tlm::BEGIN_REQ;
+      // Create transaction and initialise t
       t = sc_core::SC_ZERO_TIME;
 
       logStartTransation(trans);
 
-      switch (socket->nb_transport(trans, phase, t)) {
-      case tlm::TLM_COMPLETED:
-        // Transaction Finished, wait for the returned delay
-        wait(t);
-        break;
-
-      case tlm::TLM_ACCEPTED:
-      case tlm::TLM_UPDATED:
-        // Transaction not yet finished, wait for the end of it
-        wait(mEndEvent);
-        break;
-
-      default:
-        assert(0); exit(1);
-      };
+      socket->b_transport(trans, t);
+      wait(t);
 
       logEndTransaction(trans);
     }
@@ -140,29 +122,6 @@ public:
     wait();
 
   }
-
-  sync_enum_type myNBTransport(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
-  {
-    switch (phase) {
-    case tlm::END_REQ:
-      // Request phase ended
-      return tlm::TLM_ACCEPTED;
-
-    case tlm::BEGIN_RESP:
-      assert(t == sc_core::SC_ZERO_TIME); // FIXME: can t != 0?
-      mEndEvent.notify(t);
-      // Not needed to update the phase if true is returned
-      return tlm::TLM_COMPLETED;
-
-    case tlm::BEGIN_REQ: // fall-through
-    case tlm::END_RESP: // fall-through
-    default:
-      // A target should never call nb_transport with these phases
-      assert(0); exit(1);
-      return tlm::TLM_COMPLETED;
-    };
-  }
-
 
 private:
   sc_core::sc_event mEndEvent;

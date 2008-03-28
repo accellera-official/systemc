@@ -28,10 +28,10 @@
 class SimpleATInitiator1 : public sc_core::sc_module
 {
 public:
-  typedef tlm::tlm_generic_payload transaction_type;
-  typedef tlm::tlm_phase           phase_type;
-  typedef tlm::tlm_sync_enum       sync_enum_type;
-  typedef SimpleInitiatorSocket<>  initiator_socket_type;
+  typedef tlm::tlm_generic_payload                  transaction_type;
+  typedef tlm::tlm_phase                            phase_type;
+  typedef tlm::tlm_sync_enum                        sync_enum_type;
+  typedef SimpleInitiatorSocket<SimpleATInitiator1> initiator_socket_type;
 
 public:
   // extended transaction, holds tlm_generic_payload + data storage
@@ -79,7 +79,7 @@ public:
     mCurrentTransaction(0)
   {
     // register nb_transport method
-    REGISTER_NBTRANSPORT(socket, myNBTransport);
+    socket.registerNBTransport_bw(this, &SimpleATInitiator1::myNBTransport);
 
     // Initiator thread
     SC_THREAD(run);
@@ -161,7 +161,7 @@ public:
 
       logStartTransation(trans);
 
-      switch (socket->nb_transport(trans, phase, t)) {
+      switch (socket->nb_transport_fw(trans, phase, t)) {
       case tlm::TLM_COMPLETED:
         // Transaction Finished, wait for the returned delay
         wait(t);
@@ -179,7 +179,7 @@ public:
           // FIXME
           mCurrentTransaction = &trans;
           wait(mEndRequestPhase);
-	  mCurrentTransaction = 0;
+          mCurrentTransaction = 0;
           break;
 
         case tlm::END_REQ:
@@ -269,7 +269,7 @@ public:
     mytransaction_type* trans = mEndResponseQueue.front();
     assert(trans);
     mEndResponseQueue.pop();
-    sync_enum_type r = socket->nb_transport(*trans, phase, t);
+    sync_enum_type r = socket->nb_transport_fw(*trans, phase, t);
     assert(r == tlm::TLM_COMPLETED); // FIXME: target should return TLM_COMPLETED?
     assert(t == sc_core::SC_ZERO_TIME); // t must be SC_ZERO_TIME
 

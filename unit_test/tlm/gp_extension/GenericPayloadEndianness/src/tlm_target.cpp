@@ -14,7 +14,6 @@
   language governing rights and limitations under the License.
 
  *****************************************************************************/
-
 #include "tlm_target.h"
 
 // constructor
@@ -24,10 +23,10 @@ tlm_target::tlm_target(sc_core::sc_module_name name_,
     , socket("socket")
     , m_endianness(endianness)
 {
-    // register nb_transport method
-    REGISTER_NBTRANSPORT(socket, myNBTransport);
-    
-    m_socket_width = socket.get_bus_width()/8; // bus data width in bytes
+  // register nb_transport method
+  socket.registerNBTransport(this, &tlm_target::myNBTransport);
+
+  m_socket_width = socket.get_bus_width()/8; // bus data width in bytes
 }
 
 tlm::tlm_sync_enum tlm_target::myNBTransport(tlm::tlm_generic_payload& trans, tlm::tlm_phase& phase, sc_core::sc_time& t)

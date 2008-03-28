@@ -6,7 +6,6 @@ SUBDIRS = \
 	../RegisterSocketProcessLT \
 	../SimpleAT \
 	../SimpleAT_TA \
-	../BaseSocketUT \
         ../HierarchicalSocket
 
 .PHONY: all clean check run

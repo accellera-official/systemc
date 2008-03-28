@@ -28,10 +28,8 @@ class tlm_target : public sc_core::sc_module
 {
 public:
 
-    SimpleTargetSocket<> socket; // default 32-bit
+    SimpleTargetSocket<tlm_target> socket; // default 32-bit
 
-    SC_HAS_PROCESS(tlm_target);
-    
     // constructor & destructor
     tlm_target(sc_core::sc_module_name name_, 
                unsigned int start_address, 
@@ -44,19 +42,19 @@ public:
         , m_endianness(endianness)
         , m_checker(start_address, end_address, socket.get_bus_width()/8)
     {
-        // register nb_transport method
-        REGISTER_NBTRANSPORT(socket, myNBTransport);
+      // register nb_transport method
+      socket.registerNBTransport(this, &tlm_target::myNBTransport);
         
-        mem = new unsigned int [(end_address-start_address+1)/4];
+      mem = new unsigned int [(end_address-start_address+1)/4];
         
-        socket_bus_width = socket.get_bus_width()/8;
+      socket_bus_width = socket.get_bus_width()/8;
         
-        m_checker.burst_mode_streaming_not_supported();
+      m_checker.burst_mode_streaming_not_supported();
     }
 
     ~tlm_target() 
     { 
-        delete [] mem;
+      delete [] mem;
     }
     
 

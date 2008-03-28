@@ -20,19 +20,20 @@
 
 #include "tlm.h"     /// TLM definitions
 #include <cassert>   /// STD assert ()
-//#include <iostream>  /// STD I/O streams
 
 class SimpleLTInitiator1 :
   public sc_core::sc_module,
   public virtual tlm::tlm_bw_transport_if<>
 {
 public:
-  typedef tlm::tlm_generic_payload      transaction_type;
-  typedef tlm::tlm_phase                phase_type;
-  typedef tlm::tlm_sync_enum            sync_enum_type;
-  typedef tlm::tlm_fw_transport_if<>    fw_interface_type;
-  typedef tlm::tlm_bw_transport_if<>    bw_interface_type;
-  typedef tlm::tlm_initiator_socket<>   initiator_socket_type;
+  typedef tlm::tlm_generic_payload        transaction_type;
+  typedef tlm::tlm_phase                  phase_type;
+  typedef tlm::tlm_sync_enum              sync_enum_type;
+  typedef tlm::tlm_fw_transport_if<>      fw_interface_type;
+  typedef tlm::tlm_bw_transport_if<>      bw_interface_type;
+  typedef tlm::tlm_initiator_socket<32,
+                                    fw_interface_type,
+                                    bw_interface_type> initiator_socket_type;
 
 public:
   initiator_socket_type socket;
@@ -40,8 +41,8 @@ public:
 public:
   SC_HAS_PROCESS(SimpleLTInitiator1);
   SimpleLTInitiator1(sc_core::sc_module_name name,
-                     unsigned int nrOfTransactions = 0x5,
-                     unsigned int baseAddress = 0x0) :
+                  unsigned int nrOfTransactions = 0x5,
+                  unsigned int baseAddress = 0x0) :
     sc_core::sc_module(name),
     socket("socket"),
     mNrOfTransactions(nrOfTransactions),
@@ -110,59 +111,23 @@ public:
   void run()
   {
     transaction_type trans;
-    phase_type phase;
-    sc_core::sc_time t;
-
+    sc_core::sc_time t(sc_core::SC_ZERO_TIME);
     while (initTransaction(trans)) {
-      // Create transaction and initialise phase and t
-      phase = tlm::BEGIN_REQ;
-      t = sc_core::SC_ZERO_TIME;
-
       logStartTransation(trans);
-
-      switch (socket->nb_transport(trans, phase, t)) {
-      case tlm::TLM_COMPLETED:
-        // Transaction Finished, wait for the returned delay
-        wait(t);
-        break;
-
-      case tlm::TLM_ACCEPTED:
-      case tlm::TLM_UPDATED:
-        // Transaction not yet finished, wait for the end of it
-        wait(mEndEvent);
-        break;
-
-      default:
-        assert(0); exit(1);
-      };
-
+      socket->b_transport(trans, t);
+      wait(t);
       logEndTransaction(trans);
+      t = sc_core::SC_ZERO_TIME;
     }
     sc_core::sc_stop();
     wait();
 
   }
 
-  sync_enum_type nb_transport(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
+  tlm::tlm_sync_enum nb_transport_bw(transaction_type &,phase_type &,sc_core::sc_time & )
   {
-    switch (phase) {
-    case tlm::END_REQ:
-      // Request phase ended
-      return tlm::TLM_ACCEPTED;
-
-    case tlm::BEGIN_RESP:
-      assert(t == sc_core::SC_ZERO_TIME); // FIXME: can t != 0?
-      mEndEvent.notify(t);
-      // Not needed to update the phase if true is returned
-      return tlm::TLM_COMPLETED;
-
-    case tlm::BEGIN_REQ: // fall-through
-    case tlm::END_RESP: // fall-through
-    default:
-      // A target should never call nb_transport with these phases
-      assert(0); exit(1);
-      return tlm::TLM_COMPLETED;
-    };
+    assert(0);  // should never happen
+    return tlm::TLM_COMPLETED;
   }
 
   void invalidate_direct_mem_ptr(sc_dt::uint64 start_range,

@@ -14,7 +14,6 @@
   language governing rights and limitations under the License.
 
 *****************************************************************************/
-
 #include "tlm_initiator.h"
 
 //
@@ -44,7 +43,7 @@ void tlm_initiator::write(sc_dt::uint64 address,
     phase = tlm::BEGIN_REQ;
     t = sc_core::SC_ZERO_TIME;
     
-    switch (socket->nb_transport(m_gp, phase, t)) 
+    switch (socket->nb_transport_fw(m_gp, phase, t)) 
     {
     case tlm::TLM_COMPLETED:
         // Transaction Finished, wait for the returned delay
@@ -95,7 +94,7 @@ void tlm_initiator::read(sc_dt::uint64 address,
     phase = tlm::BEGIN_REQ;
     t = sc_core::SC_ZERO_TIME;
     
-    switch (socket->nb_transport(m_gp, phase, t)) 
+    switch (socket->nb_transport_fw(m_gp, phase, t)) 
     {
     case tlm::TLM_COMPLETED:
         // Transaction Finished, wait for the returned delay

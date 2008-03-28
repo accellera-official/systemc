@@ -15,9 +15,6 @@
 
  *****************************************************************************/
 
-//#include <iostream>
-//#include <stdint.h>
-
 #include "tlm.h"
 
 #include "SimpleLTInitiator1_DMI.h"
@@ -30,7 +27,7 @@
 #include "SimpleATInitiator2.h"
 #include "SimpleATTarget2.h"
 #include "CoreDecouplingLTInitiator.h"
-#include "ExplicitLTTarget.h"
+#include "ExplicitATTarget.h"
 #include "SimpleBus.h"
 
 template <int X, int Y>
@@ -73,7 +70,7 @@ int sc_main(int argc, char* argv[])
   SimpleATTarget2 target5("target5");
 
   CoreDecouplingLTInitiator initiator6("initiator6", 10, 0x50000000);
-  ExplicitLTTarget target6("target6");
+  ExplicitATTarget target6("target6");
 
   SimpleBus<6, 6> bus("bus");
   AbstractionSwitch<6,6> abstractionSwitch("abstractionSwitch", bus);

@@ -18,12 +18,12 @@
 #include "tlm.h"
 
 #include "CoreDecouplingLTInitiator.h"
-#include "ExplicitLTTarget.h"
+#include "SimpleLTTarget1.h"
 
 int sc_main(int argc, char* argv[])
 {
   CoreDecouplingLTInitiator initiator("initiator", 10);
-  ExplicitLTTarget target("target");
+  SimpleLTTarget1 target("target");
 
   initiator.socket(target.socket);
 

@@ -23,7 +23,6 @@
 
 #include "simple_target_socket.h"
 #include "simple_initiator_socket.h"
-#include "simple_socket_utils.h"
 
 #include "MyPEQ.h"
 
@@ -31,11 +30,11 @@ template <int NR_OF_INITIATORS, int NR_OF_TARGETS>
 class SimpleBus : public sc_core::sc_module
 {
 public:
-  typedef tlm::tlm_generic_payload transaction_type;
-  typedef tlm::tlm_phase           phase_type;
-  typedef tlm::tlm_sync_enum       sync_enum_type;
-  typedef SimpleTargetSocket<>     target_socket_type;
-  typedef SimpleInitiatorSocket<>  initiator_socket_type;
+  typedef tlm::tlm_generic_payload               transaction_type;
+  typedef tlm::tlm_phase                         phase_type;
+  typedef tlm::tlm_sync_enum                     sync_enum_type;
+  typedef SimpleTargetSocketTagged<SimpleBus>    target_socket_type;
+  typedef SimpleInitiatorSocketTagged<SimpleBus> initiator_socket_type;
 
 public:
   target_socket_type target_socket[NR_OF_INITIATORS];
@@ -50,13 +49,13 @@ public:
     mResponsePEQ("responsePEQ")
   {
      for (unsigned int i = 0; i < NR_OF_INITIATORS; ++i) {
-       REGISTER_NBTRANSPORT_USER(target_socket[i], initiatorNBTransport, i);
-       REGISTER_DEBUGTRANSPORT_USER(target_socket[i], transportDebug, i);
-       REGISTER_DMI_USER(target_socket[i], getDMIPointer, i);
+       target_socket[i].registerNBTransport(this, &SimpleBus::initiatorNBTransport, i);
+       target_socket[i].registerDebugTransport(this, &SimpleBus::transportDebug, i);
+       target_socket[i].registerDMI(this, &SimpleBus::getDMIPointer, i);
      }
      for (unsigned int i = 0; i < NR_OF_TARGETS; ++i) {
-       REGISTER_NBTRANSPORT(initiator_socket[i], targetNBTransport);
-       REGISTER_INVALIDATEDMI(initiator_socket[i], invalidateDMIPointers);
+       initiator_socket[i].registerNBTransport_bw(this, &SimpleBus::targetNBTransport, i);
+       initiator_socket[i].registerInvalidateDMI(this, &SimpleBus::invalidateDMIPointers, i);
      }
 
      SC_THREAD(RequestThread);
@@ -93,7 +92,7 @@ public:
     mAbstraction = TLM_AT;
 
     // Invalidate all DMI pointers
-    invalidateDMIPointers(0, 0);
+    invalidateDMIPointers(-1, 0, (sc_dt::uint64)-1);
 
     return true;
   }
@@ -132,7 +131,8 @@ public:
   // - forward each nb_transport call to the target/initiator
   //
 
-  sync_enum_type initiatorNBTransportLT(transaction_type& trans,
+  sync_enum_type initiatorNBTransportLT(int initiator_id,
+                                        transaction_type& trans,
                                         phase_type& phase,
                                         sc_core::sc_time& t)
   {
@@ -144,7 +144,7 @@ public:
       assert(portId < NR_OF_TARGETS);
       decodeSocket = &initiator_socket[portId];
       trans.set_address(trans.get_address() & getAddressMask(portId));
-      addPendingTransaction(trans, decodeSocket);
+      addPendingTransaction(trans, decodeSocket, initiator_id);
 
     } else if (phase == tlm::END_RESP) {
       // end of response phase
@@ -162,7 +162,7 @@ public:
     // FIXME: No limitation on number of pending transactions
     //        All targets (that return false) must support multiple
     //        transactions
-    sync_enum_type r = (*decodeSocket)->nb_transport(trans, phase, t);
+    sync_enum_type r = (*decodeSocket)->nb_transport_fw(trans, phase, t);
     if (r == tlm::TLM_COMPLETED) {
       // Transaction finished
       mPendingTransactions.erase(&trans);
@@ -171,7 +171,8 @@ public:
     return r;
   }
 
-  sync_enum_type targetNBTransportLT(transaction_type& trans,
+  sync_enum_type targetNBTransportLT(int portId,
+                                     transaction_type& trans,
                                      phase_type& phase,
                                      sc_core::sc_time& t)
   {
@@ -185,7 +186,7 @@ public:
     PendingTransactionsIterator it = mPendingTransactions.find(&trans);
     assert(it != mPendingTransactions.end());
 
-    sync_enum_type r = (*it->second.from)->nb_transport(trans, phase, t);
+    sync_enum_type r = (*it->second.from)->nb_transport_bw(trans, phase, t);
     if (r == tlm::TLM_COMPLETED) {
       // Transaction finished
       mPendingTransactions.erase(it);
@@ -220,7 +221,7 @@ public:
 
         // FIXME: No limitation on number of pending transactions
         //        All targets (that return false) must support multiple transactions
-        switch ((*decodeSocket)->nb_transport(*trans, phase, t)) {
+        switch ((*decodeSocket)->nb_transport_fw(*trans, phase, t)) {
         case tlm::TLM_ACCEPTED:
         case tlm::TLM_UPDATED:
           // Transaction not yet finished
@@ -243,7 +244,7 @@ public:
 
           phase = tlm::END_REQ;
           t = sc_core::SC_ZERO_TIME;
-          (*it->second.from)->nb_transport(*trans, phase, t);
+          (*it->second.from)->nb_transport_bw(*trans, phase, t);
           break;
 
         case tlm::TLM_COMPLETED:
@@ -276,7 +277,7 @@ public:
         phase_type phase = tlm::BEGIN_RESP;
         sc_core::sc_time t = sc_core::SC_ZERO_TIME;
 
-        switch ((*it->second.from)->nb_transport(*trans, phase, t)) {
+        switch ((*it->second.from)->nb_transport_bw(*trans, phase, t)) {
         case tlm::TLM_COMPLETED:
           // Transaction finished
 
@@ -284,7 +285,7 @@ public:
           // --> immediately notify target
           if (it->second.to) {
             phase = tlm::END_RESP;
-            bool r = (*it->second.to)->nb_transport(*trans, phase, t);
+            bool r = (*it->second.to)->nb_transport_fw(*trans, phase, t);
             assert(r);
           }
           mPendingTransactions.erase(it);
@@ -304,12 +305,13 @@ public:
     }
   }
 
-  sync_enum_type initiatorNBTransportAT(transaction_type& trans,
+  sync_enum_type initiatorNBTransportAT(int initiator_id,
+                                        transaction_type& trans,
                                         phase_type& phase,
                                         sc_core::sc_time& t)
   {
     if (phase == tlm::BEGIN_REQ) {
-      addPendingTransaction(trans, 0);
+      addPendingTransaction(trans, 0, initiator_id);
 
       mRequestPEQ.notify(trans, t);
 
@@ -321,7 +323,7 @@ public:
 
       if (it->second.to) {
         phase = tlm::END_RESP;
-        sync_enum_type r = (*it->second.to)->nb_transport(trans, phase, t);
+        sync_enum_type r = (*it->second.to)->nb_transport_fw(trans, phase, t);
         assert(r == tlm::TLM_COMPLETED);
       }
 
@@ -339,7 +341,7 @@ public:
     return tlm::TLM_ACCEPTED;
   }
 
-  sync_enum_type targetNBTransportAT(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
+  sync_enum_type targetNBTransportAT(int portId, transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
   {
     if (phase != tlm::END_REQ && phase != tlm::BEGIN_RESP) {
       std::cout << "ERROR: '" << name()
@@ -360,31 +362,33 @@ public:
   // interface methods
   //
 
-  sync_enum_type initiatorNBTransport(transaction_type& trans,
+  sync_enum_type initiatorNBTransport(int initiator_id,
+                                      transaction_type& trans,
                                       phase_type& phase,
                                       sc_core::sc_time& t)
   {
     if (mAbstraction == TLM_LT) {
-      return initiatorNBTransportLT(trans, phase, t);
+      return initiatorNBTransportLT(initiator_id, trans, phase, t);
 
     } else { // TLM_AT
-      return initiatorNBTransportAT(trans, phase, t);
+      return initiatorNBTransportAT(initiator_id, trans, phase, t);
     }
   }
 
-  sync_enum_type targetNBTransport(transaction_type& trans,
+  sync_enum_type targetNBTransport(int portId,
+                                   transaction_type& trans,
                                    phase_type& phase,
                                    sc_core::sc_time& t)
   {
     if (mAbstraction == TLM_LT) {
-      return targetNBTransportLT(trans, phase, t);
+      return targetNBTransportLT(portId, trans, phase, t);
 
     } else { // TLM_AT
-      return targetNBTransportAT(trans, phase, t);
+      return targetNBTransportAT(portId, trans, phase, t);
     }
   }
 
-  unsigned int transportDebug(transaction_type& trans)
+  unsigned int transportDebug(int initiator_id, transaction_type& trans)
   {
     unsigned int portId = decode(trans.get_address());
     assert(portId < NR_OF_TARGETS);
@@ -414,7 +418,8 @@ public:
     return true;
   }
 
-  bool getDMIPointer(transaction_type& trans,
+  bool getDMIPointer(int initiator_id,
+                     transaction_type& trans,
                      tlm::tlm_dmi&  dmi_data)
   {
     sc_dt::uint64 address = trans.get_address();
@@ -455,14 +460,13 @@ public:
     return result;
   }
 
-  void invalidateDMIPointers(sc_dt::uint64 start_range,
+  void invalidateDMIPointers(int portId,
+                             sc_dt::uint64 start_range,
                              sc_dt::uint64 end_range)
   {
     // FIXME: probably faster to always invalidate everything?
-    unsigned int portId = 
-      simple_socket_utils::simple_socket_user::instance().get_user_id();
 
-    if (!limitRange(portId, start_range, end_range)) {
+    if ((portId >= 0) && !limitRange(portId, start_range, end_range)) {
       // Range does not fall into address range of target
       return;
     }
@@ -474,10 +478,9 @@ public:
 
 private:
   void addPendingTransaction(transaction_type& trans,
-                             initiator_socket_type* to)
+                             initiator_socket_type* to,
+                             int initiatorId)
   {
-    int initiatorId =
-      simple_socket_utils::simple_socket_user::instance().get_user_id();
     const ConnectionInfo info = { &target_socket[initiatorId], to };
     assert(mPendingTransactions.find(&trans) == mPendingTransactions.end());
     mPendingTransactions[&trans] = info;

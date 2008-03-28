@@ -18,8 +18,8 @@
 #ifndef __TLM_FW_BW_IFS_H__
 #define __TLM_FW_BW_IFS_H__
 
-#include "tlm_h/tlm_trans/tlm_generic_payload/tlm_generic_payload.h"
 #include <systemc>
+#include "tlm_h/tlm_trans/tlm_generic_payload/tlm_generic_payload.h"
 
 namespace tlm {
 
@@ -31,11 +31,20 @@ enum tlm_sync_enum { TLM_ACCEPTED, TLM_UPDATED, TLM_COMPLETED };
 ////////////////////////////////////////////////////////////////////////////
 template <typename TRANS = tlm_generic_payload,
           typename PHASE = tlm_phase>
-class tlm_nonblocking_transport_if : public virtual sc_core::sc_interface {
+class tlm_fw_nonblocking_transport_if : public virtual sc_core::sc_interface {
 public:
-  virtual tlm_sync_enum nb_transport(TRANS& trans,
-                                     PHASE& phase,
-                                     sc_core::sc_time& t) = 0;
+  virtual tlm_sync_enum nb_transport_fw(TRANS& trans,
+                                        PHASE& phase,
+                                        sc_core::sc_time& t) = 0;
+};
+
+template <typename TRANS = tlm_generic_payload,
+          typename PHASE = tlm_phase>
+class tlm_bw_nonblocking_transport_if : public virtual sc_core::sc_interface {
+public:
+  virtual tlm_sync_enum nb_transport_bw(TRANS& trans,
+                                        PHASE& phase,
+                                        sc_core::sc_time& t) = 0;
 };
 
 template <typename TRANS = tlm_generic_payload>
@@ -192,8 +201,8 @@ struct tlm_generic_payload_types
 // The forward interface:
 template <typename TYPES = tlm_generic_payload_types>
 class tlm_fw_transport_if
-  : public virtual tlm_nonblocking_transport_if<typename TYPES::tlm_payload_type,
-                                                typename TYPES::tlm_phase_type>
+  : public virtual tlm_fw_nonblocking_transport_if<typename TYPES::tlm_payload_type,
+                                                   typename TYPES::tlm_phase_type>
   , public virtual tlm_blocking_transport_if<typename TYPES::tlm_payload_type>
   , public virtual tlm_fw_direct_mem_if<typename TYPES::tlm_payload_type>
   , public virtual tlm_transport_dbg_if<typename TYPES::tlm_payload_type>
@@ -202,8 +211,8 @@ class tlm_fw_transport_if
 // The backward interface:
 template <typename TYPES = tlm_generic_payload_types>
 class tlm_bw_transport_if
-  : public virtual tlm_nonblocking_transport_if<typename TYPES::tlm_payload_type,
-                                                typename TYPES::tlm_phase_type>
+  : public virtual tlm_bw_nonblocking_transport_if<typename TYPES::tlm_payload_type,
+                                                   typename TYPES::tlm_phase_type>
   , public virtual tlm_bw_direct_mem_if
 {};
 

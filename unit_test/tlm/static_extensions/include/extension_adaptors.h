@@ -30,9 +30,9 @@ class adapt_ext2gp : public sc_core::sc_module
     public:
     typedef tlm::tlm_generic_payload                   initiator_payload_type;
     typedef tlm::tlm_generic_payload                   target_payload_type;
-    typedef SimpleInitiatorSocket<BUSWIDTH,
+    typedef SimpleInitiatorSocket<adapt_ext2gp, BUSWIDTH,
                                   tlm::tlm_generic_payload_types> initiator_socket_type;
-    typedef SimpleTargetSocket<BUSWIDTH,
+    typedef SimpleTargetSocket<adapt_ext2gp, BUSWIDTH,
                                my_extended_payload_types>  target_socket_type;
     
     target_socket_type  target_socket;
@@ -42,12 +42,12 @@ class adapt_ext2gp : public sc_core::sc_module
     adapt_ext2gp(sc_core::sc_module_name name_)
         : sc_core::sc_module(name_)
     {
-        REGISTER_NBTRANSPORT(target_socket, forward_nb_transport);
-        REGISTER_DEBUGTRANSPORT(target_socket, transport_debug);
-        REGISTER_DMI(target_socket, get_dmi_pointer);
+      target_socket.registerNBTransport(this, &adapt_ext2gp::forward_nb_transport);
+      target_socket.registerDebugTransport(this, &adapt_ext2gp::transport_debug);
+      target_socket.registerDMI(this, &adapt_ext2gp::get_dmi_pointer);
         
-        REGISTER_NBTRANSPORT(initiator_socket, backward_nb_transport);
-        REGISTER_INVALIDATEDMI(initiator_socket, invalidate_dmi_pointers);
+      initiator_socket.registerNBTransport_bw(this, &adapt_ext2gp::backward_nb_transport);
+      initiator_socket.registerInvalidateDMI(this, &adapt_ext2gp::invalidate_dmi_pointers);
     }
 
     ///////////////
@@ -61,7 +61,7 @@ class adapt_ext2gp : public sc_core::sc_module
                                             tlm::tlm_phase& phase,
                                             sc_core::sc_time& t)
     {
-        return initiator_socket->nb_transport(trans, phase, t);
+        return initiator_socket->nb_transport_fw(trans, phase, t);
     }
     // Backward direction: we can  assume here that the payload we get
     // as parameter is the same one that the initiator sent out. Thus, the
@@ -70,7 +70,7 @@ class adapt_ext2gp : public sc_core::sc_module
                                              tlm::tlm_phase& phase,
                                              sc_core::sc_time& t)
     {
-        return target_socket->nb_transport(trans, phase, t);
+        return target_socket->nb_transport_bw(trans, phase, t);
     }
     
     bool get_dmi_pointer(target_payload_type& trans,
@@ -102,9 +102,9 @@ class adapt_gp2ext : public sc_core::sc_module
     public:
     typedef tlm::tlm_generic_payload                   initiator_payload_type;
     typedef tlm::tlm_generic_payload                   target_payload_type;
-    typedef SimpleInitiatorSocket<BUSWIDTH,
+    typedef SimpleInitiatorSocket<adapt_gp2ext, BUSWIDTH,
                                   my_extended_payload_types> initiator_socket_type;
-    typedef SimpleTargetSocket<BUSWIDTH,
+    typedef SimpleTargetSocket<adapt_gp2ext, BUSWIDTH,
                                tlm::tlm_generic_payload_types> target_socket_type;
     
     target_socket_type  target_socket;
@@ -117,12 +117,12 @@ class adapt_gp2ext : public sc_core::sc_module
         // Optionally, we can initialize our private extension class
         // here, if required.
 
-        REGISTER_NBTRANSPORT(target_socket, forward_nb_transport);
-        REGISTER_DEBUGTRANSPORT(target_socket, transport_debug);
-        REGISTER_DMI(target_socket, get_dmi_pointer);
+      target_socket.registerNBTransport(this, &adapt_gp2ext::forward_nb_transport);
+      target_socket.registerDebugTransport(this, &adapt_gp2ext::transport_debug);
+      target_socket.registerDMI(this, &adapt_gp2ext::get_dmi_pointer);
         
-        REGISTER_NBTRANSPORT(initiator_socket, backward_nb_transport);
-        REGISTER_INVALIDATEDMI(initiator_socket, invalidate_dmi_pointers);
+      initiator_socket.registerNBTransport_bw(this, &adapt_gp2ext::backward_nb_transport);
+      initiator_socket.registerInvalidateDMI(this, &adapt_gp2ext::invalidate_dmi_pointers);
 
         m_ext.m_data = 13;
     }
@@ -150,7 +150,7 @@ class adapt_gp2ext : public sc_core::sc_module
             m_initiator_ext = trans.set_extension(&m_ext);
         }
         tlm::tlm_sync_enum tmp =
-        initiator_socket->nb_transport(trans, phase, t);
+        initiator_socket->nb_transport_fw(trans, phase, t);
         if (tmp == tlm::TLM_COMPLETED)
         {
             m_initiator_ext = trans.set_extension(m_initiator_ext);            
@@ -163,7 +163,7 @@ class adapt_gp2ext : public sc_core::sc_module
                                              sc_core::sc_time& t)
     {
         m_initiator_ext = trans.set_extension(m_initiator_ext);
-        return target_socket->nb_transport(trans, phase, t);
+        return target_socket->nb_transport_bw(trans, phase, t);
     }
 
     bool get_dmi_pointer(target_payload_type& trans,

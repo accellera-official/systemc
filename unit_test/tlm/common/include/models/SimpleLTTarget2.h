@@ -19,44 +19,40 @@
 #define __SIMPLE_LT_TARGET2_H__
 
 #include "tlm.h"
-#include "simple_target_socket.h"
-//#include <systemc>
+#include "trivial_target_socket.h"
 #include <cassert>
 #include <vector>
-//#include <iostream>
 
 class SimpleLTTarget2 : public sc_core::sc_module
 {
 public:
-  typedef tlm::tlm_generic_payload        transaction_type;
-  typedef tlm::tlm_phase                  phase_type;
-  typedef tlm::tlm_sync_enum              sync_enum_type;
-  typedef SimpleTargetSocket<>            target_socket_type;
+  typedef tlm::tlm_generic_payload             transaction_type;
+  typedef tlm::tlm_phase                       phase_type;
+  typedef tlm::tlm_sync_enum                   sync_enum_type;
+  typedef TrivialTargetSocket<SimpleLTTarget2> target_socket_type;
+  
 
 public:
   target_socket_type socket;
 
 public:
-  SC_HAS_PROCESS(SimpleLTTarget2);
   SimpleLTTarget2(sc_core::sc_module_name name) :
     sc_core::sc_module(name),
     socket("socket")
   {
     // register nb_transport method
-    REGISTER_NBTRANSPORT(socket, myNBTransport);
-    REGISTER_DMI(socket, myGetDMIPtr);
+    socket.registerBTransport(this, &SimpleLTTarget2::myBTransport);
+    socket.registerNBTransport(this, &SimpleLTTarget2::myNBTransport);
+    socket.registerDMI(this, &SimpleLTTarget2::myGetDMIPtr);
 
     // TODO: we don't register the transport_dbg callback here, so we
     // can test if something bad happens
-    // REGISTER_DEBUGTRANSPORT(socket, transport_dbg);
+    // REGISTER_DEBUGTRANSPORT(socket, transport_dbg, 0);
   }
 
-  sync_enum_type myNBTransport(transaction_type& trans,
-                               phase_type& phase,
-                               sc_core::sc_time& t)
+  void myBTransport(transaction_type& trans,
+                     sc_core::sc_time& t)
   {
-    assert(phase == tlm::BEGIN_REQ);
-
     sc_dt::uint64 address = trans.get_address();
     assert(address < 400);
 
@@ -82,10 +78,19 @@ public:
     trans.set_response_status(tlm::TLM_OK_RESPONSE);
 
     trans.set_dmi_allowed(true);
+  }
 
+  sync_enum_type myNBTransport(transaction_type& trans,
+                               phase_type& phase,
+                               sc_core::sc_time& t)
+  {
+    assert(phase == tlm::BEGIN_REQ);
+
+    // Never blocks, so call b_transport implementation
+    myBTransport(trans, t);
     // LT target
-    // - always return true
-    // - not necessary to update phase (if true is returned)
+    // - always return TLM_COMPLETED
+    // - not necessary to update phase (if TLM_COMPLETED is returned)
     return tlm::TLM_COMPLETED;
   }
 

@@ -28,11 +28,11 @@
 class SimpleLTInitiator3_dmi : public sc_core::sc_module
 {
 public:
-  typedef tlm::tlm_generic_payload transaction_type;
-  typedef tlm::tlm_dmi             dmi_type;
-  typedef tlm::tlm_phase           phase_type;
-  typedef tlm::tlm_sync_enum       sync_enum_type;
-  typedef SimpleInitiatorSocket<>  initiator_socket_type;
+  typedef tlm::tlm_generic_payload                       transaction_type;
+  typedef tlm::tlm_dmi                                   dmi_type;
+  typedef tlm::tlm_phase                                 phase_type;
+  typedef tlm::tlm_sync_enum                             sync_enum_type;
+  typedef SimpleInitiatorSocket<SimpleLTInitiator3_dmi>  initiator_socket_type;
 
 public:
   initiator_socket_type socket;
@@ -53,7 +53,7 @@ public:
     mDMIDataWrites.first.set_start_address(1);
     mDMIDataWrites.first.set_end_address(0);
 
-    REGISTER_INVALIDATEDMI(socket, invalidate_direct_mem_ptr);
+    socket.registerInvalidateDMI(this, &SimpleLTInitiator3_dmi::invalidate_direct_mem_ptr);
 
     // Initiator thread
     SC_THREAD(run);
@@ -124,12 +124,10 @@ public:
   void run()
   {
     transaction_type trans;
-    phase_type phase;
     sc_core::sc_time t;
     
     while (initTransaction(trans)) {
-      // Create transaction and initialise phase and t
-      phase = tlm::BEGIN_REQ;
+      // Create transaction and initialise t
       t = sc_core::SC_ZERO_TIME;
 
       logStartTransation(trans);
@@ -188,21 +186,9 @@ public:
       }
       else // we need a full transaction
       {
-          switch (socket->nb_transport(trans, phase, t)) {
-          case tlm::TLM_COMPLETED:
-              // Transaction Finished, wait for the returned delay
-              wait(t);
-              break;
-              
-          case tlm::TLM_ACCEPTED:
-          case tlm::TLM_UPDATED:
-              // Transaction not yet finished, wait for the end of it
-              wait(socket.getEndEvent());
-              break;
-
-          default:
-            assert(0); exit(1);
-          };
+          socket->b_transport(trans, t);
+          // wait for the returned delay
+          wait(t);
       }
 
       logEndTransaction(trans);

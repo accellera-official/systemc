@@ -9,7 +9,6 @@ SUBDIRS = \
           ../bus_dmi \
           ../gp_extension \
           ../p2p \
-          ../transactor \
           ../static_extensions
 
 .PHONY: all clean run

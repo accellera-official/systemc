@@ -27,10 +27,10 @@
 class SimpleLTInitiator3 : public sc_core::sc_module
 {
 public:
-  typedef tlm::tlm_generic_payload        transaction_type;
-  typedef tlm::tlm_phase                  phase_type;
-  typedef tlm::tlm_sync_enum              sync_enum_type;
-  typedef SimpleInitiatorSocket<>         initiator_socket_type;
+  typedef tlm::tlm_generic_payload                  transaction_type;
+  typedef tlm::tlm_phase                            phase_type;
+  typedef tlm::tlm_sync_enum                        sync_enum_type;
+  typedef SimpleInitiatorSocket<SimpleLTInitiator3> initiator_socket_type;
 
 public:
   initiator_socket_type socket;
@@ -105,31 +105,17 @@ public:
   void run()
   {
     transaction_type trans;
-    phase_type phase;
     sc_core::sc_time t;
     
     while (initTransaction(trans)) {
-      // Create transaction and initialise phase and t
-      phase = tlm::BEGIN_REQ;
+      // Create transaction and initialise t
       t = sc_core::SC_ZERO_TIME;
 
       logStartTransation(trans);
 
-      switch (socket->nb_transport(trans, phase, t)) {
-      case tlm::TLM_COMPLETED:
-        // Transaction Finished, wait for the returned delay
-        wait(t);
-        break;
-
-      case tlm::TLM_ACCEPTED:
-      case tlm::TLM_UPDATED:
-        // Transaction not yet finished, wait for the end of it
-        wait(socket.getEndEvent());
-        break;
-
-      default:
-        assert(0); exit(1);
-      };
+      socket->b_transport(trans, t);
+      // Transaction Finished, wait for the returned delay
+      wait(t);
 
       logEndTransaction(trans);
     }

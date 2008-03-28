@@ -24,7 +24,7 @@
 //#include <systemc>
 
 class TransactorLT2UT :
-  public virtual tlm::tlm_bw_b_transport_if,
+  public virtual tlm::tlm_bw_transport_if,
   public sc_core::sc_module
 {
 public:

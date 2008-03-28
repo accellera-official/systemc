@@ -28,7 +28,7 @@ class tlm_initiator : public sc_core::sc_module
 {
 public:	 
 	
-    SimpleInitiatorSocket<> socket; // default 32-bit 
+    SimpleInitiatorSocket<tlm_initiator> socket; // default 32-bit 
     
     SC_HAS_PROCESS(tlm_initiator);
     
@@ -239,7 +239,7 @@ void tlm_initiator::writeBurst(unsigned int address,
     phase = tlm::BEGIN_REQ;
     t = sc_core::SC_ZERO_TIME;
     
-    switch (socket->nb_transport(m_gp, phase, t)) 
+    switch (socket->nb_transport_fw(m_gp, phase, t)) 
     {
     case tlm::TLM_COMPLETED:
         // Transaction Finished, wait for the returned delay
@@ -287,7 +287,7 @@ void tlm_initiator::readBurst(unsigned int address,
     phase = tlm::BEGIN_REQ;
     t = sc_core::SC_ZERO_TIME;
     
-    switch (socket->nb_transport(m_gp, phase, t)) 
+    switch (socket->nb_transport_fw(m_gp, phase, t)) 
     {
     case tlm::TLM_COMPLETED:
         // Transaction Finished, wait for the returned delay

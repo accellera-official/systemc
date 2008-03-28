@@ -26,7 +26,7 @@ class tlm_target : public sc_core::sc_module
 {
 public:
 
-    SimpleTargetSocket< 32 > socket; 
+    SimpleTargetSocket<tlm_target, 32 > socket; 
 
     SC_HAS_PROCESS(tlm_target);
     

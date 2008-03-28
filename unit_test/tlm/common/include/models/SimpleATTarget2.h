@@ -29,10 +29,10 @@
 class SimpleATTarget2 : public sc_core::sc_module
 {
 public:
-  typedef tlm::tlm_generic_payload transaction_type;
-  typedef tlm::tlm_phase           phase_type;
-  typedef tlm::tlm_sync_enum       sync_enum_type;
-  typedef SimpleTargetSocket<>     target_socket_type;
+  typedef tlm::tlm_generic_payload            transaction_type;
+  typedef tlm::tlm_phase                      phase_type;
+  typedef tlm::tlm_sync_enum                  sync_enum_type;
+  typedef SimpleTargetSocket<SimpleATTarget2> target_socket_type;
 
 public:
   target_socket_type socket;
@@ -46,7 +46,7 @@ public:
     RESPONSE_DELAY(100, sc_core::SC_NS)
   {
     // register nb_transport method
-    REGISTER_NBTRANSPORT(socket, myNBTransport);
+    socket.registerNBTransport(this, &SimpleATTarget2::myNBTransport);
 
     SC_METHOD(beginResponse)
     sensitive << mBeginResponseEvent;
@@ -137,7 +137,7 @@ public:
         *reinterpret_cast<unsigned int*>(&mMem[address]);
     }
 
-    if (socket->nb_transport(*trans, phase, t) == tlm::TLM_COMPLETED) {
+    if (socket->nb_transport_bw(*trans, phase, t) == tlm::TLM_COMPLETED) {
       // response phase ends after t
       mEndResponseEvent.notify(t);
 

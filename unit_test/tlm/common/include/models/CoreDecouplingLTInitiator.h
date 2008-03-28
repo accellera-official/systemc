@@ -27,9 +27,9 @@
 class CoreDecouplingLTInitiator : public sc_core::sc_module
 {
 public:
-  typedef tlm::tlm_generic_payload transaction_type;
-  typedef tlm::tlm_phase           phase_type;
-  typedef SimpleInitiatorSocket<>  initiator_socket_type;
+  typedef tlm::tlm_generic_payload                         transaction_type;
+  typedef tlm::tlm_phase                                   phase_type;
+  typedef SimpleInitiatorSocket<CoreDecouplingLTInitiator> initiator_socket_type;
 
 public:
   initiator_socket_type socket;
@@ -127,7 +127,7 @@ public:
 
       logStartTransation(trans);
 
-      switch (socket->nb_transport(trans, phase, mQuantumKeeper.get_local_time())) {
+      switch (socket->nb_transport_fw(trans, phase, mQuantumKeeper.get_local_time())) {
       case tlm::TLM_COMPLETED:
         // Transaction finished
         // Target may have added a delay to the quantum -> sync if needed

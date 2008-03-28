@@ -19,10 +19,8 @@
 #define __SIMPLE_LT_TARGET1_H__
 
 #include "tlm.h"
-//#include <systemc>
 #include <cassert>
 #include <vector>
-//#include <iostream>
 
 class SimpleLTTarget1 :
   public sc_core::sc_module,
@@ -34,7 +32,9 @@ public:
   typedef tlm::tlm_sync_enum            sync_enum_type;
   typedef tlm::tlm_fw_transport_if<>    fw_interface_type;
   typedef tlm::tlm_bw_transport_if<>    bw_interface_type;
-  typedef tlm::tlm_target_socket<>      target_socket_type;
+  typedef tlm::tlm_target_socket<32,
+                                 fw_interface_type,
+                                 bw_interface_type> target_socket_type;
 
 public:
   target_socket_type socket;
@@ -57,18 +57,15 @@ public:
     }
   }
 
-  sync_enum_type nb_transport(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
+  sync_enum_type nb_transport_fw(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
   {
-    assert(phase == tlm::BEGIN_REQ);
+    //Target never calls wait, so we can do this
+    b_transport(trans, t);
 
-    b_transport(trans, t);      //We never block, so call b_transport
-    // LT target
-    // - always return true
-    // - not necessary to update phase (if true is returned)
     return tlm::TLM_COMPLETED;
   }
 
-  void b_transport(transaction_type& trans, sc_core::sc_time& t)
+  void b_transport(transaction_type& trans, sc_core::sc_time &t)
   {
     sc_dt::uint64 address = trans.get_address();
     assert(address < 400);
@@ -81,7 +78,7 @@ public:
                 << " @ " << sc_core::sc_time_stamp() << std::endl;
 
       *reinterpret_cast<unsigned int*>(&mMem[address]) = data;
-      t += sc_core::sc_time(10, sc_core::SC_NS);
+      t+=  sc_core::sc_time(10, sc_core::SC_NS);
 
     } else {
       std::cout << name() << ": Received read request: A = 0x"
@@ -105,16 +102,15 @@ public:
     unsigned int num_bytes;
     if (tmp + r.get_data_length() >= 400) {
       num_bytes = 400 - tmp;
+
     } else {
       num_bytes = r.get_data_length();
-    }
-    if(!r.is_read() && !r.is_write()) {
-      return 0;
     }
     if (r.is_read()) {
       for (unsigned int i = 0; i < num_bytes; ++i) {
         r.get_data_ptr()[i] = mMem[i + tmp];
       }
+
     } else {
       for (unsigned int i = 0; i < num_bytes; ++i) {
         mMem[i + tmp] = r.get_data_ptr()[i];
@@ -139,8 +135,8 @@ public:
 
     } else {
       // should not happen
-      dmi_data.set_start_address(address);
-      dmi_data.set_end_address(address);
+      dmi_data.set_start_address(trans.get_address());
+      dmi_data.set_end_address(trans.get_address());
       return false;
 
     }

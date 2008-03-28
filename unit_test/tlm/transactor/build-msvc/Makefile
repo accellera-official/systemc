@@ -1,8 +1,7 @@
 !include <..\..\build-msvc\Makefile.config>
 
 SUBDIRS = \
-          ../BvsNB \
-          ../UTvsLT
+          ../BvsNB
 
 #.PHONY: all clean run check
 

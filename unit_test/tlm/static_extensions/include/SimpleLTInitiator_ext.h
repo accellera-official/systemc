@@ -35,7 +35,7 @@ public:
   typedef tlm::tlm_dmi        dmi_type;
   typedef tlm::tlm_phase      phase_type;
   typedef tlm::tlm_sync_enum  sync_enum_type;
-  typedef SimpleInitiatorSocket<32,
+  typedef SimpleInitiatorSocket<SimpleLTInitiator_ext, 32,
                                 my_extended_payload_types> initiator_socket_type;
 
 public:
@@ -55,8 +55,8 @@ public:
       invalidate(mDMIData);
       
       // register nb_transport method
-      REGISTER_NBTRANSPORT(socket, myNBTransport);
-      REGISTER_INVALIDATEDMI(socket, invalidate_direct_mem_ptr);
+      socket.registerNBTransport_bw(this, &SimpleLTInitiator_ext::myNBTransport);
+      socket.registerInvalidateDMI(this, &SimpleLTInitiator_ext::invalidate_direct_mem_ptr);
       
       // Initiator thread
       SC_THREAD(run);
@@ -185,7 +185,7 @@ public:
               logEndTransaction(trans);
               
           } else { // we need a full transaction
-              switch (socket->nb_transport(trans, phase, t)) {
+              switch (socket->nb_transport_fw(trans, phase, t)) {
               case tlm::TLM_COMPLETED:
                   // Transaction Finished, wait for the returned delay
                   wait(t);

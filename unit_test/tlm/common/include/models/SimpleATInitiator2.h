@@ -28,10 +28,10 @@
 class SimpleATInitiator2 : public sc_core::sc_module
 {
 public:
-  typedef tlm::tlm_generic_payload transaction_type;
-  typedef tlm::tlm_phase           phase_type;
-  typedef tlm::tlm_sync_enum       sync_enum_type;
-  typedef SimpleInitiatorSocket<>  initiator_socket_type;
+  typedef tlm::tlm_generic_payload                   transaction_type;
+  typedef tlm::tlm_phase                             phase_type;
+  typedef tlm::tlm_sync_enum                         sync_enum_type;
+  typedef SimpleInitiatorSocket<SimpleATInitiator2>  initiator_socket_type;
 
 public:
   // extended transaction, holds tlm_generic_payload + data storage
@@ -79,7 +79,7 @@ public:
     mCurrentTransaction(0)
   {
     // register nb_transport method
-    REGISTER_NBTRANSPORT(socket, myNBTransport);
+    socket.registerNBTransport_bw(this, &SimpleATInitiator2::myNBTransport);
 
     // Initiator thread
     SC_THREAD(run);
@@ -157,7 +157,7 @@ public:
 
       logStartTransation(trans);
 
-      switch (socket->nb_transport(trans, phase, t)) {
+      switch (socket->nb_transport_fw(trans, phase, t)) {
       case tlm::TLM_COMPLETED:
         // Transaction Finished, wait for the returned delay
         wait(t);
