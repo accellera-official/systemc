@@ -65,7 +65,7 @@ namespace tlm {
       tlm_quantumkeeper() :
         mLocalTime(sc_core::SC_ZERO_TIME)
       {
-        mLocalQuantum = compute_local_quantum();
+        mNextSyncPoint = sc_core::sc_time_stamp() + compute_local_quantum();
       }
   
       virtual ~tlm_quantumkeeper() {}
@@ -79,6 +79,16 @@ namespace tlm {
       {
         mLocalTime += t;
       }
+
+      //
+      // Sets the local time (the time the initiator is ahead of the
+      // systemC time) After changing the local time an initiator should
+      // check (with the need_sync method) if a sync is required.
+      //
+      void set(const sc_core::sc_time& t)
+      {
+        mLocalTime = t;
+      }
     
       //
       // Checks if a sync to systemC is required for this initiator. This will
@@ -87,7 +97,7 @@ namespace tlm {
       //
       bool need_sync() const
       {
-        return mLocalTime >= mLocalQuantum;
+        return sc_core::sc_time_stamp() + mLocalTime >= mNextSyncPoint;
       }
 
       //
@@ -110,7 +120,7 @@ namespace tlm {
       void reset()
       {
         mLocalTime = sc_core::SC_ZERO_TIME;
-        mLocalQuantum = compute_local_quantum();
+        mNextSyncPoint = sc_core::sc_time_stamp() + compute_local_quantum();
       }
     
       //
@@ -171,7 +181,7 @@ namespace tlm {
       static sc_core::sc_time mGlobalQuantum;
     
     protected:
-      sc_core::sc_time mLocalQuantum;
+      sc_core::sc_time mNextSyncPoint;
       sc_core::sc_time mLocalTime;
     };
     
