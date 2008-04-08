@@ -63,9 +63,9 @@ namespace tlm {
     
     public:
       tlm_quantumkeeper() :
+        mNextSyncPoint(sc_core::SC_ZERO_TIME),
         mLocalTime(sc_core::SC_ZERO_TIME)
       {
-        mNextSyncPoint = sc_core::sc_time_stamp() + compute_local_quantum();
       }
   
       virtual ~tlm_quantumkeeper() {}
