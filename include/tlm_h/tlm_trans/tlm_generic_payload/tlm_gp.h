@@ -41,8 +41,9 @@ class tlm_extension_base
 {
 public:
     virtual tlm_extension_base* clone() const = 0;
-    virtual ~tlm_extension_base() {}
+    virtual void free() { delete this; }
 protected:
+    virtual ~tlm_extension_base() {}
     static unsigned int register_extension()
     {
         return (max_num_extensions(true) - 1);

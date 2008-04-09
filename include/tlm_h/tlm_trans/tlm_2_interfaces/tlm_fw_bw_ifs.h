@@ -20,10 +20,50 @@
 
 #include <systemc>
 #include "tlm_h/tlm_trans/tlm_generic_payload/tlm_generic_payload.h"
+#include <string>
+#include <iostream>
 
 namespace tlm {
 
-enum tlm_phase { BEGIN_REQ, END_REQ, BEGIN_RESP, END_RESP };
+//enum tlm_phase { BEGIN_REQ, END_REQ, BEGIN_RESP, END_RESP };
+enum tlm_phase_enum { BEGIN_REQ=0, END_REQ, BEGIN_RESP, END_RESP };
+
+class tlm_phase{
+public:
+  tlm_phase(): m_name("undefined phase") {}
+  tlm_phase(const char* name): m_name(name){}
+  tlm_phase(const tlm_phase_enum& standard): m_name((const char*) standard){}
+  const char* m_name;
+  tlm_phase& operator=(const tlm_phase_enum& standard){m_name=(const char*)standard; return *this;}
+  operator long() const{return (long) m_name;}
+};
+
+inline
+std::ostream& operator<<(std::ostream& s, const tlm_phase& p){
+  switch ((long)p.m_name){
+    case BEGIN_REQ:  s<<"BEGIN_REQ"; break;
+    case END_REQ:    s<<"END_REQ"; break;
+    case BEGIN_RESP: s<<"BEGIN_RESP"; break;
+    case END_RESP:   s<<"END_RESP"; break;
+    default:
+      s<<p.m_name; return s;      
+  }
+  return s;
+}
+  
+#define DECLARE_EXTENDED_PHASE(name_arg) \
+class tlm_phase_##name_arg:public tlm_phase{ \
+public:\
+static const tlm_phase_##name_arg& getPhase(){static tlm_phase_##name_arg tmp; return tmp;}\
+private:\
+tlm_phase_##name_arg():tlm_phase(getChar_##name_arg()){};\
+tlm_phase_##name_arg(const tlm_phase_##name_arg&); \
+tlm_phase_##name_arg& operator=(const tlm_phase_##name_arg&); \
+static inline const char* getChar_##name_arg(){static const char* tmp=#name_arg; assert((long)tmp>(long)END_RESP); return tmp;} \
+}; \
+static const tlm_phase_##name_arg& name_arg=tlm_phase_##name_arg::getPhase()
+
+  
 enum tlm_sync_enum { TLM_ACCEPTED, TLM_UPDATED, TLM_COMPLETED };
 
 ////////////////////////////////////////////////////////////////////////////
