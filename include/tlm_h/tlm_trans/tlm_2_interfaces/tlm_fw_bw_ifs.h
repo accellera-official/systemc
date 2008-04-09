@@ -35,12 +35,12 @@ public:
   tlm_phase(const tlm_phase_enum& standard): m_name((const char*) standard){}
   const char* m_name;
   tlm_phase& operator=(const tlm_phase_enum& standard){m_name=(const char*)standard; return *this;}
-  operator long() const{return (long) m_name;}
+  operator unsigned long() const{return (unsigned long) m_name;}
 };
 
 inline
 std::ostream& operator<<(std::ostream& s, const tlm_phase& p){
-  switch ((long)p.m_name){
+  switch ((unsigned long)p.m_name){
     case BEGIN_REQ:  s<<"BEGIN_REQ"; break;
     case END_REQ:    s<<"END_REQ"; break;
     case BEGIN_RESP: s<<"BEGIN_RESP"; break;
@@ -59,7 +59,7 @@ private:\
 tlm_phase_##name_arg():tlm_phase(getChar_##name_arg()){};\
 tlm_phase_##name_arg(const tlm_phase_##name_arg&); \
 tlm_phase_##name_arg& operator=(const tlm_phase_##name_arg&); \
-static inline const char* getChar_##name_arg(){static const char* tmp=#name_arg; assert((long)tmp>(long)END_RESP); return tmp;} \
+static inline const char* getChar_##name_arg(){static const char* tmp=#name_arg; assert((unsigned long)tmp>(unsigned long)END_RESP); return tmp;} \
 }; \
 static const tlm_phase_##name_arg& name_arg=tlm_phase_##name_arg::getPhase()
 
