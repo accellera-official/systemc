@@ -43,7 +43,7 @@ public:
     base_type(n),
     mProcess(this->name(), mEndEvent)
   {
-    mExport.bind(mProcess);
+    base_type::mExport.bind(mProcess);
   }
 
   sc_core::sc_event& getEndEvent()
@@ -184,7 +184,7 @@ public:
     base_type(n),
     mProcess(this->name(), mEndEvent)
   {
-    mExport.bind(mProcess);
+    base_type::mExport.bind(mProcess);
   }
 
   sc_core::sc_event& getEndEvent()
