@@ -63,9 +63,13 @@ CoreDecouplingLTInitiator
 ExplicitLTTarget
 ----------------
 
-- LT Target that uses explicit timing: seperate call for the start of the
-  response phase
+- LT Target that uses explicit timing (calls wait)
 - added support for debug transactions
+
+ExplicitLTTarget
+----------------
+
+- AT Target, only registers nb_transport
 
 SimpleBus
 ---------

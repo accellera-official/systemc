@@ -24,8 +24,6 @@
 #include "simple_target_socket.h"
 #include "simple_initiator_socket.h"
 
-#include "MyPEQ.h"
-
 template <int NR_OF_INITIATORS, int NR_OF_TARGETS>
 class SimpleBusLT : public sc_core::sc_module
 {
@@ -46,13 +44,11 @@ public:
     sc_core::sc_module(name)
   {
     for (unsigned int i = 0; i < NR_OF_INITIATORS; ++i) {
-      target_socket[i].registerNBTransport(this, &SimpleBusLT::initiatorNBTransport, i);
       target_socket[i].registerBTransport(this, &SimpleBusLT::initiatorBTransport, i);
       target_socket[i].registerDebugTransport(this, &SimpleBusLT::transportDebug, i);
       target_socket[i].registerDMI(this, &SimpleBusLT::getDMIPointer, i);
     }
     for (unsigned int i = 0; i < NR_OF_TARGETS; ++i) {
-      initiator_socket[i].registerNBTransport_bw(this, &SimpleBusLT::targetNBTransport, i);
       initiator_socket[i].registerInvalidateDMI(this, &SimpleBusLT::invalidateDMIPointers, i);
     }
   }
@@ -105,70 +101,6 @@ public:
     trans.set_address(trans.get_address() & getAddressMask(portId));
 
     (*decodeSocket)->b_transport(trans, t);
-  }
-
-  sync_enum_type initiatorNBTransport(int SocketId,
-                                      transaction_type& trans,
-                                      phase_type& phase,
-                                        sc_core::sc_time& t)
-  {
-    initiator_socket_type* decodeSocket;
-
-    if (phase == tlm::BEGIN_REQ) {
-      // new transaction: decode
-      unsigned int portId = decode(trans.get_address());
-      assert(portId < NR_OF_TARGETS);
-      decodeSocket = &initiator_socket[portId];
-      trans.set_address(trans.get_address() & getAddressMask(portId));
-      addPendingTransaction(trans, decodeSocket, SocketId);
-
-    } else if (phase == tlm::END_RESP) {
-      // end of response phase
-      PendingTransactionsIterator it = mPendingTransactions.find(&trans);
-      assert(it != mPendingTransactions.end());
-
-      decodeSocket = it->second.to;
-
-    } else {
-      std::cout << "ERROR: '" << name()
-                << "': Illegal phase received from initiator: " << phase << std::endl;
-      assert(false); exit(1);
-    }
-
-    // FIXME: No limitation on number of pending transactions
-    //        All targets (that return false) must support multiple
-    //        transactions
-    sync_enum_type r = (*decodeSocket)->nb_transport_fw(trans, phase, t);
-    if (r == tlm::TLM_COMPLETED) {
-      // Transaction finished
-      mPendingTransactions.erase(&trans);
-    }
-
-    return r;
-  }
-
-  sync_enum_type targetNBTransport(int target_index,
-                                   transaction_type& trans,
-                                   phase_type& phase,
-                                   sc_core::sc_time& t)
-  {
-    if (phase != tlm::END_REQ && phase != tlm::BEGIN_RESP) {
-      std::cout << "ERROR: '" << name()
-                << "': Illegal phase received from target:" << phase
-                << std::endl;
-      assert(false); exit(1);
-    }
-
-    PendingTransactionsIterator it = mPendingTransactions.find(&trans);
-    assert(it != mPendingTransactions.end());
-
-    sync_enum_type r = (*it->second.from)->nb_transport_bw(trans, phase, t);
-    if (r == tlm::TLM_COMPLETED) {
-      // Transaction finished
-      mPendingTransactions.erase(it);
-    }
-
-    return r;
   }
 
   unsigned int transportDebug(int SocketId,
@@ -254,29 +186,6 @@ public:
     }
   }
 
-private:
-  void addPendingTransaction(transaction_type& trans,
-                             initiator_socket_type* to,
-                             int initiatorId)
-  {
-    const ConnectionInfo info = { &target_socket[initiatorId], to };
-    assert(mPendingTransactions.find(&trans) == mPendingTransactions.end());
-    mPendingTransactions[&trans] = info;
-  }
-
-private:
-  struct ConnectionInfo {
-    target_socket_type* from;
-    initiator_socket_type* to;
-  };
-  typedef std::map<transaction_type*, ConnectionInfo> PendingTransactions;
-  typedef typename PendingTransactions::iterator PendingTransactionsIterator;
-  typedef typename PendingTransactions::const_iterator PendingTransactionsConstIterator;
-
-  enum tlm_abstraction { TLM_LT, TLM_AT };
-
-private:
-  PendingTransactions mPendingTransactions;
 };
 
 #endif

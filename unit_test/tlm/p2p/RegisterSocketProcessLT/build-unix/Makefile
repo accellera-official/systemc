@@ -2,7 +2,7 @@ include ../../../build-unix/Makefile.config
 
 OBJ_NAME = register_socket_process_LT
 
-INCDIR = -I../../../common/include/SimpleSocket -I../../../common/include/models
+INCDIR = -I../../../common/include/SimpleSocket -I../../../common/include/utils -I../../../common/include/models
 SRCDIR = ../src
  
 CFLAGS = $(FLAGS) $(INCDIR)

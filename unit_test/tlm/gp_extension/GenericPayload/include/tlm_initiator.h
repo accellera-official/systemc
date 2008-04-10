@@ -117,7 +117,6 @@ public:
         std::cout << "\n\nBE Initiator:\n" << std::endl;
         doBEReadAccesses(0x10);
         
-        sc_core::sc_stop();
         sc_core::wait(sc_core::SC_ZERO_TIME);
     }
     

@@ -20,4 +20,12 @@ target: Received read request: A = 0xc @ 200 ns
 initiator: Send read request: A = 0x10 @ 225 ns
 target: Received read request: A = 0x10 @ 225 ns
 initiator: Received ok response @ 245 ns
+initiator: Received ok response @ 355 ns
+initiator: Received ok response @ 465 ns
+initiator: Received ok response @ 575 ns
+initiator: Received ok response: D = 0x0 @ 685 ns
+initiator: Received ok response: D = 0x1 @ 795 ns
+initiator: Received ok response: D = 0x2 @ 905 ns
+initiator: Received ok response: D = 0x3 @ 1015 ns
+initiator: Received ok response: D = 0x4 @ 1125 ns
 SystemC: simulation stopped by user.

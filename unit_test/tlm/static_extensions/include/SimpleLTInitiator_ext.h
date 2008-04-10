@@ -219,7 +219,6 @@ public:
           }
       }
       delete tmp_ext;
-      sc_core::sc_stop();
       wait();
       
   }

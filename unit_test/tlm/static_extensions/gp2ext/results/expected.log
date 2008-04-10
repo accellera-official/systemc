@@ -69,6 +69,7 @@ target1: OK, extension data = 13
 target1: Received read request: A = 0x24 @ 1 us
 initiator1: Received ok response: D = 0x9 @ 1100 ns
 target1: get_direct_mem_ptr OK, extension data = 13
+initiator1: got DMI pointer invalidation @ 1125 ns
 SystemC: simulation stopped by user.
 initiator1, <<SimpleLTInitiator1>>:
 

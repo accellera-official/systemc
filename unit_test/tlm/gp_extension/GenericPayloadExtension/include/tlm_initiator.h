@@ -61,7 +61,6 @@ public:
             test_single_write(true,  true,  false);
             test_single_write(true,  true,  true);
             test_single_read();
-            sc_core::sc_stop();
             sc_core::wait();
         }
     }

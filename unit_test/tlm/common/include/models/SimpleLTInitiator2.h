@@ -118,7 +118,6 @@ public:
 
       logEndTransaction(trans);
     }
-    sc_core::sc_stop();
     wait();
 
   }

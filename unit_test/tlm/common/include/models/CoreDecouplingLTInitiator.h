@@ -28,7 +28,6 @@ class CoreDecouplingLTInitiator : public sc_core::sc_module
 {
 public:
   typedef tlm::tlm_generic_payload                         transaction_type;
-  typedef tlm::tlm_phase                                   phase_type;
   typedef SimpleInitiatorSocket<CoreDecouplingLTInitiator> initiator_socket_type;
 
 public:
@@ -119,43 +118,26 @@ public:
   void run()
   {
     transaction_type trans;
-    phase_type phase;
 
     while (initTransaction(trans)) {
-      // Create transaction and initialise phase and t
-      phase = tlm::BEGIN_REQ;
-
       logStartTransation(trans);
-
-      switch (socket->nb_transport_fw(trans, phase, mQuantumKeeper.get_local_time())) {
-      case tlm::TLM_COMPLETED:
-        // Transaction finished
-        // Target may have added a delay to the quantum -> sync if needed
-        if (mQuantumKeeper.need_sync()) {
-          std::cout << "Sync'ing..." << std::endl;
-          mQuantumKeeper.sync();
-        }
-        break;
-
-      case tlm::TLM_ACCEPTED:
-      case tlm::TLM_UPDATED:
-        // Transaction not yet finished, wait for the end of it
-        wait(socket.getEndEvent());
-        mQuantumKeeper.reset();
-        break;
-
-      default:
-        assert(0); exit(1);
-      };
+      
+      // exec instr
+      sc_core::sc_time t = mQuantumKeeper.get_local_time();
+      socket->b_transport(trans, t);
+      mQuantumKeeper.set(t);
+      // Target may have added a delay to the quantum -> sync if needed
+      if (mQuantumKeeper.need_sync()) {
+        std::cout << "Sync'ing..." << std::endl;
+        mQuantumKeeper.sync();
+      }
 
       logEndTransaction(trans);
     }
-    sc_core::sc_stop();
     wait();
   }
 
 private:
-  sc_core::sc_event mEndEvent;
   unsigned int mNrOfTransactions;
   unsigned int mBaseAddress;
   unsigned int mTransactionCount;

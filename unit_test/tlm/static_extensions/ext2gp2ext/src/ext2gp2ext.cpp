@@ -18,7 +18,7 @@
 #include "tlm.h"
 
 #include "SimpleLTInitiator_ext.h"
-#include "SimpleBus.h"
+#include "SimpleBusLT.h"
 #include "SimpleLTTarget_ext.h"
 #include "extension_adaptors.h"
 
@@ -27,7 +27,7 @@ int sc_main(int argc, char* argv[])
 {
   SimpleLTInitiator_ext initiator("initiator1", 10, 0x0);
   adapt_ext2gp<32>       bridge1("bridge1");
-  SimpleBus<1,1>         bus("bus");
+  SimpleBusLT<1,1>       bus("bus");
   adapt_gp2ext<32>       bridge2("bridge2");
   SimpleLTTarget_ext     target("target1");
 
@@ -37,6 +37,7 @@ int sc_main(int argc, char* argv[])
   bridge2.initiator_socket(target.socket);
 
   sc_core::sc_start();
+  sc_core::sc_stop();
 
   return 0;
 }

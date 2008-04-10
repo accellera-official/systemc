@@ -27,6 +27,7 @@ int sc_main(int argc, char* argv[])
   initiator.socket(target.socket);
 
   sc_core::sc_start();
+  sc_core::sc_stop();
 
   return 0;
 }

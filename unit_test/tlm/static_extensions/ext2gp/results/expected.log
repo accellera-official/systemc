@@ -53,6 +53,7 @@ initiator: Received ok response: D = 0x8 @ 1 us
 initiator: Send read request: A = 0x24 @ 1 us
 target: Received read request: A = 0x24 @ 1 us
 initiator: Received ok response: D = 0x9 @ 1100 ns
+initiator: got DMI pointer invalidation @ 1125 ns
 SystemC: simulation stopped by user.
 initiator, <<SimpleLTInitiator1>>:
 

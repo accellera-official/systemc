@@ -119,7 +119,6 @@ public:
       logEndTransaction(trans);
       t = sc_core::SC_ZERO_TIME;
     }
-    sc_core::sc_stop();
     wait();
 
   }

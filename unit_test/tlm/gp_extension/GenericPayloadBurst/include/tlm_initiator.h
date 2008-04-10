@@ -82,7 +82,6 @@ public:
         delete [] wr_data;	wr_data = 0;
         delete [] rd_data;	rd_data = 0;
         
-        sc_core::sc_stop();
         sc_core::wait(sc_core::SC_ZERO_TIME);
     }
     

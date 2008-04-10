@@ -2,7 +2,7 @@ include ../../../build-unix/Makefile.config
 
 OBJ_NAME = end_event_LT
 
-INCDIR = -I../../../common/include/models -I../../../common/include/SimpleSocket
+INCDIR = -I../../../common/include/models -I../../../common/include/SimpleSocket -I../../../common/include/utils
 SRCDIR = ../src
 
 CFLAGS = $(FLAGS) $(INCDIR)

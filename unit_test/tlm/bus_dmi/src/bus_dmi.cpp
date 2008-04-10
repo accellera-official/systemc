@@ -27,34 +27,13 @@
 #include "SimpleATInitiator2.h"
 #include "SimpleATTarget2.h"
 #include "CoreDecouplingLTInitiator.h"
+#include "ExplicitLTTarget.h"
 #include "ExplicitATTarget.h"
-#include "SimpleBus.h"
-
-template <int X, int Y>
-class AbstractionSwitch : public sc_core::sc_module
-{
-public:
-  SC_HAS_PROCESS(AbstractionSwitch);
-  AbstractionSwitch(sc_core::sc_module_name name, SimpleBus<X, Y>& m) :
-    sc_core::sc_module(name),
-    mModule(m)
-  {
-    SC_THREAD(doSwitch);
-  }
-
-  void doSwitch()
-  {
-    wait(1000, sc_core::SC_NS);
-    mModule.setATMode();
-  }
-
-private:
-  SimpleBus<X, Y>& mModule;
-};
+#include "SimpleBusLT.h"
 
 int sc_main(int argc, char* argv[])
 {
-  SimpleLTInitiator1_dmi initiator1("initiator1", 10, 0x0);
+  SimpleLTInitiator1_dmi initiator1("initiator1", 10, 0x00000000);
   SimpleLTTarget1 target1("target1");
 
   SimpleLTInitiator2_dmi initiator2("initiator2", 10, 0x10000000);
@@ -70,10 +49,12 @@ int sc_main(int argc, char* argv[])
   SimpleATTarget2 target5("target5");
 
   CoreDecouplingLTInitiator initiator6("initiator6", 10, 0x50000000);
-  ExplicitATTarget target6("target6");
+  ExplicitLTTarget target6("target6");
 
-  SimpleBus<6, 6> bus("bus");
-  AbstractionSwitch<6,6> abstractionSwitch("abstractionSwitch", bus);
+  CoreDecouplingLTInitiator initiator7("initiator7", 10, 0x60000000);
+  ExplicitATTarget target7("target7");
+
+  SimpleBusLT<7, 7> bus("bus");
 
   initiator1.socket(bus.target_socket[0]);
   initiator2.socket(bus.target_socket[1]);
@@ -81,14 +62,17 @@ int sc_main(int argc, char* argv[])
   initiator4.socket(bus.target_socket[3]);
   initiator5.socket(bus.target_socket[4]);
   initiator6.socket(bus.target_socket[5]);
+  initiator7.socket(bus.target_socket[6]);
   bus.initiator_socket[0](target1.socket);
   bus.initiator_socket[1](target2.socket);
   bus.initiator_socket[2](target3.socket);
   bus.initiator_socket[3](target4.socket);
   bus.initiator_socket[4](target5.socket);
   bus.initiator_socket[5](target6.socket);
+  bus.initiator_socket[6](target7.socket);
 
   sc_core::sc_start();
+  sc_core::sc_stop();
 
   return 0;
 }

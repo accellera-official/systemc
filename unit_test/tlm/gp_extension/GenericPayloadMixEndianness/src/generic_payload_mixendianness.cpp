@@ -20,7 +20,7 @@
 #include "tlm_initiator.h"
 #include "tlm_target.h"
 
-#include "SimpleBus.h"
+#include "SimpleBusLT.h"
 
 
 int sc_main(int argc, char* argv[])
@@ -42,7 +42,7 @@ int sc_main(int argc, char* argv[])
                          1023,
                          tlm::TLM_BIG_ENDIAN);
     
-    SimpleBus<2,2> bus("bus");
+    SimpleBusLT<2,2> bus("bus");
     
     // connections
     initiator_le.socket(bus.target_socket[0]);
@@ -51,6 +51,7 @@ int sc_main(int argc, char* argv[])
     bus.initiator_socket[1](target_be.socket);
     
     sc_core::sc_start();
+    sc_core::sc_stop();
     
     return 0;
 }

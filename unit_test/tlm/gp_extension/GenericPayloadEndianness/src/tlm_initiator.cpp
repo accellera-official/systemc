@@ -25,7 +25,6 @@ void tlm_initiator::write(sc_dt::uint64 address,
                           unsigned char* byte_enable,
                           unsigned int byte_enable_length)
 {
-    tlm::tlm_phase phase;
     sc_core::sc_time t;
 
 	// Single WRITE transaction 
@@ -40,23 +39,10 @@ void tlm_initiator::write(sc_dt::uint64 address,
     m_gp.set_byte_enable_ptr(byte_enable);
     m_gp.set_byte_enable_length(byte_enable_length);
     
-    phase = tlm::BEGIN_REQ;
     t = sc_core::SC_ZERO_TIME;
     
-    switch (socket->nb_transport_fw(m_gp, phase, t)) 
-    {
-    case tlm::TLM_COMPLETED:
-        // Transaction Finished, wait for the returned delay
-        wait(t);
-        break;
-    case tlm::TLM_ACCEPTED:
-    case tlm::TLM_UPDATED:
-        // Transaction not yet finished, wait for the end of it
-        wait(socket.getEndEvent());
-        break;
-    default:
-        assert(0); exit(1);
-    };
+    socket->b_transport(m_gp, t);
+    wait(t);
     
     if(m_gp.is_response_ok())
     {
@@ -77,7 +63,6 @@ void tlm_initiator::read(sc_dt::uint64 address,
                          unsigned char* byte_enable,
                          unsigned int byte_enable_length)
 {
-    tlm::tlm_phase phase;
     sc_core::sc_time t;
 
 	// Single READ transaction 
@@ -91,23 +76,10 @@ void tlm_initiator::read(sc_dt::uint64 address,
     m_gp.set_byte_enable_ptr(byte_enable);
     m_gp.set_byte_enable_length(byte_enable_length);
     
-    phase = tlm::BEGIN_REQ;
     t = sc_core::SC_ZERO_TIME;
     
-    switch (socket->nb_transport_fw(m_gp, phase, t)) 
-    {
-    case tlm::TLM_COMPLETED:
-        // Transaction Finished, wait for the returned delay
-        wait(t);
-        break;
-    case tlm::TLM_ACCEPTED:
-    case tlm::TLM_UPDATED:
-        // Transaction not yet finished, wait for the end of it
-        wait(socket.getEndEvent());
-        break;
-    default:
-        assert(0); exit(1);
-    };
+    socket->b_transport(m_gp, t);
+    wait(t);
     
     if(m_gp.is_response_ok())
     {

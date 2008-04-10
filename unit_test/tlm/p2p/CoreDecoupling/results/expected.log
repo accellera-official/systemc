@@ -27,6 +27,7 @@ target: Received write request: A = 0x20, D = 0x8 @ 400 ns
 initiator: Received ok response @ 450 ns (450 ns + 0 s)
 initiator: Send write request: A = 0x24, D = 0x9 @ 450 ns (450 ns + 0 s)
 target: Received write request: A = 0x24, D = 0x9 @ 450 ns
+Sync'ing...
 initiator: Received ok response @ 500 ns (500 ns + 0 s)
 initiator: Send read request: A = 0x0 @ 500 ns (500 ns + 0 s)
 target: Received read request: A = 0x0 @ 500 ns

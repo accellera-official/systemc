@@ -24,20 +24,14 @@
 int sc_main(int argc, char* argv[])
 {
     // module instances
-    tlm_initiator*       initiator_1 = 0;
-    tlm_target*          target_1 = 0;
+    tlm_initiator initiator_1("initiator_1");
+    tlm_target target_1("target_1", 0, 1023);
 
-    // construction
-    initiator_1 = new tlm_initiator("initiator_1");
-    target_1    = new tlm_target("target_1", 0, 1023);
-    
     // connections
-    initiator_1->bus_port(target_1->bus_port);
+    initiator_1.bus_port(target_1.bus_port);
     
     sc_core::sc_start();
+    sc_core::sc_stop();
     
-    if (initiator_1) {delete initiator_1;}
-    if (target_1) {delete target_1;}
- 
     return 0;
 }

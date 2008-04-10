@@ -35,6 +35,7 @@ int sc_main(int argc, char* argv[])
   transactorB2NB.socket(target1.socket);
 
   sc_core::sc_start();
+  sc_core::sc_stop();
 
   return 0;
 }

@@ -78,3 +78,4 @@ initiator_big_endian : Receive read request: A = 0x10000200, D = 0x1020304 @ 360
 
 initiator_big_endian : SLAVE LE : WR_DATA equal to RD_DATA : OK
 
+SystemC: simulation stopped by user.

@@ -212,7 +212,6 @@ public:
         assert(0); exit(1);
       };
     }
-    sc_core::sc_stop();
     wait();
 
   }

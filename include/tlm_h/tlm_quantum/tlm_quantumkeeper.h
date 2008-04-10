@@ -139,12 +139,7 @@ namespace tlm {
       // systenC (local time). This time should be passed to a target in the
       // nb_transport call
       //
-      const sc_core::sc_time& get_local_time() const
-      {
-        return mLocalTime;
-      }
-    
-      sc_core::sc_time& get_local_time()
+      sc_core::sc_time get_local_time() const
       {
         return mLocalTime;
       }

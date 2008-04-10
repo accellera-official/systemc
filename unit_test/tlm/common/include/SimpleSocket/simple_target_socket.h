@@ -19,6 +19,7 @@
 #define __SIMPLE_TARGET_SOCKET_H__
 
 #include "tlm.h"
+#include "MyPEQ.h"
 
 template <typename MODULE,
           unsigned int BUSWIDTH = 32,
@@ -111,9 +112,13 @@ private:
 
       } else {
         if (phase == tlm::END_REQ) {
+          mOwner->mEndRequest.notify(sc_core::SC_ZERO_TIME);
           return tlm::TLM_ACCEPTED;
         
         } else if (phase == tlm::BEGIN_RESP) {
+          if (mOwner->mCurrentTransaction == &trans) {
+            mOwner->mEndRequest.notify(sc_core::SC_ZERO_TIME);
+          }
           //TODO: add response-accept delay?
           it->second->notify(t);
           mOwner->mPendingTrans.erase(it);
@@ -155,8 +160,14 @@ private:
       mNBTransportPtr(0),
       mBTransportPtr(0),
       mTransportDebugPtr(0),
-      mGetDMIPtr(0)
+      mGetDMIPtr(0),
+      mPEQ(sc_core::sc_gen_unique_name("mPEQ")),
+      mResponseInProgress(false)
     {
+      sc_core::sc_spawn_options opts;
+      opts.set_sensitivity(&mPEQ.getEvent());
+      sc_spawn(sc_bind(&FwProcess::b2nb_thread, this), 
+               sc_core::sc_gen_unique_name("b2nb_thread"), &opts);
     }
   
     void setNBTransportPtr(MODULE* mod, NBTransportPtr p)
@@ -224,11 +235,13 @@ private:
           sc_core::sc_event *e = new sc_core::sc_event;
           opts.set_sensitivity(e);
           sc_spawn(sc_bind(&FwProcess::nb2b_thread, this, sc_ref(trans), e), 
-                   sc_core::sc_gen_unique_name((mName + ".nb2b_thread").c_str()), &opts);
+                   sc_core::sc_gen_unique_name("nb2b_thread"), &opts);
           e->notify(t);
           return tlm::TLM_ACCEPTED;
 
         } else if (phase == tlm::END_RESP) {
+          mResponseInProgress = false;
+          mEndResponse.notify(t);
           return tlm::TLM_COMPLETED;
 
         } else {
@@ -248,30 +261,17 @@ private:
       if (mBTransportPtr) {
         // forward call
         assert(mMod);
-        return (mMod->*mBTransportPtr)(trans, t);
+        (mMod->*mBTransportPtr)(trans, t);
+        return;
       
       } else if (mNBTransportPtr) {
-        assert(mMod);
-        phase_type phase = tlm::BEGIN_REQ;
+        mPEQ.notify(trans, t);
+        t = sc_core::SC_ZERO_TIME;
 
-        switch ((mMod->*mNBTransportPtr)(trans, phase, t)) {
-          case tlm::TLM_COMPLETED:
-            // Transaction Finished
-            break;
-
-          case tlm::TLM_ACCEPTED:
-          case tlm::TLM_UPDATED:
-            // Transaction not yet finished, wait for the end of it
-            {
-              sc_core::sc_event endEvent;
-              mOwner->mPendingTrans[&trans] = &endEvent;
-              sc_core::wait(endEvent);
-            }
-            break;
-
-          default:
-            assert(0); exit(1);
-          };
+        // wait until transaction is finished
+        sc_core::sc_event endEvent;
+        mOwner->mPendingTrans[&trans] = &endEvent;
+        sc_core::wait(endEvent);
 
       } else {
         std::cerr << mName << ": no transport callback registered" << std::endl;
@@ -310,7 +310,7 @@ private:
       }
     }
 
-    private:
+  private:
     void nb2b_thread(transaction_type& trans, sc_core::sc_event* e)
     {
       sc_core::sc_time t = sc_core::SC_ZERO_TIME;
@@ -319,19 +319,85 @@ private:
       assert(mMod);
       (mMod->*mBTransportPtr)(trans, t);
 
-      if (t != sc_core::SC_ZERO_TIME) {
-        sc_core::wait(t);
-      }
+      sc_core::wait(t);
 
       // return path
+      while (mResponseInProgress) {
+        sc_core::wait(mEndResponse);
+      }
       t = sc_core::SC_ZERO_TIME;
       phase_type phase = tlm::BEGIN_RESP;
-      mOwner->bw_nb_transport(trans, phase, t);
+      if (mOwner->bw_nb_transport(trans, phase, t) != tlm::TLM_COMPLETED) {
+        mResponseInProgress = true;
+      }
 
       // cleanup
       delete e;
     }
 
+    void b2nb_thread()
+    {
+      while (true) {
+        sc_core::wait(mPEQ.getEvent());
+
+        transaction_type* trans;
+        while ((trans = mPEQ.getNextTransaction())!=0) {
+          assert(mMod);
+          assert(mNBTransportPtr);
+          phase_type phase = tlm::BEGIN_REQ;
+          sc_core::sc_time t = sc_core::SC_ZERO_TIME;
+
+          switch ((mMod->*mNBTransportPtr)(*trans, phase, t)) {
+          case tlm::TLM_COMPLETED:
+          {
+            // notify transaction is finished
+            typename std::map<transaction_type*, sc_core::sc_event *>::iterator it =
+              mOwner->mPendingTrans.find(trans);
+            assert(it != mOwner->mPendingTrans.end());
+            it->second->notify(t);
+            mOwner->mPendingTrans.erase(it);
+            break;
+          }
+
+          case tlm::TLM_ACCEPTED:
+          case tlm::TLM_UPDATED:
+            switch (phase) {
+            case tlm::BEGIN_REQ:
+              mOwner->mCurrentTransaction = trans;
+              sc_core::wait(mOwner->mEndRequest);
+              mOwner->mCurrentTransaction = 0;
+              break;
+
+            case tlm::END_REQ:
+              sc_core::wait(t);
+              break;
+
+            case tlm::BEGIN_RESP:
+            {
+              phase = tlm::END_RESP;
+              t = sc_core::SC_ZERO_TIME;
+              (mMod->*mNBTransportPtr)(*trans, phase, t);
+          
+              // notify transaction is finished
+              typename std::map<transaction_type*, sc_core::sc_event *>::iterator it =
+                mOwner->mPendingTrans.find(trans);
+              assert(it != mOwner->mPendingTrans.end());
+              it->second->notify(t);
+              mOwner->mPendingTrans.erase(it);
+              break;
+            }
+
+            default:
+              assert(0); exit(1);
+            };
+            break;
+
+          default:
+            assert(0); exit(1);
+          };
+        }
+      }
+    }
 
   private:
     const std::string mName;
@@ -341,15 +407,17 @@ private:
     BTransportPtr mBTransportPtr;
     TransportDebugPtr mTransportDebugPtr;
     GetDMIPtr mGetDMIPtr;
-    int mTransportUserId;
-    int mTransportDebugUserId;
-    int mGetDMIUserId;
+    MyPEQ mPEQ;
+    bool mResponseInProgress;
+    sc_core::sc_event mEndResponse;
   };
 
 private:
   FwProcess mFwProcess;
   BwProcess mBwProcess;
   std::map<transaction_type*, sc_core::sc_event *> mPendingTrans;
+  sc_core::sc_event mEndRequest;
+  transaction_type* mCurrentTransaction;
 };
 
 //ID Tagged version
@@ -390,14 +458,14 @@ public:
   {
     assert(!sc_core::sc_get_curr_simcontext()->elaboration_done());
     mFwProcess.setNBTransportPtr(mod, cb);
-    mFwProcess.setTransportUserId(id);
+    mFwProcess.setNBTransportUserId(id);
   }
 
   void registerBTransport(MODULE* mod, void (MODULE::*cb)(int id, transaction_type&, sc_core::sc_time&), int id)
   {
     assert(!sc_core::sc_get_curr_simcontext()->elaboration_done());
     mFwProcess.setBTransportPtr(mod, cb);
-    mFwProcess.setTransportUserId(id);
+    mFwProcess.setBTransportUserId(id);
   }
 
   void registerDebugTransport(MODULE* mod,
@@ -450,9 +518,13 @@ private:
 
       } else {
         if (phase == tlm::END_REQ) {
+          mOwner->mEndRequest.notify(sc_core::SC_ZERO_TIME);
           return tlm::TLM_ACCEPTED;
         
         } else if (phase == tlm::BEGIN_RESP) {
+          if (mOwner->mCurrentTransaction == &trans) {
+            mOwner->mEndRequest.notify(sc_core::SC_ZERO_TIME);
+          }
           //TODO: add response-accept delay?
           it->second->notify(t);
           mOwner->mPendingTrans.erase(it);
@@ -499,13 +571,21 @@ private:
       mBTransportPtr(0),
       mTransportDebugPtr(0),
       mGetDMIPtr(0),
-      mTransportUserId(0),
+      mNBTransportUserId(0),
+      mBTransportUserId(0),
       mTransportDebugUserId(0),
-      mGetDMIUserId(0)
+      mGetDMIUserId(0),
+      mPEQ(sc_core::sc_gen_unique_name("mPEQ")),
+      mResponseInProgress(false)
     {
+      sc_core::sc_spawn_options opts;
+      opts.set_sensitivity(&mPEQ.getEvent());
+      sc_spawn(sc_bind(&FwProcess::b2nb_thread, this), 
+               sc_core::sc_gen_unique_name("b2nb_thread"), &opts);
     }
   
-    void setTransportUserId(int id) { mTransportUserId = id; }
+    void setNBTransportUserId(int id) { mNBTransportUserId = id; }
+    void setBTransportUserId(int id) { mBTransportUserId = id; }
     void setTransportDebugUserId(int id) { mTransportDebugUserId = id; }
     void setGetDMIUserId(int id) { mGetDMIUserId = id; }
 
@@ -564,7 +644,7 @@ private:
       if (mNBTransportPtr) {
         // forward call
         assert(mMod);
-        return (mMod->*mNBTransportPtr)(mTransportUserId, trans, phase, t);
+        return (mMod->*mNBTransportPtr)(mNBTransportUserId, trans, phase, t);
 
       } else if (mBTransportPtr) {
         if (phase == tlm::BEGIN_REQ) {
@@ -574,11 +654,13 @@ private:
           sc_core::sc_event *e = new sc_core::sc_event;
           opts.set_sensitivity(e);
           sc_spawn(sc_bind(&FwProcess::nb2b_thread, this, sc_ref(trans), e), 
-                   sc_core::sc_gen_unique_name((mName + ".nb2b_thread").c_str()), &opts);
+                   sc_core::sc_gen_unique_name("nb2b_thread"), &opts);
           e->notify(t);
           return tlm::TLM_ACCEPTED;
 
         } else if (phase == tlm::END_RESP) {
+          mResponseInProgress = false;
+          mEndResponse.notify(t);
           return tlm::TLM_COMPLETED;
 
         } else {
@@ -598,30 +680,17 @@ private:
       if (mBTransportPtr) {
         // forward call
         assert(mMod);
-        return (mMod->*mBTransportPtr)(mTransportUserId, trans, t);
+        (mMod->*mBTransportPtr)(mBTransportUserId, trans, t);
+        return;
       
       } else if (mNBTransportPtr) {
-        assert(mMod);
-        phase_type phase = tlm::BEGIN_REQ;
+        mPEQ.notify(trans, t);
+        t = sc_core::SC_ZERO_TIME;
 
-        switch ((mMod->*mNBTransportPtr)(mTransportUserId, trans, phase, t)) {
-          case tlm::TLM_COMPLETED:
-            // Transaction Finished
-            break;
-
-          case tlm::TLM_ACCEPTED:
-          case tlm::TLM_UPDATED:
-            // Transaction not yet finished, wait for the end of it
-            {
-              sc_core::sc_event endEvent;
-              mOwner->mPendingTrans[&trans] = &endEvent;
-              sc_core::wait(endEvent);
-            }
-            break;
-
-          default:
-            assert(0); exit(1);
-          };
+        // wait until transaction is finished
+        sc_core::sc_event endEvent;
+        mOwner->mPendingTrans[&trans] = &endEvent;
+        sc_core::wait(endEvent);
 
       } else {
         std::cerr << mName << ": no transport callback registered" << std::endl;
@@ -667,19 +736,86 @@ private:
 
       // forward call
       assert(mMod);
-      (mMod->*mBTransportPtr)(mTransportUserId, trans, t);
+      (mMod->*mBTransportPtr)(mBTransportUserId, trans, t);
 
-      if (t != sc_core::SC_ZERO_TIME) {
-        sc_core::wait(t);
-      }
+      sc_core::wait(t);
 
       // return path
+      while (mResponseInProgress) {
+        sc_core::wait(mEndResponse);
+      }
       t = sc_core::SC_ZERO_TIME;
       phase_type phase = tlm::BEGIN_RESP;
-      mOwner->bw_nb_transport(trans, phase, t);
+      if (mOwner->bw_nb_transport(trans, phase, t) != tlm::TLM_COMPLETED) {
+        mResponseInProgress = true;
+      }
 
       // cleanup
       delete e;
+    }
+
+    void b2nb_thread()
+    {
+      while (true) {
+        sc_core::wait(mPEQ.getEvent());
+
+        transaction_type* trans;
+        while ((trans = mPEQ.getNextTransaction())!=0) {
+          assert(mMod);
+          assert(mNBTransportPtr);
+          phase_type phase = tlm::BEGIN_REQ;
+          sc_core::sc_time t = sc_core::SC_ZERO_TIME;
+
+          switch ((mMod->*mNBTransportPtr)(mNBTransportUserId, *trans, phase, t)) {
+          case tlm::TLM_COMPLETED:
+          {
+            // notify transaction is finished
+            typename std::map<transaction_type*, sc_core::sc_event *>::iterator it =
+              mOwner->mPendingTrans.find(trans);
+            assert(it != mOwner->mPendingTrans.end());
+            it->second->notify(t);
+            mOwner->mPendingTrans.erase(it);
+            break;
+          }
+
+          case tlm::TLM_ACCEPTED:
+          case tlm::TLM_UPDATED:
+            switch (phase) {
+            case tlm::BEGIN_REQ:
+              mOwner->mCurrentTransaction = trans;
+              sc_core::wait(mOwner->mEndRequest);
+              mOwner->mCurrentTransaction = 0;
+              break;
+
+            case tlm::END_REQ:
+              sc_core::wait(t);
+              break;
+
+            case tlm::BEGIN_RESP:
+            {
+              phase = tlm::END_RESP;
+              t = sc_core::SC_ZERO_TIME;
+              (mMod->*mNBTransportPtr)(mNBTransportUserId, *trans, phase, t);
+          
+              // notify transaction is finished
+              typename std::map<transaction_type*, sc_core::sc_event *>::iterator it =
+                mOwner->mPendingTrans.find(trans);
+              assert(it != mOwner->mPendingTrans.end());
+              it->second->notify(t);
+              mOwner->mPendingTrans.erase(it);
+              break;
+            }
+
+            default:
+              assert(0); exit(1);
+            };
+            break;
+
+          default:
+            assert(0); exit(1);
+          };
+        }
+      }
     }
 
   private:
@@ -690,15 +826,21 @@ private:
     BTransportPtr mBTransportPtr;
     TransportDebugPtr mTransportDebugPtr;
     GetDMIPtr mGetDMIPtr;
-    int mTransportUserId;
+    int mNBTransportUserId;
+    int mBTransportUserId;
     int mTransportDebugUserId;
     int mGetDMIUserId;
+    MyPEQ mPEQ;
+    bool mResponseInProgress;
+    sc_core::sc_event mEndResponse;
   };
 
 private:
   FwProcess mFwProcess;
   BwProcess mBwProcess;
   std::map<transaction_type*, sc_core::sc_event *> mPendingTrans;
+  sc_core::sc_event mEndRequest;
+  transaction_type* mCurrentTransaction;
 };
 
 #endif

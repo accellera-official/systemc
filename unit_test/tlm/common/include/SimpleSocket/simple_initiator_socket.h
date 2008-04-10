@@ -41,14 +41,9 @@ public:
 public:
   explicit SimpleInitiatorSocket(const char* n = "") :
     base_type(n),
-    mProcess(this->name(), mEndEvent)
+    mProcess(this->name())
   {
-    base_type::mExport.bind(mProcess);
-  }
-
-  sc_core::sc_event& getEndEvent()
-  {
-    return mEndEvent;
+    this->mExport.bind(mProcess);
   }
 
   void registerNBTransport_bw(MODULE* mod,
@@ -75,12 +70,11 @@ private:
     typedef void (MODULE::*InvalidateDMIPtr)(sc_dt::uint64,
                                              sc_dt::uint64);
       
-    Process(const std::string& name, sc_core::sc_event& endEvent) :
+    Process(const std::string& name) :
       mName(name),
       mMod(0),
       mTransportPtr(0),
-      mInvalidateDMIPtr(0),
-      mEndEvent(endEvent)
+      mInvalidateDMIPtr(0)
     {
     }
   
@@ -116,23 +110,8 @@ private:
         return (mMod->*mTransportPtr)(trans, phase, t);
 
       } else {
-        // No callback registered, handle protocol and notify event
-        switch (phase) {
-        case tlm::END_REQ:
-          // Request phase ended
-          return tlm::TLM_ACCEPTED;
-        case tlm::BEGIN_RESP:
-          assert(t == sc_core::SC_ZERO_TIME); // FIXME: can t != 0?    
-          mEndEvent.notify(t);
-          // Not needed to update the phase if true is returned
-          return tlm::TLM_COMPLETED;
-        case tlm::BEGIN_REQ: // fall-through
-        case tlm::END_RESP: // fall-through
-        default:
-          // A target should never call nb_transport with these phases
-          assert(0); exit(1);
-//          return tlm::TLM_COMPLETED;   ///< unreachable code
-        };
+        std::cerr << mName << ": no transport callback registered" << std::endl;
+        assert(0); exit(1);
       }
     }
 
@@ -151,12 +130,10 @@ private:
     MODULE* mMod;
     TransportPtr mTransportPtr;
     InvalidateDMIPtr mInvalidateDMIPtr;
-    sc_core::sc_event& mEndEvent;
   };
 
 private:
   Process mProcess;
-  sc_core::sc_event mEndEvent;
 };
 
 // Tagged version
@@ -182,14 +159,9 @@ public:
 public:
   explicit SimpleInitiatorSocketTagged(const char* n = "") :
     base_type(n),
-    mProcess(this->name(), mEndEvent)
+    mProcess(this->name())
   {
-    base_type::mExport.bind(mProcess);
-  }
-
-  sc_core::sc_event& getEndEvent()
-  {
-    return mEndEvent;
+    this->mExport.bind(mProcess);
   }
 
   void registerNBTransport_bw(MODULE* mod,
@@ -223,14 +195,13 @@ private:
                                              sc_dt::uint64,
                                              sc_dt::uint64);
       
-    Process(const std::string& name, sc_core::sc_event& endEvent) :
+    Process(const std::string& name) :
       mName(name),
       mMod(0),
       mTransportPtr(0),
       mInvalidateDMIPtr(0),
       mTransportUserId(0),
-      mInvalidateDMIUserId(0),
-      mEndEvent(endEvent)
+      mInvalidateDMIUserId(0)
     {
     }
   
@@ -269,23 +240,8 @@ private:
         return (mMod->*mTransportPtr)(mTransportUserId, trans, phase, t);
 
       } else {
-        // No callback registered, handle protocol and notify event
-        switch (phase) {
-        case tlm::END_REQ:
-          // Request phase ended
-          return tlm::TLM_ACCEPTED;
-        case tlm::BEGIN_RESP:
-          assert(t == sc_core::SC_ZERO_TIME); // FIXME: can t != 0?    
-          mEndEvent.notify(t);
-          // Not needed to update the phase if true is returned
-          return tlm::TLM_COMPLETED;
-        case tlm::BEGIN_REQ: // fall-through
-        case tlm::END_RESP: // fall-through
-        default:
-          // A target should never call nb_transport with these phases
-          assert(0); exit(1);
-//          return tlm::TLM_COMPLETED;   ///< unreachable code
-        };
+        std::cerr << mName << ": no transport callback registered" << std::endl;
+        assert(0); exit(1);
       }
     }
 
@@ -306,11 +262,9 @@ private:
     InvalidateDMIPtr mInvalidateDMIPtr;
     int mTransportUserId;
     int mInvalidateDMIUserId;
-    sc_core::sc_event& mEndEvent;
   };
 
 private:
   Process mProcess;
-  sc_core::sc_event mEndEvent;
 };
 #endif

@@ -64,7 +64,6 @@ public:
         test_customized_be();
         std::cout << std::endl;
         
-        sc_core::sc_stop();
         sc_core::wait(sc_core::SC_ZERO_TIME);
     }
     

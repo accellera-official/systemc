@@ -27,12 +27,13 @@
 #include "SimpleATInitiator2.h"
 #include "SimpleATTarget2.h"
 #include "CoreDecouplingLTInitiator.h"
+#include "ExplicitLTTarget.h"
 #include "ExplicitATTarget.h"
-#include "SimpleBusLT.h"
+#include "SimpleBusAT.h"
 
 int sc_main(int argc, char* argv[])
 {
-  SimpleLTInitiator1 initiator1("initiator1", 10, 0x20000000); //0x0);
+  SimpleLTInitiator1 initiator1("initiator1", 10, 0x00000000);
   SimpleLTTarget1 target1("target1");
 
   SimpleLTInitiator2 initiator2("initiator2", 10, 0x10000000);
@@ -48,9 +49,12 @@ int sc_main(int argc, char* argv[])
   SimpleATTarget2 target5("target5");
 
   CoreDecouplingLTInitiator initiator6("initiator6", 10, 0x50000000);
-  ExplicitATTarget target6("target6");
+  ExplicitLTTarget target6("target6");
 
-  SimpleBusLT<6, 6> bus("bus");
+  CoreDecouplingLTInitiator initiator7("initiator7", 10, 0x60000000);
+  ExplicitATTarget target7("target7");
+
+  SimpleBusAT<7, 7> bus("bus");
 
   initiator1.socket(bus.target_socket[0]);
   initiator2.socket(bus.target_socket[1]);
@@ -58,14 +62,17 @@ int sc_main(int argc, char* argv[])
   initiator4.socket(bus.target_socket[3]);
   initiator5.socket(bus.target_socket[4]);
   initiator6.socket(bus.target_socket[5]);
+  initiator7.socket(bus.target_socket[6]);
   bus.initiator_socket[0](target1.socket);
   bus.initiator_socket[1](target2.socket);
   bus.initiator_socket[2](target3.socket);
   bus.initiator_socket[3](target4.socket);
   bus.initiator_socket[4](target5.socket);
   bus.initiator_socket[5](target6.socket);
+  bus.initiator_socket[6](target7.socket);
 
   sc_core::sc_start();
+  sc_core::sc_stop();
 
   return 0;
 }
