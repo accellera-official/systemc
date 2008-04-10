@@ -194,7 +194,7 @@ public:
   {
       // We should never be called
       assert(0); exit(1);
-      return tlm::TLM_COMPLETED;
+//      return tlm::TLM_COMPLETED;  //unreachable code
   }
 
   void invalidate(dmi_type& dmiData)

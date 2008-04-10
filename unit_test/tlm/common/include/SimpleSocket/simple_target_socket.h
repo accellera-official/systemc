@@ -123,7 +123,7 @@ private:
           assert(0); exit(1);
         }
 
-        return tlm::TLM_COMPLETED;  //Should not reach here
+//        return tlm::TLM_COMPLETED;  //Should not reach here
       }
     }
 
@@ -462,7 +462,7 @@ private:
           assert(0); exit(1);
         }
 
-        return tlm::TLM_COMPLETED;  //Should not reach here
+//        return tlm::TLM_COMPLETED;  //Should not reach here
       }
     }
 

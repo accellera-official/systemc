@@ -112,7 +112,7 @@ public:
 
     // Not possible
     assert(0); exit(1);
-    return tlm::TLM_COMPLETED;
+//    return tlm::TLM_COMPLETED;  //unreachable code
   }
 
   void endRequest()

@@ -256,7 +256,7 @@ public:
     default:
       // A target should never call nb_transport with these phases
       assert(0); exit(1);
-      return tlm::TLM_COMPLETED;
+//      return tlm::TLM_COMPLETED;  //unreachable code
     };
   }
 
