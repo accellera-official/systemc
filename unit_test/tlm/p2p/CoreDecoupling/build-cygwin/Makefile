@@ -2,7 +2,7 @@ include ../../../build-cygwin/Makefile.config
 
 OBJ_NAME = core_decoupling
 
-MY_INCLUDES = /I../../../common/include/SimpleSocket /I../../../common/include/models
+MY_INCLUDES = /I../../../common/include/SimpleSocket /I../../../common/include/models /I../../../common/include/utils
 SRCDIR = ../src
  
 CFLAGS = $(FLAGS) $(MY_INCLUDES)

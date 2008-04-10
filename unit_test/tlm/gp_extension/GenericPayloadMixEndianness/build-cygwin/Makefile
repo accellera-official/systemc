@@ -2,7 +2,7 @@ include ../../../build-cygwin/Makefile.config
 
 OBJ_NAME = generic_payload_mixendianness
 
-MY_INCLUDES = /I../include /I../../common/include /I../../../common/include/utils /I../../../common/include/models /I../../../common/include/SimpleSocket
+MY_INCLUDES = /I../include /I../../common/include /I../../../common/include/utils /I../../../common/include/models /I../../../common/include/SimpleSocket /I../../../common/include/utils
 SRCDIR = ../src
  
 CFLAGS = $(FLAGS) $(MY_INCLUDES)

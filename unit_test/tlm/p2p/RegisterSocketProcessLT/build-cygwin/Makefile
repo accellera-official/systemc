@@ -2,7 +2,7 @@ include ../../../build-cygwin/Makefile.config
 
 OBJ_NAME = register_socket_process_LT
 
-MY_INCLUDES = /I../../../common/include/SimpleSocket /I../../../common/include/models
+MY_INCLUDES = /I../../../common/include/SimpleSocket /I../../../common/include/models /I../../../common/include/utils
 SRCDIR = ../src
  
 CFLAGS = $(FLAGS) $(MY_INCLUDES)

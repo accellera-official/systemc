@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/vmg"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\common\include\SimpleSocket;..\..\..\\common\include\models"
+				AdditionalIncludeDirectories="..\..\..\common\include\SimpleSocket;..\..\..\common\include\models;..\..\..\common\include\utils"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				StringPooling="true"
 				MinimalRebuild="true"
@@ -128,7 +128,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/vmg"
-				AdditionalIncludeDirectories="..\..\..\common\include\SimpleSocket;..\..\..\\common\include\models"
+				AdditionalIncludeDirectories="..\..\..\common\include\SimpleSocket;..\..\..\common\include\models;..\..\..\common\include\utils"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;SC_INCLUDE_FX"
 				StringPooling="false"
 				MinimalRebuild="false"

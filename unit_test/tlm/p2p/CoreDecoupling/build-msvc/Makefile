@@ -2,8 +2,9 @@
 
 OBJ_NAME = core_decoupling
 
-MY_INCLUDES = /I..\..\..\common\include\SimpleSocket \
-              /I..\..\..\common\include\models
+MY_INCLUDES = -I../../../common/include/SimpleSocket \
+              -I../../../common/include/models \
+              -I../../../common/include/utils
               
 SRCDIR = ..\src
 SRCCOMMONDIR = ..\..\common\src

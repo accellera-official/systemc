@@ -3,7 +3,8 @@
 OBJ_NAME = end_event_LT
 
 MY_INCLUDES = /I..\..\..\common\include\SimpleSocket \
-              /I..\..\..\common\include\models
+              /I..\..\..\common\include\models \
+              /I../../../common/include/utils
               
 SRCDIR = ..\src
 SRCCOMMONDIR = ..\..\common\src
