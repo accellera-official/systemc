@@ -22,31 +22,44 @@
 #include "tlm_h/tlm_trans/tlm_generic_payload/tlm_generic_payload.h"
 #include <string>
 #include <iostream>
+#include <vector>
 
 namespace tlm {
 
 //enum tlm_phase { BEGIN_REQ, END_REQ, BEGIN_RESP, END_RESP };
-enum tlm_phase_enum { BEGIN_REQ=0, END_REQ, BEGIN_RESP, END_RESP };
+  
+enum tlm_phase_enum { UNINITIALIZED_PHASE=0, BEGIN_REQ=1, END_REQ, BEGIN_RESP, END_RESP };
+
+inline unsigned int createPhaseNumber(){
+  static unsigned int number=END_RESP+1;
+  return number++;
+}
+
+inline std::vector<const char*>& getphaseNameVec(){
+  static std::vector<const char*> phaseNameVec(END_RESP+1, (const char*)NULL);
+  return phaseNameVec;
+}
 
 class tlm_phase{
 public:
-  tlm_phase(): m_name("undefined phase") {}
-  tlm_phase(const char* name): m_name(name){}
-  tlm_phase(const tlm_phase_enum& standard): m_name((const char*) standard){}
-  const char* m_name;
-  tlm_phase& operator=(const tlm_phase_enum& standard){m_name=(const char*)standard; return *this;}
-  operator unsigned long() const{return (unsigned long) m_name;}
+  tlm_phase(): m_id(0) {}
+  tlm_phase(unsigned int m_id): m_id(m_id){}
+  tlm_phase(const tlm_phase_enum& standard): m_id((unsigned int) standard){}
+  unsigned int m_id;
+  tlm_phase& operator=(const tlm_phase_enum& standard){m_id=(unsigned int)standard; return *this;}
+  operator unsigned int() const{return m_id;}
 };
 
 inline
 std::ostream& operator<<(std::ostream& s, const tlm_phase& p){
-  switch ((unsigned long)p.m_name){
+  switch (p.m_id){
+    case UNINITIALIZED_PHASE: s<<"UNINITIALIZED_PHASE"; break;
     case BEGIN_REQ:  s<<"BEGIN_REQ"; break;
     case END_REQ:    s<<"END_REQ"; break;
     case BEGIN_RESP: s<<"BEGIN_RESP"; break;
     case END_RESP:   s<<"END_RESP"; break;
     default:
-      s<<p.m_name; return s;      
+      s<<getphaseNameVec()[(unsigned int)p]; return s;      
   }
   return s;
 }
@@ -56,13 +69,14 @@ class tlm_phase_##name_arg:public tlm_phase{ \
 public:\
 static const tlm_phase_##name_arg& getPhase(){static tlm_phase_##name_arg tmp; return tmp;}\
 private:\
-tlm_phase_##name_arg():tlm_phase(getChar_##name_arg()){};\
+tlm_phase_##name_arg():tlm_phase(createPhaseNumber()){getphaseNameVec().push_back(getChar_##name_arg());};\
 tlm_phase_##name_arg(const tlm_phase_##name_arg&); \
 tlm_phase_##name_arg& operator=(const tlm_phase_##name_arg&); \
-static inline const char* getChar_##name_arg(){static const char* tmp=#name_arg; assert((unsigned long)tmp>(unsigned long)END_RESP); return tmp;} \
+static inline const char* getChar_##name_arg(){static const char* tmp=#name_arg; return tmp;} \
 }; \
 static const tlm_phase_##name_arg& name_arg=tlm_phase_##name_arg::getPhase()
-
+  
+ 
   
 enum tlm_sync_enum { TLM_ACCEPTED, TLM_UPDATED, TLM_COMPLETED };
 
