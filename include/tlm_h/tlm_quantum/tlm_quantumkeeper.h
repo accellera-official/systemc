@@ -75,7 +75,7 @@ namespace tlm {
       // systemC time) After incrementing the local time an initiator should
       // check (with the need_sync method) if a sync is required.
       //
-      void inc(const sc_core::sc_time& t)
+      virtual void inc(const sc_core::sc_time& t)
       {
         mLocalTime += t;
       }
@@ -85,7 +85,7 @@ namespace tlm {
       // systemC time) After changing the local time an initiator should
       // check (with the need_sync method) if a sync is required.
       //
-      void set(const sc_core::sc_time& t)
+      virtual void set(const sc_core::sc_time& t)
       {
         mLocalTime = t;
       }
@@ -95,7 +95,7 @@ namespace tlm {
       // be the case if the local time becomes greater than the local (current)
       // quantum value for this initiator.
       //
-      bool need_sync() const
+      virtual bool need_sync() const
       {
         return sc_core::sc_time_stamp() + mLocalTime >= mNextSyncPoint;
       }
@@ -105,7 +105,7 @@ namespace tlm {
       // initiator was running ahead of systemC time and reset the
       // tlm_quantumkeeper.
       //
-      void sync()
+      virtual void sync()
       {
         sc_core::wait(mLocalTime);
         reset();
@@ -117,7 +117,7 @@ namespace tlm {
       // a wait because of a synchronization request by a target (TLM_ACCEPTED,
       // or TLM_UPDATED).
       //
-      void reset()
+      virtual void reset()
       {
         mLocalTime = sc_core::SC_ZERO_TIME;
         mNextSyncPoint = sc_core::sc_time_stamp() + compute_local_quantum();
@@ -129,7 +129,7 @@ namespace tlm {
       // returned by sc_time_stamp incremeneted with the time the initiator is
       // running ahead.
       //
-      sc_core::sc_time get_current_time() const
+      virtual sc_core::sc_time get_current_time() const
       {
         return sc_core::sc_time_stamp() + mLocalTime;
       }
@@ -139,7 +139,7 @@ namespace tlm {
       // systenC (local time). This time should be passed to a target in the
       // nb_transport call
       //
-      sc_core::sc_time get_local_time() const
+      virtual sc_core::sc_time get_local_time() const
       {
         return mLocalTime;
       }
