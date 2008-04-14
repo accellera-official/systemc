@@ -39,8 +39,8 @@ public:
                                  bw_interface_type>     base_type;
 
 public:
-  explicit TrivialTargetSocket(const char* n = "") :
-    base_type(n),
+  explicit TrivialTargetSocket(const char* n = "TrivialTargetSocket") :
+    base_type(sc_core::sc_gen_unique_name(n)),
     mProcess(this->name())
   {
     bind(mProcess);

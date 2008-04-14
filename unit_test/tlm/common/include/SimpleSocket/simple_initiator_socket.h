@@ -39,8 +39,8 @@ public:
                                     bw_interface_type>  base_type;
 
 public:
-  explicit SimpleInitiatorSocket(const char* n = "") :
-    base_type(n),
+  explicit SimpleInitiatorSocket(const char* n = "SimpleInitiatorSocket") :
+    base_type(sc_core::sc_gen_unique_name(n)),
     mProcess(this->name())
   {
     this->mExport.bind(mProcess);
@@ -157,8 +157,8 @@ public:
                                     bw_interface_type>  base_type;
 
 public:
-  explicit SimpleInitiatorSocketTagged(const char* n = "") :
-    base_type(n),
+  explicit SimpleInitiatorSocketTagged(const char* n = "SimpleInitiatorSocketTagged") :
+    base_type(sc_core::sc_gen_unique_name(n)),
     mProcess(this->name())
   {
     this->mExport.bind(mProcess);

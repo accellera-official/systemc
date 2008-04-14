@@ -47,7 +47,7 @@ public:
                                     bw_interface_type>;
 
 public:
-  tlm_target_socket(const char* name)
+  explicit tlm_target_socket(const char* name = "tlm_target_socket")
   : export_type(name)
   , mPort(sc_core::sc_gen_unique_name((std::string(name) + "_port").c_str()))
   {

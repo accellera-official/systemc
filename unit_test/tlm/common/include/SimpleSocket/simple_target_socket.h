@@ -42,7 +42,7 @@ public:
                                  bw_interface_type>     base_type;
 
 public:
-  explicit SimpleTargetSocket(const char* n = "") :
+  explicit SimpleTargetSocket(const char* n = "SimpleTargetSocket") :
     base_type(sc_core::sc_gen_unique_name(n)),
     mFwProcess(this),
     mBwProcess(this)
@@ -442,7 +442,7 @@ public:
                                  bw_interface_type>     base_type;
 
 public:
-  explicit SimpleTargetSocketTagged(const char* n = "") :
+  explicit SimpleTargetSocketTagged(const char* n = "SimpleTargetSocketTagged") :
     base_type(sc_core::sc_gen_unique_name(n)),
     mFwProcess(this),
     mBwProcess(this)
