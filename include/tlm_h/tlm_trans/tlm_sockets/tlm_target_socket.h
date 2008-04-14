@@ -42,9 +42,8 @@ public:
                                fw_interface_type,
                                bw_interface_type> initiator_socket_type;
 
-  friend class tlm_initiator_socket<BUSWIDTH,
-                                    fw_interface_type,
-                                    bw_interface_type>;
+  template <unsigned int, typename, typename>
+  friend class tlm_initiator_socket;
 
 public:
   tlm_target_socket()
