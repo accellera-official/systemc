@@ -139,7 +139,14 @@ class tlm_conv_target_socket :
                             tlm_bw_transport_if<TYPES> >
 {
 public:
-  tlm_conv_target_socket(const char* name) :
+  tlm_conv_target_socket() :
+    tlm_target_socket<BUSWIDTH,
+                      tlm_fw_transport_if<TYPES>,
+                      tlm_bw_transport_if<TYPES> >()
+  {
+  }
+
+  explicit tlm_conv_target_socket(const char* name) :
     tlm_target_socket<BUSWIDTH,
                       tlm_fw_transport_if<TYPES>,
                       tlm_bw_transport_if<TYPES> >(name)

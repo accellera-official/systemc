@@ -129,7 +129,14 @@ class tlm_conv_initiator_socket :
                                tlm_bw_transport_if<TYPES> >
 {
 public:
-  tlm_conv_initiator_socket(const char* name) :
+  tlm_conv_initiator_socket() :
+    tlm_initiator_socket<BUSWIDTH,
+                         tlm_fw_transport_if<TYPES>,
+                         tlm_bw_transport_if<TYPES> >()
+  {
+  }
+
+  explicit tlm_conv_initiator_socket(const char* name) :
     tlm_initiator_socket<BUSWIDTH,
                          tlm_fw_transport_if<TYPES>,
                          tlm_bw_transport_if<TYPES> >(name)
