@@ -7,7 +7,8 @@ SUBDIRS = \
           ../bus_dmi \
           ../gp_extension \
           ../p2p \
-          ../static_extensions
+          ../static_extensions \
+          ../endian_conv
 
 .PHONY: all clean check run
 
@@ -26,4 +27,4 @@ run:
 clean:
 	@for i in $(SUBDIRS); do \
         (cd $$i/build-unix && $(MAKE) clean); done;
-       	
+

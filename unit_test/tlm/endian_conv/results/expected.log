@@ -1,0 +1,145 @@
+
+TLM-2 Endianness Conversion Helper Functions Tester
+March 2008
+
+enter {R|W}, addr=a, len=l, bus width=b, word width=w, initiator offset=i, be = {x|01}
+enter initiator memory state = (2048 characters)
+enter target memory state = (2048 characters)
+enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+Memory States after Transaction
+  initiator = 45670123cdef89abxxxxxxxxxxxxxxxxxxxx
+  target = 0123456789abcdefghijklmnopqrstuvwxyz
+
+enter initiator memory state = (2048 characters)
+enter target memory state = (2048 characters)
+enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+Memory States after Transaction
+  initiator = klmnghijstuvopqrxxxxxxxxxxxxxxxxxxxx
+  target = 0123456789abcdefghijklmnopqrstuvwxyz
+
+enter initiator memory state = (2048 characters)
+enter target memory state = (2048 characters)
+enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+Memory States after Transaction
+  initiator = 0123456789abcdefghijklmnopqrstuvwxyz
+  target = xxxxxxxxxxxxxxxx89ab4567ghijcdefxxxx
+
+enter initiator memory state = (2048 characters)
+enter target memory state = (2048 characters)
+enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+Memory States after Transaction
+  initiator = 0123456789abcdefghijklmnopqrstuvwxyz
+  target = 45670123cdef89abxxxxxxxxxxxxxxxxxxxx
+
+enter initiator memory state = (2048 characters)
+enter target memory state = (2048 characters)
+enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+Memory States after Transaction
+  initiator = 4567xxxxcdefxxxxxxxxxxxxxxxxxxxxxxxx
+  target = 0123456789abcdefghijklmnopqrstuvwxyz
+
+enter initiator memory state = (2048 characters)
+enter target memory state = (2048 characters)
+enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+Memory States after Transaction
+  initiator = klmnxxxxstuvxxxxxxxxxxxxxxxxxxxxxxxx
+  target = 0123456789abcdefghijklmnopqrstuvwxyz
+
+enter initiator memory state = (2048 characters)
+enter target memory state = (2048 characters)
+enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+Memory States after Transaction
+  initiator = 0123456789abcdefghijklmnopqrstuvwxyz
+  target = xxxxxxxxxxxxxxxxxxxx4567ghijxxxxxxxx
+
+enter initiator memory state = (2048 characters)
+enter target memory state = (2048 characters)
+enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+Memory States after Transaction
+  initiator = 0123456789abcdefghijklmnopqrstuvwxyz
+  target = xxxx0123cdefxxxxxxxxxxxxxxxxxxxxxxxx
+
+enter initiator memory state = (2048 characters)
+enter target memory state = (2048 characters)
+enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+Memory States after Transaction
+  initiator = ghijxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  target = 0123456789abcdefghijklmnopqrstuvwxyz
+
+enter initiator memory state = (2048 characters)
+enter target memory state = (2048 characters)
+enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+Memory States after Transaction
+  initiator = ghijxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  target = 0123456789abcdefghijklmnopqrstuvwxyz
+
+enter initiator memory state = (2048 characters)
+enter target memory state = (2048 characters)
+enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+Memory States after Transaction
+  initiator = 0123456789abcdefghijklmnopqrstuvwxyz
+  target = xxxxxxxxxxxxxxxxxxxxxxxx4567xxxxxxxx
+
+enter initiator memory state = (2048 characters)
+enter target memory state = (2048 characters)
+enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+Memory States after Transaction
+  initiator = 0123456789abcdefghijklmnopqrstuvwxyz
+  target = xxxxxxxxxxxxxxxxxxxxxxxx4567xxxxxxxx
+
+enter initiator memory state = (2048 characters)
+enter target memory state = (2048 characters)
+enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+Memory States after Transaction
+  initiator = hixxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  target = 0123456789abcdefghijklmnopqrstuvwxyz
+
+enter initiator memory state = (2048 characters)
+enter target memory state = (2048 characters)
+enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+Memory States after Transaction
+  initiator = hixxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  target = 0123456789abcdefghijklmnopqrstuvwxyz
+
+enter initiator memory state = (2048 characters)
+enter target memory state = (2048 characters)
+enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+Memory States after Transaction
+  initiator = 0123456789abcdefghijklmnopqrstuvwxyz
+  target = pqrsxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+enter initiator memory state = (2048 characters)
+enter target memory state = (2048 characters)
+enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+Memory States after Transaction
+  initiator = 0123456789abcdefghijklmnopqrstuvwxyz
+  target = pqrsxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+enter initiator memory state = (2048 characters)
+enter target memory state = (2048 characters)
+enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+Memory States after Transaction
+  initiator = 9an8lmjkhivgtuxxxxxxxxxxxxxxxxxxxxxx
+  target = 0123456789abcdefghijklmnopqrstuvwxyz
+
+enter initiator memory state = (2048 characters)
+enter target memory state = (2048 characters)
+enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+Memory States after Transaction
+  initiator = 0123456789abcdefghijklmnopqrstuvwxyz
+  target = xxxxrqpxxxxsxxxxxxxxxxxxxxxxxxxxxxxx
+
+enter initiator memory state = (2048 characters)
+enter target memory state = (2048 characters)
+enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+Memory States after Transaction
+  initiator = ef89xxxxmnghxxxxxxxxxxxxxxxxxxxxxxxx
+  target = 0123456789abcdefghijklmnopqrstuvwxyz
+
+enter initiator memory state = (2048 characters)
+enter target memory state = (2048 characters)
+enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+Memory States after Transaction
+  initiator = 0123456789abcdefghijklmnopqrstuvwxyz
+  target = xxxxxxxxxxxxxxxxxtuvwxxxxxxxxxxxxxxx
+

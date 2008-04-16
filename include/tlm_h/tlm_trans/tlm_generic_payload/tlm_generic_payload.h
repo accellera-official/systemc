@@ -14,15 +14,15 @@
   language governing rights and limitations under the License.
 
  *****************************************************************************/
- 
+
 #ifndef __TLM_GENERIC_PAYLOAD_H__
 #define __TLM_GENERIC_PAYLOAD_H__
 
 #include "tlm_helpers.h"
 #include "tlm_gp.h"
 #include "tlm_data_serializers.h"
-
 #include "tlm_dmi.h"
+#include "tlm_endian_conv.h"
 
 #endif
 
