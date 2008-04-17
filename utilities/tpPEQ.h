@@ -175,8 +175,6 @@ class payload_event_queue:
   };
 
 public:
-
-  //callback????
   
   SC_HAS_PROCESS( payload_event_queue );
   
