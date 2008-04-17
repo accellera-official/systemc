@@ -23,25 +23,81 @@
 
 namespace tlm {
 
-template <unsigned int BUSWIDTH,
-          typename FW_IF,
-          typename BW_IF> class tlm_target_socket;
 
 template <unsigned int BUSWIDTH = 32,
           typename FW_IF = tlm_fw_transport_if<>,
           typename BW_IF = tlm_bw_transport_if<> >
-class tlm_initiator_socket : public sc_core::sc_port<FW_IF>
+class tlm_initiator_socket_base
+{
+public:
+  virtual ~tlm_initiator_socket_base() {}
+	
+  virtual sc_core::sc_port_b<FW_IF> & get_base_port() = 0;
+  virtual                    BW_IF  & get_base_interface() = 0;
+  virtual sc_core::sc_export<BW_IF> & get_base_export() = 0;
+};
+
+
+template <unsigned int BUSWIDTH,
+          typename FW_IF,
+          typename BW_IF> class tlm_target_socket_base;
+
+template <unsigned int BUSWIDTH,
+          typename FW_IF,
+          typename BW_IF,
+          int N
+#if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
+          ,sc_core::sc_port_policy POL
+#endif
+          > class tlm_target_socket;
+
+template <unsigned int BUSWIDTH = 32,
+          typename FW_IF = tlm_fw_transport_if<>,
+          typename BW_IF = tlm_bw_transport_if<>,
+          int N = 1
+#if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
+          ,sc_core::sc_port_policy POL = sc_core::SC_ONE_OR_MORE_BOUND
+#endif
+          >
+class tlm_initiator_socket :public tlm_initiator_socket_base<BUSWIDTH, FW_IF, BW_IF>, 
+                             public sc_core::sc_port<FW_IF, N
+#if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
+                                                        , POL
+#endif
+                                                    >
+
 {
 public:
   typedef FW_IF                                 fw_interface_type;
   typedef BW_IF                                 bw_interface_type;
-  typedef sc_core::sc_port<fw_interface_type>   port_type;
+  typedef sc_core::sc_port<fw_interface_type, N
+#if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
+                                            , POL
+#endif
+                                            >   port_type;
+
   typedef sc_core::sc_export<bw_interface_type> export_type;
   typedef tlm_target_socket<BUSWIDTH,
                             fw_interface_type,
-                            bw_interface_type>  target_socket_type;
+                            bw_interface_type,
+                            N
+#if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
+                            ,POL
+#endif
+                            >                        target_socket_type;
 
-  template <unsigned int, typename, typename>
+  typedef tlm_target_socket_base<BUSWIDTH,
+                                   fw_interface_type,
+                                   bw_interface_type>   base_target_socket_type;                                  
+  typedef tlm_initiator_socket_base<BUSWIDTH,
+                                    fw_interface_type,
+                                    bw_interface_type>  base_type;
+
+  template <unsigned int, typename, typename, int
+#if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
+           ,sc_core::sc_port_policy
+#endif
+           >
   friend class tlm_target_socket;
 
 public:
@@ -69,15 +125,15 @@ public:
   // - Binds the port of the target socket to the export of the initiator
   //   socket
   //
-  void bind(target_socket_type& s)
+  void bind(base_target_socket_type& s)
   {
     // initiator.port -> target.export
-    (*static_cast<port_type*>(this))(*static_cast<typename target_socket_type::export_type*>(&s));
+    (get_base_port())(s.get_base_interface());
     // target.port -> initiator.export
-    s.mPort(mExport);
+    (s.get_base_port())(get_base_interface());
   }
 
-  void operator() (target_socket_type& s)
+  void operator() (base_target_socket_type& s)
   {
     bind(s);
   }
@@ -86,15 +142,15 @@ public:
   // Bind initiator socket to initiator socket (hierarchical bind)
   // - Binds both the export and the port
   //
-  void bind(tlm_initiator_socket& s)
+  void bind(base_type& s)
   {
     // port
-    (*static_cast<port_type*>(this))(*static_cast<port_type*>(&s));
+    (get_base_port())(s.get_base_port());
     // export
-    s.mExport(mExport);
+    (s.get_base_export())(get_base_export());
   }
 
-  void operator() (tlm_initiator_socket& s)
+  void operator() (base_type& s)
   {
     bind(s);
   }
@@ -105,13 +161,18 @@ public:
   //
   void bind(bw_interface_type& ifs)
   {
-    mExport(ifs);
+    (get_base_export())(ifs);
   }
 
   void operator() (bw_interface_type& s)
   {
     bind(s);
   }
+
+  // Implementation of pure virtual functions of base class
+  virtual sc_core::sc_port_b<FW_IF> &   get_base_port()      { return *this;   }
+  virtual                    BW_IF  &   get_base_interface() { return mExport; }
+  virtual sc_core::sc_export<BW_IF> &   get_base_export()    { return mExport; }
 
 protected:
   export_type mExport;
@@ -122,24 +183,44 @@ protected:
 //
 
 template <unsigned int BUSWIDTH = 32,
-          typename TYPES = tlm_generic_payload_types>
+          typename TYPES = tlm_generic_payload_types,
+          int N = 1
+#if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
+          ,sc_core::sc_port_policy POL = sc_core::SC_ONE_OR_MORE_BOUND
+#endif
+          >          
 class tlm_conv_initiator_socket :
   public tlm_initiator_socket <BUSWIDTH,
                                tlm_fw_transport_if<TYPES>,
-                               tlm_bw_transport_if<TYPES> >
+                               tlm_bw_transport_if<TYPES>,
+                               N
+#if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
+                               ,POL
+#endif
+                              >
 {
 public:
   tlm_conv_initiator_socket() :
     tlm_initiator_socket<BUSWIDTH,
                          tlm_fw_transport_if<TYPES>,
-                         tlm_bw_transport_if<TYPES> >()
+                         tlm_bw_transport_if<TYPES>,
+                         N
+#if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
+                         ,POL
+#endif
+                         >()
   {
   }
 
   explicit tlm_conv_initiator_socket(const char* name) :
     tlm_initiator_socket<BUSWIDTH,
                          tlm_fw_transport_if<TYPES>,
-                         tlm_bw_transport_if<TYPES> >(name)
+                         tlm_bw_transport_if<TYPES>,
+                         N
+#if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
+                         ,POL
+#endif
+                         >(name)
   {
   }
 };
