@@ -203,6 +203,7 @@ public:
   ~payload_event_queue(){}
   
   void notify (tlm_payload_type& t, tlm_phase_type& p, const sc_core::sc_time& when){
+    //t.aquire();
     if (when==sc_core::SC_ZERO_TIME) {
       if (sc_core::sc_delta_count() & (sc_dt::uint64)0x1) //uneven delta cycle so delta delay is for even cylce
         m_evenDelta.insert(PAYLOAD(&t,p));
@@ -225,17 +226,17 @@ private:
   
   void fec(){
     //immediate yield notifications
-    while(m_immediateYield.next()) {PAYLOAD& tmp=m_immediateYield.get(); (m_owner->*m_cb)(*tmp.first, tmp.second);}
+    while(m_immediateYield.next()) {PAYLOAD& tmp=m_immediateYield.get(); (m_owner->*m_cb)(*tmp.first, tmp.second);} //tmp.first->release();}
     m_immediateYield.reset();
     
     //delta notifications
     if (sc_core::sc_delta_count() & (sc_dt::uint64) 0x1) {//uneven delta so put out all payloads for uneven delta
-      while (m_unevenDelta.next()) {PAYLOAD& tmp=m_unevenDelta.get(); (m_owner->*m_cb)(*tmp.first, tmp.second);}
+      while (m_unevenDelta.next()) {PAYLOAD& tmp=m_unevenDelta.get(); (m_owner->*m_cb)(*tmp.first, tmp.second);} //tmp.first->release();}
       m_unevenDelta.reset();
       if (m_evenDelta.size) m_e.notify(sc_core::SC_ZERO_TIME);
     }
     else {
-      while (m_evenDelta.next()) {PAYLOAD& tmp=m_evenDelta.get(); (m_owner->*m_cb)(*tmp.first, tmp.second);}
+      while (m_evenDelta.next()) {PAYLOAD& tmp=m_evenDelta.get(); (m_owner->*m_cb)(*tmp.first, tmp.second);} //tmp.first->release();}
       m_evenDelta.reset();  
       if (m_unevenDelta.size) m_e.notify(sc_core::SC_ZERO_TIME);
     }
@@ -247,7 +248,7 @@ private:
 
     while(m_ppq.getSize() && top==now) { // push all active ones into target
       PAYLOAD& tmp=m_ppq.top();
-      (m_owner->*m_cb)(*tmp.first, tmp.second);
+      (m_owner->*m_cb)(*tmp.first, tmp.second); //tmp.first->release();}
       m_ppq.delete_top();
       top=m_ppq.top_time();
     }
