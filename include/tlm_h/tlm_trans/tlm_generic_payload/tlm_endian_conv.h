@@ -223,8 +223,8 @@ static void return_context(txn_endian_context *tc) {
 // a set of constants for efficient filling of byte enables
 template<class D> class tlm_bool {
   public:
-    static D TRUE;
-    static D FALSE;
+    static D TLM_TRUE;
+    static D TLM_FALSE;
     static D make_uchar_array(uchar c) {
       uchar *tmp = new uchar[sizeof(D)];
       for(unsigned int i=0; i<sizeof(D); i++) tmp[i] = c;
@@ -232,8 +232,8 @@ template<class D> class tlm_bool {
     }
 };
 
-template<class D> D tlm_bool<D>::TRUE = tlm_bool<D>::make_uchar_array(1);
-template<class D> D tlm_bool<D>::FALSE = tlm_bool<D>::make_uchar_array(0);
+template<class D> D tlm_bool<D>::TLM_TRUE = tlm_bool<D>::make_uchar_array(1);
+template<class D> D tlm_bool<D>::TLM_FALSE = tlm_bool<D>::make_uchar_array(0);
 
 
 
@@ -242,7 +242,7 @@ template<class D> D tlm_bool<D>::FALSE = tlm_bool<D>::make_uchar_array(0);
 template<class D>
 inline void copy_d1(uchar *src1, uchar *src2, uchar *dest1, uchar *dest2) {
   *((D *)dest1) = *((D *)src1);
-  *((D *)dest2) = tlm_bool<D>::TRUE;
+  *((D *)dest2) = tlm_bool<D>::TLM_TRUE;
 }
 
 template<class D>
@@ -253,7 +253,7 @@ inline void copy_db1(uchar *src1, uchar *src2, uchar *dest1, uchar *dest2) {
 
 template<class D>
 inline void true_b1(uchar *src1, uchar *src2, uchar *dest1, uchar *dest2) {
-  *((D *)dest2) = tlm_bool<D>::TRUE;
+  *((D *)dest2) = tlm_bool<D>::TLM_TRUE;
 }
 
 template<class D>
@@ -272,7 +272,7 @@ inline void copy_dbytrue1(uchar *src1, uchar *src2, uchar *dest1, uchar *dest2) 
 }
 
 template<class D> inline void false_b1(uchar *dest1) {
-  *((D *)dest1) = tlm_bool<D>::FALSE;
+  *((D *)dest1) = tlm_bool<D>::TLM_FALSE;
 }
 
 template<class D> inline void no_b1(uchar *dest1) {
