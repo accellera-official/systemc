@@ -2,7 +2,7 @@ include ../../../build-unix/Makefile.config
 
 OBJ_NAME = gp2ext
 
-INCDIR = -I../../../common/include/SimpleSocket -I../../../common/include/models -I../../../common/include/utils -I../../include
+INCDIR = -I../../../common/include/models -I../../include
 SRCDIR = ../src
 
 CFLAGS = $(FLAGS) $(INCDIR)

@@ -2,7 +2,7 @@ include ../../../build-cygwin/Makefile.config
 
 OBJ_NAME = simple_AT_TA
 
-MY_INCLUDES = /I../../../common/include/SimpleSocket /I../../../common/include/models /I../../../common/include/utils
+MY_INCLUDES = /I../../../common/include/models
 SRCDIR = ../src
  
 CFLAGS = $(FLAGS) $(MY_INCLUDES)

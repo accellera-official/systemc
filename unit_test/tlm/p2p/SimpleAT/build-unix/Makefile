@@ -2,7 +2,7 @@ include ../../../build-unix/Makefile.config
 
 OBJ_NAME = simple_AT
 
-INCDIR = -I../../../common/include/SimpleSocket -I../../../common/include/utils -I../../../common/include/models
+INCDIR = -I../../../common/include/models
 SRCDIR = ../src
  
 CFLAGS = $(FLAGS) $(INCDIR)

@@ -7,7 +7,7 @@
 	<Tool
 		Name="VCCLCompilerTool"
 		AdditionalOptions="/vmg"
-		AdditionalIncludeDirectories="$(SYSTEMC)\..\src;$(TLM)\include"
+		AdditionalIncludeDirectories="$(SYSTEMC)\..\src;$(TLM)\include;$(TLM)\utilities"
 		PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS;SC_INCLUDE_DYNAMIC_PROCESSES"
 		RuntimeTypeInfo="true"
 		WarningLevel="3"

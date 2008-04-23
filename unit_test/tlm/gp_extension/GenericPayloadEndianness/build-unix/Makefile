@@ -2,7 +2,7 @@ include ../../../build-unix/Makefile.config
 
 OBJ_NAME = generic_payload_endianness
 
-INCDIR  = -I../include -I../../common/include -I../../../common/include/SimpleSocket -I../../../common/include/utils
+INCDIR  = -I../include -I../../common/include
 SRCDIR  = ../src
  
 CFLAGS = $(FLAGS) $(INCDIR)

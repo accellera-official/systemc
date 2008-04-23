@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/vmg"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\common\include\utils;..\..\..\common\include\models;..\..\..\common\include\SimpleSocket;..\include;..\..\common\include;..\..\..\common\include"
+				AdditionalIncludeDirectories="..\..\..\common\include\models;..\include;..\..\common\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -124,7 +124,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\..\common\include\utils;..\..\..\common\include\models;..\..\..\common\include\SimpleSocket;..\include;..\..\common\include;..\..\..\common\include"
+				AdditionalIncludeDirectories="..\..\..\common\include\models;..\include;..\..\common\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
@@ -200,18 +200,6 @@
 			>
 			<File
 				RelativePath="..\include\mem_map.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\common\include\SimpleSocket\simple_initiator_socket.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\common\include\SimpleSocket\simple_socket_utils.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\common\include\SimpleSocket\simple_target_socket.h"
 				>
 			</File>
 			<File

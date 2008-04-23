@@ -2,7 +2,7 @@ include ../../build-unix/Makefile.config
 
 OBJ_NAME = bus_dmi
 
-INCDIR = -I../../common/include/SimpleSocket -I../../common/include/models -I../../common/include/utils
+INCDIR = -I../../common/include/models
 SRCDIR = ../src
  
 CFLAGS = $(FLAGS) $(INCDIR)

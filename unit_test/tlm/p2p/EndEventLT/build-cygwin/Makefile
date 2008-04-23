@@ -2,7 +2,7 @@ include ../../../build-cygwin/Makefile.config
 
 OBJ_NAME = end_event_LT
 
-MY_INCLUDES = /I../../../common/include/SimpleSocket /I../../../common/include/models /I../../../common/include/utils
+MY_INCLUDES = /I../../../common/include/models
 SRCDIR = ../src
  
 CFLAGS = $(FLAGS) $(MY_INCLUDES)

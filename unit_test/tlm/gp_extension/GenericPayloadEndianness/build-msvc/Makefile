@@ -2,11 +2,7 @@
 
 OBJ_NAME = generic_payload_endianness
 
-MY_INCLUDES = /I../include \
-              /I../../../common/include \
-              /I../../../common/include/SimpleSocket \
-              /I../../../common/include/models \
-              /I../../../common/include/utils
+MY_INCLUDES = /I../include /I../../common/include
 
 SRCDIR = ..\src
 SRCCOMMONDIR = ..\..\common\src

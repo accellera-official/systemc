@@ -2,10 +2,7 @@
 
 OBJ_NAME = gp2ext
 
-MY_INCLUDES = /I../../../common/include/SimpleSocket \
- 			  /I../../../common/include/models \
- 			  /I../../../common/include/utils \
- 			  /I../../include
+MY_INCLUDES = /I../../../common/include/models /I../../include
 
 SRCDIR = ..\src
 SRCCOMMONDIR = ..\..\common\src

@@ -2,9 +2,7 @@
 
 OBJ_NAME = B_vs_NB
 
-MY_INCLUDES = /I../../../common/include/SimpleSocket \
-			  /I../../../common/include/models \
-			  /I../../../common/include/utils \
+MY_INCLUDES = /I../../../common/include/models \
 			  /I../../common/include/transactors \
  			  /I../../common/include/tlm_bus \
  			  /I../../common/include/tlm_annotated_ifs

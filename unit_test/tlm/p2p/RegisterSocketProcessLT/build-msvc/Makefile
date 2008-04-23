@@ -2,9 +2,7 @@
 
 OBJ_NAME = register_socket_process_LT
 
-MY_INCLUDES = /I../../../common/include/SimpleSocket \
-              /I..\..\..\common\include\models \
-              /I../../../common/include/utils
+MY_INCLUDES = /I..\..\..\common\include\models
               
 SRCDIR = ..\src
 SRCCOMMONDIR = ..\..\common\src

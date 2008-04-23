@@ -6,9 +6,7 @@ INCDIR  = -I$(SYSTEMC_INC_DIR) \
           -I$(TLM_INC_DIR) \
           -I../include \
           -I../../common/include \
-          -I../../../common/include/utils \
           -I../../../common/include/models \
-          -I../../../common/include/SimpleSocket
            
 SRCDIR  = ../src
  
