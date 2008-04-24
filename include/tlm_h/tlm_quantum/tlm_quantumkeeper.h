@@ -53,12 +53,21 @@ namespace tlm {
       //
       static void set_global_quantum(const sc_core::sc_time& t)
       {
-        mGlobalQuantum = t;
+        if (!mGlobalQuantum) {
+          mGlobalQuantum = new sc_core::sc_time(t);
+
+        } else {
+          *mGlobalQuantum = t;
+        }
       }
     
       static const sc_core::sc_time& get_global_quantum() 
       {
-        return mGlobalQuantum;
+        if (!mGlobalQuantum) {
+          mGlobalQuantum = new sc_core::sc_time(sc_core::SC_ZERO_TIME);
+        }
+
+        return *mGlobalQuantum;
       }
     
     public:
@@ -159,9 +168,9 @@ namespace tlm {
       //
       virtual sc_core::sc_time compute_local_quantum()
       {
-        if (mGlobalQuantum != sc_core::SC_ZERO_TIME) {
+        if (*mGlobalQuantum != sc_core::SC_ZERO_TIME) {
           const sc_dt::uint64 current = sc_core::sc_time_stamp().value();
-          const sc_dt::uint64 gQuant = mGlobalQuantum.value();
+          const sc_dt::uint64 gQuant = mGlobalQuantum->value();
           const sc_dt::uint64 tmp = (current/gQuant+sc_dt::uint64(1)) * gQuant;
           const sc_core::sc_time remainder = sc_core::sc_time(tmp - current,
                                                               false);
@@ -173,7 +182,7 @@ namespace tlm {
       }
     
     private:
-      static sc_core::sc_time mGlobalQuantum;
+      static sc_core::sc_time *mGlobalQuantum;
     
     protected:
       sc_core::sc_time mNextSyncPoint;
@@ -181,7 +190,7 @@ namespace tlm {
     };
     
     template <typename Dummy>
-    sc_core::sc_time tlm_quantumkeeper<Dummy>::mGlobalQuantum = sc_core::SC_ZERO_TIME;
+    sc_core::sc_time* tlm_quantumkeeper<Dummy>::mGlobalQuantum = 0;
   
     struct tlm_dummy {};
 
