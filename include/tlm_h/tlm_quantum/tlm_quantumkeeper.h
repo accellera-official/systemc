@@ -168,9 +168,9 @@ namespace tlm {
       //
       virtual sc_core::sc_time compute_local_quantum()
       {
-        if (*mGlobalQuantum != sc_core::SC_ZERO_TIME) {
+        if (get_global_quantum() != sc_core::SC_ZERO_TIME) {
           const sc_dt::uint64 current = sc_core::sc_time_stamp().value();
-          const sc_dt::uint64 gQuant = mGlobalQuantum->value();
+          const sc_dt::uint64 gQuant = get_global_quantum().value();
           const sc_dt::uint64 tmp = (current/gQuant+sc_dt::uint64(1)) * gQuant;
           const sc_core::sc_time remainder = sc_core::sc_time(tmp - current,
                                                               false);
@@ -182,6 +182,11 @@ namespace tlm {
       }
     
     private:
+      // sc_set_time_resolution can only be called before the first
+      // sc_time object is created. To make it possible to call 
+      // sc_set_time_resolution from sc_main, mGlobalQuantum should be
+      // pointer. Otherwise it will be created before main is called,
+      // which will cause sc_set_time_resolution to fail.
       static sc_core::sc_time *mGlobalQuantum;
     
     protected:
