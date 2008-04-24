@@ -3,7 +3,8 @@
 OBJ_NAME = generic_payload_mixendianness
 
 MY_INCLUDES = /I..\include \
-              /I..\..\common\include
+              /I..\..\common\include \
+              /I..\..\..\common\include\models
 
 SRCDIR = ..\src
 SRCCOMMONDIR = ..\..\common\src
