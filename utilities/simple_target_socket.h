@@ -19,7 +19,7 @@
 #define __SIMPLE_TARGET_SOCKET_H__
 
 #include "tlm.h"
-#include "MyPEQ.h"
+#include "PEQFifo.h"
 
 template <typename MODULE,
           unsigned int BUSWIDTH = 32,
@@ -407,7 +407,7 @@ private:
     BTransportPtr mBTransportPtr;
     TransportDebugPtr mTransportDebugPtr;
     GetDMIPtr mGetDMIPtr;
-    MyPEQ mPEQ;
+    PEQFifo mPEQ;
     bool mResponseInProgress;
     sc_core::sc_event mEndResponse;
   };
@@ -830,7 +830,7 @@ private:
     int mBTransportUserId;
     int mTransportDebugUserId;
     int mGetDMIUserId;
-    MyPEQ mPEQ;
+    PEQFifo mPEQ;
     bool mResponseInProgress;
     sc_core::sc_event mEndResponse;
   };

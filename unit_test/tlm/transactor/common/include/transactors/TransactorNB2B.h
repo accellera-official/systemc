@@ -23,7 +23,7 @@
 #include "tlm_annotated_ifs.h"
 #include "tlm_request.h"
 #include "tlm_response.h"
-#include "MyPEQ.h"
+#include "PEQFifo.h"
 //#include <systemc>
 
 class TransactorNB2B : public sc_core::sc_module
@@ -126,7 +126,7 @@ public:
   }
 
 private:
-  MyPEQ mTransactionPEQ;
+  PEQFifo mTransactionPEQ;
   sc_core::sc_event mEndTransactionEvent;
 };
 

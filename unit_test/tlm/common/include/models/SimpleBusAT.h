@@ -24,7 +24,7 @@
 #include "simple_target_socket.h"
 #include "simple_initiator_socket.h"
 
-#include "MyPEQ.h"
+#include "PEQFifo.h"
 
 template <int NR_OF_INITIATORS, int NR_OF_TARGETS>
 class SimpleBusAT : public sc_core::sc_module
@@ -368,11 +368,11 @@ private:
 private:
   PendingTransactions mPendingTransactions;
 
-  MyPEQ mRequestPEQ;
+  PEQFifo mRequestPEQ;
   sc_core::sc_event mBeginRequestEvent;
   sc_core::sc_event mEndRequestEvent;
 
-  MyPEQ mResponsePEQ;
+  PEQFifo mResponsePEQ;
   sc_core::sc_event mBeginResponseEvent;
   sc_core::sc_event mEndResponseEvent;
 };

@@ -15,22 +15,22 @@
 
  *****************************************************************************/
 
-#ifndef MY_PEQ_H
-#define MY_PEQ_H
+#ifndef PEQFIFO_H
+#define PEQFIFO_H
 
 //#include "tlm.h"
 #include <systemc>
 #include <map>
 
-class MyPEQ : public sc_core::sc_module
+class PEQFifo : public sc_core::sc_module
 {
 public:
   typedef tlm::tlm_generic_payload transaction_type;
   typedef std::pair<const sc_core::sc_time, transaction_type*> pair_type;
 
 public:
-  SC_HAS_PROCESS(MyPEQ);
-  MyPEQ(sc_core::sc_module_name name) : sc_core::sc_module(name)
+  SC_HAS_PROCESS(PEQFifo);
+  PEQFifo(sc_core::sc_module_name name) : sc_core::sc_module(name)
   {
   }
 
