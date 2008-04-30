@@ -29,7 +29,7 @@ template <typename MODULE,
           ,sc_core::sc_port_policy POL = sc_core::SC_ONE_OR_MORE_BOUND
 #endif
           >
-class SimpleMultiInitiatorSocket: public MultiInitBase< BUSWIDTH, 
+class TrivialMultiInitiatorSocket: public MultiInitBase< BUSWIDTH, 
                                                         TYPES,
                                                         N
 #if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
@@ -64,7 +64,7 @@ public:
   typedef typename base_type::base_target_socket_type base_target_socket_type;
 
   //CTOR
-  SimpleMultiInitiatorSocket(const char* name)
+  TrivialMultiInitiatorSocket(const char* name)
       : base_type((std::string(name)+std::string("_base")).c_str())
       , m_mod(0)
       , m_nb_cb(0)
@@ -75,9 +75,9 @@ public:
   {
   }
 
-  ~SimpleMultiInitiatorSocket(){
+  ~TrivialMultiInitiatorSocket(){
     //clean up everything allocated by 'new'
-    for (int i=0; i<m_binders.size(); i++) delete m_binders[i];
+    for (unsigned int i=0; i<m_binders.size(); i++) delete m_binders[i];
   }
   
   void displayWarning(const std::string& text){
@@ -172,7 +172,7 @@ public:
     if (m_beoe_disabled) return;
     std::vector<callback_binder_bw<TYPES>* >& binders=getHierarchBind()->getBinders();
     m_used_sockets=getHierarchBind()->getSockets();
-    for (int i=0; i<binders.size(); i++) {
+    for (unsigned int i=0; i<binders.size(); i++) {
       binders[i]->setCallBacks(m_nb_f, m_dmi_f);
     }
   }
@@ -202,6 +202,7 @@ public:
 
   //get access to sub port
   tlm_fw_transport_if<TYPES>* operator[](int i){return m_used_sockets[i];}
+  unsigned int size() {return m_used_sockets.size();}
 
 protected:
   //implementation of base class interface

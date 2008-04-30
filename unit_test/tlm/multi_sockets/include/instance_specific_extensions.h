@@ -167,7 +167,7 @@ class tlm_private_extension_container{
   void resize(){
     //TODO: eoe done check
     m_private_extensions_per_accessor.resize(max_num_accessors());
-    for (int i=0; i<m_private_extensions_per_accessor.size(); i++) {
+    for (unsigned int i=0; i<m_private_extensions_per_accessor.size(); i++) {
       m_private_extensions_per_accessor[i]=new tlm_private_extensions_per_accessor<tlm_private_extension_container>(this, 
                                                                                    &tlm_private_extension_container::inc_use_count, 
                                                                                    &tlm_private_extension_container::dec_use_count
@@ -195,7 +195,7 @@ class tlm_private_extension_container{
 tlm_private_extension_container*& tlm_private_extension_container_pool::getUnused(){
   static tlm_private_extension_container* unused=NULL;
   return unused;
-};
+}
 
 tlm_private_extension_container* tlm_private_extension_container_pool::create(){  //dummy for now
   tlm_private_extension_container*& unused=getUnused();

@@ -80,7 +80,7 @@ public:
 
   ~TrivialMultiTargetSocket(){
     //clean up everything allocated by 'new'
-    for (int i=0; i<m_binders.size(); i++) delete m_binders[i];
+    for (unsigned int i=0; i<m_binders.size(); i++) delete m_binders[i];
   }
   
   void displayWarning(const std::string& text){
@@ -187,7 +187,7 @@ public:
     if (m_beoe_disabled) return;
     std::vector<callback_binder_fw<TYPES>* >& binders=getHierarchBind()->getBinders();
     std::map<unsigned int, tlm_bw_transport_if<TYPES>*>&  multiBinds=getHierarchBind()->getMultiBinds();
-    for (int i=0; i<binders.size(); i++) {
+    for (unsigned int i=0; i<binders.size(); i++) {
       binders[i]->setCallBacks(m_nb_f, m_b_f, m_dmi_f, m_dbg_f);
       if (multiBinds.find(i)!=multiBinds.end()) //this connection is multi-multi
         m_sockets.push_back(multiBinds[i]);
@@ -221,6 +221,8 @@ public:
 
   //get access to sub port
   tlm_bw_transport_if<TYPES>* operator[](int i){return m_sockets[i];}
+  
+  unsigned int size(){return m_sockets.size();}
 
 protected:
   //implementation of base class interface
@@ -243,9 +245,9 @@ protected:
   
   MODULE* m_mod; //the owning module
   nb_cb   m_nb_cb; //the nb callback of the owning module
-  dmi_cb  m_dmi_cb; //the dmi callback of the owning module
   b_cb    m_b_cb;
   dbg_cb  m_dbg_cb;
+  dmi_cb  m_dmi_cb; //the dmi callback of the owning module
   base_type*  m_hierarch_bind; //pointer to hierarchical bound multi port
   bool m_beoe_disabled;
   callback_binder_fw<TYPES> m_dummy;
