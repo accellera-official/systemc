@@ -195,6 +195,7 @@ public:
           // Notify end of response phase after ACCEPT delay
           t += ACCEPT_DELAY;
           phase = tlm::END_RESP;
+          socket->nb_transport_fw(trans, phase, t);
           logEndTransaction(trans);
           transPool.release(&trans);
           break;
