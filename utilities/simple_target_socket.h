@@ -166,8 +166,8 @@ private:
     {
       sc_core::sc_spawn_options opts;
       opts.set_sensitivity(&mPEQ.getEvent());
-      sc_spawn(sc_bind(&FwProcess::b2nb_thread, this), 
-               sc_core::sc_gen_unique_name("b2nb_thread"), &opts);
+      sc_core::sc_spawn(sc_bind(&FwProcess::b2nb_thread, this), 
+                        sc_core::sc_gen_unique_name("b2nb_thread"), &opts);
     }
   
     void setNBTransportPtr(MODULE* mod, NBTransportPtr p)
@@ -234,8 +234,8 @@ private:
           opts.dont_initialize();
           sc_core::sc_event *e = new sc_core::sc_event;
           opts.set_sensitivity(e);
-          sc_spawn(sc_bind(&FwProcess::nb2b_thread, this, sc_ref(trans), e), 
-                   sc_core::sc_gen_unique_name("nb2b_thread"), &opts);
+          sc_core::sc_spawn(sc_bind(&FwProcess::nb2b_thread, this, sc_ref(trans), e), 
+                            sc_core::sc_gen_unique_name("nb2b_thread"), &opts);
           e->notify(t);
           return tlm::TLM_ACCEPTED;
 
@@ -580,8 +580,8 @@ private:
     {
       sc_core::sc_spawn_options opts;
       opts.set_sensitivity(&mPEQ.getEvent());
-      sc_spawn(sc_bind(&FwProcess::b2nb_thread, this), 
-               sc_core::sc_gen_unique_name("b2nb_thread"), &opts);
+      sc_core::sc_spawn(sc_bind(&FwProcess::b2nb_thread, this), 
+                        sc_core::sc_gen_unique_name("b2nb_thread"), &opts);
     }
   
     void setNBTransportUserId(int id) { mNBTransportUserId = id; }
@@ -653,8 +653,8 @@ private:
           opts.dont_initialize();
           sc_core::sc_event *e = new sc_core::sc_event;
           opts.set_sensitivity(e);
-          sc_spawn(sc_bind(&FwProcess::nb2b_thread, this, sc_ref(trans), e), 
-                   sc_core::sc_gen_unique_name("nb2b_thread"), &opts);
+          sc_core::sc_spawn(sc_bind(&FwProcess::nb2b_thread, this, sc_ref(trans), e), 
+                            sc_core::sc_gen_unique_name("nb2b_thread"), &opts);
           e->notify(t);
           return tlm::TLM_ACCEPTED;
 
