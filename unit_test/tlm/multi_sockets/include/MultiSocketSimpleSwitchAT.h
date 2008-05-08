@@ -208,7 +208,7 @@ public:
       return tlm::TLM_COMPLETED;
     }
     else
-      assert(0);
+      assert(0); exit(1);
     return tlm::TLM_ACCEPTED;
   }
 
@@ -277,7 +277,7 @@ public:
             }
             break;
           default:
-            assert(0);
+            assert(0); exit(1);
             
         };
     }
