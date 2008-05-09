@@ -19,8 +19,6 @@
 
 #include "multi_socket_bases.h"
 
-namespace tlm{
-
 template <typename MODULE,
           unsigned int BUSWIDTH = 32,
           typename TYPES = tlm::tlm_generic_payload_types,
@@ -29,14 +27,14 @@ template <typename MODULE,
           ,sc_core::sc_port_policy POL = sc_core::SC_ONE_OR_MORE_BOUND
 #endif
           >
-class TrivialMultiTargetSocket: public MultiTargetBase< BUSWIDTH, 
+class trivial_multi_target_socket: public multi_target_base< BUSWIDTH, 
                                                         TYPES,
                                                         N
 #if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
                                                         ,POL
 #endif
                                                         >
-                              , public MultiToMultiBindBase<TYPES>
+                              , public multi_to_multi_bind_base<TYPES>
 {
 
 public:
@@ -53,7 +51,7 @@ public:
   typedef unsigned int (MODULE::*dbg_cb)(int, transaction_type& txn);
   typedef bool (MODULE::*dmi_cb)(int, transaction_type& txn, tlm::tlm_dmi& dmi);
   
-  typedef MultiTargetBase<BUSWIDTH, 
+  typedef multi_target_base<BUSWIDTH, 
                         TYPES,
                         N
 #if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION == 20050714)
@@ -65,7 +63,7 @@ public:
   typedef typename base_type::initiator_socket_type initiator_socket_type;
   
   //CTOR
-  TrivialMultiTargetSocket(const char* name)
+  trivial_multi_target_socket(const char* name)
       : base_type((std::string(name)+std::string("_base")).c_str())
       , m_mod(0)
       , m_nb_cb(0)
@@ -78,35 +76,35 @@ public:
   {
   }
 
-  ~TrivialMultiTargetSocket(){
+  ~trivial_multi_target_socket(){
     //clean up everything allocated by 'new'
     for (unsigned int i=0; i<m_binders.size(); i++) delete m_binders[i];
   }
   
-  void displayWarning(const std::string& text){
+  void display_warning(const std::string& text){
     std::stringstream s;
     s<<"WARNING in instance "<<base_type::name()<<": "<<text;
     SC_REPORT_WARNING("multi_socket", s.str().c_str());
   }
 
-  void displayError(const std::string& text){
+  void display_error(const std::string& text){
     std::stringstream s;
     s<<"ERROR in instance "<<base_type::name()<<": "<<text;
     SC_REPORT_ERROR("multi_socket", s.str().c_str());
   }
 
   //simply remember the callback function ptr
-  void registerNBTransport_fw(MODULE* mod,
+  void register_nb_transport_fw(MODULE* mod,
                               nb_cb cb)
   {
-    if (!sc_core::sc_export<tlm_fw_transport_if<TYPES> >::get_interface()) //if our export hasn't been bound yet (due to a hierarch binding)
-      sc_core::sc_export<tlm_fw_transport_if<TYPES> >::bind(m_dummy);      //  we bind it now      
+    if (!sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::get_interface()) //if our export hasn't been bound yet (due to a hierarch binding)
+      sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::bind(m_dummy);      //  we bind it now      
 
     if (m_mod) assert(m_mod==mod);
     else m_mod=mod;
     
     if (m_nb_cb){
-      displayWarning("NBTransport_bw callback already registered.");
+      display_warning("NBTransport_bw callback already registered.");
       return;
     }
     m_nb_cb=cb;
@@ -114,34 +112,34 @@ public:
   }
 
   //simply remember the callback function ptr
-  void registerBTransport(MODULE* mod,
+  void register_b_transport(MODULE* mod,
                               b_cb cb)
   {
-    if (!sc_core::sc_export<tlm_fw_transport_if<TYPES> >::get_interface()) //if our export hasn't been bound yet (due to a hierarch binding)
-      sc_core::sc_export<tlm_fw_transport_if<TYPES> >::bind(m_dummy);      //  we bind it now      
+    if (!sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::get_interface()) //if our export hasn't been bound yet (due to a hierarch binding)
+      sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::bind(m_dummy);      //  we bind it now      
 
     if (m_mod) assert(m_mod==mod);
     else m_mod=mod;
     
     if (m_b_cb){
-      displayWarning("BTransport callback already registered.");
+      display_warning("BTransport callback already registered.");
       return;
     }
     m_b_cb=cb;
     m_b_f=boost::bind<void>(m_b_cb, m_mod, _1, _2, _3);
   }
 
-  void registerDebugTransport(MODULE* mod,
+  void register_debug_transport(MODULE* mod,
                               dbg_cb cb)
   {
-    if (!sc_core::sc_export<tlm_fw_transport_if<TYPES> >::get_interface()) //if our export hasn't been bound yet (due to a hierarch binding)
-      sc_core::sc_export<tlm_fw_transport_if<TYPES> >::bind(m_dummy);      //  we bind it now      
+    if (!sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::get_interface()) //if our export hasn't been bound yet (due to a hierarch binding)
+      sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::bind(m_dummy);      //  we bind it now      
 
     if (m_mod) assert(m_mod==mod);
     else m_mod=mod;
     
     if (m_dbg_cb){
-      displayWarning("DebugTransport callback already registered.");
+      display_warning("DebugTransport callback already registered.");
       return;
     }
     m_dbg_cb=cb;
@@ -149,51 +147,48 @@ public:
   }
 
   //simply remember the callback function ptr
-  void registerDMI(MODULE* mod,
+  void register_DMI(MODULE* mod,
                    dmi_cb cb)
   {
-    if (!sc_core::sc_export<tlm_fw_transport_if<TYPES> >::get_interface()) //if our export hasn't been bound yet (due to a hierarch binding)
-      sc_core::sc_export<tlm_fw_transport_if<TYPES> >::bind(m_dummy);      //  we bind it now      
+    if (!sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::get_interface()) //if our export hasn't been bound yet (due to a hierarch binding)
+      sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::bind(m_dummy);      //  we bind it now      
 
     if (m_mod) assert(m_mod==mod);
     else m_mod=mod;
 
     if (m_dmi_cb){
-      displayWarning("DMI callback already registered.");
+      display_warning("DMI callback already registered.");
       return;
     }
     m_dmi_cb=cb;
     m_nb_f=boost::bind<bool>(m_nb_cb, m_mod, _1, _2, _3);
   }
 
-  virtual tlm_fw_transport_if<TYPES>& get_base_interface()
+  virtual tlm::tlm_fw_transport_if<TYPES>& get_base_interface()
   {
-    if (m_hierarch_bind) displayError("Socket already bound hierarchically.");
-    if (!sc_core::sc_export<tlm_fw_transport_if<TYPES> >::get_interface()) //if our export hasn't been bound yet (due to a hierarch binding)
-      sc_core::sc_export<tlm_fw_transport_if<TYPES> >::bind(m_dummy);      //  we bind it now      
+    if (m_hierarch_bind) display_error("Socket already bound hierarchically.");
+    if (!sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::get_interface()) //if our export hasn't been bound yet (due to a hierarch binding)
+      sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::bind(m_dummy);      //  we bind it now      
     m_binders.push_back(new callback_binder_fw<TYPES>(m_binders.size()));
     return *m_binders[m_binders.size()-1];
   }
 
-  virtual sc_core::sc_export<tlm_fw_transport_if<TYPES> >& get_base_export()
+  virtual sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >& get_base_export()
   {
-//    if (!m_beoe_disabled){ //we are not bound hierarchically
-//      sc_export<tlm_fw_transport_if<TYPES> >::bind(m_dummy);
-//    }
     return *this;
   }
   
   void end_of_elaboration(){
     if (m_beoe_disabled) return;
-    std::vector<callback_binder_fw<TYPES>* >& binders=getHierarchBind()->getBinders();
-    std::map<unsigned int, tlm_bw_transport_if<TYPES>*>&  multiBinds=getHierarchBind()->getMultiBinds();
+    std::vector<callback_binder_fw<TYPES>* >& binders=get_hierarch_bind()->get_binders();
+    std::map<unsigned int, tlm::tlm_bw_transport_if<TYPES>*>&  multiBinds=get_hierarch_bind()->get_multi_binds();
     for (unsigned int i=0; i<binders.size(); i++) {
-      binders[i]->setCallBacks(m_nb_f, m_b_f, m_dmi_f, m_dbg_f);
+      binders[i]->set_callbacks(m_nb_f, m_b_f, m_dmi_f, m_dbg_f);
       if (multiBinds.find(i)!=multiBinds.end()) //this connection is multi-multi
         m_sockets.push_back(multiBinds[i]);
       else{ //we are bound to a normal socket
-        base_initiator_socket_type* test=dynamic_cast<base_initiator_socket_type*>(binders[i]->getOtherSide());
-        if (!test){displayError("Not bound to tlm_socket.");}
+        base_initiator_socket_type* test=dynamic_cast<base_initiator_socket_type*>(binders[i]->get_other_side());
+        if (!test){display_error("Not bound to tlm_socket.");}
         m_sockets.push_back(&test->get_base_interface());
       }
     }
@@ -205,11 +200,11 @@ public:
   void bind(base_type& s)
   {
     if (m_beoe_disabled){
-      displayWarning("Socket already bound hierarchically. Bind attempt ignored.");
+      display_warning("Socket already bound hierarchically. Bind attempt ignored.");
       return;
     }
-    disableBEOE();
-    s.setHierarchBind((base_type*)this);    
+    disable_BEOE();
+    s.set_hierarch_bind((base_type*)this);    
     base_type::bind(s); //satisfy SystemC
   }
 
@@ -220,26 +215,26 @@ public:
   }
 
   //get access to sub port
-  tlm_bw_transport_if<TYPES>* operator[](int i){return m_sockets[i];}
+  tlm::tlm_bw_transport_if<TYPES>* operator[](int i){return m_sockets[i];}
   
   unsigned int size(){return m_sockets.size();}
 
 protected:
   //implementation of base class interface
-  base_type* getHierarchBind(){if (m_hierarch_bind) return m_hierarch_bind->getHierarchBind(); else return this;}
-  std::map<unsigned int, tlm_bw_transport_if<TYPES>*>&  getMultiBinds(){return m_multiBinds;}
-  void setHierarchBind(base_type* h){m_hierarch_bind=h;}
-  tlm_fw_transport_if<TYPES>* getLastBinder(tlm_bw_transport_if<TYPES>* other){
-    m_multiBinds[m_binders.size()-1]=other;
+  base_type* get_hierarch_bind(){if (m_hierarch_bind) return m_hierarch_bind->get_hierarch_bind(); else return this;}
+  std::map<unsigned int, tlm::tlm_bw_transport_if<TYPES>*>&  get_multi_binds(){return m_multi_binds;}
+  void set_hierarch_bind(base_type* h){m_hierarch_bind=h;}
+  tlm::tlm_fw_transport_if<TYPES>* get_last_binder(tlm::tlm_bw_transport_if<TYPES>* other){
+    m_multi_binds[m_binders.size()-1]=other;
     return m_binders[m_binders.size()-1];
   }
   
-  std::map<unsigned int, tlm_bw_transport_if<TYPES>*> m_multiBinds;
+  std::map<unsigned int, tlm::tlm_bw_transport_if<TYPES>*> m_multi_binds;
     
-  void disableBEOE(){ m_beoe_disabled=true;}
-  std::vector<callback_binder_fw<TYPES>* >& getBinders(){return m_binders;}
+  void disable_BEOE(){ m_beoe_disabled=true;}
+  std::vector<callback_binder_fw<TYPES>* >& get_binders(){return m_binders;}
   //vector of connected sockets
-  std::vector<tlm_bw_transport_if<TYPES>*> m_sockets;
+  std::vector<tlm::tlm_bw_transport_if<TYPES>*> m_sockets;
   //vector of binders that convert untagged interface into tagged interface
   std::vector<callback_binder_fw<TYPES>*> m_binders;
   
@@ -258,7 +253,5 @@ protected:
   boost::function<bool (int i, transaction_type& txn, tlm::tlm_dmi& dmi)> m_dmi_f;
 
 };
-
-}
 
 #endif

@@ -22,7 +22,7 @@
 #include "tlm.h"
 
 template <typename PAYLOAD>
-class timeorderedlist
+class time_ordered_list
 {
 public:
   struct element
@@ -40,7 +40,7 @@ public:
   element *list;
   unsigned int size;
     
-  timeorderedlist() 
+  time_ordered_list() 
     : nill(new element()),
       empties(NULL),
       list(nill),
@@ -48,7 +48,7 @@ public:
   {
   }
   
-  ~timeorderedlist() {
+  ~time_ordered_list() {
     while(size) {
       delete_top();
     }
@@ -261,7 +261,7 @@ private:
   OWNER* m_owner;
   cb     m_cb;
   
-  timeorderedlist<PAYLOAD> m_ppq;
+  time_ordered_list<PAYLOAD> m_ppq;
   delta_list m_unevenDelta;
   delta_list m_evenDelta;
   delta_list m_immediateYield;

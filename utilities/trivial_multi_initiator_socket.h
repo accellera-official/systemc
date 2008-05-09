@@ -19,8 +19,6 @@
 
 #include "multi_socket_bases.h"
 
-namespace tlm{
-
 template <typename MODULE,
           unsigned int BUSWIDTH = 32,
           typename TYPES = tlm::tlm_generic_payload_types,
@@ -29,7 +27,7 @@ template <typename MODULE,
           ,sc_core::sc_port_policy POL = sc_core::SC_ONE_OR_MORE_BOUND
 #endif
           >
-class TrivialMultiInitiatorSocket: public MultiInitBase< BUSWIDTH, 
+class trivial_multi_initiator_socket: public multi_init_base< BUSWIDTH, 
                                                         TYPES,
                                                         N
 #if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
@@ -53,7 +51,7 @@ public:
                                          sc_core::sc_time&);
   typedef void (MODULE::*dmi_cb)(int, sc_dt::uint64, sc_dt::uint64);
 
-  typedef MultiInitBase<BUSWIDTH, 
+  typedef multi_init_base<BUSWIDTH, 
                         TYPES,
                         N
 #if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
@@ -64,7 +62,7 @@ public:
   typedef typename base_type::base_target_socket_type base_target_socket_type;
 
   //CTOR
-  TrivialMultiInitiatorSocket(const char* name)
+  trivial_multi_initiator_socket(const char* name)
       : base_type((std::string(name)+std::string("_base")).c_str())
       , m_mod(0)
       , m_nb_cb(0)
@@ -75,18 +73,18 @@ public:
   {
   }
 
-  ~TrivialMultiInitiatorSocket(){
+  ~trivial_multi_initiator_socket(){
     //clean up everything allocated by 'new'
     for (unsigned int i=0; i<m_binders.size(); i++) delete m_binders[i];
   }
   
-  void displayWarning(const std::string& text){
+  void display_warning(const std::string& text){
     std::stringstream s;
     s<<"WARNING in instance "<<base_type::name()<<": "<<text;
     SC_REPORT_WARNING("multi_socket", s.str().c_str());
   }
 
-  void displayError(const std::string& text){
+  void display_error(const std::string& text){
     std::stringstream s;
     s<<"ERROR in instance "<<base_type::name()<<": "<<text;
     SC_REPORT_ERROR("multi_socket", s.str().c_str());
@@ -97,7 +95,7 @@ public:
 
 
   //simply remember the callback function ptr
-  void registerNBTransport_bw(MODULE* mod,
+  void register_nb_transport_bw(MODULE* mod,
                               sync_enum_type (MODULE::*cb)(int,
                                                            transaction_type&,
                                                            phase_type&,
@@ -107,7 +105,7 @@ public:
     else m_mod=mod;
     
     if (m_nb_cb){
-      displayWarning("NBTransport_bw callback already registered.");
+      display_warning("NBTransport_bw callback already registered.");
       return;
     }
     m_nb_cb=cb;
@@ -115,27 +113,27 @@ public:
   }
 
   //simply remember the callback function ptr
-  void registerInvalidateDMI(MODULE* mod,
+  void register_invalidate_DMI(MODULE* mod,
                              void (MODULE::*cb)(int, sc_dt::uint64, sc_dt::uint64))
   {
     if (m_mod) assert(m_mod==mod);
     else m_mod=mod;
 
     if (m_dmi_cb){
-      displayWarning("InvalidateDMI callback already registered.");
+      display_warning("InvalidateDMI callback already registered.");
       return;
     }
     m_dmi_cb=cb;
     m_dmi_f=boost::bind<void>(m_dmi_cb, m_mod, _1, _2, _3);
   }
 
-  virtual tlm_bw_transport_if<TYPES>& get_base_interface()
+  virtual tlm::tlm_bw_transport_if<TYPES>& get_base_interface()
   {
     m_binders.push_back(new callback_binder_bw<TYPES>(m_binders.size()));
     return *m_binders[m_binders.size()-1];
   }
 
-  virtual sc_core::sc_export<tlm_bw_transport_if<TYPES> >& get_base_export()
+  virtual sc_core::sc_export<tlm::tlm_bw_transport_if<TYPES> >& get_base_export()
   {
     if (!m_beoe_disabled) //we are not bound hierarchically
       base_type::mExport.bind(m_dummy);
@@ -145,17 +143,17 @@ public:
   void bind(base_target_socket_type& s)
   {
     if (m_hierarch_bind)
-      displayError("Already hierarchically bound.");      
+      display_error("Already hierarchically bound.");      
     base_type::bind(s); //satisfy systemC, leads to a call to get_base_interface()
-    sc_core::sc_export<tlm_fw_transport_if<TYPES> >* p_ex_s=dynamic_cast<sc_core::sc_export<tlm_fw_transport_if<TYPES> >*>(&s);
-    if (!p_ex_s) displayError("Multi socket not bound to tlm_socket.");
+    sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >* p_ex_s=dynamic_cast<sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >*>(&s);
+    if (!p_ex_s) display_error("Multi socket not bound to tlm_socket.");
     
-    MultiToMultiBindBase<TYPES>* test=dynamic_cast<MultiToMultiBindBase<TYPES>*> (p_ex_s);
+    multi_to_multi_bind_base<TYPES>* test=dynamic_cast<multi_to_multi_bind_base<TYPES>*> (p_ex_s);
     if (test) //did we just do a multi-multi bind??
-      m_sockets.push_back(test->getLastBinder(m_binders[m_binders.size()-1]));
+      m_sockets.push_back(test->get_last_binder(m_binders[m_binders.size()-1]));
     else{  // if not just bind normally
-      sc_core::sc_export<tlm_fw_transport_if<TYPES> >& ex_s=*p_ex_s;
-      m_sockets.push_back(&((tlm_fw_transport_if<TYPES>&)ex_s));
+      sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >& ex_s=*p_ex_s;
+      m_sockets.push_back(&((tlm::tlm_fw_transport_if<TYPES>&)ex_s));
     }
   }
 
@@ -170,10 +168,10 @@ public:
       base_type::mExport.bind(m_dummy);      //  we bind it now
     }
     if (m_beoe_disabled) return;
-    std::vector<callback_binder_bw<TYPES>* >& binders=getHierarchBind()->getBinders();
-    m_used_sockets=getHierarchBind()->getSockets();
+    std::vector<callback_binder_bw<TYPES>* >& binders=get_hierarch_bind()->get_binders();
+    m_used_sockets=get_hierarch_bind()->get_sockets();
     for (unsigned int i=0; i<binders.size(); i++) {
-      binders[i]->setCallBacks(m_nb_f, m_dmi_f);
+      binders[i]->set_callbacks(m_nb_f, m_dmi_f);
     }
   }
 
@@ -183,13 +181,13 @@ public:
   void bind(base_type& s)
   {
     if (m_binders.size()) //a multi socket is either bound hierarchically or directly
-      displayError("Socket already directly bound.");
+      display_error("Socket already directly bound.");
     if (m_hierarch_bind){
-      displayWarning("Socket already bound hierarchically. Bind attempt ignored.");
+      display_warning("Socket already bound hierarchically. Bind attempt ignored.");
       return;
     }
     //remember to which socket we are hierarchically bound and disable it, so that it won't try to register callbacks itself
-    s.disableBEOE();
+    s.disable_BEOE();
     m_hierarch_bind=&s;    
     base_type::bind(s); //satisfy SystemC
   }
@@ -201,18 +199,18 @@ public:
   }
 
   //get access to sub port
-  tlm_fw_transport_if<TYPES>* operator[](int i){return m_used_sockets[i];}
+  tlm::tlm_fw_transport_if<TYPES>* operator[](int i){return m_used_sockets[i];}
   unsigned int size() {return m_used_sockets.size();}
 
 protected:
   //implementation of base class interface
-  base_type* getHierarchBind(){if (m_hierarch_bind) return m_hierarch_bind->getHierarchBind(); else return this;}
-  void disableBEOE(){ m_beoe_disabled=true;}
-  std::vector<callback_binder_bw<TYPES>* >& getBinders(){return m_binders;}
-  std::vector<tlm_fw_transport_if<TYPES>*>& getSockets(){return m_sockets;}
+  base_type* get_hierarch_bind(){if (m_hierarch_bind) return m_hierarch_bind->get_hierarch_bind(); else return this;}
+  void disable_BEOE(){ m_beoe_disabled=true;}
+  std::vector<callback_binder_bw<TYPES>* >& get_binders(){return m_binders;}
+  std::vector<tlm::tlm_fw_transport_if<TYPES>*>& get_sockets(){return m_sockets;}
   //vector of connected sockets
-  std::vector<tlm_fw_transport_if<TYPES>*> m_sockets;
-  std::vector<tlm_fw_transport_if<TYPES>*> m_used_sockets;
+  std::vector<tlm::tlm_fw_transport_if<TYPES>*> m_sockets;
+  std::vector<tlm::tlm_fw_transport_if<TYPES>*> m_used_sockets;
   //vector of binders that convert untagged interface into tagged interface
   std::vector<callback_binder_bw<TYPES>*> m_binders;
   
@@ -226,7 +224,5 @@ protected:
   boost::function<sync_enum_type (int i, transaction_type& txn, phase_type& p, sc_core::sc_time& t)> m_nb_f;
   boost::function<void (int i, sc_dt::uint64 l, sc_dt::uint64 u)> m_dmi_f;
 };
-
-}
 
 #endif

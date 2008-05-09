@@ -24,7 +24,7 @@
 #include "../utilities/trivial_multi_target_socket.h"
 #include "simpleAddressMap.h"
 #include "extensionPool.h"
-#include "instance_specific_extensions.h"
+#include "../utilities/instance_specific_extensions.h"
 #include "../utilities/tpPEQ.h"
 
 
@@ -47,8 +47,8 @@ public:
   typedef tlm::tlm_generic_payload                                 transaction_type;
   typedef tlm::tlm_phase                                           phase_type;
   typedef tlm::tlm_sync_enum                                       sync_enum_type;
-  typedef tlm::TrivialMultiTargetSocket<MultiSocketSimpleSwitchAT>    target_socket_type;
-  typedef tlm::TrivialMultiInitiatorSocket<MultiSocketSimpleSwitchAT> initiator_socket_type;
+  typedef trivial_multi_target_socket<MultiSocketSimpleSwitchAT>    target_socket_type;
+  typedef trivial_multi_initiator_socket<MultiSocketSimpleSwitchAT> initiator_socket_type;
 
 public:
   target_socket_type target_socket; //the target multi socket
@@ -59,13 +59,13 @@ private:
   std::vector<std::deque<transaction_type*> > m_pendingReqs; //list of pending reqs per target
   std::vector<std::deque<transaction_type*> > m_pendingResps; //list of pending resps per initiator
   std::vector<sc_dt::uint64> m_masks; //address masks for each target
-  tlm::tlm_extension_accessor extensionAccess; //extension accessor to access private extensions
+  instance_specific_extension_accessor accessMySpecificExtensions; //extension accessor to access private extensions
   payload_event_queue<MultiSocketSimpleSwitchAT> m_bwPEQ; //PEQ in the fw direction
   payload_event_queue<MultiSocketSimpleSwitchAT> m_fwPEQ; //PEQ in the bw direction
 
 
   //an instance specific extension that tells us whether we are in a wrapped b_transport or not
-  class BTag : public tlm::tlm_private_extension<BTag>{
+  class BTag : public instance_specific_extension<BTag>{
   public:
     sc_core::sc_event event; //trigger this event when transaction is done
   };
@@ -73,7 +73,7 @@ private:
   //an instance specific extension that holds information about source and sink of a txn
   // as well as information if the req still has to be cleared and if the txn is already
   //  complete on the target side
-  class ConnectionInfo : public tlm::tlm_private_extension<ConnectionInfo>{
+  class ConnectionInfo : public instance_specific_extension<ConnectionInfo>{
     public:
     unsigned int  fwID; //socket number of sink
     unsigned int  bwID; //socket number of source
@@ -105,9 +105,9 @@ public:
     m_connInfoPool(10),
     m_target_count(0)
   {
-    target_socket.registerNBTransport_fw(this, &MultiSocketSimpleSwitchAT::initiatorNBTransport);
-    target_socket.registerBTransport(this, &MultiSocketSimpleSwitchAT::b_transport);
-    initiator_socket.registerNBTransport_bw(this, &MultiSocketSimpleSwitchAT::targetNBTransport);
+    target_socket.register_nb_transport_fw(this, &MultiSocketSimpleSwitchAT::initiatorNBTransport);
+    target_socket.register_b_transport(this, &MultiSocketSimpleSwitchAT::b_transport);
+    initiator_socket.register_nb_transport_bw(this, &MultiSocketSimpleSwitchAT::targetNBTransport);
   }
 
   void bindTargetSocket(initiator_socket_type::base_target_socket_type& target
@@ -137,14 +137,14 @@ public:
   void b_transport(int initiator_id, transaction_type& trans, sc_core::sc_time& t){
     //first make sure that there is no BTag (just for debugging)
     BTag* btag;
-    extensionAccess.privateAccess(trans).get_extension(btag);
+    accessMySpecificExtensions(trans).get_extension(btag);
     assert(!btag);
     BTag tag; //now add our BTag
-    extensionAccess.privateAccess(trans).set_extension(&tag);
+    accessMySpecificExtensions(trans).set_extension(&tag);
     phase_type phase=tlm::BEGIN_REQ; //then simply use our nb implementation (respects all the rules)
     initiatorNBTransport(initiator_id, trans, phase, t);
     wait(tag.event); //and wait for the event to be triggered
-    extensionAccess.privateAccess(trans).clear_extension(&tag); //don't forget to remove the extension
+    accessMySpecificExtensions(trans).clear_extension(&tag); //don't forget to remove the extension
   }
 
   //do a fw transmission
@@ -165,7 +165,7 @@ public:
       case tlm::TLM_COMPLETED:
         // Transaction finished
         ConnectionInfo* connInfo;
-        extensionAccess.privateAccess(trans).get_extension(connInfo); 
+        accessMySpecificExtensions(trans).get_extension(connInfo); 
         assert(connInfo);
         connInfo->alreadyComplete=true;
         phase=tlm::BEGIN_RESP;
@@ -187,7 +187,7 @@ public:
     //  but since we are not allowed to do so
     //   we have to insert the private info from END_RESP into another PEQ
     ConnectionInfo* connInfo;
-    extensionAccess.privateAccess(trans).get_extension(connInfo); 
+    accessMySpecificExtensions(trans).get_extension(connInfo);
     if (phase==tlm::BEGIN_REQ){
       //add our private information to the txn
       assert(!connInfo); 
@@ -196,20 +196,21 @@ public:
       connInfo->bwID=initiator_id;
       connInfo->clearReq=true; 
       connInfo->alreadyComplete=false;
-      extensionAccess.privateAccess(trans).set_extension(connInfo); 
+      accessMySpecificExtensions(trans).set_extension(connInfo);
       m_fwPEQ.notify(trans,phase,t);
     }
     else
     if (phase==tlm::END_RESP){
       assert(connInfo);
-      extensionAccess.privateAccess(trans).clear_extension(connInfo);
+      accessMySpecificExtensions(trans).clear_extension(connInfo);
       if (!connInfo->alreadyComplete) initiator_socket[connInfo->fwID]->nb_transport_fw(trans, phase, t);
       m_clearPEQ.notify(*connInfo, phase, t);
       return tlm::TLM_COMPLETED;
     }
     else
-      assert(0); exit(1);
+      {assert(0); exit(1);}
     return tlm::TLM_ACCEPTED;
+
   }
 
   sync_enum_type targetNBTransport(int portId,
@@ -230,12 +231,12 @@ public:
   void bwPEQcb(transaction_type& trans, const phase_type& phase){
     //first get our private info from the txn
     ConnectionInfo* connInfo;
-    extensionAccess.privateAccess(trans).get_extension(connInfo); 
+    accessMySpecificExtensions(trans).get_extension(connInfo); 
     assert(connInfo); 
     phase_type p=phase;
     sc_core::sc_time t=sc_core::SC_ZERO_TIME;
     BTag* btag;
-    extensionAccess.privateAccess(trans).get_extension(btag);
+    accessMySpecificExtensions(trans).get_extension(btag);
     bool doCall=btag==NULL; //we only will do a bw call if we are not in a wrapped b_transport
     if (phase==tlm::END_REQ | connInfo->clearReq){ //in case the target left out end_req clearReq reminds us to unlock the req port
       assert(m_pendingReqs[connInfo->fwID].front()==&trans);
@@ -259,7 +260,7 @@ public:
           if (!connInfo->alreadyComplete)
             initiator_socket[connInfo->fwID]->nb_transport_fw(trans, ph, t);
           m_clearPEQ.notify(*connInfo, ph,t); //schedule reset of response socket lock
-          extensionAccess.privateAccess(trans).clear_extension(connInfo); //remove the extension
+          accessMySpecificExtensions(trans).clear_extension(connInfo); //remove the extension
           btag->event.notify(t); //release b_transport
       }
       else
@@ -273,7 +274,7 @@ public:
             if (!connInfo->alreadyComplete)
               initiator_socket[connInfo->fwID]->nb_transport_fw(trans, ph, t);
             m_clearPEQ.notify(*connInfo, ph,t); //schedule reset of response socket lock
-            extensionAccess.privateAccess(trans).clear_extension(connInfo);  //remove extension
+            accessMySpecificExtensions(trans).clear_extension(connInfo);  //remove extension
             }
             break;
           default:
@@ -288,7 +289,7 @@ public:
   void fwPEQcb(transaction_type& trans, const phase_type& phase){
     //phase is always BEGIN_REQ
     ConnectionInfo* connInfo;
-    extensionAccess.privateAccess(trans).get_extension(connInfo); 
+    accessMySpecificExtensions(trans).get_extension(connInfo); 
     assert(connInfo); 
     trans.set_address(trans.get_address()&m_masks[connInfo->fwID]); //mask address
     m_pendingReqs[connInfo->fwID].push_back(&trans);

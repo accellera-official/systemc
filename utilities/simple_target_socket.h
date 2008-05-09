@@ -142,7 +142,18 @@ private:
   };
 
   class FwProcess : public tlm::tlm_fw_transport_if<TYPES>
+                  , public tlm::mm_interface
+                  , public tlm::mm_proxy
   {
+  private:
+    struct
+    mm_end_event_ext : public tlm::tlm_extension<mm_end_event_ext>{
+      tlm::tlm_extension_base* clone() const {return NULL;}
+      void free(){return;}
+      void copy_from(tlm::tlm_extension_base const &){return;}
+      sc_core::sc_event done;
+    };
+    
   public:
     typedef sync_enum_type (MODULE::*NBTransportPtr)(transaction_type&,
                                                      tlm::tlm_phase&,
@@ -267,17 +278,43 @@ private:
       } else if (mNBTransportPtr) {
         mPEQ.notify(trans, t);
         t = sc_core::SC_ZERO_TIME;
-
+        mm_end_event_ext mm_ext;
+        
+        bool mm_added=!mm_proxy::has_mm(&trans);
+        
+        if (mm_added){
+          trans.set_extension(&mm_ext);
+          mm_proxy::set_mm(&trans, this);
+          trans.acquire();
+        }
+        
         // wait until transaction is finished
         sc_core::sc_event endEvent;
         mOwner->mPendingTrans[&trans] = &endEvent;
         sc_core::wait(endEvent);
+
+        if (mm_added){
+          trans.release();
+          if (trans.get_ref_count()) wait(mm_ext.done);
+          mm_proxy::set_mm(&trans, NULL);
+          //there is no MM any more (we just removed it ;-) ) so it's safe
+          // to call clear
+          trans.clear_extension(&mm_ext);
+        }
 
       } else {
         std::cerr << mName << ": no transport callback registered" << std::endl;
         assert(0); exit(1);
 //        return tlm::TLM_COMPLETED;   ///< unreachable code
       }
+    }
+
+    void free(transaction_type* trans){
+      mm_end_event_ext* ext;
+      trans->get_extension(ext);
+      assert(ext);
+      trans->reset();
+      ext->done.notify();
     }
 
     unsigned int transport_dbg(transaction_type& trans)

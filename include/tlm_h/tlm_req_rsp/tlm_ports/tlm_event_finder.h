@@ -42,7 +42,7 @@ public:
     virtual ~tlm_event_finder_t()
         {}
 #if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
-    virtual const sc_event& find_event( sc_core::sc_interface* if_p = 0 ) const;
+    virtual const sc_core::sc_event& find_event( sc_core::sc_interface* if_p = 0 ) const;
 #else
     virtual const sc_core::sc_event& find_event() const;
 #endif
