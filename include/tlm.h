@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2007 by all Contributors.
+  source code Copyright (c) 1996-2008 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -20,6 +20,7 @@
 
 #include <systemc>    /// main SystemC header
 
+#include "tlm_h/tlm_version.h"
 #include "tlm_h/tlm_analysis/tlm_analysis.h"
 #include "tlm_h/tlm_peq/tlm_peq.h"
 #include "tlm_h/tlm_quantum/tlm_quantum.h"
