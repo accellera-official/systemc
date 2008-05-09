@@ -52,6 +52,8 @@ public:
     tlm_array(unsigned int size = 0, T default_value = 0)
         : m_data(0)
         , m_size(0)
+        , m_entries(NULL)
+        , m_last_entry(0)
         , m_default(default_value)
     {
         expand(size);
@@ -61,6 +63,7 @@ public:
     tlm_array(const tlm_array& orig)
     {
         m_size = orig.size();
+        m_last_entry=orig.m_last_entry;        
         if (m_size>0)
         {
             try {
@@ -69,9 +72,36 @@ public:
             catch (std::exception &e) {
                 report_error(e); return;
             }
+            try {
+                m_entries = new T*[m_size];
+            }
+            catch (std::exception &e) {
+                report_error(e); return;
+            }
             for(unsigned int i=0; i<m_size; i++)
             {
                 m_data[i] = orig.m_data[i];
+                m_entries[i] = orig.m_entries[i];
+            }
+        }
+    }
+    
+    // Copy 'cache' list. O(n^2) as we need to find extension position in original 'cache'
+    //  to add it in the right place in the copy.
+    void deep_copy_active_extensions_into(tlm_array& other) const
+    {
+        assert(m_size == other.m_size);
+        for (unsigned int j=0; j<m_size; j++)
+        {
+            if (m_data[j])
+            {
+                for (unsigned int i=0; i<m_last_entry; i++)
+                {
+                    if (m_data[j]==(*m_entries[i]))
+                    {
+                        other.m_entries[i]=&other.m_data[j];
+                    }
+                }
             }
         }
     }
@@ -112,31 +142,52 @@ public:
                 catch (std::exception &e) {
                     report_error(e); return;
                 }
+
+                try {
+                    m_entries = new T*[new_size];
+                }
+                catch (std::exception &e) {
+                    report_error(e); return;
+                }
+                
                 for(i=0; i<new_size; i++)
                 {
                     m_data[i] = m_default;
+                    m_entries[i] = NULL;
                 }
                 m_size = new_size;
+                m_last_entry=0;
             }
             else
             {
                 T* tmp = m_data;
+                T** tmp2 = m_entries;
                 try {
                     m_data = new T[new_size];
                 }
                 catch (std::exception &e) {
                     report_error(e); return;
                 }
+                try {
+                    m_entries = new T*[new_size];
+                }
+                catch (std::exception &e) {
+                    report_error(e); return;
+                }
+                
                 for(i=0; i<m_size; i++)
                 {
                     m_data[i] = tmp[i];
+                    m_entries[i] = tmp2[i];
                 }
                 for(i=m_size; i<new_size; i++)
                 {
                     m_data[i] = m_default;
+                    m_entries[i] = NULL;
                 }
                 m_size = new_size;
                 delete[] tmp;
+                delete[] tmp2;
             }
         }
     }
@@ -144,9 +195,28 @@ public:
     static const char* const kind_string;
     const char* kind() const { return kind_string; }
 
+    inline void insert(T* p)
+    {
+        m_entries[m_last_entry++]=p;
+    }
+
+    inline void free()
+    {
+        while(m_last_entry)
+        {
+            m_last_entry--;
+            (*m_entries[m_last_entry])->free();
+            *m_entries[m_last_entry]=0;
+        }
+    }
+
 protected:
     T* m_data;
     unsigned int m_size;
+
+    T** m_entries;
+    unsigned int m_last_entry;
+
     T m_default;
 
     // disabled:

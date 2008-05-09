@@ -190,7 +190,9 @@ class txn_endian_context : public tlm_extension<txn_endian_context> {
     // for pooling
     txn_endian_context *next;
     tlm_extension_base* clone() const {return 0;}
-    void anti_clone() {return;}
+    void free() {return;}
+    void copy_from(tlm_extension_base const &){return;}
+    
 };
 // Assumptions about transaction contexts:
 // 1) only the address attribute of a transaction

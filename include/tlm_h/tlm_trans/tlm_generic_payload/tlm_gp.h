@@ -24,6 +24,15 @@
 
 namespace tlm {
 
+class
+tlm_generic_payload;
+
+class mm_interface{
+public:
+  virtual void free(tlm_generic_payload*)=0;
+  virtual ~mm_interface(){}
+};
+
 //---------------------------------------------------------------------------
 // Classes and helper functions for the extension mechanism
 //---------------------------------------------------------------------------
@@ -42,6 +51,7 @@ class tlm_extension_base
 public:
     virtual tlm_extension_base* clone() const = 0;
     virtual void free() { delete this; }
+    virtual void copy_from(tlm_extension_base const &) = 0;
 protected:
     virtual ~tlm_extension_base() {}
     static unsigned int register_extension()
@@ -61,6 +71,7 @@ class tlm_extension : public tlm_extension_base
 {
 public:
     virtual tlm_extension_base* clone() const = 0;
+    virtual void copy_from(tlm_extension_base const &ext) = 0; //{assert(typeid(this)==typeid(ext)); assert(ID === ext.ID); assert(0);}
     virtual ~tlm_extension() {}
     const static unsigned int ID;
 };
@@ -92,39 +103,70 @@ enum tlm_response_status {
 // The generic payload class:
 //---------------------------------------------------------------------------
 class tlm_generic_payload {
-public:
 
+public:
+    friend class mm_proxy;
     //---------------
     // Constructors
     //---------------
     
     // Default constructor
     tlm_generic_payload() 
-        : m_command(TLM_IGNORE_COMMAND)
-        , m_address(0)
+        : m_address(0)
+        , m_command(TLM_IGNORE_COMMAND)
         , m_data(0)
         , m_length(0)
         , m_response_status(TLM_INCOMPLETE_RESPONSE)
+        , m_dmi(false)
         , m_byte_enable(0)
         , m_byte_enable_length(0)
         , m_streaming_width(0)
         , m_extensions(max_num_extensions())
-        , m_dmi(false)
+        , m_mm(NULL)
+        , m_ref_count(0)
     {
     }
+
+    tlm_generic_payload(mm_interface& mm) 
+        : m_address(0)
+        , m_command(TLM_IGNORE_COMMAND)
+        , m_data(0)
+        , m_length(0)
+        , m_response_status(TLM_INCOMPLETE_RESPONSE)
+        , m_dmi(false)
+        , m_byte_enable(0)
+        , m_byte_enable_length(0)
+        , m_streaming_width(0)
+        , m_extensions(max_num_extensions())
+        , m_mm(&mm)
+        , m_ref_count(0)
+    {
+    }
+        
+    void acquire(){m_ref_count++;}
+    void release(){if (--m_ref_count==0) m_mm->free(this);}
+    int get_ref_count(){return m_ref_count;}
     
+    void reset(){
+      //should the other members be reset too?
+      m_extensions.free();
+    };
+    
+
+private:
+    //disabled copy ctor and assignment operator.    
     // Copy constructor
     tlm_generic_payload(const tlm_generic_payload& x)
-        : m_command(x.get_command())
-        , m_address(x.get_address())
+        : m_address(x.get_address())
+        , m_command(x.get_command())
         , m_data(x.get_data_ptr())
         , m_length(x.get_data_length())
         , m_response_status(x.get_response_status())
+        , m_dmi(x.get_dmi_allowed())
         , m_byte_enable(x.get_byte_enable_ptr())
         , m_byte_enable_length(x.get_byte_enable_length())
         , m_streaming_width(x.get_streaming_width())
         , m_extensions(max_num_extensions())
-        , m_dmi(x.get_dmi_allowed())
     {
         // copy all extensions
         for(unsigned int i=0; i<m_extensions.size(); i++)
@@ -156,41 +198,51 @@ public:
         }
         return (*this);
     }
-
+public:
     // non-virtual deep-copying of the object
-    tlm_generic_payload* deep_copy() const
+    void deep_copy_into(tlm_generic_payload& other) const
     {
-        tlm_generic_payload* tmp = new tlm_generic_payload(*this);
+        other.m_command =            get_command();
+        other.m_address =            get_address();
+        other.m_data =               get_data_ptr();
+        other.m_length =             get_data_length();
+        other.m_response_status =    get_response_status();
+        other.m_byte_enable =        get_byte_enable_ptr();
+        other.m_byte_enable_length = get_byte_enable_length();
+        other.m_streaming_width =    get_streaming_width();
+        other.m_dmi =                get_dmi_allowed();
+
         // deep copy data
-        if(m_data && m_length)
+        // there must be enough space in the target transaction!
+        if(m_data && other.m_data)
         {
-            unsigned char* tmp_data = new unsigned char[m_length];
-            tmp->set_data_ptr(tmp_data);
-            for(unsigned int i=0; i<m_length; i++)
+            unsigned int min_length=(m_length>other.m_length)? other.m_length : m_length;
+            unsigned char* tmp_data=other.get_data_ptr();
+            for(unsigned int i=0; i<min_length; i++)
             {
                 tmp_data[i] = m_data[i];
             }
         }
         // deep copy byte enables
-        if(m_byte_enable && m_byte_enable_length)
+        // there must be enough space in the target transaction!
+        if(m_byte_enable && other.m_byte_enable)
         {
-            unsigned char* tmp_byte_enable = new unsigned char[m_byte_enable_length];
-            tmp->set_byte_enable_ptr(tmp_byte_enable);
-            tmp->set_byte_enable_length(m_byte_enable_length);
-            for (unsigned int i=0; i<m_byte_enable_length; i++)
+            unsigned int min_length=(m_byte_enable_length>other.m_byte_enable_length)? other.m_byte_enable_length : m_byte_enable_length;
+            unsigned char* tmp_byte_enable=other.get_byte_enable_ptr();
+            for(unsigned int i=0; i<min_length; i++)
             {
                 tmp_byte_enable[i] = m_byte_enable[i];
             }
         }
-        // deep copy extensions
+        // deep copy extensions (sticky and non-sticky)
         for(unsigned int i=0; i<m_extensions.size(); i++)
         {
             if(m_extensions[i])
             {
-                tmp->set_extension(i, m_extensions[i]->clone());
+                other.set_extension(i, m_extensions[i]->clone());
             }
         }
-        return tmp;
+        m_extensions.deep_copy_active_extensions_into(other.m_extensions);
     }
 
     //--------------
@@ -252,6 +304,13 @@ public:
     inline void                 set_byte_enable_ptr(unsigned char* byte_enable){m_byte_enable = byte_enable;}
     inline unsigned int         get_byte_enable_length() const {return m_byte_enable_length;}
     inline void                 set_byte_enable_length(const unsigned int byte_enable_length){m_byte_enable_length = byte_enable_length;}
+
+    // This is the "DMI-hint" a slave can set this to true if it
+    // wants to indicate that a DMI request would be supported:
+    inline void                 set_dmi_allowed(bool dmiAllowed) { m_dmi = dmiAllowed; }
+    inline bool                 get_dmi_allowed() const { return m_dmi; }
+
+private:
     
     /* --------------------------------------------------------------------- */
     /* Generic Payload attributes:                                           */
@@ -288,13 +347,12 @@ public:
     /* - m_streaming_width  :                                                */
     /* --------------------------------------------------------------------- */
 
-private:
-
-    tlm_command          m_command;
     sc_dt::uint64        m_address;
+    tlm_command          m_command;
     unsigned char*       m_data;
     unsigned int         m_length;
     tlm_response_status  m_response_status;
+    bool                 m_dmi;  
     unsigned char*       m_byte_enable;
     unsigned int         m_byte_enable_length;
     unsigned int         m_streaming_width;
@@ -340,18 +398,39 @@ public:
     // previous value:
     template <typename T> T* set_extension(T* ext)
     {
-        resize_extensions();
         T* tmp = static_cast<T*>(m_extensions[T::ID]);
         m_extensions[T::ID] = static_cast<tlm_extension_base*>(ext);
         return tmp;
     }
+    
     // non-templatized version with manual index:
     tlm_extension_base* set_extension(unsigned int index,
                                       tlm_extension_base* ext)
     {
-        resize_extensions();
         tlm_extension_base* tmp = m_extensions[index];
         m_extensions[index] = ext;
+        return tmp;
+    }
+
+    // Stick the pointer to an extension into the vector, return the
+    // previous value and schedule its release
+    template <typename T> T* set_nb_extension(T* ext)
+    {
+        T* tmp = static_cast<T*>(m_extensions[T::ID]);
+        m_extensions[T::ID] = static_cast<tlm_extension_base*>(ext);
+        if (!tmp) m_extensions.insert(&m_extensions[T::ID]);
+        assert(m_mm);
+        return tmp;
+    }
+    
+    // non-templatized version with manual index:
+    tlm_extension_base* set_nb_extension(unsigned int index,
+                                      tlm_extension_base* ext)
+    {
+        tlm_extension_base* tmp = m_extensions[index];
+        m_extensions[index] = ext;
+        if (!tmp) m_extensions.insert(&m_extensions[index]);
+        assert(m_mm);
         return tmp;
     }
 
@@ -372,17 +451,57 @@ public:
         return m_extensions[index];
     }
 
-    // Clear extension, the argument is needed to find the right index:
+    //this call just removes the extension from the txn but does not
+    // call free() or tells the MM to do so
+    // it return false if there was active MM so you are now in an unsafe situation
+    // recommended use: when 100% sure there is no MM
     template <typename T> void clear_extension(const T* ext)
     {
-        resize_extensions();
         m_extensions[T::ID] = static_cast<tlm_extension_base*>(0);
     }
+    
+    //this call just removes the extension from the txn but does not
+    // call free() or tells the MM to do so
+    // it return false if there was active MM so you are now in an unsafe situation
+    // recommended use: when 100% sure there is no MM
     template <typename T> void clear_extension()
     {
-        resize_extensions();
         m_extensions[T::ID] = static_cast<tlm_extension_base*>(0);
     }
+
+    //this call removes the extension from the txn and does
+    // call free() or tells the MM to do so when the txn is finally done
+    // recommended use: when not sure there is no MM
+    template <typename T> void release_extension(const T* ext)
+    {
+        if (m_mm)
+        {
+            m_extensions.insert(&m_extensions[T::ID]);
+        }
+        else 
+        {
+            ext->free();
+            m_extensions[T::ID] = static_cast<tlm_extension_base*>(0);
+        }
+    }
+    
+    //this call removes the extension from the txn and does
+    // call free() or tells the MM to do so when the txn is finally done
+    // recommended use: when not sure there is no MM
+    template <typename T> void release_extension()
+    {
+        if (m_mm)
+        {
+            m_extensions.insert(&m_extensions[T::ID]);
+        }
+        else 
+        {
+            m_extensions[T::ID]->free();
+            m_extensions[T::ID] = static_cast<tlm_extension_base*>(0);
+        }
+    }
+
+private:
     // Non-templatized version with manual index
     void clear_extension(unsigned int index)
     {
@@ -391,7 +510,7 @@ public:
             m_extensions[index] = static_cast<tlm_extension_base*>(0);
         }
     }
-
+public:
     // Make sure the extension array is large enough. Can be called once by
     // an initiator module (before issuing the first transaction) to make
     // sure that the extension array is of correct size. This is only needed
@@ -404,15 +523,14 @@ public:
 
 private:
     tlm_array<tlm_extension_base*> m_extensions;
+    mm_interface*                  m_mm;
+    unsigned int                   m_ref_count;
+};
 
+class mm_proxy{
 public:
-  // This is the "DMI-hint" a slave can set this to true if it
-  // wants to indicate that a DMI request would be supported:
-  void set_dmi_allowed(bool dmiAllowed) { m_dmi = dmiAllowed; }
-  bool get_dmi_allowed() const { return m_dmi; }
-
-private:
-  bool m_dmi;
+  void set_mm(tlm_generic_payload* p, mm_interface* mm) {p->m_mm=mm;}
+  bool has_mm(tlm_generic_payload* p) {return p->m_mm!=NULL;}
 };
 
 } // namespace tlm
