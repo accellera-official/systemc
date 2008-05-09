@@ -204,10 +204,8 @@ public:
     {
         other.m_command =            get_command();
         other.m_address =            get_address();
-        other.m_data =               get_data_ptr();
         other.m_length =             get_data_length();
         other.m_response_status =    get_response_status();
-        other.m_byte_enable =        get_byte_enable_ptr();
         other.m_byte_enable_length = get_byte_enable_length();
         other.m_streaming_width =    get_streaming_width();
         other.m_dmi =                get_dmi_allowed();
@@ -216,9 +214,8 @@ public:
         // there must be enough space in the target transaction!
         if(m_data && other.m_data)
         {
-            unsigned int min_length=(m_length>other.m_length)? other.m_length : m_length;
             unsigned char* tmp_data=other.get_data_ptr();
-            for(unsigned int i=0; i<min_length; i++)
+            for(unsigned int i=0; i<m_length; i++)
             {
                 tmp_data[i] = m_data[i];
             }
@@ -227,9 +224,8 @@ public:
         // there must be enough space in the target transaction!
         if(m_byte_enable && other.m_byte_enable)
         {
-            unsigned int min_length=(m_byte_enable_length>other.m_byte_enable_length)? other.m_byte_enable_length : m_byte_enable_length;
             unsigned char* tmp_byte_enable=other.get_byte_enable_ptr();
-            for(unsigned int i=0; i<min_length; i++)
+            for(unsigned int i=0; i<m_byte_enable_length; i++)
             {
                 tmp_byte_enable[i] = m_byte_enable[i];
             }
