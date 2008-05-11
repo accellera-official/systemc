@@ -49,7 +49,7 @@
                                             TLM_VERSION_STRING_MINOR TLM_VERSION_SEPARATOR \
                                             TLM_VERSION_STRING_PATCH
                                     
-#if ( TLM_IS_PRERELEASE == true )
+#if ( TLM_IS_PRERELEASE == TRUE )
 
 #define TLM_VERSION_STRING_PRE_START        " ("
 #define TLM_VERSION_STRING_PRERELEASE       TLM_VERSION_PRERELEASE
