@@ -20,8 +20,8 @@
 
 #include "tlm.h"
 
-#include "../utilities/trivial_multi_initiator_socket.h"
-#include "../utilities/trivial_multi_target_socket.h"
+#include "../utilities/multi_passthrough_initiator_socket.h"
+#include "../utilities/multi_passthrough_target_socket.h"
 #include "simpleAddressMap.h"
 #include "extensionPool.h"
 #include "../utilities/instance_specific_extensions.h"
@@ -47,8 +47,8 @@ public:
   typedef tlm::tlm_generic_payload                                 transaction_type;
   typedef tlm::tlm_phase                                           phase_type;
   typedef tlm::tlm_sync_enum                                       sync_enum_type;
-  typedef trivial_multi_target_socket<MultiSocketSimpleSwitchAT>    target_socket_type;
-  typedef trivial_multi_initiator_socket<MultiSocketSimpleSwitchAT> initiator_socket_type;
+  typedef multi_passthrough_target_socket<MultiSocketSimpleSwitchAT>    target_socket_type;
+  typedef multi_passthrough_initiator_socket<MultiSocketSimpleSwitchAT> initiator_socket_type;
 
 public:
   target_socket_type target_socket; //the target multi socket

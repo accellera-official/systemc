@@ -14,8 +14,8 @@
   language governing rights and limitations under the License.
 
  *****************************************************************************/
-#ifndef __TRIVIAL_MULTI_INITIATOR_SOCKET_H__
-#define __TRIVIAL_MULTI_INITIATOR_SOCKET_H__
+#ifndef __MULTI_PASSTHROUGH_INITIATOR_SOCKET_H__
+#define __MULTI_PASSTHROUGH_INITIATOR_SOCKET_H__
 
 #include "multi_socket_bases.h"
 
@@ -38,7 +38,7 @@ template <typename MODULE,
           ,sc_core::sc_port_policy POL = sc_core::SC_ONE_OR_MORE_BOUND
 #endif
           >
-class trivial_multi_initiator_socket: public multi_init_base< BUSWIDTH, 
+class multi_passthrough_initiator_socket: public multi_init_base< BUSWIDTH, 
                                                         TYPES,
                                                         N
 #if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
@@ -73,7 +73,7 @@ public:
   typedef typename base_type::base_target_socket_type base_target_socket_type;
 
   //CTOR
-  trivial_multi_initiator_socket(const char* name)
+  multi_passthrough_initiator_socket(const char* name)
       : base_type((std::string(name)+std::string("_base")).c_str())
       , m_mod(0)
       , m_nb_cb(0)
@@ -84,7 +84,7 @@ public:
   {
   }
 
-  ~trivial_multi_initiator_socket(){
+  ~multi_passthrough_initiator_socket(){
     //clean up everything allocated by 'new'
     for (unsigned int i=0; i<m_binders.size(); i++) delete m_binders[i];
   }
