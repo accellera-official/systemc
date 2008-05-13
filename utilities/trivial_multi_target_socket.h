@@ -14,8 +14,8 @@
   language governing rights and limitations under the License.
 
  *****************************************************************************/
-#ifndef __SIMPLE_MULTI_TARGET_SOCKET_H__
-#define __SIMPLE_MULTI_TARGET_SOCKET_H__
+#ifndef __TRIVIAL_MULTI_TARGET_SOCKET_H__
+#define __TRIVIAL_MULTI_TARGET_SOCKET_H__
 
 #include "multi_socket_bases.h"
 
