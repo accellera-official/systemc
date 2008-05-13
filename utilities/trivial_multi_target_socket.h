@@ -19,6 +19,17 @@
 
 #include "multi_socket_bases.h"
 
+/*
+This class implements a trivial multi target socket.
+The triviality refers to the fact that the socket does not
+do blocking to non-blocking or non-blocking to blocking conversions.
+
+It allows to connect multiple initiators to this socket.
+The user has to register callbacks for the fw interface methods
+he likes to use. The callbacks are basically equal to the fw interface
+methods but carry an additional integer that indicates to which
+index of this socket the calling initiator is connected.
+*/
 template <typename MODULE,
           unsigned int BUSWIDTH = 32,
           typename TYPES = tlm::tlm_generic_payload_types,
@@ -71,7 +82,7 @@ public:
       , m_dbg_cb(0)
       , m_dmi_cb(0)
       , m_hierarch_bind(0)
-      , m_beoe_disabled(false)
+      , m_eoe_disabled(false)
       , m_dummy(42)
   {
   }
@@ -81,6 +92,7 @@ public:
     for (unsigned int i=0; i<m_binders.size(); i++) delete m_binders[i];
   }
   
+  //simple helpers for warnings an errors to shorten in code notation
   void display_warning(const std::string& text){
     std::stringstream s;
     s<<"WARNING in instance "<<base_type::name()<<": "<<text;
@@ -93,103 +105,156 @@ public:
     SC_REPORT_ERROR("multi_socket", s.str().c_str());
   }
 
-  //simply remember the callback function ptr
+  //register callback for nb transport of fw interface
   void register_nb_transport_fw(MODULE* mod,
                               nb_cb cb)
   {
-    if (!sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::get_interface()) //if our export hasn't been bound yet (due to a hierarch binding)
-      sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::bind(m_dummy);      //  we bind it now      
+    //if our export hasn't been bound yet (due to a hierarch binding)
+    //  we bind it now.
+    //We do that here as the user of the target port HAS to bind at least on callback,
+    //otherwise the socket was useless. Nevertheless, the target socket may still
+    // stay unbound afterwards.
+    if (!sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::get_interface()) 
+      sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::bind(m_dummy);      
 
+    //make sure that only one module is registering callbacks with this socket
     if (m_mod) assert(m_mod==mod);
     else m_mod=mod;
     
+    //warn if there already is a callback
     if (m_nb_cb){
       display_warning("NBTransport_bw callback already registered.");
       return;
     }
+    
+    //store the callback and create the appropriate boost function
     m_nb_cb=cb;
     m_nb_f=boost::bind<sync_enum_type>(m_nb_cb, m_mod, _1, _2, _3, _4);
   }
 
-  //simply remember the callback function ptr
+  //register callback for b transport of fw interface
   void register_b_transport(MODULE* mod,
                               b_cb cb)
   {
-    if (!sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::get_interface()) //if our export hasn't been bound yet (due to a hierarch binding)
-      sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::bind(m_dummy);      //  we bind it now      
+    //if our export hasn't been bound yet (due to a hierarch binding)
+    //  we bind it now.
+    //We do that here as the user of the target port HAS to bind at least on callback,
+    //otherwise the socket was useless. Nevertheless, the target socket may still
+    // stay unbound afterwards.
+    if (!sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::get_interface())
+      sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::bind(m_dummy);
 
+    //make sure that only one module is registering callbacks with this socket
     if (m_mod) assert(m_mod==mod);
     else m_mod=mod;
     
+    //warn if there already is a callback
     if (m_b_cb){
       display_warning("BTransport callback already registered.");
       return;
     }
+    
+    //store the callback and create the appropriate boost function
     m_b_cb=cb;
     m_b_f=boost::bind<void>(m_b_cb, m_mod, _1, _2, _3);
   }
 
+  //register callback for debug transport of fw interface
   void register_debug_transport(MODULE* mod,
                               dbg_cb cb)
   {
-    if (!sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::get_interface()) //if our export hasn't been bound yet (due to a hierarch binding)
-      sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::bind(m_dummy);      //  we bind it now      
+    //if our export hasn't been bound yet (due to a hierarch binding)
+    //  we bind it now.
+    //We do that here as the user of the target port HAS to bind at least on callback,
+    //otherwise the socket was useless. Nevertheless, the target socket may still
+    // stay unbound afterwards.
+    if (!sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::get_interface())
+      sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::bind(m_dummy); 
 
+    //make sure that only one module is registering callbacks with this socket
     if (m_mod) assert(m_mod==mod);
     else m_mod=mod;
     
+    //warn if there already is a callback
     if (m_dbg_cb){
       display_warning("DebugTransport callback already registered.");
       return;
     }
+    
+    //store the callback and create the appropriate boost function
     m_dbg_cb=cb;
     m_dbg_f=boost::bind<unsigned int>(m_nb_cb, m_mod, _1, _2);
   }
 
-  //simply remember the callback function ptr
+  //register callback for DMI of fw interface
   void register_DMI(MODULE* mod,
                    dmi_cb cb)
   {
-    if (!sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::get_interface()) //if our export hasn't been bound yet (due to a hierarch binding)
-      sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::bind(m_dummy);      //  we bind it now      
+    //if our export hasn't been bound yet (due to a hierarch binding)
+    //  we bind it now.
+    //We do that here as the user of the target port HAS to bind at least on callback,
+    //otherwise the socket was useless. Nevertheless, the target socket may still
+    // stay unbound afterwards.
+    if (!sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::get_interface())
+      sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::bind(m_dummy);
 
+    //make sure that only one module is registering callbacks with this socket
     if (m_mod) assert(m_mod==mod);
     else m_mod=mod;
 
+    //warn if there already is a callback
     if (m_dmi_cb){
       display_warning("DMI callback already registered.");
       return;
     }
+    
+    //store the callback and create the appropriate boost function
     m_dmi_cb=cb;
     m_nb_f=boost::bind<bool>(m_nb_cb, m_mod, _1, _2, _3);
   }
 
+
+  //Override virtual functions of the tlm_target_socket:
+  // this function is called whenever an sc_port (as part of a init socket)
+  //  wants to bind to the export of the underlying tlm_target_socket
+  //At this time a callback binder is created an returned to the sc_port
+  // of the init socket, so that it binds to the callback binder
   virtual tlm::tlm_fw_transport_if<TYPES>& get_base_interface()
   {
-    if (m_hierarch_bind) display_error("Socket already bound hierarchically.");
-    if (!sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::get_interface()) //if our export hasn't been bound yet (due to a hierarch binding)
-      sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::bind(m_dummy);      //  we bind it now      
+    //error if this socket is already bound hierarchically
+    if (m_hierarch_bind) display_error("Socket already bound hierarchically.");  
+    
     m_binders.push_back(new callback_binder_fw<TYPES>(m_binders.size()));
     return *m_binders[m_binders.size()-1];
   }
 
+  //just return the export of the underlying tlm_target_socket in case of a hierarchical bind
   virtual sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >& get_base_export()
   {
     return *this;
   }
   
+  //the standard end of elaboration callback
   void end_of_elaboration(){
-    if (m_beoe_disabled) return;
+    //'break' here if the socket was told not to do callback binding
+    if (m_eoe_disabled) return;
+    
+    //get the callback binders and the multi binds of the top of the hierachical bind chain
+    // NOTE: this could be the same socket if there is no hierachical bind
     std::vector<callback_binder_fw<TYPES>* >& binders=get_hierarch_bind()->get_binders();
     std::map<unsigned int, tlm::tlm_bw_transport_if<TYPES>*>&  multiBinds=get_hierarch_bind()->get_multi_binds();
+
+    //iterate over all binders
     for (unsigned int i=0; i<binders.size(); i++) {
-      binders[i]->set_callbacks(m_nb_f, m_b_f, m_dmi_f, m_dbg_f);
-      if (multiBinds.find(i)!=multiBinds.end()) //this connection is multi-multi
+      binders[i]->set_callbacks(m_nb_f, m_b_f, m_dmi_f, m_dbg_f); //set the callbacks for the binder
+      if (multiBinds.find(i)!=multiBinds.end()) //check if this connection is multi-multi
+        //if so remember the interface
         m_sockets.push_back(multiBinds[i]);
-      else{ //we are bound to a normal socket
+      else{ //if we are bound to a normal socket
+        //get the calling port and try to cast it into a tlm socket base
         base_initiator_socket_type* test=dynamic_cast<base_initiator_socket_type*>(binders[i]->get_other_side());
         if (!test){display_error("Not bound to tlm_socket.");}
-        m_sockets.push_back(&test->get_base_interface());
+        m_sockets.push_back(&test->get_base_interface()); //remember the interface
       }
     }
   }
@@ -199,11 +264,16 @@ public:
   //
   void bind(base_type& s)
   {
-    if (m_beoe_disabled){
+    //warn if already bound hierarchically
+    if (m_eoe_disabled){
       display_warning("Socket already bound hierarchically. Bind attempt ignored.");
       return;
     }
-    disable_BEOE();
+    
+    //disable our own end of elaboration call
+    disable_cb_bind();
+    
+    //inform the bound target socket that it is bound hierarchically now
     s.set_hierarch_bind((base_type*)this);    
     base_type::bind(s); //satisfy SystemC
   }
@@ -217,6 +287,8 @@ public:
   //get access to sub port
   tlm::tlm_bw_transport_if<TYPES>* operator[](int i){return m_sockets[i];}
   
+  //get number of bound initiators
+  // NOTE: only at start of simulation or during runtime, as m_sockets gets created only at end of elaboration
   unsigned int size(){return m_sockets.size();}
 
 protected:
@@ -229,9 +301,11 @@ protected:
     return m_binders[m_binders.size()-1];
   }
   
+  //map that stores to which index a multi init socket is connected
+  // and the interface of the multi init socket
   std::map<unsigned int, tlm::tlm_bw_transport_if<TYPES>*> m_multi_binds;
     
-  void disable_BEOE(){ m_beoe_disabled=true;}
+  void disable_cb_bind(){ m_eoe_disabled=true;}
   std::vector<callback_binder_fw<TYPES>* >& get_binders(){return m_binders;}
   //vector of connected sockets
   std::vector<tlm::tlm_bw_transport_if<TYPES>*> m_sockets;
@@ -240,13 +314,16 @@ protected:
   
   MODULE* m_mod; //the owning module
   nb_cb   m_nb_cb; //the nb callback of the owning module
-  b_cb    m_b_cb;
-  dbg_cb  m_dbg_cb;
+  b_cb    m_b_cb;  //the b callback of the owning module
+  dbg_cb  m_dbg_cb; //the debug callback of the owning module
   dmi_cb  m_dmi_cb; //the dmi callback of the owning module
   base_type*  m_hierarch_bind; //pointer to hierarchical bound multi port
-  bool m_beoe_disabled;
-  callback_binder_fw<TYPES> m_dummy;
+  bool m_eoe_disabled; //bool that diables callback bindings at end of elaboration
+  callback_binder_fw<TYPES> m_dummy; //a dummy to bind to the export
 
+  //callbacks as boost functions
+  // (allows to pass the callback to another socket that does not know the type of the module that owns
+  //  the callbacks)
   boost::function<sync_enum_type (int i, transaction_type& txn, phase_type& p, sc_core::sc_time& t)> m_nb_f;
   boost::function<void (int i, transaction_type& txn, sc_core::sc_time& t)> m_b_f;
   boost::function<unsigned int (int i, transaction_type& txn)> m_dbg_f;
