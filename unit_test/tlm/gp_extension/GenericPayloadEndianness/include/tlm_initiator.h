@@ -29,7 +29,7 @@ class tlm_initiator : public sc_core::sc_module
 {
 public:
     
-    SimpleInitiatorSocket<tlm_initiator, 32 > socket;  // bus data width in bits
+    simple_initiator_socket<tlm_initiator, 32 > socket;  // bus data width in bits
 
     SC_HAS_PROCESS(tlm_initiator);
 

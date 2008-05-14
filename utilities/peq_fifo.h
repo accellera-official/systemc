@@ -15,22 +15,23 @@
 
  *****************************************************************************/
 
-#ifndef PEQFIFO_H
-#define PEQFIFO_H
+#ifndef __PEQ_FIFO_H__
+#define __PEQ_FIFO_H__
 
 //#include "tlm.h"
 #include <systemc>
 #include <map>
 
-class PEQFifo : public sc_core::sc_module
+template <class PAYLOAD>
+class peq_fifo : public sc_core::sc_module
 {
 public:
-  typedef tlm::tlm_generic_payload transaction_type;
+  typedef PAYLOAD transaction_type;
   typedef std::pair<const sc_core::sc_time, transaction_type*> pair_type;
 
 public:
-  SC_HAS_PROCESS(PEQFifo);
-  PEQFifo(sc_core::sc_module_name name) : sc_core::sc_module(name)
+  SC_HAS_PROCESS(peq_fifo);
+  peq_fifo(sc_core::sc_module_name name) : sc_core::sc_module(name)
   {
   }
 
@@ -41,7 +42,7 @@ public:
   }
 
   // needs to be called until it returns 0
-  transaction_type* getNextTransaction()
+  transaction_type* get_next_transaction()
   {
     if (mScheduledEvents.empty()) {
       return 0;
@@ -59,7 +60,7 @@ public:
     return 0;
   }
 
-  sc_core::sc_event& getEvent()
+  sc_core::sc_event& get_event()
   {
     return mEvent;
   }

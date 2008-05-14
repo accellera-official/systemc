@@ -28,7 +28,7 @@ class tlm_target : public sc_core::sc_module
 {
 public:
 
-    SimpleTargetSocket<tlm_target> socket; // default 32-bit
+    simple_target_socket<tlm_target> socket; // default 32-bit
 
     // constructor & destructor
     tlm_target(sc_core::sc_module_name name_, 
@@ -43,7 +43,7 @@ public:
         , m_checker(start_address, end_address, socket.get_bus_width()/8)
     {
       // register nb_transport method
-      socket.registerNBTransport(this, &tlm_target::myNBTransport);
+      socket.register_nb_transport_fw(this, &tlm_target::myNBTransport);
         
       mem = new unsigned int [(end_address-start_address+1)/4];
         

@@ -31,7 +31,7 @@ public:
   typedef tlm::tlm_generic_payload                   transaction_type;
   typedef tlm::tlm_phase                             phase_type;
   typedef tlm::tlm_sync_enum                         sync_enum_type;
-  typedef SimpleInitiatorSocket<SimpleATInitiator2>  initiator_socket_type;
+  typedef simple_initiator_socket<SimpleATInitiator2>  initiator_socket_type;
 
 public:
   // extended transaction, holds tlm_generic_payload + data storage
@@ -40,6 +40,10 @@ public:
   {
   public:
     MyTransaction()
+    {
+      this->set_data_ptr(reinterpret_cast<unsigned char*>(&mData));
+    }
+    MyTransaction(tlm::mm_interface& mm) : transaction_type(mm)
     {
       this->set_data_ptr(reinterpret_cast<unsigned char*>(&mData));
     }
@@ -53,13 +57,25 @@ public:
   typedef MyTransaction<unsigned int>  mytransaction_type;
 
   // Dummy Transaction Pool
-  template <typename T>
-  class SimplePool
+  class SimplePool : public tlm::mm_interface
   {
   public:
     SimplePool() {}
-    T* claim() { return new T(); }
-    void release(T* t) { delete t; }
+    mytransaction_type* claim()
+    { 
+      mytransaction_type* t = new mytransaction_type(*this);
+      t->acquire();
+      return t;
+    }
+    void release(mytransaction_type* t)
+    {
+      t->release();
+    }
+    void free(tlm::tlm_generic_payload* t)
+    {
+      t->reset(); 
+      delete t;
+    }
   };
 
 public:
@@ -79,7 +95,7 @@ public:
     mCurrentTransaction(0)
   {
     // register nb_transport method
-    socket.registerNBTransport_bw(this, &SimpleATInitiator2::myNBTransport);
+    socket.register_nb_transport_bw(this, &SimpleATInitiator2::myNBTransport);
 
     // Initiator thread
     SC_THREAD(run);
@@ -101,6 +117,8 @@ public:
     } else {
       return false;
     }
+
+    trans->set_data_length(4);
 
     ++mTransactionCount;
     return true;
@@ -264,7 +282,7 @@ private:
 private:
   unsigned int mNrOfTransactions;
   unsigned int mBaseAddress;
-  SimplePool<mytransaction_type> transPool;
+  SimplePool transPool;
   unsigned int mTransactionCount;
   sc_core::sc_event mEndRequestPhase;
   transaction_type* mCurrentTransaction;

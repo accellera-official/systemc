@@ -24,7 +24,7 @@
 #include "simple_target_socket.h"
 #include "simple_initiator_socket.h"
 
-#include "PEQFifo.h"
+#include "peq_fifo.h"
 
 template <int NR_OF_INITIATORS, int NR_OF_TARGETS>
 class SimpleBusAT : public sc_core::sc_module
@@ -33,8 +33,8 @@ public:
   typedef tlm::tlm_generic_payload               transaction_type;
   typedef tlm::tlm_phase                         phase_type;
   typedef tlm::tlm_sync_enum                     sync_enum_type;
-  typedef SimpleTargetSocketTagged<SimpleBusAT>    target_socket_type;
-  typedef SimpleInitiatorSocketTagged<SimpleBusAT> initiator_socket_type;
+  typedef simple_target_socket_tagged<SimpleBusAT>    target_socket_type;
+  typedef simple_initiator_socket_tagged<SimpleBusAT> initiator_socket_type;
 
 public:
   target_socket_type target_socket[NR_OF_INITIATORS];
@@ -48,13 +48,13 @@ public:
     mResponsePEQ("responsePEQ")
   {
      for (unsigned int i = 0; i < NR_OF_INITIATORS; ++i) {
-       target_socket[i].registerNBTransport(this, &SimpleBusAT::initiatorNBTransport, i);
-       target_socket[i].registerDebugTransport(this, &SimpleBusAT::transportDebug, i);
-       target_socket[i].registerDMI(this, &SimpleBusAT::getDMIPointer, i);
+       target_socket[i].register_nb_transport_fw(this, &SimpleBusAT::initiatorNBTransport, i);
+       target_socket[i].register_transport_dbg(this, &SimpleBusAT::transportDebug, i);
+       target_socket[i].register_get_direct_mem_ptr(this, &SimpleBusAT::getDMIPointer, i);
      }
      for (unsigned int i = 0; i < NR_OF_TARGETS; ++i) {
-       initiator_socket[i].registerNBTransport_bw(this, &SimpleBusAT::targetNBTransport, i);
-       initiator_socket[i].registerInvalidateDMI(this, &SimpleBusAT::invalidateDMIPointers, i);
+       initiator_socket[i].register_nb_transport_bw(this, &SimpleBusAT::targetNBTransport, i);
+       initiator_socket[i].register_invalidate_direct_mem_ptr(this, &SimpleBusAT::invalidateDMIPointers, i);
      }
 
      SC_THREAD(RequestThread);
@@ -97,10 +97,10 @@ public:
   void RequestThread()
   {
     while (true) {
-      wait(mRequestPEQ.getEvent());
+      wait(mRequestPEQ.get_event());
 
       transaction_type* trans;
-      while ((trans = mRequestPEQ.getNextTransaction())!=0) {
+      while ((trans = mRequestPEQ.get_next_transaction())!=0) {
         unsigned int portId = decode(trans->get_address());
         assert(portId < NR_OF_TARGETS);
         initiator_socket_type* decodeSocket = &initiator_socket[portId];
@@ -127,16 +127,21 @@ public:
           } else if (phase == tlm::END_REQ) {
             // Request phase finished, but response phase not yet started
             wait(t);
-            phase = tlm::END_REQ;
-            t = sc_core::SC_ZERO_TIME;
-            (*it->second.from)->nb_transport_bw(*trans, phase, t);
 
           } else if (phase == tlm::BEGIN_RESP) {
             mResponsePEQ.notify(*trans, t);
+            // Not needed to send END_REQ to initiator
             continue;
 
           } else { // END_RESP
             assert(0); exit(1);
+          }
+
+          // only send END_REQ to initiator if BEGIN_RESP was not already send
+          if (it->second.from) {
+            phase = tlm::END_REQ;
+            t = sc_core::SC_ZERO_TIME;
+            (*it->second.from)->nb_transport_bw(*trans, phase, t);
           }
 
           break;
@@ -161,28 +166,23 @@ public:
   void ResponseThread()
   {
     while (true) {
-      wait(mResponsePEQ.getEvent());
+      wait(mResponsePEQ.get_event());
 
       transaction_type* trans;
-      while ((trans = mResponsePEQ.getNextTransaction())!=0) {
+      while ((trans = mResponsePEQ.get_next_transaction())!=0) {
         PendingTransactionsIterator it = mPendingTransactions.find(trans);
         assert(it != mPendingTransactions.end());
 
         phase_type phase = tlm::BEGIN_RESP;
         sc_core::sc_time t = sc_core::SC_ZERO_TIME;
 
-        switch ((*it->second.from)->nb_transport_bw(*trans, phase, t)) {
+        target_socket_type* initiatorSocket = it->second.from;
+        // if BEGIN_RESP is send first we don't have to send END_REQ anymore
+        it->second.from = 0;
+
+        switch ((*initiatorSocket)->nb_transport_bw(*trans, phase, t)) {
         case tlm::TLM_COMPLETED:
           // Transaction finished
-
-          // Transaction may already be deleted (or re-used)
-          // --> immediately notify target
-          if (it->second.to) {
-            phase = tlm::END_RESP;
-            bool r = (*it->second.to)->nb_transport_fw(*trans, phase, t);
-            assert(r);
-          }
-          mPendingTransactions.erase(it);
           wait(t);
           break;
 
@@ -190,11 +190,22 @@ public:
         case tlm::TLM_UPDATED:
           // Transaction not yet finished
           wait(mEndResponseEvent);
-        break;
+          break;
 
         default:
           assert(0); exit(1);
         };
+
+        // forward END_RESP to target
+        if (it->second.to) {
+          phase = tlm::END_RESP;
+          t = sc_core::SC_ZERO_TIME;
+          sync_enum_type r = (*it->second.to)->nb_transport_fw(*trans, phase, t);
+          assert(r == tlm::TLM_COMPLETED);
+        }
+
+        mPendingTransactions.erase(it);
+        trans->release();
       }
     }
   }
@@ -209,24 +220,12 @@ public:
                                       sc_core::sc_time& t)
   {
     if (phase == tlm::BEGIN_REQ) {
+      trans.acquire();
       addPendingTransaction(trans, 0, initiator_id);
 
       mRequestPEQ.notify(trans, t);
 
     } else if (phase == tlm::END_RESP) {
-      // after returning true the transaction can be deleted (or re-used)
-      // --> immediately forward call to target
-      PendingTransactionsIterator it = mPendingTransactions.find(&trans);
-      assert(it != mPendingTransactions.end());
-
-      if (it->second.to) {
-        phase = tlm::END_RESP;
-        sync_enum_type r = (*it->second.to)->nb_transport_fw(trans, phase, t);
-        assert(r == tlm::TLM_COMPLETED);
-      }
-
-      mPendingTransactions.erase(it);
-
       mEndResponseEvent.notify(t);
       return tlm::TLM_COMPLETED;
 
@@ -251,12 +250,7 @@ public:
     }
 
     mEndRequestEvent.notify(t);
-    if (phase == tlm::END_REQ) {
-      PendingTransactionsIterator it = mPendingTransactions.find(&trans);
-      assert(it != mPendingTransactions.end());
-      (*it->second.from)->nb_transport_bw(trans, phase, t);
-
-    } else if (phase == tlm::BEGIN_RESP) {
+    if (phase == tlm::BEGIN_RESP) {
       mResponsePEQ.notify(trans, t);
     }
 
@@ -368,11 +362,11 @@ private:
 private:
   PendingTransactions mPendingTransactions;
 
-  PEQFifo mRequestPEQ;
+  peq_fifo<transaction_type> mRequestPEQ;
   sc_core::sc_event mBeginRequestEvent;
   sc_core::sc_event mEndRequestEvent;
 
-  PEQFifo mResponsePEQ;
+  peq_fifo<transaction_type> mResponsePEQ;
   sc_core::sc_event mBeginResponseEvent;
   sc_core::sc_event mEndResponseEvent;
 };

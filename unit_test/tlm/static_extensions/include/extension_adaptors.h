@@ -30,9 +30,9 @@ class adapt_ext2gp : public sc_core::sc_module
     public:
     typedef tlm::tlm_generic_payload                   initiator_payload_type;
     typedef tlm::tlm_generic_payload                   target_payload_type;
-    typedef SimpleInitiatorSocket<adapt_ext2gp, BUSWIDTH,
+    typedef simple_initiator_socket<adapt_ext2gp, BUSWIDTH,
                                   tlm::tlm_generic_payload_types> initiator_socket_type;
-    typedef SimpleTargetSocket<adapt_ext2gp, BUSWIDTH,
+    typedef simple_target_socket<adapt_ext2gp, BUSWIDTH,
                                my_extended_payload_types>  target_socket_type;
     
     target_socket_type  target_socket;
@@ -42,12 +42,12 @@ class adapt_ext2gp : public sc_core::sc_module
     adapt_ext2gp(sc_core::sc_module_name name_)
         : sc_core::sc_module(name_)
     {
-      target_socket.registerNBTransport(this, &adapt_ext2gp::forward_nb_transport);
-      target_socket.registerDebugTransport(this, &adapt_ext2gp::transport_debug);
-      target_socket.registerDMI(this, &adapt_ext2gp::get_dmi_pointer);
+      target_socket.register_nb_transport_fw(this, &adapt_ext2gp::forward_nb_transport);
+      target_socket.register_transport_dbg(this, &adapt_ext2gp::transport_debug);
+      target_socket.register_get_direct_mem_ptr(this, &adapt_ext2gp::get_dmi_pointer);
         
-      initiator_socket.registerNBTransport_bw(this, &adapt_ext2gp::backward_nb_transport);
-      initiator_socket.registerInvalidateDMI(this, &adapt_ext2gp::invalidate_dmi_pointers);
+      initiator_socket.register_nb_transport_bw(this, &adapt_ext2gp::backward_nb_transport);
+      initiator_socket.register_invalidate_direct_mem_ptr(this, &adapt_ext2gp::invalidate_dmi_pointers);
     }
 
     ///////////////
@@ -102,9 +102,9 @@ class adapt_gp2ext : public sc_core::sc_module
     public:
     typedef tlm::tlm_generic_payload                   initiator_payload_type;
     typedef tlm::tlm_generic_payload                   target_payload_type;
-    typedef SimpleInitiatorSocket<adapt_gp2ext, BUSWIDTH,
+    typedef simple_initiator_socket<adapt_gp2ext, BUSWIDTH,
                                   my_extended_payload_types> initiator_socket_type;
-    typedef SimpleTargetSocket<adapt_gp2ext, BUSWIDTH,
+    typedef simple_target_socket<adapt_gp2ext, BUSWIDTH,
                                tlm::tlm_generic_payload_types> target_socket_type;
     
     target_socket_type  target_socket;
@@ -117,12 +117,12 @@ class adapt_gp2ext : public sc_core::sc_module
         // Optionally, we can initialize our private extension class
         // here, if required.
 
-      target_socket.registerNBTransport(this, &adapt_gp2ext::forward_nb_transport);
-      target_socket.registerDebugTransport(this, &adapt_gp2ext::transport_debug);
-      target_socket.registerDMI(this, &adapt_gp2ext::get_dmi_pointer);
+      target_socket.register_nb_transport_fw(this, &adapt_gp2ext::forward_nb_transport);
+      target_socket.register_transport_dbg(this, &adapt_gp2ext::transport_debug);
+      target_socket.register_get_direct_mem_ptr(this, &adapt_gp2ext::get_dmi_pointer);
         
-      initiator_socket.registerNBTransport_bw(this, &adapt_gp2ext::backward_nb_transport);
-      initiator_socket.registerInvalidateDMI(this, &adapt_gp2ext::invalidate_dmi_pointers);
+      initiator_socket.register_nb_transport_bw(this, &adapt_gp2ext::backward_nb_transport);
+      initiator_socket.register_invalidate_direct_mem_ptr(this, &adapt_gp2ext::invalidate_dmi_pointers);
 
         m_ext.m_data = 13;
     }

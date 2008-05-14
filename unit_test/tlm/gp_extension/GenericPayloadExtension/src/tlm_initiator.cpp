@@ -97,10 +97,10 @@ void tlm_initiator::test_single_read()
     m_gp.set_data_length(sizeof(m_data));
     
 
-    // Clear extension array using direct indexes:
-    m_gp.clear_extension(tlm_extension1::ID);
-    m_gp.clear_extension(tlm_extension2::ID);
-    m_gp.clear_extension(tlm_extension3::ID);
+    // Clear extension array:
+    m_gp.clear_extension<tlm_extension1>();
+    m_gp.clear_extension<tlm_extension2>();
+    m_gp.clear_extension<tlm_extension3>();
 
     bus_port->nb_transport(&m_gp);
     

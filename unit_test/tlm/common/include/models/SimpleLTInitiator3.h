@@ -30,7 +30,7 @@ public:
   typedef tlm::tlm_generic_payload                  transaction_type;
   typedef tlm::tlm_phase                            phase_type;
   typedef tlm::tlm_sync_enum                        sync_enum_type;
-  typedef SimpleInitiatorSocket<SimpleLTInitiator3> initiator_socket_type;
+  typedef simple_initiator_socket<SimpleLTInitiator3> initiator_socket_type;
 
 public:
   initiator_socket_type socket;
@@ -55,18 +55,19 @@ public:
     if (mTransactionCount < mNrOfTransactions) {
       trans.set_address(mBaseAddress + 4*mTransactionCount);
       mData = mTransactionCount;
-      trans.set_data_ptr(reinterpret_cast<unsigned char*>(&mData));
       trans.set_command(tlm::TLM_WRITE_COMMAND);
 
     } else if (mTransactionCount < 2 * mNrOfTransactions) {
       trans.set_address(mBaseAddress + 4*(mTransactionCount-mNrOfTransactions));
       mData = 0;
-      trans.set_data_ptr(reinterpret_cast<unsigned char*>(&mData));
       trans.set_command(tlm::TLM_READ_COMMAND);
 
     } else {
       return false;
     }
+
+    trans.set_data_ptr(reinterpret_cast<unsigned char*>(&mData));
+    trans.set_data_length(4);
 
     ++mTransactionCount;
     return true;

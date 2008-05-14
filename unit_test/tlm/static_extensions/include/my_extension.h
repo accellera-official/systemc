@@ -19,6 +19,7 @@
 #define __MY_EXTENSION_H__
 
 #include "tlm.h"
+#include <cassert>
 
 class my_extension :
    public tlm::tlm_extension<my_extension>
@@ -30,6 +31,15 @@ public:
     tlm_extension_base* clone() const
     {
         return new my_extension(*this);
+    }
+    void free()
+    {
+        delete this;
+    }
+    void copy_from(tlm_extension_base const & e)
+    {
+        assert(typeid(this) == typeid(e));
+        m_data = static_cast<my_extension const &>(e).m_data;
     }
     
     int m_data;

@@ -19,6 +19,7 @@
 #define __TLM_EXTENSIONS_H__
 
 #include "tlm.h"
+#include <cassert>
 
 // This header file defines a simple set of extension classes.
 // The basic structure here is that the classes must be derived
@@ -41,6 +42,15 @@ public:
     {
         return new tlm_extension1(*this);
     }
+    void free()
+    {
+        delete this;
+    }
+    void copy_from(tlm_extension_base const & e)
+    {
+        assert(typeid(this) == typeid(e));
+        data1 = static_cast<tlm_extension1 const &>(e).data1;
+    }
 };
 
 class tlm_extension2 :
@@ -54,6 +64,15 @@ public:
     tlm_extension_base* clone() const
     {
         return new tlm_extension2(*this);
+    }
+    void free()
+    {
+        delete this;
+    }
+    void copy_from(tlm_extension_base const & e)
+    {
+        assert(typeid(this) == typeid(e));
+        data2 = static_cast<tlm_extension2 const &>(e).data2;
     }
 };
 
@@ -69,6 +88,15 @@ public:
     tlm_extension_base* clone() const
     {
         return new tlm_extension3(*this);
+    }
+    void free()
+    {
+        delete this;
+    }
+    void copy_from(tlm_extension_base const & e)
+    {
+        assert(typeid(this) == typeid(e));
+        data3 = static_cast<tlm_extension3 const &>(e).data3;
     }
 };
 

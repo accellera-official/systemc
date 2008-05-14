@@ -32,7 +32,7 @@ public:
   typedef tlm::tlm_generic_payload            transaction_type;
   typedef tlm::tlm_phase                      phase_type;
   typedef tlm::tlm_sync_enum                  sync_enum_type;
-  typedef SimpleTargetSocket<SimpleATTarget1> target_socket_type;
+  typedef simple_target_socket<SimpleATTarget1> target_socket_type;
 
 public:
   target_socket_type socket;
@@ -46,7 +46,7 @@ public:
     RESPONSE_DELAY(100, sc_core::SC_NS)
   {
     // register nb_transport method
-    socket.registerNBTransport(this, &SimpleATTarget1::myNBTransport);
+    socket.register_nb_transport_fw(this, &SimpleATTarget1::myNBTransport);
 
     SC_METHOD(endRequest)
     sensitive << mEndRequestEvent;
@@ -71,6 +71,9 @@ public:
   sync_enum_type myNBTransport(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
   {
     if (phase == tlm::BEGIN_REQ) {
+      // transactions may be kept in queue after the initiator has send END_REQ
+      trans.acquire();
+
       sc_dt::uint64 address = trans.get_address();
       assert(address < 400);
 
@@ -178,6 +181,7 @@ public:
   void endResponse()
   {
     assert(!mResponseQueue.empty());
+    mResponseQueue.front()->release();
     mResponseQueue.pop();
 
     if (!mResponseQueue.empty()) {

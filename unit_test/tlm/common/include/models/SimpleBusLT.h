@@ -31,8 +31,8 @@ public:
   typedef tlm::tlm_generic_payload                 transaction_type;
   typedef tlm::tlm_phase                           phase_type;
   typedef tlm::tlm_sync_enum                       sync_enum_type;
-  typedef SimpleTargetSocketTagged<SimpleBusLT>    target_socket_type;
-  typedef SimpleInitiatorSocketTagged<SimpleBusLT> initiator_socket_type;
+  typedef simple_target_socket_tagged<SimpleBusLT>    target_socket_type;
+  typedef simple_initiator_socket_tagged<SimpleBusLT> initiator_socket_type;
 
 public:
   target_socket_type target_socket[NR_OF_INITIATORS];
@@ -44,12 +44,12 @@ public:
     sc_core::sc_module(name)
   {
     for (unsigned int i = 0; i < NR_OF_INITIATORS; ++i) {
-      target_socket[i].registerBTransport(this, &SimpleBusLT::initiatorBTransport, i);
-      target_socket[i].registerDebugTransport(this, &SimpleBusLT::transportDebug, i);
-      target_socket[i].registerDMI(this, &SimpleBusLT::getDMIPointer, i);
+      target_socket[i].register_b_transport(this, &SimpleBusLT::initiatorBTransport, i);
+      target_socket[i].register_transport_dbg(this, &SimpleBusLT::transportDebug, i);
+      target_socket[i].register_get_direct_mem_ptr(this, &SimpleBusLT::getDMIPointer, i);
     }
     for (unsigned int i = 0; i < NR_OF_TARGETS; ++i) {
-      initiator_socket[i].registerInvalidateDMI(this, &SimpleBusLT::invalidateDMIPointers, i);
+      initiator_socket[i].register_invalidate_direct_mem_ptr(this, &SimpleBusLT::invalidateDMIPointers, i);
     }
   }
 

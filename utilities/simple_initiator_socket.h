@@ -23,7 +23,7 @@
 template <typename MODULE,
           unsigned int BUSWIDTH = 32,
           typename TYPES = tlm::tlm_generic_payload_types>
-class SimpleInitiatorSocket :
+class simple_initiator_socket :
   public tlm::tlm_initiator_socket<BUSWIDTH,
                                    tlm::tlm_fw_transport_if<TYPES>,
                                    tlm::tlm_bw_transport_if<TYPES> >
@@ -39,23 +39,23 @@ public:
                                     bw_interface_type>  base_type;
 
 public:
-  explicit SimpleInitiatorSocket(const char* n = "SimpleInitiatorSocket") :
+  explicit simple_initiator_socket(const char* n = "simple_initiator_socket") :
     base_type(sc_core::sc_gen_unique_name(n)),
     mProcess(this->name())
   {
     this->mExport.bind(mProcess);
   }
 
-  void registerNBTransport_bw(MODULE* mod,
-                              sync_enum_type (MODULE::*cb)(transaction_type&,
-                                                           phase_type&,
-                                                           sc_core::sc_time&))
+  void register_nb_transport_bw(MODULE* mod,
+                                sync_enum_type (MODULE::*cb)(transaction_type&,
+                                                             phase_type&,
+                                                             sc_core::sc_time&))
   {
     mProcess.setTransportPtr(mod, cb);
   }
 
-  void registerInvalidateDMI(MODULE* mod,
-                             void (MODULE::*cb)(sc_dt::uint64, sc_dt::uint64))
+  void register_invalidate_direct_mem_ptr(MODULE* mod,
+                                          void (MODULE::*cb)(sc_dt::uint64, sc_dt::uint64))
   {
     mProcess.setInvalidateDMIPtr(mod, cb);
   }
@@ -141,7 +141,7 @@ private:
 template <typename MODULE,
           unsigned int BUSWIDTH = 32,
           typename TYPES = tlm::tlm_generic_payload_types>
-class SimpleInitiatorSocketTagged :
+class simple_initiator_socket_tagged :
   public tlm::tlm_initiator_socket<BUSWIDTH,
                                    tlm::tlm_fw_transport_if<TYPES>,
                                    tlm::tlm_bw_transport_if<TYPES> >
@@ -157,27 +157,27 @@ public:
                                     bw_interface_type>  base_type;
 
 public:
-  explicit SimpleInitiatorSocketTagged(const char* n = "SimpleInitiatorSocketTagged") :
+  explicit simple_initiator_socket_tagged(const char* n = "simple_initiator_socket_tagged") :
     base_type(sc_core::sc_gen_unique_name(n)),
     mProcess(this->name())
   {
     this->mExport.bind(mProcess);
   }
 
-  void registerNBTransport_bw(MODULE* mod,
-                              sync_enum_type (MODULE::*cb)(int,
-                                                           transaction_type&,
-                                                           phase_type&,
-                                                           sc_core::sc_time&),
-                              int id)
+  void register_nb_transport_bw(MODULE* mod,
+                                sync_enum_type (MODULE::*cb)(int,
+                                                             transaction_type&,
+                                                             phase_type&,
+                                                             sc_core::sc_time&),
+                                int id)
   {
     mProcess.setTransportPtr(mod, cb);
     mProcess.setTransportUserId(id);
   }
 
-  void registerInvalidateDMI(MODULE* mod,
-                             void (MODULE::*cb)(int, sc_dt::uint64, sc_dt::uint64),
-                             int id)
+  void register_invalidate_direct_mem_ptr(MODULE* mod,
+                                          void (MODULE::*cb)(int, sc_dt::uint64, sc_dt::uint64),
+                                           int id)
   {
     mProcess.setInvalidateDMIPtr(mod, cb);
     mProcess.setInvalidateDMIUserId(id);

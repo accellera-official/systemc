@@ -29,7 +29,7 @@ public:
   typedef tlm::tlm_generic_payload             transaction_type;
   typedef tlm::tlm_phase                       phase_type;
   typedef tlm::tlm_sync_enum                   sync_enum_type;
-  typedef TrivialTargetSocket<SimpleLTTarget2> target_socket_type;
+  typedef trivial_target_socket<SimpleLTTarget2> target_socket_type;
   
 
 public:
@@ -41,9 +41,9 @@ public:
     socket("socket")
   {
     // register nb_transport method
-    socket.registerBTransport(this, &SimpleLTTarget2::myBTransport);
-    socket.registerNBTransport(this, &SimpleLTTarget2::myNBTransport);
-    socket.registerDMI(this, &SimpleLTTarget2::myGetDMIPtr);
+    socket.register_b_transport(this, &SimpleLTTarget2::myBTransport);
+    socket.register_nb_transport_fw(this, &SimpleLTTarget2::myNBTransport);
+    socket.register_get_direct_mem_ptr(this, &SimpleLTTarget2::myGetDMIPtr);
 
     // TODO: we don't register the transport_dbg callback here, so we
     // can test if something bad happens

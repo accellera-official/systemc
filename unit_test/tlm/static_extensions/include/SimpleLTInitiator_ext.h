@@ -35,7 +35,7 @@ public:
   typedef tlm::tlm_dmi        dmi_type;
   typedef tlm::tlm_phase      phase_type;
   typedef tlm::tlm_sync_enum  sync_enum_type;
-  typedef SimpleInitiatorSocket<SimpleLTInitiator_ext, 32,
+  typedef simple_initiator_socket<SimpleLTInitiator_ext, 32,
                                 my_extended_payload_types> initiator_socket_type;
 
 public:
@@ -55,8 +55,8 @@ public:
       invalidate(mDMIData);
       
       // register nb_transport method
-      socket.registerNBTransport_bw(this, &SimpleLTInitiator_ext::myNBTransport);
-      socket.registerInvalidateDMI(this, &SimpleLTInitiator_ext::invalidate_direct_mem_ptr);
+      socket.register_nb_transport_bw(this, &SimpleLTInitiator_ext::myNBTransport);
+      socket.register_invalidate_direct_mem_ptr(this, &SimpleLTInitiator_ext::invalidate_direct_mem_ptr);
       
       // Initiator thread
       SC_THREAD(run);

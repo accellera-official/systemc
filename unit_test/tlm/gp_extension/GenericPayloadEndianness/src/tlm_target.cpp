@@ -24,7 +24,7 @@ tlm_target::tlm_target(sc_core::sc_module_name name_,
     , m_endianness(endianness)
 {
   // register nb_transport method
-  socket.registerNBTransport(this, &tlm_target::myNBTransport);
+  socket.register_nb_transport_fw(this, &tlm_target::myNBTransport);
 
   m_socket_width = socket.get_bus_width()/8; // bus data width in bytes
 }

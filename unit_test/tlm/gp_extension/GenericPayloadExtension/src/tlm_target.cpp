@@ -46,45 +46,54 @@ tlm_target::tlm_target(sc_core::sc_module_name name_,
 
 void tlm_target::nb_transport(tlm::tlm_generic_payload* gp)
 {
+    tlm::tlm_generic_payload gp_tmp;
+    if (gp->get_data_length()) {
+      gp_tmp.set_data_ptr(new unsigned char[gp->get_data_length()]);
+    }
+    if (gp->get_byte_enable_length()) {
+      gp_tmp.set_byte_enable_ptr(new unsigned char[gp->get_byte_enable_length()]);
+    }
+
     // We also test deep_copy here:
-    tlm::tlm_generic_payload* gp_tmp = gp->deep_copy();
+    gp->deep_copy_into(gp_tmp);
 
     // handle extensions:
     tlm_extension1* ext1;
     tlm_extension2* ext2;
     tlm_extension3* ext3;
-    gp_tmp->get_extension(ext1);
-    // or: ext1 = static_cast<tlm_extension1*>(gp_tmp->get_extension(tlm_extension1::ID));
-    gp_tmp->get_extension(ext2);
-    gp_tmp->get_extension(ext3);
+    gp_tmp.get_extension(ext1);
+    // or: ext1 = static_cast<tlm_extension1*>(gp_tmp.get_extension(tlm_extension1::ID));
+    gp_tmp.get_extension(ext2);
+    gp_tmp.get_extension(ext3);
     if (ext1)
     {
         std::cout << std::endl << name() << ": got extension 1 with value = " 
                   << ext1->data1;
-        delete ext1;
+        gp_tmp.release_extension<tlm_extension1>();
     }
     if (ext2)
     {
         std::cout << std::endl << name() << ": got extension 2 with value = " 
                   << ext2->data2;
-        delete ext2;
+        gp_tmp.release_extension<tlm_extension2>();
     }
     if (ext3)
     {
         std::cout << std::endl << name() << ": got extension 3 with value = " 
                   << ext3->data3;
-        delete ext3;
+        gp_tmp.release_extension<tlm_extension3>();
     }
     std::cout << std::endl;
-    if (gp_tmp->get_data_ptr())
+    if (gp_tmp.get_data_ptr())
     {
-        delete[] gp_tmp->get_data_ptr();
+        delete[] gp_tmp.get_data_ptr();
     }
-    if (gp_tmp->get_byte_enable_ptr())
+    if (gp_tmp.get_byte_enable_ptr())
     {
-        delete[] gp_tmp->get_byte_enable_ptr();
+std::cout << "3" << std::endl;
+        delete[] gp_tmp.get_byte_enable_ptr();
+std::cout << "4" << std::endl;
     }
-    delete gp_tmp;
 
     // Generic Payload Protocol
     tlm::tlm_response_status m_response_status;

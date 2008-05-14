@@ -32,7 +32,7 @@ public:
   typedef tlm::tlm_generic_payload                 transaction_type;
   typedef tlm::tlm_phase                           phase_type;
   typedef tlm::tlm_sync_enum                       sync_enum_type;
-  typedef SimpleTargetSocket<ExplicitATTarget>     target_socket_type;
+  typedef simple_target_socket<ExplicitATTarget>     target_socket_type;
 
 public:
   target_socket_type socket;
@@ -45,8 +45,8 @@ public:
     mCurrentTransaction(0)
   {
     // register nb_transport method
-    socket.registerNBTransport(this, &ExplicitATTarget::myNBTransport);
-    socket.registerDebugTransport(this, &ExplicitATTarget::transport_dbg);
+    socket.register_nb_transport_fw(this, &ExplicitATTarget::myNBTransport);
+    socket.register_transport_dbg(this, &ExplicitATTarget::transport_dbg);
 
     SC_THREAD(beginResponse)
   }
@@ -127,7 +127,7 @@ public:
       // Wait before sending the response
       wait(50, sc_core::SC_NS);
 
-      if (socket->nb_transport_bw(*mCurrentTransaction, phase, t)) {
+      if (socket->nb_transport_bw(*mCurrentTransaction, phase, t) == tlm::TLM_COMPLETED) {
         mCurrentTransaction = 0;
 
       } else {

@@ -23,7 +23,7 @@
 template <typename MODULE,
           unsigned int BUSWIDTH = 32,
           typename TYPES = tlm::tlm_generic_payload_types>
-class TrivialTargetSocket :
+class trivial_target_socket :
   public tlm::tlm_target_socket<BUSWIDTH,
                                tlm::tlm_fw_transport_if<TYPES>,
                                tlm::tlm_bw_transport_if<TYPES> >
@@ -39,7 +39,7 @@ public:
                                  bw_interface_type>     base_type;
 
 public:
-  explicit TrivialTargetSocket(const char* n = "TrivialTargetSocket") :
+  explicit trivial_target_socket(const char* n = "trivial_target_socket") :
     base_type(sc_core::sc_gen_unique_name(n)),
     mProcess(this->name())
   {
@@ -47,24 +47,30 @@ public:
   }
 
   // REGISTER_XXX
-  void registerNBTransport(MODULE* mod, sync_enum_type (MODULE::*cb)(transaction_type&, phase_type&, sc_core::sc_time&))
+  void register_nb_transport_fw(MODULE* mod,
+                                sync_enum_type (MODULE::*cb)(transaction_type&,
+                                                             phase_type&,
+                                                             sc_core::sc_time&))
   {
     mProcess.setNBTransportPtr(mod, cb);
   }
 
-  void registerBTransport(MODULE* mod, void (MODULE::*cb)(transaction_type&, sc_core::sc_time&))
+  void register_b_transport(MODULE* mod,
+                            void (MODULE::*cb)(transaction_type&,
+                                               sc_core::sc_time&))
   {
     mProcess.setBTransportPtr(mod, cb);
   }
 
-  void registerDebugTransport(MODULE* mod,
+  void register_transport_dbg(MODULE* mod,
                               unsigned int (MODULE::*cb)(transaction_type&))
   {
     mProcess.setTransportDebugPtr(mod, cb);
   }
 
-  void registerDMI(MODULE* mod, bool (MODULE::*cb)(transaction_type&,
-                                                   tlm::tlm_dmi&))
+  void register_get_direct_mem_ptr(MODULE* mod,
+                                   bool (MODULE::*cb)(transaction_type&,
+                                                      tlm::tlm_dmi&))
   {
     mProcess.setGetDMIPtr(mod, cb);
   }

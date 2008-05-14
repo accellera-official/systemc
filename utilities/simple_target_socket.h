@@ -19,12 +19,12 @@
 #define __SIMPLE_TARGET_SOCKET_H__
 
 #include "tlm.h"
-#include "PEQFifo.h"
+#include "peq_fifo.h"
 
 template <typename MODULE,
           unsigned int BUSWIDTH = 32,
           typename TYPES = tlm::tlm_generic_payload_types>
-class SimpleTargetSocket :
+class simple_target_socket :
   public tlm::tlm_target_socket<BUSWIDTH,
                                tlm::tlm_fw_transport_if<TYPES>,
                                tlm::tlm_bw_transport_if<TYPES> >
@@ -42,7 +42,7 @@ public:
                                  bw_interface_type>     base_type;
 
 public:
-  explicit SimpleTargetSocket(const char* n = "SimpleTargetSocket") :
+  explicit simple_target_socket(const char* n = "simple_target_socket") :
     base_type(sc_core::sc_gen_unique_name(n)),
     mFwProcess(this),
     mBwProcess(this)
@@ -54,27 +54,33 @@ public:
   tlm::tlm_bw_transport_if<TYPES> * operator ->() {return &mBwProcess;}
 
   // REGISTER_XXX
-  void registerNBTransport(MODULE* mod, sync_enum_type (MODULE::*cb)(transaction_type&, phase_type&, sc_core::sc_time&))
+  void register_nb_transport_fw(MODULE* mod,
+                                sync_enum_type (MODULE::*cb)(transaction_type&,
+                                                             phase_type&,
+                                                             sc_core::sc_time&))
   {
     assert(!sc_core::sc_get_curr_simcontext()->elaboration_done());
     mFwProcess.setNBTransportPtr(mod, cb);
   }
 
-  void registerBTransport(MODULE* mod, void (MODULE::*cb)(transaction_type&, sc_core::sc_time&))
+  void register_b_transport(MODULE* mod,
+                            void (MODULE::*cb)(transaction_type&,
+                                               sc_core::sc_time&))
   {
     assert(!sc_core::sc_get_curr_simcontext()->elaboration_done());
     mFwProcess.setBTransportPtr(mod, cb);
   }
 
-  void registerDebugTransport(MODULE* mod,
+  void register_transport_dbg(MODULE* mod,
                               unsigned int (MODULE::*cb)(transaction_type&))
   {
     assert(!sc_core::sc_get_curr_simcontext()->elaboration_done());
     mFwProcess.setTransportDebugPtr(mod, cb);
   }
 
-  void registerDMI(MODULE* mod, bool (MODULE::*cb)(transaction_type&,
-                                                   tlm::tlm_dmi&))
+  void register_get_direct_mem_ptr(MODULE* mod,
+                                   bool (MODULE::*cb)(transaction_type&,
+                                                      tlm::tlm_dmi&))
   {
     assert(!sc_core::sc_get_curr_simcontext()->elaboration_done());
     mFwProcess.setGetDMIPtr(mod, cb);
@@ -97,7 +103,7 @@ private:
   class BwProcess : public tlm::tlm_bw_transport_if<TYPES>
   {
   public:
-    BwProcess(SimpleTargetSocket *pOwn) : mOwner(pOwn)
+    BwProcess(simple_target_socket *pOwn) : mOwner(pOwn)
     {
     }
 
@@ -138,22 +144,12 @@ private:
     }
 
   private:
-    SimpleTargetSocket *mOwner;
+    simple_target_socket *mOwner;
   };
 
-  class FwProcess : public tlm::tlm_fw_transport_if<TYPES>
-                  , public tlm::mm_interface
-                  , public tlm::mm_proxy
+  class FwProcess : public tlm::tlm_fw_transport_if<TYPES>,
+                    public tlm::mm_interface
   {
-  private:
-    struct
-    mm_end_event_ext : public tlm::tlm_extension<mm_end_event_ext>{
-      tlm::tlm_extension_base* clone() const {return NULL;}
-      void free(){return;}
-      void copy_from(tlm::tlm_extension_base const &){return;}
-      sc_core::sc_event done;
-    };
-    
   public:
     typedef sync_enum_type (MODULE::*NBTransportPtr)(transaction_type&,
                                                      tlm::tlm_phase&,
@@ -164,7 +160,7 @@ private:
     typedef bool (MODULE::*GetDMIPtr)(transaction_type&,
                                       tlm::tlm_dmi&);
       
-    FwProcess(SimpleTargetSocket *pOwn) :
+    FwProcess(simple_target_socket *pOwn) :
       mName(pOwn->name()),
       mOwner(pOwn),
       mMod(0),
@@ -176,7 +172,7 @@ private:
       mResponseInProgress(false)
     {
       sc_core::sc_spawn_options opts;
-      opts.set_sensitivity(&mPEQ.getEvent());
+      opts.set_sensitivity(&mPEQ.get_event());
       sc_core::sc_spawn(sc_bind(&FwProcess::b2nb_thread, this), 
                         sc_core::sc_gen_unique_name("b2nb_thread"), &opts);
     }
@@ -278,28 +274,28 @@ private:
       } else if (mNBTransportPtr) {
         mPEQ.notify(trans, t);
         t = sc_core::SC_ZERO_TIME;
+
         mm_end_event_ext mm_ext;
-        
-        bool mm_added=!mm_proxy::has_mm(&trans);
-        
-        if (mm_added){
-          trans.set_extension(&mm_ext);
-          mm_proxy::set_mm(&trans, this);
+        const bool mmAdded = !mMMProxy.has_mm(&trans);
+
+        if (mmAdded) {
+          mMMProxy.set_mm(&trans, this);
+          trans.set_nb_extension(&mm_ext);
           trans.acquire();
         }
-        
+
         // wait until transaction is finished
         sc_core::sc_event endEvent;
         mOwner->mPendingTrans[&trans] = &endEvent;
         sc_core::wait(endEvent);
 
-        if (mm_added){
+        if (mmAdded) {
+          // release will not delete the transaction, it will notify mm_ext.done
           trans.release();
-          if (trans.get_ref_count()) wait(mm_ext.done);
-          mm_proxy::set_mm(&trans, NULL);
-          //there is no MM any more (we just removed it ;-) ) so it's safe
-          // to call clear
-          trans.clear_extension(&mm_ext);
+          if (trans.get_ref_count()) {
+            sc_core::wait(mm_ext.done);
+          }
+          mMMProxy.set_mm(&trans, 0);
         }
 
       } else {
@@ -307,14 +303,6 @@ private:
         assert(0); exit(1);
 //        return tlm::TLM_COMPLETED;   ///< unreachable code
       }
-    }
-
-    void free(transaction_type* trans){
-      mm_end_event_ext* ext;
-      trans->get_extension(ext);
-      assert(ext);
-      trans->reset();
-      ext->done.notify();
     }
 
     unsigned int transport_dbg(transaction_type& trans)
@@ -375,10 +363,10 @@ private:
     void b2nb_thread()
     {
       while (true) {
-        sc_core::wait(mPEQ.getEvent());
+        sc_core::wait(mPEQ.get_event());
 
         transaction_type* trans;
-        while ((trans = mPEQ.getNextTransaction())!=0) {
+        while ((trans = mPEQ.get_next_transaction())!=0) {
           assert(mMod);
           assert(mNBTransportPtr);
           phase_type phase = tlm::BEGIN_REQ;
@@ -436,17 +424,36 @@ private:
       }
     }
 
+    void free(transaction_type* trans)
+    {
+      mm_end_event_ext* ext = trans->template get_extension<mm_end_event_ext>();
+      assert(ext);
+      // notif event first before freeing extensions (reset)
+      ext->done.notify();
+      trans->reset();
+    }
+
+  private:
+    struct mm_end_event_ext : public tlm::tlm_extension<mm_end_event_ext>
+    {
+      tlm::tlm_extension_base* clone() const { return NULL; }
+      void free() {}
+      void copy_from(tlm::tlm_extension_base const &) {}
+      sc_core::sc_event done;
+    };
+
   private:
     const std::string mName;
-    SimpleTargetSocket *mOwner;
+    simple_target_socket *mOwner;
     MODULE* mMod;
     NBTransportPtr mNBTransportPtr;
     BTransportPtr mBTransportPtr;
     TransportDebugPtr mTransportDebugPtr;
     GetDMIPtr mGetDMIPtr;
-    PEQFifo mPEQ;
+    peq_fifo<transaction_type> mPEQ;
     bool mResponseInProgress;
     sc_core::sc_event mEndResponse;
+    tlm::mm_proxy mMMProxy;
   };
 
 private:
@@ -461,7 +468,7 @@ private:
 template <typename MODULE,
           unsigned int BUSWIDTH = 32,
           typename TYPES = tlm::tlm_generic_payload_types>
-class SimpleTargetSocketTagged :
+class simple_target_socket_tagged :
   public tlm::tlm_target_socket<BUSWIDTH,
                                tlm::tlm_fw_transport_if<TYPES>,
                                tlm::tlm_bw_transport_if<TYPES> >
@@ -479,7 +486,7 @@ public:
                                  bw_interface_type>     base_type;
 
 public:
-  explicit SimpleTargetSocketTagged(const char* n = "SimpleTargetSocketTagged") :
+  explicit simple_target_socket_tagged(const char* n = "simple_target_socket_tagged") :
     base_type(sc_core::sc_gen_unique_name(n)),
     mFwProcess(this),
     mBwProcess(this)
@@ -491,22 +498,32 @@ public:
   tlm::tlm_bw_transport_if<TYPES> * operator ->() {return &mBwProcess;}
 
   // REGISTER_XXX
-  void registerNBTransport(MODULE* mod, sync_enum_type (MODULE::*cb)(int id, transaction_type&, phase_type&, sc_core::sc_time&), int id)
+  void register_nb_transport_fw(MODULE* mod,
+                                sync_enum_type (MODULE::*cb)(int id,
+                                                             transaction_type&,
+                                                             phase_type&,
+                                                             sc_core::sc_time&),
+                                int id)
   {
     assert(!sc_core::sc_get_curr_simcontext()->elaboration_done());
     mFwProcess.setNBTransportPtr(mod, cb);
     mFwProcess.setNBTransportUserId(id);
   }
 
-  void registerBTransport(MODULE* mod, void (MODULE::*cb)(int id, transaction_type&, sc_core::sc_time&), int id)
+  void register_b_transport(MODULE* mod,
+                            void (MODULE::*cb)(int id,
+                                               transaction_type&,
+                                               sc_core::sc_time&),
+                            int id)
   {
     assert(!sc_core::sc_get_curr_simcontext()->elaboration_done());
     mFwProcess.setBTransportPtr(mod, cb);
     mFwProcess.setBTransportUserId(id);
   }
 
-  void registerDebugTransport(MODULE* mod,
-                              unsigned int (MODULE::*cb)(int id, transaction_type&),
+  void register_transport_dbg(MODULE* mod,
+                              unsigned int (MODULE::*cb)(int id,
+                                                         transaction_type&),
                               int id)
   {
     assert(!sc_core::sc_get_curr_simcontext()->elaboration_done());
@@ -514,9 +531,11 @@ public:
     mFwProcess.setTransportDebugUserId(id);
   }
 
-  void registerDMI(MODULE* mod, bool (MODULE::*cb)(int id,
-                                                   transaction_type&,
-                                                   tlm::tlm_dmi&), int id)
+  void register_get_direct_mem_ptr(MODULE* mod,
+                                   bool (MODULE::*cb)(int id,
+                                                      transaction_type&,
+                                                      tlm::tlm_dmi&),
+                                   int id)
   {
     assert(!sc_core::sc_get_curr_simcontext()->elaboration_done());
     mFwProcess.setGetDMIPtr(mod, cb);
@@ -540,7 +559,7 @@ private:
   class BwProcess : public tlm::tlm_bw_transport_if<TYPES>
   {
   public:
-    BwProcess(SimpleTargetSocketTagged *pOwn) : mOwner(pOwn)
+    BwProcess(simple_target_socket_tagged *pOwn) : mOwner(pOwn)
     {
     }
 
@@ -581,10 +600,11 @@ private:
     }
 
   private:
-    SimpleTargetSocketTagged *mOwner;
+    simple_target_socket_tagged *mOwner;
   };
 
-  class FwProcess : public tlm::tlm_fw_transport_if<TYPES>
+  class FwProcess : public tlm::tlm_fw_transport_if<TYPES>,
+                    public tlm::mm_interface
   {
   public:
     typedef sync_enum_type (MODULE::*NBTransportPtr)(int id, 
@@ -600,7 +620,7 @@ private:
                                       transaction_type&,
                                       tlm::tlm_dmi&);
       
-    FwProcess(SimpleTargetSocketTagged *pOwn) :
+    FwProcess(simple_target_socket_tagged *pOwn) :
       mName(pOwn->name()),
       mOwner(pOwn),
       mMod(0),
@@ -616,7 +636,7 @@ private:
       mResponseInProgress(false)
     {
       sc_core::sc_spawn_options opts;
-      opts.set_sensitivity(&mPEQ.getEvent());
+      opts.set_sensitivity(&mPEQ.get_event());
       sc_core::sc_spawn(sc_bind(&FwProcess::b2nb_thread, this), 
                         sc_core::sc_gen_unique_name("b2nb_thread"), &opts);
     }
@@ -724,10 +744,28 @@ private:
         mPEQ.notify(trans, t);
         t = sc_core::SC_ZERO_TIME;
 
+        mm_end_event_ext mm_ext;
+        const bool mmAdded = !mMMProxy.has_mm(&trans);
+
+        if (mmAdded){
+          mMMProxy.set_mm(&trans, this);
+          trans.set_nb_extension(&mm_ext);
+          trans.acquire();
+        }
+
         // wait until transaction is finished
         sc_core::sc_event endEvent;
         mOwner->mPendingTrans[&trans] = &endEvent;
         sc_core::wait(endEvent);
+
+        if (mmAdded) {
+          // release will not delete the transaction, it will notify mm_ext.done
+          trans.release();
+          if (trans.get_ref_count()) {
+            sc_core::wait(mm_ext.done);
+          }
+          mMMProxy.set_mm(&trans, 0);
+        }
 
       } else {
         std::cerr << mName << ": no transport callback registered" << std::endl;
@@ -794,10 +832,10 @@ private:
     void b2nb_thread()
     {
       while (true) {
-        sc_core::wait(mPEQ.getEvent());
+        sc_core::wait(mPEQ.get_event());
 
         transaction_type* trans;
-        while ((trans = mPEQ.getNextTransaction())!=0) {
+        while ((trans = mPEQ.get_next_transaction())!=0) {
           assert(mMod);
           assert(mNBTransportPtr);
           phase_type phase = tlm::BEGIN_REQ;
@@ -855,9 +893,27 @@ private:
       }
     }
 
+    void free(transaction_type* trans)
+    {
+      mm_end_event_ext* ext = trans->template get_extension<mm_end_event_ext>();
+      assert(ext);
+      // notif event first before freeing extensions (reset)
+      ext->done.notify();
+      trans->reset();
+    }
+
+  private:
+    struct mm_end_event_ext : public tlm::tlm_extension<mm_end_event_ext>
+    {
+      tlm::tlm_extension_base* clone() const { return NULL; }
+      void free() {}
+      void copy_from(tlm::tlm_extension_base const &) {}
+      sc_core::sc_event done;
+    };
+
   private:
     const std::string mName;
-    SimpleTargetSocketTagged *mOwner;
+    simple_target_socket_tagged *mOwner;
     MODULE* mMod;
     NBTransportPtr mNBTransportPtr;
     BTransportPtr mBTransportPtr;
@@ -867,9 +923,10 @@ private:
     int mBTransportUserId;
     int mTransportDebugUserId;
     int mGetDMIUserId;
-    PEQFifo mPEQ;
+    peq_fifo<transaction_type> mPEQ;
     bool mResponseInProgress;
     sc_core::sc_event mEndResponse;
+    tlm::mm_proxy mMMProxy;
   };
 
 private:

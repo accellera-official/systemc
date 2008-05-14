@@ -32,7 +32,7 @@ public:
   typedef tlm::tlm_generic_payload                 transaction_type;
   typedef tlm::tlm_phase                           phase_type;
   typedef tlm::tlm_sync_enum                       sync_enum_type;
-  typedef SimpleTargetSocket<ExplicitLTTarget>     target_socket_type;
+  typedef simple_target_socket<ExplicitLTTarget>     target_socket_type;
 
 public:
   target_socket_type socket;
@@ -44,8 +44,8 @@ public:
     socket("socket")
   {
     // register nb_transport method
-    socket.registerBTransport(this, &ExplicitLTTarget::myBTransport);
-    socket.registerDebugTransport(this, &ExplicitLTTarget::transport_dbg);
+    socket.register_b_transport(this, &ExplicitLTTarget::myBTransport);
+    socket.register_transport_dbg(this, &ExplicitLTTarget::transport_dbg);
   }
 
   void myBTransport(transaction_type& trans, sc_core::sc_time& t)

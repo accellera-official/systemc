@@ -33,7 +33,7 @@ public:
   typedef tlm::tlm_generic_payload              transaction_type;
   typedef tlm::tlm_phase                        phase_type;
   typedef tlm::tlm_sync_enum                    sync_enum_type;
-  typedef SimpleTargetSocket<SimpleLTTarget_ext, 32,
+  typedef simple_target_socket<SimpleLTTarget_ext, 32,
                              my_extended_payload_types> target_socket_type;
 
 public:
@@ -47,10 +47,10 @@ public:
     socket("socket")
   {
     // register nb_transport method
-    socket.registerNBTransport(this, &SimpleLTTarget_ext::myNBTransport);
-    socket.registerDMI(this, &SimpleLTTarget_ext::myGetDMIPtr);
+    socket.register_nb_transport_fw(this, &SimpleLTTarget_ext::myNBTransport);
+    socket.register_get_direct_mem_ptr(this, &SimpleLTTarget_ext::myGetDMIPtr);
 
-    socket.registerDebugTransport(this, &SimpleLTTarget_ext::transport_dbg);
+    socket.register_transport_dbg(this, &SimpleLTTarget_ext::transport_dbg);
     
     SC_METHOD(invalidate_dmi_method);
     sensitive << m_invalidate_dmi_event;

@@ -28,7 +28,7 @@ class tlm_initiator : public sc_core::sc_module
 {
 public:	 
 	
-    SimpleInitiatorSocket<tlm_initiator> socket; // default 32-bit 
+    simple_initiator_socket<tlm_initiator> socket; // default 32-bit 
     
     SC_HAS_PROCESS(tlm_initiator);
     
