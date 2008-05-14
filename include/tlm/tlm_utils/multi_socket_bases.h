@@ -28,6 +28,7 @@
 #include "tlm.h"
 
 #include "boost/function.hpp"
+#include "boost/mem_fn.hpp"
 
 namespace tlm_utils {
 

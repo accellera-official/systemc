@@ -131,7 +131,7 @@ public:
     
     //store the callback and create the appropriate boost function
     m_nb_cb=cb;
-    m_nb_f=boost::bind<sync_enum_type>(m_nb_cb, m_mod, _1, _2, _3, _4);
+    m_nb_f=boost::bind<sync_enum_type>(boost::mem_fn(m_nb_cb), m_mod, _1, _2, _3, _4);
   }
 
   //register callback for b transport of fw interface
@@ -158,7 +158,7 @@ public:
     
     //store the callback and create the appropriate boost function
     m_b_cb=cb;
-    m_b_f=boost::bind<void>(m_b_cb, m_mod, _1, _2, _3);
+    m_b_f=boost::bind<void>(boost::mem_fn(m_b_cb), m_mod, _1, _2, _3);
   }
 
   //register callback for debug transport of fw interface
@@ -185,7 +185,7 @@ public:
     
     //store the callback and create the appropriate boost function
     m_dbg_cb=cb;
-    m_dbg_f=boost::bind<unsigned int>(m_nb_cb, m_mod, _1, _2);
+    m_dbg_f=boost::bind<unsigned int>(boost::mem_fn(m_nb_cb), m_mod, _1, _2);
   }
 
   //register callback for DMI of fw interface
@@ -212,7 +212,7 @@ public:
     
     //store the callback and create the appropriate boost function
     m_dmi_cb=cb;
-    m_nb_f=boost::bind<bool>(m_nb_cb, m_mod, _1, _2, _3);
+    m_nb_f=boost::bind<bool>(boost::mem_fn(m_nb_cb), m_mod, _1, _2, _3);
   }
 
 
