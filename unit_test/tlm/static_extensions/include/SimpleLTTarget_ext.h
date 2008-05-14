@@ -19,7 +19,7 @@
 #define __SIMPLE_LT_TARGET2_H__
 
 #include "tlm.h"
-#include "simple_target_socket.h"
+#include "tlm_utils/simple_target_socket.h"
 #include "my_extension.h"
 
 //#include <systemc>

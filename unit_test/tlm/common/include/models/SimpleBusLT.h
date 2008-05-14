@@ -21,8 +21,8 @@
 //#include <systemc>
 #include "tlm.h"
 
-#include "simple_target_socket.h"
-#include "simple_initiator_socket.h"
+#include "tlm_utils/simple_target_socket.h"
+#include "tlm_utils/simple_initiator_socket.h"
 
 template <int NR_OF_INITIATORS, int NR_OF_TARGETS>
 class SimpleBusLT : public sc_core::sc_module

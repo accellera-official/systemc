@@ -3,7 +3,6 @@
 SUBDIRS = \
           ../bus \
           ../bus_dmi \
-          ../gp_extension \
           ../p2p \
           ../static_extensions
           

@@ -19,7 +19,7 @@
 #define __EXPLICIT_LT_TARGET_H__
 
 #include "tlm.h"
-#include "simple_target_socket.h"
+#include "tlm_utils/simple_target_socket.h"
 //#include <systemc>
 #include <cassert>
 #include <vector>

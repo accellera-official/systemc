@@ -20,12 +20,12 @@
 
 #include "tlm.h"
 
-#include "../utilities/multi_passthrough_initiator_socket.h"
-#include "../utilities/multi_passthrough_target_socket.h"
+#include "tlm_utils/multi_passthrough_initiator_socket.h"
+#include "tlm_utils/multi_passthrough_target_socket.h"
 #include "simpleAddressMap.h"
 #include "extensionPool.h"
-#include "../utilities/instance_specific_extensions.h"
-#include "../utilities/tpPEQ.h"
+#include "tlm_utils/instance_specific_extensions.h"
+#include "tlm_utils/tpPEQ.h"
 
 
 /*

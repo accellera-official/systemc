@@ -19,7 +19,7 @@
 #define __CORE_DECOUPLING_LT_INITIATOR_H__
 
 #include "tlm.h"
-#include "simple_initiator_socket.h"
+#include "tlm_utils/simple_initiator_socket.h"
 //#include <systemc>
 #include <cassert>
 //#include <iostream>

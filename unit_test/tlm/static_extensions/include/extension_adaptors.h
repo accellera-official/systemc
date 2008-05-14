@@ -21,8 +21,8 @@
 #include "tlm.h"
 #include "my_extension.h"
 
-#include "simple_initiator_socket.h"
-#include "simple_target_socket.h"
+#include "tlm_utils/simple_initiator_socket.h"
+#include "tlm_utils/simple_target_socket.h"
 
 template <unsigned int BUSWIDTH = 32>
 class adapt_ext2gp : public sc_core::sc_module
