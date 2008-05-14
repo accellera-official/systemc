@@ -103,15 +103,15 @@ void select_initiator::initiator_thread(void)   // initiator thread
 // Make the non-blocking call and decode returned status (tlm_sync_enum) 
 //-----------------------------------------------------------------------------
     tlm::tlm_sync_enum 
-    retrun_value = initiator_socket->nb_transport_fw(*transaction_ptr, phase, delay);
+    return_value = initiator_socket->nb_transport_fw(*transaction_ptr, phase, delay);
     
     msg.str("");
     msg << "Initiator: " << m_ID
-      << " " << report::print(retrun_value) <<  " (GP, "
+      << " " << report::print(return_value) <<  " (GP, "
       << report::print(phase) << ", "
       << delay << ")" << endl; 
 
-    switch (retrun_value) 
+    switch (return_value) 
     {
 //-----------------------------------------------------------------------------
 //  The target returned COMPLETED this is a single phase transaction 
@@ -229,12 +229,12 @@ select_initiator::nb_transport_bw                       // inbound nb_transport_
 {
   tlm::tlm_sync_enum        status = tlm::TLM_COMPLETED;  // return status reject by default
   std::ostringstream        msg;                          // log message
-
-  waiting_bw_path_map::iterator transaction_pair ;        // create interator for map
-
+  
 //=============================================================================
 // Check waiting backward path map of valid transaction  
 //=============================================================================
+  waiting_bw_path_map::iterator transaction_pair ;        // create interator for map
+
   transaction_pair  = m_waiting_bw_path_map.find(&transaction_ref); 
   
   if (transaction_pair == m_waiting_bw_path_map.end() ) {   
@@ -243,18 +243,17 @@ select_initiator::nb_transport_bw                       // inbound nb_transport_
 //  The transaction pointer used by the backward path call does not belong 
 //  to this initiator, this is a major error 
 //=============================================================================
-        
     msg << "      "
     << "Initiator: " << m_ID 
     << " Received invalid transaction pointer";
     REPORT_FATAL (filename, __FUNCTION__, msg.str() );
   }
 
-    else { 
 //=============================================================================
 //  Normal operation  
 //    Decode backeard path phase 
 //=============================================================================
+    else { 
     msg.str ("");
     msg << "Initiator: " << m_ID               
         << " nb_transport_bw (GP, " 
@@ -275,7 +274,7 @@ select_initiator::nb_transport_bw                       // inbound nb_transport_
         if (transaction_pair->second == Rcved_ACCEPTED_enum) {
           msg << "      "
               << "Initiator: " << m_ID
-              << " transaction waiting begin-response on backeard path" 
+              << " transaction waiting begin-response on backward path" 
               << endl;
                 
           m_enable_next_request_event.notify(SC_ZERO_TIME); 
@@ -299,13 +298,14 @@ select_initiator::nb_transport_bw                       // inbound nb_transport_
       }
 
 //-----------------------------------------------------------------------------
-//  Target has responded with BEGIN_RESP the transaction could be 2,3 or 4 phase   
-//	  Decode the previous current tracking enum 
+//  Target has responded with BEGIN_RESP 
+//    The style could be 2,3 or 4 phase   
+//	  Decode the previous tracking enum 
 //-----------------------------------------------------------------------------
     case tlm::BEGIN_RESP:
       {
 //-----------------------------------------------------------------------------
-// Respond to begin response using a phase style  
+// Respond to begin-response - 2 phase style  
 //-----------------------------------------------------------------------------
         if( transaction_pair->second == Rcved_UPDATED_enum){
         
@@ -334,14 +334,14 @@ select_initiator::nb_transport_bw                       // inbound nb_transport_
         }
 
 //-----------------------------------------------------------------------------
-//  Respond to begin response when the target has omitted the 
-//  end-request timing-point
+//  Respond to begin-response when the target has omitted the 
+//  end-request timing-point - 3 phase style 
 //-----------------------------------------------------------------------------
         else if ( transaction_pair->second == Rcved_ACCEPTED_enum){
 
           msg << "      "
               << "Initiator: " << m_ID 
-              << " target omitted end request timing-point returning ACCEPTED ";
+              << " target omitted end-request timing-point returning ACCEPTED ";
           REPORT_INFO (filename, __FUNCTION__, msg.str() );
 
           m_waiting_bw_path_map.erase(&transaction_ref);    // erase from map 
@@ -355,7 +355,7 @@ select_initiator::nb_transport_bw                       // inbound nb_transport_
         }
         
 //-----------------------------------------------------------------------------
-// Respond to begin response using a 4 phase style 
+// Respond to begin-response - 4 phase style 
 //-----------------------------------------------------------------------------
         else if ( transaction_pair->second == Rcved_END_REQ_enum){
           msg << "      "
@@ -396,7 +396,7 @@ select_initiator::nb_transport_bw                       // inbound nb_transport_
     case tlm::END_RESP: 
       {
         msg.str ("");
-        msg << m_ID << " - unsupported phase";
+        msg << m_ID << " Illegal phase on backward path ";
         REPORT_FATAL(filename, __FUNCTION__, msg.str() );
         break;   
       }
@@ -406,7 +406,7 @@ select_initiator::nb_transport_bw                       // inbound nb_transport_
     default: 
       {                     
         msg.str ("");
-        msg << m_ID << " - nb_transport_bw: phase not implemented";
+        msg << m_ID << " Unknown phase on the backward path ";
         REPORT_FATAL (filename, __FUNCTION__, msg.str() );
         break;   
       }
@@ -452,15 +452,15 @@ void select_initiator::send_end_rsp_method(void)    // send end response method
 
     // call begin response and then decode return status
     tlm::tlm_sync_enum 
-    retrun_value = initiator_socket->nb_transport_fw(*transaction_ptr, phase, delay);
+    return_value = initiator_socket->nb_transport_fw(*transaction_ptr, phase, delay);
     
     msg.str("");
     msg << "Initiator: " << m_ID
-      << " " << report::print(retrun_value) <<  " (GP, "
+      << " " << report::print(return_value) <<  " (GP, "
       << report::print(phase) << ", "
       << delay << ")"; 
 
-    switch (retrun_value)    
+    switch (return_value)    
     {
       case tlm::TLM_COMPLETED:                        // transaction complete
       {
@@ -476,7 +476,7 @@ void select_initiator::send_end_rsp_method(void)    // send end response method
       {
         msg << "      " 
             << "Initiator: " << m_ID
-            << report::print(retrun_value) << " - invalid response for END_RESP ";
+            << report::print(return_value) << " Unknown return value for END_RESP ";
         REPORT_INFO(filename,  __FUNCTION__, msg.str()); 
         break;
       }
@@ -501,7 +501,7 @@ void select_initiator::invalidate_direct_mem_ptr  // invalidate_direct_mem_ptr
   std::ostringstream       msg;                     // log message
 
   msg.str ("");
-  msg << m_ID << " - invalidate_direct_mem_ptr: not implemented";
+  msg << m_ID << " invalidate_direct_mem_ptr: not implemented";
   REPORT_INFO(filename, __FUNCTION__, msg.str());
 }
 
