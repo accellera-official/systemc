@@ -39,37 +39,37 @@ public:
 
   void notify(transaction_type& trans, sc_core::sc_time& t)
   {
-    mScheduledEvents.insert(pair_type(t + sc_core::sc_time_stamp(), &trans));
-    mEvent.notify(t);
+    m_scheduled_events.insert(pair_type(t + sc_core::sc_time_stamp(), &trans));
+    m_event.notify(t);
   }
 
   // needs to be called until it returns 0
   transaction_type* get_next_transaction()
   {
-    if (mScheduledEvents.empty()) {
+    if (m_scheduled_events.empty()) {
       return 0;
     }
 
     sc_core::sc_time now = sc_core::sc_time_stamp();
-    if (mScheduledEvents.begin()->first <= now) {
-      transaction_type* trans = mScheduledEvents.begin()->second;
-      mScheduledEvents.erase(mScheduledEvents.begin());
+    if (m_scheduled_events.begin()->first <= now) {
+      transaction_type* trans = m_scheduled_events.begin()->second;
+      m_scheduled_events.erase(m_scheduled_events.begin());
       return trans;
     }
 
-    mEvent.notify(mScheduledEvents.begin()->first - now);
+    m_event.notify(m_scheduled_events.begin()->first - now);
     
     return 0;
   }
 
   sc_core::sc_event& get_event()
   {
-    return mEvent;
+    return m_event;
   }
 
 private:
-  std::multimap<const sc_core::sc_time, transaction_type*> mScheduledEvents;
-  sc_core::sc_event mEvent;
+  std::multimap<const sc_core::sc_time, transaction_type*> m_scheduled_events;
+  sc_core::sc_event m_event;
 };
 
 }

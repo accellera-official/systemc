@@ -306,7 +306,7 @@ public:
 
     // This is the "DMI-hint" a slave can set this to true if it
     // wants to indicate that a DMI request would be supported:
-    void                 set_dmi_allowed(bool dmiAllowed) { m_dmi = dmiAllowed; }
+    void                 set_dmi_allowed(bool dmi_allowed) { m_dmi = dmi_allowed; }
     bool                 get_dmi_allowed() const { return m_dmi; }
 
 private:

@@ -100,13 +100,13 @@ public:
 public:
   tlm_target_socket()
   : export_type(sc_core::sc_gen_unique_name("tlm_target_socket"))
-  , mPort(sc_core::sc_gen_unique_name("tlm_target_socket_port"))
+  , m_port(sc_core::sc_gen_unique_name("tlm_target_socket_port"))
   {
   }
 
   explicit tlm_target_socket(const char* name)
   : export_type(name)
-  , mPort(sc_core::sc_gen_unique_name((std::string(name) + "_port").c_str()))
+  , m_port(sc_core::sc_gen_unique_name((std::string(name) + "_port").c_str()))
   {
   }
 
@@ -171,7 +171,7 @@ public:
   //
   int size() const
   {
-  	return mPort.size();
+  	return m_port.size();
   }
     
   //
@@ -179,7 +179,7 @@ public:
   //
   bw_interface_type* operator->()
   {
-    return mPort.operator->();
+    return m_port.operator->();
   }
   
   //
@@ -187,16 +187,16 @@ public:
   //
   bw_interface_type* operator[](int i)
   {
-    return mPort.operator[](i);
+    return m_port.operator[](i);
   }
 
   // Implementation of pure virtual functions of base class
-  virtual sc_core::sc_port_b<BW_IF> & get_base_port()      { return mPort;   }
+  virtual sc_core::sc_port_b<BW_IF> & get_base_port()      { return m_port;   }
   virtual                    FW_IF  & get_base_interface() { return *this;   }
   virtual sc_core::sc_export<FW_IF> & get_base_export()    { return *this;   }
 
 protected:
-  port_type mPort;
+  port_type m_port;
 };
 
 

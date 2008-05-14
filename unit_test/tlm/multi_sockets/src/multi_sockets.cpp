@@ -35,7 +35,7 @@ int sc_main(int argc, char* argv[]){
     SimpleLTInitiator3 lt_i3("LT_I3", 3, 0x60000000); //AT_T3
 
     
-    SimpleATInitiator1 at_i2("AT_I2", 3, 0x50000000); //AT_T2  //should be SimpleATInitiator2 (which is buggy)
+    SimpleATInitiator2 at_i2("AT_I2", 3, 0x50000000); //AT_T2
     CoreDecouplingLTInitiator lt_i4("LT_I4", 3, 0x40000000); //LT_T3
     
     SimpleATTarget1    at_t1("AT_T1");

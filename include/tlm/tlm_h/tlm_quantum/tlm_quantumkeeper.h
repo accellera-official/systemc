@@ -36,7 +36,7 @@ namespace tlm {
     // should be used.
     //
     // The dummy template parameter is introduced to make it possible to
-    // initialize the static member (mGlobalQuantum) in the headerfile. This
+    // initialize the static member (m_global_quantum) in the headerfile. This
     // is only possible for template classes, otherwise the static member must
     // be initialized in a source file.
     //  
@@ -53,27 +53,27 @@ namespace tlm {
       //
       static void set_global_quantum(const sc_core::sc_time& t)
       {
-        if (!mGlobalQuantum) {
-          mGlobalQuantum = new sc_core::sc_time(t);
+        if (!m_global_quantum) {
+          m_global_quantum = new sc_core::sc_time(t);
 
         } else {
-          *mGlobalQuantum = t;
+          *m_global_quantum = t;
         }
       }
     
       static const sc_core::sc_time& get_global_quantum() 
       {
-        if (!mGlobalQuantum) {
-          mGlobalQuantum = new sc_core::sc_time(sc_core::SC_ZERO_TIME);
+        if (!m_global_quantum) {
+          m_global_quantum = new sc_core::sc_time(sc_core::SC_ZERO_TIME);
         }
 
-        return *mGlobalQuantum;
+        return *m_global_quantum;
       }
     
     public:
       tlm_quantumkeeper() :
-        mNextSyncPoint(sc_core::SC_ZERO_TIME),
-        mLocalTime(sc_core::SC_ZERO_TIME)
+        m_next_sync_point(sc_core::SC_ZERO_TIME),
+        m_local_time(sc_core::SC_ZERO_TIME)
       {
       }
   
@@ -86,7 +86,7 @@ namespace tlm {
       //
       virtual void inc(const sc_core::sc_time& t)
       {
-        mLocalTime += t;
+        m_local_time += t;
       }
 
       //
@@ -96,7 +96,7 @@ namespace tlm {
       //
       virtual void set(const sc_core::sc_time& t)
       {
-        mLocalTime = t;
+        m_local_time = t;
       }
     
       //
@@ -106,7 +106,7 @@ namespace tlm {
       //
       virtual bool need_sync() const
       {
-        return sc_core::sc_time_stamp() + mLocalTime >= mNextSyncPoint;
+        return sc_core::sc_time_stamp() + m_local_time >= m_next_sync_point;
       }
 
       //
@@ -116,7 +116,7 @@ namespace tlm {
       //
       virtual void sync()
       {
-        sc_core::wait(mLocalTime);
+        sc_core::wait(m_local_time);
         reset();
       }
     
@@ -128,8 +128,8 @@ namespace tlm {
       //
       virtual void reset()
       {
-        mLocalTime = sc_core::SC_ZERO_TIME;
-        mNextSyncPoint = sc_core::sc_time_stamp() + compute_local_quantum();
+        m_local_time = sc_core::SC_ZERO_TIME;
+        m_next_sync_point = sc_core::sc_time_stamp() + compute_local_quantum();
       }
     
       //
@@ -140,7 +140,7 @@ namespace tlm {
       //
       virtual sc_core::sc_time get_current_time() const
       {
-        return sc_core::sc_time_stamp() + mLocalTime;
+        return sc_core::sc_time_stamp() + m_local_time;
       }
     
       //
@@ -150,7 +150,7 @@ namespace tlm {
       //
       virtual sc_core::sc_time get_local_time() const
       {
-        return mLocalTime;
+        return m_local_time;
       }
     
     protected:
@@ -170,8 +170,8 @@ namespace tlm {
       {
         if (get_global_quantum() != sc_core::SC_ZERO_TIME) {
           const sc_dt::uint64 current = sc_core::sc_time_stamp().value();
-          const sc_dt::uint64 gQuant = get_global_quantum().value();
-          const sc_dt::uint64 tmp = (current/gQuant+sc_dt::uint64(1)) * gQuant;
+          const sc_dt::uint64 g_quant = get_global_quantum().value();
+          const sc_dt::uint64 tmp = (current/g_quant+sc_dt::uint64(1)) * g_quant;
           const sc_core::sc_time remainder = sc_core::sc_time(tmp - current,
                                                               false);
           return remainder;
@@ -184,18 +184,18 @@ namespace tlm {
     private:
       // sc_set_time_resolution can only be called before the first
       // sc_time object is created. To make it possible to call 
-      // sc_set_time_resolution from sc_main, mGlobalQuantum should be
+      // sc_set_time_resolution from sc_main, m_global_quantum should be
       // pointer. Otherwise it will be created before main is called,
       // which will cause sc_set_time_resolution to fail.
-      static sc_core::sc_time *mGlobalQuantum;
+      static sc_core::sc_time *m_global_quantum;
     
     protected:
-      sc_core::sc_time mNextSyncPoint;
-      sc_core::sc_time mLocalTime;
+      sc_core::sc_time m_next_sync_point;
+      sc_core::sc_time m_local_time;
     };
     
     template <typename Dummy>
-    sc_core::sc_time* tlm_quantumkeeper<Dummy>::mGlobalQuantum = 0;
+    sc_core::sc_time* tlm_quantumkeeper<Dummy>::m_global_quantum = 0;
   
     struct tlm_dummy {};
 

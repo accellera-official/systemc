@@ -82,12 +82,12 @@ class
 instance_specific_extension : public ispex_base{
 public:
     virtual ~instance_specific_extension() {}
-    const static unsigned int privID;
+    const static unsigned int priv_id;
 };
 
 template <typename T>
 const
-unsigned int instance_specific_extension<T>::privID = ispex_base::register_private_extension();
+unsigned int instance_specific_extension<T>::priv_id = ispex_base::register_private_extension();
 
 
 //this thing is basically a snippet of the generic_payload
@@ -107,8 +107,8 @@ public:
   template <typename T> T* set_extension(T* ext)
   {
       resize_extensions();
-      T* tmp = static_cast<T*>(m_extensions[T::privID]);
-      m_extensions[T::privID] = static_cast<ispex_base*>(ext);
+      T* tmp = static_cast<T*>(m_extensions[T::priv_id]);
+      m_extensions[T::priv_id] = static_cast<ispex_base*>(ext);
       if (!tmp && ext) (m_container->*m_inc)();
       return tmp;
   }
@@ -126,7 +126,7 @@ public:
   // Check for an extension, ext will point to 0 if not present
   template <typename T> void get_extension(T*& ext) const
   {
-      ext = static_cast<T*>(m_extensions[T::privID]);
+      ext = static_cast<T*>(m_extensions[T::priv_id]);
   }
   // Non-templatized version:
    ispex_base* get_extension(unsigned int index) const
@@ -138,8 +138,8 @@ public:
   template <typename T> void clear_extension(const T* ext)
   {
       resize_extensions();
-      if (m_extensions[T::privID]) (m_container->*m_dec)();
-      m_extensions[T::privID] = static_cast<ispex_base*>(0);
+      if (m_extensions[T::priv_id]) (m_container->*m_dec)();
+      m_extensions[T::priv_id] = static_cast<ispex_base*>(0);
   }
   // Non-templatized version with manual index
   void clear_extension(unsigned int index)
@@ -175,7 +175,7 @@ class instance_specific_extension_container;
 class instance_specific_extension_container_pool{
   friend class instance_specific_extension_carrier;
   friend class instance_specific_extension_container;
-  inline static instance_specific_extension_container*& getUnused();
+  inline static instance_specific_extension_container*& get_unused();
   inline static instance_specific_extension_container* create();
   inline static void free(instance_specific_extension_container*);
 };
@@ -222,13 +222,13 @@ class instance_specific_extension_container{
 };
 
 
-instance_specific_extension_container*& instance_specific_extension_container_pool::getUnused(){
+instance_specific_extension_container*& instance_specific_extension_container_pool::get_unused(){
   static instance_specific_extension_container* unused=NULL;
   return unused;
 }
 
 instance_specific_extension_container* instance_specific_extension_container_pool::create(){  //dummy for now
-  instance_specific_extension_container*& unused=getUnused();
+  instance_specific_extension_container*& unused=get_unused();
   if (!unused) {unused=new instance_specific_extension_container();}
   instance_specific_extension_container* tmp=unused;
   unused=unused->next;
@@ -236,7 +236,7 @@ instance_specific_extension_container* instance_specific_extension_container_poo
 }
 
 void instance_specific_extension_container_pool::free(instance_specific_extension_container* cont){
-  instance_specific_extension_container*& unused=getUnused();
+  instance_specific_extension_container*& unused=get_unused();
   cont->next=unused;
   unused=cont;
 }

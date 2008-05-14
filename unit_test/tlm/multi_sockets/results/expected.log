@@ -52,6 +52,7 @@ AT_T1: Received read request: A = 0x4 @ 100 ns
 LT_I4: Received ok response @ 100 ns (100 ns + 0 s)
 LT_I4: Send write request: A = 0x40000008, D = 0x2 @ 100 ns (100 ns + 0 s)
 LT_T3: Received write request: A = 0x8, D = 0x2 @ 100 ns
+AT_I2: Received ok response @ 125 ns
 AT_I2: Send read request: A = 0x50000008 @ 125 ns
 AT_T2: Received read request: A = 0x8 @ 125 ns
 AT_I1: Send read request: A = 0x10000008 @ 125 ns
@@ -63,7 +64,6 @@ LT_T1: Received read request: A = 0x4 @ 130 ns
 LT_I2: Received ok response: D = 0x0 @ 130 ns
 LT_I2: Send read request: A = 0x30000004 @ 130 ns
 LT_T2: Received read request: A = 0x4 @ 130 ns
-AT_I2: Received ok response @ 135 ns
 AT_I1: Received ok response @ 135 ns
 LT_I4: Received ok response @ 150 ns (150 ns + 0 s)
 LT_I4: Send read request: A = 0x40000000 @ 150 ns (150 ns + 0 s)
@@ -77,8 +77,8 @@ LT_T1: Received read request: A = 0x8 @ 230 ns
 LT_I2: Received ok response: D = 0x1 @ 230 ns
 LT_I2: Send read request: A = 0x30000008 @ 230 ns
 LT_T2: Received read request: A = 0x8 @ 230 ns
+AT_I2: Received ok response @ 235 ns
 AT_I1: Received ok response @ 245 ns
-AT_I2: Received ok response @ 245 ns
 LT_I4: Received ok response: D = 0x0 @ 250 ns (250 ns + 0 s)
 LT_I4: Send read request: A = 0x40000004 @ 250 ns (250 ns + 0 s)
 LT_T3: Received read request: A = 0x4 @ 250 ns
@@ -87,25 +87,25 @@ LT_I3: Send read request: A = 0x60000000 @ 280 ns
 AT_T3: Received read request: A = 0x0 @ 330 ns
 LT_I1: Received ok response: D = 0x2 @ 330 ns
 LT_I2: Received ok response: D = 0x2 @ 330 ns
+AT_I2: Received ok response @ 345 ns
 LT_I4: Received ok response: D = 0x1 @ 350 ns (350 ns + 0 s)
 LT_I4: Send read request: A = 0x40000008 @ 350 ns (350 ns + 0 s)
 LT_T3: Received read request: A = 0x8 @ 350 ns
 AT_I1: Received ok response @ 355 ns
-AT_I2: Received ok response @ 355 ns
 LT_I3: Received ok response: D = 0x0 @ 430 ns
 LT_I3: Send read request: A = 0x60000004 @ 430 ns
 AT_T3: Received read request: A = 0x4 @ 430 ns
 LT_I4: Received ok response: D = 0x2 @ 450 ns (450 ns + 0 s)
-AT_I2: Received ok response: D = 0x0 @ 465 ns
+AT_I2: Received ok response: D = 0x0 @ 455 ns
 AT_I1: Received ok response: D = 0x0 @ 465 ns
 LT_I3: Received ok response: D = 0x1 @ 530 ns
 LT_I3: Send read request: A = 0x60000008 @ 530 ns
 AT_T3: Received read request: A = 0x8 @ 530 ns
+AT_I2: Received ok response: D = 0x1 @ 565 ns
 AT_I1: Received ok response: D = 0x1 @ 575 ns
-AT_I2: Received ok response: D = 0x1 @ 575 ns
 LT_I3: Received ok response: D = 0x2 @ 630 ns
+AT_I2: Received ok response: D = 0x2 @ 675 ns
 AT_I1: Received ok response: D = 0x2 @ 685 ns
-AT_I2: Received ok response: D = 0x2 @ 685 ns
 At 18446744073709551615 ps status of bus1 is 
   Number of connected initiators: 4
   Number of connected targets: 3

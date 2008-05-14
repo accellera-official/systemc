@@ -67,14 +67,14 @@ std::ostream& operator<<(std::ostream& s, const tlm_phase& p){
 #define DECLARE_EXTENDED_PHASE(name_arg) \
 class tlm_phase_##name_arg:public tlm::tlm_phase{ \
 public:\
-static const tlm_phase_##name_arg& getPhase(){static tlm_phase_##name_arg tmp; return tmp;}\
+static const tlm_phase_##name_arg& get_phase(){static tlm_phase_##name_arg tmp; return tmp;}\
 private:\
-tlm_phase_##name_arg():tlm::tlm_phase(tlm::create_phase_number()){tlm::get_phase_name_vec().push_back(getChar_##name_arg());};\
+tlm_phase_##name_arg():tlm::tlm_phase(tlm::create_phase_number()){tlm::get_phase_name_vec().push_back(get_char_##name_arg());};\
 tlm_phase_##name_arg(const tlm_phase_##name_arg&); \
 tlm_phase_##name_arg& operator=(const tlm_phase_##name_arg&); \
-static inline const char* getChar_##name_arg(){static const char* tmp=#name_arg; return tmp;} \
+static inline const char* get_char_##name_arg(){static const char* tmp=#name_arg; return tmp;} \
 }; \
-static const tlm_phase_##name_arg& name_arg=tlm_phase_##name_arg::getPhase()
+static const tlm_phase_##name_arg& name_arg=tlm_phase_##name_arg::get_phase()
   
 } // namespace tlm
 

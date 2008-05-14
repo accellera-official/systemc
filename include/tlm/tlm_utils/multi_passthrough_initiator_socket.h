@@ -128,7 +128,7 @@ public:
   }
 
   //register callback for dmi function of bw interface
-  void register_invalidate_DMI(MODULE* mod,
+  void register_invalidate_direct_mem_ptr(MODULE* mod,
                              void (MODULE::*cb)(int, sc_dt::uint64, sc_dt::uint64))
   {
     //make sure that only one module is registering callbacks with this socket
@@ -164,8 +164,8 @@ public:
   virtual sc_core::sc_export<tlm::tlm_bw_transport_if<TYPES> >& get_base_export()
   {
     if (!m_beoe_disabled) //we are not bound hierarchically
-      base_type::mExport.bind(m_dummy);  //so we bind the dummy to avoid a SystemC error
-    return base_type::mExport; //and then return our own export so that the hierarchical binding is set up properly
+      base_type::m_export.bind(m_dummy);  //so we bind the dummy to avoid a SystemC error
+    return base_type::m_export; //and then return our own export so that the hierarchical binding is set up properly
   }
 
   //bind against a target socket
@@ -206,8 +206,8 @@ public:
     // we bind it now to avoid a SystemC error.
     //We must do that, because it is legal not to register a callback on this socket
     // as the user might only use b_transport
-    if (!base_type::mExport.get_interface()){ 
-      base_type::mExport.bind(m_dummy);      
+    if (!base_type::m_export.get_interface()){ 
+      base_type::m_export.bind(m_dummy);      
     }
     
     //'break' here if the socket was told not to do callback binding

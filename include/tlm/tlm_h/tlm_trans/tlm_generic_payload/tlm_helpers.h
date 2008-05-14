@@ -35,7 +35,7 @@ namespace tlm {
 
 enum tlm_endianness { TLM_UNKNOWN_ENDIAN, TLM_LITTLE_ENDIAN, TLM_BIG_ENDIAN };
 
-inline tlm_endianness getHostEndianness(void)
+inline tlm_endianness get_host_endianness(void)
 {
   static tlm_endianness host_endianness = TLM_UNKNOWN_ENDIAN;
   
@@ -49,7 +49,7 @@ inline tlm_endianness getHostEndianness(void)
   return host_endianness;
 }
 
-inline bool hostHasLittleEndianness(void)
+inline bool host_has_little_endianness(void)
 {
   static tlm_endianness host_endianness = TLM_UNKNOWN_ENDIAN;
   static bool host_little_endian = false;
@@ -64,9 +64,9 @@ inline bool hostHasLittleEndianness(void)
   return host_little_endian;
 }
 
-inline bool hasHostEndianness(tlm_endianness endianness)
+inline bool has_host_endianness(tlm_endianness endianness)
 {
-  if (hostHasLittleEndianness()) {
+  if (host_has_little_endianness()) {
     return endianness == TLM_LITTLE_ENDIAN;
 
   } else {

@@ -43,9 +43,9 @@ public:
 public:
   explicit trivial_target_socket(const char* n = "trivial_target_socket") :
     base_type(sc_core::sc_gen_unique_name(n)),
-    mProcess(this->name())
+    m_process(this->name())
   {
-    bind(mProcess);
+    bind(m_process);
   }
 
   // REGISTER_XXX
@@ -54,97 +54,97 @@ public:
                                                              phase_type&,
                                                              sc_core::sc_time&))
   {
-    mProcess.setNBTransportPtr(mod, cb);
+    m_process.set_nb_transport_ptr(mod, cb);
   }
 
   void register_b_transport(MODULE* mod,
                             void (MODULE::*cb)(transaction_type&,
                                                sc_core::sc_time&))
   {
-    mProcess.setBTransportPtr(mod, cb);
+    m_process.set_b_transport_ptr(mod, cb);
   }
 
   void register_transport_dbg(MODULE* mod,
                               unsigned int (MODULE::*cb)(transaction_type&))
   {
-    mProcess.setTransportDebugPtr(mod, cb);
+    m_process.set_transport_dbg_ptr(mod, cb);
   }
 
   void register_get_direct_mem_ptr(MODULE* mod,
                                    bool (MODULE::*cb)(transaction_type&,
                                                       tlm::tlm_dmi&))
   {
-    mProcess.setGetDMIPtr(mod, cb);
+    m_process.set_get_direct_mem_ptr(mod, cb);
   }
 
 private:
-  class Process : public tlm::tlm_fw_transport_if<TYPES>
+  class process : public tlm::tlm_fw_transport_if<TYPES>
   {
   public:
     typedef sync_enum_type (MODULE::*NBTransportPtr)(transaction_type&,
-                                                     tlm::tlm_phase&,
-                                                     sc_core::sc_time&);
+                                                       tlm::tlm_phase&,
+                                                       sc_core::sc_time&);
     typedef void (MODULE::*BTransportPtr)(transaction_type&,
-                                          sc_core::sc_time&);
-    typedef unsigned int (MODULE::*TransportDebugPtr)(transaction_type&);
-    typedef bool (MODULE::*GetDMIPtr)(transaction_type&,
-                                                  tlm::tlm_dmi&);
+                                            sc_core::sc_time&);
+    typedef unsigned int (MODULE::*TransportDbgPtr)(transaction_type&);
+    typedef bool (MODULE::*GetDirectMem_ptr)(transaction_type&,
+                                               tlm::tlm_dmi&);
       
-    Process(const std::string& name) :
-      mName(name),
-      mMod(0),
-      mNBTransportPtr(0),
-      mBTransportPtr(0),
-      mTransportDebugPtr(0),
-      mGetDMIPtr(0)
+    process(const std::string& name) :
+      m_name(name),
+      m_mod(0),
+      m_nb_transport_ptr(0),
+      m_b_transport_ptr(0),
+      m_transport_dbg_ptr(0),
+      m_get_direct_mem_ptr(0)
     {
     }
   
-    void setNBTransportPtr(MODULE* mod, NBTransportPtr p)
+    void set_nb_transport_ptr(MODULE* mod, NBTransportPtr p)
     {
-      if (mNBTransportPtr) {
-        std::cerr << mName << ": non-blocking callback allready registered" << std::endl;
+      if (m_nb_transport_ptr) {
+        std::cerr << m_name << ": non-blocking callback allready registered" << std::endl;
 
       } else {
-        assert(!mMod || mMod == mod);
-        mMod = mod;
-        mNBTransportPtr = p;
+        assert(!m_mod || m_mod == mod);
+        m_mod = mod;
+        m_nb_transport_ptr = p;
       }
     }
 
-    void setBTransportPtr(MODULE* mod, BTransportPtr p)
+    void set_b_transport_ptr(MODULE* mod, BTransportPtr p)
     {
-      if (mBTransportPtr) {
-        std::cerr << mName << ": non-blocking callback allready registered" << std::endl;
+      if (m_b_transport_ptr) {
+        std::cerr << m_name << ": non-blocking callback allready registered" << std::endl;
 
       } else {
-        assert(!mMod || mMod == mod);
-        mMod = mod;
-        mBTransportPtr = p;
+        assert(!m_mod || m_mod == mod);
+        m_mod = mod;
+        m_b_transport_ptr = p;
       }
     }
 
-    void setTransportDebugPtr(MODULE* mod, TransportDebugPtr p)
+    void set_transport_dbg_ptr(MODULE* mod, TransportDbgPtr p)
     {
-      if (mTransportDebugPtr) {
-        std::cerr << mName << ": debug callback allready registered" << std::endl;
+      if (m_transport_dbg_ptr) {
+        std::cerr << m_name << ": debug callback allready registered" << std::endl;
 
       } else {
-        assert(!mMod || mMod == mod);
-        mMod = mod;
-        mTransportDebugPtr = p;
+        assert(!m_mod || m_mod == mod);
+        m_mod = mod;
+        m_transport_dbg_ptr = p;
       }
     }
 
-    void setGetDMIPtr(MODULE* mod, GetDMIPtr p)
+    void set_get_direct_mem_ptr(MODULE* mod, GetDirectMem_ptr p)
     {
-      if (mGetDMIPtr) {
-        std::cerr << mName << ": get DMI pointer callback allready registered" << std::endl;
+      if (m_get_direct_mem_ptr) {
+        std::cerr << m_name << ": get DMI pointer callback allready registered" << std::endl;
 
       } else {
-        assert(!mMod || mMod == mod);
-        mMod = mod;
-        mGetDMIPtr = p;
+        assert(!m_mod || m_mod == mod);
+        m_mod = mod;
+        m_get_direct_mem_ptr = p;
       }
     }
 
@@ -152,13 +152,13 @@ private:
                                    phase_type& phase,
                                    sc_core::sc_time& t)
     {
-      if (mNBTransportPtr) {
+      if (m_nb_transport_ptr) {
         // forward call
-        assert(mMod);
-        return (mMod->*mNBTransportPtr)(trans, phase, t);
+        assert(m_mod);
+        return (m_mod->*m_nb_transport_ptr)(trans, phase, t);
 
       } else {
-        std::cerr << mName << ": no non-blocking callback registered" << std::endl;
+        std::cerr << m_name << ": no non-blocking callback registered" << std::endl;
         assert(0); exit(1);
 //        return tlm::TLM_COMPLETED;   ///< unreachable code
       }
@@ -166,13 +166,13 @@ private:
 
     void b_transport(transaction_type& trans, sc_core::sc_time& t)
     {
-      if (mBTransportPtr) {
+      if (m_b_transport_ptr) {
         // forward call
-        assert(mMod);
-        return (mMod->*mBTransportPtr)(trans, t);
+        assert(m_mod);
+        return (m_mod->*m_b_transport_ptr)(trans, t);
 
       } else {
-        std::cerr << mName << ": no blocking callback registered" << std::endl;
+        std::cerr << m_name << ": no blocking callback registered" << std::endl;
         assert(0); exit(1);
 //        return tlm::TLM_COMPLETED;   ///< unreachable code
       }
@@ -180,10 +180,10 @@ private:
 
     unsigned int transport_dbg(transaction_type& trans)
     {
-      if (mTransportDebugPtr) {
+      if (m_transport_dbg_ptr) {
         // forward call
-        assert(mMod);
-        return (mMod->*mTransportDebugPtr)(trans);
+        assert(m_mod);
+        return (m_mod->*m_transport_dbg_ptr)(trans);
 
       } else {
         // No debug support
@@ -194,10 +194,10 @@ private:
     bool get_direct_mem_ptr(transaction_type& trans,
                             tlm::tlm_dmi&  dmi_data)
     {
-      if (mGetDMIPtr) {
+      if (m_get_direct_mem_ptr) {
         // forward call
-        assert(mMod);
-        return (mMod->*mGetDMIPtr)(trans, dmi_data);
+        assert(m_mod);
+        return (m_mod->*m_get_direct_mem_ptr)(trans, dmi_data);
 
       } else {
         // No DMI support
@@ -209,16 +209,16 @@ private:
     }
 
   private:
-    const std::string mName;
-    MODULE* mMod;
-    NBTransportPtr mNBTransportPtr;
-    BTransportPtr mBTransportPtr;
-    TransportDebugPtr mTransportDebugPtr;
-    GetDMIPtr mGetDMIPtr;
+    const std::string m_name;
+    MODULE* m_mod;
+    NBTransportPtr m_nb_transport_ptr;
+    BTransportPtr m_b_transport_ptr;
+    TransportDbgPtr m_transport_dbg_ptr;
+    GetDirectMem_ptr m_get_direct_mem_ptr;
   };
 
 private:
-  Process mProcess;
+  process m_process;
 };
 
 }

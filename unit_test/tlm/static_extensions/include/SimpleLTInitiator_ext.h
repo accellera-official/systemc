@@ -299,7 +299,7 @@ public:
           int e_start = 0;
           int e_end = 4;
           int e_increment = 1;
-          if (!tlm::hostHasLittleEndianness())
+          if (!tlm::host_has_little_endianness())
           {
               e_start = 3;
               e_end = -1;

@@ -102,7 +102,7 @@ public:
     }
   }
   
-  unsigned int getSize()
+  unsigned int get_size()
   {
     return size;
   }
@@ -208,9 +208,9 @@ public:
     //t.aquire();
     if (when==sc_core::SC_ZERO_TIME) {
       if (sc_core::sc_delta_count() & (sc_dt::uint64)0x1) //uneven delta cycle so delta delay is for even cylce
-        m_evenDelta.insert(PAYLOAD(&t,p));
+        m_even_delta.insert(PAYLOAD(&t,p));
       else
-        m_unevenDelta.insert(PAYLOAD(&t,p)); //even delta cycle so delta delay is for uneven delta
+        m_uneven_delta.insert(PAYLOAD(&t,p)); //even delta cycle so delta delay is for uneven delta
       m_e.notify(sc_core::SC_ZERO_TIME);
     }
     else {
@@ -220,7 +220,7 @@ public:
   }
 
   void notify (tlm_payload_type& t, tlm_phase_type& p){
-    m_immediateYield.insert(PAYLOAD(&t,p));
+    m_immediate_yield.insert(PAYLOAD(&t,p));
     m_e.notify(); // immediate notification
   }
   
@@ -228,33 +228,33 @@ private:
   
   void fec(){
     //immediate yield notifications
-    while(m_immediateYield.next()) {PAYLOAD& tmp=m_immediateYield.get(); (m_owner->*m_cb)(*tmp.first, tmp.second);} //tmp.first->release();}
-    m_immediateYield.reset();
+    while(m_immediate_yield.next()) {PAYLOAD& tmp=m_immediate_yield.get(); (m_owner->*m_cb)(*tmp.first, tmp.second);} //tmp.first->release();}
+    m_immediate_yield.reset();
     
     //delta notifications
     if (sc_core::sc_delta_count() & (sc_dt::uint64) 0x1) {//uneven delta so put out all payloads for uneven delta
-      while (m_unevenDelta.next()) {PAYLOAD& tmp=m_unevenDelta.get(); (m_owner->*m_cb)(*tmp.first, tmp.second);} //tmp.first->release();}
-      m_unevenDelta.reset();
-      if (m_evenDelta.size) m_e.notify(sc_core::SC_ZERO_TIME);
+      while (m_uneven_delta.next()) {PAYLOAD& tmp=m_uneven_delta.get(); (m_owner->*m_cb)(*tmp.first, tmp.second);} //tmp.first->release();}
+      m_uneven_delta.reset();
+      if (m_even_delta.size) m_e.notify(sc_core::SC_ZERO_TIME);
     }
     else {
-      while (m_evenDelta.next()) {PAYLOAD& tmp=m_evenDelta.get(); (m_owner->*m_cb)(*tmp.first, tmp.second);} //tmp.first->release();}
-      m_evenDelta.reset();  
-      if (m_unevenDelta.size) m_e.notify(sc_core::SC_ZERO_TIME);
+      while (m_even_delta.next()) {PAYLOAD& tmp=m_even_delta.get(); (m_owner->*m_cb)(*tmp.first, tmp.second);} //tmp.first->release();}
+      m_even_delta.reset();  
+      if (m_uneven_delta.size) m_e.notify(sc_core::SC_ZERO_TIME);
     }
-    if (!m_ppq.getSize()) return; //there were only delta notification
+    if (!m_ppq.get_size()) return; //there were only delta notification
     
     //timed notifications
     const sc_core::sc_time now=sc_core::sc_time_stamp();
     sc_core::sc_time top=m_ppq.top_time();
 
-    while(m_ppq.getSize() && top==now) { // push all active ones into target
+    while(m_ppq.get_size() && top==now) { // push all active ones into target
       PAYLOAD& tmp=m_ppq.top();
       (m_owner->*m_cb)(*tmp.first, tmp.second); //tmp.first->release();}
       m_ppq.delete_top();
       top=m_ppq.top_time();
     }
-    if ( m_ppq.getSize()) {
+    if ( m_ppq.get_size()) {
       m_e.notify( top - now) ;
     }
     
@@ -264,9 +264,9 @@ private:
   cb     m_cb;
   
   time_ordered_list<PAYLOAD> m_ppq;
-  delta_list m_unevenDelta;
-  delta_list m_evenDelta;
-  delta_list m_immediateYield;
+  delta_list m_uneven_delta;
+  delta_list m_even_delta;
+  delta_list m_immediate_yield;
   
   sc_core::sc_event m_e;   // default event
 };

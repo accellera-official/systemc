@@ -43,9 +43,9 @@ public:
 public:
   explicit simple_initiator_socket(const char* n = "simple_initiator_socket") :
     base_type(sc_core::sc_gen_unique_name(n)),
-    mProcess(this->name())
+    m_process(this->name())
   {
-    this->mExport.bind(mProcess);
+    this->m_export.bind(m_process);
   }
 
   void register_nb_transport_bw(MODULE* mod,
@@ -53,66 +53,66 @@ public:
                                                              phase_type&,
                                                              sc_core::sc_time&))
   {
-    mProcess.setTransportPtr(mod, cb);
+    m_process.set_transport_ptr(mod, cb);
   }
 
   void register_invalidate_direct_mem_ptr(MODULE* mod,
                                           void (MODULE::*cb)(sc_dt::uint64, sc_dt::uint64))
   {
-    mProcess.setInvalidateDMIPtr(mod, cb);
+    m_process.set_invalidate_direct_mem_ptr(mod, cb);
   }
 
 private:
-  class Process : public tlm::tlm_bw_transport_if<TYPES>
+  class process : public tlm::tlm_bw_transport_if<TYPES>
   {
   public:
     typedef sync_enum_type (MODULE::*TransportPtr)(transaction_type&,
                                                    tlm::tlm_phase&,
                                                    sc_core::sc_time&);
-    typedef void (MODULE::*InvalidateDMIPtr)(sc_dt::uint64,
-                                             sc_dt::uint64);
+    typedef void (MODULE::*InvalidateDirectMemPtr)(sc_dt::uint64,
+                                                   sc_dt::uint64);
       
-    Process(const std::string& name) :
-      mName(name),
-      mMod(0),
-      mTransportPtr(0),
-      mInvalidateDMIPtr(0)
+    process(const std::string& name) :
+      m_name(name),
+      m_mod(0),
+      m_transport_ptr(0),
+      m_invalidate_direct_mem_ptr(0)
     {
     }
   
-    void setTransportPtr(MODULE* mod, TransportPtr p)
+    void set_transport_ptr(MODULE* mod, TransportPtr p)
     {
-      if (mTransportPtr) {
-        std::cerr << mName << ": non-blocking callback allready registered" << std::endl;
+      if (m_transport_ptr) {
+        std::cerr << m_name << ": non-blocking callback allready registered" << std::endl;
 
       } else {
-        assert(!mMod || mMod == mod);
-        mMod = mod;
-        mTransportPtr = p;
+        assert(!m_mod || m_mod == mod);
+        m_mod = mod;
+        m_transport_ptr = p;
       }
     }
 
-    void setInvalidateDMIPtr(MODULE* mod, InvalidateDMIPtr p)
+    void set_invalidate_direct_mem_ptr(MODULE* mod, InvalidateDirectMemPtr p)
     {
-      if (mInvalidateDMIPtr) {
-        std::cerr << mName << ": invalidate DMI callback allready registered" << std::endl;
+      if (m_invalidate_direct_mem_ptr) {
+        std::cerr << m_name << ": invalidate DMI callback allready registered" << std::endl;
 
       } else {
-        assert(!mMod || mMod == mod);
-        mMod = mod;
-        mInvalidateDMIPtr = p;
+        assert(!m_mod || m_mod == mod);
+        m_mod = mod;
+        m_invalidate_direct_mem_ptr = p;
       }
     }
 
     sync_enum_type nb_transport_bw(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
     {
-      if (mTransportPtr) {
+      if (m_transport_ptr) {
         // forward call
-        assert(mMod);
-        return (mMod->*mTransportPtr)(trans, phase, t);
+        assert(m_mod);
+        return (m_mod->*m_transport_ptr)(trans, phase, t);
 
       } else {
-        std::cerr << mName << ": no transport callback registered" << std::endl;
+        std::cerr << m_name << ": no transport callback registered" << std::endl;
         assert(0); exit(1);
       }
     }
@@ -120,22 +120,22 @@ private:
     void invalidate_direct_mem_ptr(sc_dt::uint64 start_range,
                                    sc_dt::uint64 end_range)
     {
-      if (mInvalidateDMIPtr) {
+      if (m_invalidate_direct_mem_ptr) {
         // forward call
-        assert(mMod);
-        (mMod->*mInvalidateDMIPtr)(start_range, end_range);
+        assert(m_mod);
+        (m_mod->*m_invalidate_direct_mem_ptr)(start_range, end_range);
       }
     }
 
   private:
-    const std::string mName;
-    MODULE* mMod;
-    TransportPtr mTransportPtr;
-    InvalidateDMIPtr mInvalidateDMIPtr;
+    const std::string m_name;
+    MODULE* m_mod;
+    TransportPtr m_transport_ptr;
+    InvalidateDirectMemPtr m_invalidate_direct_mem_ptr;
   };
 
 private:
-  Process mProcess;
+  process m_process;
 };
 
 // Tagged version
@@ -161,9 +161,9 @@ public:
 public:
   explicit simple_initiator_socket_tagged(const char* n = "simple_initiator_socket_tagged") :
     base_type(sc_core::sc_gen_unique_name(n)),
-    mProcess(this->name())
+    m_process(this->name())
   {
-    this->mExport.bind(mProcess);
+    this->m_export.bind(m_process);
   }
 
   void register_nb_transport_bw(MODULE* mod,
@@ -173,76 +173,76 @@ public:
                                                              sc_core::sc_time&),
                                 int id)
   {
-    mProcess.setTransportPtr(mod, cb);
-    mProcess.setTransportUserId(id);
+    m_process.set_transport_ptr(mod, cb);
+    m_process.set_transport_user_id(id);
   }
 
   void register_invalidate_direct_mem_ptr(MODULE* mod,
                                           void (MODULE::*cb)(int, sc_dt::uint64, sc_dt::uint64),
                                            int id)
   {
-    mProcess.setInvalidateDMIPtr(mod, cb);
-    mProcess.setInvalidateDMIUserId(id);
+    m_process.set_invalidate_direct_mem_ptr(mod, cb);
+    m_process.set_invalidate_dmi_user_id(id);
   }
 
 private:
-  class Process : public tlm::tlm_bw_transport_if<TYPES>
+  class process : public tlm::tlm_bw_transport_if<TYPES>
   {
   public:
     typedef sync_enum_type (MODULE::*TransportPtr)(int,
                                                    transaction_type&,
                                                    tlm::tlm_phase&,
                                                    sc_core::sc_time&);
-    typedef void (MODULE::*InvalidateDMIPtr)(int,
-                                             sc_dt::uint64,
-                                             sc_dt::uint64);
+    typedef void (MODULE::*InvalidateDirectMemPtr)(int,
+                                                   sc_dt::uint64,
+                                                   sc_dt::uint64);
       
-    Process(const std::string& name) :
-      mName(name),
-      mMod(0),
-      mTransportPtr(0),
-      mInvalidateDMIPtr(0),
-      mTransportUserId(0),
-      mInvalidateDMIUserId(0)
+    process(const std::string& name) :
+      m_name(name),
+      m_mod(0),
+      m_transport_ptr(0),
+      m_invalidate_direct_mem_ptr(0),
+      m_transport_user_id(0),
+      m_invalidate_direct_mem_user_id(0)
     {
     }
   
-    void setTransportUserId(int id) { mTransportUserId = id; }
-    void setInvalidateDMIUserId(int id) { mInvalidateDMIUserId = id; }
+    void set_transport_user_id(int id) { m_transport_user_id = id; }
+    void set_invalidate_dmi_user_id(int id) { m_invalidate_direct_mem_user_id = id; }
 
-    void setTransportPtr(MODULE* mod, TransportPtr p)
+    void set_transport_ptr(MODULE* mod, TransportPtr p)
     {
-      if (mTransportPtr) {
-        std::cerr << mName << ": non-blocking callback allready registered" << std::endl;
+      if (m_transport_ptr) {
+        std::cerr << m_name << ": non-blocking callback allready registered" << std::endl;
 
       } else {
-        assert(!mMod || mMod == mod);
-        mMod = mod;
-        mTransportPtr = p;
+        assert(!m_mod || m_mod == mod);
+        m_mod = mod;
+        m_transport_ptr = p;
       }
     }
 
-    void setInvalidateDMIPtr(MODULE* mod, InvalidateDMIPtr p)
+    void set_invalidate_direct_mem_ptr(MODULE* mod, InvalidateDirectMemPtr p)
     {
-      if (mInvalidateDMIPtr) {
-        std::cerr << mName << ": invalidate DMI callback allready registered" << std::endl;
+      if (m_invalidate_direct_mem_ptr) {
+        std::cerr << m_name << ": invalidate DMI callback allready registered" << std::endl;
 
       } else {
-        assert(!mMod || mMod == mod);
-        mMod = mod;
-        mInvalidateDMIPtr = p;
+        assert(!m_mod || m_mod == mod);
+        m_mod = mod;
+        m_invalidate_direct_mem_ptr = p;
       }
     }
 
     sync_enum_type nb_transport_bw(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
     {
-      if (mTransportPtr) {
+      if (m_transport_ptr) {
         // forward call
-        assert(mMod);
-        return (mMod->*mTransportPtr)(mTransportUserId, trans, phase, t);
+        assert(m_mod);
+        return (m_mod->*m_transport_ptr)(m_transport_user_id, trans, phase, t);
 
       } else {
-        std::cerr << mName << ": no transport callback registered" << std::endl;
+        std::cerr << m_name << ": no transport callback registered" << std::endl;
         assert(0); exit(1);
       }
     }
@@ -250,24 +250,24 @@ private:
     void invalidate_direct_mem_ptr(sc_dt::uint64 start_range,
                                    sc_dt::uint64 end_range)
     {
-      if (mInvalidateDMIPtr) {
+      if (m_invalidate_direct_mem_ptr) {
         // forward call
-        assert(mMod);
-        (mMod->*mInvalidateDMIPtr)(mInvalidateDMIUserId, start_range, end_range);
+        assert(m_mod);
+        (m_mod->*m_invalidate_direct_mem_ptr)(m_invalidate_direct_mem_user_id, start_range, end_range);
       }
     }
 
   private:
-    const std::string mName;
-    MODULE* mMod;
-    TransportPtr mTransportPtr;
-    InvalidateDMIPtr mInvalidateDMIPtr;
-    int mTransportUserId;
-    int mInvalidateDMIUserId;
+    const std::string m_name;
+    MODULE* m_mod;
+    TransportPtr m_transport_ptr;
+    InvalidateDirectMemPtr m_invalidate_direct_mem_ptr;
+    int m_transport_user_id;
+    int m_invalidate_direct_mem_user_id;
   };
 
 private:
-  Process mProcess;
+  process m_process;
 };
 
 }

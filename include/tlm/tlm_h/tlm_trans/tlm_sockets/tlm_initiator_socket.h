@@ -103,13 +103,13 @@ public:
 public:
   tlm_initiator_socket()
   : port_type(sc_core::sc_gen_unique_name("tlm_initiator_socket"))
-  , mExport(sc_core::sc_gen_unique_name("tlm_initiator_socket_export"))
+  , m_export(sc_core::sc_gen_unique_name("tlm_initiator_socket_export"))
   {
   }
 
   explicit tlm_initiator_socket(const char* name)
   : port_type(name)
-  , mExport(sc_core::sc_gen_unique_name((std::string(name) + "_export").c_str()))
+  , m_export(sc_core::sc_gen_unique_name((std::string(name) + "_export").c_str()))
   {
   }
 
@@ -171,11 +171,11 @@ public:
 
   // Implementation of pure virtual functions of base class
   virtual sc_core::sc_port_b<FW_IF> &   get_base_port()      { return *this;   }
-  virtual                    BW_IF  &   get_base_interface() { return mExport; }
-  virtual sc_core::sc_export<BW_IF> &   get_base_export()    { return mExport; }
+  virtual                    BW_IF  &   get_base_interface() { return m_export; }
+  virtual sc_core::sc_export<BW_IF> &   get_base_export()    { return m_export; }
 
 protected:
-  export_type mExport;
+  export_type m_export;
 };
 
 //

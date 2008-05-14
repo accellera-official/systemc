@@ -162,7 +162,7 @@ public:
   }
 
   //register callback for debug transport of fw interface
-  void register_debug_transport(MODULE* mod,
+  void register_transport_dbg(MODULE* mod,
                               dbg_cb cb)
   {
     //if our export hasn't been bound yet (due to a hierarch binding)
@@ -189,8 +189,8 @@ public:
   }
 
   //register callback for DMI of fw interface
-  void register_DMI(MODULE* mod,
-                   dmi_cb cb)
+  void register_get_direct_mem_ptr(MODULE* mod,
+                                   dmi_cb cb)
   {
     //if our export hasn't been bound yet (due to a hierarch binding)
     //  we bind it now.
@@ -244,14 +244,14 @@ public:
     //get the callback binders and the multi binds of the top of the hierachical bind chain
     // NOTE: this could be the same socket if there is no hierachical bind
     std::vector<callback_binder_fw<TYPES>* >& binders=get_hierarch_bind()->get_binders();
-    std::map<unsigned int, tlm::tlm_bw_transport_if<TYPES>*>&  multiBinds=get_hierarch_bind()->get_multi_binds();
+    std::map<unsigned int, tlm::tlm_bw_transport_if<TYPES>*>&  multi_binds=get_hierarch_bind()->get_multi_binds();
 
     //iterate over all binders
     for (unsigned int i=0; i<binders.size(); i++) {
       binders[i]->set_callbacks(m_nb_f, m_b_f, m_dmi_f, m_dbg_f); //set the callbacks for the binder
-      if (multiBinds.find(i)!=multiBinds.end()) //check if this connection is multi-multi
+      if (multi_binds.find(i)!=multi_binds.end()) //check if this connection is multi-multi
         //if so remember the interface
-        m_sockets.push_back(multiBinds[i]);
+        m_sockets.push_back(multi_binds[i]);
       else{ //if we are bound to a normal socket
         //get the calling port and try to cast it into a tlm socket base
         base_initiator_socket_type* test=dynamic_cast<base_initiator_socket_type*>(binders[i]->get_other_side());
