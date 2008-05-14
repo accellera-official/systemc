@@ -19,6 +19,7 @@
 #define __TLM_ANALYSIS_H__
 
 
+#include "tlm_write_if.h"
 #include "tlm_analysis_if.h"
 
 #include "tlm_analysis_triple.h"

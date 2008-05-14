@@ -22,7 +22,6 @@
 
 #include "tlm_h/tlm_version.h"
 #include "tlm_h/tlm_analysis/tlm_analysis.h"
-#include "tlm_h/tlm_peq/tlm_peq.h"
 #include "tlm_h/tlm_quantum/tlm_quantum.h"
 #include "tlm_h/tlm_req_rsp/tlm_req_rsp.h"
 #include "tlm_h/tlm_trans/tlm_trans.h"

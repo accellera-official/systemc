@@ -251,32 +251,32 @@ public:
     //---------------
 
     // Command related method
-    inline bool                 is_read() const {return (m_command == TLM_READ_COMMAND);}
-    inline void                 set_read() {m_command = TLM_READ_COMMAND;}
-    inline bool                 is_write() const {return (m_command == TLM_WRITE_COMMAND);}
-    inline void                 set_write() {m_command = TLM_WRITE_COMMAND;}
-    inline tlm_command          get_command() const {return m_command;}
-    inline void                 set_command(const tlm_command command) {m_command = command;}
+    bool                 is_read() const {return (m_command == TLM_READ_COMMAND);}
+    void                 set_read() {m_command = TLM_READ_COMMAND;}
+    bool                 is_write() const {return (m_command == TLM_WRITE_COMMAND);}
+    void                 set_write() {m_command = TLM_WRITE_COMMAND;}
+    tlm_command          get_command() const {return m_command;}
+    void                 set_command(const tlm_command command) {m_command = command;}
     
     // Address related methods
-    inline sc_dt::uint64        get_address() const {return m_address;}
-    inline void                 set_address(const sc_dt::uint64 address) {m_address = address;}
+    sc_dt::uint64        get_address() const {return m_address;}
+    void                 set_address(const sc_dt::uint64 address) {m_address = address;}
     
     // Data related methods
-    inline unsigned char*       get_data_ptr() const {return m_data;}
-    inline void                 set_data_ptr(unsigned char* data) {m_data = data;}
+    unsigned char*       get_data_ptr() const {return m_data;}
+    void                 set_data_ptr(unsigned char* data) {m_data = data;}
     
     // Transaction length (in bytes) related methods
-    inline unsigned int         get_data_length() const {return m_length;}
-    inline void                 set_data_length(const unsigned int length) {m_length = length;}
+    unsigned int         get_data_length() const {return m_length;}
+    void                 set_data_length(const unsigned int length) {m_length = length;}
     
     // Response status related methods
-    inline bool                 is_response_ok() const {return (m_response_status > 0);}
-    inline bool                 is_response_error() const {return (m_response_status <= 0);}
-    inline tlm_response_status  get_response_status() const {return m_response_status;}
-    inline void                 set_response_status(const tlm_response_status response_status)
+    bool                 is_response_ok() const {return (m_response_status > 0);}
+    bool                 is_response_error() const {return (m_response_status <= 0);}
+    tlm_response_status  get_response_status() const {return m_response_status;}
+    void                 set_response_status(const tlm_response_status response_status)
         {m_response_status = response_status;}  
-    inline std::string          get_response_string() const
+    std::string          get_response_string() const
     {
         switch(m_response_status)
         {
@@ -292,19 +292,19 @@ public:
     }
     
     // Streaming related methods
-    inline unsigned int         get_streaming_width() const {return m_streaming_width;}
-    inline void                 set_streaming_width(const unsigned int streaming_width) {m_streaming_width = streaming_width; }
+    unsigned int         get_streaming_width() const {return m_streaming_width;}
+    void                 set_streaming_width(const unsigned int streaming_width) {m_streaming_width = streaming_width; }
         
     // Byte enable related methods
-    inline unsigned char*       get_byte_enable_ptr() const {return m_byte_enable;}
-    inline void                 set_byte_enable_ptr(unsigned char* byte_enable){m_byte_enable = byte_enable;}
-    inline unsigned int         get_byte_enable_length() const {return m_byte_enable_length;}
-    inline void                 set_byte_enable_length(const unsigned int byte_enable_length){m_byte_enable_length = byte_enable_length;}
+    unsigned char*       get_byte_enable_ptr() const {return m_byte_enable;}
+    void                 set_byte_enable_ptr(unsigned char* byte_enable){m_byte_enable = byte_enable;}
+    unsigned int         get_byte_enable_length() const {return m_byte_enable_length;}
+    void                 set_byte_enable_length(const unsigned int byte_enable_length){m_byte_enable_length = byte_enable_length;}
 
     // This is the "DMI-hint" a slave can set this to true if it
     // wants to indicate that a DMI request would be supported:
-    inline void                 set_dmi_allowed(bool dmiAllowed) { m_dmi = dmiAllowed; }
-    inline bool                 get_dmi_allowed() const { return m_dmi; }
+    void                 set_dmi_allowed(bool dmiAllowed) { m_dmi = dmiAllowed; }
+    bool                 get_dmi_allowed() const { return m_dmi; }
 
 private:
     

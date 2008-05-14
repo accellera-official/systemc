@@ -15,13 +15,11 @@
 
  *****************************************************************************/
 
-#ifndef __TLM_GENERIC_PAYLOAD_H__
-#define __TLM_GENERIC_PAYLOAD_H__
+#ifndef __TLM_2_INTERFACES_H__
+#define __TLM_2_INTERFACES_H__
 
-#include "tlm_helpers.h"
-#include "tlm_phase.h"
-#include "tlm_gp.h"
-#include "tlm_endian_conv.h"
+#include "tlm_dmi.h"
+#include "tlm_fw_bw_ifs.h"
 
 #endif
 

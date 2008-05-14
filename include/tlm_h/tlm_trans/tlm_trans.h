@@ -18,7 +18,7 @@
 #ifndef __TLM_TRANS_H__
 #define __TLM_TRANS_H__
 
-#include "tlm_2_interfaces/tlm_fw_bw_ifs.h"
+#include "tlm_2_interfaces/tlm_2_interfaces.h"
 #include "tlm_generic_payload/tlm_generic_payload.h"
 #include "tlm_sockets/tlm_sockets.h"
 
