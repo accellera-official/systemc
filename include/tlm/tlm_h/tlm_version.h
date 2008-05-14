@@ -36,6 +36,8 @@
 #define TLM_IS_PRERELEASE                   TRUE
 #define TLM_VERSION_PRERELEASE              "DR3"
 
+#define	TLM_VERSION_RELEASE_DATE			"2008-06-14"
+
 /************************** do not modify below this line *******************************/
 
 #define TLM_VERSION_STR(x)                  TLM_VERSION_STR_HELPER(x)
@@ -49,17 +51,16 @@
                                             TLM_VERSION_STRING_MINOR TLM_VERSION_SEPARATOR \
                                             TLM_VERSION_STRING_PATCH
                                     
+#define TLM_VERSION_STRING_PRE_START        " ("
+#define TLM_VERSION_STRING_PRE_END          ")"
+
 #if ( TLM_IS_PRERELEASE == TRUE )
 
-#define TLM_VERSION_STRING_PRE_START        " ("
 #define TLM_VERSION_STRING_PRERELEASE       TLM_VERSION_PRERELEASE
-#define TLM_VERSION_STRING_PRE_END          ")"
 
 #else   /* TLM_IS_PRERELEASE == TRUE */
 
-#define TLM_VERSION_STRING_PRE_START        ""
-#define TLM_VERSION_STRING_PRERELEASE       ""
-#define TLM_VERSION_STRING_PRE_END          ""
+#define TLM_VERSION_STRING_PRERELEASE       TLM_VERSION_RELEASE_DATE
 
 #endif  /* TLM_IS_PRERELEASE == TRUE */
 
@@ -72,19 +73,20 @@
                                         
 #define TLM_VERSION                         TLM_VERSION_STRING
 
-const unsigned int  tlm_version_major       ( TLM_VERSION_MAJOR         );
-const unsigned int  tlm_version_minor       ( TLM_VERSION_MINOR         );
-const unsigned int  tlm_version_patch       ( TLM_VERSION_PATCH         );
+const unsigned int tlm_version_major       	( TLM_VERSION_MAJOR         );
+const unsigned int tlm_version_minor       	( TLM_VERSION_MINOR         );
+const unsigned int tlm_version_patch       	( TLM_VERSION_PATCH         );
 
-const bool          tlm_is_prerelease       (
+const bool         tlm_is_prerelease       	(
 #if ( TLM_IS_PRERELEASE == TRUE )
                                               true
 #else   /* TLM_IS_PRERELEASE == TRUE */
                                               false
 #endif  /* TLM_IS_PRERELEASE == TRUE */
-                                            );
+                                            							);
 
-const std::string   tlm_version_string      ( TLM_VERSION_STRING        );
-const std::string   tlm_version_prerelease  ( TLM_VERSION_PRERELEASE    );
+const std::string  tlm_version_string      	( TLM_VERSION_STRING        );
+const std::string  tlm_version_prerelease  	( TLM_VERSION_PRERELEASE    );
+const std::string  tlm_version_release_date	( TLM_VERSION_RELEASE_DATE	);
 
 #endif /* __TLM_VERSION_H__ */
