@@ -180,7 +180,7 @@ public:
               trans.set_write();
               if ( socket->get_direct_mem_ptr(trans,
                                               tmp) &&
-                   tmp.get_granted_access() != tlm::tlm_dmi::READ )
+                   tmp.get_granted_access() != tlm::tlm_dmi::DMI_TYPE_READ )
               {
                   mDMIData = tmp;
               }
