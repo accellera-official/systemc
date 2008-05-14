@@ -234,8 +234,8 @@ template<class D> class tlm_bool {
     }
 };
 
-template<class D> D tlm_bool<D>::TLM_TRUE = tlm_bool<D>::make_uchar_array(1);
-template<class D> D tlm_bool<D>::TLM_FALSE = tlm_bool<D>::make_uchar_array(0);
+template<class D> D tlm_bool<D>::TLM_TRUE = tlm_bool<D>::make_uchar_array(TLM_BYTE_ENABLED);
+template<class D> D tlm_bool<D>::TLM_FALSE = tlm_bool<D>::make_uchar_array(TLM_BYTE_DISABLED);
 
 
 
@@ -265,7 +265,7 @@ inline void copy_b1(uchar *src1, uchar *src2, uchar *dest1, uchar *dest2) {
 
 template<class D>
 inline void copy_dbyb1(uchar *src1, uchar *src2, uchar *dest1, uchar *dest2) {
-  if(*src2 != 0)  *((D *)src1) = *((D *)dest1);
+  if(*src2 != TLM_BYTE_DISABLED)  *((D *)src1) = *((D *)dest1);
 }
 
 template<class D>
@@ -458,7 +458,7 @@ template<class D> inline void copy_db2(D *src1, D *src2, D *dest1, D *dest2) {
 
 template<class D>
 inline void copy_dbyb2(D *src1, D *src2, D *dest1, D *dest2) {
-  if(*((uchar *)src2) != 0) *dest1 = *src1;
+  if(*((uchar *)src2) != TLM_BYTE_DISABLED) *dest1 = *src1;
 }
 
 template<class D, void COPY(D *src1, D *src2, D *dest1, D *dest2)>

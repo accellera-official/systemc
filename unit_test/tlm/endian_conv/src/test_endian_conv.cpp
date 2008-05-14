@@ -101,7 +101,11 @@ void test_a_conversion(char cmd) {
   if((byte_enable_legible[0] == '1') || (byte_enable_legible[0] == '0')) {
     txn->set_byte_enable_ptr(new unsigned char[txn->get_data_length()]);
     for(unsigned int i=0; i<txn->get_data_length(); i++)
-      txn->get_byte_enable_ptr()[i] = byte_enable_legible[i] - '0';
+      if (byte_enable_legible[i] == '0') {
+        txn->get_byte_enable_ptr()[i] = TLM_BYTE_DISABLED;
+      } else { // byte_enable_legible[i] == '1'
+        txn->get_byte_enable_ptr()[i] = TLM_BYTE_ENABLED;
+      }
   }
 
   cout << "enter initiator memory state = ("<< BUFFER_SIZE << " characters)\n";

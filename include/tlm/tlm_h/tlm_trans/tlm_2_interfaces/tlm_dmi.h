@@ -43,7 +43,7 @@ public:
 // The initiator uses gp.m_command to indicate it intention (read/write)
 //  The target is allowed to promote READ or WRITE requests to READ_WRITE.
 
-  enum Type { READ = 0x1, WRITE = 0x2, READ_WRITE = READ|WRITE };
+  enum Type { IGNORE = 0x0, READ = 0x1, WRITE = 0x2, READ_WRITE = READ|WRITE };
   
   unsigned char*    get_dmi_ptr() const {return dmi_ptr;}
   sc_dt::uint64     get_start_address() const {return dmi_start_address;}

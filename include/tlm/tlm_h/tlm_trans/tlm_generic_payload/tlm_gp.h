@@ -99,6 +99,9 @@ enum tlm_response_status {
     TLM_BYTE_ENABLE_ERROR_RESPONSE = -5
 };
 
+#define TLM_BYTE_DISABLED 0x0
+#define TLM_BYTE_ENABLED 0xff
+
 //---------------------------------------------------------------------------
 // The generic payload class:
 //---------------------------------------------------------------------------
