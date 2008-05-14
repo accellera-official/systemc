@@ -20,7 +20,6 @@
 
 #include "tlm_helpers.h"
 #include "tlm_gp.h"
-#include "tlm_data_serializers.h"
 #include "tlm_dmi.h"
 #include "tlm_endian_conv.h"
 
