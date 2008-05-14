@@ -20,6 +20,8 @@
 
 #include "tlm.h"
 
+namespace tlm_utils {
+
 template <typename MODULE,
           unsigned int BUSWIDTH = 32,
           typename TYPES = tlm::tlm_generic_payload_types>
@@ -267,4 +269,7 @@ private:
 private:
   Process mProcess;
 };
+
+}
+
 #endif

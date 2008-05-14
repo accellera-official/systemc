@@ -1,1 +1,0 @@
-The TLM 2.0 draft 1 payload (tlm_bus/) and interfaces (tlm_annotated_ifs/) have been included here in support of the BvsNB unit test which demonstrates a bridge (both directions) between draft 1 and draft 2.

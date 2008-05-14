@@ -31,7 +31,7 @@ public:
   typedef tlm::tlm_generic_payload                   transaction_type;
   typedef tlm::tlm_phase                             phase_type;
   typedef tlm::tlm_sync_enum                         sync_enum_type;
-  typedef simple_initiator_socket<SimpleATInitiator2>  initiator_socket_type;
+  typedef tlm_utils::simple_initiator_socket<SimpleATInitiator2>  initiator_socket_type;
 
 public:
   // extended transaction, holds tlm_generic_payload + data storage

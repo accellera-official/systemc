@@ -29,6 +29,8 @@
 
 #include "boost/function.hpp"
 
+namespace tlm_utils {
+
 
 /*
 This class implements the fw interface.
@@ -315,5 +317,7 @@ public:
   virtual ~multi_to_multi_bind_base(){}
   virtual tlm::tlm_fw_transport_if<TYPES>* get_last_binder(tlm::tlm_bw_transport_if<TYPES>*)=0;
 };
+
+}
 
 #endif

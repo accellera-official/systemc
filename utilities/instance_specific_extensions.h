@@ -46,6 +46,8 @@ the extension before/after setting/clearing the extension.
  
 #include "tlm.h"
 
+namespace tlm_utils {
+
 //Helper to do the numbering of private extension accessors
 inline unsigned int max_num_ispex_accessors(bool increment=false)
 {
@@ -288,3 +290,5 @@ public:
 protected:
   unsigned int m_index;
 };
+
+}

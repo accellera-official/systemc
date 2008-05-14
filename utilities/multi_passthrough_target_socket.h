@@ -19,6 +19,8 @@
 
 #include "multi_socket_bases.h"
 
+namespace tlm_utils {
+
 /*
 This class implements a trivial multi target socket.
 The triviality refers to the fact that the socket does not
@@ -330,5 +332,7 @@ protected:
   boost::function<bool (int i, transaction_type& txn, tlm::tlm_dmi& dmi)> m_dmi_f;
 
 };
+
+}
 
 #endif

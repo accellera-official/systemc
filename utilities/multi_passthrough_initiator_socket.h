@@ -19,6 +19,8 @@
 
 #include "multi_socket_bases.h"
 
+namespace tlm_utils {
+
 /*
 This class implements a trivial multi initiator socket.
 The triviality refers to the fact that the socket does not
@@ -284,5 +286,7 @@ protected:
   boost::function<sync_enum_type (int i, transaction_type& txn, phase_type& p, sc_core::sc_time& t)> m_nb_f;
   boost::function<void (int i, sc_dt::uint64 l, sc_dt::uint64 u)> m_dmi_f;
 };
+
+}
 
 #endif

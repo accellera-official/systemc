@@ -21,6 +21,8 @@
 #include "tlm.h"
 #include "peq_fifo.h"
 
+namespace tlm_utils {
+
 template <typename MODULE,
           unsigned int BUSWIDTH = 32,
           typename TYPES = tlm::tlm_generic_payload_types>
@@ -936,5 +938,7 @@ private:
   sc_core::sc_event mEndRequest;
   transaction_type* mCurrentTransaction;
 };
+
+}
 
 #endif

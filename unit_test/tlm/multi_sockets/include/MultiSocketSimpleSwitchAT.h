@@ -47,8 +47,8 @@ public:
   typedef tlm::tlm_generic_payload                                 transaction_type;
   typedef tlm::tlm_phase                                           phase_type;
   typedef tlm::tlm_sync_enum                                       sync_enum_type;
-  typedef multi_passthrough_target_socket<MultiSocketSimpleSwitchAT>    target_socket_type;
-  typedef multi_passthrough_initiator_socket<MultiSocketSimpleSwitchAT> initiator_socket_type;
+  typedef tlm_utils::multi_passthrough_target_socket<MultiSocketSimpleSwitchAT>    target_socket_type;
+  typedef tlm_utils::multi_passthrough_initiator_socket<MultiSocketSimpleSwitchAT> initiator_socket_type;
 
 public:
   target_socket_type target_socket; //the target multi socket
@@ -59,13 +59,13 @@ private:
   std::vector<std::deque<transaction_type*> > m_pendingReqs; //list of pending reqs per target
   std::vector<std::deque<transaction_type*> > m_pendingResps; //list of pending resps per initiator
   std::vector<sc_dt::uint64> m_masks; //address masks for each target
-  instance_specific_extension_accessor accessMySpecificExtensions; //extension accessor to access private extensions
-  payload_event_queue<MultiSocketSimpleSwitchAT> m_bwPEQ; //PEQ in the fw direction
-  payload_event_queue<MultiSocketSimpleSwitchAT> m_fwPEQ; //PEQ in the bw direction
+  tlm_utils::instance_specific_extension_accessor accessMySpecificExtensions; //extension accessor to access private extensions
+  tlm_utils::payload_event_queue<MultiSocketSimpleSwitchAT> m_bwPEQ; //PEQ in the fw direction
+  tlm_utils::payload_event_queue<MultiSocketSimpleSwitchAT> m_fwPEQ; //PEQ in the bw direction
 
 
   //an instance specific extension that tells us whether we are in a wrapped b_transport or not
-  class BTag : public instance_specific_extension<BTag>{
+  class BTag : public tlm_utils::instance_specific_extension<BTag>{
   public:
     sc_core::sc_event event; //trigger this event when transaction is done
   };
@@ -73,7 +73,7 @@ private:
   //an instance specific extension that holds information about source and sink of a txn
   // as well as information if the req still has to be cleared and if the txn is already
   //  complete on the target side
-  class ConnectionInfo : public instance_specific_extension<ConnectionInfo>{
+  class ConnectionInfo : public tlm_utils::instance_specific_extension<ConnectionInfo>{
     public:
     unsigned int  fwID; //socket number of sink
     unsigned int  bwID; //socket number of source
@@ -87,7 +87,7 @@ private:
     typedef tlm::tlm_phase tlm_phase_type;
   };
 
-  payload_event_queue<MultiSocketSimpleSwitchAT, internalPEQTypes> m_clearPEQ; //PEQ to delay response clearing
+  tlm_utils::payload_event_queue<MultiSocketSimpleSwitchAT, internalPEQTypes> m_clearPEQ; //PEQ to delay response clearing
 
   
   ExtensionPool<ConnectionInfo> m_connInfoPool; //our pool of extensions

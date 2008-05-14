@@ -83,5 +83,5 @@ private:
   std::vector<T*> mine; //just for clean up and is_from
 };
 
-
 #endif
+

@@ -35,7 +35,7 @@ public:
   typedef tlm::tlm_dmi        dmi_type;
   typedef tlm::tlm_phase      phase_type;
   typedef tlm::tlm_sync_enum  sync_enum_type;
-  typedef simple_initiator_socket<SimpleLTInitiator_ext, 32,
+  typedef tlm_utils::simple_initiator_socket<SimpleLTInitiator_ext, 32,
                                 my_extended_payload_types> initiator_socket_type;
 
 public:

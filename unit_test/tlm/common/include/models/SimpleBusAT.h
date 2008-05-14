@@ -33,8 +33,8 @@ public:
   typedef tlm::tlm_generic_payload               transaction_type;
   typedef tlm::tlm_phase                         phase_type;
   typedef tlm::tlm_sync_enum                     sync_enum_type;
-  typedef simple_target_socket_tagged<SimpleBusAT>    target_socket_type;
-  typedef simple_initiator_socket_tagged<SimpleBusAT> initiator_socket_type;
+  typedef tlm_utils::simple_target_socket_tagged<SimpleBusAT>    target_socket_type;
+  typedef tlm_utils::simple_initiator_socket_tagged<SimpleBusAT> initiator_socket_type;
 
 public:
   target_socket_type target_socket[NR_OF_INITIATORS];
@@ -362,11 +362,11 @@ private:
 private:
   PendingTransactions mPendingTransactions;
 
-  peq_fifo<transaction_type> mRequestPEQ;
+  tlm_utils::peq_fifo<transaction_type> mRequestPEQ;
   sc_core::sc_event mBeginRequestEvent;
   sc_core::sc_event mEndRequestEvent;
 
-  peq_fifo<transaction_type> mResponsePEQ;
+  tlm_utils::peq_fifo<transaction_type> mResponsePEQ;
   sc_core::sc_event mBeginResponseEvent;
   sc_core::sc_event mEndResponseEvent;
 };

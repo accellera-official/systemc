@@ -22,6 +22,8 @@
 #include <systemc>
 #include <map>
 
+namespace tlm_utils {
+
 template <class PAYLOAD>
 class peq_fifo : public sc_core::sc_module
 {
@@ -70,5 +72,6 @@ private:
   sc_core::sc_event mEvent;
 };
 
+}
 
 #endif

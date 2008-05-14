@@ -21,6 +21,8 @@
 #include <systemc>
 #include "tlm.h"
 
+namespace tlm_utils {
+
 template <typename PAYLOAD>
 class time_ordered_list
 {
@@ -268,5 +270,7 @@ private:
   
   sc_core::sc_event m_e;   // default event
 };
+
+}
 
 #endif // PAYLOAD_EVENT_QUEUE_H
