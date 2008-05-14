@@ -71,7 +71,7 @@ tlm_event_finder_t<IF,T>::find_event( sc_core::sc_interface* if_p ) const
     if( iface == 0 ) {
 	report_error( sc_core::SC_ID_FIND_EVENT_, "port is not bound" );
     }
-    return (const_cast<IF*>( iface )->*m_event_method) ();
+    return (const_cast<IF*>( iface )->*m_event_method) ( 0 );
 }
 #else
 template <class IF , class T>
