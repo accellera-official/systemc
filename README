@@ -1,26 +1,28 @@
-                             2007-11-29
-                 TLM 2.0 Draft 2 for public review
+                             2008-05-15
+                 	       TLM 2.0 
                  =================================
 
-This draft of the TLM 2.0 standard is being made available for public review
-through January 31, 2008.
+This is the proposed code for the TLM 2.0 standard and is made available for 
+OSCI internal review only
 
 -------------------------------------------------------------------------------
                 IMPORTANT
 
-1. This draft represents a significant evolution since the draft 1 kit 
-   that was released a year ago.  Draft 2 is not, nor was it intended to be, 
-   backwards compatible with draft 1.
+1. This version of the TLM 2.0 standard is a further evolution of draft 2 which
+   in itself represents a significant evolution since the draft 1 kit.  
+   This version is not, nor was it intended to be, backwards compatible with 
+   draft 2 and draft 1.
 
 2. This release has been well tested on the following platforms:
-    o Linux (Redhat Enterprise 4) with GNU C++ compiler versions gcc-3.4.2,
+    o Linux (Redhat Enterprise 4) with GNU C++ compiler versions gcc-3.4.4,
       gcc-4.2.0
-    o Linux (Fedora 6) with GNU C++ compiler version 4.1.2
-    o Linux (SuSE SLES9SP3) with GNU C++ compiler versions gcc-3.4.4, gcc-4.2.0
-    o MacOSX with GNU C++ compiler versions gcc-3.1, gcc-3.4.2, and gcc-4.0
-    o SunOS 5.9, with Sun Forte compiler 8.0, 10.0 and 11.0
-    o SunOS 5.9, with GNU C++ compiler versions gcc-3.3.2
-    o Windows XP (SP2) with VC++ 7.0 and 8.0
+    To be completed:
+    [o Linux (Fedora 6) with GNU C++ compiler version 4.1.2]
+    [o Linux (SuSE SLES9SP3) with GNU C++ compiler versions gcc-3.4.4, gcc-4.2.0]
+    [o MacOSX with GNU C++ compiler versions gcc-3.1, gcc-3.4.2, and gcc-4.0]
+    [o SunOS 5.9, with Sun Forte compiler 8.0, 10.0 and 11.0]
+    [o SunOS 5.9, with GNU C++ compiler versions gcc-3.3.2]
+    [o Windows XP (SP2) with VC++ 7.0 and 8.0]
     
 
 -------------------------------------------------------------------------------
@@ -51,6 +53,10 @@ Directory Structure
 
    The TLM kit's directory structure has been patterned after that used 
    for the SystemC language and Verification library (SCV).
+   Dirs: include/   : contains the TLM 2.0 standard headers
+         unit_test/ : contains a set of tests for TLM 2.0
+	 examples/  : contains the examples that come with the TLM 2.0 kit
+	 [ to be added: docs]
 
 Build Support
  
@@ -64,19 +70,10 @@ Build Support
    and $TARGET_ARCH should be defined such that $SYSTEMC_HOME/lib-$TARGET_ARCH
    is a directory containing the systemc library.  On Windows, the SYSTEMC and
    TLM environments variables should be used.
-   
+
 Examples
 
-   A complete example of a loosely timed system is provided at:
-   examples/tlm/lt_min_system/; look in the docs/ subdirectory at
-   lt_min_system_example.ppt for a description and step-by-step instructions
-   for building and running it.  A TLM1 integration example has also been 
-   provided.
-
-   More examples are in the works and will be incrementally made available 
-   via the OSCI web site (please request examples that would make applying 
-   this technology more apparent for you via the feedback forum described 
-   below).
+   [to be added]
 
 Unit Tests
 
@@ -87,7 +84,7 @@ Unit Tests
 
    See instructions in unit_test/README.txt
 
-Providing Feedback
+Problems
 
-   Feedback regarding this kit would be greatly appreciated and can be 
-   submitted to tlm2_forum@lists.systemc.org.
+   any problems regarding the use of this kit would be can be submitted to 
+   tlm2_forum@lists.systemc.org.

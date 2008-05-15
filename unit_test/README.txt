@@ -1,25 +1,15 @@
-models
-------
 
-- Master/Slave and bus models used in the examples
+TLM-2.0 unit tests
+==================
+	
+Dir: unit_test/
+SubDirs: tlm/
+Files: README.txt
 
-SimpleSocket
-------------
 
-- Convenience socket classes
+Comments
+========
 
-p2p
----
-
-- Point-2-point examples (LT, AT, Core Decoupling,...)
-
-bus
----
-
-- Example system using a TLM2 bus model
-
-transactor
-----------
-
-- Example transactors: transport <-> nb_transport
+Contains all unit tests for TLM-2.0
+See the README in the subdirectory for more details.
 

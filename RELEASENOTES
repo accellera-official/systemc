@@ -1,5 +1,64 @@
-            Release Notes for the TLM 2.0 Draft 2 Kit Of 29 Nov 2007
-            ========================================================
+
+
+========================================================
+Release Notes for the TLM 2.0 Kit Of 15 May 2008
+========================================================
+
+CONTENTS
+========
+
+  1) Supported SystemC versions
+  2) What's changed in this kit?
+  3) Known issues
+
+
+1) Supported SystemC versions
+=============================
+SystemC 2.1.v1 and 2.2.0 are supported and have been tested.
+
+2) What's changed in this kit?
+==============================
+
+Compared to the 29 Nov 2007 draft 2 kit, the standard has evolved in the 
+following primary ways:
+  - the file and directory structure has undergone further cleaning
+  - resolved confusion on multiple interfaces, and loosely timed versus untimed 
+    modeling by:
+  	- LT = single phase hence blocking API with support for timing 
+	       annotation (&temporal decoupling)
+	- AT = multi-phase hence non-blocking API with extensible number of 
+	       phases
+  - unified the interfaces: that means both API's need to be implemented by 
+    all compliant models
+  - added convenience sockets (implementing LT-AT conversion and multiple 
+    bindings)
+  - better support for extended protocol definitions by reusing GP for DMI and 
+    debug
+  - support for ignorable phase extentions
+  - added exmaple for instance based extentions
+  - provided with endianness (conversion) helper functions
+  - now using char * for byte-enable array
+ To be added:
+[  - Documentation (training presentation and users manual)
+[  	- updated for the changes above
+[	- additional semantical clarifications
+[	- well-defined transaction ordering rules
+[  - Examples have been improved
+
+3) Known issues
+===============
+
+-documentation is not yet added
+-examples are not fully ready
+
+
+
+
+========================================================
+Release Notes for the TLM 2.0 Draft 2 Kit Of 29 Nov 2007
+========================================================
+
+
 
 CONTENTS
 ========
