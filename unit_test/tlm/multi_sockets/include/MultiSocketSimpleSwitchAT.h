@@ -41,7 +41,7 @@ This could be avoided by changing the fwPEQ into a priority PEQ of some kind.
 The switch ensures that the end_req and end_resp rules are not violated when
 many initiator talk to the same target.
 */
-class MultiSocketSimpleSwitchAT : public sc_core::sc_module
+class MultiSocketSimpleSwitchAT : public sc_core::sc_module, public tlm::tlm_mm_interface, public tlm::tlm_mm_proxy
 {
 public:
   typedef tlm::tlm_generic_payload                                 transaction_type;
@@ -86,10 +86,6 @@ private:
     typedef ConnectionInfo tlm_payload_type;
     typedef tlm::tlm_phase tlm_phase_type;
   };
-
-  tlm_utils::peq_with_phase<MultiSocketSimpleSwitchAT, internalPEQTypes> m_clearPEQ; //PEQ to delay response clearing
-
-  
   ExtensionPool<ConnectionInfo> m_connInfoPool; //our pool of extensions
   unsigned int m_target_count;  //number of connected targets (see bindTargetSocket for explanation)
   
@@ -101,7 +97,6 @@ public:
     initiator_socket("initiator_socket"),
     m_bwPEQ(this, &MultiSocketSimpleSwitchAT::bwPEQcb),
     m_fwPEQ(this, &MultiSocketSimpleSwitchAT::fwPEQcb),
-    m_clearPEQ(this, &MultiSocketSimpleSwitchAT::clearPEQcb),
     m_connInfoPool(10),
     m_target_count(0)
   {
@@ -140,11 +135,31 @@ public:
     accessMySpecificExtensions(trans).get_extension(btag);
     assert(!btag);
     BTag tag; //now add our BTag
+    bool added_mm=!tlm_mm_proxy::has_mm(&trans); //in case there is no MM in we add it now
+    if (added_mm){
+      tlm_mm_proxy::set_mm(&trans, this);
+      trans.acquire(); //acquire the txn
+    }
     accessMySpecificExtensions(trans).set_extension(&tag);
     phase_type phase=tlm::BEGIN_REQ; //then simply use our nb implementation (respects all the rules)
     initiatorNBTransport(initiator_id, trans, phase, t);
     wait(tag.event); //and wait for the event to be triggered
-    accessMySpecificExtensions(trans).clear_extension(&tag); //don't forget to remove the extension
+    if (added_mm){  //if we added MM
+      trans.release(); //we release our reference (this will not delete the txn but trigger the tag.event as soon as the ref count is zero)
+      if (trans.get_ref_count())
+        wait(tag.event); //wait for the ref count to get to zero
+      tlm_mm_proxy::set_mm(&trans, NULL); //remove the MM
+    }
+    //don't forget to remove the extension (instance specific extensions are not cleared off by MM)
+    accessMySpecificExtensions(trans).clear_extension(&tag); 
+  }
+
+  void free(transaction_type* txn){
+    BTag* btag;
+    accessMySpecificExtensions(*txn).get_extension(btag);
+    assert(btag);    
+    txn->reset(); //clean off all extension that were added down stream
+    btag->event.notify();
   }
 
   //do a fw transmission
@@ -182,12 +197,9 @@ public:
                                       phase_type& phase,
                                       sc_core::sc_time& t)
   {
-    //if we were allowed to put END_RESP into a PEQ, we would have an 
-    // implementation beautifully symetrical to the bw path
-    //  but since we are not allowed to do so
-    //   we have to insert the private info from END_RESP into another PEQ
     ConnectionInfo* connInfo;
     accessMySpecificExtensions(trans).get_extension(connInfo);
+    m_fwPEQ.notify(trans,phase,t);
     if (phase==tlm::BEGIN_REQ){
       //add our private information to the txn
       assert(!connInfo); 
@@ -197,20 +209,14 @@ public:
       connInfo->clearReq=true; 
       connInfo->alreadyComplete=false;
       accessMySpecificExtensions(trans).set_extension(connInfo);
-      m_fwPEQ.notify(trans,phase,t);
     }
     else
     if (phase==tlm::END_RESP){
-      assert(connInfo);
-      accessMySpecificExtensions(trans).clear_extension(connInfo);
-      if (!connInfo->alreadyComplete) initiator_socket[connInfo->fwID]->nb_transport_fw(trans, phase, t);
-      m_clearPEQ.notify(*connInfo, phase, t);
       return tlm::TLM_COMPLETED;
     }
     else
       {assert(0); exit(1);}
     return tlm::TLM_ACCEPTED;
-
   }
 
   sync_enum_type targetNBTransport(int portId,
@@ -249,19 +255,16 @@ public:
     } 
     //no else here, since we might clear the req AND begin a resp
     if (phase==tlm::BEGIN_RESP){
-      if (&trans!=m_pendingResps[connInfo->bwID].front()) //obviously this is a new response (we can't get the same txn twice before the first resp ends
+      if (&trans!=m_pendingResps[connInfo->bwID].front()) {//obviously this is a new response (we can't get the same txn twice before the first resp ends
         m_pendingResps[connInfo->bwID].push_back(&trans);
+      }
       doCall=m_pendingResps[connInfo->bwID].size()==1; //do a call in case the response socket was free
     }
 
-    if (doCall){ //we have to do a call on the bw path
+    if (doCall){ //we have to do a call on the bw of fw path
       if (btag){ //only possible if BEGIN_RESP and resp socket was free
           phase_type ph=tlm::END_RESP;
-          if (!connInfo->alreadyComplete)
-            initiator_socket[connInfo->fwID]->nb_transport_fw(trans, ph, t);
-          m_clearPEQ.notify(*connInfo, ph,t); //schedule reset of response socket lock
-          accessMySpecificExtensions(trans).clear_extension(connInfo); //remove the extension
-          btag->event.notify(t); //release b_transport
+          m_fwPEQ.notify(trans, ph, t);
       }
       else
         switch (target_socket[connInfo->bwID]->nb_transport_bw(trans, p, t)){
@@ -271,10 +274,7 @@ public:
           case tlm::TLM_COMPLETED:{
             //covers a piggy bagged END_RESP to START_RESP
             phase_type ph=tlm::END_RESP;
-            if (!connInfo->alreadyComplete)
-              initiator_socket[connInfo->fwID]->nb_transport_fw(trans, ph, t);
-            m_clearPEQ.notify(*connInfo, ph,t); //schedule reset of response socket lock
-            accessMySpecificExtensions(trans).clear_extension(connInfo);  //remove extension
+            m_fwPEQ.notify(trans, ph, t);
             }
             break;
           default:
@@ -287,28 +287,36 @@ public:
   //the following two functions (fwPEQcb and clearPEQcb) could be one, if we were allowed
   // to stick END_RESP into a PEQ
   void fwPEQcb(transaction_type& trans, const phase_type& phase){
-    //phase is always BEGIN_REQ
     ConnectionInfo* connInfo;
     accessMySpecificExtensions(trans).get_extension(connInfo); 
     assert(connInfo); 
-    trans.set_address(trans.get_address()&m_masks[connInfo->fwID]); //mask address
-    m_pendingReqs[connInfo->fwID].push_back(&trans);
-    if (m_pendingReqs[connInfo->fwID].size()==1){ //the socket is free
-      phase_type ph=phase;
-      sc_core::sc_time t=sc_core::SC_ZERO_TIME;
-      initiatorNBTransport_core(trans, ph, t, connInfo->fwID);
+    phase_type ph=phase;
+    sc_core::sc_time t=sc_core::SC_ZERO_TIME;
+    if (phase==tlm::BEGIN_REQ){
+      trans.set_address(trans.get_address()&m_masks[connInfo->fwID]); //mask address
+      m_pendingReqs[connInfo->fwID].push_back(&trans);
+      if (m_pendingReqs[connInfo->fwID].size()==1){ //the socket is free
+        initiatorNBTransport_core(trans, ph, t, connInfo->fwID);
+      }
     }
-  }
-  
-  void clearPEQcb(ConnectionInfo& connInfo, const phase_type& phase){
-    //phase is always END_RESP
-    m_pendingResps[connInfo.bwID].pop_front(); //remove current response
-    if (m_pendingResps[connInfo.bwID].size()){ //if there was one pending
-      phase_type p=tlm::BEGIN_RESP; //schedule its transmission
-      sc_core::sc_time t=sc_core::SC_ZERO_TIME;
-      m_bwPEQ.notify(*m_pendingResps[connInfo.bwID].front(),p,t);
+    else
+    {
+      //phase is always END_RESP
+      BTag* btag;
+      accessMySpecificExtensions(trans).get_extension(btag);
+      accessMySpecificExtensions(trans).clear_extension(connInfo); //remove our specific extension as it is not needed any more
+      if (!connInfo->alreadyComplete) {
+        sync_enum_type tmp=initiator_socket[connInfo->fwID]->nb_transport_fw(trans, ph, t);
+        assert(tmp==tlm::TLM_COMPLETED);
+      }
+      m_pendingResps[connInfo->bwID].pop_front(); //remove current response
+      if (m_pendingResps[connInfo->bwID].size()){ //if there was one pending
+        ph=tlm::BEGIN_RESP; //schedule its transmission
+        m_bwPEQ.notify(*m_pendingResps[connInfo->bwID].front(),ph,t);
+      }
+      m_connInfoPool.free(connInfo); //release connInfo
+      if (btag) btag->event.notify(t); //release b_transport
     }
-    m_connInfoPool.free(&connInfo); //release connInfo
   }
   
   void dump_status(){
