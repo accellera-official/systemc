@@ -4,7 +4,8 @@ SUBDIRS = \
           ../bus \
           ../bus_dmi \
           ../p2p \
-          ../static_extensions
+          ../static_extensions \
+          ../endian_conv
           
 #.PHONY: all clean run check
 
