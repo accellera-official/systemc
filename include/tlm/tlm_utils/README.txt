@@ -14,7 +14,7 @@ Files: README.txt
        peq_fifo.h
        simple_initiator_socket.h
        simple_target_socket.h
-       tpPEQ.h
+       peq_with_phase.h
        trivial_target_socket.h
 
 
@@ -66,7 +66,7 @@ Files:
      Has a get_next_transaction API that returns the transaction that is 
      scheduled in the event queue
      
-  tpPEQ.h
+  peq_with_phase.h
      another payload event queue, this one with a pull interface (callback
      mechanism ). Allows to register a callback that will be called whenever 
      the event in the event queue is triggered, the callback gets transaction

@@ -14,8 +14,8 @@
   language governing rights and limitations under the License.
 
  *****************************************************************************/
-#ifndef PAYLOAD_EVENT_QUEUE_H
-#define PAYLOAD_EVENT_QUEUE_H
+#ifndef PEQ_WITH_PHASE_H
+#define PEQ_WITH_PHASE_H
 
 #include <vector>
 #include <systemc>
@@ -134,7 +134,7 @@ public:
  */
 //---------------------------------------------------------------------------
 template<typename OWNER,typename TYPES=tlm::tlm_generic_payload_types>
-class payload_event_queue: 
+class peq_with_phase: 
   public sc_core::sc_module
 {
 
@@ -178,10 +178,10 @@ class payload_event_queue:
 
 public:
   
-  SC_HAS_PROCESS( payload_event_queue );
+  SC_HAS_PROCESS( peq_with_phase );
   
-  payload_event_queue(OWNER* _owner, cb _cb)
-    :sc_module( sc_core::sc_gen_unique_name( "payload_event_queue" ) )
+  peq_with_phase(OWNER* _owner, cb _cb)
+    :sc_module( sc_core::sc_gen_unique_name( "peq_with_phase" ) )
     ,m_owner(_owner)
     ,m_cb(_cb)
   {
@@ -191,7 +191,7 @@ public:
     end_module();
   }
 
-  payload_event_queue(sc_core::sc_module_name name_,OWNER* _owner,cb _cb)
+  peq_with_phase(sc_core::sc_module_name name_,OWNER* _owner,cb _cb)
     : sc_core::sc_module( name_ )
     ,m_owner(_owner)
     ,m_cb(_cb)
@@ -202,7 +202,7 @@ public:
     end_module();
   }
   
-  ~payload_event_queue(){}
+  ~peq_with_phase(){}
   
   void notify (tlm_payload_type& t, tlm_phase_type& p, const sc_core::sc_time& when){
     //t.aquire();
@@ -273,4 +273,4 @@ private:
 
 }
 
-#endif // PAYLOAD_EVENT_QUEUE_H
+#endif // PEQ_WITH_PHASE_H

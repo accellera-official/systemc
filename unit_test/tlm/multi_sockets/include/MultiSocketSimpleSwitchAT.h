@@ -25,7 +25,7 @@
 #include "simpleAddressMap.h"
 #include "extensionPool.h"
 #include "tlm_utils/instance_specific_extensions.h"
-#include "tlm_utils/tpPEQ.h"
+#include "tlm_utils/peq_with_phase.h"
 
 
 /*
@@ -60,8 +60,8 @@ private:
   std::vector<std::deque<transaction_type*> > m_pendingResps; //list of pending resps per initiator
   std::vector<sc_dt::uint64> m_masks; //address masks for each target
   tlm_utils::instance_specific_extension_accessor accessMySpecificExtensions; //extension accessor to access private extensions
-  tlm_utils::payload_event_queue<MultiSocketSimpleSwitchAT> m_bwPEQ; //PEQ in the fw direction
-  tlm_utils::payload_event_queue<MultiSocketSimpleSwitchAT> m_fwPEQ; //PEQ in the bw direction
+  tlm_utils::peq_with_phase<MultiSocketSimpleSwitchAT> m_bwPEQ; //PEQ in the fw direction
+  tlm_utils::peq_with_phase<MultiSocketSimpleSwitchAT> m_fwPEQ; //PEQ in the bw direction
 
 
   //an instance specific extension that tells us whether we are in a wrapped b_transport or not
@@ -87,7 +87,7 @@ private:
     typedef tlm::tlm_phase tlm_phase_type;
   };
 
-  tlm_utils::payload_event_queue<MultiSocketSimpleSwitchAT, internalPEQTypes> m_clearPEQ; //PEQ to delay response clearing
+  tlm_utils::peq_with_phase<MultiSocketSimpleSwitchAT, internalPEQTypes> m_clearPEQ; //PEQ to delay response clearing
 
   
   ExtensionPool<ConnectionInfo> m_connInfoPool; //our pool of extensions
