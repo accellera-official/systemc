@@ -43,7 +43,7 @@ public:
     {
       this->set_data_ptr(reinterpret_cast<unsigned char*>(&mData));
     }
-    MyTransaction(tlm::mm_interface& mm) : transaction_type(mm)
+    MyTransaction(tlm::tlm_mm_interface& mm) : transaction_type(mm)
     {
       this->set_data_ptr(reinterpret_cast<unsigned char*>(&mData));
     }
@@ -57,7 +57,7 @@ public:
   typedef MyTransaction<unsigned int>  mytransaction_type;
 
   // Dummy Transaction Pool
-  class SimplePool : public tlm::mm_interface
+  class SimplePool : public tlm::tlm_mm_interface
   {
   public:
     SimplePool() {}

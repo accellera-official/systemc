@@ -27,10 +27,10 @@ namespace tlm {
 class
 tlm_generic_payload;
 
-class mm_interface{
+class tlm_mm_interface {
 public:
-  virtual void free(tlm_generic_payload*)=0;
-  virtual ~mm_interface(){}
+  virtual void free(tlm_generic_payload*) = 0;
+  virtual ~tlm_mm_interface() {}
 };
 
 //---------------------------------------------------------------------------
@@ -108,7 +108,7 @@ enum tlm_response_status {
 class tlm_generic_payload {
 
 public:
-    friend class mm_proxy;
+    friend class tlm_mm_proxy;
     //---------------
     // Constructors
     //---------------
@@ -130,7 +130,7 @@ public:
     {
     }
 
-    tlm_generic_payload(mm_interface& mm) 
+    tlm_generic_payload(tlm_mm_interface& mm) 
         : m_address(0)
         , m_command(TLM_IGNORE_COMMAND)
         , m_data(0)
@@ -522,14 +522,14 @@ public:
 
 private:
     tlm_array<tlm_extension_base*> m_extensions;
-    mm_interface*                  m_mm;
+    tlm_mm_interface*              m_mm;
     unsigned int                   m_ref_count;
 };
 
-class mm_proxy{
+class tlm_mm_proxy {
 public:
-  void set_mm(tlm_generic_payload* p, mm_interface* mm) {p->m_mm=mm;}
-  bool has_mm(tlm_generic_payload* p) {return p->m_mm!=NULL;}
+  void set_mm(tlm_generic_payload* p, tlm_mm_interface* mm) { p->m_mm = mm; }
+  bool has_mm(tlm_generic_payload* p) { return p->m_mm != NULL; }
 };
 
 } // namespace tlm

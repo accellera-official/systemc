@@ -150,7 +150,7 @@ private:
   };
 
   class fw_process : public tlm::tlm_fw_transport_if<TYPES>,
-                    public tlm::mm_interface
+                    public tlm::tlm_mm_interface
   {
   public:
     typedef sync_enum_type (MODULE::*NBTransportPtr)(transaction_type&,
@@ -455,7 +455,7 @@ private:
     peq_fifo<transaction_type> m_peq;
     bool m_response_in_progress;
     sc_core::sc_event m_end_response;
-    tlm::mm_proxy m_mm_proxy;
+    tlm::tlm_mm_proxy m_mm_proxy;
   };
 
 private:
@@ -606,7 +606,7 @@ private:
   };
 
   class fw_process : public tlm::tlm_fw_transport_if<TYPES>,
-                    public tlm::mm_interface
+                     public tlm::tlm_mm_interface
   {
   public:
     typedef sync_enum_type (MODULE::*NBTransportPtr)(int id, 
@@ -928,7 +928,7 @@ private:
     peq_fifo<transaction_type> m_peq;
     bool m_response_in_progress;
     sc_core::sc_event m_end_response;
-    tlm::mm_proxy m_mm_proxy;
+    tlm::tlm_mm_proxy m_mm_proxy;
   };
 
 private:
