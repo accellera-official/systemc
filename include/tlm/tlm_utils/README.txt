@@ -11,7 +11,7 @@ Files: README.txt
        multi_passthrough_initiator_socket.h
        multi_passthrough_target_socket.h
        multi_socket_bases.h
-       peq_fifo.h
+       peq_with_get.h
        simple_initiator_socket.h
        simple_target_socket.h
        peq_with_phase.h
@@ -61,7 +61,7 @@ Files:
   multi_socket_bases.h
      contains base class definitions used by the multi_passthrough sockets
      
-  peq_fifo.h
+  peq_with_get.h
      payload event queue (PEQ) implementation using a pull interface.
      Has a get_next_transaction API that returns the transaction that is 
      scheduled in the event queue

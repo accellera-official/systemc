@@ -19,7 +19,7 @@
 #define __SIMPLE_TARGET_SOCKET_H__
 
 #include "tlm.h"
-#include "peq_fifo.h"
+#include "peq_with_get.h"
 
 namespace tlm_utils {
 
@@ -452,7 +452,7 @@ private:
     BTransportPtr m_b_transport_ptr;
     TransportDbgPtr m_transport_dbg_ptr;
     GetDirectMemPtr m_get_direct_mem_ptr;
-    peq_fifo<transaction_type> m_peq;
+    peq_with_get<transaction_type> m_peq;
     bool m_response_in_progress;
     sc_core::sc_event m_end_response;
     tlm::tlm_mm_proxy m_mm_proxy;
@@ -925,7 +925,7 @@ private:
     int m_b_transport_user_id;
     int m_transport_dbg_user_id;
     int m_get_dmi_user_id;
-    peq_fifo<transaction_type> m_peq;
+    peq_with_get<transaction_type> m_peq;
     bool m_response_in_progress;
     sc_core::sc_event m_end_response;
     tlm::tlm_mm_proxy m_mm_proxy;

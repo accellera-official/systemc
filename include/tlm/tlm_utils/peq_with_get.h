@@ -15,8 +15,8 @@
 
  *****************************************************************************/
 
-#ifndef __PEQ_FIFO_H__
-#define __PEQ_FIFO_H__
+#ifndef PEQ_WITH_GET_H
+#define PEQ_WITH_GET_H
 
 //#include "tlm.h"
 #include <systemc>
@@ -25,15 +25,15 @@
 namespace tlm_utils {
 
 template <class PAYLOAD>
-class peq_fifo : public sc_core::sc_module
+class peq_with_get : public sc_core::sc_object
 {
 public:
   typedef PAYLOAD transaction_type;
   typedef std::pair<const sc_core::sc_time, transaction_type*> pair_type;
 
 public:
-  SC_HAS_PROCESS(peq_fifo);
-  peq_fifo(sc_core::sc_module_name name) : sc_core::sc_module(name)
+  SC_HAS_PROCESS(peq_with_get);
+  peq_with_get(const char* name) : sc_core::sc_object(name)
   {
   }
 
@@ -41,6 +41,12 @@ public:
   {
     m_scheduled_events.insert(pair_type(t + sc_core::sc_time_stamp(), &trans));
     m_event.notify(t);
+  }
+
+  void notify(transaction_type& trans)
+  {
+    m_scheduled_events.insert(pair_type(sc_core::sc_time_stamp(), &trans));
+    m_event.notify(); // immediate notification
   }
 
   // needs to be called until it returns 0

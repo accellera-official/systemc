@@ -24,7 +24,7 @@
 #include "tlm_utils/simple_target_socket.h"
 #include "tlm_utils/simple_initiator_socket.h"
 
-#include "tlm_utils/peq_fifo.h"
+#include "tlm_utils/peq_with_get.h"
 
 template <int NR_OF_INITIATORS, int NR_OF_TARGETS>
 class SimpleBusAT : public sc_core::sc_module
@@ -362,11 +362,11 @@ private:
 private:
   PendingTransactions mPendingTransactions;
 
-  tlm_utils::peq_fifo<transaction_type> mRequestPEQ;
+  tlm_utils::peq_with_get<transaction_type> mRequestPEQ;
   sc_core::sc_event mBeginRequestEvent;
   sc_core::sc_event mEndRequestEvent;
 
-  tlm_utils::peq_fifo<transaction_type> mResponsePEQ;
+  tlm_utils::peq_with_get<transaction_type> mResponsePEQ;
   sc_core::sc_event mBeginResponseEvent;
   sc_core::sc_event mEndResponseEvent;
 };
