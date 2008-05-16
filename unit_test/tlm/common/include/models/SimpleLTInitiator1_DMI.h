@@ -193,8 +193,8 @@ public:
   sync_enum_type nb_transport_bw(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
   {
       // We should never be called
-      assert(0); exit(1);
-//      return tlm::TLM_COMPLETED;  //unreachable code
+      assert(0);
+      return tlm::TLM_COMPLETED;
   }
 
   void invalidate(dmi_type& dmiData)
