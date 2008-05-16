@@ -19,7 +19,7 @@
 #define __SIMPLE_LT_TARGET2_H__
 
 #include "tlm.h"
-#include "tlm_utils/trivial_target_socket.h"
+#include "tlm_utils/passthrough_target_socket.h"
 #include <cassert>
 #include <vector>
 
@@ -29,7 +29,7 @@ public:
   typedef tlm::tlm_generic_payload             transaction_type;
   typedef tlm::tlm_phase                       phase_type;
   typedef tlm::tlm_sync_enum                   sync_enum_type;
-  typedef tlm_utils::trivial_target_socket<SimpleLTTarget2> target_socket_type;
+  typedef tlm_utils::passthrough_target_socket<SimpleLTTarget2> target_socket_type;
   
 
 public:

@@ -26,9 +26,7 @@ template <typename MODULE,
           unsigned int BUSWIDTH = 32,
           typename TYPES = tlm::tlm_generic_payload_types>
 class simple_initiator_socket :
-  public tlm::tlm_initiator_socket<BUSWIDTH,
-                                   tlm::tlm_fw_transport_if<TYPES>,
-                                   tlm::tlm_bw_transport_if<TYPES> >
+  public tlm::tlm_initiator_socket<BUSWIDTH, TYPES>
 {
 public:
   typedef typename TYPES::tlm_payload_type              transaction_type;
@@ -36,9 +34,7 @@ public:
   typedef tlm::tlm_sync_enum                            sync_enum_type;
   typedef tlm::tlm_fw_transport_if<TYPES>               fw_interface_type;
   typedef tlm::tlm_bw_transport_if<TYPES>               bw_interface_type;
-  typedef tlm::tlm_initiator_socket<BUSWIDTH,
-                                    fw_interface_type,
-                                    bw_interface_type>  base_type;
+  typedef tlm::tlm_initiator_socket<BUSWIDTH, TYPES>    base_type;
 
 public:
   explicit simple_initiator_socket(const char* n = "simple_initiator_socket") :
@@ -144,9 +140,7 @@ template <typename MODULE,
           unsigned int BUSWIDTH = 32,
           typename TYPES = tlm::tlm_generic_payload_types>
 class simple_initiator_socket_tagged :
-  public tlm::tlm_initiator_socket<BUSWIDTH,
-                                   tlm::tlm_fw_transport_if<TYPES>,
-                                   tlm::tlm_bw_transport_if<TYPES> >
+  public tlm::tlm_initiator_socket<BUSWIDTH, TYPES>
 {
 public:
   typedef typename TYPES::tlm_payload_type              transaction_type;
@@ -154,9 +148,7 @@ public:
   typedef tlm::tlm_sync_enum                            sync_enum_type;
   typedef tlm::tlm_fw_transport_if<TYPES>               fw_interface_type;
   typedef tlm::tlm_bw_transport_if<TYPES>               bw_interface_type;
-  typedef tlm::tlm_initiator_socket<BUSWIDTH,
-                                    fw_interface_type,
-                                    bw_interface_type>  base_type;
+  typedef tlm::tlm_initiator_socket<BUSWIDTH, TYPES>    base_type;
 
 public:
   explicit simple_initiator_socket_tagged(const char* n = "simple_initiator_socket_tagged") :

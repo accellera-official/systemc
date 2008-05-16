@@ -31,9 +31,7 @@ public:
   typedef tlm::tlm_sync_enum              sync_enum_type;
   typedef tlm::tlm_fw_transport_if<>      fw_interface_type;
   typedef tlm::tlm_bw_transport_if<>      bw_interface_type;
-  typedef tlm::tlm_initiator_socket<32,
-                                    fw_interface_type,
-                                    bw_interface_type> initiator_socket_type;
+  typedef tlm::tlm_initiator_socket<32>   initiator_socket_type;
 
 public:
   initiator_socket_type socket;

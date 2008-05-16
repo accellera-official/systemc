@@ -27,10 +27,10 @@ namespace tlm {
 template <unsigned int BUSWIDTH = 32,
           typename FW_IF = tlm_fw_transport_if<>,
           typename BW_IF = tlm_bw_transport_if<> >
-class tlm_target_socket_base
+class tlm_base_target_socket_b
 {
 public:
-  virtual ~tlm_target_socket_base() {}
+  virtual ~tlm_base_target_socket_b() {}
 	
   virtual sc_core::sc_port_b<BW_IF> & get_base_port() = 0;
   virtual sc_core::sc_export<FW_IF> & get_base_export() = 0;
@@ -39,7 +39,7 @@ public:
 
 template <unsigned int BUSWIDTH,
           typename FW_IF,
-          typename BW_IF> class tlm_initiator_socket_base;
+          typename BW_IF> class tlm_base_initiator_socket_b;
 
 template <unsigned int BUSWIDTH,
           typename FW_IF,
@@ -48,7 +48,7 @@ template <unsigned int BUSWIDTH,
 #if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
           ,sc_core::sc_port_policy POL
 #endif
-          > class tlm_initiator_socket;
+          > class tlm_base_initiator_socket;
 
 template <unsigned int BUSWIDTH = 32,
           typename FW_IF = tlm_fw_transport_if<>,
@@ -58,8 +58,8 @@ template <unsigned int BUSWIDTH = 32,
           ,sc_core::sc_port_policy POL = sc_core::SC_ONE_OR_MORE_BOUND
 #endif
           >
-class tlm_target_socket :public tlm_target_socket_base<BUSWIDTH, FW_IF, BW_IF>, 
-                         public sc_core::sc_export<FW_IF>
+class tlm_base_target_socket : public tlm_base_target_socket_b<BUSWIDTH, FW_IF, BW_IF>, 
+                               public sc_core::sc_export<FW_IF>
 {
 public:
   typedef FW_IF                                 fw_interface_type;
@@ -71,23 +71,23 @@ public:
                                             >   port_type;
 
   typedef sc_core::sc_export<fw_interface_type> export_type;
-  typedef tlm_initiator_socket_base<BUSWIDTH,
-                                   fw_interface_type,
-                                   bw_interface_type>   base_initiator_socket_type;
+  typedef tlm_base_initiator_socket_b<BUSWIDTH,
+                                      fw_interface_type,
+                                      bw_interface_type>  base_initiator_socket_type;
 
-  typedef tlm_initiator_socket<BUSWIDTH,
-                               fw_interface_type,
-                               bw_interface_type,
-                               N
+  typedef tlm_base_initiator_socket<BUSWIDTH,
+                                    fw_interface_type,
+                                    bw_interface_type,
+                                    N
 #if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
-                               ,POL
+                                    ,POL
 #endif
-                               >                     initiator_socket_type;
+                                   > initiator_socket_type;
 
 
-  typedef tlm_target_socket_base<BUSWIDTH,
-                                 fw_interface_type,
-                                 bw_interface_type>     base_type;
+  typedef tlm_base_target_socket_b<BUSWIDTH,
+                                   fw_interface_type,
+                                   bw_interface_type> base_type;
 
   template <unsigned int, typename, typename, int
 #if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
@@ -95,16 +95,16 @@ public:
 #endif
   
            >
-  friend class tlm_initiator_socket;
+  friend class tlm_base_initiator_socket;
 
 public:
-  tlm_target_socket()
-  : export_type(sc_core::sc_gen_unique_name("tlm_target_socket"))
+  tlm_base_target_socket()
+  : export_type(sc_core::sc_gen_unique_name("tlm_base_target_socket"))
   , m_port(sc_core::sc_gen_unique_name("tlm_target_socket_port"))
   {
   }
 
-  explicit tlm_target_socket(const char* name)
+  explicit tlm_base_target_socket(const char* name)
   : export_type(name)
   , m_port(sc_core::sc_gen_unique_name((std::string(name) + "_port").c_str()))
   {
@@ -211,8 +211,8 @@ template <unsigned int BUSWIDTH = 32,
           ,sc_core::sc_port_policy POL = sc_core::SC_ONE_OR_MORE_BOUND
 #endif
           >
-class tlm_conv_target_socket :
-  public tlm_target_socket <BUSWIDTH,
+class tlm_target_socket :
+  public tlm_base_target_socket <BUSWIDTH,
                             tlm_fw_transport_if<TYPES>,
                             tlm_bw_transport_if<TYPES>,
                             N
@@ -222,8 +222,8 @@ class tlm_conv_target_socket :
                             >
 {
 public:
-  tlm_conv_target_socket() :
-    tlm_target_socket<BUSWIDTH,
+  tlm_target_socket() :
+    tlm_base_target_socket<BUSWIDTH,
                       tlm_fw_transport_if<TYPES>,
                       tlm_bw_transport_if<TYPES>,
                       N
@@ -234,8 +234,8 @@ public:
   {
   }
 
-  explicit tlm_conv_target_socket(const char* name) :
-    tlm_target_socket<BUSWIDTH,
+  explicit tlm_target_socket(const char* name) :
+    tlm_base_target_socket<BUSWIDTH,
                       tlm_fw_transport_if<TYPES>,
                       tlm_bw_transport_if<TYPES>,
                       N

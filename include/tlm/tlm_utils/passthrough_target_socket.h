@@ -15,8 +15,8 @@
 
  *****************************************************************************/
 
-#ifndef __TRIVIAL_TARGET_SOCKET_H__
-#define __TRIVIAL_TARGET_SOCKET_H__
+#ifndef __PASSTHROUGH_TARGET_SOCKET_H__
+#define __PASSTHROUGH_TARGET_SOCKET_H__
 
 #include "tlm.h"
 
@@ -25,10 +25,8 @@ namespace tlm_utils {
 template <typename MODULE,
           unsigned int BUSWIDTH = 32,
           typename TYPES = tlm::tlm_generic_payload_types>
-class trivial_target_socket :
-  public tlm::tlm_target_socket<BUSWIDTH,
-                               tlm::tlm_fw_transport_if<TYPES>,
-                               tlm::tlm_bw_transport_if<TYPES> >
+class passthrough_target_socket :
+  public tlm::tlm_target_socket<BUSWIDTH, TYPES>
 {
 public:
   typedef typename TYPES::tlm_payload_type              transaction_type;
@@ -36,12 +34,10 @@ public:
   typedef tlm::tlm_sync_enum                            sync_enum_type;
   typedef tlm::tlm_fw_transport_if<TYPES>               fw_interface_type;
   typedef tlm::tlm_bw_transport_if<TYPES>               bw_interface_type;
-  typedef tlm::tlm_target_socket<BUSWIDTH,
-                                 fw_interface_type,
-                                 bw_interface_type>     base_type;
+  typedef tlm::tlm_target_socket<BUSWIDTH, TYPES>       base_type;
 
 public:
-  explicit trivial_target_socket(const char* n = "trivial_target_socket") :
+  explicit passthrough_target_socket(const char* n = "passthrough_target_socket") :
     base_type(sc_core::sc_gen_unique_name(n)),
     m_process(this->name())
   {

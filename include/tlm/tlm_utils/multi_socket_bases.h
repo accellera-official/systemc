@@ -210,19 +210,17 @@ template <unsigned int BUSWIDTH = 32,
           ,sc_core::sc_port_policy POL = sc_core::SC_ONE_OR_MORE_BOUND
 #endif
           >
-class multi_init_base: public tlm::tlm_initiator_socket<BUSWIDTH, 
-                                                tlm::tlm_fw_transport_if<TYPES>,
-                                                tlm::tlm_bw_transport_if<TYPES>,
-                                                N
+class multi_init_base: public tlm::tlm_initiator_socket<BUSWIDTH,
+                                                  TYPES,
+                                                  N
 #if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
-                                                ,POL
+                                                  ,POL
 #endif
-                                                >{
+                                                  >{
 public:
   //typedef for the base type: the standard tlm initiator socket
-  typedef tlm::tlm_initiator_socket<BUSWIDTH, 
-                              tlm::tlm_fw_transport_if<TYPES>,
-                              tlm::tlm_bw_transport_if<TYPES>,
+  typedef tlm::tlm_initiator_socket<BUSWIDTH,
+                              TYPES,
                               N
 #if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
                               ,POL
@@ -264,8 +262,7 @@ template <unsigned int BUSWIDTH = 32,
 #endif
           >
 class multi_target_base: public tlm::tlm_target_socket<BUSWIDTH, 
-                                                tlm::tlm_fw_transport_if<TYPES>,
-                                                tlm::tlm_bw_transport_if<TYPES>,
+                                                TYPES,
                                                 N
 #if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)                                                
                                                 ,POL
@@ -274,8 +271,7 @@ class multi_target_base: public tlm::tlm_target_socket<BUSWIDTH,
 public:
   //typedef for the base type: the standard tlm target socket
   typedef tlm::tlm_target_socket<BUSWIDTH, 
-                              tlm::tlm_fw_transport_if<TYPES>,
-                              tlm::tlm_bw_transport_if<TYPES>,
+                              TYPES,
                               N
 #if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
                               ,POL
