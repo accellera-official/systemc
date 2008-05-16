@@ -227,8 +227,6 @@ public:
 #endif
                               > base_type;
   
-  typedef typename base_type::base_target_socket_type base_target_socket_type;
-  
   //this method shall disable the code that does the callback binding
   // that registers callbacks to binders
   virtual void disable_cb_bind()=0;
@@ -278,9 +276,6 @@ public:
 #endif
                               > base_type;
   
-  typedef typename base_type::base_initiator_socket_type base_initiator_socket_type;
-  typedef typename base_type::initiator_socket_type initiator_socket_type;
-
   //this method shall return the multi_init_base to which the
   // multi_init_base is bound hierarchically
   //  If the base is not bound hierarchically it shall return a pointer to itself                                                
