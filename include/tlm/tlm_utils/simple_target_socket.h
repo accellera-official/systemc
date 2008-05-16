@@ -278,11 +278,11 @@ private:
         t = sc_core::SC_ZERO_TIME;
 
         mm_end_event_ext mm_ext;
-        const bool mm_added = !m_mm_proxy.has_mm(&trans);
+        const bool mm_added = !trans.has_mm();
 
         if (mm_added) {
-          m_mm_proxy.set_mm(&trans, this);
-          trans.set_nb_extension(&mm_ext);
+          trans.set_mm(this);
+          trans.set_auto_extension(&mm_ext);
           trans.acquire();
         }
 
@@ -297,7 +297,7 @@ private:
           if (trans.get_ref_count()) {
             sc_core::wait(mm_ext.done);
           }
-          m_mm_proxy.set_mm(&trans, 0);
+          trans.set_mm(0);
         }
 
       } else {
@@ -455,7 +455,6 @@ private:
     peq_with_get<transaction_type> m_peq;
     bool m_response_in_progress;
     sc_core::sc_event m_end_response;
-    tlm::tlm_mm_proxy m_mm_proxy;
   };
 
 private:
@@ -747,11 +746,11 @@ private:
         t = sc_core::SC_ZERO_TIME;
 
         mm_end_event_ext mm_ext;
-        const bool mm_added = !m_mm_proxy.has_mm(&trans);
+        const bool mm_added = !trans.has_mm();
 
         if (mm_added){
-          m_mm_proxy.set_mm(&trans, this);
-          trans.set_nb_extension(&mm_ext);
+          trans.set_mm(this);
+          trans.set_auto_extension(&mm_ext);
           trans.acquire();
         }
 
@@ -766,7 +765,7 @@ private:
           if (trans.get_ref_count()) {
             sc_core::wait(mm_ext.done);
           }
-          m_mm_proxy.set_mm(&trans, 0);
+          trans.set_mm(0);
         }
 
       } else {
@@ -928,7 +927,6 @@ private:
     peq_with_get<transaction_type> m_peq;
     bool m_response_in_progress;
     sc_core::sc_event m_end_response;
-    tlm::tlm_mm_proxy m_mm_proxy;
   };
 
 private:

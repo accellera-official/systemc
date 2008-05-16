@@ -25,7 +25,7 @@
 #include "simpleAddressMap.h"
 #include "extensionPool.h"
 #include "tlm_utils/instance_specific_extensions.h"
-#include "tlm_utils/peq_with_phase.h"
+#include "tlm_utils/peq_with_cb_and_phase.h"
 
 
 /*
@@ -41,7 +41,7 @@ This could be avoided by changing the fwPEQ into a priority PEQ of some kind.
 The switch ensures that the end_req and end_resp rules are not violated when
 many initiator talk to the same target.
 */
-class MultiSocketSimpleSwitchAT : public sc_core::sc_module, public tlm::tlm_mm_interface, public tlm::tlm_mm_proxy
+class MultiSocketSimpleSwitchAT : public sc_core::sc_module, public tlm::tlm_mm_interface
 {
 public:
   typedef tlm::tlm_generic_payload                                 transaction_type;
@@ -60,8 +60,8 @@ private:
   std::vector<std::deque<transaction_type*> > m_pendingResps; //list of pending resps per initiator
   std::vector<sc_dt::uint64> m_masks; //address masks for each target
   tlm_utils::instance_specific_extension_accessor accessMySpecificExtensions; //extension accessor to access private extensions
-  tlm_utils::peq_with_phase<MultiSocketSimpleSwitchAT> m_bwPEQ; //PEQ in the fw direction
-  tlm_utils::peq_with_phase<MultiSocketSimpleSwitchAT> m_fwPEQ; //PEQ in the bw direction
+  tlm_utils::peq_with_cb_and_phase<MultiSocketSimpleSwitchAT> m_bwPEQ; //PEQ in the fw direction
+  tlm_utils::peq_with_cb_and_phase<MultiSocketSimpleSwitchAT> m_fwPEQ; //PEQ in the bw direction
 
 
   //an instance specific extension that tells us whether we are in a wrapped b_transport or not
@@ -135,9 +135,9 @@ public:
     accessMySpecificExtensions(trans).get_extension(btag);
     assert(!btag);
     BTag tag; //now add our BTag
-    bool added_mm=!tlm_mm_proxy::has_mm(&trans); //in case there is no MM in we add it now
+    bool added_mm=!trans.has_mm(); //in case there is no MM in we add it now
     if (added_mm){
-      tlm_mm_proxy::set_mm(&trans, this);
+      trans.set_mm(this);
       trans.acquire(); //acquire the txn
     }
     accessMySpecificExtensions(trans).set_extension(&tag);
@@ -148,7 +148,7 @@ public:
       trans.release(); //we release our reference (this will not delete the txn but trigger the tag.event as soon as the ref count is zero)
       if (trans.get_ref_count())
         wait(tag.event); //wait for the ref count to get to zero
-      tlm_mm_proxy::set_mm(&trans, NULL); //remove the MM
+      trans.set_mm(NULL); //remove the MM
     }
     //don't forget to remove the extension (instance specific extensions are not cleared off by MM)
     accessMySpecificExtensions(trans).clear_extension(&tag); 

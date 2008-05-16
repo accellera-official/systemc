@@ -108,7 +108,6 @@ enum tlm_response_status {
 class tlm_generic_payload {
 
 public:
-    friend class tlm_mm_proxy;
     //---------------
     // Constructors
     //---------------
@@ -149,6 +148,8 @@ public:
     void acquire(){m_ref_count++;}
     void release(){if (--m_ref_count==0) m_mm->free(this);}
     int get_ref_count(){return m_ref_count;}
+    void set_mm(tlm_mm_interface* mm) { m_mm = mm; }
+    bool has_mm() { return m_mm != NULL; }
     
     void reset(){
       //should the other members be reset too?
@@ -247,7 +248,10 @@ public:
     //--------------
     // Destructor
     //--------------
-    virtual ~tlm_generic_payload() {}
+    virtual ~tlm_generic_payload() {
+      for(unsigned int i=0; i<m_extensions.size(); i++)
+          if(m_extensions[i]) m_extensions[i]->free();
+    }
        
     //----------------
     // API (including setters & getters)
@@ -413,7 +417,7 @@ public:
 
     // Stick the pointer to an extension into the vector, return the
     // previous value and schedule its release
-    template <typename T> T* set_nb_extension(T* ext)
+    template <typename T> T* set_auto_extension(T* ext)
     {
         T* tmp = static_cast<T*>(m_extensions[T::ID]);
         m_extensions[T::ID] = static_cast<tlm_extension_base*>(ext);
@@ -423,7 +427,7 @@ public:
     }
     
     // non-templatized version with manual index:
-    tlm_extension_base* set_nb_extension(unsigned int index,
+    tlm_extension_base* set_auto_extension(unsigned int index,
                                       tlm_extension_base* ext)
     {
         tlm_extension_base* tmp = m_extensions[index];
@@ -524,12 +528,6 @@ private:
     tlm_array<tlm_extension_base*> m_extensions;
     tlm_mm_interface*              m_mm;
     unsigned int                   m_ref_count;
-};
-
-class tlm_mm_proxy {
-public:
-  void set_mm(tlm_generic_payload* p, tlm_mm_interface* mm) { p->m_mm = mm; }
-  bool has_mm(tlm_generic_payload* p) { return p->m_mm != NULL; }
 };
 
 } // namespace tlm

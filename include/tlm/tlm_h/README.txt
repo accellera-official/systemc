@@ -79,7 +79,6 @@ Files:
 					tlm_extension
 					tlm_extension_base
 					tlm_mm_interface
-					tlm_mm_proxy
 			     and the enumeration types
 			    		tlm_command
 					tlm_response_status  ) 
