@@ -18,6 +18,8 @@
 #ifndef __TLM_GLOBAL_QUANTUM_H__
 #define __TLM_GLOBAL_QUANTUM_H__
 
+#include <systemc>
+
 namespace tlm {
 
   namespace tlm_qk_internal {
@@ -79,7 +81,28 @@ namespace tlm {
       {
         return m_global_quantum;
       }
-    
+
+      //
+      // This function will calculate the next value of the local quantum for
+      // an initiator. All initiators should synchronize on integer multiples
+      // of the global quantum value. The maximum value for the local quantum
+      // will be equal to the global quantum.
+      //
+      sc_core::sc_time compute_local_quantum()
+      {
+        if (m_global_quantum != sc_core::SC_ZERO_TIME) {
+          const sc_dt::uint64 current = sc_core::sc_time_stamp().value();
+          const sc_dt::uint64 g_quant = m_global_quantum.value();
+          const sc_dt::uint64 tmp = (current/g_quant+sc_dt::uint64(1)) * g_quant;
+          const sc_core::sc_time remainder = sc_core::sc_time(tmp - current,
+                                                              false);
+          return remainder;
+
+        } else {
+          return sc_core::SC_ZERO_TIME;
+        }
+      }
+
     protected:
       tlm_global_quantum() : m_global_quantum(sc_core::SC_ZERO_TIME)
       {

@@ -134,30 +134,17 @@ namespace tlm_utils {
   
   protected:
     //
-    // This function will calculate the next value of the local quantum for
-    // this initiator. All initiators will synchronize on integer multiples
-    // of the global quantum value. The maximum value for the local quantum
-    // will be equal to the global quantum.
+    // Calculate the next local quantum for this initiator.
     //
     // The method can be overloaded in a derived object if an initiator wants
     // to use another local quantum. This derived object should also take the
     // global quantum into account. It's local quantum should not be set to a
     // value that is larger than the quantum returned by the
-    // compute_local_quantum of it's base class.
+    // compute_local_quantum of the tlm_global_quantum singleton.
     //
     virtual sc_core::sc_time compute_local_quantum()
     {
-      if (get_global_quantum() != sc_core::SC_ZERO_TIME) {
-        const sc_dt::uint64 current = sc_core::sc_time_stamp().value();
-        const sc_dt::uint64 g_quant = get_global_quantum().value();
-        const sc_dt::uint64 tmp = (current/g_quant+sc_dt::uint64(1)) * g_quant;
-        const sc_core::sc_time remainder = sc_core::sc_time(tmp - current,
-                                                            false);
-        return remainder;
-
-      } else {
-        return sc_core::SC_ZERO_TIME;
-      }
+      return tlm::tlm_global_quantum::instance().compute_local_quantum();
     }
   
   protected:
