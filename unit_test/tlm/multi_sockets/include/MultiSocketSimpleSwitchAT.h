@@ -32,7 +32,7 @@
 This class is a simple crossbar switch through which an arbitrary number of initiators
 may communicate in parallel as long as they do not talk to the same target.
 
-If two masters address the same target at the same point of time, 
+If two masters address the same target at the same point of time,
 the choice who will be allowed to communicate
 is done non-deterministically (based on the SystemC process exectution order).
 
@@ -52,7 +52,7 @@ public:
 
 public:
   target_socket_type target_socket; //the target multi socket
-  
+
 private:
   initiator_socket_type initiator_socket; //the initiator multi socket (private to enforce use of bindTarget function)
   SimpleAddressMap m_addrMap; //a pretty simple address map
@@ -88,7 +88,7 @@ private:
   };
   ExtensionPool<ConnectionInfo> m_connInfoPool; //our pool of extensions
   unsigned int m_target_count;  //number of connected targets (see bindTargetSocket for explanation)
-  
+
 public:
   SC_HAS_PROCESS(MultiSocketSimpleSwitchAT);
   MultiSocketSimpleSwitchAT(sc_core::sc_module_name name) :
@@ -113,7 +113,7 @@ public:
     //insert into address map and increase target count
     // (we have to count the targets manually, because target_socket.size() is only reliable during simulation
     //  as it gets evaluated during end_of_elaboration)
-    m_addrMap.insert(low, high, m_target_count++); 
+    m_addrMap.insert(low, high, m_target_count++);
     m_masks.push_back(mask); //add the mask for this target
   }
 
@@ -151,13 +151,13 @@ public:
       trans.set_mm(NULL); //remove the MM
     }
     //don't forget to remove the extension (instance specific extensions are not cleared off by MM)
-    accessMySpecificExtensions(trans).clear_extension(&tag); 
+    accessMySpecificExtensions(trans).clear_extension(&tag);
   }
 
   void free(transaction_type* txn){
     BTag* btag;
     accessMySpecificExtensions(*txn).get_extension(btag);
-    assert(btag);    
+    assert(btag);
     txn->reset(); //clean off all extension that were added down stream
     btag->event.notify();
   }
@@ -180,7 +180,7 @@ public:
       case tlm::TLM_COMPLETED:
         // Transaction finished
         ConnectionInfo* connInfo;
-        accessMySpecificExtensions(trans).get_extension(connInfo); 
+        accessMySpecificExtensions(trans).get_extension(connInfo);
         assert(connInfo);
         connInfo->alreadyComplete=true;
         phase=tlm::BEGIN_RESP;
@@ -190,7 +190,7 @@ public:
         assert(0); exit(1);
     };
   }
-  
+
   //nb_transport_fw
   sync_enum_type initiatorNBTransport(int initiator_id,
                                       transaction_type& trans,
@@ -202,11 +202,11 @@ public:
     m_fwPEQ.notify(trans,phase,t);
     if (phase==tlm::BEGIN_REQ){
       //add our private information to the txn
-      assert(!connInfo); 
+      assert(!connInfo);
       connInfo=m_connInfoPool.construct();
       connInfo->fwID=decode(trans.get_address());
       connInfo->bwID=initiator_id;
-      connInfo->clearReq=true; 
+      connInfo->clearReq=true;
       connInfo->alreadyComplete=false;
       accessMySpecificExtensions(trans).set_extension(connInfo);
     }
@@ -233,18 +233,18 @@ public:
     m_bwPEQ.notify(trans,phase,t);
     return tlm::TLM_ACCEPTED;
   }
-  
+
   void bwPEQcb(transaction_type& trans, const phase_type& phase){
     //first get our private info from the txn
     ConnectionInfo* connInfo;
-    accessMySpecificExtensions(trans).get_extension(connInfo); 
-    assert(connInfo); 
+    accessMySpecificExtensions(trans).get_extension(connInfo);
+    assert(connInfo);
     phase_type p=phase;
     sc_core::sc_time t=sc_core::SC_ZERO_TIME;
     BTag* btag;
     accessMySpecificExtensions(trans).get_extension(btag);
     bool doCall=btag==NULL; //we only will do a bw call if we are not in a wrapped b_transport
-    if (phase==tlm::END_REQ | connInfo->clearReq){ //in case the target left out end_req clearReq reminds us to unlock the req port
+    if ((phase==tlm::END_REQ) | (connInfo->clearReq)){ //in case the target left out end_req clearReq reminds us to unlock the req port
       assert(m_pendingReqs[connInfo->fwID].size());
       assert(m_pendingReqs[connInfo->fwID].front()==&trans);
       m_pendingReqs[connInfo->fwID].pop_front(); //allow another req to start at this target
@@ -253,7 +253,7 @@ public:
         initiatorNBTransport_core(*m_pendingReqs[connInfo->fwID].front(), ph, t,connInfo->fwID);
       }
       connInfo->clearReq=false;
-    } 
+    }
     //no else here, since we might clear the req AND begin a resp
     if (phase==tlm::BEGIN_RESP){
       m_pendingResps[connInfo->bwID].push_back(&trans);
@@ -278,7 +278,7 @@ public:
             break;
           default:
             assert(0); exit(1);
-            
+
         };
     }
   }
@@ -287,8 +287,8 @@ public:
   // to stick END_RESP into a PEQ
   void fwPEQcb(transaction_type& trans, const phase_type& phase){
     ConnectionInfo* connInfo;
-    accessMySpecificExtensions(trans).get_extension(connInfo); 
-    assert(connInfo); 
+    accessMySpecificExtensions(trans).get_extension(connInfo);
+    assert(connInfo);
     phase_type ph=phase;
     sc_core::sc_time t=sc_core::SC_ZERO_TIME;
     if (phase==tlm::BEGIN_REQ){
@@ -318,7 +318,7 @@ public:
       if (btag) btag->event.notify(t); //release b_transport
     }
   }
-  
+
   void dump_status(){
     std::cout<<"At "<<sc_core::sc_time_stamp()<<" status of "<<name()<<" is "<<std::endl
              <<"  Number of connected initiators: "<<target_socket.size()<<std::endl
@@ -331,7 +331,7 @@ public:
       std::cout<<"    "<<m_pendingResps[i].size()<<" pending responses for initiator number "<<i<<std::endl;
     std::cout<<"  The address map is:"<<std::endl;
     m_addrMap.dumpMap();
-    
+
   }
 };
 

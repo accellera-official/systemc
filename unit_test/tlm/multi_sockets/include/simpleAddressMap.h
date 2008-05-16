@@ -19,11 +19,11 @@
  * Simple address map implementation for the generic protocol.
  */
 //--------------------------------------------------------------------------
-class SimpleAddressMap 
+class SimpleAddressMap
 {
   typedef std::map<sc_dt::uint64, unsigned int> mapType;
   typedef std::map<sc_dt::uint64, unsigned int>::iterator addressMapIterator;
-  
+
 public:
   SimpleAddressMap() {}
 
@@ -32,7 +32,7 @@ public:
    * Check for overlapping address ranges
    */
   //--------------------------------------------------------------------------
-  void checkSanity() 
+  void checkSanity()
   {
     addressMapIterator pos;
     for (pos=m_addressMap.begin();pos!=m_addressMap.end();++pos){
@@ -49,7 +49,7 @@ public:
 
   //--------------------------------------------------------------------------
   /**
-   * Print map 
+   * Print map
    */
   //--------------------------------------------------------------------------
   void dumpMap()
@@ -63,7 +63,7 @@ public:
         printf("key: %x    value: %i \n", (unsigned int) (pos->first>>1)-1, pos->second);
     }
   }
-  
+
 
   //--------------------------------------------------------------------------
   /**
@@ -75,9 +75,9 @@ public:
   unsigned int decode(sc_dt::uint64 address_)
   {
     addressMapIterator lbound;
-    
+
     lbound=m_addressMap.lower_bound((address_+1)<<1);
-    if(lbound->second == 255 | lbound==m_addressMap.end()){
+    if((lbound->second == 255) | (lbound==m_addressMap.end())){
       SC_REPORT_ERROR("SimpleAddressMap", "Address does not match any registered address range.");
     }
     else{
@@ -85,7 +85,7 @@ public:
     }
     return 255;
   }
-  
+
   const sc_dt::uint64& get_max(){
     if (m_addressMap.size()){
       addressMapIterator i=(m_addressMap.end());
@@ -96,7 +96,7 @@ public:
     else {
       SC_REPORT_ERROR("SimpleAddressMap", "get_max() called on empty address map.");
       return retval;
-    }    
+    }
   }
 
   const sc_dt::uint64& get_min(){
