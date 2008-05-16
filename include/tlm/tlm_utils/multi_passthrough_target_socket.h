@@ -18,6 +18,7 @@
 #define __MULTI_PASSTHROUGH_TARGET_SOCKET_H__
 
 #include "multi_socket_bases.h"
+#include <sstream>
 
 namespace tlm_utils {
 
@@ -40,7 +41,7 @@ template <typename MODULE,
           ,sc_core::sc_port_policy POL = sc_core::SC_ONE_OR_MORE_BOUND
 #endif
           >
-class multi_passthrough_target_socket: public multi_target_base< BUSWIDTH, 
+class multi_passthrough_target_socket: public multi_target_base< BUSWIDTH,
                                                         TYPES,
                                                         N
 #if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
@@ -55,16 +56,16 @@ public:
   //typedefs
   //  tlm 2.0 types for nb_transport
   typedef typename TYPES::tlm_payload_type              transaction_type;
-  typedef typename TYPES::tlm_phase_type                phase_type;  
+  typedef typename TYPES::tlm_phase_type                phase_type;
   typedef tlm::tlm_sync_enum                            sync_enum_type;
-  
+
   //  typedefs to keep the fn ptr notations short
   typedef sync_enum_type (MODULE::*nb_cb)(int, transaction_type&, phase_type&, sc_core::sc_time&);
   typedef void (MODULE::*b_cb)(int, transaction_type&, sc_core::sc_time&);
   typedef unsigned int (MODULE::*dbg_cb)(int, transaction_type& txn);
   typedef bool (MODULE::*dmi_cb)(int, transaction_type& txn, tlm::tlm_dmi& dmi);
-  
-  typedef multi_target_base<BUSWIDTH, 
+
+  typedef multi_target_base<BUSWIDTH,
                         TYPES,
                         N
 #if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION == 20050714)
@@ -74,7 +75,7 @@ public:
 
   typedef typename base_type::base_initiator_socket_type base_initiator_socket_type;
   typedef typename base_type::initiator_socket_type initiator_socket_type;
-  
+
   //CTOR
   multi_passthrough_target_socket(const char* name)
       : base_type((std::string(name)+std::string("_base")).c_str())
@@ -93,7 +94,7 @@ public:
     //clean up everything allocated by 'new'
     for (unsigned int i=0; i<m_binders.size(); i++) delete m_binders[i];
   }
-  
+
   //simple helpers for warnings an errors to shorten in code notation
   void display_warning(const std::string& text){
     std::stringstream s;
@@ -116,19 +117,19 @@ public:
     //We do that here as the user of the target port HAS to bind at least on callback,
     //otherwise the socket was useless. Nevertheless, the target socket may still
     // stay unbound afterwards.
-    if (!sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::get_interface()) 
-      sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::bind(m_dummy);      
+    if (!sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::get_interface())
+      sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::bind(m_dummy);
 
     //make sure that only one module is registering callbacks with this socket
     if (m_mod) assert(m_mod==mod);
     else m_mod=mod;
-    
+
     //warn if there already is a callback
     if (m_nb_cb){
       display_warning("NBTransport_bw callback already registered.");
       return;
     }
-    
+
     //store the callback and create the appropriate boost function
     m_nb_cb=cb;
     m_nb_f=boost::bind<sync_enum_type>(boost::mem_fn(m_nb_cb), m_mod, _1, _2, _3, _4);
@@ -149,13 +150,13 @@ public:
     //make sure that only one module is registering callbacks with this socket
     if (m_mod) assert(m_mod==mod);
     else m_mod=mod;
-    
+
     //warn if there already is a callback
     if (m_b_cb){
       display_warning("BTransport callback already registered.");
       return;
     }
-    
+
     //store the callback and create the appropriate boost function
     m_b_cb=cb;
     m_b_f=boost::bind<void>(boost::mem_fn(m_b_cb), m_mod, _1, _2, _3);
@@ -171,18 +172,18 @@ public:
     //otherwise the socket was useless. Nevertheless, the target socket may still
     // stay unbound afterwards.
     if (!sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::get_interface())
-      sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::bind(m_dummy); 
+      sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::bind(m_dummy);
 
     //make sure that only one module is registering callbacks with this socket
     if (m_mod) assert(m_mod==mod);
     else m_mod=mod;
-    
+
     //warn if there already is a callback
     if (m_dbg_cb){
       display_warning("DebugTransport callback already registered.");
       return;
     }
-    
+
     //store the callback and create the appropriate boost function
     m_dbg_cb=cb;
     m_dbg_f=boost::bind<unsigned int>(boost::mem_fn(m_nb_cb), m_mod, _1, _2);
@@ -209,7 +210,7 @@ public:
       display_warning("DMI callback already registered.");
       return;
     }
-    
+
     //store the callback and create the appropriate boost function
     m_dmi_cb=cb;
     m_nb_f=boost::bind<bool>(boost::mem_fn(m_nb_cb), m_mod, _1, _2, _3);
@@ -224,8 +225,8 @@ public:
   virtual tlm::tlm_fw_transport_if<TYPES>& get_base_interface()
   {
     //error if this socket is already bound hierarchically
-    if (m_hierarch_bind) display_error("Socket already bound hierarchically.");  
-    
+    if (m_hierarch_bind) display_error("Socket already bound hierarchically.");
+
     m_binders.push_back(new callback_binder_fw<TYPES>(m_binders.size()));
     return *m_binders[m_binders.size()-1];
   }
@@ -235,12 +236,12 @@ public:
   {
     return *this;
   }
-  
+
   //the standard end of elaboration callback
   void end_of_elaboration(){
     //'break' here if the socket was told not to do callback binding
     if (m_eoe_disabled) return;
-    
+
     //get the callback binders and the multi binds of the top of the hierachical bind chain
     // NOTE: this could be the same socket if there is no hierachical bind
     std::vector<callback_binder_fw<TYPES>* >& binders=get_hierarch_bind()->get_binders();
@@ -271,12 +272,12 @@ public:
       display_warning("Socket already bound hierarchically. Bind attempt ignored.");
       return;
     }
-    
+
     //disable our own end of elaboration call
     disable_cb_bind();
-    
+
     //inform the bound target socket that it is bound hierarchically now
-    s.set_hierarch_bind((base_type*)this);    
+    s.set_hierarch_bind((base_type*)this);
     base_type::bind(s); //satisfy SystemC
   }
 
@@ -288,7 +289,7 @@ public:
 
   //get access to sub port
   tlm::tlm_bw_transport_if<TYPES>* operator[](int i){return m_sockets[i];}
-  
+
   //get number of bound initiators
   // NOTE: only at start of simulation or during runtime, as m_sockets gets created only at end of elaboration
   unsigned int size(){return m_sockets.size();}
@@ -302,18 +303,18 @@ protected:
     m_multi_binds[m_binders.size()-1]=other;
     return m_binders[m_binders.size()-1];
   }
-  
+
   //map that stores to which index a multi init socket is connected
   // and the interface of the multi init socket
   std::map<unsigned int, tlm::tlm_bw_transport_if<TYPES>*> m_multi_binds;
-    
+
   void disable_cb_bind(){ m_eoe_disabled=true;}
   std::vector<callback_binder_fw<TYPES>* >& get_binders(){return m_binders;}
   //vector of connected sockets
   std::vector<tlm::tlm_bw_transport_if<TYPES>*> m_sockets;
   //vector of binders that convert untagged interface into tagged interface
   std::vector<callback_binder_fw<TYPES>*> m_binders;
-  
+
   MODULE* m_mod; //the owning module
   nb_cb   m_nb_cb; //the nb callback of the owning module
   b_cb    m_b_cb;  //the b callback of the owning module
