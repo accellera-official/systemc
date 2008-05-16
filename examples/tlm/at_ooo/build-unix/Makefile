@@ -20,7 +20,7 @@ OBJS   =    $(OBJ_NAME).o \
             $(OBJ_NAME)_top.o \
             initiator_top.o \
             traffic_generator.o \
-            at_initiator_4_phase.o \
+            select_initiator.o \
             at_target_4_phase.o \
 
 .PHONY: clean all check
@@ -55,7 +55,7 @@ initiator_top.o: $(SRCDIR)/initiator_top.cpp
 traffic_generator.o: $(SRCDIRCOMMON)/traffic_generator.cpp
 	$(GXX) $(CFLAGS) -c $< -o $@
 
-at_initiator_4_phase.o: $(SRCDIRCOMMON)/at_initiator_4_phase.cpp
+select_initiator.o: $(SRCDIRCOMMON)/select_initiator.cpp
 	$(GXX) $(CFLAGS) -c $< -o $@
 
 at_target_4_phase.o: $(SRCDIRCOMMON)/at_target_4_phase.cpp

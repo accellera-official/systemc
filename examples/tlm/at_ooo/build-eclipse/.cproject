@@ -68,7 +68,7 @@
 </folderInfo>
 <sourceEntries>
 <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="example-src"/>
-<entry excluding="at_target_4_phase.cpp|at_target_1_phase.cpp|lt_target.cpp|lt_initiator.cpp|adapters|at_initiator_temporal_decoupling.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="common-src"/>
+<entry excluding="lt_target.cpp|at_initiator_4_phase.cpp|lt_initiator.cpp|at_initiator_4_phase_orig.cpp|at_target_4_phase_orig.cpp|at_target_1_phase.cpp|at_initiator_1_phase.cpp|adapters|at_initiator_temporal_decoupling.cpp|at_initiator_full.cpp|at_target_2_phase.cpp|at_initiator_2_phase.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="common-src"/>
 </sourceEntries>
 </configuration>
 </storageModule>
@@ -552,7 +552,7 @@
 </toolChain>
 </folderInfo>
 <sourceEntries>
-<entry excluding="common-src/at_target_4_phase.cpp|common-src/at_target_1_phase.cpp|common-src/lt_target.cpp|common-src/lt_initiator.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+<entry excluding="common-src/lt_target.cpp|common-src/at_initiator_4_phase.cpp|common-src/lt_initiator.cpp|common-src/at_initiator_4_phase_orig.cpp|common-src/at_target_4_phase_orig.cpp|common-src/at_target_1_phase.cpp|common-src/at_initiator_1_phase.cpp|common-src/adapters|common-src/at_target_2_phase.cpp|common-src/at_initiator_temporal_decoupling.cpp|common-src/at_initiator_full.cpp|common-src/at_initiator_2_phase.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 </sourceEntries>
 </configuration>
 </storageModule>

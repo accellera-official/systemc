@@ -14,16 +14,16 @@
 					<value>all</value>
 				</dictionary>
 				<dictionary>
-					<key>org.eclipse.cdt.make.core.buildLocation</key>
-					<value>${workspace_loc:/at_2_phase_example/Debug}</value>
+					<key>?name?</key>
+					<value></value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.enableAutoBuild</key>
 					<value>false</value>
 				</dictionary>
 				<dictionary>
-					<key>?name?</key>
-					<value></value>
+					<key>org.eclipse.cdt.make.core.buildLocation</key>
+					<value>${workspace_loc:/at_2_phase/Debug}</value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.enableFullBuild</key>
@@ -34,12 +34,12 @@
 					<value>true</value>
 				</dictionary>
 				<dictionary>
-					<key>org.eclipse.cdt.make.core.append_environment</key>
-					<value>true</value>
-				</dictionary>
-				<dictionary>
 					<key>org.eclipse.cdt.make.core.cleanBuildTarget</key>
 					<value>clean</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.append_environment</key>
+					<value>true</value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.contents</key>
@@ -83,12 +83,12 @@
 		<link>
 			<name>example-src</name>
 			<type>2</type>
-			<location>/eklectically/Project/TLM-Internal-svn/svn/trunk/new_examples/tlm/at_2_phase/src</location>
+			<location>/eklectically/Project/tlm_2-svn/svn/examples/tlm/at_2_phase/src</location>
 		</link>
 		<link>
 			<name>common-src</name>
 			<type>2</type>
-			<location>/eklectically/Project/TLM-Internal-svn/svn/trunk/new_examples/tlm/common/src</location>
+			<location>/eklectically/Project/tlm_2-svn/svn/examples/tlm/common/src</location>
 		</link>
 	</linkedResources>
 </projectDescription>
