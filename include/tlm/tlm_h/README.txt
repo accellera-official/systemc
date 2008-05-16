@@ -43,8 +43,8 @@ tlm_quantum/
 This contains the quantum keeper for temporal decoupling:
 
 Files:
-  tlm_quantum.h       ( includes the other header file in this directory )
-  tlm_quantumkeeper.h ( defines tlm_quantumkeeper ) 
+  tlm_quantum.h        ( includes the other header file in this directory )
+  tlm_global_quantum.h ( defines tlm_global_quantum ) 
 
 
 tlm_trans/

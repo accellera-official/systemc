@@ -16,6 +16,7 @@ Files: README.txt
        simple_target_socket.h
        peq_with_cb_and_phase.h
        trivial_target_socket.h
+       tlm_quantumkeeper.h
 
 
 Comments
@@ -77,4 +78,9 @@ Files:
      are specific to an instance along the path of a transaction, to allow that
      extentions of the same type can be used by the different blocks along
      the path of the transaction
+
+  tlm_quantumkeeper.h
+     is an convenience object used to keep track of the local time in
+     an initiator (how much it has run ahead of the SystemC time), to
+     synchronize with SystemC time etc.
      

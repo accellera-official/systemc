@@ -20,6 +20,7 @@
 
 #include "tlm.h"
 #include "tlm_utils/simple_initiator_socket.h"
+#include "tlm_utils/tlm_quantumkeeper.h"
 //#include <systemc>
 #include <cassert>
 //#include <iostream>
@@ -44,7 +45,7 @@ public:
     mBaseAddress(baseAddress),
     mTransactionCount(0)
   {
-    tlm::tlm_quantumkeeper::set_global_quantum(sc_core::sc_time(500, sc_core::SC_NS));
+    tlm_utils::tlm_quantumkeeper::set_global_quantum(sc_core::sc_time(500, sc_core::SC_NS));
     mQuantumKeeper.reset();
 
     // Initiator thread
@@ -143,7 +144,7 @@ private:
   unsigned int mBaseAddress;
   unsigned int mTransactionCount;
   unsigned int mData;
-  tlm::tlm_quantumkeeper mQuantumKeeper;
+  tlm_utils::tlm_quantumkeeper mQuantumKeeper;
 };
 
 #endif
