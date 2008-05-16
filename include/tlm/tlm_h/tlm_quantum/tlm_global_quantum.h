@@ -83,10 +83,11 @@ namespace tlm {
       }
 
       //
-      // This function will calculate the next value of the local quantum for
-      // an initiator. All initiators should synchronize on integer multiples
-      // of the global quantum value. The maximum value for the local quantum
-      // will be equal to the global quantum.
+      // This function will calculate the maximum value for the next local
+      // quantum for an initiator. All initiators should synchronize on
+      // integer multiples of the global quantum value. The value for the
+      // local quantum of an initiator can be smaller, but should never be
+      // greater than the value returned by this method.
       //
       sc_core::sc_time compute_local_quantum()
       {
