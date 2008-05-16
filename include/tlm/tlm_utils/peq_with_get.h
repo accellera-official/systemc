@@ -15,8 +15,8 @@
 
  *****************************************************************************/
 
-#ifndef PEQ_WITH_GET_H
-#define PEQ_WITH_GET_H
+#ifndef __PEQ_WITH_GET_H__
+#define __PEQ_WITH_GET_H__
 
 //#include "tlm.h"
 #include <systemc>

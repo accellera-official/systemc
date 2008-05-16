@@ -14,8 +14,8 @@
   language governing rights and limitations under the License.
 
  *****************************************************************************/
-#ifndef PEQ_WITH_CB_AND_PHASE_H
-#define PEQ_WITH_CB_AND_PHASE_H
+#ifndef __PEQ_WITH_CB_AND_PHASE_H__
+#define __PEQ_WITH_CB_AND_PHASE_H__
 
 #include <vector>
 #include <systemc>
@@ -273,4 +273,4 @@ private:
 
 }
 
-#endif // PEQ_WITH_PHASE_H
+#endif // __PEQ_WITH_CB_AND_PHASE_H__

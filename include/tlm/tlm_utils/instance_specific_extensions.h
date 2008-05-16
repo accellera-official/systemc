@@ -43,7 +43,9 @@ The owner of the private extension is responsible to allocate/deallocate
 the extension before/after setting/clearing the extension.
 */
  
- 
+#ifndef __INSTANCE_SPECIFIC_EXTENSIONS_H__
+#define __INSTANCE_SPECIFIC_EXTENSIONS_H__
+
 #include "tlm.h"
 
 namespace tlm_utils {
@@ -292,3 +294,5 @@ protected:
 };
 
 }
+
+#endif
