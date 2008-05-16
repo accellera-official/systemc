@@ -245,6 +245,7 @@ public:
     accessMySpecificExtensions(trans).get_extension(btag);
     bool doCall=btag==NULL; //we only will do a bw call if we are not in a wrapped b_transport
     if (phase==tlm::END_REQ | connInfo->clearReq){ //in case the target left out end_req clearReq reminds us to unlock the req port
+      assert(m_pendingReqs[connInfo->fwID].size());
       assert(m_pendingReqs[connInfo->fwID].front()==&trans);
       m_pendingReqs[connInfo->fwID].pop_front(); //allow another req to start at this target
       if (m_pendingReqs[connInfo->fwID].size()){ //there was a pending req
@@ -255,9 +256,7 @@ public:
     } 
     //no else here, since we might clear the req AND begin a resp
     if (phase==tlm::BEGIN_RESP){
-      if (&trans!=m_pendingResps[connInfo->bwID].front()) {//obviously this is a new response (we can't get the same txn twice before the first resp ends
-        m_pendingResps[connInfo->bwID].push_back(&trans);
-      }
+      m_pendingResps[connInfo->bwID].push_back(&trans);
       doCall=m_pendingResps[connInfo->bwID].size()==1; //do a call in case the response socket was free
     }
 
@@ -309,6 +308,7 @@ public:
         sync_enum_type tmp=initiator_socket[connInfo->fwID]->nb_transport_fw(trans, ph, t);
         assert(tmp==tlm::TLM_COMPLETED);
       }
+      assert(m_pendingResps[connInfo->bwID].size());
       m_pendingResps[connInfo->bwID].pop_front(); //remove current response
       if (m_pendingResps[connInfo->bwID].size()){ //if there was one pending
         ph=tlm::BEGIN_RESP; //schedule its transmission
