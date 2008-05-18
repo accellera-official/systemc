@@ -2,8 +2,6 @@ include ../../build-unix/Makefile.config
 
 OBJ_NAME = test_endian_conv
 
-## this include directory will disappear once the converter
-## functions are included in tlm.h
 INCDIR =
 SRCDIR = ../src
 

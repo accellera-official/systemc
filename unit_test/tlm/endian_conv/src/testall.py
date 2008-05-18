@@ -23,9 +23,8 @@ Make it faster.  (1) don't calculate a new memory state for every
 transaction.  One every 10 is enough, seeing as everything random
 anyway.  (2) don't keep starting new SystemC processes, but just pipe
 transactions to the same one which contains a loop.
-(3) there is only one conversion function that can deal with words that
-cross a bus boundary, so this feature is poorly tested.
-(4) currently data words wider than the bus are not possible.
+(3) currently data words wider than the bus are not possible.
+(4) currently stream and repeating byte-enables aren't tested.
 
 There is a simple testbench programme in C++ which runs a single
 transaction through a single conversion function, to a simple target
@@ -242,6 +241,9 @@ fragmenters = \
 # conversion functions are determined by an index (shared with C++) and
 # a function that tests if they can be applied to a transaction
 def check_generic(txn):
+  return False
+
+def check_word(txn):
   return True
 
 def check_aligned(txn):
@@ -259,16 +261,18 @@ def check_single(txn):
   if base_addr != end_base_addr:  return False
   return True
 
-all_converters = [check_generic, check_aligned, check_single]
-usage = [0, 0, 0]
+def check_local_single(txn):
+  if txn.length != txn.data_width:  return False
+  return True
+
+all_converters = [check_generic, check_word, check_aligned, check_single, check_local_single]
+usage = [0 for x in all_converters]
 
 
 class SystemCFailure(Exception):  pass
 class ConverterDifference(Exception):  pass
 class FragmenterDifference(Exception):  pass
 
-
-# conditional rebuild of testbench (ought to be in a Makefile really)
 from subprocess import Popen, PIPE
 
 # test a single fragment one way
@@ -280,8 +284,8 @@ def run_test(fragment, memstate, converter):
     txtout = sp.communicate(txtin)[0]
     result = memory_state_cl()
     tmp = txtout.splitlines()
-    result.initiator = [l.split()[-1] for l in tmp if "initiator" in l][-1]
-    result.target = [l.split()[-1] for l in tmp if "target" in l][-1]
+    result.initiator = [l.split()[-1] for l in tmp if "initiator =" in l][-1]
+    result.target = [l.split()[-1] for l in tmp if "target =" in l][-1]
   except:
     raise SystemCFailure("\n" + txtin + txtout)
   if sp.returncode != 0:  raise SystemCFailure("\n" + txtin + txtout)
@@ -366,8 +370,7 @@ start memory:
 golden memory:
 %s
 actual memory:
-%s""" % (fragmenter, txn, partial_txn, initial_memory, golden_memory_state,
-  memory_state))
+%s""" % (fragmenter, txn, initial_memory, golden_memory_state, memory_state))
 
   print ".",
 print
@@ -376,4 +379,5 @@ print "Conversion functions usage frequency:"
 print "  generic", usage[0]
 print "  aligned", usage[1]
 print "   single", usage[2]
+print " local single", usage[3]
 

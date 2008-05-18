@@ -5,141 +5,518 @@ March 2008
 enter {R|W}, addr=a, len=l, bus width=b, word width=w, initiator offset=i, be = {x|01}
 enter initiator memory state = (2048 characters)
 enter target memory state = (2048 characters)
-enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+enter converter choice = (0 => word, 1 => aligned, 2 => single)
+Initiator Intent
+  Cmd = R
+  Addr = 0
+  Len = 16
+  Bus Width = 8
+  Data Word = 4
+  Initiator offset = 0
+  Byte enables = x
+  Initiator memory = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  Target memory = 0123456789abcdefghijklmnopqrstuvwxyz
+  Converter = 1
+
+Converted Transaction
+  Addr = 0
+  Len = 16
+  Txn data pointer = changed
+  Byte enables and byte enable pointer = 1111111111111111, changed
+
 Memory States after Transaction
   initiator = 45670123cdef89abxxxxxxxxxxxxxxxxxxxx
   target = 0123456789abcdefghijklmnopqrstuvwxyz
 
+enter {R|W}, addr=a, len=l, bus width=b, word width=w, initiator offset=i, be = {x|01}
 enter initiator memory state = (2048 characters)
 enter target memory state = (2048 characters)
-enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+enter converter choice = (0 => word, 1 => aligned, 2 => single)
+Initiator Intent
+  Cmd = R
+  Addr = 16
+  Len = 16
+  Bus Width = 8
+  Data Word = 4
+  Initiator offset = 0
+  Byte enables = x
+  Initiator memory = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  Target memory = 0123456789abcdefghijklmnopqrstuvwxyz
+  Converter = 2
+
+Converted Transaction
+  Addr = 16
+  Len = 16
+  Txn data pointer = changed
+
 Memory States after Transaction
   initiator = klmnghijstuvopqrxxxxxxxxxxxxxxxxxxxx
   target = 0123456789abcdefghijklmnopqrstuvwxyz
 
+enter {R|W}, addr=a, len=l, bus width=b, word width=w, initiator offset=i, be = {x|01}
 enter initiator memory state = (2048 characters)
 enter target memory state = (2048 characters)
-enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+enter converter choice = (0 => word, 1 => aligned, 2 => single)
+Initiator Intent
+  Cmd = W
+  Addr = 16
+  Len = 16
+  Bus Width = 8
+  Data Word = 4
+  Initiator offset = 4
+  Byte enables = x
+  Initiator memory = 0123456789abcdefghijklmnopqrstuvwxyz
+  Target memory = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  Converter = 1
+
+Converted Transaction
+  Addr = 16
+  Len = 16
+  Txn data pointer = changed
+  Byte enables and byte enable pointer = 1111111111111111, changed
+
 Memory States after Transaction
   initiator = 0123456789abcdefghijklmnopqrstuvwxyz
   target = xxxxxxxxxxxxxxxx89ab4567ghijcdefxxxx
 
+enter {R|W}, addr=a, len=l, bus width=b, word width=w, initiator offset=i, be = {x|01}
 enter initiator memory state = (2048 characters)
 enter target memory state = (2048 characters)
-enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+enter converter choice = (0 => word, 1 => aligned, 2 => single)
+Initiator Intent
+  Cmd = W
+  Addr = 0
+  Len = 16
+  Bus Width = 8
+  Data Word = 4
+  Initiator offset = 0
+  Byte enables = x
+  Initiator memory = 0123456789abcdefghijklmnopqrstuvwxyz
+  Target memory = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  Converter = 2
+
+Converted Transaction
+  Addr = 0
+  Len = 16
+  Txn data pointer = changed
+
 Memory States after Transaction
   initiator = 0123456789abcdefghijklmnopqrstuvwxyz
   target = 45670123cdef89abxxxxxxxxxxxxxxxxxxxx
 
+enter {R|W}, addr=a, len=l, bus width=b, word width=w, initiator offset=i, be = {x|01}
 enter initiator memory state = (2048 characters)
 enter target memory state = (2048 characters)
-enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+enter converter choice = (0 => word, 1 => aligned, 2 => single)
+Initiator Intent
+  Cmd = R
+  Addr = 0
+  Len = 16
+  Bus Width = 8
+  Data Word = 4
+  Initiator offset = 0
+  Byte enables = 1111000011110000
+  Initiator memory = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  Target memory = 0123456789abcdefghijklmnopqrstuvwxyz
+  Converter = 1
+
+Converted Transaction
+  Addr = 0
+  Len = 16
+  Txn data pointer = changed
+  Byte enables and byte enable pointer = 0000111100001111, changed
+
 Memory States after Transaction
   initiator = 4567xxxxcdefxxxxxxxxxxxxxxxxxxxxxxxx
   target = 0123456789abcdefghijklmnopqrstuvwxyz
 
+enter {R|W}, addr=a, len=l, bus width=b, word width=w, initiator offset=i, be = {x|01}
 enter initiator memory state = (2048 characters)
 enter target memory state = (2048 characters)
-enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+enter converter choice = (0 => word, 1 => aligned, 2 => single)
+Initiator Intent
+  Cmd = R
+  Addr = 16
+  Len = 16
+  Bus Width = 8
+  Data Word = 4
+  Initiator offset = 0
+  Byte enables = 1111000011110000
+  Initiator memory = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  Target memory = 0123456789abcdefghijklmnopqrstuvwxyz
+  Converter = 2
+
+Converted Transaction
+  Addr = 16
+  Len = 16
+  Txn data pointer = changed
+  Byte enables and byte enable pointer = 0000111100001111, changed
+
 Memory States after Transaction
   initiator = klmnxxxxstuvxxxxxxxxxxxxxxxxxxxxxxxx
   target = 0123456789abcdefghijklmnopqrstuvwxyz
 
+enter {R|W}, addr=a, len=l, bus width=b, word width=w, initiator offset=i, be = {x|01}
 enter initiator memory state = (2048 characters)
 enter target memory state = (2048 characters)
-enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+enter converter choice = (0 => word, 1 => aligned, 2 => single)
+Initiator Intent
+  Cmd = W
+  Addr = 16
+  Len = 16
+  Bus Width = 8
+  Data Word = 4
+  Initiator offset = 4
+  Byte enables = 1111000000001111
+  Initiator memory = 0123456789abcdefghijklmnopqrstuvwxyz
+  Target memory = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  Converter = 1
+
+Converted Transaction
+  Addr = 16
+  Len = 16
+  Txn data pointer = changed
+  Byte enables and byte enable pointer = 0000111111110000, changed
+
 Memory States after Transaction
   initiator = 0123456789abcdefghijklmnopqrstuvwxyz
   target = xxxxxxxxxxxxxxxxxxxx4567ghijxxxxxxxx
 
+enter {R|W}, addr=a, len=l, bus width=b, word width=w, initiator offset=i, be = {x|01}
 enter initiator memory state = (2048 characters)
 enter target memory state = (2048 characters)
-enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+enter converter choice = (0 => word, 1 => aligned, 2 => single)
+Initiator Intent
+  Cmd = W
+  Addr = 0
+  Len = 16
+  Bus Width = 8
+  Data Word = 4
+  Initiator offset = 0
+  Byte enables = 1111000000001111
+  Initiator memory = 0123456789abcdefghijklmnopqrstuvwxyz
+  Target memory = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  Converter = 2
+
+Converted Transaction
+  Addr = 0
+  Len = 16
+  Txn data pointer = changed
+  Byte enables and byte enable pointer = 0000111111110000, changed
+
 Memory States after Transaction
   initiator = 0123456789abcdefghijklmnopqrstuvwxyz
   target = xxxx0123cdefxxxxxxxxxxxxxxxxxxxxxxxx
 
+enter {R|W}, addr=a, len=l, bus width=b, word width=w, initiator offset=i, be = {x|01}
 enter initiator memory state = (2048 characters)
 enter target memory state = (2048 characters)
-enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+enter converter choice = (0 => word, 1 => aligned, 2 => single)
+Initiator Intent
+  Cmd = R
+  Addr = 20
+  Len = 4
+  Bus Width = 8
+  Data Word = 4
+  Initiator offset = 0
+  Byte enables = x
+  Initiator memory = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  Target memory = 0123456789abcdefghijklmnopqrstuvwxyz
+  Converter = 1
+
+Converted Transaction
+  Addr = 16
+  Len = 4
+  Txn data pointer = changed
+  Byte enables and byte enable pointer = 1111, changed
+
 Memory States after Transaction
   initiator = ghijxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
   target = 0123456789abcdefghijklmnopqrstuvwxyz
 
+enter {R|W}, addr=a, len=l, bus width=b, word width=w, initiator offset=i, be = {x|01}
 enter initiator memory state = (2048 characters)
 enter target memory state = (2048 characters)
-enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+enter converter choice = (0 => word, 1 => aligned, 2 => single)
+Initiator Intent
+  Cmd = R
+  Addr = 20
+  Len = 4
+  Bus Width = 8
+  Data Word = 4
+  Initiator offset = 0
+  Byte enables = x
+  Initiator memory = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  Target memory = 0123456789abcdefghijklmnopqrstuvwxyz
+  Converter = 3
+
+Converted Transaction
+  Addr = 16
+  Len = 4
+  Txn data pointer = unchanged
+
 Memory States after Transaction
   initiator = ghijxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
   target = 0123456789abcdefghijklmnopqrstuvwxyz
 
+enter {R|W}, addr=a, len=l, bus width=b, word width=w, initiator offset=i, be = {x|01}
 enter initiator memory state = (2048 characters)
 enter target memory state = (2048 characters)
-enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+enter converter choice = (0 => word, 1 => aligned, 2 => single)
+Initiator Intent
+  Cmd = W
+  Addr = 28
+  Len = 4
+  Bus Width = 8
+  Data Word = 4
+  Initiator offset = 4
+  Byte enables = x
+  Initiator memory = 0123456789abcdefghijklmnopqrstuvwxyz
+  Target memory = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  Converter = 1
+
+Converted Transaction
+  Addr = 24
+  Len = 4
+  Txn data pointer = changed
+  Byte enables and byte enable pointer = 1111, changed
+
 Memory States after Transaction
   initiator = 0123456789abcdefghijklmnopqrstuvwxyz
   target = xxxxxxxxxxxxxxxxxxxxxxxx4567xxxxxxxx
 
+enter {R|W}, addr=a, len=l, bus width=b, word width=w, initiator offset=i, be = {x|01}
 enter initiator memory state = (2048 characters)
 enter target memory state = (2048 characters)
-enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+enter converter choice = (0 => word, 1 => aligned, 2 => single)
+Initiator Intent
+  Cmd = W
+  Addr = 28
+  Len = 4
+  Bus Width = 8
+  Data Word = 4
+  Initiator offset = 4
+  Byte enables = x
+  Initiator memory = 0123456789abcdefghijklmnopqrstuvwxyz
+  Target memory = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  Converter = 3
+
+Converted Transaction
+  Addr = 24
+  Len = 4
+  Txn data pointer = unchanged
+
 Memory States after Transaction
   initiator = 0123456789abcdefghijklmnopqrstuvwxyz
   target = xxxxxxxxxxxxxxxxxxxxxxxx4567xxxxxxxx
 
+enter {R|W}, addr=a, len=l, bus width=b, word width=w, initiator offset=i, be = {x|01}
 enter initiator memory state = (2048 characters)
 enter target memory state = (2048 characters)
-enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+enter converter choice = (0 => word, 1 => aligned, 2 => single)
+Initiator Intent
+  Cmd = R
+  Addr = 21
+  Len = 2
+  Bus Width = 8
+  Data Word = 2
+  Initiator offset = 0
+  Byte enables = 11
+  Initiator memory = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  Target memory = 0123456789abcdefghijklmnopqrstuvwxyz
+  Converter = 1
+
+Converted Transaction
+  Addr = 16
+  Len = 3
+  Txn data pointer = changed
+  Byte enables and byte enable pointer = 011, changed
+
 Memory States after Transaction
   initiator = hixxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
   target = 0123456789abcdefghijklmnopqrstuvwxyz
 
+enter {R|W}, addr=a, len=l, bus width=b, word width=w, initiator offset=i, be = {x|01}
 enter initiator memory state = (2048 characters)
 enter target memory state = (2048 characters)
-enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+enter converter choice = (0 => word, 1 => aligned, 2 => single)
+Initiator Intent
+  Cmd = R
+  Addr = 21
+  Len = 2
+  Bus Width = 8
+  Data Word = 2
+  Initiator offset = 0
+  Byte enables = 11
+  Initiator memory = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  Target memory = 0123456789abcdefghijklmnopqrstuvwxyz
+  Converter = 3
+
+Converted Transaction
+  Addr = 17
+  Len = 2
+  Txn data pointer = unchanged
+  Byte enables and byte enable pointer = 11, unchanged
+
 Memory States after Transaction
   initiator = hixxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
   target = 0123456789abcdefghijklmnopqrstuvwxyz
 
+enter {R|W}, addr=a, len=l, bus width=b, word width=w, initiator offset=i, be = {x|01}
 enter initiator memory state = (2048 characters)
 enter target memory state = (2048 characters)
-enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+enter converter choice = (0 => word, 1 => aligned, 2 => single)
+Initiator Intent
+  Cmd = W
+  Addr = 0
+  Len = 4
+  Bus Width = 4
+  Data Word = 4
+  Initiator offset = 25
+  Byte enables = 1111
+  Initiator memory = 0123456789abcdefghijklmnopqrstuvwxyz
+  Target memory = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  Converter = 1
+
+Converted Transaction
+  Addr = 0
+  Len = 4
+  Txn data pointer = changed
+  Byte enables and byte enable pointer = 1111, changed
+
 Memory States after Transaction
   initiator = 0123456789abcdefghijklmnopqrstuvwxyz
   target = pqrsxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
+enter {R|W}, addr=a, len=l, bus width=b, word width=w, initiator offset=i, be = {x|01}
 enter initiator memory state = (2048 characters)
 enter target memory state = (2048 characters)
-enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+enter converter choice = (0 => word, 1 => aligned, 2 => single)
+Initiator Intent
+  Cmd = W
+  Addr = 0
+  Len = 4
+  Bus Width = 4
+  Data Word = 4
+  Initiator offset = 25
+  Byte enables = 1111
+  Initiator memory = 0123456789abcdefghijklmnopqrstuvwxyz
+  Target memory = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  Converter = 3
+
+Converted Transaction
+  Addr = 0
+  Len = 4
+  Txn data pointer = unchanged
+  Byte enables and byte enable pointer = 1111, unchanged
+
 Memory States after Transaction
   initiator = 0123456789abcdefghijklmnopqrstuvwxyz
   target = pqrsxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
+enter {R|W}, addr=a, len=l, bus width=b, word width=w, initiator offset=i, be = {x|01}
 enter initiator memory state = (2048 characters)
 enter target memory state = (2048 characters)
-enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+enter converter choice = (0 => word, 1 => aligned, 2 => single)
+Initiator Intent
+  Cmd = R
+  Addr = 13
+  Len = 14
+  Bus Width = 8
+  Data Word = 2
+  Initiator offset = 0
+  Byte enables = x
+  Initiator memory = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  Target memory = 0123456789abcdefghijklmnopqrstuvwxyz
+  Converter = 1
+
+Converted Transaction
+  Addr = 8
+  Len = 24
+  Txn data pointer = changed
+  Byte enables and byte enable pointer = 111000001111111100000111, changed
+
 Memory States after Transaction
   initiator = 9an8lmjkhivgtuxxxxxxxxxxxxxxxxxxxxxx
   target = 0123456789abcdefghijklmnopqrstuvwxyz
 
+enter {R|W}, addr=a, len=l, bus width=b, word width=w, initiator offset=i, be = {x|01}
 enter initiator memory state = (2048 characters)
 enter target memory state = (2048 characters)
-enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+enter converter choice = (0 => word, 1 => aligned, 2 => single)
+Initiator Intent
+  Cmd = W
+  Addr = 5
+  Len = 4
+  Bus Width = 4
+  Data Word = 1
+  Initiator offset = 25
+  Byte enables = x
+  Initiator memory = 0123456789abcdefghijklmnopqrstuvwxyz
+  Target memory = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  Converter = 1
+
+Converted Transaction
+  Addr = 4
+  Len = 8
+  Txn data pointer = changed
+  Byte enables and byte enable pointer = 11100001, changed
+
 Memory States after Transaction
   initiator = 0123456789abcdefghijklmnopqrstuvwxyz
   target = xxxxrqpxxxxsxxxxxxxxxxxxxxxxxxxxxxxx
 
+enter {R|W}, addr=a, len=l, bus width=b, word width=w, initiator offset=i, be = {x|01}
 enter initiator memory state = (2048 characters)
 enter target memory state = (2048 characters)
-enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+enter converter choice = (0 => word, 1 => aligned, 2 => single)
+Initiator Intent
+  Cmd = R
+  Addr = 10
+  Len = 12
+  Bus Width = 4
+  Data Word = 4
+  Initiator offset = 0
+  Byte enables = 111100001111
+  Initiator memory = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  Target memory = 0123456789abcdefghijklmnopqrstuvwxyz
+  Converter = 1
+
+Converted Transaction
+  Addr = 8
+  Len = 16
+  Txn data pointer = changed
+  Byte enables and byte enable pointer = 1100001111000011, changed
+
 Memory States after Transaction
   initiator = ef89xxxxmnghxxxxxxxxxxxxxxxxxxxxxxxx
   target = 0123456789abcdefghijklmnopqrstuvwxyz
 
+enter {R|W}, addr=a, len=l, bus width=b, word width=w, initiator offset=i, be = {x|01}
 enter initiator memory state = (2048 characters)
 enter target memory state = (2048 characters)
-enter converter choice = (0 => generic, 1 => aligned, 2 => single)
+enter converter choice = (0 => word, 1 => aligned, 2 => single)
+Initiator Intent
+  Cmd = W
+  Addr = 15
+  Len = 8
+  Bus Width = 8
+  Data Word = 4
+  Initiator offset = 25
+  Byte enables = 00001111
+  Initiator memory = 0123456789abcdefghijklmnopqrstuvwxyz
+  Target memory = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  Converter = 1
+
+Converted Transaction
+  Addr = 8
+  Len = 16
+  Txn data pointer = changed
+  Byte enables and byte enable pointer = 0000000001111000, changed
+
 Memory States after Transaction
   initiator = 0123456789abcdefghijklmnopqrstuvwxyz
   target = xxxxxxxxxxxxxxxxxtuvwxxxxxxxxxxxxxxx
 
+enter {R|W}, addr=a, len=l, bus width=b, word width=w, initiator offset=i, be = {x|01}
+Buffer pool buffer size has reached 32 bytes
