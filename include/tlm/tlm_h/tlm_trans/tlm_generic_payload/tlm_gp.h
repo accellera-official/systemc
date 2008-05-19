@@ -287,13 +287,13 @@ public:
     {
         switch(m_response_status)
         {
-        case TLM_OK_RESPONSE:            return "TLM_OK_RESPONSE"; break;
-        case TLM_INCOMPLETE_RESPONSE:    return "TLM_INCOMPLETE_RESPONSE"; break;
-        case TLM_GENERIC_ERROR_RESPONSE: return "TLM_GENERIC_ERROR_RESPONSE"; break;
-        case TLM_ADDRESS_ERROR_RESPONSE: return "TLM_ADDRESS_ERROR_RESPONSE"; break;
-        case TLM_COMMAND_ERROR_RESPONSE: return "TLM_COMMAND_ERROR_RESPONSE"; break;
-        case TLM_BURST_ERROR_RESPONSE:   return "TLM_BURST_ERROR_RESPONSE"; break;
-        case TLM_BYTE_ENABLE_ERROR_RESPONSE: return "TLM_BYTE_ENABLE_ERROR_RESPONSE"; break;	
+        case TLM_OK_RESPONSE:            return "TLM_OK_RESPONSE";
+        case TLM_INCOMPLETE_RESPONSE:    return "TLM_INCOMPLETE_RESPONSE";
+        case TLM_GENERIC_ERROR_RESPONSE: return "TLM_GENERIC_ERROR_RESPONSE";
+        case TLM_ADDRESS_ERROR_RESPONSE: return "TLM_ADDRESS_ERROR_RESPONSE";
+        case TLM_COMMAND_ERROR_RESPONSE: return "TLM_COMMAND_ERROR_RESPONSE";
+        case TLM_BURST_ERROR_RESPONSE:   return "TLM_BURST_ERROR_RESPONSE";
+        case TLM_BYTE_ENABLE_ERROR_RESPONSE: return "TLM_BYTE_ENABLE_ERROR_RESPONSE";
         }
         return "TLM_UNKNOWN_RESPONSE";
     }
