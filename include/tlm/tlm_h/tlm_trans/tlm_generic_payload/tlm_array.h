@@ -178,8 +178,21 @@ public:
                 for(i=0; i<m_size; i++)
                 {
                     m_data[i] = tmp[i];
-                    m_entries[i] = tmp2[i];
                 }
+                for (unsigned int j=0; j<m_size; j++)
+                {
+                    if (tmp[j])
+                    {
+                        for (unsigned int i=0; i<m_last_entry; i++)
+                        {
+                            if (tmp[j]==(*tmp2[i]))
+                            {
+                                 m_entries[i]=&m_data[j];
+                            }
+                        }
+                    }
+                }
+                
                 for(i=m_size; i<new_size; i++)
                 {
                     m_data[i] = m_default;

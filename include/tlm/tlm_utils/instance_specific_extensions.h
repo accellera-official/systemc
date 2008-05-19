@@ -177,9 +177,13 @@ class instance_specific_extension_container;
 class instance_specific_extension_container_pool{
   friend class instance_specific_extension_carrier;
   friend class instance_specific_extension_container;
-  inline static instance_specific_extension_container*& get_unused();
-  inline static instance_specific_extension_container* create();
-  inline static void free(instance_specific_extension_container*);
+  instance_specific_extension_container_pool() : unused(NULL){}
+  inline ~instance_specific_extension_container_pool();
+  inline static instance_specific_extension_container_pool& get_ispexcont_pool(){ static instance_specific_extension_container_pool tmp; return tmp;}
+  inline instance_specific_extension_container* create();
+  inline void free(instance_specific_extension_container*);
+  
+  instance_specific_extension_container* unused;
 };
 
 class instance_specific_extension_carrier;
@@ -207,6 +211,10 @@ class instance_specific_extension_container{
     }
   }
  
+  ~instance_specific_extension_container(){
+    for (unsigned int i=0; i<m_ispex_per_accessor.size(); i++) delete m_ispex_per_accessor[i];
+  }
+ 
   void inc_use_count(){use_count++;}
   inline void dec_use_count();
   
@@ -218,13 +226,11 @@ class instance_specific_extension_container{
 };
 
 
-instance_specific_extension_container*& instance_specific_extension_container_pool::get_unused(){
-  static instance_specific_extension_container* unused=NULL;
-  return unused;
+inline instance_specific_extension_container_pool::~instance_specific_extension_container_pool(){
+  while(unused) { instance_specific_extension_container* tmp=unused; unused=unused->next; delete tmp;}
 }
 
-instance_specific_extension_container* instance_specific_extension_container_pool::create(){  //dummy for now
-  instance_specific_extension_container*& unused=get_unused();
+instance_specific_extension_container* instance_specific_extension_container_pool::create(){
   if (!unused) {unused=new instance_specific_extension_container();}
   instance_specific_extension_container* tmp=unused;
   unused=unused->next;
@@ -232,7 +238,6 @@ instance_specific_extension_container* instance_specific_extension_container_poo
 }
 
 void instance_specific_extension_container_pool::free(instance_specific_extension_container* cont){
-  instance_specific_extension_container*& unused=get_unused();
   cont->next=unused;
   unused=cont;
 }
@@ -244,7 +249,7 @@ class instance_specific_extension_carrier: public tlm::tlm_extension<instance_sp
 
 public:
   instance_specific_extension_carrier(){
-    m_container=instance_specific_extension_container_pool::create();
+    m_container=instance_specific_extension_container_pool::get_ispexcont_pool().create();
     m_container->my_carrier=this;
   }
   
@@ -261,7 +266,7 @@ private:
 
 inline void instance_specific_extension_container::dec_use_count(){
   if ((--use_count)==0) { //if this container isn't used any more
-    instance_specific_extension_container_pool::free(this);  //we send it back to our pool
+    instance_specific_extension_container_pool::get_ispexcont_pool().free(this);  //we send it back to our pool
     //we have to do that manually, as we cannot rely on the fact that there is MM in the txn
     my_txn->clear_extension(my_carrier); //and remove it from the transaction's extension array
     delete my_carrier;
