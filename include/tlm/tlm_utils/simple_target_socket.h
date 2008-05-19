@@ -422,7 +422,7 @@ private:
       }
     }
 
-    void free(transaction_type* trans)
+    void free(tlm::tlm_generic_payload* trans)
     {
       mm_end_event_ext* ext = trans->template get_extension<mm_end_event_ext>();
       assert(ext);
@@ -886,7 +886,7 @@ private:
       }
     }
 
-    void free(transaction_type* trans)
+    void free(tlm::tlm_generic_payload* trans)
     {
       mm_end_event_ext* ext = trans->template get_extension<mm_end_event_ext>();
       assert(ext);
