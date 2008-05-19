@@ -109,7 +109,7 @@ public:
     // destructor:
     ~tlm_array()
     {
-        if (m_size>0) delete[] m_data;
+        if (m_size>0) {delete[] m_data; delete [] m_entries;}
         m_size = 0;
     }
 
