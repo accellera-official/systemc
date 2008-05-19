@@ -78,8 +78,8 @@ private:
   {
   public:
     typedef sync_enum_type (MODULE::*NBTransportPtr)(transaction_type&,
-                                                       tlm::tlm_phase&,
-                                                       sc_core::sc_time&);
+                                                     phase_type&,
+                                                     sc_core::sc_time&);
     typedef void (MODULE::*BTransportPtr)(transaction_type&,
                                             sc_core::sc_time&);
     typedef unsigned int (MODULE::*TransportDbgPtr)(transaction_type&);
