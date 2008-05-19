@@ -208,13 +208,7 @@ class instance_specific_extension_container{
   }
  
   void inc_use_count(){use_count++;}
-  void dec_use_count(){
-    if ((--use_count)==0) { //if this container isn't used any more
-      instance_specific_extension_container_pool::free(this);  //we send it back to our pool
-      //we have to do that manually, as we cannot rely on the fact that there is MM in the txn
-      my_txn->clear_extension(my_carrier); //and remove it from the transaction's extension array
-    }
-  }
+  inline void dec_use_count();
   
   std::vector<instance_specific_extensions_per_accessor<instance_specific_extension_container>* > m_ispex_per_accessor; 
   unsigned int use_count;
@@ -264,6 +258,16 @@ public:
 private:
   instance_specific_extension_container* m_container;
 };
+
+inline void instance_specific_extension_container::dec_use_count(){
+  if ((--use_count)==0) { //if this container isn't used any more
+    instance_specific_extension_container_pool::free(this);  //we send it back to our pool
+    //we have to do that manually, as we cannot rely on the fact that there is MM in the txn
+    my_txn->clear_extension(my_carrier); //and remove it from the transaction's extension array
+    delete my_carrier;
+  }
+}
+
 
 //This class 'hides' all the instance specific extension stuff from the user
 // he instantiates one of those (e.g. instance_specific_extension_accessor extAcc;) and can then access

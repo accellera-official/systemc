@@ -68,7 +68,7 @@ public:
   typedef multi_target_base<BUSWIDTH,
                         TYPES,
                         N
-#if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION == 20050714)
+#if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
                         ,POL
 #endif
                         > base_type;

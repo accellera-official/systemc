@@ -29,6 +29,7 @@
 
 #include "boost/function.hpp"
 #include "boost/mem_fn.hpp"
+#include <map>
 
 namespace tlm_utils {
 
