@@ -32,7 +32,6 @@ public:
   typedef std::pair<const sc_core::sc_time, transaction_type*> pair_type;
 
 public:
-  SC_HAS_PROCESS(peq_with_get);
   peq_with_get(const char* name) : sc_core::sc_object(name)
   {
   }
