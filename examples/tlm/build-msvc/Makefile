@@ -1,9 +1,12 @@
 !include <.\Makefile.config>
 
 SUBDIRS = \
-          ..\lt_min_system \
-          ..\b_min_system \
-          ../tlm_1_integration
+          ../at_1_phase \
+          ../at_2_phase \
+          ../at_4_phase \
+          ../at_ooo \
+          ../at_mixed_targets \
+          ../lt
           
 #.PHONY: all clean run check
 
