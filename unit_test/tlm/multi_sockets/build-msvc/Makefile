@@ -6,7 +6,7 @@ INCDIR = -I../../common/include/models -I../include -I$(BOOST_HOME)
 SRCDIR = ..\src
 SRCCOMMONDIR = ..\..\common\src
 
-CFLAGS = $(FLAGS) $(INCDIR)
+CFLAGS = $(INCDIR) $(FLAGS)
 
 OBJS   = $(OBJ_NAME).obj
 

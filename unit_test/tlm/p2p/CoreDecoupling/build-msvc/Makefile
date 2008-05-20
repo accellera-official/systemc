@@ -7,7 +7,7 @@ MY_INCLUDES = -I../../../common/include/models
 SRCDIR = ..\src
 SRCCOMMONDIR = ..\..\common\src
 
-CFLAGS = $(FLAGS) $(MY_INCLUDES)
+CFLAGS = $(MY_INCLUDES) $(FLAGS)
 
 OBJS   = $(OBJ_NAME).obj
 

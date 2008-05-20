@@ -8,7 +8,7 @@ MY_INCLUDES = /I..\include \
 SRCDIR = ..\src
 SRCCOMMONDIR = ..\..\common\src
 
-CFLAGS = $(FLAGS) $(MY_INCLUDES)
+CFLAGS = $(MY_INCLUDES) $(FLAGS)
 
 OBJS   = $(OBJ_NAME).obj
 
