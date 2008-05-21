@@ -135,7 +135,7 @@ public:
 //---------------------------------------------------------------------------
 template<typename OWNER,typename TYPES=tlm::tlm_generic_payload_types>
 class peq_with_cb_and_phase: 
-  public sc_core::sc_module
+  public sc_core::sc_object
 {
 
   typedef typename TYPES::tlm_payload_type tlm_payload_type;
@@ -178,28 +178,30 @@ class peq_with_cb_and_phase:
 
 public:
   
-  SC_HAS_PROCESS( peq_with_cb_and_phase );
-  
   peq_with_cb_and_phase(OWNER* _owner, cb _cb)
-    :sc_module( sc_core::sc_gen_unique_name( "peq_with_cb_and_phase" ) )
+    :sc_core::sc_object( sc_core::sc_gen_unique_name( "peq_with_cb_and_phase" ) )
     ,m_owner(_owner)
     ,m_cb(_cb)
   {
-    SC_METHOD( fec );
-    sensitive << m_e;
-    dont_initialize();  
-    end_module();
+    sc_core::sc_spawn_options opts;
+    opts.spawn_method();
+    opts.set_sensitivity(&m_e);
+    opts.dont_initialize();
+    sc_core::sc_spawn(sc_bind(&peq_with_cb_and_phase::fec, this), 
+                      sc_core::sc_gen_unique_name("fec"), &opts);
   }
 
-  peq_with_cb_and_phase(sc_core::sc_module_name name_,OWNER* _owner,cb _cb)
-    : sc_core::sc_module( name_ )
+  peq_with_cb_and_phase(const char* _name, OWNER* _owner,cb _cb)
+    : sc_core::sc_object( _name )
     ,m_owner(_owner)
     ,m_cb(_cb)
   {
-    SC_METHOD( fec );
-    sensitive << m_e;
-    dont_initialize();
-    end_module();
+    sc_core::sc_spawn_options opts;
+    opts.spawn_method();
+    opts.set_sensitivity(&m_e);
+    opts.dont_initialize();
+    sc_core::sc_spawn(sc_bind(&peq_with_cb_and_phase::fec, this), 
+                      sc_core::sc_gen_unique_name("fec"), &opts);
   }
   
   ~peq_with_cb_and_phase(){}

@@ -43,6 +43,8 @@ namespace tlm {
 // does not require this feature. Bear in mind that calling the expand method
 // may invalidate all direct pointers into the m_data array.
 
+
+//the tlm_array shall always be used with T=tlm_extension_base*
 template <typename T>
 class tlm_array
 {
@@ -179,15 +181,17 @@ public:
                 {
                     m_data[i] = tmp[i];
                 }
+                
+                //since the array new the cache entries have to be update
                 for (unsigned int j=0; j<m_size; j++)
                 {
-                    if (tmp[j])
+                    if (tmp[j]) //if there was a valid extension in the old array ...
                     {
-                        for (unsigned int i=0; i<m_last_entry; i++)
+                        for (unsigned int i=0; i<m_last_entry; i++) //...we search its position in the old cache
                         {
-                            if (tmp[j]==(*tmp2[i]))
+                            if (tmp[j]==(*tmp2[i])) //...and if it was in the old cache
                             {
-                                 m_entries[i]=&m_data[j];
+                                 m_entries[i]=&m_data[j]; //...we put it into the same position in the new cache
                             }
                         }
                     }
@@ -208,18 +212,22 @@ public:
     static const char* const kind_string;
     const char* kind() const { return kind_string; }
 
-    inline void insert(T* p)
+    //this function shall get a pointer to a array slot
+    // it stores this slot in a cache of active slots
+    inline void insert_in_cache(T* p)
     {
         m_entries[m_last_entry++]=p;
     }
 
-    inline void free()
+    //this functions clears all active slots of the array
+    inline void free_entire_cache()
     {
         while(m_last_entry)
         {
             m_last_entry--;
-            (*m_entries[m_last_entry])->free();
-            *m_entries[m_last_entry]=0;
+            if (*m_entries[m_last_entry]) //we make sure no one cleared the slot manually
+              (*m_entries[m_last_entry])->free(); //...and then we call free on the content of the slot
+            *m_entries[m_last_entry]=0;   //afterwards we set the slot to NULL
         }
     }
 

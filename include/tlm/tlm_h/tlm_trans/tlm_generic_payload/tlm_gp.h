@@ -145,15 +145,15 @@ public:
     {
     }
         
-    void acquire(){m_ref_count++;}
-    void release(){if (--m_ref_count==0) m_mm->free(this);}
+    void acquire(){assert(m_mm); m_ref_count++;}
+    void release(){assert(m_mm); if (--m_ref_count==0) m_mm->free(this);}
     int get_ref_count(){return m_ref_count;}
     void set_mm(tlm_mm_interface* mm) { m_mm = mm; }
     bool has_mm() { return m_mm != NULL; }
     
     void reset(){
       //should the other members be reset too?
-      m_extensions.free();
+      m_extensions.free_entire_cache();
     };
     
 
@@ -421,7 +421,7 @@ public:
     {
         T* tmp = static_cast<T*>(m_extensions[T::ID]);
         m_extensions[T::ID] = static_cast<tlm_extension_base*>(ext);
-        if (!tmp) m_extensions.insert(&m_extensions[T::ID]);
+        if (!tmp) m_extensions.insert_in_cache(&m_extensions[T::ID]);
         assert(m_mm);
         return tmp;
     }
@@ -432,7 +432,7 @@ public:
     {
         tlm_extension_base* tmp = m_extensions[index];
         m_extensions[index] = ext;
-        if (!tmp) m_extensions.insert(&m_extensions[index]);
+        if (!tmp) m_extensions.insert_in_cache(&m_extensions[index]);
         assert(m_mm);
         return tmp;
     }
@@ -479,7 +479,7 @@ public:
     {
         if (m_mm)
         {
-            m_extensions.insert(&m_extensions[T::ID]);
+            m_extensions.insert_in_cache(&m_extensions[T::ID]);
         }
         else 
         {
@@ -495,7 +495,7 @@ public:
     {
         if (m_mm)
         {
-            m_extensions.insert(&m_extensions[T::ID]);
+            m_extensions.insert_in_cache(&m_extensions[T::ID]);
         }
         else 
         {
