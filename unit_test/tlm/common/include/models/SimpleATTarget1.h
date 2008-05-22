@@ -127,7 +127,9 @@ public:
     transaction_type* trans = mEndRequestQueue.front();
     assert(trans);
     mEndRequestQueue.pop();
+    #if ( ! NDEBUG )
     sync_enum_type r = socket->nb_transport_bw(*trans, phase, t);
+    #endif /* ! NDEBUG */
     assert(r == tlm::TLM_ACCEPTED); // FIXME: initiator should return TLM_ACCEPTED?
     assert(t == sc_core::SC_ZERO_TIME); // t must be SC_ZERO_TIME
 
