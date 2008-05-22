@@ -22,6 +22,7 @@
 //  Authors:
 //    Bill Bunton, ESLX
 //    Jack Donovan, ESLX
+//    Charles Wilson, ESLX
 //====================================================================
 
 #include "reporting.h"               	// reporting macros
@@ -36,26 +37,24 @@ static const char *filename = "traffic_generator.cpp";  ///< filename for report
 SC_HAS_PROCESS(traffic_generator);
 //-----------------------------------------------------------------------------
 //
-traffic_generator::traffic_generator          // @todo correct use of module name to instance name
-( sc_core::sc_module_name name                  // module name
+traffic_generator::traffic_generator            // constructor
+( sc_core::sc_module_name name                  // instance name
 , const unsigned int    ID                      // initiator ID
 , sc_dt::uint64         base_address_1          // first base address
 , sc_dt::uint64         base_address_2          // second base address
 )
-
-: sc_module         (name)                      /// module name
-, m_ID              (ID)                        /// initiator ID
-, m_base_address_1  (base_address_1)            /// first base address
-, m_base_address_2  (base_address_2)            /// second base address
-, m_active_txn_count (4)                        /// Max number of transactions active 
-// @todo change to const
-, m_check_all       (false)                     /// @todo comment variable
+: sc_module           ( name            )       /// module name
+, m_ID                ( ID              )       /// initiator ID
+, m_base_address_1    ( base_address_1  )       /// first base address
+, m_base_address_2    ( base_address_2  )       /// second base address
+, m_active_txn_count  ( 4               )       /// Max number of transactions active 
+, m_check_all         ( false           )       /// @todo comment variable
 { 
   SC_THREAD(traffic_generator_thread);
 }
 //-----------------------------------------------------------------------------
 //
-traffic_generator::traffic_generator          // @todo keep me, lose other constructor
+traffic_generator::traffic_generator            // @todo keep me, lose other constructor
 ( sc_core::sc_module_name name                  // module name
 , const unsigned int    ID                      // initiator ID
 , sc_dt::uint64         base_address_1          // first base address
@@ -63,17 +62,15 @@ traffic_generator::traffic_generator          // @todo keep me, lose other const
 , unsigned int          active_txn_count        // Max number of active transactions 
 )
 
-: sc_module         (name)                      /// module name
-, m_ID              (ID)                        /// initiator ID
-, m_base_address_1  (base_address_1)            /// first base address
-, m_base_address_2  (base_address_2)            /// second base address
-, m_active_txn_count (active_txn_count)         /// Max number of active transactions 
-, m_check_all       (false)
+: sc_module           ( name              )     /// module name
+, m_ID                ( ID                )     /// initiator ID
+, m_base_address_1    ( base_address_1    )     /// first base address
+, m_base_address_2    ( base_address_2    )     /// second base address
+, m_active_txn_count  ( active_txn_count  )     /// Max number of active transactions 
+, m_check_all         ( false             )
 { 
   SC_THREAD(traffic_generator_thread);
 }
-
-
 
 /// SystemC thread for generation of GP traffic
 
@@ -90,21 +87,24 @@ traffic_generator::traffic_generator_thread
   tlm::tlm_generic_payload  *transaction_ptr;
   unsigned char             *data_buffer_ptr; 
   
- 
-//-----------------------------------------------------------------------------
-//  build transaction pool 
+  // build transaction pool 
 
-  for (unsigned int i = 0; i < m_active_txn_count; i++ ) {
-    data_buffer_ptr  = new unsigned char [4];     // @todo size of txn data
-    transaction_ptr  = new tlm::tlm_generic_payload;
-    transaction_ptr->set_data_ptr(data_buffer_ptr);
-    m_txn_pool.push(transaction_ptr);
-}
+  for (unsigned int i = 0; i < m_active_txn_count; i++ )
+  {
+    m_txn_pool.push ();
+    
+//    data_buffer_ptr  = new unsigned char [m_txn_data_size];
+//    transaction_ptr  = new tlm::tlm_generic_payload;
+    
+//    transaction_ptr->set_data_ptr(data_buffer_ptr);
+    
+//    m_txn_pool.push(transaction_ptr);
+  }
   
-//=============================================================================
-//  Outer loop of a simple memory test  Generate addresses
+  // outer loop of a simple memory test  Generate addresses
 
-  sc_dt::uint64 base_address ; 
+  sc_dt::uint64 base_address;
+   
   for (unsigned int i = 0; i < 2; i++ ) {
     if (i==0) {
       base_address  = m_base_address_1; 
@@ -113,15 +113,18 @@ traffic_generator::traffic_generator_thread
       base_address  = m_base_address_2; 
     }
 
-    sc_dt::uint64 mem_address   = base_address; 
+    sc_dt::uint64 mem_address = base_address; 
 
   //-----------------------------------------------------------------------------
   // write loop 
     for (unsigned int j = 0; j < 16; j++ ) {
     
-      if(!m_txn_pool.empty()) {
-        transaction_ptr = m_txn_pool.front();   // get gp from pool 
-        m_txn_pool.pop();
+      if(!m_txn_pool.empty())
+      {
+//        transaction_ptr = m_txn_pool.front();   // get gp from pool 
+//        m_txn_pool.pop();
+        
+        transaction_ptr = m_txn_pool.pop ();
         
         data_buffer_ptr = transaction_ptr->get_data_ptr();
 
@@ -135,13 +138,12 @@ traffic_generator::traffic_generator_thread
         // convert address of write data to an 32-bit value
         *reinterpret_cast<unsigned int*>(data_buffer_ptr) = w_data;
         
-              
-        transaction_ptr->set_command          (tlm::TLM_WRITE_COMMAND);
-        transaction_ptr->set_address          (mem_address);
-        transaction_ptr->set_data_length      (4);
-        transaction_ptr->set_response_status  (tlm::TLM_INCOMPLETE_RESPONSE);
+        transaction_ptr->set_command          ( tlm::TLM_WRITE_COMMAND       );
+        transaction_ptr->set_address          ( mem_address                  );
+        transaction_ptr->set_data_length      ( m_txn_data_size              );
+        transaction_ptr->set_response_status  ( tlm::TLM_INCOMPLETE_RESPONSE );
 
-        mem_address += 4;                           // increment memory address 
+        mem_address += m_txn_data_size;             // increment memory address 
 
         request_out_port->write (transaction_ptr);  // send write request 
       } 
@@ -151,31 +153,34 @@ traffic_generator::traffic_generator_thread
     
     check_all_complete();
     
-  //-----------------------------------------------------------------------------
-  // read loop 
+    // read loop 
   
-   mem_address   = base_address; 
+    mem_address = base_address; 
    
-    for (unsigned int i = 0; i < 16; i++ ) {
-    
-      if(!m_txn_pool.empty()) {
-        transaction_ptr = m_txn_pool.front();   // get gp from pool 
-        m_txn_pool.pop();
-                   
-        transaction_ptr->set_command          (tlm::TLM_READ_COMMAND);
-        transaction_ptr->set_address          (mem_address);
-        transaction_ptr->set_data_length      (4);
-        transaction_ptr->set_response_status  (tlm::TLM_INCOMPLETE_RESPONSE);
+    for (unsigned int i = 0; i < 16; i++ )
+    {
+      if(!m_txn_pool.empty())
+      {
+//        transaction_ptr = m_txn_pool.front();   // get gp from pool 
+//        m_txn_pool.pop();
+        
+        transaction_ptr = m_txn_pool.pop ();
+                           
+        transaction_ptr->set_command          ( tlm::TLM_READ_COMMAND        );
+        transaction_ptr->set_address          ( mem_address                  );
+        transaction_ptr->set_data_length      ( m_txn_data_size              );
+        transaction_ptr->set_response_status  ( tlm::TLM_INCOMPLETE_RESPONSE );
 
-        mem_address += 4;                           // increment memory address 
+        mem_address += m_txn_data_size;             // increment memory address 
 
         request_out_port->write (transaction_ptr);  // send write request 
-      }  
+      }
+        
       check_complete();
     } // end read loop
    
     check_all_complete();
-}
+  }
 
   msg.str ("");
   msg << "Traffic Generator : " << m_ID << endl 
@@ -184,8 +189,6 @@ traffic_generator::traffic_generator_thread
   REPORT_INFO(filename, __FUNCTION__, msg.str());
 
 } // end traffic_generator_thread
-
-
 
 //-----------------------------------------------------------------------------
 //  Check Complete method

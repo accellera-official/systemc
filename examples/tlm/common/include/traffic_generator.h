@@ -90,17 +90,105 @@ class traffic_generator                       	// traffic_generator
   ( void
   ); 
   
-//-----------------------------------------------------------------------------
-//  Check Complete method
-void check_complete (void); 
+  //-----------------------------------------------------------------------------
+  //  Check Complete method
+  void check_complete (void); 
 
+  //-----------------------------------------------------------------------------
+  //  Check All Complete method
 
+  void check_all_complete (void);
 
-
-//-----------------------------------------------------------------------------
-//  Check All Complete method
-
-void check_all_complete (void);
+  // Transaction Pool (queue)
+  
+  static const unsigned int  m_txn_data_size = 4;          // transaction size
+  
+  class pool_queue_c                                      /// memory pool queue class
+  : public tlm::tlm_mm_interface                          /// implements memory management IF
+  {
+    public:
+    
+    pool_queue_c                                          /// pool_queue_c constructor
+    ( void
+    )
+    {
+    }
+    
+    void
+    push                                                  /// push entry
+    ( void
+    )
+    { 
+      tlm::tlm_generic_payload  *transaction_ptr  = new tlm::tlm_generic_payload ( *this ); /// transaction pointer
+      unsigned char             *data_buffer_ptr  = new unsigned char [ m_txn_data_size ];  /// data buffer pointer
+      
+      transaction_ptr->set_data_ptr ( data_buffer_ptr );
+      
+      m_queue.push ( transaction_ptr );
+      
+      transaction_ptr->acquire();
+    }
+    
+    void
+    push                                                  /// push entry
+    ( tlm::tlm_generic_payload  *transaction_ptr          /// transaction pointer
+    )
+    { 
+      m_queue.push ( transaction_ptr );
+      
+      transaction_ptr->acquire();
+    }
+    
+    tlm::tlm_generic_payload *                            /// transaction pointer
+    pop                                                   /// release entry
+    ( void
+    )
+    {
+      tlm::tlm_generic_payload *transaction_ptr = m_queue.front();
+      
+      m_queue.pop();
+      
+      return transaction_ptr;
+    }
+    
+    void
+    release                                               /// release entry
+    ( tlm::tlm_generic_payload *transaction_ptr           /// transaction pointer
+    )
+    {
+      transaction_ptr->release ();
+    }
+    
+    bool                                                  /// queue is empty
+    empty                                                 /// queue empty
+    ( void
+    )
+    {
+      return m_queue.empty ();
+    }
+    
+    size_t                                               /// queue size
+    size                                                 /// queue size
+    ( void
+    )
+    {
+      return m_queue.size ();
+    }
+    
+    void
+    free                                                  /// free allocated memory
+    ( tlm::tlm_generic_payload *transaction_ptr           /// transaction pointer
+    )
+    {
+      transaction_ptr->reset();
+       
+      delete transaction_ptr;
+    }
+    
+    private:
+    
+    std::queue<tlm::tlm_generic_payload*> m_queue;      /// queue
+  };
 
 //=============================================================================
 // Member Variables 
@@ -114,8 +202,9 @@ void check_all_complete (void);
   sc_dt::uint64       m_base_address_1;      	      // first base address
   sc_dt::uint64       m_base_address_2;       	    // second base address
   
-  std::queue<tlm::tlm_generic_payload*> m_txn_pool; // response queue
-  unsigned int        m_active_txn_count;
+  pool_queue_c        m_txn_pool;                   // transaction pool
+  
+  const unsigned int  m_active_txn_count;           // active transaction count
   bool                m_check_all;
   
   public:
@@ -125,7 +214,5 @@ void check_all_complete (void);
   
   /// Port for responses from the initiator
   sc_core::sc_port<sc_core::sc_fifo_in_if  <gp_ptr> > response_in_port;
-
-  
 };
 #endif /* __TRAFFIC_GENERATOR_H__ */
