@@ -276,11 +276,8 @@ inline void instance_specific_extension_container::dec_use_count(){
 
 //This class 'hides' all the instance specific extension stuff from the user
 // he instantiates one of those (e.g. instance_specific_extension_accessor extAcc;) and can then access
-// the private and public extensions
-//  if he wants to access private extensions he calls 
-//    extAcc.privateAccess(txn).extensionAPIFnCall()
-//  if he wants to access public extensions he calls 
-//    extAcc.publicAccess(txn).extensionAPIFnCall()
+// the private extensions
+//    extAcc(txn).extensionAPIFnCall()
 //  where extensionAPIFnCall is set_extension, get_extension, clear_extension,...
 class instance_specific_extension_accessor{
 public:
