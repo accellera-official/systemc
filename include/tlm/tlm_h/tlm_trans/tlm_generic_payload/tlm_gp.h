@@ -111,9 +111,9 @@ public:
     //---------------
     // Constructors
     //---------------
-    
+
     // Default constructor
-    tlm_generic_payload() 
+    tlm_generic_payload()
         : m_address(0)
         , m_command(TLM_IGNORE_COMMAND)
         , m_data(0)
@@ -129,7 +129,7 @@ public:
     {
     }
 
-    tlm_generic_payload(tlm_mm_interface& mm) 
+    tlm_generic_payload(tlm_mm_interface& mm)
         : m_address(0)
         , m_command(TLM_IGNORE_COMMAND)
         , m_data(0)
@@ -144,21 +144,21 @@ public:
         , m_ref_count(0)
     {
     }
-        
-    void acquire(){assert(m_mm); m_ref_count++;}
-    void release(){assert(m_mm); if (--m_ref_count==0) m_mm->free(this);}
+
+    void acquire(){assert(m_mm != 0); m_ref_count++;}
+    void release(){assert(m_mm != 0); if (--m_ref_count==0) m_mm->free(this);}
     int get_ref_count(){return m_ref_count;}
     void set_mm(tlm_mm_interface* mm) { m_mm = mm; }
     bool has_mm() { return m_mm != NULL; }
-    
+
     void reset(){
       //should the other members be reset too?
       m_extensions.free_entire_cache();
     };
-    
+
 
 private:
-    //disabled copy ctor and assignment operator.    
+    //disabled copy ctor and assignment operator.
     // Copy constructor
     tlm_generic_payload(const tlm_generic_payload& x)
         : m_address(x.get_address())
@@ -252,7 +252,7 @@ public:
       for(unsigned int i=0; i<m_extensions.size(); i++)
           if(m_extensions[i]) m_extensions[i]->free();
     }
-       
+
     //----------------
     // API (including setters & getters)
     //---------------
@@ -264,25 +264,25 @@ public:
     void                 set_write() {m_command = TLM_WRITE_COMMAND;}
     tlm_command          get_command() const {return m_command;}
     void                 set_command(const tlm_command command) {m_command = command;}
-    
+
     // Address related methods
     sc_dt::uint64        get_address() const {return m_address;}
     void                 set_address(const sc_dt::uint64 address) {m_address = address;}
-    
+
     // Data related methods
     unsigned char*       get_data_ptr() const {return m_data;}
     void                 set_data_ptr(unsigned char* data) {m_data = data;}
-    
+
     // Transaction length (in bytes) related methods
     unsigned int         get_data_length() const {return m_length;}
     void                 set_data_length(const unsigned int length) {m_length = length;}
-    
+
     // Response status related methods
     bool                 is_response_ok() const {return (m_response_status > 0);}
     bool                 is_response_error() const {return (m_response_status <= 0);}
     tlm_response_status  get_response_status() const {return m_response_status;}
     void                 set_response_status(const tlm_response_status response_status)
-        {m_response_status = response_status;}  
+        {m_response_status = response_status;}
     std::string          get_response_string() const
     {
         switch(m_response_status)
@@ -297,11 +297,11 @@ public:
         }
         return "TLM_UNKNOWN_RESPONSE";
     }
-    
+
     // Streaming related methods
     unsigned int         get_streaming_width() const {return m_streaming_width;}
     void                 set_streaming_width(const unsigned int streaming_width) {m_streaming_width = streaming_width; }
-        
+
     // Byte enable related methods
     unsigned char*       get_byte_enable_ptr() const {return m_byte_enable;}
     void                 set_byte_enable_ptr(unsigned char* byte_enable){m_byte_enable = byte_enable;}
@@ -314,7 +314,7 @@ public:
     bool                 get_dmi_allowed() const { return m_dmi; }
 
 private:
-    
+
     /* --------------------------------------------------------------------- */
     /* Generic Payload attributes:                                           */
     /* --------------------------------------------------------------------- */
@@ -355,13 +355,13 @@ private:
     unsigned char*       m_data;
     unsigned int         m_length;
     tlm_response_status  m_response_status;
-    bool                 m_dmi;  
+    bool                 m_dmi;
     unsigned char*       m_byte_enable;
     unsigned int         m_byte_enable_length;
     unsigned int         m_streaming_width;
-    
+
 public:
-   
+
     /* --------------------------------------------------------------------- */
     /* Dynamic extension mechanism:                                          */
     /* --------------------------------------------------------------------- */
@@ -405,7 +405,7 @@ public:
         m_extensions[T::ID] = static_cast<tlm_extension_base*>(ext);
         return tmp;
     }
-    
+
     // non-templatized version with manual index:
     tlm_extension_base* set_extension(unsigned int index,
                                       tlm_extension_base* ext)
@@ -422,10 +422,10 @@ public:
         T* tmp = static_cast<T*>(m_extensions[T::ID]);
         m_extensions[T::ID] = static_cast<tlm_extension_base*>(ext);
         if (!tmp) m_extensions.insert_in_cache(&m_extensions[T::ID]);
-        assert(m_mm);
+        assert(m_mm != 0);
         return tmp;
     }
-    
+
     // non-templatized version with manual index:
     tlm_extension_base* set_auto_extension(unsigned int index,
                                       tlm_extension_base* ext)
@@ -433,7 +433,7 @@ public:
         tlm_extension_base* tmp = m_extensions[index];
         m_extensions[index] = ext;
         if (!tmp) m_extensions.insert_in_cache(&m_extensions[index]);
-        assert(m_mm);
+        assert(m_mm != 0);
         return tmp;
     }
 
@@ -462,7 +462,7 @@ public:
     {
         m_extensions[T::ID] = static_cast<tlm_extension_base*>(0);
     }
-    
+
     //this call just removes the extension from the txn but does not
     // call free() or tells the MM to do so
     // it return false if there was active MM so you are now in an unsafe situation
@@ -481,13 +481,13 @@ public:
         {
             m_extensions.insert_in_cache(&m_extensions[T::ID]);
         }
-        else 
+        else
         {
             ext->free();
             m_extensions[T::ID] = static_cast<tlm_extension_base*>(0);
         }
     }
-    
+
     //this call removes the extension from the txn and does
     // call free() or tells the MM to do so when the txn is finally done
     // recommended use: when not sure there is no MM
@@ -497,7 +497,7 @@ public:
         {
             m_extensions.insert_in_cache(&m_extensions[T::ID]);
         }
-        else 
+        else
         {
             m_extensions[T::ID]->free();
             m_extensions[T::ID] = static_cast<tlm_extension_base*>(0);
