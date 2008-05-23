@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2007 by all Contributors.
+  source code Copyright (c) 1996-2008 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -88,26 +88,6 @@ public:
         }
     }
     
-    // Copy 'cache' list. O(n^2) as we need to find extension position in original 'cache'
-    //  to add it in the right place in the copy.
-    void deep_copy_active_extensions_into(tlm_array& other) const
-    {
-        assert(m_size == other.m_size);
-        for (unsigned int j=0; j<m_size; j++)
-        {
-            if (m_data[j])
-            {
-                for (unsigned int i=0; i<m_last_entry; i++)
-                {
-                    if (m_data[j]==(*m_entries[i]))
-                    {
-                        other.m_entries[i]=&other.m_data[j];
-                    }
-                }
-            }
-        }
-    }
-
     // destructor:
     ~tlm_array()
     {
@@ -214,13 +194,13 @@ public:
 
     //this function shall get a pointer to a array slot
     // it stores this slot in a cache of active slots
-    inline void insert_in_cache(T* p)
+    void insert_in_cache(T* p)
     {
         m_entries[m_last_entry++]=p;
     }
 
     //this functions clears all active slots of the array
-    inline void free_entire_cache()
+    void free_entire_cache()
     {
         while(m_last_entry)
         {

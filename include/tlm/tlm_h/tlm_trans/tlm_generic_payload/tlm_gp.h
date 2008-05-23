@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2007 by all Contributors.
+  source code Copyright (c) 1996-2008 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -204,53 +204,76 @@ private:
     }
 public:
     // non-virtual deep-copying of the object
-    void deep_copy_into(tlm_generic_payload& other) const
+    void deep_copy_from(const tlm_generic_payload & other)
     {
-        other.m_command =            get_command();
-        other.m_address =            get_address();
-        other.m_length =             get_data_length();
-        other.m_response_status =    get_response_status();
-        other.m_byte_enable_length = get_byte_enable_length();
-        other.m_streaming_width =    get_streaming_width();
-        other.m_dmi =                get_dmi_allowed();
+        m_command =            other.get_command();
+        m_address =            other.get_address();
+        m_length =             other.get_data_length();
+        m_response_status =    other.get_response_status();
+        m_byte_enable_length = other.get_byte_enable_length();
+        m_streaming_width =    other.get_streaming_width();
+        m_dmi =                other.get_dmi_allowed();
 
         // deep copy data
         // there must be enough space in the target transaction!
         if(m_data && other.m_data)
         {
-            unsigned char* tmp_data=other.get_data_ptr();
-            for(unsigned int i=0; i<m_length; i++)
-            {
-                tmp_data[i] = m_data[i];
-            }
+            memcpy(m_data, other.m_data, m_length);
         }
         // deep copy byte enables
         // there must be enough space in the target transaction!
         if(m_byte_enable && other.m_byte_enable)
         {
-            unsigned char* tmp_byte_enable=other.get_byte_enable_ptr();
-            for(unsigned int i=0; i<m_byte_enable_length; i++)
-            {
-                tmp_byte_enable[i] = m_byte_enable[i];
-            }
+            memcpy(m_byte_enable, other.m_byte_enable, m_byte_enable_length);
         }
         // deep copy extensions (sticky and non-sticky)
+        for(unsigned int i=0; i<other.m_extensions.size(); i++)
+        {
+            if(other.m_extensions[i])
+            {                       //original has extension i
+                if(!m_extensions[i])
+                {                   //We don't: clone.
+                    tlm_extension_base *ext = m_extensions[i]->clone();
+                    if(ext)			//extension may not be clonable.
+                    {
+                        if(has_mm())
+                        {           //mm can take care of removing cloned extensions
+                            set_auto_extension(i, ext);
+                        }
+                        else
+                        {           // no mm, user will call free_all_extensions().
+                            set_extension(i, ext);
+                        }
+                    }
+                }
+                else
+                {                   //We already have such extension. Copy original over it.
+                    m_extensions[i]->copy_from(*other.m_extensions[i]);
+                }
+            }
+        }
+    }
+
+    // Free all extensions. Useful when reusing a cloned transaction that doesn't have memory manager.
+    // normal and sticky extensions are freed and extension array cleared.
+    void free_all_extensions()
+    {
+        m_extensions.free_entire_cache();
         for(unsigned int i=0; i<m_extensions.size(); i++)
         {
             if(m_extensions[i])
             {
-                other.set_extension(i, m_extensions[i]->clone());
+                m_extensions[i]->free();
+                m_extensions[i] = 0;
             }
         }
-        m_extensions.deep_copy_active_extensions_into(other.m_extensions);
     }
-
     //--------------
     // Destructor
     //--------------
     virtual ~tlm_generic_payload() {
-      for(unsigned int i=0; i<m_extensions.size(); i++)
-          if(m_extensions[i]) m_extensions[i]->free();
+        for(unsigned int i=0; i<m_extensions.size(); i++)
+            if(m_extensions[i]) m_extensions[i]->free();
     }
 
     //----------------
