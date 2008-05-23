@@ -27,7 +27,6 @@ TO DO:
 + Verification runs very slowly.  One of the reasons for this is the overhead
 starting a new process for every test.  Therefore the testing should be
 put into a loop rather than being one-shot, with reuse of memory states.
-+ Byte enable length and stream width support
 */
 
 
@@ -71,7 +70,6 @@ local_single_fromhe(tlm_generic_payload *txn, unsigned int sizeof_databus);
 
 void test_a_conversion(char cmd) {
   tlm_generic_payload txn;
-  txn.set_byte_enable_ptr(0);
 
   if(cmd == 'R') txn.set_read();
   else txn.set_write();
@@ -101,14 +99,24 @@ void test_a_conversion(char cmd) {
   cin.ignore(10000,'=');  cin >> byte_enable_legible;
   if((byte_enable_legible[0] == '1') || (byte_enable_legible[0] == '0')) {
     txn.set_byte_enable_ptr(new unsigned char[txn.get_data_length()]);
+    txn.set_byte_enable_length(txn.get_data_length());
     original_byte_enable = txn.get_byte_enable_ptr();
-    for(unsigned int i=0; i<txn.get_data_length(); i++)
-      if (byte_enable_legible[i] == '0') {
+    for(unsigned int i=0; i<txn.get_data_length(); i++) {
+      if(byte_enable_legible[i] == '0') {
         txn.get_byte_enable_ptr()[i] = TLM_BYTE_DISABLED;
-      } else { // byte_enable_legible[i] == '1'
+      } else if(byte_enable_legible[i] == '1') {
         txn.get_byte_enable_ptr()[i] = TLM_BYTE_ENABLED;
+      } else {
+        // not enough byte enables
+        txn.set_byte_enable_length(i);
+        break;
       }
+    }
   }
+
+  int stream_width;
+  cin.ignore(10000,'=');  cin >> stream_width;
+  txn.set_streaming_width(stream_width);
 
   cout << "enter initiator memory state = ("<< BUFFER_SIZE << " characters)\n";
   unsigned char initiator_mem[BUFFER_SIZE+1];
@@ -120,7 +128,7 @@ void test_a_conversion(char cmd) {
   unsigned char target_mem[BUFFER_SIZE+1];
   cin.ignore(10000,'=');  cin >> target_mem;
 
-  cout << "enter converter choice = (0 => word, 1 => aligned, 2 => single)\n";
+  cout << "enter converter choice = (0 => generic, 1 => word, 2 => aligned, 3 => single)\n";
   int converter;
   cin.ignore(10000,'=');  cin >> converter;
 
@@ -137,12 +145,15 @@ void test_a_conversion(char cmd) {
   cout << "  Initiator offset = " << initiator_offset << endl;
   cout << "  Byte enables = " << byte_enable_legible << endl;
 #endif
+  cout << "  Byte enable length = " << txn.get_byte_enable_length() << endl;
+  cout << "  Streaming width = " << txn.get_streaming_width() << endl;
   cout << "  Initiator memory = " << initiator_mem << endl;
   cout << "  Target memory = " << target_mem << endl;
   cout << "  Converter = " << converter << endl << endl;
 
   // initiator //
   switch(converter) {
+    case 0:  convert(tlm_to_hostendian_generic); break;
     case 1:  convert(tlm_to_hostendian_word); break;
     case 2:  convert(tlm_to_hostendian_aligned); break;
     case 3:  convert(tlm_to_hostendian_single); break;
@@ -173,26 +184,36 @@ void test_a_conversion(char cmd) {
      (txn.get_byte_enable_ptr() == original_byte_enable ? "unchanged" : "changed") << endl;
   }
 #endif
+  cout << "  Byte enable length = " << txn.get_byte_enable_length() << endl;
+  cout << "  Streaming width = " << txn.get_streaming_width() << endl;
   cout << endl;
 
   // target //
-  if(txn.get_byte_enable_ptr() == 0) {  // AND STREAM WIDTH //
-    if(txn.is_read())
-      memcpy(txn.get_data_ptr(), target_mem+txn.get_address(),
-        txn.get_data_length());
-    else
-      memcpy(target_mem+txn.get_address(), txn.get_data_ptr(),
-        txn.get_data_length());
-  } else {  // IMPLEMENT BYTE_ENABLE_LENGTH AND STREAM WIDTH //
-    if(txn.is_read()) {
-      for(unsigned int j=0; j<txn.get_data_length(); j++) {
-        if(txn.get_byte_enable_ptr()[j])
-          (txn.get_data_ptr())[j] = target_mem[j+txn.get_address()];
-      }
+  int sw = txn.get_streaming_width();
+  if((txn.get_data_length()/sw)*sw != txn.get_data_length()) {
+    cout << "ERROR: Data length not a multiple of streaming width\n";
+    exit(1);
+  }
+  for(unsigned int ss = 0; ss < txn.get_data_length(); ss += sw) {
+    if(txn.get_byte_enable_ptr() == 0) {
+      // simple transaction can be processed by mem-copy
+      if(txn.is_read())
+        memcpy(ss+txn.get_data_ptr(), target_mem+txn.get_address(), sw);
+      else
+        memcpy(target_mem+txn.get_address(), ss+txn.get_data_ptr(), sw);
     } else {
-      for(unsigned int j=0; j<txn.get_data_length(); j++) {
-        if(txn.get_byte_enable_ptr()[j])
-          target_mem[j+txn.get_address()] = (txn.get_data_ptr())[j];
+      // complex transaction, byte enables, maybe shorter than data
+      int bel = txn.get_byte_enable_length();
+      if(txn.is_read()) {
+        for(int j=0; j<sw; j++) {
+          if(txn.get_byte_enable_ptr()[(ss+j) % bel])
+            (txn.get_data_ptr())[ss+j] = target_mem[j+txn.get_address()];
+        }
+      } else {
+        for(int j=0; j<sw; j++) {
+          if(txn.get_byte_enable_ptr()[(ss+j) % bel])
+            target_mem[j+txn.get_address()] = (txn.get_data_ptr())[ss+j];
+        }
       }
     }
   }
@@ -208,6 +229,7 @@ void test_a_conversion(char cmd) {
     cout << "using specific entry point for response\n";
 #endif
     switch(converter) {
+      case 0:  convert(tlm_from_hostendian_generic); break;
       case 1:  convert(tlm_from_hostendian_word); break;
       case 2:  convert(tlm_from_hostendian_aligned); break;
       case 3:  convert(tlm_from_hostendian_single); break;
@@ -241,7 +263,7 @@ int main(int argc, char **argv) {
   srand(time(NULL));
 
   while(true) {
-    cout << "enter {R|W}, addr=a, len=l, bus width=b, word width=w, initiator offset=i, be = {x|01}\n";
+    cout << "enter {R|W}, addr=a, len=l, bus width=b, word width=w, initiator offset=i, be={x|01}, stream width=s\n";
     char command;
     cin >> command;
     if(cin.eof()) break;
@@ -280,6 +302,7 @@ local_single_tohe(tlm_generic_payload *txn, unsigned int sizeof_databus) {
     txn->set_data_length(sizeof_databus + sizeof(DATAWORD));
   else
     txn->set_data_length(2 * sizeof_databus);
+  txn->set_streaming_width(txn->get_data_length());
   unsigned char *new_data = new unsigned char[txn->get_data_length()];
   unsigned char *new_be = new unsigned char[txn->get_data_length()];
   // drive all BEs to zero initially
@@ -310,6 +333,7 @@ local_single_tohe(tlm_generic_payload *txn, unsigned int sizeof_databus) {
   original_dptr = txn->get_data_ptr();
   txn->set_data_ptr(new_data);
   txn->set_byte_enable_ptr(new_be);
+  txn->set_byte_enable_length(txn->get_data_length());
   original_addr = txn->get_address();
   txn->set_address(new_addr);
 }

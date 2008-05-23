@@ -23,8 +23,6 @@ Make it faster.  (1) don't calculate a new memory state for every
 transaction.  One every 10 is enough, seeing as everything random
 anyway.  (2) don't keep starting new SystemC processes, but just pipe
 transactions to the same one which contains a loop.
-(3) currently data words wider than the bus are not possible.
-(4) currently stream and repeating byte-enables aren't tested.
 
 There is a simple testbench programme in C++ which runs a single
 transaction through a single conversion function, to a simple target
@@ -57,6 +55,8 @@ lower values
 - offset address (0..bus width) with a higher priority for 0
 - address in initiator buffer uniform random
 - read or write
+- byte-enable length may be smaller than transasction length
+- may be a streaming burst
 
 Transaction breakdown
 - individual words (always)
@@ -77,7 +77,7 @@ import string
 
 class transaction:
   """ contains read_not_write, address, length, byte_enable,
-      bus_width, data_width, data_pointer """
+      bus_width, data_width, data_pointer, stream_width """
   def __init__(self, **a):  self.__dict__ = a
   def __str__(self):
     if self.read_not_write:  a = "R: "
@@ -87,6 +87,7 @@ class transaction:
        self.data_pointer)
     if self.byte_enable:  a += ", be = " + self.byte_enable
     else:  a += ", be = x"
+    a += ", sw = %d" % (self.stream_width)
     return a
 
 
@@ -95,8 +96,10 @@ def txn_generator(nr):
   pr_byte_enable = 0.5
   pr_enabled = 0.5
   bus_widths = [1, 2, 4, 8, 16]
-  data_widths = [1, 2, 4, 8, 16] + [1, 2, 4, 8] + [1, 2, 4] + [1, 2] + [1]
+  data_widths = [1, 2, 4, 8, 16] + [1, 2, 4, 8] + [1, 2, 4] + [1, 2]
   lengths = range(1,33) + range(1,17) + range(1,9) + range(1,5) + range(1,3)
+  pr_short_be = 0.2
+  pr_stream = 0.1
   nr_generated = 0
   while nr_generated < nr:
     # create a random transaction
@@ -104,6 +107,7 @@ def txn_generator(nr):
     while True:
       data_width = random.choice(data_widths)
       if data_width <= bus_width:  break
+      if random.random() < 0.25:  break
     length = random.choice(lengths)
     addr_base = random.choice(range(0,1024,bus_width))
     addr_offset = random.choice(range(bus_width)+[0]*(bus_width/2))
@@ -114,13 +118,32 @@ def txn_generator(nr):
       length = length * data_width,
       address = addr_base + addr_offset,
       byte_enable = False,
+      stream_width = length * data_width,
       data_pointer = random.randint(0,1023)
     )
     if random.random() < pr_byte_enable:
-      bep = ["0" * txn.data_width, "1" * txn.data_width]
-      txn.byte_enable = "".join([random.choice(bep) for x in range(length)])
+      belen = length
+      if random.random() < pr_short_be:
+        belen = min(random.choice(lengths), length)
+      bep = ["0" * data_width, "1" * data_width]
+      txn.byte_enable = "".join([random.choice(bep) for x in range(belen)])
+    if random.random() < pr_stream and length > 1:
+      strlen = length
+      while True:
+        strlen -= 1
+        if strlen == 1 or \
+          (random.random() < 0.5 and (length/strlen)*strlen == length):
+          break
+      txn.stream_width = strlen * data_width
     nr_generated += 1
     yield txn
+
+# test code for transaction generator
+if False:
+  for t in txn_generator(20):
+    print t
+  raise Exception
+# end test code
 
 
 class memory_state_cl:
@@ -150,104 +173,155 @@ def __FRAG__null(txn):
   yield txn
 
 def __FRAG__word(txn):
-  end_address = txn.address + txn.length
   curr_address = txn.address
+  reset_address = curr_address + txn.stream_width
+  if txn.byte_enable:
+    full_byte_enable = txn.byte_enable * (1+txn.length/len(txn.byte_enable))
   be_pos = 0
   d_pos = txn.data_pointer
-  while curr_address < end_address:
+  end = txn.length + d_pos
+  while d_pos < end:
     new_txn = transaction(
       bus_width = txn.bus_width,
       data_width = txn.data_width,
       read_not_write = txn.read_not_write,
       length = txn.data_width,
       address = curr_address,
-      byte_enable = txn.byte_enable,
+      byte_enable = False,
+      stream_width = txn.data_width,
       data_pointer = d_pos
     )
     curr_address += txn.data_width
+    if curr_address == reset_address:  curr_address = txn.address
     d_pos += txn.data_width
     if txn.byte_enable:
-      new_txn.byte_enable = txn.byte_enable[be_pos:be_pos+txn.data_width]
+      new_txn.byte_enable = full_byte_enable[be_pos:be_pos+txn.data_width]
       be_pos += txn.data_width
     yield new_txn
 
-def __FRAG__random(txn):
-  pr_nofrag = 0.5
-  end_address = txn.address + txn.length
-  curr_address = txn.address
+def __FRAG__stream(txn):
+  if txn.byte_enable:
+    full_byte_enable = txn.byte_enable * (1+txn.length/len(txn.byte_enable))
   be_pos = 0
-  d_pos = txn.data_pointer
-  while curr_address < end_address:
+  bytes_done = 0
+  while bytes_done < txn.length:
     new_txn = transaction(
       bus_width = txn.bus_width,
       data_width = txn.data_width,
       read_not_write = txn.read_not_write,
-      length = txn.data_width,
-      address = curr_address,
-      byte_enable = txn.byte_enable,
-      data_pointer = d_pos
+      length = txn.stream_width,
+      address = txn.address,
+      byte_enable = False,
+      stream_width = txn.stream_width,
+      data_pointer = bytes_done + txn.data_pointer
     )
-    curr_address += txn.data_width
-    d_pos += txn.data_width
     if txn.byte_enable:
-      new_txn.byte_enable = txn.byte_enable[be_pos:be_pos+txn.data_width]
-      be_pos += txn.data_width
-    while random.random() < pr_nofrag and curr_address < end_address:
-      new_txn.length += txn.data_width
+      new_txn.byte_enable = full_byte_enable[be_pos:be_pos+txn.stream_width]
+      be_pos += txn.stream_width
+    yield new_txn
+    bytes_done += txn.stream_width
+
+def __FRAG__random(stream_txn):
+  for txn in __FRAG__stream(stream_txn):
+    # txn has full byte enables and no stream feature guaranteed
+    pr_nofrag = 0.5
+    end_address = txn.address + txn.length
+    curr_address = txn.address
+    be_pos = 0
+    d_pos = txn.data_pointer
+    while curr_address < end_address:
+      new_txn = transaction(
+        bus_width = txn.bus_width,
+        data_width = txn.data_width,
+        read_not_write = txn.read_not_write,
+        length = txn.data_width,
+        address = curr_address,
+        byte_enable = txn.byte_enable,
+        stream_width = txn.data_width,
+        data_pointer = d_pos
+      )
       curr_address += txn.data_width
       d_pos += txn.data_width
       if txn.byte_enable:
-        new_txn.byte_enable += txn.byte_enable[be_pos:be_pos+txn.data_width]
+        new_txn.byte_enable = txn.byte_enable[be_pos:be_pos+txn.data_width]
         be_pos += txn.data_width
-    yield new_txn
+      while random.random() < pr_nofrag and curr_address < end_address:
+        new_txn.length += txn.data_width
+        new_txn.stream_width += txn.data_width
+        curr_address += txn.data_width
+        d_pos += txn.data_width
+        if txn.byte_enable:
+          new_txn.byte_enable += txn.byte_enable[be_pos:be_pos+txn.data_width]
+          be_pos += txn.data_width
+      yield new_txn
 
-def __FRAG__randinterleave(txn):
-  pr_frag = 0.5
-  txns = [ transaction(
-    bus_width = txn.bus_width,
-    data_width = txn.data_width,
-    read_not_write = txn.read_not_write,
-    length = txn.length,
-    address = txn.address,
-    byte_enable = "",
-    data_pointer = txn.data_pointer
-  ), transaction(
-    bus_width = txn.bus_width,
-    data_width = txn.data_width,
-    read_not_write = txn.read_not_write,
-    length = txn.length,
-    address = txn.address,
-    byte_enable = "",
-    data_pointer = txn.data_pointer
-  ) ]
-  curr = 0
-  be_pos = 0
-  on = "1" * txn.data_width
-  off = "0" * txn.data_width
-  while be_pos < txn.length:
-    if txn.byte_enable:  bew = txn.byte_enable[be_pos:be_pos+txn.data_width]
-    else:  bew = on
-    txns[curr].byte_enable += bew
-    txns[1-curr].byte_enable += off
-    be_pos += txn.data_width
-    if random.random() < pr_frag:  curr = 1-curr
-  yield txns[0]
-  yield txns[1]
+def __FRAG__randinterleave(stream_txn):
+  for txn in __FRAG__stream(stream_txn):
+    # txn has full byte enables and no stream feature guaranteed
+    pr_frag = 0.5
+    txns = [ transaction(
+      bus_width = txn.bus_width,
+      data_width = txn.data_width,
+      read_not_write = txn.read_not_write,
+      length = txn.length,
+      address = txn.address,
+      byte_enable = "",
+      stream_width = txn.length,
+      data_pointer = txn.data_pointer
+    ), transaction(
+      bus_width = txn.bus_width,
+      data_width = txn.data_width,
+      read_not_write = txn.read_not_write,
+      length = txn.length,
+      address = txn.address,
+      byte_enable = "",
+      stream_width = txn.length,
+      data_pointer = txn.data_pointer
+    ) ]
+    curr = 0
+    be_pos = 0
+    on = "1" * txn.data_width
+    off = "0" * txn.data_width
+    while be_pos < txn.length:
+      if txn.byte_enable:  bew = txn.byte_enable[be_pos:be_pos+txn.data_width]
+      else:  bew = on
+      txns[curr].byte_enable += bew
+      txns[1-curr].byte_enable += off
+      be_pos += txn.data_width
+      if random.random() < pr_frag:  curr = 1-curr
+    yield txns[0]
+    yield txns[1]
 
 fragmenters = \
-  [__FRAG__null, __FRAG__word, __FRAG__random, __FRAG__randinterleave]
+  [__FRAG__null, __FRAG__word, __FRAG__stream, __FRAG__random, __FRAG__randinterleave]
+
+# test code for fragmenters
+if False:
+  for t in txn_generator(1):
+    print t
+    print
+    for u in fragmenters[4](t):
+      print u
+  raise Exception
+# end test code
+
 
 
 # conversion functions are determined by an index (shared with C++) and
 # a function that tests if they can be applied to a transaction
 def check_generic(txn):
-  return False
+  return True
 
 def check_word(txn):
+  if txn.data_width > txn.bus_width:  return False
+  if txn.stream_width < txn.length:  return False
+  if txn.byte_enable and len(txn.byte_enable) < txn.length:  return False
   return True
 
 def check_aligned(txn):
   if txn.data_width > txn.bus_width:  return False
+  if txn.stream_width < txn.length:  return False
+  if txn.byte_enable and len(txn.byte_enable) < txn.length:  return False
   base_addr = txn.address / txn.bus_width
   if base_addr * txn.bus_width != txn.address:  return False
   nr_bus_words = txn.length / txn.bus_width
@@ -337,7 +411,6 @@ except:
   nr_txns_to_test = 1000
 
 print "Number to test:", nr_txns_to_test
-print "Warning:  currently modified not to test data word wider than bus"
 
 # generate and test a number of transactions
 for txn in txn_generator(nr_txns_to_test):
@@ -377,7 +450,8 @@ print
 
 print "Conversion functions usage frequency:"
 print "  generic", usage[0]
-print "  aligned", usage[1]
-print "   single", usage[2]
-print " local single", usage[3]
+print "     word", usage[1]
+print "  aligned", usage[2]
+print "   single", usage[3]
+print " local single", usage[4]
 

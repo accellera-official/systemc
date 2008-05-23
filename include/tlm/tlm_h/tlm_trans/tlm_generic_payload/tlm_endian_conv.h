@@ -85,6 +85,15 @@ All functions assume power-of-2 bus and data word widths.
 
 Functions offered:
 
+0) A pair of functions that work for almost all TLM2 GP transactions.  The
+only limitations are that data and bus widths should be powers of 2, and that
+the data length should be an integer number of streaming widths and that the
+streaming width should be an integer number of data words.
+These functions always allocate new data and byte enable buffers and copy
+data one byte at a time.
+  tlm_to_hostendian_generic(tlm_generic_payload *txn, int sizeof_databus)
+  tlm_from_hostendian_generic(tlm_generic_payload *txn, int sizeof_databus)
+
 1) A pair of functions that work for all transactions regardless of data and
 bus data sizes and address alignment except for the the following
 limitations:
@@ -198,10 +207,12 @@ static tlm_buffer_pool local_buffer_pool;
 // an extension to keep the information needed for reconversion of response
 class tlm_endian_context : public tlm_extension<tlm_endian_context> {
   public:
-    sc_dt::uint64 address;     // used by generic
-    uchar *data_ptr;     // used by generic and aligned
-    uchar *byte_enable;  // used by generic
-    int length;         // used by generic
+    sc_dt::uint64 address;     // used by generic, word
+    sc_dt::uint64 new_address;     // used by generic
+    uchar *data_ptr;     // used by generic, word, aligned
+    uchar *byte_enable;  // used by word
+    int length;         // used by generic, word
+    int stream_width;   // used by generic
 
     // used by common entry point on response
     void (*from_f)(tlm_generic_payload *txn, unsigned int sizeof_databus);
@@ -224,7 +235,7 @@ class tlm_endian_context : public tlm_extension<tlm_endian_context> {
 // that can/must not be deleted.
 // 3) the conversion functions in this file use an extension to store
 // context information.  they do not remove this extension.  the initiator
-// should leave not remove it unless it deletes the generic payload
+// should not remove it unless it deletes the generic payload
 // object.
 
 inline tlm_endian_context *establish_context(tlm_generic_payload *txn) {
@@ -257,6 +268,145 @@ template<class D> class tlm_bool {
 
 template<class D> D tlm_bool<D>::TLM_TRUE = tlm_bool<D>::make_uchar_array(TLM_BYTE_ENABLED);
 template<class D> D tlm_bool<D>::TLM_FALSE = tlm_bool<D>::make_uchar_array(TLM_BYTE_DISABLED);
+
+using namespace std;
+
+///////////////////////////////////////////////////////////////////////////////
+// function set (0): Utilities
+inline void copy_db0(uchar *src1, uchar *src2, uchar *dest1, uchar *dest2) {
+  *dest1 = *src1;
+  *dest2 = *src2;
+}
+
+inline void copy_dbtrue0(uchar *src1, uchar *src2, uchar *dest1, uchar *dest2) {
+  *dest1 = *src1;
+  *dest2 = TLM_BYTE_ENABLED;
+}
+
+inline void copy_btrue0(uchar *src1, uchar *src2, uchar *dest1, uchar *dest2) {
+  *dest2 = TLM_BYTE_ENABLED;
+}
+
+inline void copy_b0(uchar *src1, uchar *src2, uchar *dest1, uchar *dest2) {
+  *dest2 = *src2;
+}
+
+inline void copy_dbyb0(uchar *src1, uchar *src2, uchar *dest1, uchar *dest2) {
+  if(*dest2 == TLM_BYTE_ENABLED) *src1 = *dest1;
+}
+
+
+template<class D,
+  void COPY(uchar *he_d, uchar *he_b, uchar *ie_d, uchar *ie_b)>
+inline void loop_generic0(int new_len, int new_stream_width,
+  int orig_stream_width, int sizeof_databus,
+  sc_dt::uint64 orig_start_address, sc_dt::uint64 new_start_address, int be_length,
+  uchar *ie_data, uchar *ie_be, uchar *he_data, uchar *he_be) {
+
+  for(int orig_sword = 0, new_sword = 0; new_sword < new_len;
+      new_sword += new_stream_width, orig_sword += orig_stream_width) {
+
+    sc_dt::uint64 ie_addr = orig_start_address;
+    for(int orig_dword = orig_sword;
+      orig_dword < orig_sword + orig_stream_width; orig_dword += sizeof(D)) {
+
+      for(int curr_byte = orig_dword + sizeof(D) - 1;
+          curr_byte >= orig_dword; curr_byte--) {
+
+        int he_index = ((ie_addr++) ^ (sizeof_databus - 1))
+          - new_start_address + new_sword;
+        COPY(ie_data+curr_byte, ie_be+(curr_byte % be_length),
+             he_data+he_index, he_be+he_index);
+      }
+    }
+  }
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+// function set (0): Response
+template<class DATAWORD> inline void
+tlm_from_hostendian_generic(tlm_generic_payload *txn, unsigned int sizeof_databus) {
+  if(txn->is_read()) {
+    tlm_endian_context *tc = txn->get_extension<tlm_endian_context>();
+
+    loop_generic0<DATAWORD, &copy_dbyb0>(txn->get_data_length(),
+      txn->get_streaming_width(), tc->stream_width, sizeof_databus, tc->address,
+      tc->new_address, txn->get_data_length(), tc->data_ptr, 0, txn->get_data_ptr(),
+      txn->get_byte_enable_ptr());
+  }
+
+  local_buffer_pool.return_buffer(txn->get_byte_enable_ptr());
+  local_buffer_pool.return_buffer(txn->get_data_ptr());
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+// function set (0): Request
+template<class DATAWORD> inline void
+tlm_to_hostendian_generic(tlm_generic_payload *txn, unsigned int sizeof_databus) {
+  tlm_endian_context *tc = establish_context(txn);
+  tc->from_f = &(tlm_from_hostendian_generic<DATAWORD>);
+  tc->sizeof_databus = sizeof_databus;
+
+  // calculate new size:  nr stream words multiplied by big enough stream width
+  int s_width = txn->get_streaming_width();
+  int length = txn->get_data_length();
+  if(s_width >= length) s_width = length;
+  int nr_stream_words = length/s_width;
+
+  // find out in which bus word the stream word starts and ends
+  sc_dt::uint64 new_address = (txn->get_address() & ~(sizeof_databus - 1));
+  sc_dt::uint64 end_address = ((txn->get_address() + s_width - 1)
+    & ~(sizeof_databus - 1));
+
+  int new_stream_width = end_address - new_address + sizeof_databus;
+  int new_length = new_stream_width * nr_stream_words;
+
+  // store context
+  tc->data_ptr = txn->get_data_ptr();
+  tc->address = txn->get_address();
+  tc->new_address = new_address;
+  tc->stream_width = s_width;
+  uchar *orig_be = txn->get_byte_enable_ptr();
+  int orig_be_length = txn->get_byte_enable_length();
+
+  // create data and byte-enable buffers
+  txn->set_address(new_address);
+  txn->set_data_ptr(local_buffer_pool.get_a_buffer(new_length));
+  txn->set_byte_enable_ptr(local_buffer_pool.get_a_buffer(new_length));
+  memset(txn->get_byte_enable_ptr(), TLM_BYTE_DISABLED, new_length);
+  txn->set_streaming_width(new_stream_width);
+  txn->set_data_length(new_length);
+  txn->set_byte_enable_length(new_length);
+
+  // copy data and/or byte enables
+  if(txn->is_write()) {
+    if(orig_be == 0) {
+      loop_generic0<DATAWORD, &copy_dbtrue0>(new_length,
+        new_stream_width, s_width, sizeof_databus, tc->address,
+        new_address, new_length, tc->data_ptr, 0, txn->get_data_ptr(),
+        txn->get_byte_enable_ptr());
+    } else {
+      loop_generic0<DATAWORD, &copy_db0>(new_length,
+        new_stream_width, s_width, sizeof_databus, tc->address,
+        new_address, orig_be_length, tc->data_ptr, orig_be, txn->get_data_ptr(),
+        txn->get_byte_enable_ptr());
+    }
+  } else { // read transaction
+    if(orig_be == 0) {
+      loop_generic0<DATAWORD, &copy_btrue0>(new_length,
+        new_stream_width, s_width, sizeof_databus, tc->address,
+        new_address, new_length, tc->data_ptr, 0, txn->get_data_ptr(),
+        txn->get_byte_enable_ptr());
+    } else {
+      loop_generic0<DATAWORD, &copy_b0>(new_length,
+        new_stream_width, s_width, sizeof_databus, tc->address,
+        new_address, orig_be_length, tc->data_ptr, orig_be, txn->get_data_ptr(),
+        txn->get_byte_enable_ptr());
+    }
+  }
+}
 
 
 
@@ -457,6 +607,7 @@ tlm_to_hostendian_word(tlm_generic_payload *txn, unsigned int sizeof_databus) {
     }
   }
   txn->set_byte_enable_length(txn->get_data_length());
+  txn->set_streaming_width(txn->get_data_length());
   txn->set_data_ptr(new_data);
   txn->set_byte_enable_ptr(new_be);
   txn->set_address(a_aligned);
