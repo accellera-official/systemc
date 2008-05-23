@@ -254,6 +254,21 @@ public:
         }
     }
 
+    void update_extensions_from(const tlm_generic_payload & other)
+    {
+        // deep copy extensions that are already present
+        for(unsigned int i=0; i<other.m_extensions.size(); i++)
+        {
+            if(other.m_extensions[i])
+            {                       //original has extension i
+                if(m_extensions[i])
+                {                   //We have it too. copy.
+                    m_extensions[i]->copy_from(*other.m_extensions[i]);
+                }
+            }
+        }
+    }
+
     // Free all extensions. Useful when reusing a cloned transaction that doesn't have memory manager.
     // normal and sticky extensions are freed and extension array cleared.
     void free_all_extensions()
