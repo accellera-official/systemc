@@ -205,7 +205,7 @@ protected:
 //
 
 template <unsigned int BUSWIDTH = 32,
-          typename TYPES = tlm_generic_payload_types,
+          typename TYPES = tlm_base_protocol_types,
           int N = 1
 #if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
           ,sc_core::sc_port_policy POL = sc_core::SC_ONE_OR_MORE_BOUND

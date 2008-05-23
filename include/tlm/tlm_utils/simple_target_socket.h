@@ -25,7 +25,7 @@ namespace tlm_utils {
 
 template <typename MODULE,
           unsigned int BUSWIDTH = 32,
-          typename TYPES = tlm::tlm_generic_payload_types>
+          typename TYPES = tlm::tlm_base_protocol_types>
 class simple_target_socket :
   public tlm::tlm_target_socket<BUSWIDTH, TYPES>
 {
@@ -464,7 +464,7 @@ private:
 //ID Tagged version
 template <typename MODULE,
           unsigned int BUSWIDTH = 32,
-          typename TYPES = tlm::tlm_generic_payload_types>
+          typename TYPES = tlm::tlm_base_protocol_types>
 class simple_target_socket_tagged :
   public tlm::tlm_target_socket<BUSWIDTH, TYPES>
 {

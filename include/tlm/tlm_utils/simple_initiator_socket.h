@@ -24,7 +24,7 @@ namespace tlm_utils {
 
 template <typename MODULE,
           unsigned int BUSWIDTH = 32,
-          typename TYPES = tlm::tlm_generic_payload_types>
+          typename TYPES = tlm::tlm_base_protocol_types>
 class simple_initiator_socket :
   public tlm::tlm_initiator_socket<BUSWIDTH, TYPES>
 {
@@ -138,7 +138,7 @@ private:
 
 template <typename MODULE,
           unsigned int BUSWIDTH = 32,
-          typename TYPES = tlm::tlm_generic_payload_types>
+          typename TYPES = tlm::tlm_base_protocol_types>
 class simple_initiator_socket_tagged :
   public tlm::tlm_initiator_socket<BUSWIDTH, TYPES>
 {

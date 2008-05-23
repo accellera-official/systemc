@@ -47,8 +47,8 @@ public:
 
 struct my_extended_payload_types
 {
-  typedef tlm::tlm_generic_payload_types::tlm_payload_type tlm_payload_type;
-  typedef tlm::tlm_generic_payload_types::tlm_phase_type tlm_phase_type;
+  typedef tlm::tlm_base_protocol_types::tlm_payload_type tlm_payload_type;
+  typedef tlm::tlm_base_protocol_types::tlm_phase_type tlm_phase_type;
 };
 
 #endif

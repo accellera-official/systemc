@@ -31,7 +31,7 @@ class adapt_ext2gp : public sc_core::sc_module
     typedef tlm::tlm_generic_payload                   initiator_payload_type;
     typedef tlm::tlm_generic_payload                   target_payload_type;
     typedef tlm_utils::simple_initiator_socket<adapt_ext2gp, BUSWIDTH,
-                                  tlm::tlm_generic_payload_types> initiator_socket_type;
+                                  tlm::tlm_base_protocol_types> initiator_socket_type;
     typedef tlm_utils::simple_target_socket<adapt_ext2gp, BUSWIDTH,
                                my_extended_payload_types>  target_socket_type;
     
@@ -105,7 +105,7 @@ class adapt_gp2ext : public sc_core::sc_module
     typedef tlm_utils::simple_initiator_socket<adapt_gp2ext, BUSWIDTH,
                                   my_extended_payload_types> initiator_socket_type;
     typedef tlm_utils::simple_target_socket<adapt_gp2ext, BUSWIDTH,
-                               tlm::tlm_generic_payload_types> target_socket_type;
+                               tlm::tlm_base_protocol_types> target_socket_type;
     
     target_socket_type  target_socket;
     initiator_socket_type initiator_socket;

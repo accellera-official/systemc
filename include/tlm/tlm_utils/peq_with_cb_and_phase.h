@@ -133,7 +133,7 @@ public:
  * notifications. Each notification have an associate payload.
  */
 //---------------------------------------------------------------------------
-template<typename OWNER,typename TYPES=tlm::tlm_generic_payload_types>
+template<typename OWNER,typename TYPES=tlm::tlm_base_protocol_types>
 class peq_with_cb_and_phase: 
   public sc_core::sc_object
 {

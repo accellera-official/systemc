@@ -35,7 +35,7 @@ index of this socket the calling initiator is connected.
 */
 template <typename MODULE,
           unsigned int BUSWIDTH = 32,
-          typename TYPES = tlm::tlm_generic_payload_types,
+          typename TYPES = tlm::tlm_base_protocol_types,
           unsigned int N=0
 #if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
           ,sc_core::sc_port_policy POL = sc_core::SC_ONE_OR_MORE_BOUND

@@ -192,14 +192,14 @@ public:
 // Combined interfaces
 ////////////////////////////////////////////////////////////////////////////
 
-struct tlm_generic_payload_types
+struct tlm_base_protocol_types
 {
   typedef tlm_generic_payload tlm_payload_type;
   typedef tlm_phase tlm_phase_type;
 };
 
 // The forward interface:
-template <typename TYPES = tlm_generic_payload_types>
+template <typename TYPES = tlm_base_protocol_types>
 class tlm_fw_transport_if
   : public virtual tlm_fw_nonblocking_transport_if<typename TYPES::tlm_payload_type,
                                                    typename TYPES::tlm_phase_type>
@@ -209,7 +209,7 @@ class tlm_fw_transport_if
 {};
 
 // The backward interface:
-template <typename TYPES = tlm_generic_payload_types>
+template <typename TYPES = tlm_base_protocol_types>
 class tlm_bw_transport_if
   : public virtual tlm_bw_nonblocking_transport_if<typename TYPES::tlm_payload_type,
                                                    typename TYPES::tlm_phase_type>
