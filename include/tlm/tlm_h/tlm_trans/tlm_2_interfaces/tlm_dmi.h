@@ -24,69 +24,77 @@ namespace tlm {
 
 class tlm_dmi
 {
-public:
+  public:
 
-  tlm_dmi()
+  // Enum for indicating the access granted to the initiator. 
+  // The initiator uses gp.m_command to indicate it intention (read/write)
+  //  The target is allowed to promote dmi_access_read or dmi_access_write
+  //  requests to dmi_access_read_write.
+
+  enum dmi_access_e
+  { dmi_access_none       = 0x00                               // no access
+  , dmi_access_read       = 0x01                               // read access
+  , dmi_access_write      = 0x02                               // write access
+  , dmi_access_read_write = dmi_access_read | dmi_access_write // read/write access
+  };
+  
+  tlm_dmi (void)
   {
     init();
   }
   
-  void init()
+  void init (void)
   {
-    dmi_ptr           = 0;
-    dmi_start_address = 0x0;
-    dmi_end_address   = (sc_dt::uint64)-1;
-    dmi_read_latency  = sc_core::SC_ZERO_TIME;
-    dmi_write_latency = sc_core::SC_ZERO_TIME;
+    m_dmi_ptr           = 0x0;
+    m_dmi_start_address = 0x0;
+    m_dmi_end_address   = (sc_dt::uint64)(-1);
+    m_dmi_access        = dmi_access_none;
+    m_dmi_read_latency  = sc_core::SC_ZERO_TIME;
+    m_dmi_write_latency = sc_core::SC_ZERO_TIME;
   }
-// Enum for signaling the granted access type to the initiator. 
-// The initiator uses gp.m_command to indicate it intention (read/write)
-//  The target is allowed to promote DMI_TYPE_READ or DMI_TYPE_WRITE
-//  requests to DMI_TYPE_READ_WRITE.
-
-  enum dmi_type_e
-  { DMI_TYPE_IGNORE     = 0x00
-  , DMI_TYPE_READ       = 0x01
-  , DMI_TYPE_WRITE      = 0x02
-  , DMI_TYPE_READ_WRITE = DMI_TYPE_READ | DMI_TYPE_WRITE
-  };
   
-  unsigned char*    get_dmi_ptr() const {return dmi_ptr;}
-  sc_dt::uint64     get_start_address() const {return dmi_start_address;}
-  sc_dt::uint64     get_end_address() const {return dmi_end_address;}
-  sc_core::sc_time  get_read_latency() const {return dmi_read_latency;}
-  sc_core::sc_time  get_write_latency() const {return dmi_write_latency;}
-  dmi_type_e        get_granted_access() const {return dmi_type;}
-  bool              is_read_allowed() const {return (dmi_type & DMI_TYPE_READ) != 0;}
-  bool              is_write_allowed() const {return (dmi_type & DMI_TYPE_WRITE) != 0;}
-  bool              is_read_write_allowed() const {return (dmi_type & DMI_TYPE_READ_WRITE) != 0;}
+  unsigned char*    get_dmi_ptr           (void) const {return m_dmi_ptr;}
+  sc_dt::uint64     get_start_address     (void) const {return m_dmi_start_address;}
+  sc_dt::uint64     get_end_address       (void) const {return m_dmi_end_address;}
+  sc_core::sc_time  get_read_latency      (void) const {return m_dmi_read_latency;}
+  sc_core::sc_time  get_write_latency     (void) const {return m_dmi_write_latency;}
+  dmi_access_e      get_granted_access    (void) const {return m_dmi_access;}
+  bool              is_none_allowed       (void) const {return m_dmi_access == dmi_access_none;}
+  bool              is_read_allowed       (void) const {return (m_dmi_access & dmi_access_read) == dmi_access_read;}
+  bool              is_write_allowed      (void) const {return (m_dmi_access & dmi_access_write) == dmi_access_write;}
+  bool              is_read_write_allowed (void) const {return (m_dmi_access & dmi_access_read_write) == dmi_access_read_write;}
 
-  void              set_dmi_ptr(unsigned char* p) {dmi_ptr = p;}
-  void              set_start_address(sc_dt::uint64 addr) {dmi_start_address = addr;}
-  void              set_end_address(sc_dt::uint64 addr) {dmi_end_address = addr;}
-  void              set_read_latency(sc_core::sc_time t) {dmi_read_latency = t;}
-  void              set_write_latency(sc_core::sc_time t) {dmi_write_latency = t;}
-  void              set_granted_access(dmi_type_e t) {dmi_type = t;}
-  void              allow_read() {dmi_type = DMI_TYPE_READ;}
-  void              allow_write() {dmi_type = DMI_TYPE_WRITE;}
-  void              allow_read_write() {dmi_type = DMI_TYPE_READ_WRITE;}
+  void              set_dmi_ptr           (unsigned char* p)   {m_dmi_ptr = p;}
+  void              set_start_address     (sc_dt::uint64 addr) {m_dmi_start_address = addr;}
+  void              set_end_address       (sc_dt::uint64 addr) {m_dmi_end_address = addr;}
+  void              set_read_latency      (sc_core::sc_time t) {m_dmi_read_latency = t;}
+  void              set_write_latency     (sc_core::sc_time t) {m_dmi_write_latency = t;}
+  void              set_granted_access    (dmi_access_e a)     {m_dmi_access = a;}
+  void              allow_none            (void)               {m_dmi_access = dmi_access_none;}
+  void              allow_read            (void)               {m_dmi_access = dmi_access_read;}
+  void              allow_write           (void)               {m_dmi_access = dmi_access_write;}
+  void              allow_read_write      (void)               {m_dmi_access = dmi_access_read_write;}
 
-private:
+  private:
+
   // If the forward call is successful, the target returns the dmi_ptr,
   // which must point to the data element corresponding to the
   // dmi_start_address. The data is organized as a byte array with the
   // endianness of the target (endianness member of the tlm_dmi struct).
-  unsigned char* dmi_ptr;
+  
+  unsigned char*   m_dmi_ptr;
   
   // The absolute start and end addresses of the DMI region. If the decoder
   // logic in the interconnect changes the address field e.g. by masking, the
   // interconnect is responsible to transform the relative address back to an
   // absolute address again.
-  sc_dt::uint64 dmi_start_address;
-  sc_dt::uint64 dmi_end_address;
+  
+  sc_dt::uint64    m_dmi_start_address;
+  sc_dt::uint64    m_dmi_end_address;
 
   // Granted access
-  dmi_type_e dmi_type;
+  
+  dmi_access_e     m_dmi_access;
 
   // These members define the latency of read/write transactions. The
   // initiator must initialize these members to zero before requesting a
@@ -94,8 +102,9 @@ private:
   // add to the total transaction latency.
   // Depending on the 'type' attribute only one, or both of these attributes
   // will be valid.
-  sc_core::sc_time  dmi_read_latency;
-  sc_core::sc_time  dmi_write_latency;
+  
+  sc_core::sc_time m_dmi_read_latency;
+  sc_core::sc_time m_dmi_write_latency;
 };
 
 } // namespace tlm

@@ -178,9 +178,8 @@ public:
               dmi_type tmp;
               trans.set_address(addr);  //restore address, in case it was mutated.
               trans.set_write();
-              if ( socket->get_direct_mem_ptr(trans,
-                                              tmp) &&
-                   tmp.get_granted_access() != tlm::tlm_dmi::DMI_TYPE_READ )
+              if ( socket->get_direct_mem_ptr(trans, tmp)
+                   && tmp.is_write_allowed() )
               {
                   mDMIData = tmp;
               }
