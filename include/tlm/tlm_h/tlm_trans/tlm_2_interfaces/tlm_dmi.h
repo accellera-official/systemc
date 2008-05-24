@@ -28,14 +28,14 @@ class tlm_dmi
 
   // Enum for indicating the access granted to the initiator. 
   // The initiator uses gp.m_command to indicate it intention (read/write)
-  //  The target is allowed to promote dmi_access_read or dmi_access_write
+  //  The target is allowed to promote DMI_ACCESS_READ or DMI_ACCESS_WRITE
   //  requests to dmi_access_read_write.
 
   enum dmi_access_e
-  { dmi_access_none       = 0x00                               // no access
-  , dmi_access_read       = 0x01                               // read access
-  , dmi_access_write      = 0x02                               // write access
-  , dmi_access_read_write = dmi_access_read | dmi_access_write // read/write access
+  { DMI_ACCESS_NONE       = 0x00                               // no access
+  , DMI_ACCESS_READ       = 0x01                               // read access
+  , DMI_ACCESS_WRITE      = 0x02                               // write access
+  , DMI_ACCESS_READ_WRITE = DMI_ACCESS_READ | DMI_ACCESS_WRITE // read/write access
   };
   
   tlm_dmi (void)
@@ -48,7 +48,7 @@ class tlm_dmi
     m_dmi_ptr           = 0x0;
     m_dmi_start_address = 0x0;
     m_dmi_end_address   = (sc_dt::uint64)(-1);
-    m_dmi_access        = dmi_access_none;
+    m_dmi_access        = DMI_ACCESS_NONE;
     m_dmi_read_latency  = sc_core::SC_ZERO_TIME;
     m_dmi_write_latency = sc_core::SC_ZERO_TIME;
   }
@@ -59,10 +59,10 @@ class tlm_dmi
   sc_core::sc_time  get_read_latency      (void) const {return m_dmi_read_latency;}
   sc_core::sc_time  get_write_latency     (void) const {return m_dmi_write_latency;}
   dmi_access_e      get_granted_access    (void) const {return m_dmi_access;}
-  bool              is_none_allowed       (void) const {return m_dmi_access == dmi_access_none;}
-  bool              is_read_allowed       (void) const {return (m_dmi_access & dmi_access_read) == dmi_access_read;}
-  bool              is_write_allowed      (void) const {return (m_dmi_access & dmi_access_write) == dmi_access_write;}
-  bool              is_read_write_allowed (void) const {return (m_dmi_access & dmi_access_read_write) == dmi_access_read_write;}
+  bool              is_none_allowed       (void) const {return m_dmi_access == DMI_ACCESS_NONE;}
+  bool              is_read_allowed       (void) const {return (m_dmi_access & DMI_ACCESS_READ) == DMI_ACCESS_READ;}
+  bool              is_write_allowed      (void) const {return (m_dmi_access & DMI_ACCESS_WRITE) == DMI_ACCESS_WRITE;}
+  bool              is_read_write_allowed (void) const {return (m_dmi_access & DMI_ACCESS_READ_WRITE) == DMI_ACCESS_READ_WRITE;}
 
   void              set_dmi_ptr           (unsigned char* p)   {m_dmi_ptr = p;}
   void              set_start_address     (sc_dt::uint64 addr) {m_dmi_start_address = addr;}
@@ -70,10 +70,10 @@ class tlm_dmi
   void              set_read_latency      (sc_core::sc_time t) {m_dmi_read_latency = t;}
   void              set_write_latency     (sc_core::sc_time t) {m_dmi_write_latency = t;}
   void              set_granted_access    (dmi_access_e a)     {m_dmi_access = a;}
-  void              allow_none            (void)               {m_dmi_access = dmi_access_none;}
-  void              allow_read            (void)               {m_dmi_access = dmi_access_read;}
-  void              allow_write           (void)               {m_dmi_access = dmi_access_write;}
-  void              allow_read_write      (void)               {m_dmi_access = dmi_access_read_write;}
+  void              allow_none            (void)               {m_dmi_access = DMI_ACCESS_NONE;}
+  void              allow_read            (void)               {m_dmi_access = DMI_ACCESS_READ;}
+  void              allow_write           (void)               {m_dmi_access = DMI_ACCESS_WRITE;}
+  void              allow_read_write      (void)               {m_dmi_access = DMI_ACCESS_READ_WRITE;}
 
   private:
 
