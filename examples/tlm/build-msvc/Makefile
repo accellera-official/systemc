@@ -6,6 +6,8 @@ SUBDIRS = \
           ../at_4_phase \
           ../at_ooo \
           ../at_mixed_targets \
+          ../at_extension_optional \
+          ../at_extension_mandatory \
           ../lt
           
 #.PHONY: all clean run check
