@@ -1,6 +1,4 @@
 
-Info: (I804) /IEEE_Std_1666/deprecated: sc_start(double) deprecated, use sc_start(sc_time) or sc_start()
-
 Info: traffic_generator.cpp: 0 s - traffic_generator_thread
       Initiator: 101 Starting Traffic
 
@@ -109,14 +107,14 @@ Info: at_target_2_phase.cpp: 87 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
+Info: select_initiator.cpp: 90 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
+      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
+
 Info: at_target_2_phase.cpp: 90 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
-
-Info: select_initiator.cpp: 90 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
-      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
 
 Info: select_initiator.cpp: 90 ns - initiator_thread
       Initiator: 101 starting new transaction
@@ -185,14 +183,14 @@ Info: at_target_2_phase.cpp: 137 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
+Info: select_initiator.cpp: 140 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
+      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
+
 Info: at_target_2_phase.cpp: 140 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
-
-Info: select_initiator.cpp: 140 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
-      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
 
 Info: select_initiator.cpp: 140 ns - initiator_thread
       Initiator: 101 starting new transaction
@@ -261,14 +259,14 @@ Info: at_target_2_phase.cpp: 187 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
+Info: select_initiator.cpp: 190 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
+      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
+
 Info: at_target_2_phase.cpp: 190 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
-
-Info: select_initiator.cpp: 190 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
-      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
 
 Info: select_initiator.cpp: 190 ns - initiator_thread
       Initiator: 101 starting new transaction
@@ -337,14 +335,14 @@ Info: at_target_2_phase.cpp: 237 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
+Info: select_initiator.cpp: 240 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
+      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
+
 Info: at_target_2_phase.cpp: 240 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
-
-Info: select_initiator.cpp: 240 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
-      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
 
 Info: select_initiator.cpp: 240 ns - initiator_thread
       Initiator: 101 starting new transaction
@@ -413,14 +411,14 @@ Info: at_target_2_phase.cpp: 287 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
+Info: select_initiator.cpp: 290 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
+      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
+
 Info: at_target_2_phase.cpp: 290 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
-
-Info: select_initiator.cpp: 290 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
-      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
 
 Info: select_initiator.cpp: 290 ns - initiator_thread
       Initiator: 101 starting new transaction
@@ -489,14 +487,14 @@ Info: at_target_2_phase.cpp: 337 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
+Info: select_initiator.cpp: 340 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
+      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
+
 Info: at_target_2_phase.cpp: 340 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
-
-Info: select_initiator.cpp: 340 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
-      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
 
 Info: select_initiator.cpp: 340 ns - initiator_thread
       Initiator: 101 starting new transaction
@@ -565,14 +563,14 @@ Info: at_target_2_phase.cpp: 387 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
+Info: select_initiator.cpp: 390 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
+      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
+
 Info: at_target_2_phase.cpp: 390 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
-
-Info: select_initiator.cpp: 390 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
-      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
 
 Info: select_initiator.cpp: 390 ns - initiator_thread
       Initiator: 101 starting new transaction
@@ -641,14 +639,14 @@ Info: at_target_2_phase.cpp: 437 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
+Info: select_initiator.cpp: 440 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
+      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
+
 Info: at_target_2_phase.cpp: 440 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
-
-Info: select_initiator.cpp: 440 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
-      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
 
 Info: select_initiator.cpp: 440 ns - initiator_thread
       Initiator: 101 starting new transaction
@@ -717,14 +715,14 @@ Info: at_target_2_phase.cpp: 487 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
+Info: select_initiator.cpp: 490 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
+      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
+
 Info: at_target_2_phase.cpp: 490 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
-
-Info: select_initiator.cpp: 490 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
-      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
 
 Info: select_initiator.cpp: 490 ns - initiator_thread
       Initiator: 101 starting new transaction
@@ -793,14 +791,14 @@ Info: at_target_2_phase.cpp: 537 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
+Info: select_initiator.cpp: 540 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
+      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
+
 Info: at_target_2_phase.cpp: 540 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
-
-Info: select_initiator.cpp: 540 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
-      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
 
 Info: select_initiator.cpp: 540 ns - initiator_thread
       Initiator: 101 starting new transaction
@@ -869,14 +867,14 @@ Info: at_target_2_phase.cpp: 587 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
+Info: select_initiator.cpp: 590 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
+      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
+
 Info: at_target_2_phase.cpp: 590 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
-
-Info: select_initiator.cpp: 590 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
-      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
 
 Info: select_initiator.cpp: 590 ns - initiator_thread
       Initiator: 101 starting new transaction
@@ -945,14 +943,14 @@ Info: at_target_2_phase.cpp: 637 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
+Info: select_initiator.cpp: 640 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
+      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
+
 Info: at_target_2_phase.cpp: 640 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
-
-Info: select_initiator.cpp: 640 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
-      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
 
 Info: select_initiator.cpp: 640 ns - initiator_thread
       Initiator: 101 starting new transaction
@@ -1021,14 +1019,14 @@ Info: at_target_2_phase.cpp: 687 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
+Info: select_initiator.cpp: 690 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
+      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
+
 Info: at_target_2_phase.cpp: 690 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
-
-Info: select_initiator.cpp: 690 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
-      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
 
 Info: select_initiator.cpp: 690 ns - initiator_thread
       Initiator: 101 starting new transaction
@@ -1097,14 +1095,14 @@ Info: at_target_2_phase.cpp: 737 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
+Info: select_initiator.cpp: 740 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
+      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
+
 Info: at_target_2_phase.cpp: 740 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
-
-Info: select_initiator.cpp: 740 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
-      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
 
 Info: select_initiator.cpp: 740 ns - initiator_thread
       Initiator: 101 starting new transaction
@@ -1173,14 +1171,14 @@ Info: at_target_2_phase.cpp: 787 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
+Info: select_initiator.cpp: 790 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
+      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
+
 Info: at_target_2_phase.cpp: 790 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
-
-Info: select_initiator.cpp: 790 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
-      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
 
 Info: select_initiator.cpp: 797 ns - send_end_rsp_method
       Initiator: 101 starting send-end-response method
@@ -1249,14 +1247,14 @@ Info: select_initiator.cpp: 837 ns - initiator_thread
       Initiator: 102 ACCEPTED (GP, BEGIN_REQ, 0 s)
       Initiator: 102 transaction waiting end-request on backward-path 
 
+Info: select_initiator.cpp: 860 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
+      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
+
 Info: at_target_2_phase.cpp: 860 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
-
-Info: select_initiator.cpp: 860 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
-      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
 
 Info: select_initiator.cpp: 860 ns - initiator_thread
       Initiator: 101 starting new transaction
@@ -1325,14 +1323,14 @@ Info: at_target_2_phase.cpp: 927 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
+Info: select_initiator.cpp: 930 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
+      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
+
 Info: at_target_2_phase.cpp: 930 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
-
-Info: select_initiator.cpp: 930 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
-      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
 
 Info: select_initiator.cpp: 930 ns - initiator_thread
       Initiator: 101 starting new transaction
@@ -1401,14 +1399,14 @@ Info: at_target_2_phase.cpp: 997 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
+Info: select_initiator.cpp: 1 us - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
+      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
+
 Info: at_target_2_phase.cpp: 1 us - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
-
-Info: select_initiator.cpp: 1 us - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
-      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
 
 Info: select_initiator.cpp: 1 us - initiator_thread
       Initiator: 101 starting new transaction
@@ -1641,14 +1639,14 @@ Info: at_target_2_phase.cpp: 1157 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
+Info: select_initiator.cpp: 1160 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
+      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
+
 Info: at_target_2_phase.cpp: 1160 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
-
-Info: select_initiator.cpp: 1160 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
-      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
 
 Info: select_initiator.cpp: 1160 ns - initiator_thread
       Initiator: 101 starting new transaction
@@ -1717,14 +1715,14 @@ Info: at_target_2_phase.cpp: 1227 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
+Info: select_initiator.cpp: 1230 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
+      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
+
 Info: at_target_2_phase.cpp: 1230 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
-
-Info: select_initiator.cpp: 1230 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
-      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
 
 Info: select_initiator.cpp: 1230 ns - initiator_thread
       Initiator: 101 starting new transaction
@@ -1793,14 +1791,14 @@ Info: at_target_2_phase.cpp: 1297 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
+Info: select_initiator.cpp: 1300 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
+      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
+
 Info: at_target_2_phase.cpp: 1300 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
-
-Info: select_initiator.cpp: 1300 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
-      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
 
 Info: select_initiator.cpp: 1300 ns - initiator_thread
       Initiator: 101 starting new transaction
@@ -1869,14 +1867,14 @@ Info: at_target_2_phase.cpp: 1367 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
+Info: select_initiator.cpp: 1370 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
+      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
+
 Info: at_target_2_phase.cpp: 1370 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
-
-Info: select_initiator.cpp: 1370 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
-      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
 
 Info: select_initiator.cpp: 1370 ns - initiator_thread
       Initiator: 101 starting new transaction
@@ -1945,14 +1943,14 @@ Info: at_target_2_phase.cpp: 1437 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
+Info: select_initiator.cpp: 1440 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
+      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
+
 Info: at_target_2_phase.cpp: 1440 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
-
-Info: select_initiator.cpp: 1440 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
-      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
 
 Info: select_initiator.cpp: 1440 ns - initiator_thread
       Initiator: 101 starting new transaction
@@ -2021,14 +2019,14 @@ Info: at_target_2_phase.cpp: 1507 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
+Info: select_initiator.cpp: 1510 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
+      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
+
 Info: at_target_2_phase.cpp: 1510 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
-
-Info: select_initiator.cpp: 1510 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
-      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
 
 Info: select_initiator.cpp: 1510 ns - initiator_thread
       Initiator: 101 starting new transaction
@@ -2097,14 +2095,14 @@ Info: at_target_2_phase.cpp: 1577 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
+Info: select_initiator.cpp: 1580 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
+      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
+
 Info: at_target_2_phase.cpp: 1580 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
-
-Info: select_initiator.cpp: 1580 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
-      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
 
 Info: select_initiator.cpp: 1580 ns - initiator_thread
       Initiator: 101 starting new transaction
@@ -2173,14 +2171,14 @@ Info: at_target_2_phase.cpp: 1647 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
+Info: select_initiator.cpp: 1650 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
+      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
+
 Info: at_target_2_phase.cpp: 1650 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
-
-Info: select_initiator.cpp: 1650 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
-      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
 
 Info: select_initiator.cpp: 1650 ns - initiator_thread
       Initiator: 101 starting new transaction
@@ -2249,14 +2247,14 @@ Info: at_target_2_phase.cpp: 1717 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
+Info: select_initiator.cpp: 1720 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
+      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
+
 Info: at_target_2_phase.cpp: 1720 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
-
-Info: select_initiator.cpp: 1720 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
-      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
 
 Info: select_initiator.cpp: 1720 ns - initiator_thread
       Initiator: 101 starting new transaction
@@ -2325,14 +2323,14 @@ Info: at_target_2_phase.cpp: 1787 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
+Info: select_initiator.cpp: 1790 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
+      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
+
 Info: at_target_2_phase.cpp: 1790 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
-
-Info: select_initiator.cpp: 1790 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
-      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
 
 Info: select_initiator.cpp: 1790 ns - initiator_thread
       Initiator: 101 starting new transaction
@@ -2401,14 +2399,14 @@ Info: at_target_2_phase.cpp: 1857 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
+Info: select_initiator.cpp: 1860 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
+      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
+
 Info: at_target_2_phase.cpp: 1860 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
-
-Info: select_initiator.cpp: 1860 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
-      Initiator: 101 target omitted end-request timing-point returning ACCEPTED 
 
 Info: select_initiator.cpp: 1867 ns - send_end_rsp_method
       Initiator: 101 starting send-end-response method
@@ -4014,19 +4012,6 @@ Info: select_initiator.cpp: 2303 ns - send_end_rsp_method
 Info: select_initiator.cpp: 2303 ns - send_end_rsp_method
       Initiator: 102 COMPLETED (GP, END_RESP, 0 s)
 
-Info: at_target_2_phase.cpp: 2326 ns - begin_response_method
-      Target: 202 starting response method
-
-Info: report.cpp: 2326 ns - print
-      ID: 202 COMMAND: READ Length: 04
-      Addr: 0x0000000000000100 Data: 0xEFFFFEFF
-
-Info: at_target_2_phase.cpp: 2326 ns - begin_response_method
-      Target: 202 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
-
-Info: at_target_2_phase.cpp: 2326 ns - begin_response_method
-      Target: 202 ACCEPTED (GP, BEGIN_RESP, 0 s)
-
 Info: at_target_4_phase.cpp: 2326 ns - begin_response_method
       Target: 203 starting response method
 
@@ -4040,64 +4025,94 @@ Info: at_target_4_phase.cpp: 2326 ns - begin_response_method
 Info: at_target_4_phase.cpp: 2326 ns - begin_response_method
       Target: 203 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
+Info: at_target_2_phase.cpp: 2326 ns - begin_response_method
+      Target: 202 starting response method
+
+Info: report.cpp: 2326 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x0000000000000100 Data: 0xEFFFFEFF
+
+Info: at_target_2_phase.cpp: 2326 ns - begin_response_method
+      Target: 202 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
+
+Info: at_target_2_phase.cpp: 2326 ns - begin_response_method
+      Target: 202 ACCEPTED (GP, BEGIN_RESP, 0 s)
+
 Info: select_initiator.cpp: 2326 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
-      Initiator: 101 transaction moved to send-end-response PEQ 
-      Initiator: 101 ACCEPTED (GP, BEGIN_RESP, 0 s)
-
-Info: select_initiator.cpp: 2333 ns - send_end_rsp_method
-      Initiator: 101 starting send-end-response method
-      Initiator: 101 nb_transport_fw (GP, END_RESP, 0 s)
-
-Info: select_initiator.cpp: 2333 ns - send_end_rsp_method
-      Initiator: 101 COMPLETED (GP, END_RESP, 0 s)
-
-Info: at_target_2_phase.cpp: 2333 ns - nb_transport_fw
-      Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
-      Target: 202 COMPLETED (GP, END_RESP, 0 s)
-
-Info: select_initiator.cpp: 2333 ns - nb_transport_bw
       Initiator: 102 nb_transport_bw (GP, BEGIN_RESP, 0 s)
       Initiator: 102 transaction moved to send-end-response PEQ 
       Initiator: 102 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2333 ns - initiator_thread
-      Initiator: 101 starting new transaction
-      Initiator: 101 nb_transport_fw (GP, BEGIN_REQ, 0 s)
-
-Info: select_initiator.cpp: 2333 ns - initiator_thread
-      Initiator: 101 ACCEPTED (GP, BEGIN_REQ, 0 s)
-      Initiator: 101 transaction waiting end-request on backward-path 
-
-Info: at_target_2_phase.cpp: 2333 ns - nb_transport_fw
-      Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
-      Target: 202 transaction moved to send-response PEQ 
-      Target: 202 UPDATED (GP, END_REQ, 10 ns)
-
-Info: at_target_2_phase.cpp: 2336 ns - begin_response_method
-      Target: 202 starting response method
-
-Info: report.cpp: 2336 ns - print
-      ID: 202 COMMAND: READ Length: 04
-      Addr: 0x0000000000000104 Data: 0xEFFFFEFB
-
-Info: at_target_2_phase.cpp: 2336 ns - begin_response_method
-      Target: 202 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
-
-Info: at_target_2_phase.cpp: 2336 ns - begin_response_method
-      Target: 202 ACCEPTED (GP, BEGIN_RESP, 0 s)
-
-Info: select_initiator.cpp: 2340 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2333 ns - send_end_rsp_method
       Initiator: 102 starting send-end-response method
       Initiator: 102 nb_transport_fw (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2340 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2333 ns - send_end_rsp_method
       Initiator: 102 COMPLETED (GP, END_RESP, 0 s)
+
+Info: select_initiator.cpp: 2333 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
+      Initiator: 101 transaction moved to send-end-response PEQ 
+      Initiator: 101 ACCEPTED (GP, BEGIN_RESP, 0 s)
+
+Info: select_initiator.cpp: 2333 ns - initiator_thread
+      Initiator: 102 starting new transaction
+      Initiator: 102 nb_transport_fw (GP, BEGIN_REQ, 0 s)
+
+Info: select_initiator.cpp: 2333 ns - initiator_thread
+      Initiator: 102 ACCEPTED (GP, BEGIN_REQ, 0 s)
+      Initiator: 102 transaction waiting end-request on backward-path 
+
+Info: at_target_4_phase.cpp: 2333 ns - nb_transport_fw
+      Target: 203 nb_transport_fw (GP, BEGIN_REQ, 0 s)
+      Target: 203 ACCEPTED (GP, BEGIN_REQ, 0 s)
+
+Info: select_initiator.cpp: 2340 ns - send_end_rsp_method
+      Initiator: 101 starting send-end-response method
+      Initiator: 101 nb_transport_fw (GP, END_RESP, 0 s)
+
+Info: select_initiator.cpp: 2340 ns - send_end_rsp_method
+      Initiator: 101 COMPLETED (GP, END_RESP, 0 s)
+
+Info: at_target_2_phase.cpp: 2340 ns - nb_transport_fw
+      Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
+      Target: 202 COMPLETED (GP, END_RESP, 0 s)
+
+Info: at_target_2_phase.cpp: 2340 ns - begin_response_method
+      Target: 202 starting response method
+
+Info: report.cpp: 2340 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x0000000000000104 Data: 0xEFFFFEFB
+
+Info: at_target_2_phase.cpp: 2340 ns - begin_response_method
+      Target: 202 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
+
+Info: at_target_2_phase.cpp: 2340 ns - begin_response_method
+      Target: 202 ACCEPTED (GP, BEGIN_RESP, 0 s)
+
+Info: select_initiator.cpp: 2340 ns - initiator_thread
+      Initiator: 101 starting new transaction
+      Initiator: 101 nb_transport_fw (GP, BEGIN_REQ, 0 s)
+
+Info: select_initiator.cpp: 2340 ns - initiator_thread
+      Initiator: 101 ACCEPTED (GP, BEGIN_REQ, 0 s)
+      Initiator: 101 transaction waiting end-request on backward-path 
 
 Info: select_initiator.cpp: 2340 ns - nb_transport_bw
       Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
       Initiator: 101 transaction moved to send-end-response PEQ 
       Initiator: 101 ACCEPTED (GP, BEGIN_RESP, 0 s)
+
+Info: select_initiator.cpp: 2340 ns - nb_transport_bw
+      Initiator: 102 nb_transport_bw (GP, END_REQ, 0 s)
+      Initiator: 102 transaction waiting begin-response on backward path
+      Initiator: 102 ACCEPTED (GP, END_REQ, 0 s)
+
+Info: at_target_2_phase.cpp: 2340 ns - nb_transport_fw
+      Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
+      Target: 202 transaction moved to send-response PEQ 
+      Target: 202 UPDATED (GP, END_REQ, 10 ns)
 
 Info: select_initiator.cpp: 2340 ns - initiator_thread
       Initiator: 102 starting new transaction
@@ -4107,14 +4122,13 @@ Info: select_initiator.cpp: 2340 ns - initiator_thread
       Initiator: 102 ACCEPTED (GP, BEGIN_REQ, 0 s)
       Initiator: 102 transaction waiting end-request on backward-path 
 
-Info: select_initiator.cpp: 2343 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, END_REQ, 0 s)
-      Initiator: 101 transaction waiting begin-response on backward path
-      Initiator: 101 ACCEPTED (GP, END_REQ, 0 s)
+Info: at_target_4_phase.cpp: 2343 ns - end_request_method
+      Target: 203 starting end-request method
+      Target: 203 transaction moved to send-response PEQ 
+      Target: 203 nb_transport_bw (GP, END_REQ, 0 s)
 
-Info: at_target_4_phase.cpp: 2343 ns - nb_transport_fw
-      Target: 203 nb_transport_fw (GP, BEGIN_REQ, 0 s)
-      Target: 203 ACCEPTED (GP, BEGIN_REQ, 0 s)
+Info: at_target_4_phase.cpp: 2343 ns - end_request_method
+      Target: 203 ACCEPTED (GP, END_REQ, 0 s)
 
 Info: select_initiator.cpp: 2347 ns - send_end_rsp_method
       Initiator: 101 starting send-end-response method
@@ -4127,1448 +4141,1425 @@ Info: at_target_2_phase.cpp: 2347 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2347 ns - initiator_thread
-      Initiator: 101 starting new transaction
-      Initiator: 101 nb_transport_fw (GP, BEGIN_REQ, 0 s)
-
-Info: select_initiator.cpp: 2347 ns - initiator_thread
-      Initiator: 101 ACCEPTED (GP, BEGIN_REQ, 0 s)
-      Initiator: 101 transaction waiting end-request on backward-path 
-
-Info: at_target_4_phase.cpp: 2353 ns - end_request_method
-      Target: 203 starting end-request method
-      Target: 203 transaction moved to send-response PEQ 
-      Target: 203 nb_transport_bw (GP, END_REQ, 0 s)
-
-Info: at_target_4_phase.cpp: 2353 ns - end_request_method
-      Target: 203 ACCEPTED (GP, END_REQ, 0 s)
-
-Info: select_initiator.cpp: 2353 ns - nb_transport_bw
-      Initiator: 102 nb_transport_bw (GP, END_REQ, 0 s)
-      Initiator: 102 transaction waiting begin-response on backward path
-      Initiator: 102 ACCEPTED (GP, END_REQ, 0 s)
-
-Info: at_target_2_phase.cpp: 2353 ns - nb_transport_fw
-      Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
-      Target: 202 transaction moved to send-response PEQ 
-      Target: 202 UPDATED (GP, END_REQ, 10 ns)
-
-Info: select_initiator.cpp: 2353 ns - initiator_thread
-      Initiator: 102 starting new transaction
-      Initiator: 102 nb_transport_fw (GP, BEGIN_REQ, 0 s)
-
-Info: select_initiator.cpp: 2353 ns - initiator_thread
-      Initiator: 102 ACCEPTED (GP, BEGIN_REQ, 0 s)
-      Initiator: 102 transaction waiting end-request on backward-path 
-
-Info: select_initiator.cpp: 2363 ns - nb_transport_bw
+Info: select_initiator.cpp: 2350 ns - nb_transport_bw
       Initiator: 101 nb_transport_bw (GP, END_REQ, 0 s)
       Initiator: 101 transaction waiting begin-response on backward path
       Initiator: 101 ACCEPTED (GP, END_REQ, 0 s)
 
-Info: at_target_4_phase.cpp: 2363 ns - nb_transport_fw
+Info: at_target_4_phase.cpp: 2350 ns - nb_transport_fw
       Target: 203 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 203 ACCEPTED (GP, BEGIN_REQ, 0 s)
 
-Info: at_target_4_phase.cpp: 2373 ns - end_request_method
+Info: select_initiator.cpp: 2350 ns - initiator_thread
+      Initiator: 101 starting new transaction
+      Initiator: 101 nb_transport_fw (GP, BEGIN_REQ, 0 s)
+
+Info: select_initiator.cpp: 2350 ns - initiator_thread
+      Initiator: 101 ACCEPTED (GP, BEGIN_REQ, 0 s)
+      Initiator: 101 transaction waiting end-request on backward-path 
+
+Info: at_target_4_phase.cpp: 2360 ns - end_request_method
       Target: 203 starting end-request method
       Target: 203 transaction moved to send-response PEQ 
       Target: 203 nb_transport_bw (GP, END_REQ, 0 s)
 
-Info: at_target_4_phase.cpp: 2373 ns - end_request_method
+Info: at_target_4_phase.cpp: 2360 ns - end_request_method
       Target: 203 ACCEPTED (GP, END_REQ, 0 s)
 
-Info: select_initiator.cpp: 2373 ns - nb_transport_bw
+Info: select_initiator.cpp: 2360 ns - nb_transport_bw
       Initiator: 102 nb_transport_bw (GP, END_REQ, 0 s)
       Initiator: 102 transaction waiting begin-response on backward path
       Initiator: 102 ACCEPTED (GP, END_REQ, 0 s)
 
-Info: at_target_2_phase.cpp: 2393 ns - begin_response_method
-      Target: 202 starting response method
-
-Info: report.cpp: 2393 ns - print
-      ID: 202 COMMAND: READ Length: 04
-      Addr: 0x0000000000000108 Data: 0xEFFFFEF7
-
-Info: at_target_2_phase.cpp: 2393 ns - begin_response_method
-      Target: 202 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
-
-Info: at_target_2_phase.cpp: 2393 ns - begin_response_method
-      Target: 202 ACCEPTED (GP, BEGIN_RESP, 0 s)
-
-Info: select_initiator.cpp: 2393 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
-      Initiator: 101 transaction moved to send-end-response PEQ 
-      Initiator: 101 ACCEPTED (GP, BEGIN_RESP, 0 s)
-
-Info: select_initiator.cpp: 2400 ns - send_end_rsp_method
-      Initiator: 101 starting send-end-response method
-      Initiator: 101 nb_transport_fw (GP, END_RESP, 0 s)
-
-Info: select_initiator.cpp: 2400 ns - send_end_rsp_method
-      Initiator: 101 COMPLETED (GP, END_RESP, 0 s)
-
-Info: at_target_2_phase.cpp: 2400 ns - nb_transport_fw
-      Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
-      Target: 202 COMPLETED (GP, END_RESP, 0 s)
-
-Info: select_initiator.cpp: 2400 ns - initiator_thread
-      Initiator: 101 starting new transaction
-      Initiator: 101 nb_transport_fw (GP, BEGIN_REQ, 0 s)
-
-Info: select_initiator.cpp: 2400 ns - initiator_thread
-      Initiator: 101 ACCEPTED (GP, BEGIN_REQ, 0 s)
-      Initiator: 101 transaction waiting end-request on backward-path 
-
-Info: at_target_2_phase.cpp: 2400 ns - nb_transport_fw
+Info: at_target_2_phase.cpp: 2360 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
 
-Info: at_target_4_phase.cpp: 2403 ns - begin_response_method
+Info: select_initiator.cpp: 2370 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, END_REQ, 0 s)
+      Initiator: 101 transaction waiting begin-response on backward path
+      Initiator: 101 ACCEPTED (GP, END_REQ, 0 s)
+
+Info: at_target_4_phase.cpp: 2393 ns - begin_response_method
       Target: 203 starting response method
 
-Info: report.cpp: 2403 ns - print
+Info: report.cpp: 2393 ns - print
       ID: 203 COMMAND: READ Length: 04
       Addr: 0x0000000000000200 Data: 0xDFFFFDFF
 
-Info: at_target_4_phase.cpp: 2403 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2393 ns - begin_response_method
       Target: 203 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
 
-Info: at_target_4_phase.cpp: 2403 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2393 ns - begin_response_method
       Target: 203 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2403 ns - nb_transport_bw
+Info: select_initiator.cpp: 2393 ns - nb_transport_bw
       Initiator: 102 nb_transport_bw (GP, BEGIN_RESP, 0 s)
       Initiator: 102 transaction moved to send-end-response PEQ 
       Initiator: 102 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2410 ns - send_end_rsp_method
+Info: at_target_2_phase.cpp: 2400 ns - begin_response_method
+      Target: 202 starting response method
+
+Info: report.cpp: 2400 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x0000000000000108 Data: 0xEFFFFEF7
+
+Info: at_target_2_phase.cpp: 2400 ns - begin_response_method
+      Target: 202 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
+
+Info: at_target_2_phase.cpp: 2400 ns - begin_response_method
+      Target: 202 ACCEPTED (GP, BEGIN_RESP, 0 s)
+
+Info: select_initiator.cpp: 2400 ns - send_end_rsp_method
       Initiator: 102 starting send-end-response method
       Initiator: 102 nb_transport_fw (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2410 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2400 ns - send_end_rsp_method
       Initiator: 102 COMPLETED (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2410 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, END_REQ, 0 s)
-      Initiator: 101 transaction waiting begin-response on backward path
-      Initiator: 101 ACCEPTED (GP, END_REQ, 0 s)
-
-Info: select_initiator.cpp: 2410 ns - initiator_thread
-      Initiator: 102 starting new transaction
-      Initiator: 102 nb_transport_fw (GP, BEGIN_REQ, 0 s)
-
-Info: select_initiator.cpp: 2410 ns - initiator_thread
-      Initiator: 102 ACCEPTED (GP, BEGIN_REQ, 0 s)
-      Initiator: 102 transaction waiting end-request on backward-path 
-
-Info: at_target_4_phase.cpp: 2410 ns - nb_transport_fw
-      Target: 203 nb_transport_fw (GP, BEGIN_REQ, 0 s)
-      Target: 203 ACCEPTED (GP, BEGIN_REQ, 0 s)
-
-Info: at_target_2_phase.cpp: 2413 ns - begin_response_method
-      Target: 202 starting response method
-
-Info: report.cpp: 2413 ns - print
-      ID: 202 COMMAND: READ Length: 04
-      Addr: 0x000000000000010C Data: 0xEFFFFEF3
-
-Info: at_target_2_phase.cpp: 2413 ns - begin_response_method
-      Target: 202 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
-
-Info: at_target_2_phase.cpp: 2413 ns - begin_response_method
-      Target: 202 ACCEPTED (GP, BEGIN_RESP, 0 s)
-
-Info: select_initiator.cpp: 2413 ns - nb_transport_bw
+Info: select_initiator.cpp: 2400 ns - nb_transport_bw
       Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
       Initiator: 101 transaction moved to send-end-response PEQ 
       Initiator: 101 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2413 ns - nb_transport_bw
-      Initiator: 102 nb_transport_bw (GP, END_REQ, 0 s)
-      Initiator: 102 transaction waiting begin-response on backward path
-      Initiator: 102 ACCEPTED (GP, END_REQ, 0 s)
+Info: select_initiator.cpp: 2400 ns - initiator_thread
+      Initiator: 102 starting new transaction
+      Initiator: 102 nb_transport_fw (GP, BEGIN_REQ, 0 s)
 
-Info: at_target_4_phase.cpp: 2420 ns - end_request_method
+Info: select_initiator.cpp: 2400 ns - initiator_thread
+      Initiator: 102 ACCEPTED (GP, BEGIN_REQ, 0 s)
+      Initiator: 102 transaction waiting end-request on backward-path 
+
+Info: at_target_4_phase.cpp: 2400 ns - nb_transport_fw
+      Target: 203 nb_transport_fw (GP, BEGIN_REQ, 0 s)
+      Target: 203 ACCEPTED (GP, BEGIN_REQ, 0 s)
+
+Info: select_initiator.cpp: 2407 ns - send_end_rsp_method
+      Initiator: 101 starting send-end-response method
+      Initiator: 101 nb_transport_fw (GP, END_RESP, 0 s)
+
+Info: select_initiator.cpp: 2407 ns - send_end_rsp_method
+      Initiator: 101 COMPLETED (GP, END_RESP, 0 s)
+
+Info: at_target_2_phase.cpp: 2407 ns - nb_transport_fw
+      Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
+      Target: 202 COMPLETED (GP, END_RESP, 0 s)
+
+Info: select_initiator.cpp: 2407 ns - initiator_thread
+      Initiator: 101 starting new transaction
+      Initiator: 101 nb_transport_fw (GP, BEGIN_REQ, 0 s)
+
+Info: select_initiator.cpp: 2407 ns - initiator_thread
+      Initiator: 101 ACCEPTED (GP, BEGIN_REQ, 0 s)
+      Initiator: 101 transaction waiting end-request on backward-path 
+
+Info: at_target_4_phase.cpp: 2410 ns - end_request_method
       Target: 203 starting end-request method
       Target: 203 transaction moved to send-response PEQ 
       Target: 203 nb_transport_bw (GP, END_REQ, 0 s)
 
-Info: at_target_4_phase.cpp: 2420 ns - end_request_method
+Info: at_target_4_phase.cpp: 2410 ns - end_request_method
       Target: 203 ACCEPTED (GP, END_REQ, 0 s)
 
-Info: select_initiator.cpp: 2420 ns - send_end_rsp_method
-      Initiator: 101 starting send-end-response method
-      Initiator: 101 nb_transport_fw (GP, END_RESP, 0 s)
-
-Info: select_initiator.cpp: 2420 ns - send_end_rsp_method
-      Initiator: 101 COMPLETED (GP, END_RESP, 0 s)
-
-Info: at_target_2_phase.cpp: 2420 ns - nb_transport_fw
-      Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
-      Target: 202 COMPLETED (GP, END_RESP, 0 s)
-
-Info: select_initiator.cpp: 2420 ns - initiator_thread
-      Initiator: 101 starting new transaction
-      Initiator: 101 nb_transport_fw (GP, BEGIN_REQ, 0 s)
-
-Info: select_initiator.cpp: 2420 ns - initiator_thread
-      Initiator: 101 ACCEPTED (GP, BEGIN_REQ, 0 s)
-      Initiator: 101 transaction waiting end-request on backward-path 
-
-Info: at_target_2_phase.cpp: 2420 ns - nb_transport_fw
-      Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
-      Target: 202 transaction moved to send-response PEQ 
-      Target: 202 UPDATED (GP, END_REQ, 10 ns)
-
-Info: at_target_4_phase.cpp: 2423 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2410 ns - begin_response_method
       Target: 203 starting response method
 
-Info: report.cpp: 2423 ns - print
+Info: report.cpp: 2410 ns - print
       ID: 203 COMMAND: READ Length: 04
       Addr: 0x0000000000000204 Data: 0xDFFFFDFB
 
-Info: at_target_4_phase.cpp: 2423 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2410 ns - begin_response_method
       Target: 203 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
 
-Info: at_target_4_phase.cpp: 2423 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2410 ns - begin_response_method
       Target: 203 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2423 ns - nb_transport_bw
+Info: select_initiator.cpp: 2410 ns - nb_transport_bw
       Initiator: 102 nb_transport_bw (GP, BEGIN_RESP, 0 s)
       Initiator: 102 transaction moved to send-end-response PEQ 
       Initiator: 102 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2430 ns - send_end_rsp_method
-      Initiator: 102 starting send-end-response method
-      Initiator: 102 nb_transport_fw (GP, END_RESP, 0 s)
-
-Info: select_initiator.cpp: 2430 ns - send_end_rsp_method
-      Initiator: 102 COMPLETED (GP, END_RESP, 0 s)
-
-Info: select_initiator.cpp: 2430 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, END_REQ, 0 s)
-      Initiator: 101 transaction waiting begin-response on backward path
-      Initiator: 101 ACCEPTED (GP, END_REQ, 0 s)
-
-Info: select_initiator.cpp: 2430 ns - initiator_thread
-      Initiator: 102 starting new transaction
-      Initiator: 102 nb_transport_fw (GP, BEGIN_REQ, 0 s)
-
-Info: select_initiator.cpp: 2430 ns - initiator_thread
-      Initiator: 102 ACCEPTED (GP, BEGIN_REQ, 0 s)
-      Initiator: 102 transaction waiting end-request on backward-path 
-
-Info: at_target_4_phase.cpp: 2430 ns - nb_transport_fw
-      Target: 203 nb_transport_fw (GP, BEGIN_REQ, 0 s)
-      Target: 203 ACCEPTED (GP, BEGIN_REQ, 0 s)
-
-Info: at_target_4_phase.cpp: 2440 ns - end_request_method
-      Target: 203 starting end-request method
-      Target: 203 transaction moved to send-response PEQ 
-      Target: 203 nb_transport_bw (GP, END_REQ, 0 s)
-
-Info: at_target_4_phase.cpp: 2440 ns - end_request_method
-      Target: 203 ACCEPTED (GP, END_REQ, 0 s)
-
-Info: select_initiator.cpp: 2440 ns - nb_transport_bw
+Info: select_initiator.cpp: 2410 ns - nb_transport_bw
       Initiator: 102 nb_transport_bw (GP, END_REQ, 0 s)
       Initiator: 102 transaction waiting begin-response on backward path
       Initiator: 102 ACCEPTED (GP, END_REQ, 0 s)
 
-Info: at_target_2_phase.cpp: 2460 ns - begin_response_method
-      Target: 202 starting response method
-
-Info: report.cpp: 2460 ns - print
-      ID: 202 COMMAND: READ Length: 04
-      Addr: 0x0000000000000110 Data: 0xEFFFFEEF
-
-Info: at_target_2_phase.cpp: 2460 ns - begin_response_method
-      Target: 202 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
-
-Info: at_target_2_phase.cpp: 2460 ns - begin_response_method
-      Target: 202 ACCEPTED (GP, BEGIN_RESP, 0 s)
-
-Info: select_initiator.cpp: 2460 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
-      Initiator: 101 transaction moved to send-end-response PEQ 
-      Initiator: 101 ACCEPTED (GP, BEGIN_RESP, 0 s)
-
-Info: select_initiator.cpp: 2467 ns - send_end_rsp_method
-      Initiator: 101 starting send-end-response method
-      Initiator: 101 nb_transport_fw (GP, END_RESP, 0 s)
-
-Info: select_initiator.cpp: 2467 ns - send_end_rsp_method
-      Initiator: 101 COMPLETED (GP, END_RESP, 0 s)
-
-Info: at_target_2_phase.cpp: 2467 ns - nb_transport_fw
-      Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
-      Target: 202 COMPLETED (GP, END_RESP, 0 s)
-
-Info: select_initiator.cpp: 2467 ns - initiator_thread
-      Initiator: 101 starting new transaction
-      Initiator: 101 nb_transport_fw (GP, BEGIN_REQ, 0 s)
-
-Info: select_initiator.cpp: 2467 ns - initiator_thread
-      Initiator: 101 ACCEPTED (GP, BEGIN_REQ, 0 s)
-      Initiator: 101 transaction waiting end-request on backward-path 
-
-Info: at_target_2_phase.cpp: 2467 ns - nb_transport_fw
+Info: at_target_2_phase.cpp: 2410 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
 
-Info: at_target_4_phase.cpp: 2470 ns - begin_response_method
+Info: select_initiator.cpp: 2417 ns - send_end_rsp_method
+      Initiator: 102 starting send-end-response method
+      Initiator: 102 nb_transport_fw (GP, END_RESP, 0 s)
+
+Info: select_initiator.cpp: 2417 ns - send_end_rsp_method
+      Initiator: 102 COMPLETED (GP, END_RESP, 0 s)
+
+Info: select_initiator.cpp: 2417 ns - initiator_thread
+      Initiator: 102 starting new transaction
+      Initiator: 102 nb_transport_fw (GP, BEGIN_REQ, 0 s)
+
+Info: select_initiator.cpp: 2417 ns - initiator_thread
+      Initiator: 102 ACCEPTED (GP, BEGIN_REQ, 0 s)
+      Initiator: 102 transaction waiting end-request on backward-path 
+
+Info: at_target_2_phase.cpp: 2420 ns - begin_response_method
+      Target: 202 starting response method
+
+Info: report.cpp: 2420 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x000000000000010C Data: 0xEFFFFEF3
+
+Info: at_target_2_phase.cpp: 2420 ns - begin_response_method
+      Target: 202 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
+
+Info: at_target_2_phase.cpp: 2420 ns - begin_response_method
+      Target: 202 ACCEPTED (GP, BEGIN_RESP, 0 s)
+
+Info: select_initiator.cpp: 2420 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, END_REQ, 0 s)
+      Initiator: 101 transaction waiting begin-response on backward path
+      Initiator: 101 ACCEPTED (GP, END_REQ, 0 s)
+
+Info: at_target_4_phase.cpp: 2420 ns - nb_transport_fw
+      Target: 203 nb_transport_fw (GP, BEGIN_REQ, 0 s)
+      Target: 203 ACCEPTED (GP, BEGIN_REQ, 0 s)
+
+Info: select_initiator.cpp: 2420 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
+      Initiator: 101 transaction moved to send-end-response PEQ 
+      Initiator: 101 ACCEPTED (GP, BEGIN_RESP, 0 s)
+
+Info: select_initiator.cpp: 2420 ns - nb_transport_bw
+      Initiator: 102 nb_transport_bw (GP, END_REQ, 0 s)
+      Initiator: 102 transaction waiting begin-response on backward path
+      Initiator: 102 ACCEPTED (GP, END_REQ, 0 s)
+
+Info: select_initiator.cpp: 2427 ns - send_end_rsp_method
+      Initiator: 101 starting send-end-response method
+      Initiator: 101 nb_transport_fw (GP, END_RESP, 0 s)
+
+Info: select_initiator.cpp: 2427 ns - send_end_rsp_method
+      Initiator: 101 COMPLETED (GP, END_RESP, 0 s)
+
+Info: at_target_2_phase.cpp: 2427 ns - nb_transport_fw
+      Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
+      Target: 202 COMPLETED (GP, END_RESP, 0 s)
+
+Info: select_initiator.cpp: 2427 ns - initiator_thread
+      Initiator: 101 starting new transaction
+      Initiator: 101 nb_transport_fw (GP, BEGIN_REQ, 0 s)
+
+Info: select_initiator.cpp: 2427 ns - initiator_thread
+      Initiator: 101 ACCEPTED (GP, BEGIN_REQ, 0 s)
+      Initiator: 101 transaction waiting end-request on backward-path 
+
+Info: at_target_2_phase.cpp: 2427 ns - nb_transport_fw
+      Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
+      Target: 202 transaction moved to send-response PEQ 
+      Target: 202 UPDATED (GP, END_REQ, 10 ns)
+
+Info: at_target_4_phase.cpp: 2430 ns - end_request_method
+      Target: 203 starting end-request method
+      Target: 203 transaction moved to send-response PEQ 
+      Target: 203 nb_transport_bw (GP, END_REQ, 0 s)
+
+Info: at_target_4_phase.cpp: 2430 ns - end_request_method
+      Target: 203 ACCEPTED (GP, END_REQ, 0 s)
+
+Info: select_initiator.cpp: 2437 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, END_REQ, 0 s)
+      Initiator: 101 transaction waiting begin-response on backward path
+      Initiator: 101 ACCEPTED (GP, END_REQ, 0 s)
+
+Info: at_target_4_phase.cpp: 2460 ns - begin_response_method
       Target: 203 starting response method
 
-Info: report.cpp: 2470 ns - print
+Info: report.cpp: 2460 ns - print
       ID: 203 COMMAND: READ Length: 04
       Addr: 0x0000000000000208 Data: 0xDFFFFDF7
 
-Info: at_target_4_phase.cpp: 2470 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2460 ns - begin_response_method
       Target: 203 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
 
-Info: at_target_4_phase.cpp: 2470 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2460 ns - begin_response_method
       Target: 203 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2470 ns - nb_transport_bw
+Info: select_initiator.cpp: 2460 ns - nb_transport_bw
       Initiator: 102 nb_transport_bw (GP, BEGIN_RESP, 0 s)
       Initiator: 102 transaction moved to send-end-response PEQ 
       Initiator: 102 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2477 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2467 ns - send_end_rsp_method
       Initiator: 102 starting send-end-response method
       Initiator: 102 nb_transport_fw (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2477 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2467 ns - send_end_rsp_method
       Initiator: 102 COMPLETED (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2477 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, END_REQ, 0 s)
-      Initiator: 101 transaction waiting begin-response on backward path
-      Initiator: 101 ACCEPTED (GP, END_REQ, 0 s)
-
-Info: select_initiator.cpp: 2477 ns - initiator_thread
+Info: select_initiator.cpp: 2467 ns - initiator_thread
       Initiator: 102 starting new transaction
       Initiator: 102 nb_transport_fw (GP, BEGIN_REQ, 0 s)
 
-Info: select_initiator.cpp: 2477 ns - initiator_thread
+Info: select_initiator.cpp: 2467 ns - initiator_thread
       Initiator: 102 ACCEPTED (GP, BEGIN_REQ, 0 s)
       Initiator: 102 transaction waiting end-request on backward-path 
 
-Info: at_target_4_phase.cpp: 2477 ns - nb_transport_fw
+Info: at_target_4_phase.cpp: 2467 ns - nb_transport_fw
       Target: 203 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 203 ACCEPTED (GP, BEGIN_REQ, 0 s)
 
-Info: at_target_2_phase.cpp: 2480 ns - begin_response_method
+Info: at_target_2_phase.cpp: 2470 ns - begin_response_method
       Target: 202 starting response method
 
-Info: report.cpp: 2480 ns - print
+Info: report.cpp: 2470 ns - print
       ID: 202 COMMAND: READ Length: 04
-      Addr: 0x0000000000000114 Data: 0xEFFFFEEB
+      Addr: 0x0000000000000110 Data: 0xEFFFFEEF
 
-Info: at_target_2_phase.cpp: 2480 ns - begin_response_method
+Info: at_target_2_phase.cpp: 2470 ns - begin_response_method
       Target: 202 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
 
-Info: at_target_2_phase.cpp: 2480 ns - begin_response_method
+Info: at_target_2_phase.cpp: 2470 ns - begin_response_method
       Target: 202 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2480 ns - nb_transport_bw
+Info: select_initiator.cpp: 2470 ns - nb_transport_bw
       Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
       Initiator: 101 transaction moved to send-end-response PEQ 
       Initiator: 101 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2480 ns - nb_transport_bw
+Info: select_initiator.cpp: 2470 ns - nb_transport_bw
       Initiator: 102 nb_transport_bw (GP, END_REQ, 0 s)
       Initiator: 102 transaction waiting begin-response on backward path
       Initiator: 102 ACCEPTED (GP, END_REQ, 0 s)
 
-Info: at_target_4_phase.cpp: 2487 ns - end_request_method
+Info: at_target_4_phase.cpp: 2477 ns - end_request_method
       Target: 203 starting end-request method
       Target: 203 transaction moved to send-response PEQ 
       Target: 203 nb_transport_bw (GP, END_REQ, 0 s)
 
-Info: at_target_4_phase.cpp: 2487 ns - end_request_method
+Info: at_target_4_phase.cpp: 2477 ns - end_request_method
       Target: 203 ACCEPTED (GP, END_REQ, 0 s)
 
-Info: select_initiator.cpp: 2487 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2477 ns - send_end_rsp_method
       Initiator: 101 starting send-end-response method
       Initiator: 101 nb_transport_fw (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2487 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2477 ns - send_end_rsp_method
       Initiator: 101 COMPLETED (GP, END_RESP, 0 s)
 
-Info: at_target_2_phase.cpp: 2487 ns - nb_transport_fw
+Info: at_target_2_phase.cpp: 2477 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2487 ns - initiator_thread
+Info: select_initiator.cpp: 2477 ns - initiator_thread
       Initiator: 101 starting new transaction
       Initiator: 101 nb_transport_fw (GP, BEGIN_REQ, 0 s)
 
-Info: select_initiator.cpp: 2487 ns - initiator_thread
+Info: select_initiator.cpp: 2477 ns - initiator_thread
       Initiator: 101 ACCEPTED (GP, BEGIN_REQ, 0 s)
       Initiator: 101 transaction waiting end-request on backward-path 
 
-Info: at_target_2_phase.cpp: 2487 ns - nb_transport_fw
+Info: at_target_2_phase.cpp: 2477 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
 
-Info: at_target_4_phase.cpp: 2490 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2480 ns - begin_response_method
       Target: 203 starting response method
 
-Info: report.cpp: 2490 ns - print
+Info: report.cpp: 2480 ns - print
       ID: 203 COMMAND: READ Length: 04
       Addr: 0x000000000000020C Data: 0xDFFFFDF3
 
-Info: at_target_4_phase.cpp: 2490 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2480 ns - begin_response_method
       Target: 203 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
 
-Info: at_target_4_phase.cpp: 2490 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2480 ns - begin_response_method
       Target: 203 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2490 ns - nb_transport_bw
+Info: select_initiator.cpp: 2480 ns - nb_transport_bw
       Initiator: 102 nb_transport_bw (GP, BEGIN_RESP, 0 s)
       Initiator: 102 transaction moved to send-end-response PEQ 
       Initiator: 102 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2497 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2487 ns - send_end_rsp_method
       Initiator: 102 starting send-end-response method
       Initiator: 102 nb_transport_fw (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2497 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2487 ns - send_end_rsp_method
       Initiator: 102 COMPLETED (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2497 ns - nb_transport_bw
+Info: at_target_2_phase.cpp: 2487 ns - begin_response_method
+      Target: 202 starting response method
+
+Info: report.cpp: 2487 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x0000000000000114 Data: 0xEFFFFEEB
+
+Info: at_target_2_phase.cpp: 2487 ns - begin_response_method
+      Target: 202 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
+
+Info: at_target_2_phase.cpp: 2487 ns - begin_response_method
+      Target: 202 ACCEPTED (GP, BEGIN_RESP, 0 s)
+
+Info: select_initiator.cpp: 2487 ns - nb_transport_bw
       Initiator: 101 nb_transport_bw (GP, END_REQ, 0 s)
       Initiator: 101 transaction waiting begin-response on backward path
       Initiator: 101 ACCEPTED (GP, END_REQ, 0 s)
 
-Info: select_initiator.cpp: 2497 ns - initiator_thread
-      Initiator: 102 starting new transaction
-      Initiator: 102 nb_transport_fw (GP, BEGIN_REQ, 0 s)
-
-Info: select_initiator.cpp: 2497 ns - initiator_thread
-      Initiator: 102 ACCEPTED (GP, BEGIN_REQ, 0 s)
-      Initiator: 102 transaction waiting end-request on backward-path 
-
-Info: at_target_4_phase.cpp: 2497 ns - nb_transport_fw
-      Target: 203 nb_transport_fw (GP, BEGIN_REQ, 0 s)
-      Target: 203 ACCEPTED (GP, BEGIN_REQ, 0 s)
-
-Info: at_target_4_phase.cpp: 2507 ns - end_request_method
-      Target: 203 starting end-request method
-      Target: 203 transaction moved to send-response PEQ 
-      Target: 203 nb_transport_bw (GP, END_REQ, 0 s)
-
-Info: at_target_4_phase.cpp: 2507 ns - end_request_method
-      Target: 203 ACCEPTED (GP, END_REQ, 0 s)
-
-Info: select_initiator.cpp: 2507 ns - nb_transport_bw
-      Initiator: 102 nb_transport_bw (GP, END_REQ, 0 s)
-      Initiator: 102 transaction waiting begin-response on backward path
-      Initiator: 102 ACCEPTED (GP, END_REQ, 0 s)
-
-Info: at_target_2_phase.cpp: 2527 ns - begin_response_method
-      Target: 202 starting response method
-
-Info: report.cpp: 2527 ns - print
-      ID: 202 COMMAND: READ Length: 04
-      Addr: 0x0000000000000118 Data: 0xEFFFFEE7
-
-Info: at_target_2_phase.cpp: 2527 ns - begin_response_method
-      Target: 202 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
-
-Info: at_target_2_phase.cpp: 2527 ns - begin_response_method
-      Target: 202 ACCEPTED (GP, BEGIN_RESP, 0 s)
-
-Info: select_initiator.cpp: 2527 ns - nb_transport_bw
+Info: select_initiator.cpp: 2487 ns - nb_transport_bw
       Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
       Initiator: 101 transaction moved to send-end-response PEQ 
       Initiator: 101 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2534 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2487 ns - initiator_thread
+      Initiator: 102 starting new transaction
+      Initiator: 102 nb_transport_fw (GP, BEGIN_REQ, 0 s)
+
+Info: select_initiator.cpp: 2487 ns - initiator_thread
+      Initiator: 102 ACCEPTED (GP, BEGIN_REQ, 0 s)
+      Initiator: 102 transaction waiting end-request on backward-path 
+
+Info: at_target_4_phase.cpp: 2487 ns - nb_transport_fw
+      Target: 203 nb_transport_fw (GP, BEGIN_REQ, 0 s)
+      Target: 203 ACCEPTED (GP, BEGIN_REQ, 0 s)
+
+Info: select_initiator.cpp: 2494 ns - send_end_rsp_method
       Initiator: 101 starting send-end-response method
       Initiator: 101 nb_transport_fw (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2534 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2494 ns - send_end_rsp_method
       Initiator: 101 COMPLETED (GP, END_RESP, 0 s)
 
-Info: at_target_2_phase.cpp: 2534 ns - nb_transport_fw
+Info: at_target_2_phase.cpp: 2494 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2534 ns - initiator_thread
+Info: select_initiator.cpp: 2494 ns - initiator_thread
       Initiator: 101 starting new transaction
       Initiator: 101 nb_transport_fw (GP, BEGIN_REQ, 0 s)
 
-Info: select_initiator.cpp: 2534 ns - initiator_thread
+Info: select_initiator.cpp: 2494 ns - initiator_thread
       Initiator: 101 ACCEPTED (GP, BEGIN_REQ, 0 s)
       Initiator: 101 transaction waiting end-request on backward-path 
 
-Info: at_target_2_phase.cpp: 2534 ns - nb_transport_fw
+Info: at_target_4_phase.cpp: 2497 ns - end_request_method
+      Target: 203 starting end-request method
+      Target: 203 transaction moved to send-response PEQ 
+      Target: 203 nb_transport_bw (GP, END_REQ, 0 s)
+
+Info: at_target_4_phase.cpp: 2497 ns - end_request_method
+      Target: 203 ACCEPTED (GP, END_REQ, 0 s)
+
+Info: select_initiator.cpp: 2497 ns - nb_transport_bw
+      Initiator: 102 nb_transport_bw (GP, END_REQ, 0 s)
+      Initiator: 102 transaction waiting begin-response on backward path
+      Initiator: 102 ACCEPTED (GP, END_REQ, 0 s)
+
+Info: at_target_2_phase.cpp: 2497 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
 
-Info: at_target_4_phase.cpp: 2537 ns - begin_response_method
+Info: select_initiator.cpp: 2507 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, END_REQ, 0 s)
+      Initiator: 101 transaction waiting begin-response on backward path
+      Initiator: 101 ACCEPTED (GP, END_REQ, 0 s)
+
+Info: at_target_4_phase.cpp: 2527 ns - begin_response_method
       Target: 203 starting response method
 
-Info: report.cpp: 2537 ns - print
+Info: report.cpp: 2527 ns - print
       ID: 203 COMMAND: READ Length: 04
       Addr: 0x0000000000000210 Data: 0xDFFFFDEF
 
-Info: at_target_4_phase.cpp: 2537 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2527 ns - begin_response_method
       Target: 203 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
 
-Info: at_target_4_phase.cpp: 2537 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2527 ns - begin_response_method
       Target: 203 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2537 ns - nb_transport_bw
+Info: select_initiator.cpp: 2527 ns - nb_transport_bw
       Initiator: 102 nb_transport_bw (GP, BEGIN_RESP, 0 s)
       Initiator: 102 transaction moved to send-end-response PEQ 
       Initiator: 102 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2544 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2534 ns - send_end_rsp_method
       Initiator: 102 starting send-end-response method
       Initiator: 102 nb_transport_fw (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2544 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2534 ns - send_end_rsp_method
       Initiator: 102 COMPLETED (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2544 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, END_REQ, 0 s)
-      Initiator: 101 transaction waiting begin-response on backward path
-      Initiator: 101 ACCEPTED (GP, END_REQ, 0 s)
-
-Info: select_initiator.cpp: 2544 ns - initiator_thread
+Info: select_initiator.cpp: 2534 ns - initiator_thread
       Initiator: 102 starting new transaction
       Initiator: 102 nb_transport_fw (GP, BEGIN_REQ, 0 s)
 
-Info: select_initiator.cpp: 2544 ns - initiator_thread
+Info: select_initiator.cpp: 2534 ns - initiator_thread
       Initiator: 102 ACCEPTED (GP, BEGIN_REQ, 0 s)
       Initiator: 102 transaction waiting end-request on backward-path 
 
-Info: at_target_4_phase.cpp: 2544 ns - nb_transport_fw
+Info: at_target_4_phase.cpp: 2534 ns - nb_transport_fw
       Target: 203 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 203 ACCEPTED (GP, BEGIN_REQ, 0 s)
 
-Info: at_target_2_phase.cpp: 2547 ns - begin_response_method
+Info: at_target_2_phase.cpp: 2537 ns - begin_response_method
       Target: 202 starting response method
 
-Info: report.cpp: 2547 ns - print
+Info: report.cpp: 2537 ns - print
       ID: 202 COMMAND: READ Length: 04
-      Addr: 0x000000000000011C Data: 0xEFFFFEE3
+      Addr: 0x0000000000000118 Data: 0xEFFFFEE7
 
-Info: at_target_2_phase.cpp: 2547 ns - begin_response_method
+Info: at_target_2_phase.cpp: 2537 ns - begin_response_method
       Target: 202 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
 
-Info: at_target_2_phase.cpp: 2547 ns - begin_response_method
+Info: at_target_2_phase.cpp: 2537 ns - begin_response_method
       Target: 202 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2547 ns - nb_transport_bw
+Info: select_initiator.cpp: 2537 ns - nb_transport_bw
       Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
       Initiator: 101 transaction moved to send-end-response PEQ 
       Initiator: 101 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2547 ns - nb_transport_bw
+Info: select_initiator.cpp: 2537 ns - nb_transport_bw
       Initiator: 102 nb_transport_bw (GP, END_REQ, 0 s)
       Initiator: 102 transaction waiting begin-response on backward path
       Initiator: 102 ACCEPTED (GP, END_REQ, 0 s)
 
-Info: at_target_4_phase.cpp: 2554 ns - end_request_method
+Info: at_target_4_phase.cpp: 2544 ns - end_request_method
       Target: 203 starting end-request method
       Target: 203 transaction moved to send-response PEQ 
       Target: 203 nb_transport_bw (GP, END_REQ, 0 s)
 
-Info: at_target_4_phase.cpp: 2554 ns - end_request_method
+Info: at_target_4_phase.cpp: 2544 ns - end_request_method
       Target: 203 ACCEPTED (GP, END_REQ, 0 s)
 
-Info: select_initiator.cpp: 2554 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2544 ns - send_end_rsp_method
       Initiator: 101 starting send-end-response method
       Initiator: 101 nb_transport_fw (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2554 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2544 ns - send_end_rsp_method
       Initiator: 101 COMPLETED (GP, END_RESP, 0 s)
 
-Info: at_target_2_phase.cpp: 2554 ns - nb_transport_fw
+Info: at_target_2_phase.cpp: 2544 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2554 ns - initiator_thread
+Info: select_initiator.cpp: 2544 ns - initiator_thread
       Initiator: 101 starting new transaction
       Initiator: 101 nb_transport_fw (GP, BEGIN_REQ, 0 s)
 
-Info: select_initiator.cpp: 2554 ns - initiator_thread
+Info: select_initiator.cpp: 2544 ns - initiator_thread
       Initiator: 101 ACCEPTED (GP, BEGIN_REQ, 0 s)
       Initiator: 101 transaction waiting end-request on backward-path 
 
-Info: at_target_2_phase.cpp: 2554 ns - nb_transport_fw
+Info: at_target_2_phase.cpp: 2544 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
 
-Info: at_target_4_phase.cpp: 2557 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2547 ns - begin_response_method
       Target: 203 starting response method
 
-Info: report.cpp: 2557 ns - print
+Info: report.cpp: 2547 ns - print
       ID: 203 COMMAND: READ Length: 04
       Addr: 0x0000000000000214 Data: 0xDFFFFDEB
 
-Info: at_target_4_phase.cpp: 2557 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2547 ns - begin_response_method
       Target: 203 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
 
-Info: at_target_4_phase.cpp: 2557 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2547 ns - begin_response_method
       Target: 203 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2557 ns - nb_transport_bw
+Info: select_initiator.cpp: 2547 ns - nb_transport_bw
       Initiator: 102 nb_transport_bw (GP, BEGIN_RESP, 0 s)
       Initiator: 102 transaction moved to send-end-response PEQ 
       Initiator: 102 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2564 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2554 ns - send_end_rsp_method
       Initiator: 102 starting send-end-response method
       Initiator: 102 nb_transport_fw (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2564 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2554 ns - send_end_rsp_method
       Initiator: 102 COMPLETED (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2564 ns - nb_transport_bw
+Info: select_initiator.cpp: 2554 ns - nb_transport_bw
       Initiator: 101 nb_transport_bw (GP, END_REQ, 0 s)
       Initiator: 101 transaction waiting begin-response on backward path
       Initiator: 101 ACCEPTED (GP, END_REQ, 0 s)
 
-Info: select_initiator.cpp: 2564 ns - initiator_thread
+Info: select_initiator.cpp: 2554 ns - initiator_thread
       Initiator: 102 starting new transaction
       Initiator: 102 nb_transport_fw (GP, BEGIN_REQ, 0 s)
 
-Info: select_initiator.cpp: 2564 ns - initiator_thread
+Info: select_initiator.cpp: 2554 ns - initiator_thread
       Initiator: 102 ACCEPTED (GP, BEGIN_REQ, 0 s)
       Initiator: 102 transaction waiting end-request on backward-path 
 
-Info: at_target_4_phase.cpp: 2564 ns - nb_transport_fw
+Info: at_target_4_phase.cpp: 2554 ns - nb_transport_fw
       Target: 203 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 203 ACCEPTED (GP, BEGIN_REQ, 0 s)
 
-Info: at_target_4_phase.cpp: 2574 ns - end_request_method
-      Target: 203 starting end-request method
-      Target: 203 transaction moved to send-response PEQ 
-      Target: 203 nb_transport_bw (GP, END_REQ, 0 s)
-
-Info: at_target_4_phase.cpp: 2574 ns - end_request_method
-      Target: 203 ACCEPTED (GP, END_REQ, 0 s)
-
-Info: select_initiator.cpp: 2574 ns - nb_transport_bw
-      Initiator: 102 nb_transport_bw (GP, END_REQ, 0 s)
-      Initiator: 102 transaction waiting begin-response on backward path
-      Initiator: 102 ACCEPTED (GP, END_REQ, 0 s)
-
-Info: at_target_2_phase.cpp: 2594 ns - begin_response_method
+Info: at_target_2_phase.cpp: 2557 ns - begin_response_method
       Target: 202 starting response method
 
-Info: report.cpp: 2594 ns - print
+Info: report.cpp: 2557 ns - print
       ID: 202 COMMAND: READ Length: 04
-      Addr: 0x0000000000000120 Data: 0xEFFFFEDF
+      Addr: 0x000000000000011C Data: 0xEFFFFEE3
 
-Info: at_target_2_phase.cpp: 2594 ns - begin_response_method
+Info: at_target_2_phase.cpp: 2557 ns - begin_response_method
       Target: 202 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
 
-Info: at_target_2_phase.cpp: 2594 ns - begin_response_method
+Info: at_target_2_phase.cpp: 2557 ns - begin_response_method
       Target: 202 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2594 ns - nb_transport_bw
+Info: select_initiator.cpp: 2557 ns - nb_transport_bw
       Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
       Initiator: 101 transaction moved to send-end-response PEQ 
       Initiator: 101 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2601 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2557 ns - nb_transport_bw
+      Initiator: 102 nb_transport_bw (GP, END_REQ, 0 s)
+      Initiator: 102 transaction waiting begin-response on backward path
+      Initiator: 102 ACCEPTED (GP, END_REQ, 0 s)
+
+Info: at_target_4_phase.cpp: 2564 ns - end_request_method
+      Target: 203 starting end-request method
+      Target: 203 transaction moved to send-response PEQ 
+      Target: 203 nb_transport_bw (GP, END_REQ, 0 s)
+
+Info: at_target_4_phase.cpp: 2564 ns - end_request_method
+      Target: 203 ACCEPTED (GP, END_REQ, 0 s)
+
+Info: select_initiator.cpp: 2564 ns - send_end_rsp_method
       Initiator: 101 starting send-end-response method
       Initiator: 101 nb_transport_fw (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2601 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2564 ns - send_end_rsp_method
       Initiator: 101 COMPLETED (GP, END_RESP, 0 s)
 
-Info: at_target_2_phase.cpp: 2601 ns - nb_transport_fw
+Info: at_target_2_phase.cpp: 2564 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2601 ns - initiator_thread
+Info: select_initiator.cpp: 2564 ns - initiator_thread
       Initiator: 101 starting new transaction
       Initiator: 101 nb_transport_fw (GP, BEGIN_REQ, 0 s)
 
-Info: select_initiator.cpp: 2601 ns - initiator_thread
+Info: select_initiator.cpp: 2564 ns - initiator_thread
       Initiator: 101 ACCEPTED (GP, BEGIN_REQ, 0 s)
       Initiator: 101 transaction waiting end-request on backward-path 
 
-Info: at_target_2_phase.cpp: 2601 ns - nb_transport_fw
+Info: at_target_2_phase.cpp: 2564 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
 
-Info: at_target_4_phase.cpp: 2604 ns - begin_response_method
+Info: select_initiator.cpp: 2574 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, END_REQ, 0 s)
+      Initiator: 101 transaction waiting begin-response on backward path
+      Initiator: 101 ACCEPTED (GP, END_REQ, 0 s)
+
+Info: at_target_4_phase.cpp: 2594 ns - begin_response_method
       Target: 203 starting response method
 
-Info: report.cpp: 2604 ns - print
+Info: report.cpp: 2594 ns - print
       ID: 203 COMMAND: READ Length: 04
       Addr: 0x0000000000000218 Data: 0xDFFFFDE7
 
-Info: at_target_4_phase.cpp: 2604 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2594 ns - begin_response_method
       Target: 203 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
 
-Info: at_target_4_phase.cpp: 2604 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2594 ns - begin_response_method
       Target: 203 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2604 ns - nb_transport_bw
+Info: select_initiator.cpp: 2594 ns - nb_transport_bw
       Initiator: 102 nb_transport_bw (GP, BEGIN_RESP, 0 s)
       Initiator: 102 transaction moved to send-end-response PEQ 
       Initiator: 102 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2611 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2601 ns - send_end_rsp_method
       Initiator: 102 starting send-end-response method
       Initiator: 102 nb_transport_fw (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2611 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2601 ns - send_end_rsp_method
       Initiator: 102 COMPLETED (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2611 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, END_REQ, 0 s)
-      Initiator: 101 transaction waiting begin-response on backward path
-      Initiator: 101 ACCEPTED (GP, END_REQ, 0 s)
-
-Info: select_initiator.cpp: 2611 ns - initiator_thread
+Info: select_initiator.cpp: 2601 ns - initiator_thread
       Initiator: 102 starting new transaction
       Initiator: 102 nb_transport_fw (GP, BEGIN_REQ, 0 s)
 
-Info: select_initiator.cpp: 2611 ns - initiator_thread
+Info: select_initiator.cpp: 2601 ns - initiator_thread
       Initiator: 102 ACCEPTED (GP, BEGIN_REQ, 0 s)
       Initiator: 102 transaction waiting end-request on backward-path 
 
-Info: at_target_4_phase.cpp: 2611 ns - nb_transport_fw
+Info: at_target_4_phase.cpp: 2601 ns - nb_transport_fw
       Target: 203 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 203 ACCEPTED (GP, BEGIN_REQ, 0 s)
 
-Info: at_target_2_phase.cpp: 2614 ns - begin_response_method
+Info: at_target_2_phase.cpp: 2604 ns - begin_response_method
       Target: 202 starting response method
 
-Info: report.cpp: 2614 ns - print
+Info: report.cpp: 2604 ns - print
       ID: 202 COMMAND: READ Length: 04
-      Addr: 0x0000000000000124 Data: 0xEFFFFEDB
+      Addr: 0x0000000000000120 Data: 0xEFFFFEDF
 
-Info: at_target_2_phase.cpp: 2614 ns - begin_response_method
+Info: at_target_2_phase.cpp: 2604 ns - begin_response_method
       Target: 202 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
 
-Info: at_target_2_phase.cpp: 2614 ns - begin_response_method
+Info: at_target_2_phase.cpp: 2604 ns - begin_response_method
       Target: 202 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2614 ns - nb_transport_bw
+Info: select_initiator.cpp: 2604 ns - nb_transport_bw
       Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
       Initiator: 101 transaction moved to send-end-response PEQ 
       Initiator: 101 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2614 ns - nb_transport_bw
+Info: select_initiator.cpp: 2604 ns - nb_transport_bw
       Initiator: 102 nb_transport_bw (GP, END_REQ, 0 s)
       Initiator: 102 transaction waiting begin-response on backward path
       Initiator: 102 ACCEPTED (GP, END_REQ, 0 s)
 
-Info: at_target_4_phase.cpp: 2621 ns - end_request_method
+Info: at_target_4_phase.cpp: 2611 ns - end_request_method
       Target: 203 starting end-request method
       Target: 203 transaction moved to send-response PEQ 
       Target: 203 nb_transport_bw (GP, END_REQ, 0 s)
 
-Info: at_target_4_phase.cpp: 2621 ns - end_request_method
+Info: at_target_4_phase.cpp: 2611 ns - end_request_method
       Target: 203 ACCEPTED (GP, END_REQ, 0 s)
 
-Info: select_initiator.cpp: 2621 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2611 ns - send_end_rsp_method
       Initiator: 101 starting send-end-response method
       Initiator: 101 nb_transport_fw (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2621 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2611 ns - send_end_rsp_method
       Initiator: 101 COMPLETED (GP, END_RESP, 0 s)
 
-Info: at_target_2_phase.cpp: 2621 ns - nb_transport_fw
+Info: at_target_2_phase.cpp: 2611 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2621 ns - initiator_thread
+Info: select_initiator.cpp: 2611 ns - initiator_thread
       Initiator: 101 starting new transaction
       Initiator: 101 nb_transport_fw (GP, BEGIN_REQ, 0 s)
 
-Info: select_initiator.cpp: 2621 ns - initiator_thread
+Info: select_initiator.cpp: 2611 ns - initiator_thread
       Initiator: 101 ACCEPTED (GP, BEGIN_REQ, 0 s)
       Initiator: 101 transaction waiting end-request on backward-path 
 
-Info: at_target_2_phase.cpp: 2621 ns - nb_transport_fw
+Info: at_target_2_phase.cpp: 2611 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
 
-Info: at_target_4_phase.cpp: 2624 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2614 ns - begin_response_method
       Target: 203 starting response method
 
-Info: report.cpp: 2624 ns - print
+Info: report.cpp: 2614 ns - print
       ID: 203 COMMAND: READ Length: 04
       Addr: 0x000000000000021C Data: 0xDFFFFDE3
 
-Info: at_target_4_phase.cpp: 2624 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2614 ns - begin_response_method
       Target: 203 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
 
-Info: at_target_4_phase.cpp: 2624 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2614 ns - begin_response_method
       Target: 203 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2624 ns - nb_transport_bw
+Info: select_initiator.cpp: 2614 ns - nb_transport_bw
       Initiator: 102 nb_transport_bw (GP, BEGIN_RESP, 0 s)
       Initiator: 102 transaction moved to send-end-response PEQ 
       Initiator: 102 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2631 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2621 ns - send_end_rsp_method
       Initiator: 102 starting send-end-response method
       Initiator: 102 nb_transport_fw (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2631 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2621 ns - send_end_rsp_method
       Initiator: 102 COMPLETED (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2631 ns - nb_transport_bw
+Info: select_initiator.cpp: 2621 ns - nb_transport_bw
       Initiator: 101 nb_transport_bw (GP, END_REQ, 0 s)
       Initiator: 101 transaction waiting begin-response on backward path
       Initiator: 101 ACCEPTED (GP, END_REQ, 0 s)
 
-Info: select_initiator.cpp: 2631 ns - initiator_thread
+Info: select_initiator.cpp: 2621 ns - initiator_thread
       Initiator: 102 starting new transaction
       Initiator: 102 nb_transport_fw (GP, BEGIN_REQ, 0 s)
 
-Info: select_initiator.cpp: 2631 ns - initiator_thread
+Info: select_initiator.cpp: 2621 ns - initiator_thread
       Initiator: 102 ACCEPTED (GP, BEGIN_REQ, 0 s)
       Initiator: 102 transaction waiting end-request on backward-path 
 
-Info: at_target_4_phase.cpp: 2631 ns - nb_transport_fw
+Info: at_target_4_phase.cpp: 2621 ns - nb_transport_fw
       Target: 203 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 203 ACCEPTED (GP, BEGIN_REQ, 0 s)
 
-Info: at_target_4_phase.cpp: 2641 ns - end_request_method
-      Target: 203 starting end-request method
-      Target: 203 transaction moved to send-response PEQ 
-      Target: 203 nb_transport_bw (GP, END_REQ, 0 s)
-
-Info: at_target_4_phase.cpp: 2641 ns - end_request_method
-      Target: 203 ACCEPTED (GP, END_REQ, 0 s)
-
-Info: select_initiator.cpp: 2641 ns - nb_transport_bw
-      Initiator: 102 nb_transport_bw (GP, END_REQ, 0 s)
-      Initiator: 102 transaction waiting begin-response on backward path
-      Initiator: 102 ACCEPTED (GP, END_REQ, 0 s)
-
-Info: at_target_2_phase.cpp: 2661 ns - begin_response_method
+Info: at_target_2_phase.cpp: 2624 ns - begin_response_method
       Target: 202 starting response method
 
-Info: report.cpp: 2661 ns - print
+Info: report.cpp: 2624 ns - print
       ID: 202 COMMAND: READ Length: 04
-      Addr: 0x0000000000000128 Data: 0xEFFFFED7
+      Addr: 0x0000000000000124 Data: 0xEFFFFEDB
 
-Info: at_target_2_phase.cpp: 2661 ns - begin_response_method
+Info: at_target_2_phase.cpp: 2624 ns - begin_response_method
       Target: 202 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
 
-Info: at_target_2_phase.cpp: 2661 ns - begin_response_method
+Info: at_target_2_phase.cpp: 2624 ns - begin_response_method
       Target: 202 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2661 ns - nb_transport_bw
+Info: select_initiator.cpp: 2624 ns - nb_transport_bw
       Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
       Initiator: 101 transaction moved to send-end-response PEQ 
       Initiator: 101 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2668 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2624 ns - nb_transport_bw
+      Initiator: 102 nb_transport_bw (GP, END_REQ, 0 s)
+      Initiator: 102 transaction waiting begin-response on backward path
+      Initiator: 102 ACCEPTED (GP, END_REQ, 0 s)
+
+Info: at_target_4_phase.cpp: 2631 ns - end_request_method
+      Target: 203 starting end-request method
+      Target: 203 transaction moved to send-response PEQ 
+      Target: 203 nb_transport_bw (GP, END_REQ, 0 s)
+
+Info: at_target_4_phase.cpp: 2631 ns - end_request_method
+      Target: 203 ACCEPTED (GP, END_REQ, 0 s)
+
+Info: select_initiator.cpp: 2631 ns - send_end_rsp_method
       Initiator: 101 starting send-end-response method
       Initiator: 101 nb_transport_fw (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2668 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2631 ns - send_end_rsp_method
       Initiator: 101 COMPLETED (GP, END_RESP, 0 s)
 
-Info: at_target_2_phase.cpp: 2668 ns - nb_transport_fw
+Info: at_target_2_phase.cpp: 2631 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2668 ns - initiator_thread
+Info: select_initiator.cpp: 2631 ns - initiator_thread
       Initiator: 101 starting new transaction
       Initiator: 101 nb_transport_fw (GP, BEGIN_REQ, 0 s)
 
-Info: select_initiator.cpp: 2668 ns - initiator_thread
+Info: select_initiator.cpp: 2631 ns - initiator_thread
       Initiator: 101 ACCEPTED (GP, BEGIN_REQ, 0 s)
       Initiator: 101 transaction waiting end-request on backward-path 
 
-Info: at_target_2_phase.cpp: 2668 ns - nb_transport_fw
+Info: at_target_2_phase.cpp: 2631 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
 
-Info: at_target_4_phase.cpp: 2671 ns - begin_response_method
+Info: select_initiator.cpp: 2641 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, END_REQ, 0 s)
+      Initiator: 101 transaction waiting begin-response on backward path
+      Initiator: 101 ACCEPTED (GP, END_REQ, 0 s)
+
+Info: at_target_4_phase.cpp: 2661 ns - begin_response_method
       Target: 203 starting response method
 
-Info: report.cpp: 2671 ns - print
+Info: report.cpp: 2661 ns - print
       ID: 203 COMMAND: READ Length: 04
       Addr: 0x0000000000000220 Data: 0xDFFFFDDF
 
-Info: at_target_4_phase.cpp: 2671 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2661 ns - begin_response_method
       Target: 203 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
 
-Info: at_target_4_phase.cpp: 2671 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2661 ns - begin_response_method
       Target: 203 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2671 ns - nb_transport_bw
+Info: select_initiator.cpp: 2661 ns - nb_transport_bw
       Initiator: 102 nb_transport_bw (GP, BEGIN_RESP, 0 s)
       Initiator: 102 transaction moved to send-end-response PEQ 
       Initiator: 102 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2678 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2668 ns - send_end_rsp_method
       Initiator: 102 starting send-end-response method
       Initiator: 102 nb_transport_fw (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2678 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2668 ns - send_end_rsp_method
       Initiator: 102 COMPLETED (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2678 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, END_REQ, 0 s)
-      Initiator: 101 transaction waiting begin-response on backward path
-      Initiator: 101 ACCEPTED (GP, END_REQ, 0 s)
-
-Info: select_initiator.cpp: 2678 ns - initiator_thread
+Info: select_initiator.cpp: 2668 ns - initiator_thread
       Initiator: 102 starting new transaction
       Initiator: 102 nb_transport_fw (GP, BEGIN_REQ, 0 s)
 
-Info: select_initiator.cpp: 2678 ns - initiator_thread
+Info: select_initiator.cpp: 2668 ns - initiator_thread
       Initiator: 102 ACCEPTED (GP, BEGIN_REQ, 0 s)
       Initiator: 102 transaction waiting end-request on backward-path 
 
-Info: at_target_4_phase.cpp: 2678 ns - nb_transport_fw
+Info: at_target_4_phase.cpp: 2668 ns - nb_transport_fw
       Target: 203 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 203 ACCEPTED (GP, BEGIN_REQ, 0 s)
 
-Info: at_target_2_phase.cpp: 2681 ns - begin_response_method
+Info: at_target_2_phase.cpp: 2671 ns - begin_response_method
       Target: 202 starting response method
 
-Info: report.cpp: 2681 ns - print
+Info: report.cpp: 2671 ns - print
       ID: 202 COMMAND: READ Length: 04
-      Addr: 0x000000000000012C Data: 0xEFFFFED3
+      Addr: 0x0000000000000128 Data: 0xEFFFFED7
 
-Info: at_target_2_phase.cpp: 2681 ns - begin_response_method
+Info: at_target_2_phase.cpp: 2671 ns - begin_response_method
       Target: 202 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
 
-Info: at_target_2_phase.cpp: 2681 ns - begin_response_method
+Info: at_target_2_phase.cpp: 2671 ns - begin_response_method
       Target: 202 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2681 ns - nb_transport_bw
+Info: select_initiator.cpp: 2671 ns - nb_transport_bw
       Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
       Initiator: 101 transaction moved to send-end-response PEQ 
       Initiator: 101 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2681 ns - nb_transport_bw
+Info: select_initiator.cpp: 2671 ns - nb_transport_bw
       Initiator: 102 nb_transport_bw (GP, END_REQ, 0 s)
       Initiator: 102 transaction waiting begin-response on backward path
       Initiator: 102 ACCEPTED (GP, END_REQ, 0 s)
 
-Info: at_target_4_phase.cpp: 2688 ns - end_request_method
+Info: at_target_4_phase.cpp: 2678 ns - end_request_method
       Target: 203 starting end-request method
       Target: 203 transaction moved to send-response PEQ 
       Target: 203 nb_transport_bw (GP, END_REQ, 0 s)
 
-Info: at_target_4_phase.cpp: 2688 ns - end_request_method
+Info: at_target_4_phase.cpp: 2678 ns - end_request_method
       Target: 203 ACCEPTED (GP, END_REQ, 0 s)
 
-Info: select_initiator.cpp: 2688 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2678 ns - send_end_rsp_method
       Initiator: 101 starting send-end-response method
       Initiator: 101 nb_transport_fw (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2688 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2678 ns - send_end_rsp_method
       Initiator: 101 COMPLETED (GP, END_RESP, 0 s)
 
-Info: at_target_2_phase.cpp: 2688 ns - nb_transport_fw
+Info: at_target_2_phase.cpp: 2678 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2688 ns - initiator_thread
+Info: select_initiator.cpp: 2678 ns - initiator_thread
       Initiator: 101 starting new transaction
       Initiator: 101 nb_transport_fw (GP, BEGIN_REQ, 0 s)
 
-Info: select_initiator.cpp: 2688 ns - initiator_thread
+Info: select_initiator.cpp: 2678 ns - initiator_thread
       Initiator: 101 ACCEPTED (GP, BEGIN_REQ, 0 s)
       Initiator: 101 transaction waiting end-request on backward-path 
 
-Info: at_target_2_phase.cpp: 2688 ns - nb_transport_fw
+Info: at_target_2_phase.cpp: 2678 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
 
-Info: at_target_4_phase.cpp: 2691 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2681 ns - begin_response_method
       Target: 203 starting response method
 
-Info: report.cpp: 2691 ns - print
+Info: report.cpp: 2681 ns - print
       ID: 203 COMMAND: READ Length: 04
       Addr: 0x0000000000000224 Data: 0xDFFFFDDB
 
-Info: at_target_4_phase.cpp: 2691 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2681 ns - begin_response_method
       Target: 203 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
 
-Info: at_target_4_phase.cpp: 2691 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2681 ns - begin_response_method
       Target: 203 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2691 ns - nb_transport_bw
+Info: select_initiator.cpp: 2681 ns - nb_transport_bw
       Initiator: 102 nb_transport_bw (GP, BEGIN_RESP, 0 s)
       Initiator: 102 transaction moved to send-end-response PEQ 
       Initiator: 102 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2698 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2688 ns - send_end_rsp_method
       Initiator: 102 starting send-end-response method
       Initiator: 102 nb_transport_fw (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2698 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2688 ns - send_end_rsp_method
       Initiator: 102 COMPLETED (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2698 ns - nb_transport_bw
+Info: select_initiator.cpp: 2688 ns - nb_transport_bw
       Initiator: 101 nb_transport_bw (GP, END_REQ, 0 s)
       Initiator: 101 transaction waiting begin-response on backward path
       Initiator: 101 ACCEPTED (GP, END_REQ, 0 s)
 
-Info: select_initiator.cpp: 2698 ns - initiator_thread
+Info: select_initiator.cpp: 2688 ns - initiator_thread
       Initiator: 102 starting new transaction
       Initiator: 102 nb_transport_fw (GP, BEGIN_REQ, 0 s)
 
-Info: select_initiator.cpp: 2698 ns - initiator_thread
+Info: select_initiator.cpp: 2688 ns - initiator_thread
       Initiator: 102 ACCEPTED (GP, BEGIN_REQ, 0 s)
       Initiator: 102 transaction waiting end-request on backward-path 
 
-Info: at_target_4_phase.cpp: 2698 ns - nb_transport_fw
+Info: at_target_4_phase.cpp: 2688 ns - nb_transport_fw
       Target: 203 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 203 ACCEPTED (GP, BEGIN_REQ, 0 s)
 
-Info: at_target_4_phase.cpp: 2708 ns - end_request_method
-      Target: 203 starting end-request method
-      Target: 203 transaction moved to send-response PEQ 
-      Target: 203 nb_transport_bw (GP, END_REQ, 0 s)
-
-Info: at_target_4_phase.cpp: 2708 ns - end_request_method
-      Target: 203 ACCEPTED (GP, END_REQ, 0 s)
-
-Info: select_initiator.cpp: 2708 ns - nb_transport_bw
-      Initiator: 102 nb_transport_bw (GP, END_REQ, 0 s)
-      Initiator: 102 transaction waiting begin-response on backward path
-      Initiator: 102 ACCEPTED (GP, END_REQ, 0 s)
-
-Info: at_target_2_phase.cpp: 2728 ns - begin_response_method
+Info: at_target_2_phase.cpp: 2691 ns - begin_response_method
       Target: 202 starting response method
 
-Info: report.cpp: 2728 ns - print
+Info: report.cpp: 2691 ns - print
       ID: 202 COMMAND: READ Length: 04
-      Addr: 0x0000000000000130 Data: 0xEFFFFECF
+      Addr: 0x000000000000012C Data: 0xEFFFFED3
 
-Info: at_target_2_phase.cpp: 2728 ns - begin_response_method
+Info: at_target_2_phase.cpp: 2691 ns - begin_response_method
       Target: 202 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
 
-Info: at_target_2_phase.cpp: 2728 ns - begin_response_method
+Info: at_target_2_phase.cpp: 2691 ns - begin_response_method
       Target: 202 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2728 ns - nb_transport_bw
+Info: select_initiator.cpp: 2691 ns - nb_transport_bw
       Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
       Initiator: 101 transaction moved to send-end-response PEQ 
       Initiator: 101 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2735 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2691 ns - nb_transport_bw
+      Initiator: 102 nb_transport_bw (GP, END_REQ, 0 s)
+      Initiator: 102 transaction waiting begin-response on backward path
+      Initiator: 102 ACCEPTED (GP, END_REQ, 0 s)
+
+Info: at_target_4_phase.cpp: 2698 ns - end_request_method
+      Target: 203 starting end-request method
+      Target: 203 transaction moved to send-response PEQ 
+      Target: 203 nb_transport_bw (GP, END_REQ, 0 s)
+
+Info: at_target_4_phase.cpp: 2698 ns - end_request_method
+      Target: 203 ACCEPTED (GP, END_REQ, 0 s)
+
+Info: select_initiator.cpp: 2698 ns - send_end_rsp_method
       Initiator: 101 starting send-end-response method
       Initiator: 101 nb_transport_fw (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2735 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2698 ns - send_end_rsp_method
       Initiator: 101 COMPLETED (GP, END_RESP, 0 s)
 
-Info: at_target_2_phase.cpp: 2735 ns - nb_transport_fw
+Info: at_target_2_phase.cpp: 2698 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2735 ns - initiator_thread
+Info: select_initiator.cpp: 2698 ns - initiator_thread
       Initiator: 101 starting new transaction
       Initiator: 101 nb_transport_fw (GP, BEGIN_REQ, 0 s)
 
-Info: select_initiator.cpp: 2735 ns - initiator_thread
+Info: select_initiator.cpp: 2698 ns - initiator_thread
       Initiator: 101 ACCEPTED (GP, BEGIN_REQ, 0 s)
       Initiator: 101 transaction waiting end-request on backward-path 
 
-Info: at_target_2_phase.cpp: 2735 ns - nb_transport_fw
+Info: at_target_2_phase.cpp: 2698 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
 
-Info: at_target_4_phase.cpp: 2738 ns - begin_response_method
+Info: select_initiator.cpp: 2708 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, END_REQ, 0 s)
+      Initiator: 101 transaction waiting begin-response on backward path
+      Initiator: 101 ACCEPTED (GP, END_REQ, 0 s)
+
+Info: at_target_4_phase.cpp: 2728 ns - begin_response_method
       Target: 203 starting response method
 
-Info: report.cpp: 2738 ns - print
+Info: report.cpp: 2728 ns - print
       ID: 203 COMMAND: READ Length: 04
       Addr: 0x0000000000000228 Data: 0xDFFFFDD7
 
-Info: at_target_4_phase.cpp: 2738 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2728 ns - begin_response_method
       Target: 203 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
 
-Info: at_target_4_phase.cpp: 2738 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2728 ns - begin_response_method
       Target: 203 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2738 ns - nb_transport_bw
+Info: select_initiator.cpp: 2728 ns - nb_transport_bw
       Initiator: 102 nb_transport_bw (GP, BEGIN_RESP, 0 s)
       Initiator: 102 transaction moved to send-end-response PEQ 
       Initiator: 102 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2745 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2735 ns - send_end_rsp_method
       Initiator: 102 starting send-end-response method
       Initiator: 102 nb_transport_fw (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2745 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2735 ns - send_end_rsp_method
       Initiator: 102 COMPLETED (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2745 ns - nb_transport_bw
-      Initiator: 101 nb_transport_bw (GP, END_REQ, 0 s)
-      Initiator: 101 transaction waiting begin-response on backward path
-      Initiator: 101 ACCEPTED (GP, END_REQ, 0 s)
-
-Info: select_initiator.cpp: 2745 ns - initiator_thread
+Info: select_initiator.cpp: 2735 ns - initiator_thread
       Initiator: 102 starting new transaction
       Initiator: 102 nb_transport_fw (GP, BEGIN_REQ, 0 s)
 
-Info: select_initiator.cpp: 2745 ns - initiator_thread
+Info: select_initiator.cpp: 2735 ns - initiator_thread
       Initiator: 102 ACCEPTED (GP, BEGIN_REQ, 0 s)
       Initiator: 102 transaction waiting end-request on backward-path 
 
-Info: at_target_4_phase.cpp: 2745 ns - nb_transport_fw
+Info: at_target_4_phase.cpp: 2735 ns - nb_transport_fw
       Target: 203 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 203 ACCEPTED (GP, BEGIN_REQ, 0 s)
 
-Info: at_target_2_phase.cpp: 2748 ns - begin_response_method
+Info: at_target_2_phase.cpp: 2738 ns - begin_response_method
       Target: 202 starting response method
 
-Info: report.cpp: 2748 ns - print
+Info: report.cpp: 2738 ns - print
       ID: 202 COMMAND: READ Length: 04
-      Addr: 0x0000000000000134 Data: 0xEFFFFECB
+      Addr: 0x0000000000000130 Data: 0xEFFFFECF
 
-Info: at_target_2_phase.cpp: 2748 ns - begin_response_method
+Info: at_target_2_phase.cpp: 2738 ns - begin_response_method
       Target: 202 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
 
-Info: at_target_2_phase.cpp: 2748 ns - begin_response_method
+Info: at_target_2_phase.cpp: 2738 ns - begin_response_method
       Target: 202 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2748 ns - nb_transport_bw
+Info: select_initiator.cpp: 2738 ns - nb_transport_bw
       Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
       Initiator: 101 transaction moved to send-end-response PEQ 
       Initiator: 101 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2748 ns - nb_transport_bw
+Info: select_initiator.cpp: 2738 ns - nb_transport_bw
       Initiator: 102 nb_transport_bw (GP, END_REQ, 0 s)
       Initiator: 102 transaction waiting begin-response on backward path
       Initiator: 102 ACCEPTED (GP, END_REQ, 0 s)
 
-Info: at_target_4_phase.cpp: 2755 ns - end_request_method
+Info: at_target_4_phase.cpp: 2745 ns - end_request_method
       Target: 203 starting end-request method
       Target: 203 transaction moved to send-response PEQ 
       Target: 203 nb_transport_bw (GP, END_REQ, 0 s)
 
-Info: at_target_4_phase.cpp: 2755 ns - end_request_method
+Info: at_target_4_phase.cpp: 2745 ns - end_request_method
       Target: 203 ACCEPTED (GP, END_REQ, 0 s)
 
-Info: select_initiator.cpp: 2755 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2745 ns - send_end_rsp_method
       Initiator: 101 starting send-end-response method
       Initiator: 101 nb_transport_fw (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2755 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2745 ns - send_end_rsp_method
       Initiator: 101 COMPLETED (GP, END_RESP, 0 s)
 
-Info: at_target_2_phase.cpp: 2755 ns - nb_transport_fw
+Info: at_target_2_phase.cpp: 2745 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2755 ns - initiator_thread
+Info: select_initiator.cpp: 2745 ns - initiator_thread
       Initiator: 101 starting new transaction
       Initiator: 101 nb_transport_fw (GP, BEGIN_REQ, 0 s)
 
-Info: select_initiator.cpp: 2755 ns - initiator_thread
+Info: select_initiator.cpp: 2745 ns - initiator_thread
       Initiator: 101 ACCEPTED (GP, BEGIN_REQ, 0 s)
       Initiator: 101 transaction waiting end-request on backward-path 
 
-Info: at_target_2_phase.cpp: 2755 ns - nb_transport_fw
+Info: at_target_2_phase.cpp: 2745 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 202 transaction moved to send-response PEQ 
       Target: 202 UPDATED (GP, END_REQ, 10 ns)
 
-Info: at_target_4_phase.cpp: 2758 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2748 ns - begin_response_method
       Target: 203 starting response method
 
-Info: report.cpp: 2758 ns - print
+Info: report.cpp: 2748 ns - print
       ID: 203 COMMAND: READ Length: 04
       Addr: 0x000000000000022C Data: 0xDFFFFDD3
 
-Info: at_target_4_phase.cpp: 2758 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2748 ns - begin_response_method
       Target: 203 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
 
-Info: at_target_4_phase.cpp: 2758 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2748 ns - begin_response_method
       Target: 203 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2758 ns - nb_transport_bw
+Info: select_initiator.cpp: 2748 ns - nb_transport_bw
       Initiator: 102 nb_transport_bw (GP, BEGIN_RESP, 0 s)
       Initiator: 102 transaction moved to send-end-response PEQ 
       Initiator: 102 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2765 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2755 ns - send_end_rsp_method
       Initiator: 102 starting send-end-response method
       Initiator: 102 nb_transport_fw (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2765 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2755 ns - send_end_rsp_method
       Initiator: 102 COMPLETED (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2765 ns - nb_transport_bw
+Info: select_initiator.cpp: 2755 ns - nb_transport_bw
       Initiator: 101 nb_transport_bw (GP, END_REQ, 0 s)
       Initiator: 101 transaction waiting begin-response on backward path
       Initiator: 101 ACCEPTED (GP, END_REQ, 0 s)
 
-Info: select_initiator.cpp: 2765 ns - initiator_thread
+Info: select_initiator.cpp: 2755 ns - initiator_thread
       Initiator: 102 starting new transaction
       Initiator: 102 nb_transport_fw (GP, BEGIN_REQ, 0 s)
 
-Info: select_initiator.cpp: 2765 ns - initiator_thread
+Info: select_initiator.cpp: 2755 ns - initiator_thread
       Initiator: 102 ACCEPTED (GP, BEGIN_REQ, 0 s)
       Initiator: 102 transaction waiting end-request on backward-path 
 
-Info: at_target_4_phase.cpp: 2765 ns - nb_transport_fw
+Info: at_target_4_phase.cpp: 2755 ns - nb_transport_fw
       Target: 203 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 203 ACCEPTED (GP, BEGIN_REQ, 0 s)
 
-Info: at_target_4_phase.cpp: 2775 ns - end_request_method
-      Target: 203 starting end-request method
-      Target: 203 transaction moved to send-response PEQ 
-      Target: 203 nb_transport_bw (GP, END_REQ, 0 s)
-
-Info: at_target_4_phase.cpp: 2775 ns - end_request_method
-      Target: 203 ACCEPTED (GP, END_REQ, 0 s)
-
-Info: select_initiator.cpp: 2775 ns - nb_transport_bw
-      Initiator: 102 nb_transport_bw (GP, END_REQ, 0 s)
-      Initiator: 102 transaction waiting begin-response on backward path
-      Initiator: 102 ACCEPTED (GP, END_REQ, 0 s)
-
-Info: at_target_2_phase.cpp: 2795 ns - begin_response_method
+Info: at_target_2_phase.cpp: 2758 ns - begin_response_method
       Target: 202 starting response method
 
-Info: report.cpp: 2795 ns - print
+Info: report.cpp: 2758 ns - print
       ID: 202 COMMAND: READ Length: 04
-      Addr: 0x0000000000000138 Data: 0xEFFFFEC7
+      Addr: 0x0000000000000134 Data: 0xEFFFFECB
 
-Info: at_target_2_phase.cpp: 2795 ns - begin_response_method
+Info: at_target_2_phase.cpp: 2758 ns - begin_response_method
       Target: 202 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
 
-Info: at_target_2_phase.cpp: 2795 ns - begin_response_method
+Info: at_target_2_phase.cpp: 2758 ns - begin_response_method
       Target: 202 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2795 ns - nb_transport_bw
+Info: select_initiator.cpp: 2758 ns - nb_transport_bw
       Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
       Initiator: 101 transaction moved to send-end-response PEQ 
       Initiator: 101 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2802 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2758 ns - nb_transport_bw
+      Initiator: 102 nb_transport_bw (GP, END_REQ, 0 s)
+      Initiator: 102 transaction waiting begin-response on backward path
+      Initiator: 102 ACCEPTED (GP, END_REQ, 0 s)
+
+Info: at_target_4_phase.cpp: 2765 ns - end_request_method
+      Target: 203 starting end-request method
+      Target: 203 transaction moved to send-response PEQ 
+      Target: 203 nb_transport_bw (GP, END_REQ, 0 s)
+
+Info: at_target_4_phase.cpp: 2765 ns - end_request_method
+      Target: 203 ACCEPTED (GP, END_REQ, 0 s)
+
+Info: select_initiator.cpp: 2765 ns - send_end_rsp_method
       Initiator: 101 starting send-end-response method
       Initiator: 101 nb_transport_fw (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2802 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2765 ns - send_end_rsp_method
       Initiator: 101 COMPLETED (GP, END_RESP, 0 s)
 
-Info: at_target_2_phase.cpp: 2802 ns - nb_transport_fw
+Info: at_target_2_phase.cpp: 2765 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
-Info: at_target_4_phase.cpp: 2805 ns - begin_response_method
+Info: select_initiator.cpp: 2765 ns - initiator_thread
+      Initiator: 101 starting new transaction
+      Initiator: 101 nb_transport_fw (GP, BEGIN_REQ, 0 s)
+
+Info: select_initiator.cpp: 2765 ns - initiator_thread
+      Initiator: 101 ACCEPTED (GP, BEGIN_REQ, 0 s)
+      Initiator: 101 transaction waiting end-request on backward-path 
+
+Info: at_target_2_phase.cpp: 2765 ns - nb_transport_fw
+      Target: 202 nb_transport_fw (GP, BEGIN_REQ, 0 s)
+      Target: 202 transaction moved to send-response PEQ 
+      Target: 202 UPDATED (GP, END_REQ, 10 ns)
+
+Info: select_initiator.cpp: 2775 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, END_REQ, 0 s)
+      Initiator: 101 transaction waiting begin-response on backward path
+      Initiator: 101 ACCEPTED (GP, END_REQ, 0 s)
+
+Info: at_target_4_phase.cpp: 2795 ns - begin_response_method
       Target: 203 starting response method
 
-Info: report.cpp: 2805 ns - print
+Info: report.cpp: 2795 ns - print
       ID: 203 COMMAND: READ Length: 04
       Addr: 0x0000000000000230 Data: 0xDFFFFDCF
 
-Info: at_target_4_phase.cpp: 2805 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2795 ns - begin_response_method
       Target: 203 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
 
-Info: at_target_4_phase.cpp: 2805 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2795 ns - begin_response_method
       Target: 203 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2805 ns - nb_transport_bw
+Info: select_initiator.cpp: 2795 ns - nb_transport_bw
       Initiator: 102 nb_transport_bw (GP, BEGIN_RESP, 0 s)
       Initiator: 102 transaction moved to send-end-response PEQ 
       Initiator: 102 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2812 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2802 ns - send_end_rsp_method
       Initiator: 102 starting send-end-response method
       Initiator: 102 nb_transport_fw (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2812 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2802 ns - send_end_rsp_method
       Initiator: 102 COMPLETED (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2812 ns - initiator_thread
+Info: select_initiator.cpp: 2802 ns - initiator_thread
       Initiator: 102 starting new transaction
       Initiator: 102 nb_transport_fw (GP, BEGIN_REQ, 0 s)
 
-Info: select_initiator.cpp: 2812 ns - initiator_thread
+Info: select_initiator.cpp: 2802 ns - initiator_thread
       Initiator: 102 ACCEPTED (GP, BEGIN_REQ, 0 s)
       Initiator: 102 transaction waiting end-request on backward-path 
 
-Info: at_target_4_phase.cpp: 2812 ns - nb_transport_fw
+Info: at_target_4_phase.cpp: 2802 ns - nb_transport_fw
       Target: 203 nb_transport_fw (GP, BEGIN_REQ, 0 s)
       Target: 203 ACCEPTED (GP, BEGIN_REQ, 0 s)
 
-Info: at_target_2_phase.cpp: 2815 ns - begin_response_method
+Info: at_target_2_phase.cpp: 2805 ns - begin_response_method
       Target: 202 starting response method
 
-Info: report.cpp: 2815 ns - print
+Info: report.cpp: 2805 ns - print
       ID: 202 COMMAND: READ Length: 04
-      Addr: 0x000000000000013C Data: 0xEFFFFEC3
+      Addr: 0x0000000000000138 Data: 0xEFFFFEC7
 
-Info: at_target_2_phase.cpp: 2815 ns - begin_response_method
+Info: at_target_2_phase.cpp: 2805 ns - begin_response_method
       Target: 202 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
 
-Info: at_target_2_phase.cpp: 2815 ns - begin_response_method
+Info: at_target_2_phase.cpp: 2805 ns - begin_response_method
       Target: 202 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2815 ns - nb_transport_bw
+Info: select_initiator.cpp: 2805 ns - nb_transport_bw
       Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
       Initiator: 101 transaction moved to send-end-response PEQ 
       Initiator: 101 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2815 ns - nb_transport_bw
+Info: select_initiator.cpp: 2805 ns - nb_transport_bw
       Initiator: 102 nb_transport_bw (GP, END_REQ, 0 s)
       Initiator: 102 transaction waiting begin-response on backward path
       Initiator: 102 ACCEPTED (GP, END_REQ, 0 s)
 
-Info: at_target_4_phase.cpp: 2822 ns - end_request_method
+Info: at_target_4_phase.cpp: 2812 ns - end_request_method
       Target: 203 starting end-request method
       Target: 203 transaction moved to send-response PEQ 
       Target: 203 nb_transport_bw (GP, END_REQ, 0 s)
 
-Info: at_target_4_phase.cpp: 2822 ns - end_request_method
+Info: at_target_4_phase.cpp: 2812 ns - end_request_method
       Target: 203 ACCEPTED (GP, END_REQ, 0 s)
 
-Info: select_initiator.cpp: 2822 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2812 ns - send_end_rsp_method
       Initiator: 101 starting send-end-response method
       Initiator: 101 nb_transport_fw (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2822 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2812 ns - send_end_rsp_method
       Initiator: 101 COMPLETED (GP, END_RESP, 0 s)
 
-Info: traffic_generator.cpp: 2822 ns - traffic_generator_thread
+Info: at_target_2_phase.cpp: 2812 ns - nb_transport_fw
+      Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
+      Target: 202 COMPLETED (GP, END_RESP, 0 s)
+
+Info: at_target_4_phase.cpp: 2815 ns - begin_response_method
+      Target: 203 starting response method
+
+Info: report.cpp: 2815 ns - print
+      ID: 203 COMMAND: READ Length: 04
+      Addr: 0x0000000000000234 Data: 0xDFFFFDCB
+
+Info: at_target_4_phase.cpp: 2815 ns - begin_response_method
+      Target: 203 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
+
+Info: at_target_4_phase.cpp: 2815 ns - begin_response_method
+      Target: 203 ACCEPTED (GP, BEGIN_RESP, 0 s)
+
+Info: select_initiator.cpp: 2815 ns - nb_transport_bw
+      Initiator: 102 nb_transport_bw (GP, BEGIN_RESP, 0 s)
+      Initiator: 102 transaction moved to send-end-response PEQ 
+      Initiator: 102 ACCEPTED (GP, BEGIN_RESP, 0 s)
+
+Info: select_initiator.cpp: 2822 ns - send_end_rsp_method
+      Initiator: 102 starting send-end-response method
+      Initiator: 102 nb_transport_fw (GP, END_RESP, 0 s)
+
+Info: select_initiator.cpp: 2822 ns - send_end_rsp_method
+      Initiator: 102 COMPLETED (GP, END_RESP, 0 s)
+
+Info: select_initiator.cpp: 2822 ns - initiator_thread
+      Initiator: 102 starting new transaction
+      Initiator: 102 nb_transport_fw (GP, BEGIN_REQ, 0 s)
+
+Info: select_initiator.cpp: 2822 ns - initiator_thread
+      Initiator: 102 ACCEPTED (GP, BEGIN_REQ, 0 s)
+      Initiator: 102 transaction waiting end-request on backward-path 
+
+Info: at_target_4_phase.cpp: 2822 ns - nb_transport_fw
+      Target: 203 nb_transport_fw (GP, BEGIN_REQ, 0 s)
+      Target: 203 ACCEPTED (GP, BEGIN_REQ, 0 s)
+
+Info: at_target_2_phase.cpp: 2825 ns - begin_response_method
+      Target: 202 starting response method
+
+Info: report.cpp: 2825 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x000000000000013C Data: 0xEFFFFEC3
+
+Info: at_target_2_phase.cpp: 2825 ns - begin_response_method
+      Target: 202 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
+
+Info: at_target_2_phase.cpp: 2825 ns - begin_response_method
+      Target: 202 ACCEPTED (GP, BEGIN_RESP, 0 s)
+
+Info: select_initiator.cpp: 2825 ns - nb_transport_bw
+      Initiator: 101 nb_transport_bw (GP, BEGIN_RESP, 0 s)
+      Initiator: 101 transaction moved to send-end-response PEQ 
+      Initiator: 101 ACCEPTED (GP, BEGIN_RESP, 0 s)
+
+Info: select_initiator.cpp: 2825 ns - nb_transport_bw
+      Initiator: 102 nb_transport_bw (GP, END_REQ, 0 s)
+      Initiator: 102 transaction waiting begin-response on backward path
+      Initiator: 102 ACCEPTED (GP, END_REQ, 0 s)
+
+Info: at_target_4_phase.cpp: 2832 ns - end_request_method
+      Target: 203 starting end-request method
+      Target: 203 transaction moved to send-response PEQ 
+      Target: 203 nb_transport_bw (GP, END_REQ, 0 s)
+
+Info: at_target_4_phase.cpp: 2832 ns - end_request_method
+      Target: 203 ACCEPTED (GP, END_REQ, 0 s)
+
+Info: select_initiator.cpp: 2832 ns - send_end_rsp_method
+      Initiator: 101 starting send-end-response method
+      Initiator: 101 nb_transport_fw (GP, END_RESP, 0 s)
+
+Info: select_initiator.cpp: 2832 ns - send_end_rsp_method
+      Initiator: 101 COMPLETED (GP, END_RESP, 0 s)
+
+Info: traffic_generator.cpp: 2832 ns - traffic_generator_thread
       Traffic Generator : 101
 =========================================================
             ####  Traffic Generator Complete  #### 
 
-Info: at_target_2_phase.cpp: 2822 ns - nb_transport_fw
+Info: at_target_2_phase.cpp: 2832 ns - nb_transport_fw
       Target: 202 nb_transport_fw (GP, END_RESP, 0 s)
       Target: 202 COMPLETED (GP, END_RESP, 0 s)
 
-Info: at_target_4_phase.cpp: 2825 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2862 ns - begin_response_method
       Target: 203 starting response method
 
-Info: report.cpp: 2825 ns - print
-      ID: 203 COMMAND: READ Length: 04
-      Addr: 0x0000000000000234 Data: 0xDFFFFDCB
-
-Info: at_target_4_phase.cpp: 2825 ns - begin_response_method
-      Target: 203 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
-
-Info: at_target_4_phase.cpp: 2825 ns - begin_response_method
-      Target: 203 ACCEPTED (GP, BEGIN_RESP, 0 s)
-
-Info: select_initiator.cpp: 2825 ns - nb_transport_bw
-      Initiator: 102 nb_transport_bw (GP, BEGIN_RESP, 0 s)
-      Initiator: 102 transaction moved to send-end-response PEQ 
-      Initiator: 102 ACCEPTED (GP, BEGIN_RESP, 0 s)
-
-Info: select_initiator.cpp: 2832 ns - send_end_rsp_method
-      Initiator: 102 starting send-end-response method
-      Initiator: 102 nb_transport_fw (GP, END_RESP, 0 s)
-
-Info: select_initiator.cpp: 2832 ns - send_end_rsp_method
-      Initiator: 102 COMPLETED (GP, END_RESP, 0 s)
-
-Info: select_initiator.cpp: 2832 ns - initiator_thread
-      Initiator: 102 starting new transaction
-      Initiator: 102 nb_transport_fw (GP, BEGIN_REQ, 0 s)
-
-Info: select_initiator.cpp: 2832 ns - initiator_thread
-      Initiator: 102 ACCEPTED (GP, BEGIN_REQ, 0 s)
-      Initiator: 102 transaction waiting end-request on backward-path 
-
-Info: at_target_4_phase.cpp: 2832 ns - nb_transport_fw
-      Target: 203 nb_transport_fw (GP, BEGIN_REQ, 0 s)
-      Target: 203 ACCEPTED (GP, BEGIN_REQ, 0 s)
-
-Info: at_target_4_phase.cpp: 2842 ns - end_request_method
-      Target: 203 starting end-request method
-      Target: 203 transaction moved to send-response PEQ 
-      Target: 203 nb_transport_bw (GP, END_REQ, 0 s)
-
-Info: at_target_4_phase.cpp: 2842 ns - end_request_method
-      Target: 203 ACCEPTED (GP, END_REQ, 0 s)
-
-Info: select_initiator.cpp: 2842 ns - nb_transport_bw
-      Initiator: 102 nb_transport_bw (GP, END_REQ, 0 s)
-      Initiator: 102 transaction waiting begin-response on backward path
-      Initiator: 102 ACCEPTED (GP, END_REQ, 0 s)
-
-Info: at_target_4_phase.cpp: 2872 ns - begin_response_method
-      Target: 203 starting response method
-
-Info: report.cpp: 2872 ns - print
+Info: report.cpp: 2862 ns - print
       ID: 203 COMMAND: READ Length: 04
       Addr: 0x0000000000000238 Data: 0xDFFFFDC7
 
-Info: at_target_4_phase.cpp: 2872 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2862 ns - begin_response_method
       Target: 203 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
 
-Info: at_target_4_phase.cpp: 2872 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2862 ns - begin_response_method
       Target: 203 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2872 ns - nb_transport_bw
+Info: select_initiator.cpp: 2862 ns - nb_transport_bw
       Initiator: 102 nb_transport_bw (GP, BEGIN_RESP, 0 s)
       Initiator: 102 transaction moved to send-end-response PEQ 
       Initiator: 102 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2879 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2869 ns - send_end_rsp_method
       Initiator: 102 starting send-end-response method
       Initiator: 102 nb_transport_fw (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2879 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2869 ns - send_end_rsp_method
       Initiator: 102 COMPLETED (GP, END_RESP, 0 s)
 
-Info: at_target_4_phase.cpp: 2892 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2882 ns - begin_response_method
       Target: 203 starting response method
 
-Info: report.cpp: 2892 ns - print
+Info: report.cpp: 2882 ns - print
       ID: 203 COMMAND: READ Length: 04
       Addr: 0x000000000000023C Data: 0xDFFFFDC3
 
-Info: at_target_4_phase.cpp: 2892 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2882 ns - begin_response_method
       Target: 203 nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)
 
-Info: at_target_4_phase.cpp: 2892 ns - begin_response_method
+Info: at_target_4_phase.cpp: 2882 ns - begin_response_method
       Target: 203 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2892 ns - nb_transport_bw
+Info: select_initiator.cpp: 2882 ns - nb_transport_bw
       Initiator: 102 nb_transport_bw (GP, BEGIN_RESP, 0 s)
       Initiator: 102 transaction moved to send-end-response PEQ 
       Initiator: 102 ACCEPTED (GP, BEGIN_RESP, 0 s)
 
-Info: select_initiator.cpp: 2899 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2889 ns - send_end_rsp_method
       Initiator: 102 starting send-end-response method
       Initiator: 102 nb_transport_fw (GP, END_RESP, 0 s)
 
-Info: select_initiator.cpp: 2899 ns - send_end_rsp_method
+Info: select_initiator.cpp: 2889 ns - send_end_rsp_method
       Initiator: 102 COMPLETED (GP, END_RESP, 0 s)
 
-Info: traffic_generator.cpp: 2899 ns - traffic_generator_thread
+Info: traffic_generator.cpp: 2889 ns - traffic_generator_thread
       Traffic Generator : 102
 =========================================================
             ####  Traffic Generator Complete  #### 
-
-Info: (I804) /IEEE_Std_1666/deprecated: You can turn off warnings about
-             IEEE 1666 deprecated features by placing this method call as the
-             first statement in your sc_main() function:
-
-  sc_report_handler::set_actions("/IEEE_Std_1666/deprecated", SC_DO_NOTHING);
-
-
+SystemC: simulation stopped by user.
