@@ -25,8 +25,12 @@
 //    Charles Wilson, ESLX
 //====================================================================
 
-#include "reporting.h"               	// reporting macros
-#include "traffic_generator.h"          // traffic generator declarations
+#include "reporting.h"               	        // reporting macros
+#include "traffic_generator.h"                // traffic generator declarations
+
+#ifdef USING_EXTENSION_OPTIONAL
+#include "extension_initiator_id.h"           // initiator ID extension
+#endif  /* USING_EXTENSION_OPTIONAL */
 
 using namespace std;
 
@@ -35,15 +39,16 @@ static const char *filename = "traffic_generator.cpp";  ///< filename for report
 /// Constructor
 
 SC_HAS_PROCESS(traffic_generator);
+
 //-----------------------------------------------------------------------------
-//
+
 traffic_generator::traffic_generator            // constructor
 ( sc_core::sc_module_name name                  // instance name
 , const unsigned int    ID                      // initiator ID
 , sc_dt::uint64         base_address_1          // first base address
 , sc_dt::uint64         base_address_2          // second base address
 )
-: sc_module           ( name            )       /// module name
+: sc_module           ( name            )       /// instance name
 , m_ID                ( ID              )       /// initiator ID
 , m_base_address_1    ( base_address_1  )       /// first base address
 , m_base_address_2    ( base_address_2  )       /// second base address
@@ -55,14 +60,14 @@ traffic_generator::traffic_generator            // constructor
 //-----------------------------------------------------------------------------
 //
 traffic_generator::traffic_generator            // @todo keep me, lose other constructor
-( sc_core::sc_module_name name                  // module name
+( sc_core::sc_module_name name                  // instance name
 , const unsigned int    ID                      // initiator ID
 , sc_dt::uint64         base_address_1          // first base address
 , sc_dt::uint64         base_address_2          // second base address
 , unsigned int          active_txn_count        // Max number of active transactions 
 )
 
-: sc_module           ( name              )     /// module name
+: sc_module           ( name              )     /// instance name
 , m_ID                ( ID                )     /// initiator ID
 , m_base_address_1    ( base_address_1    )     /// first base address
 , m_base_address_2    ( base_address_2    )     /// second base address
@@ -80,12 +85,13 @@ traffic_generator::traffic_generator_thread
  )
 {
   std::ostringstream  msg;                      ///< log message
+  
   msg.str ("");
   msg << "Initiator: " << m_ID << " Starting Traffic";
   REPORT_INFO(filename, __FUNCTION__, msg.str());
   
-  tlm::tlm_generic_payload  *transaction_ptr;
-  unsigned char             *data_buffer_ptr; 
+  tlm::tlm_generic_payload  *transaction_ptr;   ///< transaction pointer
+  unsigned char             *data_buffer_ptr;   ///< data buffer pointer
   
   // build transaction pool 
 
@@ -101,7 +107,7 @@ traffic_generator::traffic_generator_thread
 //    m_txn_pool.push(transaction_ptr);
   }
   
-  // outer loop of a simple memory test  Generate addresses
+  // outer loop of a simple memory test generate addresses
 
   sc_dt::uint64 base_address;
    
@@ -142,11 +148,32 @@ traffic_generator::traffic_generator_thread
         transaction_ptr->set_address          ( mem_address                  );
         transaction_ptr->set_data_length      ( m_txn_data_size              );
         transaction_ptr->set_response_status  ( tlm::TLM_INCOMPLETE_RESPONSE );
+        
+        #if (  defined ( USING_EXTENSION_OPTIONAL  ) \
+            || defined ( USING_EXTENSION_MANDITORY ) )
 
-        mem_address += m_txn_data_size;             // increment memory address 
+        // set the extension
+        
+        extension_initiator_id  *extension_pointer;   // extension pointer
+        std::ostringstream       initiator_id;        // initiator ID string
+        
+        initiator_id << "'Initiator ID: " << m_ID << "'";
 
-        request_out_port->write (transaction_ptr);  // send write request 
-      } 
+        extension_pointer                 = new extension_initiator_id;
+        extension_pointer->m_initiator_id = initiator_id.str();
+        
+        // register the extension
+        transaction_ptr->set_extension ( extension_pointer );
+ 
+        #endif  /* USING_EXTENSION_OPTIONAL || USING_EXTENSION_MANDATORY */
+        
+        // increment memory address
+        mem_address += m_txn_data_size;
+        
+        // send write request
+        request_out_port->write (transaction_ptr);
+      }
+      
       check_complete();
           
     } // end write loop
@@ -171,9 +198,29 @@ traffic_generator::traffic_generator_thread
         transaction_ptr->set_data_length      ( m_txn_data_size              );
         transaction_ptr->set_response_status  ( tlm::TLM_INCOMPLETE_RESPONSE );
 
-        mem_address += m_txn_data_size;             // increment memory address 
+        #if (  defined ( USING_EXTENSION_OPTIONAL  ) \
+            || defined ( USING_EXTENSION_MANDITORY ) )
 
-        request_out_port->write (transaction_ptr);  // send write request 
+        // set the extension
+        
+        extension_initiator_id  *extension_pointer;   // extension pointer
+        std::ostringstream       initiator_id;        // initiator ID string
+        
+        initiator_id << "'Initiator ID: " << m_ID << "'";
+
+        extension_pointer                 = new extension_initiator_id;
+        extension_pointer->m_initiator_id = initiator_id.str();
+        
+        // register the extension
+        transaction_ptr->set_extension ( extension_pointer );
+ 
+        #endif  /* USING_EXTENSION_OPTIONAL || USING_EXTENSION_MANDATORY */
+        
+        // increment memory address
+        mem_address += m_txn_data_size; 
+        
+        // send write request
+        request_out_port->write (transaction_ptr); 
       }
         
       check_complete();

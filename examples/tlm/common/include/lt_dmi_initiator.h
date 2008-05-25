@@ -15,7 +15,7 @@
 
  *****************************************************************************/
 //==============================================================================
-///  @file lt_initiator.h
+///  @file lt_dmi_initiator.h
 ///  @brief This is Loosley Timed Initiator
 ///
 ///  @Details
@@ -31,21 +31,21 @@
 //    Anna Keist, ESLX
 //==============================================================================
 
-#ifndef __LT_INITIATOR_H__
-#define __LT_INITIATOR_H__
+#ifndef __LT_DMI_INITIATOR_H__
+#define __LT_DMI_INITIATOR_H__
 
 #include "tlm.h"                                    // TLM headers
-#include "simple_initiator_socket.h"
-/// @todo - use convenience socket - Trivial_....Passthru..??
+#include "dmi_memory.h"
 
-class lt_initiator                                  // lt_initiator 
+class lt_dmi_initiator                       // lt_dmi_initiator 
   :  public sc_core::sc_module               // module base class 
+  , virtual public tlm::tlm_bw_transport_if<>  // backward non-blocking interface
 {
 public:
 // Constructor ================================================================= 
-    lt_initiator                                // constructor
+    lt_dmi_initiator                            // constructor
     ( sc_core::sc_module_name name              // module name
-    , const unsigned int  ID                       ///< initiator ID
+    , const unsigned int  ID                    ///< initiator ID
     );
      
 // Method Declarations =========================================================
@@ -60,22 +60,38 @@ public:
 ///        the traffic generator for checking via the response_out_port
 //
 //============================================================================== 
-  void initiator_thread (void);                    
+  void initiator_thread (void);        
+  
+  void invalidate_direct_mem_ptr      // invalidate_direct_mem_ptr
+       ( sc_dt::uint64 start_range    // start range
+       , sc_dt::uint64 end_range      // end range
+       );
+  
+  tlm::tlm_sync_enum 
+  nb_transport_bw                                    // inbound nb_transport_bw
+       ( tlm::tlm_generic_payload&  transaction_ref  // generic payload
+       , tlm::tlm_phase&            phase            // tlm phase
+       , sc_core::sc_time&          delay            // delay
+       );
   
   
 // Variable and Object Declarations ============================================
 public:
   
    typedef tlm::tlm_generic_payload  *gp_ptr;        // generic payload
-   tlm_utils::simple_initiator_socket<lt_initiator> initiator_socket;
+   tlm::tlm_initiator_socket<>        initiator_socket;
  
    sc_core::sc_port<sc_core::sc_fifo_in_if  <gp_ptr> > request_in_port;  
    sc_core::sc_port<sc_core::sc_fifo_out_if <gp_ptr> > response_out_port;
 
 private:
-  tlm::tlm_response_status gp_status;
+  tlm::tlm_response_status m_gp_status;
   unsigned int            m_ID;                     // initiator ID
   sc_core::sc_time        m_end_rsp_delay;          // end response delay
+  dmi_memory              m_dmi_memory;
+  tlm::tlm_dmi            m_dmi_properties;
+  sc_dt::uint64           m_address;
+  
   
 }; 
- #endif /* __LT_INITIATOR_H__ */
+ #endif /* __LT_DMI_INITIATOR_H__ */

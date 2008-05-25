@@ -13,9 +13,9 @@
   language governing rights and limitations under the License.
  *********************************************************************/
 //=====================================================================
-///  @file memory.h
+///  @file dmi_memory.h
 //
-///  @brief Single Phase AT initiator
+///  @brief performs dmi "housekeeping" and actual reads and writes
 //
 ///  @Details
 //
@@ -24,12 +24,12 @@
 //    Jack Donovan, ESLX
 //=====================================================================
 
-#ifndef __MEMORY_H__
-#define __MEMORY_H__
+#ifndef __DMI_MEMORY_H__
+#define __DMI_MEMORY_H__
 
 #include "tlm.h"                                // TLM headers
 
-class memory                          
+class dmi_memory                          
 {
 // Member Methods  ====================================================
   
@@ -44,13 +44,9 @@ class memory
 ///		Initialized member variables and the initiator socket    
 ///
 //=====================================================================
-  memory              
+  dmi_memory              
   (
     const unsigned int ID                 ///< initiator ID for messaging
-  , sc_core::sc_time   read_delay         ///< delay for reads
-  , sc_core::sc_time   write_delay        ///< delay for writes
-  , sc_dt::uint64      memory_size        ///< memory size (bytes)
-  , unsigned int       memory_width       ///< memory width (bytes)
   );
 
  //====================================================================
@@ -86,13 +82,22 @@ class memory
       tlm::tlm_generic_payload  &gp           ///< TLM2 GP reference
     , sc_core::sc_time          &delay_time   ///< time to be updated
     );
-
-  private:
+  
+  void
+  load_dmi_ptr(
+      tlm::tlm_dmi &dmi_payload
+    );
+  
+  void
+  invalidate_dmi_ptr(
+      sc_dt::uint64     start_range
+    , sc_dt::uint64     end_range
+      );
  
-/// Check the address vs. range passed at construction
+/// Check the address to see if it is the range enabled for dmi
 	  
-  tlm::tlm_response_status 
-  check_address
+  bool 
+  address_is_dmi
   (
     tlm::tlm_generic_payload  &gp        
   );   
@@ -101,15 +106,19 @@ class memory
     
    private:
     
-   unsigned int          m_ID;                    ///< initiator ID
-   sc_core::sc_time      m_read_delay;            ///< read delay
-   sc_core::sc_time      m_write_delay;           ///< write delay
-   sc_dt::uint64         m_memory_size;           ///< memory size (bytes)
-   unsigned int          m_memory_width;          ///< memory width (bytes)
-    
-   unsigned char         *m_memory;               ///< memory
-   
-   bool                  m_previous_warning;      ///< limits to one message
+   unsigned int             m_ID;                    ///< initiator ID
+   unsigned char           *m_data;
+   unsigned int             m_length;
+   sc_dt::uint64            m_dmi_size;
+   sc_dt::uint64            m_offset;
+   sc_dt::uint64            m_address;
+   sc_core::sc_time         m_dmi_read_latency;
+   sc_core::sc_time         m_dmi_write_latency;
+   tlm::tlm_command         m_command;
+   unsigned char           *m_dmi_ptr;
+   sc_dt::uint64            m_start_address;
+   sc_dt::uint64            m_end_address;
+   tlm::tlm_dmi             m_dmi_properties;
     
 }; 
- #endif /* __MEMORY_H__ */
+ #endif /* __DMI_MEMORY_H__ */

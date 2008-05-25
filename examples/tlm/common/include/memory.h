@@ -86,6 +86,8 @@ class memory
       tlm::tlm_generic_payload  &gp           ///< TLM2 GP reference
     , sc_core::sc_time          &delay_time   ///< time to be updated
     );
+  
+  unsigned char* get_mem_ptr(void);
 
   private:
  

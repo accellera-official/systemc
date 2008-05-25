@@ -27,26 +27,30 @@
 
 #include "at_target_4_phase.h"                        // our header
 #include "reporting.h"                                // reporting macros
-//#include <stdio.h>
+
+#ifdef USING_EXTENSION_OPTIONAL
+#include "extension_initiator_id.h"                   // optional extension
+#endif /* USING_EXTENSION_OPTIONAL */
                     
-using namespace  std;
+using namespace std;
 
 static const char *filename = "at_target_4_phase.cpp";	///< filename for reporting
 
 SC_HAS_PROCESS(at_target_4_phase);
 
 ///Constructor
+
 at_target_4_phase::at_target_4_phase                      
-( sc_core::sc_module_name module_name               // module name
-, const unsigned int        ID                      // target ID
-, const char                *memory_socket          // socket name
-, sc_dt::uint64             memory_size             // memory size (bytes)
-, unsigned int              memory_width            // memory width (bytes)
-, const sc_core::sc_time    accept_delay            // accept delay (SC_TIME)
-, const sc_core::sc_time    read_response_delay     // read response delay (SC_TIME)
-, const sc_core::sc_time    write_response_delay    // write response delay (SC_TIME)
+( sc_core::sc_module_name           module_name             /// instance name
+, const unsigned int                ID                      /// target ID
+, const char                        *memory_socket          /// socket name
+, sc_dt::uint64                     memory_size             /// memory size (bytes)
+, unsigned int                      memory_width            /// memory width (bytes)
+, const sc_core::sc_time            accept_delay            /// accept delay (SC_TIME)
+, const sc_core::sc_time            read_response_delay     /// read response delay (SC_TIME)
+, const sc_core::sc_time            write_response_delay    /// write response delay (SC_TIME)
 )
-: sc_module                         (module_name)           /// init module name
+: sc_module                         (module_name)           /// instance name
 , m_memory_socket                   (memory_socket)         /// init socket name
 
 , m_ID                              (ID)                    /// init target ID
@@ -72,27 +76,19 @@ at_target_4_phase::at_target_4_phase
   , m_memory_size                 // memory size (bytes)
   , m_memory_width                // memory width (bytes)      
   )
-  
-  
 {
-      
   /// Bind the socket's export to the interface
   m_memory_socket(*this);
-
 
   /// Register begin_reponse as an SC_METHOD
   SC_METHOD(end_request_method);
   sensitive << m_end_request_PEQ.getEvent();
   dont_initialize();
 
-
-
   /// Register begin_reponse as an SC_METHOD
   SC_METHOD(begin_response_method);
   sensitive << m_response_PEQ.getEvent();
   dont_initialize();
-  
-
 }
 
 //==============================================================================
@@ -124,7 +120,6 @@ at_target_4_phase::b_transport
   return;     
 }
 
-
 //=============================================================================
 // nb_transport_fw implementation calls from initiators 
 //
@@ -137,14 +132,45 @@ at_target_4_phase::nb_transport_fw                  // non-blocking transport ca
 {
   std::ostringstream  msg;                          // log message
   
+  tlm::tlm_sync_enum  return_status = tlm::TLM_COMPLETED;
+  
+  #if (  defined ( USING_EXTENSION_OPTIONAL  ) \
+      || defined ( USING_EXTENSION_MANDITORY ) )
+  
+  extension_initiator_id *extension_pointer;
+  
+  gp.get_extension ( extension_pointer );
+  
+  msg.str("");
+  msg << "Target: " << m_ID              
+      << " extension ";
+  
+  if ( extension_pointer )
+  {
+    msg << "data: " << extension_pointer->m_initiator_id;
+
+    REPORT_INFO ( filename,  __FUNCTION__, msg.str() );
+  }
+  
+  #if ( defined ( USING_EXTENSION_MANDATORY ) )
+  
+  else
+  {
+    msg << "not present"; 
+
+    REPORT_FATAL ( filename,  __FUNCTION__, msg.str() );
+  }
+  
+  #endif /* USING_EXTENSION_MANDATORY */
+  
+  #endif  /* USING_EXTENSION_OPTIONAL || USING_EXTENSION_MANDATORY */
+
   msg.str("");
   msg << "Target: " << m_ID               
       << " nb_transport_fw (GP, " 
       << report::print(phase) << ", "
       << delay_time << ")";
  
-  tlm::tlm_sync_enum  return_status = tlm::TLM_COMPLETED;
-  
 //-----------------------------------------------------------------------------
 // decode phase argument 
 //-----------------------------------------------------------------------------
@@ -153,7 +179,6 @@ at_target_4_phase::nb_transport_fw                  // non-blocking transport ca
 //=============================================================================
     case tlm::BEGIN_REQ: 
     {	
-      
       sc_core::sc_time PEQ_delay_time = delay_time + m_accept_delay;
       
       m_end_request_PEQ.notify(gp, PEQ_delay_time); // put transaction in the PEQ
@@ -206,8 +231,6 @@ at_target_4_phase::nb_transport_fw                  // non-blocking transport ca
   
   return return_status;  
 } //end nb_transport_fw
-
-
 
 //=============================================================================
 /// end_request  method function implementation
@@ -267,7 +290,6 @@ void at_target_4_phase::end_request_method (void)
 
     switch (status)
     { 
-     
 //=============================================================================
     case tlm::TLM_ACCEPTED:
       {   
@@ -307,9 +329,7 @@ void at_target_4_phase::end_request_method (void)
         break;
       }
     }// end switch
-      
   } // end while
-  
 } //end end_request_method
 
 //=============================================================================
@@ -367,7 +387,6 @@ void at_target_4_phase::begin_response_method (void)
     
     switch (status)
     { 
-    
 //=============================================================================
     case tlm::TLM_COMPLETED:    
       {          
@@ -411,13 +430,10 @@ void at_target_4_phase::begin_response_method (void)
       break;
     }
   } // end while
-  
 } //end begin_response_queue_active
-
 
 //==============================================================================
 // Methods Required by Target Interface but not Implemented for this Example
-
 
 // Not implemented for this example but required by interface
 bool                                            

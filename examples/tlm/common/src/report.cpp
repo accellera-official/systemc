@@ -97,9 +97,8 @@ std::string print(const tlm::tlm_sync_enum status)
   return os;
 }
 //=====================================================================
-///  @fn print_memory_transaction_helper
 //  
-///  @brief helper function for printing transactions
+///  @brief helper function for printing memory transactions
 //   
 //=====================================================================
 void
@@ -145,5 +144,72 @@ print
 
    REPORT_INFO(filename, __FUNCTION__, msg.str());
 }
- 
+//=====================================================================
+//  
+///  @brief helper function for printing memory transactions
+//   
+//=====================================================================
+void
+print_full
+( const int                 &ID              ///< Target ID/Initiator/?ID
+, const char*               caller_filename
+, tlm::tlm_generic_payload  &gp          ///< transaction to be printed
+)
+{
+   std::ostringstream     msg;
+   msg.str("");
+   
+   msg << "gp_ptr = " << &gp << endl << "      ";
+   
+   sc_dt::uint64 print_address  = gp.get_address();      // memory address
+   unsigned char *print_data    = gp.get_data_ptr();    // data pointer
+   unsigned int  print_length   = gp.get_data_length(); // data length
+   tlm::tlm_command print_command = gp.get_command();     // memory command
+     
+   msg << "ID: "<< ID << " COMMAND: ";
+       
+   if (print_command == tlm::TLM_WRITE_COMMAND) msg << "WRITE";
+   else msg << "READ";
+       
+   msg << " Length: " << internal << setw( 2 ) << setfill( '0' ) 
+       << dec << print_length << endl;
+   msg << "      Addr: 0x" << internal << setw( sizeof(print_address) * 2 ) 
+       << setfill( '0' ) << uppercase << hex << print_address;  
+   
+   msg << " Data: 0x";
+// @todo only prints 4 bytes at this time.
+    msg << internal << setw( 2 ) << setfill( '0' ) 
+        << uppercase << hex << (int)print_data[3];
+    msg << internal << setw( 2 ) << setfill( '0' ) 
+        << uppercase << hex << (int)print_data[2];
+    msg << internal << setw( 2 ) << setfill( '0' ) 
+        << uppercase << hex << (int)print_data[1];
+    msg << internal << setw( 2 ) << setfill( '0' ) 
+        << uppercase << hex << (int)print_data[0];
+    
+    msg << endl << "      "
+        << "RSP STATUS = " << gp.get_response_string()
+        << " STREAMING WIDTH = " << gp.get_streaming_width()
+        << endl << "      "
+        << "DMI ALLOWED = " << gp.get_dmi_allowed()
+        << endl << "      "
+        << "BYTE ENABLE PTR = " << gp.get_byte_enable_ptr()
+        << " BYTE ENABLE LNGTH = " << gp.get_byte_enable_length();
+
+
+   REPORT_INFO(caller_filename, __FUNCTION__, msg.str());
+   
+}
+void  
+print
+( const int                 &ID              ///< Target ID/Initiator/?ID
+, tlm::tlm_dmi              &dmi_parameters     ///< dmi transaction to be printed
+)       
+{     
+   std::ostringstream     msg;
+   msg.str("");
+   msg << "Printing of the DMI Parameters is not yet implemented";
+   REPORT_INFO(filename, __FUNCTION__, msg.str());
+}     
+    
 }//end namespace

@@ -144,6 +144,12 @@ memory::operation
   return;
 } // end memory_operation
 
+unsigned char* 
+memory::get_mem_ptr(void)
+  {
+    return m_memory;
+  }
+
 void 
 memory::get_delay
 (
