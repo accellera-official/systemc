@@ -37,6 +37,9 @@
 ///    to connect the example components. 
 //
 //=====================================================================
+
+SC_HAS_PROCESS(example_system_top);
+
 example_system_top::example_system_top  
 ( sc_core::sc_module_name name             
 )
@@ -47,9 +50,9 @@ example_system_top::example_system_top
   , m_bus                                   /// Init Simple Bus
     ( "m_bus"                              
     )
-    
+  , m_simulation_limit(10000, sc_core::SC_NS) ///< simulation time limit
   , m_at_target_1_phase_1                   /// Init intance 1 of AT target
-    ( "m_at_target_1_phase_1"               // module name
+    ( "m_at_target_1_phase_1"               // instance name
     , 201                                   /// 1st Target ID is 201
     , "memory_socket_1"                     // socket name
     , 4*1024                                // memory size (bytes)
@@ -60,7 +63,7 @@ example_system_top::example_system_top
     )
     
   , m_at_target_2_phase_1                   /// Init instance 2 of AT target
-    ( "m_at_target_2_phase_1"               // module name
+    ( "m_at_target_2_phase_1"               // instance name
     , 202                                   /// 2nd Target ID is 202
     , "memory_socket_1"                     // socket name
     , 4*1024                                // memory size (bytes)
@@ -71,7 +74,7 @@ example_system_top::example_system_top
     )
     
   , m_at_target_4_phase_1                   /// Init instance 3 of AT target
-    ( "m_at_target_4_phase_1"               // module name
+    ( "m_at_target_4_phase_1"               // instance name
     , 203                                   /// 3nd Target ID is 203
     , "memory_socket_1"                     // socket name
     , 4*1024                                // memory size (bytes)
@@ -82,7 +85,7 @@ example_system_top::example_system_top
     )
     
   , m_initiator_1                           /// Init Instance 1 of AT initiator
-    ( "m_initiator_1"                       // module name
+    ( "m_initiator_1"                       // instance name
     , 101                                   /// 1st Initiator ID is 101
     , 0x0000000000000100                    // fitst base address
     , 0x0000000010000100                    // second base address
@@ -97,6 +100,9 @@ example_system_top::example_system_top
     , 2                                     // active transactions
     )
 {
+  // register the time limiter
+  SC_THREAD(limit_thread);
+
   /// bind TLM2 initiators to TLM2 target sockets on SimpleBus
   m_initiator_1.initiator_socket(m_bus.target_socket[0]);
   m_initiator_2.initiator_socket(m_bus.target_socket[1]);
@@ -105,4 +111,16 @@ example_system_top::example_system_top
   m_bus.initiator_socket[0](m_at_target_1_phase_1.m_memory_socket);
   m_bus.initiator_socket[1](m_at_target_2_phase_1.m_memory_socket);
   m_bus.initiator_socket[2](m_at_target_4_phase_1.m_memory_socket);
+}
+
+void
+example_system_top::limit_thread                    ///< limit_thread
+( void
+)
+{
+  sc_core::wait ( sc_core::SC_ZERO_TIME );  // Only after simulation initialized
+  
+  sc_core::wait ( m_simulation_limit );     // Limit simulation time
+  
+  sc_core::sc_stop ();                      // Ensure end_of_simulation called
 }

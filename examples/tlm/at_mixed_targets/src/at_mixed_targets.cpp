@@ -35,6 +35,8 @@
 #include "at_mixed_targets_top.h"  		// top module
 #include "tlm.h"            			// TLM header
 
+using namespace sc_core;
+
 //=====================================================================
 ///  @fn sc_main
 //  
@@ -57,7 +59,7 @@ sc_main                                 // SystemC entry point
   
   example_system_top top("top");        // instantiate a exmaple top module
 
-  sc_core::sc_start(10000);                  // start the simulation
+  sc_start();                           // start the simulation
 
   return 0;                             // return okay status
 }
