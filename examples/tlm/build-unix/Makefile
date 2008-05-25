@@ -8,12 +8,12 @@ SUBDIRS = \
           ../at_4_phase \
           ../at_ooo \
           ../at_mixed_targets \
+          ../at_extension_optional \
+          ../at_extension_mandatory \
           ../lt
 
 #          ../at_dmi \
 #          ../at_1_phase_temporal_decoupling \
-#          ../at_optional_extension \
-#          ../at_mandatory_extension \
 #          ../at_endianess \
 #          ../lt_temporal_decoupling  
 
