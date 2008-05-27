@@ -8,7 +8,7 @@ Info: traffic_generator.cpp: 0 s - traffic_generator_thread
 Info: lt_initiator.cpp: 0 s - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 0 s - print
+Info: memory.cpp: 0 s - print
       ID: 201 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000000 Data: 0x00000000
 
@@ -21,7 +21,7 @@ Info: lt_initiator.cpp: 0 s - initiator_thread
 Info: lt_initiator.cpp: 0 s - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 0 s - print
+Info: memory.cpp: 0 s - print
       ID: 201 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000000 Data: 0x00000000
 
@@ -34,7 +34,7 @@ Info: lt_initiator.cpp: 0 s - initiator_thread
 Info: lt_initiator.cpp: 80 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 80 ns - print
+Info: memory.cpp: 80 ns - print
       ID: 201 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000004 Data: 0x00000004
 
@@ -47,7 +47,7 @@ Info: lt_initiator.cpp: 80 ns - initiator_thread
 Info: lt_initiator.cpp: 80 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 80 ns - print
+Info: memory.cpp: 80 ns - print
       ID: 201 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000004 Data: 0x00000004
 
@@ -60,7 +60,7 @@ Info: lt_initiator.cpp: 80 ns - initiator_thread
 Info: lt_initiator.cpp: 160 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 160 ns - print
+Info: memory.cpp: 160 ns - print
       ID: 201 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000008 Data: 0x00000008
 
@@ -73,7 +73,7 @@ Info: lt_initiator.cpp: 160 ns - initiator_thread
 Info: lt_initiator.cpp: 160 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 160 ns - print
+Info: memory.cpp: 160 ns - print
       ID: 201 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000008 Data: 0x00000008
 
@@ -86,7 +86,7 @@ Info: lt_initiator.cpp: 160 ns - initiator_thread
 Info: lt_initiator.cpp: 240 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 240 ns - print
+Info: memory.cpp: 240 ns - print
       ID: 201 COMMAND: WRITE Length: 04
       Addr: 0x000000000000000C Data: 0x0000000C
 
@@ -99,7 +99,7 @@ Info: lt_initiator.cpp: 240 ns - initiator_thread
 Info: lt_initiator.cpp: 240 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 240 ns - print
+Info: memory.cpp: 240 ns - print
       ID: 201 COMMAND: WRITE Length: 04
       Addr: 0x000000000000000C Data: 0x0000000C
 
@@ -112,7 +112,7 @@ Info: lt_initiator.cpp: 240 ns - initiator_thread
 Info: lt_initiator.cpp: 320 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 320 ns - print
+Info: memory.cpp: 320 ns - print
       ID: 201 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000010 Data: 0x00000010
 
@@ -125,7 +125,7 @@ Info: lt_initiator.cpp: 320 ns - initiator_thread
 Info: lt_initiator.cpp: 320 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 320 ns - print
+Info: memory.cpp: 320 ns - print
       ID: 201 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000010 Data: 0x00000010
 
@@ -138,7 +138,7 @@ Info: lt_initiator.cpp: 320 ns - initiator_thread
 Info: lt_initiator.cpp: 400 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 400 ns - print
+Info: memory.cpp: 400 ns - print
       ID: 201 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000014 Data: 0x00000014
 
@@ -151,7 +151,7 @@ Info: lt_initiator.cpp: 400 ns - initiator_thread
 Info: lt_initiator.cpp: 400 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 400 ns - print
+Info: memory.cpp: 400 ns - print
       ID: 201 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000014 Data: 0x00000014
 
@@ -164,7 +164,7 @@ Info: lt_initiator.cpp: 400 ns - initiator_thread
 Info: lt_initiator.cpp: 480 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 480 ns - print
+Info: memory.cpp: 480 ns - print
       ID: 201 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000018 Data: 0x00000018
 
@@ -177,7 +177,7 @@ Info: lt_initiator.cpp: 480 ns - initiator_thread
 Info: lt_initiator.cpp: 480 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 480 ns - print
+Info: memory.cpp: 480 ns - print
       ID: 201 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000018 Data: 0x00000018
 
@@ -190,7 +190,7 @@ Info: lt_initiator.cpp: 480 ns - initiator_thread
 Info: lt_initiator.cpp: 560 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 560 ns - print
+Info: memory.cpp: 560 ns - print
       ID: 201 COMMAND: WRITE Length: 04
       Addr: 0x000000000000001C Data: 0x0000001C
 
@@ -203,7 +203,7 @@ Info: lt_initiator.cpp: 560 ns - initiator_thread
 Info: lt_initiator.cpp: 560 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 560 ns - print
+Info: memory.cpp: 560 ns - print
       ID: 201 COMMAND: WRITE Length: 04
       Addr: 0x000000000000001C Data: 0x0000001C
 
@@ -216,7 +216,7 @@ Info: lt_initiator.cpp: 560 ns - initiator_thread
 Info: lt_initiator.cpp: 640 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 640 ns - print
+Info: memory.cpp: 640 ns - print
       ID: 201 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000020 Data: 0x00000020
 
@@ -229,7 +229,7 @@ Info: lt_initiator.cpp: 640 ns - initiator_thread
 Info: lt_initiator.cpp: 640 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 640 ns - print
+Info: memory.cpp: 640 ns - print
       ID: 201 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000020 Data: 0x00000020
 
@@ -242,7 +242,7 @@ Info: lt_initiator.cpp: 640 ns - initiator_thread
 Info: lt_initiator.cpp: 720 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 720 ns - print
+Info: memory.cpp: 720 ns - print
       ID: 201 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000024 Data: 0x00000024
 
@@ -255,7 +255,7 @@ Info: lt_initiator.cpp: 720 ns - initiator_thread
 Info: lt_initiator.cpp: 720 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 720 ns - print
+Info: memory.cpp: 720 ns - print
       ID: 201 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000024 Data: 0x00000024
 
@@ -268,7 +268,7 @@ Info: lt_initiator.cpp: 720 ns - initiator_thread
 Info: lt_initiator.cpp: 800 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 800 ns - print
+Info: memory.cpp: 800 ns - print
       ID: 201 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000028 Data: 0x00000028
 
@@ -281,7 +281,7 @@ Info: lt_initiator.cpp: 800 ns - initiator_thread
 Info: lt_initiator.cpp: 800 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 800 ns - print
+Info: memory.cpp: 800 ns - print
       ID: 201 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000028 Data: 0x00000028
 
@@ -294,7 +294,7 @@ Info: lt_initiator.cpp: 800 ns - initiator_thread
 Info: lt_initiator.cpp: 880 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 880 ns - print
+Info: memory.cpp: 880 ns - print
       ID: 201 COMMAND: WRITE Length: 04
       Addr: 0x000000000000002C Data: 0x0000002C
 
@@ -307,7 +307,7 @@ Info: lt_initiator.cpp: 880 ns - initiator_thread
 Info: lt_initiator.cpp: 880 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 880 ns - print
+Info: memory.cpp: 880 ns - print
       ID: 201 COMMAND: WRITE Length: 04
       Addr: 0x000000000000002C Data: 0x0000002C
 
@@ -320,7 +320,7 @@ Info: lt_initiator.cpp: 880 ns - initiator_thread
 Info: lt_initiator.cpp: 960 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 960 ns - print
+Info: memory.cpp: 960 ns - print
       ID: 201 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000030 Data: 0x00000030
 
@@ -333,7 +333,7 @@ Info: lt_initiator.cpp: 960 ns - initiator_thread
 Info: lt_initiator.cpp: 960 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 960 ns - print
+Info: memory.cpp: 960 ns - print
       ID: 201 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000030 Data: 0x00000030
 
@@ -346,7 +346,7 @@ Info: lt_initiator.cpp: 960 ns - initiator_thread
 Info: lt_initiator.cpp: 1040 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 1040 ns - print
+Info: memory.cpp: 1040 ns - print
       ID: 201 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000034 Data: 0x00000034
 
@@ -359,7 +359,7 @@ Info: lt_initiator.cpp: 1040 ns - initiator_thread
 Info: lt_initiator.cpp: 1040 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 1040 ns - print
+Info: memory.cpp: 1040 ns - print
       ID: 201 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000034 Data: 0x00000034
 
@@ -372,7 +372,7 @@ Info: lt_initiator.cpp: 1040 ns - initiator_thread
 Info: lt_initiator.cpp: 1120 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 1120 ns - print
+Info: memory.cpp: 1120 ns - print
       ID: 201 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000038 Data: 0x00000038
 
@@ -385,7 +385,7 @@ Info: lt_initiator.cpp: 1120 ns - initiator_thread
 Info: lt_initiator.cpp: 1120 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 1120 ns - print
+Info: memory.cpp: 1120 ns - print
       ID: 201 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000038 Data: 0x00000038
 
@@ -398,7 +398,7 @@ Info: lt_initiator.cpp: 1120 ns - initiator_thread
 Info: lt_initiator.cpp: 1200 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 1200 ns - print
+Info: memory.cpp: 1200 ns - print
       ID: 201 COMMAND: WRITE Length: 04
       Addr: 0x000000000000003C Data: 0x0000003C
 
@@ -411,7 +411,7 @@ Info: lt_initiator.cpp: 1200 ns - initiator_thread
 Info: lt_initiator.cpp: 1200 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 1200 ns - print
+Info: memory.cpp: 1200 ns - print
       ID: 201 COMMAND: WRITE Length: 04
       Addr: 0x000000000000003C Data: 0x0000003C
 
@@ -424,7 +424,7 @@ Info: lt_initiator.cpp: 1200 ns - initiator_thread
 Info: lt_initiator.cpp: 1280 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 1280 ns - print
+Info: memory.cpp: 1280 ns - print
       ID: 201 COMMAND: READ Length: 04
       Addr: 0x0000000000000000 Data: 0x00000000
 
@@ -437,7 +437,7 @@ Info: lt_initiator.cpp: 1280 ns - initiator_thread
 Info: lt_initiator.cpp: 1280 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 1280 ns - print
+Info: memory.cpp: 1280 ns - print
       ID: 201 COMMAND: READ Length: 04
       Addr: 0x0000000000000000 Data: 0x00000000
 
@@ -450,7 +450,7 @@ Info: lt_initiator.cpp: 1280 ns - initiator_thread
 Info: lt_initiator.cpp: 1400 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 1400 ns - print
+Info: memory.cpp: 1400 ns - print
       ID: 201 COMMAND: READ Length: 04
       Addr: 0x0000000000000004 Data: 0x00000004
 
@@ -463,7 +463,7 @@ Info: lt_initiator.cpp: 1400 ns - initiator_thread
 Info: lt_initiator.cpp: 1400 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 1400 ns - print
+Info: memory.cpp: 1400 ns - print
       ID: 201 COMMAND: READ Length: 04
       Addr: 0x0000000000000004 Data: 0x00000004
 
@@ -476,7 +476,7 @@ Info: lt_initiator.cpp: 1400 ns - initiator_thread
 Info: lt_initiator.cpp: 1520 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 1520 ns - print
+Info: memory.cpp: 1520 ns - print
       ID: 201 COMMAND: READ Length: 04
       Addr: 0x0000000000000008 Data: 0x00000008
 
@@ -489,7 +489,7 @@ Info: lt_initiator.cpp: 1520 ns - initiator_thread
 Info: lt_initiator.cpp: 1520 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 1520 ns - print
+Info: memory.cpp: 1520 ns - print
       ID: 201 COMMAND: READ Length: 04
       Addr: 0x0000000000000008 Data: 0x00000008
 
@@ -502,7 +502,7 @@ Info: lt_initiator.cpp: 1520 ns - initiator_thread
 Info: lt_initiator.cpp: 1640 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 1640 ns - print
+Info: memory.cpp: 1640 ns - print
       ID: 201 COMMAND: READ Length: 04
       Addr: 0x000000000000000C Data: 0x0000000C
 
@@ -515,7 +515,7 @@ Info: lt_initiator.cpp: 1640 ns - initiator_thread
 Info: lt_initiator.cpp: 1640 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 1640 ns - print
+Info: memory.cpp: 1640 ns - print
       ID: 201 COMMAND: READ Length: 04
       Addr: 0x000000000000000C Data: 0x0000000C
 
@@ -528,7 +528,7 @@ Info: lt_initiator.cpp: 1640 ns - initiator_thread
 Info: lt_initiator.cpp: 1760 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 1760 ns - print
+Info: memory.cpp: 1760 ns - print
       ID: 201 COMMAND: READ Length: 04
       Addr: 0x0000000000000010 Data: 0x00000010
 
@@ -541,7 +541,7 @@ Info: lt_initiator.cpp: 1760 ns - initiator_thread
 Info: lt_initiator.cpp: 1760 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 1760 ns - print
+Info: memory.cpp: 1760 ns - print
       ID: 201 COMMAND: READ Length: 04
       Addr: 0x0000000000000010 Data: 0x00000010
 
@@ -554,7 +554,7 @@ Info: lt_initiator.cpp: 1760 ns - initiator_thread
 Info: lt_initiator.cpp: 1880 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 1880 ns - print
+Info: memory.cpp: 1880 ns - print
       ID: 201 COMMAND: READ Length: 04
       Addr: 0x0000000000000014 Data: 0x00000014
 
@@ -567,7 +567,7 @@ Info: lt_initiator.cpp: 1880 ns - initiator_thread
 Info: lt_initiator.cpp: 1880 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 1880 ns - print
+Info: memory.cpp: 1880 ns - print
       ID: 201 COMMAND: READ Length: 04
       Addr: 0x0000000000000014 Data: 0x00000014
 
@@ -580,7 +580,7 @@ Info: lt_initiator.cpp: 1880 ns - initiator_thread
 Info: lt_initiator.cpp: 2 us - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 2 us - print
+Info: memory.cpp: 2 us - print
       ID: 201 COMMAND: READ Length: 04
       Addr: 0x0000000000000018 Data: 0x00000018
 
@@ -593,7 +593,7 @@ Info: lt_initiator.cpp: 2 us - initiator_thread
 Info: lt_initiator.cpp: 2 us - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 2 us - print
+Info: memory.cpp: 2 us - print
       ID: 201 COMMAND: READ Length: 04
       Addr: 0x0000000000000018 Data: 0x00000018
 
@@ -606,7 +606,7 @@ Info: lt_initiator.cpp: 2 us - initiator_thread
 Info: lt_initiator.cpp: 2120 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 2120 ns - print
+Info: memory.cpp: 2120 ns - print
       ID: 201 COMMAND: READ Length: 04
       Addr: 0x000000000000001C Data: 0x0000001C
 
@@ -619,7 +619,7 @@ Info: lt_initiator.cpp: 2120 ns - initiator_thread
 Info: lt_initiator.cpp: 2120 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 2120 ns - print
+Info: memory.cpp: 2120 ns - print
       ID: 201 COMMAND: READ Length: 04
       Addr: 0x000000000000001C Data: 0x0000001C
 
@@ -632,7 +632,7 @@ Info: lt_initiator.cpp: 2120 ns - initiator_thread
 Info: lt_initiator.cpp: 2240 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 2240 ns - print
+Info: memory.cpp: 2240 ns - print
       ID: 201 COMMAND: READ Length: 04
       Addr: 0x0000000000000020 Data: 0x00000020
 
@@ -645,7 +645,7 @@ Info: lt_initiator.cpp: 2240 ns - initiator_thread
 Info: lt_initiator.cpp: 2240 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 2240 ns - print
+Info: memory.cpp: 2240 ns - print
       ID: 201 COMMAND: READ Length: 04
       Addr: 0x0000000000000020 Data: 0x00000020
 
@@ -658,7 +658,7 @@ Info: lt_initiator.cpp: 2240 ns - initiator_thread
 Info: lt_initiator.cpp: 2360 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 2360 ns - print
+Info: memory.cpp: 2360 ns - print
       ID: 201 COMMAND: READ Length: 04
       Addr: 0x0000000000000024 Data: 0x00000024
 
@@ -671,7 +671,7 @@ Info: lt_initiator.cpp: 2360 ns - initiator_thread
 Info: lt_initiator.cpp: 2360 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 2360 ns - print
+Info: memory.cpp: 2360 ns - print
       ID: 201 COMMAND: READ Length: 04
       Addr: 0x0000000000000024 Data: 0x00000024
 
@@ -684,7 +684,7 @@ Info: lt_initiator.cpp: 2360 ns - initiator_thread
 Info: lt_initiator.cpp: 2480 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 2480 ns - print
+Info: memory.cpp: 2480 ns - print
       ID: 201 COMMAND: READ Length: 04
       Addr: 0x0000000000000028 Data: 0x00000028
 
@@ -697,7 +697,7 @@ Info: lt_initiator.cpp: 2480 ns - initiator_thread
 Info: lt_initiator.cpp: 2480 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 2480 ns - print
+Info: memory.cpp: 2480 ns - print
       ID: 201 COMMAND: READ Length: 04
       Addr: 0x0000000000000028 Data: 0x00000028
 
@@ -710,7 +710,7 @@ Info: lt_initiator.cpp: 2480 ns - initiator_thread
 Info: lt_initiator.cpp: 2600 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 2600 ns - print
+Info: memory.cpp: 2600 ns - print
       ID: 201 COMMAND: READ Length: 04
       Addr: 0x000000000000002C Data: 0x0000002C
 
@@ -723,7 +723,7 @@ Info: lt_initiator.cpp: 2600 ns - initiator_thread
 Info: lt_initiator.cpp: 2600 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 2600 ns - print
+Info: memory.cpp: 2600 ns - print
       ID: 201 COMMAND: READ Length: 04
       Addr: 0x000000000000002C Data: 0x0000002C
 
@@ -736,7 +736,7 @@ Info: lt_initiator.cpp: 2600 ns - initiator_thread
 Info: lt_initiator.cpp: 2720 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 2720 ns - print
+Info: memory.cpp: 2720 ns - print
       ID: 201 COMMAND: READ Length: 04
       Addr: 0x0000000000000030 Data: 0x00000030
 
@@ -749,7 +749,7 @@ Info: lt_initiator.cpp: 2720 ns - initiator_thread
 Info: lt_initiator.cpp: 2720 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 2720 ns - print
+Info: memory.cpp: 2720 ns - print
       ID: 201 COMMAND: READ Length: 04
       Addr: 0x0000000000000030 Data: 0x00000030
 
@@ -762,7 +762,7 @@ Info: lt_initiator.cpp: 2720 ns - initiator_thread
 Info: lt_initiator.cpp: 2840 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 2840 ns - print
+Info: memory.cpp: 2840 ns - print
       ID: 201 COMMAND: READ Length: 04
       Addr: 0x0000000000000034 Data: 0x00000034
 
@@ -775,7 +775,7 @@ Info: lt_initiator.cpp: 2840 ns - initiator_thread
 Info: lt_initiator.cpp: 2840 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 2840 ns - print
+Info: memory.cpp: 2840 ns - print
       ID: 201 COMMAND: READ Length: 04
       Addr: 0x0000000000000034 Data: 0x00000034
 
@@ -788,7 +788,7 @@ Info: lt_initiator.cpp: 2840 ns - initiator_thread
 Info: lt_initiator.cpp: 2960 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 2960 ns - print
+Info: memory.cpp: 2960 ns - print
       ID: 201 COMMAND: READ Length: 04
       Addr: 0x0000000000000038 Data: 0x00000038
 
@@ -801,7 +801,7 @@ Info: lt_initiator.cpp: 2960 ns - initiator_thread
 Info: lt_initiator.cpp: 2960 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 2960 ns - print
+Info: memory.cpp: 2960 ns - print
       ID: 201 COMMAND: READ Length: 04
       Addr: 0x0000000000000038 Data: 0x00000038
 
@@ -814,7 +814,7 @@ Info: lt_initiator.cpp: 2960 ns - initiator_thread
 Info: lt_initiator.cpp: 3080 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 3080 ns - print
+Info: memory.cpp: 3080 ns - print
       ID: 201 COMMAND: READ Length: 04
       Addr: 0x000000000000003C Data: 0x0000003C
 
@@ -827,7 +827,7 @@ Info: lt_initiator.cpp: 3080 ns - initiator_thread
 Info: lt_initiator.cpp: 3080 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 3080 ns - print
+Info: memory.cpp: 3080 ns - print
       ID: 201 COMMAND: READ Length: 04
       Addr: 0x000000000000003C Data: 0x0000003C
 
@@ -840,11 +840,11 @@ Info: lt_initiator.cpp: 3080 ns - initiator_thread
 Info: lt_initiator.cpp: 3200 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 3200 ns - print
+Info: memory.cpp: 3200 ns - print
       ID: 202 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000000 Data: 0xEFFFFFFF
 
-Info: at_target_4_phase.cpp: 3200 ns - b_transport
+Info: lt_target.cpp: 3200 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
 
 Info: lt_initiator.cpp: 3200 ns - initiator_thread
@@ -853,11 +853,11 @@ Info: lt_initiator.cpp: 3200 ns - initiator_thread
 Info: lt_initiator.cpp: 3200 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 3200 ns - print
+Info: memory.cpp: 3200 ns - print
       ID: 202 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000000 Data: 0xEFFFFFFF
 
-Info: at_target_4_phase.cpp: 3200 ns - b_transport
+Info: lt_target.cpp: 3200 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
 
 Info: lt_initiator.cpp: 3200 ns - initiator_thread
@@ -866,11 +866,11 @@ Info: lt_initiator.cpp: 3200 ns - initiator_thread
 Info: lt_initiator.cpp: 3240 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 3240 ns - print
+Info: memory.cpp: 3240 ns - print
       ID: 202 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000004 Data: 0xEFFFFFFB
 
-Info: at_target_4_phase.cpp: 3240 ns - b_transport
+Info: lt_target.cpp: 3240 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
 
 Info: lt_initiator.cpp: 3240 ns - initiator_thread
@@ -879,11 +879,11 @@ Info: lt_initiator.cpp: 3240 ns - initiator_thread
 Info: lt_initiator.cpp: 3240 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 3240 ns - print
+Info: memory.cpp: 3240 ns - print
       ID: 202 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000004 Data: 0xEFFFFFFB
 
-Info: at_target_4_phase.cpp: 3240 ns - b_transport
+Info: lt_target.cpp: 3240 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
 
 Info: lt_initiator.cpp: 3240 ns - initiator_thread
@@ -892,11 +892,11 @@ Info: lt_initiator.cpp: 3240 ns - initiator_thread
 Info: lt_initiator.cpp: 3280 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 3280 ns - print
+Info: memory.cpp: 3280 ns - print
       ID: 202 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000008 Data: 0xEFFFFFF7
 
-Info: at_target_4_phase.cpp: 3280 ns - b_transport
+Info: lt_target.cpp: 3280 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
 
 Info: lt_initiator.cpp: 3280 ns - initiator_thread
@@ -905,11 +905,11 @@ Info: lt_initiator.cpp: 3280 ns - initiator_thread
 Info: lt_initiator.cpp: 3280 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 3280 ns - print
+Info: memory.cpp: 3280 ns - print
       ID: 202 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000008 Data: 0xEFFFFFF7
 
-Info: at_target_4_phase.cpp: 3280 ns - b_transport
+Info: lt_target.cpp: 3280 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
 
 Info: lt_initiator.cpp: 3280 ns - initiator_thread
@@ -918,11 +918,11 @@ Info: lt_initiator.cpp: 3280 ns - initiator_thread
 Info: lt_initiator.cpp: 3320 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 3320 ns - print
+Info: memory.cpp: 3320 ns - print
       ID: 202 COMMAND: WRITE Length: 04
       Addr: 0x000000000000000C Data: 0xEFFFFFF3
 
-Info: at_target_4_phase.cpp: 3320 ns - b_transport
+Info: lt_target.cpp: 3320 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
 
 Info: lt_initiator.cpp: 3320 ns - initiator_thread
@@ -931,11 +931,11 @@ Info: lt_initiator.cpp: 3320 ns - initiator_thread
 Info: lt_initiator.cpp: 3320 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 3320 ns - print
+Info: memory.cpp: 3320 ns - print
       ID: 202 COMMAND: WRITE Length: 04
       Addr: 0x000000000000000C Data: 0xEFFFFFF3
 
-Info: at_target_4_phase.cpp: 3320 ns - b_transport
+Info: lt_target.cpp: 3320 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
 
 Info: lt_initiator.cpp: 3320 ns - initiator_thread
@@ -944,11 +944,11 @@ Info: lt_initiator.cpp: 3320 ns - initiator_thread
 Info: lt_initiator.cpp: 3360 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 3360 ns - print
+Info: memory.cpp: 3360 ns - print
       ID: 202 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000010 Data: 0xEFFFFFEF
 
-Info: at_target_4_phase.cpp: 3360 ns - b_transport
+Info: lt_target.cpp: 3360 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
 
 Info: lt_initiator.cpp: 3360 ns - initiator_thread
@@ -957,11 +957,11 @@ Info: lt_initiator.cpp: 3360 ns - initiator_thread
 Info: lt_initiator.cpp: 3360 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 3360 ns - print
+Info: memory.cpp: 3360 ns - print
       ID: 202 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000010 Data: 0xEFFFFFEF
 
-Info: at_target_4_phase.cpp: 3360 ns - b_transport
+Info: lt_target.cpp: 3360 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
 
 Info: lt_initiator.cpp: 3360 ns - initiator_thread
@@ -970,11 +970,11 @@ Info: lt_initiator.cpp: 3360 ns - initiator_thread
 Info: lt_initiator.cpp: 3400 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 3400 ns - print
+Info: memory.cpp: 3400 ns - print
       ID: 202 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000014 Data: 0xEFFFFFEB
 
-Info: at_target_4_phase.cpp: 3400 ns - b_transport
+Info: lt_target.cpp: 3400 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
 
 Info: lt_initiator.cpp: 3400 ns - initiator_thread
@@ -983,11 +983,11 @@ Info: lt_initiator.cpp: 3400 ns - initiator_thread
 Info: lt_initiator.cpp: 3400 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 3400 ns - print
+Info: memory.cpp: 3400 ns - print
       ID: 202 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000014 Data: 0xEFFFFFEB
 
-Info: at_target_4_phase.cpp: 3400 ns - b_transport
+Info: lt_target.cpp: 3400 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
 
 Info: lt_initiator.cpp: 3400 ns - initiator_thread
@@ -996,11 +996,11 @@ Info: lt_initiator.cpp: 3400 ns - initiator_thread
 Info: lt_initiator.cpp: 3440 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 3440 ns - print
+Info: memory.cpp: 3440 ns - print
       ID: 202 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000018 Data: 0xEFFFFFE7
 
-Info: at_target_4_phase.cpp: 3440 ns - b_transport
+Info: lt_target.cpp: 3440 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
 
 Info: lt_initiator.cpp: 3440 ns - initiator_thread
@@ -1009,11 +1009,11 @@ Info: lt_initiator.cpp: 3440 ns - initiator_thread
 Info: lt_initiator.cpp: 3440 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 3440 ns - print
+Info: memory.cpp: 3440 ns - print
       ID: 202 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000018 Data: 0xEFFFFFE7
 
-Info: at_target_4_phase.cpp: 3440 ns - b_transport
+Info: lt_target.cpp: 3440 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
 
 Info: lt_initiator.cpp: 3440 ns - initiator_thread
@@ -1022,11 +1022,11 @@ Info: lt_initiator.cpp: 3440 ns - initiator_thread
 Info: lt_initiator.cpp: 3480 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 3480 ns - print
+Info: memory.cpp: 3480 ns - print
       ID: 202 COMMAND: WRITE Length: 04
       Addr: 0x000000000000001C Data: 0xEFFFFFE3
 
-Info: at_target_4_phase.cpp: 3480 ns - b_transport
+Info: lt_target.cpp: 3480 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
 
 Info: lt_initiator.cpp: 3480 ns - initiator_thread
@@ -1035,11 +1035,11 @@ Info: lt_initiator.cpp: 3480 ns - initiator_thread
 Info: lt_initiator.cpp: 3480 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 3480 ns - print
+Info: memory.cpp: 3480 ns - print
       ID: 202 COMMAND: WRITE Length: 04
       Addr: 0x000000000000001C Data: 0xEFFFFFE3
 
-Info: at_target_4_phase.cpp: 3480 ns - b_transport
+Info: lt_target.cpp: 3480 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
 
 Info: lt_initiator.cpp: 3480 ns - initiator_thread
@@ -1048,11 +1048,11 @@ Info: lt_initiator.cpp: 3480 ns - initiator_thread
 Info: lt_initiator.cpp: 3520 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 3520 ns - print
+Info: memory.cpp: 3520 ns - print
       ID: 202 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000020 Data: 0xEFFFFFDF
 
-Info: at_target_4_phase.cpp: 3520 ns - b_transport
+Info: lt_target.cpp: 3520 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
 
 Info: lt_initiator.cpp: 3520 ns - initiator_thread
@@ -1061,11 +1061,11 @@ Info: lt_initiator.cpp: 3520 ns - initiator_thread
 Info: lt_initiator.cpp: 3520 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 3520 ns - print
+Info: memory.cpp: 3520 ns - print
       ID: 202 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000020 Data: 0xEFFFFFDF
 
-Info: at_target_4_phase.cpp: 3520 ns - b_transport
+Info: lt_target.cpp: 3520 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
 
 Info: lt_initiator.cpp: 3520 ns - initiator_thread
@@ -1074,11 +1074,11 @@ Info: lt_initiator.cpp: 3520 ns - initiator_thread
 Info: lt_initiator.cpp: 3560 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 3560 ns - print
+Info: memory.cpp: 3560 ns - print
       ID: 202 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000024 Data: 0xEFFFFFDB
 
-Info: at_target_4_phase.cpp: 3560 ns - b_transport
+Info: lt_target.cpp: 3560 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
 
 Info: lt_initiator.cpp: 3560 ns - initiator_thread
@@ -1087,11 +1087,11 @@ Info: lt_initiator.cpp: 3560 ns - initiator_thread
 Info: lt_initiator.cpp: 3560 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 3560 ns - print
+Info: memory.cpp: 3560 ns - print
       ID: 202 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000024 Data: 0xEFFFFFDB
 
-Info: at_target_4_phase.cpp: 3560 ns - b_transport
+Info: lt_target.cpp: 3560 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
 
 Info: lt_initiator.cpp: 3560 ns - initiator_thread
@@ -1100,11 +1100,11 @@ Info: lt_initiator.cpp: 3560 ns - initiator_thread
 Info: lt_initiator.cpp: 3600 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 3600 ns - print
+Info: memory.cpp: 3600 ns - print
       ID: 202 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000028 Data: 0xEFFFFFD7
 
-Info: at_target_4_phase.cpp: 3600 ns - b_transport
+Info: lt_target.cpp: 3600 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
 
 Info: lt_initiator.cpp: 3600 ns - initiator_thread
@@ -1113,11 +1113,11 @@ Info: lt_initiator.cpp: 3600 ns - initiator_thread
 Info: lt_initiator.cpp: 3600 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 3600 ns - print
+Info: memory.cpp: 3600 ns - print
       ID: 202 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000028 Data: 0xEFFFFFD7
 
-Info: at_target_4_phase.cpp: 3600 ns - b_transport
+Info: lt_target.cpp: 3600 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
 
 Info: lt_initiator.cpp: 3600 ns - initiator_thread
@@ -1126,11 +1126,11 @@ Info: lt_initiator.cpp: 3600 ns - initiator_thread
 Info: lt_initiator.cpp: 3640 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 3640 ns - print
+Info: memory.cpp: 3640 ns - print
       ID: 202 COMMAND: WRITE Length: 04
       Addr: 0x000000000000002C Data: 0xEFFFFFD3
 
-Info: at_target_4_phase.cpp: 3640 ns - b_transport
+Info: lt_target.cpp: 3640 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
 
 Info: lt_initiator.cpp: 3640 ns - initiator_thread
@@ -1139,11 +1139,11 @@ Info: lt_initiator.cpp: 3640 ns - initiator_thread
 Info: lt_initiator.cpp: 3640 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 3640 ns - print
+Info: memory.cpp: 3640 ns - print
       ID: 202 COMMAND: WRITE Length: 04
       Addr: 0x000000000000002C Data: 0xEFFFFFD3
 
-Info: at_target_4_phase.cpp: 3640 ns - b_transport
+Info: lt_target.cpp: 3640 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
 
 Info: lt_initiator.cpp: 3640 ns - initiator_thread
@@ -1152,11 +1152,11 @@ Info: lt_initiator.cpp: 3640 ns - initiator_thread
 Info: lt_initiator.cpp: 3680 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 3680 ns - print
+Info: memory.cpp: 3680 ns - print
       ID: 202 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000030 Data: 0xEFFFFFCF
 
-Info: at_target_4_phase.cpp: 3680 ns - b_transport
+Info: lt_target.cpp: 3680 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
 
 Info: lt_initiator.cpp: 3680 ns - initiator_thread
@@ -1165,11 +1165,11 @@ Info: lt_initiator.cpp: 3680 ns - initiator_thread
 Info: lt_initiator.cpp: 3680 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 3680 ns - print
+Info: memory.cpp: 3680 ns - print
       ID: 202 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000030 Data: 0xEFFFFFCF
 
-Info: at_target_4_phase.cpp: 3680 ns - b_transport
+Info: lt_target.cpp: 3680 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
 
 Info: lt_initiator.cpp: 3680 ns - initiator_thread
@@ -1178,11 +1178,11 @@ Info: lt_initiator.cpp: 3680 ns - initiator_thread
 Info: lt_initiator.cpp: 3720 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 3720 ns - print
+Info: memory.cpp: 3720 ns - print
       ID: 202 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000034 Data: 0xEFFFFFCB
 
-Info: at_target_4_phase.cpp: 3720 ns - b_transport
+Info: lt_target.cpp: 3720 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
 
 Info: lt_initiator.cpp: 3720 ns - initiator_thread
@@ -1191,11 +1191,11 @@ Info: lt_initiator.cpp: 3720 ns - initiator_thread
 Info: lt_initiator.cpp: 3720 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 3720 ns - print
+Info: memory.cpp: 3720 ns - print
       ID: 202 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000034 Data: 0xEFFFFFCB
 
-Info: at_target_4_phase.cpp: 3720 ns - b_transport
+Info: lt_target.cpp: 3720 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
 
 Info: lt_initiator.cpp: 3720 ns - initiator_thread
@@ -1204,11 +1204,11 @@ Info: lt_initiator.cpp: 3720 ns - initiator_thread
 Info: lt_initiator.cpp: 3760 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 3760 ns - print
+Info: memory.cpp: 3760 ns - print
       ID: 202 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000038 Data: 0xEFFFFFC7
 
-Info: at_target_4_phase.cpp: 3760 ns - b_transport
+Info: lt_target.cpp: 3760 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
 
 Info: lt_initiator.cpp: 3760 ns - initiator_thread
@@ -1217,11 +1217,11 @@ Info: lt_initiator.cpp: 3760 ns - initiator_thread
 Info: lt_initiator.cpp: 3760 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 3760 ns - print
+Info: memory.cpp: 3760 ns - print
       ID: 202 COMMAND: WRITE Length: 04
       Addr: 0x0000000000000038 Data: 0xEFFFFFC7
 
-Info: at_target_4_phase.cpp: 3760 ns - b_transport
+Info: lt_target.cpp: 3760 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
 
 Info: lt_initiator.cpp: 3760 ns - initiator_thread
@@ -1230,11 +1230,11 @@ Info: lt_initiator.cpp: 3760 ns - initiator_thread
 Info: lt_initiator.cpp: 3800 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 3800 ns - print
+Info: memory.cpp: 3800 ns - print
       ID: 202 COMMAND: WRITE Length: 04
       Addr: 0x000000000000003C Data: 0xEFFFFFC3
 
-Info: at_target_4_phase.cpp: 3800 ns - b_transport
+Info: lt_target.cpp: 3800 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
 
 Info: lt_initiator.cpp: 3800 ns - initiator_thread
@@ -1243,11 +1243,11 @@ Info: lt_initiator.cpp: 3800 ns - initiator_thread
 Info: lt_initiator.cpp: 3800 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 3800 ns - print
+Info: memory.cpp: 3800 ns - print
       ID: 202 COMMAND: WRITE Length: 04
       Addr: 0x000000000000003C Data: 0xEFFFFFC3
 
-Info: at_target_4_phase.cpp: 3800 ns - b_transport
+Info: lt_target.cpp: 3800 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
 
 Info: lt_initiator.cpp: 3800 ns - initiator_thread
@@ -1256,11 +1256,11 @@ Info: lt_initiator.cpp: 3800 ns - initiator_thread
 Info: lt_initiator.cpp: 3840 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 3840 ns - print
+Info: memory.cpp: 3840 ns - print
       ID: 202 COMMAND: READ Length: 04
       Addr: 0x0000000000000000 Data: 0xEFFFFFFF
 
-Info: at_target_4_phase.cpp: 3840 ns - b_transport
+Info: lt_target.cpp: 3840 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
 
 Info: lt_initiator.cpp: 3840 ns - initiator_thread
@@ -1269,11 +1269,11 @@ Info: lt_initiator.cpp: 3840 ns - initiator_thread
 Info: lt_initiator.cpp: 3840 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 3840 ns - print
+Info: memory.cpp: 3840 ns - print
       ID: 202 COMMAND: READ Length: 04
       Addr: 0x0000000000000000 Data: 0xEFFFFFFF
 
-Info: at_target_4_phase.cpp: 3840 ns - b_transport
+Info: lt_target.cpp: 3840 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
 
 Info: lt_initiator.cpp: 3840 ns - initiator_thread
@@ -1282,11 +1282,11 @@ Info: lt_initiator.cpp: 3840 ns - initiator_thread
 Info: lt_initiator.cpp: 3900 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 3900 ns - print
+Info: memory.cpp: 3900 ns - print
       ID: 202 COMMAND: READ Length: 04
       Addr: 0x0000000000000004 Data: 0xEFFFFFFB
 
-Info: at_target_4_phase.cpp: 3900 ns - b_transport
+Info: lt_target.cpp: 3900 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
 
 Info: lt_initiator.cpp: 3900 ns - initiator_thread
@@ -1295,11 +1295,11 @@ Info: lt_initiator.cpp: 3900 ns - initiator_thread
 Info: lt_initiator.cpp: 3900 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 3900 ns - print
+Info: memory.cpp: 3900 ns - print
       ID: 202 COMMAND: READ Length: 04
       Addr: 0x0000000000000004 Data: 0xEFFFFFFB
 
-Info: at_target_4_phase.cpp: 3900 ns - b_transport
+Info: lt_target.cpp: 3900 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
 
 Info: lt_initiator.cpp: 3900 ns - initiator_thread
@@ -1308,11 +1308,11 @@ Info: lt_initiator.cpp: 3900 ns - initiator_thread
 Info: lt_initiator.cpp: 3960 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 3960 ns - print
+Info: memory.cpp: 3960 ns - print
       ID: 202 COMMAND: READ Length: 04
       Addr: 0x0000000000000008 Data: 0xEFFFFFF7
 
-Info: at_target_4_phase.cpp: 3960 ns - b_transport
+Info: lt_target.cpp: 3960 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
 
 Info: lt_initiator.cpp: 3960 ns - initiator_thread
@@ -1321,11 +1321,11 @@ Info: lt_initiator.cpp: 3960 ns - initiator_thread
 Info: lt_initiator.cpp: 3960 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 3960 ns - print
+Info: memory.cpp: 3960 ns - print
       ID: 202 COMMAND: READ Length: 04
       Addr: 0x0000000000000008 Data: 0xEFFFFFF7
 
-Info: at_target_4_phase.cpp: 3960 ns - b_transport
+Info: lt_target.cpp: 3960 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
 
 Info: lt_initiator.cpp: 3960 ns - initiator_thread
@@ -1334,11 +1334,11 @@ Info: lt_initiator.cpp: 3960 ns - initiator_thread
 Info: lt_initiator.cpp: 4020 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 4020 ns - print
+Info: memory.cpp: 4020 ns - print
       ID: 202 COMMAND: READ Length: 04
       Addr: 0x000000000000000C Data: 0xEFFFFFF3
 
-Info: at_target_4_phase.cpp: 4020 ns - b_transport
+Info: lt_target.cpp: 4020 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
 
 Info: lt_initiator.cpp: 4020 ns - initiator_thread
@@ -1347,11 +1347,11 @@ Info: lt_initiator.cpp: 4020 ns - initiator_thread
 Info: lt_initiator.cpp: 4020 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 4020 ns - print
+Info: memory.cpp: 4020 ns - print
       ID: 202 COMMAND: READ Length: 04
       Addr: 0x000000000000000C Data: 0xEFFFFFF3
 
-Info: at_target_4_phase.cpp: 4020 ns - b_transport
+Info: lt_target.cpp: 4020 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
 
 Info: lt_initiator.cpp: 4020 ns - initiator_thread
@@ -1360,11 +1360,11 @@ Info: lt_initiator.cpp: 4020 ns - initiator_thread
 Info: lt_initiator.cpp: 4080 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 4080 ns - print
+Info: memory.cpp: 4080 ns - print
       ID: 202 COMMAND: READ Length: 04
       Addr: 0x0000000000000010 Data: 0xEFFFFFEF
 
-Info: at_target_4_phase.cpp: 4080 ns - b_transport
+Info: lt_target.cpp: 4080 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
 
 Info: lt_initiator.cpp: 4080 ns - initiator_thread
@@ -1373,11 +1373,11 @@ Info: lt_initiator.cpp: 4080 ns - initiator_thread
 Info: lt_initiator.cpp: 4080 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 4080 ns - print
+Info: memory.cpp: 4080 ns - print
       ID: 202 COMMAND: READ Length: 04
       Addr: 0x0000000000000010 Data: 0xEFFFFFEF
 
-Info: at_target_4_phase.cpp: 4080 ns - b_transport
+Info: lt_target.cpp: 4080 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
 
 Info: lt_initiator.cpp: 4080 ns - initiator_thread
@@ -1386,11 +1386,11 @@ Info: lt_initiator.cpp: 4080 ns - initiator_thread
 Info: lt_initiator.cpp: 4140 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 4140 ns - print
+Info: memory.cpp: 4140 ns - print
       ID: 202 COMMAND: READ Length: 04
       Addr: 0x0000000000000014 Data: 0xEFFFFFEB
 
-Info: at_target_4_phase.cpp: 4140 ns - b_transport
+Info: lt_target.cpp: 4140 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
 
 Info: lt_initiator.cpp: 4140 ns - initiator_thread
@@ -1399,11 +1399,11 @@ Info: lt_initiator.cpp: 4140 ns - initiator_thread
 Info: lt_initiator.cpp: 4140 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 4140 ns - print
+Info: memory.cpp: 4140 ns - print
       ID: 202 COMMAND: READ Length: 04
       Addr: 0x0000000000000014 Data: 0xEFFFFFEB
 
-Info: at_target_4_phase.cpp: 4140 ns - b_transport
+Info: lt_target.cpp: 4140 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
 
 Info: lt_initiator.cpp: 4140 ns - initiator_thread
@@ -1412,11 +1412,11 @@ Info: lt_initiator.cpp: 4140 ns - initiator_thread
 Info: lt_initiator.cpp: 4200 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 4200 ns - print
+Info: memory.cpp: 4200 ns - print
       ID: 202 COMMAND: READ Length: 04
       Addr: 0x0000000000000018 Data: 0xEFFFFFE7
 
-Info: at_target_4_phase.cpp: 4200 ns - b_transport
+Info: lt_target.cpp: 4200 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
 
 Info: lt_initiator.cpp: 4200 ns - initiator_thread
@@ -1425,11 +1425,11 @@ Info: lt_initiator.cpp: 4200 ns - initiator_thread
 Info: lt_initiator.cpp: 4200 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 4200 ns - print
+Info: memory.cpp: 4200 ns - print
       ID: 202 COMMAND: READ Length: 04
       Addr: 0x0000000000000018 Data: 0xEFFFFFE7
 
-Info: at_target_4_phase.cpp: 4200 ns - b_transport
+Info: lt_target.cpp: 4200 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
 
 Info: lt_initiator.cpp: 4200 ns - initiator_thread
@@ -1438,11 +1438,11 @@ Info: lt_initiator.cpp: 4200 ns - initiator_thread
 Info: lt_initiator.cpp: 4260 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 4260 ns - print
+Info: memory.cpp: 4260 ns - print
       ID: 202 COMMAND: READ Length: 04
       Addr: 0x000000000000001C Data: 0xEFFFFFE3
 
-Info: at_target_4_phase.cpp: 4260 ns - b_transport
+Info: lt_target.cpp: 4260 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
 
 Info: lt_initiator.cpp: 4260 ns - initiator_thread
@@ -1451,11 +1451,11 @@ Info: lt_initiator.cpp: 4260 ns - initiator_thread
 Info: lt_initiator.cpp: 4260 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 4260 ns - print
+Info: memory.cpp: 4260 ns - print
       ID: 202 COMMAND: READ Length: 04
       Addr: 0x000000000000001C Data: 0xEFFFFFE3
 
-Info: at_target_4_phase.cpp: 4260 ns - b_transport
+Info: lt_target.cpp: 4260 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
 
 Info: lt_initiator.cpp: 4260 ns - initiator_thread
@@ -1464,11 +1464,11 @@ Info: lt_initiator.cpp: 4260 ns - initiator_thread
 Info: lt_initiator.cpp: 4320 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 4320 ns - print
+Info: memory.cpp: 4320 ns - print
       ID: 202 COMMAND: READ Length: 04
       Addr: 0x0000000000000020 Data: 0xEFFFFFDF
 
-Info: at_target_4_phase.cpp: 4320 ns - b_transport
+Info: lt_target.cpp: 4320 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
 
 Info: lt_initiator.cpp: 4320 ns - initiator_thread
@@ -1477,11 +1477,11 @@ Info: lt_initiator.cpp: 4320 ns - initiator_thread
 Info: lt_initiator.cpp: 4320 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 4320 ns - print
+Info: memory.cpp: 4320 ns - print
       ID: 202 COMMAND: READ Length: 04
       Addr: 0x0000000000000020 Data: 0xEFFFFFDF
 
-Info: at_target_4_phase.cpp: 4320 ns - b_transport
+Info: lt_target.cpp: 4320 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
 
 Info: lt_initiator.cpp: 4320 ns - initiator_thread
@@ -1490,11 +1490,11 @@ Info: lt_initiator.cpp: 4320 ns - initiator_thread
 Info: lt_initiator.cpp: 4380 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 4380 ns - print
+Info: memory.cpp: 4380 ns - print
       ID: 202 COMMAND: READ Length: 04
       Addr: 0x0000000000000024 Data: 0xEFFFFFDB
 
-Info: at_target_4_phase.cpp: 4380 ns - b_transport
+Info: lt_target.cpp: 4380 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
 
 Info: lt_initiator.cpp: 4380 ns - initiator_thread
@@ -1503,11 +1503,11 @@ Info: lt_initiator.cpp: 4380 ns - initiator_thread
 Info: lt_initiator.cpp: 4380 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 4380 ns - print
+Info: memory.cpp: 4380 ns - print
       ID: 202 COMMAND: READ Length: 04
       Addr: 0x0000000000000024 Data: 0xEFFFFFDB
 
-Info: at_target_4_phase.cpp: 4380 ns - b_transport
+Info: lt_target.cpp: 4380 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
 
 Info: lt_initiator.cpp: 4380 ns - initiator_thread
@@ -1516,11 +1516,11 @@ Info: lt_initiator.cpp: 4380 ns - initiator_thread
 Info: lt_initiator.cpp: 4440 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 4440 ns - print
+Info: memory.cpp: 4440 ns - print
       ID: 202 COMMAND: READ Length: 04
       Addr: 0x0000000000000028 Data: 0xEFFFFFD7
 
-Info: at_target_4_phase.cpp: 4440 ns - b_transport
+Info: lt_target.cpp: 4440 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
 
 Info: lt_initiator.cpp: 4440 ns - initiator_thread
@@ -1529,11 +1529,11 @@ Info: lt_initiator.cpp: 4440 ns - initiator_thread
 Info: lt_initiator.cpp: 4440 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 4440 ns - print
+Info: memory.cpp: 4440 ns - print
       ID: 202 COMMAND: READ Length: 04
       Addr: 0x0000000000000028 Data: 0xEFFFFFD7
 
-Info: at_target_4_phase.cpp: 4440 ns - b_transport
+Info: lt_target.cpp: 4440 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
 
 Info: lt_initiator.cpp: 4440 ns - initiator_thread
@@ -1542,11 +1542,11 @@ Info: lt_initiator.cpp: 4440 ns - initiator_thread
 Info: lt_initiator.cpp: 4500 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 4500 ns - print
+Info: memory.cpp: 4500 ns - print
       ID: 202 COMMAND: READ Length: 04
       Addr: 0x000000000000002C Data: 0xEFFFFFD3
 
-Info: at_target_4_phase.cpp: 4500 ns - b_transport
+Info: lt_target.cpp: 4500 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
 
 Info: lt_initiator.cpp: 4500 ns - initiator_thread
@@ -1555,11 +1555,11 @@ Info: lt_initiator.cpp: 4500 ns - initiator_thread
 Info: lt_initiator.cpp: 4500 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 4500 ns - print
+Info: memory.cpp: 4500 ns - print
       ID: 202 COMMAND: READ Length: 04
       Addr: 0x000000000000002C Data: 0xEFFFFFD3
 
-Info: at_target_4_phase.cpp: 4500 ns - b_transport
+Info: lt_target.cpp: 4500 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
 
 Info: lt_initiator.cpp: 4500 ns - initiator_thread
@@ -1568,11 +1568,11 @@ Info: lt_initiator.cpp: 4500 ns - initiator_thread
 Info: lt_initiator.cpp: 4560 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 4560 ns - print
+Info: memory.cpp: 4560 ns - print
       ID: 202 COMMAND: READ Length: 04
       Addr: 0x0000000000000030 Data: 0xEFFFFFCF
 
-Info: at_target_4_phase.cpp: 4560 ns - b_transport
+Info: lt_target.cpp: 4560 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
 
 Info: lt_initiator.cpp: 4560 ns - initiator_thread
@@ -1581,11 +1581,11 @@ Info: lt_initiator.cpp: 4560 ns - initiator_thread
 Info: lt_initiator.cpp: 4560 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 4560 ns - print
+Info: memory.cpp: 4560 ns - print
       ID: 202 COMMAND: READ Length: 04
       Addr: 0x0000000000000030 Data: 0xEFFFFFCF
 
-Info: at_target_4_phase.cpp: 4560 ns - b_transport
+Info: lt_target.cpp: 4560 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
 
 Info: lt_initiator.cpp: 4560 ns - initiator_thread
@@ -1594,11 +1594,11 @@ Info: lt_initiator.cpp: 4560 ns - initiator_thread
 Info: lt_initiator.cpp: 4620 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 4620 ns - print
+Info: memory.cpp: 4620 ns - print
       ID: 202 COMMAND: READ Length: 04
       Addr: 0x0000000000000034 Data: 0xEFFFFFCB
 
-Info: at_target_4_phase.cpp: 4620 ns - b_transport
+Info: lt_target.cpp: 4620 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
 
 Info: lt_initiator.cpp: 4620 ns - initiator_thread
@@ -1607,11 +1607,11 @@ Info: lt_initiator.cpp: 4620 ns - initiator_thread
 Info: lt_initiator.cpp: 4620 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 4620 ns - print
+Info: memory.cpp: 4620 ns - print
       ID: 202 COMMAND: READ Length: 04
       Addr: 0x0000000000000034 Data: 0xEFFFFFCB
 
-Info: at_target_4_phase.cpp: 4620 ns - b_transport
+Info: lt_target.cpp: 4620 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
 
 Info: lt_initiator.cpp: 4620 ns - initiator_thread
@@ -1620,11 +1620,11 @@ Info: lt_initiator.cpp: 4620 ns - initiator_thread
 Info: lt_initiator.cpp: 4680 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 4680 ns - print
+Info: memory.cpp: 4680 ns - print
       ID: 202 COMMAND: READ Length: 04
       Addr: 0x0000000000000038 Data: 0xEFFFFFC7
 
-Info: at_target_4_phase.cpp: 4680 ns - b_transport
+Info: lt_target.cpp: 4680 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
 
 Info: lt_initiator.cpp: 4680 ns - initiator_thread
@@ -1633,11 +1633,11 @@ Info: lt_initiator.cpp: 4680 ns - initiator_thread
 Info: lt_initiator.cpp: 4680 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 4680 ns - print
+Info: memory.cpp: 4680 ns - print
       ID: 202 COMMAND: READ Length: 04
       Addr: 0x0000000000000038 Data: 0xEFFFFFC7
 
-Info: at_target_4_phase.cpp: 4680 ns - b_transport
+Info: lt_target.cpp: 4680 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
 
 Info: lt_initiator.cpp: 4680 ns - initiator_thread
@@ -1646,11 +1646,11 @@ Info: lt_initiator.cpp: 4680 ns - initiator_thread
 Info: lt_initiator.cpp: 4740 ns - initiator_thread
       Initiator: 101 b_transport(GP, 0 s)
 
-Info: report.cpp: 4740 ns - print
+Info: memory.cpp: 4740 ns - print
       ID: 202 COMMAND: READ Length: 04
       Addr: 0x000000000000003C Data: 0xEFFFFFC3
 
-Info: at_target_4_phase.cpp: 4740 ns - b_transport
+Info: lt_target.cpp: 4740 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
 
 Info: lt_initiator.cpp: 4740 ns - initiator_thread
@@ -1659,11 +1659,11 @@ Info: lt_initiator.cpp: 4740 ns - initiator_thread
 Info: lt_initiator.cpp: 4740 ns - initiator_thread
       Initiator: 102 b_transport(GP, 0 s)
 
-Info: report.cpp: 4740 ns - print
+Info: memory.cpp: 4740 ns - print
       ID: 202 COMMAND: READ Length: 04
       Addr: 0x000000000000003C Data: 0xEFFFFFC3
 
-Info: at_target_4_phase.cpp: 4740 ns - b_transport
+Info: lt_target.cpp: 4740 ns - custom_b_transport
       Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
 
 Info: lt_initiator.cpp: 4740 ns - initiator_thread
