@@ -166,7 +166,7 @@ private:
         , m_data(x.get_data_ptr())
         , m_length(x.get_data_length())
         , m_response_status(x.get_response_status())
-        , m_dmi(x.get_dmi_allowed())
+        , m_dmi(x.is_dmi_allowed())
         , m_byte_enable(x.get_byte_enable_ptr())
         , m_byte_enable_length(x.get_byte_enable_length())
         , m_streaming_width(x.get_streaming_width())
@@ -190,7 +190,7 @@ private:
         m_byte_enable =        x.get_byte_enable_ptr();
         m_byte_enable_length = x.get_byte_enable_length();
         m_streaming_width =    x.get_streaming_width();
-        m_dmi =                x.get_dmi_allowed();
+        m_dmi =                x.is_dmi_allowed();
 
         // extension copy: all extension arrays must be of equal size by
         // construction (i.e. it must either be constructed after C++
@@ -212,7 +212,7 @@ public:
         m_response_status =    other.get_response_status();
         m_byte_enable_length = other.get_byte_enable_length();
         m_streaming_width =    other.get_streaming_width();
-        m_dmi =                other.get_dmi_allowed();
+        m_dmi =                other.is_dmi_allowed();
 
         // deep copy data
         // there must be enough space in the target transaction!
@@ -349,7 +349,7 @@ public:
     // This is the "DMI-hint" a slave can set this to true if it
     // wants to indicate that a DMI request would be supported:
     void                 set_dmi_allowed(bool dmi_allowed) { m_dmi = dmi_allowed; }
-    bool                 get_dmi_allowed() const { return m_dmi; }
+    bool                 is_dmi_allowed() const { return m_dmi; }
 
 private:
 

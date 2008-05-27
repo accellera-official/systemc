@@ -203,8 +203,8 @@ public:
     
               logEndTransaction(trans);
 
-              // Acquire DMI pointer if we get the hint:
-              if (trans.get_dmi_allowed())
+              // Acquire DMI pointer if one is available:
+              if (trans.is_dmi_allowed())
               {
                   trans.set_write();
                   dmi_type tmp;

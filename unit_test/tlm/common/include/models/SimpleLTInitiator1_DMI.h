@@ -172,8 +172,8 @@ public:
           wait(t);
           logEndTransaction(trans);
           
-		  // Acquire DMI pointer if we get the hint:
-          if (trans.get_dmi_allowed())
+		  // Acquire DMI pointer on is available:
+          if (trans.is_dmi_allowed())
           {
               dmi_type tmp;
               trans.set_address(addr);  //restore address, in case it was mutated.
