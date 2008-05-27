@@ -186,7 +186,7 @@ public:
 
     //store the callback and create the appropriate boost function
     m_dbg_cb=cb;
-    m_dbg_f=boost::bind<unsigned int>(boost::mem_fn(m_nb_cb), m_mod, _1, _2);
+    m_dbg_f=boost::bind<unsigned int>(boost::mem_fn(m_dbg_cb), m_mod, _1, _2);
   }
 
   //register callback for DMI of fw interface
@@ -213,7 +213,7 @@ public:
 
     //store the callback and create the appropriate boost function
     m_dmi_cb=cb;
-    m_nb_f=boost::bind<bool>(boost::mem_fn(m_nb_cb), m_mod, _1, _2, _3);
+    m_dmi_f=boost::bind<bool>(boost::mem_fn(m_dmi_cb), m_mod, _1, _2, _3);
   }
 
 
