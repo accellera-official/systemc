@@ -35,7 +35,7 @@
 #define __LT_INITIATOR_H__
 
 #include "tlm.h"                                    // TLM headers
-#include "simple_initiator_socket.h"
+#include "tlm_utils/simple_initiator_socket.h"
 /// @todo - use convenience socket - Trivial_....Passthru..??
 
 class lt_initiator                                  // lt_initiator 

@@ -35,8 +35,8 @@
 #define __LT_TD_INITIATOR_H__
 
 #include "tlm.h"      // TLM headers
-#include "tlm_quantumkeeper.h"
-#include "simple_initiator_socket.h"
+#include "tlm_utils/tlm_quantumkeeper.h"
+#include "tlm_utils/simple_initiator_socket.h"
 /// @todo - use convenience socket - Trivial_....Passthru..??
 
 class lt_td_initiator                                  // lt_td_initiator 

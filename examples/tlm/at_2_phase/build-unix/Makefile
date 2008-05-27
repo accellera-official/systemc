@@ -6,12 +6,9 @@ SRCDIR           = ../src
 SRCDIRCOMMON     = ../../common/src
 SRCDIRCOMMONTLM1 = ../../common_tlm_1/src
 
-INCDIR =    -I$(TLM_HOME)/include/tlm \
-            -I$(TLM_HOME)/include/tlm/tlm_h \
-            -I$(TLM_HOME)/include/tlm/tlm_utils \
-            -I$(TLM_HOME)/unit_test/tlm/common/include/models \
-            -I../include \
-            -I../../common/include 
+INCDIR =    -I../include \
+            -I../../common/include \
+            -I$(TLM_HOME)/unit_test/tlm/common/include/models
  
 CFLAGS = $(FLAGS) $(INCDIR)
 

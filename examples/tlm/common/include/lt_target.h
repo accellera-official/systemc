@@ -29,7 +29,7 @@
 
 #include "tlm.h"                                // TLM headers
 #include "memory.h"
-#include "simple_target_socket.h"
+#include "tlm_utils/simple_target_socket.h"
 
 class lt_target                      
 :     public sc_core::sc_module           	/// inherit from SC module base clase
