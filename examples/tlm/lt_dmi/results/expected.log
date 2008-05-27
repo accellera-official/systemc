@@ -1,0 +1,705 @@
+
+Info: lt_dmi_target.cpp: 0 s - toggle_dmi_method
+      Target: 201 invalidate_direct_ptr(0 , 0 );
+
+
+Info: lt_dmi_initiator.cpp: 0 s - invalidate_direct_mem_ptr
+      Initiator: 101 invalidate_direct_mem_ptr (0 , 0
+
+Info: lt_dmi_initiator.cpp: 0 s - invalidate_direct_mem_ptr
+      Initiator: 102 invalidate_direct_mem_ptr (0 , 0
+
+Info: lt_dmi_target.cpp: 0 s - toggle_dmi_method
+      Target: 202 invalidate_direct_ptr(0 , 0 );
+
+
+Info: lt_dmi_initiator.cpp: 0 s - invalidate_direct_mem_ptr
+      Initiator: 101 invalidate_direct_mem_ptr (268435456 , 268435456
+
+Info: lt_dmi_initiator.cpp: 0 s - invalidate_direct_mem_ptr
+      Initiator: 102 invalidate_direct_mem_ptr (268435456 , 268435456
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      Initiator: 101 Starting Traffic
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      Initiator: 102 Starting Traffic
+
+Info: lt_dmi_initiator.cpp: 0 s - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: report.cpp: 0 s - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000000 Data: 0x00000000
+
+Info: lt_dmi_target.cpp: 0 s - custom_b_transport
+      Target: 201 *payload = 0x2038f0
+      Target: 201 returned delay of 0 s + 20 ns + 60 ns = 80 ns
+
+Info: report.cpp: 0 s - print
+      ID: 101 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000000 Data: 0x00000000
+
+Info: lt_dmi_initiator.cpp: 0 s - initiator_thread
+      Initiator: 101 b_transport returned delay = 80 ns
+
+Info: lt_dmi_initiator.cpp: 0 s - print_full
+      gp_ptr = 0x2038f0
+      ID: 101 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000000 Data: 0x00000000
+      RSP STATUS = TLM_OK_RESPONSE STREAMING WIDTH = 0
+      DMI ALLOWED = 0
+      BYTE ENABLE PTR = 
+
+Info: lt_dmi_initiator.cpp: 0 s - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: report.cpp: 0 s - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000000 Data: 0x00000000
+
+Info: lt_dmi_target.cpp: 0 s - custom_b_transport
+      Target: 201 *payload = 0x203a90
+      Target: 201 returned delay of 0 s + 20 ns + 60 ns = 80 ns
+
+Info: report.cpp: 0 s - print
+      ID: 102 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000000 Data: 0x00000000
+
+Info: lt_dmi_initiator.cpp: 0 s - initiator_thread
+      Initiator: 102 b_transport returned delay = 80 ns
+
+Info: lt_dmi_initiator.cpp: 0 s - print_full
+      gp_ptr = 0x203a90
+      ID: 102 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000000 Data: 0x00000000
+      RSP STATUS = TLM_OK_RESPONSE STREAMING WIDTH = 0
+      DMI ALLOWED = 0
+      BYTE ENABLE PTR = 
+
+Info: lt_dmi_initiator.cpp: 80 ns - print_full
+      gp_ptr = 0x203a90
+      ID: 102 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000000 Data: 0x00000000
+      RSP STATUS = TLM_OK_RESPONSE STREAMING WIDTH = 0
+      DMI ALLOWED = 0
+      BYTE ENABLE PTR = 
+
+Info: lt_dmi_initiator.cpp: 80 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: report.cpp: 80 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000004 Data: 0x00000004
+
+Info: lt_dmi_target.cpp: 80 ns - custom_b_transport
+      Target: 201 has set dmi_allowed 
+       Target: 201 returned delay of 0 s + 20 ns + 60 ns = 80 ns
+
+Info: report.cpp: 80 ns - print
+      ID: 102 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000004 Data: 0x00000004
+
+Info: lt_dmi_initiator.cpp: 80 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 80 ns
+
+Info: lt_dmi_initiator.cpp: 80 ns - print_full
+      gp_ptr = 0x203ae0
+      ID: 102 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000004 Data: 0x00000004
+      RSP STATUS = TLM_OK_RESPONSE STREAMING WIDTH = 0
+      DMI ALLOWED = 1
+      BYTE ENABLE PTR = 
+
+Info: lt_dmi_initiator.cpp: 80 ns - print_full
+      gp_ptr = 0x2038f0
+      ID: 101 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000000 Data: 0x00000000
+      RSP STATUS = TLM_OK_RESPONSE STREAMING WIDTH = 0
+      DMI ALLOWED = 0
+      BYTE ENABLE PTR = 
+
+Info: lt_dmi_initiator.cpp: 80 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: report.cpp: 80 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000004 Data: 0x00000004
+
+Info: lt_dmi_target.cpp: 80 ns - custom_b_transport
+      Target: 201 has set dmi_allowed 
+       Target: 201 returned delay of 0 s + 20 ns + 60 ns = 80 ns
+
+Info: report.cpp: 80 ns - print
+      ID: 101 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000004 Data: 0x00000004
+
+Info: lt_dmi_initiator.cpp: 80 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 80 ns
+
+Info: lt_dmi_initiator.cpp: 80 ns - print_full
+      gp_ptr = 0x2039a0
+      ID: 101 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000004 Data: 0x00000004
+      RSP STATUS = TLM_OK_RESPONSE STREAMING WIDTH = 0
+      DMI ALLOWED = 1
+      BYTE ENABLE PTR = 
+
+Info: lt_dmi_initiator.cpp: 160 ns - print_full
+      gp_ptr = 0x203ae0
+      ID: 102 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000004 Data: 0x00000004
+      RSP STATUS = TLM_OK_RESPONSE STREAMING WIDTH = 0
+      DMI ALLOWED = 1
+      BYTE ENABLE PTR = 
+
+Info: lt_dmi_initiator.cpp: 160 ns - initiator_thread
+      Initiator: 102get_direct_mem_ptr(GP, m_dmi_properties);
+
+Info: lt_dmi_initiator.cpp: 160 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: report.cpp: 160 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000008 Data: 0x00000008
+
+Info: lt_dmi_target.cpp: 160 ns - custom_b_transport
+      Target: 201 has set dmi_allowed 
+       Target: 201 returned delay of 0 s + 20 ns + 60 ns = 80 ns
+
+Info: report.cpp: 160 ns - print
+      ID: 102 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000008 Data: 0x00000008
+
+Info: lt_dmi_initiator.cpp: 160 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 80 ns
+
+Info: lt_dmi_initiator.cpp: 160 ns - print_full
+      gp_ptr = 0x203b30
+      ID: 102 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000008 Data: 0x00000008
+      RSP STATUS = TLM_OK_RESPONSE STREAMING WIDTH = 0
+      DMI ALLOWED = 1
+      BYTE ENABLE PTR = 
+
+Info: lt_dmi_initiator.cpp: 160 ns - print_full
+      gp_ptr = 0x2039a0
+      ID: 101 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000004 Data: 0x00000004
+      RSP STATUS = TLM_OK_RESPONSE STREAMING WIDTH = 0
+      DMI ALLOWED = 1
+      BYTE ENABLE PTR = 
+
+Info: lt_dmi_initiator.cpp: 160 ns - initiator_thread
+      Initiator: 101get_direct_mem_ptr(GP, m_dmi_properties);
+
+Info: lt_dmi_initiator.cpp: 160 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: report.cpp: 160 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000008 Data: 0x00000008
+
+Info: lt_dmi_target.cpp: 160 ns - custom_b_transport
+      Target: 201 has set dmi_allowed 
+       Target: 201 returned delay of 0 s + 20 ns + 60 ns = 80 ns
+
+Info: report.cpp: 160 ns - print
+      ID: 101 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000008 Data: 0x00000008
+
+Info: lt_dmi_initiator.cpp: 160 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 80 ns
+
+Info: lt_dmi_initiator.cpp: 160 ns - print_full
+      gp_ptr = 0x2039f0
+      ID: 101 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000008 Data: 0x00000008
+      RSP STATUS = TLM_OK_RESPONSE STREAMING WIDTH = 0
+      DMI ALLOWED = 1
+      BYTE ENABLE PTR = 
+
+Info: lt_dmi_initiator.cpp: 240 ns - print_full
+      gp_ptr = 0x203b30
+      ID: 102 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000008 Data: 0x00000008
+      RSP STATUS = TLM_OK_RESPONSE STREAMING WIDTH = 0
+      DMI ALLOWED = 1
+      BYTE ENABLE PTR = 
+
+Info: lt_dmi_initiator.cpp: 240 ns - initiator_thread
+      Initiator: 102get_direct_mem_ptr(GP, m_dmi_properties);
+
+Info: lt_dmi_initiator.cpp: 240 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: report.cpp: 240 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x000000000000000C Data: 0x0000000C
+
+Info: lt_dmi_target.cpp: 240 ns - custom_b_transport
+      Target: 201 has set dmi_allowed 
+       Target: 201 returned delay of 0 s + 20 ns + 60 ns = 80 ns
+
+Info: report.cpp: 240 ns - print
+      ID: 102 COMMAND: WRITE Length: 04
+      Addr: 0x000000000000000C Data: 0x0000000C
+
+Info: lt_dmi_initiator.cpp: 240 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 80 ns
+
+Info: lt_dmi_initiator.cpp: 240 ns - print_full
+      gp_ptr = 0x203b80
+      ID: 102 COMMAND: WRITE Length: 04
+      Addr: 0x000000000000000C Data: 0x0000000C
+      RSP STATUS = TLM_OK_RESPONSE STREAMING WIDTH = 0
+      DMI ALLOWED = 1
+      BYTE ENABLE PTR = 
+
+Info: lt_dmi_initiator.cpp: 240 ns - print_full
+      gp_ptr = 0x2039f0
+      ID: 101 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000008 Data: 0x00000008
+      RSP STATUS = TLM_OK_RESPONSE STREAMING WIDTH = 0
+      DMI ALLOWED = 1
+      BYTE ENABLE PTR = 
+
+Info: lt_dmi_initiator.cpp: 240 ns - initiator_thread
+      Initiator: 101get_direct_mem_ptr(GP, m_dmi_properties);
+
+Info: lt_dmi_initiator.cpp: 240 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: report.cpp: 240 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x000000000000000C Data: 0x0000000C
+
+Info: lt_dmi_target.cpp: 240 ns - custom_b_transport
+      Target: 201 has set dmi_allowed 
+       Target: 201 returned delay of 0 s + 20 ns + 60 ns = 80 ns
+
+Info: report.cpp: 240 ns - print
+      ID: 101 COMMAND: WRITE Length: 04
+      Addr: 0x000000000000000C Data: 0x0000000C
+
+Info: lt_dmi_initiator.cpp: 240 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 80 ns
+
+Info: lt_dmi_initiator.cpp: 240 ns - print_full
+      gp_ptr = 0x203a40
+      ID: 101 COMMAND: WRITE Length: 04
+      Addr: 0x000000000000000C Data: 0x0000000C
+      RSP STATUS = TLM_OK_RESPONSE STREAMING WIDTH = 0
+      DMI ALLOWED = 1
+      BYTE ENABLE PTR = 
+
+Info: lt_dmi_initiator.cpp: 320 ns - print_full
+      gp_ptr = 0x203b80
+      ID: 102 COMMAND: WRITE Length: 04
+      Addr: 0x000000000000000C Data: 0x0000000C
+      RSP STATUS = TLM_OK_RESPONSE STREAMING WIDTH = 0
+      DMI ALLOWED = 1
+      BYTE ENABLE PTR = 
+
+Info: lt_dmi_initiator.cpp: 320 ns - initiator_thread
+      Initiator: 102get_direct_mem_ptr(GP, m_dmi_properties);
+
+Info: lt_dmi_initiator.cpp: 320 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: report.cpp: 320 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000010 Data: 0x00000010
+
+Info: lt_dmi_target.cpp: 320 ns - custom_b_transport
+      Target: 201 has set dmi_allowed 
+       Target: 201 returned delay of 0 s + 20 ns + 60 ns = 80 ns
+
+Info: report.cpp: 320 ns - print
+      ID: 102 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000010 Data: 0x00000010
+
+Info: lt_dmi_initiator.cpp: 320 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 80 ns
+
+Info: lt_dmi_initiator.cpp: 320 ns - print_full
+      gp_ptr = 0x203a90
+      ID: 102 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000010 Data: 0x00000010
+      RSP STATUS = TLM_OK_RESPONSE STREAMING WIDTH = 0
+      DMI ALLOWED = 1
+      BYTE ENABLE PTR = 
+
+Info: lt_dmi_initiator.cpp: 320 ns - print_full
+      gp_ptr = 0x203a40
+      ID: 101 COMMAND: WRITE Length: 04
+      Addr: 0x000000000000000C Data: 0x0000000C
+      RSP STATUS = TLM_OK_RESPONSE STREAMING WIDTH = 0
+      DMI ALLOWED = 1
+      BYTE ENABLE PTR = 
+
+Info: lt_dmi_initiator.cpp: 320 ns - initiator_thread
+      Initiator: 101get_direct_mem_ptr(GP, m_dmi_properties);
+
+Info: lt_dmi_initiator.cpp: 320 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: report.cpp: 320 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000010 Data: 0x00000010
+
+Info: lt_dmi_target.cpp: 320 ns - custom_b_transport
+      Target: 201 has set dmi_allowed 
+       Target: 201 returned delay of 0 s + 20 ns + 60 ns = 80 ns
+
+Info: report.cpp: 320 ns - print
+      ID: 101 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000010 Data: 0x00000010
+
+Info: lt_dmi_initiator.cpp: 320 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 80 ns
+
+Info: lt_dmi_initiator.cpp: 320 ns - print_full
+      gp_ptr = 0x2038f0
+      ID: 101 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000010 Data: 0x00000010
+      RSP STATUS = TLM_OK_RESPONSE STREAMING WIDTH = 0
+      DMI ALLOWED = 1
+      BYTE ENABLE PTR = 
+
+Info: lt_dmi_target.cpp: 340 ns - toggle_dmi_method
+      Target: 201 invalidate_direct_ptr(0 , 0 );
+
+
+Info: lt_dmi_initiator.cpp: 340 ns - invalidate_direct_mem_ptr
+      Initiator: 101 invalidate_direct_mem_ptr (0 , 0
+
+Info: lt_dmi_initiator.cpp: 340 ns - invalidate_direct_mem_ptr
+      Initiator: 102 invalidate_direct_mem_ptr (0 , 0
+
+Info: lt_dmi_target.cpp: 340 ns - toggle_dmi_method
+      Target: 202 invalidate_direct_ptr(0 , 0 );
+
+
+Info: lt_dmi_initiator.cpp: 340 ns - invalidate_direct_mem_ptr
+      Initiator: 101 invalidate_direct_mem_ptr (268435456 , 268435456
+
+Info: lt_dmi_initiator.cpp: 340 ns - invalidate_direct_mem_ptr
+      Initiator: 102 invalidate_direct_mem_ptr (268435456 , 268435456
+
+Info: lt_dmi_initiator.cpp: 400 ns - print_full
+      gp_ptr = 0x203a90
+      ID: 102 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000010 Data: 0x00000010
+      RSP STATUS = TLM_OK_RESPONSE STREAMING WIDTH = 0
+      DMI ALLOWED = 1
+      BYTE ENABLE PTR = 
+
+Info: lt_dmi_initiator.cpp: 400 ns - initiator_thread
+      Initiator: 102get_direct_mem_ptr(GP, m_dmi_properties);
+
+Info: lt_dmi_initiator.cpp: 400 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: report.cpp: 400 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000014 Data: 0x00000014
+
+Info: lt_dmi_target.cpp: 400 ns - custom_b_transport
+      Target: 201 has set dmi_allowed 
+       Target: 201 returned delay of 0 s + 20 ns + 60 ns = 80 ns
+
+Info: report.cpp: 400 ns - print
+      ID: 102 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000014 Data: 0x00000014
+
+Info: lt_dmi_initiator.cpp: 400 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 80 ns
+
+Info: lt_dmi_initiator.cpp: 400 ns - print_full
+      gp_ptr = 0x203ae0
+      ID: 102 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000014 Data: 0x00000014
+      RSP STATUS = TLM_OK_RESPONSE STREAMING WIDTH = 0
+      DMI ALLOWED = 1
+      BYTE ENABLE PTR = 
+
+Info: lt_dmi_initiator.cpp: 400 ns - print_full
+      gp_ptr = 0x2038f0
+      ID: 101 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000010 Data: 0x00000010
+      RSP STATUS = TLM_OK_RESPONSE STREAMING WIDTH = 0
+      DMI ALLOWED = 1
+      BYTE ENABLE PTR = 
+
+Info: lt_dmi_initiator.cpp: 400 ns - initiator_thread
+      Initiator: 101get_direct_mem_ptr(GP, m_dmi_properties);
+
+Info: lt_dmi_initiator.cpp: 400 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: report.cpp: 400 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000014 Data: 0x00000014
+
+Info: lt_dmi_target.cpp: 400 ns - custom_b_transport
+      Target: 201 has set dmi_allowed 
+       Target: 201 returned delay of 0 s + 20 ns + 60 ns = 80 ns
+
+Info: report.cpp: 400 ns - print
+      ID: 101 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000014 Data: 0x00000014
+
+Info: lt_dmi_initiator.cpp: 400 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 80 ns
+
+Info: lt_dmi_initiator.cpp: 400 ns - print_full
+      gp_ptr = 0x2039a0
+      ID: 101 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000014 Data: 0x00000014
+      RSP STATUS = TLM_OK_RESPONSE STREAMING WIDTH = 0
+      DMI ALLOWED = 1
+      BYTE ENABLE PTR = 
+
+Info: lt_dmi_initiator.cpp: 480 ns - print_full
+      gp_ptr = 0x203ae0
+      ID: 102 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000014 Data: 0x00000014
+      RSP STATUS = TLM_OK_RESPONSE STREAMING WIDTH = 0
+      DMI ALLOWED = 1
+      BYTE ENABLE PTR = 
+
+Info: lt_dmi_initiator.cpp: 480 ns - initiator_thread
+      Initiator: 102get_direct_mem_ptr(GP, m_dmi_properties);
+
+Info: lt_dmi_initiator.cpp: 480 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: report.cpp: 480 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000018 Data: 0x00000018
+
+Info: lt_dmi_target.cpp: 480 ns - custom_b_transport
+      Target: 201 has set dmi_allowed 
+       Target: 201 returned delay of 0 s + 20 ns + 60 ns = 80 ns
+
+Info: report.cpp: 480 ns - print
+      ID: 102 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000018 Data: 0x00000018
+
+Info: lt_dmi_initiator.cpp: 480 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 80 ns
+
+Info: lt_dmi_initiator.cpp: 480 ns - print_full
+      gp_ptr = 0x203b30
+      ID: 102 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000018 Data: 0x00000018
+      RSP STATUS = TLM_OK_RESPONSE STREAMING WIDTH = 0
+      DMI ALLOWED = 1
+      BYTE ENABLE PTR = 
+
+Info: lt_dmi_initiator.cpp: 480 ns - print_full
+      gp_ptr = 0x2039a0
+      ID: 101 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000014 Data: 0x00000014
+      RSP STATUS = TLM_OK_RESPONSE STREAMING WIDTH = 0
+      DMI ALLOWED = 1
+      BYTE ENABLE PTR = 
+
+Info: lt_dmi_initiator.cpp: 480 ns - initiator_thread
+      Initiator: 101get_direct_mem_ptr(GP, m_dmi_properties);
+
+Info: lt_dmi_initiator.cpp: 480 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: report.cpp: 480 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000018 Data: 0x00000018
+
+Info: lt_dmi_target.cpp: 480 ns - custom_b_transport
+      Target: 201 has set dmi_allowed 
+       Target: 201 returned delay of 0 s + 20 ns + 60 ns = 80 ns
+
+Info: report.cpp: 480 ns - print
+      ID: 101 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000018 Data: 0x00000018
+
+Info: lt_dmi_initiator.cpp: 480 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 80 ns
+
+Info: lt_dmi_initiator.cpp: 480 ns - print_full
+      gp_ptr = 0x2039f0
+      ID: 101 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000018 Data: 0x00000018
+      RSP STATUS = TLM_OK_RESPONSE STREAMING WIDTH = 0
+      DMI ALLOWED = 1
+      BYTE ENABLE PTR = 
+
+Info: lt_dmi_initiator.cpp: 560 ns - print_full
+      gp_ptr = 0x203b30
+      ID: 102 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000018 Data: 0x00000018
+      RSP STATUS = TLM_OK_RESPONSE STREAMING WIDTH = 0
+      DMI ALLOWED = 1
+      BYTE ENABLE PTR = 
+
+Info: lt_dmi_initiator.cpp: 560 ns - initiator_thread
+      Initiator: 102get_direct_mem_ptr(GP, m_dmi_properties);
+
+Info: lt_dmi_initiator.cpp: 560 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: report.cpp: 560 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x000000000000001C Data: 0x0000001C
+
+Info: lt_dmi_target.cpp: 560 ns - custom_b_transport
+      Target: 201 has set dmi_allowed 
+       Target: 201 returned delay of 0 s + 20 ns + 60 ns = 80 ns
+
+Info: report.cpp: 560 ns - print
+      ID: 102 COMMAND: WRITE Length: 04
+      Addr: 0x000000000000001C Data: 0x0000001C
+
+Info: lt_dmi_initiator.cpp: 560 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 80 ns
+
+Info: lt_dmi_initiator.cpp: 560 ns - print_full
+      gp_ptr = 0x203b80
+      ID: 102 COMMAND: WRITE Length: 04
+      Addr: 0x000000000000001C Data: 0x0000001C
+      RSP STATUS = TLM_OK_RESPONSE STREAMING WIDTH = 0
+      DMI ALLOWED = 1
+      BYTE ENABLE PTR = 
+
+Info: lt_dmi_initiator.cpp: 560 ns - print_full
+      gp_ptr = 0x2039f0
+      ID: 101 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000018 Data: 0x00000018
+      RSP STATUS = TLM_OK_RESPONSE STREAMING WIDTH = 0
+      DMI ALLOWED = 1
+      BYTE ENABLE PTR = 
+
+Info: lt_dmi_initiator.cpp: 560 ns - initiator_thread
+      Initiator: 101get_direct_mem_ptr(GP, m_dmi_properties);
+
+Info: lt_dmi_initiator.cpp: 560 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: report.cpp: 560 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x000000000000001C Data: 0x0000001C
+
+Info: lt_dmi_target.cpp: 560 ns - custom_b_transport
+      Target: 201 has set dmi_allowed 
+       Target: 201 returned delay of 0 s + 20 ns + 60 ns = 80 ns
+
+Info: report.cpp: 560 ns - print
+      ID: 101 COMMAND: WRITE Length: 04
+      Addr: 0x000000000000001C Data: 0x0000001C
+
+Info: lt_dmi_initiator.cpp: 560 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 80 ns
+
+Info: lt_dmi_initiator.cpp: 560 ns - print_full
+      gp_ptr = 0x203a40
+      ID: 101 COMMAND: WRITE Length: 04
+      Addr: 0x000000000000001C Data: 0x0000001C
+      RSP STATUS = TLM_OK_RESPONSE STREAMING WIDTH = 0
+      DMI ALLOWED = 1
+      BYTE ENABLE PTR = 
+
+Info: lt_dmi_initiator.cpp: 640 ns - print_full
+      gp_ptr = 0x203b80
+      ID: 102 COMMAND: WRITE Length: 04
+      Addr: 0x000000000000001C Data: 0x0000001C
+      RSP STATUS = TLM_OK_RESPONSE STREAMING WIDTH = 0
+      DMI ALLOWED = 1
+      BYTE ENABLE PTR = 
+
+Info: lt_dmi_initiator.cpp: 640 ns - initiator_thread
+      Initiator: 102get_direct_mem_ptr(GP, m_dmi_properties);
+
+Info: lt_dmi_initiator.cpp: 640 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: report.cpp: 640 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000020 Data: 0x00000020
+
+Info: lt_dmi_target.cpp: 640 ns - custom_b_transport
+      Target: 201 has set dmi_allowed 
+       Target: 201 returned delay of 0 s + 20 ns + 60 ns = 80 ns
+
+Info: report.cpp: 640 ns - print
+      ID: 102 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000020 Data: 0x00000020
+
+Info: lt_dmi_initiator.cpp: 640 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 80 ns
+
+Info: lt_dmi_initiator.cpp: 640 ns - print_full
+      gp_ptr = 0x203a90
+      ID: 102 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000020 Data: 0x00000020
+      RSP STATUS = TLM_OK_RESPONSE STREAMING WIDTH = 0
+      DMI ALLOWED = 1
+      BYTE ENABLE PTR = 
+
+Info: lt_dmi_initiator.cpp: 640 ns - print_full
+      gp_ptr = 0x203a40
+      ID: 101 COMMAND: WRITE Length: 04
+      Addr: 0x000000000000001C Data: 0x0000001C
+      RSP STATUS = TLM_OK_RESPONSE STREAMING WIDTH = 0
+      DMI ALLOWED = 1
+      BYTE ENABLE PTR = 
+
+Info: lt_dmi_initiator.cpp: 640 ns - initiator_thread
+      Initiator: 101get_direct_mem_ptr(GP, m_dmi_properties);
+
+Info: lt_dmi_initiator.cpp: 640 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: report.cpp: 640 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000020 Data: 0x00000020
+
+Info: lt_dmi_target.cpp: 640 ns - custom_b_transport
+      Target: 201 has set dmi_allowed 
+       Target: 201 returned delay of 0 s + 20 ns + 60 ns = 80 ns
+
+Info: report.cpp: 640 ns - print
+      ID: 101 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000020 Data: 0x00000020
+
+Info: lt_dmi_initiator.cpp: 640 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 80 ns
+
+Info: lt_dmi_initiator.cpp: 640 ns - print_full
+      gp_ptr = 0x2038f0
+      ID: 101 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000020 Data: 0x00000020
+      RSP STATUS = TLM_OK_RESPONSE STREAMING WIDTH = 0
+      DMI ALLOWED = 1
+      BYTE ENABLE PTR = 
+
+Info: lt_dmi_target.cpp: 680 ns - toggle_dmi_method
+      Target: 201 invalidate_direct_ptr(0 , 0 );
+
+
+Info: lt_dmi_initiator.cpp: 680 ns - invalidate_direct_mem_ptr
+      Initiator: 101 invalidate_direct_mem_ptr (0 , 0
+
+Info: lt_dmi_initiator.cpp: 680 ns - invalidate_direct_mem_ptr
+      Initiator: 102 invalidate_direct_mem_ptr (0 , 0
+
+Info: lt_dmi_target.cpp: 680 ns - toggle_dmi_method
+      Target: 202 invalidate_direct_ptr(0 , 0 );
+
+
+Info: lt_dmi_initiator.cpp: 680 ns - invalidate_direct_mem_ptr
+      Initiator: 101 invalidate_direct_mem_ptr (268435456 , 268435456
+
+Info: lt_dmi_initiator.cpp: 680 ns - invalidate_direct_mem_ptr
+      Initiator: 102 invalidate_direct_mem_ptr (268435456 , 268435456
+SystemC: simulation stopped by user.
