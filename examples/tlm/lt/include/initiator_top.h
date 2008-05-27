@@ -1,4 +1,4 @@
-/**********************************************************************
+/*******************************************************************************
     The following code is derived, directly or indirectly, from the SystemC
     source code Copyright (c) 1996-2008 by all Contributors.
     All Rights reserved.
@@ -11,38 +11,36 @@
     under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
     ANY KIND, either express or implied. See the License for the specific
     language governing rights and limitations under the License.
- *********************************************************************/
+ ******************************************************************************/
 
-//=====================================================================
+//==============================================================================
 /// @file initiator_top.h
 //
-/// @brief Initiator top module contains a traffic generator and an 
-///        example initiator module unique for the example
+/// @brief Top for Initiator and traffic generator combination
 //
-//=====================================================================
+//==============================================================================
+//
 //  Original Authors:
-//    Bill Bunton, ESLX
-//    Charles Wilson, ESLX
 //    Jack Donovan, ESLX
-//=====================================================================
+//    Charles Wilson, ESLX
+//
+//==============================================================================
 
 #ifndef __INITIATOR_TOP_H__
 #define __INITIATOR_TOP_H__
 
-#include "tlm.h"                                    // TLM headers
-//#include "simple_initiator_socket.h"
-#include "lt_initiator.h"                   // AT initiator
-#include "traffic_generator.h"                      // traffic generator
+#include "tlm.h"                                // TLM headers
+#include "lt_initiator.h"                       // LT/blocking initiator
+#include "traffic_generator.h"                  // traffic generator
 
 class initiator_top                          		       
   : public sc_core::sc_module    
-  , virtual public tlm::tlm_bw_transport_if<>  // backward non-blocking interface
+  , virtual public tlm::tlm_bw_transport_if<>  // inherit from TLM 2.0 interface
 {
-//Member Methods  =====================================================  
 
-  public:
-	  
-//=====================================================================
+public:
+//Member Methods  ==============================================================  	  
+//==============================================================================
 ///  @fn initiator_top::initiator_top
 //	    
 ///  @brief initiator_top constructor
@@ -51,7 +49,7 @@ class initiator_top
 ///    Initiator top module contains a traffic generator and an example 
 ///    unique initiator module
 //
-//===================================================================== 
+//============================================================================== 
   initiator_top 	                                   
   ( sc_core::sc_module_name name                 ///< module name
   , const unsigned int  ID                       ///< initiator ID
@@ -59,6 +57,7 @@ class initiator_top
   , sc_dt::uint64       base_address_2           ///< second base address
   );
 
+/// Required and unused virtual methods required for hierarchical connectivity
   void                                                                                          
   invalidate_direct_mem_ptr                                      
   ( sc_dt::uint64      start_range                        
@@ -72,20 +71,9 @@ class initiator_top
   , sc_core::sc_time          &delta
   );
   
-private: 
-
-
-//Member Variables/Objects  ===========================================
-
 public:
   
-//  tlm_utils::simple_initiator_socket<initiator_top> top_initiator_socket;
-//  typedef tlm::tlm_fw_transport_if<>      fw_interface_type;
-//  typedef tlm::tlm_bw_transport_if<>      bw_interface_type;
-//  typedef tlm::tlm_initiator_socket<32,
-//                                    fw_interface_type,
-//                                    bw_interface_type> initiator_socket_type;
-//  initiator_socket_type top_initiator_socket;
+//Member Variables/Objects  ====================================================
   
   tlm::tlm_initiator_socket< > top_initiator_socket;
 

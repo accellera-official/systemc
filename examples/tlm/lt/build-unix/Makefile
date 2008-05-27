@@ -19,7 +19,7 @@ OBJS = $(OBJ_NAME).o \
         $(OBJ_NAME)_top.o \
         lt_initiator.o \
         at_target_1_phase.o \
-        at_target_4_phase.o \
+        lt_target.o \
         initiator_top.o \
         memory.o \
         report.o \
@@ -57,7 +57,7 @@ initiator_top.o: $(SRCDIR)/initiator_top.cpp
 at_target_1_phase.o: $(SRCDIRCOMMON)/at_target_1_phase.cpp
 	$(GXX) $(CFLAGS) -c $< -o $@
 
-at_target_4_phase.o: $(SRCDIRCOMMON)/at_target_4_phase.cpp
+lt_target.o: $(SRCDIRCOMMON)/lt_target.cpp
 	$(GXX) $(CFLAGS) -c $< -o $@
 
 lt_initiator.o: $(SRCDIRCOMMON)/lt_initiator.cpp

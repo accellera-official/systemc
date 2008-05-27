@@ -13,16 +13,14 @@
   language governing rights and limitations under the License.
  ******************************************************************************/
 
-
-
 #include "lt_top.h"                     // top module
 #include "tlm.h"                        // TLM header
-#define REPORT_DEFINE_GLOBALS
+#define REPORT_DEFINE_GLOBALS           // reporting overhead
 #include "reporting.h"
 //==============================================================================
 ///  @fn sc_main
 //  
-///  @brief sc_main for lt example
+///  @brief sc_main for lt with dmi example
 //  
 ///  @details
 ///    This is the SystemC entry point for an example system.  The argc and argv 
@@ -33,9 +31,9 @@
 //==============================================================================
 //
 //  Original Authors:
-//    Anna Keist, ESLX
-//    Charles Wilson, ESLX
 //    Jack Donovan, ESLX
+//    Charles Wilson, ESLX
+//    Anna Keist, ESLX
 //
 //==============================================================================
 int                                     // return status
