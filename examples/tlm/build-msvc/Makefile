@@ -8,7 +8,9 @@ SUBDIRS = \
           ../at_mixed_targets \
           ../at_extension_optional \
           ../at_extension_mandatory \
-          ../lt
+          ../lt \
+          ../lt_dmi \
+          ../lt_temporal_decouple
           
 #.PHONY: all clean run check
 
