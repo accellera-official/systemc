@@ -22,14 +22,15 @@ Comments
 
 Running the tests:
 ------------------
-Support for building the examples and unit tests is provided for 'unix', 'msvc'
-(project and make files) and 'cygwin'.
+Support for building the examples and unit tests is provided for 'unix', and
+'msvc' (project and make files).
 
-Makefiles work hierarchically. Other targets are: 
-   The default target builds the tests; 
+Makefiles work hierarchically. The default target builds the tests; 
+Other targets are:
    'clean', 
    'run'  (executes built tests/examples) 
    'check' (against expected results)
+
 To run the makefiles the following environment needs to be set:
    On Unix/Linux/MacOS, 
       $TLM_HOME should be set to this kit's location
@@ -38,6 +39,9 @@ To run the makefiles the following environment needs to be set:
       these should be set such that $SYSTEMC_HOME/lib-$TARGET_ARCH is a 
       directory containing the systemc library.  
    On Windows, the SYSTEMC and TLM environments variables should be used.
+   
+   The multi_sockets test is dependent on the boos library, you will need to 
+   have an environment variable 'BOOST_HOME' set to build the test
 
 
 The tests:

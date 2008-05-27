@@ -1,7 +1,7 @@
 
 
 ========================================================
-Release Notes for the TLM 2.0 Kit Of 15 May 2008
+Release Notes for the TLM 2.0 Kit Of 9 June 2008
 ========================================================
 
 CONTENTS
@@ -10,7 +10,6 @@ CONTENTS
   1) Supported SystemC versions
   2) What's changed in this kit?
   3) Known issues
-
 
 1) Supported SystemC versions
 =============================
@@ -37,19 +36,18 @@ following primary ways:
   - support for ignorable phase extentions
   - added exmaple for instance based extentions
   - provided with endianness (conversion) helper functions
-  - now using char * for byte-enable array
- To be added:
-[  - Documentation (training presentation and users manual)
-[  	- updated for the changes above
-[	- additional semantical clarifications
-[	- well-defined transaction ordering rules
-[  - Examples have been improved
+  - now using char * for byte-enable array 
+  - Documentation (training presentation and users manual)
+  	- updated for the changes above
+	- additional semantical clarifications
+	- well-defined transaction ordering rules
+  - Examples have been updated for the changes in the standard
 
 3) Known issues
 ===============
 
--documentation is not yet added
--examples are not fully ready
+-when using TLM 2.0 with SystemC v2.2.1 on 64 bit linux you will need to 
+ force 32 bit mode by using the '-m32' flag
 
 
 

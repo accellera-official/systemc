@@ -86,12 +86,14 @@ Files:
       			     mechanism )
       tlm_endian_conv.h     (defines the implementation for the endianness 
       			     helper functions:
-			    		to_hostendian_generic()
-					from_hostendian_generic()
-					to_hostendian_aligned()
-					from_hostendian_aligned()
-					to_hostendian_single()
-					from_hostendian_single()  )
+			    		tlm_to_hostendian_generic()
+					tlm_from_hostendian_generic()
+					tlm_to_hostendian_word()
+					tlm_from_hostendian_word()
+					tlm_to_hostendian_aligned()
+					tlm_from_hostendian_aligned()
+					tlm_to_hostendian_single()
+					tlm_from_hostendian_single()  )
 					  
       tlm_helpers.h         (defines the helper functions to determine the
       			     hostendianness:

@@ -16,14 +16,13 @@ OSCI internal review only
 2. This release has been well tested on the following platforms:
     o Linux (Redhat Enterprise 4) with GNU C++ compiler versions gcc-3.4.4,
       gcc-4.2.0
-    To be completed:
-    [o Linux (Fedora 6) with GNU C++ compiler version 4.1.2]
-    [o Linux (SuSE SLES9SP3) with GNU C++ compiler versions gcc-3.4.4, gcc-4.2.0]
-    [o MacOSX with GNU C++ compiler versions gcc-3.1, gcc-3.4.2, and gcc-4.0]
-    [o SunOS 5.9, with Sun Forte compiler 8.0, 10.0 and 11.0]
-    [o SunOS 5.9, with GNU C++ compiler versions gcc-3.3.2]
-    [o Windows XP (SP2) with VC++ 7.0 and 8.0]
-    
+    o Windows XP (SP2) with VC++ 2005 SP1 and VC++ 2008
+    o Linux (Fedora 8) with GNU C++ compiler version 4.1.2
+    o SunOS 5.9, with Sun Forte compiler 10.0
+    o SunOS 5.9, with GNU C++ compiler versions gcc-3.3.2
+    o MacOSX with GNU C++ compiler versions gcc-3.1, gcc-3.4.2, and gcc-4.0
+    o Linux (SuSE SLES9SP3) with GNU C++ compiler versions gcc-3.4.4, gcc-4.2.0
+
 
 -------------------------------------------------------------------------------
 
@@ -60,8 +59,8 @@ Directory Structure
 
 Build Support
  
-   Support for building the examples and unit tests is provided for 'unix', 
-   'msvc' (project and make files) and 'cygwin'.
+   Support for building the examples and unit tests is provided for 'unix', and
+   'msvc' (project and make files).
 
    Makefiles work hierarchically.  Build is the default target; 'clean', 
    'run' (executes built tests/examples) and 'check' (against expected 
@@ -73,7 +72,9 @@ Build Support
 
 Examples
 
-   [to be added]
+   There is a set of examples available under the examples/ directory, they
+   illustrate the key features of the TLM 2.0 standard. For more information see
+   the README.txt. 
 
 Unit Tests
 

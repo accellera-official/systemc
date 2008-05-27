@@ -15,7 +15,7 @@ Files: README.txt
        simple_initiator_socket.h
        simple_target_socket.h
        peq_with_cb_and_phase.h
-       trivial_target_socket.h
+       passthrough_target_socket.h
        tlm_quantumkeeper.h
 
 
@@ -44,7 +44,7 @@ Files:
      (blocking or non-blocking) and implements a conversion in case the
      socket is used on the other interface
          
-  trivial_target_socket.h
+  passthrough_target_socket.h
      version of a target socket that has a default implementation of all
      interfaces and allows to register an implementation for any of the
      interfaces to the socket.
