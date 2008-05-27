@@ -176,18 +176,20 @@ namespace report
   void print
   ( const int                 &ID              ///< Target ID/Initiator/?ID
   , tlm::tlm_generic_payload  &trans           ///< transaction to be printed
+  , const char*               calling_filename= "print.cpp"
   );
   
   void print_full
   ( const int                 &ID              ///< Target ID/Initiator/?ID
-  , const char*               filename
   , tlm::tlm_generic_payload  &trans           ///< transaction to be printed
+  , const char*               filename = "print.cpp"
   );
   
   void  
   print
   ( const int                 &ID              ///< Target ID/Initiator/?ID
   , tlm::tlm_dmi              &dmi_parameters     ///< dmi transaction to be printed
+  , const char*               calling_filename = "print.cpp"
   );    
 }
 

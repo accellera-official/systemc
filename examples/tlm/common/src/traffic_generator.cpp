@@ -72,7 +72,7 @@ traffic_generator::traffic_generator            // @todo keep me, lose other con
 , m_base_address_1    ( base_address_1    )     /// first base address
 , m_base_address_2    ( base_address_2    )     /// second base address
 , m_active_txn_count  ( active_txn_count  )     /// Max number of active transactions 
-, m_check_all         ( false             )
+, m_check_all         ( true              )
 { 
   SC_THREAD(traffic_generator_thread);
 }

@@ -1,4 +1,4 @@
-/**********************************************************************
+/*******************************************************************************
   The following code is derived, directly or indirectly, from the SystemC
   source code Copyright (c) 1996-2008 by all Contributors.
   All Rights reserved.
@@ -11,18 +11,18 @@
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
- *********************************************************************/
-//=====================================================================
+*******************************************************************************/
+//==============================================================================
 ///  @file memory.h
 //
-///  @brief Single Phase AT initiator
+///  @brief Object for isolationg memory operations from TLM "shell"
 //
-///  @Details
+//==============================================================================
 //
-//=====================================================================
 //  Original Authors:
 //    Jack Donovan, ESLX
-//=====================================================================
+//
+//==============================================================================
 
 #ifndef __MEMORY_H__
 #define __MEMORY_H__
@@ -36,13 +36,14 @@ class memory
   public:
     
 //=====================================================================
-/// @fn memory
-///
-///  @brief Constructor
-///
+/// @fn memory.h
+//
+///  @brief memory Constructor
+//
 ///  @details
-///		Initialized member variables and the initiator socket    
-///
+//       Initialize member variables, include allocating and initializing 
+//       the actual memory
+//
 //=====================================================================
   memory              
   (
@@ -54,7 +55,7 @@ class memory
   );
 
  //====================================================================
- /// @fn Operation
+ /// @fn operation
  ///
  ///  @brief Performs the Memory Operation specified in the GP
  ///
@@ -71,7 +72,7 @@ class memory
     );    
    
  //====================================================================
- /// @fn Get_delay
+ /// @fn get_delay
  ///
  ///  @brief Looks at GP and returns delay without doing GP Operation
  ///

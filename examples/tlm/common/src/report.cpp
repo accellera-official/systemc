@@ -25,7 +25,7 @@
 
 #include "reporting.h"                                // Reporting convenience macros
 
-static const char *filename = "report.cpp"; ///< filename for reporting
+//static const char *filename = "report.cpp"; ///< filename for reporting
 
 namespace report {
 std::string print(const tlm::tlm_phase phase) 
@@ -105,6 +105,7 @@ void
 print
 ( const int                 &ID              ///< Target ID/Initiator/?ID
 , tlm::tlm_generic_payload  &gp          ///< transaction to be printed
+, const char*               calling_filename
 )
 {
    std::ostringstream     msg;
@@ -142,7 +143,7 @@ print
         << uppercase << hex << (int)print_data[0];
 
 
-   REPORT_INFO(filename, __FUNCTION__, msg.str());
+   REPORT_INFO(calling_filename, __FUNCTION__, msg.str());
 }
 //=====================================================================
 //  
@@ -152,8 +153,8 @@ print
 void
 print_full
 ( const int                 &ID              ///< Target ID/Initiator/?ID
-, const char*               caller_filename
 , tlm::tlm_generic_payload  &gp          ///< transaction to be printed
+, const char*               caller_filename
 )
 {
    std::ostringstream     msg;
@@ -193,8 +194,8 @@ print_full
         << endl << "      "
         << "DMI ALLOWED = " << gp.get_dmi_allowed()
         << endl << "      "
-        << "BYTE ENABLE PTR = " << gp.get_byte_enable_ptr()
-        << " BYTE ENABLE LNGTH = " << gp.get_byte_enable_length();
+ //       << "BYTE ENABLE PTR = " << gp.get_byte_enable_ptr()
+        << "BYTE ENABLE LNGTH = " << gp.get_byte_enable_length();
 
 
    REPORT_INFO(caller_filename, __FUNCTION__, msg.str());
@@ -203,13 +204,29 @@ print_full
 void  
 print
 ( const int                 &ID              ///< Target ID/Initiator/?ID
-, tlm::tlm_dmi              &dmi_parameters     ///< dmi transaction to be printed
+, tlm::tlm_dmi              &dmi_properties     ///< dmi transaction to be printed
+, const char*               calling_filename
 )       
-{     
+{  
    std::ostringstream     msg;
    msg.str("");
-   msg << "Printing of the DMI Parameters is not yet implemented";
-   REPORT_INFO(filename, __FUNCTION__, msg.str());
+   msg << "Initiator: " << ID 
+       << " &dmi_properties = " << &dmi_properties 
+       << endl << "      ";
+   msg << "start addr = " << dmi_properties.get_start_address()
+       << " end addr = " << dmi_properties.get_end_address() 
+       << endl << "      ";
+   msg << "read latency = " << dmi_properties.get_read_latency()
+       << " write latency = " << dmi_properties.get_write_latency() 
+       << endl << "      ";
+   msg << "granted access = " << dmi_properties.get_granted_access()
+       << endl << "      ";
+   
+//   unsigned char*    temp_dmi_ptr = dmi_properties.get_dmi_ptr();
+//   msg << "dmi_ptr = " << temp_dmi_ptr; 
+   
+   REPORT_INFO(calling_filename, __FUNCTION__, msg.str());
+   
 }     
     
 }//end namespace

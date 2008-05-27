@@ -1,4 +1,4 @@
-/**********************************************************************
+/*******************************************************************************
   The following code is derived, directly or indirectly, from the SystemC
   source code Copyright (c) 1996-2008 by all Contributors.
   All Rights reserved.
@@ -11,20 +11,23 @@
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
- *********************************************************************/
-//=====================================================================
+*******************************************************************************/
+//==============================================================================
 ///  @file dmi_memory.cpp
 //
-///  @Details
-///  
+///  @details
+///     Isolates the dmi based memory functions from the rest of the
+///     TLM initiator "shell"
 //
-//=====================================================================
+//==============================================================================
+//
 //  Original Authors:
 //    Jack Donovan, ESLX
-//=====================================================================
+//
+//==============================================================================
 
-#include "reporting.h"                      // Reporting convenience macros
-#include "dmi_memory.h"                         // Our header
+#include "reporting.h"                          // Reporting convenience macros
+#include "dmi_memory.h"                         // Header for this class
 
 using namespace sc_core;
 
@@ -34,7 +37,7 @@ static const char *filename = "dmi_memory.cpp"; ///< filename for reporting
 
 dmi_memory::dmi_memory    
 (
-  const unsigned int ID                  // Target ID
+  const unsigned int ID                         // Target ID
 )
 : m_ID                 (ID)   
 { 
@@ -42,19 +45,19 @@ dmi_memory::dmi_memory
 } // end Constructor
 
 //=====================================================================
-///  @fn memory::memory_operation
+///  @fn dmi_memory::operation
 //  
-///  @brief helper function for read and write processing
+///  @brief DMI read and write processing
 // 
 ///  @details
-///    This routine implements the read and  write operations
+///    This routine implements dmi based read and  write operations
 //   
 //=====================================================================
 void 
 dmi_memory::operation     
 ( 
-    tlm::tlm_generic_payload  &gp     
-  , sc_core::sc_time          &delay_time   ///< transaction delay 
+  tlm::tlm_generic_payload  &gp     
+, sc_core::sc_time          &delay   ///< transaction delay 
 )    
 {
   std::ostringstream  msg;   
@@ -65,8 +68,9 @@ dmi_memory::operation
   m_length    = gp.get_data_length(); ///< data length
   m_command   = gp.get_command();
   bool m_is_dmi_flag = false;
+  gp.set_response_status(tlm::TLM_GENERIC_ERROR_RESPONSE);
    
-  
+  /// if the addess has a dmi pointer available then collect info
   if (address_is_dmi(gp))
     {
       m_dmi_ptr           = m_dmi_properties.get_dmi_ptr();
@@ -78,7 +82,6 @@ dmi_memory::operation
                           - m_dmi_properties.get_start_address();
       m_is_dmi_flag       =  true;
      }
- 
   
   if(!m_is_dmi_flag) 
   {
@@ -88,7 +91,6 @@ dmi_memory::operation
         << "Use check_status before passing a gp to operation";
     REPORT_FATAL(filename, __FUNCTION__, msg.str());
   }
- 
  
     
   switch (m_command)
@@ -101,7 +103,8 @@ dmi_memory::operation
         }
           
       // update time
-      wait(m_dmi_write_latency);
+      delay = delay + m_dmi_write_latency;  
+      report::print(m_ID, gp, filename);
         
       break;     
     }
@@ -113,12 +116,13 @@ dmi_memory::operation
           
       for (unsigned int i = 0; i < m_length; i++)
         {   
-        // Need a print message
+        
         m_data[i] = m_dmi_ptr [m_offset + i];
         }  
           
       // update time
-      wait (m_dmi_read_latency);
+      delay = delay +  m_dmi_read_latency; 
+      report::print(m_ID, gp, filename);
     
       break;
     }
@@ -132,8 +136,11 @@ dmi_memory::operation
     }
      
     }//end switch
-
   
+  gp.set_response_status(tlm::TLM_OK_RESPONSE);
+  return;
+
+//==============================================================================
 } // end memory_operation
  void
 dmi_memory::invalidate_dmi_ptr
@@ -141,19 +148,44 @@ dmi_memory::invalidate_dmi_ptr
 , sc_dt::uint64     end_range
 )
 {
-  m_dmi_properties.set_start_address(1);
-  m_dmi_properties.set_end_address(0);
+  std::ostringstream  msg;   
+  msg.str("");
+  if (( start_range <= m_dmi_properties.get_end_address())
+      &&
+      ( end_range >= m_dmi_properties.get_start_address())
+     )
+    {
+      msg << "Initiator:" << m_ID
+          << " DMI Pointer Invalidated  for (" 
+          << start_range << " , " << end_range << ")";
+     
+      m_dmi_properties.set_start_address(1);
+      m_dmi_properties.set_end_address(0);
+    }
+  else
+    { 
+      msg << "Initiator:" << m_ID
+          << " DMI Pointer Not Invalidated  for (" 
+          << start_range << " , " << end_range << ")";
+    }
+    
+  REPORT_INFO(filename, __FUNCTION__, msg.str()); 
+  return;
 }
  
+//==============================================================================
 void
 dmi_memory::load_dmi_ptr
-( tlm::tlm_dmi &dmi_properties
+( 
+  tlm::tlm_dmi &dmi_properties
 )
 { 
-  report::print(m_ID,m_dmi_properties);
+  report::print(m_ID,dmi_properties,filename);
   m_dmi_properties = dmi_properties;
+  return;
 }
- 
+
+//==============================================================================
 bool
 dmi_memory::address_is_dmi
 (
@@ -165,26 +197,36 @@ dmi_memory::address_is_dmi
   
   std::ostringstream  msg;   
   msg.str("");
+  msg << "Initiator:" << m_ID;
   bool                return_status = true;
-  
+ 
+  /// Check if the address is within the dmi address boundaries
   if(!( (m_start_address >= m_dmi_properties.get_start_address()) &&
         (m_end_address   <= m_dmi_properties.get_end_address())        ))
     {  
-      // print debug message?
       return_status = false;
     }
   
-  if( ((gp.get_command()==tlm::TLM_WRITE_COMMAND) && 
-       m_dmi_properties.is_read_allowed()              ) 
+  /// Check if we have been given permission to operate the way we want using
+  /// the dmi pointer
+  if( tlm::tlm_dmi::DMI_ACCESS_NONE == m_dmi_properties.get_granted_access()
       ||
-      (gp.get_command()!=tlm::TLM_READ_COMMAND &&
-       gp.get_command()!=tlm::TLM_WRITE_COMMAND   )
-    )
+      (gp.get_command()==tlm::TLM_WRITE_COMMAND && 
+       tlm::tlm_dmi::DMI_ACCESS_READ == m_dmi_properties.get_granted_access())
+      ||
+      (gp.get_command()==tlm::TLM_READ_COMMAND &&
+       tlm::tlm_dmi::DMI_ACCESS_WRITE == m_dmi_properties.get_granted_access())
+     )
     {
-      //print debug message?
+      msg << " Incompatible Command " << endl << "      ";
       return_status = false;
     } //end if
-
+  if (return_status)
+    {
+      msg << " gp with address " << &gp << " has an address for dmi ";
+      REPORT_INFO(filename, __FUNCTION__, msg.str()); 
+    }
+  
   return return_status;
 } // end check is dmi
 

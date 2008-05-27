@@ -1,4 +1,4 @@
-/**********************************************************************
+/*******************************************************************************
   The following code is derived, directly or indirectly, from the SystemC
   source code Copyright (c) 1996-2008 by all Contributors.
   All Rights reserved.
@@ -11,18 +11,18 @@
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
- *********************************************************************/
-//=====================================================================
+*******************************************************************************/
+//==============================================================================
 ///  @file dmi_memory.h
 //
 ///  @brief performs dmi "housekeeping" and actual reads and writes
 //
-///  @Details
+//==============================================================================
 //
-//=====================================================================
 //  Original Authors:
 //    Jack Donovan, ESLX
-//=====================================================================
+//
+//==============================================================================
 
 #ifndef __DMI_MEMORY_H__
 #define __DMI_MEMORY_H__
@@ -31,28 +31,25 @@
 
 class dmi_memory                          
 {
-// Member Methods  ====================================================
+// Member Methods  =============================================================
   
-  public:
+public:
     
-//=====================================================================
-/// @fn memory
-///
+//==============================================================================
+/// @fn dmi_memory.h
+//
 ///  @brief Constructor
-///
-///  @details
-///		Initialized member variables and the initiator socket    
-///
-//=====================================================================
+//
+//==============================================================================
   dmi_memory              
   (
     const unsigned int ID                 ///< initiator ID for messaging
   );
 
- //====================================================================
- /// @fn Operation
+ //=============================================================================
+ /// @fn operation
  ///
- ///  @brief Performs the Memory Operation specified in the GP
+ ///  @brief Performs the DMI based Memory Operation specified in the GP
  ///
  ///  @details
  ///    Performs the operation specified by the GP
@@ -61,41 +58,43 @@ class dmi_memory
  ///
  ///===================================================================
   void  
-  operation(
-      tlm::tlm_generic_payload  &gp           ///< TLM2 GP reference 
-    , sc_core::sc_time          &delay_time   ///< transaction delay 
-    );    
+  operation
+  (
+    tlm::tlm_generic_payload  &gp           ///< TLM2 GP reference 
+  , sc_core::sc_time          &delay_time   ///< transaction delay 
+  );    
    
- //====================================================================
- /// @fn Get_delay
- ///
- ///  @brief Looks at GP and returns delay without doing GP Operation
- ///
- ///  @details
- ///    Performs the operation specified by the GP
- ///    Returns after updating the status of the GP (if required)
- ///    and updating the time based upon initialization parameters
- ///
- ///===================================================================
-  void 
-  get_delay(
-      tlm::tlm_generic_payload  &gp           ///< TLM2 GP reference
-    , sc_core::sc_time          &delay_time   ///< time to be updated
-    );
-  
+ //=============================================================================
+ /// @fn load_dmi_ptr
+ //
+ ///  @brief Configures the internal data structures with the DMI object
+ //
+ ///============================================================================ 
   void
-  load_dmi_ptr(
-      tlm::tlm_dmi &dmi_payload
-    );
+  load_dmi_ptr
+  (
+    tlm::tlm_dmi &dmi_parameters
+  );
   
+  //============================================================================
+  /// @fn invalidate_dmi_ptr
+  //
+  ///  @brief Invalidates a dmi pointer associated with an address range
+  //
+  ///===========================================================================   
   void
-  invalidate_dmi_ptr(
-      sc_dt::uint64     start_range
-    , sc_dt::uint64     end_range
-      );
+  invalidate_dmi_ptr
+  (
+    sc_dt::uint64     start_range
+  , sc_dt::uint64     end_range
+  );
  
-/// Check the address to see if it is the range enabled for dmi
-	  
+  //============================================================================
+  /// @fn invalidate_dmi_ptr
+  //
+  ///  @brief Checks the address in the gp to see if in range of a dmi pointer
+  //
+  ///===========================================================================   	  
   bool 
   address_is_dmi
   (

@@ -1,4 +1,4 @@
-/**********************************************************************
+/*******************************************************************************
   The following code is derived, directly or indirectly, from the SystemC
   source code Copyright (c) 1996-2008 by all Contributors.
   All Rights reserved.
@@ -11,20 +11,25 @@
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
- *********************************************************************/
-//=====================================================================
+ ******************************************************************************/
+//=============================================================================
 ///  @file memory.cpp
 //
-///  @Details
-///  
+///  @brief Implement memory functionality
 //
-//=====================================================================
+///  @details
+///     This class implements the memory functionality (read, write, etc.)
+///     and is used by all of the targets in the examples
+//
+//==============================================================================
+//
 //  Original Authors:
 //    Jack Donovan, ESLX
-//=====================================================================
+//
+//==============================================================================
 
 #include "reporting.h"                      // Reporting convenience macros
-#include "memory.h"                         // Our header
+#include "memory.h"                         // Header for this class
 
 using namespace sc_core;
 
@@ -55,20 +60,20 @@ memory::memory
 
 } // end Constructor
 
-//=====================================================================
-///  @fn memory::memory_operation
+//==============================================================================
+///  @fn memory::operation
 //  
-///  @brief helper function for read and write processing
+///  @brief performs read and write
 // 
 ///  @details
-///    This routine implements the read and  write operations
+///    This routine implements the read and  write operations. including 
+///    checking for byte_enable and streaming that are not implemented
 //   
-//=====================================================================
+//==============================================================================
 void 
 memory::operation     
-( 
-    tlm::tlm_generic_payload  &gp     
-  , sc_core::sc_time          &delay_time   ///< transaction delay 
+( tlm::tlm_generic_payload  &gp     
+, sc_core::sc_time          &delay_time   ///< transaction delay 
 )    
 {
   /// Access the required attributes from the payload
@@ -80,28 +85,27 @@ memory::operation
   std::ostringstream  msg;   
   msg.str("");
   tlm::tlm_response_status response_status = check_address(gp);
-  ///@todo we probably need to not proces command and do the "correct thing"
-  /// immediately
-//    if (gp.get_byte_enable_ptr()){
-//    gp.set_response_status(tlm::TLM_BYTE_ENABLE_ERROR_RESPONSE);
-//  }
-//  else if (gp.get_streaming_width()) {
-//    gp.set_response_status(tlm::TLM_BURST_ERROR_RESPONSE);
-//  }
+  
+  if (gp.get_byte_enable_ptr())
+  {
+    gp.set_response_status(tlm::TLM_BYTE_ENABLE_ERROR_RESPONSE);
+  }
+  else if (gp.get_streaming_width()) 
+  {
+    gp.set_response_status(tlm::TLM_BURST_ERROR_RESPONSE);
+  }
+    
   switch (command)
   {
     default:
     {
-      // ONe time warning message
-      ///@todo Warning for example but should refer to ignorable extension
-      ///@todo change to Info
-      ///@todo choose appropriate response status TLM_COMMAND_ERROR ????
-      ///@todo what delay?
       if (m_previous_warning == false)
       {
         msg << "Target: " << m_ID 
-            << " Invalid GP command";
-        REPORT_WARNING(filename, __FUNCTION__, msg.str());
+            << " Unsupported Command Extension";
+        REPORT_INFO(filename, __FUNCTION__, msg.str());
+        gp.set_response_status(tlm::TLM_COMMAND_ERROR_RESPONSE);
+        delay_time = sc_core::SC_ZERO_TIME;
         m_previous_warning = true;
       }
       break;
@@ -119,7 +123,7 @@ memory::operation
             m_memory[address++] = data[i];     // move the data to memory
           }
           delay_time = delay_time + m_write_delay;
-          report::print(m_ID, gp);
+          report::print(m_ID, gp, filename);
         } 
       break;     
     }
@@ -133,7 +137,7 @@ memory::operation
           data[i] = m_memory[address++];         // move the data to memory
         }
         delay_time = delay_time + m_read_delay;
-        report::print(m_ID, gp);
+        report::print(m_ID, gp, filename);
       }     
       break;
     }
@@ -144,17 +148,34 @@ memory::operation
   return;
 } // end memory_operation
 
-unsigned char* 
+//==============================================================================
+///  @fn memory::get_mem_ptr
+//  
+///  @brief Method to return pointer to memory in this object
+// 
+///  @details
+///    This routine used during dmi example
+//   
+//==============================================================================
+unsigned char*
 memory::get_mem_ptr(void)
-  {
-    return m_memory;
-  }
+{
+  return m_memory;
+}
 
+//==============================================================================
+///  @fn memory::get_delay
+//  
+///  @brief Method to "pull" appropriate delay from the gp
+// 
+///  @details
+///    This routine used during several at examples
+//   
+//==============================================================================
 void 
 memory::get_delay
-(
-   tlm::tlm_generic_payload  &gp           ///< TLM2 GP reference
- , sc_core::sc_time          &delay_time   ///< time to be updated
+( tlm::tlm_generic_payload  &gp           ///< TLM2 GP reference
+, sc_core::sc_time          &delay_time   ///< time to be updated
 )
 {
   /// Access the required attributes from the payload
@@ -167,12 +188,10 @@ memory::get_delay
   {
     default:
     {
-      ///@todo need to modify this to match operation method
-      // One time warning message
       if (m_previous_warning == false)
       {
         msg << "Target: " << m_ID 
-            << " Invalid GP command";
+            << " Unsupport GP command extension";
         REPORT_WARNING(filename, __FUNCTION__, msg.str());
         m_previous_warning = true;
       }
@@ -197,11 +216,18 @@ memory::get_delay
   return; 
 }
 
-
+//==============================================================================
+///  @fn memory::check_address
+//  
+///  @brief Method to check if the gp is in the address range of this memory
+// 
+///  @details
+///    This routine used to check for errors in address space
+//   
+//==============================================================================
 tlm::tlm_response_status
 memory::check_address
-(
-  tlm::tlm_generic_payload  &gp        
+( tlm::tlm_generic_payload  &gp        
 )
 {
   sc_dt::uint64    address   = gp.get_address();     // memory address

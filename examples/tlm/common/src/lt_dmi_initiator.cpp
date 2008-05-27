@@ -81,8 +81,8 @@ void lt_dmi_initiator::initiator_thread(void)   ///< initiator thread
     sc_time delay         = SC_ZERO_TIME;       // Create delay objects 
        
     msg << "Initiator: " << m_ID               
-        << " b_transport(GP, " 
-        << delay << ")";
+        << " b_transport(" << gp_ptr << " , " 
+        << delay << ");";
     REPORT_INFO(filename,  __FUNCTION__, msg.str());
     
     if(!(m_dmi_memory.address_is_dmi(*gp_ptr)))
@@ -92,7 +92,7 @@ void lt_dmi_initiator::initiator_thread(void)   ///< initiator thread
         
         initiator_socket->b_transport(*gp_ptr, delay);
         
-        report::print(m_ID, *gp_ptr);
+ //       report::print(m_ID, *gp_ptr);
         
     
         m_gp_status = gp_ptr->get_response_status();
@@ -101,15 +101,22 @@ void lt_dmi_initiator::initiator_thread(void)   ///< initiator thread
         {
            msg.str("");
            msg << "Initiator: " << m_ID               
-              << " b_transport returned delay = " 
+              << " b_transport of gp_tpr " << gp_ptr
+              << " returned a delay of " 
               << delay;
            REPORT_INFO(filename,  __FUNCTION__, msg.str());
-          
-           report::print_full(m_ID, filename, *gp_ptr);
            
            wait(delay);
            
-           report::print_full(m_ID, filename, *gp_ptr);
+ //          report::print_full(m_ID, *gp_ptr, filename);
+           
+           msg.str("");
+           msg << "Initiator: " << m_ID               
+              << " gp_tpr of " << gp_ptr
+              << " was returned with dmi_allowed set to " 
+              << gp_ptr->get_dmi_allowed();
+           REPORT_INFO(filename,  __FUNCTION__, msg.str());
+           
         }
         else
         {
@@ -120,19 +127,30 @@ void lt_dmi_initiator::initiator_thread(void)   ///< initiator thread
         // Set up for potential dmi utilization for next transaction
         if(gp_ptr->get_dmi_allowed())
           {
-            
+            msg.str(""); 
+            msg << "Initiator: " << m_ID           
+                << " set up dmi for next access to this target"
+                << endl << "      ";
             // reset address in case it was mutated
             gp_ptr->set_address(m_address);
             
-            msg.str("");
             msg << "Initiator: " << m_ID               
-                << "get_direct_mem_ptr(GP, m_dmi_properties);";
+                << " get_direct_mem_ptr(" << gp_ptr
+                << " , " << &m_dmi_properties << " );";
             REPORT_INFO(filename,  __FUNCTION__, msg.str());
             
             if(initiator_socket->get_direct_mem_ptr(*gp_ptr,m_dmi_properties))
               {
                 m_dmi_memory.load_dmi_ptr(m_dmi_properties);
               }
+            else
+              {
+                msg.str("");
+                msg << "Initiator: " << m_ID               
+                   << " DMI access refused even though dmi_allowed was set";
+                REPORT_INFO(filename,  __FUNCTION__, msg.str());
+              }//end else
+          
           }// end if dmi_allowed           
       }//end if
     else // dmi transaction ====================================================
@@ -145,7 +163,8 @@ void lt_dmi_initiator::initiator_thread(void)   ///< initiator thread
         {
            msg.str("");
            msg << "Initiator: " << m_ID               
-              << " dmi based transaction returned delay = " 
+              << " dmi based transaction for gp_ptr of "
+              << gp_ptr << " returned a delay of " 
               << delay;
            REPORT_INFO(filename,  __FUNCTION__, msg.str());
            wait(delay);
@@ -160,6 +179,11 @@ void lt_dmi_initiator::initiator_thread(void)   ///< initiator thread
         }
       }//end else   
     
+    msg.str("");
+    msg << "Initiator: " << m_ID               
+        << " End of processing for gp_ptr " << gp_ptr;
+    REPORT_INFO(filename,  __FUNCTION__, msg.str());
+    
     response_out_port->write(gp_ptr);  // return txn to traffic gen
   } // end while true
 } // end initiator_thread 
@@ -170,14 +194,14 @@ lt_dmi_initiator::invalidate_direct_mem_ptr      // invalidate_direct_mem_ptr
      , sc_dt::uint64 end_range      // end range
      )
   {
-    std::ostringstream  msg;           
-    msg.str("");
+//    std::ostringstream  msg;           
+//    msg.str("");
     
-    msg << "Initiator: " << m_ID               
-        << " invalidate_direct_mem_ptr (" 
-        << start_range << " , " << end_range;
+//    msg << "Initiator: " << m_ID               
+//        << " invalidate_direct_mem_ptr (" 
+//        << start_range << " , " << end_range  << ");";
     
-    REPORT_INFO(filename,  __FUNCTION__, msg.str());
+//    REPORT_INFO(filename,  __FUNCTION__, msg.str());
     
     m_dmi_memory.invalidate_dmi_ptr(start_range, end_range);
     return;
