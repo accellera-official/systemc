@@ -439,9 +439,7 @@ public:
     // previous value:
     template <typename T> T* set_extension(T* ext)
     {
-        T* tmp = static_cast<T*>(m_extensions[T::ID]);
-        m_extensions[T::ID] = static_cast<tlm_extension_base*>(ext);
-        return tmp;
+        return static_cast<T*>(set_extension(T::ID, ext));
     }
 
     // non-templatized version with manual index:
@@ -457,16 +455,12 @@ public:
     // previous value and schedule its release
     template <typename T> T* set_auto_extension(T* ext)
     {
-        T* tmp = static_cast<T*>(m_extensions[T::ID]);
-        m_extensions[T::ID] = static_cast<tlm_extension_base*>(ext);
-        if (!tmp) m_extensions.insert_in_cache(&m_extensions[T::ID]);
-        assert(m_mm != 0);
-        return tmp;
+        return static_cast<T*>(set_auto_extension(T::ID, ext));
     }
 
     // non-templatized version with manual index:
     tlm_extension_base* set_auto_extension(unsigned int index,
-                                      tlm_extension_base* ext)
+                                           tlm_extension_base* ext)
     {
         tlm_extension_base* tmp = m_extensions[index];
         m_extensions[index] = ext;
@@ -478,15 +472,13 @@ public:
     // Check for an extension, ext will point to 0 if not present
     template <typename T> void get_extension(T*& ext) const
     {
-        ext = static_cast<T*>(m_extensions[T::ID]);
+        ext = get_extension<T>();
     }
     template <typename T> T* get_extension() const
     {
-        T *ext;
-        get_extension(ext);
-        return ext;
+        return static_cast<T*>(get_extension(T::ID));
     }
-    // Non-templatized version:
+    // Non-templatized version with manual index:
     tlm_extension_base* get_extension(unsigned int index) const
     {
         return m_extensions[index];
@@ -498,7 +490,7 @@ public:
     // recommended use: when 100% sure there is no MM
     template <typename T> void clear_extension(const T* ext)
     {
-        m_extensions[T::ID] = static_cast<tlm_extension_base*>(0);
+        clear_extension<T>();
     }
 
     //this call just removes the extension from the txn but does not
@@ -507,23 +499,15 @@ public:
     // recommended use: when 100% sure there is no MM
     template <typename T> void clear_extension()
     {
-        m_extensions[T::ID] = static_cast<tlm_extension_base*>(0);
+        clear_extension(T::ID);
     }
 
     //this call removes the extension from the txn and does
     // call free() or tells the MM to do so when the txn is finally done
     // recommended use: when not sure there is no MM
-    template <typename T> void release_extension(const T* ext)
+    template <typename T> void release_extension(T* ext)
     {
-        if (m_mm)
-        {
-            m_extensions.insert_in_cache(&m_extensions[T::ID]);
-        }
-        else
-        {
-            ext->free();
-            m_extensions[T::ID] = static_cast<tlm_extension_base*>(0);
-        }
+        release_extension<T>();
     }
 
     //this call removes the extension from the txn and does
@@ -531,26 +515,29 @@ public:
     // recommended use: when not sure there is no MM
     template <typename T> void release_extension()
     {
-        if (m_mm)
-        {
-            m_extensions.insert_in_cache(&m_extensions[T::ID]);
-        }
-        else
-        {
-            m_extensions[T::ID]->free();
-            m_extensions[T::ID] = static_cast<tlm_extension_base*>(0);
-        }
+        release_extension(T::ID);
     }
 
 private:
     // Non-templatized version with manual index
     void clear_extension(unsigned int index)
     {
-        if (index < m_extensions.size())
+        m_extensions[index] = static_cast<tlm_extension_base*>(0);
+    }
+    // Non-templatized version with manual index
+    void release_extension(unsigned int index)
+    {
+        if (m_mm)
         {
+            m_extensions.insert_in_cache(&m_extensions[index]);
+        }
+        else
+        {
+            m_extensions[index]->free();
             m_extensions[index] = static_cast<tlm_extension_base*>(0);
         }
     }
+
 public:
     // Make sure the extension array is large enough. Can be called once by
     // an initiator module (before issuing the first transaction) to make
