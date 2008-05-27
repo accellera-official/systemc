@@ -114,7 +114,7 @@ void lt_dmi_initiator::initiator_thread(void)   ///< initiator thread
            msg << "Initiator: " << m_ID               
               << " gp_tpr of " << gp_ptr
               << " was returned with dmi_allowed set to " 
-              << gp_ptr->get_dmi_allowed();
+              << gp_ptr->is_dmi_allowed();
            REPORT_INFO(filename,  __FUNCTION__, msg.str());
            
         }
@@ -125,7 +125,7 @@ void lt_dmi_initiator::initiator_thread(void)   ///< initiator thread
            REPORT_WARNING(filename,  __FUNCTION__, msg.str());
         }
         // Set up for potential dmi utilization for next transaction
-        if(gp_ptr->get_dmi_allowed())
+        if(gp_ptr->is_dmi_allowed())
           {
             msg.str(""); 
             msg << "Initiator: " << m_ID           

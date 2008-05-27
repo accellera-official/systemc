@@ -192,7 +192,7 @@ print_full
         << "RSP STATUS = " << gp.get_response_string()
         << " STREAMING WIDTH = " << gp.get_streaming_width()
         << endl << "      "
-        << "DMI ALLOWED = " << gp.get_dmi_allowed()
+        << "DMI ALLOWED = " << gp.is_dmi_allowed()
         << endl << "      "
  //       << "BYTE ENABLE PTR = " << gp.get_byte_enable_ptr()
         << "BYTE ENABLE LNGTH = " << gp.get_byte_enable_length();
