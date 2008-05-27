@@ -134,8 +134,7 @@ at_target_4_phase::nb_transport_fw                  // non-blocking transport ca
   
   tlm::tlm_sync_enum  return_status = tlm::TLM_COMPLETED;
   
-  #if (  defined ( USING_EXTENSION_OPTIONAL  ) \
-      || defined ( USING_EXTENSION_MANDITORY ) )
+  #if (  defined ( USING_EXTENSION_OPTIONAL  ) )
   
   extension_initiator_id *extension_pointer;
   
@@ -152,18 +151,7 @@ at_target_4_phase::nb_transport_fw                  // non-blocking transport ca
     REPORT_INFO ( filename,  __FUNCTION__, msg.str() );
   }
   
-  #if ( defined ( USING_EXTENSION_MANDATORY ) )
-  
-  else
-  {
-    msg << "not present"; 
-
-    REPORT_FATAL ( filename,  __FUNCTION__, msg.str() );
-  }
-  
-  #endif /* USING_EXTENSION_MANDATORY */
-  
-  #endif  /* USING_EXTENSION_OPTIONAL || USING_EXTENSION_MANDATORY */
+  #endif  /* USING_EXTENSION_OPTIONAL */
 
   msg.str("");
   msg << "Target: " << m_ID               

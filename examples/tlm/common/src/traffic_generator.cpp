@@ -98,13 +98,6 @@ traffic_generator::traffic_generator_thread
   for (unsigned int i = 0; i < m_active_txn_count; i++ )
   {
     m_txn_pool.push ();
-    
-//    data_buffer_ptr  = new unsigned char [m_txn_data_size];
-//    transaction_ptr  = new tlm::tlm_generic_payload;
-    
-//    transaction_ptr->set_data_ptr(data_buffer_ptr);
-    
-//    m_txn_pool.push(transaction_ptr);
   }
   
   // outer loop of a simple memory test generate addresses
@@ -127,9 +120,6 @@ traffic_generator::traffic_generator_thread
     
       if(!m_txn_pool.empty())
       {
-//        transaction_ptr = m_txn_pool.front();   // get gp from pool 
-//        m_txn_pool.pop();
-        
         transaction_ptr = m_txn_pool.pop ();
         
         data_buffer_ptr = transaction_ptr->get_data_ptr();
@@ -149,8 +139,7 @@ traffic_generator::traffic_generator_thread
         transaction_ptr->set_data_length      ( m_txn_data_size              );
         transaction_ptr->set_response_status  ( tlm::TLM_INCOMPLETE_RESPONSE );
         
-        #if (  defined ( USING_EXTENSION_OPTIONAL  ) \
-            || defined ( USING_EXTENSION_MANDITORY ) )
+        #if (  defined ( USING_EXTENSION_OPTIONAL  ) )
 
         // set the extension
         
@@ -165,7 +154,7 @@ traffic_generator::traffic_generator_thread
         // register the extension
         transaction_ptr->set_extension ( extension_pointer );
  
-        #endif  /* USING_EXTENSION_OPTIONAL || USING_EXTENSION_MANDATORY */
+        #endif  /* USING_EXTENSION_OPTIONAL */
         
         // increment memory address
         mem_address += m_txn_data_size;
@@ -188,9 +177,6 @@ traffic_generator::traffic_generator_thread
     {
       if(!m_txn_pool.empty())
       {
-//        transaction_ptr = m_txn_pool.front();   // get gp from pool 
-//        m_txn_pool.pop();
-        
         transaction_ptr = m_txn_pool.pop ();
                            
         transaction_ptr->set_command          ( tlm::TLM_READ_COMMAND        );
@@ -198,8 +184,7 @@ traffic_generator::traffic_generator_thread
         transaction_ptr->set_data_length      ( m_txn_data_size              );
         transaction_ptr->set_response_status  ( tlm::TLM_INCOMPLETE_RESPONSE );
 
-        #if (  defined ( USING_EXTENSION_OPTIONAL  ) \
-            || defined ( USING_EXTENSION_MANDITORY ) )
+        #if (  defined ( USING_EXTENSION_OPTIONAL  ) )
 
         // set the extension
         
@@ -214,7 +199,7 @@ traffic_generator::traffic_generator_thread
         // register the extension
         transaction_ptr->set_extension ( extension_pointer );
  
-        #endif  /* USING_EXTENSION_OPTIONAL || USING_EXTENSION_MANDATORY */
+        #endif  /* USING_EXTENSION_OPTIONAL */
         
         // increment memory address
         mem_address += m_txn_data_size; 
