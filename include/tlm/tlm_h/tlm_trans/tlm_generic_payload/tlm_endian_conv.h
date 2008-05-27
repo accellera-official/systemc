@@ -328,7 +328,7 @@ inline void loop_generic0(int new_len, int new_stream_width,
 template<class DATAWORD> inline void
 tlm_from_hostendian_generic(tlm_generic_payload *txn, unsigned int sizeof_databus) {
   if(txn->is_read()) {
-    tlm_endian_context *tc = txn->get_extension<tlm_endian_context>();
+    tlm_endian_context *tc = txn->template get_extension<tlm_endian_context>();
 
     loop_generic0<DATAWORD, &copy_dbyb0>(txn->get_data_length(),
       txn->get_streaming_width(), tc->stream_width, sizeof_databus, tc->address,
@@ -520,7 +520,7 @@ inline int loop_word1(
 template<class DATAWORD> inline void
 tlm_from_hostendian_word(tlm_generic_payload *txn, unsigned int sizeof_databus) {
   if(txn->is_read()) {
-    tlm_endian_context *tc = txn->get_extension<tlm_endian_context>();
+    tlm_endian_context *tc = txn->template get_extension<tlm_endian_context>();
 
     sc_dt::uint64 b_mask = sizeof_databus - 1;
     int d_mask = sizeof(DATAWORD) - 1;
@@ -665,7 +665,7 @@ tlm_from_hostendian_aligned(tlm_generic_payload *txn, unsigned int sizeof_databu
     // no byte enables
     if(txn->is_read()) {
       // RD without byte enables.  Copy data to original buffer
-      tlm_endian_context *tc = txn->get_extension<tlm_endian_context>();
+      tlm_endian_context *tc = txn->template get_extension<tlm_endian_context>();
       loop_aligned2<DATAWORD, &copy_d2<DATAWORD> >(
         (DATAWORD *)(txn->get_data_ptr()),
         0, (DATAWORD *)(tc->data_ptr), 0, words, words_per_bus);
@@ -674,7 +674,7 @@ tlm_from_hostendian_aligned(tlm_generic_payload *txn, unsigned int sizeof_databu
     // byte enables present
     if(txn->is_read()) {
       // RD with byte enables.  Copy data qualified by byte-enables
-      tlm_endian_context *tc = txn->get_extension<tlm_endian_context>();
+      tlm_endian_context *tc = txn->template get_extension<tlm_endian_context>();
       loop_aligned2<DATAWORD, &copy_dbyb2<DATAWORD> >(
         (DATAWORD *)(txn->get_data_ptr()),
         (DATAWORD *)(txn->get_byte_enable_ptr()),
