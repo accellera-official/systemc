@@ -46,8 +46,15 @@ following primary ways:
 3) Known issues
 ===============
 
--when using TLM 2.0 with SystemC v2.2.1 on 64 bit linux you will need to 
- force 32 bit mode by using the '-m32' flag
+a. when using TLM 2.0 with SystemC v2.2.1 on 64 bit linux you will need to 
+   force 32 bit mode by using the '-m32' flag
+
+b. the tlm_simple_target_socket in tlm_utils does not obey the END_REQ rule
+   when only an nb_ call is registered, an b_ call is being handled in the
+   socket and there is an nb_ call coming in at the same time. In this case
+   the incoming nb_ call will be forwarded to the registered nb_ call without
+   checking whether the earlier b_ call has passed the END_REQ timing point
+ 
 
 
 
