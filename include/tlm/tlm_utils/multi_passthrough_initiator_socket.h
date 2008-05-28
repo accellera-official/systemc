@@ -258,7 +258,7 @@ public:
   
   //get the number of bound targets
   // NOTE: this is only valid at end of elaboration!
-  unsigned int size() {return m_used_sockets.size();}
+  unsigned int size() {return get_hierarch_bind()->get_sockets().size();}
 
 protected:
   //implementation of base class interface

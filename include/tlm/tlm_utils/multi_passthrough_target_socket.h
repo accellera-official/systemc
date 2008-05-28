@@ -291,8 +291,8 @@ public:
   tlm::tlm_bw_transport_if<TYPES>* operator[](int i){return m_sockets[i];}
 
   //get number of bound initiators
-  // NOTE: only at start of simulation or during runtime, as m_sockets gets created only at end of elaboration
-  unsigned int size(){return m_sockets.size();}
+  // NOTE: this is only valid at end of elaboration!
+  unsigned int size(){return get_hierarch_bind()->get_binders().size();}
 
 protected:
   //implementation of base class interface
