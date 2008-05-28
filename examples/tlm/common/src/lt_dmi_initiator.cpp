@@ -87,7 +87,7 @@ void lt_dmi_initiator::initiator_thread(void)   ///< initiator thread
         << delay << ");";
     REPORT_INFO(filename,  __FUNCTION__, msg.str());
     
-    if(!(m_dmi_memory.address_is_dmi(*gp_ptr)))
+    if(!(m_dmi_memory.is_address_dmi(*gp_ptr)))
       {
       // Not a dmi transaction =================================================
         m_address = gp_ptr->get_address();

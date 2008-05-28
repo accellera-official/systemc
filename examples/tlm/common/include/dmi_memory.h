@@ -21,6 +21,7 @@
 //
 //  Original Authors:
 //    Jack Donovan, ESLX
+//    Charles Wilson, ESLX
 //
 //==============================================================================
 
@@ -90,13 +91,13 @@ public:
   );
  
   //============================================================================
-  /// @fn invalidate_dmi_ptr
+  /// @fn is_address_dmi
   //
   ///  @brief Checks the address in the gp to see if in range of a dmi pointer
   //
   ///===========================================================================   	  
   bool 
-  address_is_dmi
+  is_address_dmi
   (
     tlm::tlm_generic_payload  &gp        
   );   

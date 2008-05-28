@@ -23,6 +23,7 @@
 //
 //  Original Authors:
 //    Jack Donovan, ESLX
+//    Charles Wilson, ESLX
 //
 //==============================================================================
 
@@ -41,7 +42,6 @@ dmi_memory::dmi_memory
 )
 : m_ID                 (ID)   
 { 
-
 } // end Constructor
 
 //=====================================================================
@@ -55,8 +55,7 @@ dmi_memory::dmi_memory
 //=====================================================================
 void 
 dmi_memory::operation     
-( 
-  tlm::tlm_generic_payload  &gp     
+( tlm::tlm_generic_payload  &gp     
 , sc_core::sc_time          &delay   ///< transaction delay 
 )    
 {
@@ -69,9 +68,8 @@ dmi_memory::operation
   m_command   = gp.get_command();
   m_is_dmi_flag = false;
   gp.set_response_status(tlm::TLM_GENERIC_ERROR_RESPONSE);
-   
   
-  if (!address_is_dmi(gp))
+  if (is_address_dmi(gp) == false )
   {
     msg << "Iniiator:" << m_ID 
         << "A GP with an address not in the allowed DMI ranges has been received" 
@@ -79,9 +77,9 @@ dmi_memory::operation
         << "Use check_status before passing a gp to operation";
       REPORT_INFO(filename, __FUNCTION__, msg.str());
       gp.set_response_status(tlm::TLM_COMMAND_ERROR_RESPONSE); // Need a different error
-      return;
     }
- 
+ else
+ {
   m_offset  = m_address - m_start_address; 
     
   switch (m_command)
@@ -126,6 +124,7 @@ dmi_memory::operation
     }
      
     }//end switch
+  }
   
   return;
 
@@ -139,10 +138,10 @@ dmi_memory::invalidate_dmi_ptr
 {
   std::ostringstream  msg;   
   msg.str("");
-  if (( start_range <= m_end_address)
-      &&
-      ( end_range >= m_start_address)
-     )
+  
+  if (  ( start_range <= end_range       )
+     && ( start_range >= m_start_address )
+     && ( end_range   <= m_end_address   ) )
     {
       msg << "Initiator:" << m_ID
           << " DMI Pointer Invalidated  for (" 
@@ -174,16 +173,16 @@ dmi_memory::load_dmi_ptr
   m_dmi_ptr           = dmi_properties.get_dmi_ptr();
   m_dmi_read_latency  = dmi_properties.get_read_latency();
   m_dmi_write_latency = dmi_properties.get_write_latency();
-  m_dmi_size          = dmi_properties.get_end_address()
-                      - dmi_properties.get_start_address();
   m_start_address     = dmi_properties.get_start_address();
+  m_dmi_size          = dmi_properties.get_end_address()
+                      - m_start_address;
   
   return;
 }
 
 //==============================================================================
 bool
-dmi_memory::address_is_dmi
+dmi_memory::is_address_dmi
 (
   tlm::tlm_generic_payload  &gp        
 )
@@ -196,35 +195,27 @@ dmi_memory::address_is_dmi
   msg << "Initiator:" << m_ID;
   bool                return_status = true;
  
-  /// Check if the address is within the dmi address boundaries
-  if(!( (m_start_address >= m_start_address) &&
-        (m_end_address   <= m_end_address)        ))
-    {  
-      return_status = false;
-    }
-  
-  /// Check if we have been given permission to operate the way we want using
-  /// the dmi pointer
-  if( tlm::tlm_dmi::DMI_ACCESS_NONE == m_granted_access
-      ||
-      (gp.get_command()==tlm::TLM_WRITE_COMMAND && 
-       tlm::tlm_dmi::DMI_ACCESS_READ == m_granted_access)
-      ||
-      (gp.get_command()==tlm::TLM_READ_COMMAND &&
-       tlm::tlm_dmi::DMI_ACCESS_WRITE == m_granted_access)
-     )
-    {
-      msg << " Incompatible Command " << endl << "      ";
-      return_status = false;
-    } //end if
+  if (  ( m_start_address < ( m_address + m_offset              ) )
+     || ( m_end_address   > ( m_address + m_offset + m_dmi_size ) ) )
+  {  
+    // address is outside of the DMI boundaries
+    return_status = false;
+  }
+  else if (  (  ( gp.get_command () == tlm::TLM_WRITE_COMMAND )
+             && ( ( tlm::tlm_dmi::DMI_ACCESS_WRITE & m_granted_access ) != tlm::tlm_dmi::DMI_ACCESS_WRITE ) )
+          || (  ( gp.get_command () == tlm::TLM_READ_COMMAND  )
+             && ( ( tlm::tlm_dmi::DMI_ACCESS_READ  & m_granted_access ) != tlm::tlm_dmi::DMI_ACCESS_READ  ) ) )
+  {
+    // access permission does not match access required for operation
+    msg << " Incompatible Command " << endl << "      ";
+    return_status = false;
+  } //end if
+    
   if (return_status)
-    {
-      msg << " gp with address " << &gp << " has an address for dmi ";
-      REPORT_INFO(filename, __FUNCTION__, msg.str()); 
-    }
+  {
+    msg << " gp with address " << &gp << " has an address for dmi ";
+    REPORT_INFO(filename, __FUNCTION__, msg.str()); 
+  }
   
   return return_status;
 } // end check is dmi
-
-
- 
