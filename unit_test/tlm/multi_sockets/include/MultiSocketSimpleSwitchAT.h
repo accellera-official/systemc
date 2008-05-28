@@ -126,7 +126,6 @@ public:
     //initialize the lists of pending reqs and resps
     m_pendingReqs.resize(initiator_socket.size());
     m_pendingResps.resize(target_socket.size());
-    std::cout<<"SIZES "<<name()<<" "<<initiator_socket.size()<<" "<<target_socket.size()<<std::endl;
   }
 
 
