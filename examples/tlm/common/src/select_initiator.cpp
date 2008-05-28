@@ -254,7 +254,7 @@ select_initiator::nb_transport_bw                       // inbound nb_transport_
 
 //=============================================================================
 //  Normal operation  
-//    Decode backeard path phase 
+//    Decode backward path phase 
 //=============================================================================
     else { 
     msg.str ("");

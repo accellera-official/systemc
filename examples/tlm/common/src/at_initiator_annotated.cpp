@@ -263,7 +263,7 @@ at_initiator_annotated::nb_transport_bw                  // inbound nb_transport
 
 //=============================================================================
 //  Normal operation  
-//    Decode backeard path phase 
+//    Decode backward path phase 
 //=============================================================================
     else { 
     msg.str ("");
