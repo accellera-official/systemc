@@ -99,16 +99,16 @@ class traffic_generator                       	// traffic_generator
 
   void check_all_complete (void);
 
-  // Transaction Pool (queue)
+  // memory manager (queue)
   
-  static const unsigned int  m_txn_data_size = 4;          // transaction size
+  static const unsigned int  m_txn_data_size = 4;         // transaction size
   
-  class pool_queue_c                                      /// memory pool queue class
+  class tg_queue_c                                        /// memory managed queue class
   : public tlm::tlm_mm_interface                          /// implements memory management IF
   {
     public:
     
-    pool_queue_c                                          /// pool_queue_c constructor
+    tg_queue_c                                            /// tg_queue_c constructor
     ( void
     )
     {
@@ -136,7 +136,7 @@ class traffic_generator                       	// traffic_generator
     { 
       m_queue.push ( transaction_ptr );
       
-      transaction_ptr->acquire();
+      transaction_ptr->acquire ();
     }
     
     tlm::tlm_generic_payload *                            /// transaction pointer
@@ -144,7 +144,7 @@ class traffic_generator                       	// traffic_generator
     ( void
     )
     {
-      tlm::tlm_generic_payload *transaction_ptr = m_queue.front();
+      tlm::tlm_generic_payload *transaction_ptr = m_queue.front ();
       
       m_queue.pop();
       
@@ -159,16 +159,16 @@ class traffic_generator                       	// traffic_generator
       transaction_ptr->release ();
     }
     
-    bool                                                  /// queue is empty
-    empty                                                 /// queue empty
+    bool                                                  /// true / false
+    is_empty                                              /// queue empty
     ( void
     )
     {
       return m_queue.empty ();
     }
     
-    size_t                                               /// queue size
-    size                                                 /// queue size
+    size_t                                                /// queue size
+    size                                                  /// queue size
     ( void
     )
     {
@@ -180,14 +180,16 @@ class traffic_generator                       	// traffic_generator
     ( tlm::tlm_generic_payload *transaction_ptr           /// transaction pointer
     )
     {
-      transaction_ptr->reset();
-       
+      release ( transaction_ptr );
+      
+      delete [] transaction_ptr->get_data_ptr ();
+      
       delete transaction_ptr;
     }
     
     private:
     
-    std::queue<tlm::tlm_generic_payload*> m_queue;      /// queue
+    std::queue<tlm::tlm_generic_payload*> m_queue;        /// queue
   };
 
 //=============================================================================
@@ -199,10 +201,10 @@ class traffic_generator                       	// traffic_generator
   
   const unsigned int  m_ID;                   	    // initiator ID
 
-  sc_dt::uint64       m_base_address_1;      	      // first base address
+  sc_dt::uint64       m_base_address_1;      	    // first base address
   sc_dt::uint64       m_base_address_2;       	    // second base address
   
-  pool_queue_c        m_txn_pool;                   // transaction pool
+  tg_queue_c          m_transaction_queue;          // transaction queue
   
   const unsigned int  m_active_txn_count;           // active transaction count
   bool                m_check_all;
