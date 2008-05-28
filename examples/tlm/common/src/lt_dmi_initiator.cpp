@@ -53,8 +53,10 @@ lt_dmi_initiator::lt_dmi_initiator                // constructor
 , m_dmi_memory        (ID)
 {                
   // bind initiator to the export
-  initiator_socket (*this);                
-  
+//  initiator_socket (*this);                
+   initiator_socket.register_invalidate_direct_mem_ptr
+     ( this
+     , &lt_dmi_initiator::custom_invalidate_dmi_ptr);
   // register thread process
   SC_THREAD(initiator_thread);                  
 }
@@ -189,7 +191,7 @@ void lt_dmi_initiator::initiator_thread(void)   ///< initiator thread
 } // end initiator_thread 
 
 void 
-lt_dmi_initiator::invalidate_direct_mem_ptr      // invalidate_direct_mem_ptr
+lt_dmi_initiator::custom_invalidate_dmi_ptr      // invalidate_direct_mem_ptr
      ( sc_dt::uint64 start_range    // start range
      , sc_dt::uint64 end_range      // end range
      )
@@ -205,23 +207,4 @@ lt_dmi_initiator::invalidate_direct_mem_ptr      // invalidate_direct_mem_ptr
     
     m_dmi_memory.invalidate_dmi_ptr(start_range, end_range);
     return;
-  }
-
-tlm::tlm_sync_enum 
-lt_dmi_initiator:: nb_transport_bw                  // inbound nb_transport_bw
-     ( tlm::tlm_generic_payload&  gp                // generic payload
-     , tlm::tlm_phase&            phase            // tlm phase
-     , sc_time&                   delay            // delay
-     )
-  {
-  std::ostringstream  msg;           
-  msg.str("");
-  
-  msg << "Initiator: " << m_ID               
-      << "non-blocking interface not implement ";
-  REPORT_WARNING(filename,  __FUNCTION__, msg.str());
- 
-  gp.set_response_status(tlm::TLM_GENERIC_ERROR_RESPONSE);
-  
-  return tlm::TLM_UPDATED;
   }

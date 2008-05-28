@@ -22,7 +22,7 @@
 
 template <typename MODULE,
           unsigned int BUSWIDTH = 32,
-          typename TYPES = tlm::tlm_base_protocol_types>
+          typename TYPES = tlm::tlm_generic_payload_types>
 class SimpleInitiatorSocket :
   public tlm::tlm_initiator_socket<BUSWIDTH,
                                    tlm::tlm_fw_transport_if<TYPES>,
@@ -140,7 +140,7 @@ private:
 
 template <typename MODULE,
           unsigned int BUSWIDTH = 32,
-          typename TYPES = tlm::tlm_base_protocol_types>
+          typename TYPES = tlm::tlm_generic_payload_types>
 class SimpleInitiatorSocketTagged :
   public tlm::tlm_initiator_socket<BUSWIDTH,
                                    tlm::tlm_fw_transport_if<TYPES>,

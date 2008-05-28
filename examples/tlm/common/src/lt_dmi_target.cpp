@@ -59,7 +59,7 @@ lt_dmi_target::lt_dmi_target
 , m_start_address         (0)
 , m_end_address           (memory_size)
 , m_toggle_count          (0)
-, MAX_TOGGLE_COUNT        (3)
+, m_max_dmi_toggle_count    (3)
 
 , m_target_memory
   ( m_ID                          // initiator ID for messaging
@@ -71,9 +71,6 @@ lt_dmi_target::lt_dmi_target
   
 {
       
-  /// Bind the socket's export to the interface
-//  m_memory_socket(*this);
-
   SC_METHOD(toggle_dmi_method);
   
   m_memory_socket.register_b_transport(this, &lt_dmi_target::custom_b_transport);
@@ -136,24 +133,27 @@ lt_dmi_target::get_direct_mem_ptr
   std::ostringstream  msg;
   msg.str("");
   sc_dt::uint64 address = gp.get_address();
+  
+  // First check to see if we are "open" to a dmi
   if(!m_dmi_enabled)
-    {
-      msg << "Target: " << m_ID
-          << " DMI not enabled not expecting call ";
-      REPORT_WARNING(filename, __FUNCTION__, msg.str());
-    }
+  {
+    msg << "Target: " << m_ID
+        << " DMI not enabled, not expecting call ";
+    REPORT_INFO(filename, __FUNCTION__, msg.str());
+  }
   else
+  {                                  // dmi processing
+    if (address < m_end_address+1)   // check that address is in our range              
     {
-      if (address < m_end_address+1) //invert this to take care of error stuff
-                                     // also check with length
-        {
+      // set up dmi properties object ======================================
         dmi_properties.allow_read_write();
         dmi_properties.set_start_address(m_start_address);
         dmi_properties.set_end_address(m_end_address);
-        // need to check this
-        unsigned char* temp_ptr = m_target_memory.get_mem_ptr();
         
-        dmi_properties.set_dmi_ptr(temp_ptr);
+//        unsigned char* temp_ptr = m_target_memory.get_mem_ptr();     
+//        dmi_properties.set_dmi_ptr(temp_ptr);
+        
+      dmi_properties.set_dmi_ptr(m_target_memory.get_mem_ptr());
         dmi_properties.set_read_latency(m_read_response_delay);
         dmi_properties.set_write_latency(m_write_response_delay);
 
@@ -168,12 +168,12 @@ lt_dmi_target::get_direct_mem_ptr
         msg << "Target: " << m_ID
             << " DMI pointer request for address= " << address
             << " max address for this target = " << m_end_address+1;
-        REPORT_WARNING(filename, __FUNCTION__, msg.str());
+        REPORT_INFO(filename, __FUNCTION__, msg.str());
         } // end else
     } // end else
   
   return false; 
-}
+} // end get_direct_mem_ptr
 
 void
 lt_dmi_target::toggle_dmi_method
@@ -201,30 +201,19 @@ lt_dmi_target::toggle_dmi_method
       {
         m_dmi_enabled = true;
         next_trigger(m_dmi_duration);
-      }
-    if(m_toggle_count >= MAX_TOGGLE_COUNT)
+      msg << "Target: " << m_ID 
+          << " DMI has been enabled in this target";
+      REPORT_INFO(filename, __FUNCTION__, msg.str());  
+    }
+  
+  if(m_toggle_count >= m_max_dmi_toggle_count)
       {
         next_trigger();
-      }
+      m_dmi_enabled = false;
+      
+    }  // Don't execute again
+   
   }// end method
-
-// Not implemented for this example but required by interface
-//unsigned int                                        // result
-//lt_dmi_target::transport_dbg            
-//( tlm::tlm_generic_payload   &payload               ///< debug payload
-//)
-//{
-//  std::ostringstream  msg; 
-//  msg.str("");
-//  if(!m_trans_dbg_prev_warning)
-//  {
-//    msg << "Target: " << m_ID 
-//        << " DBG(debug) not implemented for this example";
-//    REPORT_WARNING(filename, __FUNCTION__, msg.str()); 
-//    m_trans_dbg_prev_warning = true;
-//  }         
-//  return false;
-//}
 
 
 

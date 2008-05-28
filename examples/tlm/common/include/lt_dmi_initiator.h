@@ -36,10 +36,11 @@
 
 #include "tlm.h"                                    // TLM headers
 #include "dmi_memory.h"
+#include "tlm_utils/simple_initiator_socket.h"
 
 class lt_dmi_initiator                       // lt_dmi_initiator 
   :  public sc_core::sc_module               // module base class 
-  , virtual public tlm::tlm_bw_transport_if<>  // backward non-blocking interface
+ // , virtual public tlm::tlm_bw_transport_if<>  // backward non-blocking interface
 {
 public:
 // Constructor ================================================================= 
@@ -62,24 +63,17 @@ public:
 //============================================================================== 
   void initiator_thread (void);        
   
-  void invalidate_direct_mem_ptr      // invalidate_direct_mem_ptr
-       ( sc_dt::uint64 start_range    // start range
-       , sc_dt::uint64 end_range      // end range
-       );
-  
-  tlm::tlm_sync_enum 
-  nb_transport_bw                                    // inbound nb_transport_bw
-       ( tlm::tlm_generic_payload&  transaction_ref  // generic payload
-       , tlm::tlm_phase&            phase            // tlm phase
-       , sc_core::sc_time&          delay            // delay
-       );
-  
+  void 
+  custom_invalidate_dmi_ptr                         // invalidate_direct_mem_ptr
+  ( sc_dt::uint64 start_range                       // start range
+  , sc_dt::uint64 end_range                         // end range
+  );
   
 // Variable and Object Declarations ============================================
 public:
   
    typedef tlm::tlm_generic_payload  *gp_ptr;        // generic payload
-   tlm::tlm_initiator_socket<>        initiator_socket;
+   tlm_utils::simple_initiator_socket<lt_dmi_initiator>   initiator_socket;
  
    sc_core::sc_port<sc_core::sc_fifo_in_if  <gp_ptr> > request_in_port;  
    sc_core::sc_port<sc_core::sc_fifo_out_if <gp_ptr> > response_out_port;
@@ -91,7 +85,6 @@ private:
   dmi_memory              m_dmi_memory;
   tlm::tlm_dmi            m_dmi_properties;
   sc_dt::uint64           m_address;
-  
   
 }; 
  #endif /* __LT_DMI_INITIATOR_H__ */

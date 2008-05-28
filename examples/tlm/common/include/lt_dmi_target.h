@@ -33,8 +33,6 @@
 
 class lt_dmi_target                      
 :         public sc_core::sc_module           	/// inherit from SC module base clase
-//, virtual public tlm::tlm_fw_transport_if<>   	/// inherit from TLM "forward interface"
-
 {
 // Member Methods =====================================================
 	
@@ -78,18 +76,11 @@ class lt_dmi_target
   );
 
 
-/// Not implemented for this example but required by interface
+/// Implemented for this example but required by interface
   bool                                              // success / failure
   get_direct_mem_ptr                       
   ( tlm::tlm_generic_payload   &payload,            // address + extensions
     tlm::tlm_dmi               &dmi_data            // DMI data
-  );
-
-  
-/// Not implemented for this example but required by interface
-  unsigned int                                      // result
-  transport_dbg                            
-  ( tlm::tlm_generic_payload  &payload              // debug payload
   );
 
 // Member Variables ===================================================
@@ -98,7 +89,6 @@ class lt_dmi_target
 	  
   typedef tlm::tlm_generic_payload  *gp_ptr;		///< generic payload pointer
   
-//  tlm::tlm_utils::simple_target_socket<lt_dmi_target>  m_memory_socket; ///<  target socket
     tlm_utils::simple_target_socket<lt_dmi_target>  m_memory_socket; ///<  target socket
 
   private:
@@ -120,7 +110,7 @@ class lt_dmi_target
          
         sc_core::sc_event   m_end_resp_rcvd_event;
         unsigned int        m_toggle_count;
-  const unsigned int        MAX_TOGGLE_COUNT;
+  const unsigned int        m_max_dmi_toggle_count;
   
         memory              m_target_memory;
 };

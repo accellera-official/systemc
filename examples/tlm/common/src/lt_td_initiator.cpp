@@ -27,7 +27,6 @@
 
 #include "reporting.h"                             ///< Reporting convenience macros
 #include "lt_td_initiator.h"                          ///< Our header
-#include "tlm.h"                                   ///< TLM headers
 
 using namespace sc_core;
 static const char *filename = "lt_td_initiator.cpp"; ///< filename for reporting

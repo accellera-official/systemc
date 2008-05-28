@@ -67,31 +67,22 @@ dmi_memory::operation
   m_data      = gp.get_data_ptr();    ///< data pointer
   m_length    = gp.get_data_length(); ///< data length
   m_command   = gp.get_command();
-  bool m_is_dmi_flag = false;
+  m_is_dmi_flag = false;
   gp.set_response_status(tlm::TLM_GENERIC_ERROR_RESPONSE);
    
-  /// if the addess has a dmi pointer available then collect info
-  if (address_is_dmi(gp))
-    {
-      m_dmi_ptr           = m_dmi_properties.get_dmi_ptr();
-      m_dmi_read_latency  = m_dmi_properties.get_read_latency();
-      m_dmi_write_latency = m_dmi_properties.get_write_latency();
-      m_dmi_size          = m_dmi_properties.get_end_address()
-                          - m_dmi_properties.get_start_address();
-      m_offset            = m_address
-                          - m_dmi_properties.get_start_address();
-      m_is_dmi_flag       =  true;
-     }
   
-  if(!m_is_dmi_flag) 
+  if (!address_is_dmi(gp))
   {
     msg << "Iniiator:" << m_ID 
         << "A GP with an address not in the allowed DMI ranges has been received" 
         << endl << "       "
         << "Use check_status before passing a gp to operation";
-    REPORT_FATAL(filename, __FUNCTION__, msg.str());
-  }
+      REPORT_INFO(filename, __FUNCTION__, msg.str());
+      gp.set_response_status(tlm::TLM_COMMAND_ERROR_RESPONSE); // Need a different error
+      return;
+    }
  
+  m_offset  = m_address - m_start_address; 
     
   switch (m_command)
   {
@@ -101,9 +92,9 @@ dmi_memory::operation
        {
           m_dmi_ptr[m_offset + i] = m_data[i];
         }
-          
-      // update time
-      delay = delay + m_dmi_write_latency;  
+      gp.set_response_status(tlm::TLM_OK_RESPONSE);  
+     
+      delay = delay + m_dmi_write_latency;  // update time
       report::print(m_ID, gp, filename);
         
       break;     
@@ -112,16 +103,14 @@ dmi_memory::operation
     case tlm::TLM_READ_COMMAND:
     {
       // clear read buffer
-      memset(m_data, 0x00, m_length);
-          
+   
       for (unsigned int i = 0; i < m_length; i++)
-        {   
-        
+        {       
         m_data[i] = m_dmi_ptr [m_offset + i];
         }  
-          
-      // update time
-      delay = delay +  m_dmi_read_latency; 
+      gp.set_response_status(tlm::TLM_OK_RESPONSE);    
+   
+      delay = delay +  m_dmi_read_latency; // update time
       report::print(m_ID, gp, filename);
     
       break;
@@ -132,12 +121,12 @@ dmi_memory::operation
       msg << "Target: " << m_ID 
           << " Unknown GP command that could be ignorable";
       REPORT_WARNING(filename, __FUNCTION__, msg.str());
+      gp.set_response_status(tlm::TLM_COMMAND_ERROR_RESPONSE);  
       break;
     }
      
     }//end switch
   
-  gp.set_response_status(tlm::TLM_OK_RESPONSE);
   return;
 
 //==============================================================================
@@ -150,24 +139,24 @@ dmi_memory::invalidate_dmi_ptr
 {
   std::ostringstream  msg;   
   msg.str("");
-  if (( start_range <= m_dmi_properties.get_end_address())
+  if (( start_range <= m_end_address)
       &&
-      ( end_range >= m_dmi_properties.get_start_address())
+      ( end_range >= m_start_address)
      )
     {
       msg << "Initiator:" << m_ID
           << " DMI Pointer Invalidated  for (" 
           << start_range << " , " << end_range << ")";
      
-      m_dmi_properties.set_start_address(1);
-      m_dmi_properties.set_end_address(0);
+      m_start_address=1;
+      m_end_address=0;
     }
-  else
-    { 
-      msg << "Initiator:" << m_ID
-          << " DMI Pointer Not Invalidated  for (" 
-          << start_range << " , " << end_range << ")";
-    }
+//  else
+//  { 
+//    msg << "Initiator:" << m_ID
+//        << " DMI Pointer Not Invalidated  for (" 
+//        << start_range << " , " << end_range << ")";
+//  }
     
   REPORT_INFO(filename, __FUNCTION__, msg.str()); 
   return;
@@ -181,7 +170,14 @@ dmi_memory::load_dmi_ptr
 )
 { 
   report::print(m_ID,dmi_properties,filename);
-  m_dmi_properties = dmi_properties;
+//  m_dmi_properties = dmi_properties;
+  m_dmi_ptr           = dmi_properties.get_dmi_ptr();
+  m_dmi_read_latency  = dmi_properties.get_read_latency();
+  m_dmi_write_latency = dmi_properties.get_write_latency();
+  m_dmi_size          = dmi_properties.get_end_address()
+                      - dmi_properties.get_start_address();
+  m_start_address     = dmi_properties.get_start_address();
+  
   return;
 }
 
@@ -201,21 +197,21 @@ dmi_memory::address_is_dmi
   bool                return_status = true;
  
   /// Check if the address is within the dmi address boundaries
-  if(!( (m_start_address >= m_dmi_properties.get_start_address()) &&
-        (m_end_address   <= m_dmi_properties.get_end_address())        ))
+  if(!( (m_start_address >= m_start_address) &&
+        (m_end_address   <= m_end_address)        ))
     {  
       return_status = false;
     }
   
   /// Check if we have been given permission to operate the way we want using
   /// the dmi pointer
-  if( tlm::tlm_dmi::DMI_ACCESS_NONE == m_dmi_properties.get_granted_access()
+  if( tlm::tlm_dmi::DMI_ACCESS_NONE == m_granted_access
       ||
       (gp.get_command()==tlm::TLM_WRITE_COMMAND && 
-       tlm::tlm_dmi::DMI_ACCESS_READ == m_dmi_properties.get_granted_access())
+       tlm::tlm_dmi::DMI_ACCESS_READ == m_granted_access)
       ||
       (gp.get_command()==tlm::TLM_READ_COMMAND &&
-       tlm::tlm_dmi::DMI_ACCESS_WRITE == m_dmi_properties.get_granted_access())
+       tlm::tlm_dmi::DMI_ACCESS_WRITE == m_granted_access)
      )
     {
       msg << " Incompatible Command " << endl << "      ";

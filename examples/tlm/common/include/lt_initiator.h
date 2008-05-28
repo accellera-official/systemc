@@ -36,7 +36,7 @@
 
 #include "tlm.h"                                    // TLM headers
 #include "tlm_utils/simple_initiator_socket.h"
-/// @todo - use convenience socket - Trivial_....Passthru..??
+///@todo Do I need the "dummy calls" in initiator_top??
 
 class lt_initiator                                  // lt_initiator 
   :  public sc_core::sc_module               // module base class 

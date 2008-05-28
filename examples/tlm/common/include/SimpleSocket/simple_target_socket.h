@@ -23,7 +23,7 @@
 
 template <typename MODULE,
           unsigned int BUSWIDTH = 32,
-          typename TYPES = tlm::tlm_base_protocol_types>
+          typename TYPES = tlm::tlm_generic_payload_types>
 class SimpleTargetSocket :
   public tlm::tlm_target_socket<BUSWIDTH,
                                tlm::tlm_fw_transport_if<TYPES>,
@@ -423,7 +423,7 @@ private:
 //ID Tagged version
 template <typename MODULE,
           unsigned int BUSWIDTH = 32,
-          typename TYPES = tlm::tlm_base_protocol_types>
+          typename TYPES = tlm::tlm_generic_payload_types>
 class SimpleTargetSocketTagged :
   public tlm::tlm_target_socket<BUSWIDTH,
                                tlm::tlm_fw_transport_if<TYPES>,

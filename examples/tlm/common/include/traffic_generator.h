@@ -180,7 +180,7 @@ class traffic_generator                       	// traffic_generator
     ( tlm::tlm_generic_payload *transaction_ptr           /// transaction pointer
     )
     {
-      release ( transaction_ptr );
+      transaction_ptr->reset();
       
       delete [] transaction_ptr->get_data_ptr ();
       

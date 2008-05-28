@@ -101,23 +101,23 @@ public:
     tlm::tlm_generic_payload  &gp        
   );   
   
-// Member Variables/Objects  ===================================================
-    
+   // Member Variables
+   
    private:
     
-   unsigned int             m_ID;                    ///< initiator ID
-   unsigned char           *m_data;
-   unsigned int             m_length;
-   sc_dt::uint64            m_dmi_size;
-   sc_dt::uint64            m_offset;
-   sc_dt::uint64            m_address;
-   sc_core::sc_time         m_dmi_read_latency;
-   sc_core::sc_time         m_dmi_write_latency;
-   tlm::tlm_command         m_command;
-   unsigned char           *m_dmi_ptr;
-   sc_dt::uint64            m_start_address;
-   sc_dt::uint64            m_end_address;
-   tlm::tlm_dmi             m_dmi_properties;
-    
+   unsigned int                 m_ID;                    ///< initiator ID
+   unsigned char               *m_data;
+   unsigned int                 m_length;
+   sc_dt::uint64                m_dmi_size;
+   sc_dt::uint64                m_offset;
+   sc_dt::uint64                m_address;
+   sc_core::sc_time             m_dmi_read_latency;
+   sc_core::sc_time             m_dmi_write_latency;
+   tlm::tlm_command             m_command;
+   unsigned char               *m_dmi_ptr;
+   sc_dt::uint64                m_start_address;
+   sc_dt::uint64                m_end_address;
+   bool                         m_is_dmi_flag;
+   tlm::tlm_dmi::dmi_access_e   m_granted_access;
 }; 
  #endif /* __DMI_MEMORY_H__ */
