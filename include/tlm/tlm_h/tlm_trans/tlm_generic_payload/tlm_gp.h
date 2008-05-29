@@ -124,12 +124,12 @@ public:
         , m_byte_enable_length(0)
         , m_streaming_width(0)
         , m_extensions(max_num_extensions())
-        , m_mm(NULL)
+        , m_mm(0)
         , m_ref_count(0)
     {
     }
 
-    tlm_generic_payload(tlm_mm_interface& mm)
+    explicit tlm_generic_payload(tlm_mm_interface* mm)
         : m_address(0)
         , m_command(TLM_IGNORE_COMMAND)
         , m_data(0)
@@ -140,7 +140,7 @@ public:
         , m_byte_enable_length(0)
         , m_streaming_width(0)
         , m_extensions(max_num_extensions())
-        , m_mm(&mm)
+        , m_mm(mm)
         , m_ref_count(0)
     {
     }
@@ -149,7 +149,7 @@ public:
     void release(){assert(m_mm != 0); if (--m_ref_count==0) m_mm->free(this);}
     int get_ref_count(){return m_ref_count;}
     void set_mm(tlm_mm_interface* mm) { m_mm = mm; }
-    bool has_mm() { return m_mm != NULL; }
+    bool has_mm() { return m_mm != 0; }
 
     void reset(){
       //should the other members be reset too?

@@ -43,7 +43,7 @@ public:
     {
       this->set_data_ptr(reinterpret_cast<unsigned char*>(&mData));
     }
-    MyTransaction(tlm::tlm_mm_interface& mm) : transaction_type(mm)
+    MyTransaction(tlm::tlm_mm_interface* mm) : transaction_type(mm)
     {
       this->set_data_ptr(reinterpret_cast<unsigned char*>(&mData));
     }
@@ -63,7 +63,7 @@ public:
     SimplePool() {}
     mytransaction_type* claim()
     { 
-      mytransaction_type* t = new mytransaction_type(*this);
+      mytransaction_type* t = new mytransaction_type(this);
       t->acquire();
       return t;
     }
