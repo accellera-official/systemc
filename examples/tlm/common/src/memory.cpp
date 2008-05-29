@@ -90,7 +90,7 @@ memory::operation
   {
     gp.set_response_status(tlm::TLM_BYTE_ENABLE_ERROR_RESPONSE);
   }
-  else if (gp.get_streaming_width()) 
+  else if (gp.get_streaming_width() != gp.get_data_length()) 
   {
     gp.set_response_status(tlm::TLM_BURST_ERROR_RESPONSE);
   }

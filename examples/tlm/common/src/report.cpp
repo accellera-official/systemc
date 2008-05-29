@@ -195,7 +195,7 @@ print_full
         << "DMI ALLOWED = " << gp.is_dmi_allowed()
         << endl << "      "
  //       << "BYTE ENABLE PTR = " << gp.get_byte_enable_ptr()
-        << "BYTE ENABLE LNGTH = " << gp.get_byte_enable_length();
+        << "BYTE ENABLE LENGTH = " << gp.get_byte_enable_length();
 
 
    REPORT_INFO(caller_filename, __FUNCTION__, msg.str());
