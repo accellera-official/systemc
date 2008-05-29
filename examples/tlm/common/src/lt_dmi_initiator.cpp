@@ -76,7 +76,7 @@ void lt_dmi_initiator::initiator_thread(void)   ///< initiator thread
 
   while (true) 
   {
-// Read transaction from inpute port
+// Read transaction from input port
     gp_ptr = request_in_port->read();  // get request from input fifo
     msg.str("");
    
