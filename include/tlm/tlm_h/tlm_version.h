@@ -68,7 +68,7 @@ namespace tlm
 #define TLM_VERSION_SEPARATOR               "."
 
 #define TLM_IS_PRERELEASE                   TRUE
-#define TLM_VERSION_PRERELEASE              "RC1"
+#define TLM_VERSION_PRERELEASE              "RC2"
 
 #define TLM_VERSION_RELEASE_YEAR			"2008"
 #define TLM_VERSION_RELEASE_MONTH			"06"
