@@ -134,6 +134,7 @@ traffic_generator::traffic_generator_thread
         transaction_ptr->set_command          ( tlm::TLM_WRITE_COMMAND       );
         transaction_ptr->set_address          ( mem_address                  );
         transaction_ptr->set_data_length      ( m_txn_data_size              );
+        transaction_ptr->set_streaming_width  ( m_txn_data_size              );
         transaction_ptr->set_response_status  ( tlm::TLM_INCOMPLETE_RESPONSE );
         
         #if (  defined ( USING_EXTENSION_OPTIONAL  ) )
@@ -178,6 +179,7 @@ traffic_generator::traffic_generator_thread
         transaction_ptr->set_command          ( tlm::TLM_READ_COMMAND        );
         transaction_ptr->set_address          ( mem_address                  );
         transaction_ptr->set_data_length      ( m_txn_data_size              );
+        transaction_ptr->set_streaming_width  ( m_txn_data_size              );
         transaction_ptr->set_response_status  ( tlm::TLM_INCOMPLETE_RESPONSE );
 
         #if (  defined ( USING_EXTENSION_OPTIONAL  ) )
