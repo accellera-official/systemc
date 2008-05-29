@@ -1,0 +1,10 @@
+<area shape="rect" href="$classtlm_1_1tlm__target__socket.html" title="tlm::tlm_target_socket\&lt; BUSWIDTH, TYPES \&gt;" alt="" coords="1989,40,2291,67">
+<area shape="rect" href="$classtlm_1_1tlm__base__target__socket.html" title="tlm::tlm_base_target_socket\&lt; BUSWIDTH, tlm::tlm_fw_transport_if\&lt; TYPES \&gt;, tlm::tlm_bw_transport_if\&lt; TYPES \&gt;, 1, sc_core::SC_ONE_OR_MORE_BOUND \&gt;" alt="" coords="829,31,1811,57">
+<area shape="rect" href="$classtlm_1_1tlm__base__target__socket__b.html" title="tlm::tlm_base_target_socket_b\&lt; BUSWIDTH, FW_IF, BW_IF \&gt;" alt="" coords="293,5,691,32">
+<area shape="rect" href="$classtlm__utils_1_1passthrough__target__socket__tagged_1_1process.html" title="tlm_utils::passthrough_target_socket_tagged\&lt; MODULE, BUSWIDTH, TYPES \&gt;::process" alt="" coords="1863,92,2417,119">
+<area shape="rect" href="$classtlm_1_1tlm__fw__transport__if.html" title="tlm::tlm_fw_transport_if\&lt; TYPES \&gt;" alt="" coords="1205,107,1435,133">
+<area shape="rect" href="$classtlm_1_1tlm__fw__nonblocking__transport__if.html" title="tlm::tlm_fw_nonblocking_transport_if\&lt; TYPES::tlm_payload_type, TYPES::tlm_phase_type \&gt;" alt="" coords="205,56,779,83">
+<area shape="rect" href="$classsc__core_1_1sc__interface.html" title="sc_core::sc_interface" alt="" coords="7,133,153,160">
+<area shape="rect" href="$classtlm_1_1tlm__blocking__transport__if.html" title="tlm::tlm_blocking_transport_if\&lt; TYPES::tlm_payload_type \&gt;" alt="" coords="304,107,680,133">
+<area shape="rect" href="$classtlm_1_1tlm__fw__direct__mem__if.html" title="tlm::tlm_fw_direct_mem_if\&lt; TYPES::tlm_payload_type \&gt;" alt="" coords="313,157,671,184">
+<area shape="rect" href="$classtlm_1_1tlm__transport__dbg__if.html" title="tlm::tlm_transport_dbg_if\&lt; TYPES::tlm_payload_type \&gt;" alt="" coords="317,208,667,235">

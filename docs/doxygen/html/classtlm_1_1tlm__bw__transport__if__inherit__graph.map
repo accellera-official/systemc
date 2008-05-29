@@ -1,0 +1,8 @@
+<area shape="rect" href="$classtlm__utils_1_1callback__binder__bw.html" title="tlm_utils::callback_binder_bw\&lt; TYPES \&gt;" alt="" coords="1181,5,1445,32">
+<area shape="rect" href="$classtlm__utils_1_1simple__initiator__socket_1_1process.html" title="tlm_utils::simple_initiator_socket\&lt; TYPES \&gt;::process" alt="" coords="1145,56,1481,83">
+<area shape="rect" href="$classtlm__utils_1_1simple__initiator__socket__tagged_1_1process.html" title="tlm_utils::simple_initiator_socket_tagged\&lt; TYPES \&gt;::process" alt="" coords="1121,107,1505,133">
+<area shape="rect" href="$classtlm__utils_1_1simple__target__socket_1_1bw__process.html" title="tlm_utils::simple_target_socket\&lt; TYPES \&gt;::bw_process" alt="" coords="1137,157,1489,184">
+<area shape="rect" href="$classtlm__utils_1_1simple__target__socket__tagged_1_1bw__process.html" title="tlm_utils::simple_target_socket_tagged\&lt; TYPES \&gt;::bw_process" alt="" coords="1113,208,1513,235">
+<area shape="rect" href="$classtlm_1_1tlm__bw__nonblocking__transport__if.html" title="tlm::tlm_bw_nonblocking_transport_if\&lt; TYPES::tlm_payload_type, TYPES::tlm_phase_type \&gt;" alt="" coords="204,81,780,108">
+<area shape="rect" href="$classsc__core_1_1sc__interface.html" title="sc_core::sc_interface" alt="" coords="7,81,153,108">
+<area shape="rect" href="$classtlm_1_1tlm__bw__direct__mem__if.html" title="tlm::tlm_bw_direct_mem_if" alt="" coords="401,132,583,159">
