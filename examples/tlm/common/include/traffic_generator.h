@@ -115,11 +115,11 @@ class traffic_generator                       	// traffic_generator
     }
     
     void
-    push                                                  /// push entry
+    enqueue                                                /// enqueue entry (create)
     ( void
     )
     { 
-      tlm::tlm_generic_payload  *transaction_ptr  = new tlm::tlm_generic_payload ( *this ); /// transaction pointer
+      tlm::tlm_generic_payload  *transaction_ptr  = new tlm::tlm_generic_payload ( this ); /// transaction pointer
       unsigned char             *data_buffer_ptr  = new unsigned char [ m_txn_data_size ];  /// data buffer pointer
       
       transaction_ptr->set_data_ptr ( data_buffer_ptr );
@@ -130,7 +130,7 @@ class traffic_generator                       	// traffic_generator
     }
     
     void
-    push                                                  /// push entry
+    enqueue                                               /// enqueue entry
     ( tlm::tlm_generic_payload  *transaction_ptr          /// transaction pointer
     )
     { 
@@ -140,7 +140,7 @@ class traffic_generator                       	// traffic_generator
     }
     
     tlm::tlm_generic_payload *                            /// transaction pointer
-    pop                                                   /// release entry
+    dequeue                                               /// dequeue entry
     ( void
     )
     {

@@ -97,7 +97,7 @@ traffic_generator::traffic_generator_thread
 
   for (unsigned int i = 0; i < m_active_txn_count; i++ )
   {
-    m_transaction_queue.push ();
+    m_transaction_queue.enqueue ();
   }
   
   // outer loop of a simple memory test generate addresses
@@ -116,7 +116,7 @@ traffic_generator::traffic_generator_thread
     {
       if(!m_transaction_queue.is_empty())
       {
-        transaction_ptr = m_transaction_queue.pop ();
+        transaction_ptr = m_transaction_queue.dequeue ();
         
         data_buffer_ptr = transaction_ptr->get_data_ptr();
 
@@ -173,7 +173,7 @@ traffic_generator::traffic_generator_thread
     {
       if(!m_transaction_queue.is_empty())
       {
-        transaction_ptr = m_transaction_queue.pop ();
+        transaction_ptr = m_transaction_queue.dequeue ();
                            
         transaction_ptr->set_command          ( tlm::TLM_READ_COMMAND        );
         transaction_ptr->set_address          ( mem_address                  );
@@ -263,7 +263,7 @@ void traffic_generator::check_complete (void)
       }
     }
     
-    m_transaction_queue.push(transaction_ptr);    
+    m_transaction_queue.enqueue ( transaction_ptr );    
   }
 } // end check_complete
 
