@@ -16,18 +16,20 @@
  *****************************************************************************/
 /*==============================================================================
   @file my_initiator_id_extension.h
-  @brief This is the generic payload extension
-
-  @Details
+  
+  @brief This is a generic payload extension
+  
+  @details
   This module defines the gp extension for the example. In this example, we
-  define an optional extension to be the string containing initiator ID.. 
+  define an optional extension to be the string containing initiator ID.
+  
 =============================================================================*/
    
 /*****************************************************************************
   Original Authors:
+    Charles Wilson, ESLX
     Anna Keist, ESLX
     Bill Bunton, ESLX
-    Charles Wilson, ESLX
 *****************************************************************************/
 
 #ifndef __EXTENSION_INITIATOR_ID_H__
@@ -62,6 +64,12 @@ class extension_initiator_id                        ///< extension class
   // member variables
 
   std::string m_initiator_id;                     ///< initiator ID string
-}; 
+};
+
+struct extension_initiator_id_payload_types
+{
+  typedef tlm::tlm_base_protocol_types::tlm_payload_type    tlm_payload_type;
+  typedef tlm::tlm_base_protocol_types::tlm_phase_type      tlm_phase_type;
+};
 
 #endif /* __EXTENSION_INITIATOR_ID_H__ */
