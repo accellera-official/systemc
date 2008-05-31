@@ -32,6 +32,8 @@ announce:
 	
 check: announce $(OBJ_NAME).exe
 	@$(VALGRIND) ./$(OBJ_NAME).exe > run.log
+	@cat runtemp.log | grep -v "stopped by user" > run.log
+	@cat ../results/expected.log | grep -v "stopped by user" > expected.log
 	@diff run.log ../results/expected.log > diff.log 2>&1;\
 	if [ -s diff.log ]; then echo "***ERROR:"; cat diff.log; else echo "OK"; fi
 
