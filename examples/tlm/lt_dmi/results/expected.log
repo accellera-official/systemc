@@ -184,15 +184,17 @@ Info: lt_dmi_initiator.cpp: 140 ns - initiator_thread
 
 Info: lt_dmi_initiator.cpp: 140 ns - initiator_thread
       Initiator: 101 set up dmi for next access to this target
-      Initiator: 101 get_direct_mem_ptr(0x203a10 , 0xbfffdf14 );
+      Initiator: 101 requesting DMI pointer
 
 Info: lt_dmi_target.cpp: 140 ns - get_direct_mem_ptr
-      Target: 201 DMI pointer, 0xbfffdf14, passed back to an initiator 
+      Target: 201 passing DMI pointer back to initiator
 
 Info: dmi_memory.cpp: 140 ns - print
-      Initiator: 101 &dmi_properties = 0xbfffdf14
-      start addr = 0 end addr = 4096
-      read latency = 20 ns write latency = 15 ns
+      Initiator: 101
+      start addr     = 0
+      end addr       = 4096
+      read latency   = 20 ns
+      write latency  = 15 ns
       granted access = 3
       
 
@@ -204,15 +206,17 @@ Info: lt_dmi_initiator.cpp: 140 ns - initiator_thread
 
 Info: lt_dmi_initiator.cpp: 140 ns - initiator_thread
       Initiator: 102 set up dmi for next access to this target
-      Initiator: 102 get_direct_mem_ptr(0x203ac0 , 0xbfffe400 );
+      Initiator: 102 requesting DMI pointer
 
 Info: lt_dmi_target.cpp: 140 ns - get_direct_mem_ptr
-      Target: 201 DMI pointer, 0xbfffe400, passed back to an initiator 
+      Target: 201 passing DMI pointer back to initiator
 
 Info: dmi_memory.cpp: 140 ns - print
-      Initiator: 102 &dmi_properties = 0xbfffe400
-      start addr = 0 end addr = 4096
-      read latency = 20 ns write latency = 15 ns
+      Initiator: 102
+      start addr     = 0
+      end addr       = 4096
+      read latency   = 20 ns
+      write latency  = 15 ns
       granted access = 3
       
 
@@ -252,15 +256,17 @@ Info: lt_dmi_initiator.cpp: 175 ns - initiator_thread
 
 Info: lt_dmi_initiator.cpp: 175 ns - initiator_thread
       Initiator: 101 set up dmi for next access to this target
-      Initiator: 101 get_direct_mem_ptr(0x203a10 , 0xbfffdf14 );
+      Initiator: 101 requesting DMI pointer
 
 Info: lt_dmi_target.cpp: 175 ns - get_direct_mem_ptr
-      Target: 201 DMI pointer, 0xbfffdf14, passed back to an initiator 
+      Target: 201 passing DMI pointer back to initiator
 
 Info: dmi_memory.cpp: 175 ns - print
-      Initiator: 101 &dmi_properties = 0xbfffdf14
-      start addr = 0 end addr = 4096
-      read latency = 20 ns write latency = 15 ns
+      Initiator: 101
+      start addr     = 0
+      end addr       = 4096
+      read latency   = 20 ns
+      write latency  = 15 ns
       granted access = 3
       
 
@@ -272,15 +278,17 @@ Info: lt_dmi_initiator.cpp: 175 ns - initiator_thread
 
 Info: lt_dmi_initiator.cpp: 175 ns - initiator_thread
       Initiator: 102 set up dmi for next access to this target
-      Initiator: 102 get_direct_mem_ptr(0x203ac0 , 0xbfffe400 );
+      Initiator: 102 requesting DMI pointer
 
 Info: lt_dmi_target.cpp: 175 ns - get_direct_mem_ptr
-      Target: 201 DMI pointer, 0xbfffe400, passed back to an initiator 
+      Target: 201 passing DMI pointer back to initiator
 
 Info: dmi_memory.cpp: 175 ns - print
-      Initiator: 102 &dmi_properties = 0xbfffe400
-      start addr = 0 end addr = 4096
-      read latency = 20 ns write latency = 15 ns
+      Initiator: 102
+      start addr     = 0
+      end addr       = 4096
+      read latency   = 20 ns
+      write latency  = 15 ns
       granted access = 3
       
 
@@ -320,15 +328,17 @@ Info: lt_dmi_initiator.cpp: 210 ns - initiator_thread
 
 Info: lt_dmi_initiator.cpp: 210 ns - initiator_thread
       Initiator: 101 set up dmi for next access to this target
-      Initiator: 101 get_direct_mem_ptr(0x203a10 , 0xbfffdf14 );
+      Initiator: 101 requesting DMI pointer
 
 Info: lt_dmi_target.cpp: 210 ns - get_direct_mem_ptr
-      Target: 201 DMI pointer, 0xbfffdf14, passed back to an initiator 
+      Target: 201 passing DMI pointer back to initiator
 
 Info: dmi_memory.cpp: 210 ns - print
-      Initiator: 101 &dmi_properties = 0xbfffdf14
-      start addr = 0 end addr = 4096
-      read latency = 20 ns write latency = 15 ns
+      Initiator: 101
+      start addr     = 0
+      end addr       = 4096
+      read latency   = 20 ns
+      write latency  = 15 ns
       granted access = 3
       
 
@@ -340,15 +350,17 @@ Info: lt_dmi_initiator.cpp: 210 ns - initiator_thread
 
 Info: lt_dmi_initiator.cpp: 210 ns - initiator_thread
       Initiator: 102 set up dmi for next access to this target
-      Initiator: 102 get_direct_mem_ptr(0x203ac0 , 0xbfffe400 );
+      Initiator: 102 requesting DMI pointer
 
 Info: lt_dmi_target.cpp: 210 ns - get_direct_mem_ptr
-      Target: 201 DMI pointer, 0xbfffe400, passed back to an initiator 
+      Target: 201 passing DMI pointer back to initiator
 
 Info: dmi_memory.cpp: 210 ns - print
-      Initiator: 102 &dmi_properties = 0xbfffe400
-      start addr = 0 end addr = 4096
-      read latency = 20 ns write latency = 15 ns
+      Initiator: 102
+      start addr     = 0
+      end addr       = 4096
+      read latency   = 20 ns
+      write latency  = 15 ns
       granted access = 3
       
 
@@ -388,15 +400,17 @@ Info: lt_dmi_initiator.cpp: 245 ns - initiator_thread
 
 Info: lt_dmi_initiator.cpp: 245 ns - initiator_thread
       Initiator: 101 set up dmi for next access to this target
-      Initiator: 101 get_direct_mem_ptr(0x203a10 , 0xbfffdf14 );
+      Initiator: 101 requesting DMI pointer
 
 Info: lt_dmi_target.cpp: 245 ns - get_direct_mem_ptr
-      Target: 201 DMI pointer, 0xbfffdf14, passed back to an initiator 
+      Target: 201 passing DMI pointer back to initiator
 
 Info: dmi_memory.cpp: 245 ns - print
-      Initiator: 101 &dmi_properties = 0xbfffdf14
-      start addr = 0 end addr = 4096
-      read latency = 20 ns write latency = 15 ns
+      Initiator: 101
+      start addr     = 0
+      end addr       = 4096
+      read latency   = 20 ns
+      write latency  = 15 ns
       granted access = 3
       
 
@@ -408,15 +422,17 @@ Info: lt_dmi_initiator.cpp: 245 ns - initiator_thread
 
 Info: lt_dmi_initiator.cpp: 245 ns - initiator_thread
       Initiator: 102 set up dmi for next access to this target
-      Initiator: 102 get_direct_mem_ptr(0x203ac0 , 0xbfffe400 );
+      Initiator: 102 requesting DMI pointer
 
 Info: lt_dmi_target.cpp: 245 ns - get_direct_mem_ptr
-      Target: 201 DMI pointer, 0xbfffe400, passed back to an initiator 
+      Target: 201 passing DMI pointer back to initiator
 
 Info: dmi_memory.cpp: 245 ns - print
-      Initiator: 102 &dmi_properties = 0xbfffe400
-      start addr = 0 end addr = 4096
-      read latency = 20 ns write latency = 15 ns
+      Initiator: 102
+      start addr     = 0
+      end addr       = 4096
+      read latency   = 20 ns
+      write latency  = 15 ns
       granted access = 3
       
 
@@ -456,15 +472,17 @@ Info: lt_dmi_initiator.cpp: 280 ns - initiator_thread
 
 Info: lt_dmi_initiator.cpp: 280 ns - initiator_thread
       Initiator: 101 set up dmi for next access to this target
-      Initiator: 101 get_direct_mem_ptr(0x203a10 , 0xbfffdf14 );
+      Initiator: 101 requesting DMI pointer
 
 Info: lt_dmi_target.cpp: 280 ns - get_direct_mem_ptr
-      Target: 201 DMI pointer, 0xbfffdf14, passed back to an initiator 
+      Target: 201 passing DMI pointer back to initiator
 
 Info: dmi_memory.cpp: 280 ns - print
-      Initiator: 101 &dmi_properties = 0xbfffdf14
-      start addr = 0 end addr = 4096
-      read latency = 20 ns write latency = 15 ns
+      Initiator: 101
+      start addr     = 0
+      end addr       = 4096
+      read latency   = 20 ns
+      write latency  = 15 ns
       granted access = 3
       
 
@@ -476,15 +494,17 @@ Info: lt_dmi_initiator.cpp: 280 ns - initiator_thread
 
 Info: lt_dmi_initiator.cpp: 280 ns - initiator_thread
       Initiator: 102 set up dmi for next access to this target
-      Initiator: 102 get_direct_mem_ptr(0x203ac0 , 0xbfffe400 );
+      Initiator: 102 requesting DMI pointer
 
 Info: lt_dmi_target.cpp: 280 ns - get_direct_mem_ptr
-      Target: 201 DMI pointer, 0xbfffe400, passed back to an initiator 
+      Target: 201 passing DMI pointer back to initiator
 
 Info: dmi_memory.cpp: 280 ns - print
-      Initiator: 102 &dmi_properties = 0xbfffe400
-      start addr = 0 end addr = 4096
-      read latency = 20 ns write latency = 15 ns
+      Initiator: 102
+      start addr     = 0
+      end addr       = 4096
+      read latency   = 20 ns
+      write latency  = 15 ns
       granted access = 3
       
 
@@ -524,15 +544,17 @@ Info: lt_dmi_initiator.cpp: 315 ns - initiator_thread
 
 Info: lt_dmi_initiator.cpp: 315 ns - initiator_thread
       Initiator: 101 set up dmi for next access to this target
-      Initiator: 101 get_direct_mem_ptr(0x203a10 , 0xbfffdf14 );
+      Initiator: 101 requesting DMI pointer
 
 Info: lt_dmi_target.cpp: 315 ns - get_direct_mem_ptr
-      Target: 201 DMI pointer, 0xbfffdf14, passed back to an initiator 
+      Target: 201 passing DMI pointer back to initiator
 
 Info: dmi_memory.cpp: 315 ns - print
-      Initiator: 101 &dmi_properties = 0xbfffdf14
-      start addr = 0 end addr = 4096
-      read latency = 20 ns write latency = 15 ns
+      Initiator: 101
+      start addr     = 0
+      end addr       = 4096
+      read latency   = 20 ns
+      write latency  = 15 ns
       granted access = 3
       
 
@@ -544,15 +566,17 @@ Info: lt_dmi_initiator.cpp: 315 ns - initiator_thread
 
 Info: lt_dmi_initiator.cpp: 315 ns - initiator_thread
       Initiator: 102 set up dmi for next access to this target
-      Initiator: 102 get_direct_mem_ptr(0x203ac0 , 0xbfffe400 );
+      Initiator: 102 requesting DMI pointer
 
 Info: lt_dmi_target.cpp: 315 ns - get_direct_mem_ptr
-      Target: 201 DMI pointer, 0xbfffe400, passed back to an initiator 
+      Target: 201 passing DMI pointer back to initiator
 
 Info: dmi_memory.cpp: 315 ns - print
-      Initiator: 102 &dmi_properties = 0xbfffe400
-      start addr = 0 end addr = 4096
-      read latency = 20 ns write latency = 15 ns
+      Initiator: 102
+      start addr     = 0
+      end addr       = 4096
+      read latency   = 20 ns
+      write latency  = 15 ns
       granted access = 3
       
 
@@ -592,15 +616,17 @@ Info: lt_dmi_initiator.cpp: 350 ns - initiator_thread
 
 Info: lt_dmi_initiator.cpp: 350 ns - initiator_thread
       Initiator: 101 set up dmi for next access to this target
-      Initiator: 101 get_direct_mem_ptr(0x203a10 , 0xbfffdf14 );
+      Initiator: 101 requesting DMI pointer
 
 Info: lt_dmi_target.cpp: 350 ns - get_direct_mem_ptr
-      Target: 201 DMI pointer, 0xbfffdf14, passed back to an initiator 
+      Target: 201 passing DMI pointer back to initiator
 
 Info: dmi_memory.cpp: 350 ns - print
-      Initiator: 101 &dmi_properties = 0xbfffdf14
-      start addr = 0 end addr = 4096
-      read latency = 20 ns write latency = 15 ns
+      Initiator: 101
+      start addr     = 0
+      end addr       = 4096
+      read latency   = 20 ns
+      write latency  = 15 ns
       granted access = 3
       
 
@@ -612,15 +638,17 @@ Info: lt_dmi_initiator.cpp: 350 ns - initiator_thread
 
 Info: lt_dmi_initiator.cpp: 350 ns - initiator_thread
       Initiator: 102 set up dmi for next access to this target
-      Initiator: 102 get_direct_mem_ptr(0x203ac0 , 0xbfffe400 );
+      Initiator: 102 requesting DMI pointer
 
 Info: lt_dmi_target.cpp: 350 ns - get_direct_mem_ptr
-      Target: 201 DMI pointer, 0xbfffe400, passed back to an initiator 
+      Target: 201 passing DMI pointer back to initiator
 
 Info: dmi_memory.cpp: 350 ns - print
-      Initiator: 102 &dmi_properties = 0xbfffe400
-      start addr = 0 end addr = 4096
-      read latency = 20 ns write latency = 15 ns
+      Initiator: 102
+      start addr     = 0
+      end addr       = 4096
+      read latency   = 20 ns
+      write latency  = 15 ns
       granted access = 3
       
 
@@ -660,15 +688,17 @@ Info: lt_dmi_initiator.cpp: 385 ns - initiator_thread
 
 Info: lt_dmi_initiator.cpp: 385 ns - initiator_thread
       Initiator: 101 set up dmi for next access to this target
-      Initiator: 101 get_direct_mem_ptr(0x203a10 , 0xbfffdf14 );
+      Initiator: 101 requesting DMI pointer
 
 Info: lt_dmi_target.cpp: 385 ns - get_direct_mem_ptr
-      Target: 201 DMI pointer, 0xbfffdf14, passed back to an initiator 
+      Target: 201 passing DMI pointer back to initiator
 
 Info: dmi_memory.cpp: 385 ns - print
-      Initiator: 101 &dmi_properties = 0xbfffdf14
-      start addr = 0 end addr = 4096
-      read latency = 20 ns write latency = 15 ns
+      Initiator: 101
+      start addr     = 0
+      end addr       = 4096
+      read latency   = 20 ns
+      write latency  = 15 ns
       granted access = 3
       
 
@@ -680,15 +710,17 @@ Info: lt_dmi_initiator.cpp: 385 ns - initiator_thread
 
 Info: lt_dmi_initiator.cpp: 385 ns - initiator_thread
       Initiator: 102 set up dmi for next access to this target
-      Initiator: 102 get_direct_mem_ptr(0x203ac0 , 0xbfffe400 );
+      Initiator: 102 requesting DMI pointer
 
 Info: lt_dmi_target.cpp: 385 ns - get_direct_mem_ptr
-      Target: 201 DMI pointer, 0xbfffe400, passed back to an initiator 
+      Target: 201 passing DMI pointer back to initiator
 
 Info: dmi_memory.cpp: 385 ns - print
-      Initiator: 102 &dmi_properties = 0xbfffe400
-      start addr = 0 end addr = 4096
-      read latency = 20 ns write latency = 15 ns
+      Initiator: 102
+      start addr     = 0
+      end addr       = 4096
+      read latency   = 20 ns
+      write latency  = 15 ns
       granted access = 3
       
 
@@ -728,15 +760,17 @@ Info: lt_dmi_initiator.cpp: 420 ns - initiator_thread
 
 Info: lt_dmi_initiator.cpp: 420 ns - initiator_thread
       Initiator: 101 set up dmi for next access to this target
-      Initiator: 101 get_direct_mem_ptr(0x203a10 , 0xbfffdf14 );
+      Initiator: 101 requesting DMI pointer
 
 Info: lt_dmi_target.cpp: 420 ns - get_direct_mem_ptr
-      Target: 201 DMI pointer, 0xbfffdf14, passed back to an initiator 
+      Target: 201 passing DMI pointer back to initiator
 
 Info: dmi_memory.cpp: 420 ns - print
-      Initiator: 101 &dmi_properties = 0xbfffdf14
-      start addr = 0 end addr = 4096
-      read latency = 20 ns write latency = 15 ns
+      Initiator: 101
+      start addr     = 0
+      end addr       = 4096
+      read latency   = 20 ns
+      write latency  = 15 ns
       granted access = 3
       
 
@@ -748,15 +782,17 @@ Info: lt_dmi_initiator.cpp: 420 ns - initiator_thread
 
 Info: lt_dmi_initiator.cpp: 420 ns - initiator_thread
       Initiator: 102 set up dmi for next access to this target
-      Initiator: 102 get_direct_mem_ptr(0x203ac0 , 0xbfffe400 );
+      Initiator: 102 requesting DMI pointer
 
 Info: lt_dmi_target.cpp: 420 ns - get_direct_mem_ptr
-      Target: 201 DMI pointer, 0xbfffe400, passed back to an initiator 
+      Target: 201 passing DMI pointer back to initiator
 
 Info: dmi_memory.cpp: 420 ns - print
-      Initiator: 102 &dmi_properties = 0xbfffe400
-      start addr = 0 end addr = 4096
-      read latency = 20 ns write latency = 15 ns
+      Initiator: 102
+      start addr     = 0
+      end addr       = 4096
+      read latency   = 20 ns
+      write latency  = 15 ns
       granted access = 3
       
 
@@ -796,15 +832,17 @@ Info: lt_dmi_initiator.cpp: 455 ns - initiator_thread
 
 Info: lt_dmi_initiator.cpp: 455 ns - initiator_thread
       Initiator: 101 set up dmi for next access to this target
-      Initiator: 101 get_direct_mem_ptr(0x203a10 , 0xbfffdf14 );
+      Initiator: 101 requesting DMI pointer
 
 Info: lt_dmi_target.cpp: 455 ns - get_direct_mem_ptr
-      Target: 201 DMI pointer, 0xbfffdf14, passed back to an initiator 
+      Target: 201 passing DMI pointer back to initiator
 
 Info: dmi_memory.cpp: 455 ns - print
-      Initiator: 101 &dmi_properties = 0xbfffdf14
-      start addr = 0 end addr = 4096
-      read latency = 20 ns write latency = 15 ns
+      Initiator: 101
+      start addr     = 0
+      end addr       = 4096
+      read latency   = 20 ns
+      write latency  = 15 ns
       granted access = 3
       
 
@@ -816,15 +854,17 @@ Info: lt_dmi_initiator.cpp: 455 ns - initiator_thread
 
 Info: lt_dmi_initiator.cpp: 455 ns - initiator_thread
       Initiator: 102 set up dmi for next access to this target
-      Initiator: 102 get_direct_mem_ptr(0x203ac0 , 0xbfffe400 );
+      Initiator: 102 requesting DMI pointer
 
 Info: lt_dmi_target.cpp: 455 ns - get_direct_mem_ptr
-      Target: 201 DMI pointer, 0xbfffe400, passed back to an initiator 
+      Target: 201 passing DMI pointer back to initiator
 
 Info: dmi_memory.cpp: 455 ns - print
-      Initiator: 102 &dmi_properties = 0xbfffe400
-      start addr = 0 end addr = 4096
-      read latency = 20 ns write latency = 15 ns
+      Initiator: 102
+      start addr     = 0
+      end addr       = 4096
+      read latency   = 20 ns
+      write latency  = 15 ns
       granted access = 3
       
 
@@ -864,15 +904,17 @@ Info: lt_dmi_initiator.cpp: 490 ns - initiator_thread
 
 Info: lt_dmi_initiator.cpp: 490 ns - initiator_thread
       Initiator: 101 set up dmi for next access to this target
-      Initiator: 101 get_direct_mem_ptr(0x203a10 , 0xbfffdf14 );
+      Initiator: 101 requesting DMI pointer
 
 Info: lt_dmi_target.cpp: 490 ns - get_direct_mem_ptr
-      Target: 201 DMI pointer, 0xbfffdf14, passed back to an initiator 
+      Target: 201 passing DMI pointer back to initiator
 
 Info: dmi_memory.cpp: 490 ns - print
-      Initiator: 101 &dmi_properties = 0xbfffdf14
-      start addr = 0 end addr = 4096
-      read latency = 20 ns write latency = 15 ns
+      Initiator: 101
+      start addr     = 0
+      end addr       = 4096
+      read latency   = 20 ns
+      write latency  = 15 ns
       granted access = 3
       
 
@@ -884,15 +926,17 @@ Info: lt_dmi_initiator.cpp: 490 ns - initiator_thread
 
 Info: lt_dmi_initiator.cpp: 490 ns - initiator_thread
       Initiator: 102 set up dmi for next access to this target
-      Initiator: 102 get_direct_mem_ptr(0x203ac0 , 0xbfffe400 );
+      Initiator: 102 requesting DMI pointer
 
 Info: lt_dmi_target.cpp: 490 ns - get_direct_mem_ptr
-      Target: 201 DMI pointer, 0xbfffe400, passed back to an initiator 
+      Target: 201 passing DMI pointer back to initiator
 
 Info: dmi_memory.cpp: 490 ns - print
-      Initiator: 102 &dmi_properties = 0xbfffe400
-      start addr = 0 end addr = 4096
-      read latency = 20 ns write latency = 15 ns
+      Initiator: 102
+      start addr     = 0
+      end addr       = 4096
+      read latency   = 20 ns
+      write latency  = 15 ns
       granted access = 3
       
 
@@ -932,15 +976,17 @@ Info: lt_dmi_initiator.cpp: 525 ns - initiator_thread
 
 Info: lt_dmi_initiator.cpp: 525 ns - initiator_thread
       Initiator: 101 set up dmi for next access to this target
-      Initiator: 101 get_direct_mem_ptr(0x203a10 , 0xbfffdf14 );
+      Initiator: 101 requesting DMI pointer
 
 Info: lt_dmi_target.cpp: 525 ns - get_direct_mem_ptr
-      Target: 201 DMI pointer, 0xbfffdf14, passed back to an initiator 
+      Target: 201 passing DMI pointer back to initiator
 
 Info: dmi_memory.cpp: 525 ns - print
-      Initiator: 101 &dmi_properties = 0xbfffdf14
-      start addr = 0 end addr = 4096
-      read latency = 20 ns write latency = 15 ns
+      Initiator: 101
+      start addr     = 0
+      end addr       = 4096
+      read latency   = 20 ns
+      write latency  = 15 ns
       granted access = 3
       
 
@@ -952,15 +998,17 @@ Info: lt_dmi_initiator.cpp: 525 ns - initiator_thread
 
 Info: lt_dmi_initiator.cpp: 525 ns - initiator_thread
       Initiator: 102 set up dmi for next access to this target
-      Initiator: 102 get_direct_mem_ptr(0x203ac0 , 0xbfffe400 );
+      Initiator: 102 requesting DMI pointer
 
 Info: lt_dmi_target.cpp: 525 ns - get_direct_mem_ptr
-      Target: 201 DMI pointer, 0xbfffe400, passed back to an initiator 
+      Target: 201 passing DMI pointer back to initiator
 
 Info: dmi_memory.cpp: 525 ns - print
-      Initiator: 102 &dmi_properties = 0xbfffe400
-      start addr = 0 end addr = 4096
-      read latency = 20 ns write latency = 15 ns
+      Initiator: 102
+      start addr     = 0
+      end addr       = 4096
+      read latency   = 20 ns
+      write latency  = 15 ns
       granted access = 3
       
 
@@ -1000,15 +1048,17 @@ Info: lt_dmi_initiator.cpp: 560 ns - initiator_thread
 
 Info: lt_dmi_initiator.cpp: 560 ns - initiator_thread
       Initiator: 101 set up dmi for next access to this target
-      Initiator: 101 get_direct_mem_ptr(0x203a10 , 0xbfffdf14 );
+      Initiator: 101 requesting DMI pointer
 
 Info: lt_dmi_target.cpp: 560 ns - get_direct_mem_ptr
-      Target: 201 DMI pointer, 0xbfffdf14, passed back to an initiator 
+      Target: 201 passing DMI pointer back to initiator
 
 Info: dmi_memory.cpp: 560 ns - print
-      Initiator: 101 &dmi_properties = 0xbfffdf14
-      start addr = 0 end addr = 4096
-      read latency = 20 ns write latency = 15 ns
+      Initiator: 101
+      start addr     = 0
+      end addr       = 4096
+      read latency   = 20 ns
+      write latency  = 15 ns
       granted access = 3
       
 
@@ -1020,15 +1070,17 @@ Info: lt_dmi_initiator.cpp: 560 ns - initiator_thread
 
 Info: lt_dmi_initiator.cpp: 560 ns - initiator_thread
       Initiator: 102 set up dmi for next access to this target
-      Initiator: 102 get_direct_mem_ptr(0x203ac0 , 0xbfffe400 );
+      Initiator: 102 requesting DMI pointer
 
 Info: lt_dmi_target.cpp: 560 ns - get_direct_mem_ptr
-      Target: 201 DMI pointer, 0xbfffe400, passed back to an initiator 
+      Target: 201 passing DMI pointer back to initiator
 
 Info: dmi_memory.cpp: 560 ns - print
-      Initiator: 102 &dmi_properties = 0xbfffe400
-      start addr = 0 end addr = 4096
-      read latency = 20 ns write latency = 15 ns
+      Initiator: 102
+      start addr     = 0
+      end addr       = 4096
+      read latency   = 20 ns
+      write latency  = 15 ns
       granted access = 3
       
 
@@ -1088,7 +1140,7 @@ Info: lt_dmi_initiator.cpp: 600 ns - initiator_thread
 
 Info: lt_dmi_initiator.cpp: 600 ns - initiator_thread
       Initiator: 102 set up dmi for next access to this target
-      Initiator: 102 get_direct_mem_ptr(0x203ac0 , 0xbfffe400 );
+      Initiator: 102 requesting DMI pointer
 
 Info: lt_dmi_target.cpp: 600 ns - get_direct_mem_ptr
       Target: 201 DMI not enabled, not expecting call 
@@ -1104,7 +1156,7 @@ Info: lt_dmi_initiator.cpp: 600 ns - initiator_thread
 
 Info: lt_dmi_initiator.cpp: 600 ns - initiator_thread
       Initiator: 101 set up dmi for next access to this target
-      Initiator: 101 get_direct_mem_ptr(0x203a10 , 0xbfffdf14 );
+      Initiator: 101 requesting DMI pointer
 
 Info: lt_dmi_target.cpp: 600 ns - get_direct_mem_ptr
       Target: 201 DMI not enabled, not expecting call 
