@@ -42,6 +42,9 @@ class extension_initiator_id                        ///< extension class
 : public tlm::tlm_extension<extension_initiator_id> ///< tlm extension
 {
   public:
+  
+  typedef tlm::tlm_base_protocol_types::tlm_payload_type  tlm_payload_type;
+  typedef tlm::tlm_base_protocol_types::tlm_phase_type    tlm_phase_type;
 
   extension_initiator_id                            ///< constructor
   ( void
@@ -65,11 +68,9 @@ class extension_initiator_id                        ///< extension class
 
   std::string m_initiator_id;                     ///< initiator ID string
 };
-
+/*
 struct extension_initiator_id_payload_types
 {
-  typedef tlm::tlm_base_protocol_types::tlm_payload_type    tlm_payload_type;
-  typedef tlm::tlm_base_protocol_types::tlm_phase_type      tlm_phase_type;
 };
-
+*/
 #endif /* __EXTENSION_INITIATOR_ID_H__ */

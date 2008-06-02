@@ -160,7 +160,7 @@ print_full
    std::ostringstream     msg;
    msg.str("");
    
-   msg << "gp_ptr = " << &gp << endl << "      ";
+//   msg << "gp_ptr = " << &gp << endl << "      ";
    
    sc_dt::uint64 print_address  = gp.get_address();      // memory address
    unsigned char *print_data    = gp.get_data_ptr();    // data pointer
@@ -211,15 +211,17 @@ print
    std::ostringstream     msg;
    msg.str("");
    msg << "Initiator: " << ID 
-       << " &dmi_properties = " << &dmi_properties 
-       << endl << "      ";
-   msg << "start addr = " << dmi_properties.get_start_address()
-       << " end addr = " << dmi_properties.get_end_address() 
-       << endl << "      ";
-   msg << "read latency = " << dmi_properties.get_read_latency()
-       << " write latency = " << dmi_properties.get_write_latency() 
-       << endl << "      ";
-   msg << "granted access = " << dmi_properties.get_granted_access()
+//       << " &dmi_properties = " << &dmi_properties
+       << endl << "      "
+       << "start addr     = " << dmi_properties.get_start_address()
+       << endl << "      "
+       << "end addr       = " << dmi_properties.get_end_address() 
+       << endl << "      "
+       << "read latency   = " << dmi_properties.get_read_latency()
+       << endl << "      "
+       << "write latency  = " << dmi_properties.get_write_latency() 
+       << endl << "      "
+       << "granted access = " << dmi_properties.get_granted_access()
        << endl << "      ";
    
 //   unsigned char*    temp_dmi_ptr = dmi_properties.get_dmi_ptr();

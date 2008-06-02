@@ -136,9 +136,10 @@ void lt_dmi_initiator::initiator_thread(void)   ///< initiator thread
             // reset address in case it was mutated
             gp_ptr->set_address(m_address);
             
-            msg << "Initiator: " << m_ID               
-                << " get_direct_mem_ptr(" << gp_ptr
-                << " , " << &m_dmi_properties << " );";
+            msg << "Initiator: " << m_ID  
+                << " requesting DMI pointer";
+//                << " get_direct_mem_ptr (" << gp_ptr
+//                << " , " << &m_dmi_properties << " );";
             REPORT_INFO(filename,  __FUNCTION__, msg.str());
             
             if(initiator_socket->get_direct_mem_ptr(*gp_ptr,m_dmi_properties))

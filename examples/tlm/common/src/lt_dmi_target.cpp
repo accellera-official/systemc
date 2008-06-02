@@ -146,31 +146,28 @@ lt_dmi_target::get_direct_mem_ptr
     if (address < m_end_address+1)   // check that address is in our range              
     {
       // set up dmi properties object ======================================
-        dmi_properties.allow_read_write();
-        dmi_properties.set_start_address(m_start_address);
-        dmi_properties.set_end_address(m_end_address);
-        
-//        unsigned char* temp_ptr = m_target_memory.get_mem_ptr();     
-//        dmi_properties.set_dmi_ptr(temp_ptr);
-        
-      dmi_properties.set_dmi_ptr(m_target_memory.get_mem_ptr());
-        dmi_properties.set_read_latency(m_read_response_delay);
-        dmi_properties.set_write_latency(m_write_response_delay);
+      dmi_properties.allow_read_write   (                                );
+      dmi_properties.set_start_address  ( m_start_address                );
+      dmi_properties.set_end_address    ( m_end_address                  );
+      dmi_properties.set_dmi_ptr        ( m_target_memory.get_mem_ptr () );
+      dmi_properties.set_read_latency   ( m_read_response_delay          );
+      dmi_properties.set_write_latency  ( m_write_response_delay         );
 
-        msg << "Target: " << m_ID
-            << " DMI pointer, " << &dmi_properties
-            << ", passed back to an initiator ";
-        REPORT_INFO(filename, __FUNCTION__, msg.str());
-        return true;
-        }
-      else
-        {
-        msg << "Target: " << m_ID
-            << " DMI pointer request for address= " << address
-            << " max address for this target = " << m_end_address+1;
-        REPORT_INFO(filename, __FUNCTION__, msg.str());
-        } // end else
+      msg << "Target: " << m_ID
+          << " passing DMI pointer back to initiator";
+//          << " DMI pointer, " << &dmi_properties
+//          << ", passed back to an initiator ";
+      REPORT_INFO(filename, __FUNCTION__, msg.str());
+      return true;
+    }
+    else
+    {
+      msg << "Target: " << m_ID
+          << " DMI pointer request for address= " << address
+          << " max address for this target = " << m_end_address+1;
+      REPORT_INFO(filename, __FUNCTION__, msg.str());
     } // end else
+  } // end else
   
   return false; 
 } // end get_direct_mem_ptr
