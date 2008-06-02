@@ -6,12 +6,12 @@ SUBDIRS = \
           ../at_1_phase \
           ../at_2_phase \
           ../at_4_phase \
-          ../at_extension_mandatory \
           ../at_extension_optional \
           ../at_mixed_targets \
           ../at_ooo \
           ../lt \
           ../lt_dmi \
+          ../lt_extension_mandatory \
           ../lt_temporal_decouple
 
 .PHONY: all clean check run
