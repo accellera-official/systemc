@@ -139,9 +139,11 @@ needing to store context.
   tlm_from_hostendian(tlm_generic_payload *txn)
 */
 
-
+#ifndef uchar
 #define uchar unsigned char
-
+#else
+#define TLM_END_CONV_DONT_UNDEF_UCHAR
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 // Generic Utilities
@@ -268,8 +270,6 @@ template<class D> class tlm_bool {
 
 template<class D> D tlm_bool<D>::TLM_TRUE = tlm_bool<D>::make_uchar_array(TLM_BYTE_ENABLED);
 template<class D> D tlm_bool<D>::TLM_FALSE = tlm_bool<D>::make_uchar_array(TLM_BYTE_DISABLED);
-
-using namespace std;
 
 ///////////////////////////////////////////////////////////////////////////////
 // function set (0): Utilities
@@ -774,9 +774,9 @@ inline void tlm_from_hostendian(tlm_generic_payload *txn) {
 }
 
 
-
+#ifndef TLM_END_CONV_DONT_UNDEF_UCHAR
 #undef uchar
-
+#endif
 
 }  // namespace tlm
 
