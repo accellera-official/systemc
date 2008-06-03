@@ -17,7 +17,7 @@ announce:
 	 fi
 
 check: announce $(OBJ_NAME).exe
-	@$(VALGRIND) ./$(OBJ_NAME).exe < ../results/input.txt > runtemp.log
+	@$(VALGRIND) ./$(OBJ_NAME).exe < ../results/input.txt > run.log
 	@cat run.log | grep -v "stopped by user" | awk '{if($$0!="") print $$0}' > run_trimmed.log
 	@cat ../results/expected.log | grep -v "stopped by user" | awk '{if($$0!="") print $$0}' > ./expected_trimmed.log
 	@diff ./run_trimmed.log ./expected_trimmed.log > diff.log 2>&1;\
