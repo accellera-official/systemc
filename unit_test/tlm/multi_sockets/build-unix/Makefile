@@ -19,10 +19,10 @@ announce:
 	 fi
 	
 check: announce $(OBJ_NAME).exe
-	@$(VALGRIND) ./$(OBJ_NAME).exe > runtemp.log
-	@cat runtemp.log | grep -v "stopped by user" > run.log
-	@cat ../results/expected.log | grep -v "stopped by user" > expected.log
-	@diff -B run.log expected.log > diff.log 2>&1;\
+	@$(VALGRIND) ./$(OBJ_NAME).exe > run.log
+	@cat run.log | grep -v "stopped by user" | awk '{if($$0!="") print $$0}' > run_trimmed.log
+	@cat ../results/expected.log | grep -v "stopped by user" | awk '{if($$0!="") print $$0}' > ./expected_trimmed.log
+	@diff ./run_trimmed.log ./expected_trimmed.log > diff.log 2>&1;\
 	if [ -s diff.log ]; then echo "***ERROR:"; cat diff.log; else echo "OK"; fi
 
 run: announce $(OBJ_NAME).exe
