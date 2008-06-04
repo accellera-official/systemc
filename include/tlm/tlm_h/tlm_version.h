@@ -37,7 +37,7 @@
  	               TLM_VERSION_PRERELEASE   string       ([A-Z][a-z][0-9]_)
  	               TLM_IS_PRERELEASE        bool         (TRUE,FALSE)
  	               TLM_VERSION              string       {2.0.0_DR3-TLMWG}
- 	               TLM_COPYRIGHT			string
+ 	               TLM_COPYRIGHT			      string
  	 .
  	 compiler:     tlm_version_major        const unsigned int
  	               tlm_version_minor        const unsigned int
@@ -47,7 +47,7 @@
  	               tlm_version_prerelease   const std::string
  	               tlm_is_prerelease        const bool
  	               tlm_version              const string
- 	               tlm_copyright			const string
+ 	               tlm_copyright			      const string
  	 .
  	 accessors:    inline const char* tlm_release   (void)
  	               inline const char* tlm_version   (void)
@@ -64,24 +64,24 @@ namespace tlm
 #define TLM_VERSION_MAJOR                   2
 #define TLM_VERSION_MINOR                   0
 #define TLM_VERSION_PATCH                   0
-#define TLM_VERSION_ORIGINATOR				"TLMWG"
+#define TLM_VERSION_ORIGINATOR							"TLMWG"
 #define TLM_VERSION_SEPARATOR               "."
 
-#define TLM_IS_PRERELEASE                   TRUE
-#define TLM_VERSION_PRERELEASE              "RC2"
+#define TLM_IS_PRERELEASE             			FALSE
+#define TLM_VERSION_PRERELEASE       				""
 
-#define TLM_VERSION_RELEASE_YEAR			"2008"
-#define TLM_VERSION_RELEASE_MONTH			"06"
-#define TLM_VERSION_RELEASE_DAY				"14"
+#define TLM_VERSION_RELEASE_YEAR						"2008"
+#define TLM_VERSION_RELEASE_MONTH						"06"
+#define TLM_VERSION_RELEASE_DAY							"14"
 
-#define TLM_COPYRIGHT						"        Copyright (c) 1996-" TLM_VERSION_RELEASE_YEAR " by all Contributors\n" \
+#define TLM_COPYRIGHT												"        Copyright (c) 1996-" TLM_VERSION_RELEASE_YEAR " by all Contributors\n" \
                                             "                    ALL RIGHTS RESERVED"
 
 /************************** do not modify below this line *******************************/
 
 /******************************* preprocessor symbols ***********************************/
 
-#define	TLM_VERSION_RELEASE_DATE			TLM_VERSION_RELEASE_YEAR \
+#define	TLM_VERSION_RELEASE_DATE			      TLM_VERSION_RELEASE_YEAR \
                                             TLM_VERSION_RELEASE_MONTH \
                                             TLM_VERSION_RELEASE_DAY
                                             
@@ -102,12 +102,12 @@ namespace tlm
 #if ( TLM_IS_PRERELEASE == TRUE )
 
 #define TLM_VERSION_STRING_PRERELEASE       TLM_VERSION_PRERELEASE
-#define TLM_VERSION_STRING_RELEASE_DATE		""
+#define TLM_VERSION_STRING_RELEASE_DATE		  ""
 
 #else   /* TLM_IS_PRERELEASE == TRUE */
 
 #define TLM_VERSION_STRING_PRERELEASE       ""
-#define TLM_VERSION_STRING_RELEASE_DATE		TLM_VERSION_RELEASE_DATE
+#define TLM_VERSION_STRING_RELEASE_DATE		  TLM_VERSION_RELEASE_DATE
 
 #endif  /* TLM_IS_PRERELEASE == TRUE */
 
@@ -117,7 +117,7 @@ namespace tlm
                                             TLM_VERSION_STRING_PRE_END \
                                             TLM_VERSION_ORIGINATOR
 
-#define TLM_VERSION_STRING_2				"             TLM " \
+#define TLM_VERSION_STRING_2				        "             TLM " \
                                             TLM_VERSION_STRING_MMP \
                                             " --- " \
                                             TLM_VERSION_RELEASE_YEAR \
@@ -140,14 +140,14 @@ const bool         tlm_is_prerelease       	(
 #else   /* TLM_IS_PRERELEASE == TRUE */
                                               false
 #endif  /* TLM_IS_PRERELEASE == TRUE */
-                                            							      );
+                                            							                    );
 
 const std::string  tlm_version_string      	( TLM_VERSION_STRING              );
 const std::string  tlm_version_originator   ( TLM_VERSION_ORIGINATOR          );
 const std::string  tlm_version_prerelease  	( TLM_VERSION_PRERELEASE          );
 const std::string  tlm_version_release_date	( TLM_VERSION_STRING_RELEASE_DATE );
-const std::string  tlm_copyright_string		( TLM_COPYRIGHT                   );
-const std::string  tlm_version_string_2		( TLM_VERSION_STRING_2            );
+const std::string  tlm_copyright_string		  ( TLM_COPYRIGHT                   );
+const std::string  tlm_version_string_2		  ( TLM_VERSION_STRING_2            );
 
 inline const char*
 tlm_release
