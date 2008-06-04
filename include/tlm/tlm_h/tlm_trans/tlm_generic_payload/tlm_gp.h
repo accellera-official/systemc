@@ -233,7 +233,7 @@ public:
             {                       //original has extension i
                 if(!m_extensions[i])
                 {                   //We don't: clone.
-                    tlm_extension_base *ext = m_extensions[i]->clone();
+                    tlm_extension_base *ext = other.m_extensions[i]->clone();
                     if(ext)			//extension may not be clonable.
                     {
                         if(has_mm())
