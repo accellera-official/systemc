@@ -86,11 +86,6 @@ class lt_initiator_extension_mandatory
   , sc_dt::uint64       end_range                       ///< end DMI range
   );
 
-  void
-  check_debug_transport                                 ///< check debug transport
-  ( void
-  );
-
   //  member variables
   
   public:

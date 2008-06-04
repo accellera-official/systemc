@@ -55,9 +55,11 @@ lt_initiator_extension_mandatory::create_transaction                ///< create 
   {
     // initialize DMI state:
     
-    trans.set_dmi_allowed ( false );
+    trans.set_dmi_allowed     ( false                     );
+    trans.set_data_length     ( 4                         );
+    trans.set_streaming_width ( trans.get_data_length ()  );
     
-    if ( m_transaction_count < m_transaction_max)
+    if ( m_transaction_count < m_transaction_max )
     {
       trans.set_address ( m_base_address + ( 4 * m_transaction_count ) );
       
@@ -257,10 +259,6 @@ lt_initiator_extension_mandatory::initiator_thread      ///< initiator thread
     }
   }
   
-  // check the debug transport
-  
-  check_debug_transport ();
-  
   delete extension_ptr;
   
   wait();  
@@ -350,65 +348,5 @@ lt_initiator_extension_mandatory::invalidate_direct_mem_ptr
     msg << "not in our DMI address range";
   }
 
-  REPORT_INFO ( filename,  __FUNCTION__, msg.str () );
-}
-
-void
-lt_initiator_extension_mandatory::check_debug_transport
-( void
-)
-{
-  ostringstream       msg;                     ///< log message
-  
-  unsigned char     data [ 32 ];
-  transaction_type  trans;
-  
-  trans.set_address     ( m_base_address  );
-  trans.set_data_length ( 32              );
-  trans.set_data_ptr    ( data            );
-  trans.set_read        (                 );
-  
-  unsigned int byte_count = m_socket->transport_dbg ( trans );
-  
-  msg.str ( "" );
-  
-  msg << "Memory - Addr: 0x" << internal << setw ( sizeof ( m_base_address ) * 2 ) 
-      << setfill( '0' ) << uppercase << hex << m_base_address << endl;
-  
-  if ( byte_count > 0 )
-  {
-    // always align endianness, so that we don't get a diff when printing the raw data
-    
-    int e_start     = 0;
-    int e_end       = 4;
-    int e_increment = 1;
-    
-    if ( ! tlm::host_has_little_endianness () )
-    {
-      e_start     =  3;
-      e_end       = -1;
-      e_increment = -1;
-    }
-    
-    unsigned int j = 0;
-    
-    for ( unsigned int i = 0; i < byte_count; i += 4 )
-    {
-      for ( int k = e_start; k != e_end; k += e_increment, j++ )
-      {
-        msg << " 0x" << setw(2) << setfill('0') << (unsigned int) data [ i + k ];
-                  
-        if ( ( ( j + 1 ) % 16 ) == 0 )
-        {
-          msg << endl;
-        }
-      }
-    }
-  }
-  else
-  {
-    msg << "no data returned";
-  }
-  
   REPORT_INFO ( filename,  __FUNCTION__, msg.str () );
 }
