@@ -221,11 +221,11 @@ print
        << endl << "      "
        << "write latency  = " << dmi_properties.get_write_latency() 
        << endl << "      "
-       << "granted access = " << dmi_properties.get_granted_access()
-       << endl << "      ";
+       << "granted access = " << dmi_properties.get_granted_access();
    
 //   unsigned char*    temp_dmi_ptr = dmi_properties.get_dmi_ptr();
-//   msg << "dmi_ptr = " << temp_dmi_ptr; 
+//   msg  << endl << "      "
+//        << "dmi_ptr = " << temp_dmi_ptr; 
    
    REPORT_INFO(calling_filename, __FUNCTION__, msg.str());
    

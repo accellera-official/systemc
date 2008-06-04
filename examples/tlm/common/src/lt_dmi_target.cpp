@@ -24,58 +24,55 @@
 //
 //=====================================================================
 
-#include "lt_dmi_target.h"                        // our header
-#include "reporting.h"                            // reporting macros
+#include "lt_dmi_target.h"                              // our header
+#include "reporting.h"                                  // reporting macros
                     
 using namespace  std;
 
 static const char *filename = "lt_dmi_target.cpp"; ///< filename for reporting
 
 SC_HAS_PROCESS(lt_dmi_target);
+
 ///Constructor
 lt_dmi_target::lt_dmi_target                      
-( sc_core::sc_module_name module_name               // module name
-, const unsigned int        ID                      // target ID
-, const char                *memory_socket          // socket name
-, sc_dt::uint64             memory_size             // memory size (bytes)
-, unsigned int              memory_width            // memory width (bytes)
-, const sc_core::sc_time    accept_delay            // accept delay (SC_TIME)
-, const sc_core::sc_time    read_response_delay     // read response delay (SC_TIME)
-, const sc_core::sc_time    write_response_delay    // write response delay (SC_TIME)
-, const sc_core::sc_time    start_dmi_delay         // start of dmi transactions
-, const sc_core::sc_time    dmi_duration            // duration of dmi transactions
+( sc_core::sc_module_name module_name                   ///< module name
+, const unsigned int        ID                          ///< target ID
+, const char                *memory_socket              ///< socket name
+, sc_dt::uint64             memory_size                 ///< memory size (bytes)
+, unsigned int              memory_width                ///< memory width (bytes)
+, const sc_core::sc_time    accept_delay                ///< accept delay (SC_TIME)
+, const sc_core::sc_time    read_response_delay         ///< read response delay (SC_TIME)
+, const sc_core::sc_time    write_response_delay        ///< write response delay (SC_TIME)
+, const sc_core::sc_time    start_dmi_delay             ///< start of dmi transactions
+, const sc_core::sc_time    dmi_duration                ///< duration of dmi transactions
 )
-: sc_module               (module_name)             /// init module name
-, m_memory_socket         (memory_socket)           /// init socket name
-, m_ID                    (ID)                      /// init target ID
-, m_memory_size           (memory_size)             /// init memory size (bytes)
-, m_memory_width          (memory_width)            /// init memory width (bytes)
-, m_accept_delay          (accept_delay)            /// init accept delay
-, m_read_response_delay   (read_response_delay)     /// init read response delay
-, m_write_response_delay  (write_response_delay)    /// init write response delay
-, m_dmi_enabled           (true)
-, m_start_dmi_delay       (start_dmi_delay)
-, m_dmi_duration          (dmi_duration)
-, m_start_address         (0)
-, m_end_address           (memory_size)
-, m_toggle_count          (0)
-, m_max_dmi_toggle_count    (3)
+: sc_module                 ( module_name           )   ///< init module name
+, m_memory_socket           ( memory_socket         )   ///< init socket name
+, m_ID                      ( ID                    )   ///< init target ID
+, m_memory_size             ( memory_size           )   ///< init memory size (bytes)
+, m_memory_width            ( memory_width          )   ///< init memory width (bytes)
+, m_accept_delay            ( accept_delay          )   ///< init accept delay
+, m_read_response_delay     ( read_response_delay   )   ///< init read response delay
+, m_write_response_delay    ( write_response_delay  )   ///< init write response delay
+, m_dmi_enabled             ( true                  )
+, m_start_dmi_delay         ( start_dmi_delay       )
+, m_dmi_duration            ( dmi_duration          )
+, m_start_address           ( 0                     )
+, m_end_address             ( memory_size           )
+, m_toggle_count            ( 0                     )
+, m_max_dmi_toggle_count    ( 3                     )
 
-, m_target_memory
-  ( m_ID                          // initiator ID for messaging
-  , m_read_response_delay         // delay for reads
-  , m_write_response_delay        // delay for writes
-  , m_memory_size                 // memory size (bytes)
-  , m_memory_width                // memory width (bytes)      
-  )
-  
+, m_target_memory           ( m_ID                      // initiator ID for messaging
+                            , m_read_response_delay     // delay for reads
+                            , m_write_response_delay    // delay for writes
+                            , m_memory_size             // memory size (bytes)
+                            , m_memory_width            // memory width (bytes)      
+                            )                           ///< target memory
 {
-      
   SC_METHOD(toggle_dmi_method);
   
   m_memory_socket.register_b_transport(this, &lt_dmi_target::custom_b_transport);
   m_memory_socket.register_get_direct_mem_ptr(this, &lt_dmi_target::get_direct_mem_ptr);
-
 }
 
 //==============================================================================
@@ -88,29 +85,24 @@ lt_dmi_target::custom_b_transport
 , sc_core::sc_time          &delay_time             // delay time 
 )
 {
- 
-  std::ostringstream  msg;                          
-  msg.str("");   
   sc_core::sc_time      mem_op_time;
+  std::ostringstream    msg;
   
-  msg << "Target: " << m_ID
-      << " *gp = " << &payload
-      << endl << "      ";
+  msg.str("");   
 
   m_target_memory.operation(payload, mem_op_time);
 
   if(m_dmi_enabled)
-    {
-      payload.set_dmi_allowed(true);
-      msg.str("");
-      msg << "Target: " << m_ID
-          << " has set dmi_allowed " 
-          << endl << "      ";
-    }
+  {
+    payload.set_dmi_allowed(true);
+    msg << "Target: " << m_ID
+        << " has set dmi_allowed " 
+        << endl << "      ";
+  }
   else
-    {
-      payload.set_dmi_allowed(false);
-    }
+  {
+    payload.set_dmi_allowed(false);
+  }
 
   msg << "Target: " << m_ID
       << " returned delay of " << delay_time
@@ -126,9 +118,9 @@ lt_dmi_target::custom_b_transport
 
 bool                                            
 lt_dmi_target::get_direct_mem_ptr    
-  (tlm::tlm_generic_payload   &gp,             ///< address + extensions
-   tlm::tlm_dmi               &dmi_properties  ///< dmi data
-  )
+( tlm::tlm_generic_payload   &gp              ///< address + extensions
+, tlm::tlm_dmi               &dmi_properties  ///< dmi data
+)
 {
   std::ostringstream  msg;
   msg.str("");
@@ -155,8 +147,6 @@ lt_dmi_target::get_direct_mem_ptr
 
       msg << "Target: " << m_ID
           << " passing DMI pointer back to initiator";
-//          << " DMI pointer, " << &dmi_properties
-//          << ", passed back to an initiator ";
       REPORT_INFO(filename, __FUNCTION__, msg.str());
       return true;
     }
@@ -174,43 +164,39 @@ lt_dmi_target::get_direct_mem_ptr
 
 void
 lt_dmi_target::toggle_dmi_method
-  (void
-  )
-  {
-    std::ostringstream msg;
-    msg.str("");
-    m_toggle_count++;
-    if (m_dmi_enabled)
-      {
-        m_dmi_enabled = false;
-
-        msg << "Target: " << m_ID 
-            << " invalidate_direct_ptr(" << m_start_address << " , "
-            << m_end_address << " );" << endl;
-        REPORT_INFO(filename, __FUNCTION__, msg.str());  
-        
-        m_memory_socket->invalidate_direct_mem_ptr(m_start_address
-                                                  ,m_end_address
-                                                  );
-        next_trigger(m_start_dmi_delay);
-      }
-    else
-      {
-        m_dmi_enabled = true;
-        next_trigger(m_dmi_duration);
-      msg << "Target: " << m_ID 
-          << " DMI has been enabled in this target";
-      REPORT_INFO(filename, __FUNCTION__, msg.str());  
-    }
+(void
+)
+{
+  std::ostringstream msg;
+  msg.str("");
+  m_toggle_count++;
   
+  if (m_dmi_enabled)
+  {
+    m_dmi_enabled = false;
+
+    msg << "Target: " << m_ID 
+        << " invalidate_direct_ptr "
+        << "(" << m_start_address << ", " << m_end_address << ");";
+    REPORT_INFO(filename, __FUNCTION__, msg.str());  
+    
+    m_memory_socket->invalidate_direct_mem_ptr(m_start_address, m_end_address );
+    
+    next_trigger(m_start_dmi_delay);
+  }
+  else
+  {
+    m_dmi_enabled = true;
+    next_trigger(m_dmi_duration);
+    msg << "Target: " << m_ID 
+        << " DMI has been enabled in this target";
+    REPORT_INFO(filename, __FUNCTION__, msg.str());  
+  }
+
+  // Don't execute again
   if(m_toggle_count >= m_max_dmi_toggle_count)
-      {
-        next_trigger();
-      m_dmi_enabled = false;
-      
-    }  // Don't execute again
-   
-  }// end method
-
-
-
+  {
+    next_trigger();
+    m_dmi_enabled = false;
+  }
+}

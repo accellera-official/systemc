@@ -144,18 +144,18 @@ dmi_memory::invalidate_dmi_ptr
      && ( end_range   <= m_end_address   ) )
     {
       msg << "Initiator:" << m_ID
-          << " DMI Pointer Invalidated  for (" 
-          << start_range << " , " << end_range << ")";
+          << " DMI Pointer invalidated for "
+          << "(" << start_range << ", " << end_range << ")";
      
       m_start_address=1;
       m_end_address=0;
     }
-//  else
-//  { 
-//    msg << "Initiator:" << m_ID
-//        << " DMI Pointer Not Invalidated  for (" 
-//        << start_range << " , " << end_range << ")";
-//  }
+  else
+  { 
+    msg << "Initiator:" << m_ID
+        << " DMI Pointer not invalidated for "
+        << "(" << start_range << ", " << end_range << ")";
+  }
     
   REPORT_INFO(filename, __FUNCTION__, msg.str()); 
   return;

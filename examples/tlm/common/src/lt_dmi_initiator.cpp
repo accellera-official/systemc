@@ -83,8 +83,7 @@ void lt_dmi_initiator::initiator_thread(void)   ///< initiator thread
     sc_time delay         = SC_ZERO_TIME;       // Create delay objects 
        
     msg << "Initiator: " << m_ID               
-        << " b_transport(" << gp_ptr << " , " 
-        << delay << ");";
+        << " b_transport with delay of " << delay << ");";
     REPORT_INFO(filename,  __FUNCTION__, msg.str());
     
     if(!(m_dmi_memory.is_address_dmi(*gp_ptr)))
@@ -103,20 +102,14 @@ void lt_dmi_initiator::initiator_thread(void)   ///< initiator thread
         {
            msg.str("");
            msg << "Initiator: " << m_ID               
-              << " b_transport of gp_tpr " << gp_ptr
-              << " returned a delay of " 
-              << delay;
+              << " b_transport returned a delay of " << delay;
            REPORT_INFO(filename,  __FUNCTION__, msg.str());
            
            wait(delay);
            
- //          report::print_full(m_ID, *gp_ptr, filename);
-           
            msg.str("");
            msg << "Initiator: " << m_ID               
-              << " gp_tpr of " << gp_ptr
-              << " was returned with dmi_allowed set to " 
-              << gp_ptr->is_dmi_allowed();
+              << " gp_tpr was returned with dmi_allowed set to " << gp_ptr->is_dmi_allowed();
            REPORT_INFO(filename,  __FUNCTION__, msg.str());
            
         }
@@ -138,8 +131,6 @@ void lt_dmi_initiator::initiator_thread(void)   ///< initiator thread
             
             msg << "Initiator: " << m_ID  
                 << " requesting DMI pointer";
-//                << " get_direct_mem_ptr (" << gp_ptr
-//                << " , " << &m_dmi_properties << " );";
             REPORT_INFO(filename,  __FUNCTION__, msg.str());
             
             if(initiator_socket->get_direct_mem_ptr(*gp_ptr,m_dmi_properties))
@@ -166,9 +157,7 @@ void lt_dmi_initiator::initiator_thread(void)   ///< initiator thread
         {
            msg.str("");
            msg << "Initiator: " << m_ID               
-              << " dmi based transaction for gp_ptr of "
-              << gp_ptr << " returned a delay of " 
-              << delay;
+              << " dmi based transaction returned a delay of " << delay;
            REPORT_INFO(filename,  __FUNCTION__, msg.str());
            wait(delay);
         }
@@ -184,7 +173,7 @@ void lt_dmi_initiator::initiator_thread(void)   ///< initiator thread
     
     msg.str("");
     msg << "Initiator: " << m_ID               
-        << " End of processing for gp_ptr " << gp_ptr;
+        << " End of processing";
     REPORT_INFO(filename,  __FUNCTION__, msg.str());
     
     response_out_port->write(gp_ptr);  // return txn to traffic gen
