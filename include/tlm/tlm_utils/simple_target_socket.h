@@ -239,8 +239,23 @@ private:
           opts.dont_initialize();
           sc_core::sc_event *e = new sc_core::sc_event;
           opts.set_sensitivity(e);
-          sc_core::sc_spawn(sc_bind(&fw_process::nb2b_thread, this, sc_ref(trans), e), 
+
+          //       sc_core::sc_spawn(sc_bind(&fw_process::nb2b_thread, this, sc_ref(trans), e), 
+          //                  sc_core::sc_gen_unique_name("nb2b_thread"), &opts);
+
+          process_handle_class * ph = m_process_handle.get_handle(&trans,e);
+
+          if (!ph) { // create new dynamic process
+            ph = new process_handle_class(&trans,e);
+            m_process_handle.put_handle(ph);
+
+            sc_core::sc_spawn(sc_bind(&fw_process::nb2b_thread,this, ph, sc_ref(trans), e), 
                             sc_core::sc_gen_unique_name("nb2b_thread"), &opts);
+          } else { // reuse existing dynamic process and resume it
+            ph->m_wakeup.notify(); // immidiate notification
+          }
+
+
           e->notify(t);
           return tlm::TLM_ACCEPTED;
 
@@ -334,28 +349,88 @@ private:
     }
 
   private:
-    void nb2b_thread(transaction_type& trans, sc_core::sc_event* e)
-    {
-      sc_core::sc_time t = sc_core::SC_ZERO_TIME;
 
-      // forward call
-      assert(m_mod);
-      (m_mod->*m_b_transport_ptr)(trans, t);
+// dynamic process handler for nb2b conversion
 
-      sc_core::wait(t);
+    class process_handle_class {
+    public:
+      process_handle_class(transaction_type * trans,
+                           sc_core::sc_event* e):
+        m_trans(trans),m_e(e),m_suspend(false){}
 
-      // return path
-      while (m_response_in_progress) {
-        sc_core::wait(m_end_response);
+      transaction_type*  m_trans;
+      sc_core::sc_event* m_e;
+      sc_core::sc_event  m_wakeup;
+      bool m_suspend;
+    };
+    
+    class process_handle_list {
+    public:
+      process_handle_list() {}
+ 
+      process_handle_class* get_handle(transaction_type *trans,sc_core::sc_event* e) 
+      {                
+        typename std::vector<process_handle_class*>::iterator it;
+
+        for(it = v.begin(); it != v.end(); it++) { 
+          if ((*it)->m_suspend) {  // found suspended dynamic process, re-use it
+            (*it)->m_trans = trans; // replace to new one
+            (*it)->m_e = e;            
+            return *it;  
+          }
+        }
+        return NULL; // no suspended process
       }
-      t = sc_core::SC_ZERO_TIME;
-      phase_type phase = tlm::BEGIN_RESP;
-      if (m_owner->bw_nb_transport(trans, phase, t) != tlm::TLM_COMPLETED) {
-        m_response_in_progress = true;
+
+      void put_handle(process_handle_class* ph)
+      {
+        v.push_back(ph);
       }
 
-      // cleanup
-      delete e;
+    private:
+      std::vector<process_handle_class*> v;
+    };
+
+    process_handle_list m_process_handle;
+
+
+    void nb2b_thread(process_handle_class* h,transaction_type &trans1, sc_core::sc_event *e1)
+    { 
+      transaction_type *trans = &trans1;
+      sc_core::sc_event* e = e1;
+
+      while(1) {
+
+        sc_core::sc_time t = sc_core::SC_ZERO_TIME;
+
+        // forward call
+        assert(m_mod);
+        (m_mod->*m_b_transport_ptr)(*trans, t);
+
+        sc_core::wait(t);
+
+        // return path
+        while (m_response_in_progress) {
+          sc_core::wait(m_end_response);
+        }
+        t = sc_core::SC_ZERO_TIME;
+        phase_type phase = tlm::BEGIN_RESP;
+        if (m_owner->bw_nb_transport(*trans, phase, t) != tlm::TLM_COMPLETED) {
+          m_response_in_progress = true;
+        }
+
+        // cleanup
+        delete e;
+
+        // suspend until next transaction
+        h->m_suspend = true;
+        sc_core::wait(h->m_wakeup);
+
+        // start next transaction
+        h->m_suspend = false;
+        trans = h->m_trans;
+        e = h->m_e;
+      }
     }
 
     void b2nb_thread()
@@ -703,8 +778,22 @@ private:
           opts.dont_initialize();
           sc_core::sc_event *e = new sc_core::sc_event;
           opts.set_sensitivity(e);
-          sc_core::sc_spawn(sc_bind(&fw_process::nb2b_thread, this, sc_ref(trans), e), 
+
+          // sc_core::sc_spawn(sc_bind(&fw_process::nb2b_thread, this, sc_ref(trans), e), 
+          //                  sc_core::sc_gen_unique_name("nb2b_thread"), &opts);
+
+          process_handle_class * ph = m_process_handle.get_handle(&trans,e);
+
+          if (!ph) { // create new dynamic process
+            ph = new process_handle_class(&trans,e);
+            m_process_handle.put_handle(ph);
+
+            sc_core::sc_spawn(sc_bind(&fw_process::nb2b_thread, this, ph, sc_ref(trans), e), 
                             sc_core::sc_gen_unique_name("nb2b_thread"), &opts);
+          } else { // reuse existing dynamic process and resume it
+            ph->m_wakeup.notify(); // immidiate notification
+          }
+
           e->notify(t);
           return tlm::TLM_ACCEPTED;
 
@@ -798,28 +887,85 @@ private:
     }
 
   private:
-    void nb2b_thread(transaction_type& trans, sc_core::sc_event* e)
-    {
-      sc_core::sc_time t = sc_core::SC_ZERO_TIME;
+// dynamic process handler for nb2b conversion
 
-      // forward call
-      assert(m_mod);
-      (m_mod->*m_b_transport_ptr)(m_b_transport_user_id, trans, t);
+    class process_handle_class {
+    public:
+      process_handle_class(transaction_type * trans,
+                           sc_core::sc_event* e):
+        m_trans(trans),m_e(e),m_suspend(false){}
 
-      sc_core::wait(t);
+      transaction_type*  m_trans;
+      sc_core::sc_event* m_e;
+      sc_core::sc_event  m_wakeup;
+      bool m_suspend;
+    };
+    
+    class process_handle_list {
+    public:
+      process_handle_list() {}
+ 
+      process_handle_class* get_handle(transaction_type *trans,sc_core::sc_event* e) 
+      {                
+        typename std::vector<process_handle_class*>::iterator it;
 
-      // return path
-      while (m_response_in_progress) {
-        sc_core::wait(m_end_response);
+        for(it = v.begin(); it != v.end(); it++) { 
+          if ((*it)->m_suspend) {  // found suspended dynamic process, re-use it
+            (*it)->m_trans = trans; // replace to new one
+            (*it)->m_e = e;            
+            return *it;  
+          }
+        }
+        return NULL; // no suspended process
       }
-      t = sc_core::SC_ZERO_TIME;
-      phase_type phase = tlm::BEGIN_RESP;
-      if (m_owner->bw_nb_transport(trans, phase, t) != tlm::TLM_COMPLETED) {
-        m_response_in_progress = true;
+
+      void put_handle(process_handle_class* ph)
+      {
+        v.push_back(ph);
       }
 
-      // cleanup
-      delete e;
+    private:
+      std::vector<process_handle_class*> v;
+    };
+
+    process_handle_list m_process_handle;
+
+    void nb2b_thread(process_handle_class* h,transaction_type &trans1, sc_core::sc_event *e1)
+    { 
+      transaction_type *trans = &trans1;
+      sc_core::sc_event* e = e1;
+
+      while(1) {
+        sc_core::sc_time t = sc_core::SC_ZERO_TIME;
+
+        // forward call
+        assert(m_mod);
+        (m_mod->*m_b_transport_ptr)(m_b_transport_user_id, *trans, t);
+
+        sc_core::wait(t);
+
+        // return path
+        while (m_response_in_progress) {
+          sc_core::wait(m_end_response);
+        }
+        t = sc_core::SC_ZERO_TIME;
+        phase_type phase = tlm::BEGIN_RESP;
+        if (m_owner->bw_nb_transport(*trans, phase, t) != tlm::TLM_COMPLETED) {
+          m_response_in_progress = true;
+        }
+
+        // cleanup
+        delete e;
+
+        // suspend until next transaction
+        h->m_suspend = true;
+        sc_core::wait(h->m_wakeup);
+
+        // start next transaction
+        h->m_suspend = false;
+        trans = h->m_trans;
+        e = h->m_e;
+      }
     }
 
     void b2nb_thread()
