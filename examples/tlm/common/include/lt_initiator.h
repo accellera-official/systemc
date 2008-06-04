@@ -35,16 +35,15 @@
 #define __LT_INITIATOR_H__
 
 #include "tlm.h"                                    // TLM headers
-#include "tlm_utils/simple_initiator_socket.h"
-///@todo Do I need the "dummy calls" in initiator_top??
+#include "tlm_utils/simple_initiator_socket.h"      // TLM simple initiator socket
 
 class lt_initiator                                  // lt_initiator 
-  :  public sc_core::sc_module               // module base class 
+  :  public sc_core::sc_module                      // module base class 
 {
 public:
 // Constructor ================================================================= 
-    lt_initiator                                // constructor
-    ( sc_core::sc_module_name name              // module name
+    lt_initiator                                    // constructor
+    ( sc_core::sc_module_name name                  // module name
     , const unsigned int  ID                       ///< initiator ID
     );
      

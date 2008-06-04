@@ -112,8 +112,7 @@ class at_target_4_phase                               /// at_target_4_phase
 
   private:
 	    
-/// helper function for printing memory transactions @tdo move to .cpp
-/// @todo Do we need this declaration??
+/// helper function for printing memory transactions
   void
   print_memory_transaction_helper
   ( const int 				  &ID

@@ -108,42 +108,29 @@ print
 , const char*               calling_filename
 )
 {
-   std::ostringstream     msg;
-   msg.str("");
-   
-   sc_dt::uint64 print_address  = gp.get_address();      // memory address
-   unsigned char *print_data    = gp.get_data_ptr();    // data pointer
-   unsigned int  print_length   = gp.get_data_length(); // data length
-   tlm::tlm_command print_command = gp.get_command();     // memory command
-     
-   msg << "ID: "<< ID << " COMMAND: ";
-       
-   if (print_command == tlm::TLM_WRITE_COMMAND) msg << "WRITE";
-   else msg << "READ";
-       
-   msg << " Length: " << internal << setw( 2 ) << setfill( '0' ) 
-       << dec << print_length << endl;
-   msg << "      Addr: 0x" << internal << setw( sizeof(print_address) * 2 ) 
-       << setfill( '0' ) << uppercase << hex << print_address;  
-   
-   msg << " Data: 0x";
- /// @todo Fix endian issues for int longer than 4 bytes 
-   //for (unsigned int i = 0; i < print_length; i++)
-   //{
-   // msg << internal << setw( 2 ) << setfill( '0' ) 
-   //     << uppercase << hex << (int)print_data[i];
-   //}
-    msg << internal << setw( 2 ) << setfill( '0' ) 
-        << uppercase << hex << (int)print_data[3];
-    msg << internal << setw( 2 ) << setfill( '0' ) 
-        << uppercase << hex << (int)print_data[2];
-    msg << internal << setw( 2 ) << setfill( '0' ) 
-        << uppercase << hex << (int)print_data[1];
-    msg << internal << setw( 2 ) << setfill( '0' ) 
-        << uppercase << hex << (int)print_data[0];
-
-
-   REPORT_INFO(calling_filename, __FUNCTION__, msg.str());
+  std::ostringstream     msg;
+  msg.str("");
+  
+  sc_dt::uint64 print_address  = gp.get_address();      // memory address
+  unsigned char *print_data    = gp.get_data_ptr();    // data pointer
+  unsigned int  print_length   = gp.get_data_length(); // data length
+  tlm::tlm_command print_command = gp.get_command();     // memory command
+  
+  msg << "ID: "<< ID
+      << " COMMAND: "
+      << ((print_command == tlm::TLM_WRITE_COMMAND) ? "WRITE" : "READ")
+      << " Length: " << internal << setw( 2 ) << setfill( '0' ) 
+      << dec << print_length
+      << endl
+      << "      Addr: 0x" << internal << setw( sizeof(print_address) * 2 ) 
+      << setfill( '0' ) << uppercase << hex << print_address  
+      << " Data: 0x"
+      << internal << setw( 2 ) << setfill( '0' ) << uppercase << hex << (int)print_data[3]
+      << internal << setw( 2 ) << setfill( '0' ) << uppercase << hex << (int)print_data[2]
+      << internal << setw( 2 ) << setfill( '0' ) << uppercase << hex << (int)print_data[1]
+      << internal << setw( 2 ) << setfill( '0' ) << uppercase << hex << (int)print_data[0];
+  
+  REPORT_INFO(calling_filename, __FUNCTION__, msg.str());
 }
 //=====================================================================
 //  
@@ -157,49 +144,36 @@ print_full
 , const char*               caller_filename
 )
 {
-   std::ostringstream     msg;
-   msg.str("");
-   
-//   msg << "gp_ptr = " << &gp << endl << "      ";
-   
-   sc_dt::uint64 print_address  = gp.get_address();      // memory address
-   unsigned char *print_data    = gp.get_data_ptr();    // data pointer
-   unsigned int  print_length   = gp.get_data_length(); // data length
-   tlm::tlm_command print_command = gp.get_command();     // memory command
-     
-   msg << "ID: "<< ID << " COMMAND: ";
-       
-   if (print_command == tlm::TLM_WRITE_COMMAND) msg << "WRITE";
-   else msg << "READ";
-       
-   msg << " Length: " << internal << setw( 2 ) << setfill( '0' ) 
-       << dec << print_length << endl;
-   msg << "      Addr: 0x" << internal << setw( sizeof(print_address) * 2 ) 
-       << setfill( '0' ) << uppercase << hex << print_address;  
-   
-   msg << " Data: 0x";
-// @todo only prints 4 bytes at this time.
-    msg << internal << setw( 2 ) << setfill( '0' ) 
-        << uppercase << hex << (int)print_data[3];
-    msg << internal << setw( 2 ) << setfill( '0' ) 
-        << uppercase << hex << (int)print_data[2];
-    msg << internal << setw( 2 ) << setfill( '0' ) 
-        << uppercase << hex << (int)print_data[1];
-    msg << internal << setw( 2 ) << setfill( '0' ) 
-        << uppercase << hex << (int)print_data[0];
-    
-    msg << endl << "      "
-        << "RSP STATUS = " << gp.get_response_string()
-        << " STREAMING WIDTH = " << gp.get_streaming_width()
-        << endl << "      "
-        << "DMI ALLOWED = " << gp.is_dmi_allowed()
-        << endl << "      "
- //       << "BYTE ENABLE PTR = " << gp.get_byte_enable_ptr()
-        << "BYTE ENABLE LENGTH = " << gp.get_byte_enable_length();
-
-
-   REPORT_INFO(caller_filename, __FUNCTION__, msg.str());
-   
+  std::ostringstream     msg;
+  msg.str("");
+  
+  sc_dt::uint64 print_address  = gp.get_address();      // memory address
+  unsigned char *print_data    = gp.get_data_ptr();    // data pointer
+  unsigned int  print_length   = gp.get_data_length(); // data length
+  tlm::tlm_command print_command = gp.get_command();     // memory command
+  
+  msg << "ID: "<< ID
+      << " COMMAND: "
+      << ((print_command == tlm::TLM_WRITE_COMMAND) ? "WRITE" : "READ")
+      << " Length: " << internal << setw( 2 ) << setfill( '0' ) << dec << print_length
+      << endl
+      << "      Addr: 0x" << internal << setw( sizeof(print_address) * 2 ) 
+      << setfill( '0' ) << uppercase << hex << print_address 
+      << " Data: 0x"
+      << internal << setw( 2 ) << setfill( '0' ) << uppercase << hex << (int)print_data[3]
+      << internal << setw( 2 ) << setfill( '0' ) << uppercase << hex << (int)print_data[2]
+      << internal << setw( 2 ) << setfill( '0' ) << uppercase << hex << (int)print_data[1]
+      << internal << setw( 2 ) << setfill( '0' ) << uppercase << hex << (int)print_data[0]
+      << endl
+      << "      "
+      << "RSP STATUS = " << gp.get_response_string()
+      << " STREAMING WIDTH = " << gp.get_streaming_width()
+      << endl << "      "
+      << "DMI ALLOWED = " << gp.is_dmi_allowed()
+      << endl << "      "
+      << "BYTE ENABLE LENGTH = " << gp.get_byte_enable_length();
+  
+  REPORT_INFO(caller_filename, __FUNCTION__, msg.str());
 }
 void  
 print

@@ -38,22 +38,6 @@ class traffic_generator                       	// traffic_generator
 // Member Methods  ==================================================== 
 
   public:
-//=====================================================================
-///  @fn traffic_generator
-//  
-///  @brief traffic_generator constructor
-//  
-///  @details
-///    Initializes Traffice Generator
-//    
-//=====================================================================
-
-  traffic_generator                                
-  ( sc_core::sc_module_name name            	  ///< module name for SC
-  , const unsigned int      ID               	  ///< initiator ID
-  , sc_dt::uint64           base_address_1    	///< first base address
-  , sc_dt::uint64           base_address_2    	///< second base address
-  );
 
 //=============================================================================
 ///  @fn traffic_generator

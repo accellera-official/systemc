@@ -59,6 +59,7 @@ td_initiator_top::td_initiator_top
     ,ID                                      // ID for reporting
     ,base_address_1                          // first base address
     ,base_address_2                          // second base address
+    ,4
     )
 
 {

@@ -37,16 +37,15 @@
 #include "tlm.h"      // TLM headers
 #include "tlm_utils/tlm_quantumkeeper.h"
 #include "tlm_utils/simple_initiator_socket.h"
-/// @todo - use convenience socket - Trivial_....Passthru..??
 
-class lt_td_initiator                                  // lt_td_initiator 
-  :  public sc_core::sc_module               // module base class 
+class lt_td_initiator                                 // lt_td_initiator 
+  :  public sc_core::sc_module                        // module base class 
 {
 public:
 // Constructor ================================================================= 
-    lt_td_initiator                                // constructor
-    ( sc_core::sc_module_name name              // module name
-    , const unsigned int  ID                       ///< initiator ID
+    lt_td_initiator                                   // constructor
+    ( sc_core::sc_module_name name                    // module name
+    , const unsigned int  ID                          ///< initiator ID
     );
      
 // Method Declarations =========================================================

@@ -41,23 +41,6 @@ static const char *filename = "traffic_generator.cpp";  ///< filename for report
 SC_HAS_PROCESS(traffic_generator);
 
 //-----------------------------------------------------------------------------
-
-traffic_generator::traffic_generator            // constructor
-( sc_core::sc_module_name name                  // instance name
-, const unsigned int    ID                      // initiator ID
-, sc_dt::uint64         base_address_1          // first base address
-, sc_dt::uint64         base_address_2          // second base address
-)
-: sc_module           ( name            )       /// instance name
-, m_ID                ( ID              )       /// initiator ID
-, m_base_address_1    ( base_address_1  )       /// first base address
-, m_base_address_2    ( base_address_2  )       /// second base address
-, m_active_txn_count  ( 4               )       /// Max number of transactions active 
-, m_check_all         ( false           )       /// @todo comment variable
-{ 
-  SC_THREAD(traffic_generator_thread);
-}
-//-----------------------------------------------------------------------------
 //
 traffic_generator::traffic_generator            // @todo keep me, lose other constructor
 ( sc_core::sc_module_name name                  // instance name
@@ -250,7 +233,6 @@ void traffic_generator::check_complete (void)
       // The address for the “gp” is used as expected data.  The address filed of 
       //  the “gp” is a mutable field and is changed by the SimpleBus interconnect. 
       //  The list significant 28 bits are not modified and are use for comparison.    
-      // @todo make sure that the documentation makes the volatility of GP address 
 
       const unsigned int data_mask ( 0x0FFFFFFF );
       

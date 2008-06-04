@@ -58,8 +58,8 @@ initiator_top::initiator_top
     ,ID                                      // ID for reporting
     ,base_address_1                          // first base address
     ,base_address_2                          // second base address
+    ,4
     )
-
 {
   /// Bind ports to m_request_fifo between m_initiator and m_traffic_gen
   m_traffic_gen.request_out_port  (m_request_fifo);
