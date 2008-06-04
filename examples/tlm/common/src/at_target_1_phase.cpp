@@ -76,7 +76,7 @@ at_target_1_phase::at_target_1_phase
   /// Register begin_reponse as an SC_METHOD
   /// Used to implement force synchronization multiple timing points
   SC_METHOD(begin_response_method);
-  sensitive << m_response_PEQ.getEvent();
+  sensitive << m_response_PEQ.get_event();
   dont_initialize();
 }
 
@@ -232,7 +232,7 @@ at_target_1_phase::nb_transport_fw                  // non-blocking transport ca
 //=============================================================================
 /// begin_response method function implementation
 //
-// This method is statically sensitive to m_response_PEQ.getEvent 
+// This method is statically sensitive to m_response_PEQ.get_event 
 //
 //=============================================================================
 void at_target_1_phase::begin_response_method (void)
@@ -247,7 +247,7 @@ void at_target_1_phase::begin_response_method (void)
 //  indicates that the PEQ is empty at this time
 //----------------------------------------------------------------------------- 
 
-  while ((transaction_ptr = m_response_PEQ.getNextTransaction()) != NULL)
+  while ((transaction_ptr = m_response_PEQ.get_next_transaction()) != NULL)
   {
  
     sc_core::sc_time dummy_t  = sc_core::SC_ZERO_TIME;
@@ -322,7 +322,7 @@ void at_target_1_phase::begin_response_method (void)
       
   } // end while
   
-  next_trigger (m_response_PEQ.getEvent()); 
+  next_trigger (m_response_PEQ.get_event()); 
 
 } //end begin_response_queue_active
 

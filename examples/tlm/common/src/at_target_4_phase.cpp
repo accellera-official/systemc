@@ -82,12 +82,12 @@ at_target_4_phase::at_target_4_phase
 
   /// Register begin_reponse as an SC_METHOD
   SC_METHOD(end_request_method);
-  sensitive << m_end_request_PEQ.getEvent();
+  sensitive << m_end_request_PEQ.get_event();
   dont_initialize();
 
   /// Register begin_reponse as an SC_METHOD
   SC_METHOD(begin_response_method);
-  sensitive << m_response_PEQ.getEvent();
+  sensitive << m_response_PEQ.get_event();
   dont_initialize();
 }
 
@@ -223,7 +223,7 @@ at_target_4_phase::nb_transport_fw                  // non-blocking transport ca
 //=============================================================================
 /// end_request  method function implementation
 //
-// This method is statically sensitive to m_end_request_PEQ.getEvent 
+// This method is statically sensitive to m_end_request_PEQ.get_event 
 //
 //=============================================================================
 void at_target_4_phase::end_request_method (void)
@@ -238,7 +238,7 @@ void at_target_4_phase::end_request_method (void)
 //  indicates that the PEQ is empty at this time
 //----------------------------------------------------------------------------- 
 
-  while ((transaction_ptr = m_end_request_PEQ.getNextTransaction()) != NULL)
+  while ((transaction_ptr = m_end_request_PEQ.get_next_transaction()) != NULL)
   {
     msg.str("");
     msg << "Target: " << m_ID 
@@ -323,7 +323,7 @@ void at_target_4_phase::end_request_method (void)
 //=============================================================================
 /// begin_response method function implementation
 //
-// This method is statically sensitive to m_response_PEQ.getEvent 
+// This method is statically sensitive to m_response_PEQ.get_event 
 //
 //=============================================================================
 void at_target_4_phase::begin_response_method (void)
@@ -338,9 +338,9 @@ void at_target_4_phase::begin_response_method (void)
 //----------------------------------------------------------------------------- 
 
   // set default trigger, will be overridden by TLM_COMPLETED or TLM_UPDATED
-  next_trigger (m_response_PEQ.getEvent());
+  next_trigger (m_response_PEQ.get_event());
     
-  while ((transaction_ptr = m_response_PEQ.getNextTransaction()) != NULL)
+  while ((transaction_ptr = m_response_PEQ.get_next_transaction()) != NULL)
   {
     msg.str("");
     msg << "Target: " << m_ID 

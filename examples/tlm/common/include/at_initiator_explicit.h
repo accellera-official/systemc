@@ -29,14 +29,13 @@
 #ifndef  __AT_INITIATOR_EXPLICIT_H__
 #define  __AT_INITIATOR_EXPLICIT_H__
 
-#include "tlm.h"                                    // TLM headers
-#include <map>                                      // STL map
-#include "PEQFifo.h"                                // Payload event queue FIFO
+#include "tlm.h"                                      // TLM headers
+#include <map>                                        // STL map
+#include "tlm_utils/peq_with_get.h"                   // Payload event queue FIFO
 
-
-class at_initiator_explicit                              // TLM AT at_initiator_explicit 
-  :         public sc_core::sc_module               /// inherit from SC module base clase
-  , virtual public tlm::tlm_bw_transport_if<>       /// inherit from TLM "backward interface"
+class at_initiator_explicit                           /// TLM AT at_initiator_explicit 
+  :         public sc_core::sc_module                 /// inherit from SC module base clase
+  , virtual public tlm::tlm_bw_transport_if<>         /// inherit from TLM "backward interface"
 {
   SC_HAS_PROCESS(at_initiator_explicit);
 
@@ -89,7 +88,7 @@ class at_initiator_explicit                              // TLM AT at_initiator_
 ///   This routine takes transaction responses from the m_send_end_rsp_PEQ.  
 ///   It contains the state machine to manage the communication path to the 
 ///   targets.  This method is registered as an SC_METHOD with the SystemC 
-///   kernel and is sensitive to m_send_end_rsp_PEQ.getEvent() 
+///   kernel and is sensitive to m_send_end_rsp_PEQ.get_event() 
 //=============================================================================
   private:
   void send_end_rsp_method(void);                   // send end response method
@@ -128,14 +127,13 @@ private:
     };
 
   typedef std::map<tlm::tlm_generic_payload *, previous_phase_enum> waiting_bw_path_map;
+  
   waiting_bw_path_map     m_waiting_bw_path_map;    // Wait backward path map 
   sc_core::sc_event       m_enable_next_request_event; 
-
-  PEQFifo                 m_send_end_rsp_PEQ;       // send end response PEq
-
+  tlm_utils::peq_with_get<tlm::tlm_generic_payload>
+                          m_send_end_rsp_PEQ;       // send end response PEq
   unsigned int            m_ID;                     // initiator ID
   sc_core::sc_time        m_end_rsp_delay;          // end response delay
-  
   bool                    m_nb_trans_fw_prev_warning;
 }; 
  #endif /* __AT_INITIATOR_EXPLICIT_H__ */

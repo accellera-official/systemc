@@ -28,14 +28,13 @@
 #ifndef __AT_TARGET_1_PHASE_H__ 
 #define __AT_TARGET_1_PHASE_H__
 
-#include "tlm.h"                          		// TLM headers
-#include "PEQFifo.h"                            // Payload event queue FIFO
-#include "memory.h"
+#include "tlm.h"                          		        // TLM headers
+#include "tlm_utils/peq_with_get.h"                   // Payload event queue FIFO
+#include "memory.h"                                   // memory storage
 
-class at_target_1_phase                         // at_target_1_phase
-:         public sc_core::sc_module           	/// inherit from SC module base clase
-, virtual public tlm::tlm_fw_transport_if<>   	/// inherit from TLM "forward interface"
-
+class at_target_1_phase                               /// at_target_1_phase
+:         public sc_core::sc_module           	      /// inherit from SC module base clase
+, virtual public tlm::tlm_fw_transport_if<>   	      /// inherit from TLM "forward interface"
 {
 // Member Methods =====================================================
 	
@@ -87,7 +86,7 @@ class at_target_1_phase                         // at_target_1_phase
   ///    This routine takes transaction responses from the m_response_PEQ.
   ///    It contains the state machine to manage the communication path
   ///    back to the initiator. This method is registered as an SC_METHOD
-  ///    with the SystemC kernal and is sensitive to m_response_PEQ.getEvent() 
+  ///    with the SystemC kernal and is sensitive to m_response_PEQ.get_event() 
   //=====================================================================
 
    void
@@ -147,16 +146,14 @@ class at_target_1_phase                         // at_target_1_phase
   const sc_core::sc_time    m_read_response_delay;  ///< read response delay
   const sc_core::sc_time    m_write_response_delay; ///< write response delays
         unsigned long       m_request_count;        ///< used to calc synch transactions  
- 
         bool                m_nb_trans_fw_prev_warning;
         bool                m_begin_resp_method_prev_warning;
         bool                m_trans_dbg_prev_warning;
         bool                m_get_dm_ptr_prev_warning;
-        
-        PEQFifo             m_response_PEQ;         ///< response payload event queue
+        tlm_utils::peq_with_get<tlm::tlm_generic_payload>
+                            m_response_PEQ;         ///< response payload event queue
         memory              m_target_memory;
         sc_core::sc_event   m_end_resp_rcvd_event;
 };
-
 
 #endif /* __AT_TARGET_1_PHASE_H__ */

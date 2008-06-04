@@ -58,7 +58,7 @@ at_initiator_explicit::at_initiator_explicit        // constructor
   // register method process
   SC_METHOD(send_end_rsp_method);
                
-    sensitive << m_send_end_rsp_PEQ.getEvent();
+    sensitive << m_send_end_rsp_PEQ.get_event();
     dont_initialize();
 }
 
@@ -368,7 +368,7 @@ at_initiator_explicit::nb_transport_bw                  // inbound nb_transport_
 ///  @brief send end response method
 //
 ///  @details This method is scheduled to send the end-response timing point.
-///           It is sensitive to the m_send_end_rsp_PEQ.getEvent() event. 
+///           It is sensitive to the m_send_end_rsp_PEQ.get_event() event. 
 //
 //=============================================================================
 void at_initiator_explicit::send_end_rsp_method(void) // send end response method
@@ -380,7 +380,7 @@ void at_initiator_explicit::send_end_rsp_method(void) // send end response metho
 //  Process all transactions scheduled for current time a return value of NULL 
 //  indicates that the PEQ is empty at this time
 //----------------------------------------------------------------------------- 
-  while ((transaction_ptr = m_send_end_rsp_PEQ.getNextTransaction()) != NULL)
+  while ((transaction_ptr = m_send_end_rsp_PEQ.get_next_transaction()) != NULL)
   {
     tlm::tlm_phase phase  = tlm::END_RESP;          // set the appropriate phase
     sc_time delay         = SC_ZERO_TIME;

@@ -61,9 +61,8 @@ select_initiator::select_initiator                  // constructor
 
   // register method process
   SC_METHOD(send_end_rsp_method)              
-    sensitive << m_send_end_rsp_PEQ.getEvent();
+    sensitive << m_send_end_rsp_PEQ.get_event();
     dont_initialize();  
-      
 }
 
 //=============================================================================
@@ -97,7 +96,6 @@ void select_initiator::initiator_thread(void)   // initiator thread
         << report::print(phase) << ", "
         << delay << ")";
     REPORT_INFO(filename,  __FUNCTION__, msg.str());
-
 
 //-----------------------------------------------------------------------------
 // Make the non-blocking call and decode returned status (tlm_sync_enum) 
@@ -426,7 +424,7 @@ select_initiator::nb_transport_bw                       // inbound nb_transport_
 ///  @brief send end response method
 //
 ///  @details This method is scheduled to send the end-response timing point.
-///           It is sensitive to the m_send_end_rsp_PEQ.getEvent() event. 
+///           It is sensitive to the m_send_end_rsp_PEQ.get_event() event. 
 //
 //=============================================================================
 void select_initiator::send_end_rsp_method(void)    // send end response method
@@ -438,7 +436,7 @@ void select_initiator::send_end_rsp_method(void)    // send end response method
 //  Process all transactions scheduled for current time a return value of NULL 
 //  indicates that the PEQ is empty at this time
 //----------------------------------------------------------------------------- 
-  while ((transaction_ptr = m_send_end_rsp_PEQ.getNextTransaction()) != NULL)
+  while ((transaction_ptr = m_send_end_rsp_PEQ.get_next_transaction()) != NULL)
   {
     tlm::tlm_phase phase  = tlm::END_RESP;          // set the appropriate phase
     sc_time delay         = SC_ZERO_TIME;

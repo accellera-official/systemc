@@ -31,12 +31,11 @@
 
 #include "tlm.h"                                    // TLM headers
 #include <map>                                      // STL map
-#include "PEQFifo.h"                                // Payload event queue FIFO
+#include "tlm_utils/peq_with_get.h"                 // Payload event queue FIFO
 
-
-class select_initiator                              // TLM AT select_initiator 
-  :         public sc_core::sc_module               /// inherit from SC module base clase
-  , virtual public tlm::tlm_bw_transport_if<>       /// inherit from TLM "backward interface"
+class select_initiator                              /// TLM AT select_initiator 
+:         public sc_core::sc_module                 /// inherit from SC module base clase
+, virtual public tlm::tlm_bw_transport_if<>         /// inherit from TLM "backward interface"
 {
   SC_HAS_PROCESS(select_initiator);
 
@@ -48,7 +47,6 @@ class select_initiator                              // TLM AT select_initiator
     sc_core::sc_port<sc_core::sc_fifo_in_if  <gp_ptr> > request_in_port;  
     sc_core::sc_port<sc_core::sc_fifo_out_if <gp_ptr> > response_out_port;
     tlm::tlm_initiator_socket<>                         initiator_socket; 
-
 
 //=============================================================================
 ///	@fn select_initiator
@@ -89,7 +87,7 @@ class select_initiator                              // TLM AT select_initiator
 ///   This routine takes transaction responses from the m_send_end_rsp_PEQ.  
 ///   It contains the state machine to manage the communication path to the 
 ///   targets.  This method is registered as an SC_METHOD with the SystemC 
-///   kernel and is sensitive to m_send_end_rsp_PEQ.getEvent() 
+///   kernel and is sensitive to m_send_end_rsp_PEQ.get_event() 
 //=============================================================================
   private:
   void send_end_rsp_method(void);                   // send end response method
@@ -114,8 +112,6 @@ class select_initiator                              // TLM AT select_initiator
     sc_dt::uint64 start_range,                      // start range
     sc_dt::uint64 end_range);                       // end range
 
-
-
 //==============================================================================
 // Private member variables and methods
 //==============================================================================
@@ -127,17 +123,15 @@ private:
     ,Rcved_END_REQ_enum    	                      // Received TLM_BEGIN_RESP
     };
 
-  typedef std::map<tlm::tlm_generic_payload *, previous_phase_enum> waiting_bw_path_map;
-  waiting_bw_path_map     m_waiting_bw_path_map;    // Wait backward path map 
+  typedef std::map<tlm::tlm_generic_payload *, previous_phase_enum>
+                          waiting_bw_path_map;
+  waiting_bw_path_map     m_waiting_bw_path_map;        // Wait backward path map 
   sc_core::sc_event       m_enable_next_request_event; 
-
-  PEQFifo                 m_send_end_rsp_PEQ;       // send end response PEq
-
-  unsigned int            m_ID;                     // initiator ID
-  sc_core::sc_time        m_end_rsp_delay;          // end response delay
-  
+  tlm_utils::peq_with_get<tlm::tlm_generic_payload>
+                          m_send_end_rsp_PEQ;           // send end response PEQ
+  unsigned int            m_ID;                         // initiator ID
+  sc_core::sc_time        m_end_rsp_delay;              // end response delay
   bool                    m_nb_trans_fw_prev_warning;
-  bool                    m_enable_target_tracking;   //?? remove 
-
+  bool                    m_enable_target_tracking;     // ? remove 
 }; 
  #endif /* __SELECT_INITIATOR_H__ */
