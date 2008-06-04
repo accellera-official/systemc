@@ -96,7 +96,7 @@ class at_target_2_phase                               /// at_target_2_phase
 
   private:
 	    
-/// helper function for printing memory transactions @tdo move to .cpp
+/// helper function for printing memory transactions
   void
   print_memory_transaction_helper
   ( const int 				  &ID
