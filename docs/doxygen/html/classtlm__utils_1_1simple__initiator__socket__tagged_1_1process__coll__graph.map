@@ -1,0 +1,4 @@
+<area shape="rect" href="$classtlm_1_1tlm__bw__transport__if.html" title="tlm::tlm_bw_transport_if\&lt; TYPES \&gt;" alt="" coords="831,31,1063,57">
+<area shape="rect" href="$classtlm_1_1tlm__bw__nonblocking__transport__if.html" title="tlm::tlm_bw_nonblocking_transport_if\&lt; TYPES::tlm_payload_type, TYPES::tlm_phase_type \&gt;" alt="" coords="204,5,780,32">
+<area shape="rect" href="$classsc__core_1_1sc__interface.html" title="sc_core::sc_interface" alt="" coords="7,5,153,32">
+<area shape="rect" href="$classtlm_1_1tlm__bw__direct__mem__if.html" title="tlm::tlm_bw_direct_mem_if" alt="" coords="401,56,583,83">
