@@ -58,7 +58,7 @@ class lt_dmi_target
   , const sc_core::sc_time    read_response_delay   ///< read response delay (SC_TIME, SC_NS)
   , const sc_core::sc_time    write_response_delay  ///< write response delay (SC_TIME, SC_NS)
   , const sc_core::sc_time    start_dmi_delay = sc_core::sc_time(100,sc_core::SC_NS)
-  , const sc_core::sc_time    dmi_duration    = sc_core::sc_time(500,sc_core::SC_NS)
+  , const sc_core::sc_time    dmi_duration    = sc_core::sc_time(1000,sc_core::SC_NS)
   );
  
    void toggle_dmi_method(void);

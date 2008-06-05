@@ -80,7 +80,7 @@ dmi_memory::operation
     }
  else
  {
-  m_offset  = m_address - m_start_address; 
+  m_offset  = m_address - m_dmi_base_address; 
     
   switch (m_command)
   {
@@ -101,7 +101,6 @@ dmi_memory::operation
     case tlm::TLM_READ_COMMAND:
     {
       // clear read buffer
-   
       for (unsigned int i = 0; i < m_length; i++)
         {       
         m_data[i] = m_dmi_ptr [m_offset + i];
@@ -140,8 +139,8 @@ dmi_memory::invalidate_dmi_ptr
   msg.str("");
   
   if (  ( start_range <= end_range       )
-     && ( start_range >= m_start_address )
-     && ( end_range   <= m_end_address   ) )
+     && ( start_range >= m_dmi_base_address )
+     && ( end_range   <= (m_dmi_base_address-m_dmi_size)   ) )
     {
       msg << "Initiator:" << m_ID
           << " DMI Pointer invalidated for "
@@ -173,9 +172,9 @@ dmi_memory::load_dmi_ptr
   m_dmi_ptr           = dmi_properties.get_dmi_ptr();
   m_dmi_read_latency  = dmi_properties.get_read_latency();
   m_dmi_write_latency = dmi_properties.get_write_latency();
-  m_start_address     = dmi_properties.get_start_address();
+  m_dmi_base_address       = dmi_properties.get_start_address();
   m_dmi_size          = dmi_properties.get_end_address()
-                      - m_start_address;
+                      - m_dmi_base_address;
   
   return;
 }
@@ -193,29 +192,46 @@ dmi_memory::is_address_dmi
   std::ostringstream  msg;   
   msg.str("");
   msg << "Initiator:" << m_ID;
-  bool                return_status = true;
+  bool                return_status = false;
  
-  if (  ( m_start_address < ( m_address + m_offset              ) )
-     || ( m_end_address   > ( m_address + m_offset + m_dmi_size ) ) )
+  if ( (    ( m_start_address < ( m_dmi_base_address              ) )
+         || ( m_end_address   > ( m_dmi_base_address + m_dmi_size ) ) 
+        )  
+      )
   {  
     // address is outside of the DMI boundaries
-    return_status = false;
+    msg << " address is not a dmi address";
+//    msg << "m_start_address= " << m_start_address << " m_address= " << m_address
+//        << endl << "       "
+//        << "m_end_address= " << m_end_address << " m_offset= " << m_offset << " m_dmi_size= "<< m_dmi_size;
+    REPORT_INFO(filename, __FUNCTION__, msg.str());
   }
-  else if (  (  ( gp.get_command () == tlm::TLM_WRITE_COMMAND )
-             && ( ( tlm::tlm_dmi::DMI_ACCESS_WRITE & m_granted_access ) != tlm::tlm_dmi::DMI_ACCESS_WRITE ) )
-          || (  ( gp.get_command () == tlm::TLM_READ_COMMAND  )
-             && ( ( tlm::tlm_dmi::DMI_ACCESS_READ  & m_granted_access ) != tlm::tlm_dmi::DMI_ACCESS_READ  ) ) )
-  {
-    // access permission does not match access required for operation
-    msg << " Incompatible Command " << endl << "      ";
-    return_status = false;
-  } //end if
+  else if (        ( gp.get_command () == tlm::TLM_WRITE_COMMAND        )
+          )
+       {
+        if (  (m_granted_access != tlm::tlm_dmi::DMI_ACCESS_READ ) 
+                && (  m_granted_access != tlm::tlm_dmi::DMI_ACCESS_NONE)){
+         msg << " correct address and appropriate access for a GP Write Command "<<endl<<"      ";
+         REPORT_INFO(filename, __FUNCTION__, msg.str());
+         return_status=true;
+         }
+       } //end if
+  else if (        ( gp.get_command () == tlm::TLM_READ_COMMAND          )
+          )  
+      {
+        if ( (m_granted_access != tlm::tlm_dmi::DMI_ACCESS_WRITE  ) 
+                && (  m_granted_access != tlm::tlm_dmi::DMI_ACCESS_NONE)){
+        msg << " correct address and appropriate access for a GP Read Command "<<endl<<"      ";
+        REPORT_INFO(filename, __FUNCTION__, msg.str());
+        return_status=true;
+        }
+      } //end if
+  else { 
+     // access permission does not match access required for operation
+         msg << " Incompatible GP Command for DMI Access Granted ";
+     //    msg << " Gp.getcommand()= " << gp.get_command(); 
+         REPORT_INFO(filename, __FUNCTION__, msg.str());
+  } //end else 
     
-  if (return_status)
-  {
-    msg << " gp with address " << &gp << " has an address for dmi ";
-    REPORT_INFO(filename, __FUNCTION__, msg.str()); 
-  }
-  
   return return_status;
 } // end check is dmi

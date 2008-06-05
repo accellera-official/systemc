@@ -114,6 +114,7 @@ public:
    sc_dt::uint64                m_address;
    sc_core::sc_time             m_dmi_read_latency;
    sc_core::sc_time             m_dmi_write_latency;
+   sc_dt::uint64		m_dmi_base_address;
    tlm::tlm_command             m_command;
    unsigned char               *m_dmi_ptr;
    sc_dt::uint64                m_start_address;
