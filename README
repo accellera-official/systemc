@@ -1,9 +1,8 @@
-                             2008-05-15
+                             2008-06-09
                  	       TLM 2.0 
                  =================================
 
-This is the proposed code for the TLM 2.0 standard and is made available for 
-OSCI internal review only
+This is the proof of concept implementation for the TLM 2.0 standard.
 
 -------------------------------------------------------------------------------
                 IMPORTANT
@@ -13,7 +12,7 @@ OSCI internal review only
    This version is not, nor was it intended to be, backwards compatible with 
    draft 2 and draft 1.
 
-2. This release has been well tested on the following platforms:
+2. This release has been tested on the following platforms:
     o Linux (Redhat Enterprise 4) with GNU C++ compiler versions gcc-3.4.4,
       gcc-4.2.0
     o Windows XP (SP2) with VC++ 2005 SP1 and VC++ 2008
@@ -55,10 +54,15 @@ Directory Structure
    Dirs: include/   : contains the TLM 2.0 standard headers
          unit_test/ : contains a set of tests for TLM 2.0
 	 examples/  : contains the examples that come with the TLM 2.0 kit
-	 [ to be added: docs]
+	 docs/	    : contains the documentation for TLM 2.0
 
 Build Support
  
+   To use TLM2.0 all you need is the SystemC headers. TLM2.0 has been tested
+   with SystemC versions 2.2 and 2.1.1. 
+   The multi_passthrough sockets in the tlm_utils directory also depend on 
+   the boost library, it has been tested with boost versions 1.33.1 and 1.35.0 
+   
    Support for building the examples and unit tests is provided for 'unix', and
    'msvc' (project and make files).
 
@@ -69,6 +73,8 @@ Build Support
    and $TARGET_ARCH should be defined such that $SYSTEMC_HOME/lib-$TARGET_ARCH
    is a directory containing the systemc library.  On Windows, the SYSTEMC and
    TLM environments variables should be used.
+   To run the multi_socket tests and examples you need to set the environment
+   variable BOOST_HOME to point to the boost headers.
 
 Examples
 
@@ -82,7 +88,6 @@ Unit Tests
    be illustrative for other features of the kit such as payload extensions, 
    UT & AT modeling, transactors, temporal decoupling, direct memory interface,
    etc.
-
    See instructions in unit_test/README.txt
 
 Problems

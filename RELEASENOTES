@@ -42,11 +42,13 @@ following primary ways:
 	- additional semantical clarifications
 	- well-defined transaction ordering rules
   - Examples have been updated for the changes in the standard
+For a more detailed description of all features of TLM 2.0 check out the TLM 2.0
+manual that can be found in the documentation subdirectory of this package
 
 3) Known issues
 ===============
 
-a. when using TLM 2.0 with SystemC v2.2.1 on 64 bit linux you will need to 
+a. when using TLM 2.0 with SystemC v2.2.v1 on 64 bit linux you will need to 
    force 32 bit mode by using the '-m32' flag
 
 b. the tlm_simple_target_socket in tlm_utils does not obey the END_REQ rule
@@ -55,7 +57,16 @@ b. the tlm_simple_target_socket in tlm_utils does not obey the END_REQ rule
    the incoming nb_ call will be forwarded to the registered nb_ call without
    checking whether the earlier b_ call has passed the END_REQ timing point
  
-
+c. the implementation of the PEQ 'peq_with_get' in tlm_utils does not properly
+   distinguish between immediate notifications and delta notifications. In the
+   case that a immediate and delta notification happen at the same simulation
+   time both types of notifications emerge from the PEQ in the same evaluation 
+   phase. This is wrong immediate notifications should overtake delta 
+   notifications
+   
+d. the multi_passthrough_initiator_socket and multi_passthrough_target_socket do
+   depends on a boost library and does not work with SystemC2.1.v1 due to boost
+   incompatibilities
 
 
 
@@ -71,7 +82,6 @@ CONTENTS
   1) Supported SystemC versions
   2) What's changed in this kit?
   3) Areas under construction
-  4) Known issues
 
 
 1) Supported SystemC versions

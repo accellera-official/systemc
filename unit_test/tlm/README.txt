@@ -40,7 +40,7 @@ To run the makefiles the following environment needs to be set:
       directory containing the systemc library.  
    On Windows, the SYSTEMC and TLM environments variables should be used.
    
-   The multi_sockets test is dependent on the boos library, you will need to 
+   The multi_sockets test is dependent on the boost library, you will need to 
    have an environment variable 'BOOST_HOME' set to build the test
 
 
@@ -69,6 +69,10 @@ multi_sockets/ :
       bind all targets and initiators to, in combination with LT and AT
       initiators and targets. This test also uses instance specific extentions
       in the generic payload
+      
+      NOTE: this test does not compile with SystemCv2.1.v1 due to 
+            incompatibilities with the boost library that is required for the
+	    multi_socket implementation
       
 p2p/ :
   BaseSocketLT/ :
