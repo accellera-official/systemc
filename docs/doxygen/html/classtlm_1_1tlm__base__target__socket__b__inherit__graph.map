@@ -1,9 +1,0 @@
-<area shape="rect" href="$classtlm_1_1tlm__base__target__socket.html" title="tlm::tlm_base_target_socket\&lt; BUSWIDTH, FW_IF, BW_IF \&gt;" alt="" coords="453,69,837,96">
-<area shape="rect" href="$classtlm_1_1tlm__target__socket.html" title="tlm::tlm_target_socket\&lt; BUSWIDTH, tlm::tlm_fw_transport_if\&lt; TYPES \&gt;, tlm::tlm_bw_transport_if\&lt; TYPES \&gt;, N, POL \&gt;" alt="" coords="885,31,1619,57">
-<area shape="rect" href="$classtlm_1_1tlm__target__socket.html" title="tlm::tlm_target_socket\&lt; BUSWIDTH, TYPES \&gt;" alt="" coords="1101,107,1403,133">
-<area shape="rect" href="$classtlm__utils_1_1multi__target__base.html" title="tlm_utils::multi_target_base\&lt; BUSWIDTH, TYPES, N, POL \&gt;" alt="" coords="1725,5,2109,32">
-<area shape="rect" href="$classtlm__utils_1_1multi__passthrough__target__socket.html" title="tlm_utils::multi_passthrough_target_socket\&lt; BUSWIDTH, TYPES, N, POL \&gt;" alt="" coords="2217,5,2692,32">
-<area shape="rect" href="$classtlm__utils_1_1passthrough__target__socket.html" title="tlm_utils::passthrough_target_socket\&lt; MODULE, BUSWIDTH, TYPES \&gt;" alt="" coords="1691,56,2144,83">
-<area shape="rect" href="$classtlm__utils_1_1passthrough__target__socket__tagged.html" title="tlm_utils::passthrough_target_socket_tagged\&lt; MODULE, BUSWIDTH, TYPES \&gt;" alt="" coords="1667,107,2168,133">
-<area shape="rect" href="$classtlm__utils_1_1simple__target__socket.html" title="tlm_utils::simple_target_socket\&lt; MODULE, BUSWIDTH, TYPES \&gt;" alt="" coords="1708,157,2127,184">
-<area shape="rect" href="$classtlm__utils_1_1simple__target__socket__tagged.html" title="tlm_utils::simple_target_socket_tagged\&lt; MODULE, BUSWIDTH, TYPES \&gt;" alt="" coords="1684,208,2151,235">
