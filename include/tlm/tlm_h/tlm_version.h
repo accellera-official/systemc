@@ -61,18 +61,18 @@
 namespace tlm
 {
 
-#define TLM_VERSION_MAJOR                   2
-#define TLM_VERSION_MINOR                   0
-#define TLM_VERSION_PATCH                   0
-#define TLM_VERSION_ORIGINATOR							"TLMWG"
-#define TLM_VERSION_SEPARATOR               "."
+#define TLM_VERSION_MAJOR                   2						///< version major level ( numeric )
+#define TLM_VERSION_MINOR                   0						///< version minor level ( numeric )
+#define TLM_VERSION_PATCH                   0						///< version patch level ( numeric )
+#define TLM_VERSION_ORIGINATOR							"TLMWG"			///< TLM creator string
+#define TLM_VERSION_SEPARATOR               "."					///< version string separator
 
-#define TLM_IS_PRERELEASE             			FALSE
-#define TLM_VERSION_PRERELEASE       				""
+#define TLM_IS_PRERELEASE             			FALSE				///< pre-release flag ( TRUE / FALSE )
+#define TLM_VERSION_PRERELEASE       				""					///< pre-release version string
 
-#define TLM_VERSION_RELEASE_YEAR						"2008"
-#define TLM_VERSION_RELEASE_MONTH						"06"
-#define TLM_VERSION_RELEASE_DAY							"14"
+#define TLM_VERSION_RELEASE_YEAR						"2008"			///< release year  ( YYYY )
+#define TLM_VERSION_RELEASE_MONTH						"06"				///< release month ( MM )
+#define TLM_VERSION_RELEASE_DAY							"09"				///< release day   ( DD )
 
 #define TLM_COPYRIGHT												"        Copyright (c) 1996-" TLM_VERSION_RELEASE_YEAR " by all Contributors\n" \
                                             "                    ALL RIGHTS RESERVED"
