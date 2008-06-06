@@ -14,7 +14,7 @@ This is the proof of concept implementation for the TLM 2.0 standard.
 
 2. This release has been tested on the following platforms:
     o Linux (Redhat Enterprise 4) with GNU C++ compiler versions gcc-3.4.4,
-      gcc-4.2.0
+      gcc-4.0, gcc-4.2.0
     o Windows XP (SP2) with VC++ 2005 SP1 and VC++ 2008
     o Linux (Fedora 8) with GNU C++ compiler version 4.1.2
     o SunOS 5.9, with Sun Forte compiler 10.0
@@ -42,10 +42,14 @@ Release Notes
 
 User Documentation
 
-   You can find documentation for this release in the docs directory.  It is
-   recommended that you start with the training presentation 
-   (TLM_2_0_training.pps) and then the user manual (TLM_2_0_user_manual.pdf).
-   See docs/README.txt for a description and status of the other documentation.
+   You can find documentation for this release in the docs directory. There is 
+   doxygen generated documentation in the doxygen/ subdirectory of docs/ the 
+   user manual and training presentation can be found in the release/ 
+   subdirectory of docs/. It is recommended that you start with the training 
+   presentation (TLM_2_0_presentation.pps) and then the user manual 
+   (TLM_2_0_user_manual.pdf).
+   See docs/release/README.txt for a description and status of the other 
+   documentation.
 
 Directory Structure
 
@@ -68,13 +72,16 @@ Build Support
 
    Makefiles work hierarchically.  Build is the default target; 'clean', 
    'run' (executes built tests/examples) and 'check' (against expected 
-   results) targets are also provided.  On Unix/Linux/MacOS, the $TLM_HOME 
-   environment variable should be set to this kit's location; $SYSTEMC_HOME 
-   and $TARGET_ARCH should be defined such that $SYSTEMC_HOME/lib-$TARGET_ARCH
-   is a directory containing the systemc library.  On Windows, the SYSTEMC and
-   TLM environments variables should be used.
+   results) targets are also provided.  
+   On Unix/Linux/MacOS, the $TLM_HOME environment variable should be set to this
+   kit's location; $SYSTEMC_HOME and $TARGET_ARCH should be defined such that
+   $SYSTEMC_HOME/lib-$TARGET_ARCH is a directory containing the systemc library.
+   On Windows, the SYSTEMC and TLM environments variables should be used.
    To run the multi_socket tests and examples you need to set the environment
    variable BOOST_HOME to point to the boost headers.
+   
+   Please check the README.txt file for the unit_tests how to setup the build
+   environment for different compiler and library versions.
 
 Examples
 

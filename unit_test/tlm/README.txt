@@ -42,6 +42,10 @@ To run the makefiles the following environment needs to be set:
    
    The multi_sockets test is dependent on the boost library, you will need to 
    have an environment variable 'BOOST_HOME' set to build the test
+   
+   To run the tests with SystemC-2.1v1, boost and gcc-3.4.4 you need to change
+   the Makefile.config in build-unix/ to unset the FLAG_WERROR
+   You also need to unset this flag when using gcc-4.1.2 and above
 
 
 The tests:
