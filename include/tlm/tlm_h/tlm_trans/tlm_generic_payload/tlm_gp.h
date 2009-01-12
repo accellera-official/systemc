@@ -15,6 +15,8 @@
 
 *****************************************************************************/
 
+// 12-Jan-2009  John Aynsley  Bug fix. has_mm() and get_ref_count() should both be const
+
 
 #ifndef __TLM_GP_H__
 #define __TLM_GP_H__
@@ -147,9 +149,9 @@ public:
 
     void acquire(){assert(m_mm != 0); m_ref_count++;}
     void release(){assert(m_mm != 0); if (--m_ref_count==0) m_mm->free(this);}
-    int get_ref_count(){return m_ref_count;}
+    int get_ref_count() const {return m_ref_count;}
     void set_mm(tlm_mm_interface* mm) { m_mm = mm; }
-    bool has_mm() { return m_mm != 0; }
+    bool has_mm() const { return m_mm != 0; }
 
     void reset(){
       //should the other members be reset too?
@@ -234,7 +236,7 @@ public:
                 if(!m_extensions[i])
                 {                   //We don't: clone.
                     tlm_extension_base *ext = other.m_extensions[i]->clone();
-                    if(ext)			//extension may not be clonable.
+                    if(ext)     //extension may not be clonable.
                     {
                         if(has_mm())
                         {           //mm can take care of removing cloned extensions
