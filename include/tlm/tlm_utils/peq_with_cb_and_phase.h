@@ -14,6 +14,10 @@
   language governing rights and limitations under the License.
 
  *****************************************************************************/
+
+// 12-Jan-2009  John Aynsley  Bug fix. Phase argument to notify should be const
+
+
 #ifndef __PEQ_WITH_CB_AND_PHASE_H__
 #define __PEQ_WITH_CB_AND_PHASE_H__
 
@@ -36,20 +40,20 @@ public:
     element(PAYLOAD& p, sc_core::sc_time t, sc_dt::uint64 d): p(p),t(t),d(d) {}
     element(){}
   };
-  
+
   element *nill;
   element *empties;
   element *list;
   unsigned int size;
-    
-  time_ordered_list() 
+
+  time_ordered_list()
     : nill(new element()),
       empties(NULL),
       list(nill),
       size(0)
   {
   }
-  
+
   ~time_ordered_list() {
     while(size) {
       delete_top();
@@ -62,19 +66,19 @@ public:
     }
     delete nill;
   }
-  
+
   void insert(const PAYLOAD& p, sc_core::sc_time t) {
     if (!empties) {
       empties=new struct element();
       empties->next=NULL;
     }
-    
+
     struct element *e=empties;
     empties=empties->next;
     e->p=p;
     e->t=t;
     e->d=sc_core::sc_delta_count();
-    
+
     struct element * ancestor=nill;
     struct element * iterator=list;
     while (iterator!=nill && iterator->t<=t){
@@ -91,7 +95,7 @@ public:
     }
     size++;
   }
-  
+
   void delete_top(){
     if (list != nill) {
       struct element *e=list;
@@ -101,12 +105,12 @@ public:
       size--;
     }
   }
-  
+
   unsigned int get_size()
   {
     return size;
   }
-  
+
   PAYLOAD &top()
   {
     return list->p;
@@ -134,7 +138,7 @@ public:
  */
 //---------------------------------------------------------------------------
 template<typename OWNER,typename TYPES=tlm::tlm_base_protocol_types>
-class peq_with_cb_and_phase: 
+class peq_with_cb_and_phase:
   public sc_core::sc_object
 {
 
@@ -142,29 +146,29 @@ class peq_with_cb_and_phase:
   typedef typename TYPES::tlm_phase_type   tlm_phase_type;
   typedef std::pair<tlm_payload_type*, tlm_phase_type> PAYLOAD;
   typedef void (OWNER::*cb)(tlm_payload_type&, const tlm_phase_type&);
-  
+
   class delta_list{
   public:
     delta_list(){
       reset();
       entries.resize(100);
     }
-    
+
     inline void insert(const PAYLOAD& p){
       if (size==entries.size()){
         entries.resize(entries.size()*2);
       }
       entries[size++]=p;
     }
-    
+
     inline PAYLOAD& get(){
       return entries[out++];
     }
-    
+
     inline bool next(){
       return out<size;
     }
-    
+
     inline void reset(){
       size=0;
       out=0;
@@ -177,7 +181,7 @@ class peq_with_cb_and_phase:
   };
 
 public:
-  
+
   peq_with_cb_and_phase(OWNER* _owner, cb _cb)
     :sc_core::sc_object( sc_core::sc_gen_unique_name( "peq_with_cb_and_phase" ) )
     ,m_owner(_owner)
@@ -187,7 +191,7 @@ public:
     opts.spawn_method();
     opts.set_sensitivity(&m_e);
     opts.dont_initialize();
-    sc_core::sc_spawn(sc_bind(&peq_with_cb_and_phase::fec, this), 
+    sc_core::sc_spawn(sc_bind(&peq_with_cb_and_phase::fec, this),
                       sc_core::sc_gen_unique_name("fec"), &opts);
   }
 
@@ -200,13 +204,13 @@ public:
     opts.spawn_method();
     opts.set_sensitivity(&m_e);
     opts.dont_initialize();
-    sc_core::sc_spawn(sc_bind(&peq_with_cb_and_phase::fec, this), 
+    sc_core::sc_spawn(sc_bind(&peq_with_cb_and_phase::fec, this),
                       sc_core::sc_gen_unique_name("fec"), &opts);
   }
-  
+
   ~peq_with_cb_and_phase(){}
-  
-  void notify (tlm_payload_type& t, tlm_phase_type& p, const sc_core::sc_time& when){
+
+  void notify (tlm_payload_type& t, const tlm_phase_type& p, const sc_core::sc_time& when){
     //t.aquire();
     if (when==sc_core::SC_ZERO_TIME) {
       if (sc_core::sc_delta_count() & (sc_dt::uint64)0x1) //uneven delta cycle so delta delay is for even cylce
@@ -221,18 +225,18 @@ public:
     }
   }
 
-  void notify (tlm_payload_type& t, tlm_phase_type& p){
+  void notify (tlm_payload_type& t, const tlm_phase_type& p){
     m_immediate_yield.insert(PAYLOAD(&t,p));
     m_e.notify(); // immediate notification
   }
-  
+
 private:
-  
+
   void fec(){
     //immediate yield notifications
     while(m_immediate_yield.next()) {PAYLOAD& tmp=m_immediate_yield.get(); (m_owner->*m_cb)(*tmp.first, tmp.second);} //tmp.first->release();}
     m_immediate_yield.reset();
-    
+
     //delta notifications
     if (sc_core::sc_delta_count() & (sc_dt::uint64) 0x1) {//uneven delta so put out all payloads for uneven delta
       while (m_uneven_delta.next()) {PAYLOAD& tmp=m_uneven_delta.get(); (m_owner->*m_cb)(*tmp.first, tmp.second);} //tmp.first->release();}
@@ -241,11 +245,11 @@ private:
     }
     else {
       while (m_even_delta.next()) {PAYLOAD& tmp=m_even_delta.get(); (m_owner->*m_cb)(*tmp.first, tmp.second);} //tmp.first->release();}
-      m_even_delta.reset();  
+      m_even_delta.reset();
       if (m_uneven_delta.size) m_e.notify(sc_core::SC_ZERO_TIME);
     }
     if (!m_ppq.get_size()) return; //there were only delta notification
-    
+
     //timed notifications
     const sc_core::sc_time now=sc_core::sc_time_stamp();
     sc_core::sc_time top=m_ppq.top_time();
@@ -259,17 +263,17 @@ private:
     if ( m_ppq.get_size()) {
       m_e.notify( top - now) ;
     }
-    
+
   }
-  
+
   OWNER* m_owner;
   cb     m_cb;
-  
+
   time_ordered_list<PAYLOAD> m_ppq;
   delta_list m_uneven_delta;
   delta_list m_even_delta;
   delta_list m_immediate_yield;
-  
+
   sc_core::sc_event m_e;   // default event
 };
 
