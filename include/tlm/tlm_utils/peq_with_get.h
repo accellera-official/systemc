@@ -15,6 +15,9 @@
 
  *****************************************************************************/
 
+// 12-Jan-2009  John Aynsley  Bug fix. sc_time argument to notify should be const
+
+
 #ifndef __PEQ_WITH_GET_H__
 #define __PEQ_WITH_GET_H__
 
@@ -36,7 +39,7 @@ public:
   {
   }
 
-  void notify(transaction_type& trans, sc_core::sc_time& t)
+  void notify(transaction_type& trans, const sc_core::sc_time& t)
   {
     m_scheduled_events.insert(pair_type(t + sc_core::sc_time_stamp(), &trans));
     m_event.notify(t);
@@ -63,7 +66,7 @@ public:
     }
 
     m_event.notify(m_scheduled_events.begin()->first - now);
-    
+
     return 0;
   }
 
