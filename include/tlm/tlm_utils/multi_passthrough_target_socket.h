@@ -79,11 +79,6 @@ public:
   //CTOR
   multi_passthrough_target_socket(const char* name)
       : base_type((std::string(name)+std::string("_base")).c_str())
-      , m_mod(0)
-      , m_nb_cb(0)
-      , m_b_cb(0)
-      , m_dbg_cb(0)
-      , m_dmi_cb(0)
       , m_hierarch_bind(0)
       , m_eoe_disabled(false)
       , m_dummy(42)
@@ -120,19 +115,14 @@ public:
     if (!sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::get_interface())
       sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::bind(m_dummy);
 
-    //make sure that only one module is registering callbacks with this socket
-    if (m_mod) assert(m_mod==mod);
-    else m_mod=mod;
-
     //warn if there already is a callback
-    if (m_nb_cb){
+    if (!m_nb_f.empty()){
       display_warning("NBTransport_bw callback already registered.");
       return;
     }
 
-    //store the callback and create the appropriate boost function
-    m_nb_cb=cb;
-    m_nb_f=boost::bind<sync_enum_type>(boost::mem_fn(m_nb_cb), m_mod, _1, _2, _3, _4);
+    //set the functor
+    m_nb_f.set_function(mod, cb);
   }
 
   //register callback for b transport of fw interface
@@ -147,19 +137,14 @@ public:
     if (!sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::get_interface())
       sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::bind(m_dummy);
 
-    //make sure that only one module is registering callbacks with this socket
-    if (m_mod) assert(m_mod==mod);
-    else m_mod=mod;
-
     //warn if there already is a callback
-    if (m_b_cb){
+    if (!m_b_f.empty()){
       display_warning("BTransport callback already registered.");
       return;
     }
 
-    //store the callback and create the appropriate boost function
-    m_b_cb=cb;
-    m_b_f=boost::bind<void>(boost::mem_fn(m_b_cb), m_mod, _1, _2, _3);
+    //set the functor
+    m_b_f.set_function(mod, cb);
   }
 
   //register callback for debug transport of fw interface
@@ -174,19 +159,14 @@ public:
     if (!sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::get_interface())
       sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::bind(m_dummy);
 
-    //make sure that only one module is registering callbacks with this socket
-    if (m_mod) assert(m_mod==mod);
-    else m_mod=mod;
-
     //warn if there already is a callback
-    if (m_dbg_cb){
+    if (!m_dbg_f.empty()){
       display_warning("DebugTransport callback already registered.");
       return;
     }
 
-    //store the callback and create the appropriate boost function
-    m_dbg_cb=cb;
-    m_dbg_f=boost::bind<unsigned int>(boost::mem_fn(m_dbg_cb), m_mod, _1, _2);
+    //set the functor
+    m_dbg_f.set_function(mod, cb);
   }
 
   //register callback for DMI of fw interface
@@ -201,19 +181,14 @@ public:
     if (!sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::get_interface())
       sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::bind(m_dummy);
 
-    //make sure that only one module is registering callbacks with this socket
-    if (m_mod) assert(m_mod==mod);
-    else m_mod=mod;
-
     //warn if there already is a callback
-    if (m_dmi_cb){
+    if (!m_dmi_f.empty()){
       display_warning("DMI callback already registered.");
       return;
     }
 
-    //store the callback and create the appropriate boost function
-    m_dmi_cb=cb;
-    m_dmi_f=boost::bind<bool>(boost::mem_fn(m_dmi_cb), m_mod, _1, _2, _3);
+    //set the functor
+    m_dmi_f.set_function(mod, cb);
   }
 
 
@@ -315,23 +290,17 @@ protected:
   //vector of binders that convert untagged interface into tagged interface
   std::vector<callback_binder_fw<TYPES>*> m_binders;
 
-  MODULE* m_mod; //the owning module
-  nb_cb   m_nb_cb; //the nb callback of the owning module
-  b_cb    m_b_cb;  //the b callback of the owning module
-  dbg_cb  m_dbg_cb; //the debug callback of the owning module
-  dmi_cb  m_dmi_cb; //the dmi callback of the owning module
   base_type*  m_hierarch_bind; //pointer to hierarchical bound multi port
   bool m_eoe_disabled; //bool that diables callback bindings at end of elaboration
   callback_binder_fw<TYPES> m_dummy; //a dummy to bind to the export
 
-  //callbacks as boost functions
+  //callbacks as functors
   // (allows to pass the callback to another socket that does not know the type of the module that owns
   //  the callbacks)
-  boost::function<sync_enum_type (int i, transaction_type& txn, phase_type& p, sc_core::sc_time& t)> m_nb_f;
-  boost::function<void (int i, transaction_type& txn, sc_core::sc_time& t)> m_b_f;
-  boost::function<unsigned int (int i, transaction_type& txn)> m_dbg_f;
-  boost::function<bool (int i, transaction_type& txn, tlm::tlm_dmi& dmi)> m_dmi_f;
-
+  typename callback_binder_fw<TYPES>::nb_func_type    m_nb_f;
+  typename callback_binder_fw<TYPES>::b_func_type     m_b_f;
+  typename callback_binder_fw<TYPES>::debug_func_type m_dbg_f;
+  typename callback_binder_fw<TYPES>::dmi_func_type   m_dmi_f;
 };
 
 }

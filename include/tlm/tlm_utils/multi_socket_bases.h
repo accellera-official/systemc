@@ -27,12 +27,116 @@
 #endif
 #include "tlm.h"
 
-#include "boost/function.hpp"
-#include "boost/mem_fn.hpp"
 #include <map>
 
 namespace tlm_utils {
 
+template <typename signature>
+struct fn_container{
+  signature function;
+};
+
+#define TLM_DEFINE_FUNCTOR(name) \
+template <typename MODULE, typename TRAITS> \
+inline TLM_RET_VAL static_##name( void* mod \
+                                       , void* fn \
+                                       , int index \
+                                       , TLM_FULL_ARG_LIST) \
+{ \
+  typedef fn_container<TLM_RET_VAL (MODULE::*)(int, TLM_FULL_ARG_LIST)> fn_container_type; \
+  MODULE* tmp_mod=static_cast<MODULE*>(mod); \
+  fn_container_type* tmp_cb =static_cast<fn_container_type*> (fn); \
+  return (tmp_mod->*(tmp_cb->function))(index, TLM_ARG_LIST_WITHOUT_TYPES); \
+}\
+\
+template <typename MODULE, typename TRAITS> \
+inline void delete_fn_container_of_##name(void* fn) \
+{ \
+  typedef fn_container<TLM_RET_VAL (MODULE::*)(int, TLM_FULL_ARG_LIST)> fn_container_type; \
+  fn_container_type* tmp_cb =static_cast<fn_container_type*> (fn); \
+  if (tmp_cb) delete tmp_cb;\
+} \
+\
+template <typename TRAITS> \
+class name##_functor{ \
+public: \
+  typedef typename TRAITS::tlm_payload_type payload_type; \
+  typedef typename TRAITS::tlm_phase_type   phase_type; \
+  typedef TLM_RET_VAL (*call_fn)(void*,void*, int, TLM_FULL_ARG_LIST); \
+  typedef void (*del_fn)(void*); \
+\
+  name##_functor(): m_fn(0), m_del_fn(0), m_mod(0), m_mem_fn(0){} \
+  ~name##_functor(){if (m_del_fn) (*m_del_fn)(m_mem_fn);}  \
+\
+  template <typename MODULE> \
+  void set_function(MODULE* mod, TLM_RET_VAL (MODULE::*cb)(int, TLM_FULL_ARG_LIST)){ \
+    typedef fn_container<TLM_RET_VAL (MODULE::*)(int, TLM_FULL_ARG_LIST)> fn_container_type; \
+    m_fn=&static_##name<MODULE,TRAITS>;\
+    m_del_fn=&delete_fn_container_of_##name<MODULE,TRAITS>;\
+    m_del_fn(m_mem_fn); \
+    fn_container_type* tmp= new fn_container_type(); \
+    tmp->function=cb; \
+    m_mod=static_cast<void*>(mod); \
+    m_mem_fn=static_cast<void*>(tmp); \
+  } \
+  \
+  TLM_RET_VAL operator()(int index, TLM_FULL_ARG_LIST){ \
+    return m_fn(m_mod,m_mem_fn, index, TLM_ARG_LIST_WITHOUT_TYPES); \
+  } \
+\
+  bool empty(){return (m_mod==0 || m_mem_fn==0 || m_fn==0);}\
+\
+protected: \
+  call_fn m_fn;\
+  del_fn m_del_fn; \
+  void* m_mod; \
+  void* m_mem_fn; \
+private: \
+  name##_functor& operator=(const name##_functor&); \
+}
+
+
+#define TLM_RET_VAL tlm::tlm_sync_enum
+#define TLM_FULL_ARG_LIST typename TRAITS::tlm_payload_type& txn, typename TRAITS::tlm_phase_type& ph, sc_core::sc_time& t
+#define TLM_ARG_LIST_WITHOUT_TYPES txn,ph,t
+TLM_DEFINE_FUNCTOR(nb_transport);
+#undef TLM_RET_VAL
+#undef TLM_FULL_ARG_LIST
+#undef TLM_ARG_LIST_WITHOUT_TYPES
+
+#define TLM_RET_VAL void
+#define TLM_FULL_ARG_LIST typename TRAITS::tlm_payload_type& txn, sc_core::sc_time& t
+#define TLM_ARG_LIST_WITHOUT_TYPES txn,t
+TLM_DEFINE_FUNCTOR(b_transport);
+#undef TLM_RET_VAL
+#undef TLM_FULL_ARG_LIST
+#undef TLM_ARG_LIST_WITHOUT_TYPES
+
+#define TLM_RET_VAL unsigned int
+#define TLM_FULL_ARG_LIST typename TRAITS::tlm_payload_type& txn
+#define TLM_ARG_LIST_WITHOUT_TYPES txn
+TLM_DEFINE_FUNCTOR(debug_transport);
+#undef TLM_RET_VAL
+#undef TLM_FULL_ARG_LIST
+#undef TLM_ARG_LIST_WITHOUT_TYPES
+
+#define TLM_RET_VAL bool
+#define TLM_FULL_ARG_LIST typename TRAITS::tlm_payload_type& txn, tlm::tlm_dmi& dmi
+#define TLM_ARG_LIST_WITHOUT_TYPES txn,dmi
+TLM_DEFINE_FUNCTOR(get_dmi_ptr);
+#undef TLM_RET_VAL
+#undef TLM_FULL_ARG_LIST
+#undef TLM_ARG_LIST_WITHOUT_TYPES
+
+#define TLM_RET_VAL void
+#define TLM_FULL_ARG_LIST typename sc_dt::uint64 l, sc_dt::uint64 u
+#define TLM_ARG_LIST_WITHOUT_TYPES l,u
+TLM_DEFINE_FUNCTOR(invalidate_dmi);
+#undef TLM_RET_VAL
+#undef TLM_FULL_ARG_LIST
+#undef TLM_ARG_LIST_WITHOUT_TYPES
+
+#undef TLM_DEFINE_FUNCTOR
 
 /*
 This class implements the fw interface.
@@ -49,10 +153,10 @@ class callback_binder_fw: public tlm::tlm_fw_transport_if<TYPES>{
     typedef tlm::tlm_sync_enum                            sync_enum_type;
   
     //typedefs for the callbacks
-    typedef boost::function<sync_enum_type (int i, transaction_type& txn, phase_type& ph, sc_core::sc_time& t)> nb_func_type;
-    typedef boost::function<void (int i, transaction_type& txn, sc_core::sc_time& t)> b_func_type;
-    typedef boost::function<unsigned int (int i, transaction_type& txn)> debug_func_type;
-    typedef boost::function<bool (int i, transaction_type& txn, tlm::tlm_dmi& dmi)> dmi_func_type;
+    typedef nb_transport_functor<TYPES>    nb_func_type;
+    typedef b_transport_functor<TYPES>     b_func_type;
+    typedef debug_transport_functor<TYPES> debug_func_type;
+    typedef get_dmi_ptr_functor<TYPES>     dmi_func_type;
 
     //ctor: an ID is needed to create a callback binder
     callback_binder_fw(int id): m_id(id){
@@ -86,8 +190,10 @@ class callback_binder_fw: public tlm::tlm_fw_transport_if<TYPES>{
     bool get_direct_mem_ptr(transaction_type& trans, tlm::tlm_dmi&  dmi_data){
       //check if a callback is registered
       if (m_dmi_f->empty()){
-        std::cerr<<"No function registered"<<std::endl; 
-        exit(1);
+        dmi_data.allow_none();
+        dmi_data.set_start_address(0x0);
+        dmi_data.set_end_address((sc_dt::uint64)-1);
+        return false;
       }
       else
         return (*m_dmi_f)(m_id, trans,dmi_data); //do the callback
@@ -97,8 +203,7 @@ class callback_binder_fw: public tlm::tlm_fw_transport_if<TYPES>{
     unsigned int transport_dbg(transaction_type& trans){
       //check if a callback is registered
       if (m_dbg_f->empty()){
-        std::cerr<<"No function registered"<<std::endl; 
-        exit(1);
+        return 0;
       }
       else
         return (*m_dbg_f)(m_id, trans); //do the callback
@@ -153,8 +258,8 @@ class callback_binder_bw: public tlm::tlm_bw_transport_if<TYPES>{
     typedef tlm::tlm_sync_enum                            sync_enum_type;
   
     //typedefs for the callbacks
-    typedef boost::function<sync_enum_type (int i, transaction_type& txn, phase_type& p, sc_core::sc_time& t)> nb_func_type;
-    typedef boost::function<void (int i, sc_dt::uint64 l, sc_dt::uint64 u)> dmi_func_type;
+    typedef nb_transport_functor<TYPES>   nb_func_type;
+    typedef invalidate_dmi_functor<TYPES> dmi_func_type;
 
     //ctor: an ID is needed to create a callback binder
     callback_binder_bw(int id): m_id(id){
@@ -176,9 +281,8 @@ class callback_binder_bw: public tlm::tlm_bw_transport_if<TYPES>{
     //the DMI method of the bw interface
     void invalidate_direct_mem_ptr(sc_dt::uint64 l, sc_dt::uint64 u){
       //check if a callback is registered
-      if (m_nb_f->empty()){
-        std::cerr<<"No function registered"<<std::endl;
-        exit(1);
+      if (m_dmi_f->empty()){
+        return;
       }
       else
         (*m_dmi_f)(m_id,l,u); //do the callback
@@ -312,5 +416,4 @@ public:
 };
 
 }
-
 #endif

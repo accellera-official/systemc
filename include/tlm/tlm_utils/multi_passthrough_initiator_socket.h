@@ -77,9 +77,6 @@ public:
   //CTOR
   multi_passthrough_initiator_socket(const char* name)
       : base_type((std::string(name)+std::string("_base")).c_str())
-      , m_mod(0)
-      , m_nb_cb(0)
-      , m_dmi_cb(0)
       , m_hierarch_bind(0)
       , m_beoe_disabled(false)
       , m_dummy(42)
@@ -112,38 +109,28 @@ public:
                                                            phase_type&,
                                                            sc_core::sc_time&))
   {
-    //make sure that only one module is registering callbacks with this socket
-    if (m_mod) assert(m_mod==mod);
-    else m_mod=mod;
-    
     //warn if there already is a callback
-    if (m_nb_cb){
+    if (!m_nb_f.empty()){
       display_warning("NBTransport_bw callback already registered.");
       return;
     }
     
-    //store the callback and create the appropriate boost function
-    m_nb_cb=cb;
-    m_nb_f=boost::bind<sync_enum_type>(boost::mem_fn(m_nb_cb) , m_mod, _1, _2, _3, _4);
+    //set the functor
+    m_nb_f.set_function(mod, cb);
   }
 
   //register callback for dmi function of bw interface
   void register_invalidate_direct_mem_ptr(MODULE* mod,
                              void (MODULE::*cb)(int, sc_dt::uint64, sc_dt::uint64))
   {
-    //make sure that only one module is registering callbacks with this socket
-    if (m_mod) assert(m_mod==mod);
-    else m_mod=mod;
-
     //warn if there already is a callback
-    if (m_dmi_cb){
+    if (!m_dmi_f.empty()){
       display_warning("InvalidateDMI callback already registered.");
       return;
     }
     
-    //store the callback and create the appropriate boost function
-    m_dmi_cb=cb;
-    m_dmi_f=boost::bind<void>(boost::mem_fn(m_dmi_cb), m_mod, _1, _2, _3);
+    //set the functor
+    m_dmi_f.set_function(mod, cb);
   }
 
   //Override virtual functions of the tlm_initiator_socket:
@@ -272,19 +259,16 @@ protected:
   //vector of binders that convert untagged interface into tagged interface
   std::vector<callback_binder_bw<TYPES>*> m_binders;
   
-  MODULE* m_mod; //the owning module
-  nb_cb   m_nb_cb; //the nb callback of the owning module
-  dmi_cb  m_dmi_cb; //the dmi callback of the owning module
   base_type*  m_hierarch_bind; //pointer to hierarchical bound multi port
   bool m_beoe_disabled;  // bool that remembers whether this socket shall bind callbacks or not
   callback_binder_bw<TYPES> m_dummy; //a callback binder that is bound to the underlying export
                                      // in case there was no real bind
 
-  //callbacks as boost functions
+  //callbacks as functors
   // (allows to pass the callback to another socket that does not know the type of the module that owns
   //  the callbacks)
-  boost::function<sync_enum_type (int i, transaction_type& txn, phase_type& p, sc_core::sc_time& t)> m_nb_f;
-  boost::function<void (int i, sc_dt::uint64 l, sc_dt::uint64 u)> m_dmi_f;
+  typename callback_binder_bw<TYPES>::nb_func_type  m_nb_f;
+  typename callback_binder_bw<TYPES>::dmi_func_type m_dmi_f;
 };
 
 }
