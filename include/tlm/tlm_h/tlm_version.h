@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2008 by all Contributors.
+  source code Copyright (c) 1996-2009 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -21,7 +21,7 @@
  @brief TLM version header
  
   Original Author:
-    Charles Wilson, ESLX
+    Charles Wilson, XtremeEDA Corporation
     
  @description
  	This header contains preprocessor and compiler symbols to allow for the determination
@@ -63,16 +63,16 @@ namespace tlm
 
 #define TLM_VERSION_MAJOR                   2						///< version major level ( numeric )
 #define TLM_VERSION_MINOR                   0						///< version minor level ( numeric )
-#define TLM_VERSION_PATCH                   0						///< version patch level ( numeric )
+#define TLM_VERSION_PATCH                   1						///< version patch level ( numeric )
 #define TLM_VERSION_ORIGINATOR							"TLMWG"			///< TLM creator string
 #define TLM_VERSION_SEPARATOR               "."					///< version string separator
 
-#define TLM_IS_PRERELEASE             			FALSE				///< pre-release flag ( TRUE / FALSE )
-#define TLM_VERSION_PRERELEASE       				""					///< pre-release version string
+#define TLM_IS_PRERELEASE             			TRUE				///< pre-release flag ( TRUE / FALSE )
+#define TLM_VERSION_PRERELEASE       				"alpha 1"		///< pre-release version string
 
-#define TLM_VERSION_RELEASE_YEAR						"2008"			///< release year  ( YYYY )
-#define TLM_VERSION_RELEASE_MONTH						"06"				///< release month ( MM )
-#define TLM_VERSION_RELEASE_DAY							"09"				///< release day   ( DD )
+#define TLM_VERSION_RELEASE_YEAR						"2009"			///< release year  ( YYYY )
+#define TLM_VERSION_RELEASE_MONTH						"01"				///< release month ( MM )
+#define TLM_VERSION_RELEASE_DAY							"30"				///< release day   ( DD )
 
 #define TLM_COPYRIGHT												"        Copyright (c) 1996-" TLM_VERSION_RELEASE_YEAR " by all Contributors\n" \
                                             "                    ALL RIGHTS RESERVED"
