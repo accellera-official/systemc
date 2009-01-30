@@ -1,8 +1,6 @@
-
-
-========================================================
-Release Notes for the TLM 2.0 Kit Of 9 June 2008
-========================================================
+=============================================================
+Release Notes for the TLM 2.0.1 alpha 1 Kit - 30 January 2009
+=============================================================
 
 CONTENTS
 ========
@@ -18,30 +16,10 @@ SystemC 2.1.v1 and 2.2.0 are supported and have been tested.
 2) What's changed in this kit?
 ==============================
 
-Compared to the 29 Nov 2007 draft 2 kit, the standard has evolved in the 
-following primary ways:
-  - the file and directory structure has undergone further cleaning
-  - resolved confusion on multiple interfaces, and loosely timed versus untimed 
-    modeling by:
-  	- LT = single phase hence blocking API with support for timing 
-	       annotation (&temporal decoupling)
-	- AT = multi-phase hence non-blocking API with extensible number of 
-	       phases
-  - unified the interfaces: that means both API's need to be implemented by 
-    all compliant models
-  - added convenience sockets (implementing LT-AT conversion and multiple 
-    bindings)
-  - better support for extended protocol definitions by reusing GP for DMI and 
-    debug
-  - support for ignorable phase extentions
-  - added exmaple for instance based extentions
-  - provided with endianness (conversion) helper functions
-  - now using char * for byte-enable array 
-  - Documentation (training presentation and users manual)
-  	- updated for the changes above
-	- additional semantical clarifications
-	- well-defined transaction ordering rules
-  - Examples have been updated for the changes in the standard
+Compared to the 2.0.0 kit, the following has changed:
+
+  - stuff here
+
 For a more detailed description of all features of TLM 2.0 check out the TLM 2.0
 manual that can be found in the documentation subdirectory of this package
 
@@ -75,11 +53,9 @@ f. the lt_dmi example does not run for all platform and library versions. It
    works for X86 linux, gcc4.0 and SystemCv2.2.0 
 
 
-========================================================
-Release Notes for the TLM 2.0 Draft 2 Kit Of 29 Nov 2007
-========================================================
-
-
+=============================================================
+Release Notes for the TLM 2.0.1 alpha 1 Kit - 30 January 2009
+=============================================================
 
 CONTENTS
 ========
@@ -96,37 +72,19 @@ SystemC 2.1.v1 and 2.2.0 are supported and have been tested.
 2) What's changed in this kit?
 ==============================
 
-Compared to the 29 Nov 2006 draft 1 kit, draft 2 has evolved in the following
-primary ways:
-  - Many of the features have undergone significant change:
-    - Untimed modeling
-    - Approximately timed modeling
-    - The generic payload and its extension mechanism
-    - Non-intrusive (debug) transactions
-  - Several new features have been incorporated:
-    - Loosely timed modeling
-    - Temporal decoupling
-    - Model synchronization
-    - Direct memory interface (DMI)
-  - Documentation (training presentation and users manual) is provided
-  - Examples have been improved
+Compared to the 2.0.0 kit, the following has changed:
+
+  - stuff here
 
 3) Areas under construction
 ===========================
 
 This is a draft kit for public review so any of it is subject to change.  
+
 During the public review, there will be ongoing work to improve the 
 documentation and provide more examples.  Some of the planned investigations
 are:
-  - consider generic payload support for atomic transactions
-  - improve the analysis ports and integrate them with sockets
-  - extend DMI to support snooping and consider a direct channel for bus
-    bypass to non-memory models
-  - enforce payload modifiability rules
-  - some features of the generic payload need to be programmed differently 
-    depending on host endianness; helper functions will be provided to isolate
-    the modeler from these details; key issues are demonstrated in the 
-    gp_extension/GenericPayloadEndianness unit test, which produces
-    host-endian dependent results and therefore is not part of the automated
-    regression suite
+
+  - stuff here
+  
 Additional detail on some of these topics can be found in the users manual.
