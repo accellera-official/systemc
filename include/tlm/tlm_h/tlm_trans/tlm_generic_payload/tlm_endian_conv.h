@@ -139,76 +139,38 @@ needing to store context.
   tlm_from_hostendian(tlm_generic_payload *txn)
 */
 
+
+
 #ifndef uchar
 #define uchar unsigned char
 #else
 #define TLM_END_CONV_DONT_UNDEF_UCHAR
 #endif
 
+
 ///////////////////////////////////////////////////////////////////////////////
 // Generic Utilities
 
-// a pool for uchar* buffers of arbitrary but bounded size.  the pool contains
-// buffers with a fixed size - the largest so far requested.
-class tlm_buffer_pool {
-  int max_buffer_size;
-  uchar* pool_head;
-
+class tlm_endian_context;
+class tlm_endian_context_pool {
   public:
-    tlm_buffer_pool(): max_buffer_size(32), pool_head(0) {};
-
-    uchar *get_a_buffer(int size) {
-      if(size > max_buffer_size) {
-        max_buffer_size = size;
-        // empty the pool - it will have to grow again naturally
-        for(uchar *p = pool_head; p != 0; ) {
-          uchar *q = p;
-          p = *((uchar **)(p + sizeof(int)));
-          delete [] q;
-        }
-        pool_head = 0;
-      }
-      if(pool_head == 0) {
-        // do a real malloc because pool is empty
-        // allocate 2 spare spaces, one for the size and the other for the
-        // next-pointer
-        pool_head = new uchar[max_buffer_size + sizeof(int) + sizeof(uchar *)];
-        *((int *)pool_head) = max_buffer_size;
-        *((uchar **)(pool_head + sizeof(int))) = 0;
-      }
-      // now pop the pool and return the old head
-      uchar *retval = pool_head + sizeof(int) + sizeof(uchar *);
-      pool_head = *((uchar **)(pool_head + sizeof(int)));
-      return retval;
-    };
-
-    void return_buffer(uchar *p) {
-      // calculate the start of the actual buffer
-      uchar *q = p - sizeof(int) - sizeof(uchar *);
-      if(*((int *)q) != max_buffer_size) {
-        // this buffer's size is out of date.  throw it away
-        delete [] q;
-      } else {
-        // push a buffer into the pool if it has the right size
-        *((uchar **)(q + sizeof(int))) = pool_head;
-        pool_head = q;
-      }
-    }
-
-    int get_pool_size() {
-      int s = 0;
-      for(uchar *p = pool_head; p != 0; p = *((uchar **)(p + sizeof(int))), s++) {}
-      return s;
-    }
-
-    int get_buffer_size() {return max_buffer_size;}
+    tlm_endian_context *first;
+    inline tlm_endian_context_pool();
+    inline ~tlm_endian_context_pool();
+    inline tlm_endian_context *pop();
+    inline void push(tlm_endian_context *c);
 };
-
-static tlm_buffer_pool local_buffer_pool;
+static tlm_endian_context_pool global_tlm_endian_context_pool;
 
 // an extension to keep the information needed for reconversion of response
 class tlm_endian_context : public tlm_extension<tlm_endian_context> {
   public:
+    tlm_endian_context() : dbuf_size(0), bebuf_size(0) {}
+    ~tlm_endian_context() {
+      if(dbuf_size > 0) delete [] new_dbuf;
+      if(bebuf_size > 0) delete [] new_bebuf;
+    }
+
     sc_dt::uint64 address;     // used by generic, word
     sc_dt::uint64 new_address;     // used by generic
     uchar *data_ptr;     // used by generic, word, aligned
@@ -220,10 +182,31 @@ class tlm_endian_context : public tlm_extension<tlm_endian_context> {
     void (*from_f)(tlm_generic_payload *txn, unsigned int sizeof_databus);
     int sizeof_databus;
 
+    // reordering buffers for data and byte-enables
+    uchar *new_dbuf, *new_bebuf;
+    int dbuf_size, bebuf_size;
+    void establish_dbuf(int len) {
+      if(len <= dbuf_size) return;
+      if(dbuf_size > 0) delete [] new_dbuf;
+      new_dbuf = new uchar[len];
+      dbuf_size = len;
+    }
+    void establish_bebuf(int len) {
+      if(len <= bebuf_size) return;
+      if(bebuf_size > 0) delete [] new_bebuf;
+      new_bebuf = new uchar[len];
+      bebuf_size = len;
+    }
+
     // required for extension management
+    void free() {
+      global_tlm_endian_context_pool.push(this);
+    }
     tlm_extension_base* clone() const {return 0;}
-    void free() {delete this;}
     void copy_from(tlm_extension_base const &) {return;}
+
+    // for pooling
+    tlm_endian_context *next;
 };
 // Assumptions about transaction contexts:
 // 1) only the address attribute of a transaction
@@ -243,11 +226,34 @@ class tlm_endian_context : public tlm_extension<tlm_endian_context> {
 inline tlm_endian_context *establish_context(tlm_generic_payload *txn) {
   tlm_endian_context *tc = txn->get_extension<tlm_endian_context>();
   if(tc == 0) {
-    tc = new tlm_endian_context;
+    tc = global_tlm_endian_context_pool.pop();
     txn->set_extension(tc);
   }
   return tc;
 }
+
+inline tlm_endian_context_pool::tlm_endian_context_pool() : first(0) {}
+
+inline tlm_endian_context_pool::~tlm_endian_context_pool() {
+  while(first != 0) {
+    tlm_endian_context *next = first->next;
+    delete first;
+    first = next;
+  }
+}
+
+tlm_endian_context *tlm_endian_context_pool::pop() {
+  if(first == 0) return new tlm_endian_context;
+  tlm_endian_context *r = first;
+  first = first->next;
+  return r;
+}
+
+void tlm_endian_context_pool::push(tlm_endian_context *c) {
+  c->next = first;
+  first = c;
+}
+
 
 // a set of constants for efficient filling of byte enables
 template<class D> class tlm_bool {
@@ -257,7 +263,7 @@ template<class D> class tlm_bool {
     static D make_uchar_array(uchar c) {
       D d;
       uchar *tmp = (uchar *)(&d);
-      for(unsigned int i=0; i<sizeof(D); i++) tmp[i] = c;
+      for(ptrdiff_t i=0; i!=sizeof(D); i++) tmp[i] = c;  // 64BITFIX negligable risk but easy fix //
       return d;
     }
     // also provides an syntax-efficient tester, using a
@@ -268,8 +274,12 @@ template<class D> class tlm_bool {
     bool b;
 };
 
-template<class D> D tlm_bool<D>::TLM_TRUE = tlm_bool<D>::make_uchar_array(TLM_BYTE_ENABLED);
-template<class D> D tlm_bool<D>::TLM_FALSE = tlm_bool<D>::make_uchar_array(TLM_BYTE_DISABLED);
+template<class D> D tlm_bool<D>::TLM_TRUE
+  = tlm_bool<D>::make_uchar_array(TLM_BYTE_ENABLED);
+template<class D> D tlm_bool<D>::TLM_FALSE
+  = tlm_bool<D>::make_uchar_array(TLM_BYTE_DISABLED);
+
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // function set (0): Utilities
@@ -313,9 +323,10 @@ inline void loop_generic0(int new_len, int new_stream_width,
       for(int curr_byte = orig_dword + sizeof(D) - 1;
           curr_byte >= orig_dword; curr_byte--) {
 
-        int he_index = ((ie_addr++) ^ (sizeof_databus - 1))
-          - new_start_address + new_sword;
-        COPY(ie_data+curr_byte, ie_be+(curr_byte % be_length),
+        ptrdiff_t he_index = ((ie_addr++) ^ (sizeof_databus - 1))
+          - new_start_address + new_sword;  // 64BITFIX //
+        COPY(ie_data+curr_byte,
+             ie_be+(curr_byte % be_length),  // 64BITRISK no risk of overflow, always positive //
              he_data+he_index, he_be+he_index);
       }
     }
@@ -329,15 +340,11 @@ template<class DATAWORD> inline void
 tlm_from_hostendian_generic(tlm_generic_payload *txn, unsigned int sizeof_databus) {
   if(txn->is_read()) {
     tlm_endian_context *tc = txn->template get_extension<tlm_endian_context>();
-
     loop_generic0<DATAWORD, &copy_dbyb0>(txn->get_data_length(),
       txn->get_streaming_width(), tc->stream_width, sizeof_databus, tc->address,
       tc->new_address, txn->get_data_length(), tc->data_ptr, 0, txn->get_data_ptr(),
       txn->get_byte_enable_ptr());
   }
-
-  local_buffer_pool.return_buffer(txn->get_byte_enable_ptr());
-  local_buffer_pool.return_buffer(txn->get_data_ptr());
 }
 
 
@@ -373,8 +380,10 @@ tlm_to_hostendian_generic(tlm_generic_payload *txn, unsigned int sizeof_databus)
 
   // create data and byte-enable buffers
   txn->set_address(new_address);
-  txn->set_data_ptr(local_buffer_pool.get_a_buffer(new_length));
-  txn->set_byte_enable_ptr(local_buffer_pool.get_a_buffer(new_length));
+  tc->establish_dbuf(new_length);
+  txn->set_data_ptr(tc->new_dbuf);
+  tc->establish_bebuf(new_length);
+  txn->set_byte_enable_ptr(tc->new_bebuf);
   memset(txn->get_byte_enable_ptr(), TLM_BYTE_DISABLED, new_length);
   txn->set_streaming_width(new_stream_width);
   txn->set_data_length(new_length);
@@ -458,8 +467,8 @@ template<class D,
 inline int loop_word1(
   int bytes_left, int len0, int lenN, int sizeof_databus,
   uchar *start, uchar *end, uchar *src, uchar *bsrc, uchar *dest, uchar *bdest) {
-  int d2b_src = bsrc - src;
-  int d2b_dest = bdest - dest;
+  ptrdiff_t d2b_src = bsrc - src;  // 64BITFIX was int //
+  ptrdiff_t d2b_dest = bdest - dest;  // 64BITFIX was int //
   uchar *original_dest = dest;
 
   while(true) {
@@ -521,15 +530,14 @@ template<class DATAWORD> inline void
 tlm_from_hostendian_word(tlm_generic_payload *txn, unsigned int sizeof_databus) {
   if(txn->is_read()) {
     tlm_endian_context *tc = txn->template get_extension<tlm_endian_context>();
-
     sc_dt::uint64 b_mask = sizeof_databus - 1;
     int d_mask = sizeof(DATAWORD) - 1;
     int a_offset = tc->address & b_mask;
     int len0 = (sizeof_databus - a_offset) & d_mask;
     int lenN = sizeof(DATAWORD) - len0;
     uchar *d_start = tc->data_ptr;
-    uchar *d_end = tc->length + d_start;
-    uchar *d = ((sizeof_databus - a_offset) & ~d_mask) + lenN + d_start;
+    uchar *d_end = ptrdiff_t(tc->length) + d_start;  // 64BITFIX probably redundant //
+    uchar *d = ptrdiff_t(((sizeof_databus - a_offset) & ~d_mask) + lenN) + d_start;  // 64BITFIX probably redundant //
 
     // iterate over transaction copying data qualified by byte-enables
     if(tc->byte_enable == 0) {
@@ -544,8 +552,6 @@ tlm_from_hostendian_word(tlm_generic_payload *txn, unsigned int sizeof_databus) 
         tc->byte_enable - d_start + d, txn->get_data_ptr(), 0);
     }
   }
-  local_buffer_pool.return_buffer(txn->get_byte_enable_ptr());
-  local_buffer_pool.return_buffer(txn->get_data_ptr());
 }
 
 
@@ -564,13 +570,15 @@ tlm_to_hostendian_word(tlm_generic_payload *txn, unsigned int sizeof_databus) {
   int len0 = (sizeof_databus - a_offset) & d_mask;
   int lenN = sizeof(DATAWORD) - len0;
   uchar *d_start = txn->get_data_ptr();
-  uchar *d_end = txn->get_data_length() + d_start;
-  uchar *d = ((sizeof_databus - a_offset) & ~d_mask) + lenN + d_start;
+  uchar *d_end = ptrdiff_t(txn->get_data_length()) + d_start;  // 64BITFIX probably redundant //
+  uchar *d = ptrdiff_t(((sizeof_databus - a_offset) & ~d_mask) + lenN) + d_start;  // 64BITFIX probably redundant //
 
   // create new data and byte enable buffers
   int long_enough = txn->get_data_length() + 2 * sizeof_databus;
-  uchar *new_data = local_buffer_pool.get_a_buffer(long_enough);
-  uchar *new_be = local_buffer_pool.get_a_buffer(long_enough);
+  tc->establish_dbuf(long_enough);
+  uchar *new_data = tc->new_dbuf;
+  tc->establish_bebuf(long_enough);
+  uchar *new_be = tc->new_bebuf;
 
   if(txn->is_read()) {
     tc->data_ptr = d_start;
@@ -634,20 +642,20 @@ inline void copy_dbyb2(D *src1, D *src2, D *dest1, D *dest2) {
 template<class D, void COPY(D *src1, D *src2, D *dest1, D *dest2)>
 inline void loop_aligned2(D *src1, D *src2, D *dest1, D *dest2,
     int words, int words_per_bus) {
-  int src1to2 = int(src2) - int(src1);
-  int dest1to2 = int(dest2) - int(dest1);
+  ptrdiff_t src1to2 = (char *)src2 - (char *)src1;  // 64BITFIX was int and operands were cast to int //
+  ptrdiff_t dest1to2 = (char *)dest2 - (char *)dest1;  // 64BITFIX was int and operands were cast to int //
 
-  D *done = src1 + words;
+  D *done = src1 + ptrdiff_t(words);  // 64BITFIX //
   D *bus_start = src1;
-  src1 += words_per_bus - 1;
+  src1 += ptrdiff_t(words_per_bus - 1);  // 64BITFIX //
 
   while(true) {
-    COPY(src1, (D *)(int(src1)+src1to2), dest1, (D *)(int(dest1)+dest1to2));
+    COPY(src1, (D *)(src1to2+(char *)src1), dest1, (D *)(dest1to2+(char *)dest1));   // 64BITFIX //
     dest1++;
     if((--src1) < bus_start) {
-      bus_start += words_per_bus;
+      bus_start += ptrdiff_t(words_per_bus);  // 64BITFIX //
       if(bus_start == done) break;
-      src1 = bus_start + words_per_bus - 1;
+      src1 = bus_start + ptrdiff_t(words_per_bus - 1);  // 64BITFIX //
     }
   }
 }
@@ -660,12 +668,12 @@ tlm_from_hostendian_aligned(tlm_generic_payload *txn, unsigned int sizeof_databu
   int words_per_bus = sizeof_databus/sizeof(DATAWORD);
   if(words_per_bus == 1) return;
   int words = (txn->get_data_length())/sizeof(DATAWORD);
+  tlm_endian_context *tc = txn->template get_extension<tlm_endian_context>();
 
   if(txn->get_byte_enable_ptr() == 0) {
     // no byte enables
     if(txn->is_read()) {
       // RD without byte enables.  Copy data to original buffer
-      tlm_endian_context *tc = txn->template get_extension<tlm_endian_context>();
       loop_aligned2<DATAWORD, &copy_d2<DATAWORD> >(
         (DATAWORD *)(txn->get_data_ptr()),
         0, (DATAWORD *)(tc->data_ptr), 0, words, words_per_bus);
@@ -674,16 +682,12 @@ tlm_from_hostendian_aligned(tlm_generic_payload *txn, unsigned int sizeof_databu
     // byte enables present
     if(txn->is_read()) {
       // RD with byte enables.  Copy data qualified by byte-enables
-      tlm_endian_context *tc = txn->template get_extension<tlm_endian_context>();
       loop_aligned2<DATAWORD, &copy_dbyb2<DATAWORD> >(
         (DATAWORD *)(txn->get_data_ptr()),
         (DATAWORD *)(txn->get_byte_enable_ptr()),
         (DATAWORD *)(tc->data_ptr), 0, words, words_per_bus);
     }
-    local_buffer_pool.return_buffer(txn->get_byte_enable_ptr());
   }
-  // in all cases free the new data buffer
-  local_buffer_pool.return_buffer(txn->get_data_ptr());
 }
 
 
@@ -703,7 +707,8 @@ tlm_to_hostendian_aligned(tlm_generic_payload *txn, unsigned int sizeof_databus)
   DATAWORD *original_data = (DATAWORD *)(txn->get_data_ptr());
 
   // always allocate a new data buffer
-  txn->set_data_ptr(local_buffer_pool.get_a_buffer(txn->get_data_length()));
+  tc->establish_dbuf(txn->get_data_length());
+  txn->set_data_ptr(tc->new_dbuf);
 
   if(original_be == 0) {
     // no byte enables
@@ -719,8 +724,8 @@ tlm_to_hostendian_aligned(tlm_generic_payload *txn, unsigned int sizeof_databus)
   } else {
     // byte enables present
     // allocate a new buffer for them
-    txn->set_byte_enable_ptr(
-      local_buffer_pool.get_a_buffer(txn->get_data_length()));
+    tc->establish_bebuf(txn->get_data_length());
+    txn->set_byte_enable_ptr(tc->new_bebuf);
     txn->set_byte_enable_length(txn->get_data_length());
 
     if(txn->is_write()) {

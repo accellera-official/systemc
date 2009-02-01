@@ -18,12 +18,6 @@
 
 Python Script to test Endianness Conversion Functions for OSCI TLM-2
 
-TO DO:
-Make it faster.  (1) don't calculate a new memory state for every
-transaction.  One every 10 is enough, seeing as everything random
-anyway.  (2) don't keep starting new SystemC processes, but just pipe
-transactions to the same one which contains a loop.
-
 There is a simple testbench programme in C++ which runs a single
 transaction through a single conversion function, to a simple target
 memory and back.  This script will run the testbench many times and test for
@@ -292,8 +286,7 @@ def __FRAG__randinterleave(stream_txn):
     yield txns[0]
     yield txns[1]
 
-fragmenters = \
-  [__FRAG__null, __FRAG__word, __FRAG__stream, __FRAG__random, __FRAG__randinterleave]
+fragmenters = [globals()[n] for n in globals().keys() if n[:8]=="__FRAG__"]
 
 # test code for fragmenters
 if False:
@@ -306,19 +299,21 @@ if False:
 # end test code
 
 
-
 # conversion functions are determined by an index (shared with C++) and
 # a function that tests if they can be applied to a transaction
-def check_generic(txn):
+def __CHCK__generic(txn):
+  __CHCK__generic.nr = 0
   return True
 
-def check_word(txn):
+def __CHCK__word(txn):
+  __CHCK__word.nr = 1
   if txn.data_width > txn.bus_width:  return False
   if txn.stream_width < txn.length:  return False
   if txn.byte_enable and len(txn.byte_enable) < txn.length:  return False
   return True
 
-def check_aligned(txn):
+def __CHCK__aligned(txn):
+  __CHCK__aligned.nr = 2
   if txn.data_width > txn.bus_width:  return False
   if txn.stream_width < txn.length:  return False
   if txn.byte_enable and len(txn.byte_enable) < txn.length:  return False
@@ -328,44 +323,29 @@ def check_aligned(txn):
   if nr_bus_words * txn.bus_width != txn.length:  return False
   return True
 
-def check_single(txn):
+def __CHCK__single(txn):
+  __CHCK__single.nr = 3
   if txn.length != txn.data_width:  return False
   base_addr = txn.address / txn.bus_width
-  end_base_addr = (txn.address + txn.length) / txn.bus_width
+  end_base_addr = (txn.address + txn.length - 1) / txn.bus_width
   if base_addr != end_base_addr:  return False
   return True
 
-def check_local_single(txn):
+def __CHCK__local_single(txn):
+  __CHCK__local_single.nr = 4
   if txn.length != txn.data_width:  return False
   return True
 
-all_converters = [check_generic, check_word, check_aligned, check_single, check_local_single]
-usage = [0 for x in all_converters]
+all_converters = [globals()[n] for n in globals().keys() if n[:8]=="__CHCK__"]
+for x in all_converters:  x.usage = 0
 
 
+class TesterFailure(Exception):  pass
 class SystemCFailure(Exception):  pass
 class ConverterDifference(Exception):  pass
 class FragmenterDifference(Exception):  pass
 
 from subprocess import Popen, PIPE
-
-# test a single fragment one way
-def run_test(fragment, memstate, converter):
-  txtin = "%s\n%s\nconverter = %d\n" % (fragment, memstate, converter)
-  txtout = "no output"
-  try:
-    sp = Popen("../build-unix/test_endian_conv.exe", stdin=PIPE, stdout=PIPE)
-    txtout = sp.communicate(txtin)[0]
-    result = memory_state_cl()
-    tmp = txtout.splitlines()
-    result.initiator = [l.split()[-1] for l in tmp if "initiator =" in l][-1]
-    result.target = [l.split()[-1] for l in tmp if "target =" in l][-1]
-  except:
-    raise SystemCFailure("\n" + txtin + txtout)
-  if sp.returncode != 0:  raise SystemCFailure("\n" + txtin + txtout)
-  usage[converter] += 1
-  return result
-
 
 # test a single fragment in multiple ways
 def test_a_fragment(f, ms):
@@ -374,17 +354,35 @@ def test_a_fragment(f, ms):
 
   # run the same fragment through all applicable conversion functions
   # and check they all do the same thing
-  first_run = True
-  for i,checker in enumerate(all_converters):
-    if checker(f):
-      ms_out = run_test(f, ms, i)
+  # use the same sub-process for all of them
 
-      if first_run:
-        golden_ms = ms_out.copy()
-        golden_idx = i
-        first_run = False
-      else:
-        if ms_out != golden_ms:  raise ConverterDifference("""
+  # build complete stdin
+  convs = [c for c in all_converters if c(f)]
+  if len(convs) == 0:  raise TesterFailure(f.str())
+  txtin = "\n".join(
+    [("%s\n%s\nconverter = %d\n" % (f, ms, c.nr)) for c in convs])
+
+  # run and get stdout
+  txtout = "no output"
+  try:
+    sp = Popen("../build-unix/test_endian_conv.exe", stdin=PIPE, stdout=PIPE)
+    txtout = sp.communicate(txtin)[0]
+    tmp = txtout.splitlines()
+    initiators = [l.split()[-1] for l in tmp if l[:14] == "  initiator = "]
+    targets = [l.split()[-1] for l in tmp if l[:11] == "  target = "]
+  except:
+    raise SystemCFailure("\n" + txtin + txtout)
+  if sp.returncode != 0:  raise SystemCFailure("\n" + txtin + txtout)
+  if len(initiators) != len(convs):  raise SystemCFailure("\n" + txtin + txtout)
+  if len(targets) != len(convs):  raise SystemCFailure("\n" + txtin + txtout)
+  for c in convs:  c.usage += 1
+
+  ms_out = memory_state_cl()
+  ms_out.initiator = initiators[0]
+  ms_out.target = targets[0]
+  for i in range(1,len(convs)):
+    if initiators[i]!=ms_out.initiator or targets[i]!=ms_out.target:
+      raise ConverterDifference("""
 %s
 start memory:
 %s
@@ -448,10 +446,9 @@ actual memory:
   print ".",
 print
 
+
 print "Conversion functions usage frequency:"
-print "  generic", usage[0]
-print "     word", usage[1]
-print "  aligned", usage[2]
-print "   single", usage[3]
-print " local single", usage[4]
+for c in all_converters:
+  print c.nr, c.__name__, c.usage
+
 

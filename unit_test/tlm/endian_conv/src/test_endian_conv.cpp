@@ -22,11 +22,6 @@ endianness conversion function, then through a simple memory model,
 then converts it back.
 Takes the initial memory state as input and provides the final
 memory state as output.
-
-TO DO:
-+ Verification runs very slowly.  One of the reasons for this is the overhead
-starting a new process for every test.  Therefore the testing should be
-put into a loop rather than being one-shot, with reuse of memory states.
 */
 
 
@@ -68,8 +63,7 @@ template<class DATAWORD> inline void
 local_single_fromhe(tlm_generic_payload *txn, unsigned int sizeof_databus);
 
 
-void test_a_conversion(char cmd) {
-  tlm_generic_payload txn;
+void test_a_conversion(char cmd, tlm_generic_payload &txn) {
 
   if(cmd == 'R') txn.set_read();
   else txn.set_write();
@@ -96,7 +90,13 @@ void test_a_conversion(char cmd) {
   unsigned char *original_byte_enable = 0;
   unsigned char *byte_enable_legible =
     new unsigned char[txn.get_data_length() + 1];
-  cin.ignore(10000,'=');  cin >> byte_enable_legible;
+  memset(byte_enable_legible, 0, txn.get_data_length() + 1);
+  cin.ignore(10000,'=');
+  for(unsigned b=0; b<txn.get_data_length(); b++) {
+    char tmp; cin >> tmp;
+    if((tmp=='0')||(tmp=='1')||(tmp=='x')) byte_enable_legible[b]=tmp;
+    else break;
+  }
   if((byte_enable_legible[0] == '1') || (byte_enable_legible[0] == '0')) {
     txn.set_byte_enable_ptr(new unsigned char[txn.get_data_length()]);
     txn.set_byte_enable_length(txn.get_data_length());
@@ -112,6 +112,9 @@ void test_a_conversion(char cmd) {
         break;
       }
     }
+  } else {
+    txn.set_byte_enable_ptr(0);
+    txn.set_byte_enable_length(0);
   }
 
   int stream_width;
@@ -120,12 +123,14 @@ void test_a_conversion(char cmd) {
 
   cout << "enter initiator memory state = ("<< BUFFER_SIZE << " characters)\n";
   unsigned char initiator_mem[BUFFER_SIZE+1];
+  memset(initiator_mem, 0, BUFFER_SIZE+1);
   cin.ignore(10000,'=');  cin >> initiator_mem;
 
   txn.set_data_ptr(initiator_mem + initiator_offset);
 
   cout << "enter target memory state = ("<< BUFFER_SIZE << " characters)\n";
   unsigned char target_mem[BUFFER_SIZE+1];
+  memset(target_mem, 0, BUFFER_SIZE+1);
   cin.ignore(10000,'=');  cin >> target_mem;
 
   cout << "enter converter choice = (0 => generic, 1 => word, 2 => aligned, 3 => single)\n";
@@ -247,10 +252,17 @@ void test_a_conversion(char cmd) {
   // clean up
   delete [] byte_enable_legible;
   if(original_byte_enable != 0) delete [] original_byte_enable;
-  if(txn.get_extension<tlm_endian_context>() != 0) {
-    txn.get_extension<tlm_endian_context>()->free();
-    txn.clear_extension<tlm_endian_context>();
+}
+
+
+void pool_status() {
+  cout << "Pool status: ";
+  tlm_endian_context *f = global_tlm_endian_context_pool.first;
+  while(f!=0) {
+    cout << "(" << f->dbuf_size << "," << f->bebuf_size << ") ";
+    f = f->next;
   }
+  cout << endl;
 }
 
 
@@ -261,24 +273,36 @@ int main(int argc, char **argv) {
   cout << "March 2008\n\n";
 
   srand(time(NULL));
+  const int nr_txns_in_pool = 7;
+  const int txn_to_cycle = 4;
+  tlm_generic_payload *txns[nr_txns_in_pool];
+  for(int i=0; i < nr_txns_in_pool; i++) txns[i] = new tlm_generic_payload;
 
-  while(true) {
-    cout << "enter {R|W}, addr=a, len=l, bus width=b, word width=w, initiator offset=i, be={x|01}, stream width=s\n";
+  for(int i=0; true; i = ((i+1) % nr_txns_in_pool)) {
+    cout << i << " enter {R|W}, addr=a, len=l, bus width=b, word width=w, initiator offset=i, be={x|01}, stream width=s\n";
+    pool_status();
     char command;
     cin >> command;
     if(cin.eof()) break;
     if((command != 'R') && (command != 'W')) break;
-    test_a_conversion(command);
+    if(i==txn_to_cycle) {
+      // should cause 2 extensions to get pushed to the pool once they've been used
+      delete txns[i];
+      pool_status();
+      delete txns[i-1];
+      pool_status();
+      // and popped back later when these new ones establish contexts
+      txns[i] = new tlm_generic_payload;
+      txns[i-1] = new tlm_generic_payload;
+      pool_status();
+    }
+    test_a_conversion(command, *txns[i]);
   }
 
-  if(local_buffer_pool.get_pool_size() > 2) {
-    // expect a pool of 2, one for data and one for byte enable
-    cout << "Error: buffer pool is not working properly\n";
-    cout << "Pool contains " << local_buffer_pool.get_pool_size() << " buffers\n";
-    exit(1);
+  for(int i=0; i < nr_txns_in_pool; i++) {
+    delete txns[i];
+    pool_status();
   }
-  cout << "Buffer pool buffer size has reached " <<
-    local_buffer_pool.get_buffer_size() << " bytes\n";
 }
 
 
