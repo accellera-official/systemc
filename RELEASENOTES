@@ -11,17 +11,32 @@ CONTENTS
 
 1) Supported SystemC versions
 =============================
+
 SystemC 2.1.v1 and 2.2.0 are supported and have been tested.
+
 
 2) What's changed in this kit?
 ==============================
 
 Compared to the 2.0.0 kit, the following has changed:
 
-  - stuff here
+
+a. Added a const modifier to the generic payload methods get_ref_count() and has_mm()
+
+b. Added a const modifier to the phase argument of the notify methods of each of the two PEQs
+
+c. Removed the dependency on the Boost libraries from the code of the multi-socket utilities. The TLM-2 kit now has no dependencies on Boost
+
+d. Changed the implementations of the multi_passthrough_initiator_sockets to provide default implementations for the dmi/debug methods (just like all the other sockets in the tlm_utils)
+
+e. Changed the implementations of the endianness conversion functions so they work correctly on a 64-bit host
+
+f. Fixed bug in simple_target_socket and simple_target_socket_tagged where timing annotation was not acted upon
+
 
 For a more detailed description of all features of TLM 2.0 check out the TLM 2.0
 manual that can be found in the documentation subdirectory of this package
+
 
 3) Known issues
 ===============
@@ -42,9 +57,7 @@ c. the implementation of the PEQ 'peq_with_get' in tlm_utils does not properly
    phase. This is wrong immediate notifications should overtake delta 
    notifications
    
-d. the multi_passthrough_initiator_socket and multi_passthrough_target_socket do
-   depends on a boost library and does not work with SystemC2.1.v1 due to boost
-   incompatibilities
+d. FIXED
 
 e. the examples do not successfully 'make check' on bigendian machines, messages
    are not printed correctly in that case.
@@ -53,38 +66,3 @@ f. the lt_dmi example does not run for all platform and library versions. It
    works for X86 linux, gcc4.0 and SystemCv2.2.0 
 
 
-=============================================================
-Release Notes for the TLM 2.0.1 alpha 1 Kit - 30 January 2009
-=============================================================
-
-CONTENTS
-========
-
-  1) Supported SystemC versions
-  2) What's changed in this kit?
-  3) Areas under construction
-
-
-1) Supported SystemC versions
-=============================
-SystemC 2.1.v1 and 2.2.0 are supported and have been tested.
-
-2) What's changed in this kit?
-==============================
-
-Compared to the 2.0.0 kit, the following has changed:
-
-  - stuff here
-
-3) Areas under construction
-===========================
-
-This is a draft kit for public review so any of it is subject to change.  
-
-During the public review, there will be ongoing work to improve the 
-documentation and provide more examples.  Some of the planned investigations
-are:
-
-  - stuff here
-  
-Additional detail on some of these topics can be found in the users manual.
