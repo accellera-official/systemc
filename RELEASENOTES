@@ -33,6 +33,8 @@ e. Changed the implementations of the endianness conversion functions so they wo
 
 f. Fixed bug in simple_target_socket and simple_target_socket_tagged where timing annotation was not acted upon
 
+g. added an example lt_mixed_endian illustrating use of endianness conversion functions to model memory sharing between big- and little-endian initiators
+
 
 For a more detailed description of all features of TLM 2.0 check out the TLM 2.0
 manual that can be found in the documentation subdirectory of this package
@@ -41,7 +43,7 @@ manual that can be found in the documentation subdirectory of this package
 3) Known issues
 ===============
 
-a. when using TLM 2.0 with SystemC v2.2.v1 on 64 bit linux you will need to 
+a. when using TLM 2.0 with SystemC v2.2.v1 on 64 bit linux you will need to
    force 32 bit mode by using the '-m32' flag
 
 b. the tlm_simple_target_socket in tlm_utils does not obey the END_REQ rule
@@ -49,20 +51,20 @@ b. the tlm_simple_target_socket in tlm_utils does not obey the END_REQ rule
    socket and there is an nb_ call coming in at the same time. In this case
    the incoming nb_ call will be forwarded to the registered nb_ call without
    checking whether the earlier b_ call has passed the END_REQ timing point
- 
+
 c. the implementation of the PEQ 'peq_with_get' in tlm_utils does not properly
    distinguish between immediate notifications and delta notifications. In the
    case that a immediate and delta notification happen at the same simulation
-   time both types of notifications emerge from the PEQ in the same evaluation 
-   phase. This is wrong immediate notifications should overtake delta 
+   time both types of notifications emerge from the PEQ in the same evaluation
+   phase. This is wrong immediate notifications should overtake delta
    notifications
-   
+
 d. FIXED
 
 e. the examples do not successfully 'make check' on bigendian machines, messages
    are not printed correctly in that case.
-   
+
 f. the lt_dmi example does not run for all platform and library versions. It
-   works for X86 linux, gcc4.0 and SystemCv2.2.0 
+   works for X86 linux, gcc4.0 and SystemCv2.2.0
 
 
