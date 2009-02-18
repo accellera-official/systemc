@@ -35,6 +35,11 @@ f. Fixed bug in simple_target_socket and simple_target_socket_tagged where timin
 
 g. added an example lt_mixed_endian illustrating use of endianness conversion functions to model memory sharing between big- and little-endian initiators
 
+h. Changed constructors of convenience sockets to provide, for each socket, one default constructor and a second one with a name argument (just like standard sockets)
+
+i. Removed references to tlm::tlm_phase in convenience sockets (and replaced them by phase_type)
+
+j. Removed typedefs initiator/target_socket_type from standard sockets
 
 For a more detailed description of all features of TLM 2.0 check out the TLM 2.0
 manual that can be found in the documentation subdirectory of this package
