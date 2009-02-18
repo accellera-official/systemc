@@ -77,14 +77,6 @@ public:
                                             >   port_type;
 
   typedef sc_core::sc_export<bw_interface_type> export_type;
-  typedef tlm_base_target_socket<BUSWIDTH,
-                                 fw_interface_type,
-                                 bw_interface_type,
-                                 N
-#if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
-                                 ,POL
-#endif
-                                > target_socket_type;
 
   typedef tlm_base_target_socket_b<BUSWIDTH,
                                    fw_interface_type,

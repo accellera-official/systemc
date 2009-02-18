@@ -75,16 +75,6 @@ public:
                                       fw_interface_type,
                                       bw_interface_type>  base_initiator_socket_type;
 
-  typedef tlm_base_initiator_socket<BUSWIDTH,
-                                    fw_interface_type,
-                                    bw_interface_type,
-                                    N
-#if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
-                                    ,POL
-#endif
-                                   > initiator_socket_type;
-
-
   typedef tlm_base_target_socket_b<BUSWIDTH,
                                    fw_interface_type,
                                    bw_interface_type> base_type;
