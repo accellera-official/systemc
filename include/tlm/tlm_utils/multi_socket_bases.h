@@ -349,6 +349,7 @@ public:
   
   //ctor and dtor
   virtual ~multi_init_base(){}
+  multi_init_base():base_type(sc_core::sc_gen_unique_name("multi_init_base")){}
   multi_init_base(const char* name):base_type(name){}
 };
 
@@ -400,6 +401,7 @@ public:
   
   //ctor and dtor
   virtual ~multi_target_base(){}
+  multi_target_base():base_type(sc_core::sc_gen_unique_name("multi_target_base")){}
   multi_target_base(const char* name):base_type(name){}
 };
 

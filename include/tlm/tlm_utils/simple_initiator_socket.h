@@ -37,8 +37,15 @@ public:
   typedef tlm::tlm_initiator_socket<BUSWIDTH, TYPES>    base_type;
 
 public:
-  explicit simple_initiator_socket(const char* n = "simple_initiator_socket") :
-    base_type(sc_core::sc_gen_unique_name(n)),
+  simple_initiator_socket() :
+    base_type(sc_core::sc_gen_unique_name("simple_initiator_socket")),
+    m_process(this->name())
+  {
+    this->m_export.bind(m_process);
+  }
+
+  explicit simple_initiator_socket(const char* n) :
+    base_type(n),
     m_process(this->name())
   {
     this->m_export.bind(m_process);
@@ -63,7 +70,7 @@ private:
   {
   public:
     typedef sync_enum_type (MODULE::*TransportPtr)(transaction_type&,
-                                                   tlm::tlm_phase&,
+                                                   phase_type&,
                                                    sc_core::sc_time&);
     typedef void (MODULE::*InvalidateDirectMemPtr)(sc_dt::uint64,
                                                    sc_dt::uint64);
@@ -151,8 +158,15 @@ public:
   typedef tlm::tlm_initiator_socket<BUSWIDTH, TYPES>    base_type;
 
 public:
-  explicit simple_initiator_socket_tagged(const char* n = "simple_initiator_socket_tagged") :
-    base_type(sc_core::sc_gen_unique_name(n)),
+  simple_initiator_socket_tagged() :
+    base_type(sc_core::sc_gen_unique_name("simple_initiator_socket_tagged")),
+    m_process(this->name())
+  {
+    this->m_export.bind(m_process);
+  }
+
+  explicit simple_initiator_socket_tagged(const char* n) :
+    base_type(n),
     m_process(this->name())
   {
     this->m_export.bind(m_process);
@@ -183,7 +197,7 @@ private:
   public:
     typedef sync_enum_type (MODULE::*TransportPtr)(int,
                                                    transaction_type&,
-                                                   tlm::tlm_phase&,
+                                                   phase_type&,
                                                    sc_core::sc_time&);
     typedef void (MODULE::*InvalidateDirectMemPtr)(int,
                                                    sc_dt::uint64,

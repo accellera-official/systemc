@@ -47,8 +47,16 @@ public:
   typedef tlm::tlm_target_socket<BUSWIDTH, TYPES>       base_type;
 
 public:
-  explicit simple_target_socket(const char* n = "simple_target_socket") :
-    base_type(sc_core::sc_gen_unique_name(n)),
+  simple_target_socket() :
+    base_type(sc_core::sc_gen_unique_name("simple_target_socket")),
+    m_fw_process(this),
+    m_bw_process(this)
+  {
+    bind(m_fw_process);
+  }
+
+  explicit simple_target_socket(const char* n) :
+    base_type(n),
     m_fw_process(this),
     m_bw_process(this)
   {
@@ -157,7 +165,7 @@ private:
   {
   public:
     typedef sync_enum_type (MODULE::*NBTransportPtr)(transaction_type&,
-                                                     tlm::tlm_phase&,
+                                                     phase_type&,
                                                      sc_core::sc_time&);
     typedef void (MODULE::*BTransportPtr)(transaction_type&,
                                           sc_core::sc_time&);
@@ -438,7 +446,7 @@ private:
         trans = h->m_trans;
         e = h->m_e;
 
-        wait(*e); // JA bug fix
+        sc_core::wait(*e); // JA bug fix
       }
     }
 
@@ -563,8 +571,16 @@ public:
   typedef tlm::tlm_target_socket<BUSWIDTH, TYPES>       base_type;
 
 public:
-  explicit simple_target_socket_tagged(const char* n = "simple_target_socket_tagged") :
-    base_type(sc_core::sc_gen_unique_name(n)),
+  simple_target_socket_tagged() :
+    base_type(sc_core::sc_gen_unique_name("simple_target_socket_tagged")),
+    m_fw_process(this),
+    m_bw_process(this)
+  {
+    bind(m_fw_process);
+  }
+
+  explicit simple_target_socket_tagged(const char* n) :
+    base_type(n),
     m_fw_process(this),
     m_bw_process(this)
   {
@@ -686,7 +702,7 @@ private:
   public:
     typedef sync_enum_type (MODULE::*NBTransportPtr)(int id,
                                                      transaction_type&,
-                                                     tlm::tlm_phase&,
+                                                     phase_type&,
                                                      sc_core::sc_time&);
     typedef void (MODULE::*BTransportPtr)(int id,
                                           transaction_type&,
@@ -975,7 +991,7 @@ private:
         trans = h->m_trans;
         e = h->m_e;
 
-        wait(*e); // JA bug fix
+        sc_core::wait(*e); // JA bug fix
       }
     }
 

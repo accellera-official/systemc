@@ -77,8 +77,17 @@ public:
   typedef typename base_type::initiator_socket_type initiator_socket_type;
 
   //CTOR
+  multi_passthrough_target_socket()
+      : base_type(sc_core::sc_gen_unique_name("multi_passthrough_target_socket"))
+      , m_hierarch_bind(0)
+      , m_eoe_disabled(false)
+      , m_dummy(42)
+  {
+  }
+
+  //CTOR
   multi_passthrough_target_socket(const char* name)
-      : base_type((std::string(name)+std::string("_base")).c_str())
+      : base_type(name)
       , m_hierarch_bind(0)
       , m_eoe_disabled(false)
       , m_dummy(42)
