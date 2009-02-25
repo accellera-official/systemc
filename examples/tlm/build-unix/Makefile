@@ -12,6 +12,7 @@ SUBDIRS = \
           ../lt \
           ../lt_dmi \
           ../lt_extension_mandatory \
+          ../lt_mixed_endian \
           ../lt_temporal_decouple
 
 .PHONY: all clean check run
