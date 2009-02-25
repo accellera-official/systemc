@@ -25,6 +25,18 @@
 //    Charles Wilson, ESLX
 //====================================================================
 
+//====================================================================
+//  Nov 06, 2008
+//
+//  Updated by:
+//    Xiaopeng Qiu, JEDA Technologies, Inc
+//    Email:  qiuxp@jedatechnologies.net
+//
+//  To fix violations of TLM2.0 rules, which are detected by JEDA 
+//  TLM2.0 checker.
+//
+//====================================================================
+
 #include "reporting.h"               	        // reporting macros
 #include "traffic_generator.h"                // traffic generator declarations
 
@@ -47,17 +59,23 @@ traffic_generator::traffic_generator            // @todo keep me, lose other con
 , const unsigned int    ID                      // initiator ID
 , sc_dt::uint64         base_address_1          // first base address
 , sc_dt::uint64         base_address_2          // second base address
-, unsigned int          active_txn_count        // Max number of active transactions 
+, unsigned int          max_txns 		// Max number of active transactions 
 )
 
 : sc_module           ( name              )     /// instance name
 , m_ID                ( ID                )     /// initiator ID
 , m_base_address_1    ( base_address_1    )     /// first base address
 , m_base_address_2    ( base_address_2    )     /// second base address
-, m_active_txn_count  ( active_txn_count  )     /// Max number of active transactions 
+, m_active_txn_count  ( 0                 )     /// number of active transactions 
 , m_check_all         ( true              )
 { 
   SC_THREAD(traffic_generator_thread);
+  
+  // build transaction pool 
+  for (unsigned int i = 0; i < max_txns; i++ )
+  {
+    m_transaction_queue.enqueue ();
+  }
 }
 
 /// SystemC thread for generation of GP traffic
@@ -76,13 +94,6 @@ traffic_generator::traffic_generator_thread
   tlm::tlm_generic_payload  *transaction_ptr;   ///< transaction pointer
   unsigned char             *data_buffer_ptr;   ///< data buffer pointer
   
-  // build transaction pool 
-
-  for (unsigned int i = 0; i < m_active_txn_count; i++ )
-  {
-    m_transaction_queue.enqueue ();
-  }
-  
   // outer loop of a simple memory test generate addresses
 
   sc_dt::uint64 base_address;
@@ -100,6 +111,8 @@ traffic_generator::traffic_generator_thread
       if(!m_transaction_queue.is_empty())
       {
         transaction_ptr = m_transaction_queue.dequeue ();
+        transaction_ptr->acquire();
+	++m_active_txn_count;
         
         data_buffer_ptr = transaction_ptr->get_data_ptr();
 
@@ -158,6 +171,8 @@ traffic_generator::traffic_generator_thread
       if(!m_transaction_queue.is_empty())
       {
         transaction_ptr = m_transaction_queue.dequeue ();
+        transaction_ptr->acquire();
+	++m_active_txn_count;
                            
         transaction_ptr->set_command          ( tlm::TLM_READ_COMMAND        );
         transaction_ptr->set_address          ( mem_address                  );
@@ -246,8 +261,8 @@ void traffic_generator::check_complete (void)
         REPORT_FATAL(filename, __FUNCTION__, msg.str()); 
       }
     }
-    
-    m_transaction_queue.enqueue ( transaction_ptr );    
+    transaction_ptr->release();
+    --m_active_txn_count;
   }
 } // end check_complete
 
@@ -259,7 +274,7 @@ traffic_generator::check_all_complete
 ( void
 )
 {
-  while (m_transaction_queue.size() < m_active_txn_count)
+  while (m_active_txn_count)
   {
     m_check_all = true; 
     check_complete();

@@ -1,6 +1,6 @@
-=============================================================
-Release Notes for the TLM 2.0.1 alpha 1 Kit - 30 January 2009
-=============================================================
+==============================================================
+Release Notes for the TLM 2.0.1 alpha 1 Kit - 24 February 2009
+==============================================================
 
 CONTENTS
 ========
@@ -40,6 +40,10 @@ h. Changed constructors of convenience sockets to provide, for each socket, one 
 i. Removed references to tlm::tlm_phase in convenience sockets (and replaced them by phase_type)
 
 j. Removed typedefs initiator/target_socket_type from standard sockets
+
+k. Added PTHREADS support in the examples Makefile
+
+l. Cleaned up examples to eliminate issues identified by Doulos and Jeda protocol checkers
 
 For a more detailed description of all features of TLM 2.0 check out the TLM 2.0
 manual that can be found in the documentation subdirectory of this package

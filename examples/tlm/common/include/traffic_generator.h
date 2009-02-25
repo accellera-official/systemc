@@ -109,18 +109,6 @@ class traffic_generator                       	// traffic_generator
       transaction_ptr->set_data_ptr ( data_buffer_ptr );
       
       m_queue.push ( transaction_ptr );
-      
-      transaction_ptr->acquire();
-    }
-    
-    void
-    enqueue                                               /// enqueue entry
-    ( tlm::tlm_generic_payload  *transaction_ptr          /// transaction pointer
-    )
-    { 
-      m_queue.push ( transaction_ptr );
-      
-      transaction_ptr->acquire ();
     }
     
     tlm::tlm_generic_payload *                            /// transaction pointer
@@ -160,15 +148,12 @@ class traffic_generator                       	// traffic_generator
     }
     
     void
-    free                                                  /// free allocated memory
-    ( tlm::tlm_generic_payload *transaction_ptr           /// transaction pointer
+    free                                                  /// return transaction
+    ( tlm::tlm_generic_payload *transaction_ptr           /// to the pool
     )
     {
       transaction_ptr->reset();
-      
-      delete [] transaction_ptr->get_data_ptr ();
-      
-      delete transaction_ptr;
+      m_queue.push ( transaction_ptr );
     }
     
     private:
@@ -190,7 +175,7 @@ class traffic_generator                       	// traffic_generator
   
   tg_queue_c          m_transaction_queue;          // transaction queue
   
-  const unsigned int  m_active_txn_count;           // active transaction count
+  unsigned int        m_active_txn_count;           // active transaction count
   bool                m_check_all;
   
   public:
