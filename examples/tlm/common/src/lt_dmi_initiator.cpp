@@ -26,6 +26,18 @@
 //    Anna Keist, ESLX
 //==============================================================================
 
+//====================================================================
+//  Nov 06, 2008
+//
+//  Updated by:
+//    Xiaopeng Qiu, JEDA Technologies, Inc
+//    Email:  qiuxp@jedatechnologies.net
+//
+//  To fix violations of TLM2.0 rules, which are detected by JEDA 
+//  TLM2.0 checker.
+//
+//====================================================================
+
 #include "reporting.h"                             ///< Reporting convenience macros
 #include "lt_dmi_initiator.h"                          ///< Our header
 #include "tlm.h"                                   ///< TLM headers
@@ -90,7 +102,7 @@ void lt_dmi_initiator::initiator_thread(void)   ///< initiator thread
       {
       // Not a dmi transaction =================================================
         m_address = gp_ptr->get_address();
-        
+        gp_ptr->set_dmi_allowed(false);
         initiator_socket->b_transport(*gp_ptr, delay);
         
  //       report::print(m_ID, *gp_ptr);
@@ -132,7 +144,7 @@ void lt_dmi_initiator::initiator_thread(void)   ///< initiator thread
             msg << "Initiator: " << m_ID  
                 << " requesting DMI pointer";
             REPORT_INFO(filename,  __FUNCTION__, msg.str());
-            
+            m_dmi_properties.init();
             if(initiator_socket->get_direct_mem_ptr(*gp_ptr,m_dmi_properties))
               {
                 m_dmi_memory.load_dmi_ptr(m_dmi_properties);
