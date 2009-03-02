@@ -74,7 +74,6 @@ public:
                         > base_type;
 
   typedef typename base_type::base_initiator_socket_type base_initiator_socket_type;
-  typedef typename base_type::initiator_socket_type initiator_socket_type;
 
   //CTOR
   multi_passthrough_target_socket()

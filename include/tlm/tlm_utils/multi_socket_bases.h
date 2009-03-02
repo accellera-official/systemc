@@ -129,7 +129,7 @@ TLM_DEFINE_FUNCTOR(get_dmi_ptr);
 #undef TLM_ARG_LIST_WITHOUT_TYPES
 
 #define TLM_RET_VAL void
-#define TLM_FULL_ARG_LIST typename sc_dt::uint64 l, sc_dt::uint64 u
+#define TLM_FULL_ARG_LIST sc_dt::uint64 l, sc_dt::uint64 u
 #define TLM_ARG_LIST_WITHOUT_TYPES l,u
 TLM_DEFINE_FUNCTOR(invalidate_dmi);
 #undef TLM_RET_VAL
