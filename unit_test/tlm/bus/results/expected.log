@@ -246,8 +246,8 @@ target7: Received read request: A = 0x0 @ 1545 ns
 initiator3: Send read request: A = 0x2000000c @ 1545 ns
 initiator4: Received ok response: D = 0x1 @ 1595 ns
 initiator5: Received ok response: D = 0x1 @ 1620 ns
-target6: Received read request: A = 0x0 @ 1645 ns
 Sync'ing...
+target6: Received read request: A = 0x0 @ 1645 ns
 target2: Received read request: A = 0x4 @ 1645 ns
 initiator7: Received ok response: D = 0x0 @ 1645 ns (1645 ns + 0 s)
 initiator7: Send read request: A = 0x60000004 @ 1645 ns (1645 ns + 0 s)
@@ -440,3 +440,4 @@ target6: Received read request: A = 0x24 @ 5720 ns
 Sync'ing...
 initiator7: Received ok response: D = 0x9 @ 5720 ns (5720 ns + 0 s)
 initiator6: Received ok response: D = 0x9 @ 5820 ns (5820 ns + 0 s)
+SystemC: simulation stopped by user.
