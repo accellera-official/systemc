@@ -43,7 +43,7 @@ j. Removed typedefs initiator/target_socket_type from standard sockets
 
 k. Added PTHREADS support in the examples Makefile
 
-l. Cleaned up examples to eliminate issues identified by Doulos and Jeda protocol checkers
+l. Cleaned up examples and unit_tests to eliminate issues identified by Doulos and Jeda protocol checkers
 
 For a more detailed description of all features of TLM 2.0 check out the TLM 2.0
 manual that can be found in the documentation subdirectory of this package

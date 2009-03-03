@@ -15,6 +15,18 @@
 
  *****************************************************************************/
 
+//====================================================================
+//  Nov 06, 2008
+//
+//  Updated by:
+//    Xiaopeng Qiu, JEDA Technologies, Inc
+//    Email:  qiuxp@jedatechnologies.net
+//
+//  To fix violations of TLM2.0 rules, which are detected by JEDA 
+//  TLM2.0 checker.
+//
+//====================================================================
+
 #ifndef __SIMPLE_LT_INITIATOR1_DMI_H__
 #define __SIMPLE_LT_INITIATOR1_DMI_H__
 
@@ -81,6 +93,7 @@ public:
 
     trans.set_data_ptr(reinterpret_cast<unsigned char*>(&mData));
     trans.set_data_length(4);
+    trans.set_streaming_width(4);
 
     ++mTransactionCount;
     return true;
@@ -176,6 +189,7 @@ public:
           if (trans.is_dmi_allowed())
           {
               dmi_type tmp;
+              tmp.init();
               trans.set_address(addr);  //restore address, in case it was mutated.
               trans.set_write();
               if ( socket->get_direct_mem_ptr(trans, tmp)

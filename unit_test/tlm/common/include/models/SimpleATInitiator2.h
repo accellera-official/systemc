@@ -15,6 +15,18 @@
 
  *****************************************************************************/
 
+//====================================================================
+//  Nov 06, 2008
+//
+//  Updated by:
+//    Xiaopeng Qiu, JEDA Technologies, Inc
+//    Email:  qiuxp@jedatechnologies.net
+//
+//  To fix violations of TLM2.0 rules, which are detected by JEDA 
+//  TLM2.0 checker.
+//
+//====================================================================
+
 #ifndef __SIMPLE_AT_INITIATOR2_H__
 #define __SIMPLE_AT_INITIATOR2_H__
 
@@ -119,6 +131,7 @@ public:
     }
 
     trans->set_data_length(4);
+    trans->set_streaming_width(4);
 
     ++mTransactionCount;
     return true;
