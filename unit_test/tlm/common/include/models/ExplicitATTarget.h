@@ -85,6 +85,7 @@ public:
                   << std::endl;
 
         data = *reinterpret_cast<unsigned int*>(&mMem[address]);
+        trans.set_response_status(tlm::TLM_OK_RESPONSE);
 
         // Finish transaction (use timing annotation)
         t += sc_core::sc_time(100, sc_core::SC_NS);
