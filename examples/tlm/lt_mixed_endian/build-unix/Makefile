@@ -1,6 +1,7 @@
 include ../../build-unix/Makefile.config
 
 OBJ_NAME = lt
+EXAMPLE_NAME = lt_mixed_endian
 
 SRCDIR           = ../src
 SRCDIRCOMMON     = ../../common/src
@@ -31,7 +32,7 @@ all: announce $(OBJ_NAME).exe
 
 announce:
 	@if  ( test ! -d $(FLAG_BATCH) ); \
-	 	then echo; echo "$(OBJ_NAME):"; echo; \
+	 	then echo; echo "$(EXAMPLE_NAME):"; echo; \
 	 fi
 
 check: announce $(OBJ_NAME).exe

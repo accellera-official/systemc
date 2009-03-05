@@ -75,68 +75,58 @@ class me_traffic_generator                       	// traffic_generator
   );
 
   // Transaction Pool (queue)
-  class pool_queue_c                                      /// memory pool queue class
-  : public tlm::tlm_mm_interface                          /// implements memory management IF
-  {
-    public:
-
-    pool_queue_c() {
+  class pool_c : public tlm::tlm_mm_interface {
+  public:
+    pool_c() {
       m_size = m_initial_size;
       m_available = 0;
-      m_queue = new tlm::tlm_generic_payload* [m_size];
+      m_stack = new tlm::tlm_generic_payload* [m_size];
     }
 
-    ~pool_queue_c() {
-      for(unsigned i=0; i<m_available; i++) delete m_queue[i];
-      delete [] m_queue;
+    ~pool_c() {
+      for(std::list<tlm::tlm_generic_payload *>::iterator
+        i = all_payloads.begin(); i != all_payloads.end(); i++) {
+        delete *i;
+      }
+      delete [] m_stack;
     }
 
-    tlm::tlm_generic_payload *                            /// transaction pointer
-    pop                                                   /// get a payload object
-    ( void
-    )
-    {
+    tlm::tlm_generic_payload *pop() {
       tlm::tlm_generic_payload *transaction_ptr;
       if(m_available == 0) {
         transaction_ptr = new tlm::tlm_generic_payload(this);
+        all_payloads.push_back(transaction_ptr);
       } else {
-        transaction_ptr = m_queue[--m_available];
+        transaction_ptr = m_stack[--m_available];
       }
       transaction_ptr->acquire();
       return transaction_ptr;
     }
 
-    void
-    push                                                  /// give back a payload object
-    ( tlm::tlm_generic_payload *transaction_ptr           /// transaction pointer
-    )
-    {
+    void push(tlm::tlm_generic_payload *transaction_ptr) {
       transaction_ptr->release();
     }
 
-    void
-    free                                                  /// callback on transaction completion
-    ( tlm::tlm_generic_payload *transaction_ptr           /// transaction pointer
-    )
-    {
+    void free (tlm::tlm_generic_payload *transaction_ptr) {
       transaction_ptr->reset();
       if(m_available == m_size) {
-        // queue is full.  make a new one twice as big
+        // stack is full.  make a new one twice as big
         m_size *= 2;
-        tlm::tlm_generic_payload **new_queue = new tlm::tlm_generic_payload* [m_size];
-        for(unsigned i=0; i<m_available; i++) new_queue[i] = m_queue[i];
-        delete [] m_queue;
-        m_queue = new_queue;
+        tlm::tlm_generic_payload
+          **new_stack = new tlm::tlm_generic_payload* [m_size];
+        for(unsigned i=0; i<m_available; i++) new_stack[i] = m_stack[i];
+        delete [] m_stack;
+        m_stack = new_stack;
       }
-      m_queue[m_available++] = transaction_ptr;
+      m_stack[m_available++] = transaction_ptr;
     }
 
-    private:
-
-    tlm::tlm_generic_payload **m_queue;      /// queue
+  private:
+    tlm::tlm_generic_payload **m_stack;   /// stack of available payloads
+    std::list<tlm::tlm_generic_payload *> all_payloads;
     unsigned m_size, m_available;
     static const unsigned m_initial_size = 1;
-  };
+  };  // pool_c class definition
 
   private:
     void do_transaction(std::string &user_command);
@@ -157,7 +147,7 @@ class me_traffic_generator                       	// traffic_generator
   sc_dt::uint64       m_base_address_1;      	      // first base address
   sc_dt::uint64       m_base_address_2;       	    // second base address
 
-  pool_queue_c        m_txn_pool;                   // transaction pool
+  pool_c        m_txn_pool;                   // transaction pool
 
   tlm::tlm_endianness m_endianness, m_host_endianness;
 

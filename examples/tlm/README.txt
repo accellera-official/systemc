@@ -16,6 +16,7 @@ SubDirs: at_1_phase/
          lt_dmi/
          lt_extension_mandatory/
          lt_temporal_decouple/
+         lt_mixed_endian/
 Files: README.txt
 
 
