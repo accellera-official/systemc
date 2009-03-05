@@ -240,8 +240,15 @@ public:
   typedef tlm::tlm_target_socket<BUSWIDTH, TYPES>       base_type;
 
 public:
-  explicit passthrough_target_socket_tagged(const char* n = "passthrough_target_socket_tagged") :
-    base_type(sc_core::sc_gen_unique_name(n)),
+  passthrough_target_socket_tagged() :
+    base_type(sc_core::sc_gen_unique_name("passthrough_target_socket_tagged")),
+    m_process(this->name())
+  {
+    bind(m_process);
+  }
+
+  explicit passthrough_target_socket_tagged(const char* n) :
+    base_type(n),
     m_process(this->name())
   {
     bind(m_process);
