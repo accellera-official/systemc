@@ -20,7 +20,7 @@
 
 #include <systemc>
 #include "tlm_h/tlm_trans/tlm_generic_payload/tlm_generic_payload.h"
-#include "tlm_h/tlm_trans/tlm_generic_payload/tlm_phase.h"
+#include "tlm_h/tlm_trans/tlm_2_interfaces/tlm_dmi.h"
 
 namespace tlm {
 
