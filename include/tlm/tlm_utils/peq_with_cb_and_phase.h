@@ -16,6 +16,7 @@
  *****************************************************************************/
 
 // 12-Jan-2009  John Aynsley  Bug fix. Phase argument to notify should be const
+// 20-Mar-2009  John Aynsley  Add cancel_all() method
 
 
 #ifndef __PEQ_WITH_CB_AND_PHASE_H__
@@ -55,6 +56,11 @@ public:
   }
 
   ~time_ordered_list() {
+    reset();
+    delete nill;
+  }
+
+  void reset() {
     while(size) {
       delete_top();
     }
@@ -64,7 +70,6 @@ public:
       delete empties;
       empties=e;
     }
-    delete nill;
   }
 
   void insert(const PAYLOAD& p, sc_core::sc_time t) {
@@ -228,6 +233,15 @@ public:
   void notify (tlm_payload_type& t, const tlm_phase_type& p){
     m_immediate_yield.insert(PAYLOAD(&t,p));
     m_e.notify(); // immediate notification
+  }
+
+  // Cancel all events from the event queue
+  void cancel_all() {
+    m_ppq.reset();
+    m_uneven_delta.reset();
+    m_even_delta.reset();
+    m_immediate_yield.reset();
+    m_e.cancel();
   }
 
 private:
