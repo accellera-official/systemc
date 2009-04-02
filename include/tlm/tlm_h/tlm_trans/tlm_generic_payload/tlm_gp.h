@@ -16,6 +16,7 @@
 *****************************************************************************/
 
 // 12-Jan-2009  John Aynsley  Bug fix. has_mm() and get_ref_count() should both be const
+// 23-Mar-2009  John Aynsley  Add method update_original_from()
 
 
 #ifndef __TLM_GP_H__
@@ -253,6 +254,63 @@ public:
                     m_extensions[i]->copy_from(*other.m_extensions[i]);
                 }
             }
+        }
+    }
+
+    // To update the state of the original generic payload from a deep copy
+    // Assumes that "other" was created from the original by calling deep_copy_from
+    // Argument use_byte_enable_on_read determines whether to use or ignores byte enables
+    // when copying back the data array on a read command
+
+    void update_original_from(const tlm_generic_payload & other,
+                              bool use_byte_enable_on_read = true)
+    {
+        // Copy back extensions that are present on the original
+        update_extensions_from(other);
+
+        // Copy back the response status and DMI hint attributes
+        m_response_status = other.get_response_status();
+        m_dmi             = other.is_dmi_allowed();
+
+        // Copy back the data array for a read command only
+        // deep_copy_from allowed null pointers, and so will we
+        // We assume the arrays are the same size
+        // We test for equal pointers in case the original and the copy share the same array
+
+        if(is_read() && m_data && other.m_data && m_data != other.m_data)
+        {
+            if (m_byte_enable && use_byte_enable_on_read)
+            {
+                if (m_byte_enable_length == 8 && m_length % 8 == 0 )
+                {
+                    // Optimized implementation copies 64-bit words by masking
+                    for (unsigned int i = 0; i < m_length; i += 8)
+                    {
+                        typedef sc_dt::uint64* u;
+                        *reinterpret_cast<u>(&m_data[i]) &= ~*reinterpret_cast<u>(m_byte_enable);
+                        *reinterpret_cast<u>(&m_data[i]) |= *reinterpret_cast<u>(&other.m_data[i]) &
+                                                            *reinterpret_cast<u>(m_byte_enable);
+                    }
+                }
+                else if (m_byte_enable_length == 4 && m_length % 4 == 0 )
+                {
+                    // Optimized implementation copies 32-bit words by masking
+                    for (unsigned int i = 0; i < m_length; i += 4)
+                    {
+                        typedef unsigned long int* u;
+                        *reinterpret_cast<u>(&m_data[i]) &= ~*reinterpret_cast<u>(m_byte_enable);
+                        *reinterpret_cast<u>(&m_data[i]) |= *reinterpret_cast<u>(&other.m_data[i]) &
+                                                            *reinterpret_cast<u>(m_byte_enable);
+                    }
+                }
+                else
+                    // Unoptimized implementation
+                    for (unsigned int i = 0; i < m_length; i++)
+                        if ( m_byte_enable[i % m_byte_enable_length] )
+                            m_data[i] = other.m_data[i];
+            }
+            else
+              memcpy(m_data, other.m_data, m_length);
         }
     }
 
