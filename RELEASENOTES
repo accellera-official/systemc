@@ -45,6 +45,13 @@ k. Added PTHREADS support in the examples Makefile
 
 l. Cleaned up examples and unit_tests to eliminate issues identified by Doulos and Jeda protocol checkers
 
+m. Added a convenience method set_and_sync() to tlm_quantumkeeper
+
+n. Added method update_original_from() to class tlm_generic_payload
+
+o. Added method cancel_all() to classes peq_with_get and peq_with_cb_and_phase
+
+
 For a more detailed description of all features of TLM 2.0 check out the TLM 2.0
 manual that can be found in the documentation subdirectory of this package
 
