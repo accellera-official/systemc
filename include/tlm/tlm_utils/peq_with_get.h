@@ -16,6 +16,7 @@
  *****************************************************************************/
 
 // 12-Jan-2009  John Aynsley  Bug fix. sc_time argument to notify should be const
+// 20-Mar-2009  John Aynsley  Add cancel_all() method
 
 
 #ifndef __PEQ_WITH_GET_H__
@@ -73,6 +74,12 @@ public:
   sc_core::sc_event& get_event()
   {
     return m_event;
+  }
+
+  // Cancel all events from the event queue
+  void cancel_all() {
+    m_scheduled_events.clear();
+    m_event.cancel();
   }
 
 private:
