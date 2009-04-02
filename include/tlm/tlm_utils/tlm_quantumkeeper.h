@@ -15,6 +15,9 @@
 
  *****************************************************************************/
 
+// 20-Mar-2009  John Aynsley  Add set_and_sync() method
+
+
 #ifndef __TLM_QUANTUMKEEPER_H__
 #define __TLM_QUANTUMKEEPER_H__
 
@@ -28,7 +31,7 @@ namespace tlm_utils {
   // The tlm_quantumkeeper class is used to keep track of the local time in
   // an initiator (how much it has run ahead of the SystemC time), to
   // synchronize with SystemC time etc.
-  //  
+  //
   class tlm_quantumkeeper
   {
   public:
@@ -43,12 +46,12 @@ namespace tlm_utils {
     {
       tlm::tlm_global_quantum::instance().set(t);
     }
-  
-    static const sc_core::sc_time& get_global_quantum() 
+
+    static const sc_core::sc_time& get_global_quantum()
     {
       return tlm::tlm_global_quantum::instance().get();
     }
-  
+
   public:
     tlm_quantumkeeper() :
       m_next_sync_point(sc_core::SC_ZERO_TIME),
@@ -57,7 +60,7 @@ namespace tlm_utils {
     }
 
     virtual ~tlm_quantumkeeper() {}
-  
+
     //
     // Increment the local time (the time the initiator is ahead of the
     // systemC time) After incrementing the local time an initiator should
@@ -77,7 +80,7 @@ namespace tlm_utils {
     {
       m_local_time = t;
     }
-  
+
     //
     // Checks if a sync to systemC is required for this initiator. This will
     // be the case if the local time becomes greater than the local (current)
@@ -98,7 +101,17 @@ namespace tlm_utils {
       sc_core::wait(m_local_time);
       reset();
     }
-  
+
+    //
+    // Non-virtual convenience method to set the local time and sync only if needed
+    //
+    void set_and_sync(const sc_core::sc_time& t)
+    {
+      set(t);
+      if (need_sync())
+        sync();
+    }
+
     //
     // Resets the local time to SC_ZERO_TIME and computes the value of the
     // next local quantum. This method should be called by an initiator after
@@ -110,10 +123,10 @@ namespace tlm_utils {
       m_local_time = sc_core::SC_ZERO_TIME;
       m_next_sync_point = sc_core::sc_time_stamp() + compute_local_quantum();
     }
-  
+
     //
     // Helper function to get the current systemC time, taken the local time
-    // into account. The current systemC time is calculated as the time 
+    // into account. The current systemC time is calculated as the time
     // returned by sc_time_stamp incremeneted with the time the initiator is
     // running ahead.
     //
@@ -121,7 +134,7 @@ namespace tlm_utils {
     {
       return sc_core::sc_time_stamp() + m_local_time;
     }
-  
+
     //
     // Helper functions to get the time the initiator is running ahead of
     // systenC (local time). This time should be passed to a target in the
@@ -131,7 +144,7 @@ namespace tlm_utils {
     {
       return m_local_time;
     }
-  
+
   protected:
     //
     // Calculate the next local quantum for this initiator.
@@ -146,12 +159,12 @@ namespace tlm_utils {
     {
       return tlm::tlm_global_quantum::instance().compute_local_quantum();
     }
-  
+
   protected:
     sc_core::sc_time m_next_sync_point;
     sc_core::sc_time m_local_time;
   };
-    
+
 } // namespace tlm
 
 #endif
