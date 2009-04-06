@@ -51,6 +51,10 @@ n. Added method update_original_from() to class tlm_generic_payload
 
 o. Added method cancel_all() to classes peq_with_get and peq_with_cb_and_phase
 
+p. Move tlm_req_rsp and tlm_analysis to a new directory tlm_1
+
+q. Collapse the directory hierarchy below tlm_h by removing tlm_trans
+
 
 For a more detailed description of all features of TLM 2.0 check out the TLM 2.0
 manual that can be found in the documentation subdirectory of this package
