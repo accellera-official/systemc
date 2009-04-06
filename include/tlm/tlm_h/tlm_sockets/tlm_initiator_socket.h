@@ -19,7 +19,7 @@
 #define __TLM_INITIATOR_SOCKET_H__
 
 //#include <systemc>
-#include "tlm_h/tlm_trans/tlm_2_interfaces/tlm_fw_bw_ifs.h"
+#include "tlm_h/tlm_2_interfaces/tlm_fw_bw_ifs.h"
 
 namespace tlm {
 
@@ -31,7 +31,7 @@ class tlm_base_initiator_socket_b
 {
 public:
   virtual ~tlm_base_initiator_socket_b() {}
-	
+
   virtual sc_core::sc_port_b<FW_IF> & get_base_port() = 0;
   virtual                    BW_IF  & get_base_interface() = 0;
   virtual sc_core::sc_export<BW_IF> & get_base_export() = 0;
@@ -59,7 +59,7 @@ template <unsigned int BUSWIDTH = 32,
           ,sc_core::sc_port_policy POL = sc_core::SC_ONE_OR_MORE_BOUND
 #endif
           >
-class tlm_base_initiator_socket : public tlm_base_initiator_socket_b<BUSWIDTH, FW_IF, BW_IF>, 
+class tlm_base_initiator_socket : public tlm_base_initiator_socket_b<BUSWIDTH, FW_IF, BW_IF>,
                                   public sc_core::sc_port<FW_IF, N
 #if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
                                                         , POL
@@ -80,7 +80,7 @@ public:
 
   typedef tlm_base_target_socket_b<BUSWIDTH,
                                    fw_interface_type,
-                                   bw_interface_type> base_target_socket_type;                                  
+                                   bw_interface_type> base_target_socket_type;
   typedef tlm_base_initiator_socket_b<BUSWIDTH,
                                       fw_interface_type,
                                       bw_interface_type> base_type;
@@ -180,7 +180,7 @@ template <unsigned int BUSWIDTH = 32,
 #if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
           ,sc_core::sc_port_policy POL = sc_core::SC_ONE_OR_MORE_BOUND
 #endif
-          >          
+          >
 class tlm_initiator_socket :
   public tlm_base_initiator_socket <BUSWIDTH,
                                tlm_fw_transport_if<TYPES>,

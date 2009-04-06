@@ -19,8 +19,8 @@
 #define __TLM_FW_BW_IFS_H__
 
 #include <systemc>
-#include "tlm_h/tlm_trans/tlm_generic_payload/tlm_generic_payload.h"
-#include "tlm_h/tlm_trans/tlm_2_interfaces/tlm_dmi.h"
+#include "tlm_h/tlm_generic_payload/tlm_generic_payload.h"
+#include "tlm_h/tlm_2_interfaces/tlm_dmi.h"
 
 namespace tlm {
 
@@ -59,7 +59,7 @@ public:
 //////////////////////////////////////////////////////////////////////////
 
 // The semantics of the forward interface are as follows:
-// 
+//
 // - An initiator that wants to get direct access to a target's memory region
 //   can call the get_direct_mem_ptr method with the 'trans' parameter set to
 //   the address that it wants to gain access to. It sets the trans.m_command
@@ -97,7 +97,7 @@ public:
 //   DMI data structure.
 //
 // DMI hint optimization:
-// 
+//
 // Initiators may use the DMI hint in the tlm_generic_payload to avoid
 // unnecessary DMI attempts. The recommended sequence of interface
 // method calls would be:
