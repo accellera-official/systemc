@@ -1,13 +1,13 @@
 
-TLM-2.0 interoperability standard header files
-==============================================
+TLM-2.0 interoperability layer header files
+===========================================
 	
 Dir: include/tlm/tlm_h/
 
-SubDirs: tlm_analysis/
+SubDirs: tlm_2_interfaces/
+	 tlm_generic_payload/
 	 tlm_quantum/
-	 tlm_req_rsp/
-	 tlm_trans/
+	 tlm_sockets
 
 Files: README.txt
        tlm_version.h
@@ -25,38 +25,12 @@ tlm_version.h contains the definitions for the version string and integer values
 
 The header files are organizated, by subdirectory, as follows:
 
-tlm_analysis/ 
---------------
-This contains the basic mechanisms for doing analysis
+
+tlm_2_interfaces/
+-----------------
+Contains the TLM-2.0 core interfaces
 
 Files:
-  tlm_analysis.h        (includes the other header files in this directory )
-  tlm_analysis_fifo.h   (defines tlm_analysis_fifo )
-  tlm_analysis_if.h     (defines tlm_analysis_if and tlm_delayed_analysis_if )
-  tlm_analysis_port.h   (defines tlm_analysis_port )
-  tlm_analysis_triple.h (defines tlm_analysis_triple )
-  tlm_write_if.h        (defines tlm_write_if and tlm_delayed_write_if )
-
-
-tlm_quantum/
-------------
-This contains the quantum keeper for temporal decoupling:
-
-Files:
-  tlm_quantum.h        ( includes the other header file in this directory )
-  tlm_global_quantum.h ( defines tlm_global_quantum ) 
-
-
-tlm_trans/
-----------
-This contains the TLM2.0 additional interfaces with support for pass by 
-reference, also contains the definitions for the TLM2.0 sockets and 
-generic payload.
-
-Files:
-  tlm_trans.h (includes the key header files from the other directories )
-
-  tlm_2_interfaces/
       tlm_2_interfaces.h (includes the other header files in this directory )
       tlm_fw_bw_ifs.h    (defines the TLM 2.0 interface API's:
 					tlm_fw_nonblocking_transport_if
@@ -72,7 +46,12 @@ Files:
 					tlm_bw_transport_if )
       tlm_dmi.h          (defines tlm_dmi)
 
-  tlm_generic_payload/
+
+tlm_generic_payload/
+--------------------
+Contains the TLM-2.0 generic payload and associated classes and helper functions
+
+Files:
       tlm_generic_payload.h ( includes the other header files in this directory)
       tlm_gp.h              (defines the TLM 2.0 generic payload classes:
       					tlm_generic_payload
@@ -103,8 +82,13 @@ Files:
 			     and defines the enumeration type:
 			     		tlm_endianness	
       tlm_phase.h           (defines tlm_phase as an extendable enum type)
+
   
-  tlm_sockets/
+tlm_sockets/
+------------
+Contains the standard TLM-2.0 initiator and target sockets (which are used as the base classes for the convenience sockets in tlm_utils)
+
+Files:
       tlm_sockets.h          (includes the other header files in this directory)
       tlm_initiator_socket.h (defines the initiator sockets:
       					tlm_initiator_socket_base
@@ -116,65 +100,11 @@ Files:
 					tlm_conv_target_socket
 
 
-tlm_req_rsp/
+tlm_quantum/
 ------------
-This provides support for TLM modeling based on a request/response pair that 
-are passed by value. This is  the original TLM 1.0 standard, with the addition 
-of a few new methods such as the reference based form of transport.
+This contains the global quantum. (The quantum keeper is in tlm_utils)
 
 Files:
-  tlm_req_rsp.h  (includes the key header files from the other directories)
-
-  tlm_1_interfaces/
-      tlm_core_ifs.h          (defines the TLM 1.0 core interfaces:
-					tlm_transport_if
-					tlm_blocking_get_if
-					tlm_blocking_put_if
-					tlm_nonblocking_get_if
-					tlm_nonblocking_put_if
-					tlm_get_if 
-					tlm_put_if 
-					tlm_blocking_peek_if
-					tlm_nonblocking_peek_if
-					tlm_peek_if 
-					tlm_blocking_get_peek_if 
-					tlm_nonblocking_get_peek_if 
-					tlm_get_peek_if              )     
-      tlm_fifo_ifs.h	     ( defines the TLM1.0 fifo interfaces:
-					tlm_fifo_debug_if			
-					tlm_fifo_put_if
-					tlm_fifo_get_if
-					tlm_fifo_config_size_if )
-      tlm_master_slave_ifs.h ( defines the TLM1.0 master slave interfaces:
-					tlm_blocking_master_if
-					tlm_blocking_slave_if
-					tlm_nonblocking_master_if
-					tlm_nonblocking_slave_if 
-					tlm_master_if 
-					tlm_slave_if )
-      tlm_tag.h	             ( defines tlm_tag )
-  
-  tlm_ports/
-      tlm_nonblocking_port.h (defines tlm_nonblocking_put_port, 
-                                      tlm_nonblocking_get_port and
-				      tlm_nonblocking_peek_port )
-      tlm_event_finder.h     (defines tlm_event_finder_t )
-
-  tlm_channels/
-      tlm_fifo/
-          tlm_fifo.h         (defines tlm_fifo, includes the other files )
-          tlm_fifo_peek.h    (defines peek and poke interfaces for tlm_fifo )
-          tlm_fifo_put_get.h (defines put and get interfaces for tlm_fifo )
-          tlm_fifo_resize.h  (defines expand, reduce, bound and unbound
-	                      interfaces for tlm_fifo )
-          circular_buffer.h  (defines circular buffer used by tlm_fifo )
-      tlm_req_rsp_channels/
-          tlm_req_rsp_channels.h (defines tlm_req_rsp_channel and
-	  			          tlm_transport_channel )
-          tlm_put_get_imp.h      (contains implementatins used by the channels)
-  
-  tlm_adapters/
-  	tlm_adapters.h  (defines transport_to_master and tlm_slave_to_transport)
-	
-
+  tlm_quantum.h        ( includes the other header file in this directory )
+  tlm_global_quantum.h ( defines tlm_global_quantum ) 
 

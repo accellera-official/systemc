@@ -14,16 +14,18 @@
   language governing rights and limitations under the License.
 
  *****************************************************************************/
- 
+
 #ifndef __TLM_H__
 #define __TLM_H__
 
 #include <systemc>    /// main SystemC header
 
 #include "tlm_h/tlm_version.h"
-#include "tlm_h/tlm_analysis/tlm_analysis.h"
+#include "tlm_1/tlm_analysis/tlm_analysis.h"
+#include "tlm_1/tlm_req_rsp/tlm_req_rsp.h"
+#include "tlm_h/tlm_2_interfaces/tlm_2_interfaces.h"
+#include "tlm_h/tlm_generic_payload/tlm_generic_payload.h"
+#include "tlm_h/tlm_sockets/tlm_sockets.h"
 #include "tlm_h/tlm_quantum/tlm_quantum.h"
-#include "tlm_h/tlm_req_rsp/tlm_req_rsp.h"
-#include "tlm_h/tlm_trans/tlm_trans.h"
 
 #endif /* __TLM_H__ */

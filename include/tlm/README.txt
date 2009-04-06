@@ -4,7 +4,8 @@ TLM-2.0 standard header files
 	
 Dir: include/tlm/
 
-SubDirs: tlm_h/
+SubDirs: tlm_1/
+         tlm_h/
 	 tlm_utils/
 
 Files: README.txt
@@ -16,7 +17,7 @@ Comments
 
 To use the TLM-2.0 interoperability standard a user should only include the 
 tlm.h header file.The tlm.h header file refers to all the header files within 
-the tlm_h subdirectoy, everything within tlm.his contained in the tlm namespace.
+the tlm_h and tlm_1 subdirectories, everything within tlm.h is contained in the tlm namespace.
 The TLM-2.0 interoperability standard also contains the TLM-1.0 standard, these headers are included in tlm.h
 
 The tlm_utils subdirectory, contains a set of additional definitions supported 
