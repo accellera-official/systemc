@@ -18,8 +18,8 @@
 #ifndef __TLM_NONBLOCKING_PORT_H__
 #define __TLM_NONBLOCKING_PORT_H__
 
-#include "tlm_h/tlm_req_rsp/tlm_1_interfaces/tlm_core_ifs.h"
-#include "tlm_h/tlm_req_rsp/tlm_ports/tlm_event_finder.h"
+#include "tlm_1/tlm_req_rsp/tlm_1_interfaces/tlm_core_ifs.h"
+#include "tlm_1/tlm_req_rsp/tlm_ports/tlm_event_finder.h"
 
 namespace tlm {
 
@@ -34,10 +34,10 @@ public:
     sc_core::sc_port< tlm_nonblocking_get_if< T > , 1 >( port_name ) {}
 
   sc_core::sc_event_finder& ok_to_get() const {
-    
+
     return *new tlm_event_finder_t< get_if_type , T >(
-	     *this,
-	     &get_if_type::ok_to_get );
+       *this,
+       &get_if_type::ok_to_get );
 
   }
 
@@ -54,10 +54,10 @@ public:
     sc_core::sc_port< tlm_nonblocking_peek_if< T > , 1 >( port_name ) {}
 
   sc_core::sc_event_finder& ok_to_peek() const {
-    
+
     return *new tlm_event_finder_t< peek_if_type , T >(
-	     *this,
-	     &peek_if_type::ok_to_peek );
+       *this,
+       &peek_if_type::ok_to_peek );
 
   }
 
@@ -78,7 +78,7 @@ public:
 
     return *new tlm_event_finder_t< put_if_type , T >(
              *this,
-	     &put_if_type::ok_to_put );
+       &put_if_type::ok_to_put );
 
   }
 

@@ -18,15 +18,15 @@
 #ifndef __TLM_REQ_RSP_CHANNELS_H__
 #define __TLM_REQ_RSP_CHANNELS_H__
 
-#include "tlm_h/tlm_req_rsp/tlm_adapters/tlm_adapters.h"
-#include "tlm_h/tlm_req_rsp/tlm_channels/tlm_fifo/tlm_fifo.h"
-#include "tlm_h/tlm_req_rsp/tlm_channels/tlm_req_rsp_channels/tlm_put_get_imp.h"
+#include "tlm_1/tlm_req_rsp/tlm_adapters/tlm_adapters.h"
+#include "tlm_1/tlm_req_rsp/tlm_channels/tlm_fifo/tlm_fifo.h"
+#include "tlm_1/tlm_req_rsp/tlm_channels/tlm_req_rsp_channels/tlm_put_get_imp.h"
 
 namespace tlm {
 
 template < typename REQ , typename RSP ,
-	   typename REQ_CHANNEL = tlm_fifo<REQ> , 
-	   typename RSP_CHANNEL = tlm_fifo<RSP> >
+     typename REQ_CHANNEL = tlm_fifo<REQ> ,
+     typename RSP_CHANNEL = tlm_fifo<RSP> >
 
 class tlm_req_rsp_channel : public sc_core::sc_module
 {
@@ -51,25 +51,25 @@ public:
     sc_core::sc_module( sc_core::sc_module_name( sc_core::sc_gen_unique_name("tlm_req_rsp_channel") ) ) ,
     request_fifo( req_size ) ,
     response_fifo( rsp_size ) ,
-    master( request_fifo , response_fifo ) , 
+    master( request_fifo , response_fifo ) ,
     slave( request_fifo , response_fifo )
   {
 
     bind_exports();
-    
+
   }
 
   tlm_req_rsp_channel( sc_core::sc_module_name module_name ,
-		       int req_size = 1 , int rsp_size = 1 ) :
-    sc_core::sc_module( module_name  ) , 
+           int req_size = 1 , int rsp_size = 1 ) :
+    sc_core::sc_module( module_name  ) ,
     request_fifo( req_size ) ,
     response_fifo( rsp_size ) ,
-    master( request_fifo , response_fifo ) , 
+    master( request_fifo , response_fifo ) ,
     slave( request_fifo , response_fifo )
   {
 
     bind_exports();
-    
+
   }
 
 private:
@@ -77,7 +77,7 @@ private:
 
     put_request_export( request_fifo );
     get_request_export( request_fifo );
-    
+
     put_response_export( response_fifo );
     get_response_export( response_fifo );
 
@@ -95,8 +95,8 @@ protected:
 };
 
 template < typename REQ , typename RSP ,
-	   typename REQ_CHANNEL = tlm_fifo<REQ> , 
-	   typename RSP_CHANNEL = tlm_fifo<RSP> >
+     typename REQ_CHANNEL = tlm_fifo<REQ> ,
+     typename RSP_CHANNEL = tlm_fifo<RSP> >
 class tlm_transport_channel : public sc_core::sc_module
 {
 public:

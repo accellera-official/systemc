@@ -12,17 +12,15 @@
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
-  
+
  *****************************************************************************/
 
 #ifndef __TLM_ANALYSIS_FIFO_H__
 #define __TLM_ANALYSIS_FIFO_H__
 
-//#include "tlm_core.h"
-
-#include "tlm_h/tlm_req_rsp/tlm_channels/tlm_fifo/tlm_fifo.h"
-#include "tlm_h/tlm_analysis/tlm_analysis_if.h"
-#include "tlm_h/tlm_analysis/tlm_analysis_triple.h"
+#include "tlm_1/tlm_req_rsp/tlm_channels/tlm_fifo/tlm_fifo.h"
+#include "tlm_1/tlm_analysis/tlm_analysis_if.h"
+#include "tlm_1/tlm_analysis/tlm_analysis_triple.h"
 
 namespace tlm {
 

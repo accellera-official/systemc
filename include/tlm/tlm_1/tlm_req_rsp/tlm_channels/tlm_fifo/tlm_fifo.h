@@ -34,8 +34,8 @@
 
 //#include <systemc>
 
-#include "tlm_h/tlm_req_rsp/tlm_1_interfaces/tlm_fifo_ifs.h"
-#include "tlm_h/tlm_req_rsp/tlm_channels/tlm_fifo/circular_buffer.h"
+#include "tlm_1/tlm_req_rsp/tlm_1_interfaces/tlm_fifo_ifs.h"
+#include "tlm_1/tlm_req_rsp/tlm_channels/tlm_fifo/circular_buffer.h"
 
 namespace tlm {
 
@@ -51,14 +51,14 @@ public:
 
     explicit tlm_fifo( int size_ = 1 )
       : sc_core::sc_prim_channel( sc_core::sc_gen_unique_name( "fifo" ) ) {
-     
+
       init( size_ );
 
     }
 
     explicit tlm_fifo( const char* name_, int size_ = 1 )
       : sc_core::sc_prim_channel( name_ ) {
-    
+
       init( size_ );
 
     }
@@ -91,7 +91,7 @@ public:
       return m_data_written_event;
     }
 
-    // tlm put interface 
+    // tlm put interface
 
     void put( const T& );
 
@@ -164,10 +164,10 @@ protected:
 
     int m_size;                  // logical size of fifo
 
-    int m_num_readable;	         // #samples readable
-    int m_num_read;	         // #samples read during this delta cycle
-    int m_num_written;	         // #samples written during this delta cycle
-    bool m_expand;               // has an expand occurred during this delta cycle ? 
+    int m_num_readable;          // #samples readable
+    int m_num_read;          // #samples read during this delta cycle
+    int m_num_written;           // #samples written during this delta cycle
+    bool m_expand;               // has an expand occurred during this delta cycle ?
     int m_num_read_no_notify;    // #samples read without notify during this delta cycle
 
     sc_core::sc_event m_data_read_event;
@@ -184,7 +184,7 @@ private:
     // private functions
     //
 
-    bool is_empty() const { 
+    bool is_empty() const {
       return used() == 0;
     }
 
@@ -205,14 +205,14 @@ const char* const tlm_fifo<T>::kind_string = "tlm_fifo";
 ******************************************************************/
 
 template< typename T >
-inline 
+inline
 void
 tlm_fifo<T>::init( int size_ ) {
 
   if( size_ > 0 ) {
     buffer = new circular_buffer<T>( size_);
   }
-  
+
   else if( size_ < 0 ) {
     buffer = new circular_buffer<T>( -size_ );
   }
@@ -236,11 +236,11 @@ void
 tlm_fifo<T>::update()
 {
     if( m_num_read > m_num_read_no_notify || m_expand ) {
-	m_data_read_event.notify( sc_core::SC_ZERO_TIME );
+  m_data_read_event.notify( sc_core::SC_ZERO_TIME );
     }
 
     if( m_num_written > 0 ) {
-	m_data_written_event.notify( sc_core::SC_ZERO_TIME );
+  m_data_written_event.notify( sc_core::SC_ZERO_TIME );
     }
 
     m_expand = false;
@@ -253,9 +253,9 @@ tlm_fifo<T>::update()
 
 } // namespace tlm
 
-#include "tlm_h/tlm_req_rsp/tlm_channels/tlm_fifo/tlm_fifo_put_get.h"
-#include "tlm_h/tlm_req_rsp/tlm_channels/tlm_fifo/tlm_fifo_peek.h"
-#include "tlm_h/tlm_req_rsp/tlm_channels/tlm_fifo/tlm_fifo_resize.h"
+#include "tlm_1/tlm_req_rsp/tlm_channels/tlm_fifo/tlm_fifo_put_get.h"
+#include "tlm_1/tlm_req_rsp/tlm_channels/tlm_fifo/tlm_fifo_peek.h"
+#include "tlm_1/tlm_req_rsp/tlm_channels/tlm_fifo/tlm_fifo_resize.h"
 
 #endif
 

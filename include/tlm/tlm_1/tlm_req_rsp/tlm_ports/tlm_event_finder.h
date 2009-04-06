@@ -20,7 +20,7 @@
 
 //#include <systemc>
 
-#include "tlm_h/tlm_req_rsp/tlm_1_interfaces/tlm_tag.h"
+#include "tlm_1/tlm_req_rsp/tlm_1_interfaces/tlm_tag.h"
 
 namespace tlm {
 
@@ -69,7 +69,7 @@ tlm_event_finder_t<IF,T>::find_event( sc_core::sc_interface* if_p ) const
     const IF* iface = ( if_p ) ? dynamic_cast<const IF*>( if_p ) :
                                  dynamic_cast<const IF*>( port().get_interface() );
     if( iface == 0 ) {
-	report_error( sc_core::SC_ID_FIND_EVENT_, "port is not bound" );
+  report_error( sc_core::SC_ID_FIND_EVENT_, "port is not bound" );
     }
     return (const_cast<IF*>( iface )->*m_event_method) ( 0 );
 }
@@ -81,7 +81,7 @@ tlm_event_finder_t<IF,T>::find_event() const
 {
     const IF* iface = dynamic_cast<const IF*>( port().get_interface() );
     if( iface == 0 ) {
-	report_error( sc_core::SC_ID_FIND_EVENT_, "port is not bound" );
+  report_error( sc_core::SC_ID_FIND_EVENT_, "port is not bound" );
     }
     return (const_cast<IF*>( iface )->*m_event_method) ( 0 );
 }

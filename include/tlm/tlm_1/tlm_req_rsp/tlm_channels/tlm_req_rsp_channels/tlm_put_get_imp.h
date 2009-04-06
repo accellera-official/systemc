@@ -22,7 +22,7 @@
 #ifndef __TLM_PUT_GET_IMP_H__
 #define __TLM_PUT_GET_IMP_H__
 
-#include "tlm_h/tlm_req_rsp/tlm_1_interfaces/tlm_master_slave_ifs.h"
+#include "tlm_1/tlm_req_rsp/tlm_1_interfaces/tlm_master_slave_ifs.h"
 
 namespace tlm {
 
@@ -33,7 +33,7 @@ class tlm_put_get_imp :
 {
 public:
   tlm_put_get_imp( tlm_put_if<PUT_DATA> &p ,
-		   tlm_get_peek_if<GET_DATA> &g ) :
+       tlm_get_peek_if<GET_DATA> &g ) :
     put_fifo( p ) , get_fifo( g ) {}
 
   // put interface
@@ -53,7 +53,7 @@ public:
   GET_DATA get( tlm_tag<GET_DATA> *t = 0 ) { return get_fifo.get(); }
 
   bool nb_get( GET_DATA &t ) { return get_fifo.nb_get( t ); }
-  
+
   bool nb_can_get( tlm_tag<GET_DATA> *t = 0 ) const {
     return get_fifo.nb_can_get( t );
   }
@@ -67,7 +67,7 @@ public:
   GET_DATA peek( tlm_tag<GET_DATA> *t = 0 ) const { return get_fifo.peek(); }
 
   bool nb_peek( GET_DATA &t ) const { return get_fifo.nb_peek( t ); }
-  
+
   bool nb_can_peek( tlm_tag<GET_DATA> *t = 0 ) const {
     return get_fifo.nb_can_peek( t );
   }

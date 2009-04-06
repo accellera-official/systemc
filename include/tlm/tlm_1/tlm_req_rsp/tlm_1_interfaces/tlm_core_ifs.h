@@ -25,7 +25,7 @@
 
 //#include <systemc>
 
-#include "tlm_h/tlm_req_rsp/tlm_1_interfaces/tlm_tag.h"
+#include "tlm_1/tlm_req_rsp/tlm_1_interfaces/tlm_tag.h"
 
 namespace tlm {
 
@@ -83,7 +83,7 @@ public:
 };
 
 
-// combined uni-directional blocking and non blocking 
+// combined uni-directional blocking and non blocking
 
 template < typename T >
 class tlm_get_if :

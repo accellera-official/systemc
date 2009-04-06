@@ -18,7 +18,7 @@
 #ifndef __TLM_ADAPTERS_H__
 #define __TLM_ADAPTERS_H__
 
-#include "tlm_h/tlm_req_rsp/tlm_1_interfaces/tlm_master_slave_ifs.h"
+#include "tlm_1/tlm_req_rsp/tlm_1_interfaces/tlm_master_slave_ifs.h"
 
 namespace tlm {
 
@@ -69,7 +69,7 @@ class tlm_slave_to_transport : public sc_core::sc_module
 public:
 
   SC_HAS_PROCESS( tlm_slave_to_transport );
-  
+
   sc_core::sc_port< tlm_slave_if< REQ , RSP > > slave_port;
   sc_core::sc_port< tlm_transport_if< REQ , RSP > > initiator_port;
 
@@ -79,10 +79,10 @@ public:
   tlm_slave_to_transport() :
     sc_core::sc_module( sc_core::sc_module_name( sc_core::sc_gen_unique_name("slave_to_transport") ) )
   {}
-  
+
 private:
   void run() {
- 
+
     REQ req;
     RSP rsp;
 
@@ -95,7 +95,7 @@ private:
     }
 
   }
- 
+
 };
 
 } // namespace tlm
