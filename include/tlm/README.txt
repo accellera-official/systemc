@@ -16,13 +16,14 @@ Comments
 ========
 
 To use the TLM-2.0 interoperability standard a user should only include the 
-tlm.h header file.The tlm.h header file refers to all the header files within 
-the tlm_h and tlm_1 subdirectories, everything within tlm.h is contained in the tlm namespace.
-The TLM-2.0 interoperability standard also contains the TLM-1.0 standard, these headers are included in tlm.h
+tlm.h header file. The same holds for the TLM-1.0 implementation that is 
+included as part of this kit; only include tlm.h. The tlm.h header file refers 
+to all the header files within the tlm_h and tlm_1 subdirectories, everything 
+within tlm.h is contained in the tlm namespace. 
 
-The tlm_utils subdirectory, contains a set of additional definitions supported 
+The tlm_utils subdirectory contains a set of additional definitions supported 
 by the TLM-2.0 standard but which are not part of the interoperability 
-requirements.It contains ease-of-use and convenience implementations for the 
+requirements. It contains ease-of-use and convenience implementations for the 
 interoperability standard. All objects defined in the tlm_utils directory are 
 contained in the tlm_util namespace.
 
