@@ -8,12 +8,14 @@ SubDirs: build-cygwin/
          build-unix/
          bus/
          bus_dmi/
+         cancel_all/
          common/
          endian_conv/
          gp_extension/
          multi_sockets/
          p2p/
          static_extensions/
+         update_original/
 Files: README.txt
 
 

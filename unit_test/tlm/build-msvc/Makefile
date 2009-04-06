@@ -6,7 +6,9 @@ SUBDIRS = \
           ../p2p \
           ../static_extensions \
           ../endian_conv \
-          ../multi_sockets
+          ../multi_sockets \
+          ../update_original \
+          ../cancel_all
           
 #.PHONY: all clean run check
 
