@@ -63,7 +63,7 @@ manual that can be found in the documentation subdirectory of this package
 3) Known issues
 ===============
 
-a. when using TLM 2.0 with SystemC v2.2.v1 on 64 bit linux you will need to
+a. when using TLM 2.0 with SystemC 2.1.v1 on 64 bit linux you will need to
    force 32 bit mode by using the '-m32' flag
 
 b. the tlm_simple_target_socket in tlm_utils does not obey the END_REQ rule
@@ -85,6 +85,6 @@ e. the examples do not successfully 'make check' on bigendian machines, messages
    are not printed correctly in that case.
 
 f. the lt_dmi example does not run for all platform and library versions. It
-   works for X86 linux, gcc4.0 and SystemCv2.2.0
+   works for X86 linux, gcc4.0 and SystemC 2.2.0
 
 
