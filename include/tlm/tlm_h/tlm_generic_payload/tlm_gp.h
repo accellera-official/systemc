@@ -17,6 +17,7 @@
 
 // 12-Jan-2009  John Aynsley  Bug fix. has_mm() and get_ref_count() should both be const
 // 23-Mar-2009  John Aynsley  Add method update_original_from()
+// 20-Apr-2009  John Aynsley  Bug fix for 64-bit machines: unsigned long int -> unsigned int
 
 
 #ifndef __TLM_GP_H__
@@ -297,7 +298,7 @@ public:
                     // Optimized implementation copies 32-bit words by masking
                     for (unsigned int i = 0; i < m_length; i += 4)
                     {
-                        typedef unsigned long int* u;
+                        typedef unsigned int* u;
                         *reinterpret_cast<u>(&m_data[i]) &= ~*reinterpret_cast<u>(m_byte_enable);
                         *reinterpret_cast<u>(&m_data[i]) |= *reinterpret_cast<u>(&other.m_data[i]) &
                                                             *reinterpret_cast<u>(m_byte_enable);
