@@ -90,7 +90,7 @@ public:
 public:
   tlm_base_target_socket()
   : export_type(sc_core::sc_gen_unique_name("tlm_base_target_socket"))
-  , m_port(sc_core::sc_gen_unique_name("tlm_target_socket_port"))
+  , m_port(sc_core::sc_gen_unique_name("tlm_base_target_socket_port"))
   {
   }
 

@@ -95,7 +95,7 @@ public:
 public:
   tlm_base_initiator_socket()
   : port_type(sc_core::sc_gen_unique_name("tlm_base_initiator_socket"))
-  , m_export(sc_core::sc_gen_unique_name("tlm_initiator_socket_export"))
+  , m_export(sc_core::sc_gen_unique_name("tlm_base_initiator_socket_export"))
   {
   }
 
