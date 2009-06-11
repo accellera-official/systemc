@@ -20,11 +20,6 @@
 
 #include <systemc>
 
-#if !(SYSTEMC_VERSION <= 20050714)
-# include "sysc/kernel/sc_boost.h"
-# include "sysc/kernel/sc_spawn.h"
-# include "sysc/kernel/sc_spawn_options.h"
-#endif
 #include "tlm.h"
 
 #include <map>
@@ -168,8 +163,8 @@ class callback_binder_fw: public tlm::tlm_fw_transport_if<TYPES>{
                                 sc_core::sc_time& t){
       //check if a callback is registered
       if (m_nb_f->empty()){
-        std::cerr<<"No function registered"<<std::endl;
-        exit(1);
+        //std::cerr<<"No function registered"<<std::endl;
+        SC_REPORT_ERROR("/OSCI_TLM-2/multi_socket","Call to nb_transport_fw without a registered callback for nb_transport_fw.");
       }
       else
         return (*m_nb_f)(m_id, txn, p, t); //do the callback
@@ -179,8 +174,7 @@ class callback_binder_fw: public tlm::tlm_fw_transport_if<TYPES>{
     void b_transport(transaction_type& trans,sc_core::sc_time& t){
       //check if a callback is registered
       if (m_b_f->empty()){
-        std::cerr<<"No function registered"<<std::endl;
-        exit(1);
+        SC_REPORT_ERROR("/OSCI_TLM-2/multi_socket","Call to b_transport without a registered callback for b_transport.");
       }
       else
         (*m_b_f)(m_id, trans,t); //do the callback
@@ -271,8 +265,7 @@ class callback_binder_bw: public tlm::tlm_bw_transport_if<TYPES>{
                                 sc_core::sc_time& t){
       //check if a callback is registered
       if (m_nb_f->empty()){
-        std::cerr<<"No function registered"<<std::endl; //here we could do an automatic nb->b conversion
-        exit(1);
+        SC_REPORT_ERROR("/OSCI_TLM-2/multi_socket","Call to nb_transport_bw without a registered callback for nb_transport_bw");
       }
       else
         return (*m_nb_f)(m_id, txn, p, t); //do the callback

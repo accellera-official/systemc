@@ -127,9 +127,9 @@ public:
   void insert(sc_dt::uint64 baseAddress_, sc_dt::uint64 highAddress_, unsigned int portNumber_)
   {
     if(baseAddress_>highAddress_)
-      SC_REPORT_ERROR("Address Map", "Base address must be lower than high address.");
+      SC_REPORT_ERROR("SimpleAddressMap", "Base address must be lower than high address.");
     if(portNumber_>=255)
-      SC_REPORT_ERROR("Address Map", "Only ;-) 255 targets can be handled.");
+      SC_REPORT_ERROR("SimpleAddressMap", "Only ;-) 255 targets can be handled.");
     m_addressMap.insert(mapType::value_type(((baseAddress_+1)<<1)-1,    255    ));
     m_addressMap.insert(mapType::value_type( (highAddress_+1)<<1   ,portNumber_));
   }

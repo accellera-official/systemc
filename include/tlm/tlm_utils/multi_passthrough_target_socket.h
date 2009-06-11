@@ -102,13 +102,13 @@ public:
   void display_warning(const std::string& text){
     std::stringstream s;
     s<<"WARNING in instance "<<base_type::name()<<": "<<text;
-    SC_REPORT_WARNING("multi_socket", s.str().c_str());
+    SC_REPORT_WARNING("/OSCI_TLM-2/multi_socket", s.str().c_str());
   }
 
   void display_error(const std::string& text){
     std::stringstream s;
     s<<"ERROR in instance "<<base_type::name()<<": "<<text;
-    SC_REPORT_ERROR("multi_socket", s.str().c_str());
+    SC_REPORT_ERROR("/OSCI_TLM-2/multi_socket", s.str().c_str());
   }
 
   //register callback for nb transport of fw interface

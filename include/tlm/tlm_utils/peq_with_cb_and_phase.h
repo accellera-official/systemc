@@ -57,18 +57,17 @@ public:
 
   ~time_ordered_list() {
     reset();
+    while(empties){
+      struct element *e=empties->next;
+      delete empties;
+      empties=e;
+    }
     delete nill;
   }
 
   void reset() {
     while(size) {
       delete_top();
-    }
-
-    while(empties){
-      struct element *e=empties->next;
-      delete empties;
-      empties=e;
     }
   }
 
