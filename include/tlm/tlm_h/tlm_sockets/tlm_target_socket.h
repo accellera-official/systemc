@@ -100,6 +100,11 @@ public:
   {
   }
 
+  virtual const char* kind() const
+  {
+    return "tlm_base_target_socket";
+  }
+
   unsigned int get_bus_width() const
   {
     return BUSWIDTH;
@@ -234,6 +239,11 @@ public:
 #endif
                       >(name)
   {
+  }
+
+  virtual const char* kind() const
+  {
+    return "tlm_target_socket";
   }
 };
 
