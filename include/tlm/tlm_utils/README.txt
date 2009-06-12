@@ -61,8 +61,6 @@ Files:
      
   multi_socket_bases.h
      contains base class definitions used by the multi_passthrough sockets
-     This header depends on the boost library, see the toplevel README.txt for
-     the supported boost libraries.
      
   peq_with_get.h
      payload event queue (PEQ) implementation using a pull interface.

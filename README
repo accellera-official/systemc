@@ -64,8 +64,8 @@ Build Support
  
    To use TLM2.0 all you need is the SystemC headers. TLM2.0 has been tested
    with SystemC versions 2.2 and 2.1.1. 
-   The multi_passthrough sockets in the tlm_utils directory also depend on 
-   the boost library, it has been tested with boost versions 1.33.1 and 1.35.0 
+   
+   In earlier versions of TLM-2.0, the multi_passthrough sockets in the tlm_utils directory depended on the boost library. This is not true of the current release.
    
    Support for building the examples and unit tests is provided for 'unix', and
    'msvc' (project and make files).
@@ -77,9 +77,7 @@ Build Support
    kit's location; $SYSTEMC_HOME and $TARGET_ARCH should be defined such that
    $SYSTEMC_HOME/lib-$TARGET_ARCH is a directory containing the systemc library.
    On Windows, the SYSTEMC and TLM environments variables should be used.
-   To run the multi_socket tests and examples you need to set the environment
-   variable BOOST_HOME to point to the boost headers.
-   
+
    Please check the README.txt file for the unit_tests how to setup the build
    environment for different compiler and library versions.
 
