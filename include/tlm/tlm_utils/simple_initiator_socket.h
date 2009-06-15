@@ -19,6 +19,7 @@
 #define __SIMPLE_INITIATOR_SOCKET_H__
 
 #include "tlm.h"
+#include <sstream>
 
 namespace tlm_utils {
 
@@ -86,8 +87,9 @@ private:
     void set_transport_ptr(MODULE* mod, TransportPtr p)
     {
       if (m_transport_ptr) {
-        std::cerr << m_name << ": non-blocking callback allready registered" << std::endl;
-
+        std::stringstream s;
+        s << m_name << ": non-blocking callback allready registered";
+        SC_REPORT_WARNING("/OSCI_TLM-2/simple_socket",s.str().c_str());
       } else {
         assert(!m_mod || m_mod == mod);
         m_mod = mod;
@@ -98,8 +100,9 @@ private:
     void set_invalidate_direct_mem_ptr(MODULE* mod, InvalidateDirectMemPtr p)
     {
       if (m_invalidate_direct_mem_ptr) {
-        std::cerr << m_name << ": invalidate DMI callback allready registered" << std::endl;
-
+        std::stringstream s;
+        s << m_name << ": invalidate DMI callback allready registered";
+        SC_REPORT_WARNING("/OSCI_TLM-2/simple_socket",s.str().c_str());
       } else {
         assert(!m_mod || m_mod == mod);
         m_mod = mod;
@@ -115,9 +118,11 @@ private:
         return (m_mod->*m_transport_ptr)(trans, phase, t);
 
       } else {
-        std::cerr << m_name << ": no transport callback registered" << std::endl;
-        assert(0); exit(1);
+        std::stringstream s;
+        s << m_name << ": no transport callback registered";
+        SC_REPORT_ERROR("/OSCI_TLM-2/simple_socket",s.str().c_str());
       }
+      return tlm::TLM_ACCEPTED;   ///< unreachable code
     }
 
     void invalidate_direct_mem_ptr(sc_dt::uint64 start_range,
@@ -219,8 +224,9 @@ private:
     void set_transport_ptr(MODULE* mod, TransportPtr p)
     {
       if (m_transport_ptr) {
-        std::cerr << m_name << ": non-blocking callback allready registered" << std::endl;
-
+        std::stringstream s;
+        s << m_name << ": non-blocking callback allready registered";
+        SC_REPORT_WARNING("/OSCI_TLM-2/simple_socket",s.str().c_str());
       } else {
         assert(!m_mod || m_mod == mod);
         m_mod = mod;
@@ -231,8 +237,9 @@ private:
     void set_invalidate_direct_mem_ptr(MODULE* mod, InvalidateDirectMemPtr p)
     {
       if (m_invalidate_direct_mem_ptr) {
-        std::cerr << m_name << ": invalidate DMI callback allready registered" << std::endl;
-
+        std::stringstream s;
+        s << m_name << ": invalidate DMI callback allready registered";
+        SC_REPORT_WARNING("/OSCI_TLM-2/simple_socket",s.str().c_str());
       } else {
         assert(!m_mod || m_mod == mod);
         m_mod = mod;
@@ -248,9 +255,11 @@ private:
         return (m_mod->*m_transport_ptr)(m_transport_user_id, trans, phase, t);
 
       } else {
-        std::cerr << m_name << ": no transport callback registered" << std::endl;
-        assert(0); exit(1);
+        std::stringstream s;
+        s << m_name << ": no transport callback registered";
+        SC_REPORT_ERROR("/OSCI_TLM-2/simple_socket",s.str().c_str());
       }
+      return tlm::TLM_ACCEPTED;   ///< unreachable code
     }
 
     void invalidate_direct_mem_ptr(sc_dt::uint64 start_range,

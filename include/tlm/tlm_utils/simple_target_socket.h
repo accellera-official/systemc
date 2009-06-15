@@ -27,6 +27,7 @@
 
 #include "tlm.h"
 #include "peq_with_get.h"
+#include <sstream>
 
 namespace tlm_utils {
 
@@ -193,8 +194,9 @@ private:
     void set_nb_transport_ptr(MODULE* mod, NBTransportPtr p)
     {
       if (m_nb_transport_ptr) {
-        std::cerr << m_name << ": non-blocking callback allready registered" << std::endl;
-
+        std::stringstream s;
+        s << m_name << ": non-blocking callback allready registered";
+        SC_REPORT_WARNING("/OSCI_TLM-2/simple_socket",s.str().c_str());
       } else {
         assert(!m_mod || m_mod == mod);
         m_mod = mod;
@@ -205,8 +207,9 @@ private:
     void set_b_transport_ptr(MODULE* mod, BTransportPtr p)
     {
       if (m_b_transport_ptr) {
-        std::cerr << m_name << ": non-blocking callback allready registered" << std::endl;
-
+        std::stringstream s;
+        s << m_name << ": blocking callback allready registered";
+        SC_REPORT_WARNING("/OSCI_TLM-2/simple_socket",s.str().c_str());
       } else {
         assert(!m_mod || m_mod == mod);
         m_mod = mod;
@@ -217,8 +220,9 @@ private:
     void set_transport_dbg_ptr(MODULE* mod, TransportDbgPtr p)
     {
       if (m_transport_dbg_ptr) {
-        std::cerr << m_name << ": debug callback allready registered" << std::endl;
-
+        std::stringstream s;
+        s << m_name << ": debug callback allready registered";
+        SC_REPORT_WARNING("/OSCI_TLM-2/simple_socket",s.str().c_str());
       } else {
         assert(!m_mod || m_mod == mod);
         m_mod = mod;
@@ -229,8 +233,9 @@ private:
     void set_get_direct_mem_ptr(MODULE* mod, GetDirectMemPtr p)
     {
       if (m_get_direct_mem_ptr) {
-        std::cerr << m_name << ": get DMI pointer callback allready registered" << std::endl;
-
+        std::stringstream s;
+        s << m_name << ": get DMI pointer callback allready registered";
+        SC_REPORT_WARNING("/OSCI_TLM-2/simple_socket",s.str().c_str());
       } else {
         assert(!m_mod || m_mod == mod);
         m_mod = mod;
@@ -285,10 +290,11 @@ private:
         }
 
       } else {
-        std::cerr << m_name << ": no transport callback registered" << std::endl;
-        assert(0); exit(1);
-//        return tlm::TLM_COMPLETED;   ///< unreachable code
+        std::stringstream s;
+        s << m_name << ": no non-blocking transport callback registered";
+        SC_REPORT_ERROR("/OSCI_TLM-2/simple_socket",s.str().c_str());
       }
+      return tlm::TLM_ACCEPTED;   ///< unreachable code
     }
 
     void b_transport(transaction_type& trans, sc_core::sc_time& t)
@@ -327,9 +333,9 @@ private:
         }
 
       } else {
-        std::cerr << m_name << ": no transport callback registered" << std::endl;
-        assert(0); exit(1);
-//        return tlm::TLM_COMPLETED;   ///< unreachable code
+        std::stringstream s;
+        s << m_name << ": no blocking transport callback registered";
+        SC_REPORT_ERROR("/OSCI_TLM-2/simple_socket",s.str().c_str());
       }
     }
 
@@ -742,8 +748,9 @@ private:
     void set_nb_transport_ptr(MODULE* mod, NBTransportPtr p)
     {
       if (m_nb_transport_ptr) {
-        std::cerr << m_name << ": non-blocking callback allready registered" << std::endl;
-
+        std::stringstream s;
+        s << m_name << ": non-blocking callback allready registered";
+        SC_REPORT_WARNING("/OSCI_TLM-2/simple_socket",s.str().c_str());
       } else {
         assert(!m_mod || m_mod == mod);
         m_mod = mod;
@@ -754,8 +761,9 @@ private:
     void set_b_transport_ptr(MODULE* mod, BTransportPtr p)
     {
       if (m_b_transport_ptr) {
-        std::cerr << m_name << ": non-blocking callback allready registered" << std::endl;
-
+        std::stringstream s;
+        s << m_name << ": blocking callback allready registered";
+        SC_REPORT_WARNING("/OSCI_TLM-2/simple_socket",s.str().c_str());
       } else {
         assert(!m_mod || m_mod == mod);
         m_mod = mod;
@@ -766,8 +774,9 @@ private:
     void set_transport_dbg_ptr(MODULE* mod, TransportDbgPtr p)
     {
       if (m_transport_dbg_ptr) {
-        std::cerr << m_name << ": debug callback allready registered" << std::endl;
-
+        std::stringstream s;
+        s << m_name << ": debug callback allready registered";
+        SC_REPORT_WARNING("/OSCI_TLM-2/simple_socket",s.str().c_str());
       } else {
         assert(!m_mod || m_mod == mod);
         m_mod = mod;
@@ -778,8 +787,9 @@ private:
     void set_get_direct_mem_ptr(MODULE* mod, GetDirectMemPtr p)
     {
       if (m_get_direct_mem_ptr) {
-        std::cerr << m_name << ": get DMI pointer callback allready registered" << std::endl;
-
+        std::stringstream s;
+        s << m_name << ": get DMI pointer callback allready registered";
+        SC_REPORT_WARNING("/OSCI_TLM-2/simple_socket",s.str().c_str());
       } else {
         assert(!m_mod || m_mod == mod);
         m_mod = mod;
@@ -833,10 +843,11 @@ private:
         }
 
       } else {
-        std::cerr << m_name << ": no transport callback registered" << std::endl;
-        assert(0); exit(1);
-//        return tlm::TLM_COMPLETED;   ///< unreachable code
+        std::stringstream s;
+        s << m_name << ": no non-blocking transport callback registered";
+        SC_REPORT_ERROR("/OSCI_TLM-2/simple_socket",s.str().c_str());
       }
+      return tlm::TLM_ACCEPTED;   ///< unreachable code
     }
 
     void b_transport(transaction_type& trans, sc_core::sc_time& t)
@@ -875,9 +886,9 @@ private:
         }
 
       } else {
-        std::cerr << m_name << ": no transport callback registered" << std::endl;
-        assert(0); exit(1);
-//        return tlm::TLM_COMPLETED;   ///< unreachable code
+        std::stringstream s;
+        s << m_name << ": no transport callback registered";
+        SC_REPORT_ERROR("/OSCI_TLM-2/simple_socket",s.str().c_str());
       }
     }
 

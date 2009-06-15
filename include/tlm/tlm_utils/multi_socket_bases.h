@@ -23,6 +23,7 @@
 #include "tlm.h"
 
 #include <map>
+#include <sstream>
 
 namespace tlm_utils {
 
@@ -168,6 +169,7 @@ class callback_binder_fw: public tlm::tlm_fw_transport_if<TYPES>{
       }
       else
         return (*m_nb_f)(m_id, txn, p, t); //do the callback
+      return tlm::TLM_ACCEPTED; //unreachable
     }
     
     //the b_transport method of the fw interface
@@ -269,6 +271,7 @@ class callback_binder_bw: public tlm::tlm_bw_transport_if<TYPES>{
       }
       else
         return (*m_nb_f)(m_id, txn, p, t); //do the callback
+      return tlm::TLM_ACCEPTED; //unreachable
     }
     
     //the DMI method of the bw interface
