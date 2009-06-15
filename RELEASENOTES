@@ -57,6 +57,8 @@ q. Collapse the directory hierarchy below tlm_h by removing tlm_trans
 
 r. Changed "tlm_initiator_socket_export" to "tlm_base_initiator_socket_export", and "tlm_target_socket_port" to "tlm_base_target_socket_port" in default constructors of standard sockets
 
+s. Added a virtual const char* kind() const; method to the standard sockets
+
 
 For a more detailed description of all features of TLM 2.0 check out the TLM 2.0
 manual that can be found in the documentation subdirectory of this package
