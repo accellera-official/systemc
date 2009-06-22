@@ -40,12 +40,11 @@ inline tlm_endianness get_host_endianness(void)
   static tlm_endianness host_endianness = TLM_UNKNOWN_ENDIAN;
   
   if (host_endianness == TLM_UNKNOWN_ENDIAN) {
-    const unsigned char endian_array[2] = { 1, 0 };
-    unsigned short endian_short = *(unsigned short *)endian_array;
-  
-    host_endianness = (endian_short == 1) ? TLM_LITTLE_ENDIAN : TLM_BIG_ENDIAN;
-  }
+    unsigned int number = 1;
+    unsigned char *p_msb_or_lsb = (unsigned char*)&number;
 
+    host_endianness = (p_msb_or_lsb[0] == 0) ? TLM_BIG_ENDIAN : TLM_LITTLE_ENDIAN;
+  }
   return host_endianness;
 }
 
@@ -55,10 +54,10 @@ inline bool host_has_little_endianness(void)
   static bool host_little_endian = false;
   
   if (host_endianness == TLM_UNKNOWN_ENDIAN) {
-    const unsigned char endian_array[2] = { 1, 0 };
-    unsigned short endian_short = *(unsigned short *)endian_array;
-  
-    host_little_endian = (endian_short == 1);
+    unsigned int number = 1;
+    unsigned char *p_msb_or_lsb = (unsigned char*)&number;
+
+    host_little_endian = (p_msb_or_lsb[0] == 0) ? false : true;
   }
 
   return host_little_endian;
