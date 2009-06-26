@@ -16,8 +16,8 @@
 //=====================================================================
 ///  @file example_main.cpp
 ///
-///  @brief Example main instantiates the example system top and call 
-///  sc_start() 
+///  @brief Example main instantiates the example system top and starts 
+///  the systemc simulator
 ///
 //=====================================================================
 //  Original Authors:
@@ -32,8 +32,8 @@
 #define REPORT_DEFINE_GLOBALS
 
 #include "reporting.h"                  // reporting utilities
-#include "at_1_phase_top.h"  		    // top module
-#include "tlm.h"            			// TLM header
+#include "at_1_phase_top.h"             // top module
+#include "tlm.h"                        // TLM header
 
 //=====================================================================
 ///  @fn sc_main
@@ -43,7 +43,7 @@
 ///  @details
 ///    This is the SystemC entry point for the example system.  The argc and argv 
 ///    parameters are not used.  Simulation runtime is not specified when 
-///    “sc_start()” is called, the example’s traffic generator will run to 
+///    sc_start() is called, the examples traffic generator will run to 
 ///    completion, ending the simulation. 
 ///
 //=====================================================================

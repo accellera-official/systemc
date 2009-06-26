@@ -16,8 +16,9 @@
 //=====================================================================
 ///  @file example_system_top.h
  
-///  @brief This class instantiates components that compose the TLM2 
-///         example system 
+///  @brief This class instantiates components that compose TLM2 
+///         example system that demonstrates Out of Order Execution of 
+///         transactions 
 
 //=====================================================================
 //  Original Authors:
@@ -31,7 +32,7 @@
 
 #include "tlm.h"                              // TLM header
 #include "at_target_2_phase.h"                // at memory target
-#include "at_target_ooo_2_phase.h"                // at memory target
+#include "at_target_ooo_2_phase.h"            // memory target
 #include "initiator_top.h"                    // processor abstraction initiator
 #include "SimpleBusAT.h"                      // Bus/Router Implementation
 

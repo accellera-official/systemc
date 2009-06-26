@@ -17,7 +17,7 @@
 /// @file initiator_top.h
 //
 /// @brief Initiator top module contains a traffic generator and an 
-///        example initiator module unique for the example
+///        example tlm initiator module
 //
 //=====================================================================
 //  Original Authors:

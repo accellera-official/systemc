@@ -31,6 +31,7 @@
 
 #include "tlm.h"                              // TLM header
 #include "at_target_4_phase.h"                // at memory target
+#include "at_target_2_phase.h"                // 2nd memory target not using extension
 #include "initiator_top.h"                    // processor abstraction initiator
 #include "SimpleBusAT.h"                      // Bus/Router Implementation
 
@@ -53,7 +54,7 @@ class example_system_top
   
   SimpleBusAT<2, 2>       m_bus;                  ///< simple bus
   at_target_4_phase       m_at_target_4_phase_1;  ///< instance 1 target
-  at_target_4_phase       m_at_target_4_phase_2;  ///< instance 2 target
+  at_target_2_phase       m_at_target_2_phase_2;  ///< instance 2 target
   initiator_top           m_initiator_1;          ///< instance 1 initiator
   initiator_top           m_initiator_2;          ///< instance 2 initiator
 };

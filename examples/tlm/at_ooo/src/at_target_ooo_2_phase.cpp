@@ -16,7 +16,8 @@
 //=====================================================================
 /// @file at_target_ooo_2_phase.cpp
 //
-/// @brief Implements single phase AT target
+/// @brief Implements single phase AT target that has been modified to perform
+///        Out Of Order transactions
 //
 //=====================================================================
 //  Original Authors:
@@ -27,7 +28,6 @@
 
 #include "at_target_ooo_2_phase.h"                        // our header
 #include "reporting.h"                                // reporting macros
-//#include <stdio.h>
                     
 using namespace  std;
 
@@ -59,7 +59,8 @@ at_target_ooo_2_phase::at_target_ooo_2_phase
 , m_trans_dbg_prev_warning(false)
 , m_get_dm_ptr_prev_warning(false)
 , m_response_PEQ          ("response_PEQ")
-, m_delay_for_out_of_order(100, sc_core::SC_NS)
+, m_peq_delay_time        (0  , sc_core::SC_NS)
+, m_delay_for_out_of_order(700, sc_core::SC_NS)
 , m_target_memory                                   /// init target's memory 
   ( m_ID                          // initiator ID for messaging
   , m_read_response_delay         // delay for reads
@@ -148,19 +149,30 @@ at_target_ooo_2_phase::nb_transport_fw                  // non-blocking transpor
         m_target_memory.get_delay(gp, delay_time);  // get memory operation delay
         
         delay_time += m_accept_delay;
-        // every fifth request force an out of order transaction
-        if(m_request_count++ % 5)
-          { delay_time += m_delay_for_out_of_order; }
+        m_peq_delay_time = delay_time;
+        bool ooo_flag(false);
+        // every other request forces a possible out of order transaction
+        if(m_request_count++ % 2)
+          { m_peq_delay_time += m_delay_for_out_of_order;
+            ooo_flag = true;
+          }
+          else { ooo_flag = false; }
         
-        m_response_PEQ.notify(gp, delay_time);      // put transaction in the PEQ
+        m_response_PEQ.notify(gp, m_peq_delay_time);      // put transaction in the PEQ
         
         delay_time = m_accept_delay;
         phase = tlm::END_REQ;                       // advance txn state to end request     
         return_status = tlm::TLM_UPDATED;           // force synchronization 
 
         msg << endl << "      "
-            << "Target: " << m_ID   
-            << " transaction moved to response PEQ ";
+            << "Target: " << m_ID;
+        if(ooo_flag == true)
+          { msg << " out of order"; }
+             
+        msg << " transaction moved to response PEQ " << endl;
+        msg << "      Target: " << dec << m_ID  
+            << " with Addr: 0x" << setw(8) << setfill('0') << hex << gp.get_address() << dec
+            << " and a delay of " << m_peq_delay_time;
         
         msg << endl << "      "
             << "Target: " << m_ID   
@@ -240,7 +252,8 @@ void at_target_ooo_2_phase::begin_response_method (void)
   {
     msg.str("");
     msg << "Target: " << m_ID 
-        << " Starting response method"
+        << " Starting response method for Addr: 0X"
+        << setw(8) << setfill('0') << hex << transaction_ptr->get_address() 
         << endl << "      ";
     REPORT_INFO(filename,  __FUNCTION__, msg.str());    
       
@@ -252,7 +265,7 @@ void at_target_ooo_2_phase::begin_response_method (void)
                     delay = sc_core::SC_ZERO_TIME;
                     
     msg.str("");
-    msg << "Target: " << m_ID 
+    msg << "Target: " << dec << m_ID 
         << " nb_transport_bw (GP, BEGIN_RESP, SC_ZERO_TIME)"
         << endl << "      ";
     REPORT_INFO(filename,  __FUNCTION__, msg.str());
@@ -263,7 +276,7 @@ void at_target_ooo_2_phase::begin_response_method (void)
     status = m_memory_socket->nb_transport_bw(*transaction_ptr, phase, delay);
     
     msg.str("");
-    msg << "Target: " << m_ID
+    msg << "Target: " << dec << m_ID
         << " " << report::print(status) << " (GP, "
         << report::print(phase) << ", "
         << delay << ")"; 

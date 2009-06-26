@@ -16,7 +16,8 @@
 //=====================================================================
 /// @file at_target_ooo_2_phase.h
 //
-/// @brief Single phase AT target
+/// @brief A 2 phase target that has been created to force out of order
+///        processing of transactions 
 //
 //=====================================================================
 //  Original Authors:
@@ -153,6 +154,7 @@ class at_target_ooo_2_phase                           /// at_target_ooo_2_phase
         bool                m_get_dm_ptr_prev_warning;
         tlm_utils::peq_with_get<tlm::tlm_generic_payload>
                             m_response_PEQ;         ///< response payload event queue
+        sc_core::sc_time    m_peq_delay_time;
         sc_core::sc_time    m_delay_for_out_of_order;
         memory              m_target_memory;
         sc_core::sc_event   m_end_resp_rcvd_event;

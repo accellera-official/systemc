@@ -27,8 +27,7 @@
 
 #include "at_target_2_phase.h"                        // our header
 #include "reporting.h"                                // reporting macros
-//#include <stdio.h>
-                    
+
 using namespace  std;
 
 static const char *filename = "at_target_2_phase.cpp";	///< filename for reporting

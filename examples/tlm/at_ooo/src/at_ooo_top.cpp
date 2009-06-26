@@ -18,8 +18,8 @@
 /*=============================================================================
   @file example_system_top.cpp
   
-  @brief AThis class instantiates components that compose the TLM2 example system
-         for AT_4_phase 
+  @brief This class instantiates components that compose a TLM2 example system
+         that demonstrates Out Of Order transaction processing
 
 =============================================================================*/
 
@@ -80,8 +80,8 @@ example_system_top::example_system_top    ///< constructor
     // force additional out of order execution by making on 
     // target longer than the other
     , sc_core::sc_time(20, sc_core::SC_NS)  ///< accept delay
-    , sc_core::sc_time(70, sc_core::SC_NS)  ///< read response delay
-    , sc_core::sc_time(45, sc_core::SC_NS)  ///< write response delay
+    , sc_core::sc_time(100, sc_core::SC_NS)  ///< read response delay
+    , sc_core::sc_time(60, sc_core::SC_NS)  ///< write response delay
     )
 
   , m_initiator_1                           ///< initiator 1

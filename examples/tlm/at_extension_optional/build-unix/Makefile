@@ -19,6 +19,7 @@ OBJS   =    $(OBJ_NAME).o \
             memory.o \
             report.o \
             at_target_4_phase.o \
+            at_target_2_phase.o \
             select_initiator.o \
             extension_initiator_id.o
 
@@ -63,6 +64,9 @@ report.o: $(SRCDIRCOMMON)/report.cpp
 	$(GXX) $(CFLAGS) -c $< -o $@
 
 at_target_4_phase.o: $(SRCDIRCOMMON)/at_target_4_phase.cpp
+	$(GXX) $(CFLAGS) -c $< -o $@
+
+at_target_2_phase.o: $(SRCDIRCOMMON)/at_target_2_phase.cpp
 	$(GXX) $(CFLAGS) -c $< -o $@
 
 select_initiator.o: $(SRCDIRCOMMON)/select_initiator.cpp

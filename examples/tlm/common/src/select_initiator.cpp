@@ -89,9 +89,11 @@ void select_initiator::initiator_thread(void)   // initiator thread
     
     msg.str("");
     msg << "Initiator: " << m_ID 
-        << " starting new transaction" 
-        << endl << "      " 
-        << "Initiator: " << m_ID               
+        << " starting new transaction"
+        << " for Addr:0x" << hex << setw(8) << setfill('0') << uppercase
+        << transaction_ptr->get_address()
+        << endl << "      " ; 
+    msg << "Initiator: " << dec <<  m_ID               
         << " nb_transport_fw (GP, " 
         << report::print(phase) << ", "
         << delay << ")";
@@ -260,7 +262,8 @@ select_initiator::nb_transport_bw                       // inbound nb_transport_
         << " nb_transport_bw (GP, " 
         << report::print(phase) << ", "
         << delay << ")"
-        << endl;
+        << "from Addr:0x" << hex << setw(8) << setfill('0') << uppercase << transaction_ref.get_address()
+        << dec << endl;
 
     switch (phase) 
     {

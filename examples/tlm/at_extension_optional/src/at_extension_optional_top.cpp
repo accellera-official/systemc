@@ -58,8 +58,8 @@ example_system_top::example_system_top
     , sc_core::sc_time(30, sc_core::SC_NS)  // write response delay
     )
     
-  , m_at_target_4_phase_2                   /// Init instance 2 of AT target
-    ( "m_at_target_4_phase_2"               // instance name
+  , m_at_target_2_phase_2                   /// Init instance 2 of AT target
+    ( "m_at_target_2_phase_2"               // instance name
     , 202                                   /// 2nd Target ID is 202
     , "memory_socket_1"                     // socket name
     , 4*1024                                // memory size (bytes)
@@ -91,5 +91,5 @@ example_system_top::example_system_top
 
   /// bind TLM2 targets to TLM2 initiator sockets on SimpleBus
   m_bus.initiator_socket[0](m_at_target_4_phase_1.m_memory_socket);
-  m_bus.initiator_socket[1](m_at_target_4_phase_2.m_memory_socket);
+  m_bus.initiator_socket[1](m_at_target_2_phase_2.m_memory_socket);
 }

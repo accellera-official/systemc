@@ -17,7 +17,7 @@
 /// @file example_system_top.cpp
 //
 /// @brief This class instantiates components that compose the TLM2 
-///        example system. The same block diagram is  instantiated 
+///        example system. A similar block diagram is created 
 ///        for each version, but with different components
 //
 //=====================================================================

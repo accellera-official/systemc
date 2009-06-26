@@ -17,7 +17,7 @@
 ///  @file example_system_top.h
  
 ///  @brief This class instantiates components that compose the TLM2 
-///         example system 
+///         example system called at_1_phase 
 
 //=====================================================================
 //  Original Authors:
@@ -29,7 +29,7 @@
 #ifndef __EXAMPLE_SYSTEM_TOP_H__
 #define __EXAMPLE_SYSTEM_TOP_H__
 
-#include "reporting.h"
+#include "reporting.h"                        // common reporting code
 #include "at_target_1_phase.h"                // at memory target
 #include "initiator_top.h"                    // processor abstraction initiator
 #include "SimpleBusAT.h"                      // Bus/Router Implementation
