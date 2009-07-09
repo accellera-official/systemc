@@ -2,15 +2,13 @@
 
 OBJ_NAME = multi_sockets
 
-INCDIR = -I../../common/include/models -I../include -I$(BOOST_HOME)
+INCDIR = -I../../common/include/models -I../include
 SRCDIR = ..\src
 SRCCOMMONDIR = ..\..\common\src
 
 CFLAGS = $(INCDIR) $(FLAGS)
 
 OBJS   = $(OBJ_NAME).obj
-
-!IFDEF BOOST_HOME
 
 #.PHONY: clean all run check announce
 
@@ -46,8 +44,3 @@ $(OBJ_NAME).obj: $(SRCDIR)\$(OBJ_NAME).cpp
 
 clean:
 	del $(OBJ_NAME).exe *.obj *.log *.idb *.pdb *ilk
-
-!ELSE
-all:
-	@echo Variable BOOST_HOME not specified. Set it so that it points to your boost installation \(one level above /boost\).
-!ENDIF
