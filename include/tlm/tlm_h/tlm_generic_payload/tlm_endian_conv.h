@@ -532,7 +532,7 @@ tlm_from_hostendian_word(tlm_generic_payload *txn, unsigned int sizeof_databus) 
     tlm_endian_context *tc = txn->template get_extension<tlm_endian_context>();
     sc_dt::uint64 b_mask = sizeof_databus - 1;
     int d_mask = sizeof(DATAWORD) - 1;
-    int a_offset = tc->address & b_mask;
+    int a_offset = static_cast<int>(tc->address & b_mask);
     int len0 = (sizeof_databus - a_offset) & d_mask;
     int lenN = sizeof(DATAWORD) - len0;
     uchar *d_start = tc->data_ptr;
@@ -566,7 +566,7 @@ tlm_to_hostendian_word(tlm_generic_payload *txn, unsigned int sizeof_databus) {
   sc_dt::uint64 b_mask = sizeof_databus - 1;
   int d_mask = sizeof(DATAWORD) - 1;
   sc_dt::uint64 a_aligned = txn->get_address() & ~b_mask;
-  int a_offset = txn->get_address() & b_mask;
+  int a_offset = static_cast<int>(txn->get_address() & b_mask);
   int len0 = (sizeof_databus - a_offset) & d_mask;
   int lenN = sizeof(DATAWORD) - len0;
   uchar *d_start = txn->get_data_ptr();
