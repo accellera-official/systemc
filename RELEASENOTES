@@ -1,6 +1,6 @@
-==============================================================
-Release Notes for the TLM 2.0.1 alpha 1 Kit - 24 February 2009
-==============================================================
+==================================================
+Release Notes for the TLM 2.0.1 - 24 February 2009
+==================================================
 
 CONTENTS
 ========
@@ -60,8 +60,8 @@ r. Changed "tlm_initiator_socket_export" to "tlm_base_initiator_socket_export", 
 s. Added a virtual const char* kind() const; method to the standard sockets
 
 
-For a more detailed description of all features of TLM 2.0 check out the TLM 2.0
-manual that can be found in the documentation subdirectory of this package
+For a more detailed description of all features of TLM 2.0 check out the TLM-2.0
+LRM that can be found in the documentation subdirectory of this package
 
 
 3) Known issues

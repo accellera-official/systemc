@@ -1,18 +1,24 @@
-                             2008-06-09
-                 	       TLM 2.0 
+
+                             2009-July-02
+                 	      TLM-2.0.1
                  =================================
 
-This is the proof of concept implementation for the TLM 2.0 standard.
+This is the proof of concept implementation for the OSCI TLM-2.0 standard.
 
 -------------------------------------------------------------------------------
                 IMPORTANT
 
-1. This version of the TLM 2.0 standard is a further evolution of draft 2 which
+1. This version of the TLM-2.0 standard is a further evolution of draft 2 which
    in itself represents a significant evolution since the draft 1 kit.  
    This version is not, nor was it intended to be, backwards compatible with 
    draft 2 and draft 1.
+   
+2. The version number 2.0.1 signifies the version of the software release, not 
+   the version of the OSCI TLM-2.0 standard. This version of the
+   TLM-2.0 proof of concept implementation is intended to be fully compliant 
+   with the OSCI TLM-2.0 Language Reference Manual.
 
-2. This release has been tested on the following platforms:
+3. This release has been tested on the following platforms:
     o Linux (Redhat Enterprise 4) with GNU C++ compiler versions gcc-3.4.4,
       gcc-4.0, gcc-4.2.0
     o Windows XP (SP2) with VC++ 2005 SP1 and VC++ 2008
@@ -22,6 +28,25 @@ This is the proof of concept implementation for the TLM 2.0 standard.
     o MacOSX with GNU C++ compiler versions gcc-3.1, gcc-3.4.2, and gcc-4.0
     o Linux (SuSE SLES9SP3) with GNU C++ compiler versions gcc-3.4.4, gcc-4.2.0
 
+
+2.0.1
+
+Linux Redhat Enterprise     with gcc-3.3.2                          and SystemC-2.2.0 [John]
+Linux Redhat Enterprise 4   with gcc-3.4.3 and 3.4.4                and SystemC-2.2.0 [Guillaume]
+Linux Redhat Enterprise 5   with gcc-4.1.2                                                    [Guillaume]
+Linux RedHat Enterprise 4   with 64-bit gcc-4.0.3                   and SystemC-2.2.0 [James]
+Windows XP Cygwin (Cygming) with 32-bit gcc-3.4.4 (cygming special) and SystemC-2.1.v1 [James]
+Windows XP SP2              with MS Visual C++ 2008 Express Edition and SystemC-2.2.0  [John]
+
+Linux Fedora 11             with gcc-4.4.0                          and SystemC-2.2.0  [Alan]
+
+But to have SystemC itself work with gcc-4.4.0 requires the following change:
+Edit the file systemc-2.2.0/include/sysc/packages/boost/bind/placeholders.hpp
+change line 28
+  from
+#if defined(__BORLANDC__)
+  to
+#if defined(__BORLANDC__) || defined(__GNUC__)
 
 -------------------------------------------------------------------------------
 
@@ -46,8 +71,8 @@ User Documentation
    doxygen generated documentation in the doxygen/ subdirectory of docs/ the 
    user manual and training presentation can be found in the release/ 
    subdirectory of docs/. It is recommended that you start with the training 
-   presentation (TLM_2_0_presentation.pps) and then the user manual 
-   (TLM_2_0_user_manual.pdf).
+   presentation (TLM_2_0_presentation.pps) and then the Language Reference Manual 
+   (TLM_2_0_LRM.pdf).
    See docs/release/README.txt for a description and status of the other 
    documentation.
 
@@ -63,9 +88,10 @@ Directory Structure
 Build Support
  
    To use TLM2.0 all you need is the SystemC headers. TLM2.0 has been tested
-   with SystemC versions 2.2 and 2.1.1. 
+   with SystemC versions 2.2.0 and 2.1.v1. 
    
-   In earlier versions of TLM-2.0, the multi_passthrough sockets in the tlm_utils directory depended on the boost library. This is not true of the current release.
+   In earlier versions of TLM-2.0, the multi_passthrough sockets in the tlm_utils 
+   directory depended on the boost library. This is not true of the current release.
    
    Support for building the examples and unit tests is provided for 'unix', and
    'msvc' (project and make files).
@@ -97,5 +123,5 @@ Unit Tests
 
 Problems
 
-   any problems regarding the use of this kit would be can be submitted to 
+   Any problems related to the use of this kit can be submitted to 
    tlm2_forum@lists.systemc.org.
