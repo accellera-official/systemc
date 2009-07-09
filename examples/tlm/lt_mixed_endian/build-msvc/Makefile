@@ -43,14 +43,18 @@ announce:
 #    which includes another version of find
 # 3. find /v returns all lines that don't match. fc /w ignores (collapses)
 #    white space
+#
+# NOTE: for this test, must also filter only lines containing :: into the log
+#
 check: announce $(OBJ_NAME).exe
-	@.\$(OBJ_NAME).exe > runtemp.log
+	@.\$(OBJ_NAME).exe < ../results/input.txt > run.log
+	@type run.log | $(WINDIR)\system32\find /i "::" >runtemp.log
 	@type runtemp.log | $(WINDIR)\system32\find /v /i "stopped by user" >run.log
 	@type ..\results\expected.log | $(WINDIR)\system32\find /v /i "stopped by user" >expected.log
 	@(fc /w run.log expected.log > diff.log) & if ERRORLEVEL 1  (echo "***ERROR:" & type diff.log) else (echo OK) 
 
 run: announce $(OBJ_NAME).exe
-	@.\$(OBJ_NAME).exe
+	@.\$(OBJ_NAME).exe < ../results/input.txt
 
 
 $(OBJ_NAME).exe: $(OBJS)
