@@ -40,7 +40,9 @@ dmi_memory::dmi_memory
 (
   const unsigned int ID                         // Target ID
 )
-: m_ID                 (ID)
+: m_ID                 (ID),
+  m_dmi_base_address   (0),
+  m_dmi_size           (0)
 {
 } // end Constructor
 
