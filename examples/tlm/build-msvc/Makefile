@@ -4,12 +4,13 @@ SUBDIRS = \
           ../at_1_phase \
           ../at_2_phase \
           ../at_4_phase \
-          ../at_ooo \
-          ../at_mixed_targets \
           ../at_extension_optional \
-          ../at_extension_mandatory \
+          ../at_mixed_targets \
+          ../at_ooo \
           ../lt \
           ../lt_dmi \
+          ../lt_extension_mandatory \
+          ../lt_mixed_endian \
           ../lt_temporal_decouple
           
 #.PHONY: all clean run check

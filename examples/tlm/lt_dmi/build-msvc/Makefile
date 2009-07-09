@@ -6,9 +6,12 @@ SRCDIR           = ../src
 SRCDIRCOMMON     = ../../common/src
 SRCDIRCOMMONTLM1 = ../../common_tlm_1/src
 
-INCDIR =    -I../include \
-            -I../../common/include \
-	    -I$(TLM)/../../unit_test/tlm/common/include/models
+INCDIR =    -I$(TLM) \
+            -I$(TLM)/tlm_h \
+            -I$(TLM)/tlm_utils \
+            -I$(TLM)/../../unit_test/tlm/common/include/models \
+            -I../include \
+            -I../../common/include 
 	    
 # Note: putting $(INCDIR) before $(FLAGS) should ensure the correct 
 # version of memory.h is found when building with Visual C++ 2005

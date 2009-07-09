@@ -1,6 +1,6 @@
 !include <..\..\build-msvc/Makefile.config>
 
-OBJ_NAME = at_extension_optional
+OBJ_NAME = lt_extension_mandatory
 
 SRCDIR           = ../src
 SRCDIRCOMMON     = ../../common/src
@@ -12,21 +12,17 @@ INCDIR =    -I$(TLM) \
             -I$(TLM)/../../unit_test/tlm/common/include/models \
             -I../include \
             -I../../common/include 
-
+	    
 # Note: putting $(INCDIR) before $(FLAGS) should ensure the correct 
 # version of memory.h is found when building with Visual C++ 2005
 CFLAGS = $(INCDIR) $(FLAGS)
 
 OBJS   = $(OBJ_NAME).obj \
             $(OBJ_NAME)_top.obj \
-            initiator_top.obj \
-            traffic_generator.obj \
-            memory.obj \
-            report.obj \
-            at_target_2_phase.obj \
-            at_target_4_phase.obj \
-            select_initiator.obj \
-	    extension_initiator_id.obj
+            lt_initiator_extension_mandatory.obj \
+            lt_target_extension_mandatory.obj \
+            extension_initiator_id.obj \
+            report.obj
 
 #.PHONY: clean all run check announce
 
@@ -62,29 +58,20 @@ $(OBJ_NAME).obj: $(SRCDIR)\$(OBJ_NAME).cpp
 $(OBJ_NAME)_top.obj: $(SRCDIR)/$(OBJ_NAME)_top.cpp
 	$(CC) /c $(CFLAGS) /Fo"$@" %s
 
-initiator_top.obj: $(SRCDIR)/initiator_top.cpp
+lt_initiator_extension_mandatory.obj: $(SRCDIR)/lt_initiator_extension_mandatory.cpp
 	$(CC) /c $(CFLAGS) /Fo"$@" %s
 	
-traffic_generator.obj: $(SRCDIRCOMMON)/traffic_generator.cpp
+lt_target_extension_mandatory.obj: $(SRCDIR)/lt_target_extension_mandatory.cpp
 	$(CC) /c $(CFLAGS) /Fo"$@" %s
 
-memory.obj: $(SRCDIRCOMMON)/memory.cpp
+extension_initiator_id.obj: $(SRCDIRCOMMON)/extension_initiator_id.cpp
 	$(CC) /c $(CFLAGS) /Fo"$@" %s
 
 report.obj: $(SRCDIRCOMMON)/report.cpp
 	$(CC) /c $(CFLAGS) /Fo"$@" %s
 
-at_target_2_phase.obj: $(SRCDIRCOMMON)/at_target_2_phase.cpp
+traffic_generator.obj: $(SRCDIRCOMMON)/traffic_generator.cpp
 	$(CC) /c $(CFLAGS) /Fo"$@" %s
 
-at_target_4_phase.obj: $(SRCDIRCOMMON)/at_target_4_phase.cpp
-	$(CC) /c $(CFLAGS) /Fo"$@" %s
-
-select_initiator.obj: $(SRCDIRCOMMON)/select_initiator.cpp
-	$(CC) /c $(CFLAGS) /Fo"$@" %s
-	
-extension_initiator_id.obj: $(SRCDIRCOMMON)/extension_initiator_id.cpp
-	$(CC) /c $(CFLAGS) /Fo"$@" %s
-	
 clean:
 	del $(OBJ_NAME).exe *.obj *.log *.idb *.pdb *ilk

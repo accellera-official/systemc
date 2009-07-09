@@ -1,6 +1,7 @@
 !include <..\..\build-msvc/Makefile.config>
 
 OBJ_NAME = lt
+EXAMPLE_NAME = lt_mixed_endian
 
 SRCDIR           = ../src
 SRCDIRCOMMON     = ../../common/src
@@ -25,14 +26,14 @@ OBJS   = $(OBJ_NAME).obj \
             initiator_top.obj \
             memory.obj \
             report.obj \
-            traffic_generator.obj
+            me_traffic_generator.obj
 
 #.PHONY: clean all run check announce
 
 all: announce $(OBJ_NAME).exe
 
 announce:
-	@if  not defined $(FLAG_BATCH) echo. , echo $(OBJ_NAME):
+	@if  not defined $(FLAG_BATCH) echo. , echo $(EXAMPLE_NAME):
 
 # Notes: 
 # 1. two lines starting @type filter out lines containing
@@ -79,7 +80,7 @@ memory.obj: $(SRCDIRCOMMON)/memory.cpp
 report.obj: $(SRCDIRCOMMON)/report.cpp
 	$(CC) /c $(CFLAGS) /Fo"$@" %s
 
-traffic_generator.obj: $(SRCDIRCOMMON)/traffic_generator.cpp
+me_traffic_generator.obj: $(SRCDIR)/me_traffic_generator.cpp
 	$(CC) /c $(CFLAGS) /Fo"$@" %s
 
 clean:
