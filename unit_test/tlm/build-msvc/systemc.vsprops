@@ -29,8 +29,4 @@
 		Value="C:\ESLX\projects\TLMWG\tlm2"
 		PerformEnvironmentSet="true"
 	/>
-	<UserMacro
-		Name="BOOST"
-		Value="C:\ESLX\projects\boost_1_35_0"
-	/>
 </VisualStudioPropertySheet>

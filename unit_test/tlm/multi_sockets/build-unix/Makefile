@@ -2,12 +2,10 @@ include ../../build-unix/Makefile.config
 
 OBJ_NAME = multi_sockets
 
-INCDIR = -I../../common/include/models -I../include -I$(BOOST_HOME)
+INCDIR = -I../../common/include/models -I../include
 SRCDIR = ../src
  
 CFLAGS = $(FLAGS) $(INCDIR)
-
-ifdef BOOST_HOME
 
 .PHONY: clean all run check announce
 
@@ -35,11 +33,6 @@ $(OBJ_NAME).o: $(SRCDIR)/$(OBJ_NAME).cpp
 	$(GXX) -c $(CFLAGS) $< -o $@
 
 # DO NOT DELETE
-
-else
-all:
-	@echo Variable BOOST_HOME not specified. Set it so that it points to your boost installation \(one level above /boost\).
-endif
 
 clean:
 	rm -f *.o *.log $(OBJ_NAME).exe

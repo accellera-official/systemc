@@ -44,8 +44,7 @@ nmake check            # run unit tests and compare against golden results
 
 You may see messages like this:
 "Unknown compiler version - please run the configure tests and report the results"
-This is issued by the Boost library, which is used by both SystemC and by some
-TLM Kit code. It can be safely ignored.
+This is issued by the Boost library, which is used by SystemC. It can be safely ignored.
 
 
 

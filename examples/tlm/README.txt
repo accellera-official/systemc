@@ -44,7 +44,7 @@ To run the makefiles the following environment needs to be set:
       directory containing the systemc library.  
    On Windows, the SYSTEMC and TLM environments variables should be used.
    
-   To run the tests with SystemC-2.1v1, boost and gcc-3.4.4 you need to change
+   To run the tests with SystemC-2.1v1 and gcc-3.4.4 you need to change
    the Makefile.config in build-unix/ to unset the FLAG_WERROR
    You also need to unset this flag when using gcc-4.1.2 and above
 

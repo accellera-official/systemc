@@ -42,7 +42,7 @@ To run the makefiles the following environment needs to be set:
       directory containing the systemc library.  
    On Windows, the SYSTEMC and TLM environments variables should be used.
    
-   To run the tests with SystemC-2.1v1, boost and gcc-3.4.4 you need to change
+   To run the tests with SystemC-2.1v1 and gcc-3.4.4 you need to change
    the Makefile.config in build-unix/ to unset the FLAG_WERROR
    You also need to unset this flag when using gcc-4.1.2 and above
 
@@ -73,9 +73,6 @@ multi_sockets/ :
       initiators and targets. This test also uses instance specific extentions
       in the generic payload
       
-      NOTE: this test does not compile with SystemCv2.1.v1 due to 
-            incompatibilities with the boost library that is required for the
-	    multi_socket implementation
       
 p2p/ :
   BaseSocketLT/ :
