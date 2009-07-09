@@ -1,7 +1,0 @@
-<area shape="rect" href="$classtlm_1_1tlm__base__initiator__socket.html" title="tlm::tlm_base_initiator_socket\&lt; BUSWIDTH, FW_IF, BW_IF \&gt;" alt="" coords="461,31,853,57">
-<area shape="rect" href="$classtlm_1_1tlm__initiator__socket.html" title="tlm::tlm_initiator_socket\&lt; BUSWIDTH, tlm::tlm_fw_transport_if\&lt; TYPES \&gt;, tlm::tlm_bw_transport_if\&lt; TYPES \&gt;, N, POL \&gt;" alt="" coords="903,5,1644,32">
-<area shape="rect" href="$classtlm_1_1tlm__initiator__socket.html" title="tlm::tlm_initiator_socket\&lt; BUSWIDTH, TYPES \&gt;" alt="" coords="1119,56,1428,83">
-<area shape="rect" href="$classtlm__utils_1_1multi__init__base.html" title="tlm_utils::multi_init_base\&lt; BUSWIDTH, TYPES, N, POL \&gt;" alt="" coords="1747,5,2115,32">
-<area shape="rect" href="$classtlm__utils_1_1multi__passthrough__initiator__socket.html" title="tlm_utils::multi_passthrough_initiator_socket\&lt; BUSWIDTH, TYPES, N, POL \&gt;" alt="" coords="2217,5,2700,32">
-<area shape="rect" href="$classtlm__utils_1_1simple__initiator__socket.html" title="tlm_utils::simple_initiator_socket\&lt; MODULE, BUSWIDTH, TYPES \&gt;" alt="" coords="1717,56,2144,83">
-<area shape="rect" href="$classtlm__utils_1_1simple__initiator__socket__tagged.html" title="tlm_utils::simple_initiator_socket_tagged\&lt; MODULE, BUSWIDTH, TYPES \&gt;" alt="" coords="1693,107,2168,133">
