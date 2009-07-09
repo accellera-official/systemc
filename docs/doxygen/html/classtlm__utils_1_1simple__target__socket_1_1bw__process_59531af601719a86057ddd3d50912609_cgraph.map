@@ -1,0 +1,3 @@
+<area shape="rect" href="$classtlm__utils_1_1simple__target__socket.html#391fb6f29ec13ffb63f763c0281b8c42" title="tlm_utils::simple_target_socket::bw_nb_transport" alt="" coords="503,31,860,57">
+<area shape="rect" href="$classtlm_1_1tlm__bw__nonblocking__transport__if.html#3ec41ec9ff402632fae2d9a2c7f91022" title="tlm::tlm_bw_nonblocking_transport_if::nb_transport_bw" alt="" coords="1264,5,1659,32">
+<area shape="rect" href="$classtlm_1_1tlm__base__target__socket.html#b5cd0be9b3dbab76ca9f0bb1fba45d07" title="tlm::tlm_base_target_socket\&lt; BUSWIDTH, tlm_fw_transport_if\&lt; TYPES \&gt;, tlm_bw_transport_if\&lt; TYPES \&gt;, 1,sc_core::SC_ONE_OR_MORE_BOUND \&gt;::operator&#45;\&gt;" alt="" coords="909,56,2013,83">

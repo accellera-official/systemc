@@ -1,0 +1,11 @@
+<area shape="rect" href="$classtlm_1_1tlm__target__socket.html" title="tlm::tlm_target_socket\&lt; BUSWIDTH, TYPES \&gt;" alt="" coords="2323,72,2656,99">
+<area shape="rect" href="$classtlm_1_1tlm__base__target__socket.html" title="tlm::tlm_base_target_socket\&lt; BUSWIDTH, tlm_fw_transport_if\&lt; TYPES \&gt;, tlm_bw_transport_if\&lt; TYPES \&gt;, 1,sc_core::SC_ONE_OR_MORE_BOUND \&gt;" alt="" coords="1041,56,2060,83">
+<area shape="rect" href="$classtlm_1_1tlm__base__target__socket__b.html" title="tlm::tlm_base_target_socket_b\&lt; BUSWIDTH, tlm_fw_transport_if\&lt; TYPES \&gt;, tlm_bw_transport_if\&lt; TYPES \&gt; \&gt;" alt="" coords="225,5,988,32">
+<area shape="rect" href="$classsc__core_1_1sc__export.html" title="sc_core::sc_export\&lt;tlm_fw_transport_if\&lt; TYPES \&gt; \&gt;" alt="" coords="417,56,796,83">
+<area shape="rect" href="$classtlm__utils_1_1passthrough__target__socket_1_1process.html" title="tlm_utils::passthrough_target_socket\&lt; MODULE, BUSWIDTH, TYPES \&gt;::passthrough_target_socket::process" alt="" coords="2112,125,2867,152">
+<area shape="rect" href="$classtlm_1_1tlm__fw__transport__if.html" title="tlm::tlm_fw_transport_if\&lt; TYPES \&gt;" alt="" coords="1423,157,1679,184">
+<area shape="rect" href="$classtlm_1_1tlm__fw__nonblocking__transport__if.html" title="tlm::tlm_fw_nonblocking_transport_if\&lt; TYPES::tlm_payload_type, TYPES::tlm_phase_type \&gt;" alt="" coords="287,107,927,133">
+<area shape="rect" href="$classsc__core_1_1sc__interface.html" title="sc_core::sc_interface" alt="" coords="5,184,173,211">
+<area shape="rect" href="$classtlm_1_1tlm__blocking__transport__if.html" title="tlm::tlm_blocking_transport_if\&lt; TYPES::tlm_payload_type \&gt;" alt="" coords="395,157,819,184">
+<area shape="rect" href="$classtlm_1_1tlm__fw__direct__mem__if.html" title="tlm::tlm_fw_direct_mem_if\&lt; TYPES::tlm_payload_type \&gt;" alt="" coords="404,208,809,235">
+<area shape="rect" href="$classtlm_1_1tlm__transport__dbg__if.html" title="tlm::tlm_transport_dbg_if\&lt; TYPES::tlm_payload_type \&gt;" alt="" coords="409,259,804,285">

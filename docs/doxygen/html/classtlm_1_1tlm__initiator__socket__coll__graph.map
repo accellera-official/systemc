@@ -1,0 +1,3 @@
+<area shape="rect" href="$classtlm_1_1tlm__base__initiator__socket.html" title="tlm::tlm_base_initiator_socket\&lt; BUSWIDTH, tlm_fw_transport_if\&lt; TYPES \&gt;, tlm_bw_transport_if\&lt; TYPES \&gt;, N,POL \&gt;" alt="" coords="828,31,1633,57">
+<area shape="rect" href="$classtlm_1_1tlm__base__initiator__socket__b.html" title="tlm::tlm_base_initiator_socket_b\&lt; BUSWIDTH, tlm_fw_transport_if\&lt; TYPES \&gt;, tlm_bw_transport_if\&lt; TYPES \&gt; \&gt;" alt="" coords="7,5,777,32">
+<area shape="rect" href="$classsc__core_1_1sc__port.html" title="sc_core::sc_port\&lt;tlm_fw_transport_if\&lt; TYPES \&gt; , N , POL \&gt;" alt="" coords="180,56,604,83">

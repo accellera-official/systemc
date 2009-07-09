@@ -1,0 +1,9 @@
+<area shape="rect" href="$classtlm_1_1tlm__initiator__socket.html" title="tlm::tlm_initiator_socket\&lt; BUSWIDTH, TYPES \&gt;" alt="" coords="2359,56,2700,83">
+<area shape="rect" href="$classtlm_1_1tlm__base__initiator__socket.html" title="tlm::tlm_base_initiator_socket\&lt; BUSWIDTH, tlm_fw_transport_if\&lt; TYPES \&gt;, tlm_bw_transport_if\&lt; TYPES \&gt;, 1,sc_core::SC_ONE_OR_MORE_BOUND \&gt;" alt="" coords="1049,56,2076,83">
+<area shape="rect" href="$classtlm_1_1tlm__base__initiator__socket__b.html" title="tlm::tlm_base_initiator_socket_b\&lt; BUSWIDTH, tlm_fw_transport_if\&lt; TYPES \&gt;, tlm_bw_transport_if\&lt; TYPES \&gt; \&gt;" alt="" coords="225,5,996,32">
+<area shape="rect" href="$classsc__core_1_1sc__port.html" title="sc_core::sc_port\&lt;tlm_fw_transport_if\&lt; TYPES \&gt; , N , POL \&gt;" alt="" coords="399,56,823,83">
+<area shape="rect" href="$classtlm__utils_1_1simple__initiator__socket__tagged_1_1process.html" title="tlm_utils::simple_initiator_socket_tagged\&lt; MODULE, BUSWIDTH, TYPES \&gt;::simple_initiator_socket_tagged::process" alt="" coords="2128,107,2931,133">
+<area shape="rect" href="$classtlm_1_1tlm__bw__transport__if.html" title="tlm::tlm_bw_transport_if\&lt; TYPES \&gt;" alt="" coords="1433,107,1692,133">
+<area shape="rect" href="$classtlm_1_1tlm__bw__nonblocking__transport__if.html" title="tlm::tlm_bw_nonblocking_transport_if\&lt; TYPES::tlm_payload_type, TYPES::tlm_phase_type \&gt;" alt="" coords="289,107,932,133">
+<area shape="rect" href="$classsc__core_1_1sc__interface.html" title="sc_core::sc_interface" alt="" coords="5,107,173,133">
+<area shape="rect" href="$classtlm_1_1tlm__bw__direct__mem__if.html" title="tlm::tlm_bw_direct_mem_if" alt="" coords="507,157,715,184">
