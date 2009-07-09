@@ -6,16 +6,13 @@ SRCDIR           = ../src
 SRCDIRCOMMON     = ../../common/src
 SRCDIRCOMMONTLM1 = ../../common_tlm_1/src
 
-INCDIR =    -I$(TLM) \
-            -I$(TLM)/tlm_h \
-            -I$(TLM)/tlm_utils \
+INCDIR =    -I../include \
+            -I../../common/include \
             -I$(TLM)/../../unit_test/tlm/common/include/models \
-            -I../include \
-            -I../../common/include 
 
 # Note: putting $(INCDIR) before $(FLAGS) should ensure the correct 
 # version of memory.h is found when building with Visual C++ 2005
-CFLAGS = $(INCDIR) $(FLAGS)
+CFLAGS = $(INCDIR) $(FLAGS) -DUSING_EXTENSION_OPTIONAL
 
 OBJS   = $(OBJ_NAME).obj \
             $(OBJ_NAME)_top.obj \
@@ -23,10 +20,10 @@ OBJS   = $(OBJ_NAME).obj \
             traffic_generator.obj \
             memory.obj \
             report.obj \
-            at_target_2_phase.obj \
             at_target_4_phase.obj \
+            at_target_2_phase.obj \
             select_initiator.obj \
-	    extension_initiator_id.obj
+	    	extension_initiator_id.obj
 
 #.PHONY: clean all run check announce
 
@@ -74,10 +71,10 @@ memory.obj: $(SRCDIRCOMMON)/memory.cpp
 report.obj: $(SRCDIRCOMMON)/report.cpp
 	$(CC) /c $(CFLAGS) /Fo"$@" %s
 
-at_target_2_phase.obj: $(SRCDIRCOMMON)/at_target_2_phase.cpp
+at_target_4_phase.obj: $(SRCDIRCOMMON)/at_target_4_phase.cpp
 	$(CC) /c $(CFLAGS) /Fo"$@" %s
 
-at_target_4_phase.obj: $(SRCDIRCOMMON)/at_target_4_phase.cpp
+at_target_2_phase.obj: $(SRCDIRCOMMON)/at_target_2_phase.cpp
 	$(CC) /c $(CFLAGS) /Fo"$@" %s
 
 select_initiator.obj: $(SRCDIRCOMMON)/select_initiator.cpp
