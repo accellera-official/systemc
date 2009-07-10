@@ -1,5 +1,5 @@
 
-* TLM-2.0 LRM.pdf
+* TLM_2_0_LRM.pdf
   The definitive OSCI TLM-2.0 Language Reference Manual
 
 * TLM_2_0_presentation.ppt
