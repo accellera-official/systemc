@@ -11,8 +11,8 @@ SubDirs: build-cygwin/
          cancel_all/
          common/
          endian_conv/
-         gp_extension/
          multi_sockets/
+         nb2b_adapter/
          p2p/
          static_extensions/
          update_original/

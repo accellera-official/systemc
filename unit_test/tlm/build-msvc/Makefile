@@ -8,7 +8,8 @@ SUBDIRS = \
           ../endian_conv \
           ../multi_sockets \
           ../update_original \
-          ../cancel_all
+          ../cancel_all \
+          ../nb2b_adapter
           
 #.PHONY: all clean run check
 
