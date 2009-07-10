@@ -46,6 +46,14 @@ To run the makefiles the following environment needs to be set:
    the Makefile.config in build-unix/ to unset the FLAG_WERROR
    You also need to unset this flag when using gcc-4.1.2 and above
 
+To run the Visual C++ solutions (.sln) or project (.vcproj) files, you must edit 
+the Property sheet as follows:
+
+1 Select Property Manager from the View menu
+2 Under projectName > Debug | Win32 select systemc
+3 Select Properties from the View menu
+4 Select User Macros under Common Properties
+5 Update the SYSTEMC and TLM entries and apply
 
 The tests:
 ----------
