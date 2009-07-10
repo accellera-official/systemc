@@ -1,5 +1,5 @@
 
-                             2009-July-02
+                             2009-July-10
                  	      TLM-2.0.1
                  =================================
 
@@ -19,34 +19,28 @@ This is the proof of concept implementation for the OSCI TLM-2.0 standard.
    with the OSCI TLM-2.0 Language Reference Manual.
 
 3. This release has been tested on the following platforms:
-    o Linux (Redhat Enterprise 4) with GNU C++ compiler versions gcc-3.4.4,
-      gcc-4.0, gcc-4.2.0
-    o Windows XP (SP2) with VC++ 2005 SP1 and VC++ 2008
-    o Linux (Fedora 8) with GNU C++ compiler version 4.1.2
-    o SunOS 5.9, with Sun Forte compiler 10.0
-    o SunOS 5.9, with GNU C++ compiler versions gcc-3.3.2
-    o MacOSX with GNU C++ compiler versions gcc-3.1, gcc-3.4.2, and gcc-4.0
-    o Linux (SuSE SLES9SP3) with GNU C++ compiler versions gcc-3.4.4, gcc-4.2.0
 
+   32-bit platforms
+     Linux Redhat Enterprise 4   with gcc-3.3.2  and SystemC-2.2.0
+     Linux Redhat Enterprise 4   with gcc-3.4.3  and SystemC-2.2.0
+     Linux Redhat Enterprise 4   with gcc-3.4.4  and SystemC-2.2.0
+     Linux Redhat Enterprise 5   with gcc-4.1.2  and SystemC-2.2.0
+     Linux Fedora 11             with gcc-4.4.0  and SystemC-2.2.0
+     Linux Fedora 11             with gcc-4.4.0  and 2.3.16jun09_beta
+     Windows XP Cygwin (Cygming) with gcc-3.4.   and SystemC-2.1.v1
+     Windows XP SP2/SP3          with MS Visual C++ 2008 Express Edition 
+                                                 and SystemC-2.2.0
+     
+   64-bit platforms
+     Linux RedHat Enterprise 4   with gcc-4.0.3 and SystemC-2.2.0
 
-2.0.1
-
-Linux Redhat Enterprise     with gcc-3.3.2                          and SystemC-2.2.0 [John]
-Linux Redhat Enterprise 4   with gcc-3.4.3 and 3.4.4                and SystemC-2.2.0 [Guillaume]
-Linux Redhat Enterprise 5   with gcc-4.1.2                                                    [Guillaume]
-Linux RedHat Enterprise 4   with 64-bit gcc-4.0.3                   and SystemC-2.2.0 [James]
-Windows XP Cygwin (Cygming) with 32-bit gcc-3.4.4 (cygming special) and SystemC-2.1.v1 [James]
-Windows XP SP2              with MS Visual C++ 2008 Express Edition and SystemC-2.2.0  [John]
-
-Linux Fedora 11             with gcc-4.4.0                          and SystemC-2.2.0  [Alan]
-
-But to have SystemC itself work with gcc-4.4.0 requires the following change:
-Edit the file systemc-2.2.0/include/sysc/packages/boost/bind/placeholders.hpp
-change line 28
-  from
-#if defined(__BORLANDC__)
-  to
-#if defined(__BORLANDC__) || defined(__GNUC__)
+   But to have SystemC itself work with gcc-4.4.0 requires the following change:
+   Edit the file systemc-2.2.0/include/sysc/packages/boost/bind/placeholders.hpp
+   change line 28
+   from
+     #if defined(__BORLANDC__)
+   to
+     #if defined(__BORLANDC__) || defined(__GNUC__)
 
 -------------------------------------------------------------------------------
 
@@ -72,7 +66,7 @@ User Documentation
    user manual and training presentation can be found in the release/ 
    subdirectory of docs/. It is recommended that you start with the training 
    presentation (TLM_2_0_presentation.pps) and then the Language Reference Manual 
-   (TLM_2_0_LRM.pdf).
+   (TLM-2.0 LRM.pdf).
    See docs/release/README.txt for a description and status of the other 
    documentation.
 

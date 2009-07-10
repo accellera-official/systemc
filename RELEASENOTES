@@ -1,5 +1,5 @@
 ==================================================
-Release Notes for the TLM 2.0.1 - 24 February 2009
+Release Notes for the TLM 2.0.1 - 10 July 2009
 ==================================================
 
 CONTENTS
@@ -9,10 +9,12 @@ CONTENTS
   2) What's changed in this kit?
   3) Known issues
 
+
 1) Supported SystemC versions
 =============================
 
 SystemC 2.1.v1 and 2.2.0 are supported and have been tested.
+Has been run successfully with Beta versions of SystemC 2.3.x
 
 
 2) What's changed in this kit?

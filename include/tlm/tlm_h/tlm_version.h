@@ -68,11 +68,11 @@ namespace tlm
 #define TLM_VERSION_SEPARATOR               "."         ///< version string separator
 
 #define TLM_IS_PRERELEASE                   TRUE        ///< pre-release flag ( TRUE / FALSE )
-#define TLM_VERSION_PRERELEASE              "alpha 2"   ///< pre-release version string
+#define TLM_VERSION_PRERELEASE              "rc1"       ///< pre-release version string
 
 #define TLM_VERSION_RELEASE_YEAR            "2009"      ///< release year  ( YYYY )
-#define TLM_VERSION_RELEASE_MONTH           "04"        ///< release month ( MM )
-#define TLM_VERSION_RELEASE_DAY             "06"        ///< release day   ( DD )
+#define TLM_VERSION_RELEASE_MONTH           "07"        ///< release month ( MM )
+#define TLM_VERSION_RELEASE_DAY             "10"        ///< release day   ( DD )
 
 #define TLM_COPYRIGHT                       "        Copyright (c) 1996-" TLM_VERSION_RELEASE_YEAR " by all Contributors\n" \
                                             "                    ALL RIGHTS RESERVED"
