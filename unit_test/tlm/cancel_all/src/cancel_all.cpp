@@ -93,7 +93,6 @@ SC_MODULE(Test_peq_with_get)
     section = 3;
 
     tlm::tlm_generic_payload *trans;
-    tlm::tlm_phase phase;
     for (int i = 0; i < 50; i++)
     {
       trans = new tlm::tlm_generic_payload;
