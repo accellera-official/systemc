@@ -40,6 +40,10 @@
     typedef unsigned __int16  uint16_t;
     typedef unsigned __int32  uint32_t;
   #endif
+#elif defined( __sparc ) || defined( __sparc__ )
+  typedef unsigned char     uint8_t;
+  typedef unsigned short    uint16_t;
+  typedef unsigned int      uint32_t;
 #else
   #include <stdint.h>
 #endif
