@@ -76,6 +76,8 @@
 102 LE32 :: cmd: l32 20   1
 102 LE32 :: read transaction length 1 (10) x 32-bit completed, returning:
 102 LE32 :: 13579bdf
+102 LE32 :: cmd: s32 30   00000000
+102 LE32 :: write transaction length 1 (10) x 32-bit completed
 102 LE32 :: cmd: s16 30   ea62
 102 LE32 :: write transaction length 1 (10) x 16-bit completed
 101 BE32 :: cmd: l16 30   1

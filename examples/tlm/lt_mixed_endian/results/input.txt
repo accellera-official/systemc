@@ -57,6 +57,8 @@ w
 l32 20   1
 
 # sharing 16-bit data needs address mod
+# first clear entire 32-bit word
+s32 30   00000000
 s16 30   ea62
 w
 l16 30   1
