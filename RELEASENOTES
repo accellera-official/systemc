@@ -1,6 +1,7 @@
-==================================================
-Release Notes for the TLM 2.0.1 - 10 July 2009
-==================================================
+
+==========================================
+Release Notes for  TLM 2.0.1  2009-July-15
+==========================================
 
 CONTENTS
 ========
@@ -35,7 +36,7 @@ e. Changed the implementations of the endianness conversion functions so they wo
 
 f. Fixed bug in simple_target_socket and simple_target_socket_tagged where timing annotation was not acted upon
 
-g. added an example lt_mixed_endian illustrating use of endianness conversion functions to model memory sharing between big- and little-endian initiators
+g. Added an example lt_mixed_endian illustrating use of endianness conversion functions to model memory sharing between big- and little-endian initiators
 
 h. Changed constructors of convenience sockets to provide, for each socket, one default constructor and a second one with a name argument (just like standard sockets)
 
@@ -45,7 +46,7 @@ j. Removed typedefs initiator/target_socket_type from standard sockets
 
 k. Added PTHREADS support in the examples Makefile
 
-l. Cleaned up examples and unit_tests to eliminate issues identified by Doulos and Jeda protocol checkers
+l. Cleaned up examples and unit_tests to eliminate issues identified by Doulos and Jeda protocol checkers and to allow them to pass regressions on both little- and big-endian hosts
 
 m. Added a convenience method set_and_sync() to tlm_quantumkeeper
 
@@ -60,6 +61,9 @@ q. Collapse the directory hierarchy below tlm_h by removing tlm_trans
 r. Changed "tlm_initiator_socket_export" to "tlm_base_initiator_socket_export", and "tlm_target_socket_port" to "tlm_base_target_socket_port" in default constructors of standard sockets
 
 s. Added a virtual const char* kind() const; method to the standard sockets
+
+t. Added further unit tests
+
 
 
 For a more detailed description of all features of TLM 2.0 check out the TLM-2.0
@@ -85,12 +89,7 @@ c. the implementation of the PEQ 'peq_with_get' in tlm_utils does not properly
    phase. This is wrong immediate notifications should overtake delta
    notifications
 
-d. FIXED
-
-e. the examples do not successfully 'make check' on bigendian machines, messages
-   are not printed correctly in that case.
-
-f. the lt_dmi example does not run for all platform and library versions. It
+d. the lt_dmi example does not run for all platform and library versions. It
    works for X86 linux, gcc4.0 and SystemC 2.2.0
 
 

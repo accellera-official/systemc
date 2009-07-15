@@ -1,9 +1,11 @@
 
-                           2009-July-10
-                             TLM-2.0.1
-                 =================================
+====================================
+README  for  TLM-2.0.1  2009-July-15
+====================================
 
 This is the proof of concept implementation for the OSCI TLM-2.0 standard.
+
+This release includes the OSCI TLM-2.0 Language Reference Manual
 
 -------------------------------------------------------------------------------
                 IMPORTANT
@@ -21,18 +23,24 @@ This is the proof of concept implementation for the OSCI TLM-2.0 standard.
 3. This release has been tested on the following platforms:
 
    32-bit platforms
+     Linux Redhat 3              with gcc 3.2.3  and SystemC-2.2.0
      Linux Redhat Enterprise 4   with gcc-3.3.2  and SystemC-2.2.0
      Linux Redhat Enterprise 4   with gcc-3.4.3  and SystemC-2.2.0
      Linux Redhat Enterprise 4   with gcc-3.4.4  and SystemC-2.2.0
      Linux Redhat Enterprise 5   with gcc-4.1.2  and SystemC-2.2.0
      Linux Fedora 11             with gcc-4.4.0  and SystemC-2.2.0
      Linux Fedora 11             with gcc-4.4.0  and 2.3.16jun09_beta
+
      Windows XP Cygwin (Cygming) with gcc-3.4.   and SystemC-2.1.v1
+
      Windows XP SP2/SP3          with MS Visual C++ 2008 Express Edition 
                                                  and SystemC-2.2.0
+                                                 
+     Solaris 5.8                 with gcc 3.3.2  and SystemC-2.2.0
+     Solaris 5.8                 with gcc 3.4.2  and SystemC-2.2.0
      
    64-bit platforms
-     Linux RedHat Enterprise 4   with gcc-4.0.3 and SystemC-2.2.0
+     Linux RedHat Enterprise 4   with gcc-4.0.3  and SystemC-2.2.0
 
    But to have SystemC itself work with gcc-4.4.0 requires the following change:
    Edit the file systemc-2.2.0/include/sysc/packages/boost/bind/placeholders.hpp
