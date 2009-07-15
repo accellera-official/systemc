@@ -1,6 +1,0 @@
-<area shape="rect" href="$namespacetlm.html#3d28c3714f7375334465f92755ed3e36" title="tlm::establish_context" alt="" coords="335,56,511,83">
-<area shape="rect" href="$classtlm_1_1tlm__generic__payload.html#56d9cf62de27f45e93a45bf5c144c288" title="tlm::tlm_generic_payload::get_address" alt="" coords="280,107,565,133">
-<area shape="rect" href="$classtlm_1_1tlm__generic__payload.html#486d7746584d058f148f6b3d6aab55c4" title="tlm::tlm_generic_payload::set_address" alt="" coords="281,157,564,184">
-<area shape="rect" href="$classtlm_1_1tlm__generic__payload.html#57e1f088841057cd1c2717701c240396" title="tlm::tlm_generic_payload::get_extension" alt="" coords="615,5,913,32">
-<area shape="rect" href="$classtlm_1_1tlm__endian__context__pool.html#a38c31e12f7ccc9a2610442de40074a8" title="tlm::tlm_endian_context_pool::pop" alt="" coords="635,56,893,83">
-<area shape="rect" href="$classtlm_1_1tlm__generic__payload.html#736d6fe355b64be5280ba32386566163" title="tlm::tlm_generic_payload::set_extension" alt="" coords="615,107,913,133">

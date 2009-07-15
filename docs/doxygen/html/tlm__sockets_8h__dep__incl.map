@@ -1,9 +1,0 @@
-<area shape="rect" href="$tlm_8h.html" title="include/tlm/tlm.h" alt="" coords="1029,84,1163,111">
-<area shape="rect" href="$instance__specific__extensions_8h.html" title="include/tlm/tlm_utils/instance_specific_extensions.h" alt="" coords="5,161,376,188">
-<area shape="rect" href="$multi__socket__bases_8h.html" title="include/tlm/tlm_utils/multi_socket_bases.h" alt="" coords="400,161,707,188">
-<area shape="rect" href="$passthrough__target__socket_8h.html" title="include/tlm/tlm_utils/passthrough_target_socket.h" alt="" coords="731,161,1091,188">
-<area shape="rect" href="$peq__with__cb__and__phase_8h.html" title="include/tlm/tlm_utils/peq_with_cb_and_phase.h" alt="" coords="1115,161,1451,188">
-<area shape="rect" href="$simple__initiator__socket_8h.html" title="include/tlm/tlm_utils/simple_initiator_socket.h" alt="" coords="1475,161,1803,188">
-<area shape="rect" href="$simple__target__socket_8h.html" title="include/tlm/tlm_utils/simple_target_socket.h" alt="" coords="1827,161,2147,188">
-<area shape="rect" href="$multi__passthrough__initiator__socket_8h.html" title="include/tlm/tlm_utils/multi_passthrough_initiator_socket.h" alt="" coords="135,239,543,265">
-<area shape="rect" href="$multi__passthrough__target__socket_8h.html" title="include/tlm/tlm_utils/multi_passthrough_target_socket.h" alt="" coords="567,239,967,265">

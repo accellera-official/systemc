@@ -1,3 +1,0 @@
-<area shape="rect" href="$classtlm__utils_1_1simple__target__socket__tagged.html#66b86d32607cedd92228bc0f9284fc13" title="tlm_utils::simple_target_socket_tagged::bw_invalidate_direct_mem_ptr" alt="" coords="625,31,1132,57">
-<area shape="rect" href="$classtlm_1_1tlm__bw__direct__mem__if.html#aa1efc3defd487dc4be30e29dad7c5eb" title="tlm::tlm_bw_direct_mem_if::invalidate_direct_mem_ptr" alt="" coords="1535,5,1932,32">
-<area shape="rect" href="$classtlm_1_1tlm__base__target__socket.html#b5cd0be9b3dbab76ca9f0bb1fba45d07" title="tlm::tlm_base_target_socket\&lt; BUSWIDTH, tlm_fw_transport_if\&lt; TYPES \&gt;, tlm_bw_transport_if\&lt; TYPES \&gt;, 1,sc_core::SC_ONE_OR_MORE_BOUND \&gt;::operator&#45;\&gt;" alt="" coords="1181,56,2285,83">

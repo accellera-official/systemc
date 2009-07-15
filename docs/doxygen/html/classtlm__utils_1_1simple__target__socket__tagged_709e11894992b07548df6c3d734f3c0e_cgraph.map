@@ -1,5 +1,0 @@
-<area shape="rect" href="$classtlm_1_1tlm__base__target__socket.html#869a3d71249771ebcf15fe677832f238" title="tlm::tlm_base_target_socket\&lt; BUSWIDTH, tlm_fw_transport_if\&lt; TYPES \&gt;, tlm_bw_transport_if\&lt; TYPES \&gt;, 1,sc_core::SC_ONE_OR_MORE_BOUND \&gt;::bind" alt="" coords="559,81,1615,108">
-<area shape="rect" href="$classtlm_1_1tlm__base__initiator__socket__b.html#6d2fdfe9f8b2da2492b076535e11ee5d" title="tlm::tlm_base_initiator_socket_b::get_base_interface" alt="" coords="1665,5,2049,32">
-<area shape="rect" href="$classtlm_1_1tlm__base__target__socket.html#5dbd7dbeb4f7efec075c99da7e89964d" title="tlm::tlm_base_target_socket::get_base_interface" alt="" coords="1676,56,2039,83">
-<area shape="rect" href="$classtlm_1_1tlm__base__target__socket.html#725b54330bd4f74139adc5f64666cc97" title="tlm::tlm_base_target_socket::get_base_port" alt="" coords="1693,107,2021,133">
-<area shape="rect" href="$classtlm_1_1tlm__base__initiator__socket__b.html#1da569dccb5ed23c57ec360f80ee2d46" title="tlm::tlm_base_initiator_socket_b::get_base_port" alt="" coords="1681,157,2033,184">
