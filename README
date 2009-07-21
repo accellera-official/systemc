@@ -42,9 +42,11 @@ This release includes the OSCI TLM-2.0 Language Reference Manual
    64-bit platforms
      Linux RedHat Enterprise 4   with gcc-3.4.3  and SystemC-2.2.0
      Linux RedHat Enterprise 4   with gcc-4.0.3  and SystemC-2.2.0
+     Linux SUSE Enterprise 9     with gcc-4.2.2  and SystemC-2.2.0
      
 
-   But to have SystemC itself work with gcc-4.4.0 requires the following change:
+   But to have SystemC itself work with gcc-4.2.2 or gcc-4.4.0 requires the following 
+   change:
    Edit the file systemc-2.2.0/include/sysc/packages/boost/bind/placeholders.hpp
    change line 28
    from
