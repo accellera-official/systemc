@@ -34,11 +34,11 @@
  *****************************************************************************/
 
 // $Log: sc_join.h,v $
-// Revision 1.2  2008/10/10 17:36:40  acg
-//  Andy Goodrich: update of copyright.
+// Revision 1.2  2008/05/22 17:06:25  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
 //
-// Revision 1.1.1.1  2006/12/15 20:31:37  acg
-// SystemC 2.2
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
 //
 // Revision 1.5  2006/04/28 21:38:27  acg
 //  Andy Goodrich: fixed loop constraint that was using sizeof(sc_thread_handle)

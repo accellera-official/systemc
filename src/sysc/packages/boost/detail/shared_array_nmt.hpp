@@ -24,7 +24,7 @@
 #include <functional>       // for std::less
 #include <new>              // for std::bad_alloc
 
-namespace boost
+namespace sc_boost
 {
 
 template<class T> class shared_array
@@ -47,7 +47,7 @@ public:
         }
         catch(...)
         {
-            boost::checked_array_delete(p);
+            sc_boost::checked_array_delete(p);
             throw;
         }
 
@@ -57,8 +57,8 @@ public:
 
         if(pn == 0)
         {
-            boost::checked_array_delete(p);
-            boost::throw_exception(std::bad_alloc());
+            sc_boost::checked_array_delete(p);
+            sc_boost::throw_exception(std::bad_alloc());
         }
 
 #endif
@@ -68,7 +68,7 @@ public:
     {
         if(--*pn == 0)
         {
-            boost::checked_array_delete(px);
+            sc_boost::checked_array_delete(px);
             delete pn;
         }
     }
@@ -146,6 +146,6 @@ template<class T> void swap(shared_array<T> & a, shared_array<T> & b)
     a.swap(b);
 }
 
-} // namespace boost
+} // namespace sc_boost
 
 #endif  // #ifndef BOOST_DETAIL_SHARED_ARRAY_NMT_HPP_INCLUDED

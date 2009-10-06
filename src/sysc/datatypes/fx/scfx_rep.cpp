@@ -36,6 +36,9 @@
 
 
 // $Log: scfx_rep.cpp,v $
+// Revision 1.2  2009/02/28 00:26:20  acg
+//  Andy Goodrich: bug fixes.
+//
 // Revision 1.2  2008/11/06 17:22:47  acg
 //  Andy Goodrich: bug fixes for 2.2.1.
 //

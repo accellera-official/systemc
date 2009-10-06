@@ -35,11 +35,14 @@
 
 
 // $Log: sc_reset.h,v $
-// Revision 1.2  2008/10/10 17:36:41  acg
-//  Andy Goodrich: update of copyright.
+// Revision 1.2  2008/05/22 17:06:26  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
 //
-// Revision 1.1.1.1  2006/12/15 20:31:37  acg
-// SystemC 2.2
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.6  2006/12/02 20:58:19  acg
+//  Andy Goodrich: updates from 2.2 for IEEE 1666 support.
 //
 // Revision 1.4  2006/04/11 23:13:21  acg
 //   Andy Goodrich: Changes for reduced reset support that only includes
@@ -58,6 +61,8 @@ namespace sc_core {
 template<typename DATA> class sc_signal_in_if;
 template<typename IF> class sc_signal;
 template<typename DATA> class sc_in;
+template<typename DATA> class sc_inout;
+template<typename DATA> class sc_out;
 class sc_process_b;
 
 class sc_reset {
@@ -71,8 +76,14 @@ class sc_reset {
 
   protected:
 	static void reconcile_resets();
-    static void reset_signal_is(const sc_signal_in_if<bool>& iface, bool level);
-    static void reset_signal_is(const sc_in<bool>& iface, bool level);
+    static void 
+	reset_signal_is(bool async, const sc_signal_in_if<bool>& iface, bool level);
+    static void 
+	reset_signal_is( bool async, const sc_in<bool>& iface, bool level);
+    static void 
+	reset_signal_is( bool async, const sc_inout<bool>& iface, bool level);
+    static void 
+	reset_signal_is( bool async, const sc_out<bool>& iface, bool level);
 
   protected:
     sc_reset( const sc_signal_in_if<bool>* iface_p ) :

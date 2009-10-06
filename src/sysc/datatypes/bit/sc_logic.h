@@ -35,8 +35,15 @@
  *****************************************************************************/
 
 // $Log: sc_logic.h,v $
-// Revision 1.1.1.1  2006/12/15 20:31:36  acg
-// SystemC 2.2
+// Revision 1.1.1.1  2006/12/15 20:20:04  acg
+// SystemC 2.3
+//
+// Revision 1.5  2006/12/02 21:00:57  acg
+//  Andy Goodrich: fixes for concatenation support.
+//
+// Revision 1.4  2006/05/08 17:49:59  acg
+//   Andy Goodrich: Added David Long's declarations for friend operators,
+//   functions, and methods, to keep the Microsoft compiler happy.
 //
 // Revision 1.3  2006/01/13 18:53:53  acg
 // Andy Goodrich: added $Log command so that CVS comments are reproduced in

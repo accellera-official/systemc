@@ -21,7 +21,7 @@
 //  Users can detect this situation by checking BOOST_AC_USE_PTHREADS.
 //
 
-namespace boost
+namespace sc_boost
 {
 
 namespace detail
@@ -91,6 +91,6 @@ private:
 
 } // namespace detail
 
-} // namespace boost
+} // namespace sc_boost
 
 #endif // #ifndef BOOST_DETAIL_ATOMIC_COUNT_PTHREADS_HPP_INCLUDED

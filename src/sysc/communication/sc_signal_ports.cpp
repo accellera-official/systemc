@@ -35,8 +35,16 @@
 
 
 // $Log: sc_signal_ports.cpp,v $
-// Revision 1.1.1.1  2006/12/15 20:31:35  acg
-// SystemC 2.2
+// Revision 1.1.1.1  2006/12/15 20:20:04  acg
+// SystemC 2.3
+//
+// Revision 1.8  2006/05/08 17:52:47  acg
+//  Andy Goodrich:
+//    (1) added David Long's forward declarations for friend functions,
+//        methods, and operators to keep the Microsoft compiler happy.
+//    (2) Added delta_count() method to sc_prim_channel for use by
+//        sc_signal so that the friend declaration in sc_simcontext.h
+// 	   can be for a non-templated class (i.e., sc_prim_channel.)
 //
 // Revision 1.7  2006/04/18 18:01:26  acg
 //  Andy Goodrich: added an add_trace_internal() method to the various port

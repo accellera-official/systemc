@@ -30,7 +30,7 @@
 #   include <sysc/packages/boost/detail/is_function_ref_tester.hpp>
 #  endif 
 
-namespace boost { namespace detail {
+namespace sc_boost { namespace detail {
 
 namespace indirect_traits {
 
@@ -201,7 +201,7 @@ struct is_pointer_to_class
 
 #  else
 
-using namespace boost::detail::is_function_ref_tester_;
+using namespace sc_boost::detail::is_function_ref_tester_;
 
 typedef char (&inner_yes_type)[3];
 typedef char (&inner_no_type)[2];
@@ -252,7 +252,7 @@ struct is_reference_to_function_aux
 {
     static T t;
     BOOST_STATIC_CONSTANT(
-        bool, value = sizeof(detail::is_function_ref_tester(t,0)) == sizeof(::boost::type_traits::yes_type));
+        bool, value = sizeof(detail::is_function_ref_tester(t,0)) == sizeof(::sc_boost::type_traits::yes_type));
     typedef mpl::bool_<value> type;
  };
 
@@ -268,7 +268,7 @@ struct is_pointer_to_function_aux
     static T t;
     BOOST_STATIC_CONSTANT(
         bool, value
-        = sizeof(::boost::type_traits::is_function_ptr_tester(t)) == sizeof(::boost::type_traits::yes_type));
+        = sizeof(::sc_boost::type_traits::is_function_ptr_tester(t)) == sizeof(::sc_boost::type_traits::yes_type));
     typedef mpl::bool_<value> type;
 };
 
@@ -482,6 +482,6 @@ struct is_pointer_to_class
 
 using namespace indirect_traits;
 
-}} // namespace boost::python::detail
+}} // namespace sc_boost::python::detail
 
 #endif // INDIRECT_TRAITS_DWA2002131_HPP

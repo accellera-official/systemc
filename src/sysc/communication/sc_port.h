@@ -42,8 +42,20 @@
 
 /* 
 $Log: sc_port.h,v $
-Revision 1.1.1.1  2006/12/15 20:31:35  acg
-SystemC 2.2
+Revision 1.1.1.1  2006/12/15 20:20:04  acg
+SystemC 2.3
+
+Revision 1.5  2006/08/29 23:35:00  acg
+ Andy Goodrich: added bind_count() method to allow users to determine which
+ ports are connected in before_end_of_elaboration().
+
+Revision 1.4  2006/05/08 17:52:47  acg
+ Andy Goodrich:
+   (1) added David Long's forward declarations for friend functions,
+       methods, and operators to keep the Microsoft compiler happy.
+   (2) Added delta_count() method to sc_prim_channel for use by
+       sc_signal so that the friend declaration in sc_simcontext.h
+	   can be for a non-templated class (i.e., sc_prim_channel.)
 
 Revision 1.3  2006/01/24 20:46:31  acg
 Andy Goodrich: changes to eliminate use of deprecated features. For instance,
@@ -127,6 +139,8 @@ public:
     typedef sc_port_base this_type;
 
 public:
+
+	int bind_count();
 
     // get the first interface without checking for nil
     virtual       sc_interface* get_interface()       = 0;
@@ -220,6 +234,7 @@ private:
     sc_port_base( const this_type& );
     this_type& operator = ( const this_type& );
 };
+
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_port_registry

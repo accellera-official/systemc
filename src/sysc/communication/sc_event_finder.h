@@ -34,8 +34,8 @@
     
  *****************************************************************************/
 //$Log: sc_event_finder.h,v $
-//Revision 1.1.1.1  2006/12/15 20:31:35  acg
-//SystemC 2.2
+//Revision 1.1.1.1  2006/12/15 20:20:04  acg
+//SystemC 2.3
 //
 //Revision 1.4  2006/02/02 23:42:37  acg
 // Andy Goodrich: implemented a much better fix to the sc_event_finder

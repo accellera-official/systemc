@@ -38,12 +38,15 @@
 
 
 // $Log: sc_utils_ids.cpp,v $
-// Revision 1.2  2008/05/20 20:42:05  acg
-//  Andy Goodrich: Added includes for system declarations that are required
-//  by gcc 4.3.
+// Revision 1.3  2009/02/28 00:27:57  acg
+//  Andy Goodrich: includes for C++ library types to keep compiler happy.
 //
-// Revision 1.1.1.1  2006/12/15 20:31:39  acg
-// SystemC 2.2
+// Revision 1.2  2008/05/20 20:43:21  acg
+//  Andy Goodrich: Added includes <cstdlib> and <cstring> to pick up their
+//  declarations.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:06  acg
+// SystemC 2.3
 //
 // Revision 1.6  2006/01/31 21:42:07  acg
 //  Andy Goodrich: Added checks for SC_DEPRECATED_WARNINGS being defined as
@@ -64,6 +67,7 @@
 
 #include <cstdlib>
 #include <cstring>
+
 #include "sysc/utils/sc_report.h"
 
 
@@ -114,7 +118,7 @@ int initialize()
     // PROCESS ANY ENVIRONMENTAL OVERRIDES:
 
     const char* deprecation_warn = std::getenv("SC_DEPRECATION_WARNINGS");
-    if ( (deprecation_warn!=0) && !strcmp(deprecation_warn,"DISABLE") )
+    if ( (deprecation_warn!=0) && !std::strcmp(deprecation_warn,"DISABLE") )
     {
         sc_report_handler::set_actions("/IEEE_Std_1666/deprecated", 
             SC_DO_NOTHING);

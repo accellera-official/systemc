@@ -1,13 +1,14 @@
-                SystemC Class Library (Rel. 2.2.1)
+                SystemC Class Library (Rel. 2.3.0)
                 ==================================
 
-This is the release of the SystemC 2.2.1 Class Library.
+This is the release of the SystemC 2.3.0 Class Library.
 
 -------------------------------------------------------------------------------
                 IMPORTANT
 
-1. This is the release of SystemC 2.2.1. This release contains bug 
-   fixes for SystemC 2.2.0.
+1. This is the release of SystemC 2.3.0. This release contains bug 
+   fixes for SystemC 2.1.v1 as well as adding IEEE 1666(tm) compliance
+   features.
 
 2. This release is supported on the following platforms for which it has
    been well tested:

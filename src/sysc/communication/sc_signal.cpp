@@ -35,15 +35,16 @@
 
 /* 
 $Log: sc_signal.cpp,v $
-Revision 1.3  2008/05/20 16:42:53  acg
- Andy Goodrich: improvements to invalid signal writer message generator.
+Revision 1.3  2007/04/09 21:59:49  acg
+ Andy Goodrich: fixed multiple write notification bug where writes
+ done outside the simulator were being treated as multiple writes.
 
-Revision 1.2  2007/04/02 17:24:30  acg
+Revision 1.2  2007/04/02 17:24:01  acg
  Andy Goodrich: added check for null writer pointers in sc_signal invalid
  writer method.
 
-Revision 1.1.1.1  2006/12/15 20:31:35  acg
-SystemC 2.2
+Revision 1.1.1.1  2006/12/15 20:20:04  acg
+SystemC 2.3
 
 Revision 1.7  2006/04/11 23:11:57  acg
   Andy Goodrich: Changes for reset support that only includes
@@ -127,18 +128,19 @@ sc_signal_invalid_writer(
     const char* writer2_name;
     const char* writer2_kind;
     if ( second_writer )
-    {
+    {   
         writer2_name = second_writer->name();
         writer2_kind = second_writer->kind();
 
-	std::sprintf( msg, "\n signal `%s' (%s)"
-	     "\n first driver `%s' (%s)"
-	     "\n second driver `%s' (%s)",
-	     target_name, target_kind, 
-	     writer1_name, writer1_kind, 
+        std::sprintf( msg, "\n signal `%s' (%s)"
+             "\n first driver `%s' (%s)"
+             "\n second driver `%s' (%s)",
+             target_name, target_kind,
+	     writer1_name, writer1_kind,
 	     writer2_name, writer2_kind );
-	SC_REPORT_ERROR( SC_ID_MORE_THAN_ONE_SIGNAL_DRIVER_, msg );
+        SC_REPORT_ERROR( SC_ID_MORE_THAN_ONE_SIGNAL_DRIVER_, msg );
     }
+
 }
 
 

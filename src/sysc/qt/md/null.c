@@ -11,4 +11,4 @@
  * purpose.
  */
 
-char const qtmd_rcsid[] = "$Header: /Users/acg/CVSROOT/systemc-2.2/src/sysc/qt/md/null.c,v 1.1.1.1 2006/12/15 20:31:39 acg Exp $";
+char const qtmd_rcsid[] = "$Header: /Users/acg/CVSROOT/systemc-2.3/src/sysc/qt/md/null.c,v 1.1.1.1 2006/12/15 20:20:06 acg Exp $";

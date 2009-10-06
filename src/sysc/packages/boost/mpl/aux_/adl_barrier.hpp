@@ -10,9 +10,9 @@
 //
 // See http://www.boost.org/libs/mpl for documentation.
 
-// $Source: /Users/acg/CVSROOT/systemc-2.2/src/sysc/packages/boost/mpl/aux_/adl_barrier.hpp,v $
-// $Date: 2006/12/15 20:31:38 $
-// $Revision: 1.1.1.1 $
+// $Source: /Users/acg/CVSROOT/systemc-2.3/src/sysc/packages/boost/mpl/aux_/adl_barrier.hpp,v $
+// $Date: 2009/02/28 00:27:17 $
+// $Revision: 1.2 $
 
 #include <sysc/packages/boost/mpl/aux_/config/adl.hpp>
 #include <sysc/packages/boost/mpl/aux_/config/gcc.hpp>
@@ -24,22 +24,22 @@
 #   define BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_OPEN namespace mpl_ {
 #   define BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_CLOSE }
 #   define BOOST_MPL_AUX_ADL_BARRIER_DECL(type) \
-    namespace boost { namespace mpl { \
+    namespace sc_boost { namespace mpl { \
     using ::BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE::type; \
     } } \
 /**/
 
 #if !defined(BOOST_MPL_PREPROCESSING_MODE)
 namespace BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE { namespace aux {} }
-namespace boost { namespace mpl { using namespace BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE; 
+namespace sc_boost { namespace mpl { using namespace BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE; 
 namespace aux { using namespace BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE::aux; }
 }}
 #endif
 
 #else // BOOST_MPL_CFG_NO_ADL_BARRIER_NAMESPACE
 
-#   define BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE boost::mpl
-#   define BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_OPEN namespace boost { namespace mpl {
+#   define BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE sc_boost::mpl
+#   define BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_OPEN namespace sc_boost { namespace mpl {
 #   define BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_CLOSE }}
 #   define BOOST_MPL_AUX_ADL_BARRIER_DECL(type) /**/
 

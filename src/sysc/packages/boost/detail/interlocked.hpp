@@ -43,7 +43,7 @@ extern "C" long __cdecl _InterlockedCompareExchange( long volatile *, long, long
 
 #elif defined( WIN32 ) || defined( _WIN32 ) || defined( __WIN32__ )
 
-namespace boost
+namespace sc_boost
 {
 
 namespace detail
@@ -55,7 +55,7 @@ extern "C" __declspec(dllimport) long __stdcall InterlockedCompareExchange( long
 
 } // namespace detail
 
-} // namespace boost
+} // namespace sc_boost
 
 # define BOOST_INTERLOCKED_INCREMENT InterlockedIncrement
 # define BOOST_INTERLOCKED_DECREMENT InterlockedDecrement

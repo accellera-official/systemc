@@ -25,7 +25,7 @@
 #include <sysc/packages/boost/get_pointer.hpp>
 #include <sysc/packages/boost/detail/workaround.hpp>
 
-namespace boost
+namespace sc_boost
 {
 
 #if defined(BOOST_NO_VOID_RETURNS)
@@ -389,6 +389,6 @@ template<class R, class T> _mfi::dm<R, T> mem_fn(R T::*f)
     return _mfi::dm<R, T>(f);
 }
 
-} // namespace boost
+} // namespace sc_boost
 
 #endif // #ifndef BOOST_MEM_FN_HPP_INCLUDED

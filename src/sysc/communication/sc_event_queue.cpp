@@ -35,8 +35,14 @@
 
 
 // $Log: sc_event_queue.cpp,v $
-// Revision 1.1.1.1  2006/12/15 20:31:35  acg
-// SystemC 2.2
+// Revision 1.1.1.1  2006/12/15 20:20:04  acg
+// SystemC 2.3
+//
+// Revision 1.5  2006/11/28 20:30:48  acg
+//  Andy Goodrich: updated from 2.2 source. sc_event_queue constructors
+//  collapsed into a single constructor with an optional argument to get
+//  the sc_module_name stack done correctly. Class name prefixing added
+//  to sc_semaphore calls to wait() to keep gcc 4.x happy.
 //
 // Revision 1.4  2006/01/26 21:00:50  acg
 //  Andy Goodrich: conversion to use sc_event::notify(SC_ZERO_TIME) instead of

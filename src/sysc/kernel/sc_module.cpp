@@ -54,11 +54,20 @@
 
 
 // $Log: sc_module.cpp,v $
-// Revision 1.2  2008/10/10 17:36:41  acg
-//  Andy Goodrich: update of copyright.
+// Revision 1.4  2008/11/17 15:57:15  acg
+//  Andy Goodrich: added deprecation message for sc_module(const char*)
 //
-// Revision 1.1.1.1  2006/12/15 20:31:37  acg
-// SystemC 2.2
+// Revision 1.3  2008/05/22 17:06:25  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
+//
+// Revision 1.2  2007/05/17 20:16:33  acg
+//  Andy Goodrich: changes for beta release to LWG.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.9  2006/12/02 20:58:18  acg
+//  Andy Goodrich: updates from 2.2 for IEEE 1666 support.
 //
 // Revision 1.8  2006/03/21 00:00:34  acg
 //   Andy Goodrich: changed name of sc_get_current_process_base() to be
@@ -236,6 +245,7 @@ sc_module::sc_module( const char* nm )
   sensitive_pos(this),
   sensitive_neg(this)
 {
+    SC_REPORT_WARNING( SC_ID_BAD_SC_MODULE_CONTRUCTOR_, nm );
     sc_module_init();
 }
 
@@ -337,6 +347,32 @@ sc_module::add_child_object( sc_object* object_ )
     m_child_objects.push_back( object_ );
 }
 
+// set SC_THREAD asynchronous reset sensitivity
+
+void
+sc_module::areset_signal_is( const sc_in<bool>& port, bool level )
+{
+	sc_reset::reset_signal_is(true, port, level);
+}
+
+void
+sc_module::areset_signal_is( const sc_inout<bool>& port, bool level )
+{
+	sc_reset::reset_signal_is(true, port, level);
+}
+
+void
+sc_module::areset_signal_is( const sc_out<bool>& port, bool level )
+{
+	sc_reset::reset_signal_is(true, port, level);
+}
+
+void
+sc_module::areset_signal_is( const sc_signal_in_if<bool>& iface, bool level )
+{
+	sc_reset::reset_signal_is(true, iface, level);
+}
+
 void
 sc_module::remove_child_object( sc_object* object_ )
 {
@@ -378,18 +414,30 @@ sc_module::dont_initialize()
     last_proc.dont_initialize( true );
 }
 
-// set SC_CTHREAD reset sensitivity
+// set SC_THREAD synchronous reset sensitivity
 
 void
 sc_module::reset_signal_is( const sc_in<bool>& port, bool level )
 {
-	sc_reset::reset_signal_is(port, level);
+	sc_reset::reset_signal_is(false, port, level);
+}
+
+void
+sc_module::reset_signal_is( const sc_inout<bool>& port, bool level )
+{
+	sc_reset::reset_signal_is(false, port, level);
+}
+
+void
+sc_module::reset_signal_is( const sc_out<bool>& port, bool level )
+{
+	sc_reset::reset_signal_is(false, port, level);
 }
 
 void
 sc_module::reset_signal_is( const sc_signal_in_if<bool>& iface, bool level )
 {
-	sc_reset::reset_signal_is(iface, level);
+	sc_reset::reset_signal_is(false, iface, level);
 }
 
 // to generate unique names for objects in an MT-Safe way

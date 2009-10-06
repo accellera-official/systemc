@@ -35,8 +35,11 @@
 
 /* 
 $Log: scx_signal_signed.h,v $
-Revision 1.1.1.1  2006/12/15 20:31:29  acg
-SystemC 2.2
+Revision 1.1.1.1  2006/12/15 20:20:03  acg
+SystemC 2.3
+
+Revision 1.4  2006/10/23 19:40:35  acg
+ Andy Goodrich: added an explicit dynamic cast to keep gcc 4.x happy.
 
 Revision 1.3  2006/03/21 01:31:48  acg
  Andy Goodrich: changed over to sc_get_current_process_b() from

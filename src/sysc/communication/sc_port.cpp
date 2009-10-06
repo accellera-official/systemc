@@ -41,11 +41,20 @@
 
 
 // $Log: sc_port.cpp,v $
-// Revision 1.2  2008/10/10 17:36:34  acg
-//  Andy Goodrich: update of copyright.
+// Revision 1.1.1.1  2006/12/15 20:20:04  acg
+// SystemC 2.3
 //
-// Revision 1.1.1.1  2006/12/15 20:31:35  acg
-// SystemC 2.2
+// Revision 1.11  2006/08/29 23:34:59  acg
+//  Andy Goodrich: added bind_count() method to allow users to determine which
+//  ports are connected in before_end_of_elaboration().
+//
+// Revision 1.10  2006/05/08 17:52:47  acg
+//  Andy Goodrich:
+//    (1) added David Long's forward declarations for friend functions,
+//        methods, and operators to keep the Microsoft compiler happy.
+//    (2) Added delta_count() method to sc_prim_channel for use by
+//        sc_signal so that the friend declaration in sc_simcontext.h
+// 	   can be for a non-templated class (i.e., sc_prim_channel.)
 //
 // Revision 1.9  2006/02/02 20:43:09  acg
 //  Andy Goodrich: Added an existence linked list to sc_event_finder so that
@@ -191,7 +200,7 @@ struct sc_bind_info
 
 // constructor
 
-sc_bind_info::sc_bind_info( int    max_size_, sc_port_policy policy_ )
+sc_bind_info::sc_bind_info( int max_size_, sc_port_policy policy_ )
 : m_max_size( max_size_ ),
   m_policy( policy_ ),
   has_parent( false ),
@@ -211,7 +220,7 @@ sc_bind_info::~sc_bind_info()
 }
 
 
-int   
+int
 sc_bind_info::max_size() const
 {
     return m_max_size ? m_max_size : vec.size();
@@ -223,7 +232,7 @@ sc_bind_info::policy() const
     return m_policy;
 }
 
-int   
+int
 sc_bind_info::size() const
 {
     return vec.size();
@@ -253,6 +262,15 @@ void sc_port_base::add_static_event(
     process_p->add_static_event( event );
 }
 
+// return number of interfaces that will be bound, or are bound:
+
+int sc_port_base::bind_count()
+{
+    if ( m_bind_info )
+	return m_bind_info->size();
+    else 
+	return interface_count();
+}
 
 // error reporting
 
@@ -432,7 +450,7 @@ sc_port_base::make_sensitive( sc_method_handle handle_,
 int
 sc_port_base::first_parent()
 {
-    for( int    i = 0; i < m_bind_info->size(); ++ i ) {
+    for( int i = 0; i < m_bind_info->size(); ++ i ) {
 	if( m_bind_info->vec[i]->parent != 0 ) {
 	    return i;
 	}
@@ -550,7 +568,7 @@ sc_port_base::complete_binding()
     if ( actual_binds > m_bind_info->max_size() )
     {
 	sprintf(msg_buffer, "%d binds exceeds maximum of %d allowed",
-	    (int)actual_binds, (int)m_bind_info->max_size() );
+	    actual_binds, m_bind_info->max_size() );
 	report_error( SC_ID_COMPLETE_BINDING_, msg_buffer );
     }
     switch ( m_bind_info->policy() )
@@ -563,7 +581,7 @@ sc_port_base::complete_binding()
       case SC_ALL_BOUND:
         if ( actual_binds < m_bind_info->max_size() || actual_binds < 1 ) {
 	    sprintf(msg_buffer, "%d actual binds is less than required %d",
-	        (int)actual_binds, (int)m_bind_info->max_size() ); 
+	        actual_binds, m_bind_info->max_size() ); 
             report_error( SC_ID_COMPLETE_BINDING_, msg_buffer );
         }
         break;

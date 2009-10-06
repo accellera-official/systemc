@@ -33,11 +33,15 @@
 
  *****************************************************************************/
 // $Log: sc_boost.h,v $
-// Revision 1.2  2008/10/10 17:36:39  acg
-//  Andy Goodrich: update of copyright.
+// Revision 1.3  2009/02/28 00:26:58  acg
+//  Andy Goodrich: changed boost name space to sc_boost to allow use with
+//  full boost library applications.
 //
-// Revision 1.1.1.1  2006/12/15 20:31:36  acg
-// SystemC 2.2
+// Revision 1.2  2008/05/22 17:06:24  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
 //
 // Revision 1.3  2006/01/13 18:44:29  acg
 // Added $Log to record CVS changes into the source.
@@ -71,9 +75,13 @@
 // } // namespace sc_dp This is off because of bugs with gcc 2.9x
 
 // macros to help avoid direct user code dependencies on boost lib
+//
+// note the use of the sc_boost namespace for the SystemC version of
+// boost. to replace the version shipped with SystemC with another boost
+// you will need to change the namespace prefix back to boost.
 
-#define sc_bind    boost::bind
-#define sc_ref(r)  boost::ref(r)
-#define sc_cref(r) boost::cref(r)
+#define sc_bind    sc_boost::bind
+#define sc_ref(r)  sc_boost::ref(r)
+#define sc_cref(r) sc_boost::cref(r)
 
 #endif // SC_BOOST_H

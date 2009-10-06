@@ -34,8 +34,12 @@
  *****************************************************************************/
 
 // $Log: sc_length_param.h,v $
-// Revision 1.1.1.1  2006/12/15 20:31:36  acg
-// SystemC 2.2
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.4  2006/05/08 17:50:01  acg
+//   Andy Goodrich: Added David Long's declarations for friend operators,
+//   functions, and methods, to keep the Microsoft compiler happy.
 //
 // Revision 1.3  2006/01/13 18:49:32  acg
 // Added $Log command so that CVS check in comments are reproduced in the

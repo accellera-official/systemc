@@ -34,8 +34,8 @@
 
  *****************************************************************************/
 // $Log: scfx_string.h,v $
-// Revision 1.1.1.1  2006/12/15 20:31:36  acg
-// SystemC 2.2
+// Revision 1.1.1.1  2006/12/15 20:20:04  acg
+// SystemC 2.3
 //
 // Revision 1.2  2006/01/03 23:18:34  acg
 // Changed copyright to include 2006.

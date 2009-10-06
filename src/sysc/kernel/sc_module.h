@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2006 by all Contributors.
+  source code Copyright (c) 1996-2008 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -49,15 +49,18 @@
  *****************************************************************************/
 
 // $Log: sc_module.h,v $
-// Revision 1.3  2007/03/14 17:48:04  acg
-//  Andy Goodrich: Fixed this-> usage in process macros.
+// Revision 1.3  2008/05/22 17:06:25  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
 //
-// Revision 1.2  2007/01/24 20:14:12  acg
-//  Andy Goodrich: improved comment about using this-> in the macros that
-//  access sensitive.
+// Revision 1.2  2007/01/24 20:14:40  acg
+//  Andy Goodrich: improved comments about the use of this-> in the macros
+//  that access sensitive.
 //
-// Revision 1.1.1.1  2006/12/15 20:31:37  acg
-// SystemC 2.2
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.10  2006/12/02 20:58:18  acg
+//  Andy Goodrich: updates from 2.2 for IEEE 1666 support.
 //
 // Revision 1.7  2006/04/11 23:13:21  acg
 //   Andy Goodrich: Changes for reduced reset support that only includes
@@ -122,6 +125,8 @@ namespace sc_core {
 
 class sc_name_gen;
 template<class T> class sc_in;
+template<class T> class sc_inout;
+template<class T> class sc_out;
 template<class T> class sc_signal;
 
 // ----------------------------------------------------------------------------
@@ -239,8 +244,14 @@ protected:
     void positional_bind( sc_interface& );
     void positional_bind( sc_port_base& );
 
-    // set reset sensitivity for SC_CTHREADs
+    // set reset sensitivity for SC_xTHREADs
+    void areset_signal_is( const sc_in<bool>& port, bool level );
+    void areset_signal_is( const sc_inout<bool>& port, bool level );
+    void areset_signal_is( const sc_out<bool>& port, bool level );
+    void areset_signal_is( const sc_signal_in_if<bool>& iface, bool level );
     void reset_signal_is( const sc_in<bool>& port, bool level );
+    void reset_signal_is( const sc_inout<bool>& port, bool level );
+    void reset_signal_is( const sc_out<bool>& port, bool level );
     void reset_signal_is( const sc_signal_in_if<bool>& iface, bool level );
 
     // static sensitivity for SC_THREADs and SC_CTHREADs
@@ -483,7 +494,6 @@ extern sc_module* sc_module_dynalloc(sc_module*);
 // class B : public sc_module;
 // template<typename X>
 // class A : public B<X>
-
 
 #define declare_method_process(handle, name, host_tag, func)        \
     {		                                                    \

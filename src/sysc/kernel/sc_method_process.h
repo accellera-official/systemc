@@ -20,7 +20,7 @@
   sc_method_process.h -- Method process declarations
 
   Original Author: Andy Goodrich, Forte Design Systems, 4 August 2005
-
+               
 
  *****************************************************************************/
 
@@ -35,11 +35,18 @@
  *****************************************************************************/
 
 // $Log: sc_method_process.h,v $
-// Revision 1.2  2008/10/10 17:36:41  acg
-//  Andy Goodrich: update of copyright.
+// Revision 1.2  2008/05/22 17:06:25  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
 //
-// Revision 1.1.1.1  2006/12/15 20:31:37  acg
-// SystemC 2.2
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.7  2006/05/08 17:57:13  acg
+//  Andy Goodrich: Added David Long's forward declarations for friend functions
+//  to keep the Microsoft C++ compiler happy.
+//
+// Revision 1.6  2006/04/20 17:08:17  acg
+//  Andy Goodrich: 3.0 style process changes.
 //
 // Revision 1.5  2006/04/11 23:13:21  acg
 //   Andy Goodrich: Changes for reduced reset support that only includes
@@ -64,33 +71,26 @@
 
 namespace sc_core {
 
-// friend function declarations
-    void sc_method_cor_fn( void* );
-    void sc_cmethod_cor_fn( void* );
-    void sc_set_stack_size( sc_method_handle, std::size_t );
-    class sc_event;
-    class sc_module;
-    class sc_process_table;
-    class sc_process_handle;
-    class sc_simcontext;
-    class sc_runnable;
+// forward function and class declarations:
 
-    void next_trigger( sc_simcontext* );
-    void next_trigger( const sc_event&,
-                  sc_simcontext* );
-    void next_trigger( sc_event_or_list&,
-                  sc_simcontext* );
-    void next_trigger( sc_event_and_list&,
-                  sc_simcontext* );
-    void next_trigger( const sc_time&,
-                  sc_simcontext* );
-    void next_trigger( const sc_time&, const sc_event&,
-                  sc_simcontext* );
-    void next_trigger( const sc_time&, sc_event_or_list&,
-                  sc_simcontext* );
-    void next_trigger( const sc_time&, sc_event_and_list&,
-                  sc_simcontext* );
+void sc_method_cor_fn( void* );
+void sc_cmethod_cor_fn( void* );
+void sc_set_stack_size( sc_method_handle, std::size_t );
+class sc_event;
+class sc_module;
+class sc_process_table;
+class sc_process_handle;
+class sc_simcontext;
+class sc_runnable;
 
+void next_trigger( sc_simcontext* );
+void next_trigger( const sc_event&, sc_simcontext* );
+void next_trigger( sc_event_or_list&, sc_simcontext* );
+void next_trigger( sc_event_and_list&, sc_simcontext* );
+void next_trigger( const sc_time&, sc_simcontext* );
+void next_trigger( const sc_time&, const sc_event&, sc_simcontext* );
+void next_trigger( const sc_time&, sc_event_or_list&, sc_simcontext* );
+void next_trigger( const sc_time&, sc_event_and_list&, sc_simcontext* );
 
 //==============================================================================
 // sc_method_process -
@@ -125,7 +125,7 @@ class sc_method_process : public sc_process_b {
 
   public:
     sc_method_process( const char* name_p, bool free_host,
-        SC_ENTRY_FUNC method_p, sc_process_host* host_p,
+        SC_ENTRY_FUNC method_p, sc_process_host* host_p, 
         const sc_spawn_options* opt_p );
 
     virtual ~sc_method_process();
@@ -134,6 +134,10 @@ class sc_method_process : public sc_process_b {
         { return "sc_method_process"; }
 
   protected:
+    virtual void disable_process(
+        sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
+    virtual void enable_process(
+        sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
     virtual void kill_process();
     sc_method_handle next_exist();
     sc_method_handle next_runnable();
@@ -145,9 +149,17 @@ class sc_method_process : public sc_process_b {
     void next_trigger( const sc_time&, const sc_event& );
     void next_trigger( const sc_time&, sc_event_or_list& );
     void next_trigger( const sc_time&, sc_event_and_list& );
+	inline bool ready_to_run();
+    virtual void resume_process(
+        sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
     void set_next_exist( sc_method_handle next_p );
     void set_next_runnable( sc_method_handle next_p );
     void set_stack_size( std::size_t size );
+    virtual void suspend_process( 
+        sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
+    virtual void throw_reset( bool async );
+    virtual void throw_user( const sc_throw_it_helper& helper,
+        sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
     bool trigger_dynamic( sc_event* );
 
   protected:
@@ -240,6 +252,26 @@ sc_method_process::next_trigger( const sc_time& t, sc_event_and_list& el )
     m_trigger_type = AND_LIST_TIMEOUT;
 }
 
+//------------------------------------------------------------------------------
+//"sc_method_process::ready_to_run"
+//
+//------------------------------------------------------------------------------
+inline bool sc_method_process::ready_to_run()
+{
+	switch( m_state )
+	{
+	  case ps_normal:
+	  	return true;
+	  case ps_suspended:
+	  	m_state = ps_suspended_and_pending;
+		break;
+	  default:
+	  	break;
+	}
+    return false;
+}
+
+
 inline
 void sc_method_process::set_next_exist(sc_method_handle next_p)
 {
@@ -265,6 +297,6 @@ sc_method_handle sc_method_process::next_runnable()
     return (sc_method_handle)m_runnable_p;
 }
 
-} // namespace sc_core
+} // namespace sc_core 
 
 #endif // !defined(sc_method_process_h_INCLUDED)

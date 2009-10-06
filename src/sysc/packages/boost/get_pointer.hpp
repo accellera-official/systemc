@@ -7,7 +7,7 @@
 
 # include <memory>
 
-namespace boost { 
+namespace sc_boost { 
 
 // get_pointer(p) extracts a ->* capable pointer from p
 
@@ -24,6 +24,6 @@ template<class T> T * get_pointer(std::auto_ptr<T> const& p)
 }
 
 
-} // namespace boost
+} // namespace sc_boost
 
 #endif // GET_POINTER_DWA20021219_HPP

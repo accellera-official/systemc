@@ -21,7 +21,7 @@
 #include <typeinfo>
 #include <pthread.h>
 
-namespace boost
+namespace sc_boost
 {
 
 namespace detail
@@ -130,6 +130,6 @@ public:
 
 } // namespace detail
 
-} // namespace boost
+} // namespace sc_boost
 
 #endif  // #ifndef BOOST_DETAIL_SP_COUNTED_BASE_PT_HPP_INCLUDED

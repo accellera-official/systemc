@@ -11,7 +11,7 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 
-namespace boost
+namespace sc_boost
 {
 
 namespace _bi
@@ -139,6 +139,6 @@ template<class F> _bi::protected_bind_t<F> protect(F f)
     return _bi::protected_bind_t<F>(f);
 }
 
-} // namespace boost
+} // namespace sc_boost
 
 #endif // #ifndef BOOST_BIND_PROTECT_HPP_INCLUDED

@@ -36,11 +36,11 @@
 
 /* 
 $Log: sc_wait_cthread.cpp,v $
-Revision 1.2  2008/10/10 17:36:42  acg
- Andy Goodrich: update of copyright.
+Revision 1.2  2008/05/22 17:06:27  acg
+ Andy Goodrich: updated copyright notice to include 2008.
 
-Revision 1.1.1.1  2006/12/15 20:31:37  acg
-SystemC 2.2
+Revision 1.1.1.1  2006/12/15 20:20:05  acg
+SystemC 2.3
 
 Revision 1.3  2006/03/13 20:26:51  acg
  Andy Goodrich: Addition of forward class declarations, e.g.,

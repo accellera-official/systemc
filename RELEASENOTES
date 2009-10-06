@@ -1,4 +1,4 @@
-        Release Notes for SystemC 2.2.1 Release Of 30 Oct 2007
+        Release Notes for SystemC 2.3.0 Release Of 12 Feb 2009
         ======================================================
 
 CONTENTS
@@ -12,15 +12,13 @@ CONTENTS
 
   4) Incompatibitilies with previous releases
 
-  5) Fixes to match the IEEE 1666 SystemC Language Reference Manual
+  5) Expanded dynamic process support
 
-  6) Dynamic process support
+  6) Experimental features
 
-  7) Experimental features
+  7) Known problems
 
-  8) Known problems
-
-  9) Fixed-point library
+  8) Fixed-point library
 
 
 1) What's new in this release?
@@ -28,13 +26,31 @@ CONTENTS
 
 Compared to the 2.2.0, this release has the following new items:
 
-  - Bug fixes, see next section.
+  - Bug fixes, see section 2.
+
+  - Expanded dynamic process capabilities, see section 5.
      
 
 2) Bug fixes and enhancements
 =============================
 
 Following is the list of bug fixes and enhancements for this release:
+
+     - Plugged a memory leak in operator - for sc_signed operations. If 
+       the two operands were equal it returned a new sc_signed instance 
+       of zero, but did not free its temporary buffer.
+
+     - Added masking for the RADIX size to the conversion of double
+       values to the internal representation of sc_unsigned and
+       sc_signed values. Changes to sc_signed.cpp and sc_unsigned.cpp.
+
+     - Added a static std::vector<sc_object*> field to the sc_object
+       class to return for get_child_objects() rather than a dynamic
+       allocation. Changes to sc_object.h and sc_object.cpp.
+
+     - sc_mutex::lock() & sc_mutex::trylock() now allow owner to apply
+       lock more than once without incident. Previous behavior locked 
+       up the owning process.
 
      - Fixed list processing for attributes to match that of C++ Standard
        Library classes.
@@ -79,7 +95,7 @@ Following is the list of bug fixes and enhancements for this release:
 
        src/sysc/datatypes/int/sc_uint_base.cpp:
 
-         Changes to sc_int_base::concat_get_data() to fix masks and values
+         Changes to sc_uint_base::concat_get_data() to fix masks and values
 	 that were unsigned long values that should have been unsigned long
 	 long values.
 
@@ -94,12 +110,19 @@ Following is the list of bug fixes and enhancements for this release:
 	 sc_unsigned to get the proper bit width. Without this fix the
 	 high order bit disappears in logical results.
 
+     - Added "kill" assignment to sc_fifo::buf_read() so that things like
+       boost::shared_ptr actually release.
+
 3) New features
 ===============
 
-Here is an overview of changes in 2.2.1 compared to 2.2.0:
+Here is an overview of changes in 2.3.0 compared to 2.2.0:
 
-    - None
+  - Expanded dynamic process capabilities, see section 5.
+
+  - Boost library used by SystemC is now in the namespace sc_boost 
+    rather than boost. This allows SystemC-based programs to be 
+    combined with programs using later versions of the boost library.
 
 4) Incompatibilities with previous releases
 ===========================================
@@ -108,28 +131,20 @@ Here is a list of known incompatibilities between this release and 2.2.0:
 
   - None
 
-5) Fixes to match with the IEEE 1666 SystemC Language Reference Manual
-======================================================================
+5) Expanded Dynamic Process Support
+===================================
 
-- None
+- TBW
 
 
-7) Experimental features
+6) Experimental features
 ========================
 
 In this section the experimental features of this release are listed.
 
   - None
 
-8) Deprecated features
-======================
-
-In this section the deprecated features of this release compared with 
-2.2.0 
-
-  - None
-
-9) Known Problems       
+7) Known Problems       
 =================
 
   - The use of the DEBUG_SYSTEMC macro does not work properly with certain
@@ -141,8 +156,8 @@ In this section the deprecated features of this release compared with
     is built.
 
 
-10) Fixed-point library
-=======================
+8) Fixed-point library
+======================
 
 (No change from 2.0.1 Production.)
 

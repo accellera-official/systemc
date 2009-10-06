@@ -41,19 +41,25 @@
  *****************************************************************************/
 
 // $Log: sc_concatref.h,v $
-// Revision 1.4  2008/10/10 17:36:39  acg
-//  Andy Goodrich: update of copyright.
+// Revision 1.4  2009/02/28 00:26:29  acg
+//  Andy Goodrich: bug fixes.
 //
-// Revision 1.3  2008/04/29 20:23:26  acg
-//  Andy Goodrich: fixed the code that assigns a string value to an
-//  sc_concatref instance.
+// Revision 1.3  2008/04/29 20:23:55  acg
+//  Andy Goodrich: fixed the code that assigns the value of a string to
+//  an sc_concatref instance.
 //
-// Revision 1.2  2008/02/14 20:56:51  acg
-//  Andy Goodrich: added casts to the front of ~0 instances to keep the
-//  MSVC compiler.
+// Revision 1.2  2008/02/14 20:57:26  acg
+//  Andy Goodrich: added casts to ~0 instances to keep MSVC compiler happy.
 //
-// Revision 1.1.1.1  2006/12/15 20:31:36  acg
-// SystemC 2.2
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.4  2006/10/23 19:36:59  acg
+//  Andy Goodrich: changed casts for operations on concatenation values to
+//  mirror those of sc_unsigned. For instance, an sc_unsigned minus a value
+//  returns an sc_signed result, whereas an sc_concatref minus a value was
+//  returning an sc_unsigned result. Now both sc_unsigned and sc_concatref
+//  minus a value return an sc_signed result.
 //
 // Revision 1.3  2006/01/13 18:54:01  acg
 // Andy Goodrich: added $Log command so that CVS comments are reproduced in
@@ -229,7 +235,7 @@ public:
             bool           right_non_zero;
 
             result_p->nbits = result_p->num_bits(m_len);
-            result_p->ndigits = DIV_CEIL(result_p->nbits); 
+	    result_p->ndigits = DIV_CEIL(result_p->nbits);
             result_p->digit = (sc_digit*)sc_core::sc_temp_heap.allocate( 
                 sizeof(sc_digit)*result_p->ndigits );
 	    result_p->digit[result_p->ndigits-1] = 0;

@@ -33,8 +33,8 @@
     
  *****************************************************************************/
 //$Log: sc_signal_rv.h,v $
-//Revision 1.1.1.1  2006/12/15 20:31:35  acg
-//SystemC 2.2
+//Revision 1.1.1.1  2006/12/15 20:20:04  acg
+//SystemC 2.3
 //
 //Revision 1.3  2006/03/21 00:00:27  acg
 //  Andy Goodrich: changed name of sc_get_current_process_base() to be

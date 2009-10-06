@@ -35,11 +35,11 @@
 
 
 // $Log: sc_vector.h,v $
-// Revision 1.3  2008/10/09 21:19:47  acg
-//  Andy Goodrich: fixed the way the end() methods calculate their value
-//  I had incorrectly cut and paste code associated with begin().
+// Revision 1.3  2008/10/09 21:20:33  acg
+//  Andy Goodrich: fixed the way the end() methods calculate their results.
+//  I had incorrectly cut and pasted code from the begin() method.
 //
-// Revision 1.2  2007/01/12 21:04:58  acg
+// Revision 1.2  2007/01/17 22:44:34  acg
 //  Andy Goodrich: fix for Microsoft compiler.
 //
 // Revision 1.3  2006/01/13 18:53:11  acg
@@ -91,7 +91,7 @@ public:
 	{}
 
 
-    size_t size() const
+    int size() const
 	{ return m_vector.size(); }
 
 
@@ -108,6 +108,7 @@ public:
     { 
         return static_cast<const_iterator> (ADDR_ACCESS(m_vector.size()));
     }
+
 
     sc_pvector<T>& operator = ( const sc_pvector<T>& rhs )
 	{ m_vector = rhs.m_vector; return *this; }

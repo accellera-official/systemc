@@ -35,11 +35,14 @@
  *****************************************************************************/
 
 // $Log: sc_method_process.cpp,v $
-// Revision 1.2  2008/10/10 17:36:41  acg
-//  Andy Goodrich: update of copyright.
+// Revision 1.2  2008/05/22 17:06:25  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
 //
-// Revision 1.1.1.1  2006/12/15 20:31:37  acg
-// SystemC 2.2
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.7  2006/04/20 17:08:16  acg
+//  Andy Goodrich: 3.0 style process changes.
 //
 // Revision 1.6  2006/04/11 23:13:20  acg
 //   Andy Goodrich: Changes for reduced reset support that only includes
@@ -115,6 +118,96 @@ void sc_method_process::clear_trigger()
         break;
     }
     m_trigger_type = STATIC;
+}
+
+//------------------------------------------------------------------------------
+//"sc_method_process::disable_process"
+//
+// This virtual method disables this process and its children if requested to.
+//     descendants = indicator of whether this process' children should also
+//                   be suspended
+//------------------------------------------------------------------------------
+void sc_method_process::disable_process(
+    sc_descendant_inclusion_info descendants )
+{     
+    int                              child_i;    // Index of child accessing.
+    int                              child_n;    // Number of children.
+    sc_process_b*                    child_p;    // Child accessing.
+    const ::std::vector<sc_object*>* children_p; // Vector of children.
+
+    // IF NEEDED PROPOGATE THE SUSPEND REQUEST THROUGH OUR DESCENDANTS:
+
+    if ( descendants == SC_INCLUDE_DESCENDANTS )
+    {
+        children_p = &get_child_objects();
+        child_n = children_p->size();
+        for ( child_i = 0; child_i < child_n; child_i++ )
+        {
+            child_p = DCAST<sc_process_b*>((*children_p)[child_i]);
+            if ( child_p ) child_p->disable_process(descendants);
+        }
+    }
+
+    // SUSPEND OUR OBJECT INSTANCE:
+
+	switch( m_state )
+	{
+	  case ps_normal:
+	  	m_state = ps_disabled;
+		break;
+	  case ps_suspended:
+	  case ps_suspended_and_pending:
+	  	m_state = ps_disabled_and_suspended;
+		break;
+	  default:
+	  	break;
+    }
+}
+
+
+//------------------------------------------------------------------------------
+//"sc_method_process::enable_process"
+//
+// This method enables the execution of this process, and if requested, its
+// descendants. If the process was suspended and has a resumption pending it 
+// will be dispatched in the next delta cycle. Otherwise the state will be
+// adjusted to indicate it is no longer suspended, but no immediate execution
+// will occur.
+//------------------------------------------------------------------------------
+void sc_method_process::enable_process(
+    sc_descendant_inclusion_info descendants )
+{
+    int                              child_i;    // Index of child accessing.
+    int                              child_n;    // Number of children.
+    sc_process_b*                    child_p;    // Child accessing.
+    const ::std::vector<sc_object*>* children_p; // Vector of children.
+
+    // IF NEEDED PROPOGATE THE RESUME REQUEST THROUGH OUR DESCENDANTS:
+
+    if ( descendants == SC_INCLUDE_DESCENDANTS )
+    {
+        children_p = &get_child_objects();
+        child_n = children_p->size();
+        for ( child_i = 0; child_i < child_n; child_i++ )
+        {
+            child_p = DCAST<sc_process_b*>((*children_p)[child_i]);
+            if ( child_p ) child_p->enable_process(descendants);
+        }
+    }
+
+    // RESUME OBJECT INSTANCE:
+
+    switch( m_state )
+    {
+      case ps_disabled:
+        m_state = ps_normal;
+        break;
+      case ps_disabled_and_suspended:
+        m_state = ps_suspended;
+        break;
+      default:
+        break;
+	}
 }
 
 
@@ -195,6 +288,30 @@ sc_method_process::sc_method_process( const char* name_p,
             sc_sensitive::make_static_sensitivity(
                 this, *opt_p->m_sensitive_event_finders[i]);
         }
+
+		// process any reset signal specification:
+		if ( opt_p->m_areset_iface_p )
+		{
+			sc_reset::reset_signal_is(
+				true, *opt_p->m_areset_iface_p, opt_p->m_areset_level );
+		}
+		if ( opt_p->m_areset_port_p )
+		{
+			sc_reset::reset_signal_is(
+				true, *opt_p->m_areset_port_p, opt_p->m_areset_level );
+		}
+#if 0 // @@@@ not allowed in specification.
+		if ( opt_p->m_reset_iface_p )
+		{
+			sc_reset::reset_signal_is(
+				false, *opt_p->m_reset_iface_p, opt_p->m_reset_level );
+		}
+		if ( opt_p->m_reset_port_p )
+		{
+			sc_reset::reset_signal_is(
+				false, *opt_p->m_reset_port_p, opt_p->m_reset_level );
+		}
+#endif // @@@@
     }
 
     else
@@ -212,6 +329,157 @@ sc_method_process::~sc_method_process()
 {
 }
 
+
+//------------------------------------------------------------------------------
+//"sc_method_process::suspend_process"
+//
+// This virtual method suspends this process and its children if requested to.
+//     descendants = indicator of whether this process' children should also
+//                   be suspended
+//------------------------------------------------------------------------------
+void sc_method_process::suspend_process(
+    sc_descendant_inclusion_info descendants )
+{     
+    int                              child_i;    // Index of child accessing.
+    int                              child_n;    // Number of children.
+    sc_process_b*                    child_p;    // Child accessing.
+    const ::std::vector<sc_object*>* children_p; // Vector of children.
+
+    // IF NEEDED PROPOGATE THE SUSPEND REQUEST THROUGH OUR DESCENDANTS:
+
+    if ( descendants == SC_INCLUDE_DESCENDANTS )
+    {
+        children_p = &get_child_objects();
+        child_n = children_p->size();
+        for ( child_i = 0; child_i < child_n; child_i++ )
+        {
+            child_p = DCAST<sc_process_b*>((*children_p)[child_i]);
+            if ( child_p ) child_p->suspend_process(descendants);
+        }
+    }
+
+    // SUSPEND OUR OBJECT INSTANCE:
+	//
+	// (1) If we are on the runnable queue then we are also pending.
+	// (2) If this is self-suspension we are also pending.
+
+	switch( m_state )
+	{
+	  case ps_normal:
+		m_state = ( (next_runnable() != 0) ||
+			( sc_get_current_process_b() == DCAST<sc_process_b*>(this) ) ) ?
+			ps_suspended_and_pending : ps_suspended;
+		break;
+	  case ps_disabled:
+	  	m_state = ps_disabled_and_suspended;
+		break;
+	  default:
+	  	break;
+    }
+}
+
+//------------------------------------------------------------------------------
+//"sc_method_process::resume_process"
+//
+// This method resumes the execution of this process, and if requested, its
+// descendants. If the process was suspended and has a resumption pending it 
+// will be dispatched in the next delta cycle. Otherwise the state will be
+// adjusted to indicate it is no longer suspended, but no immediate execution
+// will occur.
+//------------------------------------------------------------------------------
+void sc_method_process::resume_process(
+    sc_descendant_inclusion_info descendants )
+{
+    int                              child_i;    // Index of child accessing.
+    int                              child_n;    // Number of children.
+    sc_process_b*                    child_p;    // Child accessing.
+    const ::std::vector<sc_object*>* children_p; // Vector of children.
+
+    // IF NEEDED PROPOGATE THE RESUME REQUEST THROUGH OUR DESCENDANTS:
+
+    if ( descendants == SC_INCLUDE_DESCENDANTS )
+    {
+        children_p = &get_child_objects();
+        child_n = children_p->size();
+        for ( child_i = 0; child_i < child_n; child_i++ )
+        {
+            child_p = DCAST<sc_process_b*>((*children_p)[child_i]);
+            if ( child_p ) child_p->resume_process(descendants);
+        }
+    }
+
+    // RESUME OBJECT INSTANCE:
+
+    switch( m_state )
+    {
+      case ps_suspended:
+        m_state = ps_normal;
+        break;
+      case ps_suspended_and_pending:
+        m_state = ps_normal;
+		if ( next_runnable() == 0 )
+			simcontext()->push_runnable_method( this );
+        break;
+      case ps_disabled_and_suspended:
+        m_state = ps_disabled;
+        break;
+      default:
+        break;
+	}
+}
+
+
+//------------------------------------------------------------------------------
+//"sc_method_process::throw_reset"
+//
+// This virtual method is invoked to "throw" a reset. If the reset is 
+// asynchronous the method will cancel any dynamic waits and queue this 
+// object instance to be executed. If the reset is synchronous this is a no-op.
+//------------------------------------------------------------------------------
+void sc_method_process::throw_reset( bool async )
+{
+	if ( async )
+	{
+		if ( m_event_p ) m_event_p->remove_dynamic( this );
+		if ( m_event_list_p ) m_event_list_p->remove_dynamic( this, 0 );
+		if ( next_runnable() == 0 ) simcontext()->push_runnable_method( this );
+    }
+}
+
+
+//------------------------------------------------------------------------------
+//"sc_method_process::throw_user"
+//
+// This virtual method is invoked when a user exception is to be thrown.
+// If requested it will also throw the exception to the children of this 
+// object instance. Since this is a method no throw will occur for this
+// object instance. The children will be awakened from youngest child to
+// eldest.
+//     helper_p    -> object to use to throw the exception.
+//     descendants =  indicator of whether this process' children should also
+//                    be suspended
+//------------------------------------------------------------------------------
+void sc_method_process::throw_user( const sc_throw_it_helper& helper,
+    sc_descendant_inclusion_info descendants )
+{     
+    int                              child_i;    // Index of child accessing.
+    int                              child_n;    // Number of children.
+    sc_process_b*                    child_p;    // Child accessing.
+    const ::std::vector<sc_object*>* children_p; // Vector of children.
+
+    // IF NEEDED PROPOGATE THE THROW REQUEST THROUGH OUR DESCENDANTS:
+
+    if ( descendants == SC_INCLUDE_DESCENDANTS )
+    {
+        children_p = &get_child_objects();
+        child_n = children_p->size();
+        for ( child_i = 0; child_i < child_n; child_i++ )
+        {
+            child_p = DCAST<sc_process_b*>((*children_p)[child_i]);
+            if ( child_p ) child_p->throw_user(helper, descendants);
+        }
+    }
+}
 
 //------------------------------------------------------------------------------
 //"sc_method_process::trigger_dynamic"

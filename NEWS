@@ -6,7 +6,7 @@
     o Compliance with the IEEE 1666 SystemC Language reference module.
   - Platforms and compilers supported (added since 2.1):
     o Support for 64-bit Linux systems gcc-3.4.3.
-    o Linux with GNU C++ compiler versions gcc-3.4.5 and gcc-4.1.0.
+    o Linux with GNU C++ compiler version gcc-4.0.1.
     o MacOS X with GNU C++ compiler version gcc-4.0.0.
 
 * SystemC 2.1 

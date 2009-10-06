@@ -25,7 +25,7 @@
 # include <exception>
 #endif
 
-namespace boost
+namespace sc_boost
 {
 
 #ifdef BOOST_NO_EXCEPTIONS
@@ -41,6 +41,6 @@ template<class E> inline void throw_exception(E const & e)
 
 #endif
 
-} // namespace boost
+} // namespace sc_boost
 
 #endif // #ifndef BOOST_THROW_EXCEPTION_HPP_INCLUDED

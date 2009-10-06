@@ -20,7 +20,7 @@
   sc_cthread_process.h -- Clocked thread declarations
 
   Original Author: Andy Goodrich, Forte Design Systems, 4 August 2005
-
+               
 
  *****************************************************************************/
 
@@ -35,11 +35,18 @@
  *****************************************************************************/
 
 // $Log: sc_cthread_process.h,v $
-// Revision 1.2  2008/10/10 17:36:40  acg
-//  Andy Goodrich: update of copyright.
+// Revision 1.2  2008/05/22 17:06:25  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
 //
-// Revision 1.1.1.1  2006/12/15 20:31:37  acg
-// SystemC 2.2
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.6  2006/05/08 17:57:13  acg
+//  Andy Goodrich: Added David Long's forward declarations for friend functions
+//  to keep the Microsoft C++ compiler happy.
+//
+// Revision 1.5  2006/04/20 17:08:16  acg
+//  Andy Goodrich: 3.0 style process changes.
 //
 // Revision 1.4  2006/04/11 23:13:20  acg
 //   Andy Goodrich: Changes for reduced reset support that only includes
@@ -57,29 +64,20 @@
 
 namespace sc_core {
 
+// friend function declarations:
 
-// friend function declarations
-    void wait( sc_simcontext* );
-    void wait( const sc_event&,
-              sc_simcontext* );
-    void wait( sc_event_or_list&,
-              sc_simcontext* );
-    void wait( sc_event_and_list&,
-              sc_simcontext* );
-    void wait( const sc_time&,
-              sc_simcontext* );
-    void wait( const sc_time&, const sc_event&,
-              sc_simcontext* );
-    void wait( const sc_time&, sc_event_or_list&,
-              sc_simcontext* );
-    void wait( const sc_time&, sc_event_and_list&,
-              sc_simcontext* );
+void halt( sc_simcontext* );
+void sc_cthread_cor_fn( void* );  
+void wait( sc_simcontext* );
+void wait( const sc_event&, sc_simcontext* );
+void wait( sc_event_or_list&, sc_simcontext* );
+void wait( sc_event_and_list&, sc_simcontext* );
+void wait( const sc_time&, sc_simcontext* );
+void wait( const sc_time&, const sc_event&, sc_simcontext* );
+void wait( const sc_time&, sc_event_or_list&, sc_simcontext* );
+void wait( const sc_time&, sc_event_and_list&, sc_simcontext* );
+void wait( int, sc_simcontext* );
 
-    void sc_cthread_cor_fn( void* );
-
-    void halt( sc_simcontext* );
-    void wait( int,
-              sc_simcontext* );
 
 //==============================================================================
 // sc_cthread_process -
@@ -117,7 +115,7 @@ class sc_cthread_process : public sc_thread_process {
 
   public:
     sc_cthread_process( const char* name_p, bool free_host,
-        SC_ENTRY_FUNC method_p, sc_process_host* host_p,
+        SC_ENTRY_FUNC method_p, sc_process_host* host_p, 
         const sc_spawn_options* opt_p );
     virtual ~sc_cthread_process();
 
@@ -128,6 +126,7 @@ class sc_cthread_process : public sc_thread_process {
   protected:
     sc_cthread_handle next_exist();
     void set_next_exist( sc_cthread_handle next_p );
+    virtual void throw_reset( bool async );
 
 private:
 
@@ -170,6 +169,6 @@ inline void sc_cthread_process::wait_halt()
     throw sc_halt();
 }
 
-} // namespace sc_core
+} // namespace sc_core 
 
 #endif // !defined(sc_cthread_process_h_INCLUDED)

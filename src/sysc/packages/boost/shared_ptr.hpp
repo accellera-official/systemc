@@ -37,7 +37,7 @@
 # pragma warning(disable:4284) // odd return type for operator->
 #endif
 
-namespace boost
+namespace sc_boost
 {
 
 template<class T> class weak_ptr;
@@ -82,7 +82,7 @@ template<> struct shared_ptr_traits<void const volatile>
 
 // enable_shared_from_this support
 
-template<class T, class Y> void sp_enable_shared_from_this( shared_count const & pn, boost::enable_shared_from_this<T> const * pe, Y const * px )
+template<class T, class Y> void sp_enable_shared_from_this( shared_count const & pn, sc_boost::enable_shared_from_this<T> const * pe, Y const * px )
 {
     if(pe != 0) pe->_internal_weak_this._internal_assign(const_cast<Y*>(px), pn);
 }
@@ -187,7 +187,7 @@ public:
     {
         if(px == 0)
         {
-            boost::throw_exception(std::bad_cast());
+            sc_boost::throw_exception(std::bad_cast());
         }
     }
 
@@ -410,7 +410,7 @@ template<class T, class U> shared_ptr<T> shared_polymorphic_downcast(shared_ptr<
     return shared_static_cast<T>(r);
 }
 
-// get_pointer() enables boost::mem_fn to recognize shared_ptr
+// get_pointer() enables sc_boost::mem_fn to recognize shared_ptr
 
 template<class T> inline T * get_pointer(shared_ptr<T> const & p)
 {
@@ -467,7 +467,7 @@ template<class D, class T> D * get_deleter(shared_ptr<T> const & p)
 
 #endif
 
-} // namespace boost
+} // namespace sc_boost
 
 #ifdef BOOST_MSVC
 # pragma warning(pop)

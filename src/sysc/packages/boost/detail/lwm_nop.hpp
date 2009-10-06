@@ -17,7 +17,7 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 
-namespace boost
+namespace sc_boost
 {
 
 namespace detail
@@ -32,6 +32,6 @@ public:
 
 } // namespace detail
 
-} // namespace boost
+} // namespace sc_boost
 
 #endif // #ifndef BOOST_DETAIL_LWM_NOP_HPP_INCLUDED

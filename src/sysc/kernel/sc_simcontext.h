@@ -52,11 +52,21 @@
                                
  *****************************************************************************/
 // $Log: sc_simcontext.h,v $
-// Revision 1.2  2008/10/10 17:36:42  acg
-//  Andy Goodrich: update of copyright.
+// Revision 1.3  2008/05/22 17:06:26  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
 //
-// Revision 1.1.1.1  2006/12/15 20:31:37  acg
-// SystemC 2.2
+// Revision 1.2  2007/09/20 20:32:35  acg
+//  Andy Goodrich: changes to the semantics of throw_it() to match the
+//  specification. A call to throw_it() will immediately suspend the calling
+//  thread until all the throwees have executed. At that point the calling
+//  thread will be restarted before the execution of any other threads.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.13  2006/05/08 18:00:06  acg
+// Andy Goodrich: added David Long's forward declarations for friend
+//   functions, methods, and operators to keep the Microsoft compiler happy.
 //
 // Revision 1.11  2006/04/11 23:13:21  acg
 //   Andy Goodrich: Changes for reduced reset support that only includes
@@ -129,6 +139,9 @@ class sc_signal_bool_deval;
 class sc_trace_file;
 class sc_runnable;
 class sc_process_host;
+class sc_method_process;
+class sc_cthread_process;
+class sc_thread_process;
 
 
 
@@ -184,15 +197,17 @@ class sc_simcontext
     friend class sc_clock;
     friend class sc_method_process;
     friend class sc_process_b;
+    friend class sc_process_handle;
 	friend class sc_prim_channel;
+    friend class sc_cthread_process;
     friend class sc_thread_process;
     friend sc_dt::uint64 sc_delta_count();
     friend const std::vector<sc_object*>& sc_get_top_level_objects(
         const sc_simcontext* simc_p);
+    friend bool sc_pending_activity_at_current_time();
     friend bool sc_is_running( const sc_simcontext* simc_p );
 
     friend bool sc_end_of_simulation_invoked();
-    friend bool sc_pending_activity_at_current_time();
     friend bool sc_start_of_simulation_invoked();
 
     void init();
@@ -285,7 +300,7 @@ private:
     void add_child_object( sc_object* );
     void remove_child_object( sc_object* );
 
-    void crunch(bool once=false);
+    void crunch( bool once=false );
 
     int add_delta_event( sc_event* );
     void remove_delta_event( sc_event* );
@@ -306,6 +321,9 @@ private:
 
     void remove_runnable_method( sc_method_handle );
     void remove_runnable_thread( sc_thread_handle );
+
+	void requeue_current_process();
+	void suspend_current_process();
 
     void do_sc_stop_action();
 

@@ -35,8 +35,8 @@
 
 /* 
 $Log: scx_signal_uint.cpp,v $
-Revision 1.1.1.1  2006/12/15 20:31:29  acg
-SystemC 2.2
+Revision 1.1.1.1  2006/12/15 20:20:03  acg
+SystemC 2.3
 
 Revision 1.2  2005/12/26 20:11:14  acg
 Fixed up copyright.

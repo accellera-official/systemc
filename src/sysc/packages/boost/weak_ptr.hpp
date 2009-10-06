@@ -20,7 +20,7 @@
 # pragma warning(disable:4284) // odd return type for operator->
 #endif
 
-namespace boost
+namespace sc_boost
 {
 
 template<class T> class weak_ptr
@@ -183,7 +183,7 @@ template<class T> shared_ptr<T> make_shared(weak_ptr<T> const & r)
     return r.lock();
 }
 
-} // namespace boost
+} // namespace sc_boost
 
 #ifdef BOOST_MSVC
 # pragma warning(pop)

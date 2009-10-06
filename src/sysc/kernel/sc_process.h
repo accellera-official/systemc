@@ -30,12 +30,12 @@
   changes you are making here.
 
       Name, Affiliation, Date: Andy Goodrich, Forte Design Systems, 12 Aug 05
-  Description of Modification: This is the rewrite of process support. It
+  Description of Modification: This is the rewrite of process support. It 
                                contains some code from the original
                                sc_process.h by Stan Liao, and the now-defunct
                                sc_process_b.h by Stan Liao and Martin
                                Janssen, all of Synopsys, Inc., It also contains
-                               code from the original sc_process_b.h by
+                               code from the original sc_process_b.h by 
                                Andy Goodrich of Forte Design Systems and
                                Bishnupriya Bhattacharya of Cadence Design
                                Systems.
@@ -46,14 +46,27 @@
  *****************************************************************************/
 
 // $Log: sc_process.h,v $
-// Revision 1.3  2008/10/10 17:36:41  acg
-//  Andy Goodrich: update of copyright.
+// Revision 1.2  2008/05/22 17:06:26  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
 //
-// Revision 1.2  2008/05/22 17:04:13  acg
-//  Andy Goodrich: refined the check for Microsoft platforms.
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
 //
-// Revision 1.1.1.1  2006/12/15 20:31:37  acg
-// SystemC 2.2
+// Revision 1.11  2006/05/08 17:58:10  acg
+// Andy Goodrich: added David Long's forward declarations for friend
+//   functions, methods, and operators to keep the Microsoft compiler happy.
+//
+// Revision 1.10  2006/04/28 23:29:01  acg
+//  Andy Goodrich: added an sc_core:: prefix to SC_FUNC_PTR in the
+//  SC_MAKE_FUNC_PTR macro to allow its transpareuse outside of the sc_core
+//  namespace.
+//
+// Revision 1.9  2006/04/28 21:52:57  acg
+//  Andy Goodrich: changed SC_MAKE_FUNC_PTR to use a static cast to address
+//  and AIX issue wrt sc_module's inherited classes.
+//
+// Revision 1.8  2006/04/20 17:08:17  acg
+//  Andy Goodrich: 3.0 style process changes.
 //
 // Revision 1.7  2006/04/11 23:13:21  acg
 //   Andy Goodrich: Changes for reduced reset support that only includes
@@ -91,14 +104,15 @@ namespace sc_core {
 
 // Forward declarations:
 class sc_process_handle;
+class sc_thread_process;
 class sc_reset;
 
-// friend function declarations
-    const char* sc_gen_unique_name( const char*, bool preserve_first );
-    sc_process_handle sc_get_current_process_handle();
-    void sc_thread_cor_fn( void* arg );
-    void sc_cthread_cor_fn( void* arg );
-    bool timed_out( sc_simcontext* );
+const char* sc_gen_unique_name( const char*, bool preserve_first );
+sc_process_handle sc_get_current_process_handle();
+void sc_thread_cor_fn( void* arg );
+void sc_cthread_cor_fn( void* arg );
+bool timed_out( sc_simcontext* );
+
 
 
 // Process handles as forward references:
@@ -118,6 +132,14 @@ enum sc_curr_proc_kind
     SC_CTHREAD_PROC_
 };
 
+// Descendant information for process hierarchy operations:
+
+enum sc_descendant_inclusion_info {
+    SC_NO_DESCENDANTS=0,
+    SC_INCLUDE_DESCENDANTS,
+    SC_INVALID_DESCENDANTS
+};
+
 //==============================================================================
 // CLASS sc_process_host
 //
@@ -125,7 +147,7 @@ enum sc_curr_proc_kind
 // their methods (e.g., sc_module)
 //==============================================================================
 
-class sc_process_host
+class sc_process_host 
 {
   public:
     sc_process_host() {}
@@ -137,7 +159,7 @@ class sc_process_host
 //==============================================================================
 // CLASS sc_process_monitor
 //
-// This class provides a way of monitoring a process' status (e.g., waiting
+// This class provides a way of monitoring a process' status (e.g., waiting 
 // for a thread to complete its execution.) This class is intended to be a base
 // class for classes which need to monitor a process or processes (e.g.,
 // sc_join.) Its methods should be overloaded where notifications are desired.
@@ -149,28 +171,28 @@ class sc_process_monitor {
         spm_exit = 0
     };
     virtual ~sc_process_monitor() {}
-    virtual void signal(sc_thread_handle thread_p, int type) {}
+    virtual void signal(sc_thread_handle thread_p, int type) {}  
 };
 
 //------------------------------------------------------------------------------
 // PROCESS INVOCATION METHOD OR FUNCTION:
 //
-//  Define SC_USE_MEMBER_FUNC_PTR if we want to use member function pointers
-//  to implement process dispatch. Otherwise, we'll use a hack that involves
+//  Define SC_USE_MEMBER_FUNC_PTR if we want to use member function pointers 
+//  to implement process dispatch. Otherwise, we'll use a hack that involves 
 //  creating a templated invocation object which will invoke the member
 //  function. This should not be necessary, but some compilers (e.g., VC++)
-//  do not allow the conversion from `void (callback_tag::*)()' to
-//  `void (sc_process_host::*)()'. This is supposed to be OK as long as the
-//  dynamic type is correct.  C++ Standard 5.4 "Explicit type conversion",
-//  clause 7: a pointer to member of derived class type may be explicitly
-//  converted to a pointer to member of an unambiguous non-virtual base class
-//  type.
+//  do not allow the conversion from `void (callback_tag::*)()' to 
+//  `void (sc_process_host::*)()'. This is supposed to be OK as long as the 
+//  dynamic type is correct.  C++ Standard 5.4 "Explicit type conversion", 
+//  clause 7: a pointer to member of derived class type may be explicitly 
+//  converted to a pointer to member of an unambiguous non-virtual base class 
+//  type. 
 //-----------------------------------------------------------------------------
 
 #if defined(_MSC_VER)
-#   if ( _MSC_VER > 1200 && _MSC_VER < 1400 )
-#      define SC_USE_MEMBER_FUNC_PTR
-#   endif
+#if ( _MSC_VER > 1200 )
+#   define SC_USE_MEMBER_FUNC_PTR
+#endif
 #else
 #   define SC_USE_MEMBER_FUNC_PTR
 #endif
@@ -244,23 +266,67 @@ class sc_name_gen;
 class sc_spawn_options;
 
 //==============================================================================
+// CLASS sc_throw_it<EXCEPT> - ARBITRARY EXCEPTION CLASS
+//
+// This class serves as a way of throwing an execption for an aribtrary type
+// without knowing what that type is. A true virtual method in the base
+// class is used to actually throw the execption. A pointer to the base 
+// class is used internally removing the necessity of knowing what the type
+// of EXCEPT is for code internal to the library.
+//
+// Note the clone() true virtual method. This is used to allow instances
+// of the sc_throw_it<EXCEPT> class to be easily garbage collected. Since
+// an exception may be propogated to more than one process knowing when
+// to garbage collect is non-trivial. So when a call is made to 
+// sc_process_handle::throw_it() an instance of sc_throw_it<EXCEPT> is 
+// allocated on the stack. For each process throwing the exception a copy is 
+// made via clone(). That allows those objects to be deleted by the individual
+// processes when they are no longer needed (in this implementation of SystemC 
+// that deletion will occur each time a new exception is thrown ( see 
+// sc_thread_process::suspend_me() ).
+//==============================================================================
+class sc_throw_it_helper {
+  public:
+    virtual sc_throw_it_helper* clone() const = 0;
+    virtual void throw_it() = 0;
+    sc_throw_it_helper() {}
+    virtual ~sc_throw_it_helper() {}
+};
+
+template<typename EXCEPT>
+class sc_throw_it : public sc_throw_it_helper
+{
+    typedef sc_throw_it<EXCEPT> this_type;
+  public:
+    sc_throw_it( const EXCEPT& value ) { m_value = value; }
+    virtual ~sc_throw_it() {}
+    virtual inline this_type* clone() const { return new this_type(m_value); }
+    virtual inline void throw_it() { throw m_value; }
+  protected:
+    EXCEPT m_value;  // value to be thrown.
+};
+
+//==============================================================================
 // CLASS sc_process_b - USER INITIATED DYNAMIC PROCESS SUPPORT:
 //
-// This class implements the base class for a threaded process_base process
-// whose semantics are provided by the true virtual method semantics().
-// Classes derived from this one will provide a version of semantics which
+// This class implements the base class for a threaded process_base process 
+// whose semantics are provided by the true virtual method semantics(). 
+// Classes derived from this one will provide a version of semantics which 
 // implements the desired semantics. See the sc_spawn_xxx classes below.
 //
 // Notes:
-//   (1) Object instances of this class maintain a reference count of
-//       outstanding handles. When the handle count goes to zero the
-//       object will be deleted.
+//   (1) Object instances of this class maintain a reference count of 
+//       outstanding handles. When the handle count goes to zero the 
+//       object will be deleted. 
 //   (2) Descriptions of the methods and operators in this class appear with
 //       their implementations.
 //==============================================================================
-class sc_process_b : public sc_object {
-    friend class sc_process_handle; // Allow handles to modify ref. count.
-    friend class sc_simcontext;     // Allow static processes to have base.
+class sc_process_b : public sc_object { 
+    friend class sc_simcontext;      // Allow static processes to have base.
+    friend class sc_cthread_process; // Child can access parent.
+    friend class sc_method_process;  // Child can access parent.
+    friend class sc_process_handle;  // Allow handles to modify ref. count.
+    friend class sc_thread_process;  // Child can access parent.
 
     friend class sc_object;
     friend class sc_port_base;
@@ -281,7 +347,21 @@ class sc_process_b : public sc_object {
   public:
     enum process_throw_type {
         THROW_NONE = 0,
+        THROW_USER,
         THROW_RESET
+    };
+    enum process_state {
+        ps_disabled = 0,
+        ps_disabled_and_suspended,
+        ps_normal,
+        ps_suspended,
+        ps_suspended_and_pending,
+        ps_zombie
+    };
+    enum reset_type {
+        reset_asynchronous = 0,
+        reset_off,
+        reset_synchronous
     };
     enum trigger_t
     {
@@ -295,9 +375,9 @@ class sc_process_b : public sc_object {
         AND_LIST_TIMEOUT
     };
 
-  public:
+  public: 
     sc_process_b( const char* name_p, bool free_host,
-        SC_ENTRY_FUNC method_p, sc_process_host* host_p,
+        SC_ENTRY_FUNC method_p, sc_process_host* host_p, 
         const sc_spawn_options* opt_p );
     virtual ~sc_process_b();
 
@@ -310,7 +390,7 @@ class sc_process_b : public sc_object {
 
   public:
     static inline sc_process_handle last_created_process_handle();
-
+        
   protected:
     void add_static_event( const sc_event& );
     bool dynamic() const { return m_dynamic_proc; }
@@ -318,12 +398,12 @@ class sc_process_b : public sc_object {
     inline sc_report* get_last_report() { return m_last_report_p; }
     inline bool is_runnable();
     static inline sc_process_b* last_created_process_base();
+    void remove_static_events();
     inline void set_last_report( sc_report* last_p )
-        {
+        {  
             if ( m_last_report_p ) delete m_last_report_p;
             m_last_report_p = last_p;
         }
-    void remove_static_events();
     bool trigger_static();
     inline bool timed_out() const;
 
@@ -333,8 +413,22 @@ class sc_process_b : public sc_object {
 
 
   protected: // process control methods:
-    virtual void kill_process();
+    virtual void disable_process(
+        sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS ) = 0;
+    virtual void enable_process(
+        sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS ) = 0;
+    virtual void kill_process(
+        sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
     inline void reset_changed();
+    inline void reset_process( reset_type rt,
+        sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
+    virtual void resume_process(
+        sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS ) = 0;
+    virtual void suspend_process(
+        sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS ) = 0;
+    virtual void throw_user( const sc_throw_it_helper& helper,
+        sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS ) = 0;
+    virtual void throw_reset( bool async ) = 0;
     virtual bool terminated() const;
 
   private:
@@ -352,6 +446,8 @@ class sc_process_b : public sc_object {
     int                         proc_id;
 
   protected:
+    bool                         m_areset_level;   // Level for async reset.
+    sc_reset*                    m_areset_p;       // Async reset object.
     std::vector<sc_object*>      m_child_objects;  // Child processes.
     bool                         m_dont_init;      // True: no initialize call.
     bool                         m_dynamic_proc;   // True: after elaboration.
@@ -369,13 +465,15 @@ class sc_process_b : public sc_object {
     sc_process_b*                m_runnable_p;     // sc_runnable link
     sc_process_host*             m_semantics_host_p;   // Host for semantics.
     SC_ENTRY_FUNC                m_semantics_method_p; // Method for semantics.
+    process_state                m_state;           // Process state.
     std::vector<const sc_event*> m_static_events;   // Static events waiting on.
+    bool                         m_sync_reset;      // True if in sync reset.
     sc_event*                    m_term_event_p;    // Terminated event.
+    sc_throw_it_helper*          m_throw_helper_p;  // What to throw.
     process_throw_type           m_throw_type;      // Throw type.
     bool                         m_timed_out;       // True if we timed out.
     sc_event*                    m_timeout_event_p; // Timeout event.
     trigger_t                    m_trigger_type;    // Type of trigger using.
-    bool                         m_zombie;          // True if terminated.
 
   protected:
     static sc_process_b* m_delete_next_p;          // Next process to delete.
@@ -457,7 +555,7 @@ inline sc_curr_proc_kind sc_process_b::proc_kind() const
 //------------------------------------------------------------------------------
 //"sc_process_b::reference_decrement"
 //
-// This inline method decrements the number of outstanding references to this
+// This inline method decrements the number of outstanding references to this 
 // object instance. If the number of references goes to zero, this object
 // instance is placed on the deletion queue, after deleting any process that
 // is already there. The reason for the two step deletion process is that the
@@ -479,7 +577,7 @@ inline void sc_process_b::reference_decrement()
 //------------------------------------------------------------------------------
 //"sc_process_b::reference_increment"
 //
-// This inline method increments the number of outstanding references to this
+// This inline method increments the number of outstanding references to this 
 // object instance.
 //------------------------------------------------------------------------------
 inline void sc_process_b::reference_increment()
@@ -490,34 +588,90 @@ inline void sc_process_b::reference_increment()
 
 //------------------------------------------------------------------------------
 //"sc_process_b::reset_changed"
-//
+//      
 // This method is called when there is a change in the value of the
-// signal specified via reset_signal_is. If reset_signal_is was not
+// signal that was specified via reset_signal_is. If reset_signal_is was not
 // called this method won't be either.
 //------------------------------------------------------------------------------
 inline void sc_process_b::reset_changed()
-{
-    m_throw_type = ( m_reset_p->read() == m_reset_level ) ?
-        THROW_RESET : THROW_NONE;
-}
+{       
+    if ( m_areset_p && (m_areset_p->read() == m_areset_level) ) 
+    {   
+        throw_reset(true);
+    }           
+    else if ( m_reset_p && (m_reset_p->read() == m_reset_level) ) 
+    {   
+        throw_reset(false);
+    }           
+    else
+    {
+        if ( m_throw_type == THROW_RESET ) m_throw_type = THROW_NONE;
+    }   
+}       
 
+//------------------------------------------------------------------------------
+//"sc_process_b::reset_process"
+//
+// This inline method changes the reset state of this object instance and
+// conditionally its descendants.
+//     rt = how to change reset.
+//     descendants = indication of how to process descendants.
+//------------------------------------------------------------------------------
+inline void sc_process_b::reset_process( reset_type rt,
+    sc_descendant_inclusion_info descendants )
+{
+    int                              child_i;    // Index of child accessing.
+    int                              child_n;    // Number of children.
+    sc_process_b*                    child_p;    // Child accessing.
+    const ::std::vector<sc_object*>* children_p; // Vector of children.
+
+    // PROCESS THIS OBJECT INSTANCE'S DESCENDANTS IF REQUESTED TO:
+
+    if ( descendants == SC_INCLUDE_DESCENDANTS )
+    {
+        children_p = &get_child_objects();
+        child_n = children_p->size();
+        for ( child_i = 0; child_i < child_n; child_i++ )
+        {
+            child_p = DCAST<sc_process_b*>((*children_p)[child_i]);
+            if ( child_p ) child_p->reset_process(rt, descendants);
+        }
+    }
+
+    // PROCESS THIS OBJECT INSTANCE:
+
+    switch (rt)
+    {
+      case reset_asynchronous:
+        throw_reset(true); // @@@@ it( sc_process_b::THROW_RESET, SC_NO_DESCENDANTS );
+        break;
+      case reset_synchronous:
+        m_sync_reset = true;
+        break;
+      default:
+        m_sync_reset = false;
+        break;
+    }   
+}
 
 //------------------------------------------------------------------------------
 //"sc_process_b::semantics"
 //
-// This inline method invokes the semantics for this object instance.
+// This inline method invokes the semantics for this object instance. 
 // We check to see if we are initially in reset and then invoke the
 // process semantics.
 //------------------------------------------------------------------------------
 inline void sc_process_b::semantics()
 {
     assert( m_process_kind != SC_NO_PROC_ );
-    m_throw_type = ( m_reset_p && m_reset_p->read() == m_reset_level ) ?
-        THROW_RESET : THROW_NONE;
+    m_throw_type = (
+            ( m_areset_p && m_areset_p->read() == m_areset_level ) ||
+            ( m_reset_p && m_reset_p->read() == m_reset_level ) 
+        ) ?  THROW_RESET : THROW_NONE;
 #   ifndef SC_USE_MEMBER_FUNC_PTR
         m_semantics_method_p->invoke( m_semantics_host_p );
 #   else
-        (m_semantics_host_p->*m_semantics_method_p)();
+        (m_semantics_host_p->*m_semantics_method_p)(); 
 #   endif
 }
 
@@ -529,7 +683,7 @@ inline void sc_process_b::semantics()
 //------------------------------------------------------------------------------
 inline bool sc_process_b::terminated() const
 {
-    return m_zombie;
+    return m_state == ps_zombie;
 }
 
 

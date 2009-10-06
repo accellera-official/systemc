@@ -39,7 +39,7 @@
     namespace std { class bad_typeid { }; }
 # endif
 
-namespace boost
+namespace sc_boost
 {
 
   namespace detail
@@ -124,7 +124,7 @@ namespace boost
       { detail::report_exception( out, "unknown exception", "" ); }
 #endif // BOOST_NO_EXCEPTIONS
 
-    if ( exception_thrown ) result = boost::exit_exception_failure;
+    if ( exception_thrown ) result = sc_boost::exit_exception_failure;
 
     if ( result != 0 && result != exit_success )
     {
@@ -140,7 +140,7 @@ namespace boost
     return result;
   } // catch_exceptions
 
-} // boost
+} // sc_boost
 
 #endif  // BOOST_CATCH_EXCEPTIONS_HPP
 

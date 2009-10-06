@@ -35,7 +35,7 @@
 #include <sysc/packages/boost/call_traits.hpp>
 #endif
 
-namespace boost
+namespace sc_boost
 {
 #ifdef BOOST_MSVC6_MEMBER_TEMPLATES
 //
@@ -112,7 +112,7 @@ public:
    {
       init_one<best_conversion_traits<A, T1, T2>::value>::init(val, &_first, &_second);
    }
-   compressed_pair_0(const ::boost::compressed_pair<T1,T2>& x)
+   compressed_pair_0(const ::sc_boost::compressed_pair<T1,T2>& x)
       : _first(x.first()), _second(x.second()) {}
 
 #if 0
@@ -164,7 +164,7 @@ public:
       init_one<best_conversion_traits<A, T1, T2>::value>::init(val, &_first, static_cast<T2*>(this));
    }
 
-   compressed_pair_1(const ::boost::compressed_pair<T1,T2>& x)
+   compressed_pair_1(const ::sc_boost::compressed_pair<T1,T2>& x)
       : T2(x.second()), _first(x.first()) {}
 
 #if defined(BOOST_MSVC) && BOOST_MSVC <= 1300
@@ -215,7 +215,7 @@ public:
    {
       init_one<best_conversion_traits<A, T1, T2>::value>::init(val, static_cast<T1*>(this), &_second);
    }
-   compressed_pair_2(const ::boost::compressed_pair<T1,T2>& x)
+   compressed_pair_2(const ::sc_boost::compressed_pair<T1,T2>& x)
       : T1(x.first()), _second(x.second()) {}
 
 #if 0
@@ -262,7 +262,7 @@ public:
    {
       init_one<best_conversion_traits<A, T1, T2>::value>::init(val, static_cast<T1*>(this), static_cast<T2*>(this));
    }
-   compressed_pair_3(const ::boost::compressed_pair<T1,T2>& x)
+   compressed_pair_3(const ::sc_boost::compressed_pair<T1,T2>& x)
       : T1(x.first()), T2(x.second()) {}
 
    first_reference       first()       { return *this; }
@@ -295,7 +295,7 @@ public:
             compressed_pair_4(first_param_type x, second_param_type y) : T1(x), m_second(y) {}
    // only one single argument constructor since T1 == T2
    explicit compressed_pair_4(first_param_type x) : T1(x), m_second(x) {}
-   compressed_pair_4(const ::boost::compressed_pair<T1,T2>& x)
+   compressed_pair_4(const ::sc_boost::compressed_pair<T1,T2>& x)
       : T1(x.first()), m_second(x.second()) {}
 
    first_reference       first()       { return *this; }
@@ -333,7 +333,7 @@ public:
             compressed_pair_5(first_param_type x, second_param_type y) : _first(x), _second(y) {}
    // only one single argument constructor since T1 == T2
    explicit compressed_pair_5(first_param_type x) : _first(x), _second(x) {}
-   compressed_pair_5(const ::boost::compressed_pair<T1,T2>& c) 
+   compressed_pair_5(const ::sc_boost::compressed_pair<T1,T2>& c) 
       : _first(c.first()), _second(c.second()) {}
 
    first_reference       first()       { return _first; }
@@ -502,7 +502,7 @@ inline void swap(compressed_pair<T1, T2>& x, compressed_pair<T1, T2>& y)
 
 #endif
 
-} // boost
+} // sc_boost
 
 #endif // BOOST_OB_COMPRESSED_PAIR_HPP
 

@@ -14,7 +14,7 @@
 
 #include <sysc/packages/boost/utility/detail/in_place_factory_prefix.hpp>
 
-namespace boost {
+namespace sc_boost {
 
 class typed_in_place_factory_base {} ;
 
@@ -49,7 +49,7 @@ in_place ( BOOST_PP_ENUM_BINARY_PARAMS(BOOST_PP_INC(n),A, const& a) ) \
 
 BOOST_PP_REPEAT( BOOST_MAX_INPLACE_FACTORY_ARITY, BOOST_DEFINE_TYPED_INPLACE_FACTORY_CLASS, BOOST_PP_EMPTY() )
 
-} // namespace boost
+} // namespace sc_boost
 
 #include <sysc/packages/boost/utility/detail/in_place_factory_suffix.hpp>
 

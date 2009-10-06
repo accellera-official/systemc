@@ -106,8 +106,12 @@ ADD_HELPER(small_type us, int unb, int und,
 
     int cmp_res = vec_cmp(und, ud, vnd, vd);
     
-    if (cmp_res == 0) // u == v
+    if (cmp_res == 0) { // u == v
+#ifndef SC_MAX_NBITS
+      delete d;
+#endif
       return CLASS_TYPE();
+    }
     
     if (cmp_res > 0)  { // u > v
 

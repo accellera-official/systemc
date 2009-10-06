@@ -27,7 +27,7 @@
 #include <sysc/packages/boost/type_traits/is_pointer.hpp>
 #include <sysc/packages/boost/detail/workaround.hpp>
 
-namespace boost{
+namespace sc_boost{
 
 namespace detail{
 
@@ -78,8 +78,8 @@ public:
    // of ct_imp to handle the logic. (JM)
    typedef typename detail::ct_imp<
       T,
-      ::boost::is_pointer<T>::value,
-      ::boost::is_arithmetic<T>::value
+      ::sc_boost::is_pointer<T>::value,
+      ::sc_boost::is_arithmetic<T>::value
    >::param_type param_type;
 };
 

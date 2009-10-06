@@ -33,8 +33,8 @@
     
  *****************************************************************************/
 //$Log: sc_fifo.h,v $
-//Revision 1.1.1.1  2006/12/15 20:31:35  acg
-//SystemC 2.2
+//Revision 1.1.1.1  2006/12/15 20:20:04  acg
+//SystemC 2.3
 //
 //Revision 1.4  2006/01/24 20:46:31  acg
 //Andy Goodrich: changes to eliminate use of deprecated features. For instance,
@@ -427,6 +427,7 @@ sc_fifo<T>::buf_read( T& val_ )
 	return false;
     }
     val_ = m_buf[m_ri];
+    m_buf[m_ri] = T(); // clear entry for boost::shared_ptr, et al.
     m_ri = ( m_ri + 1 ) % m_size;
     m_free ++;
     return true;

@@ -11,7 +11,7 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 
-namespace boost
+namespace sc_boost
 {
 
 namespace _bi
@@ -182,6 +182,6 @@ template<class R, class A1, class A2, class A3, class A4, class F> _bi::af4<R, A
     return _bi::af4<R, A1, A2, A3, A4, F>(f);
 }
 
-} // namespace boost
+} // namespace sc_boost
 
 #endif // #ifndef BOOST_BIND_MAKE_ADAPTABLE_HPP_INCLUDED

@@ -36,15 +36,18 @@
  *****************************************************************************/
 
 // $Log: sc_runnable_int.h,v $
-// Revision 1.2  2008/10/10 17:36:42  acg
-//  Andy Goodrich: update of copyright.
+// Revision 1.3  2009/02/28 00:26:58  acg
+//  Andy Goodrich: changed boost name space to sc_boost to allow use with
+//  full boost library applications.
 //
-// Revision 1.1.1.1  2006/12/15 20:31:37  acg
-// SystemC 2.2
+// Revision 1.2  2008/05/22 17:06:26  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
 //
 // Revision 1.4  2006/04/20 17:08:17  acg
-//  Andy Goodrich: Changed loop end checks to use non-zero unique values
-//                 rather than erroneous check for zero values.
+//  Andy Goodrich: 3.0 style process changes.
 //
 // Revision 1.3  2006/01/13 18:44:30  acg
 // Added $Log to record CVS changes into the source.

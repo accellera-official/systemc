@@ -58,15 +58,32 @@
 				 execution problem with using sc_pvector.
  *****************************************************************************/
 // $Log: sc_simcontext.cpp,v $
-// Revision 1.3  2008/10/10 17:36:42  acg
-//  Andy Goodrich: update of copyright.
+// Revision 1.3  2008/05/22 17:06:26  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
 //
-// Revision 1.2  2008/05/22 17:03:35  acg
-//  Andy Goodrich: switch sc_stop message to use messaging mechanism rather
-//  than cout.
+// Revision 1.2  2007/09/20 20:32:35  acg
+//  Andy Goodrich: changes to the semantics of throw_it() to match the
+//  specification. A call to throw_it() will immediately suspend the calling
+//  thread until all the throwees have executed. At that point the calling
+//  thread will be restarted before the execution of any other threads.
 //
-// Revision 1.1.1.1  2006/12/15 20:31:37  acg
-// SystemC 2.2
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.21  2006/08/29 23:37:13  acg
+//  Andy Goodrich: Added check for negative time.
+//
+// Revision 1.20  2006/05/26 20:33:16  acg
+//   Andy Goodrich: changes required by additional platform compilers (i.e.,
+//   Microsoft VC++, Sun Forte, HP aCC).
+//
+// Revision 1.19  2006/05/08 17:59:52  acg
+//  Andy Goodrich: added a check before m_curr_time is set to make sure it
+//  is not set to a time before its current value. This will treat
+//  sc_event.notify( ) calls with negative times as calls with a zero time.
+//
+// Revision 1.18  2006/04/20 17:08:17  acg
+//  Andy Goodrich: 3.0 style process changes.
 //
 // Revision 1.17  2006/04/11 23:13:21  acg
 //   Andy Goodrich: Changes for reduced reset support that only includes
@@ -521,13 +538,16 @@ sc_simcontext::crunch( bool once )
 
 	    sc_method_handle method_h = pop_runnable_method();
 	    while( method_h != 0 ) {
-		try {
-		    method_h->semantics();
-		}
-		catch( const sc_report& ex ) {
-		    ::std::cout << "\n" << ex.what() << ::std::endl;
-		    m_error = true;
-		    return;
+		if ( method_h->ready_to_run() )
+		{
+		    try {
+			method_h->semantics();
+		    }
+		    catch( const sc_report& ex ) {
+			::std::cout << "\n" << ex.what() << ::std::endl;
+			m_error = true;
+			return;
+		    }
 		}
 		method_h = pop_runnable_method();
 	    }
@@ -548,7 +568,7 @@ sc_simcontext::crunch( bool once )
 
 	    // check for call(s) to sc_stop
 	    if( m_forced_stop ) {
-		if ( stop_mode == SC_STOP_IMMEDIATE ) return;
+		if ( stop_mode == SC_STOP_IMMEDIATE ) return; 
 	    }
 
 	    if( m_runnable->is_empty() ) {
@@ -610,12 +630,12 @@ sc_simcontext::crunch( bool once )
 	    break;
 	}
 
-	// IF ONLY DOING ONE CYCLE, WE ARE DONE. OTHERWISE GET NEW CALLBACKS
+        // IF ONLY DOING ONE CYCLE, WE ARE DONE. OTHERWISE GET NEW CALLBACKS
 
-	if ( once ) break;
+        if ( once ) break;
 
 	m_runnable->toggle();
-    } 
+    }
 }
 
 inline
@@ -829,8 +849,9 @@ sc_simcontext::simulate( const sc_time& duration )
     }
     else if ( duration < SC_ZERO_TIME )
     {
-	SC_REPORT_ERROR(SC_ID_NEGATIVE_SIMULATION_TIME_,"");
+        SC_REPORT_ERROR(SC_ID_NEGATIVE_SIMULATION_TIME_,"");
     }
+
     m_in_simulator_control = true;
 
     sc_time until_t = m_curr_time + duration;
@@ -840,7 +861,7 @@ sc_simcontext::simulate( const sc_time& duration )
 
     sc_time t;
 
-    // IF DURATION WAS ZERO WE ONLY CRUNCH:
+    // IF DURATION WAS ZERO WE ONLY CRUNCH ONCE:
     //
     // We duplicate the code so that we don't add the overhead of the
     // check to each loop in the do below.
@@ -900,7 +921,6 @@ void
 sc_simcontext::do_sc_stop_action()
 {
     SC_REPORT_INFO("/OSCI/SystemC","Simulation stopped by user.");
-    // ::std::cout << "SystemC: simulation stopped by user." << ::std::endl;
     if (m_start_of_simulation_called) {
 	end();
 	m_in_simulator_control = false;
@@ -1188,6 +1208,40 @@ sc_simcontext::remove_delta_event( sc_event* e )
     e->m_delta_event_index = -1;
 }
 
+//------------------------------------------------------------------------------
+//"sc_simcontext::requeue_current_process"
+//
+// This method requeues the current process at the beginning of the run queue
+// if it is a thread. This is called by sc_process_handle::throw_it() to assure
+// that a thread that is issuing a throw will execute immediately after the
+// processes it notifies via the throw.
+//------------------------------------------------------------------------------
+void sc_simcontext::requeue_current_process()
+{
+    sc_thread_handle thread_p;
+    thread_p = DCAST<sc_thread_handle>(get_curr_proc_info()->process_handle);
+    if ( thread_p )
+    {
+	    push_runnable_thread_front( thread_p );
+    }
+}
+
+//------------------------------------------------------------------------------
+//"sc_simcontext::suspend_current_process"
+//
+// This method suspends the current process if it is a thread. This is called 
+// by sc_process_handle::throw_it() to allow the processes that have received
+// a throw to execute.
+//------------------------------------------------------------------------------
+void sc_simcontext::suspend_current_process()
+{
+    sc_thread_handle thread_p;
+    thread_p = DCAST<sc_thread_handle>(get_curr_proc_info()->process_handle);
+    if ( thread_p )
+    {
+	    thread_p->suspend_me(); 
+    }
+}
 
 void
 sc_simcontext::trace_cycle( bool delta_cycle )
@@ -1294,8 +1348,8 @@ sc_pending_activity_at_current_time()
 {
     sc_simcontext* c_p = sc_get_curr_simcontext();
     return (c_p->m_delta_events.size() != 0) ||
-    	    !c_p->m_runnable->is_empty() ||
-	    c_p->m_prim_channel_registry->pending_updates();
+            !c_p->m_runnable->is_empty() ||
+            c_p->m_prim_channel_registry->pending_updates();
 }
 
 // Set the random seed for controlled randomization -- not yet implemented

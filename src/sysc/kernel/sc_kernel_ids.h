@@ -34,11 +34,24 @@
  *****************************************************************************/
 
 // $Log: sc_kernel_ids.h,v $
-// Revision 1.2  2008/10/10 17:36:40  acg
-//  Andy Goodrich: update of copyright.
+// Revision 1.4  2009/02/28 00:26:58  acg
+//  Andy Goodrich: changed boost name space to sc_boost to allow use with
+//  full boost library applications.
 //
-// Revision 1.1.1.1  2006/12/15 20:31:37  acg
-// SystemC 2.2
+// Revision 1.3  2008/11/17 15:57:15  acg
+//  Andy Goodrich: added deprecation message for sc_module(const char*)
+//
+// Revision 1.2  2008/05/22 17:06:25  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.7  2006/08/29 23:37:13  acg
+//  Andy Goodrich: Added check for negative time.
+//
+// Revision 1.6  2006/04/20 17:08:16  acg
+//  Andy Goodrich: 3.0 style process changes.
 //
 // Revision 1.5  2006/01/25 00:31:19  acg
 //  Andy Goodrich: Changed over to use a standard message id of
@@ -173,9 +186,12 @@ SC_DEFINE_MESSAGE(SC_ID_MULTIPLE_RESETS_,         565,
 SC_DEFINE_MESSAGE(SC_ID_UNKNOWN_PROCESS_TYPE_,       566,
 	"Unknown process type" )
 SC_DEFINE_MESSAGE(SC_ID_RESET_SIGNAL_IS_NOT_ALLOWED_ , 567,
-	"reset_signal_is() is only allowed for SC_CTHREADs" )
+        "reset_signal_is() is only allowed for SC_CTHREADs" )
 SC_DEFINE_MESSAGE(SC_ID_NEGATIVE_SIMULATION_TIME_, 568,
-	"negative simulation interval specified in sc_start call" )
+    "negative simulation interval specified in sc_start call" )
+SC_DEFINE_MESSAGE(SC_ID_BAD_SC_MODULE_CONTRUCTOR_  , 569,
+        "sc_module(const char*) has been deprecated, use sc_module(const sc_module_name&)" )
+
 #endif
 
 // Taf!

@@ -34,11 +34,11 @@
  *****************************************************************************/
 
 // $Log: sc_attribute.cpp,v $
-// Revision 1.2  2008/10/10 17:36:39  acg
-//  Andy Goodrich: update of copyright.
+// Revision 1.2  2008/05/22 17:06:24  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
 //
-// Revision 1.1.1.1  2006/12/15 20:31:36  acg
-// SystemC 2.2
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
 //
 // Revision 1.4  2006/01/16 22:27:08  acg
 // Test of $Log comment.

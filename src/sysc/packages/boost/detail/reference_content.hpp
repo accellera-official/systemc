@@ -25,7 +25,7 @@
 
 #include "sysc/packages/boost/mpl/void.hpp"
 
-namespace boost {
+namespace sc_boost {
 
 namespace detail {
 
@@ -128,7 +128,7 @@ struct make_reference_content< mpl::void_ >
 
 template <typename T>
 struct has_nothrow_copy<
-      ::boost::detail::reference_content< T& >
+      ::sc_boost::detail::reference_content< T& >
     >
     : mpl::true_
 {
@@ -136,6 +136,6 @@ struct has_nothrow_copy<
 
 #endif // !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
-} // namespace boost
+} // namespace sc_boost
 
 #endif // BOOST_DETAIL_REFERENCE_CONTENT_HPP

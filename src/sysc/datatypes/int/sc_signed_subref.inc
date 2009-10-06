@@ -175,7 +175,7 @@ sc_signed_subref::operator = ( const sc_signed& v )
     for ( ; i <= m_left; i++ ) m_obj_p->set( i, v.test( l ) );
 
     return *this;
-}
+} 
 
 const sc_signed_subref& 
 sc_signed_subref::operator = ( const sc_unsigned_subref_r& v )
@@ -192,7 +192,7 @@ sc_signed_subref::operator = ( const sc_unsigned& v )
     for( i = m_right; i <= l; ++ i ) m_obj_p->set( i, v.test( i - m_right ) );
     for ( ; i <= m_left; i++ ) m_obj_p->set( i, 0 );
     return *this;
-}
+} 
 
 const sc_signed_subref& 
 sc_signed_subref::operator = ( unsigned long v )

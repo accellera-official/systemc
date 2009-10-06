@@ -27,7 +27,7 @@
 #include <functional>       // for std::less
 #include <new>              // for std::bad_alloc
 
-namespace boost
+namespace sc_boost
 {
 
 template<class T> class shared_ptr
@@ -51,7 +51,7 @@ public:
         }
         catch(...)
         {
-            boost::checked_delete(p);
+            sc_boost::checked_delete(p);
             throw;
         }
 
@@ -61,8 +61,8 @@ public:
 
         if(pn == 0)
         {
-            boost::checked_delete(p);
-            boost::throw_exception(std::bad_alloc());
+            sc_boost::checked_delete(p);
+            sc_boost::throw_exception(std::bad_alloc());
         }
 
 #endif
@@ -72,7 +72,7 @@ public:
     {
         if(--*pn == 0)
         {
-            boost::checked_delete(px);
+            sc_boost::checked_delete(px);
             delete pn;
         }
     }
@@ -170,13 +170,13 @@ template<class T> void swap(shared_ptr<T> & a, shared_ptr<T> & b)
     a.swap(b);
 }
 
-// get_pointer() enables boost::mem_fn to recognize shared_ptr
+// get_pointer() enables sc_boost::mem_fn to recognize shared_ptr
 
 template<class T> inline T * get_pointer(shared_ptr<T> const & p)
 {
     return p.get();
 }
 
-} // namespace boost
+} // namespace sc_boost
 
 #endif  // #ifndef BOOST_DETAIL_SHARED_PTR_NMT_HPP_INCLUDED

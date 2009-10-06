@@ -77,7 +77,7 @@
 
 #ifndef BOOST_HAS_THREADS
 
-namespace boost
+namespace sc_boost
 {
 
 namespace detail

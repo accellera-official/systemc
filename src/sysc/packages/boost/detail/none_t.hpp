@@ -12,7 +12,7 @@
 #ifndef BOOST_DETAIL_NONE_T_17SEP2003_HPP
 #define BOOST_DETAIL_NONE_T_17SEP2003_HPP
 
-namespace boost {
+namespace sc_boost {
 
 namespace detail {
 
@@ -22,7 +22,7 @@ typedef int none_helper::*none_t ;
 
 } // namespace detail
 
-} // namespace boost
+} // namespace sc_boost
 
 #endif
 

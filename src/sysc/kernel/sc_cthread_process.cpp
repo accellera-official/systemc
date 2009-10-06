@@ -35,11 +35,14 @@
  *****************************************************************************/
 
 // $Log: sc_cthread_process.cpp,v $
-// Revision 1.2  2008/10/10 17:36:40  acg
-//  Andy Goodrich: update of copyright.
+// Revision 1.2  2008/05/22 17:06:25  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
 //
-// Revision 1.1.1.1  2006/12/15 20:31:37  acg
-// SystemC 2.2
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.6  2006/04/20 17:08:16  acg
+//  Andy Goodrich: 3.0 style process changes.
 //
 // Revision 1.5  2006/04/11 23:13:20  acg
 //   Andy Goodrich: Changes for reduced reset support that only includes
@@ -55,6 +58,7 @@
 //
 
 #include "sysc/kernel/sc_cthread_process.h"
+#include "sysc/kernel/sc_simcontext_int.h"
 
 namespace sc_core {
 
@@ -150,5 +154,25 @@ sc_cthread_process::sc_cthread_process( const char* name_p,
 sc_cthread_process::~sc_cthread_process()
 {
 }
+
+//------------------------------------------------------------------------------
+//"sc_cthread_process::throw_reset"
+//
+// This virtual method is invoked when an reset is to be thrown. It sets the
+// wait count to zero. If the reset is asynchronous the process is scheduled
+// for an immediate reset throw.
+//------------------------------------------------------------------------------
+void sc_cthread_process::throw_reset( bool async )
+{     
+	if ( m_state == ps_zombie ) return; // if process is dead don't bother.
+
+	m_throw_type = THROW_RESET;
+	m_wait_cycle_n = 0;
+	if ( async )
+	{
+	    if ( next_runnable() == 0 ) simcontext()->push_runnable_thread( this ); 
+	}
+}
+
 
 } // namespace sc_core 

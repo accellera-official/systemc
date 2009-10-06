@@ -21,7 +21,7 @@
 //#include "sysc/packages/boost/static_assert.hpp" // gps
 
 
-namespace boost {
+namespace sc_boost {
 
   namespace detail {
 
@@ -162,7 +162,7 @@ namespace boost {
 
   } // namespace detail
 
-} // namespace boost
+} // namespace sc_boost
 
 #endif // include guard
 

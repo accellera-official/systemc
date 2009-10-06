@@ -35,15 +35,19 @@
 
 
 // $Log: sc_cor_qt.cpp,v $
-// Revision 1.3  2008/10/10 17:36:40  acg
-//  Andy Goodrich: update of copyright.
+// Revision 1.4  2008/11/11 14:03:07  acg
+//  Andy Goodrich: added execute access to the release of red zone storage
+//  per Ulli's suggestion.
 //
-// Revision 1.2  2008/03/24 18:32:11  acg
-//  Andy Goodrich: added include of sys/types.h to pick up caddr_t
-//  declaration.
+// Revision 1.3  2008/05/22 17:06:25  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
 //
-// Revision 1.1.1.1  2006/12/15 20:31:37  acg
-// SystemC 2.2
+// Revision 1.2  2008/03/24 18:32:36  acg
+//  Andy Goodrich: added include of sys/types.h to pick up the declaration
+//  of caddr_t.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
 //
 // Revision 1.3  2006/01/13 18:44:29  acg
 // Added $Log to record CVS changes into the source.
@@ -113,10 +117,20 @@ sc_cor_qt::stack_protect( bool enable )
 
     int ret;
 
+    // Enable the red zone at the end of the stack so that references within
+    // it will cause an interrupt.
+
     if( enable ) {
-	ret = mprotect( redzone, pagesize - 1, PROT_NONE );
-    } else {
-	ret = mprotect( redzone, pagesize - 1, PROT_READ | PROT_WRITE );
+        ret = mprotect( redzone, pagesize - 1, PROT_NONE );
+    } 
+    
+    // Revert the red zone to normal memory usage. Try to make it read - write -
+    // execute. If that does not work then settle for read - write
+
+    else {
+        ret = mprotect( redzone, pagesize - 1, PROT_READ|PROT_WRITE|PROT_EXEC);
+        if ( ret != 0 )
+            ret = mprotect( redzone, pagesize - 1, PROT_READ | PROT_WRITE );
     }
 
     assert( ret == 0 );
@@ -187,9 +201,8 @@ sc_cor_pkg_qt::create( std::size_t stack_size, sc_cor_fn* fn, void* arg )
     cor->m_pkg = this;
     cor->m_stack_size = stack_size;
     cor->m_stack = new char[cor->m_stack_size];
-    void* sto = stack_align( cor->m_stack, QUICKTHREADS_STKALIGN, 
-    	&cor->m_stack_size );
-    cor->m_sp = QUICKTHREADS_SP(sto, cor->m_stack_size - QUICKTHREADS_STKALIGN);
+    void* sto = stack_align( cor->m_stack, QUICKTHREADS_STKALIGN, &cor->m_stack_size );
+    cor->m_sp = QUICKTHREADS_SP( sto, cor->m_stack_size - QUICKTHREADS_STKALIGN );
     cor->m_sp = QUICKTHREADS_ARGS( cor->m_sp, arg, cor, (qt_userf_t*) fn,
 			 sc_cor_qt_wrapper );
     return cor;

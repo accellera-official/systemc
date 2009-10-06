@@ -43,7 +43,7 @@
 #include <algorithm>
 #include <vector>
 
-namespace boost {
+namespace sc_boost {
 
   template <typename Iter1, typename Iter2>
   Iter1 begin(const std::pair<Iter1, Iter2>& p) { return p.first; }
@@ -52,7 +52,7 @@ namespace boost {
   Iter2 end(const std::pair<Iter1, Iter2>& p) { return p.second; }
 
   template <typename Iter1, typename Iter2>
-  typename boost::detail::iterator_traits<Iter1>::difference_type
+  typename sc_boost::detail::iterator_traits<Iter1>::difference_type
   size(const std::pair<Iter1, Iter2>& p) {
     return std::distance(p.first, p.second);
   }
@@ -244,6 +244,6 @@ namespace boost {
     return is_sorted(begin(c), end(c), comp);
   }
 
-} // namespace boost
+} // namespace sc_boost
 
 #endif // BOOST_ALGORITHM_HPP

@@ -27,7 +27,7 @@
 #include <sysc/packages/boost/detail/interlocked.hpp>
 #include <typeinfo>
 
-namespace boost
+namespace sc_boost
 {
 
 namespace detail
@@ -112,6 +112,6 @@ public:
 
 } // namespace detail
 
-} // namespace boost
+} // namespace sc_boost
 
 #endif  // #ifndef BOOST_DETAIL_SP_COUNTED_BASE_W32_HPP_INCLUDED

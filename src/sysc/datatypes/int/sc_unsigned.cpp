@@ -42,22 +42,29 @@
 
 
 // $Log: sc_unsigned.cpp,v $
-// Revision 1.5  2008/06/19 17:33:19  acg
-//  Andy Goodrich: actually needed to negate the value in the SC_NEG case
-//  for concat_get_data().
+// Revision 1.6  2008/12/10 20:38:45  acg
+//  Andy Goodrich: fixed conversion of double values to the digits vector.
+//  The bits above the radix were not being masked off.
 //
-// Revision 1.4  2008/06/19 16:57:40  acg
-//  Andy Goodrich: added case for negative unsigned values to the support
-//  in concate_get_data().
+// Revision 1.5  2008/06/19 17:47:57  acg
+//  Andy Goodrich: fixes for bugs. See 2.2.1 RELEASENOTES.
 //
-// Revision 1.3  2007/11/04 21:20:34  acg
-//  Andy Goodrich: changes for valgrind issues and proper value return.
+// Revision 1.4  2008/06/19 16:57:57  acg
+//  Andy Goodrich: added case for negative unsigned values to the support in
+//  concate_get_data().
 //
-// Revision 1.2  2007/02/22 21:34:49  acg
+// Revision 1.3  2007/11/04 21:27:00  acg
+//  Andy Goodrich: changes to make sure the proper value is returned from
+//  concat_get_data().
+//
+// Revision 1.2  2007/02/22 21:35:05  acg
 //  Andy Goodrich: cleaned up comments in concat_get_ctrl and concat_get_data.
 //
-// Revision 1.1.1.1  2006/12/15 20:31:36  acg
-// SystemC 2.2
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.4  2006/08/29 23:36:54  acg
+//  Andy Goodrich: fixed and_reduce and optimized or_reduce.
 //
 // Revision 1.3  2006/01/13 18:49:32  acg
 // Added $Log command so that CVS check in comments are reproduced in the
@@ -161,7 +168,7 @@ bool sc_unsigned::concat_get_ctrl( sc_digit* dst_p, int low_i ) const
 
 bool sc_unsigned::concat_get_data( sc_digit* dst_p, int low_i ) const
 {
-    sc_digit carry;        // Carry for negating a value.
+    sc_digit carry;        // Carry for negating value.
     int      dst_i;        // Index to next word to set in dst_p.
     int      end_i;        // Index of high order word to set.
     int      high_i;       // Index w/in word of high order bit.
@@ -533,9 +540,9 @@ sc_unsigned::operator=(double v)
   register int i = 0;
   while (floor(v) && (i < ndigits)) {
 #ifndef WIN32
-    digit[i++] = (sc_digit) floor(remainder(v, DIGIT_RADIX));
+    digit[i++] = ((sc_digit)floor(remainder(v, DIGIT_RADIX))) & DIGIT_MASK;
 #else
-    digit[i++] = (sc_digit) floor(fmod(v, DIGIT_RADIX));
+    digit[i++] = ((sc_digit)floor(fmod(v, DIGIT_RADIX))) & DIGIT_MASK;
 #endif
     v /= DIGIT_RADIX;
   }

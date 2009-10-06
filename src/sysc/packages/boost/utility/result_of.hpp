@@ -20,7 +20,7 @@
 #  define BOOST_RESULT_OF_NUM_ARGS 10
 #endif
 
-namespace boost {
+namespace sc_boost {
 
 template<typename F> struct result_of;
 

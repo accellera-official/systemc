@@ -35,8 +35,12 @@
 
 
 // $Log: sc_string.h,v $
-// Revision 1.1.1.1  2006/12/15 20:31:39  acg
-// SystemC 2.2
+// Revision 1.1.1.1  2006/12/15 20:20:06  acg
+// SystemC 2.3
+//
+// Revision 1.4  2006/05/08 17:50:51  acg
+//   Andy Goodrich: added David Long's forward declarations for friend
+//   functions, methods, and operators to keep the Microsoft compiler happy.
 //
 // Revision 1.3  2006/01/13 18:53:11  acg
 // Andy Goodrich: Added $Log command so that CVS comments are reproduced in

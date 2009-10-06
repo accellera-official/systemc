@@ -42,8 +42,8 @@
  *****************************************************************************/
 
 // $Log: sc_proxy.h,v $
-// Revision 1.2  2008/11/06 17:22:43  acg
-//  Andy Goodrich: bug fixes for 2.2.1.
+// Revision 1.2  2009/02/28 00:26:14  acg
+//  Andy Goodrich: bug fixes.
 //
 // Revision 1.1.1.1  2006/12/15 20:31:36  acg
 // SystemC 2.2

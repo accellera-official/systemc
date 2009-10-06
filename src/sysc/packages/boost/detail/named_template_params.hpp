@@ -17,7 +17,7 @@
 #include <sysc/packages/boost/type_traits/ice.hpp>
 #endif
 
-namespace boost {
+namespace sc_boost {
   namespace detail {
     
     struct default_argument { };
@@ -133,7 +133,7 @@ namespace boost {
     // named "type" that produces the default for TYPE.  See
     // boost/iterator_adaptors.hpp for an example usage.  Also,
     // applications of this macro must be placed in namespace
-    // boost::detail.
+    // sc_boost::detail.
 
 #define BOOST_NAMED_TEMPLATE_PARAM(TYPE) \
     struct get_##TYPE##_from_named { \
@@ -172,6 +172,6 @@ namespace boost {
 
     
   } // namespace detail
-} // namespace boost
+} // namespace sc_boost
 
 #endif // BOOST_DETAIL_NAMED_TEMPLATE_PARAMS_HPP

@@ -37,11 +37,15 @@
  *****************************************************************************/
 
 // $Log: sc_simcontext_int.h,v $
-// Revision 1.2  2008/10/10 17:36:42  acg
-//  Andy Goodrich: update of copyright.
+// Revision 1.2  2008/05/22 17:06:26  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
 //
-// Revision 1.1.1.1  2006/12/15 20:31:37  acg
-// SystemC 2.2
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.6  2006/05/26 20:33:16  acg
+//   Andy Goodrich: changes required by additional platform compilers (i.e.,
+//   Microsoft VC++, Sun Forte, HP aCC).
 //
 // Revision 1.5  2006/01/19 00:29:52  acg
 // Andy Goodrich: Yet another implementation for signal write checking. This
@@ -93,7 +97,7 @@ inline
 void
 sc_simcontext::push_runnable_method( sc_method_handle method_h )
 {
-	m_runnable->push_back_method( method_h );
+    m_runnable->push_back_method( method_h );
 }
 
 inline

@@ -187,7 +187,7 @@ namespace std{ using _STLP_VENDOR_CSTD::strcmp; using _STLP_VENDOR_CSTD::strcpy;
 #  include <algorithm> // for std::min and std::max
 #  define BOOST_USING_STD_MIN() ((void)0)
 #  define BOOST_USING_STD_MAX() ((void)0)
-namespace boost { using std::min; using std::max; }
+namespace sc_boost { using std::min; using std::max; }
 #endif
 
 #define BOOST_STDLIB "STLPort standard library version " BOOST_STRINGIZE(__SGI_STL_PORT)

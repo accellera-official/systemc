@@ -35,8 +35,16 @@
     
  *****************************************************************************/
 //$Log: sc_prim_channel.h,v $
-//Revision 1.1.1.1  2006/12/15 20:31:35  acg
-//SystemC 2.2
+//Revision 1.1.1.1  2006/12/15 20:20:04  acg
+//SystemC 2.3
+//
+//Revision 1.3  2006/05/08 17:52:47  acg
+// Andy Goodrich:
+//   (1) added David Long's forward declarations for friend functions,
+//       methods, and operators to keep the Microsoft compiler happy.
+//   (2) Added delta_count() method to sc_prim_channel for use by
+//       sc_signal so that the friend declaration in sc_simcontext.h
+//	   can be for a non-templated class (i.e., sc_prim_channel.)
 //
 //Revision 1.2  2006/01/03 23:18:26  acg
 //Changed copyright to include 2006.
@@ -263,10 +271,10 @@ public:
 
     inline void request_update( sc_prim_channel& );
 
-    bool pending_updates() const 
-        { return m_update_list_p != 
-		(sc_prim_channel*)sc_prim_channel::list_end; 
-	}
+    bool pending_updates() const
+        { return m_update_list_p !=                 
+                 (sc_prim_channel*)sc_prim_channel::list_end; 
+        }   
 
 private:
 

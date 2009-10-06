@@ -20,7 +20,7 @@
   sc_process_handle.h -- Process access support.
 
   Original Author: Andy Goodrich, Forte Design Systems, 17 June 2003
-
+               
 
  *****************************************************************************/
 
@@ -35,11 +35,24 @@
  *****************************************************************************/
 
 // $Log: sc_process_handle.h,v $
-// Revision 1.2  2008/10/10 17:36:41  acg
-//  Andy Goodrich: update of copyright.
+// Revision 1.3  2008/05/22 17:06:26  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
 //
-// Revision 1.1.1.1  2006/12/15 20:31:37  acg
-// SystemC 2.2
+// Revision 1.2  2007/09/20 20:32:35  acg
+//  Andy Goodrich: changes to the semantics of throw_it() to match the
+//  specification. A call to throw_it() will immediately suspend the calling
+//  thread until all the throwees have executed. At that point the calling
+//  thread will be restarted before the execution of any other threads.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.7  2006/05/08 17:58:24  acg
+// Andy Goodrich: added David Long's forward declarations for friend
+//   functions, methods, and operators to keep the Microsoft compiler happy.
+//
+// Revision 1.6  2006/04/20 17:08:17  acg
+//  Andy Goodrich: 3.0 style process changes.
 //
 // Revision 1.5  2006/04/11 23:13:21  acg
 //   Andy Goodrich: Changes for reduced reset support that only includes
@@ -61,17 +74,21 @@
 
 namespace sc_core {
 
+// forward operator declarations:
+
 class sc_process_handle;
-// friend operator declarations
-    bool operator == ( const sc_process_handle& left, const sc_process_handle& right );
-    bool operator != ( const sc_process_handle& left, const sc_process_handle& right );
+bool 
+operator == ( const sc_process_handle& left, const sc_process_handle& right );
+bool 
+operator != ( const sc_process_handle& left, const sc_process_handle& right );
+
 
 
 //=============================================================================
 // CLASS sc_process_handle
 //
 // This class provides access to an sc_process_b object instance in a
-// manner which allows some persistence after the deletion of the actual
+// manner which allows some persistence after the deletion of the actual 
 // process.
 //=============================================================================
 class sc_simcontext;
@@ -97,27 +114,46 @@ class sc_process_handle {
     inline sc_process_handle& operator = ( const sc_process_handle& src );
 
   public:
+    inline void disable(
+        sc_descendant_inclusion_info descendants=SC_NO_DESCENDANTS );
     inline bool dynamic() const;
+    inline void enable(
+        sc_descendant_inclusion_info descendants=SC_NO_DESCENDANTS );
     inline const std::vector<sc_object*>& get_child_objects() const;
     inline sc_object* get_parent_object() const;
     inline sc_object* get_process_object() const;
+    inline void kill( 
+        sc_descendant_inclusion_info descendants=SC_NO_DESCENDANTS );
     inline const char* name() const;
     inline sc_curr_proc_kind proc_kind() const;
+    inline void reset( 
+        sc_descendant_inclusion_info descendants=SC_NO_DESCENDANTS );
+    inline void resume(
+        sc_descendant_inclusion_info descendants=SC_NO_DESCENDANTS );
+    inline void suspend(
+        sc_descendant_inclusion_info descendants=SC_NO_DESCENDANTS );
+    inline void sync_reset_off( 
+        sc_descendant_inclusion_info descendants=SC_NO_DESCENDANTS );
+    inline void sync_reset_on( 
+        sc_descendant_inclusion_info descendants=SC_NO_DESCENDANTS );
     inline sc_event& terminated_event();
     inline bool terminated() const;
+    template<typename EXCEPT>
+    inline void throw_it( const EXCEPT& exception,
+        sc_descendant_inclusion_info descendants=SC_NO_DESCENDANTS );
     inline bool valid() const;
 
   protected:
-    inline bool dont_initialize() const
+    inline bool dont_initialize() const 
         { return m_target_p ? m_target_p->dont_initialize() : false; }
     inline void dont_initialize( bool dont );
 
   public:
-    operator sc_process_b* ()
+    operator sc_process_b* () 
         { return m_target_p; }
     operator sc_cthread_handle ();
     operator sc_method_handle ();
-    operator sc_thread_handle ();
+    operator sc_thread_handle ();  
 
   protected:
     sc_process_b* m_target_p;   // Target for this object instance.
@@ -127,14 +163,14 @@ class sc_process_handle {
     static sc_event                non_event;    // Returned if m_target_p == 0.
 };
 
-inline bool operator == (
+inline bool operator == ( 
     const sc_process_handle& left, const sc_process_handle& right )
 {
     return (left.m_target_p != 0) && (right.m_target_p != 0) &&
         (left.m_target_p == right.m_target_p);
 }
 
-inline bool operator != (
+inline bool operator != ( 
     const sc_process_handle& left, const sc_process_handle& right )
 {
     return (left.m_target_p == 0) || (right.m_target_p == 0) ||
@@ -190,7 +226,7 @@ inline sc_process_handle::sc_process_handle( const sc_process_handle& orig )
 // handle and increments the references to its target.
 //     orig = sc_process_handle object instance to be copied from.
 //------------------------------------------------------------------------------
-inline sc_process_handle&
+inline sc_process_handle& 
 sc_process_handle::operator = ( const sc_process_handle& orig )
 {
     if ( m_target_p ) m_target_p->reference_decrement();
@@ -216,6 +252,11 @@ inline sc_process_handle::~sc_process_handle()
 //
 // These are short inline methods.
 //------------------------------------------------------------------------------
+inline void sc_process_handle::disable(sc_descendant_inclusion_info descendants)
+{
+    if ( m_target_p ) m_target_p->disable_process(descendants);
+}
+
 inline void sc_process_handle::dont_initialize( bool dont )
 {
     if ( m_target_p ) m_target_p->dont_initialize( dont );
@@ -226,10 +267,15 @@ inline bool sc_process_handle::dynamic() const
     return m_target_p ? m_target_p->dynamic() : false;
 }
 
-inline
+inline void sc_process_handle::enable(sc_descendant_inclusion_info descendants)
+{
+    if ( m_target_p ) m_target_p->enable_process(descendants);
+}
+
+inline 
 const std::vector<sc_object*>& sc_process_handle::get_child_objects() const
 {
-    return m_target_p ? m_target_p->get_child_objects() :
+    return m_target_p ? m_target_p->get_child_objects() : 
         sc_process_handle::empty_vector;
 }
 
@@ -243,6 +289,12 @@ inline sc_object* sc_process_handle::get_process_object() const
     return m_target_p;
 }
 
+inline void sc_process_handle::kill( sc_descendant_inclusion_info descendants )
+{
+    if ( m_target_p ) 
+        m_target_p->kill_process( descendants );
+}
+
 inline const char* sc_process_handle::name() const
 {
     return m_target_p ? m_target_p->name() : "";
@@ -253,20 +305,93 @@ inline sc_curr_proc_kind sc_process_handle::proc_kind() const
     return m_target_p ? m_target_p->proc_kind() : SC_NO_PROC_;
 }
 
+inline void sc_process_handle::reset( sc_descendant_inclusion_info descendants )
+{
+    if ( m_target_p ) 
+        m_target_p->reset_process(sc_process_b::reset_asynchronous,descendants);
+}
+
+inline void sc_process_handle::resume(sc_descendant_inclusion_info descendants)
+{
+    if ( m_target_p ) m_target_p->resume_process(descendants);
+}
+
+inline void sc_process_handle::suspend(sc_descendant_inclusion_info descendants)
+{
+    if ( m_target_p ) m_target_p->suspend_process(descendants);
+}
+inline void sc_process_handle::sync_reset_off(
+    sc_descendant_inclusion_info descendants)
+{
+    if ( m_target_p ) 
+        m_target_p->reset_process( sc_process_b::reset_off, descendants);
+}
+inline void sc_process_handle::sync_reset_on(
+    sc_descendant_inclusion_info descendants)
+{
+    if ( m_target_p ) 
+    {
+        m_target_p->reset_process(sc_process_b::reset_synchronous, 
+            descendants);
+    }
+}
+
 inline bool sc_process_handle::terminated() const
 {
-    return m_target_p ? m_target_p->terminated() : false;
+    return m_target_p ? m_target_p->terminated() : false; 
 }
 
 inline sc_event& sc_process_handle::terminated_event()
 {
-    return m_target_p ? m_target_p->terminated_event() :
+    return m_target_p ? m_target_p->terminated_event() : 
         sc_process_handle::non_event;
 }
 
 inline bool sc_process_handle::valid() const
 {
     return m_target_p ? true : false;
+}
+
+//------------------------------------------------------------------------------
+//"sc_process_handle::sc_throw_it"
+//
+// This method throws the supplied exception to the process whose handle this
+// object instance is, and optionally to the process' descendants. Once the
+// exception is thrown the currently executed process will suspend to allow
+// the exception to be propagated. Once the propagation has occurred the
+// current process will be resumed.
+//
+// Notes:
+//   (1) We allocate the helper function on the stack, see the description of
+//       sc_throw_it<EXCEPT>, in sc_process.h, for why.
+//
+// Arguments:
+//    exception = exception to be thrown
+//    descendants = indication of whether descendant processes should also
+//                  receive the throw.
+//------------------------------------------------------------------------------
+template<typename EXCEPT>
+inline void sc_process_handle::throw_it( const EXCEPT& exception,
+    sc_descendant_inclusion_info descendants)
+{
+    sc_simcontext*      context_p;          // current simcontext.
+    sc_throw_it<EXCEPT> helper(exception);  // helper to throw the exception.
+
+    // Requeue the current process so it will execute just after our throwees.
+
+    context_p = sc_get_curr_simcontext();
+    context_p->requeue_current_process();
+
+    // Throw the exception, causing the throwees to be queued for execution.
+
+    if ( m_target_p ) 
+    {
+        m_target_p->throw_user(helper, descendants);
+    }
+
+    // Suspend the current process to the throwees can execute.
+    
+    context_p->suspend_current_process();
 }
 
 

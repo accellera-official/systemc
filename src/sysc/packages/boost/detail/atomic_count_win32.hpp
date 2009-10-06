@@ -19,7 +19,7 @@
 
 #include <sysc/packages/boost/detail/interlocked.hpp>
 
-namespace boost
+namespace sc_boost
 {
 
 namespace detail
@@ -58,6 +58,6 @@ private:
 
 } // namespace detail
 
-} // namespace boost
+} // namespace sc_boost
 
 #endif // #ifndef BOOST_DETAIL_ATOMIC_COUNT_WIN32_HPP_INCLUDED

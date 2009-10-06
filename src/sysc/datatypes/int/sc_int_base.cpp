@@ -36,17 +36,15 @@
 
 
 // $Log: sc_int_base.cpp,v $
-// Revision 1.4  2008/10/10 17:36:39  acg
-//  Andy Goodrich: update of copyright.
+// Revision 1.3  2008/06/19 17:47:56  acg
+//  Andy Goodrich: fixes for bugs. See 2.2.1 RELEASENOTES.
 //
-// Revision 1.3  2007/11/04 21:20:34  acg
-//  Andy Goodrich: changes for valgrind issues and proper value return.
+// Revision 1.2  2007/11/04 21:27:00  acg
+//  Andy Goodrich: changes to make sure the proper value is returned from
+//  concat_get_data().
 //
-// Revision 1.2  2007/10/30 16:33:45  acg
-//  Andy Goodrich: fixed bugs in sc_int_base::concat_get_data().
-//
-// Revision 1.1.1.1  2006/12/15 20:31:36  acg
-// SystemC 2.2
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
 //
 // Revision 1.3  2006/01/13 18:49:31  acg
 // Added $Log command so that CVS check in comments are reproduced in the

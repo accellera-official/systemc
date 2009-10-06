@@ -42,18 +42,27 @@
 
 
 // $Log: sc_signed.cpp,v $
-// Revision 1.4  2008/10/10 17:36:39  acg
-//  Andy Goodrich: update of copyright.
+// Revision 1.5  2008/12/10 20:38:45  acg
+//  Andy Goodrich: fixed conversion of double values to the digits vector.
+//  The bits above the radix were not being masked off.
 //
-// Revision 1.3  2008/04/29 21:20:29  acg
+// Revision 1.4  2008/06/19 17:47:56  acg
+//  Andy Goodrich: fixes for bugs. See 2.2.1 RELEASENOTES.
+//
+// Revision 1.3  2008/04/29 21:20:41  acg
 //  Andy Goodrich: added mask to first word transferred when processing
 //  a negative sc_signed value in sc_signed::concat_get_data().
 //
-// Revision 1.2  2007/11/04 21:20:34  acg
-//  Andy Goodrich: changes for valgrind issues and proper value return.
+// Revision 1.2  2007/11/04 21:27:00  acg
+//  Andy Goodrich: changes to make sure the proper value is returned from
+//  concat_get_data().
 //
-// Revision 1.1.1.1  2006/12/15 20:31:36  acg
-// SystemC 2.2
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.5  2006/10/23 19:32:47  acg
+//  Andy Goodrich: further fix for incorrect value being returned from
+//  concat_get_data. This one is in the non-aligned value code.
 //
 // Revision 1.3  2006/01/13 18:49:32  acg
 // Added $Log command so that CVS check in comments are reproduced in the
@@ -105,7 +114,7 @@ sc_signed::invalid_range( int l, int r ) const
     char msg[BUFSIZ];
     std::sprintf( msg,
          "sc_bigint part selection: left = %d, right = %d \n"
-         "  violates either (%d >= left >= 0) or (%d >= right >= 0)",
+	 "  violates either (%d >= left >= 0) or (%d >= right >= 0)",
          l, r, nbits-1, nbits-1 );
     SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
 }
@@ -159,7 +168,7 @@ bool sc_signed::concat_get_data( sc_digit* dst_p, int low_i ) const
     int      left_shift;   // Amount to shift value left.
     sc_digit left_word;    // High word component for set.
     sc_digit mask;         // Mask for partial word sets.
-    bool     result;	   // True if inserted non-zero data.
+    bool     result;	 // True if inserted non-zero data.
     int      right_shift;  // Amount to shift value right.
     sc_digit right_word;   // Low word component for set.
     int      src_i;        // Index to next word to get from digit.
@@ -186,7 +195,7 @@ bool sc_signed::concat_get_data( sc_digit* dst_p, int low_i ) const
         if ( dst_i == end_i )
         {
             mask = ~(-1 << left_shift);
-            dst_p[dst_i] = ( ( dst_p[dst_i] & mask ) |
+            dst_p[dst_i] = ( ( dst_p[dst_i] & mask ) | 
                 (digit[0] << left_shift) ) & DIGIT_MASK;
         }
 
@@ -242,7 +251,7 @@ bool sc_signed::concat_get_data( sc_digit* dst_p, int low_i ) const
             mask = ~(-1 << nbits);
             right_word = ((digit[0] ^ DIGIT_MASK) + 1) & mask;
             mask = ~(-1 << left_shift);
-            dst_p[dst_i] = ( ( dst_p[dst_i] & mask ) |
+            dst_p[dst_i] = ( ( dst_p[dst_i] & mask ) | 
                 (right_word << left_shift) ) & DIGIT_MASK;
         }
 
@@ -261,7 +270,7 @@ bool sc_signed::concat_get_data( sc_digit* dst_p, int low_i ) const
             high_i = high_i % BITS_PER_DIGIT;
             mask = (~(-2 << high_i)) & DIGIT_MASK;
             right_word = (src_i < ndigits) ? 
-		(digit[src_i] ^ DIGIT_MASK) + carry : DIGIT_MASK + carry;
+	        (digit[src_i] ^ DIGIT_MASK) + carry : DIGIT_MASK + carry;
             dst_p[dst_i] = right_word & mask;
         }
 
@@ -288,7 +297,7 @@ bool sc_signed::concat_get_data( sc_digit* dst_p, int low_i ) const
                 right_word = left_word & DIGIT_MASK;
             }
             left_word = (src_i < ndigits) ? 
-		(digit[src_i] ^ DIGIT_MASK) + carry : carry;
+	        (digit[src_i] ^ DIGIT_MASK) + carry : carry;
             mask = ~(-2 << high_i) & DIGIT_MASK;
             dst_p[dst_i] = ((left_word << left_shift) |
                 (right_word >> right_shift)) & mask;
@@ -552,9 +561,9 @@ sc_signed::operator=(double v)
   register int i = 0;
   while (floor(v) && (i < ndigits)) {
 #ifndef WIN32
-    digit[i++] = (sc_digit) floor(remainder(v, DIGIT_RADIX));
+    digit[i++] = ((sc_digit)floor(remainder(v, DIGIT_RADIX))) & DIGIT_MASK;
 #else
-    digit[i++] = (sc_digit) floor(fmod(v, DIGIT_RADIX));
+    digit[i++] = ((sc_digit)floor(fmod(v, DIGIT_RADIX))) & DIGIT_MASK;
 #endif
     v /= DIGIT_RADIX;
   }

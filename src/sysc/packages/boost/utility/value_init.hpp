@@ -12,7 +12,7 @@
 #include "sysc/packages/boost/detail/select_type.hpp"
 #include "sysc/packages/boost/type_traits/cv_traits.hpp"
 
-namespace boost {
+namespace sc_boost {
 
 namespace vinit_detail {
 
@@ -40,7 +40,7 @@ template<class T>
 struct select_base
 {
   typedef typename
-    detail::if_true< ::boost::is_const<T>::value >
+    detail::if_true< ::sc_boost::is_const<T>::value >
       ::template then< const_T_base<T>, non_const_T_base<T> >::type type ;
 } ;
 
@@ -70,7 +70,7 @@ T& get ( value_initialized<T>& x )
   return x.data() ;
 }
 
-} // namespace boost
+} // namespace sc_boost
 
 
 #endif

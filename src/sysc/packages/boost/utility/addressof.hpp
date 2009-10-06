@@ -14,7 +14,7 @@
 # include <sysc/packages/boost/config.hpp>
 # include <sysc/packages/boost/detail/workaround.hpp>
 
-namespace boost {
+namespace sc_boost {
 
 // Do not make addressof() inline. Breaks MSVC 7. (Peter Dimov)
 

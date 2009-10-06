@@ -30,7 +30,7 @@
 #include <sysc/packages/boost/type_traits/composite_traits.hpp>
 #endif
 
-namespace boost{
+namespace sc_boost{
 
 #ifdef BOOST_MSVC6_MEMBER_TEMPLATES
 //
@@ -133,9 +133,9 @@ struct call_traits
 {
 private:
     typedef detail::call_traits_chooser<
-         ::boost::is_pointer<T>::value,
-         ::boost::is_arithmetic<T>::value, 
-         ::boost::is_reference<T>::value
+         ::sc_boost::is_pointer<T>::value,
+         ::sc_boost::is_arithmetic<T>::value, 
+         ::sc_boost::is_reference<T>::value
       > chooser;
    typedef typename chooser::template rebind<T> bound_type;
    typedef typename bound_type::type call_traits_type;

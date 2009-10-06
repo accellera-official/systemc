@@ -18,7 +18,7 @@
 #include <memory>
 #include <new>
 
-namespace boost{
+namespace sc_boost{
 
 namespace detail{
 
@@ -176,10 +176,10 @@ void destroy(const Type* p)
   p->~Type();
 }
 
-} /* namespace boost::detail::allocator */
+} /* namespace sc_boost::detail::allocator */
 
-} /* namespace boost::detail */
+} /* namespace sc_boost::detail */
 
-} /* namespace boost */
+} /* namespace sc_boost */
 
 #endif

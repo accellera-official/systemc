@@ -35,10 +35,10 @@
 
 
 // $Log: sc_event.cpp,v $
-// Revision 1.3  2008/10/10 17:36:40  acg
-//  Andy Goodrich: update of copyright.
+// Revision 1.3  2008/05/22 17:06:25  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
 //
-// Revision 1.2  2007/01/12 21:04:53  acg
+// Revision 1.2  2007/01/17 22:44:30  acg
 //  Andy Goodrich: fix for Microsoft compiler.
 //
 // Revision 1.7  2006/04/11 23:13:20  acg

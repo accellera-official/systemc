@@ -33,13 +33,17 @@
     
  *****************************************************************************/
 
-
 // $Log: sc_mutex.cpp,v $
-// Revision 1.2  2008/05/20 16:41:47  acg
-//  Andy Goodrich: added process writer checks.
+// Revision 1.3  2008/11/13 15:29:46  acg
+//  David C. Black, ESLX, Inc: lock & trylock now allow owner to apply
+//  lock more than once without incident. Previous behavior locked up the
+//  owning process.
 //
-// Revision 1.1.1.1  2006/12/15 20:31:35  acg
-// SystemC 2.2
+// Revision 1.2  2008/05/20 16:46:18  acg
+//  Andy Goodrich: added checks for multiple writers.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:04  acg
+// SystemC 2.3
 //
 // Revision 1.4  2006/03/21 00:00:27  acg
 //   Andy Goodrich: changed name of sc_get_current_process_base() to be
@@ -85,7 +89,7 @@ sc_mutex::~sc_mutex()
 int
 sc_mutex::lock()
 {
-    if (m_owner == sc_get_current_process_b()) return 0;
+    if ( m_owner == sc_get_current_process_b()) return 0;
     while( in_use() ) {
 	wait( m_free );
     }
@@ -99,7 +103,7 @@ sc_mutex::lock()
 int
 sc_mutex::trylock()
 {
-    if (m_owner == sc_get_current_process_b()) return 0;
+    if ( m_owner == sc_get_current_process_b()) return 0;
     if( in_use() ) {
 	return -1;
     }

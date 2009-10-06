@@ -36,8 +36,8 @@
 
 
 // $Log: scfx_mant.cpp,v $
-// Revision 1.1.1.1  2006/12/15 20:31:36  acg
-// SystemC 2.2
+// Revision 1.1.1.1  2006/12/15 20:20:04  acg
+// SystemC 2.3
 //
 // Revision 1.3  2006/01/13 18:53:58  acg
 // Andy Goodrich: added $Log command so that CVS comments are reproduced in

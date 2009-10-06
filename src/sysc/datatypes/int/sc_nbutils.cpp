@@ -36,11 +36,12 @@
 
 
 // $Log: sc_nbutils.cpp,v $
-// Revision 1.2  2007/11/04 21:20:34  acg
-//  Andy Goodrich: changes for valgrind issues and proper value return.
+// Revision 1.2  2007/11/04 21:26:40  acg
+//  Andy Goodrich: added a buffer to the allocation of the q array to address
+//  an issue with references outside the array by 1 byte detected by valgrind.
 //
-// Revision 1.1.1.1  2006/12/15 20:31:36  acg
-// SystemC 2.2
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
 //
 // Revision 1.3  2006/01/13 18:49:32  acg
 // Added $Log command so that CVS check in comments are reproduced in the
@@ -1187,7 +1188,7 @@ vec_div_large(int ulen, const sc_digit *u,
   uchar *x = new uchar[xlen];
   uchar *y = new uchar[ylen];
   // valgrind complains about us accessing too far to so leave a buffer.
-  uchar *q = new uchar[(xlen - ylen) + 10]; 
+  uchar *q = new uchar[(xlen - ylen) + 10];
 #endif
 
   // q corresponds to w.
@@ -1222,7 +1223,7 @@ vec_div_large(int ulen, const sc_digit *u,
   const sc_digit DOUBLE_BITS_PER_BYTE = 2 * BITS_PER_BYTE;
 
   // Find each q[k].
-  for (register int k = (xlen - ylen); k >= 0; --k) { 
+  for (register int k = (xlen - ylen); k >= 0; --k) {
 
     // qk is a guess for q[k] such that q[k] = qk or qk - 1.
     register sc_digit qk;

@@ -45,11 +45,18 @@
 
 
 // $Log: sc_object.cpp,v $
-// Revision 1.2  2008/10/10 17:36:41  acg
-//  Andy Goodrich: update of copyright.
+// Revision 1.3  2009/02/28 00:26:58  acg
+//  Andy Goodrich: changed boost name space to sc_boost to allow use with
+//  full boost library applications.
 //
-// Revision 1.1.1.1  2006/12/15 20:31:37  acg
-// SystemC 2.2
+// Revision 1.2  2008/05/22 17:06:26  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.5  2006/04/20 17:08:17  acg
+//  Andy Goodrich: 3.0 style process changes.
 //
 // Revision 1.4  2006/03/21 00:00:34  acg
 //   Andy Goodrich: changed name of sc_get_current_process_base() to be
@@ -225,6 +232,7 @@ sc_object::sc_object_init(const char* nm)
             } 
         } 
     } 
+
 } 
 
 sc_object::sc_object() : m_parent(0)
@@ -281,9 +289,27 @@ sc_object::sc_object(const char* nm) : m_parent(0)
 
 sc_object::~sc_object()
 {
+	detach();
+    delete [] (m_name-1);
+    if ( m_attr_cltn_p ) delete m_attr_cltn_p;
+}
+
+//------------------------------------------------------------------------------
+//"sc_object::detach"
+//
+// This method detaches this object instance from the object hierarchy.
+// It is called in two places: ~sc_object() and sc_process_b::kill_process().
+//------------------------------------------------------------------------------
+void sc_object::detach()
+{
     if (m_name[-1] && m_simc) {
+
+        // REMOVE OBJECT FROM THE OBJECT MANAGER:
+
         sc_object_manager* object_manager = m_simc->get_object_manager();
         object_manager->remove_object(m_name);
+
+		// REMOVE OBJECT FROM PARENT'S LIST OF OBJECTS:
 
         sc_module* parent_mod = DCAST<sc_module*>(m_parent);
         if (parent_mod) {
@@ -296,11 +322,25 @@ sc_object::~sc_object()
                 m_simc->remove_child_object( this );
             }
         }
-    }
-    delete [] (m_name-1);
-    if ( m_attr_cltn_p ) delete m_attr_cltn_p;
-}
 
+        // ORPHAN THIS OBJECT'S CHILDREN:
+
+#if 0 // ####
+	    ::std::<sc_object*> children_p = &get_child_objects();
+		int                 child_n = children_p->size();
+		sc_object*          parent_p;
+
+		for ( int child_i = 0; child_i < child_n; child_i++ )
+		{
+			(*children_p)[child_i]->m_parent = 0;
+		}
+#endif
+
+		// MARK OBJECT AS HAVING BEEN DETACHED:
+
+		m_name[-1] = 0; 
+    }
+}
 void
 sc_object::trace( sc_trace_file * /* unused */) const
 {
@@ -385,4 +425,7 @@ sc_object::attr_cltn() const
     return *m_attr_cltn_p;
 }
 
+std::vector<sc_object*> sc_object::m_no_children;
+
 } // namespace sc_core
+

@@ -25,7 +25,7 @@
 //  See http://www.boost.org/libs/bind/ref.html for documentation.
 //
 
-namespace boost
+namespace sc_boost
 {
 
 template<class T> class reference_wrapper
@@ -39,7 +39,7 @@ public:
 
 #else
 
-    explicit reference_wrapper(T& t): t_(boost::addressof(t)) {}
+    explicit reference_wrapper(T& t): t_(sc_boost::addressof(t)) {}
 
 #endif
 
@@ -113,11 +113,11 @@ AUX_REFERENCE_WRAPPER_METAFUNCTIONS_DEF(reference_wrapper<T> const volatile)
 
 # else // no partial specialization
 
-} // namespace boost
+} // namespace sc_boost
 
 #include <sysc/packages/boost/type.hpp>
 
-namespace boost
+namespace sc_boost
 {
 
 namespace detail
@@ -160,7 +160,7 @@ class is_reference_wrapper
              sizeof(detail::is_reference_wrapper_test(type<T>()))
             == sizeof(detail::yes_reference_wrapper_t)));
     
-    typedef ::boost::mpl::bool_<value> type;
+    typedef ::sc_boost::mpl::bool_<value> type;
 };
 
 template <typename T>
@@ -172,6 +172,6 @@ class unwrap_reference
 
 # endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
-} // namespace boost
+} // namespace sc_boost
 
 #endif // #ifndef BOOST_REF_HPP_INCLUDED

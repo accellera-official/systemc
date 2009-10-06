@@ -34,7 +34,7 @@
 #include <new>              // std::bad_alloc
 #include <typeinfo>         // std::type_info in get_deleter
 
-namespace boost
+namespace sc_boost
 {
 
 namespace detail
@@ -83,7 +83,7 @@ public:
         }
         catch(...)
         {
-            boost::checked_delete( p );
+            sc_boost::checked_delete( p );
             throw;
         }
 
@@ -93,8 +93,8 @@ public:
 
         if( pi_ == 0 )
         {
-            boost::checked_delete( p );
-            boost::throw_exception( std::bad_alloc() );
+            sc_boost::checked_delete( p );
+            sc_boost::throw_exception( std::bad_alloc() );
         }
 
 #endif
@@ -124,7 +124,7 @@ public:
         if(pi_ == 0)
         {
             d(p); // delete p
-            boost::throw_exception(std::bad_alloc());
+            sc_boost::throw_exception(std::bad_alloc());
         }
 
 #endif
@@ -144,7 +144,7 @@ public:
 
         if( pi_ == 0 )
         {
-            boost::throw_exception(std::bad_alloc());
+            sc_boost::throw_exception(std::bad_alloc());
         }
 
 #endif
@@ -315,13 +315,13 @@ inline shared_count::shared_count( weak_count const & r ): pi_( r.pi_ )
 {
     if( pi_ == 0 || !pi_->add_ref_lock() )
     {
-        boost::throw_exception( boost::bad_weak_ptr() );
+        sc_boost::throw_exception( sc_boost::bad_weak_ptr() );
     }
 }
 
 } // namespace detail
 
-} // namespace boost
+} // namespace sc_boost
 
 #ifdef __BORLANDC__
 # pragma warn .8027     // Functions containing try are not expanded inline

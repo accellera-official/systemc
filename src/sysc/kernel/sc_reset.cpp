@@ -24,11 +24,14 @@
  *****************************************************************************/
 
 // $Log: sc_reset.cpp,v $
-// Revision 1.2  2008/10/10 17:36:41  acg
-//  Andy Goodrich: update of copyright.
+// Revision 1.2  2008/05/22 17:06:26  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
 //
-// Revision 1.1.1.1  2006/12/15 20:31:37  acg
-// SystemC 2.2
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.7  2006/12/02 20:58:19  acg
+//  Andy Goodrich: updates from 2.2 for IEEE 1666 support.
 //
 // Revision 1.5  2006/04/11 23:13:21  acg
 //   Andy Goodrich: Changes for reduced reset support that only includes
@@ -62,14 +65,21 @@ static sc_reset_finder* reset_finder_q=0;  // Q of reset finders to reconcile.
 class sc_reset_finder {
     friend class sc_reset;
   public:
-    sc_reset_finder(
-        const sc_in<bool>* port_p, bool level, sc_process_b* target_p);
+    sc_reset_finder( bool async, const sc_in<bool>* port_p, bool level, 
+        sc_process_b* target_p);
+    sc_reset_finder( bool async, const sc_inout<bool>* port_p, bool level, 
+        sc_process_b* target_p);
+    sc_reset_finder( bool async, const sc_out<bool>* port_p, bool level, 
+        sc_process_b* target_p);
 
   protected:
-    bool                 m_level;     // Level for reset.
-    sc_reset_finder*     m_next_p;    // Next reset finder in list.
-    const sc_in<bool>*   m_port_p;    // Port for which reset is needed.
-    sc_process_b*        m_target_p;  // Process to reset.
+    bool                   m_async;     // True if asynchronous reset.
+    bool                   m_level;     // Level for reset.
+    sc_reset_finder*       m_next_p;    // Next reset finder in list.
+    const sc_in<bool>*     m_in_p;      // Port for which reset is needed.
+    const sc_inout<bool>*  m_inout_p;   // Port for which reset is needed.
+    const sc_out<bool>*    m_out_p;     // Port for which reset is needed.
+    sc_process_b*          m_target_p;  // Process to reset.
 
   private: // disabled
     sc_reset_finder( const sc_reset_finder& );
@@ -77,9 +87,30 @@ class sc_reset_finder {
 };
 
 inline sc_reset_finder::sc_reset_finder(
-    const sc_in<bool>* port_p, bool level, sc_process_b* target_p
+    bool async, const sc_in<bool>* port_p, bool level, sc_process_b* target_p
 ) : 
-    m_level(level), m_port_p(port_p), m_target_p(target_p)
+    m_async(async), m_level(level), m_in_p(port_p), m_inout_p(0), m_out_p(0), 
+    m_target_p(target_p)
+{   
+    m_next_p = reset_finder_q;
+    reset_finder_q = this;
+}
+
+inline sc_reset_finder::sc_reset_finder(
+    bool async, const sc_inout<bool>* port_p, bool level, sc_process_b* target_p
+) : 
+    m_async(async), m_level(level), m_in_p(0), m_inout_p(port_p), m_out_p(0), 
+    m_target_p(target_p)
+{   
+    m_next_p = reset_finder_q;
+    reset_finder_q = this;
+}
+
+inline sc_reset_finder::sc_reset_finder(
+    bool async, const sc_out<bool>* port_p, bool level, sc_process_b* target_p
+) : 
+    m_async(async), m_level(level), m_in_p(0), m_inout_p(0), m_out_p(port_p), 
+    m_target_p(target_p)
 {   
     m_next_p = reset_finder_q;
     reset_finder_q = this;
@@ -136,15 +167,37 @@ void sc_reset::reconcile_resets()
     for ( now_p = reset_finder_q; now_p; now_p = next_p )
     {
         next_p = now_p->m_next_p;
-        if ( now_p->m_target_p->m_reset_p )
+        if ( now_p->m_target_p->m_reset_p || now_p->m_target_p->m_areset_p )
             SC_REPORT_ERROR(SC_ID_MULTIPLE_RESETS_,now_p->m_target_p->name());
-        iface_p = DCAST<const sc_signal_in_if<bool>*>(
-            now_p->m_port_p->get_interface());
+        if ( now_p->m_in_p )
+        {
+            iface_p = DCAST<const sc_signal_in_if<bool>*>(
+                now_p->m_in_p->get_interface());
+        }
+        else if ( now_p->m_inout_p )
+        {
+            iface_p = DCAST<const sc_signal_in_if<bool>*>(
+                now_p->m_inout_p->get_interface());
+        }
+        else
+        {
+            iface_p = DCAST<const sc_signal_in_if<bool>*>(
+                now_p->m_out_p->get_interface());
+        }
         assert( iface_p != 0 );
         reset_p = iface_p->is_reset();
-        now_p->m_target_p->m_reset_p = reset_p;
-        now_p->m_target_p->m_reset_level = now_p->m_level;
-		reset_p->m_processes.push_back(now_p->m_target_p);
+        if ( now_p->m_async )
+        {
+            now_p->m_target_p->m_areset_p = reset_p;
+            now_p->m_target_p->m_areset_level = now_p->m_level;
+            reset_p->m_processes.push_back(now_p->m_target_p);
+        }
+        else
+        {
+            now_p->m_target_p->m_reset_p = reset_p;
+            now_p->m_target_p->m_reset_level = now_p->m_level;
+            reset_p->m_processes.push_back(now_p->m_target_p);
+        }
         delete now_p;
     }
 }
@@ -172,10 +225,11 @@ void sc_reset::remove_process( sc_process_b* process_p )
 }
 
 //------------------------------------------------------------------------------
-//"sc_reset_signal_is"
+//"sc_reset::reset_signal_is"
 //
 //------------------------------------------------------------------------------
-void sc_reset::reset_signal_is( const sc_in<bool>& port, bool level )
+void sc_reset::reset_signal_is(
+    bool async, const sc_in<bool>& port, bool level)
 {
     const sc_signal_in_if<bool>* iface_p;
     sc_process_b*                process_p;
@@ -186,16 +240,70 @@ void sc_reset::reset_signal_is( const sc_in<bool>& port, bool level )
     {
       case SC_THREAD_PROC_:
       case SC_METHOD_PROC_:
-        SC_REPORT_ERROR(SC_ID_RESET_SIGNAL_IS_NOT_ALLOWED_,"");
-		break;
       case SC_CTHREAD_PROC_:
         process_p->m_reset_level = level;
         iface_p = DCAST<const sc_signal_in_if<bool>*>(port.get_interface());
         if ( iface_p )
-            reset_signal_is( *iface_p, level );
+            reset_signal_is( async, *iface_p, level );
         else
         {
-            new sc_reset_finder( &port, level, process_p );
+            new sc_reset_finder( async, &port, level, process_p );
+        }
+        break;
+      default:
+        SC_REPORT_ERROR(SC_ID_UNKNOWN_PROCESS_TYPE_, process_p->name());
+        break;
+    }
+}
+
+void sc_reset::reset_signal_is(
+    bool async, const sc_inout<bool>& port, bool level )
+{
+    const sc_signal_in_if<bool>* iface_p;
+    sc_process_b*                process_p;
+    
+    process_p = (sc_process_b*)sc_get_current_process_handle();
+    assert( process_p );
+    switch ( process_p->proc_kind() )
+    {
+      case SC_THREAD_PROC_:
+      case SC_METHOD_PROC_:
+      case SC_CTHREAD_PROC_:
+        process_p->m_reset_level = level;
+        iface_p = DCAST<const sc_signal_in_if<bool>*>(port.get_interface());
+        if ( iface_p )
+            reset_signal_is( async, *iface_p, level );
+        else
+        {
+            new sc_reset_finder( async, &port, level, process_p );
+        }
+        break;
+      default:
+        SC_REPORT_ERROR(SC_ID_UNKNOWN_PROCESS_TYPE_, process_p->name());
+        break;
+    }
+}
+
+void sc_reset::reset_signal_is(
+    bool async, const sc_out<bool>& port, bool level )
+{
+    const sc_signal_in_if<bool>* iface_p;
+    sc_process_b*                process_p;
+    
+    process_p = (sc_process_b*)sc_get_current_process_handle();
+    assert( process_p );
+    switch ( process_p->proc_kind() )
+    {
+      case SC_THREAD_PROC_:
+      case SC_METHOD_PROC_:
+      case SC_CTHREAD_PROC_:
+        process_p->m_reset_level = level;
+        iface_p = DCAST<const sc_signal_in_if<bool>*>(port.get_interface());
+        if ( iface_p )
+            reset_signal_is( async, *iface_p, level );
+        else
+        {
+            new sc_reset_finder( async, &port, level, process_p );
         }
         break;
       default:
@@ -212,7 +320,8 @@ void sc_reset::reset_signal_is( const sc_in<bool>& port, bool level )
 //       the m_processes list. This is because we want the reset to act as
 //       a synchronous reset rather than an asynchronous one.
 //------------------------------------------------------------------------------
-void sc_reset::reset_signal_is( const sc_signal_in_if<bool>& iface, bool level )
+void sc_reset::reset_signal_is( 
+    bool async, const sc_signal_in_if<bool>& iface, bool level )
 {
     sc_process_b* process_p; // Process adding reset for.
     sc_reset*        reset_p;   // Reset object.
@@ -224,14 +333,22 @@ void sc_reset::reset_signal_is( const sc_signal_in_if<bool>& iface, bool level )
     switch ( process_p->proc_kind() )
     {
       case SC_CTHREAD_PROC_:
-        process_p->m_reset_level = level;
-        reset_p = iface.is_reset();
-        process_p->m_reset_p = reset_p;
-		reset_p->m_processes.push_back(process_p);
-        break;
       case SC_THREAD_PROC_:
       case SC_METHOD_PROC_:
-        SC_REPORT_ERROR(SC_ID_RESET_SIGNAL_IS_NOT_ALLOWED_,"");
+        if ( async )
+        {
+            process_p->m_areset_level = level;
+            reset_p = iface.is_reset();
+            process_p->m_areset_p = reset_p;
+            reset_p->m_processes.push_back(process_p);
+        }
+        else
+        {
+            process_p->m_reset_level = level;
+            reset_p = iface.is_reset();
+            process_p->m_reset_p = reset_p;
+            reset_p->m_processes.push_back(process_p);
+        }
         break;
       default:
         SC_REPORT_ERROR(SC_ID_UNKNOWN_PROCESS_TYPE_, process_p->name());

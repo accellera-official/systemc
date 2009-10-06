@@ -20,7 +20,7 @@
   sc_thread_process.h -- Thread process declarations
 
   Original Author: Andy Goodrich, Forte Design Systems, 4 August 2005
-
+               
 
  *****************************************************************************/
 
@@ -35,11 +35,18 @@
  *****************************************************************************/
 
 // $Log: sc_thread_process.h,v $
-// Revision 1.2  2008/10/10 17:36:42  acg
-//  Andy Goodrich: update of copyright.
+// Revision 1.2  2008/05/22 17:06:06  acg
+//  Andy Goodrich: formatting and comments.
 //
-// Revision 1.1.1.1  2006/12/15 20:31:37  acg
-// SystemC 2.2
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.7  2006/05/08 17:57:13  acg
+//  Andy Goodrich: Added David Long's forward declarations for friend functions
+//  to keep the Microsoft C++ compiler happy.
+//
+// Revision 1.6  2006/04/20 17:08:17  acg
+//  Andy Goodrich: 3.0 style process changes.
 //
 // Revision 1.5  2006/04/11 23:13:21  acg
 //   Andy Goodrich: Changes for reduced reset support that only includes
@@ -67,42 +74,31 @@
 
 namespace sc_core {
 
+// forward references:
 class sc_event_and_list;
 class sc_event_or_list;
 class sc_reset;
+void sc_thread_cor_fn( void* );
+void sc_cthread_cor_fn( void* );
+void sc_set_stack_size( sc_thread_handle, std::size_t );
+class sc_event;
+class sc_join;
+class sc_module;
+class sc_process_handle;
+class sc_process_table;
+class sc_simcontext;
+class sc_runnable;
 
-// friend function declarations
-    void sc_thread_cor_fn( void* );
-    void sc_cthread_cor_fn( void* );
-    void sc_set_stack_size( sc_thread_handle, std::size_t );
-    class sc_event;
-    class sc_join;
-    class sc_module;
-    class sc_process_handle;
-    class sc_process_table;
-    class sc_simcontext;
-    class sc_runnable;
-    sc_cor* get_cor_pointer( sc_process_b* process_p );
-
-    void wait( sc_simcontext* );
-    void wait( const sc_event&,
-              sc_simcontext* );
-    void wait( sc_event_or_list&,
-              sc_simcontext* );
-    void wait( sc_event_and_list&,
-              sc_simcontext* );
-    void wait( const sc_time&,
-              sc_simcontext* );
-    void wait( const sc_time&, const sc_event&,
-              sc_simcontext* );
-    void wait( const sc_time&, sc_event_or_list&,
-              sc_simcontext* );
-    void wait( const sc_time&, sc_event_and_list&,
-              sc_simcontext* );
-
-//==============================================================================
-
+sc_cor* get_cor_pointer( sc_process_b* process_p );
 void sc_set_stack_size( sc_thread_handle thread_h, std::size_t size );
+void wait( sc_simcontext* );
+void wait( const sc_event&, sc_simcontext* );
+void wait( sc_event_or_list&, sc_simcontext* );
+void wait( sc_event_and_list&, sc_simcontext* );
+void wait( const sc_time&, sc_simcontext* );
+void wait( const sc_time&, const sc_event&, sc_simcontext* );
+void wait( const sc_time&, sc_event_or_list&, sc_simcontext* );
+void wait( const sc_time&, sc_event_and_list&, sc_simcontext* );
 
 //==============================================================================
 // sc_thread_process -
@@ -122,23 +118,16 @@ class sc_thread_process : public sc_process_b {
     friend sc_cor* get_cor_pointer( sc_process_b* process_p );
 
     friend void wait( sc_simcontext* );
-    friend void wait( const sc_event&,
-              sc_simcontext* );
-    friend void wait( sc_event_or_list&,
-              sc_simcontext* );
-    friend void wait( sc_event_and_list&,
-              sc_simcontext* );
-    friend void wait( const sc_time&,
-              sc_simcontext* );
-    friend void wait( const sc_time&, const sc_event&,
-              sc_simcontext* );
-    friend void wait( const sc_time&, sc_event_or_list&,
-              sc_simcontext* );
-    friend void wait( const sc_time&, sc_event_and_list&,
-              sc_simcontext* );
+    friend void wait( const sc_event&, sc_simcontext* );
+    friend void wait( sc_event_or_list&, sc_simcontext* );
+    friend void wait( sc_event_and_list&, sc_simcontext* );
+    friend void wait( const sc_time&, sc_simcontext* );
+    friend void wait( const sc_time&, const sc_event&, sc_simcontext* );
+    friend void wait( const sc_time&, sc_event_or_list&, sc_simcontext* );
+    friend void wait( const sc_time&, sc_event_and_list&, sc_simcontext* );
   public:
-    sc_thread_process( const char* name_p, bool free_host,
-        SC_ENTRY_FUNC method_p, sc_process_host* host_p,
+    sc_thread_process( const char* name_p, bool free_host, 
+        SC_ENTRY_FUNC method_p, sc_process_host* host_p, 
         const sc_spawn_options* opt_p );
 
     virtual ~sc_thread_process();
@@ -147,16 +136,28 @@ class sc_thread_process : public sc_process_b {
         { return "sc_thread_process"; }
 
   protected:
-    virtual void kill_process();
+    virtual void disable_process( 
+        sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
+    virtual void enable_process( 
+        sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
+    virtual void kill_process(
+        sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
     sc_thread_handle next_exist();
     sc_thread_handle next_runnable();
     virtual void prepare_for_simulation();
     inline bool ready_to_run();
+    virtual void resume_process( 
+        sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
     void set_next_exist( sc_thread_handle next_p );
     void set_next_runnable( sc_thread_handle next_p );
 
     void set_stack_size( std::size_t size );
     inline void suspend_me();
+    virtual void suspend_process( 
+        sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
+    virtual void throw_reset( bool async );
+    virtual void throw_user( const sc_throw_it_helper& helper,
+        sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
 
     bool trigger_dynamic( sc_event* );
 
@@ -194,12 +195,34 @@ class sc_thread_process : public sc_process_b {
 //------------------------------------------------------------------------------
 inline bool sc_thread_process::ready_to_run()
 {
-    if ( (m_throw_type == THROW_NONE) && ( m_wait_cycle_n > 0 ) )
+    // IF WE ARE THROWING AN EXCEPTION DISPATCH THIS THREAD:
+
+    if ( m_throw_type != THROW_NONE ) return true;
+
+
+    // SEE IF WE CAN DISPATCH THE THREAD:
+
+    switch( m_state )
     {
-        --m_wait_cycle_n;
-        return false;
+      case ps_normal:
+        if ( m_wait_cycle_n > 0 )
+        {
+            --m_wait_cycle_n;
+            return false;
+        }
+        return true;
+      case ps_suspended:
+        if ( m_wait_cycle_n > 0 )
+        {
+            --m_wait_cycle_n;
+            return false;
+        }
+        m_state = ps_suspended_and_pending;
+        break;
+      default:
+        break;
     }
-    return true;
+    return false;
 }
 
 
@@ -217,23 +240,48 @@ inline void sc_thread_process::set_stack_size( std::size_t size )
 //"sc_thread_process::suspend_me"
 //
 // This method suspends this object instance in favor of the next runnable
-// process. Upon awakening we check to see if an exception should be thrown.
+// process. Upon awakening we check to see if an exception should be thrown. 
+// There are two types of exceptions that can be thrown, synchronous reset
+// and asynchronous reset. At a future time there may be more asynchronous
+// exceptions.  If an asynchronous reset is seen and there is not static reset
+// specified, or the static reset is not active then clear the throw
+// type for the next time this method is called.
 //------------------------------------------------------------------------------
 inline void sc_thread_process::suspend_me()
 {
     sc_simcontext* simc_p = simcontext();
     simc_p->cor_pkg()->yield( simc_p->next_cor() );
 
-    switch ( m_throw_type )
+    // IF THERE IS A SYNCHRONOUS RESET ACTIVE THROW AN EXCEPTION:
+
+    if ( m_sync_reset )
     {
-      case THROW_NONE:
-        break;
-      case THROW_RESET:
         throw sc_user();
-      default:
-        break;
+    }
+
+    // IF WE ARE IN RESET BECAUSE OF A THROW, THROW THAT EXCEPTION:
+
+    if ( m_throw_type == THROW_NONE )
+    {
+        return;
+    }
+    else if ( m_throw_type == THROW_RESET )
+    {
+        if ( 
+             ( !m_reset_p || (m_reset_p->read() != m_reset_level) ) || 
+             ( !m_areset_p || (m_areset_p->read() != m_areset_level) ) 
+        ) {
+            m_throw_type = THROW_NONE; 
+        }
+        throw sc_user();
+    }
+    else if ( m_throw_type == THROW_USER )
+    {
+        m_throw_type = THROW_NONE; 
+        m_throw_helper_p->throw_it();
     }
 }
+
 
 //------------------------------------------------------------------------------
 //"sc_thread_process::wait"
@@ -242,7 +290,7 @@ inline void sc_thread_process::suspend_me()
 inline
 void
 sc_thread_process::wait( const sc_event& e )
-{
+{   
     e.add_dynamic( this );
     m_trigger_type = EVENT;
     suspend_me();
@@ -251,7 +299,7 @@ sc_thread_process::wait( const sc_event& e )
 inline
 void
 sc_thread_process::wait( sc_event_or_list& el )
-{
+{   
     el.add_dynamic( this );
     m_event_list_p = &el;
     m_trigger_type = OR_LIST;
@@ -322,13 +370,13 @@ sc_thread_process::wait( const sc_time& t, sc_event_and_list& el )
 // This method suspends this object instance for the specified number of cycles.
 // A cycle is defined as the event the thread is set up to staticly wait on.
 // The field m_wait_cycle_n is set to one less than the number of cycles to
-// be waited for, since the value is tested before being decremented in
+// be waited for, since the value is tested before being decremented in 
 // the simulation kernel.
 //------------------------------------------------------------------------------
 inline
 void
 sc_thread_process::wait_cycles( int n )
-{
+{   
     m_wait_cycle_n = n-1;
     suspend_me();
 }
@@ -389,6 +437,6 @@ inline sc_cor* get_cor_pointer( sc_process_b* process_p )
     return thread_p->m_cor_p;
 }
 
-} // namespace sc_core
+} // namespace sc_core 
 
 #endif // !defined(sc_thread_process_h_INCLUDED)

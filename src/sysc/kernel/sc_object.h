@@ -37,11 +37,18 @@
  *****************************************************************************/
 
 // $Log: sc_object.h,v $
-// Revision 1.2  2008/10/10 17:36:41  acg
-//  Andy Goodrich: update of copyright.
+// Revision 1.3  2009/02/28 00:26:58  acg
+//  Andy Goodrich: changed boost name space to sc_boost to allow use with
+//  full boost library applications.
 //
-// Revision 1.1.1.1  2006/12/15 20:31:37  acg
-// SystemC 2.2
+// Revision 1.2  2008/05/22 17:06:26  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.5  2006/04/20 17:08:17  acg
+//  Andy Goodrich: 3.0 style process changes.
 //
 // Revision 1.4  2006/04/11 23:13:21  acg
 //   Andy Goodrich: Changes for reduced reset support that only includes
@@ -116,7 +123,7 @@ public:
     const sc_attr_cltn& attr_cltn() const;
 
     virtual const std::vector<sc_object*>& get_child_objects() const
-        { return *(new std::vector<sc_object*>); }
+        { return m_no_children; }
 
     sc_object* get_parent() const { return m_parent; } 
     sc_object* get_parent_object() const { return m_parent; }
@@ -129,15 +136,18 @@ protected:
 
 private:
 
+    void detach();
     void sc_object_init(const char* nm);
 
 private:
 
     /* Each simulation object is associated with a simulation context */ 
-    sc_simcontext*         m_simc;
-    char*                  m_name;
-    mutable sc_attr_cltn*  m_attr_cltn_p;
-    sc_object*             m_parent;
+    sc_simcontext*          m_simc;  // simcontext pointer and empty indicator.
+    char*                   m_name;
+    mutable sc_attr_cltn*   m_attr_cltn_p;
+    sc_object*              m_parent;
+    static 
+    std::vector<sc_object*> m_no_children; // get_child_objects() default value.
 };
 
 

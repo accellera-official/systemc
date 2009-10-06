@@ -34,8 +34,11 @@
  *****************************************************************************/
 
 // $Log: sc_bit_proxies.h,v $
-// Revision 1.4  2007/03/14 17:47:49  acg
-//  Andy Goodrich: Formatting.
+// Revision 1.5  2009/02/28 00:26:14  acg
+//  Andy Goodrich: bug fixes.
+//
+// Revision 1.4  2007/03/14 17:48:37  acg
+//  Andy Goodrich: fixed bug.
 //
 // Revision 1.3  2007/01/18 19:29:18  acg
 //  Andy Goodrich: fixed bug in concatenations of bit selects on sc_lv and
@@ -2000,7 +2003,7 @@ sc_digit
 sc_bitref_r<T>::get_cword( int n ) const
 {
     if( n == 0 ) {
-	return ( get_bit( n ) & SC_DIGIT_TWO );
+	return ( (get_bit( n ) & SC_DIGIT_TWO) >> 1 );
     } else {
 	SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, 0 );
 	// never reached

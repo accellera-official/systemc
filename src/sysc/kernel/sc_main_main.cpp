@@ -35,16 +35,15 @@
 
 
 // $Log: sc_main_main.cpp,v $
-// Revision 1.3  2008/10/10 17:36:41  acg
-//  Andy Goodrich: update of copyright.
+// Revision 1.3  2008/05/22 17:06:25  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
 //
-// Revision 1.2  2008/04/11 20:40:14  acg
-//  Andy Goodrich: changed the default status value returned by
-//  sc_elab_and_sim() to be 1 rather than 0. That way when a exception
-//  aborts sc_main() we will return a non-zero value.
+// Revision 1.2  2008/04/11 20:41:28  acg
+//  Andy Goodrich: changed the return value in sc_elab_and_sim() to be 1
+//  when an exception occurs in sc_main() rather than 0.
 //
-// Revision 1.1.1.1  2006/12/15 20:31:37  acg
-// SystemC 2.2
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
 //
 // Revision 1.4  2006/01/25 00:31:19  acg
 //  Andy Goodrich: Changed over to use a standard message id of
