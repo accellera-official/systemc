@@ -69,6 +69,9 @@
  *****************************************************************************/
 
 // $Log: sc_unsigned.h,v $
+// Revision 1.2  2008/11/06 17:22:47  acg
+//  Andy Goodrich: bug fixes for 2.2.1.
+//
 // Revision 1.1.1.1  2006/12/15 20:31:36  acg
 // SystemC 2.2
 //
@@ -130,8 +133,8 @@ int compare_unsigned(small_type us,
                               int vnb,
                               int vnd,
                               const sc_digit *vd,
-                              small_type if_u_signed,
-                              small_type if_v_signed);
+                              small_type if_u_signed=0,
+                              small_type if_v_signed=0);
 
 sc_unsigned add_unsigned_friend(small_type us,
                                          int unb,
@@ -1854,8 +1857,8 @@ public:
                               int vnb,
                               int vnd,
                               const sc_digit *vd,
-                              small_type if_u_signed = 0,
-                              small_type if_v_signed = 0);
+                              small_type if_u_signed,
+                              small_type if_v_signed);
 
   friend sc_unsigned add_unsigned_friend(small_type us,
                                          int unb,

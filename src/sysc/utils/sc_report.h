@@ -42,6 +42,10 @@
  *****************************************************************************/
 
 // $Log: sc_report.h,v $
+// Revision 1.2  2008/05/20 20:42:05  acg
+//  Andy Goodrich: Added includes for system declarations that are required
+//  by gcc 4.3.
+//
 // Revision 1.1.1.1  2006/12/15 20:31:39  acg
 // SystemC 2.2
 //
@@ -222,7 +226,7 @@ typedef std::exception sc_exception;
 #else
 
 #define sc_assert(expr)                                                       \
- ((void) ((expr) ? 0 : (SC_REPORT_FATAL( SC_ID_ASSERTION_FAILED_ , #expr ), 0)))
+ ((void) ((expr) ? 0 : (SC_REPORT_FATAL( sc_core::SC_ID_ASSERTION_FAILED_ , #expr ), 0)))
 
 #endif
 

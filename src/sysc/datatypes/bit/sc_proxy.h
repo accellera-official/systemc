@@ -42,6 +42,9 @@
  *****************************************************************************/
 
 // $Log: sc_proxy.h,v $
+// Revision 1.2  2008/11/06 17:22:43  acg
+//  Andy Goodrich: bug fixes for 2.2.1.
+//
 // Revision 1.1.1.1  2006/12/15 20:31:36  acg
 // SystemC 2.2
 //
@@ -999,8 +1002,8 @@ b_and_assign_( sc_proxy<X>& px, const sc_proxy<Y>& py )
 	sc_digit x_dw, x_cw, y_dw, y_cw;
 	get_words_( x, i, x_dw, x_cw );
 	get_words_( y, i, y_dw, y_cw );
-	sc_digit cw = x_dw & y_cw | x_cw & y_dw | x_cw & y_cw;
-	sc_digit dw = cw | x_dw & y_dw;
+	sc_digit cw = (x_dw & y_cw) | (x_cw & y_dw) | (x_cw & y_cw);
+	sc_digit dw = cw | (x_dw & y_dw);
 	set_words_( x, i, dw, cw );
     }
     // tail cleaning not needed
@@ -1023,7 +1026,7 @@ b_or_assign_( sc_proxy<X>& px, const sc_proxy<Y>& py )
 	sc_digit x_dw, x_cw, y_dw, y_cw;
 	get_words_( x, i, x_dw, x_cw );
 	get_words_( y, i, y_dw, y_cw );
-	sc_digit cw = x_cw & y_cw | x_cw & ~y_dw | ~x_dw & y_cw;
+	sc_digit cw = (x_cw & y_cw) | (x_cw & ~y_dw) | (~x_dw & y_cw);
 	sc_digit dw = cw | x_dw | y_dw;
 	set_words_( x, i, dw, cw );
     }
@@ -1048,7 +1051,7 @@ b_xor_assign_( sc_proxy<X>& a, const sc_proxy<Y>& b )
 	get_words_( x, i, x_dw, x_cw );
 	get_words_( y, i, y_dw, y_cw );
 	sc_digit cw = x_cw | y_cw;
-	sc_digit dw = cw | x_dw ^ y_dw;
+	sc_digit dw = cw | (x_dw ^ y_dw);
 	set_words_( x, i, dw, cw );
     }
     // tail cleaning not needed

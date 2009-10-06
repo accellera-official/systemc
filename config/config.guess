@@ -226,6 +226,9 @@ EOF
     "Power Macintosh":Darwin:*:*)
 	echo powerpc-apple-macosx
 	exit 0 ;;
+    i386:Darwin:*:*)
+	echo i386-apple-macosx
+	exit 0 ;;
     macppc:NetBSD:*:*)
         echo powerpc-apple-netbsd${UNAME_RELEASE}
         exit 0 ;;

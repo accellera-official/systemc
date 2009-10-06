@@ -2016,8 +2016,8 @@ vcd_trace_file::cycle(bool this_is_a_delta_cycle)
     double_to_special_int64(now_units, &now_units_high, &now_units_low );
 
     bool now_later_than_previous_time = false;
-    if( now_units_low > previous_time_units_low 
-        && now_units_high == previous_time_units_high
+    if( (now_units_low > previous_time_units_low 
+        && now_units_high == previous_time_units_high)
         || now_units_high > previous_time_units_high){
         now_later_than_previous_time = true;
     }

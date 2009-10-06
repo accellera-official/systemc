@@ -38,6 +38,10 @@
 
 
 // $Log: sc_utils_ids.cpp,v $
+// Revision 1.2  2008/05/20 20:42:05  acg
+//  Andy Goodrich: Added includes for system declarations that are required
+//  by gcc 4.3.
+//
 // Revision 1.1.1.1  2006/12/15 20:31:39  acg
 // SystemC 2.2
 //
@@ -58,6 +62,8 @@
 // the source.
 //
 
+#include <cstdlib>
+#include <cstring>
 #include "sysc/utils/sc_report.h"
 
 

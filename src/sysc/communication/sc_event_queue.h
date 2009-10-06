@@ -34,6 +34,10 @@
  *****************************************************************************/
 
 // $Log: sc_event_queue.h,v $
+// Revision 1.2  2008/05/20 16:43:53  acg
+//  Andy Goodrich: changed the unique name generator to the one used for
+//  sc_modules from the global case.
+//
 // Revision 1.1.1.1  2006/12/15 20:31:35  acg
 // SystemC 2.2
 //

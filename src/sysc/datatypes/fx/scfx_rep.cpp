@@ -36,6 +36,9 @@
 
 
 // $Log: scfx_rep.cpp,v $
+// Revision 1.2  2008/11/06 17:22:47  acg
+//  Andy Goodrich: bug fixes for 2.2.1.
+//
 // Revision 1.1.1.1  2006/12/15 20:31:36  acg
 // SystemC 2.2
 //
@@ -1522,8 +1525,8 @@ multiply( scfx_rep& result, const scfx_rep& lhs, const scfx_rep& rhs,
     //
 
     if( lhs.is_nan() || rhs.is_nan()
-    ||  lhs.is_inf() && rhs.is_zero()
-    ||  lhs.is_zero() && rhs.is_inf() )
+    ||  (lhs.is_inf() && rhs.is_zero())
+    ||  (lhs.is_zero() && rhs.is_inf()) )
     {
 	result.set_nan();
 	return;
@@ -1603,8 +1606,8 @@ div_scfx_rep( const scfx_rep& lhs, const scfx_rep& rhs, int div_wl )
     // check for special cases
     //
 
-    if( lhs.is_nan() || rhs.is_nan() || lhs.is_inf() && rhs.is_inf() ||
-	lhs.is_zero() && rhs.is_zero() )
+    if( lhs.is_nan() || rhs.is_nan() || (lhs.is_inf() && rhs.is_inf()) ||
+	(lhs.is_zero() && rhs.is_zero()) )
     {
 	result.set_nan();
 	return &result;
@@ -1976,7 +1979,7 @@ scfx_rep::quantization( const scfx_params& params, bool& q_flag )
 	    }
             case SC_RND_CONV:			// convergent rounding
 	    {
-		if( qb && ! qz || qb && qz && q_odd( x ) )
+		if( (qb && ! qz) || (qb && qz && q_odd( x )) )
 		    q_incr( x );
 		break;
 	    }
@@ -2046,7 +2049,7 @@ scfx_rep::overflow( const scfx_params& params, bool& o_flag )
 	    if( params.o_mode() == SC_SAT_SYM )
 		under = ( ! zero_left || bit_at );
 	    else
-		under = ( ! zero_left || zero_left && bit_at && ! zero_right );
+		under = (! zero_left || (zero_left && bit_at && ! zero_right));
 	}
 	else
 	    over = ( ! zero_left || bit_at );
@@ -2885,8 +2888,8 @@ scfx_rep::round( int wl )
 
     scfx_index x( wi, bi );
 
-    if( q_bit( x ) && ! q_zero( x ) ||
-	q_bit( x ) && q_zero( x ) && q_odd( x ) )
+    if( (q_bit( x ) && ! q_zero( x )) ||
+	(q_bit( x ) && q_zero( x ) && q_odd( x )) )
 	q_incr( x );
     q_clear( x );
 

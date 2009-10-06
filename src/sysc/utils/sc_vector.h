@@ -35,6 +35,10 @@
 
 
 // $Log: sc_vector.h,v $
+// Revision 1.3  2008/10/09 21:19:47  acg
+//  Andy Goodrich: fixed the way the end() methods calculate their value
+//  I had incorrectly cut and paste code associated with begin().
+//
 // Revision 1.2  2007/01/12 21:04:58  acg
 //  Andy Goodrich: fix for Microsoft compiler.
 //
@@ -57,6 +61,7 @@ extern "C" {
 
 // #define ACCESS(I) m_vector.at(I) // index checking
 #define ACCESS(I) m_vector[I]
+#define ADDR_ACCESS(I) (m_vector.size() != 0 ? &m_vector[I] : 0 )
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_pvector<T>
@@ -86,22 +91,23 @@ public:
 	{}
 
 
-    int size() const
+    size_t size() const
 	{ return m_vector.size(); }
 
 
     iterator begin()
-        { return (iterator) &ACCESS(0); }
+        { return (iterator) ADDR_ACCESS(0); }
 
     const_iterator begin() const
-        { return (const_iterator) &ACCESS(0); }
+        { return (const_iterator) ADDR_ACCESS(0); }
 
     iterator end()
-        { return static_cast<iterator> (&ACCESS(m_vector.size()-1)+1); }
+        { return static_cast<iterator> (ADDR_ACCESS(m_vector.size())); }
 
     const_iterator end() const
-        { return static_cast<const_iterator> (&ACCESS(m_vector.size()-1)+1); }
-
+    { 
+        return static_cast<const_iterator> (ADDR_ACCESS(m_vector.size()));
+    }
 
     sc_pvector<T>& operator = ( const sc_pvector<T>& rhs )
 	{ m_vector = rhs.m_vector; return *this; }
@@ -164,6 +170,7 @@ public:
 };
 
 #undef ACCESS
+#undef ADDR_ACCESS
 
 } // namespace sc_core
 

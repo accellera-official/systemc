@@ -42,6 +42,14 @@
 
 
 // $Log: sc_unsigned.cpp,v $
+// Revision 1.5  2008/06/19 17:33:19  acg
+//  Andy Goodrich: actually needed to negate the value in the SC_NEG case
+//  for concat_get_data().
+//
+// Revision 1.4  2008/06/19 16:57:40  acg
+//  Andy Goodrich: added case for negative unsigned values to the support
+//  in concate_get_data().
+//
 // Revision 1.3  2007/11/04 21:20:34  acg
 //  Andy Goodrich: changes for valgrind issues and proper value return.
 //
@@ -104,7 +112,7 @@ sc_unsigned::invalid_range( int l, int r ) const
     char msg[BUFSIZ];
     std::sprintf( msg,
          "sc_biguint part selection: left = %d, right = %d \n"
-         "  violates either (0 <= left <= %d) or (0 <= right <= %d)",
+	 "  violates either (%d >= left >= 0) or (%d >= right >= 0)",
          l, r, nbits-2, nbits-2 );
     SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
 }
@@ -153,6 +161,7 @@ bool sc_unsigned::concat_get_ctrl( sc_digit* dst_p, int low_i ) const
 
 bool sc_unsigned::concat_get_data( sc_digit* dst_p, int low_i ) const
 {
+    sc_digit carry;        // Carry for negating a value.
     int      dst_i;        // Index to next word to set in dst_p.
     int      end_i;        // Index of high order word to set.
     int      high_i;       // Index w/in word of high order bit.
@@ -229,6 +238,71 @@ bool sc_unsigned::concat_get_data( sc_digit* dst_p, int low_i ) const
 	    dst_p[dst_i] = ((left_word << left_shift) |
 		(right_word >> right_shift)) & mask;
 	}
+	break;
+
+      // SOURCE VALUE IS NEGATIVE:
+
+      case SC_NEG:
+
+        // ALL DATA TO BE MOVED IS IN A SINGLE WORD:
+
+	result = true;
+        if ( dst_i == end_i )
+        {
+            mask = ~(-1 << nbits);
+            right_word = ((digit[0] ^ DIGIT_MASK) + 1) & mask;
+            mask = ~(-1 << left_shift);
+            dst_p[dst_i] = ( ( dst_p[dst_i] & mask ) |
+                (right_word << left_shift) ) & DIGIT_MASK;
+        }
+
+
+        // DATA IS IN MORE THAN ONE WORD, BUT IS WORD ALIGNED:
+
+        else if ( left_shift == 0 )
+        {
+            carry = 1;
+            for ( src_i = 0; dst_i < end_i; dst_i++, src_i++ )
+            {
+                right_word = (digit[src_i] ^ DIGIT_MASK) + carry;
+                dst_p[dst_i] = right_word &  DIGIT_MASK;
+                carry = right_word >> BITS_PER_DIGIT;
+            }
+            high_i = high_i % BITS_PER_DIGIT;
+            mask = (~(-2 << high_i)) & DIGIT_MASK;
+            right_word = (src_i < ndigits) ? 
+		(digit[src_i] ^ DIGIT_MASK) + carry : DIGIT_MASK + carry;
+            dst_p[dst_i] = right_word & mask;
+        }
+
+
+        // DATA IS IN MORE THAN ONE WORD, AND NOT WORD ALIGNED:
+
+        else
+        {
+            high_i = high_i % BITS_PER_DIGIT;
+            right_shift = BITS_PER_DIGIT - left_shift;
+            mask = ~(-1 << left_shift);
+            carry = 1;
+            right_word = (digit[0] ^ DIGIT_MASK) + carry;
+            dst_p[dst_i] = (dst_p[dst_i] & mask) | 
+                ((right_word << left_shift) & DIGIT_MASK);
+	    carry = right_word >> BITS_PER_DIGIT;
+	    right_word &= DIGIT_MASK;
+            for ( src_i = 1, dst_i++; dst_i < end_i; dst_i++, src_i++ )
+            {
+                left_word = (digit[src_i] ^ DIGIT_MASK) + carry;
+                dst_p[dst_i] = ((left_word << left_shift)&DIGIT_MASK) |
+                    (right_word >> right_shift);
+                carry = left_word >> BITS_PER_DIGIT;
+                right_word = left_word & DIGIT_MASK;
+            }
+            left_word = (src_i < ndigits) ? 
+		(digit[src_i] ^ DIGIT_MASK) + carry : carry;
+            mask = ~(-2 << high_i) & DIGIT_MASK;
+            dst_p[dst_i] = ((left_word << left_shift) |
+                (right_word >> right_shift)) & mask;
+        }
 	break;
 
 

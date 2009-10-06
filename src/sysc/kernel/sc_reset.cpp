@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2006 by all Contributors.
+  source code Copyright (c) 1996-2008 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -24,6 +24,9 @@
  *****************************************************************************/
 
 // $Log: sc_reset.cpp,v $
+// Revision 1.2  2008/10/10 17:36:41  acg
+//  Andy Goodrich: update of copyright.
+//
 // Revision 1.1.1.1  2006/12/15 20:31:37  acg
 // SystemC 2.2
 //

@@ -41,6 +41,9 @@
  *****************************************************************************/
 
 // $Log: sc_concatref.h,v $
+// Revision 1.4  2008/10/10 17:36:39  acg
+//  Andy Goodrich: update of copyright.
+//
 // Revision 1.3  2008/04/29 20:23:26  acg
 //  Andy Goodrich: fixed the code that assigns a string value to an
 //  sc_concatref instance.

@@ -35,6 +35,9 @@
 
 /* 
 $Log: sc_signal.cpp,v $
+Revision 1.3  2008/05/20 16:42:53  acg
+ Andy Goodrich: improvements to invalid signal writer message generator.
+
 Revision 1.2  2007/04/02 17:24:30  acg
  Andy Goodrich: added check for null writer pointers in sc_signal invalid
  writer method.

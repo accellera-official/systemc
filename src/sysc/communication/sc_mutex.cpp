@@ -35,6 +35,9 @@
 
 
 // $Log: sc_mutex.cpp,v $
+// Revision 1.2  2008/05/20 16:41:47  acg
+//  Andy Goodrich: added process writer checks.
+//
 // Revision 1.1.1.1  2006/12/15 20:31:35  acg
 // SystemC 2.2
 //

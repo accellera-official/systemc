@@ -42,6 +42,9 @@
 
 
 // $Log: sc_signed.cpp,v $
+// Revision 1.4  2008/10/10 17:36:39  acg
+//  Andy Goodrich: update of copyright.
+//
 // Revision 1.3  2008/04/29 21:20:29  acg
 //  Andy Goodrich: added mask to first word transferred when processing
 //  a negative sc_signed value in sc_signed::concat_get_data().
@@ -102,7 +105,7 @@ sc_signed::invalid_range( int l, int r ) const
     char msg[BUFSIZ];
     std::sprintf( msg,
          "sc_bigint part selection: left = %d, right = %d \n"
-         "  violates either (0 <= left <= %d) or (0 <= right <= %d)",
+         "  violates either (%d >= left >= 0) or (%d >= right >= 0)",
          l, r, nbits-1, nbits-1 );
     SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
 }

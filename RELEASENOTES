@@ -36,6 +36,21 @@ Compared to the 2.2.0, this release has the following new items:
 
 Following is the list of bug fixes and enhancements for this release:
 
+     - Fixed list processing for attributes to match that of C++ Standard
+       Library classes.
+       
+       src/sysc/utils/sc_vector.h
+       
+       Changed .begin() and .end in sc_pvector<T> so that its use by
+       sc_object::attr_cltn().begin() and .end() will return a null
+       pointer if there are no attributes defined.
+
+     - Fixed bug where concatenations involving sc_unsigned instances 
+       with negative values, e.g., from ~X for instance, were returning 
+       zero rather than the actual bits of the value.
+
+     - Added sc_core namespace prefix in the sc_assert() macro.
+
      - When sc_stop() is called the message informing the user is now
        issued via SC_REPORT_INFO() rather than just output to cout.
      

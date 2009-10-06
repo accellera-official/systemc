@@ -36,6 +36,9 @@
 
 
 // $Log: sc_uint_base.cpp,v $
+// Revision 1.4  2008/10/10 17:36:39  acg
+//  Andy Goodrich: update of copyright.
+//
 // Revision 1.3  2007/11/04 21:20:34  acg
 //  Andy Goodrich: changes for valgrind issues and proper value return.
 //
@@ -349,7 +352,7 @@ sc_uint_base::invalid_range( int l, int r ) const
     char msg[BUFSIZ];
     std::sprintf( msg,
 	     "sc_uint[_base] part selection: left = %d, right = %d violates "
-	     "0 <= right <= left <= %d",
+	     "%d >= left >= right >= 0",
 	     l, r, m_len - 1 );
     SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
 }

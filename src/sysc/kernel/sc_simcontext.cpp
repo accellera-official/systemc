@@ -1,7 +1,7 @@
 /****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2006 by all Contributors.
+  source code Copyright (c) 1996-2008 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -58,6 +58,13 @@
 				 execution problem with using sc_pvector.
  *****************************************************************************/
 // $Log: sc_simcontext.cpp,v $
+// Revision 1.3  2008/10/10 17:36:42  acg
+//  Andy Goodrich: update of copyright.
+//
+// Revision 1.2  2008/05/22 17:03:35  acg
+//  Andy Goodrich: switch sc_stop message to use messaging mechanism rather
+//  than cout.
+//
 // Revision 1.1.1.1  2006/12/15 20:31:37  acg
 // SystemC 2.2
 //

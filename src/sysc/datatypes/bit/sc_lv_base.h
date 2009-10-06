@@ -37,6 +37,9 @@
  *****************************************************************************/
 
 // $Log: sc_lv_base.h,v $
+// Revision 1.3  2008/11/06 17:22:43  acg
+//  Andy Goodrich: bug fixes for 2.2.1.
+//
 // Revision 1.2  2007/03/14 17:47:49  acg
 //  Andy Goodrich: Formatting.
 //
@@ -306,8 +309,8 @@ sc_lv_base::get_bit( int i ) const
 {
     int wi = i / SC_DIGIT_SIZE;
     int bi = i % SC_DIGIT_SIZE;
-    return sc_logic_value_t( m_data[wi] >> bi & SC_DIGIT_ONE |
-			     m_ctrl[wi] >> bi << 1 & SC_DIGIT_TWO );
+    return sc_logic_value_t( (m_data[wi] >> bi & SC_DIGIT_ONE) |
+			     (((m_ctrl[wi] >> bi) << 1) & SC_DIGIT_TWO) );
 }
 
 inline
