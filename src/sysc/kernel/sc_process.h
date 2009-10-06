@@ -162,9 +162,9 @@ class sc_process_monitor {
 //-----------------------------------------------------------------------------
 
 #if defined(_MSC_VER)
-#if ( _MSC_VER > 1200 )
-#   define SC_USE_MEMBER_FUNC_PTR
-#endif
+#   if ( _MSC_VER > 1200 && _MSC_VER < 1400 )
+#      define SC_USE_MEMBER_FUNC_PTR
+#   endif
 #else
 #   define SC_USE_MEMBER_FUNC_PTR
 #endif

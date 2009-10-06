@@ -97,8 +97,7 @@ class sc_event_queue:
 
     SC_HAS_PROCESS( sc_event_queue );
 
-    sc_event_queue( sc_module_name name_ = 
-		sc_module_name(sc_gen_unique_name("event_queue")) );
+    sc_event_queue( sc_module_name name_ = sc_gen_unique_name("event_queue") );
     ~sc_event_queue();
 
     // API of sc_object

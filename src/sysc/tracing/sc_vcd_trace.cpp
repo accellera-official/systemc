@@ -2164,19 +2164,28 @@ vcd_trace_file::obtain_name()
     const int used_types_count = 'z' - 'a' + 1;
     int result;
 
-    char char4 = (char)(vcd_name_index % used_types_count);
+    result = vcd_name_index;
+    char char6 = (char)(vcd_name_index % used_types_count);
 
-    result = vcd_name_index / used_types_count;
+    result = result / used_types_count;
+    char char5 = (char)(result % used_types_count);
+
+    result = result / used_types_count;
+    char char4 = (char)(result % used_types_count);
+
+    result = result / used_types_count;
     char char3 = (char)(result % used_types_count);
 
     result = result / used_types_count;
     char char2 = (char)(result % used_types_count);
 
     char buf[20];
-    std::sprintf(buf, "%c%c%c",
+    std::sprintf(buf, "%c%c%c%c%c",
             char2 + first_type_used,
             char3 + first_type_used,
-            char4 + first_type_used);
+            char4 + first_type_used,
+            char5 + first_type_used,
+            char6 + first_type_used);
     vcd_name_index++;
     return std::string(buf);
 }

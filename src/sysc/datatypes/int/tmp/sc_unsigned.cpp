@@ -362,7 +362,6 @@ bool sc_unsigned::xor_reduce() const
     return odd ? true : false;
 }
 
-
 // ----------------------------------------------------------------------------
 //  SECTION: Public members - Assignment operators.
 // ----------------------------------------------------------------------------
@@ -2099,9 +2098,6 @@ sc_unsigned::iszero() const
 #define MUL_HELPER mul_unsigned_friend
 #define DIV_HELPER div_unsigned_friend
 #define MOD_HELPER mod_unsigned_friend
-#define AND_HELPER and_unsigned_friend
-#define  OR_HELPER  or_unsigned_friend
-#define XOR_HELPER xor_unsigned_friend 
 
 #include "sc_nbfriends.inc"
 
@@ -2128,9 +2124,6 @@ sc_unsigned::iszero() const
 #undef IF_SC_SIGNED
 #undef SC_UNSIGNED
 
-#undef XOR_HELPER
-#undef  OR_HELPER
-#undef AND_HELPER
 #undef MOD_HELPER
 #undef DIV_HELPER
 #undef MUL_HELPER
@@ -2142,6 +2135,405 @@ sc_unsigned::iszero() const
 
 #include "sc_unsigned_bitref.inc"
 #include "sc_unsigned_subref.inc"
+
+// ----------------------------------------------------------------------------
+//  SECTION: Friend functions for AND operators.
+// ----------------------------------------------------------------------------
+
+// Handles the cases 2-5 and returns the result.
+sc_unsigned 
+and_unsigned_friend(small_type us, 
+           int unb, int und, 
+           const sc_digit *ud, 
+           small_type vs,
+           int vnb, int vnd,
+           const sc_digit *vd)
+{
+
+  int nb = sc_max(unb, vnb);
+  int nd = sc_max(und, vnd);
+
+#ifdef SC_MAX_NBITS
+  sc_digit dbegin[MAX_NDIGITS];
+#else
+  sc_digit *dbegin = new sc_digit[nd];
+#endif
+
+  sc_digit *d = dbegin;
+
+  register const sc_digit *x;
+  register const sc_digit *y;
+  int xnd;
+  int ynd;
+  small_type xs;
+  small_type ys;
+
+  if (und >= vnd) {
+    x = ud;
+    y = vd;
+    xnd = und;
+    ynd = vnd;
+    xs = us;
+    ys = vs;
+  }
+  else {
+    y = ud;
+    x = vd;
+    ynd = und;
+    xnd = vnd;
+    ys = us;
+    xs = vs;
+  }
+
+  const sc_digit *xend = (x + xnd);
+  const sc_digit *yend = (y + ynd);
+
+  // x is longer than y.
+
+  small_type s = mul_signs(xs, ys);
+
+  if (s > 0) {
+
+    if (xs > 0) { // case 2
+
+      while (y < yend)
+        (*d++) = (*x++) & (*y++);
+
+      while (x++ < xend) 
+        (*d++) = 0;
+
+    }
+    else {  // case 3
+
+      register sc_digit xcarry = 1;
+      register sc_digit ycarry = 1;
+
+      while (y < yend) {
+        xcarry += (~(*x++) & DIGIT_MASK);
+        ycarry += (~(*y++) & DIGIT_MASK);
+        (*d++) = (xcarry & ycarry) & DIGIT_MASK;
+        xcarry >>= BITS_PER_DIGIT;
+        ycarry >>= BITS_PER_DIGIT;
+      }
+
+      while (x < xend) {
+        xcarry += (~(*x++) & DIGIT_MASK);
+        ycarry += DIGIT_MASK;
+        (*d++) = (xcarry & ycarry) & DIGIT_MASK;
+        xcarry >>= BITS_PER_DIGIT;
+        ycarry >>= BITS_PER_DIGIT;
+      }
+
+    }
+  }
+  else {
+
+    if (xs > 0) { // case 4
+
+      register sc_digit ycarry = 1;
+
+      while (y < yend) {
+        ycarry += (~(*y++) & DIGIT_MASK);
+        (*d++) = ((*x++) & ycarry) & DIGIT_MASK;
+        ycarry >>= BITS_PER_DIGIT;
+      }
+
+      while (x < xend) {
+        ycarry += DIGIT_MASK;
+        (*d++) = ((*x++) & ycarry) & DIGIT_MASK;
+        ycarry >>= BITS_PER_DIGIT;
+      }
+
+    }
+    else {  // case 5
+
+      register sc_digit xcarry = 1;
+
+      while (y < yend) {
+        xcarry += (~(*x++) & DIGIT_MASK);
+        (*d++) = (xcarry & (*y++)) & DIGIT_MASK;
+        xcarry >>= BITS_PER_DIGIT;
+      }
+
+      while (x++ < xend)
+        (*d++) = 0;
+
+    }
+  }
+
+  s = SC_ZERO;
+  for ( int ni = 0; ni < nd; ni++ )
+      if ( dbegin[ni] != 0 ) s = SC_POS;
+
+  return sc_unsigned(s, nb, nd, dbegin);  
+
+}
+
+
+// ----------------------------------------------------------------------------
+//  SECTION: Friend functions for OR operators.
+// ----------------------------------------------------------------------------
+
+// Handles the cases 3-5 and returns the result.
+sc_unsigned 
+or_unsigned_friend(small_type us, 
+          int unb, int und, 
+          const sc_digit *ud, 
+          small_type vs,
+          int vnb, int vnd,
+          const sc_digit *vd)
+{
+  
+  int nb = sc_max(unb, vnb);
+  int nd = sc_max(und, vnd);
+
+#ifdef SC_MAX_NBITS
+  sc_digit dbegin[MAX_NDIGITS];
+#else
+  sc_digit *dbegin = new sc_digit[nd];
+#endif
+
+  sc_digit *d = dbegin;
+
+  register const sc_digit *x;
+  register const sc_digit *y;
+  int xnd;
+  int ynd;
+  small_type xs;
+  small_type ys;
+
+  if (und >= vnd) {
+    x = ud;
+    y = vd;
+    xnd = und;
+    ynd = vnd;
+    xs = us;
+    ys = vs;
+  }
+  else {
+    y = ud;
+    x = vd;
+    ynd = und;
+    xnd = vnd;
+    ys = us;
+    xs = vs;
+  }
+
+  const sc_digit *xend = (x + xnd);
+  const sc_digit *yend = (y + ynd);
+
+  // x is longer than y.
+
+  small_type s = mul_signs(xs, ys);
+
+  if (s > 0) {
+
+    if (xs > 0) { // case 3
+
+      while (y < yend)
+        (*d++) = (*x++) | (*y++);
+
+      while (x < xend)
+        (*d++) = (*x++);
+
+    }
+    else {  // case 4
+
+      register sc_digit xcarry = 1;
+      register sc_digit ycarry = 1;
+
+      while (y < yend) {
+        xcarry += (~(*x++) & DIGIT_MASK);
+        ycarry += (~(*y++) & DIGIT_MASK);
+        (*d++) = (xcarry | ycarry) & DIGIT_MASK;
+        xcarry >>= BITS_PER_DIGIT;
+        ycarry >>= BITS_PER_DIGIT;
+      }
+
+      while (x < xend) {
+        xcarry += (~(*x++) & DIGIT_MASK);
+        ycarry += DIGIT_MASK;
+        (*d++) = (xcarry | ycarry) & DIGIT_MASK;
+        xcarry >>= BITS_PER_DIGIT;
+        ycarry >>= BITS_PER_DIGIT;
+      }
+
+    }
+
+  }
+  else {
+
+    if (xs > 0) { // case 5
+
+      register sc_digit ycarry = 1;
+
+      while (y < yend) {
+        ycarry += (~(*y++) & DIGIT_MASK);
+        (*d++) = ((*x++) | ycarry) & DIGIT_MASK;
+        ycarry >>= BITS_PER_DIGIT;
+      }
+
+      while (x < xend) {
+        ycarry += DIGIT_MASK;
+        (*d++) = ((*x++) | ycarry) & DIGIT_MASK;
+        ycarry >>= BITS_PER_DIGIT;
+      }
+
+    }
+    else {  // case 6
+
+      register sc_digit xcarry = 1;
+
+      while (y < yend) {
+        xcarry += (~(*x++) & DIGIT_MASK);
+        (*d++) = (xcarry | (*y++)) & DIGIT_MASK;
+        xcarry >>= BITS_PER_DIGIT;
+      }
+
+      while (x < xend) {
+        xcarry += (~(*x++) & DIGIT_MASK);
+        (*d++) = xcarry & DIGIT_MASK;
+        xcarry >>= BITS_PER_DIGIT;
+      }
+    }
+
+  }
+
+  return sc_unsigned(s, nb, nd, dbegin);
+
+}
+
+
+// ----------------------------------------------------------------------------
+//  SECTION: Friend functions for XOR operators.
+// ----------------------------------------------------------------------------
+
+// Handles the cases 3-5 and returns the result.
+sc_unsigned 
+xor_unsigned_friend(small_type us, 
+           int unb, int und, 
+           const sc_digit *ud, 
+           small_type vs,
+           int vnb, int vnd,
+           const sc_digit *vd)
+{
+  
+  int nb = sc_max(unb, vnb);
+  int nd = sc_max(und, vnd);
+
+#ifdef SC_MAX_NBITS
+  sc_digit dbegin[MAX_NDIGITS];
+#else
+  sc_digit *dbegin = new sc_digit[nd];
+#endif
+
+  sc_digit *d = dbegin;
+
+  register const sc_digit *x;
+  register const sc_digit *y;
+  int xnd;
+  int ynd;
+  small_type xs;
+  small_type ys;
+
+  if (und >= vnd) {
+    x = ud;
+    y = vd;
+    xnd = und;
+    ynd = vnd;
+    xs = us;
+    ys = vs;
+  }
+  else {
+    y = ud;
+    x = vd;
+    ynd = und;
+    xnd = vnd;
+    ys = us;
+    xs = vs;
+  }
+
+  const sc_digit *xend = (x + xnd);
+  const sc_digit *yend = (y + ynd);
+
+  // x is longer than y.
+
+  small_type s = mul_signs(xs, ys);
+
+  if (s > 0) {
+
+    if (xs > 0) { // case 3
+
+      while (y < yend)
+        (*d++) = ((*x++) ^ (*y++)) & DIGIT_MASK;
+
+      while (x < xend)
+        (*d++) = (*x++);
+
+    }
+    else {  // case 4
+
+      register sc_digit xcarry = 1;
+      register sc_digit ycarry = 1;
+
+      while (y < yend) {
+        xcarry += (~(*x++) & DIGIT_MASK);
+        ycarry += (~(*y++) & DIGIT_MASK);
+        (*d++) = (xcarry ^ ycarry) & DIGIT_MASK;
+        xcarry >>= BITS_PER_DIGIT;
+        ycarry >>= BITS_PER_DIGIT;
+      }
+
+      while (x < xend) {
+        xcarry += (~(*x++) & DIGIT_MASK);
+        ycarry += DIGIT_MASK;
+        (*d++) = (xcarry ^ ycarry) & DIGIT_MASK;
+        xcarry >>= BITS_PER_DIGIT;
+        ycarry >>= BITS_PER_DIGIT;
+      }
+
+    }
+  }
+  else {
+
+    if (xs > 0) { // case 5
+
+      register sc_digit ycarry = 1;
+
+      while (y < yend) {
+        ycarry += (~(*y++) & DIGIT_MASK);
+        (*d++) = ((*x++) ^ ycarry) & DIGIT_MASK;
+        ycarry >>= BITS_PER_DIGIT;
+      }
+
+      while (x < xend) {
+        ycarry += DIGIT_MASK;
+        (*d++) = ((*x++) ^ ycarry) & DIGIT_MASK;
+        ycarry >>= BITS_PER_DIGIT;
+      }
+
+    }
+    else {  // case 6
+
+      register sc_digit xcarry = 1;
+
+      while (y < yend) {
+        xcarry += (~(*x++) & DIGIT_MASK);
+        (*d++) = (xcarry ^ (*y++)) & DIGIT_MASK;
+        xcarry >>= BITS_PER_DIGIT;
+      }
+
+      while (x < xend) {
+        xcarry += (~(*x++) & DIGIT_MASK);
+        (*d++) = xcarry & DIGIT_MASK;
+        xcarry >>= BITS_PER_DIGIT;
+      }
+    }
+  }
+
+  return sc_unsigned(s, nb, nd, dbegin);
+
+}
 
 #undef CONVERT_LONG
 #undef CONVERT_LONG_2

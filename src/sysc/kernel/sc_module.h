@@ -49,6 +49,9 @@
  *****************************************************************************/
 
 // $Log: sc_module.h,v $
+// Revision 1.3  2007/03/14 17:48:04  acg
+//  Andy Goodrich: Fixed this-> usage in process macros.
+//
 // Revision 1.2  2007/01/24 20:14:12  acg
 //  Andy Goodrich: improved comment about using this-> in the macros that
 //  access sensitive.

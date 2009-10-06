@@ -36,6 +36,12 @@
 
 
 // $Log: sc_uint_base.cpp,v $
+// Revision 1.3  2007/11/04 21:20:34  acg
+//  Andy Goodrich: changes for valgrind issues and proper value return.
+//
+// Revision 1.2  2007/10/30 16:34:11  acg
+//  Andy Goodrich: fixed bugs in sc_uint_base::get_concat_data()
+//
 // Revision 1.1.1.1  2006/12/15 20:31:36  acg
 // SystemC 2.2
 //
@@ -145,7 +151,7 @@ bool sc_uint_subref_r::concat_get_ctrl( sc_digit* dst_p, int low_i ) const
     end_i = (low_i + (m_left-m_right)) / BITS_PER_DIGIT; 
 
     mask = ~(-1 << left_shift);
-    dst_p[dst_i] = (unsigned long)((dst_p[dst_i] & mask));
+    dst_p[dst_i] = (sc_digit)((dst_p[dst_i] & mask));
 
     dst_i++;
     for ( ; dst_i <= end_i; dst_i++ ) dst_p[dst_i] = 0;
@@ -175,7 +181,7 @@ bool sc_uint_subref_r::concat_get_data( sc_digit* dst_p, int low_i ) const
     // PROCESS THE FIRST WORD:
 
     mask = ~(-1 << left_shift);
-    dst_p[dst_i] = (unsigned long)(((dst_p[dst_i] & mask)) | 
+    dst_p[dst_i] = (sc_digit)(((dst_p[dst_i] & mask)) | 
 	((val << left_shift) & DIGIT_MASK));
 
     switch ( end_i - dst_i )
@@ -185,7 +191,7 @@ bool sc_uint_subref_r::concat_get_data( sc_digit* dst_p, int low_i ) const
      case 1:
         dst_i++;
         val >>= (BITS_PER_DIGIT-left_shift);
-        dst_p[dst_i] = (unsigned long)val;
+        dst_p[dst_i] = (sc_digit)val;
         break;
 
      // BITS ARE ACROSS THREE WORDS:
@@ -193,9 +199,9 @@ bool sc_uint_subref_r::concat_get_data( sc_digit* dst_p, int low_i ) const
      case 2:
         dst_i++;
         val >>= (BITS_PER_DIGIT-left_shift);
-        dst_p[dst_i++] = (unsigned long)(val & DIGIT_MASK);
+        dst_p[dst_i++] = (sc_digit)(val & DIGIT_MASK);
         val >>= BITS_PER_DIGIT;
-        dst_p[dst_i] = (unsigned long)val;
+        dst_p[dst_i] = (sc_digit)val;
         break;
 
      // BITS ARE ACROSS THREE WORDS:
@@ -203,11 +209,11 @@ bool sc_uint_subref_r::concat_get_data( sc_digit* dst_p, int low_i ) const
      case 3:
         dst_i++;
         val >>= (BITS_PER_DIGIT-left_shift);
-        dst_p[dst_i++] = (unsigned long)(val & DIGIT_MASK);
+        dst_p[dst_i++] = (sc_digit)(val & DIGIT_MASK);
         val >>= BITS_PER_DIGIT;
-        dst_p[dst_i++] = (unsigned long)(val & DIGIT_MASK);
+        dst_p[dst_i++] = (sc_digit)(val & DIGIT_MASK);
         val >>= BITS_PER_DIGIT;
-        dst_p[dst_i] = (unsigned long)val;
+        dst_p[dst_i] = (sc_digit)val;
         break;
     }
     return result;
@@ -578,22 +584,37 @@ bool sc_uint_base::concat_get_ctrl( sc_digit* dst_p, int low_i ) const
     // PROCESS THE FIRST WORD:
 
     mask = ~((uint_type)-1 << left_shift);
-    dst_p[dst_i] = (unsigned long)((dst_p[dst_i] & mask));
+    dst_p[dst_i] = (sc_digit)((dst_p[dst_i] & mask));
 
     dst_i++;
     for ( ; dst_i <= end_i; dst_i++ ) dst_p[dst_i] = 0;
     return false;
 }
 
+//------------------------------------------------------------------------------
+//"sc_uint_base::concat_get_data"
+//
+// This method transfers the value of this object instance to the supplied
+// array of sc_unsigned digits starting with the bit specified by low_i within
+// the array of digits.
+//
+// Notes:
+//   (1) we don't worry about masking the high order data we transfer since
+//       concat_get_data() is called from low order bit to high order bit. So
+//       the bits above where we place ours will be filled in by someone else.
+//
+//   dst_p -> array of sc_unsigned digits to be filled in.
+//   low_i =  first bit within dst_p to be set.
+//------------------------------------------------------------------------------
 bool sc_uint_base::concat_get_data( sc_digit* dst_p, int low_i ) const
 {    
     int       dst_i;       // Word in dst_p now processing.
     int       end_i;       // Highest order word in dst_p to process.
     int       high_i;      // Index of high order bit in dst_p to set.
     int       left_shift;  // Left shift for val.
-    sc_digit  mask;        // Mask for bits to extract or keep.
+    uint_type mask;        // Mask for bits to extract or keep.
     bool      result;	   // True if inserting non-zero value.
-    sc_digit  val;         // Value for this object.
+    uint_type val;         // Value for this object.
 
     dst_i = low_i / BITS_PER_DIGIT;
     left_shift = low_i % BITS_PER_DIGIT;
@@ -602,10 +623,18 @@ bool sc_uint_base::concat_get_data( sc_digit* dst_p, int low_i ) const
     val = m_val;
     result = val != 0;
 
+    // MASK OFF DATA TO BE TRANSFERRED BASE ON WIDTH:
+
+    if ( m_len < 64 )
+    {
+	mask = ~((uint_type)-1 << m_len);
+        val &=  mask;
+    }
+
     // PROCESS THE FIRST WORD:
 
     mask = ~((uint_type)-1 << left_shift);
-    dst_p[dst_i] = (unsigned long)(((dst_p[dst_i] & mask)) | 
+    dst_p[dst_i] = (sc_digit)(((dst_p[dst_i] & mask)) | 
 	((val << left_shift) & DIGIT_MASK));
 
     switch ( end_i - dst_i )
@@ -613,21 +642,33 @@ bool sc_uint_base::concat_get_data( sc_digit* dst_p, int low_i ) const
      // BITS ARE ACROSS TWO WORDS:
 
      case 1:
-        dst_i++;
-        val >>= (BITS_PER_DIGIT-left_shift);
-        dst_p[dst_i] = (unsigned long)val;
-        break;
+	dst_i++;
+	val >>= (BITS_PER_DIGIT-left_shift);
+	dst_p[dst_i] = (sc_digit)val;
+	break;
 
      // BITS ARE ACROSS THREE WORDS:
 
      case 2:
+	dst_i++;
+	val >>= (BITS_PER_DIGIT-left_shift);
+	dst_p[dst_i++] = (sc_digit)(val & DIGIT_MASK);
+	val >>= BITS_PER_DIGIT;
+	dst_p[dst_i] = (sc_digit)val;
+	break;
+
+     // BITS ARE ACROSS FOUR WORDS:
+
+     case 3:
         dst_i++;
         val >>= (BITS_PER_DIGIT-left_shift);
-        dst_p[dst_i] = (unsigned long)(val & DIGIT_MASK);
-        dst_i++;
-        val >>= (BITS_PER_DIGIT-left_shift);
-        dst_p[dst_i] = (unsigned long)val;
+        dst_p[dst_i++] = (sc_digit)(val & DIGIT_MASK);
+        val >>= BITS_PER_DIGIT;
+        dst_p[dst_i++] = (sc_digit)(val & DIGIT_MASK);
+        val >>= BITS_PER_DIGIT;
+        dst_p[dst_i] = (sc_digit)val;
         break;
+
     }
     return result;
 }

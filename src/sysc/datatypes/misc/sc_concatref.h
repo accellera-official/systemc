@@ -41,6 +41,14 @@
  *****************************************************************************/
 
 // $Log: sc_concatref.h,v $
+// Revision 1.3  2008/04/29 20:23:26  acg
+//  Andy Goodrich: fixed the code that assigns a string value to an
+//  sc_concatref instance.
+//
+// Revision 1.2  2008/02/14 20:56:51  acg
+//  Andy Goodrich: added casts to the front of ~0 instances to keep the
+//  MSVC compiler.
+//
 // Revision 1.1.1.1  2006/12/15 20:31:36  acg
 // SystemC 2.2
 //
@@ -199,13 +207,13 @@ public:
             result = m_right_p->concat_get_uint64();
             if ( m_len_r < 64 )
             {
-                mask = ~0;
+                mask = (uint64)~0;
                 result = (m_left_p->concat_get_uint64() << m_len_r) | 
                             (result & ~(mask << m_len_r));
             }
             if ( m_len < 64 )
             {
-                mask = ~0;
+                mask = (uint64)~0;
                 result = result & ~(mask << m_len);
             }
             return result;
@@ -218,10 +226,10 @@ public:
             bool           right_non_zero;
 
             result_p->nbits = result_p->num_bits(m_len);
-            result_p->ndigits = (result_p->nbits+BITS_PER_DIGIT-1) / 
-                BITS_PER_DIGIT;
+            result_p->ndigits = DIV_CEIL(result_p->nbits); 
             result_p->digit = (sc_digit*)sc_core::sc_temp_heap.allocate( 
                 sizeof(sc_digit)*result_p->ndigits );
+	    result_p->digit[result_p->ndigits-1] = 0;
             right_non_zero = m_right_p->concat_get_data( result_p->digit, 0 );
             left_non_zero = m_left_p->concat_get_data(result_p->digit, m_len_r); 
             if ( left_non_zero || right_non_zero ) 
@@ -350,7 +358,7 @@ public:
 
     const sc_concatref& operator = ( const char* v_p )
     {
-        sc_unsigned v(strlen(v_p));
+        sc_unsigned v(m_len);
         v = v_p;
         m_right_p->concat_set(v, 0);
         m_left_p->concat_set(v, m_len_r);

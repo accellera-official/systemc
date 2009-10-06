@@ -1,4 +1,4 @@
-        Release Notes for SystemC 2.2.0 Release Of 14 Mar 2007
+        Release Notes for SystemC 2.2.1 Release Of 30 Oct 2007
         ======================================================
 
 CONTENTS
@@ -26,8 +26,7 @@ CONTENTS
 1) What's new in this release?
 ==============================
 
-Compared to the 05 June 2006 release, this release has the following
-new items:
+Compared to the 2.2.0, this release has the following new items:
 
   - Bug fixes, see next section.
      
@@ -37,307 +36,83 @@ new items:
 
 Following is the list of bug fixes and enhancements for this release:
 
-     - CHANGES FOR GCC 4.X
-
-       src/sysc/datatypes/bit/sc_logic.h:
-
-         Prefixed references to the logic tables within sc_logic with the 
-         class name.
-
-       src/sysc/kernel/sc_module.h
-
-         The process creation macros now have a prefix of this-> on 
-         references to sensitive, sensitive_pos and sensitive_neg. 
-         This is required with gcc 4.x when a module is a parent of a class 
-         that is no sc_module:
-            class B: public sc_module;
-            class A: public B;
-
-     - CONCATENATION BUG IN sc_bitref<X> CLASS
-       
-       src/sysc/datatypes/bit/sc_bit_proxies.h
-
-         Bug fixed in sc_bitref<X>::set_word() and sc_bit_ref<X>::set_cword()
-         methods. These methods are called by the bit concatenation code to
-         set the bit represented by the reference. However the code in the
-         set_word() and set_cword() methods was setting all the bits in the
-         word whose index was the bit index of the bit the bit reference
-         was representing. The code now sets only the bit specified in
-         the bit reference.
-
-     - PART SELECTION BUG
-
-       src/sysc/datatypes/int/sc_nbcommon.inc:
-
-         Fixed case where part selections for an sc_signed number were 
-         incorrectly returning a signed value rather than an unsigned one.
-         Removed a redundant piece of code that was #if'ed out, and would 
-         never be used since a copy of it already existed.
-
-     - CONCATENATION BUG IN sc_signed CLASS
+     - When sc_stop() is called the message informing the user is now
+       issued via SC_REPORT_INFO() rather than just output to cout.
      
-       src/sysc/datatypes/int/sc_signed.cpp:
+     - Fixed bug for sc_bigint::and_reduce() where it was not properly
+       detecting the all ones case.
 
-         Bug fixed in concat_get_data for sc_signed values. The individual 
-         digits for a negative sc_signed value were not being masked properly, 
-         resulting in an incorrect sign propagation during two's complement 
-         conversion.
+     - Changed the default status value in sc_elab_and_sim() to be 1 
+       rather than 0. This means a non-zero value will be returned
+       if sc_main() generates an exception.
 
-     - AND REDUCTION BUG in sc_unsigned CLASS
+     - Fixed bug in auto-increment and auto-decrement of sc_signed and
+       sc_unsigned values. The original code left the values in sign
+       magnitude form and did not properly trim them. The code now uses
+       *this = *this + 1 and *this = *this -1
 
-       src/sysc/datatypes/int/sc_unsigned.cpp:
+     - Expanded naming of signals in sc_vcd_trace.cpp to use 5 characters
+       rather than 3 to accommodate more signals.
 
-         Bug fixed where the code for reduce_and was not taking into account 
-         the fact that there is a bonus bit on top of sc_unsigned values that 
-         is always 0.
+     - Fixes for concatenation of sc_int<W> and sc_uint<W> instances.
 
-     - BUG INVOLVING ARITHMETIC EXPRESSIONS CONTAINING sc_concatref INSTANCES
+       src/sysc/datatypes/int/sc_int_base.cpp:
 
-       src/sysc/datatypes/misc/sc_concatref.h:
+         Changes to sc_int_base::concat_get_data() to fix masks and values
+	 that were unsigned long values that should have been unsigned long
+	 long values.
 
-       Changed operators that act on an sc_concatref and a signed value to 
-       returned sc_signed results. Previously they were returning sc_unsigned 
-       results which is incorrect.
+       src/sysc/datatypes/int/sc_uint_base.cpp:
+
+         Changes to sc_int_base::concat_get_data() to fix masks and values
+	 that were unsigned long values that should have been unsigned long
+	 long values.
+
+     - Fix for logical operators between unsigned int and sc_unsigned
+
+       src/sysc/datatypes/int/sc_nbcommon.inc
+
+         Fixed bit width in CLASS_TYPE::CLASS_TYPE() for the case that
+	 the signature is a buffer of digits and a width. The value of
+	 nbits needs to be set via num_bits() rather than using the
+	 nb parameter. This allows the case where CLASS_TYPE is 
+	 sc_unsigned to get the proper bit width. Without this fix the
+	 high order bit disappears in logical results.
 
 3) New features
 ===============
 
-Here is an overview of changes in 2.2.0 compared to 2.1.v1:
+Here is an overview of changes in 2.2.1 compared to 2.2.0:
 
-    - SUPPORT FOR 64-BIT LINUX
-
-        src/sysc/qt/md/iX86_64.h
-        src/sysc/qt/md/iX86_64.s
-        src/sysc/qt/config
-        configure.in
-
-          64-bit native mode for Linux is now a SystemC platform. The
-          implementation uses quick threads for thread support. The major
-          code change is the use of the sc_digit data type to represent
-          values that were previously unsigned long. These occurred in 
-          the concatenation code and the internal representations for
-          sc_signed, sc_unsigned, bit classes, and some fixed point 
-          classes.
-
-
+    - None
 
 4) Incompatibilities with previous releases
 ===========================================
 
-Here is a list of known incompatibilities between this release and 2.1.v1:
+Here is a list of known incompatibilities between this release and 2.2.0:
 
-  - Lambda expressions, and the functions and methods associated with
-    them, have been removed to comply with the SystemC standard. 
-    
-      o The deferred() method has been removed from the signal and port
-        classes that took bool or sc_logic templates. The deferred()
-        method was used to generate lambda expressions and so is 
-        obsolete.
-
-      o The watching() function has been removed. The major use of the
-        watching() function was to provide reset semantics for 
-        SC_CTHREAD instances. This is accomplished in SystemC 2.2.0 by 
-        using the reset_signal_is() method of the sc_module class. 
-
-      o The wait_until() function has been removed. Calls to wait_until() 
-        can be replaced by a do-while loop. Given a wait_until() call like
-            wait_until( valid.deferred() == true );
-        replace it with
-            do { wait(); } while ( !(valid == true) );
-        Note the removal of the deferred() invocation and the reversal
-        of the sense of the expression. The general algorithm for 
-        converting a wait_until call: wait_until(expr) is:
-          o Remove the deferred() method calls in the expression, leaving
-            the ports and signals the calls were for.
-          o Replace the wait_until text with 
-                do { wait(); } while
-          o Reverse the sense of the expression:
-                do { wait(); } while ( !(expr) );
-
-  - The check for multiple writers of a signal now defaults on rather than
-    off. This means that if two separate processes write to a signal an 
-    error will be reported. To turn off the check, reverting to the
-    behavior of previous releases, one needs set an environment variable:
-        setenv SC_SIGNAL_WRITE_CHECK DISABLE
-    When set SystemC programs will not perform the write check.
-    
-  - The signature for the find_event() virutal method in sc_event_finder
-    has changed. An additional optional sc_interface pointer has been
-    added as an argument. So the signature is now:
-
-    virtual sc_event& find_event( sc_interface* p = 0 ) const;
-
-    The additional argument is used to specify the interface to return
-    the sc_event instance for when using multi-interface ports.
-
-  - The function for setting the time unit associated with a trace file
-    has changed. It now has the signature:
-       void set_time_unit( double v, sc_time_unit tu )
-    rather than
-       void set_time_unit( int exponent10_seconds )
-
-    To map an old-style call into a new one use the following table:
-
-       Old New v New tu | Old New v New tu | Old New v New tu
-       --- ----- ------ | --- ----- ------ | --- ----- ------
-       -15    1.0 SC_FS |  -9   1.0 SC_NS  |  -3   1.0 SC_MS
-       -14   10.0 SC_FS |  -8  10.0 SC_NS  |  -2  10.0 SC_MS
-       -13  100.0 SC_FS |  -7 100.0 SC_NS  |  -1 100.0 SC_MS
-       -12    1.0 SC_PS |  -6   1.0 SC_US  |   0   1.0 SC_SEC
-       -11   10.0 SC_PS |  -5  10.0 SC_US  |   1  10.0 SC_SEC
-       -10  100.0 SC_PS |  -4 100.0 SC_US  |   2 100.0 SC_SEC
-
-  - Three methods were removed from sc_simcontext that were previously
-     used to register processes:
-       o register_cthread_process()
-       o register_method_process()
-       o register_thread_process()
-     These are no longer called, since you cannot create a process 
-     without calling one of the three new create_XXXX_process methods.
-
-  - The << operators for process handles have been removed from the
-    sc_sensitive, sc_sensitive_neg, and sc_sensitive_pos classes:
-      o operator << ( sc_cthread_handle )
-      o operator << ( sc_module_handle )
-      o operator << ( sc_thread_handle )
-    These are no longer needed since one can use an sc_process_handle
-    instance to set the process.
+  - None
 
 5) Fixes to match with the IEEE 1666 SystemC Language Reference Manual
 ======================================================================
 
-- The OSCI SystemC 2.2.0 open-source proof-of-concept implementation is 
-  now compliant with the IEEE 1666 SystemC Language Reference Manual(LRM)
-  in a number of areas that SystemC 2.1.v1 was not. 
-  
-  The IEEE 1666 LRM is the official standard for the SystemC language. 
-  It is a very useful reference document for all SystemC users, and it 
-  can be freely downloaded it at the URL below:
-  
-      http://standards.ieee.org/getieee/1666/index.html
-  
-- The changes from 2.1.v1 
-  are:
+- None
 
-- 2.2.0 does implement the pure virtual function 
-  set_time_unit of class sc_trace_file that replaces the member 
-  functions sc_set_vcd_time_unit and sc_set_wif_time_unit of 
-  classes vcd_trace_file and wif_trace_file, respectively. 
-
-- 2.2.0 does implement the valid, name, proc_kind, 
-  get_child_object, get_parent_object, dynamic, 
-  terminated_event, operator==, operator!= members of the 
-  class sc_process_handle. 
-
-- 2.2.0 has removed member function wait() from class 
-  sc_process_handle. 
-
-- 2.2.0 has implemented the sc_get_current_process_handle 
-  function. 
-
-- 2.2.0 has implemented the kind member function of class 
-  sc_event_queue and has changed the default constructor name 
-  seed to "event_queue". 
-
-- 2.2.0 has implemented the get_parent_object and 
-  get_child_objects member functions of class sc_object 
-
-- 2.2.0 has implemented the the behavior of sc_object 
-  constructors and sc_gen_unique_name such that every sc_object 
-  is registered in the object hierarchy and has a unique 
-  hierarchical name of the form seed_N. 
-
-- 2.2.0 has implemented the sc_find_object function and 
-  sc_get_top_level_objects. 
-
-- 2.2.0 has removed the constructors of class sc_export that 
-  bind the export at the time of construction. 
-
-- 2.2.0 has made constructor sc_export( const char* ) 
-  explicit. 
-
-- In 2.2.0 a call to function sc_spawn during what would have 
-  been the final update phase causes the spawned process to run 
-  in the next evaluation phase, potentially causing simulation to 
-  continue. 
-
-- 2.2.0 has changed the type of the first parameter to 
-  functions sc_stop_here and sc_interrupt_here from int to const 
-  char*. 
-
-- 2.2.0 has removed the initialize and release member 
-  functions of class sc_report_handler. 
-
-- Calling sc_start() with a zero time value, sc_start(SC_ZERO_TIME) will
-  result in the execution of a single delta cycle. Previously, the call
-  would have executed one or more delta cycles, until there was no more
-  pending activity at the current simulation time. To allow users to 
-  get the old behavior a new function, sc_pending_activity_at_current_time() 
-  has been added. It returns a value of true if there is still activity
-  possible before simulation time is advanced, and false it not. So to
-  get the previous behavior of sc_start(SC_ZERO_TIME) one needs the 
-  following loop:
-     do { 
-         sc_start(SC_ZERO_TIME); 
-     } while ( sc_pending_activity_at_current_time(); }
-
-6) Dynamic Process Support
-==========================
-
-SystemC 2.2.0 contains support for dynamic processes, allowing users 
-to spawn processes during the execution of a SystemC model. To enable
-dynamic process support one must define the following symbol before
-including systemc.h:
-
-    #define SC_INCLUDE_DYNAMIC_PROCESSES
-
-An example of dynamic process use is contained in the directory
-examples/2.1/sysc/forkjoin.
 
 7) Experimental features
 ========================
 
 In this section the experimental features of this release are listed.
 
-  - a new class scx_barrier has been added to provide barrier 
-    synchronization for dynamic processes. The header defining
-    it and an example of its use appear in the directory
-    examples/sysc/2.1/scx_barrier.
-
-  - specialized versions of signals and ports for SystemC integer
-    datatypes, e.g., sc_int<W>, sc_biguint<W>, has been added for
-    experimental use. The headers and source defining this support,
-    and an example of its use appear in the examples directory under
-    examples/sysc/2.1/specialized_signals.
-
-  - a new class scx_mutex_w_policy has been added to provide mutex 
-    support for random arbitration policies when more than one
-    process is contending to use a mutex. The header defining this
-    support, and an example, in the examples directory under
-    examples/sysc/2.1/scx_mutex_w_policy.
+  - None
 
 8) Deprecated features
 ======================
 
 In this section the deprecated features of this release compared with 
-2.1.v1 are listed.
+2.2.0 
 
-  - Lambda expressions and watching() and wait_until() have been removed.
-    See section 4 above for details.
-
-  - There are now warning messages for the many of the deprecated features 
-    in Annex C of the IEEE 1666 SystemC Language Reference Manual (see
-    docs/LRM.pdf). These messages may be turned off in two ways:
-    
-    (1) Setting the environment variable SC_DEPRECATION_WARNINGS to DISABLE:
-    
-        setenv SC_DEPRECATION_WARNINGS DISABLE
-        
-    (2) By using the following call as the first line of sc_main:
-
-            sc_report_handler::set_actions("/IEEE_Std_1666/deprecated", 
-                SC_DO_NOTHING);
-
+  - None
 
 9) Known Problems       
 =================

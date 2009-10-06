@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: sc_bit_proxies.h,v $
+// Revision 1.4  2007/03/14 17:47:49  acg
+//  Andy Goodrich: Formatting.
+//
 // Revision 1.3  2007/01/18 19:29:18  acg
 //  Andy Goodrich: fixed bug in concatenations of bit selects on sc_lv and
 //  sc_bv types. The offending code was in sc_bitref<X>::set_word and

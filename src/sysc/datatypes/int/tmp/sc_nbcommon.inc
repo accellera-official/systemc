@@ -372,8 +372,22 @@ CLASS_TYPE::operator+=(const OTHER_CLASS_TYPE& v)
 CLASS_TYPE&
 CLASS_TYPE::operator++() // prefix
 {
-    *this = *this + 1;
-    return *this;   
+  // u = *this
+
+  if (sgn == SC_ZERO) { // case 1
+    digit[0] = 1;
+    sgn = SC_POS;
+  }
+
+  else if (sgn == SC_POS)   // case 3
+    vec_add_small_on(ndigits, digit, 1);
+
+  else // case 4
+    vec_sub_small_on(ndigits, digit, 1);
+
+  sgn = convert_signed_SM_to_2C_to_SM(sgn, nbits, ndigits, digit);
+
+  return *this;   
 }
 
 
@@ -392,7 +406,7 @@ CLASS_TYPE::operator++(int) // postfix
 
   vec_copy(ndigits, d, digit);
 
-  *this = *this + 1;
+  ++(*this);
 
   return CLASS_TYPE(s, nbits, ndigits, d);
 }
@@ -568,8 +582,20 @@ CLASS_TYPE::operator-=(const OTHER_CLASS_TYPE& v)
 CLASS_TYPE&
 CLASS_TYPE::operator--() // prefix
 {
-    *this = *this - 1;
-    return *this;   
+  if (sgn == SC_ZERO) { // case 1
+    digit[0] = 1;
+    sgn = SC_NEG;
+  }
+
+  else if (sgn == SC_POS)   // case 3
+    vec_sub_small_on(ndigits, digit, 1);
+
+  else // case 4
+    vec_add_small_on(ndigits, digit, 1);
+
+  sgn = convert_signed_SM_to_2C_to_SM(sgn, nbits, ndigits, digit);
+
+  return *this;   
 }
 
 
@@ -588,7 +614,7 @@ CLASS_TYPE::operator--(int) // postfix
 
   vec_copy(ndigits, d, digit);
 
-  *this = *this - 1;
+  --(*this);
 
   return CLASS_TYPE(s, nbits, ndigits, d);
 }
@@ -2619,6 +2645,7 @@ CLASS_TYPE::CLASS_TYPE(small_type s, int nb,
                        bool alloc)
 {
   sgn = s;
+  // #### nbits = nb;
   nbits = num_bits(nb);
   ndigits = DIV_CEIL(nbits);
 
@@ -2636,6 +2663,7 @@ CLASS_TYPE::CLASS_TYPE(small_type s, int nb,
     delete [] d;
 #endif
 }
+
 
 // This constructor is mainly used in finding a "range" of bits from a
 // number of type CLASS_TYPE. The function range(l, r) can have
@@ -2983,3 +3011,4 @@ CLASS_TYPE::check_if_outside(int bit_num) const
 }
 
 // End of file.
+

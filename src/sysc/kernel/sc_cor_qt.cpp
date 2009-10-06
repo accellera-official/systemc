@@ -35,6 +35,10 @@
 
 
 // $Log: sc_cor_qt.cpp,v $
+// Revision 1.2  2008/03/24 18:32:11  acg
+//  Andy Goodrich: added include of sys/types.h to pick up caddr_t
+//  declaration.
+//
 // Revision 1.1.1.1  2006/12/15 20:31:37  acg
 // SystemC 2.2
 //
@@ -46,6 +50,7 @@
 
 #include <unistd.h>
 #include <sys/mman.h>
+#include <sys/types.h>
 
 #include "sysc/kernel/sc_cor_qt.h"
 #include "sysc/kernel/sc_simcontext.h"

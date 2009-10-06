@@ -169,10 +169,11 @@ sc_unsigned_subref::operator = ( const sc_unsigned_subref& a )
 const sc_unsigned_subref& 
 sc_unsigned_subref::operator = ( const sc_unsigned& v )
 {
+    int i;
     int l = sc_min( m_left, v.nbits - 1 + m_right );
-    for( int i = m_right; i <= l; ++ i ) {
-	m_obj_p->set( i, v.test( i - m_right ) );
-    }
+
+    for( i = m_right; i <= l; ++ i ) m_obj_p->set( i, v.test( i - m_right ) );
+    for ( ; i <= m_left; i++ ) m_obj_p->set( i, v.test( l ) );
     return *this;
 }
 
@@ -185,10 +186,11 @@ sc_unsigned_subref::operator = ( const sc_signed_subref_r& v )
 const sc_unsigned_subref& 
 sc_unsigned_subref::operator = ( const sc_signed& v )
 {
+    int i;
     int l = sc_min( m_left, v.nbits - 1 + m_right );
-    for( int i = m_right; i <= l; ++ i ) {
-	m_obj_p->set( i, v.test( i - m_right ) );
-    }
+
+    for( i = m_right; i <= l; ++ i ) m_obj_p->set( i, v.test( i - m_right ) );
+    for ( ; i <= m_left; i++ ) m_obj_p->set( i, 0 );
     return *this;
 }
 

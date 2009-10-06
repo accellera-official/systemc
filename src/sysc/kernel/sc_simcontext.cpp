@@ -892,7 +892,8 @@ sc_simcontext::simulate( const sc_time& duration )
 void
 sc_simcontext::do_sc_stop_action()
 {
-    ::std::cout << "SystemC: simulation stopped by user." << ::std::endl;
+    SC_REPORT_INFO("/OSCI/SystemC","Simulation stopped by user.");
+    // ::std::cout << "SystemC: simulation stopped by user." << ::std::endl;
     if (m_start_of_simulation_called) {
 	end();
 	m_in_simulator_control = false;

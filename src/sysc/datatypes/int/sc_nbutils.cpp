@@ -36,6 +36,9 @@
 
 
 // $Log: sc_nbutils.cpp,v $
+// Revision 1.2  2007/11/04 21:20:34  acg
+//  Andy Goodrich: changes for valgrind issues and proper value return.
+//
 // Revision 1.1.1.1  2006/12/15 20:31:36  acg
 // SystemC 2.2
 //
@@ -1183,7 +1186,8 @@ vec_div_large(int ulen, const sc_digit *u,
 #else
   uchar *x = new uchar[xlen];
   uchar *y = new uchar[ylen];
-  uchar *q = new uchar[xlen - ylen + 1];
+  // valgrind complains about us accessing too far to so leave a buffer.
+  uchar *q = new uchar[(xlen - ylen) + 10]; 
 #endif
 
   // q corresponds to w.
@@ -1218,7 +1222,7 @@ vec_div_large(int ulen, const sc_digit *u,
   const sc_digit DOUBLE_BITS_PER_BYTE = 2 * BITS_PER_BYTE;
 
   // Find each q[k].
-  for (register int k = xlen - ylen; k >= 0; --k) {
+  for (register int k = (xlen - ylen); k >= 0; --k) { 
 
     // qk is a guess for q[k] such that q[k] = qk or qk - 1.
     register sc_digit qk;

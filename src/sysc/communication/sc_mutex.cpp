@@ -82,6 +82,7 @@ sc_mutex::~sc_mutex()
 int
 sc_mutex::lock()
 {
+    if (m_owner == sc_get_current_process_b()) return 0;
     while( in_use() ) {
 	wait( m_free );
     }
@@ -95,6 +96,7 @@ sc_mutex::lock()
 int
 sc_mutex::trylock()
 {
+    if (m_owner == sc_get_current_process_b()) return 0;
     if( in_use() ) {
 	return -1;
     }

@@ -356,9 +356,7 @@ sc_module::end_module()
 	/* TBD: Can check here to alert the user that end_module
                 was not called for a previous module. */
 	(void)sc_get_curr_simcontext()->hierarchy_pop();
-	// (void) simcontext()->hierarchy_pop();
 	sc_get_curr_simcontext()->reset_curr_proc(); 
-	// simcontext()->reset_curr_proc(); 
 	sensitive.reset();
 	sensitive_pos.reset();
 	sensitive_neg.reset();

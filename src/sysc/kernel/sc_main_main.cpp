@@ -35,6 +35,11 @@
 
 
 // $Log: sc_main_main.cpp,v $
+// Revision 1.2  2008/04/11 20:40:14  acg
+//  Andy Goodrich: changed the default status value returned by
+//  sc_elab_and_sim() to be 1 rather than 0. That way when a exception
+//  aborts sc_main() we will return a non-zero value.
+//
 // Revision 1.1.1.1  2006/12/15 20:31:37  acg
 // SystemC 2.2
 //
@@ -83,7 +88,7 @@ const char* const* sc_argv()
 int
 sc_elab_and_sim( int argc, char* argv[] )
 {
-    int status = 0;
+    int status = 1;
     argc_copy = argc;
     argv_copy = new char*[argc];
     for ( int i = 0; i < argc; i++ ) 

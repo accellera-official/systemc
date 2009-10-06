@@ -1,14 +1,13 @@
-                SystemC Class Library (Rel. 2.2.0)
+                SystemC Class Library (Rel. 2.2.1)
                 ==================================
 
-This is the release of the SystemC 2.2.0 Class Library.
+This is the release of the SystemC 2.2.1 Class Library.
 
 -------------------------------------------------------------------------------
                 IMPORTANT
 
-1. This is the release of SystemC 2.2.0. This release contains bug 
-   fixes for SystemC 2.1.v1 as well as adding IEEE 1666(tm) compliance
-   features.
+1. This is the release of SystemC 2.2.1. This release contains bug 
+   fixes for SystemC 2.2.0.
 
 2. This release is supported on the following platforms for which it has
    been well tested:
@@ -19,11 +18,12 @@ This is the release of the SystemC 2.2.0 Class Library.
        (Note: tests that use the new dynamic process feature do 
         not compile with SC6.1
        )
-    o Linux (Redhat 6.2) with GNU C++ compiler versions gcc-2.95.3
+    o Linux (Redhat 6.2) with GNU C++ compiler version gcc-2.95.3
     o Linux (Redhat 7.2) with GNU C++ compiler version gcc-2.95.3
-    o Linux (Redhat 8.0) with GNU C++ compiler version gcc-2.95.3,
+    o Linux (Redhat 8.0) with GNU C++ compiler versions gcc-2.95.3,
       gcc-3.2.3 and gcc-3.3.2
-    o Linux (Redhat 9.0) with GNU C++ compiler version gcc-3.2.2
+    o Linux (Redhat 9.0) with GNU C++ compiler versions gcc-3.2.2,
+	  gcc-3.4.3
     o Linux (2.6.9-34.EL kernel) with GNU C++ compiler versions gcc-3.4.5
       and gcc-4.1.0
     o 64-bit Linux (Redhat 2.6.9-5.0.3.EL) with GNU C++ compiler version 
