@@ -12,44 +12,44 @@
 //  HP aCC C++ compiler setup:
 
 #if (__HP_aCC <= 33100)
-#    define BOOST_NO_INTEGRAL_INT64_T
-#    define BOOST_NO_OPERATORS_IN_NAMESPACE
+#    define SC_BOOST_NO_INTEGRAL_INT64_T
+#    define SC_BOOST_NO_OPERATORS_IN_NAMESPACE
 #  if !defined(_NAMESPACE_STD)
-#     define BOOST_NO_STD_LOCALE
-#     define BOOST_NO_STRINGSTREAM
+#     define SC_BOOST_NO_STD_LOCALE
+#     define SC_BOOST_NO_STRINGSTREAM
 #  endif
 #endif
 
 #if (__HP_aCC <= 33300)
 // member templates are sufficiently broken that we disable them for now
-#    define BOOST_NO_MEMBER_TEMPLATES
-#    define BOOST_NO_DEPENDENT_NESTED_DERIVATIONS
-#    define BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE
+#    define SC_BOOST_NO_MEMBER_TEMPLATES
+#    define SC_BOOST_NO_DEPENDENT_NESTED_DERIVATIONS
+#    define SC_BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE
 #endif
 
-#if (__HP_aCC <= 33900) || !defined(BOOST_STRICT_CONFIG)
-#    define BOOST_NO_UNREACHABLE_RETURN_DETECTION
-#    define BOOST_NO_TEMPLATE_TEMPLATES
-#    define BOOST_NO_SWPRINTF
-#    define BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
-#    define BOOST_NO_IS_ABSTRACT
+#if (__HP_aCC <= 33900) || !defined(SC_BOOST_STRICT_CONFIG)
+#    define SC_BOOST_NO_UNREACHABLE_RETURN_DETECTION
+#    define SC_BOOST_NO_TEMPLATE_TEMPLATES
+#    define SC_BOOST_NO_SWPRINTF
+#    define SC_BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
+#    define SC_BOOST_NO_IS_ABSTRACT
 //     std lib config should set this one already:
-//#    define BOOST_NO_STD_ALLOCATOR
+//#    define SC_BOOST_NO_STD_ALLOCATOR
 #endif 
 
 // optional features rather than defects:
 #if (__HP_aCC >= 33900)
-#    define BOOST_HAS_LONG_LONG
-#    define BOOST_HAS_PARTIAL_STD_ALLOCATOR
+#    define SC_BOOST_HAS_LONG_LONG
+#    define SC_BOOST_HAS_PARTIAL_STD_ALLOCATOR
 #endif
 
 #if (__HP_aCC >= 50000 ) && (__HP_aCC <= 53800 ) || (__HP_aCC < 31300 )
-#    define BOOST_NO_MEMBER_TEMPLATE_KEYWORD
+#    define SC_BOOST_NO_MEMBER_TEMPLATE_KEYWORD
 #endif
 
-#define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#define SC_BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 
-#define BOOST_COMPILER "HP aCC version " BOOST_STRINGIZE(__HP_aCC)
+#define SC_BOOST_COMPILER "HP aCC version " SC_BOOST_STRINGIZE(__HP_aCC)
 
 //
 // versions check:
@@ -60,7 +60,7 @@
 //
 // last known and checked version is 0:
 #if (__HP_aCC > 53800)
-#  if defined(BOOST_ASSERT_CONFIG)
+#  if defined(SC_BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  endif
 #endif

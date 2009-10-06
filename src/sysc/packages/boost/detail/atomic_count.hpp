@@ -1,5 +1,5 @@
-#ifndef BOOST_DETAIL_ATOMIC_COUNT_HPP_INCLUDED
-#define BOOST_DETAIL_ATOMIC_COUNT_HPP_INCLUDED
+#ifndef SC_BOOST_DETAIL_ATOMIC_COUNT_HPP_INCLUDED
+#define SC_BOOST_DETAIL_ATOMIC_COUNT_HPP_INCLUDED
 
 // MS compatible compilers support #pragma once
 
@@ -16,7 +16,7 @@
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
-//  typedef <implementation-defined> boost::detail::atomic_count;
+//  typedef <implementation-defined> boost::sc_detail::atomic_count;
 //
 //  atomic_count a(n);
 //
@@ -75,12 +75,12 @@
 
 #include <sysc/packages/boost/config.hpp>
 
-#ifndef BOOST_HAS_THREADS
+#ifndef SC_BOOST_HAS_THREADS
 
 namespace sc_boost
 {
 
-namespace detail
+namespace sc_detail
 {
 
 typedef long atomic_count;
@@ -89,20 +89,20 @@ typedef long atomic_count;
 
 }
 
-#elif defined(BOOST_AC_USE_PTHREADS)
+#elif defined(SC_BOOST_AC_USE_PTHREADS)
 #  include <sysc/packages/boost/detail/atomic_count_pthreads.hpp>
 #elif defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
 #  include <sysc/packages/boost/detail/atomic_count_win32.hpp>
 #elif defined(__GLIBCPP__) || defined(__GLIBCXX__)
 #  include <sysc/packages/boost/detail/atomic_count_gcc.hpp>
-#elif defined(BOOST_HAS_PTHREADS)
-#  define BOOST_AC_USE_PTHREADS
+#elif defined(SC_BOOST_HAS_PTHREADS)
+#  define SC_BOOST_AC_USE_PTHREADS
 #  include <sysc/packages/boost/detail/atomic_count_pthreads.hpp>
 #else
 
-// Use #define BOOST_DISABLE_THREADS to avoid the error
+// Use #define SC_BOOST_DISABLE_THREADS to avoid the error
 #error Unrecognized threading platform
 
 #endif
 
-#endif // #ifndef BOOST_DETAIL_ATOMIC_COUNT_HPP_INCLUDED
+#endif // #ifndef SC_BOOST_DETAIL_ATOMIC_COUNT_HPP_INCLUDED

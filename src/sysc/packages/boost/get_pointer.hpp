@@ -2,8 +2,8 @@
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
-#ifndef GET_POINTER_DWA20021219_HPP
-# define GET_POINTER_DWA20021219_HPP
+#ifndef SC_GET_POINTER_DWA20021219_HPP
+# define SC_GET_POINTER_DWA20021219_HPP
 
 # include <memory>
 
@@ -26,4 +26,4 @@ template<class T> T * get_pointer(std::auto_ptr<T> const& p)
 
 } // namespace sc_boost
 
-#endif // GET_POINTER_DWA20021219_HPP
+#endif // SC_GET_POINTER_DWA20021219_HPP

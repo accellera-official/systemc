@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: sc_event.h,v $
+// Revision 1.3  2009/05/22 16:06:29  acg
+//  Andy Goodrich: process control updates.
+//
 // Revision 1.2  2008/05/22 17:06:25  acg
 //  Andy Goodrich: updated copyright notice to include 2008.
 //
@@ -94,17 +97,17 @@ class sc_event_and_list;
 
 class sc_event
 {
-	friend class sc_clock;
+    friend class sc_clock;
     friend class sc_event_list;
     friend class sc_event_timed;
     friend class sc_simcontext;
     friend class sc_process_b;
     friend class sc_method_process;
     friend class sc_thread_process;
-	template<typename IF> friend class sc_signal;
-	friend class sc_signal<bool>;
-	friend class sc_signal<sc_dt::sc_logic>;
-
+    template<typename IF> friend class sc_signal;
+    friend class sc_signal<bool>;
+    friend class sc_signal<sc_dt::sc_logic>;
+    friend void sc_thread_cor_fn( void* arg );
 
 public:
 
@@ -332,6 +335,7 @@ class sc_event_list
     friend class sc_process_b;
     friend class sc_method_process;
     friend class sc_thread_process;
+    friend void sc_thread_cor_fn( void* arg );
 
 protected:
 

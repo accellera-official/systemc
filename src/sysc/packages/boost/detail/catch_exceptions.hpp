@@ -13,8 +13,8 @@
 //   22 Jan 01 Remove test_tools dependencies to reduce coupling.
 //    5 Nov 00 Initial boost version (Beman Dawes)
 
-#ifndef BOOST_CATCH_EXCEPTIONS_HPP
-#define BOOST_CATCH_EXCEPTIONS_HPP
+#ifndef SC_BOOST_CATCH_EXCEPTIONS_HPP
+#define SC_BOOST_CATCH_EXCEPTIONS_HPP
 
 //  header dependencies are deliberately restricted to the standard library
 //  to reduce coupling to other boost libraries.
@@ -31,18 +31,18 @@
 # endif
 
 # if defined(__BORLANDC__) && (__BORLANDC__ <= 0x0551)
-#   define BOOST_BUILT_IN_EXCEPTIONS_MISSING_WHAT 
+#   define SC_BOOST_BUILT_IN_EXCEPTIONS_MISSING_WHAT 
 # endif
 
 #if defined(MPW_CPLUS) && (MPW_CPLUS <= 0x890)
-#   define BOOST_BUILT_IN_EXCEPTIONS_MISSING_WHAT 
+#   define SC_BOOST_BUILT_IN_EXCEPTIONS_MISSING_WHAT 
     namespace std { class bad_typeid { }; }
 # endif
 
 namespace sc_boost
 {
 
-  namespace detail
+  namespace sc_detail
   {
     //  A separate reporting function was requested during formal review.
     inline void report_exception( std::ostream & os, 
@@ -59,13 +59,13 @@ namespace sc_boost
     int result = 0;               // quiet compiler warnings
     bool exception_thrown = true; // avoid setting result for each excptn type
 
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef SC_BOOST_NO_EXCEPTIONS
     try
     {
 #endif
       result = function_object();
       exception_thrown = false;
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef SC_BOOST_NO_EXCEPTIONS
     }
 
     //  As a result of hard experience with strangely interleaved output
@@ -77,52 +77,52 @@ namespace sc_boost
     //  required, but it doesn't hurt and some programmers ask for it.
 
     catch ( const char * ex )
-      { detail::report_exception( out, "", ex ); }
+      { sc_detail::report_exception( out, "", ex ); }
     catch ( const std::string & ex )
-      { detail::report_exception( out, "", ex.c_str() ); }
+      { sc_detail::report_exception( out, "", ex.c_str() ); }
 
     //  std:: exceptions
     catch ( const std::bad_alloc & ex )
-      { detail::report_exception( out, "std::bad_alloc:", ex.what() ); }
+      { sc_detail::report_exception( out, "std::bad_alloc:", ex.what() ); }
 
-# ifndef BOOST_BUILT_IN_EXCEPTIONS_MISSING_WHAT
+# ifndef SC_BOOST_BUILT_IN_EXCEPTIONS_MISSING_WHAT
     catch ( const std::bad_cast & ex )
-      { detail::report_exception( out, "std::bad_cast:", ex.what() ); }
+      { sc_detail::report_exception( out, "std::bad_cast:", ex.what() ); }
     catch ( const std::bad_typeid & ex )
-      { detail::report_exception( out, "std::bad_typeid:", ex.what() ); }
+      { sc_detail::report_exception( out, "std::bad_typeid:", ex.what() ); }
 # else
     catch ( const std::bad_cast & )
-      { detail::report_exception( out, "std::bad_cast", "" ); }
+      { sc_detail::report_exception( out, "std::bad_cast", "" ); }
     catch ( const std::bad_typeid & )
-      { detail::report_exception( out, "std::bad_typeid", "" ); }
+      { sc_detail::report_exception( out, "std::bad_typeid", "" ); }
 # endif
 
     catch ( const std::bad_exception & ex )
-      { detail::report_exception( out, "std::bad_exception:", ex.what() ); }
+      { sc_detail::report_exception( out, "std::bad_exception:", ex.what() ); }
     catch ( const std::domain_error & ex )
-      { detail::report_exception( out, "std::domain_error:", ex.what() ); }
+      { sc_detail::report_exception( out, "std::domain_error:", ex.what() ); }
     catch ( const std::invalid_argument & ex )
-      { detail::report_exception( out, "std::invalid_argument:", ex.what() ); }
+      { sc_detail::report_exception( out, "std::invalid_argument:", ex.what() ); }
     catch ( const std::length_error & ex )
-      { detail::report_exception( out, "std::length_error:", ex.what() ); }
+      { sc_detail::report_exception( out, "std::length_error:", ex.what() ); }
     catch ( const std::out_of_range & ex )
-      { detail::report_exception( out, "std::out_of_range:", ex.what() ); }
+      { sc_detail::report_exception( out, "std::out_of_range:", ex.what() ); }
     catch ( const std::range_error & ex )
-      { detail::report_exception( out, "std::range_error:", ex.what() ); }
+      { sc_detail::report_exception( out, "std::range_error:", ex.what() ); }
     catch ( const std::overflow_error & ex )
-      { detail::report_exception( out, "std::overflow_error:", ex.what() ); }
+      { sc_detail::report_exception( out, "std::overflow_error:", ex.what() ); }
     catch ( const std::underflow_error & ex )
-      { detail::report_exception( out, "std::underflow_error:", ex.what() ); }
+      { sc_detail::report_exception( out, "std::underflow_error:", ex.what() ); }
     catch ( const std::logic_error & ex )
-      { detail::report_exception( out, "std::logic_error:", ex.what() ); }
+      { sc_detail::report_exception( out, "std::logic_error:", ex.what() ); }
     catch ( const std::runtime_error & ex )
-      { detail::report_exception( out, "std::runtime_error:", ex.what() ); }
+      { sc_detail::report_exception( out, "std::runtime_error:", ex.what() ); }
     catch ( const std::exception & ex )
-      { detail::report_exception( out, "std::exception:", ex.what() ); }
+      { sc_detail::report_exception( out, "std::exception:", ex.what() ); }
 
     catch ( ... )
-      { detail::report_exception( out, "unknown exception", "" ); }
-#endif // BOOST_NO_EXCEPTIONS
+      { sc_detail::report_exception( out, "unknown exception", "" ); }
+#endif // SC_BOOST_NO_EXCEPTIONS
 
     if ( exception_thrown ) result = sc_boost::exit_exception_failure;
 
@@ -134,7 +134,7 @@ namespace sc_boost
         << "**********  errors detected; see stdout for details  ***********"
         << std::endl;
     }
-#if !defined(BOOST_NO_CPP_MAIN_SUCCESS_MESSAGE)
+#if !defined(SC_BOOST_NO_CPP_MAIN_SUCCESS_MESSAGE)
     else { out << std::flush << "no errors detected" << std::endl; }
 #endif
     return result;
@@ -142,5 +142,5 @@ namespace sc_boost
 
 } // sc_boost
 
-#endif  // BOOST_CATCH_EXCEPTIONS_HPP
+#endif  // SC_BOOST_CATCH_EXCEPTIONS_HPP
 

@@ -1,5 +1,5 @@
-#ifndef BOOST_BIND_PLACEHOLDERS_HPP_INCLUDED
-#define BOOST_BIND_PLACEHOLDERS_HPP_INCLUDED
+#ifndef SC_BOOST_BIND_PLACEHOLDERS_HPP_INCLUDED
+#define SC_BOOST_BIND_PLACEHOLDERS_HPP_INCLUDED
 
 // MS compatible compilers support #pragma once
 
@@ -22,10 +22,10 @@
 #include <sysc/packages/boost/bind/arg.hpp>
 #include <sysc/packages/boost/config.hpp>
 
-namespace
+namespace sc_unamed
 {
 
-#if defined(__BORLANDC__)
+#if defined(__BORLANDC__) || defined(__GNUC__)
 
 static inline sc_boost::arg<1> _1() { return sc_boost::arg<1>(); }
 static inline sc_boost::arg<2> _2() { return sc_boost::arg<2>(); }
@@ -37,7 +37,7 @@ static inline sc_boost::arg<7> _7() { return sc_boost::arg<7>(); }
 static inline sc_boost::arg<8> _8() { return sc_boost::arg<8>(); }
 static inline sc_boost::arg<9> _9() { return sc_boost::arg<9>(); }
 
-#elif defined(BOOST_MSVC) || (defined(__DECCXX_VER) && __DECCXX_VER <= 60590031) || defined(__MWERKS__)
+#elif defined(SC_BOOST_MSVC) || (defined(__DECCXX_VER) && __DECCXX_VER <= 60590031) || defined(__MWERKS__)
 
 static sc_boost::arg<1> _1;
 static sc_boost::arg<2> _2;
@@ -63,6 +63,6 @@ sc_boost::arg<9> _9;
 
 #endif
 
-} // unnamed namespace
+} // namespace sc_unamed
 
-#endif // #ifndef BOOST_BIND_PLACEHOLDERS_HPP_INCLUDED
+#endif // #ifndef SC_BOOST_BIND_PLACEHOLDERS_HPP_INCLUDED

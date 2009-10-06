@@ -4080,6 +4080,24 @@ echo "$as_me: error: \"sorry...compiler not supported\"" >&2;}
 	AS=as
         QT_ARCH="iX86"
         ;;
+    *mingw*)
+        case "$CXX_COMP" in
+            c++ | g++)
+                EXTRA_CXXFLAGS="-Wall"
+                DEBUG_CXXFLAGS="-g"
+                OPT_CXXFLAGS="-O3"
+                TARGET_ARCH="macosx"
+        	CC="$CXX"
+        	CFLAGS="$EXTRA_CXXFLAGS $OPT_CXXFLAGS"
+                ;;
+            *)
+                { { echo "$as_me:2730: error: \"sorry...compiler not supported\"" >&5
+echo "$as_me: error: \"sorry...compiler not supported\"" >&2;}
+   { (exit 1); exit 1; }; }
+        esac
+	AS=as
+        QT_ARCH="iX386"
+        ;;
     powerpc-apple-macosx*)
         case "$CXX_COMP" in
             CC)

@@ -42,6 +42,9 @@
 
 
 // $Log: sc_int64_mask.cpp,v $
+// Revision 1.2  2009/05/22 16:06:29  acg
+//  Andy Goodrich: process control updates.
+//
 // Revision 1.1.1.1  2006/12/15 20:20:05  acg
 // SystemC 2.3
 //
@@ -59,7 +62,7 @@
 namespace sc_dt
 {
 
-#ifndef WIN32
+#if !defined(WIN32) || defined(__MINGW32__)
 
 const uint_type mask_int[SC_INTWIDTH][SC_INTWIDTH] = 
 {

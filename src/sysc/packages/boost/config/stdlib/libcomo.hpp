@@ -21,16 +21,16 @@
 // NOTE: versions of libcomo prior to beta28 have octal version numbering,
 // e.g. version 25 is 21 (dec)
 #if __LIBCOMO_VERSION__ <= 22
-#  define BOOST_NO_STD_WSTREAMBUF
+#  define SC_BOOST_NO_STD_WSTREAMBUF
 #endif
 
 #if (__LIBCOMO_VERSION__ <= 31) && defined(_WIN32)
-#define BOOST_NO_SWPRINTF
+#define SC_BOOST_NO_SWPRINTF
 #endif
 
 #if __LIBCOMO_VERSION__ >= 31
-#  define BOOST_HAS_HASH
-#  define BOOST_HAS_SLIST
+#  define SC_BOOST_HAS_HASH
+#  define SC_BOOST_HAS_SLIST
 #endif
 
 //
@@ -39,8 +39,8 @@
 // has intrinsic compiler support with SGI's compilers.
 // Whatever map SGI style type traits to boost equivalents:
 //
-#define BOOST_HAS_SGI_TYPE_TRAITS
+#define SC_BOOST_HAS_SGI_TYPE_TRAITS
 
-#define BOOST_STDLIB "Comeau standard library " BOOST_STRINGIZE(__LIBCOMO_VERSION__)
+#define SC_BOOST_STDLIB "Comeau standard library " SC_BOOST_STRINGIZE(__LIBCOMO_VERSION__)
 
 

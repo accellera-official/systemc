@@ -7,8 +7,8 @@
 
 //  See <http://www.boost.org/libs/utility/> for the library's home page.
 
-#ifndef BOOST_UTILITY_BASE_FROM_MEMBER_HPP
-#define BOOST_UTILITY_BASE_FROM_MEMBER_HPP
+#ifndef SC_BOOST_UTILITY_BASE_FROM_MEMBER_HPP
+#define SC_BOOST_UTILITY_BASE_FROM_MEMBER_HPP
 
 #include <sysc/packages/boost/preprocessor/arithmetic/inc.hpp>
 #include <sysc/packages/boost/preprocessor/repetition/enum_binary_params.hpp>
@@ -28,8 +28,8 @@
 
 // Contributed by Jonathan Turkanis
 
-#ifndef BOOST_BASE_FROM_MEMBER_MAX_ARITY
-#define BOOST_BASE_FROM_MEMBER_MAX_ARITY  10
+#ifndef SC_BOOST_BASE_FROM_MEMBER_MAX_ARITY
+#define SC_BOOST_BASE_FROM_MEMBER_MAX_ARITY  10
 #endif
 
 
@@ -42,10 +42,10 @@
 //         {}
 // This macro should only persist within this file.
 
-#define BOOST_PRIVATE_CTR_DEF( z, n, data )                            \
-    template < BOOST_PP_ENUM_PARAMS(n, typename T) >                   \
-    explicit base_from_member( BOOST_PP_ENUM_BINARY_PARAMS(n, T, x) )  \
-        : member( BOOST_PP_ENUM_PARAMS(n, x) )                         \
+#define SC_BOOST_PRIVATE_CTR_DEF( z, n, data )                            \
+    template < SC_BOOST_PP_ENUM_PARAMS(n, typename T) >                   \
+    explicit base_from_member( SC_BOOST_PP_ENUM_BINARY_PARAMS(n, T, x) )  \
+        : member( SC_BOOST_PP_ENUM_PARAMS(n, x) )                         \
         {}                                                             \
     /**/
 
@@ -72,8 +72,8 @@ protected:
         : member()
         {}
 
-    BOOST_PP_REPEAT_FROM_TO( 1, BOOST_PP_INC(BOOST_BASE_FROM_MEMBER_MAX_ARITY),
-     BOOST_PRIVATE_CTR_DEF, _ )
+    SC_BOOST_PP_REPEAT_FROM_TO( 1, SC_BOOST_PP_INC(SC_BOOST_BASE_FROM_MEMBER_MAX_ARITY),
+     SC_BOOST_PRIVATE_CTR_DEF, _ )
 
 };  // sc_boost::base_from_member
 
@@ -81,7 +81,7 @@ protected:
 
 
 // Undo any private macros
-#undef BOOST_PRIVATE_CTR_DEF
+#undef SC_BOOST_PRIVATE_CTR_DEF
 
 
-#endif  // BOOST_UTILITY_BASE_FROM_MEMBER_HPP
+#endif  // SC_BOOST_UTILITY_BASE_FROM_MEMBER_HPP

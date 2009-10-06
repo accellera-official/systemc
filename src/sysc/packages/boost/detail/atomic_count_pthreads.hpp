@@ -1,5 +1,5 @@
-#ifndef BOOST_DETAIL_ATOMIC_COUNT_PTHREADS_HPP_INCLUDED
-#define BOOST_DETAIL_ATOMIC_COUNT_PTHREADS_HPP_INCLUDED
+#ifndef SC_BOOST_DETAIL_ATOMIC_COUNT_PTHREADS_HPP_INCLUDED
+#define SC_BOOST_DETAIL_ATOMIC_COUNT_PTHREADS_HPP_INCLUDED
 
 //
 //  boost/detail/atomic_count_pthreads.hpp
@@ -18,13 +18,13 @@
 //    inefficiencies. Example: a class with two atomic_count members
 //    can get away with a single mutex.
 //
-//  Users can detect this situation by checking BOOST_AC_USE_PTHREADS.
+//  Users can detect this situation by checking SC_BOOST_AC_USE_PTHREADS.
 //
 
 namespace sc_boost
 {
 
-namespace detail
+namespace sc_detail
 {
 
 class atomic_count
@@ -89,8 +89,8 @@ private:
     long value_;
 };
 
-} // namespace detail
+} // namespace sc_detail
 
 } // namespace sc_boost
 
-#endif // #ifndef BOOST_DETAIL_ATOMIC_COUNT_PTHREADS_HPP_INCLUDED
+#endif // #ifndef SC_BOOST_DETAIL_ATOMIC_COUNT_PTHREADS_HPP_INCLUDED

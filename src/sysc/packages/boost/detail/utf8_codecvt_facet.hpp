@@ -5,8 +5,8 @@
 // without express or implied warranty, and with no claim as to its suitability
 // for any purpose.
 
-#ifndef BOOST_UTF8_CODECVT_FACET_HPP
-#define BOOST_UTF8_CODECVT_FACET_HPP
+#ifndef SC_BOOST_UTF8_CODECVT_FACET_HPP
+#define SC_BOOST_UTF8_CODECVT_FACET_HPP
 
 // MS compatible compilers support #pragma once
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
@@ -33,17 +33,17 @@
 // - include this header from one of it's headers or sources
 // - include the corresponding .cpp file from one of the sources
 // - before including either file, the library must define
-//   - BOOST_UTF8_BEGIN_NAMESPACE to the namespace declaration that must be used
-//   - BOOST_UTF8_END_NAMESPACE to the code to close the previous namespace
+//   - SC_BOOST_UTF8_BEGIN_NAMESPACE to the namespace declaration that must be used
+//   - SC_BOOST_UTF8_END_NAMESPACE to the code to close the previous namespace
 //   - declaration.
-//   - BOOST_UTF8_DECL -- to the code which must be used for all 'exportable'
+//   - SC_BOOST_UTF8_DECL -- to the code which must be used for all 'exportable'
 //     symbols.
 //
 // For example, program_options library might contain:
-//    #define BOOST_UTF8_BEGIN_NAMESPACE <backslash character> 
+//    #define SC_BOOST_UTF8_BEGIN_NAMESPACE <backslash character> 
 //             namespace sc_boost { namespace program_options {
-//    #define BOOST_UTF8_END_NAMESPACE }}
-//    #define BOOST_UTF8_DECL BOOST_PROGRAM_OPTIONS_DECL
+//    #define SC_BOOST_UTF8_END_NAMESPACE }}
+//    #define SC_BOOST_UTF8_DECL SC_BOOST_PROGRAM_OPTIONS_DECL
 //    #include "../../detail/utf8/utf8_codecvt.cpp"
 //
 // Essentially, each library will have its own copy of utf8 code, in
@@ -92,27 +92,29 @@
 namespace std {
     #if defined(__LIBCOMO__)
         using ::mbstate_t;
-    #elif defined(BOOST_DINKUMWARE_STDLIB)
+    #elif defined(SC_BOOST_DINKUMWARE_STDLIB)
         using ::mbstate_t;
     #elif defined(__SGI_STL_PORT)
-    #elif defined(BOOST_NO_STDC_NAMESPACE)
+    #elif defined(SC_BOOST_NO_STDC_NAMESPACE)
         using ::mbstate_t;
         using ::codecvt;
     #endif
 } // namespace std
 
 #if !defined(__MSL_CPP__) && !defined(__LIBCOMO__)
-    #define BOOST_CODECVT_DO_LENGTH_CONST const
+    #define SC_BOOST_CODECVT_DO_LENGTH_CONST const
 #else
-    #define BOOST_CODECVT_DO_LENGTH_CONST
+    #define SC_BOOST_CODECVT_DO_LENGTH_CONST
 #endif
 
 // maximum lenght of a multibyte string
-#define MB_LENGTH_MAX 8
+#if !defined(MB_LENGTH_MAX)
+#   define MB_LENGTH_MAX 8
+#endif
 
-BOOST_UTF8_BEGIN_NAMESPACE
+SC_BOOST_UTF8_BEGIN_NAMESPACE
 
-struct BOOST_UTF8_DECL utf8_codecvt_facet :
+struct SC_BOOST_UTF8_DECL utf8_codecvt_facet :
     public std::codecvt<wchar_t, char, std::mbstate_t>  
 {
 public:
@@ -178,11 +180,11 @@ protected:
     // How many char objects can I process to get <= max_limit
     // wchar_t objects?
     virtual int do_length(
-        BOOST_CODECVT_DO_LENGTH_CONST std::mbstate_t &,
+        SC_BOOST_CODECVT_DO_LENGTH_CONST std::mbstate_t &,
         const char * from,
         const char * from_end, 
         std::size_t max_limit
-#if BOOST_WORKAROUND(__IBMCPP__, BOOST_TESTED_AT(600))
+#if SC_BOOST_WORKAROUND(__IBMCPP__, SC_BOOST_TESTED_AT(600))
         ) const throw();
 #else
         ) const;
@@ -194,6 +196,6 @@ protected:
     }
 };
 
-BOOST_UTF8_END_NAMESPACE
+SC_BOOST_UTF8_END_NAMESPACE
 
-#endif // BOOST_UTF8_CODECVT_FACET_HPP
+#endif // SC_BOOST_UTF8_CODECVT_FACET_HPP

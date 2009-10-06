@@ -8,8 +8,8 @@
 // 04 Oct 2001   David Abrahams
 //      Changed name of "bind" to "select" to avoid problems with MSVC.
 
-#ifndef BOOST_DETAIL_NAMED_TEMPLATE_PARAMS_HPP
-#define BOOST_DETAIL_NAMED_TEMPLATE_PARAMS_HPP
+#ifndef SC_BOOST_DETAIL_NAMED_TEMPLATE_PARAMS_HPP
+#define SC_BOOST_DETAIL_NAMED_TEMPLATE_PARAMS_HPP
 
 #include <sysc/packages/boost/type_traits/conversion_traits.hpp>
 #include <sysc/packages/boost/type_traits/composite_traits.hpp> // for is_reference
@@ -18,7 +18,7 @@
 #endif
 
 namespace sc_boost {
-  namespace detail {
+  namespace sc_detail {
     
     struct default_argument { };
 
@@ -31,7 +31,7 @@ namespace sc_boost {
 
    // This class template is a workaround for MSVC.
    template <class Gen> struct default_generator {
-     typedef detail::dummy_default_gen type;
+     typedef sc_detail::dummy_default_gen type;
    };
 
     template <class T> struct is_default { 
@@ -102,7 +102,7 @@ namespace sc_boost {
     };
     struct choose_default_arg {
       template <class Prev> struct select { 
-        typedef detail::default_argument type;
+        typedef sc_detail::default_argument type;
       };
     };
 
@@ -133,9 +133,9 @@ namespace sc_boost {
     // named "type" that produces the default for TYPE.  See
     // boost/iterator_adaptors.hpp for an example usage.  Also,
     // applications of this macro must be placed in namespace
-    // sc_boost::detail.
+    // sc_boost::sc_detail.
 
-#define BOOST_NAMED_TEMPLATE_PARAM(TYPE) \
+#define SC_BOOST_NAMED_TEMPLATE_PARAM(TYPE) \
     struct get_##TYPE##_from_named { \
       template <class Base, class NamedParams, class Traits> \
       struct select { \
@@ -171,7 +171,7 @@ namespace sc_boost {
     }
 
     
-  } // namespace detail
+  } // namespace sc_detail
 } // namespace sc_boost
 
-#endif // BOOST_DETAIL_NAMED_TEMPLATE_PARAMS_HPP
+#endif // SC_BOOST_DETAIL_NAMED_TEMPLATE_PARAMS_HPP

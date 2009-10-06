@@ -1,5 +1,5 @@
-#ifndef BOOST_DETAIL_QUICK_ALLOCATOR_HPP_INCLUDED
-#define BOOST_DETAIL_QUICK_ALLOCATOR_HPP_INCLUDED
+#ifndef SC_BOOST_DETAIL_QUICK_ALLOCATOR_HPP_INCLUDED
+#define SC_BOOST_DETAIL_QUICK_ALLOCATOR_HPP_INCLUDED
 
 // MS compatible compilers support #pragma once
 
@@ -30,7 +30,7 @@
 namespace sc_boost
 {
 
-namespace detail
+namespace sc_detail
 {
 
 template<unsigned size, unsigned align_> union freeblock
@@ -60,9 +60,9 @@ template<unsigned size, unsigned align_> struct allocator_impl
     // varying the page size. g++ 2.96 on Red Hat Linux 7.2,
     // for example, passionately dislikes 496. 512 seems OK.
 
-#if defined(BOOST_QA_PAGE_SIZE)
+#if defined(SC_BOOST_QA_PAGE_SIZE)
 
-    enum { items_per_page = BOOST_QA_PAGE_SIZE / size };
+    enum { items_per_page = SC_BOOST_QA_PAGE_SIZE / size };
 
 #else
 
@@ -70,7 +70,7 @@ template<unsigned size, unsigned align_> struct allocator_impl
 
 #endif
 
-#ifdef BOOST_HAS_THREADS
+#ifdef SC_BOOST_HAS_THREADS
     static lightweight_mutex mutex;
 #endif
 
@@ -80,7 +80,7 @@ template<unsigned size, unsigned align_> struct allocator_impl
 
     static inline void * alloc()
     {
-#ifdef BOOST_HAS_THREADS
+#ifdef SC_BOOST_HAS_THREADS
         lightweight_mutex::scoped_lock lock(mutex);
 #endif
         if(block * x = free)
@@ -110,7 +110,7 @@ template<unsigned size, unsigned align_> struct allocator_impl
         }
         else
         {
-#ifdef BOOST_HAS_THREADS
+#ifdef SC_BOOST_HAS_THREADS
             lightweight_mutex::scoped_lock lock(mutex);
 #endif
             if(block * x = free)
@@ -135,7 +135,7 @@ template<unsigned size, unsigned align_> struct allocator_impl
     {
         if(pv != 0) // 18.4.1.1/13
         {
-#ifdef BOOST_HAS_THREADS
+#ifdef SC_BOOST_HAS_THREADS
             lightweight_mutex::scoped_lock lock(mutex);
 #endif
             block * pb = static_cast<block *>(pv);
@@ -152,7 +152,7 @@ template<unsigned size, unsigned align_> struct allocator_impl
         }
         else if(pv != 0) // 18.4.1.1/13
         {
-#ifdef BOOST_HAS_THREADS
+#ifdef SC_BOOST_HAS_THREADS
             lightweight_mutex::scoped_lock lock(mutex);
 #endif
             block * pb = static_cast<block *>(pv);
@@ -162,7 +162,7 @@ template<unsigned size, unsigned align_> struct allocator_impl
     }
 };
 
-#ifdef BOOST_HAS_THREADS
+#ifdef SC_BOOST_HAS_THREADS
 template<unsigned size, unsigned align_>
   lightweight_mutex allocator_impl<size, align_>::mutex;
 #endif
@@ -181,8 +181,8 @@ struct quick_allocator: public allocator_impl< sizeof(T), sc_boost::alignment_of
 {
 };
 
-} // namespace detail
+} // namespace sc_detail
 
 } // namespace sc_boost
 
-#endif  // #ifndef BOOST_DETAIL_QUICK_ALLOCATOR_HPP_INCLUDED
+#endif  // #ifndef SC_BOOST_DETAIL_QUICK_ALLOCATOR_HPP_INCLUDED

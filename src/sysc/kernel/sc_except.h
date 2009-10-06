@@ -38,6 +38,9 @@
  *****************************************************************************/
 
 // $Log: sc_except.h,v $
+// Revision 1.3  2009/05/22 16:06:29  acg
+//  Andy Goodrich: process control updates.
+//
 // Revision 1.2  2008/05/22 17:06:25  acg
 //  Andy Goodrich: updated copyright notice to include 2008.
 //
@@ -56,7 +59,7 @@ namespace sc_core {
 
 /*
  *  These classes are intentionally empty. Their raison d'etre is for
- *  the implemetation of `watching'.
+ *  the implemetation of various SystemC throws.
  */
 
 class sc_user
@@ -73,6 +76,14 @@ class sc_halt
 public:
     sc_halt() {}
     sc_halt( const sc_halt& ) {}
+};
+
+class sc_kill
+{
+    /*EMPTY*/
+public:
+    sc_kill() {}
+    sc_kill( const sc_kill& ) {}
 };
 
 } // namespace sc_core

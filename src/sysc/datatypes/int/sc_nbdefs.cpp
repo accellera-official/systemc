@@ -36,6 +36,9 @@
 
 
 // $Log: sc_nbdefs.cpp,v $
+// Revision 1.2  2009/05/22 16:06:29  acg
+//  Andy Goodrich: process control updates.
+//
 // Revision 1.1.1.1  2006/12/15 20:20:05  acg
 // SystemC 2.3
 //
@@ -62,7 +65,7 @@ const int MAX_NDIGITS      = DIV_CEIL(SC_MAX_NBITS) + 2;
 
 // Support for the long long type. This type is not in the standard
 // but is usually supported by compilers.
-#ifndef WIN32
+#if !defined(WIN32) || defined(__MINGW32__)
 const uint64 UINT64_ZERO   = 0ULL;
 const uint64 UINT64_ONE    = 1ULL;
 const uint64 UINT64_32ONES = 0x00000000ffffffffULL;

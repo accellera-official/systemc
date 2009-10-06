@@ -6,76 +6,76 @@
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 // For more information, see http://www.boost.org/libs/utility
-#if !defined(BOOST_PP_IS_ITERATING)
+#if !defined(SC_BOOST_PP_IS_ITERATING)
 # error Boost result_of - do not include this file!
 #endif
 
 // CWPro8 requires an argument in a function type specialization
-#if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3002)) && BOOST_PP_ITERATION() == 0
-# define BOOST_RESULT_OF_ARGS void
+#if SC_BOOST_WORKAROUND(__MWERKS__, SC_BOOST_TESTED_AT(0x3002)) && SC_BOOST_PP_ITERATION() == 0
+# define SC_BOOST_RESULT_OF_ARGS void
 #else
-# define BOOST_RESULT_OF_ARGS BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T)
+# define SC_BOOST_RESULT_OF_ARGS SC_BOOST_PP_ENUM_PARAMS(SC_BOOST_PP_ITERATION(),T)
 #endif
 
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))
-template<typename F BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
-         BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),typename T)>
-struct result_of<F(BOOST_RESULT_OF_ARGS)>
-    : detail::result_of<F, F(BOOST_RESULT_OF_ARGS)> {};
+#if !SC_BOOST_WORKAROUND(__BORLANDC__, SC_BOOST_TESTED_AT(0x551))
+template<typename F SC_BOOST_PP_COMMA_IF(SC_BOOST_PP_ITERATION())
+         SC_BOOST_PP_ENUM_PARAMS(SC_BOOST_PP_ITERATION(),typename T)>
+struct result_of<F(SC_BOOST_RESULT_OF_ARGS)>
+    : sc_detail::result_of<F, F(SC_BOOST_RESULT_OF_ARGS)> {};
 #endif
 
-namespace detail {
+namespace sc_detail {
 
-template<typename R,  typename FArgs BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
-         BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),typename T)>
-struct result_of<R (*)(BOOST_RESULT_OF_ARGS), FArgs>
+template<typename R,  typename FArgs SC_BOOST_PP_COMMA_IF(SC_BOOST_PP_ITERATION())
+         SC_BOOST_PP_ENUM_PARAMS(SC_BOOST_PP_ITERATION(),typename T)>
+struct result_of<R (*)(SC_BOOST_RESULT_OF_ARGS), FArgs>
 {
   typedef R type;
 };
 
-template<typename R,  typename FArgs BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
-         BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),typename T)>
-struct result_of<R (&)(BOOST_RESULT_OF_ARGS), FArgs>
+template<typename R,  typename FArgs SC_BOOST_PP_COMMA_IF(SC_BOOST_PP_ITERATION())
+         SC_BOOST_PP_ENUM_PARAMS(SC_BOOST_PP_ITERATION(),typename T)>
+struct result_of<R (&)(SC_BOOST_RESULT_OF_ARGS), FArgs>
 {
   typedef R type;
 };
 
-#undef BOOST_RESULT_OF_ARGS
+#undef SC_BOOST_RESULT_OF_ARGS
 
-#if BOOST_PP_ITERATION() > 1 && !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))
-template<typename R, typename FArgs BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
-         BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),typename T)>
+#if SC_BOOST_PP_ITERATION() > 1 && !SC_BOOST_WORKAROUND(__BORLANDC__, SC_BOOST_TESTED_AT(0x551))
+template<typename R, typename FArgs SC_BOOST_PP_COMMA_IF(SC_BOOST_PP_ITERATION())
+         SC_BOOST_PP_ENUM_PARAMS(SC_BOOST_PP_ITERATION(),typename T)>
 struct result_of<R (T0::*)
-                     (BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PP_ITERATION(),T)),
+                     (SC_BOOST_PP_ENUM_SHIFTED_PARAMS(SC_BOOST_PP_ITERATION(),T)),
                  FArgs>
 {
   typedef R type;
 };
 
-template<typename R, typename FArgs BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
-         BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),typename T)>
+template<typename R, typename FArgs SC_BOOST_PP_COMMA_IF(SC_BOOST_PP_ITERATION())
+         SC_BOOST_PP_ENUM_PARAMS(SC_BOOST_PP_ITERATION(),typename T)>
 struct result_of<R (T0::*)
-                     (BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PP_ITERATION(),T))
+                     (SC_BOOST_PP_ENUM_SHIFTED_PARAMS(SC_BOOST_PP_ITERATION(),T))
                      const,
                  FArgs>
 {
   typedef R type;
 };
 
-template<typename R, typename FArgs BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
-         BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),typename T)>
+template<typename R, typename FArgs SC_BOOST_PP_COMMA_IF(SC_BOOST_PP_ITERATION())
+         SC_BOOST_PP_ENUM_PARAMS(SC_BOOST_PP_ITERATION(),typename T)>
 struct result_of<R (T0::*)
-                     (BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PP_ITERATION(),T))
+                     (SC_BOOST_PP_ENUM_SHIFTED_PARAMS(SC_BOOST_PP_ITERATION(),T))
                      volatile,
                  FArgs>
 {
   typedef R type;
 };
 
-template<typename R, typename FArgs BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
-         BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),typename T)>
+template<typename R, typename FArgs SC_BOOST_PP_COMMA_IF(SC_BOOST_PP_ITERATION())
+         SC_BOOST_PP_ENUM_PARAMS(SC_BOOST_PP_ITERATION(),typename T)>
 struct result_of<R (T0::*)
-                     (BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PP_ITERATION(),T))
+                     (SC_BOOST_PP_ENUM_SHIFTED_PARAMS(SC_BOOST_PP_ITERATION(),T))
                      const volatile,
                  FArgs>
 {

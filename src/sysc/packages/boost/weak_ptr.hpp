@@ -1,5 +1,5 @@
-#ifndef BOOST_WEAK_PTR_HPP_INCLUDED
-#define BOOST_WEAK_PTR_HPP_INCLUDED
+#ifndef SC_BOOST_WEAK_PTR_HPP_INCLUDED
+#define SC_BOOST_WEAK_PTR_HPP_INCLUDED
 
 //
 //  weak_ptr.hpp
@@ -15,7 +15,7 @@
 
 #include <sysc/packages/boost/shared_ptr.hpp>
 
-#ifdef BOOST_MSVC  // moved here to work around VC++ compiler crash
+#ifdef SC_BOOST_MSVC  // moved here to work around VC++ compiler crash
 # pragma warning(push)
 # pragma warning(disable:4284) // odd return type for operator->
 #endif
@@ -69,7 +69,7 @@ public:
     {
     }
 
-#if !defined(BOOST_MSVC) || (BOOST_MSVC > 1200)
+#if !defined(SC_BOOST_MSVC) || (SC_BOOST_MSVC > 1200)
 
     template<class Y>
     weak_ptr & operator=(weak_ptr<Y> const & r) // never throws
@@ -91,7 +91,7 @@ public:
 
     shared_ptr<T> lock() const // never throws
     {
-#if defined(BOOST_HAS_THREADS)
+#if defined(SC_BOOST_HAS_THREADS)
 
         // optimization: avoid throw overhead
         if(expired())
@@ -153,7 +153,7 @@ public:
 // Tasteless as this may seem, making all members public allows member templates
 // to work in the absence of member template friends. (Matthew Langston)
 
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#ifndef SC_BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 
 private:
 
@@ -185,8 +185,8 @@ template<class T> shared_ptr<T> make_shared(weak_ptr<T> const & r)
 
 } // namespace sc_boost
 
-#ifdef BOOST_MSVC
+#ifdef SC_BOOST_MSVC
 # pragma warning(pop)
 #endif    
 
-#endif  // #ifndef BOOST_WEAK_PTR_HPP_INCLUDED
+#endif  // #ifndef SC_BOOST_WEAK_PTR_HPP_INCLUDED

@@ -124,6 +124,14 @@ Here is an overview of changes in 2.3.0 compared to 2.2.0:
     rather than boost. This allows SystemC-based programs to be 
     combined with programs using later versions of the boost library.
 
+    Note that to use OSCI TLM 2.0 with SystemC 2.3.0 you will need to
+    add the following line before including systemc.h:
+
+       #define sc_boost boost
+
+    This will change the namespace back to boost, which is necessary to
+    compile TLM 2.0 based applications.
+
 4) Incompatibilities with previous releases
 ===========================================
 
@@ -134,7 +142,8 @@ Here is a list of known incompatibilities between this release and 2.2.0:
 5) Expanded Dynamic Process Support
 ===================================
 
-- TBW
+- This version implements the proposed dynamic process extensions described
+  in the paper "XXXX" available on the OSCI web site, www.osci.org.
 
 
 6) Experimental features

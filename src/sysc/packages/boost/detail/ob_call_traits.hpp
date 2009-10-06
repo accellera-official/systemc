@@ -16,28 +16,28 @@
       & Ulrich Eisenecker.
 */
 
-#ifndef BOOST_OB_CALL_TRAITS_HPP
-#define BOOST_OB_CALL_TRAITS_HPP
+#ifndef SC_BOOST_OB_CALL_TRAITS_HPP
+#define SC_BOOST_OB_CALL_TRAITS_HPP
 
-#ifndef BOOST_CONFIG_HPP
+#ifndef SC_BOOST_CONFIG_HPP
 #include <sysc/packages/boost/config.hpp>
 #endif
 
-#ifndef BOOST_ARITHMETIC_TYPE_TRAITS_HPP
+#ifndef SC_BOOST_ARITHMETIC_TYPE_TRAITS_HPP
 #include <sysc/packages/boost/type_traits/arithmetic_traits.hpp>
 #endif
-#ifndef BOOST_COMPOSITE_TYPE_TRAITS_HPP
+#ifndef SC_BOOST_COMPOSITE_TYPE_TRAITS_HPP
 #include <sysc/packages/boost/type_traits/composite_traits.hpp>
 #endif
 
 namespace sc_boost{
 
-#ifdef BOOST_MSVC6_MEMBER_TEMPLATES
+#ifdef SC_BOOST_MSVC6_MEMBER_TEMPLATES
 //
 // use member templates to emulate
 // partial specialisation:
 //
-namespace detail{
+namespace sc_detail{
 
 template <class T>
 struct standard_call_traits
@@ -127,12 +127,12 @@ struct call_traits_chooser<false, true, false>
    };
 };
 
-} // namespace detail
+} // namespace sc_detail
 template <typename T>
 struct call_traits
 {
 private:
-    typedef detail::call_traits_chooser<
+    typedef sc_detail::call_traits_chooser<
          ::sc_boost::is_pointer<T>::value,
          ::sc_boost::is_arithmetic<T>::value, 
          ::sc_boost::is_reference<T>::value
@@ -165,4 +165,4 @@ struct call_traits
 
 }
 
-#endif // BOOST_OB_CALL_TRAITS_HPP
+#endif // SC_BOOST_OB_CALL_TRAITS_HPP

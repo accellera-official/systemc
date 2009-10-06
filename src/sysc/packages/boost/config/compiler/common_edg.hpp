@@ -19,43 +19,43 @@
 #endif
 
 #if (__EDG_VERSION__ <= 238)
-#   define BOOST_NO_INTEGRAL_INT64_T
-#   define BOOST_NO_SFINAE
+#   define SC_BOOST_NO_INTEGRAL_INT64_T
+#   define SC_BOOST_NO_SFINAE
 #endif
 
 #if (__EDG_VERSION__ <= 240)
-#   define BOOST_NO_VOID_RETURNS
+#   define SC_BOOST_NO_VOID_RETURNS
 #endif
 
-#if (__EDG_VERSION__ <= 241) && !defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
-#   define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+#if (__EDG_VERSION__ <= 241) && !defined(SC_BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
+#   define SC_BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 #endif
 
-#if (__EDG_VERSION__ <= 244) && !defined(BOOST_NO_TEMPLATE_TEMPLATES)
-#   define BOOST_NO_TEMPLATE_TEMPLATES
+#if (__EDG_VERSION__ <= 244) && !defined(SC_BOOST_NO_TEMPLATE_TEMPLATES)
+#   define SC_BOOST_NO_TEMPLATE_TEMPLATES
 #endif 
 
-#if (__EDG_VERSION__ < 300) && !defined(BOOST_NO_IS_ABSTRACT)
-#   define BOOST_NO_IS_ABSTRACT
+#if (__EDG_VERSION__ < 300) && !defined(SC_BOOST_NO_IS_ABSTRACT)
+#   define SC_BOOST_NO_IS_ABSTRACT
 #endif 
 
-#if (__EDG_VERSION__ <= 303) && !defined(BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL)
-#   define BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL
+#if (__EDG_VERSION__ <= 303) && !defined(SC_BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL)
+#   define SC_BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL
 #endif 
 
 // See also kai.hpp which checks a Kai-specific symbol for EH
 # if !defined(__KCC) && !defined(__EXCEPTIONS)
-#     define BOOST_NO_EXCEPTIONS
+#     define SC_BOOST_NO_EXCEPTIONS
 # endif
 
 # if !defined(__NO_LONG_LONG)
-#     define BOOST_HAS_LONG_LONG
+#     define SC_BOOST_HAS_LONG_LONG
 # endif
 
 #ifdef c_plusplus
 // EDG has "long long" in non-strict mode
 // However, some libraries have insufficient "long long" support
-// #define BOOST_HAS_LONG_LONG
+// #define SC_BOOST_HAS_LONG_LONG
 #endif
 
 

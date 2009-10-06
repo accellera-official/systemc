@@ -11,15 +11,15 @@
 //             Andrew Lumsdaine (lums at osl.iu.edu)
 
 
-#ifndef BOOST_UTILITY_ENABLE_IF_HPP
-#define BOOST_UTILITY_ENABLE_IF_HPP
+#ifndef SC_BOOST_UTILITY_ENABLE_IF_HPP
+#define SC_BOOST_UTILITY_ENABLE_IF_HPP
 
 #include "sysc/packages/boost/config.hpp"
 
 // Even the definition of enable_if causes problems on some compilers,
 // so it's macroed out for all compilers that do not support SFINAE
 
-#ifndef BOOST_NO_SFINAE
+#ifndef SC_BOOST_NO_SFINAE
 
 namespace sc_boost
 {
@@ -75,45 +75,45 @@ namespace sc_boost
 
 namespace sc_boost {
 
-  namespace detail { typedef void enable_if_default_T; }
+  namespace sc_detail { typedef void enable_if_default_T; }
 
   template <typename T>
   struct enable_if_does_not_work_on_this_compiler;
 
-  template <bool B, class T = detail::enable_if_default_T>
+  template <bool B, class T = sc_detail::enable_if_default_T>
   struct enable_if_c : enable_if_does_not_work_on_this_compiler<T>
   { };
 
-  template <bool B, class T = detail::enable_if_default_T> 
+  template <bool B, class T = sc_detail::enable_if_default_T> 
   struct disable_if_c : enable_if_does_not_work_on_this_compiler<T>
   { };
 
-  template <bool B, class T = detail::enable_if_default_T> 
+  template <bool B, class T = sc_detail::enable_if_default_T> 
   struct lazy_enable_if_c : enable_if_does_not_work_on_this_compiler<T>
   { };
 
-  template <bool B, class T = detail::enable_if_default_T> 
+  template <bool B, class T = sc_detail::enable_if_default_T> 
   struct lazy_disable_if_c : enable_if_does_not_work_on_this_compiler<T>
   { };
 
-  template <class Cond, class T = detail::enable_if_default_T> 
+  template <class Cond, class T = sc_detail::enable_if_default_T> 
   struct enable_if : enable_if_does_not_work_on_this_compiler<T>
   { };
 
-  template <class Cond, class T = detail::enable_if_default_T> 
+  template <class Cond, class T = sc_detail::enable_if_default_T> 
   struct disable_if : enable_if_does_not_work_on_this_compiler<T>
   { };
 
-  template <class Cond, class T = detail::enable_if_default_T> 
+  template <class Cond, class T = sc_detail::enable_if_default_T> 
   struct lazy_enable_if : enable_if_does_not_work_on_this_compiler<T>
   { };
 
-  template <class Cond, class T = detail::enable_if_default_T> 
+  template <class Cond, class T = sc_detail::enable_if_default_T> 
   struct lazy_disable_if : enable_if_does_not_work_on_this_compiler<T>
   { };
 
 } // namespace sc_boost
 
-#endif // BOOST_NO_SFINAE
+#endif // SC_BOOST_NO_SFINAE
 
 #endif

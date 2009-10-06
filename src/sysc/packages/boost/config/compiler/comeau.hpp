@@ -19,14 +19,14 @@
 #  if defined(_MSC_VER) && _MSC_VER <= 1300
 #     if _MSC_VER > 100
          // only set this in non-strict mode:
-#        define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+#        define SC_BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 #     endif
 #  endif
 
 // Void returns don't work when emulating VC 6 (Peter Dimov)
 
 #  if defined(_MSC_VER) && (_MSC_VER == 1200)
-#     define BOOST_NO_VOID_RETURNS
+#     define SC_BOOST_NO_VOID_RETURNS
 #  endif
 
 #endif  // version 4245
@@ -35,10 +35,10 @@
 // enable __int64 support in VC emulation mode
 //
 #  if defined(_MSC_VER) && (_MSC_VER >= 1200)
-#     define BOOST_HAS_MS_INT64
+#     define SC_BOOST_HAS_MS_INT64
 #  endif
 
-#define BOOST_COMPILER "Comeau compiler version " BOOST_STRINGIZE(__COMO_VERSION__)
+#define SC_BOOST_COMPILER "Comeau compiler version " SC_BOOST_STRINGIZE(__COMO_VERSION__)
 
 //
 // versions check:
@@ -49,7 +49,7 @@
 //
 // last known and checked version is 4245:
 #if (__COMO_VERSION__ > 4245)
-#  if defined(BOOST_ASSERT_CONFIG)
+#  if defined(SC_BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  endif
 #endif

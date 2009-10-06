@@ -6,15 +6,15 @@
 //
 // 21 Ago 2002 (Created) Fernando Cacciola
 //
-#ifndef BOOST_UTILITY_VALUE_INIT_21AGO2002_HPP
-#define BOOST_UTILITY_VALUE_INIT_21AGO2002_HPP
+#ifndef SC_BOOST_UTILITY_VALUE_INIT_21AGO2002_HPP
+#define SC_BOOST_UTILITY_VALUE_INIT_21AGO2002_HPP
 
 #include "sysc/packages/boost/detail/select_type.hpp"
 #include "sysc/packages/boost/type_traits/cv_traits.hpp"
 
 namespace sc_boost {
 
-namespace vinit_detail {
+namespace sc_vinit_detail {
 
 template<class T>
 class const_T_base
@@ -44,10 +44,10 @@ struct select_base
       ::template then< const_T_base<T>, non_const_T_base<T> >::type type ;
 } ;
 
-} // namespace vinit_detail
+} // namespace sc_vinit_detail
 
 template<class T>
-class value_initialized : private vinit_detail::select_base<T>::type
+class value_initialized : private sc_vinit_detail::select_base<T>::type
 {
   public :
 

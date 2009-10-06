@@ -15,10 +15,10 @@
       (issue raised by Steve Cleary).
 */
 
-#ifndef BOOST_DETAIL_CALL_TRAITS_HPP
-#define BOOST_DETAIL_CALL_TRAITS_HPP
+#ifndef SC_BOOST_DETAIL_CALL_TRAITS_HPP
+#define SC_BOOST_DETAIL_CALL_TRAITS_HPP
 
-#ifndef BOOST_CONFIG_HPP
+#ifndef SC_BOOST_CONFIG_HPP
 #include <sysc/packages/boost/config.hpp>
 #endif
 #include <cstddef>
@@ -29,7 +29,7 @@
 
 namespace sc_boost{
 
-namespace detail{
+namespace sc_detail{
 
 template <typename T, bool small_>
 struct ct_imp2
@@ -76,7 +76,7 @@ public:
    // however compiler bugs prevent this - instead pass three bool's to
    // ct_imp<T,bool,bool,bool> and add an extra partial specialisation
    // of ct_imp to handle the logic. (JM)
-   typedef typename detail::ct_imp<
+   typedef typename sc_detail::ct_imp<
       T,
       ::sc_boost::is_pointer<T>::value,
       ::sc_boost::is_arithmetic<T>::value
@@ -92,7 +92,7 @@ struct call_traits<T&>
    typedef T& param_type;  // hh removed const
 };
 
-#if BOOST_WORKAROUND( __BORLANDC__,  BOOST_TESTED_AT( 0x570 ) )
+#if SC_BOOST_WORKAROUND( __BORLANDC__,  SC_BOOST_TESTED_AT( 0x570 ) )
 // these are illegal specialisations; cv-qualifies applied to
 // references have no effect according to [8.3.2p1],
 // C++ Builder requires them though as it treats cv-qualified
@@ -122,7 +122,7 @@ struct call_traits<T&const volatile>
    typedef T& param_type;  // hh removed const
 };
 #endif
-#if !defined(BOOST_NO_ARRAY_TYPE_SPECIALIZATIONS)
+#if !defined(SC_BOOST_NO_ARRAY_TYPE_SPECIALIZATIONS)
 template <typename T, std::size_t N>
 struct call_traits<T [N]>
 {
@@ -152,4 +152,4 @@ public:
 
 }
 
-#endif // BOOST_DETAIL_CALL_TRAITS_HPP
+#endif // SC_BOOST_DETAIL_CALL_TRAITS_HPP

@@ -1,5 +1,5 @@
-#ifndef BOOST_DETAIL_SP_COUNTED_IMPL_HPP_INCLUDED
-#define BOOST_DETAIL_SP_COUNTED_IMPL_HPP_INCLUDED
+#ifndef SC_BOOST_DETAIL_SP_COUNTED_IMPL_HPP_INCLUDED
+#define SC_BOOST_DETAIL_SP_COUNTED_IMPL_HPP_INCLUDED
 
 // MS compatible compilers support #pragma once
 
@@ -20,14 +20,14 @@
 
 #include <sysc/packages/boost/config.hpp>
 
-#if defined(BOOST_SP_USE_STD_ALLOCATOR) && defined(BOOST_SP_USE_QUICK_ALLOCATOR)
-# error BOOST_SP_USE_STD_ALLOCATOR and BOOST_SP_USE_QUICK_ALLOCATOR are incompatible.
+#if defined(SC_BOOST_SP_USE_STD_ALLOCATOR) && defined(SC_BOOST_SP_USE_QUICK_ALLOCATOR)
+# error SC_BOOST_SP_USE_STD_ALLOCATOR and SC_BOOST_SP_USE_QUICK_ALLOCATOR are incompatible.
 #endif
 
 #include <sysc/packages/boost/checked_delete.hpp>
 #include <sysc/packages/boost/detail/sp_counted_base.hpp>
 
-#if defined(BOOST_SP_USE_QUICK_ALLOCATOR)
+#if defined(SC_BOOST_SP_USE_QUICK_ALLOCATOR)
 #include <sysc/packages/boost/detail/quick_allocator.hpp>
 #endif
 
@@ -38,14 +38,14 @@
 namespace sc_boost
 {
 
-#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
+#if defined(SC_BOOST_SP_ENABLE_DEBUG_HOOKS)
 
 void sp_scalar_constructor_hook( void * px, std::size_t size, void * pn );
 void sp_scalar_destructor_hook( void * px, std::size_t size, void * pn );
 
 #endif
 
-namespace detail
+namespace sc_detail
 {
 
 template<class X> class sp_counted_impl_p: public sp_counted_base
@@ -63,14 +63,14 @@ public:
 
     explicit sp_counted_impl_p( X * px ): px_( px )
     {
-#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
+#if defined(SC_BOOST_SP_ENABLE_DEBUG_HOOKS)
         sc_boost::sp_scalar_constructor_hook( px, sizeof(X), this );
 #endif
     }
 
     virtual void dispose() // nothrow
     {
-#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
+#if defined(SC_BOOST_SP_ENABLE_DEBUG_HOOKS)
         sc_boost::sp_scalar_destructor_hook( px_, sizeof(X), this );
 #endif
         sc_boost::checked_delete( px_ );
@@ -81,7 +81,7 @@ public:
         return 0;
     }
 
-#if defined(BOOST_SP_USE_STD_ALLOCATOR)
+#if defined(SC_BOOST_SP_USE_STD_ALLOCATOR)
 
     void * operator new( std::size_t )
     {
@@ -95,7 +95,7 @@ public:
 
 #endif
 
-#if defined(BOOST_SP_USE_QUICK_ALLOCATOR)
+#if defined(SC_BOOST_SP_USE_QUICK_ALLOCATOR)
 
     void * operator new( std::size_t )
     {
@@ -147,7 +147,7 @@ public:
         return ti == typeid(D)? &del: 0;
     }
 
-#if defined(BOOST_SP_USE_STD_ALLOCATOR)
+#if defined(SC_BOOST_SP_USE_STD_ALLOCATOR)
 
     void * operator new( std::size_t )
     {
@@ -161,7 +161,7 @@ public:
 
 #endif
 
-#if defined(BOOST_SP_USE_QUICK_ALLOCATOR)
+#if defined(SC_BOOST_SP_USE_QUICK_ALLOCATOR)
 
     void * operator new( std::size_t )
     {
@@ -180,8 +180,8 @@ public:
 # pragma option pop
 #endif
 
-} // namespace detail
+} // namespace sc_detail
 
 } // namespace sc_boost
 
-#endif  // #ifndef BOOST_DETAIL_SP_COUNTED_IMPL_HPP_INCLUDED
+#endif  // #ifndef SC_BOOST_DETAIL_SP_COUNTED_IMPL_HPP_INCLUDED

@@ -1,5 +1,5 @@
-#ifndef BOOST_DETAIL_LWM_PTHREADS_HPP_INCLUDED
-#define BOOST_DETAIL_LWM_PTHREADS_HPP_INCLUDED
+#ifndef SC_BOOST_DETAIL_LWM_PTHREADS_HPP_INCLUDED
+#define SC_BOOST_DETAIL_LWM_PTHREADS_HPP_INCLUDED
 
 // MS compatible compilers support #pragma once
 
@@ -22,7 +22,7 @@
 namespace sc_boost
 {
 
-namespace detail
+namespace sc_detail
 {
 
 class lightweight_mutex
@@ -79,8 +79,8 @@ public:
     };
 };
 
-} // namespace detail
+} // namespace sc_detail
 
 } // namespace sc_boost
 
-#endif // #ifndef BOOST_DETAIL_LWM_PTHREADS_HPP_INCLUDED
+#endif // #ifndef SC_BOOST_DETAIL_LWM_PTHREADS_HPP_INCLUDED

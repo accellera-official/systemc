@@ -37,6 +37,9 @@
  *****************************************************************************/
 
 // $Log: sc_spawn_options.h,v $
+// Revision 1.4  2009/05/22 16:06:29  acg
+//  Andy Goodrich: process control updates.
+//
 // Revision 1.3  2009/02/28 00:26:58  acg
 //  Andy Goodrich: changed boost name space to sc_boost to allow use with
 //  full boost library applications.
@@ -85,9 +88,9 @@ class sc_spawn_options {
         m_spawn_method(false), m_stack_size(0)
         { }
 
-    void areset_signal_is( const sc_signal_in_if<bool>& iface, bool level )
+    void async_reset_signal_is( const sc_signal_in_if<bool>& iface, bool level )
         { m_areset_iface_p = &iface; m_areset_level = level; }
-    void areset_signal_is( const sc_in<bool>& port, bool level )
+    void async_reset_signal_is( const sc_in<bool>& port, bool level )
         { m_areset_port_p = &port; m_areset_level = level; }
     void spawn_method()                 { m_spawn_method = true; }
     void dont_initialize()              { m_dont_initialize = true; }
@@ -118,8 +121,10 @@ class sc_spawn_options {
     const sc_in<bool>*            m_areset_port_p;     // Areset port or 0.
     bool                          m_dont_initialize;         
     const sc_signal_in_if<bool>*  m_reset_iface_p;     // Reset interface or 0.
+    std::vector<sc_signal_in_if<bool>*> m_reset_ifs;
     bool                          m_reset_level;       // Level for reset.
     const sc_in<bool>*            m_reset_port_p;      // Reset port or 0.
+    std::vector<sc_in<bool>*>     m_reset_ports;
     std::vector<const sc_event*>  m_sensitive_events;
     std::vector<sc_event_finder*> m_sensitive_event_finders; 
     std::vector<sc_interface*>    m_sensitive_interfaces;

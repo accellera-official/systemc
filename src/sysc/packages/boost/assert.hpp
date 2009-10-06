@@ -1,5 +1,5 @@
 //
-//  boost/assert.hpp - BOOST_ASSERT(expr)
+//  boost/assert.hpp - SC_BOOST_ASSERT(expr)
 //
 //  Copyright (c) 2001, 2002 Peter Dimov and Multi Media Ltd.
 //
@@ -12,13 +12,13 @@
 //  See http://www.boost.org/libs/utility/assert.html for documentation.
 //
 
-#undef BOOST_ASSERT
+#undef SC_BOOST_ASSERT
 
-#if defined(BOOST_DISABLE_ASSERTS)
+#if defined(SC_BOOST_DISABLE_ASSERTS)
 
-# define BOOST_ASSERT(expr) ((void)0)
+# define SC_BOOST_ASSERT(expr) ((void)0)
 
-#elif defined(BOOST_ENABLE_ASSERT_HANDLER)
+#elif defined(SC_BOOST_ENABLE_ASSERT_HANDLER)
 
 #include <boost/current_function.hpp>
 
@@ -29,9 +29,9 @@ void assertion_failed(char const * expr, char const * function, char const * fil
 
 } // namespace sc_boost
 
-#define BOOST_ASSERT(expr) ((expr)? ((void)0): ::sc_boost::assertion_failed(#expr, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__))
+#define SC_BOOST_ASSERT(expr) ((expr)? ((void)0): ::sc_boost::assertion_failed(#expr, SC_BOOST_CURRENT_FUNCTION, __FILE__, __LINE__))
 
 #else
 # include <assert.h> // .h to support old libraries w/o <cassert> - effect is the same
-# define BOOST_ASSERT(expr) assert(expr)
+# define SC_BOOST_ASSERT(expr) assert(expr)
 #endif

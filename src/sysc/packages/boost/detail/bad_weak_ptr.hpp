@@ -1,5 +1,5 @@
-#ifndef BOOST_BAD_WEAK_PTR_HPP_INCLUDED
-#define BOOST_BAD_WEAK_PTR_HPP_INCLUDED
+#ifndef SC_BOOST_BAD_WEAK_PTR_HPP_INCLUDED
+#define SC_BOOST_BAD_WEAK_PTR_HPP_INCLUDED
 
 // MS compatible compilers support #pragma once
 
@@ -56,4 +56,4 @@ public:
 # pragma warn .8026     // Functions with excep. spec. are not expanded inline
 #endif
 
-#endif  // #ifndef BOOST_BAD_WEAK_PTR_HPP_INCLUDED
+#endif  // #ifndef SC_BOOST_BAD_WEAK_PTR_HPP_INCLUDED

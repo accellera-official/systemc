@@ -30,8 +30,8 @@
  * purpose.  It is provided "as is" without express or implied warranty.
  */
 
-#ifndef BOOST_ALGORITHM_HPP
-# define BOOST_ALGORITHM_HPP
+#ifndef SC_BOOST_ALGORITHM_HPP
+# define SC_BOOST_ALGORITHM_HPP
 # include <sysc/packages/boost/detail/iterator.hpp>
 // Algorithms on sequences
 //
@@ -52,7 +52,7 @@ namespace sc_boost {
   Iter2 end(const std::pair<Iter1, Iter2>& p) { return p.second; }
 
   template <typename Iter1, typename Iter2>
-  typename sc_boost::detail::iterator_traits<Iter1>::difference_type
+  typename sc_boost::sc_detail::iterator_traits<Iter1>::difference_type
   size(const std::pair<Iter1, Iter2>& p) {
     return std::distance(p.first, p.second);
   }
@@ -246,4 +246,4 @@ namespace sc_boost {
 
 } // namespace sc_boost
 
-#endif // BOOST_ALGORITHM_HPP
+#endif // SC_BOOST_ALGORITHM_HPP

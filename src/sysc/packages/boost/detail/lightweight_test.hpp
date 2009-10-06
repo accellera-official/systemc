@@ -1,5 +1,5 @@
-#ifndef BOOST_DETAIL_LIGHTWEIGHT_TEST_HPP_INCLUDED
-#define BOOST_DETAIL_LIGHTWEIGHT_TEST_HPP_INCLUDED
+#ifndef SC_BOOST_DETAIL_LIGHTWEIGHT_TEST_HPP_INCLUDED
+#define SC_BOOST_DETAIL_LIGHTWEIGHT_TEST_HPP_INCLUDED
 
 // MS compatible compilers support #pragma once
 
@@ -16,8 +16,8 @@
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
-//  BOOST_TEST(expression)
-//  BOOST_ERROR(message)
+//  SC_BOOST_TEST(expression)
+//  SC_BOOST_ERROR(message)
 //
 //  int boost::report_errors()
 //
@@ -28,7 +28,7 @@
 namespace sc_boost
 {
 
-namespace detail
+namespace sc_detail
 {
 
 inline int & test_errors()
@@ -49,11 +49,11 @@ inline void error_impl(char const * msg, char const * file, int line, char const
     ++test_errors();
 }
 
-} // namespace detail
+} // namespace sc_detail
 
 inline int report_errors()
 {
-    int errors = detail::test_errors();
+    int errors = sc_detail::test_errors();
 
     if(errors == 0)
     {
@@ -69,7 +69,7 @@ inline int report_errors()
 
 } // namespace sc_boost
 
-#define BOOST_TEST(expr) ((expr)? (void)0: ::sc_boost::detail::test_failed_impl(#expr, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION))
-#define BOOST_ERROR(msg) ::sc_boost::detail::error_impl(msg, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION)
+#define SC_BOOST_TEST(expr) ((expr)? (void)0: ::sc_boost::sc_detail::test_failed_impl(#expr, __FILE__, __LINE__, SC_BOOST_CURRENT_FUNCTION))
+#define SC_BOOST_ERROR(msg) ::sc_boost::sc_detail::error_impl(msg, __FILE__, __LINE__, SC_BOOST_CURRENT_FUNCTION)
 
-#endif // #ifndef BOOST_DETAIL_LIGHTWEIGHT_TEST_HPP_INCLUDED
+#endif // #ifndef SC_BOOST_DETAIL_LIGHTWEIGHT_TEST_HPP_INCLUDED

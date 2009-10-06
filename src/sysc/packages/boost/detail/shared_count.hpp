@@ -1,5 +1,5 @@
-#ifndef BOOST_DETAIL_SHARED_COUNT_HPP_INCLUDED
-#define BOOST_DETAIL_SHARED_COUNT_HPP_INCLUDED
+#ifndef SC_BOOST_DETAIL_SHARED_COUNT_HPP_INCLUDED
+#define SC_BOOST_DETAIL_SHARED_COUNT_HPP_INCLUDED
 
 // MS compatible compilers support #pragma once
 
@@ -37,10 +37,10 @@
 namespace sc_boost
 {
 
-namespace detail
+namespace sc_detail
 {
 
-#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
+#if defined(SC_BOOST_SP_ENABLE_DEBUG_HOOKS)
 
 int const shared_count_id = 0x2C35F101;
 int const   weak_count_id = 0x298C38A4;
@@ -55,7 +55,7 @@ private:
 
     sp_counted_base * pi_;
 
-#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
+#if defined(SC_BOOST_SP_ENABLE_DEBUG_HOOKS)
     int id_;
 #endif
 
@@ -64,18 +64,18 @@ private:
 public:
 
     shared_count(): pi_(0) // nothrow
-#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
+#if defined(SC_BOOST_SP_ENABLE_DEBUG_HOOKS)
         , id_(shared_count_id)
 #endif
     {
     }
 
     template<class Y> explicit shared_count( Y * p ): pi_( 0 )
-#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
+#if defined(SC_BOOST_SP_ENABLE_DEBUG_HOOKS)
         , id_(shared_count_id)
 #endif
     {
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef SC_BOOST_NO_EXCEPTIONS
 
         try
         {
@@ -101,11 +101,11 @@ public:
     }
 
     template<class P, class D> shared_count(P p, D d): pi_(0)
-#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
+#if defined(SC_BOOST_SP_ENABLE_DEBUG_HOOKS)
         , id_(shared_count_id)
 #endif
     {
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef SC_BOOST_NO_EXCEPTIONS
 
         try
         {
@@ -130,17 +130,17 @@ public:
 #endif
     }
 
-#ifndef BOOST_NO_AUTO_PTR
+#ifndef SC_BOOST_NO_AUTO_PTR
 
     // auto_ptr<Y> is special cased to provide the strong guarantee
 
     template<class Y>
     explicit shared_count( std::auto_ptr<Y> & r ): pi_( new sp_counted_impl_p<Y>( r.get() ) )
-#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
+#if defined(SC_BOOST_SP_ENABLE_DEBUG_HOOKS)
         , id_(shared_count_id)
 #endif
     {
-#ifdef BOOST_NO_EXCEPTIONS
+#ifdef SC_BOOST_NO_EXCEPTIONS
 
         if( pi_ == 0 )
         {
@@ -157,13 +157,13 @@ public:
     ~shared_count() // nothrow
     {
         if( pi_ != 0 ) pi_->release();
-#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
+#if defined(SC_BOOST_SP_ENABLE_DEBUG_HOOKS)
         id_ = 0;
 #endif
     }
 
     shared_count(shared_count const & r): pi_(r.pi_) // nothrow
-#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
+#if defined(SC_BOOST_SP_ENABLE_DEBUG_HOOKS)
         , id_(shared_count_id)
 #endif
     {
@@ -226,7 +226,7 @@ private:
 
     sp_counted_base * pi_;
 
-#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
+#if defined(SC_BOOST_SP_ENABLE_DEBUG_HOOKS)
     int id_;
 #endif
 
@@ -235,14 +235,14 @@ private:
 public:
 
     weak_count(): pi_(0) // nothrow
-#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
+#if defined(SC_BOOST_SP_ENABLE_DEBUG_HOOKS)
         , id_(weak_count_id)
 #endif
     {
     }
 
     weak_count(shared_count const & r): pi_(r.pi_) // nothrow
-#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
+#if defined(SC_BOOST_SP_ENABLE_DEBUG_HOOKS)
         , id_(shared_count_id)
 #endif
     {
@@ -250,7 +250,7 @@ public:
     }
 
     weak_count(weak_count const & r): pi_(r.pi_) // nothrow
-#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
+#if defined(SC_BOOST_SP_ENABLE_DEBUG_HOOKS)
         , id_(shared_count_id)
 #endif
     {
@@ -260,7 +260,7 @@ public:
     ~weak_count() // nothrow
     {
         if(pi_ != 0) pi_->weak_release();
-#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
+#if defined(SC_BOOST_SP_ENABLE_DEBUG_HOOKS)
         id_ = 0;
 #endif
     }
@@ -309,7 +309,7 @@ public:
 };
 
 inline shared_count::shared_count( weak_count const & r ): pi_( r.pi_ )
-#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
+#if defined(SC_BOOST_SP_ENABLE_DEBUG_HOOKS)
         , id_(shared_count_id)
 #endif
 {
@@ -319,7 +319,7 @@ inline shared_count::shared_count( weak_count const & r ): pi_( r.pi_ )
     }
 }
 
-} // namespace detail
+} // namespace sc_detail
 
 } // namespace sc_boost
 
@@ -327,4 +327,4 @@ inline shared_count::shared_count( weak_count const & r ): pi_( r.pi_ )
 # pragma warn .8027     // Functions containing try are not expanded inline
 #endif
 
-#endif  // #ifndef BOOST_DETAIL_SHARED_COUNT_HPP_INCLUDED
+#endif  // #ifndef SC_BOOST_DETAIL_SHARED_COUNT_HPP_INCLUDED

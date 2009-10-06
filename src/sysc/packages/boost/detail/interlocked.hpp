@@ -1,5 +1,5 @@
-#ifndef BOOST_DETAIL_INTERLOCKED_HPP_INCLUDED
-#define BOOST_DETAIL_INTERLOCKED_HPP_INCLUDED
+#ifndef SC_BOOST_DETAIL_INTERLOCKED_HPP_INCLUDED
+#define SC_BOOST_DETAIL_INTERLOCKED_HPP_INCLUDED
 
 // MS compatible compilers support #pragma once
 
@@ -19,15 +19,15 @@
 
 #include <sysc/packages/boost/config.hpp>
 
-#if defined( BOOST_USE_WINDOWS_H )
+#if defined( SC_BOOST_USE_WINDOWS_H )
 
 # include <windows.h>
 
-# define BOOST_INTERLOCKED_INCREMENT InterlockedIncrement
-# define BOOST_INTERLOCKED_DECREMENT InterlockedDecrement
-# define BOOST_INTERLOCKED_COMPARE_EXCHANGE InterlockedCompareExchange
+# define SC_BOOST_INTERLOCKED_INCREMENT InterlockedIncrement
+# define SC_BOOST_INTERLOCKED_DECREMENT InterlockedDecrement
+# define SC_BOOST_INTERLOCKED_COMPARE_EXCHANGE InterlockedCompareExchange
 
-#elif defined( BOOST_MSVC ) || defined( BOOST_INTEL_WIN )
+#elif defined( SC_BOOST_MSVC ) || defined( SC_BOOST_INTEL_WIN )
 
 extern "C" long __cdecl _InterlockedIncrement( long volatile * );
 extern "C" long __cdecl _InterlockedDecrement( long volatile * );
@@ -37,29 +37,29 @@ extern "C" long __cdecl _InterlockedCompareExchange( long volatile *, long, long
 # pragma intrinsic( _InterlockedDecrement )
 # pragma intrinsic( _InterlockedCompareExchange )
 
-# define BOOST_INTERLOCKED_INCREMENT _InterlockedIncrement
-# define BOOST_INTERLOCKED_DECREMENT _InterlockedDecrement
-# define BOOST_INTERLOCKED_COMPARE_EXCHANGE _InterlockedCompareExchange
+# define SC_BOOST_INTERLOCKED_INCREMENT _InterlockedIncrement
+# define SC_BOOST_INTERLOCKED_DECREMENT _InterlockedDecrement
+# define SC_BOOST_INTERLOCKED_COMPARE_EXCHANGE _InterlockedCompareExchange
 
 #elif defined( WIN32 ) || defined( _WIN32 ) || defined( __WIN32__ )
 
 namespace sc_boost
 {
 
-namespace detail
+namespace sc_detail
 {
 
 extern "C" __declspec(dllimport) long __stdcall InterlockedIncrement( long volatile * );
 extern "C" __declspec(dllimport) long __stdcall InterlockedDecrement( long volatile * );
 extern "C" __declspec(dllimport) long __stdcall InterlockedCompareExchange( long volatile *, long, long );
 
-} // namespace detail
+} // namespace sc_detail
 
 } // namespace sc_boost
 
-# define BOOST_INTERLOCKED_INCREMENT InterlockedIncrement
-# define BOOST_INTERLOCKED_DECREMENT InterlockedDecrement
-# define BOOST_INTERLOCKED_COMPARE_EXCHANGE InterlockedCompareExchange
+# define SC_BOOST_INTERLOCKED_INCREMENT InterlockedIncrement
+# define SC_BOOST_INTERLOCKED_DECREMENT InterlockedDecrement
+# define SC_BOOST_INTERLOCKED_COMPARE_EXCHANGE InterlockedCompareExchange
 
 #else
 
@@ -67,4 +67,4 @@ extern "C" __declspec(dllimport) long __stdcall InterlockedCompareExchange( long
 
 #endif
 
-#endif // #ifndef BOOST_DETAIL_INTERLOCKED_HPP_INCLUDED
+#endif // #ifndef SC_BOOST_DETAIL_INTERLOCKED_HPP_INCLUDED

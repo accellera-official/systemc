@@ -68,9 +68,9 @@ class sc_join : public sc_process_monitor {
     friend class sc_process_handle;
   public:
     inline sc_join();
-	virtual inline ~sc_join();
+    virtual inline ~sc_join();
     void add_process( sc_process_handle process_h );
-	inline int process_count();
+    inline int process_count();
     virtual void signal(sc_thread_handle thread_p, int type);
     inline void wait();
     inline void wait_clocked();
@@ -85,7 +85,7 @@ class sc_join : public sc_process_monitor {
 
 sc_join::sc_join() : m_threads_n(0) { }
 
-sc_join::~sc_join() {}
+sc_join::~sc_join() { }
 
 
 int sc_join::process_count() { return m_threads_n; }
@@ -104,25 +104,25 @@ inline void sc_join::wait_clocked()
 #define SC_CJOIN \
     }; \
     sc_core::sc_join           join; \
-	for ( unsigned int i = 0; \
-	    i < sizeof(forkees)/sizeof(sc_core::sc_process_handle); \
-		i++ ) \
-		join.add_process(forkees[i]); \
-	join.wait_clocked(); \
+    for ( unsigned int i = 0; \
+        i < sizeof(forkees)/sizeof(sc_core::sc_process_handle); \
+        i++ ) \
+        join.add_process(forkees[i]); \
+    join.wait_clocked(); \
 }
 
 #define SC_FORK \
 { \
-	sc_core::sc_process_handle forkees[] = {
+    sc_core::sc_process_handle forkees[] = {
 
 #define SC_JOIN \
     }; \
     sc_core::sc_join           join; \
-	for ( unsigned int i = 0; \
-	    i < sizeof(forkees)/sizeof(sc_core::sc_process_handle); \
-		i++ ) \
-		join.add_process(forkees[i]); \
-	join.wait(); \
+    for ( unsigned int i = 0; \
+        i < sizeof(forkees)/sizeof(sc_core::sc_process_handle); \
+        i++ ) \
+        join.add_process(forkees[i]); \
+    join.wait(); \
 }
 
 } // namespace sc_core

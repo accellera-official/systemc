@@ -1,5 +1,5 @@
-#ifndef BOOST_DETAIL_SP_COUNTED_BASE_GCC_IA64_HPP_INCLUDED
-#define BOOST_DETAIL_SP_COUNTED_BASE_GCC_IA64_HPP_INCLUDED
+#ifndef SC_BOOST_DETAIL_SP_COUNTED_BASE_GCC_IA64_HPP_INCLUDED
+#define SC_BOOST_DETAIL_SP_COUNTED_BASE_GCC_IA64_HPP_INCLUDED
 
 //
 //  detail/sp_counted_base_gcc_ia64.hpp - g++ on IA64
@@ -21,7 +21,7 @@
 namespace sc_boost
 {
 
-namespace detail
+namespace sc_detail
 {
 
 inline void atomic_increment( long * pw )
@@ -150,8 +150,8 @@ public:
     }
 };
 
-} // namespace detail
+} // namespace sc_detail
 
 } // namespace sc_boost
 
-#endif  // #ifndef BOOST_DETAIL_SP_COUNTED_BASE_GCC_IA64_HPP_INCLUDED
+#endif  // #ifndef SC_BOOST_DETAIL_SP_COUNTED_BASE_GCC_IA64_HPP_INCLUDED

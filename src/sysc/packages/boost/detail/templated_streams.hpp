@@ -10,65 +10,65 @@
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_DETAIL_TEMPLATED_STREAMS_HPP
-#define BOOST_DETAIL_TEMPLATED_STREAMS_HPP
+#ifndef SC_BOOST_DETAIL_TEMPLATED_STREAMS_HPP
+#define SC_BOOST_DETAIL_TEMPLATED_STREAMS_HPP
 
 #include "sysc/packages/boost/config.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////
-// (detail) BOOST_TEMPLATED_STREAM_* macros
+// (detail) SC_BOOST_TEMPLATED_STREAM_* macros
 //
 // Provides workaround platforms without stream class templates.
 //
 
-#if !defined(BOOST_NO_STD_LOCALE)
+#if !defined(SC_BOOST_NO_STD_LOCALE)
 
-#define BOOST_TEMPLATED_STREAM_TEMPLATE(E,T) \
+#define SC_BOOST_TEMPLATED_STREAM_TEMPLATE(E,T) \
     template < typename E , typename T >
 
-#define BOOST_TEMPLATED_STREAM_TEMPLATE_ALLOC(E,T,A) \
+#define SC_BOOST_TEMPLATED_STREAM_TEMPLATE_ALLOC(E,T,A) \
     template < typename E , typename T , typename A >
 
-#define BOOST_TEMPLATED_STREAM_ARGS(E,T) \
+#define SC_BOOST_TEMPLATED_STREAM_ARGS(E,T) \
     typename E , typename T 
 
-#define BOOST_TEMPLATED_STREAM_ARGS_ALLOC(E,T,A) \
+#define SC_BOOST_TEMPLATED_STREAM_ARGS_ALLOC(E,T,A) \
     typename E , typename T , typename A 
 
-#define BOOST_TEMPLATED_STREAM_COMMA        ,
+#define SC_BOOST_TEMPLATED_STREAM_COMMA        ,
 
-#define BOOST_TEMPLATED_STREAM_ELEM(E)      E
-#define BOOST_TEMPLATED_STREAM_TRAITS(T)    T
-#define BOOST_TEMPLATED_STREAM_ALLOC(A)     A
+#define SC_BOOST_TEMPLATED_STREAM_ELEM(E)      E
+#define SC_BOOST_TEMPLATED_STREAM_TRAITS(T)    T
+#define SC_BOOST_TEMPLATED_STREAM_ALLOC(A)     A
 
-#define BOOST_TEMPLATED_STREAM(X,E,T) \
-    BOOST_JOIN(std::basic_,X)< E , T >
+#define SC_BOOST_TEMPLATED_STREAM(X,E,T) \
+    SC_BOOST_JOIN(std::basic_,X)< E , T >
 
-#define BOOST_TEMPLATED_STREAM_WITH_ALLOC(X,E,T,A) \
-    BOOST_JOIN(std::basic_,X)< E , T , A >
+#define SC_BOOST_TEMPLATED_STREAM_WITH_ALLOC(X,E,T,A) \
+    SC_BOOST_JOIN(std::basic_,X)< E , T , A >
 
-#else // defined(BOOST_NO_STD_LOCALE)
+#else // defined(SC_BOOST_NO_STD_LOCALE)
 
-#define BOOST_TEMPLATED_STREAM_TEMPLATE(E,T) /**/
+#define SC_BOOST_TEMPLATED_STREAM_TEMPLATE(E,T) /**/
 
-#define BOOST_TEMPLATED_STREAM_TEMPLATE_ALLOC(E,T,A) /**/
+#define SC_BOOST_TEMPLATED_STREAM_TEMPLATE_ALLOC(E,T,A) /**/
 
-#define BOOST_TEMPLATED_STREAM_ARGS(E,T) /**/
+#define SC_BOOST_TEMPLATED_STREAM_ARGS(E,T) /**/
 
-#define BOOST_TEMPLATED_STREAM_ARGS_ALLOC(E,T,A) /**/
+#define SC_BOOST_TEMPLATED_STREAM_ARGS_ALLOC(E,T,A) /**/
 
-#define BOOST_TEMPLATED_STREAM_COMMA        /**/
+#define SC_BOOST_TEMPLATED_STREAM_COMMA        /**/
 
-#define BOOST_TEMPLATED_STREAM_ELEM(E)      char
-#define BOOST_TEMPLATED_STREAM_TRAITS(T)    std::char_traits<char>
-#define BOOST_TEMPLATED_STREAM_ALLOC(A)     std::allocator<char>
+#define SC_BOOST_TEMPLATED_STREAM_ELEM(E)      char
+#define SC_BOOST_TEMPLATED_STREAM_TRAITS(T)    std::char_traits<char>
+#define SC_BOOST_TEMPLATED_STREAM_ALLOC(A)     std::allocator<char>
 
-#define BOOST_TEMPLATED_STREAM(X,E,T) \
+#define SC_BOOST_TEMPLATED_STREAM(X,E,T) \
     std::X
 
-#define BOOST_TEMPLATED_STREAM_WITH_ALLOC(X,E,T,A) \
+#define SC_BOOST_TEMPLATED_STREAM_WITH_ALLOC(X,E,T,A) \
     std::X
 
-#endif // BOOST_NO_STD_LOCALE
+#endif // SC_BOOST_NO_STD_LOCALE
 
-#endif // BOOST_DETAIL_TEMPLATED_STREAMS_HPP
+#endif // SC_BOOST_DETAIL_TEMPLATED_STREAMS_HPP

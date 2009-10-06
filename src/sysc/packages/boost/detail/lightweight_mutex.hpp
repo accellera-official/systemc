@@ -1,5 +1,5 @@
-#ifndef BOOST_DETAIL_LIGHTWEIGHT_MUTEX_HPP_INCLUDED
-#define BOOST_DETAIL_LIGHTWEIGHT_MUTEX_HPP_INCLUDED
+#ifndef SC_BOOST_DETAIL_LIGHTWEIGHT_MUTEX_HPP_INCLUDED
+#define SC_BOOST_DETAIL_LIGHTWEIGHT_MUTEX_HPP_INCLUDED
 
 // MS compatible compilers support #pragma once
 
@@ -16,9 +16,9 @@
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
-//  typedef <unspecified> sc_boost::detail::lightweight_mutex;
+//  typedef <unspecified> sc_boost::sc_detail::lightweight_mutex;
 //
-//  sc_boost::detail::lightweight_mutex is a header-only implementation of
+//  sc_boost::sc_detail::lightweight_mutex is a header-only implementation of
 //  a subset of the Mutex concept requirements:
 //
 //  http://www.boost.org/doc/html/threads/concepts.html#threads.concepts.Mutex
@@ -28,15 +28,15 @@
 
 #include <sysc/packages/boost/config.hpp>
 
-#if !defined(BOOST_HAS_THREADS)
+#if !defined(SC_BOOST_HAS_THREADS)
 # include <sysc/packages/boost/detail/lwm_nop.hpp>
 #elif defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
 #  include <sysc/packages/boost/detail/lwm_win32_cs.hpp>
-#elif defined(BOOST_HAS_PTHREADS)
+#elif defined(SC_BOOST_HAS_PTHREADS)
 #  include <sysc/packages/boost/detail/lwm_pthreads.hpp>
 #else
-// Use #define BOOST_DISABLE_THREADS to avoid the error
+// Use #define SC_BOOST_DISABLE_THREADS to avoid the error
 #  error Unrecognized threading platform
 #endif
 
-#endif // #ifndef BOOST_DETAIL_LIGHTWEIGHT_MUTEX_HPP_INCLUDED
+#endif // #ifndef SC_BOOST_DETAIL_LIGHTWEIGHT_MUTEX_HPP_INCLUDED

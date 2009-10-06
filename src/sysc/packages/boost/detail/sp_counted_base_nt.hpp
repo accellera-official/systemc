@@ -1,5 +1,5 @@
-#ifndef BOOST_DETAIL_SP_COUNTED_BASE_NT_HPP_INCLUDED
-#define BOOST_DETAIL_SP_COUNTED_BASE_NT_HPP_INCLUDED
+#ifndef SC_BOOST_DETAIL_SP_COUNTED_BASE_NT_HPP_INCLUDED
+#define SC_BOOST_DETAIL_SP_COUNTED_BASE_NT_HPP_INCLUDED
 
 // MS compatible compilers support #pragma once
 
@@ -23,7 +23,7 @@
 namespace sc_boost
 {
 
-namespace detail
+namespace sc_detail
 {
 
 class sp_counted_base
@@ -100,8 +100,8 @@ public:
     }
 };
 
-} // namespace detail
+} // namespace sc_detail
 
 } // namespace sc_boost
 
-#endif  // #ifndef BOOST_DETAIL_SP_COUNTED_BASE_NT_HPP_INCLUDED
+#endif  // #ifndef SC_BOOST_DETAIL_SP_COUNTED_BASE_NT_HPP_INCLUDED

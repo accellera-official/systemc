@@ -35,6 +35,9 @@
 
 
 // $Log: sc_reset.h,v $
+// Revision 1.3  2009/05/22 16:06:29  acg
+//  Andy Goodrich: process control updates.
+//
 // Revision 1.2  2008/05/22 17:06:26  acg
 //  Andy Goodrich: updated copyright notice to include 2008.
 //
@@ -58,24 +61,54 @@
 
 namespace sc_core {
 
+// FORWARD CLASS REFERENCES:
+
 template<typename DATA> class sc_signal_in_if;
 template<typename IF> class sc_signal;
 template<typename DATA> class sc_in;
 template<typename DATA> class sc_inout;
 template<typename DATA> class sc_out;
+class sc_reset;
 class sc_process_b;
 
+//==============================================================================
+// CLASS sc_reset_target - RESET ENTRY FOR AN sc_process_b TARGET
+//
+// This class describes a reset condition associated with an sc_process_b
+// instance. 
+//==============================================================================
+class sc_reset_target {
+  public:
+    bool          m_async;     // true asynchronous reset, false synchronous.
+    bool          m_level;     // level for reset.
+    sc_process_b* m_process_p; // process this reset entry is for.
+};
+
+inline std::ostream& operator << ( std::ostream& os, 
+                                   const sc_reset_target& target )
+{
+    os << "[";
+    os << target.m_async << ",";
+    os << target.m_level << ",";
+    os << target.m_process_p << ",";
+    return os;
+}
+
+//==============================================================================
+// CLASS sc_reset - RESET INFORMATION FOR A RESET SIGNAL
+//
+//==============================================================================
 class sc_reset {
     friend class sc_cthread_process;
     friend class sc_method_process; 
     friend class sc_module; 
-	friend class sc_process_b;
-	friend class sc_signal<bool>;
+    friend class sc_process_b;
+    friend class sc_signal<bool>;
     friend class sc_simcontext;
     friend class sc_thread_process; 
 
   protected:
-	static void reconcile_resets();
+    static void reconcile_resets();
     static void 
 	reset_signal_is(bool async, const sc_signal_in_if<bool>& iface, bool level);
     static void 
@@ -88,13 +121,12 @@ class sc_reset {
   protected:
     sc_reset( const sc_signal_in_if<bool>* iface_p ) :
         m_iface_p(iface_p) {}
-	void notify_processes();
-    bool read();
+    void notify_processes();
     void remove_process( sc_process_b* );
 
   protected:
-    const sc_signal_in_if<bool>*  m_iface_p;   // Interface to read.
-	std::vector<sc_process_b*> m_processes;    // List of processes to reset.
+    const sc_signal_in_if<bool>*  m_iface_p;  // Interface to read.
+    std::vector<sc_reset_target>  m_targets;  // List of processes to reset.
 
   private: // disabled
     sc_reset( const sc_reset& );

@@ -24,6 +24,12 @@
  *****************************************************************************/
 
 // $Log: sc_reset.cpp,v $
+// Revision 1.4  2009/05/22 16:06:29  acg
+//  Andy Goodrich: process control updates.
+//
+// Revision 1.3  2009/03/12 22:59:58  acg
+//  Andy Goodrich: updates for 2.4 stuff.
+//
 // Revision 1.2  2008/05/22 17:06:26  acg
 //  Andy Goodrich: updated copyright notice to include 2008.
 //
@@ -124,25 +130,20 @@ inline sc_reset_finder::sc_reset_finder(
 //------------------------------------------------------------------------------
 void sc_reset::notify_processes()
 {
-    int process_i; // Index of process resetting.
-    int process_n; // # of processes to reset.
-    process_n = m_processes.size();
+    bool             active;       // true if reset is active.
+    sc_reset_target* entry_p;      // reset entry processing.
+    int              process_i;    // index of process resetting.
+    int              process_n;    // # of processes to reset.
+    bool             value;        // value of our signal.
+
+    value = m_iface_p->read();
+    process_n = m_targets.size();
     for ( process_i = 0; process_i < process_n; process_i++ )
     {
-        m_processes[process_i]->reset_changed();
+        entry_p = &m_targets[process_i];
+	active = ( entry_p->m_level == value );
+	entry_p->m_process_p->reset_changed( entry_p->m_async, active );
     }
-}
-
-
-//------------------------------------------------------------------------------
-//"sc_reset::read"
-//
-// This method returns the value of the signal associated with this object 
-// instance.
-//------------------------------------------------------------------------------
-bool sc_reset::read()
-{
-    return m_iface_p->read(); 
 }
 
 
@@ -153,22 +154,24 @@ bool sc_reset::read()
 // reset connections.
 //
 // Notes:
-//   (1) For sc_cthread_process instances we do not record the process in
-//       the m_processes list. This is because we want the reset to act as
-//       a synchronous reset rather than an asynchronous one.
+//   (1) If reset is asserted we tell the process that it is in reset
+//       initially.
 //------------------------------------------------------------------------------
 void sc_reset::reconcile_resets()
 {
-    const sc_signal_in_if<bool>*  iface_p; // Interface to reset signal.
-    sc_reset_finder*              next_p;  // Next finder to process.
-    sc_reset_finder*              now_p;   // Finder currently processing.
-    sc_reset*                     reset_p; // Reset object to use.
+    const sc_signal_in_if<bool>*  iface_p;      // Interface to reset signal.
+    sc_reset_finder*              next_p;       // Next finder to process.
+    sc_reset_finder*              now_p;        // Finder currently processing.
+    sc_reset_target               reset_target; // Target's reset entry.
+    sc_reset*                     reset_p;      // Reset object to use.
 
     for ( now_p = reset_finder_q; now_p; now_p = next_p )
     {
         next_p = now_p->m_next_p;
+#if 0 // @@@@ REMOVE
         if ( now_p->m_target_p->m_reset_p || now_p->m_target_p->m_areset_p )
             SC_REPORT_ERROR(SC_ID_MULTIPLE_RESETS_,now_p->m_target_p->name());
+#endif
         if ( now_p->m_in_p )
         {
             iface_p = DCAST<const sc_signal_in_if<bool>*>(
@@ -186,18 +189,13 @@ void sc_reset::reconcile_resets()
         }
         assert( iface_p != 0 );
         reset_p = iface_p->is_reset();
-        if ( now_p->m_async )
-        {
-            now_p->m_target_p->m_areset_p = reset_p;
-            now_p->m_target_p->m_areset_level = now_p->m_level;
-            reset_p->m_processes.push_back(now_p->m_target_p);
-        }
-        else
-        {
-            now_p->m_target_p->m_reset_p = reset_p;
-            now_p->m_target_p->m_reset_level = now_p->m_level;
-            reset_p->m_processes.push_back(now_p->m_target_p);
-        }
+	now_p->m_target_p->m_resets.push_back(reset_p);
+	reset_target.m_async = now_p->m_async;
+	reset_target.m_level = now_p->m_level;
+	reset_target.m_process_p = now_p->m_target_p;
+	reset_p->m_targets.push_back(reset_target);
+	if ( iface_p->read() == now_p->m_level ) // see note 1 above
+	    now_p->m_target_p->initially_in_reset( now_p->m_async );
         delete now_p;
     }
 }
@@ -212,15 +210,19 @@ void sc_reset::remove_process( sc_process_b* process_p )
     int process_i; // Index of process resetting.
     int process_n; // # of processes to reset.
 
-    process_n = m_processes.size();
-    for ( process_i = 0; process_i < process_n; process_i++ )
+    process_n = m_targets.size();
+    for ( process_i = 0; process_i < process_n; )
     {
-        if ( m_processes[process_i] == process_p )
+        if ( m_targets[process_i].m_process_p == process_p )
         {
-            m_processes[process_i] = m_processes[process_n-1];
-            m_processes.resize(process_n-1);
-            return;
+            m_targets[process_i] = m_targets[process_n-1];
+	    process_n--;
+            m_targets.resize(process_n);
         }
+	else
+	{
+	    process_i++;
+	}
     }
 }
 
@@ -241,7 +243,6 @@ void sc_reset::reset_signal_is(
       case SC_THREAD_PROC_:
       case SC_METHOD_PROC_:
       case SC_CTHREAD_PROC_:
-        process_p->m_reset_level = level;
         iface_p = DCAST<const sc_signal_in_if<bool>*>(port.get_interface());
         if ( iface_p )
             reset_signal_is( async, *iface_p, level );
@@ -269,7 +270,7 @@ void sc_reset::reset_signal_is(
       case SC_THREAD_PROC_:
       case SC_METHOD_PROC_:
       case SC_CTHREAD_PROC_:
-        process_p->m_reset_level = level;
+        // @@@@ CAN THIS GO? process_p->m_reset_level = level;
         iface_p = DCAST<const sc_signal_in_if<bool>*>(port.get_interface());
         if ( iface_p )
             reset_signal_is( async, *iface_p, level );
@@ -297,7 +298,7 @@ void sc_reset::reset_signal_is(
       case SC_THREAD_PROC_:
       case SC_METHOD_PROC_:
       case SC_CTHREAD_PROC_:
-        process_p->m_reset_level = level;
+        // @@@@ process_p->m_reset_level = level;
         iface_p = DCAST<const sc_signal_in_if<bool>*>(port.get_interface());
         if ( iface_p )
             reset_signal_is( async, *iface_p, level );
@@ -316,39 +317,38 @@ void sc_reset::reset_signal_is(
 //"sc_reset::reset_signal_is"
 //
 // Notes:
-//   (1) For sc_cthread_process instances we do not record the process in
-//       the m_processes list. This is because we want the reset to act as
-//       a synchronous reset rather than an asynchronous one.
+//   (1) If reset is asserted we tell the process that it is in reset
+//       initially.
 //------------------------------------------------------------------------------
 void sc_reset::reset_signal_is( 
     bool async, const sc_signal_in_if<bool>& iface, bool level )
 {
-    sc_process_b* process_p; // Process adding reset for.
-    sc_reset*        reset_p;   // Reset object.
+    sc_process_b*   process_p;    // process adding reset for.
+    sc_reset_target reset_target; // entry to build for the process.
+    sc_reset*       reset_p;      // reset object.
 
     process_p = sc_process_b::last_created_process_base();
     assert( process_p );
+#if 0 // @@@@ REMOVE OR CONDITIONAL ON SYSC 2.2
     if ( process_p->m_reset_p )
         SC_REPORT_ERROR(SC_ID_MULTIPLE_RESETS_,process_p->name());
+#endif
     switch ( process_p->proc_kind() )
     {
+      case SC_METHOD_PROC_:
+        if ( !async ) {
+            // @@@@SC_REPORT_ERROR(SC_ID_NO_METHOD_SYNC_RESET_,process_p->name());
+	    break;
+	} // fall through...
       case SC_CTHREAD_PROC_:
       case SC_THREAD_PROC_:
-      case SC_METHOD_PROC_:
-        if ( async )
-        {
-            process_p->m_areset_level = level;
-            reset_p = iface.is_reset();
-            process_p->m_areset_p = reset_p;
-            reset_p->m_processes.push_back(process_p);
-        }
-        else
-        {
-            process_p->m_reset_level = level;
-            reset_p = iface.is_reset();
-            process_p->m_reset_p = reset_p;
-            reset_p->m_processes.push_back(process_p);
-        }
+	reset_p = iface.is_reset();
+	process_p->m_resets.push_back(reset_p);
+        reset_target.m_async = async; 
+	reset_target.m_level = level;
+	reset_target.m_process_p = process_p;
+	reset_p->m_targets.push_back(reset_target);
+	if ( iface.read() == level ) process_p->initially_in_reset( async );
         break;
       default:
         SC_REPORT_ERROR(SC_ID_UNKNOWN_PROCESS_TYPE_, process_p->name());

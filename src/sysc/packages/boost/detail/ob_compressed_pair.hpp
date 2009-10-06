@@ -21,23 +21,23 @@
 */
 
 
-#ifndef BOOST_OB_COMPRESSED_PAIR_HPP
-#define BOOST_OB_COMPRESSED_PAIR_HPP
+#ifndef SC_BOOST_OB_COMPRESSED_PAIR_HPP
+#define SC_BOOST_OB_COMPRESSED_PAIR_HPP
 
 #include <algorithm>
-#ifndef BOOST_OBJECT_TYPE_TRAITS_HPP
+#ifndef SC_BOOST_OBJECT_TYPE_TRAITS_HPP
 #include <sysc/packages/boost/type_traits/object_traits.hpp>
 #endif
-#ifndef BOOST_SAME_TRAITS_HPP
+#ifndef SC_BOOST_SAME_TRAITS_HPP
 #include <sysc/packages/boost/type_traits/same_traits.hpp>
 #endif
-#ifndef BOOST_CALL_TRAITS_HPP
+#ifndef SC_BOOST_CALL_TRAITS_HPP
 #include <sysc/packages/boost/call_traits.hpp>
 #endif
 
 namespace sc_boost
 {
-#ifdef BOOST_MSVC6_MEMBER_TEMPLATES
+#ifdef SC_BOOST_MSVC6_MEMBER_TEMPLATES
 //
 // use member templates to emulate
 // partial specialisation.  Note that due to
@@ -50,7 +50,7 @@ namespace sc_boost
 template <class T1, class T2>
 class compressed_pair;
 
-namespace detail{
+namespace sc_detail{
 
 template <class A, class T1, class T2>
 struct best_conversion_traits
@@ -167,7 +167,7 @@ public:
    compressed_pair_1(const ::sc_boost::compressed_pair<T1,T2>& x)
       : T2(x.second()), _first(x.first()) {}
 
-#if defined(BOOST_MSVC) && BOOST_MSVC <= 1300
+#if defined(SC_BOOST_MSVC) && SC_BOOST_MSVC <= 1300
   // Total weirdness. If the assignment to _first is moved after
   // the call to the inherited operator=, then this breaks graph/test/graph.cpp
   // by way of iterator_adaptor.
@@ -420,13 +420,13 @@ public:
    typedef typename bound_type::type type;
 };
 
-} // namespace detail
+} // namespace sc_detail
 
 template <class T1, class T2>
-class compressed_pair : public detail::compressed_pair_traits<T1, T2>::type
+class compressed_pair : public sc_detail::compressed_pair_traits<T1, T2>::type
 {
 private:
-   typedef typename detail::compressed_pair_traits<T1, T2>::type base_type;
+   typedef typename sc_detail::compressed_pair_traits<T1, T2>::type base_type;
 public:
    typedef T1                                                 first_type;
    typedef T2                                                 second_type;
@@ -504,7 +504,7 @@ inline void swap(compressed_pair<T1, T2>& x, compressed_pair<T1, T2>& y)
 
 } // sc_boost
 
-#endif // BOOST_OB_COMPRESSED_PAIR_HPP
+#endif // SC_BOOST_OB_COMPRESSED_PAIR_HPP
 
 
 

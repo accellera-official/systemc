@@ -6,8 +6,8 @@
  * See Boost website at http://www.boost.org/
  */
 
-#ifndef BOOST_DETAIL_ALLOCATOR_UTILITIES_HPP
-#define BOOST_DETAIL_ALLOCATOR_UTILITIES_HPP
+#ifndef SC_BOOST_DETAIL_ALLOCATOR_UTILITIES_HPP
+#define SC_BOOST_DETAIL_ALLOCATOR_UTILITIES_HPP
 
 #include <sysc/packages/boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
 #include <sysc/packages/boost/detail/workaround.hpp>
@@ -20,14 +20,14 @@
 
 namespace sc_boost{
 
-namespace detail{
+namespace sc_detail{
 
 /* Allocator adaption layer. Some stdlibs provide allocators without rebind
  * and template ctors. These facilities are simulated with the external
  * template class rebind_to and the aid of partial_std_allocator_wrapper.
  */
 
-namespace allocator{
+namespace sc_allocator{
 
 /* partial_std_allocator_wrapper inherits the functionality of a std
  * allocator while providing a templatized ctor.
@@ -47,7 +47,7 @@ public:
   {
   };
 
-#if defined(BOOST_DINKUMWARE_STDLIB)
+#if defined(SC_BOOST_DINKUMWARE_STDLIB)
   /* Dinkumware guys didn't provide a means to call allocate() without
    * supplying a hint, in disagreement with the standard.
    */
@@ -69,21 +69,21 @@ public:
  * a standard defective allocator.
  */
 
-#if defined(BOOST_NO_STD_ALLOCATOR)&&\
-  (defined(BOOST_HAS_PARTIAL_STD_ALLOCATOR)||defined(BOOST_DINKUMWARE_STDLIB))
+#if defined(SC_BOOST_NO_STD_ALLOCATOR)&&\
+  (defined(SC_BOOST_HAS_PARTIAL_STD_ALLOCATOR)||defined(SC_BOOST_DINKUMWARE_STDLIB))
 
 template<typename Allocator>
 struct is_partial_std_allocator
 {
-  BOOST_STATIC_CONSTANT(bool,
+  SC_BOOST_STATIC_CONSTANT(bool,
     value=
       (is_same<
-        std::allocator<BOOST_DEDUCED_TYPENAME Allocator::value_type>,
+        std::allocator<SC_BOOST_DEDUCED_TYPENAME Allocator::value_type>,
         Allocator
       >::value)||
       (is_same<
         partial_std_allocator_wrapper<
-          BOOST_DEDUCED_TYPENAME Allocator::value_type>,
+          SC_BOOST_DEDUCED_TYPENAME Allocator::value_type>,
         Allocator
       >::value));
 };
@@ -93,7 +93,7 @@ struct is_partial_std_allocator
 template<typename Allocator>
 struct is_partial_std_allocator
 {
-  BOOST_STATIC_CONSTANT(bool,value=false);
+  SC_BOOST_STATIC_CONSTANT(bool,value=false);
 };
 
 #endif
@@ -108,7 +108,7 @@ struct partial_std_allocator_rebind_to
 
 /* rebind operation in all other cases */
 
-#if BOOST_WORKAROUND(BOOST_MSVC,<1300)
+#if SC_BOOST_WORKAROUND(SC_BOOST_MSVC,<1300)
 /* Workaround for a problem in MSVC with dependent template typedefs
  * when doing rebinding of allocators.
  * Modeled after <sysc/packages/boost/mpl/aux_/msvc_dtw.hpp> (thanks, Aleksey!)
@@ -137,7 +137,7 @@ struct rebinder
   template<typename Type>
   struct result
   {
-      typedef typename Allocator::BOOST_NESTED_TEMPLATE 
+      typedef typename Allocator::SC_BOOST_NESTED_TEMPLATE 
           rebind<Type>::other other;
   };
 };
@@ -147,7 +147,7 @@ template<typename Allocator,typename Type>
 struct compliant_allocator_rebind_to
 {
   typedef typename rebinder<Allocator>::
-      BOOST_NESTED_TEMPLATE result<Type>::other type;
+      SC_BOOST_NESTED_TEMPLATE result<Type>::other type;
 };
 
 /* rebind front-end */
@@ -176,9 +176,9 @@ void destroy(const Type* p)
   p->~Type();
 }
 
-} /* namespace sc_boost::detail::allocator */
+} /* namespace sc_boost::sc_detail::sc_allocator */
 
-} /* namespace sc_boost::detail */
+} /* namespace sc_boost::sc_detail */
 
 } /* namespace sc_boost */
 

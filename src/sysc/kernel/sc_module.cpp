@@ -54,6 +54,9 @@
 
 
 // $Log: sc_module.cpp,v $
+// Revision 1.5  2009/05/22 16:06:29  acg
+//  Andy Goodrich: process control updates.
+//
 // Revision 1.4  2008/11/17 15:57:15  acg
 //  Andy Goodrich: added deprecation message for sc_module(const char*)
 //
@@ -350,25 +353,25 @@ sc_module::add_child_object( sc_object* object_ )
 // set SC_THREAD asynchronous reset sensitivity
 
 void
-sc_module::areset_signal_is( const sc_in<bool>& port, bool level )
+sc_module::async_reset_signal_is( const sc_in<bool>& port, bool level )
 {
 	sc_reset::reset_signal_is(true, port, level);
 }
 
 void
-sc_module::areset_signal_is( const sc_inout<bool>& port, bool level )
+sc_module::async_reset_signal_is( const sc_inout<bool>& port, bool level )
 {
 	sc_reset::reset_signal_is(true, port, level);
 }
 
 void
-sc_module::areset_signal_is( const sc_out<bool>& port, bool level )
+sc_module::async_reset_signal_is( const sc_out<bool>& port, bool level )
 {
 	sc_reset::reset_signal_is(true, port, level);
 }
 
 void
-sc_module::areset_signal_is( const sc_signal_in_if<bool>& iface, bool level )
+sc_module::async_reset_signal_is(const sc_signal_in_if<bool>& iface, bool level)
 {
 	sc_reset::reset_signal_is(true, iface, level);
 }

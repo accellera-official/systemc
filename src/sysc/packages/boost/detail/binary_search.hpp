@@ -25,21 +25,21 @@
 // representations about the suitability of this software for any
 // purpose.  It is provided "as is" without express or implied warranty.
 // 
-#ifndef BINARY_SEARCH_DWA_122600_H_
-# define BINARY_SEARCH_DWA_122600_H_
+#ifndef SC_BINARY_SEARCH_DWA_122600_H_
+# define SC_BINARY_SEARCH_DWA_122600_H_
 
 # include <sysc/packages/boost/detail/iterator.hpp>
 # include <utility>
 
-namespace sc_boost { namespace detail {
+namespace sc_boost { namespace sc_detail {
 
 template <class ForwardIter, class Tp>
 ForwardIter lower_bound(ForwardIter first, ForwardIter last,
                              const Tp& val) 
 {
-    typedef detail::iterator_traits<ForwardIter> traits;
+    typedef sc_detail::iterator_traits<ForwardIter> traits;
     
-    typename traits::difference_type len = sc_boost::detail::distance(first, last);
+    typename traits::difference_type len = sc_boost::sc_detail::distance(first, last);
     typename traits::difference_type half;
     ForwardIter middle;
 
@@ -62,9 +62,9 @@ template <class ForwardIter, class Tp, class Compare>
 ForwardIter lower_bound(ForwardIter first, ForwardIter last,
                               const Tp& val, Compare comp)
 {
-  typedef detail::iterator_traits<ForwardIter> traits;
+  typedef sc_detail::iterator_traits<ForwardIter> traits;
 
-  typename traits::difference_type len = sc_boost::detail::distance(first, last);
+  typename traits::difference_type len = sc_boost::sc_detail::distance(first, last);
   typename traits::difference_type half;
   ForwardIter middle;
 
@@ -87,9 +87,9 @@ template <class ForwardIter, class Tp>
 ForwardIter upper_bound(ForwardIter first, ForwardIter last,
                            const Tp& val)
 {
-  typedef detail::iterator_traits<ForwardIter> traits;
+  typedef sc_detail::iterator_traits<ForwardIter> traits;
 
-  typename traits::difference_type len = sc_boost::detail::distance(first, last);
+  typename traits::difference_type len = sc_boost::sc_detail::distance(first, last);
   typename traits::difference_type half;
   ForwardIter middle;
 
@@ -112,9 +112,9 @@ template <class ForwardIter, class Tp, class Compare>
 ForwardIter upper_bound(ForwardIter first, ForwardIter last,
                            const Tp& val, Compare comp)
 {
-  typedef detail::iterator_traits<ForwardIter> traits;
+  typedef sc_detail::iterator_traits<ForwardIter> traits;
 
-  typename traits::difference_type len = sc_boost::detail::distance(first, last);
+  typename traits::difference_type len = sc_boost::sc_detail::distance(first, last);
   typename traits::difference_type half;
   ForwardIter middle;
 
@@ -137,9 +137,9 @@ template <class ForwardIter, class Tp>
 std::pair<ForwardIter, ForwardIter>
 equal_range(ForwardIter first, ForwardIter last, const Tp& val)
 {
-  typedef detail::iterator_traits<ForwardIter> traits;
+  typedef sc_detail::iterator_traits<ForwardIter> traits;
 
-  typename traits::difference_type len = sc_boost::detail::distance(first, last);
+  typename traits::difference_type len = sc_boost::sc_detail::distance(first, last);
   typename traits::difference_type half;
   ForwardIter middle, left, right;
 
@@ -155,9 +155,9 @@ equal_range(ForwardIter first, ForwardIter last, const Tp& val)
     else if (val < *middle)
       len = half;
     else {
-      left = sc_boost::detail::lower_bound(first, middle, val);
+      left = sc_boost::sc_detail::lower_bound(first, middle, val);
       std::advance(first, len);
-      right = sc_boost::detail::upper_bound(++middle, first, val);
+      right = sc_boost::sc_detail::upper_bound(++middle, first, val);
       return std::pair<ForwardIter, ForwardIter>(left, right);
     }
   }
@@ -169,9 +169,9 @@ std::pair<ForwardIter, ForwardIter>
 equal_range(ForwardIter first, ForwardIter last, const Tp& val,
               Compare comp)
 {
-  typedef detail::iterator_traits<ForwardIter> traits;
+  typedef sc_detail::iterator_traits<ForwardIter> traits;
 
-  typename traits::difference_type len = sc_boost::detail::distance(first, last);
+  typename traits::difference_type len = sc_boost::sc_detail::distance(first, last);
   typename traits::difference_type half;
   ForwardIter middle, left, right;
 
@@ -187,9 +187,9 @@ equal_range(ForwardIter first, ForwardIter last, const Tp& val,
     else if (comp(val, *middle))
       len = half;
     else {
-      left = sc_boost::detail::lower_bound(first, middle, val, comp);
+      left = sc_boost::sc_detail::lower_bound(first, middle, val, comp);
       std::advance(first, len);
-      right = sc_boost::detail::upper_bound(++middle, first, val, comp);
+      right = sc_boost::sc_detail::upper_bound(++middle, first, val, comp);
       return std::pair<ForwardIter, ForwardIter>(left, right);
     }
   }
@@ -199,7 +199,7 @@ equal_range(ForwardIter first, ForwardIter last, const Tp& val,
 template <class ForwardIter, class Tp>
 bool binary_search(ForwardIter first, ForwardIter last,
                    const Tp& val) {
-  ForwardIter i = sc_boost::detail::lower_bound(first, last, val);
+  ForwardIter i = sc_boost::sc_detail::lower_bound(first, last, val);
   return i != last && !(val < *i);
 }
 
@@ -207,10 +207,10 @@ template <class ForwardIter, class Tp, class Compare>
 bool binary_search(ForwardIter first, ForwardIter last,
                    const Tp& val,
                    Compare comp) {
-  ForwardIter i = sc_boost::detail::lower_bound(first, last, val, comp);
+  ForwardIter i = sc_boost::sc_detail::lower_bound(first, last, val, comp);
   return i != last && !comp(val, *i);
 }
 
-}} // namespace sc_boost::detail
+}} // namespace sc_boost::sc_detail
 
-#endif // BINARY_SEARCH_DWA_122600_H_
+#endif // SC_BINARY_SEARCH_DWA_122600_H_

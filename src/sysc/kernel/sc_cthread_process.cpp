@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_cthread_process.cpp,v $
+// Revision 1.3  2009/05/22 16:06:29  acg
+//  Andy Goodrich: process control updates.
+//
 // Revision 1.2  2008/05/22 17:06:25  acg
 //  Andy Goodrich: updated copyright notice to include 2008.
 //
@@ -70,6 +73,7 @@ namespace sc_core {
 void sc_cthread_cor_fn( void* arg )
 {
     sc_cthread_handle cthread_h = RCAST<sc_cthread_handle>( arg );
+    sc_simcontext*    simc_p = sc_get_curr_simcontext();
 
     // EXECUTE THE CTHREAD AND PROCESS ANY EXCEPTIONS THAT ARE THROWN:
     //
@@ -89,6 +93,10 @@ void sc_cthread_cor_fn( void* arg )
             ::std::cout << "Terminating process "
                       << cthread_h->name() << ::std::endl;
         }
+        catch( sc_kill ) {
+            ::std::cout << "Killing process "
+                      << cthread_h->name() << ::std::endl;
+        }
         catch( const sc_report& ex ) {
             ::std::cout << "\n" << ex.what() << ::std::endl;
             cthread_h->simcontext()->set_error();
@@ -97,13 +105,27 @@ void sc_cthread_cor_fn( void* arg )
         break;
     }
 
-    // SCHEDULE THREAD FOR DESTRUCTION:
-    //
-    // If control reaches this point the process semantics have returned
-    // so the process should die.
+    sc_process_b*    active_p = sc_get_current_process_b();
 
-    cthread_h->kill_process();
+    // REMOVE ALL TRACES OF OUR THREAD FROM THE SIMULATORS DATA STRUCTURES:
 
+    cthread_h->disconnect_process();
+
+    // IF WE AREN'T ACTIVE MAKE SURE WE WON'T EXECUTE:
+
+    if ( cthread_h->next_runnable() != 0 )
+    {
+        simc_p->remove_runnable_thread(cthread_h);
+    }
+
+    // IF WE ARE THE ACTIVE PROCESS ABORT OUR EXECUTION:
+
+
+    if ( active_p == (sc_process_b*)cthread_h )
+    {
+
+        simc_p->cor_pkg()->abort( simc_p->next_cor() );
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -126,7 +148,8 @@ void sc_cthread_process::dont_initialize( bool dont )
 void sc_cthread_process::prepare_for_simulation()
 {
     m_cor_p = simcontext()->cor_pkg()->create( m_stack_size,
-                         sc_cthread_cor_fn, this );
+                         sc_thread_cor_fn, this );
+                         // @@@@#### sc_cthread_cor_fn, this );
     m_cor_p->stack_protect( true );
 }
 
@@ -168,9 +191,9 @@ void sc_cthread_process::throw_reset( bool async )
 
 	m_throw_type = THROW_RESET;
 	m_wait_cycle_n = 0;
-	if ( async )
+	if ( async  && next_runnable() == 0 ) 
 	{
-	    if ( next_runnable() == 0 ) simcontext()->push_runnable_thread( this ); 
+	    simcontext()->push_runnable_thread( this ); 
 	}
 }
 

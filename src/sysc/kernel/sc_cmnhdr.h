@@ -34,6 +34,9 @@
 
  *****************************************************************************/
 // $Log: sc_cmnhdr.h,v $
+// Revision 1.3  2009/05/22 16:06:29  acg
+//  Andy Goodrich: process control updates.
+//
 // Revision 1.2  2008/05/22 17:06:24  acg
 //  Andy Goodrich: updated copyright notice to include 2008.
 //
@@ -113,6 +116,14 @@
 
 #endif
 
+
+// ----------------------------------------------------------------------------
+
+#ifdef __MINGW32__
+#define _WIN32_WINNT 0x400
+#include <Windows.h>
+
+#endif
 
 // ----------------------------------------------------------------------------
 

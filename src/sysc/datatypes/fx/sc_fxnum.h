@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: sc_fxnum.h,v $
+// Revision 1.2  2009/03/09 17:26:46  acg
+//  Andy Goodrich: removed ; from namespace { }
+//
 // Revision 1.1.1.1  2006/12/15 20:20:04  acg
 // SystemC 2.3
 //
@@ -57,7 +60,7 @@ namespace sc_core {
 	class vcd_sc_fxnum_fast_trace;
 	class wif_sc_fxnum_trace;
 	class wif_sc_fxnum_fast_trace;
-};
+}
 
 
 namespace sc_dt

@@ -50,6 +50,7 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include <stdint.h>
 #if defined(__EDG__)
 #   include <strstream>
 #endif // defined(__EDG__)

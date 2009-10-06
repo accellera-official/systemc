@@ -1,5 +1,5 @@
-#ifndef BOOST_BIND_MAKE_ADAPTABLE_HPP_INCLUDED
-#define BOOST_BIND_MAKE_ADAPTABLE_HPP_INCLUDED
+#ifndef SC_BOOST_BIND_MAKE_ADAPTABLE_HPP_INCLUDED
+#define SC_BOOST_BIND_MAKE_ADAPTABLE_HPP_INCLUDED
 
 //
 //  make_adaptable.hpp
@@ -14,7 +14,7 @@
 namespace sc_boost
 {
 
-namespace _bi
+namespace sc_bi
 {
 
 template<class R, class F> class af0
@@ -155,33 +155,33 @@ private:
     F f_;
 };
 
-} // namespace _bi
+} // namespace sc_bi
 
-template<class R, class F> _bi::af0<R, F> make_adaptable(F f)
+template<class R, class F> sc_bi::af0<R, F> make_adaptable(F f)
 {
-    return _bi::af0<R, F>(f);
+    return sc_bi::af0<R, F>(f);
 }
 
-template<class R, class A1, class F> _bi::af1<R, A1, F> make_adaptable(F f)
+template<class R, class A1, class F> sc_bi::af1<R, A1, F> make_adaptable(F f)
 {
-    return _bi::af1<R, A1, F>(f);
+    return sc_bi::af1<R, A1, F>(f);
 }
 
-template<class R, class A1, class A2, class F> _bi::af2<R, A1, A2, F> make_adaptable(F f)
+template<class R, class A1, class A2, class F> sc_bi::af2<R, A1, A2, F> make_adaptable(F f)
 {
-    return _bi::af2<R, A1, A2, F>(f);
+    return sc_bi::af2<R, A1, A2, F>(f);
 }
 
-template<class R, class A1, class A2, class A3, class F> _bi::af3<R, A1, A2, A3, F> make_adaptable(F f)
+template<class R, class A1, class A2, class A3, class F> sc_bi::af3<R, A1, A2, A3, F> make_adaptable(F f)
 {
-    return _bi::af3<R, A1, A2, A3, F>(f);
+    return sc_bi::af3<R, A1, A2, A3, F>(f);
 }
 
-template<class R, class A1, class A2, class A3, class A4, class F> _bi::af4<R, A1, A2, A3, A4, F> make_adaptable(F f)
+template<class R, class A1, class A2, class A3, class A4, class F> sc_bi::af4<R, A1, A2, A3, A4, F> make_adaptable(F f)
 {
-    return _bi::af4<R, A1, A2, A3, A4, F>(f);
+    return sc_bi::af4<R, A1, A2, A3, A4, F>(f);
 }
 
 } // namespace sc_boost
 
-#endif // #ifndef BOOST_BIND_MAKE_ADAPTABLE_HPP_INCLUDED
+#endif // #ifndef SC_BOOST_BIND_MAKE_ADAPTABLE_HPP_INCLUDED

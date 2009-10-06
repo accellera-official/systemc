@@ -52,7 +52,7 @@
 
 // namespace sc_dp { This is off because of bugs with gcc 2.9x
 
-// SET THE NAME OF OBJECTS THAT THE BOOST LIBRARY WILL PRODUCE AND INCLUDE IT:
+// SET THE NAME OF OBJECTS THAT THE SC_BOOST LIBRARY WILL PRODUCE AND INCLUDE IT
 
 #if defined(_MSC_VER) && !defined(__ICL) && !defined(__COMO__)
 #   pragma warning(disable: 4786)  // identifier truncated in debug info
@@ -64,11 +64,11 @@
 #include "sysc/packages/boost/bind.hpp"
 #include "sysc/packages/boost/ref.hpp"
 
-#if defined(BOOST_MSVC) && (BOOST_MSVC < 1300)
+#if defined(SC_BOOST_MSVC) && (SC_BOOST_MSVC < 1300)
 #   pragma warning(push, 3)
 #endif
 
-#if defined(BOOST_MSVC) && (BOOST_MSVC < 1300)
+#if defined(SC_BOOST_MSVC) && (SC_BOOST_MSVC < 1300)
 #   pragma warning(pop)
 #endif
 

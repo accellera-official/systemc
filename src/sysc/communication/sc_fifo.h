@@ -33,6 +33,9 @@
     
  *****************************************************************************/
 //$Log: sc_fifo.h,v $
+//Revision 1.2  2009/05/22 16:06:24  acg
+// Andy Goodrich: process control updates.
+//
 //Revision 1.1.1.1  2006/12/15 20:20:04  acg
 //SystemC 2.3
 //

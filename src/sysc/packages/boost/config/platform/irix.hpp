@@ -9,22 +9,22 @@
 
 //  SGI Irix specific config options:
 
-#define BOOST_PLATFORM "SGI Irix"
+#define SC_BOOST_PLATFORM "SGI Irix"
 
-#define BOOST_NO_SWPRINTF 
+#define SC_BOOST_NO_SWPRINTF 
 //
 // these are not auto detected by POSIX feature tests:
 //
-#define BOOST_HAS_GETTIMEOFDAY
-#define BOOST_HAS_PTHREAD_MUTEXATTR_SETTYPE
+#define SC_BOOST_HAS_GETTIMEOFDAY
+#define SC_BOOST_HAS_PTHREAD_MUTEXATTR_SETTYPE
 
 #ifdef __GNUC__
    // GNU C on IRIX does not support threads (checked up to gcc 3.3)
-#  define BOOST_DISABLE_THREADS
+#  define SC_BOOST_DISABLE_THREADS
 #endif
 
 // boilerplate code:
-#define BOOST_HAS_UNISTD_H
+#define SC_BOOST_HAS_UNISTD_H
 #include <sysc/packages/boost/config/posix_features.hpp>
 
 

@@ -1,5 +1,5 @@
-#ifndef BOOST_DETAIL_SHARED_ARRAY_NMT_HPP_INCLUDED
-#define BOOST_DETAIL_SHARED_ARRAY_NMT_HPP_INCLUDED
+#ifndef SC_BOOST_DETAIL_SHARED_ARRAY_NMT_HPP_INCLUDED
+#define SC_BOOST_DETAIL_SHARED_ARRAY_NMT_HPP_INCLUDED
 
 //
 //  detail/shared_array_nmt.hpp - shared_array.hpp without member templates
@@ -31,7 +31,7 @@ template<class T> class shared_array
 {
 private:
 
-    typedef detail::atomic_count count_type;
+    typedef sc_detail::atomic_count count_type;
 
 public:
 
@@ -39,7 +39,7 @@ public:
       
     explicit shared_array(T * p = 0): px(p)
     {
-#ifndef BOOST_NO_EXCEPTIONS
+#ifndef SC_BOOST_NO_EXCEPTIONS
 
         try  // prevent leak if new throws
         {
@@ -87,7 +87,7 @@ public:
 
     void reset(T * p = 0)
     {
-        BOOST_ASSERT(p == 0 || p != px);
+        SC_BOOST_ASSERT(p == 0 || p != px);
         shared_array(p).swap(*this);
     }
 
@@ -98,8 +98,8 @@ public:
 
     T & operator[](std::ptrdiff_t i) const  // never throws
     {
-        BOOST_ASSERT(px != 0);
-        BOOST_ASSERT(i >= 0);
+        SC_BOOST_ASSERT(px != 0);
+        SC_BOOST_ASSERT(i >= 0);
         return px[i];
     }
 
@@ -148,4 +148,4 @@ template<class T> void swap(shared_array<T> & a, shared_array<T> & b)
 
 } // namespace sc_boost
 
-#endif  // #ifndef BOOST_DETAIL_SHARED_ARRAY_NMT_HPP_INCLUDED
+#endif  // #ifndef SC_BOOST_DETAIL_SHARED_ARRAY_NMT_HPP_INCLUDED

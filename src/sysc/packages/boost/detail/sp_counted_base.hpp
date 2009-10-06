@@ -1,5 +1,5 @@
-#ifndef BOOST_DETAIL_SP_COUNTED_BASE_HPP_INCLUDED
-#define BOOST_DETAIL_SP_COUNTED_BASE_HPP_INCLUDED
+#ifndef SC_BOOST_DETAIL_SP_COUNTED_BASE_HPP_INCLUDED
+#define SC_BOOST_DETAIL_SP_COUNTED_BASE_HPP_INCLUDED
 
 // MS compatible compilers support #pragma once
 
@@ -19,11 +19,11 @@
 
 #include <sysc/packages/boost/config.hpp>
 
-#if defined( BOOST_SP_DISABLE_THREADS )
+#if defined( SC_BOOST_SP_DISABLE_THREADS )
 
 # include <sysc/packages/boost/detail/sp_counted_base_nt.hpp>
 
-#elif defined( BOOST_SP_USE_PTHREADS )
+#elif defined( SC_BOOST_SP_USE_PTHREADS )
 
 # include <sysc/packages/boost/detail/sp_counted_base_pt.hpp>
 
@@ -51,19 +51,19 @@
 
 # include <sysc/packages/boost/detail/sp_counted_base_w32.hpp>
 
-#elif !defined( BOOST_HAS_THREADS )
+#elif !defined( SC_BOOST_HAS_THREADS )
 
 # include <sysc/packages/boost/detail/sp_counted_base_nt.hpp>
 
-#elif defined( BOOST_HAS_PTHREADS )
+#elif defined( SC_BOOST_HAS_PTHREADS )
 
 # include <sysc/packages/boost/detail/sp_counted_base_pt.hpp>
 
 #else
 
-// Use #define BOOST_DISABLE_THREADS to avoid the error
+// Use #define SC_BOOST_DISABLE_THREADS to avoid the error
 # error Unrecognized threading platform
 
 #endif
 
-#endif  // #ifndef BOOST_DETAIL_SP_COUNTED_BASE_HPP_INCLUDED
+#endif  // #ifndef SC_BOOST_DETAIL_SP_COUNTED_BASE_HPP_INCLUDED

@@ -7,7 +7,7 @@
 
 //  SGI C++ compiler setup:
 
-#define BOOST_COMPILER "SGI Irix compiler version " BOOST_STRINGIZE(_COMPILER_VERSION)
+#define SC_BOOST_COMPILER "SGI Irix compiler version " SC_BOOST_STRINGIZE(_COMPILER_VERSION)
 
 #include "sysc/packages/boost/config/compiler/common_edg.hpp"
 
@@ -16,7 +16,7 @@
 // Turn this on unconditionally here, it will get turned off again later
 // if no threading API is detected.
 //
-#define BOOST_HAS_THREADS
+#define SC_BOOST_HAS_THREADS
 //
 // version check:
 // probably nothing to do here?

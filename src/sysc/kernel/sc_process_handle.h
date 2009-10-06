@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_process_handle.h,v $
+// Revision 1.4  2009/05/22 16:06:29  acg
+//  Andy Goodrich: process control updates.
+//
 // Revision 1.3  2008/05/22 17:06:26  acg
 //  Andy Goodrich: updated copyright notice to include 2008.
 //
@@ -389,7 +392,7 @@ inline void sc_process_handle::throw_it( const EXCEPT& exception,
         m_target_p->throw_user(helper, descendants);
     }
 
-    // Suspend the current process to the throwees can execute.
+    // Suspend the current process so the throwees can execute.
     
     context_p->suspend_current_process();
 }

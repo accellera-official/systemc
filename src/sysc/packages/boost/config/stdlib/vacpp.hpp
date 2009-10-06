@@ -6,13 +6,13 @@
 //  See http://www.boost.org for most recent version.
 
 #if __IBMCPP__ <= 501
-#  define BOOST_NO_STD_ALLOCATOR
+#  define SC_BOOST_NO_STD_ALLOCATOR
 #endif
 
-#define BOOST_HAS_MACRO_USE_FACET
-#define BOOST_NO_STD_MESSAGES
+#define SC_BOOST_HAS_MACRO_USE_FACET
+#define SC_BOOST_NO_STD_MESSAGES
 
-#define BOOST_STDLIB "Visual Age default standard library"
+#define SC_BOOST_STDLIB "Visual Age default standard library"
 
 
 

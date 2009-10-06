@@ -6,8 +6,8 @@
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 // For more information, see http://www.boost.org/libs/utility
-#ifndef BOOST_RESULT_OF_HPP
-#define BOOST_RESULT_OF_HPP
+#ifndef SC_BOOST_RESULT_OF_HPP
+#define SC_BOOST_RESULT_OF_HPP
 
 #include <sysc/packages/boost/config.hpp>
 #include <sysc/packages/boost/type_traits/ice.hpp>
@@ -16,18 +16,18 @@
 #include <sysc/packages/boost/detail/workaround.hpp>
 #include <sysc/packages/boost/mpl/has_xxx.hpp>
 
-#ifndef BOOST_RESULT_OF_NUM_ARGS
-#  define BOOST_RESULT_OF_NUM_ARGS 10
+#ifndef SC_BOOST_RESULT_OF_NUM_ARGS
+#  define SC_BOOST_RESULT_OF_NUM_ARGS 10
 #endif
 
 namespace sc_boost {
 
 template<typename F> struct result_of;
 
-#if !defined(BOOST_NO_SFINAE) && !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-namespace detail {
+#if !defined(SC_BOOST_NO_SFINAE) && !defined(SC_BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+namespace sc_detail {
 
-BOOST_MPL_HAS_XXX_TRAIT_DEF(result_type)
+SC_BOOST_MPL_HAS_XXX_TRAIT_DEF(result_type)
 
 template<typename F, typename FArgs, bool HasResultType> struct get_result_of;
 
@@ -52,15 +52,15 @@ struct get_result_of<F, F(void), false>
 template<typename F, typename FArgs>
 struct result_of : get_result_of<F, FArgs, (has_result_type<F>::value)> {};
 
-} // end namespace detail
+} // end namespace sc_detail
 
-#define BOOST_PP_ITERATION_PARAMS_1 (3,(0,BOOST_RESULT_OF_NUM_ARGS,<sysc/packages/boost/utility/detail/result_of_iterate.hpp>))
-#include BOOST_PP_ITERATE()
+#define SC_BOOST_PP_ITERATION_PARAMS_1 (3,(0,SC_BOOST_RESULT_OF_NUM_ARGS,<sysc/packages/boost/utility/detail/result_of_iterate.hpp>))
+#include SC_BOOST_PP_ITERATE()
 
 #else
-#  define BOOST_NO_RESULT_OF 1
+#  define SC_BOOST_NO_RESULT_OF 1
 #endif
 
 }
 
-#endif // BOOST_RESULT_OF_HPP
+#endif // SC_BOOST_RESULT_OF_HPP

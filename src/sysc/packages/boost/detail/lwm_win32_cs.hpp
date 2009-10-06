@@ -1,5 +1,5 @@
-#ifndef BOOST_DETAIL_LWM_WIN32_CS_HPP_INCLUDED
-#define BOOST_DETAIL_LWM_WIN32_CS_HPP_INCLUDED
+#ifndef SC_BOOST_DETAIL_LWM_WIN32_CS_HPP_INCLUDED
+#define SC_BOOST_DETAIL_LWM_WIN32_CS_HPP_INCLUDED
 
 // MS compatible compilers support #pragma once
 
@@ -17,17 +17,17 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifdef BOOST_USE_WINDOWS_H
+#ifdef SC_BOOST_USE_WINDOWS_H
 #  include <windows.h>
 #endif
 
 namespace sc_boost
 {
 
-namespace detail
+namespace sc_detail
 {
 
-#ifndef BOOST_USE_WINDOWS_H
+#ifndef SC_BOOST_USE_WINDOWS_H
 
 struct CRITICAL_SECTION
 {
@@ -48,7 +48,7 @@ extern "C" __declspec(dllimport) void __stdcall EnterCriticalSection(CRITICAL_SE
 extern "C" __declspec(dllimport) void __stdcall LeaveCriticalSection(CRITICAL_SECTION *);
 extern "C" __declspec(dllimport) void __stdcall DeleteCriticalSection(CRITICAL_SECTION *);
 
-#endif // #ifndef BOOST_USE_WINDOWS_H
+#endif // #ifndef SC_BOOST_USE_WINDOWS_H
 
 class lightweight_mutex
 {
@@ -97,8 +97,8 @@ public:
     };
 };
 
-} // namespace detail
+} // namespace sc_detail
 
 } // namespace sc_boost
 
-#endif // #ifndef BOOST_DETAIL_LWM_WIN32_CS_HPP_INCLUDED
+#endif // #ifndef SC_BOOST_DETAIL_LWM_WIN32_CS_HPP_INCLUDED

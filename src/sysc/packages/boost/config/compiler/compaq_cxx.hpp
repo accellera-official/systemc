@@ -7,7 +7,7 @@
 
 //  Dec Alpha True64 C++ compiler setup:
 
-#define BOOST_COMPILER "Dec Alpha True64 " BOOST_STRINGIZE(__DECCXX_VER)
+#define SC_BOOST_COMPILER "Dec Alpha True64 " SC_BOOST_STRINGIZE(__DECCXX_VER)
 
 #include "sysc/packages/boost/config/compiler/common_edg.hpp"
 

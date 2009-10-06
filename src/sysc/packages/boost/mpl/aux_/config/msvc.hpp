@@ -1,6 +1,6 @@
 
-#ifndef BOOST_MPL_AUX_CONFIG_MSVC_HPP_INCLUDED
-#define BOOST_MPL_AUX_CONFIG_MSVC_HPP_INCLUDED
+#ifndef SC_BOOST_MPL_AUX_CONFIG_MSVC_HPP_INCLUDED
+#define SC_BOOST_MPL_AUX_CONFIG_MSVC_HPP_INCLUDED
 
 // Copyright Aleksey Gurtovoy 2002-2004
 //
@@ -15,7 +15,7 @@
 // $Revision: 1.1.1.1 $
 
 
-// BOOST_MSVC is defined here:
+// SC_BOOST_MSVC is defined here:
 #include <sysc/packages/boost/config.hpp>
 
-#endif // BOOST_MPL_AUX_CONFIG_MSVC_HPP_INCLUDED
+#endif // SC_BOOST_MPL_AUX_CONFIG_MSVC_HPP_INCLUDED

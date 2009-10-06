@@ -9,8 +9,8 @@
 // You are welcome to contact the author at:
 //  fernando_cacciola@hotmail.com
 //
-#ifndef BOOST_UTILITY_COMPARE_POINTEES_25AGO2003_HPP
-#define BOOST_UTILITY_COMPARE_POINTEES_25AGO2003_HPP
+#ifndef SC_BOOST_UTILITY_COMPARE_POINTEES_25AGO2003_HPP
+#define SC_BOOST_UTILITY_COMPARE_POINTEES_25AGO2003_HPP
 
 #include<functional>
 

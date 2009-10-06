@@ -83,8 +83,8 @@ class sc_process_b;
 // semantics for a process via its () operator. An instance of the supplied 
 // execution object will be kept to provide the semantics when the process is 
 // scheduled for execution. The () operator does not return a value. An example 
-// of an object that might be used for this helper function would be void BOOST 
-// bound function or method. 
+// of an object that might be used for this helper function would be void 
+// SC_BOOST bound function or method. 
 //
 // This class is derived from sc_process_host and overloads 
 // sc_process_host::semantics to provide the actual semantic content. 
@@ -125,7 +125,7 @@ class sc_spawn_object : public sc_process_host {
 //
 // This inline function spawns a process for execution. The execution semantics 
 // for the process being spawned will be provided by the supplied object 
-// instance via its () operator. (E.g., a BOOST bound function) 
+// instance via its () operator. (E.g., a SC_BOOST bound function) 
 // After creating the process it is registered with the simulator.
 //     object   =   object instance providing the execution semantics via its 
 //                  () operator.
@@ -175,8 +175,8 @@ inline sc_process_handle sc_spawn(
 // object will be kept to provide the semantics when the process is scheduled 
 // for execution. The () operator returns a value, which will be stored at the 
 // location specified by the supplied pointer. An example of an object that 
-// might be used for this helper function would be valued BOOST bound function 
-// or method. 
+// might be used for this helper function would be valued SC_BOOST bound 
+// function or method. 
 //
 //   sc_spawn_object_v( typename F::result_type* r_p, T f, const char* name_p,
 //                      const sc_spawn_options* opt_p )
@@ -202,8 +202,9 @@ inline sc_process_handle sc_spawn(
 //
 // This inline function spawns a process for execution. The execution semantics 
 // for the process being spawned will be provided by the supplied object 
-// instance via its () operator. (E.g., a BOOST bound function) That operator 
-// returns a value, which will be placed in the supplied return location. 
+// instance via its () operator. (E.g., a SC_BOOST bound function) That 
+// operator returns a value, which will be placed in the supplied return 
+// location. 
 // After creating the process it is registered with the simulator.
 //     object   =  object instance providing the execution semantics via its () 
 //                 operator.

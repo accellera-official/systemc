@@ -10,10 +10,10 @@
 //            specialization to unspecialized template (David Abrahams)
 // 06 Feb 01  Created (David Abrahams)
 
-#ifndef SELECT_TYPE_DWA20010206_HPP
-# define SELECT_TYPE_DWA20010206_HPP
+#ifndef SC_SELECT_TYPE_DWA20010206_HPP
+# define SC_SELECT_TYPE_DWA20010206_HPP
 
-namespace sc_boost { namespace detail {
+namespace sc_boost { namespace sc_detail {
 
   // Template class if_true -- select among 2 types based on a bool constant expression
   // Usage:
@@ -33,4 +33,4 @@ namespace sc_boost { namespace detail {
       struct then { typedef F type; };
   };
 }}
-#endif // SELECT_TYPE_DWA20010206_HPP
+#endif // SC_SELECT_TYPE_DWA20010206_HPP

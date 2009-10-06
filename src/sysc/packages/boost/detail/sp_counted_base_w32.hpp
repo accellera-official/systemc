@@ -1,5 +1,5 @@
-#ifndef BOOST_DETAIL_SP_COUNTED_BASE_W32_HPP_INCLUDED
-#define BOOST_DETAIL_SP_COUNTED_BASE_W32_HPP_INCLUDED
+#ifndef SC_BOOST_DETAIL_SP_COUNTED_BASE_W32_HPP_INCLUDED
+#define SC_BOOST_DETAIL_SP_COUNTED_BASE_W32_HPP_INCLUDED
 
 // MS compatible compilers support #pragma once
 
@@ -30,7 +30,7 @@
 namespace sc_boost
 {
 
-namespace detail
+namespace sc_detail
 {
 
 class sp_counted_base
@@ -69,7 +69,7 @@ public:
 
     void add_ref_copy()
     {
-        BOOST_INTERLOCKED_INCREMENT( &use_count_ );
+        SC_BOOST_INTERLOCKED_INCREMENT( &use_count_ );
     }
 
     bool add_ref_lock() // true on success
@@ -78,13 +78,13 @@ public:
         {
             long tmp = static_cast< long const volatile& >( use_count_ );
             if( tmp == 0 ) return false;
-            if( BOOST_INTERLOCKED_COMPARE_EXCHANGE( &use_count_, tmp + 1, tmp ) == tmp ) return true;
+            if( SC_BOOST_INTERLOCKED_COMPARE_EXCHANGE( &use_count_, tmp + 1, tmp ) == tmp ) return true;
         }
     }
 
     void release() // nothrow
     {
-        if( BOOST_INTERLOCKED_DECREMENT( &use_count_ ) == 0 )
+        if( SC_BOOST_INTERLOCKED_DECREMENT( &use_count_ ) == 0 )
         {
             dispose();
             weak_release();
@@ -93,12 +93,12 @@ public:
 
     void weak_add_ref() // nothrow
     {
-        BOOST_INTERLOCKED_INCREMENT( &weak_count_ );
+        SC_BOOST_INTERLOCKED_INCREMENT( &weak_count_ );
     }
 
     void weak_release() // nothrow
     {
-        if( BOOST_INTERLOCKED_DECREMENT( &weak_count_ ) == 0 )
+        if( SC_BOOST_INTERLOCKED_DECREMENT( &weak_count_ ) == 0 )
         {
             destroy();
         }
@@ -110,8 +110,8 @@ public:
     }
 };
 
-} // namespace detail
+} // namespace sc_detail
 
 } // namespace sc_boost
 
-#endif  // #ifndef BOOST_DETAIL_SP_COUNTED_BASE_W32_HPP_INCLUDED
+#endif  // #ifndef SC_BOOST_DETAIL_SP_COUNTED_BASE_W32_HPP_INCLUDED

@@ -1,5 +1,5 @@
-#ifndef BOOST_THROW_EXCEPTION_HPP_INCLUDED
-#define BOOST_THROW_EXCEPTION_HPP_INCLUDED
+#ifndef SC_BOOST_THROW_EXCEPTION_HPP_INCLUDED
+#define SC_BOOST_THROW_EXCEPTION_HPP_INCLUDED
 
 // MS compatible compilers support #pragma once
 
@@ -21,14 +21,14 @@
 
 #include <sysc/packages/boost/config.hpp>
 
-#ifdef BOOST_NO_EXCEPTIONS
+#ifdef SC_BOOST_NO_EXCEPTIONS
 # include <exception>
 #endif
 
 namespace sc_boost
 {
 
-#ifdef BOOST_NO_EXCEPTIONS
+#ifdef SC_BOOST_NO_EXCEPTIONS
 
 void throw_exception(std::exception const & e); // user defined
 
@@ -43,4 +43,4 @@ template<class E> inline void throw_exception(E const & e)
 
 } // namespace sc_boost
 
-#endif // #ifndef BOOST_THROW_EXCEPTION_HPP_INCLUDED
+#endif // #ifndef SC_BOOST_THROW_EXCEPTION_HPP_INCLUDED

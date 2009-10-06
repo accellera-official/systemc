@@ -12,8 +12,8 @@
 //  See http://www.boost.org/libs/dynamic_bitset for documentation.
 
 
-#ifndef BOOST_DETAIL_DYNAMIC_BITSET_HPP
-#define BOOST_DETAIL_DYNAMIC_BITSET_HPP
+#ifndef SC_BOOST_DETAIL_DYNAMIC_BITSET_HPP
+#define SC_BOOST_DETAIL_DYNAMIC_BITSET_HPP
 
 #include <cstddef> // for std::size_t
 #include "sysc/packages/boost/config.hpp"
@@ -23,7 +23,7 @@
 
 namespace sc_boost {
 
-  namespace detail {
+  namespace sc_detail {
 
     // Gives (read-)access to the object representation
     // of an object of type T (3.9p4). CANNOT be used
@@ -38,7 +38,7 @@ namespace sc_boost {
 
     // ------- count function implementation --------------
 
-    namespace dynamic_bitset_count_impl {
+    namespace sc_dynamic_bitset_count_impl {
 
     typedef unsigned char byte_type;
 
@@ -122,7 +122,7 @@ namespace sc_boost {
      }
 
 
-    } // dynamic_bitset_count_impl
+    } // sc_dynamic_bitset_count_impl
     // -------------------------------------------------------
 
 
@@ -160,7 +160,7 @@ namespace sc_boost {
     };
 
 
-  } // namespace detail
+  } // namespace sc_detail
 
 } // namespace sc_boost
 

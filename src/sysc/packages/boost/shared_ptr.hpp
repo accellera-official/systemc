@@ -1,5 +1,5 @@
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
-#define BOOST_SHARED_PTR_HPP_INCLUDED
+#ifndef SC_BOOST_SHARED_PTR_HPP_INCLUDED
+#define SC_BOOST_SHARED_PTR_HPP_INCLUDED
 
 //
 //  shared_ptr.hpp
@@ -16,7 +16,7 @@
 
 #include <sysc/packages/boost/config.hpp>   // for broken compiler workarounds
 
-#if defined(BOOST_NO_MEMBER_TEMPLATES) && !defined(BOOST_MSVC6_MEMBER_TEMPLATES)
+#if defined(SC_BOOST_NO_MEMBER_TEMPLATES) && !defined(SC_BOOST_MSVC6_MEMBER_TEMPLATES)
 #include <sysc/packages/boost/detail/shared_ptr_nmt.hpp>
 #else
 
@@ -32,7 +32,7 @@
 #include <typeinfo>             // for std::bad_cast
 #include <iosfwd>               // for std::basic_ostream
 
-#ifdef BOOST_MSVC  // moved here to work around VC++ compiler crash
+#ifdef SC_BOOST_MSVC  // moved here to work around VC++ compiler crash
 # pragma warning(push)
 # pragma warning(disable:4284) // odd return type for operator->
 #endif
@@ -43,7 +43,7 @@ namespace sc_boost
 template<class T> class weak_ptr;
 template<class T> class enable_shared_from_this;
 
-namespace detail
+namespace sc_detail
 {
 
 struct static_cast_tag {};
@@ -61,7 +61,7 @@ template<> struct shared_ptr_traits<void>
     typedef void reference;
 };
 
-#if !defined(BOOST_NO_CV_VOID_SPECIALIZATIONS)
+#if !defined(SC_BOOST_NO_CV_VOID_SPECIALIZATIONS)
 
 template<> struct shared_ptr_traits<void const>
 {
@@ -91,7 +91,7 @@ inline void sp_enable_shared_from_this( shared_count const & /*pn*/, ... )
 {
 }
 
-} // namespace detail
+} // namespace sc_detail
 
 
 //
@@ -114,7 +114,7 @@ public:
     typedef T element_type;
     typedef T value_type;
     typedef T * pointer;
-    typedef typename detail::shared_ptr_traits<T>::reference reference;
+    typedef typename sc_detail::shared_ptr_traits<T>::reference reference;
 
     shared_ptr(): px(0), pn() // never throws in 1.30+
     {
@@ -123,7 +123,7 @@ public:
     template<class Y>
     explicit shared_ptr( Y * p ): px( p ), pn( p ) // Y must be complete
     {
-        detail::sp_enable_shared_from_this( pn, p, p );
+        sc_detail::sp_enable_shared_from_this( pn, p, p );
     }
 
     //
@@ -134,7 +134,7 @@ public:
 
     template<class Y, class D> shared_ptr(Y * p, D d): px(p), pn(p, d)
     {
-        detail::sp_enable_shared_from_this( pn, p, p );
+        sc_detail::sp_enable_shared_from_this( pn, p, p );
     }
 
 //  generated copy constructor, assignment, destructor are fine...
@@ -164,26 +164,26 @@ public:
     }
 
     template<class Y>
-    shared_ptr(shared_ptr<Y> const & r, detail::static_cast_tag): px(static_cast<element_type *>(r.px)), pn(r.pn)
+    shared_ptr(shared_ptr<Y> const & r, sc_detail::static_cast_tag): px(static_cast<element_type *>(r.px)), pn(r.pn)
     {
     }
 
     template<class Y>
-    shared_ptr(shared_ptr<Y> const & r, detail::const_cast_tag): px(const_cast<element_type *>(r.px)), pn(r.pn)
+    shared_ptr(shared_ptr<Y> const & r, sc_detail::const_cast_tag): px(const_cast<element_type *>(r.px)), pn(r.pn)
     {
     }
 
     template<class Y>
-    shared_ptr(shared_ptr<Y> const & r, detail::dynamic_cast_tag): px(dynamic_cast<element_type *>(r.px)), pn(r.pn)
+    shared_ptr(shared_ptr<Y> const & r, sc_detail::dynamic_cast_tag): px(dynamic_cast<element_type *>(r.px)), pn(r.pn)
     {
         if(px == 0) // need to allocate new counter -- the cast failed
         {
-            pn = detail::shared_count();
+            pn = sc_detail::shared_count();
         }
     }
 
     template<class Y>
-    shared_ptr(shared_ptr<Y> const & r, detail::polymorphic_cast_tag): px(dynamic_cast<element_type *>(r.px)), pn(r.pn)
+    shared_ptr(shared_ptr<Y> const & r, sc_detail::polymorphic_cast_tag): px(dynamic_cast<element_type *>(r.px)), pn(r.pn)
     {
         if(px == 0)
         {
@@ -191,19 +191,19 @@ public:
         }
     }
 
-#ifndef BOOST_NO_AUTO_PTR
+#ifndef SC_BOOST_NO_AUTO_PTR
 
     template<class Y>
     explicit shared_ptr(std::auto_ptr<Y> & r): px(r.get()), pn()
     {
         Y * tmp = r.get();
-        pn = detail::shared_count(r);
-        detail::sp_enable_shared_from_this( pn, tmp, tmp );
+        pn = sc_detail::shared_count(r);
+        sc_detail::sp_enable_shared_from_this( pn, tmp, tmp );
     }
 
 #endif
 
-#if !defined(BOOST_MSVC) || (BOOST_MSVC > 1200)
+#if !defined(SC_BOOST_MSVC) || (SC_BOOST_MSVC > 1200)
 
     template<class Y>
     shared_ptr & operator=(shared_ptr<Y> const & r) // never throws
@@ -215,7 +215,7 @@ public:
 
 #endif
 
-#ifndef BOOST_NO_AUTO_PTR
+#ifndef SC_BOOST_NO_AUTO_PTR
 
     template<class Y>
     shared_ptr & operator=(std::auto_ptr<Y> & r)
@@ -233,7 +233,7 @@ public:
 
     template<class Y> void reset(Y * p) // Y must be complete
     {
-        BOOST_ASSERT(p == 0 || p != px); // catch self-reset errors
+        SC_BOOST_ASSERT(p == 0 || p != px); // catch self-reset errors
         this_type(p).swap(*this);
     }
 
@@ -244,13 +244,13 @@ public:
 
     reference operator* () const // never throws
     {
-        BOOST_ASSERT(px != 0);
+        SC_BOOST_ASSERT(px != 0);
         return *px;
     }
 
     T * operator-> () const // never throws
     {
-        BOOST_ASSERT(px != 0);
+        SC_BOOST_ASSERT(px != 0);
         return px;
     }
     
@@ -261,7 +261,7 @@ public:
 
     // implicit conversion to "bool"
 
-#if defined(__SUNPRO_CC) && BOOST_WORKAROUND(__SUNPRO_CC, <= 0x530)
+#if defined(__SUNPRO_CC) && SC_BOOST_WORKAROUND(__SUNPRO_CC, <= 0x530)
 
     operator bool () const
     {
@@ -269,7 +269,7 @@ public:
     }
 
 #elif \
-    ( defined(__MWERKS__) && BOOST_WORKAROUND(__MWERKS__, < 0x3200) ) || \
+    ( defined(__MWERKS__) && SC_BOOST_WORKAROUND(__MWERKS__, < 0x3200) ) || \
     ( defined(__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__ < 304) )
 
     typedef T * (this_type::*unspecified_bool_type)() const;
@@ -326,7 +326,7 @@ public:
 // Tasteless as this may seem, making all members public allows member templates
 // to work in the absence of member template friends. (Matthew Langston)
 
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#ifndef SC_BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 
 private:
 
@@ -337,7 +337,7 @@ private:
 #endif
 
     T * px;                     // contained pointer
-    detail::shared_count pn;    // reference counter
+    sc_detail::shared_count pn;    // reference counter
 
 };  // shared_ptr
 
@@ -374,39 +374,39 @@ template<class T> inline void swap(shared_ptr<T> & a, shared_ptr<T> & b)
 
 template<class T, class U> shared_ptr<T> static_pointer_cast(shared_ptr<U> const & r)
 {
-    return shared_ptr<T>(r, detail::static_cast_tag());
+    return shared_ptr<T>(r, sc_detail::static_cast_tag());
 }
 
 template<class T, class U> shared_ptr<T> const_pointer_cast(shared_ptr<U> const & r)
 {
-    return shared_ptr<T>(r, detail::const_cast_tag());
+    return shared_ptr<T>(r, sc_detail::const_cast_tag());
 }
 
 template<class T, class U> shared_ptr<T> dynamic_pointer_cast(shared_ptr<U> const & r)
 {
-    return shared_ptr<T>(r, detail::dynamic_cast_tag());
+    return shared_ptr<T>(r, sc_detail::dynamic_cast_tag());
 }
 
 // shared_*_cast names are deprecated. Use *_pointer_cast instead.
 
 template<class T, class U> shared_ptr<T> shared_static_cast(shared_ptr<U> const & r)
 {
-    return shared_ptr<T>(r, detail::static_cast_tag());
+    return shared_ptr<T>(r, sc_detail::static_cast_tag());
 }
 
 template<class T, class U> shared_ptr<T> shared_dynamic_cast(shared_ptr<U> const & r)
 {
-    return shared_ptr<T>(r, detail::dynamic_cast_tag());
+    return shared_ptr<T>(r, sc_detail::dynamic_cast_tag());
 }
 
 template<class T, class U> shared_ptr<T> shared_polymorphic_cast(shared_ptr<U> const & r)
 {
-    return shared_ptr<T>(r, detail::polymorphic_cast_tag());
+    return shared_ptr<T>(r, sc_detail::polymorphic_cast_tag());
 }
 
 template<class T, class U> shared_ptr<T> shared_polymorphic_downcast(shared_ptr<U> const & r)
 {
-    BOOST_ASSERT(dynamic_cast<T *>(r.get()) == r.get());
+    SC_BOOST_ASSERT(dynamic_cast<T *>(r.get()) == r.get());
     return shared_static_cast<T>(r);
 }
 
@@ -429,7 +429,7 @@ template<class Y> std::ostream & operator<< (std::ostream & os, shared_ptr<Y> co
 
 #else
 
-# if defined(BOOST_MSVC) && BOOST_WORKAROUND(BOOST_MSVC, <= 1200 && __SGI_STL_PORT)
+# if defined(SC_BOOST_MSVC) && SC_BOOST_WORKAROUND(SC_BOOST_MSVC, <= 1200 && __SGI_STL_PORT)
 // MSVC6 has problems finding std::basic_ostream through the using declaration in namespace _STL
 using std::basic_ostream;
 template<class E, class T, class Y> basic_ostream<E, T> & operator<< (basic_ostream<E, T> & os, shared_ptr<Y> const & p)
@@ -445,9 +445,9 @@ template<class E, class T, class Y> std::basic_ostream<E, T> & operator<< (std::
 
 // get_deleter (experimental)
 
-#if ( defined(__GNUC__) && BOOST_WORKAROUND(__GNUC__, < 3) ) || \
-    ( defined(__EDG_VERSION__) && BOOST_WORKAROUND(__EDG_VERSION__, <= 238) ) || \
-    ( defined(__HP_aCC) && BOOST_WORKAROUND(__HP_aCC, <= 33500) )
+#if ( defined(__GNUC__) && SC_BOOST_WORKAROUND(__GNUC__, < 3) ) || \
+    ( defined(__EDG_VERSION__) && SC_BOOST_WORKAROUND(__EDG_VERSION__, <= 238) ) || \
+    ( defined(__HP_aCC) && SC_BOOST_WORKAROUND(__HP_aCC, <= 33500) )
 
 // g++ 2.9x doesn't allow static_cast<X const *>(void *)
 // apparently EDG 2.38 and HP aCC A.03.35 also don't accept it
@@ -469,10 +469,10 @@ template<class D, class T> D * get_deleter(shared_ptr<T> const & p)
 
 } // namespace sc_boost
 
-#ifdef BOOST_MSVC
+#ifdef SC_BOOST_MSVC
 # pragma warning(pop)
 #endif    
 
-#endif  // #if defined(BOOST_NO_MEMBER_TEMPLATES) && !defined(BOOST_MSVC6_MEMBER_TEMPLATES)
+#endif  // #if defined(SC_BOOST_NO_MEMBER_TEMPLATES) && !defined(SC_BOOST_MSVC6_MEMBER_TEMPLATES)
 
-#endif  // #ifndef BOOST_SHARED_PTR_HPP_INCLUDED
+#endif  // #ifndef SC_BOOST_SHARED_PTR_HPP_INCLUDED

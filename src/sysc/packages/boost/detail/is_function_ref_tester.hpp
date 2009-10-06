@@ -5,30 +5,30 @@
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#if !defined(BOOST_PP_IS_ITERATING)
+#if !defined(SC_BOOST_PP_IS_ITERATING)
 
 ///// header body
 
-#ifndef BOOST_DETAIL_IS_FUNCTION_REF_TESTER_HPP_INCLUDED
-#define BOOST_DETAIL_IS_FUNCTION_REF_TESTER_HPP_INCLUDED
+#ifndef SC_BOOST_DETAIL_IS_FUNCTION_REF_TESTER_HPP_INCLUDED
+#define SC_BOOST_DETAIL_IS_FUNCTION_REF_TESTER_HPP_INCLUDED
 
 #include "sysc/packages/boost/type_traits/detail/yes_no_type.hpp"
 #include "sysc/packages/boost/type_traits/config.hpp"
 
-#if defined(BOOST_TT_PREPROCESSING_MODE)
+#if defined(SC_BOOST_TT_PREPROCESSING_MODE)
 #   include "sysc/packages/boost/preprocessor/iterate.hpp"
 #   include "sysc/packages/boost/preprocessor/enum_params.hpp"
 #   include "sysc/packages/boost/preprocessor/comma_if.hpp"
 #endif
 
 namespace sc_boost {
-namespace detail {
-namespace is_function_ref_tester_ {
+namespace sc_detail {
+namespace sc_is_function_ref_tester_ {
 
 template <class T>
-sc_boost::type_traits::no_type BOOST_TT_DECL is_function_ref_tester(T& ...);
+sc_boost::type_traits::no_type SC_BOOST_TT_DECL is_function_ref_tester(T& ...);
 
-#if !defined(BOOST_TT_PREPROCESSING_MODE)
+#if !defined(SC_BOOST_TT_PREPROCESSING_MODE)
 // preprocessor-generated part, don't edit by hand!
 
 template <class R>
@@ -111,25 +111,25 @@ sc_boost::type_traits::yes_type is_function_ref_tester(R (&)(T0,T1,T2,T3,T4,T5,T
 
 #else
 
-#define BOOST_PP_ITERATION_PARAMS_1 \
+#define SC_BOOST_PP_ITERATION_PARAMS_1 \
     (3, (0, 25, "sysc/packages/boost/type_traits/detail/is_function_ref_tester.hpp"))
-#include BOOST_PP_ITERATE()
+#include SC_BOOST_PP_ITERATE()
 
-#endif // BOOST_TT_PREPROCESSING_MODE
+#endif // SC_BOOST_TT_PREPROCESSING_MODE
 
-} // namespace detail
+} // namespace sc_detail
 } // namespace python
 } // namespace sc_boost
 
-#endif // BOOST_DETAIL_IS_FUNCTION_REF_TESTER_HPP_INCLUDED
+#endif // SC_BOOST_DETAIL_IS_FUNCTION_REF_TESTER_HPP_INCLUDED
 
 ///// iteration
 
 #else
-#define i BOOST_PP_FRAME_ITERATION(1)
+#define i SC_BOOST_PP_FRAME_ITERATION(1)
 
-template <class R BOOST_PP_COMMA_IF(i) BOOST_PP_ENUM_PARAMS(i,class T) >
-sc_boost::type_traits::yes_type is_function_ref_tester(R (&)(BOOST_PP_ENUM_PARAMS(i,T)), int);
+template <class R SC_BOOST_PP_COMMA_IF(i) SC_BOOST_PP_ENUM_PARAMS(i,class T) >
+sc_boost::type_traits::yes_type is_function_ref_tester(R (&)(SC_BOOST_PP_ENUM_PARAMS(i,T)), int);
 
 #undef i
-#endif // BOOST_PP_IS_ITERATING
+#endif // SC_BOOST_PP_IS_ITERATING

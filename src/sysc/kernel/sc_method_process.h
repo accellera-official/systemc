@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_method_process.h,v $
+// Revision 1.3  2009/05/22 16:06:29  acg
+//  Andy Goodrich: process control updates.
+//
 // Revision 1.2  2008/05/22 17:06:25  acg
 //  Andy Goodrich: updated copyright notice to include 2008.
 //
@@ -138,7 +141,8 @@ class sc_method_process : public sc_process_b {
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
     virtual void enable_process(
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
-    virtual void kill_process();
+    virtual void kill_process(
+        sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
     sc_method_handle next_exist();
     sc_method_handle next_runnable();
     void clear_trigger();
@@ -263,7 +267,7 @@ inline bool sc_method_process::ready_to_run()
 	  case ps_normal:
 	  	return true;
 	  case ps_suspended:
-	  	m_state = ps_suspended_and_pending;
+	  	m_state = ps_suspended_pending;
 		break;
 	  default:
 	  	break;

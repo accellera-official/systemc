@@ -17,8 +17,8 @@
 // rewriten swap to get gcc and C++ builder to compile.
 // added partial specialisations for case T1 == T2 to avoid duplicate constructor defs.
 
-#ifndef BOOST_DETAIL_COMPRESSED_PAIR_HPP
-#define BOOST_DETAIL_COMPRESSED_PAIR_HPP
+#ifndef SC_BOOST_DETAIL_COMPRESSED_PAIR_HPP
+#define SC_BOOST_DETAIL_COMPRESSED_PAIR_HPP
 
 #include <algorithm>
 
@@ -36,7 +36,7 @@ class compressed_pair;
 
 // compressed_pair
 
-namespace details
+namespace sc_details
 {
    // JM altered 26 Jan 2000:
    template <class T1, class T2, bool IsSame, bool FirstEmpty, bool SecondEmpty>
@@ -327,12 +327,12 @@ namespace details
       second_type second_;
    };
 
-}  // details
+}  // sc_details
 
 template <class T1, class T2>
 class compressed_pair
-   : private ::sc_boost::details::compressed_pair_imp<T1, T2,
-             ::sc_boost::details::compressed_pair_switch<
+   : private ::sc_boost::sc_details::compressed_pair_imp<T1, T2,
+             ::sc_boost::sc_details::compressed_pair_switch<
                     T1,
                     T2,
                     ::sc_boost::is_same<typename remove_cv<T1>::type, typename remove_cv<T2>::type>::value,
@@ -340,8 +340,8 @@ class compressed_pair
                     ::sc_boost::is_empty<T2>::value>::value>
 {
 private:
-   typedef details::compressed_pair_imp<T1, T2,
-             ::sc_boost::details::compressed_pair_switch<
+   typedef sc_details::compressed_pair_imp<T1, T2,
+             ::sc_boost::sc_details::compressed_pair_switch<
                     T1,
                     T2,
                     ::sc_boost::is_same<typename remove_cv<T1>::type, typename remove_cv<T2>::type>::value,
@@ -376,8 +376,8 @@ public:
 //
 template <class T>
 class compressed_pair<T, T>
-   : private details::compressed_pair_imp<T, T,
-             ::sc_boost::details::compressed_pair_switch<
+   : private sc_details::compressed_pair_imp<T, T,
+             ::sc_boost::sc_details::compressed_pair_switch<
                     T,
                     T,
                     ::sc_boost::is_same<typename remove_cv<T>::type, typename remove_cv<T>::type>::value,
@@ -385,8 +385,8 @@ class compressed_pair<T, T>
                     ::sc_boost::is_empty<T>::value>::value>
 {
 private:
-   typedef details::compressed_pair_imp<T, T,
-             ::sc_boost::details::compressed_pair_switch<
+   typedef sc_details::compressed_pair_imp<T, T,
+             ::sc_boost::sc_details::compressed_pair_switch<
                     T,
                     T,
                     ::sc_boost::is_same<typename remove_cv<T>::type, typename remove_cv<T>::type>::value,
@@ -428,5 +428,5 @@ swap(compressed_pair<T1, T2>& x, compressed_pair<T1, T2>& y)
 
 } // sc_boost
 
-#endif // BOOST_DETAIL_COMPRESSED_PAIR_HPP
+#endif // SC_BOOST_DETAIL_COMPRESSED_PAIR_HPP
 

@@ -43,6 +43,9 @@
  *****************************************************************************/
 
 // $Log: sc_process.cpp,v $
+// Revision 1.4  2009/05/22 16:06:29  acg
+//  Andy Goodrich: process control updates.
+//
 // Revision 1.3  2008/05/22 17:06:26  acg
 //  Andy Goodrich: updated copyright notice to include 2008.
 //
@@ -134,6 +137,73 @@ void sc_process_b::add_static_event( const sc_event& e )
     }
 }
 
+//------------------------------------------------------------------------------
+//"sc_process_b::disconnect_process"
+//
+// This method removes this object instance from use. It will be called by
+// the kill_process() methods of classes derived from it. This object instance
+// will be removed from any data structures it resides, other than existence.
+//------------------------------------------------------------------------------
+void sc_process_b::disconnect_process()
+{
+    int               mon_n;      // monitor queue size.
+    sc_thread_handle  thread_h;   // This process as a thread.
+
+    // IF THIS OBJECT IS PINING FOR THE FJORDS WE ARE DONE:
+
+    if ( m_state == ps_zombie ) return;    // Nothing to be done.
+
+    // IF THIS IS A THREAD SIGNAL ANY MONITORS WAITING FOR IT TO EXIT:
+
+    switch ( m_process_kind )
+    {
+      case SC_THREAD_PROC_:
+      case SC_CTHREAD_PROC_:
+        thread_h = DCAST<sc_thread_handle>(this);
+        assert( thread_h );
+        mon_n = thread_h->m_monitor_q.size();
+        if ( mon_n )
+        {
+            for ( int mon_i = 0; mon_i < mon_n; mon_i++ )
+            {
+                thread_h->m_monitor_q[mon_i]->signal( thread_h, 
+			      sc_process_monitor::spm_exit);
+            }
+        }
+        break;
+      default:
+        break;
+    }
+
+
+    // REMOVE EVENT WAITS, AND REMOVE THE PROCESS FROM ITS SC_RESET:
+
+    remove_dynamic_events();
+    remove_static_events();
+
+    for ( size_t rst_i = 0; rst_i < m_resets.size(); rst_i++ )
+    {
+        m_resets[rst_i]->remove_process( this );
+    }
+    m_resets.resize(0);
+
+    // REMOVE THIS INSTANCE FROM THE OBJECT HIERARCHY:
+
+    detach();
+
+
+    // FIRE THE TERMINATION EVENT, MARK AS TERMINATED, AND DECREMENT THE COUNT:
+    //
+    // (1) We wait to set the process kind until after doing the removals
+    //     above.
+    // (2) Decrementing the reference count will result in actual object 
+    //     deletion if we hit zero.
+
+    m_state = ps_zombie;
+    if ( m_term_event_p ) m_term_event_p->notify();
+    reference_decrement();
+}
+
 
 //------------------------------------------------------------------------------
 //"sc_process_b::dont_initialize"
@@ -158,42 +228,17 @@ const char* sc_process_b::gen_unique_name( const char* basename_,
     return m_name_gen_p->gen_unique_name( basename_, preserve_first );
 }
 
-
 //------------------------------------------------------------------------------
-//"sc_process_b::kill_process"
+//"sc_process_b::remove_dynamic_events"
 //
-// This method removes this object instance from use. It will be called by
-// the kill_process() methods of classes derived from it. This object 
-// will be removed from any data structures it resides, other than existence.
+// This method removes this object instance from the events in its dynamic
+// event lists.
 //------------------------------------------------------------------------------
-void sc_process_b::kill_process( sc_descendant_inclusion_info descendants )
+void
+sc_process_b::remove_dynamic_events()
 {
-    int                              child_i;    // Index of child accessing.
-    int                              child_n;    // Number of children.
-    sc_process_b*                    child_p;    // Child accessing.
-    const ::std::vector<sc_object*>* children_p; // Vector of children.
-    sc_method_handle                 method_h;   // This process as a method.
-    sc_thread_handle                 thread_h;   // This process as a thread.
-
-    // IF NEEDED PROPOGATE THE SUSPEND REQUEST THROUGH OUR DESCENDANTS:
-
-    if ( descendants == SC_INCLUDE_DESCENDANTS )
-    {
-        children_p = &get_child_objects();
-        child_n = children_p->size();
-        for ( child_i = 0; child_i < child_n; child_i++ )
-        {
-            child_p = DCAST<sc_process_b*>((*children_p)[child_i]);
-            if ( child_p ) child_p->disable_process(descendants);
-        }
-    }
-
-    // IF THIS OBJECT IS PUSHING UP DAISIES WE ARE DONE:
-
-    if ( m_state == ps_zombie ) return;    // Nothing to be done.
-
-
-    // REMOVE ANY DYNAMIC WAITS:
+    sc_method_handle  method_h;   // This process as a method.
+    sc_thread_handle  thread_h;   // This process as a thread.
 
     switch ( m_process_kind )
     {
@@ -201,6 +246,10 @@ void sc_process_b::kill_process( sc_descendant_inclusion_info descendants )
       case SC_CTHREAD_PROC_:
         thread_h = DCAST<sc_thread_handle>(this);
         assert( thread_h );
+	if ( thread_h->m_timeout_event_p ) {
+	    thread_h->m_timeout_event_p->remove_dynamic(thread_h);
+	    thread_h->m_timeout_event_p->cancel();
+	}
         if ( m_event_p ) m_event_p->remove_dynamic( thread_h );
         if ( m_event_list_p )
         {
@@ -222,30 +271,6 @@ void sc_process_b::kill_process( sc_descendant_inclusion_info descendants )
         // std::cout << "Check " << __FILE__ << ":" << __LINE__ << std::endl;
         break;
     }
-
-
-    // REMOVE STATIC WAITS, AND REMOVE THE PROCESS FROM ITS SC_RESET:
-
-    remove_static_events();
-    if ( m_areset_p ) m_areset_p->remove_process( this );
-    if ( m_reset_p ) m_reset_p->remove_process( this );
-
-
-    // REMOVE THIS INSTANCE FROM THE OBJECT HIERARCHY:
-
-	detach();
-
-
-    // FIRE THE TERMINATION EVENT, MARK AS TERMINATED, AND DECREMENT THE COUNT:
-    //
-    // (1) We wait to set the process kind until after doing the removals
-    //     above.
-    // (2) Decrementing the reference count will result in actual object 
-    //     deletion if we hit zero.
-
-    m_state = ps_zombie;
-    if ( m_term_event_p ) m_term_event_p->notify();
-    reference_decrement();
 }
 
 //------------------------------------------------------------------------------
@@ -297,23 +322,24 @@ sc_process_b::sc_process_b( const char* name_p, bool free_host,
 ) :
     sc_object( name_p ),
     proc_id( simcontext()->next_proc_id()),
-    m_areset_p(0),
+    m_active_areset_n(0),
+    m_active_reset_n(0),
     m_dont_init( false ),
     m_dynamic_proc( simcontext()->elaboration_done() ),
     m_event_p(0),
     m_event_list_p(0),
     m_exist_p(0),
+    m_explicit_reset(false),
     m_free_host( free_host ),
     m_last_report_p(0),
     m_name_gen_p(0),
     m_process_kind(SC_NO_PROC_),
     m_references_n(1), 
-    m_reset_p(0),
+    m_resume_event_p(0),
     m_runnable_p(0),
     m_semantics_host_p( host_p ),
     m_semantics_method_p ( method_p ),
-	m_state(ps_normal),
-	m_sync_reset(false),
+    m_state(ps_normal),
     m_term_event_p(0),
     m_throw_helper_p(0),
     m_throw_type( THROW_NONE ),
@@ -359,6 +385,7 @@ sc_process_b::~sc_process_b()
 
     if ( m_name_gen_p ) delete m_name_gen_p;
     if ( m_last_report_p ) delete m_last_report_p;
+    if ( m_resume_event_p ) delete m_resume_event_p;
     if ( m_term_event_p ) delete m_term_event_p;
     if ( m_timeout_event_p ) delete m_timeout_event_p;
 

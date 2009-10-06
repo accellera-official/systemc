@@ -1,5 +1,5 @@
-#ifndef BOOST_BIND_PROTECT_HPP_INCLUDED
-#define BOOST_BIND_PROTECT_HPP_INCLUDED
+#ifndef SC_BOOST_BIND_PROTECT_HPP_INCLUDED
+#define SC_BOOST_BIND_PROTECT_HPP_INCLUDED
 
 //
 //  protect.hpp
@@ -14,16 +14,16 @@
 namespace sc_boost
 {
 
-namespace _bi
+namespace sc_bi
 {
 
-template<class F> class protected_bind_t
+template<class F> class protectedsc_bind_t
 {
 public:
 
     typedef typename F::result_type result_type;
 
-    explicit protected_bind_t(F f): f_(f)
+    explicit protectedsc_bind_t(F f): f_(f)
     {
     }
 
@@ -132,13 +132,13 @@ private:
     F f_;
 };
 
-} // namespace _bi
+} // namespace sc_bi
 
-template<class F> _bi::protected_bind_t<F> protect(F f)
+template<class F> sc_bi::protectedsc_bind_t<F> protect(F f)
 {
-    return _bi::protected_bind_t<F>(f);
+    return sc_bi::protectedsc_bind_t<F>(f);
 }
 
 } // namespace sc_boost
 
-#endif // #ifndef BOOST_BIND_PROTECT_HPP_INCLUDED
+#endif // #ifndef SC_BOOST_BIND_PROTECT_HPP_INCLUDED

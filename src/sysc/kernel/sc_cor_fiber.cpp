@@ -35,6 +35,9 @@
 
 
 // $Log: sc_cor_fiber.cpp,v $
+// Revision 1.3  2009/05/22 16:06:29  acg
+//  Andy Goodrich: process control updates.
+//
 // Revision 1.2  2008/05/22 17:06:25  acg
 //  Andy Goodrich: updated copyright notice to include 2008.
 //
@@ -130,7 +133,7 @@ sc_cor_pkg_fiber::create( std::size_t stack_size, sc_cor_fn* fn, void* arg )
     sc_cor_fiber* cor = new sc_cor_fiber;
     cor->m_pkg = this;
     cor->m_stack_size = stack_size;
-    cor->m_fiber = CreateFiber( cor->m_stack_size,
+    cor->m_fiber = CreateFiber( cor->m_stack_size / 2, cor->m_stack_size,
 			        (LPFIBER_START_ROUTINE) fn, arg );
     return cor;
 }

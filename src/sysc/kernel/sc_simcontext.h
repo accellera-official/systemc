@@ -38,10 +38,10 @@
   Description of Modification: - support for dynamic process
                                - support for sc export registry
                                - new member methods elaborate(), 
-				 prepare_to_simulate(), and initial_crunch()
-				 that are invoked by initialize() in that order
+                 prepare_to_simulate(), and initial_crunch()
+                 that are invoked by initialize() in that order
                                - add sc_get_last_created_process_handle() for 
-				 use before simulation starts
+                 use before simulation starts
                                
       Name, Affiliation, Date: Bishnupriya Bhattacharya, Cadence Design Systems,
                                3 March, 2004
@@ -52,6 +52,9 @@
                                
  *****************************************************************************/
 // $Log: sc_simcontext.h,v $
+// Revision 1.4  2009/05/22 16:06:29  acg
+//  Andy Goodrich: process control updates.
+//
 // Revision 1.3  2008/05/22 17:06:26  acg
 //  Andy Goodrich: updated copyright notice to include 2008.
 //
@@ -198,7 +201,7 @@ class sc_simcontext
     friend class sc_method_process;
     friend class sc_process_b;
     friend class sc_process_handle;
-	friend class sc_prim_channel;
+    friend class sc_prim_channel;
     friend class sc_cthread_process;
     friend class sc_thread_process;
     friend sc_dt::uint64 sc_delta_count();
@@ -209,6 +212,8 @@ class sc_simcontext
 
     friend bool sc_end_of_simulation_invoked();
     friend bool sc_start_of_simulation_invoked();
+    friend void sc_cthread_cor_fn(void*);
+    friend void sc_thread_cor_fn(void*);
 
     void init();
     void clean();
@@ -226,7 +231,7 @@ public:
     void reset();
 
     int sim_status() const;
-	bool elaboration_done() const;
+    bool elaboration_done() const;
 
     sc_object_manager* get_object_manager();
 
@@ -249,16 +254,16 @@ public:
 
     // process creation
     sc_process_handle create_cthread_process( 
-	const char* name_p, bool free_host, SC_ENTRY_FUNC method_p, 
-	sc_process_host* host_p, const sc_spawn_options* opt_p );
+    const char* name_p, bool free_host, SC_ENTRY_FUNC method_p, 
+    sc_process_host* host_p, const sc_spawn_options* opt_p );
 
     sc_process_handle create_method_process( 
-	const char* name_p, bool free_host, SC_ENTRY_FUNC method_p, 
-	sc_process_host* host_p, const sc_spawn_options* opt_p );
+    const char* name_p, bool free_host, SC_ENTRY_FUNC method_p, 
+    sc_process_host* host_p, const sc_spawn_options* opt_p );
 
     sc_process_handle create_thread_process( 
-	const char* name_p, bool free_host, SC_ENTRY_FUNC method_p, 
-	sc_process_host* host_p, const sc_spawn_options* opt_p );
+    const char* name_p, bool free_host, SC_ENTRY_FUNC method_p, 
+    sc_process_host* host_p, const sc_spawn_options* opt_p );
 
     sc_curr_proc_handle get_curr_proc_info();
     sc_object* get_current_writer() const;
@@ -278,7 +283,7 @@ public:
     const sc_time& time_stamp() const;
 
     sc_dt::uint64 delta_count() const;
-	bool event_occurred( sc_dt::uint64 last_change_count ) const;
+    bool event_occurred( sc_dt::uint64 last_change_count ) const;
     bool is_running() const;
     bool update_phase() const;
     bool get_error();
@@ -322,19 +327,19 @@ private:
     void remove_runnable_method( sc_method_handle );
     void remove_runnable_thread( sc_thread_handle );
 
-	void requeue_current_process();
-	void suspend_current_process();
+    void requeue_current_process();
+    void suspend_current_process();
 
     void do_sc_stop_action();
 
 private:
 
     enum execution_phases {
-	    phase_initialize = 0,
-	    phase_evaluate,
-	    phase_update,
-	    phase_notify
-	};
+        phase_initialize = 0,
+        phase_evaluate,
+        phase_update,
+        phase_notify
+    };
     sc_object_manager*          m_object_manager;
 
     sc_module_registry*         m_module_registry;
@@ -496,7 +501,7 @@ inline
 bool
 sc_simcontext::event_occurred(sc_dt::uint64 last_change_count) const
 {
-	return m_delta_count == last_change_count;
+    return m_delta_count == last_change_count;
 }
 
 inline

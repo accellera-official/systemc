@@ -26,7 +26,7 @@
 // 03 Mar 2001 - Put all implementation into namespace
 //               sc_boost::detail::iterator_traits_. Some progress made on fixes
 //               for Intel compiler. (David Abrahams)
-// 02 Mar 2001 - Changed BOOST_MSVC to BOOST_MSVC_STD_ITERATOR in a few
+// 02 Mar 2001 - Changed SC_BOOST_MSVC to SC_BOOST_MSVC_STD_ITERATOR in a few
 //               places. (Jeremy Siek)
 // 19 Feb 2001 - Improved workarounds for stock MSVC6; use yes_type and
 //               no_type from type_traits.hpp; stopped trying to remove_cv
@@ -47,8 +47,8 @@
 // 06 Feb 2001 - Removed useless #includes of standard library headers
 //               (David Abrahams)
 
-#ifndef ITERATOR_DWA122600_HPP_
-# define ITERATOR_DWA122600_HPP_
+#ifndef SC_ITERATOR_DWA122600_HPP_
+# define SC_ITERATOR_DWA122600_HPP_
 
 # include <sysc/packages/boost/config.hpp>
 # include <iterator>
@@ -63,18 +63,18 @@
 # if defined(__SGI_STL_PORT)
 
 #  if (__SGI_STL_PORT <= 0x410) && !defined(__STL_CLASS_PARTIAL_SPECIALIZATION) && defined(__STL_DEBUG)
-#   define BOOST_BAD_CONTAINER_ITERATOR_CATEGORY_TYPEDEF
+#   define SC_BOOST_BAD_CONTAINER_ITERATOR_CATEGORY_TYPEDEF
 #  endif
 
-#  define BOOST_BAD_OUTPUT_ITERATOR_SPECIALIZATION
+#  define SC_BOOST_BAD_OUTPUT_ITERATOR_SPECIALIZATION
 
 # endif // STLPort <= 4.1b4 && no partial specialization
 
-# if !defined(BOOST_NO_STD_ITERATOR_TRAITS)             \
-  && !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
-  && !defined(BOOST_MSVC_STD_ITERATOR)
+# if !defined(SC_BOOST_NO_STD_ITERATOR_TRAITS)             \
+  && !defined(SC_BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
+  && !defined(SC_BOOST_MSVC_STD_ITERATOR)
     
-namespace sc_boost { namespace detail {
+namespace sc_boost { namespace sc_detail {
 
 // Define a new template so it can be specialized
 template <class Iterator>
@@ -83,16 +83,16 @@ struct iterator_traits
 {};
 using std::distance;
 
-}} // namespace sc_boost::detail
+}} // namespace sc_boost::sc_detail
 
 # else
 
-#  if  !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)  \
-    && !defined(BOOST_MSVC_STD_ITERATOR)
+#  if  !defined(SC_BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)  \
+    && !defined(SC_BOOST_MSVC_STD_ITERATOR)
 
-// This is the case where everything conforms except BOOST_NO_STD_ITERATOR_TRAITS
+// This is the case where everything conforms except SC_BOOST_NO_STD_ITERATOR_TRAITS
 
-namespace sc_boost { namespace detail {
+namespace sc_boost { namespace sc_detail {
 
 // Rogue Wave Standard Library fools itself into thinking partial
 // specialization is missing on some platforms (e.g. Sun), so fails to
@@ -127,7 +127,7 @@ struct iterator_traits<T const*>
     typedef std::random_access_iterator_tag iterator_category;
 };
 
-}} // namespace sc_boost::detail
+}} // namespace sc_boost::sc_detail
 
 #  else
 
@@ -135,11 +135,11 @@ struct iterator_traits<T const*>
 # include <sysc/packages/boost/type_traits/detail/yes_no_type.hpp>
 # include <sysc/packages/boost/type_traits/is_pointer.hpp>
 
-# ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+# ifdef SC_BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 #  include <sysc/packages/boost/type_traits/is_same.hpp>
 #  include <sysc/packages/boost/type_traits/remove_pointer.hpp>
 # endif
-# ifdef BOOST_BAD_OUTPUT_ITERATOR_SPECIALIZATION
+# ifdef SC_BOOST_BAD_OUTPUT_ITERATOR_SPECIALIZATION
 #  include <sysc/packages/boost/type_traits/is_base_and_derived.hpp>
 # endif
 
@@ -150,13 +150,13 @@ struct iterator_traits<T const*>
 // should be the last #include
 # include "sysc/packages/boost/type_traits/detail/bool_trait_def.hpp"
 
-namespace sc_boost { namespace detail {
+namespace sc_boost { namespace sc_detail {
 
-BOOST_MPL_HAS_XXX_TRAIT_DEF(value_type)
-BOOST_MPL_HAS_XXX_TRAIT_DEF(reference)
-BOOST_MPL_HAS_XXX_TRAIT_DEF(pointer)
-BOOST_MPL_HAS_XXX_TRAIT_DEF(difference_type)
-BOOST_MPL_HAS_XXX_TRAIT_DEF(iterator_category)
+SC_BOOST_MPL_HAS_XXX_TRAIT_DEF(value_type)
+SC_BOOST_MPL_HAS_XXX_TRAIT_DEF(reference)
+SC_BOOST_MPL_HAS_XXX_TRAIT_DEF(pointer)
+SC_BOOST_MPL_HAS_XXX_TRAIT_DEF(difference_type)
+SC_BOOST_MPL_HAS_XXX_TRAIT_DEF(iterator_category)
 
 // is_mutable_iterator --
 //
@@ -170,7 +170,7 @@ BOOST_MPL_HAS_XXX_TRAIT_DEF(iterator_category)
 // This one detects ordinary mutable iterators - the result of
 // operator* is convertible to the value_type.
 template <class T>
-type_traits::yes_type is_mutable_iterator_helper(T const*, BOOST_DEDUCED_TYPENAME T::value_type*);
+type_traits::yes_type is_mutable_iterator_helper(T const*, SC_BOOST_DEDUCED_TYPENAME T::value_type*);
 
 // Since you can't take the address of an rvalue, the guts of
 // is_mutable_iterator_impl will fail if we use &*t directly.  This
@@ -191,9 +191,9 @@ struct is_mutable_iterator_impl
 {
     static T t;
     
-    BOOST_STATIC_CONSTANT(
+    SC_BOOST_STATIC_CONSTANT(
         bool, value = sizeof(
-            detail::is_mutable_iterator_helper(
+            sc_detail::is_mutable_iterator_helper(
                 (T*)0
               , mutable_iterator_lvalue_helper(*t) // like &*t
             ))
@@ -201,8 +201,8 @@ struct is_mutable_iterator_impl
     );
 };
 
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(
-    is_mutable_iterator,T,::sc_boost::detail::is_mutable_iterator_impl<T>::value)
+SC_BOOST_TT_AUX_BOOL_TRAIT_DEF1(
+    is_mutable_iterator,T,::sc_boost::sc_detail::is_mutable_iterator_impl<T>::value)
 
 
 // is_full_iterator_traits --
@@ -222,12 +222,12 @@ struct is_full_iterator_traits_impl
     };
 };
 
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(
-    is_full_iterator_traits,T,::sc_boost::detail::is_full_iterator_traits_impl<T>::value)
+SC_BOOST_TT_AUX_BOOL_TRAIT_DEF1(
+    is_full_iterator_traits,T,::sc_boost::sc_detail::is_full_iterator_traits_impl<T>::value)
 
 
-#   ifdef BOOST_BAD_CONTAINER_ITERATOR_CATEGORY_TYPEDEF
-BOOST_MPL_HAS_XXX_TRAIT_DEF(_Iterator_category)
+#   ifdef SC_BOOST_BAD_CONTAINER_ITERATOR_CATEGORY_TYPEDEF
+SC_BOOST_MPL_HAS_XXX_TRAIT_DEF(_Iterator_category)
     
 // is_stlport_40_debug_iterator --
 //
@@ -246,8 +246,8 @@ struct is_stlport_40_debug_iterator_impl
     };
 };
 
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(
-    is_stlport_40_debug_iterator,T,::sc_boost::detail::is_stlport_40_debug_iterator_impl<T>::value)
+SC_BOOST_TT_AUX_BOOL_TRAIT_DEF1(
+    is_stlport_40_debug_iterator,T,::sc_boost::sc_detail::is_stlport_40_debug_iterator_impl<T>::value)
 
 template <class T>
 struct stlport_40_debug_iterator_traits
@@ -258,11 +258,11 @@ struct stlport_40_debug_iterator_traits
     typedef typename T::difference_type difference_type;
     typedef typename T::_Iterator_category iterator_category;
 };
-#   endif // BOOST_BAD_CONTAINER_ITERATOR_CATEGORY_TYPEDEF 
+#   endif // SC_BOOST_BAD_CONTAINER_ITERATOR_CATEGORY_TYPEDEF 
 
 template <class T> struct pointer_iterator_traits;
 
-#   ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#   ifndef SC_BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 template <class T>
 struct pointer_iterator_traits<T*>
 {
@@ -279,13 +279,13 @@ struct pointer_iterator_traits<T*>
 // some basic types, remove_pointer is manually defined in
 // type_traits/broken_compiler_spec.hpp. For others, do it yourself.
 
-template<class P> class please_invoke_BOOST_TT_BROKEN_COMPILER_SPEC_on_cv_unqualified_pointee;
+template<class P> class please_invoke_SC_BOOST_TT_BROKEN_COMPILER_SPEC_on_cv_unqualified_pointee;
 
 template<class P>
 struct pointer_value_type
   : mpl::if_<
         is_same<P, typename remove_pointer<P>::type>
-      , please_invoke_BOOST_TT_BROKEN_COMPILER_SPEC_on_cv_unqualified_pointee<P>
+      , please_invoke_SC_BOOST_TT_BROKEN_COMPILER_SPEC_on_cv_unqualified_pointee<P>
       , typename remove_const<
             typename remove_pointer<P>::type
         >::type
@@ -298,7 +298,7 @@ template<class P>
 struct pointer_reference
   : mpl::if_<
         is_same<P, typename remove_pointer<P>::type>
-      , please_invoke_BOOST_TT_BROKEN_COMPILER_SPEC_on_cv_unqualified_pointee<P>
+      , please_invoke_SC_BOOST_TT_BROKEN_COMPILER_SPEC_on_cv_unqualified_pointee<P>
       , typename remove_pointer<P>::type&
     >
 {
@@ -315,7 +315,7 @@ struct pointer_iterator_traits
     typedef typename pointer_reference<T>::type reference;
 };
 
-#   endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#   endif // SC_BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 // We'll sort iterator types into one of these classifications, from which we
 // can determine the difference_type, pointer, reference, and value_type
@@ -347,7 +347,7 @@ struct msvc_stdlib_const_traits
     typedef const typename std::iterator_traits<Iterator>::value_type& reference;
 };
 
-#   ifdef BOOST_BAD_OUTPUT_ITERATOR_SPECIALIZATION
+#   ifdef SC_BOOST_BAD_OUTPUT_ITERATOR_SPECIALIZATION
 template <class Iterator>
 struct is_bad_output_iterator
     : is_base_and_derived<
@@ -384,7 +384,7 @@ struct non_pointer_iterator_traits
         is_full_iterator_traits<Iterator>
         // Use a standard iterator_traits implementation
         , standard_iterator_traits<Iterator>
-#   ifdef BOOST_BAD_CONTAINER_ITERATOR_CATEGORY_TYPEDEF
+#   ifdef SC_BOOST_BAD_CONTAINER_ITERATOR_CATEGORY_TYPEDEF
         // Check for STLPort 4.0 broken _Iterator_category type
         , mpl::if_<
              is_stlport_40_debug_iterator<Iterator>
@@ -392,7 +392,7 @@ struct non_pointer_iterator_traits
 #   endif
         // Otherwise, assume it's a Dinkum iterator
         , msvc_stdlib_iterator_traits<Iterator>
-#   ifdef BOOST_BAD_CONTAINER_ITERATOR_CATEGORY_TYPEDEF
+#   ifdef SC_BOOST_BAD_CONTAINER_ITERATOR_CATEGORY_TYPEDEF
         >::type
 #   endif 
     >::type
@@ -415,7 +415,7 @@ struct iterator_traits
     // Explicit forwarding from base class needed to keep MSVC6 happy
     // under some circumstances.
  private:
-#   ifdef BOOST_BAD_OUTPUT_ITERATOR_SPECIALIZATION
+#   ifdef SC_BOOST_BAD_OUTPUT_ITERATOR_SPECIALIZATION
     typedef 
     typename mpl::if_<
         is_bad_output_iterator<Iterator>
@@ -443,13 +443,13 @@ template <> struct iterator_traits<int>
     typedef int iterator_category;
 };
 
-}} // namespace sc_boost::detail
+}} // namespace sc_boost::sc_detail
 
 #  endif // workarounds
 
-namespace sc_boost { namespace detail {
+namespace sc_boost { namespace sc_detail {
 
-namespace iterator_traits_
+namespace sc_iterator_traits_
 {
   template <class Iterator, class Difference>
   struct distance_select
@@ -470,16 +470,16 @@ namespace iterator_traits_
           return i2 - i1;
       }
   };
-} // namespace sc_boost::detail::iterator_traits_
+} // namespace sc_boost::sc_detail::sc_iterator_traits_
 
 template <class Iterator>
 inline typename iterator_traits<Iterator>::difference_type
 distance(Iterator first, Iterator last)
 {
     typedef typename iterator_traits<Iterator>::difference_type diff_t;
-    typedef typename ::sc_boost::detail::iterator_traits<Iterator>::iterator_category iterator_category;
+    typedef typename ::sc_boost::sc_detail::iterator_traits<Iterator>::iterator_category iterator_category;
     
-    return iterator_traits_::distance_select<Iterator,diff_t>::execute(
+    return sc_iterator_traits_::distance_select<Iterator,diff_t>::execute(
         first, last, (iterator_category*)0);
 }
 
@@ -488,7 +488,7 @@ distance(Iterator first, Iterator last)
 # endif
 
 
-# undef BOOST_BAD_CONTAINER_ITERATOR_CATEGORY_TYPEDEF
-# undef BOOST_BAD_OUTPUT_ITERATOR_SPECIALIZATION
+# undef SC_BOOST_BAD_CONTAINER_ITERATOR_CATEGORY_TYPEDEF
+# undef SC_BOOST_BAD_OUTPUT_ITERATOR_SPECIALIZATION
 
-#endif // ITERATOR_DWA122600_HPP_
+#endif // SC_ITERATOR_DWA122600_HPP_

@@ -1,5 +1,5 @@
-#ifndef BOOST_CURRENT_FUNCTION_HPP_INCLUDED
-#define BOOST_CURRENT_FUNCTION_HPP_INCLUDED
+#ifndef SC_BOOST_CURRENT_FUNCTION_HPP_INCLUDED
+#define SC_BOOST_CURRENT_FUNCTION_HPP_INCLUDED
 
 // MS compatible compilers support #pragma once
 
@@ -8,7 +8,7 @@
 #endif
 
 //
-//  boost/current_function.hpp - BOOST_CURRENT_FUNCTION
+//  boost/current_function.hpp - SC_BOOST_CURRENT_FUNCTION
 //
 //  Copyright (c) 2002 Peter Dimov and Multi Media Ltd.
 //
@@ -22,7 +22,7 @@
 namespace sc_boost
 {
 
-namespace detail
+namespace sc_detail
 {
 
 inline void current_function_helper()
@@ -30,34 +30,34 @@ inline void current_function_helper()
 
 #if defined(__GNUC__) || (defined(__MWERKS__) && (__MWERKS__ >= 0x3000)) || (defined(__ICC) && (__ICC >= 600))
 
-# define BOOST_CURRENT_FUNCTION __PRETTY_FUNCTION__
+# define SC_BOOST_CURRENT_FUNCTION __PRETTY_FUNCTION__
 
 #elif defined(__FUNCSIG__)
 
-# define BOOST_CURRENT_FUNCTION __FUNCSIG__
+# define SC_BOOST_CURRENT_FUNCTION __FUNCSIG__
 
 #elif (defined(__INTEL_COMPILER) && (__INTEL_COMPILER >= 600)) || (defined(__IBMCPP__) && (__IBMCPP__ >= 500))
 
-# define BOOST_CURRENT_FUNCTION __FUNCTION__
+# define SC_BOOST_CURRENT_FUNCTION __FUNCTION__
 
 #elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x550)
 
-# define BOOST_CURRENT_FUNCTION __FUNC__
+# define SC_BOOST_CURRENT_FUNCTION __FUNC__
 
 #elif defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901)
 
-# define BOOST_CURRENT_FUNCTION __func__
+# define SC_BOOST_CURRENT_FUNCTION __func__
 
 #else
 
-# define BOOST_CURRENT_FUNCTION "(unknown)"
+# define SC_BOOST_CURRENT_FUNCTION "(unknown)"
 
 #endif
 
 }
 
-} // namespace detail
+} // namespace sc_detail
 
 } // namespace sc_boost
 
-#endif // #ifndef BOOST_CURRENT_FUNCTION_HPP_INCLUDED
+#endif // #ifndef SC_BOOST_CURRENT_FUNCTION_HPP_INCLUDED

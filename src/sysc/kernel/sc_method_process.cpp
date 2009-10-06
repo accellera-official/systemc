@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_method_process.cpp,v $
+// Revision 1.3  2009/05/22 16:06:29  acg
+//  Andy Goodrich: process control updates.
+//
 // Revision 1.2  2008/05/22 17:06:25  acg
 //  Andy Goodrich: updated copyright notice to include 2008.
 //
@@ -150,17 +153,18 @@ void sc_method_process::disable_process(
 
     // SUSPEND OUR OBJECT INSTANCE:
 
-	switch( m_state )
-	{
-	  case ps_normal:
-	  	m_state = ps_disabled;
-		break;
-	  case ps_suspended:
-	  case ps_suspended_and_pending:
-	  	m_state = ps_disabled_and_suspended;
-		break;
-	  default:
-	  	break;
+    switch( m_state )
+    {
+      case ps_normal:
+        m_state = (next_runnable() == 0) ? ps_disabled : 
+                                           ps_disabled_pending;
+        break;
+      case ps_suspended:
+      case ps_suspended_pending:
+        m_state = ps_disabled_suspended;
+        break;
+      default:
+        break;
     }
 }
 
@@ -202,35 +206,48 @@ void sc_method_process::enable_process(
       case ps_disabled:
         m_state = ps_normal;
         break;
-      case ps_disabled_and_suspended:
+      case ps_disabled_suspended:
         m_state = ps_suspended;
         break;
       default:
         break;
-	}
+    }
 }
 
 
 //------------------------------------------------------------------------------
 //"sc_method_process::kill_process"
 //
-// This method removes this object instance from use. It calls the
-// sc_process_b::kill_process() method to perform low level clean up. Then
-// it aborts this process if it is the active process.
+// This method removes throws a kill for this object instance. It calls the
+// sc_process_b::kill_process() method to perform low level clean up. 
 //------------------------------------------------------------------------------
-void sc_method_process::kill_process()
+void sc_method_process::kill_process(sc_descendant_inclusion_info descendants)
 {
-    // CLEAN UP THE LOW LEVEL STUFF ASSOCIATED WITH THIS DATA STRUCTURE:
+    int                              child_i;    // Index of child accessing.
+    int                              child_n;    // Number of children.
+    sc_process_b*                    child_p;    // Child accessing.
+    const ::std::vector<sc_object*>* children_p; // Vector of children.
 
-    sc_process_b::kill_process();
+    // IF NEEDED PROPOGATE THE KILL REQUEST THROUGH OUR DESCENDANTS:
 
+    if ( descendants == SC_INCLUDE_DESCENDANTS )
+    {
+        children_p = &get_child_objects();
+        child_n = children_p->size();
+        for ( child_i = 0; child_i < child_n; child_i++ )
+        {
+            child_p = DCAST<sc_process_b*>((*children_p)[child_i]);
+            if ( child_p ) child_p->kill_process(descendants);
+        }
+    }
 
-    // REMOVE METHOD FROM RUN QUEUE:
+    // REMOVE OUR PROCESS FROM EVENTS, ETC., AND QUEUE IT SO IT CAN 
+    // THROW ITS KILL.
 
-    simcontext()->remove_runnable_method( this );
-
+    disconnect_process();
+    if ( next_runnable() == 0 ) simcontext()->push_runnable_method( this );
+    m_throw_type = THROW_KILL;
 }
-
 
 //------------------------------------------------------------------------------
 //"sc_method_process::sc_method_process"
@@ -289,29 +306,17 @@ sc_method_process::sc_method_process( const char* name_p,
                 this, *opt_p->m_sensitive_event_finders[i]);
         }
 
-		// process any reset signal specification:
-		if ( opt_p->m_areset_iface_p )
-		{
-			sc_reset::reset_signal_is(
-				true, *opt_p->m_areset_iface_p, opt_p->m_areset_level );
-		}
-		if ( opt_p->m_areset_port_p )
-		{
-			sc_reset::reset_signal_is(
-				true, *opt_p->m_areset_port_p, opt_p->m_areset_level );
-		}
-#if 0 // @@@@ not allowed in specification.
-		if ( opt_p->m_reset_iface_p )
-		{
-			sc_reset::reset_signal_is(
-				false, *opt_p->m_reset_iface_p, opt_p->m_reset_level );
-		}
-		if ( opt_p->m_reset_port_p )
-		{
-			sc_reset::reset_signal_is(
-				false, *opt_p->m_reset_port_p, opt_p->m_reset_level );
-		}
-#endif // @@@@
+    // process any reset signal specification:
+    if ( opt_p->m_areset_iface_p )
+    {
+        sc_reset::reset_signal_is(
+            true, *opt_p->m_areset_iface_p, opt_p->m_areset_level );
+    }
+    if ( opt_p->m_areset_port_p )
+    {
+        sc_reset::reset_signal_is(
+            true, *opt_p->m_areset_port_p, opt_p->m_areset_level );
+    }
     }
 
     else
@@ -359,22 +364,22 @@ void sc_method_process::suspend_process(
     }
 
     // SUSPEND OUR OBJECT INSTANCE:
-	//
-	// (1) If we are on the runnable queue then we are also pending.
-	// (2) If this is self-suspension we are also pending.
+    //
+    // (1) If we are on the runnable queue then we are also pending.
+    // (2) If this is self-suspension we are also pending.
 
-	switch( m_state )
-	{
-	  case ps_normal:
-		m_state = ( (next_runnable() != 0) ||
-			( sc_get_current_process_b() == DCAST<sc_process_b*>(this) ) ) ?
-			ps_suspended_and_pending : ps_suspended;
-		break;
-	  case ps_disabled:
-	  	m_state = ps_disabled_and_suspended;
-		break;
-	  default:
-	  	break;
+    switch( m_state )
+    {
+      case ps_normal:
+        m_state = ( (next_runnable() != 0) ||
+            ( sc_get_current_process_b() == DCAST<sc_process_b*>(this) ) ) ?
+            ps_suspended_pending : ps_suspended;
+        break;
+      case ps_disabled:
+        m_state = ps_disabled_suspended;
+        break;
+      default:
+        break;
     }
 }
 
@@ -415,17 +420,22 @@ void sc_method_process::resume_process(
       case ps_suspended:
         m_state = ps_normal;
         break;
-      case ps_suspended_and_pending:
+      case ps_suspended_pending:
         m_state = ps_normal;
-		if ( next_runnable() == 0 )
-			simcontext()->push_runnable_method( this );
+        if ( next_runnable() == 0 )
+	    if ( m_resume_event_p == 0 ) 
+	    {
+	        m_resume_event_p = new sc_event;
+	        add_static_event( *m_resume_event_p );
+	    }
+	    m_resume_event_p->notify(SC_ZERO_TIME);
         break;
-      case ps_disabled_and_suspended:
+      case ps_disabled_suspended:
         m_state = ps_disabled;
         break;
       default:
         break;
-	}
+    }
 }
 
 
@@ -438,11 +448,14 @@ void sc_method_process::resume_process(
 //------------------------------------------------------------------------------
 void sc_method_process::throw_reset( bool async )
 {
-	if ( async )
-	{
-		if ( m_event_p ) m_event_p->remove_dynamic( this );
-		if ( m_event_list_p ) m_event_list_p->remove_dynamic( this, 0 );
-		if ( next_runnable() == 0 ) simcontext()->push_runnable_method( this );
+    if ( async )
+    {
+        if ( m_event_p ) 
+            m_event_p->remove_dynamic( this );
+        if ( m_event_list_p ) 
+            m_event_list_p->remove_dynamic( this, 0 );
+        if ( next_runnable() == 0 ) 
+            simcontext()->push_runnable_method( this );
     }
 }
 

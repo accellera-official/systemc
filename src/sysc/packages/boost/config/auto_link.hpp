@@ -17,13 +17,13 @@ USAGE:
 
 Before including this header you must define one or more of define the following macros:
 
-BOOST_LIB_NAME:           Required: A string containing the basename of the library,
+SC_BOOST_LIB_NAME:           Required: A string containing the basename of the library,
                           for example boost_regex.
-BOOST_LIB_TOOLSET:        Optional: the base name of the toolset.
-BOOST_DYN_LINK:           Optional: when set link to dll rather than static library.
-BOOST_LIB_DIAGNOSTIC:     Optional: when set the header will print out the name
+SC_BOOST_LIB_TOOLSET:        Optional: the base name of the toolset.
+SC_BOOST_DYN_LINK:           Optional: when set link to dll rather than static library.
+SC_BOOST_LIB_DIAGNOSTIC:     Optional: when set the header will print out the name
                           of the library selected (useful for debugging).
-BOOST_AUTO_LINK_NOMANGLE: Specifies that we should link to BOOST_LIB_NAME.lib,
+SC_BOOST_AUTO_LINK_NOMANGLE: Specifies that we should link to SC_BOOST_LIB_NAME.lib,
                           rather than a mangled-name version.
 
 These macros will be undef'ed at the end of the header, further this header
@@ -36,26 +36,26 @@ Libraries for Borland and Microsoft compilers are automatically
 selected here, the name of the lib is selected according to the following
 formula:
 
-BOOST_LIB_PREFIX
-   + BOOST_LIB_NAME
+SC_BOOST_LIB_PREFIX
+   + SC_BOOST_LIB_NAME
    + "_"
-   + BOOST_LIB_TOOLSET
-   + BOOST_LIB_THREAD_OPT
-   + BOOST_LIB_RT_OPT
+   + SC_BOOST_LIB_TOOLSET
+   + SC_BOOST_LIB_THREAD_OPT
+   + SC_BOOST_LIB_RT_OPT
    "-"
-   + BOOST_LIB_VERSION
+   + SC_BOOST_LIB_VERSION
 
 These are defined as:
 
-BOOST_LIB_PREFIX:     "lib" for static libraries otherwise "".
+SC_BOOST_LIB_PREFIX:     "lib" for static libraries otherwise "".
 
-BOOST_LIB_NAME:       The base name of the lib ( for example boost_regex).
+SC_BOOST_LIB_NAME:       The base name of the lib ( for example boost_regex).
 
-BOOST_LIB_TOOLSET:    The compiler toolset name (vc6, vc7, bcb5 etc).
+SC_BOOST_LIB_TOOLSET:    The compiler toolset name (vc6, vc7, bcb5 etc).
 
-BOOST_LIB_THREAD_OPT: "-mt" for multithread builds, otherwise nothing.
+SC_BOOST_LIB_THREAD_OPT: "-mt" for multithread builds, otherwise nothing.
 
-BOOST_LIB_RT_OPT:     A suffix that indicates the runtime library used,
+SC_BOOST_LIB_RT_OPT:     A suffix that indicates the runtime library used,
                       contains one or more of the following letters after
                       a hiphen:
 
@@ -64,37 +64,37 @@ BOOST_LIB_RT_OPT:     A suffix that indicates the runtime library used,
                       g      debug/diagnostic runtime (release if not present).
                       p      STLPort Build.
 
-BOOST_LIB_VERSION:    The Boost version, in the form x_y, for Boost version x.y.
+SC_BOOST_LIB_VERSION:    The Boost version, in the form x_y, for Boost version x.y.
 
 
 ***************************************************************************/
 
 #ifdef __cplusplus
-#  ifndef BOOST_CONFIG_HPP
+#  ifndef SC_BOOST_CONFIG_HPP
 #     include <sysc/packages/boost/config.hpp>
 #  endif
 #elif defined(_MSC_VER) && !defined(__MWERKS__) && !defined(__EDG_VERSION__)
 //
 // C language compatability (no, honestly)
 //
-#  define BOOST_MSVC _MSC_VER
-#  define BOOST_STRINGIZE(X) BOOST_DO_STRINGIZE(X)
-#  define BOOST_DO_STRINGIZE(X) #X
+#  define SC_BOOST_MSVC _MSC_VER
+#  define SC_BOOST_STRINGIZE(X) SC_BOOST_DO_STRINGIZE(X)
+#  define SC_BOOST_DO_STRINGIZE(X) #X
 #endif
 //
 // Only include what follows for known and supported compilers:
 //
-#if defined(BOOST_MSVC) \
+#if defined(SC_BOOST_MSVC) \
     || defined(__BORLANDC__) \
     || (defined(__MWERKS__) && defined(_WIN32) && (__MWERKS__ >= 0x3000)) \
     || (defined(__ICL) && defined(_MSC_EXTENSIONS) && (_MSC_VER >= 1200))
 
-#ifndef BOOST_VERSION_HPP
+#ifndef SC_BOOST_VERSION_HPP
 #  include <sysc/packages/boost/version.hpp>
 #endif
 
-#ifndef BOOST_LIB_NAME
-#  error "Macro BOOST_LIB_NAME not set (internal error)"
+#ifndef SC_BOOST_LIB_NAME
+#  error "Macro SC_BOOST_LIB_NAME not set (internal error)"
 #endif
 
 //
@@ -108,57 +108,57 @@ BOOST_LIB_VERSION:    The Boost version, in the form x_y, for Boost version x.y.
 //
 // select toolset if not defined already:
 //
-#ifndef BOOST_LIB_TOOLSET
-#if defined(BOOST_MSVC) && (BOOST_MSVC == 1200)
+#ifndef SC_BOOST_LIB_TOOLSET
+#if defined(SC_BOOST_MSVC) && (SC_BOOST_MSVC == 1200)
 
    // vc6:
-#  define BOOST_LIB_TOOLSET "vc6"
+#  define SC_BOOST_LIB_TOOLSET "vc6"
 
-#elif defined(BOOST_MSVC) && (BOOST_MSVC == 1300)
+#elif defined(SC_BOOST_MSVC) && (SC_BOOST_MSVC == 1300)
 
    // vc7:
-#  define BOOST_LIB_TOOLSET "vc7"
+#  define SC_BOOST_LIB_TOOLSET "vc7"
 
-#elif defined(BOOST_MSVC) && (BOOST_MSVC == 1310)
+#elif defined(SC_BOOST_MSVC) && (SC_BOOST_MSVC == 1310)
 
    // vc71:
-#  define BOOST_LIB_TOOLSET "vc71"
+#  define SC_BOOST_LIB_TOOLSET "vc71"
 
-#elif defined(BOOST_MSVC) && (BOOST_MSVC >= 1400)
+#elif defined(SC_BOOST_MSVC) && (SC_BOOST_MSVC >= 1400)
 
    // vc80:
-#  define BOOST_LIB_TOOLSET "vc80"
+#  define SC_BOOST_LIB_TOOLSET "vc80"
 
 #elif defined(__BORLANDC__)
 
    // CBuilder 6:
-#  define BOOST_LIB_TOOLSET "bcb"
+#  define SC_BOOST_LIB_TOOLSET "bcb"
 
 #elif defined(__ICL)
 
    // Intel C++, no version number:
-#  define BOOST_LIB_TOOLSET "iw"
+#  define SC_BOOST_LIB_TOOLSET "iw"
 
 #elif defined(__MWERKS__) && (__MWERKS__ <= 0x31FF )
 
    // Metrowerks CodeWarrior 8.x
-#  define BOOST_LIB_TOOLSET "cw8"
+#  define SC_BOOST_LIB_TOOLSET "cw8"
 
 #elif defined(__MWERKS__) && (__MWERKS__ <= 0x32FF )
 
    // Metrowerks CodeWarrior 9.x
-#  define BOOST_LIB_TOOLSET "cw9"
+#  define SC_BOOST_LIB_TOOLSET "cw9"
 
 #endif
-#endif // BOOST_LIB_TOOLSET
+#endif // SC_BOOST_LIB_TOOLSET
 
 //
 // select thread opt:
 //
 #if defined(_MT) || defined(__MT__)
-#  define BOOST_LIB_THREAD_OPT "-mt"
+#  define SC_BOOST_LIB_THREAD_OPT "-mt"
 #else
-#  define BOOST_LIB_THREAD_OPT
+#  define SC_BOOST_LIB_THREAD_OPT
 #endif
 
 #if defined(_MSC_VER) || defined(__MWERKS__)
@@ -168,33 +168,33 @@ BOOST_LIB_VERSION:    The Boost version, in the form x_y, for Boost version x.y.
 #     if (defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)) && (defined(_STLP_OWN_IOSTREAMS) || defined(__STL_OWN_IOSTREAMS))
 
 #        if defined(_DEBUG) && (defined(__STL_DEBUG) || defined(_STLP_DEBUG))
-#            define BOOST_LIB_RT_OPT "-gdp"
+#            define SC_BOOST_LIB_RT_OPT "-gdp"
 #        elif defined(_DEBUG)
-#            define BOOST_LIB_RT_OPT "-gdp"
+#            define SC_BOOST_LIB_RT_OPT "-gdp"
 #            pragma message("warning: STLPort debug versions are built with /D_STLP_DEBUG=1")
 #            error "Build options aren't compatible with pre-built libraries"
 #        else
-#            define BOOST_LIB_RT_OPT "-p"
+#            define SC_BOOST_LIB_RT_OPT "-p"
 #        endif
 
 #     elif defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
 
 #        if defined(_DEBUG) && (defined(__STL_DEBUG) || defined(_STLP_DEBUG))
-#            define BOOST_LIB_RT_OPT "-gdpn"
+#            define SC_BOOST_LIB_RT_OPT "-gdpn"
 #        elif defined(_DEBUG)
-#            define BOOST_LIB_RT_OPT "-gdpn"
+#            define SC_BOOST_LIB_RT_OPT "-gdpn"
 #            pragma message("warning: STLPort debug versions are built with /D_STLP_DEBUG=1")
 #            error "Build options aren't compatible with pre-built libraries"
 #        else
-#            define BOOST_LIB_RT_OPT "-pn"
+#            define SC_BOOST_LIB_RT_OPT "-pn"
 #        endif
 
 #     else
 
 #        if defined(_DEBUG)
-#            define BOOST_LIB_RT_OPT "-gd"
+#            define SC_BOOST_LIB_RT_OPT "-gd"
 #        else
-#            define BOOST_LIB_RT_OPT
+#            define SC_BOOST_LIB_RT_OPT
 #        endif
 
 #     endif
@@ -204,33 +204,33 @@ BOOST_LIB_VERSION:    The Boost version, in the form x_y, for Boost version x.y.
 #     if (defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)) && (defined(_STLP_OWN_IOSTREAMS) || defined(__STL_OWN_IOSTREAMS))
 
 #        if defined(_DEBUG) && (defined(__STL_DEBUG) || defined(_STLP_DEBUG))
-#            define BOOST_LIB_RT_OPT "-sgdp"
+#            define SC_BOOST_LIB_RT_OPT "-sgdp"
 #        elif defined(_DEBUG)
-#             define BOOST_LIB_RT_OPT "-sgdp"
+#             define SC_BOOST_LIB_RT_OPT "-sgdp"
 #            pragma message("warning: STLPort debug versions are built with /D_STLP_DEBUG=1")
 #            error "Build options aren't compatible with pre-built libraries"
 #        else
-#            define BOOST_LIB_RT_OPT "-sp"
+#            define SC_BOOST_LIB_RT_OPT "-sp"
 #        endif
 
 #     elif defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
 
 #        if defined(_DEBUG) && (defined(__STL_DEBUG) || defined(_STLP_DEBUG))
-#            define BOOST_LIB_RT_OPT "-sgdpn"
+#            define SC_BOOST_LIB_RT_OPT "-sgdpn"
 #        elif defined(_DEBUG)
-#             define BOOST_LIB_RT_OPT "-sgdpn"
+#             define SC_BOOST_LIB_RT_OPT "-sgdpn"
 #            pragma message("warning: STLPort debug versions are built with /D_STLP_DEBUG=1")
 #            error "Build options aren't compatible with pre-built libraries"
 #        else
-#            define BOOST_LIB_RT_OPT "-spn"
+#            define SC_BOOST_LIB_RT_OPT "-spn"
 #        endif
 
 #     else
 
 #        if defined(_DEBUG)
-#             define BOOST_LIB_RT_OPT "-sgd"
+#             define SC_BOOST_LIB_RT_OPT "-sgd"
 #        else
-#            define BOOST_LIB_RT_OPT "-s"
+#            define SC_BOOST_LIB_RT_OPT "-s"
 #        endif
 
 #     endif
@@ -243,7 +243,7 @@ BOOST_LIB_VERSION:    The Boost version, in the form x_y, for Boost version x.y.
 // figure out whether we want the debug builds or not:
 //
 #if __BORLANDC__ > 0x561
-#pragma defineonoption BOOST_BORLAND_DEBUG -v
+#pragma defineonoption SC_BOOST_BORLAND_DEBUG -v
 #endif
 //
 // sanity check:
@@ -254,18 +254,18 @@ BOOST_LIB_VERSION:    The Boost version, in the form x_y, for Boost version x.y.
 
 #  ifdef _RTLDLL
 
-#     ifdef BOOST_BORLAND_DEBUG
-#         define BOOST_LIB_RT_OPT "-d"
+#     ifdef SC_BOOST_BORLAND_DEBUG
+#         define SC_BOOST_LIB_RT_OPT "-d"
 #     else
-#         define BOOST_LIB_RT_OPT
+#         define SC_BOOST_LIB_RT_OPT
 #     endif
 
 #  else
 
-#     ifdef BOOST_BORLAND_DEBUG
-#         define BOOST_LIB_RT_OPT "-sd"
+#     ifdef SC_BOOST_BORLAND_DEBUG
+#         define SC_BOOST_LIB_RT_OPT "-sd"
 #     else
-#         define BOOST_LIB_RT_OPT "-s"
+#         define SC_BOOST_LIB_RT_OPT "-s"
 #     endif
 
 #  endif
@@ -275,33 +275,33 @@ BOOST_LIB_VERSION:    The Boost version, in the form x_y, for Boost version x.y.
 //
 // select linkage opt:
 //
-#if (defined(_DLL) || defined(_RTLDLL)) && defined(BOOST_DYN_LINK)
-#  define BOOST_LIB_PREFIX
-#elif defined(BOOST_DYN_LINK)
+#if (defined(_DLL) || defined(_RTLDLL)) && defined(SC_BOOST_DYN_LINK)
+#  define SC_BOOST_LIB_PREFIX
+#elif defined(SC_BOOST_DYN_LINK)
 #  error "Mixing a dll boost library with a static runtime is a really bad idea..."
 #else
-#  define BOOST_LIB_PREFIX "lib"
+#  define SC_BOOST_LIB_PREFIX "lib"
 #endif
 
 //
 // now include the lib:
 //
-#if defined(BOOST_LIB_NAME) \
-      && defined(BOOST_LIB_PREFIX) \
-      && defined(BOOST_LIB_TOOLSET) \
-      && defined(BOOST_LIB_THREAD_OPT) \
-      && defined(BOOST_LIB_RT_OPT) \
-      && defined(BOOST_LIB_VERSION)
+#if defined(SC_BOOST_LIB_NAME) \
+      && defined(SC_BOOST_LIB_PREFIX) \
+      && defined(SC_BOOST_LIB_TOOLSET) \
+      && defined(SC_BOOST_LIB_THREAD_OPT) \
+      && defined(SC_BOOST_LIB_RT_OPT) \
+      && defined(SC_BOOST_LIB_VERSION)
 
-#ifndef BOOST_AUTO_LINK_NOMANGLE
-#  pragma comment(lib, BOOST_LIB_PREFIX BOOST_STRINGIZE(BOOST_LIB_NAME) "-" BOOST_LIB_TOOLSET BOOST_LIB_THREAD_OPT BOOST_LIB_RT_OPT "-" BOOST_LIB_VERSION ".lib")
-#  ifdef BOOST_LIB_DIAGNOSTIC
-#     pragma message ("Linking to lib file: " BOOST_LIB_PREFIX BOOST_STRINGIZE(BOOST_LIB_NAME) "-" BOOST_LIB_TOOLSET BOOST_LIB_THREAD_OPT BOOST_LIB_RT_OPT "-" BOOST_LIB_VERSION ".lib")
+#ifndef SC_BOOST_AUTO_LINK_NOMANGLE
+#  pragma comment(lib, SC_BOOST_LIB_PREFIX SC_BOOST_STRINGIZE(SC_BOOST_LIB_NAME) "-" SC_BOOST_LIB_TOOLSET SC_BOOST_LIB_THREAD_OPT SC_BOOST_LIB_RT_OPT "-" SC_BOOST_LIB_VERSION ".lib")
+#  ifdef SC_BOOST_LIB_DIAGNOSTIC
+#     pragma message ("Linking to lib file: " SC_BOOST_LIB_PREFIX SC_BOOST_STRINGIZE(SC_BOOST_LIB_NAME) "-" SC_BOOST_LIB_TOOLSET SC_BOOST_LIB_THREAD_OPT SC_BOOST_LIB_RT_OPT "-" SC_BOOST_LIB_VERSION ".lib")
 #  endif
 #else
-#  pragma comment(lib, BOOST_STRINGIZE(BOOST_LIB_NAME) ".lib")
-#  ifdef BOOST_LIB_DIAGNOSTIC
-#     pragma message ("Linking to lib file: " BOOST_STRINGIZE(BOOST_LIB_NAME) ".lib")
+#  pragma comment(lib, SC_BOOST_STRINGIZE(SC_BOOST_LIB_NAME) ".lib")
+#  ifdef SC_BOOST_LIB_DIAGNOSTIC
+#     pragma message ("Linking to lib file: " SC_BOOST_STRINGIZE(SC_BOOST_LIB_NAME) ".lib")
 #  endif
 #endif
 
@@ -315,34 +315,34 @@ BOOST_LIB_VERSION:    The Boost version, in the form x_y, for Boost version x.y.
 //
 // finally undef any macros we may have set:
 //
-#ifdef BOOST_LIB_PREFIX
-#  undef BOOST_LIB_PREFIX
+#ifdef SC_BOOST_LIB_PREFIX
+#  undef SC_BOOST_LIB_PREFIX
 #endif
-#if defined(BOOST_LIB_NAME)
-#  undef BOOST_LIB_NAME
+#if defined(SC_BOOST_LIB_NAME)
+#  undef SC_BOOST_LIB_NAME
 #endif
 // Don't undef this one: it can be set by the user and should be the 
 // same for all libraries:
-//#if defined(BOOST_LIB_TOOLSET)
-//#  undef BOOST_LIB_TOOLSET
+//#if defined(SC_BOOST_LIB_TOOLSET)
+//#  undef SC_BOOST_LIB_TOOLSET
 //#endif
-#if defined(BOOST_LIB_THREAD_OPT)
-#  undef BOOST_LIB_THREAD_OPT
+#if defined(SC_BOOST_LIB_THREAD_OPT)
+#  undef SC_BOOST_LIB_THREAD_OPT
 #endif
-#if defined(BOOST_LIB_RT_OPT)
-#  undef BOOST_LIB_RT_OPT
+#if defined(SC_BOOST_LIB_RT_OPT)
+#  undef SC_BOOST_LIB_RT_OPT
 #endif
-#if defined(BOOST_LIB_LINK_OPT)
-#  undef BOOST_LIB_LINK_OPT
+#if defined(SC_BOOST_LIB_LINK_OPT)
+#  undef SC_BOOST_LIB_LINK_OPT
 #endif
-#if defined(BOOST_LIB_DEBUG_OPT)
-#  undef BOOST_LIB_DEBUG_OPT
+#if defined(SC_BOOST_LIB_DEBUG_OPT)
+#  undef SC_BOOST_LIB_DEBUG_OPT
 #endif
-#if defined(BOOST_DYN_LINK)
-#  undef BOOST_DYN_LINK
+#if defined(SC_BOOST_DYN_LINK)
+#  undef SC_BOOST_DYN_LINK
 #endif
-#if defined(BOOST_AUTO_LINK_NOMANGLE)
-#  undef BOOST_AUTO_LINK_NOMANGLE
+#if defined(SC_BOOST_AUTO_LINK_NOMANGLE)
+#  undef SC_BOOST_AUTO_LINK_NOMANGLE
 #endif
 
 

@@ -42,7 +42,7 @@
 // See http://www.boost.org for most recent version including documentation.
 
 // Revision History
-// 11 Feb 2001 - Use BOOST_STATIC_CONSTANT (David Abrahams)
+// 11 Feb 2001 - Use SC_BOOST_STATIC_CONSTANT (David Abrahams)
 // 11 Feb 2001 - Rolled back ineffective Borland-specific code
 //               (David Abrahams)
 // 10 Feb 2001 - Rolled in supposed Borland fixes from John Maddock, but
@@ -55,8 +55,8 @@
 //               not supplied by numeric_limits<>. (David Abrahams)
 // 21 Jan 2001 - Created (David Abrahams)
 
-#ifndef BOOST_NUMERIC_TRAITS_HPP_DWA20001901
-# define BOOST_NUMERIC_TRAITS_HPP_DWA20001901
+#ifndef SC_BOOST_NUMERIC_TRAITS_HPP_DWA20001901
+# define SC_BOOST_NUMERIC_TRAITS_HPP_DWA20001901
 
 # include <sysc/packages/boost/config.hpp>
 # include <sysc/packages/boost/cstdint.hpp>
@@ -65,7 +65,7 @@
 # include <sysc/packages/boost/detail/select_type.hpp>
 # include <sysc/packages/boost/limits.hpp>
 
-namespace sc_boost { namespace detail {
+namespace sc_boost { namespace sc_detail {
 
   // Template class is_signed -- determine whether a numeric type is signed
   // Requires that T is constructable from the literals -1 and 0.  Compile-time
@@ -74,14 +74,14 @@ namespace sc_boost { namespace detail {
   template <class Number>
   struct is_signed
   {
-#if defined(BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS) || defined(BOOST_MSVC) && BOOST_MSVC <= 1300
-    BOOST_STATIC_CONSTANT(bool, value = (Number(-1) < Number(0)));
+#if defined(SC_BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS) || defined(SC_BOOST_MSVC) && SC_BOOST_MSVC <= 1300
+    SC_BOOST_STATIC_CONSTANT(bool, value = (Number(-1) < Number(0)));
 #else
-    BOOST_STATIC_CONSTANT(bool, value = std::numeric_limits<Number>::is_signed);
+    SC_BOOST_STATIC_CONSTANT(bool, value = std::numeric_limits<Number>::is_signed);
 #endif
   };
 
-# ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+# ifndef SC_BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
   // digit_traits - compute the number of digits in a built-in integer
   // type. Needed for implementations on which numeric_limits is not specialized
   // for intmax_t (e.g. VC6).
@@ -92,7 +92,7 @@ namespace sc_boost { namespace detail {
   {
       template <class T> struct traits
       {
-          BOOST_STATIC_CONSTANT(int, digits = std::numeric_limits<T>::digits);
+          SC_BOOST_STATIC_CONSTANT(int, digits = std::numeric_limits<T>::digits);
       };
   };
 
@@ -101,7 +101,7 @@ namespace sc_boost { namespace detail {
   {
       template <class T> struct traits
       {
-          BOOST_STATIC_CONSTANT(int, digits = (
+          SC_BOOST_STATIC_CONSTANT(int, digits = (
               sizeof(T) * std::numeric_limits<unsigned char>::digits
               - (is_signed<T>::value ? 1 : 0))
               );
@@ -114,7 +114,7 @@ namespace sc_boost { namespace detail {
       typedef digit_traits_select<
                 ::std::numeric_limits<T>::is_specialized> selector;
       typedef typename selector::template traits<T> traits;
-      BOOST_STATIC_CONSTANT(int, digits = traits::digits);
+      SC_BOOST_STATIC_CONSTANT(int, digits = traits::digits);
   };
 #endif
 
@@ -124,18 +124,18 @@ namespace sc_boost { namespace detail {
   template <class Integer>
   struct integer_traits
   {
-# ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+# ifndef SC_BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    private:
       typedef Integer integer_type;
       typedef std::numeric_limits<integer_type> x;
-#   if defined(BOOST_MSVC) && BOOST_MSVC <= 1300
+#   if defined(SC_BOOST_MSVC) && SC_BOOST_MSVC <= 1300
       // for some reason, MSVC asserts when it shouldn't unless we make these
       // local definitions
-      BOOST_STATIC_CONSTANT(bool, is_integer = x::is_integer);
-      BOOST_STATIC_CONSTANT(bool, is_specialized = x::is_specialized);
+      SC_BOOST_STATIC_CONSTANT(bool, is_integer = x::is_integer);
+      SC_BOOST_STATIC_CONSTANT(bool, is_specialized = x::is_specialized);
       
-      BOOST_STATIC_ASSERT(is_integer);
-      BOOST_STATIC_ASSERT(is_specialized);
+      SC_BOOST_STATIC_ASSERT(is_integer);
+      SC_BOOST_STATIC_ASSERT(is_specialized);
 #   endif
    public:
       typedef typename
@@ -155,7 +155,7 @@ namespace sc_boost { namespace detail {
         intmax_t
       >::type>::type>::type difference_type;
 #else
-      BOOST_STATIC_ASSERT(sc_boost::is_integral<Integer>::value);
+      SC_BOOST_STATIC_ASSERT(sc_boost::is_integral<Integer>::value);
 
       typedef typename
       if_true<(sizeof(Integer) >= sizeof(intmax_t))>::template then<
@@ -188,4 +188,4 @@ namespace sc_boost { namespace detail {
   }
 }}
 
-#endif // BOOST_NUMERIC_TRAITS_HPP_DWA20001901
+#endif // SC_BOOST_NUMERIC_TRAITS_HPP_DWA20001901

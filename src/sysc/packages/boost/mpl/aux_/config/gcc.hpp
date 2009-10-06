@@ -1,6 +1,6 @@
 
-#ifndef BOOST_MPL_AUX_CONFIG_GCC_HPP_INCLUDED
-#define BOOST_MPL_AUX_CONFIG_GCC_HPP_INCLUDED
+#ifndef SC_BOOST_MPL_AUX_CONFIG_GCC_HPP_INCLUDED
+#define SC_BOOST_MPL_AUX_CONFIG_GCC_HPP_INCLUDED
 
 // Copyright Aleksey Gurtovoy 2004
 //
@@ -15,9 +15,9 @@
 // $Revision: 1.1.1.1 $
 
 #if defined(__GNUC__) && !defined(__EDG_VERSION__)
-#   define BOOST_MPL_CFG_GCC ((__GNUC__ << 8) | __GNUC_MINOR__)
+#   define SC_BOOST_MPL_CFG_GCC ((__GNUC__ << 8) | __GNUC_MINOR__)
 #else
-#   define BOOST_MPL_CFG_GCC 0
+#   define SC_BOOST_MPL_CFG_GCC 0
 #endif
 
-#endif // BOOST_MPL_AUX_CONFIG_GCC_HPP_INCLUDED
+#endif // SC_BOOST_MPL_AUX_CONFIG_GCC_HPP_INCLUDED

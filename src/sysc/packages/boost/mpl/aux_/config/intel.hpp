@@ -1,6 +1,6 @@
 
-#ifndef BOOST_MPL_AUX_CONFIG_INTEL_HPP_INCLUDED
-#define BOOST_MPL_AUX_CONFIG_INTEL_HPP_INCLUDED
+#ifndef SC_BOOST_MPL_AUX_CONFIG_INTEL_HPP_INCLUDED
+#define SC_BOOST_MPL_AUX_CONFIG_INTEL_HPP_INCLUDED
 
 // Copyright Aleksey Gurtovoy 2004
 //
@@ -15,7 +15,7 @@
 // $Revision: 1.1.1.1 $
 
 
-// BOOST_INTEL_CXX_VERSION is defined here:
+// SC_BOOST_INTEL_CXX_VERSION is defined here:
 #include <sysc/packages/boost/config.hpp>
 
-#endif // BOOST_MPL_AUX_CONFIG_INTEL_HPP_INCLUDED
+#endif // SC_BOOST_MPL_AUX_CONFIG_INTEL_HPP_INCLUDED

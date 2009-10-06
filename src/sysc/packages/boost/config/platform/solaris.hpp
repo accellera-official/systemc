@@ -8,12 +8,12 @@
 
 //  sun specific config options:
 
-#define BOOST_PLATFORM "Sun Solaris"
+#define SC_BOOST_PLATFORM "Sun Solaris"
 
-#define BOOST_HAS_GETTIMEOFDAY
+#define SC_BOOST_HAS_GETTIMEOFDAY
 
 // boilerplate code:
-#define BOOST_HAS_UNISTD_H
+#define SC_BOOST_HAS_UNISTD_H
 #include <sysc/packages/boost/config/posix_features.hpp>
 
 

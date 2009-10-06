@@ -1,5 +1,5 @@
-#ifndef BOOST_DETAIL_ATOMIC_COUNT_WIN32_HPP_INCLUDED
-#define BOOST_DETAIL_ATOMIC_COUNT_WIN32_HPP_INCLUDED
+#ifndef SC_BOOST_DETAIL_ATOMIC_COUNT_WIN32_HPP_INCLUDED
+#define SC_BOOST_DETAIL_ATOMIC_COUNT_WIN32_HPP_INCLUDED
 
 // MS compatible compilers support #pragma once
 
@@ -22,7 +22,7 @@
 namespace sc_boost
 {
 
-namespace detail
+namespace sc_detail
 {
 
 class atomic_count
@@ -35,12 +35,12 @@ public:
 
     long operator++()
     {
-        return BOOST_INTERLOCKED_INCREMENT( &value_ );
+        return SC_BOOST_INTERLOCKED_INCREMENT( &value_ );
     }
 
     long operator--()
     {
-        return BOOST_INTERLOCKED_DECREMENT( &value_ );
+        return SC_BOOST_INTERLOCKED_DECREMENT( &value_ );
     }
 
     operator long() const
@@ -56,8 +56,8 @@ private:
     long value_;
 };
 
-} // namespace detail
+} // namespace sc_detail
 
 } // namespace sc_boost
 
-#endif // #ifndef BOOST_DETAIL_ATOMIC_COUNT_WIN32_HPP_INCLUDED
+#endif // #ifndef SC_BOOST_DETAIL_ATOMIC_COUNT_WIN32_HPP_INCLUDED

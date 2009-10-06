@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_nbdefs.h,v $
+// Revision 1.2  2009/05/22 16:06:29  acg
+//  Andy Goodrich: process control updates.
+//
 // Revision 1.1.1.1  2006/12/15 20:20:05  acg
 // SystemC 2.3
 //
@@ -50,6 +53,7 @@
 #include "sysc/kernel/sc_cmnhdr.h"
 
 #include <climits>
+#include <stdint.h>
 
 #include "sysc/utils/sc_iostream.h"
 #include "sysc/kernel/sc_constants.h"   // For SC_MAX_NBITS
@@ -134,8 +138,10 @@ typedef unsigned int sc_digit;	// 32-bit unsigned integer
 // Support for the long long type. This type is not in the standard
 // but is usually supported by compilers.
 #ifndef WIN32
-    typedef long long          int64;
-    typedef unsigned long long uint64;
+    // typedef long long          int64;
+    // typedef unsigned long long uint64;
+    typedef int64_t            int64;
+    typedef uint64_t           uint64;
     extern const uint64        UINT64_ZERO;
     extern const uint64        UINT64_ONE;
     extern const uint64        UINT64_32ONES;
@@ -153,10 +159,10 @@ typedef unsigned int sc_digit;	// 32-bit unsigned integer
 #define BITS_PER_CHAR    8
 #define BITS_PER_INT    (sizeof(int) * BITS_PER_CHAR)
 #define BITS_PER_LONG   (sizeof(long) * BITS_PER_CHAR)
-#define BITS_PER_INT64  (sizeof(long long) * BITS_PER_CHAR)
+#define BITS_PER_INT64  (sizeof(int64_t) * BITS_PER_CHAR)
 #define BITS_PER_UINT   (sizeof(unsigned int) * BITS_PER_CHAR)
 #define BITS_PER_ULONG  (sizeof(unsigned long) * BITS_PER_CHAR)
-#define BITS_PER_UINT64 (sizeof(unsigned long long) * BITS_PER_CHAR)
+#define BITS_PER_UINT64 (sizeof(uint64_t long) * BITS_PER_CHAR)
 
 // Digits per ...
 #define DIGITS_PER_CHAR   1

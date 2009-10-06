@@ -9,18 +9,18 @@
 // You are welcome to contact the author at:
 //  fernando_cacciola@hotmail.com
 //
-#ifndef BOOST_DETAIL_NONE_T_17SEP2003_HPP
-#define BOOST_DETAIL_NONE_T_17SEP2003_HPP
+#ifndef SC_BOOST_DETAIL_NONE_T_17SEP2003_HPP
+#define SC_BOOST_DETAIL_NONE_T_17SEP2003_HPP
 
 namespace sc_boost {
 
-namespace detail {
+namespace sc_detail {
 
 struct none_helper{};
 
 typedef int none_helper::*none_t ;
 
-} // namespace detail
+} // namespace sc_detail
 
 } // namespace sc_boost
 

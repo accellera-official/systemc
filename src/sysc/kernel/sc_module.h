@@ -49,6 +49,9 @@
  *****************************************************************************/
 
 // $Log: sc_module.h,v $
+// Revision 1.4  2009/05/22 16:06:29  acg
+//  Andy Goodrich: process control updates.
+//
 // Revision 1.3  2008/05/22 17:06:25  acg
 //  Andy Goodrich: updated copyright notice to include 2008.
 //
@@ -245,10 +248,10 @@ protected:
     void positional_bind( sc_port_base& );
 
     // set reset sensitivity for SC_xTHREADs
-    void areset_signal_is( const sc_in<bool>& port, bool level );
-    void areset_signal_is( const sc_inout<bool>& port, bool level );
-    void areset_signal_is( const sc_out<bool>& port, bool level );
-    void areset_signal_is( const sc_signal_in_if<bool>& iface, bool level );
+    void async_reset_signal_is( const sc_in<bool>& port, bool level );
+    void async_reset_signal_is( const sc_inout<bool>& port, bool level );
+    void async_reset_signal_is( const sc_out<bool>& port, bool level );
+    void async_reset_signal_is( const sc_signal_in_if<bool>& iface, bool level);
     void reset_signal_is( const sc_in<bool>& port, bool level );
     void reset_signal_is( const sc_inout<bool>& port, bool level );
     void reset_signal_is( const sc_out<bool>& port, bool level );

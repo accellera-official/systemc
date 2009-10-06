@@ -19,17 +19,17 @@
 // figure out a consistent version number:
 //
 #ifndef _RWSTD_VER
-#  define BOOST_RWSTD_VER 0x010000
+#  define SC_BOOST_RWSTD_VER 0x010000
 #elif _RWSTD_VER < 0x010000
-#  define BOOST_RWSTD_VER (_RWSTD_VER << 8)
+#  define SC_BOOST_RWSTD_VER (_RWSTD_VER << 8)
 #else
-#  define BOOST_RWSTD_VER _RWSTD_VER
+#  define SC_BOOST_RWSTD_VER _RWSTD_VER
 #endif
 
 #ifndef _RWSTD_VER
-#  define BOOST_STDLIB "Rogue Wave standard library version (Unknown version)"
+#  define SC_BOOST_STDLIB "Rogue Wave standard library version (Unknown version)"
 #else
-#  define BOOST_STDLIB "Rogue Wave standard library version " BOOST_STRINGIZE(_RWSTD_VER)
+#  define SC_BOOST_STDLIB "Rogue Wave standard library version " SC_BOOST_STRINGIZE(_RWSTD_VER)
 #endif
 
 //
@@ -37,53 +37,53 @@
 // does not have compile time constants, even though specializations of that
 // template do:
 //
-#if BOOST_RWSTD_VER < 0x020200
-#  define BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+#if SC_BOOST_RWSTD_VER < 0x020200
+#  define SC_BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 #endif
 
 // Sun CC 5.5 patch 113817-07 adds long long specialization, but does not change the
 // library version number (http://sunsolve6.sun.com/search/document.do?assetkey=1-21-113817):
-#if BOOST_RWSTD_VER <= 0x020101 && (!defined(__SUNPRO_CC) || (__SUNPRO_CC < 0x550))
-#  define BOOST_NO_LONG_LONG_NUMERIC_LIMITS
+#if SC_BOOST_RWSTD_VER <= 0x020101 && (!defined(__SUNPRO_CC) || (__SUNPRO_CC < 0x550))
+#  define SC_BOOST_NO_LONG_LONG_NUMERIC_LIMITS
 # endif
 
 //
 // Borland version of numeric_limits lacks __int64 specialisation:
 //
 #ifdef __BORLANDC__
-#  define BOOST_NO_MS_INT64_NUMERIC_LIMITS
+#  define SC_BOOST_NO_MS_INT64_NUMERIC_LIMITS
 #endif
 
 //
 // No std::iterator if it can't figure out default template args:
 //
-#if defined(_RWSTD_NO_SIMPLE_DEFAULT_TEMPLATES) || defined(RWSTD_NO_SIMPLE_DEFAULT_TEMPLATES) || (BOOST_RWSTD_VER < 0x020000)
-#  define BOOST_NO_STD_ITERATOR
+#if defined(_RWSTD_NO_SIMPLE_DEFAULT_TEMPLATES) || defined(RWSTD_NO_SIMPLE_DEFAULT_TEMPLATES) || (SC_BOOST_RWSTD_VER < 0x020000)
+#  define SC_BOOST_NO_STD_ITERATOR
 #endif
 
 //
 // No iterator traits without partial specialization:
 //
 #if defined(_RWSTD_NO_CLASS_PARTIAL_SPEC) || defined(RWSTD_NO_CLASS_PARTIAL_SPEC)
-#  define BOOST_NO_STD_ITERATOR_TRAITS
+#  define SC_BOOST_NO_STD_ITERATOR_TRAITS
 #endif
 
 //
 // Prior to version 2.0, std::auto_ptr was buggy, and there were no
 // new-style iostreams, and no conformant std::allocator:
 //
-#if (BOOST_RWSTD_VER < 0x020000)
-#  define BOOST_NO_AUTO_PTR
-#  define BOOST_NO_STRINGSTREAM
-#  define BOOST_NO_STD_ALLOCATOR
-#  define BOOST_NO_STD_LOCALE
+#if (SC_BOOST_RWSTD_VER < 0x020000)
+#  define SC_BOOST_NO_AUTO_PTR
+#  define SC_BOOST_NO_STRINGSTREAM
+#  define SC_BOOST_NO_STD_ALLOCATOR
+#  define SC_BOOST_NO_STD_LOCALE
 #endif
 
 //
 // No template iterator constructors without member template support:
 //
 #if defined(RWSTD_NO_MEMBER_TEMPLATES) || defined(_RWSTD_NO_MEMBER_TEMPLATES)
-#  define BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS
+#  define SC_BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS
 #endif
 
 //
@@ -92,36 +92,36 @@
 // on HP aCC systems even though the allocator is in fact broken):
 //
 #if !defined(_RWSTD_ALLOCATOR) || (defined(__HP_aCC) && __HP_aCC <= 33100)
-#  define BOOST_NO_STD_ALLOCATOR
+#  define SC_BOOST_NO_STD_ALLOCATOR
 #endif
 
 //
 // If we have a std::locale, we still may not have std::use_facet:
 //
-#if defined(_RWSTD_NO_TEMPLATE_ON_RETURN_TYPE) && !defined(BOOST_NO_STD_LOCALE)
-#  define BOOST_NO_STD_USE_FACET
-#  define BOOST_HAS_TWO_ARG_USE_FACET
+#if defined(_RWSTD_NO_TEMPLATE_ON_RETURN_TYPE) && !defined(SC_BOOST_NO_STD_LOCALE)
+#  define SC_BOOST_NO_STD_USE_FACET
+#  define SC_BOOST_HAS_TWO_ARG_USE_FACET
 #endif
 
 //
 // There's no std::distance prior to version 2, or without
 // partial specialization support:
 //
-#if (BOOST_RWSTD_VER < 0x020000) || defined(_RWSTD_NO_CLASS_PARTIAL_SPEC)
-    #define BOOST_NO_STD_DISTANCE
+#if (SC_BOOST_RWSTD_VER < 0x020000) || defined(_RWSTD_NO_CLASS_PARTIAL_SPEC)
+    #define SC_BOOST_NO_STD_DISTANCE
 #endif
 
 //
 // Some versions of the rogue wave library don't have assignable
 // OutputIterators:
 //
-#if BOOST_RWSTD_VER < 0x020100
-#  define BOOST_NO_STD_OUTPUT_ITERATOR_ASSIGN
+#if SC_BOOST_RWSTD_VER < 0x020100
+#  define SC_BOOST_NO_STD_OUTPUT_ITERATOR_ASSIGN
 #endif
 
 //
-// Disable BOOST_HAS_LONG_LONG when the library has no support for it.
+// Disable SC_BOOST_HAS_LONG_LONG when the library has no support for it.
 //
-#if !defined(_RWSTD_LONG_LONG) && defined(BOOST_HAS_LONG_LONG)
-#  undef BOOST_HAS_LONG_LONG
+#if !defined(_RWSTD_LONG_LONG) && defined(SC_BOOST_HAS_LONG_LONG)
+#  undef SC_BOOST_HAS_LONG_LONG
 #endif

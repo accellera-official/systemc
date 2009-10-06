@@ -2,8 +2,8 @@
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
-#ifndef INDIRECT_TRAITS_DWA2002131_HPP
-# define INDIRECT_TRAITS_DWA2002131_HPP
+#ifndef SC_INDIRECT_TRAITS_DWA2002131_HPP
+# define SC_INDIRECT_TRAITS_DWA2002131_HPP
 # include <sysc/packages/boost/type_traits/is_function.hpp>
 # include <sysc/packages/boost/type_traits/is_reference.hpp>
 # include <sysc/packages/boost/type_traits/is_pointer.hpp>
@@ -26,15 +26,15 @@
 # include <sysc/packages/boost/mpl/not.hpp>
 # include <sysc/packages/boost/mpl/aux_/lambda_support.hpp>
 
-#  ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#  ifdef SC_BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 #   include <sysc/packages/boost/detail/is_function_ref_tester.hpp>
 #  endif 
 
-namespace sc_boost { namespace detail {
+namespace sc_boost { namespace sc_detail {
 
-namespace indirect_traits {
+namespace sc_indirect_traits {
 
-#  ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#  ifndef SC_BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 template <class T>
 struct is_reference_to_const : mpl::false_
 {
@@ -45,7 +45,7 @@ struct is_reference_to_const<T const&> : mpl::true_
 {
 };
 
-#   if defined(BOOST_MSVC) && _MSC_FULL_VER <= 13102140 // vc7.01 alpha workaround
+#   if defined(SC_BOOST_MSVC) && _MSC_FULL_VER <= 13102140 // vc7.01 alpha workaround
 template<class T>
 struct is_reference_to_const<T const volatile&> : mpl::true_
 {
@@ -90,7 +90,7 @@ template <class T>
 struct is_reference_to_member_function_pointer
     : is_reference_to_member_function_pointer_impl<T>
 {
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_reference_to_member_function_pointer,(T))
+    SC_BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_reference_to_member_function_pointer,(T))
 };
 
 template <class T>
@@ -138,7 +138,7 @@ struct is_reference_to_volatile<T volatile&> : mpl::true_
 {
 };
 
-#   if defined(BOOST_MSVC) && _MSC_FULL_VER <= 13102140 // vc7.01 alpha workaround
+#   if defined(SC_BOOST_MSVC) && _MSC_FULL_VER <= 13102140 // vc7.01 alpha workaround
 template <class T>
 struct is_reference_to_volatile<T const volatile&> : mpl::true_
 {
@@ -182,7 +182,7 @@ struct is_reference_to_class
           >
       >
 {
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_reference_to_class,(T))
+    SC_BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_reference_to_class,(T))
 };
 
 template <class T>
@@ -196,12 +196,12 @@ struct is_pointer_to_class
           >
       >
 {
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_pointer_to_class,(T))
+    SC_BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_pointer_to_class,(T))
 };
 
 #  else
 
-using namespace sc_boost::detail::is_function_ref_tester_;
+using namespace sc_boost::sc_detail::is_function_ref_tester_;
 
 typedef char (&inner_yes_type)[3];
 typedef char (&inner_no_type)[2];
@@ -251,8 +251,8 @@ template <class T>
 struct is_reference_to_function_aux
 {
     static T t;
-    BOOST_STATIC_CONSTANT(
-        bool, value = sizeof(detail::is_function_ref_tester(t,0)) == sizeof(::sc_boost::type_traits::yes_type));
+    SC_BOOST_STATIC_CONSTANT(
+        bool, value = sizeof(sc_detail::is_function_ref_tester(t,0)) == sizeof(::sc_boost::type_traits::yes_type));
     typedef mpl::bool_<value> type;
  };
 
@@ -266,7 +266,7 @@ template <class T>
 struct is_pointer_to_function_aux
 {
     static T t;
-    BOOST_STATIC_CONSTANT(
+    SC_BOOST_STATIC_CONSTANT(
         bool, value
         = sizeof(::sc_boost::type_traits::is_function_ptr_tester(t)) == sizeof(::sc_boost::type_traits::yes_type));
     typedef mpl::bool_<value> type;
@@ -276,7 +276,7 @@ template <class T>
 struct is_pointer_to_function
     : mpl::if_<is_pointer<T>, is_pointer_to_function_aux<T>, mpl::bool_<false> >::type
 {
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_pointer_to_function,(T))
+    SC_BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_pointer_to_function,(T))
 };
 
 struct false_helper1
@@ -298,7 +298,7 @@ struct true_helper1
     struct apply
     {
         static T t;
-        BOOST_STATIC_CONSTANT(
+        SC_BOOST_STATIC_CONSTANT(
             bool, value
             = sizeof(reference_to_const_helper(t)) == sizeof(inner_yes_type));
         typedef mpl::bool_<value> type;
@@ -330,7 +330,7 @@ struct is_reference_to_non_const_helper1
     struct apply
     {
         static T t;
-        BOOST_STATIC_CONSTANT(
+        SC_BOOST_STATIC_CONSTANT(
             bool, value
             = sizeof(reference_to_const_helper(t)) == sizeof(inner_no_type));
         
@@ -348,7 +348,7 @@ template <class T>
 struct is_reference_to_non_const
     : is_reference_to_non_const_helper1<is_reference<T>::value>::template apply<T>
 {
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_reference_to_non_const,(T))
+    SC_BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_reference_to_non_const,(T))
 };
 
 
@@ -364,7 +364,7 @@ struct is_reference_to_volatile_helper1
     struct apply
     {
         static T t;
-        BOOST_STATIC_CONSTANT(
+        SC_BOOST_STATIC_CONSTANT(
             bool, value
             = sizeof(reference_to_volatile_helper(t)) == sizeof(inner_yes_type));
         typedef mpl::bool_<value> type;
@@ -391,7 +391,7 @@ template <class T>
 struct is_reference_to_pointer
 {
     static T t;
-    BOOST_STATIC_CONSTANT(
+    SC_BOOST_STATIC_CONSTANT(
         bool, value
         = (is_reference<T>::value
            && sizeof((reference_to_pointer_helper)(t)) == sizeof(inner_yes_type))
@@ -399,7 +399,7 @@ struct is_reference_to_pointer
     
     typedef mpl::bool_<value> type;
     
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_reference_to_pointer,(T))
+    SC_BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_reference_to_pointer,(T))
 };
 
 template <class T>
@@ -410,7 +410,7 @@ struct is_reference_to_function_pointer
         , mpl::bool_<false>
      >::type
 {
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_reference_to_function_pointer,(T))
+    SC_BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_reference_to_function_pointer,(T))
 };
 
 
@@ -427,7 +427,7 @@ template <class T>
 struct is_pointer_to_member_function_aux
 {
     static T t;
-    BOOST_STATIC_CONSTANT(
+    SC_BOOST_STATIC_CONSTANT(
         bool, value
         = sizeof((member_function_pointer_helper)(t)) == sizeof(inner_yes_type));
     typedef mpl::bool_<value> type;
@@ -441,7 +441,7 @@ struct is_reference_to_member_function_pointer
         , mpl::bool_<false>
      >::type
 {
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_reference_to_member_function_pointer,(T))
+    SC_BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_reference_to_member_function_pointer,(T))
 };
 
 template <typename V>
@@ -452,13 +452,13 @@ template <class T>
 struct is_reference_to_class
 {
     static T t;
-    BOOST_STATIC_CONSTANT(
+    SC_BOOST_STATIC_CONSTANT(
         bool, value
         = (is_reference<T>::value
            & (sizeof(reference_to_class_helper(t)) == sizeof(inner_yes_type)))
         );
     typedef mpl::bool_<value> type;
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_reference_to_class,(T))
+    SC_BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_reference_to_class,(T))
 };
 
 template <typename V>
@@ -469,19 +469,19 @@ template <class T>
 struct is_pointer_to_class
 {
     static T t;
-    BOOST_STATIC_CONSTANT(
+    SC_BOOST_STATIC_CONSTANT(
         bool, value
         = (is_pointer<T>::value
            && sizeof(pointer_to_class_helper(t)) == sizeof(inner_yes_type))
         );
     typedef mpl::bool_<value> type;
 };
-#  endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION 
+#  endif // SC_BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION 
 
 }
 
-using namespace indirect_traits;
+using namespace sc_indirect_traits;
 
-}} // namespace sc_boost::python::detail
+}} // namespace sc_boost::python::sc_detail
 
-#endif // INDIRECT_TRAITS_DWA2002131_HPP
+#endif // SC_INDIRECT_TRAITS_DWA2002131_HPP

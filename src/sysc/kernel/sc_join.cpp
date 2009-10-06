@@ -67,10 +67,10 @@ namespace sc_core {
 //------------------------------------------------------------------------------
 void sc_join::add_process( sc_process_b* process_p )
 {
-	sc_thread_handle handle = DCAST<sc_thread_handle>(process_p);
-	assert( handle != 0 );
-	m_threads_n++;
-	handle->add_monitor( this );
+    sc_thread_handle handle = DCAST<sc_thread_handle>(process_p);
+    assert( handle != 0 );
+    m_threads_n++;
+    handle->add_monitor( this );
 }
 
 
@@ -84,18 +84,18 @@ void sc_join::add_process( sc_process_b* process_p )
 //------------------------------------------------------------------------------
 void sc_join::add_process( sc_process_handle process_h )
 {
-	sc_thread_handle thread_p; // Thread within process_h.
+    sc_thread_handle thread_p; // Thread within process_h.
 
-	thread_p = process_h.operator sc_thread_handle();
-	if ( thread_p )
-	{
-		m_threads_n++;
-		thread_p->add_monitor( this );
-	}
-	else
-	{
-		SC_REPORT_ERROR( SC_ID_JOIN_ON_METHOD_HANDLE_, 0 ); 
-	}
+    thread_p = process_h.operator sc_thread_handle();
+    if ( thread_p )
+    {
+        m_threads_n++;
+        thread_p->add_monitor( this );
+    }
+    else
+    {
+        SC_REPORT_ERROR( SC_ID_JOIN_ON_METHOD_HANDLE_, 0 ); 
+    }
 }
 
 
@@ -112,12 +112,12 @@ void sc_join::add_process( sc_process_handle process_h )
 void sc_join::signal(sc_thread_handle thread_p, int type)
 {
     switch ( type )
-	{
-	  case sc_process_monitor::spm_exit:
-		thread_p->remove_monitor(this);
-		if ( --m_threads_n == 0 ) m_join_event.notify();
-		break;
-	}
+    {
+      case sc_process_monitor::spm_exit:
+        thread_p->remove_monitor(this);
+        if ( --m_threads_n == 0 ) m_join_event.notify();
+        break;
+    }
 }
 
 } // namespace sc_core

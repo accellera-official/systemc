@@ -1,5 +1,5 @@
-#ifndef BOOST_DETAIL_ATOMIC_COUNT_GCC_HPP_INCLUDED
-#define BOOST_DETAIL_ATOMIC_COUNT_GCC_HPP_INCLUDED
+#ifndef SC_BOOST_DETAIL_ATOMIC_COUNT_GCC_HPP_INCLUDED
+#define SC_BOOST_DETAIL_ATOMIC_COUNT_GCC_HPP_INCLUDED
 
 //
 //  boost/detail/atomic_count_gcc.hpp
@@ -22,7 +22,7 @@
 namespace sc_boost
 {
 
-namespace detail
+namespace sc_detail
 {
 
 #if defined(__GLIBCXX__) // g++ 3.4+
@@ -61,8 +61,8 @@ private:
     mutable _Atomic_word value_;
 };
 
-} // namespace detail
+} // namespace sc_detail
 
 } // namespace sc_boost
 
-#endif // #ifndef BOOST_DETAIL_ATOMIC_COUNT_GCC_HPP_INCLUDED
+#endif // #ifndef SC_BOOST_DETAIL_ATOMIC_COUNT_GCC_HPP_INCLUDED

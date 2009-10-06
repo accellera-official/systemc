@@ -9,8 +9,8 @@
 // You are welcome to contact the author at:
 //  fernando_cacciola@hotmail.com
 //
-#ifndef BOOST_UTILITY_TYPED_INPLACE_FACTORY_25AGO2003_HPP
-#define BOOST_UTILITY_TYPED_INPLACE_FACTORY_25AGO2003_HPP
+#ifndef SC_BOOST_UTILITY_TYPED_INPLACE_FACTORY_25AGO2003_HPP
+#define SC_BOOST_UTILITY_TYPED_INPLACE_FACTORY_25AGO2003_HPP
 
 #include <sysc/packages/boost/utility/detail/in_place_factory_prefix.hpp>
 
@@ -18,36 +18,36 @@ namespace sc_boost {
 
 class typed_in_place_factory_base {} ;
 
-#define BOOST_DEFINE_TYPED_INPLACE_FACTORY_CLASS(z,n,_) \
-template< class T, BOOST_PP_ENUM_PARAMS(BOOST_PP_INC(n),class A) > \
-class BOOST_PP_CAT(typed_in_place_factory, BOOST_PP_INC(n) ) : public typed_in_place_factory_base \
+#define SC_BOOST_DEFINE_TYPED_INPLACE_FACTORY_CLASS(z,n,_) \
+template< class T, SC_BOOST_PP_ENUM_PARAMS(SC_BOOST_PP_INC(n),class A) > \
+class SC_BOOST_PP_CAT(typed_in_place_factory, SC_BOOST_PP_INC(n) ) : public typed_in_place_factory_base \
 { \
 public: \
 \
   typedef T value_type ; \
 \
-  BOOST_PP_CAT(typed_in_place_factory, BOOST_PP_INC(n) ) ( BOOST_PP_ENUM_BINARY_PARAMS(BOOST_PP_INC(n),A,const& a) ) \
+  SC_BOOST_PP_CAT(typed_in_place_factory, SC_BOOST_PP_INC(n) ) ( SC_BOOST_PP_ENUM_BINARY_PARAMS(SC_BOOST_PP_INC(n),A,const& a) ) \
     : \
-    BOOST_PP_ENUM( BOOST_PP_INC(n), BOOST_DEFINE_INPLACE_FACTORY_CLASS_MEMBER_INIT, _ ) \
+    SC_BOOST_PP_ENUM( SC_BOOST_PP_INC(n), SC_BOOST_DEFINE_INPLACE_FACTORY_CLASS_MEMBER_INIT, _ ) \
   {} \
 \
   void apply ( void* address ) const \
   { \
-    new ( address ) T ( BOOST_PP_ENUM_PARAMS( BOOST_PP_INC(n), m_a ) ) ; \
+    new ( address ) T ( SC_BOOST_PP_ENUM_PARAMS( SC_BOOST_PP_INC(n), m_a ) ) ; \
   } \
 \
-  BOOST_PP_REPEAT( BOOST_PP_INC(n), BOOST_DEFINE_INPLACE_FACTORY_CLASS_MEMBER_DECL, _) \
+  SC_BOOST_PP_REPEAT( SC_BOOST_PP_INC(n), SC_BOOST_DEFINE_INPLACE_FACTORY_CLASS_MEMBER_DECL, _) \
 } ; \
 \
-template< class T, BOOST_PP_ENUM_PARAMS(BOOST_PP_INC(n),class A) > \
-BOOST_PP_CAT(typed_in_place_factory, BOOST_PP_INC(n) ) < T , BOOST_PP_ENUM_PARAMS( BOOST_PP_INC(n), A ) > \
-in_place ( BOOST_PP_ENUM_BINARY_PARAMS(BOOST_PP_INC(n),A, const& a) ) \
+template< class T, SC_BOOST_PP_ENUM_PARAMS(SC_BOOST_PP_INC(n),class A) > \
+SC_BOOST_PP_CAT(typed_in_place_factory, SC_BOOST_PP_INC(n) ) < T , SC_BOOST_PP_ENUM_PARAMS( SC_BOOST_PP_INC(n), A ) > \
+in_place ( SC_BOOST_PP_ENUM_BINARY_PARAMS(SC_BOOST_PP_INC(n),A, const& a) ) \
 { \
-  return BOOST_PP_CAT(typed_in_place_factory, BOOST_PP_INC(n) ) < T, BOOST_PP_ENUM_PARAMS( BOOST_PP_INC(n), A ) > \
-           ( BOOST_PP_ENUM_PARAMS( BOOST_PP_INC(n), a ) ) ; \
+  return SC_BOOST_PP_CAT(typed_in_place_factory, SC_BOOST_PP_INC(n) ) < T, SC_BOOST_PP_ENUM_PARAMS( SC_BOOST_PP_INC(n), A ) > \
+           ( SC_BOOST_PP_ENUM_PARAMS( SC_BOOST_PP_INC(n), a ) ) ; \
 } ; \
 
-BOOST_PP_REPEAT( BOOST_MAX_INPLACE_FACTORY_ARITY, BOOST_DEFINE_TYPED_INPLACE_FACTORY_CLASS, BOOST_PP_EMPTY() )
+SC_BOOST_PP_REPEAT( SC_BOOST_MAX_INPLACE_FACTORY_ARITY, SC_BOOST_DEFINE_TYPED_INPLACE_FACTORY_CLASS, SC_BOOST_PP_EMPTY() )
 
 } // namespace sc_boost
 

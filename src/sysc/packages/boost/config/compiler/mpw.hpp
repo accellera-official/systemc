@@ -9,9 +9,9 @@
 //  MPW C++ compilers setup:
 
 #   if    defined(__SC__)
-#     define BOOST_COMPILER "MPW SCpp version " BOOST_STRINGIZE(__SC__)
+#     define SC_BOOST_COMPILER "MPW SCpp version " SC_BOOST_STRINGIZE(__SC__)
 #   elif defined(__MRC__)
-#     define BOOST_COMPILER "MPW MrCpp version " BOOST_STRINGIZE(__MRC__)
+#     define SC_BOOST_COMPILER "MPW MrCpp version " SC_BOOST_STRINGIZE(__MRC__)
 #   else
 #     error "Using MPW compiler configuration by mistake.  Please update."
 #   endif
@@ -19,19 +19,19 @@
 //
 // MPW 8.90:
 //
-#if (MPW_CPLUS <= 0x890) || !defined(BOOST_STRICT_CONFIG)
-#  define BOOST_NO_CV_SPECIALIZATIONS
-#  define BOOST_NO_DEPENDENT_NESTED_DERIVATIONS
-#  define BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
-#  define BOOST_NO_INCLASS_MEMBER_INITIALIZATION
-#  define BOOST_NO_INTRINSIC_WCHAR_T
-#  define BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-#  define BOOST_NO_USING_TEMPLATE
+#if (MPW_CPLUS <= 0x890) || !defined(SC_BOOST_STRICT_CONFIG)
+#  define SC_BOOST_NO_CV_SPECIALIZATIONS
+#  define SC_BOOST_NO_DEPENDENT_NESTED_DERIVATIONS
+#  define SC_BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
+#  define SC_BOOST_NO_INCLASS_MEMBER_INITIALIZATION
+#  define SC_BOOST_NO_INTRINSIC_WCHAR_T
+#  define SC_BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#  define SC_BOOST_NO_USING_TEMPLATE
 
-#  define BOOST_NO_CWCHAR
-#  define BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+#  define SC_BOOST_NO_CWCHAR
+#  define SC_BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 
-#  define BOOST_NO_STD_ALLOCATOR /* actually a bug with const reference overloading */
+#  define SC_BOOST_NO_STD_ALLOCATOR /* actually a bug with const reference overloading */
 #endif
 
 //
@@ -43,7 +43,7 @@
 //
 // last known and checked version is 0x890:
 #if (MPW_CPLUS > 0x890)
-#  if defined(BOOST_ASSERT_CONFIG)
+#  if defined(SC_BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  endif
 #endif

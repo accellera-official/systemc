@@ -9,7 +9,7 @@
 
 //  See http://www.boost.org for most recent version.
 
-// locate which std lib we are using and define BOOST_STDLIB_CONFIG as needed:
+// locate which std lib we are using and define SC_BOOST_STDLIB_CONFIG as needed:
 
 // we need to include a std lib header here in order to detect which
 // library is in use, use <utility> as it's about the smallest
@@ -23,41 +23,41 @@
 // STLPort library; this _must_ come first, otherwise since
 // STLport typically sits on top of some other library, we
 // can end up detecting that first rather than STLport:
-#  define BOOST_STDLIB_CONFIG "sysc/packages/boost/config/stdlib/stlport.hpp"
+#  define SC_BOOST_STDLIB_CONFIG "sysc/packages/boost/config/stdlib/stlport.hpp"
 
 #elif defined(__LIBCOMO__)
 // Comeau STL:
-#define BOOST_STDLIB_CONFIG "sysc/packages/boost/config/stdlib/libcomo.hpp"
+#define SC_BOOST_STDLIB_CONFIG "sysc/packages/boost/config/stdlib/libcomo.hpp"
 
 #elif defined(__STD_RWCOMPILER_H__) || defined(_RWSTD_VER)
 // Rogue Wave library:
-#  define BOOST_STDLIB_CONFIG "sysc/packages/boost/config/stdlib/roguewave.hpp"
+#  define SC_BOOST_STDLIB_CONFIG "sysc/packages/boost/config/stdlib/roguewave.hpp"
 
 #elif defined(__GLIBCPP__) || defined(__GLIBCXX__)
 // GNU libstdc++ 3
-#  define BOOST_STDLIB_CONFIG "sysc/packages/boost/config/stdlib/libstdcpp3.hpp"
+#  define SC_BOOST_STDLIB_CONFIG "sysc/packages/boost/config/stdlib/libstdcpp3.hpp"
 
 #elif defined(__STL_CONFIG_H)
 // generic SGI STL
-#  define BOOST_STDLIB_CONFIG "sysc/packages/boost/config/stdlib/sgi.hpp"
+#  define SC_BOOST_STDLIB_CONFIG "sysc/packages/boost/config/stdlib/sgi.hpp"
 
 #elif defined(__MSL_CPP__)
 // MSL standard lib:
-#  define BOOST_STDLIB_CONFIG "sysc/packages/boost/config/stdlib/msl.hpp"
+#  define SC_BOOST_STDLIB_CONFIG "sysc/packages/boost/config/stdlib/msl.hpp"
 
 #elif defined(__IBMCPP__)
 // take the default VACPP std lib
-#  define BOOST_STDLIB_CONFIG "sysc/packages/boost/config/stdlib/vacpp.hpp"
+#  define SC_BOOST_STDLIB_CONFIG "sysc/packages/boost/config/stdlib/vacpp.hpp"
 
 #elif defined(MSIPL_COMPILE_H)
 // Modena C++ standard library
-#  define BOOST_STDLIB_CONFIG "sysc/packages/boost/config/stdlib/modena.hpp"
+#  define SC_BOOST_STDLIB_CONFIG "sysc/packages/boost/config/stdlib/modena.hpp"
 
 #elif (defined(_YVALS) && !defined(__IBMCPP__)) || defined(_CPPLIB_VER)
 // Dinkumware Library (this has to appear after any possible replacement libraries):
-#  define BOOST_STDLIB_CONFIG "sysc/packages/boost/config/stdlib/dinkumware.hpp"
+#  define SC_BOOST_STDLIB_CONFIG "sysc/packages/boost/config/stdlib/dinkumware.hpp"
 
-#elif defined (BOOST_ASSERT_CONFIG)
+#elif defined (SC_BOOST_ASSERT_CONFIG)
 // this must come last - generate an error if we don't
 // recognise the library:
 #  error "Unknown standard library - please configure and report the results to boost.org"

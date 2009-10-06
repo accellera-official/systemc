@@ -8,8 +8,8 @@
 
 // For more information, see http://www.boost.org
 
-#ifndef BOOST_UTILITY_ADDRESSOF_HPP
-# define BOOST_UTILITY_ADDRESSOF_HPP
+#ifndef SC_BOOST_UTILITY_ADDRESSOF_HPP
+# define SC_BOOST_UTILITY_ADDRESSOF_HPP
 
 # include <sysc/packages/boost/config.hpp>
 # include <sysc/packages/boost/detail/workaround.hpp>
@@ -19,7 +19,7 @@ namespace sc_boost {
 // Do not make addressof() inline. Breaks MSVC 7. (Peter Dimov)
 
 // VC7 strips const from nested classes unless we add indirection here
-# if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
+# if SC_BOOST_WORKAROUND(SC_BOOST_MSVC, == 1300)
 
 template<class T> struct _addp
 {
@@ -39,7 +39,7 @@ addressof(T& v)
 
 // Borland doesn't like casting an array reference to a char reference
 // but these overloads work around the problem.
-# if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+# if SC_BOOST_WORKAROUND(__BORLANDC__, SC_BOOST_TESTED_AT(0x564))
 template<typename T,std::size_t N>
 T (*addressof(T (&t)[N]))[N]
 {
@@ -55,4 +55,4 @@ const T (*addressof(const T (&t)[N]))[N]
 
 }
 
-#endif // BOOST_UTILITY_ADDRESSOF_HPP
+#endif // SC_BOOST_UTILITY_ADDRESSOF_HPP

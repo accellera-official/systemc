@@ -10,59 +10,59 @@
 
 //  hpux specific config options:
 
-#define BOOST_PLATFORM "HP-UX"
+#define SC_BOOST_PLATFORM "HP-UX"
 
 // In principle, HP-UX has a nice <stdint.h> under the name <inttypes.h>
 // However, it has the following problem:
 // Use of UINT32_C(0) results in "0u l" for the preprocessed source
 // (verifyable with gcc 2.95.3, assumed for HP aCC)
-// #define BOOST_HAS_STDINT_H
+// #define SC_BOOST_HAS_STDINT_H
 
-#define BOOST_NO_SWPRINTF 
-#define BOOST_NO_CWCTYPE
+#define SC_BOOST_NO_SWPRINTF 
+#define SC_BOOST_NO_CWCTYPE
 
 #if defined(__GNUC__)
 #  if (__GNUC__ < 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ < 3))
       // GNU C on HP-UX does not support threads (checked up to gcc 3.3)
-#     define BOOST_DISABLE_THREADS
-#  elif !defined(BOOST_DISABLE_THREADS)
+#     define SC_BOOST_DISABLE_THREADS
+#  elif !defined(SC_BOOST_DISABLE_THREADS)
       // threads supported from gcc-3.3 onwards:
-#     define BOOST_HAS_THREADS
-#     define BOOST_HAS_PTHREADS
+#     define SC_BOOST_HAS_THREADS
+#     define SC_BOOST_HAS_PTHREADS
 #  endif
 #endif
 
 // boilerplate code:
-#define BOOST_HAS_UNISTD_H
+#define SC_BOOST_HAS_UNISTD_H
 #include <sysc/packages/boost/config/posix_features.hpp>
 
 // the following are always available:
-#ifndef BOOST_HAS_GETTIMEOFDAY
-#  define BOOST_HAS_GETTIMEOFDAY
+#ifndef SC_BOOST_HAS_GETTIMEOFDAY
+#  define SC_BOOST_HAS_GETTIMEOFDAY
 #endif
-#ifndef BOOST_HAS_SCHED_YIELD
-#    define BOOST_HAS_SCHED_YIELD
+#ifndef SC_BOOST_HAS_SCHED_YIELD
+#    define SC_BOOST_HAS_SCHED_YIELD
 #endif
-#ifndef BOOST_HAS_PTHREAD_MUTEXATTR_SETTYPE
-#    define BOOST_HAS_PTHREAD_MUTEXATTR_SETTYPE
+#ifndef SC_BOOST_HAS_PTHREAD_MUTEXATTR_SETTYPE
+#    define SC_BOOST_HAS_PTHREAD_MUTEXATTR_SETTYPE
 #endif
-#ifndef BOOST_HAS_NL_TYPES_H
-#    define BOOST_HAS_NL_TYPES_H
+#ifndef SC_BOOST_HAS_NL_TYPES_H
+#    define SC_BOOST_HAS_NL_TYPES_H
 #endif
-#ifndef BOOST_HAS_NANOSLEEP
-#    define BOOST_HAS_NANOSLEEP
+#ifndef SC_BOOST_HAS_NANOSLEEP
+#    define SC_BOOST_HAS_NANOSLEEP
 #endif
-#ifndef BOOST_HAS_GETTIMEOFDAY
-#    define BOOST_HAS_GETTIMEOFDAY
+#ifndef SC_BOOST_HAS_GETTIMEOFDAY
+#    define SC_BOOST_HAS_GETTIMEOFDAY
 #endif
-#ifndef BOOST_HAS_DIRENT_H
-#    define BOOST_HAS_DIRENT_H
+#ifndef SC_BOOST_HAS_DIRENT_H
+#    define SC_BOOST_HAS_DIRENT_H
 #endif
-#ifndef BOOST_HAS_CLOCK_GETTIME
-#    define BOOST_HAS_CLOCK_GETTIME
+#ifndef SC_BOOST_HAS_CLOCK_GETTIME
+#    define SC_BOOST_HAS_CLOCK_GETTIME
 #endif
-#ifndef BOOST_HAS_SIGACTION
-#  define BOOST_HAS_SIGACTION
+#ifndef SC_BOOST_HAS_SIGACTION
+#  define SC_BOOST_HAS_SIGACTION
 #endif
 
 

@@ -3,8 +3,8 @@
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_TYPE_DWA20010120_HPP
-# define BOOST_TYPE_DWA20010120_HPP
+#ifndef SC_BOOST_TYPE_DWA20010120_HPP
+# define SC_BOOST_TYPE_DWA20010120_HPP
 
 namespace sc_boost {
 
@@ -15,4 +15,4 @@ namespace sc_boost {
 
 }
 
-#endif // BOOST_TYPE_DWA20010120_HPP
+#endif // SC_BOOST_TYPE_DWA20010120_HPP
