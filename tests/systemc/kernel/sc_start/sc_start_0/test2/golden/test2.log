@@ -1,0 +1,16 @@
+SystemC Simulation
+0 s 1 thread
+0 s 2 cascade0
+0 s 3 cascade1
+0 s 4 cascade2
+
+1 ns 8 thread
+1 ns 9 cascade0
+1 ns 10 cascade1
+1 ns 11 cascade2
+
+2 ns 15 thread
+2 ns 16 cascade0
+2 ns 17 cascade1
+2 ns 18 cascade2
+Program completed

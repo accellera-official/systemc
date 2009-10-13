@@ -243,7 +243,7 @@ sc_main(int ac, char *av[])
   fetch F("F", pc, instr);
 
   // instead of a testbench routine, we include the testbench here
-  sc_start(0, SC_NS);
+  sc_start(1, SC_NS);
   sc_start( 10, SC_NS );
 
   fflush( stdout );

@@ -47,6 +47,9 @@
  *****************************************************************************/
 
 // $Log: main.cpp,v $
+// Revision 1.1.1.1  2006/12/15 20:37:20  acg
+// SystemC Tests 2.2
+//
 // Revision 1.5  2006/01/24 21:05:56  acg
 //  Andy Goodrich: replacement of deprecated features with their non-deprecated
 //  counterparts.

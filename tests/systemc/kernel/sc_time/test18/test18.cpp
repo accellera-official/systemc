@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: test18.cpp,v $
+// Revision 1.1.1.1  2006/12/15 20:37:06  acg
+// SystemC Tests 2.2
+//
 // Revision 1.1  2006/05/03 19:37:10  acg
 //  Andy Goodrich: new test to check that time will not run backward if a
 //  negative value is given to sc_event::notify()

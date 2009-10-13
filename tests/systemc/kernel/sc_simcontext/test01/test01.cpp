@@ -81,7 +81,7 @@ sc_main( int, char*[] )
     mod_a a( "a" );
     a.clk( clk );
 
-    sc_start(0, SC_NS);
+    sc_start(1, SC_NS);
 
     return 0;
 }

@@ -60,14 +60,14 @@ class module1 : public sc_module
 private:
   sc_event& ev;
   int method_count;
+  int r;
 public:
 
   SC_HAS_PROCESS(module1);
 
   module1(sc_module_name name, sc_event& event) : sc_module(name), 
-    ev(event), method_count(0)
+    ev(event), method_count(0), r(0)
   {
-    int r;
     SC_THREAD(main);
     cout << endl << sc_time_stamp() << ": CTOR, Before spawning function_method " << endl;
     sc_spawn_options o1;

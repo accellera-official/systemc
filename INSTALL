@@ -1,4 +1,4 @@
-	INSTALL NOTES FOR SystemC 2.1 regression test suite
+	INSTALL NOTES FOR SystemC 2.2.0 regression test suite
 	-----------------------------------------------------
 
 Contents:
@@ -11,12 +11,12 @@ Contents:
 1. Installation Notes for Unix
 ------------------------------
 
-All you have to do is unpack the regtests-2.1.tgz file in the
+All you have to do is unpack the systemc_tests-2.2.0.tgz file in the
 directory of your choice, .e.g,
 
-  > gtar zxvf regtests-2.1.tgz
+  > gtar zxvf systemc_tests-2.2.0.tgz
 
-This will create the directory regtests-2.1 containing the test
+This will create the directory systemc_tests-2.2.0 containing the test
 source code and scripts.
 
 Refer to the README file on how to run the regression tests.
@@ -25,10 +25,10 @@ Refer to the README file on how to run the regression tests.
 2. Installation Notes for Windows
 ---------------------------------
 
-All you have to do is execute the regtests-2.1.exe file and specify
+All you have to do is execute the systemc_tests-2.2.0.exe file and specify
 the directory in which to unpack the regression test suite.
 
-This will create the directory regtests-2.1 containing the test
+This will create the directory systemc_tests-2.2.0 containing the test
 source code and scripts.
 
 Refer to the README file on how to run the regression tests.

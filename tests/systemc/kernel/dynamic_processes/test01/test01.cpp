@@ -80,13 +80,13 @@ public:
 
     SC_FORK
       sc_spawn(&r,
-        sc_bind(&top::round_robin, this, "1", sc_ref(e1), sc_ref(e2), 3), "1") ,
+        sc_bind(&top::round_robin, this, "1", sc_ref(e1), sc_ref(e2), 3), "t1") ,
       sc_spawn(&r,
-        sc_bind(&top::round_robin, this, "2", sc_ref(e2), sc_ref(e3), 3), "2") ,
+        sc_bind(&top::round_robin, this, "2", sc_ref(e2), sc_ref(e3), 3), "t2") ,
       sc_spawn(&r,
-        sc_bind(&top::round_robin, this, "3", sc_ref(e3), sc_ref(e4), 3), "3") ,
+        sc_bind(&top::round_robin, this, "3", sc_ref(e3), sc_ref(e4), 3), "t3") ,
       sc_spawn(&r,
-        sc_bind(&top::round_robin, this, "4", sc_ref(e4), sc_ref(e1), 3), "4") ,
+        sc_bind(&top::round_robin, this, "4", sc_ref(e4), sc_ref(e1), 3), "t4") ,
     SC_JOIN
 
     cout << "Returned int is " << r << endl;
@@ -99,13 +99,10 @@ public:
 
     wait(20, SC_NS);
 
-    // Test thread reuse, & show how to use sc_spawn_options 
-
-    sc_spawn_options o;
-	o.set_stack_size(0);
+    // Test thread reuse
 
     for (int i = 0 ; i < 10; i++)
-      sc_spawn(&r, sc_bind(&top::wait_and_end, this, i), "t1", &o);
+      sc_spawn(&r, sc_bind(&top::wait_and_end, this, i));
 
     wait(20, SC_NS);
 
@@ -115,11 +112,17 @@ public:
 
     cout << "Returned int is " << r << endl;
 
-	sc_process_handle handle1 = sc_spawn(sc_bind(&void_function, 1.2345));
-	wait(handle1.terminated_event());
+    // demo sc_spawn_options usage
+
+    sc_spawn_options ops;
+    ops.set_stack_size(0);
+    sc_process_handle handle1 = sc_spawn(
+      sc_bind(&void_function, 1.2345), "void_function", &ops
+    );
+    wait(handle1.terminated_event());
 
     double d = 9.8765;
-    wait( sc_spawn(&r, sc_bind(&ref_function, sc_cref(d))).terminated_event());
+    wait( sc_spawn(&r, sc_bind(&ref_function, sc_cref(d))).terminated_event() );
 
     cout << "Returned int is " << r << endl;
 

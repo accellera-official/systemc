@@ -1,5 +1,4 @@
 #include <systemc.h>
-#include "sysc/communication/sc_event_queue.h"
 
 SC_MODULE(Rec) {
   sc_event_queue_port E;

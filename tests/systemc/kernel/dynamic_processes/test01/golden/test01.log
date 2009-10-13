@@ -1,17 +1,17 @@
 SystemC Simulation
 
-100 ns: Top1.main.1: Round robin thread 1
-110 ns: Top1.main.2: Round robin thread 2
-120 ns: Top1.main.3: Round robin thread 3
-130 ns: Top1.main.4: Round robin thread 4
-140 ns: Top1.main.1: Round robin thread 1
-150 ns: Top1.main.2: Round robin thread 2
-160 ns: Top1.main.3: Round robin thread 3
-170 ns: Top1.main.4: Round robin thread 4
-180 ns: Top1.main.1: Round robin thread 1
-190 ns: Top1.main.2: Round robin thread 2
-200 ns: Top1.main.3: Round robin thread 3
-210 ns: Top1.main.4: Round robin thread 4
+100 ns: Top1.main.t1: Round robin thread 1
+110 ns: Top1.main.t2: Round robin thread 2
+120 ns: Top1.main.t3: Round robin thread 3
+130 ns: Top1.main.t4: Round robin thread 4
+140 ns: Top1.main.t1: Round robin thread 1
+150 ns: Top1.main.t2: Round robin thread 2
+160 ns: Top1.main.t3: Round robin thread 3
+170 ns: Top1.main.t4: Round robin thread 4
+180 ns: Top1.main.t1: Round robin thread 1
+190 ns: Top1.main.t2: Round robin thread 2
+200 ns: Top1.main.t3: Round robin thread 3
+210 ns: Top1.main.t4: Round robin thread 4
 Returned int is 0
 
 
@@ -25,59 +25,23 @@ Returned int is 0
 228 ns: Top1.main.thread_p_7: Thread 7 ending.
 229 ns: Top1.main.thread_p_8: Thread 8 ending.
 230 ns: Top1.main.thread_p_9: Thread 9 ending.
+241 ns: Top1.main.thread_p_10: Thread 0 ending.
+242 ns: Top1.main.thread_p_11: Thread 1 ending.
+243 ns: Top1.main.thread_p_12: Thread 2 ending.
+244 ns: Top1.main.thread_p_13: Thread 3 ending.
+245 ns: Top1.main.thread_p_14: Thread 4 ending.
+246 ns: Top1.main.thread_p_15: Thread 5 ending.
+247 ns: Top1.main.thread_p_16: Thread 6 ending.
+248 ns: Top1.main.thread_p_17: Thread 7 ending.
+249 ns: Top1.main.thread_p_18: Thread 8 ending.
+250 ns: Top1.main.thread_p_19: Thread 9 ending.
 
-Warning: (W505) object already exists: Top1.main.t1. Latter declaration will be renamed to Top1.main.t1_0
-In file: <removed by verify.pl>
-In process: Top1.main @ 240 ns
-
-Warning: (W505) object already exists: Top1.main.t1. Latter declaration will be renamed to Top1.main.t1_1
-In file: <removed by verify.pl>
-In process: Top1.main @ 240 ns
-
-Warning: (W505) object already exists: Top1.main.t1. Latter declaration will be renamed to Top1.main.t1_2
-In file: <removed by verify.pl>
-In process: Top1.main @ 240 ns
-
-Warning: (W505) object already exists: Top1.main.t1. Latter declaration will be renamed to Top1.main.t1_3
-In file: <removed by verify.pl>
-In process: Top1.main @ 240 ns
-
-Warning: (W505) object already exists: Top1.main.t1. Latter declaration will be renamed to Top1.main.t1_4
-In file: <removed by verify.pl>
-In process: Top1.main @ 240 ns
-
-Warning: (W505) object already exists: Top1.main.t1. Latter declaration will be renamed to Top1.main.t1_5
-In file: <removed by verify.pl>
-In process: Top1.main @ 240 ns
-
-Warning: (W505) object already exists: Top1.main.t1. Latter declaration will be renamed to Top1.main.t1_6
-In file: <removed by verify.pl>
-In process: Top1.main @ 240 ns
-
-Warning: (W505) object already exists: Top1.main.t1. Latter declaration will be renamed to Top1.main.t1_7
-In file: <removed by verify.pl>
-In process: Top1.main @ 240 ns
-
-Warning: (W505) object already exists: Top1.main.t1. Latter declaration will be renamed to Top1.main.t1_8
-In file: <removed by verify.pl>
-In process: Top1.main @ 240 ns
-241 ns: Top1.main.t1: Thread 0 ending.
-242 ns: Top1.main.t1_0: Thread 1 ending.
-243 ns: Top1.main.t1_1: Thread 2 ending.
-244 ns: Top1.main.t1_2: Thread 3 ending.
-245 ns: Top1.main.t1_3: Thread 4 ending.
-246 ns: Top1.main.t1_4: Thread 5 ending.
-247 ns: Top1.main.t1_5: Thread 6 ending.
-248 ns: Top1.main.t1_6: Thread 7 ending.
-249 ns: Top1.main.t1_7: Thread 8 ending.
-250 ns: Top1.main.t1_8: Thread 9 ending.
-
-260 ns: Top1.main.thread_p_10: Test_function sees 3.14159
+260 ns: Top1.main.thread_p_20: Test_function sees 3.14159
 Returned int is 3
 
-260 ns: Top1.main.thread_p_11: void_function sees 1.2345
+260 ns: Top1.main.void_function: void_function sees 1.2345
 
-260 ns: Top1.main.thread_p_12: ref_function sees 9.8765
+260 ns: Top1.main.thread_p_21: ref_function sees 9.8765
 Returned int is 9
 
 Done.

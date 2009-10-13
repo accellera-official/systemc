@@ -3,6 +3,7 @@ SystemC Simulation
 1
 2
 2
+500 ps
 ***
 sc_module  a
 sc_module  b

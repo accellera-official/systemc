@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: sc_barrier.h,v $
+// Revision 1.1.1.1  2006/12/15 20:37:04  acg
+// SystemC Tests 2.2
+//
 // Revision 1.2  2006/01/24 21:04:52  acg
 //  Andy Goodrich: replacement of deprecated features with their non-deprecated
 //  counterparts.

@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: pulse.cpp,v $
+// Revision 1.1.1.1  2006/12/15 20:37:20  acg
+// SystemC Tests 2.2
+//
 // Revision 1.3  2006/01/19 00:48:14  acg
 // Andy Goodrich: Changes for the fact signal write checking is enabled.
 //

@@ -128,7 +128,7 @@ sc_main( int, char*[] )
     mod_c c( "c" );
     c.clk( clk );
 
-    sc_start(0, SC_NS);
+    sc_start(1, SC_NS);
 
     print_child_objects( sc_get_top_level_objects() );
     print_child_objects( a.get_child_objects() );

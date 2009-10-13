@@ -1,7 +1,7 @@
-		SystemC 2.1 regression test suite
-                =================================
+		SystemC 2.2.0 regression test suite
+        ===================================
 
-This is the production release of the SystemC 2.1 regression test suite.
+This is the production release of the SystemC 2.2.0 regression test suite.
 
 
 Contents:
@@ -86,19 +86,19 @@ Contents:
   The 'verify.pl' script takes directories and names of tests as
   arguments. For example
 
-    > .../regtests-2.1/scripts/verify.pl systemc
+    > .../systemc_tests-2.2.0/scripts/verify.pl systemc
 
   runs all the tests in the regression test suite. The directories
   should be relative to '$SYSTEMC_TEST/tests'. By specifying
   subdirectories, it is possible to run only a subset of the tests in
   the regression test suite, e.g.
 
-    > .../regtests-2.1/scripts/verify.pl systemc/datatypes/fx
+    > .../systemc_tests-2.2.0/scripts/verify.pl systemc/datatypes/fx
 
   will run only the fixed-point regression tests. And if the name of
   the test/directory is unique, one can enter instead
 
-    > .../regtests-2.1/scripts/verify.pl fx
+    > .../systemc_tests-2.2.0/scripts/verify.pl fx
 
   which will run the same tests.
 

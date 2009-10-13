@@ -133,7 +133,7 @@ int sc_main(int ac, char *av[])
   proc2 P2("P2", Bus, clock);
   proc3 P3("P3", Bus);
 
-  sc_start(0, SC_NS);
+  sc_start(1, SC_NS);
   clock = 1;
   sc_start(10, SC_NS);
   for (int i = 0; i < 3; i++) {
