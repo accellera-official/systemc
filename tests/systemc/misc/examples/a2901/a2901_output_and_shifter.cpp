@@ -1,11 +1,11 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2002 by all Contributors.
+  source code Copyright (c) 1996-2005 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.3 (the "License");
+  set forth in the SystemC Open Source License Version 2.4 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -51,8 +51,9 @@ a2901_output_and_shifter::entry()
     q0  = Q.read()[0];
     q3  = Q.read()[3];
 
-    Y.write( ( ( i86 == 0x2 ) && ( OEbar.read() == 0x0)) ? A.read() :
-	     (!( i86 == 0x2 ) && ( OEbar.read() == 0x0)) ? F.read() : z4);
+    Y.write( ( ( i86 == 0x2 ) && ( OEbar.read() == 0x0)) ? (uint64)A.read() :
+	     (!( i86 == 0x2 ) && ( OEbar.read() == 0x0)) ? 
+			(uint64)F.read() : (uint64)z4); 
 
     t_RAM0 .write( (( i8 == 0x1) && ( i7 == 0x0 )) ? f0 : 0x0);             
     t_RAM3 .write( (( i8 == 0x1) && ( i7 == 0x1 )) ? f3 : 0x0);           

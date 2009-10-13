@@ -1,11 +1,11 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2002 by all Contributors.
+  source code Copyright (c) 1996-2005 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.3 (the "License");
+  set forth in the SystemC Open Source License Version 2.4 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -34,6 +34,15 @@
  *****************************************************************************/
 
 #include "systemc.h"
+#include "isaac.h"
+
+QTIsaac<8> rng;		// Platform independent random number generator.
+
+#define TEST(A,B) \
+{ \
+    if ( A != B ) \
+        cout << #A << " (" << A << ") != " << #B << "(" << B << ")" << endl; \
+}
 
 int
 sc_main(int, char**)
@@ -57,9 +66,9 @@ sc_main(int, char**)
             for (int ii = 0; ii < 100; ++ii) {
                 for (int jj = 0; jj < 100; ++jj) {
                     unsigned qi = (ii < 5) ? vali[ii] :
-		                             (rand() & ((1 << i) - 1));
+		                             (rng.rand() & ((1 << i) - 1));
                     signed int qj = (jj < 5) ? valj[jj] :
-		                               (rand() & ((1 << j) - 1));
+		                               (rng.rand() & ((1 << j) - 1));
 
                     if (qi & (1 << (i - 1))) {
                         qi = (qi << (32 - i)) >> (32 - i);
@@ -72,43 +81,38 @@ sc_main(int, char**)
                     y = qj;
 
                     sc_signed ty(x);
-                    assert( x == ty );
+                    TEST(x,ty );
                     assert( ty >= 0 );
-                    assert( (! x[i-1]) || (ty.length() == i+1) );
+                    assert((! x[i-1]) || (ty.length() == i+1) );
 
                     z = x + y;
-                    assert( static_cast<sc_signed>( z.range(31,0) ) ==
+                    TEST(static_cast<sc_bigint<32> >( z.range(31,0) ),
 			    int(int(qi) + qj) );
                     z = x - y;
-                    assert( static_cast<sc_signed>( z.range(31,0) ) ==
+                    TEST(static_cast<sc_bigint<32> >( z.range(31,0) ),
 			    int(int(qi) - qj) );
                     z = x * y;
-                    assert( static_cast<sc_signed>( z.range(31,0) ) ==
+                    TEST(static_cast<sc_bigint<32> >( z.range(31,0) ),
 			    int(int(qi) * qj) );
                     sc_unsigned xx(i);
                     xx = x;
                     xx *= y;
                     sc_unsigned xx2(i);
                     xx2 = z.range(i - 1, 0);
-                    assert(xx == xx2);
+                    TEST(xx,xx2);
 
                     if (y != 0) {
                         z = x / y;
-                        assert( static_cast<sc_signed>( z.range(31,0) ) ==
-				int(int(qi) / qj) );
+                        TEST(static_cast<sc_bigint<32> >( z.range(31,0) ), int(int(qi) / qj) );
                         z = x % y;
-                        assert( static_cast<sc_signed>( z.range(31,0) ) ==
-				int(int(qi) % qj) );
+                        TEST(static_cast<sc_bigint<32> >( z.range(31,0) ), int(int(qi) % qj) );
                     }
                     z = x & y;
-                    assert( static_cast<sc_signed>( z.range(31,0) ) ==
-			    int(int(qi) & qj) );
+                    TEST(static_cast<sc_bigint<32> >( z.range(31,0) ), int(int(qi) & qj) );
                     z = x | y;
-                    assert( static_cast<sc_signed>( z.range(31,0) ) ==
-			    int(int(qi) | qj) );
+                    TEST(static_cast<sc_bigint<32> >( z.range(31,0) ), int(int(qi) | qj) );
                     z = x ^ y;
-                    assert( static_cast<sc_signed>( z.range(31,0) ) ==
-			    int(int(qi) ^ qj) );
+                    TEST(static_cast<sc_bigint<32> >( z.range(31,0) ), int(int(qi) ^ qj) );
                 }
             }
         }

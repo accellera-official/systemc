@@ -4,10 +4,10 @@ $timescale
 $end
 
 $scope module SystemC $end
-$var wire    8  aaa  Char       $end
-$var wire   16  aab  Short       $end
-$var wire   32  aac  Int       $end
-$var wire   32  aad  Long       $end
+$var wire    8  aaa  Char [7:0]  $end
+$var wire   16  aab  Short [15:0]  $end
+$var wire   32  aac  Int [31:0]  $end
+$var wire   32  aad  Long [31:0]  $end
 $var wire    1  aae  Clock       $end
 $upscope $end
 $enddefinitions  $end

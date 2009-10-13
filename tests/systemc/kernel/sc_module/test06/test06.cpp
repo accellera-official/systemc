@@ -1,11 +1,11 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2002 by all Contributors.
+  source code Copyright (c) 1996-2005 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.3 (the "License");
+  set forth in the SystemC Open Source License Version 2.4 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -34,7 +34,7 @@
 
  *****************************************************************************/
 
-// test of the sc_module::sc_module(const sc_string&)
+// test of the sc_module::sc_module(const std::string&)
 
 #include "systemc.h"
 
@@ -42,7 +42,7 @@
 SC_MODULE( mod_a )
 {
 
-    mod_a(const sc_string &m) : sc_module(m) 
+    mod_a(const std::string &m) : sc_module(m) 
       { }
 
 };
@@ -51,7 +51,7 @@ SC_MODULE( mod_a )
 int
 sc_main( int, char*[] )
 {
-    const sc_string nm = "module_a";
+    const std::string nm = "module_a";
     mod_a a(nm );
     cout<<a.name()<<endl;;      
     return 0;

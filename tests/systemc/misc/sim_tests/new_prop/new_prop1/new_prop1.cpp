@@ -1,11 +1,11 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2002 by all Contributors.
+  source code Copyright (c) 1996-2005 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.3 (the "License");
+  set forth in the SystemC Open Source License Version 2.4 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -139,15 +139,15 @@ sc_main(int,char**)
     }
 
     print_func = &dont_print;
-    sc_initialize();
+    sc_start(0);
 
     print_func = &printf;
 
     for (int k = 0; k < 16; ++k) {
         i[k] = ! i[k].read();
-        sc_cycle(1);
+        sc_start(1);
         i[k] = ! i[k].read();
-        sc_cycle(1);
+        sc_start(1);
     }
 
     fflush( stdout );

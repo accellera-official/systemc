@@ -9,6 +9,8 @@ sc_module  b
 sc_clock  clock_0
 sc_signal  signal_0
 sc_module  c
+sc_method_process  clock_0_posedge_action_0
+sc_method_process  clock_0_negedge_action_0
 ***
 sc_in  a.port_0
 sc_out  a.port_1

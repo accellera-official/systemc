@@ -1,11 +1,11 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2002 by all Contributors.
+  source code Copyright (c) 1996-2005 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.3 (the "License");
+  set forth in the SystemC Open Source License Version 2.4 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -103,7 +103,7 @@ SC_MODULE( mod_c )
 };
 
 void
-print_child_objects( const sc_pvector<sc_object*>& child_objects_ )
+print_child_objects( const ::std::vector<sc_object*>& child_objects_ )
 {
     int size = child_objects_.size();
     cout << "***\n";
@@ -128,7 +128,7 @@ sc_main( int, char*[] )
     mod_c c( "c" );
     c.clk( clk );
 
-    sc_initialize();
+    sc_start(0);
 
     print_child_objects( sc_get_curr_simcontext()->get_child_objects() );
     print_child_objects( a.get_child_objects() );

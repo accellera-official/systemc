@@ -1,11 +1,11 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2002 by all Contributors.
+  source code Copyright (c) 1996-2005 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.3 (the "License");
+  set forth in the SystemC Open Source License Version 2.4 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -71,7 +71,8 @@ a2901_alu::entry()
 
     F.write(result);
     OVR.write(!(R_ext_v[3] ^ S_ext_v[3]) & (R_ext_v[3] ^ result[3]));
-    C4.write(result[4]);
+    //C4.write(result[4]);
+    C4.write((bool)result[4]);
     temp_p = R_ext_v | S_ext_v;
     temp_g = R_ext_v & S_ext_v;
     Pbar.write((temp_p[0] & temp_p[1] & temp_p[2] & temp_p[3]) ? 0 : 1);
@@ -79,6 +80,7 @@ a2901_alu::entry()
 	       (temp_p[3] & temp_g[2]) |
 	       (temp_p[3] & temp_p[2] & temp_g[1]) |
 	       (temp_p[3] & temp_p[2] & temp_p[1] & temp_g[0])) ? 0 : 1);
-    F3.write(result[3]);
+    //F3.write(result[3]);
+    F3.write((bool)result[3]);
     F30.write((result[3] | result[2] | result[1] | result[0]) ? 0 : 1);
 }

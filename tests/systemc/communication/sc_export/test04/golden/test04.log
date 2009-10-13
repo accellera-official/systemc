@@ -1,0 +1,4 @@
+SystemC Simulation
+
+Error: (E124) sc_export instance not bound to interface at end of construction: x.a
+In file: <removed by verify.pl>

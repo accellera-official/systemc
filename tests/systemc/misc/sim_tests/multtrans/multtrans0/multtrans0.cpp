@@ -1,11 +1,11 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2002 by all Contributors.
+  source code Copyright (c) 1996-2005 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.3 (the "License");
+  set forth in the SystemC Open Source License Version 2.4 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -165,13 +165,13 @@ void state_machine::entry()
 void testbench(sc_signal<int>& data, const sc_signal<int>& res)
 {
   int i;
-  sc_initialize();
+  sc_start(0);
   for (i=0; i<10; i++) {
     data.write(i*10 + 123);
-    sc_cycle( 10, SC_NS );
+    sc_start( 10, SC_NS );
     cout << "Result = " << res.read() << endl;
     data.write(i * 11 - 34);
-    sc_cycle( 10, SC_NS );
+    sc_start( 10, SC_NS );
     cout << "Result = " << res.read() << endl;
   }
 }

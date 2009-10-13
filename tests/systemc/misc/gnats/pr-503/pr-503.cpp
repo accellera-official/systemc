@@ -1,11 +1,11 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2002 by all Contributors.
+  source code Copyright (c) 1996-2005 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.3 (the "License");
+  set forth in the SystemC Open Source License Version 2.4 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -716,7 +716,8 @@ void EXC_CTRL::start_always() {
                         id_reg = 1;
                         err_no_reg = err_no_reg;
                         rb_flag = rb_flag;
-                        RHC_ADDR1 = (((sc_int<4>(0), sig_gen_buff_addr), RPBI_BPA.read()), sc_int<1>(MODE_S_P.read()));
+                        //RHC_ADDR1 = (((sc_int<4>(0), sig_gen_buff_addr), RPBI_BPA.read()), sc_int<1>(MODE_S_P.read()));
+                        RHC_ADDR1 = (((sc_int<4>(0), sig_gen_buff_addr), sc_int<4>(RPBI_BPA.read())), sc_int<1>(MODE_S_P.read()));
                         RHC_ADDR2 = ((sc_int<8>(10), TS0AR), sc_int<1>(RHC_REG_RST.read()));
                         RHC_OP_CODE = -4;
                         RHC_OP_START = 1;
@@ -756,7 +757,8 @@ void EXC_CTRL::start_always() {
                             }
                             wait();
                         }
-                        RHC_ADDR1 = (((sc_int<4>(0), dtemp.range(13,7)), RPBI_BPA.read()), sc_int<1>(MODE_S_P.read()));
+                        //RHC_ADDR1 = (((sc_int<4>(0), dtemp.range(13,7)), RPBI_BPA.read()), sc_int<1>(MODE_S_P.read()));
+                        RHC_ADDR1 = (((sc_int<4>(0), dtemp.range(13,7)), sc_int<4>(RPBI_BPA.read())), sc_int<1>(MODE_S_P.read()));
                         RHC_ADDR2 = ((sc_int<8>(11), TS1AR), sc_int<1>(RHC_REG_RST.read()));
                         RHC_OP_CODE = -4;
                         RHC_OP_START = 1;

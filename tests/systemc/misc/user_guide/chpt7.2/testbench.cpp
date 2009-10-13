@@ -1,11 +1,11 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2002 by all Contributors.
+  source code Copyright (c) 1996-2005 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.3 (the "License");
+  set forth in the SystemC Open Source License Version 2.4 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -38,6 +38,9 @@
 
 #include <math.h>
 #include "testbench.h"
+#include "isaac.h"
+
+QTIsaac<8> rng;
 
 void testbench::entry()
 {
@@ -45,17 +48,10 @@ void testbench::entry()
   int sum;
   int i;
 
-  /* g++ version 2.95.2 was not recognizing random(), so
-     I changed the calls to rand(), and also initialized the
-     generator with a call to srand().
-  */
- 
-  srand(123);
-
   for (i=0; i < 10; i++) {
-    a = rand() & 0x0fffffff;
-    b = rand() & 0x0fffffff;
-    c = rand() & 0x0fffffff;
+    a = rng.rand() & 0x0fffffff;
+    b = rng.rand() & 0x0fffffff;
+    c = rng.rand() & 0x0fffffff;
 
     Sa.write(a);
     Sb.write(b);

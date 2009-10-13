@@ -1,11 +1,11 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2002 by all Contributors.
+  source code Copyright (c) 1996-2005 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.3 (the "License");
+  set forth in the SystemC Open Source License Version 2.4 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -89,31 +89,31 @@ sc_main(int argc, char *argv[])
     sc_trace(tf, clk1, "clk1");
     sc_trace(tf, clk2, "clk2");
 
-    sc_initialize();
+    sc_start(0);
 
     clk1 = 0;                                         
     clk2 = 0;                                          // 0 ns
-    sc_cycle(3);
+    sc_start(3);
     clk2 = 1;                                          // 3 ns +
-    sc_cycle(2);
+    sc_start(2);
     clk1 = 1;                                          // 5 ns +
-    sc_cycle(4);
+    sc_start(4);
     clk2 = 0;                                          // 9 ns
-    sc_cycle(1);
+    sc_start(1);
     clk1 = 0;                                          // 10 ns
-    sc_cycle(5);
+    sc_start(5);
     clk2 = 1;                                          // 15 ns +
-    sc_cycle(0);
+    sc_start(0);
     clk1 = 1;                                          // 15 ns +
-    sc_cycle(5);
+    sc_start(5);
     clk1 = 0;                                          // 20 ns
-    sc_cycle(1);
+    sc_start(1);
     clk2 = 0;                                          // 21 ns
-    sc_cycle(4);
+    sc_start(4);
     clk1 = 1;                                          // 25 ns +
-    sc_cycle(2);
+    sc_start(2);
     clk2 = 1;                                          // 27 ns +
-    sc_cycle(3);
+    sc_start(3);
     clk1 = 0;                                          // 30 ns
 
     sc_close_vcd_trace_file(tf);

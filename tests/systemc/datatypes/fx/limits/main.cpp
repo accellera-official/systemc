@@ -1,11 +1,11 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2002 by all Contributors.
+  source code Copyright (c) 1996-2005 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.3 (the "License");
+  set forth in the SystemC Open Source License Version 2.4 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -46,6 +46,12 @@
 #define SC_INCLUDE_FX
 #include "systemc.h"
 
+#if defined(__GNUC__) && (__GNUC__ >= 3)
+#   include "sstream"
+#else
+#   include "strstream.h"
+#endif
+
 extern void test_fx_float_limits(ostream&);
 extern void test_fx_ufix_limits(ostream&);
 extern void test_fx_fix_limits(ostream&);
@@ -54,7 +60,11 @@ extern void test_fx_ufixed_limits(ostream&);
 
 int sc_main( int, char** )
 {
-  strstream out;
+# if defined(__GNUC__) && (__GNUC__ >= 3)
+    std::stringstream out;
+# else
+    strstream out;
+# endif
 
   out.precision(15);
 
@@ -64,29 +74,33 @@ int sc_main( int, char** )
   test_fx_fixed_limits(out);
   test_fx_ufixed_limits(out);
 
-  out << '\0';
-  char *s = out.str();
+# if defined(__GNUC__) && (__GNUC__ >= 3)
+    std::string s = out.str();
+    for (int i = 0; i < s.length(); i++)
+# else
+    out << '\0';
+    char* s = out.str();
+    for (int i = 0; i < strlen(s); i++)
+# endif
 
-  for (char* p=s; *p; p++)
   {
-    if (p[0] == 'i'  &&  p[1] == 'n'  &&  p[2] == 'f')
+    if (s[i+0] == 'i'  &&  s[i+1] == 'n'  &&  s[i+2] == 'f')
     {
-      p[0] = 'I';
-      p += 2;
+      s[i+0] = 'I';
+      i += 2;
       continue;
     }
 
-    if (p[0] == 'n'  &&  p[1] == 'a'  &&  p[2] == 'n')
+    if (s[i+0] == 'n'  &&  s[i+1] == 'a'  &&  s[i+2] == 'n')
     {
-      p[0] = 'N';
-      p[2] = 'N';
-      p += 2;
+      s[i+0] = 'N';
+      s[i+2] = 'N';
+      i += 2;
       continue;
     }
   }
 
   cout << s;
-  delete [] s;
 
   return 0;
 }

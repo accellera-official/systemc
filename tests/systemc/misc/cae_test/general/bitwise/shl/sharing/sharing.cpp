@@ -1,11 +1,11 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2002 by all Contributors.
+  source code Copyright (c) 1996-2005 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.3 (the "License");
+  set forth in the SystemC Open Source License Version 2.4 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -56,9 +56,8 @@ void sharing::entry()
   char            tmp6r;
 
 // define 1 dimensional array
-   int  tmp7[2];
+   unsigned int  tmp7[2];
    char tmp8[2];
-   int  tmp9[2];
 
 // define sc_bool_vector
   sc_bv<4>	tmp10;
@@ -84,7 +83,6 @@ void sharing::entry()
    tmp7[1] = 12;
    tmp8[0] = 'S';
    tmp8[1] = 'C';
-   // tmp9 = tmp7;
    tmp11[0][0] = "1";
    tmp11[1][0] = "0";
 
@@ -103,11 +101,11 @@ void sharing::entry()
     out_ack.write(true);
 
     //execute mixed data type shit left operations
-    tmp1r = tmp1 << tmp7[0];
+    tmp1r = tmp1 << (tmp7[0] % 8);
     tmp2r = tmp2 << 2;
     tmp3r = tmp3 << 1;
-    tmp4r = tmp4 << tmp7[1];
-    tmp5r = tmp3 << int(tmp1.to_int());
+    tmp4r = tmp4 << (tmp7[1] % 32);
+    tmp5r = tmp3 << ((unsigned int)tmp1.to_int() % 32);
     tmp6r = tmp6 << 1;
 
     //write outputs
@@ -124,12 +122,12 @@ void sharing::entry()
     out_valid.write(false);
 
     //execute mixed data type shift left operations
-    tmp1r = tmp1 << tmp7[0];
-    tmp2r = tmp2 << tmp4;
-    tmp3r = tmp3 << tmp5;
+    tmp1r = tmp1 << (tmp7[0] % 8);
+    tmp2r = tmp2 << (tmp4 % 8);
+    tmp3r = tmp3 << (tmp5 % 32);
     tmp4r = tmp4 << 2;
-    tmp5r = tmp3 << int(tmp5);
-    tmp6r = tmp6 << int(tmp2.to_uint());
+    tmp5r = tmp3 << ((unsigned int)(tmp5) % 32);
+    tmp6r = tmp6 << (tmp2.to_uint() % 8);
  
     //write outputs
     out_value1.write(tmp1r);

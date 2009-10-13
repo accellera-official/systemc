@@ -1,0 +1,11 @@
+SystemC Simulation
+
+Warning: (W540) sc_cycle is deprecated: use sc_start(...) instead
+In file: <removed by verify.pl>
+After first sc_cycle call
+After second sc_cycle call
+
+Warning: (W540) sc_cycle is deprecated: use sc_start(...) instead
+In file: <removed by verify.pl>
+After third sc_cycle call
+Program completed

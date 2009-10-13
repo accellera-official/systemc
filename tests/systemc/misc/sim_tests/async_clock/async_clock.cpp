@@ -1,11 +1,11 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2002 by all Contributors.
+  source code Copyright (c) 1996-2005 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.3 (the "License");
+  set forth in the SystemC Open Source License Version 2.4 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -151,30 +151,30 @@ sc_main( int argc, char* argv[] )
     proc3 p3("p3", dclk2);
     proc4 p4("p4", p, q, clk1, dclk1, dclk2 );
 
-    sc_initialize();
+    sc_start(0);
     p = 1;
     q = 1;
     for (double t = 0; t < 5 NS; t += 1 NS) {
         clk1 = 1;
-        sc_cycle( 1, SC_NS );
+        sc_start( 1, SC_NS );
         clk1 = 0;
-        sc_cycle( 1, SC_NS );
+        sc_start( 1, SC_NS );
 	cout << " ***" << endl;
     }
     q = 0;
     for (double t = 0; t < 5 NS; t += 1 NS) {
         clk1 = 1;
-        sc_cycle( 1, SC_NS );
+        sc_start( 1, SC_NS );
         clk1 = 0;
-        sc_cycle( 1, SC_NS );
+        sc_start( 1, SC_NS );
 	cout << " ***" << endl;
     }
     p = 0;
     for (double t = 0; t < 5 NS; t += 1 NS) {
         clk1 = 1;
-        sc_cycle( 1, SC_NS );
+        sc_start( 1, SC_NS );
         clk1 = 0;
-        sc_cycle( 1, SC_NS );
+        sc_start( 1, SC_NS );
 	cout << " ***" << endl;
     }
 

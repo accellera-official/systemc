@@ -1,11 +1,11 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2002 by all Contributors.
+  source code Copyright (c) 1996-2005 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.3 (the "License");
+  set forth in the SystemC Open Source License Version 2.4 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -215,7 +215,7 @@ test_bitwise_left_shift()
 	    a <<= -1;
 	    WRITE( a );
 	}
-	catch( sc_exception x ) {
+	catch( sc_report x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -237,7 +237,7 @@ test_bitwise_left_shift()
 	    b = a << -1;
 	    WRITE( b );
 	}
-	catch( sc_exception x ) {
+	catch( sc_report x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -258,7 +258,7 @@ test_bitwise_left_shift()
 	    a <<= -1;
 	    WRITE( a );
 	}
-	catch( sc_exception x ) {
+	catch( sc_report x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -280,7 +280,7 @@ test_bitwise_left_shift()
 	    b = a << -1;
 	    WRITE( b );
 	}
-	catch( sc_exception x ) {
+	catch( sc_report x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -301,7 +301,7 @@ test_bitwise_left_shift()
 	    (a( 69, 20 ), a( 19, 0 )) <<= -1;
 	    WRITE( a );
 	}
-	catch( sc_exception x ) {
+	catch( sc_report x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -324,7 +324,7 @@ test_bitwise_left_shift()
 	    b = (a( 69, 20 ), a( 19, 0 )) << -1;
 	    WRITE( b );
 	}
-	catch( sc_exception x ) {
+	catch( sc_report x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -351,7 +351,7 @@ test_bitwise_right_shift()
 	    a >>= -1;
 	    WRITE( a );
 	}
-	catch( sc_exception x ) {
+	catch( sc_report x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -373,7 +373,7 @@ test_bitwise_right_shift()
 	    b = a >> -1;
 	    WRITE( b );
 	}
-	catch( sc_exception x ) {
+	catch( sc_report x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -394,7 +394,7 @@ test_bitwise_right_shift()
 	    a >>= -1;
 	    WRITE( a );
 	}
-	catch( sc_exception x ) {
+	catch( sc_report x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -416,7 +416,7 @@ test_bitwise_right_shift()
 	    b = a >> -1;
 	    WRITE( b );
 	}
-	catch( sc_exception x ) {
+	catch( sc_report x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -437,7 +437,7 @@ test_bitwise_right_shift()
 	    (a( 69, 20 ), a( 19, 0 )) >>= -1;
 	    WRITE( a );
 	}
-	catch( sc_exception x ) {
+	catch( sc_report x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -459,7 +459,7 @@ test_bitwise_right_shift()
 	    b = (a( 69, 20 ), a( 19, 0 )) >> -1;
 	    WRITE( b );
 	}
-	catch( sc_exception x ) {
+	catch( sc_report x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -486,7 +486,7 @@ test_bitwise_left_rotate()
 	    a.lrotate( -1 );
 	    WRITE( a );
 	}
-	catch( sc_exception x ) {
+	catch( sc_report x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -508,7 +508,7 @@ test_bitwise_left_rotate()
 	    b = lrotate( a, -1 );
 	    WRITE( b );
 	}
-	catch( sc_exception x ) {
+	catch( sc_report x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -529,7 +529,7 @@ test_bitwise_left_rotate()
 	    a.lrotate( -1 );
 	    WRITE( a );
 	}
-	catch( sc_exception x ) {
+	catch( sc_report x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -551,7 +551,7 @@ test_bitwise_left_rotate()
 	    b = lrotate( a, -1 );
 	    WRITE( b );
 	}
-	catch( sc_exception x ) {
+	catch( sc_report x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -572,7 +572,7 @@ test_bitwise_left_rotate()
 	    (a( 69, 20 ), a( 19, 0 )).lrotate( -1 );
 	    WRITE( a );
 	}
-	catch( sc_exception x ) {
+	catch( sc_report x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -594,7 +594,7 @@ test_bitwise_left_rotate()
 	    b = lrotate( (a( 69, 20 ), a( 19, 0 )), -1 );
 	    WRITE( b );
 	}
-	catch( sc_exception x ) {
+	catch( sc_report x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -621,7 +621,7 @@ test_bitwise_right_rotate()
 	    a.rrotate( -1 );
 	    WRITE( a );
 	}
-	catch( sc_exception x ) {
+	catch( sc_report x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -643,7 +643,7 @@ test_bitwise_right_rotate()
 	    b = rrotate( a, -1 );
 	    WRITE( b );
 	}
-	catch( sc_exception x ) {
+	catch( sc_report x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -664,7 +664,7 @@ test_bitwise_right_rotate()
 	    a.rrotate( -1 );
 	    WRITE( a );
 	}
-	catch( sc_exception x ) {
+	catch( sc_report x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -686,7 +686,7 @@ test_bitwise_right_rotate()
 	    b = rrotate( a, -1 );
 	    WRITE( b );
 	}
-	catch( sc_exception x ) {
+	catch( sc_report x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -707,7 +707,7 @@ test_bitwise_right_rotate()
 	    (a( 69, 20 ), a( 19, 0 )).rrotate( -1 );
 	    WRITE( a );
 	}
-	catch( sc_exception x ) {
+	catch( sc_report x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -730,7 +730,7 @@ test_bitwise_right_rotate()
 	    b = rrotate( (a( 69, 20 ), a( 19, 0 )), -1 );
 	    WRITE( b );
 	}
-	catch( sc_exception x ) {
+	catch( sc_report x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -831,7 +831,7 @@ test_string_conversions()
 
 	sc_bv_base a( 1, 8 );
 	sc_bv_base b( 8 );
-	sc_string s;
+	std::string s;
 	s = a.to_string();
 	cout << s << endl;
 	b = s.c_str();
@@ -886,7 +886,7 @@ test_string_conversions()
 
 	sc_lv_base a( SC_LOGIC_1, 8 );
 	sc_lv_base b( 8 );
-	sc_string s;
+	std::string s;
 	s = a.to_string();
 	cout << s << endl;
 	b = s.c_str();
@@ -941,7 +941,7 @@ test_string_conversions()
 
 	sc_lv_base a( SC_LOGIC_1, 8 );
 	sc_lv_base b( 8 );
-	sc_string s;
+	std::string s;
 	s = (a( 7, 4 ), a( 3, 0 )).to_string();
 	cout << s << endl;
 	(b( 7, 4 ), b( 3, 0 )) = s.c_str();

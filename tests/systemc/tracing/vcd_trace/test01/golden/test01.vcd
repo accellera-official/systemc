@@ -6,8 +6,8 @@ $end
 $scope module SystemC $end
 $var wire    1  aaa  Bool       $end
 $var wire    1  aab  SC_Logic       $end
-$var wire    4  aac  SC_BV       $end
-$var wire    4  aad  SC_LV       $end
+$var wire    4  aac  SC_BV [3:0]  $end
+$var wire    4  aad  SC_LV [3:0]  $end
 $upscope $end
 $enddefinitions  $end
 

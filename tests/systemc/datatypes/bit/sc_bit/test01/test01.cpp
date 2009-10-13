@@ -1,11 +1,11 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2002 by all Contributors.
+  source code Copyright (c) 1996-2005 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.3 (the "License");
+  set forth in the SystemC Open Source License Version 2.4 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -45,7 +45,7 @@ void cover_sc_bit()
     try {
 	sc_bit foo(2);
     }
-    catch (sc_exception) {
+    catch (sc_report) {
 	cout << "Caught exception for sc_bit(2)\n";
     }
     sc_bit bc0('0');
@@ -53,7 +53,7 @@ void cover_sc_bit()
     try {
 	sc_bit foo('2');
     }
-    catch (sc_exception) {
+    catch (sc_report) {
 	cout << "Caught exception for sc_bit('2')\n";
     }
     sc_bit blc0(sc_logic('0'));

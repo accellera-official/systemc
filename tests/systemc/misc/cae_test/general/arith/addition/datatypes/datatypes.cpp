@@ -1,11 +1,11 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2002 by all Contributors.
+  source code Copyright (c) 1996-2005 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.3 (the "License");
+  set forth in the SystemC Open Source License Version 2.4 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -103,7 +103,7 @@ void datatypes::entry()
     out_ack.write(true);
 
     //execute mixed data type addition operations
-    tmp1r = tmp1 + tmp2 + tmp1.range(0, 0) ;
+    tmp1r = tmp1 + tmp2 + (sc_bigint<1>)tmp1.range(0, 0) ; // ####
     // tmp2r = tmp6 + tmp1 + int(tmp10[2]);	// treat tmp10[2] as carry in
     tmp2r = tmp6 + tmp1 + tmp10[2].to_bool();	// treat tmp10[2] as carry in
     tmp3r = tmp4 + tmp6;

@@ -1,11 +1,11 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2002 by all Contributors.
+  source code Copyright (c) 1996-2005 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.3 (the "License");
+  set forth in the SystemC Open Source License Version 2.4 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -45,6 +45,7 @@ SC_MODULE( proc1 )
   short obj2;
   int obj3;
   long obj4;
+  int64 obj5;
 
   proc1( sc_module_name NAME,
 	 sc_signal<bool>& CLK )
@@ -56,6 +57,7 @@ SC_MODULE( proc1 )
     obj2 = 0;
     obj3 = 0;
     obj4 = 0;
+    obj5 = 0;
   }
 
   void entry();
@@ -69,11 +71,15 @@ void proc1::entry()
     obj2 = 31;
     obj3 = -1023;
     obj4 = 2047;
+	obj5 = -1;
+	obj5 = obj5 << 40;
     wait();
     obj1 = 1;
     obj2 = -2;
     obj3 = 1024;
     obj4 = -2048;
+	obj5 = 7;
+	obj5 = obj5 << 40;
     wait();
   }
 }
@@ -91,15 +97,16 @@ int sc_main(int ac, char *av[])
   sc_trace(tf, P1.obj2, "Short", 12);
   sc_trace(tf, P1.obj3, "Int", 14);
   sc_trace(tf, P1.obj4, "Long", 14);
+  sc_trace(tf, P1.obj5, "Long", 44);
   sc_trace(tf, clock, "Clock");
 
   clock.write(0);
-  sc_initialize();
+  sc_start(0);
   for (int i = 0; i< 10; i++) {
     clock.write(1);
-    sc_cycle(10);
+    sc_start(10);
     clock.write(0);
-    sc_cycle(10);
+    sc_start(10);
   }
   sc_close_vcd_trace_file( tf );
   return 0;

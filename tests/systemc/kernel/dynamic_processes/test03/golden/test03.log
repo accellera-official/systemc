@@ -1,0 +1,7 @@
+SystemC Simulation
+
+0 s: static_method, Before spawning function_method 
+
+Error: (E560) Attempt to wait on process handle associated with method process
+In file: <removed by verify.pl>
+In process: mod1.static_method @ 0 s

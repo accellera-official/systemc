@@ -1,0 +1,46 @@
+
+*** verify.pl started on host Nomad.local.
+
+Darwin Nomad.local. 6.6 Darwin Kernel Version 6.6: Thu May  1 21:48:54 PDT 2003; root:xnu/xnu-344.34.obj~1/RELEASE_PPC  Power Macintosh powerpc
+Mon Jun 16 14:25:55 PDT 2003
+
+*** settings
+
+SYSTEMC_ARCH : macosx
+SYSTEMC_HOME : /Users/acg/work/systemc-2.1beta
+SYSTEMC_TEST : /Users/acg/work/osci_regress
+ OUTPUT_DIR  : /Users/acg/work/osci_regress/scripts
+
+*** running tests
+
+-------------------------------------------------------------------------------
+ TEST : systemc/misc/v1.0/blv/blv.cpp  (1/1)
+-------------------------------------------------------------------------------
+Compiling
+Linking
+Running
+Comparing
+PASSED
+(1:0)
+
+*** test results
+
+-------------------------------------------------------------------------------
+ Tests that passed :
+-------------------------------------------------------------------------------
+systemc/misc/v1.0/blv/blv.cpp
+
+-------------------------------------------------------------------------------
+ Tests that failed :
+-------------------------------------------------------------------------------
+
+Total passed : 1
+Total failed : 0
+
+   GUT METER : 100 %
+
+*** verify.pl finished successfully on host Nomad.local.
+
+Darwin Nomad.local. 6.6 Darwin Kernel Version 6.6: Thu May  1 21:48:54 PDT 2003; root:xnu/xnu-344.34.obj~1/RELEASE_PPC  Power Macintosh powerpc
+Mon Jun 16 14:26:27 PDT 2003
+

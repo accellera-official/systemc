@@ -1,11 +1,11 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2002 by all Contributors.
+  source code Copyright (c) 1996-2005 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.3 (the "License");
+  set forth in the SystemC Open Source License Version 2.4 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -44,7 +44,7 @@ lv1.range(15,8) = lv2.range(7,0);
 and the lv2 vector contains "z", I get the warning message
 
 WARNING: (E2004) sc_bv cannot contain values X and Z :
- - ../../../../../src/systemc/datatypes/bit/sc_bv.h: 340
+ - ../../../../../src/sysc/datatypes/bit/sc_bv.h: 340
 
 and the assignment is not done. Further investigation revealed that the 
 vector seems to get mistakenly converted to a sc_bv in between. Removing the 

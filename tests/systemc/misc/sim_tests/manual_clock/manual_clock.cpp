@@ -1,11 +1,11 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2002 by all Contributors.
+  source code Copyright (c) 1996-2005 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.3 (the "License");
+  set forth in the SystemC Open Source License Version 2.4 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 #include "systemc.h"
+#include "isaac.h"
+
+QTIsaac<8> rng;		// Platform independent random number generator.
 
 SC_MODULE( proc1 )
 {
@@ -61,10 +64,12 @@ SC_MODULE( proc1 )
             wait();
             c = a.read() && b.read();
             wait();
-	    cout << "P1:: C = " << c.read() << endl;
+	    cout << sc_simulation_time() << " P1(a&&b):: C = " << c.read() 
+		<< endl;
             c = a.read() || b.read();
             wait();
-	    cout << "P1:: C = " << c.read() << endl;
+	    cout << sc_simulation_time() << " P1(a||b):: C = " << c.read() 
+		<< endl;
             c = a ^ b;
         }
     }
@@ -96,10 +101,12 @@ SC_MODULE( proc2 )
             wait();
             c = ! (a.read() && b.read());
             wait();
-	    cout << "P2:: C = " << c.read() << endl;
+	    cout << sc_simulation_time() << " P2(a&&b):: C = " << c.read() 
+		<< endl;
             c = ! (a.read() || b.read());
             wait();
-	    cout << "P2:: C = " << c.read() << endl;
+	    cout << sc_simulation_time() << " P2(a||b):: C = " << c.read() 
+		<< endl;
             c = ! (a ^ b);
         }
     }
@@ -147,17 +154,16 @@ sc_main( int argc, char* argv[] )
     proc2 p2( "p2", clk2, a, b, q );
     proc3 p3( "p3", p, q, zero, one );
 
-    sc_initialize();
-    srand(100);
+    sc_start(0);
     for (double t = 0; t < 0.00001; t += 1e-9) {
         clk1 = 1;
         clk2 = 1;
-        a = rand() & 16;
-        b = rand() & 32;
-        sc_cycle( 1, SC_NS );
+        a = rng.rand() & 16;
+        b = rng.rand() & 32;
+        sc_start( 1, SC_NS );
         clk1 = 0;
         clk2 = 0;
-        sc_cycle( 1, SC_NS );
+        sc_start( 1, SC_NS );
     }
 
     return 0;

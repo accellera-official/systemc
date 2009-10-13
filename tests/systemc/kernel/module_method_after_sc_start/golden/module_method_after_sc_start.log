@@ -1,0 +1,6 @@
+SystemC Simulation
+
+Error: (E541) call to SC_METHOD in sc_module while simulation running
+In file: <removed by verify.pl>
+In process: y.comb @ 0 s
+Program completed

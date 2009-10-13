@@ -4,10 +4,10 @@ $timescale
 $end
 
 $scope module SystemC $end
-$var wire   10  aaa  Signed       $end
-$var wire   10  aab  Unsigned       $end
-$var wire   10  aac  BV       $end
-$var wire   10  aad  SV       $end
+$var wire   10  aaa  Signed [9:0]  $end
+$var wire   10  aab  Unsigned [9:0]  $end
+$var wire   10  aac  BV [9:0]  $end
+$var wire   10  aad  SV [9:0]  $end
 $upscope $end
 $enddefinitions  $end
 

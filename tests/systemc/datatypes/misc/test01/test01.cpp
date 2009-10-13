@@ -1,11 +1,11 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2002 by all Contributors.
+  source code Copyright (c) 1996-2005 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.3 (the "License");
+  set forth in the SystemC Open Source License Version 2.4 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -37,12 +37,119 @@
 
 #define SC_INCLUDE_FX
 #include "systemc.h"
+#if defined(__GNUC__) && (__GNUC__ >= 3)
+#   include "sstream"
+#else
+#   include "strstream.h"
+#endif
+
+// THE FOLLOWING SPECIALIZATIONS FOR sc_bitref<X> AND sc_subref<X> GO AWAY
+// WHEN sc_bv and sc_lv ARE INTEGRATED INTO THE NORMAL CONCATENATION SCHEME:
+
+template <class X>
+void
+test( sc_dt::sc_bitref<X> a )
+{
+# if defined(__GNUC__) && (__GNUC__ >= 3)
+    std::stringstream ss;
+# else
+	strstream ss;
+# endif
+
+    cout << a << endl;
+    ss << a;
+    ss >> a;
+    cout << a << endl;
+}
+
+template <class X>
+void
+test( sc_dt::sc_subref<X> a )
+{
+# if defined(__GNUC__) && (__GNUC__ >= 3)
+    std::stringstream ss;
+# else
+	strstream ss;
+# endif
+
+    cout << a << endl;
+    ss << a;
+    ss >> a;
+    cout << a << endl;
+}
+
+
+void
+test( sc_dt::sc_fxnum_bitref a )
+{
+# if defined(__GNUC__) && (__GNUC__ >= 3)
+    std::stringstream ss;
+# else
+	strstream ss;
+# endif
+
+    cout << a << endl;
+    ss << a;
+    ss >> a;
+    cout << a << endl;
+}
+
+void
+test( sc_dt::sc_fxnum_fast_bitref a )
+{
+# if defined(__GNUC__) && (__GNUC__ >= 3)
+    std::stringstream ss;
+# else
+	strstream ss;
+# endif
+
+    cout << a << endl;
+    ss << a;
+    ss >> a;
+    cout << a << endl;
+}
+
+
+void
+test( sc_dt::sc_fxnum_subref a )
+{
+# if defined(__GNUC__) && (__GNUC__ >= 3)
+    std::stringstream ss;
+# else
+	strstream ss;
+# endif
+
+    cout << a << endl;
+    ss << a;
+    ss >> a;
+    cout << a << endl;
+}
+
+void
+test( sc_dt::sc_fxnum_fast_subref a )
+{
+# if defined(__GNUC__) && (__GNUC__ >= 3)
+    std::stringstream ss;
+# else
+	strstream ss;
+# endif
+
+    cout << a << endl;
+    ss << a;
+    ss >> a;
+    cout << a << endl;
+}
 
 template <class T>
 void
-test( T a )
+test( T& a )
 {
-    strstream ss;
+# if defined(__GNUC__) && (__GNUC__ >= 3)
+    std::stringstream ss;
+# else
+	strstream ss;
+# endif
+
     cout << a << endl;
     ss << a;
     ss >> a;
@@ -117,8 +224,10 @@ test_bit()
         cout << "\nsc_concref" << endl;
         sc_bv<4> a( "0101" );
         sc_lv<4> b( "01ZX" );
+#if 0 // #### re-enable when concatenation support is homogenous.
         test( ( a[1], a[0] ) );
         test( ( b[1], b[0] ) );
+#endif // 0
     }
 }
 
@@ -228,12 +337,10 @@ test_int()
 
     // sc_signed_concref
     {
-        cout << "\nsc_signed_concref" << endl;
-        cout << "NOT YET IMPLEMENTED" << endl;
-        // sc_bigint<4> a = -7;
-        // sc_bigint<8> b = 15;
-        // test( (a[1], a[0]) );
-        // test( (b[1], b[0]) );
+        sc_bigint<4> a = -7;
+        sc_bigint<8> b = 15;
+        test( (a[1], a[0]) );
+        test( (b[1], b[0]) );
     }
 
     // sc_biguint
@@ -265,12 +372,10 @@ test_int()
 
     // sc_unsigned_concref
     {
-        cout << "\nsc_unsigned_concref" << endl;
-        cout << "NOT YET IMPLEMENTED" << endl;
-        // sc_biguint<4> a = -7;
-        // sc_biguint<8> b = 15;
-        // test( (a[1], a[0]) );
-        // test( (b[1], b[0]) );
+        sc_biguint<4> a = -7;
+        sc_biguint<8> b = 15;
+        test( (a[1], a[0]) );
+        test( (b[1], b[0]) );
     }
 }
 

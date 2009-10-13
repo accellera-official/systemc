@@ -1,11 +1,11 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2002 by all Contributors.
+  source code Copyright (c) 1996-2005 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.3 (the "License");
+  set forth in the SystemC Open Source License Version 2.4 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -28,8 +28,13 @@
   MODIFICATION LOG - modifiers, enter your name, affiliation, date and
   changes you are making here.
 
-      Name, Affiliation, Date:
-  Description of Modification:
+      Name, Affiliation, Date: Bishnupriya Bhattacharya, Cadence Design Systems,
+                               September 5, 2003
+  Description of Modification: - set stop mode to SC_STOP_IMMEDIATE;
+			       - add more output printout to make sure that
+				 the immdiate event notification of "e_b" after 
+				 issuing sc_stop() does not make the 
+				 sensitive process "thread_a" run
 
  *****************************************************************************/
 
@@ -52,6 +57,7 @@ SC_MODULE( mod_a )
             n ++;
             e_a.notify();
             wait( e_b );
+	    cout << "Triggered by event e_b" << endl;
         }
     }
 
@@ -61,6 +67,7 @@ SC_MODULE( mod_a )
             wait( e_a );
             cout << simcontext()->delta_count() << " " << n << endl;
             if( n == 20 ) {
+                cout << "Issuing sc_stop() " << endl;
                 sc_stop();
             }
             e_b.notify();
@@ -79,6 +86,7 @@ sc_main( int, char*[] )
 {
     mod_a a( "a" );
 
+    sc_set_stop_mode(SC_STOP_IMMEDIATE);
     sc_start();
 
     return 0;

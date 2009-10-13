@@ -1,11 +1,11 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2002 by all Contributors.
+  source code Copyright (c) 1996-2005 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.3 (the "License");
+  set forth in the SystemC Open Source License Version 2.4 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -44,10 +44,10 @@ sc_main( int, char*[] )
   sc_clock clk;
   sc_attr_cltn att_cltn;
   sc_attr_cltn att_cln(att_cltn);
-  sc_attribute<sc_string> a1( "a1", "clock" );
-  sc_attribute<sc_string> a2( a1 );
+  sc_attribute<std::string> a1( "a1", "clock" );
+  sc_attribute<std::string> a2( a1 );
   sc_attribute<int> a3( "a3", 24 );
-  sc_attribute<sc_string> a4( "a4", "casio" );
+  sc_attribute<std::string> a4( "a4", "casio" );
   sc_attribute<int> a5("a5");
   
   cout <<a2.name() << endl;
@@ -57,7 +57,7 @@ sc_main( int, char*[] )
 
   sc_attr_base* p = clk.get_attribute("a1");
   cout << p->name() << endl;
-  sc_attribute<sc_string>* pi = dynamic_cast<sc_attribute<sc_string>*>( p );
+  sc_attribute<std::string>* pi = dynamic_cast<sc_attribute<std::string>*>( p );
    if( pi != 0 ) {
         cout << pi->value << endl;
     }

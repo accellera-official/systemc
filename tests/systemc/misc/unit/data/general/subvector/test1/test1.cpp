@@ -1,11 +1,11 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2002 by all Contributors.
+  source code Copyright (c) 1996-2005 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.3 (the "License");
+  set forth in the SystemC Open Source License Version 2.4 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -97,22 +97,22 @@ sc_main( int argc, char* argv[] )
     cout << "b3.range(5,3) = " << b3.range(5,3) << endl;
     cout << "b3.range(3,5) = " << b3.range(3,5) << endl;
 
-    cout << "u1.range(3,0) = " << sc_biguint<4>(u1.range(3,0)) << endl;
-    cout << "u1.range(0,3) = " << sc_biguint<4>(u1.range(0,3)) << endl;
-    cout << "u2.range(4,1) = " << sc_biguint<4>(u2.range(4,1)) << endl;
-    cout << "u2.range(1,4) = " << sc_biguint<4>(u2.range(1,4)) << endl;
-    cout << "u3.range(5,3) = " << sc_biguint<3>(u3.range(5,3)) << endl;
-    cout << "u3.range(3,5) = " << sc_biguint<3>(u3.range(3,5)) << endl;
-    cout << "u3.range(9,3) = " << sc_biguint<7>(u3.range(9,3)) << endl;
+    cout << "u1.range(3,0) = " << sc_unsigned(u1.range(3,0)) << endl;
+    cout << "u1.range(0,3) = " << sc_unsigned(u1.range(0,3)) << endl;
+    cout << "u2.range(4,1) = " << sc_unsigned(u2.range(4,1)) << endl;
+    cout << "u2.range(1,4) = " << sc_unsigned(u2.range(1,4)) << endl;
+    cout << "u3.range(5,3) = " << sc_unsigned(u3.range(5,3)) << endl;
+    cout << "u3.range(3,5) = " << sc_unsigned(u3.range(3,5)) << endl;
+    cout << "u3.range(9,3) = " << sc_unsigned(u3.range(9,3)) << endl;
     cout << "u3 = " << u3 << endl;
 
-    cout << "s1.range(3,0) = " << sc_bigint<4>(s1.range(3,0)) << endl;
-    cout << "s1.range(0,3) = " << sc_bigint<4>(s1.range(0,3)) << endl;
-    cout << "s2.range(4,1) = " << sc_bigint<4>(s2.range(4,1)) << endl;
-    cout << "s2.range(1,4) = " << sc_bigint<4>(s2.range(1,4)) << endl;
-    cout << "s3.range(5,3) = " << sc_bigint<3>(s3.range(5,3)) << endl;
-    cout << "s3.range(3,5) = " << sc_bigint<3>(s3.range(3,5)) << endl;
-    cout << "s3.range(9,3) = " << sc_bigint<7>(s3.range(9,3)) << endl;
+    cout << "s1.range(3,0) = " << sc_signed(s1.range(3,0)) << endl;
+    cout << "s1.range(0,3) = " << sc_signed(s1.range(0,3)) << endl;
+    cout << "s2.range(4,1) = " << sc_signed(s2.range(4,1)) << endl;
+    cout << "s2.range(1,4) = " << sc_signed(s2.range(1,4)) << endl;
+    cout << "s3.range(5,3) = " << sc_signed(s3.range(5,3)) << endl;
+    cout << "s3.range(3,5) = " << sc_signed(s3.range(3,5)) << endl;
+    cout << "s3.range(9,3) = " << sc_signed(s3.range(9,3)) << endl;
     cout << "s3 = " << s3 << endl;
 
     u1 = b1;
@@ -123,22 +123,22 @@ sc_main( int argc, char* argv[] )
     s2 = b2;
     s3 = b3;
 
-    cout << "u1.range(3,0) = " << sc_biguint<4>(u1.range(3,0)) << endl;
-    cout << "u1.range(0,3) = " << sc_biguint<4>(u1.range(0,3)) << endl;
-    cout << "u2.range(4,1) = " << sc_biguint<4>(u2.range(4,1)) << endl;
-    cout << "u2.range(1,4) = " << sc_biguint<4>(u2.range(1,4)) << endl;
-    cout << "u3.range(5,3) = " << sc_biguint<3>(u3.range(5,3)) << endl;
-    cout << "u3.range(3,5) = " << sc_biguint<3>(u3.range(3,5)) << endl;
-    cout << "u3.range(9,3) = " << sc_biguint<7>(u3.range(9,3)) << endl;
+    cout << "u1.range(3,0) = " << sc_unsigned(u1.range(3,0)) << endl;
+    cout << "u1.range(0,3) = " << sc_unsigned(u1.range(0,3)) << endl;
+    cout << "u2.range(4,1) = " << sc_unsigned(u2.range(4,1)) << endl;
+    cout << "u2.range(1,4) = " << sc_unsigned(u2.range(1,4)) << endl;
+    cout << "u3.range(5,3) = " << sc_unsigned(u3.range(5,3)) << endl;
+    cout << "u3.range(3,5) = " << sc_unsigned(u3.range(3,5)) << endl;
+    cout << "u3.range(9,3) = " << sc_unsigned(u3.range(9,3)) << endl;
     cout << "u3 = " << u3 << endl;
 
-    cout << "s1.range(3,0) = " << sc_bigint<4>(s1.range(3,0)) << endl;
-    cout << "s1.range(0,3) = " << sc_bigint<4>(s1.range(0,3)) << endl;
-    cout << "s2.range(4,1) = " << sc_bigint<4>(s2.range(4,1)) << endl;
-    cout << "s2.range(1,4) = " << sc_bigint<4>(s2.range(1,4)) << endl;
-    cout << "s3.range(5,3) = " << sc_bigint<3>(s3.range(5,3)) << endl;
-    cout << "s3.range(3,5) = " << sc_bigint<3>(s3.range(3,5)) << endl;
-    cout << "s3.range(9,3) = " << sc_bigint<7>(s3.range(9,3)) << endl;
+    cout << "s1.range(3,0) = " << sc_signed(s1.range(3,0)) << endl;
+    cout << "s1.range(0,3) = " << sc_signed(s1.range(0,3)) << endl;
+    cout << "s2.range(4,1) = " << sc_signed(s2.range(4,1)) << endl;
+    cout << "s2.range(1,4) = " << sc_signed(s2.range(1,4)) << endl;
+    cout << "s3.range(5,3) = " << sc_signed(s3.range(5,3)) << endl;
+    cout << "s3.range(3,5) = " << sc_signed(s3.range(3,5)) << endl;
+    cout << "s3.range(9,3) = " << sc_signed(s3.range(9,3)) << endl;
     cout << "s3 = " << s3 << endl;
 
     return 0;

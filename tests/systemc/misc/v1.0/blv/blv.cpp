@@ -1,11 +1,11 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2002 by all Contributors.
+  source code Copyright (c) 1996-2005 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.3 (the "License");
+  set forth in the SystemC Open Source License Version 2.4 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -38,6 +38,9 @@
 //----------------------------------------------------------
 #include "systemc.h"
 #include <time.h>
+#include "isaac.h"
+
+QTIsaac<8> rng;
 
 template<class T>
 void compare(int W)
@@ -47,7 +50,7 @@ void compare(int W)
   // initialize
   for(int i=0; i<W; i++)
   {
-    bool la = (rand()&1) == 0;
+    bool la = (rng.rand()&1) == 0;
     x[i] = la;
     st[i] = la;
   }
@@ -71,8 +74,8 @@ void compare(int W)
     cout<<"\nERROR: st,st="<<(st,st)<<
     "; x,x="<<(x,x)<<"\n"<<
     "st="<<st<<"\nx="<<x<< endl;
-  int first = (int) ( (double) W * rand() / (RAND_MAX + 1.0) );
-  int second = (int) ( (double) W * rand() / (RAND_MAX + 1.0) );
+  int first = (int) ( (double) W * ((double)rng.rand() / (double)0x7fffffff));
+  int second = (int) ( (double) W * ((double)rng.rand() / (double)0x7fffffff));
   if(st.range(first,second).to_string()!=x.range(first,second).to_string())
     cout<<"st.range("<<first<<","<<second<<")="<<st.range(first,second)<<
     "; x.range("<<first<<","<<second<<")="<<x.range(first,second)<<"\n"<<
@@ -106,7 +109,7 @@ void compare(int W)
   }
 
   // verify assignments
-  long ra = rand();
+  long ra = rng.rand();
   x  = ra;
   st = ra;
   if(st.to_string()!=x.to_string())
@@ -117,12 +120,7 @@ void compare(int W)
 int sc_main(int, char**)
 {
   const int N = 2000;
-#ifdef __BCLUSPLUS__
-  randomize();
-#else
-  srand((int) time(NULL));
-#endif
-  int Seed = rand();
+  int Seed = rng.rand();
   cout<<"\nverifying sc_bv<"<<N<<">" << endl;
   try{
     for(int i=0; i<1000; i++)

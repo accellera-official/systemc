@@ -5,8 +5,8 @@ $end
 
 $scope module SystemC $end
 $var wire    1  aaa  Clock       $end
-$var wire   32  aab  Int       $end
-$var wire    8  aac  Char       $end
+$var wire   32  aab  Int [31:0]  $end
+$var wire    8  aac  Char [7:0]  $end
 $var real    1  aad  Float       $end
 $var wire    1  aae  Logic       $end
 $upscope $end

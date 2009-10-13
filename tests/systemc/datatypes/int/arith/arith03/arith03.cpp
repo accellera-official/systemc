@@ -1,11 +1,11 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2002 by all Contributors.
+  source code Copyright (c) 1996-2005 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.3 (the "License");
+  set forth in the SystemC Open Source License Version 2.4 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -35,6 +35,21 @@
 
 #include <stdlib.h>
 #include "systemc.h"
+#include "isaac.h"
+
+QTIsaac<8> rng;		// Platform independent random number generator.
+
+#define TEST(A,B) \
+{ \
+	if ( A != B ) \
+		cout << #A << " (" << hex << A << ") != " << #B << "(" << hex << B << ")" << endl; \
+}
+
+#define TESTA(A,B,C) \
+{ \
+	if ( A != (B-C) ) \
+		cout << #A << " (" << hex << A << ") != " << hex << B-C << " " << B << " " << C << endl; \
+}
 
 int
 sc_main( int argc, char* argv[] )
@@ -58,8 +73,8 @@ sc_main( int argc, char* argv[] )
 
             for (int ii = 0; ii < 100; ++ii) {
                 for (int jj = 0; jj < 100; ++jj) {
-                    unsigned qi = (ii < 5) ? vali[ii] : (rand() & ((1 << i) - 1));
-                    unsigned qj = (jj < 5) ? valj[jj] : (rand() & ((1 << j) - 1));
+                    unsigned qi = (ii < 5) ? vali[ii] : (rng.rand() & ((1 << i) - 1));
+                    unsigned qj = (jj < 5) ? valj[jj] : (rng.rand() & ((1 << j) - 1));
 
                     if (qi & (1 << (i - 1))) {
                         qi = (qi << (32 - i)) >> (32 - i);
@@ -69,43 +84,37 @@ sc_main( int argc, char* argv[] )
                     }
 
                     x = qi;
-                    assert( x == qi );
+                    TEST(x,qi);
                     y = qj;
-                    assert( y == qj );
+                    TEST(y,qj);
                     z = x + y;
-                    assert( static_cast<sc_unsigned>( z.range(31,0) ) ==
-			    (qi + qj) );
+                    TEST((sc_unsigned)( z.range(31,0) ),(qi + qj));
                     z = x - y;
-                    assert( static_cast<sc_unsigned>( z.range(31,0) ) ==
-			    (qi - qj) );
+                    // TEST((sc_unsigned)( z.range(31,0) ),(qi - qj));
+                    TESTA((sc_unsigned)( z.range(31,0) ),qi,qj);
                     z = x * y;
-                    assert( static_cast<sc_unsigned>( z.range(31,0) ) ==
+                    TEST((sc_unsigned)( z.range(31,0) ),
 			    (qi * qj) );
                     if (y != 0) {
                         z = x / y;
-                        assert( static_cast<sc_unsigned>( z.range(31,0) ) ==
-				(qi / qj) );
+                        TEST((sc_unsigned)( z.range(31,0) ),(qi/qj));
                         z = x % y;
-                        assert( static_cast<sc_unsigned>( z.range(31,0) ) ==
-				(qi % qj) );
+                        TEST((sc_unsigned)( z.range(31,0) ),(qi%qj));
                     }
                     z = x & y;
-                    assert( static_cast<sc_unsigned>( z.range(31,0) ) ==
-			    (qi & qj) );
+                    TEST( (sc_unsigned)( z.range(31,0) ), (qi & qj) );
                     z = x | y;
-                    assert( static_cast<sc_unsigned>( z.range(31,0) ) ==
-			    (qi | qj) );
+                    TEST((sc_unsigned)( z.range(31,0) ), (qi | qj) );
                     z = x ^ y;
-                    assert( static_cast<sc_unsigned>( z.range(31,0) ) ==
-			    (qi ^ qj) );
+                    TEST((sc_unsigned)( z.range(31,0) ), (qi ^ qj) );
                     if (jj < i - 1) {
                         z = x << jj;
                         for (int r = 0; r < i; ++r) {
-                            assert( (bool) z[r] == !!((qi << jj) & (1 << r)) );
+                            TEST((bool) z[r],!!((qi << jj) & (1 << r)) );
                         }
                         z = x >> jj;
                         for (int r = 0; r < i; ++r) {
-                            assert( (bool) z[r] == !!((qi >> jj) & (1 << r)) );
+                            TEST((bool) z[r],!!((qi >> jj) & (1 << r)) );
                         }
                     }
                 }

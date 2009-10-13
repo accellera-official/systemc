@@ -1,11 +1,11 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2002 by all Contributors.
+  source code Copyright (c) 1996-2005 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.3 (the "License");
+  set forth in the SystemC Open Source License Version 2.4 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -43,7 +43,7 @@ sc_main( int, char*[] )
     sc_clock clk;
 
     sc_attribute<int> a1( "a1", 42 );
-    sc_attribute<sc_string> a2( "a2", "foobar" );
+    sc_attribute<std::string> a2( "a2", "foobar" );
 
     clk.add_attribute( a1 );
     clk.add_attribute( a2 );
@@ -54,7 +54,7 @@ sc_main( int, char*[] )
     if( pi != 0 ) {
         cout << pi->value << endl;
     }
-    sc_attribute<sc_string>* ps = dynamic_cast<sc_attribute<sc_string>*>( p );
+    sc_attribute<std::string>* ps = dynamic_cast<sc_attribute<std::string>*>( p );
     if( ps != 0 ) {
         cout << ps->value << endl;
     }

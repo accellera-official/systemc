@@ -4,11 +4,12 @@ $timescale
 $end
 
 $scope module SystemC $end
-$var wire    4  aaa  Char       $end
-$var wire   12  aab  Short       $end
-$var wire   14  aac  Int       $end
-$var wire   14  aad  Long       $end
-$var wire    1  aae  Clock       $end
+$var wire    4  aaa  Char [3:0]  $end
+$var wire   12  aab  Short [11:0]  $end
+$var wire   14  aac  Int [13:0]  $end
+$var wire   14  aad  Long [13:0]  $end
+$var wire   44  aae  Long [43:0]  $end
+$var wire    1  aaf  Clock       $end
 $upscope $end
 $enddefinitions  $end
 
@@ -21,7 +22,8 @@ b0 aaa
 b0 aab
 b0 aac
 b0 aad
-0aae
+b0 aae
+0aaf
 $end
 
 #0
@@ -29,138 +31,158 @@ b111 aaa
 b11111 aab
 bx aac
 b11111111111 aad
-1aae
+bx aae
+1aaf
 
 #10000
 b1 aaa
 bx aab
 b10000000000 aac
 bx aad
-0aae
+b1110000000000000000000000000000000000000000 aae
+0aaf
 
 #20000
 b111 aaa
 b11111 aab
 bx aac
 b11111111111 aad
-1aae
+bx aae
+1aaf
 
 #30000
 b1 aaa
 bx aab
 b10000000000 aac
 bx aad
-0aae
+b1110000000000000000000000000000000000000000 aae
+0aaf
 
 #40000
 b111 aaa
 b11111 aab
 bx aac
 b11111111111 aad
-1aae
+bx aae
+1aaf
 
 #50000
 b1 aaa
 bx aab
 b10000000000 aac
 bx aad
-0aae
+b1110000000000000000000000000000000000000000 aae
+0aaf
 
 #60000
 b111 aaa
 b11111 aab
 bx aac
 b11111111111 aad
-1aae
+bx aae
+1aaf
 
 #70000
 b1 aaa
 bx aab
 b10000000000 aac
 bx aad
-0aae
+b1110000000000000000000000000000000000000000 aae
+0aaf
 
 #80000
 b111 aaa
 b11111 aab
 bx aac
 b11111111111 aad
-1aae
+bx aae
+1aaf
 
 #90000
 b1 aaa
 bx aab
 b10000000000 aac
 bx aad
-0aae
+b1110000000000000000000000000000000000000000 aae
+0aaf
 
 #100000
 b111 aaa
 b11111 aab
 bx aac
 b11111111111 aad
-1aae
+bx aae
+1aaf
 
 #110000
 b1 aaa
 bx aab
 b10000000000 aac
 bx aad
-0aae
+b1110000000000000000000000000000000000000000 aae
+0aaf
 
 #120000
 b111 aaa
 b11111 aab
 bx aac
 b11111111111 aad
-1aae
+bx aae
+1aaf
 
 #130000
 b1 aaa
 bx aab
 b10000000000 aac
 bx aad
-0aae
+b1110000000000000000000000000000000000000000 aae
+0aaf
 
 #140000
 b111 aaa
 b11111 aab
 bx aac
 b11111111111 aad
-1aae
+bx aae
+1aaf
 
 #150000
 b1 aaa
 bx aab
 b10000000000 aac
 bx aad
-0aae
+b1110000000000000000000000000000000000000000 aae
+0aaf
 
 #160000
 b111 aaa
 b11111 aab
 bx aac
 b11111111111 aad
-1aae
+bx aae
+1aaf
 
 #170000
 b1 aaa
 bx aab
 b10000000000 aac
 bx aad
-0aae
+b1110000000000000000000000000000000000000000 aae
+0aaf
 
 #180000
 b111 aaa
 b11111 aab
 bx aac
 b11111111111 aad
-1aae
+bx aae
+1aaf
 
 #190000
 b1 aaa
 bx aab
 b10000000000 aac
 bx aad
-0aae
+b1110000000000000000000000000000000000000000 aae
+0aaf
 

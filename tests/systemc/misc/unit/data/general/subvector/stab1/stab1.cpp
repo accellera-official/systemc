@@ -1,11 +1,11 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2002 by all Contributors.
+  source code Copyright (c) 1996-2005 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.3 (the "License");
+  set forth in the SystemC Open Source License Version 2.4 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -90,13 +90,13 @@ sc_main( int argc, char* argv[] )
                 cout << x.range(i + 224, i).to_string() << endl;
                 cout << y.range(i + 41, i) << endl;
                 cout << y.range(i + 41, i).to_string() << endl;
-                cout << sc_signed(z.range(i + 2, i)) << endl;
+                cout << sc_signed(z.range(i+2,i)) << endl;
                 cout << sc_unsigned(w.range(i + 190, i)) << endl;
                 cout << x.range(i, i + 224) << endl;
                 cout << x.range(i, i + 224).to_string() << endl;
                 cout << y.range(i, i + 41) << endl;
                 cout << y.range(i, i + 41).to_string() << endl;
-                cout << sc_signed(z.range(i, i + 2)) << endl;
+                cout << sc_signed(z.range(i,i+2)) << endl;
                 cout << sc_unsigned(w.range(i, i + 190)) << endl;
             } else {
                 (void) x.range(i + 224, i);

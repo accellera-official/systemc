@@ -1,22 +1,42 @@
 SystemC Simulation
 2 1
+Triggered by event e_b
 2 2
+Triggered by event e_b
 2 3
+Triggered by event e_b
 2 4
+Triggered by event e_b
 2 5
+Triggered by event e_b
 2 6
+Triggered by event e_b
 2 7
+Triggered by event e_b
 2 8
+Triggered by event e_b
 2 9
+Triggered by event e_b
 2 10
+Triggered by event e_b
 2 11
+Triggered by event e_b
 2 12
+Triggered by event e_b
 2 13
+Triggered by event e_b
 2 14
+Triggered by event e_b
 2 15
+Triggered by event e_b
 2 16
+Triggered by event e_b
 2 17
+Triggered by event e_b
 2 18
+Triggered by event e_b
 2 19
+Triggered by event e_b
 2 20
+Issuing sc_stop() 
 SystemC: simulation stopped by user.

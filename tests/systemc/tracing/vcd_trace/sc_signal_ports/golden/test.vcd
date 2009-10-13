@@ -4,7 +4,7 @@ $timescale
 $end
 
 $scope module SystemC $end
-$var wire   32  aaa  sig_int       $end
+$var wire   32  aaa  sig_int [31:0]  $end
 $var wire    1  aab  sig_bool       $end
 $var wire    1  aac  sig_logic       $end
 $var wire    1  aad  sig_resolved       $end
@@ -13,12 +13,12 @@ $var wire    1  aaf  a.out_rv1       $end
 $var wire    1  aag  a.out_resolved       $end
 $var wire    1  aah  a.out_logic       $end
 $var wire    1  aai  a.out_bool       $end
-$var wire   32  aaj  a.out_int       $end
+$var wire   32  aaj  a.out_int [31:0]  $end
 $var wire    1  aak  a.in_rv1       $end
 $var wire    1  aal  a.in_resolved       $end
 $var wire    1  aam  a.in_logic       $end
 $var wire    1  aan  a.in_bool       $end
-$var wire   32  aao  a.in_int       $end
+$var wire   32  aao  a.in_int [31:0]  $end
 $upscope $end
 $enddefinitions  $end
 

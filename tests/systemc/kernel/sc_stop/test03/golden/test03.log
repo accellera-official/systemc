@@ -1,0 +1,6 @@
+SystemC Simulation
+Creating able...
+Creating baker...
+baker: 0: issuing sc_stop()
+able: 0
+SystemC: simulation stopped by user.

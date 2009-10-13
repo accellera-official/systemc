@@ -1,11 +1,11 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2002 by all Contributors.
+  source code Copyright (c) 1996-2005 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.3 (the "License");
+  set forth in the SystemC Open Source License Version 2.4 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -54,15 +54,15 @@ int sc_main(int ac, char *av[])
   c_block.out_a0(out_a0);
   c_block.out_a1(out_a1);
 
-  sc_initialize();
+  sc_start(0);
 
   count = 0;
 
   for(int i = 0; i < 10; i++){
       clk.write(1);
-      sc_cycle( 5 NS );
+      sc_start( 5 NS );
       clk.write(0);
-      sc_cycle( 5 NS );      
+      sc_start( 5 NS );      
       count = count + 1;
       cout << "constants " << out_a0 << "\t" << out_a1 << endl;
   }

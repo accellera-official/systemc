@@ -1,11 +1,11 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2002 by all Contributors.
+  source code Copyright (c) 1996-2005 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.3 (the "License");
+  set forth in the SystemC Open Source License Version 2.4 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -28,8 +28,10 @@
   MODIFICATION LOG - modifiers, enter your name, affiliation, date and
   changes you are making here.
 
-      Name, Affiliation, Date:
-  Description of Modification:
+      Name, Affiliation, Date: Bishnupriya Bhattacharya, Cadence Design Systems,
+                               September 5, 2003
+  Description of Modification: change sc_get_curr_proc_handle() to
+                               sc_get_last_created_process_handle()
 
  *****************************************************************************/
 
@@ -40,10 +42,8 @@
 #define WRITE(a) \
 { \
     cout << (a).kind() << endl; \
-    cout << (a).kind_string << endl; \
     sc_object* obj = &(a); \
     cout << obj->kind() << endl; \
-    cout << obj->kind_string << endl; \
 }
 
 SC_MODULE( mod_a )
@@ -63,13 +63,13 @@ SC_MODULE( mod_a )
     {
         sc_process_b* p;
         SC_METHOD( method_action );
-        p = sc_get_curr_process_handle();
+        p = sc_get_last_created_process_handle();
         WRITE( *p );
         SC_THREAD( thread_action );
-        p = sc_get_curr_process_handle();
+        p = sc_get_last_created_process_handle();
         WRITE( *p );
         SC_CTHREAD( cthread_action, clk.pos() );
-        p = sc_get_curr_process_handle();
+        p = sc_get_last_created_process_handle();
         WRITE( *p );
     }
 };
