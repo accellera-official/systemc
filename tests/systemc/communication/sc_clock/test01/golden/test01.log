@@ -1,0 +1,57 @@
+SystemC Simulation
+
+name       = clock_0
+period     = 1 ns
+duty_cycle = 0.5
+
+name       = c2
+period     = 1 ns
+duty_cycle = 0.5
+
+name       = c3
+period     = 8 ns
+duty_cycle = 0.5
+
+name       = c4
+period     = 8 ns
+duty_cycle = 0.1
+
+name       = c5
+period     = 8 ns
+duty_cycle = 0.1
+
+name       = c6
+period     = 8 ns
+duty_cycle = 0.1
+
+name       = c7
+period     = 8 ns
+duty_cycle = 0.5
+
+name       = c8
+period     = 8 ns
+duty_cycle = 0.1
+
+name       = c9
+period     = 8 ns
+duty_cycle = 0.1
+
+name       = cA
+period     = 8 ns
+duty_cycle = 0.1
+
+name       = cB
+period     = 8 ns
+duty_cycle = 0.5
+
+name       = cC
+period     = 8 ns
+duty_cycle = 0.1
+
+name       = cD
+period     = 8 ns
+duty_cycle = 0.1
+
+name       = cE
+period     = 8 ns
+duty_cycle = 0.1

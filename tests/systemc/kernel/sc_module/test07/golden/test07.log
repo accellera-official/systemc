@@ -1,0 +1,4 @@
+SystemC Simulation
+
+Warning: (W509) module construction not properly completed: did you forget to add a sc_module_name parameter to your module constructor?: module 'm'
+In file: <removed by verify.pl>

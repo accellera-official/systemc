@@ -1,0 +1,35 @@
+SystemC Simulation
+bogus message
+0
+1
+0
+
+Info: (I9999) bogus message: infos ...
+
+Info: (I9999) bogus message: infos not suppressed
+
+Info: (I9999) bogus message: not suppressed
+
+Warning: (W9999) bogus message: warnings ...
+In file: <removed by verify.pl>
+
+Warning: (W9999) bogus message: warnings not suppressed
+In file: <removed by verify.pl>
+
+Warning: (W9999) bogus message: not suppressed
+In file: <removed by verify.pl>
+
+caught exception
+Error: (E9999) bogus message: do make warnings errors
+In file: <removed by verify.pl>
+
+Warning: (W9999) bogus message: do not make warnings errors
+In file: <removed by verify.pl>
+
+caught exception
+Error: (E9999) bogus message: errors ...
+In file: <removed by verify.pl>
+
+caught exception
+Error: (E9999) bogus message: cannot be suppressed
+In file: <removed by verify.pl>

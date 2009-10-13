@@ -1,0 +1,59 @@
+	Release Notes for SystemC 2.0.1 regression test suite
+        =====================================================
+
+CONTENTS
+========
+
+  1) What's new in this release?
+
+  2) Bug fixes and enhancements
+
+  3) Other changes
+
+  4) Known limitations
+
+
+1) What's new in this release?
+==============================
+
+Compared to the previous release, this release has the following new
+items:
+
+  - Since this is the first public release of the SystemC regression
+    test suite, everything is new.
+
+  - This version contains 632 regression tests, which take several
+    hours to finish.
+
+
+2) Bug fixes and enhancements
+=============================
+
+Following is the list of bug fixes and enhancements for this release:
+
+  - None.
+
+
+3) Other changes
+================
+
+Here is an overview of changes with respect to the previous release:
+
+  - None.
+
+
+4) Known limitations
+====================
+
+Here is a list of known limitations in this release:
+
+  - Not all options of the verify.pl script are fully functional.
+
+  - The regression test suite currently covers about 80% of the
+    SystemC source code. We strive to get this number up to 100%.
+    Especially for the data types more tests are needed.
+
+  - The organization of the tests in the test suite can (and must) be
+    improved.
+
+  - Some datatype tests take a long time to either compile or run.

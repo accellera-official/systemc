@@ -1,0 +1,84 @@
+SystemC Simulation
+Result = 1237 and 6
+Result = 1239 and 12
+Result = 1242 and 36
+Result = 1246 and 144
+Result = 1251 and 720
+Result = 1257 and 4320
+Result = 1264 and 30240
+Result = 1272 and 241920
+Result = 1281 and 2177280
+Result = 1291 and 21772800
+Result = 1302 and 239500800
+Result = 1314 and -1420957696
+Result = 1327 and -1292580864
+Asserting both reset
+Result = 1341 and -916262912
+Reset add seen
+Result = 1341 and -916262912
+Reset add seen
+Result = 1341 and -916262912
+Reset add seen
+Result = 1341 and -916262912
+Result = 1341 and -916262912
+Result = 1 and 3
+Result = 5 and 12
+Result = 10 and 60
+Result = 16 and 360
+Result = 23 and 2520
+Result = 31 and 20160
+Result = 40 and 181440
+Result = 50 and 1814400
+Result = 61 and 19958400
+Result = 73 and 239500800
+Result = 86 and -1181456896
+Asserting ADDER reset
+Result = 100 and 639472640
+Reset add seen
+Result = 100 and 639472640
+Reset add seen
+Result = 100 and 639472640
+Reset add seen
+Result = 100 and 639472640
+Result = 100 and 639472640
+Result = 1 and 3
+Result = 5 and 12
+Result = 10 and 60
+Result = 16 and 360
+Result = 23 and 2520
+Result = 31 and 20160
+Result = 40 and 181440
+Result = 50 and 1814400
+Result = 61 and 19958400
+Result = 73 and 239500800
+Result = 86 and -1181456896
+Asserting MULT reset
+Result = 100 and 639472640
+Reset mult seen
+Result = 100 and 639472640
+Result = 100 and 639472640
+Result = 100 and 639472640
+Result = 100 and 639472640
+Result = 114 and 14
+Result = 118 and 56
+Result = 123 and 280
+Result = 129 and 1680
+Result = 136 and 11760
+Result = 144 and 94080
+Result = 153 and 846720
+Result = 163 and 8467200
+Result = 174 and 93139200
+Result = 186 and 1117670400
+Result = 199 and 1644813312
+Asserting both reset
+Result = 213 and 1552549888
+Reset add seen
+Result = 213 and 1552549888
+Reset add seen
+Result = 213 and 1552549888
+Reset add seen
+Result = 213 and 1552549888
+Result = 213 and 1552549888
+Result = 1 and 3
+Result = 5 and 12
+Result = 10 and 60

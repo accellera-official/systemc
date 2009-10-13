@@ -1,0 +1,122 @@
+SystemC Simulation
+Stimuli1 : in_valid = true in_value 0 at 6
+Stimuli1 : in_valid = true in_value 1 at 7
+Stimuli1 : in_valid = true in_value 2 at 8
+Display : 0  at 8
+Stimuli1 : in_valid = true in_value 3 at 9
+Display : 1  at 9
+Stimuli1 : in_valid = true in_value 4 at 10
+Display : 1  at 10
+Stimuli1 : in_valid = true in_value 5 at 11
+Display : 1  at 11
+Stimuli1 : in_valid = true in_value 6 at 12
+Display : 1  at 12
+Stimuli1 : in_valid = true in_value 7 at 13
+Display : 5  at 13
+Stimuli1 : in_valid = true in_value 8 at 14
+Display : 6  at 14
+Stimuli1 : in_valid = true in_value 9 at 15
+Display : 7  at 15
+Stimuli1 : in_valid = true in_value 10 at 16
+Display : 7  at 16
+Display : 9  at 17
+Display : 10  at 18
+Stimuli2 : in_valid = true in_value 0 at 21
+Stimuli2 : in_valid = true in_value 1 at 22
+Stimuli2 : in_valid = true in_value 2 at 23
+Stimuli2 : in_valid = true in_value 3 at 24
+Display : 10  at 24
+Stimuli2 : in_valid = true in_value 4 at 25
+Display : 2  at 25
+Stimuli2 : in_valid = true in_value 5 at 26
+Display : 3  at 26
+Stimuli2 : in_valid = true in_value 6 at 27
+Display : 4  at 27
+Stimuli2 : in_valid = true in_value 7 at 28
+Display : 5  at 28
+Stimuli2 : in_valid = true in_value 8 at 29
+Display : 6  at 29
+Stimuli2 : in_valid = true in_value 9 at 30
+Display : 6  at 30
+Stimuli2 : in_valid = true in_value 10 at 31
+Stimuli1 : in_valid = true in_value 0 at 42
+Stimuli1 : in_valid = true in_value 1 at 43
+Stimuli1 : in_valid = true in_value 2 at 44
+Display : 6  at 44
+Stimuli1 : in_valid = true in_value 3 at 45
+Display : 1  at 45
+Stimuli1 : in_valid = true in_value 4 at 46
+Display : 1  at 46
+Stimuli1 : in_valid = true in_value 5 at 47
+Display : 1  at 47
+Stimuli1 : in_valid = true in_value 6 at 48
+Display : 1  at 48
+Stimuli1 : in_valid = true in_value 7 at 49
+Display : 5  at 49
+Stimuli1 : in_valid = true in_value 8 at 50
+Display : 6  at 50
+Stimuli1 : in_valid = true in_value 9 at 51
+Display : 7  at 51
+Stimuli1 : in_valid = true in_value 10 at 52
+Display : 7  at 52
+Display : 9  at 53
+Display : 10  at 54
+Stimuli2 : in_valid = true in_value 0 at 57
+Stimuli2 : in_valid = true in_value 1 at 58
+Stimuli2 : in_valid = true in_value 2 at 59
+Stimuli2 : in_valid = true in_value 3 at 60
+Display : 10  at 60
+Stimuli2 : in_valid = true in_value 4 at 61
+Display : 2  at 61
+Stimuli2 : in_valid = true in_value 5 at 62
+Display : 3  at 62
+Stimuli2 : in_valid = true in_value 6 at 63
+Display : 4  at 63
+Stimuli2 : in_valid = true in_value 7 at 64
+Display : 5  at 64
+Stimuli2 : in_valid = true in_value 8 at 65
+Display : 6  at 65
+Stimuli2 : in_valid = true in_value 9 at 66
+Display : 6  at 66
+Stimuli2 : in_valid = true in_value 10 at 67
+Stimuli1 : in_valid = true in_value 0 at 78
+Stimuli1 : in_valid = true in_value 1 at 79
+Stimuli1 : in_valid = true in_value 2 at 80
+Display : 6  at 80
+Stimuli1 : in_valid = true in_value 3 at 81
+Display : 1  at 81
+Stimuli1 : in_valid = true in_value 4 at 82
+Display : 1  at 82
+Stimuli1 : in_valid = true in_value 5 at 83
+Display : 1  at 83
+Stimuli1 : in_valid = true in_value 6 at 84
+Display : 1  at 84
+Stimuli1 : in_valid = true in_value 7 at 85
+Display : 5  at 85
+Stimuli1 : in_valid = true in_value 8 at 86
+Display : 6  at 86
+Stimuli1 : in_valid = true in_value 9 at 87
+Display : 7  at 87
+Stimuli1 : in_valid = true in_value 10 at 88
+Display : 7  at 88
+Display : 9  at 89
+Display : 10  at 90
+Stimuli2 : in_valid = true in_value 0 at 93
+Stimuli2 : in_valid = true in_value 1 at 94
+Stimuli2 : in_valid = true in_value 2 at 95
+Stimuli2 : in_valid = true in_value 3 at 96
+Display : 10  at 96
+Stimuli2 : in_valid = true in_value 4 at 97
+Display : 2  at 97
+Stimuli2 : in_valid = true in_value 5 at 98
+Display : 3  at 98
+Stimuli2 : in_valid = true in_value 6 at 99
+Display : 4  at 99
+Stimuli2 : in_valid = true in_value 7 at 100
+Display : 5  at 100
+Stimuli2 : in_valid = true in_value 8 at 101
+Display : 6  at 101
+Stimuli2 : in_valid = true in_value 9 at 102
+Display : 6  at 102
+Stimuli2 : in_valid = true in_value 10 at 103
+SystemC: simulation stopped by user.

@@ -1,0 +1,8 @@
+SystemC Simulation
+20 : WRITING ready = 1
+20 : READY = 1 DETECTED
+40 : WRITING ready = 0
+60 : WRITING ready = 1
+60 : READY = 1 DETECTED
+80 : READY = 1 DETECTED
+100 : READY = 1 DETECTED

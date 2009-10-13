@@ -1,0 +1,199 @@
+
+$timescale
+     1 ps
+$end
+
+$scope module SystemC $end
+$var wire   32  aaa  sig_int       $end
+$var wire    1  aab  sig_bool       $end
+$var wire    1  aac  sig_logic       $end
+$var wire    1  aad  sig_resolved       $end
+$var wire    1  aae  sig_rv1       $end
+$var wire    1  aaf  a.out_rv1       $end
+$var wire    1  aag  a.out_resolved       $end
+$var wire    1  aah  a.out_logic       $end
+$var wire    1  aai  a.out_bool       $end
+$var wire   32  aaj  a.out_int       $end
+$var wire    1  aak  a.in_rv1       $end
+$var wire    1  aal  a.in_resolved       $end
+$var wire    1  aam  a.in_logic       $end
+$var wire    1  aan  a.in_bool       $end
+$var wire   32  aao  a.in_int       $end
+$upscope $end
+$enddefinitions  $end
+
+$comment
+All initial values are dumped below at time 0 sec = 0 timescale units.
+$end
+
+$dumpvars
+b0 aaa
+0aab
+xaac
+xaad
+Xaae
+Xaaf
+xaag
+xaah
+0aai
+b0 aaj
+Xaak
+xaal
+xaam
+0aan
+b0 aao
+$end
+
+#1000
+b1 aaa
+1aab
+1aac
+1aad
+1aae
+1aaf
+1aag
+1aah
+1aai
+b1 aaj
+1aak
+1aal
+1aam
+1aan
+b1 aao
+
+#2000
+b10 aaa
+0aab
+zaac
+zaad
+Zaae
+Zaaf
+zaag
+zaah
+0aai
+b10 aaj
+Zaak
+zaal
+zaam
+0aan
+b10 aao
+
+#3000
+b11 aaa
+1aab
+xaac
+xaad
+Xaae
+Xaaf
+xaag
+xaah
+1aai
+b11 aaj
+Xaak
+xaal
+xaam
+1aan
+b11 aao
+
+#4000
+b100 aaa
+0aab
+0aac
+0aad
+0aae
+0aaf
+0aag
+0aah
+0aai
+b100 aaj
+0aak
+0aal
+0aam
+0aan
+b100 aao
+
+#5000
+b101 aaa
+1aab
+1aac
+1aad
+1aae
+1aaf
+1aag
+1aah
+1aai
+b101 aaj
+1aak
+1aal
+1aam
+1aan
+b101 aao
+
+#6000
+b110 aaa
+0aab
+zaac
+zaad
+Zaae
+Zaaf
+zaag
+zaah
+0aai
+b110 aaj
+Zaak
+zaal
+zaam
+0aan
+b110 aao
+
+#7000
+b111 aaa
+1aab
+xaac
+xaad
+Xaae
+Xaaf
+xaag
+xaah
+1aai
+b111 aaj
+Xaak
+xaal
+xaam
+1aan
+b111 aao
+
+#8000
+b1000 aaa
+0aab
+0aac
+0aad
+0aae
+0aaf
+0aag
+0aah
+0aai
+b1000 aaj
+0aak
+0aal
+0aam
+0aan
+b1000 aao
+
+#9000
+b1001 aaa
+1aab
+1aac
+1aad
+1aae
+1aaf
+1aag
+1aah
+1aai
+b1001 aaj
+1aak
+1aal
+1aam
+1aan
+b1001 aao
+

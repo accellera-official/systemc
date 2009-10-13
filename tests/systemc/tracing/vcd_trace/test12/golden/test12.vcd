@@ -1,0 +1,144 @@
+
+$timescale
+     1 ps
+$end
+
+$scope module SystemC $end
+$var wire   10  aaa  Signed       $end
+$var wire   10  aab  Unsigned       $end
+$var wire   10  aac  BV       $end
+$var wire   10  aad  SV       $end
+$upscope $end
+$enddefinitions  $end
+
+$comment
+All initial values are dumped below at time 0 sec = 0 timescale units.
+$end
+
+$dumpvars
+b0 aaa
+b0 aab
+b0 aac
+b0 aad
+$end
+
+#0
+b11 aaa
+b111 aab
+b11 aac
+b111 aad
+
+#10000
+b1111111101 aaa
+b101 aab
+b1111111101 aac
+b101 aad
+
+#20000
+b11 aaa
+b111 aab
+b11 aac
+b111 aad
+
+#30000
+b1111111101 aaa
+b101 aab
+b1111111101 aac
+b101 aad
+
+#40000
+b11 aaa
+b111 aab
+b11 aac
+b111 aad
+
+#50000
+b1111111101 aaa
+b101 aab
+b1111111101 aac
+b101 aad
+
+#60000
+b11 aaa
+b111 aab
+b11 aac
+b111 aad
+
+#70000
+b1111111101 aaa
+b101 aab
+b1111111101 aac
+b101 aad
+
+#80000
+b11 aaa
+b111 aab
+b11 aac
+b111 aad
+
+#90000
+b1111111101 aaa
+b101 aab
+b1111111101 aac
+b101 aad
+
+#100000
+b11 aaa
+b111 aab
+b11 aac
+b111 aad
+
+#110000
+b1111111101 aaa
+b101 aab
+b1111111101 aac
+b101 aad
+
+#120000
+b11 aaa
+b111 aab
+b11 aac
+b111 aad
+
+#130000
+b1111111101 aaa
+b101 aab
+b1111111101 aac
+b101 aad
+
+#140000
+b11 aaa
+b111 aab
+b11 aac
+b111 aad
+
+#150000
+b1111111101 aaa
+b101 aab
+b1111111101 aac
+b101 aad
+
+#160000
+b11 aaa
+b111 aab
+b11 aac
+b111 aad
+
+#170000
+b1111111101 aaa
+b101 aab
+b1111111101 aac
+b101 aad
+
+#180000
+b11 aaa
+b111 aab
+b11 aac
+b111 aad
+
+#190000
+b1111111101 aaa
+b101 aab
+b1111111101 aac
+b101 aad
+

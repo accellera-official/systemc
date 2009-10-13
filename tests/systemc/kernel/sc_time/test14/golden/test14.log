@@ -1,0 +1,5 @@
+SystemC Simulation
+
+Error: (E515) set default time unit failed: simulation running
+In file: <removed by verify.pl>
+In process: src.main_action @ 0 s

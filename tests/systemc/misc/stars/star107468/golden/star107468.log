@@ -1,0 +1,4 @@
+SystemC Simulation
+
+Warning: (W212) sc_logic value 'X' cannot be converted to bool
+In file: <removed by verify.pl>

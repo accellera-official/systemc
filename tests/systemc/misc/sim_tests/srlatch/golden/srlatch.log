@@ -1,0 +1,6 @@
+SystemC Simulation
+SR=10 QQ'=01
+SR=01 QQ'=10
+SR=00 QQ'=10
+SR=11 QQ'=00
+SystemC: simulation stopped by user.

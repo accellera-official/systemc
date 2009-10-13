@@ -1,0 +1,4 @@
+SystemC Simulation
+
+Error: (E515) set default time unit failed: value smaller than time resolution
+In file: <removed by verify.pl>

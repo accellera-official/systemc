@@ -1,0 +1,33 @@
+SystemC Simulation
+0 : CLK UP
+
+5 : _____________CLK2 UP
+
+9 : _____________CLK2 DN
+
+10 : CLK DN
+
+20 : CLK UP
+
+25 : _____________CLK2 UP
+
+29 : _____________CLK2 DN
+
+30 : CLK DN
+
+40 : CLK UP
+
+45 : _____________CLK2 UP
+
+49 : _____________CLK2 DN
+
+50 : CLK DN
+
+60 : CLK UP
+
+65 : _____________CLK2 UP
+
+69 : _____________CLK2 DN
+
+70 : CLK DN
+

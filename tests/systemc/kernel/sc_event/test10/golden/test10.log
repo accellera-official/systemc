@@ -1,0 +1,49 @@
+SystemC Simulation
+*** wait(e)
+2:0 sender
+2:0 receiver - e1
+2:0 sender
+3:0 receiver - e2
+3:0 sender
+5:2 receiver - e3
+*** wait(or_list)
+5:2 sender
+5:2 receiver - e1 | e1 | e1
+5:2 sender
+6:2 receiver - e2 | e2 | e2
+6:2 sender
+8:4 receiver - e3 | e3 | e3
+8:4 sender
+8:4 receiver - e1 | e2 | e3
+8:4 sender
+8:4 receiver - e3 | e2 | e1
+*** wait(and_list)
+8:4 sender
+8:4 receiver - e1 & e1 & e1
+8:4 sender
+9:4 receiver - e2 & e2 & e2
+9:4 sender
+11:6 receiver - e3 & e3 & e3
+11:6 sender
+13:8 receiver - e1 & e2 & e3
+13:8 sender
+15:10 receiver - e3 & e2 & e1
+*** wait(t)
+16:10 receiver - 0 ns
+18:11 sender - timed out
+18:11 receiver - 1 ns
+*** wait(t,e)
+18:11 sender
+18:11 receiver - 1 ns | e1
+18:11 sender
+19:11 receiver - 1 ns | e2
+19:11 sender
+21:12 receiver - 1 ns | e3 - timed out
+*** wait(t,or_list)
+21:12 sender
+21:12 receiver - 1 ns | e1 | e2 | e3
+*** wait(t,and_list)
+21:12 sender
+23:13 receiver - 1 ns | e1 & e2 & e3 - timed out
+23:13 receiver - stop
+SystemC: simulation stopped by user.

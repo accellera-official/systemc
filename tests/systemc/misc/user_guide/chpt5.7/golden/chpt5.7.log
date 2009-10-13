@@ -1,0 +1,80 @@
+SystemC Simulation
+Result = 1237 and 6
+Result = 1239 and 12
+Result = 1242 and 36
+Result = 1246 and 144
+Result = 1251 and 720
+Result = 1257 and 4320
+Result = 1264 and 30240
+Result = 1272 and 241920
+Result = 1281 and 2177280
+Result = 1291 and 21772800
+Result = 1302 and 239500800
+Result = 1314 and -1420957696
+Result = 1327 and -1292580864
+Asserting both reset
+Result = 1341 and -916262912
+Reset add seen
+Result = 1341 and -916262912
+Result = 1341 and -916262912
+Result = 14 and 57221120
+Result = 16 and 114442240
+Result = 19 and 343326720
+Result = 23 and 1373306880
+Result = 28 and -1723400192
+Result = 34 and -1750466560
+Result = 41 and 631635968
+Result = 49 and 758120448
+Result = 58 and -1766850560
+Result = 68 and -488636416
+Result = 79 and -1080033280
+Result = 91 and -75497472
+Result = 104 and -981467136
+Asserting ADDER reset
+Result = 118 and -855638016
+Reset add seen
+Result = 118 and -855638016
+Result = 118 and -855638016
+Result = 14 and 905969664
+Result = 16 and 1811939328
+Result = 19 and 1140850688
+Asserting MULT reset
+Result = 23 and 268435456
+Reset mult seen
+Result = 23 and 268435456
+Result = 23 and 268435456
+Result = 23 and 268435456
+Result = 23 and 268435456
+Result = 27 and 4
+Result = 31 and 16
+Result = 36 and 80
+Result = 42 and 480
+Result = 49 and 3360
+Result = 57 and 26880
+Result = 66 and 241920
+Result = 76 and 2419200
+Result = 87 and 26611200
+Result = 99 and 319334400
+Result = 112 and -143620096
+Asserting both reset
+Result = 126 and -2010681344
+Reset add seen
+Result = 126 and -2010681344
+Result = 126 and -2010681344
+Result = 14 and 1915232256
+Result = 16 and -464502784
+Result = 19 and -1393508352
+Result = 23 and -1279066112
+Result = 28 and -2100363264
+Result = 34 and 282722304
+Result = 41 and 1979056128
+Result = 49 and -1347420160
+Result = 58 and 758120448
+Result = 68 and -1008730112
+Result = 79 and 1788870656
+Result = 91 and -8388608
+Result = 104 and -109051904
+Asserting ADDER reset
+Result = 118 and -1526726656
+Reset add seen
+Result = 118 and -1526726656

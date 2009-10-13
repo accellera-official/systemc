@@ -1,0 +1,7 @@
+SystemC Simulation
+m_cur_val for c1( "c1", t1, 0.1, t2 ) is: 0
+m_cur_val for c2( "c2", t1, 0.1, t2, false ) is: 1
+m_cur_val for c3( "c3", t1, 0.1, t2 ) is: 0
+m_cur_val for c4( "c4", t1, 0.1, t2, false ) is: 1
+m_cur_val for c5( "c5", t1, 0.1, t2 ) is: 0
+m_cur_val for c6( "c6", t1, 0.1, t2, false ) is: 1

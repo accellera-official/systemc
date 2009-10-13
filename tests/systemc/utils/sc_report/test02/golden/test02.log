@@ -1,0 +1,17 @@
+SystemC Simulation
+
+caught exception
+Error: (E800) register_id failed: invalid report id
+In file: <removed by verify.pl>
+
+caught exception
+Error: (E800) register_id failed: invalid report message
+In file: <removed by verify.pl>
+
+caught exception
+Error: (E800) register_id failed: report id already exists
+In file: <removed by verify.pl>
+
+unknown id
+
+0

@@ -1,0 +1,49 @@
+SystemC Simulation
+Caught exception for sc_bit(2)
+Caught exception for sc_bit('2')
+
+Warning: (W212) sc_logic value 'X' cannot be converted to bool
+In file: <removed by verify.pl>
+00101010111
+0111
+0001
+0110
+0111
+0001
+0110
+0111
+0001
+0110
+1011
+0010
+1001
+0111
+0001
+0110
+0111
+0001
+0110
+0111
+0001
+0110
+0111
+0001
+0110
+0111
+0001
+0110
+0111
+0001
+0110
+0111
+0001
+0110
+0111
+0001
+0110
+0111
+0001
+0110
+0111
+0001
+0110

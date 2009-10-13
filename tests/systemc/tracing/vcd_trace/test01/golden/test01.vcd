@@ -1,0 +1,129 @@
+
+$timescale
+     1 ps
+$end
+
+$scope module SystemC $end
+$var wire    1  aaa  Bool       $end
+$var wire    1  aab  SC_Logic       $end
+$var wire    4  aac  SC_BV       $end
+$var wire    4  aad  SC_LV       $end
+$upscope $end
+$enddefinitions  $end
+
+$comment
+All initial values are dumped below at time 0 sec = 0 timescale units.
+$end
+
+$dumpvars
+0aaa
+0aab
+b0 aac
+b0 aad
+$end
+
+#0
+1aab
+b1111 aad
+
+#10000
+1aaa
+0aab
+b1010 aac
+b1011 aad
+
+#20000
+b101 aac
+b101 aad
+
+#30000
+0aaa
+1aab
+b0 aac
+b1111 aad
+
+#40000
+1aaa
+0aab
+b1010 aac
+b1011 aad
+
+#50000
+b110 aac
+b110 aad
+
+#60000
+0aaa
+1aab
+b0 aac
+b1111 aad
+
+#70000
+1aaa
+0aab
+b1010 aac
+b1011 aad
+
+#80000
+b111 aac
+b111 aad
+
+#90000
+0aaa
+1aab
+b0 aac
+b1111 aad
+
+#100000
+1aaa
+0aab
+b1010 aac
+b1011 aad
+
+#110000
+b1000 aac
+b1000 aad
+
+#120000
+0aaa
+1aab
+b0 aac
+b1111 aad
+
+#130000
+1aaa
+0aab
+b1010 aac
+b1011 aad
+
+#140000
+b1001 aac
+b1001 aad
+
+#150000
+0aaa
+1aab
+b0 aac
+b1111 aad
+
+#160000
+1aaa
+0aab
+b1010 aac
+b1011 aad
+
+#170000
+b1010 aad
+
+#180000
+0aaa
+1aab
+b0 aac
+b1111 aad
+
+#190000
+1aaa
+0aab
+b1010 aac
+b1011 aad
+

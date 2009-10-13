@@ -1,0 +1,7 @@
+SystemC Simulation
+0
+1
+1
+
+Error: (E204) value is not valid: sc_bit( 2 )
+In file: <removed by verify.pl>

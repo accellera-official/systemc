@@ -1,0 +1,75 @@
+SystemC Simulation
+*** cancel()
+2:0 sender - immediate
+2:0 receiver_static_method
+2:0 receiver_dynamic_method
+2:0 receiver_static_thread
+2:0 receiver_dynamic_thread
+3:0 sender - immediate
+3:0 sender - canceled
+3:0 receiver_static_method
+3:0 receiver_dynamic_method
+3:0 receiver_static_thread
+3:0 receiver_dynamic_thread
+4:0 sender - delta
+5:0 receiver_static_method
+5:0 receiver_dynamic_method
+5:0 receiver_static_thread
+5:0 receiver_dynamic_thread
+6:0 sender - delta
+6:0 sender - canceled
+8:0 sender - timed 1 ns
+10:1 receiver_static_method
+10:1 receiver_dynamic_method
+10:1 receiver_static_thread
+10:1 receiver_dynamic_thread
+11:1 sender - timed 1 ns
+11:1 sender - canceled
+14:2 sender - timed 2 ns
+16:3 sender - canceled
+*** notify()
+19:4 sender - delta
+19:4 sender - immediate
+19:4 receiver_static_method
+19:4 receiver_dynamic_method
+19:4 receiver_static_thread
+19:4 receiver_dynamic_thread
+21:4 sender - timed 1 ns
+21:4 sender - immediate
+21:4 receiver_static_method
+21:4 receiver_dynamic_method
+21:4 receiver_static_thread
+21:4 receiver_dynamic_thread
+24:5 sender - timed 2 ns
+26:6 sender - immediate
+26:6 receiver_static_method
+26:6 receiver_dynamic_method
+26:6 receiver_static_thread
+26:6 receiver_dynamic_thread
+*** notify(t)
+29:7 sender - delta
+29:7 sender - timed 1 ns
+30:7 receiver_static_method
+30:7 receiver_dynamic_method
+30:7 receiver_static_thread
+30:7 receiver_dynamic_thread
+33:8 sender - timed 1 ns
+33:8 sender - delta
+34:8 receiver_static_method
+34:8 receiver_dynamic_method
+34:8 receiver_static_thread
+34:8 receiver_dynamic_thread
+37:9 sender - timed 2 ns
+37:9 sender - timed 1 ns
+39:10 receiver_static_method
+39:10 receiver_dynamic_method
+39:10 receiver_static_thread
+39:10 receiver_dynamic_thread
+42:11 sender - timed 1 ns
+42:11 sender - timed 2 ns
+44:12 receiver_static_method
+44:12 receiver_dynamic_method
+44:12 receiver_static_thread
+44:12 receiver_dynamic_thread
+47:13 sender - stop
+SystemC: simulation stopped by user.

@@ -1,0 +1,11 @@
+SystemC Simulation
+Value on Bus = Z
+Value on Bus = 0
+Input is = 0
+Value on Bus = Z
+Input is = Z
+Value on Bus = 1
+Input is = 1
+Value on Bus = Z
+Input is = Z
+SystemC: simulation stopped by user.
