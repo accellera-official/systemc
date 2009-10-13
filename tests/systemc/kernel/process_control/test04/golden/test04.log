@@ -1,19 +1,20 @@
 SystemC Simulation
-0 s in reset
-1 ns before thread0 self-suspend
-3 ns resuming thread0 
-3 ns after thread0 self-suspend
-4 ns before thread0 self-disable
-6 ns enabling thread0 
-6 ns after thread0 self-disable
-7 ns synchronous reset on thread0 
-7 ns in reset
-8 ns in reset
-9 ns in reset
-10 ns no synchronous reset on thread0 
-10 ns before thread0 self-suspend
-13 ns asynchronous reset on thread0 
-13 ns in reset
+0 s:slave - in reset
+1 ns:slave - self-suspend...
+3 ns:master -                    resuming slave
+3 ns:slave - ... resumed
+4 ns:slave - self-disable ...
+4 ns:slave - ... executing ...
+6 ns:master -                    enabling slave
+7 ns:slave - ... enabled
+7 ns:master -                    sync reset on slave
+8 ns:slave - in reset
+9 ns:slave - in reset
+10 ns:slave - in reset
+10 ns:master -                    sync reset off slave
+11 ns:slave - self-suspend...
+13 ns:master -                    async reset on slave
+13 ns:slave - in reset
 
 Info: /OSCI/SystemC: Simulation stopped by user.
 Program completed

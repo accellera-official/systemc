@@ -34,7 +34,7 @@
  *****************************************************************************/
 
                 /***************************************/
-                /* Interface Filename:	prime_numgen.h */
+                /* Interface Filename:  prime_numgen.h */
                 /***************************************/
 
 #include "common.h"
@@ -46,25 +46,25 @@ SC_MODULE( prime_numgen )
   sc_in_clk clk;
 
   // Inputs
-        const sc_signal<bool>&	reset;
+        const sc_signal<bool>&  reset;
   // Outputs
         signal_bool_vector&     prime;  
 
   // Constructor
-  prime_numgen (sc_module_name		NAME,
-	sc_clock&			TICK,
-        const sc_signal<bool>&        	RESET,
-        signal_bool_vector&      	PRIME )
-	
+  prime_numgen (sc_module_name      NAME,
+    sc_clock&           TICK,
+        const sc_signal<bool>&          RESET,
+        signal_bool_vector&         PRIME )
+    
       : 
-	reset	(RESET),
-    	prime	(PRIME)
+    reset   (RESET),
+        prime   (PRIME)
 
-  	{ 
-          clk	(TICK);
-		  SC_CTHREAD( entry, clk.pos() );
-	  reset_signal_is(reset,false);
-	}
+    { 
+          clk   (TICK);
+          SC_CTHREAD( entry, clk.pos() );
+      reset_signal_is(reset,false);
+    }
 
   void entry();
 };

@@ -1,0 +1,13 @@
+SystemC Simulation
+0 s: starting victim thread
+0 s: victim thread executing A
+10 ns: in perpetrator disabling victim 
+25 ns: in perpetrator enabling victim 
+30 ns: victim thread executing B
+40 ns: in perpetrator disabling victim 
+55 ns: in perpetrator enabling victim 
+60 ns: victim thread executing C
+70 ns: ending victim thread
+75 ns: ending perpetrator thread
+
+Info: /OSCI/SystemC: Simulation stopped by user.

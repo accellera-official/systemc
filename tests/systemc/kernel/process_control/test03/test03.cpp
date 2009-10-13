@@ -151,7 +151,7 @@ SC_MODULE(DUT)
 			wait();
 			wait();
 			cout << sc_time_stamp() << ": stimulus ("
-			     << __LINE__ << ") - suspending all processes" << endl;
+			     << __LINE__ << ") - disabling all processes" << endl;
 			m_cthread.disable();
 			m_dynamic_method.disable();
 			m_dynamic_thread.disable();
@@ -166,10 +166,10 @@ SC_MODULE(DUT)
 			m_static_method.enable();
 			m_static_thread.enable();
 			cout << endl << sc_time_stamp() << ": stimulus (" 
-			     << __LINE__ << ") - resuming all processes" << endl;
+			     << __LINE__ << ") - enabling all processes" << endl;
 			wait();
 			cout << sc_time_stamp() << ": stimulus ("
-			     << __LINE__ << ") - suspending all processes" << endl;
+			     << __LINE__ << ") - disabling all processes" << endl;
 			m_cthread.disable();
 			m_dynamic_method.disable();
 			m_dynamic_thread.disable();
@@ -186,7 +186,7 @@ SC_MODULE(DUT)
 			m_static_method.enable();
 			m_static_thread.enable();
 			cout << endl << sc_time_stamp() << ": stimulus (" 
-			     << __LINE__ << ") - resuming all processes" << endl;
+			     << __LINE__ << ") - enabling all processes" << endl;
 			wait();
 			m_event2.notify(SC_ZERO_TIME);
 			cout << sc_time_stamp() << ": stimulus ("
@@ -228,6 +228,9 @@ int sc_main(int argc, char* argv[])
 }
 
 // $Log: test03.cpp,v $
+// Revision 1.2  2009/05/22 16:07:26  acg
+//  Andy Goodrich: process control updates.
+//
 // Revision 1.1.1.1  2006/12/15 20:26:03  acg
 // systemc_tests-2.3
 //

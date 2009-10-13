@@ -18,11 +18,17 @@ SystemC Simulation
 4 ns dut.grand_parent.parent2.child3 initialization
 4 ns dut.grand_parent.parent2 removing children
 4 ns dut.grand_parent.parent2 initialization
-4 ns dut.grand_parent initialization
-
+4 ns dut.grand_parent.parent2.child1 got kill
+Killing process dut.grand_parent.parent2.child1
+4 ns dut.grand_parent.parent2.child2 got kill
+Killing process dut.grand_parent.parent2.child2
+4 ns dut.grand_parent.parent2.child3 got kill
+Killing process dut.grand_parent.parent2.child3
 4 ns dut.grand_parent.parent2.child1 initialization
 4 ns dut.grand_parent.parent2.child2 initialization
 4 ns dut.grand_parent.parent2.child3 initialization
+4 ns dut.grand_parent initialization
+
 8 ns dut.grand_parent.parent1.child1 initialization
 8 ns dut.grand_parent.parent1.child2 initialization
 8 ns dut.grand_parent.parent1.child3 initialization
@@ -32,11 +38,17 @@ SystemC Simulation
 8 ns dut.grand_parent.parent2.child3 initialization
 8 ns dut.grand_parent.parent2 removing children
 8 ns dut.grand_parent.parent2 initialization
-8 ns dut.grand_parent initialization
-
+8 ns dut.grand_parent.parent2.child1 got kill
+Killing process dut.grand_parent.parent2.child1
+8 ns dut.grand_parent.parent2.child2 got kill
+Killing process dut.grand_parent.parent2.child2
+8 ns dut.grand_parent.parent2.child3 got kill
+Killing process dut.grand_parent.parent2.child3
 8 ns dut.grand_parent.parent2.child1 initialization
 8 ns dut.grand_parent.parent2.child2 initialization
 8 ns dut.grand_parent.parent2.child3 initialization
+8 ns dut.grand_parent initialization
+
 12 ns dut.grand_parent.parent1.child1 initialization
 12 ns dut.grand_parent.parent1.child2 initialization
 12 ns dut.grand_parent.parent1.child3 initialization
@@ -46,11 +58,17 @@ SystemC Simulation
 12 ns dut.grand_parent.parent2.child3 initialization
 12 ns dut.grand_parent.parent2 removing children
 12 ns dut.grand_parent.parent2 initialization
-12 ns dut.grand_parent initialization
-
+12 ns dut.grand_parent.parent2.child1 got kill
+Killing process dut.grand_parent.parent2.child1
+12 ns dut.grand_parent.parent2.child2 got kill
+Killing process dut.grand_parent.parent2.child2
+12 ns dut.grand_parent.parent2.child3 got kill
+Killing process dut.grand_parent.parent2.child3
 12 ns dut.grand_parent.parent2.child1 initialization
 12 ns dut.grand_parent.parent2.child2 initialization
 12 ns dut.grand_parent.parent2.child3 initialization
+12 ns dut.grand_parent initialization
+
 16 ns dut.grand_parent.parent1.child1 initialization
 16 ns dut.grand_parent.parent1.child2 initialization
 16 ns dut.grand_parent.parent1.child3 initialization
@@ -60,11 +78,17 @@ SystemC Simulation
 16 ns dut.grand_parent.parent2.child3 initialization
 16 ns dut.grand_parent.parent2 removing children
 16 ns dut.grand_parent.parent2 initialization
-16 ns dut.grand_parent initialization
-
+16 ns dut.grand_parent.parent2.child1 got kill
+Killing process dut.grand_parent.parent2.child1
+16 ns dut.grand_parent.parent2.child2 got kill
+Killing process dut.grand_parent.parent2.child2
+16 ns dut.grand_parent.parent2.child3 got kill
+Killing process dut.grand_parent.parent2.child3
 16 ns dut.grand_parent.parent2.child1 initialization
 16 ns dut.grand_parent.parent2.child2 initialization
 16 ns dut.grand_parent.parent2.child3 initialization
+16 ns dut.grand_parent initialization
+
 20 ns dut.grand_parent.parent1.child1 initialization
 20 ns dut.grand_parent.parent1.child2 initialization
 20 ns dut.grand_parent.parent1.child3 initialization
@@ -74,9 +98,15 @@ SystemC Simulation
 20 ns dut.grand_parent.parent2.child3 initialization
 20 ns dut.grand_parent.parent2 removing children
 20 ns dut.grand_parent.parent2 initialization
-20 ns dut.grand_parent initialization
-
+20 ns dut.grand_parent.parent2.child1 got kill
+Killing process dut.grand_parent.parent2.child1
+20 ns dut.grand_parent.parent2.child2 got kill
+Killing process dut.grand_parent.parent2.child2
+20 ns dut.grand_parent.parent2.child3 got kill
+Killing process dut.grand_parent.parent2.child3
 20 ns dut.grand_parent.parent2.child1 initialization
 20 ns dut.grand_parent.parent2.child2 initialization
 20 ns dut.grand_parent.parent2.child3 initialization
+20 ns dut.grand_parent initialization
+
 Program completed

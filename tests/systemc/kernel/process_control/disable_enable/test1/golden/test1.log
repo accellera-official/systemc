@@ -1,0 +1,6 @@
+SystemC Simulation
+0 s: starting victim thread
+0 s: issuing self disable in victim thread
+0 s: after issuing self disable in victim thread
+10 ns: in perpetrator enabling victim 
+100 ns: ending victim thread

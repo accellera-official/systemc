@@ -40,75 +40,83 @@
 
 SC_MODULE(DUT)
 {
-	SC_CTOR(DUT)
-	{
-		SC_CTHREAD(thread0,m_clk.pos());
-		SC_CTHREAD(thread1,m_clk.pos());
-	}
-	void thread0()
-	{
-		m_handle0 = sc_get_current_process_handle();
-		cout << sc_time_stamp() << " in reset" << endl;
-		for (;;)
-		{
-			wait();
-			cout << sc_time_stamp() << " before thread0 self-suspend" << endl;
-			m_handle0.suspend();
-			cout << sc_time_stamp() << " after thread0 self-suspend" << endl;
-			wait();
-			cout << sc_time_stamp() << " before thread0 self-disable" << endl;
-			m_handle0.disable();
-			cout << sc_time_stamp() << " after thread0 self-disable" << endl;
-		}
-	}
-	void thread1()
-	{
-		m_handle1 = sc_get_current_process_handle();
-		for (;;)
-		{
-			wait();
-			wait();
-			wait();
-			cout << sc_time_stamp() << " resuming thread0 " << endl;
-			m_handle0.resume();
-			wait();
-			wait();
-			wait();
-			cout << sc_time_stamp() << " enabling thread0 " << endl;
-			m_handle0.enable();
-			wait();
-			cout << sc_time_stamp() << " synchronous reset on thread0 " << endl;
-			m_handle0.sync_reset_on();
-			wait();
-			wait();
-			wait();
-			cout << sc_time_stamp() << " no synchronous reset on thread0 " 
-			     << endl;
-			m_handle0.sync_reset_off();
-			wait();
-			wait();
-			wait();
-			cout << sc_time_stamp() << " asynchronous reset on thread0 " 
-			     << endl;
-			m_handle0.reset();
-			wait(20);
-			sc_stop();
-		}
-	}
-	sc_in<bool>       m_clk;
-	sc_process_handle m_handle0;
-	sc_process_handle m_handle1;
+    SC_CTOR(DUT)
+    {
+        SC_CTHREAD(master,m_clk.pos());
+        SC_CTHREAD(slave,m_clk.pos());
+    }
+    void slave()
+    {
+        m_handle0 = sc_get_current_process_handle();
+        cout << sc_time_stamp() << ":slave - in reset" << endl;
+        for (;;)
+        {
+            wait();
+            cout << sc_time_stamp() << ":slave - self-suspend..." << endl;
+            m_handle0.suspend();
+            cout << sc_time_stamp() << ":slave - ... resumed" << endl;
+            wait();
+            cout << sc_time_stamp() << ":slave - self-disable ..." << endl;
+            m_handle0.disable();
+            cout << sc_time_stamp() << ":slave - ... executing ..." << endl;
+	    wait();
+            cout << sc_time_stamp() << ":slave - ... enabled" << endl;
+	    wait();
+	    wait();
+	    wait();
+        }
+    }
+    void master()
+    {
+        m_handle1 = sc_get_current_process_handle();
+        for (;;)
+        {
+            wait();
+            wait();
+            wait();
+            cout << sc_time_stamp() 
+	         << ":master -                    resuming slave" << endl;
+            m_handle0.resume();
+            wait();
+            wait();
+            wait();
+            cout << sc_time_stamp() 
+	         << ":master -                    enabling slave" << endl;
+            m_handle0.enable();
+            wait();
+            cout << sc_time_stamp() 
+	         << ":master -                    sync reset on slave" << endl;
+            m_handle0.sync_reset_on();
+            wait();
+            wait();
+            wait();
+            cout << sc_time_stamp() 
+	         << ":master -                    sync reset off slave" << endl;
+            m_handle0.sync_reset_off();
+            wait();
+            wait();
+            wait();
+            cout << sc_time_stamp() 
+	         << ":master -                    async reset on slave" << endl;
+            m_handle0.reset();
+            wait(20);
+            sc_stop();
+        }
+    }
+    sc_in<bool>       m_clk;
+    sc_process_handle m_handle0;
+    sc_process_handle m_handle1;
 };
 
 int sc_main(int argc, char* argv[])
 {
-	sc_clock        clock;
-	DUT             dut("dut");
+    sc_clock        clock;
+    DUT             dut("dut");
 
-	dut.m_clk(clock);
+    dut.m_clk(clock);
 
-	sc_start();
+    sc_start();
 
-	cout << "Program completed" << endl;
-	return 0;
+    cout << "Program completed" << endl;
+    return 0;
 }

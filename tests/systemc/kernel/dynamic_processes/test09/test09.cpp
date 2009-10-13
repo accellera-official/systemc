@@ -47,132 +47,140 @@
 
 SC_MODULE(DUT)
 {
-	SC_CTOR(DUT)
-	{
-		SC_CTHREAD(stimulus,m_clk.pos());
-		reset_signal_is(m_reset, true);
-		SC_THREAD(grand_parent);
-		sensitive << m_clk.pos();
-	}
+    SC_CTOR(DUT)
+    {
+        SC_CTHREAD(stimulus,m_clk.pos());
+        reset_signal_is(m_reset, true);
+        SC_THREAD(grand_parent);
+        sensitive << m_clk.pos();
+    }
 
-	void child()
-	{
-		sc_process_handle my_handle = sc_get_current_process_handle();
+    void child()
+    {
+        sc_process_handle my_handle = sc_get_current_process_handle();
+        cout << sc_time_stamp() << " " << my_handle.name() 
+             << " initialization" << endl;
+        try {
+        for (;;)
+        {
+            wait();
+        }
+        } 
+        catch(sc_core::sc_kill)
+        {
 	    cout << sc_time_stamp() << " " << my_handle.name() 
-		     << " initialization" << endl;
-		for (;;)
-		{
-			wait();
-		}
-	}
+		 << " got kill" << endl;
+	    throw sc_core::sc_kill();
+        }
+    }
 
-	void grand_parent()
-	{
-	    static bool       initialize = true;
-	    cout << sc_time_stamp() << " " << "dut.grand_parent initialization" 
-		     << endl;
-		cout << endl;
-		if ( initialize )
-		{
-			m_grand_parent_handle = sc_get_current_process_handle();
-			sc_spawn( sc_bind(&DUT::parent1, this), "parent1" );
-			sc_spawn( sc_bind(&DUT::parent2, this), "parent2" );
-			initialize = false;
-		}
+    void grand_parent()
+    {
+        static bool       initialize = true;
+        cout << sc_time_stamp() << " " << "dut.grand_parent initialization" 
+             << endl;
+        cout << endl;
+        if ( initialize )
+        {
+            m_grand_parent_handle = sc_get_current_process_handle();
+            sc_spawn( sc_bind(&DUT::parent1, this), "parent1" );
+            sc_spawn( sc_bind(&DUT::parent2, this), "parent2" );
+            initialize = false;
+        }
 
-		for (;;)
-		{
-			wait();
-		}
-	}
+        for (;;)
+        {
+            wait();
+        }
+    }
 
-	void parent1()
-	{
-	    static bool initialize = true;
-		sc_process_handle m_child1;
-		sc_process_handle m_child2;
-		sc_process_handle m_child3;
-		sc_process_handle my_handle = sc_get_current_process_handle();
-	    cout << sc_time_stamp() << " " << my_handle.name() 
-		     << " initialization" << endl;
-		if ( initialize )
-		{
-			m_child1 = sc_spawn( sc_bind(&DUT::child, this), "child1" );
-			m_child2 = sc_spawn( sc_bind(&DUT::child, this), "child2" );
-			m_child3 = sc_spawn( sc_bind(&DUT::child, this), "child3" );
-			initialize = false;
-		}
+    void parent1()
+    {
+        static bool initialize = true;
+        sc_process_handle m_child1;
+        sc_process_handle m_child2;
+        sc_process_handle m_child3;
+        sc_process_handle my_handle = sc_get_current_process_handle();
+        cout << sc_time_stamp() << " " << my_handle.name() 
+             << " initialization" << endl;
+        if ( initialize )
+        {
+            m_child1 = sc_spawn( sc_bind(&DUT::child, this), "child1" );
+            m_child2 = sc_spawn( sc_bind(&DUT::child, this), "child2" );
+            m_child3 = sc_spawn( sc_bind(&DUT::child, this), "child3" );
+            initialize = false;
+        }
 
-		for (;;)
-		{
-			wait();
-		}
-	}
+        for (;;)
+        {
+            wait();
+        }
+    }
 
-	void parent2()
-	{
-		sc_process_handle m_child1;
-		sc_process_handle m_child2;
-		sc_process_handle m_child3;
-		sc_process_handle my_handle;
-		for (;;)
-		{
-			try
-			{
-				my_handle = sc_get_current_process_handle();
-				cout << sc_time_stamp() << " " << my_handle.name() 
-					 << " initialization" << endl;
-				m_child1 = sc_spawn( sc_bind(&DUT::child, this), "child1" );
-				m_child2 = sc_spawn( sc_bind(&DUT::child, this), "child2" );
-				m_child3 = sc_spawn( sc_bind(&DUT::child, this), "child3" );
+    void parent2()
+    {
+        sc_process_handle m_child1;
+        sc_process_handle m_child2;
+        sc_process_handle m_child3;
+        sc_process_handle my_handle;
+        for (;;)
+        {
+            try
+            {
+                my_handle = sc_get_current_process_handle();
+                cout << sc_time_stamp() << " " << my_handle.name() 
+                     << " initialization" << endl;
+                m_child1 = sc_spawn( sc_bind(&DUT::child, this), "child1" );
+                m_child2 = sc_spawn( sc_bind(&DUT::child, this), "child2" );
+                m_child3 = sc_spawn( sc_bind(&DUT::child, this), "child3" );
 
-				for (;;)
-				{
-					wait();
-				}
-			} 
-			catch ( sc_core::sc_user )
-			{
-				cout << sc_time_stamp() << " " << my_handle.name() 
-					 << " removing children" << endl;
-				m_child1.kill();
-				m_child2.kill();
-				m_child3.kill();
-			}
-		}
-	}
+                for (;;)
+                {
+                    wait();
+                }
+            } 
+            catch ( sc_core::sc_user )
+            {
+                cout << sc_time_stamp() << " " << my_handle.name() 
+                     << " removing children" << endl;
+                m_child1.kill();
+                m_child2.kill();
+                m_child3.kill();
+            }
+        }
+    }
 
-	void stimulus()
-	{
-		for (;;)
-		{
-			wait();
-			wait();
-			wait();
-			wait();
-			m_grand_parent_handle.reset(SC_INCLUDE_DESCENDANTS);
-		}
-	}
+    void stimulus()
+    {
+        for (;;)
+        {
+            wait();
+            wait();
+            wait();
+            wait();
+            m_grand_parent_handle.reset(SC_INCLUDE_DESCENDANTS);
+        }
+    }
 
-	sc_in<bool>       m_clk;
-	sc_process_handle m_grand_parent_handle;
-	sc_in<bool>       m_reset;
+    sc_in<bool>       m_clk;
+    sc_process_handle m_grand_parent_handle;
+    sc_in<bool>       m_reset;
 };
 
 int sc_main(int argc, char* argv[])
 {
-	sc_clock        clock;
-	DUT             dut("dut");
-	sc_signal<bool> reset;
+    sc_clock        clock;
+    DUT             dut("dut");
+    sc_signal<bool> reset;
 
-	dut.m_clk(clock);
-	dut.m_reset(reset);
+    dut.m_clk(clock);
+    dut.m_reset(reset);
 
-	reset = true;
-	sc_start(1, SC_NS);
-	reset = false;
-	sc_start(20, SC_NS);
+    reset = true;
+    sc_start(1, SC_NS);
+    reset = false;
+    sc_start(20, SC_NS);
 
-	cout << "Program completed" << endl;
-	return 0;
+    cout << "Program completed" << endl;
+    return 0;
 }

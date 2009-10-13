@@ -17,7 +17,7 @@
         
 /*****************************************************************************
         
-  test05.cpp -- Test reset_signal_is() and areset_signal_is() usage.
+  test05.cpp -- Test reset_signal_is() and async_reset_signal_is() usage.
         
   Original Author: Andy Goodrich, Forte Design Systems, 14 December 2006
         
@@ -46,20 +46,20 @@ SC_MODULE(DUT)
 		// SET UP STATICALLY DEFINED PROCESSES:
 
 		SC_CTHREAD(static_cthread,m_clk.pos());
-		areset_signal_is(m_areset,true);
+		async_reset_signal_is(m_areset,true);
 		reset_signal_is(m_sreset,true);
 		SC_METHOD(static_method);
-		areset_signal_is(m_areset,true);
+		async_reset_signal_is(m_areset,true);
 		SC_THREAD(static_thread_clocked);
 		sensitive << m_clk.pos();
 		dont_initialize();
-		areset_signal_is(m_areset,true);
+		async_reset_signal_is(m_areset,true);
 		reset_signal_is(m_sreset,true);
 		SC_THREAD(static_thread_event);
-		areset_signal_is(m_areset,true);
+		async_reset_signal_is(m_areset,true);
 		reset_signal_is(m_sreset,true);
 		SC_THREAD(static_thread_timed);
-		areset_signal_is(m_areset,true);
+		async_reset_signal_is(m_areset,true);
 		reset_signal_is(m_sreset,true);
 	}
 
@@ -73,23 +73,23 @@ SC_MODULE(DUT)
 
 		wait(1);
 
-		options_method.areset_signal_is( m_areset, true );
+		options_method.async_reset_signal_is( m_areset, true );
 		options_method.spawn_method();
 		sc_spawn( sc_bind(&DUT::dynamic_method, this), "dynamic_method", 
 			&options_method);
 
-		options_thread_clocked.areset_signal_is( m_areset, true );
+		options_thread_clocked.async_reset_signal_is( m_areset, true );
 		options_thread_clocked.reset_signal_is( m_sreset, true );
 		options_thread_clocked.set_sensitivity( &m_clk.posedge_event() );
 		sc_spawn( sc_bind(&DUT::dynamic_thread_clocked, this), 
             "dynamic_thread_clocked", &options_thread_clocked);
 
-		options_thread_event.areset_signal_is( m_areset, true );
+		options_thread_event.async_reset_signal_is( m_areset, true );
 		options_thread_event.reset_signal_is( m_sreset, true );
 		sc_spawn( sc_bind(&DUT::dynamic_thread_event, this), 
             "dynamic_thread_event", &options_thread_event);
 
-		options_thread_timed.areset_signal_is( m_areset, true );
+		options_thread_timed.async_reset_signal_is( m_areset, true );
 		options_thread_timed.reset_signal_is( m_sreset, true );
 		sc_spawn( sc_bind(&DUT::dynamic_thread_timed, this), 
             "dynamic_thread_timed", &options_thread_timed);

@@ -1,0 +1,7 @@
+SystemC Simulation
+0 s: starting victim thread
+2 ns: in perpetrator suspending victim 
+12 ns(3): in perpetrator resuming victim 
+12 ns(4): victim thread resuming
+
+Info: /OSCI/SystemC: Simulation stopped by user.
