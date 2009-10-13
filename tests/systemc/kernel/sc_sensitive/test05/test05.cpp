@@ -31,7 +31,7 @@ int sc_main( int, char*[] )
     TB       tb("tb");
 
 	tb.m_clk(clock);
-	sc_start(2000);
+	sc_start(2000, SC_NS);
 
     return 0;
 }

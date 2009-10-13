@@ -45,11 +45,11 @@ int sc_main(int ac, char *av[])
   sc_signal<int> resulta;
   sc_signal<int> resultm;
 
-  sc_clock clk("Clock", 20.0, 0.5, 0.0);
+  sc_clock clk("Clock", 20.0, SC_NS, 0.5, 0.0, SC_NS);
 
   testbench TBH("TB", clk, resulta,resultm, number);
   accumulator ACC("ACC", clk, number, resulta, resultm);
 
-  sc_clock::start(1000);
+  sc_start(1000, SC_NS);
   return 0;
 }

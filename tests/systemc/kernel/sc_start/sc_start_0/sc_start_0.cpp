@@ -51,27 +51,27 @@ int sc_main(int argc, char* argv[])
 	cout << "Event         Start Parameters         End Parameters" << endl;
 	cout << "------------- ----------------         --------------\n" << endl;
 
-	ACTION(sc_start(1),"sc_start(1)")
+	ACTION(sc_start(1, SC_NS),"sc_start(1, SC_NS)")
 	ACTION(tweak = !tweak,"~tweak     ")
-	ACTION(sc_start(0),"sc_start(0)")
-	ACTION(sc_start(0),"sc_start(0)")
-	ACTION(sc_start(1),"sc_start(1)")
-	ACTION(sc_start(0),"sc_start(0)")
-	ACTION(sc_start(0),"sc_start(0)")
+	ACTION(sc_start(0, SC_NS),"sc_start(0, SC_NS)")
+	ACTION(sc_start(0, SC_NS),"sc_start(0, SC_NS)")
+	ACTION(sc_start(1, SC_NS),"sc_start(1, SC_NS)")
+	ACTION(sc_start(0, SC_NS),"sc_start(0, SC_NS)")
+	ACTION(sc_start(0, SC_NS),"sc_start(0, SC_NS)")
 
 	ACTION(tweak = !tweak,"~tweak     ")
-	ACTION(sc_start(0),"sc_start(0)")
+	ACTION(sc_start(0, SC_NS),"sc_start(0, SC_NS)")
 
 	ACTION(tweak = !tweak,"~tweak     ")
-	ACTION(sc_start(0),"sc_start(0)")
-	ACTION(sc_start(0),"sc_start(0)")
+	ACTION(sc_start(0, SC_NS),"sc_start(0, SC_NS)")
+	ACTION(sc_start(0, SC_NS),"sc_start(0, SC_NS)")
 
-	ACTION(sc_start(1),"sc_start(1)")
-	ACTION(sc_start(1),"sc_start(1)")
-	ACTION(sc_start(0),"sc_start(0)")
+	ACTION(sc_start(1, SC_NS),"sc_start(1, SC_NS)")
+	ACTION(sc_start(1, SC_NS),"sc_start(1, SC_NS)")
+	ACTION(sc_start(0, SC_NS),"sc_start(0, SC_NS)")
 	ACTION(tweak = !tweak,"~tweak     ")
-	ACTION(sc_start(0),"sc_start(0)")
-	ACTION(sc_start(0),"sc_start(0)")
+	ACTION(sc_start(0, SC_NS),"sc_start(0, SC_NS)")
+	ACTION(sc_start(0, SC_NS),"sc_start(0, SC_NS)")
 
     cerr << "Program completed" << endl;
     return 0;

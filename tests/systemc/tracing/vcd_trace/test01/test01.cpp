@@ -48,10 +48,10 @@ SC_MODULE( proc1 )
 
   proc1( sc_module_name NAME,
 	 sc_signal<bool>& CLK )
-    : clk(CLK)
   {
+    clk(CLK);
     SC_THREAD( entry );
-    sensitive(clk);
+    sensitive << clk;
     obj1 = 0;
     obj2 = 0;
     obj3 = "0000";
@@ -95,7 +95,7 @@ int sc_main(int ac, char *av[])
   proc1 P1("P1", clock);
 
   tf = sc_create_vcd_trace_file("test01");
-  ((vcd_trace_file *) tf)->sc_set_vcd_time_unit(-12);
+  ((vcd_trace_file *) tf)->set_time_unit(1.0, SC_PS);
   sc_trace(tf, P1.obj1, "Bool");
   sc_trace(tf, P1.obj2, "SC_Logic");
   sc_trace(tf, P1.obj3, "SC_BV");
@@ -103,12 +103,12 @@ int sc_main(int ac, char *av[])
   //sc_trace(tf, clock, "Clock");
 
   clock.write(0);
-  sc_start(0);
+  sc_start(0, SC_NS);
   for (int i = 0; i< 10; i++) {
     clock.write(1);
-    sc_start(10);
+    sc_start(10, SC_NS);
     clock.write(0);
-    sc_start(10);
+    sc_start(10, SC_NS);
   }
   sc_close_vcd_trace_file( tf );
   return 0;

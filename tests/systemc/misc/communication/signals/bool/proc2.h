@@ -50,11 +50,11 @@ SC_MODULE( proc2 )
 	   sc_clock&        CLK,
 	   sc_signal<bool>& READY,
 	   sc_signal<bool>& ACK )
-    : clk( CLK ),
-      ready( READY ),
-      ack( ACK )
     {
-        SC_CTHREAD( entry, clk.pos() );
+        clk( CLK );
+      ready( READY );
+      ack( ACK );
+		SC_CTHREAD( entry, clk.pos() );
     }
 
     void entry();

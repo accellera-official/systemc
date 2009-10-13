@@ -58,9 +58,13 @@ SC_MODULE( op_queue )
 	    sc_signal<bool>& POP,
 	    sc_signal<float>& OUT1,
 	    int QUEUE_SIZE = 4 )
-    : clk(CLK), in(IN1), pop(POP), out(OUT1), queue_size(QUEUE_SIZE)
+	: queue_size(QUEUE_SIZE)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLK);
+    in(IN1); 
+	pop(POP); 
+	out(OUT1); 
+	SC_CTHREAD( entry, clk.pos() );
     queue = new float[queue_size];
   }
 

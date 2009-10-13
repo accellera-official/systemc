@@ -54,8 +54,8 @@ SC_MODULE( ts_buf )
     : in(IN_), control(CONTROL), ts_out(TS_OUT)
   {
     SC_METHOD( entry );
-    sensitive(in);
-    sensitive(control);
+    sensitive << in;
+    sensitive << control;
   }
 
   // Process functionality in member function below

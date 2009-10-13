@@ -38,10 +38,10 @@
 int sc_main(int argc, char* argv[] )
 {
     sc_clock clock1("CLK1");
-    sc_clock clock2("CLK2", 2);
-    sc_clock clock3("CLK3", 3, 0.25);
-    sc_clock clock4("CLK4", 4, 0.5, 0.5);
-    sc_clock clock5("CLK5", 5, 0.75, 1.0, false);
+    sc_clock clock2("CLK2", 2, SC_NS);
+    sc_clock clock3("CLK3", 3, SC_NS, 0.25);
+    sc_clock clock4("CLK4", 4, SC_NS, 0.5, 0.5, SC_NS);
+    sc_clock clock5("CLK5", 5, SC_NS, 0.75, 1.0, SC_NS, false);
     const char *name = clock1.name();
     // double period = clock2.period();
     sc_time period = clock2.period();

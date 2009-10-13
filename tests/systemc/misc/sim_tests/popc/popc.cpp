@@ -61,10 +61,11 @@ SC_MODULE( proc1 )
          sc_signal<bool>& RESET,
 	 sc_signal<bool>& DATA_READY,
          sc_signal<int>& IN_ )
-    : clk(CLK), data_ack(DATA_ACK), popc(POPC),
-      reset(RESET), data_ready(DATA_READY), in(IN_)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLK);
+    data_ack(DATA_ACK); popc(POPC);
+    reset(RESET); data_ready(DATA_READY); in(IN_);
+	SC_CTHREAD( entry, clk.pos() );
   }
 
   // Process functionality goes here
@@ -102,12 +103,15 @@ SC_MODULE( proc2 )
          sc_signal<int>& IN_,
 	 sc_signal<bool>& DATA_ACK,
          sc_signal<int>& POPC )
-    : clk(CLK), reset(RESET), data_ready(DATA_READY), in(IN_),
-      data_ack(DATA_ACK), popc(POPC)
   {
+    clk(CLK);
+    reset(RESET);   
+    data_ready(DATA_READY);
+    in(IN_);
+    data_ack(DATA_ACK);
+    popc(POPC);
     SC_CTHREAD( entry, clk.pos() );
-    // Global watching for reset
-    watching(reset.delayed() == true);
+    reset_signal_is(reset,true);
     c = 0;
     t = 0;
   }
@@ -137,9 +141,9 @@ void proc1::entry()
 	in.write(j);
 
         data_ready.write(true);
-        wait_until(data_ack.delayed() == true);
+        do { wait(); } while (data_ack == false);
         data_ready.write(false);
-        wait_until(data_ack.delayed() == false);
+        do { wait(); } while (data_ack == true);
 
         char buf[BUFSIZ];
         sprintf( buf, "Input: %7d   Population Count: %3d", j, popc.read() );
@@ -175,7 +179,7 @@ void proc2::entry()
     wait();
   
     while (true) {
-        wait_until(data_ready.delayed() == true);
+        do { wait(); } while (data_ready == false);
 
 	t = in.read();
 	c = 0;
@@ -189,7 +193,7 @@ void proc2::entry()
         popc.write(c);
 
         data_ack.write(true);
-        wait_until(data_ready.delayed() == false);
+        do { wait(); } while (data_ready == true);
         data_ack.write(false);
     }
 }
@@ -204,7 +208,7 @@ sc_main(int argc, char *argv[])
   sc_signal<int>   popc;
   sc_signal<bool>  reset;
 
-  sc_clock clock("CLOCK", 10, 0.5, 0.0);
+  sc_clock clock("CLOCK", 10, SC_NS, 0.5, 0.0, SC_NS);
 
   proc1 TestBench("TestBench", clock, data_ack, popc, reset, data_ready, in);
   proc2 Popc("Popc", clock, reset, data_ready, in,  data_ack, popc);
@@ -225,7 +229,7 @@ sc_main(int argc, char *argv[])
   sc_trace(tf, Popc.c, "Popc.c");
   sc_trace(tf, Popc.no, "Popc.no");
 
-  sc_start(-1);
+  sc_start();
   return 0;
 }
 

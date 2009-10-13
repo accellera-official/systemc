@@ -154,7 +154,7 @@ int sc_main( int argc, char* argv[] )
 	sc_clock clock;
 	X x("x");
 	x.clk(clock);
-	sc_start(1000);
+	sc_start(1000, SC_NS);
 
 	cerr << "Program completed\n";
 	return 0;

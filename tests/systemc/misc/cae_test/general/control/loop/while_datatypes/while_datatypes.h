@@ -57,15 +57,16 @@ SC_MODULE( while_datatypes )
 	      sc_signal<bool>&          OUT_VALID,
               sc_signal<int>&           RESULT 
         )
-        : clk            (CLK),            // connection definition
+        : 
           reset          (RESET),
           in_valid       (IN_VALID),
           in_value       (IN_VALUE),
           out_valid      (OUT_VALID),
           result         (RESULT)
     {
-      SC_CTHREAD( entry, clk.pos() );
-      watching(reset.delayed() == true);
+      clk            (CLK);
+	  SC_CTHREAD( entry, clk.pos() );
+      reset_signal_is(reset,true);
     };
     void entry ();
 };

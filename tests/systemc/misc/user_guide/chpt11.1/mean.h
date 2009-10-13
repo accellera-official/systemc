@@ -64,9 +64,10 @@ SC_MODULE( mean )
        signal_bool_vector& AM,
        signal_bool_vector& GM,
        signal_bool_vector& HM)
-    : clk(CLK), a(A), b(B), c(C), d(D), am(AM), gm(GM), hm(HM)
+    : a(A), b(B), c(C), d(D), am(AM), gm(GM), hm(HM)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLK);
+	SC_CTHREAD( entry, clk.pos() );
   }
 
   // Process functionality in member function below

@@ -76,7 +76,7 @@ sc_main( int, char*[] )
     cout << sig_logic << endl;
     cout << sig_rv4 << endl;
 
-    sc_start(0);
+    sc_start(0, SC_NS);
 
     cout << sig_int << endl;
     cout << sig_bool << endl;

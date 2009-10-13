@@ -54,15 +54,16 @@ SC_MODULE( gcd_cc )
             const sc_signal<unsigned>& B,
             sc_signal<unsigned>& C,
             sc_signal<bool>&     READY )
-        : clk( CLK ),
+        : 
           reset(RESET),
           a(A),
           b(B),
           c(C),
           ready(READY)
     {
-        SC_CTHREAD( entry, clk.pos() );
-        watching( reset.delayed() == 1 );
+        clk( CLK );
+		SC_CTHREAD( entry, clk.pos() );
+        reset_signal_is(reset,true);
     }
 
     void entry();

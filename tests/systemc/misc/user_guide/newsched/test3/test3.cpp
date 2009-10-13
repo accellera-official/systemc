@@ -48,10 +48,10 @@ SC_MODULE( asyncproc )
 
   asyncproc(sc_module_name NAME,
 	    sc_signal_in_if<bool>& CLOCK)
-    : clock(CLOCK)
   {
+    clock(CLOCK);
     SC_THREAD( entry );
-    sensitive_pos(clock);
+    sensitive << clock.pos();
   }
 
   void entry()
@@ -77,10 +77,10 @@ SC_MODULE( asyncblock )
 
   asyncblock(sc_module_name NAME,
 	     sc_signal_in_if<bool>& CLOCK)
-    : clock(CLOCK)
   {
+    clock(CLOCK);
     SC_METHOD( entry );
-    sensitive_neg(clock);
+    sensitive << clock.neg();
   }
 
   void entry()
@@ -98,12 +98,12 @@ SC_MODULE( asyncblock )
 int
 sc_main(int ac, char *av[])
 {
-  sc_clock clock("Clock", 20, 0.5);
+  sc_clock clock("Clock", 20, SC_NS, 0.5);
 
   asyncproc P2("P2", clock);
   asyncblock P3("P3", clock);
 
-  sc_start(160);
+  sc_start(160, SC_NS);
   return 0;
 
 }

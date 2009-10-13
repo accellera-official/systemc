@@ -88,7 +88,7 @@ int sc_main(int argc, char* argv[])
 	TB		 tb("tb");
 
 	tb.m_clk(clock);
-	sc_start(100);
+	sc_start(100, SC_NS);
 	cout << "Program completed." << endl;
 	return 0;
 }

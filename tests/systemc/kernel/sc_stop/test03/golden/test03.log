@@ -1,6 +1,6 @@
 SystemC Simulation
 Creating able...
 Creating baker...
-baker: 0: issuing sc_stop()
-able: 0
+baker: 0 s: issuing sc_stop()
+able: 0 s
 SystemC: simulation stopped by user.

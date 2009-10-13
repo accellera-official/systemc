@@ -60,14 +60,15 @@ SC_MODULE( datawidth )
 	const sc_signal<bool>&		READY,
 	sc_signal_bool_vector7&		RESULT )
 	
-      : clk	(TICK),
+      : 
 	in1	(IN1),
 	in2	(IN2),
 	ready   (READY),
 	result	(RESULT)
 
   	{
-          SC_CTHREAD( entry, clk.pos() );
+          clk	(TICK);
+	  SC_CTHREAD( entry, clk.pos() );
         }
 
   void entry();

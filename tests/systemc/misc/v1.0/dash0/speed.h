@@ -57,10 +57,10 @@ SC_MODULE( speed_mod )
     elapsed_time = 0;
 
     SC_METHOD( find_time_proc );
-    sensitive_pos << clk;
+    sensitive << clk.pos();
 
     SC_THREAD( read_speed_proc );
-    sensitive_pos << pulse;
+    sensitive << pulse.pos();
   }
 
 };

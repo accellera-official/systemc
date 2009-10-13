@@ -63,9 +63,11 @@ SC_MODULE( some_process )
 	        sc_clock& CLK,
 	        sc_fifo<rgb_t>& COLOR_IN,
 	        sc_fifo<rgb_t>& COLOR_OUT )
-    : clk(CLK), color_in(COLOR_IN),color_out(COLOR_OUT)
+    : color_in(COLOR_IN),color_out(COLOR_OUT)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLK);
+	SC_THREAD( entry );
+	sensitive <<  clk.pos();
   }
 
   void entry();

@@ -62,11 +62,12 @@ SC_MODULE( adder_sub )
 	    sc_signal<int>& SD,
 	    sc_signal<int>& SSUM,
 	    sc_signal<bool>& ADDER_SUB_DONE)
-    : clk(CLK), Sa(SA), Sb(SB), Sc(SC), 
+    : Sa(SA), Sb(SB), Sc(SC), 
       adder_sub_ready(ADDER_SUB_READY),
       Sd(SD), Ssum(SSUM), adder_sub_done(ADDER_SUB_DONE)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLK);
+	SC_CTHREAD( entry, clk.pos() );
   }
 
   // Process functionality in member function below

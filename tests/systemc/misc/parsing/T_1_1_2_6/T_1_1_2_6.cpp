@@ -48,9 +48,10 @@ SC_MODULE( inverter )
 	      sc_clock& CLK,
 	      const sc_signal<bool>& INPUT,
 	      sc_signal<bool>& OUTPUT )
-        : clk(CLK), input(INPUT), output(OUTPUT)
+        : input(INPUT), output(OUTPUT)
     {
-        SC_CTHREAD( entry, clk.pos() );
+        clk(CLK);
+		SC_CTHREAD( entry, clk.pos() );
     }
     void entry();
 };

@@ -90,7 +90,7 @@ SC_MODULE( a2901_edge )
       Q( Q_ )
     {
         SC_METHOD( entry );
-        sensitive_pos( CLK );
+        sensitive << CLK.posedge_event();
     }
 
     void entry();

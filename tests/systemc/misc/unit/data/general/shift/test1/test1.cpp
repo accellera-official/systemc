@@ -54,6 +54,6 @@ sc_main(int argc, char* argv[])
         cout << x << endl;
         x.dump(cout);
     }
-    sc_start(0);
+    sc_start(0, SC_NS);
     return 0;
 }

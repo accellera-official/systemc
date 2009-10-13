@@ -49,11 +49,12 @@ SC_MODULE( WAIT_RDY )
                sc_clock&		TICK_P,
                const sc_signal<bool>&  	READY )
  
-    : clk (TICK_P),
+    : 
 		ready (READY)
 
     {
-        SC_CTHREAD( entry, clk.pos() );
+        clk (TICK_P);
+		SC_CTHREAD( entry, clk.pos() );
     }
  
   void entry();
@@ -64,9 +65,9 @@ void
 WAIT_RDY::entry()
 {
   while (true) {
-    wait_until(ready.delayed() == 1); 
+    do { wait(); } while (ready != 1); 
   
-    cout << sc_simulation_time() << " : "
+    cout << sc_time_stamp() << " : "
          << "READY = 1 DETECTED" << endl;
   }
 }

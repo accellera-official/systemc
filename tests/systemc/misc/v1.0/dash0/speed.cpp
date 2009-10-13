@@ -33,6 +33,19 @@
 
  *****************************************************************************/
 
+// $Log: speed.cpp,v $
+// Revision 1.4  2006/01/24 21:05:52  acg
+//  Andy Goodrich: replacement of deprecated features with their non-deprecated
+//  counterparts.
+//
+// Revision 1.3  2006/01/19 00:48:10  acg
+// Andy Goodrich: Changes for the fact signal write checking is enabled.
+//
+// Revision 1.2  2006/01/18 00:23:44  acg
+// Change over from SC_NO_WRITE_CHECK to sc_write_check_enable() call.
+//
+
+#define SC_NO_WRITE_CHECK
 #include "systemc.h"
 #include "const.h"
 #include "speed.h"
@@ -64,10 +77,10 @@ speed_mod::read_speed_proc()
     elapsed_time = 0;
 
     cout << "Current speed displayed = " 
-         << speed << " km/h @ " << sc_simulation_time() << endl;
+         << speed << " km/h @ " << sc_time_stamp() << endl;
     cout << "Current speedometer angle = " 
          << speed * MAX_ANGLE / MAX_SPEED 
-         << " degrees @ " << sc_simulation_time() << endl;
+         << " degrees @ " << sc_time_stamp() << endl;
   }
 }
 

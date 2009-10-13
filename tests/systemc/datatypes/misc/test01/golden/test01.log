@@ -3,6 +3,8 @@ SystemC Simulation
 *** test_bit ***
 
 sc_bit
+
+Info: (I804) /IEEE_Std_1666/deprecated: sc_bit is deprecated, use bool instead
 1
 1
 0
@@ -187,3 +189,11 @@ sc_fxval_fast
 -7
 15
 15
+
+Info: (I804) /IEEE_Std_1666/deprecated: You can turn off warnings about
+             IEEE 1666 deprecated features by placing this method call as the
+             first statement in your sc_main() function:
+
+  sc_report_handler::set_actions("/IEEE_Std_1666/deprecated", SC_DO_NOTHING);
+
+

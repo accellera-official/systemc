@@ -42,7 +42,7 @@ SC_MODULE(test) {
 
   SC_CTOR(test) {
     SC_CTHREAD(reset_loop, clk.pos());
-    watching(reset.delayed());
+    reset_signal_is(reset,true);
   }
 
   void reset_loop(void);

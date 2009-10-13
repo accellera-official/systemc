@@ -37,8 +37,6 @@
 
 #include <systemc.h>
 
-bool sc_core::sc_report_close_default_log();
-
 SC_MODULE( M )
 {
     sc_event trigger_t, trigger_m;

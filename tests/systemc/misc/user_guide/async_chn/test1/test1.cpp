@@ -54,8 +54,8 @@ SC_MODULE( p1 )
   {
     init = INIT;
     SC_THREAD( entry );
-    sensitive(clock);
-    // sensitive(b);
+    sensitive << clock;
+    // sensitive << b;
   }
 
   void entry() {
@@ -79,31 +79,31 @@ int sc_main(int ac, char *av[])
   p1 Proc1("Proc1", a, b, clock, 10);
   p1 Proc2("Proc2", b, a, clock, 129);
 
-  sc_start(0);
+  sc_start(0, SC_NS);
   clock = 1;
-  sc_start(1);
+  sc_start(1, SC_NS);
   clock = 0;
-  sc_start(1);
+  sc_start(1, SC_NS);
 
   clock = 1;
-  sc_start(1);
+  sc_start(1, SC_NS);
   clock = 0;
-  sc_start(1);
+  sc_start(1, SC_NS);
 
   clock = 1;
-  sc_start(1);
+  sc_start(1, SC_NS);
   clock = 0;
-  sc_start(1);
+  sc_start(1, SC_NS);
 
   clock = 1;
-  sc_start(1);
+  sc_start(1, SC_NS);
   clock = 0;
-  sc_start(1);
+  sc_start(1, SC_NS);
 
   clock = 1;
-  sc_start(1);
+  sc_start(1, SC_NS);
   clock = 0;
-  sc_start(1);
+  sc_start(1, SC_NS);
 
   return 0;
 }

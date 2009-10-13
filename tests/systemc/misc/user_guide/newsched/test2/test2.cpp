@@ -57,8 +57,9 @@ SC_MODULE( syncproc )
 	   const sc_signal<int>& IN1,
 	   const sc_signal<int>& IN2,
 	   sc_signal<int>& OUT_)
-    : clk(CLK), in1(IN1), in2(IN2), out(OUT_)
+    : in1(IN1), in2(IN2), out(OUT_)
   {
+    clk(CLK);
     SC_CTHREAD( entry, clk.pos() );
     out = 0;
   }
@@ -91,11 +92,12 @@ SC_MODULE( asyncproc )
 	    const sc_signal<int>& IN_,
 	    sc_signal<int>& OUT_, 
 	    sc_signal_in_if<bool>& CLOCK)
-    : in(IN_), out(OUT_), clock(CLOCK)
+    : in(IN_), out(OUT_)
   {
+    clock(CLOCK);
     out = 0;
     SC_THREAD( entry );
-    sensitive(in);
+    sensitive << in;
   }
 
   void entry()
@@ -121,11 +123,12 @@ SC_MODULE( asyncblock )
 	     const sc_signal<int>& IN_,
 	     sc_signal<int>& OUT_, 
 	     sc_signal_in_if<bool>& CLOCK)
-    : in(IN_), out(OUT_), clock(CLOCK)
+    : in(IN_), out(OUT_)
   {
+    clock(CLOCK);
     out = 0;
     SC_METHOD( entry );
-    sensitive(clock);
+    sensitive << clock;
   }
 
   void entry()
@@ -146,7 +149,7 @@ sc_main(int ac, char *av[])
 {
   sc_signal<int> a, b, c;
 
-  sc_clock clock("Clock", 20, 0.5);
+  sc_clock clock("Clock", 20, SC_NS, 0.5);
 
   syncproc P1("P1", clock, a, b, c);
   asyncproc P2("P2", c, a, clock);
@@ -159,7 +162,7 @@ sc_main(int ac, char *av[])
   sc_trace(tf, c, "SYNC2-OUT");
   sc_trace(tf, clock, "Clock");
 
-  sc_start(160);
+  sc_start(160, SC_NS);
   return 0;
 
 }

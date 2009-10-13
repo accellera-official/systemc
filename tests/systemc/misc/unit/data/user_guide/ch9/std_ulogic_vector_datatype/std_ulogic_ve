@@ -400,7 +400,7 @@ int sc_main(int ac, char *av[])
 
   // std_ulogic_vector     .to_string() 
   std_ulogic_vector<9>	tstr;
-  std::string           str;
+  sc_string             str;
 
   tstr = "UXZ01WLH-";
   str  = tstr.to_string();

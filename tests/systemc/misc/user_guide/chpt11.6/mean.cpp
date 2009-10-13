@@ -60,7 +60,7 @@ void mean::entry()
   while (true) {
     // read all inputs
     send_input.write(true);
-    wait_until(data_available.delayed() == true);
+    do { wait(); } while (data_available != true);
     i = in.read().to_int();
     wait();
     j = in.read().to_int();
@@ -78,7 +78,7 @@ void mean::entry()
     calculate_harmonic_mean(i, j, k, l, harmonic);
 
     // write all outputs
-    wait_until(receiver_ready.delayed() == true);
+    do { wait(); } while (receiver_ready != true);
     data_ready.write(true);
     wait();
     out.write(arith);

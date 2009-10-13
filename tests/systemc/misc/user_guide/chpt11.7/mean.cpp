@@ -59,27 +59,27 @@ void mean::entry()
 
   while (true) {
     // read all inputs
-    wait_until(input_available.delayed() == true);
+    do { wait(); } while (input_available != true);
     send_data.write(true);
-    wait_until(input_available.delayed() == false);
+    do { wait(); } while (input_available != false);
     i = in.read().to_int();
     send_data.write(false);
 
-    wait_until(input_available.delayed() == true);
+    do { wait(); } while (input_available != true);
     send_data.write(true);
-    wait_until(input_available.delayed() == false);
+    do { wait(); } while (input_available != false);
     j = in.read().to_int();
     send_data.write(false);
 
-    wait_until(input_available.delayed() == true);
+    do { wait(); } while (input_available != true);
     send_data.write(true);
-    wait_until(input_available.delayed() == false);
+    do { wait(); } while (input_available != false);
     k = in.read().to_int();
     send_data.write(false);
 
-    wait_until(input_available.delayed() == true);
+    do { wait(); } while (input_available != true);
     send_data.write(true);
-    wait_until(input_available.delayed() == false);
+    do { wait(); } while (input_available != false);
     l = in.read().to_int();
     send_data.write(false);
     wait();
@@ -93,23 +93,23 @@ void mean::entry()
 
     // write all outputs
     output_ready.write(true);
-    wait_until(receiver_ready.delayed() == true);
+    do { wait(); } while (receiver_ready != true);
     output_ready.write(false);
     out.write(arith);
-    wait_until(receiver_ready.delayed() == false);
+    do { wait(); } while (receiver_ready != false);
 
     output_ready.write(true);
-    wait_until(receiver_ready.delayed() == true);
+    do { wait(); } while (receiver_ready != true);
     output_ready.write(false);
     out.write(geom);
-    wait_until(receiver_ready.delayed() == false);
+    do { wait(); } while (receiver_ready != false);
 
 
     output_ready.write(true);
-    wait_until(receiver_ready.delayed() == true);
+    do { wait(); } while (receiver_ready != true);
     output_ready.write(false);
     out.write(harmonic);
-    wait_until(receiver_ready.delayed() == false);
+    do { wait(); } while (receiver_ready != false);
   }
 } // end of entry function
 

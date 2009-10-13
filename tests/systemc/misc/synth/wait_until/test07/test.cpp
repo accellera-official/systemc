@@ -40,7 +40,7 @@ void test::entry()
 {
   while (true) {
 
-  wait_until (cont1.delayed() == 1);
+  do { wait(); } while  (cont1 == 0);
   wait();
   o1 = 0;
   o2 = 0;
@@ -57,7 +57,7 @@ void test::entry()
                                 wait ();
                                 o5 = 2;
                         } else {
-                                wait_until (cont2.delayed() == 8);
+                                do { wait(); } while  (cont2 != 8);
                         }
                   }
                 o1 = 9;

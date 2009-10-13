@@ -42,7 +42,7 @@
 #define WRITE(a) \
 { \
     cout << (a).kind() << endl; \
-    sc_object* obj = &(a); \
+    const sc_object* obj = &(a); \
     cout << obj->kind() << endl; \
 }
 
@@ -61,16 +61,12 @@ SC_MODULE( mod_a )
 
     SC_CTOR( mod_a )
     {
-        sc_process_b* p;
         SC_METHOD( method_action );
-        p = sc_get_last_created_process_handle();
-        WRITE( *p );
+        WRITE( *sc_get_current_process_handle().get_process_object() );
         SC_THREAD( thread_action );
-        p = sc_get_last_created_process_handle();
-        WRITE( *p );
+        WRITE( *sc_get_current_process_handle().get_process_object() );
         SC_CTHREAD( cthread_action, clk.pos() );
-        p = sc_get_last_created_process_handle();
-        WRITE( *p );
+        WRITE( *sc_get_current_process_handle().get_process_object() );
     }
 };
 

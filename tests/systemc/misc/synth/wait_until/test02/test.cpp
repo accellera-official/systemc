@@ -43,7 +43,7 @@ void test::entry()
   wait();
   wait ();
   if (i1 == 5) {
-        wait_until (cont1.delayed() == 1);
+        do { wait(); } while  (cont1 == 0);
         wait ();
   } else {
     wait ();

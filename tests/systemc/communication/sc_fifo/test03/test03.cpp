@@ -126,7 +126,7 @@ int sc_main( int, char*[] )
     r.in( fifo );
 
     // run the simulation
-    sc_start( 100 );
+    sc_start( 100, SC_NS );
 
     return 0;
 }

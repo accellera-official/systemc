@@ -43,14 +43,14 @@ void displayp::entry()
 {
   bool_vector	tmp;
 
-  cout << sc_simulation_time() << " : STARTING SIM \n" << endl;
+  cout << sc_time_stamp() << " : STARTING SIM \n" << endl;
 
   while (true) {
 
     tmp = prime.read();
     wait();
 
-    cout << sc_simulation_time() << " : STOPPING SIM - stop button" << endl;
+    cout << sc_time_stamp() << " : STOPPING SIM - stop button" << endl;
     sc_stop();
 
   }

@@ -44,7 +44,7 @@ void display::entry(){
 	while (in_valid.read()==false) wait();
 	cout << "Display : " << in_data1.read() << " "
 	     << in_data2.read() << " "
-	     << " at " << sc_simulation_time() << endl;
+	     << " at " << sc_time_stamp() << endl;
 
 	i++;
 	if(i == 24) 	    sc_stop();

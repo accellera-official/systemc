@@ -45,7 +45,7 @@ SC_MODULE( mod_a )
  
     void write( const char* msg )
     {
-        cout <<"simulation time" << ":" << sc_simulation_time()
+        cout <<"simulation time" << ":" << sc_time_stamp()
              << " " << msg << endl;
      
     }
@@ -69,9 +69,9 @@ SC_MODULE( mod_a )
     SC_CTOR( mod_a )
     {
         SC_METHOD( sender );
-        sensitive(e1);
+        sensitive << e1;
         SC_METHOD( receiver );
-        sensitive(e2);
+        sensitive << e2;
     }
 };
 

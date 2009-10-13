@@ -52,9 +52,10 @@ SC_MODULE( numgen )
 	 sc_clock& CLK,
 	 sc_signal<double>& OUT1,
 	 sc_signal<double>& OUT2)
-    : clk(CLK), out1(OUT1), out2(OUT2)
+    : out1(OUT1), out2(OUT2)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLK);
+	SC_CTHREAD( entry, clk.pos() );
   }
 
   // Process functionality in member function below

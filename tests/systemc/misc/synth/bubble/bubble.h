@@ -78,7 +78,6 @@ SC_MODULE( BUBBLE )
 		      signal_bool_vector&	D8	
               ) 
         :
-        clk(TICK_P), 
 		reset	(RESET),
 		in_ok	(IN_OK),
 		out_ok	(OUT_OK),
@@ -89,8 +88,9 @@ SC_MODULE( BUBBLE )
 		d1	(D1), d2(D2), d3(D3), d4(D4),
 		d5	(D5), d6(D6), d7(D7), d8(D8)
     {
+        clk(TICK_P); 
         SC_CTHREAD( entry, clk.pos() );
-	watching(reset.delayed() == 1); 
+	reset_signal_is(reset,true);
     }
     void entry();
 };
@@ -144,7 +144,7 @@ BUBBLE::entry()
 
 // INPUT HANDSHAKE & INPUT READ
 
-    wait_until(in_ok.delayed());
+    do { wait(); } while (!in_ok);
 
     instrb.write(false);
     wait();
@@ -204,7 +204,7 @@ lout << "STARTING BUBBLE SORT" << endl;
     outstrb.write(true);	// Ready to give output data
     wait();
    
-    wait_until(out_ok.delayed()); 
+    do { wait(); } while (!out_ok); 
 
     outstrb.write(false);
     wait();

@@ -48,11 +48,11 @@ int sc_main(int ac, char *av[])
   signal_bool_vector32 data1("Data1");
   signal_bool_vector32 data2("Data2");
 
-  sc_clock clk("Clock", 20, 0.5, 0.0);
+  sc_clock clk("Clock", 20, SC_NS, 0.5, 0.0, SC_NS);
 
   accessor A("Accessor", clk, data1, cs, we, addr, data2);
   ram R("Ram", data2, cs, we, addr, data1);
 
-  sc_clock::start(560);
+  sc_start(560, SC_NS);
   return 0;
 }

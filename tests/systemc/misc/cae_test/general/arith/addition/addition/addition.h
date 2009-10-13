@@ -82,8 +82,8 @@ SC_MODULE( addition )
                sc_signal_bool_vector8&            OUT_VALUE5,   
                sc_signal<bool>&                   OUT_VALID    // Output port
         )
-        : clk          (CLK),            // connection definition
-          reset        (RESET),
+        : 
+          reset        (RESET), // connection definition
 	  in_value1    (IN_VALUE1),
 	  in_value2    (IN_VALUE2),
 	  in_value3    (IN_VALUE3),
@@ -98,8 +98,9 @@ SC_MODULE( addition )
           out_valid    (OUT_VALID)
 
     {
+	  clk(CLK);
       SC_CTHREAD( entry, clk.pos() );
-      watching(reset.delayed() == true);
+	  reset_signal_is(reset,true);
     };
 
     //

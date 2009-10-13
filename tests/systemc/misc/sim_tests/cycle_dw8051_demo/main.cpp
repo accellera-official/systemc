@@ -108,7 +108,7 @@ void parse_arg(int argc, char *argv[]) {
 int sc_main(int argc, char *argv[])
 {
   // clock -------------------------------------------------------------------
-  sc_clock             clock  ("CLOCK", 40, 0.5);        // assume 25MHz
+  sc_clock             clock  ("CLOCK", 40, SC_NS, 0.5); // assume 25MHz
 
     // signals for read/write to External RAM/ROM
   signal_bool_vector16    mem_addr("mem_addr");          // address bus
@@ -165,6 +165,6 @@ int sc_main(int argc, char *argv[])
   
 
 
-  sc_start(-1);
+  sc_start();
   return 0;
 }

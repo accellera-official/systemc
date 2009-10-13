@@ -56,13 +56,14 @@ SC_MODULE( prime_numgen )
         const sc_signal<bool>&        	RESET,
         signal_bool_vector&      	PRIME )
 	
-      : clk	(TICK),
+      : 
 	reset	(RESET),
     	prime	(PRIME)
 
   	{ 
-          SC_CTHREAD( entry, clk.pos() );
-	  watching ( reset.delayed() == 0 );	
+          clk	(TICK);
+		  SC_CTHREAD( entry, clk.pos() );
+	  reset_signal_is(reset,false);
 	}
 
   void entry();

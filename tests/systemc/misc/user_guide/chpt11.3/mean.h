@@ -58,9 +58,10 @@ SC_MODULE( mean )
        signal_bool_vector& OUT_,
        const sc_signal<bool>& DATA_AVAILABLE,
        sc_signal<bool>& DATA_READY)
-    : clk(CLK), in(IN_), out(OUT_), data_available(DATA_AVAILABLE), data_ready(DATA_READY)
+    : in(IN_), out(OUT_), data_available(DATA_AVAILABLE), data_ready(DATA_READY)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLK);
+	SC_CTHREAD( entry, clk.pos() );
   }
 
   // Process functionality in member function below

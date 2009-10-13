@@ -53,11 +53,12 @@ SC_MODULE( STIM )
                  sc_clock&		TICK_P,
            const sc_signal<bool>&  	DATA )
  
-    : clk (TICK_P),
+    : 
 		data (DATA)
 
     {
-      SC_CTHREAD( entry, clk.pos() );
+      clk (TICK_P);
+	  SC_CTHREAD( entry, clk.pos() );
     }
  
   /*** Call to Process Functionality ***/
@@ -70,7 +71,7 @@ STIM::entry()
 {
   while(true) {
     at_posedge(data);			
-    cout << sc_simulation_time() << " : "	
+    cout << sc_time_stamp() << " : "	
          << "POSEDGE READY DETECTED" 
 	 << endl;
   }

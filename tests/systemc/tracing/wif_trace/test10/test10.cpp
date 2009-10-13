@@ -51,10 +51,10 @@ SC_MODULE( proc1 )
 
   proc1( sc_module_name NAME,
 	 sc_signal<bool>& CLK )
-    : clk(CLK)
   {
+    clk(CLK);
     SC_THREAD( entry );
-    sensitive(clk);
+    sensitive << clk;
     obj1 = OK;
   }
 
@@ -95,12 +95,12 @@ int sc_main(int ac, char *av[])
   sc_trace(tf, clock, "Clock");
 
   clock.write(0);
-  sc_start(0);
+  sc_start(0, SC_NS);
   for (int i = 0; i< 10; i++) {
     clock.write(1);
-    sc_start(10);
+    sc_start(10, SC_NS);
     clock.write(0);
-    sc_start(10);
+    sc_start(10, SC_NS);
   }
   sc_close_wif_trace_file( tf );
   return 0;

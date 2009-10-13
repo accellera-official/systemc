@@ -60,7 +60,7 @@ int sc_main(int ac, char *av[])
 
 // Clock Instantiation
 
-  sc_clock 	clk ("Clock", 10, 0.5, 0);
+  sc_clock 	clk ("Clock", 10, SC_NS, 0.5, 0, SC_NS);
 
 // Process Instantiation
 
@@ -72,6 +72,6 @@ int sc_main(int ac, char *av[])
 
 // Simulation Run Control
 
-  sc_clock::start( -1 );
+  sc_start();
   return 0;
 }

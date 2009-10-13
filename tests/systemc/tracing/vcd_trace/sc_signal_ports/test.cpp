@@ -134,7 +134,7 @@ sc_main( int, char*[] )
     sc_trace( tf, a.out_resolved, "a.out_resolved" );
     sc_trace( tf, a.out_rv1,      "a.out_rv1" );
 
-    sc_start( 10 );
+    sc_start( 10, SC_NS );
 
     sc_close_vcd_trace_file( tf );
 

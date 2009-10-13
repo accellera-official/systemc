@@ -79,7 +79,6 @@ SC_MODULE( STIM )
 		      signal_bool_vector&	D8
               ) 
         :
-        clk(TICK_P), 
 		reset	(RESET),
 		in_ok	(IN_OK),
 		out_ok	(OUT_OK),
@@ -90,6 +89,7 @@ SC_MODULE( STIM )
 		d1      (D1), d2(D2), d3(D3), d4(D4),
                 d5      (D5), d6(D6), d7(D7), d8(D8)
     {
+        clk(TICK_P); 
         SC_CTHREAD( entry, clk.neg() );
     }
     void entry();
@@ -124,7 +124,7 @@ STIM::entry()
 
 // WAIT FOR REQUEST FOR INPUT 
 
-  wait_until(instrb.delayed() == 1);
+  do { wait(); } while (instrb == 0);
 
 // SEND INPUT DATA TO BE SORTED
   a1.write(-76);
@@ -140,7 +140,7 @@ STIM::entry()
 
 // WAIT FOR OUTPUT READY
 
-  wait_until(outstrb.delayed() == 1);
+  do { wait(); } while (outstrb == 0);
 
 // READ OUTPUT & DISPLAY RESULTS
 

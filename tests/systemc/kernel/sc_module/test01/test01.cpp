@@ -33,7 +33,7 @@
 
  *****************************************************************************/
 
-// test of positional binding -- general test of operator <<
+// test of positional binding
 
 #include "systemc.h"
 
@@ -78,7 +78,7 @@ SC_MODULE( hier_source )
     SC_CTOR( hier_source )
     : prim_source1( "prim_source1" )
     {
-	prim_source1 << out << port_out;
+	prim_source1( out, port_out);
     }
 };
 
@@ -95,7 +95,7 @@ SC_MODULE( hier_transfer )
     SC_CTOR( hier_transfer )
     : prim_transfer1( "prim_transfer1" )
     {
-	prim_transfer1 << in << port_in << out << port_out;
+	prim_transfer1( in, port_in, out, port_out);
     }
 };
 
@@ -110,7 +110,7 @@ SC_MODULE( hier_sink )
     SC_CTOR( hier_sink )
     : prim_sink1( "prim_sink1" )
     {
-	prim_sink1 << in << port_in;
+	prim_sink1( in, port_in );
     }
 };
 
@@ -131,9 +131,9 @@ SC_MODULE( hier1 )
       prim_transfer1( "prim_transfer1" ),
       prim_sink1( "prim_sink1" )
     {
-	prim_source1 << sig1 << sig2;
-	prim_transfer1 << sig1 << sig2 << sig3 << sig4;
-	prim_sink1 << sig3 << sig4;
+	prim_source1( sig1, sig2);
+	prim_transfer1( sig1, sig2, sig3, sig4);
+	prim_sink1( sig3, sig4);
     }
 };
 
@@ -154,9 +154,9 @@ SC_MODULE( hier2 )
       hier_transfer1( "hier_transfer1" ),
       hier_sink1( "hier_sink1" )
     {
-	hier_source1 << sig1 << sig2;
-	hier_transfer1 << sig1 << sig2 << sig3 << sig4;
-	hier_sink1 << sig3 << sig4;
+	hier_source1( sig1, sig2);
+	hier_transfer1( sig1, sig2, sig3, sig4);
+	hier_sink1( sig3, sig4);
     }
 };
 
@@ -171,7 +171,7 @@ sc_main( int, char*[] )
     hier2<bool> hier2_bool( "hier2_bool" );
     hier2<sc_logic> hier2_logic( "hier2_logic" );
 
-    sc_start(0);
+    sc_start(0, SC_NS);
 
     return 0;
 }

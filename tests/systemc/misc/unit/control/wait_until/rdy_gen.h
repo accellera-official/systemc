@@ -49,11 +49,12 @@ SC_MODULE( RDY_GEN )
                 sc_clock&		TICK_P,
                 sc_signal<bool>&  	READY )
  
-    : clk (TICK_P),
+    :
 		ready (READY)
 
   {
-      SC_CTHREAD( entry, clk.pos() );
+       clk (TICK_P);
+	   SC_CTHREAD( entry, clk.pos() );
   }
  
   void entry();
@@ -65,16 +66,16 @@ RDY_GEN::entry()
 {
   ready.write(1);
   wait();
-  cout << sc_simulation_time() << " : "
+  cout << sc_time_stamp() << " : "
        << "WRITING ready = 1" << endl;
 
   ready.write(0);
   wait(); 
-  cout << sc_simulation_time() << " : "
+  cout << sc_time_stamp() << " : "
        << "WRITING ready = 0" << endl;
 
   ready.write(1);
   wait();
-  cout << sc_simulation_time() << " : "
+  cout << sc_time_stamp() << " : "
        << "WRITING ready = 1" << endl;
 }

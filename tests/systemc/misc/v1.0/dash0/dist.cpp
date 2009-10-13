@@ -33,6 +33,19 @@
 
  *****************************************************************************/
 
+// $Log: dist.cpp,v $
+// Revision 1.4  2006/01/24 21:05:51  acg
+//  Andy Goodrich: replacement of deprecated features with their non-deprecated
+//  counterparts.
+//
+// Revision 1.3  2006/01/19 00:48:10  acg
+// Andy Goodrich: Changes for the fact signal write checking is enabled.
+//
+// Revision 1.2  2006/01/18 00:23:44  acg
+// Change over from SC_NO_WRITE_CHECK to sc_write_check_enable() call.
+//
+
+#define SC_NO_WRITE_CHECK
 #include "systemc.h"
 #include "const.h"
 #include "dist.h"
@@ -58,9 +71,9 @@ dist_mod::get_dist_proc()
     partial = partial + DIST_INCR;
 
     cout << "Current total distance displayed = " 
-         << total << " km @ " << sc_simulation_time() << endl;  
+         << total << " km @ " << sc_time_stamp() << endl;  
     cout << "Current partial distance displayed = " 
-         << partial << " km @ " << sc_simulation_time() << endl;  
+         << partial << " km @ " << sc_time_stamp() << endl;  
 
     if (total >= 3 * DIST_INCR)
       sc_stop();

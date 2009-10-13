@@ -40,11 +40,11 @@
 int
 sc_main( int, char*[] )
 {
-    sc_clock clk( "CLK", 20, 0.5, 0);
-    sc_clock clk2( "_____________CLK2", 20, 0.2, 5);
+    sc_clock clk( "CLK", 20, SC_NS, 0.5, 0, SC_NS);
+    sc_clock clk2( "_____________CLK2", 20, SC_NS, 0.2, 5, SC_NS);
 
     testbench tb1("TB1", clk, clk2);	
 
-    sc_clock::start( 80 );          // Simulation control
+    sc_start( 80, SC_NS );          // Simulation control
     return 0;
 }

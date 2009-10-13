@@ -60,18 +60,18 @@ SC_MODULE( circ48 )
 	    sc_signal<bool>&       out_sel_,
 	    signal_bool_vector&    out_xy_,
 	    signal_bool_vector&    diffs_ )
-	: sc_module( name_ ),
-          clk( clk_ ),
-	  reset( reset_ ),
-	  x_ok( x_ok_ ),
-	  y_ok( y_ok_ ),
-	  out_wr( out_wr_ ),
-	  out_sel( out_sel_ ),
-	  out_xy( out_xy_ ),
-	  diffs( diffs_ )
+	: sc_module( name_ )
     {
+          clk( clk_ );
+	  reset( reset_ );
+	  x_ok( x_ok_ );
+	  y_ok( y_ok_ );
+	  out_wr( out_wr_ );
+	  out_sel( out_sel_ );
+	  out_xy( out_xy_ );
+	  diffs( diffs_ );
 	SC_CTHREAD( entry, clk.pos() );
-	watching( reset.delayed() == 1 );
+	reset_signal_is(reset,true);
     }
 };
 
@@ -174,7 +174,7 @@ circ48::entry()
 
             // handshake x..
 
-	    wait_until(x_ok.delayed() == 1); 
+	    do { wait(); } while (x_ok == 0); 
 	    out_wr.write(0);
 	    wait();
 	    
@@ -187,7 +187,7 @@ circ48::entry()
  
             // handshake y..
  
-	    wait_until(y_ok.delayed() == 1); 
+	    do { wait(); } while (y_ok == 0); 
 	    out_wr.write(0);
 	    wait();
 	}  // End of Main_loop

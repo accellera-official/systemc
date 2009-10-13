@@ -38,8 +38,10 @@
 TestSem::TestSem( sc_module_name )
         :sem_1(5)
 {
-    SC_CTHREAD(body_1,clk.pos());
-    SC_CTHREAD(body_2,clk.pos());
+	SC_THREAD(body_1);
+	sensitive << clk.pos();
+    SC_THREAD(body_2);
+	sensitive << clk.pos();
 }
 
 void TestSem::body_1()

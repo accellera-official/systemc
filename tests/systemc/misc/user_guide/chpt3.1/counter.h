@@ -50,8 +50,9 @@ SC_MODULE( counter )
   counter(sc_module_name NAME,
 	  sc_clock& POS_CLK,
 	  const sc_signal<bool>& FOUND)
-    : clk(POS_CLK), found(FOUND) {
-    SC_CTHREAD( entry, clk.pos() );
+    : found(FOUND) {
+    clk(POS_CLK);
+	SC_CTHREAD( entry, clk.pos() );
   }
 
   // The main functionality of the process

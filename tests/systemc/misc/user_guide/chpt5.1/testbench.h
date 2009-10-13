@@ -54,9 +54,10 @@ SC_MODULE( testbench )
 	    const sc_signal<int>& RESULTA,
 	    const sc_signal<int>& RESULTM,
 	    sc_signal<int>& NUMBER)
-    : clk(CLK), resulta(RESULTA), resultm(RESULTM), number(NUMBER)
+    : resulta(RESULTA), resultm(RESULTM), number(NUMBER)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLK);
+	SC_CTHREAD( entry, clk.pos() );
   }
 
   // Process functionality in member function below

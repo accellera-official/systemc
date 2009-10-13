@@ -47,7 +47,7 @@ struct test : sc_module {
   
   test (const char *NAME) : sc_module(NAME) {
     SC_CTHREAD( reset_loop, clk.pos() );
-    watching(reset.delayed()==true);
+    reset_signal_is(reset,true);
     end_module();
   }
 

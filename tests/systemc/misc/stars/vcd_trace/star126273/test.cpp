@@ -58,9 +58,9 @@ public:
 
     SC_CTOR(foo) {
         SC_METHOD(do_clk1);
-        sensitive_pos << clk1;
+        sensitive << clk1.pos();
         SC_METHOD(do_clk2);
-        sensitive_pos << clk2;
+        sensitive << clk2.pos();
     }
     void do_clk1() { 
         cout << "foo: clk1 + " << sc_time_stamp() << endl;
@@ -73,8 +73,8 @@ public:
 int
 sc_main(int argc, char *argv[])
 {
-    // sc_clock	clk1("clk1", 10, 0.5);
-    // sc_clock	clk2("clk2", 12, 0.5);
+    // sc_clock	clk1("clk1", 10, SC_NS, 0.5);
+    // sc_clock	clk2("clk2", 12, SC_NS, 0.5);
     sc_signal<bool> clk1( "clk1" );
     sc_signal<bool> clk2( "clk2" );
 
@@ -89,31 +89,31 @@ sc_main(int argc, char *argv[])
     sc_trace(tf, clk1, "clk1");
     sc_trace(tf, clk2, "clk2");
 
-    sc_start(0);
+    sc_start(0, SC_NS);
 
     clk1 = 0;                                         
     clk2 = 0;                                          // 0 ns
-    sc_start(3);
+    sc_start(3, SC_NS);
     clk2 = 1;                                          // 3 ns +
-    sc_start(2);
+    sc_start(2, SC_NS);
     clk1 = 1;                                          // 5 ns +
-    sc_start(4);
+    sc_start(4, SC_NS);
     clk2 = 0;                                          // 9 ns
-    sc_start(1);
+    sc_start(1, SC_NS);
     clk1 = 0;                                          // 10 ns
-    sc_start(5);
+    sc_start(5, SC_NS);
     clk2 = 1;                                          // 15 ns +
-    sc_start(0);
+    sc_start(0, SC_NS);
     clk1 = 1;                                          // 15 ns +
-    sc_start(5);
+    sc_start(5, SC_NS);
     clk1 = 0;                                          // 20 ns
-    sc_start(1);
+    sc_start(1, SC_NS);
     clk2 = 0;                                          // 21 ns
-    sc_start(4);
+    sc_start(4, SC_NS);
     clk1 = 1;                                          // 25 ns +
-    sc_start(2);
+    sc_start(2, SC_NS);
     clk2 = 1;                                          // 27 ns +
-    sc_start(3);
+    sc_start(3, SC_NS);
     clk1 = 0;                                          // 30 ns
 
     sc_close_vcd_trace_file(tf);

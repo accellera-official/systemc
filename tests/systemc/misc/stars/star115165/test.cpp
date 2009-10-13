@@ -42,7 +42,7 @@ SC_MODULE( mod_a )
     void main_action()
     {
         while( true ) {
-            cout << sc_simulation_time() << endl;
+            cout << sc_time_stamp() << endl;
             // wait( 1 ); // fine
             wait( 0 );
         }
@@ -63,7 +63,7 @@ sc_main( int, char*[] )
 
     a.clk( clk );
 
-    sc_start( 20 );
+    sc_start( 20, SC_NS );
 
     return 0;
 }

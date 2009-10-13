@@ -50,7 +50,7 @@ struct gcd_cc : public sc_module {
     gcd_cc( sc_module_name name )
     {
         SC_CTHREAD( gcd_compute, clk.pos() );
-        watching( reset.delayed() == 1 );
+        reset_signal_is(reset,true);
     }
 };
 
@@ -97,7 +97,7 @@ static unsigned numbers_index = 0;
 struct testbench : public sc_module {
     sc_in_clk          clk;
     sc_inout<bool>     reset;
-    sc_inout<bool>     ready;
+    sc_in<bool>        ready;
     sc_inout<unsigned> a;
     sc_inout<unsigned> b;
     sc_in<unsigned>    c;
@@ -134,7 +134,7 @@ void
 testbench::stimu_gen()
 {
     while (true) {
-        wait_until(ready.delayed() == 1);
+        do { wait(); } while (ready == 0);
         a = (unsigned) numbers[numbers_index++ % (sizeof(numbers)/sizeof(numbers[0]))];
         b = (unsigned) numbers[(numbers_index*numbers_index) % (sizeof(numbers)/sizeof(numbers[0]))];
         numbers_index++;
@@ -153,7 +153,7 @@ testbench::display()
 int sc_main(int argc, char* argv[] )
 {
     sc_signal<unsigned> a("a"), b("b"), c("c");
-    sc_clock            clk("clk", 20);
+    sc_clock            clk("clk", 20, SC_NS);
     sc_signal<bool>     reset("reset"), ready("ready");
 
     a = 0;
@@ -163,11 +163,11 @@ int sc_main(int argc, char* argv[] )
     ready = false;
 
     gcd_cc gcd("gcd");
-    gcd << clk << reset << a << b << c << ready;
+    gcd(clk, reset, a, b, c, ready);
 
     testbench tb("tb");
-    tb << clk << reset << ready << a << b << c;
+    tb(clk, reset, ready, a, b, c);
 
-    sc_start(2000000);
+    sc_start(2000000, SC_NS);
     return 0;
 }

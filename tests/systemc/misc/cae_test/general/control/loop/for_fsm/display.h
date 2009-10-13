@@ -50,11 +50,12 @@ SC_MODULE( display )
 	   const  sc_signal<int>&    RESULT,      
            const  sc_signal<bool>&   OUT_VALID
 	   )
-  : clk(CLK),
+  : 
     result(RESULT),
     out_valid(OUT_VALID)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLK);
+	SC_CTHREAD( entry, clk.pos() );
   }
 
   void entry();

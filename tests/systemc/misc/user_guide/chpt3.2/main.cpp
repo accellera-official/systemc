@@ -47,7 +47,7 @@ int sc_main(int ac, char **av)
   sc_signal<bool> found;
   sc_signal<char> stream ("ST");
 
-  sc_clock clk("Clock", 20, 0.5, 0.0);
+  sc_clock clk("Clock", 20, SC_NS, 0.5, 0.0, SC_NS);
 
   counter cnt("COUNTER", clk, found);
   fsm_recognizer fsm("Recog", clk, stream, handshake, found);
@@ -57,7 +57,7 @@ int sc_main(int ac, char **av)
   handshake = false;
   found = false;
 
-  sc_clock::start(-1);
+  sc_start();
   return 0;
 }
 

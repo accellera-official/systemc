@@ -1,7 +1,7 @@
 SystemC Simulation
 0 s: Issuing sc_start(10, SC_NS)
-10 ns: Issuing sc_start(-1)
-18446744073709551615 ps: Issuing sc_start(-1)
+10 ns: Issuing sc_start()
+18446744073709551615 ps: Issuing sc_start()
 18446744073709551615 ps: Issuing sc_start(10, SC_NS)
 
 Error: (E544) simulation time value overflow, simulation aborted

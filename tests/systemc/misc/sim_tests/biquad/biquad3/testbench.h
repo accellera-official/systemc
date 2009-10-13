@@ -54,9 +54,10 @@ SC_MODULE( testbench )
 	     sc_signal<float>& RESULT,
 	     sc_signal<bool>& RESET,
 	     sc_signal<float>& SAMPLE )
-    : clk(CLK), result(RESULT), reset(RESET), sample(SAMPLE)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLK);
+    result(RESULT); reset(RESET); sample(SAMPLE);
+	SC_CTHREAD( entry, clk.pos() );
   }
 
   // Process functionality in member function below

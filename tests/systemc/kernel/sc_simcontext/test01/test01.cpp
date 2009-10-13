@@ -43,14 +43,14 @@ SC_MODULE( mod_a ) {
 
     void main_action_method()
     {
-        cout << simcontext()->delta_count()
+        cout << sc_delta_count()
              << " main_action_method called" << endl;
     }
 
     void main_action_thread()
     {
         while( true ) {
-            cout << simcontext()->delta_count()
+            cout << sc_delta_count()
                  << " main_action_thread called" << endl;
             wait(); // for what?
         }
@@ -59,7 +59,7 @@ SC_MODULE( mod_a ) {
     void main_action_cthread()
     {
         while( true ) {
-            cout << simcontext()->delta_count()
+            cout << sc_delta_count()
                  << " main_action_cthread called" << endl;
             wait();
         }
@@ -81,7 +81,7 @@ sc_main( int, char*[] )
     mod_a a( "a" );
     a.clk( clk );
 
-    sc_start(0);
+    sc_start(0, SC_NS);
 
     return 0;
 }

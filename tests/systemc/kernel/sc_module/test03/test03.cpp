@@ -171,7 +171,7 @@ sc_main( int, char*[] )
     hier2<bool> hier2_bool( "hier2_bool" );
     hier2<sc_logic> hier2_logic( "hier2_logic" );
 
-    sc_start(0);
+    sc_start(0, SC_NS);
 
     return 0;
 }

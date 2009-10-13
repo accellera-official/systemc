@@ -52,8 +52,9 @@ SC_MODULE( stimgen )
 	    sc_clock& CLK,
 	    sc_signal<char>& STREAM,
 	    sc_signal<bool>& DATA_READY)
-    : clk(CLK), stream(STREAM), data_ready(DATA_READY) {
-    SC_CTHREAD( entry, clk.pos() );
+    : stream(STREAM), data_ready(DATA_READY) {
+    clk(CLK);
+	SC_CTHREAD( entry, clk.pos() );
   }
 
   // The functionality of the process

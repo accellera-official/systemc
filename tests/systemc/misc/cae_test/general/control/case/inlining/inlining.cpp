@@ -84,7 +84,7 @@ void inlining::entry(){
   // main loop
   //
   while(1) {
-    wait_until (in_valid.delayed() == true);
+    do { wait(); } while  (in_valid == false);
 
     //reading inputs
     tmp1 = in_value1.read().to_int();

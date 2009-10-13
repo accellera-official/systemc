@@ -47,15 +47,15 @@ SC_MODULE( proc1 )
   proc1( sc_module_name NAME,
 	 sc_signal<bool>& CLOCK,
          sc_signal<bool>* IRQ )
-    : clock(CLOCK)
   {
+    clock(CLOCK);
     for( int i = 0; i < MAX_NUM; ++ i ) {
         irq[i]( IRQ[i] );
     }
 
     SC_THREAD( entry );
-    sensitive(irq[0]);
-    sensitive(irq[1]);
+    sensitive << irq[0];
+    sensitive << irq[1];
   }
 
   void entry()
@@ -82,16 +82,16 @@ int sc_main(int ac, char *av[])
   for( int i = 0; i < MAX_NUM; ++ i ) {
     irq[i] = 0;
   }
-  sc_start(0);
+  sc_start(0, SC_NS);
   for (int i=0; i < MAX_NUM; i++) {
     clock = 0;
-    sc_start(1);
+    sc_start(1, SC_NS);
     irq[i] = 1;
     clock = 1;
-    sc_start(1);
+    sc_start(1, SC_NS);
     clock = 0;
     irq[i] = 0;
-    sc_start(1);
+    sc_start(1, SC_NS);
   }
   return 0;
 }

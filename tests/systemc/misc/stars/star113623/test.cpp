@@ -60,7 +60,6 @@ void add() {
         
 SC_CTOR(adder_reg) { 
    SC_CTHREAD(add, clk.pos()); 
-   //sensitive_pos(clk);
   } 
 }; 
  
@@ -69,15 +68,15 @@ int sc_main(int argc, char *argv[])
   sc_signal< sc_int<8> > a; 
   sc_signal< sc_int<8> > b; 
   sc_signal< sc_int<9> > c; 
-  sc_clock clk("CLK", 10, 0.5, 0.0); 
+  sc_clock clk("CLK", 10, SC_NS, 0.5, 0.0, SC_NS); 
   adder_reg adder_reg("adder");
-  adder_reg << a << b << c << clk;
+  adder_reg(a, b, c, clk);
   a = 3; 
   b = 6; 
   cout << c.read().to_int() << endl; 
-  sc_start(clk, 1); 
+  sc_start(clk, 1, SC_NS); 
   cout << c.read().to_int() << endl; 
-  sc_start(clk, 1); 
+  sc_start(clk, 1, SC_NS); 
  
   // CynAppsTwo clocks to get the answer. 
   // Rocco: No with SC_METHOD it take 1 cycle

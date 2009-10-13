@@ -42,12 +42,12 @@ void test::entry()
 
   wait();
   o1 = 2;
-  wait_until (cont1.delayed() == 1);
+  do { wait(); } while  (cont1 != 1);
   wait();
   while (1) {
         wait ();
         o1 = i2 + 1;
-        wait_until (cont1.delayed() == 1);
+        do { wait(); } while  (cont1 != 1);
   }
 
   }

@@ -50,7 +50,7 @@ void adder_sub::entry()
 
   while (true) {
     // Wait until you get signal to go
-    wait_until(adder_sub_ready.delayed() == true);
+    do { wait(); } while (adder_sub_ready != true);
     // Read inputs
     a = Sa.read();
     b = Sb.read();
@@ -67,7 +67,7 @@ void adder_sub::entry()
     Sd.write(d);
     wait();
     adder_sub_done.write(false);
-    // Loop back to wait_until. 
+    // Loop back to do { wait(); } while . 
   }
 
 } // end of entry function

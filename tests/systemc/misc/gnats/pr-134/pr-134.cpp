@@ -49,9 +49,10 @@ SC_MODULE( arst )
           
           const sc_signal<char>& A,
                 sc_signal<char>& B )
-        : clk(CLK), a(A), b(B)
+        : a(A), b(B)
     {
-      SC_CTHREAD( entry, clk.pos() );
+      clk(CLK);
+	  SC_CTHREAD( entry, clk.pos() );
     }
     void entry();
 };

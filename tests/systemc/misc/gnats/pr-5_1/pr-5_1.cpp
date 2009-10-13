@@ -48,10 +48,11 @@ SC_MODULE( matrix )
 
         const sc_signal<bool>& RESET
 	)
-          : clk (CLK), reset(RESET)
+          : reset(RESET)
     {
-        SC_CTHREAD( entry, clk.pos() );
-        watching (reset.delayed() == 1);
+        clk (CLK);
+		SC_CTHREAD( entry, clk.pos() );
+		reset_signal_is(reset,true);
     }
 
     void entry();

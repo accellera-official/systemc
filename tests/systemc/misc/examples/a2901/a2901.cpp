@@ -71,9 +71,9 @@ sc_main( int, char*[] )
 
     twosome AA( "AA", clk );
 
-    sc_start( 410000 );
+    sc_start( 410000, SC_NS );
 
-    cout << sc_simulation_time() << endl;
+    cout << sc_time_stamp() << endl;
 
     return 0;
 }

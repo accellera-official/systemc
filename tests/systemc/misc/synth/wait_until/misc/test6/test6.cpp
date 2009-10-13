@@ -37,7 +37,7 @@
  
 void t::a() 
 {
-  wait_until(cont1.delayed() == 1);
+  do { wait(); } while (cont1 == 1);
 
 }
 

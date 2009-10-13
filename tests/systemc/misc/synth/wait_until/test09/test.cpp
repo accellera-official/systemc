@@ -40,13 +40,13 @@ void test::entry()
 {
   while (true) {
 
-  wait_until (cont1.delayed() == 1);
+  do { wait(); } while  (cont1 != 1);
  
   wait();
   while (i1 < 4) {
         o1 = 0;
         wait ();
-        wait_until (cont2.delayed() == 1);
+        do { wait(); } while  (cont2 != 1);
         o1 = 1;
         wait ();
   }

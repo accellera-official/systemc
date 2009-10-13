@@ -65,7 +65,7 @@ SC_MODULE( mod_a )
     {
         while( true ) {
             wait( e_a );
-            cout << simcontext()->delta_count() << " " << n << endl;
+            cout << sc_delta_count() << " " << n << endl;
             if( n == 20 ) {
                 cout << "Issuing sc_stop() " << endl;
                 sc_stop();

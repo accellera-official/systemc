@@ -64,7 +64,7 @@ int sc_main(int ac, char *av[])
   sc_signal<bool> 	  ready 	("ready");     
 
 // Clock Instantiation
-  sc_clock clk( "clock", 10, 0.5, 0); 
+  sc_clock clk( "clock", 10, SC_NS, 0.5, 0, SC_NS); 
 
 // Process Instantiation
   datawidth	D1 ("D1", clk, in1, in2, ready, result);
@@ -72,6 +72,6 @@ int sc_main(int ac, char *av[])
   stimgen	T1 ("T1", clk, result, in1, in2, ready);
 
 // Simulation Run Control
-  sc_start( -1 ); 
+  sc_start(); 
   return 0;
 }

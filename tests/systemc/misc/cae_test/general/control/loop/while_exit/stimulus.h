@@ -52,12 +52,13 @@ SC_MODULE( stimulus )
            sc_signal<int>&       IN_VALUE,
            sc_signal<bool>&      IN_VALID
           )
-          : clk            (CLK),
+          : 
             reset          (RESET),
             in_value       (IN_VALUE),
             in_valid       (IN_VALID)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk            (CLK);
+	SC_CTHREAD( entry, clk.pos() );
   }
   
   void entry();

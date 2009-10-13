@@ -1,0 +1,4 @@
+SystemC Simulation
+spawn thetest
+in thetest()
+SystemC: simulation stopped by user.

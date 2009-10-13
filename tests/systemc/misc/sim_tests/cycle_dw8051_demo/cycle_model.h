@@ -200,7 +200,7 @@ SC_MODULE( cycle_model )
 	      sc_signal<bool>&                 P0_ADDR_DATA_N,
 	      sc_signal<bool>&                 P2_MEM_REG_N
 	      )
-    : clk(CLK),
+    : 
       
       mem_addr(MEM_ADDR), 
       mem_data_out(MEM_DATA_OUT),
@@ -215,7 +215,8 @@ SC_MODULE( cycle_model )
       p0_addr_data_n(P0_ADDR_DATA_N),
       p2_mem_reg_n(P2_MEM_REG_N)
     {
-      SC_THREAD( entry );
+      clk(CLK);
+	  SC_THREAD( entry );
       sensitive << clk;
       
       parse_hex(hex_file_name);

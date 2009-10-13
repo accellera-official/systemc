@@ -39,12 +39,12 @@ void test::entry()
 {
   while (true) {
   o1 = 0;
-  wait_until (cont1.delayed() == 1);
+  do { wait(); } while  (cont1 == 1);
   wait();
   wait ();
   if (i1 == 5) {
         if (i2 == 5) {
-                wait_until (cont2.delayed() == 1);
+                do { wait(); } while  (cont2 == 1);
                 wait ();
                 o1 = 1;
         } else {

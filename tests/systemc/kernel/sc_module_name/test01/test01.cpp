@@ -61,7 +61,7 @@ sc_main( int, char*[] )
     base_mod m1( "m1" );
     derived_mod m2( "m2" );
 
-    sc_start(0);
+    sc_start(0, SC_NS);
 
     cout << m1.name() << endl;
     cout << m2.name() << endl;

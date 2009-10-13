@@ -47,9 +47,11 @@ SC_MODULE( proc1 )
   proc1( sc_module_name NAME,
 	 sc_clock& CLOCK,
 	 sc_fifo<int>& IN_ )
-    : clk( CLOCK ), in(IN_)
+    : in(IN_)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk( CLOCK );
+	SC_THREAD( entry );
+	sensitive << clk.pos();
   }
 
   void entry() {
@@ -101,9 +103,11 @@ SC_MODULE( proc2 )
   proc2( sc_module_name NAME,
 	 sc_clock& CLOCK,
 	 sc_fifo<int>& OUT_ )
-    : clk( CLOCK ), out(OUT_)
+    : out(OUT_)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk( CLOCK );
+	SC_THREAD( entry );
+	sensitive << clk.pos();
   }
 
   void entry() {
@@ -133,7 +137,7 @@ int sc_main(int ac, char *av[])
 {
   sc_fifo<int> c("C", 5);
 
-  sc_clock clock("CLK", 20);
+  sc_clock clock("CLK", 20, SC_NS);
 
   proc1 p1("P1", clock, c);
   proc2 p2("P2", clock, c);
@@ -141,7 +145,7 @@ int sc_main(int ac, char *av[])
   // sc_trace_file *tf = sc_create_vcd_trace_file("systemc");
   // sc_trace(tf, c, "MyChannel", 3);
   
-  sc_start(-1);
+  sc_start();
 
   return 0;
 }

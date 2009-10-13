@@ -83,7 +83,7 @@ SC_MODULE( mod_c )
     void main_action()
     {
         while( true ) {
-            cout << sc_simulation_time() << endl;
+            cout << sc_time_stamp() << endl;
             wait();
         }
     }
@@ -128,9 +128,9 @@ sc_main( int, char*[] )
     mod_c c( "c" );
     c.clk( clk );
 
-    sc_start(0);
+    sc_start(0, SC_NS);
 
-    print_child_objects( sc_get_curr_simcontext()->get_child_objects() );
+    print_child_objects( sc_get_top_level_objects() );
     print_child_objects( a.get_child_objects() );
     print_child_objects( b.get_child_objects() );
     print_child_objects( c.get_child_objects() );

@@ -1,5 +1,5 @@
 SystemC Simulation
-Note: VCD trace timescale unit is set by user to 1e-9 sec.
+Note: VCD trace timescale unit is set by user to 1.000000e-09 sec.
 Seen other edge
 AsyncBlock: Value read = 0
 AsyncProc: Value read = 100

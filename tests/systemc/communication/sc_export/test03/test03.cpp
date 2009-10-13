@@ -47,8 +47,9 @@ SC_MODULE( E )
     SC_CTOR( E ) 		 
 	: m_C("C"),
 	  m_D("D"),
-          IFP1("IFP1", m_C) 		
+          IFP1("IFP1")
     {				 
+        IFP1( m_C );
 	IFP2( m_D.IFP );          // bind sc_export->sc_export by name
         IFP1.get_interface();     // just to see whether it compiles
     }

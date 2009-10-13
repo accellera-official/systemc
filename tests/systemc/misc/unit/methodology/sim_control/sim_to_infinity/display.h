@@ -53,11 +53,12 @@ SC_MODULE( displayp )
 	sc_clock&			TICK,
 	const signal_bool_vector&     	PRIME )
 	
-      : clk	(TICK),
+      : 
 	prime	(PRIME)
 
   	{
-          SC_CTHREAD( entry, clk.pos() );
+          clk	(TICK);
+	  SC_CTHREAD( entry, clk.pos() );
         }
 
   void entry();

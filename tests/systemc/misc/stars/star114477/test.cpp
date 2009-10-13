@@ -39,8 +39,6 @@
 #include "design.h"
 #endif
 
-#define NS * 1e-9
-
 int sc_main(int ac, char *av[])
 {
   // Signals
@@ -54,15 +52,15 @@ int sc_main(int ac, char *av[])
   c_block.out_a0(out_a0);
   c_block.out_a1(out_a1);
 
-  sc_start(0);
+  sc_start(0, SC_NS);
 
   count = 0;
 
   for(int i = 0; i < 10; i++){
       clk.write(1);
-      sc_start( 5 NS );
+      sc_start( 5, SC_NS );
       clk.write(0);
-      sc_start( 5 NS );      
+      sc_start( 5, SC_NS );      
       count = count + 1;
       cout << "constants " << out_a0 << "\t" << out_a1 << endl;
   }

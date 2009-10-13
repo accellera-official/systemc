@@ -60,8 +60,8 @@ struct example : sc_module {
     example( sc_module_name name )
     {
         SC_METHOD( block_a );
-        sensitive(a);
-        sensitive(b);
+        sensitive << a;
+        sensitive << b;
 
         SC_METHOD( block_b );
         sensitive << a << b;
@@ -193,13 +193,13 @@ SC_MODULE( monitor )
     monitor( sc_module_name NAME,
              const sc_signal<int>& A,
              const sc_signal<int>& B,
-             const sc_signal<int>& C )
-        : a(A), b(B), c(C)
+             const sc_signal<int>& C ) :
+        a(A), b(B), c(C)
     {
 	SC_METHOD( entry );
-        sensitive(a);
-        sensitive(b);
-        sensitive(c);
+        sensitive << a;
+        sensitive << b;
+        sensitive << c;
     }
     void entry();
 };
@@ -218,19 +218,19 @@ sc_main( int argc, char* argv[] )
     sc_signal<int> a("a");
     sc_signal<int> b("b");
     sc_signal<int> c("c");
-    sc_clock clk("clk", 10);
+    sc_clock clk("clk", 10, SC_NS);
 
     example ex1("ex1");
-    ex1 << clk << a << b << c;
+    ex1(clk, a, b, c);
 
     tb tbb1("tbb1");
-    tbb1 << clk << a;
+    tbb1(clk, a);
 
     tb2 tbb2("tbb2");
-    tbb2 << clk << b;
+    tbb2(clk, b);
 
     monitor mon("mon", a, b, c);
 
-    sc_start(200);
+    sc_start(200, SC_NS);
     return 0;
 }

@@ -11,7 +11,7 @@ SC_MODULE(Rec) {
   }
   void P() {
     cout << sc_time_stamp() 
-	 << " delta " << sc_get_curr_simcontext()->delta_count()
+	 << " delta " << sc_delta_count()
 	 << ": P awakes\n";
   }
 };
@@ -22,7 +22,7 @@ SC_MODULE(Sender) {
 
   SC_CTOR(Sender) {
       SC_METHOD(P);
-      sensitive_pos << Clock;
+      sensitive << Clock.pos();
       dont_initialize();
   }
   void P() {
@@ -41,7 +41,7 @@ SC_MODULE(xyz) {
   void P() {
       wait(15, SC_NS);
       cout << sc_time_stamp() 
-	   << " delta " << sc_get_curr_simcontext()->delta_count()
+	   << " delta " << sc_delta_count()
 	   << ": xyz awakes\n";	  
   }
 };
@@ -53,8 +53,8 @@ int sc_main (int agrc, char** argv)
   Rec R("Rec");
   R.E(E);
 
-  sc_clock C1 ("C1", 20);
-  sc_clock C2 ("C2", 40);
+  sc_clock C1 ("C1", 20, SC_NS);
+  sc_clock C2 ("C2", 40, SC_NS);
 
   xyz xyz_obj("xyz");
 
@@ -69,21 +69,21 @@ int sc_main (int agrc, char** argv)
   S2.E(E);
 
   // Events at 3ns, 5ns (2x), 8ns
-  sc_start(10);
+  sc_start(10, SC_NS);
   E.notify( 5,SC_NS );
   E.notify( 3,SC_NS );
   E.notify( 5,SC_NS );
   E.notify( 8,SC_NS) ;
 
   // Events would be at 40ns, 43ns (2x), 44ns but all are cancelled
-  sc_start(40);
+  sc_start(40, SC_NS);
   E.notify( 3, SC_NS );
   E.notify( 3, SC_NS );
   E.notify( 4, SC_NS );
   E.notify( SC_ZERO_TIME );
   E.cancel_all();
 
-  sc_start(40);
+  sc_start(40, SC_NS);
 
   return 0;
 }

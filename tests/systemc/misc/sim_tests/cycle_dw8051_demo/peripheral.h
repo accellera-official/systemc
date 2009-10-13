@@ -72,7 +72,7 @@ SC_MODULE( peripheral )
 	     const sc_signal<bool>&      P0_ADDR_DATA_N,
 	     const sc_signal<bool>&      P2_MEM_REG_N
 	     )
-    : clk(TICK), 
+    : 
       mem_addr(MEM_ADDR), 
       mem_data_out(MEM_DATA_OUT),
       mem_data_in(MEM_DATA_IN),
@@ -86,7 +86,8 @@ SC_MODULE( peripheral )
       p0_addr_data_n(P0_ADDR_DATA_N),
       p2_mem_reg_n(P2_MEM_REG_N)
     {
-      SC_CTHREAD( entry, clk.pos() );
+      clk(TICK);
+	  SC_CTHREAD( entry, clk.pos() );
     }
   
   /* Process functionality in member function below */

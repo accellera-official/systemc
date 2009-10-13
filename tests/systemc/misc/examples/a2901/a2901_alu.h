@@ -96,10 +96,10 @@ SC_MODULE( a2901_alu )
       F30( F30_ )
     {
         SC_METHOD( entry );
-        sensitive( I );
-        sensitive( RE );
-        sensitive( S );
-        sensitive( C0 );
+        sensitive << I;
+        sensitive << RE;
+        sensitive << S;
+        sensitive << C0;
     }
 
     void entry();

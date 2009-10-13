@@ -55,7 +55,7 @@ SC_MODULE( source )
     SC_CTOR( source )
     {
         SC_THREAD( main_action );
-        sensitive_pos << clk;
+        sensitive << clk.pos();
     }
 };
 
@@ -69,7 +69,7 @@ sc_main( int, char*[] )
     src.clk( clk );
     src.out( sig );
 
-    sc_start( -1 );
+    sc_start();
 
     return 0;
 }

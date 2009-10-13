@@ -52,7 +52,7 @@ void test::entry()
   int a[10],b[10];
    
 
-  wait_until (cont1.delayed() == 1);
+  do { wait(); } while  (cont1 == 0);
   wait ();
 
   i = 0;

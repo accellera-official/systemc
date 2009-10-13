@@ -51,10 +51,11 @@ SC_MODULE( proc1 )
 	 sc_signal<char>& CSIG,
 	 sc_signal<float>& FSIG,
 	 sc_signal<sc_logic>& LSIG )
-    : clk(CLK), Isig(ISIG), Csig(CSIG), Fsig(FSIG), Lsig(LSIG)
+    : Isig(ISIG), Csig(CSIG), Fsig(FSIG), Lsig(LSIG)
   {
-    SC_THREAD( entry );
-    sensitive(clk);
+    clk(CLK);
+	SC_THREAD( entry );
+    sensitive << clk;
     Isig = 0;
     Csig = 0;
     Fsig = 0.0;
@@ -101,12 +102,12 @@ int sc_main(int ac, char *av[])
   sc_trace(tf, L, "Logic");
 
   clock.write(0);
-  sc_start(0);
+  sc_start(0, SC_NS);
   for (int i = 0; i< 10; i++) {
     clock.write(1);
-    sc_start(10);
+    sc_start(10, SC_NS);
     clock.write(0);
-    sc_start(10);
+    sc_start(10, SC_NS);
   }
 
   sc_close_vcd_trace_file( tf );

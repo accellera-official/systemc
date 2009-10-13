@@ -79,11 +79,11 @@ SC_MODULE( a2901_alu_inputs )
       A( A_ )
     {
         SC_METHOD( entry );
-        sensitive( I );
-        sensitive( Aadd );
-        sensitive( Badd );
-        sensitive( D );
-        sensitive( Q );
+        sensitive << I;
+        sensitive << Aadd;
+        sensitive << Badd;
+        sensitive << D;
+        sensitive << Q;
     }
 
     void entry();

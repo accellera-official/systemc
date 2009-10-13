@@ -65,12 +65,13 @@ SC_MODULE( stim )
 	sc_signal<bool>& CIN,
 	sc_signal<bool>& READY,
         const int DATA_WIDTH = 8)
-    : clk(TICK), done(DONE), reset(RESET), 
+    : done(DONE), reset(RESET), 
       a(A),b(B), cin(CIN),
       ready(READY),
       data_width(DATA_WIDTH)
   { 
-    SC_CTHREAD( entry, clk.neg() );
+    clk(TICK);
+	SC_CTHREAD( entry, clk.neg() );
   }
 
   // Process functionality in member function below

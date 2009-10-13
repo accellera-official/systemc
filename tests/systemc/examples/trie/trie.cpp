@@ -25,7 +25,7 @@ SC_MODULE(lc)
 
 	SC_CTOR(lc){
 		SC_CTHREAD(thread, CLK.pos());
-		watching(RSTN.delayed() == false);
+		reset_signal_is(RSTN,false);
 	}
 };
 
@@ -252,9 +252,9 @@ sc_main(int argc, char *argv[])
 	      reset, clk);
 
 	reset = 0;
-	sc_start(2);
+	sc_start(2, SC_NS);
 	reset = 1;
-	sc_start(2);
+	sc_start(2, SC_NS);
 	out_rdy = 1;
 
 	/*
@@ -262,17 +262,17 @@ sc_main(int argc, char *argv[])
 	 * the routing data
 	 */
 	for(i = 0, m_addr = 0; i < M_SIZE; i++, m_addr++){
-		while(!in_rdy) sc_start(1);
+		while(!in_rdy) sc_start(1, SC_NS);
 		in_vld = 1;
 		op.write(LOAD_ADDR);
 		data.write(m_addr);
-		do { sc_start(1); in_vld = 0; } while(!in_rdy);
-		sc_start(1);
+		do { sc_start(1, SC_NS); in_vld = 0; } while(!in_rdy);
+		sc_start(1, SC_NS);
 		in_vld = 1;
 		op.write(LOAD_DATA);
 		data.write(M[m_addr]);
-		do { sc_start(1); in_vld = 0; } while(!in_rdy);
-		sc_start(1);
+		do { sc_start(1, SC_NS); in_vld = 0; } while(!in_rdy);
+		sc_start(1, SC_NS);
 	}
 
 	/*
@@ -280,11 +280,11 @@ sc_main(int argc, char *argv[])
  	 * comes back as next-hops
 	 */
 	for(i = 0; i < sizeof S/sizeof(struct stimuli); i++){
-		while(!in_rdy) sc_start(1);
+		while(!in_rdy) sc_start(1, SC_NS);
 		in_vld = 1;
 		op.write(LOOKUP);
 		data.write(S[i].ip);
-		do { sc_start(1); in_vld = 0; } while(!out_vld);
+		do { sc_start(1, SC_NS); in_vld = 0; } while(!out_vld);
 		unsigned int h = hop.read();
 		if( h != S[i].hop){
 			cout << S[i].ip << " should be hop " << S[i].hop

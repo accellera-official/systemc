@@ -56,7 +56,7 @@ SC_MODULE( dist_mod )
   SC_CTOR( dist_mod )
   {
     SC_THREAD( get_dist_proc );
-    sensitive_pos << pulse;
+    sensitive << pulse.pos();
 
     prev_reset = false;
   }

@@ -103,7 +103,7 @@ sc_main( int argc, char* argv[] )
     cout << "u2.range(1,4) = " << sc_unsigned(u2.range(1,4)) << endl;
     cout << "u3.range(5,3) = " << sc_unsigned(u3.range(5,3)) << endl;
     cout << "u3.range(3,5) = " << sc_unsigned(u3.range(3,5)) << endl;
-    cout << "u3.range(9,3) = " << sc_unsigned(u3.range(9,3)) << endl;
+    cout << "u3.range(6,3) = " << sc_unsigned(u3.range(6,3)) << endl;
     cout << "u3 = " << u3 << endl;
 
     cout << "s1.range(3,0) = " << sc_signed(s1.range(3,0)) << endl;
@@ -112,7 +112,7 @@ sc_main( int argc, char* argv[] )
     cout << "s2.range(1,4) = " << sc_signed(s2.range(1,4)) << endl;
     cout << "s3.range(5,3) = " << sc_signed(s3.range(5,3)) << endl;
     cout << "s3.range(3,5) = " << sc_signed(s3.range(3,5)) << endl;
-    cout << "s3.range(9,3) = " << sc_signed(s3.range(9,3)) << endl;
+    cout << "s3.range(6,3) = " << sc_signed(s3.range(6,3)) << endl;
     cout << "s3 = " << s3 << endl;
 
     u1 = b1;
@@ -129,7 +129,7 @@ sc_main( int argc, char* argv[] )
     cout << "u2.range(1,4) = " << sc_unsigned(u2.range(1,4)) << endl;
     cout << "u3.range(5,3) = " << sc_unsigned(u3.range(5,3)) << endl;
     cout << "u3.range(3,5) = " << sc_unsigned(u3.range(3,5)) << endl;
-    cout << "u3.range(9,3) = " << sc_unsigned(u3.range(9,3)) << endl;
+    cout << "u3.range(6,3) = " << sc_unsigned(u3.range(6,3)) << endl;
     cout << "u3 = " << u3 << endl;
 
     cout << "s1.range(3,0) = " << sc_signed(s1.range(3,0)) << endl;
@@ -138,7 +138,7 @@ sc_main( int argc, char* argv[] )
     cout << "s2.range(1,4) = " << sc_signed(s2.range(1,4)) << endl;
     cout << "s3.range(5,3) = " << sc_signed(s3.range(5,3)) << endl;
     cout << "s3.range(3,5) = " << sc_signed(s3.range(3,5)) << endl;
-    cout << "s3.range(9,3) = " << sc_signed(s3.range(9,3)) << endl;
+    cout << "s3.range(6,3) = " << sc_signed(s3.range(6,3)) << endl;
     cout << "s3 = " << s3 << endl;
 
     return 0;

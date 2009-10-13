@@ -97,7 +97,7 @@ int sc_main (int argc , char *argv[]) {
 		      output_valid
 		      );
 
-  sc_start(-1);
+  sc_start();
   return 0;
 }
 

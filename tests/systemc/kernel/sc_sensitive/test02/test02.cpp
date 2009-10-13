@@ -34,14 +34,19 @@
 
  *****************************************************************************/
 
+// $Log: test02.cpp,v $
+// Revision 1.2  2006/01/19 00:47:01  acg
+// Andy Goodrich: Added CVS logging.
+//
+
 // test of sc_sensitive_neg::operator(<<)()(sc_inout<bool>)
 
 #include "systemc.h"
 
 SC_MODULE( mod_a )
 {
-    sc_inout<bool> in1;
-    sc_inout<bool> in2;
+    sc_in<bool> in1;
+    sc_in<bool> in2;
  
     void main_action1()
     { 

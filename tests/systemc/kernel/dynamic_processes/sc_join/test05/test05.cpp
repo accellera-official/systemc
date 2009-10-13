@@ -73,7 +73,7 @@ int sc_main( int argc, char* argv[] )
 	X x("x");
 	x.m_clk(clock);
 
-	sc_start(1000);
+	sc_start(1000, SC_NS);
 
 	cerr << "Program completed" << endl;
 	return 0;

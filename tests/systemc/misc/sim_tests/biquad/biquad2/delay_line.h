@@ -55,10 +55,11 @@ SC_MODULE( delay_line )
 	      sc_clock& CLK,
 	      sc_signal<float>& IN1,
 	      sc_signal<float>& OUT1,
-	      int DELAY=4 )
-    : clk(CLK), in(IN1), out(OUT1), delay(DELAY)
+	      int DELAY=4 ) : delay(DELAY)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLK);
+    in(IN1); out(OUT1); 
+	SC_CTHREAD( entry, clk.pos() );
     line = new float[delay];
   }
 

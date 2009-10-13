@@ -51,10 +51,11 @@ SC_MODULE( pr57 )
           sc_clock& CLK,
           const sc_signal<bool>& A,
                 sc_signal<bool>& B )
-        : clk(CLK),
+        : 
           a(A), b(B)
     {
-      SC_CTHREAD( entry, clk.pos() );
+      clk(CLK);
+	  SC_CTHREAD( entry, clk.pos() );
     }
     void entry();
     bool pres1(bool x, bool y);

@@ -46,11 +46,11 @@ void proc2::entry()
   cout << "Ack \t = False" << endl;
   
   while (true) {
-    wait_until(data_ready.delayed() == true);
+    do { wait(); } while (data_ready != true);
     data_ack.write(true);
     cout << "Ready \t = True" << endl;
 
-    wait_until(data_ready.delayed() == false);
+    do { wait(); } while (data_ready != false);
     data_ack.write(false);
     cout << "Ready \t = False" << endl;
   }

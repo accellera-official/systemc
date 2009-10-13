@@ -49,7 +49,7 @@ void display::entry(){
 	     << in_data4.read() << " "
 	     << in_data5.read() << " " 
 	     << in_data6.read() << " " 
-	     << " at " << sc_simulation_time() << endl;
+	     << " at " << sc_time_stamp() << endl;
 
 	i++;
 	if(i == 12) 	    sc_stop();

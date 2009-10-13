@@ -41,14 +41,14 @@ void test::entry()
   while (true) {
 
   wait();
-  wait_until (cont1.delayed() == 1);
+  do { wait(); } while  (cont1 != 1);
   wait();
   o2 = 8;
   wait();
   while (i2 < 6) {
         wait();
         o1 = 7;
-        wait_until (cont2.delayed() == 1);
+        do { wait(); } while  (cont2 != 1);
   }
   wait();
   o2 = 0;

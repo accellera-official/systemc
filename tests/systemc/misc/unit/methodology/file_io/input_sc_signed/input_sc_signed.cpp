@@ -43,6 +43,6 @@ int sc_main(int ac, char *av[])
   testvectors >> sample;
 
   cout << "SAMPLE DATA = " << sample << endl;
-  sc_start(0);
+  sc_start(0, SC_NS);
   return 0;
 }

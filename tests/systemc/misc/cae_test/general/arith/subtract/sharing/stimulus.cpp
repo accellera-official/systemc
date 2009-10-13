@@ -67,7 +67,7 @@ void stimulus::entry() {
        tmp3 = tmp3 + 1;
        tmp4 = tmp4 + 1;
        tmp5 = tmp5 + 1;
-       wait_until(in_ack.delayed()==true);
+       do { wait(); } while (in_ack==false);
        out_valid.write(false);
        wait();
     }

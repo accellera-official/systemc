@@ -76,7 +76,7 @@ void stimulus::entry() {
        tmp4 = tmp4 + 1;
        if (tmp4 == zero_3) tmp4 = "001";
        // handshake
-       wait_until(in_ack.delayed()==true);
+       do { wait(); } while (in_ack==false);
        out_valid.write(false);
        wait();
     }

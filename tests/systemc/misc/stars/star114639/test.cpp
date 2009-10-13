@@ -41,7 +41,7 @@ sc_main( int, char*[] )
     sc_signal <sc_lv<4> > tmp;
 
     sc_clock clk( "clk" );
-    sc_start( 100 );
+    sc_start( 100, SC_NS );
 
     return 0;
 }

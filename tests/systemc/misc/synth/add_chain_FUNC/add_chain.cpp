@@ -59,14 +59,14 @@ SC_MODULE( add_chain )
     	  	      sc_signal<bool>& 		READY
               ) 
         :
-        clk(TICK_P), 
 		rst	(RST), 
 		a_in	(A_IN), 
 		sum_out	(SUM_OUT),
 		ready	(READY)	
     {
+        clk(TICK_P); 
         SC_CTHREAD( entry, clk.pos() );
-	watching(rst.delayed() == 0); 
+	reset_signal_is(rst,0);
     }
     void entry();
 };

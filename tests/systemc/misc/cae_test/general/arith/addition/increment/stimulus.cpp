@@ -56,7 +56,7 @@ void stimulus::entry()
     out_valid.write( true );
     cout << "Stimuli : " << send_value1 << " "
 	 << send_value2  << " at "
-         << sc_simulation_time() << endl;
+         << sc_time_stamp() << endl;
     send_value1 = send_value1+4;
     send_value2 = send_value2+4;
     wait();

@@ -59,7 +59,7 @@ void testbench::entry()
     adder_sub_ready.write(true);
     wait();
     adder_sub_ready.write(false);
-    wait_until(adder_sub_done.delayed() == true);
+    do { wait(); } while (adder_sub_done != true);
     sum = Ssum.read();
     d = Sdiff.read();
     // printf("A = %d, B = %d, C = %d, D = %d, SUM = %d\n", a, b, c, d, sum);

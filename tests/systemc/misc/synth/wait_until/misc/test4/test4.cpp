@@ -40,7 +40,7 @@ void t::entry()
   wait();
   if (i1 == 1) {
     while (i1 == 1) {
-      wait_until(cont1.delayed() == 1);
+      do { wait(); } while (cont1 == 1);
     }
   } else {
     wait();

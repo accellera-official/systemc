@@ -233,13 +233,13 @@ public:
 		sc_signal<bool>& pOut_req,
 		sc_signal<bool>& pOut_ack,
 		sc_signal<sc_biguint<128> >& pOut_wire
-	) : AES_Base(name),
-	    CLK(pCLK), RST_X(pRST_X),
-	    In_req(pIn_req), In_ack(pIn_ack), In_cmd(pIn_cmd), In_wire(pIn_wire),
-	    Out_req(pOut_req), Out_ack(pOut_ack), Out_wire(pOut_wire)
+	) : AES_Base(name)
 	{
+	    CLK(pCLK); RST_X(pRST_X);
+	    In_req(pIn_req); In_ack(pIn_ack); In_cmd(pIn_cmd); In_wire(pIn_wire);
+	    Out_req(pOut_req); Out_ack(pOut_ack); Out_wire(pOut_wire);
 		SC_CTHREAD(MainThread, this->CLK.pos());
-		watching(RST_X.delayed() == false);
+		reset_signal_is(RST_X,false);
 	} 
 
 	sc_in_clk CLK;
@@ -666,13 +666,13 @@ public:
 		    sc_signal<bool>& pOut_req,
 		    sc_signal<bool>& pOut_ack,
 		    sc_signal<sc_biguint<128> >& pOut_wire
-	) : AES_Base(name),
-	    CLK(pCLK), RST_X(pRST_X),
-	    In_req(pIn_req), In_ack(pIn_ack), In_cmd(pIn_cmd), In_wire(pIn_wire),
-	    Out_req(pOut_req), Out_ack(pOut_ack), Out_wire(pOut_wire)
+	) : AES_Base(name)
 	{
+	    CLK(pCLK); RST_X(pRST_X);
+	    In_req(pIn_req); In_ack(pIn_ack); In_cmd(pIn_cmd); In_wire(pIn_wire);
+	    Out_req(pOut_req); Out_ack(pOut_ack); Out_wire(pOut_wire);
 		SC_CTHREAD(MainThread, this->CLK.pos());
-		watching(RST_X.delayed() == false);
+		reset_signal_is(RST_X,false);
 	}
 
 	sc_in_clk CLK;
@@ -1107,41 +1107,41 @@ sc_main(int argc, char *argv[])
 	key = makekey(key_string);
 
 	reset = 0;
-	sc_start(2);
+	sc_start(2, SC_NS);
 	reset = 1;
-	sc_start(2);
+	sc_start(2, SC_NS);
 
-	while( !E_In_req) sc_start(1);
+	while( !E_In_req) sc_start(1, SC_NS);
 	E_In_cmd = LOAD_KEY;
 	E_In_ack = 1;
 	E_In_wire = key;
-	do { sc_start(1); E_In_ack = 0; } while( !E_In_req);
+	do { sc_start(1, SC_NS); E_In_ack = 0; } while( !E_In_req);
 
-	while( !D_In_req) sc_start(1);
+	while( !D_In_req) sc_start(1, SC_NS);
 	D_In_cmd = LOAD_KEY;
 	D_In_ack = 1;
 	D_In_wire = key;
-	do { sc_start(1); D_In_ack = 0; } while( !D_In_req);
+	do { sc_start(1, SC_NS); D_In_ack = 0; } while( !D_In_req);
 	
 
-	while( !E_In_req) sc_start(1);
+	while( !E_In_req) sc_start(1, SC_NS);
 	E_Out_req = 1;
 	E_In_cmd = ENCRYPT;
 	E_In_ack = 1;
 	E_In_wire = str2biguint((char*)"abcdefghijklmnop");
-	do { sc_start(1); E_In_ack = 0; } while(!E_Out_ack);
+	do { sc_start(1, SC_NS); E_In_ack = 0; } while(!E_Out_ack);
 	E_Out_req = 0;
-	sc_start(1);
+	sc_start(1, SC_NS);
 
-	while( !D_In_req) sc_start(1);
+	while( !D_In_req) sc_start(1, SC_NS);
 	D_Out_req = 1;
 	D_In_cmd = DECRYPT;
 	D_In_ack = 1;
 	D_In_wire = E_Out_wire;
-	do { sc_start(1); D_In_ack = 0; } while(!D_Out_ack);
+	do { sc_start(1, SC_NS); D_In_ack = 0; } while(!D_Out_ack);
 	out = biguint2str(D_Out_wire);
 	D_Out_req = 0;
-	sc_start(1);
+	sc_start(1, SC_NS);
 
 	err = false;
 	for(i = 0; i < 16; i++){

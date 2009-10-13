@@ -71,7 +71,7 @@ class channel :
     static int i = 0;
     next_trigger(10, SC_NS);
     data = i;
-    cout <<"simulation time" << ":" << sc_simulation_time()<<"    ";
+    cout <<"simulation time" << ":" << sc_time_stamp()<<"    ";
     cout<<"writting "<< data <<" to channel" << endl;
   
       write_event_2.notify(5, SC_NS);
@@ -86,7 +86,7 @@ class channel :
     int j;
     next_trigger(write_event_1 & write_event_2);
     j = data;
-    cout <<"simulation time" << ":" << sc_simulation_time();
+    cout <<"simulation time" << ":" << sc_time_stamp();
     cout<<"    reading "<<j<<" from channel" << endl;
   }
 

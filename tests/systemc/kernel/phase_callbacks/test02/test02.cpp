@@ -42,7 +42,7 @@ int sc_main(int argc, char* argv[])
 	if ( sc_end_of_simulation_invoked() ) 
 		 cout << __FILE__ << "(" << __LINE__ << "): bad end flag should be false" << endl;
 
-	sc_start(2);
+	sc_start(2, SC_NS);
 	if ( !sc_start_of_simulation_invoked() ) 
 		 cout << __FILE__ << "(" << __LINE__ << "): bad start flag should be true" << endl;
 

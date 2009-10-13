@@ -53,7 +53,7 @@ stimgen::entry()
     mode.write(i);
     wait();
     cout << "a = " << a << "  b = " << b << "  mode = " << mode << endl;
-    wait_until(done.delayed() == 1);
+    do { wait(); } while (done != 1);
     cout << "\t c = " << c << "  d = " << d << endl;
   }
 

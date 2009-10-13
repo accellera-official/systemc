@@ -43,8 +43,8 @@
 /******************************************************************************/
 int sc_main(int ac, char *av[])
 {
-  sc_clock clk( "CLK", 20, 0.5, 0);             	// Clock function
+  sc_clock clk( "CLK", 20, SC_NS, 0.5, 0, SC_NS); // Clock function
   testbench tb1("TB1", clk);	// Testbench Instantiation
-  sc_clock::start( 120 );          // Simulation control
+  sc_start( 120, SC_NS );          // Simulation control
   return 0;
 }

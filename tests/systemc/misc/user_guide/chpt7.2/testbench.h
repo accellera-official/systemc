@@ -62,12 +62,13 @@ SC_MODULE( testbench )
 	    sc_signal<int>& SB,
 	    sc_signal<int>& SC,
 	    sc_signal<bool>& ADDER_SUB_READY)
-    : clk(CLK), Ssum(SSUM), Sdiff(SDIFF), 
+    : Ssum(SSUM), Sdiff(SDIFF), 
       adder_sub_done(ADDER_SUB_DONE),
       Sa(SA), Sb(SB), Sc(SC), adder_sub_ready(ADDER_SUB_READY)
       
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLK);
+	SC_CTHREAD( entry, clk.pos() );
   }
 
   // Process functionality in member function below

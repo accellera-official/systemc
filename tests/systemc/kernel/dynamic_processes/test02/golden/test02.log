@@ -21,5 +21,5 @@ SystemC Simulation
 
 100 ns: sc_main, Before spawning function_thread 
 
-100 ns, thread_p_0: function_thread sees 6.789
-110 ns, thread_p_0: ending thread
+100 ns, thread_p_1: function_thread sees 6.789
+110 ns, thread_p_1: ending thread

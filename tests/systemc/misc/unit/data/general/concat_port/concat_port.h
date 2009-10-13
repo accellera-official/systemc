@@ -66,7 +66,7 @@ SC_MODULE( concat_port )
 	signal_bool_vector16&		D,
 	sc_signal<bool>&		DONE )
 	
-      : clk	(TICK),
+      : 
 	a	(A),
 	b	(B),
 	mode	(MODE),
@@ -76,7 +76,8 @@ SC_MODULE( concat_port )
  	done	(DONE)
 
   	{
-          SC_CTHREAD( entry, clk.pos() );
+          clk	(TICK);
+	  SC_CTHREAD( entry, clk.pos() );
         }
 
   void entry();

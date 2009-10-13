@@ -80,11 +80,11 @@ SC_MODULE( a2901_output_and_shifter )
       t_Q3( t_Q3_ )
     {
         SC_METHOD( entry );
-        sensitive( I );
-        sensitive( OEbar );
-        sensitive( A );
-        sensitive( F );
-        sensitive( Q );
+        sensitive << I;
+        sensitive << OEbar;
+        sensitive << A;
+        sensitive << F;
+        sensitive << Q;
     }
 
     void entry();

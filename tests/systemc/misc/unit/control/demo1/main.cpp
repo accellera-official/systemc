@@ -44,11 +44,11 @@ int sc_main(int ac, char *av[])
   sc_signal<bool> data_ready("Ready");
   sc_signal<bool> data_ack("Ack");
 
-  sc_clock clock("CLOCK", 10, 0.5, 0.0);
+  sc_clock clock("CLOCK", 10, SC_NS, 0.5, 0.0, SC_NS);
 
   proc1 Master("MasterProcess", clock, data_ack, data_ready);
   proc2 Slave("SlaveProcess", clock, data_ready, data_ack);
 
-  sc_clock::start(100);
+  sc_start(100, SC_NS);
   return 0;
 }

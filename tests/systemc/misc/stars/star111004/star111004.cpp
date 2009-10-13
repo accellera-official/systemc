@@ -96,7 +96,7 @@ sc_uint<32> io_controller_m::read_from_memory(sc_uint<32> mp){
    wr_n_o = 0;
    wait();
    ads_n_o = 1;
-   wait_until(rdy_n_i.delayed() == 0);
+   do { wait(); } while (rdy_n_i == 1);
    sc_uint<32> data = data32_i.read();
    wr_n_o = 1;
    addr30_o = 0;
@@ -111,7 +111,7 @@ void io_controller_m::write_into_memory(sc_uint<32> mp, sc_uint<32> data){
    wait();
    ads_n_o = 1;
    data32_o = data;
-   wait_until(rdy_n_i.delayed() == 0);
+   do { wait(); } while (rdy_n_i == 1);
    wr_n_o = 1;
    addr30_o = 0;
    data32_o = 0;
@@ -121,18 +121,18 @@ void io_controller_m::control_write(){
    sc_uint<32> word_cnt;
    
    if (!res_n_i.read()){
-      wait_until(res_n_i.delayed());
+      do { wait(); } while (!res_n_i);
    
       // initialize
       
       // wait for 1. AR (HWS-Daten)
-      wait_until(ar_i.delayed());
+      do { wait(); } while (!ar_i);
       sc_uint<32> hws = data32_i.read();
       
       wait();
 
       // wait for 2. AR (ACB-Pointer)
-      wait_until(ar_i.delayed());
+      do { wait(); } while (!ar_i);
       addr_tx_frame_ptr = data32_i.read();
       
    } 
@@ -160,7 +160,7 @@ void io_controller_m::control_write(){
       // but the model from Hr. Wahl said: wait for some ms !!!
       
      // wait(unsigned ((SCAN_INTERVAL NS)/40e-9));
-      //wait_until(ar_i.delayed());
+      //do { wait(); } while (ar_i);
       
       #ifdef LOGGING
          flog << sc_time_stamp()<<": "<<name()<<"::control_write - Attention Request" << endl;
@@ -222,7 +222,7 @@ void io_controller_m::control_read(){
   int arr_ptr = 0;
    
    while (true){
-      wait_until(control_en.delayed());
+      do { wait(); } while (!control_en);
       #ifdef LOGGING
          flog << sc_time_stamp()<<": "<<name()<<"::control_read " << endl;
       #endif
@@ -247,7 +247,7 @@ void io_controller_m::control_read(){
          write_into_memory(rx_frame_ptr + i*4, d);
          // release semaphore
          V();
-         wait_until(control_en.delayed());
+         do { wait(); } while (!control_en);
          
       }
       // separate last loop because we don't want to wait for

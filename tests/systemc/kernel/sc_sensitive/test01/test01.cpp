@@ -34,6 +34,11 @@
 
  *****************************************************************************/
 
+// $Log: test01.cpp,v $
+// Revision 1.2  2006/01/19 00:46:58  acg
+// Andy Goodrich: Added CVS logging.
+//
+
 // test of sc_sensitive::operator()(sc_cthread_process*, sc_in(inout)<bool>)
 
 #include "systemc.h"
@@ -42,7 +47,7 @@
 SC_MODULE( mod_a )
 {
     sc_in<bool>    clk;
-    sc_inout<bool> in1;
+    sc_in<bool>    in1;
  
     void main_action1()
     { 

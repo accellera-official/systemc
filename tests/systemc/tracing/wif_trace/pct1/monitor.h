@@ -50,9 +50,10 @@ SC_MODULE( monitor )
 	   sc_signal<bool>& TX,
 	   sc_signal<int>&  DOUT,
 	   sc_signal<bool>& WR )
-    : clk(CLK), tx(TX), dout(DOUT), wr(WR)
+    : tx(TX), dout(DOUT), wr(WR)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLK);
+	SC_CTHREAD( entry, clk.pos() );
   }
 
   // Process functionality in member function below

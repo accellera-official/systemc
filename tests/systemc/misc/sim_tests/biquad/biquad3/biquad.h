@@ -55,8 +55,9 @@ SC_MODULE( biquad )
 	  sc_signal<float>& IN1,
 	  sc_signal<bool>& RESET,
 	  sc_signal<float>& OUT1 )
-    : in(IN1), reset(RESET), out(OUT1)
   {
+    in(IN1); reset(RESET); out(OUT1);
+
     // initialize the coefficient matrix
     Cte[0] = 1.0;
     Cte[1] = 2.0;

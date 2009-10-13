@@ -52,12 +52,13 @@ SC_MODULE( adder )
            sc_signal<int>& A,
            sc_signal<int>& B,
            sc_signal<int>& SUM )
-        : clk(CLK), a(A), b(B), sum(SUM)
+        : a(A), b(B), sum(SUM)
     {
-        SC_METHOD( entry );
-        sensitive(clk);
-        sensitive(a);
-        sensitive(b);
+        clk(CLK);
+		SC_METHOD( entry );
+        sensitive << clk;
+        sensitive << a;
+        sensitive << b;
     }
     void entry();
 };
@@ -82,9 +83,10 @@ SC_MODULE( stim )
           sc_clock& CLK,
           sc_signal<int>& A,
           sc_signal<int>& B )
-        : clk(CLK), a(A), b(B)
+        : a(A), b(B)
     {
-        SC_CTHREAD( entry, clk.pos() );
+        clk(CLK);
+		SC_CTHREAD( entry, clk.pos() );
     }
     void entry();
 };
@@ -105,7 +107,7 @@ sc_main( int argc, char* argv[] )
     sc_signal<int> a("a");
     sc_signal<int> b("b");
     sc_signal<int> sum("sum");
-    sc_clock clk("clk", 20);
+    sc_clock clk("clk", 20, SC_NS);
 
     a = 0;
     b = 0;
@@ -119,7 +121,7 @@ sc_main( int argc, char* argv[] )
     sc_trace(tf, b, "b");
     sc_trace(tf, sum, "sum");
     sc_trace(tf, clk, "clk");
-    sc_start(1000);
+    sc_start(1000, SC_NS);
     sc_close_wif_trace_file( tf );
     return 0;
 }

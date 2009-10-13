@@ -29,8 +29,8 @@
   MODIFICATION LOG - modifiers, enter your name, affiliation, date and
   changes you are making here.
 
-      Name, Affiliation, Date:
-  Description of Modification:
+      Name, Affiliation, Date: Andy Goodrich, Forte Design Systems, 10 Aug 05
+  Description of Modification: Rewrite to use sc_process_handle::kind().
 
  *****************************************************************************/
 
@@ -43,9 +43,7 @@ SC_MODULE( mod_a )
     void main_action()
     {
 	cout << "main action ";
-	sc_process_b* proc;
-	proc = sc_get_curr_process_handle();
-	cout << proc->kind() << endl;
+	cout << sc_get_current_process_b()->kind() << endl;
     }
 
     SC_CTOR( mod_a )

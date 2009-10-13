@@ -46,7 +46,7 @@ sc_main( int, char*[] )
     sc_trace( tf, clk, "clock" );
     sc_trace_delta_cycles( tf, true );
 
-    sc_start( 100 );
+    sc_start( 100, SC_NS );
     sc_close_vcd_trace_file( tf );
 
     return 0;

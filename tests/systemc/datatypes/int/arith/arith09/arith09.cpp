@@ -78,10 +78,34 @@ sc_main( int argc, char* argv[] )
                     z = x * y;
                     assert( (sc_unsigned)( z.range(31,0) ) ==
 			    (qi * qj) );
-                    q = (x.range(15,0) * y.range(15,0)) +
-                        (x.range(31,16) * y.range(15,0) +
-			 x.range(15,0) * y.range(31,16)) * 65536 +
-                        ((x.range(31,16) * y.range(31,16) * 65536) * 65536);
+                    if ( i < 17 )
+                    {
+                        if ( j < 17 ) // (i < 17)
+                        {
+                            q = (x.range(i-1,0) * y.range(j-1,0));
+                        }
+                        else // (j >= 17) (i < 17)
+                        {
+                            q = (x.range(i-1,0) * y.range(15,0)) +
+                                ( x.range(i-1,0) * y.range(j-1,16) ) * 65536;
+                        }
+		    }
+                    else
+                    {
+                        if ( j < 17 ) // (i >= 17)
+                        {
+                            q = (x.range(15,0) * y.range(j-1,0)) +
+                                (x.range(i-1,16) * y.range(j-1,0)) * 65536;
+                        }
+                        else // (j >= 17) (i >= 17)
+                        {
+                            q = (x.range(15,0) * y.range(15,0)) +
+                                (x.range(i-1,16) * y.range(15,0) +
+                                 x.range(15,0) * y.range(j-1,16)) * 65536 +
+                                ((x.range(i-1,16) * y.range(j-1,16) * 65536) 
+                                * 65536);
+                        }
+                    }
                     assert(z == q);
 
                     if (y != 0) {

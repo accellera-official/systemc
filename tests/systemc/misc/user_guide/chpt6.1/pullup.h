@@ -50,9 +50,10 @@ SC_MODULE( pullup )
   pullup(sc_module_name NAME,
 	 sc_clock& CLK,
 	 signal_std_logic& PUP)
-    : clk(CLK), pup(PUP)
+    : pup(PUP)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLK);
+	SC_CTHREAD( entry, clk.pos() );
   }
 
   // Process functionality in member function below

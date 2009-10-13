@@ -58,9 +58,10 @@ SC_MODULE( fsm_recognizer )
 		 const sc_signal<char>& INPUT_CHAR,
 		 const sc_signal<bool>& DATA_READY,
 		 sc_signal<bool>& FOUND)
-    : clk(TICK), input_char(INPUT_CHAR), data_ready(DATA_READY), 
+    : input_char(INPUT_CHAR), data_ready(DATA_READY), 
       found(FOUND) {
-        SC_CTHREAD( entry, clk.pos() );
+        clk(TICK);
+		SC_CTHREAD( entry, clk.pos() );
 	pattern[0] = 'S';
 	pattern[1] = 'c';
 	pattern[2] = 'e';

@@ -50,12 +50,12 @@ int sc_main(int ac, char* av[])
   in2 = 0.0;
   powr = 0.0;
 
-  sc_clock clk("CLOCK", 20.0, 0.5, 0.0);
+  sc_clock clk("CLOCK", 20.0, SC_NS, 0.5, 0.0, SC_NS);
 
   testbench T("Testbench", clk, powr, in1, in2);
   f_pipeline("PIPE", clk, in1, in2, powr);
 
-  sc_clock::start(1000);
+  sc_start(1000, SC_NS);
   return 0;
 }
 

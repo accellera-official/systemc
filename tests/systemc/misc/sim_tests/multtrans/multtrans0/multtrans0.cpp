@@ -46,8 +46,9 @@ SC_MODULE( delay1 )
   delay1( sc_module_name NAME,
           sc_signal<int>& DATA_I,
           sc_signal<int>& DATA_O )
-    : data_i(DATA_I), data_o(DATA_O)
   {
+    data_i(DATA_I);
+	data_o(DATA_O);
     SC_THREAD( entry );
     sensitive << data_i;
   }
@@ -85,8 +86,8 @@ SC_MODULE( state_machine )
 		 sc_signal<int>& DATA_I1,
 		 sc_signal<int>& DATA_I2,
 		 sc_signal<int>& DATA_O )
-    : data_i1(DATA_I1), data_i2(DATA_I2), data_o(DATA_O)
   {
+    data_i1(DATA_I1); data_i2(DATA_I2); data_o(DATA_O);
     SC_METHOD( entry );
     sensitive << data_i1 << data_i2;
 
@@ -165,7 +166,7 @@ void state_machine::entry()
 void testbench(sc_signal<int>& data, const sc_signal<int>& res)
 {
   int i;
-  sc_start(0);
+  sc_start(0, SC_NS);
   for (i=0; i<10; i++) {
     data.write(i*10 + 123);
     sc_start( 10, SC_NS );

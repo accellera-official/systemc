@@ -62,9 +62,10 @@ SC_MODULE( mean )
        sc_signal<bool>& SEND_DATA,
        sc_signal<bool>& OUTPUT_READY,
        const sc_signal<bool>& RECEIVER_READY)
-    : clk(CLK), in(IN_), out(OUT_), receiver_ready(RECEIVER_READY), send_data(SEND_DATA), input_available(INPUT_AVAILABLE), output_ready(OUTPUT_READY)
+    : in(IN_), out(OUT_), receiver_ready(RECEIVER_READY), send_data(SEND_DATA), input_available(INPUT_AVAILABLE), output_ready(OUTPUT_READY)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLK);
+	SC_CTHREAD( entry, clk.pos() );
   }
 
   // Process functionality in member function below

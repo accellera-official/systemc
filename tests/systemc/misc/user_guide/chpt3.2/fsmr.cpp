@@ -44,7 +44,7 @@ void fsm_recognizer::entry()
   bool out;
 
   while (true) {
-    wait_until(data_ready.delayed() == true);
+    do { wait(); } while (data_ready != true);
     c = input_char.read();
     cout << c;
 

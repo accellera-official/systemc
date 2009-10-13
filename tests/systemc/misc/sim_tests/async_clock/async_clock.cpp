@@ -43,9 +43,9 @@ SC_MODULE( proc1 )
 
     proc1( sc_module_name NAME,
            sc_signal_in_if<bool>& CLK )
-      : clk( CLK )
     {
-        SC_CTHREAD( entry, clk.pos() );
+        clk( CLK );
+		SC_CTHREAD( entry, clk.pos() );
     }
 
     void entry()
@@ -65,9 +65,9 @@ SC_MODULE( proc2 )
 
     proc2( sc_module_name NAME,
            sc_signal_in_if<bool>& CLK )
-      : clk( CLK )
     {
-        SC_CTHREAD( entry, clk.pos() );
+        clk( CLK );
+	SC_CTHREAD( entry, clk.pos() );
     }
 
     void entry()
@@ -87,9 +87,9 @@ SC_MODULE( proc3 )
 
     proc3( sc_module_name NAME,
            sc_signal_in_if<bool>& CLK )
-      : clk( CLK )
     {
-        SC_CTHREAD( entry, clk.pos() );
+        clk( CLK );
+	SC_CTHREAD( entry, clk.pos() );
     }
 
     void entry()
@@ -118,8 +118,12 @@ SC_MODULE( proc4 )
 	   sc_signal_in_if<bool>& CLK,
            sc_signal_out_if<bool>& C,
            sc_signal_out_if<bool>& D )
-        : a(A), b(B), clk(CLK), c(C), d(D)
     {
+        a(A);
+	b(B);
+	clk(CLK);
+	c(C);
+	d(D);
         SC_METHOD( entry );
         sensitive << a << b << clk;
     }
@@ -151,7 +155,7 @@ sc_main( int argc, char* argv[] )
     proc3 p3("p3", dclk2);
     proc4 p4("p4", p, q, clk1, dclk1, dclk2 );
 
-    sc_start(0);
+    sc_start(0, SC_NS);
     p = 1;
     q = 1;
     for (double t = 0; t < 5 NS; t += 1 NS) {

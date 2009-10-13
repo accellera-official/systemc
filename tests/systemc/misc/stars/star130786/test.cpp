@@ -74,7 +74,7 @@ SC_MODULE(Test)
   SC_CTOR(Test)
   {
     SC_METHOD(meth);
-    sensitive_pos << clk;
+    sensitive << clk.pos();
 
   }  // SC_CTOR(Test)
 
@@ -84,7 +84,7 @@ SC_MODULE(Test)
 int sc_main(int argc, char *argv[])
 {
   // Declare the clock
-  sc_clock clk("clk", 50, 0.5, 0, false);
+  sc_clock clk("clk", 50, SC_NS, 0.5, 0, SC_NS, false);
 
   sc_signal<sc_uint<16> > in;
 
@@ -93,7 +93,7 @@ int sc_main(int argc, char *argv[])
   test.in(in);
 
   in.write(10);  // Initialize "in" with "10"
-  sc_start(75);  // Run for 1-1/2 clock cycles
+  sc_start(75, SC_NS);  // Run for 1-1/2 clock cycles
   
   return 0;
 

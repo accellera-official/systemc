@@ -50,12 +50,13 @@ SC_MODULE( p1 )
      sc_fifo<int>& B, 
      sc_signal_in_if<bool>& CLK,
      int INIT)
-    : a(A), b(B), clk(CLK)
+    : a(A), b(B)
   {
-    init = INIT;
+    clk(CLK);
+	init = INIT;
     SC_THREAD( entry );
-    sensitive(clk);
-    // sensitive(b);
+    sensitive << clk;
+    // sensitive << b;
   }
 
   void entry() {
@@ -87,9 +88,10 @@ SC_MODULE( p2 )
       sc_fifo<int>& A,
       sc_fifo<int>& B,
       int INIT)
-    : clk(CLK), a(A), b(B)
+    : a(A), b(B)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLK);
+	SC_CTHREAD( entry, clk.pos() );
     init = INIT;
   }
 
@@ -108,13 +110,13 @@ SC_MODULE( p2 )
 int sc_main(int ac, char *av[])
 {
   sc_fifo<int> a(2), b(2);
-  sc_clock clock("Clock", 20);
+  sc_clock clock("Clock", 20, SC_NS);
 
   p1 Proc1("Proc1", a, b, clock.signal(), 10);
   p2 Proc2("Proc2", clock, b, a, 129);
 
-  // sc_start(500);
-  sc_start(250);
+  // sc_start(500, SC_NS);
+  sc_start(250, SC_NS);
 
   return 0;
 }

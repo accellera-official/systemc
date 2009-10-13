@@ -45,12 +45,12 @@ sc_main( int, char*[] )
     ack = 1;
     ready = 1;
 
-    sc_clock clk( "Clock", 20, 0.5, 0.0 );
+    sc_clock clk( "Clock", 20, SC_NS, 0.5, 0.0, SC_NS );
 
     proc1 P1( "P1", clk, ack, ready );
     proc2 P2( "P2", clk, ready, ack );
 
-    sc_start( 500 );
+    sc_start( 500, SC_NS );
 
     return 0;
 }

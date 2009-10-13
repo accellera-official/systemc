@@ -91,10 +91,12 @@ sc_main( int argc, char* argv[] )
 
                     sc_unsigned xhi(16), xlo(16);
                     sc_unsigned yhi(16), ylo(16);
-                    xlo = x2.range(15,0);
-                    xhi = x2.range(31,16);
-                    ylo = y2.range(15,0);
-                    yhi = y2.range(31,16);
+		    sc_unsigned zero(16);
+		    zero = 0;
+                    xlo = i > 14 ? x2.range(15,0) : x2.range(i,0);
+                    xhi = i > 15 ? x2.range(i,16) : zero;
+                    ylo = j > 14 ? y2.range(15,0) : y2.range(j,0);
+                    yhi = j > 15 ? y2.range(j,16) : zero;
                     q = (xlo * ylo) +
                         (xhi * ylo + xlo * yhi) * 65536 +
                         ((xhi * yhi) * 65536) * 65536;

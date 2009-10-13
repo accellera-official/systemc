@@ -50,7 +50,7 @@ SC_MODULE( foo )
         : input(INPUT), output(OUTPUT)
     {
         SC_THREAD( entry );
-	sensitive(input);
+	sensitive << input;
     }
     void entry();
 };

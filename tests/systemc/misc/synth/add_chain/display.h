@@ -61,9 +61,9 @@ SC_MODULE( DISPLAY )
 
     {
         SC_METHOD( entry );
-	sensitive(ready);
-	sensitive(data);
-	sensitive(sum);
+	sensitive << ready;
+	sensitive << data;
+	sensitive << sum;
     }
  
   /*** Call to Process Functionality ***/

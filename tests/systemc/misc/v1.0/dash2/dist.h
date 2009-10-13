@@ -68,7 +68,7 @@ SC_MODULE( dist_mod )
   SC_CTOR( dist_mod )
   {
     SC_THREAD( get_dist_proc );
-    sensitive_pos << pulse;
+    sensitive << pulse.pos();
 
     SC_METHOD( compute_total_proc );
     sensitive << ok_for_incr;

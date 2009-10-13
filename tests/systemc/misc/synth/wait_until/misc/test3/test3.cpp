@@ -41,9 +41,9 @@ void t::entry()
   while (1) {
     if (i2 == 1)
       continue; 
-    /* error: wait_until transformation does not allow continue stmt
-       before it if no wait follows the wait_until */
-    wait_until(cont1.delayed() == 1);
+    /* error: do { wait(); } while  transformation does not allow continue stmt
+       before it if no wait follows the do { wait(); } while  */
+    do { wait(); } while (cont1 == 0);
     if (i2 == 1)
       break;
   }

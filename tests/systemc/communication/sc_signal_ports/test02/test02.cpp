@@ -39,12 +39,9 @@
 
 SC_MODULE( mod_a )
 {
-    sc_in<int> in_int;
-    sc_in<bool> in_bool;
-    sc_in<sc_logic> in_logic;
-    sc_inout<int> inout_int;
-    sc_inout<bool> inout_bool;
-    sc_inout<sc_logic> inout_logic;
+    sc_in<int>         in_int;
+    sc_in<bool>        in_bool;
+    sc_in<sc_logic>    in_logic;
 
     void main_action()
     {
@@ -71,29 +68,6 @@ SC_MODULE( mod_a )
         wait( in_logic.negedge_event() );
         cout << "in_logic     negedge_event()" << endl;
 
-        wait( inout_int.default_event() );
-        cout << "inout_int    default_event()" << endl;
-        wait( inout_int.value_changed_event() );
-        cout << "inout_int    value_changed_event()" << endl;
-
-        wait( inout_bool.default_event() );
-        cout << "inout_bool   default_event()" << endl;
-        wait( inout_bool.value_changed_event() );
-        cout << "inout_bool   value_changed_event()" << endl;
-        wait( inout_bool.posedge_event() );
-        cout << "inout_bool   posedge_event()" << endl;
-        wait( inout_bool.negedge_event() );
-        cout << "inout_bool   negedge_event()" << endl;
-
-        wait( inout_logic.default_event() );
-        cout << "inout_logic  default_event()" << endl;
-        wait( inout_logic.value_changed_event() );
-        cout << "inout_logic  value_changed_event()" << endl;
-        wait( inout_logic.posedge_event() );
-        cout << "inout_logic  posedge_event()" << endl;
-        wait( inout_logic.negedge_event() );
-        cout << "inout_logic  negedge_event()" << endl;
-
         sc_stop();
     }
 
@@ -107,8 +81,8 @@ SC_MODULE( mod_b )
 {
     sc_in_clk clk;
 
-    sc_out<int> out_int;
-    sc_out<bool> out_bool;
+    sc_out<bool>     out_bool;
+    sc_out<int>      out_int;
     sc_out<sc_logic> out_logic;
 
     void main_action()
@@ -147,16 +121,13 @@ sc_main( int, char*[] )
     sc_signal<sc_logic> sig_logic;
 
     b.clk( clk );
-    b.out_int( sig_int );
     b.out_bool( sig_bool );
+    b.out_int( sig_int );
     b.out_logic( sig_logic );
 
     a.in_int( sig_int );
     a.in_bool( sig_bool );
     a.in_logic( sig_logic );
-    a.inout_int( sig_int );
-    a.inout_bool( sig_bool );
-    a.inout_logic( sig_logic );
 
     sc_start();
 

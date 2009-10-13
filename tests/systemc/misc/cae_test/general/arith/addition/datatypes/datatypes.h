@@ -89,7 +89,7 @@ SC_MODULE( datatypes )
                 sc_signal<char>&                   OUT_VALUE6,
                 sc_signal<bool>&                   OUT_VALID    
         )
-        : clk          (CLK),            // connection definition
+        : 
           reset        (RESET),
           in_value1    (IN_VALUE1),
           in_value2    (IN_VALUE2),
@@ -108,8 +108,9 @@ SC_MODULE( datatypes )
           out_valid    (OUT_VALID)
 
     {
-      SC_CTHREAD( entry, clk.pos() );
-      watching(reset.delayed() == true);
+      clk          (CLK);
+	  SC_CTHREAD( entry, clk.pos() );
+	  reset_signal_is(reset,true);
     };
 
 //Process Functionality: Described in the member function below

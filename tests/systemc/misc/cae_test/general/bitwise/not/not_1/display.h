@@ -58,7 +58,7 @@ SC_MODULE( display )
 	   const  sc_signal_bool_vector&   IN_DATA5,     
            const  sc_signal<bool>&         IN_VALID
 	   )
-  : clk(CLK),
+  : 
     in_data1(IN_DATA1),
     in_data2(IN_DATA2),
     in_data3(IN_DATA3),
@@ -66,7 +66,8 @@ SC_MODULE( display )
     in_data5(IN_DATA5),
     in_valid(IN_VALID)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLK);
+	SC_CTHREAD( entry, clk.pos() );
   }
 
   void entry();

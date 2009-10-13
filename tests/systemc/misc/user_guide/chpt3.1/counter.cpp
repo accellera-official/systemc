@@ -43,7 +43,7 @@ void counter::entry()
 
   count = 0;
   while (true) { // infinite loop
-    wait_until(found.delayed() == true);
+    do { wait(); } while (found != true);
     count = count + 1;
     cout << "\nFound Count is " << count << endl;
   }

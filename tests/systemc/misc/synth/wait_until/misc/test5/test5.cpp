@@ -38,7 +38,7 @@
 void t::entry() 
 {
   wait();
-  /* error: control nesting too deep - error reported in siu_wait_until.c */
+  /* error: control nesting too deep - error reported in siu_do { wait(); } while .c */
   if (i1 == 1)
   if (i1 == 1)
   if (i1 == 1)

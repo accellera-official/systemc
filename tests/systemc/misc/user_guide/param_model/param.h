@@ -71,8 +71,7 @@ SC_MODULE( param )
 	sc_signal<bool>&          	DONE,
 	const int			DATA_WIDTH = 4)
 	
-      : clk		(TICK),
-	reset		(RESET),
+      : reset		(RESET),
     	a		(A), 
     	b		(B), 
 	cin		(CIN),
@@ -83,8 +82,9 @@ SC_MODULE( param )
         data_width  	(DATA_WIDTH)
 
   	{ 
+	  clk(TICK);
           SC_CTHREAD( entry, clk.pos() );
-	  watching ( reset.delayed() == 0 );	
+	  reset_signal_is(reset,false);
 	}
 
   void entry();

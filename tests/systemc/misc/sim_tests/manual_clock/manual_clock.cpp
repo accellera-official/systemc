@@ -53,9 +53,10 @@ SC_MODULE( proc1 )
            sc_signal<bool>& A,
            sc_signal<bool>& B,
            sc_signal<bool>& C )
-        : clk( CLK ), a(A), b(B), c(C)
     {
-        SC_CTHREAD( entry, clk.pos() );
+        clk( CLK );
+        a(A); b(B); c(C);
+		SC_CTHREAD( entry, clk.pos() );
     }
 
     void entry()
@@ -64,11 +65,11 @@ SC_MODULE( proc1 )
             wait();
             c = a.read() && b.read();
             wait();
-	    cout << sc_simulation_time() << " P1(a&&b):: C = " << c.read() 
+	    cout << sc_time_stamp() << " P1(a&&b):: C = " << c.read() 
 		<< endl;
             c = a.read() || b.read();
             wait();
-	    cout << sc_simulation_time() << " P1(a||b):: C = " << c.read() 
+	    cout << sc_time_stamp() << " P1(a||b):: C = " << c.read() 
 		<< endl;
             c = a ^ b;
         }
@@ -90,9 +91,10 @@ SC_MODULE( proc2 )
            sc_signal<bool>& A,
            sc_signal<bool>& B,
            sc_signal<bool>& C )
-        : clk( CLK ), a(A), b(B), c(C)
     {
-        SC_CTHREAD( entry, clk.pos() );
+        clk( CLK );
+        a(A); b(B); c(C);
+		SC_CTHREAD( entry, clk.pos() );
     }
 
     void entry()
@@ -101,11 +103,11 @@ SC_MODULE( proc2 )
             wait();
             c = ! (a.read() && b.read());
             wait();
-	    cout << sc_simulation_time() << " P2(a&&b):: C = " << c.read() 
+	    cout << sc_time_stamp() << " P2(a&&b):: C = " << c.read() 
 		<< endl;
             c = ! (a.read() || b.read());
             wait();
-	    cout << sc_simulation_time() << " P2(a||b):: C = " << c.read() 
+	    cout << sc_time_stamp() << " P2(a||b):: C = " << c.read() 
 		<< endl;
             c = ! (a ^ b);
         }
@@ -127,8 +129,8 @@ SC_MODULE( proc3 )
            sc_signal<bool>& B,
            sc_signal<bool>& C,
            sc_signal<bool>& D )
-        : a(A), b(B), c(C), d(D)
     {
+        a(A); b(B); c(C); d(D);
         SC_METHOD( entry );
         sensitive << a << b;
     }
@@ -154,7 +156,7 @@ sc_main( int argc, char* argv[] )
     proc2 p2( "p2", clk2, a, b, q );
     proc3 p3( "p3", p, q, zero, one );
 
-    sc_start(0);
+    sc_start(0, SC_NS);
     for (double t = 0; t < 0.00001; t += 1e-9) {
         clk1 = 1;
         clk2 = 1;

@@ -46,14 +46,14 @@ int sc_main(int ac, char *av[])
   signal_bool_vector      prime	("prime");
 
 // Clock Instantiation
-  sc_clock 	clk ("CLK", 6, 0.5, 0);	// 167 Mhz
+  sc_clock 	clk ("CLK", 6, SC_NS, 0.5, 0, SC_NS);	// 167 Mhz
 
 // Process Instantiation
  
   displayp	T2 ("T2", clk, prime);
  
 // Simulation Run Control
-  sc_start( 30 );
-  cout << sc_simulation_time() << " : STOPPING SIM - start button" << endl;
+  sc_start( 30, SC_NS );
+  cout << sc_time_stamp() << " : STOPPING SIM - start button" << endl;
    return 0;
 }

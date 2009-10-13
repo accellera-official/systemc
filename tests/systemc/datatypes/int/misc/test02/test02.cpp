@@ -3,7 +3,7 @@
 
 inline void dump(sc_signed& value)
 {
-	unsigned long* ptr = value.get_raw();
+	sc_digit* ptr = value.get_raw();
 	printf("    %08x_%08x_%08x_%08x\n", 
 		(int)ptr[3], (int)ptr[2], (int)ptr[1], (int)ptr[0]);
 	cout << "    " << value << endl;
@@ -11,7 +11,7 @@ inline void dump(sc_signed& value)
 
 inline void dump(sc_unsigned& value)
 {
-	unsigned long* ptr = value.get_raw();
+	sc_digit* ptr = value.get_raw();
 	printf("    %08x_%08x_%08x_%08x\n", 
 		(int)ptr[3], (int)ptr[2], (int)ptr[1], (int)ptr[0]);
 	cout << "    " << value << endl;

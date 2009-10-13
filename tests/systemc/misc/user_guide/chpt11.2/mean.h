@@ -54,9 +54,10 @@ SC_MODULE( mean )
        sc_clock& CLK,
        const signal_bool_vector& IN_,
        signal_bool_vector& OUT_)
-    : clk(CLK), in(IN_), out(OUT_)
+    : in(IN_), out(OUT_)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLK);
+	SC_CTHREAD( entry, clk.pos() );
   }
 
   // Process functionality in member function below

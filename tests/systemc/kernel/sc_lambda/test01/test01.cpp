@@ -29,12 +29,17 @@
   MODIFICATION LOG - modifiers, enter your name, affiliation, date and
   changes you are making here.
 
-      Name, Affiliation, Date:
-  Description of Modification:
+      Name, Affiliation, Date: Andy Goodrich, Forte Design Systems, 2005-11-10
+  Description of Modification: Removal of Lambda exressions
 
  *****************************************************************************/
+// $Log: test01.cpp,v $
+// Revision 1.2  2006/01/24 21:04:54  acg
+//  Andy Goodrich: replacement of deprecated features with their non-deprecated
+//  counterparts.
+//
 
-// test of sc_lambda
+// test of sc_lambda-style wait_until w/normal loop.
 
 #include "systemc.h"
 
@@ -48,7 +53,7 @@ SC_MODULE( mod_a )
 	int i = 0;
 
 	while( true ) {
-	    wait_until( clk2.delayed() == true );
+	    do { wait(); } while ( !(clk2 == true) );
 	    cout << "i = " << i << endl;
 	    i ++;
 	    wait();
@@ -65,12 +70,12 @@ int
 sc_main( int, char*[] )
 {
     mod_a a( "a" );
-    sc_clock clk1( "clk1", 0.1 );
-    sc_clock clk2( "clk2", 0.5 );
+    sc_clock clk1( "clk1", 0.1, SC_NS );
+    sc_clock clk2( "clk2", 0.5, SC_NS );
     a.clk1( clk1 );
     a.clk2( clk2 );
 
-    sc_start( 3 );
+    sc_start( 3, SC_NS );
 
     return 0;
 }

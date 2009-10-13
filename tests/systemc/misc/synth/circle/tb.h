@@ -58,15 +58,15 @@ SC_MODULE( testbench )
 	       const sc_signal<bool>&    data_ready_,
 	       const sc_signal<bool>&    select_xy_,
 	       const signal_bool_vector& coord_xy_ )
-        : sc_module( name_ ),
-          clk( clk_ ),
-	  reset( reset_ ),
-	  x_ok( x_ok_ ),
-	  y_ok( y_ok_ ),
-	  data_ready( data_ready_ ),
-	  select_xy( select_xy_ ),
-	  coord_xy( coord_xy_ )
+        : sc_module( name_ )
     {
+          clk( clk_ );
+	  reset( reset_ );
+	  x_ok( x_ok_ );
+	  y_ok( y_ok_ );
+	  data_ready( data_ready_ );
+	  select_xy( select_xy_ );
+	  coord_xy( coord_xy_ );
 	SC_CTHREAD( entry, clk.neg() );
     }
 };
@@ -104,7 +104,7 @@ testbench::entry()
 
         // wait for new x or y coordinate to be calculated
 
-	wait_until(data_ready.delayed() == 1);
+	do { wait(); } while (data_ready == 0);
 
         // capture x coordinate
 

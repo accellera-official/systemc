@@ -43,7 +43,7 @@ SC_MODULE( mod_a )
 
     void write( const char* msg )
     {
-        cout << sc_simulation_time() << " " << msg << endl;
+        cout << sc_time_stamp() << " " << msg << endl;
     }
 
     void proc_a()
@@ -85,7 +85,7 @@ SC_MODULE( mod_b )
 
     void write( const char* msg )
     {
-        cout << sc_simulation_time() << " " << msg << endl;
+        cout << sc_time_stamp() << " " << msg << endl;
     }
 
     void proc_b()

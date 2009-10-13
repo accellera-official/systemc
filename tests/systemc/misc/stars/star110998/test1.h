@@ -74,15 +74,8 @@ SC_MODULE(io_controller_m){
      { 
       
        SC_CTHREAD(control_write, clk_i486_if.pos());
-      //watching(mii_coll_det.delayed() == true);
-     //watching(res_n_i.delayed() == false);
-      
-     // SC_CTHREAD(control_read, clk_i486_if.pos());
      
    } 
    void control_write();
-   //void control_read();
-   //sc_uint<32> read_from_memory(sc_uint<32>);
-   //void write_into_memory(sc_uint<32>, sc_uint<32>);
 
 }; 

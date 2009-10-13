@@ -24,7 +24,7 @@ int sc_main(int argc,char **argv)
 	TB       tb("tb");
 
 	tb.m_clk(clock);
-	sc_start(2);
+	sc_start(2, SC_NS);
 
 	cerr << "Program completed" << endl;
     return (0); 

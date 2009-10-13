@@ -64,7 +64,7 @@ SC_MODULE( stimgen )
 	const signal_bool_vector8&	O5,
 	signal_bool_vector8&		IN1 )
 	
-      : clk	(TICK),
+      : 
 	o1	(O1),
 	o2	(O2),
 	o3	(O3),
@@ -73,7 +73,8 @@ SC_MODULE( stimgen )
 	in1	(IN1)
 
   	{
-          SC_CTHREAD( entry, clk.pos() );
+          clk	(TICK);
+	  SC_CTHREAD( entry, clk.pos() );
         }
 
   void entry();

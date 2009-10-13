@@ -53,9 +53,11 @@ SC_MODULE( proc1 )
 	 sc_fifo<bool>& DONE,
 	 sc_fifo<int>& OUT_,
 	 sc_fifo<bool>& READY )
-    : clk(CLOCK), in(IN_), done(DONE), out(OUT_), ready(READY)
+    : in(IN_), done(DONE), out(OUT_), ready(READY)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLOCK); 
+	SC_THREAD( entry );
+	sensitive << clk.pos();
   }
 
   void entry() {
@@ -89,9 +91,11 @@ SC_MODULE( proc2 )
 	 sc_fifo<bool>& DONE,
 	 sc_fifo<int>& OUT_,
 	 sc_fifo<bool>& READY)
-    : clk(CLOCK), in(IN_), done(DONE), out(OUT_), ready(READY)
+    : in(IN_), done(DONE), out(OUT_), ready(READY)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLOCK);
+	SC_THREAD( entry );
+	sensitive << clk.pos();
   }
 
   void entry() {
@@ -114,11 +118,11 @@ int sc_main(int ac, char *av[])
   sc_fifo<int> c("C", 10);
   sc_fifo<int> d("D", 2);
 
-  sc_clock clock("CLK", 20);
+  sc_clock clock("CLK", 20, SC_NS);
 
   proc1 p1("P1", clock, c, a, d, b);
   proc2 p2("P2", clock, d, b, c, a);
 
-  sc_start(1000);
+  sc_start(1000, SC_NS);
   return 0;
 }

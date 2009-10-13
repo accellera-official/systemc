@@ -46,7 +46,7 @@ SC_MODULE( arraytypes ) {
     SC_CTOR(arraytypes)
       {
 	SC_CTHREAD (entry, clk.pos());
-	watching (reset.delayed() == true);
+	reset_signal_is( reset, true );
       };
       
     void entry ();

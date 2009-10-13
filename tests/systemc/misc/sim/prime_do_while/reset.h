@@ -53,11 +53,12 @@ SC_MODULE( resetp )
 	  sc_clock&		TICK,
 	  sc_signal<bool>&	RESET )
 	
-      : clk(TICK),
+      : 
 	reset	(RESET)
 
   	{
-          SC_CTHREAD( entry, clk.neg() );
+          clk(TICK);
+		  SC_CTHREAD( entry, clk.neg() );
         }
 
   void entry();

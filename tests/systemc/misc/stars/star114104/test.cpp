@@ -47,7 +47,7 @@ SC_MODULE( pro )
         while( true ) {
             sc_logic tmp( i );
             out.write( tmp );
-            cout << sc_simulation_time() << ": " << tmp.to_char() << endl;
+            cout << sc_time_stamp() << ": " << tmp.to_char() << endl;
             wait( 3, SC_NS );
             i = (i + 1) % 4;
         }
@@ -65,21 +65,21 @@ SC_MODULE( con )
 
     void pos_action()
     {
-        cout << sc_simulation_time() << ": posedge" << endl;
+        cout << sc_time_stamp() << ": posedge" << endl;
     }
 
     void neg_action()
     {
-        cout << sc_simulation_time() << ": negedge" << endl;
+        cout << sc_time_stamp() << ": negedge" << endl;
     }
 
     SC_CTOR( con )
     {
         SC_METHOD( pos_action );
-        sensitive_pos << in;
+        sensitive << in.pos();
         dont_initialize();
         SC_METHOD( neg_action );
-        sensitive_neg << in;
+        sensitive << in.neg();
         dont_initialize();
     }
 };
@@ -92,6 +92,6 @@ sc_main( int, char*[] )
     con c( "c" );
     p.out( sig );
     c.in( sig );
-    sc_start( 100 );
+    sc_start( 100, SC_NS );
     return 0;
 }

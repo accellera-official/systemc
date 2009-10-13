@@ -39,10 +39,10 @@ void t::entry()
 {
   wait();
   while (1) {
-    wait_until(cont1.delayed() == 1);
+    do { wait(); } while (cont1 == 0);
     if (i2 == 1)
       break; 
-    /* error: wait needs to be inserted between wait_until
+    /* error: wait needs to be inserted between do { wait(); } while 
        and break */
   }
   wait();

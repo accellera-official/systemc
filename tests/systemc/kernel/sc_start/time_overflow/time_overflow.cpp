@@ -37,10 +37,10 @@ int sc_main(int argc, char* argv[])
 {
     cout << sc_time_stamp() << ": Issuing sc_start(10, SC_NS)" << endl;
     sc_start(10, SC_NS);
-    cout << sc_time_stamp() << ": Issuing sc_start(-1)" << endl;
-    sc_start(-1);
-    cout << sc_time_stamp() << ": Issuing sc_start(-1)" << endl;
-    sc_start(-1);
+    cout << sc_time_stamp() << ": Issuing sc_start()" << endl;
+    sc_start();
+    cout << sc_time_stamp() << ": Issuing sc_start()" << endl;
+    sc_start();
     cout << sc_time_stamp() << ": Issuing sc_start(10, SC_NS)" << endl;
     sc_start(10, SC_NS);
     cerr << sc_time_stamp() << ": Program completed" << endl;

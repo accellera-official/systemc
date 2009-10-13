@@ -103,7 +103,7 @@ int sc_main(int argc, char* argv[])
  a.clk(clock);
  b.clk(clock);
 
-  sc_start(0);
+  sc_start(0, SC_NS);
   sc_time sim_time(10.,sc_ms);
   sc_start(sim_time);
   return 0;

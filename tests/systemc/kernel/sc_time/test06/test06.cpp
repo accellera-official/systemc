@@ -59,7 +59,7 @@ SC_MODULE( source )
     : m_first_time( true )
     {
         SC_METHOD( main_action );
-        sensitive_pos << clk;
+        sensitive << clk.pos();
     }
 
 private:
@@ -77,7 +77,7 @@ sc_main( int, char*[] )
     src.clk( clk );
     src.out( sig );
 
-    sc_start( -1 );
+    sc_start();
 
     return 0;
 }

@@ -43,7 +43,7 @@ void ram::entry()
   int address;
 
   while (true) {
-    wait_until(cs.delayed() == true); 
+    do { wait(); } while (cs != true); 
     address = addr.read().to_int();
     if (we.read() == true) { // Write operation
       wait(wait_cycles-1);

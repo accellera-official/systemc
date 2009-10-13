@@ -62,7 +62,7 @@ SC_MODULE(tst) {
   sc_port<sc_signal_in_if<bool>, 2> INP;
 
   void print_mthd() {
-    cout <<sc_simulation_time()<<": Method Activated"<<endl;
+    cout <<sc_time_stamp()<<": Method Activated"<<endl;
   }
  
   SC_CTOR(tst) {
@@ -79,16 +79,16 @@ int sc_main(int argc, char* argv[]) {
   tsti.INP(INP1);
   tsti.INP(INP2);
 
-  sc_start(0);
+  sc_start(0, SC_NS);
 
   INP1.write(1);
-  sc_start(1);
+  sc_start(1, SC_NS);
   INP2.write(1);
-  sc_start(1);
+  sc_start(1, SC_NS);
   INP2.write(0);
-  sc_start(1);
+  sc_start(1, SC_NS);
   INP1.write(0);
-  sc_start(1);
+  sc_start(1, SC_NS);
 
   return 0;
 }

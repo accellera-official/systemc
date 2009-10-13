@@ -58,12 +58,13 @@ SC_MODULE( RESET_STIM )
                       sc_signal<bool>&  RESET,
   		      sc_signal<int>&	ADDR   )
  
-    : clk (TICK_N),
+    : 
 		ready (READY),
 		reset (RESET),
 		addr  (ADDR)
 
     {
+		clk (TICK_N);
         SC_CTHREAD( entry, clk.neg() );
     }
  
@@ -99,10 +100,10 @@ RESET_STIM::entry()
 
 // WAIT FOR LAST MEMORY ADDRESS, THEN 3 CLOCKS, THEN STOP SIMULATION 
 
-  // wait_until(addr.delayed() == LIMIT);	
+  // do { wait(); } while (addr == LIMIT);	
   do { wait(); } while (!(addr == LIMIT));
   wait(LATENCY);
-  wait_until(ready.delayed() == 1);			
+  do { wait(); } while (ready != 1);			
   sc_clock::stop();
   halt();
 }

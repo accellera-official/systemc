@@ -198,19 +198,19 @@ test_conversion()
     sc_time t1;
     cout << t1.value() << endl;
     cout << t1.to_double() << endl;
-    cout << t1.to_default_time_units() << endl;
+    cout << t1 << endl;
     cout << t1.to_seconds() << endl;
 
     sc_time t2( 1.2345, SC_US );
     cout << t2.value() << endl;
     cout << t2.to_double() << endl;
-    cout << t2.to_default_time_units() << endl;
+    cout << t2 << endl;
     cout << t2.to_seconds() << endl;
 
     sc_time t3( -1.5432, SC_NS );
     cout << t3.value() << endl;
     cout << t3.to_double() << endl;
-    cout << t3.to_default_time_units() << endl;
+    cout << t3 << endl;
     cout << t3.to_seconds() << endl;
 }
 

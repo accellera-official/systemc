@@ -1,7 +1,7 @@
 // Bug 70 - Problems with part selections on sc_biguint.
 
 #include "systemc.h"
-#include "iomanip.h"
+//#include "iomanip.h"
 
 int sc_main(int argc, char* argv[])
 {

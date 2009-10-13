@@ -60,7 +60,7 @@ SC_MODULE( stimulus )
 	   sc_signal_bool_vector8&  OUT_STIMULUS5,     
 	   sc_signal<bool>&         OUT_VALID
           )
-          : clk (CLK),
+          : 
             reset(RESET),
             out_stimulus1(OUT_STIMULUS1),
             out_stimulus2(OUT_STIMULUS2),
@@ -69,7 +69,8 @@ SC_MODULE( stimulus )
             out_stimulus5(OUT_STIMULUS5),
             out_valid(OUT_VALID)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk (CLK);
+	SC_CTHREAD( entry, clk.pos() );
   }
   
   void entry();

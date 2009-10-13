@@ -51,10 +51,11 @@ SC_MODULE( CLK_POS )
               sc_clock&		TICK_P,
 	      sc_signal<bool>&	OUT_CLK_POS )
  
-    : clk (TICK_P),
+    : 
       out_clk_pos (OUT_CLK_POS)
     {
-        SC_CTHREAD( entry, clk.pos() );
+        clk (TICK_P);
+	SC_CTHREAD( entry, clk.pos() );
     }
  
   void entry();
@@ -63,15 +64,15 @@ SC_MODULE( CLK_POS )
 void
 CLK_POS::entry()
 {
-  cout << sc_simulation_time() << " : CLK UP\n" << endl;
+  cout << sc_time_stamp() << " : CLK UP\n" << endl;
   out_clk_pos.write(1);
   wait();
-  cout << sc_simulation_time() << " : CLK UP\n" << endl;
+  cout << sc_time_stamp() << " : CLK UP\n" << endl;
   out_clk_pos.write(0);
   wait();
-  cout << sc_simulation_time() << " : CLK UP\n" << endl;
+  cout << sc_time_stamp() << " : CLK UP\n" << endl;
   wait();
-  cout << sc_simulation_time() << " : CLK UP\n" << endl;
+  cout << sc_time_stamp() << " : CLK UP\n" << endl;
 }
 
 /******************************************************************************/
@@ -89,10 +90,11 @@ SC_MODULE( CLK_NEG )
     CLK_NEG ( sc_module_name   	NAME,
               sc_clock&		TICK_N,
 	      sc_signal<bool>&	OUT_CLK_NEG )
-    : clk (TICK_N),
+    : 
       out_clk_neg (OUT_CLK_NEG)
     {
-        SC_CTHREAD( entry, clk.neg() );
+        clk (TICK_N);
+	SC_CTHREAD( entry, clk.neg() );
     }
  
   void entry();
@@ -101,15 +103,15 @@ SC_MODULE( CLK_NEG )
 void
 CLK_NEG::entry()
 {
-  cout << sc_simulation_time() << " : CLK DN\n" << endl;
+  cout << sc_time_stamp() << " : CLK DN\n" << endl;
   out_clk_neg.write(1);
   wait();
-  cout << sc_simulation_time() << " : CLK DN\n" << endl;
+  cout << sc_time_stamp() << " : CLK DN\n" << endl;
   out_clk_neg.write(0);
   wait();
-  cout << sc_simulation_time() << " : CLK DN\n" << endl;
+  cout << sc_time_stamp() << " : CLK DN\n" << endl;
   wait();
-  cout << sc_simulation_time() << " : CLK DN\n" << endl;
+  cout << sc_time_stamp() << " : CLK DN\n" << endl;
 }
 
 /******************************************************************************/
@@ -127,10 +129,11 @@ SC_MODULE( CLK2_POS )
     CLK2_POS ( sc_module_name  	NAME,
                sc_clock&	TICK2_P,
 	       sc_signal<bool>&	OUT_CLK2_POS )
-    : clk (TICK2_P),
+    : 
       out_clk2_pos (OUT_CLK2_POS)
     {
-        SC_CTHREAD( entry, clk.pos() );
+        clk (TICK2_P);
+	SC_CTHREAD( entry, clk.pos() );
     }
  
   void entry();
@@ -139,15 +142,15 @@ SC_MODULE( CLK2_POS )
 void
 CLK2_POS::entry()
 {
-  cout << sc_simulation_time() << " : _____________CLK2 UP\n" << endl;
+  cout << sc_time_stamp() << " : _____________CLK2 UP\n" << endl;
   out_clk2_pos.write(1);
   wait();
-  cout << sc_simulation_time() << " : _____________CLK2 UP\n" << endl;
+  cout << sc_time_stamp() << " : _____________CLK2 UP\n" << endl;
   out_clk2_pos.write(0);
   wait();
-  cout << sc_simulation_time() << " : _____________CLK2 UP\n" << endl;
+  cout << sc_time_stamp() << " : _____________CLK2 UP\n" << endl;
   wait();
-  cout << sc_simulation_time() << " : _____________CLK2 UP\n" << endl;
+  cout << sc_time_stamp() << " : _____________CLK2 UP\n" << endl;
 }
 
 /******************************************************************************/
@@ -165,10 +168,11 @@ SC_MODULE( CLK2_NEG )
     CLK2_NEG ( sc_module_name  	NAME,
                sc_clock&	TICK2_N,
 	       sc_signal<bool>&	OUT_CLK2_NEG )
-    : clk (TICK2_N),
+    : 
       out_clk2_neg (OUT_CLK2_NEG)
     {
-        SC_CTHREAD( entry, clk.neg() );
+        clk (TICK2_N);
+	SC_CTHREAD( entry, clk.neg() );
     }
  
   void entry();
@@ -177,13 +181,13 @@ SC_MODULE( CLK2_NEG )
 void
 CLK2_NEG::entry()
 {
-  cout << sc_simulation_time() << " : _____________CLK2 DN\n" << endl;
+  cout << sc_time_stamp() << " : _____________CLK2 DN\n" << endl;
   out_clk2_neg.write(1);
   wait();
-  cout << sc_simulation_time() << " : _____________CLK2 DN\n" << endl;
+  cout << sc_time_stamp() << " : _____________CLK2 DN\n" << endl;
   out_clk2_neg.write(0);
   wait();
-  cout << sc_simulation_time() << " : _____________CLK2 DN\n" << endl;
+  cout << sc_time_stamp() << " : _____________CLK2 DN\n" << endl;
   wait();
-  cout << sc_simulation_time() << " : _____________CLK2 DN\n" << endl;
+  cout << sc_time_stamp() << " : _____________CLK2 DN\n" << endl;
 }

@@ -39,7 +39,7 @@ void test::entry()
 {
   wait();
   wait ();
-  wait_until(cont1.delayed() == 1);
+  do { wait(); } while (cont1 == 1);
   wait ();
   o1 = 4;
   wait ();

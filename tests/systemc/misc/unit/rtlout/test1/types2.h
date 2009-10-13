@@ -45,7 +45,7 @@ SC_MODULE( types2 ) {
     SC_CTOR(types2)
       {
 	SC_CTHREAD (entry, clk.pos());
-	watching (reset.delayed() == true);
+	reset_signal_is(reset,true);
       };
       
     void entry ();

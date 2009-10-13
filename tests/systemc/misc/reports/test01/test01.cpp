@@ -33,6 +33,12 @@
 
  *****************************************************************************/
 
+// $Log: test01.cpp,v $
+// Revision 1.2  2006/01/24 21:05:13  acg
+//  Andy Goodrich: replacement of deprecated features with their non-deprecated
+//  counterparts.
+//
+
 // test of former asserts (should not be reachable from public APIs) now errors
 
 #include "systemc.h"

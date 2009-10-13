@@ -56,9 +56,10 @@ SC_MODULE( stage1 )
 	 const sc_signal<double>& IN2,
 	 sc_signal<double>& SUM,
 	 sc_signal<double>& DIFF)
-    : clk(CLK), in1(IN1), in2(IN2), sum(SUM), diff(DIFF)
+    : in1(IN1), in2(IN2), sum(SUM), diff(DIFF)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLK);
+	SC_CTHREAD( entry, clk.pos() );
   }
 
   // Process functionality in member function below

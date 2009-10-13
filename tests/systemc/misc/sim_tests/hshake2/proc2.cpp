@@ -46,16 +46,16 @@ void proc2::entry()
   wait();
   
   while (true) {
-    wait_until(data_ready.delayed() == true);
+    do { wait(); } while (data_ready == false);
     i = data.read();
     cout << "Proc2: Received data = " << i << " at time " << 
-      sc_simulation_time() << endl;
+      sc_time_stamp() << endl;
     if (i > 12) {
       sc_stop();
     }
     data_ack.write(true);
     wait();
-    wait_until(data_ready.delayed() == false);
+    do { wait(); } while (data_ready == true);
     data_ack.write(false);
   }
 } // end of entry function

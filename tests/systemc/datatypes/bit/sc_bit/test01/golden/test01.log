@@ -1,4 +1,6 @@
 SystemC Simulation
+
+Info: (I804) /IEEE_Std_1666/deprecated: sc_bit is deprecated, use bool instead
 Caught exception for sc_bit(2)
 Caught exception for sc_bit('2')
 
@@ -47,3 +49,11 @@ In file: <removed by verify.pl>
 0111
 0001
 0110
+
+Info: (I804) /IEEE_Std_1666/deprecated: You can turn off warnings about
+             IEEE 1666 deprecated features by placing this method call as the
+             first statement in your sc_main() function:
+
+  sc_report_handler::set_actions("/IEEE_Std_1666/deprecated", SC_DO_NOTHING);
+
+

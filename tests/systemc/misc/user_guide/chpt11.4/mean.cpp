@@ -78,7 +78,7 @@ void mean::entry()
     calculate_harmonic_mean(i, j, k, l, harmonic);
 
     // write all outputs
-    wait_until(receiver_ready.delayed() == true);
+    do { wait(); } while (receiver_ready != true);
     wait();
     out.write(arith);
     wait();

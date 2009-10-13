@@ -59,10 +59,10 @@ SC_MODULE( ram )
       addr(ADDR), dataout(DATAOUT)
   {
     SC_METHOD( entry );
-    sensitive(datain);
-    sensitive(cs);
-    sensitive(we);
-    sensitive(addr);
+    sensitive << datain;
+    sensitive << cs;
+    sensitive << we;
+    sensitive << addr;
   }
 
   // Process functionality in member function below

@@ -62,11 +62,12 @@ SC_MODULE( accessor )
 	   signal_bool_vector10& ADDRESS,
 	   signal_bool_vector32& DATAOUT,
 	   const int MEMORY_LATENCY = 1)
-    : clk(CLK), datain(DATAIN), chip_select(CHIP_SELECT), 
+    : datain(DATAIN), chip_select(CHIP_SELECT), 
       write_enable(WRITE_ENABLE), address(ADDRESS), dataout(DATAOUT),
       memory_latency(MEMORY_LATENCY)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLK);
+	SC_CTHREAD( entry, clk.pos() );
   }
 
   // Process functionality in member function below

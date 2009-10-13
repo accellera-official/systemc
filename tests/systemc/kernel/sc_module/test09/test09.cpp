@@ -45,7 +45,7 @@ SC_MODULE(ModuleBase)
     }
 	void base_method()
 	{
-		cout << sc_simulation_time() << ": ModuleBase" << endl;
+		cout << sc_time_stamp() << ": ModuleBase" << endl;
 	}
 	sc_in_clk m_clk;
 };
@@ -63,7 +63,7 @@ class NonModuleDerived : public ModuleBase
 	}
 	void derived_method()
 	{
-		cout << sc_simulation_time() << ": NonModuleDerived" << endl;
+		cout << sc_time_stamp() << ": NonModuleDerived" << endl;
 	}
 };
 
@@ -84,7 +84,7 @@ SC_MODULE(ModuleDerived), public NonModuleBase
 	}
 	void derived_method()
 	{
-		cout << sc_simulation_time() << ": ModuleDerived" << endl;
+		cout << sc_time_stamp() << ": ModuleDerived" << endl;
 	}
 };
 
@@ -96,7 +96,7 @@ int sc_main(int argc, char* argv[])
 	non_derived.m_clk(clock);
 	derived.m_clk(clock);
 
-	sc_start(20);
+	sc_start(20, SC_NS);
 	return 0;
 }
 

@@ -55,11 +55,12 @@ SC_MODULE( displayp )
 	const sc_signal<bool>&		PRIME_READY,
 	const signal_bool_vector&     	PRIME )
 	
-      : clk	(TICK),
+      : 
 	prime_ready	(PRIME_READY),
 	prime		(PRIME)
 
   	{
+	    clk	(TICK);
             SC_CTHREAD( entry, clk.pos() );
         }
 

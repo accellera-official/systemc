@@ -147,11 +147,12 @@ SC_MODULE( sync1 )
            sc_signal<bool>& B,
            const sc_signal<bool>& C,
            const sc_signal<bool>& D )
-        : clk(CLK),
+        : 
           a(A), b(B), c(C), d(D)
 
     {
-        SC_CTHREAD( entry, clk.pos() );
+        clk(CLK);
+		SC_CTHREAD( entry, clk.pos() );
         count = 0;
     }
     void entry();
@@ -192,6 +193,6 @@ sc_main(int argc, char** argv)
     aproc2 p2("p2", a, b, d);
     sync1  s1("s1", clk, a, b, c, d);
 
-    sc_start(2000);
+    sc_start(2000, SC_NS);
     return 0;
 }

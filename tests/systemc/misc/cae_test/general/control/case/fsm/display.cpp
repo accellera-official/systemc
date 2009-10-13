@@ -45,19 +45,19 @@ void display::entry(){
 	while (in_valid1.read()==false) wait();
         while (in_valid1.read()==true) {
 	  cout << "Display : in_data1 " << in_data1.read() << " "
-	       << " at " << sc_simulation_time() << endl;
+	       << " at " << sc_time_stamp() << endl;
 	  wait();
 	};
 	while (in_valid2.read()==false) wait();
         while (in_valid2.read()==true) {
 	  cout << "Display : in_data2 " << in_data2.read() << " "
-	       << " at " << sc_simulation_time() << endl;
+	       << " at " << sc_time_stamp() << endl;
 	  wait();
 	};
 	while (in_valid3.read()==false) wait();
         while (in_valid3.read()==true) {
 	  cout << "Display : in_data3 " << in_data3.read() << " "
-	       << " at " << sc_simulation_time() << endl;
+	       << " at " << sc_time_stamp() << endl;
 	  wait();
 	};
     };

@@ -49,7 +49,7 @@ datawidth::entry()
   while (true) {
     
     // HANDSHAKING
-    wait_until(ready.delayed() == 1);
+    do { wait(); } while (ready == 0);
 
     // COMPUTATION
     tmp_a = in1.read();

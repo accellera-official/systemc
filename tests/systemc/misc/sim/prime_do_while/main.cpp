@@ -50,7 +50,7 @@ sc_main(int ac, char *av[])
   signal_bool_vector      prime	("prime");
 
 // Clock Instantiation
-  sc_clock 	clk ("CLK", 6, 0.5, 10, false);	// 167 Mhz
+  sc_clock 	clk ("CLK", 6, SC_NS, 0.5, 10, SC_NS, false);	// 167 Mhz
 
 // Process Instantiation
   prime_numgen	D1 ("D1", clk, reset, prime);
@@ -60,6 +60,6 @@ sc_main(int ac, char *av[])
   displayp	T2 ("T2", clk, prime);
  
 // Simulation Run Control
-  sc_start( -1 );
+  sc_start();
  return 0;
 }

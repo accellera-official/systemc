@@ -32,7 +32,7 @@
 */
 
 
-typedef unsigned long int UINT32;
+typedef unsigned int UINT32;
 const UINT32 GOLDEN_RATIO = UINT32(0x9e3779b9);
 
 

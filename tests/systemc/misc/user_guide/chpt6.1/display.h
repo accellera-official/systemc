@@ -51,7 +51,7 @@ SC_MODULE( display )
   {
     SC_METHOD( entry );
     dont_initialize();
-    sensitive(bus);
+    sensitive << bus;
   }
 
   // Process functionality in member function below

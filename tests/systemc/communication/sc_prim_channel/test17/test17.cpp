@@ -73,7 +73,7 @@ class channel :
     while(1){
     wait(10, SC_NS);
     data = i;
-    cout <<"simulation time" << ":" << sc_simulation_time()<<"    ";
+    cout <<"simulation time" << ":" << sc_time_stamp()<<"    ";
     cout<<"writting "<< data <<" to channel" << endl;
   
     if(i < 3){
@@ -96,7 +96,7 @@ class channel :
     while(1){
     wait(10, SC_NS, write_event_1 | write_event_2);
     j = data;
-    cout <<"simulation time" << ":" << sc_simulation_time();
+    cout <<"simulation time" << ":" << sc_time_stamp();
     cout<<"    reading "<<j<<" from channel" << endl;
     }
   }

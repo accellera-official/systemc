@@ -33,6 +33,11 @@
 
  *****************************************************************************/
 
+// $Log: test01.cpp,v $
+// Revision 1.2  2006/01/24 19:11:29  acg
+// Andy Goodrich: Changed sc_simulation_time() usage to sc_time_stamp().
+//
+
 // test of sc_buffer<T> -- general test
 
 #include "systemc.h"
@@ -53,7 +58,7 @@ SC_MODULE( mod_a )
     SC_CTOR( mod_a )
     {
         SC_THREAD( main_action );
-        sensitive_pos << clk;
+        sensitive << clk.pos();
     }
 };
 
@@ -63,7 +68,7 @@ SC_MODULE( mod_b )
 
     void main_action()
     {
-        cout << sc_simulation_time() << " " << in.read() << endl;
+        cout << sc_time_stamp() << " " << in.read() << endl;
     }
 
     SC_CTOR( mod_b )
@@ -86,7 +91,7 @@ sc_main( int, char*[] )
     a.out( buf );
     b.in( buf );
 
-    sc_start( 100 );
+    sc_start( 100, SC_NS);
 
     return 0;
 }

@@ -73,6 +73,6 @@ int sc_main(int argc, char* argv[])
 	sc_clock clock;
 	a.m_clk(clock);
 
-	sc_start(10);
+	sc_start(10, SC_NS);
     return 0;
 }

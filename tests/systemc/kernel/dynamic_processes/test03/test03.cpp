@@ -27,11 +27,12 @@
   MODIFICATION LOG - modifiers, enter your name, affiliation, date and
   changes you are making here.
 
-      Name, Affiliation, Date:
-  Description of Modification:
+      Name, Affiliation, Date: Andy Goodrich, Forte Design Systems, 26 Jul 2005
+  Description of Modification: Changed waits to use the new terminated_event
+                               support.
 
  *****************************************************************************/
-// test error message for wait() on dynamic method process handle
+// test error message for wait() on dynamic method process handle's event.
 
 #define SC_INCLUDE_DYNAMIC_PROCESSES
 #include <systemc.h>
@@ -39,7 +40,7 @@
 int function_method(double d)
 {
   cout << endl << sc_time_stamp() << ", " 
-       << sc_get_curr_process_handle()->name() 
+       << sc_get_current_process_handle().name() 
        << ": function_method sees " << d << endl;
   return int(d);
 }
@@ -66,7 +67,7 @@ public:
     o1.dont_initialize();
     o1.set_sensitivity(&ev);
     sc_process_handle h4 = sc_spawn(&r, sc_bind(&function_method, 1.2345), "event_sensitive_method", &o1);
-    h4.wait(); 
+    wait(h4.terminated_event());
   }
 };
 

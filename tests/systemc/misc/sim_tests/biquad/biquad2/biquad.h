@@ -58,10 +58,11 @@ SC_MODULE( biquad )
 	  sc_signal<float>& IN1,
 	  sc_signal<bool>& RESET,
 	  sc_signal<float>& OUT1 )
-    : clk(CLK), in(IN1), reset(RESET), out(OUT1)
   {
-    SC_CTHREAD( entry, clk.pos() );
-    watching(reset.delayed() == true);
+    clk(CLK);
+    in(IN1); reset(RESET); out(OUT1);
+	SC_CTHREAD( entry, clk.pos() );
+    reset_signal_is(reset,true);
     // initialize the coefficient matrix
     Cte[0] = 1.0;
     Cte[1] = 2.0;

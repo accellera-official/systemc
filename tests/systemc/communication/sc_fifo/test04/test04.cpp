@@ -38,11 +38,11 @@
 #include "systemc.h"
 
 #define W_INFO(msg) \
-    cout << sc_simulation_time() << "," << simcontext()->delta_count() \
+    cout << sc_time_stamp() << "," << sc_delta_count() \
          << ": writer: " << msg << endl;
 
 #define R_INFO(msg) \
-    cout << sc_simulation_time() << "," << simcontext()->delta_count() \
+    cout << sc_time_stamp() << "," << sc_delta_count() \
          << ": reader: " << msg << endl;
 
 SC_MODULE( writer )
@@ -137,7 +137,7 @@ int sc_main( int, char*[] )
     r.in( fifo );
 
     // run the simulation
-    sc_start( 100 );
+    sc_start( 100, SC_NS );
 
     return 0;
 }

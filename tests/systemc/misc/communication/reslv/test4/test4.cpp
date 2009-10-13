@@ -46,10 +46,11 @@ SC_MODULE( proc1 )
   proc1( sc_module_name n,
 	 sc_signal_resolved& OUT_,
 	 sc_signal<bool>& IN_ )
-    : out(OUT_), in(IN_)
+    : out(OUT_)
   {
-    SC_THREAD( entry );
-    sensitive(in);
+    in(IN_);
+	SC_THREAD( entry );
+    sensitive << in;
   }
 
   void entry();
@@ -83,10 +84,11 @@ SC_MODULE( proc2 )
   proc2( sc_module_name n,
 	 sc_signal_resolved& OUT_,
 	 sc_signal<bool>& IN_ )
-    : out(OUT_), in(IN_)
+    : out(OUT_)
   {
-    SC_THREAD( entry );
-    sensitive(in);
+    in(IN_);
+	SC_THREAD( entry );
+    sensitive << in;
   }
 
   void entry();
@@ -120,7 +122,7 @@ SC_MODULE( proc3 )
     : in(IN_)
   {
     SC_METHOD( entry );
-    sensitive(in);
+    sensitive << in;
   }
 
   void entry()
@@ -140,14 +142,14 @@ int sc_main(int ac, char *av[])
   proc2 P2("P2", Bus, clock);
   proc3 P3("P3", Bus);
 
-  sc_start(0);
+  sc_start(0, SC_NS);
   clock = 1;
-  sc_start(10);
+  sc_start(10, SC_NS);
   for (int i = 0; i < 3; i++) {
     clock = 0;
-    sc_start(10);
+    sc_start(10, SC_NS);
     clock = 1;
-    sc_start(10);
+    sc_start(10, SC_NS);
   }
   return 0;
 }

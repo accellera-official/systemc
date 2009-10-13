@@ -93,10 +93,9 @@ sc_main( int, char*[] )
     sc_signal_rv<1> sig_rv1;
 
     mod_a a("a");
-    a << clk << sig_int << sig_bool << sig_logic << buf_int
-      << sig_resolved << sig_rv1;
+    a(clk,sig_int,sig_bool,sig_logic,buf_int,sig_resolved,sig_rv1);
 
-    sc_start( 20 );
+    sc_start( 20, SC_NS );
 
     return 0;
 }

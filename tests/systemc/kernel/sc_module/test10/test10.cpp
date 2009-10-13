@@ -51,7 +51,7 @@ SC_MODULE(A)
 
 	    for (;;) 
 		{
-			cout << sc_simulation_time() << endl;
+			cout << sc_time_stamp() << endl;
 			wait();
 		}
 	}
@@ -64,7 +64,7 @@ int sc_main(int argc, char* argv[])
 	A        a("a");
 	a.m_clk(clock);
 
-	sc_start(2);
+	sc_start(2, SC_NS);
 
 	return 0;
 }

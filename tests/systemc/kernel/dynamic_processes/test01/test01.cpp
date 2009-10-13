@@ -38,20 +38,20 @@
 
 int test_function(double d)
 {
-  cout << endl << sc_time_stamp() << ": " << sc_get_curr_process_handle()->name()
+  cout << endl << sc_time_stamp() << ": " << sc_get_current_process_handle().name()
        << ": Test_function sees " << d << endl;
   return int(d);
 }
 
 void void_function(double d)
 {
-  cout << endl << sc_time_stamp() << ": " << sc_get_curr_process_handle()->name()
+  cout << endl << sc_time_stamp() << ": " << sc_get_current_process_handle().name()
        << ": void_function sees " << d << endl;
 }
 
 int ref_function(const double& d)
 {
-  cout << endl << sc_time_stamp() << ": " << sc_get_curr_process_handle()->name()
+  cout << endl << sc_time_stamp() << ": " << sc_get_current_process_handle().name()
        << ": ref_function sees " << d << endl;
   return int(d);
 }
@@ -111,15 +111,15 @@ public:
 
     // Demo of a function rather than method call, & use return value ...
     
-    sc_spawn(&r, sc_bind(&test_function, 3.14159)).wait();
+    wait( sc_spawn(&r, sc_bind(&test_function, 3.14159)).terminated_event() );
 
     cout << "Returned int is " << r << endl;
 
 	sc_process_handle handle1 = sc_spawn(sc_bind(&void_function, 1.2345));
-	handle1.wait();
+	wait(handle1.terminated_event());
 
     double d = 9.8765;
-    sc_spawn(&r, sc_bind(&ref_function, sc_cref(d))).wait();
+    wait( sc_spawn(&r, sc_bind(&ref_function, sc_cref(d))).terminated_event());
 
     cout << "Returned int is " << r << endl;
 
@@ -131,7 +131,7 @@ public:
     while (--cnt >= 0)
     {
       wait(receive);
-      cout << sc_time_stamp() << ": " << sc_get_curr_process_handle()->name()
+      cout << sc_time_stamp() << ": " << sc_get_current_process_handle().name()
            << ": Round robin thread " << str << endl;
       wait(10, SC_NS);
       send.notify();
@@ -143,7 +143,7 @@ public:
   int wait_and_end(int i)
   {
     wait( i + 1, SC_NS);
-    cout << sc_time_stamp() << ": " << sc_get_curr_process_handle()->name()
+    cout << sc_time_stamp() << ": " << sc_get_current_process_handle().name()
          << ": Thread " << i << " ending." << endl;
     return 0;
   }
@@ -152,7 +152,7 @@ public:
 int sc_main (int argc , char *argv[]) 
 {
   top top1("Top1");
-  sc_start(-1);
+  sc_start();
 
   return 0;
 }

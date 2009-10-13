@@ -64,7 +64,7 @@ SC_MODULE( array_range )
 	signal_bool_vector8&		O4,
 	signal_bool_vector8&		O5 )
 	
-      : clk	(TICK),
+      : 
 	in1	(IN1),
 	o1	(O1),
 	o2	(O2),
@@ -73,7 +73,8 @@ SC_MODULE( array_range )
 	o5	(O5)
 
   	{
-          SC_CTHREAD( entry, clk.pos() );
+          clk	(TICK);
+	  SC_CTHREAD( entry, clk.pos() );
         }
 
   void entry();

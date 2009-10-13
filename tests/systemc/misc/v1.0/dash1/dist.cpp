@@ -33,6 +33,15 @@
 
  *****************************************************************************/
 
+// $Log: dist.cpp,v $
+// Revision 1.3  2006/01/19 00:48:12  acg
+// Andy Goodrich: Changes for the fact signal write checking is enabled.
+//
+// Revision 1.2  2006/01/18 00:23:50  acg
+// Change over from SC_NO_WRITE_CHECK to sc_write_check_enable() call.
+//
+
+#define SC_NO_WRITE_CHECK
 #include "systemc.h"
 #include "const.h"
 #include "dist.h"

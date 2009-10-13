@@ -1,49 +1,59 @@
 SystemC Simulation
 *** next_trigger(e)
-2:0 sender
-2:0 receiver - e1
-2:0 sender
-3:0 receiver - e2
-3:0 sender
-5:2 receiver - e3
+
+Info: (I804) /IEEE_Std_1666/deprecated: timed_out() function is deprecated
+1:0 s sender
+1:0 s receiver - e1
+1:0 s sender
+2:0 s receiver - e2
+2:0 s sender
+3:2 ns receiver - e3
 *** next_trigger(or_list)
-5:2 sender
-5:2 receiver - e1 | e1 | e1
-5:2 sender
-6:2 receiver - e2 | e2 | e2
-6:2 sender
-8:4 receiver - e3 | e3 | e3
-8:4 sender
-8:4 receiver - e1 | e2 | e3
-8:4 sender
-8:4 receiver - e3 | e2 | e1
+3:2 ns sender
+3:2 ns receiver - e1 | e1 | e1
+3:2 ns sender
+4:2 ns receiver - e2 | e2 | e2
+4:2 ns sender
+5:4 ns receiver - e3 | e3 | e3
+5:4 ns sender
+5:4 ns receiver - e1 | e2 | e3
+5:4 ns sender
+5:4 ns receiver - e3 | e2 | e1
 *** next_trigger(and_list)
-8:4 sender
-8:4 receiver - e1 & e1 & e1
-8:4 sender
-9:4 receiver - e2 & e2 & e2
-9:4 sender
-11:6 receiver - e3 & e3 & e3
-11:6 sender
-13:8 receiver - e1 & e2 & e3
-13:8 sender
-15:10 receiver - e3 & e2 & e1
+5:4 ns sender
+5:4 ns receiver - e1 & e1 & e1
+5:4 ns sender
+6:4 ns receiver - e2 & e2 & e2
+6:4 ns sender
+7:6 ns receiver - e3 & e3 & e3
+7:6 ns sender
+8:8 ns receiver - e1 & e2 & e3
+8:8 ns sender
+9:10 ns receiver - e3 & e2 & e1
 *** next_trigger(t)
-16:10 receiver - 0 ns
-18:11 sender - timed out
-18:11 receiver - 1 ns
+10:10 ns receiver - 0 ns
+11:11 ns sender - timed out
+11:11 ns receiver - 1 ns
 *** next_trigger(t,e)
-18:11 sender
-18:11 receiver - 1 ns | e1
-18:11 sender
-19:11 receiver - 1 ns | e2
-19:11 sender
-21:12 receiver - 1 ns | e3 - timed out
+11:11 ns sender
+11:11 ns receiver - 1 ns | e1
+11:11 ns sender
+12:11 ns receiver - 1 ns | e2
+12:11 ns sender
+13:12 ns receiver - 1 ns | e3 - timed out
 *** next_trigger(t,or_list)
-21:12 sender
-21:12 receiver - 1 ns | e1 | e2 | e3
+13:12 ns sender
+13:12 ns receiver - 1 ns | e1 | e2 | e3
 *** next_trigger(t,and_list)
-21:12 sender
-23:13 receiver - 1 ns | e1 & e2 & e3 - timed out
-23:13 receiver - stop
+13:12 ns sender
+14:13 ns receiver - 1 ns | e1 & e2 & e3 - timed out
+14:13 ns receiver - stop
 SystemC: simulation stopped by user.
+
+Info: (I804) /IEEE_Std_1666/deprecated: You can turn off warnings about
+             IEEE 1666 deprecated features by placing this method call as the
+             first statement in your sc_main() function:
+
+  sc_report_handler::set_actions("/IEEE_Std_1666/deprecated", SC_DO_NOTHING);
+
+

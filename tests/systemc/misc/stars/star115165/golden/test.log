@@ -1,5 +1,5 @@
 SystemC Simulation
-0
+0 s
 
 Error: (E525) wait(n) is only valid for n > 0: n = 0
 In file: <removed by verify.pl>

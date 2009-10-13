@@ -67,11 +67,11 @@ SC_MODULE( some_process )
 	          sc_clock&         CLK,
 	          sc_signal<rgb_t>& COLOR_IN,
 	          sc_signal<rgb_t>& COLOR_OUT)
-    : clk( CLK ),
-      color_in( COLOR_IN ),
-      color_out( COLOR_OUT )
     {
-        SC_CTHREAD( entry, clk.pos() );
+        clk( CLK );
+      color_in( COLOR_IN );
+      color_out( COLOR_OUT );
+		SC_CTHREAD( entry, clk.pos() );
     }
 
     void entry();

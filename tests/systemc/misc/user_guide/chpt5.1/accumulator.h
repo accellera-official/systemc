@@ -57,9 +57,10 @@ SC_MODULE( accumulator )
 	      const sc_signal<int>& NUMBER,
 	      sc_signal<int>& SUM,
 	      sc_signal<int>& PROD)
-    : clk(CLK), number(NUMBER), sum(SUM), prod(PROD)
+    : number(NUMBER), sum(SUM), prod(PROD)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLK);
+	SC_CTHREAD( entry, clk.pos() );
   }
 
   // Process functionality in member function below

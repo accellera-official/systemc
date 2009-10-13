@@ -63,9 +63,13 @@ SC_MODULE( mod_a)
   sc_inout_resolved in_out5;
   sc_inout_resolved in_out6;
   
-  SC_CTOR( mod_a ):in_1(), in_2("in_2"), in_3(sig_1), in_4("in_4", sig_2),
-    in_out3(sig_3), in_out4("in_out4", sig_4), in_out5(), in_out6("in_out6") 
+  SC_CTOR( mod_a ):in_1(), in_2("in_2"), in_4("in_4"),
+    in_out4("in_out4"), in_out5(), in_out6("in_out6") 
     {
+     in_3(sig_1);
+     in_4(sig_2);
+     in_out3(sig_3);
+     in_out4(sig_4);
      WRITE(in_1);
      WRITE(in_2);
      WRITE(in_3);
@@ -90,9 +94,12 @@ SC_MODULE(mod_b)
   sc_in_resolved input_4;
 
 
-  SC_CTOR( mod_b ):a("a"),input_1(a.in_5), input_2("input_2", a.in_6),
-    input_3(a.in_out1), input_4("input_4", a.in_out2)
+  SC_CTOR( mod_b ):a("a"), input_2("input_2"), input_4("input_4")
  {
+   input_1(a.in_5);
+   input_2(a.in_6);
+   input_3(a.in_out1);
+   input_4(a.in_out2);
    WRITE(input_1);
    WRITE(input_2);
    WRITE(input_3);

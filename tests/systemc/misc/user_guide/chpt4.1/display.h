@@ -50,9 +50,10 @@ SC_MODULE( display )
   display(sc_module_name NAME,
 	  sc_clock& CLK,
 	  const sc_signal<double>& IN_)
-    : clk(CLK), in(IN_)
+    : in(IN_)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLK);
+	SC_CTHREAD( entry, clk.pos() );
   }
 
   // Process functionality in member function below

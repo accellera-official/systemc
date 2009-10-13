@@ -53,9 +53,11 @@ SC_MODULE( delay_line )
 	      sc_signal<float>& IN1,
 	      sc_signal<float>& OUT1,
 	      int DELAY=4 )
-    : in(IN1), out(OUT1), delay(DELAY)
+    : delay(DELAY)
   {
-    line = new float[delay];
+    in(IN1); 
+	out(OUT1);
+	line = new float[delay];
     for(int i=0; i<delay; i++) line[i] = 0.0;
 
     SC_METHOD( entry );

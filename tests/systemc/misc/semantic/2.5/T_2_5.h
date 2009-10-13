@@ -57,10 +57,11 @@ SC_MODULE( MYNAME )
             const signal_vector& X,
             const signal_vector& Y,
             signal_vector& Z )
-        : clk(CLK),
+        : 
           x(X), y(Y), z(Z)
     {
-        SC_CTHREAD( entry, clk.pos() );
+        clk(CLK);
+		SC_CTHREAD( entry, clk.pos() );
     }
     void entry();
 };

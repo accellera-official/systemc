@@ -15,6 +15,6 @@ int sc_main(int argc, char* argv[])
 	sc_clock clock;
 	X        x("x");
 
-	sc_start(1);
+	sc_start(1, SC_NS);
 	return 0;
 }

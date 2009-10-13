@@ -50,9 +50,10 @@ SC_MODULE( proc1 )
 	sc_clock& CLK,
 	const sc_signal<bool>& DATA_ACK,
 	sc_signal<bool>& DATA_READY)
-    : clk(CLK), data_ack(DATA_ACK), data_ready(DATA_READY)
+    : data_ack(DATA_ACK), data_ready(DATA_READY)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLK);
+	SC_CTHREAD( entry, clk.pos() );
   }
 
   // Process functionality in member function below

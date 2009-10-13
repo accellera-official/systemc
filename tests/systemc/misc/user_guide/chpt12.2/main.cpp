@@ -47,11 +47,11 @@ int sc_main(int ac, char *av[])
   signal_bool_vector32 data2("Data2");
   const int delay_cycles = 2;
 
-  sc_clock clk("Clock", 20, 0.5, 0.0);
+  sc_clock clk("Clock", 20, SC_NS, 0.5, 0.0, SC_NS);
 
   accessor A("Accessor", clk, data1, cs, we, addr, data2, delay_cycles);
   ram R("Ram", clk, data2, cs, we, addr, data1, delay_cycles);
 
-  sc_clock::start(1060);
+  sc_start(1060, SC_NS);
   return 0;
 }

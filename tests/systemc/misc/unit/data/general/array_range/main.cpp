@@ -52,7 +52,7 @@ int sc_main(int ac, char *av[])
   signal_bool_vector8  	  o5		("o5");
 
 // Clock Instantiation
-  sc_clock clk( "clock", 10, 0.5, 0); 
+  sc_clock clk( "clock", 10, SC_NS, 0.5, 0, SC_NS); 
 
 // Process Instantiation
   array_range	D1 ("D1", clk, in1, o1, o2, o3, o4, o5); 
@@ -60,6 +60,6 @@ int sc_main(int ac, char *av[])
   stimgen	T1 ("T1", clk, o1, o2, o3, o4, o5, in1); 
 
 // Simulation Run Control
-  sc_start( -1 ); 
+  sc_start(); 
   return 0;
 }

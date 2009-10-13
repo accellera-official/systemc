@@ -50,10 +50,11 @@ SC_MODULE( activa )
             const sc_signal<unsigned>& A,
             const sc_signal<unsigned>& B,
                   sc_signal<unsigned>& C )
-        : clk( CLK ),
+        : 
           a(A), b(B), c(C)
     {
-      SC_CTHREAD( entry, clk.pos() );
+      clk( CLK );
+	  SC_CTHREAD( entry, clk.pos() );
     }
     void entry();
 };

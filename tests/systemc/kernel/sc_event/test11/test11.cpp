@@ -46,7 +46,7 @@ SC_MODULE( mod_a )
 
     void write( const char* msg )
     {
-        cout << simcontext()->delta_count() << ":" << sc_simulation_time()
+        cout << sc_delta_count() << ":" << sc_time_stamp()
              << " " << msg << "\n";
     }
 

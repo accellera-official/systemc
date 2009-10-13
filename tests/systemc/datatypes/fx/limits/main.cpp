@@ -17,7 +17,7 @@
 
 /*****************************************************************************
 
-  main.cpp -- 
+  main.cpp --
 
   Original Author: Martin Janssen, Synopsys, Inc., 2002-02-15
 
@@ -34,19 +34,19 @@
  *****************************************************************************/
 
 // This may look like C code, but it is really -*- C++ -*-
-// 
-// main.cxx -- 
+//
+// main.cxx --
 // Copyright Synopsys 1998
 // Author          : Ric Hilderink
 // Created On      : Wed Dec 30 12:41:10 1998
 // Status          : none
-// 
+//
 
 #include <limits.h>
 #define SC_INCLUDE_FX
 #include "systemc.h"
 
-#if defined(__GNUC__) && (__GNUC__ >= 3)
+# if (defined(__GNUC__) && (__GNUC__ >= 3))|| (defined(_MSC_VER) && (_MSC_VER >= 1300))
 #   include "sstream"
 #else
 #   include "strstream.h"
@@ -60,7 +60,7 @@ extern void test_fx_ufixed_limits(ostream&);
 
 int sc_main( int, char** )
 {
-# if defined(__GNUC__) && (__GNUC__ >= 3)
+# if (defined(__GNUC__) && (__GNUC__ >= 3))|| (defined(_MSC_VER) && (_MSC_VER >= 1300))
     std::stringstream out;
 # else
     strstream out;
@@ -74,7 +74,7 @@ int sc_main( int, char** )
   test_fx_fixed_limits(out);
   test_fx_ufixed_limits(out);
 
-# if defined(__GNUC__) && (__GNUC__ >= 3)
+# if (defined(__GNUC__) && (__GNUC__ >= 3))|| (defined(_MSC_VER) && (_MSC_VER >= 1300))
     std::string s = out.str();
     for (int i = 0; i < s.length(); i++)
 # else

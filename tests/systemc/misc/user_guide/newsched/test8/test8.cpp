@@ -33,6 +33,12 @@
 
  *****************************************************************************/
 
+// $Log: test8.cpp,v $
+// Revision 1.2  2006/01/24 21:05:50  acg
+//  Andy Goodrich: replacement of deprecated features with their non-deprecated
+//  counterparts.
+//
+
 /*
   Corner case testing for new scheduler.
   Case 5: Checking multiple clock transitions at the same time
@@ -52,10 +58,11 @@ SC_MODULE( triga )
   triga(sc_module_name NAME,
 	sc_signal_in_if<bool>& CLOCK,
 	sc_signal<int>& OUT_)
-    : clock(CLOCK), out(OUT_)
+    : out(OUT_)
   {
+    clock(CLOCK);
     SC_METHOD( entry );
-    sensitive(clock);
+    sensitive << clock;
     i = 0;
     out = i++;
   }
@@ -84,11 +91,13 @@ SC_MODULE( watcher )
 	  const sc_signal<int>& IN2,
 	  const sc_signal<int>& IN3,
 	  const sc_signal<int>& IN4)
-    : clock1(CLOCK1), clock2(CLOCK2), in1(IN1), in2(IN2), in3(IN3), in4(IN4)
+    : in1(IN1), in2(IN2), in3(IN3), in4(IN4)
   {
+    clock1(CLOCK1);
+    clock2(CLOCK2);
     SC_METHOD( entry );
-    sensitive(clock1); sensitive(clock2);
-    sensitive(in1); sensitive(in2); sensitive(in3); sensitive(in4);
+    sensitive << clock1; sensitive << clock2;
+    sensitive << in1; sensitive << in2; sensitive << in3; sensitive << in4;
   }
 
   void entry()
@@ -118,8 +127,9 @@ SC_MODULE( trigp )
   trigp(sc_module_name NAME,
 	sc_signal_in_if<bool>& CLK,
 	sc_signal<int>& OUT_)
-    : clk(CLK), out(OUT_)
-  {
+    : out(OUT_)
+  { 
+    clk(CLK);
     SC_CTHREAD( entry, clk.pos() );
     out = 0;
   }
@@ -137,8 +147,8 @@ SC_MODULE( trigp )
 int
 sc_main(int ac, char *av[])
 {
-  // sc_clock clock1("Clock1", 20, 0.5);
-  // sc_clock clock2("Clock2", 20, 0.5);
+  // sc_clock clock1("Clock1", 20, SC_NS, 0.5);
+  // sc_clock clock2("Clock2", 20, SC_NS, 0.5);
   sc_signal<bool> clock1( "Clock1" );
   sc_signal<bool> clock2( "Clock2" );
 
@@ -158,15 +168,15 @@ sc_main(int ac, char *av[])
   sc_trace(tf, sig3, "Sync2");
   sc_trace(tf, sig4, "Async2");
 
-  sc_start(0);
+  sc_start(0, SC_NS);
   clock1 = 0;
   clock2 = 0;
-  sc_start(5);
+  sc_start(5, SC_NS);
   for (int i = 0; i< 10; i++) {
     clock1 = 1; clock2 = 1;
-    sc_start(5);
+    sc_start(5, SC_NS);
     clock1 = 0; clock2 = 0;
-    sc_start(5);
+    sc_start(5, SC_NS);
   }
   return 0;
 }

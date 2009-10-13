@@ -39,7 +39,7 @@
 int function_method(double d)
 {
   cout << endl << sc_time_stamp() << ", " 
-       << sc_get_curr_process_handle()->name() 
+       << sc_get_current_process_handle().name() 
        << ": function_method sees " << d << endl;
   return int(d);
 }
@@ -47,11 +47,11 @@ int function_method(double d)
 void function_thread(double d)
 {
   cout << endl << sc_time_stamp() << ", " 
-       << sc_get_curr_process_handle()->name() 
+       << sc_get_current_process_handle().name() 
        << ": function_thread sees " << d << endl;
   sc_core::wait(10, SC_NS);
   cout << sc_time_stamp() << ", "
-       << sc_get_curr_process_handle()->name()
+       << sc_get_current_process_handle().name()
        << ": ending thread" << endl;
 }
 
@@ -85,7 +85,7 @@ public:
     sc_spawn_options o1, o2, o3, o4;
 
     cout << endl << sc_time_stamp() << ", " 
-    << sc_get_curr_process_handle()->name() 
+    << sc_get_current_process_handle().name() 
     << ": main thread, Before spawning round robin methods " 
     << endl << endl;
 
@@ -108,20 +108,20 @@ public:
 
 
     cout << endl << sc_time_stamp() << ", " 
-	 << sc_get_curr_process_handle()->name() 
+	 << sc_get_current_process_handle().name() 
 	 << ": main thread, Issuing wait(60, SC_NS)" << endl;
 
     sc_core::wait(60, SC_NS);
 
     cout << endl << sc_time_stamp() << ", " 
-	 << sc_get_curr_process_handle()->name() 
+	 << sc_get_current_process_handle().name() 
 	 << ": Done main thread." << endl;
   }
 
   void round_robin(const char *str, sc_event& receive, sc_event& send, int cnt)
   {
     cout << sc_time_stamp() << ", " 
-	 << sc_get_curr_process_handle()->name() 
+	 << sc_get_current_process_handle().name() 
 	 << ": In Round robin method " << str; 
       
     if (method_count < 4) {

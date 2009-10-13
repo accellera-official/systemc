@@ -68,7 +68,7 @@ sc_main( int, char*[] )
     src.clk( clk );
     src.out( sig );
 
-    sc_start( -1 );
+    sc_start();
 
     return 0;
 }

@@ -33,6 +33,18 @@
 
  *****************************************************************************/
 
+// $Log: add_chain_main.cpp,v $
+// Revision 1.4  2006/01/24 21:05:23  acg
+//  Andy Goodrich: replacement of deprecated features with their non-deprecated
+//  counterparts.
+//
+// Revision 1.3  2006/01/20 00:43:23  acg
+// Andy Goodrich: Changed over to use putenv() instead of setenv() to accommodate old versions of Solaris.
+//
+// Revision 1.2  2006/01/19 00:47:31  acg
+// Andy Goodrich: Changes for the fact signal write checking is enabled.
+//
+
 #include "common.h"
 #include "add_chain.h"
 #include "add_chain_tb.h" 	/** Definition of testbench Structure **/
@@ -40,9 +52,13 @@
 int
 sc_main(int ac, char *av[])
 {
-  sc_clock clk( "CLOCK", 20, 0.5, 10);          	// Clock function
+  // turn off multiwrite check for signals.
+  putenv("SC_SIGNAL_WRITE_CHECK=DISABLE");
+  sc_get_curr_simcontext()->reset();
+
+  sc_clock clk( "CLOCK", 20, SC_NS, 0.5, 10, SC_NS); // Clock function
   testbench tb1("TB1", clk );	// Testbench Instance
-  sc_clock::start( -1 );	 // Simulation runs forever 
+  sc_start();	 // Simulation runs forever 
 					 // due to negative value
   return 0;
 }

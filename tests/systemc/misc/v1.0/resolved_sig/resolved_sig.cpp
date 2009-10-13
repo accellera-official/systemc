@@ -58,15 +58,15 @@ SC_MODULE( stimgen )
 	     sc_signal<int>&       IN1,
 	     sc_signal<int>&       IN2,
 	     sc_signal<bool>&      READY,
-	     sc_signal_rv<8>&      bus )
-    : clk( TICK ),
-      result( RESULT ),
-      in1( IN1 ),
-      in2( IN2 ),
-      ready( READY ),
-      bus( bus )
+	     sc_signal_rv<8>&      BUS )
     {
 	SC_CTHREAD( entry, clk.pos() );
+        clk( TICK );
+        result( RESULT );
+        in1( IN1 );
+        in2( IN2 );
+        ready( READY );
+		bus( BUS );
     }
 
     void entry();
@@ -95,15 +95,15 @@ SC_MODULE( datawidth )
 	       sc_signal<int>&  IN2,
 	       sc_signal<bool>& READY,
 	       sc_signal<int>&        RESULT,
-	       sc_signal_rv<8>&       bus )
-    : clk( TICK ),
-      in1( IN1 ),
-      in2( IN2 ),
-      ready( READY ),
-      bus( bus ),
-      result( RESULT )
+	       sc_signal_rv<8>&       BUS )
     {
 	SC_CTHREAD( entry, clk.pos() );
+        clk( TICK );
+        in1( IN1 );
+        in2( IN2 );
+        ready( READY );
+        bus( BUS );
+        result( RESULT );
     }
 
     void entry();
@@ -121,7 +121,7 @@ datawidth::entry()
     while (true) {
     
 	// HANDSHAKING
-	wait_until( ready.delayed() == 1 );
+	do { wait(); } while ( ready != 1 );
 
 	// COMPUTATION
 	tmp_a = in1.read();
@@ -190,14 +190,14 @@ sc_main( int ac, char *av[] )
     sc_signal_rv<8> bus( "bus" );
 
     // Clock Instantiation
-    sc_clock clk( "clock", 10, 0.5, 0 );
+    sc_clock clk( "clock", 10, SC_NS, 0.5, 0, SC_NS );
 
     // Process Instantiation
     datawidth D1( "D1", clk, in1, in2, ready, result, bus );
     stimgen T1( "T1", clk, result, in1, in2, ready,bus );
 
     // Simulation Run Control
-    sc_start( -1 );
+    sc_start();
 
     return 0;
 }

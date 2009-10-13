@@ -53,9 +53,10 @@ SC_MODULE( exec_decode )
   exec_decode( sc_module_name NAME,
 	       sc_signal<unsigned>& INSTRUCTION,
 	       sc_signal<unsigned>& PROGRAM_COUNTER )
-    : instruction(INSTRUCTION), program_counter(PROGRAM_COUNTER)
+    : program_counter(PROGRAM_COUNTER)
   {
-    SC_METHOD( entry );
+    instruction(INSTRUCTION);
+	SC_METHOD( entry );
     // sensitive only to the clock
     sensitive << instruction;
 
@@ -195,8 +196,9 @@ SC_MODULE( fetch )
   fetch( sc_module_name NAME,
 	 sc_signal<unsigned>& PROGRAM_COUNTER,
 	 sc_signal<unsigned>& INSTRUCTION )
-    : program_counter(PROGRAM_COUNTER), instruction(INSTRUCTION)
+    : instruction(INSTRUCTION)
   {
+    program_counter(PROGRAM_COUNTER);
     SC_METHOD( entry );
     sensitive << program_counter;
 
@@ -241,7 +243,7 @@ sc_main(int ac, char *av[])
   fetch F("F", pc, instr);
 
   // instead of a testbench routine, we include the testbench here
-  sc_start(0);
+  sc_start(0, SC_NS);
   sc_start( 10, SC_NS );
 
   fflush( stdout );

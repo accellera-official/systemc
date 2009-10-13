@@ -52,7 +52,7 @@ void stim::entry()
    
   reset.write(1);
   wait();
-  cout  << sc_simulation_time() << "\t : "
+  cout  << sc_time_stamp() << "\t : "
         << "RESET off \t...by stim" << endl;
 
   // Stimulus Generation
@@ -69,10 +69,10 @@ void stim::entry()
 
       ready.write(1);
       // wait();
-      wait_until(done.delayed() == 1); 
+      do { wait(); } while (done != 1); 
 
       ready.write(0);
-      // wait_until(done.delayed() == 1); 
+      // do { wait(); } while (done == 1); 
       wait();
     }
   }

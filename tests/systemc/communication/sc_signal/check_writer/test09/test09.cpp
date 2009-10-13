@@ -59,9 +59,9 @@ sc_main( int, char*[] )
     sc_signal<target> sig_target;
 
     mod_a a("a");
-    a << clk << sig_target << sig_target;
+    a(clk, sig_target, sig_target);
 
-    sc_start(1);
+    sc_start(1, SC_NS);
 
     return 0;
 }

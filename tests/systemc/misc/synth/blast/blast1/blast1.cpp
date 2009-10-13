@@ -55,12 +55,13 @@ SC_MODULE( array )
            const sc_signal<char>& A,
            const sc_signal<char>& B,
                  sc_signal<short>& C )
-        : clk(CLK),
+        : 
           reset(RESET), a(A), b(B), c(C),
           i(2), j(2)
     {
-        SC_CTHREAD( entry, clk );
-        watching( reset.delayed() == 1 );
+        clk(CLK);
+		SC_CTHREAD( entry, clk );
+        reset_signal_is(reset,true);
     }
     void entry();
 };

@@ -52,13 +52,14 @@ SC_MODULE( dub )
          const sc_signal<bool>& B,
                sc_signal<bool>& C,
                sc_signal<bool>& D )
-        : clk(CLK),
+        : 
           a(A),
           b(B),
           c(C),
           d(D)
     {
-      SC_CTHREAD( entry, clk.pos() );
+      clk(CLK);
+	  SC_CTHREAD( entry, clk.pos() );
     }
     void entry();
 };

@@ -51,7 +51,7 @@ sc_main(int ac, char *av[])
   result = 0.0;
   reset = false;
 
-  sc_clock clk("Clock", CLOCK_PERIOD);
+  sc_clock clk("Clock", CLOCK_PERIOD, SC_NS);
 
   biquad filter("BFILTER", clk, sample, reset, result);
   testbench TB("TB", clk, result, reset, sample);
@@ -66,6 +66,6 @@ sc_main(int ac, char *av[])
     n = atoi(av[i]);
   }
 
-  sc_start(n);
+  sc_start(n, SC_NS);
   return 0;
 }

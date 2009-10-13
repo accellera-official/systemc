@@ -63,7 +63,7 @@ SC_MODULE(createpulse)
   SC_CTOR(createpulse)
    {
     SC_THREAD(pulse);
-    sensitive_pos << i_clk;
+    sensitive << i_clk.pos();
     trigger1 = 0;
     trigger2 = 0;
    }

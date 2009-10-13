@@ -52,7 +52,7 @@ void stimulus::entry() {
     for(j=1; j<=10; j++) {
       in_value.write(j);
       cout << "Stimuli1 : in_valid = true in_value " << j << " at "
-	   << sc_simulation_time() << endl;
+	   << sc_time_stamp() << endl;
       wait();
     };
     in_valid.write(false);
@@ -60,14 +60,14 @@ void stimulus::entry() {
     for(j=1; j<=10; j++) {
       in_value.write(j);
       cout << "Stimuli2 : in_valid = true in_value " << j << " at "
-	   << sc_simulation_time() << endl;
+	   << sc_time_stamp() << endl;
       wait();
     };
     wait(4);
     for(j=1; j<=10; j++) {
       in_value.write(j);
       cout << "Stimuli3 : in_valid = true in_value " << j << " at "
-	   << sc_simulation_time() << endl;
+	   << sc_time_stamp() << endl;
       wait();
     };
     wait(10);

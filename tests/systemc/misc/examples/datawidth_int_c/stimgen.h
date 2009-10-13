@@ -60,14 +60,15 @@ SC_MODULE( stimgen )
 	sc_signal<int>&			IN2,
 	sc_signal<bool>&		READY )
 	
-      : clk	(TICK),
+      : 
 	result	(RESULT),
 	in1	(IN1),
 	in2	(IN2),
 	ready   (READY)
 
   	{
-          SC_CTHREAD( entry, clk.pos() );
+          clk	(TICK);
+	  SC_CTHREAD( entry, clk.pos() );
         }
 
   void entry();

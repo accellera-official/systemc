@@ -49,7 +49,7 @@ SC_MODULE( mod_a )
 
     void write( const char* msg )
     {
-        cout <<"simulation time" << ":" << sc_simulation_time()
+        cout <<"simulation time" << ":" << sc_time_stamp()
              << " " << msg << endl;
      
     }

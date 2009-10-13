@@ -67,7 +67,7 @@ SC_MODULE( datawidth )
 	const int                       IN2_WIDTH,
 	const int                       RESULT_WIDTH )
 	
-      : clk	(TICK),
+      : 
 	in1	(IN1),
 	in2	(IN2),
 	ready   (READY),
@@ -77,7 +77,8 @@ SC_MODULE( datawidth )
 	result_width (RESULT_WIDTH)
 
   	{
-            SC_CTHREAD( entry, clk.pos() );
+            clk	(TICK);
+	    SC_CTHREAD( entry, clk.pos() );
         }
 
   void entry();

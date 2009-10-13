@@ -45,7 +45,7 @@ int sc_main(int argc, char *argv[]) //(int ac, char** av)
   sc_signal<sc_uint<1> > int2 ;
 
 
-  sc_clock clk("clk", 20, 0.5);
+  sc_clock clk("clk", 20, SC_NS, 0.5);
 
 
 
@@ -68,7 +68,7 @@ int sc_main(int argc, char *argv[]) //(int ac, char** av)
   sc_trace( tf2, int2, "int2");
   */
 
-  sc_start(1000);
+  sc_start(1000, SC_NS);
   sc_close_wif_trace_file( tf );
   return 0;
 }

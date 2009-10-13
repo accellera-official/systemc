@@ -153,9 +153,9 @@ SC_MODULE(lp_write_buf) {
   SC_CTOR(lp_write_buf)
   {
     SC_CTHREAD(lp_write_buf_body, clk.pos());
-    watching( reset.delayed() == 1 );
+    reset_signal_is(reset,true);
     SC_CTHREAD(check_read_address, clk.pos());
-    watching( reset.delayed() == 1 );
+    reset_signal_is(reset,true);
   }
 };
 

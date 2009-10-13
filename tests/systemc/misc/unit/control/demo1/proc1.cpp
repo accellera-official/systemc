@@ -47,11 +47,11 @@ void proc1::entry()
 
   while(true) {
     data_ready.write(true);
-    wait_until(data_ack.delayed() == true);
+    do { wait(); } while (data_ack != true);
     cout << "Ack \t = True" << endl;
 
     data_ready.write(false);
-    wait_until(data_ack.delayed() == false);
+    do { wait(); } while (data_ack != false);
     cout << "Ack \t = False" << endl;
   }
 } // end of entry function

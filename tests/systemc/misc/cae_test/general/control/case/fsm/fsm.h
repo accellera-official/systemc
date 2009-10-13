@@ -73,7 +73,7 @@ SC_MODULE( fsm )
       sc_signal<bool>&         OUT_VALID2,    
       sc_signal<bool>&         OUT_VALID3    
       )
-    : clk          (CLK),           
+    : 
       reset        (RESET),
       in_value1    (IN_VALUE1),
       in_value2    (IN_VALUE2),
@@ -86,8 +86,9 @@ SC_MODULE( fsm )
       out_valid2   (OUT_VALID2),
       out_valid3   (OUT_VALID3)
     {
-      SC_CTHREAD( entry, clk.pos() );
-      watching(reset.delayed() == true);
+      clk          (CLK);
+	  SC_CTHREAD( entry, clk.pos() );
+      reset_signal_is(reset,true);
     };
 
   //

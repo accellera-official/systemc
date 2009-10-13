@@ -39,9 +39,9 @@
 void display::entry() {
 
     while(true){
-       wait_until( in_valid.delayed() == true);
+       do { wait(); } while ( in_valid == false);
        cout << "Display: " << in_value1.read() << " " << in_value2.read() << " " << in_value3.read() << " " << in_value4.read() << " " << in_value5.read() << " " << (int)in_value6.read() << endl;
-       wait_until( in_valid.delayed() == false);
+       do { wait(); } while ( in_valid == true);
     }
    
 }

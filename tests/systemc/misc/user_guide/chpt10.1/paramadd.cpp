@@ -54,7 +54,7 @@ void paramadd::entry()
 
     // HANDSHAKE
     done.write(0);
-    wait_until(ready.delayed() == 1);
+    do { wait(); } while (ready != 1);
 
     // COMPUTATION
     a1 = a.read();
@@ -70,7 +70,7 @@ void paramadd::entry()
     co.write( sum1[data_width] );
     wait( 2 );
 
-    cout  << sc_simulation_time() << "\t : "
+    cout  << sc_time_stamp() << "\t : "
           << a1 << " + " 
           << b1 << " + " 
           << cin << " = " << sum1

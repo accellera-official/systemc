@@ -62,7 +62,7 @@ SC_MODULE( for_nest )
           result         (RESULT)
     {
       SC_CTHREAD( entry, clk.pos() );
-      watching(reset.delayed() == true);
+      reset_signal_is(reset,true);
     };
     void entry ();
 };

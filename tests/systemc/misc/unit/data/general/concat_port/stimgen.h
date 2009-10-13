@@ -66,7 +66,7 @@ SC_MODULE( stimgen )
 	sc_signal<int>&			MODE,
 	sc_signal<bool>&		READY )
 	
-      : clk	(TICK),
+      : 
 	c	(C),
 	d	(D),
 	done	(DONE),
@@ -76,7 +76,8 @@ SC_MODULE( stimgen )
 	ready	(READY)
 
   	{
-          SC_CTHREAD( entry, clk.pos() );
+          clk	(TICK);
+	  SC_CTHREAD( entry, clk.pos() );
         }
 
   void entry();

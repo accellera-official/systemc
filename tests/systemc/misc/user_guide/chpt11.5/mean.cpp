@@ -59,7 +59,7 @@ void mean::entry()
 
   while (true) {
     // read all inputs
-    wait_until(input_available.delayed() == true);
+    do { wait(); } while (input_available != true);
     send_data.write(true);
     wait();
     i = in.read().to_int();
@@ -80,7 +80,7 @@ void mean::entry()
 
     // write all outputs
     output_ready.write(true);
-    wait_until(receiver_ready.delayed() == true);
+    do { wait(); } while (receiver_ready != true);
     wait();
     out.write(arith);
     wait();

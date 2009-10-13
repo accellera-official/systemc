@@ -53,11 +53,12 @@ SC_MODULE( RDY )
                 sc_clock&		TICK_N,
                 sc_signal<bool>&  	DATA )
  
-    : clk (TICK_N),
+    : 
 		data (DATA)
 
     {
-      SC_CTHREAD( entry, clk.neg() );
+      clk (TICK_N);
+	  SC_CTHREAD( entry, clk.neg() );
     }
  
   /*** Call to Process Functionality ***/
@@ -69,35 +70,35 @@ void
 RDY::entry()
 {
   // IMPLICIT wait(); AT FIRST NEGEDGE
-  cout << sc_simulation_time() << " : "	// Time 10
+  cout << sc_time_stamp() << " : "	// Time 10
        << "ready = " << data 
        << "\t\t (RDY) "
        << endl;
   data.write(0); 
 
   wait();						// Time 30
-  cout << sc_simulation_time() << " : "	
+  cout << sc_time_stamp() << " : "	
        << "ready = " << data 
        << "\t\t (RDY) "
        << endl;
   data.write(1); 
 
   wait(); 						// Time 50
-  cout << sc_simulation_time() << " : "
+  cout << sc_time_stamp() << " : "
        << "ready = " << data 
        << "\t\t (RDY) "
        << endl;
   data.write(0); 
 
   wait(); 						// Time 70
-  cout << sc_simulation_time() << " : "
+  cout << sc_time_stamp() << " : "
        << "ready = " << data 
        << "\t\t (RDY) "
        << endl;
   data.write(1); 
 
   wait(); 						// Time 90
-  cout << sc_simulation_time() << " : "
+  cout << sc_time_stamp() << " : "
        << "ready = " << data 
        << "\t\t (RDY) "
        << endl;

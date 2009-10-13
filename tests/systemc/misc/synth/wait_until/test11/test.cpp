@@ -40,7 +40,7 @@ void test::entry()
 {
   while (true) {
 
-  wait_until (cont1.delayed() == 1);
+  do { wait(); } while  (cont1 != 1);
   wait();
   if (i2 == 1)
         o1 = 9;
@@ -48,7 +48,7 @@ void test::entry()
         o1 = 10;
   wait ();
   switch (i3) {
-  case 1: o2 = 8; wait_until (cont2.delayed() == 1); break;
+  case 1: o2 = 8; do { wait(); } while  (cont2 != 1); break;
   case 2: o2 = 9; wait(); break;
   case 3: o2 = 10; wait(); break;
   default: o2 = 11; wait(); break;

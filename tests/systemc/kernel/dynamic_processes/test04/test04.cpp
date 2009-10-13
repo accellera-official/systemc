@@ -58,7 +58,7 @@ public:
     sc_spawn_options o1, o2, o3, o4;
 
     cout << endl << sc_time_stamp() << ", " 
-    << sc_get_curr_process_handle()->name() 
+    << sc_get_current_process_handle().name() 
     << ": main thread, Before spawning round robin methods " 
     << endl << endl;
 
@@ -82,20 +82,20 @@ public:
     SC_JOIN
 
     cout << endl << sc_time_stamp() << ", " 
-	 << sc_get_curr_process_handle()->name() 
+	 << sc_get_current_process_handle().name() 
 	 << ": main thread, Issuing wait(60, SC_NS)" << endl;
 
     wait(60, SC_NS);
 
     cout << endl << sc_time_stamp() << ", " 
-	 << sc_get_curr_process_handle()->name() 
+	 << sc_get_current_process_handle().name() 
 	 << ": Done main thread." << endl;
   }
 
   int round_robin(const char *str, sc_event& receive, sc_event& send, int cnt)
   {
     cout << sc_time_stamp() << ", " 
-	 << sc_get_curr_process_handle()->name() 
+	 << sc_get_current_process_handle().name() 
 	 << ": In Round robin method " << str; 
       
     if (method_count < 4) {

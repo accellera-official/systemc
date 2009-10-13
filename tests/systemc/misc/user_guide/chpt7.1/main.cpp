@@ -39,10 +39,10 @@
 
 int sc_main(int ac, char *av[])
 {
-  sc_clock clock("Clock", 10, 0.5, 0);
+  sc_clock clock("Clock", 10, SC_NS, 0.5, 0, SC_NS);
 
   testbench T("TB", clock);
 
-  sc_clock::start(-1);
+  sc_start();
   return 0;
 }

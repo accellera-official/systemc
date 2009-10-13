@@ -98,27 +98,27 @@ SC_MODULE( DISPLAY )
 
     {
         SC_METHOD( entry );
-	sensitive(reset);
-	sensitive(in_ok);
-	sensitive(out_ok);
-	sensitive(instrb);
-	sensitive(outstrb);
-	sensitive(a1);
-	sensitive(a2);
-	sensitive(a3);
-	sensitive(a4);
-	sensitive(a5);
-	sensitive(a6);
-	sensitive(a7);
-	sensitive(a8);
-	sensitive(d1);
-	sensitive(d2);
-	sensitive(d3);
-	sensitive(d4);
-	sensitive(d5);
-	sensitive(d6);
-	sensitive(d7);
-	sensitive(d8);
+	sensitive << reset;
+	sensitive << in_ok;
+	sensitive << out_ok;
+	sensitive << instrb;
+	sensitive << outstrb;
+	sensitive << a1;
+	sensitive << a2;
+	sensitive << a3;
+	sensitive << a4;
+	sensitive << a5;
+	sensitive << a6;
+	sensitive << a7;
+	sensitive << a8;
+	sensitive << d1;
+	sensitive << d2;
+	sensitive << d3;
+	sensitive << d4;
+	sensitive << d5;
+	sensitive << d6;
+	sensitive << d7;
+	sensitive << d8;
     }
  
   /*** Call to Process Functionality ***/

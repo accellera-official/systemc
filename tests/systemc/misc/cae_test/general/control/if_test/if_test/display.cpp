@@ -48,7 +48,7 @@ void display::entry(){
 	     << in_data3.read() << " "
 	     << in_data4.read() << " "
 	     << in_data5.read() << " " 
-	     << " at " << sc_simulation_time() << endl;
+	     << " at " << sc_time_stamp() << endl;
 	i++;
 	if(i == 24) 	    sc_stop();
         wait();

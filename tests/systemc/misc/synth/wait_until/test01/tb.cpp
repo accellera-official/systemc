@@ -50,7 +50,7 @@ void tb::entry()
   
   set_value(cont1,1);
   single_cycle;
-  test_value(o1,4);
+  test_value(o1.read(),4);
   long_wait;
 
   sc_stop();

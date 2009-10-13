@@ -43,7 +43,7 @@ sc_main( int, char*[] )
 {
     top<bool> t1( "t1" );
 
-    sc_start(0);
+    sc_start(0, SC_NS);
 
     return 0;
 }

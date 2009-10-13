@@ -59,7 +59,7 @@ int i;
     input_valid.write(true);
     cout << "Stimuli: stim1= " << i << " stim2= " << i << " stim3= " 
 	 << i << " stim4= " << i << " stim5= " << i << "  " 
-	 << sc_simulation_time() << endl; 
+	 << sc_time_stamp() << endl; 
     wait();
     input_valid.write(false);
     wait(10);

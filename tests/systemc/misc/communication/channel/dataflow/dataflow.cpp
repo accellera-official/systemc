@@ -48,9 +48,11 @@ SC_MODULE( sawtooth )
 	    sc_clock& CLK,
 	    sc_fifo<int>& OUT1,
 	    sc_fifo<int>& OUT2 )
-    : clk(CLK), out1(OUT1), out2(OUT2)
+    : out1(OUT1), out2(OUT2)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLK);
+	SC_THREAD( entry );
+	sensitive << clk.pos();
   }
 
   void entry();
@@ -60,6 +62,7 @@ void sawtooth::entry()
 {
   int index = 0;
   while (true) {
+     wait();
     out1.write(index % 17);
     out2.write(index % 17);
     index++;
@@ -79,9 +82,11 @@ SC_MODULE( delay )
 	 sc_clock& CLK,
 	 sc_fifo<int>& IN_,
 	 sc_fifo<int>& OUT_ )
-    : clk(CLK), in(IN_), out(OUT_)
+    : in(IN_), out(OUT_)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLK);
+	SC_THREAD( entry );
+	sensitive << clk.pos();
   }
 
   void entry();
@@ -110,9 +115,11 @@ SC_MODULE( downsample )
 	      sc_clock& CLK,
 	      sc_fifo<int>& IN_,
 	      sc_fifo<int>& OUT_ )
-    : clk(CLK), in(IN_), out(OUT_)
+    : in(IN_), out(OUT_)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLK);
+	SC_THREAD( entry );
+	sensitive << clk.pos();
   }
 
   void entry();
@@ -141,9 +148,11 @@ SC_MODULE( upsample )
 	    sc_clock& CLK,
 	    sc_fifo<int>& IN_,
 	    sc_fifo<int>& OUT_ )
-    : clk(CLK), in(IN_), out(OUT_)
+    : in(IN_), out(OUT_)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLK);
+	SC_THREAD( entry );
+	sensitive << clk.pos();
   }
 
   void entry();
@@ -170,9 +179,11 @@ SC_MODULE( adder )
 	 sc_clock& CLK,
 	 sc_fifo<int>& A,
 	 sc_fifo<int>& B )
-    : clk(CLK), a(A), b(B)
+    : a(A), b(B)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLK);
+	SC_THREAD( entry );
+	sensitive << clk.pos();
   }
 
   void entry();
@@ -207,7 +218,7 @@ int sc_main(int ac, char *av[])
 
   adder A ("A", clock, a3, b3);
 
-  sc_start(100);
+  sc_start(100, SC_NS);
 
   return 0;
 }

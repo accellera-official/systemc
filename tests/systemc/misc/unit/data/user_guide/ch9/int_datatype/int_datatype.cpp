@@ -210,6 +210,6 @@ int sc_main(int ac, char *av[])
 
   op1 = op2 = 0;			// Assignment operator concatenation
    cout << op1 << "\t    = \t\t " << op2 << endl;
-  sc_start(0);
+  sc_start(0, SC_NS);
   return 0;
 }

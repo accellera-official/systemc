@@ -54,9 +54,10 @@ SC_MODULE( proc2 )
 	 sc_signal<bool>& DATA_READY,
 	 sc_signal<int>& DATA,
 	 sc_signal<bool>& DATA_ACK )
-    : clk(CLK), data_ready(DATA_READY), data(DATA), data_ack(DATA_ACK)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLK);
+    data_ready(DATA_READY); data(DATA); data_ack(DATA_ACK);
+	SC_CTHREAD( entry, clk.pos() );
   }
 
   // Process functionality in member function below

@@ -50,10 +50,10 @@ SC_MODULE( proc1 )
 	   sc_clock&                CLK,
 	   sc_signal<unsigned int>& READY,
 	   sc_signal<unsigned int>& ACK )
-    : clk( CLK ),
-      ready( READY ),
-      ack( ACK )
     {
+	clk( CLK );
+      ready( READY );
+      ack( ACK );
 	SC_CTHREAD( entry, clk.pos() );
     }
 

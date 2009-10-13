@@ -53,11 +53,12 @@ SC_MODULE( RDY )
                 sc_clock&		TICK_N,
                 sc_signal<bool>&  	DATA )
  
-    : clk (TICK_N),
+    : 
 		data (DATA)
 
     {
-        SC_CTHREAD( entry, clk.neg() );
+        clk (TICK_N);
+		SC_CTHREAD( entry, clk.neg() );
     }
  
   /*** Call to Process Functionality ***/
@@ -72,71 +73,71 @@ RDY::entry()
   int a = 0;
 
   cout << "\nSTART OF SIM -- CLOCK AT NEGEDGE (10,30,50,...) " << endl;
-  cout << sc_simulation_time() << " : "	
+  cout << sc_time_stamp() << " : "	
        << " ready[S] = " << data 
        << " a[V] = " << a
        << endl;
 
   a = 0;		cout << "\t\t\t a =    0 " << endl;
-  cout << sc_simulation_time() << " : "	
+  cout << sc_time_stamp() << " : "	
        << " ready[S] = " << data 
        << " a[V] = " << a
        << endl;
   data.write(0);	cout << "      ready =    0 " << endl; 
-  cout << sc_simulation_time() << " : "	
+  cout << sc_time_stamp() << " : "	
        << " ready[S] = " << data 
        << " a[V] = " << a
        << endl;
   wait();		cout << "\nCLK " << endl;
-  cout << sc_simulation_time() << " : "	
+  cout << sc_time_stamp() << " : "	
        << " ready[S] = " << data 
        << " a[V] = " << a
        << endl;
 
   a = 1;		cout << "\t\t   a =    1 " << endl;
-  cout << sc_simulation_time() << " : "	
+  cout << sc_time_stamp() << " : "	
        << " ready[S] = " << data 
        << " a[V] = " << a
        << endl;
   data.write(1);	cout << "      ready =    1 " << endl; 
-  cout << sc_simulation_time() << " : "	
+  cout << sc_time_stamp() << " : "	
        << " ready[S] = " << data 
        << " a[V] = " << a
        << endl;
   wait(); 		cout << "\nCLK " << endl;	
-  cout << sc_simulation_time() << " : "	
+  cout << sc_time_stamp() << " : "	
        << " ready[S] = " << data 
        << " a[V] = " << a
        << endl;
 
   a = 0;		cout << "\t\t   a =    0 " << endl;
-  cout << sc_simulation_time() << " : "	
+  cout << sc_time_stamp() << " : "	
        << " ready[S] = " << data 
        << " a[V] = " << a
        << endl;
   data.write(0);	cout << "      ready =    0 " << endl; 
-  cout << sc_simulation_time() << " : "	
+  cout << sc_time_stamp() << " : "	
        << " ready[S] = " << data 
        << " a[V] = " << a
        << endl;
   wait();		cout << "\nCLK " << endl;
-  cout << sc_simulation_time() << " : "	
+  cout << sc_time_stamp() << " : "	
        << " ready[S] = " << data 
        << " a[V] = " << a
        << endl;
 
   a = 1;		cout << "\t\t   a =    1 " << endl;
-  cout << sc_simulation_time() << " : "	
+  cout << sc_time_stamp() << " : "	
        << " ready[S] = " << data 
        << " a[V] = " << a
        << endl;
   data.write(1);	cout << "      ready =    1 " << endl; 
-  cout << sc_simulation_time() << " : "	
+  cout << sc_time_stamp() << " : "	
        << " ready[S] = " << data 
        << " a[V] = " << a
        << endl;
   wait(); 		cout << "\nCLK " << endl;	
-  cout << sc_simulation_time() << " : "	
+  cout << sc_time_stamp() << " : "	
        << " ready[S] = " << data 
        << " a[V] = " << a
        << endl;

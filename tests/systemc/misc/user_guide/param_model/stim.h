@@ -67,8 +67,7 @@ SC_MODULE( stim )
 	sc_signal<bool>&	READY,
         const int            	DATA_WIDTH = 4)
 
-      : clk		(TICK),
-	done		(DONE),
+      : done		(DONE),
 	reset		(RESET),
 	a		(A),
 	b		(B),
@@ -76,7 +75,8 @@ SC_MODULE( stim )
 	ready		(READY),
         data_width  	(DATA_WIDTH)
 
-  	{
+  	{ 
+	    clk(TICK);
             SC_CTHREAD( entry, clk.neg() );
         }
 

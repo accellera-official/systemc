@@ -62,7 +62,7 @@ void design :: write_in_fifo() {
     //foofoo.val.range(1,1) = 1;
     //foo.range(1) = 1;
     foo.range(1,1) = 1;
-    wait_until(take_the_data.delayed());
+    do { wait(); } while (!take_the_data);
     data_in = input.read();
     rp = read_pointer.read();
     wp = write_pointer.read();
@@ -90,7 +90,7 @@ void design :: read_out_fifo() {
   fsm_t state;
  read_loop:  while (1) {
    //reading inputs
-   wait_until(data_request.delayed());
+   do { wait(); } while (data_request);
    rp = read_pointer.read();
    wp = write_pointer.read();
    // set the state

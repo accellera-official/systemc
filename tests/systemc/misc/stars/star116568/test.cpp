@@ -77,18 +77,18 @@ int sc_main(int ac, char *av[])
   UUT.A(A);
   UUT.X(X);
 
-  sc_start(0);
+  sc_start(0, SC_NS);
 
   A.write(1);
-  sc_start( 10 NS );
+  sc_start( 10, SC_NS );
   cout << X.read() << endl;
 
   A.write(2);
-  sc_start( 10 NS );
+  sc_start( 10, SC_NS );
   cout << X.read() << endl;
 
   A.write(3);
-  sc_start( 10 NS );
+  sc_start( 10, SC_NS );
   cout << X.read() << endl;
 
   return 0;

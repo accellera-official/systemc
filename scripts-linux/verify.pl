@@ -26,8 +26,8 @@ eval "exec perl -S $0 $*"
 #  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
 #  changes you are making here.
 #
-#      Name, Affiliation, Date:
-#  Description of Modification:
+#      Name, Affiliation, Date: Andy Goodrich, Forte Design Systems, 2005-05-05
+#  Description of Modification: Added SYSTEMC_PTHREADS environment variable.
 #
 # *****************************************************************************
 
@@ -55,6 +55,11 @@ sub set_systemc_test
 {
     local( $dir ) = @_;
 
+    if ( defined $ENV{ 'SYSTEMC_PTHREADS' } )
+    {
+        $lpthreads = "-lpthread";
+	$rt_pthreads = " (pthreads)";
+    }
     if( defined $ENV{ 'SYSTEMC_TEST' } ) {
 	$rt_systemc_test = $ENV{ 'SYSTEMC_TEST' };
     }
@@ -123,7 +128,7 @@ sub create_mail
     printf MAIL "%s\n", $date;
 
     printf MAIL "\n";
-    printf MAIL "SYSTEMC_ARCH : %s\n", $rt_systemc_arch;
+    printf MAIL "SYSTEMC_ARCH : %s %s\n", $rt_systemc_arch, "$rt_pthreads";
     printf MAIL "SYSTEMC_HOME : %s\n", $rt_systemc_home;
     printf MAIL "SYSTEMC_TEST : %s\n", $rt_systemc_test;
     printf MAIL " OUTPUT_DIR  : %s\n", $rt_output_dir;
@@ -334,10 +339,12 @@ sub get_systemc_arch
 {
     local( $uname_s ) = `uname -s`;
     local( $uname_r ) = `uname -r`;
+    local( $uname_m ) = `uname -m`;
     local( $arch );
     local( $cxx );
     local( $cxx_comp );
 
+    chop( $uname_m );
     chop( $uname_s );
     chop( $uname_r );
 
@@ -382,7 +389,14 @@ sub get_systemc_arch
     } elsif( $uname_s eq "Linux" ) {
 	if( $uname_r =~ /^2/ ) {
 	    if( $cxx_comp eq "c++" || $cxx_comp eq "g++" ) {
-		$arch = "linux";
+	        if ( $uname_m eq "x86_64" )
+		{
+		    $arch = "linux64";
+		}
+		else
+		{
+		    $arch = "linux";
+		}
 	    } else {
 		die "Error: unsupported compiler '$cxx'\n";
 	    }
@@ -484,6 +498,12 @@ sub init_globals
 	$rt_ldflags = $rt_ccflags;
 	$rt_debug_flag = "-g";
 	$rt_optimize_flag = "+O1";
+    } elsif( $rt_systemc_arch eq "linux64" ) {
+	$rt_ccflags = "-Wall";
+	$rt_ld = $rt_cc;
+	$rt_ldflags = "$rt_ccflags -lpthread"; # use pthreads for now...
+	$rt_debug_flag = "-g";
+	$rt_optimize_flag = "-O2";
     } elsif( $rt_systemc_arch eq "linux" ) {
 	$rt_ccflags = "-Wall";
 	$rt_ld = $rt_cc;
@@ -754,7 +774,7 @@ sub print_intro
     &print_log( "$date\n" );
 
     &print_log( "\n*** settings\n\n" );
-    &print_log( "SYSTEMC_ARCH : $rt_systemc_arch\n" );
+    &print_log( "SYSTEMC_ARCH : $rt_systemc_arch $rt_pthreads\n" );
     local( $working_view ) = '';
     local( $ct ) = "/usr/atria/bin/cleartool";
     if( -x $ct ) {
@@ -1934,7 +1954,7 @@ sub run_test
 	    if( $rt_add_ldpaths ne '' ) {
 		$command .= "$rt_add_ldpaths ";
 	    }
-	    $command .= "-lsystemc ";
+	    $command .= "-lsystemc $lpthreads ";
 	    if( $rt_add_ldlibs ne '' ) {
 		$command .= "$rt_add_ldlibs ";
 	    }
@@ -2012,7 +2032,7 @@ sub run_test
 	    if( $rt_add_ldpaths ne '' ) {
 		$command .= "$rt_add_ldpaths ";
 	    }
-	    $command .= "-lsystemc ";
+	    $command .= "-lsystemc $lpthreads ";
 	    if( $rt_add_ldlibs ne '' ) {
 		$command .= "$rt_add_ldlibs ";
 	    }

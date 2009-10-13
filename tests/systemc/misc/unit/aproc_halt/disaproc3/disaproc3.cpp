@@ -59,8 +59,8 @@ SC_MODULE( aproc1 )
         : a(A), b(B), c(C)
     {
         SC_THREAD( entry );
-        sensitive_pos << a;
-        sensitive_neg << b;
+        sensitive << a.posedge_event();
+        sensitive << b.negedge_event();
     }
     void entry();
 };
@@ -95,8 +95,8 @@ SC_MODULE( aproc2 )
         : a(A), b(B), d(D)
     {
         SC_THREAD( entry );
-        sensitive_neg << a;
-        sensitive_pos << b;
+        sensitive << a.negedge_event();
+        sensitive << b.posedge_event();
     }
     void entry();
 };
@@ -153,11 +153,12 @@ SC_MODULE( sync1 )
            sc_signal<bool>& B,
            const sc_signal<bool>& C,
            const sc_signal<bool>& D )
-        : clk(CLK),
+        : 
           a(A), b(B), c(C), d(D)
 
     {
-        SC_CTHREAD( entry, clk.pos() );
+        clk(CLK);
+		SC_CTHREAD( entry, clk.pos() );
         count = 0;
     }
     void entry();
@@ -203,6 +204,6 @@ sc_main(int argc, char** argv)
     // assert( p2.aproc_handle->trigger_signals[0] == &b );
     // assert( p2.aproc_handle->trigger_signals_edgy_neg[0] == &a );
 
-    sc_start(2000);
+    sc_start(2000, SC_NS);
     return 0;
 }

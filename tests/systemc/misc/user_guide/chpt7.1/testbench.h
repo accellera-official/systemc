@@ -47,8 +47,8 @@ SC_MODULE( testbench )
   //Constructor 
   testbench(sc_module_name NAME,
 	    sc_clock& CLK)
-    : clk(CLK)
   {
+    clk(CLK);
     SC_CTHREAD( entry, clk.pos() );
   }
 

@@ -20,7 +20,7 @@ SC_MODULE(WRITE_LEAF)
     {
                 my_export(out);
 		SC_METHOD(sync)
-		sensitive_pos << clk;
+		sensitive << clk.pos();
     }
 	void sync()
 	{
@@ -69,7 +69,7 @@ int sc_main(int argc, char* arg[])
     TOP top("top");
 	top.clk(clock);
 
-    sc_start(10);
+    sc_start(10, SC_NS);
     return 0;
 }
 

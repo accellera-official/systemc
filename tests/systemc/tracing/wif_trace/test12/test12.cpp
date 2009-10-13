@@ -50,10 +50,11 @@ SC_MODULE( proc1 )
 	   sc_signal<bool>& CLK,
 	   sc_signal<sc_int<10> >& BV,
 	   sc_signal<sc_uint<10> >& SV )
-	: clk(CLK), bv(BV), sv(SV)
+	: bv(BV), sv(SV)
     {
-        SC_THREAD( entry );
-	sensitive(clk);
+        clk(CLK);
+		SC_THREAD( entry );
+	sensitive << clk;
 	obj1 = 0;
 	obj2 = 0;
     }
@@ -97,12 +98,12 @@ int sc_main(int ac, char *av[])
   sc_trace(tf, sv, "SV");
 
   clock.write(0);
-  sc_start(0);
+  sc_start(0, SC_NS);
   for (int i = 0; i< 10; i++) {
     clock.write(1);
-    sc_start(10);
+    sc_start(10, SC_NS);
     clock.write(0);
-    sc_start(10);
+    sc_start(10, SC_NS);
   }
   sc_close_wif_trace_file( tf );
   return 0;

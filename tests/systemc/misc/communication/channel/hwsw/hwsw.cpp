@@ -62,9 +62,11 @@ SC_MODULE( adder_sub )
 	     sc_fifo<int>& SC,
 	     sc_fifo<int>& SD,
 	     sc_fifo<int>& SSUM )
-    : clk(CLK), Sa(SA), Sb(SB), Sc(SC), Sd(SD), Ssum(SSUM)
+    : Sa(SA), Sb(SB), Sc(SC), Sd(SD), Ssum(SSUM)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLK);
+	SC_THREAD( entry );
+	sensitive << clk.pos();
   }
 
   // Process functionality in member function below
@@ -96,7 +98,7 @@ void adder_sub::entry()
     // Write outputs
     Ssum.write(sum);
     Sd.write(d);
-    // Loop back to wait_until. 
+    // Loop back to do { wait(); } while . 
   }
 
 } // end of entry function
@@ -121,9 +123,11 @@ SC_MODULE( testbench )
 	     sc_fifo<int>& SA,
 	     sc_fifo<int>& SB,
 	     sc_fifo<int>& SC )
-    : clk(CLK), Ssum(SSUM), Sdiff(SDIFF), Sa(SA), Sb(SB), Sc(SC)
+    : Ssum(SSUM), Sdiff(SDIFF), Sa(SA), Sb(SB), Sc(SC)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLK);
+	SC_THREAD( entry );
+	sensitive << clk.pos();
   }
 
   // Process functionality in member function below
@@ -165,11 +169,11 @@ int sc_main(int ac, char *av[])
   sc_fifo<int> c;
   sc_fifo<int> d;
   sc_fifo<int> sum;
-  sc_clock clock("Clock", 10, 0.5, 0);
+  sc_clock clock("Clock", 10, SC_NS, 0.5, 0, SC_NS, 0);
 
   testbench T("TB", clock, sum, d, a, b, c);
   adder_sub AS("AS", clock, a, b, c, d, sum);
 
-  sc_start(-1);
+  sc_start();
   return 0;
 }

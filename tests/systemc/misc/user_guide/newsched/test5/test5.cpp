@@ -52,11 +52,13 @@ SC_MODULE( cgater )
 	 const sc_signal<bool>& GATE,
 	 sc_signal_in_if<bool>& CLOCK_IN,
 	 sc_signal_out_if<bool>& CLOCK_OUT)
-    : gate(GATE), clock_in(CLOCK_IN), clock_out(CLOCK_OUT)
+    : gate(GATE)
   {
+    clock_in(CLOCK_IN);
+    clock_out(CLOCK_OUT);
     SC_METHOD( entry );
-    sensitive(gate);
-    sensitive(clock_in);
+    sensitive << gate;
+    sensitive << clock_in;
   }
 
   void entry()
@@ -79,13 +81,15 @@ SC_MODULE( watcher )
 	  sc_signal_in_if<bool>& CLOCK,
 	  sc_signal_in_if<bool>& DCLOCK,
 	  const sc_signal<int>& A)
-    : gate(GATE), clock(CLOCK), dclock(DCLOCK), a(A)
+    : gate(GATE), a(A)
   {
+    clock(CLOCK);
+    dclock(DCLOCK);
     SC_METHOD( entry );
-    sensitive(clock);
-    sensitive(a);
-    sensitive(gate);
-    sensitive(dclock);
+    sensitive <<  clock;
+    sensitive <<  a;
+    sensitive <<  gate;
+    sensitive <<  dclock;
   }
 
   void entry()
@@ -113,8 +117,9 @@ SC_MODULE( gategen )
   gategen(sc_module_name NAME,
 	  sc_signal_in_if<bool>& CLK,
 	  sc_signal<bool>& GATE)
-    : clk(CLK), gate(GATE)
+    : gate(GATE)
   {
+    clk(CLK);
     SC_CTHREAD( entry, clk.pos() );
     gate = 1;
   }
@@ -139,8 +144,9 @@ SC_MODULE( trigp )
   trigp(sc_module_name NAME,
 	sc_signal_in_if<bool>& CLK,
 	sc_signal<int>& OUT_)
-    : clk(CLK), out(OUT_)
+    : out(OUT_)
   {
+    clk(CLK);
     SC_CTHREAD( entry, clk.pos() );
     out = 0;
   }
@@ -158,7 +164,7 @@ SC_MODULE( trigp )
 int
 sc_main(int ac, char *av[])
 {
-  sc_clock clock1("Clock1", 20, 0.5);
+  sc_clock clock1("Clock1", 20, SC_NS, 0.5);
   // sc_clock dclock("Derived", -1);
   sc_signal<bool> dclock( "Derived" );
 
@@ -176,6 +182,6 @@ sc_main(int ac, char *av[])
   sc_trace(tf, Gate, "Gate");
   sc_trace(tf, Output, "Out");
 
-  sc_start(600);
+  sc_start(600, SC_NS);
   return 0;
 }

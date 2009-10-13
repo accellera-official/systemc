@@ -48,7 +48,7 @@ void displayp::entry()
     last_prime = prime.read();
     wait();
 
-    wait_until(prime_ready.delayed() == 1);
+    do { wait(); } while (prime_ready == 0);
     cout << prime.read().to_uint() << endl;
 
     if (prime.read().to_uint() > 40)  {

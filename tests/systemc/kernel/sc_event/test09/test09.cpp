@@ -10,7 +10,7 @@
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  ANY KIND, either express or implied. See the License for the specific
+  ANY KINDither express or implied. See the License for the specific
   language governing rights and limitations under the License.
 
  *****************************************************************************/
@@ -43,7 +43,7 @@ SC_MODULE( mod_a )
 
     void write( const char* msg )
     {
-        cout << simcontext()->delta_count() << ":" << sc_simulation_time()
+        cout << sc_delta_count() << ":" << sc_time_stamp()
              << " " << msg << "\n";
     }
 
@@ -58,25 +58,25 @@ SC_MODULE( mod_a )
             cout << "*** cancel()\n";
 
             // immediate notification
-            notify( e );
+            e.notify();
             write( "sender - immediate" );
             wait( SC_ZERO_TIME );
 
             // immediate notification -- canceled (no effect)
-            notify( e );
+            e.notify();
             write( "sender - immediate" );
             e.cancel();
             write( "sender - canceled" );
             wait( SC_ZERO_TIME );
 
             // delta notification
-            notify( SC_ZERO_TIME, e );
+            e.notify( SC_ZERO_TIME );
             write( "sender - delta" );
             wait( SC_ZERO_TIME );
             wait( SC_ZERO_TIME );
 
             // delta notification -- canceled
-            notify( SC_ZERO_TIME, e );
+            e.notify( SC_ZERO_TIME );
             write( "sender - delta" );
             e.cancel();
             write( "sender - canceled" );
@@ -84,13 +84,13 @@ SC_MODULE( mod_a )
             wait( SC_ZERO_TIME );
 
             // timed notification
-            notify( 1, SC_NS, e );
+			e.notify( 1, SC_NS );
             write( "sender - timed 1 ns" );
             wait( 1, SC_NS );
             wait( SC_ZERO_TIME );
 
             // timed notification -- canceled
-            notify( 1, SC_NS, e );
+			e.notify( 1, SC_NS );
             write( "sender - timed 1 ns" );
             e.cancel();
             write( "sender - canceled" );
@@ -98,7 +98,7 @@ SC_MODULE( mod_a )
             wait( SC_ZERO_TIME );
 
             // timed notifiation -- canceled
-            notify( 2, SC_NS, e );
+			e.notify(2, SC_NS);
             write( "sender - timed 2 ns" );
             wait( 1, SC_NS );
             e.cancel();
@@ -110,26 +110,26 @@ SC_MODULE( mod_a )
             cout << "*** notify()\n";
 
             // delta notification -- made immediate
-            notify( SC_ZERO_TIME, e );
+			e.notify(SC_ZERO_TIME);
             write( "sender - delta" );
-            notify( e );
+            e.notify();
             write( "sender - immediate" );
             wait( SC_ZERO_TIME );
             wait( SC_ZERO_TIME );
 
             // timed notification -- made immediate
-            notify( 1, SC_NS, e );
+            e.notify( 1, SC_NS );
             write( "sender - timed 1 ns" );
-            notify( e );
+            e.notify();
             write( "sender - immediate" );
             wait( 1, SC_NS );
             wait( SC_ZERO_TIME );
 
             // timed notification -- made immediate
-            notify( 2, SC_NS, e );
+            e.notify( 2, SC_NS );
             write( "sender - timed 2 ns" );
             wait( 1, SC_NS );
-            notify( e );
+            e.notify();
             write( "sender - immediate" );
             wait( 1, SC_NS );
             wait( SC_ZERO_TIME );
@@ -137,30 +137,30 @@ SC_MODULE( mod_a )
             // test notify(t)
             cout << "*** notify(t)\n";
 
-            notify( SC_ZERO_TIME, e );
+            e.notify( SC_ZERO_TIME );
             write( "sender - delta" );
-            notify( 1, SC_NS, e );
+            e.notify( 1, SC_NS );
             write( "sender - timed 1 ns" );
             wait( 1, SC_NS );
             wait( SC_ZERO_TIME );
 
-            notify( 1, SC_NS, e );
+            e.notify( 1, SC_NS );
             write( "sender - timed 1 ns" );
-            notify( SC_ZERO_TIME, e );
+            e.notify( SC_ZERO_TIME );
             write( "sender - delta" );
             wait( 1, SC_NS );
             wait( SC_ZERO_TIME );
 
-            notify( 2, SC_NS, e );
+            e.notify( 2, SC_NS );
             write( "sender - timed 2 ns" );
-            notify( 1, SC_NS, e );
+            e.notify( 1, SC_NS );
             write( "sender - timed 1 ns" );
             wait( 2, SC_NS );
             wait( SC_ZERO_TIME );
 
-            notify( 1, SC_NS, e );
+            e.notify( 1, SC_NS );
             write( "sender - timed 1 ns" );
-            notify( 2, SC_NS, e );
+            e.notify( 2, SC_NS );
             write( "sender - timed 2 ns" );
             wait( 2, SC_NS );
             wait( SC_ZERO_TIME );

@@ -47,11 +47,11 @@ int sc_main(int ac, char *av[])
   sc_signal<int> sum;
   sc_signal<bool> ready;
   sc_signal<bool> done;
-  sc_clock clock("Clock", 10, 0.5, 0);
+  sc_clock clock("Clock", 10, SC_NS, 0.5, 0, SC_NS);
 
   testbench T("TB", clock, sum, d, done, a, b, c, ready);
   adder_sub AS("AS", clock, a, b, c, ready, d, sum, done);
 
-  sc_clock::start(-1);
+  sc_start();
   return 0;
 }

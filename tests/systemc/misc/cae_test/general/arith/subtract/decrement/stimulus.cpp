@@ -56,7 +56,7 @@ void stimulus::entry() {
        cout << "Stimuli: " << tmp1 << " " << tmp2 << endl;
        tmp1 = tmp1 + 1;
        tmp2 = tmp2 + 1;
-       wait_until(in_ack.delayed()==true);
+       do { wait(); } while (in_ack==false);
        out_valid.write(false);
        wait();
     }

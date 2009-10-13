@@ -2,6 +2,11 @@ SystemC Simulation
 
 0 s: static_method, Before spawning function_method 
 
-Error: (E560) Attempt to wait on process handle associated with method process
+Warning: (W560) Attempt to get terminated event for a method process
+In file: <removed by verify.pl>
+In process: mod1.static_method @ 0 s
+
+Error: (E519) wait() is only allowed in SC_THREADs and SC_CTHREADs: 
+        in SC_METHODs use next_trigger() instead
 In file: <removed by verify.pl>
 In process: mod1.static_method @ 0 s

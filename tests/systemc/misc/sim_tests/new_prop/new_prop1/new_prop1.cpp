@@ -54,53 +54,53 @@ struct new_prop : sc_module {
 
     SC_CTOR(new_prop) {
         SC_METHOD(async0);
-        sensitive_neg << i[4];
-        sensitive_neg << i[12];
-        sensitive_neg << i[13];
-        sensitive_neg << i[14];
-        sensitive_neg << i[15];
+        sensitive << i[4].neg();
+        sensitive << i[12].neg();
+        sensitive << i[13].neg();
+        sensitive << i[14].neg();
+        sensitive << i[15].neg();
 
         SC_METHOD(async1);
-        sensitive_pos << i[1];
-        sensitive_pos << i[5];
-        sensitive_pos << i[7];
-        sensitive_pos << i[9];
+        sensitive << i[1].pos();
+        sensitive << i[5].pos();
+        sensitive << i[7].pos();
+        sensitive << i[9].pos();
 
         SC_METHOD(async2);
-        sensitive_neg << i[5];
-        sensitive_neg << i[6];
-        sensitive_pos << i[13];
-        sensitive_pos << i[15];
+        sensitive << i[5].neg();
+        sensitive << i[6].neg();
+        sensitive << i[13].pos();
+        sensitive << i[15].pos();
         
         SC_METHOD(async3);
-        sensitive_pos << i[3];
-        sensitive_neg << i[5];
-        sensitive_neg << i[7];
-        sensitive_pos << i[11];
+        sensitive << i[3].pos();
+        sensitive << i[5].neg();
+        sensitive << i[7].neg();
+        sensitive << i[11].pos();
 
         SC_THREAD(aproc0);
-        sensitive_pos << i[2];
+        sensitive << i[2].pos();
 
         SC_THREAD(aproc1);
-        sensitive_pos << i[3];
-        sensitive_neg << i[12];
-        sensitive_neg << i[13];
-        sensitive_neg << i[14];
-        sensitive_neg << i[15];
+        sensitive << i[3].pos();
+        sensitive << i[12].neg();
+        sensitive << i[13].neg();
+        sensitive << i[14].neg();
+        sensitive << i[15].neg();
 
         SC_THREAD(aproc2);
-        sensitive_neg << i[8];
-        sensitive_neg << i[9];
-        sensitive_neg << i[10];
-        sensitive_neg << i[11];
+        sensitive << i[8].neg();
+        sensitive << i[9].neg();
+        sensitive << i[10].neg();
+        sensitive << i[11].neg();
 
         SC_THREAD(aproc3);
-        sensitive_pos << i[6];
-        sensitive_pos << i[7];
-        sensitive_pos << i[10];
-        sensitive_pos << i[11];
-        sensitive_pos << i[14];
-        sensitive_pos << i[15];
+        sensitive << i[6].pos();
+        sensitive << i[7].pos();
+        sensitive << i[10].pos();
+        sensitive << i[11].pos();
+        sensitive << i[14].pos();
+        sensitive << i[15].pos();
     }
 };
 
@@ -139,15 +139,15 @@ sc_main(int,char**)
     }
 
     print_func = &dont_print;
-    sc_start(0);
+    sc_start(0, SC_NS);
 
     print_func = &printf;
 
     for (int k = 0; k < 16; ++k) {
         i[k] = ! i[k].read();
-        sc_start(1);
+        sc_start(1, SC_NS);
         i[k] = ! i[k].read();
-        sc_start(1);
+        sc_start(1, SC_NS);
     }
 
     fflush( stdout );

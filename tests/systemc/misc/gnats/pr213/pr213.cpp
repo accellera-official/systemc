@@ -52,10 +52,11 @@ SC_MODULE( abc )
          const sc_signal<bool>& B,
                sc_signal<bool>& C )
 
-        : clk(CLK),
+        : 
           a(A), b(B), c(C)
     {
-      SC_CTHREAD( entry, clk.pos() );
+      clk(CLK);
+	  SC_CTHREAD( entry, clk.pos() );
     }
     void entry();
 };

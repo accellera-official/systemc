@@ -64,7 +64,7 @@ SC_MODULE( pr207 )
                 sig_char& D2,
                 sig_bool& READY
           )
-        : clk(CLK),
+        : 
           reset(RESET),
           start(START),
           c1(C1),
@@ -75,8 +75,9 @@ SC_MODULE( pr207 )
           d2(D2),
           ready(READY)
     {
-        SC_CTHREAD( entry, clk.pos() );
-        watching(reset.delayed() == true);
+        clk(CLK);
+		SC_CTHREAD( entry, clk.pos() );
+        reset_signal_is(reset,true);
     }
     void entry();
 
@@ -102,7 +103,7 @@ pr207::entry()
     d2 = 0;
     wait();
     while (true) {
-        wait_until(start.delayed() == 1);
+        do { wait(); } while (start == 0);
         ready = false;
         wait();
         pair_array[idx1.read()].x = c1;

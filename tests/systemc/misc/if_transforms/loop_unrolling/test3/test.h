@@ -89,12 +89,13 @@ SC_MODULE( test )
 	sc_signal<int>& O3,
 	sc_signal<int>& O4,
 	sc_signal<int>& O5)
-	  : clk(CLK), reset_sig(RESET_SIG), i1(I1),  i2(I2),  
+	  : reset_sig(RESET_SIG), i1(I1),  i2(I2),  
 	    i3(I3),  i4(I4), i5(I5), cont1 (CONT1), cont2 (CONT2), 
 	    cont3 (CONT3), o1(O1),  o2(O2),  o3(O3),  o4(O4),  o5(O5) 
         {
-          SC_CTHREAD( entry, clk.pos() );
-	  watching (reset_sig.delayed() == true);
+          clk(CLK);
+		  SC_CTHREAD( entry, clk.pos() );
+	  reset_signal_is(reset_sig,true);
 	}
 
   void entry();

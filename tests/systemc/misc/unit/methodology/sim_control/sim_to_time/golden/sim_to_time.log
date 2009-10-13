@@ -1,6 +1,6 @@
 SystemC Simulation
-0 : STARTING SIM 
+0 s : STARTING SIM 
 
-6 : STOPPING SIM - stop button
+6 ns : STOPPING SIM - stop button
 SystemC: simulation stopped by user.
-6 : STOPPING SIM - start button
+6 ns : STOPPING SIM - start button

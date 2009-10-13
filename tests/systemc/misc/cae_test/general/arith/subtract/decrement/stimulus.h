@@ -61,14 +61,15 @@ SC_MODULE( stimulus )
         sc_signal<bool>&                   OUT_VALID,
         const sc_signal<bool>&             IN_ACK
         )
-        : clk          (CLK),
+        : 
           reset        (RESET),
           out_value1    (OUT_VALUE1),
           out_value2    (OUT_VALUE2),
           out_valid     (OUT_VALID),
           in_ack        (IN_ACK) 
    {
-     SC_CTHREAD( entry, clk.pos() );
+     clk          (CLK);
+	 SC_CTHREAD( entry, clk.pos() );
    };
   void entry();
 };

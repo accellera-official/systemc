@@ -46,10 +46,11 @@ SC_MODULE( t )
     t( sc_module_name NAME,
        sc_clock& CLK,
        sc_signal<bool>& A )
-        : clk(CLK),
+        : 
           a(A)
     {
-      SC_CTHREAD( entry, clk.pos() );
+      clk(CLK);
+	  SC_CTHREAD( entry, clk.pos() );
     }
     void entry();
 };

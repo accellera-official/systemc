@@ -43,7 +43,7 @@ void display::entry(){
     //  Reading Data, and Counter i,j is counted up.
     while (out_valid.read()==false) wait();
     cout << "Display : " << result.read() << " "
-	 << " at " << sc_simulation_time() << endl;
+	 << " at " << sc_time_stamp() << endl;
     wait();
   }
 }

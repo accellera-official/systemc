@@ -14,7 +14,7 @@ SC_MODULE(X)
 		{
 			wait();
 			sensitive << clk.posedge_event();
-			cout << "able: " << sc_simulation_time() << endl;
+			cout << "able: " << sc_time_stamp() << endl;
 		}
 	}
 	sc_in_clk clk;
@@ -26,6 +26,6 @@ int sc_main(int argc, char* argv[])
 	X        x("x");
 	x.clk(clock);
 
-	sc_start(100);
+	sc_start(100, SC_NS);
 	return 0;
 }

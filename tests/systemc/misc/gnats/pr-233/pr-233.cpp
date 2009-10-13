@@ -62,10 +62,11 @@ SC_MODULE( pr233 )
            const sc_signal<int*>& Y,
            const sc_signal<int>&  Q,
            sc_signal<int*>&       Z )
-        : clk( CLK ),
+        : 
           x(X), y(Y), q(Q), z(Z)
     {
-      SC_CTHREAD( entry, clk.pos() );
+      clk( CLK );
+	  SC_CTHREAD( entry, clk.pos() );
     }
     void entry();
 

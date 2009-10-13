@@ -33,6 +33,12 @@
 
  *****************************************************************************/
 
+// $Log: sc_barrier.h,v $
+// Revision 1.2  2006/01/24 21:04:52  acg
+//  Andy Goodrich: replacement of deprecated features with their non-deprecated
+//  counterparts.
+//
+
 #ifndef SC_BARRIER_H
 #define SC_BARRIER_H
 
@@ -62,7 +68,7 @@ class sc_barrier {
         }
         else
         {
-            m_barrier_event.notify_delayed();
+            m_barrier_event.notify(SC_ZERO_TIME);
             ::sc_core::wait(m_barrier_event);
         }
     }

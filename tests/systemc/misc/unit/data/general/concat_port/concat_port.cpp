@@ -48,7 +48,7 @@ concat_port::entry()
   while (true) {
 
     done.write(0);
-    wait_until(ready.delayed() == 1);
+    do { wait(); } while (ready != 1);
 
     tmp_a = a.read();
     tmp_b = b.read();

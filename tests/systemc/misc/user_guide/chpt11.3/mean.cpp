@@ -59,7 +59,7 @@ void mean::entry()
 
   while (true) {
     // read all inputs
-    wait_until(data_available.delayed() == true);
+    do { wait(); } while (data_available != true);
     i = in.read().to_int();
     wait();
     j = in.read().to_int();

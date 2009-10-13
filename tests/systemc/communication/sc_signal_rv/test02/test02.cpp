@@ -97,14 +97,14 @@ SC_MODULE( mod_a )
 int
 sc_main( int, char*[] )
 {
-    // sc_signal_rv<1> sig;
-    sc_signal<sc_lv<1> > sig;
+    sc_signal_rv<1> sig_rv;
+    sc_signal<sc_lv<1> > sig_lv;
 
     mod_a a( "a" );
 
-    a.out1( sig );
-    a.out2( sig );
-    a.in( sig );
+    a.out1( sig_lv );
+    a.out2( sig_rv );
+    a.in( sig_lv );
 
     sc_start();
 

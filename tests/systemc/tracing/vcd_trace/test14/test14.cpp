@@ -27,7 +27,7 @@ class Mod : public sc_module
 	 Mod(const sc_module_name& name) : sc_module(name), a("a")
 	 {
 	 	 SC_METHOD(foo);
-	 	 sensitive_pos << clk;
+	 	 sensitive << clk.pos();
 	 	 dont_initialize();
 	 }
 

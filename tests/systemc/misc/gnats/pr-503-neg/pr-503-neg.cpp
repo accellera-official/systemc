@@ -73,7 +73,7 @@ struct EXC_CTRL : sc_module {
     EXC_CTRL(char *name) : sc_module(name) {
         SC_CTHREAD( start_always, RHC_RPHB_CLK.pos() );
         // reset 
-        watching( RPHB_RESET.delayed() == true);
+        reset_signal_is( RPHB_RESET, true);
         end_module();
     };
     void start_always();

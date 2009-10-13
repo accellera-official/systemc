@@ -56,6 +56,6 @@ sc_main(int ac, char *av[])
   nor G1("G1", s, qp, q);
   nor G2("G2", r, q, qp);
   
-  sc_start(-1);
+  sc_start();
   return 0;
 }

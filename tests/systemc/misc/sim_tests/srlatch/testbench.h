@@ -56,9 +56,10 @@ SC_MODULE( testbench )
 	     sc_signal<bool>& QP,
 	     sc_signal<bool>& S,
 	     sc_signal<bool>& R )
-    : clk(CLK), q(Q), qp(QP), s(S), r(R)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLK);
+    q(Q); qp(QP); s(S); r(R);
+	SC_CTHREAD( entry, clk.pos() );
   }
 
   // Process functionality in member function below

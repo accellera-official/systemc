@@ -47,7 +47,7 @@ void quant::do_quant()
 
     ready.write(true);
     data_out_ready.write(false);
-    wait_until(start.delayed()==true);
+    do { wait(); } while (start==false);
     ready.write(false);
 
     c = data_in.read();
@@ -63,7 +63,7 @@ void quant::do_quant()
      data_out.write(fuv);
 
     data_out_ready.write(true);
-    wait_until(data_ok.delayed()==true);
+    do { wait(); } while (data_ok==false);
 
   }
 }

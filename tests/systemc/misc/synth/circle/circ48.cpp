@@ -39,7 +39,7 @@
 int
 sc_main( int, char *[] )
 {
-    sc_clock clk( "clk", 20, 0.5, 10 );
+    sc_clock clk( "clk", 20, SC_NS, 0.5, 10, SC_NS );
 
     sc_signal<bool>    I_reset;
     sc_signal<bool>    I_x_ok;

@@ -63,7 +63,7 @@ SC_MODULE( mod_a )
   SC_CTOR( mod_a ):sig1("res_sig1"), sig2("res_sig2")
        {
         SC_THREAD(main_action);
-        sensitive_pos(clk);
+        sensitive << clk.pos();
        }
 };
 

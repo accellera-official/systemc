@@ -51,10 +51,11 @@ SC_MODULE( clk_pos )
   clk_pos(sc_module_name NAME,
 	  sc_clock& TICK_P,
 	  sc_signal<bool>& OUT_CLK_POS)
-    : clk(TICK_P),
+    : 
       out_clk_pos(OUT_CLK_POS)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(TICK_P);
+	SC_CTHREAD( entry, clk.pos() );
   }
   
   void entry();
@@ -81,10 +82,11 @@ SC_MODULE( clk_neg )
   clk_neg(sc_module_name NAME,
 	  sc_clock& TICK_N,
 	  sc_signal<bool>& OUT_CLK_NEG)
-    : clk(TICK_N),
+    : 
       out_clk_neg(OUT_CLK_NEG)
   {
-    SC_CTHREAD( entry, clk.neg() );
+    clk(TICK_N);
+	SC_CTHREAD( entry, clk.neg() );
   }
  
   void entry();
@@ -111,10 +113,11 @@ SC_MODULE( clk2_pos )
   clk2_pos(sc_module_name NAME,
 	   sc_clock& TICK2_P,
 	   sc_signal<bool>& OUT_CLK2_POS)
-    : clk(TICK2_P),
+    : 
       out_clk2_pos(OUT_CLK2_POS)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(TICK2_P);
+	SC_CTHREAD( entry, clk.pos() );
   }
  
   void entry();
@@ -141,10 +144,11 @@ SC_MODULE( clk2_neg )
   clk2_neg(sc_module_name NAME,
 	   sc_clock& TICK2_N,
 	   sc_signal<bool>& OUT_CLK2_NEG)
-    : clk(TICK2_N),
+    : 
       out_clk2_neg (OUT_CLK2_NEG)
   {
-    SC_CTHREAD( entry, clk.neg() );
+    clk(TICK2_N);
+	SC_CTHREAD( entry, clk.neg() );
   }
  
   void entry();

@@ -51,8 +51,10 @@ SC_MODULE( nor )
        sc_signal<bool>& A,
        sc_signal<bool>& B,
        sc_signal<bool>& C )
-    : a(A), b(B), c(C)
   {
+    a(A);
+	b(B);
+	c(C);
     SC_METHOD( entry );
     sensitive << a << b;
   }

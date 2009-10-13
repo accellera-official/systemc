@@ -51,8 +51,10 @@ SC_MODULE( ts_buf )
 	  sc_signal<bool>& IN1,
 	  sc_signal<bool>& CONTROL,
 	  sc_signal_resolved& TS_OUT )
-    : in(IN1), control(CONTROL), ts_out(TS_OUT)
+    : ts_out(TS_OUT)
   {
+    in(IN1); 
+	control(CONTROL);
     SC_METHOD( entry );
     sensitive << in << control;
   }

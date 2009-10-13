@@ -58,7 +58,7 @@ SC_MODULE( driver_mod )
   SC_CTOR( driver_mod )
   {
     SC_THREAD( driver_out_proc );
-    sensitive_pos << clk;
+    sensitive << clk.pos();
 
     SC_METHOD( driver_in_proc );
     sensitive << speed << angle << total << partial;

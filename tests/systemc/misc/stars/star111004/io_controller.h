@@ -134,10 +134,6 @@ SC_MODULE(io_controller_m){
    
    SC_CTOR(io_controller_m){ 
       
-     //SC_CTHREAD(control_write, clk_i486_if.pos());
-      //watching(mii_coll_det.delayed() == true);
-     //watching(res_n_i.delayed() == false);
-      
       SC_CTHREAD(control_read, clk_i486_if.pos());
       
 //       mux = new mux_m("mux");

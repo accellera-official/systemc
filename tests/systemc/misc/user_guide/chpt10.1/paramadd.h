@@ -69,13 +69,14 @@ SC_MODULE( paramadd )
 	 sc_signal<bool>& CO,
 	 sc_signal<bool>& DONE,
 	 const int DATA_WIDTH = 8)
-    : clk(TICK), reset(RESET), a(A), 
+    : reset(RESET), a(A), 
       b(B), cin(CIN), ready(READY), 
       sum(SUM), co(CO), done(DONE),
       data_width(DATA_WIDTH)
   { 
-    SC_CTHREAD( entry, clk.pos() );
-    watching ( reset.delayed() == 0 );	
+    clk(TICK);
+	SC_CTHREAD( entry, clk.pos() );
+    reset_signal_is(reset,false);
   }
 
   // Process functionality in member function below

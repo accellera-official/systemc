@@ -51,9 +51,10 @@ SC_MODULE( sio_tx )
 	  sc_clock&        CLK,
 	  sc_signal<bool>& TWO_STOP_BITS,
 	  sc_signal<bool>& TX )
-    : clk(CLK), two_stop_bits(TWO_STOP_BITS), tx(TX)
+    : two_stop_bits(TWO_STOP_BITS), tx(TX)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLK);
+	SC_CTHREAD( entry, clk.pos() );
   }
 
   // Process functionality in member function below

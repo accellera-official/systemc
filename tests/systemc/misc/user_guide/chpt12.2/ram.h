@@ -65,10 +65,11 @@ SC_MODULE( ram )
       const signal_bool_vector10& ADDR,
       signal_bool_vector32& DATAOUT,
       const int WAIT_CYCLES = 1)
-    : clk(TICK), datain(DATAIN), cs(CS), we(WE), 
+    : datain(DATAIN), cs(CS), we(WE), 
       addr(ADDR), dataout(DATAOUT), wait_cycles(WAIT_CYCLES)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(TICK);
+	SC_CTHREAD( entry, clk.pos() );
   }
 
   // Process functionality in member function below

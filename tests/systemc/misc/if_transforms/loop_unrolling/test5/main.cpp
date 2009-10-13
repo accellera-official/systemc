@@ -42,9 +42,9 @@
  
 int sc_main(int ac, char *av[])
 {
-  sc_clock clock("Clock", CLOCK_PERIOD, DUTY_CYCLE, 0);
-  sc_clock tb_clock("TBClock", TB_CLOCK_PERIOD, DUTY_CYCLE, 0);
-  sc_clock mon_clock("MonClock", CLOCK_PERIOD, DUTY_CYCLE, 75);
+  sc_clock clock("Clock", CLOCK_PERIOD, SC_NS, DUTY_CYCLE, 0, SC_NS);
+  sc_clock tb_clock("TBClock", TB_CLOCK_PERIOD, SC_NS, DUTY_CYCLE, 0, SC_NS);
+  sc_clock mon_clock("MonClock", CLOCK_PERIOD, SC_NS, DUTY_CYCLE, 75, SC_NS);
  
   sc_signal<bool> reset_sig;
 
@@ -72,6 +72,6 @@ int sc_main(int ac, char *av[])
 	 cont1, cont2, cont3, o1, o2, o3, o4, o5);
 
   // Simulation Run Control
-  sc_start (-1);
+  sc_start ();
   return 0;
 }

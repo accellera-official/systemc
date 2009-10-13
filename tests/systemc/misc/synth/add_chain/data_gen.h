@@ -57,12 +57,13 @@ SC_MODULE( DATA_GEN )
                      signal_bool_vector8& 	DATA,
   		     sc_signal<int>&		ADDR   )
  
-    : clk (TICK_N),
+    : 
 		ready (READY),
               	data  (DATA),	// 8 bits
 		addr  (ADDR)
 
     {
+	   clk (TICK_N);
         SC_CTHREAD( entry, clk.neg() );
     }
  
@@ -74,6 +75,7 @@ SC_MODULE( DATA_GEN )
 void
 DATA_GEN::entry()
 {
+
   while(true) {
 
 //  WAIT FOR POSEDGE OF ready 

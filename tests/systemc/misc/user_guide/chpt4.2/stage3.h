@@ -54,9 +54,10 @@ SC_MODULE( stage3 )
 	 const sc_signal<double>& PROD,
 	 const sc_signal<double>& QUOT,
 	 sc_signal<double>& POWR)
-    : clk(CLK), prod(PROD), quot(QUOT), powr(POWR)
+    : prod(PROD), quot(QUOT), powr(POWR)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLK);
+	SC_CTHREAD( entry, clk.pos() );
   }
 
   // Process functionality in member function below

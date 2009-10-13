@@ -54,9 +54,10 @@ SC_MODULE( driver )
 	 const signal_std_logic& IN_,
 	 sc_signal<bool>& CONTROL,
 	 sc_signal<bool>& OUT_)
-    : clk(CLK), in(IN_), control(CONTROL), out(OUT_)
+    : in(IN_), control(CONTROL), out(OUT_)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLK);
+	SC_CTHREAD( entry, clk.pos() );
   }
 
   // Process functionality in member function below

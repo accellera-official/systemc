@@ -75,7 +75,7 @@ int sc_main(int ac, char* av[])
 
   some_process foo("FOO", clk, in, out);
   
-  sc_start(1000);
+  sc_start(1000, SC_NS);
 
   return 0;
 }

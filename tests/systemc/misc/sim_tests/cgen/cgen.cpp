@@ -49,8 +49,9 @@ SC_MODULE( seqgen )
   seqgen( sc_module_name NAME,
 	  sc_signal<bool>& CLOCK_I,
 	  sc_signal<int>& DATA_O )
-    : clock_i(CLOCK_I), data_o(DATA_O)
   {
+    clock_i(CLOCK_I);  
+	data_o(DATA_O);
     SC_THREAD( entry );
     sensitive << clock_i;
   }
@@ -96,8 +97,9 @@ SC_MODULE( codegen )
   codegen( sc_module_name NAME,
 	   sc_signal<int>& DATA_I,
 	   sc_signal<int>& CODE_O )
-    : data_i(DATA_I), code_o(CODE_O)
   {
+    data_i(DATA_I);
+	code_o(CODE_O);
     SC_METHOD( entry );
     sensitive << data_i;
 
@@ -123,7 +125,7 @@ void testbench(const sc_signal<int>& data,
 {
   int i;
 
-  sc_start(0);
+  sc_start(0, SC_NS);
   for (i=0; i<100; i++) {
     sc_start( 10, SC_NS );
     clock.write(1);

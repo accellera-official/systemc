@@ -44,12 +44,12 @@ int sc_main(int ac, char* av[])
   sc_signal<bool> data_ack("DataAck");
   sc_signal<int> data("Data");
 
-  sc_clock clock("CLOCK", 10, 0.5, 0.0);
+  sc_clock clock("CLOCK", 10, SC_NS, 0.5, 0.0, SC_NS);
 
   proc1 Master("MasterProcess", clock, data_ack, data, data_ready);
   proc2 Slave("SlaveProcess", clock, data_ready, data, data_ack);
 
-  sc_start(-1);
-  cout << "SIMULATION COMPLETED AT TIME " << sc_simulation_time() << endl;
+  sc_start();
+  cout << "SIMULATION COMPLETED AT TIME " << sc_time_stamp() << endl;
   return 0;
 }

@@ -79,7 +79,7 @@ sc_main( int, char*[] )
     b.out( sig1 );
     b.in( sig2 );
 
-    sc_start(0);
+    sc_start(0, SC_NS);
 
     cout << sig1.name() << endl;
     cout << sig2.name() << endl;

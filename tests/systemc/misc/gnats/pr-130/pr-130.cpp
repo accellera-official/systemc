@@ -46,9 +46,10 @@ SC_MODULE( pr130 )
     pr130( sc_module_name NAME,
            sc_clock& CLK,
            const sc_signal<bool>& X )
-        : clk(CLK), x(X)
+        : x(X)
     {
-      SC_CTHREAD( entry, clk.pos() );
+      clk(CLK);
+	  SC_CTHREAD( entry, clk.pos() );
     }
     void entry();
 };
@@ -64,9 +65,10 @@ SC_MODULE( pr130_2 )
     pr130_2( sc_module_name NAME,
              sc_clock& CLK,
              const sc_signal<bool>& X )
-        : clk(CLK), x(X)
+        : x(X)
     {
-      SC_CTHREAD( entry, clk.pos() );
+      clk(CLK);
+	  SC_CTHREAD( entry, clk.pos() );
     }
     void entry();
 };

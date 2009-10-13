@@ -52,10 +52,11 @@ SC_MODULE( triga )
   triga(sc_module_name NAME,
 	sc_signal_in_if<bool>& CLOCK,
 	sc_signal<int>& OUT_)
-    : clock(CLOCK), out(OUT_)
+    : out(OUT_)
   {
+    clock(CLOCK);
     SC_METHOD( entry );
-    sensitive(clock);
+    sensitive << clock;
     i = 0;
     out = i++;
   }
@@ -84,11 +85,13 @@ SC_MODULE( watcher )
 	  const sc_signal<int>& IN2,
 	  const sc_signal<int>& IN3,
 	  const sc_signal<int>& IN4)
-    : clock1(CLOCK1), clock2(CLOCK2), in1(IN1), in2(IN2), in3(IN3), in4(IN4)
+    : in1(IN1), in2(IN2), in3(IN3), in4(IN4)
   {
+    clock1(CLOCK1);
+    clock2(CLOCK2);
     SC_METHOD( entry );
-    sensitive(clock1); sensitive(clock2);
-    sensitive(in1); sensitive(in2); sensitive(in3); sensitive(in4);
+    sensitive << clock1 << clock2;
+    sensitive << in1 << in2 << in3 << in4;
   }
 
   void entry()
@@ -118,8 +121,9 @@ SC_MODULE( trigp )
   trigp(sc_module_name NAME,
 	sc_signal_in_if<bool>& CLK,
 	sc_signal<int>& OUT_)
-    : clk(CLK), out(OUT_)
+    : out(OUT_)
   {
+    clk(CLK); 
     SC_CTHREAD( entry, clk.pos() );
     out = 0;
   }
@@ -137,8 +141,8 @@ SC_MODULE( trigp )
 int
 sc_main(int ac, char *av[])
 {
-  sc_clock clock1("Clock1", 20, 0.5);
-  sc_clock clock2("Clock2", 40, 0.5);
+  sc_clock clock1("Clock1", 20, SC_NS, 0.5);
+  sc_clock clock2("Clock2", 40, SC_NS, 0.5);
 
   sc_signal<int> sig1, sig2, sig3, sig4;
 
@@ -156,6 +160,6 @@ sc_main(int ac, char *av[])
   sc_trace(tf, sig3, "Sync2");
   sc_trace(tf, sig4, "Async2");
 
-  sc_start(100);
+  sc_start(100, SC_NS);
   return 0;
 }

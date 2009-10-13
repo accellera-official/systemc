@@ -54,7 +54,7 @@ SC_MODULE( source )
     SC_CTOR( source )
     {
         SC_THREAD( main_action );
-        sensitive_pos << clk;
+        sensitive << clk.pos();
     }
 };
 
@@ -70,7 +70,7 @@ SC_MODULE( sink )
         int a;
         while( true ) {
             wait();
-            cout << simcontext()->delta_count() << " -- " << in.read() << endl;
+            cout << sc_delta_count() << " -- " << in.read() << endl;
             a = in.read();
             if( ( a % 3 ) == 0 ) {
                 e.notify();
@@ -82,26 +82,26 @@ SC_MODULE( sink )
     {
         while( true ) {
             wait( e );
-            cout << simcontext()->delta_count() << " AA " << in.read() << endl;
+            cout << sc_delta_count() << " AA " << in.read() << endl;
             wait( e | e );  // same as wait( e )
-            cout << simcontext()->delta_count() << " BB " << in.read() << endl;
+            cout << sc_delta_count() << " BB " << in.read() << endl;
             wait( e & e );  // same as wait( e )
-            cout << simcontext()->delta_count() << " CC " << in.read() << endl;
+            cout << sc_delta_count() << " CC " << in.read() << endl;
             wait( e | e | e );  // same as wait( e )
-            cout << simcontext()->delta_count() << " DD " << in.read() << endl;
+            cout << sc_delta_count() << " DD " << in.read() << endl;
             wait( e & e & e );  // same as wait( e )
-            cout << simcontext()->delta_count() << " EE " << in.read() << endl;
+            cout << sc_delta_count() << " EE " << in.read() << endl;
             wait( e & clk->negedge_event() );
-            cout << simcontext()->delta_count() << " FF " << in.read() << endl;
+            cout << sc_delta_count() << " FF " << in.read() << endl;
             wait( e | clk->negedge_event() );
-            cout << simcontext()->delta_count() << " GG " << in.read() << endl;
+            cout << sc_delta_count() << " GG " << in.read() << endl;
         }
     }
 
     SC_CTOR( sink )
     {
         SC_THREAD( main_action );
-        sensitive_pos << clk;
+        sensitive << clk.pos();
         SC_THREAD( other_action );
     }
 };
@@ -119,7 +119,7 @@ int sc_main( int, char** )
     snk.clk( clk );
     snk.in( sig );
 
-    sc_start( 100 );
+    sc_start( 100, SC_NS );
 
     return 0;
 }

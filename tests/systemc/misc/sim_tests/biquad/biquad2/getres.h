@@ -52,9 +52,11 @@ SC_MODULE( getres )
 	  sc_clock& CLK,
 	  sc_signal<float>& RESULT,
 	  sc_signal<bool>& POP )
-    : clk(CLK), result(RESULT), pop(POP)
   {
-    SC_CTHREAD( entry, clk.pos() );
+    clk(CLK);
+    result(RESULT);
+	pop(POP);
+	SC_CTHREAD( entry, clk.pos() );
   }
 
   // Process functionality in member function below

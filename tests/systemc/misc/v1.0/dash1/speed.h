@@ -59,10 +59,10 @@ SC_MODULE( speed_mod )
   SC_CTOR( speed_mod )
   {
     SC_METHOD( find_time_proc );
-    sensitive_pos << clk;
+    sensitive << clk.pos();
 
     SC_THREAD( read_speed_proc );
-    sensitive_pos << pulse;
+    sensitive << pulse.pos();
 
     elapsed_time = 0;
   }

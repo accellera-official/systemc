@@ -74,7 +74,7 @@ class channel :
     while(1){
     wait(t1);
     data = i;
-    cout<<"simulation time"<<":"<<sc_simulation_time()<<"   ";
+    cout<<"simulation time"<<":"<<sc_time_stamp()<<"   ";
     cout<<"writting "<< data <<" to channel"<<endl;
     i++;
    }
@@ -86,7 +86,7 @@ class channel :
     while(1){
     wait(10, SC_NS);
     j = data;
-    cout<<"simulation time"<<":"<<sc_simulation_time()<<"   "; 
+    cout<<"simulation time"<<":"<<sc_time_stamp()<<"   "; 
     cout<<"reading  "<<j<<" from channel"<<endl;
 
     }

@@ -77,7 +77,7 @@ void stimulus::entry() {
 	 << send_value4 << " "
 	 << send_value5 << " " 
 	 << send_value6 << " " << " at "
-         << sc_simulation_time() << endl;
+         << sc_time_stamp() << endl;
     send_value1 = send_value1+2;
     send_value2 = send_value2+2;
     send_value3 = send_value3+8;

@@ -78,7 +78,7 @@ class top : public sc_module
 int sc_main (int argc , char *argv[])
 {
    top top1("Top1");
-   sc_start(-1);
+   sc_start();
    return 0;
 }
 
