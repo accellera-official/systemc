@@ -35,4 +35,5 @@ Display : -4 4294967292 11111100 11111100 11111100  at 130 ns
 Stimuli : 122 122 01111010 122 122  at 134 ns
 Display : -123 4294967173 10000101 10000101 10000101  at 138 ns
 Display : -4 4294967292 11111100 11111100 11111100  at 141 ns
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.

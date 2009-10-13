@@ -4095,4 +4095,5 @@ SystemC Simulation
 63 + 61 = 60
 63 + 62 = 61
 63 + 63 = 62
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.

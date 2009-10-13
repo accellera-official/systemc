@@ -80,4 +80,5 @@ Display: 10001001 00101000 -123370 -110282 20225  0 1111 1111
 Stimuli: -93 41 12345873 -123339 20234 $ h 0 8 9
 Display: 10001010 00110101 -123375 -110273 20239  0 0001 1110
 Stimuli: -91 42 12345878 -123336 20240 $ i 1 9 10
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.

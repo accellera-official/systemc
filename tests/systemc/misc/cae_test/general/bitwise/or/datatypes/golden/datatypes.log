@@ -200,4 +200,5 @@ Display: 01111101 00111100 -123162 -106770 20589 £
 Stimuli: 27 101 12346173 -123159 20594 $ ¤
 Display: 01111111 00111101 -123155 -106757 20599 ¤
 Stimuli: 29 102 12346178 -123156 20600 $ ¥
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.

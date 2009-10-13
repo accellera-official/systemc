@@ -4095,4 +4095,5 @@ SystemC Simulation
 15 + 61 = 76 (001001100)
 15 + 62 = 77 (001001101)
 15 + 63 = 78 (001001110)
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.

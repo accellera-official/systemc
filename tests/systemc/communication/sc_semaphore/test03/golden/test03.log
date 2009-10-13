@@ -15,4 +15,5 @@ time 70.000000 => thread1 : took semaphore 9 times
 time 90.000000 => thread2 : posted semaphore 1
 time 90.000000 => thread1 : took semaphore 10 times
 time 90.000000 => thread1 : value of semaphore = 0
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.

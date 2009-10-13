@@ -4095,4 +4095,5 @@ SystemC Simulation
 63 + 61 = 12 (1100)
 63 + 62 = 13 (1101)
 63 + 63 = 14 (1110)
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.

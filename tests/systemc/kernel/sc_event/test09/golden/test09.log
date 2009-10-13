@@ -39,4 +39,5 @@ SystemC Simulation
 30:11 ns sender - timed 2 ns
 31:12 ns receiver
 33:13 ns sender - stop
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.

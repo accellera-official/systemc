@@ -72,4 +72,5 @@ SystemC Simulation
 31:12 ns receiver_static_thread
 31:12 ns receiver_dynamic_thread
 33:13 ns sender - stop
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.

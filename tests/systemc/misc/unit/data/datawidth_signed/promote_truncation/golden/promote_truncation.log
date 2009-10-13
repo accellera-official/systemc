@@ -4095,4 +4095,5 @@ SystemC Simulation
 -1 + -3 = -4 (1100)
 -1 + -2 = -3 (1101)
 -1 + -1 = -2 (1110)
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.

@@ -28,4 +28,5 @@ Compiler will make a lot of things easy by implementing by refined Scen
 Found Count is 10
 ic
 models.
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.

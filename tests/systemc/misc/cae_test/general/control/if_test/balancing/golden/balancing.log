@@ -130,4 +130,5 @@ Display : in_data2 0001  at 246 ns
 Display : in_data2 0001  at 247 ns
 Display : in_data3 0100  at 249 ns
 Display : in_data3 0100  at 250 ns
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.

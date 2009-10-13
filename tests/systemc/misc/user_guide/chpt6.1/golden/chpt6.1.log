@@ -8,4 +8,5 @@ Value on Bus = 1
 Input is = 1
 Value on Bus = Z
 Input is = Z
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.

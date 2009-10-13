@@ -4,4 +4,5 @@ O1 = 0101  O2 = 1001
 O3 = 10011010
 O4 = 10011010
 O5 = 10001110
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.

@@ -187,4 +187,5 @@ Current speed displayed = 118.8 km/h @ 9100 ns
 Current speedometer angle = 246.738 degrees @ 9100 ns
 Current total distance displayed = 0.03 km @ 9150 ns
 Current partial distance displayed = 0.03 km @ 9150 ns
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.

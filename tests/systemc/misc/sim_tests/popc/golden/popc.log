@@ -15,4 +15,5 @@ Input:    8191   Population Count:  13
 Input:   16383   Population Count:  14
 Input:   32767   Population Count:  15
 Input:   65535   Population Count:  16
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.

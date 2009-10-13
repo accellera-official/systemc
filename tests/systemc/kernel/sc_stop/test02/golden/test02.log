@@ -9,4 +9,5 @@ Warning: (W545) sc_stop has already been called
 In file: <removed by verify.pl>
 In process: x.baker @ 0 s
 able: 0 s
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.

@@ -259,4 +259,5 @@ Sum of 11111101 is  7
 Sum of 11111110 is  7
 Sum of 11111111 is  8
 Sum of 11111111 is  8
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.

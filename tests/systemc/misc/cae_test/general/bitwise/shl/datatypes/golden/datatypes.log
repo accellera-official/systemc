@@ -199,4 +199,5 @@ Stimuli: 61 99 99 97 20098
 Display: 11101000 10001100 198 397312 0 104
 Stimuli: 62 100 100 98 20099 
 Display: 11110000 10010000 200 401408 0 106
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.

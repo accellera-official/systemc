@@ -18,4 +18,5 @@ Proc1:: Loop start
 Proc1:: Read. Value = 4
 Proc1:: Read. Value = 6
 Proc1:: Read. Value = 9
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.

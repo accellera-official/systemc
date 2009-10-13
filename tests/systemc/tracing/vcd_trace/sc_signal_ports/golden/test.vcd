@@ -8,13 +8,13 @@ $var wire   32  aaa  sig_int [31:0]  $end
 $var wire    1  aab  sig_bool       $end
 $var wire    1  aac  sig_logic       $end
 $var wire    1  aad  sig_resolved       $end
-$var wire    1  aae  sig_rv1       $end
-$var wire    1  aaf  a.out_rv1       $end
+$var wire    1  aaaae  sig_rv1       $end
+$var wire    1  aaaaf  a.out_rv1       $end
 $var wire    1  aag  a.out_resolved       $end
 $var wire    1  aah  a.out_logic       $end
 $var wire    1  aai  a.out_bool       $end
 $var wire   32  aaj  a.out_int [31:0]  $end
-$var wire    1  aak  a.in_rv1       $end
+$var wire    1  aaaak  a.in_rv1       $end
 $var wire    1  aal  a.in_resolved       $end
 $var wire    1  aam  a.in_logic       $end
 $var wire    1  aan  a.in_bool       $end
@@ -31,13 +31,13 @@ b0 aaa
 0aab
 xaac
 xaad
-Xaae
-Xaaf
+Xaaaae
+Xaaaaf
 xaag
 xaah
 0aai
 b0 aaj
-Xaak
+Xaaaak
 xaal
 xaam
 0aan
@@ -49,13 +49,13 @@ b1 aaa
 1aab
 1aac
 1aad
-1aae
-1aaf
+1aaaae
+1aaaaf
 1aag
 1aah
 1aai
 b1 aaj
-1aak
+1aaaak
 1aal
 1aam
 1aan
@@ -66,13 +66,13 @@ b10 aaa
 0aab
 zaac
 zaad
-Zaae
-Zaaf
+Zaaaae
+Zaaaaf
 zaag
 zaah
 0aai
 b10 aaj
-Zaak
+Zaaaak
 zaal
 zaam
 0aan
@@ -83,13 +83,13 @@ b11 aaa
 1aab
 xaac
 xaad
-Xaae
-Xaaf
+Xaaaae
+Xaaaaf
 xaag
 xaah
 1aai
 b11 aaj
-Xaak
+Xaaaak
 xaal
 xaam
 1aan
@@ -100,13 +100,13 @@ b100 aaa
 0aab
 0aac
 0aad
-0aae
-0aaf
+0aaaae
+0aaaaf
 0aag
 0aah
 0aai
 b100 aaj
-0aak
+0aaaak
 0aal
 0aam
 0aan
@@ -117,13 +117,13 @@ b101 aaa
 1aab
 1aac
 1aad
-1aae
-1aaf
+1aaaae
+1aaaaf
 1aag
 1aah
 1aai
 b101 aaj
-1aak
+1aaaak
 1aal
 1aam
 1aan
@@ -134,13 +134,13 @@ b110 aaa
 0aab
 zaac
 zaad
-Zaae
-Zaaf
+Zaaaae
+Zaaaaf
 zaag
 zaah
 0aai
 b110 aaj
-Zaak
+Zaaaak
 zaal
 zaam
 0aan
@@ -151,13 +151,13 @@ b111 aaa
 1aab
 xaac
 xaad
-Xaae
-Xaaf
+Xaaaae
+Xaaaaf
 xaag
 xaah
 1aai
 b111 aaj
-Xaak
+Xaaaak
 xaal
 xaam
 1aan
@@ -168,13 +168,13 @@ b1000 aaa
 0aab
 0aac
 0aad
-0aae
-0aaf
+0aaaae
+0aaaaf
 0aag
 0aah
 0aai
 b1000 aaj
-0aak
+0aaaak
 0aal
 0aam
 0aan
@@ -185,13 +185,13 @@ b1001 aaa
 1aab
 1aac
 1aad
-1aae
-1aaf
+1aaaae
+1aaaaf
 1aag
 1aah
 1aai
 b1001 aaj
-1aak
+1aaaak
 1aal
 1aam
 1aan

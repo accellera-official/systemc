@@ -9,4 +9,5 @@ in_logic     default_event()
 in_logic     value_changed_event()
 in_logic     posedge_event()
 in_logic     negedge_event()
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.

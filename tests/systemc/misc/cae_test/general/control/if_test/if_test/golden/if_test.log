@@ -31,4 +31,5 @@ Stimuli: stim1= 14 stim2= 14 stim3= 14 stim4= 14 stim5= 14  156 ns
 Display : 1110 0000 1110 1110 0  at 163 ns
 Stimuli: stim1= 15 stim2= 15 stim3= 15 stim4= 15 stim5= 15  167 ns
 Display : 1111 0000 1111 1111 0  at 174 ns
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.

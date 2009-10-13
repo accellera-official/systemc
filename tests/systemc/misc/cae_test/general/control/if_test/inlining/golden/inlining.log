@@ -63,4 +63,5 @@ Stimuli: stim1= 15 stim2= 15 stim3= 15 stim4= 15  167 ns
 tmp1 my print 0
 tmp2 my print 15
 Display : 1111 1111  at 170 ns
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.

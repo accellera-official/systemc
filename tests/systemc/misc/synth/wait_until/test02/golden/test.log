@@ -26,4 +26,5 @@ Mismatch. Expected: 3. Actual: 0
 [Cycle No: 21] i1 = 0 o1 = 0 o2 = 0 cont1 = 0
 [Cycle No: 22] i1 = 0 o1 = 0 o2 = 0 cont1 = 0
 End Simulation
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.

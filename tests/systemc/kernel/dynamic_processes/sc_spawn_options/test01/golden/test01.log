@@ -22,4 +22,5 @@ Round robin method 3 at time 280 ns
 Round robin method 4 at time 290 ns
 
 Done.
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.

@@ -31,4 +31,5 @@ Current speedometer angle = 41.1231 degrees @ 40875 ns
 Driver stopped the car @ 50 us
 Current total distance displayed = 0.04 km @ 58275 ns
 Current partial distance displayed = 0.01 km @ 58275 ns
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.

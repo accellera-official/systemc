@@ -28,5 +28,6 @@ Initiating Transfer
 Proc1: Data Ready has value = 1 at time 110 ns
 Proc1: Data Ack has value = 0 at same time
 Proc2: Received data = 13 at time 110 ns
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.
 SIMULATION COMPLETED AT TIME 110 ns

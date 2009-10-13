@@ -19,4 +19,5 @@ peripheral: receive 2
 peripheral: send 2
 peripheral: receive 1
 peripheral: send 1
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.

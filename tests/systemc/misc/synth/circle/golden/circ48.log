@@ -17,4 +17,5 @@ Memory Location 13 : 	0000111011100000
 Memory Location 14 : 	0000001110000000
 Memory Location 15 : 	0000000000000000
 Memory Location 16 : 	0000000000000000
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.

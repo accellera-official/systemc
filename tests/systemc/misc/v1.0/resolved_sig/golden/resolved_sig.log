@@ -71,4 +71,5 @@ writing to bus: 01010101;    reading from bus=XXXXXXXX
 datawidth writing to bus: 10101010
 writing to bus: 11111111;    reading from bus=1X1X1X1X
 datawidth writing to bus: 10101010
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.

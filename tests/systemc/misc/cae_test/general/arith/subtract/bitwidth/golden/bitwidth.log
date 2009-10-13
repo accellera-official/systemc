@@ -200,4 +200,5 @@ Stimuli: -1 4 -27 102
 Display: 00 0001 100010 01100010
 Stimuli: 0 5 -26 103
 Display: 00 0001 100010 01100010
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.

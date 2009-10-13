@@ -35,4 +35,5 @@ Current partial distance displayed = 0.02 km @ 49075 ns
 Driver stopped the car @ 50 us
 Current total distance displayed = 0.08 km @ 58225 ns
 Current partial distance displayed = 0.03 km @ 58225 ns
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.

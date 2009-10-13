@@ -2,5 +2,6 @@ SystemC Simulation
 0 s : STARTING SIM 
 
 6 ns : STOPPING SIM - stop button
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.
 6 ns : STOPPING SIM - start button

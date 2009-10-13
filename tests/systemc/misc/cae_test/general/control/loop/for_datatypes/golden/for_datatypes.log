@@ -197,4 +197,5 @@ Stimuli3 : in_valid = true in_value 10 at 148 ns
 Display : 8  at 148 ns
 Display : 9  at 149 ns
 Display : 10  at 150 ns
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.

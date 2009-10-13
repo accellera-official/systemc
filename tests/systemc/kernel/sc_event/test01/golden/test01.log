@@ -39,4 +39,5 @@ Triggered by event e_b
 Triggered by event e_b
 1 20
 Issuing sc_stop() 
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.

@@ -44,4 +44,5 @@ Proc1:: Read. Value = 16
 Proc1:: Read. Value = 17
 Proc1:: Read. Value = 18
 Proc1:: Read. Value = 19
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.
