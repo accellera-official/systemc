@@ -34,8 +34,8 @@
  *****************************************************************************/
 
 // $Log: test01.cpp,v $
-// Revision 1.1.1.1  2006/12/15 20:36:58  acg
-// SystemC Tests 2.2
+// Revision 1.1.1.1  2006/12/15 20:25:56  acg
+// systemc_tests-2.3
 //
 // Revision 1.2  2006/01/24 19:11:29  acg
 // Andy Goodrich: Changed sc_simulation_time() usage to sc_time_stamp().

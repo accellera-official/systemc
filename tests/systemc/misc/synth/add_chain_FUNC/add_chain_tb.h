@@ -55,15 +55,14 @@ struct testbench : public sc_module {
   signal_bool_vector4 	sum;
 
   /*** Constructor ***/ 
-  testbench ( const char* NAME,
-	      sc_clock&   TICK  )
+  testbench ( const sc_module_name& NAME,
+	      sc_clock&             TICK  )
 
-    : sc_module (NAME)
+    : sc_module()
     {
   	f_RESET_STIM  	("RD1", TICK, ready, reset, addr);
 	f_DATA_GEN    	("DG1", TICK, ready, data, addr);
 	f_add_chain 	("AC1", TICK, reset, data, sum, ready);
         f_DISPLAY	("D1",  ready, data, sum);
-	end_module();
     }
 };

@@ -17,7 +17,7 @@
 
 /*****************************************************************************
 
-  test02.cpp -- Test reset_signal_is() usage with SC_CTHREAD processes.
+  test03.cpp -- Test reset_signal_is() usage with SC_CTHREAD processes.
 
   Original Author: Andy Goodrich, Forte Design Systems, 12 August 2005
     

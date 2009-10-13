@@ -49,10 +49,10 @@ struct testbench : public sc_module
     CLK2_NEG		clkn2;
 
     /*** Constructor ***/ 
-    testbench ( const char*  	NAME,
-	        sc_clock&   	TICK,
-	        sc_clock&  	TICK2 )
-    : sc_module (NAME),
+    testbench ( const sc_module_name&  	NAME,
+	        sc_clock&   	        TICK,
+	        sc_clock&  	        TICK2 )
+    : sc_module(),
       out_clk_pos	("out_clk_pos"),
       out_clk_neg	("out_clk_neg"),
       out_clk2_pos	("out_clk2_pos"),

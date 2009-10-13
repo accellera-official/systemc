@@ -35,8 +35,8 @@
  *****************************************************************************/
 
 // $Log: test03.cpp,v $
-// Revision 1.1.1.1  2006/12/15 20:37:06  acg
-// SystemC Tests 2.2
+// Revision 1.1.1.1  2006/12/15 20:26:04  acg
+// systemc_tests-2.3
 //
 // Revision 1.2  2006/01/19 00:47:04  acg
 // Andy Goodrich: Added CVS logging.

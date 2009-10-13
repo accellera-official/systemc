@@ -34,8 +34,8 @@
  *****************************************************************************/
 
 // $Log: driver.cpp,v $
-// Revision 1.1.1.1  2006/12/15 20:37:20  acg
-// SystemC Tests 2.2
+// Revision 1.1.1.1  2006/12/15 20:26:24  acg
+// systemc_tests-2.3
 //
 // Revision 1.4  2006/01/24 21:05:57  acg
 //  Andy Goodrich: replacement of deprecated features with their non-deprecated

@@ -1,4 +1,13 @@
 SystemC Simulation
+
+Warning: (W569) sc_module(const char*) has been deprecated, use sc_module(const sc_module_name&): Testbench
+In file: <removed by verify.pl>
+
+Warning: (W569) sc_module(const char*) has been deprecated, use sc_module(const sc_module_name&): PIPE
+In file: <removed by verify.pl>
+
+Warning: (W569) sc_module(const char*) has been deprecated, use sc_module(const sc_module_name&): Stage1_2
+In file: <removed by verify.pl>
 Result = 0
 Result = 3200000
 Result = 100000000

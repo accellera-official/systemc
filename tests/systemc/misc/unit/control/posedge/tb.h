@@ -44,10 +44,10 @@ SC_MODULE( testbench )
   RDY			rd1;
 
   /*** Constructor ***/ 
-  testbench (	const char*  		NAME,
-		sc_clock&   		TICK )
+  testbench (	sc_module_name   NAME,
+		sc_clock&        TICK )
 
-    : sc_module (NAME),
+    : sc_module(),
       st1 ("ST1", TICK, ready),
       rd1 ("RD1", TICK, ready)
     {

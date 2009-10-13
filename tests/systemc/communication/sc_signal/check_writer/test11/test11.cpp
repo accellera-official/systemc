@@ -17,7 +17,7 @@
 
 /*****************************************************************************
 
-  test11.cpp -- Test detection of two write ports connected to 1 signal.
+  test10.cpp -- Test detection of two write ports connected to 1 signal.
 
   Original Author: Andy Goodrich, Forte Design Systems, 15 Oct 2003
 

@@ -29,8 +29,8 @@
   changes you are making here.
 
   $Log: constructor_throw.cpp,v $
-  Revision 1.1.1.1  2006/12/15 20:36:58  acg
-  SystemC Tests 2.2
+  Revision 1.1.1.1  2006/12/15 20:25:56  acg
+  systemc_tests-2.3
 
   Revision 1.1  2006/03/15 00:12:08  acg
    Andy Goodrich: Forte Design Systems

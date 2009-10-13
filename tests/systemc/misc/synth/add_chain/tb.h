@@ -57,10 +57,10 @@ struct testbench : public sc_module {
   DISPLAY		d1;
 
   /*** Constructor ***/ 
-  testbench ( const char* NAME,
+  testbench ( const sc_module_name& NAME,
 	      sc_clock&   TICK  )
 
-    : sc_module (NAME),
+    : sc_module(),
   	rd1 ("RD1", TICK, ready, reset, addr),
 	dg1 ("DG1", TICK, ready, data, addr),
 	ac1 ("AC1", TICK, reset, data, sum, ready),
