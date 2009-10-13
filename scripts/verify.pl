@@ -1,4 +1,5 @@
-#!/usr/local/bin/perl5
+eval "exec perl -S $0 $*"
+  if 0;
 # *****************************************************************************
 #
 #  The following code is derived, directly or indirectly, from the SystemC
@@ -372,6 +373,12 @@ sub get_systemc_arch
 	} else {
 	    die "Error: unsupported architecture '$uname_s $uname_r'\n";
 	}
+    } elsif( $uname_s eq "Darwin" ) {
+	if( $cxx_comp eq "c++" || $cxx_comp eq "g++" ) {
+	    $arch = "macosx";
+	} else {
+	    die "Error: unsupported compiler '$cxx'\n";
+	}
     } elsif( $uname_s eq "Linux" ) {
 	if( $uname_r =~ /^2/ ) {
 	    if( $cxx_comp eq "c++" || $cxx_comp eq "g++" ) {
@@ -472,7 +479,7 @@ sub init_globals
 	$rt_debug_flag = "-g";
 	$rt_optimize_flag = "-O2";
     } elsif( $rt_systemc_arch eq "hpux11" ) {
-	$rt_ccflags = "-Aa -ext +DA2.0 +DS2.0";
+	$rt_ccflags = "-AA -ext +DA2.0 +DS2.0";
 	$rt_ld = $rt_cc;
 	$rt_ldflags = $rt_ccflags;
 	$rt_debug_flag = "-g";
@@ -483,6 +490,12 @@ sub init_globals
 	$rt_ldflags = $rt_ccflags;
 	$rt_debug_flag = "-g";
 	$rt_optimize_flag = "-O2";
+    } elsif( $rt_systemc_arch eq "macosx" ) {
+	$rt_ccflags = "-Wall";
+	$rt_ld = $rt_cc;
+	$rt_ldflags = $rt_ccflags;
+	$rt_debug_flag = "-g";
+	$rt_optimize_flag = "-O3";
     } elsif( $rt_systemc_arch eq "cygwin" ) {
 	$rt_ccflags = "-Wall";
 	$rt_ld = $rt_cc;
