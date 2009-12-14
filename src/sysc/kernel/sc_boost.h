@@ -33,6 +33,9 @@
 
  *****************************************************************************/
 // $Log: sc_boost.h,v $
+// Revision 1.4  2009/07/28 01:10:53  acg
+//  Andy Goodrich: updates for 2.3 release candidate.
+//
 // Revision 1.3  2009/02/28 00:26:58  acg
 //  Andy Goodrich: changed boost name space to sc_boost to allow use with
 //  full boost library applications.

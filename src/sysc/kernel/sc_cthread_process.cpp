@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_cthread_process.cpp,v $
+// Revision 1.4  2009/07/28 01:10:53  acg
+//  Andy Goodrich: updates for 2.3 release candidate.
+//
 // Revision 1.3  2009/05/22 16:06:29  acg
 //  Andy Goodrich: process control updates.
 //
@@ -149,7 +152,6 @@ void sc_cthread_process::prepare_for_simulation()
 {
     m_cor_p = simcontext()->cor_pkg()->create( m_stack_size,
                          sc_thread_cor_fn, this );
-                         // @@@@#### sc_cthread_cor_fn, this );
     m_cor_p->stack_protect( true );
 }
 

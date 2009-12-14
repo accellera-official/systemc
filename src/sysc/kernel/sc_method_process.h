@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_method_process.h,v $
+// Revision 1.4  2009/07/28 01:10:53  acg
+//  Andy Goodrich: updates for 2.3 release candidate.
+//
 // Revision 1.3  2009/05/22 16:06:29  acg
 //  Andy Goodrich: process control updates.
 //
@@ -262,16 +265,12 @@ sc_method_process::next_trigger( const sc_time& t, sc_event_and_list& el )
 //------------------------------------------------------------------------------
 inline bool sc_method_process::ready_to_run()
 {
-	switch( m_state )
-	{
-	  case ps_normal:
-	  	return true;
-	  case ps_suspended:
-	  	m_state = ps_suspended_pending;
-		break;
-	  default:
-	  	break;
-	}
+    switch( m_state )
+    {
+      case ps_normal:    return true;
+      case ps_suspended: m_state = ps_suspended_pending; break;
+      default: break;
+    }
     return false;
 }
 

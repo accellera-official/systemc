@@ -11,8 +11,8 @@
 // See http://www.boost.org/libs/mpl for documentation.
 
 // $Source: /Users/acg/CVSROOT/systemc-2.3/src/sysc/packages/boost/mpl/aux_/adl_barrier.hpp,v $
-// $Date: 2009/02/28 00:27:17 $
-// $Revision: 1.2 $
+// $Date: 2009/10/14 19:11:05 $
+// $Revision: 1.3 $
 
 #include <sysc/packages/boost/mpl/aux_/config/adl.hpp>
 #include <sysc/packages/boost/mpl/aux_/config/gcc.hpp>

@@ -70,8 +70,12 @@ public:
 
     enum vcd_enum {VCD_WIRE=0, VCD_REAL=1, VCD_LAST};
 	// sc_set_vcd_time_unit is deprecated.
+#if 0 // deprecated
     inline void sc_set_vcd_time_unit(int exponent10_seconds)
     	{ set_time_unit(exponent10_seconds); }
+#endif
+
+    virtual void set_time_unit( double v, sc_time_unit tu);
 
     // Create a Vcd trace file.
     // `Name' forms the base of the name to which `.vcd' is added.
@@ -221,6 +225,11 @@ public:
     std::vector<vcd_trace*> traces;
     // same as create_vcd_name (corrected style)
     std::string obtain_name();
+
+protected:
+    bool   initialized;           // = true means initialized
+    double timescale_unit;        // in seconds
+    bool   timescale_set_by_user; // = true means set by user
 };
 
 

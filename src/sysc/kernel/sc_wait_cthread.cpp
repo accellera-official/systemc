@@ -36,6 +36,10 @@
 
 /* 
 $Log: sc_wait_cthread.cpp,v $
+Revision 1.3  2009/10/14 19:07:42  acg
+ Andy Goodrich: added an error message for wait(n) being called from an
+ SC_METHOD.
+
 Revision 1.2  2008/05/22 17:06:27  acg
  Andy Goodrich: updated copyright notice to include 2008.
 
@@ -116,6 +120,8 @@ wait( int n, sc_simcontext* simc )
 	RCAST<sc_cthread_handle>( cpi->process_handle )->wait_cycles( n );
         break;
       default:
+        SC_REPORT_ERROR( SC_ID_WAIT_NOT_ALLOWED_, "\n        "
+	                 "in SC_METHODs use next_trigger() instead" );
         break;
     }
 }

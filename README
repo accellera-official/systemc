@@ -31,8 +31,9 @@ This is the release of the SystemC 2.3.0 Class Library.
       gcc-3.4.4
     o HP-UX 11.00 with HP C++ compiler version A.03.39
       (Note: +O1 is the highest safe optimization level)
-    o MacOSX (Tiger) with GNU C++ compiler version gcc-3.1, gcc-3.3, and
+    o MacOSX (Tiger) with GNU C++ compiler versions gcc-3.1, gcc-3.3, and
       gcc-4.0.0
+    o MacOSX (Snow Leopard) with GNU C++ compiler version gcc-4.2.1
     o Windows NT 4.0 (SP6a) with VC++ 7.0 
 
 -------------------------------------------------------------------------------

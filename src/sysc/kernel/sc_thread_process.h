@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_thread_process.h,v $
+// Revision 1.5  2009/07/28 01:10:53  acg
+//  Andy Goodrich: updates for 2.3 release candidate.
+//
 // Revision 1.4  2009/05/22 16:06:29  acg
 //  Andy Goodrich: process control updates.
 //
@@ -233,7 +236,7 @@ inline bool sc_thread_process::ready_to_run()
             return false;
         }
         m_state = ps_disabled;
-	return true;
+	break; // return true;
       default:
         break;
     }

@@ -37,6 +37,9 @@
  *****************************************************************************/
 
 // $Log: sc_spawn.h,v $
+// Revision 1.3  2009/07/28 01:10:53  acg
+//  Andy Goodrich: updates for 2.3 release candidate.
+//
 // Revision 1.2  2008/05/22 17:06:26  acg
 //  Andy Goodrich: updated copyright notice to include 2008.
 //

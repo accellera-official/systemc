@@ -33,6 +33,10 @@
     
  *****************************************************************************/
 //$Log: sc_fifo.h,v $
+//Revision 1.3  2009/10/14 19:05:40  acg
+// Andy Goodrich: added check for blocking interfaces in addition to the
+// combined blocking/nonblocking interface.
+//
 //Revision 1.2  2009/05/22 16:06:24  acg
 // Andy Goodrich: process control updates.
 //
@@ -217,18 +221,27 @@ sc_fifo<T>::register_port( sc_port_base& port_,
 			    const char* if_typename_ )
 {
     std::string nm( if_typename_ );
-    if( nm == typeid( sc_fifo_in_if<T> ).name() ) {
+    if( nm == typeid( sc_fifo_in_if<T> ).name() ||
+        nm == typeid( sc_fifo_blocking_in_if<T> ).name() 
+    ) {
 	// only one reader can be connected
 	if( m_reader != 0 ) {
 	    SC_REPORT_ERROR( SC_ID_MORE_THAN_ONE_FIFO_READER_, 0 );
 	}
 	m_reader = &port_;
-    } else {  // nm == typeid( sc_fifo_out_if<T> ).name()
+    } else if( nm == typeid( sc_fifo_out_if<T> ).name() ||
+               nm == typeid( sc_fifo_blocking_out_if<T> ).name()
+    ) {
 	// only one writer can be connected
 	if( m_writer != 0 ) {
 	    SC_REPORT_ERROR( SC_ID_MORE_THAN_ONE_FIFO_WRITER_, 0 );
 	}
 	m_writer = &port_;
+    }
+    else
+    {
+        SC_REPORT_ERROR( SC_ID_BIND_IF_TO_PORT_, 
+	                 "sc_fifo<T> port not recognized" );
     }
 }
 

@@ -35,6 +35,10 @@
 
 
 // $Log: sc_main_main.cpp,v $
+// Revision 1.4  2009/10/14 19:06:48  acg
+//  Andy Goodrich: changed the way the "copy" of argv is handled. It is
+//  now passed to sc_main, and the original is referenced via argv_copy.
+//
 // Revision 1.3  2008/05/22 17:06:25  acg
 //  Andy Goodrich: updated copyright notice to include 2008.
 //
@@ -92,9 +96,11 @@ sc_elab_and_sim( int argc, char* argv[] )
 {
     int status = 1;
     argc_copy = argc;
-    argv_copy = new char*[argc];
+    argv_copy = argv;
+    char* argv_call[argc+1];
     for ( int i = 0; i < argc; i++ ) 
-    argv_copy[i] = argv[i];
+        argv_call[i] = argv[i];
+    argv_call[argc] = 0;
 
     try
     {
@@ -103,7 +109,7 @@ sc_elab_and_sim( int argc, char* argv[] )
         // Perform initialization here
         sc_in_action = true;
 
-        status = sc_main( argc, argv );
+        status = sc_main( argc, argv_call );
 
         // Perform cleanup here
         sc_in_action = false;
@@ -134,7 +140,6 @@ sc_elab_and_sim( int argc, char* argv[] )
           "SC_DO_NOTHING);\n\n" );
     }
 
-    delete [] argv_copy;
     return status;
 }
 

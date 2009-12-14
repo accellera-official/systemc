@@ -157,8 +157,7 @@ public:
     virtual void delta_cycles( bool flag );
 
     // Set time unit.
-    virtual void set_time_unit( int exponent10_seconds ); // deprecated.
-    virtual void set_time_unit( double v, sc_time_unit tu );
+    virtual void set_time_unit( double v, sc_time_unit tu )=0;
 
 protected:
 
@@ -168,11 +167,6 @@ protected:
     // Flush results and close file
     virtual ~sc_trace_file()
 	{ /* Intentionally blank */ };
-
-protected:
-    bool   initialized;           // = true means initialized
-    double timescale_unit;        // in seconds
-    bool   timescale_set_by_user; // = true means set by user
 };
 
 /*****************************************************************************/

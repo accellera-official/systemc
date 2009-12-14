@@ -41,6 +41,9 @@
  *****************************************************************************/
 
 // $Log: sc_concatref.h,v $
+// Revision 1.5  2009/11/17 19:58:15  acg
+//  Andy Goodrich: fix of shift rhs possibilities to include "int".
+//
 // Revision 1.4  2009/02/28 00:26:29  acg
 //  Andy Goodrich: bug fixes.
 //
@@ -516,6 +519,12 @@ inline const sc_unsigned operator << (
 }
 
 inline const sc_unsigned operator << ( 
+    const sc_concatref& target, int shift )
+{
+    return target.value() << shift;
+}
+
+inline const sc_unsigned operator << ( 
     const sc_concatref& target, unsigned int shift )
 {
     return target.value() << (int)shift;
@@ -540,6 +549,12 @@ inline const sc_unsigned operator >> (
     const sc_concatref& target, unsigned long shift )
 {
     return target.value() >> (int)shift;
+}
+
+inline const sc_unsigned operator >> ( 
+    const sc_concatref& target, int shift )
+{
+    return target.value() >> shift;
 }
 
 inline const sc_unsigned operator >> ( 

@@ -71,8 +71,11 @@ public:
     enum wif_enum {WIF_BIT=0, WIF_MVL=1, WIF_REAL=2, WIF_LAST};
 
 	// sc_set_wif_time_unit is deprecated.
+	void set_time_unit( double, sc_time_unit );
+#if 0 // deprecated
     inline void sc_set_wif_time_unit(int exponent10_seconds)
         { set_time_unit(exponent10_seconds); }
+#endif
 
     // Create a wif trace file.
     // `Name' forms the base of the name to which `.awif' is added.
@@ -223,6 +226,11 @@ public:
 
     // Array to store the variables traced
     std::vector<wif_trace*> traces;
+
+protected:
+    bool   initialized;           // = true means initialized
+    double timescale_unit;        // in seconds
+    bool   timescale_set_by_user; // = true means set by user
 };
 
 // Create WIF file

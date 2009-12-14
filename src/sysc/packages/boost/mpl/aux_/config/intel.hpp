@@ -11,8 +11,8 @@
 // See http://www.boost.org/libs/mpl for documentation.
 
 // $Source: /Users/acg/CVSROOT/systemc-2.3/src/sysc/packages/boost/mpl/aux_/config/intel.hpp,v $
-// $Date: 2006/12/15 20:20:06 $
-// $Revision: 1.1.1.1 $
+// $Date: 2009/10/14 19:11:07 $
+// $Revision: 1.2 $
 
 
 // SC_BOOST_INTEL_CXX_VERSION is defined here:

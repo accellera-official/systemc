@@ -11,8 +11,8 @@
 // See http://www.boost.org/libs/mpl for documentation.
 
 // $Source: /Users/acg/CVSROOT/systemc-2.3/src/sysc/packages/boost/mpl/bool_fwd.hpp,v $
-// $Date: 2006/12/15 20:20:06 $
-// $Revision: 1.1.1.1 $
+// $Date: 2009/10/14 19:11:02 $
+// $Revision: 1.2 $
 
 #include <sysc/packages/boost/mpl/aux_/adl_barrier.hpp>
 

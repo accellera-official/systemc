@@ -2265,7 +2265,46 @@ remove_vcd_name_problems(std::string& name)
     }
 }
 
+// set the time unit.
+void vcd_trace_file::set_time_unit(double v, sc_time_unit tu)
+{
+    if(initialized)
+    {        
+	put_error_message(
+	    "Trace timescale unit cannot be changed once tracing has begun.",
+	    false
+        );
+        std::cout << "To change the scale, create a new trace file." 
+		  << std::endl;
+        return;    
+    }
 
+    switch ( tu )
+    {
+      case SC_FS:  v = v * 1e-15; break;
+	  case SC_PS:  v = v * 1e-12; break;
+      case SC_NS:  v = v * 1e-9;  break;
+      case SC_US:  v = v * 1e-6;  break;
+      case SC_MS:  v = v * 1e-3;  break;
+      case SC_SEC:                break;
+      default:                    
+	  	put_error_message("Unknown time unit specified ",true);
+		std::cout << tu << std::endl;
+		break;
+    }
+
+    timescale_unit = v;
+
+    // EMIT ADVISORY MESSAGE ABOUT CHANGE IN TIME SCALE:
+
+    char buf[200];
+    std::sprintf(buf,
+        "Note: VCD trace timescale unit is set by user to %e sec.\n",
+        timescale_unit);
+    ::std::cout << buf << ::std::flush;
+
+	timescale_set_by_user = true;
+}
 sc_trace_file*
 sc_create_vcd_trace_file(const char * name)
 {

@@ -1,4 +1,4 @@
-        Release Notes for SystemC 2.3.0 Release Of 12 Feb 2009
+        Release Notes for SystemC 2.3.0 Release Of 17 Nov 2009
         ======================================================
 
 CONTENTS
@@ -35,6 +35,11 @@ Compared to the 2.2.0, this release has the following new items:
 =============================
 
 Following is the list of bug fixes and enhancements for this release:
+
+     - sc_concatref did not have shift operator overloads for int shift
+       values. They have been added.
+
+       src/sysc/datatypes/misc/sc_concatref.h
 
      - Plugged a memory leak in operator - for sc_signed operations. If 
        the two operands were equal it returned a new sc_signed instance 
@@ -112,6 +117,29 @@ Following is the list of bug fixes and enhancements for this release:
 
      - Added "kill" assignment to sc_fifo::buf_read() so that things like
        boost::shared_ptr actually release.
+
+     - Better writer and read checking for sc_fifo<T> ports. 
+
+       src/sysc/communication/sc_fifo.h
+
+          The port binder now checks for blocking interfaces in addition to
+	  the combined non-blocking - blocking interface.
+
+     - Error message added if wait(N) is called from an SC_METHOD
+
+       src/sysc/kernel/sc_wait_cthread.h
+
+     - Null terminator placed on end of argv_copy.
+
+       src/sysc/kernel/sc_main_main.cpp
+
+     - Mac OS X support modified to accommodate Snow Leopard
+
+       configure.in
+
+       The support for i386 based Macintoshes now includes "-arch i386" 
+       for the command line options for g++/gcc and as. This produces
+       32-bit architecture libraries, as has been true in the past.
 
 3) New features
 ===============

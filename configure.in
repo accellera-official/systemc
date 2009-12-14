@@ -60,7 +60,7 @@ case "$target" in
     i386-apple-macosx*)
         case "$CXX_COMP" in
             CC)
-                EXTRA_CXXFLAGS=""
+                EXTRA_CXXFLAGS="-arch i386"
                 DEBUG_CXXFLAGS="-g"
                 OPT_CXXFLAGS="-O3"
                 TARGET_ARCH="macosx386"
@@ -69,7 +69,7 @@ case "$target" in
         	CFLAGS="$EXTRA_CXXFLAGS $OPT_CXXFLAGS"
                 ;;
             c++ | g++)
-                EXTRA_CXXFLAGS="-Wall"
+                EXTRA_CXXFLAGS="-Wall -arch i386"
                 DEBUG_CXXFLAGS="-g"
                 OPT_CXXFLAGS="-O3"
                 TARGET_ARCH="macosx386"
@@ -82,7 +82,7 @@ echo "$as_me: error: \"sorry...compiler not supported\"" >&2;}
    { (exit 1); exit 1; }; }
 		;;
         esac
-	AS=as
+	AS="as -arch i386"
         QT_ARCH="iX86"
         ;;
     *mingw*)

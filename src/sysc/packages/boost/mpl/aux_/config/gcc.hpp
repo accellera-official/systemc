@@ -11,8 +11,8 @@
 // See http://www.boost.org/libs/mpl for documentation.
 
 // $Source: /Users/acg/CVSROOT/systemc-2.3/src/sysc/packages/boost/mpl/aux_/config/gcc.hpp,v $
-// $Date: 2006/12/15 20:20:06 $
-// $Revision: 1.1.1.1 $
+// $Date: 2009/10/14 19:11:07 $
+// $Revision: 1.2 $
 
 #if defined(__GNUC__) && !defined(__EDG_VERSION__)
 #   define SC_BOOST_MPL_CFG_GCC ((__GNUC__ << 8) | __GNUC_MINOR__)
