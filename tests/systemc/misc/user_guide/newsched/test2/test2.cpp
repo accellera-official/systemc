@@ -156,7 +156,7 @@ sc_main(int ac, char *av[])
   asyncblock P3("P3", c, b, clock);
 
   sc_trace_file *tf = sc_create_vcd_trace_file("systemc");
-  ((vcd_trace_file *) tf)->sc_set_vcd_time_unit(-9);
+  ((vcd_trace_file *) tf)->set_time_unit(1, SC_NS);
   sc_trace(tf, a, "SYNC-IN1");
   sc_trace(tf, b, "SYNC-IN2");
   sc_trace(tf, c, "SYNC2-OUT");

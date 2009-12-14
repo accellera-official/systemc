@@ -95,7 +95,8 @@ int sc_main(int ac, char *av[])
   proc1 P1("P1", clock);
 
   tf = sc_create_wif_trace_file("test01");
-  ((wif_trace_file *) tf)->sc_set_wif_time_unit(-12);
+  tf->set_time_unit( 1, SC_PS );
+  // @@@@ ((wif_trace_file *) tf)->sc_set_wif_time_unit(-12);
   sc_trace(tf, P1.obj1, "Bool");
   sc_trace(tf, P1.obj2, "SC_Logic");
   sc_trace(tf, P1.obj3, "SC_BV");

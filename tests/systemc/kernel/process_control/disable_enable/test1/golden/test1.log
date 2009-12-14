@@ -1,6 +1,29 @@
 SystemC Simulation
-0 s: starting victim thread
-0 s: issuing self disable in victim thread
-0 s: after issuing self disable in victim thread
-10 ns: in perpetrator enabling victim 
-100 ns: ending victim thread
+0 s[0]: target_method0: starting
+0 s[0]: target_method0: issuing self disable
+0 s[0]: target_method0: after issuing self disable
+
+0 s[0]: target_thread0: starting
+0 s[0]: target_thread0: issuing self disable
+0 s[0]: target_thread0: after issuing self disable
+
+0 s[1]: target_cthread0: starting
+0 s[1]: target_cthread0: issuing self disable
+0 s[1]: target_cthread0: after issuing self disable
+
+
+10 ns[30]: stimulator: enabling target_cthread0
+
+
+20 ns[60]: stimulator: enabling target_method0
+
+
+30 ns[90]: stimulator: enabling target_thread0
+
+80 ns[240]: target_thread0: terminating
+109 ns[328]: target_cthread0: terminating
+118 ns[355]: target_method0: terminating
+
+1030 ns[3090]: stimulator: terminating
+
+Info: /OSCI/SystemC: Simulation stopped by user.

@@ -15,16 +15,12 @@ SystemC Simulation
 1500 ps:      dynamic thread (123) after wait on m_clk.negedge_event() 
 2 ns:      static method (134)
 2 ns: stimulus (154) - disabling all processes
-2 ns:      static thread (143)
-2 ns:      cthread (61)
 
 5 ns: stimulus (169) - enabling all processes
 5 ns:      static thread (143)
 5 ns:      cthread (61)
 6 ns:      static method (134)
 6 ns: stimulus (172) - disabling all processes
-6 ns:      static thread (143)
-6 ns:      cthread (61)
 7 ns: stimulus (181) - firing event1 
 
 8 ns: stimulus (189) - enabling all processes
@@ -56,16 +52,12 @@ SystemC Simulation
 13 ns:      cthread (61)
 14 ns:      static method (134)
 14 ns: stimulus (154) - disabling all processes
-14 ns:      static thread (143)
-14 ns:      cthread (61)
 
 17 ns: stimulus (169) - enabling all processes
 17 ns:      static thread (143)
 17 ns:      cthread (61)
 18 ns:      static method (134)
 18 ns: stimulus (172) - disabling all processes
-18 ns:      static thread (143)
-18 ns:      cthread (61)
 19 ns: stimulus (181) - firing event1 
 
 20 ns: stimulus (189) - enabling all processes

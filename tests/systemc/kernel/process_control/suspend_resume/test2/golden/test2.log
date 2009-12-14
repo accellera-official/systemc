@@ -5,74 +5,74 @@ SystemC Simulation
 0 s[1]: target_cthread0: starting
 1 ns[3]: target_thread0: active
 
-2 ns[4]: stimulator: disabling target_cthread0
+2 ns[4]: stimulator: suspending target_cthread0
 
 2 ns[5]: target_method0: active
 3 ns[7]: target_thread0: active
 4 ns[9]: target_method0: active
 
-5 ns[10]: stimulator: disabling target_method0
+5 ns[10]: stimulator: suspending target_method0
 
 5 ns[11]: target_thread0: active
 7 ns[15]: target_thread0: active
 
-8 ns[16]: stimulator: disabling target_thread0
+8 ns[16]: stimulator: suspending target_thread0
 
 
-11 ns[22]: stimulator: enabling target_cthread0
+11 ns[22]: stimulator: resuming target_cthread0
 
+11 ns[23]: target_cthread0: active
 12 ns[25]: target_cthread0: active
 
-14 ns[28]: stimulator: enabling target_method0
+14 ns[28]: stimulator: resuming target_method0
 
 14 ns[29]: target_method0: active
 14 ns[29]: target_cthread0: active
 16 ns[33]: target_method0: active
 16 ns[33]: target_cthread0: active
 
-17 ns[34]: stimulator: enabling target_thread0
+17 ns[34]: stimulator: resuming target_thread0
 
 17 ns[35]: target_thread0: active
 18 ns[37]: target_method0: active
 18 ns[37]: target_cthread0: active
 19 ns[39]: target_thread0: active
 
-20 ns[40]: stimulator: disabling target_cthread0
+20 ns[40]: stimulator: suspending target_cthread0
 
 20 ns[41]: target_method0: active
 21 ns[43]: target_thread0: active
 22 ns[45]: target_method0: active
 
-23 ns[46]: stimulator: disabling target_method0
+23 ns[46]: stimulator: suspending target_method0
 
 23 ns[47]: target_thread0: active
 25 ns[51]: target_thread0: active
 
-26 ns[52]: stimulator: disabling target_thread0
+26 ns[52]: stimulator: suspending target_thread0
 
 
-29 ns[58]: stimulator: enabling target_cthread0
+29 ns[58]: stimulator: resuming target_cthread0
 
+29 ns[59]: target_cthread0: active
 30 ns[61]: target_cthread0: active
 
-32 ns[64]: stimulator: enabling target_method0
+32 ns[64]: stimulator: resuming target_method0
 
 32 ns[65]: target_method0: active
 32 ns[65]: target_cthread0: active
 34 ns[69]: target_method0: active
 34 ns[69]: target_cthread0: active
 
-35 ns[70]: stimulator: enabling target_thread0
+35 ns[70]: stimulator: resuming target_thread0
 
 35 ns[71]: target_thread0: active
 35 ns[71]: target_thread0: terminating
 36 ns[73]: target_method0: active
 36 ns[73]: target_cthread0: active
+36 ns[73]: target_cthread0: terminating
 38 ns[76]: target_method0: active
-38 ns[76]: target_cthread0: active
 40 ns[79]: target_method0: active
-40 ns[79]: target_cthread0: active
-40 ns[79]: target_cthread0: terminating
 42 ns[82]: target_method0: active
 44 ns[85]: target_method0: active
 46 ns[88]: target_method0: active

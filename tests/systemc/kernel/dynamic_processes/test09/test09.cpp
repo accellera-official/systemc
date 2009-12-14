@@ -34,6 +34,9 @@
 
  *****************************************************************************/
 // $Log: test09.cpp,v $
+// Revision 1.2  2009/10/14 19:13:27  acg
+//  Andy Goodrich: changes for SystemC 2.3
+//
 // Revision 1.1.1.1  2006/12/15 20:26:03  acg
 // systemc_tests-2.3
 //

@@ -1,7 +1,30 @@
 SystemC Simulation
-0 s: starting victim thread
-2 ns: in perpetrator suspending victim 
-12 ns(3): in perpetrator resuming victim 
-12 ns(4): victim thread resuming
+0 s[0]: target_method0: starting
+0 s[0]: target_method0: issuing self suspend
+0 s[0]: target_method0: after issuing self suspend
+
+0 s[0]: target_thread0: starting
+0 s[0]: target_thread0: issuing self suspend
+
+0 s[1]: target_cthread0: starting
+0 s[1]: target_cthread0: issuing self suspend
+
+
+10 ns[30]: stimulator: resuming target_cthread0
+
+10 ns[31]: target_cthread0: back from self suspend
+
+20 ns[60]: stimulator: resuming target_method0
+
+20 ns[61]: target_method0: back from self suspend
+
+30 ns[90]: stimulator: resuming target_thread0
+
+30 ns[91]: target_thread0: back from self suspend
+110 ns[330]: target_thread0: terminating
+110 ns[331]: target_cthread0: terminating
+118 ns[355]: target_method0: terminating
+
+1030 ns[3090]: stimulator: terminating
 
 Info: /OSCI/SystemC: Simulation stopped by user.

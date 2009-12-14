@@ -15,19 +15,17 @@
 //
 //
 //
-//  test01.cpp -- test self suspends on processes
+//  test02.cpp -- test that suspended processes with static sensitivity
+//                wake up when resumed.
 //
 //  Original Author: Andy Goodrich, Forte Design Systems, Inc. 
 //
 //  CVS MODIFICATION LOG - modifiers, enter your name, affiliation, date and
 //  changes you are making here.
 //
-// $Log: test1.cpp,v $
-// Revision 1.2  2009/07/28 18:43:50  acg
+// $Log: test2.cpp,v $
+// Revision 1.1  2009/07/28 18:43:55  acg
 //  Andy Goodrich: new standard test bench version of this test.
-//
-// Revision 1.2  2009/07/28 01:09:48  acg
-//  Andy Goodrich: replacement test using standardized environment.
 //
 //*****************************************************************************
 
@@ -35,7 +33,7 @@
 #include "systemc.h"
     
 enum my_process_states {
-    ST_DISABLED,
+    ST_SUSPENDD,
     ST_NORMAL,
     ST_SUSPENDED
 };
@@ -49,11 +47,12 @@ inline ostream& time_stamp( ostream& os )
 SC_MODULE(top) {
     // constructor:
 
-    SC_CTOR(top) : 
-        m_state_cthread0(ST_NORMAL), 
-	m_state_method0(ST_NORMAL),
-        m_state_thread0(ST_NORMAL)
+    SC_CTOR(top) 
     {
+        m_state_cthread0 = ST_NORMAL;
+	m_state_method0 = ST_NORMAL;
+        m_state_thread0 = ST_NORMAL;
+
         SC_THREAD(stimulator0);
 
         SC_CTHREAD( target_cthread0, m_clk.pos() );
@@ -64,6 +63,7 @@ SC_MODULE(top) {
         m_target_method0 = sc_get_current_process_handle();
 
         SC_THREAD(target_thread0);
+	sensitive << m_clk.neg();
         m_target_thread0 = sc_get_current_process_handle();
     }
 
@@ -77,39 +77,63 @@ SC_MODULE(top) {
     // Storage: 
 
     sc_in<bool>       m_clk;      
-    int               m_state_cthread0;
-    int               m_state_method0;
-    int               m_state_thread0;
+    sc_signal<int>    m_state_cthread0;
+    sc_signal<int>    m_state_method0;
+    sc_signal<int>    m_state_thread0;
     sc_process_handle m_target_cthread0;
     sc_process_handle m_target_method0;
     sc_process_handle m_target_thread0;
 };
 
+#define SUSPEND(TARGET) \
+    cout << endl; \
+    time_stamp(cout) << name << ": suspending target_" << #TARGET << endl; \
+    m_state_##TARGET = ST_SUSPENDD; \
+    m_target_##TARGET.suspend(); \
+    cout << endl; 
+
+#define RESUME(TARGET) \
+    cout << endl; \
+    time_stamp(cout) << name << ": resuming target_" << #TARGET << endl; \
+    m_state_##TARGET = ST_NORMAL; \
+    m_target_##TARGET.resume(); \
+    cout << endl; 
+
 void top::stimulator0() 
 {
     const char* name = "stimulator";
-    wait(10, SC_NS);
-    cout << endl;
-    time_stamp(cout) << name << ": resuming target_cthread0" << endl;
-    cout << endl;
-    m_state_cthread0 = ST_NORMAL;
-    m_target_cthread0.resume();
-    wait(10, SC_NS);
 
-    cout << endl;
-    time_stamp(cout) << name << ": resuming target_method0" << endl;
-    cout << endl;
-    m_state_method0 = ST_NORMAL;
-    m_target_method0.resume();
-    wait(10, SC_NS);
+    wait(2, SC_NS);
 
-    cout << endl;
-    time_stamp(cout) << name << ": resuming target_thread0" << endl;
-    cout << endl;
-    m_state_thread0 = ST_NORMAL;
-    m_target_thread0.resume();
+    SUSPEND(cthread0)
+    wait(3, SC_NS);
+    SUSPEND(method0)
+    wait(3, SC_NS);
+    SUSPEND(thread0)
+    wait(3, SC_NS);
+
+    RESUME(cthread0)
+    wait(3, SC_NS);
+    RESUME(method0)
+    wait(3, SC_NS);
+    RESUME(thread0)
+    wait(3, SC_NS);
+
+    SUSPEND(cthread0)
+    wait(3, SC_NS);
+    SUSPEND(method0)
+    wait(3, SC_NS);
+    SUSPEND(thread0)
+    wait(3, SC_NS);
+
+    RESUME(cthread0)
+    wait(3, SC_NS);
+    RESUME(method0)
+    wait(3, SC_NS);
+    RESUME(thread0)
+    wait(3, SC_NS);
+
     ::sc_core::wait(1000, SC_NS);
-
     cout << endl;
     time_stamp(cout) << name << ": terminating" << endl;
     sc_stop();
@@ -117,22 +141,20 @@ void top::stimulator0()
 
 void top::target_cthread0() 
 {
-    int         i;
     const char* name = "target_cthread0";
 
     time_stamp(cout) << name  << ": starting" << endl;
-    time_stamp(cout) << name  << ": issuing self suspend" << endl;
-    cout << endl;
-    m_state_cthread0 = ST_SUSPENDED;
-    m_target_cthread0.suspend();
-    time_stamp(cout) << name  << ": back from self suspend" << endl;
-    for ( i = 0; i < 100; i++ ) 
+    for (int i = 0; i < 10; i++)
     {
-	if ( m_state_cthread0 == ST_SUSPENDED )
+	wait();
+	if ( m_state_cthread0 == ST_SUSPENDD )
 	{
 	    time_stamp(cout) << name  << ": ERROR should not see this" << endl;
 	}
-        wait();
+	else
+	{
+	    time_stamp(cout) << name  << ": active" << endl;
+	}
     }
     time_stamp(cout) << name  << ": terminating" << endl;
 }
@@ -145,22 +167,18 @@ void top::target_method0()
     {
       case 0:
         time_stamp(cout) << name  << ": starting" << endl;
-        time_stamp(cout) << name  << ": issuing self suspend" << endl;
-	m_state_method0 = ST_SUSPENDED;
-        m_target_method0.suspend();
-        time_stamp(cout) << name  << ": after issuing self suspend" << endl;
-        cout << endl;
         break;
-      case 1:
-	time_stamp(cout) << name  << ": back from self suspend" << endl;
-	// fall through
       default:
-	if ( m_state_method0 == ST_SUSPENDED )
+	if ( m_state_method0 == ST_SUSPENDD )
 	{
 	    time_stamp(cout) << name  << ": ERROR should not see this" << endl;
 	}
+	else if ( state < 18 )
+	{
+	    time_stamp(cout) << name  << ": active" << endl;
+	}
         break;
-      case 99:
+      case 19:
         time_stamp(cout) << name  << ": terminating" << endl;
         break;
     }
@@ -172,27 +190,24 @@ void top::target_thread0()
     const char* name = "target_thread0";
 
     time_stamp(cout) << name  << ": starting" << endl;
-    time_stamp(cout) << name  << ": issuing self suspend" << endl;
-    cout << endl;
-    m_state_thread0 = ST_SUSPENDED;
-    m_target_thread0.suspend();
-    time_stamp(cout) << name  << ": back from self suspend" << endl;
-
-    // We wait a long enough time that our event will not occur until
-    // after we are resumed. Otherwise this thread will just go away
-    // quietly when the suspend cancels the event.
-
-    ::sc_core::wait(80, SC_NS);
-    if ( m_state_thread0 == ST_SUSPENDED )
+    for (int i = 0; i < 10; i++)
     {
-	time_stamp(cout) << name  << ": ERROR should not see this" << endl;
+	wait();
+	if ( m_state_thread0 == ST_SUSPENDD )
+	{
+	    time_stamp(cout) << name  << ": ERROR should not see this" << endl;
+	}
+	else
+	{
+	    time_stamp(cout) << name  << ": active" << endl;
+	}
     }
     time_stamp(cout) << name  << ": terminating" << endl;
 }
 
 int sc_main (int argc, char *argv[])
 {
-    sc_clock clock( "clock", 1.0, SC_NS );
+    sc_clock clock( "clock", 2.0, SC_NS );
 
     top* top_p = new top("top");
     top_p->m_clk(clock);
