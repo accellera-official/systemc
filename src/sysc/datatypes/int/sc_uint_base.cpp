@@ -36,6 +36,10 @@
 
 
 // $Log: sc_uint_base.cpp,v $
+// Revision 1.4  2010/02/04 22:23:29  acg
+//  Andy Goodrich: fixed bug in concatenation reads for part selections,
+//  the mask being used was 32 bits and should have been 64 bits.
+//
 // Revision 1.3  2008/06/19 17:47:57  acg
 //  Andy Goodrich: fixes for bugs. See 2.2.1 RELEASENOTES.
 //
@@ -166,7 +170,7 @@ bool sc_uint_subref_r::concat_get_data( sc_digit* dst_p, int low_i ) const
     int       end_i;	   // Highest order word in dst_p to process.
     int       high_i;	   // Index of high order bit in dst_p to set.
     int       left_shift;  // Left shift for val.
-    sc_digit  mask;	   // Mask for bits to extract or keep.
+    uint_type mask;	   // Mask for bits to extract or keep.
     bool      result;	   // True if inserting non-zero value.
     uint_type val;	   // Selection value extracted from m_obj_p.
 

@@ -36,6 +36,10 @@
 
 
 // $Log: sc_int_base.cpp,v $
+// Revision 1.4  2010/02/04 22:23:29  acg
+//  Andy Goodrich: fixed bug in concatenation reads for part selections,
+//  the mask being used was 32 bits and should have been 64 bits.
+//
 // Revision 1.3  2008/06/19 17:47:56  acg
 //  Andy Goodrich: fixes for bugs. See 2.2.1 RELEASENOTES.
 //
@@ -189,13 +193,13 @@ bool sc_int_subref_r::concat_get_ctrl( sc_digit* dst_p, int low_i ) const
 
 bool sc_int_subref_r::concat_get_data( sc_digit* dst_p, int low_i ) const
 {    
-    int       dst_i;       // Word in dst_p now processing.
-    int       end_i;       // Highest order word in dst_p to process.
-    int       high_i;      // Index of high order bit in dst_p to set.
-    int       left_shift;  // Left shift for val.
-    sc_digit  mask;        // Mask for bits to extract or keep.
-    bool      non_zero;	   // True if value inserted is non-zero.
-    uint_type val;         // Selection value extracted from m_obj_p.
+    int       dst_i;      // Word in dst_p now processing.
+    int       end_i;      // Highest order word in dst_p to process.
+    int       high_i;     // Index of high order bit in dst_p to set.
+    int       left_shift; // Left shift for val.
+    uint_type mask;       // Mask for bits to extract or keep.
+    bool      non_zero;	  // True if value inserted is non-zero.
+    uint_type val;        // Selection value extracted from m_obj_p.
 
     dst_i = low_i / BITS_PER_DIGIT;
     left_shift = low_i % BITS_PER_DIGIT;
@@ -211,6 +215,7 @@ bool sc_int_subref_r::concat_get_data( sc_digit* dst_p, int low_i ) const
     mask = ~(-1 << left_shift);
     dst_p[dst_i] = (sc_digit)((dst_p[dst_i] & mask) | 
 		((val << left_shift) & DIGIT_MASK));
+
     switch ( end_i - dst_i )
     {
      // BITS ARE ACROSS TWO WORDS:
