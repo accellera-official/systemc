@@ -228,7 +228,7 @@ void sc_method_process::kill_process(sc_descendant_inclusion_info descendants)
     sc_process_b*                    child_p;    // Child accessing.
     const ::std::vector<sc_object*>* children_p; // Vector of children.
 
-    // IF NEEDED PROPOGATE THE KILL REQUEST THROUGH OUR DESCENDANTS:
+    // IF NEEDED, PROPOGATE THE KILL REQUEST THROUGH OUR DESCENDANTS:
 
     if ( descendants == SC_INCLUDE_DESCENDANTS )
     {
@@ -246,6 +246,7 @@ void sc_method_process::kill_process(sc_descendant_inclusion_info descendants)
 
     disconnect_process();
     if ( next_runnable() == 0 ) simcontext()->push_runnable_method( this );
+    // @@@@#### should we do this? if ( next_runnable() != 0 ) simcontext()->remove_runnable_method( this );
     m_throw_type = THROW_KILL;
 }
 

@@ -165,10 +165,10 @@ sc_reset* sc_signal<bool>::is_reset() const
 
 sc_signal<bool>::~sc_signal()
 {
-    if ( !m_change_event_p )  delete m_change_event_p;
-    if ( !m_negedge_event_p ) delete m_negedge_event_p;
-    if ( !m_posedge_event_p ) delete m_posedge_event_p;
-    if ( m_reset_p )          delete m_reset_p;
+    if ( m_change_event_p )  delete m_change_event_p;
+    if ( m_negedge_event_p ) delete m_negedge_event_p;
+    if ( m_posedge_event_p ) delete m_posedge_event_p;
+    if ( m_reset_p )         delete m_reset_p;
 }
 
 

@@ -85,7 +85,7 @@ class sc_signal
 
     virtual ~sc_signal()
 	{
-	    if ( !m_change_event_p ) delete m_change_event_p;
+	    if ( m_change_event_p ) delete m_change_event_p;
 	}
 
 
@@ -538,9 +538,9 @@ class sc_signal<sc_dt::sc_logic>
 
     virtual ~sc_signal()
 	{
-	    if ( !m_change_event_p ) delete m_change_event_p;
-	    if ( !m_negedge_event_p ) delete m_negedge_event_p;
-	    if ( !m_posedge_event_p ) delete m_posedge_event_p;
+	    if ( m_change_event_p ) delete m_change_event_p;
+	    if ( m_negedge_event_p ) delete m_negedge_event_p;
+	    if ( m_posedge_event_p ) delete m_posedge_event_p;
 	}
 
 

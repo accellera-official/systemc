@@ -34,6 +34,10 @@
  *****************************************************************************/
 
 // $Log: sc_bit_proxies.h,v $
+// Revision 1.6  2010/02/22 14:25:43  acg
+//  Andy Goodrich: removed 'mutable' directive from references, since it
+//  is not a legal C++ construct.
+//
 // Revision 1.5  2009/02/28 00:26:14  acg
 //  Andy Goodrich: bug fixes.
 //
@@ -716,10 +720,10 @@ public:
 
 protected:
 
-    mutable X& m_obj;
-    int        m_hi;
-    int        m_lo;
-    int        m_len;
+    X&  m_obj;
+    int m_hi;
+    int m_lo;
+    int m_len;
 
 private:
 
@@ -1193,10 +1197,10 @@ public:
 
 protected:
 
-    mutable X&   m_left;
-    mutable Y&   m_right;
+    X&           m_left;
+    Y&           m_right;
     mutable int  m_delete;
-    mutable int& m_refs;
+    int&         m_refs;
 
 private:
 

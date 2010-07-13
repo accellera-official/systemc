@@ -50,7 +50,11 @@
 #include <iostream>
 #include <memory>
 #include <string>
-#include <stdint.h>
+#if defined(__sun) || defined(__sun__)
+#   include <inttypes.h>
+#else
+#   include <stdint.h>
+#endif
 #if defined(__EDG__)
 #   include <strstream>
 #endif // defined(__EDG__)

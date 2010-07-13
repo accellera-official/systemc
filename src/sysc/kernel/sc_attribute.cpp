@@ -161,8 +161,8 @@ sc_attr_cltn::remove( const std::string& name_ )
     for( int i = m_cltn.size() - 1; i >= 0; -- i ) {
 	if( name_ == m_cltn[i]->name() ) {
 	    sc_attr_base* attribute = m_cltn[i];
-	    m_cltn[i] = m_cltn[m_cltn.size() - 1];
-	    m_cltn.decr_count();
+	    std::swap( m_cltn[i], m_cltn.back() );
+	    m_cltn.pop_back();
 	    return attribute;
 	}
     }
@@ -175,7 +175,7 @@ sc_attr_cltn::remove( const std::string& name_ )
 void
 sc_attr_cltn::remove_all()
 {
-    m_cltn.erase_all();
+    m_cltn.clear();
 }
 
 } // namespace sc_core

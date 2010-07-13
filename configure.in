@@ -56,76 +56,41 @@ dnl
 CXX_COMP=`basename $CXX`
 AR_TOOL="ar cru"
 
+EXTRA_CXXFLAGS="-Wall"
+DEBUG_CXXFLAGS="-g"
+OPT_CXXFLAGS="-O3"
+
 case "$target" in
     i386-apple-macosx*)
         case "$CXX_COMP" in
             CC)
                 EXTRA_CXXFLAGS="-arch i386"
-                DEBUG_CXXFLAGS="-g"
-                OPT_CXXFLAGS="-O3"
                 TARGET_ARCH="macosx386"
 		AR_TOOL="$CXX -xar -o"
-        	CC="$CXX"
-        	CFLAGS="$EXTRA_CXXFLAGS $OPT_CXXFLAGS"
                 ;;
             c++ | g++)
-                EXTRA_CXXFLAGS="-Wall -arch i386"
-                DEBUG_CXXFLAGS="-g"
-                OPT_CXXFLAGS="-O3"
+                EXTRA_CXXFLAGS="$EXTRA_CXXFLAGS -arch i386"
                 TARGET_ARCH="macosx386"
-        	CC="$CXX"
-        	CFLAGS="$EXTRA_CXXFLAGS $OPT_CXXFLAGS"
                 ;;
             *)
-                { { echo "$as_me:2730: error: \"sorry...compiler not supported\"" >&5
-echo "$as_me: error: \"sorry...compiler not supported\"" >&2;}
-   { (exit 1); exit 1; }; }
+		AC_MSG_ERROR("sorry...compiler not supported")
 		;;
         esac
 	AS="as -arch i386"
         QT_ARCH="iX86"
         ;;
-    *mingw*)
-        case "$CXX_COMP" in
-            c++ | g++)
-                EXTRA_CXXFLAGS="-Wall"
-                DEBUG_CXXFLAGS="-g"
-                OPT_CXXFLAGS="-O3"
-                TARGET_ARCH="macosx"
-        	CC="$CXX"
-        	CFLAGS="$EXTRA_CXXFLAGS $OPT_CXXFLAGS"
-                ;;
-            *)
-                { { echo "$as_me:2730: error: \"sorry...compiler not supported\"" >&5
-echo "$as_me: error: \"sorry...compiler not supported\"" >&2;}
-   { (exit 1); exit 1; }; }
-        esac
-	AS=as
-        QT_ARCH="iX386"
-        ;;
     powerpc-apple-macosx*)
         case "$CXX_COMP" in
             CC)
                 EXTRA_CXXFLAGS=""
-                DEBUG_CXXFLAGS="-g"
-                OPT_CXXFLAGS="-O3"
                 TARGET_ARCH="macosx"
 		AR_TOOL="$CXX -xar -o"
-        	CC="$CXX"
-        	CFLAGS="$EXTRA_CXXFLAGS $OPT_CXXFLAGS"
                 ;;
             c++ | g++)
-                EXTRA_CXXFLAGS="-Wall"
-                DEBUG_CXXFLAGS="-g"
-                OPT_CXXFLAGS="-O3"
                 TARGET_ARCH="macosx"
-        	CC="$CXX"
-        	CFLAGS="$EXTRA_CXXFLAGS $OPT_CXXFLAGS"
                 ;;
             *)
-                { { echo "$as_me:2730: error: \"sorry...compiler not supported\"" >&5
-echo "$as_me: error: \"sorry...compiler not supported\"" >&2;}
-   { (exit 1); exit 1; }; }
+		AC_MSG_ERROR("sorry...compiler not supported")
 		;;
         esac
 	AS=as
@@ -135,20 +100,11 @@ echo "$as_me: error: \"sorry...compiler not supported\"" >&2;}
         case "$CXX_COMP" in
             CC)
                 EXTRA_CXXFLAGS=""
-                DEBUG_CXXFLAGS="-g"
-                OPT_CXXFLAGS="-O3"
                 TARGET_ARCH="sparcOS5"
 		AR_TOOL="$CXX -xar -o"
-        	CC="$CXX"
-        	CFLAGS="$EXTRA_CXXFLAGS $OPT_CXXFLAGS"
                 ;;
             c++ | g++)
-                EXTRA_CXXFLAGS="-Wall"
-                DEBUG_CXXFLAGS="-g"
-                OPT_CXXFLAGS="-O3"
                 TARGET_ARCH="gccsparcOS5"
-        	CC="$CXX"
-        	CFLAGS="$EXTRA_CXXFLAGS $OPT_CXXFLAGS"
                 ;;
             *)
                 AC_MSG_ERROR("sorry...compiler not supported")
@@ -160,12 +116,7 @@ echo "$as_me: error: \"sorry...compiler not supported\"" >&2;}
     x86_64*linux*)
         case "$CXX_COMP" in
             c++ | g++)
-                EXTRA_CXXFLAGS="-Wall"
-                DEBUG_CXXFLAGS="-g"
-                OPT_CXXFLAGS="-O3"
                 TARGET_ARCH="linux64"
-        	CC="$CXX"
-        	CFLAGS="$EXTRA_CXXFLAGS $OPT_CXXFLAGS"
                 ;;
             *)
                 AC_MSG_ERROR("sorry...compiler not supported")
@@ -177,29 +128,43 @@ echo "$as_me: error: \"sorry...compiler not supported\"" >&2;}
     *linux*)
         case "$CXX_COMP" in
             c++ | g++)
-                EXTRA_CXXFLAGS="-Wall"
-                DEBUG_CXXFLAGS="-g"
-                OPT_CXXFLAGS="-O3"
                 TARGET_ARCH="linux"
-        	CC="$CXX"
-        	CFLAGS="$EXTRA_CXXFLAGS $OPT_CXXFLAGS"
                 ;;
             *)
                 AC_MSG_ERROR("sorry...compiler not supported")
 		;;
         esac
 	AS=as
+        QT_ARCH="iX86"
+        ;;
+    amd64*freebsd* | x86_64*freebsd*)
+        case "$CXX_COMP" in
+            c++ | g++)
+                TARGET_ARCH="freebsd64"
+                ;;
+            *)
+                AC_MSG_ERROR("sorry...compiler not supported")
+            ;;
+        esac
+        AS=as
+        QT_ARCH="x86_64"
+        ;;
+    *freebsd*)
+        case "$CXX_COMP" in
+            c++ | g++)
+                TARGET_ARCH="freebsd"
+                ;;
+            *)
+                AC_MSG_ERROR("sorry...compiler not supported")
+            ;;
+        esac
+        AS=as
         QT_ARCH="iX86"
         ;;
     *cygwin*)
         case "$CXX_COMP" in
             c++ | g++)
-                EXTRA_CXXFLAGS="-Wall"
-                DEBUG_CXXFLAGS="-g"
-                OPT_CXXFLAGS="-O3"
                 TARGET_ARCH="cygwin"
-        	CC="$CXX"
-        	CFLAGS="$EXTRA_CXXFLAGS $OPT_CXXFLAGS"
                 ;;
             *)
                 AC_MSG_ERROR("sorry...compiler not supported")
@@ -208,23 +173,28 @@ echo "$as_me: error: \"sorry...compiler not supported\"" >&2;}
 	AS=as
         QT_ARCH="iX86"
         ;;
+    *mingw*)
+        case "$CXX_COMP" in
+            c++ | g++)
+                TARGET_ARCH="mingw"
+                ;;
+            *)
+                AC_MSG_ERROR("sorry...compiler not supported")
+		;;
+        esac
+	AS=as
+        QT_ARCH="iX386"
+        ;;
     *hpux11*)
         case "$CXX_COMP" in
             aCC)
                 EXTRA_CXXFLAGS="-AA -ext +DA2.0 +DS2.0"
-                DEBUG_CXXFLAGS="-g"
                 OPT_CXXFLAGS="+O1"
                 TARGET_ARCH="hpux11"
-        	CC="$CXX"
-        	CFLAGS="$EXTRA_CXXFLAGS $OPT_CXXFLAGS -Wa,-w36"
+        	CFLAGS="-Wa,-w36"
                 ;;
             c++ | g++)
-                EXTRA_CXXFLAGS="-Wall"
-                DEBUG_CXXFLAGS="-g"
-                OPT_CXXFLAGS="-O3"
                 TARGET_ARCH="gcchpux11"
-        	CC="$CXX"
-        	CFLAGS="$EXTRA_CXXFLAGS $OPT_CXXFLAGS"
                 ;;
             *)
                 AC_MSG_ERROR("sorry...compiler not supported")
@@ -237,6 +207,11 @@ echo "$as_me: error: \"sorry...compiler not supported\"" >&2;}
         AC_MSG_ERROR("sorry...architecture not supported")
         ;;
 esac
+
+dnl set C-related variables
+dnl
+CC="$CXX"
+CFLAGS="$EXTRA_CXXFLAGS $OPT_CXXFLAGS $EXTRA_CFLAGS"
 
 dnl
 dnl The fixed-point datatypes "package" is included.

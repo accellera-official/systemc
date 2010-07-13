@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2008 by all Contributors.
+  source code Copyright (c) 1996-2010 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -84,6 +84,8 @@ bool
 operator == ( const sc_process_handle& left, const sc_process_handle& right );
 bool 
 operator != ( const sc_process_handle& left, const sc_process_handle& right );
+bool 
+operator < ( const sc_process_handle& left, const sc_process_handle& right );
 
 
 
@@ -100,6 +102,7 @@ class sc_process_handle {
 
     friend bool operator == ( const this_type& left, const this_type& right );
     friend bool operator != ( const this_type& left, const this_type& right );
+    friend bool operator < ( const this_type& left, const this_type& right );
     friend class sc_object;
     friend class sc_join;
     friend class sc_module;
@@ -114,7 +117,8 @@ class sc_process_handle {
     inline explicit sc_process_handle( sc_object* object_p );
     inline sc_process_handle( const sc_process_handle& orig );
     inline ~sc_process_handle();
-    inline sc_process_handle& operator = ( const sc_process_handle& src );
+    inline sc_process_handle& operator = ( sc_process_handle src );
+    inline void swap( sc_process_handle& other );
 
   public:
     inline void disable(
@@ -180,6 +184,12 @@ inline bool operator != (
         (left.m_target_p != right.m_target_p);
 }
 
+inline bool operator < (
+    const sc_process_handle& left, const sc_process_handle& right )
+{
+    return left.m_target_p < right.m_target_p == 0;
+}
+
 //------------------------------------------------------------------------------
 //"sc_process_handle::sc_process_handle - non-pointer constructor"
 //
@@ -221,20 +231,25 @@ inline sc_process_handle::sc_process_handle( const sc_process_handle& orig )
     if ( m_target_p ) m_target_p->reference_increment();
 }
 
+
 //------------------------------------------------------------------------------
-//"sc_process_handle::operator = - copy constructor"
+//"sc_process_handle::operator ="
 //
-// This version of the object instance constructor for this class provides
-// the copy constructor for the class. It clones the supplied original
-// handle and increments the references to its target.
+// This assignment operator signature is call by value rather than reference.
+// This means that an sc_process_handle instance will be created and the
+// target for that instance will be incremented before the assignment is done.
+// The assignment is done using the swap() method, which simply swaps the
+// targets of 'orig' and this object instance. We don't need to increment
+// the reference count for our new target since that was done when 'orig'
+// was created. Our old target's reference count will be decremented when
+// 'orig' is deleted.
 //     orig = sc_process_handle object instance to be copied from.
+// Result is a reference for this object instance.
 //------------------------------------------------------------------------------
 inline sc_process_handle& 
-sc_process_handle::operator = ( const sc_process_handle& orig )
+sc_process_handle::operator = ( sc_process_handle orig )
 {
-    if ( m_target_p ) m_target_p->reference_decrement();
-    m_target_p = orig.m_target_p;
-    if ( m_target_p ) m_target_p->reference_increment();
+    swap( orig );
     return *this;
 }
 
@@ -255,25 +270,36 @@ inline sc_process_handle::~sc_process_handle()
 //
 // These are short inline methods.
 //------------------------------------------------------------------------------
+
+// disable this object instance's target.
+
 inline void sc_process_handle::disable(sc_descendant_inclusion_info descendants)
 {
     if ( m_target_p ) m_target_p->disable_process(descendants);
 }
+
+// call dont_initialize() on this object instance's target.
 
 inline void sc_process_handle::dont_initialize( bool dont )
 {
     if ( m_target_p ) m_target_p->dont_initialize( dont );
 }
 
+// return whether this object instance's target is dynamic or not.
+
 inline bool sc_process_handle::dynamic() const
 {
     return m_target_p ? m_target_p->dynamic() : false;
 }
 
+// enable this object instance's target.
+
 inline void sc_process_handle::enable(sc_descendant_inclusion_info descendants)
 {
     if ( m_target_p ) m_target_p->enable_process(descendants);
 }
+
+// return the child objects for this object instance's target.
 
 inline 
 const std::vector<sc_object*>& sc_process_handle::get_child_objects() const
@@ -282,15 +308,21 @@ const std::vector<sc_object*>& sc_process_handle::get_child_objects() const
         sc_process_handle::empty_vector;
 }
 
+// return the parent object for this object instance's target.
+
 inline sc_object* sc_process_handle::get_parent_object() const
 {
     return m_target_p ? m_target_p->get_parent_object() : (sc_object*)0;
 }
 
+// return this object instance's target.
+
 inline sc_object* sc_process_handle::get_process_object() const
 {
     return m_target_p;
 }
+
+// kill this object instance's target.
 
 inline void sc_process_handle::kill( sc_descendant_inclusion_info descendants )
 {
@@ -298,15 +330,21 @@ inline void sc_process_handle::kill( sc_descendant_inclusion_info descendants )
         m_target_p->kill_process( descendants );
 }
 
+// return the name of this object instance's target.
+
 inline const char* sc_process_handle::name() const
 {
     return m_target_p ? m_target_p->name() : "";
 }
 
+// return the process kind for this object instance's target.
+
 inline sc_curr_proc_kind sc_process_handle::proc_kind() const
 {
     return m_target_p ? m_target_p->proc_kind() : SC_NO_PROC_;
 }
+
+// reset this object instance's target.
 
 inline void sc_process_handle::reset( sc_descendant_inclusion_info descendants )
 {
@@ -314,21 +352,40 @@ inline void sc_process_handle::reset( sc_descendant_inclusion_info descendants )
         m_target_p->reset_process(sc_process_b::reset_asynchronous,descendants);
 }
 
+// resume this object instance's target.
+
 inline void sc_process_handle::resume(sc_descendant_inclusion_info descendants)
 {
     if ( m_target_p ) m_target_p->resume_process(descendants);
 }
 
+// suspend this object instance's target.
+
 inline void sc_process_handle::suspend(sc_descendant_inclusion_info descendants)
 {
     if ( m_target_p ) m_target_p->suspend_process(descendants);
 }
+
+// swap targets of this process handle with the supplied one.
+
+inline void sc_process_handle::swap( sc_process_handle& other )
+{
+    sc_process_b* tmp = m_target_p;
+    m_target_p = other.m_target_p;
+    other.m_target_p = tmp;
+}
+
+// turn sync_reset off for this object instance's target.
+
 inline void sc_process_handle::sync_reset_off(
     sc_descendant_inclusion_info descendants)
 {
     if ( m_target_p ) 
         m_target_p->reset_process( sc_process_b::reset_off, descendants);
 }
+
+// turn sync_reset on for this object instance's target.
+
 inline void sc_process_handle::sync_reset_on(
     sc_descendant_inclusion_info descendants)
 {
@@ -339,16 +396,22 @@ inline void sc_process_handle::sync_reset_on(
     }
 }
 
+// terminate this object instance's target.
+
 inline bool sc_process_handle::terminated() const
 {
     return m_target_p ? m_target_p->terminated() : false; 
 }
+
+// return the termination event for this object instance's target.
 
 inline sc_event& sc_process_handle::terminated_event()
 {
     return m_target_p ? m_target_p->terminated_event() : 
         sc_process_handle::non_event;
 }
+
+// return true if this object instance has a target, false it not.
 
 inline bool sc_process_handle::valid() const
 {

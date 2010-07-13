@@ -88,9 +88,6 @@ namespace sc_core {
 std::vector<sc_object*> sc_process_handle::empty_vector;
 sc_event                sc_process_handle::non_event;
 
-// Process to delete next:
-sc_process_b* sc_process_b::m_delete_next_p = 0;
-
 // Last process that was created:
 sc_process_b* sc_process_b::m_last_created_process_p = 0;
 
@@ -175,7 +172,6 @@ void sc_process_b::disconnect_process()
         break;
     }
 
-
     // REMOVE EVENT WAITS, AND REMOVE THE PROCESS FROM ITS SC_RESET:
 
     remove_dynamic_events();
@@ -186,10 +182,6 @@ void sc_process_b::disconnect_process()
         m_resets[rst_i]->remove_process( this );
     }
     m_resets.resize(0);
-
-    // REMOVE THIS INSTANCE FROM THE OBJECT HIERARCHY:
-
-    detach();
 
 
     // FIRE THE TERMINATION EVENT, MARK AS TERMINATED, AND DECREMENT THE COUNT:
@@ -202,6 +194,37 @@ void sc_process_b::disconnect_process()
     m_state = ps_zombie;
     if ( m_term_event_p ) m_term_event_p->notify();
     reference_decrement();
+}
+
+//------------------------------------------------------------------------------
+//"sc_process_b::delete_process"
+//
+// This method deletes the current instance, if it is not the running
+// process. Otherwise, it is put in the simcontext's process deletion
+// queue.
+//
+// The reason for the two step deletion process is that the process from which
+// reference_decrement() is called may be the running process, so we may need
+// to wait until it goes idle.
+//------------------------------------------------------------------------------
+void sc_process_b::delete_process()
+{
+    assert( m_references_n == 0 );
+
+    // Immediate deletion:
+
+    if ( this != sc_get_current_process_b() )
+    {
+        delete this;
+    }
+  
+    // Deferred deletion
+  
+    else
+    {
+        detach();
+        simcontext()->mark_to_collect_process( this );
+    }
 }
 
 

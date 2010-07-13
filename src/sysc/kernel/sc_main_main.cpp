@@ -35,6 +35,9 @@
 
 
 // $Log: sc_main_main.cpp,v $
+// Revision 1.5  2010/03/15 18:29:25  acg
+//  Andy Goodrich: Changed the default stack size to 128K from 64K.
+//
 // Revision 1.4  2009/10/14 19:06:48  acg
 //  Andy Goodrich: changed the way the "copy" of argv is handled. It is
 //  now passed to sc_main, and the original is referenced via argv_copy.
@@ -62,6 +65,7 @@
 #include "sysc/utils/sc_iostream.h"
 #include "sysc/utils/sc_report.h"
 #include "sysc/utils/sc_report_handler.h"
+#include <vector>
 
 namespace sc_core {
 
@@ -97,10 +101,9 @@ sc_elab_and_sim( int argc, char* argv[] )
     int status = 1;
     argc_copy = argc;
     argv_copy = argv;
-    char* argv_call[argc+1];
+    std::vector<char*> argv_call;
     for ( int i = 0; i < argc; i++ ) 
-        argv_call[i] = argv[i];
-    argv_call[argc] = 0;
+        argv_call.push_back(argv[i]);
 
     try
     {
@@ -109,7 +112,7 @@ sc_elab_and_sim( int argc, char* argv[] )
         // Perform initialization here
         sc_in_action = true;
 
-        status = sc_main( argc, argv_call );
+        status = sc_main( argc, &argv_call[0] );
 
         // Perform cleanup here
         sc_in_action = false;

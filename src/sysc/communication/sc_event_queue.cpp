@@ -94,7 +94,7 @@ void sc_event_queue::cancel_all()
 {
     m_pending_delta = 0;
     while( m_ppq.size() > 0 )
-	m_ppq.extract_top();
+	delete m_ppq.extract_top();
     m_e.cancel();
 }
 
@@ -110,6 +110,9 @@ void sc_event_queue::notify (const sc_time& when)
     
 void sc_event_queue::fire_event()
 {
+    if ( m_ppq.empty() ) { // event has been cancelled
+        return;
+    }
     sc_time* t = m_ppq.extract_top();
     assert( *t==sc_time_stamp() );
     delete t;

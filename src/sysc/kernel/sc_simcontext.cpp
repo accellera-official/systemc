@@ -182,6 +182,7 @@
 #include "sysc/communication/sc_prim_channel.h"
 #include "sysc/tracing/sc_trace.h"
 #include "sysc/utils/sc_mempool.h"
+#include "sysc/utils/sc_list.h"
 #include "sysc/utils/sc_utils_ids.h"
 
 namespace sc_core {
@@ -387,20 +388,24 @@ sc_process_table::thread_q_head()
     return m_thread_q;
 }
 
-
+#if !defined(SC_DISABLE_COPYRIGHT_MESSAGE)
+#  define SC_DISABLE_COPYRIGHT_MESSAGE 0
+#endif
 
 // ----------------------------------------------------------------------------
 
 void
 pln()
 {
-    static bool lnp = false;
+    static bool lnp = SC_DISABLE_COPYRIGHT_MESSAGE;
+    if ( getenv("SYSTEMC_DISABLE_COPYRIGHT_MESSAGE") != 0 ) lnp = true;
     if( ! lnp ) {
         ::std::cerr << ::std::endl;
 	::std::cerr << sc_version() << ::std::endl;
 	::std::cerr << sc_copyright() << ::std::endl;
 
 	//  regressions check point
+
         if( getenv( "SYSTEMC_REGRESSION" ) != 0 ) {
             ::std::cerr << "SystemC Simulation" << ::std::endl;
         }
@@ -465,6 +470,7 @@ sc_simcontext::init()
     m_timed_events = new sc_ppq<sc_event_timed*>( 128, sc_notify_time_compare );
     m_something_to_trace = false;
     m_runnable = new sc_runnable;
+    m_collectable = new sc_process_list;
     m_time_params = new sc_time_params;
     m_curr_time = SC_ZERO_TIME;
     m_delta_count = 0;
@@ -499,6 +505,7 @@ sc_simcontext::clean()
     }
     m_trace_files.resize(0);
     delete m_runnable;
+    delete m_collectable;
     delete m_time_params;
     if( m_until_event != 0 ) {
         delete m_until_event;
@@ -577,6 +584,16 @@ sc_simcontext::crunch( bool once )
 	    }
 	    m_runnable->toggle();
 	}
+
+	// remove finally dead zombies:
+
+        while( ! m_collectable->empty() )
+        {
+	    sc_process_b* del_p = m_collectable->front();
+	    m_collectable->pop_front();
+	    delete del_p;
+        }
+
 
 	// UPDATE PHASE
 	//
@@ -925,6 +942,12 @@ sc_simcontext::do_sc_stop_action()
 	end();
 	m_in_simulator_control = false;
     }
+}
+
+void
+sc_simcontext::mark_to_collect_process( sc_process_b* zombie )
+{
+    m_collectable->push_back( zombie );
 }
 
 

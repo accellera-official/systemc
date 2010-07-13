@@ -146,7 +146,8 @@ class sc_method_process;
 class sc_cthread_process;
 class sc_thread_process;
 
-
+template< typename > class sc_plist;
+typedef sc_plist< sc_process_b* > sc_process_list;
 
 struct sc_curr_proc_info
 {
@@ -331,6 +332,7 @@ private:
     void suspend_current_process();
 
     void do_sc_stop_action();
+    void mark_to_collect_process( sc_process_b* zombie_p );
 
 private:
 
@@ -364,6 +366,7 @@ private:
     bool                        m_something_to_trace;
 
     sc_runnable*                m_runnable;
+    sc_process_list*            m_collectable;
 
     sc_time_params*             m_time_params;
     sc_time                     m_curr_time;

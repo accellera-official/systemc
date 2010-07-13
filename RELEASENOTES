@@ -36,8 +36,25 @@ Compared to the 2.2.0, this release has the following new items:
 
 Following is the list of bug fixes and enhancements for this release:
 
-     - sc_concatref did not have shift operator overloads for int shift
-       values. They have been added.
+     - Moved default parameter specifications from friend declarations to
+       the actual function signatures in the fixed point support.
+
+       src/sysc/datatypes/fx/scfx_rep.h
+
+     - The default stack size for threads, SC_DEFAULT_STACK_SIZE, has been 
+       increased from 64K bytes to 128K bytes. This setting is controlled 
+       with a #define, so if necessary, you can set it back to 64K bytes 
+       in your version.
+
+       src/sysc/kernel/sc_constants.h
+
+     - sc_concref uses for 8 cases involving bool or char* operands failed
+       to release the storage they allocated. This has been fixed.
+
+         src/sysc/datatypes/bit/sc_lv_base.h
+
+     - sc_concatref did not have shift operator overloads for the int shift
+       value. It has been added.
 
        src/sysc/datatypes/misc/sc_concatref.h
 
@@ -60,9 +77,9 @@ Following is the list of bug fixes and enhancements for this release:
      - Fixed list processing for attributes to match that of C++ Standard
        Library classes.
        
-       src/sysc/utils/sc_vector.h
+         src/sysc/utils/sc_vector.h
        
-       Changed .begin() and .end in sc_pvector<T> so that its use by
+     - Changed .begin() and .end in sc_pvector<T> so that its use by
        sc_object::attr_cltn().begin() and .end() will return a null
        pointer if there are no attributes defined.
 
@@ -90,19 +107,13 @@ Following is the list of bug fixes and enhancements for this release:
      - Expanded naming of signals in sc_vcd_trace.cpp to use 5 characters
        rather than 3 to accommodate more signals.
 
-     - Fixes for concatenation of sc_int<W> and sc_uint<W> instances.
+     - The mask being used to construct concatenation read values for
+       sc_int<W>, sc_uint<W>, and their part selection classes was 32 bits 
+       when it should have been 64 bits. This meant that selections wider
+       than 32 bits would fail. It is now 64 bits.
 
-       src/sysc/datatypes/int/sc_int_base.cpp:
-
-         Changes to sc_int_base::concat_get_data() to fix masks and values
-	 that were unsigned long values that should have been unsigned long
-	 long values.
-
-       src/sysc/datatypes/int/sc_uint_base.cpp:
-
-         Changes to sc_uint_base::concat_get_data() to fix masks and values
-	 that were unsigned long values that should have been unsigned long
-	 long values.
+         src/sysc/datatypes/int/sc_int_base.cpp:
+         src/sysc/datatypes/int/sc_uint_base.cpp:
 
      - Fix for logical operators between unsigned int and sc_unsigned
 
@@ -120,22 +131,22 @@ Following is the list of bug fixes and enhancements for this release:
 
      - Better writer and read checking for sc_fifo<T> ports. 
 
-       src/sysc/communication/sc_fifo.h
+         src/sysc/communication/sc_fifo.h
 
-          The port binder now checks for blocking interfaces in addition to
-	  the combined non-blocking - blocking interface.
+            The port binder now checks for blocking interfaces in addition 
+	    to the combined non-blocking - blocking interface.
 
      - Error message added if wait(N) is called from an SC_METHOD
 
-       src/sysc/kernel/sc_wait_cthread.h
+         src/sysc/kernel/sc_wait_cthread.h
 
      - Null terminator placed on end of argv_copy.
 
-       src/sysc/kernel/sc_main_main.cpp
+         src/sysc/kernel/sc_main_main.cpp
 
      - Mac OS X support modified to accommodate Snow Leopard
 
-       configure.in
+         configure.in
 
        The support for i386 based Macintoshes now includes "-arch i386" 
        for the command line options for g++/gcc and as. This produces

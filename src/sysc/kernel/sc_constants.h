@@ -34,6 +34,9 @@
 
  *****************************************************************************/
 // $Log: sc_constants.h,v $
+// Revision 1.3  2010/03/15 18:29:25  acg
+//  Andy Goodrich: Changed the default stack size to 128K from 64K.
+//
 // Revision 1.2  2008/05/22 17:06:24  acg
 //  Andy Goodrich: updated copyright notice to include 2008.
 //
@@ -57,7 +60,7 @@ namespace sc_core {
 //#define SC_MAX_NBITS    510    // 17 * BITS_PER_DIGIT
 
 
-const int SC_DEFAULT_STACK_SIZE   = 0x10000;
+const int SC_DEFAULT_STACK_SIZE   = 0x20000;
 const int SC_MAX_WATCH_LEVEL      = 16;
 
 #ifdef DEBUG_SYSTEMC

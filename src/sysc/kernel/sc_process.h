@@ -527,6 +527,7 @@ class sc_process_b : public sc_object {
     virtual bool terminated() const;
 
   private:
+    void        delete_process();
     inline void reference_decrement();
     inline void reference_increment();
 
@@ -571,7 +572,6 @@ class sc_process_b : public sc_object {
     trigger_t                    m_trigger_type;    // Type of trigger using.
 
   protected:
-    static sc_process_b* m_delete_next_p;          // Next process to delete.
     static sc_process_b* m_last_created_process_p; // Last process created.
 };
 
@@ -588,6 +588,7 @@ sc_process_b::add_child_object( sc_object* object_ )
 {
     // no check if object_ is already in the set
     m_child_objects.push_back( object_ );
+    reference_increment();
 }
 
 inline void
@@ -598,6 +599,7 @@ sc_process_b::remove_child_object( sc_object* object_ )
         if( object_ == m_child_objects[i] ) {
             m_child_objects[i] = m_child_objects[size - 1];
             m_child_objects.resize(size-1);
+	    reference_decrement();
             return;
         }
     }
@@ -669,20 +671,12 @@ inline sc_curr_proc_kind sc_process_b::proc_kind() const
 //
 // This inline method decrements the number of outstanding references to this 
 // object instance. If the number of references goes to zero, this object
-// instance is placed on the deletion queue, after deleting any process that
-// is already there. The reason for the two step deletion process is that the
-// process from which reference_decrement() is called is likely to be the
-// running process, so we have to wait until it goes idle.
+// can be delete in "sc_process_b::delete_process()".
 //------------------------------------------------------------------------------
 inline void sc_process_b::reference_decrement()
 {
     m_references_n--;
-    if ( m_references_n == 0 )
-    {
-        if ( m_delete_next_p ) delete m_delete_next_p;
-        assert(m_delete_next_p != this);
-        m_delete_next_p = this;
-    }
+    if ( m_references_n == 0 ) delete_process();
 }
 
 

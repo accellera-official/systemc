@@ -46,8 +46,8 @@
 #ifndef SC_ATTRIBUTE_H
 #define SC_ATTRIBUTE_H
 
-#include "sysc/utils/sc_string.h"
-#include "sysc/utils/sc_vector.h"
+#include <string>
+#include <vector>
 
 namespace sc_core {
 
@@ -95,9 +95,9 @@ class sc_attr_cltn
 public:
 
     // typedefs
-    typedef sc_attr_base*    elem_type;
-    typedef elem_type*       iterator;
-    typedef const elem_type* const_iterator;
+    typedef sc_attr_base*                          elem_type;
+    typedef std::vector<elem_type>::iterator       iterator;
+    typedef std::vector<elem_type>::const_iterator const_iterator;
 
     // constructors
     sc_attr_cltn();
@@ -140,8 +140,7 @@ public:
         { return m_cltn.end(); }
 
 private:
-
-    sc_pvector<sc_attr_base*> m_cltn;
+    std::vector<sc_attr_base*> m_cltn;
 
 private:
 

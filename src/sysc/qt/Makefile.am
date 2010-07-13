@@ -36,7 +36,18 @@ noinst_LIBRARIES = libqt.a
 
 H_FILES = \
 	qt.h \
-	qtmd.h
+	qtmd.h \
+	md/axp.h \
+	md/hppa.h \
+	md/i386.h \
+	md/iX86_64.h \
+	md/ksr1.h \
+	md/m88k.h \
+	md/mips.h \
+	md/powerpc_mach.h \
+	md/powerpc_sys5.h \
+	md/sparc.h \
+	md/vax.h
 
 noinst_HEADERS = $(H_FILES)
 
@@ -64,15 +75,6 @@ clean:
 
 install-data-local:
 	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(INCLUDE_DIR)
-	for file in $(noinst_HEADERS); do \
-	  $(INSTALL_DATA) $(srcdir)/$$file $(INCLUDE_DIR)/$$file; \
-	done
-	$(mkinstalldirs) $(INCLUDE_DIR)/md
-	list=`echo md/*`; \
-	  for file in $$list; do \
-	    $(INSTALL_DATA) $(srcdir)/$$file $(INCLUDE_DIR)/$$file; \
-	  done
 	$(AR_TOOL) $(top_builddir)/src/$(MAIN_LIBRARY) \
 	  $(libqt_a_OBJECTS) $(libqt_a_LIBADD)
 

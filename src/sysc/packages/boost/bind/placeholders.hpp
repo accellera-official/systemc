@@ -25,6 +25,8 @@
 namespace sc_unamed
 {
 
+namespace { // anonymous namespace
+
 #if defined(__BORLANDC__) || defined(__GNUC__)
 
 static inline sc_boost::arg<1> _1() { return sc_boost::arg<1>(); }
@@ -63,6 +65,7 @@ sc_boost::arg<9> _9;
 
 #endif
 
+} // anonymous namespace
 } // namespace sc_unamed
 
 #endif // #ifndef SC_BOOST_BIND_PLACEHOLDERS_HPP_INCLUDED

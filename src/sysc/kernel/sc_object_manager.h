@@ -47,12 +47,11 @@
 #ifndef SC_OBJECT_MANAGER_H
 #define SC_OBJECT_MANAGER_H
 
-#include "sysc/utils/sc_vector.h"
+#include <vector>
 
 namespace sc_core {
 
 class sc_module_name;
-template <class K, class C> class sc_phash;
 
 
 // ----------------------------------------------------------------------------
@@ -68,7 +67,7 @@ class sc_object_manager
 public:
 
     typedef sc_phash<const char*, sc_object*> object_table_type;
-    typedef sc_pvector<sc_object*>            object_vector_type;
+    typedef std::vector<sc_object*>           object_vector_type;
     typedef sc_plist<sc_object*>              object_hierarchy_type;
 
     sc_object_manager();
@@ -92,12 +91,12 @@ public:
 
 private:
 
-    object_table_type*     m_object_table;
-    object_vector_type*    m_ordered_object_vector;
-    bool                   m_ordered_object_vector_dirty;
-    int                    m_next_object_index;
-    object_hierarchy_type* m_object_hierarchy;
-    sc_module_name*        m_module_name_stack;
+    object_table_type             m_object_table;
+    object_vector_type            m_ordered_object_vector;
+    bool                          m_ordered_object_vector_dirty;
+    object_vector_type::size_type m_next_object_index;
+    object_hierarchy_type         m_object_hierarchy;
+    sc_module_name*               m_module_name_stack;
 };
 
 } // namespace sc_core

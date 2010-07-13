@@ -37,6 +37,11 @@
  *****************************************************************************/
 
 // $Log: sc_lv_base.h,v $
+// Revision 1.3  2010/01/27 19:41:29  acg
+//  Andy Goodrich: fix 8 instances of sc_concref constructor invocations
+//  that failed to indicate that their arguments should be freed when the
+//  object was freed.
+//
 // Revision 1.2  2009/02/28 00:26:14  acg
 //  Andy Goodrich: bug fixes.
 //
@@ -870,7 +875,7 @@ sc_concref_r<sc_bitref_r<T>,sc_lv_base>
 operator , ( sc_bitref_r<T> a, const sc_logic& b )
 {
     return sc_concref_r<sc_bitref_r<T>,sc_lv_base>(
-	*a.clone(), *new sc_lv_base( b, 1 ) );
+	*a.clone(), *new sc_lv_base( b, 1 ), 3 );
 }
 
 template <class T>
@@ -888,7 +893,7 @@ sc_concref_r<sc_bitref_r<T>,sc_lv_base>
 operator , ( sc_bitref_r<T> a, bool b )
 {
     return sc_concref_r<sc_bitref_r<T>,sc_lv_base>(
-	*a.clone(), *new sc_lv_base( sc_logic( b ), 1 ) );
+	*a.clone(), *new sc_lv_base( sc_logic( b ), 1 ), 3 );
 }
 
 template <class T>
@@ -925,7 +930,7 @@ sc_concref_r<sc_bitref_r<T>,sc_lv_base>
 concat( sc_bitref_r<T> a, const sc_logic& b )
 {
     return sc_concref_r<sc_bitref_r<T>,sc_lv_base>(
-	*a.clone(), *new sc_lv_base( b, 1 ) );
+	*a.clone(), *new sc_lv_base( b, 1 ), 3 );
 }
 
 template <class T>
@@ -943,7 +948,7 @@ sc_concref_r<sc_bitref_r<T>,sc_lv_base>
 concat( sc_bitref_r<T> a, bool b )
 {
     return sc_concref_r<sc_bitref_r<T>,sc_lv_base>(
-	*a.clone(), *new sc_lv_base( sc_logic( b ), 1 ) );
+	*a.clone(), *new sc_lv_base( sc_logic( b ), 1 ), 3 );
 }
 
 template <class T>
@@ -982,7 +987,7 @@ sc_concref_r<sc_bitref_r<T>,sc_lv_base>
 operator , ( sc_bitref<T> a, const sc_logic& b )
 {
     return sc_concref_r<sc_bitref_r<T>,sc_lv_base>(
-	*a.clone(), *new sc_lv_base( b, 1 ) );
+	*a.clone(), *new sc_lv_base( b, 1 ), 3 );
 }
 
 template <class T>
@@ -1000,7 +1005,7 @@ sc_concref_r<sc_bitref_r<T>,sc_lv_base>
 operator , ( sc_bitref<T> a, bool b )
 {
     return sc_concref_r<sc_bitref_r<T>,sc_lv_base>(
-	*a.clone(), *new sc_lv_base( sc_logic( b ), 1 ) );
+	*a.clone(), *new sc_lv_base( sc_logic( b ), 1 ), 3 );
 }
 
 template <class T>
@@ -1037,7 +1042,7 @@ sc_concref_r<sc_bitref_r<T>,sc_lv_base>
 concat( sc_bitref<T> a, const sc_logic& b )
 {
     return sc_concref_r<sc_bitref_r<T>,sc_lv_base>(
-	*a.clone(), *new sc_lv_base( b, 1 ) );
+	*a.clone(), *new sc_lv_base( b, 1 ), 3 );
 }
 
 template <class T>
@@ -1055,7 +1060,7 @@ sc_concref_r<sc_bitref_r<T>,sc_lv_base>
 concat( sc_bitref<T> a, bool b )
 {
     return sc_concref_r<sc_bitref_r<T>,sc_lv_base>(
-	*a.clone(), *new sc_lv_base( sc_logic( b ), 1 ) );
+	*a.clone(), *new sc_lv_base( sc_logic( b ), 1 ), 3 );
 }
 
 template <class T>

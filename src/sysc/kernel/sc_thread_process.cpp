@@ -276,6 +276,13 @@ void sc_thread_process::kill_process(sc_descendant_inclusion_info descendants )
         m_wait_cycle_n = 0;
         if ( (next_runnable() == 0) ) simcontext()->push_runnable_thread(this);
     }
+
+    // REMOVE TRACES OF OUR PROCESS FROM EVENT QUEUES, ETC.:
+
+    else
+    {
+        disconnect_process();
+    }
 }
 
 //------------------------------------------------------------------------------

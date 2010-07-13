@@ -35,6 +35,10 @@
  *****************************************************************************/
 
 // $Log: scfx_rep.h,v $
+// Revision 1.2  2010/03/15 18:29:01  acg
+//  Andy Goodrich: Moved default argument specifications from friend
+//  declarations to the actual function signatures.
+//
 // Revision 1.1.1.1  2006/12/15 20:20:04  acg
 // SystemC 2.3
 //
@@ -71,12 +75,17 @@ class sc_signed;
 class sc_unsigned;
 
 // function declarations
-void multiply( scfx_rep&, const scfx_rep&, const scfx_rep&, int );
+void multiply( scfx_rep&, const scfx_rep&, const scfx_rep&, 
+	       int max_wl = SC_DEFAULT_MAX_WL_ );
 scfx_rep*  neg_scfx_rep( const scfx_rep& );
-scfx_rep* mult_scfx_rep( const scfx_rep&, const scfx_rep&, int );
-scfx_rep*  div_scfx_rep( const scfx_rep&, const scfx_rep&, int );
-scfx_rep*  add_scfx_rep( const scfx_rep&, const scfx_rep&, int );
-scfx_rep*  sub_scfx_rep( const scfx_rep&, const scfx_rep&, int );
+scfx_rep* mult_scfx_rep( const scfx_rep&, const scfx_rep&, 
+	       int max_wl = SC_DEFAULT_MAX_WL_ );
+scfx_rep*  div_scfx_rep( const scfx_rep&, const scfx_rep&, 
+	       int max_wl = SC_DEFAULT_MAX_WL_ );
+scfx_rep*  add_scfx_rep( const scfx_rep&, const scfx_rep&, 
+	       int max_wl = SC_DEFAULT_MAX_WL_ );
+scfx_rep*  sub_scfx_rep( const scfx_rep&, const scfx_rep&, 
+	       int max_wl = SC_DEFAULT_MAX_WL_ );
 scfx_rep*  lsh_scfx_rep( const scfx_rep&, int );
 scfx_rep*  rsh_scfx_rep( const scfx_rep&, int );
 int        cmp_scfx_rep( const scfx_rep&, const scfx_rep& );
@@ -172,18 +181,13 @@ public:
 
     void operator = ( const scfx_rep& );
 
-    friend void multiply( scfx_rep&, const scfx_rep&, const scfx_rep&,
-			  int = SC_DEFAULT_MAX_WL_ );
+    friend void multiply( scfx_rep&, const scfx_rep&, const scfx_rep&, int );
 
     friend scfx_rep*  neg_scfx_rep( const scfx_rep& );
-    friend scfx_rep* mult_scfx_rep( const scfx_rep&, const scfx_rep&,
-				     int = SC_DEFAULT_MAX_WL_ );
-    friend scfx_rep*  div_scfx_rep( const scfx_rep&, const scfx_rep&,
-				     int = SC_DEFAULT_DIV_WL_ );
-    friend scfx_rep*  add_scfx_rep( const scfx_rep&, const scfx_rep&,
-				     int = SC_DEFAULT_MAX_WL_ );
-    friend scfx_rep*  sub_scfx_rep( const scfx_rep&, const scfx_rep&,
-				     int = SC_DEFAULT_MAX_WL_ );
+    friend scfx_rep* mult_scfx_rep( const scfx_rep&, const scfx_rep&, int );
+    friend scfx_rep*  div_scfx_rep( const scfx_rep&, const scfx_rep&, int );
+    friend scfx_rep*  add_scfx_rep( const scfx_rep&, const scfx_rep&, int );
+    friend scfx_rep*  sub_scfx_rep( const scfx_rep&, const scfx_rep&, int );
     friend scfx_rep*  lsh_scfx_rep( const scfx_rep&, int );
     friend scfx_rep*  rsh_scfx_rep( const scfx_rep&, int );
 

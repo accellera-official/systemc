@@ -49,6 +49,7 @@
 #include <cstdlib>
 #include <cassert>
 #include <ctype.h>
+#include <algorithm> // pick up std::sort.
 
 #include "sysc/utils/sc_iostream.h"
 #include "sysc/kernel/sc_object.h"
@@ -61,7 +62,7 @@
 
 namespace sc_core {
 
-int
+static int
 strcmp_void(const void* a, const void* b)
 {
   return strcmp(static_cast<const char*>(a),static_cast<const char*>(b));
@@ -74,24 +75,21 @@ strcmp_void(const void* a, const void* b)
 //  Manager of objects.
 // ----------------------------------------------------------------------------
 
-sc_object_manager::sc_object_manager()
+sc_object_manager::sc_object_manager() :
+    m_object_table(),
+    m_ordered_object_vector(),
+    m_ordered_object_vector_dirty(),
+    m_next_object_index(0),
+    m_object_hierarchy(),
+    m_module_name_stack(0)
+
 {
-    m_ordered_object_vector = new object_vector_type;
-
-    m_object_table = new object_table_type;
-    m_object_table->set_hash_fn(default_str_hash_fn);
-    m_object_table->set_cmpr_fn(strcmp_void);
-
-    m_object_hierarchy = new object_hierarchy_type;
-    m_ordered_object_vector_dirty = true;
-    m_next_object_index = 0;
-    m_module_name_stack = 0;
+    m_object_table.set_hash_fn(default_str_hash_fn);
+    m_object_table.set_cmpr_fn(strcmp_void);
 }
 
 sc_object_manager::~sc_object_manager()
 {
-    delete m_object_hierarchy;
-
     /* Go through each object in the table, and
        mark the m_simc field of the object NULL */
     object_table_type::iterator it(m_object_table);
@@ -99,38 +97,33 @@ sc_object_manager::~sc_object_manager()
         sc_object* obj = it.contents();
         obj->m_simc = 0;
     }
-    delete m_object_table;
-    delete m_ordered_object_vector;
 }
 
 sc_object*
 sc_object_manager::find_object(const char* name)
 {
-    return (*m_object_table)[name];
+    return m_object_table[name];
 }
 
-extern "C" {
-  static int
-    object_name_compare(const void* o1, const void* o2)
-    {
-      const sc_object* obj1 = *(const sc_object**) o1;
-      const sc_object* obj2 = *(const sc_object**) o2;
-      return strcmp(obj1->name(), obj2->name());
-    }
+static bool object_name_compare(sc_object* obj1, sc_object* obj2)
+{
+    return strcmp(obj1->name(), obj2->name()) < 0;
 }
 
 sc_object*
 sc_object_manager::first_object()
 {
     if (m_ordered_object_vector_dirty) {
-        m_ordered_object_vector->erase_all();
+	object_vector_type ordered;
         object_table_type::iterator it(m_object_table);
+	ordered.reserve( m_object_table.count() );
         while (! it.empty()) {
             sc_object* obj = it.contents();
-            m_ordered_object_vector->push_back(obj);
+	    ordered.push_back(obj);
             it++;
         }
-        m_ordered_object_vector->sort(object_name_compare);
+	std::sort( ordered.begin(), ordered.end(), object_name_compare );
+	m_ordered_object_vector.swap( ordered );
         m_ordered_object_vector_dirty = false;
     }
     m_next_object_index = 0;
@@ -141,34 +134,34 @@ sc_object*
 sc_object_manager::next_object()
 {
     assert( ! m_ordered_object_vector_dirty );
-    if ( m_next_object_index >= m_ordered_object_vector->size() )
+    if ( m_next_object_index >= m_ordered_object_vector.size() )
         return 0;
     else
-        return (*m_ordered_object_vector)[m_next_object_index++];
+        return m_ordered_object_vector[m_next_object_index++];
 }
 
 void
 sc_object_manager::hierarchy_push(sc_object* mdl)
 {
-    m_object_hierarchy->push_front(mdl);
+    m_object_hierarchy.push_front(mdl);
 }
 
 sc_object*
 sc_object_manager::hierarchy_pop()
 {
-    return m_object_hierarchy->pop_front();
+    return m_object_hierarchy.pop_front();
 }
 
 sc_object*
 sc_object_manager::hierarchy_curr()
 {
-    return m_object_hierarchy->empty() ? 0 : m_object_hierarchy->front();
+    return m_object_hierarchy.empty() ? 0 : m_object_hierarchy.front();
 }
 
 int
 sc_object_manager::hierarchy_size()
 {
-    return m_object_hierarchy->size();
+    return m_object_hierarchy.size();
 }
 
 void
@@ -199,14 +192,14 @@ sc_object_manager::top_of_module_name_stack()
 void
 sc_object_manager::insert_object(const char* name, sc_object* obj)
 {
-    m_object_table->insert(name, obj);
+    m_object_table.insert(name, obj);
     m_ordered_object_vector_dirty = true;
 }
 
 void
 sc_object_manager::remove_object(const char* name)
 {
-    m_object_table->remove(name);
+    m_object_table.remove(name);
     m_ordered_object_vector_dirty = true;
 }
 
