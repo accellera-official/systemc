@@ -183,7 +183,7 @@ case "$target" in
 		;;
         esac
 	AS=as
-        QT_ARCH="iX386"
+        QT_ARCH="iX86"
         ;;
     *hpux11*)
         case "$CXX_COMP" in
