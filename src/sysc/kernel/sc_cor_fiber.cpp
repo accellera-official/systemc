@@ -126,7 +126,7 @@ sc_cor_pkg_fiber::create( std::size_t stack_size, sc_cor_fn* fn, void* arg )
     sc_cor_fiber* cor = new sc_cor_fiber;
     cor->m_pkg = this;
     cor->m_stack_size = stack_size;
-    cor->m_fiber = CreateFiber( cor->m_stack_size / 2, cor->m_stack_size,
+    cor->m_fiber = CreateFiberEx( cor->m_stack_size / 2, cor->m_stack_size, 0,
 			        (LPFIBER_START_ROUTINE) fn, arg );
     return cor;
 }
