@@ -69,6 +69,7 @@
 #include "sysc/kernel/sc_event.h"
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/kernel/sc_process.h"
+#include "sysc/kernel/sc_process_handle.h"
 #include "sysc/kernel/sc_simcontext_int.h"
 #include "sysc/utils/sc_utils_ids.h"
 
@@ -459,10 +460,21 @@ sc_event_list::push_back( const sc_event& e )
     m_events.push_back( &e );
 }
 
+void
+sc_event_list::push_back( const sc_event_list& el )
+{
+    m_events.reserve( size() + el.size() );
+    for( int i = el.m_events.size() - 1; i >= 0; -- i ) {
+        push_back( *el.m_events[i] );
+    }
+
+    el.auto_delete();
+}
 
 void
 sc_event_list::add_dynamic( sc_method_handle method_h ) const
 {
+    m_busy++;
     if ( m_events.size() != 0 ) {
       const sc_event* const * l_events = &m_events[0];
       for( int i = m_events.size() - 1; i >= 0; -- i ) {
@@ -474,6 +486,7 @@ sc_event_list::add_dynamic( sc_method_handle method_h ) const
 void
 sc_event_list::add_dynamic( sc_thread_handle thread_h ) const
 {
+    m_busy++;
     if ( m_events.size() != 0 ) {
       const sc_event* const * l_events = &m_events[0];
       for( int i = m_events.size() - 1; i >= 0; -- i ) {
@@ -510,6 +523,37 @@ sc_event_list::remove_dynamic( sc_thread_handle thread_h,
           }
       }
   }
+}
+
+void
+sc_event_list::report_premature_destruction() const
+{
+    // TDB: reliably detect premature destruction
+    //
+    // If an event list is used as a member of a module,
+    // its lifetime may (correctly) end, although there
+    // are processes currently waiting for it.
+    //
+    // Detecting (and ignoring) this corner-case is quite
+    // difficult for similar reasons to the sc_is_running()
+    // return value during the destruction of the module
+    // hierarchy.
+    //
+    // Ignoring the lifetime checks for now, if no process
+    // is currently running (which is only part of the story):
+
+    if( sc_get_current_process_handle().valid() ) {
+        // FIXME: improve error-handling
+        sc_assert( false && "sc_event_list prematurely destroyed" );
+    }
+
+}
+
+void
+sc_event_list::report_invalid_modification() const
+{
+    // FIXME: improve error-handling
+    sc_assert( false && "sc_event_list modfied while being waited on" );
 }
 
 // ----------------------------------------------------------------------------
