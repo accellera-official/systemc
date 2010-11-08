@@ -282,6 +282,7 @@ sc_process_b::remove_dynamic_events()
         {
             m_event_list_p->remove_dynamic( thread_h, 0 );
             m_event_list_p->auto_delete();
+            m_event_list_p = 0;
         }
         break;
       case SC_METHOD_PROC_:
@@ -292,6 +293,7 @@ sc_process_b::remove_dynamic_events()
         {
             m_event_list_p->remove_dynamic( method_h, 0 );
             m_event_list_p->auto_delete();
+            m_event_list_p = 0;
         }
         break;
       default: // Some other type, it needs to clean up itself.

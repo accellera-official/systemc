@@ -454,8 +454,11 @@ void sc_method_process::throw_reset( bool async )
     {
         if ( m_event_p ) 
             m_event_p->remove_dynamic( this );
-        if ( m_event_list_p ) 
+        if ( m_event_list_p ) {
             m_event_list_p->remove_dynamic( this, 0 );
+            m_event_list_p->auto_delete();
+            m_event_list_p = 0;
+        }
         if ( next_runnable() == 0 ) 
             simcontext()->push_runnable_method( this );
     }
