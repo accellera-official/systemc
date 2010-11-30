@@ -440,6 +440,20 @@ public:
                      , iterator from )
     { return sc_vector_do_operator_paren( *this, first, last, from ); }
 
+  sc_vector_assembly( const sc_vector_assembly & other )
+    : vec_( other.vec_ )
+    , ptr_( other.ptr_ )
+    , child_vec_(0)
+  {}
+
+  sc_vector_assembly& operator=( const sc_vector_assembly& other )
+  {
+    vec_ = other.vec_;
+    ptr_ = other.ptr_;
+    delete child_vec_;
+    child_vec_ = 0;
+  }
+
   ~sc_vector_assembly()
     { delete child_vec_; }
 
