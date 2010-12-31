@@ -65,7 +65,7 @@
   sc_fxtype_params fooc(T_WL, T_IWL, SC_TRN, SC_WRAP);		      \
   									      \
   out << "------------------ " #T_op " ---- " << T_WL << ", " << T_IWL << " --------------\n"; \
-  T_op r = 0x8000;							      \
+  T_op r(0x8000);							      \
   T_op m(0x8000, FX_off);						      \
   T_op q(FX_off);							      \
   int i;								      \
@@ -132,7 +132,7 @@ void operator_shift_right(ostream& out)
 
   out << "------------------ " QUOTE(T_FX_FLOAT) " ---- " << T_WL << ", "
      << T_IWL << " --------------\n";
-  T_FX_FLOAT r = 0x8000;
+  T_FX_FLOAT r(0x8000);
 #include "fx_precision_double.h"
   T_FX_FLOAT m(0x8000);
   T_FX_FLOAT q;
@@ -166,7 +166,7 @@ void operator_shift_right(ostream& out)
 
   out << "------------------ " QUOTE(T_FX_UFIX) " ---- " << T_WL << ", "
      << T_IWL << " --------------\n";
-  T_FX_UFIX r = 0x8000;
+  T_FX_UFIX r(0x8000);
 #include "fx_precision_double.h"
   T_FX_UFIX m(0x8000);
   T_FX_UFIX q;
@@ -200,7 +200,7 @@ void operator_shift_right(ostream& out)
 
   out << "------------------ " QUOTE(T_FX_FIX) " ---- " << T_WL << ", "
      << T_IWL << " --------------\n";
-  T_FX_FIX r = 0x8000;
+  T_FX_FIX r(0x8000);
 #include "fx_precision_double.h"
   T_FX_FIX m(0x8000);
   T_FX_FIX q;
@@ -234,7 +234,7 @@ void operator_shift_right(ostream& out)
 
   out << "------------------ " QUOTE(T_FX_FIXED) " ---- " << T_WL << ", "
      << T_IWL << " --------------\n";
-  T_FX_FIXED r = 0x8000;
+  T_FX_FIXED r(0x8000);
 #include "fx_precision_double.h"
   T_FX_FIXED m(0x8000);
   T_FX_FIXED q;
@@ -268,7 +268,7 @@ void operator_shift_right(ostream& out)
 
   out << "------------------ " QUOTE(T_FX_UFIXED) " ---- " << T_WL << ", "
      << T_IWL << " --------------\n";
-  T_FX_UFIXED r = 0x8000;
+  T_FX_UFIXED r(0x8000);
 #include "fx_precision_double.h"
   T_FX_UFIXED m(0x8000);
   T_FX_UFIXED q;
@@ -307,7 +307,7 @@ void operator_shift_right(ostream& out)
 
   out << "------------------ " QUOTE(T_FX_FLOAT) " ---- " << T_WL << ", "
      << T_IWL << " --------------\n";
-  T_FX_FLOAT r = 0x8000;
+  T_FX_FLOAT r(0x8000);
 #include "fx_precision_double.h"
   T_FX_FLOAT m(0x8000);
   T_FX_FLOAT q;
@@ -341,7 +341,7 @@ void operator_shift_right(ostream& out)
 
   out << "------------------ " QUOTE(T_FX_UFIX) " ---- " << T_WL << ", "
      << T_IWL << " --------------\n";
-  T_FX_UFIX r = 0x8000;
+  T_FX_UFIX r(0x8000);
 #include "fx_precision_double.h"
   T_FX_UFIX m(0x8000);
   T_FX_UFIX q;
@@ -375,7 +375,7 @@ void operator_shift_right(ostream& out)
 
   out << "------------------ " QUOTE(T_FX_FIX) " ---- " << T_WL << ", "
      << T_IWL << " --------------\n";
-  T_FX_FIX r = 0x8000;
+  T_FX_FIX r(0x8000);
 #include "fx_precision_double.h"
   T_FX_FIX m(0x8000);
   T_FX_FIX q;
@@ -409,7 +409,7 @@ void operator_shift_right(ostream& out)
 
   out << "------------------ " QUOTE(T_FX_FIXED) " ---- " << T_WL << ", "
      << T_IWL << " --------------\n";
-  T_FX_FIXED r = 0x8000;
+  T_FX_FIXED r(0x8000);
 #include "fx_precision_double.h"
   T_FX_FIXED m(0x8000);
   T_FX_FIXED q;
@@ -443,7 +443,7 @@ void operator_shift_right(ostream& out)
 
   out << "------------------ " QUOTE(T_FX_UFIXED) " ---- " << T_WL << ", "
      << T_IWL << " --------------\n";
-  T_FX_UFIXED r = 0x8000;
+  T_FX_UFIXED r(0x8000);
 #include "fx_precision_double.h"
   T_FX_UFIXED m(0x8000);
   T_FX_UFIXED q;
@@ -482,7 +482,7 @@ void operator_shift_right(ostream& out)
 
   out << "------------------ " QUOTE(T_FX_FLOAT) " ---- " << T_WL << ", "
      << T_IWL << " --------------\n";
-  T_FX_FLOAT r = 0x8000;
+  T_FX_FLOAT r(0x8000);
 #include "fx_precision_double.h"
   T_FX_FLOAT m(0x8000);
   T_FX_FLOAT q;
@@ -516,7 +516,7 @@ void operator_shift_right(ostream& out)
 
   out << "------------------ " QUOTE(T_FX_UFIX) " ---- " << T_WL << ", "
      << T_IWL << " --------------\n";
-  T_FX_UFIX r = 0x8000;
+  T_FX_UFIX r(0x8000);
 #include "fx_precision_double.h"
   T_FX_UFIX m(0x8000);
   T_FX_UFIX q;
@@ -550,7 +550,7 @@ void operator_shift_right(ostream& out)
 
   out << "------------------ " QUOTE(T_FX_FIX) " ---- " << T_WL << ", "
      << T_IWL << " --------------\n";
-  T_FX_FIX r = 0x8000;
+  T_FX_FIX r(0x8000);
 #include "fx_precision_double.h"
   T_FX_FIX m(0x8000);
   T_FX_FIX q;
@@ -584,7 +584,7 @@ void operator_shift_right(ostream& out)
 
   out << "------------------ " QUOTE(T_FX_FIXED) " ---- " << T_WL << ", "
      << T_IWL << " --------------\n";
-  T_FX_FIXED r = 0x8000;
+  T_FX_FIXED r(0x8000);
 #include "fx_precision_double.h"
   T_FX_FIXED m(0x8000);
   T_FX_FIXED q;
@@ -618,7 +618,7 @@ void operator_shift_right(ostream& out)
 
   out << "------------------ " QUOTE(T_FX_UFIXED) " ---- " << T_WL << ", "
      << T_IWL << " --------------\n";
-  T_FX_UFIXED r = 0x8000;
+  T_FX_UFIXED r(0x8000);
 #include "fx_precision_double.h"
   T_FX_UFIXED m(0x8000);
   T_FX_UFIXED q;

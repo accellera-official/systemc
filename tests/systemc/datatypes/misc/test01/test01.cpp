@@ -441,8 +441,8 @@ test_fx()
     // sc_fxval
     {
         cout << "\nsc_fxval" << endl;
-        sc_fxval a = -7;
-        sc_fxval b = 15;
+        sc_fxval a(-7);
+        sc_fxval b(15);
         test( a );
         test( b );
     }
@@ -450,8 +450,8 @@ test_fx()
     // sc_fxval_fast
     {
         cout << "\nsc_fxval_fast" << endl;
-        sc_fxval_fast a = -7;
-        sc_fxval_fast b = 15;
+        sc_fxval_fast a(-7);
+        sc_fxval_fast b(15);
         test( a );
         test( b );
     }

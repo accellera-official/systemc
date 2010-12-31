@@ -355,7 +355,7 @@ int sc_main(int argc, char* argv[])
   std::string originator = release.substr(n+1,release.size());
 
   std::string charset =
-  "abcdefghijklmnopqrstuvwxyzABSCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
+  "abcdefghijklmnopqrstuvwxyzABSCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-";
 
   for (unsigned int i = 0; i < major.size(); i++)
     assert(charset.find(major[i]) < charset.size());

@@ -45,6 +45,7 @@
 #include <limits.h>
 #include <float.h>
 #define SC_INCLUDE_FX
+#define SC_FXVAL_IMPLICIT_CONV
 #include "systemc.h"
  
 typedef unsigned int   uint;
@@ -55,6 +56,10 @@ typedef unsigned long  ulong;
 #define IDENT_ASSIGN_CONSTRUCTORS(a) cerr << "--assign_constructor-Inf-Inf-Inf-Inf-Inf- " << a << "\n"
 
 //----------------------------------------------------------------
+// copy-initialisation from builtin types no longer works with sc_fxval, 
+// unless SC_FXVAL_IMPLICIT_CONV is defined
+
+#if defined(SC_FXVAL_IMPLICIT_CONV)
 static void test_fx_float_int()
 {
   IDENT_ASSIGN_CONSTRUCTORS("test_fx_float_int");
@@ -158,6 +163,7 @@ static void test_fx_float_double()
 
   SHOW_ASSIGN_CONSTRUCTORS(a); SHOW_ASSIGN_CONSTRUCTORS(b); SHOW_ASSIGN_CONSTRUCTORS(c); SHOW_ASSIGN_CONSTRUCTORS(d); SHOW_ASSIGN_CONSTRUCTORS(e);
 }
+#endif // defined(SC_FXVAL_IMPLICIT_CONV)
 
 //----------------------------------------------------------------
 static void test_fx_ufix_int()
@@ -581,6 +587,7 @@ static void test_fx_ufixed_double()
 
 void assign_constructor()
 {
+#if defined(SC_FXVAL_IMPLICIT_CONV)
   cerr << "************** assign_constructor test_fx_float_\n";
   test_fx_float_int();
   test_fx_float_uint();
@@ -590,6 +597,7 @@ void assign_constructor()
   test_fx_float_ulong();
   test_fx_float_float();
   test_fx_float_double();
+#endif // defined(SC_FXVAL_IMPLICIT_CONV)
   cerr << "************** assign_constructor test_fx_ufix_\n";
   test_fx_ufix_int();
   test_fx_ufix_uint();

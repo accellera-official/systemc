@@ -66,7 +66,7 @@
   sc_fxtype_params fooc(T_WL, T_IWL, SC_TRN, SC_WRAP);		      \
   									      \
   out << "------------------ " #T_op " ---- " << T_WL << ", " << T_IWL << " --------------\n"; \
-  T_op r = 2;								      \
+  T_op r(2);
   int i;								      \
   for (i = 0; i < T_WL+10; ++i)						      \
     {									      \
@@ -138,7 +138,7 @@ void operator_shift_left(ostream& out)
 
   out << "------------------ " QUOTE(T_FX_FLOAT) " ---- " << T_WL << ", "
      << T_IWL << " --------------\n";
-  T_FX_FLOAT r = 2;
+  T_FX_FLOAT r(2);
   int i;
   for (i = 0; i < T_WL+10; ++i)
     {
@@ -177,7 +177,7 @@ void operator_shift_left(ostream& out)
 
   out << "------------------ " QUOTE(T_FX_UFIX) " ---- " << T_WL << ", "
      << T_IWL << " --------------\n";
-  T_FX_UFIX r = 2;
+  T_FX_UFIX r(2);
   int i;
   for (i = 0; i < T_WL+10; ++i)
     {
@@ -216,7 +216,7 @@ void operator_shift_left(ostream& out)
 
   out << "------------------ " QUOTE(T_FX_FIX) " ---- " << T_WL << ", "
      << T_IWL << " --------------\n";
-  T_FX_FIX r = 2;
+  T_FX_FIX r(2);
   int i;
   for (i = 0; i < T_WL+10; ++i)
     {
@@ -255,7 +255,7 @@ void operator_shift_left(ostream& out)
 
   out << "------------------ " QUOTE(T_FX_FIXED) " ---- " << T_WL << ", "
      << T_IWL << " --------------\n";
-  T_FX_FIXED r = 2;
+  T_FX_FIXED r(2);
   int i;
   for (i = 0; i < T_WL+10; ++i)
     {
@@ -294,7 +294,7 @@ void operator_shift_left(ostream& out)
 
   out << "------------------ " QUOTE(T_FX_UFIXED) " ---- " << T_WL << ", "
      << T_IWL << " --------------\n";
-  T_FX_UFIXED r = 2;
+  T_FX_UFIXED r(2);
   int i;
   for (i = 0; i < T_WL+10; ++i)
     {
@@ -338,7 +338,7 @@ void operator_shift_left(ostream& out)
 
   out << "------------------ " QUOTE(T_FX_FLOAT) " ---- " << T_WL << ", "
      << T_IWL << " --------------\n";
-  T_FX_FLOAT r = 2;
+  T_FX_FLOAT r(2);
   int i;
   for (i = 0; i < T_WL+10; ++i)
     {
@@ -377,7 +377,7 @@ void operator_shift_left(ostream& out)
 
   out << "------------------ " QUOTE(T_FX_UFIX) " ---- " << T_WL << ", "
      << T_IWL << " --------------\n";
-  T_FX_UFIX r = 2;
+  T_FX_UFIX r(2);
   int i;
   for (i = 0; i < T_WL+10; ++i)
     {
@@ -416,7 +416,7 @@ void operator_shift_left(ostream& out)
 
   out << "------------------ " QUOTE(T_FX_FIX) " ---- " << T_WL << ", "
      << T_IWL << " --------------\n";
-  T_FX_FIX r = 2;
+  T_FX_FIX r(2);
   int i;
   for (i = 0; i < T_WL+10; ++i)
     {
@@ -455,7 +455,7 @@ void operator_shift_left(ostream& out)
 
   out << "------------------ " QUOTE(T_FX_FIXED) " ---- " << T_WL << ", "
      << T_IWL << " --------------\n";
-  T_FX_FIXED r = 2;
+  T_FX_FIXED r(2);
   int i;
   for (i = 0; i < T_WL+10; ++i)
     {
@@ -494,7 +494,7 @@ void operator_shift_left(ostream& out)
 
   out << "------------------ " QUOTE(T_FX_UFIXED) " ---- " << T_WL << ", "
      << T_IWL << " --------------\n";
-  T_FX_UFIXED r = 2;
+  T_FX_UFIXED r(2);
   int i;
   for (i = 0; i < T_WL+10; ++i)
     {
@@ -538,7 +538,7 @@ void operator_shift_left(ostream& out)
 
   out << "------------------ " QUOTE(T_FX_FLOAT) " ---- " << T_WL << ", "
      << T_IWL << " --------------\n";
-  T_FX_FLOAT r = 2;
+  T_FX_FLOAT r(2);
   int i;
   for (i = 0; i < T_WL+10; ++i)
     {
@@ -577,7 +577,7 @@ void operator_shift_left(ostream& out)
 
   out << "------------------ " QUOTE(T_FX_UFIX) " ---- " << T_WL << ", "
      << T_IWL << " --------------\n";
-  T_FX_UFIX r = 2;
+  T_FX_UFIX r(2);
   int i;
   for (i = 0; i < T_WL+10; ++i)
     {
@@ -616,7 +616,7 @@ void operator_shift_left(ostream& out)
 
   out << "------------------ " QUOTE(T_FX_FIX) " ---- " << T_WL << ", "
      << T_IWL << " --------------\n";
-  T_FX_FIX r = 2;
+  T_FX_FIX r(2);
   int i;
   for (i = 0; i < T_WL+10; ++i)
     {
@@ -655,7 +655,7 @@ void operator_shift_left(ostream& out)
 
   out << "------------------ " QUOTE(T_FX_FIXED) " ---- " << T_WL << ", "
      << T_IWL << " --------------\n";
-  T_FX_FIXED r = 2;
+  T_FX_FIXED r(2);
   int i;
   for (i = 0; i < T_WL+10; ++i)
     {
@@ -694,7 +694,7 @@ void operator_shift_left(ostream& out)
 
   out << "------------------ " QUOTE(T_FX_UFIXED) " ---- " << T_WL << ", "
      << T_IWL << " --------------\n";
-  T_FX_UFIXED r = 2;
+  T_FX_UFIXED r(2);
   int i;
   for (i = 0; i < T_WL+10; ++i)
     {

@@ -44,6 +44,7 @@
 
 #include <limits.h>
 #define SC_INCLUDE_FX
+#define SC_FX_IMPLICIT_CONV
 #include "systemc.h"
  
 typedef unsigned int   uint;
@@ -104,7 +105,7 @@ static void test_fx_float_long()
 
   sc_fxval a = (long)0;
   sc_fxval b;
-  sc_fxval c = b = (long)-1;
+  sc_fxval c = b = -1L;
 
   SHOW_ASSIGN(a); SHOW_ASSIGN(b); SHOW_ASSIGN(c); 
 }
@@ -112,9 +113,9 @@ static void test_fx_float_long()
 static void test_fx_float_ulong()
 {
   IDENT_ASSIGN("test_fx_float_ulong");
-  sc_fxval a = (ulong)0;
+  sc_fxval a(0);
   sc_fxval b;
-  sc_fxval c = b = (ulong)-1;
+  sc_fxval c = b = -1UL;
 
   SHOW_ASSIGN(a); SHOW_ASSIGN(b); SHOW_ASSIGN(c); 
 }
@@ -123,9 +124,9 @@ static void test_fx_float_float()
 {
   IDENT_ASSIGN("test_fx_float_float");
   
-  sc_fxval a = 0.0;
+  sc_fxval a(0.0f);
   sc_fxval b;
-  sc_fxval c = b = -1.0;
+  sc_fxval c = b = -1.0f;
 
   SHOW_ASSIGN(a); SHOW_ASSIGN(b); SHOW_ASSIGN(c); 
 }
@@ -134,9 +135,9 @@ static void test_fx_float_double()
 {
   IDENT_ASSIGN("test_fx_float_double");
   
-  sc_fxval a = (double)0.0;
+  sc_fxval a(0.0);
   sc_fxval b;
-  sc_fxval c = b = (double)-1.0;
+  sc_fxval c = b = -1.0;
 
   SHOW_ASSIGN(a); SHOW_ASSIGN(b); SHOW_ASSIGN(c); 
 }
@@ -146,7 +147,7 @@ static void test_fx_ufix_int()
 {
   IDENT_ASSIGN("test_fx_ufix_int");
 
-  sc_ufix a = 0;
+  sc_ufix a(0);
   sc_ufix b;
   sc_ufix c = b = -1;
 
@@ -157,7 +158,7 @@ static void test_fx_ufix_uint()
 {
   IDENT_ASSIGN("test_fx_ufix_uint");
 
-  sc_ufix a = (uint)0;
+  sc_ufix a(0u);
   sc_ufix b;
   sc_ufix c = b = (uint)-1;
 
@@ -168,7 +169,7 @@ static void test_fx_ufix_short()
 {
   IDENT_ASSIGN("test_fx_ufix_short");
 
-  sc_ufix a = (short)0;
+  sc_ufix a((short)0);
   sc_ufix b;
   sc_ufix c = b = (short)-1;
 
@@ -179,7 +180,7 @@ static void test_fx_ufix_ushort()
 {
   IDENT_ASSIGN("test_fx_ufix_ushort");
 
-  sc_ufix a = (ushort)0;
+  sc_ufix a((ushort)0);
   sc_ufix b;
   sc_ufix c = b = (ushort)-1;
 
@@ -190,9 +191,9 @@ static void test_fx_ufix_long()
 {
   IDENT_ASSIGN("test_fx_ufix_long");
 
-  sc_ufix a = (long)0;
+  sc_ufix a(0L);
   sc_ufix b;
-  sc_ufix c = b = (long)-1;
+  sc_ufix c = b = -1L;
 
   SHOW_ASSIGN(a); SHOW_ASSIGN(b); SHOW_ASSIGN(c); 
 }

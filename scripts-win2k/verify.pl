@@ -1514,7 +1514,7 @@ sub strip_tracelog
     ( $dir = $stripped_file ) =~ s|/[^/]+$||;
     &create_dir( $dir );
     
-    $command = "`tail -n+8 < $log_file | sed -e 's:\r::' > $stripped_file`";
+    $command = "`tail +8 < $log_file | sed -e 's:\r::' > $stripped_file`";
 
     ( $exit_code, $signal ) = &rt_system( $command );
 

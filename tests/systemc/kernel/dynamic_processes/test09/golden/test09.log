@@ -18,32 +18,44 @@ SystemC Simulation
 4 ns dut.grand_parent.parent2.child3 initialization
 4 ns dut.grand_parent.parent2 removing children
 4 ns dut.grand_parent.parent2 initialization
+
+Warning: (W505) object already exists: dut.grand_parent.parent2.child1. Latter declaration will be renamed to dut.grand_parent.parent2.child1_0
+In file: <removed by verify.pl>
+In process: dut.grand_parent.parent2 @ 4 ns
+
+Warning: (W505) object already exists: dut.grand_parent.parent2.child2. Latter declaration will be renamed to dut.grand_parent.parent2.child2_0
+In file: <removed by verify.pl>
+In process: dut.grand_parent.parent2 @ 4 ns
+
+Warning: (W505) object already exists: dut.grand_parent.parent2.child3. Latter declaration will be renamed to dut.grand_parent.parent2.child3_0
+In file: <removed by verify.pl>
+In process: dut.grand_parent.parent2 @ 4 ns
 4 ns dut.grand_parent.parent2.child1 got kill
 Killing process dut.grand_parent.parent2.child1
 4 ns dut.grand_parent.parent2.child2 got kill
 Killing process dut.grand_parent.parent2.child2
 4 ns dut.grand_parent.parent2.child3 got kill
 Killing process dut.grand_parent.parent2.child3
-4 ns dut.grand_parent.parent2.child1 initialization
-4 ns dut.grand_parent.parent2.child2 initialization
-4 ns dut.grand_parent.parent2.child3 initialization
+4 ns dut.grand_parent.parent2.child1_0 initialization
+4 ns dut.grand_parent.parent2.child2_0 initialization
+4 ns dut.grand_parent.parent2.child3_0 initialization
 4 ns dut.grand_parent initialization
 
 8 ns dut.grand_parent.parent1.child1 initialization
 8 ns dut.grand_parent.parent1.child2 initialization
 8 ns dut.grand_parent.parent1.child3 initialization
 8 ns dut.grand_parent.parent1 initialization
-8 ns dut.grand_parent.parent2.child1 initialization
-8 ns dut.grand_parent.parent2.child2 initialization
-8 ns dut.grand_parent.parent2.child3 initialization
+8 ns dut.grand_parent.parent2.child3_0 initialization
+8 ns dut.grand_parent.parent2.child2_0 initialization
+8 ns dut.grand_parent.parent2.child1_0 initialization
 8 ns dut.grand_parent.parent2 removing children
 8 ns dut.grand_parent.parent2 initialization
-8 ns dut.grand_parent.parent2.child1 got kill
-Killing process dut.grand_parent.parent2.child1
-8 ns dut.grand_parent.parent2.child2 got kill
-Killing process dut.grand_parent.parent2.child2
-8 ns dut.grand_parent.parent2.child3 got kill
-Killing process dut.grand_parent.parent2.child3
+8 ns dut.grand_parent.parent2.child1_0 got kill
+Killing process dut.grand_parent.parent2.child1_0
+8 ns dut.grand_parent.parent2.child2_0 got kill
+Killing process dut.grand_parent.parent2.child2_0
+8 ns dut.grand_parent.parent2.child3_0 got kill
+Killing process dut.grand_parent.parent2.child3_0
 8 ns dut.grand_parent.parent2.child1 initialization
 8 ns dut.grand_parent.parent2.child2 initialization
 8 ns dut.grand_parent.parent2.child3 initialization
@@ -58,32 +70,44 @@ Killing process dut.grand_parent.parent2.child3
 12 ns dut.grand_parent.parent2.child3 initialization
 12 ns dut.grand_parent.parent2 removing children
 12 ns dut.grand_parent.parent2 initialization
+
+Warning: (W505) object already exists: dut.grand_parent.parent2.child1. Latter declaration will be renamed to dut.grand_parent.parent2.child1_1
+In file: <removed by verify.pl>
+In process: dut.grand_parent.parent2 @ 12 ns
+
+Warning: (W505) object already exists: dut.grand_parent.parent2.child2. Latter declaration will be renamed to dut.grand_parent.parent2.child2_1
+In file: <removed by verify.pl>
+In process: dut.grand_parent.parent2 @ 12 ns
+
+Warning: (W505) object already exists: dut.grand_parent.parent2.child3. Latter declaration will be renamed to dut.grand_parent.parent2.child3_1
+In file: <removed by verify.pl>
+In process: dut.grand_parent.parent2 @ 12 ns
 12 ns dut.grand_parent.parent2.child1 got kill
 Killing process dut.grand_parent.parent2.child1
 12 ns dut.grand_parent.parent2.child2 got kill
 Killing process dut.grand_parent.parent2.child2
 12 ns dut.grand_parent.parent2.child3 got kill
 Killing process dut.grand_parent.parent2.child3
-12 ns dut.grand_parent.parent2.child1 initialization
-12 ns dut.grand_parent.parent2.child2 initialization
-12 ns dut.grand_parent.parent2.child3 initialization
+12 ns dut.grand_parent.parent2.child1_1 initialization
+12 ns dut.grand_parent.parent2.child2_1 initialization
+12 ns dut.grand_parent.parent2.child3_1 initialization
 12 ns dut.grand_parent initialization
 
 16 ns dut.grand_parent.parent1.child1 initialization
 16 ns dut.grand_parent.parent1.child2 initialization
 16 ns dut.grand_parent.parent1.child3 initialization
 16 ns dut.grand_parent.parent1 initialization
-16 ns dut.grand_parent.parent2.child1 initialization
-16 ns dut.grand_parent.parent2.child2 initialization
-16 ns dut.grand_parent.parent2.child3 initialization
+16 ns dut.grand_parent.parent2.child3_1 initialization
+16 ns dut.grand_parent.parent2.child2_1 initialization
+16 ns dut.grand_parent.parent2.child1_1 initialization
 16 ns dut.grand_parent.parent2 removing children
 16 ns dut.grand_parent.parent2 initialization
-16 ns dut.grand_parent.parent2.child1 got kill
-Killing process dut.grand_parent.parent2.child1
-16 ns dut.grand_parent.parent2.child2 got kill
-Killing process dut.grand_parent.parent2.child2
-16 ns dut.grand_parent.parent2.child3 got kill
-Killing process dut.grand_parent.parent2.child3
+16 ns dut.grand_parent.parent2.child1_1 got kill
+Killing process dut.grand_parent.parent2.child1_1
+16 ns dut.grand_parent.parent2.child2_1 got kill
+Killing process dut.grand_parent.parent2.child2_1
+16 ns dut.grand_parent.parent2.child3_1 got kill
+Killing process dut.grand_parent.parent2.child3_1
 16 ns dut.grand_parent.parent2.child1 initialization
 16 ns dut.grand_parent.parent2.child2 initialization
 16 ns dut.grand_parent.parent2.child3 initialization
@@ -98,15 +122,27 @@ Killing process dut.grand_parent.parent2.child3
 20 ns dut.grand_parent.parent2.child3 initialization
 20 ns dut.grand_parent.parent2 removing children
 20 ns dut.grand_parent.parent2 initialization
+
+Warning: (W505) object already exists: dut.grand_parent.parent2.child1. Latter declaration will be renamed to dut.grand_parent.parent2.child1_2
+In file: <removed by verify.pl>
+In process: dut.grand_parent.parent2 @ 20 ns
+
+Warning: (W505) object already exists: dut.grand_parent.parent2.child2. Latter declaration will be renamed to dut.grand_parent.parent2.child2_2
+In file: <removed by verify.pl>
+In process: dut.grand_parent.parent2 @ 20 ns
+
+Warning: (W505) object already exists: dut.grand_parent.parent2.child3. Latter declaration will be renamed to dut.grand_parent.parent2.child3_2
+In file: <removed by verify.pl>
+In process: dut.grand_parent.parent2 @ 20 ns
 20 ns dut.grand_parent.parent2.child1 got kill
 Killing process dut.grand_parent.parent2.child1
 20 ns dut.grand_parent.parent2.child2 got kill
 Killing process dut.grand_parent.parent2.child2
 20 ns dut.grand_parent.parent2.child3 got kill
 Killing process dut.grand_parent.parent2.child3
-20 ns dut.grand_parent.parent2.child1 initialization
-20 ns dut.grand_parent.parent2.child2 initialization
-20 ns dut.grand_parent.parent2.child3 initialization
+20 ns dut.grand_parent.parent2.child1_2 initialization
+20 ns dut.grand_parent.parent2.child2_2 initialization
+20 ns dut.grand_parent.parent2.child3_2 initialization
 20 ns dut.grand_parent initialization
 
 Program completed

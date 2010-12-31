@@ -45,6 +45,7 @@
 
 #include <limits.h>
 #define SC_INCLUDE_FX
+#define SC_FX_IMPLICIT_FXVAL
 #include "systemc.h"
 
 #define T_FX_FLOAT  sc_fxval
@@ -55,8 +56,8 @@
 
 #define RANGE_TO_MIN(FX_TTT) \
 {									      \
-  FX_TTT x = 1;								      \
-  FX_TTT d = 1;								      \
+  FX_TTT x(1); \
+  FX_TTT d(1); \
 									      \
   int i;								      \
   for (i = 0; i < 300; ++i)						      \
@@ -70,9 +71,9 @@
 
 #define RANGE_MIN_MAX(FX_TTT) \
 {									      \
-  FX_TTT x = 1;								      \
-  FX_TTT d = 4;								      \
-  FX_TTT e = 0.125;                                                           \
+  FX_TTT x(1); \
+  FX_TTT d(4); \
+  FX_TTT e(0.125);                                                           \
   int i;								      \
   for (i = 0; i < 300; ++i)						      \
     {									      \
@@ -92,8 +93,8 @@
 
 #define RANGE_TO_MAX(FX_TTT) \
 {									      \
-  FX_TTT x = 1;								      \
-  FX_TTT d = 1;								      \
+  FX_TTT x(1); \
+  FX_TTT d(1); \
   int i;								      \
   for (i = 0; i < 300; ++i)						      \
     {									      \

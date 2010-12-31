@@ -59,8 +59,8 @@ out << m.to_string(SC_HEX) << "\n" << flush
   out << "______________________ " #T_op " ______________________\n";         \
   out << "______________________ UP        ______________________\n";         \
   sc_fxtype_params fooc(T_WL, T_IWL, SC_RND, SC_SAT);                        \
-  T_op m = 1;								      \
-  T_op r = 1;								      \
+  T_op m(1); \
+  T_op r(1); \
   int i;								      \
   for (i = 0; i < T_WL + 10; ++i)						      \
     {									      \

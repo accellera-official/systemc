@@ -63,7 +63,7 @@
 {									      \
   sc_fxtype_params fooc(T_WL, T_IWL, SC_TRN, SC_WRAP);		      \
   									      \
-  T_op r = 2;								      \
+  T_op r(2); \
   int i;								      \
   for (i = 0; i < T_WL+10; ++i)						      \
     {									      \
