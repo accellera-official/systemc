@@ -52,6 +52,9 @@
                                
  *****************************************************************************/
 // $Log: sc_simcontext.h,v $
+// Revision 1.5  2010/07/22 20:02:33  acg
+//  Andy Goodrich: bug fixes.
+//
 // Revision 1.4  2009/05/22 16:06:29  acg
 //  Andy Goodrich: process control updates.
 //

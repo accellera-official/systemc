@@ -119,10 +119,6 @@ void mcast_pkt_switch :: entry()
   cout << "  from one port to another in a pipelined fashion, resolving output contention " << endl;
   cout << "  and handling multicast switch efficiently." << endl << endl;
  
-  cout << "  Press \"Return\" key to start the simulation..." << endl << endl;
-
-  getchar();
-
   wait();
   // functionality
   while( sim_count++ < SIM_NUM )

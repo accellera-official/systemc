@@ -42,7 +42,7 @@ dnl Some simple checks.
 dnl
 
 AC_CANONICAL_SYSTEM
-AM_INIT_AUTOMAKE(package,version,do-no-define)
+AM_INIT_AUTOMAKE(SystemC,2.3.0,do-no-define)
 
 AC_PROG_CC
 AC_PROG_CXX

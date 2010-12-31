@@ -2170,8 +2170,8 @@ fi
 
 
 # Define the identity of the package.
- PACKAGE=package
- VERSION=version
+ PACKAGE=SystemC
+ VERSION=2.3.0
 
 
 # Some tools Automake needs.

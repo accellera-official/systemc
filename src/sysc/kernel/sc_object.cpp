@@ -45,6 +45,9 @@
 
 
 // $Log: sc_object.cpp,v $
+// Revision 1.4  2010/08/03 17:02:39  acg
+//  Andy Goodrich: formatting changes.
+//
 // Revision 1.3  2009/02/28 00:26:58  acg
 //  Andy Goodrich: changed boost name space to sc_boost to allow use with
 //  full boost library applications.
@@ -289,7 +292,7 @@ sc_object::sc_object(const char* nm) : m_parent(0)
 
 sc_object::~sc_object()
 {
-	detach();
+    detach();
     delete [] (m_name-1);
     if ( m_attr_cltn_p ) delete m_attr_cltn_p;
 }
@@ -341,6 +344,7 @@ void sc_object::detach()
 		m_name[-1] = 0; 
     }
 }
+
 void
 sc_object::trace( sc_trace_file * /* unused */) const
 {

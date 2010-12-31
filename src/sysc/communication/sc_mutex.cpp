@@ -34,6 +34,10 @@
  *****************************************************************************/
 
 // $Log: sc_mutex.cpp,v $
+// Revision 1.4  2010/11/02 16:31:01  acg
+//  Andy Goodrich: changed object derivation to use sc_object rather than
+//  sc_prim_channel as the parent class.
+//
 // Revision 1.3  2008/11/13 15:29:46  acg
 //  David C. Black, ESLX, Inc: lock & trylock now allow owner to apply
 //  lock more than once without incident. Previous behavior locked up the
@@ -67,12 +71,12 @@ namespace sc_core {
 // constructors
 
 sc_mutex::sc_mutex()
-: sc_prim_channel( sc_gen_unique_name( "mutex" ) ),
+: sc_object( sc_gen_unique_name( "mutex" ) ),
   m_owner( 0 )
 {}
 
 sc_mutex::sc_mutex( const char* name_ )
-: sc_prim_channel( name_ ),
+: sc_object( name_ ),
   m_owner( 0 )
 {}
 
@@ -91,7 +95,7 @@ sc_mutex::lock()
 {
     if ( m_owner == sc_get_current_process_b()) return 0;
     while( in_use() ) {
-	wait( m_free );
+	sc_core::wait( m_free, sc_get_curr_simcontext() );
     }
     m_owner = sc_get_current_process_b();
     return 0;

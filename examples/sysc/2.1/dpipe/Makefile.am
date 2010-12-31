@@ -15,7 +15,7 @@
 ##
 ## ****************************************************************************
 ##
-##  examples/sysc/2.1/sc_export/Makefile.am --
+##  examples/sysc/2.1/dpipe/Makefile.am --
 ##  Process this file with automake to produce a Makefile.in file.
 ##
 ##  Original Author: Andy Goodrich, Forte Design Systems, 17 June 2003
@@ -35,16 +35,16 @@ CXX_FILES = \
 
 H_FILES = 
 
-check_PROGRAMS = sc_export
+check_PROGRAMS = dpipe
 TESTS = $(check_PROGRAMS) 
 
 INCLUDES = -I$(prefix)/include
 
-sc_export_SOURCES = $(CXX_FILES) $(H_FILES)
+dpipe_SOURCES = $(CXX_FILES) $(H_FILES)
 
-sc_export_LDADD = -L$(prefix)/lib-$(TARGET_ARCH) -lsystemc -lm
+dpipe_LDADD = -L$(prefix)/lib-$(TARGET_ARCH) -lsystemc -lm
 
-sc_export_INSTALLS = $(sc_export_SOURCES) 
+dpipe_INSTALLS = $(dpipe_SOURCES) 
 
 
 all:
@@ -54,7 +54,7 @@ all:
 install-data-local:
 	@$(NORMAL_INSTALL)
 	$(mkinstalldirs) .
-	for file in $(sc_export_INSTALLS); do \
+	for file in $(dpipe_INSTALLS); do \
 		$(INSTALL_DATA) $(srcdir)/$$file ./$$file; \
 	done
 
@@ -62,7 +62,7 @@ install-data-local:
 
 uninstall-local:
 	@$(NORMAL_UNINSTALL)
-	for file in $(sc_export_INSTALLS); do \
+	for file in $(dpipe_INSTALLS); do \
 		rm -f ./$$file; \
 	done
 

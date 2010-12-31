@@ -41,9 +41,9 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_CLEAN_FILES =
-am__objects_1 = receiver.$(OBJEXT) fifo.$(OBJEXT) sender.$(OBJEXT) \
-	switch.$(OBJEXT) switch_clk.$(OBJEXT)
-am__objects_2 = main.$(OBJEXT)
+am__objects_1 = fifo.$(OBJEXT) main.$(OBJEXT) receiver.$(OBJEXT) \
+	sender.$(OBJEXT) switch.$(OBJEXT) switch_clk.$(OBJEXT)
+am__objects_2 =
 am_pkt_switch_OBJECTS = $(am__objects_1) $(am__objects_2)
 pkt_switch_OBJECTS = $(am_pkt_switch_OBJECTS)
 pkt_switch_DEPENDENCIES =
@@ -171,7 +171,6 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 H_FILES = \
 	fifo.h \
-	main.cpp \
 	pkt.h \
 	receiver.h \
 	sender.h \
@@ -180,8 +179,9 @@ H_FILES = \
 	switch_reg.h
 
 CXX_FILES = \
-	receiver.cpp \
 	fifo.cpp \
+	main.cpp \
+	receiver.cpp \
 	sender.cpp \
 	switch.cpp \
 	switch_clk.cpp

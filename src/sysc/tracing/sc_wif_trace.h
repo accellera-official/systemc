@@ -70,8 +70,8 @@ class wif_trace_file : public sc_trace_file{
 public:
     enum wif_enum {WIF_BIT=0, WIF_MVL=1, WIF_REAL=2, WIF_LAST};
 
-	// sc_set_wif_time_unit is deprecated.
-	void set_time_unit( double, sc_time_unit );
+    void set_time_unit( double, sc_time_unit );
+    // sc_set_wif_time_unit is deprecated.
 #if 0 // deprecated
     inline void sc_set_wif_time_unit(int exponent10_seconds)
         { set_time_unit(exponent10_seconds); }

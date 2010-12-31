@@ -49,6 +49,9 @@
  *****************************************************************************/
 
 // $Log: sc_module.h,v $
+// Revision 1.5  2010/12/07 20:09:12  acg
+// Andy Goodrich: remove unused signal declaration
+//
 // Revision 1.4  2009/05/22 16:06:29  acg
 //  Andy Goodrich: process control updates.
 //
@@ -130,7 +133,6 @@ class sc_name_gen;
 template<class T> class sc_in;
 template<class T> class sc_inout;
 template<class T> class sc_out;
-template<class T> class sc_signal;
 
 // ----------------------------------------------------------------------------
 //  STRUCT : sc_bind_proxy

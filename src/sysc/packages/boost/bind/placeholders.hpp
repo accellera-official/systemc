@@ -22,7 +22,7 @@
 #include <sysc/packages/boost/bind/arg.hpp>
 #include <sysc/packages/boost/config.hpp>
 
-namespace sc_unamed
+namespace sc_unnamed
 {
 
 namespace { // anonymous namespace
@@ -66,6 +66,6 @@ sc_boost::arg<9> _9;
 #endif
 
 } // anonymous namespace
-} // namespace sc_unamed
+} // namespace sc_unnamed
 
 #endif // #ifndef SC_BOOST_BIND_PLACEHOLDERS_HPP_INCLUDED

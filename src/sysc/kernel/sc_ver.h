@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2008 by all Contributors.
+  source code Copyright (c) 1996-2010 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -44,9 +44,10 @@ extern const char* sc_release();
 extern const char* sc_version();
 
 #define SYSTEMC_2_3_0
-#define SYSTEMC_VERSION 20100709
+#define SYSTEMC_VERSION 20101228
 
-#define SC_RELEASE_STRING "2.3.09jul10_beta"
+#define SC_RELEASE_STRING "2.3.0_20101228_beta"
+#define SC_VENDOR_STRING "OSCI"
 #define SC_API_VERSION_STRING sc_api_version_2_3_0
 
 

@@ -42,6 +42,9 @@
  *****************************************************************************/
 
 // $Log: sc_proxy.h,v $
+// Revision 1.3  2010/12/07 20:09:07  acg
+// Andy Goodrich: Fix for returning enough data
+//
 // Revision 1.2  2009/02/28 00:26:14  acg
 //  Andy Goodrich: bug fixes.
 //
@@ -1431,23 +1434,29 @@ inline
 int64
 sc_proxy<X>::to_anything_signed() const
 {
-    // only 0 word is returned
-    // can't convert logic values other than 0 and 1
     const X& x = back_cast();
     int len = x.length();
-    if( x.get_cword( 0 ) != SC_DIGIT_ZERO ) {
+    int64 w = 0;
+
+    if( len > SC_DIGIT_SIZE ) 
+    {
+	if( x.get_cword( 1 ) != SC_DIGIT_ZERO ) 
+	    SC_REPORT_WARNING( sc_core::SC_ID_VECTOR_CONTAINS_LOGIC_VALUE_, 0 );
+	w = x.get_word(1);
+    }
+    if( x.get_cword( 0 ) != SC_DIGIT_ZERO ) 
 	SC_REPORT_WARNING( sc_core::SC_ID_VECTOR_CONTAINS_LOGIC_VALUE_, 0 );
-    }
-    int64 w = x.get_word( 0 );
-    uint64 zero = 0;
+    w = (w << SC_DIGIT_SIZE) | x.get_word( 0 );
     if( len >= 64 ) {
-	return (uint64) w;
+	return w;
     }
+
+    uint64 zero = 0;
     sc_logic_value_t sgn = x.get_bit( len - 1 );
     if( sgn == 0 ) {
-	return ( w & (~zero >> (64 - len)) );
+	return (int64)( w & (~zero >> (64 - len)) );
     } else {
-	return ( w | (~zero << len) );
+	return (int64)( w | (~zero << len) );
     }
 }
 

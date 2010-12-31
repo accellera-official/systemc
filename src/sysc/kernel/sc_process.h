@@ -46,6 +46,9 @@
  *****************************************************************************/
 
 // $Log: sc_process.h,v $
+// Revision 1.4  2010/07/22 20:02:33  acg
+//  Andy Goodrich: bug fixes.
+//
 // Revision 1.3  2009/05/22 16:06:29  acg
 //  Andy Goodrich: process control updates.
 //
@@ -671,7 +674,7 @@ inline sc_curr_proc_kind sc_process_b::proc_kind() const
 //
 // This inline method decrements the number of outstanding references to this 
 // object instance. If the number of references goes to zero, this object
-// can be delete in "sc_process_b::delete_process()".
+// can be deleted in "sc_process_b::delete_process()".
 //------------------------------------------------------------------------------
 inline void sc_process_b::reference_decrement()
 {

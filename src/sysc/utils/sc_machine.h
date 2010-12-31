@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: sc_machine.h,v $
+// Revision 1.2  2010/09/06 16:35:09  acg
+//  Andy Goodrich: changed i386 to __i386__ in ifdef.
+//
 // Revision 1.1.1.1  2006/12/15 20:20:06  acg
 // SystemC 2.3
 //
@@ -49,7 +52,7 @@
 //  Little or big endian machine?
 // ----------------------------------------------------------------------------
 
-#if defined( __x86_64__ ) || defined( i386 ) || defined(WIN32)
+#if defined( __x86_64__ ) || defined( __i386__ ) || defined(WIN32)
 #   define SC_LITTLE_ENDIAN
 #elif defined( __ppc__ ) || defined( sparc ) || defined( __hppa )
 #   define SC_BIG_ENDIAN

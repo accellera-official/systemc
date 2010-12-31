@@ -35,6 +35,9 @@
 
 
 // $Log: sc_cor_qt.cpp,v $
+// Revision 1.5  2010/08/03 16:52:14  acg
+//  Andy Goodrich: line formatting.
+//
 // Revision 1.4  2008/11/11 14:03:07  acg
 //  Andy Goodrich: added execute access to the release of red zone storage
 //  per Ulli's suggestion.
@@ -201,10 +204,11 @@ sc_cor_pkg_qt::create( std::size_t stack_size, sc_cor_fn* fn, void* arg )
     cor->m_pkg = this;
     cor->m_stack_size = stack_size;
     cor->m_stack = new char[cor->m_stack_size];
-    void* sto = stack_align( cor->m_stack, QUICKTHREADS_STKALIGN, &cor->m_stack_size );
-    cor->m_sp = QUICKTHREADS_SP( sto, cor->m_stack_size - QUICKTHREADS_STKALIGN );
+    void* sto = stack_align( cor->m_stack, QUICKTHREADS_STKALIGN, 
+                             &cor->m_stack_size );
+    cor->m_sp = QUICKTHREADS_SP(sto, cor->m_stack_size - QUICKTHREADS_STKALIGN);
     cor->m_sp = QUICKTHREADS_ARGS( cor->m_sp, arg, cor, (qt_userf_t*) fn,
-			 sc_cor_qt_wrapper );
+			           sc_cor_qt_wrapper );
     return cor;
 }
 

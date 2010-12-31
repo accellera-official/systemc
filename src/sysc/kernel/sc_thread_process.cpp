@@ -35,6 +35,12 @@
  *****************************************************************************/
 
 // $Log: sc_thread_process.cpp,v $
+// Revision 1.7  2010/11/20 17:10:57  acg
+//  Andy Goodrich: reset processing changes for new IEEE 1666 standard.
+//
+// Revision 1.6  2010/07/22 20:02:33  acg
+//  Andy Goodrich: bug fixes.
+//
 // Revision 1.5  2009/07/28 01:10:53  acg
 //  Andy Goodrich: updates for 2.3 release candidate.
 //
@@ -264,10 +270,6 @@ void sc_thread_process::kill_process(sc_descendant_inclusion_info descendants )
         }
     }
 
-    // REMOVE TRACES OF OUR PROCESS FROM EVENT QUEUES AND THE LIKE:
-
-    disconnect_process();
-
     // SET UP TO KILL THE PROCESS IF SIMULATION HAS STARTED:
  
     if ( sc_is_running() )
@@ -418,26 +420,8 @@ sc_thread_process::sc_thread_process( const char* name_p, bool free_host,
         }
 
         // process any reset signal specification:
-        if ( opt_p->m_areset_iface_p )
-        {
-            sc_reset::reset_signal_is(
-                true, *opt_p->m_areset_iface_p, opt_p->m_areset_level );
-        }
-        if ( opt_p->m_areset_port_p )
-        {
-            sc_reset::reset_signal_is(
-                true, *opt_p->m_areset_port_p, opt_p->m_areset_level );
-        }
-        if ( opt_p->m_reset_iface_p )
-        {
-            sc_reset::reset_signal_is(
-                false, *opt_p->m_reset_iface_p, opt_p->m_reset_level );
-        }
-        if ( opt_p->m_reset_port_p )
-        {
-            sc_reset::reset_signal_is(
-                false, *opt_p->m_reset_port_p, opt_p->m_reset_level );
-        }
+
+	opt_p->specify_resets();
 
     }
 

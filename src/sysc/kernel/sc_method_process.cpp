@@ -35,6 +35,12 @@
  *****************************************************************************/
 
 // $Log: sc_method_process.cpp,v $
+// Revision 1.5  2010/11/20 17:10:56  acg
+//  Andy Goodrich: reset processing changes for new IEEE 1666 standard.
+//
+// Revision 1.4  2010/07/22 20:02:33  acg
+//  Andy Goodrich: bug fixes.
+//
 // Revision 1.3  2009/05/22 16:06:29  acg
 //  Andy Goodrich: process control updates.
 //
@@ -66,6 +72,7 @@
 #include "sysc/kernel/sc_method_process.h"
 #include "sysc/kernel/sc_simcontext_int.h"
 #include "sysc/kernel/sc_module.h"
+#include "sysc/kernel/sc_spawn_options.h"
 
 namespace sc_core {
 
@@ -245,8 +252,8 @@ void sc_method_process::kill_process(sc_descendant_inclusion_info descendants)
     // THROW ITS KILL.
 
     disconnect_process();
-    if ( next_runnable() == 0 ) simcontext()->push_runnable_method( this );
-    // @@@@#### should we do this? if ( next_runnable() != 0 ) simcontext()->remove_runnable_method( this );
+    // @@@@#### if ( next_runnable() == 0 ) simcontext()->push_runnable_method( this );
+    if ( next_runnable() != 0 ) simcontext()->remove_runnable_method( this );
     m_throw_type = THROW_KILL;
 }
 
@@ -307,17 +314,9 @@ sc_method_process::sc_method_process( const char* name_p,
                 this, *opt_p->m_sensitive_event_finders[i]);
         }
 
-    // process any reset signal specification:
-    if ( opt_p->m_areset_iface_p )
-    {
-        sc_reset::reset_signal_is(
-            true, *opt_p->m_areset_iface_p, opt_p->m_areset_level );
-    }
-    if ( opt_p->m_areset_port_p )
-    {
-        sc_reset::reset_signal_is(
-            true, *opt_p->m_areset_port_p, opt_p->m_areset_level );
-    }
+	// process any reset signal specification:
+
+	opt_p->specify_resets();
     }
 
     else

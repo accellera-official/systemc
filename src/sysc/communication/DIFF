@@ -1,0 +1,126 @@
+Index: sc_prim_channel.cpp
+===================================================================
+RCS file: /Users/acg/CVSROOT/systemc-2.3/src/sysc/communication/sc_prim_channel.cpp,v
+retrieving revision 1.1.1.1
+diff -r1.1.1.1 sc_prim_channel.cpp
+70c70
+<   m_update_next_p( 0 )
+---
+>   m_update_next_p( (sc_prim_channel*)sc_prim_channel::list_end )
+78c78
+<   m_update_next_p( 0 )
+---
+>   m_update_next_p( (sc_prim_channel*)sc_prim_channel::list_end )
+205c205,207
+< : m_simc( &simc_ ), m_update_list_p((sc_prim_channel*)sc_prim_channel::list_end)
+---
+> : m_simc( &simc_ ), 
+>   m_safe_update_list_p((sc_prim_channel*)sc_prim_channel::list_end),
+>   m_update_list_p((sc_prim_channel*)sc_prim_channel::list_end)
+Index: sc_prim_channel.h
+===================================================================
+RCS file: /Users/acg/CVSROOT/systemc-2.3/src/sysc/communication/sc_prim_channel.h,v
+retrieving revision 1.1.1.1
+diff -r1.1.1.1 sc_prim_channel.h
+67a68
+> #include "pthread.h"
+71a73,93
+> //  CLASS : sc_scoped_mutex - multi-thread safety lock.
+> //
+> // ----------------------------------------------------------------------------
+> class sc_scoped_mutex 
+> {
+>   public: // constructor:
+>     sc_scoped_mutex( pthread_mutex_t& mutex ) : m_mutex(mutex) 
+>     {
+>         pthread_mutex_lock(&m_mutex);
+>     }
+>   public:
+>     ~sc_scoped_mutex()
+>     {
+>         pthread_mutex_unlock(&m_mutex);
+>     }
+>   private:
+>     pthread_mutex_t m_mutex;
+> };
+> 
+> 
+> // ----------------------------------------------------------------------------
+89c111,118
+< 	{ return m_update_next_p != (sc_prim_channel*)list_end; }
+---
+> 	{ return (m_update_next_p != (sc_prim_channel*)list_end) ||
+> 	         (m_safe_update_next_p != (sc_prim_channel*)list_end);
+> 	}
+> 
+>     // multi-thread safe request the update method to be executed during the 
+>     // update phase
+> 
+>     inline void request_mt_safe_update();
+246,248c275,277
+< 
+<     sc_prim_channel_registry* m_registry;      // Update list manager.
+<     sc_prim_channel*          m_update_next_p; // Next entry in update list.
+---
+>     sc_prim_channel_registry* m_registry;           // Update list manager.
+>     sc_prim_channel*          m_safe_update_next_p; // Next in safe update list.
+>     sc_prim_channel*          m_update_next_p;      // Next entry update list.
+271a301
+>     inline void request_mt_safe_update( sc_prim_channel& );
+273a304,309
+>     bool pending_mt_safe_updates() const
+>         { 
+> 	    return ( m_update_list_p != 
+> 	             (sc_prim_channel*)sc_prim_channel::list_end );
+>         }   
+> 
+275,276c311,315
+<         { return m_update_list_p !=                 
+<                  (sc_prim_channel*)sc_prim_channel::list_end; 
+---
+>         { 
+> 	    return ( m_update_list_p != 
+> 	             (sc_prim_channel*)sc_prim_channel::list_end ) ||
+> 	           ( m_safe_update_list_p != 
+> 		     (sc_prim_channel*)sc_prim_channel::list_end);
+311a351,352
+>     pthread_mutex_t               m_mutex;              
+>     sc_prim_channel*              m_safe_update_list_p;
+332a374,383
+> inline
+> void
+> sc_prim_channel_registry::request_mt_safe_update(sc_prim_channel& prim_channel_)
+> {
+>     sc_scoped_mutex lock(m_mutex);
+>     prim_channel_.m_update_next_p = m_safe_update_list_p;
+>     m_safe_update_list_p = &prim_channel_;
+>     // mutex unlocked on exit.
+> }
+> 
+350a402,415
+> 
+>     if ( m_safe_update_list_p != (sc_prim_channel*)sc_prim_channel::list_end )
+>     {
+>         sc_scoped_mutex lock(m_mutex);
+> 	now_p = m_safe_update_list_p;
+> 	m_safe_update_list_p = 
+>         m_safe_update_list_p = (sc_prim_channel*)sc_prim_channel::list_end;
+> 	for ( ; now_p != (sc_prim_channel*)sc_prim_channel::list_end; 
+> 	    now_p = next_p )
+> 	{
+> 	    next_p = now_p->m_update_next_p;
+> 	    now_p->perform_update();
+> 	}
+>     }
+362a428,436
+> sc_prim_channel::request_mt_safe_update()
+> {
+>     if( ! m_update_next_p ) {
+> 	m_registry->request_mt_safe_update( *this );
+>     }
+> }
+> 
+> inline
+> void
+370a445
+> 

@@ -35,6 +35,9 @@
 
 
 // $Log: sc_event_queue.cpp,v $
+// Revision 1.2  2010/07/22 20:02:30  acg
+//  Andy Goodrich: bug fixes.
+//
 // Revision 1.1.1.1  2006/12/15 20:20:04  acg
 // SystemC 2.3
 //

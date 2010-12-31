@@ -31,8 +31,8 @@
 ## ****************************************************************************
 
 SUBDIRS = \
-	fft_flpt 
-#fft_fxpt 
+	fft_flpt \
+	fft_fxpt 
 
 
 EXAMPLES_DIR = $(prefix)/examples/sysc/fft

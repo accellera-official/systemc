@@ -33,6 +33,10 @@
     
  *****************************************************************************/
 //$Log: sc_mutex.h,v $
+//Revision 1.2  2010/11/02 16:31:01  acg
+// Andy Goodrich: changed object derivation to use sc_object rather than
+// sc_prim_channel as the parent class.
+//
 //Revision 1.1.1.1  2006/12/15 20:20:04  acg
 //SystemC 2.3
 //
@@ -54,7 +58,8 @@
 #define SC_MUTEX_H
 
 #include "sysc/kernel/sc_event.h"
-#include "sysc/communication/sc_prim_channel.h"
+#include "sysc/kernel/sc_object.h"
+#include "sysc/kernel/sc_wait.h"
 #include "sysc/communication/sc_mutex_if.h"
 
 namespace sc_core {
@@ -67,7 +72,7 @@ namespace sc_core {
 
 class sc_mutex
 : public sc_mutex_if,
-  public sc_prim_channel
+  public sc_object
 {
 public:
 

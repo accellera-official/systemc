@@ -32,7 +32,6 @@
 
 H_FILES = \
 	fifo.h \
-	main.cpp \
 	pkt.h \
 	receiver.h \
 	sender.h \
@@ -41,8 +40,9 @@ H_FILES = \
 	switch_reg.h
 
 CXX_FILES = \
-	receiver.cpp \
 	fifo.cpp \
+	main.cpp \
+	receiver.cpp \
 	sender.cpp \
 	switch.cpp \
 	switch_clk.cpp

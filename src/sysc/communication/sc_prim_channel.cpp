@@ -39,6 +39,12 @@
 
 
 // $Log: sc_prim_channel.cpp,v $
+// Revision 1.3  2010/12/07 20:36:49  acg
+//  Andy Goodrich: fix pointer that should have been initialized to zero.
+//
+// Revision 1.2  2010/12/07 19:50:36  acg
+//  Andy Goodrich: addition of writer policies, courtesy of Philipp Hartmann.
+//
 // Revision 1.1.1.1  2006/12/15 20:20:04  acg
 // SystemC 2.3
 //
@@ -67,7 +73,7 @@ namespace sc_core {
 sc_prim_channel::sc_prim_channel()
 : sc_object( 0 ),
   m_registry( simcontext()->get_prim_channel_registry() ),
-  m_update_next_p( 0 )
+  m_update_next_p( 0 ) 
 {
     m_registry->insert( *this );
 }

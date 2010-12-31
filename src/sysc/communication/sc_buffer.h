@@ -34,6 +34,9 @@
     
  *****************************************************************************/
 //$Log: sc_buffer.h,v $
+//Revision 1.2  2010/12/07 19:50:36  acg
+// Andy Goodrich: addition of writer policies, courtesy of Philipp Hartmann.
+//
 //Revision 1.1.1.1  2006/12/15 20:20:04  acg
 //SystemC 2.3
 //
@@ -88,16 +91,16 @@ namespace sc_core {
 //  The sc_buffer<T> primitive channel class.
 // ----------------------------------------------------------------------------
 
-template <class T>
+template< typename T, sc_writer_policy POL = SC_ONE_WRITER >
 class sc_buffer
-: public sc_signal<T>
+: public sc_signal<T,POL>
 {
 public:
 
     // typedefs
 
-    typedef sc_buffer<T> this_type;
-    typedef sc_signal<T> base_type;
+    typedef sc_buffer<T,POL> this_type;
+    typedef sc_signal<T,POL> base_type;
 
 public:
 
@@ -120,13 +123,13 @@ public:
 
     // other methods
 
-    sc_buffer<T>& operator = ( const T& a )
+    this_type& operator = ( const T& a )
 	{ write( a ); return *this; }
 
-    sc_buffer<T>& operator = ( const base_type& a )
+    this_type& operator = ( const sc_signal_in_if<T>& a )
 	{ write( a.read() ); return *this; }
 
-    sc_buffer<T>& operator = ( const this_type& a )
+    this_type& operator = ( const this_type& a )
 	{ write( a.read() ); return *this; }
 
     virtual const char* kind() const
@@ -139,7 +142,7 @@ protected:
 private:
 
     // disabled
-    sc_buffer( const sc_buffer<T>& );
+    sc_buffer( const this_type& );
 };
 
 
@@ -147,31 +150,28 @@ private:
 
 // write the new value
 
-template <class T>
+template< typename T, sc_writer_policy POL >
 inline
 void
-sc_buffer<T>::write( const T& value_ )
+sc_buffer<T,POL>::write( const T& value_ )
 {
-    sc_object* writer = sc_get_curr_simcontext()->get_current_writer();
-    if( sc_signal<T>::m_writer == 0 ) {
-	sc_signal<T>::m_writer = writer;
-    } else if( sc_signal<T>::m_writer != writer ) {
-	sc_signal_invalid_writer( this, sc_signal<T>::m_writer, writer );
-    }
+    if( !base_type::policy_type::check_write(this) )
+      return;
 
     this->m_new_val = value_;
     this->request_update();
 }
 
 
-template <class T>
+template< typename T, sc_writer_policy POL >
 inline
 void
-sc_buffer<T>::update()
+sc_buffer<T,POL>::update()
 {
+    base_type::policy_type::update();
     this->m_cur_val = this->m_new_val;
-    if ( sc_signal<T>::m_change_event_p )
-	    sc_signal<T>::m_change_event_p->notify(SC_ZERO_TIME);
+    if ( base_type::m_change_event_p )
+        base_type::m_change_event_p->notify(SC_ZERO_TIME);
     this->m_delta = sc_delta_count();
 }
 

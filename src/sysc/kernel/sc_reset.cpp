@@ -24,6 +24,12 @@
  *****************************************************************************/
 
 // $Log: sc_reset.cpp,v $
+// Revision 1.6  2010/12/07 20:09:13  acg
+// Andy Goodrich: removed sc_signal overloads since already have sc_signal_in_if overloads.
+//
+// Revision 1.5  2010/11/20 17:10:56  acg
+//  Andy Goodrich: reset processing changes for new IEEE 1666 standard.
+//
 // Revision 1.4  2009/05/22 16:06:29  acg
 //  Andy Goodrich: process control updates.
 //
@@ -320,6 +326,29 @@ void sc_reset::reset_signal_is(
 //   (1) If reset is asserted we tell the process that it is in reset
 //       initially.
 //------------------------------------------------------------------------------
+#if 0 // @@@@#### REMOVE
+void sc_reset::reset_signal_is( 
+    bool async, const sc_signal<bool,SC_ONE_WRITER>& sig, bool level )
+{
+    reset_signal_is(async, *dynamic_cast<const sc_signal_in_if<bool>*>(&sig), 
+                    level);
+}
+
+void sc_reset::reset_signal_is( 
+    bool async, const sc_signal<bool,SC_MANY_WRITERS>& sig, bool level )
+{
+    reset_signal_is(async, *dynamic_cast<const sc_signal_in_if<bool>*>(&sig), 
+                    level);
+}
+
+void sc_reset::reset_signal_is( 
+    bool async, const sc_signal<bool,SC_UNCHECKED_WRITERS>& sig, bool level )
+{
+    reset_signal_is(async, *dynamic_cast<const sc_signal_in_if<bool>*>(&sig), 
+                    level);
+}
+#endif // @@@@#### REMOVE
+
 void sc_reset::reset_signal_is( 
     bool async, const sc_signal_in_if<bool>& iface, bool level )
 {

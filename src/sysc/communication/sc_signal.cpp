@@ -35,6 +35,9 @@
 
 /* 
 $Log: sc_signal.cpp,v $
+Revision 1.5  2010/12/07 19:50:36  acg
+ Andy Goodrich: addition of writer policies, courtesy of Philipp Hartmann.
+
 Revision 1.3  2007/04/09 21:59:49  acg
  Andy Goodrich: fixed multiple write notification bug where writes
  done outside the simulator were being treated as multiple writes.
@@ -143,41 +146,22 @@ sc_signal_invalid_writer(
 
 }
 
-
-// ----------------------------------------------------------------------------
-//  CLASS : sc_signal<bool>
-//
-//  Specialization of sc_signal<T> for type bool.
-// ----------------------------------------------------------------------------
-
-
-// reset support:
-
-sc_reset* sc_signal<bool>::is_reset() const
+bool
+sc_writer_policy_check_port::
+  check_port( sc_object* target, sc_port_base * port_, bool is_output )
 {
-    sc_reset* result_p;
-    if ( !m_reset_p ) m_reset_p = new sc_reset( this );
-    result_p = m_reset_p;
-    return result_p;
+    if ( is_output && sc_get_curr_simcontext()->write_check() )
+    {
+        // an out or inout port; only one can be connected
+        if( m_output != 0) {
+            sc_signal_invalid_writer( target, m_output, port_ );
+            return false;
+        } else {
+            m_output = port_;
+        }
+    }
+    return true;
 }
-
-// destructor
-
-sc_signal<bool>::~sc_signal()
-{
-    if ( m_change_event_p )  delete m_change_event_p;
-    if ( m_negedge_event_p ) delete m_negedge_event_p;
-    if ( m_posedge_event_p ) delete m_posedge_event_p;
-    if ( m_reset_p )         delete m_reset_p;
-}
-
-
-// ----------------------------------------------------------------------------
-//  CLASS : sc_signal<sc_logic>
-//
-//  Specialization of sc_signal<T> for type sc_logic.
-// ----------------------------------------------------------------------------
-
 
 void sc_deprecated_get_data_ref()
 {

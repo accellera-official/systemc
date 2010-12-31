@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: sc_kernel_ids.h,v $
+// Revision 1.5  2010/07/30 05:21:22  acg
+//  Andy Goodrich: release 2.3 fixes.
+//
 // Revision 1.4  2009/02/28 00:26:58  acg
 //  Andy Goodrich: changed boost name space to sc_boost to allow use with
 //  full boost library applications.
@@ -188,7 +191,7 @@ SC_DEFINE_MESSAGE(SC_ID_UNKNOWN_PROCESS_TYPE_,       566,
 SC_DEFINE_MESSAGE(SC_ID_RESET_SIGNAL_IS_NOT_ALLOWED_ , 567,
         "reset_signal_is() is only allowed for SC_CTHREADs" )
 SC_DEFINE_MESSAGE(SC_ID_NEGATIVE_SIMULATION_TIME_, 568,
-    "negative simulation interval specified in sc_start call" )
+        "negative simulation interval specified in sc_start call" )
 SC_DEFINE_MESSAGE(SC_ID_BAD_SC_MODULE_CONTRUCTOR_  , 569,
         "sc_module(const char*) has been deprecated, use sc_module(const sc_module_name&)" )
 

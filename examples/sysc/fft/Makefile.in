@@ -163,9 +163,9 @@ target_vendor = @target_vendor@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 SUBDIRS = \
-	fft_flpt 
+	fft_flpt \
+	fft_fxpt 
 
-#fft_fxpt 
 EXAMPLES_DIR = $(prefix)/examples/sysc/fft
 all: all-recursive
 

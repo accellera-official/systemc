@@ -1,4 +1,4 @@
-        Release Notes for SystemC 2.3.0 Release Of 17 Nov 2009
+        Release Notes for SystemC 2.3.0 Release Of 09 Jul 2010
         ======================================================
 
 CONTENTS
@@ -29,12 +29,39 @@ Compared to the 2.2.0, this release has the following new items:
   - Bug fixes, see section 2.
 
   - Expanded dynamic process capabilities, see section 5.
+
+  - Expanded platform support, see the README.
      
 
 2) Bug fixes and enhancements
 =============================
 
 Following is the list of bug fixes and enhancements for this release:
+
+     - Removed quick threads header inclusion from public includes.
+
+     - Added free BSD support to configure and cleaned up other issues.
+
+     - Plugged memory leak in sc_signal destructors associated with 
+       sc_event instances.
+
+     - Fixed namespace collision issue with sc_boost support.
+
+     - Process control improvements: 
+         (a) Fixed bug in hierarchical killing of processes.
+	 (b) Changes to when deleted processes are actually deleted.
+	 (c) Retain process objects as zombies until all of their children 
+	     have been removed.
+
+     - Replaced last uses of sc_pvector with std::vector<>.
+
+     - Changes to sc_process handle to use a copy/swap idiom for implementing
+       operator = so that the reference counts work properly.
+
+     - Fixed memory leak and race condition in sc_event_queue.
+
+     - Removed internal objects from the object hierarchy for IEEE 1666
+       compatibility.
 
      - Moved default parameter specifications from friend declarations to
        the actual function signatures in the fixed point support.

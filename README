@@ -7,7 +7,7 @@ This is the release of the SystemC 2.3.0 Class Library.
                 IMPORTANT
 
 1. This is the release of SystemC 2.3.0. This release contains bug 
-   fixes for SystemC 2.1.v1 as well as adding IEEE 1666(tm) compliance
+   fixes for SystemC 2.2.0 as well as adding IEEE 1666(tm) compliance
    features.
 
 2. This release is supported on the following platforms for which it has
@@ -27,13 +27,13 @@ This is the release of the SystemC 2.3.0 Class Library.
 	  gcc-3.4.3
     o Linux (2.6.9-34.EL kernel) with GNU C++ compiler versions gcc-3.4.5
       and gcc-4.1.0
-    o 64-bit Linux (Redhat 2.6.9-5.0.3.EL) with GNU C++ compiler version 
-      gcc-3.4.4
+    o 64-bit Linux (Redhat 2.6.9-5.0.3.EL) with GNU C++ compiler versions 
+      gcc-3.4.4 through gcc-4.2.2
     o HP-UX 11.00 with HP C++ compiler version A.03.39
       (Note: +O1 is the highest safe optimization level)
-    o MacOSX (Tiger) with GNU C++ compiler versions gcc-3.1, gcc-3.3, and
+    o MacOSX with GNU C++ compiler versions gcc-3.1 through gcc-4.2.1
       gcc-4.0.0
-    o MacOSX (Snow Leopard) with GNU C++ compiler version gcc-4.2.1
+    o FreeBSD with GNU C++ compiler versions through gcc-4.2.2
     o Windows NT 4.0 (SP6a) with VC++ 7.0 
 
 -------------------------------------------------------------------------------

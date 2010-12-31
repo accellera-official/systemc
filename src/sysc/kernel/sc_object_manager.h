@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: sc_object_manager.h,v $
+// Revision 1.3  2010/07/22 20:02:33  acg
+//  Andy Goodrich: bug fixes.
+//
 // Revision 1.2  2008/05/22 17:06:26  acg
 //  Andy Goodrich: updated copyright notice to include 2008.
 //

@@ -58,6 +58,12 @@
 				 execution problem with using sc_pvector.
  *****************************************************************************/
 // $Log: sc_simcontext.cpp,v $
+// Revision 1.5  2010/11/20 17:10:57  acg
+//  Andy Goodrich: reset processing changes for new IEEE 1666 standard.
+//
+// Revision 1.4  2010/07/22 20:02:33  acg
+//  Andy Goodrich: bug fixes.
+//
 // Revision 1.3  2008/05/22 17:06:26  acg
 //  Andy Goodrich: updated copyright notice to include 2008.
 //
@@ -549,6 +555,11 @@ sc_simcontext::crunch( bool once )
 		{
 		    try {
 			method_h->semantics();
+		    }
+		    catch( sc_kill ) {
+		        ::std::cout << "Killing method"
+			            << method_h->name() 
+				    << ::std::endl;
 		    }
 		    catch( const sc_report& ex ) {
 			::std::cout << "\n" << ex.what() << ::std::endl;

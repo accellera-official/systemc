@@ -67,6 +67,8 @@ fft_LDADD = -L$(prefix)/lib-$(TARGET_ARCH) -lsystemc -lm
 
 check_PROGRAMS = fft
 
+TESTS=$(check_PROGRAMS)
+
 INCLUDES = -I$(prefix)/include
 
 fft_INSTALLS = $(IMAGE_FILES) $(fft_SOURCES)

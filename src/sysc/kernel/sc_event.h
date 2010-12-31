@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: sc_event.h,v $
+// Revision 1.4  2010/12/07 20:09:11  acg
+// Andy Goodrich: writer policy fix.
+//
 // Revision 1.3  2009/05/22 16:06:29  acg
 //  Andy Goodrich: process control updates.
 //
@@ -75,6 +78,7 @@
 #include "sysc/datatypes/bit/sc_logic.h"
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/kernel/sc_simcontext.h"
+#include "sysc/communication/sc_writer_policy.h"
 
 namespace sc_core {
 
@@ -104,7 +108,7 @@ class sc_event
     friend class sc_process_b;
     friend class sc_method_process;
     friend class sc_thread_process;
-    template<typename IF> friend class sc_signal;
+    template<typename IF, sc_writer_policy POL> friend class sc_signal;
     friend class sc_signal<bool>;
     friend class sc_signal<sc_dt::sc_logic>;
     friend void sc_thread_cor_fn( void* arg );

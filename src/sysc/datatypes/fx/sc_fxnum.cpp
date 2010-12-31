@@ -35,6 +35,9 @@
 
 
 // $Log: sc_fxnum.cpp,v $
+// Revision 1.2  2010/12/07 20:09:08  acg
+// Andy Goodrich: Philipp Hartmann's constructor disambiguation fix
+//
 // Revision 1.1.1.1  2006/12/15 20:20:04  acg
 // SystemC 2.3
 //
@@ -477,7 +480,7 @@ overflow( double& c, const scfx_params& params, bool& o_flag )
 	high = full_circle - resolution;
     }
     double val = c;
-    sc_fxval_fast c2 = c;
+    sc_fxval_fast c2(c);
 
     bool under = ( val < low );
     bool over = ( val > high );

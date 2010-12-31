@@ -35,6 +35,9 @@
 
 
 // $Log: sc_ver.cpp,v $
+// Revision 1.3  2010/11/20 17:10:57  acg
+//  Andy Goodrich: reset processing changes for new IEEE 1666 standard.
+//
 // Revision 1.2  2008/05/22 17:06:27  acg
 //  Andy Goodrich: updated copyright notice to include 2008.
 //
@@ -57,7 +60,8 @@ const char copyright[] =
 
 static
 const char systemc_version[] =
-    "             SystemC " SC_RELEASE_STRING " --- " __DATE__ " " __TIME__;
+    "             SystemC " SC_RELEASE_STRING "-" SC_VENDOR_STRING 
+    " --- " __DATE__ " " __TIME__;
 
 const char*
 sc_copyright()

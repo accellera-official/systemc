@@ -42,6 +42,9 @@
 
 /* 
 $Log: sc_port.h,v $
+Revision 1.2  2010/08/03 18:01:11  acg
+ Andy Goodrich: formatting.
+
 Revision 1.1.1.1  2006/12/15 20:20:04  acg
 SystemC 2.3
 
@@ -140,7 +143,7 @@ public:
 
 public:
 
-	int bind_count();
+    int bind_count();
 
     // get the first interface without checking for nil
     virtual       sc_interface* get_interface()       = 0;

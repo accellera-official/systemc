@@ -58,7 +58,8 @@ H_FILES = \
 	sc_signal_resolved.h \
 	sc_signal_resolved_ports.h \
 	sc_signal_rv.h \
-	sc_signal_rv_ports.h 
+	sc_signal_rv_ports.h \
+	sc_writer_policy.h
 
 noinst_HEADERS = $(H_FILES)
 

@@ -35,6 +35,12 @@
  *****************************************************************************/
 
 // $Log: sc_process_handle.h,v $
+// Revision 1.6  2010/07/30 05:21:22  acg
+//  Andy Goodrich: release 2.3 fixes.
+//
+// Revision 1.5  2010/07/22 20:02:33  acg
+//  Andy Goodrich: bug fixes.
+//
 // Revision 1.4  2009/05/22 16:06:29  acg
 //  Andy Goodrich: process control updates.
 //
@@ -187,7 +193,7 @@ inline bool operator != (
 inline bool operator < (
     const sc_process_handle& left, const sc_process_handle& right )
 {
-    return left.m_target_p < right.m_target_p == 0;
+    return left.m_target_p < right.m_target_p;
 }
 
 //------------------------------------------------------------------------------

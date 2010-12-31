@@ -41,6 +41,7 @@ H_FILES = \
 	sc_machine.h \
 	sc_mempool.h \
 	sc_pq.h \
+	sc_pvector.h \
 	sc_report.h \
 	sc_report_handler.h \
 	sc_string.h \
@@ -62,7 +63,8 @@ CXX_FILES = \
 	sc_report_handler.cpp \
 	sc_stop_here.cpp \
 	sc_string.cpp \
-	sc_utils_ids.cpp 
+	sc_utils_ids.cpp \
+	sc_vector.cpp
 
 NO_CXX_FILES =
 

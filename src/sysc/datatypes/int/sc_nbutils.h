@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_nbutils.h,v $
+// Revision 1.2  2010/09/06 16:35:48  acg
+//  Andy Goodrich: changed i386 to __i386__ in ifdef's.
+//
 // Revision 1.1.1.1  2006/12/15 20:20:05  acg
 // SystemC 2.3
 //
@@ -47,7 +50,7 @@
 #define SC_NBUTILS_H
 
 
-#if !defined(__ppc__) && !defined(_MSC_VER) && !defined(__x86_64__) && !defined(i386) && !defined(__hpux) && !defined( __BORLANDC__ )
+#if !defined(__ppc__) && !defined(_MSC_VER) && !defined(__x86_64__) && !defined(__i386__) && !defined(__hpux) && !defined( __BORLANDC__ )
 #include <ieeefp.h>
 #else
 #include <cmath>
@@ -954,7 +957,7 @@ void
 is_bad_double(double v)
 {
 // Windows throws exception.
-#if !defined(WIN32) && !defined(i386) && !defined(__x86_64__) && !defined( __EDG__ )
+#if !defined(WIN32) && !defined(__i386__) && !defined(__x86_64__) && !defined( __EDG__ )
 #if defined( __hpux ) && defined( isfinite )
   // HP-UX 11.00 does not have finite anymore
   if( ! isfinite( v ) ) {

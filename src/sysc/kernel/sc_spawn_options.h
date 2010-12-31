@@ -37,6 +37,12 @@
  *****************************************************************************/
 
 // $Log: sc_spawn_options.h,v $
+// Revision 1.6  2010/12/07 20:09:15  acg
+// Andy Goodrich: replaced sc_signal signatures with sc_signal_in_if signatures for reset methods.
+//
+// Revision 1.5  2010/11/20 17:10:57  acg
+//  Andy Goodrich: reset processing changes for new IEEE 1666 standard.
+//
 // Revision 1.4  2009/05/22 16:06:29  acg
 //  Andy Goodrich: process control updates.
 //
@@ -72,6 +78,42 @@ class sc_interface;
 class sc_event_finder;
 class sc_process_b;
 
+// +============================================================================
+// | CLASS sc_spawn_reset_base - Class to do a generic access to an 
+// |                             sc_spawn_rest object instance
+// +===========================================================================
+class sc_spawn_reset_base
+{
+  public:
+    sc_spawn_reset_base( bool async, bool level ) : 
+	m_async( async ), m_level(level)
+    {}
+    virtual void specify_reset() = 0;
+
+  protected:
+    bool m_async;   // = true if async reset.
+    bool m_level;   // level indicating reset.
+};
+
+// +============================================================================
+// | CLASS sc_spawn_reset<SOURCE> - Reset specification for sc_spawn_options.
+// +===========================================================================
+template<typename SOURCE>
+class sc_spawn_reset : public sc_spawn_reset_base
+{
+  public:
+    sc_spawn_reset( bool async, const SOURCE& source, bool level ) :
+	sc_spawn_reset_base(async, level), m_source(source)
+    {}
+    virtual void specify_reset()
+    {
+	sc_reset::reset_signal_is( m_async, m_source, m_level );
+    }
+
+  protected:
+    const SOURCE& m_source; // source of reset signal.
+};
+
 //=============================================================================
 // CLASS sc_spawn_options
 //
@@ -83,54 +125,111 @@ class sc_spawn_options {
     friend class sc_thread_process;
   public:
     sc_spawn_options() :                  
-        m_areset_iface_p(0), m_areset_port_p(0),
-        m_dont_initialize(false), m_reset_iface_p(0), m_reset_port_p(0),
-        m_spawn_method(false), m_stack_size(0)
+        m_dont_initialize(false), m_spawn_method(false), m_stack_size(0)
         { }
 
-    void async_reset_signal_is( const sc_signal_in_if<bool>& iface, bool level )
-        { m_areset_iface_p = &iface; m_areset_level = level; }
+    ~sc_spawn_options()
+    {
+        size_t resets_n = m_resets.size();
+	for ( size_t reset_i = 0; reset_i < resets_n; reset_i++ )
+	    delete m_resets[reset_i];
+    }
+
     void async_reset_signal_is( const sc_in<bool>& port, bool level )
-        { m_areset_port_p = &port; m_areset_level = level; }
-    void spawn_method()                 { m_spawn_method = true; }
-    void dont_initialize()              { m_dont_initialize = true; }
-    bool is_method() const              { return m_spawn_method; }
-    void reset_signal_is( const sc_signal_in_if<bool>& iface, bool level )
-        { m_reset_iface_p=&iface; m_reset_level = level; }
+    {
+        m_resets.push_back(
+	    new sc_spawn_reset<sc_in<bool> >(true, port, level) );
+    }
+
+    void async_reset_signal_is( const sc_inout<bool>& port, bool level )
+    {
+        m_resets.push_back(
+	    new sc_spawn_reset<sc_inout<bool> >(true, port, level) );
+    }
+
+    void async_reset_signal_is( const sc_out<bool>& port, bool level )
+    {
+        m_resets.push_back(
+	    new sc_spawn_reset<sc_out<bool> >(true, port, level) );
+    }
+
+    void async_reset_signal_is( const sc_signal_in_if<bool>& port, bool level )
+    {
+        m_resets.push_back(
+	    new sc_spawn_reset<sc_signal_in_if<bool> >(true, port, level) );
+    }
+
+    void dont_initialize()   { m_dont_initialize = true; }
+
+    bool is_method() const   { return m_spawn_method; }
+
     void reset_signal_is( const sc_in<bool>& port, bool level )
-        { m_reset_port_p = &port; m_reset_level = level; }
+    {
+        m_resets.push_back(
+	    new sc_spawn_reset<sc_in<bool> >(false, port, level) );
+    }
+
+    void reset_signal_is( const sc_inout<bool>& port, bool level )
+    {
+        m_resets.push_back(
+	    new sc_spawn_reset<sc_inout<bool> >(false, port, level) );
+    }
+
+    void reset_signal_is( const sc_out<bool>& port, bool level )
+    {
+        m_resets.push_back(
+	    new sc_spawn_reset<sc_out<bool> >(false, port, level) );
+    }
+
+    void reset_signal_is( const sc_signal_in_if<bool>& port, bool level )
+    {
+        m_resets.push_back(
+	    new sc_spawn_reset<sc_signal_in_if<bool> >(false, port, level) );
+    }
+
     void set_stack_size(int stack_size) { m_stack_size = stack_size; }
+
     void set_sensitivity(const sc_event* event) 
         { m_sensitive_events.push_back(event); }
+
     void set_sensitivity(sc_port_base* port_base)
         { m_sensitive_port_bases.push_back(port_base); }
+
     void set_sensitivity(sc_interface* interface_p) 
         { m_sensitive_interfaces.push_back(interface_p); }
+
     void set_sensitivity(sc_export_base* export_base) 
         { m_sensitive_interfaces.push_back(export_base->get_interface()); }
+
     void set_sensitivity(sc_event_finder* event_finder) 
         { m_sensitive_event_finders.push_back(event_finder); }
+
+    void spawn_method()                 { m_spawn_method = true; }
+
+  protected:
+    void specify_resets() const
+    {
+        size_t resets_n; // number of reset specifications to process.
+	resets_n = m_resets.size();
+	for ( size_t reset_i = 0; reset_i < resets_n; reset_i++ )
+	{
+	    m_resets[reset_i]->specify_reset();
+	}
+    }
 
   private:
     sc_spawn_options( const sc_spawn_options& );
     const sc_spawn_options& operator = ( const sc_spawn_options& );
 
   protected:
-    const sc_signal_in_if<bool>*  m_areset_iface_p;    // Areset interface or 0.
-    bool                          m_areset_level;      // Level for areset.
-    const sc_in<bool>*            m_areset_port_p;     // Areset port or 0.
-    bool                          m_dont_initialize;         
-    const sc_signal_in_if<bool>*  m_reset_iface_p;     // Reset interface or 0.
-    std::vector<sc_signal_in_if<bool>*> m_reset_ifs;
-    bool                          m_reset_level;       // Level for reset.
-    const sc_in<bool>*            m_reset_port_p;      // Reset port or 0.
-    std::vector<sc_in<bool>*>     m_reset_ports;
-    std::vector<const sc_event*>  m_sensitive_events;
-    std::vector<sc_event_finder*> m_sensitive_event_finders; 
-    std::vector<sc_interface*>    m_sensitive_interfaces;
-    std::vector<sc_port_base*>    m_sensitive_port_bases;
-    bool                          m_spawn_method;       // Method not thread.
-    int                           m_stack_size;         // Thread stack size.
+    bool                               m_dont_initialize;         
+    std::vector<sc_spawn_reset_base*>  m_resets;
+    std::vector<const sc_event*>       m_sensitive_events;
+    std::vector<sc_event_finder*>      m_sensitive_event_finders; 
+    std::vector<sc_interface*>         m_sensitive_interfaces;
+    std::vector<sc_port_base*>         m_sensitive_port_bases;
+    bool                               m_spawn_method; // Method not thread.
+    int                                m_stack_size;   // Thread stack size.
 };
 
 } // namespace sc_core

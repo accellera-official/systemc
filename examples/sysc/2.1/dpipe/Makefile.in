@@ -32,7 +32,7 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
-check_PROGRAMS = sc_export$(EXEEXT)
+check_PROGRAMS = dpipe$(EXEEXT)
 subdir = examples/sysc/2.1/dpipe
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -43,9 +43,9 @@ mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_CLEAN_FILES =
 am__objects_1 = main.$(OBJEXT)
 am__objects_2 =
-am_sc_export_OBJECTS = $(am__objects_1) $(am__objects_2)
-sc_export_OBJECTS = $(am_sc_export_OBJECTS)
-sc_export_DEPENDENCIES =
+am_dpipe_OBJECTS = $(am__objects_1) $(am__objects_2)
+dpipe_OBJECTS = $(am_dpipe_OBJECTS)
+dpipe_DEPENDENCIES =
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp =
 am__depfiles_maybe =
@@ -54,8 +54,8 @@ CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 CXXLD = $(CXX)
 CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) \
 	-o $@
-SOURCES = $(sc_export_SOURCES)
-DIST_SOURCES = $(sc_export_SOURCES)
+SOURCES = $(dpipe_SOURCES)
+DIST_SOURCES = $(dpipe_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -170,9 +170,9 @@ CXX_FILES = \
 H_FILES = 
 TESTS = $(check_PROGRAMS) 
 INCLUDES = -I$(prefix)/include
-sc_export_SOURCES = $(CXX_FILES) $(H_FILES)
-sc_export_LDADD = -L$(prefix)/lib-$(TARGET_ARCH) -lsystemc -lm
-sc_export_INSTALLS = $(sc_export_SOURCES) 
+dpipe_SOURCES = $(CXX_FILES) $(H_FILES)
+dpipe_LDADD = -L$(prefix)/lib-$(TARGET_ARCH) -lsystemc -lm
+dpipe_INSTALLS = $(dpipe_SOURCES) 
 all: all-am
 
 .SUFFIXES:
@@ -209,9 +209,9 @@ $(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 
 clean-checkPROGRAMS:
 	-test -z "$(check_PROGRAMS)" || rm -f $(check_PROGRAMS)
-sc_export$(EXEEXT): $(sc_export_OBJECTS) $(sc_export_DEPENDENCIES) 
-	@rm -f sc_export$(EXEEXT)
-	$(CXXLINK) $(sc_export_OBJECTS) $(sc_export_LDADD) $(LIBS)
+dpipe$(EXEEXT): $(dpipe_OBJECTS) $(dpipe_DEPENDENCIES) 
+	@rm -f dpipe$(EXEEXT)
+	$(CXXLINK) $(dpipe_OBJECTS) $(dpipe_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -480,13 +480,13 @@ all:
 install-data-local:
 	@$(NORMAL_INSTALL)
 	$(mkinstalldirs) .
-	for file in $(sc_export_INSTALLS); do \
+	for file in $(dpipe_INSTALLS); do \
 		$(INSTALL_DATA) $(srcdir)/$$file ./$$file; \
 	done
 
 uninstall-local:
 	@$(NORMAL_UNINSTALL)
-	for file in $(sc_export_INSTALLS); do \
+	for file in $(dpipe_INSTALLS); do \
 		rm -f ./$$file; \
 	done
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

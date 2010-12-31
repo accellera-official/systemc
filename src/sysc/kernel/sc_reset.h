@@ -35,6 +35,12 @@
 
 
 // $Log: sc_reset.h,v $
+// Revision 1.5  2010/12/07 20:09:14  acg
+// Andy Goodrich: removed sc_signal signatures since already have sc_signal_in_if signatures.
+//
+// Revision 1.4  2010/11/20 17:10:57  acg
+//  Andy Goodrich: reset processing changes for new IEEE 1666 standard.
+//
 // Revision 1.3  2009/05/22 16:06:29  acg
 //  Andy Goodrich: process control updates.
 //
@@ -59,12 +65,14 @@
 #if !defined(sc_reset_h_INCLUDED)
 #define sc_reset_h_INCLUDED
 
+#include "sysc/communication/sc_writer_policy.h"
+
 namespace sc_core {
 
 // FORWARD CLASS REFERENCES:
 
 template<typename DATA> class sc_signal_in_if;
-template<typename IF> class sc_signal;
+template<typename IF, sc_writer_policy POL> class sc_signal;
 template<typename DATA> class sc_in;
 template<typename DATA> class sc_inout;
 template<typename DATA> class sc_out;
@@ -103,14 +111,29 @@ class sc_reset {
     friend class sc_method_process; 
     friend class sc_module; 
     friend class sc_process_b;
-    friend class sc_signal<bool>;
+    friend class sc_signal<bool, SC_ONE_WRITER>;
+    friend class sc_signal<bool, SC_MANY_WRITERS>;
+    friend class sc_signal<bool, SC_UNCHECKED_WRITERS>;
     friend class sc_simcontext;
+    template<typename SOURCE> friend class sc_spawn_reset;
     friend class sc_thread_process; 
 
   protected:
     static void reconcile_resets();
+#if 0 // @@@@#### REMOVE
+    static void reset_signal_is(bool async, 
+                                const sc_signal<bool,SC_ONE_WRITER>& sig, 
+	                        bool level );
+    static void reset_signal_is(bool async, 
+                                const sc_signal<bool,SC_MANY_WRITERS>& sig, 
+	                        bool level );
+    static void reset_signal_is(bool async, 
+                                const sc_signal<bool,SC_UNCHECKED_WRITERS>& sig,
+	                        bool level );
+#endif // @@@@#### REMOVE
     static void 
-	reset_signal_is(bool async, const sc_signal_in_if<bool>& iface, bool level);
+	reset_signal_is(bool async, const sc_signal_in_if<bool>& iface, 
+	                bool level);
     static void 
 	reset_signal_is( bool async, const sc_in<bool>& iface, bool level);
     static void 
@@ -132,8 +155,6 @@ class sc_reset {
     sc_reset( const sc_reset& );
     const sc_reset& operator = ( const sc_reset& );
 };
-
-
 
 } // namespace sc_core
 

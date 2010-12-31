@@ -117,8 +117,7 @@ public:
 };
 
 
-vcd_trace::vcd_trace(const std::string& name_,
-		     const std::string& vcd_name_)
+vcd_trace::vcd_trace(const std::string& name_, const std::string& vcd_name_)
 : name(name_),
   vcd_name(vcd_name_),
   bit_width(0)
@@ -169,7 +168,7 @@ vcd_trace::print_variable_declaration_line(FILE* f)
     if ( bit_width <= 0 )
     {
         std::sprintf(buf, "Traced object \"%s\" has 0 Bits, cannot be traced.",
-	    name.c_str());
+	             name.c_str());
         put_error_message(buf, false);
     }
     else
@@ -179,19 +178,19 @@ vcd_trace::print_variable_declaration_line(FILE* f)
 	if ( bit_width == 1 )
 	{
 	    std::sprintf(buf, "$var %s  % 3d  %s  %s       $end\n",
-		vcd_var_typ_name,
-		bit_width,
-		vcd_name.c_str(),
-		namecopy.c_str());
+		         vcd_var_typ_name,
+		         bit_width,
+		         vcd_name.c_str(),
+		         namecopy.c_str());
 	}
 	else
 	{
 	    std::sprintf(buf, "$var %s  % 3d  %s  %s [%d:0]  $end\n",
-                vcd_var_typ_name,
-		bit_width,
-		vcd_name.c_str(),
-		namecopy.c_str(),
-		bit_width-1);
+                         vcd_var_typ_name,
+		         bit_width,
+		         vcd_name.c_str(),
+		         namecopy.c_str(),
+		         bit_width-1);
 	}
         std::fputs(buf, f);
     }

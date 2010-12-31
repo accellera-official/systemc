@@ -36,6 +36,9 @@
  *****************************************************************************/
 
 // $Log: sc_runnable_int.h,v $
+// Revision 1.4  2010/07/22 20:02:33  acg
+//  Andy Goodrich: bug fixes.
+//
 // Revision 1.3  2009/02/28 00:26:58  acg
 //  Andy Goodrich: changed boost name space to sc_boost to allow use with
 //  full boost library applications.

@@ -33,6 +33,9 @@
     
  *****************************************************************************/
 //$Log: sc_signal_ifs.h,v $
+//Revision 1.2  2010/12/07 19:50:37  acg
+// Andy Goodrich: addition of writer policies, courtesy of Philipp Hartmann.
+//
 //Revision 1.1.1.1  2006/12/15 20:20:04  acg
 //SystemC 2.3
 //
@@ -66,6 +69,7 @@
 
 
 #include "sysc/communication/sc_interface.h"
+#include "sysc/communication/sc_writer_policy.h"
 
 
 namespace sc_dt
@@ -245,6 +249,8 @@ public:
     sc_signal_write_if() {}
     // write the new value
     virtual void write( const T& ) = 0;
+    virtual sc_writer_policy get_writer_policy() const
+        { return SC_ONE_WRITER; }
 private:
     // disabled
     sc_signal_write_if( const sc_signal_write_if<T>& );

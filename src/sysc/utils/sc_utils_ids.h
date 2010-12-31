@@ -37,6 +37,9 @@
  *****************************************************************************/
 
 // $Log: sc_utils_ids.h,v $
+// Revision 1.2  2010/12/07 20:10:19  acg
+// Andy Goodrich: messages for new sc_vector class.
+//
 // Revision 1.1.1.1  2006/12/15 20:20:06  acg
 // SystemC 2.3
 //
@@ -82,7 +85,10 @@ SC_DEFINE_MESSAGE(SC_ID_BACK_ON_EMPTY_LIST_,
 		  803, "attempt to take back() on an empty list")
 SC_DEFINE_MESSAGE(SC_ID_IEEE_1666_DEPRECATION_,
 		  804, "/IEEE_Std_1666/deprecated" )
-
+SC_DEFINE_MESSAGE(SC_ID_VECTOR_INIT_CALLED_TWICE_,
+                  805, "sc_vector::init has already been called" )
+SC_DEFINE_MESSAGE(SC_ID_VECTOR_INIT_INVALID_CONTEXT_,
+                  806, "sc_vector::init called from invalid object context" )
 
 #endif
 

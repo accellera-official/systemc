@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_thread_process.h,v $
+// Revision 1.6  2010/07/22 20:02:33  acg
+//  Andy Goodrich: bug fixes.
+//
 // Revision 1.5  2009/07/28 01:10:53  acg
 //  Andy Goodrich: updates for 2.3 release candidate.
 //
@@ -205,9 +208,20 @@ class sc_thread_process : public sc_process_b {
 //------------------------------------------------------------------------------
 inline bool sc_thread_process::ready_to_run()
 {
+    // IF OUR THREAD IS ALREADY GONE WE CAN'T EXECUTE IT:
+    
+    if ( m_cor_p == NULL ) 
+    {
+	std::cout << " reference count is " << m_references_n << std::endl;
+    	return false;
+    }
+
     // IF WE ARE THROWING AN EXCEPTION DISPATCH THIS THREAD:
 
-    if ( m_throw_type != THROW_NONE ) return true;
+    if ( m_throw_type != THROW_NONE ) 
+    {
+    	return true;
+    }
 
 
     // SEE IF WE CAN DISPATCH THE THREAD:
@@ -236,7 +250,7 @@ inline bool sc_thread_process::ready_to_run()
             return false;
         }
         m_state = ps_disabled;
-	break; // return true;
+	break; 
       default:
         break;
     }

@@ -35,6 +35,10 @@
 
 
 // $Log: sc_semaphore.cpp,v $
+// Revision 1.2  2010/11/02 16:31:01  acg
+//  Andy Goodrich: changed object derivation to use sc_object rather than
+//  sc_prim_channel as the parent class.
+//
 // Revision 1.1.1.1  2006/12/15 20:20:04  acg
 // SystemC 2.3
 //
@@ -51,6 +55,7 @@
 #include "sysc/communication/sc_communication_ids.h"
 #include "sysc/communication/sc_semaphore.h"
 #include "sysc/kernel/sc_simcontext.h"
+#include "sysc/kernel/sc_wait.h"
 
 namespace sc_core {
 
@@ -78,7 +83,7 @@ sc_semaphore::report_error( const char* id, const char* add_msg ) const
 // constructors
 
 sc_semaphore::sc_semaphore( int init_value_ )
-: sc_prim_channel( sc_gen_unique_name( "semaphore" ) ),
+: sc_object( sc_gen_unique_name( "semaphore" ) ),
   m_value( init_value_ )
 {
     if( m_value < 0 ) {
@@ -87,7 +92,7 @@ sc_semaphore::sc_semaphore( int init_value_ )
 }
 
 sc_semaphore::sc_semaphore( const char* name_, int init_value_ )
-: sc_prim_channel( name_ ), m_value( init_value_ )
+: sc_object( name_ ), m_value( init_value_ )
 {
     if( m_value < 0 ) {
 	report_error( SC_ID_INVALID_SEMAPHORE_VALUE_ );
@@ -103,7 +108,7 @@ int
 sc_semaphore::wait()
 {
     while( in_use() ) {
-	sc_prim_channel::wait( m_free );
+	sc_core::wait( m_free, sc_get_curr_simcontext() );
     }
     -- m_value;
     return 0;

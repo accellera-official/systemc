@@ -234,9 +234,9 @@ void fft::entry()
  
         //First Iteration :  Simple calculation, with no multiplies
           i = 0;
-          while(i < N)  
+          while(i < (short)N)  
           {
-             index =  i; index2 = i + len; 
+             index =  i; index2 = i + (short)len; 
 
              tmp_real = real[index] + real[index2];
              tmp_imag = imag[index] + imag[index2];
@@ -253,13 +253,13 @@ void fft::entry()
         //Remaining Iterations: Use Stored W
          j = 1; windex = incr - 1;
         // This loop executes N/2 times at the first stage, N/2 times at the second.. once at last stage
-         while (j < len)
+         while (j < (short)len)
          {
             i = j; 
-            while (i < N) 
+            while (i < (short)N) 
             {
               index = i;
-              index2 = i + len;
+              index2 = i + (short)len;
 
 	      // Read in the data and twiddle factors
 	      w_real  = W_real[windex];

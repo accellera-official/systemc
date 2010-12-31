@@ -48,7 +48,7 @@ enum simple_bus_status { SIMPLE_BUS_OK = 0
 extern char simple_bus_status_str[4][20]; 
 
 struct simple_bus_request;
-typedef sc_pvector<simple_bus_request *> simple_bus_request_vec;
+typedef std::vector<simple_bus_request *> simple_bus_request_vec;
 
 extern int sb_fprintf(FILE *, const char *, ...);
 

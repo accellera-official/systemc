@@ -43,6 +43,9 @@
  *****************************************************************************/
 
 // $Log: sc_process.cpp,v $
+// Revision 1.5  2010/07/22 20:02:33  acg
+//  Andy Goodrich: bug fixes.
+//
 // Revision 1.4  2009/05/22 16:06:29  acg
 //  Andy Goodrich: process control updates.
 //
@@ -89,6 +92,7 @@ std::vector<sc_object*> sc_process_handle::empty_vector;
 sc_event                sc_process_handle::non_event;
 
 // Last process that was created:
+
 sc_process_b* sc_process_b::m_last_created_process_p = 0;
 
 //------------------------------------------------------------------------------
