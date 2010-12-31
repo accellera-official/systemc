@@ -382,14 +382,7 @@ sub get_systemc_arch
 	}
     } elsif( $uname_s eq "Darwin" ) {
 	if( $cxx_comp eq "c++" || $cxx_comp eq "g++" ) {
-	    if ( $uname_m eq "i386" )
-	    {
-		$arch = "macosx386";
-	    }
-	    else
-	    {
-		$arch = "macosx";
-	    }
+	    $arch = "macosx";
 	} else {
 	    die "Error: unsupported compiler '$cxx'\n";
 	}
@@ -519,12 +512,6 @@ sub init_globals
 	$rt_optimize_flag = "-O2";
     } elsif( $rt_systemc_arch eq "macosx" ) {
 	$rt_ccflags = "-Wall";
-	$rt_ld = $rt_cc;
-	$rt_ldflags = $rt_ccflags;
-	$rt_debug_flag = "-g";
-	$rt_optimize_flag = "-O3";
-    } elsif( $rt_systemc_arch eq "macosx386" ) {
-	$rt_ccflags = "-Wall -arch i386";
 	$rt_ld = $rt_cc;
 	$rt_ldflags = $rt_ccflags;
 	$rt_debug_flag = "-g";
@@ -1503,7 +1490,7 @@ sub strip_tracelog
     ( $dir = $stripped_file ) =~ s|/[^/]+$||;
     &create_dir( $dir );
     
-    $command = "`tail -n+8 < $log_file | sed -e 's:\r::' > $stripped_file`";
+    $command = "`tail +8 < $log_file | sed -e 's:\r::' > $stripped_file`";
 
     ( $exit_code, $signal ) = &rt_system( $command );
 
