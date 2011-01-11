@@ -252,7 +252,7 @@ inline bool sc_thread_process::ready_to_run()
             return false;
         }
         m_state = ps_disabled;
-	break; 
+	return true;  // @@@@####
       default:
         break;
     }
