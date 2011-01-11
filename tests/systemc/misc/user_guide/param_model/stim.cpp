@@ -80,6 +80,6 @@ void stim::entry()
     }
   }
  
-  sc_clock::stop(); 
+  sc_stop(); 
    
 }

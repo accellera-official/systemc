@@ -172,5 +172,5 @@ STIM::entry()
 
 // STOP SIMULATION
 
-  sc_clock::stop();
+  sc_stop();
 }

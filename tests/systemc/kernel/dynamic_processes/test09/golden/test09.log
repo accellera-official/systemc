@@ -9,6 +9,7 @@ SystemC Simulation
 0 s dut.grand_parent.parent2.child1 initialization
 0 s dut.grand_parent.parent2.child2 initialization
 0 s dut.grand_parent.parent2.child3 initialization
+4 ns stimulus issuing reset
 4 ns dut.grand_parent.parent1.child1 initialization
 4 ns dut.grand_parent.parent1.child2 initialization
 4 ns dut.grand_parent.parent1.child3 initialization
@@ -31,16 +32,14 @@ Warning: (W505) object already exists: dut.grand_parent.parent2.child3. Latter d
 In file: <removed by verify.pl>
 In process: dut.grand_parent.parent2 @ 4 ns
 4 ns dut.grand_parent.parent2.child1 got kill
-Killing process dut.grand_parent.parent2.child1
 4 ns dut.grand_parent.parent2.child2 got kill
-Killing process dut.grand_parent.parent2.child2
 4 ns dut.grand_parent.parent2.child3 got kill
-Killing process dut.grand_parent.parent2.child3
 4 ns dut.grand_parent.parent2.child1_0 initialization
 4 ns dut.grand_parent.parent2.child2_0 initialization
 4 ns dut.grand_parent.parent2.child3_0 initialization
 4 ns dut.grand_parent initialization
 
+8 ns stimulus issuing reset
 8 ns dut.grand_parent.parent1.child1 initialization
 8 ns dut.grand_parent.parent1.child2 initialization
 8 ns dut.grand_parent.parent1.child3 initialization
@@ -51,16 +50,14 @@ Killing process dut.grand_parent.parent2.child3
 8 ns dut.grand_parent.parent2 removing children
 8 ns dut.grand_parent.parent2 initialization
 8 ns dut.grand_parent.parent2.child1_0 got kill
-Killing process dut.grand_parent.parent2.child1_0
 8 ns dut.grand_parent.parent2.child2_0 got kill
-Killing process dut.grand_parent.parent2.child2_0
 8 ns dut.grand_parent.parent2.child3_0 got kill
-Killing process dut.grand_parent.parent2.child3_0
 8 ns dut.grand_parent.parent2.child1 initialization
 8 ns dut.grand_parent.parent2.child2 initialization
 8 ns dut.grand_parent.parent2.child3 initialization
 8 ns dut.grand_parent initialization
 
+12 ns stimulus issuing reset
 12 ns dut.grand_parent.parent1.child1 initialization
 12 ns dut.grand_parent.parent1.child2 initialization
 12 ns dut.grand_parent.parent1.child3 initialization
@@ -83,16 +80,14 @@ Warning: (W505) object already exists: dut.grand_parent.parent2.child3. Latter d
 In file: <removed by verify.pl>
 In process: dut.grand_parent.parent2 @ 12 ns
 12 ns dut.grand_parent.parent2.child1 got kill
-Killing process dut.grand_parent.parent2.child1
 12 ns dut.grand_parent.parent2.child2 got kill
-Killing process dut.grand_parent.parent2.child2
 12 ns dut.grand_parent.parent2.child3 got kill
-Killing process dut.grand_parent.parent2.child3
 12 ns dut.grand_parent.parent2.child1_1 initialization
 12 ns dut.grand_parent.parent2.child2_1 initialization
 12 ns dut.grand_parent.parent2.child3_1 initialization
 12 ns dut.grand_parent initialization
 
+16 ns stimulus issuing reset
 16 ns dut.grand_parent.parent1.child1 initialization
 16 ns dut.grand_parent.parent1.child2 initialization
 16 ns dut.grand_parent.parent1.child3 initialization
@@ -103,16 +98,14 @@ Killing process dut.grand_parent.parent2.child3
 16 ns dut.grand_parent.parent2 removing children
 16 ns dut.grand_parent.parent2 initialization
 16 ns dut.grand_parent.parent2.child1_1 got kill
-Killing process dut.grand_parent.parent2.child1_1
 16 ns dut.grand_parent.parent2.child2_1 got kill
-Killing process dut.grand_parent.parent2.child2_1
 16 ns dut.grand_parent.parent2.child3_1 got kill
-Killing process dut.grand_parent.parent2.child3_1
 16 ns dut.grand_parent.parent2.child1 initialization
 16 ns dut.grand_parent.parent2.child2 initialization
 16 ns dut.grand_parent.parent2.child3 initialization
 16 ns dut.grand_parent initialization
 
+20 ns stimulus issuing reset
 20 ns dut.grand_parent.parent1.child1 initialization
 20 ns dut.grand_parent.parent1.child2 initialization
 20 ns dut.grand_parent.parent1.child3 initialization
@@ -135,11 +128,8 @@ Warning: (W505) object already exists: dut.grand_parent.parent2.child3. Latter d
 In file: <removed by verify.pl>
 In process: dut.grand_parent.parent2 @ 20 ns
 20 ns dut.grand_parent.parent2.child1 got kill
-Killing process dut.grand_parent.parent2.child1
 20 ns dut.grand_parent.parent2.child2 got kill
-Killing process dut.grand_parent.parent2.child2
 20 ns dut.grand_parent.parent2.child3 got kill
-Killing process dut.grand_parent.parent2.child3
 20 ns dut.grand_parent.parent2.child1_2 initialization
 20 ns dut.grand_parent.parent2.child2_2 initialization
 20 ns dut.grand_parent.parent2.child3_2 initialization

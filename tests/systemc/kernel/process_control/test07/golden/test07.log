@@ -73,11 +73,8 @@ SystemC Simulation
 +++ dut.parent.child0.grandchild starting (600 ns)
 +++ kills sent ... (650 ns)
 +++ dut.parent.child0.local deleted
-Killing process dut.parent.child0
 +++ dut.parent.child1.grandchild.local deleted
-Killing process dut.parent.child1.grandchild
 +++ dut.parent.child1.local deleted
-Killing process dut.parent.child1
 ------ (700 ns) ------
  dut (sc_module)
   dut.parent (sc_thread_process) (running)

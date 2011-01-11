@@ -64,16 +64,19 @@ SC_MODULE(DUT)
         cout << sc_time_stamp() << " " << my_handle.name() 
              << " initialization" << endl;
         try {
-        for (;;)
-        {
-            wait();
-        }
+            for (;;)
+            {
+                wait();
+            }
         } 
-        catch(sc_core::sc_kill)
+        catch(sc_core::sc_unwind_exception& ex)
         {
-	    cout << sc_time_stamp() << " " << my_handle.name() 
-		 << " got kill" << endl;
-	    throw sc_core::sc_kill();
+	    if ( !ex.is_reset() )
+	    {
+		cout << sc_time_stamp() << " " << my_handle.name() 
+		     << " got kill" << endl;
+	    }
+	    throw ex;
         }
     }
 
@@ -142,13 +145,17 @@ SC_MODULE(DUT)
                     wait();
                 }
             } 
-            catch ( sc_core::sc_user )
+            catch ( sc_core::sc_unwind_exception& ex )
             {
-                cout << sc_time_stamp() << " " << my_handle.name() 
-                     << " removing children" << endl;
-                m_child1.kill();
-                m_child2.kill();
-                m_child3.kill();
+		if ( ex.is_reset() )
+		{
+		    cout << sc_time_stamp() << " " << my_handle.name() 
+			 << " removing children" << endl;
+		    m_child1.kill();
+		    m_child2.kill();
+		    m_child3.kill();
+		}
+		throw ex;
             }
         }
     }
@@ -161,6 +168,7 @@ SC_MODULE(DUT)
             wait();
             wait();
             wait();
+	    cout << sc_time_stamp() << " stimulus issuing reset" << endl;
             m_grand_parent_handle.reset(SC_INCLUDE_DESCENDANTS);
         }
     }

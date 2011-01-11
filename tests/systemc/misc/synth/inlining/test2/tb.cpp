@@ -40,7 +40,7 @@
 void tb::entry() 
 {
 
-  sc_clock::stop();
+  sc_stop();
 
 }
 

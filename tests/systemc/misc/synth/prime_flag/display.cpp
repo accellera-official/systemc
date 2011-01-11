@@ -52,7 +52,7 @@ void displayp::entry()
     cout << prime.read().to_uint() << endl;
 
     if (prime.read().to_uint() > 40)  {
-	sc_clock::stop();
+	sc_stop();
     }
   }
 }

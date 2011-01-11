@@ -104,6 +104,6 @@ RESET_STIM::entry()
   do { wait(); } while (!(addr == LIMIT));
   wait(LATENCY);
   do { wait(); } while (ready != 1);			
-  sc_clock::stop();
+  sc_stop();
   halt();
 }

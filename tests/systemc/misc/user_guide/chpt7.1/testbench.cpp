@@ -74,6 +74,6 @@ void testbench::entry()
     sprintf(buf, "A = %d, B = %d, C = %d, D = %d, SUM = %d\n", a, b, c, d, sum);
     cout << buf;
   }
-  sc_clock::stop();
+  sc_stop();
 } // end of entry function
 

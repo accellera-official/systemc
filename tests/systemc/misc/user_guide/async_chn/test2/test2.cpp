@@ -112,7 +112,7 @@ int sc_main(int ac, char *av[])
   sc_fifo<int> a(2), b(2);
   sc_clock clock("Clock", 20, SC_NS);
 
-  p1 Proc1("Proc1", a, b, clock.signal(), 10);
+  p1 Proc1("Proc1", a, b, clock, 10);
   p2 Proc2("Proc2", clock, b, a, 129);
 
   // sc_start(500, SC_NS);

@@ -63,5 +63,5 @@ stimgen::entry()
     }
   }
 
-  sc_clock::stop();
+  sc_stop();
 }

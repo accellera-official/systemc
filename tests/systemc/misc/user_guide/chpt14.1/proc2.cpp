@@ -51,7 +51,7 @@ void proc2::entry()
     cout << "Proc2: Received data = " << i << " at time " << 
       sc_time_stamp() << endl;
     if (i > 12) {
-      sc_clock::stop();
+      sc_stop();
     }
     data_ack.write(true);
     wait();

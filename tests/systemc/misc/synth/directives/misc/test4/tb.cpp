@@ -44,7 +44,7 @@ void tb::entry()
 
   cout << "End Simulation" << endl;
 
-  sc_clock::stop();
+  sc_stop();
 
 }
 

@@ -53,7 +53,7 @@ int sc_main(int ac, char *av[])
   displayp	T2 ("T2", clk, prime);
  
 // Simulation Run Control
-  sc_start( 30, SC_NS );
+  sc_start( 30, SC_NS, SC_EXIT_ON_STARVATION );
   cout << sc_time_stamp() << " : STOPPING SIM - start button" << endl;
    return 0;
 }

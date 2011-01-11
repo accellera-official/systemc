@@ -74,9 +74,9 @@ int sc_main(int argc, char *argv[])
   a = 3; 
   b = 6; 
   cout << c.read().to_int() << endl; 
-  sc_start(clk, 1, SC_NS); 
+  sc_start(10, SC_NS); 
   cout << c.read().to_int() << endl; 
-  sc_start(clk, 1, SC_NS); 
+  sc_start(10, SC_NS); 
  
   // CynAppsTwo clocks to get the answer. 
   // Rocco: No with SC_METHOD it take 1 cycle

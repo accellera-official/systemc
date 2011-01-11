@@ -46,6 +46,9 @@
  *****************************************************************************/
 
 // $Log: main.cpp,v $
+// Revision 1.2  2011/01/07 01:20:19  acg
+//  Andy Goodrich: update for new IEEE 1666.
+//
 // Revision 1.1.1.1  2006/12/15 20:26:24  acg
 // systemc_tests-2.3
 //
@@ -96,7 +99,7 @@ sc_main(int argc, char *argv[])
   // Trace file creation.
   sc_trace_file *tf = sc_create_vcd_trace_file("dash");
   // External signals.
-  sc_trace(tf, clk1.signal(), "fast_clk");
+  sc_trace(tf, clk1, "fast_clk");
   sc_trace(tf, speed_pulses, "speed_pulses");
   sc_trace(tf, dist_pulses, "dist_pulses");
   // Internal signals.

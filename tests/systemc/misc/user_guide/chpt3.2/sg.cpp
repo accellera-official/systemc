@@ -46,7 +46,7 @@ void stimgen::entry()
   
   while (true) {
     if (fscanf(file, "%c", &c) == EOF)
-      sc_clock::stop();
+      sc_stop();
     data_ready.write(true);
     stream.write(c);
     wait();

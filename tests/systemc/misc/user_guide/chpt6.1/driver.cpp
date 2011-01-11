@@ -57,6 +57,6 @@ void driver::entry()
   control.write(false);
   wait();
   cout << "Input is = " << in.read() << endl;
-  sc_clock::stop();
+  sc_stop();
 } // end of entry function
 
