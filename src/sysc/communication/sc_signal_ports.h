@@ -150,29 +150,29 @@ public:
 
     // bind to in interface
 
-    void bind( const in_if_type& interface_ )
+    virtual void bind( const in_if_type& interface_ )
 	{ sc_port_base::bind( CCAST<in_if_type&>( interface_ ) ); }
 
     void operator () ( const in_if_type& interface_ )
-	{ sc_port_base::bind( CCAST<in_if_type&>( interface_ ) ); }
+	{ this->bind( CCAST<in_if_type&>( interface_ ) ); }
 
 
     // bind to parent in port
 
-    void bind( in_port_type& parent_ )
+    virtual void bind( in_port_type& parent_ )
         { sc_port_base::bind( parent_ ); }
 
     void operator () ( in_port_type& parent_ )
-        { sc_port_base::bind( parent_ ); }
+        { this->bind( parent_ ); }
 
 
     // bind to parent inout port
 
-    void bind( inout_port_type& parent_ )
+    virtual void bind( inout_port_type& parent_ )
 	{ sc_port_base::bind( parent_ ); }
 
     void operator () ( inout_port_type& parent_ )
-	{ sc_port_base::bind( parent_ ); }
+	{ this->bind( parent_ ); }
 
 
     // interface access shortcut methods
@@ -460,29 +460,29 @@ public:
 
     // bind to in interface
 
-    void bind( const in_if_type& interface_ )
+    virtual void bind( const in_if_type& interface_ )
 	{ sc_port_base::bind( CCAST<in_if_type&>( interface_ ) ); }
 
     void operator () ( const in_if_type& interface_ )
-	{ sc_port_base::bind( CCAST<in_if_type&>( interface_ ) ); }
+	{ this->bind( CCAST<in_if_type&>( interface_ ) ); }
 
 
     // bind to parent in port
 
-    void bind( in_port_type& parent_ )
+    virtual void bind( in_port_type& parent_ )
         { sc_port_base::bind( parent_ ); }
 
     void operator () ( in_port_type& parent_ )
-        { sc_port_base::bind( parent_ ); }
+        { this->bind( parent_ ); }
 
 
     // bind to parent inout port
 
-    void bind( inout_port_type& parent_ )
+    virtual void bind( inout_port_type& parent_ )
 	{ sc_port_base::bind( parent_ ); }
 
     void operator () ( inout_port_type& parent_ )
-	{ sc_port_base::bind( parent_ ); }
+	{ this->bind( parent_ ); }
 
 
     // interface access shortcut methods
@@ -715,29 +715,29 @@ public:
 
     // bind to in interface
 
-    void bind( const in_if_type& interface_ )
+    virtual void bind( const in_if_type& interface_ )
 	{ sc_port_base::bind( CCAST<in_if_type&>( interface_ ) ); }
 
     void operator () ( const in_if_type& interface_ )
-	{ sc_port_base::bind( CCAST<in_if_type&>( interface_ ) ); }
+	{ this->bind( CCAST<in_if_type&>( interface_ ) ); }
 
 
     // bind to parent in port
 
-    void bind( in_port_type& parent_ )
+    virtual void bind( in_port_type& parent_ )
         { sc_port_base::bind( parent_ ); }
 
     void operator () ( in_port_type& parent_ )
-        { sc_port_base::bind( parent_ ); }
+        { this->bind( parent_ ); }
 
 
     // bind to parent inout port
 
-    void bind( inout_port_type& parent_ )
+    virtual void bind( inout_port_type& parent_ )
 	{ sc_port_base::bind( parent_ ); }
 
     void operator () ( inout_port_type& parent_ )
-	{ sc_port_base::bind( parent_ ); }
+	{ this->bind( parent_ ); }
 
 
     // interface access shortcut methods

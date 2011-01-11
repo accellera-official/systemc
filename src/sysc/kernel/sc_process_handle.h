@@ -135,6 +135,7 @@ class sc_process_handle {
     inline const std::vector<sc_object*>& get_child_objects() const;
     inline sc_object* get_parent_object() const;
     inline sc_object* get_process_object() const;
+    inline bool is_unwinding() const;
     inline void kill( 
         sc_descendant_inclusion_info descendants=SC_NO_DESCENDANTS );
     inline const char* name() const;
@@ -328,6 +329,13 @@ inline sc_object* sc_process_handle::get_process_object() const
     return m_target_p;
 }
 
+// return whether this object instance is unwinding or not.
+
+inline bool sc_process_handle::is_unwinding() const
+{
+    return m_target_p ? m_target_p->is_unwinding() : false;
+}
+
 // kill this object instance's target.
 
 inline void sc_process_handle::kill( sc_descendant_inclusion_info descendants )
@@ -483,6 +491,5 @@ inline sc_process_handle sc_get_last_created_process_handle()
 }
 
 } // namespace sc_core
-
 
 #endif // !defined(sc_spawn_h_INCLUDED)

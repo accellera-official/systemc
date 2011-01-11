@@ -146,6 +146,11 @@ private:
 
 private:
 
+    sc_object( const sc_object& );
+    const sc_object& operator = ( const sc_object& );
+
+private:
+
     /* Each simulation object is associated with a simulation context */ 
     sc_simcontext*          m_simc;  // simcontext pointer and empty indicator.
     char*                   m_name;

@@ -55,7 +55,7 @@ namespace sc_core {
 
 static
 const char copyright[] =
-    "        Copyright (c) 1996-2006 by all Contributors\n"
+    "        Copyright (c) 1996-2011 by all Contributors\n"
     "                    ALL RIGHTS RESERVED";
 
 static

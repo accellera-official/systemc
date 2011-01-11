@@ -161,25 +161,22 @@ struct sc_curr_proc_info
 
 typedef const sc_curr_proc_info* sc_curr_proc_handle;
 
-// friend function declarations
-
-sc_dt::uint64 sc_delta_count();
-const std::vector<sc_object*>& sc_get_top_level_objects(
-const sc_simcontext* simc_p);
-bool sc_is_running( const sc_simcontext* simc_p );
-bool sc_end_of_simulation_invoked();
-bool sc_start_of_simulation_invoked();
-void    sc_set_time_resolution( double, sc_time_unit );
-sc_time sc_get_time_resolution();
-void    sc_set_default_time_unit( double, sc_time_unit );
-sc_time sc_get_default_time_unit();
-bool sc_pending_activity_at_current_time();
-
 // simulation status codes
 
 const int SC_SIM_OK        = 0;
 const int SC_SIM_ERROR     = 1;
 const int SC_SIM_USER_STOP = 2;
+
+enum sc_status { // sc_get_status values:
+    SC_ELABORATION,               // during construction of module hierarchy.
+    SC_BEFORE_END_OF_ELABORATION, // from within before_end_of_elaboration().
+    SC_END_OF_ELABORATION,        // from end_of_elaboration().
+    SC_START_OF_SIMULATION,       // from within start_of_simulation().
+    SC_RUNNING,                   // from initialization, evaluation or update.
+    SC_PAUSED,                    // when scheduler stopped by sc_pause().
+    SC_STOPPED,                   // when scheduler stopped by sc_stop().
+    SC_END_OF_SIMULATION          // from end_of_simulation().
+};
 
 enum sc_stop_mode {          // sc_stop modes:
     SC_STOP_FINISH_DELTA,
@@ -187,6 +184,43 @@ enum sc_stop_mode {          // sc_stop modes:
 };
 extern void sc_set_stop_mode( sc_stop_mode mode );
 extern sc_stop_mode sc_get_stop_mode();
+
+enum sc_starvation_policy 
+{
+    SC_EXIT_ON_STARVATION,
+    SC_RUN_TO_TIME
+};
+extern void sc_start();
+extern void sc_start( const sc_time& duration, 
+                      sc_starvation_policy p=SC_RUN_TO_TIME );
+inline void sc_start( int duration, sc_time_unit unit, 
+                      sc_starvation_policy p=SC_RUN_TO_TIME )
+{
+    sc_start( sc_time((double)duration,unit), p );
+}
+
+inline void sc_start( double duration, sc_time_unit unit, 
+                      sc_starvation_policy p=SC_RUN_TO_TIME )
+{
+    sc_start( sc_time(duration,unit), p );
+}
+
+extern void sc_stop();
+// friend function declarations
+
+sc_dt::uint64 sc_delta_count();
+const std::vector<sc_object*>& sc_get_top_level_objects(
+const sc_simcontext* simc_p);
+bool sc_is_running( const sc_simcontext* simc_p );
+void sc_pause();
+bool sc_end_of_simulation_invoked();
+void sc_start( const sc_time&, sc_starvation_policy );
+bool sc_start_of_simulation_invoked();
+void    sc_set_time_resolution( double, sc_time_unit );
+sc_time sc_get_time_resolution();
+void    sc_set_default_time_unit( double, sc_time_unit );
+sc_time sc_get_default_time_unit();
+bool sc_pending_activity_at_current_time();
 
 
 // ----------------------------------------------------------------------------
@@ -213,8 +247,9 @@ class sc_simcontext
         const sc_simcontext* simc_p);
     friend bool sc_pending_activity_at_current_time();
     friend bool sc_is_running( const sc_simcontext* simc_p );
-
+    friend void sc_pause();
     friend bool sc_end_of_simulation_invoked();
+    friend void sc_start( const sc_time&, sc_starvation_policy );
     friend bool sc_start_of_simulation_invoked();
     friend void sc_cthread_cor_fn(void*);
     friend void sc_thread_cor_fn(void*);
@@ -238,6 +273,8 @@ public:
     bool elaboration_done() const;
 
     sc_object_manager* get_object_manager();
+
+    inline sc_status get_status() const;
 
     void hierarchy_push( sc_module* );
     sc_module* hierarchy_pop();
@@ -284,6 +321,7 @@ public:
     friend void    sc_set_default_time_unit( double, sc_time_unit );
     friend sc_time sc_get_default_time_unit();
 
+    const sc_time& max_time() const;
     const sc_time& time_stamp() const;
 
     sc_dt::uint64 delta_count() const;
@@ -373,17 +411,19 @@ private:
 
     sc_time_params*             m_time_params;
     sc_time                     m_curr_time;
+    mutable sc_time             m_max_time;
  
     sc_dt::uint64               m_delta_count;
     bool                        m_forced_stop;
+    bool                        m_paused;
     bool                        m_ready_to_simulate;
     bool                        m_elaboration_done;
     execution_phases            m_execution_phase;
     bool                        m_error;
     bool                        m_in_simulator_control;   
     bool                        m_end_of_simulation_called;
+    sc_status                   m_simulation_status;
     bool                        m_start_of_simulation_called;
-
 
     sc_event*                   m_until_event;
 
@@ -417,6 +457,10 @@ sc_get_curr_simcontext()
 #else
     extern sc_simcontext* sc_get_curr_simcontext();
 #endif // 0
+inline sc_status sc_get_status()
+{
+    return sc_get_curr_simcontext()->get_status();
+}
 
 
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
@@ -428,6 +472,11 @@ sc_simcontext::elaboration_done() const
     return m_elaboration_done;
 }
 
+
+inline sc_status sc_simcontext::get_status() const
+{
+    return m_simulation_status;
+}
 
 inline
 int
@@ -492,6 +541,18 @@ int
 sc_simcontext::next_proc_id()
 {
     return ( ++ m_next_proc_id );
+}
+
+
+inline
+const sc_time&
+sc_simcontext::max_time() const
+{
+    if ( m_max_time == SC_ZERO_TIME )
+    {
+        m_max_time = sc_time(0x7fffffff, SC_SEC);
+    }
+    return m_max_time;
 }
 
 
@@ -600,14 +661,10 @@ void
 sc_set_random_seed( unsigned int seed_ );
 
 
-extern void sc_start();
-extern void sc_start( const sc_time& duration );
-extern void sc_start( double duration );
-extern void sc_stop();
-
 extern void sc_initialize();
 extern void sc_cycle( const sc_time& duration );
 
+extern const sc_time& sc_max_time();    // Get maximum time value.
 extern const sc_time& sc_time_stamp();  // Current simulation time.
 extern double sc_simulation_time();     // Current time in default time units.
 
@@ -631,6 +688,13 @@ inline
 bool sc_is_running( const sc_simcontext* simc_p = sc_get_curr_simcontext() )
 {
     return simc_p->m_ready_to_simulate;
+}
+
+bool sc_is_unwinding();
+
+inline void sc_pause()
+{
+    sc_get_curr_simcontext()->m_paused = true;
 }
 
 inline

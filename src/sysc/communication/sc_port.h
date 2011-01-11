@@ -164,10 +164,10 @@ protected:
     virtual ~sc_port_base();
 
     // bind interface to this port
-    void bind( sc_interface& interface_ );
+    virtual void bind( sc_interface& interface_ );
 
     // bind parent port to this port
-    void bind( this_type& parent_ );
+    virtual void bind( this_type& parent_ );
 
     // called by pbind (for internal use only)
     virtual int vbind( sc_interface& ) = 0;
@@ -322,20 +322,20 @@ public:
 
     // bind an interface of type IF to this port
 
-    void bind( IF& interface_ )
+    virtual void bind( IF& interface_ )
 	{ base_type::bind( interface_ ); }
 
     void operator () ( IF& interface_ )
-	{ base_type::bind( interface_ ); }
+	{ this->bind( interface_ ); }
 
 
     // bind a parent port with type IF to this port
 
-    void bind( this_type& parent_ )
+    virtual void bind( this_type& parent_ )
 	{ base_type::bind( parent_ ); }
 
     void operator () ( this_type& parent_ )
-	{ base_type::bind( parent_ ); }
+	{ this->bind( parent_ ); }
 
 
     // number of connected interfaces

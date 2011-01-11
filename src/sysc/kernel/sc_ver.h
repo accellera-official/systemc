@@ -44,12 +44,19 @@ extern const char* sc_release();
 extern const char* sc_version();
 
 #define SYSTEMC_2_3_0
-#define SYSTEMC_VERSION 20101228
+#define SYSTEMC_VERSION 20110107
 
-#define SC_RELEASE_STRING "2.3.0_20101228_beta"
-#define SC_VENDOR_STRING "OSCI"
 #define SC_API_VERSION_STRING sc_api_version_2_3_0
-
+#define SC_COPYRIGHT "Copyright (c) 1996-2011 by all Contributors"
+#define SC_IS_PRERELEASE true
+#define SC_RELEASE_STRING "systemc-2.3.0_20110107_prerelease"
+#define SC_VENDOR_PATCH 0
+#define SC_VENDOR_STRING "OSCI"
+#define SC_VERSION "systemc-2.3.0_20110107_beta-OSCI"
+#define SC_VERSION_MAJOR 2
+#define SC_VERSION_MINOR 3
+#define SC_VERSION_ORIGINATOR "OSCI"
+#define SC_VERSION_RELEASE_DATE "20110107"
 
 // THIS CLASS AND STATIC INSTANCE BELOW DETECTS BAD REV OBJECTS AT LINK TIME
 //
@@ -61,7 +68,7 @@ extern const char* sc_version();
 
 class SC_API_VERSION_STRING {
   public:
-	SC_API_VERSION_STRING ();
+    SC_API_VERSION_STRING ();
 };
 
 

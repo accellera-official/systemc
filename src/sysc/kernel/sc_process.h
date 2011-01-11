@@ -477,6 +477,7 @@ class sc_process_b : public sc_object {
     virtual ~sc_process_b();
 
   public:
+    inline process_state current_state() { return m_state; }
     bool dont_initialize() const { return m_dont_init; }
     virtual void dont_initialize( bool dont );
     const ::std::vector<sc_object*>& get_child_objects() const;
@@ -491,7 +492,7 @@ class sc_process_b : public sc_object {
     bool dynamic() const { return m_dynamic_proc; }
     const char* gen_unique_name( const char* basename_, bool preserve_first );
     inline sc_report* get_last_report() { return m_last_report_p; }
-    inline bool is_runnable();
+    inline bool is_runnable() const;
     static inline sc_process_b* last_created_process_base();
     void remove_dynamic_events();
     void remove_static_events();
@@ -515,6 +516,7 @@ class sc_process_b : public sc_object {
     virtual void enable_process(
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS ) = 0;
     inline void initially_in_reset( bool async );
+    inline bool is_unwinding() const;
     virtual void kill_process(
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS ) = 0;
     inline void reset_changed( bool async, bool asserted );
@@ -639,9 +641,19 @@ inline void sc_process_b::initially_in_reset( bool async )
 // This method returns true if this process is runnable. That is indicated
 // by a non-zero m_runnable_p field.
 //------------------------------------------------------------------------------
-inline bool sc_process_b::is_runnable()
+inline bool sc_process_b::is_runnable() const
 {
     return m_runnable_p != 0;
+}
+
+//------------------------------------------------------------------------------
+//"sc_process_b::is_unwinding"
+//
+// This method returns true if this process is unwinding from a kill or reset.
+//------------------------------------------------------------------------------
+inline bool sc_process_b::is_unwinding() const
+{
+    return m_throw_type == THROW_RESET || m_throw_type == THROW_KILL;
 }
 
 

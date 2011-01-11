@@ -96,9 +96,8 @@ void sc_cthread_cor_fn( void* arg )
             ::std::cout << "Terminating process "
                       << cthread_h->name() << ::std::endl;
         }
-        catch( sc_kill ) {
-            ::std::cout << "Killing process "
-                      << cthread_h->name() << ::std::endl;
+        catch( const sc_unwind_exception& ex ) {
+	    if ( ex.is_reset() ) continue;
         }
         catch( const sc_report& ex ) {
             ::std::cout << "\n" << ex.what() << ::std::endl;

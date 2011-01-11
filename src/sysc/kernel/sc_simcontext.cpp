@@ -479,8 +479,10 @@ sc_simcontext::init()
     m_collectable = new sc_process_list;
     m_time_params = new sc_time_params;
     m_curr_time = SC_ZERO_TIME;
+    m_max_time = SC_ZERO_TIME;
     m_delta_count = 0;
     m_forced_stop = false;
+    m_paused = false;
     m_ready_to_simulate = false;
     m_elaboration_done = false;
     m_execution_phase = phase_initialize;
@@ -491,6 +493,7 @@ sc_simcontext::init()
     m_in_simulator_control = false;
     m_start_of_simulation_called = false;
     m_end_of_simulation_called = false;
+    m_simulation_status = SC_ELABORATION;
 }
 
 void
@@ -556,10 +559,8 @@ sc_simcontext::crunch( bool once )
 		    try {
 			method_h->semantics();
 		    }
-		    catch( sc_kill ) {
-		        ::std::cout << "Killing method"
-			            << method_h->name() 
-				    << ::std::endl;
+		    catch( sc_unwind_exception& ex ) {
+		        if ( ex.is_reset() ) continue;
 		    }
 		    catch( const sc_report& ex ) {
 			::std::cout << "\n" << ex.what() << ::std::endl;
@@ -658,6 +659,10 @@ sc_simcontext::crunch( bool once )
 	    break;
 	}
 
+	// if sc_pause() was called we are done.
+
+	if ( m_paused ) break;
+
         // IF ONLY DOING ONE CYCLE, WE ARE DONE. OTHERWISE GET NEW CALLBACKS
 
         if ( once ) break;
@@ -691,6 +696,7 @@ sc_simcontext::elaborate()
         return;
     }
 
+    m_simulation_status = SC_BEFORE_END_OF_ELABORATION;
     m_port_registry->construction_done();
     m_export_registry->construction_done();
     m_prim_channel_registry->construction_done();
@@ -709,6 +715,7 @@ sc_simcontext::elaborate()
     // the process as being dynamic.
 
     m_elaboration_done = true;
+    m_simulation_status = SC_END_OF_ELABORATION;
 
     m_port_registry->elaboration_done();
     m_export_registry->elaboration_done();
@@ -748,6 +755,7 @@ sc_simcontext::prepare_to_simulate()
 
     // NOTIFY ALL OBJECTS THAT SIMULATION IS ABOUT TO START:
 
+    m_simulation_status = SC_START_OF_SIMULATION;
     m_port_registry->start_simulation();
     m_export_registry->start_simulation();
     m_prim_channel_registry->start_simulation();
@@ -775,6 +783,7 @@ sc_simcontext::prepare_to_simulate()
 	cthread_p->prepare_for_simulation();
     }
 
+    m_simulation_status = SC_RUNNING;
     m_ready_to_simulate = true;
     m_runnable->init();
 
@@ -881,6 +890,7 @@ sc_simcontext::simulate( const sc_time& duration )
     }
 
     m_in_simulator_control = true;
+    m_paused = false;
 
     sc_time until_t = m_curr_time + duration;
 
@@ -917,7 +927,8 @@ sc_simcontext::simulate( const sc_time& duration )
 	if( m_something_to_trace ) {
 	    trace_cycle( false );
 	}
-	// check for call(s) to sc_stop
+	// check for call(s) to sc_stop() or sc_pause().
+	if ( m_paused ) return ;
 	if( m_forced_stop ) {
 	    do_sc_stop_action();
 	    return;
@@ -953,6 +964,7 @@ sc_simcontext::do_sc_stop_action()
 	end();
 	m_in_simulator_control = false;
     }
+    m_simulation_status = SC_STOPPED;
 }
 
 void
@@ -1009,6 +1021,7 @@ sc_simcontext::reset()
 void
 sc_simcontext::end()
 {
+    m_simulation_status = SC_END_OF_SIMULATION;
     m_ready_to_simulate = false;
     m_port_registry->simulation_done();
     m_export_registry->simulation_done();
@@ -1397,12 +1410,17 @@ sc_set_random_seed( unsigned int )
 
 
 void
-sc_start( const sc_time& duration )
+sc_start( const sc_time& duration, sc_starvation_policy p )
 {
-    sc_simcontext* context;
-    int status;
+    sc_simcontext* context;    // current simulation context.
+    sc_time        exit_time;  // simulation time to set upon exit.
+    int            status;     //current simulation status.
 
     context = sc_get_curr_simcontext();
+
+    if ( p == SC_RUN_TO_TIME )
+        exit_time = context->m_curr_time + duration;
+
     status = context->sim_status();
     if( status != SC_SIM_OK ) 
     {
@@ -1413,15 +1431,19 @@ sc_start( const sc_time& duration )
         return;
     }
     context->simulate( duration );
+    if ( p == SC_RUN_TO_TIME )
+        context->m_curr_time = exit_time;
 }
 
 void
 sc_start()  
 {
-	sc_start( sc_time(~sc_dt::UINT64_ZERO, false) - sc_time_stamp() );
+    sc_start( sc_time(~sc_dt::UINT64_ZERO, false) - sc_time_stamp(), 
+              SC_EXIT_ON_STARVATION );
 }
 
 // for backward compatibility with 1.0
+#if 0
 void
 sc_start( double duration )  // in default time units
 {
@@ -1443,6 +1465,7 @@ sc_start( double duration )  // in default time units
         sc_start( sc_time( duration, true ) );
     }
 }
+#endif // 
 
 void
 sc_stop()
@@ -1490,6 +1513,12 @@ sc_object* sc_find_object( const char* name, sc_simcontext* simc_p )
 
 
 const sc_time&
+sc_max_time()
+{
+    return sc_get_curr_simcontext()->max_time();
+}
+
+const sc_time&
 sc_time_stamp()
 {
     return sc_get_curr_simcontext()->time_stamp();
@@ -1527,7 +1556,7 @@ void sc_set_stop_mode(sc_stop_mode mode)
 {
     if ( sc_is_running() )
     {
-        SC_REPORT_WARNING(SC_ID_STOP_MODE_AFTER_START_,"");
+        SC_REPORT_ERROR(SC_ID_STOP_MODE_AFTER_START_,"");
     }
     else
     {
@@ -1548,6 +1577,12 @@ sc_get_stop_mode()
 {
     return stop_mode;
 }
+
+bool sc_is_unwinding()
+{ 
+    return sc_get_current_process_handle().is_unwinding();
+}
+
 
 } // namespace sc_core
 // Taf!

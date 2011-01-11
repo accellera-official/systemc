@@ -35,6 +35,10 @@
 
 
 // $Log: sc_event.cpp,v $
+// Revision 1.4  2011/01/06 18:04:05  acg
+//  Andy Goodrich: added code to leave disabled processes on the dynamic
+//  method and thread queues.
+//
 // Revision 1.3  2008/05/22 17:06:25  acg
 //  Andy Goodrich: updated copyright notice to include 2008.
 //
@@ -203,14 +207,31 @@ sc_event::reset()
 }
 
 
+// +----------------------------------------------------------------------------
+// |"sc_event::trigger"
+// | 
+// | This method "triggers" this object instance. This consists of scheduling
+// | for execution all the processes that are schedulable and waiting on this 
+// | event.
+// |
+// | Notes:
+// |   (1) For processes that are dynamically waiting on this event we must
+// |       that if they are disabled they stay on the appropriate dynamic
+// |       queue. Disabled events are handled in this manner because this
+// |       event may be part of an and event list and its easier to keep the
+// |       processes on the event queue than it is to try to restore things
+// |       when the process is re-enabled.
+// +----------------------------------------------------------------------------
 void
 sc_event::trigger()
 {
-    int size;
+    int last_i; // index of last element in vector now accessing.
+    int size;   // size of vector now accessing.
 
     // trigger the static sensitive methods
 
-    if( ( size = m_methods_static.size() ) != 0 ) {
+    if( ( size = m_methods_static.size() ) != 0 ) 
+    {
         sc_method_handle* l_methods_static = &m_methods_static[0];
         int i = size - 1;
         do {
@@ -223,21 +244,38 @@ sc_event::trigger()
 
     // trigger the dynamic sensitive methods
 
-    if( ( size = m_methods_dynamic.size() ) != 0 ) {
-        sc_method_handle* l_methods_dynamic = &m_methods_dynamic[0];
-        int i = size - 1;
-        do {
-            sc_method_handle method_h = l_methods_dynamic[i];
-            if( method_h->trigger_dynamic( this ) ) {
-                m_simc->push_runnable_method( method_h );
-            }
-        } while( -- i >= 0 );
-        m_methods_dynamic.resize(0);
+
+    if( ( size = m_methods_dynamic.size() ) != 0 ) 
+    {
+	last_i = size - 1;
+	sc_method_handle* l_methods_dynamic = &m_methods_dynamic[0];
+	for ( int i = 0; i <= last_i; )
+	{
+	    sc_method_handle method_h = l_methods_dynamic[i];
+	    if ( method_h->trigger_dynamic( this ) )
+	    {
+		m_simc->push_runnable_method( method_h );
+		l_methods_dynamic[i] = l_methods_dynamic[last_i];
+		last_i--;
+	    }
+	    else if ( method_h->current_state() == sc_process_b::ps_disabled )
+	    {
+		i++; // see note 1 above.
+	    }
+	    else
+	    {
+		l_methods_dynamic[i] = l_methods_dynamic[last_i];
+		last_i--;
+	    }
+	}
+        m_methods_dynamic.resize(last_i+1);
     }
+
 
     // trigger the static sensitive threads
 
-    if( ( size = m_threads_static.size() ) != 0 ) {
+    if( ( size = m_threads_static.size() ) != 0 ) 
+    {
         sc_thread_handle* l_threads_static = &m_threads_static[0];
         int i = size - 1;
         do {
@@ -250,16 +288,30 @@ sc_event::trigger()
 
     // trigger the dynamic sensitive threads
 
-    if( ( size = m_threads_dynamic.size() ) != 0 ) {
-        sc_thread_handle* l_threads_dynamic = &m_threads_dynamic[0];
-        int i = size - 1;
-        do {
-            sc_thread_handle thread_h = l_threads_dynamic[i];
-            if( thread_h->trigger_dynamic( this ) ) {
-                m_simc->push_runnable_thread( thread_h );
-            }
-        } while( -- i >= 0 );
-        m_threads_dynamic.resize(0);
+    if( ( size = m_threads_dynamic.size() ) != 0 ) 
+    {
+	last_i = size - 1;
+	sc_thread_handle* l_threads_dynamic = &m_threads_dynamic[0];
+	for ( int i = 0; i <= last_i; )
+	{
+	    sc_thread_handle thread_h = l_threads_dynamic[i];
+	    if ( thread_h->trigger_dynamic( this ) )
+	    {
+		m_simc->push_runnable_thread( thread_h );
+		l_threads_dynamic[i] = l_threads_dynamic[last_i];
+		last_i--;
+	    }
+	    else if ( thread_h->current_state() == sc_process_b::ps_disabled )
+	    {
+		i++; // see note 1 above.
+	    }
+	    else
+	    {
+		l_threads_dynamic[i] = l_threads_dynamic[last_i];
+		last_i--;
+	    }
+	}
+        m_threads_dynamic.resize(last_i+1);
     }
 
     m_notify_type = NONE;

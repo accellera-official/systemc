@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_method_process.cpp,v $
+// Revision 1.6  2011/01/06 18:02:43  acg
+//  Andy Goodrich: added check for ps_disabled to method_dynamic().
+//
 // Revision 1.5  2010/11/20 17:10:56  acg
 //  Andy Goodrich: reset processing changes for new IEEE 1666 standard.
 //
@@ -252,7 +255,6 @@ void sc_method_process::kill_process(sc_descendant_inclusion_info descendants)
     // THROW ITS KILL.
 
     disconnect_process();
-    // @@@@#### if ( next_runnable() == 0 ) simcontext()->push_runnable_method( this );
     if ( next_runnable() != 0 ) simcontext()->remove_runnable_method( this );
     m_throw_type = THROW_KILL;
 }
@@ -503,6 +505,9 @@ bool
 sc_method_process::trigger_dynamic( sc_event* e )
 {
     if( is_runnable() ) {
+        return false;
+    }
+    if ( m_state == ps_disabled ) {
         return false;
     }
     m_timed_out = false;

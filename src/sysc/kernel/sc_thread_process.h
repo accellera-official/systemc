@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_thread_process.h,v $
+// Revision 1.7  2011/01/06 17:59:58  acg
+//  Andy Goodrich: removed debugging output.
+//
 // Revision 1.6  2010/07/22 20:02:33  acg
 //  Andy Goodrich: bug fixes.
 //
@@ -212,7 +215,6 @@ inline bool sc_thread_process::ready_to_run()
     
     if ( m_cor_p == NULL ) 
     {
-	std::cout << " reference count is " << m_references_n << std::endl;
     	return false;
     }
 
@@ -313,7 +315,7 @@ inline void sc_thread_process::suspend_me()
     {
 	m_throw_type = ( m_active_areset_n || m_active_reset_n ) ?
 	    THROW_RESET : THROW_NONE;
-        throw sc_user();
+        throw sc_unwind_exception( true );
     }
     else if ( m_throw_type == THROW_USER )
     {
@@ -322,7 +324,7 @@ inline void sc_thread_process::suspend_me()
     }
     else if ( m_throw_type == THROW_KILL )
     {
-	throw sc_kill();
+	throw sc_unwind_exception( false );
     }
 }
 

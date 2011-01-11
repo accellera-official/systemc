@@ -150,6 +150,7 @@ public:
         { return "sc_clock"; }
 
 
+#if 0 // @@@@#### REMOVE
     // for backward compatibility with 1.0
 
     sc_signal_in_if<bool>& signal()
@@ -162,13 +163,14 @@ public:
 	{ sc_start( duration ); }
 
     static void start( double v, sc_time_unit tu )
-	{ sc_start( v, tu ); }
+	{ sc_start( sc_time(v, tu) ); }
 
     static void start( double duration = -1 )
 	{ sc_start( duration ); }
 
     static void stop()
 	{ sc_stop(); }
+#endif
 
 protected:
 
@@ -234,6 +236,7 @@ sc_clock::negedge_action()
 
 // for backward compatibility with 1.0
 
+#if 0 // @@@@####
 inline
 void
 sc_start( sc_clock& clock, const sc_time& duration )
@@ -254,6 +257,7 @@ sc_start( sc_clock& clock, double duration = -1 )
 {
     clock.start( duration );
 }
+#endif
 
 class sc_clock_posedge_callback {
 public:

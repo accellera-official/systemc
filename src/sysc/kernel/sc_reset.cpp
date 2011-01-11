@@ -24,6 +24,9 @@
  *****************************************************************************/
 
 // $Log: sc_reset.cpp,v $
+// Revision 1.7  2011/01/06 18:04:38  acg
+//  Andy Goodrich: removed commented out code.
+//
 // Revision 1.6  2010/12/07 20:09:13  acg
 // Andy Goodrich: removed sc_signal overloads since already have sc_signal_in_if overloads.
 //
@@ -326,29 +329,6 @@ void sc_reset::reset_signal_is(
 //   (1) If reset is asserted we tell the process that it is in reset
 //       initially.
 //------------------------------------------------------------------------------
-#if 0 // @@@@#### REMOVE
-void sc_reset::reset_signal_is( 
-    bool async, const sc_signal<bool,SC_ONE_WRITER>& sig, bool level )
-{
-    reset_signal_is(async, *dynamic_cast<const sc_signal_in_if<bool>*>(&sig), 
-                    level);
-}
-
-void sc_reset::reset_signal_is( 
-    bool async, const sc_signal<bool,SC_MANY_WRITERS>& sig, bool level )
-{
-    reset_signal_is(async, *dynamic_cast<const sc_signal_in_if<bool>*>(&sig), 
-                    level);
-}
-
-void sc_reset::reset_signal_is( 
-    bool async, const sc_signal<bool,SC_UNCHECKED_WRITERS>& sig, bool level )
-{
-    reset_signal_is(async, *dynamic_cast<const sc_signal_in_if<bool>*>(&sig), 
-                    level);
-}
-#endif // @@@@#### REMOVE
-
 void sc_reset::reset_signal_is( 
     bool async, const sc_signal_in_if<bool>& iface, bool level )
 {
@@ -358,15 +338,10 @@ void sc_reset::reset_signal_is(
 
     process_p = sc_process_b::last_created_process_base();
     assert( process_p );
-#if 0 // @@@@ REMOVE OR CONDITIONAL ON SYSC 2.2
-    if ( process_p->m_reset_p )
-        SC_REPORT_ERROR(SC_ID_MULTIPLE_RESETS_,process_p->name());
-#endif
     switch ( process_p->proc_kind() )
     {
       case SC_METHOD_PROC_:
         if ( !async ) {
-            // @@@@SC_REPORT_ERROR(SC_ID_NO_METHOD_SYNC_RESET_,process_p->name());
 	    break;
 	} // fall through...
       case SC_CTHREAD_PROC_:

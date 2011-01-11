@@ -72,7 +72,6 @@ public:
 
 class sc_halt
 {
-    /*EMPTY*/
 public:
     sc_halt() {}
     sc_halt( const sc_halt& ) {}
@@ -80,10 +79,22 @@ public:
 
 class sc_kill
 {
-    /*EMPTY*/
 public:
     sc_kill() {}
     sc_kill( const sc_kill& ) {}
+};
+
+class sc_unwind_exception
+{
+  public:
+    sc_unwind_exception() : m_is_reset(false) {}
+    sc_unwind_exception( bool is_reset ) : m_is_reset(is_reset) {}
+    virtual ~sc_unwind_exception() {}
+    virtual bool is_reset() const { return m_is_reset; }
+    virtual const char* what() const { return m_is_reset ? "RESET" : "KILL"; }
+
+  private:
+    bool m_is_reset; // true if this is an unwind of a reset, false if not.
 };
 
 } // namespace sc_core

@@ -172,7 +172,7 @@ public: // interface access:
     }
 
 public: // binding:
-    void bind( IF& interface_ )
+    virtual void bind( IF& interface_ )
     {
     	if ( m_interface_p )
 	{
@@ -186,14 +186,7 @@ public: // binding:
 
     void operator () ( IF& interface_ )
     {
-    	if ( m_interface_p )
-	{
-	    SC_REPORT_ERROR(SC_ID_SC_EXPORT_ALREADY_BOUND_,name());
-	}
-	else
-	{
-	    m_interface_p = &interface_;
-	}
+        this->bind(interface_);
     }
 
 public: // identification:

@@ -35,6 +35,9 @@
 
 
 // $Log: sc_reset.h,v $
+// Revision 1.6  2011/01/06 18:00:32  acg
+//  Andy Goodrich: Removed commented out code.
+//
 // Revision 1.5  2010/12/07 20:09:14  acg
 // Andy Goodrich: removed sc_signal signatures since already have sc_signal_in_if signatures.
 //
@@ -120,17 +123,6 @@ class sc_reset {
 
   protected:
     static void reconcile_resets();
-#if 0 // @@@@#### REMOVE
-    static void reset_signal_is(bool async, 
-                                const sc_signal<bool,SC_ONE_WRITER>& sig, 
-	                        bool level );
-    static void reset_signal_is(bool async, 
-                                const sc_signal<bool,SC_MANY_WRITERS>& sig, 
-	                        bool level );
-    static void reset_signal_is(bool async, 
-                                const sc_signal<bool,SC_UNCHECKED_WRITERS>& sig,
-	                        bool level );
-#endif // @@@@#### REMOVE
     static void 
 	reset_signal_is(bool async, const sc_signal_in_if<bool>& iface, 
 	                bool level);

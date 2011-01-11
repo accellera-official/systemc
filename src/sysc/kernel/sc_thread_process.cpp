@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_thread_process.cpp,v $
+// Revision 1.8  2011/01/06 18:02:16  acg
+//  Andy Goodrich: added check for disabled thread to trigger_dynamic().
+//
 // Revision 1.7  2010/11/20 17:10:57  acg
 //  Andy Goodrich: reset processing changes for new IEEE 1666 standard.
 //
@@ -113,9 +116,11 @@ void sc_thread_cor_fn( void* arg )
             ::std::cout << "Terminating process "
                       << thread_h->name() << ::std::endl;
         }
-        catch( sc_kill ) {
-            ::std::cout << "Killing process "
-                      << thread_h->name() << ::std::endl;
+        catch( const sc_unwind_exception& ex ) {
+            if ( ex.is_reset() ) 
+	    {
+	        continue;
+	    }
         }
         catch( const sc_report& ex ) {
             std::cout << "\n" << ex.what() << std::endl;
@@ -611,9 +616,19 @@ void sc_thread_process::throw_user( const sc_throw_it_helper& helper,
 //------------------------------------------------------------------------------
 bool sc_thread_process::trigger_dynamic( sc_event* e )
 {
+    // If this process is already runnable, or it is disabled we can't trigger
+    // an event.
+
     if( is_runnable() ) {
         return false;
     }
+    if ( m_state == ps_disabled || m_state == ps_disabled_pending )
+    {
+	return false;
+    }
+
+    // Process based on the event type:
+
     m_timed_out = false;
     switch( m_trigger_type ) {
     case EVENT: {

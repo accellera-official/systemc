@@ -389,6 +389,7 @@ protected:
 
 private:
     sc_module( const sc_module& );
+    const sc_module& operator = ( const sc_module& );
 
 private:
 
