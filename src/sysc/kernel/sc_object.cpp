@@ -243,6 +243,11 @@ sc_object::sc_object() : m_parent(0)
     sc_object_init( sc_gen_unique_name("object") );
 }
 
+sc_object::sc_object( const sc_object& that ) : m_parent(0)
+{
+    sc_object_init( sc_gen_unique_name( that.basename() ) );
+}
+
 static bool
 object_name_illegal_char(char ch)
 {

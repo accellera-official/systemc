@@ -137,17 +137,16 @@ protected:
 
     sc_object();
     sc_object(const char* nm);
+
+    sc_object( const sc_object& );
+    sc_object& operator=( const sc_object& );
+
     virtual ~sc_object();
 
 private:
 
     void detach();
     void sc_object_init(const char* nm);
-
-private:
-
-    sc_object( const sc_object& );
-    const sc_object& operator = ( const sc_object& );
 
 private:
 
@@ -160,6 +159,13 @@ private:
     std::vector<sc_object*> m_no_children; // get_child_objects() default value.
 };
 
+inline
+sc_object&
+sc_object::operator=( sc_object const & )
+{
+  // deliberately do nothing
+  return *this;
+}
 
 // ----------------------------------------------------------------------------
 
