@@ -554,7 +554,7 @@ class sc_process_b : public sc_object {
     bool                         m_dynamic_proc;    // True: after elaboration.
     const sc_event*              m_event_p;         // Dynamic event waiting on.
     int                          m_event_count;     // Number of events.
-    sc_event_list*               m_event_list_p;    // Event list waiting on.
+    const sc_event_list*         m_event_list_p;    // Event list waiting on.
     sc_process_b*                m_exist_p;         // Process existence link.
     bool                         m_explicit_reset;  // See note 3 above.
     bool                         m_free_host;       // Free sc_semantic_host_p.

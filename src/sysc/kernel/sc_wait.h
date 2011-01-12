@@ -100,12 +100,12 @@ wait( const sc_event&,
 
 extern
 void
-wait( sc_event_or_list&,
+wait( const sc_event_or_list&,
       sc_simcontext* = sc_get_curr_simcontext() );
 
 extern
 void
-wait( sc_event_and_list&,
+wait( const sc_event_and_list&,
       sc_simcontext* = sc_get_curr_simcontext() );
 
 extern
@@ -139,13 +139,13 @@ wait( double v, sc_time_unit tu,
 extern
 void
 wait( const sc_time&,
-      sc_event_or_list&,
+      const sc_event_or_list&,
       sc_simcontext* = sc_get_curr_simcontext() );
 
 inline
 void
 wait( double v, sc_time_unit tu,
-      sc_event_or_list& el,
+      const sc_event_or_list& el,
       sc_simcontext* simc = sc_get_curr_simcontext() )
 {
     wait( sc_time( v, tu, simc ), el, simc );
@@ -154,13 +154,13 @@ wait( double v, sc_time_unit tu,
 extern
 void
 wait( const sc_time&,
-      sc_event_and_list&,
+      const sc_event_and_list&,
       sc_simcontext* = sc_get_curr_simcontext() );
 
 inline
 void
 wait( double v, sc_time_unit tu,
-      sc_event_and_list& el,
+      const sc_event_and_list& el,
       sc_simcontext* simc = sc_get_curr_simcontext() )
 {
     wait( sc_time( v, tu, simc ), el, simc );
@@ -183,12 +183,12 @@ next_trigger( const sc_event&,
 
 extern
 void
-next_trigger( sc_event_or_list&,
+next_trigger( const sc_event_or_list&,
 	      sc_simcontext* = sc_get_curr_simcontext() );
 
 extern
 void
-next_trigger( sc_event_and_list&,
+next_trigger( const sc_event_and_list&,
 	      sc_simcontext* = sc_get_curr_simcontext() );
 
 extern
@@ -222,13 +222,13 @@ next_trigger( double v, sc_time_unit tu,
 extern
 void
 next_trigger( const sc_time&,
-	      sc_event_or_list&,
+	      const sc_event_or_list&,
 	      sc_simcontext* = sc_get_curr_simcontext() );
 
 inline
 void
 next_trigger( double v, sc_time_unit tu,
-	      sc_event_or_list& el,
+	      const sc_event_or_list& el,
 	      sc_simcontext* simc = sc_get_curr_simcontext() )
 {
     next_trigger( sc_time( v, tu, simc ), el, simc );
@@ -237,13 +237,13 @@ next_trigger( double v, sc_time_unit tu,
 extern
 void
 next_trigger( const sc_time&,
-	      sc_event_and_list&,
+	      const sc_event_and_list&,
 	      sc_simcontext* = sc_get_curr_simcontext() );
 
 inline
 void
 next_trigger( double v, sc_time_unit tu,
-	      sc_event_and_list& el,
+	      const sc_event_and_list& el,
 	      sc_simcontext* simc = sc_get_curr_simcontext() )
 {
     next_trigger( sc_time( v, tu, simc ), el, simc );

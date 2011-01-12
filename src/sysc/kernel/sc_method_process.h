@@ -91,12 +91,12 @@ class sc_runnable;
 
 void next_trigger( sc_simcontext* );
 void next_trigger( const sc_event&, sc_simcontext* );
-void next_trigger( sc_event_or_list&, sc_simcontext* );
-void next_trigger( sc_event_and_list&, sc_simcontext* );
+void next_trigger( const sc_event_or_list&, sc_simcontext* );
+void next_trigger( const sc_event_and_list&, sc_simcontext* );
 void next_trigger( const sc_time&, sc_simcontext* );
 void next_trigger( const sc_time&, const sc_event&, sc_simcontext* );
-void next_trigger( const sc_time&, sc_event_or_list&, sc_simcontext* );
-void next_trigger( const sc_time&, sc_event_and_list&, sc_simcontext* );
+void next_trigger( const sc_time&, const sc_event_or_list&, sc_simcontext* );
+void next_trigger( const sc_time&, const sc_event_and_list&, sc_simcontext* );
 
 //==============================================================================
 // sc_method_process -
@@ -116,17 +116,17 @@ class sc_method_process : public sc_process_b {
     friend void next_trigger( sc_simcontext* );
     friend void next_trigger( const sc_event&,
                   sc_simcontext* );
-    friend void next_trigger( sc_event_or_list&,
+    friend void next_trigger( const sc_event_or_list&,
                   sc_simcontext* );
-    friend void next_trigger( sc_event_and_list&,
+    friend void next_trigger( const sc_event_and_list&,
                   sc_simcontext* );
     friend void next_trigger( const sc_time&,
                   sc_simcontext* );
     friend void next_trigger( const sc_time&, const sc_event&,
                   sc_simcontext* );
-    friend void next_trigger( const sc_time&, sc_event_or_list&,
+    friend void next_trigger( const sc_time&, const sc_event_or_list&,
                   sc_simcontext* );
-    friend void next_trigger( const sc_time&, sc_event_and_list&,
+    friend void next_trigger( const sc_time&, const sc_event_and_list&,
                   sc_simcontext* );
 
   public:
@@ -150,12 +150,12 @@ class sc_method_process : public sc_process_b {
     sc_method_handle next_runnable();
     void clear_trigger();
     void next_trigger( const sc_event& );
-    void next_trigger( sc_event_or_list& );
-    void next_trigger( sc_event_and_list& );
+    void next_trigger( const sc_event_or_list& );
+    void next_trigger( const sc_event_and_list& );
     void next_trigger( const sc_time& );
     void next_trigger( const sc_time&, const sc_event& );
-    void next_trigger( const sc_time&, sc_event_or_list& );
-    void next_trigger( const sc_time&, sc_event_and_list& );
+    void next_trigger( const sc_time&, const sc_event_or_list& );
+    void next_trigger( const sc_time&, const sc_event_and_list& );
 	inline bool ready_to_run();
     virtual void resume_process(
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
@@ -193,7 +193,7 @@ sc_method_process::next_trigger( const sc_event& e )
 
 inline
 void
-sc_method_process::next_trigger( sc_event_or_list& el )
+sc_method_process::next_trigger( const sc_event_or_list& el )
 {
     clear_trigger();
     el.add_dynamic( this );
@@ -203,7 +203,7 @@ sc_method_process::next_trigger( sc_event_or_list& el )
 
 inline
 void
-sc_method_process::next_trigger( sc_event_and_list& el )
+sc_method_process::next_trigger( const sc_event_and_list& el )
 {
     clear_trigger();
     el.add_dynamic( this );
@@ -236,7 +236,7 @@ sc_method_process::next_trigger( const sc_time& t, const sc_event& e )
 
 inline
 void
-sc_method_process::next_trigger( const sc_time& t, sc_event_or_list& el )
+sc_method_process::next_trigger( const sc_time& t, const sc_event_or_list& el )
 {
     clear_trigger();
     m_timeout_event_p->notify_internal( t );
@@ -248,7 +248,7 @@ sc_method_process::next_trigger( const sc_time& t, sc_event_or_list& el )
 
 inline
 void
-sc_method_process::next_trigger( const sc_time& t, sc_event_and_list& el )
+sc_method_process::next_trigger( const sc_time& t, const sc_event_and_list& el )
 {
     clear_trigger();
     m_timeout_event_p->notify_internal( t );

@@ -351,13 +351,12 @@ protected:
 
     int size() const;
     bool and_list() const;
+    void add_dynamic( sc_method_handle ) const;
+    void add_dynamic( sc_thread_handle ) const;
+    void remove_dynamic( sc_method_handle, const sc_event* ) const;
+    void remove_dynamic( sc_thread_handle, const sc_event* ) const;
 
-    void add_dynamic( sc_method_handle );
-    void add_dynamic( sc_thread_handle );
-    void remove_dynamic( sc_method_handle, const sc_event* );
-    void remove_dynamic( sc_thread_handle, const sc_event* );
-
-    void auto_delete();
+    void auto_delete() const;
 
 private:
 
@@ -404,7 +403,7 @@ sc_event_list::and_list() const
 
 inline
 void
-sc_event_list::auto_delete()
+sc_event_list::auto_delete() const
 {
     if( m_auto_delete ) {
         delete this;

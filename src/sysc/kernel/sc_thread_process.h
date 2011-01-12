@@ -108,12 +108,12 @@ sc_cor* get_cor_pointer( sc_process_b* process_p );
 void sc_set_stack_size( sc_thread_handle thread_h, std::size_t size );
 void wait( sc_simcontext* );
 void wait( const sc_event&, sc_simcontext* );
-void wait( sc_event_or_list&, sc_simcontext* );
-void wait( sc_event_and_list&, sc_simcontext* );
+void wait( const sc_event_or_list&, sc_simcontext* );
+void wait( const sc_event_and_list&, sc_simcontext* );
 void wait( const sc_time&, sc_simcontext* );
 void wait( const sc_time&, const sc_event&, sc_simcontext* );
-void wait( const sc_time&, sc_event_or_list&, sc_simcontext* );
-void wait( const sc_time&, sc_event_and_list&, sc_simcontext* );
+void wait( const sc_time&, const sc_event_or_list&, sc_simcontext* );
+void wait( const sc_time&, const sc_event_and_list&, sc_simcontext* );
 
 //==============================================================================
 // sc_thread_process -
@@ -135,12 +135,12 @@ class sc_thread_process : public sc_process_b {
 
     friend void wait( sc_simcontext* );
     friend void wait( const sc_event&, sc_simcontext* );
-    friend void wait( sc_event_or_list&, sc_simcontext* );
-    friend void wait( sc_event_and_list&, sc_simcontext* );
+    friend void wait( const sc_event_or_list&, sc_simcontext* );
+    friend void wait( const sc_event_and_list&, sc_simcontext* );
     friend void wait( const sc_time&, sc_simcontext* );
     friend void wait( const sc_time&, const sc_event&, sc_simcontext* );
-    friend void wait( const sc_time&, sc_event_or_list&, sc_simcontext* );
-    friend void wait( const sc_time&, sc_event_and_list&, sc_simcontext* );
+    friend void wait( const sc_time&, const sc_event_or_list&, sc_simcontext* );
+    friend void wait( const sc_time&, const sc_event_and_list&, sc_simcontext* );
   public:
     sc_thread_process( const char* name_p, bool free_host, 
         SC_ENTRY_FUNC method_p, sc_process_host* host_p, 
@@ -178,12 +178,12 @@ class sc_thread_process : public sc_process_b {
     bool trigger_dynamic( sc_event* );
 
     void wait( const sc_event& );
-    void wait( sc_event_or_list& );
-    void wait( sc_event_and_list& );
+    void wait( const sc_event_or_list& );
+    void wait( const sc_event_and_list& );
     void wait( const sc_time& );
     void wait( const sc_time&, const sc_event& );
-    void wait( const sc_time&, sc_event_or_list& );
-    void wait( const sc_time&, sc_event_and_list& );
+    void wait( const sc_time&, const sc_event_or_list& );
+    void wait( const sc_time&, const sc_event_and_list& );
     void wait_cycles( int n=1 );
 
   protected:
@@ -345,7 +345,7 @@ sc_thread_process::wait( const sc_event& e )
 
 inline
 void
-sc_thread_process::wait( sc_event_or_list& el )
+sc_thread_process::wait( const sc_event_or_list& el )
 {   
     el.add_dynamic( this );
     m_event_list_p = &el;
@@ -355,7 +355,7 @@ sc_thread_process::wait( sc_event_or_list& el )
 
 inline
 void
-sc_thread_process::wait( sc_event_and_list& el )
+sc_thread_process::wait( const sc_event_and_list& el )
 {
     el.add_dynamic( this );
     m_event_list_p = &el;
@@ -388,7 +388,7 @@ sc_thread_process::wait( const sc_time& t, const sc_event& e )
 
 inline
 void
-sc_thread_process::wait( const sc_time& t, sc_event_or_list& el )
+sc_thread_process::wait( const sc_time& t, const sc_event_or_list& el )
 {
     m_timeout_event_p->notify_internal( t );
     m_timeout_event_p->add_dynamic( this );
@@ -400,7 +400,7 @@ sc_thread_process::wait( const sc_time& t, sc_event_or_list& el )
 
 inline
 void
-sc_thread_process::wait( const sc_time& t, sc_event_and_list& el )
+sc_thread_process::wait( const sc_time& t, const sc_event_and_list& el )
 {
     m_timeout_event_p->notify_internal( t );
     m_timeout_event_p->add_dynamic( this );

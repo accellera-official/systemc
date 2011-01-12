@@ -131,10 +131,10 @@ protected:
     void wait( const sc_event& e )
         { sc_core::wait( e, simcontext() ); }
 
-    void wait( sc_event_or_list& el )
+    void wait( const sc_event_or_list& el )
 	{ sc_core::wait( el, simcontext() ); }
 
-    void wait( sc_event_and_list& el )
+    void wait( const sc_event_and_list& el )
 	{ sc_core::wait( el, simcontext() ); }
 
     void wait( const sc_time& t )
@@ -149,16 +149,16 @@ protected:
     void wait( double v, sc_time_unit tu, const sc_event& e )
         { sc_core::wait( sc_time( v, tu, simcontext() ), e, simcontext() ); }
 
-    void wait( const sc_time& t, sc_event_or_list& el )
+    void wait( const sc_time& t, const sc_event_or_list& el )
         { sc_core::wait( t, el, simcontext() ); }
 
-    void wait( double v, sc_time_unit tu, sc_event_or_list& el )
+    void wait( double v, sc_time_unit tu, const sc_event_or_list& el )
         { sc_core::wait( sc_time( v, tu, simcontext() ), el, simcontext() ); }
 
-    void wait( const sc_time& t, sc_event_and_list& el )
+    void wait( const sc_time& t, const sc_event_and_list& el )
         { sc_core::wait( t, el, simcontext() ); }
 
-    void wait( double v, sc_time_unit tu, sc_event_and_list& el )
+    void wait( double v, sc_time_unit tu, const sc_event_and_list& el )
         { sc_core::wait( sc_time( v, tu, simcontext() ), el, simcontext() ); }
 
     void wait( int n )
@@ -176,10 +176,10 @@ protected:
     void next_trigger( const sc_event& e )
         { sc_core::next_trigger( e, simcontext() ); }
 
-    void next_trigger( sc_event_or_list& el )
+    void next_trigger( const sc_event_or_list& el )
         { sc_core::next_trigger( el, simcontext() ); }
 
-    void next_trigger( sc_event_and_list& el )
+    void next_trigger( const sc_event_and_list& el )
         { sc_core::next_trigger( el, simcontext() ); }
 
     void next_trigger( const sc_time& t )
@@ -195,17 +195,17 @@ protected:
         { sc_core::next_trigger( 
 	    sc_time( v, tu, simcontext() ), e, simcontext() ); }
 
-    void next_trigger( const sc_time& t, sc_event_or_list& el )
+    void next_trigger( const sc_time& t, const sc_event_or_list& el )
         { sc_core::next_trigger( t, el, simcontext() ); }
 
-    void next_trigger( double v, sc_time_unit tu, sc_event_or_list& el )
+    void next_trigger( double v, sc_time_unit tu, const sc_event_or_list& el )
         { sc_core::next_trigger( 
 	    sc_time( v, tu, simcontext() ), el, simcontext() ); }
 
-    void next_trigger( const sc_time& t, sc_event_and_list& el )
+    void next_trigger( const sc_time& t, const sc_event_and_list& el )
         { sc_core::next_trigger( t, el, simcontext() ); }
 
-    void next_trigger( double v, sc_time_unit tu, sc_event_and_list& el )
+    void next_trigger( double v, sc_time_unit tu, const sc_event_and_list& el )
         { sc_core::next_trigger( 
 	    sc_time( v, tu, simcontext() ), el, simcontext() ); }
 

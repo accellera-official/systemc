@@ -461,10 +461,10 @@ sc_event_list::push_back( const sc_event& e )
 
 
 void
-sc_event_list::add_dynamic( sc_method_handle method_h )
+sc_event_list::add_dynamic( sc_method_handle method_h ) const
 {
     if ( m_events.size() != 0 ) {
-      const sc_event** l_events = &m_events[0];
+      const sc_event* const * l_events = &m_events[0];
       for( int i = m_events.size() - 1; i >= 0; -- i ) {
           l_events[i]->add_dynamic( method_h );
       }
@@ -472,10 +472,10 @@ sc_event_list::add_dynamic( sc_method_handle method_h )
 }
 
 void
-sc_event_list::add_dynamic( sc_thread_handle thread_h )
+sc_event_list::add_dynamic( sc_thread_handle thread_h ) const
 {
     if ( m_events.size() != 0 ) {
-      const sc_event** l_events = &m_events[0];
+      const sc_event* const * l_events = &m_events[0];
       for( int i = m_events.size() - 1; i >= 0; -- i ) {
           l_events[i]->add_dynamic( thread_h );
       }
@@ -484,10 +484,10 @@ sc_event_list::add_dynamic( sc_thread_handle thread_h )
 
 void
 sc_event_list::remove_dynamic( sc_method_handle method_h,
-                               const sc_event* e_not )
+                               const sc_event* e_not ) const
 {
     if ( m_events.size() != 0 ) {
-      const sc_event** l_events = &m_events[0];
+      const sc_event* const * l_events = &m_events[0];
       for( int i = m_events.size() - 1; i >= 0; -- i ) {
           const sc_event* e = l_events[i];
           if( e != e_not ) {
@@ -499,10 +499,10 @@ sc_event_list::remove_dynamic( sc_method_handle method_h,
 
 void
 sc_event_list::remove_dynamic( sc_thread_handle thread_h,
-                               const sc_event* e_not )
+                               const sc_event* e_not ) const
 {
     if ( m_events.size() != 0 ) {
-      const sc_event** l_events = &m_events[0];
+      const sc_event* const * l_events = &m_events[0];
       for( int i = m_events.size() - 1; i >= 0; -- i ) {
           const sc_event* e = l_events[i];
           if( e != e_not ) {

@@ -68,16 +68,7 @@ namespace sc_core {
 
 void halt( sc_simcontext* );
 void sc_cthread_cor_fn( void* );  
-void wait( sc_simcontext* );
-void wait( const sc_event&, sc_simcontext* );
-void wait( sc_event_or_list&, sc_simcontext* );
-void wait( sc_event_and_list&, sc_simcontext* );
-void wait( const sc_time&, sc_simcontext* );
-void wait( const sc_time&, const sc_event&, sc_simcontext* );
-void wait( const sc_time&, sc_event_or_list&, sc_simcontext* );
-void wait( const sc_time&, sc_event_and_list&, sc_simcontext* );
 void wait( int, sc_simcontext* );
-
 
 //==============================================================================
 // sc_cthread_process -
@@ -91,27 +82,10 @@ class sc_cthread_process : public sc_thread_process {
     friend class sc_thread_process;
     friend class sc_simcontext;
 
-    friend void wait( sc_simcontext* );
-    friend void wait( const sc_event&,
-              sc_simcontext* );
-    friend void wait( sc_event_or_list&,
-              sc_simcontext* );
-    friend void wait( sc_event_and_list&,
-              sc_simcontext* );
-    friend void wait( const sc_time&,
-              sc_simcontext* );
-    friend void wait( const sc_time&, const sc_event&,
-              sc_simcontext* );
-    friend void wait( const sc_time&, sc_event_or_list&,
-              sc_simcontext* );
-    friend void wait( const sc_time&, sc_event_and_list&,
-              sc_simcontext* );
-
     friend void sc_cthread_cor_fn( void* );
 
     friend void halt( sc_simcontext* );
-    friend void wait( int,
-              sc_simcontext* );
+    friend void wait( int, sc_simcontext* );
 
   public:
     sc_cthread_process( const char* name_p, bool free_host,
