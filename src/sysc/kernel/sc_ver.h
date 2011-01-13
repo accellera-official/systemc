@@ -36,6 +36,7 @@
 #ifndef SC_VER_H
 #define SC_VER_H
 
+#include <string>
 
 namespace sc_core {
 
@@ -43,20 +44,57 @@ extern const char* sc_copyright();
 extern const char* sc_release();
 extern const char* sc_version();
 
-#define SYSTEMC_2_3_0
-#define SYSTEMC_VERSION 20110107
+extern const unsigned int sc_version_major;
+extern const unsigned int sc_version_minor;
+extern const unsigned int sc_version_patch;
 
+extern const std::string  sc_version_originator;
+extern const std::string  sc_version_release_date;
+extern const std::string  sc_version_prerelease;
+extern const bool         sc_is_prerelease;
+extern const std::string  sc_version_string;
+extern const std::string  sc_copyright_string;
+
+#define SYSTEMC_2_3_0
 #define SC_API_VERSION_STRING sc_api_version_2_3_0
-#define SC_COPYRIGHT "Copyright (c) 1996-2011 by all Contributors"
-#define SC_IS_PRERELEASE true
-#define SC_RELEASE_STRING "systemc-2.3.0_20110107_prerelease"
-#define SC_VENDOR_PATCH 0
-#define SC_VENDOR_STRING "OSCI"
-#define SC_VERSION "systemc-2.3.0_20110107_beta-OSCI"
-#define SC_VERSION_MAJOR 2
-#define SC_VERSION_MINOR 3
+
+#define SYSTEMC_VERSION       20110107
 #define SC_VERSION_ORIGINATOR "OSCI"
-#define SC_VERSION_RELEASE_DATE "20110107"
+#define SC_VERSION_MAJOR      2
+#define SC_VERSION_MINOR      3
+#define SC_VERSION_PATCH      0
+#define SC_IS_PRERELEASE      true
+
+#define SC_COPYRIGHT "Copyright (c) 1996-2011 by all Contributors"
+
+// token stringification
+#define SC_STRINGIFY_HELPER_( Arg ) \
+  SC_STRINGIFY_HELPER_DEFERRED_( Arg )
+#define SC_STRINGIFY_HELPER_DEFERRED_( Arg ) \
+  SC_STRINGIFY_HELPER_MORE_DEFERRED_( Arg )
+#define SC_STRINGIFY_HELPER_MORE_DEFERRED_( Arg ) \
+  #Arg 
+
+#define SC_VERSION_RELEASE_DATE \
+  SC_STRINGIFY_HELPER_( SYSTEMC_VERSION )
+
+#if SC_IS_PRERELEASE
+#  define SC_VERSION_PRERELEASE_STRING "_beta"
+#else
+#  define SC_VERSION_PRERELEASE_STRING // nothing
+#endif
+
+#define SC_VERSION \
+  SC_STRINGIFY_HELPER_( SC_VERSION_MAJOR.SC_VERSION_MINOR.SC_VERSION_PATCH ) \
+  "_" SC_VERSION_RELEASE_DATE SC_VERSION_PRERELEASE_STRING \
+  "-" SC_VERSION_ORIGINATOR
+
+// probably obsolete
+
+#define SC_RELEASE_STRING \
+  "systemc-" SC_VERSION
+#define SC_VENDOR_STRING \
+  SC_VERSION_ORIGINATOR
 
 // THIS CLASS AND STATIC INSTANCE BELOW DETECTS BAD REV OBJECTS AT LINK TIME
 //
