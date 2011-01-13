@@ -54,13 +54,6 @@
 #include "sysc/kernel/sc_cor_fiber.h"
 #include "sysc/kernel/sc_simcontext.h"
 
-#if( defined(_MSC_VER) && _MSC_VER >= 1300 )
-
-using std::size_t;
-
-#endif
-
-
 namespace sc_core {
 
 // ----------------------------------------------------------------------------

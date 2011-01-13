@@ -112,13 +112,8 @@ public:
     virtual ~sc_cor_pkg() {}
 
     // create a new coroutine
-#if( defined(_MSC_VER) && _MSC_VER < 1300 )
    virtual sc_cor* create(
 	    std::size_t stack_size, sc_cor_fn* fn, void* arg ) = 0;
-#else
-   virtual sc_cor* create(
-	    std::size_t stack_size, sc_cor_fn* fn, void* arg ) = 0;
-#endif // ( defined(_MSC_VER) && _MSC_VER < 1300 )
 
     // yield to the next coroutine
     virtual void yield( sc_cor* next_cor ) = 0;
