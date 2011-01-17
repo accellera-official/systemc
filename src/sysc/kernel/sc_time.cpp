@@ -64,6 +64,14 @@
 #include "sysc/kernel/sc_time.h"
 #include "sysc/utils/sc_utils_ids.h"
 
+#if !defined(PRIu64)
+#if defined(_MSC_VER) || defined(__MINGW32__)
+#  define PRIu64 "%I64u"
+#else
+#  define PRIu64 "%llu"
+#endif
+#endif // PRIu64
+
 namespace sc_core {
 
 static
@@ -199,11 +207,7 @@ sc_time::to_string() const
 	n ++;
     }
     char buf[BUFSIZ];
-#if !defined( _MSC_VER )
-    std::sprintf( buf, "%llu", val );
-#else
-    std::sprintf( buf, "%I64u", val );
-#endif
+    std::sprintf( buf, PRIu64, val );
     std::string result( buf );
     if( n >= 15 ) {
 	for( int i = n - 15; i > 0; -- i ) {
