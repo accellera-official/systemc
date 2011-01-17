@@ -64,21 +64,6 @@ extern const sc_dt::sc_logic_value_t sc_logic_resolution_tbl[4][4];
 
 
 // ----------------------------------------------------------------------------
-//  CLASS : sc_logic_resolve
-//
-//  Resolution function for sc_dt::sc_logic.
-// ----------------------------------------------------------------------------
-
-class sc_logic_resolve
-{
-public:
-
-    // resolves sc_dt::sc_logic values and returns the resolved value
-    static void resolve(sc_dt::sc_logic&, const std::vector<sc_dt::sc_logic*>&);
-};
-
-
-// ----------------------------------------------------------------------------
 //  CLASS : sc_signal_resolved
 //
 //  The resolved signal class.
@@ -106,10 +91,6 @@ public:
     explicit sc_signal_resolved( const char* name_ )
         : base_type( name_ )
 	{}
-
-
-    // destructor
-    virtual ~sc_signal_resolved();
 
 
     // interface methods
@@ -140,7 +121,7 @@ protected:
 protected:
 
     std::vector<sc_process_b*> m_proc_vec; // processes writing this signal
-    std::vector<data_type*>       m_val_vec;  // new values written this signal
+    std::vector<data_type>     m_val_vec;  // new values written this signal
 
 private:
 
