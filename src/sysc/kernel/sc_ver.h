@@ -63,7 +63,7 @@ extern const std::string  sc_copyright_string;
 #define SC_VERSION_MAJOR      2
 #define SC_VERSION_MINOR      3
 #define SC_VERSION_PATCH      0
-#define SC_IS_PRERELEASE      true
+#define SC_IS_PRERELEASE      1
 
 #define SC_COPYRIGHT "Copyright (c) 1996-2011 by all Contributors"
 
@@ -78,7 +78,7 @@ extern const std::string  sc_copyright_string;
 #define SC_VERSION_RELEASE_DATE \
   SC_STRINGIFY_HELPER_( SYSTEMC_VERSION )
 
-#if SC_IS_PRERELEASE
+#if ( SC_IS_PRERELEASE == 1 )
 #  define SC_VERSION_PRERELEASE_STRING "_beta"
 #else
 #  define SC_VERSION_PRERELEASE_STRING // nothing
