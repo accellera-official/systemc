@@ -191,7 +191,7 @@ case "$target" in
                 EXTRA_CXXFLAGS="-AA -ext +DA2.0 +DS2.0"
                 OPT_CXXFLAGS="+O1"
                 TARGET_ARCH="hpux11"
-        	CFLAGS="-Wa,-w36"
+                EXTRA_CFLAGS="-Wa,-w36"
                 ;;
             c++ | g++)
                 TARGET_ARCH="gcchpux11"
