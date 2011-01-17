@@ -565,7 +565,7 @@ sc_simcontext::crunch( bool once )
 		    catch( const sc_report& ex ) {
 			::std::cout << "\n" << ex.what() << ::std::endl;
 			m_error = true;
-			return;
+			goto out;
 		    }
 		}
 		method_h = pop_runnable_method();
@@ -582,12 +582,12 @@ sc_simcontext::crunch( bool once )
 		m_cor_pkg->yield( thread_h->m_cor_p );
 	    }
 	    if( m_error ) {
-		return;
+		goto out;
 	    }
 
 	    // check for call(s) to sc_stop
 	    if( m_forced_stop ) {
-		if ( stop_mode == SC_STOP_IMMEDIATE ) return; 
+		if ( stop_mode == SC_STOP_IMMEDIATE ) goto out; 
 	    }
 
 	    if( m_runnable->is_empty() ) {
@@ -669,6 +669,8 @@ sc_simcontext::crunch( bool once )
 
 	m_runnable->toggle();
     }
+out:
+    this->reset_curr_proc();
 }
 
 inline
