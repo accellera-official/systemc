@@ -1430,6 +1430,11 @@ sc_start( const sc_time& duration, sc_starvation_policy p )
 	{
 	    SC_REPORT_ERROR(SC_ID_SIMULATION_START_AFTER_STOP_, "");        
 	}
+	if ( status == SC_SIM_ERROR )
+	{
+	    SC_REPORT_ERROR(SC_ID_SIMULATION_START_AFTER_ERROR_, "");
+	}
+
         return;
     }
     context->simulate( duration );

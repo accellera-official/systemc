@@ -176,6 +176,8 @@ SC_DEFINE_MESSAGE(SC_ID_SIMULATION_START_AFTER_STOP_  , 546,
 	"sc_start called after sc_stop has been called" ) 
 SC_DEFINE_MESSAGE(SC_ID_STOP_MODE_AFTER_START_        , 547,
 	"attempt to set sc_stop mode  after start will be ignored" ) 
+SC_DEFINE_MESSAGE( SC_ID_SIMULATION_START_AFTER_ERROR_, 548,
+	"attempt to restart simulation after error" )
 SC_DEFINE_MESSAGE(SC_ID_METHOD_TERMINATION_EVENT_        , 560,
 	"Attempt to get terminated event for a method process" ) 
 SC_DEFINE_MESSAGE(SC_ID_JOIN_ON_METHOD_HANDLE_        , 561,
