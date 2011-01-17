@@ -154,7 +154,7 @@ public:
 	{ sc_port_base::bind( CCAST<in_if_type&>( interface_ ) ); }
 
     void operator () ( const in_if_type& interface_ )
-	{ this->bind( CCAST<in_if_type&>( interface_ ) ); }
+	{ this->bind( interface_ ); }
 
 
     // bind to parent in port
@@ -464,7 +464,7 @@ public:
 	{ sc_port_base::bind( CCAST<in_if_type&>( interface_ ) ); }
 
     void operator () ( const in_if_type& interface_ )
-	{ this->bind( CCAST<in_if_type&>( interface_ ) ); }
+        { this->bind( interface_ ); }
 
 
     // bind to parent in port
@@ -719,7 +719,7 @@ public:
 	{ sc_port_base::bind( CCAST<in_if_type&>( interface_ ) ); }
 
     void operator () ( const in_if_type& interface_ )
-	{ this->bind( CCAST<in_if_type&>( interface_ ) ); }
+	{ this->bind( interface_ ); }
 
 
     // bind to parent in port
