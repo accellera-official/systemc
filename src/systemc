@@ -94,14 +94,17 @@
 #   include "sysc/datatypes/fx/fx.h"
 #endif // SC_INCLUDE_FX
 
-#ifdef SC_INCLUDE_DYNAMIC_PROCESSES
-#    include "sysc/kernel/sc_dynamic_processes.h"
-#endif // SC_INCLUDE_DYNAMIC_PROCESSES
-
 #include "sysc/tracing/sc_vcd_trace.h"
 #include "sysc/tracing/sc_wif_trace.h"
 
 #include "sysc/utils/sc_iostream.h"
 #include "sysc/utils/sc_utils_ids.h"
+#include "sysc/utils/sc_pvector.h"
+#include "sysc/utils/sc_vector.h"
 
 #endif // !defined(SYSTEMC_INCLUDED)
+
+#ifdef SC_INCLUDE_DYNAMIC_PROCESSES
+#    include "sysc/kernel/sc_dynamic_processes.h"
+#endif // SC_INCLUDE_DYNAMIC_PROCESSES
+
