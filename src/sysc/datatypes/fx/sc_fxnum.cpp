@@ -425,10 +425,10 @@ quantization( double& c, const scfx_params& params, bool& q_flag )
             case SC_RND_CONV:			// convergent rounding
 	    {
 		if( frac_part > 0.5 ||
-		    frac_part == 0.5 && fmod( int_part, 2.0 ) != 0.0 )
+		    ( frac_part == 0.5 && fmod( int_part, 2.0 ) != 0.0 ) )
 		    val += 1.0;
 		else if( frac_part < -0.5 ||
-			 frac_part == -0.5 && fmod( int_part, 2.0 ) != 0.0 )
+			 ( frac_part == -0.5 && fmod( int_part, 2.0 ) != 0.0 ) )
 		    val -= 1.0;
 		break;
 	    }
