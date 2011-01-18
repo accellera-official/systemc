@@ -198,7 +198,6 @@ enum sc_logic_value_t
 
 class sc_logic
 {
-    friend class sc_logic_resolve;
 
 private:
 

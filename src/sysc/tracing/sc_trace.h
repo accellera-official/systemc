@@ -71,7 +71,6 @@ namespace sc_dt
 
 namespace sc_core {
 
-class sc_logic_resolve;
 class sc_time;
 
 template <class T> class sc_signal_in_if;
