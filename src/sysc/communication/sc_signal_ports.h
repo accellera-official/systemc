@@ -154,7 +154,7 @@ public:
 	{ sc_port_base::bind( CCAST<in_if_type&>( interface_ ) ); }
 
     void operator () ( const in_if_type& interface_ )
-	{ this->bind( CCAST<in_if_type&>( interface_ ) ); }
+	{ this->bind( interface_ ); }
 
 
     // bind to parent in port
@@ -464,7 +464,7 @@ public:
 	{ sc_port_base::bind( CCAST<in_if_type&>( interface_ ) ); }
 
     void operator () ( const in_if_type& interface_ )
-	{ this->bind( CCAST<in_if_type&>( interface_ ) ); }
+	{ this->bind( interface_ ); }
 
 
     // bind to parent in port
@@ -719,7 +719,7 @@ public:
 	{ sc_port_base::bind( CCAST<in_if_type&>( interface_ ) ); }
 
     void operator () ( const in_if_type& interface_ )
-	{ this->bind( CCAST<in_if_type&>( interface_ ) ); }
+	{ this->bind( interface_ ); }
 
 
     // bind to parent in port
@@ -1797,6 +1797,9 @@ sc_trace( sc_trace_file* tf, const sc_inout<T>& port,
 
  *****************************************************************************/
 //$Log: sc_signal_ports.h,v $
+//Revision 1.2  2011/01/20 16:52:15  acg
+// Andy Goodrich: changes for IEEE 1666 2011.
+//
 //Revision 1.1.1.1  2006/12/15 20:20:04  acg
 //SystemC 2.3
 //

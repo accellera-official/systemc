@@ -81,14 +81,5 @@ install-data-local:
 
 uninstall-local:
 	@$(NORMAL_UNINSTALL)
-	for file in $(noinst_HEADERS); do \
-	  rm -f $(INCLUDE_DIR)/$$file; \
-	done
-	list=`echo md/*`; \
-	  for file in $$list; do \
-	    rm -f $(INCLUDE_DIR)/$$file; \
-	  done
-	-rmdir $(INCLUDE_DIR)/md
-	-rmdir $(INCLUDE_DIR)
 
 ## Taf!

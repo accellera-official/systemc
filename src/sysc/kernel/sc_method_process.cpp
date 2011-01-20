@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_method_process.cpp,v $
+// Revision 1.7  2011/01/18 20:10:44  acg
+//  Andy Goodrich: changes for IEEE1666_2011 semantics.
+//
 // Revision 1.6  2011/01/06 18:02:43  acg
 //  Andy Goodrich: added check for ps_disabled to method_dynamic().
 //
@@ -167,10 +170,10 @@ void sc_method_process::disable_process(
     {
       case ps_normal:
         m_state = (next_runnable() == 0) ? ps_disabled : 
-                                           ps_disabled_pending;
+                                           ps_disable_pending;
         break;
       case ps_suspended:
-      case ps_suspended_pending:
+      case ps_suspended_ready_to_run:
         m_state = ps_disabled_suspended;
         break;
       default:
@@ -367,15 +370,13 @@ void sc_method_process::suspend_process(
 
     // SUSPEND OUR OBJECT INSTANCE:
     //
-    // (1) If we are on the runnable queue then we are also pending.
-    // (2) If this is self-suspension we are also pending.
+    // (1) If we are on the runnable queue then we are also ready to run.
 
     switch( m_state )
     {
       case ps_normal:
-        m_state = ( (next_runnable() != 0) ||
-            ( sc_get_current_process_b() == DCAST<sc_process_b*>(this) ) ) ?
-            ps_suspended_pending : ps_suspended;
+        m_state = ( (next_runnable() != 0) ) ?  ps_suspended_ready_to_run : 
+	                                        ps_suspended;
         break;
       case ps_disabled:
         m_state = ps_disabled_suspended;
@@ -422,7 +423,7 @@ void sc_method_process::resume_process(
       case ps_suspended:
         m_state = ps_normal;
         break;
-      case ps_suspended_pending:
+      case ps_suspended_ready_to_run:
         m_state = ps_normal;
         if ( next_runnable() == 0 )
 	    if ( m_resume_event_p == 0 ) 
@@ -455,7 +456,11 @@ void sc_method_process::throw_reset( bool async )
         if ( m_event_p ) 
             m_event_p->remove_dynamic( this );
         if ( m_event_list_p ) 
+	{
             m_event_list_p->remove_dynamic( this, 0 );
+            m_event_list_p->auto_delete();
+            m_event_list_p = 0;
+        }
         if ( next_runnable() == 0 ) 
             simcontext()->push_runnable_method( this );
     }

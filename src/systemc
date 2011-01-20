@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: systemc,v $
+// Revision 1.3  2011/01/20 16:52:09  acg
+//  Andy Goodrich: changes for IEEE 1666 2011.
+//
 // Revision 1.2  2009/11/17 19:57:51  acg
 //  Andy Goodrich: changes for boost.
 //
@@ -94,14 +97,17 @@
 #   include "sysc/datatypes/fx/fx.h"
 #endif // SC_INCLUDE_FX
 
-#ifdef SC_INCLUDE_DYNAMIC_PROCESSES
-#    include "sysc/kernel/sc_dynamic_processes.h"
-#endif // SC_INCLUDE_DYNAMIC_PROCESSES
-
 #include "sysc/tracing/sc_vcd_trace.h"
 #include "sysc/tracing/sc_wif_trace.h"
 
 #include "sysc/utils/sc_iostream.h"
 #include "sysc/utils/sc_utils_ids.h"
 
+#include "sysc/utils/sc_pvector.h"
+#include "sysc/utils/sc_vector.h"
+
 #endif // !defined(SYSTEMC_INCLUDED)
+
+#ifdef SC_INCLUDE_DYNAMIC_PROCESSES
+#    include "sysc/kernel/sc_dynamic_processes.h"
+#endif // SC_INCLUDE_DYNAMIC_PROCESSES

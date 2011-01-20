@@ -319,6 +319,9 @@
 				RelativePath="..\..\src\sysc\tracing\sc_vcd_trace.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\sysc\utils\sc_vector.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\sysc\kernel\sc_ver.cpp">
 			</File>
 			<File
@@ -436,6 +439,7 @@
 			</File>
 			<File
 				RelativePath="..\..\src\sysc\kernel\sc_cthread_process.h">
+
 			</File>
 			<File
 				RelativePath="..\..\src\sysc\kernel\sc_dynamic_processes.h">
@@ -663,6 +667,9 @@
 				RelativePath="..\..\src\sysc\communication\sc_signal_rv_ports.h">
 			</File>
 			<File
+				RelativePath="..\..\src\sysc\communication\sc_writer_policy.h">
+			</File>
+			<File
 				RelativePath="..\..\src\sysc\datatypes\int\sc_signed.h">
 			</File>
 			<File
@@ -730,6 +737,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\sysc\tracing\sc_vcd_trace.h">
+			</File>
+			<File
+				RelativePath="..\..\src\sysc\utils\sc_pvector.h">
 			</File>
 			<File
 				RelativePath="..\..\src\sysc\utils\sc_vector.h">

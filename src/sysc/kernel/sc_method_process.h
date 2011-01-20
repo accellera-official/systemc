@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_method_process.h,v $
+// Revision 1.5  2011/01/18 20:10:44  acg
+//  Andy Goodrich: changes for IEEE1666_2011 semantics.
+//
 // Revision 1.4  2009/07/28 01:10:53  acg
 //  Andy Goodrich: updates for 2.3 release candidate.
 //
@@ -91,12 +94,12 @@ class sc_runnable;
 
 void next_trigger( sc_simcontext* );
 void next_trigger( const sc_event&, sc_simcontext* );
-void next_trigger( sc_event_or_list&, sc_simcontext* );
-void next_trigger( sc_event_and_list&, sc_simcontext* );
+void next_trigger( const sc_event_or_list&, sc_simcontext* );
+void next_trigger( const sc_event_and_list&, sc_simcontext* );
 void next_trigger( const sc_time&, sc_simcontext* );
 void next_trigger( const sc_time&, const sc_event&, sc_simcontext* );
-void next_trigger( const sc_time&, sc_event_or_list&, sc_simcontext* );
-void next_trigger( const sc_time&, sc_event_and_list&, sc_simcontext* );
+void next_trigger( const sc_time&, const sc_event_or_list&, sc_simcontext* );
+void next_trigger( const sc_time&, const sc_event_and_list&, sc_simcontext* );
 
 //==============================================================================
 // sc_method_process -
@@ -116,17 +119,17 @@ class sc_method_process : public sc_process_b {
     friend void next_trigger( sc_simcontext* );
     friend void next_trigger( const sc_event&,
                   sc_simcontext* );
-    friend void next_trigger( sc_event_or_list&,
+    friend void next_trigger( const sc_event_or_list&,
                   sc_simcontext* );
-    friend void next_trigger( sc_event_and_list&,
+    friend void next_trigger( const sc_event_and_list&,
                   sc_simcontext* );
     friend void next_trigger( const sc_time&,
                   sc_simcontext* );
     friend void next_trigger( const sc_time&, const sc_event&,
                   sc_simcontext* );
-    friend void next_trigger( const sc_time&, sc_event_or_list&,
+    friend void next_trigger( const sc_time&, const sc_event_or_list&,
                   sc_simcontext* );
-    friend void next_trigger( const sc_time&, sc_event_and_list&,
+    friend void next_trigger( const sc_time&, const sc_event_and_list&,
                   sc_simcontext* );
 
   public:
@@ -150,13 +153,14 @@ class sc_method_process : public sc_process_b {
     sc_method_handle next_runnable();
     void clear_trigger();
     void next_trigger( const sc_event& );
-    void next_trigger( sc_event_or_list& );
-    void next_trigger( sc_event_and_list& );
+    void next_trigger( const sc_event_or_list& );
+    void next_trigger( const sc_event_and_list& );
     void next_trigger( const sc_time& );
     void next_trigger( const sc_time&, const sc_event& );
-    void next_trigger( const sc_time&, sc_event_or_list& );
-    void next_trigger( const sc_time&, sc_event_and_list& );
-	inline bool ready_to_run();
+    void next_trigger( const sc_time&, const sc_event_or_list& );
+    void next_trigger( const sc_time&, const sc_event_and_list& );
+    virtual void queue_for_execution();
+    inline bool ready_to_run();
     virtual void resume_process(
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
     void set_next_exist( sc_method_handle next_p );
@@ -193,7 +197,7 @@ sc_method_process::next_trigger( const sc_event& e )
 
 inline
 void
-sc_method_process::next_trigger( sc_event_or_list& el )
+sc_method_process::next_trigger( const sc_event_or_list& el )
 {
     clear_trigger();
     el.add_dynamic( this );
@@ -203,7 +207,7 @@ sc_method_process::next_trigger( sc_event_or_list& el )
 
 inline
 void
-sc_method_process::next_trigger( sc_event_and_list& el )
+sc_method_process::next_trigger( const sc_event_and_list& el )
 {
     clear_trigger();
     el.add_dynamic( this );
@@ -236,7 +240,7 @@ sc_method_process::next_trigger( const sc_time& t, const sc_event& e )
 
 inline
 void
-sc_method_process::next_trigger( const sc_time& t, sc_event_or_list& el )
+sc_method_process::next_trigger( const sc_time& t, const sc_event_or_list& el )
 {
     clear_trigger();
     m_timeout_event_p->notify_internal( t );
@@ -248,7 +252,7 @@ sc_method_process::next_trigger( const sc_time& t, sc_event_or_list& el )
 
 inline
 void
-sc_method_process::next_trigger( const sc_time& t, sc_event_and_list& el )
+sc_method_process::next_trigger( const sc_time& t, const sc_event_and_list& el )
 {
     clear_trigger();
     m_timeout_event_p->notify_internal( t );
@@ -260,6 +264,17 @@ sc_method_process::next_trigger( const sc_time& t, sc_event_and_list& el )
 }
 
 //------------------------------------------------------------------------------
+//"sc_method_process::queue_for_execution"
+//
+//------------------------------------------------------------------------------
+inline
+void sc_method_process::queue_for_execution()
+{
+    if ( !is_runnable() )
+	simcontext()->push_runnable_method(this);
+}
+
+//------------------------------------------------------------------------------
 //"sc_method_process::ready_to_run"
 //
 //------------------------------------------------------------------------------
@@ -268,7 +283,7 @@ inline bool sc_method_process::ready_to_run()
     switch( m_state )
     {
       case ps_normal:    return true;
-      case ps_suspended: m_state = ps_suspended_pending; break;
+      case ps_suspended: m_state = ps_suspended_ready_to_run; break;
       default: break;
     }
     return false;

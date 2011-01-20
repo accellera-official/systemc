@@ -35,6 +35,15 @@
  *****************************************************************************/
 
 // $Log: sc_thread_process.cpp,v $
+// Revision 1.11  2011/01/20 16:52:20  acg
+//  Andy Goodrich: changes for IEEE 1666 2011.
+//
+// Revision 1.10  2011/01/19 23:21:50  acg
+//  Andy Goodrich: changes for IEEE 1666 2011
+//
+// Revision 1.9  2011/01/18 20:10:45  acg
+//  Andy Goodrich: changes for IEEE1666_2011 semantics.
+//
 // Revision 1.8  2011/01/06 18:02:16  acg
 //  Andy Goodrich: added check for disabled thread to trigger_dynamic().
 //
@@ -190,10 +199,10 @@ void sc_thread_process::disable_process(
     switch( m_state )
     {
       case ps_normal:
-        m_state = ( next_runnable() == 0 ) ? ps_disabled : ps_disabled_pending;
+        m_state = ( next_runnable() == 0 ) ? ps_disabled : ps_disable_pending;
         break;
       case ps_suspended:
-      case ps_suspended_pending:
+      case ps_suspended_ready_to_run:
         m_state = ps_disabled_suspended;
         break;
       default:
@@ -236,7 +245,7 @@ void sc_thread_process::enable_process(
     switch( m_state )
     {
       case ps_disabled:
-      case ps_disabled_pending:
+      case ps_disable_pending:
         m_state = ps_normal;
         break;
       case ps_disabled_suspended:
@@ -257,10 +266,14 @@ void sc_thread_process::enable_process(
 //------------------------------------------------------------------------------
 void sc_thread_process::kill_process(sc_descendant_inclusion_info descendants )
 {
-    int                              child_i;    // Index of child accessing.
-    int                              child_n;    // Number of children.
-    sc_process_b*                    child_p;    // Child accessing.
-    const ::std::vector<sc_object*>* children_p; // Vector of children.
+    sc_thread_handle                 active_p;   // active process.
+    int                              child_i;    // index of child accessing.
+    int                              child_n;    // number of children.
+    sc_process_b*                    child_p;    // child accessing.
+    const ::std::vector<sc_object*>* children_p; // vector of children.
+    sc_simcontext*                   context_p;  // current simulation context.
+
+    context_p = simcontext();
 
     // IF NEEDED PROPOGATE THE KILL REQUEST THROUGH OUR DESCENDANTS:
 
@@ -276,15 +289,36 @@ void sc_thread_process::kill_process(sc_descendant_inclusion_info descendants )
     }
 
     // SET UP TO KILL THE PROCESS IF SIMULATION HAS STARTED:
+    //
+    // (1) If this is not a suicide we need to push the currently running
+    //     process onto the front of the run queue, then push this process
+    //     onto the front of the turn queue, and then suspend the currently
+    //     running process so that the kill gets done, and the currently
+    //     running process then resumes.
+    //
+    // (2) If this is a suicide we need to push this process onto the 
+    //     front of the run queue and suspend it so the kill gets thrown.
  
     if ( sc_is_running() )
     {
         m_throw_type = THROW_KILL;
         m_wait_cycle_n = 0;
-        if ( (next_runnable() == 0) ) simcontext()->push_runnable_thread(this);
+        active_p = RCAST<sc_thread_handle>(sc_get_current_process_b());
+
+        if ( this != active_p && active_p )
+	    context_p->push_runnable_thread_front( active_p );
+	if ( next_runnable() != 0 )
+	    context_p->remove_runnable_thread(this);
+	context_p->push_runnable_thread_front(this);
+
+        if ( this != active_p && active_p )
+	    active_p->suspend_me();
+	else
+	    suspend_me();
     }
 
-    // REMOVE TRACES OF OUR PROCESS FROM EVENT QUEUES, ETC.:
+    // IF THE SIMULATION HAS NOT STARTED REMOVE TRACES OF OUR PROCESS FROM 
+    // EVENT QUEUES, ETC.:
 
     else
     {
@@ -343,7 +377,7 @@ void sc_thread_process::resume_process(
       case ps_suspended:
         m_state = ps_normal;
         break;
-      case ps_suspended_pending:
+      case ps_suspended_ready_to_run:
         m_state = ps_normal;
         if ( next_runnable() == 0 ) 
 	{
@@ -508,10 +542,10 @@ void sc_thread_process::suspend_process(
     {
       case ps_normal:
         m_state = (next_runnable() == 0) ? 
-            ps_suspended : ps_suspended_pending;
+            ps_suspended : ps_suspended_ready_to_run;
         if ( sc_get_current_process_b() == DCAST<sc_process_b*>(this) )
         {
-            m_state = ps_suspended_pending;
+            m_state = ps_suspended_ready_to_run;
             suspend_me();
         }
         break;
@@ -532,7 +566,7 @@ void sc_thread_process::suspend_process(
 //------------------------------------------------------------------------------
 void sc_thread_process::throw_reset( bool async )
 {     
-    sc_thread_handle active_h; // handle for active thread if its a thread.
+    sc_thread_handle active_p; // handle for active thread if its a thread.
 
     // IF THIS INSTANCE IS DEAD IGNORE THE REQUEST
 
@@ -543,21 +577,26 @@ void sc_thread_process::throw_reset( bool async )
 
     m_throw_type = THROW_RESET;
     m_wait_cycle_n = 0;
-    remove_dynamic_events();
+    // remove_dynamic_events(); // @@@#### REMOVE THIS?
 
     // IF REQUESTED TO, IMMEDIATELY SCHEDULE THE RESET:
 
     if ( async && (next_runnable() == 0) )
             simcontext()->push_runnable_thread( this );
 
-    // IF THE ACTIVE THREAD IS NOT THIS OBJECT INSTANCE WE NEED TO RESCHEDULE
-    // IT AFTER WE PERFORM OUR RESET, AND SUSPEND IT SO WE DO GET OUR RESET:
+    // IF THE ACTIVE THREAD IS NOT THIS OBJECT INSTANCE:
+    //
+    // We will need so suspend it so that we can execute the reset on our
+    // object instance:
+    //    (1) Reschedule the active thread for later execution.
+    //    (2) Suspend the active thread so that this thread being reset can 
+    //        execute its reset if its sensitivity is activated.
 
-    active_h = RCAST<sc_thread_handle>(sc_get_current_process_b());
-    if ( this != active_h && active_h )
+    active_p = RCAST<sc_thread_handle>(sc_get_current_process_b());
+    if ( this != active_p && active_p )
     {
-	simcontext()->push_runnable_thread( active_h );
-	suspend_me();
+	simcontext()->push_runnable_thread( active_p );
+	active_p->suspend_me();
     }
 }
 
@@ -622,7 +661,7 @@ bool sc_thread_process::trigger_dynamic( sc_event* e )
     if( is_runnable() ) {
         return false;
     }
-    if ( m_state == ps_disabled || m_state == ps_disabled_pending )
+    if ( m_state == ps_disabled || m_state == ps_disable_pending )
     {
 	return false;
     }

@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_nbdefs.h,v $
+// Revision 1.5  2011/01/20 16:52:20  acg
+//  Andy Goodrich: changes for IEEE 1666 2011.
+//
 // Revision 1.4  2010/02/08 18:35:55  acg
 //  Andy Goodrich: Philipp Hartmann's changes for Solaris and Linux 64.
 //
@@ -59,7 +62,7 @@
 
 #if defined(__sun) || defined(__sun__)
 #  include <inttypes.h>
-#else
+#elif !defined(WIN32)
 #  include <stdint.h>
 #endif
 

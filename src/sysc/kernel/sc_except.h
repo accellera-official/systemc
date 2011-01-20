@@ -38,6 +38,9 @@
  *****************************************************************************/
 
 // $Log: sc_except.h,v $
+// Revision 1.4  2011/01/18 20:10:44  acg
+//  Andy Goodrich: changes for IEEE1666_2011 semantics.
+//
 // Revision 1.3  2009/05/22 16:06:29  acg
 //  Andy Goodrich: process control updates.
 //

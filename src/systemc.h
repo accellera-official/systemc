@@ -52,7 +52,7 @@
 #include <string>
 #if defined(__sun) || defined(__sun__)
 #   include <inttypes.h>
-#else
+#elif !defined(WIN32)
 #   include <stdint.h>
 #endif
 #if defined(__EDG__)

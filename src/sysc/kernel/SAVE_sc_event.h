@@ -34,9 +34,6 @@
  *****************************************************************************/
 
 // $Log: sc_event.h,v $
-// Revision 1.5  2011/01/18 20:10:44  acg
-//  Andy Goodrich: changes for IEEE1666_2011 semantics.
-//
 // Revision 1.4  2010/12/07 20:09:11  acg
 // Andy Goodrich: writer policy fix.
 //
@@ -110,17 +107,25 @@ class sc_event_expr
 
     typedef T type;
 
-    inline sc_event_expr()
+    inline explicit sc_event_expr()
+#if 1
+;
+#else
        : m_expr( new T(true) )
     {}
+#endif
 
 public:
 
     inline sc_event_expr( sc_event_expr const & e) // move semantics
+#if 1
+;
+#else
       : m_expr(e.m_expr)
     {
         e.m_expr = 0;
     }
+#endif
 
     T const & release() const
     {
@@ -158,129 +163,24 @@ private:
     void operator=( sc_event_expr const & );
 };
 
-// ----------------------------------------------------------------------------
-//  CLASS : sc_event_list
-//
-//  Base class for lists of events.
-// ----------------------------------------------------------------------------
-
-class sc_event_list
+// @@@@####
+template< typename T >
+inline sc_event_expr<T>::sc_event_expr()
+       : m_expr( new T(true) )
+    {}
+template< typename T >
+inline sc_event_expr<T>::sc_event_expr( sc_event_expr const & e)
+      : m_expr(e.m_expr)
 {
-    friend class sc_process_b;
-    friend class sc_method_process;
-    friend class sc_thread_process;
-    friend void sc_thread_cor_fn( void* arg );
+    e.m_expr = 0;
+}
+// @@@@####
 
-public:
-    sc_event_list( const sc_event_list& );
-    sc_event_list& operator = ( const sc_event_list& );
-
-    int size() const;
-
-protected:
-
-    void push_back( const sc_event& );
-    void push_back( const sc_event_list& );
-
-    explicit
-    sc_event_list( bool and_list_, bool auto_delete_ = false );
-
-    sc_event_list( const sc_event&,
-                   bool and_list_,
-                   bool auto_delete_ = false );
-
-    ~sc_event_list();
-
-    void swap( sc_event_list& );
-    void move_from( const sc_event_list& );
-
-    bool and_list() const;
-
-    void add_dynamic( sc_method_handle ) const;
-    void add_dynamic( sc_thread_handle ) const;
-    void remove_dynamic( sc_method_handle, const sc_event* ) const;
-    void remove_dynamic( sc_thread_handle, const sc_event* ) const;
-
-    bool busy()        const;
-    bool temporary()   const;
-    void auto_delete() const;
-
-    void report_premature_destruction() const;
-    void report_invalid_modification()  const;
-
-private:
-
-    std::vector<const sc_event*> m_events;
-    bool                         m_and_list;
-    bool                         m_auto_delete;
-    mutable unsigned             m_busy;
-};
-
-
-// ----------------------------------------------------------------------------
-//  CLASS : sc_event_and_list
-//
-//  AND list of events.
-// ----------------------------------------------------------------------------
-
-class sc_event_and_list
-: public sc_event_list
-{
-    friend class sc_event;
-    friend class sc_event_expr<sc_event_and_list>;
-    friend class sc_process_b;
-    friend class sc_method_process;
-    friend class sc_thread_process;
-
-protected:
-
-    sc_event_and_list( bool auto_delete_ );
-
-public:
-
-    sc_event_and_list();
-    sc_event_and_list( const sc_event& );
-
-    void swap( sc_event_and_list& );
-    sc_event_and_list& operator &= ( const sc_event& );
-    sc_event_and_list& operator &= ( const sc_event_and_list & );
-
-    sc_event_expr<sc_event_and_list>  operator & ( const sc_event& );
-    sc_event_expr<sc_event_and_list>  operator & ( const sc_event_and_list& );
-};
-
-typedef sc_event_expr<sc_event_and_list> sc_event_and_expr;
-
-// ----------------------------------------------------------------------------
-//  CLASS : sc_event_or_list
-//
-//  OR list of events.
-// ----------------------------------------------------------------------------
-
-class sc_event_or_list
-: public sc_event_list
-{
-    friend class sc_event;
-    friend class sc_event_expr<sc_event_or_list>;
-    friend class sc_process_b;
-    friend class sc_method_process;
-    friend class sc_thread_process;
-
-protected:
-
-    sc_event_or_list( bool auto_delete_ );
-
-public:
-    sc_event_or_list();
-    sc_event_or_list( const sc_event& );
-    void swap( sc_event_or_list& );
-    sc_event_or_list& operator |= ( const sc_event& );
-    sc_event_or_list& operator |= ( const sc_event_or_list & );
-    sc_event_expr<sc_event_or_list>  operator | ( const sc_event& ) const;
-    sc_event_expr<sc_event_or_list>  operator | ( const sc_event_or_list& ) const;
-};
-
+template class sc_event_expr<sc_event_or_list>;
 typedef sc_event_expr<sc_event_or_list> sc_event_or_expr;
+
+template class sc_event_expr<sc_event_and_list>;
+typedef sc_event_expr<sc_event_and_list> sc_event_and_expr;
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_event
@@ -520,6 +420,65 @@ extern void notify( const sc_time& t, sc_event& e );
 extern void notify( double v, sc_time_unit tu, sc_event& e );
 
 
+// ----------------------------------------------------------------------------
+//  CLASS : sc_event_list
+//
+//  Base class for lists of events.
+// ----------------------------------------------------------------------------
+
+class sc_event_list
+{
+    friend class sc_process_b;
+    friend class sc_method_process;
+    friend class sc_thread_process;
+    friend void sc_thread_cor_fn( void* arg );
+
+public:
+    sc_event_list( const sc_event_list& );
+    sc_event_list& operator = ( const sc_event_list& );
+
+    int size() const;
+
+protected:
+
+    void push_back( const sc_event& );
+    void push_back( const sc_event_list& );
+
+    explicit
+    sc_event_list( bool and_list_, bool auto_delete_ = false );
+
+    sc_event_list( const sc_event&,
+                   bool and_list_,
+                   bool auto_delete_ = false );
+
+    ~sc_event_list();
+
+    void swap( sc_event_list& );
+    void move_from( const sc_event_list& );
+
+    bool and_list() const;
+
+    void add_dynamic( sc_method_handle ) const;
+    void add_dynamic( sc_thread_handle ) const;
+    void remove_dynamic( sc_method_handle, const sc_event* ) const;
+    void remove_dynamic( sc_thread_handle, const sc_event* ) const;
+
+    bool busy()        const;
+    bool temporary()   const;
+    void auto_delete() const;
+
+    void report_premature_destruction() const;
+    void report_invalid_modification()  const;
+
+private:
+
+    std::vector<const sc_event*> m_events;
+    bool                         m_and_list;
+    bool                         m_auto_delete;
+    mutable unsigned             m_busy;
+};
+
+
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
 inline
@@ -635,6 +594,35 @@ sc_event_list::auto_delete() const
 }
 
 
+// ----------------------------------------------------------------------------
+//  CLASS : sc_event_or_list
+//
+//  OR list of events.
+// ----------------------------------------------------------------------------
+
+class sc_event_or_list
+: public sc_event_list
+{
+    friend class sc_event;
+    friend class sc_event_expr<sc_event_or_list>;
+    friend class sc_process_b;
+    friend class sc_method_process;
+    friend class sc_thread_process;
+
+protected:
+
+    sc_event_or_list( bool auto_delete_ );
+
+public:
+    sc_event_or_list();
+    sc_event_or_list( const sc_event& );
+    void swap( sc_event_or_list& );
+    sc_event_or_list& operator |= ( const sc_event& );
+    sc_event_or_list& operator |= ( const sc_event_or_list & );
+    sc_event_or_expr  operator | ( const sc_event& ) const;
+    sc_event_or_expr  operator | ( const sc_event_or_list& ) const;
+};
+
 
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
@@ -746,6 +734,37 @@ sc_event_or_list::swap( sc_event_or_list & that )
 }
 
 
+// ----------------------------------------------------------------------------
+//  CLASS : sc_event_and_list
+//
+//  AND list of events.
+// ----------------------------------------------------------------------------
+
+class sc_event_and_list
+: public sc_event_list
+{
+    friend class sc_event;
+    friend class sc_event_expr<sc_event_and_list>;
+    friend class sc_process_b;
+    friend class sc_method_process;
+    friend class sc_thread_process;
+
+protected:
+
+    sc_event_and_list( bool auto_delete_ );
+
+public:
+
+    sc_event_and_list();
+    sc_event_and_list( const sc_event& );
+
+    void swap( sc_event_and_list& );
+    sc_event_and_list& operator &= ( const sc_event& );
+    sc_event_and_list& operator &= ( const sc_event_and_list & );
+
+    sc_event_and_expr  operator & ( const sc_event& );
+    sc_event_and_expr  operator & ( const sc_event_and_list& );
+};
 
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 

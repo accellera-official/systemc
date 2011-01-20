@@ -45,6 +45,9 @@
 
 
 // $Log: sc_object.cpp,v $
+// Revision 1.5  2011/01/18 20:10:44  acg
+//  Andy Goodrich: changes for IEEE1666_2011 semantics.
+//
 // Revision 1.4  2010/08/03 17:02:39  acg
 //  Andy Goodrich: formatting changes.
 //
@@ -242,6 +245,12 @@ sc_object::sc_object() : m_parent(0)
 {
     sc_object_init( sc_gen_unique_name("object") );
 }
+
+sc_object::sc_object( const sc_object& that ) : m_parent(0)
+{
+    sc_object_init( sc_gen_unique_name( that.basename() ) );
+}
+
 
 static bool
 object_name_illegal_char(char ch)

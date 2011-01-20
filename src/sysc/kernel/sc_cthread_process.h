@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_cthread_process.h,v $
+// Revision 1.3  2011/01/18 20:10:44  acg
+//  Andy Goodrich: changes for IEEE1666_2011 semantics.
+//
 // Revision 1.2  2008/05/22 17:06:25  acg
 //  Andy Goodrich: updated copyright notice to include 2008.
 //
@@ -68,14 +71,6 @@ namespace sc_core {
 
 void halt( sc_simcontext* );
 void sc_cthread_cor_fn( void* );  
-void wait( sc_simcontext* );
-void wait( const sc_event&, sc_simcontext* );
-void wait( sc_event_or_list&, sc_simcontext* );
-void wait( sc_event_and_list&, sc_simcontext* );
-void wait( const sc_time&, sc_simcontext* );
-void wait( const sc_time&, const sc_event&, sc_simcontext* );
-void wait( const sc_time&, sc_event_or_list&, sc_simcontext* );
-void wait( const sc_time&, sc_event_and_list&, sc_simcontext* );
 void wait( int, sc_simcontext* );
 
 
@@ -91,27 +86,10 @@ class sc_cthread_process : public sc_thread_process {
     friend class sc_thread_process;
     friend class sc_simcontext;
 
-    friend void wait( sc_simcontext* );
-    friend void wait( const sc_event&,
-              sc_simcontext* );
-    friend void wait( sc_event_or_list&,
-              sc_simcontext* );
-    friend void wait( sc_event_and_list&,
-              sc_simcontext* );
-    friend void wait( const sc_time&,
-              sc_simcontext* );
-    friend void wait( const sc_time&, const sc_event&,
-              sc_simcontext* );
-    friend void wait( const sc_time&, sc_event_or_list&,
-              sc_simcontext* );
-    friend void wait( const sc_time&, sc_event_and_list&,
-              sc_simcontext* );
-
     friend void sc_cthread_cor_fn( void* );
 
     friend void halt( sc_simcontext* );
-    friend void wait( int,
-              sc_simcontext* );
+    friend void wait( int, sc_simcontext* );
 
   public:
     sc_cthread_process( const char* name_p, bool free_host,

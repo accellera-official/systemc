@@ -33,6 +33,9 @@
     
  *****************************************************************************/
 //$Log: sc_signal_resolved.h,v $
+//Revision 1.2  2011/01/20 16:52:15  acg
+// Andy Goodrich: changes for IEEE 1666 2011.
+//
 //Revision 1.1.1.1  2006/12/15 20:20:04  acg
 //SystemC 2.3
 //
@@ -61,21 +64,6 @@ namespace sc_core {
 class sc_process_b;
 
 extern const sc_dt::sc_logic_value_t sc_logic_resolution_tbl[4][4];
-
-
-// ----------------------------------------------------------------------------
-//  CLASS : sc_logic_resolve
-//
-//  Resolution function for sc_dt::sc_logic.
-// ----------------------------------------------------------------------------
-
-class sc_logic_resolve
-{
-public:
-
-    // resolves sc_dt::sc_logic values and returns the resolved value
-    static void resolve(sc_dt::sc_logic&, const std::vector<sc_dt::sc_logic*>&);
-};
 
 
 // ----------------------------------------------------------------------------
@@ -108,10 +96,6 @@ public:
 	{}
 
 
-    // destructor
-    virtual ~sc_signal_resolved();
-
-
     // interface methods
 
     virtual void register_port( sc_port_base&, const char* )
@@ -140,7 +124,7 @@ protected:
 protected:
 
     std::vector<sc_process_b*> m_proc_vec; // processes writing this signal
-    std::vector<data_type*>       m_val_vec;  // new values written this signal
+    std::vector<data_type>     m_val_vec;  // new values written this signal
 
 private:
 

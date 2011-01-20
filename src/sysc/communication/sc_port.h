@@ -42,6 +42,9 @@
 
 /* 
 $Log: sc_port.h,v $
+Revision 1.3  2011/01/20 16:52:15  acg
+ Andy Goodrich: changes for IEEE 1666 2011.
+
 Revision 1.2  2010/08/03 18:01:11  acg
  Andy Goodrich: formatting.
 

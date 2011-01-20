@@ -1,7 +1,7 @@
 #include "copyright.h"
 #include "qt.h"
 
-static void *qt_sp_bottom_save;
+// static void *qt_sp_bottom_save;
 
 #ifdef QT_VARGS_DEFAULT
 

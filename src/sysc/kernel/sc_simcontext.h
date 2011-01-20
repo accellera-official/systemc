@@ -52,6 +52,12 @@
                                
  *****************************************************************************/
 // $Log: sc_simcontext.h,v $
+// Revision 1.7  2011/01/19 23:21:50  acg
+//  Andy Goodrich: changes for IEEE 1666 2011
+//
+// Revision 1.6  2011/01/18 20:10:45  acg
+//  Andy Goodrich: changes for IEEE1666_2011 semantics.
+//
 // Revision 1.5  2010/07/22 20:02:33  acg
 //  Andy Goodrich: bug fixes.
 //
@@ -168,14 +174,14 @@ const int SC_SIM_ERROR     = 1;
 const int SC_SIM_USER_STOP = 2;
 
 enum sc_status { // sc_get_status values:
-    SC_ELABORATION,               // during construction of module hierarchy.
-    SC_BEFORE_END_OF_ELABORATION, // from within before_end_of_elaboration().
-    SC_END_OF_ELABORATION,        // from end_of_elaboration().
-    SC_START_OF_SIMULATION,       // from within start_of_simulation().
-    SC_RUNNING,                   // from initialization, evaluation or update.
-    SC_PAUSED,                    // when scheduler stopped by sc_pause().
-    SC_STOPPED,                   // when scheduler stopped by sc_stop().
-    SC_END_OF_SIMULATION          // from end_of_simulation().
+    SC_ELABORATION=0x01,               // during module hierarchy construction.
+    SC_BEFORE_END_OF_ELABORATION=0x02, // during before_end_of_elaboration().
+    SC_END_OF_ELABORATION=0x04,        // during end_of_elaboration().
+    SC_START_OF_SIMULATION=0x08,       // during start_of_simulation().
+    SC_RUNNING=0x10,                   // initialization, evaluation or update.
+    SC_PAUSED=0x20,                    // when scheduler stopped by sc_pause().
+    SC_STOPPED=0x40,                   // when scheduler stopped by sc_stop().
+    SC_END_OF_SIMULATION=0x80          // during end_of_simulation().
 };
 
 enum sc_stop_mode {          // sc_stop modes:
@@ -210,17 +216,18 @@ extern void sc_stop();
 
 sc_dt::uint64 sc_delta_count();
 const std::vector<sc_object*>& sc_get_top_level_objects(
-const sc_simcontext* simc_p);
-bool sc_is_running( const sc_simcontext* simc_p );
-void sc_pause();
-bool sc_end_of_simulation_invoked();
-void sc_start( const sc_time&, sc_starvation_policy );
-bool sc_start_of_simulation_invoked();
+const   sc_simcontext* simc_p);
+bool    sc_is_running( const sc_simcontext* simc_p );
+void    sc_pause();
+bool    sc_end_of_simulation_invoked();
+void    sc_start( const sc_time&, sc_starvation_policy );
+bool    sc_start_of_simulation_invoked();
 void    sc_set_time_resolution( double, sc_time_unit );
 sc_time sc_get_time_resolution();
 void    sc_set_default_time_unit( double, sc_time_unit );
 sc_time sc_get_default_time_unit();
-bool sc_pending_activity_at_current_time();
+bool    sc_pending_activity_at_current_time();
+sc_time sc_time_to_pending_activity();
 
 
 // ----------------------------------------------------------------------------
@@ -253,6 +260,7 @@ class sc_simcontext
     friend bool sc_start_of_simulation_invoked();
     friend void sc_cthread_cor_fn(void*);
     friend void sc_thread_cor_fn(void*);
+    friend sc_time sc_time_to_pending_activity();
 
     void init();
     void clean();
@@ -475,7 +483,9 @@ sc_simcontext::elaboration_done() const
 
 inline sc_status sc_simcontext::get_status() const
 {
-    return m_simulation_status;
+    return m_simulation_status != SC_RUNNING ? 
+                  m_simulation_status :
+		  (m_in_simulator_control ? SC_RUNNING : SC_PAUSED);
 }
 
 inline
@@ -550,7 +560,7 @@ sc_simcontext::max_time() const
 {
     if ( m_max_time == SC_ZERO_TIME )
     {
-        m_max_time = sc_time(0x7fffffff, SC_SEC);
+        m_max_time = sc_time(~(sc_dt::uint64)0, false);
     }
     return m_max_time;
 }

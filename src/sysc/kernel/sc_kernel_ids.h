@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: sc_kernel_ids.h,v $
+// Revision 1.6  2011/01/19 23:21:50  acg
+//  Andy Goodrich: changes for IEEE 1666 2011
+//
 // Revision 1.5  2010/07/30 05:21:22  acg
 //  Andy Goodrich: release 2.3 fixes.
 //
@@ -176,6 +179,8 @@ SC_DEFINE_MESSAGE(SC_ID_SIMULATION_START_AFTER_STOP_  , 546,
 	"sc_start called after sc_stop has been called" ) 
 SC_DEFINE_MESSAGE(SC_ID_STOP_MODE_AFTER_START_        , 547,
 	"attempt to set sc_stop mode  after start will be ignored" ) 
+SC_DEFINE_MESSAGE( SC_ID_SIMULATION_START_AFTER_ERROR_, 548,
+       "attempt to restart simulation after error" )
 SC_DEFINE_MESSAGE(SC_ID_METHOD_TERMINATION_EVENT_        , 560,
 	"Attempt to get terminated event for a method process" ) 
 SC_DEFINE_MESSAGE(SC_ID_JOIN_ON_METHOD_HANDLE_        , 561,
@@ -194,7 +199,8 @@ SC_DEFINE_MESSAGE(SC_ID_NEGATIVE_SIMULATION_TIME_, 568,
         "negative simulation interval specified in sc_start call" )
 SC_DEFINE_MESSAGE(SC_ID_BAD_SC_MODULE_CONTRUCTOR_  , 569,
         "sc_module(const char*) has been deprecated, use sc_module(const sc_module_name&)" )
-
+SC_DEFINE_MESSAGE(SC_ID_EMPTY_PROCESS_HANDLE_  , 570,
+        "attempt to use an empty process handle ignored" )
 #endif
 
 // Taf!

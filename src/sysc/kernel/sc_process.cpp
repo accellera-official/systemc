@@ -43,6 +43,12 @@
  *****************************************************************************/
 
 // $Log: sc_process.cpp,v $
+// Revision 1.7  2011/01/19 23:21:50  acg
+//  Andy Goodrich: changes for IEEE 1666 2011
+//
+// Revision 1.6  2011/01/18 20:10:45  acg
+//  Andy Goodrich: changes for IEEE1666_2011 semantics.
+//
 // Revision 1.5  2010/07/22 20:02:33  acg
 //  Andy Goodrich: bug fixes.
 //
@@ -152,7 +158,7 @@ void sc_process_b::disconnect_process()
 
     // IF THIS OBJECT IS PINING FOR THE FJORDS WE ARE DONE:
 
-    if ( m_state == ps_zombie ) return;    // Nothing to be done.
+    if ( m_state == ps_zombie ) return;    
 
     // IF THIS IS A THREAD SIGNAL ANY MONITORS WAITING FOR IT TO EXIT:
 
@@ -282,6 +288,7 @@ sc_process_b::remove_dynamic_events()
         {
             m_event_list_p->remove_dynamic( thread_h, 0 );
             m_event_list_p->auto_delete();
+	    m_event_list_p = 0;
         }
         break;
       case SC_METHOD_PROC_:
@@ -292,6 +299,7 @@ sc_process_b::remove_dynamic_events()
         {
             m_event_list_p->remove_dynamic( method_h, 0 );
             m_event_list_p->auto_delete();
+	    m_event_list_p = 0;
         }
         break;
       default: // Some other type, it needs to clean up itself.
@@ -356,7 +364,6 @@ sc_process_b::sc_process_b( const char* name_p, bool free_host,
     m_event_p(0),
     m_event_list_p(0),
     m_exist_p(0),
-    m_explicit_reset(false),
     m_free_host( free_host ),
     m_last_report_p(0),
     m_name_gen_p(0),
@@ -367,6 +374,7 @@ sc_process_b::sc_process_b( const char* name_p, bool free_host,
     m_semantics_host_p( host_p ),
     m_semantics_method_p ( method_p ),
     m_state(ps_normal),
+    m_sticky_reset(false),
     m_term_event_p(0),
     m_throw_helper_p(0),
     m_throw_type( THROW_NONE ),

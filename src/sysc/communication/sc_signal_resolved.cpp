@@ -35,6 +35,9 @@
 
 
 // $Log: sc_signal_resolved.cpp,v $
+// Revision 1.2  2011/01/20 16:52:15  acg
+//  Andy Goodrich: changes for IEEE 1666 2011.
+//
 // Revision 1.1.1.1  2006/12/15 20:20:04  acg
 // SystemC 2.3
 //
@@ -65,29 +68,29 @@ sc_logic_resolution_tbl[4][4] =
 
 
 // ----------------------------------------------------------------------------
-//  CLASS : sc_logic_resolve
+//  FUNCTION : sc_logic_resolve
 //
 //  Resolution function for sc_dt::sc_logic.
 // ----------------------------------------------------------------------------
 
 // resolves sc_dt::sc_logic values and returns the resolved value
 
-void
-sc_logic_resolve::resolve( sc_dt::sc_logic& result_,
-			   const std::vector<sc_dt::sc_logic*>& values_ )
+static void
+sc_logic_resolve( sc_dt::sc_logic& result_,
+                  const std::vector<sc_dt::sc_logic>& values_ )
 {
     int sz = values_.size();
 
     assert( sz != 0 );
 
     if( sz == 1 ) {
-	result_ = *values_[0];
+	result_ = values_[0];
 	return;
     }
 
-    sc_dt::sc_logic_value_t res = values_[0]->value();
-    for( int i = sz - 1; i > 0 && res != 3; -- i ) {
-	res = sc_logic_resolution_tbl[res][values_[i]->value()];
+    sc_dt::sc_logic_value_t res = values_[0].value();
+    for( int i = sz - 1; i > 0 && res != sc_dt::Log_X; -- i ) {
+       res = sc_logic_resolution_tbl[res][values_[i].value()];
     }
     result_ = res;
 }
@@ -98,16 +101,6 @@ sc_logic_resolve::resolve( sc_dt::sc_logic& result_,
 //
 //  The resolved signal class.
 // ----------------------------------------------------------------------------
-
-// destructor
-
-sc_signal_resolved::~sc_signal_resolved()
-{
-    for( int i = m_val_vec.size() - 1; i >= 0; -- i ) {
-	delete m_val_vec[i];
-    }
-}
-
 
 // write the new value
 
@@ -121,8 +114,8 @@ sc_signal_resolved::write( const data_type& value_ )
     
     for( int i = m_proc_vec.size() - 1; i >= 0; -- i ) {
 	if( cur_proc == m_proc_vec[i] ) {
-	    if( value_ != *m_val_vec[i] ) {
-		*m_val_vec[i] = value_;
+	    if( value_ != m_val_vec[i] ) {
+		m_val_vec[i] = value_;
 		value_changed = true;
 	    }
 	    found = true;
@@ -132,7 +125,7 @@ sc_signal_resolved::write( const data_type& value_ )
     
     if( ! found ) {
 	m_proc_vec.push_back( cur_proc );
-	m_val_vec.push_back( new data_type( value_ ) );
+	m_val_vec.push_back( value_ );
 	value_changed = true;
     }
     
@@ -145,7 +138,7 @@ sc_signal_resolved::write( const data_type& value_ )
 void
 sc_signal_resolved::update()
 {
-    sc_logic_resolve::resolve( m_new_val, m_val_vec );
+    sc_logic_resolve( m_new_val, m_val_vec );
     base_type::update();
 }
 

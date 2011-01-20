@@ -36,6 +36,9 @@
 
 /* 
 $Log: sc_wait.cpp,v $
+Revision 1.3  2011/01/18 20:10:45  acg
+ Andy Goodrich: changes for IEEE1666_2011 semantics.
+
 Revision 1.2  2008/05/22 17:06:27  acg
  Andy Goodrich: updated copyright notice to include 2008.
 
@@ -156,7 +159,7 @@ wait( const sc_event& e, sc_simcontext* simc )
 }
 
 void
-wait( sc_event_or_list& el, sc_simcontext* simc )
+wait( const sc_event_or_list& el, sc_simcontext* simc )
 {
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();
     switch( cpi->kind ) {
@@ -182,7 +185,7 @@ wait( sc_event_or_list& el, sc_simcontext* simc )
 }
 
 void
-wait( sc_event_and_list& el, sc_simcontext* simc )
+wait( const sc_event_and_list& el, sc_simcontext* simc )
 {
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();
     switch( cpi->kind ) {
@@ -254,7 +257,7 @@ wait( const sc_time& t, const sc_event& e, sc_simcontext* simc )
 }
 
 void
-wait( const sc_time& t, sc_event_or_list& el, sc_simcontext* simc )
+wait( const sc_time& t, const sc_event_or_list& el, sc_simcontext* simc )
 {
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();
     switch( cpi->kind ) {
@@ -278,7 +281,7 @@ wait( const sc_time& t, sc_event_or_list& el, sc_simcontext* simc )
 }
 
 void
-wait( const sc_time& t, sc_event_and_list& el, sc_simcontext* simc )
+wait( const sc_time& t, const sc_event_and_list& el, sc_simcontext* simc )
 {
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();
     switch( cpi->kind ) {
@@ -332,7 +335,7 @@ next_trigger( const sc_event& e, sc_simcontext* simc )
 }
 
 void
-next_trigger( sc_event_or_list& el, sc_simcontext* simc )
+next_trigger( const sc_event_or_list& el, sc_simcontext* simc )
 {
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();
     if( cpi->kind == SC_METHOD_PROC_ ) {
@@ -344,7 +347,7 @@ next_trigger( sc_event_or_list& el, sc_simcontext* simc )
 }
 
 void
-next_trigger( sc_event_and_list& el, sc_simcontext* simc )
+next_trigger( const sc_event_and_list& el, sc_simcontext* simc )
 {
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();
     if( cpi->kind == SC_METHOD_PROC_ ) {
@@ -380,7 +383,7 @@ next_trigger( const sc_time& t, const sc_event& e, sc_simcontext* simc )
 }
 
 void
-next_trigger( const sc_time& t, sc_event_or_list& el, sc_simcontext* simc )
+next_trigger( const sc_time& t, const sc_event_or_list& el, sc_simcontext* simc)
 {
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();
     if( cpi->kind == SC_METHOD_PROC_ ) {
@@ -392,7 +395,7 @@ next_trigger( const sc_time& t, sc_event_or_list& el, sc_simcontext* simc )
 }
 
 void
-next_trigger( const sc_time& t, sc_event_and_list& el, sc_simcontext* simc )
+next_trigger(const sc_time& t, const sc_event_and_list& el, sc_simcontext* simc)
 {
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();
     if( cpi->kind == SC_METHOD_PROC_ ) {

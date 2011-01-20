@@ -35,6 +35,9 @@
 
 
 // $Log: sc_ver.cpp,v $
+// Revision 1.4  2011/01/18 20:10:45  acg
+//  Andy Goodrich: changes for IEEE1666_2011 semantics.
+//
 // Revision 1.3  2010/11/20 17:10:57  acg
 //  Andy Goodrich: reset processing changes for new IEEE 1666 standard.
 //
@@ -55,13 +58,24 @@ namespace sc_core {
 
 static
 const char copyright[] =
-    "        Copyright (c) 1996-2011 by all Contributors\n"
+    "        " SC_COPYRIGHT "\n"
     "                    ALL RIGHTS RESERVED";
 
 static
 const char systemc_version[] =
-    "             SystemC " SC_RELEASE_STRING "-" SC_VENDOR_STRING 
+    "             SystemC " SC_VERSION
     " --- " __DATE__ " " __TIME__;
+
+const unsigned int sc_version_major = SC_VERSION_MAJOR;
+const unsigned int sc_version_minor = SC_VERSION_MINOR;
+const unsigned int sc_version_patch = SC_VERSION_PATCH;
+const bool         sc_is_prerelease = SC_IS_PRERELEASE;
+
+const std::string  sc_version_originator   = SC_VERSION_ORIGINATOR;
+const std::string  sc_version_release_date = SC_VERSION_RELEASE_DATE;
+const std::string  sc_version_prerelease   = ( SC_VERSION_PRERELEASE_STRING + 1 );
+const std::string  sc_version_string       = SC_VERSION;
+const std::string  sc_copyright_string     = SC_COPYRIGHT;
 
 const char*
 sc_copyright()
@@ -73,7 +87,7 @@ sc_copyright()
 const char*
 sc_release()
 {
-    return SC_RELEASE_STRING "-OSCI";
+    return SC_RELEASE_STRING;
 }
 
 

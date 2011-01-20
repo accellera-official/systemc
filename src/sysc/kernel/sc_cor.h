@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: sc_cor.h,v $
+// Revision 1.3  2011/01/19 23:21:49  acg
+//  Andy Goodrich: changes for IEEE 1666 2011
+//
 // Revision 1.2  2008/05/22 17:06:24  acg
 //  Andy Goodrich: updated copyright notice to include 2008.
 //
@@ -112,13 +115,8 @@ public:
     virtual ~sc_cor_pkg() {}
 
     // create a new coroutine
-#if( defined(_MSC_VER) && _MSC_VER < 1300 )
    virtual sc_cor* create(
 	    std::size_t stack_size, sc_cor_fn* fn, void* arg ) = 0;
-#else
-   virtual sc_cor* create(
-	    std::size_t stack_size, sc_cor_fn* fn, void* arg ) = 0;
-#endif // ( defined(_MSC_VER) && _MSC_VER < 1300 )
 
     // yield to the next coroutine
     virtual void yield( sc_cor* next_cor ) = 0;

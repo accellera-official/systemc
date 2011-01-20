@@ -35,6 +35,9 @@
 
 
 // $Log: sc_pvector.h,v $
+// Revision 1.2  2011/01/20 16:52:21  acg
+//  Andy Goodrich: changes for IEEE 1666 2011.
+//
 // Revision 1.1  2010/12/07 20:11:45  acg
 //  Andy Goodrich: moved sc_pvector class to new header file to allow the
 //  use of sc_vector.h for Philipp Hartmann's new sc_vector class.
@@ -98,7 +101,7 @@ public:
 	{}
 
 
-    size_t size() const
+    std::size_t size() const
 	{ return m_vector.size(); }
 
 

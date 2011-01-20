@@ -35,6 +35,9 @@
 
 
 // $Log: sc_cor_fiber.cpp,v $
+// Revision 1.4  2011/01/19 23:21:50  acg
+//  Andy Goodrich: changes for IEEE 1666 2011
+//
 // Revision 1.3  2009/05/22 16:06:29  acg
 //  Andy Goodrich: process control updates.
 //
@@ -53,13 +56,6 @@
 
 #include "sysc/kernel/sc_cor_fiber.h"
 #include "sysc/kernel/sc_simcontext.h"
-
-#if( defined(_MSC_VER) && _MSC_VER >= 1300 )
-
-using std::size_t;
-
-#endif
-
 
 namespace sc_core {
 
@@ -133,7 +129,7 @@ sc_cor_pkg_fiber::create( std::size_t stack_size, sc_cor_fn* fn, void* arg )
     sc_cor_fiber* cor = new sc_cor_fiber;
     cor->m_pkg = this;
     cor->m_stack_size = stack_size;
-    cor->m_fiber = CreateFiber( cor->m_stack_size / 2, cor->m_stack_size,
+    cor->m_fiber = CreateFiberEx( cor->m_stack_size / 2, cor->m_stack_size, 0,
 			        (LPFIBER_START_ROUTINE) fn, arg );
     return cor;
 }

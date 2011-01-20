@@ -37,6 +37,9 @@
  *****************************************************************************/
 
 // $Log: sc_object.h,v $
+// Revision 1.5  2011/01/18 20:10:44  acg
+//  Andy Goodrich: changes for IEEE1666_2011 semantics.
+//
 // Revision 1.4  2010/07/22 20:02:33  acg
 //  Andy Goodrich: bug fixes.
 //
@@ -137,17 +140,17 @@ protected:
 
     sc_object();
     sc_object(const char* nm);
+
+    sc_object( const sc_object& );
+    sc_object& operator=( const sc_object& );
+
+
     virtual ~sc_object();
 
 private:
 
     void detach();
     void sc_object_init(const char* nm);
-
-private:
-
-    sc_object( const sc_object& );
-    const sc_object& operator = ( const sc_object& );
 
 private:
 
@@ -160,6 +163,13 @@ private:
     std::vector<sc_object*> m_no_children; // get_child_objects() default value.
 };
 
+inline
+sc_object&
+sc_object::operator=( sc_object const & )
+{
+  // deliberately do nothing
+  return *this;
+}
 
 // ----------------------------------------------------------------------------
 

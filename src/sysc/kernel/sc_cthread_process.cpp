@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_cthread_process.cpp,v $
+// Revision 1.5  2011/01/18 20:10:44  acg
+//  Andy Goodrich: changes for IEEE1666_2011 semantics.
+//
 // Revision 1.4  2009/07/28 01:10:53  acg
 //  Andy Goodrich: updates for 2.3 release candidate.
 //

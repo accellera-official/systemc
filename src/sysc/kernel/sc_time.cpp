@@ -35,6 +35,9 @@
 
 
 // $Log: sc_time.cpp,v $
+// Revision 1.3  2011/01/19 23:21:50  acg
+//  Andy Goodrich: changes for IEEE 1666 2011
+//
 // Revision 1.2  2008/05/22 17:06:27  acg
 //  Andy Goodrich: updated copyright notice to include 2008.
 //
@@ -63,6 +66,14 @@
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_time.h"
 #include "sysc/utils/sc_utils_ids.h"
+
+#if !defined(PRIu64)
+#   if defined(_MSC_VER) || defined(__MINGW32__)
+#       define PRIu64 "%I64u"
+#   else
+#       define PRIu64 "%llu"
+#   endif
+#endif // PRIu64
 
 namespace sc_core {
 
@@ -199,11 +210,7 @@ sc_time::to_string() const
 	n ++;
     }
     char buf[BUFSIZ];
-#if !defined( _MSC_VER )
-    std::sprintf( buf, "%llu", val );
-#else
-    std::sprintf( buf, "%I64u", val );
-#endif
+    std::sprintf( buf, PRIu64, val );
     std::string result( buf );
     if( n >= 15 ) {
 	for( int i = n - 15; i > 0; -- i ) {

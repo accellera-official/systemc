@@ -439,15 +439,6 @@ install-data-local:
 
 uninstall-local:
 	@$(NORMAL_UNINSTALL)
-	for file in $(noinst_HEADERS); do \
-	  rm -f $(INCLUDE_DIR)/$$file; \
-	done
-	list=`echo md/*`; \
-	  for file in $$list; do \
-	    rm -f $(INCLUDE_DIR)/$$file; \
-	  done
-	-rmdir $(INCLUDE_DIR)/md
-	-rmdir $(INCLUDE_DIR)
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

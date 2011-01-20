@@ -35,6 +35,15 @@
  *****************************************************************************/
 
 // $Log: sc_process_handle.h,v $
+// Revision 1.9  2011/01/20 16:52:20  acg
+//  Andy Goodrich: changes for IEEE 1666 2011.
+//
+// Revision 1.8  2011/01/19 23:21:50  acg
+//  Andy Goodrich: changes for IEEE 1666 2011
+//
+// Revision 1.7  2011/01/18 20:10:45  acg
+//  Andy Goodrich: changes for IEEE1666_2011 semantics.
+//
 // Revision 1.6  2010/07/30 05:21:22  acg
 //  Andy Goodrich: release 2.3 fixes.
 //
@@ -282,28 +291,37 @@ inline sc_process_handle::~sc_process_handle()
 
 inline void sc_process_handle::disable(sc_descendant_inclusion_info descendants)
 {
-    if ( m_target_p ) m_target_p->disable_process(descendants);
+    if ( m_target_p ) 
+        m_target_p->disable_process(descendants);
+    else
+        SC_REPORT_WARNING( SC_ID_EMPTY_PROCESS_HANDLE_, "disable()");
 }
 
 // call dont_initialize() on this object instance's target.
 
 inline void sc_process_handle::dont_initialize( bool dont )
 {
-    if ( m_target_p ) m_target_p->dont_initialize( dont );
+    if ( m_target_p ) 
+        m_target_p->dont_initialize( dont );
+    else
+        SC_REPORT_WARNING( SC_ID_EMPTY_PROCESS_HANDLE_, "dont_initialize()");
 }
 
 // return whether this object instance's target is dynamic or not.
 
 inline bool sc_process_handle::dynamic() const
 {
-    return m_target_p ? m_target_p->dynamic() : false;
+    return  m_target_p ?  m_target_p->dynamic() : false;
 }
 
 // enable this object instance's target.
 
 inline void sc_process_handle::enable(sc_descendant_inclusion_info descendants)
 {
-    if ( m_target_p ) m_target_p->enable_process(descendants);
+    if ( m_target_p ) 
+        m_target_p->enable_process(descendants);
+    else
+        SC_REPORT_WARNING( SC_ID_EMPTY_PROCESS_HANDLE_, "enable()");
 }
 
 // return the child objects for this object instance's target.
@@ -311,15 +329,15 @@ inline void sc_process_handle::enable(sc_descendant_inclusion_info descendants)
 inline 
 const std::vector<sc_object*>& sc_process_handle::get_child_objects() const
 {
-    return m_target_p ? m_target_p->get_child_objects() : 
-        sc_process_handle::empty_vector;
+    return m_target_p ?  m_target_p->get_child_objects() : 
+                         sc_process_handle::empty_vector;
 }
 
 // return the parent object for this object instance's target.
 
 inline sc_object* sc_process_handle::get_parent_object() const
 {
-    return m_target_p ? m_target_p->get_parent_object() : (sc_object*)0;
+    return m_target_p ?  m_target_p->get_parent_object() : NULL;
 }
 
 // return this object instance's target.
@@ -333,7 +351,12 @@ inline sc_object* sc_process_handle::get_process_object() const
 
 inline bool sc_process_handle::is_unwinding() const
 {
-    return m_target_p ? m_target_p->is_unwinding() : false;
+    if ( m_target_p )
+        return m_target_p->is_unwinding();
+    else {
+        SC_REPORT_WARNING( SC_ID_EMPTY_PROCESS_HANDLE_, "is_unwinding()");
+        return false;
+    }
 }
 
 // kill this object instance's target.
@@ -342,20 +365,22 @@ inline void sc_process_handle::kill( sc_descendant_inclusion_info descendants )
 {
     if ( m_target_p ) 
         m_target_p->kill_process( descendants );
+    else
+        SC_REPORT_WARNING( SC_ID_EMPTY_PROCESS_HANDLE_, "kill()");
 }
 
 // return the name of this object instance's target.
 
 inline const char* sc_process_handle::name() const
 {
-    return m_target_p ? m_target_p->name() : "";
+    return  m_target_p ? m_target_p->name() : ""; 
 }
 
 // return the process kind for this object instance's target.
 
 inline sc_curr_proc_kind sc_process_handle::proc_kind() const
 {
-    return m_target_p ? m_target_p->proc_kind() : SC_NO_PROC_;
+    return m_target_p ?  m_target_p->proc_kind() : SC_NO_PROC_;
 }
 
 // reset this object instance's target.
@@ -363,21 +388,30 @@ inline sc_curr_proc_kind sc_process_handle::proc_kind() const
 inline void sc_process_handle::reset( sc_descendant_inclusion_info descendants )
 {
     if ( m_target_p ) 
-        m_target_p->reset_process(sc_process_b::reset_asynchronous,descendants);
+        m_target_p->reset_process( sc_process_b::reset_asynchronous,
+	                           descendants );
+    else
+        SC_REPORT_WARNING( SC_ID_EMPTY_PROCESS_HANDLE_, "reset()");
 }
 
 // resume this object instance's target.
 
 inline void sc_process_handle::resume(sc_descendant_inclusion_info descendants)
 {
-    if ( m_target_p ) m_target_p->resume_process(descendants);
+    if ( m_target_p ) 
+        m_target_p->resume_process(descendants);
+    else
+        SC_REPORT_WARNING( SC_ID_EMPTY_PROCESS_HANDLE_, "resume()");
 }
 
 // suspend this object instance's target.
 
 inline void sc_process_handle::suspend(sc_descendant_inclusion_info descendants)
 {
-    if ( m_target_p ) m_target_p->suspend_process(descendants);
+    if ( m_target_p ) 
+        m_target_p->suspend_process(descendants);
+    else
+        SC_REPORT_WARNING( SC_ID_EMPTY_PROCESS_HANDLE_, "suspend()");
 }
 
 // swap targets of this process handle with the supplied one.
@@ -395,7 +429,10 @@ inline void sc_process_handle::sync_reset_off(
     sc_descendant_inclusion_info descendants)
 {
     if ( m_target_p ) 
-        m_target_p->reset_process( sc_process_b::reset_off, descendants);
+        m_target_p->reset_process( sc_process_b::reset_synchronous_off, 
+	                           descendants);
+    else
+        SC_REPORT_WARNING( SC_ID_EMPTY_PROCESS_HANDLE_, "sync_reset_off()");
 }
 
 // turn sync_reset on for this object instance's target.
@@ -405,8 +442,12 @@ inline void sc_process_handle::sync_reset_on(
 {
     if ( m_target_p ) 
     {
-        m_target_p->reset_process(sc_process_b::reset_synchronous, 
+        m_target_p->reset_process(sc_process_b::reset_synchronous_on, 
             descendants);
+    }
+    else
+    {
+        SC_REPORT_WARNING( SC_ID_EMPTY_PROCESS_HANDLE_, "sync_reset_on()");
     }
 }
 
@@ -414,15 +455,20 @@ inline void sc_process_handle::sync_reset_on(
 
 inline bool sc_process_handle::terminated() const
 {
-    return m_target_p ? m_target_p->terminated() : false; 
+    return m_target_p ?  m_target_p->terminated() : false;
 }
 
 // return the termination event for this object instance's target.
 
 inline sc_event& sc_process_handle::terminated_event()
 {
-    return m_target_p ? m_target_p->terminated_event() : 
-        sc_process_handle::non_event;
+    if ( m_target_p )
+        return m_target_p->terminated_event();
+    else
+    {
+        SC_REPORT_WARNING( SC_ID_EMPTY_PROCESS_HANDLE_, "terminated_event()");
+        return sc_process_handle::non_event;
+    }
 }
 
 // return true if this object instance has a target, false it not.
@@ -457,20 +503,21 @@ inline void sc_process_handle::throw_it( const EXCEPT& exception,
     sc_simcontext*      context_p;          // current simcontext.
     sc_throw_it<EXCEPT> helper(exception);  // helper to throw the exception.
 
+    if ( !m_target_p ) 
+    {
+        SC_REPORT_WARNING( SC_ID_EMPTY_PROCESS_HANDLE_, "throw_it()");
+	return;
+    }
+
     // Requeue the current process so it will execute just after our throwees.
 
     context_p = sc_get_curr_simcontext();
     context_p->requeue_current_process();
 
-    // Throw the exception, causing the throwees to be queued for execution.
+    // Throw the exception and suspend the current process, causing the 
+    // throwees to be queued for execution.
 
-    if ( m_target_p ) 
-    {
-        m_target_p->throw_user(helper, descendants);
-    }
-
-    // Suspend the current process so the throwees can execute.
-    
+    m_target_p->throw_user(helper, descendants);
     context_p->suspend_current_process();
 }
 

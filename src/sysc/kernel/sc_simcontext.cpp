@@ -58,6 +58,12 @@
 				 execution problem with using sc_pvector.
  *****************************************************************************/
 // $Log: sc_simcontext.cpp,v $
+// Revision 1.7  2011/01/19 23:21:50  acg
+//  Andy Goodrich: changes for IEEE 1666 2011
+//
+// Revision 1.6  2011/01/18 20:10:45  acg
+//  Andy Goodrich: changes for IEEE1666_2011 semantics.
+//
 // Revision 1.5  2010/11/20 17:10:57  acg
 //  Andy Goodrich: reset processing changes for new IEEE 1666 standard.
 //
@@ -565,7 +571,7 @@ sc_simcontext::crunch( bool once )
 		    catch( const sc_report& ex ) {
 			::std::cout << "\n" << ex.what() << ::std::endl;
 			m_error = true;
-			return;
+			goto out;
 		    }
 		}
 		method_h = pop_runnable_method();
@@ -582,12 +588,12 @@ sc_simcontext::crunch( bool once )
 		m_cor_pkg->yield( thread_h->m_cor_p );
 	    }
 	    if( m_error ) {
-		return;
+		goto out;
 	    }
 
 	    // check for call(s) to sc_stop
 	    if( m_forced_stop ) {
-		if ( stop_mode == SC_STOP_IMMEDIATE ) return; 
+		if ( stop_mode == SC_STOP_IMMEDIATE ) goto out;
 	    }
 
 	    if( m_runnable->is_empty() ) {
@@ -669,6 +675,8 @@ sc_simcontext::crunch( bool once )
 
 	m_runnable->toggle();
     }
+out:
+    this->reset_curr_proc();
 }
 
 inline
@@ -928,7 +936,11 @@ sc_simcontext::simulate( const sc_time& duration )
 	    trace_cycle( false );
 	}
 	// check for call(s) to sc_stop() or sc_pause().
-	if ( m_paused ) return ;
+	if ( m_paused ) 
+	{
+	    m_in_simulator_control = false;
+	    return;
+	}
 	if( m_forced_stop ) {
 	    do_sc_stop_action();
 	    return;
@@ -1269,7 +1281,7 @@ void sc_simcontext::requeue_current_process()
     thread_p = DCAST<sc_thread_handle>(get_curr_proc_info()->process_handle);
     if ( thread_p )
     {
-	    push_runnable_thread_front( thread_p );
+	push_runnable_thread_front( thread_p );
     }
 }
 
@@ -1286,7 +1298,7 @@ void sc_simcontext::suspend_current_process()
     thread_p = DCAST<sc_thread_handle>(get_curr_proc_info()->process_handle);
     if ( thread_p )
     {
-	    thread_p->suspend_me(); 
+	thread_p->suspend_me(); 
     }
 }
 
@@ -1399,6 +1411,36 @@ sc_pending_activity_at_current_time()
             c_p->m_prim_channel_registry->pending_updates();
 }
 
+// Return time of next activity.
+
+sc_time  sc_time_to_pending_activity()
+{
+    sc_simcontext* p_c;    // current simulation context.
+    sc_time        result; // time of pending activity.
+
+    p_c = sc_get_curr_simcontext();
+
+    // If there is an activity pending at the current time return a delta of
+    // zero.
+
+    if ( (p_c->m_delta_events.size() != 0) ||
+         !p_c->m_runnable->is_empty() ||
+         p_c->m_prim_channel_registry->pending_updates() )
+    {
+        return SC_ZERO_TIME;
+    }
+
+    // Any activity will take place in the future pick up the next event's time.
+
+    else
+    {
+        result = p_c->next_time();
+	if ( result == SC_ZERO_TIME ) result = sc_max_time();
+	result = result - sc_time_stamp();
+    }
+    return result;
+}
+
 // Set the random seed for controlled randomization -- not yet implemented
 
 void
@@ -1428,6 +1470,11 @@ sc_start( const sc_time& duration, sc_starvation_policy p )
 	{
 	    SC_REPORT_ERROR(SC_ID_SIMULATION_START_AFTER_STOP_, "");        
 	}
+        if ( status == SC_SIM_ERROR )
+        {
+            SC_REPORT_ERROR(SC_ID_SIMULATION_START_AFTER_ERROR_, "");
+        }
+
         return;
     }
     context->simulate( duration );
