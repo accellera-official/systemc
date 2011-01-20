@@ -54,6 +54,11 @@
 
 namespace sc_core {
 
+static const char* info_id    = 0;
+static const char* warning_id = 0;
+static const char* error_id   = 0;
+static const char* fatal_id   = 0;
+
 // ----------------------------------------------------------------------------
 //  FUNCTION : sc_interrupt_here
 //
@@ -69,22 +74,18 @@ sc_interrupt_here( const char* id, sc_severity severity )
 
     switch( severity ) {
       case SC_INFO: 
-	static const char* info_id;
-	info_id = id;
-	break;
+        info_id = id;
+        break;
       case SC_WARNING: 
-	static const char* warning_id;
-	warning_id = id;
-	break;
+        warning_id = id;
+        break;
       case SC_ERROR: 
-	static const char* error_id;
-	error_id = id;
-	break;
+        error_id = id;
+        break;
       default:
       case SC_FATAL: 
-	static const char* fatal_id;
-	fatal_id = id;
-	break;
+        fatal_id = id;
+        break;
     }
 }
 
@@ -104,22 +105,18 @@ sc_stop_here( const char* id, sc_severity severity )
 
     switch( severity ) {
       case SC_INFO: 
-	static const char* info_id;
-	info_id = id;
-	break;
+        info_id = id;
+        break;
       case SC_WARNING: 
-	static const char* warning_id;
-	warning_id = id;
-	break;
+        warning_id = id;
+        break;
       case SC_ERROR: 
-	static const char* error_id;
-	error_id = id;
-	break;
+        error_id = id;
+        break;
       default:
       case SC_FATAL: 
-	static const char* fatal_id;
-	fatal_id = id;
-	break;
+        fatal_id = id;
+        break;
     }
 }
 
