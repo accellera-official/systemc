@@ -75,6 +75,7 @@
 namespace sc_core {
 
 class sc_trace_file;
+class sc_module;
 class sc_runnable;
 class sc_simcontext;
 
@@ -90,6 +91,7 @@ class sc_object
     friend class sc_module_dynalloc_list;
     friend class sc_object_manager;
     friend class sc_process_b;
+    friend class sc_module;
     friend class sc_runnable;
 
 public:
@@ -150,6 +152,8 @@ protected:
 private:
 
     void detach();
+    virtual void orphan_child_objects();
+
     void sc_object_init(const char* nm);
 
 private:

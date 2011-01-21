@@ -396,17 +396,9 @@ sc_process_b::sc_process_b( const char* name_p, bool free_host,
 //------------------------------------------------------------------------------
 sc_process_b::~sc_process_b()
 {
-   
-    // REDIRECT ANY CHILDREN AS CHILDREN OF THE SIMULATION CONTEXT:
+    // REDIRECT ANY (REMAINING) CHILDREN AS CHILDREN OF THE SIMULATION CONTEXT:
 
-    int size = m_child_objects.size();
-    for(int i = 0; i < size; i++) 
-    {
-        sc_object* obj_p =  m_child_objects[i];
-        obj_p->m_parent = NULL;
-        simcontext()->add_child_object(obj_p);
-    }
-
+    orphan_child_objects();
 
     // DELETE SEMANTICS OBJECTS IF NEED BE:
 

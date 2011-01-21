@@ -328,6 +328,7 @@ sc_module::~sc_module()
 {
     delete m_port_vec;
     delete m_name_gen;
+    orphan_child_objects();
     if ( m_module_name_p )
     {
 	m_module_name_p->clear_module( this ); // must be before end_module()

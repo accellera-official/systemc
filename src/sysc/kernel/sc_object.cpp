@@ -355,6 +355,21 @@ void sc_object::detach()
 }
 
 void
+sc_object::orphan_child_objects()
+{
+    std::vector< sc_object* > const & children = get_child_objects();
+
+    std::vector< sc_object* >::const_iterator
+            it  = children.begin(), end = children.end();
+
+    for( ; it != end; ++it  )
+    {
+        (*it)->m_parent = NULL;
+        simcontext()->add_child_object(*it);
+    }
+}
+
+void
 sc_object::trace( sc_trace_file * /* unused */) const
 {
     /* This space is intentionally left blank */
