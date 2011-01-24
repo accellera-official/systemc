@@ -348,7 +348,7 @@ public:
     void elaborate();
     void prepare_to_simulate();
     inline void initial_crunch( bool no_crunch );
-    const sc_time next_time(); 
+    bool next_time( sc_time& t ); 
 
 private:
 
@@ -364,6 +364,8 @@ private:
     void trace_cycle( bool delta_cycle );
 
     const ::std::vector<sc_object*>& get_child_objects_internal() const;
+
+    void execute_thread_next( sc_thread_handle );
 
     void push_runnable_method( sc_method_handle );
     void push_runnable_thread( sc_thread_handle );
@@ -432,8 +434,6 @@ private:
     bool                        m_end_of_simulation_called;
     sc_status                   m_simulation_status;
     bool                        m_start_of_simulation_called;
-
-    sc_event*                   m_until_event;
 
     sc_cor_pkg*                 m_cor_pkg; // the simcontext's coroutine package
     sc_cor*                     m_cor;     // the simcontext's coroutine

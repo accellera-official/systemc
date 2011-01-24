@@ -95,6 +95,13 @@ sc_simcontext::reset_curr_proc()
 
 inline
 void
+sc_simcontext::execute_thread_next( sc_thread_handle thread_h )
+{
+    m_runnable->execute_thread_next( thread_h );
+}
+
+inline
+void
 sc_simcontext::push_runnable_method( sc_method_handle method_h )
 {
     m_runnable->push_back_method( method_h );
