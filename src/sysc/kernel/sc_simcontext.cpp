@@ -549,6 +549,7 @@ sc_simcontext::crunch( bool once )
 	// EVALUATE PHASE
 	
 	m_execution_phase = phase_evaluate;
+	bool empty_eval_phase = true;
 	while( true ) {
 
 
@@ -558,6 +559,7 @@ sc_simcontext::crunch( bool once )
 	    while( method_h != 0 ) {
 		if ( method_h->ready_to_run() )
 		{
+		    empty_eval_phase = false;
 		    try {
 			method_h->semantics();
 		    }
@@ -581,6 +583,7 @@ sc_simcontext::crunch( bool once )
 		thread_h = pop_runnable_thread();
 	    }
 	    if( thread_h != 0 ) {
+		empty_eval_phase = false;
 		m_cor_pkg->yield( thread_h->m_cor_p );
 	    }
 	    if( m_error ) {
@@ -615,15 +618,13 @@ sc_simcontext::crunch( bool once )
 	// will work.
 
 	m_execution_phase = phase_update;
-	m_delta_count ++;
+	if( !empty_eval_phase ) m_delta_count ++;
 	m_prim_channel_registry->perform_update();
 	m_execution_phase = phase_notify;
 	
 	if( m_something_to_trace ) {
 	    trace_cycle( /* delta cycle? */ true );
 	}
-
-	// m_delta_count ++;
 
         // check for call(s) to sc_stop
         if( m_forced_stop ) {
@@ -830,9 +831,6 @@ sc_simcontext::prepare_to_simulate()
         m_delta_events.resize(0);
     }
 
-    if( m_runnable->is_empty() ) {
-        m_delta_count++;
-    }
 }
 
 void
