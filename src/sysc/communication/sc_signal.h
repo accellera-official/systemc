@@ -64,7 +64,7 @@ sc_writer_policy_check_write::check_write( sc_object* target )
   if( SC_UNLIKELY_(m_writer == 0) ) {
       m_writer = writer;
   } else if( SC_UNLIKELY_(m_writer != writer) ) {
-       sc_signal_invalid_writer( target, m_writer, writer );
+       sc_signal_invalid_writer( target, m_writer, writer, m_check_delta );
       return false;
   }
   return true;
