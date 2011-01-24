@@ -84,6 +84,7 @@ class sc_runnable
     inline void push_front_method( sc_method_handle );
     inline void push_front_thread( sc_thread_handle );
 
+    inline bool is_initialized() const;
     inline bool is_empty() const;
 
     inline sc_method_handle pop_method();

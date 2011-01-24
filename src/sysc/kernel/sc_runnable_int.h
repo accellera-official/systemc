@@ -112,6 +112,17 @@ inline void sc_runnable::init()
 
 
 //------------------------------------------------------------------------------
+//"sc_runnable::is_initialized"
+//
+// This method returns true if the push queue is already initialized.
+//------------------------------------------------------------------------------
+inline bool sc_runnable::is_initialized() const
+{
+    return m_methods_push_head && m_threads_push_head;
+}
+
+
+//------------------------------------------------------------------------------
 //"sc_runnable::is_empty"
 //
 // This method returns true if the push queue is empty, or false if not.

@@ -226,9 +226,9 @@ void    sc_set_time_resolution( double, sc_time_unit );
 sc_time sc_get_time_resolution();
 void    sc_set_default_time_unit( double, sc_time_unit );
 sc_time sc_get_default_time_unit();
-bool    sc_pending_activity_at_current_time();
-sc_time sc_time_to_pending_activity();
-
+bool    sc_pending_activity_at_current_time( const sc_simcontext* );
+bool    sc_pending_activity_at_future_time( const sc_simcontext* );
+sc_time sc_time_to_pending_activity( const sc_simcontext* );
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_simcontext
@@ -252,7 +252,6 @@ class sc_simcontext
     friend sc_dt::uint64 sc_delta_count();
     friend const std::vector<sc_object*>& sc_get_top_level_objects(
         const sc_simcontext* simc_p);
-    friend bool sc_pending_activity_at_current_time();
     friend bool sc_is_running( const sc_simcontext* simc_p );
     friend void sc_pause();
     friend bool sc_end_of_simulation_invoked();
@@ -260,7 +259,9 @@ class sc_simcontext
     friend bool sc_start_of_simulation_invoked();
     friend void sc_cthread_cor_fn(void*);
     friend void sc_thread_cor_fn(void*);
-    friend sc_time sc_time_to_pending_activity();
+    friend sc_time sc_time_to_pending_activity( const sc_simcontext* );
+    friend bool sc_pending_activity_at_current_time( const sc_simcontext* );
+    friend bool sc_pending_activity_at_future_time( const sc_simcontext* );
 
     void init();
     void clean();
@@ -348,7 +349,8 @@ public:
     void elaborate();
     void prepare_to_simulate();
     inline void initial_crunch( bool no_crunch );
-    bool next_time( sc_time& t ); 
+    bool next_time( sc_time& t ) const; 
+    bool pending_activity_at_current_time() const;
 
 private:
 
@@ -706,6 +708,37 @@ inline void sc_pause()
 {
     sc_get_curr_simcontext()->m_paused = true;
 }
+
+// Return indication if there are more processes to execute in this delta phase
+
+inline bool sc_pending_activity_at_current_time
+  ( const sc_simcontext* simc_p = sc_get_curr_simcontext() )
+{
+  return simc_p->pending_activity_at_current_time();
+}
+
+// Return indication if there are timed notifications in the future
+
+inline bool sc_pending_activity_at_future_time
+  ( const sc_simcontext* simc_p = sc_get_curr_simcontext() )
+{
+  sc_time ignored;
+  return simc_p->next_time( ignored );
+}
+
+// Return indication if there are processes to run,
+// or notifications in the future
+
+inline bool sc_pending_activity
+  ( const sc_simcontext* simc_p = sc_get_curr_simcontext() )
+{
+  return sc_pending_activity_at_current_time( simc_p )
+      || sc_pending_activity_at_future_time( simc_p );
+}
+
+sc_time
+sc_time_to_pending_activity
+  ( const sc_simcontext* simc_p = sc_get_curr_simcontext() );
 
 inline
 void

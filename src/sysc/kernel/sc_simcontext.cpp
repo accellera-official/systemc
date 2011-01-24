@@ -1243,7 +1243,7 @@ sc_simcontext::is_running() const
 // | Result is true if an event is found, false if not.
 // +----------------------------------------------------------------------------
 bool
-sc_simcontext::next_time( sc_time& result )
+sc_simcontext::next_time( sc_time& result ) const
 {
     while( m_timed_events->size() ) {
 	sc_event_timed* et = m_timed_events->top();
@@ -1407,44 +1407,34 @@ sc_get_curr_process_handle()
 // Return indication if there are more processes to execute in this delta phase
 
 bool
-sc_pending_activity_at_current_time()
+sc_simcontext::pending_activity_at_current_time() const
 {
-    sc_simcontext* c_p = sc_get_curr_simcontext();
-    return (c_p->m_delta_events.size() != 0) ||
-            !c_p->m_runnable->is_empty() ||
-            c_p->m_prim_channel_registry->pending_updates();
+    return ( m_delta_events.size() != 0) ||
+           ( m_runnable->is_initialized() && !m_runnable->is_empty() ) ||
+           m_prim_channel_registry->pending_updates();
 }
 
 // Return time of next activity.
 
-sc_time sc_time_to_pending_activity()
+sc_time sc_time_to_pending_activity( const sc_simcontext* simc_p )
 {
-    sc_simcontext* p_c;    // current simulation context.
-    sc_time        result; // time of pending activity.
+    // If there is an activity pending at the current time
+    // return a delta of zero.
 
-    // If the simulation is not running return max time.
+    sc_time        result = SC_ZERO_TIME;
 
-    if ( !sc_is_running() ) return sc_max_time();
-    p_c = sc_get_curr_simcontext();
-
-    // If there is an activity pending at the current time return a delta of
-    // zero.
-
-    if ( (p_c->m_delta_events.size() != 0) ||
-         !p_c->m_runnable->is_empty() ||
-         p_c->m_prim_channel_registry->pending_updates() )
+    if ( simc_p->pending_activity_at_current_time() )
     {
-        return SC_ZERO_TIME;
+        return result;
     }
 
     // Any activity will take place in the future pick up the next event's time.
 
     else
     {
-        if ( p_c->next_time(result) )
-	    result = result - sc_time_stamp();
-	else
-	    result = sc_max_time();
+		result = simc_p->max_time();
+        simc_p->next_time(result);
+	    result -= sc_time_stamp();
     }
     return result;
 }
