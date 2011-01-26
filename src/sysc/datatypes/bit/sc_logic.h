@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_logic.h,v $
+// Revision 1.2  2011/01/25 20:50:37  acg
+//  Andy Goodrich: changes for IEEE 1666 2011.
+//
 // Revision 1.1.1.1  2006/12/15 20:20:04  acg
 // SystemC 2.3
 //
@@ -198,8 +201,6 @@ enum sc_logic_value_t
 
 class sc_logic
 {
-    friend class sc_logic_resolve;
-
 private:
 
     // support methods

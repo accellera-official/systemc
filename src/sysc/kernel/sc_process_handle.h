@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_process_handle.h,v $
+// Revision 1.10  2011/01/25 20:50:37  acg
+//  Andy Goodrich: changes for IEEE 1666 2011.
+//
 // Revision 1.9  2011/01/20 16:52:20  acg
 //  Andy Goodrich: changes for IEEE 1666 2011.
 //
@@ -151,6 +154,7 @@ class sc_process_handle {
     inline sc_curr_proc_kind proc_kind() const;
     inline void reset( 
         sc_descendant_inclusion_info descendants=SC_NO_DESCENDANTS );
+    inline sc_event& reset_event() const;
     inline void resume(
         sc_descendant_inclusion_info descendants=SC_NO_DESCENDANTS );
     inline void suspend(
@@ -392,6 +396,19 @@ inline void sc_process_handle::reset( sc_descendant_inclusion_info descendants )
 	                           descendants );
     else
         SC_REPORT_WARNING( SC_ID_EMPTY_PROCESS_HANDLE_, "reset()");
+}
+
+// return the reset event for this object instance's target.
+
+inline sc_event& sc_process_handle::reset_event() const
+{
+    if ( m_target_p ) 
+        return m_target_p->reset_event();
+    else
+    {
+        SC_REPORT_WARNING( SC_ID_EMPTY_PROCESS_HANDLE_, "reset()");
+        return sc_process_handle::non_event;
+    }
 }
 
 // resume this object instance's target.

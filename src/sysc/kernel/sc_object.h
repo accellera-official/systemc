@@ -37,6 +37,9 @@
  *****************************************************************************/
 
 // $Log: sc_object.h,v $
+// Revision 1.6  2011/01/25 20:50:37  acg
+//  Andy Goodrich: changes for IEEE 1666 2011.
+//
 // Revision 1.5  2011/01/18 20:10:44  acg
 //  Andy Goodrich: changes for IEEE1666_2011 semantics.
 //
@@ -74,9 +77,10 @@
 
 namespace sc_core {
 
-class sc_trace_file;
+class sc_module;
 class sc_runnable;
 class sc_simcontext;
+class sc_trace_file;
 
 
 // ----------------------------------------------------------------------------
@@ -87,6 +91,7 @@ class sc_simcontext;
 
 class sc_object 
 {
+    friend class sc_module;
     friend class sc_module_dynalloc_list;
     friend class sc_object_manager;
     friend class sc_process_b;
@@ -150,6 +155,7 @@ protected:
 private:
 
     void detach();
+    virtual void orphan_child_objects();
     void sc_object_init(const char* nm);
 
 private:

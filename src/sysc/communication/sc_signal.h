@@ -62,10 +62,10 @@ sc_writer_policy_check_write::check_write( sc_object* target )
 {
   sc_object* writer = sc_get_curr_simcontext()->get_current_writer();
   if( SC_UNLIKELY_(m_writer == 0) ) {
-      m_writer = writer;
+       m_writer = writer;
   } else if( SC_UNLIKELY_(m_writer != writer) ) {
-       sc_signal_invalid_writer( target, m_writer, writer );
-      return false;
+       sc_signal_invalid_writer( target, m_writer, writer, m_check_delta );
+       return false;
   }
   return true;
 }
@@ -778,6 +778,9 @@ operator << ( ::std::ostream& os, const sc_signal<T,POL>& a )
     
  *****************************************************************************/
 //$Log: sc_signal.h,v $
+//Revision 1.4  2011/01/25 20:50:37  acg
+// Andy Goodrich: changes for IEEE 1666 2011.
+//
 //Revision 1.3  2010/12/07 19:50:37  acg
 // Andy Goodrich: addition of writer policies, courtesy of Philipp Hartmann.
 //

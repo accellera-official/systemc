@@ -45,6 +45,9 @@
 
 
 // $Log: sc_object.cpp,v $
+// Revision 1.6  2011/01/25 20:50:37  acg
+//  Andy Goodrich: changes for IEEE 1666 2011.
+//
 // Revision 1.5  2011/01/18 20:10:44  acg
 //  Andy Goodrich: changes for IEEE1666_2011 semantics.
 //
@@ -351,6 +354,26 @@ void sc_object::detach()
 		// MARK OBJECT AS HAVING BEEN DETACHED:
 
 		m_name[-1] = 0; 
+    }
+}
+
+// +----------------------------------------------------------------------------
+// |"sc_object::orphan_child_objects"
+// | 
+// | This method moves the children of this object instance to be children
+// | of the simulator.
+// +----------------------------------------------------------------------------
+void sc_object::orphan_child_objects()
+{
+    std::vector< sc_object* > const & children = get_child_objects();
+
+    std::vector< sc_object* >::const_iterator
+            it  = children.begin(), end = children.end();
+
+    for( ; it != end; ++it  )
+    {
+        (*it)->m_parent = NULL;
+        simcontext()->add_child_object(*it);
     }
 }
 

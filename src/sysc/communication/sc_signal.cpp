@@ -35,6 +35,9 @@
 
 /* 
 $Log: sc_signal.cpp,v $
+Revision 1.6  2011/01/25 20:50:37  acg
+ Andy Goodrich: changes for IEEE 1666 2011.
+
 Revision 1.5  2010/12/07 19:50:36  acg
  Andy Goodrich: addition of writer policies, courtesy of Philipp Hartmann.
 
@@ -120,30 +123,32 @@ namespace sc_core {
 // to avoid code bloat in sc_signal<T>
 
 void
-sc_signal_invalid_writer( 
-    sc_object* target, sc_object* first_writer, sc_object* second_writer )
+sc_signal_invalid_writer( sc_object* target, sc_object* first_writer,
+                          sc_object* second_writer, bool check_delta )
 {
-    char msg[BUFSIZ];
-    const char* target_name = target->name();
-    const char* target_kind = target->kind();
-    const char* writer1_name = first_writer->name();
-    const char* writer1_kind = first_writer->kind();
-    const char* writer2_name;
-    const char* writer2_kind;
     if ( second_writer )
     {   
-        writer2_name = second_writer->name();
-        writer2_kind = second_writer->kind();
+        std::stringstream msg;
 
-        std::sprintf( msg, "\n signal `%s' (%s)"
-             "\n first driver `%s' (%s)"
-             "\n second driver `%s' (%s)",
-             target_name, target_kind,
-	     writer1_name, writer1_kind,
-	     writer2_name, writer2_kind );
-        SC_REPORT_ERROR( SC_ID_MORE_THAN_ONE_SIGNAL_DRIVER_, msg );
+        msg
+            << "\n signal "
+               "`" << target->name() << "' "
+               "(" << target->kind() << ")"
+            << "\n first driver "
+               "`" << first_writer->name() << "' "
+              " (" << first_writer->kind() << ")"
+            << "\n second driver "
+               "`" << second_writer->name() << "' "
+               "(" << second_writer->kind() << ")";
+
+        if( check_delta )
+        {
+            msg << "\n first conflicting write in delta cycle "
+                << sc_delta_count();
+        }
+        SC_REPORT_ERROR( SC_ID_MORE_THAN_ONE_SIGNAL_DRIVER_,
+                         msg.str().c_str() );
     }
-
 }
 
 bool
@@ -154,7 +159,7 @@ sc_writer_policy_check_port::
     {
         // an out or inout port; only one can be connected
         if( m_output != 0) {
-            sc_signal_invalid_writer( target, m_output, port_ );
+            sc_signal_invalid_writer( target, m_output, port_, false );
             return false;
         } else {
             m_output = port_;

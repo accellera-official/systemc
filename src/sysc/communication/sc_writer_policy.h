@@ -35,8 +35,8 @@ class sc_port_base;
 
 extern
 void
-sc_signal_invalid_writer(
-    sc_object* target, sc_object* first_writer, sc_object* second_writer );
+sc_signal_invalid_writer( sc_object* target, sc_object* first_writer,
+                          sc_object* second_writer, bool check_delta );
 
 // SIGNAL WRITING POLICIES
 //
@@ -71,13 +71,19 @@ struct sc_writer_policy_check_write
   bool check_write( sc_object* target );
   void update(){}
 protected:
-  sc_writer_policy_check_write() : m_writer(0) {}
+  sc_writer_policy_check_write( bool check_delta = false )
+    : m_writer(0), m_check_delta( check_delta ) {}
   sc_object* m_writer;
+  const bool m_check_delta;
 };
 
 struct sc_writer_policy_check_delta
-  : sc_writer_policy_check_write
+    : sc_writer_policy_check_write
 {
+
+  sc_writer_policy_check_delta()
+    : sc_writer_policy_check_write(true) {}
+
   void update(){ m_writer = 0; }
 };
 

@@ -42,6 +42,9 @@
  *****************************************************************************/
 
 // $Log: sc_runnable.h,v $
+// Revision 1.3  2011/01/25 20:50:37  acg
+//  Andy Goodrich: changes for IEEE 1666 2011.
+//
 // Revision 1.2  2008/05/22 17:06:26  acg
 //  Andy Goodrich: updated copyright notice to include 2008.
 //
@@ -79,15 +82,21 @@ class sc_runnable
     inline void remove_method( sc_method_handle );
     inline void remove_thread( sc_thread_handle );
 
+    inline void execute_thread_next( sc_thread_handle );
+
     inline void push_back_method( sc_method_handle );
     inline void push_back_thread( sc_thread_handle );
     inline void push_front_method( sc_method_handle );
     inline void push_front_thread( sc_thread_handle );
 
+    inline bool is_initialized() const;
     inline bool is_empty() const;
 
     inline sc_method_handle pop_method();
     inline sc_thread_handle pop_thread();
+
+  public: // diagnostics:
+    void dump() const;
 
   private:
     sc_method_handle m_methods_push_head;

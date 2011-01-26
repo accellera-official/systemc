@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_thread_process.cpp,v $
+// Revision 1.12  2011/01/25 20:50:37  acg
+//  Andy Goodrich: changes for IEEE 1666 2011.
+//
 // Revision 1.11  2011/01/20 16:52:20  acg
 //  Andy Goodrich: changes for IEEE 1666 2011.
 //
@@ -306,10 +309,10 @@ void sc_thread_process::kill_process(sc_descendant_inclusion_info descendants )
         active_p = RCAST<sc_thread_handle>(sc_get_current_process_b());
 
         if ( this != active_p && active_p )
-	    context_p->push_runnable_thread_front( active_p );
+	    context_p->execute_thread_next( active_p );
 	if ( next_runnable() != 0 )
 	    context_p->remove_runnable_thread(this);
-	context_p->push_runnable_thread_front(this);
+	context_p->execute_thread_next(this);
 
         if ( this != active_p && active_p )
 	    active_p->suspend_me();
@@ -577,7 +580,6 @@ void sc_thread_process::throw_reset( bool async )
 
     m_throw_type = THROW_RESET;
     m_wait_cycle_n = 0;
-    // remove_dynamic_events(); // @@@#### REMOVE THIS?
 
     // IF REQUESTED TO, IMMEDIATELY SCHEDULE THE RESET:
 

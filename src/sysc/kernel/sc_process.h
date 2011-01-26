@@ -46,6 +46,9 @@
  *****************************************************************************/
 
 // $Log: sc_process.h,v $
+// Revision 1.7  2011/01/25 20:50:37  acg
+//  Andy Goodrich: changes for IEEE 1666 2011.
+//
 // Revision 1.6  2011/01/19 23:21:50  acg
 //  Andy Goodrich: changes for IEEE 1666 2011
 //
@@ -488,6 +491,7 @@ class sc_process_b : public sc_object {
     virtual void dont_initialize( bool dont );
     const ::std::vector<sc_object*>& get_child_objects() const;
     inline sc_curr_proc_kind proc_kind() const;
+    sc_event& reset_event();
     sc_event& terminated_event();
 
   public:
@@ -569,6 +573,7 @@ class sc_process_b : public sc_object {
     sc_curr_proc_kind            m_process_kind;    // Type of process.
     int                          m_references_n;    // Outstanding handles.
     std::vector<sc_reset*>       m_resets;          // Resets for process.
+    sc_event*                    m_reset_event_p;   // Reset event.
     sc_event*                    m_resume_event_p;  // Resume event.
     sc_process_b*                m_runnable_p;      // sc_runnable link
     sc_process_host*             m_semantics_host_p;   // Host for semantics.

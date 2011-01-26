@@ -58,6 +58,9 @@
 				 execution problem with using sc_pvector.
  *****************************************************************************/
 // $Log: sc_simcontext.cpp,v $
+// Revision 1.8  2011/01/25 20:50:37  acg
+//  Andy Goodrich: changes for IEEE 1666 2011.
+//
 // Revision 1.7  2011/01/19 23:21:50  acg
 //  Andy Goodrich: changes for IEEE 1666 2011
 //
@@ -549,6 +552,7 @@ sc_simcontext::crunch( bool once )
 	// EVALUATE PHASE
 	
 	m_execution_phase = phase_evaluate;
+	bool empty_eval_phase = true;
 	while( true ) {
 
 
@@ -558,6 +562,7 @@ sc_simcontext::crunch( bool once )
 	    while( method_h != 0 ) {
 		if ( method_h->ready_to_run() )
 		{
+		    empty_eval_phase = false;
 		    try {
 			method_h->semantics();
 		    }
@@ -581,6 +586,7 @@ sc_simcontext::crunch( bool once )
 		thread_h = pop_runnable_thread();
 	    }
 	    if( thread_h != 0 ) {
+	        empty_eval_phase = false;
 		m_cor_pkg->yield( thread_h->m_cor_p );
 	    }
 	    if( m_error ) {
@@ -615,15 +621,13 @@ sc_simcontext::crunch( bool once )
 	// will work.
 
 	m_execution_phase = phase_update;
-	m_delta_count ++;
+	if ( !empty_eval_phase ) m_delta_count ++;
 	m_prim_channel_registry->perform_update();
 	m_execution_phase = phase_notify;
 	
 	if( m_something_to_trace ) {
 	    trace_cycle( /* delta cycle? */ true );
 	}
-
-	// m_delta_count ++;
 
         // check for call(s) to sc_stop
         if( m_forced_stop ) {
@@ -829,10 +833,6 @@ sc_simcontext::prepare_to_simulate()
         } while( -- i >= 0 );
         m_delta_events.resize(0);
     }
-
-    if( m_runnable->is_empty() ) {
-        m_delta_count++;
-    }
 }
 
 void
@@ -868,6 +868,23 @@ sc_simcontext::initialize( bool no_crunch )
     m_in_simulator_control = false;
 }
 
+// +----------------------------------------------------------------------------
+// |"sc_simcontext::simulate"
+// | 
+// | This method runs the simulation for the specified amount of time.
+// |
+// | Notes:
+// |   (1) This code always run with an SC_EXIT_ON_STARVATION starvation policy,
+// |       so the simulation time on return will be the minimum of the 
+// |       simulation on entry plus the duration, and the maximum time of any 
+// |       event present in the simulation. If the simulation policy is
+// |       SC_RUN_TO_TIME starvation it is implemented by the caller of this 
+// |       method, e.g., sc_start(), by artificially setting the simulation
+// |       time forward after this method completes.
+// |
+// | Arguments:
+// |     duration = amount of time to simulate.
+// +----------------------------------------------------------------------------
 void
 sc_simcontext::simulate( const sc_time& duration )
 {
@@ -893,7 +910,7 @@ sc_simcontext::simulate( const sc_time& duration )
     m_paused = false;
 
     sc_time until_t = m_curr_time + duration;
-    sc_time         t;            // current simulaton time.
+    sc_time t;            // current simulaton time.
 
     // IF DURATION WAS ZERO WE ONLY CRUNCH ONCE:
     //
@@ -934,14 +951,14 @@ sc_simcontext::simulate( const sc_time& duration )
 	    return;
 	}
 	
+	t = m_curr_time; 
+
 	do {
-	    // Run until event starvation or the specified time, starvation 
-	    // policy is handled by our caller ( e.g., sc_start() ).
+	    // See note 1 above:
 
-            if ( !next_time(t) ) goto exit;
-	    if ( t > until_t ) goto exit; 
+            if ( !next_time(t) || (t > until_t ) ) goto exit;
 
-	    // PROCESS TIMED NOTIFICATIONS
+	    // PROCESS TIMED NOTIFICATIONS AT THE CURRENT TIME
 
 	    do {
 		sc_event_timed* et = m_timed_events->extract_top();
@@ -953,10 +970,12 @@ sc_simcontext::simulate( const sc_time& duration )
 	    } while( m_timed_events->size() &&
 		     m_timed_events->top()->notify_time() == t );
 
-	} while( m_runnable->is_empty() && t < until_t );
-	if ( t > m_curr_time && t <= until_t ) m_curr_time = t;
-    } while ( t < until_t );
+	} while( m_runnable->is_empty() );
+	if ( t > m_curr_time ) m_curr_time = t;
+    } while ( t < until_t ); // hold off on the delta for the until_t time.
+
 exit:
+    // if ( t > m_curr_time ) m_curr_time = t < until_t ? t : until_t;
     if ( t > m_curr_time && t <= until_t ) m_curr_time = t;
     m_in_simulator_control = false;
 }
@@ -1243,7 +1262,7 @@ sc_simcontext::is_running() const
 // | Result is true if an event is found, false if not.
 // +----------------------------------------------------------------------------
 bool
-sc_simcontext::next_time( sc_time& result )
+sc_simcontext::next_time( sc_time& result ) const
 {
     while( m_timed_events->size() ) {
 	sc_event_timed* et = m_timed_events->top();
@@ -1407,44 +1426,34 @@ sc_get_curr_process_handle()
 // Return indication if there are more processes to execute in this delta phase
 
 bool
-sc_pending_activity_at_current_time()
+sc_simcontext::pending_activity_at_current_time() const
 {
-    sc_simcontext* c_p = sc_get_curr_simcontext();
-    return (c_p->m_delta_events.size() != 0) ||
-            !c_p->m_runnable->is_empty() ||
-            c_p->m_prim_channel_registry->pending_updates();
+    return ( m_delta_events.size() != 0) ||
+           ( m_runnable->is_initialized() && !m_runnable->is_empty() ) ||
+           m_prim_channel_registry->pending_updates();
 }
 
 // Return time of next activity.
 
-sc_time sc_time_to_pending_activity()
+sc_time sc_time_to_pending_activity( const sc_simcontext* simc_p ) 
 {
-    sc_simcontext* p_c;    // current simulation context.
-    sc_time        result; // time of pending activity.
+    // If there is an activity pending at the current time
+    // return a delta of zero.
+    
+    sc_time result=SC_ZERO_TIME; // time of pending activity.
 
-    // If the simulation is not running return max time.
-
-    if ( !sc_is_running() ) return sc_max_time();
-    p_c = sc_get_curr_simcontext();
-
-    // If there is an activity pending at the current time return a delta of
-    // zero.
-
-    if ( (p_c->m_delta_events.size() != 0) ||
-         !p_c->m_runnable->is_empty() ||
-         p_c->m_prim_channel_registry->pending_updates() )
+    if ( simc_p->pending_activity_at_current_time() )
     {
-        return SC_ZERO_TIME;
+        return result;
     }
 
     // Any activity will take place in the future pick up the next event's time.
 
     else
     {
-        if ( p_c->next_time(result) )
-	    result = result - sc_time_stamp();
-	else
-	    result = sc_max_time();
+        result = simc_p->max_time();
+        simc_p->next_time(result);
+        result -= sc_time_stamp();
     }
     return result;
 }

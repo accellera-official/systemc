@@ -54,6 +54,9 @@
 
 
 // $Log: sc_module.cpp,v $
+// Revision 1.6  2011/01/25 20:50:37  acg
+//  Andy Goodrich: changes for IEEE 1666 2011.
+//
 // Revision 1.5  2009/05/22 16:06:29  acg
 //  Andy Goodrich: process control updates.
 //
@@ -328,6 +331,7 @@ sc_module::~sc_module()
 {
     delete m_port_vec;
     delete m_name_gen;
+    orphan_child_objects();
     if ( m_module_name_p )
     {
 	m_module_name_p->clear_module( this ); // must be before end_module()

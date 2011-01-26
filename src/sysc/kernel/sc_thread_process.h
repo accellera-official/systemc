@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_thread_process.h,v $
+// Revision 1.10  2011/01/25 20:50:37  acg
+//  Andy Goodrich: changes for IEEE 1666 2011.
+//
 // Revision 1.9  2011/01/19 23:21:50  acg
 //  Andy Goodrich: changes for IEEE 1666 2011
 //
@@ -313,6 +316,7 @@ inline void sc_thread_process::suspend_me()
     }
     else if ( m_throw_type == THROW_RESET )
     {
+	if ( m_reset_event_p ) m_reset_event_p->notify();
 	m_throw_type = ( m_active_areset_n || m_active_reset_n ) ?
 	    THROW_RESET : THROW_NONE;
         throw sc_unwind_exception( true );
@@ -324,6 +328,7 @@ inline void sc_thread_process::suspend_me()
     }
     else if ( m_throw_type == THROW_KILL )
     {
+        // m_throw_type = THROW_NONE;  // @@@@####
 	throw sc_unwind_exception( false );
     }
 }

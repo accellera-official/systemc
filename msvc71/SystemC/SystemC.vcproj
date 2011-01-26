@@ -439,7 +439,6 @@
 			</File>
 			<File
 				RelativePath="..\..\src\sysc\kernel\sc_cthread_process.h">
-
 			</File>
 			<File
 				RelativePath="..\..\src\sysc\kernel\sc_dynamic_processes.h">

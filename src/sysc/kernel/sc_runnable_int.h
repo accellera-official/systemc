@@ -36,6 +36,9 @@
  *****************************************************************************/
 
 // $Log: sc_runnable_int.h,v $
+// Revision 1.5  2011/01/25 20:50:37  acg
+//  Andy Goodrich: changes for IEEE 1666 2011.
+//
 // Revision 1.4  2010/07/22 20:02:33  acg
 //  Andy Goodrich: bug fixes.
 //
@@ -79,6 +82,30 @@ namespace sc_core {
 
 
 //------------------------------------------------------------------------------
+//"sc_runnable::dump"
+//
+// This method dumps the contents of this object instance.
+//------------------------------------------------------------------------------
+inline void sc_runnable::dump() const
+{
+    // Dump the thread queues:
+
+    std::cout << "thread pop queue: " << std::endl;
+    for ( sc_thread_handle p = m_threads_pop; p != SC_NO_THREADS; 
+          p = p->next_runnable() )
+    {
+        std::cout << "    " << p << std::endl;
+    }
+
+    std::cout << "thread push queue: " << std::endl;
+    for ( sc_thread_handle p = m_threads_push_head->next_runnable(); 
+          p != SC_NO_THREADS; p = p->next_runnable() )
+    {
+        std::cout << "    " << p << std::endl;
+    }
+}
+
+//------------------------------------------------------------------------------
 //"sc_runnable::init"
 //
 // This method initializes this object instance. Note we allocate the queue
@@ -120,6 +147,17 @@ inline bool sc_runnable::is_empty() const
 {
     return m_methods_push_head->next_runnable() == SC_NO_METHODS && 
 		m_threads_push_head->next_runnable() == SC_NO_THREADS;
+}
+
+
+//------------------------------------------------------------------------------
+//"sc_runnable::is_initialized"
+//
+// This method returns true if the push queue is already initialized.
+//------------------------------------------------------------------------------
+inline bool sc_runnable::is_initialized() const
+{
+    return m_methods_push_head && m_threads_push_head;
 }
 
 
@@ -202,6 +240,18 @@ inline void sc_runnable::push_front_thread( sc_thread_handle thread_h )
     }
 }
 
+//------------------------------------------------------------------------------
+//"sc_runnable::execute_thread_next"
+//
+// This method pushes the the supplied thread to execute as the next process.
+// This is done by pushing it onto the front of the m_threads_pop_q.
+//     thread_h -> thread process to add to the queue.
+//------------------------------------------------------------------------------
+inline void sc_runnable::execute_thread_next( sc_thread_handle thread_h )
+{
+    thread_h->set_next_runnable( m_threads_pop );
+    m_threads_pop = thread_h;
+}
 
 //------------------------------------------------------------------------------
 //"sc_runnable::pop_method"
@@ -219,10 +269,10 @@ inline sc_method_handle sc_runnable::pop_method()
         m_methods_pop = result_p->next_runnable();
         result_p->set_next_runnable(0);
     }
-	else
-	{
-		result_p = 0;
-	}
+    else
+    {
+	    result_p = 0;
+    }
     return result_p;
 
 }
@@ -243,10 +293,10 @@ inline sc_thread_handle sc_runnable::pop_thread()
         m_threads_pop = result_p->next_runnable();
         result_p->set_next_runnable(0);
     }
-	else
-	{
-		result_p = 0;
-	}
+    else
+    {
+	    result_p = 0;
+    }
     return result_p;
 }
 

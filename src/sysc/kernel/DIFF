@@ -1,7 +1,103 @@
-467,468c467
-<     for ( int i = el.m_events.size() - 1; i >= 0; --i )
-<     {
+Index: sc_simcontext.cpp
+===================================================================
+RCS file: /Users/acg/CVSROOT/systemc-2.3/src/sysc/kernel/sc_simcontext.cpp,v
+retrieving revision 1.7
+diff -r1.7 sc_simcontext.cpp
+496d495
+<     m_until_event = 0;
+525,527d523
+<     if( m_until_event != 0 ) {
+<         delete m_until_event;
+<     }
+693,694c689
+<     next_event_time = next_time();
+<     if ( next_event_time != SC_ZERO_TIME && next_event_time <= m_curr_time) {
 ---
->     for( int i = el.m_events.size() - 1; i >= 0; -- i ) {
-470a470
+>     if ( next_time(next_event_time) && next_event_time <= m_curr_time) {
+838,840d832
+<     // used in 'simulate()'
+<     m_until_event = new sc_event;
+< 
+880c872
+< sc_simcontext::simulate( const sc_time& duration )
+---
+> sc_simcontext::simulate( const sc_time& duration, sc_starvation_policy policy )
+904,908c896
+< 
+<     m_until_event->cancel();  // to be on the safe side
+<     m_until_event->notify_internal( duration );
+< 
+<     sc_time t;
+---
+>     sc_time         t;            // current simulaton time.
+924a913
+>     // NON-ZERO DURATION: EXECUTE UP TO THAT TIME, OR UNTIL EVENT STARVATION:
+926d914
+<     // NON-ZERO DURATION: EXECUTE UP TO THAT TIME:
+950c938,939
+<             t = next_time();
+---
+>             if ( !next_time(t) ) break; 
+> 	    if ( t > until_t ) break; 
+964,967c953,956
+< 	} while( m_runnable->is_empty() && t != until_t );
+< 	if ( t > m_curr_time ) m_curr_time = t;
+< 
+<     } while( t != until_t );
+---
+> 	} while( m_runnable->is_empty() );
+> 	if ( t > m_curr_time && t <= until_t ) m_curr_time = t;
+>     } while ( !m_runnable->is_empty() ); 
+>     if ( t > m_curr_time && t <= until_t ) m_curr_time = t;
+1241,1242c1230,1242
+< const sc_time
+< sc_simcontext::next_time()
+---
+> // +----------------------------------------------------------------------------
+> // |"sc_simcontext::next_time"
+> // | 
+> // | This method returns the time of the next event. If there are no events
+> // | it returns false.
+> // | 
+> // | Arguments:
+> // |     result = where to place time of the next event, if no event is 
+> // |              found this value will not be changed.
+> // | Result is true if an event is found, false if not.
+> // +----------------------------------------------------------------------------
+> bool
+> sc_simcontext::next_time( sc_time& result )
+1247c1247,1248
+< 	    return et->notify_time();
+---
+> 	    result = et->notify_time();
+> 	    return true;
+1251c1252
+<     return SC_ZERO_TIME;
+---
+>     return false;
+1254d1254
+< 
+1416c1416
+< sc_time  sc_time_to_pending_activity()
+---
+> sc_time sc_time_to_pending_activity()
+1420a1421,1423
+>     // If the simulation is not running return max time.
 > 
+>     if ( !sc_is_running() ) return sc_max_time();
+1437,1439c1440,1443
+<         result = p_c->next_time();
+< 	if ( result == SC_ZERO_TIME ) result = sc_max_time();
+< 	result = result - sc_time_stamp();
+---
+>         if ( p_c->next_time(result) )
+> 	    result = result - sc_time_stamp();
+> 	else
+> 	    result = sc_max_time();
+1477a1482,1483
+> 	if ( p == SC_RUN_TO_TIME )
+> 	    context->m_curr_time = exit_time;
+1480c1486
+<     context->simulate( duration );
+---
+>     context->simulate( duration, p );

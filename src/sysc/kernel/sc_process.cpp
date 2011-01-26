@@ -43,6 +43,9 @@
  *****************************************************************************/
 
 // $Log: sc_process.cpp,v $
+// Revision 1.8  2011/01/25 20:50:37  acg
+//  Andy Goodrich: changes for IEEE 1666 2011.
+//
 // Revision 1.7  2011/01/19 23:21:50  acg
 //  Andy Goodrich: changes for IEEE 1666 2011
 //
@@ -369,6 +372,7 @@ sc_process_b::sc_process_b( const char* name_p, bool free_host,
     m_name_gen_p(0),
     m_process_kind(SC_NO_PROC_),
     m_references_n(1), 
+    m_reset_event_p(0),
     m_resume_event_p(0),
     m_runnable_p(0),
     m_semantics_host_p( host_p ),
@@ -399,13 +403,7 @@ sc_process_b::~sc_process_b()
    
     // REDIRECT ANY CHILDREN AS CHILDREN OF THE SIMULATION CONTEXT:
 
-    int size = m_child_objects.size();
-    for(int i = 0; i < size; i++) 
-    {
-        sc_object* obj_p =  m_child_objects[i];
-        obj_p->m_parent = NULL;
-        simcontext()->add_child_object(obj_p);
-    }
+    orphan_child_objects();
 
 
     // DELETE SEMANTICS OBJECTS IF NEED BE:
@@ -418,14 +416,26 @@ sc_process_b::~sc_process_b()
 
     // REMOVE ANY STRUCTURES THAT MAY HAVE BEEN BUILT:
 
-    if ( m_name_gen_p ) delete m_name_gen_p;
     if ( m_last_report_p ) delete m_last_report_p;
+    if ( m_name_gen_p ) delete m_name_gen_p;
+    if ( m_reset_event_p ) delete m_reset_event_p;
     if ( m_resume_event_p ) delete m_resume_event_p;
     if ( m_term_event_p ) delete m_term_event_p;
     if ( m_timeout_event_p ) delete m_timeout_event_p;
 
 }
 
+//------------------------------------------------------------------------------
+//"sc_process_b::reset_event"
+//
+// This method returns a reference to the reset event for this object 
+// instance. If no event exists one is allocated.
+//------------------------------------------------------------------------------
+sc_event& sc_process_b::reset_event()
+{
+    if ( !m_reset_event_p ) m_reset_event_p = new sc_event;
+    return *m_reset_event_p;
+}
 
 //------------------------------------------------------------------------------
 //"sc_process_b::terminated_event"
