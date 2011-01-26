@@ -970,8 +970,8 @@ sc_simcontext::simulate( const sc_time& duration )
 	    } while( m_timed_events->size() &&
 		     m_timed_events->top()->notify_time() == t );
 
+	    if ( t > m_curr_time ) m_curr_time = t;
 	} while( m_runnable->is_empty() );
-	if ( t > m_curr_time ) m_curr_time = t;
     } while ( t < until_t ); // hold off on the delta for the until_t time.
 
 exit:
