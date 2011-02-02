@@ -35,6 +35,13 @@
  *****************************************************************************/
 
 // $Log: sc_process_handle.h,v $
+// Revision 1.12  2011/02/01 23:01:53  acg
+//  Andy Goodrich: removed dead code.
+//
+// Revision 1.11  2011/02/01 21:07:36  acg
+//  Andy Goodrich: defering of run queue manipulations to the
+//  sc_thread_process::throw_it() method.
+//
 // Revision 1.10  2011/01/25 20:50:37  acg
 //  Andy Goodrich: changes for IEEE 1666 2011.
 //
@@ -525,17 +532,7 @@ inline void sc_process_handle::throw_it( const EXCEPT& exception,
         SC_REPORT_WARNING( SC_ID_EMPTY_PROCESS_HANDLE_, "throw_it()");
 	return;
     }
-
-    // Requeue the current process so it will execute just after our throwees.
-
-    context_p = sc_get_curr_simcontext();
-    context_p->requeue_current_process();
-
-    // Throw the exception and suspend the current process, causing the 
-    // throwees to be queued for execution.
-
     m_target_p->throw_user(helper, descendants);
-    context_p->suspend_current_process();
 }
 
 

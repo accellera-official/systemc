@@ -43,6 +43,9 @@
  *****************************************************************************/
 
 // $Log: sc_process.cpp,v $
+// Revision 1.9  2011/02/01 21:06:12  acg
+//  Andy Goodrich: new layout for the process_state enum.
+//
 // Revision 1.8  2011/01/25 20:50:37  acg
 //  Andy Goodrich: changes for IEEE 1666 2011.
 //
@@ -92,6 +95,7 @@
 #include "sysc/kernel/sc_thread_process.h"
 #include "sysc/kernel/sc_sensitive.h"
 #include "sysc/kernel/sc_process_handle.h"
+#include "sysc/kernel/sc_event.h"
 
 namespace sc_core {
 
@@ -161,7 +165,7 @@ void sc_process_b::disconnect_process()
 
     // IF THIS OBJECT IS PINING FOR THE FJORDS WE ARE DONE:
 
-    if ( m_state == ps_zombie ) return;    
+    if ( m_state & ps_bit_zombie ) return;    
 
     // IF THIS IS A THREAD SIGNAL ANY MONITORS WAITING FOR IT TO EXIT:
 
@@ -276,6 +280,7 @@ sc_process_b::remove_dynamic_events()
     sc_method_handle  method_h;   // This process as a method.
     sc_thread_handle  thread_h;   // This process as a thread.
 
+    m_trigger_type = STATIC;
     switch ( m_process_kind )
     {
       case SC_THREAD_PROC_:
@@ -297,6 +302,10 @@ sc_process_b::remove_dynamic_events()
       case SC_METHOD_PROC_:
         method_h = DCAST<sc_method_handle>(this);
         assert( method_h );
+	if ( method_h->m_timeout_event_p ) {
+	    method_h->m_timeout_event_p->remove_dynamic(method_h);
+	    method_h->m_timeout_event_p->cancel();
+	}
         if ( m_event_p ) m_event_p->remove_dynamic( method_h );
         if ( m_event_list_p )
         {
@@ -381,7 +390,7 @@ sc_process_b::sc_process_b( const char* name_p, bool free_host,
     m_sticky_reset(false),
     m_term_event_p(0),
     m_throw_helper_p(0),
-    m_throw_type( THROW_NONE ),
+    m_throw_status( THROW_NONE ),
     m_timed_out(false),
     m_timeout_event_p(new sc_event),
     m_trigger_type(STATIC)

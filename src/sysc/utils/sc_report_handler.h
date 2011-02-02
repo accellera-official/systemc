@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_report_handler.h,v $
+// Revision 1.2  2011/02/01 23:02:05  acg
+//  Andy Goodrich: IEEE 1666 2011 changes.
+//
 // Revision 1.1.1.1  2006/12/15 20:20:06  acg
 // SystemC 2.3
 //
@@ -80,6 +83,13 @@ public:
 		       const char* msg,
 		       const char* file,
 		       int line);
+
+    static void report( sc_severity, 
+                        const char* msg_type, 
+			const char* msg, 
+                        int verbosity, 
+			const char* file, 
+			int line );
 
     static sc_actions set_actions(sc_severity,
 				  sc_actions = SC_UNSPECIFIED);

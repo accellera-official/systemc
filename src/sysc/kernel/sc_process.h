@@ -46,6 +46,9 @@
  *****************************************************************************/
 
 // $Log: sc_process.h,v $
+// Revision 1.8  2011/02/01 21:06:12  acg
+//  Andy Goodrich: new layout for the process_state enum.
+//
 // Revision 1.7  2011/01/25 20:50:37  acg
 //  Andy Goodrich: changes for IEEE 1666 2011.
 //
@@ -450,23 +453,36 @@ class sc_process_b : public sc_object {
         THROW_NONE = 0,
 	THROW_KILL,
         THROW_USER,
-        THROW_RESET
+        THROW_ASYNC_RESET,
+        THROW_SYNC_RESET,
+	THROWING_NOW
     };
 
     enum process_state {
-        ps_disabled = 0,           // process is disabled.
-        ps_disable_pending,        // process to be disabled, but execute once.
-        ps_disabled_suspended,     // process is disabled and suspended.
-        ps_normal,                 // process is in normal execution.
-        ps_suspended,              // process is suspended.
-        ps_suspended_ready_to_run, // process is suspended, run it on resume.
-        ps_zombie                  // process has been killed.
+	ps_bit_disabled = 1,      // process is disabled.
+	ps_bit_pending  = 2,      // process id pending disabled.
+	ps_bit_ready_to_run = 4,  // process is ready to run.
+        ps_bit_suspended = 8,     // process is suspended.
+	ps_bit_zombie = 0x10,     // process is a zombie.
+
+        ps_disabled = ps_bit_disabled,
+        ps_disable_pending = (ps_bit_disabled|ps_bit_pending),
+        ps_disabled_ready_to_run = (ps_bit_disabled|ps_bit_ready_to_run),
+	ps_disabled_suspended = (ps_bit_disabled|ps_bit_suspended),
+        ps_disabled_suspended_rtr = (ps_bit_disabled|ps_bit_suspended|
+	                             ps_bit_ready_to_run),
+        ps_normal = 0,
+        ps_suspended = ps_bit_suspended,
+        ps_suspended_ready_to_run = (ps_bit_suspended|ps_bit_ready_to_run),
+        ps_zombie = ps_bit_zombie 
     };
+
     enum reset_type {
         reset_asynchronous = 0,
         reset_synchronous_off,
         reset_synchronous_on
     };
+
     enum trigger_t
     {
         STATIC,
@@ -486,7 +502,7 @@ class sc_process_b : public sc_object {
     virtual ~sc_process_b();
 
   public:
-    inline process_state current_state() { return m_state; }
+    inline int current_state() { return m_state; }
     bool dont_initialize() const { return m_dont_init; }
     virtual void dont_initialize( bool dont );
     const ::std::vector<sc_object*>& get_child_objects() const;
@@ -578,12 +594,12 @@ class sc_process_b : public sc_object {
     sc_process_b*                m_runnable_p;      // sc_runnable link
     sc_process_host*             m_semantics_host_p;   // Host for semantics.
     SC_ENTRY_FUNC                m_semantics_method_p; // Method for semantics.
-    process_state                m_state;           // Process state.
+    int                          m_state;           // Process state.
     std::vector<const sc_event*> m_static_events;   // Static events waiting on.
     bool                         m_sticky_reset;    // See note 3 above.
     sc_event*                    m_term_event_p;    // Terminated event.
     sc_throw_it_helper*          m_throw_helper_p;  // What to throw.
-    process_throw_type           m_throw_type;      // Throw type.
+    process_throw_type           m_throw_status;    // Exception throwing status
     bool                         m_timed_out;       // True if we timed out.
     sc_event*                    m_timeout_event_p; // Timeout event.
     trigger_t                    m_trigger_type;    // Type of trigger using.
@@ -665,7 +681,17 @@ inline bool sc_process_b::is_runnable() const
 //------------------------------------------------------------------------------
 inline bool sc_process_b::is_unwinding() const
 {
-    return m_throw_type == THROW_RESET || m_throw_type == THROW_KILL;
+    switch( m_throw_status )
+    {
+      case THROW_KILL:
+      case THROW_ASYNC_RESET:
+      case THROW_SYNC_RESET:
+      case THROWING_NOW:
+      case THROW_USER:
+        return true;
+      default:
+        return false;
+    }
 }
 
 
@@ -726,7 +752,9 @@ inline void sc_process_b::reference_increment()
 // signal that was specified via reset_signal_is, or the value of the
 // m_sticky_reset field. We get called any time m_sticky_reset changes
 // or a signal value changes since, since we may need to throw an exception 
-// or clear one.
+// or clear one. Note that this method may be called when there is no
+// active process, but rather the main simulator is executing so we must
+// check for that case.
 //
 // Arguments:
 //     async    = true if this is an asynchronous reset.
@@ -734,6 +762,7 @@ inline void sc_process_b::reference_increment()
 //------------------------------------------------------------------------------
 inline void sc_process_b::reset_changed( bool async, bool asserted )
 {       
+
     // Reset is being asserted:
 
     if ( asserted )
@@ -762,10 +791,11 @@ inline void sc_process_b::reset_changed( bool async, bool asserted )
 
     // Clear the throw type if there are no active resets.
 
-    if ( m_throw_type == THROW_RESET && m_active_areset_n == 0 && 
-         m_active_reset_n == 0 )
+    if ( (m_throw_status == THROW_SYNC_RESET || 
+          m_throw_status == THROW_ASYNC_RESET) &&
+         m_active_areset_n == 0 && m_active_reset_n == 0 && !m_sticky_reset )
     {
-        m_throw_type = THROW_NONE;
+        m_throw_status = THROW_NONE;
     }
 }       
 
@@ -852,8 +882,8 @@ inline void sc_process_b::semantics()
 {
     assert( m_process_kind != SC_NO_PROC_ );
 
-    m_throw_type = ( m_active_areset_n || m_active_reset_n ) ?
-        THROW_RESET : THROW_NONE;
+    m_throw_status = m_active_areset_n ? THROW_ASYNC_RESET : 
+        ( m_active_reset_n  ?  THROW_SYNC_RESET : THROW_NONE);
 #   ifndef SC_USE_MEMBER_FUNC_PTR
         m_semantics_method_p->invoke( m_semantics_host_p );
 #   else
@@ -869,7 +899,7 @@ inline void sc_process_b::semantics()
 //------------------------------------------------------------------------------
 inline bool sc_process_b::terminated() const
 {
-    return m_state == ps_zombie;
+    return m_state & ps_bit_zombie;
 }
 
 

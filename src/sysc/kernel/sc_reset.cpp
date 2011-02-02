@@ -24,6 +24,9 @@
  *****************************************************************************/
 
 // $Log: sc_reset.cpp,v $
+// Revision 1.8  2011/02/01 21:08:26  acg
+//  Andy Goodrich: new multiple reset support.
+//
 // Revision 1.7  2011/01/06 18:04:38  acg
 //  Andy Goodrich: removed commented out code.
 //
@@ -141,8 +144,8 @@ void sc_reset::notify_processes()
 {
     bool             active;       // true if reset is active.
     sc_reset_target* entry_p;      // reset entry processing.
-    int              process_i;    // index of process resetting.
-    int              process_n;    // # of processes to reset.
+    size_t           process_i;    // index of process resetting.
+    size_t           process_n;    // # of processes to reset.
     bool             value;        // value of our signal.
 
     value = m_iface_p->read();
@@ -177,10 +180,6 @@ void sc_reset::reconcile_resets()
     for ( now_p = reset_finder_q; now_p; now_p = next_p )
     {
         next_p = now_p->m_next_p;
-#if 0 // @@@@ REMOVE
-        if ( now_p->m_target_p->m_reset_p || now_p->m_target_p->m_areset_p )
-            SC_REPORT_ERROR(SC_ID_MULTIPLE_RESETS_,now_p->m_target_p->name());
-#endif
         if ( now_p->m_in_p )
         {
             iface_p = DCAST<const sc_signal_in_if<bool>*>(
@@ -239,8 +238,7 @@ void sc_reset::remove_process( sc_process_b* process_p )
 //"sc_reset::reset_signal_is"
 //
 //------------------------------------------------------------------------------
-void sc_reset::reset_signal_is(
-    bool async, const sc_in<bool>& port, bool level)
+void sc_reset::reset_signal_is( bool async, const sc_in<bool>& port, bool level)
 {
     const sc_signal_in_if<bool>* iface_p;
     sc_process_b*                process_p;
@@ -279,7 +277,6 @@ void sc_reset::reset_signal_is(
       case SC_THREAD_PROC_:
       case SC_METHOD_PROC_:
       case SC_CTHREAD_PROC_:
-        // @@@@ CAN THIS GO? process_p->m_reset_level = level;
         iface_p = DCAST<const sc_signal_in_if<bool>*>(port.get_interface());
         if ( iface_p )
             reset_signal_is( async, *iface_p, level );
@@ -307,7 +304,6 @@ void sc_reset::reset_signal_is(
       case SC_THREAD_PROC_:
       case SC_METHOD_PROC_:
       case SC_CTHREAD_PROC_:
-        // @@@@ process_p->m_reset_level = level;
         iface_p = DCAST<const sc_signal_in_if<bool>*>(port.get_interface());
         if ( iface_p )
             reset_signal_is( async, *iface_p, level );
@@ -359,6 +355,5 @@ void sc_reset::reset_signal_is(
         break;
     }
 }
-
 
 } // namespace sc_core

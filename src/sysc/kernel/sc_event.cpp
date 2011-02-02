@@ -35,6 +35,9 @@
 
 
 // $Log: sc_event.cpp,v $
+// Revision 1.6  2011/02/01 21:02:28  acg
+//  Andy Goodrich: new return code for trigger_dynamic() calls.
+//
 // Revision 1.5  2011/01/18 20:10:44  acg
 //  Andy Goodrich: changes for IEEE1666_2011 semantics.
 //
@@ -217,20 +220,13 @@ sc_event::reset()
 // | This method "triggers" this object instance. This consists of scheduling
 // | for execution all the processes that are schedulable and waiting on this 
 // | event.
-// |
-// | Notes:
-// |   (1) For processes that are dynamically waiting on this event we must
-// |       that if they are disabled they stay on the appropriate dynamic
-// |       queue. Disabled events are handled in this manner because this
-// |       event may be part of an and event list and its easier to keep the
-// |       processes on the event queue than it is to try to restore things
-// |       when the process is re-enabled.
 // +----------------------------------------------------------------------------
 void
 sc_event::trigger()
 {
-    int last_i; // index of last element in vector now accessing.
-    int size;   // size of vector now accessing.
+    int       last_i; // index of last element in vector now accessing.
+    int       size;   // size of vector now accessing.
+
 
     // trigger the static sensitive methods
 
@@ -253,23 +249,27 @@ sc_event::trigger()
     {
 	last_i = size - 1;
 	sc_method_handle* l_methods_dynamic = &m_methods_dynamic[0];
-	for ( int i = 0; i <= last_i; )
+	for ( int i = 0; i <= last_i; i++ )
 	{
 	    sc_method_handle method_h = l_methods_dynamic[i];
-	    if ( method_h->trigger_dynamic( this ) )
+	    switch ( method_h->trigger_dynamic( this ) )
 	    {
+	      case dt_rearm:
+	        break;
+	      case dt_remove:
+		l_methods_dynamic[i] = l_methods_dynamic[last_i];
+		last_i--;
+		i--;
+		break;
+	      case dt_run:
+		m_simc->push_runnable_method( method_h );
+		break;
+	      case dt_run_remove:
 		m_simc->push_runnable_method( method_h );
 		l_methods_dynamic[i] = l_methods_dynamic[last_i];
 		last_i--;
-	    }
-	    else if ( method_h->current_state() == sc_process_b::ps_disabled )
-	    {
-		i++; // see note 1 above.
-	    }
-	    else
-	    {
-		l_methods_dynamic[i] = l_methods_dynamic[last_i];
-		last_i--;
+		i--;
+                break;
 	    }
 	}
         m_methods_dynamic.resize(last_i+1);
@@ -296,23 +296,27 @@ sc_event::trigger()
     {
 	last_i = size - 1;
 	sc_thread_handle* l_threads_dynamic = &m_threads_dynamic[0];
-	for ( int i = 0; i <= last_i; )
+	for ( int i = 0; i <= last_i; i++ )
 	{
 	    sc_thread_handle thread_h = l_threads_dynamic[i];
-	    if ( thread_h->trigger_dynamic( this ) )
+	    switch ( thread_h->trigger_dynamic( this ) )
 	    {
+	      case dt_rearm:
+	        break;
+	      case dt_remove:
+		l_threads_dynamic[i] = l_threads_dynamic[last_i];
+		i--;
+		last_i--;
+		break;
+	      case dt_run:
+		m_simc->push_runnable_thread( thread_h );
+		break;
+	      case dt_run_remove:
 		m_simc->push_runnable_thread( thread_h );
 		l_threads_dynamic[i] = l_threads_dynamic[last_i];
+		i--;
 		last_i--;
-	    }
-	    else if ( thread_h->current_state() == sc_process_b::ps_disabled )
-	    {
-		i++; // see note 1 above.
-	    }
-	    else
-	    {
-		l_threads_dynamic[i] = l_threads_dynamic[last_i];
-		last_i--;
+                break;
 	    }
 	}
         m_threads_dynamic.resize(last_i+1);

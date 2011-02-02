@@ -35,6 +35,14 @@
  *****************************************************************************/
 
 // $Log: sc_thread_process.h,v $
+// Revision 1.12  2011/02/01 23:01:53  acg
+//  Andy Goodrich: removed dead code.
+//
+// Revision 1.11  2011/02/01 21:18:01  acg
+//  Andy Goodrich:
+//  (1) Changes in throw processing for new process control rules.
+//  (2) Support of new process_state enum values.
+//
 // Revision 1.10  2011/01/25 20:50:37  acg
 //  Andy Goodrich: changes for IEEE 1666 2011.
 //
@@ -185,7 +193,7 @@ class sc_thread_process : public sc_process_b {
     virtual void throw_user( const sc_throw_it_helper& helper,
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
 
-    bool trigger_dynamic( sc_event* );
+    sc_event::dt_status trigger_dynamic( sc_event* );
 
     void wait( const sc_event& );
     void wait( const sc_event_or_list& );
@@ -228,25 +236,41 @@ inline bool sc_thread_process::ready_to_run()
     	return false;
     }
 
-    // IF WE ARE THROWING AN EXCEPTION DISPATCH THIS THREAD:
+    // SPECIAL CASE NORMAL STATE FOR DISPATCHING SPEED:
 
-    if ( m_throw_type != THROW_NONE ) 
+    if ( m_state == ps_normal )
     {
-    	return true;
-    }
-
-
-    // SEE IF WE CAN DISPATCH THE THREAD:
-
-    switch( m_state )
-    {
-      case ps_normal:
+	if ( m_throw_status != THROW_NONE )  return true;
         if ( m_wait_cycle_n > 0 )
         {
             --m_wait_cycle_n;
             return false;
         }
         return true;
+    }
+
+    // WE ARE THROWING AN EXCEPTION THAT TRUMPS SUSPEND/DISABLE 
+    //
+    // Schedule the process so it can throw the exception.
+
+    if ( m_throw_status == THROW_KILL ||
+	 m_throw_status == THROW_ASYNC_RESET ||
+	 m_throw_status == THROW_USER ) 
+    {
+	 return true;
+    }
+
+    // SEE IF WE CAN DISPATCH THE THREAD:
+
+    switch( m_state )
+    {
+      // No-op: its handled above.
+      case ps_normal:
+        return true; 
+
+      // Down count the number of waits necessary to wake the process, if
+      // its ready to be awakened change its status.
+
       case ps_suspended:
         if ( m_wait_cycle_n > 0 )
         {
@@ -255,14 +279,19 @@ inline bool sc_thread_process::ready_to_run()
         }
         m_state = ps_suspended_ready_to_run;
         break;
+
+      // The process has been disabled, but its on the run queue, so let it
+      // run once and then disable it.
+
       case ps_disable_pending:
-        if ( m_wait_cycle_n > 0 ) // this should never happen, but check anyway.
+        m_state = ps_disabled;
+        if ( m_wait_cycle_n > 0 )
         {
             --m_wait_cycle_n;
             return false;
         }
-        m_state = ps_disabled;
-	return true;  
+	return true;
+
       default:
         break;
     }
@@ -302,34 +331,33 @@ inline void sc_thread_process::suspend_me()
     sc_simcontext* simc_p = simcontext();
     simc_p->cor_pkg()->yield( simc_p->next_cor() );
 
-    // IF WE ARE IN RESET BECAUSE OF A THROW, THROW THAT EXCEPTION:
+    // IF THERE IS A THROW TO BE DONE FOR THIS PROCESS DO IT NOW:
     //
-    // (1) If the throw condition is gone this is a no-op.
-    // (2) If we have a reset throw reset the throw flag if a reset condition
-    //     no longer exists. If it does exist leave it set. Regardless we
-    //     throw an sc_user exception to service the reset that got us here.
-    // (3) If it is a user throw reset the throw flag and throw it.
+    // Optimize THROW_NONE for speed as it is the normal case.
 
-    if ( m_throw_type == THROW_NONE )
+    if ( m_throw_status == THROW_NONE ) return;
+
+    switch( m_throw_status )
     {
-        return;
-    }
-    else if ( m_throw_type == THROW_RESET )
-    {
+      case THROW_ASYNC_RESET:
+      case THROW_SYNC_RESET:
 	if ( m_reset_event_p ) m_reset_event_p->notify();
-	m_throw_type = ( m_active_areset_n || m_active_reset_n ) ?
-	    THROW_RESET : THROW_NONE;
-        throw sc_unwind_exception( true );
-    }
-    else if ( m_throw_type == THROW_USER )
-    {
-        m_throw_type = THROW_NONE; 
+	m_throw_status = THROWING_NOW;
+        throw sc_unwind_exception( true ); 
+	break;
+
+      case THROW_USER:
+	m_throw_status = THROWING_NOW;
         m_throw_helper_p->throw_it();
-    }
-    else if ( m_throw_type == THROW_KILL )
-    {
-        // m_throw_type = THROW_NONE;  // @@@@####
+	break;
+
+      case  THROW_KILL:
+	m_throw_status = THROWING_NOW;
 	throw sc_unwind_exception( false );
+	break;
+
+      default: // THROWING_NOW
+        break;
     }
 }
 

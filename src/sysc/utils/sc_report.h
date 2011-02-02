@@ -42,6 +42,9 @@
  *****************************************************************************/
 
 // $Log: sc_report.h,v $
+// Revision 1.3  2011/02/01 23:02:05  acg
+//  Andy Goodrich: IEEE 1666 2011 changes.
+//
 // Revision 1.2  2008/05/20 20:42:50  acg
 //  Andy Goodrich: added sc_core namespace prefix for ID value in sc_assert()
 //  macro.
@@ -74,6 +77,21 @@ enum sc_severity {
 };
 
 typedef unsigned sc_actions;
+
+// ----------------------------------------------------------------------------
+//  ENUM : sc_verbosity
+//
+//  Enumeration of message verbosity.
+// ----------------------------------------------------------------------------
+
+ enum sc_verbosity { 
+     SC_NONE = 0, 
+     SC_LOW = 100, 
+     SC_MEDIUM = 200, 
+     SC_HIGH = 300,
+     SC_FULL = 400, 
+     SC_DEBUG = 500
+ };
 
 // ----------------------------------------------------------------------------
 //  ENUM : 
@@ -136,6 +154,15 @@ public:
 
     const char* get_process_name() const;
 
+    int get_verbosity_level() const { return m_verbosity_level; }
+
+    int set_verbosity_level( int level ) 
+    { 
+	int result = m_verbosity_level;
+        m_verbosity_level = level; 
+	return result;
+    }
+
     bool valid () const
         {
 	    return process != 0;
@@ -166,6 +193,7 @@ protected:
     int                line;
     sc_time*           timestamp;
     sc_object*         process;
+    int                m_verbosity_level;
     char*              m_what;
 
 public:  // backward compatibility with 2.0+
@@ -198,6 +226,10 @@ typedef std::exception sc_exception;
 #define SC_REPORT_INFO(id,msg) \
     sc_core::sc_report_handler::report( \
 	    sc_core::SC_INFO, id, msg, __FILE__, __LINE__ )
+
+#define SC_REPORT_INFO_VERB( msg_type , msg, verbosity ) \
+    sc_report_handler::report( SC_INFO , msg_type , msg , verbosity, \
+                               __FILE__ , __LINE__ )
 
 #define SC_REPORT_WARNING(id,msg) \
     sc_core::sc_report_handler::report(\

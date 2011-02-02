@@ -35,6 +35,16 @@
  *****************************************************************************/
 
 // $Log: sc_thread_process.cpp,v $
+// Revision 1.14  2011/02/01 23:01:53  acg
+//  Andy Goodrich: removed dead code.
+//
+// Revision 1.13  2011/02/01 21:16:36  acg
+//  Andy Goodrich:
+//  (1) New version of trigger_dynamic() to implement new return codes and
+//      proper processing of events with new dynamic process rules.
+//  (2) Recoding of kill_process(), throw_user() and reset support to
+//      consolidate preemptive thread execution in sc_simcontext::preempt_with().
+//
 // Revision 1.12  2011/01/25 20:50:37  acg
 //  Andy Goodrich: changes for IEEE 1666 2011.
 //
@@ -162,8 +172,6 @@ void sc_thread_cor_fn( void* arg )
      
         sc_core::sc_cor* x = simc_p->next_cor();
 	simc_p->cor_pkg()->abort( x );
-
-	// simc_p->cor_pkg()->abort( simc_p->next_cor() );
     }
 
 }
@@ -204,11 +212,8 @@ void sc_thread_process::disable_process(
       case ps_normal:
         m_state = ( next_runnable() == 0 ) ? ps_disabled : ps_disable_pending;
         break;
-      case ps_suspended:
-      case ps_suspended_ready_to_run:
-        m_state = ps_disabled_suspended;
-        break;
       default:
+        m_state = m_state | ps_bit_disabled;
         break;
     }
 }
@@ -251,10 +256,13 @@ void sc_thread_process::enable_process(
       case ps_disable_pending:
         m_state = ps_normal;
         break;
-      case ps_disabled_suspended:
-        m_state = ps_suspended;
-        break;
+      case ps_disabled_ready_to_run:
+        m_state = ps_normal;
+	if ( next_runnable() == 0 )
+	    simcontext()->push_runnable_thread(this);
+	break;
       default:
+        m_state = m_state & ~ps_bit_disabled; 
         break;
     }
 }
@@ -269,7 +277,7 @@ void sc_thread_process::enable_process(
 //------------------------------------------------------------------------------
 void sc_thread_process::kill_process(sc_descendant_inclusion_info descendants )
 {
-    sc_thread_handle                 active_p;   // active process.
+    sc_thread_handle                 active_p;   // active thread process or 0.
     int                              child_i;    // index of child accessing.
     int                              child_n;    // number of children.
     sc_process_b*                    child_p;    // child accessing.
@@ -293,31 +301,54 @@ void sc_thread_process::kill_process(sc_descendant_inclusion_info descendants )
 
     // SET UP TO KILL THE PROCESS IF SIMULATION HAS STARTED:
     //
-    // (1) If this is not a suicide we need to push the currently running
-    //     process onto the front of the run queue, then push this process
-    //     onto the front of the turn queue, and then suspend the currently
-    //     running process so that the kill gets done, and the currently
-    //     running process then resumes.
-    //
-    // (2) If this is a suicide we need to push this process onto the 
-    //     front of the run queue and suspend it so the kill gets thrown.
- 
+    // We have 3 cases to consider:
+    // (1) The murderer is a method, or the simulator proper.
+    // (2) The murderer is another thread.
+    // (3) This is a suicide.
+
     if ( sc_is_running() )
     {
-        m_throw_type = THROW_KILL;
+        m_throw_status = THROW_KILL;
         m_wait_cycle_n = 0;
-        active_p = RCAST<sc_thread_handle>(sc_get_current_process_b());
+#if 1
+        context_p->preempt_with(this);
+#else
+        active_p = DCAST<sc_thread_handle>(sc_get_current_process_b());
 
-        if ( this != active_p && active_p )
+	// Murderer is a method, or the simulator proper: execute this
+	// thread directly.
+
+	if ( active_p == NULL )
+	{
+	    context_p->run_now( this );
+	}
+
+	// Murderer is another thread:
+	//   (a) push the currently running process onto the front of the run 
+	//       queue if it is a thread.
+	//   (b) then push this thread onto the front of the run queue,
+	//   (c) suspend the currently running thread.
+
+	else if ( this != active_p )
+	{
 	    context_p->execute_thread_next( active_p );
-	if ( next_runnable() != 0 )
-	    context_p->remove_runnable_thread(this);
-	context_p->execute_thread_next(this);
-
-        if ( this != active_p && active_p )
-	    active_p->suspend_me();
-	else
+	    if ( next_runnable() != 0 )
+		context_p->remove_runnable_thread(this);
+	    context_p->execute_thread_next(this);
 	    suspend_me();
+	}
+
+	// This is a suicide: push this thread on to the front of the run
+	// queue and suspend it to we wake up in the throw code.
+
+	else
+	{
+	    if ( next_runnable() != 0 )
+		context_p->remove_runnable_thread(this);
+	    context_p->execute_thread_next(this);
+	    suspend_me();
+	}
+#endif
     }
 
     // IF THE SIMULATION HAS NOT STARTED REMOVE TRACES OF OUR PROCESS FROM 
@@ -382,7 +413,7 @@ void sc_thread_process::resume_process(
         break;
       case ps_suspended_ready_to_run:
         m_state = ps_normal;
-        if ( next_runnable() == 0 ) 
+        if ( next_runnable() == 0 )  
 	{
 	    if ( m_resume_event_p == 0 ) 
 	    {
@@ -390,12 +421,12 @@ void sc_thread_process::resume_process(
 	        add_static_event( *m_resume_event_p );
 	    }
 	    m_resume_event_p->notify(SC_ZERO_TIME);
+	    simcontext()->push_runnable_thread(this);
 	}
-        break;
-      case ps_disabled_suspended:
-        m_state = ps_disabled;
+	remove_dynamic_events();  // order important.
         break;
       default:
+        m_state = m_state & ~ps_bit_suspended;
         break;
     }
 }
@@ -552,10 +583,8 @@ void sc_thread_process::suspend_process(
             suspend_me();
         }
         break;
-      case ps_disabled:
-        m_state = ps_disabled_suspended;
-        break;
       default:
+	m_state = m_state | ps_bit_suspended;
         break;
     }
 }
@@ -571,35 +600,21 @@ void sc_thread_process::throw_reset( bool async )
 {     
     sc_thread_handle active_p; // handle for active thread if its a thread.
 
-    // IF THIS INSTANCE IS DEAD IGNORE THE REQUEST
+    // If the thread to be reset is dead ignore the call.
 
-    if ( m_state == ps_zombie ) return;
+    if ( m_state & ps_bit_zombie ) return;
 
 
-    // SET THE THROW TYPE AND CLEAR ANY PENDING DYNAMIC EVENTS:
+    // Set the throw type and clear any pending dynamic events: 
 
-    m_throw_type = THROW_RESET;
+    m_throw_status = async ? THROW_ASYNC_RESET : THROW_SYNC_RESET;
     m_wait_cycle_n = 0;
+    // @@@@#### should we really do a remove_events here?
 
-    // IF REQUESTED TO, IMMEDIATELY SCHEDULE THE RESET:
+    // If this is an asynchronous reset execute it immediately:
 
-    if ( async && (next_runnable() == 0) )
-            simcontext()->push_runnable_thread( this );
+    if ( async ) simcontext()->preempt_with( this );
 
-    // IF THE ACTIVE THREAD IS NOT THIS OBJECT INSTANCE:
-    //
-    // We will need so suspend it so that we can execute the reset on our
-    // object instance:
-    //    (1) Reschedule the active thread for later execution.
-    //    (2) Suspend the active thread so that this thread being reset can 
-    //        execute its reset if its sensitivity is activated.
-
-    active_p = RCAST<sc_thread_handle>(sc_get_current_process_b());
-    if ( this != active_p && active_p )
-    {
-	simcontext()->push_runnable_thread( active_p );
-	active_p->suspend_me();
-    }
 }
 
 
@@ -629,12 +644,12 @@ void sc_thread_process::throw_user( const sc_throw_it_helper& helper,
     // SET UP THE THROW REQUEST FOR THIS OBJECT INSTANCE AND QUEUE IT FOR
     // EXECUTION:
 
-    if ( m_state == ps_zombie ) return;
+    if ( m_state & ps_bit_zombie ) return;
 
-    m_throw_type = THROW_USER;
+    m_throw_status = THROW_USER;
     if ( m_throw_helper_p != 0 ) delete m_throw_helper_p;
     m_throw_helper_p = helper.clone();
-    if ( next_runnable() == 0 ) simcontext()->push_runnable_thread_front(this);
+    simcontext()->preempt_with( this );
 
     // IF NEEDED PROPOGATE THE THROW REQUEST THROUGH OUR DESCENDANTS:
 
@@ -654,100 +669,324 @@ void sc_thread_process::throw_user( const sc_throw_it_helper& helper,
 //------------------------------------------------------------------------------
 //"sc_thread_process::trigger_dynamic"
 //
+// This method returns the status of this object instance with respect to 
+// the supplied event. There are 3 potential values to return:
+//   dt_rearm      - don't execute the thread and don't remove it from the
+//                   event's queue.
+//   dt_remove     - the thread should not be scheduled for execution and
+//                   the process should be moved from the event's thread queue.
+//   dt_run        - the thread should be scheduled for execution but the
+//                   the proces should stay on the event's thread queue.
+//   dt_run_remove - the thread should be scheduled for execution and the
+//                   process should be removed from the event's thread queue.
+//
+// Notes:
+//   (1) This method is identical to sc_method_process::trigger_dynamic(), 
+//       but they cannot be combined as sc_process_b::trigger_dynamic() 
+//       because the signatures things like sc_event::remove_dynamic()
+//       have different overloads for sc_thread_process* and sc_method_process*.
+//       So if you change code here you'll also need to change it in 
+//       sc_method_process.cpp.
 //------------------------------------------------------------------------------
-bool sc_thread_process::trigger_dynamic( sc_event* e )
+sc_event::dt_status sc_thread_process::trigger_dynamic( sc_event* e )
 {
-    // If this process is already runnable, or it is disabled we can't trigger
-    // an event.
+    sc_event::dt_status rc; // return code.
 
-    if( is_runnable() ) {
-        return false;
-    }
-    if ( m_state == ps_disabled || m_state == ps_disable_pending )
-    {
-	return false;
-    }
-
-    // Process based on the event type:
+    // No time outs yet, and keep gcc happy.
 
     m_timed_out = false;
-    switch( m_trigger_type ) {
-    case EVENT: {
-        m_trigger_type = STATIC;
-        m_event_p = 0;
-        return true;
+    rc = sc_event::dt_remove;
+
+    // If this thread is already runnable can't trigger an event.
+
+    if( is_runnable() ) 
+    {
+        return sc_event::dt_remove;
     }
-    case OR_LIST: {
-        m_event_list_p->remove_dynamic( this, e );
-        m_event_list_p->auto_delete();
-        m_event_list_p = 0;
-        m_trigger_type = STATIC;
-        return true;
-    }
-    case AND_LIST: {
-        if( -- m_event_count == 0 ) {
-            // no need to remove_dynamic
+
+    // Process based on the event type and current process state:
+
+    switch( m_trigger_type ) 
+    {
+      case EVENT: 
+        if ( m_state == ps_normal )
+	{
+	    rc = sc_event::dt_run_remove;
+	}
+	else if ( m_state & ps_bit_disabled )
+	{
+            return sc_event::dt_rearm;
+	}
+	else if ( m_state & ps_bit_suspended )
+	{
+	    m_state = m_state | ps_bit_ready_to_run;
+            rc = sc_event::dt_remove;
+	}
+	else
+	{
+	    rc = sc_event::dt_remove;
+	}
+	m_event_p = 0;
+	m_trigger_type = STATIC;
+	break;
+
+      case AND_LIST:
+	if ( m_state & ps_bit_disabled )
+	{
+            return sc_event::dt_rearm;
+	}
+        -- m_event_count;
+
+        if ( m_state == ps_normal )
+	{
+	    rc = m_event_count ? sc_event::dt_remove : sc_event::dt_run_remove;
+	}
+	else if ( m_state & ps_bit_suspended )
+	{
+	    if ( m_event_count == 0 )
+		m_state = m_state | ps_bit_ready_to_run;
+            rc = sc_event::dt_remove;
+	}
+	else
+	{
+	    rc = sc_event::dt_remove;
+	}
+	if ( m_event_count == 0 )
+	{
+	    m_event_list_p->auto_delete();
+	    m_event_list_p = 0;
+	    m_trigger_type = STATIC;
+	}
+	break;
+
+      case OR_LIST:
+        if ( m_state == ps_normal )
+	{
+	    rc = sc_event::dt_run_remove;
+	}
+
+	else if ( m_state & ps_bit_disabled )
+	{
+            return sc_event::dt_rearm;
+	}
+
+	else if ( m_state & ps_bit_suspended )
+	{
+	    m_state = m_state | ps_bit_ready_to_run;
+            rc = sc_event::dt_remove;
+	}
+
+	else
+	{
+	    rc = sc_event::dt_remove;
+	}
+
+	m_event_list_p->remove_dynamic( this, e );
+	m_event_list_p->auto_delete();
+	m_event_list_p = 0;
+	m_trigger_type = STATIC;
+	break;
+
+      case TIMEOUT: 
+        if ( m_state == ps_normal )
+	    rc = sc_event::dt_run_remove;
+
+	else if ( m_state & ps_bit_disabled )
+            return sc_event::dt_rearm; 
+
+	else if ( m_state & ps_bit_suspended )
+	{
+            m_state = ps_suspended_ready_to_run;
+            rc = sc_event::dt_remove;
+	}
+
+	else
+            rc = sc_event::dt_remove;
+
+	m_trigger_type = STATIC;
+	break;
+
+      case EVENT_TIMEOUT: 
+        if ( e == m_timeout_event_p )
+	{
+	    if ( m_state == ps_normal )
+	    {
+		rc = sc_event::dt_run_remove;
+	    }
+	    else if ( m_state & ps_bit_disabled )
+	    {
+	        rc = sc_event::dt_remove;
+	    }
+	    else if ( m_state & ps_bit_suspended )
+	    {
+	        m_state = m_state | ps_bit_ready_to_run;
+		rc = sc_event::dt_remove;
+	    }
+	    else
+	    {
+	        rc = sc_event::dt_remove;
+	    }
+	    m_timed_out = true;
+	    m_event_p->remove_dynamic( this );
+	    m_event_p = 0;
+	    m_trigger_type = STATIC;
+	}
+	else
+	{
+	    if ( m_state == ps_normal )
+	    {
+		rc = sc_event::dt_run_remove;
+	    }
+	    else if ( m_state & ps_bit_disabled )
+	    {
+		if ( e == m_event_p ) 
+		    return sc_event::dt_rearm;
+		else
+		    rc = sc_event::dt_remove;
+	    }
+	    else if ( m_state & ps_bit_suspended )
+	    {
+		m_state = ps_suspended_ready_to_run;
+		rc = sc_event::dt_remove;
+	    }
+	    else
+	    {
+		rc = sc_event::dt_remove;
+	    }
+
+	    m_timeout_event_p->cancel();
+	    m_timeout_event_p->reset();
+	    m_event_p = 0;
+	    m_trigger_type = STATIC;
+	}
+	break;
+
+      case OR_LIST_TIMEOUT:
+        if ( e == m_timeout_event_p )
+	{
+	    if ( m_state == ps_normal )
+	    {
+		rc = sc_event::dt_run_remove;
+	    }
+	    else if ( m_state & ps_bit_disabled )
+	    {
+	        rc = sc_event::dt_remove;
+	    }
+	    else if ( m_state & ps_bit_suspended )
+	    {
+	        m_state = m_state | ps_bit_ready_to_run;
+		rc = sc_event::dt_remove;
+	    }
+	    else
+	    {
+	        rc = sc_event::dt_remove;
+	    }
+            m_timed_out = true;
+            m_event_list_p->remove_dynamic( this, e ); 
             m_event_list_p->auto_delete();
-            m_event_list_p = 0;
+            m_event_list_p = 0; 
             m_trigger_type = STATIC;
-            return true;
-        }
-        return false;
-    }
-    case TIMEOUT: {
-        m_trigger_type = STATIC;
-        return true;
-    }
-    case EVENT_TIMEOUT: {
-        if( e == m_event_p ) {
+	}
+
+	else
+	{
+	    if ( m_state == ps_normal )
+	    {
+		rc = sc_event::dt_run_remove;
+	    }
+
+	    else if ( m_state & ps_bit_disabled )
+	    {
+		return sc_event::dt_rearm;
+	    }
+
+	    else if ( m_state & ps_bit_suspended )
+	    {
+		m_state = m_state | ps_bit_ready_to_run;
+		rc = sc_event::dt_remove;
+	    }
+
+	    else
+	    {
+		rc = sc_event::dt_remove;
+	    }
             m_timeout_event_p->cancel();
             m_timeout_event_p->reset();
-        } else {
+	    m_event_list_p->remove_dynamic( this, e ); 
+	    m_event_list_p->auto_delete();
+	    m_event_list_p = 0; 
+	    m_trigger_type = STATIC;
+	}
+	break;
+      
+      case AND_LIST_TIMEOUT:
+        if ( e == m_timeout_event_p )
+	{
+	    if ( m_state == ps_normal )
+	    {
+		rc = sc_event::dt_run_remove;
+	    }
+	    else if ( m_state & ps_bit_disabled )
+	    {
+	        rc = sc_event::dt_remove;
+	    }
+	    else if ( m_state & ps_bit_suspended )
+	    {
+	        m_state = m_state | ps_bit_ready_to_run;
+		rc = sc_event::dt_remove;
+	    }
+	    else
+	    {
+	        rc = sc_event::dt_remove;
+	    }
             m_timed_out = true;
-            m_event_p->remove_dynamic( this );
-        }
-        m_event_p = 0;
-        m_trigger_type = STATIC;
-        return true;
-    }
-    case OR_LIST_TIMEOUT: {
-        if( e != m_timeout_event_p ) {
-            m_timeout_event_p->cancel();
-            m_timeout_event_p->reset();
-        } else {
-            m_timed_out = true;
-        }
-        m_event_list_p->remove_dynamic( this, e );
-        m_event_list_p->auto_delete();
-        m_event_list_p = 0;
-        m_trigger_type = STATIC;
-        return true;
-    }
-    case AND_LIST_TIMEOUT: {
-        if( e == m_timeout_event_p ) {
-            m_timed_out = true;
-            m_event_list_p->remove_dynamic( this, e );
+            m_event_list_p->remove_dynamic( this, e ); 
             m_event_list_p->auto_delete();
-            m_event_list_p = 0;
+            m_event_list_p = 0; 
             m_trigger_type = STATIC;
-            return true;
-        } else if( -- m_event_count == 0 ) {
-            m_timeout_event_p->cancel();
-            m_timeout_event_p->reset();
-            // no need to remove_dynamic
-            m_event_list_p->auto_delete();
-            m_event_list_p = 0;
-            m_trigger_type = STATIC;
-            return true;
-        }
-        return false;
-    }
-    case STATIC: {
+	}
+
+	else
+	{
+	    if ( m_state & ps_bit_disabled )
+	    {
+		return sc_event::dt_rearm;
+	    }
+	    -- m_event_count;
+
+	    if ( m_state == ps_normal )
+	    {
+		rc = m_event_count ? sc_event::dt_remove : 
+		                     sc_event::dt_run_remove;
+	    }
+	    else if ( m_state & ps_bit_suspended )
+	    {
+		if ( m_event_count == 0 )
+		    m_state = m_state | ps_bit_ready_to_run;
+		rc = sc_event::dt_remove;
+	    }
+	    else
+	    {
+		rc = sc_event::dt_remove;
+	    }
+	    if ( m_event_count == 0 )
+	    {
+		m_timeout_event_p->cancel();
+		m_timeout_event_p->reset();
+		// no need to remove_dynamic
+		m_event_list_p->auto_delete();
+		m_event_list_p = 0; 
+		m_trigger_type = STATIC;
+	    }
+	}
+	break;
+
+      case STATIC: {
         // we should never get here
         assert( false );
+      }
     }
-    }
-    return false;
+    return rc;
 }
 
 

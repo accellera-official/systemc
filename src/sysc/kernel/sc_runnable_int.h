@@ -36,6 +36,12 @@
  *****************************************************************************/
 
 // $Log: sc_runnable_int.h,v $
+// Revision 1.7  2011/02/02 06:37:03  acg
+//  Andy Goodrich: removed toggle() method since it is no longer used.
+//
+// Revision 1.6  2011/02/01 21:09:13  acg
+//  Andy Goodrich: addition of toggle_methods() and toggle_threads() calls.
+//
 // Revision 1.5  2011/01/25 20:50:37  acg
 //  Andy Goodrich: changes for IEEE 1666 2011.
 //
@@ -145,8 +151,15 @@ inline void sc_runnable::init()
 //------------------------------------------------------------------------------
 inline bool sc_runnable::is_empty() const
 {
+#if 0
     return m_methods_push_head->next_runnable() == SC_NO_METHODS && 
 		m_threads_push_head->next_runnable() == SC_NO_THREADS;
+#else
+    return m_methods_push_head->next_runnable() == SC_NO_METHODS && 
+           m_methods_pop == SC_NO_METHODS &&
+	   m_threads_push_head->next_runnable() == SC_NO_THREADS &&
+	   m_threads_pop == SC_NO_THREADS;
+#endif
 }
 
 
@@ -244,7 +257,7 @@ inline void sc_runnable::push_front_thread( sc_thread_handle thread_h )
 //"sc_runnable::execute_thread_next"
 //
 // This method pushes the the supplied thread to execute as the next process.
-// This is done by pushing it onto the front of the m_threads_pop_q.
+// This is done by pushing it onto the front of the m_threads_pop.
 //     thread_h -> thread process to add to the queue.
 //------------------------------------------------------------------------------
 inline void sc_runnable::execute_thread_next( sc_thread_handle thread_h )
@@ -335,9 +348,9 @@ inline void sc_runnable::remove_method( sc_method_handle remove_p )
 //------------------------------------------------------------------------------
 //"sc_runnable::remove_thread"
 //
-// This method removes the supplied thread process from the push queue if it is
-// present. Note we clear the thread's next pointer so that it may be queued 
-// again.
+// This method removes the supplied thread process from the push or pop
+// queue if it is present. Note we clear the thread's next pointer so that it 
+// may be queued again.
 //     remove_p -> thread process to remove from the run queue.
 //------------------------------------------------------------------------------
 inline void sc_runnable::remove_thread( sc_thread_handle remove_p )
@@ -345,9 +358,11 @@ inline void sc_runnable::remove_thread( sc_thread_handle remove_p )
     sc_thread_handle now_p;     // Thread now checking.
     sc_thread_handle prior_p;   // Thread prior to now_p.
 
+    // Search the push queue:
+
     prior_p = m_threads_push_head;
     for ( now_p = m_threads_push_head; now_p != SC_NO_THREADS; 
-	    now_p = now_p->next_runnable() )
+	  now_p = now_p->next_runnable() )
     {
         if ( remove_p == now_p )
         {
@@ -356,7 +371,25 @@ inline void sc_runnable::remove_thread( sc_thread_handle remove_p )
                 m_threads_push_tail = prior_p;
             }
             now_p->set_next_runnable(0);
-            break;
+            return;
+        }
+        prior_p = now_p;
+    }
+
+    // Search the pop queue:
+
+    prior_p = NULL;
+    for ( now_p = m_threads_pop; now_p != SC_NO_THREADS; 
+	  now_p = now_p->next_runnable() )
+    {
+        if ( remove_p == now_p )
+        {
+	    if ( prior_p )
+		prior_p->set_next_runnable( now_p->next_runnable() );
+	    else
+	        m_threads_pop = now_p->next_runnable();
+            now_p->set_next_runnable(0);
+            return;
         }
         prior_p = now_p;
     }
@@ -369,10 +402,10 @@ inline void sc_runnable::remove_thread( sc_thread_handle remove_p )
 //------------------------------------------------------------------------------
 inline sc_runnable::sc_runnable() 
 {
-    m_methods_pop = 0;
+    m_methods_pop = SC_NO_METHODS;
     m_methods_push_head = 0;
     m_methods_push_tail = 0;
-    m_threads_pop = 0;
+    m_threads_pop = SC_NO_THREADS;
     m_threads_push_head = 0;
     m_threads_push_tail = 0;
 }
@@ -391,19 +424,36 @@ inline sc_runnable::~sc_runnable()
 
 
 //------------------------------------------------------------------------------
-//"sc_runnable::toggle"
+//"sc_runnable::toggle_methods"
 //
-// This method moves the push queue to the pop queue and zeros the push
-// queue.
+// This method moves the methods push queue to the pop queue and zeros the push
+// queue. This will only be done if the pop queue is presently empty.
 //------------------------------------------------------------------------------
-inline void sc_runnable::toggle()
+inline void sc_runnable::toggle_methods()
 {
-    m_methods_pop = m_methods_push_head->next_runnable();
-    m_methods_push_head->set_next_runnable(SC_NO_METHODS);
-    m_methods_push_tail = m_methods_push_head;
-    m_threads_pop = m_threads_push_head->next_runnable();
-    m_threads_push_head->set_next_runnable(SC_NO_THREADS);
-    m_threads_push_tail = m_threads_push_head;
+    if ( m_methods_pop == SC_NO_METHODS )
+    {
+	m_methods_pop = m_methods_push_head->next_runnable();
+	m_methods_push_head->set_next_runnable(SC_NO_METHODS);
+	m_methods_push_tail = m_methods_push_head;
+    }
+}
+
+
+//------------------------------------------------------------------------------
+//"sc_runnable::toggle_threads"
+//
+// This method moves the threads push queue to the pop queue and zeros the push
+// queue. This will only be done if the pop queue is presently empty.
+//------------------------------------------------------------------------------
+inline void sc_runnable::toggle_threads()
+{
+    if ( m_threads_pop == SC_NO_THREADS )
+    {
+	m_threads_pop = m_threads_push_head->next_runnable();
+	m_threads_push_head->set_next_runnable(SC_NO_THREADS);
+	m_threads_push_tail = m_threads_push_head;
+    }
 }
 
 #undef SC_NO_METHODS

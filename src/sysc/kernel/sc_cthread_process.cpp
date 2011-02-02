@@ -35,6 +35,10 @@
  *****************************************************************************/
 
 // $Log: sc_cthread_process.cpp,v $
+// Revision 1.6  2011/02/01 21:00:35  acg
+//  Andy Goodrich: removed throw_reset as it is now handled by parent
+//  sc_thread_process::throw_reset().
+//
 // Revision 1.5  2011/01/18 20:10:44  acg
 //  Andy Goodrich: changes for IEEE1666_2011 semantics.
 //
@@ -181,25 +185,5 @@ sc_cthread_process::sc_cthread_process( const char* name_p,
 sc_cthread_process::~sc_cthread_process()
 {
 }
-
-//------------------------------------------------------------------------------
-//"sc_cthread_process::throw_reset"
-//
-// This virtual method is invoked when an reset is to be thrown. It sets the
-// wait count to zero. If the reset is asynchronous the process is scheduled
-// for an immediate reset throw.
-//------------------------------------------------------------------------------
-void sc_cthread_process::throw_reset( bool async )
-{     
-	if ( m_state == ps_zombie ) return; // if process is dead don't bother.
-
-	m_throw_type = THROW_RESET;
-	m_wait_cycle_n = 0;
-	if ( async  && next_runnable() == 0 ) 
-	{
-	    simcontext()->push_runnable_thread( this ); 
-	}
-}
-
 
 } // namespace sc_core 

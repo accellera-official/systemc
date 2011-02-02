@@ -58,6 +58,21 @@
 				 execution problem with using sc_pvector.
  *****************************************************************************/
 // $Log: sc_simcontext.cpp,v $
+// Revision 1.11  2011/02/02 07:18:11  acg
+//  Andy Goodrich: removed toggle() calls for the new crunch() toggle usage.
+//
+// Revision 1.10  2011/02/01 23:01:53  acg
+//  Andy Goodrich: removed dead code.
+//
+// Revision 1.9  2011/02/01 21:11:59  acg
+//  Andy Goodrich:
+//  (1) Use of new toggle_methods() and toggle_threads() run queue methods
+//      to make sure the thread run queue does not execute when allow preempt_me()
+//      is called from an SC_METHOD.
+//  (2) Use of execute_thread_next() to allow thread execution in the current
+//      delta cycle() rather than push_runnable_thread_front which executed
+//      in the following cycle.
+//
 // Revision 1.8  2011/01/25 20:50:37  acg
 //  Andy Goodrich: changes for IEEE 1666 2011.
 //
@@ -547,17 +562,19 @@ sc_simcontext::crunch( bool once )
     int num_deltas = 0;  // number of delta cycles
 #endif
 
-    while ( true ) {
+    while ( true ) 
+    {
 
 	// EVALUATE PHASE
 	
 	m_execution_phase = phase_evaluate;
 	bool empty_eval_phase = true;
-	while( true ) {
-
+	while( true ) 
+	{
 
 	    // execute method processes
 
+	    m_runnable->toggle_methods();
 	    sc_method_handle method_h = pop_runnable_method();
 	    while( method_h != 0 ) {
 		if ( method_h->ready_to_run() )
@@ -567,7 +584,7 @@ sc_simcontext::crunch( bool once )
 			method_h->semantics();
 		    }
 		    catch( sc_unwind_exception& ex ) {
-		        if ( ex.is_reset() ) continue;
+		        method_h->m_throw_status = sc_process_b::THROW_NONE;
 		    }
 		    catch( const sc_report& ex ) {
 			::std::cout << "\n" << ex.what() << ::std::endl;
@@ -580,6 +597,7 @@ sc_simcontext::crunch( bool once )
 
 	    // execute (c)thread processes
 
+	    m_runnable->toggle_threads();
 	    sc_thread_handle thread_h = pop_runnable_thread();
 	    while( thread_h != 0 ) {
 		if ( thread_h->ready_to_run() ) break;
@@ -598,11 +616,11 @@ sc_simcontext::crunch( bool once )
 		if ( stop_mode == SC_STOP_IMMEDIATE ) goto out;
 	    }
 
+	    // no more runnable processes
+
 	    if( m_runnable->is_empty() ) {
-		// no more runnable processes
 		break;
 	    }
-	    m_runnable->toggle();
 	}
 
 	// remove finally dead zombies:
@@ -672,8 +690,6 @@ sc_simcontext::crunch( bool once )
         // IF ONLY DOING ONE CYCLE, WE ARE DONE. OTHERWISE GET NEW CALLBACKS
 
         if ( once ) break;
-
-	m_runnable->toggle();
     }
 out:
     this->reset_curr_proc();
@@ -686,7 +702,6 @@ sc_simcontext::cycle( const sc_time& t)
     sc_time next_event_time;
 
     m_in_simulator_control = true;
-    m_runnable->toggle();
     crunch(); 
     trace_cycle( /* delta cycle? */ false );
     m_curr_time += t;
@@ -841,7 +856,6 @@ sc_simcontext::initial_crunch( bool no_crunch )
     if( no_crunch || m_runnable->is_empty() ) {
         return;
     }
-    m_runnable->toggle();
 
     // run the delta cycle loop
 
@@ -918,7 +932,6 @@ sc_simcontext::simulate( const sc_time& duration )
     // check to each loop in the do below.
     if ( duration == SC_ZERO_TIME ) 
     {
-        m_runnable->toggle();
   	crunch( true );
 	if( m_error ) return;
 	if( m_something_to_trace ) trace_cycle( /* delta cycle? */ false );
@@ -930,7 +943,6 @@ sc_simcontext::simulate( const sc_time& duration )
     // NON-ZERO DURATION: EXECUTE UP TO THAT TIME, OR UNTIL EVENT STARVATION:
 
     do {
-	m_runnable->toggle();
 
 	crunch();
 	if( m_error ) {
@@ -957,6 +969,7 @@ sc_simcontext::simulate( const sc_time& duration )
 	    // See note 1 above:
 
             if ( !next_time(t) || (t > until_t ) ) goto exit;
+	    if ( t > m_curr_time ) m_curr_time = t;
 
 	    // PROCESS TIMED NOTIFICATIONS AT THE CURRENT TIME
 
@@ -970,12 +983,11 @@ sc_simcontext::simulate( const sc_time& duration )
 	    } while( m_timed_events->size() &&
 		     m_timed_events->top()->notify_time() == t );
 
+	    // if ( t > m_curr_time ) m_curr_time = t;
 	} while( m_runnable->is_empty() );
-	if ( t > m_curr_time ) m_curr_time = t;
     } while ( t < until_t ); // hold off on the delta for the until_t time.
 
 exit:
-    // if ( t > m_curr_time ) m_curr_time = t < until_t ? t : until_t;
     if ( t > m_curr_time && t <= until_t ) m_curr_time = t;
     m_in_simulator_control = false;
 }
@@ -1304,7 +1316,7 @@ void sc_simcontext::requeue_current_process()
     thread_p = DCAST<sc_thread_handle>(get_curr_proc_info()->process_handle);
     if ( thread_p )
     {
-	push_runnable_thread_front( thread_p );
+	execute_thread_next( thread_p );
     }
 }
 

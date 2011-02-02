@@ -52,6 +52,10 @@
                                
  *****************************************************************************/
 // $Log: sc_simcontext.h,v $
+// Revision 1.9  2011/02/01 21:18:56  acg
+//  Andy Goodrich: addition of new preempt_with() method used to immediately
+//  throw exceptions from threads.
+//
 // Revision 1.8  2011/01/25 20:50:37  acg
 //  Andy Goodrich: changes for IEEE 1666 2011.
 //
@@ -373,14 +377,16 @@ private:
 
     void execute_thread_next( sc_thread_handle );
 
+    sc_method_handle pop_runnable_method();
+    sc_thread_handle pop_runnable_thread();
+
+    inline void preempt_with( sc_thread_handle );
+
     void push_runnable_method( sc_method_handle );
     void push_runnable_thread( sc_thread_handle );
 
     void push_runnable_method_front( sc_method_handle );
     void push_runnable_thread_front( sc_thread_handle );
-
-    sc_method_handle pop_runnable_method();
-    sc_thread_handle pop_runnable_thread();
 
     void remove_runnable_method( sc_method_handle );
     void remove_runnable_thread( sc_thread_handle );

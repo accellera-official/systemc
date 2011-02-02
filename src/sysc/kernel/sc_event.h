@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: sc_event.h,v $
+// Revision 1.6  2011/02/01 21:03:23  acg
+//  Andy Goodrich: new return codes for trigger_dynamic calls.
+//
 // Revision 1.5  2011/01/18 20:10:44  acg
 //  Andy Goodrich: changes for IEEE1666_2011 semantics.
 //
@@ -347,6 +350,16 @@ private:
 private:
 
     enum notify_t { NONE, DELTA, TIMED };
+    enum dt_status {   // status from process' trigger_dynamic() method:
+	dt_rearm = 0,  // dont run the process and dont remove it from 
+	               // the event's queue.
+	dt_remove,     // remove this process from the event's queue, and
+	               // do not schedule it.
+        dt_run,        // the process should be scheduled for execution but the
+                       // the proces should stay on the event's queue.
+        dt_run_remove  // the process should be scheduled for execution and the
+                       // process should be removed from the event's queue.
+    };
 
     sc_simcontext*  m_simc;
     notify_t        m_notify_type;

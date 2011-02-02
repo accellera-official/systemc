@@ -42,6 +42,12 @@
  *****************************************************************************/
 
 // $Log: sc_runnable.h,v $
+// Revision 1.5  2011/02/02 06:37:03  acg
+//  Andy Goodrich: removed toggle() method since it is no longer used.
+//
+// Revision 1.4  2011/02/01 21:09:13  acg
+//  Andy Goodrich: addition of toggle_methods() and toggle_threads() calls.
+//
 // Revision 1.3  2011/01/25 20:50:37  acg
 //  Andy Goodrich: changes for IEEE 1666 2011.
 //
@@ -77,7 +83,8 @@ class sc_runnable
     ~sc_runnable();
 
     inline void init();
-    inline void toggle();
+    inline void toggle_methods();
+    inline void toggle_threads();
 
     inline void remove_method( sc_method_handle );
     inline void remove_thread( sc_thread_handle );

@@ -35,6 +35,10 @@
  *****************************************************************************/
 
 // $Log: sc_method_process.h,v $
+// Revision 1.6  2011/02/01 21:05:05  acg
+//  Andy Goodrich: Changes in trigger_dynamic methods to handle new
+//  process control rules about event sensitivity.
+//
 // Revision 1.5  2011/01/18 20:10:44  acg
 //  Andy Goodrich: changes for IEEE1666_2011 semantics.
 //
@@ -171,7 +175,7 @@ class sc_method_process : public sc_process_b {
     virtual void throw_reset( bool async );
     virtual void throw_user( const sc_throw_it_helper& helper,
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
-    bool trigger_dynamic( sc_event* );
+    sc_event::dt_status trigger_dynamic( sc_event* );
 
   protected:
     sc_cor*                          m_cor;        // Thread's coroutine.
@@ -282,9 +286,16 @@ inline bool sc_method_process::ready_to_run()
 {
     switch( m_state )
     {
-      case ps_normal:    return true;
-      case ps_suspended: m_state = ps_suspended_ready_to_run; break;
-      default: break;
+      case ps_normal:    
+        return true;
+      case ps_suspended: 
+        m_state = ps_suspended_ready_to_run; 
+	break;
+      case ps_disable_pending:
+        m_state = ps_disabled;
+	return true;
+      default: 
+        break;
     }
     return false;
 }

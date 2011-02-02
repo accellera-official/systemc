@@ -37,6 +37,10 @@
  *****************************************************************************/
 
 // $Log: sc_simcontext_int.h,v $
+// Revision 1.4  2011/02/01 21:12:56  acg
+//  Andy Goodrich: addition of preempt_with() method to allow immediate
+//  execution of threads for throws.
+//
 // Revision 1.3  2011/01/25 20:50:37  acg
 //  Andy Goodrich: changes for IEEE 1666 2011.
 //
@@ -102,6 +106,77 @@ sc_simcontext::execute_thread_next( sc_thread_handle thread_h )
 {
     m_runnable->execute_thread_next( thread_h );
 }
+
+// +----------------------------------------------------------------------------
+// |"sc_simcontext::preempt_with"
+// | 
+// | This method executes the supplied thread immediately, suspending the
+// | caller. After executing the supplied thread the caller's execution will
+// | be restored. It is used to allow a thread to immediately throw an 
+// | exception, e.g., when the thread's kill_process() method was called.
+// | There are three cases to consider:
+// |   (1) The caller is a method, e.g., murder by method.
+// |   (2) The caller is another thread instance, e.g., murder by thread.
+// |   (3) The caller is this thread instance, e.g., suicide.
+// |
+// | Arguments:
+// |     thread_h -> thread to be executed.
+// +----------------------------------------------------------------------------
+inline
+void
+sc_simcontext::preempt_with( sc_thread_handle thread_h )
+{
+    sc_thread_handle active_p; // active thread or null.
+
+    // Determine the active process and take the thread to be run off the
+    // run queue, if its there, since we will be explicitly causing its 
+    // execution.
+
+    active_p = DCAST<sc_thread_handle>(sc_get_current_process_b());
+    if ( thread_h->next_runnable() != NULL )
+	remove_runnable_thread( thread_h );
+
+    // THE CALLER IS A METHOD:
+    //
+    //   (a) Set the current process information to our thread.
+    //   (b) Invoke our thread directly by passing the run queue.
+    //   (c) Reset the current process information.
+
+    if ( active_p == NULL )
+    {
+	set_curr_proc( (sc_process_b*)thread_h );
+	m_cor_pkg->yield( thread_h->m_cor_p );
+	reset_curr_proc();
+    }
+
+    // CALLER IS A THREAD, BUT NOT THE THREAD TO BE RUN:
+    //
+    //   (a) Push the calling thread onto the front of the runnable queue
+    //       so it be the first thread to be run after this thread.
+    //   (b) Push the thread to be run onto the front of the runnable queue so 
+    //       it will execute when we suspend the calling thread.
+    //   (c) Suspend the active thread.
+
+    else if ( active_p != thread_h )
+    {
+        execute_thread_next( active_p );
+	execute_thread_next( thread_h );
+	active_p->suspend_me();
+    }
+
+    // CALLER IS THE THREAD TO BE RUN:
+    //
+    //   (a) Push the thread to be run onto the front of the runnable queue so 
+    //       it will execute when we suspend the calling thread.
+    //   (b) Suspend the active thread.
+
+    else
+    {
+	execute_thread_next( thread_h );
+	active_p->suspend_me();
+    }
+}
+
 
 inline
 void
@@ -171,8 +246,6 @@ sc_simcontext::remove_runnable_thread( sc_thread_handle thread_h )
 {
     m_runnable->remove_thread( thread_h );
 }
-
-
 
 // ----------------------------------------------------------------------------
 

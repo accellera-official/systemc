@@ -35,6 +35,10 @@
  *****************************************************************************/
 
 // $Log: sc_cthread_process.h,v $
+// Revision 1.4  2011/02/01 21:01:41  acg
+//  Andy Goodrich: removed throw_reset() as it is now handled by the parent
+//  method sc_thread_process::throw_reset().
+//
 // Revision 1.3  2011/01/18 20:10:44  acg
 //  Andy Goodrich: changes for IEEE1666_2011 semantics.
 //
@@ -104,7 +108,6 @@ class sc_cthread_process : public sc_thread_process {
   protected:
     sc_cthread_handle next_exist();
     void set_next_exist( sc_cthread_handle next_p );
-    virtual void throw_reset( bool async );
 
 private:
 

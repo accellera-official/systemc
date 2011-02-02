@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_report_handler.cpp,v $
+// Revision 1.2  2011/02/01 23:02:05  acg
+//  Andy Goodrich: IEEE 1666 2011 changes.
+//
 // Revision 1.1.1.1  2006/12/15 20:20:06  acg
 // SystemC 2.3
 //
@@ -277,6 +280,29 @@ sc_actions sc_report_handler::execute(sc_msg_def* md, sc_severity severity_)
 	    actions |= SC_STOP; // force sc_stop()
     }
     return actions;
+}
+
+void sc_report_handler::report( sc_severity severity_, 
+                                const char* msg_type_, 
+				const char* msg_, 
+				int verbosity_, 
+				const char* file_, 
+				int line_ )
+{
+    sc_msg_def * md = mdlookup(msg_type_);
+
+    if ( !md )
+	md = add_msg_type(msg_type_);
+
+    sc_actions actions = execute(md, severity_);
+    sc_report rep(severity_, md, msg_, file_, line_);
+
+    rep.set_verbosity_level( verbosity_ );
+
+    if ( actions & SC_CACHE_REPORT )
+	cache_report(rep);
+
+    handler(rep, actions);
 }
 
 void sc_report_handler::report(sc_severity severity_,

@@ -39,6 +39,9 @@
  *****************************************************************************/
 
 // $Log: sc_report.cpp,v $
+// Revision 1.2  2011/02/01 23:02:05  acg
+//  Andy Goodrich: IEEE 1666 2011 changes.
+//
 // Revision 1.1.1.1  2006/12/15 20:20:06  acg
 // SystemC 2.3
 //
@@ -99,6 +102,7 @@ sc_report::sc_report()
   line(0),
   timestamp(new sc_time(sc_time_stamp())),
   process(0),
+  m_verbosity_level(SC_MEDIUM),
   m_what(empty_dup(0))
 {
 }

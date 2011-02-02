@@ -37,6 +37,9 @@
  *****************************************************************************/
 
 // $Log: sc_spawn.h,v $
+// Revision 1.4  2011/02/01 21:14:02  acg
+//  Andy Goodrich: formatting.
+//
 // Revision 1.3  2009/07/28 01:10:53  acg
 //  Andy Goodrich: updates for 2.3 release candidate.
 //
@@ -141,28 +144,28 @@ inline sc_process_handle sc_spawn(
     const char* name_p = 0,
     const sc_spawn_options* opt_p = 0)
 {
-	sc_simcontext*      context_p;
-	sc_spawn_object<T>* spawn_p;
-	
-	context_p = sc_get_curr_simcontext();
-	spawn_p = new sc_spawn_object<T>(object);
-	if ( !opt_p || !opt_p->is_method() )
-	{
+    sc_simcontext*      context_p;
+    sc_spawn_object<T>* spawn_p;
+    
+    context_p = sc_get_curr_simcontext();
+    spawn_p = new sc_spawn_object<T>(object);
+    if ( !opt_p || !opt_p->is_method() )
+    {
             sc_process_handle thread_handle = context_p->create_thread_process( 
-		    name_p, true,
-		    SC_MAKE_FUNC_PTR(sc_spawn_object<T>,semantics), 
-		    spawn_p, opt_p 
-	    );
-	    return thread_handle;
+            name_p, true,
+            SC_MAKE_FUNC_PTR(sc_spawn_object<T>,semantics), 
+            spawn_p, opt_p 
+        );
+        return thread_handle;
     }
-	else
-	{
+    else
+    {
             sc_process_handle method_handle = context_p->create_method_process( 
-		    name_p, true,
-		    SC_MAKE_FUNC_PTR(sc_spawn_object<T>,semantics), 
-		    spawn_p, opt_p 
-	    );
-	    return method_handle;
+            name_p, true,
+            SC_MAKE_FUNC_PTR(sc_spawn_object<T>,semantics), 
+            spawn_p, opt_p 
+        );
+        return method_handle;
     }
 }
 
@@ -243,29 +246,29 @@ inline sc_process_handle sc_spawn(
     const char* name_p = 0,
     const sc_spawn_options* opt_p = 0)
 {
-	sc_simcontext*      context_p;
-	sc_spawn_object_v<T>* spawn_p;
-	
-	context_p = sc_get_curr_simcontext();
-	
-	spawn_p = new sc_spawn_object_v<T>(r_p, object);
-	if ( !opt_p || !opt_p->is_method() )
-	{
+    sc_simcontext*      context_p;
+    sc_spawn_object_v<T>* spawn_p;
+    
+    context_p = sc_get_curr_simcontext();
+    
+    spawn_p = new sc_spawn_object_v<T>(r_p, object);
+    if ( !opt_p || !opt_p->is_method() )
+    {
             sc_process_handle thread_handle = context_p->create_thread_process( 
-		    name_p, true,
-		    SC_MAKE_FUNC_PTR(sc_spawn_object_v<T>,semantics), 
-		    spawn_p, opt_p 
-	    );
-	    return thread_handle;
-	}
-	else
-	{
+            name_p, true,
+            SC_MAKE_FUNC_PTR(sc_spawn_object_v<T>,semantics), 
+            spawn_p, opt_p 
+        );
+        return thread_handle;
+    }
+    else
+    {
             sc_process_handle method_handle = context_p->create_method_process( 
-		    name_p, true,
-		    SC_MAKE_FUNC_PTR(sc_spawn_object_v<T>,semantics), 
-		    spawn_p, opt_p 
-	    );
-	    return method_handle;
+            name_p, true,
+            SC_MAKE_FUNC_PTR(sc_spawn_object_v<T>,semantics), 
+            spawn_p, opt_p 
+        );
+        return method_handle;
     }
 }
 
@@ -296,31 +299,31 @@ inline sc_process_handle sc_spawn(
     const char* name_p = 0,
     const sc_spawn_options* opt_p = 0)
 {
-	sc_simcontext*      context_p;
-	sc_spawn_object_v<T,R>* spawn_p;
-	
-	context_p = sc_get_curr_simcontext();
-	
-	spawn_p = new sc_spawn_object_v<T,R>(r_p, object);
-	if ( !opt_p || !opt_p->is_method() )
-	{
+    sc_simcontext*      context_p;
+    sc_spawn_object_v<T,R>* spawn_p;
+    
+    context_p = sc_get_curr_simcontext();
+    
+    spawn_p = new sc_spawn_object_v<T,R>(r_p, object);
+    if ( !opt_p || !opt_p->is_method() )
+    {
             sc_process_handle thread_handle = context_p->create_thread_process( 
-		    name_p, true,
-			static_cast<sc_core::SC_ENTRY_FUNC>(
-			    &sc_spawn_object_v<T,R>::semantics),
-		    spawn_p, opt_p 
-	    );
-	    return thread_handle;
+            name_p, true,
+            static_cast<sc_core::SC_ENTRY_FUNC>(
+                &sc_spawn_object_v<T,R>::semantics),
+            spawn_p, opt_p 
+        );
+        return thread_handle;
     }
-	else
-	{
+    else
+    {
             sc_process_handle method_handle = context_p->create_method_process( 
-		    name_p, true,
-			static_cast<sc_core::SC_ENTRY_FUNC>(
-		        &sc_spawn_object_v<T,R>::semantics), 
-		    spawn_p, opt_p 
-	    );
-	    return method_handle;
+            name_p, true,
+            static_cast<sc_core::SC_ENTRY_FUNC>(
+                &sc_spawn_object_v<T,R>::semantics), 
+            spawn_p, opt_p 
+        );
+        return method_handle;
     }
 }
 
