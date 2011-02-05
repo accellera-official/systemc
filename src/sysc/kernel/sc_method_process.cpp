@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_method_process.cpp,v $
+// Revision 1.11  2011/02/04 15:27:36  acg
+//  Andy Goodrich: changes for suspend-resume semantics.
+//
 // Revision 1.10  2011/02/01 23:01:53  acg
 //  Andy Goodrich: removed dead code.
 //
@@ -270,7 +273,7 @@ sc_method_process::sc_method_process( const char* name_p,
 ):
     sc_process_b(
         name_p && name_p[0] ? name_p : sc_gen_unique_name("method_p"), 
-        free_host, method_p, host_p, opt_p)
+        false, free_host, method_p, host_p, opt_p)
 {
 
     // CHECK IF THIS IS AN sc_module-BASED PROCESS AND SIMUALTION HAS STARTED:
@@ -411,29 +414,34 @@ void sc_method_process::resume_process(
         }
     }
 
-    // RESUME OBJECT INSTANCE:
+    // RESUME OBJECT INSTANCE IF IT IS NOT DISABLED:
+    //
+    // Even if it is disabled we fire the resume event.
 
-    switch( m_state )
+    if ( !(m_state & ps_bit_disabled) )
     {
-      case ps_suspended:
-        m_state = ps_normal;
-        break;
-      case ps_suspended_ready_to_run:
-        m_state = ps_normal;
-        if ( next_runnable() == 0 )
+#if 0 // @@@@#### REMOVE
+        if ( m_resume_event_p == 0 ) 
+        {
+	    m_resume_event_p = new sc_event;
+	    add_static_event( *m_resume_event_p );
+        }
+        m_resume_event_p->notify(SC_ZERO_TIME);
+#endif // @@@@#### REMOVE
+	switch( m_state )
 	{
-	    if ( m_resume_event_p == 0 ) 
-	    {
-	        m_resume_event_p = new sc_event;
-	        add_static_event( *m_resume_event_p );
-	    }
-            simcontext()->push_runnable_method(this);
-	    m_resume_event_p->notify(SC_ZERO_TIME);
+	  case ps_suspended:
+	    m_state = ps_normal;
+	    break;
+	  case ps_suspended_ready_to_run:
+	    m_state = ps_normal;
+	    if ( next_runnable() == 0 )
+		simcontext()->push_runnable_method(this);
+	    break;
+	  default:
+	    m_state = m_state & ~ps_suspended;
+	    break;
 	}
-        break;
-      default:
-        m_state = m_state & ~ps_suspended;
-        break;
     }
 }
 
@@ -462,8 +470,6 @@ void sc_method_process::throw_reset( bool async )
             m_event_list_p->auto_delete();
             m_event_list_p = 0;
         }
-	if ( next_runnable() == 0 )
-	    simcontext()->push_runnable_method( this );
 	if ( RCAST<sc_method_handle>(sc_get_current_process_b()) == this )
 	{
 	    m_throw_status = THROWING_NOW;
@@ -583,7 +589,7 @@ sc_event::dt_status sc_method_process::trigger_dynamic( sc_event* e )
 	}
 	else if ( m_state & ps_bit_suspended )
 	{
-	    if ( !m_event_count )
+	    if ( m_event_count == 0 )
 		m_state = m_state | ps_bit_ready_to_run;
             rc = sc_event::dt_remove;
 	}
@@ -629,10 +635,14 @@ sc_event::dt_status sc_method_process::trigger_dynamic( sc_event* e )
 
       case TIMEOUT: 
         if ( m_state == ps_normal )
+	{
 	    rc = sc_event::dt_run_remove;
+	}
 
 	else if ( m_state & ps_bit_disabled )
-            return sc_event::dt_rearm; // what to do here?
+	{
+            rc = sc_event::dt_remove;  // timeout cancels the wait.
+	}
 
 	else if ( m_state & ps_bit_suspended )
 	{
@@ -655,7 +665,7 @@ sc_event::dt_status sc_method_process::trigger_dynamic( sc_event* e )
 	    }
 	    else if ( m_state & ps_bit_disabled )
 	    {
-	        rc = sc_event::dt_remove;
+	        rc = sc_event::dt_remove; // timeout cancels the wait.
 	    }
 	    else if ( m_state & ps_bit_suspended )
 	    {
@@ -679,10 +689,7 @@ sc_event::dt_status sc_method_process::trigger_dynamic( sc_event* e )
 	    }
 	    else if ( m_state & ps_bit_disabled )
 	    {
-		if ( e == m_event_p ) 
-		    return sc_event::dt_rearm;
-		else
-		    rc = sc_event::dt_remove;
+		return sc_event::dt_rearm;
 	    }
 	    else if ( m_state & ps_bit_suspended )
 	    {
@@ -710,7 +717,7 @@ sc_event::dt_status sc_method_process::trigger_dynamic( sc_event* e )
 	    }
 	    else if ( m_state & ps_bit_disabled )
 	    {
-	        rc = sc_event::dt_remove;
+	        rc = sc_event::dt_remove; // timeout removes cancels the wait.
 	    }
 	    else if ( m_state & ps_bit_suspended )
 	    {
@@ -769,6 +776,8 @@ sc_event::dt_status sc_method_process::trigger_dynamic( sc_event* e )
 	    else if ( m_state & ps_bit_disabled )
 	    {
 	        rc = sc_event::dt_remove;
+		if ( m_state & ps_bit_suspended )
+		    m_state = m_state | ps_bit_ready_to_run;
 	    }
 	    else if ( m_state & ps_bit_suspended )
 	    {

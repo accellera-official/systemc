@@ -43,6 +43,9 @@
  *****************************************************************************/
 
 // $Log: sc_process.cpp,v $
+// Revision 1.10  2011/02/04 15:27:36  acg
+//  Andy Goodrich: changes for suspend-resume semantics.
+//
 // Revision 1.9  2011/02/01 21:06:12  acg
 //  Andy Goodrich: new layout for the process_state enum.
 //
@@ -363,7 +366,7 @@ sc_process_b::remove_static_events()
 //
 // This is the object instance constructor for this class.
 //------------------------------------------------------------------------------
-sc_process_b::sc_process_b( const char* name_p, bool free_host,
+sc_process_b::sc_process_b( const char* name_p, bool is_thread, bool free_host,
      SC_ENTRY_FUNC method_p, sc_process_host* host_p, 
      const sc_spawn_options* opt_p 
 ) :
@@ -377,6 +380,7 @@ sc_process_b::sc_process_b( const char* name_p, bool free_host,
     m_event_list_p(0),
     m_exist_p(0),
     m_free_host( free_host ),
+    m_is_thread(is_thread),
     m_last_report_p(0),
     m_name_gen_p(0),
     m_process_kind(SC_NO_PROC_),

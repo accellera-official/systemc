@@ -46,6 +46,9 @@
  *****************************************************************************/
 
 // $Log: sc_process.h,v $
+// Revision 1.9  2011/02/04 15:27:36  acg
+//  Andy Goodrich: changes for suspend-resume semantics.
+//
 // Revision 1.8  2011/02/01 21:06:12  acg
 //  Andy Goodrich: new layout for the process_state enum.
 //
@@ -496,7 +499,7 @@ class sc_process_b : public sc_object {
     };
 
   public: 
-    sc_process_b( const char* name_p, bool free_host,
+    sc_process_b( const char* name_p, bool is_thread, bool free_host, 
         SC_ENTRY_FUNC method_p, sc_process_host* host_p, 
         const sc_spawn_options* opt_p );
     virtual ~sc_process_b();
@@ -576,33 +579,34 @@ class sc_process_b : public sc_object {
   protected:
     int                          m_active_areset_n; // number of aresets active.
     int                          m_active_reset_n;  // number of resets active.
-    std::vector<sc_object*>      m_child_objects;   // Child processes.
-    bool                         m_dont_init;       // True: no initialize call.
-    bool                         m_dynamic_proc;    // True: after elaboration.
+    std::vector<sc_object*>      m_child_objects;   // child processes.
+    bool                         m_dont_init;       // true: no initialize call.
+    bool                         m_dynamic_proc;    // true: after elaboration.
     const sc_event*              m_event_p;         // Dynamic event waiting on.
-    int                          m_event_count;     // Number of events.
-    const sc_event_list*         m_event_list_p;    // Event list waiting on.
-    sc_process_b*                m_exist_p;         // Process existence link.
-    bool                         m_free_host;       // Free sc_semantic_host_p.
-    sc_report*                   m_last_report_p;   // Last report this process.
-    sc_name_gen*                 m_name_gen_p;      // Subprocess name generator
-    sc_curr_proc_kind            m_process_kind;    // Type of process.
-    int                          m_references_n;    // Outstanding handles.
-    std::vector<sc_reset*>       m_resets;          // Resets for process.
-    sc_event*                    m_reset_event_p;   // Reset event.
-    sc_event*                    m_resume_event_p;  // Resume event.
+    int                          m_event_count;     // number of events.
+    const sc_event_list*         m_event_list_p;    // event list waiting on.
+    sc_process_b*                m_exist_p;         // process existence link.
+    bool                         m_free_host;       // free sc_semantic_host_p.
+    bool                         m_is_thread;       // true if this is thread.
+    sc_report*                   m_last_report_p;   // last report this process.
+    sc_name_gen*                 m_name_gen_p;      // subprocess name generator
+    sc_curr_proc_kind            m_process_kind;    // type of process.
+    int                          m_references_n;    // outstanding handles.
+    std::vector<sc_reset*>       m_resets;          // resets for process.
+    sc_event*                    m_reset_event_p;   // reset event.
+    sc_event*                    m_resume_event_p;  // resume event.
     sc_process_b*                m_runnable_p;      // sc_runnable link
-    sc_process_host*             m_semantics_host_p;   // Host for semantics.
-    SC_ENTRY_FUNC                m_semantics_method_p; // Method for semantics.
-    int                          m_state;           // Process state.
-    std::vector<const sc_event*> m_static_events;   // Static events waiting on.
-    bool                         m_sticky_reset;    // See note 3 above.
-    sc_event*                    m_term_event_p;    // Terminated event.
-    sc_throw_it_helper*          m_throw_helper_p;  // What to throw.
-    process_throw_type           m_throw_status;    // Exception throwing status
-    bool                         m_timed_out;       // True if we timed out.
-    sc_event*                    m_timeout_event_p; // Timeout event.
-    trigger_t                    m_trigger_type;    // Type of trigger using.
+    sc_process_host*             m_semantics_host_p;   // host for semantics.
+    SC_ENTRY_FUNC                m_semantics_method_p; // method for semantics.
+    int                          m_state;           // process state.
+    std::vector<const sc_event*> m_static_events;   // static events waiting on.
+    bool                         m_sticky_reset;    // see note 3 above.
+    sc_event*                    m_term_event_p;    // terminated event.
+    sc_throw_it_helper*          m_throw_helper_p;  // what to throw.
+    process_throw_type           m_throw_status;    // exception throwing status
+    bool                         m_timed_out;       // true if we timed out.
+    sc_event*                    m_timeout_event_p; // timeout event.
+    trigger_t                    m_trigger_type;    // type of trigger using.
 
   protected:
     static sc_process_b* m_last_created_process_p; // Last process created.
@@ -843,6 +847,8 @@ inline void sc_process_b::reset_process( reset_type rt,
     switch (rt)
     {
       // One-shot asynchronous reset: remove dynamic sensitivity and throw:
+      //
+      // If this is an sc_method only throw if it is active.
 
       case reset_asynchronous:
 	remove_dynamic_events();

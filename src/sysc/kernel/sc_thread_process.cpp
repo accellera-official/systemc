@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_thread_process.cpp,v $
+// Revision 1.15  2011/02/04 15:27:36  acg
+//  Andy Goodrich: changes for suspend-resume semantics.
+//
 // Revision 1.14  2011/02/01 23:01:53  acg
 //  Andy Goodrich: removed dead code.
 //
@@ -277,7 +280,6 @@ void sc_thread_process::enable_process(
 //------------------------------------------------------------------------------
 void sc_thread_process::kill_process(sc_descendant_inclusion_info descendants )
 {
-    sc_thread_handle                 active_p;   // active thread process or 0.
     int                              child_i;    // index of child accessing.
     int                              child_n;    // number of children.
     sc_process_b*                    child_p;    // child accessing.
@@ -404,30 +406,35 @@ void sc_thread_process::resume_process(
         }
     }
 
-    // RESUME OBJECT INSTANCE:
+    // RESUME OBJECT INSTANCE IF IT IS NOT DISABLED:
+    //
+    // Even if it is disabled we fire the resume event.
 
-    switch( m_state )
+    if ( !(m_state & ps_bit_disabled) )
     {
-      case ps_suspended:
-        m_state = ps_normal;
-        break;
-      case ps_suspended_ready_to_run:
-        m_state = ps_normal;
-        if ( next_runnable() == 0 )  
+#if 0 // @@@@#### REMOVE
+	if ( m_resume_event_p == 0 ) 
 	{
-	    if ( m_resume_event_p == 0 ) 
-	    {
-	        m_resume_event_p = new sc_event;
-	        add_static_event( *m_resume_event_p );
-	    }
-	    m_resume_event_p->notify(SC_ZERO_TIME);
-	    simcontext()->push_runnable_thread(this);
+	    m_resume_event_p = new sc_event;
+	    add_static_event( *m_resume_event_p );
 	}
-	remove_dynamic_events();  // order important.
-        break;
-      default:
-        m_state = m_state & ~ps_bit_suspended;
-        break;
+	m_resume_event_p->notify(SC_ZERO_TIME);
+#endif // @@@@#### REMOVE
+	switch( m_state )
+	{
+	  case ps_suspended:
+	    m_state = ps_normal;
+	    break;
+	  case ps_suspended_ready_to_run:
+	    m_state = ps_normal;
+	    if ( next_runnable() == 0 )  
+		simcontext()->push_runnable_thread(this);
+	    remove_dynamic_events();  // order important.
+	    break;
+	  default:
+	    m_state = m_state & ~ps_bit_suspended;
+	    break;
+	}
     }
 }
 
@@ -442,7 +449,7 @@ sc_thread_process::sc_thread_process( const char* name_p, bool free_host,
 ):
     sc_process_b(
         name_p && name_p[0] ? name_p : sc_gen_unique_name("thread_p"), 
-        free_host, method_p, host_p, opt_p),
+        true, free_host, method_p, host_p, opt_p),
         m_cor_p(0), m_stack_size(SC_DEFAULT_STACK_SIZE), 
         m_wait_cycle_n(0)
 {
@@ -598,8 +605,6 @@ void sc_thread_process::suspend_process(
 //------------------------------------------------------------------------------
 void sc_thread_process::throw_reset( bool async )
 {     
-    sc_thread_handle active_p; // handle for active thread if its a thread.
-
     // If the thread to be reset is dead ignore the call.
 
     if ( m_state & ps_bit_zombie ) return;
@@ -789,10 +794,14 @@ sc_event::dt_status sc_thread_process::trigger_dynamic( sc_event* e )
 
       case TIMEOUT: 
         if ( m_state == ps_normal )
+	{
 	    rc = sc_event::dt_run_remove;
+	}
 
 	else if ( m_state & ps_bit_disabled )
-            return sc_event::dt_rearm; 
+	{
+            rc = sc_event::dt_remove;  // timeout cancels the wait.
+	}
 
 	else if ( m_state & ps_bit_suspended )
 	{
@@ -815,7 +824,7 @@ sc_event::dt_status sc_thread_process::trigger_dynamic( sc_event* e )
 	    }
 	    else if ( m_state & ps_bit_disabled )
 	    {
-	        rc = sc_event::dt_remove;
+	        rc = sc_event::dt_remove; // timeout cancels the wait.
 	    }
 	    else if ( m_state & ps_bit_suspended )
 	    {
@@ -839,10 +848,7 @@ sc_event::dt_status sc_thread_process::trigger_dynamic( sc_event* e )
 	    }
 	    else if ( m_state & ps_bit_disabled )
 	    {
-		if ( e == m_event_p ) 
-		    return sc_event::dt_rearm;
-		else
-		    rc = sc_event::dt_remove;
+		return sc_event::dt_rearm;
 	    }
 	    else if ( m_state & ps_bit_suspended )
 	    {
@@ -870,7 +876,7 @@ sc_event::dt_status sc_thread_process::trigger_dynamic( sc_event* e )
 	    }
 	    else if ( m_state & ps_bit_disabled )
 	    {
-	        rc = sc_event::dt_remove;
+	        rc = sc_event::dt_remove; // timeout removes cancels the wait.
 	    }
 	    else if ( m_state & ps_bit_suspended )
 	    {
@@ -929,6 +935,8 @@ sc_event::dt_status sc_thread_process::trigger_dynamic( sc_event* e )
 	    else if ( m_state & ps_bit_disabled )
 	    {
 	        rc = sc_event::dt_remove;
+		if ( m_state & ps_bit_suspended )
+		    m_state = m_state | ps_bit_ready_to_run;
 	    }
 	    else if ( m_state & ps_bit_suspended )
 	    {
