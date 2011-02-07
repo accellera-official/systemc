@@ -10,17 +10,34 @@ using std::endl;
 
 void invalid_handle_check(sc_process_handle& h)
 {
-  assert(h.valid() == false);
-  assert(strcmp(h.name(), "") == 0);
-  assert(h.proc_kind() == SC_NO_PROC_);
-  assert(h.get_process_object() == 0);
-  std::vector<sc_object*> children = h.get_child_objects();
-  assert(children.size() == 0);
-  assert(h.get_parent_object() == 0);
-  assert(h.terminated() == false);
-  assert(h.dynamic() == false);
-  assert( !(h == h) );
-  assert(h != h);
+
+    assert(h.valid() == false);
+    assert(strcmp(h.name(), "") == 0);
+    assert(h.proc_kind() == SC_NO_PROC_);
+    assert(h.get_process_object() == 0);
+    std::vector<sc_object*> children = h.get_child_objects();
+    assert(children.size() == 0);
+    assert(h.get_parent_object() == 0);
+    assert(h.terminated() == false);
+    assert(h.dynamic() == false);
+    assert( !(h == h) );
+    assert(h != h);
+
+    cout << "There should be warning 11 messages" << endl;
+
+    h.disable();
+    h.enable();
+    h.is_unwinding();
+    h.kill();
+    h.reset();
+    h.resume();
+    h.suspend();
+    h.sync_reset_off();
+    h.sync_reset_on();
+    h.terminated_event();
+    h.throw_it(sc_user(), SC_NO_DESCENDANTS);
+
+    cout << "End of warning messages" << endl;
 }
 
 SC_MODULE(M)
@@ -234,7 +251,7 @@ struct Top: sc_module
 
 int sc_main(int argc, char* argv[])
 {
-  cout << "Should be silent" << endl;
+  cout << "Should be silent except for warning messages" << endl;
 
   sc_process_handle h;
   invalid_handle_check(h);

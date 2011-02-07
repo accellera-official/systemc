@@ -1,72 +1,79 @@
 SystemC Simulation
-0 s:      dynamic method (73,0) initialization call 
-0 s:      static method (134)
-0 s:      dynamic thread (112) initialization call 
-0 s:      static method (134)
-0 s:      dynamic method (78,1) after wait on m_clk.posedge_event() 
-0 s:      static thread (143)
-0 s:      dynamic thread (117) after wait on m_clk.posedge_event() 
-1 ns:      static method (134)
-1 ns:      dynamic method (84,2) after wait on m_clk.posedge_event() 
-1 ns:      static thread (143)
-1 ns:      cthread (61)
-1 ns:      dynamic thread (120) after wait on m_clk.posedge_event() 
-1500 ps:      dynamic method (90,3) after wait on m_clk.negedge() 
-1500 ps:      dynamic thread (123) after wait on m_clk.negedge_event() 
-2 ns:      static method (134)
-2 ns: stimulus (154) - disabling all processes
+Status before sc_start(1,SC_NS) = 1
+0 s dynamic_method_and_events: initialization call
+0 s dynamic_method_negedge: initialization call
+0 s dynamic_method_posedge: initialization call
+Status during sc_start(1,SC_NS) = 16
+0 s: stimulus (203) - disabling all processes
+0 s dynamic_thread_and_events: initialization call
+0 s dynamic_thread_negedge: initialization call
+0 s dynamic_thread_posedge: initialization call
+Status after sc_start(1,SC_NS) = 32
 
-5 ns: stimulus (169) - enabling all processes
-5 ns:      static thread (143)
-5 ns:      cthread (61)
-6 ns:      static method (134)
-6 ns: stimulus (172) - disabling all processes
-7 ns: stimulus (181) - firing event1 
+3 ns: stimulus (236) - enabling all processes
+3 ns: static thread awakened
+3500 ps dynamic_method_negedge: awakened
+3500 ps dynamic_thread_negedge: awakened
+4 ns: static method awakened
+4 ns dynamic_method_posedge: awakened
 
-8 ns: stimulus (189) - enabling all processes
-8 ns:      static thread (143)
-8 ns:      cthread (61)
-9 ns:      static method (134)
-9 ns: stimulus (193) - firing event2 
-9 ns:      static thread (143)
-9 ns:      cthread (61)
-9 ns:      dynamic method (95,4) after wait on m_event1 & m_event2 
-9 ns:      dynamic thread (126) after wait on m_event1 & m_event2 
-10 ns:      static method (134)
-10 ns:      dynamic method (78,1) after wait on m_clk.posedge_event() 
-10 ns:      static thread (143)
-10 ns:      cthread (61)
-10 ns:      dynamic thread (117) after wait on m_clk.posedge_event() 
-11 ns:      static method (134)
-11 ns:      dynamic method (84,2) after wait on m_clk.posedge_event() 
-11 ns:      static thread (143)
-11 ns:      cthread (61)
-11 ns:      dynamic thread (120) after wait on m_clk.posedge_event() 
-11500 ps:      dynamic method (90,3) after wait on m_clk.negedge() 
-11500 ps:      dynamic thread (123) after wait on m_clk.negedge_event() 
-12 ns:      static method (134)
-12 ns:      static thread (143)
-12 ns:      cthread (61)
-13 ns:      static method (134)
-13 ns:      static thread (143)
-13 ns:      cthread (61)
-14 ns:      static method (134)
-14 ns: stimulus (154) - disabling all processes
+4 ns: stimulus (242) - disabling all processes
+4 ns: static thread awakened
+4 ns: cthread awakened
+4 ns dynamic_thread_posedge: awakened
 
-17 ns: stimulus (169) - enabling all processes
-17 ns:      static thread (143)
-17 ns:      cthread (61)
-18 ns:      static method (134)
-18 ns: stimulus (172) - disabling all processes
-19 ns: stimulus (181) - firing event1 
+5 ns: stimulus (257) - enabling all processes
+5 ns: static thread awakened
+5 ns: cthread awakened
+5500 ps dynamic_method_negedge: awakened
+5500 ps dynamic_thread_negedge: awakened
+6 ns: static method awakened
+6 ns dynamic_method_posedge: awakened
 
-20 ns: stimulus (189) - enabling all processes
-20 ns:      static thread (143)
-20 ns:      cthread (61)
-21 ns:      static method (134)
-21 ns: stimulus (193) - firing event2 
-21 ns:      static thread (143)
-21 ns:      cthread (61)
-21 ns:      dynamic method (95,4) after wait on m_event1 & m_event2 
-21 ns:      dynamic thread (126) after wait on m_event1 & m_event2 
+6 ns: stimulus (271) - firing event1 
+6 ns: static thread awakened
+6 ns: cthread awakened
+6 ns dynamic_thread_posedge: awakened
+6500 ps dynamic_method_negedge: awakened
+6500 ps dynamic_thread_negedge: awakened
+7 ns: static method awakened
+7 ns dynamic_method_posedge: awakened
+
+7 ns: stimulus (276) - disabling all processes
+7 ns: static thread awakened
+7 ns: cthread awakened
+7 ns dynamic_thread_posedge: awakened
+
+8 ns: stimulus (293) - firing event2 
+
+11 ns: stimulus (301) - enabling all processes
+11 ns: static thread awakened
+11 ns: cthread awakened
+11500 ps dynamic_method_negedge: awakened
+11500 ps dynamic_thread_negedge: awakened
+12 ns: static method awakened
+12 ns dynamic_method_posedge: awakened
+
+12 ns: stimulus (315) - firing event2 
+12 ns: static thread awakened
+12 ns: cthread awakened
+12 ns dynamic_thread_posedge: awakened
+12 ns dynamic_method_and_events: awakened
+12 ns dynamic_thread_and_events: awakened
+12500 ps dynamic_method_negedge: awakened
+12500 ps dynamic_thread_negedge: awakened
+13 ns: static method awakened
+13 ns dynamic_method_posedge: awakened
+13 ns: static thread awakened
+13 ns: cthread awakened
+13 ns dynamic_thread_posedge: awakened
+13500 ps dynamic_method_negedge: awakened
+13500 ps dynamic_thread_negedge: awakened
+14 ns: static method awakened
+14 ns dynamic_method_posedge: awakened
+14 ns: static thread awakened
+14 ns: cthread awakened
+14 ns dynamic_thread_posedge: awakened
+
+Info: /OSCI/SystemC: Simulation stopped by user.
 Program completed

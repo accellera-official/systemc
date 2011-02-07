@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2002 by all Contributors.
+  source code Copyright (c) 1996-2011 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -21,6 +21,8 @@
 
  *****************************************************************************/
 
+// tests parent spawning process dying before child spawned process.
+
 /*****************************************************************************
 
   MODIFICATION LOG - modifiers, enter your name, affiliation, date and
@@ -30,8 +32,10 @@
   Description of Modification:
 
  *****************************************************************************/
-
-// tests parent spawning process dying before child spawned process.
+// $Log: test06.cpp,v $
+// Revision 1.2  2011/02/01 17:17:40  acg
+//  Andy Goodrich: update of copyright notice, added visible CVS logging.
+//
 
 #define SC_INCLUDE_DYNAMIC_PROCESSES
 #include <systemc.h>

@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2002 by all Contributors.
+  source code Copyright (c) 1996-2011 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -17,9 +17,13 @@
 
 /*****************************************************************************
 
+  test07.cpp -- Test that for all the interfaces of a port a callback occurs 
+                for a dynamic process created after the beginning of simulation.
+
   Original Author: Andy Goodrich, Forte Design Systems
 
  *****************************************************************************/
+
 
 /*****************************************************************************
 
@@ -30,9 +34,10 @@
   Description of Modification:
 
  *****************************************************************************/
-
-// test that for all the interfaces of a port occurs for a dynamic process
-// created after the beginning of simulation.
+// $Log: test07.cpp,v $
+// Revision 1.2  2011/02/01 17:17:40  acg
+//  Andy Goodrich: update of copyright notice, added visible CVS logging.
+//
 
 
 #define SC_INCLUDE_DYNAMIC_PROCESSES

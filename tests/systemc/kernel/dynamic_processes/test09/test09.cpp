@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2011 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -34,6 +34,12 @@
 
  *****************************************************************************/
 // $Log: test09.cpp,v $
+// Revision 1.4  2011/02/01 17:17:40  acg
+//  Andy Goodrich: update of copyright notice, added visible CVS logging.
+//
+// Revision 1.3  2011/01/14 14:23:46  acg
+//  Andy Goodrich: Fixes for 1666_2011
+//
 // Revision 1.2  2009/10/14 19:13:27  acg
 //  Andy Goodrich: changes for SystemC 2.3
 //

@@ -10,8 +10,6 @@ SystemC Simulation
 1 ns ... dynamic thread timed wait
 
 2500 ps asserting asynchronous reset
-2500 ps ... static method
-2500 ps ... dynamic method
 2500 ps ... static cthread
 2500 ps ... static thread clocked
 2500 ps ... static thread event wait 
@@ -19,6 +17,8 @@ SystemC Simulation
 2500 ps ... dynamic thread clocked
 2500 ps ... dynamic thread event wait
 2500 ps ... dynamic thread timed wait
+2500 ps ... static method
+2500 ps ... dynamic method
 3 ns ... static thread clocked
 3 ns ... static cthread
 3 ns ... dynamic thread clocked
@@ -33,8 +33,6 @@ SystemC Simulation
 6500 ps clearing synchronous reset
 
 13500 ps asserting asynchronous reset
-13500 ps ... static method
-13500 ps ... dynamic method
 13500 ps ... static cthread
 13500 ps ... static thread clocked
 13500 ps ... static thread event wait 
@@ -42,6 +40,8 @@ SystemC Simulation
 13500 ps ... dynamic thread clocked
 13500 ps ... dynamic thread event wait
 13500 ps ... dynamic thread timed wait
+13500 ps ... static method
+13500 ps ... dynamic method
 14 ns ... static thread clocked
 14 ns ... static cthread
 14 ns ... dynamic thread clocked

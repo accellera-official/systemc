@@ -40,194 +40,325 @@
 
 SC_MODULE(DUT)
 {
-	SC_CTOR(DUT)
+    SC_CTOR(DUT)
+    {
+        SC_CTHREAD(cthread,m_clk.pos());
+        m_cthread = sc_get_current_process_handle();
+        SC_METHOD(dynamic_method_and_events);
+
+	m_dynamic_method_and_events = sc_get_current_process_handle();
+        SC_METHOD(dynamic_method_negedge);
+	m_dynamic_method_negedge = sc_get_current_process_handle();
+        SC_METHOD(dynamic_method_posedge);
+	m_dynamic_method_posedge = sc_get_current_process_handle();
+
+        SC_THREAD(dynamic_thread_and_events);
+        m_dynamic_thread_and_events = sc_get_current_process_handle();
+        SC_THREAD(dynamic_thread_negedge);
+        m_dynamic_thread_negedge = sc_get_current_process_handle();
+        SC_THREAD(dynamic_thread_posedge);
+        m_dynamic_thread_posedge = sc_get_current_process_handle();
+
+        SC_METHOD(static_method);
+        sensitive << m_clk.pos();
+	dont_initialize();
+        m_static_method = sc_get_current_process_handle();
+        SC_THREAD(static_thread);
+        sensitive << m_clk.pos();
+        m_static_thread = sc_get_current_process_handle();
+        SC_METHOD(stimulus_method);
+
+        SC_CTHREAD(stimulus,m_clk.pos());
+        reset_signal_is(m_reset, true);
+    }
+
+    void cthread()
+    {
+        for (;;)
+        {
+            wait();
+            cout << sc_time_stamp() << ": cthread awakened" << endl;
+        }
+    }
+
+    // dynamic_method_and_events - dynamic method waiting on the and of 
+    // two events:
+
+    void dynamic_method_and_events()
+    {
+        static int state = 0;
+	switch( state )
 	{
-		SC_CTHREAD(cthread,m_clk.pos());
-		SC_METHOD(dynamic_method);
-		SC_THREAD(dynamic_thread);
-		SC_METHOD(static_method);
-		sensitive << m_clk.pos();
-		SC_THREAD(static_thread);
-		sensitive << m_clk.pos();
-		SC_CTHREAD(stimulus,m_clk.pos());
-		reset_signal_is(m_reset, true);
+	  case 0:
+	    cout << sc_time_stamp() 
+	         << " dynamic_method_and_events: initialization call" << endl;
+	    break;
+	  case 1:
+	    cout << sc_time_stamp() << " dynamic_method_and_events: awakened"
+		 << endl;
+	    break;
 	}
-	void cthread()
+	next_trigger( m_event1 & m_event2 );
+	state = 1;
+    }
+
+    // dynamic_method_negedge - dynamic method waiting on negedge events:
+
+    void dynamic_method_negedge()
+    {
+        static int state = 0;
+	switch( state )
 	{
-	    m_cthread = sc_get_current_process_handle();
-		for (;;)
-		{
-			wait();
-			cout << sc_time_stamp() << ":      cthread (" << __LINE__ << ")" 
-			     << endl;
-		}
+	  case 0:
+	    cout << sc_time_stamp() 
+		 << " dynamic_method_negedge: initialization call" << endl;
+	    break;
+	  case 1:
+	    cout << sc_time_stamp() << " dynamic_method_negedge: awakened"
+		 << endl;
+	    break;
 	}
-	void dynamic_method()
+	next_trigger( m_clk.negedge_event() );
+	state = 1;
+    }
+
+    // dynamic_method_posedge - dynamic method waiting on posedge events:
+
+    void dynamic_method_posedge()
+    {
+        static int state = 0;
+	switch( state )
 	{
-		static int state = 0;
-		switch ( state )
-		{
-		  case 0:
-			m_dynamic_method = sc_get_current_process_handle();
-		    next_trigger( m_clk.posedge_event() );
-		    cout << sc_time_stamp() << ":      dynamic method (" << __LINE__ 
-			     << "," << state << ") initialization call " << endl;
-			break;
-		  case 1:
-		    next_trigger( m_clk.posedge_event() );
-		    cout << sc_time_stamp() << ":      dynamic method (" << __LINE__ 
-			     << "," << state << ") after wait on m_clk.posedge_event() " 
-				 << endl;
-			break;
-		  case 2:
-		    next_trigger( m_clk.negedge_event() );
-		    cout << sc_time_stamp() << ":      dynamic method (" << __LINE__ 
-			     << "," << state << ") after wait on m_clk.posedge_event() " 
-				 << endl;
-			break;
-		  case 3:
-		    next_trigger( m_event1 & m_event2 );
-		    cout << sc_time_stamp() << ":      dynamic method (" << __LINE__ 
-			     << "," << state << ") after wait on m_clk.negedge() " << endl;
-			break;
-		  case 4:
-		    next_trigger( m_clk.posedge_event() );
-		    cout << sc_time_stamp() << ":      dynamic method (" << __LINE__ 
-			     << "," << state << ") after wait on m_event1 & m_event2 " 
-				 << endl;
-			break;
-		  default:
-		    next_trigger( m_clk.posedge_event() );
-		    cout << sc_time_stamp() << ":      dynamic method (" << __LINE__ 
-			     << "," << state << ") after wait on m_clk.posedge_event() " 
-				 << endl;
-			break;
-		}
-		state = state + 1;
-		if ( state == 5 ) state = 1;
+	  case 0:
+	    cout << sc_time_stamp() 
+		 << " dynamic_method_posedge: initialization call" << endl;
+	    break;
+	  default:
+	    cout << sc_time_stamp() << " dynamic_method_posedge: awakened"
+		 << endl;
 	}
-	void dynamic_thread()
+	next_trigger( m_clk.posedge_event() );
+	state = 1;
+    }
+
+    // dynamic_thread_and_events - dynamic thread waiting on the and of 
+    // two events:
+
+    void dynamic_thread_and_events()
+    {
+	cout << sc_time_stamp() 
+	     << " dynamic_thread_and_events: initialization call" << endl;
+        for (;;)
 	{
-	    m_dynamic_thread = sc_get_current_process_handle();
-		cout << sc_time_stamp() << ":      dynamic thread (" << __LINE__ << ")" 
-			 << " initialization call " << endl;
-		wait(m_clk.posedge_event());
-		for (;;)
-		{
-			cout << sc_time_stamp() << ":      dynamic thread (" << __LINE__ 
-			     << ") after wait on m_clk.posedge_event() " << endl;
-			wait(m_clk.posedge_event());
-			cout << sc_time_stamp() << ":      dynamic thread (" << __LINE__ 
-			     << ") after wait on m_clk.posedge_event() " << endl;
-			wait(m_clk.negedge_event());
-			cout << sc_time_stamp() << ":      dynamic thread (" << __LINE__ 
-			     << ") after wait on m_clk.negedge_event() " << endl;
-			wait(m_event1 & m_event2 );
-			cout << sc_time_stamp() << ":      dynamic thread (" << __LINE__ 
-			     << ") after wait on m_event1 & m_event2 " << endl;
-			wait(m_clk.posedge_event());
-		}
+	    wait( m_event1 & m_event2 );
+	    cout << sc_time_stamp() << " dynamic_thread_and_events: awakened"
+	         << endl;
 	}
-	void static_method()
+    }
+
+    // dynamic_thread_negedge - dynamic thread waiting on negedge events:
+
+    void dynamic_thread_negedge()
+    {
+	cout << sc_time_stamp() 
+	     << " dynamic_thread_negedge: initialization call" << endl;
+        for (;;)
 	{
-	    m_static_method = sc_get_current_process_handle();
-		cout << sc_time_stamp() << ":      static method (" << __LINE__ << ")" 
-		     << endl;
+	    wait( m_clk.negedge_event() );
+	    cout << sc_time_stamp() << " dynamic_thread_negedge: awakened"
+	         << endl;
 	}
-	void static_thread()
+    }
+
+    // dynamic_thread_posedge - dynamic thread waiting on posedge events:
+
+    void dynamic_thread_posedge()
+    {
+	cout << sc_time_stamp() 
+	     << " dynamic_thread_posedge: initialization call" << endl;
+        for (;;)
 	{
-	    m_static_thread = sc_get_current_process_handle();
-		for (;;)
-		{
-			wait();
-			cout << sc_time_stamp() << ":      static thread (" << __LINE__ 
-			     << ")" << endl;
-		}
+	    wait( m_clk.posedge_event() );
+	    cout << sc_time_stamp() << " dynamic_thread_posedge: awakened"
+	         << endl;
 	}
-	void stimulus()
-	{
-		for (;;)
-		{
-			wait();
-			wait();
-			cout << sc_time_stamp() << ": stimulus ("
-			     << __LINE__ << ") - disabling all processes" << endl;
-			m_cthread.disable();
-			m_dynamic_method.disable();
-			m_dynamic_thread.disable();
-			m_static_method.disable();
-			m_static_thread.disable();
-			wait();
-			wait();
-			wait();
-			m_cthread.enable();
-			m_dynamic_method.enable();
-			m_dynamic_thread.enable();
-			m_static_method.enable();
-			m_static_thread.enable();
-			cout << endl << sc_time_stamp() << ": stimulus (" 
-			     << __LINE__ << ") - enabling all processes" << endl;
-			wait();
-			cout << sc_time_stamp() << ": stimulus ("
-			     << __LINE__ << ") - disabling all processes" << endl;
-			m_cthread.disable();
-			m_dynamic_method.disable();
-			m_dynamic_thread.disable();
-			m_static_method.disable();
-			m_static_thread.disable();
-			wait();
-			m_event1.notify(SC_ZERO_TIME);
-			cout << sc_time_stamp() << ": stimulus ("
-			     << __LINE__ << ") - firing event1 " << endl;
-			wait();
-			m_cthread.enable();
-			m_dynamic_method.enable();
-			m_dynamic_thread.enable();
-			m_static_method.enable();
-			m_static_thread.enable();
-			cout << endl << sc_time_stamp() << ": stimulus (" 
-			     << __LINE__ << ") - enabling all processes" << endl;
-			wait();
-			m_event2.notify(SC_ZERO_TIME);
-			cout << sc_time_stamp() << ": stimulus ("
-			     << __LINE__ << ") - firing event2 " << endl;
-			wait();
-			wait();
-			wait();
-		}
-	}
-	sc_in<bool>       m_clk;
-	sc_process_handle m_cthread;
-	sc_process_handle m_dynamic_method;
-	sc_process_handle m_dynamic_thread;
-	sc_event          m_event1;
-	sc_event          m_event2;
-	sc_event          m_event3;
-	sc_event          m_event4;
-	sc_in<bool>       m_reset;
-	sc_process_handle m_static_method;
-	sc_process_handle m_static_thread;
+    }
+
+    void static_method()
+    {
+        cout << sc_time_stamp() << ": static method awakened" << endl;
+    }
+    void static_thread()
+    {
+        for (;;)
+        {
+            wait();
+            cout << sc_time_stamp() << ": static thread awakened" << endl;
+        }
+    }
+    void stimulus_method()
+    {
+	cout << "Status during sc_start(1,SC_NS) = " << sc_get_status() << endl;
+	cout << sc_time_stamp() << ": stimulus ("
+	     << __LINE__ << ") - disabling all processes" << endl;
+	m_cthread.disable();
+	m_dynamic_method_and_events.disable();
+	m_dynamic_method_negedge.disable();
+	m_dynamic_method_posedge.disable();
+	m_dynamic_thread_and_events.disable();
+	m_dynamic_thread_negedge.disable();
+	m_dynamic_thread_posedge.disable();
+	m_static_method.disable();
+	m_static_thread.disable();
+    }
+    void stimulus()
+    {
+        for (;;)
+        {
+	    // START OUT BY WAITING ON THE DISABLE FROM THE stimulus_method.
+
+            wait();
+            wait();
+            wait();
+
+	    // PROCEED WITH AN ENABLE ON EVERYONE - EXPECTING posedge WAKES:
+
+            m_cthread.enable();
+            m_dynamic_method_and_events.enable();
+            m_dynamic_method_negedge.enable();
+            m_dynamic_method_posedge.enable();
+            m_dynamic_thread_and_events.enable();
+            m_dynamic_thread_negedge.enable();
+            m_dynamic_thread_posedge.enable();
+            m_static_method.enable();
+            m_static_thread.enable();
+            cout << endl << sc_time_stamp() << ": stimulus (" 
+                 << __LINE__ << ") - enabling all processes" << endl;
+            wait();
+
+	    // DISABLE EVERYONE AGAIN:
+
+            cout << endl << sc_time_stamp() << ": stimulus ("
+                 << __LINE__ << ") - disabling all processes" << endl;
+            m_cthread.disable();
+            m_dynamic_method_and_events.disable();
+            m_dynamic_method_negedge.disable();
+            m_dynamic_method_posedge.disable();
+            m_dynamic_thread_and_events.disable();
+            m_dynamic_thread_negedge.disable();
+            m_dynamic_thread_posedge.disable();
+            m_static_method.disable();
+            m_static_thread.disable();
+            wait();
+
+	    // PROCEED WITH AN ENABLE ON EVERYONE - EXPECTING negedge WAKES:
+
+            cout << endl << sc_time_stamp() << ": stimulus (" 
+                 << __LINE__ << ") - enabling all processes" << endl;
+            m_cthread.enable();
+            m_dynamic_method_and_events.enable();
+            m_dynamic_method_negedge.enable();
+            m_dynamic_method_posedge.enable();
+            m_dynamic_thread_and_events.enable();
+            m_dynamic_thread_negedge.enable();
+            m_dynamic_thread_posedge.enable();
+            m_static_method.enable();
+            m_static_thread.enable();
+            wait();
+
+            // FIRE OFF EVENT 1:
+            cout << endl << sc_time_stamp() << ": stimulus ("
+                 << __LINE__ << ") - firing event1 " << endl;
+            m_event1.notify(SC_ZERO_TIME);
+            wait();
+
+            cout << endl << sc_time_stamp() << ": stimulus ("
+                 << __LINE__ << ") - disabling all processes" << endl;
+            m_cthread.disable();
+            m_dynamic_method_and_events.disable();
+            m_dynamic_method_negedge.disable();
+            m_dynamic_method_posedge.disable();
+            m_dynamic_thread_and_events.disable();
+            m_dynamic_thread_negedge.disable();
+            m_dynamic_thread_posedge.disable();
+            m_static_method.disable();
+            m_static_thread.disable();
+            wait();
+
+
+	    // FIRE OFF EVENT 2: WITH EVERYONE DISABLED:
+
+            m_event2.notify(SC_ZERO_TIME);
+            cout << endl << sc_time_stamp() << ": stimulus ("
+                 << __LINE__ << ") - firing event2 " << endl;
+            wait();
+            wait();
+            wait();
+
+	    // FIRE OFF EVENT 2: WITH EVERYONE ENABLED:
+
+            cout << endl << sc_time_stamp() << ": stimulus (" 
+                 << __LINE__ << ") - enabling all processes" << endl;
+            m_cthread.enable();
+            m_dynamic_method_and_events.enable();
+            m_dynamic_method_negedge.enable();
+            m_dynamic_method_posedge.enable();
+            m_dynamic_thread_and_events.enable();
+            m_dynamic_thread_negedge.enable();
+            m_dynamic_thread_posedge.enable();
+            m_static_method.enable();
+            m_static_thread.enable();
+            wait();
+
+            m_event2.notify(SC_ZERO_TIME);
+            cout << endl << sc_time_stamp() << ": stimulus ("
+                 << __LINE__ << ") - firing event2 " << endl;
+            wait();
+            wait();
+            sc_stop();
+        }
+    }
+    sc_in<bool>       m_clk;
+    sc_process_handle m_cthread;
+    sc_process_handle m_dynamic_method_and_events;
+    sc_process_handle m_dynamic_method_negedge;
+    sc_process_handle m_dynamic_method_posedge;
+    sc_process_handle m_dynamic_thread_and_events;
+    sc_process_handle m_dynamic_thread_negedge;
+    sc_process_handle m_dynamic_thread_posedge;
+    sc_event          m_event1;
+    sc_event          m_event2;
+    sc_event          m_event3;
+    sc_event          m_event4;
+    sc_in<bool>       m_reset;
+    sc_process_handle m_static_method;
+    sc_process_handle m_static_thread;
 };
 
 int sc_main(int argc, char* argv[])
 {
-	sc_clock        clock;
-	DUT             dut("dut");
-	sc_signal<bool> reset;
+    sc_clock        clock;
+    DUT             dut("dut");
+    sc_signal<bool> reset;
 
-	dut.m_clk(clock);
-	dut.m_reset(reset);
+    dut.m_clk(clock);
+    dut.m_reset(reset);
 
-	reset = true;
-	sc_start(1, SC_NS);
-	reset = false;
-	sc_start(21, SC_NS);
+    reset = true;
+    cout << "Status before sc_start(1,SC_NS) = " << sc_get_status() << endl;
+    sc_start(1, SC_NS);
+    cout << "Status after sc_start(1,SC_NS) = " << sc_get_status() << endl;
+    reset = false;
+    sc_start();
 
-	cout << "Program completed" << endl;
-	return 0;
+    cout << "Program completed" << endl;
+    return 0;
 }
 
 // $Log: test03.cpp,v $
+// Revision 1.3  2011/01/14 14:23:58  acg
+//  Andy Goodrich: Fixes for 1666_2011
+//
 // Revision 1.2  2009/05/22 16:07:26  acg
 //  Andy Goodrich: process control updates.
 //

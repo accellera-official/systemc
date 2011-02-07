@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2011 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -22,6 +22,8 @@
 
  *****************************************************************************/
 
+// test dynamic method processes and hierarchical dynamic process naming
+
 /*****************************************************************************
 
   MODIFICATION LOG - modifiers, enter your name, affiliation, date and
@@ -31,7 +33,10 @@
   Description of Modification:
 
  *****************************************************************************/
-// test dynamic method processes and hierarchical dynamic process naming
+// $Log: test02.cpp,v $
+// Revision 1.2  2011/02/01 17:17:40  acg
+//  Andy Goodrich: update of copyright notice, added visible CVS logging.
+//
 
 #define SC_INCLUDE_DYNAMIC_PROCESSES
 #include <systemc.h>

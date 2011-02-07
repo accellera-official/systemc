@@ -77,9 +77,9 @@ SC_MODULE(top) {
     // Storage: 
 
     sc_in<bool>       m_clk;      
-    sc_signal<int>    m_state_cthread0;
-    sc_signal<int>    m_state_method0;
-    sc_signal<int>    m_state_thread0;
+    int               m_state_cthread0;
+    int               m_state_method0;
+    int               m_state_thread0;
     sc_process_handle m_target_cthread0;
     sc_process_handle m_target_method0;
     sc_process_handle m_target_thread0;

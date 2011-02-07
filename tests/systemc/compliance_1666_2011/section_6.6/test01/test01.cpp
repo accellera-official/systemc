@@ -20,7 +20,10 @@
 //
 // MODIFICATION LOG - modifiers, enter your name, affiliation, date and
 //
-// $Log:$
+// $Log: test01.cpp,v $
+// Revision 1.1  2011/01/14 14:23:16  acg
+//  Andy Goodrich: new test.
+//
 
 #define SC_INCLUDE_DYNAMIC_PROCESSES
 #include <systemc>

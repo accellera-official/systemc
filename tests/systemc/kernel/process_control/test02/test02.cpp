@@ -17,7 +17,7 @@
 
 /*****************************************************************************
 
-  test01.cpp -- Test of resume after dynamic event completion
+  test02.cpp -- Test of resume after dynamic event completion
 
   Original Author: Andy Goodrich
 
@@ -39,118 +39,171 @@
 
 SC_MODULE(DUT)
 {
-	SC_CTOR(DUT)
-	{
-		SC_METHOD(dynamic_method);
-		SC_THREAD(dynamic_thread);
-		SC_CTHREAD(stimulus,m_clk.pos());
-		reset_signal_is(m_reset, true);
-	}
-	void dynamic_method()
-	{
-		static int state = 0;
-		switch ( state )
-		{
-		  case 0:
-			m_dynamic_method = sc_get_current_process_handle();
-		    next_trigger( m_clk.posedge_event() );
-		    cout << sc_time_stamp() << ":      dynamic method (" << __LINE__ 
-			     << "," << state << ") initialization call " << endl;
-			state = 1;
-			break;
-		  default:
-		  case 1:
-		    next_trigger( m_event1 & m_event2 );
-		    cout << sc_time_stamp() << ":      dynamic method (" << __LINE__ 
-			     << "," << state << ") after wait on m_clk.negedge() " << endl;
-			break;
-		}
-	}
-	void dynamic_thread()
-	{
-	    m_dynamic_thread = sc_get_current_process_handle();
-		cout << sc_time_stamp() << ":      dynamic thread (" << __LINE__ << ")" 
-			 << " initialization call " << endl;
-		wait(m_clk.posedge_event());
-		cout << sc_time_stamp() << ":      dynamic thread (" << __LINE__ 
-			 << ") after wait on m_clk.posedge_event() " << endl;
-		for (;;)
-		{
-			wait(m_event1 & m_event2 );
-			cout << sc_time_stamp() << ":      dynamic thread (" << __LINE__ 
-			     << ") after wait on m_event1 & m_event2 " << endl;
-		}
-	}
-	void stimulus()
-	{
-		for (;;)
-		{
-			wait();
-			wait();
-			cout << sc_time_stamp() << ": stimulus ("
-			     << __LINE__ << ") - suspending all processes" << endl;
-			m_cthread.suspend();
-			m_dynamic_method.suspend();
-			m_dynamic_thread.suspend();
-			m_static_method.suspend();
-			m_static_thread.suspend();
-			wait();
+    SC_CTOR(DUT)
+    {
+        SC_CTHREAD(cthread,m_clk.pos());
+        reset_signal_is(m_reset, true);
+        m_cthread = sc_get_current_process_handle();
 
-			m_event1.notify(SC_ZERO_TIME);
-			cout << sc_time_stamp() << ": stimulus ("
-			     << __LINE__ << ") - firing event1 " << endl;
-			wait();
-			m_event2.notify(SC_ZERO_TIME);
-			cout << sc_time_stamp() << ": stimulus ("
-			     << __LINE__ << ") - firing event2 " << endl;
-			wait();
-			wait();
+        SC_METHOD(dynamic_method);
+	m_dynamic_method = sc_get_current_process_handle();
 
-			m_cthread.resume();
-			m_dynamic_method.resume();
-			m_dynamic_thread.resume();
-			m_static_method.resume();
-			m_static_thread.resume();
-			cout << endl << sc_time_stamp() << ": stimulus (" 
-			     << __LINE__ << ") - resuming all processes" << endl;
-			wait();
-			wait();
-			wait();
-			sc_stop();
-		}
+        SC_THREAD(dynamic_thread);
+        m_dynamic_thread = sc_get_current_process_handle();
+
+        SC_METHOD(static_method);
+	sensitive << m_event1 << m_event2;
+	m_static_method = sc_get_current_process_handle();
+
+	SC_THREAD(static_thread);
+	sensitive << m_event1 << m_event2;
+        m_static_thread = sc_get_current_process_handle();
+
+        SC_CTHREAD(stimulus,m_clk.pos());
+        reset_signal_is(m_reset, true);
+    }
+    void cthread()
+    {
+        for (;;)
+	{
+	    wait();
+	    cout << sc_time_stamp() << ":      clocked thread (" << __LINE__ 
+		 << ") after wait on m_clk.pos() " << endl;
 	}
-	sc_in<bool>       m_clk;
-	sc_process_handle m_cthread;
-	sc_process_handle m_dynamic_method;
-	sc_process_handle m_dynamic_thread;
-	sc_event          m_event1;
-	sc_event          m_event2;
-	sc_event          m_event3;
-	sc_event          m_event4;
-	sc_in<bool>       m_reset;
-	sc_process_handle m_static_method;
-	sc_process_handle m_static_thread;
+    }
+    void dynamic_method()
+    {
+        static int state = 0;
+        switch ( state )
+        {
+          case 0:
+            next_trigger( m_clk.posedge_event() );
+            cout << sc_time_stamp() << ":      dynamic method (" << __LINE__ 
+                 << "," << state << ") initialization call " << endl;
+            state = 1;
+            break;
+          default:
+          case 1:
+            next_trigger( m_event1 & m_event2 );
+            cout << sc_time_stamp() << ":      dynamic method (" << __LINE__ 
+                 << "," << state << ") after wait on m_clk.posedge() " << endl;
+            break;
+        }
+    }
+    void dynamic_thread()
+    {
+        cout << sc_time_stamp() << ":      dynamic thread (" << __LINE__ << ")" 
+             << " initialization call " << endl;
+        wait(m_clk.posedge_event());
+        cout << sc_time_stamp() << ":      dynamic thread (" << __LINE__ 
+             << ") after wait on m_clk.posedge_event() " << endl;
+        for (;;)
+        {
+            wait(m_event1 & m_event2 );
+            cout << sc_time_stamp() << ":      dynamic thread (" << __LINE__ 
+                 << ") after wait on m_event1 & m_event2 " << endl;
+        }
+    }
+    void static_method()
+    {
+        static bool initialized = false;
+	if ( !initialized )
+	{
+	    initialized = true;
+	    cout << sc_time_stamp() << ":      static method (" << __LINE__ 
+	         << ")" << " initialization call " << endl;
+	}
+	else
+	{
+	    cout << sc_time_stamp() << ":      static method (" << __LINE__ 
+		 << ") after wait on m_event1 | m_event2 " << endl;
+	}
+    }
+    void static_thread()
+    {
+        cout << sc_time_stamp() << ":      static thread (" << __LINE__ << ")" 
+             << " initialization call " << endl;
+	for (;;)
+	{
+	    wait();
+            cout << sc_time_stamp() << ":      static thread (" << __LINE__ 
+                 << ") after wait on m_event1 | m_event2 " << endl;
+	}
+        
+    }
+    void stimulus()
+    {
+        for (;;)
+        {
+            wait();
+            wait();
+            cout << sc_time_stamp() << ": stimulus ("
+                 << __LINE__ << ") - suspending all processes" << endl;
+            m_cthread.suspend();
+            m_dynamic_method.suspend();
+            m_dynamic_thread.suspend();
+            m_static_method.suspend();
+            m_static_thread.suspend();
+            wait();
+
+            m_event1.notify(SC_ZERO_TIME);
+            cout << sc_time_stamp() << ": stimulus ("
+                 << __LINE__ << ") - firing event1 " << endl;
+            wait();
+            m_event2.notify(SC_ZERO_TIME);
+            cout << sc_time_stamp() << ": stimulus ("
+                 << __LINE__ << ") - firing event2 " << endl;
+            wait();
+            wait();
+
+            m_cthread.resume();
+            m_dynamic_method.resume();
+            m_dynamic_thread.resume();
+            m_static_method.resume();
+            m_static_thread.resume();
+            cout << endl << sc_time_stamp() << ": stimulus (" 
+                 << __LINE__ << ") - resuming all processes" << endl;
+            wait();
+            wait();
+            wait();
+            sc_stop();
+        }
+    }
+    sc_in<bool>       m_clk;
+    sc_process_handle m_cthread;
+    sc_process_handle m_dynamic_method;
+    sc_process_handle m_dynamic_thread;
+    sc_event          m_event1;
+    sc_event          m_event2;
+    sc_event          m_event3;
+    sc_event          m_event4;
+    sc_in<bool>       m_reset;
+    sc_process_handle m_static_method;
+    sc_process_handle m_static_thread;
 };
 
 int sc_main(int argc, char* argv[])
 {
-	sc_clock        clock;
-	DUT             dut("dut");
-	sc_signal<bool> reset;
+    sc_clock        clock;
+    DUT             dut("dut");
+    sc_signal<bool> reset;
 
-	dut.m_clk(clock);
-	dut.m_reset(reset);
+    dut.m_clk(clock);
+    dut.m_reset(reset);
 
-	reset = true;
-	sc_start(1, SC_NS);
-	reset = false;
-	sc_start(21, SC_NS);
+    reset = true;
+    sc_start(1, SC_NS);
+    reset = false;
+    sc_start(21, SC_NS);
 
-	cout << "Program completed" << endl;
-	return 0;
+    cout << "Program completed" << endl;
+    return 0;
 }
 
 // $Log: test02.cpp,v $
+// Revision 1.2  2011/01/20 16:55:23  acg
+//  Andy Goodrich: changes for IEEE 1666 2011.
+//
 // Revision 1.1.1.1  2006/12/15 20:26:03  acg
 // systemc_tests-2.3
 //

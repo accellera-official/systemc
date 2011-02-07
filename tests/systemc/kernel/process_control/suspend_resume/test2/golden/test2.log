@@ -14,71 +14,71 @@ SystemC Simulation
 5 ns[10]: stimulator: suspending target_method0
 
 5 ns[11]: target_thread0: active
-7 ns[15]: target_thread0: active
+7 ns[14]: target_thread0: active
 
-8 ns[16]: stimulator: suspending target_thread0
-
-
-11 ns[22]: stimulator: resuming target_cthread0
-
-11 ns[23]: target_cthread0: active
-12 ns[25]: target_cthread0: active
-
-14 ns[28]: stimulator: resuming target_method0
-
-14 ns[29]: target_method0: active
-14 ns[29]: target_cthread0: active
-16 ns[33]: target_method0: active
-16 ns[33]: target_cthread0: active
-
-17 ns[34]: stimulator: resuming target_thread0
-
-17 ns[35]: target_thread0: active
-18 ns[37]: target_method0: active
-18 ns[37]: target_cthread0: active
-19 ns[39]: target_thread0: active
-
-20 ns[40]: stimulator: suspending target_cthread0
-
-20 ns[41]: target_method0: active
-21 ns[43]: target_thread0: active
-22 ns[45]: target_method0: active
-
-23 ns[46]: stimulator: suspending target_method0
-
-23 ns[47]: target_thread0: active
-25 ns[51]: target_thread0: active
-
-26 ns[52]: stimulator: suspending target_thread0
+8 ns[15]: stimulator: suspending target_thread0
 
 
-29 ns[58]: stimulator: resuming target_cthread0
+11 ns[18]: stimulator: resuming target_cthread0
 
-29 ns[59]: target_cthread0: active
-30 ns[61]: target_cthread0: active
+11 ns[18]: target_cthread0: active
+11 ns[19]: target_cthread0: active
+12 ns[21]: target_cthread0: active
 
-32 ns[64]: stimulator: resuming target_method0
+14 ns[23]: stimulator: resuming target_method0
 
-32 ns[65]: target_method0: active
-32 ns[65]: target_cthread0: active
-34 ns[69]: target_method0: active
-34 ns[69]: target_cthread0: active
+14 ns[23]: target_method0: active
+14 ns[24]: target_method0: active
+14 ns[24]: target_cthread0: active
+16 ns[27]: target_method0: active
+16 ns[27]: target_cthread0: active
 
-35 ns[70]: stimulator: resuming target_thread0
+17 ns[28]: stimulator: resuming target_thread0
 
-35 ns[71]: target_thread0: active
-35 ns[71]: target_thread0: terminating
-36 ns[73]: target_method0: active
-36 ns[73]: target_cthread0: active
-36 ns[73]: target_cthread0: terminating
-38 ns[76]: target_method0: active
-40 ns[79]: target_method0: active
-42 ns[82]: target_method0: active
-44 ns[85]: target_method0: active
-46 ns[88]: target_method0: active
-48 ns[91]: target_method0: active
-52 ns[97]: target_method0: terminating
+17 ns[28]: target_thread0: active
+17 ns[29]: target_thread0: active
+18 ns[31]: target_method0: active
+18 ns[31]: target_cthread0: active
+19 ns[33]: target_thread0: active
 
-1038 ns[1575]: stimulator: terminating
+20 ns[34]: stimulator: suspending target_cthread0
+
+20 ns[35]: target_method0: active
+21 ns[37]: target_thread0: active
+22 ns[39]: target_method0: active
+
+23 ns[40]: stimulator: suspending target_method0
+
+23 ns[41]: target_thread0: active
+25 ns[44]: target_thread0: active
+25 ns[44]: target_thread0: terminating
+
+26 ns[45]: stimulator: suspending target_thread0
+
+
+29 ns[48]: stimulator: resuming target_cthread0
+
+29 ns[48]: target_cthread0: active
+29 ns[49]: target_cthread0: active
+30 ns[51]: target_cthread0: active
+
+32 ns[53]: stimulator: resuming target_method0
+
+32 ns[53]: target_method0: active
+32 ns[54]: target_method0: active
+32 ns[54]: target_cthread0: active
+32 ns[54]: target_cthread0: terminating
+34 ns[57]: target_method0: active
+
+35 ns[58]: stimulator: resuming target_thread0
+
+36 ns[60]: target_method0: active
+38 ns[63]: target_method0: active
+40 ns[66]: target_method0: active
+42 ns[69]: target_method0: active
+44 ns[72]: target_method0: active
+48 ns[78]: target_method0: terminating
+
+1038 ns[1562]: stimulator: terminating
 
 Info: /OSCI/SystemC: Simulation stopped by user.

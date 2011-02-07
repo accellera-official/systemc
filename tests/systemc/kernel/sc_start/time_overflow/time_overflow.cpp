@@ -38,7 +38,7 @@ int sc_main(int argc, char* argv[])
     cout << sc_time_stamp() << ": Issuing sc_start(10, SC_NS)" << endl;
     sc_start(10, SC_NS);
     cout << sc_time_stamp() << ": Issuing sc_start()" << endl;
-    sc_start();
+    sc_start(sc_max_time() - sc_time(10,SC_NS) );
     cout << sc_time_stamp() << ": Issuing sc_start()" << endl;
     sc_start();
     cout << sc_time_stamp() << ": Issuing sc_start(10, SC_NS)" << endl;
