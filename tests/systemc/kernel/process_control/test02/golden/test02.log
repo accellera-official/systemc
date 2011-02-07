@@ -16,8 +16,6 @@ SystemC Simulation
 6 ns:      static method (118) after wait on m_event1 | m_event2 
 6 ns:      dynamic thread (103) after wait on m_event1 & m_event2 
 6 ns:      static thread (129) after wait on m_event1 | m_event2 
-6 ns:      static method (118) after wait on m_event1 | m_event2 
-6 ns:      static thread (129) after wait on m_event1 | m_event2 
 7 ns:      clocked thread (70) after wait on m_clk.pos() 
 8 ns:      clocked thread (70) after wait on m_clk.pos() 
 9 ns:      clocked thread (70) after wait on m_clk.pos() 

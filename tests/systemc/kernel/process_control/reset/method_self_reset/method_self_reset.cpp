@@ -23,6 +23,9 @@
 
  *****************************************************************************/
 // $Log: method_self_reset.cpp,v $
+// Revision 1.2  2011/02/04 15:26:33  acg
+//  Andy Goodrich: regolden for proper process control semantics.
+//
 // Revision 1.1  2011/01/28 19:48:36  acg
 //  Andy Goodrich: first check in.
 //
@@ -50,44 +53,16 @@ SC_MODULE(DUT)
         cout << "Exit " << endl;
     }
     sc_in<bool> m_clk;
-    sc_in<bool> m_reset;
-};
-
-SC_MODULE(TB)
-{
-    SC_CTOR(TB)
-    {
-        SC_CTHREAD(tb_thread,m_clk.pos());
-        reset_signal_is(m_reset, false);
-    }
-    void tb_thread()
-    {
-        for (;;)
-        {
-            wait();
-        }
-    }
-    sc_in<bool> m_clk;
-    sc_in<bool> m_reset;
 };
 
 int sc_main(int argc, char* argv[])
 {
     sc_clock        clock;
     DUT             dut("dut");
-    sc_signal<bool> reset;
-    TB              tb("tb");
 
     dut.m_clk(clock);
-    dut.m_reset(reset);
 
-    tb.m_clk(clock);
-    tb.m_reset(reset);
-
-    reset = false;
-    sc_start(1, SC_NS);
-    reset = true;
-    sc_start(1, SC_NS);
+    sc_start(3, SC_NS);
 
     cout << "Program completed" << endl;
     return 0;

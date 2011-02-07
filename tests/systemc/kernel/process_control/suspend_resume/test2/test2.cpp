@@ -24,6 +24,9 @@
 //  changes you are making here.
 //
 // $Log: test2.cpp,v $
+// Revision 1.2  2011/02/04 15:26:52  acg
+//  Andy Goodrich: changes for process control semantics.
+//
 // Revision 1.1  2009/07/28 18:43:55  acg
 //  Andy Goodrich: new standard test bench version of this test.
 //
