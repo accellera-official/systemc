@@ -74,7 +74,6 @@ namespace sc_core {
 // friend function declarations:
 
 void halt( sc_simcontext* );
-void sc_cthread_cor_fn( void* );  
 void wait( int, sc_simcontext* );
 
 
@@ -114,8 +113,6 @@ private:
     sc_cthread_process( const char*   nm,
             SC_ENTRY_FUNC fn,
             sc_process_host*    host );
-
-    virtual void prepare_for_simulation();
 
 
     bool eval_watchlist();

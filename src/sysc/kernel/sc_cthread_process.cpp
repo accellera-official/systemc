@@ -76,68 +76,6 @@
 namespace sc_core {
 
 //------------------------------------------------------------------------------
-//"sc_cthread_cor_fn"
-// 
-// This function invokes the coroutine for the supplied object instance.
-//------------------------------------------------------------------------------
-void sc_cthread_cor_fn( void* arg )
-{
-    sc_cthread_handle cthread_h = RCAST<sc_cthread_handle>( arg );
-    sc_simcontext*    simc_p = sc_get_curr_simcontext();
-
-    // EXECUTE THE CTHREAD AND PROCESS ANY EXCEPTIONS THAT ARE THROWN:
-    //
-    // We set the wait state to unknown before invoking the semantics
-    // in case we are reset, since the wait state will not be cleared, 
-    // since that happens only if we are not reset.
-
-    while( true ) {
-
-        try {
-            cthread_h->semantics();
-        }
-        catch( sc_user ) {
-            continue;
-        }
-        catch( sc_halt ) {
-            ::std::cout << "Terminating process "
-                      << cthread_h->name() << ::std::endl;
-        }
-        catch( const sc_unwind_exception& ex ) {
-	    if ( ex.is_reset() ) continue;
-        }
-        catch( const sc_report& ex ) {
-            ::std::cout << "\n" << ex.what() << ::std::endl;
-            cthread_h->simcontext()->set_error();
-        }
-
-        break;
-    }
-
-    sc_process_b*    active_p = sc_get_current_process_b();
-
-    // REMOVE ALL TRACES OF OUR THREAD FROM THE SIMULATORS DATA STRUCTURES:
-
-    cthread_h->disconnect_process();
-
-    // IF WE AREN'T ACTIVE MAKE SURE WE WON'T EXECUTE:
-
-    if ( cthread_h->next_runnable() != 0 )
-    {
-        simc_p->remove_runnable_thread(cthread_h);
-    }
-
-    // IF WE ARE THE ACTIVE PROCESS ABORT OUR EXECUTION:
-
-
-    if ( active_p == (sc_process_b*)cthread_h )
-    {
-
-        simc_p->cor_pkg()->abort( simc_p->next_cor() );
-    }
-}
-
-//------------------------------------------------------------------------------
 //"sc_cthread_process::dont_initialize"
 //
 // This virtual method sets the initialization switch for this object instance.
@@ -147,19 +85,6 @@ void sc_cthread_process::dont_initialize( bool dont )
     SC_REPORT_WARNING( SC_ID_DONT_INITIALIZE_, 0 );
 }
 
-
-//------------------------------------------------------------------------------
-//"sc_cthread_process::prepare_for_simulation"
-//
-// This method prepares this object instance for simulation. It calls the
-// coroutine package to create the actual thread.
-//------------------------------------------------------------------------------
-void sc_cthread_process::prepare_for_simulation()
-{
-    m_cor_p = simcontext()->cor_pkg()->create( m_stack_size,
-                         sc_thread_cor_fn, this );
-    m_cor_p->stack_protect( true );
-}
 
 
 //------------------------------------------------------------------------------

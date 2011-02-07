@@ -131,7 +131,6 @@ class sc_reset;
 const char* sc_gen_unique_name( const char*, bool preserve_first );
 sc_process_handle sc_get_current_process_handle();
 void sc_thread_cor_fn( void* arg );
-void sc_cthread_cor_fn( void* arg );
 bool timed_out( sc_simcontext* );
 
 
@@ -448,7 +447,6 @@ class sc_process_b : public sc_object {
     friend const char* sc_gen_unique_name( const char*, bool preserve_first );
     friend sc_process_handle sc_get_current_process_handle();
     friend void sc_thread_cor_fn( void* arg );
-    friend void sc_cthread_cor_fn( void* arg );
     friend bool timed_out( sc_simcontext* );
 
   public:

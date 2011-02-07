@@ -264,7 +264,6 @@ class sc_simcontext
     friend bool sc_end_of_simulation_invoked();
     friend void sc_start( const sc_time&, sc_starvation_policy );
     friend bool sc_start_of_simulation_invoked();
-    friend void sc_cthread_cor_fn(void*);
     friend void sc_thread_cor_fn(void*);
     friend sc_time sc_time_to_pending_activity( const sc_simcontext* );
     friend bool sc_pending_activity_at_current_time( const sc_simcontext* );

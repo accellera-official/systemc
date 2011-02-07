@@ -111,7 +111,6 @@ class sc_event_and_list;
 class sc_event_or_list;
 class sc_reset;
 void sc_thread_cor_fn( void* );
-void sc_cthread_cor_fn( void* );
 void sc_set_stack_size( sc_thread_handle, std::size_t );
 class sc_event;
 class sc_join;
@@ -138,7 +137,6 @@ void wait( const sc_time&, const sc_event_and_list&, sc_simcontext* );
 //==============================================================================
 class sc_thread_process : public sc_process_b {
     friend void sc_thread_cor_fn( void* );
-    friend void sc_cthread_cor_fn( void* );
     friend void sc_set_stack_size( sc_thread_handle, std::size_t );
     friend class sc_event;
     friend class sc_join;
