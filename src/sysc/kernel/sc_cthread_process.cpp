@@ -98,7 +98,7 @@ sc_cthread_process::sc_cthread_process( const char* name_p,
 ):
     sc_thread_process(name_p, free_host, method_p, host_p, opt_p)
 {
-    m_dont_init = false;
+    m_dont_init = true;
     m_process_kind = SC_CTHREAD_PROC_;
 }
 

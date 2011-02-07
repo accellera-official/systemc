@@ -229,7 +229,7 @@ sc_stop_mode stop_mode = SC_STOP_FINISH_DELTA;
 //  CLASS : sc_process_table
 //
 //  Container class that keeps track of all method processes,
-//  thread processes, and cthread processes.
+//  and (c)thread processes.
 // ----------------------------------------------------------------------------
 
 class sc_process_table
@@ -240,18 +240,14 @@ class sc_process_table
     ~sc_process_table();
     void push_front( sc_method_handle );
     void push_front( sc_thread_handle );
-    void push_front( sc_cthread_handle );
-    sc_cthread_handle cthread_q_head();
     sc_method_handle method_q_head();
-    sc_cthread_handle remove( sc_cthread_handle );
     sc_method_handle remove( sc_method_handle );
-    sc_thread_handle remove( sc_thread_handle );
     sc_thread_handle thread_q_head();
+    sc_thread_handle remove( sc_thread_handle );
 
 
   private:
 
-    sc_cthread_handle m_cthread_q; // Queue of existing cthread processes.
     sc_method_handle  m_method_q;  // Queue of existing method processes.
     sc_thread_handle  m_thread_q;  // Queue of existing thread processes.
 };
@@ -260,7 +256,7 @@ class sc_process_table
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
 sc_process_table::sc_process_table() :
-    m_cthread_q(0), m_method_q(0), m_thread_q(0)
+    m_method_q(0), m_thread_q(0)
 {}
 
 sc_process_table::~sc_process_table()
@@ -275,7 +271,7 @@ sc_process_table::~sc_process_table()
 	delete method_now_p;
     }
 
-    if ( m_thread_q || m_cthread_q )
+    if ( m_thread_q )
     {
         ::std::cout << ::std::endl 
              << "WATCH OUT!! In sc_process_table destructor. "
@@ -296,16 +292,8 @@ sc_process_table::~sc_process_table()
     // process_table. 
 
 #if 0
-    sc_cthread_handle cthread_next_p;	// Next cthread to delete.
-    sc_cthread_handle cthread_now_p;	// Cthread now deleting.
     sc_thread_handle  thread_next_p;	// Next thread to delete.
     sc_thread_handle  thread_now_p;	// Thread now deleting.
-
-    for(cthread_now_p=m_cthread_q; cthread_now_p; cthread_now_p=cthread_next_p)
-    {
-	cthread_next_p = cthread_now_p->next_exist();
-	delete cthread_now_p;
-    }
 
     for( thread_now_p=m_thread_q; thread_now_p; thread_now_p=thread_next_p )
     {
@@ -313,13 +301,6 @@ sc_process_table::~sc_process_table()
 	delete thread_now_p;
     }
 #endif // 0
-}
-
-inline
-sc_cthread_handle 
-sc_process_table::cthread_q_head()
-{
-    return m_cthread_q;
 }
 
 inline
@@ -343,36 +324,6 @@ sc_process_table::push_front( sc_thread_handle handle_ )
 {
     handle_->set_next_exist(m_thread_q);
     m_thread_q = handle_;
-}
-
-inline
-void
-sc_process_table::push_front( sc_cthread_handle handle_ )
-{
-    handle_->set_next_exist(m_cthread_q);
-    m_cthread_q = handle_;
-}
-
-
-sc_cthread_handle
-sc_process_table::remove( sc_cthread_handle handle_ )
-{
-    sc_cthread_handle now_p;	// Entry now examining.
-    sc_cthread_handle prior_p;	// Entry prior to one now examining.
-
-    prior_p = 0;
-    for ( now_p = m_cthread_q; now_p; now_p = now_p->next_exist() )
-    {
-	if ( now_p == handle_ )
-	{
-	    if ( prior_p )
-		prior_p->set_next_exist( now_p->next_exist() );
-	    else
-		m_cthread_q = now_p->next_exist();
-	    return handle_;
-	}
-    }
-    return 0;
 }
 
 sc_method_handle
@@ -761,7 +712,6 @@ sc_simcontext::elaborate()
 void
 sc_simcontext::prepare_to_simulate()
 {
-    sc_cthread_handle cthread_p; // Pointer to cthread process accessing.
     sc_method_handle  method_p;  // Pointer to method process accessing.
     sc_thread_handle  thread_p;  // Pointer to thread process accessing.
 
@@ -805,12 +755,6 @@ sc_simcontext::prepare_to_simulate()
 	thread_p->prepare_for_simulation();
     }
 
-    for ( cthread_p = m_process_table->cthread_q_head(); 
-	  cthread_p; cthread_p = cthread_p->next_exist() )
-    {
-	cthread_p->prepare_for_simulation();
-    }
-
     m_simulation_status = SC_RUNNING;
     m_ready_to_simulate = true;
     m_runnable->init();
@@ -833,7 +777,8 @@ sc_simcontext::prepare_to_simulate()
         }
     }
 
-    // make all thread processes runnable
+    // make thread processes runnable
+    // (cthread processes always have the dont_initialize flag set)
 
     for ( thread_p = m_process_table->thread_q_head(); 
 	  thread_p; thread_p = thread_p->next_exist() )
@@ -1132,7 +1077,7 @@ sc_simcontext::create_cthread_process(
     const char* name_p, bool free_host, SC_ENTRY_FUNC method_p,         
     sc_process_host* host_p, const sc_spawn_options* opt_p )
 {
-    sc_cthread_handle handle = 
+    sc_thread_handle handle = 
         new sc_cthread_process(name_p, free_host, method_p, host_p, opt_p);
     if ( m_ready_to_simulate ) 
     {

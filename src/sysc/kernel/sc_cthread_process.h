@@ -104,10 +104,6 @@ class sc_cthread_process : public sc_thread_process {
     virtual const char* kind() const
         { return "sc_cthread_process"; }
 
-  protected:
-    sc_cthread_handle next_exist();
-    void set_next_exist( sc_cthread_handle next_p );
-
 private:
 
     sc_cthread_process( const char*   nm,
@@ -121,20 +117,6 @@ private:
     void wait_halt();
 
 };
-
-//------------------------------------------------------------------------------
-//"sc_cthread_process existence chain manipulations"
-//
-//------------------------------------------------------------------------------
-inline sc_cthread_handle sc_cthread_process::next_exist()
-{
-    return (sc_cthread_handle)m_exist_p;
-}
-
-inline void sc_cthread_process::set_next_exist(sc_cthread_handle next_p)
-{
-    m_exist_p = next_p;
-}
 
 //------------------------------------------------------------------------------
 //"sc_cthread_process::wait_halt"
