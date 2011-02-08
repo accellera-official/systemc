@@ -37,6 +37,9 @@
  *****************************************************************************/
 
 // $Log: sc_spawn_options.h,v $
+// Revision 1.7  2011/02/07 19:17:20  acg
+//  Andy Goodrich: changes for IEEE 1666 compatibility.
+//
 // Revision 1.6  2010/12/07 20:09:15  acg
 // Andy Goodrich: replaced sc_signal signatures with sc_signal_in_if signatures for reset methods.
 //
@@ -88,6 +91,7 @@ class sc_spawn_reset_base
     sc_spawn_reset_base( bool async, bool level ) : 
 	m_async( async ), m_level(level)
     {}
+    virtual ~sc_spawn_reset_base() {}
     virtual void specify_reset() = 0;
 
   protected:
@@ -105,6 +109,7 @@ class sc_spawn_reset : public sc_spawn_reset_base
     sc_spawn_reset( bool async, const SOURCE& source, bool level ) :
 	sc_spawn_reset_base(async, level), m_source(source)
     {}
+    virtual ~sc_spawn_reset() {}
     virtual void specify_reset()
     {
 	sc_reset::reset_signal_is( m_async, m_source, m_level );

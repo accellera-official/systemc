@@ -35,6 +35,9 @@
 
 
 // $Log: sc_signal_resolved.cpp,v $
+// Revision 1.3  2011/02/07 19:16:50  acg
+//  Andy Goodrich: changes for handling multiple writers.
+//
 // Revision 1.2  2011/01/20 16:52:15  acg
 //  Andy Goodrich: changes for IEEE 1666 2011.
 //
@@ -49,6 +52,8 @@
 // Added $Log command so that CVS comments are reproduced in the source.
 //
 
+#include "sysc/kernel/sc_simcontext.h"
+#include "sysc/kernel/sc_process_handle.h"
 #include "sysc/communication/sc_signal_resolved.h"
 
 namespace sc_core {

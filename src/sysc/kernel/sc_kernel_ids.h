@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: sc_kernel_ids.h,v $
+// Revision 1.7  2011/02/07 19:17:20  acg
+//  Andy Goodrich: changes for IEEE 1666 compatibility.
+//
 // Revision 1.6  2011/01/19 23:21:50  acg
 //  Andy Goodrich: changes for IEEE 1666 2011
 //
@@ -201,6 +204,8 @@ SC_DEFINE_MESSAGE(SC_ID_BAD_SC_MODULE_CONTRUCTOR_  , 569,
         "sc_module(const char*) has been deprecated, use sc_module(const sc_module_name&)" )
 SC_DEFINE_MESSAGE(SC_ID_EMPTY_PROCESS_HANDLE_  , 570,
         "attempt to use an empty process handle ignored" )
+SC_DEFINE_MESSAGE(SC_ID_NO_SC_START_ACTIVITY_  , 571,
+        "no activity or clock movement for sc_start() invocation" )
 #endif
 
 // Taf!

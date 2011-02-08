@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_method_process.cpp,v $
+// Revision 1.12  2011/02/07 19:17:20  acg
+//  Andy Goodrich: changes for IEEE 1666 compatibility.
+//
 // Revision 1.11  2011/02/04 15:27:36  acg
 //  Andy Goodrich: changes for suspend-resume semantics.
 //

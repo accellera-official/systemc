@@ -58,6 +58,12 @@
 				 execution problem with using sc_pvector.
  *****************************************************************************/
 // $Log: sc_simcontext.cpp,v $
+// Revision 1.13  2011/02/08 08:42:50  acg
+//  Andy Goodrich: fix ordering of check for stopped versus paused.
+//
+// Revision 1.12  2011/02/07 19:17:20  acg
+//  Andy Goodrich: changes for IEEE 1666 compatibility.
+//
 // Revision 1.11  2011/02/02 07:18:11  acg
 //  Andy Goodrich: removed toggle() calls for the new crunch() toggle usage.
 //
@@ -932,11 +938,13 @@ sc_simcontext::simulate( const sc_time& duration )
     // check to each loop in the do below.
     if ( duration == SC_ZERO_TIME ) 
     {
+	m_in_simulator_control = true;
   	crunch( true );
 	if( m_error ) return;
 	if( m_something_to_trace ) trace_cycle( /* delta cycle? */ false );
 	if( m_forced_stop ) 
 	    do_sc_stop_action(); 
+	m_in_simulator_control = false;
 	return;
     }
 
@@ -953,13 +961,13 @@ sc_simcontext::simulate( const sc_time& duration )
 	    trace_cycle( false );
 	}
 	// check for call(s) to sc_stop() or sc_pause().
-	if ( m_paused ) 
-	{
-	    m_in_simulator_control = false;
-	    return;
-	}
 	if( m_forced_stop ) {
 	    do_sc_stop_action();
+	    return;
+	}
+	else if ( m_paused ) 
+	{
+	    m_in_simulator_control = false;
 	    return;
 	}
 	
@@ -1483,34 +1491,51 @@ sc_set_random_seed( unsigned int )
 void
 sc_start( const sc_time& duration, sc_starvation_policy p )
 {
-    sc_simcontext* context;    // current simulation context.
-    sc_time        exit_time;  // simulation time to set upon exit.
-    int            status;     //current simulation status.
+    sc_simcontext* context_p;      // current simulation context.
+    sc_time        entry_time;     // simulation time upon entry.
+    sc_time        exit_time;      // simulation time to set upon exit.
+    size_t         starting_delta; // delta count upon entry.
+    int            status;         // current simulation status.
 
-    context = sc_get_curr_simcontext();
+    // Set up based on the arguments passed to us:
 
+    context_p = sc_get_curr_simcontext();
+    starting_delta = sc_delta_count();
     if ( p == SC_RUN_TO_TIME )
-        exit_time = context->m_curr_time + duration;
+        exit_time = context_p->m_curr_time + duration;
 
-    status = context->sim_status();
+    // If the simulation status is bad issue the appropriate message:
+
+    status = context_p->sim_status();
     if( status != SC_SIM_OK ) 
     {
 	if ( status == SC_SIM_USER_STOP )
-	{
 	    SC_REPORT_ERROR(SC_ID_SIMULATION_START_AFTER_STOP_, "");        
-	}
         if ( status == SC_SIM_ERROR )
-        {
             SC_REPORT_ERROR(SC_ID_SIMULATION_START_AFTER_ERROR_, "");
-        }
-
-	if ( p == SC_RUN_TO_TIME )
-	    context->m_curr_time = exit_time;
-        return;
     }
-    context->simulate( duration );
+
+    // If the simulation status is good perform the simulation:
+
+    else
+    {
+	context_p->simulate( duration );
+    }
+
+    // Update the current time to the exit time if that is the starvation
+    // policy:
+
     if ( p == SC_RUN_TO_TIME )
-        context->m_curr_time = exit_time;
+        context_p->m_curr_time = exit_time;
+
+    // If there was no activity and the simulation clock did not move warn
+    // the user:
+
+    if ( starting_delta == sc_delta_count() && 
+         context_p->m_curr_time == entry_time ) 
+    {
+        SC_REPORT_WARNING(SC_ID_NO_SC_START_ACTIVITY_, "");
+    }
 }
 
 void

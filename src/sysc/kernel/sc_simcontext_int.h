@@ -37,6 +37,10 @@
  *****************************************************************************/
 
 // $Log: sc_simcontext_int.h,v $
+// Revision 1.5  2011/02/08 08:17:50  acg
+//  Andy Goodrich: fixed bug in preempt_with() where I was resetting the
+//  process context rather than saving and restoring it.
+//
 // Revision 1.4  2011/02/01 21:12:56  acg
 //  Andy Goodrich: addition of preempt_with() method to allow immediate
 //  execution of threads for throws.
@@ -87,7 +91,7 @@ sc_simcontext::set_curr_proc( sc_process_b* process_h )
 {
     m_curr_proc_info.process_handle = process_h;
     m_curr_proc_info.kind           = process_h->proc_kind();
-	m_current_writer = m_write_check ? process_h : (sc_object*)0;
+    m_current_writer = m_write_check ? process_h : (sc_object*)0;
 }
 
 inline
@@ -126,7 +130,8 @@ inline
 void
 sc_simcontext::preempt_with( sc_thread_handle thread_h )
 {
-    sc_thread_handle active_p; // active thread or null.
+    sc_thread_handle  active_p;    // active thread or null.
+    sc_curr_proc_info caller_info; // process info for caller.
 
     // Determine the active process and take the thread to be run off the
     // run queue, if its there, since we will be explicitly causing its 
@@ -140,13 +145,14 @@ sc_simcontext::preempt_with( sc_thread_handle thread_h )
     //
     //   (a) Set the current process information to our thread.
     //   (b) Invoke our thread directly by passing the run queue.
-    //   (c) Reset the current process information.
+    //   (c) Restore the process info to the caller.
 
     if ( active_p == NULL )
     {
+	caller_info = m_curr_proc_info;
 	set_curr_proc( (sc_process_b*)thread_h );
 	m_cor_pkg->yield( thread_h->m_cor_p );
-	reset_curr_proc();
+	m_curr_proc_info = caller_info; 
     }
 
     // CALLER IS A THREAD, BUT NOT THE THREAD TO BE RUN:

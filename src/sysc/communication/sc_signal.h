@@ -60,11 +60,11 @@ inline
 bool
 sc_writer_policy_check_write::check_write( sc_object* target )
 {
-  sc_object* writer = sc_get_curr_simcontext()->get_current_writer();
-  if( SC_UNLIKELY_(m_writer == 0) ) {
-       m_writer = writer;
-  } else if( SC_UNLIKELY_(m_writer != writer) ) {
-       sc_signal_invalid_writer( target, m_writer, writer, m_check_delta );
+  sc_object* writer_p = sc_get_curr_simcontext()->get_current_writer();
+  if( SC_UNLIKELY_(m_writer_p == 0) ) {
+       m_writer_p = writer_p;
+  } else if( SC_UNLIKELY_(m_writer_p != writer_p && writer_p != 0) ) {
+       sc_signal_invalid_writer( target, m_writer_p, writer_p, m_check_delta );
        return false;
   }
   return true;
@@ -224,6 +224,7 @@ inline
 void
 sc_signal<T,POL>::write( const T& value_ )
 {
+#if 0
     if( !policy_type::check_write(this) )
         return;
 
@@ -231,6 +232,20 @@ sc_signal<T,POL>::write( const T& value_ )
     if( !( m_new_val == m_cur_val ) ) {
 	request_update();
     }
+#else
+    bool value_changed = !(value_ == m_cur_val);
+
+    if ( value_changed || POL != SC_MANY_WRITERS )
+    {
+        if( !policy_type::check_write(this) )
+            return;
+    }
+
+    m_new_val = value_;
+    if( value_changed ) {
+        request_update();
+    }
+#endif
 }
 
 
@@ -454,6 +469,7 @@ template< sc_writer_policy POL >
 void
 sc_signal<bool,POL>::write( const bool& value_ )
 {
+#if 0
     if( !policy_type::check_write(this) )
         return; // check failed - ignore write
 
@@ -461,6 +477,20 @@ sc_signal<bool,POL>::write( const bool& value_ )
     if( !( m_new_val == m_cur_val ) ) {
 	request_update();
     }
+#else
+    bool value_changed = !(value_ == m_cur_val);
+
+    if ( value_changed || POL != SC_MANY_WRITERS )
+    {
+        if( !policy_type::check_write(this) )
+            return;
+    }
+
+    m_new_val = value_;
+    if( value_changed ) {
+        request_update();
+    }
+#endif
 }
 
 template< sc_writer_policy POL >
@@ -712,6 +742,7 @@ inline
 void
 sc_signal<sc_dt::sc_logic,POL>::write( const sc_dt::sc_logic& value_ )
 {
+#if 0
     if( ! policy_type::check_write(this) )
         return;
 
@@ -719,6 +750,20 @@ sc_signal<sc_dt::sc_logic,POL>::write( const sc_dt::sc_logic& value_ )
     if( !( m_new_val == m_cur_val ) ) {
 	request_update();
     }
+#else
+    bool value_changed = !(value_ == m_cur_val);
+
+    if ( value_changed || POL != SC_MANY_WRITERS )
+    {
+        if( !policy_type::check_write(this) )
+            return;
+    }
+
+    m_new_val = value_;
+    if( value_changed ) {
+        request_update();
+    }
+#endif
 }
 
 template< sc_writer_policy POL >
@@ -778,6 +823,9 @@ operator << ( ::std::ostream& os, const sc_signal<T,POL>& a )
     
  *****************************************************************************/
 //$Log: sc_signal.h,v $
+//Revision 1.5  2011/02/07 19:16:50  acg
+// Andy Goodrich: changes for handling multiple writers.
+//
 //Revision 1.4  2011/01/25 20:50:37  acg
 // Andy Goodrich: changes for IEEE 1666 2011.
 //

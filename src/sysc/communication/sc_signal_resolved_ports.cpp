@@ -35,6 +35,9 @@
 
 
 // $Log: sc_signal_resolved_ports.cpp,v $
+// Revision 1.2  2011/02/07 19:16:50  acg
+//  Andy Goodrich: changes for handling multiple writers.
+//
 // Revision 1.1.1.1  2006/12/15 20:20:04  acg
 // SystemC 2.3
 //
@@ -44,6 +47,8 @@
 
 #include <stdio.h>
 
+#include "sysc/kernel/sc_simcontext.h"
+#include "sysc/kernel/sc_process_handle.h"
 #include "sysc/communication/sc_communication_ids.h"
 #include "sysc/communication/sc_signal_resolved.h"
 #include "sysc/communication/sc_signal_resolved_ports.h"

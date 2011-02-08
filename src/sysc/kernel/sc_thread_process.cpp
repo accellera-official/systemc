@@ -35,6 +35,12 @@
  *****************************************************************************/
 
 // $Log: sc_thread_process.cpp,v $
+// Revision 1.17  2011/02/08 08:18:16  acg
+//  Andy Goodrich: removed obsolete code.
+//
+// Revision 1.16  2011/02/07 19:17:20  acg
+//  Andy Goodrich: changes for IEEE 1666 compatibility.
+//
 // Revision 1.15  2011/02/04 15:27:36  acg
 //  Andy Goodrich: changes for suspend-resume semantics.
 //
@@ -302,55 +308,12 @@ void sc_thread_process::kill_process(sc_descendant_inclusion_info descendants )
     }
 
     // SET UP TO KILL THE PROCESS IF SIMULATION HAS STARTED:
-    //
-    // We have 3 cases to consider:
-    // (1) The murderer is a method, or the simulator proper.
-    // (2) The murderer is another thread.
-    // (3) This is a suicide.
 
     if ( sc_is_running() )
     {
         m_throw_status = THROW_KILL;
         m_wait_cycle_n = 0;
-#if 1
         context_p->preempt_with(this);
-#else
-        active_p = DCAST<sc_thread_handle>(sc_get_current_process_b());
-
-	// Murderer is a method, or the simulator proper: execute this
-	// thread directly.
-
-	if ( active_p == NULL )
-	{
-	    context_p->run_now( this );
-	}
-
-	// Murderer is another thread:
-	//   (a) push the currently running process onto the front of the run 
-	//       queue if it is a thread.
-	//   (b) then push this thread onto the front of the run queue,
-	//   (c) suspend the currently running thread.
-
-	else if ( this != active_p )
-	{
-	    context_p->execute_thread_next( active_p );
-	    if ( next_runnable() != 0 )
-		context_p->remove_runnable_thread(this);
-	    context_p->execute_thread_next(this);
-	    suspend_me();
-	}
-
-	// This is a suicide: push this thread on to the front of the run
-	// queue and suspend it to we wake up in the throw code.
-
-	else
-	{
-	    if ( next_runnable() != 0 )
-		context_p->remove_runnable_thread(this);
-	    context_p->execute_thread_next(this);
-	    suspend_me();
-	}
-#endif
     }
 
     // IF THE SIMULATION HAS NOT STARTED REMOVE TRACES OF OUR PROCESS FROM 
@@ -614,7 +577,7 @@ void sc_thread_process::throw_reset( bool async )
 
     m_throw_status = async ? THROW_ASYNC_RESET : THROW_SYNC_RESET;
     m_wait_cycle_n = 0;
-    // @@@@#### should we really do a remove_events here?
+    // @@@@#### should we really do a delete_dynamic_events here?
 
     // If this is an asynchronous reset execute it immediately:
 

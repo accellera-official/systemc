@@ -28,11 +28,12 @@
 #ifndef SC_WRITER_POLICY_H_INCLUDED_
 #define SC_WRITER_POLICY_H_INCLUDED_
 
+
+
 namespace sc_core {
 
 class sc_object;
 class sc_port_base;
-
 extern
 void
 sc_signal_invalid_writer( sc_object* target, sc_object* first_writer,
@@ -72,9 +73,9 @@ struct sc_writer_policy_check_write
   void update(){}
 protected:
   sc_writer_policy_check_write( bool check_delta = false )
-    : m_writer(0), m_check_delta( check_delta ) {}
-  sc_object* m_writer;
-  const bool m_check_delta;
+    : m_check_delta( check_delta ), m_writer_p(NULL) {}
+  const bool         m_check_delta;
+  sc_object*         m_writer_p;
 };
 
 struct sc_writer_policy_check_delta
@@ -84,7 +85,7 @@ struct sc_writer_policy_check_delta
   sc_writer_policy_check_delta()
     : sc_writer_policy_check_write(true) {}
 
-  void update(){ m_writer = 0; }
+  void update(){ m_writer_p = NULL; }
 };
 
 struct sc_writer_policy_nocheck_port
