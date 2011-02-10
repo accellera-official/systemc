@@ -57,12 +57,19 @@
 #ifndef SC_EXCEPT_H
 #define SC_EXCEPT_H
 
+#include <exception>
 
 namespace sc_core {
 
+class sc_simcontext;
+class sc_process_b;
+class sc_method_process;
+class sc_thread_process;
+void sc_thread_cor_fn( void* arg );
+
 /*
  *  These classes are intentionally empty. Their raison d'etre is for
- *  the implemetation of various SystemC throws.
+ *  the implementation of various SystemC throws.
  */
 
 class sc_user
@@ -88,17 +95,48 @@ public:
 };
 
 class sc_unwind_exception
+  : public std::exception
 {
-  public:
-    sc_unwind_exception() : m_is_reset(false) {}
-    sc_unwind_exception( bool is_reset ) : m_is_reset(is_reset) {}
-    virtual ~sc_unwind_exception() {}
-    virtual bool is_reset() const { return m_is_reset; }
-    virtual const char* what() const { return m_is_reset ? "RESET" : "KILL"; }
+    friend class sc_simcontext;
+    friend class sc_process_b;
+    friend class sc_thread_process;
+    friend class sc_method_process;
+    friend void  sc_thread_cor_fn( void* arg );
+public:
 
-  private:
-    bool m_is_reset; // true if this is an unwind of a reset, false if not.
+    virtual bool is_reset() const { return m_is_reset; }
+    virtual const char* what() const throw();
+
+public:
+
+    // enable catch by value
+    sc_unwind_exception( const sc_unwind_exception& );
+    virtual ~sc_unwind_exception() throw();
+
+protected:
+
+    explicit
+    sc_unwind_exception( sc_process_b* target_p, bool is_reset = false );
+
+    bool active() const;
+    void clear()  const;
+
+private:
+    // disabled
+    sc_unwind_exception& operator=( const sc_unwind_exception& );
+
+    mutable sc_process_b* m_proc_p;   // used to check, if caught by the kernel
+    const   bool          m_is_reset; // true if this is an unwind of a reset
 };
+
+
+inline
+sc_unwind_exception::sc_unwind_exception( const sc_unwind_exception& that )
+  : m_proc_p( that.m_proc_p )
+  , m_is_reset( that.m_is_reset )
+{
+  that.m_proc_p = 0; // move to new instance
+}
 
 } // namespace sc_core
 

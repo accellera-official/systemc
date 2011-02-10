@@ -171,8 +171,12 @@ void sc_report_handler::default_handler(const sc_report& rep,
     if ( actions & SC_ABORT )
 	abort();
 
-    if ( actions & SC_THROW )
-	throw rep; 
+    if ( actions & SC_THROW ) {
+        sc_process_b* proc_p = sc_get_current_process_b();
+        if( proc_p && proc_p->is_unwinding() )
+            proc_p->clear_unwinding();
+        throw rep; 
+    }
 }
 
 // not documented, but available

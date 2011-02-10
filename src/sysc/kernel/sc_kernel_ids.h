@@ -168,6 +168,10 @@ SC_DEFINE_MESSAGE(SC_ID_CYCLE_MISSES_EVENTS_         , 537,
          "the simulation contains timed-events but they are "
          "ignored by sc_cycle() ==> the simulation will be "
 	 "incorrect" )
+SC_DEFINE_MESSAGE( SC_ID_WAIT_DURING_UNWINDING_      , 538,
+         "wait() not allowed during unwinding" )
+SC_DEFINE_MESSAGE( SC_ID_RETHROW_UNWINDING_          , 539,
+         "sc_unwind_exception not re-thrown during kill/reset" )
 SC_DEFINE_MESSAGE(SC_ID_MODULE_METHOD_AFTER_START_   , 541,
 	"call to SC_METHOD in sc_module while simulation running" )
 SC_DEFINE_MESSAGE(SC_ID_MODULE_THREAD_AFTER_START_   , 542,

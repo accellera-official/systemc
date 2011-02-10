@@ -476,7 +476,7 @@ void sc_method_process::throw_reset( bool async )
 	if ( RCAST<sc_method_handle>(sc_get_current_process_b()) == this )
 	{
 	    m_throw_status = THROWING_NOW;
-	    throw sc_unwind_exception( true );
+	    throw sc_unwind_exception( this, true );
 	}
     }
 }

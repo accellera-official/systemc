@@ -541,7 +541,7 @@ sc_simcontext::crunch( bool once )
 			method_h->semantics();
 		    }
 		    catch( sc_unwind_exception& ex ) {
-		        method_h->m_throw_status = sc_process_b::THROW_NONE;
+		        ex.clear();
 		    }
 		    catch( const sc_report& ex ) {
 			::std::cout << "\n" << ex.what() << ::std::endl;

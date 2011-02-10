@@ -148,10 +148,8 @@ void sc_thread_cor_fn( void* arg )
                       << thread_h->name() << ::std::endl;
         }
         catch( const sc_unwind_exception& ex ) {
-            if ( ex.is_reset() ) 
-	    {
-	        continue;
-	    }
+            ex.clear();
+            if ( ex.is_reset() ) continue;
         }
         catch( const sc_report& ex ) {
             std::cout << "\n" << ex.what() << std::endl;
