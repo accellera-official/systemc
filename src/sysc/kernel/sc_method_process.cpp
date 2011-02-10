@@ -261,8 +261,14 @@ void sc_method_process::kill_process(sc_descendant_inclusion_info descendants)
     // THROW ITS KILL.
 
     disconnect_process();
-    if ( next_runnable() != 0 ) simcontext()->remove_runnable_method( this );
-    m_throw_status = THROW_KILL;
+    if ( next_runnable() != 0 )
+        simcontext()->remove_runnable_method( this );
+
+    if ( RCAST<sc_method_handle>(sc_get_current_process_b()) == this )
+    {
+        m_throw_status = THROW_KILL;
+        throw sc_unwind_exception( this, false );
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -475,7 +481,7 @@ void sc_method_process::throw_reset( bool async )
         }
 	if ( RCAST<sc_method_handle>(sc_get_current_process_b()) == this )
 	{
-	    m_throw_status = THROWING_NOW;
+	    m_throw_status = THROW_ASYNC_RESET;
 	    throw sc_unwind_exception( this, true );
 	}
     }
