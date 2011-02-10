@@ -78,6 +78,8 @@
 #include "sysc/utils/sc_report.h"
 #include "sysc/utils/sc_utils_ids.h"
 
+#include <algorithm> // std::swap
+
 namespace sc_core {
 
 
@@ -146,26 +148,25 @@ sc_report::sc_report(const sc_report& other)
 
 sc_report & sc_report::operator=(const sc_report& other)
 {
-    severity = other.severity;
-    md = other.md;
-
-    if ( msg != empty_str ) free(msg);
-    msg = empty_dup(other.msg);
-
-    if ( file != empty_str ) free(file);
-    file = empty_dup(other.file);
-
-    line = other.line;
-    delete timestamp;
-    timestamp = new sc_time(*other.timestamp);
-    process = other.process;
-    m_verbosity_level = other.m_verbosity_level;
-
-    if ( m_what != empty_str ) free(m_what);
-	m_what = empty_dup(other.m_what);
-
+    sc_report copy(other);
+    swap( copy );
     return *this;
 }
+
+void
+sc_report::swap( sc_report & that )
+{
+    using std::swap;
+    swap( severity,          that.severity );
+    swap( md,                that.md );
+    swap( msg,               that.msg );
+    swap( file,              that.file );
+    swap( line,              that.line );
+    swap( timestamp,         that.timestamp );
+    swap( process,           that.process );
+    swap( m_verbosity_level, that.m_verbosity_level );
+    swap( m_what,            that.m_what );
+} 
 
 sc_report::~sc_report() throw()
 {

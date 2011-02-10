@@ -178,6 +178,8 @@ public:
 	    return m_what;
 	}
 
+    void swap( sc_report& );
+
 protected:
 
     sc_report(sc_severity,
