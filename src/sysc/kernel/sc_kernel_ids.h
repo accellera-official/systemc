@@ -34,6 +34,11 @@
  *****************************************************************************/
 
 // $Log: sc_kernel_ids.h,v $
+// Revision 1.8  2011/02/11 13:25:24  acg
+//  Andy Goodrich: Philipp A. Hartmann's changes:
+//    (1) Removal of SC_CTHREAD method overloads.
+//    (2) New exception processing code.
+//
 // Revision 1.7  2011/02/07 19:17:20  acg
 //  Andy Goodrich: changes for IEEE 1666 compatibility.
 //
@@ -168,6 +173,10 @@ SC_DEFINE_MESSAGE(SC_ID_CYCLE_MISSES_EVENTS_         , 537,
          "the simulation contains timed-events but they are "
          "ignored by sc_cycle() ==> the simulation will be "
 	 "incorrect" )
+SC_DEFINE_MESSAGE( SC_ID_WAIT_DURING_UNWINDING_      , 538,
+         "wait() not allowed during unwinding" )
+SC_DEFINE_MESSAGE( SC_ID_RETHROW_UNWINDING_          , 539,
+         "sc_unwind_exception not re-thrown during kill/reset" )
 SC_DEFINE_MESSAGE(SC_ID_MODULE_METHOD_AFTER_START_   , 541,
 	"call to SC_METHOD in sc_module while simulation running" )
 SC_DEFINE_MESSAGE(SC_ID_MODULE_THREAD_AFTER_START_   , 542,

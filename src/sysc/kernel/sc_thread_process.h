@@ -35,6 +35,11 @@
  *****************************************************************************/
 
 // $Log: sc_thread_process.h,v $
+// Revision 1.13  2011/02/11 13:25:24  acg
+//  Andy Goodrich: Philipp A. Hartmann's changes:
+//    (1) Removal of SC_CTHREAD method overloads.
+//    (2) New exception processing code.
+//
 // Revision 1.12  2011/02/01 23:01:53  acg
 //  Andy Goodrich: removed dead code.
 //
@@ -111,7 +116,6 @@ class sc_event_and_list;
 class sc_event_or_list;
 class sc_reset;
 void sc_thread_cor_fn( void* );
-void sc_cthread_cor_fn( void* );
 void sc_set_stack_size( sc_thread_handle, std::size_t );
 class sc_event;
 class sc_join;
@@ -138,7 +142,6 @@ void wait( const sc_time&, const sc_event_and_list&, sc_simcontext* );
 //==============================================================================
 class sc_thread_process : public sc_process_b {
     friend void sc_thread_cor_fn( void* );
-    friend void sc_cthread_cor_fn( void* );
     friend void sc_set_stack_size( sc_thread_handle, std::size_t );
     friend class sc_event;
     friend class sc_join;
@@ -281,7 +284,7 @@ inline bool sc_thread_process::ready_to_run()
         break;
 
       // The process has been disabled, but its on the run queue, so let it
-      // run once and then disable it.
+      // run once, unless its still waiting on an event and then disable it.
 
       case ps_disable_pending:
         m_state = ps_disabled;
@@ -328,8 +331,17 @@ inline void sc_thread_process::set_stack_size( std::size_t size )
 //------------------------------------------------------------------------------
 inline void sc_thread_process::suspend_me()
 {
+    // remember, if we're currently unwinding
+
+    bool unwinding_preempted = ( m_throw_status == THROWING_NOW );
+
     sc_simcontext* simc_p = simcontext();
-    simc_p->cor_pkg()->yield( simc_p->next_cor() );
+    sc_cor*         cor_p = simc_p->next_cor();
+
+    // do not switch, if we're about to execute next (e.g. suicide)
+
+    if( m_cor_p != cor_p )
+        simc_p->cor_pkg()->yield( cor_p );
 
     // IF THERE IS A THROW TO BE DONE FOR THIS PROCESS DO IT NOW:
     //
@@ -342,21 +354,20 @@ inline void sc_thread_process::suspend_me()
       case THROW_ASYNC_RESET:
       case THROW_SYNC_RESET:
 	if ( m_reset_event_p ) m_reset_event_p->notify();
-	m_throw_status = THROWING_NOW;
-        throw sc_unwind_exception( true ); 
+        throw sc_unwind_exception( this, true ); 
 	break;
 
       case THROW_USER:
-	m_throw_status = THROWING_NOW;
+	m_throw_status = THROW_NONE;
         m_throw_helper_p->throw_it();
 	break;
 
       case  THROW_KILL:
-	m_throw_status = THROWING_NOW;
-	throw sc_unwind_exception( false );
+	throw sc_unwind_exception( this, false );
 	break;
 
       default: // THROWING_NOW
+        sc_assert( unwinding_preempted );
         break;
     }
 }
@@ -370,6 +381,9 @@ inline
 void
 sc_thread_process::wait( const sc_event& e )
 {   
+    if( m_throw_status == THROWING_NOW )
+        SC_REPORT_ERROR( SC_ID_WAIT_DURING_UNWINDING_, name() );
+
     m_event_p = &e; // for cleanup.
     e.add_dynamic( this );
     m_trigger_type = EVENT;
@@ -380,6 +394,9 @@ inline
 void
 sc_thread_process::wait( const sc_event_or_list& el )
 {   
+    if( m_throw_status == THROWING_NOW )
+        SC_REPORT_ERROR( SC_ID_WAIT_DURING_UNWINDING_, name() );
+
     el.add_dynamic( this );
     m_event_list_p = &el;
     m_trigger_type = OR_LIST;
@@ -390,6 +407,9 @@ inline
 void
 sc_thread_process::wait( const sc_event_and_list& el )
 {
+    if( m_throw_status == THROWING_NOW )
+        SC_REPORT_ERROR( SC_ID_WAIT_DURING_UNWINDING_, name() );
+
     el.add_dynamic( this );
     m_event_list_p = &el;
     m_event_count = el.size();
@@ -401,6 +421,9 @@ inline
 void
 sc_thread_process::wait( const sc_time& t )
 {
+    if( m_throw_status == THROWING_NOW )
+        SC_REPORT_ERROR( SC_ID_WAIT_DURING_UNWINDING_, name() );
+
     m_timeout_event_p->notify_internal( t );
     m_timeout_event_p->add_dynamic( this );
     m_trigger_type = TIMEOUT;
@@ -411,6 +434,9 @@ inline
 void
 sc_thread_process::wait( const sc_time& t, const sc_event& e )
 {
+    if( m_throw_status == THROWING_NOW )
+        SC_REPORT_ERROR( SC_ID_WAIT_DURING_UNWINDING_, name() );
+
     m_timeout_event_p->notify_internal( t );
     m_timeout_event_p->add_dynamic( this );
     e.add_dynamic( this );
@@ -423,6 +449,9 @@ inline
 void
 sc_thread_process::wait( const sc_time& t, const sc_event_or_list& el )
 {
+    if( m_throw_status == THROWING_NOW )
+        SC_REPORT_ERROR( SC_ID_WAIT_DURING_UNWINDING_, name() );
+
     m_timeout_event_p->notify_internal( t );
     m_timeout_event_p->add_dynamic( this );
     el.add_dynamic( this );
@@ -435,6 +464,9 @@ inline
 void
 sc_thread_process::wait( const sc_time& t, const sc_event_and_list& el )
 {
+    if( m_throw_status == THROWING_NOW )
+        SC_REPORT_ERROR( SC_ID_WAIT_DURING_UNWINDING_, name() );
+
     m_timeout_event_p->notify_internal( t );
     m_timeout_event_p->add_dynamic( this );
     el.add_dynamic( this );

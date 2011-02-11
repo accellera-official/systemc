@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_report_handler.cpp,v $
+// Revision 1.3  2011/02/11 13:25:55  acg
+//  Andy Goodrich: Philipp's changes for sc_unwind_exception.
+//
 // Revision 1.2  2011/02/01 23:02:05  acg
 //  Andy Goodrich: IEEE 1666 2011 changes.
 //
@@ -171,8 +174,12 @@ void sc_report_handler::default_handler(const sc_report& rep,
     if ( actions & SC_ABORT )
 	abort();
 
-    if ( actions & SC_THROW )
-	throw rep; 
+    if ( actions & SC_THROW ) {
+        sc_process_b* proc_p = sc_get_current_process_b();
+        if( proc_p && proc_p->is_unwinding() )
+            proc_p->clear_unwinding();
+        throw rep; 
+    }
 }
 
 // not documented, but available

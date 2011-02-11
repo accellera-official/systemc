@@ -35,6 +35,11 @@
  *****************************************************************************/
 
 // $Log: sc_cthread_process.h,v $
+// Revision 1.5  2011/02/11 13:25:24  acg
+//  Andy Goodrich: Philipp A. Hartmann's changes:
+//    (1) Removal of SC_CTHREAD method overloads.
+//    (2) New exception processing code.
+//
 // Revision 1.4  2011/02/01 21:01:41  acg
 //  Andy Goodrich: removed throw_reset() as it is now handled by the parent
 //  method sc_thread_process::throw_reset().
@@ -74,7 +79,6 @@ namespace sc_core {
 // friend function declarations:
 
 void halt( sc_simcontext* );
-void sc_cthread_cor_fn( void* );  
 void wait( int, sc_simcontext* );
 
 
@@ -105,18 +109,11 @@ class sc_cthread_process : public sc_thread_process {
     virtual const char* kind() const
         { return "sc_cthread_process"; }
 
-  protected:
-    sc_cthread_handle next_exist();
-    void set_next_exist( sc_cthread_handle next_p );
-
 private:
 
     sc_cthread_process( const char*   nm,
             SC_ENTRY_FUNC fn,
             sc_process_host*    host );
-
-    virtual void prepare_for_simulation();
-
 
     bool eval_watchlist();
     bool eval_watchlist_curr_level();
@@ -124,20 +121,6 @@ private:
     void wait_halt();
 
 };
-
-//------------------------------------------------------------------------------
-//"sc_cthread_process existence chain manipulations"
-//
-//------------------------------------------------------------------------------
-inline sc_cthread_handle sc_cthread_process::next_exist()
-{
-    return (sc_cthread_handle)m_exist_p;
-}
-
-inline void sc_cthread_process::set_next_exist(sc_cthread_handle next_p)
-{
-    m_exist_p = next_p;
-}
 
 //------------------------------------------------------------------------------
 //"sc_cthread_process::wait_halt"

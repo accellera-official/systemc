@@ -46,6 +46,11 @@
  *****************************************************************************/
 
 // $Log: sc_process.h,v $
+// Revision 1.10  2011/02/11 13:25:24  acg
+//  Andy Goodrich: Philipp A. Hartmann's changes:
+//    (1) Removal of SC_CTHREAD method overloads.
+//    (2) New exception processing code.
+//
 // Revision 1.9  2011/02/04 15:27:36  acg
 //  Andy Goodrich: changes for suspend-resume semantics.
 //
@@ -131,7 +136,6 @@ class sc_reset;
 const char* sc_gen_unique_name( const char*, bool preserve_first );
 sc_process_handle sc_get_current_process_handle();
 void sc_thread_cor_fn( void* arg );
-void sc_cthread_cor_fn( void* arg );
 bool timed_out( sc_simcontext* );
 
 
@@ -285,6 +289,7 @@ class sc_event;
 class sc_event_list;
 class sc_name_gen;
 class sc_spawn_options;
+class sc_unwind_exception;
 
 //==============================================================================
 // CLASS sc_throw_it<EXCEPT> - ARBITRARY EXCEPTION CLASS
@@ -445,10 +450,11 @@ class sc_process_b : public sc_object {
     friend class sc_report_handler;
     friend class sc_reset;
     friend class sc_reset_finder;
+    friend class sc_unwind_exception;
+
     friend const char* sc_gen_unique_name( const char*, bool preserve_first );
     friend sc_process_handle sc_get_current_process_handle();
     friend void sc_thread_cor_fn( void* arg );
-    friend void sc_cthread_cor_fn( void* arg );
     friend bool timed_out( sc_simcontext* );
 
   public:
@@ -547,6 +553,8 @@ class sc_process_b : public sc_object {
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS ) = 0;
     inline void initially_in_reset( bool async );
     inline bool is_unwinding() const;
+    inline bool start_unwinding();
+    inline bool clear_unwinding();
     virtual void kill_process(
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS ) = 0;
     inline void reset_changed( bool async, bool asserted );
@@ -691,11 +699,44 @@ inline bool sc_process_b::is_unwinding() const
       case THROW_ASYNC_RESET:
       case THROW_SYNC_RESET:
       case THROWING_NOW:
-      case THROW_USER:
+      // case THROW_USER:
         return true;
       default:
         return false;
     }
+}
+
+//------------------------------------------------------------------------------
+//"sc_process_b::start_unwinding"
+//
+// This method returns whether this process should start unwinding or not.
+//------------------------------------------------------------------------------
+inline bool sc_process_b::start_unwinding()
+{
+    switch( m_throw_status )
+    {
+      case THROW_KILL:
+      case THROW_ASYNC_RESET:
+      case THROW_SYNC_RESET:
+        m_throw_status = THROWING_NOW;
+         return true;
+      case THROWING_NOW:
+      case THROW_USER:
+       default:
+         return false;
+     }
+}
+
+//------------------------------------------------------------------------------
+//"sc_process_b::clear_unwinding"
+//
+// This method clears this object instance's throw status and always returns
+// true.
+//------------------------------------------------------------------------------
+inline bool sc_process_b::clear_unwinding()
+{
+    m_throw_status = THROW_NONE;
+    return true;
 }
 
 

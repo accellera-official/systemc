@@ -35,6 +35,11 @@
  *****************************************************************************/
 
 // $Log: sc_method_process.cpp,v $
+// Revision 1.13  2011/02/11 13:25:24  acg
+//  Andy Goodrich: Philipp A. Hartmann's changes:
+//    (1) Removal of SC_CTHREAD method overloads.
+//    (2) New exception processing code.
+//
 // Revision 1.12  2011/02/07 19:17:20  acg
 //  Andy Goodrich: changes for IEEE 1666 compatibility.
 //
@@ -261,8 +266,14 @@ void sc_method_process::kill_process(sc_descendant_inclusion_info descendants)
     // THROW ITS KILL.
 
     disconnect_process();
-    if ( next_runnable() != 0 ) simcontext()->remove_runnable_method( this );
-    m_throw_status = THROW_KILL;
+    if ( next_runnable() != 0 )
+        simcontext()->remove_runnable_method( this );
+
+    if ( RCAST<sc_method_handle>(sc_get_current_process_b()) == this )
+    {
+        m_throw_status = THROW_KILL;
+        throw sc_unwind_exception( this, false );
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -475,8 +486,8 @@ void sc_method_process::throw_reset( bool async )
         }
 	if ( RCAST<sc_method_handle>(sc_get_current_process_b()) == this )
 	{
-	    m_throw_status = THROWING_NOW;
-	    throw sc_unwind_exception( true );
+	    m_throw_status = THROW_ASYNC_RESET;
+	    throw sc_unwind_exception( this, true );
 	}
     }
 }

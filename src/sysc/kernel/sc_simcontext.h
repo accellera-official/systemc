@@ -52,6 +52,11 @@
                                
  *****************************************************************************/
 // $Log: sc_simcontext.h,v $
+// Revision 1.10  2011/02/11 13:25:24  acg
+//  Andy Goodrich: Philipp A. Hartmann's changes:
+//    (1) Removal of SC_CTHREAD method overloads.
+//    (2) New exception processing code.
+//
 // Revision 1.9  2011/02/01 21:18:56  acg
 //  Andy Goodrich: addition of new preempt_with() method used to immediately
 //  throw exceptions from threads.
@@ -264,7 +269,6 @@ class sc_simcontext
     friend bool sc_end_of_simulation_invoked();
     friend void sc_start( const sc_time&, sc_starvation_policy );
     friend bool sc_start_of_simulation_invoked();
-    friend void sc_cthread_cor_fn(void*);
     friend void sc_thread_cor_fn(void*);
     friend sc_time sc_time_to_pending_activity( const sc_simcontext* );
     friend bool sc_pending_activity_at_current_time( const sc_simcontext* );

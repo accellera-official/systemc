@@ -35,6 +35,11 @@
  *****************************************************************************/
 
 // $Log: sc_thread_process.cpp,v $
+// Revision 1.18  2011/02/11 13:25:24  acg
+//  Andy Goodrich: Philipp A. Hartmann's changes:
+//    (1) Removal of SC_CTHREAD method overloads.
+//    (2) New exception processing code.
+//
 // Revision 1.17  2011/02/08 08:18:16  acg
 //  Andy Goodrich: removed obsolete code.
 //
@@ -148,10 +153,8 @@ void sc_thread_cor_fn( void* arg )
                       << thread_h->name() << ::std::endl;
         }
         catch( const sc_unwind_exception& ex ) {
-            if ( ex.is_reset() ) 
-	    {
-	        continue;
-	    }
+	    ex.clear();
+            if ( ex.is_reset() ) continue;
         }
         catch( const sc_report& ex ) {
             std::cout << "\n" << ex.what() << std::endl;

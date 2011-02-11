@@ -52,12 +52,12 @@ am__objects_1 =
 am__objects_2 = sc_attribute.$(OBJEXT) sc_cor_fiber.$(OBJEXT) \
 	sc_cor_pthread.$(OBJEXT) sc_cor_qt.$(OBJEXT) \
 	sc_cthread_process.$(OBJEXT) sc_event.$(OBJEXT) \
-	sc_join.$(OBJEXT) sc_main.$(OBJEXT) sc_main_main.$(OBJEXT) \
-	sc_method_process.$(OBJEXT) sc_module.$(OBJEXT) \
-	sc_module_name.$(OBJEXT) sc_module_registry.$(OBJEXT) \
-	sc_name_gen.$(OBJEXT) sc_object.$(OBJEXT) \
-	sc_object_manager.$(OBJEXT) sc_process.$(OBJEXT) \
-	sc_reset.$(OBJEXT) sc_sensitive.$(OBJEXT) \
+	sc_except.$(OBJEXT) sc_join.$(OBJEXT) sc_main.$(OBJEXT) \
+	sc_main_main.$(OBJEXT) sc_method_process.$(OBJEXT) \
+	sc_module.$(OBJEXT) sc_module_name.$(OBJEXT) \
+	sc_module_registry.$(OBJEXT) sc_name_gen.$(OBJEXT) \
+	sc_object.$(OBJEXT) sc_object_manager.$(OBJEXT) \
+	sc_process.$(OBJEXT) sc_reset.$(OBJEXT) sc_sensitive.$(OBJEXT) \
 	sc_simcontext.$(OBJEXT) sc_thread_process.$(OBJEXT) \
 	sc_time.$(OBJEXT) sc_ver.$(OBJEXT) sc_wait.$(OBJEXT) \
 	sc_wait_cthread.$(OBJEXT)
@@ -239,6 +239,7 @@ CXX_FILES = \
 	sc_cor_qt.cpp \
 	sc_cthread_process.cpp \
 	sc_event.cpp \
+	sc_except.cpp \
 	sc_join.cpp \
 	sc_main.cpp \
 	sc_main_main.cpp \

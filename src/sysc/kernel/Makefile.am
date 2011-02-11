@@ -86,6 +86,7 @@ CXX_FILES = \
 	sc_cor_qt.cpp \
 	sc_cthread_process.cpp \
 	sc_event.cpp \
+	sc_except.cpp \
 	sc_join.cpp \
 	sc_main.cpp \
 	sc_main_main.cpp \
