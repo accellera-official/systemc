@@ -489,6 +489,9 @@ inline
 void
 sc_thread_process::wait_cycles( int n )
 {   
+    if( m_throw_status == THROWING_NOW )
+        SC_REPORT_ERROR( SC_ID_WAIT_DURING_UNWINDING_, name() );
+
     m_wait_cycle_n = n-1;
     suspend_me();
 }
