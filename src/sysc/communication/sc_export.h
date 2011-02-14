@@ -184,6 +184,9 @@ public: // interface access:
 	return *m_interface_p;
     }
 
+    operator const IF&() const
+        { return *const_cast<this_type*>(this); }
+
 public: // binding:
     virtual void bind( IF& interface_ )
     {
