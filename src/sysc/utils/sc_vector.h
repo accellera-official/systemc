@@ -73,6 +73,19 @@ class sc_vector_base
 
   template<typename,typename> friend class sc_vector_iter;
 
+  template< typename Container, typename ArgumentIterator >
+  friend typename Container::iterator
+      sc_vector_do_bind( Container & cont
+                       , ArgumentIterator  first
+                       , ArgumentIterator  last
+                       , typename Container::iterator from );
+  template< typename Container, typename ArgumentIterator >
+  friend typename Container::iterator
+     sc_vector_do_paren( Container & cont
+                       , ArgumentIterator  first
+                       , ArgumentIterator  last
+                       , typename Container::iterator from );
+
 public:
 
   typedef std::vector< sc_object* >     storage_type;
@@ -127,8 +140,9 @@ protected:
   const_iterator begin() const { return vec_.begin(); }
   const_iterator end()   const { return vec_.end();   }
 
-  // TODO: useful?
-  // void report_incomplete_loop( const char* );
+private:
+
+  void report_empty_bind( const char* kind_, bool dst_range_ ) const;
 
 private:
   storage_type vec_;
@@ -359,6 +373,20 @@ template< typename T, typename MT >
 class sc_vector_assembly
 {
   template< typename > friend class sc_vector;
+
+  template< typename Container, typename ArgumentIterator >
+  friend typename Container::iterator
+      sc_vector_do_bind( Container & cont
+                       , ArgumentIterator  first
+                       , ArgumentIterator  last
+                       , typename Container::iterator from );
+  template< typename Container, typename ArgumentIterator >
+  friend typename Container::iterator
+     sc_vector_do_paren( Container & cont
+                       , ArgumentIterator  first
+                       , ArgumentIterator  last
+                       , typename Container::iterator from );
+
 public:
   typedef sc_vector<T> base_type;
 
@@ -378,6 +406,9 @@ public:
 
 
   typedef access_type (element_type::*member_type);
+
+  const char* name() const { return vec_->name(); }
+  const char* kind() const { return "sc_vector_assembly"; }
 
   iterator begin()
     { return iterator( (*vec_).begin().it_, ptr_ ); }
@@ -464,6 +495,9 @@ private:
     , child_vec_(0)
   {}
 
+  void report_empty_bind( const char* kind_, bool dst_empty_ ) const
+    { vec_->report_empty_bind( kind_, dst_empty_ ); }
+
   base_type * vec_;
   member_type ptr_;
 
@@ -533,6 +567,10 @@ sc_vector_do_bind( Container & cont
                  , typename Container::iterator from )
 {
   typename Container::iterator end = cont.end();
+
+  if( !cont.size() || from == end || first == last )
+      cont.report_empty_bind( cont.kind(), from == end );
+
   while( from!=end && first != last )
     (*from++).bind( *first++ );
   return from;
@@ -546,6 +584,10 @@ sc_vector_do_operator_paren( Container& cont
                            , typename Container::iterator from )
 {
   typename Container::iterator end = cont.end();
+
+  if( !cont.size() || from == end || first == last )
+      cont.report_empty_bind( cont.kind(), from == end );
+
   while( from!=end && first != last )
     (*from++)( *first++ );
   return from;

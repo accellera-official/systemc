@@ -104,6 +104,25 @@ sc_vector_base::check_init( size_type n ) const
   return true;
 }
 
+void
+sc_vector_base::report_empty_bind( const char* kind_, bool dst_empty_ ) const
+{
+  std::stringstream str;
+
+  str << "target `" << name() << "' "
+      << "(" << kind_ << ") ";
+
+  if( !size() ) {
+    str << "not initialised yet";
+  } else if ( dst_empty_ ) {
+    str << "empty range given";
+  } else {
+    str << "empty destination range given";
+  }
+
+  SC_REPORT_WARNING( SC_ID_VECTOR_BIND_EMPTY_, str.str().c_str() );
+}
+
 std::string
 sc_vector_base::make_name( const char* prefix, size_type /* idx */ )
 {
