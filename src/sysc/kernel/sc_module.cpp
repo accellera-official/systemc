@@ -509,7 +509,9 @@ sc_module::start_of_simulation()
 void
 sc_module::start_simulation()
 {
+    simcontext()->hierarchy_push( this );
     start_of_simulation();
+    simcontext()->hierarchy_pop();
 }
 
 // called by simulation_done (does nothing by default)
@@ -521,7 +523,9 @@ sc_module::end_of_simulation()
 void
 sc_module::simulation_done()
 {
+    simcontext()->hierarchy_push( this );
     end_of_simulation();
+    simcontext()->hierarchy_pop();
 }
 
 void
