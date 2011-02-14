@@ -135,10 +135,8 @@ SC_DEFINE_MESSAGE( SC_ID_INVALID_SEMAPHORE_VALUE_,  119,
 			"sc_semaphore requires an initial value >= 0" )
 SC_DEFINE_MESSAGE( SC_ID_SC_EXPORT_HAS_NO_INTERFACE_,  120,
 			"sc_export instance has no interface" )
-SC_DEFINE_MESSAGE( SC_ID_SC_EXPORT_AFTER_START_,  121,
-    "insert sc_export failed, sc_export instance after simulation has started" )
-SC_DEFINE_MESSAGE( SC_ID_SC_EXPORT_ALREADY_REGISTERED_,  122,
-    "insert sc_export failed, sc_export already inserted" )
+SC_DEFINE_MESSAGE( SC_ID_INSERT_EXPORT_,  121,
+    "insert sc_export failed" )
 SC_DEFINE_MESSAGE( SC_ID_SC_EXPORT_NOT_REGISTERED_,  123,
     "remove sc_export failed, sc_export not registered" )
 SC_DEFINE_MESSAGE( SC_ID_SC_EXPORT_NOT_BOUND_AFTER_CONSTRUCTION_,  124,

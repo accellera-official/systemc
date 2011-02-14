@@ -101,6 +101,9 @@ protected:
     virtual void end_of_simulation();
 
     virtual const char* if_typename() const = 0;
+ 
+    // error reporting
+    void report_error( const char* id, const char* add_msg = 0) const;
 
 private:
 

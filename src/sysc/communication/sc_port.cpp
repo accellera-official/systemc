@@ -293,18 +293,20 @@ sc_port_base::sc_port_base(
     int max_size_, sc_port_policy policy 
 ) : 
     sc_object( sc_gen_unique_name( "port" ) ),
-    m_bind_info( new sc_bind_info( max_size_, policy ) )
+    m_bind_info(0)
 {
     simcontext()->get_port_registry()->insert( this );
+    m_bind_info = new sc_bind_info( max_size_, policy );
 }
 
 sc_port_base::sc_port_base( 
     const char* name_, int max_size_, sc_port_policy policy 
 ) : 
     sc_object( name_ ),
-    m_bind_info( new sc_bind_info( max_size_, policy ) )
+    m_bind_info(0)
 {
     simcontext()->get_port_registry()->insert( this );
+    m_bind_info = new sc_bind_info( max_size_, policy );
 }
 
 
@@ -313,9 +315,7 @@ sc_port_base::sc_port_base(
 sc_port_base::~sc_port_base()
 {
     simcontext()->get_port_registry()->remove( this );
-    if( m_bind_info != 0 ) {
-	delete m_bind_info;
-    }
+    delete m_bind_info;
 }
 
 
@@ -647,6 +647,10 @@ sc_port_registry::insert( sc_port_base* port_ )
 {
     if( sc_is_running() ) {
 	port_->report_error( SC_ID_INSERT_PORT_, "simulation running" );
+    }
+
+    if( m_simc->elaboration_done()  ) {
+	port_->report_error( SC_ID_INSERT_PORT_, "elaboration done" );
     }
 
 #if defined(DEBUG_SYSTEMC)

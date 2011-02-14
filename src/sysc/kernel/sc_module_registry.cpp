@@ -72,6 +72,10 @@ sc_module_registry::insert( sc_module& module_ )
 	SC_REPORT_ERROR( SC_ID_INSERT_MODULE_, "simulation running" );
     }
 
+    if( m_simc->elaboration_done() ) {
+	SC_REPORT_ERROR( SC_ID_INSERT_MODULE_, "elaboration done" );
+    }
+
 #ifdef DEBUG_SYSTEMC
     // check if module_ is already inserted
     for( int i = size() - 1; i >= 0; -- i ) {

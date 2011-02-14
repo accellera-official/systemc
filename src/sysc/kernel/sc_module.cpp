@@ -236,13 +236,13 @@ const sc_bind_proxy SC_BIND_PROXY_NIL;
 void
 sc_module::sc_module_init()
 {
+    simcontext()->get_module_registry()->insert( *this );
     simcontext()->hierarchy_push( this );
     m_end_module_called = false;
 	m_module_name_p = 0;
     m_port_vec = new std::vector<sc_port_base*>;
     m_port_index = 0;
     m_name_gen = new sc_name_gen;
-    simcontext()->get_module_registry()->insert( *this );
 }
 
 sc_module::sc_module( const char* nm )
