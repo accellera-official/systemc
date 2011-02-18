@@ -173,6 +173,10 @@ void
 sc_prim_channel_registry::insert( sc_prim_channel& prim_channel_ )
 {
     if( sc_is_running() ) {
+	SC_REPORT_ERROR( SC_ID_INSERT_PRIM_CHANNEL_, "simulation running" );
+    }
+
+    if( m_simc->elaboration_done() ) {
 	SC_REPORT_ERROR( SC_ID_INSERT_PRIM_CHANNEL_, "elaboration done" );
     }
 

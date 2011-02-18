@@ -128,6 +128,10 @@ sc_export_registry::insert( sc_export_base* export_ )
 	export_->report_error(SC_ID_INSERT_EXPORT_, "simulation running");
     }
 
+    if( m_simc->elaboration_done()  ) {
+	export_->report_error(SC_ID_INSERT_EXPORT_, "elaboration done");
+    }
+
 #ifdef DEBUG_SYSTEMC
     // check if port_ is already inserted
     for( int i = size() - 1; i >= 0; -- i ) {
