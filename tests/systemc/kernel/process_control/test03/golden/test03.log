@@ -11,7 +11,6 @@ Status during sc_start(1,SC_NS) = 16
 Status after sc_start(1,SC_NS) = 32
 
 3 ns: stimulus (236) - enabling all processes
-3 ns: static thread awakened
 3500 ps dynamic_method_negedge: awakened
 3500 ps dynamic_thread_negedge: awakened
 4 ns: static method awakened
@@ -19,12 +18,9 @@ Status after sc_start(1,SC_NS) = 32
 
 4 ns: stimulus (242) - disabling all processes
 4 ns: static thread awakened
-4 ns: cthread awakened
 4 ns dynamic_thread_posedge: awakened
 
 5 ns: stimulus (257) - enabling all processes
-5 ns: static thread awakened
-5 ns: cthread awakened
 5500 ps dynamic_method_negedge: awakened
 5500 ps dynamic_thread_negedge: awakened
 6 ns: static method awakened
@@ -47,8 +43,6 @@ Status after sc_start(1,SC_NS) = 32
 8 ns: stimulus (293) - firing event2 
 
 11 ns: stimulus (301) - enabling all processes
-11 ns: static thread awakened
-11 ns: cthread awakened
 11500 ps dynamic_method_negedge: awakened
 11500 ps dynamic_thread_negedge: awakened
 12 ns: static method awakened

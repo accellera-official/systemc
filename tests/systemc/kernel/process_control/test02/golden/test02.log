@@ -11,9 +11,9 @@ SystemC Simulation
 4 ns: stimulus (155) - firing event2 
 
 6 ns: stimulus (165) - resuming all processes
-6 ns:      clocked thread (70) after wait on m_clk.pos() 
 6 ns:      dynamic method (88,1) after wait on m_clk.posedge() 
 6 ns:      static method (118) after wait on m_event1 | m_event2 
+6 ns:      clocked thread (70) after wait on m_clk.pos() 
 6 ns:      dynamic thread (103) after wait on m_event1 & m_event2 
 6 ns:      static thread (129) after wait on m_event1 | m_event2 
 7 ns:      clocked thread (70) after wait on m_clk.pos() 

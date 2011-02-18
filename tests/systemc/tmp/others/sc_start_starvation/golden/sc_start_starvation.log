@@ -1,0 +1,6 @@
+SystemC Simulation
+sc_time_stamp() = 150 ns
+sc_pending_activity_at_future_time() = 1
+sc_time_to_pending_activity() = 100 ns
+
+Success

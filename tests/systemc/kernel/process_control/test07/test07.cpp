@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC  
-  source code Copyright (c) 1996-2010 by all Contributors.  All Rights reserved.
+  source code Copyright (c) 1996-2011 by all Contributors.  All Rights reserved.
   The contents of this file are subject to the restrictions and limitations
   set forth in the SystemC Open Source License Version 2.4 (the "License");
   You may not use this file except in compliance with such restrictions and
@@ -26,6 +26,10 @@
   Description of Modification: 
 
  *****************************************************************************/
+// $Log: test07.cpp,v $
+// Revision 1.2  2011/02/14 17:00:00  acg
+//  Andy Goodrich: updated copyright and added cvs logging information inline.
+//
 
 #define SC_INCLUDE_DYNAMIC_PROCESSES
 #include <systemc.h>

@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2011 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -356,6 +356,9 @@ int sc_main(int argc, char* argv[])
 }
 
 // $Log: test03.cpp,v $
+// Revision 1.4  2011/02/14 17:00:00  acg
+//  Andy Goodrich: updated copyright and added cvs logging information inline.
+//
 // Revision 1.3  2011/01/14 14:23:58  acg
 //  Andy Goodrich: Fixes for 1666_2011
 //

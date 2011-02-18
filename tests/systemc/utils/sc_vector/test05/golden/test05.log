@@ -23,3 +23,6 @@ sub_module::end_of_elaboration
   top.sub.in_1.size() == 2 - src_1_1 @ 0 - fifo_1 @ 1
   top.sub.in_2.size() == 1 - src_2_0 @ 0
   top.sub.in_3.size() == 1 - src_2_1 @ 0
+
+Warning: (W571) no activity or clock movement for sc_start() invocation
+In file: <removed by verify.pl>

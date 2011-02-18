@@ -61,7 +61,7 @@ sctop::sctop(sc_module_name name) : sc_module(name)
 }                                                                                                                      
 int sc_main(int argc, char** argv) {
 	sctop top("top"); 
-	sc_start();
+	sc_start(1, SC_NS);
 	return 0;
 }
 

@@ -31,6 +31,9 @@
 
  *****************************************************************************/
 // $Log: test01.cpp,v $
+// Revision 1.3  2011/02/08 06:49:37  acg
+//  Andy Goodrich: removed carriage returns.
+//
 // Revision 1.2  2011/02/01 17:17:37  acg
 //  Andy Goodrich: update of copyright notice, added visible CVS logging.
 //

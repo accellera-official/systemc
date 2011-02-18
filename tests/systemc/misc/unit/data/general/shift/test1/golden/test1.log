@@ -43,3 +43,6 @@ bits  = 111 1101
 width = 7
 value = -2
 bits  = 111 1110 
+
+Warning: (W571) no activity or clock movement for sc_start() invocation
+In file: <removed by verify.pl>

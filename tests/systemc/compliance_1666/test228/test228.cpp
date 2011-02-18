@@ -96,7 +96,7 @@ int sc_main(int argc, char* argv[])
   sc_semaphore sem(2);
   sc_event_queue eq;
 
-  sc_start();
+  sc_start(100, SC_NS);
 
   cout << endl << "Success" << endl;
   return 0;

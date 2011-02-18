@@ -147,7 +147,7 @@ void top::target_cthread0()
     const char* name = "target_cthread0";
 
     time_stamp(cout) << name  << ": starting" << endl;
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 12; i++)
     {
 	wait();
 	if ( m_state_cthread0 == ST_SUSPENDD )
@@ -176,12 +176,12 @@ void top::target_method0()
 	{
 	    time_stamp(cout) << name  << ": ERROR should not see this" << endl;
 	}
-	else if ( state < 18 )
+	else if ( state < 20 )
 	{
 	    time_stamp(cout) << name  << ": active" << endl;
 	}
         break;
-      case 19:
+      case 21:
         time_stamp(cout) << name  << ": terminating" << endl;
         break;
     }
@@ -193,7 +193,7 @@ void top::target_thread0()
     const char* name = "target_thread0";
 
     time_stamp(cout) << name  << ": starting" << endl;
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 12; i++)
     {
 	wait();
 	if ( m_state_thread0 == ST_SUSPENDD )

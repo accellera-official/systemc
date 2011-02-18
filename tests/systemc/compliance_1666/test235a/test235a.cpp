@@ -168,7 +168,7 @@ int sc_main(int argc, char* argv[])
   top.p2_once(sig3);
   top.p3_once(sig4);
 
-  sc_start();
+  sc_start(1, SC_NS);
 
   cout << endl << "Success" << endl;
   return 0;

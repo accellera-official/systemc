@@ -83,7 +83,7 @@ int sc_main(int argc, char* argv[])
   top.p2_twice(sig2);
   top.p2_twice(sig3);
 
-  sc_start();
+  sc_start(1, SC_NS);
 
   assert(sc_report_handler::get_count(SC_ERROR) == 7);
 

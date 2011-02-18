@@ -4,3 +4,6 @@ SystemC Simulation
  b = 1 (!0)
  c = 1 (~1)
  d = 1 (~0)
+
+Warning: (W571) no activity or clock movement for sc_start() invocation
+In file: <removed by verify.pl>

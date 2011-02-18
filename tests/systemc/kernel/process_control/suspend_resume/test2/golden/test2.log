@@ -50,7 +50,6 @@ SystemC Simulation
 
 23 ns[40]: target_thread0: active
 25 ns[43]: target_thread0: active
-25 ns[43]: target_thread0: terminating
 
 26 ns[44]: stimulator: suspending target_thread0
 
@@ -70,15 +69,22 @@ SystemC Simulation
 
 35 ns[56]: stimulator: resuming target_thread0
 
-36 ns[58]: target_method0: active
-36 ns[58]: target_cthread0: active
-36 ns[58]: target_cthread0: terminating
-38 ns[61]: target_method0: active
-40 ns[64]: target_method0: active
-42 ns[67]: target_method0: active
-44 ns[70]: target_method0: active
-48 ns[76]: target_method0: terminating
+35 ns[56]: target_thread0: active
+35 ns[57]: target_thread0: active
+35 ns[57]: target_thread0: terminating
+36 ns[59]: target_method0: active
+36 ns[59]: target_cthread0: active
+38 ns[62]: target_method0: active
+38 ns[62]: target_cthread0: active
+40 ns[65]: target_method0: active
+40 ns[65]: target_cthread0: active
+40 ns[65]: target_cthread0: terminating
+42 ns[68]: target_method0: active
+44 ns[71]: target_method0: active
+46 ns[74]: target_method0: active
+48 ns[77]: target_method0: active
+52 ns[83]: target_method0: terminating
 
-1038 ns[1560]: stimulator: terminating
+1038 ns[1561]: stimulator: terminating
 
 Info: /OSCI/SystemC: Simulation stopped by user.

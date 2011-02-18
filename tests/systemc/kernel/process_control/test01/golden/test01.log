@@ -17,17 +17,17 @@ SystemC Simulation
 2 ns: stimulus (154) - suspending all processes
 
 5 ns: stimulus (169) - resuming all processes
-5 ns:      static thread (143)
-5 ns:      cthread (61)
 5 ns:      static method (134)
+5 ns:      cthread (61)
+5 ns:      static thread (143)
 6 ns:      static method (134)
 6 ns: stimulus (172) - suspending all processes
 7 ns: stimulus (181) - firing event1 
 
 8 ns: stimulus (189) - resuming all processes
-8 ns:      static thread (143)
-8 ns:      cthread (61)
 8 ns:      static method (134)
+8 ns:      cthread (61)
+8 ns:      static thread (143)
 9 ns:      static method (134)
 9 ns: stimulus (193) - firing event2 
 9 ns:      static thread (143)
@@ -56,17 +56,17 @@ SystemC Simulation
 14 ns: stimulus (154) - suspending all processes
 
 17 ns: stimulus (169) - resuming all processes
-17 ns:      static thread (143)
-17 ns:      cthread (61)
 17 ns:      static method (134)
+17 ns:      cthread (61)
+17 ns:      static thread (143)
 18 ns:      static method (134)
 18 ns: stimulus (172) - suspending all processes
 19 ns: stimulus (181) - firing event1 
 
 20 ns: stimulus (189) - resuming all processes
-20 ns:      static thread (143)
-20 ns:      cthread (61)
 20 ns:      static method (134)
+20 ns:      cthread (61)
+20 ns:      static thread (143)
 21 ns:      static method (134)
 21 ns: stimulus (193) - firing event2 
 21 ns:      static thread (143)
