@@ -71,20 +71,8 @@ class sc_vector_base
   : public sc_object
 {
 
+  template<typename,typename> friend class sc_vector_assembly;
   template<typename,typename> friend class sc_vector_iter;
-  template< typename Container, typename ArgumentIterator >
-  friend typename Container::iterator
-      sc_vector_do_bind( Container & cont
-                       , ArgumentIterator  first
-                       , ArgumentIterator  last
-                       , typename Container::iterator from );
-  template< typename Container, typename ArgumentIterator >
-  friend typename Container::iterator
-     sc_vector_do_paren( Container & cont
-                       , ArgumentIterator  first
-                       , ArgumentIterator  last
-                       , typename Container::iterator from );
-
 
 public:
 
@@ -140,10 +128,7 @@ protected:
   const_iterator begin() const { return vec_.begin(); }
   const_iterator end()   const { return vec_.end();   }
 
-  // TODO: useful?
-  // void report_incomplete_loop( const char* );
-
-public: // @@@@#### Philipp has this private
+public:
 
   void report_empty_bind( const char* kind_, bool dst_range_ ) const;
 
@@ -377,19 +362,6 @@ class sc_vector_assembly
 {
   template< typename > friend class sc_vector;
 
-  template< typename Container, typename ArgumentIterator >
-  friend typename Container::iterator
-      sc_vector_do_bind( Container & cont
-                       , ArgumentIterator  first
-                       , ArgumentIterator  last
-                       , typename Container::iterator from );
-  template< typename Container, typename ArgumentIterator >
-  friend typename Container::iterator
-     sc_vector_do_paren( Container & cont
-                       , ArgumentIterator  first
-                       , ArgumentIterator  last
-                       , typename Container::iterator from );
-
 public:
   typedef sc_vector<T> base_type;
 
@@ -488,6 +460,9 @@ public:
     child_vec_ = 0;
   }
 
+  void report_empty_bind( const char* kind_, bool dst_empty_ ) const
+    { vec_->report_empty_bind( kind_, dst_empty_ ); }
+
   ~sc_vector_assembly()
     { delete child_vec_; }
 
@@ -497,8 +472,6 @@ private:
     , ptr_(ptr)
     , child_vec_(0)
   {}
-  void report_empty_bind( const char* kind_, bool dst_empty_ ) const
-    { vec_->report_empty_bind( kind_, dst_empty_ ); }
 
   base_type * vec_;
   member_type ptr_;
