@@ -394,7 +394,7 @@ void sc_thread_process::resume_process(
 
     // RESUME OBJECT INSTANCE:
     //
-    // Even if it is disabled we resume.
+    // Even if it is disabled we cancel the suspension.
 
     m_state = m_state & ~ps_bit_suspended;
     if ( m_state == ps_bit_ready_to_run )
@@ -693,8 +693,7 @@ bool sc_thread_process::trigger_dynamic( sc_event* e )
     {
         if ( e == m_timeout_event_p )
 	{
-	    m_timeout_event_p = NULL; // our caller will clean this up.
-	    remove_dynamic_events();  // but we clean up everything else.
+	    remove_dynamic_events( true );  
 	    return true;
 	}
 	else

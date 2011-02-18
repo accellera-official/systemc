@@ -374,83 +374,73 @@ class sc_throw_it : public sc_throw_it_helper
 //        Actions:
 //          * DISABLE - disabled_process() invoked
 //          * ENABLE - enable_process() invoked
-//          * EXECUTE - processes starts execution
-//          * EVENT - event occurs that process is sensitive to
 //          * RESUME - resume_process() invoked
 //          * SUSPEND - suspend_process() invoked
 //          * WAIT - process performs a wait
+//          * WAIT_DONE - wait satisfied
 //       
 //        States:
-//          * disabled - process is disabled
-//          * disabled_pending - process will disable after current execution
-//          * disabled_suspended - process suspended and disabled
-//          * normal - process executing or on the execution queue
-//          * suspended - process was suspended while in waiting
-//          * suspended_ready_to_run - process was suspended while ready 
-//          * waiting - process waiting on an event
+//          * normal::ready - process on run queue or executing.
+//          * normal::waiting - process waiting on sensitivity
+//          * disabled - disabled
+//          * disabled/ready - disabled ready to run
+//          * disabled/suspended  - disabled/suspended
+//          * disabled/suspended/ready - disabled/suspended/ready to run
+//          * suspended  - suspended
+//          * suspended/ready - suspended/ready to run
+//       
+//        normal::ready_to_run State Transitions:
+//          * normal::ready + DISABLE   -> disabled
+//          * normal::ready + ENABLE    -> normal::ready
+//          * normal::ready + RESUME    -> normal::ready
+//          * normal::ready + SUSPEND   -> suspended/ready
+//          * normal::ready + WAIT      -> normal::waiting
+//       
+//        normal::waiting State Transitions:
+//          * normal::waiting + DISABLE   -> disabled
+//          * normal::waiting + ENABLE    -> normal::waiting
+//          * normal::waiting + RESUME    -> normal::waiting
+//          * normal::waiting + SUSPEND   -> suspended
+//          * normal::waiting + WAIT_DONE -> normal::ready
 //       
 //        disabled State Transitions:
-//          * disabled + DISABLE -> disable
-//          * disabled + ENABLE -> waiting
-//          * disabled + EXECUTE -> illegal
-//          * disabled + EVENT -> disabled
-//          * disabled + RESUME -> disabled
-//          * disabled + SUSPEND -> disabled_suspended
-//          * disabled + WAIT -> illegal
+//          * disabled + DISABLE -> disabled
+//          * disabled + ENABLE  -> normal::waiting
+//          * disabled + RESUME  -> disabled
+//          * disabled + SUSPEND -> disabled/suspended
 //       
-//        disabled_pending State Transitions:
-//          * disabled_pending + DISABLE -> disabled_pending
-//          * disabled_pending + ENABLE -> normal
-//          * disabled_pending + EXECUTE - disabled_pending
-//          * disabled_pending + EVENT -> disabled_pending
-//          * disabled_pending + RESUME -> disabled_pending
-//          * disabled_pending + SUSPEND -> disabled_suspended
-//          * disabled_pending + WAIT -> disabled
+//        disabled/ready State Transitions:
+//          * disabled/ready + DISABLE -> disabled/ready
+//          * disabled/ready + ENABLE -> disabled/ready
+//          * disabled/ready + RESUME -> disabled/ready
+//          * disabled/ready + SUSPEND -> disabled/suspended/ready
 //       
-//        disabled_suspended State Transitions:
-//          * disabled_suspended + DISABLE -> disabled_suspended
-//          * disabled_suspended + ENABLE -> suspended
-//          * disabled_suspended + EXECUTE -> illegal
-//          * disabled_suspended + EVENT -> disabled_suspended
-//          * disabled_suspended + RESUME -> disabled
-//          * disabled_suspended + SUSPEND -> disabled_suspended
-//          * disabled_suspended + WAIT -> illegal
+//        disabled/suspended State Transitions:
+//          * disabled/suspended + DISABLE -> disabled/suspended
+//          * disabled/suspended + ENABLE -> suspended
+//          * disabled/suspended + RESUME -> disabled
+//          * disabled/suspended + SUSPEND -> disabled/suspended
 //       
-//        ready State Transitions:
-//          * normal + DISABLE -> disabled_pending
-//          * normal + ENABLE -> normal
-//          * normal + EXECUTE -> normal
-//          * normal + EVENT -> normal
-//          * normal + RESUME -> normal
-//          * normal + SUSPEND -> suspended_ready_to_run
-//          * normal + WAIT -> waiting
+//        disabled/suspended/ready State Transitions:
+//          * disabled/suspended/ready + DISABLE -> disabled/suspended/ready
+//          * disabled/suspended/ready + ENABLE -> suspended/ready
+//          * disabled/suspended/ready + RESUME -> disabled/ready
+//          * disabled/suspended/ready + SUSPEND -> disabled/suspended/ready
 //       
 //        suspended State Transitions:
-//          * suspended + DISABLE -> disabled_suspended
+//          * suspended + DISABLE -> disabled/suspended
 //          * suspended + ENABLE -> suspended
-//          * suspended + EXECUTE -> illegal
-//          * suspended + EVENT -> suspended_ready_to_run
-//          * suspended + RESUME -> waiting
+//          * suspended + RESUME -> normal::waiting
 //          * suspended + SUSPEND -> suspended
-//          * suspended + WAIT -> illegal
+//          * suspended + WAIT_DONE -> suspended/ready
 //       
-//        suspended_ready_to_run State Transitions:
-//          * suspended_ready_to_run + DISABLE -> disabled_suspended
-//          * suspended_ready_to_run + ENABLE -> suspended_ready_to_run
-//          * suspended_ready_to_run + EXECUTE -> illegal
-//          * suspended_ready_to_run + EVENT -> suspended_ready_to_run
-//          * suspended_ready_to_run + RESUME -> normal
-//          * suspended_ready_to_run + SUSPEND -> suspended_ready_to_run
-//          * suspended_ready_to_run + WAIT -> illegal
+//        suspended/ready State Transitions:
+//          * suspended/ready + DISABLE -> disabled/suspended/ready
+//          * suspended/ready + ENABLE -> suspended/ready
+//          * suspended/ready + RESUME -> normal::ready_to_run
+//          * suspended/ready + SUSPEND -> suspended/ready
+//          * suspended/ready + WAIT_DONE -> suspended/ready
 //       
-//        waiting State Transitions:
-//          * waiting + DISABLE -> disable
-//          * waiting + ENABLE -> waiting
-//          * waiting + EXECUTE -> illegal
-//          * waiting + EVENT -> normal
-//          * waiting + RESUME -> waiting
-//          * waiting + SUSPEND -> suspended
-//          * waiting + WAIT -> illegal
 //==============================================================================
 class sc_process_b : public sc_object { 
     friend class sc_simcontext;      // Allow static processes to have base.
@@ -542,7 +532,7 @@ class sc_process_b : public sc_object {
     inline bool is_runnable() const;
     static inline sc_process_b* last_created_process_base();
     virtual void queue_for_execution()=0;
-    void remove_dynamic_events();
+    void remove_dynamic_events( bool skip_timeout = false );
     void remove_static_events();
     inline void set_last_report( sc_report* last_p )
         {  

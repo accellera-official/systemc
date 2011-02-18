@@ -320,9 +320,13 @@ const char* sc_process_b::gen_unique_name( const char* basename_,
 //
 // This method removes this object instance from the events in its dynamic
 // event lists.
+//
+// Arguments:
+//     skip_timeout = skip cleaning up the timeout event, it will be done
+//                    by sc_event_notify().
 //------------------------------------------------------------------------------
 void
-sc_process_b::remove_dynamic_events()
+sc_process_b::remove_dynamic_events( bool skip_timeout )
 {
     sc_method_handle  method_h;   // This process as a method.
     sc_thread_handle  thread_h;   // This process as a thread.
@@ -334,7 +338,7 @@ sc_process_b::remove_dynamic_events()
       case SC_CTHREAD_PROC_:
         thread_h = DCAST<sc_thread_handle>(this);
         assert( thread_h );
-	if ( thread_h->m_timeout_event_p ) {
+	if ( thread_h->m_timeout_event_p && !skip_timeout ) {
 	    thread_h->m_timeout_event_p->remove_dynamic(thread_h);
 	    thread_h->m_timeout_event_p->cancel();
 	}
@@ -349,7 +353,7 @@ sc_process_b::remove_dynamic_events()
       case SC_METHOD_PROC_:
         method_h = DCAST<sc_method_handle>(this);
         assert( method_h );
-	if ( method_h->m_timeout_event_p ) {
+	if ( method_h->m_timeout_event_p && !skip_timeout ) {
 	    method_h->m_timeout_event_p->remove_dynamic(method_h);
 	    method_h->m_timeout_event_p->cancel();
 	}
