@@ -63,7 +63,13 @@ namespace sc_core {
 //#define SC_MAX_NBITS    510    // 17 * BITS_PER_DIGIT
 
 
-const int SC_DEFAULT_STACK_SIZE   = 0x20000;
+const int SC_DEFAULT_STACK_SIZE   =
+#if !defined(SC_USE_PTHREADS) && \
+    ( defined(__CYGWIN32__) || defined(__CYGWIN32) )
+  0x50000;
+#else
+  0x20000;
+#endif
 const int SC_MAX_WATCH_LEVEL      = 16;
 
 #ifdef DEBUG_SYSTEMC

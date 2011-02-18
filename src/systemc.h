@@ -177,9 +177,11 @@
     using std::ldiv;
     using std::mblen;
     using std::mbtowc;
-    using std::wctomb;
     using std::mbstowcs;
+#if !defined(__CYGWIN__) && !defined(__CYGWIN32)
+    using std::wctomb;
     using std::wcstombs;
+#endif
 
 //  from <cstring>:
 
