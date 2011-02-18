@@ -32,7 +32,7 @@
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="FALSE"
 				DebugInformationFormat="4"
-				DisableSpecificWarnings="4244"
+				DisableSpecificWarnings="4244;4996"
 				UndefinePreprocessorDefinitions="interface"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
@@ -75,7 +75,7 @@
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="FALSE"
 				DebugInformationFormat="3"
-				DisableSpecificWarnings="4244"/>
+				DisableSpecificWarnings="4244;4996"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
@@ -143,6 +143,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\sysc\communication\sc_event_queue.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\sysc\kernel\sc_except.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\sysc\communication\sc_export.cpp">
