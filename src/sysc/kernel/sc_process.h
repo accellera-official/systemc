@@ -883,7 +883,7 @@ inline void sc_process_b::semantics()
 //------------------------------------------------------------------------------
 inline bool sc_process_b::terminated() const
 {
-    return m_state & ps_bit_zombie;
+    return ( m_state & ps_bit_zombie ) != 0;
 }
 
 

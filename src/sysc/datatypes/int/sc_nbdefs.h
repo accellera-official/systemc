@@ -62,7 +62,7 @@
 
 #if defined(__sun) || defined(__sun__)
 #  include <inttypes.h>
-#elif !defined(WIN32)
+#elif !defined(WIN32) && !defined(_WIN32)
 #  include <stdint.h>
 #endif
 

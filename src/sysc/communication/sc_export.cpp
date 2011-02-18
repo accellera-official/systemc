@@ -106,10 +106,9 @@ sc_export_base::report_error( const char* id, const char* add_msg ) const
 {
     char msg[BUFSIZ];
     if( add_msg != 0 ) {
-        std::snprintf( msg, BUFSIZ, "%s: export '%s' (%s)", add_msg, name(), 
-	               kind() );
+        std::sprintf( msg, "%s: export '%s' (%s)", add_msg, name(), kind() );
     } else {
-        std::snprintf( msg, BUFSIZ, "export '%s' (%s)", name(), kind() );
+        std::sprintf( msg, "export '%s' (%s)", name(), kind() );
     }
     SC_REPORT_ERROR( id, msg );
 }

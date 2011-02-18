@@ -112,6 +112,8 @@ Andy Goodrich - Forte Design Systems, Inc.
 #include "sysc/datatypes/bit/sc_lv_base.h"
 #include "sysc/kernel/sc_reset.h"
 
+#include <sstream>
+
 using sc_dt::sc_lv_base;
 using sc_dt::sc_signed;
 using sc_dt::sc_unsigned;
