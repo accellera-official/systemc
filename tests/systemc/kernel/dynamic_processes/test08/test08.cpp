@@ -40,9 +40,10 @@
 #define SC_INCLUDE_DYNAMIC_PROCESSES
 #include "systemc.h"
 
-class ABC : public sc_prim_channel {
+class prim_channel : public sc_prim_channel {
   public:
-  	ABC(const char* name = sc_gen_unique_name("ABC") ) : sc_prim_channel(name)
+  	prim_channel(const char* name = sc_gen_unique_name("prim_channel") )
+	    : sc_prim_channel(name)
 	{}
 	void thread()
 	{
@@ -51,7 +52,8 @@ class ABC : public sc_prim_channel {
 	void update()
 	{
 		cout << "update called..." << endl;
-		sc_spawn( sc_bind(&ABC::thread,this), sc_gen_unique_name("thread"));
+		sc_spawn( sc_bind(&prim_channel::thread,this),
+			  sc_gen_unique_name("thread"));
 	}
 	void write( int i )
 	{
@@ -70,14 +72,14 @@ SC_MODULE(DUT)
 		for (;;)
 		{
 			wait();
-			m_abc.write(0);
+			m_chan.write(0);
 			wait();
-			m_abc.write(0);
+			m_chan.write(0);
 			sc_stop();
 		}
 	}
-	ABC         m_abc;
-	sc_in<bool> m_clk;
+	prim_channel m_chan;
+	sc_in<bool>  m_clk;
 };
 int sc_main(int argc, char* argv[])
 {
