@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2010 by all Contributors.
+  source code Copyright (c) 1996-2011 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -35,6 +35,9 @@
 
 
 // $Log: sc_except.cpp,v $
+// Revision 1.2  2011/02/13 21:47:37  acg
+//  Andy Goodrich: update copyright notice.
+//
 // Revision 1.1  2011/02/10 22:47:38  acg
 //  Andy Goodrich: first check in of Philipp A. Hartmann's new exception
 //  processing code.

@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2008 by all Contributors.
+  source code Copyright (c) 1996-2011 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -38,6 +38,9 @@
  *****************************************************************************/
 
 // $Log: sc_except.h,v $
+// Revision 1.6  2011/02/13 21:47:37  acg
+//  Andy Goodrich: update copyright notice.
+//
 // Revision 1.5  2011/02/11 13:25:24  acg
 //  Andy Goodrich: Philipp A. Hartmann's changes:
 //    (1) Removal of SC_CTHREAD method overloads.

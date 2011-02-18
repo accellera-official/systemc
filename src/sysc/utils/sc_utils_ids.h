@@ -37,6 +37,9 @@
  *****************************************************************************/
 
 // $Log: sc_utils_ids.h,v $
+// Revision 1.3  2011/02/14 17:54:25  acg
+//  Andy Goodrich: Philipp's addition of early bind checks.
+//
 // Revision 1.2  2010/12/07 20:10:19  acg
 // Andy Goodrich: messages for new sc_vector class.
 //
@@ -89,6 +92,8 @@ SC_DEFINE_MESSAGE(SC_ID_VECTOR_INIT_CALLED_TWICE_,
                   805, "sc_vector::init has already been called" )
 SC_DEFINE_MESSAGE(SC_ID_VECTOR_INIT_INVALID_CONTEXT_,
                   806, "sc_vector::init called from invalid object context" )
+SC_DEFINE_MESSAGE(SC_ID_VECTOR_BIND_EMPTY_,
+                  807, "sc_vector::bind called with empty range" )
 
 #endif
 

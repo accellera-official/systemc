@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2008 by all Contributors.
+  source code Copyright (c) 1996-2011 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -35,6 +35,23 @@
  *****************************************************************************/
 
 // $Log: sc_thread_process.h,v $
+// Revision 1.17  2011/02/17 19:55:58  acg
+//  Andy Goodrich:
+//    (1) Changed signature of trigger_dynamic() back to a bool.
+//    (2) Simplified process control usage.
+//    (3) Changed trigger_static() to recognize process controls and to
+//        do the down-count on wait(N), allowing the elimination of
+//        ready_to_run().
+//
+// Revision 1.16  2011/02/16 22:37:31  acg
+//  Andy Goodrich: clean up to remove need for ps_disable_pending.
+//
+// Revision 1.15  2011/02/13 21:47:38  acg
+//  Andy Goodrich: update copyright notice.
+//
+// Revision 1.14  2011/02/13 21:35:54  acg
+//  Andy Goodrich: added error for performing a wait() during unwinding.
+//
 // Revision 1.13  2011/02/11 13:25:24  acg
 //  Andy Goodrich: Philipp A. Hartmann's changes:
 //    (1) Removal of SC_CTHREAD method overloads.
@@ -182,7 +199,6 @@ class sc_thread_process : public sc_process_b {
     sc_thread_handle next_runnable();
     virtual void prepare_for_simulation();
     virtual void queue_for_execution();
-    inline bool ready_to_run();
     virtual void resume_process( 
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
     void set_next_exist( sc_thread_handle next_p );
@@ -196,7 +212,8 @@ class sc_thread_process : public sc_process_b {
     virtual void throw_user( const sc_throw_it_helper& helper,
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
 
-    sc_event::dt_status trigger_dynamic( sc_event* );
+    bool trigger_dynamic( sc_event* );
+    inline bool trigger_static();
 
     void wait( const sc_event& );
     void wait( const sc_event_or_list& );
@@ -224,83 +241,6 @@ class sc_thread_process : public sc_process_b {
     const sc_thread_process& operator = ( const sc_thread_process& );
 
 };
-
-
-//------------------------------------------------------------------------------
-//"sc_thread_process::ready_to_run"
-//
-//------------------------------------------------------------------------------
-inline bool sc_thread_process::ready_to_run()
-{
-    // IF OUR THREAD IS ALREADY GONE WE CAN'T EXECUTE IT:
-    
-    if ( m_cor_p == NULL ) 
-    {
-    	return false;
-    }
-
-    // SPECIAL CASE NORMAL STATE FOR DISPATCHING SPEED:
-
-    if ( m_state == ps_normal )
-    {
-	if ( m_throw_status != THROW_NONE )  return true;
-        if ( m_wait_cycle_n > 0 )
-        {
-            --m_wait_cycle_n;
-            return false;
-        }
-        return true;
-    }
-
-    // WE ARE THROWING AN EXCEPTION THAT TRUMPS SUSPEND/DISABLE 
-    //
-    // Schedule the process so it can throw the exception.
-
-    if ( m_throw_status == THROW_KILL ||
-	 m_throw_status == THROW_ASYNC_RESET ||
-	 m_throw_status == THROW_USER ) 
-    {
-	 return true;
-    }
-
-    // SEE IF WE CAN DISPATCH THE THREAD:
-
-    switch( m_state )
-    {
-      // No-op: its handled above.
-      case ps_normal:
-        return true; 
-
-      // Down count the number of waits necessary to wake the process, if
-      // its ready to be awakened change its status.
-
-      case ps_suspended:
-        if ( m_wait_cycle_n > 0 )
-        {
-            --m_wait_cycle_n;
-            return false;
-        }
-        m_state = ps_suspended_ready_to_run;
-        break;
-
-      // The process has been disabled, but its on the run queue, so let it
-      // run once, unless its still waiting on an event and then disable it.
-
-      case ps_disable_pending:
-        m_state = ps_disabled;
-        if ( m_wait_cycle_n > 0 )
-        {
-            --m_wait_cycle_n;
-            return false;
-        }
-	return true;
-
-      default:
-        break;
-    }
-    return false;
-}
-
 
 //------------------------------------------------------------------------------
 //"sc_thread_process::set_stack_size"
@@ -370,6 +310,8 @@ inline void sc_thread_process::suspend_me()
         sc_assert( unwinding_preempted );
         break;
     }
+
+    m_state = ps_normal;
 }
 
 
@@ -489,6 +431,9 @@ inline
 void
 sc_thread_process::wait_cycles( int n )
 {   
+    if( m_throw_status == THROWING_NOW )
+        SC_REPORT_ERROR( SC_ID_WAIT_DURING_UNWINDING_, name() );
+
     m_wait_cycle_n = n-1;
     suspend_me();
 }
@@ -554,6 +499,44 @@ inline sc_cor* get_cor_pointer( sc_process_b* process_p )
 {
     sc_thread_handle thread_p = DCAST<sc_thread_handle>(process_p);
     return thread_p->m_cor_p;
+}
+
+//------------------------------------------------------------------------------
+//"sc_thread_process::trigger_static"
+//
+// This inline method returns true if this object instance should be placed on 
+// the queue of runnable processes. This is the case if the following criteria
+// are met:
+//   (1) The process is in a runnable state.
+//   (2) The process is not already on the run queue.
+//   (3) The process is expecting a static trigger, dynamic event waits take
+//       priority.
+//   (4) The process' static wait count is zero.
+//------------------------------------------------------------------------------
+inline
+bool
+sc_thread_process::trigger_static()
+{
+    if ( (m_state & ps_bit_disabled) || is_runnable() || 
+         m_trigger_type != STATIC )
+    {
+        return false;
+    }
+
+    if ( m_wait_cycle_n > 0 )
+    {
+	--m_wait_cycle_n;
+	return false;
+    }
+    if ( m_state & ps_bit_suspended )
+    {
+        m_state = m_state | ps_bit_ready_to_run;
+	return false;
+    }
+    else
+    {
+	return true;
+    }
 }
 
 } // namespace sc_core 

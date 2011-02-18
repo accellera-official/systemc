@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2010 by all Contributors.
+  source code Copyright (c) 1996-2011 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -35,6 +35,16 @@
  *****************************************************************************/
 
 // $Log: sc_process_handle.h,v $
+// Revision 1.15  2011/02/17 19:53:03  acg
+//  Andy Goodrich: changed dump_status() to dump_state() with new signature.
+//
+// Revision 1.14  2011/02/13 21:47:37  acg
+//  Andy Goodrich: update copyright notice.
+//
+// Revision 1.13  2011/02/13 21:33:30  acg
+//  Andy Goodrich: added dump_status() to allow the dumping of the status
+//  of a process handle's target.
+//
 // Revision 1.12  2011/02/01 23:01:53  acg
 //  Andy Goodrich: removed dead code.
 //
@@ -177,6 +187,9 @@ class sc_process_handle {
         sc_descendant_inclusion_info descendants=SC_NO_DESCENDANTS );
     inline bool valid() const;
 
+  public: // implementation specific methods:
+    inline std::string dump_state() const;
+
   protected:
     inline bool dont_initialize() const 
         { return m_target_p ? m_target_p->dont_initialize() : false; }
@@ -316,6 +329,13 @@ inline void sc_process_handle::dont_initialize( bool dont )
         m_target_p->dont_initialize( dont );
     else
         SC_REPORT_WARNING( SC_ID_EMPTY_PROCESS_HANDLE_, "dont_initialize()");
+}
+
+// dump the status of this object instance's target:
+
+inline std::string sc_process_handle::dump_state() const
+{
+    return m_target_p ? m_target_p->dump_state() : std::string("NO TARGET");
 }
 
 // return whether this object instance's target is dynamic or not.

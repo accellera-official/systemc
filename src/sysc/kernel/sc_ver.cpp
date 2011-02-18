@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2008 by all Contributors.
+  source code Copyright (c) 1996-2011 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -35,6 +35,9 @@
 
 
 // $Log: sc_ver.cpp,v $
+// Revision 1.5  2011/02/13 21:47:38  acg
+//  Andy Goodrich: update copyright notice.
+//
 // Revision 1.4  2011/01/18 20:10:45  acg
 //  Andy Goodrich: changes for IEEE1666_2011 semantics.
 //

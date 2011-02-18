@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2008 by all Contributors.
+  source code Copyright (c) 1996-2011 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -46,6 +46,25 @@
  *****************************************************************************/
 
 // $Log: sc_process.h,v $
+// Revision 1.15  2011/02/17 19:52:45  acg
+//  Andy Goodrich:
+//    (1) Simplified process control usage.
+//    (2) Changed dump_status() to dump_state() with new signature.
+//
+// Revision 1.14  2011/02/16 22:37:30  acg
+//  Andy Goodrich: clean up to remove need for ps_disable_pending.
+//
+// Revision 1.13  2011/02/13 21:47:37  acg
+//  Andy Goodrich: update copyright notice.
+//
+// Revision 1.12  2011/02/13 21:41:34  acg
+//  Andy Goodrich: get the log messages for the previous check in correct.
+//
+// Revision 1.11  2011/02/13 21:32:24  acg
+//  Andy Goodrich: moved sc_process_b::reset_process() implementation
+//  from header to cpp file . Added dump_status() to print out the status of a
+//  process.
+//
 // Revision 1.10  2011/02/11 13:25:24  acg
 //  Andy Goodrich: Philipp A. Hartmann's changes:
 //    (1) Removal of SC_CTHREAD method overloads.
@@ -469,21 +488,12 @@ class sc_process_b : public sc_object {
 
     enum process_state {
 	ps_bit_disabled = 1,      // process is disabled.
-	ps_bit_pending  = 2,      // process id pending disabled.
-	ps_bit_ready_to_run = 4,  // process is ready to run.
-        ps_bit_suspended = 8,     // process is suspended.
-	ps_bit_zombie = 0x10,     // process is a zombie.
+	ps_bit_ready_to_run = 2,  // process is ready to run.
+        ps_bit_suspended = 4,     // process is suspended.
+	ps_bit_zombie = 8,        // process is a zombie.
 
-        ps_disabled = ps_bit_disabled,
-        ps_disable_pending = (ps_bit_disabled|ps_bit_pending),
-        ps_disabled_ready_to_run = (ps_bit_disabled|ps_bit_ready_to_run),
-	ps_disabled_suspended = (ps_bit_disabled|ps_bit_suspended),
-        ps_disabled_suspended_rtr = (ps_bit_disabled|ps_bit_suspended|
-	                             ps_bit_ready_to_run),
-        ps_normal = 0,
-        ps_suspended = ps_bit_suspended,
-        ps_suspended_ready_to_run = (ps_bit_suspended|ps_bit_ready_to_run),
-        ps_zombie = ps_bit_zombie 
+	ps_cant_run = (ps_bit_disabled|ps_bit_suspended|ps_bit_zombie), 
+        ps_normal = 0             // must be zero.
     };
 
     enum reset_type {
@@ -514,6 +524,7 @@ class sc_process_b : public sc_object {
     inline int current_state() { return m_state; }
     bool dont_initialize() const { return m_dont_init; }
     virtual void dont_initialize( bool dont );
+    std::string dump_state() const;
     const ::std::vector<sc_object*>& get_child_objects() const;
     inline sc_curr_proc_kind proc_kind() const;
     sc_event& reset_event();
@@ -527,6 +538,7 @@ class sc_process_b : public sc_object {
     bool dynamic() const { return m_dynamic_proc; }
     const char* gen_unique_name( const char* basename_, bool preserve_first );
     inline sc_report* get_last_report() { return m_last_report_p; }
+    inline bool is_disabled() const;
     inline bool is_runnable() const;
     static inline sc_process_b* last_created_process_base();
     virtual void queue_for_execution()=0;
@@ -538,7 +550,6 @@ class sc_process_b : public sc_object {
             m_last_report_p = last_p;
         }
     inline bool timed_out() const;
-    bool trigger_static();
 
   private: // structure support:
     void add_child_object( sc_object* );
@@ -558,7 +569,7 @@ class sc_process_b : public sc_object {
     virtual void kill_process(
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS ) = 0;
     inline void reset_changed( bool async, bool asserted );
-    inline void reset_process( reset_type rt,
+    void reset_process( reset_type rt,
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
     virtual void resume_process(
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS ) = 0;
@@ -673,6 +684,16 @@ inline void sc_process_b::initially_in_reset( bool async )
         m_active_areset_n++;
     else
         m_active_reset_n++;
+}
+
+//------------------------------------------------------------------------------
+//"sc_process_b::is_disabled"
+//
+// This method returns true if this process is disabled. 
+//------------------------------------------------------------------------------
+inline bool sc_process_b::is_disabled() const
+{
+    return (m_state & ps_bit_disabled) ? true : false;
 }
 
 //------------------------------------------------------------------------------
@@ -845,80 +866,6 @@ inline void sc_process_b::reset_changed( bool async, bool asserted )
 }       
 
 //------------------------------------------------------------------------------
-//"sc_process_b::reset_process"
-//
-// This inline method changes the reset state of this object instance and
-// conditionally its descendants. 
-//
-// Notes: 
-//   (1) It is called for sync_reset_on() and sync_reset_off(). It is not used 
-//       for signal sensitive resets, though all reset flow ends up in
-//       reset_changed().
-//
-// Arguments:
-//     rt = source of the reset:
-//            * reset_asynchronous     - sc_process_handle::reset()
-//            * reset_synchronous_off  - sc_process_handle::sync_reset_off()
-//            * reset_synchronous_on   - sc_process_handle::sync_reset_on()
-//     descendants = indication of how to process descendants.
-//------------------------------------------------------------------------------
-inline void sc_process_b::reset_process( reset_type rt,
-    sc_descendant_inclusion_info descendants )
-{
-    int                              child_i;    // Index of child accessing.
-    int                              child_n;    // Number of children.
-    sc_process_b*                    child_p;    // Child accessing.
-    const ::std::vector<sc_object*>* children_p; // Vector of children.
-
-    // PROCESS THIS OBJECT INSTANCE'S DESCENDANTS IF REQUESTED TO:
-
-    if ( descendants == SC_INCLUDE_DESCENDANTS )
-    {
-        children_p = &get_child_objects();
-        child_n = children_p->size();
-        for ( child_i = 0; child_i < child_n; child_i++ )
-        {
-            child_p = DCAST<sc_process_b*>((*children_p)[child_i]);
-            if ( child_p ) child_p->reset_process(rt, descendants);
-        }
-    }
-
-    // PROCESS THIS OBJECT INSTANCE:
-
-    switch (rt)
-    {
-      // One-shot asynchronous reset: remove dynamic sensitivity and throw:
-      //
-      // If this is an sc_method only throw if it is active.
-
-      case reset_asynchronous:
-	remove_dynamic_events();
-	throw_reset(true);
-        break;
-
-      // Turn on sticky synchronous reset: use standard reset mechanism.
-
-      case reset_synchronous_on:
-	if ( m_sticky_reset == false )
-	{
-	    m_sticky_reset = true;
-	    reset_changed( false, true );
-	}
-        break;
-
-      // Turn off sticky synchronous reset: use standard reset mechanism.
-
-      default:
-	if ( m_sticky_reset == true )
-	{
-	    m_sticky_reset = false;
-	    reset_changed( false, false );
-	}
-        break;
-    }   
-}
-
-//------------------------------------------------------------------------------
 //"sc_process_b::semantics"
 //
 // This inline method invokes the semantics for this object instance. 
@@ -959,23 +906,6 @@ inline bool sc_process_b::timed_out() const
 {
     return m_timed_out;
 }
-
-
-//------------------------------------------------------------------------------
-//"sc_process_b::trigger_static"
-//
-// This inline method returns true if this object instance is waiting on
-// a static trigger and is not runnable. If there trigger is not static
-// then the process is waiting on a dynamically specified event, so the
-// static trigger should be ignored until that dynamic event occurs.
-//------------------------------------------------------------------------------
-inline
-bool
-sc_process_b::trigger_static()
-{
-    return ( !is_runnable() && m_trigger_type == STATIC );
-}
-
 
 } // namespace sc_core
 

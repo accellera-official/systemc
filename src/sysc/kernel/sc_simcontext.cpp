@@ -1,7 +1,7 @@
 /****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2008 by all Contributors.
+  source code Copyright (c) 1996-2011 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -58,6 +58,13 @@
 				 execution problem with using sc_pvector.
  *****************************************************************************/
 // $Log: sc_simcontext.cpp,v $
+// Revision 1.16  2011/02/17 19:53:28  acg
+//  Andy Goodrich: eliminated use of ready_to_run() as part of process control
+//  simplification.
+//
+// Revision 1.15  2011/02/13 21:47:38  acg
+//  Andy Goodrich: update copyright notice.
+//
 // Revision 1.14  2011/02/11 13:25:24  acg
 //  Andy Goodrich: Philipp A. Hartmann's changes:
 //    (1) Removal of SC_CTHREAD method overloads.
@@ -538,20 +545,17 @@ sc_simcontext::crunch( bool once )
 	    m_runnable->toggle_methods();
 	    sc_method_handle method_h = pop_runnable_method();
 	    while( method_h != 0 ) {
-		if ( method_h->ready_to_run() )
-		{
-		    empty_eval_phase = false;
-		    try {
-			method_h->semantics();
-		    }
-		    catch( sc_unwind_exception& ex ) {
-		        ex.clear();
-		    }
-		    catch( const sc_report& ex ) {
-			::std::cout << "\n" << ex.what() << ::std::endl;
-			m_error = true;
-			goto out;
-		    }
+		empty_eval_phase = false;
+		try {
+		    method_h->semantics();
+		}
+		catch( sc_unwind_exception& ex ) {
+		    ex.clear();
+		}
+		catch( const sc_report& ex ) {
+		    ::std::cout << "\n" << ex.what() << ::std::endl;
+		    m_error = true;
+		    goto out;
 		}
 		method_h = pop_runnable_method();
 	    }
@@ -561,9 +565,10 @@ sc_simcontext::crunch( bool once )
 	    m_runnable->toggle_threads();
 	    sc_thread_handle thread_h = pop_runnable_thread();
 	    while( thread_h != 0 ) {
-		if ( thread_h->ready_to_run() ) break;
+                if ( thread_h->m_cor_p != NULL ) break;
 		thread_h = pop_runnable_thread();
 	    }
+
 	    if( thread_h != 0 ) {
 	        empty_eval_phase = false;
 		m_cor_pkg->yield( thread_h->m_cor_p );
@@ -1146,7 +1151,7 @@ sc_simcontext::next_cor()
     
     sc_thread_handle thread_h = pop_runnable_thread();
     while( thread_h != 0 ) {
-        if ( thread_h->ready_to_run() ) break;
+	if ( thread_h->m_cor_p != NULL ) break;
 	thread_h = pop_runnable_thread();
     }
     

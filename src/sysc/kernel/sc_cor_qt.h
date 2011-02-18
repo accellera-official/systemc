@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2008 by all Contributors.
+  source code Copyright (c) 1996-2011 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: sc_cor_qt.h,v $
+// Revision 1.3  2011/02/13 21:47:37  acg
+//  Andy Goodrich: update copyright notice.
+//
 // Revision 1.2  2008/05/22 17:06:25  acg
 //  Andy Goodrich: updated copyright notice to include 2008.
 //

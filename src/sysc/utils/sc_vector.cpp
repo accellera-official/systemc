@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2010 by all Contributors.
+  source code Copyright (c) 1996-2011 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -32,6 +32,14 @@
   Description of Modification:
 
  *****************************************************************************/
+
+// $Log: sc_vector.cpp,v $
+// Revision 1.2  2011/02/14 17:54:25  acg
+//  Andy Goodrich: Philipp's addition of early bind checks.
+//
+// Revision 1.1  2011/02/13 21:54:14  acg
+//  Andy Goodrich: turn on embedding of cvs log records.
+//
 
 #include "sc_vector.h"
 
@@ -102,6 +110,25 @@ sc_vector_base::check_init( size_type n ) const
   }
 
   return true;
+}
+
+void
+sc_vector_base::report_empty_bind( const char* kind_, bool dst_empty_ ) const
+{
+  std::stringstream str;
+
+  str << "target `" << name() << "' "
+      << "(" << kind_ << ") ";
+
+  if( !size() ) {
+    str << "not initialised yet";
+  } else if ( dst_empty_ ) {
+    str << "empty range given";
+  } else {
+    str << "empty destination range given";
+  }
+
+  SC_REPORT_WARNING( SC_ID_VECTOR_BIND_EMPTY_, str.str().c_str() );
 }
 
 std::string

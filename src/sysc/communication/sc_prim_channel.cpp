@@ -39,6 +39,10 @@
 
 
 // $Log: sc_prim_channel.cpp,v $
+// Revision 1.4  2011/02/14 17:50:16  acg
+//  Andy Goodrich: testing for sc_port and sc_export instantiations during
+//  end of elaboration and issuing appropriate error messages.
+//
 // Revision 1.3  2010/12/07 20:36:49  acg
 //  Andy Goodrich: fix pointer that should have been initialized to zero.
 //
@@ -169,7 +173,7 @@ void
 sc_prim_channel_registry::insert( sc_prim_channel& prim_channel_ )
 {
     if( sc_is_running() ) {
-	SC_REPORT_ERROR( SC_ID_INSERT_PRIM_CHANNEL_, "simulation running" );
+	SC_REPORT_ERROR( SC_ID_INSERT_PRIM_CHANNEL_, "elaboration done" );
     }
 
 #ifdef DEBUG_SYSTEMC

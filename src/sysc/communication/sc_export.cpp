@@ -36,6 +36,10 @@
  *****************************************************************************/
 
 // $Log: sc_export.cpp,v $
+// Revision 1.2  2011/02/14 17:50:16  acg
+//  Andy Goodrich: testing for sc_port and sc_export instantiations during
+//  end of elaboration and issuing appropriate error messages.
+//
 // Revision 1.1.1.1  2006/12/15 20:20:04  acg
 // SystemC 2.3
 //
@@ -97,6 +101,19 @@ void
 sc_export_base::end_of_simulation()
 {}
 
+void
+sc_export_base::report_error( const char* id, const char* add_msg ) const
+{
+    char msg[BUFSIZ];
+    if( add_msg != 0 ) {
+        std::snprintf( msg, BUFSIZ, "%s: export '%s' (%s)", add_msg, name(), 
+	               kind() );
+    } else {
+        std::snprintf( msg, BUFSIZ, "export '%s' (%s)", name(), kind() );
+    }
+    SC_REPORT_ERROR( id, msg );
+}
+
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_export_registry
@@ -109,14 +126,15 @@ void
 sc_export_registry::insert( sc_export_base* export_ )
 {
     if( sc_is_running() ) {
-	SC_REPORT_ERROR(SC_ID_SC_EXPORT_AFTER_START_, export_->name());
+	export_->report_error(SC_ID_INSERT_EXPORT_, "simulation running");
     }
 
 #ifdef DEBUG_SYSTEMC
     // check if port_ is already inserted
     for( int i = size() - 1; i >= 0; -- i ) {
 	if( export_ == m_export_vec[i] ) {
-	    SC_REPORT_ERROR(SC_ID_SC_EXPORT_ALREADY_REGISTERED_, export_->name());
+	    export_->report_error( SC_ID_INSERT_EXPORT_, 
+	                           "export already inserted ");
 	}
     }
 #endif
@@ -147,7 +165,7 @@ sc_export_registry::remove( sc_export_base* export_ )
 	}
     }
     if( i == -1 ) {
-	SC_REPORT_ERROR(SC_ID_SC_EXPORT_NOT_REGISTERED_, export_->name());
+	export_->report_error( SC_ID_SC_EXPORT_NOT_REGISTERED_ );
     }
 
     // remove

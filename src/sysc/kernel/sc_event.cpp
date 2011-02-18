@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2008 by all Contributors.
+  source code Copyright (c) 1996-2011 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -35,6 +35,17 @@
 
 
 // $Log: sc_event.cpp,v $
+// Revision 1.9  2011/02/17 19:49:51  acg
+//  Andy Goodrich:
+//    (1) Changed signature of trigger_dynamic() to return a bool again.
+//    (2) Moved process run queue processing into trigger_dynamic().
+//
+// Revision 1.8  2011/02/16 22:37:30  acg
+//  Andy Goodrich: clean up to remove need for ps_disable_pending.
+//
+// Revision 1.7  2011/02/13 21:47:37  acg
+//  Andy Goodrich: update copyright notice.
+//
 // Revision 1.6  2011/02/01 21:02:28  acg
 //  Andy Goodrich: new return code for trigger_dynamic() calls.
 //
@@ -252,24 +263,11 @@ sc_event::trigger()
 	for ( int i = 0; i <= last_i; i++ )
 	{
 	    sc_method_handle method_h = l_methods_dynamic[i];
-	    switch ( method_h->trigger_dynamic( this ) )
+	    if ( method_h->trigger_dynamic( this ) )
 	    {
-	      case dt_rearm:
-	        break;
-	      case dt_remove:
 		l_methods_dynamic[i] = l_methods_dynamic[last_i];
 		last_i--;
 		i--;
-		break;
-	      case dt_run:
-		m_simc->push_runnable_method( method_h );
-		break;
-	      case dt_run_remove:
-		m_simc->push_runnable_method( method_h );
-		l_methods_dynamic[i] = l_methods_dynamic[last_i];
-		last_i--;
-		i--;
-                break;
 	    }
 	}
         m_methods_dynamic.resize(last_i+1);
@@ -299,24 +297,11 @@ sc_event::trigger()
 	for ( int i = 0; i <= last_i; i++ )
 	{
 	    sc_thread_handle thread_h = l_threads_dynamic[i];
-	    switch ( thread_h->trigger_dynamic( this ) )
+	    if ( thread_h->trigger_dynamic( this ) )
 	    {
-	      case dt_rearm:
-	        break;
-	      case dt_remove:
 		l_threads_dynamic[i] = l_threads_dynamic[last_i];
 		i--;
 		last_i--;
-		break;
-	      case dt_run:
-		m_simc->push_runnable_thread( thread_h );
-		break;
-	      case dt_run_remove:
-		m_simc->push_runnable_thread( thread_h );
-		l_threads_dynamic[i] = l_threads_dynamic[last_i];
-		i--;
-		last_i--;
-                break;
 	    }
 	}
         m_threads_dynamic.resize(last_i+1);

@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2008 by all Contributors.
+  source code Copyright (c) 1996-2011 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -54,6 +54,16 @@
 
 
 // $Log: sc_module.cpp,v $
+// Revision 1.9  2011/02/16 22:37:30  acg
+//  Andy Goodrich: clean up to remove need for ps_disable_pending.
+//
+// Revision 1.8  2011/02/14 17:51:40  acg
+//  Andy Goodrich: proper pushing an poppping of the module hierarchy for
+//  start_of_simulation() and end_of_simulation.
+//
+// Revision 1.7  2011/02/13 21:47:37  acg
+//  Andy Goodrich: update copyright notice.
+//
 // Revision 1.6  2011/01/25 20:50:37  acg
 //  Andy Goodrich: changes for IEEE 1666 2011.
 //
@@ -236,13 +246,13 @@ const sc_bind_proxy SC_BIND_PROXY_NIL;
 void
 sc_module::sc_module_init()
 {
+    simcontext()->get_module_registry()->insert( *this );
     simcontext()->hierarchy_push( this );
     m_end_module_called = false;
 	m_module_name_p = 0;
     m_port_vec = new std::vector<sc_port_base*>;
     m_port_index = 0;
     m_name_gen = new sc_name_gen;
-    simcontext()->get_module_registry()->insert( *this );
 }
 
 sc_module::sc_module( const char* nm )
@@ -509,7 +519,9 @@ sc_module::start_of_simulation()
 void
 sc_module::start_simulation()
 {
+    simcontext()->hierarchy_push( this );
     start_of_simulation();
+    simcontext()->hierarchy_pop();
 }
 
 // called by simulation_done (does nothing by default)
@@ -521,7 +533,9 @@ sc_module::end_of_simulation()
 void
 sc_module::simulation_done()
 {
+    simcontext()->hierarchy_push( this );
     end_of_simulation();
+    simcontext()->hierarchy_pop();
 }
 
 void

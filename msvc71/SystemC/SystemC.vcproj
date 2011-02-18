@@ -145,9 +145,6 @@
 				RelativePath="..\..\src\sysc\communication\sc_event_queue.cpp">
 			</File>
 			<File
-				RelativePath="..\..\src\sysc\communication\sc_except.cpp">
-			</File>
-			<File
 				RelativePath="..\..\src\sysc\communication\sc_export.cpp">
 			</File>
 			<File

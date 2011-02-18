@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2008 by all Contributors.
+  source code Copyright (c) 1996-2011 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -37,6 +37,9 @@
  *****************************************************************************/
 
 // $Log: sc_spawn_options.h,v $
+// Revision 1.8  2011/02/13 21:47:38  acg
+//  Andy Goodrich: update copyright notice.
+//
 // Revision 1.7  2011/02/07 19:17:20  acg
 //  Andy Goodrich: changes for IEEE 1666 compatibility.
 //

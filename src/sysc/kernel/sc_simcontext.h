@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2008 by all Contributors.
+  source code Copyright (c) 1996-2011 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -52,6 +52,13 @@
                                
  *****************************************************************************/
 // $Log: sc_simcontext.h,v $
+// Revision 1.12  2011/02/13 21:47:38  acg
+//  Andy Goodrich: update copyright notice.
+//
+// Revision 1.11  2011/02/13 21:34:35  acg
+//  Andy Goodrich: added SC_UNITIALIZED enum value to process status so
+//  its possible to detect throws before initialization.
+//
 // Revision 1.10  2011/02/11 13:25:24  acg
 //  Andy Goodrich: Philipp A. Hartmann's changes:
 //    (1) Removal of SC_CTHREAD method overloads.
@@ -186,6 +193,7 @@ const int SC_SIM_ERROR     = 1;
 const int SC_SIM_USER_STOP = 2;
 
 enum sc_status { // sc_get_status values:
+    SC_UNITIALIZED=0x00,               // initialize() not called yet.
     SC_ELABORATION=0x01,               // during module hierarchy construction.
     SC_BEFORE_END_OF_ELABORATION=0x02, // during before_end_of_elaboration().
     SC_END_OF_ELABORATION=0x04,        // during end_of_elaboration().

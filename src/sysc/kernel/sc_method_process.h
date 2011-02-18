@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2008 by all Contributors.
+  source code Copyright (c) 1996-2011 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -35,6 +35,18 @@
  *****************************************************************************/
 
 // $Log: sc_method_process.h,v $
+// Revision 1.9  2011/02/17 19:51:34  acg
+//  Andy Goodrich:
+//    (1) Changed the signature of trigger_dynamic back to a bool.
+//    (2) Removed ready_to_run().
+//    (3) Simplified process control usage.
+//
+// Revision 1.8  2011/02/16 22:37:30  acg
+//  Andy Goodrich: clean up to remove need for ps_disable_pending.
+//
+// Revision 1.7  2011/02/13 21:47:37  acg
+//  Andy Goodrich: update copyright notice.
+//
 // Revision 1.6  2011/02/01 21:05:05  acg
 //  Andy Goodrich: Changes in trigger_dynamic methods to handle new
 //  process control rules about event sensitivity.
@@ -164,7 +176,6 @@ class sc_method_process : public sc_process_b {
     void next_trigger( const sc_time&, const sc_event_or_list& );
     void next_trigger( const sc_time&, const sc_event_and_list& );
     virtual void queue_for_execution();
-    inline bool ready_to_run();
     virtual void resume_process(
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
     void set_next_exist( sc_method_handle next_p );
@@ -175,7 +186,8 @@ class sc_method_process : public sc_process_b {
     virtual void throw_reset( bool async );
     virtual void throw_user( const sc_throw_it_helper& helper,
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
-    sc_event::dt_status trigger_dynamic( sc_event* );
+    bool trigger_dynamic( sc_event* );
+    inline bool trigger_static();
 
   protected:
     sc_cor*                          m_cor;        // Thread's coroutine.
@@ -278,29 +290,6 @@ void sc_method_process::queue_for_execution()
 	simcontext()->push_runnable_method(this);
 }
 
-//------------------------------------------------------------------------------
-//"sc_method_process::ready_to_run"
-//
-//------------------------------------------------------------------------------
-inline bool sc_method_process::ready_to_run()
-{
-    switch( m_state )
-    {
-      case ps_normal:    
-        return true;
-      case ps_suspended: 
-        m_state = ps_suspended_ready_to_run; 
-	break;
-      case ps_disable_pending:
-        m_state = ps_disabled;
-	return true;
-      default: 
-        break;
-    }
-    return false;
-}
-
-
 inline
 void sc_method_process::set_next_exist(sc_method_handle next_p)
 {
@@ -324,6 +313,38 @@ inline
 sc_method_handle sc_method_process::next_runnable()
 {
     return (sc_method_handle)m_runnable_p;
+}
+
+//------------------------------------------------------------------------------
+//"sc_method_process::trigger_static"
+//
+// This inline method returns true if this object instance should be placed on 
+// the queue of runnable processes. This is the case if the following criteria
+// are met:
+//   (1) The process is in a runnable state.
+//   (2) The process is not already on the run queue.
+//   (3) The process is expecting a static trigger, dynamic event waits take
+//       priority.
+//------------------------------------------------------------------------------
+inline
+bool
+sc_method_process::trigger_static()
+{
+    if ( is_runnable() || m_trigger_type != STATIC )
+        return false;
+    if ( m_state == ps_normal ) return true; // optimize for normal case.
+
+    if ( m_state & ps_bit_disabled ) return false;
+
+    if ( m_state & ps_bit_suspended )
+    {
+        m_state = m_state | ps_bit_ready_to_run;
+	return false;
+    }
+    else
+    {
+	return true;
+    }
 }
 
 } // namespace sc_core 

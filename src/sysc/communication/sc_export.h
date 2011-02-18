@@ -35,6 +35,10 @@
  *****************************************************************************/
 
 // $Log: sc_export.h,v $
+// Revision 1.3  2011/02/14 17:50:16  acg
+//  Andy Goodrich: testing for sc_port and sc_export instantiations during
+//  end of elaboration and issuing appropriate error messages.
+//
 // Revision 1.2  2011/01/20 16:52:15  acg
 //  Andy Goodrich: changes for IEEE 1666 2011.
 //
@@ -101,6 +105,9 @@ protected:
     virtual void end_of_simulation();
 
     virtual const char* if_typename() const = 0;
+ 
+    // error reporting
+    void report_error( const char* id, const char* add_msg = 0) const;
 
 private:
 

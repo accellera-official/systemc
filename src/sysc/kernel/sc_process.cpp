@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2008 by all Contributors.
+  source code Copyright (c) 1996-2011 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -43,6 +43,22 @@
  *****************************************************************************/
 
 // $Log: sc_process.cpp,v $
+// Revision 1.14  2011/02/17 19:52:13  acg
+//  Andy Goodrich:
+//    (1) Simplfied process control usage.
+//    (2) Changed dump_status() to dump_state with new signature.
+//
+// Revision 1.13  2011/02/13 21:47:37  acg
+//  Andy Goodrich: update copyright notice.
+//
+// Revision 1.12  2011/02/13 21:41:34  acg
+//  Andy Goodrich: get the log messages for the previous check in correct.
+//
+// Revision 1.11  2011/02/13 21:32:24  acg
+//  Andy Goodrich: moved sc_process_b::reset_process() from header file
+//  to cpp file. Added dump_status() to print out the status of a
+//  process.
+//
 // Revision 1.10  2011/02/04 15:27:36  acg
 //  Andy Goodrich: changes for suspend-resume semantics.
 //
@@ -211,7 +227,7 @@ void sc_process_b::disconnect_process()
     // (2) Decrementing the reference count will result in actual object 
     //     deletion if we hit zero.
 
-    m_state = ps_zombie;
+    m_state = ps_bit_zombie;
     if ( m_term_event_p ) m_term_event_p->notify();
     reference_decrement();
 }
@@ -256,6 +272,34 @@ void sc_process_b::delete_process()
 void sc_process_b::dont_initialize( bool dont )
 {
     m_dont_init = dont;
+}
+
+//------------------------------------------------------------------------------
+//"sc_process_b::dump_state"
+//
+// This method returns the process state as a string.
+//------------------------------------------------------------------------------
+std::string sc_process_b::dump_state() const
+{
+    std::string result;
+    result = "[";
+    if ( m_state == ps_normal ) 
+    {
+        result += " normal";
+    }
+    else
+    {
+        if ( m_state & ps_bit_disabled )
+            result += "disabled ";
+        if ( m_state & ps_bit_suspended )
+            result += "suspended ";
+        if ( m_state & ps_bit_ready_to_run )
+            result += "ready_to_run ";
+        if ( m_state & ps_bit_zombie )
+            result += "zombie ";
+    }
+    result += "]";
+    return result;
 }
 
 
@@ -360,6 +404,87 @@ sc_process_b::remove_static_events()
     }
 }
 
+
+//------------------------------------------------------------------------------
+//"sc_process_b::reset_process"
+//
+// This inline method changes the reset state of this object instance and
+// conditionally its descendants. 
+//
+// Notes: 
+//   (1) It is called for sync_reset_on() and sync_reset_off(). It is not used 
+//       for signal sensitive resets, though all reset flow ends up in
+//       reset_changed().
+//
+// Arguments:
+//     rt = source of the reset:
+//            * reset_asynchronous     - sc_process_handle::reset()
+//            * reset_synchronous_off  - sc_process_handle::sync_reset_off()
+//            * reset_synchronous_on   - sc_process_handle::sync_reset_on()
+//     descendants = indication of how to process descendants.
+//------------------------------------------------------------------------------
+void sc_process_b::reset_process( reset_type rt,
+                                  sc_descendant_inclusion_info descendants )
+{
+    int                              child_i;    // Index of child accessing.
+    int                              child_n;    // Number of children.
+    sc_process_b*                    child_p;    // Child accessing.
+    const ::std::vector<sc_object*>* children_p; // Vector of children.
+
+    // IF THE SIMULATION HAS NOT BEEN INITIALIZED YET THAT IS AN ERROR:
+
+    if ( sc_get_status() == SC_ELABORATION )
+    {
+        SC_REPORT_ERROR( SC_RESET_PROCESS_WHILE_UNITIALIZED_, "" );
+    }
+
+    // PROCESS THIS OBJECT INSTANCE'S DESCENDANTS IF REQUESTED TO:
+
+    if ( descendants == SC_INCLUDE_DESCENDANTS )
+    {
+        children_p = &get_child_objects();
+        child_n = children_p->size();
+        for ( child_i = 0; child_i < child_n; child_i++ )
+        {
+            child_p = DCAST<sc_process_b*>((*children_p)[child_i]);
+            if ( child_p ) child_p->reset_process(rt, descendants);
+        }
+    }
+
+    // PROCESS THIS OBJECT INSTANCE:
+
+    switch (rt)
+    {
+      // One-shot asynchronous reset: remove dynamic sensitivity and throw:
+      //
+      // If this is an sc_method only throw if it is active.
+
+      case reset_asynchronous:
+	remove_dynamic_events();
+	throw_reset(true);
+        break;
+
+      // Turn on sticky synchronous reset: use standard reset mechanism.
+
+      case reset_synchronous_on:
+	if ( m_sticky_reset == false )
+	{
+	    m_sticky_reset = true;
+	    reset_changed( false, true );
+	}
+        break;
+
+      // Turn off sticky synchronous reset: use standard reset mechanism.
+
+      default:
+	if ( m_sticky_reset == true )
+	{
+	    m_sticky_reset = false;
+	    reset_changed( false, false );
+	}
+        break;
+    }   
+}
 
 //------------------------------------------------------------------------------
 //"sc_process_b::sc_process_b"

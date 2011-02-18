@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2008 by all Contributors.
+  source code Copyright (c) 1996-2011 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -34,6 +34,13 @@
  *****************************************************************************/
 
 // $Log: sc_kernel_ids.h,v $
+// Revision 1.10  2011/02/13 21:47:37  acg
+//  Andy Goodrich: update copyright notice.
+//
+// Revision 1.9  2011/02/13 21:29:16  acg
+//  Andy Goodrich: added error messages for throws that occur before
+//  simulator intialization.
+//
 // Revision 1.8  2011/02/11 13:25:24  acg
 //  Andy Goodrich: Philipp A. Hartmann's changes:
 //    (1) Removal of SC_CTHREAD method overloads.
@@ -215,6 +222,12 @@ SC_DEFINE_MESSAGE(SC_ID_EMPTY_PROCESS_HANDLE_  , 570,
         "attempt to use an empty process handle ignored" )
 SC_DEFINE_MESSAGE(SC_ID_NO_SC_START_ACTIVITY_  , 571,
         "no activity or clock movement for sc_start() invocation" )
+SC_DEFINE_MESSAGE(SC_KILL_PROCESS_WHILE_UNITIALIZED_  , 572,
+        "a process may not be killed before the end of elaboration" )
+SC_DEFINE_MESSAGE(SC_RESET_PROCESS_WHILE_UNITIALIZED_  , 573,
+        "a process may not be reset before the end of elaboration" )
+SC_DEFINE_MESSAGE(SC_THROW_IT_WHILE_UNITIALIZED_  , 574,
+        "a process may not throw before the end of elaboration" )
 #endif
 
 // Taf!
