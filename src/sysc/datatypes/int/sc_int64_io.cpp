@@ -1,11 +1,11 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2006 by all Contributors.
+  source code Copyright (c) 1996-2011 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.4 (the "License");
+  set forth in the SystemC Open Source License Version 3.0 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -35,6 +35,9 @@
 
 
 // $Log: sc_int64_io.cpp,v $
+// Revision 1.2  2011/02/18 20:19:14  acg
+//  Andy Goodrich: updating Copyright notice.
+//
 // Revision 1.1.1.1  2006/12/15 20:20:05  acg
 // SystemC 2.3
 //

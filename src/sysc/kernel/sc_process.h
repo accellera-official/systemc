@@ -5,7 +5,7 @@
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.4 (the "License");
+  set forth in the SystemC Open Source License Version 3.0 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -46,6 +46,17 @@
  *****************************************************************************/
 
 // $Log: sc_process.h,v $
+// Revision 1.18  2011/02/19 08:30:53  acg
+//  Andy Goodrich: Moved process queueing into trigger_static from
+//  sc_event::notify.
+//
+// Revision 1.17  2011/02/18 20:27:14  acg
+//  Andy Goodrich: Updated Copyrights.
+//
+// Revision 1.16  2011/02/18 20:10:44  acg
+//  Philipp A. Hartmann: force return expression to be a bool to keep MSVC
+//  happy.
+//
 // Revision 1.15  2011/02/17 19:52:45  acg
 //  Andy Goodrich:
 //    (1) Simplified process control usage.
@@ -481,8 +492,6 @@ class sc_process_b : public sc_object {
 	ps_bit_ready_to_run = 2,  // process is ready to run.
         ps_bit_suspended = 4,     // process is suspended.
 	ps_bit_zombie = 8,        // process is a zombie.
-
-	ps_cant_run = (ps_bit_disabled|ps_bit_suspended|ps_bit_zombie), 
         ps_normal = 0             // must be zero.
     };
 
@@ -883,7 +892,7 @@ inline void sc_process_b::semantics()
 //------------------------------------------------------------------------------
 inline bool sc_process_b::terminated() const
 {
-    return m_state & ps_bit_zombie;
+    return (m_state & ps_bit_zombie) != 0;
 }
 
 

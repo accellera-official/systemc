@@ -5,7 +5,7 @@
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.4 (the "License");
+  set forth in the SystemC Open Source License Version 3.0 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -35,6 +35,13 @@
  *****************************************************************************/
 
 // $Log: sc_method_process.h,v $
+// Revision 1.11  2011/02/19 08:30:53  acg
+//  Andy Goodrich: Moved process queueing into trigger_static from
+//  sc_event::notify.
+//
+// Revision 1.10  2011/02/18 20:27:14  acg
+//  Andy Goodrich: Updated Copyrights.
+//
 // Revision 1.9  2011/02/17 19:51:34  acg
 //  Andy Goodrich:
 //    (1) Changed the signature of trigger_dynamic back to a bool.
@@ -187,7 +194,7 @@ class sc_method_process : public sc_process_b {
     virtual void throw_user( const sc_throw_it_helper& helper,
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
     bool trigger_dynamic( sc_event* );
-    inline bool trigger_static();
+    inline void trigger_static();
 
   protected:
     sc_cor*                          m_cor;        // Thread's coroutine.
@@ -327,23 +334,25 @@ sc_method_handle sc_method_process::next_runnable()
 //       priority.
 //------------------------------------------------------------------------------
 inline
-bool
+void
 sc_method_process::trigger_static()
 {
-    if ( is_runnable() || m_trigger_type != STATIC )
-        return false;
-    if ( m_state == ps_normal ) return true; // optimize for normal case.
+    if ( (m_state & ps_bit_disabled) || is_runnable() || 
+          m_trigger_type != STATIC )
+        return;
+    if ( m_state & ps_bit_disabled ) return;
 
-    if ( m_state & ps_bit_disabled ) return false;
+    // If we get here then the method is has satisfied its wait, if its 
+    // suspended mark its state as ready to run. If its not suspended then 
+    // push it onto the runnable queue.
 
     if ( m_state & ps_bit_suspended )
     {
         m_state = m_state | ps_bit_ready_to_run;
-	return false;
     }
     else
     {
-	return true;
+        simcontext()->push_runnable_method(this);
     }
 }
 

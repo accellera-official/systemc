@@ -5,7 +5,7 @@
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.4 (the "License");
+  set forth in the SystemC Open Source License Version 3.0 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -35,6 +35,13 @@
  *****************************************************************************/
 
 // $Log: sc_thread_process.h,v $
+// Revision 1.19  2011/02/19 08:30:53  acg
+//  Andy Goodrich: Moved process queueing into trigger_static from
+//  sc_event::notify.
+//
+// Revision 1.18  2011/02/18 20:27:14  acg
+//  Andy Goodrich: Updated Copyrights.
+//
 // Revision 1.17  2011/02/17 19:55:58  acg
 //  Andy Goodrich:
 //    (1) Changed signature of trigger_dynamic() back to a bool.
@@ -213,7 +220,7 @@ class sc_thread_process : public sc_process_b {
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
 
     bool trigger_dynamic( sc_event* );
-    inline bool trigger_static();
+    inline void trigger_static();
 
     void wait( const sc_event& );
     void wait( const sc_event_or_list& );
@@ -311,7 +318,7 @@ inline void sc_thread_process::suspend_me()
         break;
     }
 
-    m_state = ps_normal;
+    // m_state = ps_normal; @@@@####
 }
 
 
@@ -514,28 +521,32 @@ inline sc_cor* get_cor_pointer( sc_process_b* process_p )
 //   (4) The process' static wait count is zero.
 //------------------------------------------------------------------------------
 inline
-bool
+void
 sc_thread_process::trigger_static()
 {
     if ( (m_state & ps_bit_disabled) || is_runnable() || 
          m_trigger_type != STATIC )
     {
-        return false;
+        return;
     }
 
     if ( m_wait_cycle_n > 0 )
     {
 	--m_wait_cycle_n;
-	return false;
+	return;
     }
+
+    // If we get here then the thread is has satisfied its wait criteria, if 
+    // its suspended mark its state as ready to run. If its not suspended then 
+    // push it onto the runnable queue.
+
     if ( m_state & ps_bit_suspended )
     {
         m_state = m_state | ps_bit_ready_to_run;
-	return false;
     }
     else
     {
-	return true;
+	simcontext()->push_runnable_thread(this);
     }
 }
 

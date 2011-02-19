@@ -1,11 +1,11 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2006 by all Contributors.
+  source code Copyright (c) 1996-2011 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.4 (the "License");
+  set forth in the SystemC Open Source License Version 3.0 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -35,6 +35,12 @@
 
 /* 
 $Log: sc_signal.cpp,v $
+Revision 1.8  2011/02/18 20:23:45  acg
+ Andy Goodrich: Copyright update.
+
+Revision 1.7  2011/02/18 20:08:14  acg
+ Philipp A. Hartmann: addition of include for sstream for MSVC.
+
 Revision 1.6  2011/01/25 20:50:37  acg
  Andy Goodrich: changes for IEEE 1666 2011.
 
@@ -111,6 +117,8 @@ Andy Goodrich - Forte Design Systems, Inc.
 #include "sysc/datatypes/int/sc_unsigned.h"
 #include "sysc/datatypes/bit/sc_lv_base.h"
 #include "sysc/kernel/sc_reset.h"
+
+#include <sstream>
 
 using sc_dt::sc_lv_base;
 using sc_dt::sc_signed;

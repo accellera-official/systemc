@@ -5,7 +5,7 @@
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.4 (the "License");
+  set forth in the SystemC Open Source License Version 3.0 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -35,6 +35,16 @@
 
 
 // $Log: sc_event.cpp,v $
+// Revision 1.12  2011/02/19 08:33:25  acg
+//  Andy Goodrich: remove }'s that should have been removed before.
+//
+// Revision 1.11  2011/02/19 08:30:53  acg
+//  Andy Goodrich: Moved process queueing into trigger_static from
+//  sc_event::notify.
+//
+// Revision 1.10  2011/02/18 20:27:14  acg
+//  Andy Goodrich: Updated Copyrights.
+//
 // Revision 1.9  2011/02/17 19:49:51  acg
 //  Andy Goodrich:
 //    (1) Changed signature of trigger_dynamic() to return a bool again.
@@ -247,9 +257,7 @@ sc_event::trigger()
         int i = size - 1;
         do {
             sc_method_handle method_h = l_methods_static[i];
-            if( method_h->trigger_static() ) {
-                m_simc->push_runnable_method( method_h );
-            }
+            method_h->trigger_static();
         } while( -- i >= 0 );
     }
 
@@ -282,9 +290,7 @@ sc_event::trigger()
         int i = size - 1;
         do {
             sc_thread_handle thread_h = l_threads_static[i];
-            if( thread_h->trigger_static() ) {
-                m_simc->push_runnable_thread( thread_h );
-            }
+            thread_h->trigger_static();
         } while( -- i >= 0 );
     }
 

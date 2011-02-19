@@ -5,7 +5,7 @@
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.4 (the "License");
+  set forth in the SystemC Open Source License Version 3.0 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -34,6 +34,12 @@
 
  *****************************************************************************/
 // $Log: sc_constants.h,v $
+// Revision 1.6  2011/02/18 20:33:26  acg
+//  Philipp A. Hartmann: added default stack size for CYGWIN32.
+//
+// Revision 1.5  2011/02/18 20:27:14  acg
+//  Andy Goodrich: Updated Copyrights.
+//
 // Revision 1.4  2011/02/13 21:47:37  acg
 //  Andy Goodrich: update copyright notice.
 //
@@ -63,7 +69,14 @@ namespace sc_core {
 //#define SC_MAX_NBITS    510    // 17 * BITS_PER_DIGIT
 
 
-const int SC_DEFAULT_STACK_SIZE   = 0x20000;
+const int SC_DEFAULT_STACK_SIZE   =
+#if !defined(SC_USE_PTHREADS) && \
+    ( defined(__CYGWIN32__) || defined(__CYGWIN32) )
+  0x50000;
+#else
+  0x20000;
+#endif
+
 const int SC_MAX_WATCH_LEVEL      = 16;
 
 #ifdef DEBUG_SYSTEMC

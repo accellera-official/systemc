@@ -5,7 +5,7 @@
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.4 (the "License");
+  set forth in the SystemC Open Source License Version 3.0 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -35,6 +35,13 @@
  *****************************************************************************/
 
 // $Log: sc_thread_process.cpp,v $
+// Revision 1.27  2011/02/19 08:30:53  acg
+//  Andy Goodrich: Moved process queueing into trigger_static from
+//  sc_event::notify.
+//
+// Revision 1.26  2011/02/18 20:27:14  acg
+//  Andy Goodrich: Updated Copyrights.
+//
 // Revision 1.25  2011/02/17 19:54:33  acg
 //  Andy Goodrich:
 //    (1) Changed signature of trigger_dynamic() back to bool, and moved
@@ -813,8 +820,8 @@ bool sc_thread_process::trigger_dynamic( sc_event* e )
       }
     }
 
-    // If we get here then the thread is has satisfied its wait(), if its 
-    // suspended mark its state as ready to run. If its not suspended then 
+    // If we get here then the thread is has satisfied its wait criteria, if 
+    // its suspended mark its state as ready to run. If its not suspended then 
     // push it onto the runnable queue.
 
     if ( (m_state & ps_bit_suspended) )

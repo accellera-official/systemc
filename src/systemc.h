@@ -1,11 +1,11 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2006 by all Contributors.
+  source code Copyright (c) 1996-2011 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.4 (the "License");
+  set forth in the SystemC Open Source License Version 3.0 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -52,7 +52,7 @@
 #include <string>
 #if defined(__sun) || defined(__sun__)
 #   include <inttypes.h>
-#elif !defined(WIN32)
+#elif !defined(WIN32) && !defined(_WIN32)
 #   include <stdint.h>
 #endif
 #if defined(__EDG__)
@@ -177,9 +177,11 @@
     using std::ldiv;
     using std::mblen;
     using std::mbtowc;
-    using std::wctomb;
     using std::mbstowcs;
+#if !defined(__CYGWIN__) && !defined(__CYGWIN32)
+    using std::wctomb;
     using std::wcstombs;
+#endif
 
 //  from <cstring>:
 

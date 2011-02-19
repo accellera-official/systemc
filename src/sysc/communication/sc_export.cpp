@@ -2,11 +2,11 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2006 by all Contributors.
+  source code Copyright (c) 1996-2011 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.4 (the "License");
+  set forth in the SystemC Open Source License Version 3.0 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -36,6 +36,17 @@
  *****************************************************************************/
 
 // $Log: sc_export.cpp,v $
+// Revision 1.5  2011/02/18 20:31:05  acg
+//  Philipp A. Hartmann: added error messages for calls that cannot be done
+//  after elaboration.
+//
+// Revision 1.4  2011/02/18 20:23:45  acg
+//  Andy Goodrich: Copyright update.
+//
+// Revision 1.3  2011/02/18 20:07:04  acg
+//  Philipp A. Hartmann: Patch to revert to sprintf from snprintf to keep
+//  some versions of MSVC happy.
+//
 // Revision 1.2  2011/02/14 17:50:16  acg
 //  Andy Goodrich: testing for sc_port and sc_export instantiations during
 //  end of elaboration and issuing appropriate error messages.
@@ -106,10 +117,9 @@ sc_export_base::report_error( const char* id, const char* add_msg ) const
 {
     char msg[BUFSIZ];
     if( add_msg != 0 ) {
-        std::snprintf( msg, BUFSIZ, "%s: export '%s' (%s)", add_msg, name(), 
-	               kind() );
+        std::sprintf( msg, "%s: export '%s' (%s)", add_msg, name(), kind() );
     } else {
-        std::snprintf( msg, BUFSIZ, "export '%s' (%s)", name(), kind() );
+        std::sprintf( msg, "export '%s' (%s)", name(), kind() );
     }
     SC_REPORT_ERROR( id, msg );
 }
@@ -128,6 +138,11 @@ sc_export_registry::insert( sc_export_base* export_ )
     if( sc_is_running() ) {
 	export_->report_error(SC_ID_INSERT_EXPORT_, "simulation running");
     }
+
+    if( m_simc->elaboration_done()  ) {
+       export_->report_error(SC_ID_INSERT_EXPORT_, "elaboration done");
+    }
+
 
 #ifdef DEBUG_SYSTEMC
     // check if port_ is already inserted

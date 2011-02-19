@@ -17,7 +17,7 @@
 
 /*****************************************************************************
 
-  sc_cor_qt.h -- Coroutine implementation with QuickThreads.
+  sc_cor.h -- Coroutine abstract base classes.
 
   Original Author: Martin Janssen, Synopsys, Inc., 2001-12-18
 
@@ -33,14 +33,14 @@
 
  *****************************************************************************/
 
-// $Log: sc_cor_qt.h,v $
-// Revision 1.4  2011/02/18 20:27:14  acg
-//  Andy Goodrich: Updated Copyrights.
-//
-// Revision 1.3  2011/02/13 21:47:37  acg
+// $Log: sc_cor.h,v $
+// Revision 1.4  2011/02/13 21:47:37  acg
 //  Andy Goodrich: update copyright notice.
 //
-// Revision 1.2  2008/05/22 17:06:25  acg
+// Revision 1.3  2011/01/19 23:21:49  acg
+//  Andy Goodrich: changes for IEEE 1666 2011
+//
+// Revision 1.2  2008/05/22 17:06:24  acg
 //  Andy Goodrich: updated copyright notice to include 2008.
 //
 // Revision 1.1.1.1  2006/12/15 20:20:05  acg
@@ -50,104 +50,103 @@
 // Added $Log to record CVS changes into the source.
 //
 
-#ifndef SC_COR_QT_H
-#define SC_COR_QT_H
+#ifndef SC_COR_H
+#define SC_COR_H
 
 
-#if !defined(WIN32) && !defined(SC_USE_PTHREADS)
-
-#include "sysc/kernel/sc_cor.h"
-#include "sysc/qt/qt.h"
+#include <cassert>
+#include <cstdlib>
 
 namespace sc_core {
 
-class sc_cor_pkg_qt;
+class sc_simcontext;
 
 
 // ----------------------------------------------------------------------------
-//  CLASS : sc_cor_qt
+//  TYPEDEF : sc_cor_fn
 //
-//  Coroutine class implemented with QuickThreads.
+//  Function type for creating coroutines.
 // ----------------------------------------------------------------------------
 
-class sc_cor_qt
-: public sc_cor
+typedef void (sc_cor_fn)( void* );
+
+
+// ----------------------------------------------------------------------------
+//  CLASS : sc_cor
+//
+//  Coroutine abstract base class.
+// ----------------------------------------------------------------------------
+
+class sc_cor
 {
-public:
+protected:
 
     // constructor
-    sc_cor_qt()
-	: m_stack_size( 0 ), m_stack( 0 ), m_sp( 0 ), m_pkg( 0 )
-	{}
-
-    // destructor
-    virtual ~sc_cor_qt()
-	{ if( m_stack != 0 ) { delete[] (char*) m_stack; } }
-
-    // switch stack protection on/off
-    virtual void stack_protect( bool enable );
+    sc_cor() {}
 
 public:
 
-    std::size_t    m_stack_size;  // stack size
-    void*          m_stack;       // stack
-    qt_t*          m_sp;          // stack pointer
+    // destructor
+    virtual ~sc_cor() {}
 
-    sc_cor_pkg_qt* m_pkg;         // the creating coroutine package
+    // switch stack protection on/off
+    virtual void stack_protect( bool enable ) {}
 
 private:
 
     // disabled
-    sc_cor_qt( const sc_cor_qt& );
-    sc_cor_qt& operator = ( const sc_cor_qt& );
+    sc_cor( const sc_cor& );
+    sc_cor& operator = ( const sc_cor& );
 };
 
 
 // ----------------------------------------------------------------------------
-//  CLASS : sc_cor_pkg_qt
+//  CLASS : sc_cor_pkg
 //
-//  Coroutine package class implemented with QuickThreads.
+//  Coroutine package abstract base class.
 // ----------------------------------------------------------------------------
 
-class sc_cor_pkg_qt
-: public sc_cor_pkg
+class sc_cor_pkg
 {
 public:
 
     // constructor
-    sc_cor_pkg_qt( sc_simcontext* simc );
+    sc_cor_pkg( sc_simcontext* simc )
+        : m_simc( simc ) { assert( simc != 0 ); }
 
     // destructor
-    virtual ~sc_cor_pkg_qt();
+    virtual ~sc_cor_pkg() {}
 
     // create a new coroutine
-    virtual sc_cor* create( std::size_t stack_size, sc_cor_fn* fn, void* arg );
+   virtual sc_cor* create(
+	    std::size_t stack_size, sc_cor_fn* fn, void* arg ) = 0;
 
     // yield to the next coroutine
-    virtual void yield( sc_cor* next_cor );
+    virtual void yield( sc_cor* next_cor ) = 0;
 
     // abort the current coroutine (and resume the next coroutine)
-    virtual void abort( sc_cor* next_cor );
+    virtual void abort( sc_cor* next_cor ) = 0;
 
     // get the main coroutine
-    virtual sc_cor* get_main();
+    virtual sc_cor* get_main() = 0;
+
+    // get the simulation context
+    sc_simcontext* simcontext()
+        { return m_simc; }
 
 private:
 
-    static int instance_count;
+    sc_simcontext* m_simc;
 
 private:
 
     // disabled
-    sc_cor_pkg_qt();
-    sc_cor_pkg_qt( const sc_cor_pkg_qt& );
-    sc_cor_pkg_qt& operator = ( const sc_cor_pkg_qt& );
+    sc_cor_pkg();
+    sc_cor_pkg( const sc_cor_pkg& );
+    sc_cor_pkg& operator = ( const sc_cor_pkg& );
 };
 
 } // namespace sc_core
-
-#endif
-
 
 #endif
 
