@@ -33,6 +33,8 @@
 
  *****************************************************************************/
 
+// $Log:$
+
 #ifndef SC_VECTOR_H_INCLUDED_
 #define SC_VECTOR_H_INCLUDED_
 
@@ -360,6 +362,7 @@ protected:
 template< typename T, typename MT >
 class sc_vector_assembly
 {
+public:
   template< typename > friend class sc_vector;
 
   typedef sc_vector<T> base_type;
