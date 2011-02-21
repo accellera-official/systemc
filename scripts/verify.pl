@@ -2061,7 +2061,7 @@ sub run_test
 	if( $rt_systemc_arch =~ /^msvc/ ) {
 	    $command  = "$rt_cc $rt_ccflags $extra_flags ";
 	    $command .= "${slash}I . ${slash}I $rt_systemc_home/src ";
-	    $command .= "/c ";
+	    $command .= "${slash}c ";
 	} else {
 	    $command  = "$rt_cc $rt_ccflags $extra_flags ";
 	    $command .= "-I . -I $rt_systemc_home/include ";
