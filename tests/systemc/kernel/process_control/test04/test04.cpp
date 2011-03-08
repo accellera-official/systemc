@@ -119,6 +119,7 @@ int sc_main(int argc, char* argv[])
 
     dut.m_clk(clock);
 
+    sc_core::sc_allow_process_control_corners = true;
     sc_start();
 
     cout << "Program completed" << endl;

@@ -197,6 +197,7 @@ int sc_main (int argc, char *argv[])
     top* top_p = new top("top");
     top_p->m_clk(clock);
 
+    sc_core::sc_allow_process_control_corners = true;
     sc_start();
     return 0;
 }

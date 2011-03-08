@@ -1071,8 +1071,6 @@ sc_main(int argc, char *argv[])
 	sc_signal<sc_biguint<128> > E_In_wire;
 	sc_signal<sc_biguint<128> > E_Out_wire;
 	sc_biguint<128> key;
-	sc_biguint<128> IN;
-	sc_biguint<128> OUT;
 	sc_biguint<128> t;
 	char *s;
 	char key_string[33] = "deadbeef0123456776543210beefdead";

@@ -356,6 +356,9 @@ int sc_main(int argc, char* argv[])
 }
 
 // $Log: test03.cpp,v $
+// Revision 1.5  2011/02/20 13:44:06  acg
+//  Andy Goodrich: updates for IEEE 1666 2011.
+//
 // Revision 1.4  2011/02/14 17:00:00  acg
 //  Andy Goodrich: updated copyright and added cvs logging information inline.
 //

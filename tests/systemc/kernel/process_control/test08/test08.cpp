@@ -33,6 +33,9 @@
 
  *****************************************************************************/
 // $Log: test08.cpp,v $
+// Revision 1.2  2011/02/20 13:44:06  acg
+//  Andy Goodrich: updates for IEEE 1666 2011.
+//
 // Revision 1.1  2011/02/14 16:59:29  acg
 //  Andy Goodrich: first check in.
 //
@@ -106,6 +109,7 @@ int sc_main(int argc, char* argv[])
     DUT             dut("dut");
     TB              tb("tb");
 
+    sc_core::sc_allow_process_control_corners = true;
     sc_start();
 
     cout << "Program completed" << endl;

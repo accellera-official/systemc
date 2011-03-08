@@ -5,7 +5,7 @@
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.4 (the "License");
+  set forth in the SystemC Open Source License Version 3.0 (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
   License at http://www.systemc.org/. Software distributed by Contributors
@@ -33,6 +33,12 @@
 
  *****************************************************************************/
 // $Log: test08.cpp,v $
+// Revision 1.4  2011/02/20 13:43:44  acg
+//  Andy Goodrich: updates for IEEE 1666 2011.
+//
+// Revision 1.3  2011/02/18 21:11:07  acg
+//  Philipp A. Hartmann: rename ABC class to eliminate class with wingdi.h.
+//
 // Revision 1.2  2011/02/01 17:17:40  acg
 //  Andy Goodrich: update of copyright notice, added visible CVS logging.
 //
@@ -40,9 +46,10 @@
 #define SC_INCLUDE_DYNAMIC_PROCESSES
 #include "systemc.h"
 
-class ABC : public sc_prim_channel {
+class prim_channel : public sc_prim_channel {
   public:
-  	ABC(const char* name = sc_gen_unique_name("ABC") ) : sc_prim_channel(name)
+  	prim_channel(const char* name = sc_gen_unique_name("prim_channel") ) 
+	    : sc_prim_channel(name)
 	{}
 	void thread()
 	{
@@ -51,7 +58,8 @@ class ABC : public sc_prim_channel {
 	void update()
 	{
 		cout << "update called..." << endl;
-		sc_spawn( sc_bind(&ABC::thread,this), sc_gen_unique_name("thread"));
+		sc_spawn( sc_bind(&prim_channel::thread,this), 
+		          sc_gen_unique_name("thread"));
 	}
 	void write( int i )
 	{
@@ -70,14 +78,14 @@ SC_MODULE(DUT)
 		for (;;)
 		{
 			wait();
-			m_abc.write(0);
+			m_chan.write(0);
 			wait();
-			m_abc.write(0);
+			m_chan.write(0);
 			sc_stop();
 		}
 	}
-	ABC         m_abc;
-	sc_in<bool> m_clk;
+	sc_in<bool>  m_clk;
+	prim_channel m_chan;
 };
 int sc_main(int argc, char* argv[])
 {

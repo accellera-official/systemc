@@ -24,6 +24,9 @@
 //  changes you are making here.
 //
 // $Log: test2.cpp,v $
+// Revision 1.3  2011/02/20 13:43:49  acg
+//  Andy Goodrich: updates for IEEE 1666 2011.
+//
 // Revision 1.2  2011/02/04 15:26:52  acg
 //  Andy Goodrich: changes for process control semantics.
 //
@@ -215,6 +218,7 @@ int sc_main (int argc, char *argv[])
     top* top_p = new top("top");
     top_p->m_clk(clock);
 
+    sc_core::sc_allow_process_control_corners = true;
     sc_start();
     return 0;
 }

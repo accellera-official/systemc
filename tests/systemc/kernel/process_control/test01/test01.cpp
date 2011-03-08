@@ -218,6 +218,7 @@ int sc_main(int argc, char* argv[])
     dut.m_clk(clock);
     dut.m_reset(reset);
 
+    sc_core::sc_allow_process_control_corners = true;
     reset = true;
     sc_start(1, SC_NS);
     reset = false;
@@ -228,6 +229,9 @@ int sc_main(int argc, char* argv[])
 }
 
 // $Log: test01.cpp,v $
+// Revision 1.3  2011/02/20 13:43:54  acg
+//  Andy Goodrich: updates for IEEE 1666 2011.
+//
 // Revision 1.2  2011/02/14 16:59:58  acg
 //  Andy Goodrich: updated copyright and added cvs logging information inline.
 //

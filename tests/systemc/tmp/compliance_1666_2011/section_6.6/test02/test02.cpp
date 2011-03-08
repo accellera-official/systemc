@@ -21,6 +21,9 @@
 // MODIFICATION LOG - modifiers, enter your name, affiliation, date and
 //
 // $Log: test02.cpp,v $
+// Revision 1.2  2011/02/20 13:44:06  acg
+//  Andy Goodrich: updates for IEEE 1666 2011.
+//
 // Revision 1.1  2011/02/05 21:13:26  acg
 //  Andy Goodrich: move of tests John Aynsley will replace.
 //
@@ -110,6 +113,7 @@ int sc_main(int argc, char* argv[])
 {
   M5 m("m");
   
+  sc_core::sc_allow_process_control_corners = true;
   sc_start();
   
   return 0;
