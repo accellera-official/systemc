@@ -37,6 +37,15 @@
  *****************************************************************************/
 
 // $Log: sc_object.h,v $
+// Revision 1.11  2011/03/06 15:55:11  acg
+//  Andy Goodrich: Changes for named events.
+//
+// Revision 1.10  2011/03/05 19:44:20  acg
+//  Andy Goodrich: changes for object and event naming and structures.
+//
+// Revision 1.9  2011/03/05 01:39:21  acg
+//  Andy Goodrich: changes for named events.
+//
 // Revision 1.8  2011/02/18 20:27:14  acg
 //  Andy Goodrich: Updated Copyrights.
 //
@@ -83,6 +92,7 @@
 
 namespace sc_core {
 
+class sc_event;
 class sc_module;
 class sc_runnable;
 class sc_simcontext;
@@ -97,6 +107,7 @@ class sc_trace_file;
 
 class sc_object 
 {
+    friend class sc_event;
     friend class sc_module;
     friend class sc_module_dynalloc_list;
     friend class sc_object_manager;
@@ -106,7 +117,8 @@ class sc_object
 public:
 
     const char* name() const
-        { return m_name; }
+        { return m_name.c_str(); }
+
     const char* basename() const;
 
     virtual void print(::std::ostream& os=::std::cout ) const;
@@ -141,8 +153,11 @@ public:
           sc_attr_cltn& attr_cltn();
     const sc_attr_cltn& attr_cltn() const;
 
+    virtual const std::vector<sc_event*>& get_child_events() const
+        { return m_child_events; }
+
     virtual const std::vector<sc_object*>& get_child_objects() const
-        { return m_no_children; }
+        { return m_child_objects; }
 
     sc_object* get_parent() const { return m_parent; } 
     sc_object* get_parent_object() const { return m_parent; }
@@ -158,21 +173,27 @@ protected:
 
     virtual ~sc_object();
 
+    virtual void add_child_event( sc_event* event_p );
+    virtual void add_child_object( sc_object* object_p );
+    virtual bool remove_child_event( sc_event* event_p );
+    virtual bool remove_child_object( sc_object* object_p );
+
 private:
 
     void detach();
+    virtual void orphan_child_events();
     virtual void orphan_child_objects();
     void sc_object_init(const char* nm);
 
 private:
 
     /* Each simulation object is associated with a simulation context */ 
-    sc_simcontext*          m_simc;  // simcontext pointer and empty indicator.
-    char*                   m_name;
-    mutable sc_attr_cltn*   m_attr_cltn_p;
-    sc_object*              m_parent;
-    static 
-    std::vector<sc_object*> m_no_children; // get_child_objects() default value.
+    mutable sc_attr_cltn*   m_attr_cltn_p;   // attributes for this object.
+    std::vector<sc_event*>  m_child_events;  // list of child events.
+    std::vector<sc_object*> m_child_objects; // list of child objects.
+    std::string             m_name;          // name of this object.
+    sc_object*              m_parent;        // parent for this object.
+    sc_simcontext*          m_simc;          // simcontext ptr / empty indicator
 };
 
 inline

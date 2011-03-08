@@ -33,7 +33,10 @@
 
  *****************************************************************************/
 
-// $Log:$
+// $Log: sc_vector.h,v $
+// Revision 1.11  2011/02/19 16:46:36  acg
+//  Andy Goodrich: finally get the update from Philipp correct!
+//
 
 #ifndef SC_VECTOR_H_INCLUDED_
 #define SC_VECTOR_H_INCLUDED_

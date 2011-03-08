@@ -52,6 +52,20 @@
                                
  *****************************************************************************/
 // $Log: sc_simcontext.h,v $
+// Revision 1.17  2011/03/07 18:25:19  acg
+//  Andy Goodrich: tightening of check for resume on a disabled process to
+//  only produce an error if it is ready to run.
+//
+// Revision 1.16  2011/03/06 15:58:50  acg
+//  Andy Goodrich: added escape to turn off process control corner case
+//  checks.
+//
+// Revision 1.15  2011/03/05 04:45:16  acg
+//  Andy Goodrich: moved active process calculation to the sc_simcontext class.
+//
+// Revision 1.14  2011/03/05 01:39:21  acg
+//  Andy Goodrich: changes for named events.
+//
 // Revision 1.13  2011/02/18 20:27:14  acg
 //  Andy Goodrich: Updated Copyrights.
 //
@@ -238,8 +252,10 @@ extern void sc_stop();
 // friend function declarations
 
 sc_dt::uint64 sc_delta_count();
+const std::vector<sc_event*>& sc_get_top_level_events(
+				const   sc_simcontext* simc_p);
 const std::vector<sc_object*>& sc_get_top_level_objects(
-const   sc_simcontext* simc_p);
+				const   sc_simcontext* simc_p);
 bool    sc_is_running( const sc_simcontext* simc_p );
 void    sc_pause();
 bool    sc_end_of_simulation_invoked();
@@ -273,6 +289,8 @@ class sc_simcontext
     friend class sc_cthread_process;
     friend class sc_thread_process;
     friend sc_dt::uint64 sc_delta_count();
+    friend const std::vector<sc_event*>& sc_get_top_level_events(
+        const sc_simcontext* simc_p);
     friend const std::vector<sc_object*>& sc_get_top_level_objects(
         const sc_simcontext* simc_p);
     friend bool sc_is_running( const sc_simcontext* simc_p );
@@ -307,6 +325,8 @@ public:
     sc_object_manager* get_object_manager();
 
     inline sc_status get_status() const;
+
+    sc_object* active_object();
 
     void hierarchy_push( sc_module* );
     sc_module* hierarchy_pop();
@@ -377,7 +397,9 @@ public:
 
 private:
 
+    void add_child_event( sc_event* );
     void add_child_object( sc_object* );
+    void remove_child_event( sc_event* );
     void remove_child_object( sc_object* );
 
     void crunch( bool once=false );
@@ -388,6 +410,7 @@ private:
 
     void trace_cycle( bool delta_cycle );
 
+    const ::std::vector<sc_event*>& get_child_events_internal() const;
     const ::std::vector<sc_object*>& get_child_objects_internal() const;
 
     void execute_thread_next( sc_thread_handle );
@@ -435,6 +458,7 @@ private:
     bool                        m_write_check;
     int                         m_next_proc_id;
 
+    std::vector<sc_event*>     m_child_events;
     std::vector<sc_object*>     m_child_objects;
 
     std::vector<sc_event*>      m_delta_events;
@@ -706,14 +730,22 @@ extern const sc_time& sc_time_stamp();  // Current simulation time.
 extern double sc_simulation_time();     // Current time in default time units.
 
 inline
+const std::vector<sc_event*>& sc_get_top_level_events(
+    const sc_simcontext* simc_p = sc_get_curr_simcontext() )
+{
+    return simc_p->m_child_events;
+}
+
+inline
 const std::vector<sc_object*>& sc_get_top_level_objects(
     const sc_simcontext* simc_p = sc_get_curr_simcontext() )
 {
     return simc_p->m_child_objects;
 }
 
-extern sc_object* sc_find_object(
-    const char* name, sc_simcontext* simc_p = sc_get_curr_simcontext() );
+extern sc_event* sc_find_event( const char* name );
+
+extern sc_object* sc_find_object( const char* name );
 
 inline
 sc_dt::uint64 sc_delta_count()
@@ -802,6 +834,12 @@ sc_start_of_simulation_invoked()
 {
         return sc_get_curr_simcontext()->m_start_of_simulation_called;
 }
+
+// The following variable controls whether process control corners should
+// be considered errors or not. See sc_simcontext.cpp for details on what
+// happens if this value is set to true.
+
+extern bool sc_allow_process_control_corners;
 
 } // namespace sc_core
 

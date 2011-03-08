@@ -34,6 +34,12 @@
  *****************************************************************************/
 
 // $Log: sc_event.h,v $
+// Revision 1.10  2011/03/06 15:55:11  acg
+//  Andy Goodrich: Changes for named events.
+//
+// Revision 1.9  2011/03/05 01:39:21  acg
+//  Andy Goodrich: changes for named events.
+//
 // Revision 1.8  2011/02/18 20:27:14  acg
 //  Andy Goodrich: Updated Copyrights.
 //
@@ -100,6 +106,7 @@ class sc_event_timed;
 class sc_event_list;
 class sc_event_or_list;
 class sc_event_and_list;
+class sc_object;
 
 // friend function declarations
     int sc_notify_time_compare( const void*, const void* );
@@ -157,7 +164,7 @@ public:
 
     ~sc_event_expr()
     {
-       delete m_expr;
+        delete m_expr;
     }
 
 private:
@@ -303,6 +310,7 @@ class sc_event
     friend class sc_event_list;
     friend class sc_event_timed;
     friend class sc_simcontext;
+    friend class sc_object;
     friend class sc_process_b;
     friend class sc_method_process;
     friend class sc_thread_process;
@@ -314,10 +322,15 @@ class sc_event
 public:
 
     sc_event();
+    sc_event( const char* name );
     ~sc_event();
 
     void cancel();
 
+    const char* name() const             { return m_name.c_str(); }
+    const char* basename() const;
+    sc_object* get_parent_object() const { return m_parent_p; }
+    bool in_hierarchy() const            { return m_name.length() != 0; }
 
     void notify();
     void notify( const sc_time& );
@@ -367,6 +380,8 @@ private:
                        // process should be removed from the event's queue.
     };
 
+    std::string     m_name;     // name of object.
+    sc_object*      m_parent_p; // parent sc_object for this event.
     sc_simcontext*  m_simc;
     notify_t        m_notify_type;
     int             m_delta_event_index;
@@ -441,20 +456,6 @@ private:
 
 
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
-
-inline
-sc_event::sc_event()
-: m_simc( sc_get_curr_simcontext() ),
-  m_notify_type( NONE ),
-  m_delta_event_index( -1 ),
-  m_timed( 0 )
-{}
-
-inline
-sc_event::~sc_event()
-{
-    cancel();
-}
 
 inline
 void

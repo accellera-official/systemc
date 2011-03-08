@@ -26,6 +26,11 @@ CONTENTS
 
 Compared to the 2.2.0, this release has the following new items:
 
+  - This version of SystemC contains the "Proof of Concept" simulator
+    for the IEEE 1666_2011 SystemC standard. Please consult the IEEE
+    1666_2011 Language Reference Manual for details about the new SystemC
+    standard.
+
   - Bug fixes, see section 2.
 
   - Expanded dynamic process capabilities, see section 5.
@@ -186,6 +191,10 @@ Here is an overview of changes in 2.3.0 compared to 2.2.0:
 
   - Expanded dynamic process capabilities, see section 5.
 
+  - A number of other changes to SystemC functions and classes, e.g.,
+    sc_start() for the new IEEE 1666 standard, IEEE 1666_2011. See the
+    IEEE 1666_2011 Language Reference Manual for details.
+
   - Boost library used by SystemC is now in the namespace sc_boost 
     rather than boost. This allows SystemC-based programs to be 
     combined with programs using later versions of the boost library.
@@ -203,13 +212,16 @@ Here is an overview of changes in 2.3.0 compared to 2.2.0:
 
 Here is a list of known incompatibilities between this release and 2.2.0:
 
-  - None
+  - The order that processes (SC_METHODS and SC_THREADS) are dispatched 
+    for execution may be different than the order with SystemC 2.2.0 for
+    some SystemC programs. This is related to the new starvation policy 
+    support for the sc_start() function introduced with IEEE 1666_2011.
 
 5) Expanded Dynamic Process Support
 ===================================
 
-- This version implements the proposed dynamic process extensions described
-  in the paper "XXXX" available on the OSCI web site, www.osci.org.
+- This version implements the dynamic process extensions described in the 
+  IEEE 1666_2011 Language Reference Manual.
 
 
 6) Experimental features

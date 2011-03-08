@@ -35,6 +35,9 @@
 
 
 // $Log: sc_interface.cpp,v $
+// Revision 1.3  2011/03/06 15:55:08  acg
+//  Andy Goodrich: Changes for named events.
+//
 // Revision 1.2  2011/02/18 20:23:45  acg
 //  Andy Goodrich: Copyright update.
 //
@@ -88,7 +91,7 @@ sc_interface::sc_interface()
 {}
 
 
-sc_event sc_interface::m_never_notified;
+sc_event sc_interface::m_never_notified("never_modified");
 
 } // namespace sc_core
 

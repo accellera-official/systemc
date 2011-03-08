@@ -36,6 +36,9 @@
  *****************************************************************************/
 
 // $Log: sc_runnable_int.h,v $
+// Revision 1.10  2011/03/06 15:58:17  acg
+//  Andy Goodrich: formatting changes.
+//
 // Revision 1.9  2011/02/18 20:27:14  acg
 //  Andy Goodrich: Updated Copyrights.
 //
@@ -129,23 +132,23 @@ inline void sc_runnable::init()
     m_methods_pop = SC_NO_METHODS;
     if ( !m_methods_push_head )
     {
-        m_methods_push_head = 
-            new sc_method_process((const char*)0, true, (SC_ENTRY_FUNC)0, 0, 0);
+        m_methods_push_head = new sc_method_process("methods_push_head", true, 
+	                                           (SC_ENTRY_FUNC)0, 0, 0);
         m_methods_push_head->dont_initialize(true);
 	m_methods_push_head->detach();
     }
     m_methods_push_tail = m_methods_push_head;
-	m_methods_push_head->set_next_runnable(SC_NO_METHODS);
+    m_methods_push_head->set_next_runnable(SC_NO_METHODS);
 
     m_threads_pop = SC_NO_THREADS;
     if ( !m_threads_push_head )
     {
-        m_threads_push_head = 
-            new sc_thread_process((const char*)0, true, (SC_ENTRY_FUNC)0, 0, 0);
+        m_threads_push_head = new sc_thread_process("threads_push_head", true, 
+	                                            (SC_ENTRY_FUNC)0, 0, 0);
         m_threads_push_head->dont_initialize(true);
 	m_threads_push_head->detach();
     }
-	m_threads_push_head->set_next_runnable(SC_NO_THREADS);
+    m_threads_push_head->set_next_runnable(SC_NO_THREADS);
     m_threads_push_tail = m_threads_push_head;
 }
 

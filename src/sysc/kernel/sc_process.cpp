@@ -43,6 +43,28 @@
  *****************************************************************************/
 
 // $Log: sc_process.cpp,v $
+// Revision 1.20  2011/03/07 17:38:43  acg
+//  Andy Goodrich: tightening up of checks for undefined interaction between
+//  synchronous reset and suspend.
+//
+// Revision 1.19  2011/03/06 23:30:13  acg
+//  Andy Goodrich: refining suspend - sync reset corner case checking so that
+//  the following are error situations:
+//    (1) Calling suspend on a process with a reset_signal_is() specification
+//        or sync_reset_on() is active.
+//    (2) Calling sync_reset_on() on a suspended process.
+//
+// Revision 1.18  2011/03/06 19:57:11  acg
+//  Andy Goodrich: refinements for the illegal suspend - synchronous reset
+//  interaction.
+//
+// Revision 1.17  2011/03/06 16:47:09  acg
+//  Andy Goodrich: changes for testing sync_reset - suspend corner cases.
+//
+// Revision 1.16  2011/03/06 15:57:57  acg
+//  Andy Goodrich: added process control corner case checks. Changes for
+//  named events.
+//
 // Revision 1.15  2011/02/18 20:27:14  acg
 //  Andy Goodrich: Updated Copyrights.
 //
@@ -124,7 +146,7 @@ namespace sc_core {
 // sc_process_handle entities that are returned for null pointer instances:
 
 std::vector<sc_object*> sc_process_handle::empty_vector;
-sc_event                sc_process_handle::non_event;
+sc_event                sc_process_handle::non_event("non_event");
 
 // Last process that was created:
 
@@ -512,6 +534,7 @@ sc_process_b::sc_process_b( const char* name_p, bool is_thread, bool free_host,
     m_event_list_p(0),
     m_exist_p(0),
     m_free_host( free_host ),
+    m_has_sync_reset( false ),
     m_is_thread(is_thread),
     m_last_report_p(0),
     m_name_gen_p(0),
@@ -528,14 +551,14 @@ sc_process_b::sc_process_b( const char* name_p, bool is_thread, bool free_host,
     m_throw_helper_p(0),
     m_throw_status( THROW_NONE ),
     m_timed_out(false),
-    m_timeout_event_p(new sc_event),
     m_trigger_type(STATIC)
 {
 
     // THIS OBJECT INSTANCE IS NOW THE LAST CREATED PROCESS:
 
     m_last_created_process_p = this;
-
+    m_timeout_event_p = 
+        new sc_event((std::string(basename())+"_timeout").c_str());
 }
 
 //------------------------------------------------------------------------------

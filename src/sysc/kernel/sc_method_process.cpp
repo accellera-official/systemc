@@ -35,6 +35,34 @@
  *****************************************************************************/
 
 // $Log: sc_method_process.cpp,v $
+// Revision 1.26  2011/03/07 18:25:19  acg
+//  Andy Goodrich: tightening of check for resume on a disabled process to
+//  only produce an error if it is ready to run.
+//
+// Revision 1.25  2011/03/07 17:38:43  acg
+//  Andy Goodrich: tightening up of checks for undefined interaction between
+//  synchronous reset and suspend.
+//
+// Revision 1.24  2011/03/06 23:30:13  acg
+//  Andy Goodrich: refining suspend - sync reset corner case checking so that
+//  the following are error situations:
+//    (1) Calling suspend on a process with a reset_signal_is() specification
+//        or sync_reset_on() is active.
+//    (2) Calling sync_reset_on() on a suspended process.
+//
+// Revision 1.23  2011/03/06 19:57:11  acg
+//  Andy Goodrich: refinements for the illegal suspend - synchronous reset
+//  interaction.
+//
+// Revision 1.22  2011/03/06 16:47:09  acg
+//  Andy Goodrich: changes for testing sync_reset - suspend corner cases.
+//
+// Revision 1.21  2011/03/06 15:57:08  acg
+//  Andy Goodrich: added process control corner case checks.
+//
+// Revision 1.20  2011/03/05 19:44:20  acg
+//  Andy Goodrich: changes for object and event naming and structures.
+//
 // Revision 1.19  2011/02/18 20:27:14  acg
 //  Andy Goodrich: Updated Copyrights.
 //
@@ -208,6 +236,19 @@ void sc_method_process::disable_process(
         }
     }
 
+    // DON'T ALLOW CORNER CASE BY DEFAULT:
+
+    if ( !sc_allow_process_control_corners )
+    switch( m_trigger_type )
+    { 
+      case TIMEOUT:
+	SC_REPORT_ERROR( SC_ID_PROCESS_CONTROL_CORNER_CASE_,
+	    ": attempt to disable a method with timeout wait" );
+        break;
+      default:
+        break;
+    }
+
     // DISABLE OUR OBJECT INSTANCE:
 
     m_state = m_state | ps_bit_disabled;
@@ -315,7 +356,7 @@ sc_method_process::sc_method_process( const char* name_p,
     sc_process_host* host_p, const sc_spawn_options* opt_p 
 ):
     sc_process_b(
-        name_p && name_p[0] ? name_p : sc_gen_unique_name("method_p"), 
+        name_p ? name_p : sc_gen_unique_name("method_p"), 
         false, free_host, method_p, host_p, opt_p)
 {
 
@@ -460,14 +501,22 @@ void sc_method_process::resume_process(
         }
     }
 
+    // BY DEFAULT DON'T ALLOW THE CORNER CASE:
+
+    if ( !sc_allow_process_control_corners && 
+         (m_state & (ps_bit_disabled|ps_bit_ready_to_run)) ==
+         (m_state & (ps_bit_disabled|ps_bit_ready_to_run)) )
+    {
+        SC_REPORT_ERROR( SC_ID_PROCESS_CONTROL_CORNER_CASE_, 
+		      ": call to resume() on a disabled ready to run process" );
+    }
+
     // RESUME OBJECT INSTANCE IF IT IS NOT DISABLED:
-    //
-    // Even if it is disabled we cancel the suspension.
 
     m_state = m_state & ~ps_bit_suspended;
-    if ( m_state == ps_bit_ready_to_run )
+    if ( m_state & ps_bit_ready_to_run )
     {
-	m_state = ps_normal;
+	m_state = m_state & ~ps_bit_ready_to_run;
 	if ( next_runnable() == 0 )  
 	    simcontext()->push_runnable_method(this);
 	remove_dynamic_events();  // order important.

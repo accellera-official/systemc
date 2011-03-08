@@ -35,6 +35,12 @@
 
 
 // $Log: sc_event.cpp,v $
+// Revision 1.14  2011/03/06 15:55:52  acg
+//  Andy Goodrich: changes for named events.
+//
+// Revision 1.13  2011/03/05 01:39:21  acg
+//  Andy Goodrich: changes for named events.
+//
 // Revision 1.12  2011/02/19 08:33:25  acg
 //  Andy Goodrich: remove }'s that should have been removed before.
 //
@@ -98,6 +104,7 @@
 #include "sysc/kernel/sc_process.h"
 #include "sysc/kernel/sc_process_handle.h"
 #include "sysc/kernel/sc_simcontext_int.h"
+#include "sysc/kernel/sc_object_manager.h"
 #include "sysc/utils/sc_utils_ids.h"
 
 namespace sc_core {
@@ -107,6 +114,13 @@ namespace sc_core {
 //
 //  The event class.
 // ----------------------------------------------------------------------------
+
+const char*
+sc_event::basename() const
+{
+    const char* p = strrchr( m_name.c_str(), SC_HIERARCHY_CHAR );
+    return p ? (p + 1) : m_name.c_str();
+}
 
 void
 sc_event::cancel()
@@ -234,6 +248,77 @@ sc_event::reset()
     m_threads_dynamic.resize(0);
 }
 
+// +----------------------------------------------------------------------------
+// |"sc_event::sc_event(name)"
+// | 
+// | This is the object instance constructor for named sc_event instances.
+// | If the name is non-null or the this is during elaboration add the
+// | event to the object hierarchy.
+// |
+// | Arguments:
+// |     name = name of the event.
+// +----------------------------------------------------------------------------
+sc_event::sc_event( const char* name ) :
+    m_parent_p(NULL),
+    m_simc( sc_get_curr_simcontext() ),
+    m_notify_type( NONE ),
+    m_delta_event_index( -1 ),
+    m_timed( 0 )
+{
+    if ( ( name && strlen(name) ) || sc_get_status() == SC_ELABORATION )
+    {
+	sc_object_manager* object_manager = m_simc->get_object_manager();
+        m_parent_p = m_simc->active_object();
+	m_name = object_manager->create_name( name ? name : 
+                                                 sc_gen_unique_name("event") );
+        object_manager->insert_event(m_name, this);
+        if ( m_parent_p )
+            m_parent_p->add_child_event( this );
+        else
+            m_simc->add_child_event( this );
+
+    }
+}
+
+sc_event::sc_event() :
+    m_parent_p(0),
+    m_simc( sc_get_curr_simcontext() ),
+    m_notify_type( NONE ),
+    m_delta_event_index( -1 ),
+    m_timed( 0 )
+{
+
+    if ( sc_get_status() == SC_ELABORATION )
+    {
+	sc_object_manager* object_manager = m_simc->get_object_manager();
+        m_parent_p = m_simc->active_object();
+	m_name = object_manager->create_name( sc_gen_unique_name("event") );
+
+        object_manager->insert_event(m_name, this);
+        if ( m_parent_p )
+            m_parent_p->add_child_event( this );
+        else
+            m_simc->add_child_event( this );
+
+    }
+}
+
+// +----------------------------------------------------------------------------
+// |"sc_event::~sc_event"
+// | 
+// | This is the object instance destructor for this class. It cancels any
+// | outstanding waits and removes the event from the object manager's 
+// | instance table if it has a name.
+// +----------------------------------------------------------------------------
+sc_event::~sc_event()
+{
+    cancel();
+    if ( m_name.length() != 0 )
+    {
+	sc_object_manager* object_manager_p = m_simc->get_object_manager();
+	object_manager_p->remove_event( m_name );
+    }
+}
 
 // +----------------------------------------------------------------------------
 // |"sc_event::trigger"

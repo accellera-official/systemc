@@ -54,6 +54,9 @@
 
 
 // $Log: sc_module.cpp,v $
+// Revision 1.11  2011/03/05 19:44:20  acg
+//  Andy Goodrich: changes for object and event naming and structures.
+//
 // Revision 1.10  2011/02/18 20:27:14  acg
 //  Andy Goodrich: Updated Copyrights.
 //
@@ -360,13 +363,6 @@ sc_module::get_child_objects() const
     return m_child_objects;
 }
 
-void
-sc_module::add_child_object( sc_object* object_ )
-{
-    // no check if object_ is already in the set
-    m_child_objects.push_back( object_ );
-}
-
 // set SC_THREAD asynchronous reset sensitivity
 
 void
@@ -392,21 +388,6 @@ sc_module::async_reset_signal_is(const sc_signal_in_if<bool>& iface, bool level)
 {
 	sc_reset::reset_signal_is(true, iface, level);
 }
-
-void
-sc_module::remove_child_object( sc_object* object_ )
-{
-    int size = m_child_objects.size();
-    for( int i = 0; i < size; ++ i ) {
-	if( object_ == m_child_objects[i] ) {
-	    m_child_objects[i] = m_child_objects[size - 1];
-	    m_child_objects.resize(size-1);
-	    return;
-	}
-    }
-    // no check if object_ is really in the set
-}
-
 
 void
 sc_module::end_module()

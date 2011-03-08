@@ -46,6 +46,9 @@
 
 
 // $Log: sc_clock.cpp,v $
+// Revision 1.3  2011/03/06 15:55:08  acg
+//  Andy Goodrich: Changes for named events.
+//
 // Revision 1.2  2011/02/18 20:23:45  acg
 //  Andy Goodrich: Copyright update.
 //
@@ -97,8 +100,11 @@ namespace sc_core {
 
 // constructors
 
-sc_clock::sc_clock()
-: sc_signal<bool>( sc_gen_unique_name( "clock" ) )
+sc_clock::sc_clock() : 
+    sc_signal<bool>( sc_gen_unique_name( "clock" ) ),
+    m_next_posedge_event((std::string(name()) + "_next_posedge_event").c_str()),
+    m_next_negedge_event((std::string(name()) + "_next_negedge_event").c_str())
+
 {
     init( sc_time( 1.0, true ),
 	  0.5,
@@ -108,8 +114,10 @@ sc_clock::sc_clock()
     m_next_posedge_event.notify_internal( m_start_time );
 }
 
-sc_clock::sc_clock( const char* name_ )
-: sc_signal<bool>( name_ )
+sc_clock::sc_clock( const char* name_ ) :
+    sc_signal<bool>( name_ ),
+    m_next_posedge_event((std::string(name()) + "_next_posedge_event").c_str()),
+    m_next_negedge_event((std::string(name()) + "_next_negedge_event").c_str())
 {
     init( sc_time( 1.0, true ),
 	  0.5,
@@ -123,8 +131,10 @@ sc_clock::sc_clock( const char* name_,
 		    const sc_time& period_,
 		    double         duty_cycle_,
 		    const sc_time& start_time_,
-		    bool           posedge_first_ )
-: sc_signal<bool>( name_ )
+		    bool           posedge_first_ ) :
+    sc_signal<bool>( name_ ),
+    m_next_posedge_event((std::string(name()) + "_next_posedge_event").c_str()),
+    m_next_negedge_event((std::string(name()) + "_next_negedge_event").c_str())
 {
     init( period_,
 	  duty_cycle_,
@@ -143,8 +153,10 @@ sc_clock::sc_clock( const char* name_,
 sc_clock::sc_clock( const char* name_,
 		    double         period_v_,
 		    sc_time_unit   period_tu_,
-		    double         duty_cycle_ )
-: sc_signal<bool>( name_ )
+		    double         duty_cycle_ ) :
+    sc_signal<bool>( name_ ),
+    m_next_posedge_event((std::string(name()) + "_next_posedge_event").c_str()),
+    m_next_negedge_event((std::string(name()) + "_next_negedge_event").c_str())
 {
     init( sc_time( period_v_, period_tu_, simcontext() ),
 	  duty_cycle_,
@@ -161,8 +173,10 @@ sc_clock::sc_clock( const char* name_,
 		    double         duty_cycle_,
 		    double         start_time_v_,
 		    sc_time_unit   start_time_tu_,
-		    bool           posedge_first_ )
-: sc_signal<bool>( name_ )
+		    bool           posedge_first_ ) :
+    sc_signal<bool>( name_ ),
+    m_next_posedge_event((std::string(name()) + "_next_posedge_event").c_str()),
+    m_next_negedge_event((std::string(name()) + "_next_negedge_event").c_str())
 {
     init( sc_time( period_v_, period_tu_, simcontext() ),
 	  duty_cycle_,
@@ -183,8 +197,10 @@ sc_clock::sc_clock( const char* name_,
 		    double         period_,      // in default time units
 		    double         duty_cycle_,
 		    double         start_time_,  // in default time units
-		    bool           posedge_first_ )
-: sc_signal<bool>( name_ )
+		    bool           posedge_first_ ) :
+    sc_signal<bool>( name_ ),
+    m_next_posedge_event((std::string(name()) + "_next_posedge_event").c_str()),
+    m_next_negedge_event((std::string(name()) + "_next_negedge_event").c_str())
 {
     static bool warn_sc_clock=true;
     if ( warn_sc_clock )

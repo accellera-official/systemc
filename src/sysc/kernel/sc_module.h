@@ -49,6 +49,9 @@
  *****************************************************************************/
 
 // $Log: sc_module.h,v $
+// Revision 1.9  2011/03/05 19:44:20  acg
+//  Andy Goodrich: changes for object and event naming and structures.
+//
 // Revision 1.8  2011/02/18 20:27:14  acg
 //  Andy Goodrich: Updated Copyrights.
 //
@@ -243,9 +246,6 @@ public:
 
 protected:
 
-    void add_child_object( sc_object* );
-    void remove_child_object( sc_object* );
-
     // this must be called by user-defined modules
     void end_module();
 
@@ -406,7 +406,6 @@ private:
     std::vector<sc_port_base*>* m_port_vec;
     int                         m_port_index;
     sc_name_gen*                m_name_gen;
-    std::vector<sc_object*>     m_child_objects;
     sc_module_name*             m_module_name_p;
 
 public:

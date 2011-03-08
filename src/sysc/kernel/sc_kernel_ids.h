@@ -34,6 +34,21 @@
  *****************************************************************************/
 
 // $Log: sc_kernel_ids.h,v $
+// Revision 1.15  2011/03/07 17:34:21  acg
+//  Andy Goodrich: changed process control corner case message. Added more
+//  place holders for unused message numbers.
+//
+// Revision 1.14  2011/03/06 19:57:11  acg
+//  Andy Goodrich: refinements for the illegal suspend - synchronous reset
+//  interaction.
+//
+// Revision 1.13  2011/03/06 15:56:29  acg
+//  Andy Goodrich: added process control corner case error message, remove
+//  unused messages.
+//
+// Revision 1.12  2011/03/05 19:44:20  acg
+//  Andy Goodrich: changes for object and event naming and structures.
+//
 // Revision 1.11  2011/02/18 20:27:14  acg
 //  Andy Goodrich: Updated Copyrights.
 //
@@ -120,7 +135,7 @@ SC_DEFINE_MESSAGE(SC_ID_OPERAND_NOT_SC_LOGIC_        , 503,
 	"operand is not sc_logic")
 SC_DEFINE_MESSAGE(SC_ID_OPERAND_NOT_BOOL_            , 504,
 	"operand is not bool")
-SC_DEFINE_MESSAGE(SC_ID_OBJECT_EXISTS_               , 505,
+SC_DEFINE_MESSAGE(SC_ID_INSTANCE_EXISTS_             , 505,
 	"object already exists")       
 SC_DEFINE_MESSAGE(SC_ID_ILLEGAL_CHARACTERS_          , 506,
 	"illegal characters" )
@@ -146,6 +161,8 @@ SC_DEFINE_MESSAGE(SC_ID_SET_DEFAULT_TIME_UNIT_       , 515,
 	"set default time unit failed" )
 SC_DEFINE_MESSAGE(SC_ID_DEFAULT_TIME_UNIT_CHANGED_   , 516,
 	"default time unit changed to time resolution" )
+// available message number 517
+// available message number 518
 SC_DEFINE_MESSAGE(SC_ID_WAIT_NOT_ALLOWED_            , 519,
 	"wait() is only allowed in SC_THREADs and SC_CTHREADs" )
 SC_DEFINE_MESSAGE(SC_ID_NEXT_TRIGGER_NOT_ALLOWED_    , 520,
@@ -179,6 +196,9 @@ SC_DEFINE_MESSAGE(SC_ID_MODULE_NAME_STACK_EMPTY_     , 533,
 	"module name stack is empty: did you forget to "
 	"add a sc_module_name parameter to your module "
 	"constructor?" )
+// available message number 534
+// available message number 535
+// available message number 536
 SC_DEFINE_MESSAGE(SC_ID_CYCLE_MISSES_EVENTS_         , 537,
          "the simulation contains timed-events but they are "
          "ignored by sc_cycle() ==> the simulation will be "
@@ -187,6 +207,7 @@ SC_DEFINE_MESSAGE( SC_ID_WAIT_DURING_UNWINDING_      , 538,
          "wait() not allowed during unwinding" )
 SC_DEFINE_MESSAGE( SC_ID_RETHROW_UNWINDING_          , 539,
          "sc_unwind_exception not re-thrown during kill/reset" )
+// available message number 540
 SC_DEFINE_MESSAGE(SC_ID_MODULE_METHOD_AFTER_START_   , 541,
 	"call to SC_METHOD in sc_module while simulation running" )
 SC_DEFINE_MESSAGE(SC_ID_MODULE_THREAD_AFTER_START_   , 542,
@@ -203,6 +224,18 @@ SC_DEFINE_MESSAGE(SC_ID_STOP_MODE_AFTER_START_        , 547,
 	"attempt to set sc_stop mode  after start will be ignored" ) 
 SC_DEFINE_MESSAGE( SC_ID_SIMULATION_START_AFTER_ERROR_, 548,
        "attempt to restart simulation after error" )
+// available message number 549
+// available message number 550
+// available message number 551
+// available message number 552
+// available message number 553
+// available message number 554
+// available message number 555
+// available message number 556
+// available message number 557
+// available message number 558
+SC_DEFINE_MESSAGE(SC_ID_PROCESS_CONTROL_CORNER_CASE_     , 559,
+	"Undefined process control interaction" ) 
 SC_DEFINE_MESSAGE(SC_ID_METHOD_TERMINATION_EVENT_        , 560,
 	"Attempt to get terminated event for a method process" ) 
 SC_DEFINE_MESSAGE(SC_ID_JOIN_ON_METHOD_HANDLE_        , 561,
@@ -211,12 +244,10 @@ SC_DEFINE_MESSAGE(SC_ID_NO_PROCESS_SEMANTICS_         , 563,
 	"Attempt to invoke process with no semantics() method" )
 SC_DEFINE_MESSAGE(SC_ID_EVENT_ON_NULL_PROCESS_         , 564,
 	"Attempt to get an event for non-existent process" )
-SC_DEFINE_MESSAGE(SC_ID_MULTIPLE_RESETS_,         565,
-	"Attempt to set more than one signal as reset for a process" )
+// available message number 565
 SC_DEFINE_MESSAGE(SC_ID_UNKNOWN_PROCESS_TYPE_,       566,
 	"Unknown process type" )
-SC_DEFINE_MESSAGE(SC_ID_RESET_SIGNAL_IS_NOT_ALLOWED_ , 567,
-        "reset_signal_is() is only allowed for SC_CTHREADs" )
+// available message number 567
 SC_DEFINE_MESSAGE(SC_ID_NEGATIVE_SIMULATION_TIME_, 568,
         "negative simulation interval specified in sc_start call" )
 SC_DEFINE_MESSAGE(SC_ID_BAD_SC_MODULE_CONTRUCTOR_  , 569,

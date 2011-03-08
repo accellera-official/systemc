@@ -46,6 +46,17 @@
  *****************************************************************************/
 
 // $Log: sc_process.h,v $
+// Revision 1.21  2011/03/07 17:38:43  acg
+//  Andy Goodrich: tightening up of checks for undefined interaction between
+//  synchronous reset and suspend.
+//
+// Revision 1.20  2011/03/06 19:57:11  acg
+//  Andy Goodrich: refinements for the illegal suspend - synchronous reset
+//  interaction.
+//
+// Revision 1.19  2011/03/05 19:44:20  acg
+//  Andy Goodrich: changes for object and event naming and structures.
+//
 // Revision 1.18  2011/02/19 08:30:53  acg
 //  Andy Goodrich: Moved process queueing into trigger_static from
 //  sc_event::notify.
@@ -533,6 +544,7 @@ class sc_process_b : public sc_object {
     static inline sc_process_handle last_created_process_handle();
         
   protected:
+    virtual void add_child_object( sc_object* );
     void add_static_event( const sc_event& );
     bool dynamic() const { return m_dynamic_proc; }
     const char* gen_unique_name( const char* basename_, bool preserve_first );
@@ -541,6 +553,7 @@ class sc_process_b : public sc_object {
     inline bool is_runnable() const;
     static inline sc_process_b* last_created_process_base();
     virtual void queue_for_execution()=0;
+    virtual bool remove_child_object( sc_object* );
     void remove_dynamic_events( bool skip_timeout = false );
     void remove_static_events();
     inline void set_last_report( sc_report* last_p )
@@ -549,11 +562,6 @@ class sc_process_b : public sc_object {
             m_last_report_p = last_p;
         }
     inline bool timed_out() const;
-
-  private: // structure support:
-    void add_child_object( sc_object* );
-    void remove_child_object( sc_object* );
-
 
   protected: // process control methods:
     virtual void disable_process(
@@ -597,7 +605,6 @@ class sc_process_b : public sc_object {
   protected:
     int                          m_active_areset_n; // number of aresets active.
     int                          m_active_reset_n;  // number of resets active.
-    std::vector<sc_object*>      m_child_objects;   // child processes.
     bool                         m_dont_init;       // true: no initialize call.
     bool                         m_dynamic_proc;    // true: after elaboration.
     const sc_event*              m_event_p;         // Dynamic event waiting on.
@@ -605,6 +612,7 @@ class sc_process_b : public sc_object {
     const sc_event_list*         m_event_list_p;    // event list waiting on.
     sc_process_b*                m_exist_p;         // process existence link.
     bool                         m_free_host;       // free sc_semantic_host_p.
+    bool                         m_has_sync_reset;  // true has reset_signal_is.
     bool                         m_is_thread;       // true if this is thread.
     sc_report*                   m_last_report_p;   // last report this process.
     sc_name_gen*                 m_name_gen_p;      // subprocess name generator
@@ -639,26 +647,23 @@ typedef sc_process_b sc_process_b;  // For compatibility.
 // These methods provide child object support.
 //------------------------------------------------------------------------------
 inline void
-sc_process_b::add_child_object( sc_object* object_ )
+sc_process_b::add_child_object( sc_object* object_p )
 {
-    // no check if object_ is already in the set
-    m_child_objects.push_back( object_ );
+    sc_object::add_child_object( object_p );
     reference_increment();
 }
 
-inline void
-sc_process_b::remove_child_object( sc_object* object_ )
+inline bool
+sc_process_b::remove_child_object( sc_object* object_p )
 {
-    int size = m_child_objects.size();
-    for( int i = 0; i < size; ++ i ) {
-        if( object_ == m_child_objects[i] ) {
-            m_child_objects[i] = m_child_objects[size - 1];
-            m_child_objects.resize(size-1);
+    if ( sc_object::remove_child_object( object_p ) ) {
 	    reference_decrement();
-            return;
-        }
+            return true;
     }
-    // no check if object_ is really in the set
+    else
+    {
+        return false;
+    }
 }
 
 inline const ::std::vector<sc_object*>&
@@ -837,6 +842,12 @@ inline void sc_process_b::reset_changed( bool async, bool asserted )
 	    m_active_areset_n++;
 	    throw_reset(true);
 	}
+	else if ( m_state & (ps_bit_suspended|ps_bit_ready_to_run) == (
+	          ps_bit_suspended|ps_bit_ready_to_run) )
+	{
+	    SC_REPORT_ERROR( SC_ID_PROCESS_CONTROL_CORNER_CASE_,
+	       ": synchronous reset changed on suspended ready to run process");
+	}
 	else
 	{
 	    m_active_reset_n++;
@@ -849,9 +860,19 @@ inline void sc_process_b::reset_changed( bool async, bool asserted )
     else 
     {
         if ( async )
+	{
 	    m_active_areset_n--;
+	}
+	else if ( m_state & (ps_bit_suspended|ps_bit_ready_to_run) == (
+	          ps_bit_suspended|ps_bit_ready_to_run) )
+	{
+	    SC_REPORT_ERROR( SC_ID_PROCESS_CONTROL_CORNER_CASE_,
+	       ": synchronous reset changed on suspended ready to run process");
+	}
 	else
+	{
 	    m_active_reset_n--;
+	}
     }
 
     // Clear the throw type if there are no active resets.

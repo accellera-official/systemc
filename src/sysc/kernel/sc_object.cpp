@@ -45,6 +45,18 @@
 
 
 // $Log: sc_object.cpp,v $
+// Revision 1.12  2011/03/06 15:55:11  acg
+//  Andy Goodrich: Changes for named events.
+//
+// Revision 1.11  2011/03/05 19:44:20  acg
+//  Andy Goodrich: changes for object and event naming and structures.
+//
+// Revision 1.10  2011/03/05 04:45:16  acg
+//  Andy Goodrich: moved active process calculation to the sc_simcontext class.
+//
+// Revision 1.9  2011/03/05 01:39:21  acg
+//  Andy Goodrich: changes for named events.
+//
 // Revision 1.8  2011/02/18 20:27:14  acg
 //  Andy Goodrich: Updated Copyrights.
 //
@@ -93,6 +105,7 @@
 #include "sysc/kernel/sc_object_manager.h"
 #include "sysc/kernel/sc_process_handle.h"
 #include "sysc/kernel/sc_simcontext.h"
+#include "sysc/kernel/sc_event.h"
 #include "sysc/utils/sc_hash.h"
 #include "sysc/utils/sc_iostream.h"
 #include "sysc/utils/sc_list.h"
@@ -116,12 +129,27 @@ bool sc_enable_name_checking = true;
 //  Abstract base class of all SystemC `simulation' objects.
 // ----------------------------------------------------------------------------
 
+void
+sc_object::add_child_event( sc_event* event_p )
+{
+    // no check if event_p is already in the set
+    m_child_events.push_back( event_p );
+}
+
+void
+sc_object::add_child_object( sc_object* object_ )
+{
+    // no check if object_ is already in the set
+    m_child_objects.push_back( object_ );
+}
+
 const char*
 sc_object::basename() const
 {
-    const char* p = strrchr( m_name, SC_HIERARCHY_CHAR );
-    return p ? (p + 1) : m_name;
-}
+    size_t pos; // position of last SC_HIERARCHY_CHAR.
+    pos = m_name.rfind( (char)SC_HIERARCHY_CHAR );
+    return ( pos == m_name.npos ) ? m_name.c_str() : &(m_name.c_str()[pos+1]);
+} 
 
 void
 sc_object::print(::std::ostream& os) const
@@ -138,52 +166,113 @@ sc_object::dump(::std::ostream& os) const
 
 static int sc_object_num = 0;
 
-static char*
-sc_object_newname(char* name)
+static std::string
+sc_object_newname()
 {
-    std::sprintf(name, "{%d}", sc_object_num);
+    char        buffer[64];
+    std::string result;
+
+    std::sprintf(buffer, "{%d}", sc_object_num);
     sc_object_num++;
-    return name;
+    result = buffer;
+
+    return result;
 }
 
+// +----------------------------------------------------------------------------
+// |"sc_object::remove_child_event"
+// | 
+// | This virtual method removes the supplied event from the list of child
+// | events if it is present.
+// |
+// | Arguments:
+// |     event_p -> event to be removed.
+// | Returns true if the event was present, false if not.
+// +----------------------------------------------------------------------------
+bool
+sc_object::remove_child_event( sc_event* event_p )
+{
+    int size = m_child_events.size();
+    for( int i = 0; i < size; ++ i ) {
+        if( event_p == m_child_events[i] ) {
+            m_child_events[i] = m_child_events[size - 1];
+            m_child_events.pop_back();
+            return true;
+        }
+    }
+    return false;
+}
+
+// +----------------------------------------------------------------------------
+// |"sc_object::remove_child_object"
+// | 
+// | This virtual method removes the supplied object from the list of child
+// | objects if it is present.
+// |
+// | Arguments:
+// |     object_p -> object to be removed.
+// | Returns true if the object was present, false if not.
+// +----------------------------------------------------------------------------
+bool
+sc_object::remove_child_object( sc_object* object_p )
+{
+    int size = m_child_objects.size();
+    for( int i = 0; i < size; ++ i ) {
+        if( object_p == m_child_objects[i] ) {
+            m_child_objects[i] = m_child_objects[size - 1];
+            m_child_objects.pop_back();
+	    object_p->m_parent = NULL;
+            return true;
+        }
+    }
+    return false;
+}
+
+// +----------------------------------------------------------------------------
+// |"sc_object::sc_object_init"
+// | 
+// | This method initializes this object instance and places it in to the
+// | object hierarchy if the supplied name is not NULL.
+// |
+// | Arguments:
+// |     nm = leaf name for the object.
+// +----------------------------------------------------------------------------
 void 
 sc_object::sc_object_init(const char* nm) 
 { 
-    bool        clash;                  // True if path name exists in obj table
-    const char* leafname_p;             // Leaf name (this object) 
-    char        pathname[BUFSIZ];       // Path name 
-    char        pathname_orig[BUFSIZ];  // Original path name which may clash 
-    const char* parentname_p;           // Parent path name 
-    bool        put_in_table;           // True if should put in object table 
+    // @@@@#### REMOVE bool        clash;                  // true if path name exists in obj table
+    // @@@@#### REMOVE const char* leafname_p;             // leaf name (this object) 
+    // @@@@#### REMOVE char        pathname[BUFSIZ];       // path name 
+    // @@@@#### REMOVE char        pathname_orig[BUFSIZ];  // original path name which may clash 
+    // @@@@#### REMOVE const char* parentname_p;           // parent path name 
+    // @@@@#### sc_object*  parent_p;               // parent for this instance or NULL.
+    // @@@@#### REMOVE bool        put_in_table;           // true if should put in object table 
  
     // SET UP POINTERS TO OBJECT MANAGER, PARENT, AND SIMULATION CONTEXT: 
-	//
+    //
     // Make the current simcontext the simcontext for this object 
 
     m_simc = sc_get_curr_simcontext(); 
     m_attr_cltn_p = 0; 
     sc_object_manager* object_manager = m_simc->get_object_manager(); 
-    sc_object*         parent_p = object_manager->hierarchy_curr(); 
-    if (!parent_p) { 
-        sc_object* proc = (sc_object*)sc_get_current_process_b();
-        parent_p = proc; 
-    } 
-    m_parent = parent_p; 
+    m_parent = m_simc->active_object();
+    // @@@@#### REMOVE m_parent = parent_p; 
 
 
     // CONSTRUCT PATHNAME TO OBJECT BEING CREATED: 
     // 
     // If there is not a leaf name generate one. 
 
+#if 0 // @@@@#### REMOVE
     parentname_p = parent_p ? parent_p->name() : ""; 
-    if (nm && nm[0] ) 
+    if (nm ) 
     { 
         leafname_p = nm; 
         put_in_table = true; 
     } 
     else 
     { 
-        leafname_p = sc_object_newname(pathname_orig); 
+        leafname_p = sc_object_newname().c_str();
         put_in_table = false; 
     } 
     if (parent_p) { 
@@ -218,34 +307,24 @@ sc_object::sc_object_init(const char* nm)
 	std::string message = pathname_orig;
 	message += ". Latter declaration will be renamed to ";
 	message += pathname;
-        SC_REPORT_WARNING( SC_ID_OBJECT_EXISTS_, message.c_str());
+        SC_REPORT_WARNING( SC_ID_INSTANCE_EXISTS_, message.c_str());
     } 
 
+    m_name = pathname;
+#else
+    m_name = object_manager->create_name(nm ? nm : sc_object_newname().c_str());
+#endif
 
-    // MOVE OBJECT NAME TO PERMANENT STORAGE 
-    // 
-    // Note here we pull a little trick -- use the first byte to store 
-    // information about whether to put the object in the object table in the 
-    // object manager 
 
-    char* ptr = new char[strlen( pathname ) + 2]; 
-    ptr[0] = put_in_table; 
-    m_name = ptr + 1; 
-    strcpy(m_name, pathname); 
+    // PLACE THE OBJECT INTO THE HIERARCHY IF A LEAF NAME WAS SUPPLIED:
+    
 
-    if (put_in_table) { 
+    if (nm != NULL) { 
         object_manager->insert_object(m_name, this); 
-        sc_module* curr_module = m_simc->hierarchy_curr(); 
-        if( curr_module != 0 ) { 
-            curr_module->add_child_object( this ); 
-        } else { 
-            sc_process_b* curr_proc = sc_get_current_process_b();
-            if (curr_proc) { 
-                curr_proc->add_child_object( this ); 
-            } else { 
-                m_simc->add_child_object( this ); 
-            } 
-        } 
+        if ( m_parent ) 
+	    m_parent->add_child_object( this );
+	else
+	    m_simc->add_child_object( this ); 
     } 
 
 } 
@@ -271,7 +350,7 @@ sc_object::sc_object(const char* nm) : m_parent(0)
 {
     int namebuf_alloc = 0;
     char* namebuf = 0;
-	const char* p;
+    const char* p;
 
 	// null name or "" uses machine generated name.
     if ( !nm || strlen(nm) == 0 )
@@ -311,7 +390,6 @@ sc_object::sc_object(const char* nm) : m_parent(0)
 sc_object::~sc_object()
 {
     detach();
-    delete [] (m_name-1);
     if ( m_attr_cltn_p ) delete m_attr_cltn_p;
 }
 
@@ -323,7 +401,7 @@ sc_object::~sc_object()
 //------------------------------------------------------------------------------
 void sc_object::detach()
 {
-    if (m_name[-1] && m_simc) {
+    if (m_simc) {
 
         // REMOVE OBJECT FROM THE OBJECT MANAGER:
 
@@ -332,17 +410,10 @@ void sc_object::detach()
 
 		// REMOVE OBJECT FROM PARENT'S LIST OF OBJECTS:
 
-        sc_module* parent_mod = DCAST<sc_module*>(m_parent);
-        if (parent_mod) {
-            parent_mod->remove_child_object( this );
-        } else {
-            sc_process_b* parent_proc = DCAST<sc_process_b*>(m_parent);
-            if (parent_proc) {
-                parent_proc->remove_child_object( this );
-            } else {
-                m_simc->remove_child_object( this );
-            }
-        }
+        if ( m_parent )
+	    m_parent->remove_child_object( this );
+	else
+	    m_simc->remove_child_object( this );
 
         // ORPHAN THIS OBJECT'S CHILDREN:
 
@@ -357,9 +428,26 @@ void sc_object::detach()
 		}
 #endif
 
-		// MARK OBJECT AS HAVING BEEN DETACHED:
+    }
+}
 
-		m_name[-1] = 0; 
+// +----------------------------------------------------------------------------
+// |"sc_object::orphan_child_events"
+// | 
+// | This method moves the children of this object instance to be children
+// | of the simulator.
+// +----------------------------------------------------------------------------
+void sc_object::orphan_child_events()
+{
+    std::vector< sc_event* > const & events = get_child_events();
+
+    std::vector< sc_event* >::const_iterator
+            it  = events.begin(), end = events.end();
+
+    for( ; it != end; ++it  )
+    {
+        (*it)->m_parent_p = NULL;
+        simcontext()->add_child_event(*it);
     }
 }
 
@@ -466,8 +554,6 @@ sc_object::attr_cltn() const
     if ( !m_attr_cltn_p ) m_attr_cltn_p = new sc_attr_cltn;
     return *m_attr_cltn_p;
 }
-
-std::vector<sc_object*> sc_object::m_no_children;
 
 } // namespace sc_core
 

@@ -58,6 +58,24 @@
 				 execution problem with using sc_pvector.
  *****************************************************************************/
 // $Log: sc_simcontext.cpp,v $
+// Revision 1.22  2011/03/07 17:38:43  acg
+//  Andy Goodrich: tightening up of checks for undefined interaction between
+//  synchronous reset and suspend.
+//
+// Revision 1.21  2011/03/06 19:57:11  acg
+//  Andy Goodrich: refinements for the illegal suspend - synchronous reset
+//  interaction.
+//
+// Revision 1.20  2011/03/06 15:58:50  acg
+//  Andy Goodrich: added escape to turn off process control corner case
+//  checks.
+//
+// Revision 1.19  2011/03/05 04:45:16  acg
+//  Andy Goodrich: moved active process calculation to the sc_simcontext class.
+//
+// Revision 1.18  2011/03/05 01:39:21  acg
+//  Andy Goodrich: changes for named events.
+//
 // Revision 1.17  2011/02/18 20:27:14  acg
 //  Andy Goodrich: Updated Copyrights.
 //
@@ -524,6 +542,25 @@ sc_simcontext::sc_simcontext()
 sc_simcontext::~sc_simcontext()
 {
     clean();
+}
+
+// +----------------------------------------------------------------------------
+// |"sc_simcontext::active_object"
+// | 
+// | This method returns the currently active object with respect to 
+// | additions to the hierarchy. It will be the top of the object hierarchy
+// | stack if it is non-empty, or it will be the active process, or NULL 
+// | if there is no active process.
+// +----------------------------------------------------------------------------
+sc_object*
+sc_simcontext::active_object() 
+{
+    sc_object* result_p; // pointer to return.
+
+    result_p = m_object_manager->hierarchy_curr();
+    if ( !result_p )
+        result_p = (sc_object*)get_curr_proc_info()->process_handle;
+    return result_p;
 }
 
 inline void
@@ -1165,7 +1202,6 @@ sc_simcontext::next_cor()
     }
 }
 
-
 const ::std::vector<sc_object*>&
 sc_simcontext::get_child_objects() const
 {
@@ -1181,10 +1217,31 @@ sc_simcontext::get_child_objects() const
 }
 
 void
+sc_simcontext::add_child_event( sc_event* event_ )
+{
+    // no check if object_ is already in the set
+    m_child_events.push_back( event_ );
+}
+
+void
 sc_simcontext::add_child_object( sc_object* object_ )
 {
     // no check if object_ is already in the set
     m_child_objects.push_back( object_ );
+}
+
+void
+sc_simcontext::remove_child_event( sc_event* event_ )
+{
+    int size = m_child_events.size();
+    for( int i = 0; i < size; ++ i ) {
+	if( event_ == m_child_events[i] ) {
+	    m_child_events[i] = m_child_events[size - 1];
+	    m_child_events.resize(size-1);
+	    return;
+	}
+    }
+    // no check if event_ is really in the set
 }
 
 void
@@ -1566,9 +1623,14 @@ sc_cycle( const sc_time& duration )
     sc_get_curr_simcontext()->cycle( duration );
 }
 
-sc_object* sc_find_object( const char* name, sc_simcontext* simc_p )
+sc_event* sc_find_event( const char* name )
 {
-    return simc_p->get_object_manager()->find_object( name );
+    return sc_get_curr_simcontext()->get_object_manager()->find_event( name );
+}
+
+sc_object* sc_find_object( const char* name )
+{
+    return sc_get_curr_simcontext()->get_object_manager()->find_object( name );
 }
 
 
@@ -1643,6 +1705,45 @@ bool sc_is_unwinding()
     return sc_get_current_process_handle().is_unwinding();
 }
 
+// The following variable controls whether process control corners should
+// be considered errors or not. If corners are not considered errors here
+// is the process state transition diagram:
+//
+// .......................................................................
+// .         ENABLED                    .           DISABLE             .
+// .                                    .                               .
+// .                 +----------+    disable      +----------+          .
+// .   +------------>|          |-------.-------->|          |          .
+// .   |             | runnable |       .         | runnable |          .
+// .   |     +-------|          |<------.---------|          |------+   .
+// .   |     |       +----------+     enable      +----------+      |   .
+// .   |     |          |    ^          .            |    ^         |   .
+// .   |     |  suspend |    | resume   .    suspend |    | resume  |   .
+// .   |     |          V    |          .            V    |         |   .
+// .   |     |       +----------+    disable      +----------+      |   .
+// .   |     |       | suspend  |-------.-------->| suspend  |      |   .
+// . t |   r |       |          |       .         |          |      | r .
+// . r |   u |       |  ready   |<------.---------|  ready   |      | u .
+// . i |   n |       +----------+     enable      +----------+      | n .
+// . g |   / |         ^                .                           | / .
+// . g |   w |  trigger|                .                           | w .
+// . e |   a |         |                .                           | a .
+// . r |   i |       +----------+    disable      +----------+      | i .
+// .   |   t |       | suspend  |-------.-------->| suspend  |      | t .
+// .   |     |       |          |       .         |          |      |   .
+// .   |     |       | waiting  |<------.---------| waiting  |      |   .
+// .   |     |       +----------+     enable      +----------+      |   .
+// .   |     |          |    ^          .            |    ^         |   .
+// .   |     |  suspend |    | resume   .    suspend |    | resume  |   .
+// .   |     |          V    |          .            V    |         |   .
+// .   |     |       +----------+    disable      +----------+      |   .
+// .   |     +------>|          |-------.-------->|          |      |   .
+// .   |             | waiting  |       .         | waiting  |      |   .
+// .   +-------------|          |<------.---------|          |<-----+   .
+// .                 +----------+     enable      +----------+          .
+// .                                    .                               .
+// ......................................................................
+bool sc_allow_process_control_corners = false;
 
 } // namespace sc_core
 // Taf!
