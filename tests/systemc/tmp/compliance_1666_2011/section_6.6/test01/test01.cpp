@@ -21,6 +21,10 @@
 // MODIFICATION LOG - modifiers, enter your name, affiliation, date and
 //
 // $Log: test01.cpp,v $
+// Revision 1.2  2011/03/07 19:32:18  acg
+//  Andy Goodrich: addition to set sc_core::sc_allow_process_control_corners
+//  to true so that this test avoids corner case error messages.
+//
 // Revision 1.1  2011/02/05 21:13:19  acg
 //  Andy Goodrich: move of tests John Aynsley will replace.
 //

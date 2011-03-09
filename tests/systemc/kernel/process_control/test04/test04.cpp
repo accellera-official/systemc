@@ -36,6 +36,10 @@
   after a check-in.
  *****************************************************************************/
 // $Log: test04.cpp,v $
+// Revision 1.4  2011/03/07 19:32:14  acg
+//  Andy Goodrich: addition to set sc_core::sc_allow_process_control_corners
+//  to true so that this test avoids corner case error messages.
+//
 // Revision 1.3  2011/02/14 17:00:00  acg
 //  Andy Goodrich: updated copyright and added cvs logging information inline.
 //

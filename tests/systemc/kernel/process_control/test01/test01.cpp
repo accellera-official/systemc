@@ -229,6 +229,10 @@ int sc_main(int argc, char* argv[])
 }
 
 // $Log: test01.cpp,v $
+// Revision 1.4  2011/03/07 19:32:10  acg
+//  Andy Goodrich: addition to set sc_core::sc_allow_process_control_corners
+//  to true so that this test avoids corner case error messages.
+//
 // Revision 1.3  2011/02/20 13:43:54  acg
 //  Andy Goodrich: updates for IEEE 1666 2011.
 //

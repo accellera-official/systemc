@@ -21,6 +21,10 @@
 // MODIFICATION LOG - modifiers, enter your name, affiliation, date and
 //
 // $Log: test02.cpp,v $
+// Revision 1.3  2011/03/07 19:32:19  acg
+//  Andy Goodrich: addition to set sc_core::sc_allow_process_control_corners
+//  to true so that this test avoids corner case error messages.
+//
 // Revision 1.2  2011/02/20 13:44:06  acg
 //  Andy Goodrich: updates for IEEE 1666 2011.
 //

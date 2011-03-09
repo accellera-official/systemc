@@ -23,6 +23,10 @@
 //  changes you are making here.
 //
 // $Log: test1.cpp,v $
+// Revision 1.3  2011/03/07 19:32:07  acg
+//  Andy Goodrich: addition to set sc_core::sc_allow_process_control_corners
+//  to true so that this test avoids corner case error messages.
+//
 // Revision 1.2  2009/07/28 18:43:50  acg
 //  Andy Goodrich: new standard test bench version of this test.
 //
