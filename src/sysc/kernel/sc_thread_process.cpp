@@ -35,6 +35,14 @@
  *****************************************************************************/
 
 // $Log: sc_thread_process.cpp,v $
+// Revision 1.36  2011/03/08 20:49:31  acg
+//  Andy Goodrich: implement coarse checking for synchronous reset - suspend
+//  interaction.
+//
+// Revision 1.35  2011/03/08 20:32:28  acg
+//  Andy Goodrich: implemented "coarse" checking for undefined process
+//  control interactions.
+//
 // Revision 1.34  2011/03/07 18:25:19  acg
 //  Andy Goodrich: tightening of check for resume on a disabled process to
 //  only produce an error if it is ready to run.
@@ -282,14 +290,19 @@ void sc_thread_process::disable_process(
     // DON'T ALLOW CORNER CASE BY DEFAULT:
 
     if ( !sc_allow_process_control_corners )
-    switch( m_trigger_type )
-    { 
-      case TIMEOUT:
-	SC_REPORT_ERROR( SC_ID_PROCESS_CONTROL_CORNER_CASE_,
-	    ": attempt to disable a thread with timeout wait" );
-        break;
-      default:
-        break;
+    {
+	switch( m_trigger_type )
+	{ 
+	  case AND_LIST_TIMEOUT:
+	  case EVENT_TIMEOUT: 
+	  case OR_LIST_TIMEOUT:
+	  case TIMEOUT:
+	    SC_REPORT_ERROR( SC_ID_PROCESS_CONTROL_CORNER_CASE_,
+		": attempt to disable a thread with timeout wait" );
+	    break;
+	  default:
+	    break;
+	}
     }
 
     // DISABLE OUR OBJECT INSTANCE:
@@ -442,12 +455,10 @@ void sc_thread_process::resume_process(
 
     // BY DEFAULT DON'T ALLOW THE CORNER CASE:
 
-    if ( !sc_allow_process_control_corners && 
-         (m_state & (ps_bit_disabled|ps_bit_ready_to_run)) ==
-         (m_state & (ps_bit_disabled|ps_bit_ready_to_run)) )
+    if ( !sc_allow_process_control_corners && m_state & ps_bit_disabled )
     {
         SC_REPORT_ERROR(SC_ID_PROCESS_CONTROL_CORNER_CASE_, 
-	               ": call to resume() on a disabled ready to run process");
+	               ": call to resume() on a disabled process");
     }
 
     // RESUME OBJECT INSTANCE:
@@ -595,6 +606,15 @@ void sc_thread_process::suspend_process(
             child_p = DCAST<sc_process_b*>((*children_p)[child_i]);
             if ( child_p ) child_p->suspend_process(descendants);
         }
+    }
+
+    // IF THIS THREAD HAS A reset_signal_is SPECIFICATION ISSUE AN ERROR:
+
+    if ( !sc_allow_process_control_corners && m_has_sync_reset )
+    {
+	SC_REPORT_ERROR(SC_ID_PROCESS_CONTROL_CORNER_CASE_,
+		    ": attempt to suspend a thread that has a reset_signal_is");
+
     }
 
     // SUSPEND OUR OBJECT INSTANCE:

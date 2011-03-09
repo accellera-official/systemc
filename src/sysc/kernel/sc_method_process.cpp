@@ -35,6 +35,14 @@
  *****************************************************************************/
 
 // $Log: sc_method_process.cpp,v $
+// Revision 1.28  2011/03/08 20:49:30  acg
+//  Andy Goodrich: implement coarse checking for synchronous reset - suspend
+//  interaction.
+//
+// Revision 1.27  2011/03/08 20:32:28  acg
+//  Andy Goodrich: implemented "coarse" checking for undefined process
+//  control interactions.
+//
 // Revision 1.26  2011/03/07 18:25:19  acg
 //  Andy Goodrich: tightening of check for resume on a disabled process to
 //  only produce an error if it is ready to run.
@@ -239,14 +247,19 @@ void sc_method_process::disable_process(
     // DON'T ALLOW CORNER CASE BY DEFAULT:
 
     if ( !sc_allow_process_control_corners )
-    switch( m_trigger_type )
-    { 
-      case TIMEOUT:
-	SC_REPORT_ERROR( SC_ID_PROCESS_CONTROL_CORNER_CASE_,
-	    ": attempt to disable a method with timeout wait" );
-        break;
-      default:
-        break;
+    {
+	switch( m_trigger_type )
+	{ 
+	  case AND_LIST_TIMEOUT:
+	  case EVENT_TIMEOUT: 
+	  case OR_LIST_TIMEOUT:
+	  case TIMEOUT:
+	    SC_REPORT_ERROR( SC_ID_PROCESS_CONTROL_CORNER_CASE_,
+		": attempt to disable a method with timeout wait" );
+	    break;
+	  default:
+	    break;
+	}
     }
 
     // DISABLE OUR OBJECT INSTANCE:
@@ -452,6 +465,15 @@ void sc_method_process::suspend_process(
         }
     }
 
+    // IF THIS METHOD HAS A reset_signal_is SPECIFICATION ISSUE AN ERROR:
+
+    if ( !sc_allow_process_control_corners && m_has_sync_reset )
+    {
+	SC_REPORT_ERROR(SC_ID_PROCESS_CONTROL_CORNER_CASE_,
+		    ": attempt to suspend a method that has a reset_signal_is");
+
+    }
+
     // SUSPEND OUR OBJECT INSTANCE:
     //
     // (1) If we are on the runnable queue then set suspended and ready_to_run,
@@ -503,12 +525,10 @@ void sc_method_process::resume_process(
 
     // BY DEFAULT DON'T ALLOW THE CORNER CASE:
 
-    if ( !sc_allow_process_control_corners && 
-         (m_state & (ps_bit_disabled|ps_bit_ready_to_run)) ==
-         (m_state & (ps_bit_disabled|ps_bit_ready_to_run)) )
+    if ( !sc_allow_process_control_corners && m_state & ps_bit_disabled )
     {
-        SC_REPORT_ERROR( SC_ID_PROCESS_CONTROL_CORNER_CASE_, 
-		      ": call to resume() on a disabled ready to run process" );
+        SC_REPORT_ERROR(SC_ID_PROCESS_CONTROL_CORNER_CASE_, 
+	               ": call to resume() on a disabled process");
     }
 
     // RESUME OBJECT INSTANCE IF IT IS NOT DISABLED:
