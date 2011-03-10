@@ -800,13 +800,6 @@ sc_time_to_pending_activity
 
 inline
 void
-sc_start( double duration, sc_time_unit time_unit )
-{
-    sc_start( sc_time( duration, time_unit ) );
-}
-
-inline
-void
 sc_cycle( double duration, sc_time_unit time_unit )
 {
     sc_cycle( sc_time( duration, time_unit ) );
