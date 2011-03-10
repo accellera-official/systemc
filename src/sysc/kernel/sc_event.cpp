@@ -248,6 +248,22 @@ sc_event::reset()
     m_threads_dynamic.resize(0);
 }
 
+void
+sc_event::set_name( const char* name )
+{
+    sc_object_manager* object_manager = m_simc->get_object_manager();
+    m_parent_p = m_simc->active_object();
+
+    if( !name || !name[0] )
+        name = sc_gen_unique_name("event");
+    object_manager->create_name( name ).swap( m_name );
+    object_manager->insert_event(m_name, this);
+    if ( m_parent_p )
+        m_parent_p->add_child_event( this );
+    else
+        m_simc->add_child_event( this );
+}
+
 // +----------------------------------------------------------------------------
 // |"sc_event::sc_event(name)"
 // | 
@@ -265,19 +281,8 @@ sc_event::sc_event( const char* name ) :
     m_delta_event_index( -1 ),
     m_timed( 0 )
 {
-    if ( ( name && strlen(name) ) || sc_get_status() == SC_ELABORATION )
-    {
-	sc_object_manager* object_manager = m_simc->get_object_manager();
-        m_parent_p = m_simc->active_object();
-	m_name = object_manager->create_name( name ? name : 
-                                                 sc_gen_unique_name("event") );
-        object_manager->insert_event(m_name, this);
-        if ( m_parent_p )
-            m_parent_p->add_child_event( this );
-        else
-            m_simc->add_child_event( this );
-
-    }
+    if ( ( name && name[0] ) || !sc_is_running( m_simc ) )
+        set_name( name );
 }
 
 sc_event::sc_event() :
@@ -287,20 +292,8 @@ sc_event::sc_event() :
     m_delta_event_index( -1 ),
     m_timed( 0 )
 {
-
-    if ( sc_get_status() == SC_ELABORATION )
-    {
-	sc_object_manager* object_manager = m_simc->get_object_manager();
-        m_parent_p = m_simc->active_object();
-	m_name = object_manager->create_name( sc_gen_unique_name("event") );
-
-        object_manager->insert_event(m_name, this);
-        if ( m_parent_p )
-            m_parent_p->add_child_event( this );
-        else
-            m_simc->add_child_event( this );
-
-    }
+    if ( !sc_is_running( m_simc ) )
+        set_name( NULL );
 }
 
 // +----------------------------------------------------------------------------

@@ -366,6 +366,8 @@ private:
 
     void trigger();
 
+    void set_name( const char* );
+
 private:
 
     enum notify_t { NONE, DELTA, TIMED };
