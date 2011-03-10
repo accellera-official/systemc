@@ -766,6 +766,12 @@ inline void sc_process_b::reference_increment()
 inline void sc_process_b::reset_changed( bool async, bool asserted )
 {       
 
+    if ( !async && ( m_state & ps_bit_suspended ) )
+    {
+	SC_REPORT_ERROR( SC_ID_PROCESS_CONTROL_CORNER_CASE_,
+	   ": synchronous reset changed on a suspended process");
+    }
+
     // Reset is being asserted:
 
     if ( asserted )
@@ -774,11 +780,6 @@ inline void sc_process_b::reset_changed( bool async, bool asserted )
 	{
 	    m_active_areset_n++;
 	    throw_reset(true);
-	}
-	else if ( m_state & ps_bit_suspended )
-	{
-	    SC_REPORT_ERROR( SC_ID_PROCESS_CONTROL_CORNER_CASE_,
-	       ": synchronous reset changed on a suspended process");
 	}
 	else
 	{
@@ -794,12 +795,6 @@ inline void sc_process_b::reset_changed( bool async, bool asserted )
         if ( async )
 	{
 	    m_active_areset_n--;
-	}
-	else if ( m_state & (ps_bit_suspended|ps_bit_ready_to_run) == (
-	          ps_bit_suspended|ps_bit_ready_to_run) )
-	{
-	    SC_REPORT_ERROR( SC_ID_PROCESS_CONTROL_CORNER_CASE_,
-	       ": synchronous reset changed on suspended ready to run process");
 	}
 	else
 	{
