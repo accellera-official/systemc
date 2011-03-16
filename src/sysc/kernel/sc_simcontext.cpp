@@ -58,6 +58,9 @@
 				 execution problem with using sc_pvector.
  *****************************************************************************/
 // $Log: sc_simcontext.cpp,v $
+// Revision 1.23  2011/03/12 21:07:51  acg
+//  Andy Goodrich: changes to kernel generated event support.
+//
 // Revision 1.22  2011/03/07 17:38:43  acg
 //  Andy Goodrich: tightening up of checks for undefined interaction between
 //  synchronous reset and suspend.

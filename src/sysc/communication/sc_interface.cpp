@@ -35,6 +35,9 @@
 
 
 // $Log: sc_interface.cpp,v $
+// Revision 1.4  2011/03/12 21:07:42  acg
+//  Andy Goodrich: changes to kernel generated event support.
+//
 // Revision 1.3  2011/03/06 15:55:08  acg
 //  Andy Goodrich: Changes for named events.
 //
@@ -91,7 +94,10 @@ sc_interface::sc_interface()
 {}
 
 
-sc_event sc_interface::m_never_notified("never_modified");
+// special event for never notified cases, note the special name to keep
+// it out of the named event structures.
+
+sc_event sc_interface::m_never_notified(SC_KERNEL_EVENT_PREFIX);
 
 } // namespace sc_core
 

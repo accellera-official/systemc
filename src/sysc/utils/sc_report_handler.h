@@ -115,8 +115,11 @@ public:
 
     static int get_count(sc_severity severity_);
     static int get_count(const char* msg_type_);
-    static int get_count(const char* msg_type_, 
-        sc_severity severity_);
+    static int get_count(const char* msg_type_, sc_severity severity_);
+
+    static int get_verbosity_level();
+    static int set_verbosity_level( int level );
+
 
     static void initialize(); // just reset counters
     static void release(); // initialize() needed for reports after it
@@ -162,6 +165,7 @@ protected:
     static sc_report*   last_global_report;
     static sc_actions   available_actions;
     static char*        log_file_name;
+    static int          verbosity_level;
 
     static msg_def_items*  messages;
     static msg_def_items   msg_terminator;

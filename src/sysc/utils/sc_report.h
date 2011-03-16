@@ -118,6 +118,7 @@ class sc_object;
 class sc_time;
 struct sc_msg_def;
 class sc_report;
+class sc_report_handler;
 const std::string sc_report_compose_message( const sc_report& );
 
 // ----------------------------------------------------------------------------
@@ -128,6 +129,8 @@ const std::string sc_report_compose_message( const sc_report& );
 
 class sc_report : public std::exception
 {
+    friend class sc_report_handler;
+
 public:
 
     sc_report();
@@ -159,13 +162,6 @@ public:
 
     int get_verbosity_level() const { return m_verbosity_level; }
 
-    int set_verbosity_level( int level ) 
-    { 
-	int result = m_verbosity_level;
-        m_verbosity_level = level; 
-	return result;
-    }
-
     bool valid () const
         {
 	    return process != 0;
@@ -178,16 +174,12 @@ public:
 
 protected:
 
-    friend class sc_report_handler;
-
-
     sc_report(sc_severity,
 	      const sc_msg_def*,
 	      const char* msg,
 	      const char* file,
-	      int line);
-
-
+	      int line,
+	      int verbosity_level=SC_MEDIUM);
 
     sc_severity        severity;
     const sc_msg_def*  md;

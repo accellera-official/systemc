@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_process_handle.h,v $
+// Revision 1.17  2011/03/12 21:07:51  acg
+//  Andy Goodrich: changes to kernel generated event support.
+//
 // Revision 1.16  2011/02/18 20:27:14  acg
 //  Andy Goodrich: Updated Copyrights.
 //
@@ -164,6 +167,7 @@ class sc_process_handle {
     inline bool dynamic() const;
     inline void enable(
         sc_descendant_inclusion_info descendants=SC_NO_DESCENDANTS );
+    inline const std::vector<sc_event*>& get_child_events() const;
     inline const std::vector<sc_object*>& get_child_objects() const;
     inline sc_object* get_parent_object() const;
     inline sc_object* get_process_object() const;
@@ -209,8 +213,9 @@ class sc_process_handle {
     sc_process_b* m_target_p;   // Target for this object instance.
 
   protected:
-    static std::vector<sc_object*> empty_vector; // Returned if m_target_p == 0.
-    static sc_event                non_event;    // Returned if m_target_p == 0.
+    static std::vector<sc_event*>  empty_event_vector;  // If m_target_p == 0.
+    static std::vector<sc_object*> empty_object_vector; // If m_target_p == 0.
+    static sc_event                non_event;           // If m_target_p == 0.
 };
 
 inline bool operator == ( 
@@ -361,10 +366,17 @@ inline void sc_process_handle::enable(sc_descendant_inclusion_info descendants)
 // return the child objects for this object instance's target.
 
 inline 
+const std::vector<sc_event*>& sc_process_handle::get_child_events() const
+{
+    return m_target_p ?  m_target_p->get_child_events() : empty_event_vector;
+}
+
+// return the child objects for this object instance's target.
+
+inline 
 const std::vector<sc_object*>& sc_process_handle::get_child_objects() const
 {
-    return m_target_p ?  m_target_p->get_child_objects() : 
-                         sc_process_handle::empty_vector;
+    return m_target_p ?  m_target_p->get_child_objects() : empty_object_vector;
 }
 
 // return the parent object for this object instance's target.

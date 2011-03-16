@@ -114,7 +114,8 @@ sc_report::sc_report(sc_severity severity_,
 		     const sc_msg_def* md_,
 		     const char* msg_,
 		     const char* file_,
-		     int line_)
+		     int line_,
+		     int verbosity_level)
 : severity(severity_),
   md(md_),
   msg(empty_dup(msg_)),
@@ -122,6 +123,7 @@ sc_report::sc_report(sc_severity severity_,
   line(line_),
   timestamp(new sc_time(sc_time_stamp())),
   process(sc_get_current_process_b()),
+  m_verbosity_level(verbosity_level),
   m_what(strdup(sc_report_compose_message(*this).c_str()))
 {
 }
@@ -134,6 +136,7 @@ sc_report::sc_report(const sc_report& other)
   line(other.line),
   timestamp(new sc_time(*other.timestamp)),
   process(other.process),
+  m_verbosity_level(other.m_verbosity_level),
   m_what(empty_dup(other.m_what))
 {
 }
@@ -153,6 +156,7 @@ sc_report & sc_report::operator=(const sc_report& other)
     delete timestamp;
     timestamp = new sc_time(*other.timestamp);
     process = other.process;
+    m_verbosity_level = other.m_verbosity_level;
 
     if ( m_what != empty_str ) free(m_what);
 	m_what = empty_dup(other.m_what);

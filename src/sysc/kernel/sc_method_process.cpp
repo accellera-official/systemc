@@ -465,13 +465,19 @@ void sc_method_process::suspend_process(
         }
     }
 
-    // IF THIS METHOD HAS A reset_signal_is SPECIFICATION ISSUE AN ERROR:
+    // CORNER CASE CHECKS, THE FOLLOWING ARE ERRORS:
+    //   (a) if this method has a reset_signal_is specification 
+    //   (b) if this method is in synchronous reset
 
     if ( !sc_allow_process_control_corners && m_has_sync_reset )
     {
 	SC_REPORT_ERROR(SC_ID_PROCESS_CONTROL_CORNER_CASE_,
 		    ": attempt to suspend a method that has a reset_signal_is");
-
+    }
+    else if ( !sc_allow_process_control_corners && m_sticky_reset )
+    {
+	SC_REPORT_ERROR(SC_ID_PROCESS_CONTROL_CORNER_CASE_,
+		    ": attempt to suspend a method in synchronous reset");
     }
 
     // SUSPEND OUR OBJECT INSTANCE:
@@ -523,7 +529,11 @@ void sc_method_process::resume_process(
         }
     }
 
-    // BY DEFAULT DON'T ALLOW THE CORNER CASE:
+    // CLEAR THE SUSPENDED BIT:
+
+    m_state = m_state & ~ps_bit_suspended;
+
+    // BY DEFAULT THE CORNER CASE IS AN ERROR:
 
     if ( !sc_allow_process_control_corners && m_state & ps_bit_disabled )
     {
@@ -531,9 +541,8 @@ void sc_method_process::resume_process(
 	               ": call to resume() on a disabled process");
     }
 
-    // RESUME OBJECT INSTANCE IF IT IS NOT DISABLED:
+    // RESUME OBJECT INSTANCE IF IT IS READY TO RUN:
 
-    m_state = m_state & ~ps_bit_suspended;
     if ( m_state & ps_bit_ready_to_run )
     {
 	m_state = m_state & ~ps_bit_ready_to_run;

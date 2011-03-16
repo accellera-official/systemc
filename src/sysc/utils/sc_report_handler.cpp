@@ -78,6 +78,8 @@ namespace std {}
 
 namespace sc_core {
 
+int sc_report_handler::verbosity_level = SC_MEDIUM;
+
 // not documented, but available
 const std::string sc_report_compose_message(const sc_report& rep)
 {
@@ -301,13 +303,19 @@ void sc_report_handler::report( sc_severity severity_,
 {
     sc_msg_def * md = mdlookup(msg_type_);
 
+    // If the severity of the report is SC_INFO and the specified verbosity 
+    // level is greater than the maximum verbosity level of the simulator then 
+    // return without any action.
+
+    if ( (severity_ == SC_INFO) && (verbosity_ > verbosity_level) ) return;
+
+    // Process the report:
+
     if ( !md )
 	md = add_msg_type(msg_type_);
 
     sc_actions actions = execute(md, severity_);
-    sc_report rep(severity_, md, msg_, file_, line_);
-
-    rep.set_verbosity_level( verbosity_ );
+    sc_report rep(severity_, md, msg_, file_, line_, verbosity_);
 
     if ( actions & SC_CACHE_REPORT )
 	cache_report(rep);
@@ -322,6 +330,14 @@ void sc_report_handler::report(sc_severity severity_,
 			       int line_)
 {
     sc_msg_def * md = mdlookup(msg_type_);
+
+    // If the severity of the report is SC_INFO and the maximum verbosity
+    // level is less than SC_MEDIUM return without any action.
+
+    if ( (severity_ == SC_INFO) && (SC_MEDIUM > verbosity_level) ) return;
+
+    // Process the report:
+
 
     if ( !md )
 	md = add_msg_type(msg_type_);
@@ -656,6 +672,15 @@ sc_msg_def * sc_report_handler::mdlookup(int id)
 		return item->md + i;
     }
     return 0;
+}
+
+int sc_report_handler::get_verbosity_level() { return verbosity_level; }
+
+int sc_report_handler::set_verbosity_level( int level )
+{
+    int result = verbosity_level;
+    verbosity_level = level;
+    return result;
 }
 
 //

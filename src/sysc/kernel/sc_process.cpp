@@ -43,6 +43,9 @@
  *****************************************************************************/
 
 // $Log: sc_process.cpp,v $
+// Revision 1.21  2011/03/12 21:07:51  acg
+//  Andy Goodrich: changes to kernel generated event support.
+//
 // Revision 1.20  2011/03/07 17:38:43  acg
 //  Andy Goodrich: tightening up of checks for undefined interaction between
 //  synchronous reset and suspend.
@@ -144,9 +147,13 @@
 namespace sc_core {
 
 // sc_process_handle entities that are returned for null pointer instances:
+//
+// Note the special name for 'non_event' - this makes sure it does not
+// appear as a named event.
 
-std::vector<sc_object*> sc_process_handle::empty_vector;
-sc_event                sc_process_handle::non_event("non_event");
+std::vector<sc_event*> sc_process_handle::empty_event_vector;
+std::vector<sc_object*> sc_process_handle::empty_object_vector;
+sc_event                sc_process_handle::non_event(SC_KERNEL_EVENT_PREFIX);
 
 // Last process that was created:
 

@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: sc_event.h,v $
+// Revision 1.11  2011/03/12 21:07:51  acg
+//  Andy Goodrich: changes to kernel generated event support.
+//
 // Revision 1.10  2011/03/06 15:55:11  acg
 //  Andy Goodrich: Changes for named events.
 //
@@ -346,7 +349,6 @@ public:
     sc_event_and_expr operator & ( const sc_event_and_list& ) const;
 
 
-
 private:
 
     void add_static( sc_method_handle ) const;
@@ -362,6 +364,7 @@ private:
     bool remove_dynamic( sc_method_handle ) const;
     bool remove_dynamic( sc_thread_handle ) const;
 
+    void register_event( const char* name );
     void reset();
 
     void trigger();
@@ -398,6 +401,8 @@ private:
     sc_event( const sc_event& );
     sc_event& operator = ( const sc_event& );
 };
+
+#define SC_KERNEL_EVENT_PREFIX "$$$$kernel_event$$$$_"
 
 extern sc_event sc_non_event; // Event that never happens.
 

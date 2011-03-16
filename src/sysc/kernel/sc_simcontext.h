@@ -723,7 +723,6 @@ sc_set_random_seed( unsigned int seed_ );
 
 
 extern void sc_initialize();
-extern void sc_cycle( const sc_time& duration );
 
 extern const sc_time& sc_max_time();    // Get maximum time value.
 extern const sc_time& sc_time_stamp();  // Current simulation time.
@@ -799,32 +798,10 @@ sc_time_to_pending_activity
 
 
 inline
-void
-sc_start( double duration, sc_time_unit time_unit )
-{
-    sc_start( sc_time( duration, time_unit ) );
-}
-
-inline
-void
-sc_cycle( double duration, sc_time_unit time_unit )
-{
-    sc_cycle( sc_time( duration, time_unit ) );
-}
-
-// for backward compatibility with 1.0
-inline
-void
-sc_cycle( double duration )  // in default time units
-{
-    sc_cycle( sc_time( duration, true ) );
-}
-
-inline
 bool
 sc_end_of_simulation_invoked()
 {
-        return sc_get_curr_simcontext()->m_end_of_simulation_called;
+    return sc_get_curr_simcontext()->m_end_of_simulation_called;
 }
 
 
@@ -832,7 +809,7 @@ inline
 bool 
 sc_start_of_simulation_invoked()
 {
-        return sc_get_curr_simcontext()->m_start_of_simulation_called;
+    return sc_get_curr_simcontext()->m_start_of_simulation_called;
 }
 
 // The following variable controls whether process control corners should

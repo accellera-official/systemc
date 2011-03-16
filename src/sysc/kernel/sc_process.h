@@ -46,6 +46,9 @@
  *****************************************************************************/
 
 // $Log: sc_process.h,v $
+// Revision 1.23  2011/03/12 21:07:51  acg
+//  Andy Goodrich: changes to kernel generated event support.
+//
 // Revision 1.22  2011/03/08 20:49:31  acg
 //  Andy Goodrich: implement coarse checking for synchronous reset - suspend
 //  interaction.
@@ -183,6 +186,7 @@ sc_process_handle sc_get_current_process_handle();
 void sc_thread_cor_fn( void* arg );
 bool timed_out( sc_simcontext* );
 
+extern bool sc_allow_process_control_corners; // see sc_simcontext.cpp.
 
 
 // Process handles as forward references:
@@ -766,6 +770,15 @@ inline void sc_process_b::reference_increment()
 inline void sc_process_b::reset_changed( bool async, bool asserted )
 {       
 
+    // Error out on the corner case:
+
+    if ( !sc_allow_process_control_corners && !async && 
+         (m_state & ps_bit_suspended) )
+    {
+	SC_REPORT_ERROR( SC_ID_PROCESS_CONTROL_CORNER_CASE_,
+	   ": synchronous reset changed on a suspended process");
+    }
+
     // Reset is being asserted:
 
     if ( asserted )
@@ -774,11 +787,6 @@ inline void sc_process_b::reset_changed( bool async, bool asserted )
 	{
 	    m_active_areset_n++;
 	    throw_reset(true);
-	}
-	else if ( m_state & ps_bit_suspended )
-	{
-	    SC_REPORT_ERROR( SC_ID_PROCESS_CONTROL_CORNER_CASE_,
-	       ": synchronous reset changed on a suspended process");
 	}
 	else
 	{
@@ -794,12 +802,6 @@ inline void sc_process_b::reset_changed( bool async, bool asserted )
         if ( async )
 	{
 	    m_active_areset_n--;
-	}
-	else if ( m_state & (ps_bit_suspended|ps_bit_ready_to_run) == (
-	          ps_bit_suspended|ps_bit_ready_to_run) )
-	{
-	    SC_REPORT_ERROR( SC_ID_PROCESS_CONTROL_CORNER_CASE_,
-	       ": synchronous reset changed on suspended ready to run process");
 	}
 	else
 	{

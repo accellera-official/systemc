@@ -46,6 +46,9 @@
 
 
 // $Log: sc_clock.cpp,v $
+// Revision 1.4  2011/03/12 21:07:42  acg
+//  Andy Goodrich: changes to kernel generated event support.
+//
 // Revision 1.3  2011/03/06 15:55:08  acg
 //  Andy Goodrich: Changes for named events.
 //
@@ -102,8 +105,10 @@ namespace sc_core {
 
 sc_clock::sc_clock() : 
     sc_signal<bool>( sc_gen_unique_name( "clock" ) ),
-    m_next_posedge_event((std::string(name()) + "_next_posedge_event").c_str()),
-    m_next_negedge_event((std::string(name()) + "_next_negedge_event").c_str())
+    m_next_posedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
+                          "_next_posedge_event").c_str()),
+    m_next_negedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
+                          "_next_negedge_event").c_str())
 
 {
     init( sc_time( 1.0, true ),
@@ -116,8 +121,10 @@ sc_clock::sc_clock() :
 
 sc_clock::sc_clock( const char* name_ ) :
     sc_signal<bool>( name_ ),
-    m_next_posedge_event((std::string(name()) + "_next_posedge_event").c_str()),
-    m_next_negedge_event((std::string(name()) + "_next_negedge_event").c_str())
+    m_next_posedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
+			   std::string(name_) + "_next_posedge_event").c_str()),
+    m_next_negedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
+			   std::string(name_) + "_next_negedge_event").c_str())
 {
     init( sc_time( 1.0, true ),
 	  0.5,
@@ -133,8 +140,10 @@ sc_clock::sc_clock( const char* name_,
 		    const sc_time& start_time_,
 		    bool           posedge_first_ ) :
     sc_signal<bool>( name_ ),
-    m_next_posedge_event((std::string(name()) + "_next_posedge_event").c_str()),
-    m_next_negedge_event((std::string(name()) + "_next_negedge_event").c_str())
+    m_next_posedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
+			   std::string(name_) + "_next_posedge_event").c_str()),
+    m_next_negedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
+			   std::string(name_) + "_next_negedge_event").c_str())
 {
     init( period_,
 	  duty_cycle_,
@@ -155,8 +164,10 @@ sc_clock::sc_clock( const char* name_,
 		    sc_time_unit   period_tu_,
 		    double         duty_cycle_ ) :
     sc_signal<bool>( name_ ),
-    m_next_posedge_event((std::string(name()) + "_next_posedge_event").c_str()),
-    m_next_negedge_event((std::string(name()) + "_next_negedge_event").c_str())
+    m_next_posedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
+			   std::string(name_) + "_next_posedge_event").c_str()),
+    m_next_negedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
+			   std::string(name_) + "_next_negedge_event").c_str())
 {
     init( sc_time( period_v_, period_tu_, simcontext() ),
 	  duty_cycle_,
@@ -175,8 +186,10 @@ sc_clock::sc_clock( const char* name_,
 		    sc_time_unit   start_time_tu_,
 		    bool           posedge_first_ ) :
     sc_signal<bool>( name_ ),
-    m_next_posedge_event((std::string(name()) + "_next_posedge_event").c_str()),
-    m_next_negedge_event((std::string(name()) + "_next_negedge_event").c_str())
+    m_next_posedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
+			   std::string(name_) + "_next_posedge_event").c_str()),
+    m_next_negedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
+			   std::string(name_) + "_next_negedge_event").c_str())
 {
     init( sc_time( period_v_, period_tu_, simcontext() ),
 	  duty_cycle_,
@@ -199,8 +212,10 @@ sc_clock::sc_clock( const char* name_,
 		    double         start_time_,  // in default time units
 		    bool           posedge_first_ ) :
     sc_signal<bool>( name_ ),
-    m_next_posedge_event((std::string(name()) + "_next_posedge_event").c_str()),
-    m_next_negedge_event((std::string(name()) + "_next_negedge_event").c_str())
+    m_next_posedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
+			   std::string(name_) + "_next_posedge_event").c_str()),
+    m_next_negedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
+			   std::string(name_) + "_next_negedge_event").c_str())
 {
     static bool warn_sc_clock=true;
     if ( warn_sc_clock )

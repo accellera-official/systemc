@@ -35,6 +35,9 @@
 
 
 // $Log: sc_event.cpp,v $
+// Revision 1.15  2011/03/12 21:07:51  acg
+//  Andy Goodrich: changes to kernel generated event support.
+//
 // Revision 1.14  2011/03/06 15:55:52  acg
 //  Andy Goodrich: changes for named events.
 //
@@ -236,6 +239,49 @@ sc_event::notify_delayed( const sc_time& t )
     }
 }
 
+// +----------------------------------------------------------------------------
+// |"sc_event::register_event"
+// | 
+// | This method sets the name of this object instance and optionally adds 
+// | it to the object manager's hierarchy. The object instance will be
+// | inserted into the object manager's hierarchy if one of the following is
+// | true:
+// |   (a) the leaf name is non-null and does not start with  
+// |       SC_KERNEL_EVENT_PREFIX.
+// |   (b) the event is being created before the start of simulation.
+// |
+// | Arguments:
+// |     leaf_name = leaf name of the object or NULL.
+// +----------------------------------------------------------------------------
+void sc_event::register_event( const char* leaf_name )
+{
+    sc_object_manager* object_manager = m_simc->get_object_manager();
+    m_parent_p = m_simc->active_object();
+
+    // No name provided, if we are not executing then create a name:
+
+    if( !leaf_name || !leaf_name[0] )
+    {
+	if ( sc_is_running( m_simc ) ) return;
+        leaf_name = sc_gen_unique_name("event");    
+    }
+
+    // Create a hierarchichal name and place it into the object manager if
+    // its not a kernel event:
+
+    object_manager->create_name( leaf_name ).swap( m_name );
+
+    if ( strncmp( leaf_name, SC_KERNEL_EVENT_PREFIX, 
+                  strlen(SC_KERNEL_EVENT_PREFIX) ) )
+    {
+	object_manager->insert_event(m_name, this);
+	if ( m_parent_p )
+	    m_parent_p->add_child_event( this );
+	else
+	    m_simc->add_child_event( this );
+    }
+}
+
 void
 sc_event::reset()
 {
@@ -265,21 +311,18 @@ sc_event::sc_event( const char* name ) :
     m_delta_event_index( -1 ),
     m_timed( 0 )
 {
-    if ( ( name && strlen(name) ) || sc_get_status() == SC_ELABORATION )
-    {
-	sc_object_manager* object_manager = m_simc->get_object_manager();
-        m_parent_p = m_simc->active_object();
-	m_name = object_manager->create_name( name ? name : 
-                                                 sc_gen_unique_name("event") );
-        object_manager->insert_event(m_name, this);
-        if ( m_parent_p )
-            m_parent_p->add_child_event( this );
-        else
-            m_simc->add_child_event( this );
+    // Skip simulator's internally defined events.
 
-    }
+    register_event( name );
 }
 
+// +----------------------------------------------------------------------------
+// |"sc_event::sc_event(name)"
+// | 
+// | This is the object instance constructor for non-named sc_event instances.
+// | If this is during elaboration add create a name and add it to the object
+// | hierarchy.
+// +----------------------------------------------------------------------------
 sc_event::sc_event() :
     m_parent_p(0),
     m_simc( sc_get_curr_simcontext() ),
@@ -288,19 +331,7 @@ sc_event::sc_event() :
     m_timed( 0 )
 {
 
-    if ( sc_get_status() == SC_ELABORATION )
-    {
-	sc_object_manager* object_manager = m_simc->get_object_manager();
-        m_parent_p = m_simc->active_object();
-	m_name = object_manager->create_name( sc_gen_unique_name("event") );
-
-        object_manager->insert_event(m_name, this);
-        if ( m_parent_p )
-            m_parent_p->add_child_event( this );
-        else
-            m_simc->add_child_event( this );
-
-    }
+    register_event( NULL );
 }
 
 // +----------------------------------------------------------------------------
