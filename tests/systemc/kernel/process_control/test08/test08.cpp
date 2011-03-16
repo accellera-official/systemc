@@ -110,6 +110,7 @@ SC_MODULE(TB)
 
 int sc_main(int argc, char* argv[])
 {
+    sc_core::sc_allow_process_control_corners = true;
     DUT             dut("dut");
     TB              tb("tb");
 

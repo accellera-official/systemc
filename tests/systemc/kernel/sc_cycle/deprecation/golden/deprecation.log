@@ -1,4 +1,0 @@
-SystemC Simulation
-
-Info: (I804) /IEEE_Std_1666/deprecated: sc_initialize() is deprecated: use sc_start(SC_ZERO_TIME)
-Program completed
