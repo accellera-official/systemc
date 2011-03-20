@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_method_process.cpp,v $
+// Revision 1.29  2011/03/20 13:43:23  acg
+//  Andy Goodrich: added async_signal_is() plus suspend() as a corner case.
+//
 // Revision 1.28  2011/03/08 20:49:30  acg
 //  Andy Goodrich: implement coarse checking for synchronous reset - suspend
 //  interaction.
@@ -469,10 +472,10 @@ void sc_method_process::suspend_process(
     //   (a) if this method has a reset_signal_is specification 
     //   (b) if this method is in synchronous reset
 
-    if ( !sc_allow_process_control_corners && m_has_sync_reset )
+    if ( !sc_allow_process_control_corners && m_has_reset_signal )
     {
 	SC_REPORT_ERROR(SC_ID_PROCESS_CONTROL_CORNER_CASE_,
-		    ": attempt to suspend a method that has a reset_signal_is");
+		    ": attempt to suspend a method that has a reset signal");
     }
     else if ( !sc_allow_process_control_corners && m_sticky_reset )
     {

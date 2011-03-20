@@ -24,6 +24,9 @@
  *****************************************************************************/
 
 // $Log: sc_reset.cpp,v $
+// Revision 1.12  2011/03/20 13:43:23  acg
+//  Andy Goodrich: added async_signal_is() plus suspend() as a corner case.
+//
 // Revision 1.11  2011/03/06 19:57:11  acg
 //  Andy Goodrich: refinements for the illegal suspend - synchronous reset
 //  interaction.
@@ -255,7 +258,7 @@ void sc_reset::reset_signal_is( bool async, const sc_in<bool>& port, bool level)
     
     process_p = (sc_process_b*)sc_get_current_process_handle();
     assert( process_p );
-    process_p->m_has_sync_reset = process_p->m_has_sync_reset || !async;
+    process_p->m_has_reset_signal = true;
     switch ( process_p->proc_kind() )
     {
       case SC_THREAD_PROC_:
@@ -283,7 +286,7 @@ void sc_reset::reset_signal_is(
     
     process_p = (sc_process_b*)sc_get_current_process_handle();
     assert( process_p );
-    process_p->m_has_sync_reset = process_p->m_has_sync_reset || !async;
+    process_p->m_has_reset_signal = true;
     switch ( process_p->proc_kind() )
     {
       case SC_THREAD_PROC_:
@@ -311,7 +314,7 @@ void sc_reset::reset_signal_is(
     
     process_p = (sc_process_b*)sc_get_current_process_handle();
     assert( process_p );
-    process_p->m_has_sync_reset = process_p->m_has_sync_reset || !async;
+    process_p->m_has_reset_signal = true;
     switch ( process_p->proc_kind() )
     {
       case SC_THREAD_PROC_:
@@ -347,7 +350,7 @@ void sc_reset::reset_signal_is(
 
     process_p = sc_process_b::last_created_process_base();
     assert( process_p );
-    process_p->m_has_sync_reset = process_p->m_has_sync_reset || !async;
+    process_p->m_has_reset_signal = true;
     switch ( process_p->proc_kind() )
     {
       case SC_METHOD_PROC_:

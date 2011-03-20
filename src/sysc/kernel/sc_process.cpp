@@ -43,6 +43,9 @@
  *****************************************************************************/
 
 // $Log: sc_process.cpp,v $
+// Revision 1.22  2011/03/20 13:43:23  acg
+//  Andy Goodrich: added async_signal_is() plus suspend() as a corner case.
+//
 // Revision 1.21  2011/03/12 21:07:51  acg
 //  Andy Goodrich: changes to kernel generated event support.
 //
@@ -541,7 +544,7 @@ sc_process_b::sc_process_b( const char* name_p, bool is_thread, bool free_host,
     m_event_list_p(0),
     m_exist_p(0),
     m_free_host( free_host ),
-    m_has_sync_reset( false ),
+    m_has_reset_signal( false ),
     m_is_thread(is_thread),
     m_last_report_p(0),
     m_name_gen_p(0),

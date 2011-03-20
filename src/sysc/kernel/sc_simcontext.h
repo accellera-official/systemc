@@ -52,6 +52,9 @@
                                
  *****************************************************************************/
 // $Log: sc_simcontext.h,v $
+// Revision 1.18  2011/03/20 13:43:23  acg
+//  Andy Goodrich: added async_signal_is() plus suspend() as a corner case.
+//
 // Revision 1.17  2011/03/07 18:25:19  acg
 //  Andy Goodrich: tightening of check for resume on a disabled process to
 //  only produce an error if it is ready to run.
