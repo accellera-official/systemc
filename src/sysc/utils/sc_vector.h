@@ -443,6 +443,11 @@ public:
                , iterator from )
     { return sc_vector_do_bind( *this, first, last, from ); }
 
+  template< typename BindableIterator >
+  iterator bind( BindableIterator first, BindableIterator last
+               , typename base_type::iterator from )
+    { return bind( first, last, iterator(from.it_, ptr_) ); }
+
   template< typename ContainerType, typename ArgumentType >
   iterator operator()( sc_vector_assembly<ContainerType,ArgumentType> c )
     { return operator()( c.begin(), c.end() ); }
@@ -459,6 +464,11 @@ public:
   iterator operator()( ArgumentIterator first, ArgumentIterator last
                      , iterator from )
     { return sc_vector_do_operator_paren( *this, first, last, from ); }
+
+  template< typename ArgumentIterator >
+  iterator operator()( ArgumentIterator first, ArgumentIterator last
+                     , typename base_type::iterator from )
+    { return operator()( first, last, iterator(from.it_, ptr_) ); }
 
   sc_vector_assembly( const sc_vector_assembly & other )
     : vec_( other.vec_ )
