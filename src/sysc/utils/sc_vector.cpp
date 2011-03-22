@@ -57,7 +57,24 @@ namespace sc_core {
 sc_vector_base::sc_vector_base()
   : sc_object( sc_gen_unique_name("vector") )
   , vec_()
+  , objs_vec_()
 {}
+
+std::vector< sc_object* > const &
+sc_vector_base::get_elements() const
+{
+  if( !objs_vec_ )
+    objs_vec_ = new std::vector< sc_object* >;
+
+  if( objs_vec_->size() || !size() )
+    return *objs_vec_;
+
+  objs_vec_->reserve( size() );
+  for( const_iterator it=begin(); it != end(); ++it )
+    objs_vec_->push_back( object_cast( *it ) );
+
+  return *objs_vec_;
+}
 
 void
 sc_vector_base::check_index( size_type i ) const

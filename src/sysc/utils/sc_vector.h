@@ -81,14 +81,13 @@ class sc_vector_base
 
 public:
 
-  typedef std::vector< sc_object* >     storage_type;
+  typedef std::vector< void* >          storage_type;
   typedef storage_type::size_type       size_type;
   typedef storage_type::difference_type difference_type;
 
   const char * kind() const { return "sc_vector"; }
 
-  storage_type const & get_elements() const
-    { return vec_; }
+  std::vector<sc_object*> const & get_elements() const;
 
   size_type size() const
     { return vec_.size(); }
@@ -105,12 +104,16 @@ protected:
   sc_vector_base( const char* prefix )
     : sc_object( prefix )
     , vec_()
+    , objs_vec_(0)
   {}
 
-  sc_object * & at( size_type i )
+  ~sc_vector_base()
+    { delete objs_vec_; }
+
+  void * & at( size_type i )
     { return vec_[i]; }
 
-  sc_object const * at( size_type i ) const
+  void const * at( size_type i ) const
     { return vec_[i]; }
 
   void reserve( size_type n )
@@ -119,7 +122,7 @@ protected:
   void clear()
     { vec_.clear(); }
 
-  void push_back( sc_object* item )
+  void push_back( void* item )
     { vec_.push_back(item); }
 
   void check_index( size_type i ) const;
@@ -133,12 +136,15 @@ protected:
   const_iterator begin() const { return vec_.begin(); }
   const_iterator end()   const { return vec_.end();   }
 
+  virtual sc_object* object_cast( void* ) const = 0;
+
 public: 
 
   void report_empty_bind( const char* kind_, bool dst_range_ ) const;
 
 private:
   storage_type vec_;
+  mutable std::vector< sc_object* >* objs_vec_;
 
   // disabled
   sc_vector_base( const sc_vector_base& );
@@ -360,6 +366,9 @@ protected:
 
   void clear();
 
+  virtual sc_object* object_cast( void* p ) const
+    { return static_cast<element_type*>(p); }
+
 };
 
 template< typename T, typename MT >
@@ -514,7 +523,7 @@ sc_vector<T>::init( size_type n, Creator c )
         std::string  name  = make_name( basename(), i );
         const char*  cname = name.c_str();
 
-        sc_object* p = c( cname, i ) ; // call Creator
+        void* p = c( cname, i ) ; // call Creator
         base_type::push_back(p);
       }
     }
