@@ -35,6 +35,10 @@
  *****************************************************************************/
 
 // $Log: sc_method_process.cpp,v $
+// Revision 1.30  2011/03/23 16:17:52  acg
+//  Andy Goodrich: don't emit an error message for a resume on a disabled
+//  process that is not suspended.
+//
 // Revision 1.29  2011/03/20 13:43:23  acg
 //  Andy Goodrich: added async_signal_is() plus suspend() as a corner case.
 //
@@ -268,6 +272,13 @@ void sc_method_process::disable_process(
     // DISABLE OUR OBJECT INSTANCE:
 
     m_state = m_state | ps_bit_disabled;
+
+    // IF THIS CALL IS BEFORE THE SIMULATION DON'T RUN THE METHOD:
+
+    if ( !sc_is_running() )
+    {
+        sc_get_curr_simcontext()->remove_runnable_method(this);
+    }
 }
 
 
@@ -532,17 +543,20 @@ void sc_method_process::resume_process(
         }
     }
 
-    // CLEAR THE SUSPENDED BIT:
-
-    m_state = m_state & ~ps_bit_suspended;
 
     // BY DEFAULT THE CORNER CASE IS AN ERROR:
 
-    if ( !sc_allow_process_control_corners && m_state & ps_bit_disabled )
+    if ( !sc_allow_process_control_corners && (m_state & ps_bit_disabled) &&
+         (m_state & ps_bit_suspended) )
     {
+	m_state = m_state & ~ps_bit_suspended;
         SC_REPORT_ERROR(SC_ID_PROCESS_CONTROL_CORNER_CASE_, 
-	               ": call to resume() on a disabled process");
+	               ": call to resume() on a disabled suspended method");
     }
+
+    // CLEAR THE SUSPENDED BIT:
+
+    m_state = m_state & ~ps_bit_suspended;
 
     // RESUME OBJECT INSTANCE IF IT IS READY TO RUN:
 
@@ -564,8 +578,13 @@ void sc_method_process::resume_process(
 //
 // If the reset is asynchronous we:
 //   (a) cancel any dynamic waits 
-//   (b) schedule it to execute.
-//   (c) if it is the active process actually throw a reset exception.
+//   (b) if it is the active process actually throw a reset exception.
+//   (c) if it was not the active process and does not have a static
+//       sensitivity emit an error if corner cases are to be considered
+//       errors.
+//
+// Arguments:
+//   async = true if this is an asynchronous reset.
 //------------------------------------------------------------------------------
 void sc_method_process::throw_reset( bool async )
 {
@@ -577,6 +596,15 @@ void sc_method_process::throw_reset( bool async )
 	{
 	    m_throw_status = THROW_ASYNC_RESET;
 	    throw sc_unwind_exception( this, true );
+	}
+	else if ( sc_allow_process_control_corners )
+	{
+	    simcontext()->push_runnable_method(this);
+	}
+	else if ( m_static_events.size() == 0 )
+	{
+	    SC_REPORT_ERROR( SC_ID_PROCESS_CONTROL_CORNER_CASE_,
+		": asynchronous reset of a method with no static sensitivity" );
 	}
     }
 }

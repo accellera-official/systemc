@@ -118,7 +118,11 @@ public: // constructors and destructor:
     // get the default event
     virtual const sc_event& default_event() const
 	{ 
-	    if ( !m_change_event_p ) m_change_event_p = new sc_event; 
+	    if ( !m_change_event_p ) 
+	    {
+	        m_change_event_p = new sc_event( 
+		    (std::string(name())+"_value_changed_event").c_str());; 
+	    }
 	    return *m_change_event_p; 
 	}
 
@@ -126,7 +130,11 @@ public: // constructors and destructor:
     // get the value changed event
     virtual const sc_event& value_changed_event() const
 	{ 
-	    if ( !m_change_event_p ) m_change_event_p = new sc_event; 
+	    if ( !m_change_event_p ) 
+	    {
+	        m_change_event_p = new sc_event( 
+		    (std::string(name())+"_value_changed_event").c_str());; 
+	    }
 	    return *m_change_event_p; 
 	}
 
@@ -336,7 +344,11 @@ public: // constructors and destructor:
     // get the default event
     virtual const sc_event& default_event() const
 	{ 
-	    if ( !m_change_event_p ) m_change_event_p = new sc_event; 
+	    if ( !m_change_event_p ) 
+	    {
+	        m_change_event_p = new sc_event(
+		    (std::string(name())+"_value_changed_event").c_str());; 
+	    }
 	    return *m_change_event_p; 
 	}
 
@@ -344,7 +356,11 @@ public: // constructors and destructor:
     // get the value changed event
     virtual const sc_event& value_changed_event() const
 	{ 
-	    if ( !m_change_event_p ) m_change_event_p = new sc_event; 
+	    if ( !m_change_event_p ) 
+	    {
+	        m_change_event_p = new sc_event( 
+		    (std::string(name())+"_value_changed_event").c_str());; 
+	    }
 	    return *m_change_event_p; 
 	}
 
@@ -619,7 +635,11 @@ public: // constructors and destructor:
     // get the default event
     virtual const sc_event& default_event() const
 	{ 
-	    if ( !m_change_event_p ) m_change_event_p = new sc_event; 
+	    if ( !m_change_event_p ) 
+	    {
+	        m_change_event_p = new sc_event( 
+		    (std::string(name())+"_value_changed_event").c_str());; 
+	    }
 	    return *m_change_event_p; 
 	}
 
@@ -627,7 +647,11 @@ public: // constructors and destructor:
     // get the value changed event
     virtual const sc_event& value_changed_event() const
 	{ 
-	    if ( !m_change_event_p ) m_change_event_p = new sc_event; 
+	    if ( !m_change_event_p ) 
+	    {
+	        m_change_event_p = new sc_event( 
+		    (std::string(name())+"_value_changed_event").c_str());; 
+	    }
 	    return *m_change_event_p; 
 	}
 
@@ -635,7 +659,10 @@ public: // constructors and destructor:
     virtual const sc_event& posedge_event() const
 	{ 
 	    if ( !m_posedge_event_p )
-	        m_posedge_event_p = new sc_event; 
+	    {
+	        m_posedge_event_p = new sc_event(
+		    (std::string(name())+"_posedge_event").c_str());; 
+	    }
 	    return *m_posedge_event_p; 
 	}
 
@@ -643,7 +670,10 @@ public: // constructors and destructor:
     virtual const sc_event& negedge_event() const
 	{ 
 	    if ( !m_negedge_event_p )
-	        m_negedge_event_p = new sc_event; 
+	    {
+	        m_negedge_event_p = new sc_event(
+		    (std::string(name())+"_negedge_event").c_str());; 
+	    }
 	    return *m_negedge_event_p; 
 	}
 
@@ -829,6 +859,9 @@ operator << ( ::std::ostream& os, const sc_signal<T,POL>& a )
     
  *****************************************************************************/
 //$Log: sc_signal.h,v $
+//Revision 1.8  2011/03/23 16:17:22  acg
+// Andy Goodrich: hide the sc_events that are kernel related.
+//
 //Revision 1.7  2011/03/06 15:55:08  acg
 // Andy Goodrich: Changes for named events.
 //

@@ -35,6 +35,10 @@
  *****************************************************************************/
 
 // $Log: sc_thread_process.cpp,v $
+// Revision 1.38  2011/03/23 16:17:52  acg
+//  Andy Goodrich: don't emit an error message for a resume on a disabled
+//  process that is not suspended.
+//
 // Revision 1.37  2011/03/20 13:43:23  acg
 //  Andy Goodrich: added async_signal_is() plus suspend() as a corner case.
 //
@@ -311,6 +315,13 @@ void sc_thread_process::disable_process(
     // DISABLE OUR OBJECT INSTANCE:
 
     m_state = m_state | ps_bit_disabled; 
+
+    // IF THIS CALL IS BEFORE THE SIMULATION DON'T RUN THE THREAD:
+
+    if ( !sc_is_running() )
+    {
+        simcontext()->remove_runnable_thread(this);
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -456,17 +467,19 @@ void sc_thread_process::resume_process(
         }
     }
 
+    // BY DEFAULT THE CORNER CASE IS AN ERROR:
+
+    if ( !sc_allow_process_control_corners && (m_state & ps_bit_disabled) &&
+         (m_state & ps_bit_suspended) )
+    {
+	m_state = m_state & ~ps_bit_suspended;
+        SC_REPORT_ERROR(SC_ID_PROCESS_CONTROL_CORNER_CASE_, 
+	               ": call to resume() on a disabled suspended thread");
+    }
+
     // CLEAR THE SUSPENDED BIT:
 
     m_state = m_state & ~ps_bit_suspended;
-
-    // BY DEFAULT THE CORNER CASE IS AN ERROR:
-
-    if ( !sc_allow_process_control_corners && m_state & ps_bit_disabled )
-    {
-        SC_REPORT_ERROR(SC_ID_PROCESS_CONTROL_CORNER_CASE_, 
-	               ": call to resume() on a disabled process");
-    }
 
     // RESUME OBJECT INSTANCE IF IT IS READY TO RUN:
 

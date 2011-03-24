@@ -35,6 +35,9 @@
 
 
 // $Log: sc_semaphore.cpp,v $
+// Revision 1.4  2011/03/23 16:17:22  acg
+//  Andy Goodrich: hide the sc_events that are kernel related.
+//
 // Revision 1.3  2011/02/18 20:23:45  acg
 //  Andy Goodrich: Copyright update.
 //
@@ -87,6 +90,7 @@ sc_semaphore::report_error( const char* id, const char* add_msg ) const
 
 sc_semaphore::sc_semaphore( int init_value_ )
 : sc_object( sc_gen_unique_name( "semaphore" ) ),
+  m_free( (std::string(SC_KERNEL_EVENT_PREFIX)+"_free_event").c_str() ),
   m_value( init_value_ )
 {
     if( m_value < 0 ) {
@@ -95,7 +99,9 @@ sc_semaphore::sc_semaphore( int init_value_ )
 }
 
 sc_semaphore::sc_semaphore( const char* name_, int init_value_ )
-: sc_object( name_ ), m_value( init_value_ )
+: sc_object( name_ ), 
+  m_free( (std::string(SC_KERNEL_EVENT_PREFIX)+"_free_event").c_str() ),
+  m_value( init_value_ )
 {
     if( m_value < 0 ) {
 	report_error( SC_ID_INVALID_SEMAPHORE_VALUE_ );

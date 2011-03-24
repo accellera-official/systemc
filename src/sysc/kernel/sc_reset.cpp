@@ -24,6 +24,10 @@
  *****************************************************************************/
 
 // $Log: sc_reset.cpp,v $
+// Revision 1.13  2011/03/20 15:13:01  acg
+//  Andy Goodrich: set the reset flag for async_reset_signal_is to catch
+//  the suspend() corner case.
+//
 // Revision 1.12  2011/03/20 13:43:23  acg
 //  Andy Goodrich: added async_signal_is() plus suspend() as a corner case.
 //

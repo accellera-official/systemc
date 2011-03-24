@@ -34,6 +34,12 @@
  *****************************************************************************/
 
 // $Log: sc_vector.cpp,v $
+// Revision 1.3  2011/03/23 16:16:28  acg
+//  Philipp A. Hartman: rebase implementation on void*
+//      - supports virtual inheritance from sc_object again
+//      - build up get_elements result on demand
+//      - still requires element type to be derived from sc_object
+//
 // Revision 1.2  2011/02/14 17:54:25  acg
 //  Andy Goodrich: Philipp's addition of early bind checks.
 //
@@ -57,7 +63,24 @@ namespace sc_core {
 sc_vector_base::sc_vector_base()
   : sc_object( sc_gen_unique_name("vector") )
   , vec_()
+  , objs_vec_()
 {}
+
+std::vector< sc_object* > const &
+sc_vector_base::get_elements() const
+{
+  if( !objs_vec_ )
+    objs_vec_ = new std::vector< sc_object* >;
+
+  if( objs_vec_->size() || !size() )
+    return *objs_vec_;
+
+  objs_vec_->reserve( size() );
+  for( const_iterator it=begin(); it != end(); ++it )
+    objs_vec_->push_back( object_cast( *it ) );
+
+  return *objs_vec_;
+}
 
 void
 sc_vector_base::check_index( size_type i ) const

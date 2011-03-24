@@ -33,6 +33,9 @@
     
  *****************************************************************************/
 //$Log: sc_fifo.h,v $
+//Revision 1.5  2011/03/23 16:17:22  acg
+// Andy Goodrich: hide the sc_events that are kernel related.
+//
 //Revision 1.4  2011/02/18 20:23:45  acg
 // Andy Goodrich: Copyright update.
 //
@@ -100,11 +103,19 @@ public:
     // constructors
 
     explicit sc_fifo( int size_ = 16 )
-	: sc_prim_channel( sc_gen_unique_name( "fifo" ) )
+	: sc_prim_channel( sc_gen_unique_name( "fifo" ) ),
+	  m_data_read_event(
+	      (std::string(SC_KERNEL_EVENT_PREFIX)+"_read_event").c_str()),
+	  m_data_written_event(
+	      (std::string(SC_KERNEL_EVENT_PREFIX)+"_write_event").c_str())
 	{ init( size_ ); }
 
     explicit sc_fifo( const char* name_, int size_ = 16 )
-	: sc_prim_channel( name_ )
+	: sc_prim_channel( name_ ),
+	  m_data_read_event(
+	      (std::string(SC_KERNEL_EVENT_PREFIX)+"_read_event").c_str()),
+	  m_data_written_event(
+	      (std::string(SC_KERNEL_EVENT_PREFIX)+"_write_event").c_str())
 	{ init( size_ ); }
 
 

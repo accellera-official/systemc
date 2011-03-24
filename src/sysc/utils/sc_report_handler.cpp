@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_report_handler.cpp,v $
+// Revision 1.5  2011/03/23 16:16:49  acg
+//  Andy Goodrich: finish message verbosity support.
+//
 // Revision 1.4  2011/02/18 20:38:44  acg
 //  Andy Goodrich: Updated Copyright notice.
 //
