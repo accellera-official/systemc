@@ -49,7 +49,7 @@ SC_MODULE(DUT)
         async_reset_signal_is(m_areset,true);
         reset_signal_is(m_sreset,true);
         SC_METHOD(static_method);
-        async_reset_signal_is(m_areset,true);
+        reset_signal_is(m_areset,true);
         SC_THREAD(static_thread_clocked);
         sensitive << m_clk.pos();
         dont_initialize();
@@ -73,7 +73,7 @@ SC_MODULE(DUT)
 
         wait(1);
 
-        options_method.async_reset_signal_is( m_areset, true );
+        options_method.reset_signal_is( m_areset, true );
         options_method.spawn_method();
         sc_spawn( sc_bind(&DUT::dynamic_method, this), "dynamic_method", 
             &options_method);
