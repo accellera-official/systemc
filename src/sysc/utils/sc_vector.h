@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: sc_vector.h,v $
+// Revision 1.13  2011/03/28 13:03:09  acg
+//  Andy Goodrich: Philipp's latest update.
+//
 // Revision 1.12  2011/03/23 16:16:28  acg
 //  Philipp A. Hartman: rebase implementation on void*
 //      - supports virtual inheritance from sc_object again

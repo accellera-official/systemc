@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: sc_kernel_ids.h,v $
+// Revision 1.16  2011/03/28 13:02:51  acg
+//  Andy Goodrich: Changes for disable() interactions.
+//
 // Revision 1.15  2011/03/07 17:34:21  acg
 //  Andy Goodrich: changed process control corner case message. Added more
 //  place holders for unused message numbers.
@@ -233,7 +236,8 @@ SC_DEFINE_MESSAGE( SC_ID_SIMULATION_START_AFTER_ERROR_, 548,
 // available message number 555
 // available message number 556
 // available message number 557
-// available message number 558
+SC_DEFINE_MESSAGE(SC_ID_DISABLE_WILL_ORPHAN_PROCESS_     , 558,
+	"disable() or dont_initialize() called on process with no static sensitivity, it will be orphaned: " ) 
 SC_DEFINE_MESSAGE(SC_ID_PROCESS_CONTROL_CORNER_CASE_     , 559,
 	"Undefined process control interaction" ) 
 SC_DEFINE_MESSAGE(SC_ID_METHOD_TERMINATION_EVENT_        , 560,

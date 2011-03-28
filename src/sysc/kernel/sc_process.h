@@ -46,6 +46,9 @@
  *****************************************************************************/
 
 // $Log: sc_process.h,v $
+// Revision 1.25  2011/03/28 13:02:51  acg
+//  Andy Goodrich: Changes for disable() interactions.
+//
 // Revision 1.24  2011/03/20 13:43:23  acg
 //  Andy Goodrich: added async_signal_is() plus suspend() as a corner case.
 //
@@ -552,7 +555,7 @@ class sc_process_b : public sc_object {
     const sc_event_list*         m_event_list_p;    // event list waiting on.
     sc_process_b*                m_exist_p;         // process existence link.
     bool                         m_free_host;       // free sc_semantic_host_p.
-    bool                         m_has_reset_signal;  // true has reset_signal_is.
+    bool                         m_has_reset_signal;  // has reset_signal_is.
     bool                         m_is_thread;       // true if this is thread.
     sc_report*                   m_last_report_p;   // last report this process.
     sc_name_gen*                 m_name_gen_p;      // subprocess name generator

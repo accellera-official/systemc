@@ -36,6 +36,9 @@
  *****************************************************************************/
 
 // $Log: sc_runnable_int.h,v $
+// Revision 1.11  2011/03/28 13:02:52  acg
+//  Andy Goodrich: Changes for disable() interactions.
+//
 // Revision 1.10  2011/03/06 15:58:17  acg
 //  Andy Goodrich: formatting changes.
 //
@@ -336,6 +339,12 @@ inline void sc_runnable::remove_method( sc_method_handle remove_p )
     sc_method_handle now_p;     // Method now checking.
     sc_method_handle prior_p;   // Method prior to now_p.
 
+    // Don't try to remove things if we have not been initialized.
+
+    if ( !is_initialized() ) return;
+
+    // Search the push queue:
+
     prior_p = m_methods_push_head;
     for ( now_p = m_methods_push_head; now_p!= SC_NO_METHODS; 
 	    now_p = now_p->next_runnable() )
@@ -348,6 +357,24 @@ inline void sc_runnable::remove_method( sc_method_handle remove_p )
             }
             now_p->set_next_runnable(0);
             break;
+        }
+        prior_p = now_p;
+    }
+
+    // Search the pop queue:
+
+    prior_p = NULL;
+    for ( now_p = m_methods_pop; now_p != SC_NO_METHODS; 
+	  now_p = now_p->next_runnable() )
+    {
+        if ( remove_p == now_p )
+        {
+	    if ( prior_p )
+		prior_p->set_next_runnable( now_p->next_runnable() );
+	    else
+	        m_methods_pop = now_p->next_runnable();
+            now_p->set_next_runnable(0);
+            return;
         }
         prior_p = now_p;
     }
@@ -366,6 +393,10 @@ inline void sc_runnable::remove_thread( sc_thread_handle remove_p )
 {
     sc_thread_handle now_p;     // Thread now checking.
     sc_thread_handle prior_p;   // Thread prior to now_p.
+
+    // Don't try to remove things if we have not been initialized.
+
+    if ( !is_initialized() ) return;
 
     // Search the push queue:
 

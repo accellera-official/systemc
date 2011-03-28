@@ -1,0 +1,73 @@
+Index: sc_method_process.cpp
+===================================================================
+RCS file: /Users/acg/CVSROOT/systemc-2.3/src/sysc/kernel/sc_method_process.cpp,v
+retrieving revision 1.30
+diff -w -b -r1.30 sc_method_process.cpp
+581,582c581,587
+< //   (b) schedule it to execute.
+< //   (c) if it is the active process actually throw a reset exception.
+---
+> //   (b) if it is the active process actually throw a reset exception.
+> //   (c) if it was not the active process and does not have a static
+> //       sensitivity emit an error if corner cases are to be considered
+> //       errors.
+> //
+> // Arguments:
+> //   async = true if this is an asynchronous reset.
+594a600,608
+> 	else if ( sc_allow_process_control_corners )
+> 	{
+> 	    simcontext()->push_runnable_method(this);
+> 	}
+> 	else if ( m_static_events.size() == 0 )
+> 	{
+> 	    SC_REPORT_ERROR( SC_ID_PROCESS_CONTROL_CORNER_CASE_,
+> 		": asynchronous reset of a method with no static sensitivity" );
+> 	}
+Index: sc_runnable_int.h
+===================================================================
+RCS file: /Users/acg/CVSROOT/systemc-2.3/src/sysc/kernel/sc_runnable_int.h,v
+retrieving revision 1.10
+diff -w -b -r1.10 sc_runnable_int.h
+338a339,344
+>     // Don't try to remove things if we have not been initialized.
+> 
+>     if ( !is_initialized() ) return;
+> 
+>     // Search the push queue:
+> 
+353a360,377
+> 
+>     // Search the pop queue:
+> 
+>     prior_p = NULL;
+>     for ( now_p = m_methods_pop; now_p != SC_NO_METHODS; 
+> 	  now_p = now_p->next_runnable() )
+>     {
+>         if ( remove_p == now_p )
+>         {
+> 	    if ( prior_p )
+> 		prior_p->set_next_runnable( now_p->next_runnable() );
+> 	    else
+> 	        m_methods_pop = now_p->next_runnable();
+>             now_p->set_next_runnable(0);
+>             return;
+>         }
+>         prior_p = now_p;
+>     }
+369a394,397
+>     // Don't try to remove things if we have not been initialized.
+> 
+>     if ( !is_initialized() ) return;
+> 
+Index: sc_simcontext.cpp
+===================================================================
+RCS file: /Users/acg/CVSROOT/systemc-2.3/src/sysc/kernel/sc_simcontext.cpp,v
+retrieving revision 1.23
+diff -w -b -r1.23 sc_simcontext.cpp
+827c827,829
+<         if( !method_p->dont_initialize() ) {
+---
+>         if( !method_p->dont_initialize() && 
+> 	    ((method_p->m_state & sc_process_b::ps_bit_disabled)== 0) ) 
+> 	{

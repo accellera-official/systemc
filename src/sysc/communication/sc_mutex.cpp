@@ -34,6 +34,10 @@
  *****************************************************************************/
 
 // $Log: sc_mutex.cpp,v $
+// Revision 1.6  2011/03/28 13:02:29  acg
+//  Andy Goodrich: removed sc_event in sc_mutex class from the object
+//  hierarchy since it is considered a "kernel" event.
+//
 // Revision 1.5  2011/02/18 20:23:45  acg
 //  Andy Goodrich: Copyright update.
 //
@@ -75,12 +79,14 @@ namespace sc_core {
 
 sc_mutex::sc_mutex()
 : sc_object( sc_gen_unique_name( "mutex" ) ),
-  m_owner( 0 )
+  m_owner( 0 ),
+  m_free( (std::string(SC_KERNEL_EVENT_PREFIX)+"_free_event").c_str() )
 {}
 
 sc_mutex::sc_mutex( const char* name_ )
 : sc_object( name_ ),
-  m_owner( 0 )
+  m_owner( 0 ),
+  m_free( (std::string(SC_KERNEL_EVENT_PREFIX)+"_free_event").c_str() )
 {}
 
 

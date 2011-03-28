@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_method_process.cpp,v $
+// Revision 1.31  2011/03/28 13:02:51  acg
+//  Andy Goodrich: Changes for disable() interactions.
+//
 // Revision 1.30  2011/03/23 16:17:52  acg
 //  Andy Goodrich: don't emit an error message for a resume on a disabled
 //  process that is not suspended.

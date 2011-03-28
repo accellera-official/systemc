@@ -58,6 +58,9 @@
 				 execution problem with using sc_pvector.
  *****************************************************************************/
 // $Log: sc_simcontext.cpp,v $
+// Revision 1.24  2011/03/28 13:02:52  acg
+//  Andy Goodrich: Changes for disable() interactions.
+//
 // Revision 1.23  2011/03/12 21:07:51  acg
 //  Andy Goodrich: changes to kernel generated event support.
 //
@@ -824,8 +827,18 @@ sc_simcontext::prepare_to_simulate()
     for ( method_p = m_process_table->method_q_head(); 
 	  method_p; method_p = method_p->next_exist() )
     {
-        if( !method_p->dont_initialize() ) {
-            push_runnable_method_front( method_p );
+	if ( ((method_p->m_state & sc_process_b::ps_bit_disabled) != 0) ||
+	     method_p->dont_initialize() ) 
+	{
+	    if ( method_p->m_static_events.size() == 0 )
+	    {
+	        SC_REPORT_WARNING( SC_ID_DISABLE_WILL_ORPHAN_PROCESS_, 
+		                   method_p->name() );
+	    }
+	}
+	else 
+	{
+		push_runnable_method_front( method_p );
         }
     }
 
@@ -835,7 +848,17 @@ sc_simcontext::prepare_to_simulate()
     for ( thread_p = m_process_table->thread_q_head(); 
 	  thread_p; thread_p = thread_p->next_exist() )
     {
-        if( !thread_p->dont_initialize() ) {
+	if ( ((thread_p->m_state & sc_process_b::ps_bit_disabled) != 0) || 
+	     thread_p->dont_initialize() ) 
+	{
+	    if ( thread_p->m_static_events.size() == 0 )
+	    {
+	        SC_REPORT_WARNING( SC_ID_DISABLE_WILL_ORPHAN_PROCESS_, 
+		                   thread_p->name() );
+	    }
+	}
+        else
+	{
             push_runnable_thread_front( thread_p );
         }
     }
