@@ -36,6 +36,10 @@
  *****************************************************************************/
 
 // $Log: sc_runnable_int.h,v $
+// Revision 1.12  2011/03/30 00:01:34  acg
+//  Philip A. Hartman: change break to return in remove_method() to short
+//  circuit the search the way remove_thread() works.
+//
 // Revision 1.11  2011/03/28 13:02:52  acg
 //  Andy Goodrich: Changes for disable() interactions.
 //
@@ -356,7 +360,7 @@ inline void sc_runnable::remove_method( sc_method_handle remove_p )
                 m_methods_push_tail = prior_p;
             }
             now_p->set_next_runnable(0);
-            break;
+            return;
         }
         prior_p = now_p;
     }

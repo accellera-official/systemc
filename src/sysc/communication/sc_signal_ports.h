@@ -153,6 +153,9 @@ public:
     virtual void bind( const in_if_type& interface_ )
 	{ sc_port_base::bind( CCAST<in_if_type&>( interface_ ) ); }
 
+    virtual void bind( in_if_type& interface_ )
+	{ sc_port_base::bind( CCAST<in_if_type&>( interface_ ) ); }
+
     void operator () ( const in_if_type& interface_ )
 	{ this->bind( interface_ ); }
 
@@ -463,6 +466,9 @@ public:
     virtual void bind( const in_if_type& interface_ )
 	{ sc_port_base::bind( CCAST<in_if_type&>( interface_ ) ); }
 
+    virtual void bind( in_if_type& interface_ )
+	{ sc_port_base::bind( CCAST<in_if_type&>( interface_ ) ); }
+
     void operator () ( const in_if_type& interface_ )
 	{ this->bind( interface_ ); }
 
@@ -716,6 +722,9 @@ public:
     // bind to in interface
 
     virtual void bind( const in_if_type& interface_ )
+	{ sc_port_base::bind( CCAST<in_if_type&>( interface_ ) ); }
+
+    virtual void bind( in_if_type& interface_ )
 	{ sc_port_base::bind( CCAST<in_if_type&>( interface_ ) ); }
 
     void operator () ( const in_if_type& interface_ )
@@ -1797,6 +1806,10 @@ sc_trace( sc_trace_file* tf, const sc_inout<T>& port,
 
  *****************************************************************************/
 //$Log: sc_signal_ports.h,v $
+//Revision 1.4  2011/03/30 16:46:10  acg
+// Andy Goodrich: added a signature and removed a virtual specification
+// to eliminate warnings with certain compilers.
+//
 //Revision 1.3  2011/02/18 20:23:45  acg
 // Andy Goodrich: Copyright update.
 //

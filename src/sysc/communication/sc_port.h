@@ -42,6 +42,10 @@
 
 /* 
 $Log: sc_port.h,v $
+Revision 1.5  2011/03/30 16:46:10  acg
+ Andy Goodrich: added a signature and removed a virtual specification
+ to eliminate warnings with certain compilers.
+
 Revision 1.4  2011/02/18 20:23:45  acg
  Andy Goodrich: Copyright update.
 
@@ -170,10 +174,10 @@ protected:
     virtual ~sc_port_base();
 
     // bind interface to this port
-    virtual void bind( sc_interface& interface_ );
+    void bind( sc_interface& interface_ );
 
     // bind parent port to this port
-    virtual void bind( this_type& parent_ );
+    void bind( this_type& parent_ );
 
     // called by pbind (for internal use only)
     virtual int vbind( sc_interface& ) = 0;
