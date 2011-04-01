@@ -227,6 +227,8 @@ class sc_vector_iter
   sc_vector_iter( raw_iterator it, access_policy acc = access_policy() )
     : access_policy(acc), it_(it) {}
 
+  access_policy const & get_policy() const { return *this; }
+
 public:
   // interface for Random Access Iterator category,
   // see ISO/IEC 14882:2003(E), 24.1 [lib.iterator.requirements]
@@ -244,8 +246,10 @@ public:
   this_type  operator--(int){ this_type old(*this); --it_; return old; }
 
   // advance
-  this_type  operator+( difference_type n ) { return it_ + n; }
-  this_type  operator-( difference_type n ) { return it_ - n; }
+  this_type  operator+( difference_type n )
+    { return this_type( it_ + n, get_policy()); }
+  this_type  operator-( difference_type n )
+    { return this_type( it_ + n, get_policy()); }
   this_type& operator+=( difference_type n ) { it_+=n; return *this; }
   this_type& operator-=( difference_type n ) { it_-=n; return *this; }
 
