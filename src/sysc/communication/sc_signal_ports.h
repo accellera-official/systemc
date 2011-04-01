@@ -154,7 +154,7 @@ public:
 	{ sc_port_base::bind( CCAST<in_if_type&>( interface_ ) ); }
 
     virtual void bind( in_if_type& interface_ )
-	{ sc_port_base::bind( CCAST<in_if_type&>( interface_ ) ); }
+	{ this->bind( CCAST<const in_if_type&>( interface_ ) ); }
 
     void operator () ( const in_if_type& interface_ )
 	{ this->bind( interface_ ); }
@@ -467,7 +467,7 @@ public:
 	{ sc_port_base::bind( CCAST<in_if_type&>( interface_ ) ); }
 
     virtual void bind( in_if_type& interface_ )
-	{ sc_port_base::bind( CCAST<in_if_type&>( interface_ ) ); }
+	{ this->bind( CCAST<const in_if_type&>( interface_ ) ); }
 
     void operator () ( const in_if_type& interface_ )
 	{ this->bind( interface_ ); }
@@ -725,7 +725,7 @@ public:
 	{ sc_port_base::bind( CCAST<in_if_type&>( interface_ ) ); }
 
     virtual void bind( in_if_type& interface_ )
-	{ sc_port_base::bind( CCAST<in_if_type&>( interface_ ) ); }
+	{ this->bind( CCAST<const in_if_type&>( interface_ ) ); }
 
     void operator () ( const in_if_type& interface_ )
 	{ this->bind( interface_ ); }
