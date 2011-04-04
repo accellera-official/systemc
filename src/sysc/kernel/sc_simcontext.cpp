@@ -844,6 +844,10 @@ sc_simcontext::prepare_to_simulate()
 	{
 		push_runnable_method_front( method_p );
         }
+	else
+	{
+	    method_p->m_state |= sc_process_b::ps_bit_ready_to_run;
+	}
     }
 
     // make thread processes runnable
@@ -865,6 +869,10 @@ sc_simcontext::prepare_to_simulate()
 	{
             push_runnable_thread_front( thread_p );
         }
+	else
+	{
+	    thread_p->m_state |= sc_process_b::ps_bit_ready_to_run;
+	}
     }
 
 
