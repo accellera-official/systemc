@@ -158,7 +158,7 @@ inline
 void
 sc_buffer<T,POL>::write( const T& value_ )
 {
-    if( !base_type::policy_type::check_write(this) )
+    if( !base_type::policy_type::check_write(this,true) )
       return;
 
     this->m_new_val = value_;

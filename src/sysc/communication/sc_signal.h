@@ -58,7 +58,7 @@ extern void sc_deprecated_trace();
 
 inline
 bool
-sc_writer_policy_check_write::check_write( sc_object* target )
+sc_writer_policy_check_write::check_write( sc_object* target, bool )
 {
   sc_object* writer_p = sc_get_curr_simcontext()->get_current_writer();
   if( SC_UNLIKELY_(m_writer_p == 0) ) {
@@ -232,28 +232,14 @@ inline
 void
 sc_signal<T,POL>::write( const T& value_ )
 {
-#if 0
-    if( !policy_type::check_write(this) )
+    bool value_changed = !( value_ == m_cur_val );
+    if( !policy_type::check_write(this, value_changed) )
         return;
-
-    m_new_val = value_;
-    if( !( m_new_val == m_cur_val ) ) {
-	request_update();
-    }
-#else
-    bool value_changed = !(value_ == m_cur_val);
-
-    if ( value_changed || POL != SC_MANY_WRITERS )
-    {
-        if( !policy_type::check_write(this) )
-            return;
-    }
 
     m_new_val = value_;
     if( value_changed ) {
         request_update();
     }
-#endif
 }
 
 
@@ -491,28 +477,14 @@ template< sc_writer_policy POL >
 void
 sc_signal<bool,POL>::write( const bool& value_ )
 {
-#if 0
-    if( !policy_type::check_write(this) )
-        return; // check failed - ignore write
-
-    m_new_val = value_;
-    if( !( m_new_val == m_cur_val ) ) {
-	request_update();
-    }
-#else
-    bool value_changed = !(value_ == m_cur_val);
-
-    if ( value_changed || POL != SC_MANY_WRITERS )
-    {
-        if( !policy_type::check_write(this) )
-            return;
-    }
+    bool value_changed = !( value_ == m_cur_val );
+    if( !policy_type::check_write(this, value_changed) )
+        return;
 
     m_new_val = value_;
     if( value_changed ) {
         request_update();
     }
-#endif
 }
 
 template< sc_writer_policy POL >
@@ -778,28 +750,14 @@ inline
 void
 sc_signal<sc_dt::sc_logic,POL>::write( const sc_dt::sc_logic& value_ )
 {
-#if 0
-    if( ! policy_type::check_write(this) )
+    bool value_changed = !( value_ == m_cur_val );
+    if( !policy_type::check_write(this, value_changed) )
         return;
-
-    m_new_val = value_;
-    if( !( m_new_val == m_cur_val ) ) {
-	request_update();
-    }
-#else
-    bool value_changed = !(value_ == m_cur_val);
-
-    if ( value_changed || POL != SC_MANY_WRITERS )
-    {
-        if( !policy_type::check_write(this) )
-            return;
-    }
 
     m_new_val = value_;
     if( value_changed ) {
         request_update();
     }
-#endif
 }
 
 template< sc_writer_policy POL >

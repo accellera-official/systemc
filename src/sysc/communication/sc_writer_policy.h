@@ -62,14 +62,15 @@ struct sc_writer_policy_check;
 
 struct sc_writer_policy_nocheck_write
 {
-  bool check_write( sc_object* target )
+
+  bool check_write( sc_object* /* target */, bool /* value_changed */ )
     { return true; }
   void update(){}
 };
 
 struct sc_writer_policy_check_write
 {
-  bool check_write( sc_object* target );
+  bool check_write( sc_object* target, bool value_changed );
   void update(){}
 protected:
   sc_writer_policy_check_write( bool check_delta = false )
@@ -85,7 +86,15 @@ struct sc_writer_policy_check_delta
   sc_writer_policy_check_delta()
     : sc_writer_policy_check_write(true) {}
 
+  bool check_write( sc_object* target, bool value_changed )
+  {
+      if( value_changed )
+          return sc_writer_policy_check_write::check_write( target, true );
+      return true;
+  }
+
   void update(){ m_writer_p = NULL; }
+
 };
 
 struct sc_writer_policy_nocheck_port
