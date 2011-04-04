@@ -154,7 +154,7 @@ public:
 	{ sc_port_base::bind( CCAST<in_if_type&>( interface_ ) ); }
 
     virtual void bind( in_if_type& interface_ )
-	{ sc_port_base::bind( CCAST<in_if_type&>( interface_ ) ); }
+	{ this->bind( CCAST<const in_if_type&>( interface_ ) ); }
 
     void operator () ( const in_if_type& interface_ )
 	{ this->bind( interface_ ); }
@@ -467,7 +467,7 @@ public:
 	{ sc_port_base::bind( CCAST<in_if_type&>( interface_ ) ); }
 
     virtual void bind( in_if_type& interface_ )
-	{ sc_port_base::bind( CCAST<in_if_type&>( interface_ ) ); }
+	{ this->bind( CCAST<const in_if_type&>( interface_ ) ); }
 
     void operator () ( const in_if_type& interface_ )
 	{ this->bind( interface_ ); }
@@ -725,7 +725,7 @@ public:
 	{ sc_port_base::bind( CCAST<in_if_type&>( interface_ ) ); }
 
     virtual void bind( in_if_type& interface_ )
-	{ sc_port_base::bind( CCAST<in_if_type&>( interface_ ) ); }
+	{ this->bind( CCAST<const in_if_type&>( interface_ ) ); }
 
     void operator () ( const in_if_type& interface_ )
 	{ this->bind( interface_ ); }
@@ -1806,6 +1806,13 @@ sc_trace( sc_trace_file* tf, const sc_inout<T>& port,
 
  *****************************************************************************/
 //$Log: sc_signal_ports.h,v $
+//Revision 1.6  2011/04/02 00:03:23  acg
+// Andy Goodrich: catch the other bind()'s that I missed in Philipp's update.
+//
+//Revision 1.5  2011/04/01 22:33:31  acg
+// Philipp A. Harmann: Use const interface signature to implement non-const
+// interface signature for virtual bind(...).
+//
 //Revision 1.4  2011/03/30 16:46:10  acg
 // Andy Goodrich: added a signature and removed a virtual specification
 // to eliminate warnings with certain compilers.

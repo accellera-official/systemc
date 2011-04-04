@@ -35,6 +35,9 @@
 
 
 // $Log: sc_object_manager.cpp,v $
+// Revision 1.10  2011/04/01 21:27:54  acg
+//  Andy Goodrich: documentation of event and object insertion methods.
+//
 // Revision 1.9  2011/03/06 15:55:11  acg
 //  Andy Goodrich: Changes for named events.
 //
@@ -320,7 +323,8 @@ sc_object_manager::hierarchy_size()
 // | table using the supplied name.
 // |
 // | Arguments:
-// |     node @@@@####
+// |     name    =  name of the event to be inserted.
+// |     event_p -> event to be inserted.
 // +----------------------------------------------------------------------------
 void
 sc_object_manager::insert_event(const std::string& name, sc_event* event_p)
@@ -335,7 +339,8 @@ sc_object_manager::insert_event(const std::string& name, sc_event* event_p)
 // | table using the supplied name.
 // |
 // | Arguments:
-// |     node @@@@####
+// |     name     =  name of the event to be inserted.
+// |     object_p -> object to be inserted.
 // +----------------------------------------------------------------------------
 void
 sc_object_manager::insert_object(const std::string& name, sc_object* object_p)

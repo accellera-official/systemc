@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_thread_process.h,v $
+// Revision 1.20  2011/04/01 21:24:57  acg
+//  Andy Goodrich: removed unused code.
+//
 // Revision 1.19  2011/02/19 08:30:53  acg
 //  Andy Goodrich: Moved process queueing into trigger_static from
 //  sc_event::notify.
@@ -205,7 +208,6 @@ class sc_thread_process : public sc_process_b {
     sc_thread_handle next_exist();
     sc_thread_handle next_runnable();
     virtual void prepare_for_simulation();
-    virtual void queue_for_execution();
     virtual void resume_process( 
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
     void set_next_exist( sc_thread_handle next_p );
@@ -317,8 +319,6 @@ inline void sc_thread_process::suspend_me()
         sc_assert( unwinding_preempted );
         break;
     }
-
-    // m_state = ps_normal; @@@@####
 }
 
 
@@ -481,13 +481,6 @@ inline
 sc_thread_handle sc_thread_process::next_exist()
 {
     return (sc_thread_handle)m_exist_p;
-}
-
-inline
-void sc_thread_process::queue_for_execution()
-{
-    if ( !is_runnable() )
-	simcontext()->push_runnable_thread(this);
 }
 
 inline

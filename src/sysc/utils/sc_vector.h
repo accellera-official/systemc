@@ -34,11 +34,18 @@
  *****************************************************************************/
 
 // $Log: sc_vector.h,v $
+// Revision 1.15  2011/04/02 00:04:32  acg
+//  Philipp A. Hartmann: fix distance from member iterators, and
+//  add iterator conversions.
+//
+// Revision 1.14  2011/04/01 22:35:19  acg
+//  Andy Goodrich: spelling fix.
+//
 // Revision 1.13  2011/03/28 13:03:09  acg
 //  Andy Goodrich: Philipp's latest update.
 //
 // Revision 1.12  2011/03/23 16:16:28  acg
-//  Philipp A. Hartman: rebase implementation on void*
+//  Philipp A. Hartmann: rebase implementation on void*
 //      - supports virtual inheritance from sc_object again
 //      - build up get_elements result on demand
 //      - still requires element type to be derived from sc_object
@@ -59,6 +66,48 @@
 //#define SC_VECTOR_HEADER_ONLY_
 
 namespace sc_core {
+namespace sc_meta {
+  // simplistic version to avoid Boost et.al.
+  template< typename T > struct remove_const          { typedef T type; };
+  template< typename T > struct remove_const<const T> { typedef T type; };
+
+  template< bool B, typename T = void >
+  struct enable_if_c { typedef T type; };
+  template< typename T>
+  struct enable_if_c<false,T>{};
+
+  template< typename Cond, typename T = void >
+  struct enable_if : enable_if_c< Cond::value, T > {};
+  
+  template< typename, typename >
+  struct is_same      { static const bool value = false; };
+  template< typename T >
+  struct is_same<T,T> { static const bool value = true; };
+
+  template< typename >
+  struct is_const { static const bool value = false; };
+  template< typename T >
+  struct is_const< const T> { static const bool value = true; };
+
+  template< typename CT, typename T >
+  struct is_more_const {
+    static const bool value
+        = is_same< typename remove_const<CT>::type
+                 , typename remove_const<T>::type
+                 >::value
+          && ( is_const<CT>::value >= is_const<T>::value );
+  };
+
+  template< typename T > struct get_first_param;
+  template< typename R, typename P1 >
+  struct get_first_param< R (P1) > { typedef P1 type; };
+
+#define SC_ENABLE_IF_( Cond ) \
+  typename ::sc_core::sc_meta::enable_if< \
+    typename ::sc_core::sc_meta::get_first_param< void Cond >::type \
+  >::type * = NULL
+
+} // namespace sc_meta
 
 // forward declarations
 template< typename >           class sc_vector;
@@ -165,7 +214,24 @@ private:
 template< typename ElementType >
 struct sc_direct_access
 {
-  typedef ElementType type;
+  typedef ElementType  element_type;
+  typedef element_type type;
+  typedef typename sc_meta::remove_const<type>::type plain_type;
+
+  typedef sc_direct_access< type >             policy;
+  typedef sc_direct_access< plain_type >       non_const_policy;
+  typedef sc_direct_access< const plain_type > const_policy;
+
+  sc_direct_access(){}
+  sc_direct_access( const non_const_policy& ) {}
+  // convert from any policy to (const) direct policy
+  template<typename U>
+  sc_direct_access( const U&
+    , SC_ENABLE_IF_((
+        sc_meta::is_more_const<type,typename U::policy::element_type>
+    )) )
+  {}
+
   type* get( type* this_ ) const
     { return this_; }
 };
@@ -175,13 +241,27 @@ template< typename ElementType
         , typename AccessType   >
 struct sc_member_access
 {
+  template< typename, typename > friend class sc_member_access;
+
   typedef ElementType element_type;
   typedef AccessType  access_type;
   typedef access_type (element_type::*member_type);
   typedef access_type type;
+  typedef typename sc_meta::remove_const<type>::type plain_type;
+  typedef typename sc_meta::remove_const<ElementType>::type plain_elem_type;
+
+  typedef sc_member_access< element_type, access_type > policy;
+  typedef sc_member_access< plain_elem_type, plain_type >
+    non_const_policy;
+  typedef sc_member_access< const plain_elem_type, const plain_type >
+    const_policy;
 
   sc_member_access( member_type ptr )
     : ptr_(ptr) {}
+
+  sc_member_access( const non_const_policy& other )
+    : ptr_(other.ptr_)
+  {}
 
   access_type * get( element_type* this_ ) const
     { return &(this_->*ptr_); }
@@ -199,16 +279,17 @@ class sc_vector_iter
   , private AccessPolicy
 {
   typedef ElementType  element_type;
-  typedef AccessPolicy access_policy;
+  typedef typename AccessPolicy::policy            access_policy;
+  typedef typename AccessPolicy::non_const_policy  non_const_policy;
+  typedef typename AccessPolicy::const_policy      const_policy;
   typedef typename access_policy::type access_type;
 
-  // simplistic version to avoid Boost et.al.
-  template< typename U > struct remove_const { typedef U type; };
-  template< typename U > struct remove_const<const U> { typedef U type; };
-  typedef typename remove_const<ElementType>::type plain_type;
+  typedef typename sc_meta::remove_const<ElementType>::type plain_type;
+  typedef const plain_type                                  const_plain_type;
 
   friend class sc_vector< plain_type >;
   template< typename, typename > friend class sc_vector_assembly;
+  template< typename, typename > friend class sc_vector_iter;
 
   typedef std::iterator< std::random_access_iterator_tag, access_type > base_type;
   typedef sc_vector_iter               this_type;
@@ -217,15 +298,21 @@ class sc_vector_iter
 
   // select correct base-type iterator
   template< typename U > struct select_iter
-    { typedef typename storage_type::iterator type;  };
+    { typedef typename storage_type::iterator       type; };
   template< typename U > struct select_iter< const U >
-    { typedef typename storage_type::const_iterator type;  };
+    { typedef typename storage_type::const_iterator type; };
 
-  typedef typename select_iter<ElementType>::type raw_iterator;
+  typedef typename select_iter<ElementType>::type          raw_iterator;
+  typedef sc_vector_iter< const_plain_type, const_policy > const_iterator;
+
+  // underlying vector iterator
+
   raw_iterator it_;
 
   sc_vector_iter( raw_iterator it, access_policy acc = access_policy() )
     : access_policy(acc), it_(it) {}
+
+  access_policy const & get_policy() const { return *this; }
 
 public:
   // interface for Random Access Iterator category,
@@ -237,6 +324,17 @@ public:
 
   sc_vector_iter() : access_policy(), it_() {}
 
+  // iterator conversions to more const, and/or direct iterators
+  template< typename OtherElement, typename OtherPolicy >
+  sc_vector_iter( const sc_vector_iter<OtherElement, OtherPolicy>& it
+      , SC_ENABLE_IF_((
+          sc_meta::is_more_const< element_type
+                                , typename OtherPolicy::element_type >
+        ))
+      )
+    : access_policy( it.get_policy() ), it_( it.it_ )
+  {}
+
   // step
   this_type& operator++(){ ++it_; return *this; }
   this_type& operator--(){ --it_; return *this; }
@@ -244,8 +342,11 @@ public:
   this_type  operator--(int){ this_type old(*this); --it_; return old; }
 
   // advance
-  this_type  operator+( difference_type n ) { return it_ + n; }
-  this_type  operator-( difference_type n ) { return it_ - n; }
+  this_type  operator+( difference_type n )
+    { return this_type( it_ + n, get_policy()); }
+  this_type  operator-( difference_type n )
+    { return this_type( it_ + n, get_policy()); }
+
   this_type& operator+=( difference_type n ) { it_+=n; return *this; }
   this_type& operator-=( difference_type n ) { it_-=n; return *this; }
 

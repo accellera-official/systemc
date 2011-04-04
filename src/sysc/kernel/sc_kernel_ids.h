@@ -34,6 +34,11 @@
  *****************************************************************************/
 
 // $Log: sc_kernel_ids.h,v $
+// Revision 1.17  2011/04/01 22:30:39  acg
+//  Andy Goodrich: change hard assertion to warning for trigger_dynamic()
+//  getting called when there is only STATIC sensitivity. This can result
+//  because of sc_process_handle::throw_it().
+//
 // Revision 1.16  2011/03/28 13:02:51  acg
 //  Andy Goodrich: Changes for disable() interactions.
 //
@@ -236,6 +241,8 @@ SC_DEFINE_MESSAGE( SC_ID_SIMULATION_START_AFTER_ERROR_, 548,
 // available message number 555
 // available message number 556
 // available message number 557
+SC_DEFINE_MESSAGE(SC_NOT_EXPECTING_DYNAMIC_EVENT_NOTIFY_ , 557,
+	"dynamic event notification encountered when sensitivity is static" )
 SC_DEFINE_MESSAGE(SC_ID_DISABLE_WILL_ORPHAN_PROCESS_     , 558,
 	"disable() or dont_initialize() called on process with no static sensitivity, it will be orphaned: " ) 
 SC_DEFINE_MESSAGE(SC_ID_PROCESS_CONTROL_CORNER_CASE_     , 559,

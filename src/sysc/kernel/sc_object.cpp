@@ -45,6 +45,9 @@
 
 
 // $Log: sc_object.cpp,v $
+// Revision 1.13  2011/04/01 21:24:57  acg
+//  Andy Goodrich: removed unused code.
+//
 // Revision 1.12  2011/03/06 15:55:11  acg
 //  Andy Goodrich: Changes for named events.
 //
@@ -240,14 +243,6 @@ sc_object::remove_child_object( sc_object* object_p )
 void 
 sc_object::sc_object_init(const char* nm) 
 { 
-    // @@@@#### REMOVE bool        clash;                  // true if path name exists in obj table
-    // @@@@#### REMOVE const char* leafname_p;             // leaf name (this object) 
-    // @@@@#### REMOVE char        pathname[BUFSIZ];       // path name 
-    // @@@@#### REMOVE char        pathname_orig[BUFSIZ];  // original path name which may clash 
-    // @@@@#### REMOVE const char* parentname_p;           // parent path name 
-    // @@@@#### sc_object*  parent_p;               // parent for this instance or NULL.
-    // @@@@#### REMOVE bool        put_in_table;           // true if should put in object table 
- 
     // SET UP POINTERS TO OBJECT MANAGER, PARENT, AND SIMULATION CONTEXT: 
     //
     // Make the current simcontext the simcontext for this object 
@@ -256,64 +251,12 @@ sc_object::sc_object_init(const char* nm)
     m_attr_cltn_p = 0; 
     sc_object_manager* object_manager = m_simc->get_object_manager(); 
     m_parent = m_simc->active_object();
-    // @@@@#### REMOVE m_parent = parent_p; 
-
 
     // CONSTRUCT PATHNAME TO OBJECT BEING CREATED: 
     // 
     // If there is not a leaf name generate one. 
 
-#if 0 // @@@@#### REMOVE
-    parentname_p = parent_p ? parent_p->name() : ""; 
-    if (nm ) 
-    { 
-        leafname_p = nm; 
-        put_in_table = true; 
-    } 
-    else 
-    { 
-        leafname_p = sc_object_newname().c_str();
-        put_in_table = false; 
-    } 
-    if (parent_p) { 
-        std::sprintf(pathname, "%s%c%s", parentname_p, 
-                SC_HIERARCHY_CHAR, leafname_p 
-        ); 
-    } else { 
-        strcpy(pathname, leafname_p); 
-    } 
-
-    // SAVE the original path name 
-    // 
-    strcpy(pathname_orig, pathname); 
-
-    // MAKE SURE THE OBJECT NAME IS UNIQUE 
-    // 
-    // If not use unique name generator to make it unique. 
-
-    clash = false; 
-    while (object_manager->find_object(pathname)) { 
-        clash = true; 
-        leafname_p = sc_gen_unique_name(leafname_p); 
-        if (parent_p) { 
-            std::sprintf(pathname, "%s%c%s", parentname_p, 
-                    SC_HIERARCHY_CHAR, leafname_p 
-            ); 
-        } else { 
-            strcpy(pathname, leafname_p); 
-        } 
-    } 
-    if (clash) { 
-	std::string message = pathname_orig;
-	message += ". Latter declaration will be renamed to ";
-	message += pathname;
-        SC_REPORT_WARNING( SC_ID_INSTANCE_EXISTS_, message.c_str());
-    } 
-
-    m_name = pathname;
-#else
     m_name = object_manager->create_name(nm ? nm : sc_object_newname().c_str());
-#endif
 
 
     // PLACE THE OBJECT INTO THE HIERARCHY IF A LEAF NAME WAS SUPPLIED:

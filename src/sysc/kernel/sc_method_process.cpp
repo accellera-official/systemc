@@ -35,6 +35,11 @@
  *****************************************************************************/
 
 // $Log: sc_method_process.cpp,v $
+// Revision 1.32  2011/04/01 22:30:39  acg
+//  Andy Goodrich: change hard assertion to warning for trigger_dynamic()
+//  getting called when there is only STATIC sensitivity. This can result
+//  because of sc_process_handle::throw_it().
+//
 // Revision 1.31  2011/03/28 13:02:51  acg
 //  Andy Goodrich: Changes for disable() interactions.
 //
@@ -814,8 +819,9 @@ bool sc_method_process::trigger_dynamic( sc_event* e )
 	break;
 
       case STATIC: {
-        // we should never get here
-        assert( false );
+        // we should never get here, but throw_it() can make it happen.
+	SC_REPORT_WARNING(SC_NOT_EXPECTING_DYNAMIC_EVENT_NOTIFY_, name());
+        return true;
       }
     }
 

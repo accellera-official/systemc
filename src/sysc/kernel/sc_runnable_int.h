@@ -1,4 +1,4 @@
-/*****************************************************************************
+/*******************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
   source code Copyright (c) 1996-2011 by all Contributors.
@@ -13,9 +13,9 @@
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
 
- *****************************************************************************/
+ ******************************************************************************/
 
-/*****************************************************************************
+/*******************************************************************************
 
   sc_runnable_int.h -- For inline definitions of some utility functions.
                        DO NOT EXPORT THIS INCLUDE FILE. Include this file
@@ -24,18 +24,24 @@
 
   Original Author: Bishnupriya Bhattacharya , Cadence Design, 28th July, 2003
 
- *****************************************************************************/
+ ******************************************************************************/
 
-/*****************************************************************************
+/*******************************************************************************
 
   MODIFICATION LOG - modifiers, enter your name, affiliation, date and
   changes you are making here.
       Andy Goodrich, Forte Design Systems, 2 September 2003
       Changed queue heads to instances to eliminate the checks for null heads.
 
- *****************************************************************************/
+ ******************************************************************************/
 
 // $Log: sc_runnable_int.h,v $
+// Revision 1.14  2011/04/01 21:31:10  acg
+//  Andy Goodrich: turn off diagnostic messages by default.
+//
+// Revision 1.13  2011/04/01 21:30:02  acg
+//  Andy Goodrich: inserted conditional displays for queue manipulations.
+//
 // Revision 1.12  2011/03/30 00:01:34  acg
 //  Philip A. Hartman: change break to return in remove_method() to short
 //  circuit the search the way remove_thread() works.
@@ -88,6 +94,26 @@
 #include "sysc/kernel/sc_runnable.h"
 #include "sysc/kernel/sc_method_process.h"
 #include "sysc/kernel/sc_thread_process.h"
+
+// DEBUGGING MACROS:
+//
+// DEBUG_MSG(NAME,P,MSG)
+//     MSG  = message to print
+//     NAME = name that must match the process for the message to print, or
+//            null if the message should be printed unconditionally.
+//     P    = pointer to process message is for, or NULL in which case the
+//            message will not print.
+#if 0
+#   define DEBUG_NAME (const char*)0
+#   define DEBUG_MSG(NAME,P,MSG) \
+    { \
+	if ( P && ( (NAME==0) || !strcmp(NAME,P->name())) ) \
+	  std::cout << sc_time_stamp() << ": " << P->name() << " ******** " \
+		    << MSG << std::endl; \
+    }
+#else
+#   define DEBUG_MSG(NAME,P,MSG) 
+#endif
 
 namespace sc_core {
 
@@ -167,15 +193,10 @@ inline void sc_runnable::init()
 //------------------------------------------------------------------------------
 inline bool sc_runnable::is_empty() const
 {
-#if 0
-    return m_methods_push_head->next_runnable() == SC_NO_METHODS && 
-		m_threads_push_head->next_runnable() == SC_NO_THREADS;
-#else
     return m_methods_push_head->next_runnable() == SC_NO_METHODS && 
            m_methods_pop == SC_NO_METHODS &&
 	   m_threads_push_head->next_runnable() == SC_NO_THREADS &&
 	   m_threads_pop == SC_NO_THREADS;
-#endif
 }
 
 
@@ -200,6 +221,7 @@ inline bool sc_runnable::is_initialized() const
 inline void sc_runnable::push_back_method( sc_method_handle method_h )
 {
     // assert( method_h->next_runnable() == 0 ); // Can't queue twice.
+    DEBUG_MSG(DEBUG_NAME,method_h,"pushing back method");
     method_h->set_next_runnable(SC_NO_METHODS);
     m_methods_push_tail->set_next_runnable(method_h);
     m_methods_push_tail = method_h;
@@ -216,6 +238,7 @@ inline void sc_runnable::push_back_method( sc_method_handle method_h )
 inline void sc_runnable::push_back_thread( sc_thread_handle thread_h )
 {
     // assert( thread_h->next_runnable() == 0 ); // Can't queue twice.
+    DEBUG_MSG(DEBUG_NAME,thread_h,"pushing back thread");
     thread_h->set_next_runnable(SC_NO_THREADS);
     m_threads_push_tail->set_next_runnable(thread_h);
     m_threads_push_tail = thread_h;
@@ -233,6 +256,7 @@ inline void sc_runnable::push_back_thread( sc_thread_handle thread_h )
 inline void sc_runnable::push_front_method( sc_method_handle method_h )
 {
     // assert( method_h->next_runnable() == 0 ); // Can't queue twice.
+    DEBUG_MSG(DEBUG_NAME,method_h,"pushing front method");
     method_h->set_next_runnable(m_methods_push_head->next_runnable());
     if ( m_methods_push_tail == m_methods_push_head ) // Empty queue.
     {
@@ -257,6 +281,7 @@ inline void sc_runnable::push_front_method( sc_method_handle method_h )
 inline void sc_runnable::push_front_thread( sc_thread_handle thread_h )
 {
     // assert( thread_h->next_runnable() == 0 ); // Can't queue twice.
+    DEBUG_MSG(DEBUG_NAME,thread_h,"pushing front thread");
     thread_h->set_next_runnable(m_threads_push_head->next_runnable());
     if ( m_threads_push_tail == m_threads_push_head ) // Empty queue.
     {
@@ -278,6 +303,7 @@ inline void sc_runnable::push_front_thread( sc_thread_handle thread_h )
 //------------------------------------------------------------------------------
 inline void sc_runnable::execute_thread_next( sc_thread_handle thread_h )
 {
+    DEBUG_MSG(DEBUG_NAME,thread_h,"executing thread next");
     thread_h->set_next_runnable( m_threads_pop );
     m_threads_pop = thread_h;
 }
@@ -300,8 +326,9 @@ inline sc_method_handle sc_runnable::pop_method()
     }
     else
     {
-	    result_p = 0;
+	result_p = 0;
     }
+    DEBUG_MSG(DEBUG_NAME,result_p,"popping method");
     return result_p;
 
 }
@@ -326,6 +353,7 @@ inline sc_thread_handle sc_runnable::pop_thread()
     {
 	    result_p = 0;
     }
+    DEBUG_MSG(DEBUG_NAME,result_p,"popping thread");
     return result_p;
 }
 
@@ -360,6 +388,7 @@ inline void sc_runnable::remove_method( sc_method_handle remove_p )
                 m_methods_push_tail = prior_p;
             }
             now_p->set_next_runnable(0);
+	    DEBUG_MSG(DEBUG_NAME,now_p,"removing method from push queue");
             return;
         }
         prior_p = now_p;
@@ -378,6 +407,7 @@ inline void sc_runnable::remove_method( sc_method_handle remove_p )
 	    else
 	        m_methods_pop = now_p->next_runnable();
             now_p->set_next_runnable(0);
+	    DEBUG_MSG(DEBUG_NAME,now_p,"removing method from pop queue");
             return;
         }
         prior_p = now_p;
@@ -415,6 +445,7 @@ inline void sc_runnable::remove_thread( sc_thread_handle remove_p )
                 m_threads_push_tail = prior_p;
             }
             now_p->set_next_runnable(0);
+	    DEBUG_MSG(DEBUG_NAME,now_p,"removing thread from push queue");
             return;
         }
         prior_p = now_p;
@@ -433,6 +464,7 @@ inline void sc_runnable::remove_thread( sc_thread_handle remove_p )
 	    else
 	        m_threads_pop = now_p->next_runnable();
             now_p->set_next_runnable(0);
+	    DEBUG_MSG(DEBUG_NAME,now_p,"removing thread from pop queue");
             return;
         }
         prior_p = now_p;
@@ -502,6 +534,7 @@ inline void sc_runnable::toggle_threads()
 
 #undef SC_NO_METHODS
 #undef SC_NO_THREADS
+#undef DEBUG_MSG
 
 } // namespace sc_core
 

@@ -58,6 +58,10 @@
 				 execution problem with using sc_pvector.
  *****************************************************************************/
 // $Log: sc_simcontext.cpp,v $
+// Revision 1.25  2011/04/01 21:31:55  acg
+//  Andy Goodrich: make sure processes suspended before the start of execution
+//  don't get scheduled for initial execution.
+//
 // Revision 1.24  2011/03/28 13:02:52  acg
 //  Andy Goodrich: Changes for disable() interactions.
 //
@@ -836,7 +840,7 @@ sc_simcontext::prepare_to_simulate()
 		                   method_p->name() );
 	    }
 	}
-	else 
+	else if ( (method_p->m_state & sc_process_b::ps_bit_suspended) == 0) 
 	{
 		push_runnable_method_front( method_p );
         }
@@ -857,7 +861,7 @@ sc_simcontext::prepare_to_simulate()
 		                   thread_p->name() );
 	    }
 	}
-        else
+	else if ( (thread_p->m_state & sc_process_b::ps_bit_suspended) == 0) 
 	{
             push_runnable_thread_front( thread_p );
         }
@@ -1528,6 +1532,15 @@ sc_set_random_seed( unsigned int )
 }
 
 
+// +----------------------------------------------------------------------------
+// |"sc_start"
+// | 
+// | This function starts, or restarts, the execution of the simulator.
+// |
+// | Arguments:
+// |     duration = the amount of time the simulator should execute.
+// |     p        = event starvation policy.
+// +----------------------------------------------------------------------------
 void
 sc_start( const sc_time& duration, sc_starvation_policy p )
 {
@@ -1541,6 +1554,7 @@ sc_start( const sc_time& duration, sc_starvation_policy p )
 
     context_p = sc_get_curr_simcontext();
     starting_delta = sc_delta_count();
+    entry_time = context_p->m_curr_time;
     if ( p == SC_RUN_TO_TIME )
         exit_time = context_p->m_curr_time + duration;
 

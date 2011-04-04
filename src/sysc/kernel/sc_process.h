@@ -46,6 +46,9 @@
  *****************************************************************************/
 
 // $Log: sc_process.h,v $
+// Revision 1.26  2011/04/01 21:24:57  acg
+//  Andy Goodrich: removed unused code.
+//
 // Revision 1.25  2011/03/28 13:02:51  acg
 //  Andy Goodrich: Changes for disable() interactions.
 //
@@ -495,7 +498,6 @@ class sc_process_b : public sc_object {
     inline bool is_disabled() const;
     inline bool is_runnable() const;
     static inline sc_process_b* last_created_process_base();
-    virtual void queue_for_execution()=0;
     virtual bool remove_child_object( sc_object* );
     void remove_dynamic_events( bool skip_timeout = false );
     void remove_static_events();

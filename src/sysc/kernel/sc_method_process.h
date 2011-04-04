@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_method_process.h,v $
+// Revision 1.12  2011/04/01 21:24:57  acg
+//  Andy Goodrich: removed unused code.
+//
 // Revision 1.11  2011/02/19 08:30:53  acg
 //  Andy Goodrich: Moved process queueing into trigger_static from
 //  sc_event::notify.
@@ -182,7 +185,6 @@ class sc_method_process : public sc_process_b {
     void next_trigger( const sc_time&, const sc_event& );
     void next_trigger( const sc_time&, const sc_event_or_list& );
     void next_trigger( const sc_time&, const sc_event_and_list& );
-    virtual void queue_for_execution();
     virtual void resume_process(
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
     void set_next_exist( sc_method_handle next_p );
@@ -284,17 +286,6 @@ sc_method_process::next_trigger( const sc_time& t, const sc_event_and_list& el )
     m_event_list_p = &el;
     m_event_count = el.size();
     m_trigger_type = AND_LIST_TIMEOUT;
-}
-
-//------------------------------------------------------------------------------
-//"sc_method_process::queue_for_execution"
-//
-//------------------------------------------------------------------------------
-inline
-void sc_method_process::queue_for_execution()
-{
-    if ( !is_runnable() )
-	simcontext()->push_runnable_method(this);
 }
 
 inline

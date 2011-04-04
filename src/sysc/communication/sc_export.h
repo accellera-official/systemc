@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_export.h,v $
+// Revision 1.5  2011/04/02 00:02:14  acg
+//  Philipp A. Hartmann: add const overload for sc_export::operator IF&
+//
 // Revision 1.4  2011/02/18 20:23:45  acg
 //  Andy Goodrich: Copyright update.
 //
@@ -183,6 +186,9 @@ public: // interface access:
 	}
 	return *m_interface_p;
     }
+    operator const IF&() const
+        { return *const_cast<this_type*>(this); }
+
 
 public: // binding:
     virtual void bind( IF& interface_ )

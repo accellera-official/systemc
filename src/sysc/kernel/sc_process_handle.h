@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_process_handle.h,v $
+// Revision 1.18  2011/04/01 22:08:26  acg
+//  Andy Goodrich: remove unused variable.
+//
 // Revision 1.17  2011/03/12 21:07:51  acg
 //  Andy Goodrich: changes to kernel generated event support.
 //
@@ -559,7 +562,6 @@ template<typename EXCEPT>
 inline void sc_process_handle::throw_it( const EXCEPT& exception,
     sc_descendant_inclusion_info descendants)
 {
-    sc_simcontext*      context_p;          // current simcontext.
     sc_throw_it<EXCEPT> helper(exception);  // helper to throw the exception.
 
     if ( !m_target_p ) 
