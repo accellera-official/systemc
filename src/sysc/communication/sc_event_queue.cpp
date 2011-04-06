@@ -110,7 +110,7 @@ void sc_event_queue::cancel_all()
 
 void sc_event_queue::notify (const sc_time& when)
 {
-    m_change_stamp = sc_change_stamp();
+    m_change_stamp = simcontext()->change_stamp();
     sc_time* t = new sc_time( when+sc_time_stamp() );
     if ( m_ppq.size()==0 || *t < *m_ppq.top() ) {
 	m_e.notify( when );

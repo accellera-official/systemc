@@ -264,7 +264,6 @@ extern void sc_stop();
 
 // friend function declarations
 
-sc_dt::uint64 sc_change_stamp();
 sc_dt::uint64 sc_delta_count();
 const std::vector<sc_event*>& sc_get_top_level_events(
 				const   sc_simcontext* simc_p);
@@ -302,7 +301,6 @@ class sc_simcontext
     friend class sc_prim_channel;
     friend class sc_cthread_process;
     friend class sc_thread_process;
-    friend sc_dt::uint64 sc_change_stamp();
     friend sc_dt::uint64 sc_delta_count();
     friend const std::vector<sc_event*>& sc_get_top_level_events(
         const sc_simcontext* simc_p);
@@ -392,7 +390,8 @@ public:
     const sc_time& time_stamp() const;
 
     sc_dt::uint64 delta_count() const;
-    bool event_occurred( sc_dt::uint64 last_change_count ) const;
+    sc_dt::uint64 change_stamp() const;
+    bool event_occurred( sc_dt::uint64 last_change_stamp ) const;
     bool is_running() const;
     bool update_phase() const;
     bool get_error();
@@ -641,12 +640,20 @@ sc_simcontext::time_stamp() const
 }
 
 
+inline
+sc_dt::uint64
+sc_simcontext::change_stamp() const
+{
+    return m_change_stamp;
+}
+
+
 inline 
 bool
-sc_simcontext::event_occurred(sc_dt::uint64 last_change_count) const
+sc_simcontext::event_occurred(sc_dt::uint64 last_change_stamp) const
 {
     // return m_delta_count == last_change_count;
-    return m_change_stamp == last_change_count;
+    return m_change_stamp == last_change_stamp;
 }
 
 inline
@@ -767,12 +774,6 @@ inline
 sc_dt::uint64 sc_delta_count()
 {
     return sc_get_curr_simcontext()->m_delta_count;
-}
-
-inline
-sc_dt::uint64 sc_change_stamp()
-{
-    return sc_get_curr_simcontext()->m_change_stamp;
 }
 
 inline 
