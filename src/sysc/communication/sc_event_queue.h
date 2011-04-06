@@ -34,6 +34,10 @@
  *****************************************************************************/
 
 // $Log: sc_event_queue.h,v $
+// Revision 1.4  2011/04/05 20:48:09  acg
+//  Andy Goodrich: changes to make sure that event(), posedge() and negedge()
+//  only return true if the clock has not moved.
+//
 // Revision 1.3  2011/02/18 20:23:45  acg
 //  Andy Goodrich: Copyright update.
 //
@@ -153,7 +157,7 @@ class sc_event_queue:
  private:
     sc_ppq<sc_time*> m_ppq;
     sc_event m_e;
-    sc_dt::uint64 m_delta;
+    sc_dt::uint64 m_change_stamp;
     unsigned m_pending_delta;
 };
 

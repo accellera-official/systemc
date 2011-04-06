@@ -34,6 +34,13 @@
     
  *****************************************************************************/
 //$Log: sc_buffer.h,v $
+//Revision 1.5  2011/04/05 20:48:09  acg
+// Andy Goodrich: changes to make sure that event(), posedge() and negedge()
+// only return true if the clock has not moved.
+//
+//Revision 1.4  2011/04/05 06:15:18  acg
+// Philipp A. Hartmann: sc_writer_policy: ignore no-ops in delta check.
+//
 //Revision 1.3  2011/02/18 20:23:45  acg
 // Andy Goodrich: Copyright update.
 //
@@ -158,7 +165,7 @@ inline
 void
 sc_buffer<T,POL>::write( const T& value_ )
 {
-    if( !base_type::policy_type::check_write(this) )
+    if( !base_type::policy_type::check_write(this,true) )
       return;
 
     this->m_new_val = value_;
@@ -175,7 +182,7 @@ sc_buffer<T,POL>::update()
     this->m_cur_val = this->m_new_val;
     if ( base_type::m_change_event_p )
         base_type::m_change_event_p->notify(SC_ZERO_TIME);
-    this->m_delta = sc_delta_count();
+    this->m_change_stamp = sc_change_stamp();
 }
 
 } // namespace sc_core

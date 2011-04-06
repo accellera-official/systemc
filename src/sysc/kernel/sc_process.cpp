@@ -43,6 +43,18 @@
  *****************************************************************************/
 
 // $Log: sc_process.cpp,v $
+// Revision 1.24  2011/04/05 20:50:57  acg
+//  Andy Goodrich:
+//    (1) changes to make sure that event(), posedge() and negedge() only
+//        return true if the clock has not moved.
+//    (2) fixes for method self-resumes.
+//    (3) added SC_PRERELEASE_VERSION
+//    (4) removed kernel events from the object hierarchy, added
+//        sc_hierarchy_name_exists().
+//
+// Revision 1.23  2011/04/05 06:25:38  acg
+//  Andy Goodrich: new checks for simulation running in reset_process().
+//
 // Revision 1.22  2011/03/20 13:43:23  acg
 //  Andy Goodrich: added async_signal_is() plus suspend() as a corner case.
 //
@@ -470,13 +482,6 @@ void sc_process_b::reset_process( reset_type rt,
     sc_process_b*                    child_p;    // Child accessing.
     const ::std::vector<sc_object*>* children_p; // Vector of children.
 
-    // IF THE SIMULATION HAS NOT BEEN INITIALIZED YET THAT IS AN ERROR:
-
-    if ( sc_get_status() == SC_ELABORATION )
-    {
-        SC_REPORT_ERROR( SC_RESET_PROCESS_WHILE_UNITIALIZED_, "" );
-    }
-
     // PROCESS THIS OBJECT INSTANCE'S DESCENDANTS IF REQUESTED TO:
 
     if ( descendants == SC_INCLUDE_DESCENDANTS )
@@ -499,8 +504,15 @@ void sc_process_b::reset_process( reset_type rt,
       // If this is an sc_method only throw if it is active.
 
       case reset_asynchronous:
-	remove_dynamic_events();
-	throw_reset(true);
+	if ( sc_get_status() != SC_RUNNING )
+	{
+	    SC_REPORT_ERROR(SC_RESET_PROCESS_WHILE_NOT_RUNNING_, "");
+	}
+	else
+	{
+	    remove_dynamic_events();
+	    throw_reset(true);
+	}
         break;
 
       // Turn on sticky synchronous reset: use standard reset mechanism.
@@ -509,7 +521,8 @@ void sc_process_b::reset_process( reset_type rt,
 	if ( m_sticky_reset == false )
 	{
 	    m_sticky_reset = true;
-	    reset_changed( false, true );
+	    if ( sc_is_running() )
+		reset_changed( false, true );
 	}
         break;
 
@@ -519,7 +532,8 @@ void sc_process_b::reset_process( reset_type rt,
 	if ( m_sticky_reset == true )
 	{
 	    m_sticky_reset = false;
-	    reset_changed( false, false );
+	    if ( sc_is_running() )
+		reset_changed( false, false );
 	}
         break;
     }   
@@ -567,8 +581,8 @@ sc_process_b::sc_process_b( const char* name_p, bool is_thread, bool free_host,
     // THIS OBJECT INSTANCE IS NOW THE LAST CREATED PROCESS:
 
     m_last_created_process_p = this;
-    m_timeout_event_p = 
-        new sc_event((std::string(basename())+"_timeout").c_str());
+    m_timeout_event_p = new sc_event(
+	          (std::string(SC_KERNEL_EVENT_PREFIX)+"_free_event").c_str() );
 }
 
 //------------------------------------------------------------------------------
@@ -611,7 +625,11 @@ sc_process_b::~sc_process_b()
 //------------------------------------------------------------------------------
 sc_event& sc_process_b::reset_event()
 {
-    if ( !m_reset_event_p ) m_reset_event_p = new sc_event;
+    if ( !m_reset_event_p ) 
+    {
+        m_reset_event_p = new sc_event(
+	         (std::string(SC_KERNEL_EVENT_PREFIX)+"_reset_event").c_str() );
+    }
     return *m_reset_event_p;
 }
 
@@ -625,7 +643,11 @@ sc_event& sc_process_b::terminated_event()
 {
     if ( m_process_kind == SC_METHOD_PROC_ )
     SC_REPORT_WARNING(SC_ID_METHOD_TERMINATION_EVENT_,"");
-    if ( !m_term_event_p ) m_term_event_p = new sc_event;
+    if ( !m_term_event_p ) 
+    {
+        m_term_event_p = new sc_event(
+	          (std::string(SC_KERNEL_EVENT_PREFIX)+"_term_event").c_str() );
+    }
     return *m_term_event_p;
 }
 

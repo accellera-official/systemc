@@ -35,6 +35,10 @@
 
 
 // $Log: sc_event_queue.cpp,v $
+// Revision 1.4  2011/04/05 20:48:09  acg
+//  Andy Goodrich: changes to make sure that event(), posedge() and negedge()
+//  only return true if the clock has not moved.
+//
 // Revision 1.3  2011/02/18 20:23:45  acg
 //  Andy Goodrich: Copyright update.
 //
@@ -83,7 +87,7 @@ sc_event_queue::sc_event_queue( sc_module_name name_ )
       m_ppq( 128, sc_time_compare ),
       m_pending_delta(0)
 {
-    m_delta=0;
+    m_change_stamp=0;
     SC_METHOD( fire_event );
     sensitive << m_e;
     dont_initialize();
@@ -106,7 +110,7 @@ void sc_event_queue::cancel_all()
 
 void sc_event_queue::notify (const sc_time& when)
 {
-    m_delta = sc_delta_count();
+    m_change_stamp = sc_change_stamp();
     sc_time* t = new sc_time( when+sc_time_stamp() );
     if ( m_ppq.size()==0 || *t < *m_ppq.top() ) {
 	m_e.notify( when );

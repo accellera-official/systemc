@@ -58,7 +58,7 @@ extern const std::string  sc_copyright_string;
 #define SYSTEMC_2_3_0
 #define SC_API_VERSION_STRING sc_api_version_2_3_0
 
-#define SYSTEMC_VERSION       20110402
+#define SYSTEMC_VERSION       20110403
 #define SC_VERSION_ORIGINATOR "OSCI"
 #define SC_VERSION_MAJOR      2
 #define SC_VERSION_MINOR      3
@@ -81,14 +81,14 @@ extern const std::string  sc_copyright_string;
   SC_STRINGIFY_HELPER_( SYSTEMC_VERSION )
 
 #if ( SC_IS_PRERELEASE == 1 )
-#  define SC_VERSION_PRERELEASE_STRING "_beta"
+#  define SC_VERSION_PRERELEASE "_beta"
 #else
-#  define SC_VERSION_PRERELEASE_STRING // nothing
+#  define SC_VERSION_PRERELEASE // nothing
 #endif
 
 #define SC_VERSION \
   SC_STRINGIFY_HELPER_( SC_VERSION_MAJOR.SC_VERSION_MINOR.SC_VERSION_PATCH ) \
-  "_" SC_VERSION_RELEASE_DATE SC_VERSION_PRERELEASE_STRING \
+  "_" SC_VERSION_RELEASE_DATE SC_VERSION_PRERELEASE \
   "-" SC_VERSION_ORIGINATOR
 
 // probably obsolete

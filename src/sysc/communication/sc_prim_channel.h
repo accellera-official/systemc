@@ -35,6 +35,10 @@
     
  *****************************************************************************/
 //$Log: sc_prim_channel.h,v $
+//Revision 1.4  2011/04/05 20:48:09  acg
+// Andy Goodrich: changes to make sure that event(), posedge() and negedge()
+// only return true if the clock has not moved.
+//
 //Revision 1.3  2011/02/18 20:23:45  acg
 // Andy Goodrich: Copyright update.
 //
@@ -222,10 +226,11 @@ protected:
 	{ return sc_core::timed_out( simcontext() ); }
 
 
+#if 0 // @@@@####
     // delta count maintenance
-
     sc_dt::uint64 delta_count()
 	{ return simcontext()->m_delta_count; }
+#endif
 
 private:
 

@@ -58,6 +58,23 @@
 				 execution problem with using sc_pvector.
  *****************************************************************************/
 // $Log: sc_simcontext.cpp,v $
+// Revision 1.28  2011/04/05 20:50:57  acg
+//  Andy Goodrich:
+//    (1) changes to make sure that event(), posedge() and negedge() only
+//        return true if the clock has not moved.
+//    (2) fixes for method self-resumes.
+//    (3) added SC_PRERELEASE_VERSION
+//    (4) removed kernel events from the object hierarchy, added
+//        sc_hierarchy_name_exists().
+//
+// Revision 1.27  2011/04/05 06:14:15  acg
+//  Andy Goodrich: fix typo.
+//
+// Revision 1.26  2011/04/05 06:03:32  acg
+//  Philipp A. Hartmann: added code to set ready to run bit for a suspended
+//  process that does not have dont_initialize specified at simulation
+//  start up.
+//
 // Revision 1.25  2011/04/01 21:31:55  acg
 //  Andy Goodrich: make sure processes suspended before the start of execution
 //  don't get scheduled for initial execution.
@@ -503,6 +520,7 @@ sc_simcontext::init()
     m_time_params = new sc_time_params;
     m_curr_time = SC_ZERO_TIME;
     m_max_time = SC_ZERO_TIME;
+    m_change_stamp = 0;
     m_delta_count = 0;
     m_forced_stop = false;
     m_paused = false;
@@ -651,11 +669,15 @@ sc_simcontext::crunch( bool once )
 
 	// UPDATE PHASE
 	//
-	// The delta count must be updated first so that event_occurred()
+	// The change stamp must be updated first so that event_occurred()
 	// will work.
 
 	m_execution_phase = phase_update;
-	if ( !empty_eval_phase ) m_delta_count ++;
+	if ( !empty_eval_phase ) 
+	{
+	    m_change_stamp++;
+	    m_delta_count ++;
+	}
 	m_prim_channel_registry->perform_update();
 	m_execution_phase = phase_notify;
 	
@@ -842,8 +864,12 @@ sc_simcontext::prepare_to_simulate()
 	}
 	else if ( (method_p->m_state & sc_process_b::ps_bit_suspended) == 0) 
 	{
-		push_runnable_method_front( method_p );
+	    push_runnable_method_front( method_p );
         }
+	else
+	{
+	    method_p->m_state |= sc_process_b::ps_bit_ready_to_run;
+	}
     }
 
     // make thread processes runnable
@@ -865,6 +891,10 @@ sc_simcontext::prepare_to_simulate()
 	{
             push_runnable_thread_front( thread_p );
         }
+	else
+	{
+	    thread_p->m_state |= sc_process_b::ps_bit_ready_to_run;
+	}
     }
 
 
@@ -1001,7 +1031,11 @@ sc_simcontext::simulate( const sc_time& duration )
 	    // See note 1 above:
 
             if ( !next_time(t) || (t > until_t ) ) goto exit;
-	    if ( t > m_curr_time ) m_curr_time = t;
+	    if ( t > m_curr_time ) 
+	    {
+	        m_curr_time = t;
+		m_change_stamp++;
+	    }
 
 	    // PROCESS TIMED NOTIFICATIONS AT THE CURRENT TIME
 
@@ -1020,7 +1054,11 @@ sc_simcontext::simulate( const sc_time& duration )
     } while ( t < until_t ); // hold off on the delta for the until_t time.
 
 exit:
-    if ( t > m_curr_time && t <= until_t ) m_curr_time = t;
+    if ( t > m_curr_time && t <= until_t ) 
+    {
+        m_curr_time = t;
+	m_change_stamp++;
+    }
     m_in_simulator_control = false;
 }
 

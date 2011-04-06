@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_thread_process.h,v $
+// Revision 1.21  2011/04/05 06:22:38  acg
+//  Andy Goodrich: expanded comment for trigger_static() initial vetting.
+//
 // Revision 1.20  2011/04/01 21:24:57  acg
 //  Andy Goodrich: removed unused code.
 //
@@ -517,12 +520,17 @@ inline
 void
 sc_thread_process::trigger_static()
 {
+    // No need to try queueing this thread if one of the following is true:
+    //    (a) its disabled
+    //    (b) its already queued for execution
+    //    (c) its waiting on a dynamic event
+    //    (d) its wait count is not satisfied
+
     if ( (m_state & ps_bit_disabled) || is_runnable() || 
          m_trigger_type != STATIC )
     {
         return;
     }
-
     if ( m_wait_cycle_n > 0 )
     {
 	--m_wait_cycle_n;

@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: sc_kernel_ids.h,v $
+// Revision 1.18  2011/04/05 06:23:45  acg
+//  Andy Goodrich: comments for throws while the simulator is not running.
+//
 // Revision 1.17  2011/04/01 22:30:39  acg
 //  Andy Goodrich: change hard assertion to warning for trigger_dynamic()
 //  getting called when there is only STATIC sensitivity. This can result
@@ -239,8 +242,8 @@ SC_DEFINE_MESSAGE( SC_ID_SIMULATION_START_AFTER_ERROR_, 548,
 // available message number 553
 // available message number 554
 // available message number 555
-// available message number 556
-// available message number 557
+SC_DEFINE_MESSAGE(SC_THROW_IT_ON_RUNNABLE_PROCESS_  , 556,
+        "throw_it on runnable process is ignored " )
 SC_DEFINE_MESSAGE(SC_NOT_EXPECTING_DYNAMIC_EVENT_NOTIFY_ , 557,
 	"dynamic event notification encountered when sensitivity is static" )
 SC_DEFINE_MESSAGE(SC_ID_DISABLE_WILL_ORPHAN_PROCESS_     , 558,
@@ -269,10 +272,10 @@ SC_DEFINE_MESSAGE(SC_ID_NO_SC_START_ACTIVITY_  , 571,
         "no activity or clock movement for sc_start() invocation" )
 SC_DEFINE_MESSAGE(SC_KILL_PROCESS_WHILE_UNITIALIZED_  , 572,
         "a process may not be killed before the end of elaboration" )
-SC_DEFINE_MESSAGE(SC_RESET_PROCESS_WHILE_UNITIALIZED_  , 573,
-        "a process may not be reset before the end of elaboration" )
-SC_DEFINE_MESSAGE(SC_THROW_IT_WHILE_UNITIALIZED_  , 574,
-        "a process may not throw before the end of elaboration" )
+SC_DEFINE_MESSAGE(SC_RESET_PROCESS_WHILE_NOT_RUNNING_  , 573,
+        "a process may not be asynchronously reset while the simulation is not running" )
+SC_DEFINE_MESSAGE(SC_THROW_IT_WHILE_NOT_RUNNING_  , 574,
+        "throw_it not allowed unless simulation is running " )
 #endif
 
 // Taf!

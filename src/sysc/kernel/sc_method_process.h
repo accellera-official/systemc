@@ -35,6 +35,15 @@
  *****************************************************************************/
 
 // $Log: sc_method_process.h,v $
+// Revision 1.13  2011/04/05 20:50:56  acg
+//  Andy Goodrich:
+//    (1) changes to make sure that event(), posedge() and negedge() only
+//        return true if the clock has not moved.
+//    (2) fixes for method self-resumes.
+//    (3) added SC_PRERELEASE_VERSION
+//    (4) removed kernel events from the object hierarchy, added
+//        sc_hierarchy_name_exists().
+//
 // Revision 1.12  2011/04/01 21:24:57  acg
 //  Andy Goodrich: removed unused code.
 //
@@ -329,8 +338,11 @@ void
 sc_method_process::trigger_static()
 {
     if ( (m_state & ps_bit_disabled) || is_runnable() || 
-          m_trigger_type != STATIC )
+          m_trigger_type != STATIC 
+	 || sc_get_current_process_b() == (sc_process_b*)this
+    ) {
         return;
+    }
     if ( m_state & ps_bit_disabled ) return;
 
     // If we get here then the method is has satisfied its wait, if its 

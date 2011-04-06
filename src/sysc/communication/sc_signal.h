@@ -58,7 +58,7 @@ extern void sc_deprecated_trace();
 
 inline
 bool
-sc_writer_policy_check_write::check_write( sc_object* target )
+sc_writer_policy_check_write::check_write( sc_object* target, bool )
 {
   sc_object* writer_p = sc_get_curr_simcontext()->get_current_writer();
   if( SC_UNLIKELY_(m_writer_p == 0) ) {
@@ -92,13 +92,13 @@ public: // constructors and destructor:
     sc_signal()
 	: sc_prim_channel( sc_gen_unique_name( "signal" ) ),
 	  m_change_event_p( 0 ), m_cur_val( T() ), 
-	  m_delta( ~sc_dt::UINT64_ONE ), m_new_val( T() )
+	  m_change_stamp( ~sc_dt::UINT64_ONE ), m_new_val( T() )
 	{}
 
     explicit sc_signal( const char* name_)
 	: sc_prim_channel( name_ ),
 	  m_change_event_p( 0 ), m_cur_val( T() ), 
-	  m_delta( ~sc_dt::UINT64_ONE ), m_new_val( T() )
+	  m_change_stamp( ~sc_dt::UINT64_ONE ), m_new_val( T() )
     {}
 
 
@@ -150,7 +150,7 @@ public: // constructors and destructor:
 
     // was there an event?
     virtual bool event() const
-        { return simcontext()->event_occurred(m_delta); }
+        { return simcontext()->event_occurred(m_change_stamp); }
 
     // write the new value
     virtual void write( const T& );
@@ -199,7 +199,7 @@ protected:
 
     mutable sc_event*  m_change_event_p;
     T                  m_cur_val;
-    sc_dt::uint64      m_delta;   // delta of last event
+    sc_dt::uint64      m_change_stamp;   // delta of last event
     T                  m_new_val;
 
 private:
@@ -232,28 +232,14 @@ inline
 void
 sc_signal<T,POL>::write( const T& value_ )
 {
-#if 0
-    if( !policy_type::check_write(this) )
+    bool value_changed = !( value_ == m_cur_val );
+    if ( !policy_type::check_write(this, value_changed) )
         return;
-
-    m_new_val = value_;
-    if( !( m_new_val == m_cur_val ) ) {
-	request_update();
-    }
-#else
-    bool value_changed = !(value_ == m_cur_val);
-
-    if ( value_changed || POL != SC_MANY_WRITERS )
-    {
-        if( !policy_type::check_write(this) )
-            return;
-    }
 
     m_new_val = value_;
     if( value_changed ) {
         request_update();
     }
-#endif
 }
 
 
@@ -283,7 +269,8 @@ sc_signal<T,POL>::update()
     if( !( m_new_val == m_cur_val ) ) {
 	m_cur_val = m_new_val;
 	if ( m_change_event_p ) m_change_event_p->notify_next_delta();
-	m_delta = delta_count();
+	// m_delta = delta_count();
+	m_change_stamp = sc_change_stamp();
     }
 }
 
@@ -313,7 +300,7 @@ public: // constructors and destructor:
 	: sc_prim_channel( sc_gen_unique_name( "signal" ) ),
 	  m_change_event_p( 0 ),
           m_cur_val( false ),
-          m_delta( ~sc_dt::UINT64_ONE ),
+          m_change_stamp( ~sc_dt::UINT64_ONE ),
 	  m_negedge_event_p( 0 ),
           m_new_val( false ),
 	  m_posedge_event_p( 0 ),
@@ -324,7 +311,7 @@ public: // constructors and destructor:
 	: sc_prim_channel( name_ ),
 	  m_change_event_p( 0 ),
           m_cur_val( false ),
-          m_delta( ~sc_dt::UINT64_ONE ),
+          m_change_stamp( ~sc_dt::UINT64_ONE ),
 	  m_negedge_event_p( 0 ),
           m_new_val( false ),
 	  m_posedge_event_p( 0 ),
@@ -398,7 +385,7 @@ public: // constructors and destructor:
 
     // was there a value changed event?
     virtual bool event() const
-        { return simcontext()->event_occurred(m_delta); }
+        { return simcontext()->event_occurred(m_change_stamp); }
 
     // was there a positive edge event?
     virtual bool posedge() const
@@ -459,7 +446,7 @@ protected:
 protected:
     mutable sc_event* m_change_event_p;  // value change event if present.
     bool              m_cur_val;         // current value of object.
-    sc_dt::uint64     m_delta;           // delta of last event
+    sc_dt::uint64     m_change_stamp;    // delta of last event
     mutable sc_event* m_negedge_event_p; // negative edge event if present.
     bool              m_new_val;         // next value of object.
     mutable sc_event* m_posedge_event_p; // positive edge event if present.
@@ -491,28 +478,13 @@ template< sc_writer_policy POL >
 void
 sc_signal<bool,POL>::write( const bool& value_ )
 {
-#if 0
-    if( !policy_type::check_write(this) )
-        return; // check failed - ignore write
-
-    m_new_val = value_;
-    if( !( m_new_val == m_cur_val ) ) {
-	request_update();
-    }
-#else
-    bool value_changed = !(value_ == m_cur_val);
-
-    if ( value_changed || POL != SC_MANY_WRITERS )
-    {
-        if( !policy_type::check_write(this) )
-            return;
-    }
-
+    bool value_changed = !( value_ == m_cur_val );
+    if ( !policy_type::check_write(this, value_changed) )
+        return;
     m_new_val = value_;
     if( value_changed ) {
         request_update();
     }
-#endif
 }
 
 template< sc_writer_policy POL >
@@ -550,7 +522,7 @@ sc_signal<bool,POL>::update()
         } else {
             if ( m_negedge_event_p ) m_negedge_event_p->notify_next_delta();
         }
-        m_delta = delta_count();
+        m_change_stamp = sc_change_stamp();
     }
 }
 
@@ -601,7 +573,7 @@ public: // constructors and destructor:
 	: sc_prim_channel( sc_gen_unique_name( "signal" ) ),
 	  m_change_event_p( 0 ),
 	  m_cur_val(),
-          m_delta( ~sc_dt::UINT64_ONE ),
+          m_change_stamp( ~sc_dt::UINT64_ONE ),
 	  m_negedge_event_p( 0 ),
 	  m_new_val(),
 	  m_posedge_event_p( 0 )
@@ -611,7 +583,7 @@ public: // constructors and destructor:
 	: sc_prim_channel( name_ ),
 	  m_change_event_p( 0 ),
 	  m_cur_val(),
-          m_delta( ~sc_dt::UINT64_ONE ),
+          m_change_stamp( ~sc_dt::UINT64_ONE ),
 	  m_negedge_event_p( 0 ),
 	  m_new_val(),
 	  m_posedge_event_p( 0 )
@@ -689,7 +661,7 @@ public: // constructors and destructor:
 
     // was there an event?
     virtual bool event() const
-        { return simcontext()->event_occurred(m_delta); }
+        { return simcontext()->event_occurred(m_change_stamp); }
 
     // was there a positive edge event?
     virtual bool posedge() const
@@ -746,7 +718,7 @@ protected:
 
     mutable sc_event* m_change_event_p;  // value change event if present.
     sc_dt::sc_logic   m_cur_val;         // current value of object.
-    sc_dt::uint64     m_delta;           // delta of last event
+    sc_dt::uint64     m_change_stamp;    // delta of last event
     mutable sc_event* m_negedge_event_p; // negative edge event if present.
     sc_dt::sc_logic   m_new_val;         // next value of object.
     mutable sc_event* m_posedge_event_p; // positive edge event if present.
@@ -778,28 +750,14 @@ inline
 void
 sc_signal<sc_dt::sc_logic,POL>::write( const sc_dt::sc_logic& value_ )
 {
-#if 0
-    if( ! policy_type::check_write(this) )
+    bool value_changed = !( value_ == m_cur_val );
+    if ( !policy_type::check_write(this, value_changed) )
         return;
-
-    m_new_val = value_;
-    if( !( m_new_val == m_cur_val ) ) {
-	request_update();
-    }
-#else
-    bool value_changed = !(value_ == m_cur_val);
-
-    if ( value_changed || POL != SC_MANY_WRITERS )
-    {
-        if( !policy_type::check_write(this) )
-            return;
-    }
 
     m_new_val = value_;
     if( value_changed ) {
         request_update();
     }
-#endif
 }
 
 template< sc_writer_policy POL >
@@ -833,7 +791,7 @@ sc_signal<sc_dt::sc_logic,POL>::update()
 	} else if( m_negedge_event_p && (m_cur_val == sc_dt::SC_LOGIC_0) ) {
 	    m_negedge_event_p->notify_next_delta();
 	}
-	m_delta = delta_count();
+	m_change_stamp = sc_change_stamp();
     }
 }
 
@@ -859,6 +817,16 @@ operator << ( ::std::ostream& os, const sc_signal<T,POL>& a )
     
  *****************************************************************************/
 //$Log: sc_signal.h,v $
+//Revision 1.11  2011/04/05 20:48:09  acg
+// Andy Goodrich: changes to make sure that event(), posedge() and negedge()
+// only return true if the clock has not moved.
+//
+//Revision 1.10  2011/04/05 07:10:55  acg
+// Andy Goodrich: added line that I dropped in sc_signal<sc_dt::sc_logic>.
+//
+//Revision 1.9  2011/04/05 06:15:18  acg
+// Philipp A. Hartmann: sc_writer_policy: ignore no-ops in delta check.
+//
 //Revision 1.8  2011/03/23 16:17:22  acg
 // Andy Goodrich: hide the sc_events that are kernel related.
 //

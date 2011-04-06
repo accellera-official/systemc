@@ -35,6 +35,15 @@
 
 
 // $Log: sc_ver.cpp,v $
+// Revision 1.7  2011/04/05 20:50:57  acg
+//  Andy Goodrich:
+//    (1) changes to make sure that event(), posedge() and negedge() only
+//        return true if the clock has not moved.
+//    (2) fixes for method self-resumes.
+//    (3) added SC_PRERELEASE_VERSION
+//    (4) removed kernel events from the object hierarchy, added
+//        sc_hierarchy_name_exists().
+//
 // Revision 1.6  2011/02/18 20:27:14  acg
 //  Andy Goodrich: Updated Copyrights.
 //
@@ -79,7 +88,7 @@ const bool         sc_is_prerelease = SC_IS_PRERELEASE;
 
 const std::string  sc_version_originator   = SC_VERSION_ORIGINATOR;
 const std::string  sc_version_release_date = SC_VERSION_RELEASE_DATE;
-const std::string  sc_version_prerelease   = ( SC_VERSION_PRERELEASE_STRING + 1 );
+const std::string  sc_version_prerelease   = ( SC_VERSION_PRERELEASE + 1 );
 const std::string  sc_version_string       = SC_VERSION;
 const std::string  sc_copyright_string     = SC_COPYRIGHT;
 

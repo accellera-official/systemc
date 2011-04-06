@@ -52,6 +52,15 @@
                                
  *****************************************************************************/
 // $Log: sc_simcontext.h,v $
+// Revision 1.19  2011/04/05 20:50:57  acg
+//  Andy Goodrich:
+//    (1) changes to make sure that event(), posedge() and negedge() only
+//        return true if the clock has not moved.
+//    (2) fixes for method self-resumes.
+//    (3) added SC_PRERELEASE_VERSION
+//    (4) removed kernel events from the object hierarchy, added
+//        sc_hierarchy_name_exists().
+//
 // Revision 1.18  2011/03/20 13:43:23  acg
 //  Andy Goodrich: added async_signal_is() plus suspend() as a corner case.
 //
@@ -252,8 +261,10 @@ inline void sc_start( double duration, sc_time_unit unit,
 }
 
 extern void sc_stop();
+
 // friend function declarations
 
+sc_dt::uint64 sc_change_stamp();
 sc_dt::uint64 sc_delta_count();
 const std::vector<sc_event*>& sc_get_top_level_events(
 				const   sc_simcontext* simc_p);
@@ -291,6 +302,7 @@ class sc_simcontext
     friend class sc_prim_channel;
     friend class sc_cthread_process;
     friend class sc_thread_process;
+    friend sc_dt::uint64 sc_change_stamp();
     friend sc_dt::uint64 sc_delta_count();
     friend const std::vector<sc_event*>& sc_get_top_level_events(
         const sc_simcontext* simc_p);
@@ -461,7 +473,7 @@ private:
     bool                        m_write_check;
     int                         m_next_proc_id;
 
-    std::vector<sc_event*>     m_child_events;
+    std::vector<sc_event*>      m_child_events;
     std::vector<sc_object*>     m_child_objects;
 
     std::vector<sc_event*>      m_delta_events;
@@ -477,6 +489,7 @@ private:
     sc_time                     m_curr_time;
     mutable sc_time             m_max_time;
  
+    sc_dt::uint64               m_change_stamp; // "time" change occurred.
     sc_dt::uint64               m_delta_count;
     bool                        m_forced_stop;
     bool                        m_paused;
@@ -632,7 +645,8 @@ inline
 bool
 sc_simcontext::event_occurred(sc_dt::uint64 last_change_count) const
 {
-    return m_delta_count == last_change_count;
+    // return m_delta_count == last_change_count;
+    return m_change_stamp == last_change_count;
 }
 
 inline
@@ -755,6 +769,12 @@ sc_dt::uint64 sc_delta_count()
     return sc_get_curr_simcontext()->m_delta_count;
 }
 
+inline
+sc_dt::uint64 sc_change_stamp()
+{
+    return sc_get_curr_simcontext()->m_change_stamp;
+}
+
 inline 
 bool sc_is_running( const sc_simcontext* simc_p = sc_get_curr_simcontext() )
 {
@@ -807,6 +827,10 @@ sc_end_of_simulation_invoked()
     return sc_get_curr_simcontext()->m_end_of_simulation_called;
 }
 
+inline bool sc_hierarchichal_name_exists( const char* name )
+{
+    return sc_find_object(name) || sc_find_event(name);
+}
 
 inline
 bool 

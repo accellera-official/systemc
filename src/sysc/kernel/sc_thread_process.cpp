@@ -35,6 +35,15 @@
  *****************************************************************************/
 
 // $Log: sc_thread_process.cpp,v $
+// Revision 1.40  2011/04/05 20:50:57  acg
+//  Andy Goodrich:
+//    (1) changes to make sure that event(), posedge() and negedge() only
+//        return true if the clock has not moved.
+//    (2) fixes for method self-resumes.
+//    (3) added SC_PRERELEASE_VERSION
+//    (4) removed kernel events from the object hierarchy, added
+//        sc_hierarchy_name_exists().
+//
 // Revision 1.39  2011/04/01 22:30:39  acg
 //  Andy Goodrich: change hard assertion to warning for trigger_dynamic()
 //  getting called when there is only STATIC sensitivity. This can result
@@ -323,7 +332,7 @@ void sc_thread_process::disable_process(
 
     // IF THIS CALL IS BEFORE THE SIMULATION DON'T RUN THE THREAD:
 
-    if ( !sc_is_running() )
+    if ( !sc_is_running() ) // @@@@#### what if not initialized at all?
     {
         simcontext()->remove_runnable_thread(this);
     }
@@ -390,7 +399,7 @@ void sc_thread_process::kill_process(sc_descendant_inclusion_info descendants )
 
     // IF THE SIMULATION HAS NOT BEEN INITIALIZED YET THAT IS AN ERROR:
 
-    if ( sc_get_status() == SC_ELABORATION )
+    if ( !sc_is_running() )
     {
         SC_REPORT_ERROR( SC_KILL_PROCESS_WHILE_UNITIALIZED_, "" );
     }
@@ -722,21 +731,32 @@ void sc_thread_process::throw_user( const sc_throw_it_helper& helper,
 
     // IF THE SIMULATION HAS NOT BEEN INITIALIZED YET THAT IS AN ERROR:
 
-    if ( sc_get_status() == SC_ELABORATION )
+    if ( sc_get_status() != SC_RUNNING )
     {
-        SC_REPORT_ERROR( SC_KILL_PROCESS_WHILE_UNITIALIZED_, "" );
+        SC_REPORT_ERROR( SC_THROW_IT_WHILE_NOT_RUNNING_, name() );
     }
 
 
     // SET UP THE THROW REQUEST FOR THIS OBJECT INSTANCE AND QUEUE IT FOR
     // EXECUTION:
+    //
+    // If this object instance is already queued for exection this call
+    // is a no-op.
 
-    if ( m_state & ps_bit_zombie ) return;
+    if ( is_runnable() )
+    {
+        SC_REPORT_WARNING( SC_THROW_IT_ON_RUNNABLE_PROCESS_, name() );
+    }
+    else
+    {
+	if ( m_state & ps_bit_zombie ) return;
 
-    m_throw_status = THROW_USER;
-    if ( m_throw_helper_p != 0 ) delete m_throw_helper_p;
-    m_throw_helper_p = helper.clone();
-    simcontext()->preempt_with( this );
+	remove_dynamic_events();
+	m_throw_status = THROW_USER;
+	if ( m_throw_helper_p != 0 ) delete m_throw_helper_p;
+	m_throw_helper_p = helper.clone();
+	simcontext()->preempt_with( this );
+    }
 
     // IF NEEDED PROPOGATE THE THROW REQUEST THROUGH OUR DESCENDANTS:
 
@@ -783,9 +803,9 @@ bool sc_thread_process::trigger_dynamic( sc_event* e )
 
     m_timed_out = false;
 
-    // If this thread is already runnable can't trigger an event.
+    // If this thread is already runnable then we are done, flush the event.
 
-    if( is_runnable() ) 
+    if( is_runnable() )
     {
         return true;
     }

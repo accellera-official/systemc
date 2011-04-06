@@ -35,6 +35,15 @@
  *****************************************************************************/
 
 // $Log: sc_method_process.cpp,v $
+// Revision 1.33  2011/04/05 20:50:56  acg
+//  Andy Goodrich:
+//    (1) changes to make sure that event(), posedge() and negedge() only
+//        return true if the clock has not moved.
+//    (2) fixes for method self-resumes.
+//    (3) added SC_PRERELEASE_VERSION
+//    (4) removed kernel events from the object hierarchy, added
+//        sc_hierarchy_name_exists().
+//
 // Revision 1.32  2011/04/01 22:30:39  acg
 //  Andy Goodrich: change hard assertion to warning for trigger_dynamic()
 //  getting called when there is only STATIC sensitivity. This can result
@@ -350,6 +359,7 @@ void sc_method_process::kill_process(sc_descendant_inclusion_info descendants)
     // IF THE SIMULATION HAS NOT BEEN INITIALIZED YET THAT IS AN ERROR:
 
     if ( sc_get_status() == SC_ELABORATION )
+    // @@@@#### if ( sc_get_status() == SC_ELABORATION )
     {
         SC_REPORT_ERROR( SC_KILL_PROCESS_WHILE_UNITIALIZED_, "" );
     }
@@ -566,14 +576,20 @@ void sc_method_process::resume_process(
 
     m_state = m_state & ~ps_bit_suspended;
 
-    // RESUME OBJECT INSTANCE IF IT IS READY TO RUN:
+    // RESUME OBJECT INSTANCE:
+    //
+    // If this is not a self-resume and the method is ready to run then
+    // put it on the runnable queue.
 
     if ( m_state & ps_bit_ready_to_run )
     {
 	m_state = m_state & ~ps_bit_ready_to_run;
-	if ( next_runnable() == 0 )  
+	if ( next_runnable() == 0 && 
+	   ( sc_get_current_process_b() != DCAST<sc_process_b*>(this) ) )
+        {
 	    simcontext()->push_runnable_method(this);
-	remove_dynamic_events();  // order important.
+	    remove_dynamic_events();  
+	}
     }
 }
 
@@ -640,9 +656,23 @@ void sc_method_process::throw_user( const sc_throw_it_helper& helper,
 
     // IF THE SIMULATION HAS NOT BEEN INITIALIZED YET THAT IS AN ERROR:
 
-    if ( sc_get_status() == SC_ELABORATION )
+    if (  sc_get_status() != SC_RUNNING )
     {
-        SC_REPORT_ERROR( SC_KILL_PROCESS_WHILE_UNITIALIZED_, "" );
+        SC_REPORT_ERROR( SC_THROW_IT_WHILE_NOT_RUNNING_, name() );
+    }
+
+    // CANCEL ANY DYNAMIC EVENT WAITS:
+    //
+    // If this object instance is already queued for exection this call
+    // is a no-op.
+
+    if ( is_runnable() )
+    {
+        SC_REPORT_WARNING( SC_THROW_IT_ON_RUNNABLE_PROCESS_, name() );
+    }
+    else 
+    {
+	remove_dynamic_events();
     }
 
     // IF NEEDED PROPOGATE THE THROW REQUEST THROUGH OUR DESCENDANTS:
@@ -688,12 +718,15 @@ bool sc_method_process::trigger_dynamic( sc_event* e )
 
     m_timed_out = false;
 
-    // If this method is already runnable can't trigger an event.
+    // Escape cases:
+    //   (a) If this method issued the notify() don't schedule it for execution,
+    //       but leave the sensitivity in place.
+    //   (b) If this method is already runnable can't trigger an event.
 
-    if( is_runnable() ) 
-    {
+    if ( sc_get_current_process_b() == (sc_process_b*)this )
+        return false;
+    else if( is_runnable() ) 
         return true;
-    }
 
     // If a process is disabled then we ignore any events, leaving them enabled:
     //
