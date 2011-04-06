@@ -16,15 +16,16 @@ protected:
 SC_MODULE(top) {
 public:
   SC_CTOR(top) {
+    SC_THREAD(perpetrator);
     SC_THREAD(victim);
     h = sc_get_current_process_handle();
-    SC_THREAD(perpetrator);
   }
 
   void victim() {
     try {
       cerr << sc_time_stamp() << ": starting victim thread" << endl;
-      ::sc_core::wait(100, SC_NS);
+      ::sc_core::wait(10, SC_NS);
+      ::sc_core::wait(90, SC_NS);
     }
     catch (my_exception& x) {
       cerr << sc_time_stamp() << ": in victim thread, caught exception "
