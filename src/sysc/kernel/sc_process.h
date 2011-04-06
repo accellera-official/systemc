@@ -520,7 +520,7 @@ class sc_process_b : public sc_object {
     inline bool clear_unwinding();
     virtual void kill_process(
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS ) = 0;
-    inline void reset_changed( bool async, bool asserted );
+    void reset_changed( bool async, bool asserted );
     void reset_process( reset_type rt,
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
     virtual void resume_process(
@@ -759,73 +759,6 @@ inline void sc_process_b::reference_increment()
     assert(m_references_n != 0);
     m_references_n++;
 }
-
-//------------------------------------------------------------------------------
-//"sc_process_b::reset_changed"
-//      
-// This method is called when there is a change in the value of the
-// signal that was specified via reset_signal_is, or the value of the
-// m_sticky_reset field. We get called any time m_sticky_reset changes
-// or a signal value changes since, since we may need to throw an exception 
-// or clear one. Note that this method may be called when there is no
-// active process, but rather the main simulator is executing so we must
-// check for that case.
-//
-// Arguments:
-//     async    = true if this is an asynchronous reset.
-//     asserted = true if reset being asserted, false if being deasserted.
-//------------------------------------------------------------------------------
-inline void sc_process_b::reset_changed( bool async, bool asserted )
-{       
-
-    // Error out on the corner case:
-
-    if ( !sc_allow_process_control_corners && !async && 
-         (m_state & ps_bit_suspended) )
-    {
-	SC_REPORT_ERROR( SC_ID_PROCESS_CONTROL_CORNER_CASE_,
-	   ": synchronous reset changed on a suspended process");
-    }
-
-    // Reset is being asserted:
-
-    if ( asserted )
-    {
-        if ( async )
-	{
-	    m_active_areset_n++;
-	    throw_reset(true);
-	}
-	else
-	{
-	    m_active_reset_n++;
-	    throw_reset(false);
-	}
-    }
-
-    // Reset is being deasserted:
-
-    else 
-    {
-        if ( async )
-	{
-	    m_active_areset_n--;
-	}
-	else
-	{
-	    m_active_reset_n--;
-	}
-    }
-
-    // Clear the throw type if there are no active resets.
-
-    if ( (m_throw_status == THROW_SYNC_RESET || 
-          m_throw_status == THROW_ASYNC_RESET) &&
-         m_active_areset_n == 0 && m_active_reset_n == 0 && !m_sticky_reset )
-    {
-        m_throw_status = THROW_NONE;
-    }
-}       
 
 //------------------------------------------------------------------------------
 //"sc_process_b::semantics"

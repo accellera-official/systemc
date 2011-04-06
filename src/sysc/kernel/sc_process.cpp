@@ -457,6 +457,73 @@ sc_process_b::remove_static_events()
 
 
 //------------------------------------------------------------------------------
+//"sc_process_b::reset_changed"
+//      
+// This method is called when there is a change in the value of the
+// signal that was specified via reset_signal_is, or the value of the
+// m_sticky_reset field. We get called any time m_sticky_reset changes
+// or a signal value changes since, since we may need to throw an exception 
+// or clear one. Note that this method may be called when there is no
+// active process, but rather the main simulator is executing so we must
+// check for that case.
+//
+// Arguments:
+//     async    = true if this is an asynchronous reset.
+//     asserted = true if reset being asserted, false if being deasserted.
+//------------------------------------------------------------------------------
+void sc_process_b::reset_changed( bool async, bool asserted )
+{       
+
+    // Error out on the corner case:
+
+    if ( !sc_allow_process_control_corners && !async && 
+         (m_state & ps_bit_suspended) )
+    {
+	SC_REPORT_ERROR( SC_ID_PROCESS_CONTROL_CORNER_CASE_,
+	   ": synchronous reset changed on a suspended process");
+    }
+
+    // Reset is being asserted:
+
+    if ( asserted )
+    {
+        if ( async )
+	{
+	    m_active_areset_n++;
+	    if ( sc_is_running() ) throw_reset(true);
+	}
+	else
+	{
+	    m_active_reset_n++;
+	    if ( sc_is_running() ) throw_reset(false);
+	}
+    }
+
+    // Reset is being deasserted:
+
+    else 
+    {
+        if ( async )
+	{
+	    m_active_areset_n--;
+	}
+	else
+	{
+	    m_active_reset_n--;
+	}
+    }
+
+    // Clear the throw type if there are no active resets.
+
+    if ( (m_throw_status == THROW_SYNC_RESET || 
+          m_throw_status == THROW_ASYNC_RESET) &&
+         m_active_areset_n == 0 && m_active_reset_n == 0 && !m_sticky_reset )
+    {
+        m_throw_status = THROW_NONE;
+    }
+}       
+
+//------------------------------------------------------------------------------
 //"sc_process_b::reset_process"
 //
 // This inline method changes the reset state of this object instance and
@@ -521,8 +588,7 @@ void sc_process_b::reset_process( reset_type rt,
 	if ( m_sticky_reset == false )
 	{
 	    m_sticky_reset = true;
-	    if ( sc_is_running() )
-		reset_changed( false, true );
+	    reset_changed( false, true );
 	}
         break;
 
@@ -532,8 +598,7 @@ void sc_process_b::reset_process( reset_type rt,
 	if ( m_sticky_reset == true )
 	{
 	    m_sticky_reset = false;
-	    if ( sc_is_running() )
-		reset_changed( false, false );
+	    reset_changed( false, false );
 	}
         break;
     }   

@@ -88,7 +88,7 @@ const bool         sc_is_prerelease = SC_IS_PRERELEASE;
 
 const std::string  sc_version_originator   = SC_VERSION_ORIGINATOR;
 const std::string  sc_version_release_date = SC_VERSION_RELEASE_DATE;
-const std::string  sc_version_prerelease   = ( SC_VERSION_PRERELEASE + 1 );
+const std::string  sc_version_prerelease   = SC_VERSION_PRERELEASE;
 const std::string  sc_version_string       = SC_VERSION;
 const std::string  sc_copyright_string     = SC_COPYRIGHT;
 

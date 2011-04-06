@@ -527,6 +527,7 @@ sc_thread_process::trigger_static()
     //    (d) its wait count is not satisfied
 
     if ( (m_state & ps_bit_disabled) || is_runnable() || 
+         (sc_get_current_process_b() == (sc_process_b*)this) ||
          m_trigger_type != STATIC )
     {
         return;
