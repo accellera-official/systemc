@@ -65,13 +65,6 @@
 #endif
 #endif
 
-// WIN64 is reserved for the future 64-bit OS
-
-#ifdef WIN64
-#error WIN64 keyword is reserved for 64-bit Windows
-#endif
-
-
 // ----------------------------------------------------------------------------
 
 #ifdef _MSC_VER
@@ -126,8 +119,12 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __MINGW32__
-#define _WIN32_WINNT 0x400
-#include <Windows.h>
+
+// Windows Version Build Option
+
+#ifndef _WIN32_WINNT
+#define _WIN32_WINNT 0x0400
+#endif
 
 #endif
 

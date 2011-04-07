@@ -49,12 +49,18 @@
 
 #include <assert.h>
 #include <cstdlib>
+#include <cstddef>
 
 #include "sysc/kernel/sc_cmnhdr.h"
 #include "sysc/utils/sc_hash.h"
 #include "sysc/utils/sc_mempool.h"
 
+
 namespace sc_core {
+
+// we can't assume global availability of uintptr_t,
+// approximate it by size_t
+typedef std::size_t uintptr_t;
 
 const double PHASH_DEFAULT_GROW_FACTOR     = 2.0;
 
@@ -611,14 +617,14 @@ sc_phash_base_iter::set_contents( void* c )
 unsigned 
 default_ptr_hash_fn(const void* p)
 {
-    return ((unsigned long)(p) >> 2) * 2654435789U;
+    return ((uintptr_t)(p) >> 2) * 2654435789U;
 
 }
 
 unsigned
 default_int_hash_fn(const void* p)
 {
-    return (unsigned long)(p) * 3141592661U;
+    return (uintptr_t)(p) * 3141592661U;
 }
 
 
