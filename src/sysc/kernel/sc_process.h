@@ -46,6 +46,19 @@
  *****************************************************************************/
 
 // $Log: sc_process.h,v $
+// Revision 1.29  2011/04/10 22:17:36  acg
+//  Andy Goodrich: added trigger_reset_event() to allow sc_process.h to
+//  contain the run_process() inline method. sc_process.h cannot have
+//  sc_simcontext information because of recursive includes.
+//
+// Revision 1.28  2011/04/08 22:34:06  acg
+//  Andy Goodrich: moved the semantics() method to this file and made it
+//  an inline method. Added reset processing to the semantics() method.
+//
+// Revision 1.27  2011/04/08 18:24:48  acg
+//  Andy Goodrich: moved reset_changed() to .cpp since it needs visibility
+//  to sc_simcontext.
+//
 // Revision 1.26  2011/04/01 21:24:57  acg
 //  Andy Goodrich: removed unused code.
 //
@@ -531,6 +544,7 @@ class sc_process_b : public sc_object {
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS ) = 0;
     virtual void throw_reset( bool async ) = 0;
     virtual bool terminated() const;
+    void trigger_reset_event();
 
   private:
     void        delete_process();
@@ -766,13 +780,25 @@ inline void sc_process_b::reference_increment()
 // This inline method invokes the semantics for this object instance. 
 // We check to see if we are initially in reset and then invoke the
 // process semantics.
+//
+// Notes:
+//   (1) For a description of the process reset mechanism see the top of 
+//       the file sc_reset.cpp.
 //------------------------------------------------------------------------------
-inline void sc_process_b::semantics()
+void sc_process_b::semantics()
 {
     assert( m_process_kind != SC_NO_PROC_ );
 
+    // Determine the reset status of this object instance and potentially
+    // trigger its notify event:
+
     m_throw_status = m_active_areset_n ? THROW_ASYNC_RESET : 
         ( m_active_reset_n  ?  THROW_SYNC_RESET : THROW_NONE);
+    if ( m_throw_status != THROW_NONE && m_reset_event_p )
+        trigger_reset_event();
+
+    // Dispatch the actual semantics for the process:
+
 #   ifndef SC_USE_MEMBER_FUNC_PTR
         m_semantics_method_p->invoke( m_semantics_host_p );
 #   else

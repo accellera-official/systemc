@@ -36,6 +36,13 @@
  ******************************************************************************/
 
 // $Log: sc_runnable_int.h,v $
+// Revision 1.16  2011/04/10 22:18:23  acg
+//  Andy Goodrich: debugging message clean up.
+//
+// Revision 1.15  2011/04/08 18:26:07  acg
+//  Andy Goodrich: added execute_method_next() to handle method dispatch
+//   for asynchronous notifications that occur outside the evaluation phase.
+//
 // Revision 1.14  2011/04/01 21:31:10  acg
 //  Andy Goodrich: turn off diagnostic messages by default.
 //
@@ -151,6 +158,34 @@ inline void sc_runnable::dump() const
     {
         std::cout << "    " << p << std::endl;
     }
+}
+
+//------------------------------------------------------------------------------
+//"sc_runnable::execute_method_next"
+//
+// This method pushes the the supplied method to execute as the next process.
+// This is done by pushing it onto the front of the m_methods_pop.
+//     method_h -> method process to add to the queue.
+//------------------------------------------------------------------------------
+inline void sc_runnable::execute_method_next( sc_method_handle method_h )
+{
+    DEBUG_MSG(DEBUG_NAME,method_h,"executing this method next");
+    method_h->set_next_runnable( m_methods_pop );
+    m_methods_pop = method_h;
+}
+
+//------------------------------------------------------------------------------
+//"sc_runnable::execute_thread_next"
+//
+// This method pushes the the supplied thread to execute as the next process.
+// This is done by pushing it onto the front of the m_threads_pop.
+//     thread_h -> thread process to add to the queue.
+//------------------------------------------------------------------------------
+inline void sc_runnable::execute_thread_next( sc_thread_handle thread_h )
+{
+    DEBUG_MSG(DEBUG_NAME,thread_h,"executing this thread next");
+    thread_h->set_next_runnable( m_threads_pop );
+    m_threads_pop = thread_h;
 }
 
 //------------------------------------------------------------------------------
@@ -292,20 +327,6 @@ inline void sc_runnable::push_front_thread( sc_thread_handle thread_h )
     {
 	m_threads_push_head->set_next_runnable(thread_h);
     }
-}
-
-//------------------------------------------------------------------------------
-//"sc_runnable::execute_thread_next"
-//
-// This method pushes the the supplied thread to execute as the next process.
-// This is done by pushing it onto the front of the m_threads_pop.
-//     thread_h -> thread process to add to the queue.
-//------------------------------------------------------------------------------
-inline void sc_runnable::execute_thread_next( sc_thread_handle thread_h )
-{
-    DEBUG_MSG(DEBUG_NAME,thread_h,"executing thread next");
-    thread_h->set_next_runnable( m_threads_pop );
-    m_threads_pop = thread_h;
 }
 
 //------------------------------------------------------------------------------

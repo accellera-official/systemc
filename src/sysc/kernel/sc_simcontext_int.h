@@ -37,6 +37,13 @@
  *****************************************************************************/
 
 // $Log: sc_simcontext_int.h,v $
+// Revision 1.9  2011/04/10 22:12:32  acg
+//  Andy Goodrich: adding debugging macros.
+//
+// Revision 1.8  2011/04/08 18:26:07  acg
+//  Andy Goodrich: added execute_method_next() to handle method dispatch
+//   for asynchronous notifications that occur outside the evaluation phase.
+//
 // Revision 1.7  2011/02/18 20:27:14  acg
 //  Andy Goodrich: Updated Copyrights.
 //
@@ -83,6 +90,26 @@
 #include "sysc/kernel/sc_runnable.h"
 #include "sysc/kernel/sc_runnable_int.h"
 
+// DEBUGGING MACROS:
+//
+// DEBUG_MSG(NAME,P,MSG)
+//     MSG  = message to print
+//     NAME = name that must match the process for the message to print, or
+//            null if the message should be printed unconditionally.
+//     P    = pointer to process message is for, or NULL in which case the
+//            message will not print.
+#if 0
+#   define DEBUG_NAME (const char*)0
+#   define DEBUG_MSG(NAME,P,MSG) \
+    { \
+        if ( P && ( (NAME==0) || !strcmp(NAME,P->name())) ) \
+          std::cout << sc_time_stamp() << ": " << P->name() << " ******** " \
+                    << MSG << std::endl; \
+    }
+#else
+#   define DEBUG_MSG(NAME,P,MSG) 
+#endif
+
 namespace sc_core {
 
 // We use m_current_writer rather than m_curr_proc_info.process_handle to
@@ -108,6 +135,13 @@ sc_simcontext::reset_curr_proc()
     m_curr_proc_info.kind           = SC_NO_PROC_;
     m_current_writer                = 0;
     sc_process_b::m_last_created_process_p = 0; 
+}
+
+inline
+void
+sc_simcontext::execute_method_next( sc_method_handle method_h )
+{
+    m_runnable->execute_method_next( method_h );
 }
 
 inline
@@ -156,6 +190,8 @@ sc_simcontext::preempt_with( sc_thread_handle thread_h )
     if ( active_p == NULL )
     {
 	caller_info = m_curr_proc_info;
+        DEBUG_MSG( DEBUG_NAME, thread_h,
+	           "preempting no active thread with this thread" );
 	set_curr_proc( (sc_process_b*)thread_h );
 	m_cor_pkg->yield( thread_h->m_cor_p );
 	m_curr_proc_info = caller_info; 
@@ -171,6 +207,8 @@ sc_simcontext::preempt_with( sc_thread_handle thread_h )
 
     else if ( active_p != thread_h )
     {
+        DEBUG_MSG( DEBUG_NAME, thread_h,
+	           "preempting active thread with this thread" );
         execute_thread_next( active_p );
 	execute_thread_next( thread_h );
 	active_p->suspend_me();
@@ -184,6 +222,7 @@ sc_simcontext::preempt_with( sc_thread_handle thread_h )
 
     else
     {
+        DEBUG_MSG(DEBUG_NAME,thread_h,"self preemption of active thread");
 	execute_thread_next( thread_h );
 	active_p->suspend_me();
     }
@@ -265,5 +304,8 @@ extern void sc_defunct_process_function( sc_module* );
 
 
 } // namespace sc_core
+
+#undef DEBUG_MSG
+#undef DEBUG_NAME
 
 #endif

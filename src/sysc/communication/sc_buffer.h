@@ -34,6 +34,10 @@
     
  *****************************************************************************/
 //$Log: sc_buffer.h,v $
+//Revision 1.6  2011/04/08 18:22:45  acg
+// Philipp A. Hartmann: use the context of the primitive channel to get
+// the change stamp value.
+//
 //Revision 1.5  2011/04/05 20:48:09  acg
 // Andy Goodrich: changes to make sure that event(), posedge() and negedge()
 // only return true if the clock has not moved.
@@ -182,7 +186,7 @@ sc_buffer<T,POL>::update()
     this->m_cur_val = this->m_new_val;
     if ( base_type::m_change_event_p )
         base_type::m_change_event_p->notify(SC_ZERO_TIME);
-    this->m_change_stamp = sc_change_stamp();
+    this->m_change_stamp = base_type::simcontext()->change_stamp();
 }
 
 } // namespace sc_core

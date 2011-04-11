@@ -52,6 +52,10 @@
                                
  *****************************************************************************/
 // $Log: sc_simcontext.h,v $
+// Revision 1.20  2011/04/08 18:26:07  acg
+//  Andy Goodrich: added execute_method_next() to handle method dispatch
+//   for asynchronous notifications that occur outside the evaluation phase.
+//
 // Revision 1.19  2011/04/05 20:50:57  acg
 //  Andy Goodrich:
 //    (1) changes to make sure that event(), posedge() and negedge() only
@@ -59,7 +63,7 @@
 //    (2) fixes for method self-resumes.
 //    (3) added SC_PRERELEASE_VERSION
 //    (4) removed kernel events from the object hierarchy, added
-//        sc_hierarchy_name_exists().
+//        sc_hierarchical_name_exists().
 //
 // Revision 1.18  2011/03/20 13:43:23  acg
 //  Andy Goodrich: added async_signal_is() plus suspend() as a corner case.
@@ -264,7 +268,6 @@ extern void sc_stop();
 
 // friend function declarations
 
-sc_dt::uint64 sc_change_stamp();
 sc_dt::uint64 sc_delta_count();
 const std::vector<sc_event*>& sc_get_top_level_events(
 				const   sc_simcontext* simc_p);
@@ -302,7 +305,6 @@ class sc_simcontext
     friend class sc_prim_channel;
     friend class sc_cthread_process;
     friend class sc_thread_process;
-    friend sc_dt::uint64 sc_change_stamp();
     friend sc_dt::uint64 sc_delta_count();
     friend const std::vector<sc_event*>& sc_get_top_level_events(
         const sc_simcontext* simc_p);
@@ -391,8 +393,10 @@ public:
     const sc_time& max_time() const;
     const sc_time& time_stamp() const;
 
+    sc_dt::uint64 change_stamp() const;
     sc_dt::uint64 delta_count() const;
     bool event_occurred( sc_dt::uint64 last_change_count ) const;
+    bool evaluation_phase() const;
     bool is_running() const;
     bool update_phase() const;
     bool get_error();
@@ -428,6 +432,7 @@ private:
     const ::std::vector<sc_event*>& get_child_events_internal() const;
     const ::std::vector<sc_object*>& get_child_objects_internal() const;
 
+    void execute_method_next( sc_method_handle );
     void execute_thread_next( sc_thread_handle );
 
     sc_method_handle pop_runnable_method();
@@ -632,6 +637,12 @@ sc_simcontext::max_time() const
     return m_max_time;
 }
 
+inline
+sc_dt::uint64
+sc_simcontext::change_stamp() const
+{
+    return m_change_stamp;
+}
 
 inline
 const sc_time&
@@ -643,10 +654,17 @@ sc_simcontext::time_stamp() const
 
 inline 
 bool
-sc_simcontext::event_occurred(sc_dt::uint64 last_change_count) const
+sc_simcontext::event_occurred(sc_dt::uint64 last_change_stamp) const
 {
-    // return m_delta_count == last_change_count;
-    return m_change_stamp == last_change_count;
+    return m_change_stamp == last_change_stamp;
+}
+
+inline
+bool
+sc_simcontext::evaluation_phase() const
+{
+    return (m_execution_phase == phase_evaluate) &&
+           m_ready_to_simulate;
 }
 
 inline
@@ -769,12 +787,6 @@ sc_dt::uint64 sc_delta_count()
     return sc_get_curr_simcontext()->m_delta_count;
 }
 
-inline
-sc_dt::uint64 sc_change_stamp()
-{
-    return sc_get_curr_simcontext()->m_change_stamp;
-}
-
 inline 
 bool sc_is_running( const sc_simcontext* simc_p = sc_get_curr_simcontext() )
 {
@@ -827,7 +839,7 @@ sc_end_of_simulation_invoked()
     return sc_get_curr_simcontext()->m_end_of_simulation_called;
 }
 
-inline bool sc_hierarchichal_name_exists( const char* name )
+inline bool sc_hierarchical_name_exists( const char* name )
 {
     return sc_find_object(name) || sc_find_event(name);
 }

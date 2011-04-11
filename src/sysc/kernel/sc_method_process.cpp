@@ -35,6 +35,16 @@
  *****************************************************************************/
 
 // $Log: sc_method_process.cpp,v $
+// Revision 1.36  2011/04/10 22:15:29  acg
+//  Andy Goodrich: change to call methods on asynchronous reset.
+//
+// Revision 1.35  2011/04/08 22:31:40  acg
+//  Andy Goodrich: removed unused code.
+//
+// Revision 1.34  2011/04/08 18:24:07  acg
+//  Andy Goodrich: fix asynchronous reset dispatch and when the reset_event()
+//  is fired.
+//
 // Revision 1.33  2011/04/05 20:50:56  acg
 //  Andy Goodrich:
 //    (1) changes to make sure that event(), posedge() and negedge() only
@@ -359,7 +369,6 @@ void sc_method_process::kill_process(sc_descendant_inclusion_info descendants)
     // IF THE SIMULATION HAS NOT BEEN INITIALIZED YET THAT IS AN ERROR:
 
     if ( sc_get_status() == SC_ELABORATION )
-    // @@@@#### if ( sc_get_status() == SC_ELABORATION )
     {
         SC_REPORT_ERROR( SC_KILL_PROCESS_WHILE_UNITIALIZED_, "" );
     }
@@ -593,11 +602,11 @@ void sc_method_process::resume_process(
     }
 }
 
-
 //------------------------------------------------------------------------------
 //"sc_method_process::throw_reset"
 //
 // This virtual method is invoked to "throw" a reset. 
+//
 // If the reset is synchronous this is a no-op.
 //
 // If the reset is asynchronous we:
@@ -607,12 +616,15 @@ void sc_method_process::resume_process(
 //       sensitivity emit an error if corner cases are to be considered
 //       errors.
 //
+// Notes:
+//   (1) If the process had a reset event it will have been triggered in 
+//       sc_process_b::semantics()
+//
 // Arguments:
 //   async = true if this is an asynchronous reset.
 //------------------------------------------------------------------------------
 void sc_method_process::throw_reset( bool async )
 {
-    if ( m_reset_event_p ) m_reset_event_p->notify();
     if ( async )
     {
         remove_dynamic_events();
@@ -621,9 +633,9 @@ void sc_method_process::throw_reset( bool async )
 	    m_throw_status = THROW_ASYNC_RESET;
 	    throw sc_unwind_exception( this, true );
 	}
-	else if ( sc_allow_process_control_corners )
+	else if ( 1 || sc_allow_process_control_corners ) // @@@@#### THIS IS THE ONLY ELSE CASE WHEN IEEE1666 STANDARD CONFIRMS SEMANTICS
 	{
-	    simcontext()->push_runnable_method(this);
+	    simcontext()->execute_method_next(this);
 	}
 	else if ( m_static_events.size() == 0 )
 	{

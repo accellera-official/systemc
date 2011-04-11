@@ -35,6 +35,17 @@
  *****************************************************************************/
 
 // $Log: sc_thread_process.cpp,v $
+// Revision 1.43  2011/04/10 22:12:32  acg
+//  Andy Goodrich: adding debugging macros.
+//
+// Revision 1.42  2011/04/08 22:40:26  acg
+//  Andy Goodrich: moved the reset event notification code out of throw_reset()
+//  and into suspend_me.
+//
+// Revision 1.41  2011/04/08 18:24:07  acg
+//  Andy Goodrich: fix asynchronous reset dispatch and when the reset_event()
+//  is fired.
+//
 // Revision 1.40  2011/04/05 20:50:57  acg
 //  Andy Goodrich:
 //    (1) changes to make sure that event(), posedge() and negedge() only
@@ -217,6 +228,26 @@
 #include "sysc/kernel/sc_simcontext_int.h"
 #include "sysc/kernel/sc_module.h"
 
+// DEBUGGING MACROS:
+//
+// DEBUG_MSG(NAME,P,MSG)
+//     MSG  = message to print
+//     NAME = name that must match the process for the message to print, or
+//            null if the message should be printed unconditionally.
+//     P    = pointer to process message is for, or NULL in which case the
+//            message will not print.
+#if 0
+#   define DEBUG_NAME (const char*)0
+#   define DEBUG_MSG(NAME,P,MSG) \
+    { \
+        if ( P && ( (NAME==0) || !strcmp(NAME,P->name())) ) \
+          std::cout << sc_time_stamp() << ": " << P->name() << " ******** " \
+                    << MSG << std::endl; \
+    }
+#else
+#   define DEBUG_MSG(NAME,P,MSG) 
+#endif
+
 namespace sc_core {
 
 //------------------------------------------------------------------------------
@@ -318,8 +349,8 @@ void sc_thread_process::disable_process(
 	  case EVENT_TIMEOUT: 
 	  case OR_LIST_TIMEOUT:
 	  case TIMEOUT:
-	    SC_REPORT_ERROR( SC_ID_PROCESS_CONTROL_CORNER_CASE_,
-		": attempt to disable a thread with timeout wait" );
+	    SC_REPORT_ERROR(SC_ID_PROCESS_CONTROL_CORNER_CASE_,
+		            ": attempt to disable a thread with timeout wait");
 	    break;
 	  default:
 	    break;
@@ -332,8 +363,9 @@ void sc_thread_process::disable_process(
 
     // IF THIS CALL IS BEFORE THE SIMULATION DON'T RUN THE THREAD:
 
-    if ( !sc_is_running() ) // @@@@#### what if not initialized at all?
+    if ( !sc_is_running() ) 
     {
+	m_state = m_state | ps_bit_ready_to_run;
         simcontext()->remove_runnable_thread(this);
     }
 }
@@ -695,14 +727,28 @@ void sc_thread_process::throw_reset( bool async )
     m_throw_status = async ? THROW_ASYNC_RESET : THROW_SYNC_RESET;
     m_wait_cycle_n = 0;
 
-    // If this is an asynchronous reset cancel any dynamic events and
-    // execute it immediately:
+    // If this is an asynchronous reset:
+    //
+    //   (a) Cancel any dynamic events 
+    //   (b) Set the thread up for execution:
+    //         (i) If we are in the execution phase do it now.
+    //         (ii) If we are not queue it to execute next when we hit
+    //              the execution phase.
 
     if ( async ) 
     {
         m_state = m_state & ~ps_bit_ready_to_run;
         remove_dynamic_events();
-        simcontext()->preempt_with( this );
+	if ( simcontext()->evaluation_phase() )
+	{
+            simcontext()->preempt_with( this );
+	}
+	else
+	{
+	    if ( is_runnable() )
+	        simcontext()->remove_runnable_thread(this);
+	    simcontext()->execute_thread_next(this);
+	}
     }
 }
 
@@ -736,28 +782,6 @@ void sc_thread_process::throw_user( const sc_throw_it_helper& helper,
         SC_REPORT_ERROR( SC_THROW_IT_WHILE_NOT_RUNNING_, name() );
     }
 
-
-    // SET UP THE THROW REQUEST FOR THIS OBJECT INSTANCE AND QUEUE IT FOR
-    // EXECUTION:
-    //
-    // If this object instance is already queued for exection this call
-    // is a no-op.
-
-    if ( is_runnable() )
-    {
-        SC_REPORT_WARNING( SC_THROW_IT_ON_RUNNABLE_PROCESS_, name() );
-    }
-    else
-    {
-	if ( m_state & ps_bit_zombie ) return;
-
-	remove_dynamic_events();
-	m_throw_status = THROW_USER;
-	if ( m_throw_helper_p != 0 ) delete m_throw_helper_p;
-	m_throw_helper_p = helper.clone();
-	simcontext()->preempt_with( this );
-    }
-
     // IF NEEDED PROPOGATE THE THROW REQUEST THROUGH OUR DESCENDANTS:
 
     if ( descendants == SC_INCLUDE_DESCENDANTS )
@@ -770,6 +794,18 @@ void sc_thread_process::throw_user( const sc_throw_it_helper& helper,
             if ( child_p ) child_p->throw_user(helper, descendants);
         }
     }
+
+    // SET UP THE THROW REQUEST FOR THIS OBJECT INSTANCE AND QUEUE IT FOR
+    // EXECUTION:
+
+    if ( m_state & ps_bit_zombie ) return;
+
+    remove_dynamic_events();
+    DEBUG_MSG(DEBUG_NAME,this,"throwing user exception");
+    m_throw_status = THROW_USER;
+    if ( m_throw_helper_p != 0 ) delete m_throw_helper_p;
+    m_throw_helper_p = helper.clone();
+    simcontext()->preempt_with( this );
 }
 
 
@@ -966,5 +1002,8 @@ sc_set_stack_size( sc_thread_handle thread_h, std::size_t size )
 {
     thread_h->set_stack_size( size );
 }
+
+#undef DEBUG_MSG
+#undef DEBUG_NAME
 
 } // namespace sc_core 

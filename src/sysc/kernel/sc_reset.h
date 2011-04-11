@@ -35,6 +35,10 @@
 
 
 // $Log: sc_reset.h,v $
+// Revision 1.9  2011/04/08 22:38:30  acg
+//  Andy Goodrich: added comment pointing to the description of how the
+//  reset mechanism works that is in sc_reset.cpp.
+//
 // Revision 1.8  2011/02/18 20:27:14  acg
 //  Andy Goodrich: Updated Copyrights.
 //
@@ -114,6 +118,8 @@ inline std::ostream& operator << ( std::ostream& os,
 //==============================================================================
 // CLASS sc_reset - RESET INFORMATION FOR A RESET SIGNAL
 //
+// See the top of sc_reset.cpp for an explaination of how the reset mechanism
+// is implemented.
 //==============================================================================
 class sc_reset {
     friend class sc_cthread_process;

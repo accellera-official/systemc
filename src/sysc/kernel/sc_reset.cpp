@@ -24,6 +24,11 @@
  *****************************************************************************/
 
 // $Log: sc_reset.cpp,v $
+// Revision 1.14  2011/04/08 22:37:34  acg
+//  Andy Goodrich: documentation of the reset mechanism and additional
+//  documentation of methods. Removal of check for SC_METHODs in
+//  sc_reset_signal_is() that should not have been there.
+//
 // Revision 1.13  2011/03/20 15:13:01  acg
 //  Andy Goodrich: set the reset flag for async_reset_signal_is to catch
 //  the suspend() corner case.
@@ -88,14 +93,43 @@
 #include "sysc/communication/sc_signal_ports.h"
 
 
+// THE SYSTEMC PROOF OF CONCEPT SIMULATOR RESET SIGNAL IMPLEMENTATION:
+//
+// (1) An instance of the sc_reset class is attached to each sc_signal<bool> 
+//     that is used as a reset signal.
+//
+// (2) Each process that is senstive to a reset signal will be registered in the
+//     sc_reset class attached to that reset signal.
+//
+// (3) When a change in the value of a reset signal occurs it invokes the
+//     notify_processes() method of its sc_reset object instance. The 
+//     notify_processes() method will call the reset_changed() method of each
+//     process that is registered with it to inform the process that 
+//     state of the reset signal has changed.
+//
+// (4) A process may have multiple reset signals, so counters are kept for the 
+//     number of active asynchronous, and synchronous, reset signals that are
+//     active. Those counters are incremented and decremented in the process'
+//     reset_changed() method.
+//
+// (5) When a process' semantics() method is called the current reset state is
+//     checked, and a reset sequence is initiated if the process is in reset.
+//     This will occur every time an SC_METHOD is dispatched. SC_CTHREAD and
+//     and SC_THREAD instances, only go through the semantics() method they
+//     initially start up. So the reset check  is duplicated in the suspend_me()
+//     method, the tail of which will execute each time the thread is 
+//     dispatched.
+
 namespace sc_core {
 
 class sc_reset_finder;
 static sc_reset_finder* reset_finder_q=0;  // Q of reset finders to reconcile.
 
 //==============================================================================
-// sc_reset_finder -
-//
+// sc_reset_finder - place holder class for a port reset signal until it is
+//                   bound and an interface class is available. When the port
+//                   has been bound the information in this class will be used
+//                   to initialize its sc_reset object instance.
 //==============================================================================
 class sc_reset_finder {
     friend class sc_reset;
@@ -183,8 +217,7 @@ void sc_reset::notify_processes()
 // reset connections.
 //
 // Notes:
-//   (1) If reset is asserted we tell the process that it is in reset
-//       initially.
+//   (1) If reset is asserted we tell the process that it is in reset.
 //------------------------------------------------------------------------------
 void sc_reset::reconcile_resets()
 {
@@ -229,6 +262,11 @@ void sc_reset::reconcile_resets()
 //------------------------------------------------------------------------------
 //"sc_reset::remove_process"
 //
+// This method removes the supplied process from the list of processes that
+// should be notified when there is a change in the value of the reset signal.
+//
+// Arguments:
+//     process_p -> process to be removed.
 //------------------------------------------------------------------------------
 void sc_reset::remove_process( sc_process_b* process_p )
 {
@@ -252,8 +290,18 @@ void sc_reset::remove_process( sc_process_b* process_p )
 }
 
 //------------------------------------------------------------------------------
-//"sc_reset::reset_signal_is"
+//"sc_reset::reset_signal_is - ports"
 //
+// These overloads of the reset_signal_is() method will register the active
+// process with the sc_reset object instance associated with the supplied port.
+// If the port does not yet have a pointer to its sc_signal<bool> instance it
+// will create an sc_reset_finder class object instance that will be used
+// to set the process' reset information when the port has been bound.
+//
+// Arguments:
+//     async = true if the reset signal is asynchronous, false if not.
+//     port  = port for sc_signal<bool> that will provide the reset signal.
+//     level = level at which reset is active, either true or false.
 //------------------------------------------------------------------------------
 void sc_reset::reset_signal_is( bool async, const sc_in<bool>& port, bool level)
 {
@@ -272,9 +320,7 @@ void sc_reset::reset_signal_is( bool async, const sc_in<bool>& port, bool level)
         if ( iface_p )
             reset_signal_is( async, *iface_p, level );
         else
-        {
             new sc_reset_finder( async, &port, level, process_p );
-        }
         break;
       default:
         SC_REPORT_ERROR(SC_ID_UNKNOWN_PROCESS_TYPE_, process_p->name());
@@ -300,9 +346,7 @@ void sc_reset::reset_signal_is(
         if ( iface_p )
             reset_signal_is( async, *iface_p, level );
         else
-        {
             new sc_reset_finder( async, &port, level, process_p );
-        }
         break;
       default:
         SC_REPORT_ERROR(SC_ID_UNKNOWN_PROCESS_TYPE_, process_p->name());
@@ -328,9 +372,7 @@ void sc_reset::reset_signal_is(
         if ( iface_p )
             reset_signal_is( async, *iface_p, level );
         else
-        {
             new sc_reset_finder( async, &port, level, process_p );
-        }
         break;
       default:
         SC_REPORT_ERROR(SC_ID_UNKNOWN_PROCESS_TYPE_, process_p->name());
@@ -341,6 +383,17 @@ void sc_reset::reset_signal_is(
 //------------------------------------------------------------------------------
 //"sc_reset::reset_signal_is"
 //
+// This static method will register the active process instance as being
+// reset by the sc_signal<bool> whose interface has been supplied. If no
+// sc_reset object instance has been attached to the sc_signal<bool> yet, it
+// will be created and attached. The active process instance is pushed into
+// the list of processes that the sc_reset object instance should notify if
+// the value of the reset signal changes.
+//
+// Arguments:
+//     async = true if the reset signal is asynchronous, false if not.
+//     iface = interface for the reset signal.
+//     level = is the level at which reset is active, either true or false.
 // Notes:
 //   (1) If reset is asserted we tell the process that it is in reset
 //       initially.
@@ -358,9 +411,6 @@ void sc_reset::reset_signal_is(
     switch ( process_p->proc_kind() )
     {
       case SC_METHOD_PROC_:
-        if ( !async ) {
-	    break;
-	} // fall through...
       case SC_CTHREAD_PROC_:
       case SC_THREAD_PROC_:
 	reset_p = iface.is_reset();

@@ -269,8 +269,7 @@ sc_signal<T,POL>::update()
     if( !( m_new_val == m_cur_val ) ) {
 	m_cur_val = m_new_val;
 	if ( m_change_event_p ) m_change_event_p->notify_next_delta();
-	// m_delta = delta_count();
-	m_change_stamp = sc_change_stamp();
+	m_change_stamp = simcontext()->change_stamp();
     }
 }
 
@@ -522,7 +521,7 @@ sc_signal<bool,POL>::update()
         } else {
             if ( m_negedge_event_p ) m_negedge_event_p->notify_next_delta();
         }
-        m_change_stamp = sc_change_stamp();
+        m_change_stamp = simcontext()->change_stamp();
     }
 }
 
@@ -791,7 +790,7 @@ sc_signal<sc_dt::sc_logic,POL>::update()
 	} else if( m_negedge_event_p && (m_cur_val == sc_dt::SC_LOGIC_0) ) {
 	    m_negedge_event_p->notify_next_delta();
 	}
-	m_change_stamp = sc_change_stamp();
+	m_change_stamp = simcontext()->change_stamp();
     }
 }
 
@@ -817,6 +816,10 @@ operator << ( ::std::ostream& os, const sc_signal<T,POL>& a )
     
  *****************************************************************************/
 //$Log: sc_signal.h,v $
+//Revision 1.12  2011/04/08 18:22:46  acg
+// Philipp A. Hartmann: use the context of the primitive channel to get
+// the change stamp value.
+//
 //Revision 1.11  2011/04/05 20:48:09  acg
 // Andy Goodrich: changes to make sure that event(), posedge() and negedge()
 // only return true if the clock has not moved.

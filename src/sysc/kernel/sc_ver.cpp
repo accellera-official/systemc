@@ -35,6 +35,9 @@
 
 
 // $Log: sc_ver.cpp,v $
+// Revision 1.8  2011/04/08 18:27:53  acg
+//  Andy Goodrich: respin of the PoC.
+//
 // Revision 1.7  2011/04/05 20:50:57  acg
 //  Andy Goodrich:
 //    (1) changes to make sure that event(), posedge() and negedge() only

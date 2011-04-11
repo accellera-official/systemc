@@ -35,6 +35,10 @@
 
 
 // $Log: sc_event_queue.cpp,v $
+// Revision 1.5  2011/04/08 18:22:46  acg
+//  Philipp A. Hartmann: use the context of the primitive channel to get
+//  the change stamp value.
+//
 // Revision 1.4  2011/04/05 20:48:09  acg
 //  Andy Goodrich: changes to make sure that event(), posedge() and negedge()
 //  only return true if the clock has not moved.
@@ -110,7 +114,7 @@ void sc_event_queue::cancel_all()
 
 void sc_event_queue::notify (const sc_time& when)
 {
-    m_change_stamp = sc_change_stamp();
+    m_change_stamp = simcontext()->change_stamp();
     sc_time* t = new sc_time( when+sc_time_stamp() );
     if ( m_ppq.size()==0 || *t < *m_ppq.top() ) {
 	m_e.notify( when );

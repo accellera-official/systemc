@@ -58,6 +58,10 @@
 				 execution problem with using sc_pvector.
  *****************************************************************************/
 // $Log: sc_simcontext.cpp,v $
+// Revision 1.29  2011/04/08 22:39:09  acg
+//  Andy Goodrich: moved method invocation code to sc_method.h so that the
+//  details are hidden from sc_simcontext.
+//
 // Revision 1.28  2011/04/05 20:50:57  acg
 //  Andy Goodrich:
 //    (1) changes to make sure that event(), posedge() and negedge() only
@@ -614,14 +618,8 @@ sc_simcontext::crunch( bool once )
 	    sc_method_handle method_h = pop_runnable_method();
 	    while( method_h != 0 ) {
 		empty_eval_phase = false;
-		try {
-		    method_h->semantics();
-		}
-		catch( sc_unwind_exception& ex ) {
-		    ex.clear();
-		}
-		catch( const sc_report& ex ) {
-		    ::std::cout << "\n" << ex.what() << ::std::endl;
+		if ( !method_h->run_process() )
+		{
 		    m_error = true;
 		    goto out;
 		}

@@ -35,6 +35,13 @@
  *****************************************************************************/
 
 // $Log: sc_method_process.h,v $
+// Revision 1.15  2011/04/10 22:12:32  acg
+//  Andy Goodrich: adding debugging macros.
+//
+// Revision 1.14  2011/04/08 22:31:21  acg
+//  Andy Goodrich: added new inline method run_process() to hide the process
+//  implementation for sc_simcontext.
+//
 // Revision 1.13  2011/04/05 20:50:56  acg
 //  Andy Goodrich:
 //    (1) changes to make sure that event(), posedge() and negedge() only
@@ -112,6 +119,28 @@
 #include "sysc/kernel/sc_spawn_options.h"
 #include "sysc/kernel/sc_cor.h"
 #include "sysc/kernel/sc_event.h"
+#include "sysc/kernel/sc_except.h"
+
+
+// DEBUGGING MACROS:
+//
+// DEBUG_MSG(NAME,P,MSG)
+//     MSG  = message to print
+//     NAME = name that must match the process for the message to print, or
+//            null if the message should be printed unconditionally.
+//     P    = pointer to process message is for, or NULL in which case the
+//            message will not print.
+#if 0
+#   define DEBUG_NAME (const char*)0
+#   define DEBUG_MSG(NAME,P,MSG) \
+    { \
+        if ( P && ( (NAME==0) || !strcmp(NAME,P->name())) ) \
+          std::cout << sc_time_stamp() << ": " << P->name() << " ******** " \
+                    << MSG << std::endl; \
+    }
+#else
+#   define DEBUG_MSG(NAME,P,MSG) 
+#endif
 
 namespace sc_core {
 
@@ -182,6 +211,7 @@ class sc_method_process : public sc_process_b {
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
     virtual void enable_process(
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
+    inline bool run_process();
     virtual void kill_process(
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
     sc_method_handle next_exist();
@@ -322,6 +352,32 @@ sc_method_handle sc_method_process::next_runnable()
     return (sc_method_handle)m_runnable_p;
 }
 
+// +----------------------------------------------------------------------------
+// |"sc_method_process::run_process"
+// | 
+// | This method executes this object instance, including fielding exceptions.
+// |
+// | Result is true is no exception occurred, false if one did.
+// +----------------------------------------------------------------------------
+inline bool sc_method_process::run_process()
+{
+    // Execute this object instance's semantics and catch any exceptions that
+    // are generated:
+
+    try {
+        DEBUG_MSG(DEBUG_NAME,this,"dispatching method");
+	semantics();
+    }
+    catch( sc_unwind_exception& ex ) {
+	ex.clear();
+    }
+    catch( const sc_report& ex ) {
+	::std::cout << "\n" << ex.what() << ::std::endl;
+	return false;
+    }
+    return true;
+}
+
 //------------------------------------------------------------------------------
 //"sc_method_process::trigger_static"
 //
@@ -358,6 +414,8 @@ sc_method_process::trigger_static()
         simcontext()->push_runnable_method(this);
     }
 }
+
+#undef DEBUG_MSG
 
 } // namespace sc_core 
 

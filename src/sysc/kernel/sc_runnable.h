@@ -42,6 +42,10 @@
  *****************************************************************************/
 
 // $Log: sc_runnable.h,v $
+// Revision 1.8  2011/04/08 18:26:07  acg
+//  Andy Goodrich: added execute_method_next() to handle method dispatch
+//   for asynchronous notifications that occur outside the evaluation phase.
+//
 // Revision 1.7  2011/02/18 20:27:14  acg
 //  Andy Goodrich: Updated Copyrights.
 //
@@ -95,6 +99,7 @@ class sc_runnable
     inline void remove_method( sc_method_handle );
     inline void remove_thread( sc_thread_handle );
 
+    inline void execute_method_next( sc_method_handle );
     inline void execute_thread_next( sc_thread_handle );
 
     inline void push_back_method( sc_method_handle );

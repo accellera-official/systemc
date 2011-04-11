@@ -43,6 +43,19 @@
  *****************************************************************************/
 
 // $Log: sc_process.cpp,v $
+// Revision 1.27  2011/04/10 22:17:35  acg
+//  Andy Goodrich: added trigger_reset_event() to allow sc_process.h to
+//  contain the run_process() inline method. sc_process.h cannot have
+//  sc_simcontext information because of recursive includes.
+//
+// Revision 1.26  2011/04/08 22:33:08  acg
+//  Andy Goodrich: moved the semantics() method to the header file and made
+//  it an inline method.
+//
+// Revision 1.25  2011/04/08 18:24:48  acg
+//  Andy Goodrich: moved reset_changed() to .cpp since it needs visibility
+//  to sc_simcontext.
+//
 // Revision 1.24  2011/04/05 20:50:57  acg
 //  Andy Goodrich:
 //    (1) changes to make sure that event(), posedge() and negedge() only
@@ -487,6 +500,7 @@ void sc_process_b::reset_changed( bool async, bool asserted )
 
     if ( asserted )
     {
+        // if ( m_reset_event_p ) m_reset_event_p->notify();
         if ( async )
 	{
 	    m_active_areset_n++;
@@ -522,6 +536,22 @@ void sc_process_b::reset_changed( bool async, bool asserted )
         m_throw_status = THROW_NONE;
     }
 }       
+
+//------------------------------------------------------------------------------
+//"sc_process_b::reset_event"
+//
+// This method returns a reference to the reset event for this object 
+// instance. If no event exists one is allocated.
+//------------------------------------------------------------------------------
+sc_event& sc_process_b::reset_event()
+{
+    if ( !m_reset_event_p ) 
+    {
+        m_reset_event_p = new sc_event(
+	         (std::string(SC_KERNEL_EVENT_PREFIX)+"_reset_event").c_str() );
+    }
+    return *m_reset_event_p;
+}
 
 //------------------------------------------------------------------------------
 //"sc_process_b::reset_process"
@@ -683,22 +713,6 @@ sc_process_b::~sc_process_b()
 }
 
 //------------------------------------------------------------------------------
-//"sc_process_b::reset_event"
-//
-// This method returns a reference to the reset event for this object 
-// instance. If no event exists one is allocated.
-//------------------------------------------------------------------------------
-sc_event& sc_process_b::reset_event()
-{
-    if ( !m_reset_event_p ) 
-    {
-        m_reset_event_p = new sc_event(
-	         (std::string(SC_KERNEL_EVENT_PREFIX)+"_reset_event").c_str() );
-    }
-    return *m_reset_event_p;
-}
-
-//------------------------------------------------------------------------------
 //"sc_process_b::terminated_event"
 //
 // This method returns a reference to the terminated event for this object 
@@ -714,6 +728,18 @@ sc_event& sc_process_b::terminated_event()
 	          (std::string(SC_KERNEL_EVENT_PREFIX)+"_term_event").c_str() );
     }
     return *m_term_event_p;
+}
+
+// +----------------------------------------------------------------------------
+// |"sc_process_b::trigger_reset_event"
+// | 
+// | This method triggers the notify event. It exists because we can't get
+// | sc_event context in sc_process.h because the includes would be 
+// | circular... sigh...
+// +----------------------------------------------------------------------------
+void sc_process_b::trigger_reset_event()
+{
+    if ( m_reset_event_p ) m_reset_event_p->notify();
 }
 
 //------------------------------------------------------------------------------
