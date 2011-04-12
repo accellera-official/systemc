@@ -35,6 +35,13 @@
  *****************************************************************************/
 
 // $Log: sc_method_process.cpp,v $
+// Revision 1.37  2011/04/11 22:10:46  acg
+//  Andy Goodrich:
+//    (1) Add DEBUG_MSG macro and use it to generate a journal of method
+//        throws if it is enabled.
+//    (2) Trim down to the expected behavior of scheduling a method that
+//        is asynchronously reset in anticipation of IEEE 1666 being revised.
+//
 // Revision 1.36  2011/04/10 22:15:29  acg
 //  Andy Goodrich: change to call methods on asynchronous reset.
 //
@@ -193,6 +200,26 @@
 #include "sysc/kernel/sc_simcontext_int.h"
 #include "sysc/kernel/sc_module.h"
 #include "sysc/kernel/sc_spawn_options.h"
+
+// DEBUGGING MACROS:
+//
+// DEBUG_MSG(NAME,P,MSG)
+//     MSG  = message to print
+//     NAME = name that must match the process for the message to print, or
+//            null if the message should be printed unconditionally.
+//     P    = pointer to process message is for, or NULL in which case the
+//            message will not print.
+#if 0
+#   define DEBUG_NAME (const char*)0
+#   define DEBUG_MSG(NAME,P,MSG) \
+    { \
+        if ( P && ( (NAME==0) || !strcmp(NAME,P->name())) ) \
+          std::cout << sc_time_stamp() << ": " << P->name() << " ******** " \
+                    << MSG << std::endl; \
+    }
+#else
+#   define DEBUG_MSG(NAME,P,MSG) 
+#endif
 
 namespace sc_core {
 
@@ -607,7 +634,8 @@ void sc_method_process::resume_process(
 //
 // This virtual method is invoked to "throw" a reset. 
 //
-// If the reset is synchronous this is a no-op.
+// If the reset is synchronous this is a no-op, except for triggering the
+// reset event if it is present.
 //
 // If the reset is asynchronous we:
 //   (a) cancel any dynamic waits 
@@ -625,22 +653,21 @@ void sc_method_process::resume_process(
 //------------------------------------------------------------------------------
 void sc_method_process::throw_reset( bool async )
 {
+    m_throw_status = async ? THROW_ASYNC_RESET : THROW_SYNC_RESET;
     if ( async )
     {
         remove_dynamic_events();
 	if ( RCAST<sc_method_handle>(sc_get_current_process_b()) == this )
 	{
+	    DEBUG_MSG(DEBUG_NAME,this,"throw_reset: throwing exception");
 	    m_throw_status = THROW_ASYNC_RESET;
 	    throw sc_unwind_exception( this, true );
 	}
-	else if ( 1 || sc_allow_process_control_corners ) // @@@@#### THIS IS THE ONLY ELSE CASE WHEN IEEE1666 STANDARD CONFIRMS SEMANTICS
+	else 
 	{
+	    DEBUG_MSG(DEBUG_NAME,this,
+	              "throw_reset: queueing method for execution");
 	    simcontext()->execute_method_next(this);
-	}
-	else if ( m_static_events.size() == 0 )
-	{
-	    SC_REPORT_ERROR( SC_ID_PROCESS_CONTROL_CORNER_CASE_,
-		": asynchronous reset of a method with no static sensitivity" );
 	}
     }
 }

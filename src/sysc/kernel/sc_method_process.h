@@ -357,10 +357,21 @@ sc_method_handle sc_method_process::next_runnable()
 // | 
 // | This method executes this object instance, including fielding exceptions.
 // |
-// | Result is true is no exception occurred, false if one did.
+// | Result is false if an unfielded exception occurred, true if not.
 // +----------------------------------------------------------------------------
 inline bool sc_method_process::run_process()
 {
+#if 0 // @@@@####
+    // If this object instance is in reset, and there is a reset event then
+    // trigger the event.
+
+    if ( m_reset_event_p && (m_active_reset_n || m_active_areset_n) )
+    {
+        DEBUG_MSG(DEBUG_NAME,this,"firing reset event");
+        m_reset_event_p->notify();
+    }
+#endif // 0
+
     // Execute this object instance's semantics and catch any exceptions that
     // are generated:
 
@@ -369,6 +380,7 @@ inline bool sc_method_process::run_process()
 	semantics();
     }
     catch( sc_unwind_exception& ex ) {
+        DEBUG_MSG(DEBUG_NAME,this,"caught unwind exception");
 	ex.clear();
     }
     catch( const sc_report& ex ) {

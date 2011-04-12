@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_thread_process.cpp,v $
+// Revision 1.44  2011/04/11 22:04:33  acg
+//  Andy Goodrich: use the DEBUG_NAME macro for DEBUG_MSG messages.
+//
 // Revision 1.43  2011/04/10 22:12:32  acg
 //  Andy Goodrich: adding debugging macros.
 //
@@ -405,7 +408,7 @@ void sc_thread_process::enable_process(
     // If it was disabled and ready to run then put it on the run queue.
 
     m_state = m_state & ~ps_bit_disabled; 
-    if ( m_state == ps_bit_ready_to_run )
+    if ( m_state == ps_bit_ready_to_run && sc_allow_process_control_corners )
     {
         m_state = ps_normal;
 	if ( next_runnable() == 0 )

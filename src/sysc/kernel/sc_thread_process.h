@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_thread_process.h,v $
+// Revision 1.25  2011/04/11 22:05:14  acg
+//  Andy Goodrich: use the DEBUG_NAME macro in DEBUG_MSG invocations.
+//
 // Revision 1.24  2011/04/10 22:12:32  acg
 //  Andy Goodrich: adding debugging macros.
 //

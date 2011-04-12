@@ -46,6 +46,10 @@
  *****************************************************************************/
 
 // $Log: sc_process.h,v $
+// Revision 1.30  2011/04/11 22:07:27  acg
+//  Andy Goodrich: check for reset event notification before resetting the
+//  throw_status value.
+//
 // Revision 1.29  2011/04/10 22:17:36  acg
 //  Andy Goodrich: added trigger_reset_event() to allow sc_process.h to
 //  contain the run_process() inline method. sc_process.h cannot have
@@ -792,10 +796,19 @@ void sc_process_b::semantics()
     // Determine the reset status of this object instance and potentially
     // trigger its notify event:
 
+    // See if we need to trigger the notify event:
+
+    if ( m_reset_event_p && 
+         ( (m_throw_status == THROW_SYNC_RESET) || 
+	   (m_throw_status == THROW_ASYNC_RESET) )
+    ) {
+        trigger_reset_event();
+    }
+
+    // Set the new reset status of this object based on the reset counts:
+
     m_throw_status = m_active_areset_n ? THROW_ASYNC_RESET : 
         ( m_active_reset_n  ?  THROW_SYNC_RESET : THROW_NONE);
-    if ( m_throw_status != THROW_NONE && m_reset_event_p )
-        trigger_reset_event();
 
     // Dispatch the actual semantics for the process:
 

@@ -37,6 +37,9 @@
  *****************************************************************************/
 
 // $Log: sc_simcontext_int.h,v $
+// Revision 1.10  2011/04/11 22:05:48  acg
+//  Andy Goodrich: use the DEBUG_NAME macro in DEBUG_MSG invocations.
+//
 // Revision 1.9  2011/04/10 22:12:32  acg
 //  Andy Goodrich: adding debugging macros.
 //
