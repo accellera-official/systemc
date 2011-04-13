@@ -46,6 +46,12 @@
  *****************************************************************************/
 
 // $Log: sc_process.h,v $
+// Revision 1.31  2011/04/13 02:44:26  acg
+//  Andy Goodrich: added m_unwinding flag in place of THROW_NOW because the
+//  throw status will be set back to THROW_*_RESET if reset is active and
+//  the check for an unwind being complete was expecting THROW_NONE as the
+//  clearing of THROW_NOW.
+//
 // Revision 1.30  2011/04/11 22:07:27  acg
 //  Andy Goodrich: check for reset event notification before resetting the
 //  throw_status value.
@@ -457,8 +463,7 @@ class sc_process_b : public sc_object {
 	THROW_KILL,
         THROW_USER,
         THROW_ASYNC_RESET,
-        THROW_SYNC_RESET,
-	THROWING_NOW
+        THROW_SYNC_RESET
     };
 
     enum process_state {
@@ -469,10 +474,10 @@ class sc_process_b : public sc_object {
         ps_normal = 0             // must be zero.
     };
 
-    enum reset_type {
-        reset_asynchronous = 0,
-        reset_synchronous_off,
-        reset_synchronous_on
+    enum reset_type {             // types for sc_process_b::reset_process()
+        reset_asynchronous = 0,   // asynchronous reset.
+        reset_synchronous_off,    // turn off synchronous reset sticky bit.
+        reset_synchronous_on      // turn on synchronous reset sticky bit.
     };
 
     enum trigger_t
@@ -596,6 +601,7 @@ class sc_process_b : public sc_object {
     bool                         m_timed_out;       // true if we timed out.
     sc_event*                    m_timeout_event_p; // timeout event.
     trigger_t                    m_trigger_type;    // type of trigger using.
+    bool                         m_unwinding;       // true if unwinding stack.
 
   protected:
     static sc_process_b* m_last_created_process_p; // Last process created.
@@ -681,38 +687,34 @@ inline bool sc_process_b::is_runnable() const
 //------------------------------------------------------------------------------
 inline bool sc_process_b::is_unwinding() const
 {
-    switch( m_throw_status )
-    {
-      case THROW_KILL:
-      case THROW_ASYNC_RESET:
-      case THROW_SYNC_RESET:
-      case THROWING_NOW:
-      // case THROW_USER:
-        return true;
-      default:
-        return false;
-    }
+    return m_unwinding;
 }
 
 //------------------------------------------------------------------------------
 //"sc_process_b::start_unwinding"
 //
-// This method returns whether this process should start unwinding or not.
+// This method flags that this object instance should start unwinding if the
+// current throw status requires an unwind. 
+//
+// Result is true if the flag is set, false if the flag is already set.
 //------------------------------------------------------------------------------
 inline bool sc_process_b::start_unwinding()
 {
-    switch( m_throw_status )
+    if ( !m_unwinding )
     {
-      case THROW_KILL:
-      case THROW_ASYNC_RESET:
-      case THROW_SYNC_RESET:
-        m_throw_status = THROWING_NOW;
-         return true;
-      case THROWING_NOW:
-      case THROW_USER:
-       default:
-         return false;
-     }
+	switch( m_throw_status )
+	{
+	  case THROW_KILL:
+	  case THROW_ASYNC_RESET:
+	  case THROW_SYNC_RESET:
+	    m_unwinding = true;
+	     return true;
+	  case THROW_USER:
+	   default:
+	     break;
+	 }
+    }
+    return false;
 }
 
 //------------------------------------------------------------------------------
@@ -723,7 +725,7 @@ inline bool sc_process_b::start_unwinding()
 //------------------------------------------------------------------------------
 inline bool sc_process_b::clear_unwinding()
 {
-    m_throw_status = THROW_NONE;
+    m_unwinding = false;
     return true;
 }
 

@@ -35,6 +35,17 @@
  *****************************************************************************/
 
 // $Log: sc_thread_process.h,v $
+// Revision 1.27  2011/04/13 05:02:18  acg
+//  Andy Goodrich: added missing check to the wake up code in suspend_me()
+//  so that we just return if the call to suspend_me() was issued from a
+//  stack unwinding.
+//
+// Revision 1.26  2011/04/13 02:44:26  acg
+//  Andy Goodrich: added m_unwinding flag in place of THROW_NOW because the
+//  throw status will be set back to THROW_*_RESET if reset is active and
+//  the check for an unwind being complete was expecting THROW_NONE as the
+//  clearing of THROW_NOW.
+//
 // Revision 1.25  2011/04/11 22:05:14  acg
 //  Andy Goodrich: use the DEBUG_NAME macro in DEBUG_MSG invocations.
 //
@@ -161,10 +172,10 @@
 //     P    = pointer to process message is for, or NULL in which case the
 //            message will not print.
 #if 0
-#   define DEBUG_NAME (const char*)0
+#   define DEBUG_NAME ""
 #   define DEBUG_MSG(NAME,P,MSG) \
     { \
-        if ( P && ( (NAME==0) || !strcmp(NAME,P->name())) ) \
+        if ( P && ( (strlen(NAME)==0) || !strcmp(NAME,P->name())) ) \
           std::cout << sc_time_stamp() << ": " << P->name() << " ******** " \
                     << MSG << std::endl; \
     }
@@ -320,7 +331,7 @@ inline void sc_thread_process::suspend_me()
 {
     // remember, if we're currently unwinding
 
-    bool unwinding_preempted = ( m_throw_status == THROWING_NOW );
+    bool unwinding_preempted = m_unwinding;
 
     sc_simcontext* simc_p = simcontext();
     sc_cor*         cor_p = simc_p->next_cor();
@@ -329,39 +340,49 @@ inline void sc_thread_process::suspend_me()
 
     if( m_cor_p != cor_p )
     {
-        DEBUG_MSG(DEBUG_NAME,this,"suspending thread");
+        DEBUG_MSG( DEBUG_NAME , this, "suspending thread");
         simc_p->cor_pkg()->yield( cor_p );
     }
 
     // IF THERE IS A THROW TO BE DONE FOR THIS PROCESS DO IT NOW:
     //
-    // Optimize THROW_NONE for speed as it is the normal case.
+    // (1) Optimize THROW_NONE for speed as it is the normal case.
+    // (2) If this thread is already unwinding then suspend_me() was
+    //     called from the catch clause, so just go back to it.
 
     if ( m_throw_status == THROW_NONE ) return;
+
+    if ( m_unwinding ) return;
 
     switch( m_throw_status )
     {
       case THROW_ASYNC_RESET:
       case THROW_SYNC_RESET:
-        DEBUG_MSG(DEBUG_NAME,this,"throwing reset");
+        DEBUG_MSG( DEBUG_NAME , this,"throwing reset");
 	if ( m_reset_event_p ) m_reset_event_p->notify();
         throw sc_unwind_exception( this, true ); 
 	break;
 
       case THROW_USER:
-        DEBUG_MSG(DEBUG_NAME,this,"throwing user exception");
+        DEBUG_MSG( DEBUG_NAME, this, "throwing user exception");
+#if 1 // @@@@#### NEW CODE
+	m_throw_status = m_active_areset_n ? THROW_ASYNC_RESET :
+	                                  (m_active_reset_n ? THROW_SYNC_RESET :
+			                  THROW_NONE);
+#else
 	m_throw_status = THROW_NONE;
+#endif
         m_throw_helper_p->throw_it();
 	break;
 
-      case  THROW_KILL:
-        DEBUG_MSG(DEBUG_NAME,this,"throwing kill");
+      case THROW_KILL:
+        DEBUG_MSG( DEBUG_NAME, this, "throwing kill");
 	throw sc_unwind_exception( this, false );
 	break;
 
       default: // THROWING_NOW
         sc_assert( unwinding_preempted );
-        DEBUG_MSG(DEBUG_NAME,this,"restarting thread");
+        DEBUG_MSG( DEBUG_NAME, this, "restarting thread");
         break;
     }
 }
@@ -375,7 +396,7 @@ inline
 void
 sc_thread_process::wait( const sc_event& e )
 {   
-    if( m_throw_status == THROWING_NOW )
+    if( m_unwinding )
         SC_REPORT_ERROR( SC_ID_WAIT_DURING_UNWINDING_, name() );
 
     m_event_p = &e; // for cleanup.
@@ -388,7 +409,7 @@ inline
 void
 sc_thread_process::wait( const sc_event_or_list& el )
 {   
-    if( m_throw_status == THROWING_NOW )
+    if( m_unwinding )
         SC_REPORT_ERROR( SC_ID_WAIT_DURING_UNWINDING_, name() );
 
     el.add_dynamic( this );
@@ -401,7 +422,7 @@ inline
 void
 sc_thread_process::wait( const sc_event_and_list& el )
 {
-    if( m_throw_status == THROWING_NOW )
+    if( m_unwinding )
         SC_REPORT_ERROR( SC_ID_WAIT_DURING_UNWINDING_, name() );
 
     el.add_dynamic( this );
@@ -415,7 +436,7 @@ inline
 void
 sc_thread_process::wait( const sc_time& t )
 {
-    if( m_throw_status == THROWING_NOW )
+    if( m_unwinding )
         SC_REPORT_ERROR( SC_ID_WAIT_DURING_UNWINDING_, name() );
 
     m_timeout_event_p->notify_internal( t );
@@ -428,7 +449,7 @@ inline
 void
 sc_thread_process::wait( const sc_time& t, const sc_event& e )
 {
-    if( m_throw_status == THROWING_NOW )
+    if( m_unwinding )
         SC_REPORT_ERROR( SC_ID_WAIT_DURING_UNWINDING_, name() );
 
     m_timeout_event_p->notify_internal( t );
@@ -443,7 +464,7 @@ inline
 void
 sc_thread_process::wait( const sc_time& t, const sc_event_or_list& el )
 {
-    if( m_throw_status == THROWING_NOW )
+    if( m_unwinding )
         SC_REPORT_ERROR( SC_ID_WAIT_DURING_UNWINDING_, name() );
 
     m_timeout_event_p->notify_internal( t );
@@ -458,7 +479,7 @@ inline
 void
 sc_thread_process::wait( const sc_time& t, const sc_event_and_list& el )
 {
-    if( m_throw_status == THROWING_NOW )
+    if( m_unwinding )
         SC_REPORT_ERROR( SC_ID_WAIT_DURING_UNWINDING_, name() );
 
     m_timeout_event_p->notify_internal( t );
@@ -483,7 +504,7 @@ inline
 void
 sc_thread_process::wait_cycles( int n )
 {   
-    if( m_throw_status == THROWING_NOW )
+    if( m_unwinding )
         SC_REPORT_ERROR( SC_ID_WAIT_DURING_UNWINDING_, name() );
 
     m_wait_cycle_n = n-1;

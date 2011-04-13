@@ -35,6 +35,10 @@
  *****************************************************************************/
 
 // $Log: sc_method_process.cpp,v $
+// Revision 1.38  2011/04/13 02:41:34  acg
+//  Andy Goodrich: eliminate warning messages generated when the DEBUG_MSG
+//  macro is used.
+//
 // Revision 1.37  2011/04/11 22:10:46  acg
 //  Andy Goodrich:
 //    (1) Add DEBUG_MSG macro and use it to generate a journal of method
@@ -210,10 +214,10 @@
 //     P    = pointer to process message is for, or NULL in which case the
 //            message will not print.
 #if 0
-#   define DEBUG_NAME (const char*)0
+#   define DEBUG_NAME ""
 #   define DEBUG_MSG(NAME,P,MSG) \
     { \
-        if ( P && ( (NAME==0) || !strcmp(NAME,P->name())) ) \
+        if ( P && ( (strlen(NAME)==0) || !strcmp(NAME,P->name())) ) \
           std::cout << sc_time_stamp() << ": " << P->name() << " ******** " \
                     << MSG << std::endl; \
     }

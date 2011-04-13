@@ -36,6 +36,10 @@
  ******************************************************************************/
 
 // $Log: sc_runnable_int.h,v $
+// Revision 1.17  2011/04/13 02:45:11  acg
+//  Andy Goodrich: eliminated warning message that occurred if the DEBUG_MSG
+//  macro was used.
+//
 // Revision 1.16  2011/04/10 22:18:23  acg
 //  Andy Goodrich: debugging message clean up.
 //
@@ -111,10 +115,10 @@
 //     P    = pointer to process message is for, or NULL in which case the
 //            message will not print.
 #if 0
-#   define DEBUG_NAME (const char*)0
+#   define DEBUG_NAME ""
 #   define DEBUG_MSG(NAME,P,MSG) \
     { \
-	if ( P && ( (NAME==0) || !strcmp(NAME,P->name())) ) \
+	if ( P && ( (strlen(NAME)==0) || !strcmp(NAME,P->name())) ) \
 	  std::cout << sc_time_stamp() << ": " << P->name() << " ******** " \
 		    << MSG << std::endl; \
     }

@@ -35,6 +35,10 @@
  *****************************************************************************/
 
 // $Log: sc_method_process.h,v $
+// Revision 1.16  2011/04/13 02:41:34  acg
+//  Andy Goodrich: eliminate warning messages generated when the DEBUG_MSG
+//  macro is used.
+//
 // Revision 1.15  2011/04/10 22:12:32  acg
 //  Andy Goodrich: adding debugging macros.
 //
@@ -131,10 +135,10 @@
 //     P    = pointer to process message is for, or NULL in which case the
 //            message will not print.
 #if 0
-#   define DEBUG_NAME (const char*)0
+#   define DEBUG_NAME ""
 #   define DEBUG_MSG(NAME,P,MSG) \
     { \
-        if ( P && ( (NAME==0) || !strcmp(NAME,P->name())) ) \
+        if ( P && ( (strlen(NAME)==0) || !strcmp(NAME,P->name())) ) \
           std::cout << sc_time_stamp() << ": " << P->name() << " ******** " \
                     << MSG << std::endl; \
     }
@@ -361,17 +365,6 @@ sc_method_handle sc_method_process::next_runnable()
 // +----------------------------------------------------------------------------
 inline bool sc_method_process::run_process()
 {
-#if 0 // @@@@####
-    // If this object instance is in reset, and there is a reset event then
-    // trigger the event.
-
-    if ( m_reset_event_p && (m_active_reset_n || m_active_areset_n) )
-    {
-        DEBUG_MSG(DEBUG_NAME,this,"firing reset event");
-        m_reset_event_p->notify();
-    }
-#endif // 0
-
     // Execute this object instance's semantics and catch any exceptions that
     // are generated:
 

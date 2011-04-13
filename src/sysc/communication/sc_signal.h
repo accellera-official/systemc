@@ -121,7 +121,8 @@ public: // constructors and destructor:
 	    if ( !m_change_event_p ) 
 	    {
 	        m_change_event_p = new sc_event( 
-		    (std::string(name())+"_value_changed_event").c_str());; 
+		    (std::string(SC_KERNEL_EVENT_PREFIX)+
+		    "_value_changed_event").c_str());; 
 	    }
 	    return *m_change_event_p; 
 	}
@@ -133,7 +134,8 @@ public: // constructors and destructor:
 	    if ( !m_change_event_p ) 
 	    {
 	        m_change_event_p = new sc_event( 
-		    (std::string(name())+"_value_changed_event").c_str());; 
+		    (std::string(SC_KERNEL_EVENT_PREFIX)+
+		    "_value_changed_event").c_str());; 
 	    }
 	    return *m_change_event_p; 
 	}
@@ -333,7 +335,8 @@ public: // constructors and destructor:
 	    if ( !m_change_event_p ) 
 	    {
 	        m_change_event_p = new sc_event(
-		    (std::string(name())+"_value_changed_event").c_str());; 
+		    (std::string(SC_KERNEL_EVENT_PREFIX)+
+		    "_value_changed_event").c_str());; 
 	    }
 	    return *m_change_event_p; 
 	}
@@ -345,7 +348,8 @@ public: // constructors and destructor:
 	    if ( !m_change_event_p ) 
 	    {
 	        m_change_event_p = new sc_event( 
-		    (std::string(name())+"_value_changed_event").c_str());; 
+		    (std::string(SC_KERNEL_EVENT_PREFIX)+
+		    "_value_changed_event").c_str());; 
 	    }
 	    return *m_change_event_p; 
 	}
@@ -356,7 +360,8 @@ public: // constructors and destructor:
 	    if ( !m_posedge_event_p )
 	    {
 	        m_posedge_event_p = new sc_event(
-		    (std::string(name())+"_posedge_event").c_str());; 
+		    (std::string(SC_KERNEL_EVENT_PREFIX)+
+		    "_posedge_event").c_str());; 
 	    }
 	    return *m_posedge_event_p; 
 	}
@@ -367,7 +372,8 @@ public: // constructors and destructor:
 	    if ( !m_negedge_event_p )
 	    {
 	        m_negedge_event_p = new sc_event(
-		    (std::string(name())+"_negedge_event").c_str());; 
+		    (std::string(SC_KERNEL_EVENT_PREFIX)+
+		    "_negedge_event").c_str());; 
 	    }
 	    return *m_negedge_event_p; 
 	}
@@ -609,7 +615,8 @@ public: // constructors and destructor:
 	    if ( !m_change_event_p ) 
 	    {
 	        m_change_event_p = new sc_event( 
-		    (std::string(name())+"_value_changed_event").c_str());; 
+		    (std::string(SC_KERNEL_EVENT_PREFIX)+
+		    "_value_changed_event").c_str());; 
 	    }
 	    return *m_change_event_p; 
 	}
@@ -621,7 +628,8 @@ public: // constructors and destructor:
 	    if ( !m_change_event_p ) 
 	    {
 	        m_change_event_p = new sc_event( 
-		    (std::string(name())+"_value_changed_event").c_str());; 
+		    (std::string(SC_KERNEL_EVENT_PREFIX)+
+		    "_value_changed_event").c_str());; 
 	    }
 	    return *m_change_event_p; 
 	}
@@ -632,7 +640,8 @@ public: // constructors and destructor:
 	    if ( !m_posedge_event_p )
 	    {
 	        m_posedge_event_p = new sc_event(
-		    (std::string(name())+"_posedge_event").c_str());; 
+		    (std::string(SC_KERNEL_EVENT_PREFIX)+
+		    "_posedge_event").c_str());; 
 	    }
 	    return *m_posedge_event_p; 
 	}
@@ -643,7 +652,8 @@ public: // constructors and destructor:
 	    if ( !m_negedge_event_p )
 	    {
 	        m_negedge_event_p = new sc_event(
-		    (std::string(name())+"_negedge_event").c_str());; 
+		    (std::string(SC_KERNEL_EVENT_PREFIX)+
+		    "_negedge_event").c_str());; 
 	    }
 	    return *m_negedge_event_p; 
 	}
@@ -816,6 +826,9 @@ operator << ( ::std::ostream& os, const sc_signal<T,POL>& a )
     
  *****************************************************************************/
 //$Log: sc_signal.h,v $
+//Revision 1.13  2011/04/13 02:59:09  acg
+// Andy Goodrich: made events internal to signals into kernel events.
+//
 //Revision 1.12  2011/04/08 18:22:46  acg
 // Philipp A. Hartmann: use the context of the primitive channel to get
 // the change stamp value.

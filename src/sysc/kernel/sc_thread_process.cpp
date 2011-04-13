@@ -35,6 +35,10 @@
  *****************************************************************************/
 
 // $Log: sc_thread_process.cpp,v $
+// Revision 1.45  2011/04/13 02:45:11  acg
+//  Andy Goodrich: eliminated warning message that occurred if the DEBUG_MSG
+//  macro was used.
+//
 // Revision 1.44  2011/04/11 22:04:33  acg
 //  Andy Goodrich: use the DEBUG_NAME macro for DEBUG_MSG messages.
 //
@@ -240,10 +244,10 @@
 //     P    = pointer to process message is for, or NULL in which case the
 //            message will not print.
 #if 0
-#   define DEBUG_NAME (const char*)0
+#   define DEBUG_NAME ""
 #   define DEBUG_MSG(NAME,P,MSG) \
     { \
-        if ( P && ( (NAME==0) || !strcmp(NAME,P->name())) ) \
+        if ( P && ( (strlen(NAME)==0) || !strcmp(NAME,P->name())) ) \
           std::cout << sc_time_stamp() << ": " << P->name() << " ******** " \
                     << MSG << std::endl; \
     }

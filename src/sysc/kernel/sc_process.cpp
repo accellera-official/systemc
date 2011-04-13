@@ -43,6 +43,16 @@
  *****************************************************************************/
 
 // $Log: sc_process.cpp,v $
+// Revision 1.29  2011/04/13 05:00:43  acg
+//  Andy Goodrich: removed check for method process in termination_event()
+//  since with the new IEEE 1666 2011 its legal.
+//
+// Revision 1.28  2011/04/13 02:44:26  acg
+//  Andy Goodrich: added m_unwinding flag in place of THROW_NOW because the
+//  throw status will be set back to THROW_*_RESET if reset is active and
+//  the check for an unwind being complete was expecting THROW_NONE as the
+//  clearing of THROW_NOW.
+//
 // Revision 1.27  2011/04/10 22:17:35  acg
 //  Andy Goodrich: added trigger_reset_event() to allow sc_process.h to
 //  contain the run_process() inline method. sc_process.h cannot have
@@ -670,7 +680,8 @@ sc_process_b::sc_process_b( const char* name_p, bool is_thread, bool free_host,
     m_throw_helper_p(0),
     m_throw_status( THROW_NONE ),
     m_timed_out(false),
-    m_trigger_type(STATIC)
+    m_trigger_type(STATIC),
+    m_unwinding(false)
 {
 
     // THIS OBJECT INSTANCE IS NOW THE LAST CREATED PROCESS:
@@ -720,8 +731,6 @@ sc_process_b::~sc_process_b()
 //------------------------------------------------------------------------------
 sc_event& sc_process_b::terminated_event()
 {
-    if ( m_process_kind == SC_METHOD_PROC_ )
-    SC_REPORT_WARNING(SC_ID_METHOD_TERMINATION_EVENT_,"");
     if ( !m_term_event_p ) 
     {
         m_term_event_p = new sc_event(
