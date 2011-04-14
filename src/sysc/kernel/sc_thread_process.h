@@ -346,13 +346,13 @@ inline void sc_thread_process::suspend_me()
 
     // IF THERE IS A THROW TO BE DONE FOR THIS PROCESS DO IT NOW:
     //
-    // (1) Optimize THROW_NONE for speed as it is the normal case.
-    // (2) If this thread is already unwinding then suspend_me() was
-    //     called from the catch clause, so just go back to it.
+    // Optimize THROW_NONE for speed as it is the normal case.
 
-    if ( m_throw_status == THROW_NONE ) return;
-
-    if ( m_unwinding ) return;
+    if ( m_throw_status == THROW_NONE )
+    {
+	DEBUG_MSG( DEBUG_NAME, this, "restarting thread");
+	return;
+    }
 
     switch( m_throw_status )
     {
@@ -365,13 +365,9 @@ inline void sc_thread_process::suspend_me()
 
       case THROW_USER:
         DEBUG_MSG( DEBUG_NAME, this, "throwing user exception");
-#if 1 // @@@@#### NEW CODE
 	m_throw_status = m_active_areset_n ? THROW_ASYNC_RESET :
 	                                  (m_active_reset_n ? THROW_SYNC_RESET :
 			                  THROW_NONE);
-#else
-	m_throw_status = THROW_NONE;
-#endif
         m_throw_helper_p->throw_it();
 	break;
 
