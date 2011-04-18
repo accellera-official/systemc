@@ -404,6 +404,13 @@ void sc_method_process::kill_process(sc_descendant_inclusion_info descendants)
         SC_REPORT_ERROR( SC_KILL_PROCESS_WHILE_UNITIALIZED_, "" );
     }
 
+    // IF THE PROCESS IS CURRENTLY UNWINDING THAT IS AN ERROR:
+
+    if ( m_unwinding )
+    {
+        SC_REPORT_ERROR( SC_ID_PROCESS_ALREADY_UNWINDING_, name() );
+    }
+
     // IF NEEDED, PROPOGATE THE KILL REQUEST THROUGH OUR DESCENDANTS:
 
     if ( descendants == SC_INCLUDE_DESCENDANTS )
@@ -657,6 +664,13 @@ void sc_method_process::resume_process(
 //------------------------------------------------------------------------------
 void sc_method_process::throw_reset( bool async )
 {
+    // IF THE PROCESS IS CURRENTLY UNWINDING THAT IS AN ERROR:
+
+    if ( m_unwinding )
+    {
+        SC_REPORT_ERROR( SC_ID_PROCESS_ALREADY_UNWINDING_, name() );
+    }
+
     m_throw_status = async ? THROW_ASYNC_RESET : THROW_SYNC_RESET;
     if ( async )
     {
@@ -703,6 +717,14 @@ void sc_method_process::throw_user( const sc_throw_it_helper& helper,
     {
         SC_REPORT_ERROR( SC_THROW_IT_WHILE_NOT_RUNNING_, name() );
     }
+
+    // IF THE PROCESS IS CURRENTLY UNWINDING THAT IS AN ERROR:
+
+    if ( m_unwinding )
+    {
+        SC_REPORT_ERROR( SC_ID_PROCESS_ALREADY_UNWINDING_, name() );
+    }
+
 
     // CANCEL ANY DYNAMIC EVENT WAITS:
     //

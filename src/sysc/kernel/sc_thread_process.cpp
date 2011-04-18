@@ -446,6 +446,13 @@ void sc_thread_process::kill_process(sc_descendant_inclusion_info descendants )
         SC_REPORT_ERROR( SC_KILL_PROCESS_WHILE_UNITIALIZED_, "" );
     }
 
+    // IF THE PROCESS IS CURRENTLY UNWINDING THAT IS AN ERROR:
+
+    if ( m_unwinding )
+    {
+        SC_REPORT_ERROR( SC_ID_PROCESS_ALREADY_UNWINDING_, name() );
+    }
+
     context_p = simcontext();
 
     // IF NEEDED PROPOGATE THE KILL REQUEST THROUGH OUR DESCENDANTS:
@@ -734,6 +741,12 @@ void sc_thread_process::throw_reset( bool async )
 
     if ( m_state & ps_bit_zombie ) return;
 
+    // IF THE PROCESS IS CURRENTLY UNWINDING THAT IS AN ERROR:
+
+    if ( m_unwinding )
+    {
+        SC_REPORT_ERROR( SC_ID_PROCESS_ALREADY_UNWINDING_, name() );
+    }
 
     // Set the throw type and clear any pending dynamic events: 
 
@@ -794,6 +807,14 @@ void sc_thread_process::throw_user( const sc_throw_it_helper& helper,
     {
         SC_REPORT_ERROR( SC_THROW_IT_WHILE_NOT_RUNNING_, name() );
     }
+
+    // IF THE PROCESS IS CURRENTLY UNWINDING THAT IS AN ERROR:
+
+    if ( m_unwinding )
+    {
+        SC_REPORT_ERROR( SC_ID_PROCESS_ALREADY_UNWINDING_, name() );
+    }
+
 
     // IF NEEDED PROPOGATE THE THROW REQUEST THROUGH OUR DESCENDANTS:
 

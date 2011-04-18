@@ -218,7 +218,8 @@ SC_DEFINE_MESSAGE( SC_ID_WAIT_DURING_UNWINDING_      , 538,
          "wait() not allowed during unwinding" )
 SC_DEFINE_MESSAGE( SC_ID_RETHROW_UNWINDING_          , 539,
          "sc_unwind_exception not re-thrown during kill/reset" )
-// available message number 540
+SC_DEFINE_MESSAGE( SC_ID_PROCESS_ALREADY_UNWINDING_,   540,
+         "process received a throw_it/kill/reset during unwinding" )
 SC_DEFINE_MESSAGE(SC_ID_MODULE_METHOD_AFTER_START_   , 541,
 	"call to SC_METHOD in sc_module while simulation running" )
 SC_DEFINE_MESSAGE(SC_ID_MODULE_THREAD_AFTER_START_   , 542,
