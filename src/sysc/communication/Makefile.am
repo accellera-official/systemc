@@ -45,6 +45,7 @@ H_FILES = \
 	sc_fifo.h \
 	sc_fifo_ifs.h \
 	sc_fifo_ports.h \
+	sc_host_mutex.h \
 	sc_interface.h \
 	sc_mutex.h \
 	sc_mutex_if.h \
@@ -60,6 +61,7 @@ H_FILES = \
 	sc_signal_rv.h \
 	sc_signal_rv_ports.h \
 	sc_writer_policy.h
+
 
 noinst_HEADERS = $(H_FILES)
 

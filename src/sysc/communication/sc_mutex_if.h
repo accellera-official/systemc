@@ -92,6 +92,52 @@ private:
     sc_mutex_if& operator = ( const sc_mutex_if& );
 };
 
+// ----------------------------------------------------------------------------
+//  CLASS : sc_scoped_lock
+//
+//  The sc_scoped_lock class to lock (and automatically release) a mutex.
+// ----------------------------------------------------------------------------
+
+//template< typename Lockable = sc_mutex_if >
+class sc_scoped_lock
+{
+public:
+    //typedef Lockable lockable_type;
+    typedef sc_mutex_if lockable_type;
+
+    explicit
+    sc_scoped_lock( lockable_type& mtx )
+      : m_ref(mtx)
+      , m_active(true)
+    {
+        m_ref.lock();
+    }
+
+    bool release()
+    {
+        if( m_active )
+        {
+            m_ref.unlock();
+            m_active = false;
+            return true;
+        }
+        return false;
+    }
+
+    ~sc_scoped_lock()
+    {
+        release();
+    }
+
+private:
+    // disabled
+    sc_scoped_lock( const sc_scoped_lock& );
+    sc_scoped_lock& operator=( const sc_scoped_lock& );
+
+    lockable_type& m_ref;
+    bool           m_active;
+};
+
 } // namespace sc_core
 
 #endif
