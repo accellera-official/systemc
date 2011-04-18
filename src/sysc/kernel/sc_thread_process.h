@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_thread_process.h,v $
+// Revision 1.28  2011/04/14 22:34:27  acg
+//  Andy Goodrich: removed dead code.
+//
 // Revision 1.27  2011/04/13 05:02:18  acg
 //  Andy Goodrich: added missing check to the wake up code in suspend_me()
 //  so that we just return if the call to suspend_me() was issued from a
@@ -342,13 +345,15 @@ inline void sc_thread_process::suspend_me()
     {
         DEBUG_MSG( DEBUG_NAME , this, "suspending thread");
         simc_p->cor_pkg()->yield( cor_p );
+        DEBUG_MSG( DEBUG_NAME , this, "resuming thread");
     }
 
     // IF THERE IS A THROW TO BE DONE FOR THIS PROCESS DO IT NOW:
     //
     // (1) Optimize THROW_NONE for speed as it is the normal case.
     // (2) If this thread is already unwinding then suspend_me() was
-    //     called from the catch clause, so just go back to it.
+    //     called from the catch clause to throw an exception on another
+    //     process, so just go back to the catch clause.
 
     if ( m_throw_status == THROW_NONE ) return;
 
@@ -365,13 +370,9 @@ inline void sc_thread_process::suspend_me()
 
       case THROW_USER:
         DEBUG_MSG( DEBUG_NAME, this, "throwing user exception");
-#if 1 // @@@@#### NEW CODE
 	m_throw_status = m_active_areset_n ? THROW_ASYNC_RESET :
 	                                  (m_active_reset_n ? THROW_SYNC_RESET :
 			                  THROW_NONE);
-#else
-	m_throw_status = THROW_NONE;
-#endif
         m_throw_helper_p->throw_it();
 	break;
 

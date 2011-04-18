@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_thread_process.cpp,v $
+// Revision 1.46  2011/04/14 22:33:43  acg
+//  Andy Goodrich: added missing checks for a process being a zombie.
+//
 // Revision 1.45  2011/04/13 02:45:11  acg
 //  Andy Goodrich: eliminated warning message that occurred if the DEBUG_MSG
 //  macro was used.
@@ -459,9 +462,12 @@ void sc_thread_process::kill_process(sc_descendant_inclusion_info descendants )
     }
 
     // SET UP TO KILL THE PROCESS IF SIMULATION HAS STARTED:
+    //
+    // If the thread to be reset we are done.
 
     if ( sc_is_running() )
     {
+	if ( m_state & ps_bit_zombie ) return;
         m_throw_status = THROW_KILL;
         m_wait_cycle_n = 0;
         context_p->preempt_with(this);

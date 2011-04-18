@@ -43,6 +43,9 @@
  *****************************************************************************/
 
 // $Log: sc_process.cpp,v $
+// Revision 1.30  2011/04/14 22:33:43  acg
+//  Andy Goodrich: added missing checks for a process being a zombie.
+//
 // Revision 1.29  2011/04/13 05:00:43  acg
 //  Andy Goodrich: removed check for method process in termination_event()
 //  since with the new IEEE 1666 2011 its legal.
@@ -505,6 +508,10 @@ void sc_process_b::reset_changed( bool async, bool asserted )
 	SC_REPORT_ERROR( SC_ID_PROCESS_CONTROL_CORNER_CASE_,
 	   ": synchronous reset changed on a suspended process");
     }
+
+    // IF THIS OBJECT IS PUSHING UP DAISIES WE ARE DONE:
+
+    if ( m_state & ps_bit_zombie ) return;    
 
     // Reset is being asserted:
 
