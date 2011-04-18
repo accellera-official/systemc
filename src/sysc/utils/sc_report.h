@@ -163,7 +163,7 @@ public:
 
     const char* get_process_name() const;
 
-    int get_verbosity_level() const { return m_verbosity_level; }
+    int get_verbosity() const { return m_verbosity_level; }
 
     bool valid () const
         {

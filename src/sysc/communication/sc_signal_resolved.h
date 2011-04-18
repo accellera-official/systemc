@@ -76,15 +76,15 @@ extern const sc_dt::sc_logic_value_t sc_logic_resolution_tbl[4][4];
 // ----------------------------------------------------------------------------
 
 class sc_signal_resolved
-: public sc_signal<sc_dt::sc_logic>
+: public sc_signal<sc_dt::sc_logic,SC_MANY_WRITERS>
 {
 public:
 
     // typedefs
 
-    typedef sc_signal_resolved         this_type;
-    typedef sc_signal<sc_dt::sc_logic> base_type;
-    typedef sc_dt::sc_logic            data_type;
+    typedef sc_signal_resolved                         this_type;
+    typedef sc_signal<sc_dt::sc_logic,SC_MANY_WRITERS> base_type;
+    typedef sc_dt::sc_logic                            data_type;
 
 public:
 

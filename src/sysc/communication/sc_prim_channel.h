@@ -169,7 +169,7 @@ public:
 
     // request the update method to be executed during the update phase
     // from a process external to the simulator.
-    inline void request_safe_update();
+    inline void async_request_update();
 
 protected:
 
@@ -350,18 +350,18 @@ public:
         { return m_prim_channel_vec.size(); }
 
     inline void request_update( sc_prim_channel& );
-    inline void request_safe_update( sc_prim_channel& );
+    inline void async_request_update( sc_prim_channel& );
 
     bool pending_updates() const
     { 
         return m_update_list_p != (sc_prim_channel*)sc_prim_channel::list_end ||
-               m_safe_update_list_p != 
+               m_async_update_list_p != 
                (sc_prim_channel*)sc_prim_channel::list_end;
     }   
 
-    bool pending_safe_updates() const
+    bool pending_async_updates() const
     { 
-        return m_safe_update_list_p != 
+        return m_async_update_list_p != 
                (sc_prim_channel*)sc_prim_channel::list_end; 
     }   
 
@@ -399,9 +399,9 @@ private:
     std::vector<sc_prim_channel*> m_prim_channel_vec;
 
     
-    sc_prim_channel*              m_safe_update_list_p; // external updates.
-    sc_scoped_mutex::mutex_t      m_safe_update_mutex;  // safety mutex.
-    sc_prim_channel*              m_update_list_p;      // internal updates.
+    sc_prim_channel*              m_async_update_list_p; // external updates.
+    sc_scoped_mutex::mutex_t      m_async_update_mutex;  // safety mutex.
+    sc_prim_channel*              m_update_list_p;       // internal updates.
 };
 
 
@@ -424,11 +424,14 @@ sc_prim_channel_registry::request_update( sc_prim_channel& prim_channel_ )
 
 inline 
 void 
-sc_prim_channel_registry::request_safe_update( sc_prim_channel& prim_channel_ )
+sc_prim_channel_registry::async_request_update( sc_prim_channel& prim_channel_ )
 { 
-    sc_scoped_mutex lock(m_safe_update_mutex); 
-    prim_channel_.m_update_next_p = m_safe_update_list_p; 
-    m_safe_update_list_p = &prim_channel_; 
+    sc_scoped_mutex lock(m_async_update_mutex); 
+    if ( !prim_channel_.m_update_next_p )
+    {
+	prim_channel_.m_update_next_p = m_async_update_list_p; 
+	m_async_update_list_p = &prim_channel_; 
+    }
     // return unlocks the mutex.
 }
 
@@ -461,11 +464,11 @@ sc_prim_channel_registry::perform_update()
     // Update the values for the primitive channels set external to the
     // simulator.
 
-    now_p = m_safe_update_list_p;
+    now_p = m_async_update_list_p;
     if ( now_p != (sc_prim_channel*)sc_prim_channel::list_end )
     {
-        sc_scoped_mutex lock(m_safe_update_mutex);
-	m_safe_update_list_p = (sc_prim_channel*)sc_prim_channel::list_end;
+        sc_scoped_mutex lock(m_async_update_mutex);
+	m_async_update_list_p = (sc_prim_channel*)sc_prim_channel::list_end;
 	for ( ; now_p != (sc_prim_channel*)sc_prim_channel::list_end; 
 	    now_p = next_p )
 	{
@@ -499,10 +502,10 @@ sc_prim_channel::request_update()
 
 inline
 void
-sc_prim_channel::request_safe_update()
+sc_prim_channel::async_request_update()
 {
     if( ! m_update_next_p ) {
-	m_registry->request_safe_update( *this );
+	m_registry->async_request_update( *this );
     }
 }
 

@@ -124,15 +124,15 @@ sc_lv_resolve<W>::resolve( sc_dt::sc_lv<W>& result_,
 
 template <int W>
 class sc_signal_rv
-: public sc_signal<sc_dt::sc_lv<W> >
+: public sc_signal<sc_dt::sc_lv<W>, SC_MANY_WRITERS>
 {
 public:
 
     // typedefs
 
-    typedef sc_signal_rv<W>             this_type;
-    typedef sc_signal<sc_dt::sc_lv<W> > base_type;
-    typedef sc_dt::sc_lv<W>             data_type;
+    typedef sc_signal_rv<W>                             this_type;
+    typedef sc_signal<sc_dt::sc_lv<W>, SC_MANY_WRITERS> base_type;
+    typedef sc_dt::sc_lv<W>                             data_type;
 
 public:
 
