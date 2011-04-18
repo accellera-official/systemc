@@ -224,8 +224,11 @@ sc_prim_channel_registry::remove( sc_prim_channel& prim_channel_ )
 // constructor
 
 sc_prim_channel_registry::sc_prim_channel_registry( sc_simcontext& simc_ )
-: m_simc( &simc_ ), m_update_list_p((sc_prim_channel*)sc_prim_channel::list_end)
+: m_simc( &simc_ ), 
+  m_safe_update_list_p((sc_prim_channel*)sc_prim_channel::list_end),
+  m_update_list_p((sc_prim_channel*)sc_prim_channel::list_end)
 {
+    SC_SCOPED_MUTEX_INIT(m_safe_update_mutex);
 }
 
 

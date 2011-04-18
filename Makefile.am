@@ -46,11 +46,11 @@ INST_FILES = \
 	RELEASENOTES \
 	docs
 
-debug:
-	$(MAKE) all CXXFLAGS="$(EXTRA_CXXFLAGS) $(DEBUG_CXXFLAGS)"
-
 opt:
 	$(MAKE) all CXXFLAGS="$(EXTRA_CXXFLAGS) $(OPT_CXXFLAGS)"
+
+debug:
+	$(MAKE) all CXXFLAGS="$(EXTRA_CXXFLAGS) $(DEBUG_CXXFLAGS)"
 
 pthreads:
 	$(MAKE) all CXXFLAGS="$(EXTRA_CXXFLAGS) $(OPT_CXXFLAGS) -DSC_USE_PTHREADS" QT_ARCH="pthreads"
@@ -60,6 +60,12 @@ pthreads_debug:
 
 pthreads_check:
 	$(MAKE) check CXXFLAGS="$(EXTRA_CXXFLAGS) -DSC_USE_PTHREADS" LDFLAGS="-l pthread" QT_ARCH="pthreads"
+
+async_update:
+	$(MAKE) all CXXFLAGS="$(EXTRA_CXXFLAGS) $(OPT_CXXFLAGS) -DSC_ASYNC_UPDATE"
+
+async_update_debug:
+	$(MAKE) all CXXFLAGS="$(EXTRA_CXXFLAGS) $(DEBUG_CXXFLAGS) -DSC_ASYNC_UPDATE"
 
 install-data-local:
 	@$(NORMAL_INSTALL)
