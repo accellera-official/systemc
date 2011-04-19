@@ -292,11 +292,8 @@ public:
     bool pending_updates() const
     { 
         return m_update_list_p != (sc_prim_channel*)sc_prim_channel::list_end 
-#if defined(SC_INCLDUE_ASYNC_UPDATES)
-               || pending_asynch_updates()
-#endif 
-               ;
-    }   
+               || pending_asynch_updates();
+    }
 
     bool pending_async_updates() const;
 
