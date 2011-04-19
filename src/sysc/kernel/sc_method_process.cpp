@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_method_process.cpp,v $
+// Revision 1.39  2011/04/19 02:39:09  acg
+//  Philipp A. Hartmann: added checks for additional throws during stack unwinds.
+//
 // Revision 1.38  2011/04/13 02:41:34  acg
 //  Andy Goodrich: eliminate warning messages generated when the DEBUG_MSG
 //  macro is used.
@@ -404,6 +407,13 @@ void sc_method_process::kill_process(sc_descendant_inclusion_info descendants)
         SC_REPORT_ERROR( SC_KILL_PROCESS_WHILE_UNITIALIZED_, "" );
     }
 
+    // IF THE PROCESS IS CURRENTLY UNWINDING THAT IS AN ERROR:
+
+    if ( m_unwinding )
+    {
+        SC_REPORT_ERROR( SC_ID_PROCESS_ALREADY_UNWINDING_, name() );
+    }
+
     // IF NEEDED, PROPOGATE THE KILL REQUEST THROUGH OUR DESCENDANTS:
 
     if ( descendants == SC_INCLUDE_DESCENDANTS )
@@ -657,6 +667,16 @@ void sc_method_process::resume_process(
 //------------------------------------------------------------------------------
 void sc_method_process::throw_reset( bool async )
 {
+    // If the process is currently unwinding this is an error:
+
+    if ( m_unwinding )
+    {
+        SC_REPORT_ERROR( SC_ID_PROCESS_ALREADY_UNWINDING_, name() );
+    }
+
+    // Set the throw status and if its an asynchronous reset throw an
+    // exception:
+
     m_throw_status = async ? THROW_ASYNC_RESET : THROW_SYNC_RESET;
     if ( async )
     {

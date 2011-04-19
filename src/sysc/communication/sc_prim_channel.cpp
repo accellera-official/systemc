@@ -39,6 +39,9 @@
 
 
 // $Log: sc_prim_channel.cpp,v $
+// Revision 1.7  2011/04/19 02:36:26  acg
+//  Philipp A. Hartmann: new aysnc_update and mutex support.
+//
 // Revision 1.6  2011/02/18 20:31:05  acg
 //  Philipp A. Hartmann: added error messages for calls that cannot be done
 //  after elaboration.
@@ -70,6 +73,9 @@
 #include "sysc/communication/sc_prim_channel.h"
 #include "sysc/communication/sc_communication_ids.h"
 #include "sysc/kernel/sc_simcontext.h"
+#if defined(SC_INCLUDE_ASYNC_UPDATES)
+#   include "sysc/communication/sc_host_mutex.h"
+#endif
 
 namespace sc_core {
 
@@ -170,6 +176,58 @@ sc_prim_channel::simulation_done()
 }
 
 // ----------------------------------------------------------------------------
+//  CLASS : sc_prim_channel_registry::async_update_list
+//
+//  Thread-safe list of pending external updates
+//  FOR INTERNAL USE ONLY!
+// ----------------------------------------------------------------------------
+
+class sc_prim_channel_registry::async_update_list
+{
+#ifdef SC_INCLUDE_ASYNC_UPDATES
+public:
+
+    bool pending() const
+    {
+	return m_push_queue.size() != 0;
+    }
+
+    void append( sc_prim_channel& prim_channel_ )
+    {
+	sc_scoped_lock lock( m_mutex );
+	m_push_queue.push_back( &prim_channel_ );
+	// return releases the mutex
+    }
+
+    void accept_updates()
+    {
+	sc_assert( ! m_pop_queue.size() );
+	{
+	    sc_scoped_lock lock( m_mutex );
+	    m_push_queue.swap( m_pop_queue );
+	    // leaving the block releases the mutex
+	}
+
+	std::vector< sc_prim_channel* >::const_iterator
+	    it = m_pop_queue.begin(), end = m_pop_queue.end();
+	while( it!= end )
+	{
+	    // we use request_update instead of perform_update
+	    // to skip duplicates
+	    (*it++)->request_update();
+	}
+	m_pop_queue.clear();
+    }
+
+private:
+    sc_host_mutex                   m_mutex;
+    std::vector< sc_prim_channel* > m_push_queue;
+    std::vector< sc_prim_channel* > m_pop_queue;
+
+#endif // SC_INCLUDE_ASYNC_UPDATES
+};
+
+// ----------------------------------------------------------------------------
 //  CLASS : sc_prim_channel_registry
 //
 //  Registry for all primitive channels.
@@ -220,15 +278,68 @@ sc_prim_channel_registry::remove( sc_prim_channel& prim_channel_ )
     m_prim_channel_vec.resize(size()-1);
 }
 
+bool
+sc_prim_channel_registry::pending_async_updates() const
+{
+#ifdef SC_INCLUDE_ASYNC_UPDATES
+    return m_async_update_list_p->pending();
+#else
+    return false;
+#endif
+}
+
+void
+sc_prim_channel_registry::async_request_update( sc_prim_channel& prim_channel_ )
+{
+#ifdef SC_INCLUDE_ASYNC_UPDATES
+    m_async_update_list_p->append( prim_channel_ );
+#else
+    SC_REPORT_ERROR( SC_ID_NO_ASYNC_UPDATE_, prim_channel_.name() );
+#endif
+}
+
+// +----------------------------------------------------------------------------
+// |"sc_prim_channel_registry::perform_update"
+// |
+// | This method updates the values of the primitive channels in its update
+// | lists.
+// +----------------------------------------------------------------------------
+void
+sc_prim_channel_registry::perform_update()
+{
+    // Update the values for the primitive channels set external to the
+    // simulator.
+
+#ifdef SC_INCLUDE_ASYNC_UPDATES
+    if( m_async_update_list_p->pending() )
+	m_async_update_list_p->accept_updates();
+#endif
+
+    sc_prim_channel* next_p; // Next update to perform.
+    sc_prim_channel* now_p;  // Update now performing.
+
+    // Update the values for the primitive channels in the simulator's list.
+
+    now_p = m_update_list_p;
+    m_update_list_p = (sc_prim_channel*)sc_prim_channel::list_end;
+    for ( ; now_p != (sc_prim_channel*)sc_prim_channel::list_end;
+	now_p = next_p )
+    {
+	next_p = now_p->m_update_next_p;
+	now_p->perform_update();
+    }
+}
 
 // constructor
 
 sc_prim_channel_registry::sc_prim_channel_registry( sc_simcontext& simc_ )
-: m_simc( &simc_ ), 
-  m_async_update_list_p((sc_prim_channel*)sc_prim_channel::list_end),
-  m_update_list_p((sc_prim_channel*)sc_prim_channel::list_end)
+:  m_async_update_list_p(0),
+   m_simc( &simc_ ), 
+   m_update_list_p((sc_prim_channel*)sc_prim_channel::list_end)
 {
-    SC_SCOPED_MUTEX_INIT(m_async_update_mutex);
+#   if defined(SC_INCLUDE_ASYNC_UPDATES)
+        m_async_update_list_p = new async_update_list();
+#   endif
 }
 
 
@@ -236,6 +347,7 @@ sc_prim_channel_registry::sc_prim_channel_registry( sc_simcontext& simc_ )
 
 sc_prim_channel_registry::~sc_prim_channel_registry()
 {
+    delete m_async_update_list_p;
 }
 
 // called when construction is done

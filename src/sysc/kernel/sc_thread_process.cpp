@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_thread_process.cpp,v $
+// Revision 1.47  2011/04/19 02:39:09  acg
+//  Philipp A. Hartmann: added checks for additional throws during stack unwinds.
+//
 // Revision 1.46  2011/04/14 22:33:43  acg
 //  Andy Goodrich: added missing checks for a process being a zombie.
 //
@@ -446,6 +449,14 @@ void sc_thread_process::kill_process(sc_descendant_inclusion_info descendants )
         SC_REPORT_ERROR( SC_KILL_PROCESS_WHILE_UNITIALIZED_, "" );
     }
 
+    // IF THE PROCESS IS CURRENTLY UNWINDING THAT IS AN ERROR:
+
+    if ( m_unwinding )
+    {
+        SC_REPORT_ERROR( SC_ID_PROCESS_ALREADY_UNWINDING_, name() );
+    }
+
+
     context_p = simcontext();
 
     // IF NEEDED PROPOGATE THE KILL REQUEST THROUGH OUR DESCENDANTS:
@@ -734,6 +745,13 @@ void sc_thread_process::throw_reset( bool async )
 
     if ( m_state & ps_bit_zombie ) return;
 
+    // IF THE PROCESS IS CURRENTLY UNWINDING THAT IS AN ERROR:
+
+    if ( m_unwinding )
+    {
+        SC_REPORT_ERROR( SC_ID_PROCESS_ALREADY_UNWINDING_, name() );
+    }
+
 
     // Set the throw type and clear any pending dynamic events: 
 
@@ -788,11 +806,18 @@ void sc_thread_process::throw_user( const sc_throw_it_helper& helper,
     sc_process_b*                    child_p;    // Child accessing.
     const ::std::vector<sc_object*>* children_p; // Vector of children.
 
-    // IF THE SIMULATION HAS NOT BEEN INITIALIZED YET THAT IS AN ERROR:
+    // IF THE SIMULATION IS NOT ACTAULLY RUNNING THIS IS AN ERROR:
 
     if ( sc_get_status() != SC_RUNNING )
     {
         SC_REPORT_ERROR( SC_THROW_IT_WHILE_NOT_RUNNING_, name() );
+    }
+
+    // IF THE PROCESS IS CURRENTLY UNWINDING THAT IS AN ERROR:
+
+    if ( m_unwinding )
+    {
+        SC_REPORT_ERROR( SC_ID_PROCESS_ALREADY_UNWINDING_, name() );
     }
 
     // IF NEEDED PROPOGATE THE THROW REQUEST THROUGH OUR DESCENDANTS:

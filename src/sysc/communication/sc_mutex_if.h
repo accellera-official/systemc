@@ -33,6 +33,9 @@
     
  *****************************************************************************/
 //$Log: sc_mutex_if.h,v $
+//Revision 1.3  2011/04/19 02:36:26  acg
+// Philipp A. Hartmann: new aysnc_update and mutex support.
+//
 //Revision 1.2  2011/02/18 20:23:45  acg
 // Andy Goodrich: Copyright update.
 //
@@ -90,6 +93,52 @@ private:
     // disabled
     sc_mutex_if( const sc_mutex_if& );
     sc_mutex_if& operator = ( const sc_mutex_if& );
+};
+
+// ----------------------------------------------------------------------------
+//  CLASS : sc_scoped_lock
+//
+//  The sc_scoped_lock class to lock (and automatically release) a mutex.
+// ----------------------------------------------------------------------------
+
+//template< typename Lockable = sc_mutex_if >
+class sc_scoped_lock
+{
+public:
+    //typedef Lockable lockable_type;
+    typedef sc_mutex_if lockable_type;
+
+    explicit
+    sc_scoped_lock( lockable_type& mtx )
+      : m_ref(mtx)
+      , m_active(true)
+    {
+        m_ref.lock();
+    }
+
+    bool release()
+    {
+        if( m_active )
+        {
+            m_ref.unlock();
+            m_active = false;
+            return true;
+        }
+        return false;
+    }
+
+    ~sc_scoped_lock()
+    {
+        release();
+    }
+
+private:
+    // disabled
+    sc_scoped_lock( const sc_scoped_lock& );
+    sc_scoped_lock& operator=( const sc_scoped_lock& );
+
+    lockable_type& m_ref;
+    bool           m_active;
 };
 
 } // namespace sc_core

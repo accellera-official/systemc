@@ -42,6 +42,9 @@
  *****************************************************************************/
 
 // $Log: sc_report.h,v $
+// Revision 1.6  2011/04/19 02:39:44  acg
+//  Andy Goodrich: set proper name for get_verbosity().
+//
 // Revision 1.5  2011/03/23 16:16:48  acg
 //  Andy Goodrich: finish message verbosity support.
 //

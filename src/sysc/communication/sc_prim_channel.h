@@ -35,6 +35,9 @@
     
  *****************************************************************************/
 //$Log: sc_prim_channel.h,v $
+//Revision 1.5  2011/04/19 02:36:26  acg
+// Philipp A. Hartmann: new aysnc_update and mutex support.
+//
 //Revision 1.4  2011/04/05 20:48:09  acg
 // Andy Goodrich: changes to make sure that event(), posedge() and negedge()
 // only return true if the clock has not moved.
@@ -79,72 +82,6 @@
 namespace sc_core {
 
 // ----------------------------------------------------------------------------
-//  CLASS : sc_scoped_mutex
-//
-//  Scoped mutex for use creating a thread-safe environment
-// ----------------------------------------------------------------------------
-#define SC_ASYNC_UPDATE // @@@@####
-#if defined(SC_ASYNC_UPDATE)
-
-#   if defined(WIN32) // windows implementation **** to be implemented ****
-#       define SC_SCOPED_MUTEX_INIT(MUTEX) 
-        struct sc_scoped_mutex 
-        {
-	    typedef int mutex_t; // mutex object.
-    
-	    sc_scoped_mutex(mutex_t& mutex) 
-            {
-            } 
-	    ~sc_scoped_mutex() 
-            {
-            } 
-        };
-#   else
-#       include <pthread.h>
-#       if defined(__hpux)
-#           define SC_SCOPED_MUTEX_INIT(MUTEX) \
-	        pthread_mutex_init( &MUTEX, cma_c_null );
-#       else  // !defined(__hpux)
-#           define SC_SCOPED_MUTEX_INIT(MUTEX) \
-	        pthread_mutex_init( &MUTEX, NULL );
-#       endif // !defined(__hpux)
-
-        class sc_scoped_mutex 
-        {
-          public:
-	    typedef pthread_mutex_t mutex_t; // mutex object.
-    
-	    sc_scoped_mutex(mutex_t& mutex) : m_mutex(mutex)
-	    { 
-	        pthread_mutex_lock( &m_mutex ); 
-	    }
-	    ~sc_scoped_mutex(void) 
-	    { 
-	        pthread_mutex_unlock( &m_mutex ); 
-	    }
-          private:
-	    mutex_t& m_mutex;
-        };
-
-#   endif
-
-#else // no implementation:
-#   define SC_SCOPED_MUTEX_INIT(MUTEX) 
-    struct sc_scoped_mutex 
-    {
-	typedef int mutex_t; // mutex object.
-
-	sc_scoped_mutex(mutex_t& mutex) 
-        {
-	    SC_REPORT_ERROR( SC_ID_NO_ASYNC_UPDATE_, "" );
-        } 
-	~sc_scoped_mutex() 
-        {
-        } 
-    };
-#endif 
-
-// ----------------------------------------------------------------------------
 //  CLASS : sc_prim_channel
 //
 //  Abstract base class of all primitive channel classes.
@@ -169,7 +106,7 @@ public:
 
     // request the update method to be executed during the update phase
     // from a process external to the simulator.
-    inline void async_request_update();
+    void async_request_update();
 
 protected:
 
@@ -350,20 +287,18 @@ public:
         { return m_prim_channel_vec.size(); }
 
     inline void request_update( sc_prim_channel& );
-    inline void async_request_update( sc_prim_channel& );
+    void async_request_update( sc_prim_channel& );
 
     bool pending_updates() const
     { 
-        return m_update_list_p != (sc_prim_channel*)sc_prim_channel::list_end ||
-               m_async_update_list_p != 
-               (sc_prim_channel*)sc_prim_channel::list_end;
+        return m_update_list_p != (sc_prim_channel*)sc_prim_channel::list_end 
+#if defined(SC_INCLDUE_ASYNC_UPDATES)
+               || pending_asynch_updates()
+#endif 
+               ;
     }   
 
-    bool pending_async_updates() const
-    { 
-        return m_async_update_list_p != 
-               (sc_prim_channel*)sc_prim_channel::list_end; 
-    }   
+    bool pending_async_updates() const;
 
 private:
 
@@ -374,7 +309,7 @@ private:
     ~sc_prim_channel_registry();
 
     // called during the update phase of a delta cycle
-    inline void perform_update();
+    void perform_update();
 
     // called when construction is done
     void construction_done();
@@ -394,13 +329,11 @@ private:
     sc_prim_channel_registry& operator = ( const sc_prim_channel_registry& );
 
 private:
+    class async_update_list;   
 
-    sc_simcontext*                m_simc;
-    std::vector<sc_prim_channel*> m_prim_channel_vec;
-
-    
-    sc_prim_channel*              m_async_update_list_p; // external updates.
-    sc_scoped_mutex::mutex_t      m_async_update_mutex;  // safety mutex.
+    async_update_list*            m_async_update_list_p; // external updates.
+    std::vector<sc_prim_channel*> m_prim_channel_vec;    // existing channels.
+    sc_simcontext*                m_simc;                // simulator context.
     sc_prim_channel*              m_update_list_p;       // internal updates.
 };
 
@@ -421,64 +354,6 @@ sc_prim_channel_registry::request_update( sc_prim_channel& prim_channel_ )
     prim_channel_.m_update_next_p = m_update_list_p;
     m_update_list_p = &prim_channel_;
 }
-
-inline 
-void 
-sc_prim_channel_registry::async_request_update( sc_prim_channel& prim_channel_ )
-{ 
-    sc_scoped_mutex lock(m_async_update_mutex); 
-    if ( !prim_channel_.m_update_next_p )
-    {
-	prim_channel_.m_update_next_p = m_async_update_list_p; 
-	m_async_update_list_p = &prim_channel_; 
-    }
-    // return unlocks the mutex.
-}
-
-// called during the update phase of a delta cycle
-
-// +----------------------------------------------------------------------------
-// |"sc_prim_channel_registry::perform_update"
-// | 
-// | This method updates the values of the primitive channels in its update 
-// | lists.
-// +----------------------------------------------------------------------------
-inline
-void
-sc_prim_channel_registry::perform_update()
-{
-    sc_prim_channel* next_p; // Next update to perform.
-    sc_prim_channel* now_p;  // Update now performing.
-
-    // Update the values for the primitive channels in the simulator's list.
-
-    now_p = m_update_list_p;
-    m_update_list_p = (sc_prim_channel*)sc_prim_channel::list_end;
-    for ( ; now_p != (sc_prim_channel*)sc_prim_channel::list_end; 
-    	now_p = next_p )
-    {
-        next_p = now_p->m_update_next_p;
-	now_p->perform_update();
-    }
-
-    // Update the values for the primitive channels set external to the
-    // simulator.
-
-    now_p = m_async_update_list_p;
-    if ( now_p != (sc_prim_channel*)sc_prim_channel::list_end )
-    {
-        sc_scoped_mutex lock(m_async_update_mutex);
-	m_async_update_list_p = (sc_prim_channel*)sc_prim_channel::list_end;
-	for ( ; now_p != (sc_prim_channel*)sc_prim_channel::list_end; 
-	    now_p = next_p )
-	{
-	    next_p = now_p->m_update_next_p;
-	    now_p->perform_update();
-	}
-	// exiting the if releases the mutex.
-    }
-}
-
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_prim_channel
@@ -504,9 +379,7 @@ inline
 void
 sc_prim_channel::async_request_update()
 {
-    if( ! m_update_next_p ) {
-	m_registry->async_request_update( *this );
-    }
+    m_registry->async_request_update(*this);
 }
 
 

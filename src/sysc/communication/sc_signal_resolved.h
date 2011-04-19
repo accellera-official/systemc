@@ -33,6 +33,9 @@
     
  *****************************************************************************/
 //$Log: sc_signal_resolved.h,v $
+//Revision 1.4  2011/04/19 02:36:26  acg
+// Philipp A. Hartmann: new aysnc_update and mutex support.
+//
 //Revision 1.3  2011/02/18 20:23:45  acg
 // Andy Goodrich: Copyright update.
 //
