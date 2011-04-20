@@ -43,6 +43,9 @@
  *****************************************************************************/
 
 // $Log: sc_process.cpp,v $
+// Revision 1.31  2011/04/19 15:04:27  acg
+//  Philipp A. Hartman: clean up SC_ID messages.
+//
 // Revision 1.30  2011/04/14 22:33:43  acg
 //  Andy Goodrich: added missing checks for a process being a zombie.
 //
@@ -620,7 +623,7 @@ void sc_process_b::reset_process( reset_type rt,
       case reset_asynchronous:
 	if ( sc_get_status() != SC_RUNNING )
 	{
-	    SC_REPORT_ERROR(SC_RESET_PROCESS_WHILE_NOT_RUNNING_, "");
+	    SC_REPORT_ERROR(SC_ID_RESET_PROCESS_WHILE_NOT_RUNNING_, "");
 	}
 	else
 	{

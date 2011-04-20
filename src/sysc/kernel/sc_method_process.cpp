@@ -35,6 +35,13 @@
  *****************************************************************************/
 
 // $Log: sc_method_process.cpp,v $
+// Revision 1.41  2011/04/19 19:15:41  acg
+//  Andy Goodrich: fix so warning message is always issued for a throw_it()
+//  on a method process.
+//
+// Revision 1.40  2011/04/19 15:04:27  acg
+//  Philipp A. Hartman: clean up SC_ID messages.
+//
 // Revision 1.39  2011/04/19 02:39:09  acg
 //  Philipp A. Hartmann: added checks for additional throws during stack unwinds.
 //
@@ -404,7 +411,7 @@ void sc_method_process::kill_process(sc_descendant_inclusion_info descendants)
 
     if ( sc_get_status() == SC_ELABORATION )
     {
-        SC_REPORT_ERROR( SC_KILL_PROCESS_WHILE_UNITIALIZED_, "" );
+        SC_REPORT_ERROR( SC_ID_KILL_PROCESS_WHILE_UNITIALIZED_, "" );
     }
 
     // IF THE PROCESS IS CURRENTLY UNWINDING THAT IS AN ERROR:
@@ -717,25 +724,11 @@ void sc_method_process::throw_user( const sc_throw_it_helper& helper,
     sc_process_b*                    child_p;    // Child accessing.
     const ::std::vector<sc_object*>* children_p; // Vector of children.
 
-    // IF THE SIMULATION HAS NOT BEEN INITIALIZED YET THAT IS AN ERROR:
+    // IF THE SIMULATION IS NOT ACTUALLY RUNNING THIS IS AN ERROR:
 
     if (  sc_get_status() != SC_RUNNING )
     {
-        SC_REPORT_ERROR( SC_THROW_IT_WHILE_NOT_RUNNING_, name() );
-    }
-
-    // CANCEL ANY DYNAMIC EVENT WAITS:
-    //
-    // If this object instance is already queued for exection this call
-    // is a no-op.
-
-    if ( is_runnable() )
-    {
-        SC_REPORT_WARNING( SC_THROW_IT_ON_RUNNABLE_PROCESS_, name() );
-    }
-    else 
-    {
-	remove_dynamic_events();
+        SC_REPORT_ERROR( SC_ID_THROW_IT_WHILE_NOT_RUNNING_, name() );
     }
 
     // IF NEEDED PROPOGATE THE THROW REQUEST THROUGH OUR DESCENDANTS:
@@ -750,6 +743,11 @@ void sc_method_process::throw_user( const sc_throw_it_helper& helper,
             if ( child_p ) child_p->throw_user(helper, descendants);
         }
     }
+
+    // throw_it HAS NO EFFECT ON A METHOD, ISSUE A WARNING:
+
+    SC_REPORT_WARNING( SC_ID_THROW_IT_ON_METHOD_, name() );
+
 }
 
 //------------------------------------------------------------------------------
@@ -916,7 +914,7 @@ bool sc_method_process::trigger_dynamic( sc_event* e )
 
       case STATIC: {
         // we should never get here, but throw_it() can make it happen.
-	SC_REPORT_WARNING(SC_NOT_EXPECTING_DYNAMIC_EVENT_NOTIFY_, name());
+	SC_REPORT_WARNING(SC_ID_NOT_EXPECTING_DYNAMIC_EVENT_NOTIFY_, name());
         return true;
       }
     }

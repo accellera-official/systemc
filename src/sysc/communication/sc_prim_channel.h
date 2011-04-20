@@ -35,6 +35,9 @@
     
  *****************************************************************************/
 //$Log: sc_prim_channel.h,v $
+//Revision 1.6  2011/04/19 15:03:48  acg
+// Philipp A. Hartman: remove ASYNC_UPDATE preprocessor check from header.
+//
 //Revision 1.5  2011/04/19 02:36:26  acg
 // Philipp A. Hartmann: new aysnc_update and mutex support.
 //
@@ -292,10 +295,7 @@ public:
     bool pending_updates() const
     { 
         return m_update_list_p != (sc_prim_channel*)sc_prim_channel::list_end 
-#if defined(SC_INCLDUE_ASYNC_UPDATES)
-               || pending_asynch_updates()
-#endif 
-               ;
+               || pending_async_updates();
     }   
 
     bool pending_async_updates() const;

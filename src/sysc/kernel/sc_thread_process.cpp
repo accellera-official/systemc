@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_thread_process.cpp,v $
+// Revision 1.48  2011/04/19 15:04:27  acg
+//  Philipp A. Hartman: clean up SC_ID messages.
+//
 // Revision 1.47  2011/04/19 02:39:09  acg
 //  Philipp A. Hartmann: added checks for additional throws during stack unwinds.
 //
@@ -446,7 +449,7 @@ void sc_thread_process::kill_process(sc_descendant_inclusion_info descendants )
 
     if ( !sc_is_running() )
     {
-        SC_REPORT_ERROR( SC_KILL_PROCESS_WHILE_UNITIALIZED_, "" );
+        SC_REPORT_ERROR( SC_ID_KILL_PROCESS_WHILE_UNITIALIZED_, "" );
     }
 
     // IF THE PROCESS IS CURRENTLY UNWINDING THAT IS AN ERROR:
@@ -810,7 +813,7 @@ void sc_thread_process::throw_user( const sc_throw_it_helper& helper,
 
     if ( sc_get_status() != SC_RUNNING )
     {
-        SC_REPORT_ERROR( SC_THROW_IT_WHILE_NOT_RUNNING_, name() );
+        SC_REPORT_ERROR( SC_ID_THROW_IT_WHILE_NOT_RUNNING_, name() );
     }
 
     // IF THE PROCESS IS CURRENTLY UNWINDING THAT IS AN ERROR:
@@ -1009,7 +1012,7 @@ bool sc_thread_process::trigger_dynamic( sc_event* e )
 
       case STATIC: {
         // we should never get here, but throw_it() can make it happen.
-	SC_REPORT_WARNING(SC_NOT_EXPECTING_DYNAMIC_EVENT_NOTIFY_, name());
+	SC_REPORT_WARNING(SC_ID_NOT_EXPECTING_DYNAMIC_EVENT_NOTIFY_, name());
         return true;
       }
     }
