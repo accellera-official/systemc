@@ -376,8 +376,9 @@ inline bool sc_method_process::run_process()
         DEBUG_MSG(DEBUG_NAME,this,"caught unwind exception");
 	ex.clear();
     }
-    catch( const sc_report& ex ) {
-	::std::cout << "\n" << ex.what() << ::std::endl;
+    catch( ... ) {
+	sc_report* err_p = sc_handle_exception();
+	simcontext()->set_error( err_p );
 	return false;
     }
     return true;

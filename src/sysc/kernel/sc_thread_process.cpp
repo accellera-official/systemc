@@ -298,9 +298,9 @@ void sc_thread_cor_fn( void* arg )
 	    ex.clear();
             if ( ex.is_reset() ) continue;
         }
-        catch( const sc_report& ex ) {
-            std::cout << "\n" << ex.what() << std::endl;
-            thread_h->simcontext()->set_error();
+        catch( ... ) {
+            sc_report* err_p = sc_handle_exception();
+            thread_h->simcontext()->set_error( err_p );
         }
         break;
     }

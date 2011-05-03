@@ -400,7 +400,7 @@ public:
     bool is_running() const;
     bool update_phase() const;
     bool get_error();
-    void set_error();
+    void set_error( sc_report* );
 
     sc_cor_pkg* cor_pkg()
         { return m_cor_pkg; }
@@ -501,7 +501,7 @@ private:
     bool                        m_ready_to_simulate;
     bool                        m_elaboration_done;
     execution_phases            m_execution_phase;
-    bool                        m_error;
+    sc_report*                  m_error;
     bool                        m_in_simulator_control;   
     bool                        m_end_of_simulation_called;
     sc_status                   m_simulation_status;
@@ -676,9 +676,10 @@ sc_simcontext::update_phase() const
 
 inline
 void
-sc_simcontext::set_error()
+sc_simcontext::set_error( sc_report* err )
 {
-    m_error = true;
+    delete m_error;
+    m_error = err;
 }
 
 
@@ -686,7 +687,7 @@ inline
 bool
 sc_simcontext::get_error()
 {
-    return m_error;
+    return m_error != NULL;
 }
 
 inline

@@ -68,6 +68,7 @@
 
 #include "sysc/kernel/sc_cmnhdr.h"
 #include "sysc/kernel/sc_externs.h"
+#include "sysc/kernel/sc_except.h"
 #include "sysc/utils/sc_iostream.h"
 #include "sysc/utils/sc_report.h"
 #include "sysc/utils/sc_report_handler.h"
@@ -127,13 +128,12 @@ sc_elab_and_sim( int argc, char* argv[] )
     {
         message_function( x.what() );
     }
-    catch( const char* s )
-    {
-        message_function( s );
-    }
     catch( ... )
     {
-        message_function( "UNKNOWN EXCEPTION OCCURED" );
+        // translate other escaping exceptions
+        sc_report*  err_p = sc_handle_exception();
+        if( err_p ) message_function( err_p->what() );
+        delete err_p;
     }
 
     // IF DEPRECATION WARNINGS WERE ISSUED TELL THE USER HOW TO TURN THEM OFF 
