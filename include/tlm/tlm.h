@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2008 by all Contributors.
+  source code Copyright (c) 1996-2011 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -15,17 +15,6 @@
 
  *****************************************************************************/
 
-#ifndef __TLM_H__
-#define __TLM_H__
+// kept for backwards compatibility
 
-#include <systemc>    /// main SystemC header
-
-#include "tlm_h/tlm_version.h"
-#include "tlm_1/tlm_analysis/tlm_analysis.h"
-#include "tlm_1/tlm_req_rsp/tlm_req_rsp.h"
-#include "tlm_h/tlm_2_interfaces/tlm_2_interfaces.h"
-#include "tlm_h/tlm_generic_payload/tlm_generic_payload.h"
-#include "tlm_h/tlm_sockets/tlm_sockets.h"
-#include "tlm_h/tlm_quantum/tlm_quantum.h"
-
-#endif /* __TLM_H__ */
+#include "tlm"
