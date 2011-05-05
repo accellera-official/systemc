@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2008 by all Contributors.
+  source code Copyright (c) 1996-2011 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -117,7 +117,7 @@ public:
   // - Binds the port of the target socket to the export of the initiator
   //   socket
   //
-  void bind(base_initiator_socket_type& s)
+  virtual void bind(base_initiator_socket_type& s)
   {
     // initiator.port -> target.export
     (s.get_base_port())(get_base_interface());
@@ -134,7 +134,7 @@ public:
   // Bind target socket to target socket (hierarchical bind)
   // - Binds both the export and the port
   //
-  void bind(base_type& s)
+  virtual void bind(base_type& s)
   {
     // export
     (get_base_export())(s.get_base_export());
@@ -151,9 +151,14 @@ public:
   // Bind interface to socket
   // - Binds the interface to the export
   //
-  void bind(fw_interface_type& ifs)
+  virtual void bind(fw_interface_type& ifs)
   {
-    (get_base_export())(ifs);
+    export_type* exp = &get_base_export();
+    if( this == exp ) {
+      export_type::bind( ifs ); // non-virtual function call
+    } else {
+      exp->bind( ifs );
+    }
   }
 
   void operator() (fw_interface_type& s)
@@ -186,9 +191,25 @@ public:
   }
 
   // Implementation of pure virtual functions of base class
-  virtual sc_core::sc_port_b<BW_IF> & get_base_port()      { return m_port;   }
-  virtual                    FW_IF  & get_base_interface() { return *this;   }
-  virtual sc_core::sc_export<FW_IF> & get_base_export()    { return *this;   }
+
+  virtual sc_core::sc_port_b<BW_IF> &       get_base_port()
+    { return m_port; }
+  virtual sc_core::sc_port_b<BW_IF> const & get_base_port() const
+    { return m_port; }
+
+  virtual                    FW_IF  &       get_base_interface()
+    { return *this; }
+  virtual                    FW_IF  const & get_base_interface() const
+#if !( defined(IEEE_1666_SYSTEMC) && IEEE_1666_SYSTEMC >= 201101L )
+    { return *const_cast<export_type*>(static_cast<export_type const*>(this)); }
+#else
+    { return *this; }
+#endif
+
+  virtual sc_core::sc_export<FW_IF> &       get_base_export()
+    { return *this; }
+  virtual sc_core::sc_export<FW_IF> const & get_base_export() const
+    { return *this; }
 
 protected:
   port_type m_port;

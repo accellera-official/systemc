@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2008 by all Contributors.
+  source code Copyright (c) 1996-2011 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -20,6 +20,7 @@
 
 #include "tlm_analysis_if.h"
 #include <deque>
+#include <algorithm>
 
 namespace tlm {
 
@@ -33,30 +34,23 @@ class tlm_analysis_port :
   tlm_analysis_port() : sc_core::sc_object() {}
   tlm_analysis_port( const char *nm ) : sc_core::sc_object( nm ) {}
 
-  // bind and () work for both interfaces and analysis ports, since 
+  // bind and () work for both interfaces and analysis ports, since
   // analysis ports implement the analysis interface
 
-  void bind( tlm_analysis_if<T> &_if ) {
+  virtual void bind( tlm_analysis_if<T> &_if ) {
     m_interfaces.push_back( &_if );
   }
 
   void operator() ( tlm_analysis_if<T> &_if ) { bind( _if ); }
 
-  bool unbind( tlm_analysis_if<T> &_if ) {
+  virtual bool unbind( tlm_analysis_if<T> &_if ) {
 
-    typename std::deque< tlm_analysis_if<T> *>::iterator i;
+    typename std::deque< tlm_analysis_if<T> * >::iterator i
+      = std::remove( m_interfaces.begin(), m_interfaces.end(), &_if );
 
-    for( i = m_interfaces.begin(); 
-	 i != m_interfaces.end();
-	 i++ ) {
-
-      if( *i == &_if ) {
-
-	m_interfaces.erase( i );
-	return 1;
-
-      }
-
+    if( i != m_interfaces.end() ) {
+      m_interfaces.erase(i, m_interfaces.end() );
+      return 1;
     }
 
     return 0;
@@ -65,10 +59,10 @@ class tlm_analysis_port :
 
   void write( const T &t ) {
     typename std::deque< tlm_analysis_if<T> * >::iterator i;
- 
-    for( i = m_interfaces.begin(); 
-	 i != m_interfaces.end();
-	 i++ ) {
+
+    for( i = m_interfaces.begin();
+   i != m_interfaces.end();
+   i++ ) {
 
       (*i)->write( t );
 
@@ -84,5 +78,5 @@ class tlm_analysis_port :
 } // namespace tlm
 
 #endif
- 
+
 
