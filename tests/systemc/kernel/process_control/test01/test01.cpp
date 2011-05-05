@@ -230,6 +230,9 @@ int sc_main(int argc, char* argv[])
 }
 
 // $Log: test01.cpp,v $
+// Revision 1.5  2011/04/02 00:08:23  acg
+//  Andy Goodrich: turn off corner case error checking.
+//
 // Revision 1.4  2011/03/07 19:32:10  acg
 //  Andy Goodrich: addition to set sc_core::sc_allow_process_control_corners
 //  to true so that this test avoids corner case error messages.

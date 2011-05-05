@@ -56,13 +56,13 @@ SC_MODULE( writer )
         int val = 0;
         while( true ) {
             wait( 10, SC_NS ); // wait for 10 ns
-			for ( int iface=0; iface < 3; iface++ )
-			{
-				W_INFO( "blocking write", iface );
-				for( int i = 0; i < 20; i ++ ) {
-					out[iface]->write( val ++ ); // blocking write
-				}
-			}
+            for ( int iface=0; iface < 3; iface++ )
+            {
+                W_INFO( "blocking write", iface );
+                for( int i = 0; i < 20; i ++ ) {
+                    out[iface]->write( val ++ ); // blocking write
+                }
+            }
         }
     }
 
@@ -81,28 +81,28 @@ SC_MODULE( reader )
     // process(es)
     void main_action()
     {
-		int iface;
+        int iface;
         int val;
         while( true ) {
             wait( 10, SC_NS ); // wait for 10 ns
-			for ( iface=0; iface < 3; iface++ )
-			{
-				R_INFO( "blocking read 1", iface );
-				for( int i = 0; i < 15; i ++ ) {
-					in[iface]->read( val ); // blocking read
-					R_INFO( val, iface );
-				}
-			}
+            for ( iface=0; iface < 3; iface++ )
+            {
+                R_INFO( "blocking read 1", iface );
+                for( int i = 0; i < 15; i ++ ) {
+                    in[iface]->read( val ); // blocking read
+                    R_INFO( val, iface );
+                }
+            }
             wait( 10, SC_NS );
             R_INFO( in.num_available() << " available samples", iface );
             R_INFO( "blocking read 2", iface );
-			for ( iface=0; iface < 3; iface++ )
-			{
-				for( int i = 0; i < 15; i ++ ) {
-					val = in[iface]->read(); // blocking read
-					R_INFO( val, iface );
-				}
-			}
+            for ( iface=0; iface < 3; iface++ )
+            {
+                for( int i = 0; i < 15; i ++ ) {
+                    val = in[iface]->read(); // blocking read
+                    R_INFO( val, iface );
+                }
+            }
         }
     }
 

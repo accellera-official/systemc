@@ -33,6 +33,9 @@
 
  *****************************************************************************/
 // $Log: test08.cpp,v $
+// Revision 1.4  2011/04/02 00:08:36  acg
+//  Andy Goodrich: turn off corner case error checking.
+//
 // Revision 1.3  2011/03/07 19:32:16  acg
 //  Andy Goodrich: addition to set sc_core::sc_allow_process_control_corners
 //  to true so that this test avoids corner case error messages.

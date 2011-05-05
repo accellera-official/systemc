@@ -23,6 +23,9 @@
 //  changes you are making here.
 //
 // $Log: test1.cpp,v $
+// Revision 1.4  2011/04/02 00:07:44  acg
+//  Andy Goodrich: new message format.
+//
 // Revision 1.3  2011/03/07 19:32:07  acg
 //  Andy Goodrich: addition to set sc_core::sc_allow_process_control_corners
 //  to true so that this test avoids corner case error messages.
