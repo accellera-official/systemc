@@ -106,7 +106,7 @@ AT_I1: Received ok response: D = 0x1 @ 575 ns
 LT_I3: Received ok response: D = 0x2 @ 630 ns
 AT_I2: Received ok response: D = 0x2 @ 675 ns
 AT_I1: Received ok response: D = 0x2 @ 685 ns
-At 18446744073709551615 ps status of bus1 is 
+At 685 ns status of bus1 is 
   Number of connected initiators: 4
   Number of connected targets: 3
   Pending requests:
@@ -126,7 +126,7 @@ key: 20000000    value: 255
 key: 2000ffff    value: 1 
 key: 30000000    value: 255 
 key: 6000ffff    value: 2 
-At 18446744073709551615 ps status of bus2 is 
+At 685 ns status of bus2 is 
   Number of connected initiators: 3
   Number of connected targets: 4
   Pending requests:
