@@ -36,6 +36,9 @@
 
 
 // $Log: sc_hash.cpp,v $
+// Revision 1.3  2011/05/05 17:46:04  acg
+//  Philip A. Hartmann: changes in "swap" support.
+//
 // Revision 1.2  2011/02/18 20:38:43  acg
 //  Andy Goodrich: Updated Copyright notice.
 //
@@ -49,12 +52,17 @@
 
 #include <assert.h>
 #include <cstdlib>
+#include <cstddef>
 
 #include "sysc/kernel/sc_cmnhdr.h"
 #include "sysc/utils/sc_hash.h"
 #include "sysc/utils/sc_mempool.h"
 
 namespace sc_core {
+
+// we can't assume global availability of uintptr_t,
+// approximate it by size_t
+typedef std::size_t uintptr_t;
 
 const double PHASH_DEFAULT_GROW_FACTOR     = 2.0;
 
@@ -611,14 +619,14 @@ sc_phash_base_iter::set_contents( void* c )
 unsigned 
 default_ptr_hash_fn(const void* p)
 {
-    return ((unsigned long)(p) >> 2) * 2654435789U;
+    return ((uintptr_t)(p) >> 2) * 2654435789U;
 
 }
 
 unsigned
 default_int_hash_fn(const void* p)
 {
-    return (unsigned long)(p) * 3141592661U;
+    return (uintptr_t)(p) * 3141592661U;
 }
 
 

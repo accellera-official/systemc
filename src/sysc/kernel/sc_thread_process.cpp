@@ -35,6 +35,10 @@
  *****************************************************************************/
 
 // $Log: sc_thread_process.cpp,v $
+// Revision 1.49  2011/05/05 17:45:27  acg
+//  Philip A. Hartmann: changes in WIN64 support.
+//  Andy Goodrich: additional DEBUG_MSG instances to trace process handling.
+//
 // Revision 1.48  2011/04/19 15:04:27  acg
 //  Philipp A. Hartman: clean up SC_ID messages.
 //
@@ -832,7 +836,11 @@ void sc_thread_process::throw_user( const sc_throw_it_helper& helper,
         for ( child_i = 0; child_i < child_n; child_i++ )
         {
             child_p = DCAST<sc_process_b*>((*children_p)[child_i]);
-            if ( child_p ) child_p->throw_user(helper, descendants);
+            if ( child_p ) 
+	    {
+	        DEBUG_MSG(DEBUG_NAME,child_p,"about to throw user on");
+	        child_p->throw_user(helper, descendants);
+	    }
         }
     }
 

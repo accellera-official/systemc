@@ -34,6 +34,10 @@
 
  *****************************************************************************/
 // $Log: sc_cmnhdr.h,v $
+// Revision 1.6  2011/05/05 17:45:27  acg
+//  Philip A. Hartmann: changes in WIN64 support.
+//  Andy Goodrich: additional DEBUG_MSG instances to trace process handling.
+//
 // Revision 1.5  2011/02/18 20:27:14  acg
 //  Andy Goodrich: Updated Copyrights.
 //
@@ -64,13 +68,6 @@
 #define WIN32
 #endif
 #endif
-
-// WIN64 is reserved for the future 64-bit OS
-
-#ifdef WIN64
-#error WIN64 keyword is reserved for 64-bit Windows
-#endif
-
 
 // ----------------------------------------------------------------------------
 
@@ -125,10 +122,10 @@
 
 // ----------------------------------------------------------------------------
 
-#ifdef __MINGW32__
-#define _WIN32_WINNT 0x400
-#include <Windows.h>
+// Windows Version Build Option
 
+#ifndef _WIN32_WINNT
+#define _WIN32_WINNT 0x0400
 #endif
 
 // ----------------------------------------------------------------------------

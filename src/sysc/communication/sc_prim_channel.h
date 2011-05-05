@@ -35,6 +35,9 @@
     
  *****************************************************************************/
 //$Log: sc_prim_channel.h,v $
+//Revision 1.7  2011/05/05 17:44:01  acg
+// Philip A. Hartmann: change in the name of pending_async_updates.
+//
 //Revision 1.6  2011/04/19 15:03:48  acg
 // Philipp A. Hartman: remove ASYNC_UPDATE preprocessor check from header.
 //

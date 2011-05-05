@@ -173,6 +173,18 @@ case "$target" in
 	AS=as
         QT_ARCH="iX86"
         ;;
+    amd64*mingw* | x86_64*mingw*)
+        case "$CXX_COMP" in
+            c++ | g++)
+                TARGET_ARCH="mingw64"
+                ;;
+            *)
+                AC_MSG_ERROR("sorry...compiler not supported")
+            ;;
+        esac
+        AS=as
+        QT_ARCH="x86_64"
+        ;;
     *mingw*)
         case "$CXX_COMP" in
             c++ | g++)

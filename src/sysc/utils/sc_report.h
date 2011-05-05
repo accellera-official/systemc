@@ -42,6 +42,9 @@
  *****************************************************************************/
 
 // $Log: sc_report.h,v $
+// Revision 1.7  2011/05/05 17:46:04  acg
+//  Philip A. Hartmann: changes in "swap" support.
+//
 // Revision 1.6  2011/04/19 02:39:44  acg
 //  Andy Goodrich: set proper name for get_verbosity().
 //
@@ -177,6 +180,8 @@ public:
         { 
 	    return m_what;
 	}
+
+    void swap( sc_report& );
 
 protected:
 
