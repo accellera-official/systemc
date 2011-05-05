@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2008 by all Contributors.
+  source code Copyright (c) 1996-2011 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -27,14 +27,13 @@ tlm_fifo<T>::peek( tlm_tag<T> * ) const {
 
   while( is_empty() ) {
 
-    // this const cast is only needed because sc_prim_channel::wait(.) is
-    // for some unknown reason, not const
+    // call free-standing sc_core::wait(),
+    // since sc_prim_channel::wait(.) is not const
 
-    const_cast< tlm_fifo<T> * >( this )->wait( m_data_written_event );
-
+    sc_core::wait( m_data_written_event );
   }
 
-  return buffer->read_data();
+  return buffer.read_data();
 
 }
 
@@ -47,7 +46,7 @@ tlm_fifo<T>::nb_peek( T &t ) const {
     return false;
   }
 
-  t = buffer->peek_data( 0 );
+  t = buffer.peek_data( 0 );
   return true;
 
 }
@@ -60,16 +59,16 @@ tlm_fifo<T>::nb_peek( T &t , int n ) const {
   if( n >= used() || n < -1 ) {
     return false;
   }
-  
+
   if( n == -1 ) {
     n = used() - 1;
   }
 
-  t = buffer->peek_data( n );
+  t = buffer.peek_data( n );
   return true;
 
 }
-    
+
 template< typename T >
 inline
 bool
@@ -87,7 +86,7 @@ tlm_fifo<T>::nb_poke( const T &t , int n ) {
     return false;
   }
 
-  buffer->poke_data( n ) = t;
+  buffer.poke_data( n ) = t;
   return true;
 
 }
