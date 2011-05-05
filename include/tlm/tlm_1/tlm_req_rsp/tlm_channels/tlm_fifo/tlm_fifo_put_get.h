@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2008 by all Contributors.
+  source code Copyright (c) 1996-2011 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -28,7 +28,7 @@ namespace tlm {
 
 template <typename T>
 inline
-T 
+T
 tlm_fifo<T>::get( tlm_tag<T> * )
 {
 
@@ -39,7 +39,7 @@ tlm_fifo<T>::get( tlm_tag<T> * )
   m_num_read ++;
   request_update();
 
-  return buffer->read();
+  return buffer.read();
 
 }
 
@@ -58,7 +58,7 @@ tlm_fifo<T>::nb_get( T& val_ )
   m_num_read ++;
   request_update();
 
-  val_ = buffer->read();
+  val_ = buffer.read();
 
   return true;
 
@@ -86,17 +86,17 @@ void
 tlm_fifo<T>::put( const T& val_ )
 {
     while( is_full() ) {
-	wait( m_data_read_event );
+  wait( m_data_read_event );
     }
 
-    if( buffer->is_full() ) {
+    if( buffer.is_full() ) {
 
-      buffer->resize( buffer->size() * 2 );
+      buffer.resize( buffer.size() * 2 );
 
     }
 
     m_num_written ++;
-    buffer->write( val_ );
+    buffer.write( val_ );
 
     request_update();
 }
@@ -110,22 +110,22 @@ tlm_fifo<T>::nb_put( const T& val_ )
   if( is_full() ) {
     return false;
   }
-  
-  if( buffer->is_full() ) {
 
-    buffer->resize( buffer->size() * 2 );
+  if( buffer.is_full() ) {
+
+    buffer.resize( buffer.size() * 2 );
 
   }
 
   m_num_written ++;
-  buffer->write( val_ );
+  buffer.write( val_ );
   request_update();
-  
+
   return true;
 }
 
-template < typename T > 
-inline 
+template < typename T >
+inline
 bool
 tlm_fifo<T>::nb_can_put( tlm_tag<T> * ) const {
 

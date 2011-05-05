@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2008 by all Contributors.
+  source code Copyright (c) 1996-2011 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -45,8 +45,8 @@ tlm_fifo<T>::nb_unbound( unsigned int n ) {
   m_expand = true;
   m_size = -n;
 
-  if( buffer->size() < static_cast<int>( n ) ) {
-    buffer->resize( n );
+  if( buffer.size() < static_cast<int>( n ) ) {
+    buffer.resize( n );
   }
 
   request_update();
@@ -63,16 +63,16 @@ tlm_fifo<T>::nb_reduce( unsigned int n ) {
   }
 
   return nb_bound( size() - n );
-  
+
 }
 
 template < typename T>
 inline
 bool
 tlm_fifo<T>::nb_bound( unsigned int new_size ) {
-  
+
   bool ret = true;
-  
+
   if( static_cast<int>( new_size ) < used() ) {
 
     new_size = used();

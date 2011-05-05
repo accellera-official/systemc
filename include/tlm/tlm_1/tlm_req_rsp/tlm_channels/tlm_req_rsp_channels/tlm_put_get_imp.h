@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2008 by all Contributors.
+  source code Copyright (c) 1996-2011 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -50,7 +50,7 @@ public:
 
   // get interface
 
-  GET_DATA get( tlm_tag<GET_DATA> *t = 0 ) { return get_fifo.get(); }
+  GET_DATA get( tlm_tag<GET_DATA> * = 0 ) { return get_fifo.get(); }
 
   bool nb_get( GET_DATA &t ) { return get_fifo.nb_get( t ); }
 
@@ -64,7 +64,7 @@ public:
 
   // peek interface
 
-  GET_DATA peek( tlm_tag<GET_DATA> *t = 0 ) const { return get_fifo.peek(); }
+  GET_DATA peek( tlm_tag<GET_DATA> * = 0 ) const { return get_fifo.peek(); }
 
   bool nb_peek( GET_DATA &t ) const { return get_fifo.nb_peek( t ); }
 
