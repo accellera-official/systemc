@@ -64,7 +64,7 @@ std::ostream& operator<<(std::ostream& s, const tlm_phase& p){
   return s;
 }
   
-#define DECLARE_EXTENDED_PHASE(name_arg) \
+#define TLM_DECLARE_EXTENDED_PHASE(name_arg) \
 class tlm_phase_##name_arg:public tlm::tlm_phase{ \
 public:\
 static const tlm_phase_##name_arg& get_phase(){static tlm_phase_##name_arg tmp; return tmp;}\
@@ -75,7 +75,11 @@ tlm_phase_##name_arg& operator=(const tlm_phase_##name_arg&); \
 static inline const char* get_char_##name_arg(){static const char* tmp=#name_arg; return tmp;} \
 }; \
 static const tlm_phase_##name_arg& name_arg=tlm_phase_##name_arg::get_phase()
-  
+
+// for backwards-compatibility
+#define DECLARE_EXTENDED_PHASE(NameArg) \
+    TLM_DECLARE_EXTENDED_PHASE( NameArg )
+
 } // namespace tlm
 
 #endif /* TLM_PHASE_HEADER */
