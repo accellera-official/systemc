@@ -64,6 +64,7 @@
 
 #include "sysc/communication/sc_export.h"
 #include "sysc/kernel/sc_simcontext.h"
+#include "sysc/kernel/sc_module.h"
 
 namespace sc_core {
 
@@ -87,30 +88,84 @@ sc_export_base::~sc_export_base()
     simcontext()->get_export_registry()->remove(this);
 }
 
-// called when construction is done
+
+// called by construction_done (does nothing by default)
 
 void
 sc_export_base::before_end_of_elaboration()
 {
 }
 
-// called when elaboration is done (does nothing)
+// called when construction is done
+
+void
+sc_export_base::construction_done()
+{
+    if ( get_interface() == 0 )
+    {
+      report_error( SC_ID_SC_EXPORT_NOT_BOUND_AFTER_CONSTRUCTION_, 0);
+    }
+    sc_module* parent = DCAST<sc_module*>( get_parent_object() );
+    sc_assert( parent );
+    simcontext()->hierarchy_push( parent );
+    before_end_of_elaboration();
+    simcontext()->hierarchy_pop();
+}
+
+// called by elaboration_done (does nothing by default)
 
 void
 sc_export_base::end_of_elaboration()
 {}
 
-// called before simulation starts (does nothing)
+// called when elaboration is done
+
+void
+sc_export_base::elaboration_done()
+{
+    sc_module* parent = DCAST<sc_module*>( get_parent_object() );
+    sc_assert( parent );
+    simcontext()->hierarchy_push( parent );
+    end_of_elaboration();
+    simcontext()->hierarchy_pop();
+}
+
+// called by start_simulation (does nothing)
 
 void
 sc_export_base::start_of_simulation()
 {}
 
-// called after simulation ends (does nothing)
+// called before simulation starts
+
+void
+sc_export_base::start_simulation()
+{
+    sc_module* parent = DCAST<sc_module*>( get_parent_object() );
+    sc_assert( parent );
+    simcontext()->hierarchy_push( parent );
+    start_of_simulation();
+    simcontext()->hierarchy_pop();
+}
+
+// called by simulation_done (does nothing)
 
 void
 sc_export_base::end_of_simulation()
 {}
+
+// called after simulation ends
+
+void
+sc_export_base::simulation_done()
+{
+    sc_module* parent = DCAST<sc_module*>( get_parent_object() );
+    sc_assert( parent );
+    simcontext()->hierarchy_push( parent );
+    end_of_simulation();
+    simcontext()->hierarchy_pop();
+}
+
 
 void
 sc_export_base::report_error( const char* id, const char* add_msg ) const
@@ -208,12 +263,7 @@ void
 sc_export_registry::construction_done()
 {
     for( int i = size() - 1; i >= 0; -- i ) {
-        sc_export_base* e = m_export_vec[i];
-        if (e->get_interface() == 0) {
-	    SC_REPORT_ERROR(SC_ID_SC_EXPORT_NOT_BOUND_AFTER_CONSTRUCTION_,
-	        e->name());
-        }
-	e->before_end_of_elaboration();
+        m_export_vec[i]->construction_done();
     }
 }
 
@@ -223,7 +273,7 @@ void
 sc_export_registry::elaboration_done()
 {
     for( int i = size() - 1; i >= 0; -- i ) {
-	m_export_vec[i]->end_of_elaboration();
+	m_export_vec[i]->elaboration_done();
     }
 }
 
@@ -233,7 +283,7 @@ void
 sc_export_registry::start_simulation()
 {
     for( int i = size() - 1; i >= 0; -- i ) {
-	m_export_vec[i]->start_of_simulation();
+	m_export_vec[i]->start_simulation();
     }
 }
 
@@ -241,7 +291,7 @@ void
 sc_export_registry::simulation_done()
 {
     for( int i = size() - 1; i >= 0; -- i ) {
-	m_export_vec[i]->end_of_simulation();
+	m_export_vec[i]->simulation_done();
     }
 }
 

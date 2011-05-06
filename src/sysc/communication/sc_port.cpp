@@ -374,10 +374,12 @@ sc_port_base::bind( this_type& parent_ )
     parent_.m_bind_info->is_leaf = false;
 }
 
-// called by sc_port_registry::construction_done (null by default)
+// called by construction_done (null by default)
 
 void sc_port_base::before_end_of_elaboration() 
 {}
+
+
 
 // called by elaboration_done (does nothing)
 
@@ -613,10 +615,15 @@ sc_port_base::complete_binding()
 
     m_bind_info->complete = true;
 }
+
 void
 sc_port_base::construction_done()
 {
+    sc_module* parent = DCAST<sc_module*>( get_parent_object() );
+    sc_assert( parent );
+    simcontext()->hierarchy_push( parent );
     before_end_of_elaboration();
+    simcontext()->hierarchy_pop();
 }
 
 void
@@ -626,19 +633,31 @@ sc_port_base::elaboration_done()
     delete m_bind_info;
     m_bind_info = 0;
 
+    sc_module* parent = DCAST<sc_module*>( get_parent_object() );
+    sc_assert( parent );
+    simcontext()->hierarchy_push( parent );
     end_of_elaboration();
+    simcontext()->hierarchy_pop();
 }
 
 void
 sc_port_base::start_simulation()
 {
+    sc_module* parent = DCAST<sc_module*>( get_parent_object() );
+    sc_assert( parent );
+    simcontext()->hierarchy_push( parent );
     start_of_simulation();
+    simcontext()->hierarchy_pop();
 }
 
 void
 sc_port_base::simulation_done()
 {
+    sc_module* parent = DCAST<sc_module*>( get_parent_object() );
+    sc_assert( parent );
+    simcontext()->hierarchy_push( parent );
     end_of_simulation();
+    simcontext()->hierarchy_pop();
 }
 
 

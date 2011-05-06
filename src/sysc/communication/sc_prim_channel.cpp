@@ -73,6 +73,7 @@
 #include "sysc/communication/sc_prim_channel.h"
 #include "sysc/communication/sc_communication_ids.h"
 #include "sysc/kernel/sc_simcontext.h"
+#include "sysc/kernel/sc_module.h"
 #if defined(SC_INCLUDE_ASYNC_UPDATES)
 #   include "sysc/communication/sc_host_mutex.h"
 #endif
@@ -129,7 +130,10 @@ void sc_prim_channel::before_end_of_elaboration()
 void
 sc_prim_channel::construction_done()
 {
+    sc_module* parent = DCAST<sc_module*>( get_parent_object() );
+    if( parent ) simcontext()->hierarchy_push( parent );
     before_end_of_elaboration();
+    if( parent ) simcontext()->hierarchy_pop();
 }
 
 // called by elaboration_done (does nothing by default)
@@ -144,7 +148,10 @@ sc_prim_channel::end_of_elaboration()
 void
 sc_prim_channel::elaboration_done()
 {
+    sc_module* parent = DCAST<sc_module*>( get_parent_object() );
+    if( parent ) simcontext()->hierarchy_push( parent );
     end_of_elaboration();
+    if( parent ) simcontext()->hierarchy_pop();
 }
 
 // called by start_simulation (does nothing)
@@ -158,7 +165,10 @@ sc_prim_channel::start_of_simulation()
 void
 sc_prim_channel::start_simulation()
 {
+    sc_module* parent = DCAST<sc_module*>( get_parent_object() );
+    if( parent ) simcontext()->hierarchy_push( parent );
     start_of_simulation();
+    if( parent ) simcontext()->hierarchy_pop();
 }
 
 // called by simulation_done (does nothing)
@@ -172,7 +182,10 @@ sc_prim_channel::end_of_simulation()
 void
 sc_prim_channel::simulation_done()
 {
+    sc_module* parent = DCAST<sc_module*>( get_parent_object() );
+    if( parent ) simcontext()->hierarchy_push( parent );
     end_of_simulation();
+    if( parent ) simcontext()->hierarchy_pop();
 }
 
 // ----------------------------------------------------------------------------

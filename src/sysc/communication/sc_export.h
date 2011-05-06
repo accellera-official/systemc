@@ -117,6 +117,11 @@ protected:
 
 private:
 
+    void construction_done();
+    void elaboration_done();
+    void start_simulation();
+    void simulation_done();
+
     // disabled
     sc_export_base(const this_type&);
     this_type& operator = (const this_type& );
