@@ -531,7 +531,7 @@ sc_simcontext::init()
     m_ready_to_simulate = false;
     m_elaboration_done = false;
     m_execution_phase = phase_initialize;
-    m_error = false;
+    m_error = NULL;
     m_cor_pkg = 0;
     m_cor = 0;
     m_in_simulator_control = false;
@@ -560,9 +560,8 @@ sc_simcontext::clean()
     delete m_runnable;
     delete m_collectable;
     delete m_time_params;
-    if( m_cor_pkg != 0 ) {
-	delete m_cor_pkg;
-    }
+    delete m_cor_pkg;
+    delete m_error;
 }
 
 
@@ -620,7 +619,6 @@ sc_simcontext::crunch( bool once )
 		empty_eval_phase = false;
 		if ( !method_h->run_process() )
 		{
-		    m_error = true;
 		    goto out;
 		}
 		method_h = pop_runnable_method();
@@ -729,6 +727,7 @@ sc_simcontext::crunch( bool once )
     }
 out:
     this->reset_curr_proc();
+    if( m_error ) throw *m_error; // re-throw propagated error
 }
 
 inline

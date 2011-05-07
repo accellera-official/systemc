@@ -146,6 +146,13 @@ sc_unwind_exception::sc_unwind_exception( const sc_unwind_exception& that )
     that.m_proc_p = 0; // move to new instance
 }
 
+//------------------------------------------------------------------------------
+// global exception handling
+//------------------------------------------------------------------------------
+ 
+class sc_report;
+sc_report* sc_handle_exception();
+
 } // namespace sc_core
 
 #endif

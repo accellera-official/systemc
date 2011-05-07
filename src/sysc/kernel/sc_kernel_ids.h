@@ -247,7 +247,8 @@ SC_DEFINE_MESSAGE(SC_ID_STOP_MODE_AFTER_START_        , 547,
 	"attempt to set sc_stop mode  after start will be ignored" ) 
 SC_DEFINE_MESSAGE( SC_ID_SIMULATION_START_AFTER_ERROR_, 548,
        "attempt to restart simulation after error" )
-// available message number 549
+SC_DEFINE_MESSAGE( SC_ID_SIMULATION_UNCAUGHT_EXCEPTION_, 549,
+       "uncaught exception" )
 // available message number 550
 // available message number 551
 // available message number 552
