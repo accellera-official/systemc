@@ -257,7 +257,7 @@ private:
     ~sc_export_registry();
 
     // called when construction is done
-    void construction_done();
+    bool construction_done();
 
     // called when elaboration is done
     void elaboration_done();
@@ -270,6 +270,7 @@ private:
 
 private:
 
+    int                          m_construction_done;
     sc_simcontext*               m_simc;
     std::vector<sc_export_base*> m_export_vec;
 

@@ -246,7 +246,8 @@ sc_export_registry::remove( sc_export_base* export_ )
 // constructor
 
 sc_export_registry::sc_export_registry( sc_simcontext& simc_ )
-: m_simc( &simc_ )
+  : m_construction_done(0)
+  , m_simc( &simc_ )
 {
 }
 
@@ -259,12 +260,19 @@ sc_export_registry::~sc_export_registry()
 
 // called when construction is done
 
-void
+bool
 sc_export_registry::construction_done()
 {
-    for( int i = size() - 1; i >= 0; -- i ) {
+    if( m_construction_done == size() )
+      // nothing has been updated
+      return true;
+
+    for( int i = size()-1; i >= m_construction_done; --i ) {
         m_export_vec[i]->construction_done();
     }
+
+    m_construction_done = size();
+    return false;
 }
 
 // called when elaboration is done

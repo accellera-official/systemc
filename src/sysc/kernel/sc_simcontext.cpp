@@ -754,15 +754,18 @@ sc_simcontext::elaborate()
     }
 
     m_simulation_status = SC_BEFORE_END_OF_ELABORATION;
-    m_port_registry->construction_done();
-    m_export_registry->construction_done();
-    m_prim_channel_registry->construction_done();
-    m_module_registry->construction_done();
+    for( int cd = 0; cd != 4; /* empty */ )
+    {
+        cd  = m_port_registry->construction_done();
+        cd += m_export_registry->construction_done();
+        cd += m_prim_channel_registry->construction_done();
+        cd += m_module_registry->construction_done();
 
-    // check for call(s) to sc_stop
-    if( m_forced_stop ) {
-        do_sc_stop_action();
-        return;
+        // check for call(s) to sc_stop
+        if( m_forced_stop ) {
+            do_sc_stop_action();
+            return;
+        }
     }
 
     // SIGNAL THAT ELABORATION IS DONE

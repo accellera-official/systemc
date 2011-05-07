@@ -721,7 +721,8 @@ sc_port_registry::remove( sc_port_base* port_ )
 // constructor
 
 sc_port_registry::sc_port_registry( sc_simcontext& simc_ )
-: m_simc( &simc_ )
+  : m_construction_done(0)
+  , m_simc( &simc_ )
 {
 }
 
@@ -734,12 +735,19 @@ sc_port_registry::~sc_port_registry()
 
 // called when construction is done
 
-void
+bool
 sc_port_registry::construction_done()
 {
-    for( int i = size() - 1; i >= 0; -- i ) {
+    if( size() == m_construction_done )
+        // nothing has been updated
+        return true;
+
+    for( int i = size()-1; i >= m_construction_done; --i ) {
         m_port_vec[i]->construction_done();
     }
+
+    m_construction_done = size();
+    return false;
 }
 
 // called when when elaboration is done

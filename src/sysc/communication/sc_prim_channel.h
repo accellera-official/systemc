@@ -315,7 +315,7 @@ private:
     void perform_update();
 
     // called when construction is done
-    void construction_done();
+    bool construction_done();
 
     // called when elaboration is done
     void elaboration_done();
@@ -335,6 +335,7 @@ private:
     class async_update_list;   
 
     async_update_list*            m_async_update_list_p; // external updates.
+    int                           m_construction_done;   // no. of construction callbacks
     std::vector<sc_prim_channel*> m_prim_channel_vec;    // existing channels.
     sc_simcontext*                m_simc;                // simulator context.
     sc_prim_channel*              m_update_list_p;       // internal updates.
