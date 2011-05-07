@@ -458,6 +458,9 @@ sub get_systemc_arch
 		elsif ( $v_string =~ /.+Version 15\.00/) {   # 2008
 		    $arch = "msvc90";
 		}
+		elsif ( $v_string =~ /.+Version 16\.00/) {   # 2010
+		    $arch = "msvc10";
+		}
 		else {
 		  die "Error: unsupported compiler '$cxx'\n";
 		}
@@ -588,7 +591,7 @@ sub init_globals
 	$rt_ldflags = $rt_ccflags;
 	$rt_debug_flag = "-g";
 	$rt_optimize_flag = "-O2";
-    } elsif( $rt_systemc_arch =~ /^msvc(71|8|9)/ ) {
+    } elsif( $rt_systemc_arch =~ /^msvc(71|8|9|10)/ ) {
 	$rt_cc = "CL.EXE";
 	$rt_ccflags = "${slash}nologo ${slash}GR ${slash}EHsc "
 	             ."${slash}Zm800 ${slash}vmg "
@@ -1499,30 +1502,21 @@ sub compile_files
         $file = `basename $temp .cpp`;		# file = <basename>
         chop( $file );
 
+	$newcommand = $command;
 	if( $rt_systemc_arch =~ /^msvc/ ) {
-	    $ofile = "$file.obj";
+            $ofilestring .= " $file.obj";
+           $newcommand  .= " ${slash}Fo$file.obj $temp";
 	} else {
-	    $ofile = "$file.o";
++            $ofilestring .= " $file.o";
++           $newcommand  .= " -o $file.o $temp";
 	}
-        $ofilestring .= " $ofile";
 
-        $newcommand = $command;
         # if first time create the file, else append to it
         if( $first_time ) {
 	    $first_time = 0;
-#	    if( $rt_systemc_arch eq "msvc60" ) {
-#		$newcommand .= " $temp /Fo $ofile 1> $testname.log  2>&1";
-#	    } else {
-#		$newcommand .= " $temp -o $ofile 1> $testname.log  2>&1";
-#	    }
-	    $newcommand .= " $temp 1> $testname.log 2>&1";
+            $newcommand .= " 1> $testname.log 2>&1";
         } else {
-#	    if( $rt_systemc_arch eq "msvc60" ) {
-#		$newcommand .= " $temp /Fo $ofile 1>> $testname.log  2>&1";
-#	    } else {
-#		$newcommand .= " $temp -o $ofile 1>> $testname.log  2>&1";
-#	    }
-	    $newcommand .= " $temp 1>> $testname.log 2>&1";
++           $newcommand .= " 1>> $testname.log 2>&1";
         }
 
 	&print_log( "  $file\n" ) unless $rt_verbose;
@@ -2061,7 +2055,7 @@ sub run_test
 	if( $rt_systemc_arch =~ /^msvc/ ) {
 	    $command  = "$rt_cc $rt_ccflags $extra_flags ";
 	    $command .= "${slash}I . ${slash}I $rt_systemc_home/src ";
-	    $command .= "/c ";
+	    $command .= "${slash}c ";
 	} else {
 	    $command  = "$rt_cc $rt_ccflags $extra_flags ";
 	    $command .= "-I . -I $rt_systemc_home/include ";

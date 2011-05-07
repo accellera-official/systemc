@@ -1,0 +1,24 @@
+SystemC Simulation
+target2() called at 0 s count = 0
+target4() called at 0 s count = 0
+target1() called at 0 s count = 0
+target3() called at 0 s count = 0
+target2() called at 10 ns count = 1
+target1() awoke at 10 ns count = 1
+Exception caught at 15 ns
+Exception caught at 15 ns
+target4() called at 140 ns count = 6
+target3() awoke at 140 ns count = 6
+target4() called at 240 ns count = 7
+target3() awoke at 240 ns count = 7
+target3() called at 320 ns count = 8
+target4() called at 330 ns count = 9
+target3() awoke at 350 ns count = 9
+target5() called at 400 ns count = 9
+target5() called at 403 ns count = 10
+target5() called at 410 ns count = 11
+target5() called at 413 ns count = 12
+
+Info: /OSCI/SystemC: Simulation stopped by user.
+
+Success

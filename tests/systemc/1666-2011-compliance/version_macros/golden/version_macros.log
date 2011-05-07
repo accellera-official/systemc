@@ -5,14 +5,16 @@ sc_version_major = 2
 sc_version_minor = 3
 sc_version_patch = 0
 sc_version_originator = OSCI
-sc_version_release_date = 20110503
+sc_version_release_date = 20110505
 sc_version_prerelease = _beta
 sc_is_prerelease = 1
-sc_version_string = 2.3.0_20110503_beta-OSCI
+sc_version_string = 2.3.0_20110505_beta-OSCI
 sc_copyright_string = Copyright (c) 1996-2011 by all Contributors
 
-sc_release() = systemc-2.3.0_20110503_beta-OSCI
-sc_version() =              SystemC 2.3.0_20110503_beta-OSCI --- May  3 2011 13:11:40
+sc_release() = systemc-2.3.0_20110505_beta-OSCI
+i = 46
+ver.size() = 70
+sc_version() =              SystemC 2.3.0_20110505_beta-OSCI ---XXXXXXXXXXXXXXXXXXXXX
 sc_copyright() =         Copyright (c) 1996-2011 by all Contributors
                     ALL RIGHTS RESERVED
 

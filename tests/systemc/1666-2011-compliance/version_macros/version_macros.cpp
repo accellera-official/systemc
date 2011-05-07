@@ -1,3 +1,28 @@
+
+//******************************************************************************
+//
+//  The following code is derived, directly or indirectly, from the SystemC
+//  source code Copyright (c) 1996-2011 by all Contributors.
+//  All Rights reserved.
+//
+//  The contents of this file are subject to the restrictions and limitations
+//  set forth in the SystemC Open Source License Version 2.4 (the "License");
+//  You may not use this file except in compliance with such restrictions and
+//  limitations. You may obtain instructions on how to receive a copy of the
+//  License at http://www.systemc.org/. Software distributed by Contributors
+//  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
+//  ANY KIND, either express or implied. See the License for the specific
+//  language governing rights and limitations under the License.
+//******************************************************************************
+
+// version_macros.cpp -- test for 
+//
+//  Original Author: John Aynsley, Doulos, Inc.
+//
+// MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+//
+// $Log:$
+
 // Process control method throw_it
 
 #define SC_INCLUDE_DYNAMIC_PROCESSES
@@ -33,7 +58,15 @@ int sc_main(int argc, char* argv[])
   cout << "sc_copyright_string = "     << sc_copyright_string << endl;  
   cout << endl;
   cout << "sc_release() = "            << sc_release() << endl;  
-  cout << "sc_version() = "            << sc_version() << endl;  
+
+  std::string ver = sc_version();
+  unsigned int i = ver.find("---");
+  cout << "i = " << i << endl;
+  cout << "ver.size() = " << ver.size() << endl;
+  for (unsigned int j = i+3; j < ver.size(); j++)
+    ver[j] = 'X';
+  cout << "sc_version() = "            << ver << endl;  
+
   cout << "sc_copyright() = "          << sc_copyright() << endl;  
   
   //sc_start();

@@ -1,0 +1,18 @@
+SystemC Simulation
+
+Warning: (W556) throw_it on method process is being ignored : top.target4
+In file: <removed by verify.pl>
+In process: top.target4 @ 0 s
+
+Warning: (W556) throw_it on method process is being ignored : top.target4
+In file: <removed by verify.pl>
+In process: top.calling @ 20 ns
+target5 called at 610 ns with count = 19
+target5 awoke at 620 ns with count = 20
+target5 catch at 630 ns with count = 21, sc_is_unwinding() = 1
+target5 called at 630 ns with count = 21
+target5 catch at 640 ns with count = 22, sc_is_unwinding() = 0
+target5 catch at 650 ns with count = 23, sc_is_unwinding() = 1
+target5 called at 650 ns with count = 23
+
+Success
