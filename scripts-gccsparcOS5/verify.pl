@@ -1507,8 +1507,8 @@ sub compile_files
             $ofilestring .= " $file.obj";
            $newcommand  .= " ${slash}Fo$file.obj $temp";
 	} else {
-+            $ofilestring .= " $file.o";
-+           $newcommand  .= " -o $file.o $temp";
+            $ofilestring .= " $file.o";
+            $newcommand  .= " -o $file.o $temp";
 	}
 
         # if first time create the file, else append to it
@@ -1516,7 +1516,7 @@ sub compile_files
 	    $first_time = 0;
             $newcommand .= " 1> $testname.log 2>&1";
         } else {
-+           $newcommand .= " 1>> $testname.log 2>&1";
+           $newcommand .= " 1>> $testname.log 2>&1";
         }
 
 	&print_log( "  $file\n" ) unless $rt_verbose;
