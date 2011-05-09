@@ -34,6 +34,11 @@
  *****************************************************************************/
 
 // $Log: sc_kernel_ids.h,v $
+// Revision 1.22  2011/05/09 04:07:48  acg
+//  Philipp A. Hartmann:
+//    (1) Restore hierarchy in all phase callbacks.
+//    (2) Ensure calls to before_end_of_elaboration.
+//
 // Revision 1.21  2011/04/19 19:15:41  acg
 //  Andy Goodrich: fix so warning message is always issued for a throw_it()
 //  on a method process.

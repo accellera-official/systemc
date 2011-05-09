@@ -35,6 +35,11 @@
  *****************************************************************************/
 
 // $Log: sc_thread_process.cpp,v $
+// Revision 1.50  2011/05/09 04:07:49  acg
+//  Philipp A. Hartmann:
+//    (1) Restore hierarchy in all phase callbacks.
+//    (2) Ensure calls to before_end_of_elaboration.
+//
 // Revision 1.49  2011/05/05 17:45:27  acg
 //  Philip A. Hartmann: changes in WIN64 support.
 //  Andy Goodrich: additional DEBUG_MSG instances to trace process handling.

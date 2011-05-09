@@ -35,6 +35,11 @@
     
  *****************************************************************************/
 //$Log: sc_prim_channel.h,v $
+//Revision 1.8  2011/05/09 04:07:37  acg
+// Philipp A. Hartmann:
+//   (1) Restore hierarchy in all phase callbacks.
+//   (2) Ensure calls to before_end_of_elaboration.
+//
 //Revision 1.7  2011/05/05 17:44:01  acg
 // Philip A. Hartmann: change in the name of pending_async_updates.
 //
@@ -267,8 +272,9 @@ private:
 
 private:
 
-    sc_prim_channel_registry* m_registry;      // Update list manager.
-    sc_prim_channel*          m_update_next_p; // Next entry in update list.
+    int                       m_construction_done; // # of construct. callbacks.
+    sc_prim_channel_registry* m_registry;          // Update list manager.
+    sc_prim_channel*          m_update_next_p;     // Next entry in update list.
 };
 
 
@@ -315,7 +321,7 @@ private:
     void perform_update();
 
     // called when construction is done
-    void construction_done();
+    bool construction_done();
 
     // called when elaboration is done
     void elaboration_done();
@@ -335,6 +341,7 @@ private:
     class async_update_list;   
 
     async_update_list*            m_async_update_list_p; // external updates.
+    int                           m_construction_done;   // # of constructs.
     std::vector<sc_prim_channel*> m_prim_channel_vec;    // existing channels.
     sc_simcontext*                m_simc;                // simulator context.
     sc_prim_channel*              m_update_list_p;       // internal updates.

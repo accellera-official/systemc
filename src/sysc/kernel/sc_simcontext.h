@@ -52,6 +52,11 @@
                                
  *****************************************************************************/
 // $Log: sc_simcontext.h,v $
+// Revision 1.21  2011/05/09 04:07:49  acg
+//  Philipp A. Hartmann:
+//    (1) Restore hierarchy in all phase callbacks.
+//    (2) Ensure calls to before_end_of_elaboration.
+//
 // Revision 1.20  2011/04/08 18:26:07  acg
 //  Andy Goodrich: added execute_method_next() to handle method dispatch
 //   for asynchronous notifications that occur outside the evaluation phase.

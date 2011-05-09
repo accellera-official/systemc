@@ -58,6 +58,11 @@
 				 execution problem with using sc_pvector.
  *****************************************************************************/
 // $Log: sc_simcontext.cpp,v $
+// Revision 1.30  2011/05/09 04:07:49  acg
+//  Philipp A. Hartmann:
+//    (1) Restore hierarchy in all phase callbacks.
+//    (2) Ensure calls to before_end_of_elaboration.
+//
 // Revision 1.29  2011/04/08 22:39:09  acg
 //  Andy Goodrich: moved method invocation code to sc_method.h so that the
 //  details are hidden from sc_simcontext.
@@ -754,15 +759,19 @@ sc_simcontext::elaborate()
     }
 
     m_simulation_status = SC_BEFORE_END_OF_ELABORATION;
-    m_port_registry->construction_done();
-    m_export_registry->construction_done();
-    m_prim_channel_registry->construction_done();
-    m_module_registry->construction_done();
+    for( int cd = 0; cd != 4; /* empty */ )
+    {
+        cd  = m_port_registry->construction_done();
+        cd += m_export_registry->construction_done();
+        cd += m_prim_channel_registry->construction_done();
+        cd += m_module_registry->construction_done();
 
-    // check for call(s) to sc_stop
-    if( m_forced_stop ) {
-        do_sc_stop_action();
-        return;
+        // check for call(s) to sc_stop
+        if( m_forced_stop ) {
+            do_sc_stop_action();
+            return;
+        }
+
     }
 
     // SIGNAL THAT ELABORATION IS DONE

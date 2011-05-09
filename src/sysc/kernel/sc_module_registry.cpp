@@ -38,6 +38,11 @@
 
 
 // $Log: sc_module_registry.cpp,v $
+// Revision 1.6  2011/05/09 04:07:49  acg
+//  Philipp A. Hartmann:
+//    (1) Restore hierarchy in all phase callbacks.
+//    (2) Ensure calls to before_end_of_elaboration.
+//
 // Revision 1.5  2011/02/18 20:27:14  acg
 //  Andy Goodrich: Updated Copyrights.
 //
@@ -121,7 +126,8 @@ sc_module_registry::remove( sc_module& module_ )
 // constructor
 
 sc_module_registry::sc_module_registry( sc_simcontext& simc_ )
-: m_simc( &simc_ )
+ : m_construction_done(0)
+ , m_simc( &simc_ )
 {}
 
 
@@ -132,12 +138,17 @@ sc_module_registry::~sc_module_registry()
 
 // called when construction is done
 
-void
+bool
 sc_module_registry::construction_done()
 {
-    for( int i = 0; i < size(); ++ i ) {
-	m_module_vec[i]->construction_done();
+    if( size() == m_construction_done )
+        // nothing has been updated
+        return true;
+
+    for( ; m_construction_done < size(); ++m_construction_done ) {
+        m_module_vec[m_construction_done]->construction_done();
     }
+    return false;
 }
 
 // called when elaboration is done

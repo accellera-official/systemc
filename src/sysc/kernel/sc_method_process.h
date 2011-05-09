@@ -35,6 +35,11 @@
  *****************************************************************************/
 
 // $Log: sc_method_process.h,v $
+// Revision 1.17  2011/05/09 04:07:48  acg
+//  Philipp A. Hartmann:
+//    (1) Restore hierarchy in all phase callbacks.
+//    (2) Ensure calls to before_end_of_elaboration.
+//
 // Revision 1.16  2011/04/13 02:41:34  acg
 //  Andy Goodrich: eliminate warning messages generated when the DEBUG_MSG
 //  macro is used.

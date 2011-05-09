@@ -39,6 +39,11 @@
 
 
 // $Log: sc_prim_channel.cpp,v $
+// Revision 1.8  2011/05/09 04:07:37  acg
+//  Philipp A. Hartmann:
+//    (1) Restore hierarchy in all phase callbacks.
+//    (2) Ensure calls to before_end_of_elaboration.
+//
 // Revision 1.7  2011/04/19 02:36:26  acg
 //  Philipp A. Hartmann: new aysnc_update and mutex support.
 //
@@ -73,6 +78,7 @@
 #include "sysc/communication/sc_prim_channel.h"
 #include "sysc/communication/sc_communication_ids.h"
 #include "sysc/kernel/sc_simcontext.h"
+#include "sysc/kernel/sc_module.h"
 #if defined(SC_INCLUDE_ASYNC_UPDATES)
 #   include "sysc/communication/sc_host_mutex.h"
 #endif
@@ -129,7 +135,11 @@ void sc_prim_channel::before_end_of_elaboration()
 void
 sc_prim_channel::construction_done()
 {
+    sc_module* parent = DCAST<sc_module*>( get_parent_object() );
+    if( parent ) simcontext()->hierarchy_push( parent );
+
     before_end_of_elaboration();
+    if( parent ) simcontext()->hierarchy_pop();
 }
 
 // called by elaboration_done (does nothing by default)
@@ -144,7 +154,10 @@ sc_prim_channel::end_of_elaboration()
 void
 sc_prim_channel::elaboration_done()
 {
+    sc_module* parent = DCAST<sc_module*>( get_parent_object() );
+    if( parent ) simcontext()->hierarchy_push( parent );
     end_of_elaboration();
+    if( parent ) simcontext()->hierarchy_pop();
 }
 
 // called by start_simulation (does nothing)
@@ -158,7 +171,10 @@ sc_prim_channel::start_of_simulation()
 void
 sc_prim_channel::start_simulation()
 {
+    sc_module* parent = DCAST<sc_module*>( get_parent_object() );
+    if( parent ) simcontext()->hierarchy_push( parent );
     start_of_simulation();
+    if( parent ) simcontext()->hierarchy_pop();
 }
 
 // called by simulation_done (does nothing)
@@ -172,7 +188,10 @@ sc_prim_channel::end_of_simulation()
 void
 sc_prim_channel::simulation_done()
 {
+    sc_module* parent = DCAST<sc_module*>( get_parent_object() );
+    if( parent ) simcontext()->hierarchy_push( parent );
     end_of_simulation();
+    if( parent ) simcontext()->hierarchy_pop();
 }
 
 // ----------------------------------------------------------------------------
@@ -333,9 +352,10 @@ sc_prim_channel_registry::perform_update()
 // constructor
 
 sc_prim_channel_registry::sc_prim_channel_registry( sc_simcontext& simc_ )
-:  m_async_update_list_p(0),
-   m_simc( &simc_ ), 
-   m_update_list_p((sc_prim_channel*)sc_prim_channel::list_end)
+  :  m_async_update_list_p(0)
+  ,  m_construction_done(0)
+  ,  m_simc( &simc_ )
+  ,  m_update_list_p((sc_prim_channel*)sc_prim_channel::list_end)
 {
 #   if defined(SC_INCLUDE_ASYNC_UPDATES)
         m_async_update_list_p = new async_update_list();
@@ -352,12 +372,18 @@ sc_prim_channel_registry::~sc_prim_channel_registry()
 
 // called when construction is done
 
-void
+bool
 sc_prim_channel_registry::construction_done()
 {
-    for( int i = 0; i < size(); ++ i ) {
-	m_prim_channel_vec[i]->construction_done();
+    if( size() == m_construction_done )
+        // nothing has been updated
+        return true;
+
+    for( ; m_construction_done < size(); ++m_construction_done ) {
+        m_prim_channel_vec[m_construction_done]->construction_done();
     }
+
+    return false;
 }
 
 

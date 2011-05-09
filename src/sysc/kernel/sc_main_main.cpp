@@ -35,6 +35,11 @@
 
 
 // $Log: sc_main_main.cpp,v $
+// Revision 1.8  2011/05/09 04:07:48  acg
+//  Philipp A. Hartmann:
+//    (1) Restore hierarchy in all phase callbacks.
+//    (2) Ensure calls to before_end_of_elaboration.
+//
 // Revision 1.7  2011/02/18 20:27:14  acg
 //  Andy Goodrich: Updated Copyrights.
 //

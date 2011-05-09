@@ -42,6 +42,11 @@
 
 /* 
 $Log: sc_port.h,v $
+Revision 1.6  2011/05/09 04:07:37  acg
+ Philipp A. Hartmann:
+   (1) Restore hierarchy in all phase callbacks.
+   (2) Ensure calls to before_end_of_elaboration.
+
 Revision 1.5  2011/03/30 16:46:10  acg
  Andy Goodrich: added a signature and removed a virtual specification
  to eliminate warnings with certain compilers.
@@ -280,7 +285,7 @@ private:
     void complete_binding();
 
     // called when construction is done
-    void construction_done();
+    bool construction_done();
 
     // called when elaboration is done
     void elaboration_done();
@@ -295,8 +300,9 @@ private:
 
 private:
 
-    sc_simcontext*              m_simc;
+    int                         m_construction_done;
     std::vector<sc_port_base*>  m_port_vec;
+    sc_simcontext*              m_simc;
 
 private:
 

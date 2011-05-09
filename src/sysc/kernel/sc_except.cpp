@@ -35,6 +35,11 @@
 
 
 // $Log: sc_except.cpp,v $
+// Revision 1.3  2011/05/09 04:07:48  acg
+//  Philipp A. Hartmann:
+//    (1) Restore hierarchy in all phase callbacks.
+//    (2) Ensure calls to before_end_of_elaboration.
+//
 // Revision 1.2  2011/02/13 21:47:37  acg
 //  Andy Goodrich: update copyright notice.
 //

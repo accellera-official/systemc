@@ -35,6 +35,11 @@
  *****************************************************************************/
 
 // $Log: sc_export.h,v $
+// Revision 1.6  2011/05/09 04:07:37  acg
+//  Philipp A. Hartmann:
+//    (1) Restore hierarchy in all phase callbacks.
+//    (2) Ensure calls to before_end_of_elaboration.
+//
 // Revision 1.5  2011/04/02 00:02:14  acg
 //  Philipp A. Hartmann: add const overload for sc_export::operator IF&
 //
@@ -116,6 +121,11 @@ protected:
     void report_error( const char* id, const char* add_msg = 0) const;
 
 private:
+
+    void construction_done();
+    void elaboration_done();
+    void start_simulation();
+    void simulation_done();
 
     // disabled
     sc_export_base(const this_type&);
@@ -252,7 +262,7 @@ private:
     ~sc_export_registry();
 
     // called when construction is done
-    void construction_done();
+    bool construction_done();
 
     // called when elaboration is done
     void elaboration_done();
@@ -265,8 +275,9 @@ private:
 
 private:
 
-    sc_simcontext*               m_simc;
+    int                          m_construction_done;
     std::vector<sc_export_base*> m_export_vec;
+    sc_simcontext*               m_simc;
 
 private:
 

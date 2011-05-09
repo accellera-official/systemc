@@ -41,6 +41,11 @@
 
 
 // $Log: sc_port.cpp,v $
+// Revision 1.4  2011/05/09 04:07:37  acg
+//  Philipp A. Hartmann:
+//    (1) Restore hierarchy in all phase callbacks.
+//    (2) Ensure calls to before_end_of_elaboration.
+//
 // Revision 1.3  2011/02/18 20:23:45  acg
 //  Andy Goodrich: Copyright update.
 //
@@ -374,7 +379,7 @@ sc_port_base::bind( this_type& parent_ )
     parent_.m_bind_info->is_leaf = false;
 }
 
-// called by sc_port_registry::construction_done (null by default)
+// called by construction_done (null by default)
 
 void sc_port_base::before_end_of_elaboration() 
 {}
@@ -613,10 +618,15 @@ sc_port_base::complete_binding()
 
     m_bind_info->complete = true;
 }
+
 void
 sc_port_base::construction_done()
 {
+    sc_module* parent = DCAST<sc_module*>( get_parent_object() );
+    sc_assert( parent );
+    simcontext()->hierarchy_push( parent );
     before_end_of_elaboration();
+    simcontext()->hierarchy_pop();
 }
 
 void
@@ -625,20 +635,31 @@ sc_port_base::elaboration_done()
     assert( m_bind_info != 0 && m_bind_info->complete );
     delete m_bind_info;
     m_bind_info = 0;
-
+    sc_module* parent = DCAST<sc_module*>( get_parent_object() );
+    sc_assert( parent );
+    simcontext()->hierarchy_push( parent );
     end_of_elaboration();
+    simcontext()->hierarchy_pop();
 }
 
 void
 sc_port_base::start_simulation()
 {
+    sc_module* parent = DCAST<sc_module*>( get_parent_object() );
+    sc_assert( parent );
+    simcontext()->hierarchy_push( parent );
     start_of_simulation();
+    simcontext()->hierarchy_pop();
 }
 
 void
 sc_port_base::simulation_done()
 {
+    sc_module* parent = DCAST<sc_module*>( get_parent_object() );
+    sc_assert( parent );
+    simcontext()->hierarchy_push( parent );
     end_of_simulation();
+    simcontext()->hierarchy_pop();
 }
 
 
@@ -702,7 +723,8 @@ sc_port_registry::remove( sc_port_base* port_ )
 // constructor
 
 sc_port_registry::sc_port_registry( sc_simcontext& simc_ )
-: m_simc( &simc_ )
+: m_construction_done(0),
+  m_simc( &simc_ )
 {
 }
 
@@ -715,12 +737,19 @@ sc_port_registry::~sc_port_registry()
 
 // called when construction is done
 
-void
+bool
 sc_port_registry::construction_done()
 {
-    for( int i = size() - 1; i >= 0; -- i ) {
+    if( size() == m_construction_done )
+        // nothing has been updated
+        return true;
+
+    for( int i = size()-1; i >= m_construction_done; --i ) {
         m_port_vec[i]->construction_done();
     }
+
+    m_construction_done = size();
+    return false;
 }
 
 // called when when elaboration is done
