@@ -21,7 +21,10 @@
 //
 // MODIFICATION LOG - modifiers, enter your name, affiliation, date and
 //
-// $Log:$
+// $Log: suspend_resume.cpp,v $
+// Revision 1.2  2011/05/08 19:18:46  acg
+//  Andy Goodrich: remove extraneous + prefixes from git diff.
+//
 
 #define SC_INCLUDE_DYNAMIC_PROCESSES
 

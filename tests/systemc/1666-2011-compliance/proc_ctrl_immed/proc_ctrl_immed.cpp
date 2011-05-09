@@ -21,7 +21,10 @@
 //
 // MODIFICATION LOG - modifiers, enter your name, affiliation, date and
 //
-// $Log:$
+// $Log: proc_ctrl_immed.cpp,v $
+// Revision 1.2  2011/05/08 19:18:46  acg
+//  Andy Goodrich: remove extraneous + prefixes from git diff.
+//
 
 // Process control methods executed immediately in same eval phase
 

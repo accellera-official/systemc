@@ -21,7 +21,10 @@
 //
 // MODIFICATION LOG - modifiers, enter your name, affiliation, date and
 //
-// $Log:$
+// $Log: mixed_child_procs.cpp,v $
+// Revision 1.2  2011/05/08 19:18:46  acg
+//  Andy Goodrich: remove extraneous + prefixes from git diff.
+//
 
 // Process control methods applied where child process tree contains
 // a mixture of method and thread processes

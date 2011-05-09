@@ -21,7 +21,10 @@
 //
 // MODIFICATION LOG - modifiers, enter your name, affiliation, date and
 //
-// $Log:$
+// $Log: kill_reset.cpp,v $
+// Revision 1.2  2011/05/08 19:18:46  acg
+//  Andy Goodrich: remove extraneous + prefixes from git diff.
+//
 
 // Reset and kill a thread process, including nested kills and resets
 

@@ -21,7 +21,10 @@
 //
 // MODIFICATION LOG - modifiers, enter your name, affiliation, date and
 //
-// $Log:$
+// $Log: sc_pause.cpp,v $
+// Revision 1.2  2011/05/08 19:18:46  acg
+//  Andy Goodrich: remove extraneous + prefixes from git diff.
+//
 
 // sc_pause, sc_get_status, sc_is_running
 

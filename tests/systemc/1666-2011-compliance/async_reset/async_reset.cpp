@@ -20,7 +20,10 @@
 //
 // MODIFICATION LOG - modifiers, enter your name, affiliation, date and
 //
-// $Log:$
+// $Log: async_reset.cpp,v $
+// Revision 1.3  2011/05/08 19:18:45  acg
+//  Andy Goodrich: remove extraneous + prefixes from git diff.
+//
 
 // async_reset_signal_is
 
