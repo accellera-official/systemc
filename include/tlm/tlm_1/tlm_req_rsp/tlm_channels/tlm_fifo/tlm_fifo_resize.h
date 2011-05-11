@@ -31,10 +31,11 @@ inline
 void
 tlm_fifo<T>::nb_expand( unsigned int n ) {
 
-  m_expand = true;
-  m_size += n;
-  request_update();
-
+  if( m_size >= 0 ) {
+    m_expand = true;
+    m_size += n;
+    request_update();
+  }
 }
 
 template < typename T>

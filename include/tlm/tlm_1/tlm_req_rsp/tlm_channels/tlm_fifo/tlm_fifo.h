@@ -185,7 +185,11 @@ private:
     }
 
     bool is_full() const {
-      return size() == m_num_readable + m_num_written;
+      //return size() == m_num_readable + m_num_written; // Old buggy code
+      if( size() < 0 )
+        return false;
+      else
+        return size() <= m_num_readable + m_num_written;
     }
 
 };
