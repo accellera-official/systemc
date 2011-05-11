@@ -19,6 +19,8 @@
 // 23-Mar-2009  John Aynsley  Add method update_original_from()
 // 20-Apr-2009  John Aynsley  Bug fix for 64-bit machines: unsigned long int -> unsigned int
 //  5-May-2011  JA and Philipp Hartmann  Add tlm_gp_option, set_gp_option, get_gp_option
+// 11-May-2011  John Aynsley  Add run-time check to release()
+
 
 #ifndef __TLM_GP_H__
 #define __TLM_GP_H__
@@ -158,7 +160,7 @@ public:
     }
 
     void acquire(){assert(m_mm != 0); m_ref_count++;}
-    void release(){assert(m_mm != 0); if (--m_ref_count==0) m_mm->free(this);}
+    void release(){assert(m_mm != 0 && m_ref_count > 0); if (--m_ref_count==0) m_mm->free(this);}
     int get_ref_count() const {return m_ref_count;}
     void set_mm(tlm_mm_interface* mm) { m_mm = mm; }
     bool has_mm() const { return m_mm != 0; }
