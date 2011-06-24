@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2008 by all Contributors.
+  source code Copyright (c) 1996-2011 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -19,6 +19,12 @@
 // Modified by John Aynsley, Doulos, Feb 2009,
 // Fix a bug in simple_target_socket and simple_target_socket_tagged
 // with the addition of one new line of code in each:  wait(*e);
+// *****************************************************************************
+
+// *****************************************************************************
+// Modified by John Aynsley on behalf of Robert Guenzel, May 2011,
+// Fix a bug in simple_target_socket and simple_target_socket_tagged
+// with the addition of one new line of code in each:  wait(t);
 // *****************************************************************************
 
 
@@ -496,6 +502,7 @@ private:
             case tlm::BEGIN_RESP:
             {
               phase = tlm::END_RESP;
+              sc_core::wait(t);  // This line is a bug fix added in TLM-2.0.2
               t = sc_core::SC_ZERO_TIME;
               (m_mod->*m_nb_transport_ptr)(*trans, phase, t);
 
@@ -1046,6 +1053,7 @@ private:
             case tlm::BEGIN_RESP:
             {
               phase = tlm::END_RESP;
+              sc_core::wait(t);  // This line is a bug fix added in TLM-2.0.2
               t = sc_core::SC_ZERO_TIME;
               (m_mod->*m_nb_transport_ptr)(m_nb_transport_user_id, *trans, phase, t);
 
