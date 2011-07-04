@@ -45,7 +45,7 @@
 
 #include <limits.h>
 #define SC_INCLUDE_FX
-#define SC_FX_IMPLICIT_FXVAL
+#define SC_FXVAL_IMPLICIT_FXVAL
 #include "systemc.h"
 
 #define T_FX_FLOAT  sc_fxval

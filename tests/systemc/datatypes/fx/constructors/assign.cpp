@@ -44,7 +44,7 @@
 
 #include <limits.h>
 #define SC_INCLUDE_FX
-#define SC_FX_IMPLICIT_CONV
+#define SC_FXVAL_IMPLICIT_CONV
 #include "systemc.h"
  
 typedef unsigned int   uint;

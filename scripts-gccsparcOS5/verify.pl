@@ -574,7 +574,7 @@ sub init_globals
 	$rt_debug_flag = "-g";
 	$rt_optimize_flag = "-O3";
     } elsif( $rt_systemc_arch eq "macosx386" ) {
-	$rt_ccflags = "-Wall -arch i386";
+	$rt_ccflags = "-Wall ";
 	$rt_ld = $rt_cc;
 	$rt_ldflags = $rt_ccflags;
 	$rt_debug_flag = "-g";
