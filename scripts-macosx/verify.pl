@@ -396,7 +396,7 @@ sub get_systemc_arch
 	    die "Error: unsupported compiler '$cxx'\n";
 	}
     } elsif( $uname_s eq "Linux" ) {
-	if( $uname_r =~ /^2/ ) {
+	if( $uname_r =~ /^[23]/ ) {
 	    if( $cxx_comp eq "c++" || $cxx_comp eq "g++" ) {
 	        if ( $uname_m eq "x86_64" )
 		{
@@ -412,6 +412,19 @@ sub get_systemc_arch
 	} else {
 	    die "Error: unsupported architecture '$uname_s $uname_r'\n";
 	}
+    } elsif( $uname_s eq "FreeBSD" ) {
+	    if( $cxx_comp eq "c++" || $cxx_comp eq "g++" ) {
+	        if ( $uname_m eq "x86_64" || $uname_m eq "amd64" )
+		{
+		    $arch = "freebsd64";
+		}
+		else
+		{
+		    $arch = "freebsd";
+		}
+	    } else {
+		die "Error: unsupported compiler '$cxx'\n";
+	    }
     } elsif( $uname_s =~ /^(CYGWIN|MINGW32)_NT/ ) {
 	if( $uname_r =~ /^1\./ ) { # both Cygwin and MinGW report 1.x as of now
 	    if( $uname_s =~ /^CYGWIN_NT/ ) {
@@ -531,66 +544,43 @@ sub init_globals
     $ENV{ 'SYSTEMC_REGRESSION' } = 1;
 
     # Set compiler and compiler flags
+    #
+    # defaults
+    $rt_ccflags       = "-Wall";
+    $rt_ld            = $rt_cc;
+    $rt_ldflags       = $rt_ccflags;
+    $rt_debug_flag    = "-g";
+    $rt_debug_ldflags = "";
+    $rt_optimize_flag = "-O2";
+
     if( $rt_systemc_arch eq "gccsparcOS5" ) {
-	$rt_ccflags = "-Wall";
-	$rt_ld = $rt_cc;
-	$rt_ldflags = $rt_ccflags;
-	$rt_debug_flag = "-g";
-	$rt_optimize_flag = "-O2";
+      # defaults
     } elsif( $rt_systemc_arch eq "sparcOS5" ) {
-	$rt_ccflags = "";
-	$rt_ld = $rt_cc;
-	$rt_ldflags = "-xildoff";
-	$rt_debug_flag = "-g";
+	$rt_ccflags       = "";
+	$rt_ldflags       = "-xildoff";
+	$rt_debug_flag    = "-g";
 	$rt_optimize_flag = "-O3";
     } elsif( $rt_systemc_arch eq "gcchpux11" ) {
-	$rt_ccflags = "-Wall";
-	$rt_ld = $rt_cc;
-	$rt_ldflags = $rt_ccflags;
-	$rt_debug_flag = "-g";
-	$rt_optimize_flag = "-O2";
+      # defaults
     } elsif( $rt_systemc_arch eq "hpux11" ) {
-	$rt_ccflags = "-Aa -ext +DA2.0 +DS2.0";
-	$rt_ld = $rt_cc;
-	$rt_ldflags = $rt_ccflags;
-	$rt_debug_flag = "-g";
+	$rt_ccflags       = "-Aa -ext +DA2.0 +DS2.0";
 	$rt_optimize_flag = "+O1";
     } elsif( $rt_systemc_arch eq "linux64" ) {
-	$rt_ccflags = "-Wall";
-	$rt_ld = $rt_cc;
-	$rt_ldflags = "$rt_ccflags -lpthread"; # use pthreads for now...
-	$rt_debug_flag = "-g";
-	$rt_optimize_flag = "-O2";
+      # defaults
     } elsif( $rt_systemc_arch eq "linux" ) {
-	$rt_ccflags = "-Wall";
-	$rt_ld = $rt_cc;
-	$rt_ldflags = $rt_ccflags;
-	$rt_debug_flag = "-g";
-	$rt_optimize_flag = "-O2";
+      # defaults
+    } elsif( $rt_systemc_arch eq "freebsd64" ) {
+      # defaults
+    } elsif( $rt_systemc_arch eq "freebsd" ) {
+      # defaults
     } elsif( $rt_systemc_arch eq "macosx" ) {
-	$rt_ccflags = "-Wall";
-	$rt_ld = $rt_cc;
-	$rt_ldflags = $rt_ccflags;
-	$rt_debug_flag = "-g";
 	$rt_optimize_flag = "-O3";
     } elsif( $rt_systemc_arch eq "macosx386" ) {
-	$rt_ccflags = "-Wall ";
-	$rt_ld = $rt_cc;
-	$rt_ldflags = $rt_ccflags;
-	$rt_debug_flag = "-g";
 	$rt_optimize_flag = "-O3";
     } elsif( $rt_systemc_arch eq "cygwin" ) {
-	$rt_ccflags = "-Wall";
-	$rt_ld = $rt_cc;
 	$rt_ldflags = $rt_ccflags." -Wl,--enable-auto-import";
-	$rt_debug_flag = "-g";
-	$rt_optimize_flag = "-O2";
     } elsif( $rt_systemc_arch eq "mingw" ) {
-	$rt_ccflags = "-Wall";
-	$rt_ld = $rt_cc;
-	$rt_ldflags = $rt_ccflags;
-	$rt_debug_flag = "-g";
-	$rt_optimize_flag = "-O2";
+      # defaults
     } elsif( $rt_systemc_arch =~ /^msvc(71|8|9|10)/ ) {
 	$rt_cc = "CL.EXE";
 	$rt_ccflags = "${slash}nologo ${slash}GR ${slash}EHsc "
@@ -598,7 +588,8 @@ sub init_globals
 		     ."${slash}D \"_USE_MATH_DEFINES\"";
 	$rt_ld = "LINK.EXE";
 	$rt_ldflags = "${slash}nologo ${slash}LTCG ${slash}NODEFAULTLIB:LIBCD ";
-	$rt_debug_flag = "${slash}GZ";
+	$rt_debug_flag    = "${slash}GZ ${slash}MTd ${slash}Zi";
+	$rt_debug_ldflags = "${slash}DEBUG ${slash}PDB:$rt_prodname.pdb";
 	$rt_optimize_flag = "${slash}O2";
     }
 
@@ -662,7 +653,7 @@ sub init_globals
 	'pass',               '              passed               ',
 	'skip',               '              skipped              ',
         'unknown',            '          unknown problem          '
-		      );
+    );
 }
 
 
@@ -1315,9 +1306,10 @@ sub setup_for_test
     local( $currtestdir ) = @_;
 
     local( $linkdir );
+    local( $dirparts );
 
-    split( '/', $currtestdir );
-    $linkdir = pop @_;
+    @dirparts = split( '/', $currtestdir );
+    $linkdir = pop @dirparts;
 
     # create log path and cd to it
     &create_dir( "$rt_output_dir/$currtestdir" );
@@ -1508,7 +1500,7 @@ sub compile_files
            $newcommand  .= " ${slash}Fo$file.obj $temp";
 	} else {
             $ofilestring .= " $file.o";
-           $newcommand  .= " -o $file.o $temp";
+            $newcommand  .= " -o $file.o $temp";
 	}
 
         # if first time create the file, else append to it
@@ -1516,7 +1508,7 @@ sub compile_files
 	    $first_time = 0;
             $newcommand .= " 1> $testname.log 2>&1";
         } else {
-           $newcommand .= " 1>> $testname.log 2>&1";
+            $newcommand .= " 1>> $testname.log 2>&1";
         }
 
 	&print_log( "  $file\n" ) unless $rt_verbose;
@@ -1559,7 +1551,7 @@ sub strip_tracelog
     ( $dir = $stripped_file ) =~ s|/[^/]+$||;
     &create_dir( $dir );
     
-    $command = "`tail -n +8 < $log_file > $stripped_file`";
+    $command = "`sed '1,7d' < $log_file > $stripped_file`";
 
     ( $exit_code, $signal ) = &rt_system( $command );
 
@@ -2009,17 +2001,27 @@ sub run_test
 	}
 
 	# link command
+	$command  = "$pure $rt_ld $rt_ldflags $extra_flags ";
+	if( $rt_props & $rt_test_props{ 'debug' } ) {
+	    $command .= "$rt_debug_ldflags ";
+	}
+
 	if( $rt_systemc_arch =~ /^msvc/ ) {
-	    $command  = "$rt_ld $rt_ldflags $extra_flags ";
 	    $command .= "${slash}out:$rt_prodname ";
 	    $command .= "$testname.obj ";
-	    # $command .= "$rt_systemc_home/msvc71/systemc/Debug/systemc.lib ";
-	    $command .= "$rt_systemc_home/msvc71/systemc/Release/systemc.lib ";
+
+	    if( $rt_props & $rt_test_props{ 'debug' } ) {
+		$command .= "$rt_systemc_home/$rt_systemc_arch/"
+		            ."systemc/Debug/systemc.lib ";
+	    } else {
+		$command .= "$rt_systemc_home/$rt_systemc_arch/"
+		           ."systemc/Release/systemc.lib ";
+	    }
 	} else {
-	    $command  = "$pure $rt_ld $rt_ldflags $extra_flags ";
 	    $command .= "-o $rt_prodname ";
 	    $command .= "$testname.o ";
 	    $command .= "-L. -L$rt_systemc_home/lib-$rt_systemc_arch ";
+	    $command .= "-Wl,-R$rt_systemc_home/lib-$rt_systemc_arch ";
 	    if( $rt_add_ldpaths ne '' ) {
 		$command .= "$rt_add_ldpaths ";
 	    }
@@ -2087,17 +2089,27 @@ sub run_test
 	}
 
 	# link command
+	$command  = "$pure $rt_ld $rt_ldflags $extra_flags ";
+	if( $rt_props & $rt_test_props{ 'debug' } ) {
+	    $command .= "$rt_debug_ldflags ";
+	}
+
 	if( $rt_systemc_arch =~ /^msvc/ ) {
-	    $command  = "$rt_ld $rt_ldflags $extra_flags ";
 	    $command .= "${slash}out:$rt_prodname ";
 	    $command .= "$ofiles ";
-	    # $command .= "$rt_systemc_home/msvc71/systemc/Debug/systemc.lib ";
-	    $command .= "$rt_systemc_home/msvc71/systemc/Release/systemc.lib ";
+
+	    if( $rt_props & $rt_test_props{ 'debug' } ) {
+		$command .= "$rt_systemc_home/$rt_systemc_arch/"
+		            ."systemc/Debug/systemc.lib ";
+	    } else {
+		$command .= "$rt_systemc_home/$rt_systemc_arch/"
+		           ."systemc/Release/systemc.lib ";
+	    }
 	} else {
-	    $command  = "$pure $rt_ld $rt_ldflags $extra_flags ";
 	    $command .= "-o $rt_prodname ";
 	    $command .= "$ofiles ";
 	    $command .= "-L. -L$rt_systemc_home/lib-$rt_systemc_arch ";
+	    $command .= "-Wl,-R$rt_systemc_home/lib-$rt_systemc_arch ";
 	    if( $rt_add_ldpaths ne '' ) {
 		$command .= "$rt_add_ldpaths ";
 	    }
