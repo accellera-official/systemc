@@ -81,6 +81,9 @@
 #include "sysc/kernel/sc_ver.h"
 #include "sysc/utils/sc_iostream.h"
 
+#include <cstdlib>
+using std::getenv;
+
 namespace sc_core {
 
 static
@@ -133,7 +136,8 @@ void
 pln()
 {
     static bool lnp = SC_DISABLE_COPYRIGHT_MESSAGE;
-    if ( getenv("SYSTEMC_DISABLE_COPYRIGHT_MESSAGE") != 0 ) lnp = true;
+    if( lnp || getenv("SYSTEMC_DISABLE_COPYRIGHT_MESSAGE") != 0 )
+        lnp = true;
     if( ! lnp ) {
         ::std::cerr << ::std::endl;
 	::std::cerr << sc_version() << ::std::endl;
