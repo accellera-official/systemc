@@ -35,6 +35,15 @@
 
 
 // $Log: sc_ver.cpp,v $
+// Revision 1.11  2011/07/02 12:55:19  acg
+//  Andy Goodrich: automake refresh.
+//
+// Revision 1.10  2011/07/01 18:49:07  acg
+//  Andy Goodrich: moved pln() from sc_simcontext.cpp to sc_ver.cpp.
+//
+// Revision 1.9  2011/07/01 18:33:08  acg
+//  Andy Goodrich: changes for IEEE 1666, removal of macros and use of them.
+//
 // Revision 1.8  2011/04/08 18:27:53  acg
 //  Andy Goodrich: respin of the PoC.
 //
@@ -75,9 +84,7 @@
 namespace sc_core {
 
 static
-const char copyright[] =
-    "        " SC_COPYRIGHT "\n"
-    "                    ALL RIGHTS RESERVED";
+const char copyright[] = SC_COPYRIGHT;
 
 static
 const char systemc_version[] =
@@ -98,14 +105,14 @@ const std::string  sc_copyright_string     = SC_COPYRIGHT;
 const char*
 sc_copyright()
 {
-    return copyright;
+    return SC_COPYRIGHT;
 }
 
 
 const char*
 sc_release()
 {
-    return SC_RELEASE_STRING;
+    return SC_VERSION;
 }
 
 
@@ -115,6 +122,32 @@ sc_version()
     return systemc_version;
 }
 
+
+#if !defined(SC_DISABLE_COPYRIGHT_MESSAGE)
+#  define SC_DISABLE_COPYRIGHT_MESSAGE 0
+#endif
+
+// ----------------------------------------------------------------------------
+
+void
+pln()
+{
+    static bool lnp = SC_DISABLE_COPYRIGHT_MESSAGE;
+    if ( getenv("SYSTEMC_DISABLE_COPYRIGHT_MESSAGE") != 0 ) lnp = true;
+    if( ! lnp ) {
+        ::std::cerr << ::std::endl;
+	::std::cerr << sc_version() << ::std::endl;
+	::std::cerr << sc_copyright() << ::std::endl;
+
+	//  regressions check point
+
+        if( getenv( "SYSTEMC_REGRESSION" ) != 0 ) {
+            ::std::cerr << "SystemC Simulation" << ::std::endl;
+        }
+
+        lnp = true;
+    }
+}
 
 // THIS CONSTRUCTOR ROOTS OUT OLD OBJECTS AT LINK TIME
 //

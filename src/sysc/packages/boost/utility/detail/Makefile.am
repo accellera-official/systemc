@@ -34,7 +34,7 @@
 
 include $(top_srcdir)/config/Make-rules
 
-noinst_LIBRARIES = 
+noinst_LTLIBRARIES = 
 
 H_FILES = \
 	in_place_factory_prefix.hpp \

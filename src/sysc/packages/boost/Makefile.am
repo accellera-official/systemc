@@ -40,6 +40,8 @@ SUBDIRS = \
 	utility \
 	.
 
+noinst_LTLIBRARIES =
+
 H_FILES = \
 	assert.hpp \
 	bind.hpp \

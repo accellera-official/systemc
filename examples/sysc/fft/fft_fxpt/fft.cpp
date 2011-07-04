@@ -99,7 +99,7 @@
     real2_out.range(14,0) = tmp_real3.range(24,10);
     imag2_out.range(14,0) = tmp_imag3.range(24,10);
 
- }; // end func_butterfly
+ } // end func_butterfly
 
 void fft::entry()
 { 

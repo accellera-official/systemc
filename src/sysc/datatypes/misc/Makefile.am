@@ -35,7 +35,7 @@
 
 include $(top_srcdir)/config/Make-rules
 
-noinst_LIBRARIES = libmisc.a
+noinst_LTLIBRARIES = libmisc.la
 
 H_FILES = \
 	sc_concatref.h \
@@ -47,7 +47,7 @@ CXX_FILES = \
 	sc_concatref.cpp \
 	sc_value_base.cpp
 
-libmisc_a_SOURCES = $(H_FILES) $(CXX_FILES) 
+libmisc_la_SOURCES = $(H_FILES) $(CXX_FILES)
 
 INCLUDE_DIR = $(prefix)/include/sysc/datatypes/misc
 
@@ -57,8 +57,6 @@ install-data-local:
 	for file in $(noinst_HEADERS); do \
 	  $(INSTALL_DATA) $(srcdir)/$$file $(INCLUDE_DIR)/$$file; \
 	done
-	$(AR_TOOL) $(top_builddir)/src/$(MAIN_LIBRARY) \
-	  $(libmisc_a_OBJECTS)
 
 uninstall-local:
 	@$(NORMAL_UNINSTALL)

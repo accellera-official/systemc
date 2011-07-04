@@ -58,6 +58,9 @@
 				 execution problem with using sc_pvector.
  *****************************************************************************/
 // $Log: sc_simcontext.cpp,v $
+// Revision 1.31  2011/07/01 18:49:07  acg
+//  Andy Goodrich: moved pln() from sc_simcontext.cpp to sc_ver.cpp.
+//
 // Revision 1.30  2011/05/09 04:07:49  acg
 //  Philipp A. Hartmann:
 //    (1) Restore hierarchy in all phase callbacks.
@@ -442,33 +445,6 @@ sc_process_table::thread_q_head()
 {
     return m_thread_q;
 }
-
-#if !defined(SC_DISABLE_COPYRIGHT_MESSAGE)
-#  define SC_DISABLE_COPYRIGHT_MESSAGE 0
-#endif
-
-// ----------------------------------------------------------------------------
-
-void
-pln()
-{
-    static bool lnp = SC_DISABLE_COPYRIGHT_MESSAGE;
-    if ( getenv("SYSTEMC_DISABLE_COPYRIGHT_MESSAGE") != 0 ) lnp = true;
-    if( ! lnp ) {
-        ::std::cerr << ::std::endl;
-	::std::cerr << sc_version() << ::std::endl;
-	::std::cerr << sc_copyright() << ::std::endl;
-
-	//  regressions check point
-
-        if( getenv( "SYSTEMC_REGRESSION" ) != 0 ) {
-            ::std::cerr << "SystemC Simulation" << ::std::endl;
-        }
-
-        lnp = true;
-    }
-}
-
 
 int
 sc_notify_time_compare( const void* p1, const void* p2 )

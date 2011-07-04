@@ -32,6 +32,10 @@
   Description of Modification:
  *****************************************************************************/
 //$Log: sc_host_mutex.h,v $
+//Revision 1.2  2011/06/25 17:08:38  acg
+// Andy Goodrich: Jerome Cornet's changes to use libtool to build the
+// library.
+//
 //Revision 1.1  2011/04/18 19:04:11  acg
 // Philipp A. Hartman: first check in of file.
 //
@@ -76,10 +80,11 @@
     pthread_mutex_unlock( &(Mutex) )
 
 #ifdef _XOPEN_SOURCE
-#define SC_MTX_TRYLOCK_( Mutex ) \
-    ( pthread_mutex_trylock( &(Mutex) ) == 0 )
+#   define SC_MTX_TRYLOCK_( Mutex ) \
+       ( pthread_mutex_trylock( &(Mutex) ) == 0 )
 #else // no try_lock available
-    ( false ) 
+#   define SC_MTX_TRYLOCK_( Mutex ) \
+       ( false ) 
 #endif
 
 #define SC_MTX_DESTROY_( Mutex ) \

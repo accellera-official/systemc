@@ -34,6 +34,10 @@
  *****************************************************************************/
 
 // $Log: sc_cor_fiber.h,v $
+// Revision 1.5  2011/06/25 17:08:39  acg
+//  Andy Goodrich: Jerome Cornet's changes to use libtool to build the
+//  library.
+//
 // Revision 1.4  2011/02/18 20:27:14  acg
 //  Andy Goodrich: Updated Copyrights.
 //
@@ -55,9 +59,19 @@
 
 
 #ifdef WIN32
+#ifdef __GNUC__
+#   include <windows.h>
+#endif
 
 #include "sysc/kernel/sc_cor.h"
 #include "sysc/kernel/sc_cmnhdr.h"
+
+#if defined(__GNUC__) && __USING_SJLJ_EXCEPTIONS__
+   // _Unwind_SjLj_Register() & _Unwind_SjLj_Unregister() only need first field.
+   struct SjLj_Function_Context {
+       struct SjLj_Function_Context *prev;
+   };
+#endif
 
 namespace sc_core {
 
@@ -82,17 +96,25 @@ public:
     // constructor
     sc_cor_fiber()
 	: m_stack_size( 0 ), m_fiber( 0 ), m_pkg( 0 )
-	{}
+       {
+#         if defined(__GNUC__) && __USING_SJLJ_EXCEPTIONS__
+              m_eh.prev = 0;
+#         endif
+       }
 
     // destructor
     virtual ~sc_cor_fiber();
 
 public:
 
-    std::size_t            m_stack_size;  // stack size
-    PVOID             m_fiber;       // fiber
+    std::size_t       m_stack_size;     // stack size
+    PVOID             m_fiber;          // fiber
 
-    sc_cor_pkg_fiber* m_pkg;         // the creating coroutine package
+    sc_cor_pkg_fiber* m_pkg;            // the creating coroutine package
+#if defined(__GNUC__) && __USING_SJLJ_EXCEPTIONS__
+    struct SjLj_Function_Context m_eh;  // the exception handling context
+#endif
+
 
 private:
 

@@ -53,7 +53,7 @@ SC_MODULE(fir_data) {
       sensitive << state_out;
       sensitive << sample;
 #include "fir_const.h"
-    };
+    }
   void entry();
 };
 

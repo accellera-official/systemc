@@ -58,7 +58,7 @@ extern const std::string  sc_copyright_string;
 #define SYSTEMC_2_3_0
 #define SC_API_VERSION_STRING sc_api_version_2_3_0
 
-#define SYSTEMC_VERSION       20110516
+#define SYSTEMC_VERSION       20110630
 #define SC_VERSION_ORIGINATOR "OSCI"
 #define SC_VERSION_MAJOR      2
 #define SC_VERSION_MINOR      3
@@ -66,10 +66,10 @@ extern const std::string  sc_copyright_string;
 #define SC_IS_PRERELEASE      1
 
 #define IEEE_1666_SYSTEMC     201101L
-
-#define SC_COPYRIGHT "Copyright (c) 1996-2011 by all Contributors"
+#define SC_COPYRIGHT "        Copyright (c) 1996-2011 by all Contributors,\n        ALL RIGHTS RESERVED\n"
 
 // token stringification
+
 #define SC_STRINGIFY_HELPER_( Arg ) \
   SC_STRINGIFY_HELPER_DEFERRED_( Arg )
 #define SC_STRINGIFY_HELPER_DEFERRED_( Arg ) \
@@ -81,28 +81,23 @@ extern const std::string  sc_copyright_string;
   SC_STRINGIFY_HELPER_( SYSTEMC_VERSION )
 
 #if ( SC_IS_PRERELEASE == 1 )
-#  define SC_VERSION_PRERELEASE "_beta"
+#  define SC_VERSION_PRERELEASE "pub_rev"
+#  define SC_VERSION \
+    SC_STRINGIFY_HELPER_( SC_VERSION_MAJOR.SC_VERSION_MINOR.SC_VERSION_PATCH ) \
+    "_" SC_VERSION_PRERELEASE "_" SC_VERSION_RELEASE_DATE \
+    "-" SC_VERSION_ORIGINATOR
 #else
 #  define SC_VERSION_PRERELEASE // nothing
+#  define SC_VERSION \
+    SC_STRINGIFY_HELPER_( SC_VERSION_MAJOR.SC_VERSION_MINOR.SC_VERSION_PATCH ) \
+    "-" SC_VERSION_ORIGINATOR
 #endif
-
-#define SC_VERSION \
-  SC_STRINGIFY_HELPER_( SC_VERSION_MAJOR.SC_VERSION_MINOR.SC_VERSION_PATCH ) \
-  "_" SC_VERSION_RELEASE_DATE SC_VERSION_PRERELEASE \
-  "-" SC_VERSION_ORIGINATOR
-
-// probably obsolete
-
-#define SC_RELEASE_STRING \
-  "systemc-" SC_VERSION
-#define SC_VENDOR_STRING \
-  SC_VERSION_ORIGINATOR
 
 // THIS CLASS AND STATIC INSTANCE BELOW DETECTS BAD REV OBJECTS AT LINK TIME
 //
 // Each source file which includes this file for the current SystemC version 
 // will have a static instance of the class sc_api_version_XXX defined
-// in it. That object instanciation will cause the constructor below
+// in it. That object instance will cause the constructor below
 // to be invoked. If the version of the SystemC being linked against
 // does not contain the constructor below a linkage error will occur.
 

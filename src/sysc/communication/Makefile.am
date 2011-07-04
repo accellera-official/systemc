@@ -32,7 +32,7 @@
 
 include $(top_srcdir)/config/Make-rules
 
-noinst_LIBRARIES = libcommunication.a
+noinst_LTLIBRARIES = libcommunication.la
 
 H_FILES = \
 	sc_buffer.h \
@@ -81,7 +81,7 @@ CXX_FILES = \
 
 NO_CXX_FILES =
 
-libcommunication_a_SOURCES = $(H_FILES) $(CXX_FILES)
+libcommunication_la_SOURCES = $(H_FILES) $(CXX_FILES)
 
 INCLUDE_DIR = $(prefix)/include/sysc/communication
 
@@ -91,8 +91,6 @@ install-data-local:
 	for file in $(noinst_HEADERS); do \
 	  $(INSTALL_DATA) $(srcdir)/$$file $(INCLUDE_DIR)/$$file; \
 	done
-	$(AR_TOOL) $(top_builddir)/src/$(MAIN_LIBRARY) \
-	  $(libcommunication_a_OBJECTS)
 
 uninstall-local:
 	@$(NORMAL_UNINSTALL)

@@ -48,7 +48,7 @@ SC_MODULE(fir_fsm) {
       SC_METHOD(entry);
       dont_initialize();
       sensitive << clock.pos();
-    };
+    }
   void entry();
 };
 

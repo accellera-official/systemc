@@ -234,7 +234,7 @@ inline
 void
 sc_signal<T,POL>::write( const T& value_ )
 {
-    bool value_changed = !( value_ == m_cur_val );
+    bool value_changed = !( m_cur_val == value_ );
     if ( !policy_type::check_write(this, value_changed) )
         return;
 
@@ -483,7 +483,7 @@ template< sc_writer_policy POL >
 void
 sc_signal<bool,POL>::write( const bool& value_ )
 {
-    bool value_changed = !( value_ == m_cur_val );
+    bool value_changed = !( m_cur_val == value_ );
     if ( !policy_type::check_write(this, value_changed) )
         return;
     m_new_val = value_;
@@ -759,7 +759,7 @@ inline
 void
 sc_signal<sc_dt::sc_logic,POL>::write( const sc_dt::sc_logic& value_ )
 {
-    bool value_changed = !( value_ == m_cur_val );
+    bool value_changed = !( m_cur_val == value_ );
     if ( !policy_type::check_write(this, value_changed) )
         return;
 
@@ -826,6 +826,10 @@ operator << ( ::std::ostream& os, const sc_signal<T,POL>& a )
     
  *****************************************************************************/
 //$Log: sc_signal.h,v $
+//Revision 1.14  2011/06/25 17:08:38  acg
+// Andy Goodrich: Jerome Cornet's changes to use libtool to build the
+// library.
+//
 //Revision 1.13  2011/04/13 02:59:09  acg
 // Andy Goodrich: made events internal to signals into kernel events.
 //

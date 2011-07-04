@@ -50,7 +50,7 @@ int sc_main (int argc , char *argv[]) {
   stimulus1.reset(reset); 
   stimulus1.input_valid(input_valid); 
   stimulus1.sample(sample); 
-  stimulus1.CLK(clock.signal());
+  stimulus1.CLK(clock);
 
   fir fir1( "process_body");
   fir1.reset(reset); 

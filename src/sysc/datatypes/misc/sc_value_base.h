@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: sc_value_base.h,v $
+// Revision 1.2  2011/06/28 21:23:04  acg
+//  Andy Goodrich: merging of SCV tree.
+//
 // Revision 1.1.1.1  2006/12/15 20:20:05  acg
 // SystemC 2.3
 //
@@ -77,7 +80,7 @@ class sc_value_base
     virtual void concat_set( const sc_unsigned& src, int low_i );
     virtual void concat_set( uint64 src, int low_i );
   public:
-    virtual ~sc_value_base() {};
+    virtual ~sc_value_base() {}
 };
 
 

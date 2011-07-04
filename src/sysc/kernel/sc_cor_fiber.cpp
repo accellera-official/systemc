@@ -35,6 +35,10 @@
 
 
 // $Log: sc_cor_fiber.cpp,v $
+// Revision 1.7  2011/06/25 17:08:39  acg
+//  Andy Goodrich: Jerome Cornet's changes to use libtool to build the
+//  library.
+//
 // Revision 1.6  2011/02/18 20:27:14  acg
 //  Andy Goodrich: Updated Copyrights.
 //
@@ -62,6 +66,14 @@
 
 #include "sysc/kernel/sc_cor_fiber.h"
 #include "sysc/kernel/sc_simcontext.h"
+#if defined(__GNUC__) && __USING_SJLJ_EXCEPTIONS__
+#   if (__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ > 2))
+#      include <unwind.h>
+#   else
+       extern "C" void _Unwind_SjLj_Register (struct SjLj_Function_Context *);
+       extern "C" void _Unwind_SjLj_Unregister (struct SjLj_Function_Context *);
+#   endif
+#endif
 
 namespace sc_core {
 
@@ -72,6 +84,10 @@ namespace sc_core {
 // main coroutine
 
 static sc_cor_fiber main_cor;
+#if defined(__GNUC__) && __USING_SJLJ_EXCEPTIONS__
+// current coroutine
+static sc_cor_fiber* curr_cor;
+#endif
 
 
 // ----------------------------------------------------------------------------
@@ -112,6 +128,11 @@ sc_cor_pkg_fiber::sc_cor_pkg_fiber( sc_simcontext* simc )
         // initialize the main coroutine
 	assert( main_cor.m_fiber == 0 );
 	main_cor.m_fiber = ConvertThreadToFiber( 0 );
+#       if defined(__GNUC__) && __USING_SJLJ_EXCEPTIONS__
+            // initialize the current coroutine
+            assert( curr_cor == 0 );
+            curr_cor = &main_cor;
+#       endif
     }
 }
 
@@ -123,6 +144,10 @@ sc_cor_pkg_fiber::~sc_cor_pkg_fiber()
     if( -- instance_count == 0 ) {
 	// cleanup the main coroutine
 	main_cor.m_fiber = 0;
+#       if defined(__GNUC__) && __USING_SJLJ_EXCEPTIONS__
+            // cleanup the current coroutine
+            curr_cor = 0;
+#       endif
     }
 }
 
@@ -147,6 +172,12 @@ void
 sc_cor_pkg_fiber::yield( sc_cor* next_cor )
 {
     sc_cor_fiber* new_cor = SCAST<sc_cor_fiber*>( next_cor );
+#   if defined(__GNUC__) && __USING_SJLJ_EXCEPTIONS__
+        // Switch SJLJ exception handling function contexts
+        _Unwind_SjLj_Register(&curr_cor->m_eh);
+        _Unwind_SjLj_Unregister(&new_cor->m_eh);
+        curr_cor = new_cor;
+#   endif
     SwitchToFiber( new_cor->m_fiber );
 }
 

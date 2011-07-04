@@ -165,7 +165,7 @@ protected:
 
     // Flush results and close file
     virtual ~sc_trace_file()
-	{ /* Intentionally blank */ };
+	{ /* Intentionally blank */ }
 };
 
 /*****************************************************************************/

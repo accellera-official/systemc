@@ -32,7 +32,7 @@
 
 include $(top_srcdir)/config/Make-rules
 
-noinst_LIBRARIES = libqt.a
+noinst_LTLIBRARIES = libqt.la
 
 H_FILES = \
 	qt.h \
@@ -55,15 +55,18 @@ C_FILES = \
 	qt.c \
 	qtmdc.c
 
-libqt_a_SOURCES = $(H_FILES) $(C_FILES)
+S_FILES = \
+       qtmds.s
 
-libqt_a_LIBADD = qtmds.o
+libqt_la_SOURCES = $(H_FILES) $(C_FILES) $(S_FILES)
+
+libqt_la_LIBTOOLFLAGS = --tag=CC
+
+qtmds_o_CCASFLAGS = $(AM_CCASFLAGS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES)
 
 INCLUDE_DIR = $(prefix)/include/sysc/qt
 
 qt.o qtmdc.c qtmds.s: configuration
-qtmds.o: qtmds.s
-	$(AS) -o qtmds.o qtmds.s $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES)
 
 configuration:
 	@test -d md || ln -s $(srcdir)/md .
@@ -75,8 +78,6 @@ clean:
 
 install-data-local:
 	@$(NORMAL_INSTALL)
-	$(AR_TOOL) $(top_builddir)/src/$(MAIN_LIBRARY) \
-	  $(libqt_a_OBJECTS) $(libqt_a_LIBADD)
 
 
 uninstall-local:

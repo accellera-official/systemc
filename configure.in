@@ -34,19 +34,20 @@ dnl
 dnl Initialization.
 dnl
 
-AC_INIT(NEWS)
-AC_CONFIG_AUX_DIR(config)
+AC_INIT([systemc],[2.3.0])
+AC_CONFIG_SRCDIR([NEWS])
+AC_CONFIG_AUX_DIR([config])
 
 dnl
 dnl Some simple checks.
 dnl
 
 AC_CANONICAL_SYSTEM
-AM_INIT_AUTOMAKE(SystemC,2.3.0,do-no-define)
+AM_INIT_AUTOMAKE([1.10 no-define]) # for .s file support of LIBTOOLFLAGS
 
+AM_PROG_AS
 AC_PROG_CC
 AC_PROG_CXX
-AC_PROG_RANLIB
 AC_PROG_INSTALL
 
 dnl
@@ -54,37 +55,34 @@ dnl Set the compiler flags and target architecture.
 dnl
 
 CXX_COMP=`basename $CXX`
-AR_TOOL="ar cru"
 
 EXTRA_CXXFLAGS="-Wall"
 DEBUG_CXXFLAGS="-g"
 OPT_CXXFLAGS="-O3"
 
 case "$target" in
-    i386-apple-macosx*)
+    i386-apple-*)
         case "$CXX_COMP" in
             CC)
-                EXTRA_CXXFLAGS="-arch i386"
                 TARGET_ARCH="macosx386"
-		AR_TOOL="$CXX -xar -o"
+		#CCAS=as
                 ;;
             c++ | g++)
-                EXTRA_CXXFLAGS="$EXTRA_CXXFLAGS -arch i386"
                 TARGET_ARCH="macosx386"
                 ;;
             *)
 		AC_MSG_ERROR("sorry...compiler not supported")
 		;;
         esac
-	AS="as -arch i386"
-        QT_ARCH="iX86"
+        #QT_ARCH="iX86"
+        QT_ARCH="x86_64"
         ;;
     powerpc-apple-macosx*)
         case "$CXX_COMP" in
             CC)
                 EXTRA_CXXFLAGS=""
                 TARGET_ARCH="macosx"
-		AR_TOOL="$CXX -xar -o"
+		CCAS=as
                 ;;
             c++ | g++)
                 TARGET_ARCH="macosx"
@@ -93,7 +91,6 @@ case "$target" in
 		AC_MSG_ERROR("sorry...compiler not supported")
 		;;
         esac
-	AS=as
         QT_ARCH="powerpc-apple-macosx"
         ;;
     sparc-sun-solaris*) 
@@ -101,7 +98,7 @@ case "$target" in
             CC)
                 EXTRA_CXXFLAGS=""
                 TARGET_ARCH="sparcOS5"
-		AR_TOOL="$CXX -xar -o"
+		CCAS=as
                 ;;
             c++ | g++)
                 TARGET_ARCH="gccsparcOS5"
@@ -110,7 +107,6 @@ case "$target" in
                 AC_MSG_ERROR("sorry...compiler not supported")
 		;;
         esac
-	AS=as
         QT_ARCH="sparc-os2"
         ;;
     x86_64*linux*)
@@ -122,79 +118,87 @@ case "$target" in
                 AC_MSG_ERROR("sorry...compiler not supported")
 		;;
         esac
-	AS=as
         QT_ARCH="x86_64"
         ;;
     *linux*)
         case "$CXX_COMP" in
             c++ | g++)
+               case "$build" in
+               x86_64*linux*)
+                   # It is mandatory to modify CC for libtool to recognize
+                   # cross-compilation
+                   CXX="$CXX -m32"
+                   CCAS="$CCAS -m32"
+                   ;;
+               *)
+                   ;;
+               esac
                 TARGET_ARCH="linux"
                 ;;
             *)
                 AC_MSG_ERROR("sorry...compiler not supported")
 		;;
         esac
-	AS=as
         QT_ARCH="iX86"
         ;;
     amd64*freebsd* | x86_64*freebsd*)
         case "$CXX_COMP" in
             c++ | g++)
                 TARGET_ARCH="freebsd64"
+		CCAS=as
                 ;;
             *)
                 AC_MSG_ERROR("sorry...compiler not supported")
             ;;
         esac
-        AS=as
         QT_ARCH="x86_64"
         ;;
     *freebsd*)
         case "$CXX_COMP" in
             c++ | g++)
                 TARGET_ARCH="freebsd"
+		CCAS=as
                 ;;
             *)
                 AC_MSG_ERROR("sorry...compiler not supported")
             ;;
         esac
-        AS=as
         QT_ARCH="iX86"
         ;;
     *cygwin*)
         case "$CXX_COMP" in
             c++ | g++)
                 TARGET_ARCH="cygwin"
+		CCAS=as
                 ;;
             *)
                 AC_MSG_ERROR("sorry...compiler not supported")
 		;;
         esac
-	AS=as
         QT_ARCH="iX86"
         ;;
     amd64*mingw* | x86_64*mingw*)
         case "$CXX_COMP" in
             c++ | g++)
                 TARGET_ARCH="mingw64"
+		CCAS=as
                 ;;
             *)
                 AC_MSG_ERROR("sorry...compiler not supported")
             ;;
         esac
-        AS=as
         QT_ARCH="x86_64"
         ;;
     *mingw*)
         case "$CXX_COMP" in
-            c++ | g++)
+            c++ | g++ | *mingw*-g++)
                 TARGET_ARCH="mingw"
+		CCAS=as
                 ;;
             *)
                 AC_MSG_ERROR("sorry...compiler not supported")
 		;;
         esac
-	AS=as
         QT_ARCH="iX86"
         ;;
     *hpux11*)
@@ -204,6 +208,7 @@ case "$target" in
                 OPT_CXXFLAGS="+O1"
                 TARGET_ARCH="hpux11"
         	EXTRA_CFLAGS="-Wa,-w36"
+		CCAS=/usr/ccs/bin/as
                 ;;
             c++ | g++)
                 TARGET_ARCH="gcchpux11"
@@ -212,7 +217,6 @@ case "$target" in
                 AC_MSG_ERROR("sorry...compiler not supported")
 		;;
         esac
-	AS=/usr/ccs/bin/as
         QT_ARCH="hppa"
         ;;
     *)
@@ -223,14 +227,17 @@ esac
 dnl set C-related variables
 dnl
 CC="$CXX"
-CFLAGS="$EXTRA_CXXFLAGS $OPT_CXXFLAGS $EXTRA_CFLAGS"
+AM_CFLAGS="$EXTRA_CXXFLAGS $OPT_CXXFLAGS $EXTRA_CFLAGS"
 
 dnl
 dnl The fixed-point datatypes "package" is included.
 dnl
 
 EXTRA_CXXFLAGS="$EXTRA_CXXFLAGS -DSC_INCLUDE_FX"
-CXXFLAGS="$EXTRA_CXXFLAGS $OPT_CXXFLAGS"
+AM_CXXFLAGS="$EXTRA_CXXFLAGS $OPT_CXXFLAGS"
+
+dnl libtools should be put *after* all CC options have been set
+AC_PROG_LIBTOOL
 
 dnl
 dnl Set the default prefix and make sure the prefix is absolute.
@@ -248,8 +255,8 @@ AC_SUBST(DEBUG_CXXFLAGS)
 AC_SUBST(OPT_CXXFLAGS)
 AC_SUBST(TARGET_ARCH)
 AC_SUBST(QT_ARCH)
-AC_SUBST(AR_TOOL)
-AC_SUBST(AS)
+AC_SUBST(AM_CFLAGS)
+AC_SUBST(AM_CXXFLAGS)
 
 dnl
 dnl Create the Makefiles.
@@ -304,5 +311,6 @@ AC_OUTPUT(
  examples/sysc/2.1/scx_mutex_w_policy/Makefile 
  examples/sysc/2.1/specialized_signals/Makefile 
 )
+
 
 dnl Taf!

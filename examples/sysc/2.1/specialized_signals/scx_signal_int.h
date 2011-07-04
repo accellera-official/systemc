@@ -35,6 +35,9 @@
 
 /* 
 $Log: scx_signal_int.h,v $
+Revision 1.2  2011/06/28 21:23:02  acg
+ Andy Goodrich: merging of SCV tree.
+
 Revision 1.1.1.1  2006/12/15 20:20:03  acg
 SystemC 2.3
 
@@ -899,7 +902,7 @@ class sc_in<sc_dt::sc_int<W> > :
     void remove_traces() const
         {
             if( m_traces != 0 ) {
-                for( unsigned int i = m_traces->size() - 1; i >= 0; -- i ) {
+                for( int i = m_traces->size() - 1; i >= 0; -- i ) {
                     delete (*m_traces)[i];
                 }
                 delete m_traces;
@@ -1233,7 +1236,7 @@ class sc_inout<sc_dt::sc_int<W> > :
     void remove_traces() const
         {
             if( m_traces != 0 ) {
-                for( unsigned int i = m_traces->size() - 1; i >= 0; -- i ) {
+                for( int i = m_traces->size() - 1; i >= 0; -- i ) {
                     delete (*m_traces)[i];
                 }
                 delete m_traces;

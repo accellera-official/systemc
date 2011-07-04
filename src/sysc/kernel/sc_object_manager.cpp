@@ -35,6 +35,10 @@
 
 
 // $Log: sc_object_manager.cpp,v $
+// Revision 1.11  2011/06/25 17:08:39  acg
+//  Andy Goodrich: Jerome Cornet's changes to use libtool to build the
+//  library.
+//
 // Revision 1.10  2011/04/01 21:27:54  acg
 //  Andy Goodrich: documentation of event and object insertion methods.
 //
@@ -112,7 +116,6 @@ sc_object_manager::sc_object_manager() :
 sc_object_manager::~sc_object_manager()
 {
     instance_table_t::iterator it;     // instance table iterator.
-    instance_table_t::iterator it_end; // instance table end.
 
     for ( it = m_instance_table.begin(); it != m_instance_table.end(); it++) 
     {

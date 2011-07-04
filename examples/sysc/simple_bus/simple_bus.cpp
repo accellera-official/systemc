@@ -359,7 +359,7 @@ simple_bus_slave_if *simple_bus::get_slave(unsigned int address)
 simple_bus_request * simple_bus::get_request(unsigned int priority)
 {
   simple_bus_request *request = (simple_bus_request *)0;
-  for (int i = 0; i < m_requests.size(); ++i)
+  for (unsigned int i = 0; i < m_requests.size(); ++i)
     {
       request = m_requests[i];
       if ((request) &&
@@ -379,7 +379,7 @@ simple_bus_request * simple_bus::get_next_request()
   // a set of likely requests. Pass it to the arbiter for the
   // final selection
   simple_bus_request_vec Q;
-  for (int i = 0; i < m_requests.size(); ++i)
+  for (unsigned int i = 0; i < m_requests.size(); ++i)
     {
       simple_bus_request *request = m_requests[i];
       if ((request->status == SIMPLE_BUS_REQUEST) ||
@@ -399,7 +399,7 @@ simple_bus_request * simple_bus::get_next_request()
 
 void simple_bus::clear_locks()
 {
-  for (int i = 0; i < m_requests.size(); ++i)
+  for (unsigned int i = 0; i < m_requests.size(); ++i)
     if (m_requests[i]->lock == SIMPLE_BUS_LOCK_GRANTED)
       m_requests[i]->lock = SIMPLE_BUS_LOCK_SET;
     else

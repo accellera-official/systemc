@@ -32,7 +32,7 @@
 
 include $(top_srcdir)/config/Make-rules
 
-noinst_LIBRARIES = libtracing.a
+noinst_LTLIBRARIES = libtracing.la
 
 H_FILES = \
 	sc_trace.h \
@@ -48,7 +48,7 @@ CXX_FILES = \
 
 NO_CXX_FILES =
 
-libtracing_a_SOURCES = $(H_FILES) $(CXX_FILES)
+libtracing_la_SOURCES = $(H_FILES) $(CXX_FILES)
 
 INCLUDE_DIR = $(prefix)/include/sysc/tracing
 
@@ -58,8 +58,6 @@ install-data-local:
 	for file in $(noinst_HEADERS); do \
 	  $(INSTALL_DATA) $(srcdir)/$$file $(INCLUDE_DIR)/$$file; \
 	done
-	$(AR_TOOL) $(top_builddir)/src/$(MAIN_LIBRARY) \
-	  $(libtracing_a_OBJECTS)
 
 uninstall-local:
 	@$(NORMAL_UNINSTALL)

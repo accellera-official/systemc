@@ -32,7 +32,7 @@
 
 include $(top_srcdir)/config/Make-rules
 
-noinst_LIBRARIES = libint.a
+noinst_LTLIBRARIES = libint.la
 
 H_FILES = \
 	sc_bigint.h \
@@ -64,7 +64,7 @@ CXX_FILES = \
 	sc_uint_base.cpp \
 	sc_unsigned.cpp
 
-libint_a_SOURCES = $(H_FILES) $(CXX_FILES) 
+libint_la_SOURCES = $(H_FILES) $(CXX_FILES)
 
 INCLUDE_DIR = $(prefix)/include/sysc/datatypes/int
 
@@ -74,8 +74,6 @@ install-data-local:
 	for file in $(noinst_HEADERS); do \
 	  $(INSTALL_DATA) $(srcdir)/$$file $(INCLUDE_DIR)/$$file; \
 	done
-	$(AR_TOOL) $(top_builddir)/src/$(MAIN_LIBRARY) \
-	  $(libint_a_OBJECTS)
 
 uninstall-local:
 	@$(NORMAL_UNINSTALL)

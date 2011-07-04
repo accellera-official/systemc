@@ -38,7 +38,7 @@
 simple_bus_request *
 simple_bus_arbiter::arbitrate(const simple_bus_request_vec &requests)
 {
-  int i;
+  unsigned int i;
   // at least one request is here
   simple_bus_request *best_request = requests[0]; 
 

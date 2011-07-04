@@ -34,6 +34,8 @@
 
 include $(top_srcdir)/config/Make-rules
 
+noinst_LTLIBRARIES =
+
 H_FILES = \
 	bool.hpp \
 	bool_fwd.hpp \

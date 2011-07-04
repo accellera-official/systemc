@@ -32,7 +32,7 @@
 
 include $(top_srcdir)/config/Make-rules
 
-noinst_LIBRARIES = libbit.a
+noinst_LTLIBRARIES = libbit.la
 
 H_FILES = \
 	sc_bit.h \
@@ -55,7 +55,7 @@ CXX_FILES = \
 
 NO_CXX_FILES =
 
-libbit_a_SOURCES = $(H_FILES) $(CXX_FILES)
+libbit_la_SOURCES = $(H_FILES) $(CXX_FILES)
 
 INCLUDE_DIR = $(prefix)/include/sysc/datatypes/bit
 
@@ -65,8 +65,6 @@ install-data-local:
 	for file in $(noinst_HEADERS); do \
 	  $(INSTALL_DATA) $(srcdir)/$$file $(INCLUDE_DIR)/$$file; \
 	done
-	$(AR_TOOL) $(top_builddir)/src/$(MAIN_LIBRARY) \
-	  $(libbit_a_OBJECTS)
 
 uninstall-local:
 	@$(NORMAL_UNINSTALL)

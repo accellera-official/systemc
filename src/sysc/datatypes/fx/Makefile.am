@@ -32,7 +32,7 @@
 
 include $(top_srcdir)/config/Make-rules
 
-noinst_LIBRARIES = libfx.a
+noinst_LTLIBRARIES = libfx.la
 
 H_FILES = \
 	fx.h \
@@ -77,7 +77,7 @@ CXX_FILES = \
 
 NO_CXX_FILES =
 
-libfx_a_SOURCES = $(H_FILES) $(CXX_FILES) 
+libfx_la_SOURCES = $(H_FILES) $(CXX_FILES)
 
 INCLUDE_DIR = $(prefix)/include/sysc/datatypes/fx
 
@@ -87,8 +87,6 @@ install-data-local:
 	for file in $(noinst_HEADERS); do \
 	  $(INSTALL_DATA) $(srcdir)/$$file $(INCLUDE_DIR)/$$file; \
 	done
-	$(AR_TOOL) $(top_builddir)/src/$(MAIN_LIBRARY) \
-	  $(libfx_a_OBJECTS)
 
 uninstall-local:
 	@$(NORMAL_UNINSTALL)

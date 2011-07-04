@@ -47,7 +47,7 @@ struct fifo {
       full = false;
       empty = true;
       pntr = 0;
-    };
+    }
 
   // methods
    
