@@ -373,19 +373,24 @@ inline bool sc_method_process::run_process()
     // Execute this object instance's semantics and catch any exceptions that
     // are generated:
 
-    try {
-        DEBUG_MSG(DEBUG_NAME,this,"dispatching method");
-	semantics();
-    }
-    catch( sc_unwind_exception& ex ) {
-        DEBUG_MSG(DEBUG_NAME,this,"caught unwind exception");
-	ex.clear();
-    }
-    catch( ... ) {
-        sc_report* err_p = sc_handle_exception();
-        simcontext()->set_error( err_p );
-        return false;
-    }
+    bool restart = false;
+    do {
+        try {
+            DEBUG_MSG(DEBUG_NAME,this,"dispatching method");
+            semantics();
+            restart = false;
+        }
+        catch( sc_unwind_exception& ex ) {
+            DEBUG_MSG(DEBUG_NAME,this,"caught unwind exception");
+            ex.clear();
+            restart = ex.is_reset();
+        }
+        catch( ... ) {
+            sc_report* err_p = sc_handle_exception();
+            simcontext()->set_error( err_p );
+            return false;
+        }
+    } while( restart );
     return true;
 }
 
