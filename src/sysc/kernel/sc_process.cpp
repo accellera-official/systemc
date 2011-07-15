@@ -336,6 +336,7 @@ void sc_process_b::delete_process()
   
     else
     {
+        m_references_n = 1; // restore reference count
         detach();
         simcontext()->mark_to_collect_process( this );
     }

@@ -640,7 +640,7 @@ sc_simcontext::crunch( bool once )
         {
 	    sc_process_b* del_p = m_collectable->front();
 	    m_collectable->pop_front();
-	    delete del_p;
+	    del_p->reference_decrement();
         }
 
 
