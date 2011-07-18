@@ -530,6 +530,8 @@ class sc_process_b : public sc_object {
         }
     inline bool timed_out() const;
 
+    void report_error( const char* msgid, const char* msg = "" );
+
   protected: // process control methods:
     virtual void disable_process(
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS ) = 0;

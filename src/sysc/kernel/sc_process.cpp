@@ -188,6 +188,8 @@
 #include "sysc/kernel/sc_process_handle.h"
 #include "sysc/kernel/sc_event.h"
 
+#include <sstream> // std::stringstream
+
 namespace sc_core {
 
 // sc_process_handle entities that are returned for null pointer instances:
@@ -484,6 +486,22 @@ sc_process_b::remove_static_events()
     }
 }
 
+//------------------------------------------------------------------------------
+// "sc_process_b::report_error"
+//
+// This method can be used to issue a report from within a process.
+// The error of the given ID is reported with the given message and
+// the process' name() appended to the report.
+//------------------------------------------------------------------------------
+void
+sc_process_b::report_error( const char* msgid, const char* msg )
+{
+    std::stringstream sstr;
+    if( msg && msg[0] )
+      sstr << msg << ": ";
+    sstr << name();
+    SC_REPORT_ERROR( msgid, sstr.str().c_str() );
+}
 
 //------------------------------------------------------------------------------
 //"sc_process_b::reset_changed"
@@ -508,8 +526,8 @@ void sc_process_b::reset_changed( bool async, bool asserted )
     if ( !sc_allow_process_control_corners && !async && 
          (m_state & ps_bit_suspended) )
     {
-	SC_REPORT_ERROR( SC_ID_PROCESS_CONTROL_CORNER_CASE_,
-	   ": synchronous reset changed on a suspended process");
+        report_error( SC_ID_PROCESS_CONTROL_CORNER_CASE_,
+                      "synchronous reset changed on a suspended process" );
     }
 
     // IF THIS OBJECT IS PUSHING UP DAISIES WE ARE DONE:
@@ -623,7 +641,7 @@ void sc_process_b::reset_process( reset_type rt,
       case reset_asynchronous:
 	if ( sc_get_status() != SC_RUNNING )
 	{
-	    SC_REPORT_ERROR(SC_ID_RESET_PROCESS_WHILE_NOT_RUNNING_, "");
+	    report_error( SC_ID_RESET_PROCESS_WHILE_NOT_RUNNING_ );
 	}
 	else
 	{

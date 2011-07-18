@@ -374,8 +374,8 @@ void sc_thread_process::disable_process(
 	  case EVENT_TIMEOUT: 
 	  case OR_LIST_TIMEOUT:
 	  case TIMEOUT:
-	    SC_REPORT_ERROR(SC_ID_PROCESS_CONTROL_CORNER_CASE_,
-		            ": attempt to disable a thread with timeout wait");
+	    report_error(SC_ID_PROCESS_CONTROL_CORNER_CASE_,
+		            "attempt to disable a thread with timeout wait");
 	    break;
 	  default:
 	    break;
@@ -458,14 +458,15 @@ void sc_thread_process::kill_process(sc_descendant_inclusion_info descendants )
 
     if ( !sc_is_running() )
     {
-        SC_REPORT_ERROR( SC_ID_KILL_PROCESS_WHILE_UNITIALIZED_, "" );
+        report_error( SC_ID_KILL_PROCESS_WHILE_UNITIALIZED_ );
     }
 
-    // IF THE PROCESS IS CURRENTLY UNWINDING THAT IS AN ERROR:
+    // IF THE PROCESS IS CURRENTLY UNWINDING THAT IS IGNORED:
 
     if ( m_unwinding )
     {
-        SC_REPORT_ERROR( SC_ID_PROCESS_ALREADY_UNWINDING_, name() );
+        SC_REPORT_WARNING( SC_ID_PROCESS_ALREADY_UNWINDING_, name() );
+        return;
     }
 
 
@@ -555,8 +556,8 @@ void sc_thread_process::resume_process(
          (m_state & ps_bit_suspended) )
     {
 	m_state = m_state & ~ps_bit_suspended;
-        SC_REPORT_ERROR(SC_ID_PROCESS_CONTROL_CORNER_CASE_, 
-	               ": call to resume() on a disabled suspended thread");
+        report_error(SC_ID_PROCESS_CONTROL_CORNER_CASE_, 
+                     "call to resume() on a disabled suspended thread" );
     }
 
     // CLEAR THE SUSPENDED BIT:
@@ -590,11 +591,11 @@ sc_thread_process::sc_thread_process( const char* name_p, bool free_host,
     m_wait_cycle_n(0)
 {
 
-    // CHECK IF THIS IS AN sc_module-BASED PROCESS AND SIMUALTION HAS STARTED:
+    // CHECK IF THIS IS AN sc_module-BASED PROCESS AND SIMULATION HAS STARTED:
 
     if ( DCAST<sc_module*>(host_p) != 0 && sc_is_running() )
     {
-        SC_REPORT_ERROR( SC_ID_MODULE_THREAD_AFTER_START_, "" );
+        report_error( SC_ID_MODULE_THREAD_AFTER_START_ );
     }
 
     // INITIALIZE VALUES:
@@ -715,13 +716,13 @@ void sc_thread_process::suspend_process(
 
     if ( !sc_allow_process_control_corners && m_has_reset_signal )
     {
-	SC_REPORT_ERROR(SC_ID_PROCESS_CONTROL_CORNER_CASE_,
-		    ": attempt to suspend a thread that has a reset signal");
+        report_error(SC_ID_PROCESS_CONTROL_CORNER_CASE_,
+                     "attempt to suspend a thread that has a reset signal");
     }
     else if ( !sc_allow_process_control_corners && m_sticky_reset )
     {
-	SC_REPORT_ERROR(SC_ID_PROCESS_CONTROL_CORNER_CASE_,
-		    ": attempt to suspend a thread in synchronous reset");
+        report_error(SC_ID_PROCESS_CONTROL_CORNER_CASE_,
+                     "attempt to suspend a thread in synchronous reset");
     }
 
     // SUSPEND OUR OBJECT INSTANCE:
@@ -757,11 +758,12 @@ void sc_thread_process::throw_reset( bool async )
 
     if ( m_state & ps_bit_zombie ) return;
 
-    // IF THE PROCESS IS CURRENTLY UNWINDING THAT IS AN ERROR:
+    // IF THE PROCESS IS CURRENTLY UNWINDING THAT IS IGNORED:
 
     if ( m_unwinding )
     {
-        SC_REPORT_ERROR( SC_ID_PROCESS_ALREADY_UNWINDING_, name() );
+        SC_REPORT_WARNING( SC_ID_PROCESS_ALREADY_UNWINDING_, name() );
+        return;
     }
 
 
@@ -822,14 +824,15 @@ void sc_thread_process::throw_user( const sc_throw_it_helper& helper,
 
     if ( sc_get_status() != SC_RUNNING )
     {
-        SC_REPORT_ERROR( SC_ID_THROW_IT_WHILE_NOT_RUNNING_, name() );
+        report_error( SC_ID_THROW_IT_WHILE_NOT_RUNNING_ );
     }
 
-    // IF THE PROCESS IS CURRENTLY UNWINDING THAT IS AN ERROR:
+    // IF THE PROCESS IS CURRENTLY UNWINDING THAT IS IGNORED:
 
     if ( m_unwinding )
     {
-        SC_REPORT_ERROR( SC_ID_PROCESS_ALREADY_UNWINDING_, name() );
+        SC_REPORT_WARNING( SC_ID_PROCESS_ALREADY_UNWINDING_, name() );
+        return;
     }
 
     // IF NEEDED PROPOGATE THE THROW REQUEST THROUGH OUR DESCENDANTS:
