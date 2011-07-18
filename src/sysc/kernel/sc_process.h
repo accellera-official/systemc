@@ -583,6 +583,7 @@ class sc_process_b : public sc_object {
     sc_process_b*                m_exist_p;         // process existence link.
     bool                         m_free_host;       // free sc_semantic_host_p.
     bool                         m_has_reset_signal;  // has reset_signal_is.
+    bool                         m_has_stack;       // stack present (for unwinding)
     bool                         m_is_thread;       // true if this is thread.
     sc_report*                   m_last_report_p;   // last report this process.
     sc_name_gen*                 m_name_gen_p;      // subprocess name generator
@@ -795,6 +796,15 @@ inline void sc_process_b::reference_increment()
 //------------------------------------------------------------------------------
 void sc_process_b::semantics()
 {
+    struct scoped_flag
+    {
+      scoped_flag( bool& b ) : ref(b){ ref = true;  }
+      ~scoped_flag()                 { ref = false; }
+      bool& ref;
+    }
+    // within this function, the process has a stack associated
+    scoped_stack_flag( m_has_stack );
+
     assert( m_process_kind != SC_NO_PROC_ );
 
     // Determine the reset status of this object instance and potentially

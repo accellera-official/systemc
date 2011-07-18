@@ -489,7 +489,7 @@ void sc_thread_process::kill_process(sc_descendant_inclusion_info descendants )
     //
     // If the thread to be reset we are done.
 
-    if ( sc_is_running() )
+    if ( sc_is_running() && m_has_stack )
     {
 	if ( m_state & ps_bit_zombie ) return;
         m_throw_status = THROW_KILL;
@@ -857,12 +857,19 @@ void sc_thread_process::throw_user( const sc_throw_it_helper& helper,
 
     if ( m_state & ps_bit_zombie ) return;
 
-    remove_dynamic_events();
-    DEBUG_MSG(DEBUG_NAME,this,"throwing user exception");
-    m_throw_status = THROW_USER;
-    if ( m_throw_helper_p != 0 ) delete m_throw_helper_p;
-    m_throw_helper_p = helper.clone();
-    simcontext()->preempt_with( this );
+    if( m_has_stack )
+    {
+        remove_dynamic_events();
+        DEBUG_MSG(DEBUG_NAME,this,"throwing user exception");
+        m_throw_status = THROW_USER;
+        if ( m_throw_helper_p != 0 ) delete m_throw_helper_p;
+        m_throw_helper_p = helper.clone();
+        simcontext()->preempt_with( this );
+    }
+    else
+    {
+        SC_REPORT_WARNING( SC_ID_THROW_IT_IGNORED_, name() );
+    }
 }
 
 

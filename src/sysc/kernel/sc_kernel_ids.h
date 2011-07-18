@@ -260,8 +260,8 @@ SC_DEFINE_MESSAGE( SC_ID_SIMULATION_UNCAUGHT_EXCEPTION_, 549,
 // available message number 553
 // available message number 554
 // available message number 555
-SC_DEFINE_MESSAGE(SC_ID_THROW_IT_ON_METHOD_  , 556,
-        "throw_it on method process is being ignored " )
+SC_DEFINE_MESSAGE(SC_ID_THROW_IT_IGNORED_  , 556,
+        "throw_it on method/non-running process is being ignored " )
 SC_DEFINE_MESSAGE(SC_ID_NOT_EXPECTING_DYNAMIC_EVENT_NOTIFY_ , 557,
 	"dynamic event notification encountered when sensitivity is static" )
 SC_DEFINE_MESSAGE(SC_ID_DISABLE_WILL_ORPHAN_PROCESS_     , 558,

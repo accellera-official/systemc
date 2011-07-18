@@ -754,10 +754,25 @@ void sc_method_process::throw_user( const sc_throw_it_helper& helper,
         }
     }
 
+#if 0 // shouldn't we throw, if we're currently running?
+
+    if ( sc_get_current_process_b() == (sc_process_b*)this )
+    {
+        remove_dynamic_events();
+        m_throw_status = THROW_USER;
+        if ( m_throw_helper_p != 0 ) delete m_throw_helper_p;
+        m_throw_helper_p = helper.clone();
+        m_throw_helper_p->throw_it();
+    }
+
     // throw_it HAS NO EFFECT ON A METHOD, ISSUE A WARNING:
 
-    SC_REPORT_WARNING( SC_ID_THROW_IT_ON_METHOD_, name() );
+    else
 
+#endif
+    {
+        SC_REPORT_WARNING( SC_ID_THROW_IT_IGNORED_, name() );
+    }
 }
 
 //------------------------------------------------------------------------------
