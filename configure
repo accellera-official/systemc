@@ -5192,7 +5192,6 @@ echo "$as_me: error: \"sorry...compiler not supported\"" >&2;}
         case "$CXX_COMP" in
             c++ | g++)
                 TARGET_ARCH="freebsd64"
-		CCAS=as
                 ;;
             *)
                 { { echo "$as_me:$LINENO: error: \"sorry...compiler not supported\"" >&5
@@ -5206,7 +5205,6 @@ echo "$as_me: error: \"sorry...compiler not supported\"" >&2;}
         case "$CXX_COMP" in
             c++ | g++)
                 TARGET_ARCH="freebsd"
-		CCAS=as
                 ;;
             *)
                 { { echo "$as_me:$LINENO: error: \"sorry...compiler not supported\"" >&5
@@ -5220,7 +5218,6 @@ echo "$as_me: error: \"sorry...compiler not supported\"" >&2;}
         case "$CXX_COMP" in
             c++ | g++)
                 TARGET_ARCH="cygwin"
-		CCAS=as
                 ;;
             *)
                 { { echo "$as_me:$LINENO: error: \"sorry...compiler not supported\"" >&5
@@ -5234,7 +5231,6 @@ echo "$as_me: error: \"sorry...compiler not supported\"" >&2;}
         case "$CXX_COMP" in
             c++ | g++)
                 TARGET_ARCH="mingw64"
-		CCAS=as
                 ;;
             *)
                 { { echo "$as_me:$LINENO: error: \"sorry...compiler not supported\"" >&5
@@ -5248,7 +5244,6 @@ echo "$as_me: error: \"sorry...compiler not supported\"" >&2;}
         case "$CXX_COMP" in
             c++ | g++ | *mingw*-g++)
                 TARGET_ARCH="mingw"
-		CCAS=as
                 ;;
             *)
                 { { echo "$as_me:$LINENO: error: \"sorry...compiler not supported\"" >&5
