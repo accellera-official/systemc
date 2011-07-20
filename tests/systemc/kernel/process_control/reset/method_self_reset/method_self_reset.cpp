@@ -41,15 +41,18 @@ SC_MODULE(DUT)
     }
     void method()
     {
-        static int first_time = true;
+        static int trigger = 0;
         cout << "Entry " << endl;
-	if ( first_time )
-	{
-	    first_time = !first_time;
+        switch( trigger++ ) {
+        case 0:
 	    cout << "Issuing self reset " << endl;
 	    sc_get_current_process_handle().reset();
-	}
-	first_time = !first_time;
+            sc_assert( false );
+        case 1:
+            break;
+        default:
+            trigger=0;
+        }
         cout << "Exit " << endl;
     }
     sc_in<bool> m_clk;
