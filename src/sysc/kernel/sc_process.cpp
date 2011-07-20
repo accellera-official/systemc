@@ -613,20 +613,16 @@ sc_event& sc_process_b::reset_event()
 void sc_process_b::reset_process( reset_type rt,
                                   sc_descendant_inclusion_info descendants )
 {
-    int                              child_i;    // Index of child accessing.
-    int                              child_n;    // Number of children.
-    sc_process_b*                    child_p;    // Child accessing.
-    const ::std::vector<sc_object*>* children_p; // Vector of children.
-
     // PROCESS THIS OBJECT INSTANCE'S DESCENDANTS IF REQUESTED TO:
 
     if ( descendants == SC_INCLUDE_DESCENDANTS )
     {
-        children_p = &get_child_objects();
-        child_n = children_p->size();
-        for ( child_i = 0; child_i < child_n; child_i++ )
+        const std::vector<sc_object*> children = get_child_objects();
+        int                           child_n  = children.size();
+
+        for ( int child_i = 0; child_i < child_n; child_i++ )
         {
-            child_p = DCAST<sc_process_b*>((*children_p)[child_i]);
+            sc_process_b* child_p = DCAST<sc_process_b*>(children[child_i]);
             if ( child_p ) child_p->reset_process(rt, descendants);
         }
     }
