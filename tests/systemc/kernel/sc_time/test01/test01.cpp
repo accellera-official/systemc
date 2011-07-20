@@ -298,6 +298,10 @@ test_SC_ZERO_TIME()
 int
 sc_main( int, char*[] )
 {
+# ifdef _MSC_VER
+    _set_output_format(_TWO_DIGIT_EXPONENT);
+# endif
+
     test_print();
     test_constructors();
     test_assignment();

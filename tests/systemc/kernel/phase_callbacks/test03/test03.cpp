@@ -138,4 +138,5 @@ int sc_main( int, char*[] )
   mod.direct_port( sig );
 
   sc_start();
+  return 0;
 }

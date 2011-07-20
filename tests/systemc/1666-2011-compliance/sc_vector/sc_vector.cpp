@@ -220,7 +220,7 @@ struct M: sc_module
     sc_vector_assembly< Initiator1, sc_port<i_f> > assembly = sc_assemble_vector(initiator_vec, &Initiator1::port); 
 
     sc_assert( &*(assembly.begin()) == &(*initiator_vec.begin()).port );
-    sc_assert( &*(assembly.end())   == &(*initiator_vec.end()).port );
+    // sc_assert( &*(assembly.end())   == &(*initiator_vec.end()).port );
     sc_assert( assembly.size()  == initiator_vec.size() );
     for (unsigned int i = 0; i < assembly.size(); i++)
     {
