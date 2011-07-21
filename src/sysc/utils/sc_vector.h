@@ -239,8 +239,9 @@ struct sc_direct_access
 // iterator access adapters
 template< typename ElementType
         , typename AccessType   >
-struct sc_member_access
+class sc_member_access
 {
+public:
   template< typename, typename > friend class sc_member_access;
 
   typedef ElementType element_type;
