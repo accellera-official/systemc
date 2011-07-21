@@ -1,0 +1,5 @@
+SystemC Simulation
+Should be silent except for some renaming warnings...
+Note: VCD trace timescale unit is set by user to 1.000000e-009 sec.
+
+Success
