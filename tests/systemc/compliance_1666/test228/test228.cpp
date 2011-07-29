@@ -82,6 +82,10 @@ struct Top: sc_module
 
 int sc_main(int argc, char* argv[])
 {
+#ifdef _MSC_VER
+    _set_output_format(_TWO_DIGIT_EXPONENT);
+#endif
+
   cout << "Should be silent except for some renaming warnings..." << endl;
 
   Top top("top");

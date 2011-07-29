@@ -23,6 +23,13 @@
 
  *****************************************************************************/
 // $Log: method_self_reset.cpp,v $
+// Revision 1.4  2011/07/24 15:59:53  acg
+//  Andy Goodrich: add statement I missed installing Philipp's patch.
+//
+// Revision 1.3  2011/07/24 15:58:39  acg
+//  Philipp A. Hartmann: convert first time toggle to counter since need 3
+//  states.
+//
 // Revision 1.2  2011/02/04 15:26:33  acg
 //  Andy Goodrich: regolden for proper process control semantics.
 //
@@ -41,15 +48,19 @@ SC_MODULE(DUT)
     }
     void method()
     {
-        static int first_time = true;
+        static int trigger = 0;
         cout << "Entry " << endl;
-	if ( first_time )
+	switch( trigger++ )
 	{
-	    first_time = !first_time;
+	  case 0:
 	    cout << "Issuing self reset " << endl;
 	    sc_get_current_process_handle().reset();
+	    sc_assert( false );
+	  case 1:
+	    break;
+	  default:
+	    trigger = 0;
 	}
-	first_time = !first_time;
         cout << "Exit " << endl;
     }
     sc_in<bool> m_clk;

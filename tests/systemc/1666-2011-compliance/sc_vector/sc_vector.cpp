@@ -22,6 +22,9 @@
 // MODIFICATION LOG - modifiers, enter your name, affiliation, date and
 //
 // $Log: sc_vector.cpp,v $
+// Revision 1.3  2011/07/24 16:04:12  acg
+//  Philipp A. Hartmann: remove assert() that does not test the correct thing.
+//
 // Revision 1.2  2011/05/08 19:18:46  acg
 //  Andy Goodrich: remove extraneous + prefixes from git diff.
 //
@@ -220,7 +223,7 @@ struct M: sc_module
     sc_vector_assembly< Initiator1, sc_port<i_f> > assembly = sc_assemble_vector(initiator_vec, &Initiator1::port); 
 
     sc_assert( &*(assembly.begin()) == &(*initiator_vec.begin()).port );
-    sc_assert( &*(assembly.end())   == &(*initiator_vec.end()).port );
+    // sc_assert( &*(assembly.end())   == &(*initiator_vec.end()).port );
     sc_assert( assembly.size()  == initiator_vec.size() );
     for (unsigned int i = 0; i < assembly.size(); i++)
     {

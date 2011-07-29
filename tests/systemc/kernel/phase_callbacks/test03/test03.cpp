@@ -22,6 +22,9 @@
 // MODIFICATION LOG - modifiers, enter your name, affiliation, date and
 //
 // $Log: test03.cpp,v $
+// Revision 1.2  2011/07/24 13:05:30  acg
+//  Alan Fitch: added return 0 to sc_main that was missing.
+//
 // Revision 1.1  2011/05/08 17:55:36  acg
 //  Philipp A. Hartmann: first check in of test.
 //
@@ -138,4 +141,5 @@ int sc_main( int, char*[] )
   mod.direct_port( sig );
 
   sc_start();
+  return 0;
 }
