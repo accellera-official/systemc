@@ -35,6 +35,10 @@
  *****************************************************************************/
 
 // $Log: sc_method_process.h,v $
+// Revision 1.18  2011/07/24 11:18:09  acg
+//  Philipp A. Hartmann: add code to restart a method process after a
+//  self-reset.
+//
 // Revision 1.17  2011/05/09 04:07:48  acg
 //  Philipp A. Hartmann:
 //    (1) Restore hierarchy in all phase callbacks.
@@ -216,6 +220,7 @@ class sc_method_process : public sc_process_b {
         { return "sc_method_process"; }
 
   protected:
+    void check_for_throws( process_throw_type old_status );
     virtual void disable_process(
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
     virtual void enable_process(
@@ -256,7 +261,6 @@ class sc_method_process : public sc_process_b {
     const sc_method_process& operator = ( const sc_method_process& );
 
 };
-
 
 inline
 void
@@ -373,19 +377,25 @@ inline bool sc_method_process::run_process()
     // Execute this object instance's semantics and catch any exceptions that
     // are generated:
 
-    try {
-        DEBUG_MSG(DEBUG_NAME,this,"dispatching method");
-	semantics();
-    }
-    catch( sc_unwind_exception& ex ) {
-        DEBUG_MSG(DEBUG_NAME,this,"caught unwind exception");
-	ex.clear();
-    }
-    catch( ... ) {
-        sc_report* err_p = sc_handle_exception();
-        simcontext()->set_error( err_p );
-        return false;
-    }
+    bool restart = false;
+    do {
+        try {
+            DEBUG_MSG(DEBUG_NAME,this,"dispatching method");
+            semantics();
+            restart = false;
+        }
+        catch( sc_unwind_exception& ex ) {
+            DEBUG_MSG(DEBUG_NAME,this,"caught unwind exception");
+            ex.clear();
+            restart = ex.is_reset();
+        }
+        catch( ... ) {
+            sc_report* err_p = sc_handle_exception();
+            simcontext()->set_error( err_p );
+            return false;
+        }
+    } while( restart );
+
     return true;
 }
 

@@ -34,6 +34,10 @@
  *****************************************************************************/
 
 // $Log: sc_kernel_ids.h,v $
+// Revision 1.23  2011/07/24 11:15:47  acg
+//  Philipp A. Hartmann: Improvements to error/warning messages related to
+//  process control.
+//
 // Revision 1.22  2011/05/09 04:07:48  acg
 //  Philipp A. Hartmann:
 //    (1) Restore hierarchy in all phase callbacks.
@@ -235,7 +239,7 @@ SC_DEFINE_MESSAGE(SC_ID_CYCLE_MISSES_EVENTS_         , 538,
 SC_DEFINE_MESSAGE( SC_ID_RETHROW_UNWINDING_          , 539,
          "sc_unwind_exception not re-thrown during kill/reset" )
 SC_DEFINE_MESSAGE( SC_ID_PROCESS_ALREADY_UNWINDING_  , 540,
-         "process received throw_it/reset during unwinding" )
+         "kill/reset ignored during unwinding" )
 SC_DEFINE_MESSAGE(SC_ID_MODULE_METHOD_AFTER_START_   , 541,
 	"call to SC_METHOD in sc_module while simulation running" )
 SC_DEFINE_MESSAGE(SC_ID_MODULE_THREAD_AFTER_START_   , 542,
@@ -260,12 +264,12 @@ SC_DEFINE_MESSAGE( SC_ID_SIMULATION_UNCAUGHT_EXCEPTION_, 549,
 // available message number 553
 // available message number 554
 // available message number 555
-SC_DEFINE_MESSAGE(SC_ID_THROW_IT_ON_METHOD_  , 556,
-        "throw_it on method process is being ignored " )
+SC_DEFINE_MESSAGE(SC_ID_THROW_IT_IGNORED_  , 556,
+        "throw_it on method/non-running process is being ignored " )
 SC_DEFINE_MESSAGE(SC_ID_NOT_EXPECTING_DYNAMIC_EVENT_NOTIFY_ , 557,
 	"dynamic event notification encountered when sensitivity is static" )
 SC_DEFINE_MESSAGE(SC_ID_DISABLE_WILL_ORPHAN_PROCESS_     , 558,
-	"disable() or dont_initialize() called on process with no static sensitivity, it will be orphaned: " ) 
+	"disable() or dont_initialize() called on process with no static sensitivity, it will be orphaned " ) 
 SC_DEFINE_MESSAGE(SC_ID_PROCESS_CONTROL_CORNER_CASE_     , 559,
 	"Undefined process control interaction" ) 
 SC_DEFINE_MESSAGE(SC_ID_METHOD_TERMINATION_EVENT_        , 560,
@@ -289,7 +293,7 @@ SC_DEFINE_MESSAGE(SC_ID_EMPTY_PROCESS_HANDLE_  , 570,
 SC_DEFINE_MESSAGE(SC_ID_NO_SC_START_ACTIVITY_  , 571,
         "no activity or clock movement for sc_start() invocation" )
 SC_DEFINE_MESSAGE(SC_ID_KILL_PROCESS_WHILE_UNITIALIZED_  , 572,
-        "a process may not be killed before the end of elaboration" )
+        "a process may not be killed before it is initialized" )
 SC_DEFINE_MESSAGE(SC_ID_RESET_PROCESS_WHILE_NOT_RUNNING_  , 573,
         "a process may not be asynchronously reset while the simulation is not running" )
 SC_DEFINE_MESSAGE(SC_ID_THROW_IT_WHILE_NOT_RUNNING_  , 574,

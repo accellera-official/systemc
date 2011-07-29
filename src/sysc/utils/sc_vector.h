@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: sc_vector.h,v $
+// Revision 1.16  2011/07/25 10:21:17  acg
+//  Andy Goodrich: check in aftermath of call to automake.
+//
 // Revision 1.15  2011/04/02 00:04:32  acg
 //  Philipp A. Hartmann: fix distance from member iterators, and
 //  add iterator conversions.
@@ -239,37 +242,38 @@ struct sc_direct_access
 // iterator access adapters
 template< typename ElementType
         , typename AccessType   >
-struct sc_member_access
+class sc_member_access
 {
-  template< typename, typename > friend class sc_member_access;
+  public:
+    template< typename, typename > friend class sc_member_access;
 
-  typedef ElementType element_type;
-  typedef AccessType  access_type;
-  typedef access_type (element_type::*member_type);
-  typedef access_type type;
-  typedef typename sc_meta::remove_const<type>::type plain_type;
-  typedef typename sc_meta::remove_const<ElementType>::type plain_elem_type;
+    typedef ElementType element_type;
+    typedef AccessType  access_type;
+    typedef access_type (element_type::*member_type);
+    typedef access_type type;
+    typedef typename sc_meta::remove_const<type>::type plain_type;
+    typedef typename sc_meta::remove_const<ElementType>::type plain_elem_type;
 
-  typedef sc_member_access< element_type, access_type > policy;
-  typedef sc_member_access< plain_elem_type, plain_type >
-    non_const_policy;
-  typedef sc_member_access< const plain_elem_type, const plain_type >
-    const_policy;
-
-  sc_member_access( member_type ptr )
-    : ptr_(ptr) {}
-
-  sc_member_access( const non_const_policy& other )
-    : ptr_(other.ptr_)
-  {}
-
-  access_type * get( element_type* this_ ) const
-    { return &(this_->*ptr_); }
-
-private:
-  member_type ptr_;
+    typedef sc_member_access< element_type, access_type > policy;
+    typedef sc_member_access< plain_elem_type, plain_type >
+      non_const_policy;
+    typedef sc_member_access< const plain_elem_type, const plain_type >
+      const_policy;
+  
+    sc_member_access( member_type ptr )
+      : ptr_(ptr) {}
+  
+    sc_member_access( const non_const_policy& other )
+      : ptr_(other.ptr_)
+    {}
+  
+    access_type * get( element_type* this_ ) const
+      { return &(this_->*ptr_); }
+  
+  private:
+    member_type ptr_;
 }; // sc_member_access
-
+  
 
 template< typename ElementType
         , typename AccessPolicy = sc_direct_access<ElementType> >

@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: scfx_rep.h,v $
+// Revision 1.5  2011/07/25 10:20:29  acg
+//  Andy Goodrich: check in aftermath of call to automake.
+//
 // Revision 1.4  2010/12/07 20:09:08  acg
 // Andy Goodrich: Philipp Hartmann's constructor disambiguation fix
 //
@@ -287,13 +290,13 @@ private:
 
 private:
 
-    scfx_mant m_mant;
-    int       m_wp;
-    int       m_sign;
-    state     m_state;
-    int       m_msw;
-    int       m_lsw;
-    bool      m_r_flag;
+    scfx_mant m_mant;     // mantissa (bits of the value).
+    int       m_wp;       // index of highest order word in value.
+    int       m_sign;     // sign of value.
+    state     m_state;    // value state, e.g., normal, inf, etc.
+    int       m_msw;      // index of most significant non-zero word.
+    int       m_lsw;      // index of least significant non-zero word.
+    bool      m_r_flag;   // true if founding occurred.
 
 };
 

@@ -46,6 +46,12 @@
  *****************************************************************************/
 
 // $Log: sc_process.h,v $
+// Revision 1.32  2011/07/24 11:20:03  acg
+//  Philipp A. Hartmann: process control error message improvements:
+//  (1) Downgrade error to warning for re-kills of processes.
+//  (2) Add process name to process messages.
+//  (3) drop some superfluous colons in messages.
+//
 // Revision 1.31  2011/04/13 02:44:26  acg
 //  Andy Goodrich: added m_unwinding flag in place of THROW_NOW because the
 //  throw status will be set back to THROW_*_RESET if reset is active and
@@ -529,6 +535,7 @@ class sc_process_b : public sc_object {
             m_last_report_p = last_p;
         }
     inline bool timed_out() const;
+    void report_error( const char* msgid, const char* msg = "" );
 
   protected: // process control methods:
     virtual void disable_process(
@@ -581,6 +588,7 @@ class sc_process_b : public sc_object {
     sc_process_b*                m_exist_p;         // process existence link.
     bool                         m_free_host;       // free sc_semantic_host_p.
     bool                         m_has_reset_signal;  // has reset_signal_is.
+    bool                         m_has_stack;       // true is stack present.
     bool                         m_is_thread;       // true if this is thread.
     sc_report*                   m_last_report_p;   // last report this process.
     sc_name_gen*                 m_name_gen_p;      // subprocess name generator
@@ -793,6 +801,17 @@ inline void sc_process_b::reference_increment()
 //------------------------------------------------------------------------------
 void sc_process_b::semantics()
 {
+    struct scoped_flag
+    {
+      scoped_flag( bool& b ) : ref(b){ ref = true;  }
+      ~scoped_flag()                 { ref = false; }
+      bool& ref;
+    }
+
+    // within this function, the process has a stack associated
+
+    scoped_stack_flag( m_has_stack );
+
     assert( m_process_kind != SC_NO_PROC_ );
 
     // Determine the reset status of this object instance and potentially

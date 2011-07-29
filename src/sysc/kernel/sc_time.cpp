@@ -35,6 +35,9 @@
 
 
 // $Log: sc_time.cpp,v $
+// Revision 1.6  2011/07/24 16:08:36  acg
+//  Philipp A. Hartmann: fix C99 format specifiers for Solaris.
+//
 // Revision 1.5  2011/02/18 20:27:14  acg
 //  Andy Goodrich: Updated Copyrights.
 //
@@ -75,9 +78,9 @@
 
 #if !defined(PRIu64)
 #   if defined(_MSC_VER) || defined(__MINGW32__)
-#       define PRIu64 "%I64u"
+#       define PRIu64 "I64u"
 #   else
-#       define PRIu64 "%llu"
+#       define PRIu64 "llu"
 #   endif
 #endif // PRIu64
 
@@ -216,7 +219,7 @@ sc_time::to_string() const
 	n ++;
     }
     char buf[BUFSIZ];
-    std::sprintf( buf, PRIu64, val );
+    std::sprintf( buf, "%"PRIu64, val );
     std::string result( buf );
     if( n >= 15 ) {
 	for( int i = n - 15; i > 0; -- i ) {

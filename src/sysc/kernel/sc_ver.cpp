@@ -35,6 +35,9 @@
 
 
 // $Log: sc_ver.cpp,v $
+// Revision 1.12  2011/07/25 10:20:34  acg
+//  Andy Goodrich: check in aftermath of call to automake.
+//
 // Revision 1.11  2011/07/02 12:55:19  acg
 //  Andy Goodrich: automake refresh.
 //
@@ -80,6 +83,8 @@
 
 #include "sysc/kernel/sc_ver.h"
 #include "sysc/utils/sc_iostream.h"
+#include <cstdlib>
+using std::getenv;
 
 namespace sc_core {
 
@@ -133,7 +138,8 @@ void
 pln()
 {
     static bool lnp = SC_DISABLE_COPYRIGHT_MESSAGE;
-    if ( getenv("SYSTEMC_DISABLE_COPYRIGHT_MESSAGE") != 0 ) lnp = true;
+    if ( lnp || getenv("SYSTEMC_DISABLE_COPYRIGHT_MESSAGE") != 0 ) 
+        lnp = true;
     if( ! lnp ) {
         ::std::cerr << ::std::endl;
 	::std::cerr << sc_version() << ::std::endl;

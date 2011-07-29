@@ -145,7 +145,6 @@ case "$target" in
         case "$CXX_COMP" in
             c++ | g++)
                 TARGET_ARCH="freebsd64"
-		CCAS=as
                 ;;
             *)
                 AC_MSG_ERROR("sorry...compiler not supported")
@@ -157,7 +156,6 @@ case "$target" in
         case "$CXX_COMP" in
             c++ | g++)
                 TARGET_ARCH="freebsd"
-		CCAS=as
                 ;;
             *)
                 AC_MSG_ERROR("sorry...compiler not supported")
@@ -169,7 +167,6 @@ case "$target" in
         case "$CXX_COMP" in
             c++ | g++)
                 TARGET_ARCH="cygwin"
-		CCAS=as
                 ;;
             *)
                 AC_MSG_ERROR("sorry...compiler not supported")
@@ -181,7 +178,6 @@ case "$target" in
         case "$CXX_COMP" in
             c++ | g++)
                 TARGET_ARCH="mingw64"
-		CCAS=as
                 ;;
             *)
                 AC_MSG_ERROR("sorry...compiler not supported")
@@ -193,7 +189,6 @@ case "$target" in
         case "$CXX_COMP" in
             c++ | g++ | *mingw*-g++)
                 TARGET_ARCH="mingw"
-		CCAS=as
                 ;;
             *)
                 AC_MSG_ERROR("sorry...compiler not supported")

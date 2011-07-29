@@ -35,6 +35,16 @@
  *****************************************************************************/
 
 // $Log: sc_thread_process.cpp,v $
+// Revision 1.52  2011/07/24 11:27:04  acg
+//  Andy Goodrich: moved the check for unwinding processes until after the
+//  descendants have been processed in throw_user and kill.
+//
+// Revision 1.51  2011/07/24 11:20:03  acg
+//  Philipp A. Hartmann: process control error message improvements:
+//  (1) Downgrade error to warning for re-kills of processes.
+//  (2) Add process name to process messages.
+//  (3) drop some superfluous colons in messages.
+//
 // Revision 1.50  2011/05/09 04:07:49  acg
 //  Philipp A. Hartmann:
 //    (1) Restore hierarchy in all phase callbacks.
@@ -374,8 +384,8 @@ void sc_thread_process::disable_process(
 	  case EVENT_TIMEOUT: 
 	  case OR_LIST_TIMEOUT:
 	  case TIMEOUT:
-	    SC_REPORT_ERROR(SC_ID_PROCESS_CONTROL_CORNER_CASE_,
-		            ": attempt to disable a thread with timeout wait");
+	    report_error(SC_ID_PROCESS_CONTROL_CORNER_CASE_,
+		         "attempt to disable a thread with timeout wait");
 	    break;
 	  default:
 	    break;
@@ -458,16 +468,8 @@ void sc_thread_process::kill_process(sc_descendant_inclusion_info descendants )
 
     if ( !sc_is_running() )
     {
-        SC_REPORT_ERROR( SC_ID_KILL_PROCESS_WHILE_UNITIALIZED_, "" );
+        report_error( SC_ID_KILL_PROCESS_WHILE_UNITIALIZED_ );
     }
-
-    // IF THE PROCESS IS CURRENTLY UNWINDING THAT IS AN ERROR:
-
-    if ( m_unwinding )
-    {
-        SC_REPORT_ERROR( SC_ID_PROCESS_ALREADY_UNWINDING_, name() );
-    }
-
 
     context_p = simcontext();
 
@@ -484,11 +486,19 @@ void sc_thread_process::kill_process(sc_descendant_inclusion_info descendants )
         }
     }
 
+    // IF THE PROCESS IS CURRENTLY UNWINDING IGNORE THE KILL:
+
+    if ( m_unwinding )
+    {
+        SC_REPORT_WARNING( SC_ID_PROCESS_ALREADY_UNWINDING_, name() );
+	return; 
+    }
+
     // SET UP TO KILL THE PROCESS IF SIMULATION HAS STARTED:
     //
-    // If the thread to be reset we are done.
+    // If the thread does not have a stack don't try the throw!
 
-    if ( sc_is_running() )
+    if ( sc_is_running() && m_has_stack )
     {
 	if ( m_state & ps_bit_zombie ) return;
         m_throw_status = THROW_KILL;
@@ -555,8 +565,8 @@ void sc_thread_process::resume_process(
          (m_state & ps_bit_suspended) )
     {
 	m_state = m_state & ~ps_bit_suspended;
-        SC_REPORT_ERROR(SC_ID_PROCESS_CONTROL_CORNER_CASE_, 
-	               ": call to resume() on a disabled suspended thread");
+        report_error(SC_ID_PROCESS_CONTROL_CORNER_CASE_, 
+	             "call to resume() on a disabled suspended thread");
     }
 
     // CLEAR THE SUSPENDED BIT:
@@ -590,11 +600,11 @@ sc_thread_process::sc_thread_process( const char* name_p, bool free_host,
     m_wait_cycle_n(0)
 {
 
-    // CHECK IF THIS IS AN sc_module-BASED PROCESS AND SIMUALTION HAS STARTED:
+    // CHECK IF THIS IS AN sc_module-BASED PROCESS AND SIMULATION HAS STARTED:
 
     if ( DCAST<sc_module*>(host_p) != 0 && sc_is_running() )
     {
-        SC_REPORT_ERROR( SC_ID_MODULE_THREAD_AFTER_START_, "" );
+        report_error( SC_ID_MODULE_THREAD_AFTER_START_ );
     }
 
     // INITIALIZE VALUES:
@@ -715,13 +725,13 @@ void sc_thread_process::suspend_process(
 
     if ( !sc_allow_process_control_corners && m_has_reset_signal )
     {
-	SC_REPORT_ERROR(SC_ID_PROCESS_CONTROL_CORNER_CASE_,
-		    ": attempt to suspend a thread that has a reset signal");
+	report_error(SC_ID_PROCESS_CONTROL_CORNER_CASE_,
+		     "attempt to suspend a thread that has a reset signal");
     }
     else if ( !sc_allow_process_control_corners && m_sticky_reset )
     {
-	SC_REPORT_ERROR(SC_ID_PROCESS_CONTROL_CORNER_CASE_,
-		    ": attempt to suspend a thread in synchronous reset");
+	report_error(SC_ID_PROCESS_CONTROL_CORNER_CASE_,
+		     "attempt to suspend a thread in synchronous reset");
     }
 
     // SUSPEND OUR OBJECT INSTANCE:
@@ -757,11 +767,12 @@ void sc_thread_process::throw_reset( bool async )
 
     if ( m_state & ps_bit_zombie ) return;
 
-    // IF THE PROCESS IS CURRENTLY UNWINDING THAT IS AN ERROR:
+    // IF THE PROCESS IS CURRENTLY UNWINDING IGNORE THE RESET:
 
     if ( m_unwinding )
     {
-        SC_REPORT_ERROR( SC_ID_PROCESS_ALREADY_UNWINDING_, name() );
+        SC_REPORT_WARNING( SC_ID_PROCESS_ALREADY_UNWINDING_, name() );
+	return; 
     }
 
 
@@ -822,14 +833,7 @@ void sc_thread_process::throw_user( const sc_throw_it_helper& helper,
 
     if ( sc_get_status() != SC_RUNNING )
     {
-        SC_REPORT_ERROR( SC_ID_THROW_IT_WHILE_NOT_RUNNING_, name() );
-    }
-
-    // IF THE PROCESS IS CURRENTLY UNWINDING THAT IS AN ERROR:
-
-    if ( m_unwinding )
-    {
-        SC_REPORT_ERROR( SC_ID_PROCESS_ALREADY_UNWINDING_, name() );
+        report_error( SC_ID_THROW_IT_WHILE_NOT_RUNNING_ ); 
     }
 
     // IF NEEDED PROPOGATE THE THROW REQUEST THROUGH OUR DESCENDANTS:
@@ -849,17 +853,30 @@ void sc_thread_process::throw_user( const sc_throw_it_helper& helper,
         }
     }
 
+    // IF THE PROCESS IS CURRENTLY UNWINDING IGNORE THE THROW:
+
+    if ( m_unwinding )
+    {
+        SC_REPORT_WARNING( SC_ID_PROCESS_ALREADY_UNWINDING_, name() );
+	return; 
+    }
+
     // SET UP THE THROW REQUEST FOR THIS OBJECT INSTANCE AND QUEUE IT FOR
     // EXECUTION:
 
-    if ( m_state & ps_bit_zombie ) return;
-
-    remove_dynamic_events();
-    DEBUG_MSG(DEBUG_NAME,this,"throwing user exception");
-    m_throw_status = THROW_USER;
-    if ( m_throw_helper_p != 0 ) delete m_throw_helper_p;
-    m_throw_helper_p = helper.clone();
-    simcontext()->preempt_with( this );
+    if( m_has_stack )
+    {
+        remove_dynamic_events();
+        DEBUG_MSG(DEBUG_NAME,this,"throwing user exception");
+        m_throw_status = THROW_USER;
+        if ( m_throw_helper_p != 0 ) delete m_throw_helper_p;
+        m_throw_helper_p = helper.clone();
+        simcontext()->preempt_with( this );
+    }
+    else
+    {
+        SC_REPORT_WARNING( SC_ID_THROW_IT_IGNORED_, name() );
+    }
 }
 
 

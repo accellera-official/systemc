@@ -58,6 +58,10 @@
 				 execution problem with using sc_pvector.
  *****************************************************************************/
 // $Log: sc_simcontext.cpp,v $
+// Revision 1.32  2011/07/24 11:16:36  acg
+//  Philipp A. Hartmann: fix reference counting on deferred deletions of
+//  processes.
+//
 // Revision 1.31  2011/07/01 18:49:07  acg
 //  Andy Goodrich: moved pln() from sc_simcontext.cpp to sc_ver.cpp.
 //
@@ -640,7 +644,7 @@ sc_simcontext::crunch( bool once )
         {
 	    sc_process_b* del_p = m_collectable->front();
 	    m_collectable->pop_front();
-	    delete del_p;
+	    del_p->reference_decrement();
         }
 
 

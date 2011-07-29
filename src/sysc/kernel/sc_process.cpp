@@ -43,6 +43,12 @@
  *****************************************************************************/
 
 // $Log: sc_process.cpp,v $
+// Revision 1.32  2011/07/24 11:20:03  acg
+//  Philipp A. Hartmann: process control error message improvements:
+//  (1) Downgrade error to warning for re-kills of processes.
+//  (2) Add process name to process messages.
+//  (3) drop some superfluous colons in messages.
+//
 // Revision 1.31  2011/04/19 15:04:27  acg
 //  Philipp A. Hartman: clean up SC_ID messages.
 //
@@ -330,10 +336,12 @@ void sc_process_b::delete_process()
         delete this;
     }
   
-    // Deferred deletion
+    // Deferred deletion: note we set the reference count to one  for the call
+    // to reference_decrement that occurs in sc_simcontext::crunch().
   
     else
     {
+	m_references_n = 1; 
         detach();
         simcontext()->mark_to_collect_process( this );
     }
@@ -484,6 +492,22 @@ sc_process_b::remove_static_events()
     }
 }
 
+//------------------------------------------------------------------------------
+// "sc_process_b::report_error"
+//
+// This method can be used to issue a report from within a process.
+// The error of the given ID is reported with the given message and
+// the process' name() appended to the report.
+//------------------------------------------------------------------------------
+void
+sc_process_b::report_error( const char* msgid, const char* msg )
+{
+    std::stringstream sstr;
+    if( msg && msg[0] )
+        sstr << msg << ": ";
+    sstr << name();
+    SC_REPORT_ERROR( msgid, sstr.str().c_str() );
+}
 
 //------------------------------------------------------------------------------
 //"sc_process_b::reset_changed"
@@ -508,8 +532,8 @@ void sc_process_b::reset_changed( bool async, bool asserted )
     if ( !sc_allow_process_control_corners && !async && 
          (m_state & ps_bit_suspended) )
     {
-	SC_REPORT_ERROR( SC_ID_PROCESS_CONTROL_CORNER_CASE_,
-	   ": synchronous reset changed on a suspended process");
+	report_error( SC_ID_PROCESS_CONTROL_CORNER_CASE_,
+	              "synchronous reset changed on a suspended process" );
     }
 
     // IF THIS OBJECT IS PUSHING UP DAISIES WE ARE DONE:
@@ -623,7 +647,7 @@ void sc_process_b::reset_process( reset_type rt,
       case reset_asynchronous:
 	if ( sc_get_status() != SC_RUNNING )
 	{
-	    SC_REPORT_ERROR(SC_ID_RESET_PROCESS_WHILE_NOT_RUNNING_, "");
+	    report_error(SC_ID_RESET_PROCESS_WHILE_NOT_RUNNING_);
 	}
 	else
 	{
@@ -674,6 +698,7 @@ sc_process_b::sc_process_b( const char* name_p, bool is_thread, bool free_host,
     m_exist_p(0),
     m_free_host( free_host ),
     m_has_reset_signal( false ),
+    m_has_stack(false),
     m_is_thread(is_thread),
     m_last_report_p(0),
     m_name_gen_p(0),
