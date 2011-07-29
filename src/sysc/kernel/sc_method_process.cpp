@@ -340,21 +340,17 @@ void sc_method_process::clear_trigger()
 //------------------------------------------------------------------------------
 void sc_method_process::disable_process(
     sc_descendant_inclusion_info descendants )
-{     
-    int                              child_i;    // Index of child accessing.
-    int                              child_n;    // Number of children.
-    sc_process_b*                    child_p;    // Child accessing.
-    const ::std::vector<sc_object*>* children_p; // Vector of children.
-
+{
     // IF NEEDED PROPOGATE THE SUSPEND REQUEST THROUGH OUR DESCENDANTS:
 
     if ( descendants == SC_INCLUDE_DESCENDANTS )
     {
-        children_p = &get_child_objects();
-        child_n = children_p->size();
-        for ( child_i = 0; child_i < child_n; child_i++ )
+        const std::vector<sc_object*>& children = get_child_objects();
+        int                            child_n  = children.size();
+
+        for ( int child_i = 0; child_i < child_n; child_i++ )
         {
-            child_p = DCAST<sc_process_b*>((*children_p)[child_i]);
+            sc_process_b* child_p = DCAST<sc_process_b*>(children[child_i]);
             if ( child_p ) child_p->disable_process(descendants);
         }
     }
@@ -402,20 +398,16 @@ void sc_method_process::disable_process(
 void sc_method_process::enable_process(
     sc_descendant_inclusion_info descendants )
 {
-    int                              child_i;    // Index of child accessing.
-    int                              child_n;    // Number of children.
-    sc_process_b*                    child_p;    // Child accessing.
-    const ::std::vector<sc_object*>* children_p; // Vector of children.
-
     // IF NEEDED PROPOGATE THE RESUME REQUEST THROUGH OUR DESCENDANTS:
 
     if ( descendants == SC_INCLUDE_DESCENDANTS )
     {
-        children_p = &get_child_objects();
-        child_n = children_p->size();
-        for ( child_i = 0; child_i < child_n; child_i++ )
+        const std::vector<sc_object*>& children = get_child_objects();
+        int                            child_n  = children.size();
+
+        for ( int child_i = 0; child_i < child_n; child_i++ )
         {
-            child_p = DCAST<sc_process_b*>((*children_p)[child_i]);
+            sc_process_b* child_p = DCAST<sc_process_b*>(children[child_i]);
             if ( child_p ) child_p->enable_process(descendants);
         }
     }
@@ -442,11 +434,6 @@ void sc_method_process::enable_process(
 //------------------------------------------------------------------------------
 void sc_method_process::kill_process(sc_descendant_inclusion_info descendants)
 {
-    int                              child_i;    // Index of child accessing.
-    int                              child_n;    // Number of children.
-    sc_process_b*                    child_p;    // Child accessing.
-    const ::std::vector<sc_object*>* children_p; // Vector of children.
-
     // IF THE SIMULATION HAS NOT BEEN INITIALIZED YET THAT IS AN ERROR:
 
     if ( sc_get_status() == SC_ELABORATION )
@@ -458,11 +445,12 @@ void sc_method_process::kill_process(sc_descendant_inclusion_info descendants)
 
     if ( descendants == SC_INCLUDE_DESCENDANTS )
     {
-        children_p = &get_child_objects();
-        child_n = children_p->size();
-        for ( child_i = 0; child_i < child_n; child_i++ )
+        const std::vector<sc_object*> children = get_child_objects();
+        int                           child_n  = children.size();
+
+        for ( int child_i = 0; child_i < child_n; child_i++ )
         {
-            child_p = DCAST<sc_process_b*>((*children_p)[child_i]);
+            sc_process_b* child_p = DCAST<sc_process_b*>(children[child_i]);
             if ( child_p ) child_p->kill_process(descendants);
         }
     }
@@ -581,21 +569,17 @@ sc_method_process::~sc_method_process()
 //------------------------------------------------------------------------------
 void sc_method_process::suspend_process(
     sc_descendant_inclusion_info descendants )
-{     
-    int                              child_i;    // Index of child accessing.
-    int                              child_n;    // Number of children.
-    sc_process_b*                    child_p;    // Child accessing.
-    const ::std::vector<sc_object*>* children_p; // Vector of children.
-
+{
     // IF NEEDED PROPOGATE THE SUSPEND REQUEST THROUGH OUR DESCENDANTS:
 
     if ( descendants == SC_INCLUDE_DESCENDANTS )
     {
-        children_p = &get_child_objects();
-        child_n = children_p->size();
-        for ( child_i = 0; child_i < child_n; child_i++ )
+        const std::vector<sc_object*>& children = get_child_objects();
+        int                            child_n  = children.size();
+
+        for ( int child_i = 0; child_i < child_n; child_i++ )
         {
-            child_p = DCAST<sc_process_b*>((*children_p)[child_i]);
+            sc_process_b* child_p = DCAST<sc_process_b*>(children[child_i]);
             if ( child_p ) child_p->suspend_process(descendants);
         }
     }
@@ -646,24 +630,19 @@ void sc_method_process::suspend_process(
 void sc_method_process::resume_process(
     sc_descendant_inclusion_info descendants )
 {
-    int                              child_i;    // Index of child accessing.
-    int                              child_n;    // Number of children.
-    sc_process_b*                    child_p;    // Child accessing.
-    const ::std::vector<sc_object*>* children_p; // Vector of children.
-
     // IF NEEDED PROPOGATE THE RESUME REQUEST THROUGH OUR DESCENDANTS:
 
     if ( descendants == SC_INCLUDE_DESCENDANTS )
     {
-        children_p = &get_child_objects();
-        child_n = children_p->size();
-        for ( child_i = 0; child_i < child_n; child_i++ )
+        const std::vector<sc_object*>& children = get_child_objects();
+        int                            child_n  = children.size();
+
+        for ( int child_i = 0; child_i < child_n; child_i++ )
         {
-            child_p = DCAST<sc_process_b*>((*children_p)[child_i]);
+            sc_process_b* child_p = DCAST<sc_process_b*>(children[child_i]);
             if ( child_p ) child_p->resume_process(descendants);
         }
     }
-
 
     // BY DEFAULT THE CORNER CASE IS AN ERROR:
 
@@ -765,12 +744,7 @@ void sc_method_process::throw_reset( bool async )
 //------------------------------------------------------------------------------
 void sc_method_process::throw_user( const sc_throw_it_helper& helper,
     sc_descendant_inclusion_info descendants )
-{     
-    int                              child_i;    // Index of child accessing.
-    int                              child_n;    // Number of children.
-    sc_process_b*                    child_p;    // Child accessing.
-    const ::std::vector<sc_object*>* children_p; // Vector of children.
-
+{
     // IF THE SIMULATION IS NOT ACTUALLY RUNNING THIS IS AN ERROR:
 
     if (  sc_get_status() != SC_RUNNING )
@@ -782,11 +756,12 @@ void sc_method_process::throw_user( const sc_throw_it_helper& helper,
 
     if ( descendants == SC_INCLUDE_DESCENDANTS )
     {
-        children_p = &get_child_objects();
-        child_n = children_p->size();
-        for ( child_i = 0; child_i < child_n; child_i++ )
+        const std::vector<sc_object*> children = get_child_objects();
+        int                           child_n  = children.size();
+
+        for ( int child_i = 0; child_i < child_n; child_i++ )
         {
-            child_p = DCAST<sc_process_b*>((*children_p)[child_i]);
+            sc_process_b* child_p = DCAST<sc_process_b*>(children[child_i]);
             if ( child_p ) 
 	    {
 	        DEBUG_MSG(DEBUG_NAME,child_p,"about to throw user on");
