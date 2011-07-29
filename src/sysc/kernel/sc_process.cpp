@@ -194,6 +194,8 @@
 #include "sysc/kernel/sc_process_handle.h"
 #include "sysc/kernel/sc_event.h"
 
+#include <sstream>
+
 namespace sc_core {
 
 // sc_process_handle entities that are returned for null pointer instances:
