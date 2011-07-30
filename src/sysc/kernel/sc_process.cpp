@@ -43,6 +43,13 @@
  *****************************************************************************/
 
 // $Log: sc_process.cpp,v $
+// Revision 1.34  2011/07/29 22:55:01  acg
+//  Philipp A. Hartmann: add missing include.
+//
+// Revision 1.33  2011/07/29 22:43:41  acg
+//   Philipp A. Hartmann: changes to handle case where a process control
+//   invocation on a child process causes the list of child processes to change.
+//
 // Revision 1.32  2011/07/24 11:20:03  acg
 //  Philipp A. Hartmann: process control error message improvements:
 //  (1) Downgrade error to warning for re-kills of processes.
@@ -193,6 +200,7 @@
 #include "sysc/kernel/sc_sensitive.h"
 #include "sysc/kernel/sc_process_handle.h"
 #include "sysc/kernel/sc_event.h"
+#include <sstream>
 
 namespace sc_core {
 
@@ -618,20 +626,17 @@ sc_event& sc_process_b::reset_event()
 void sc_process_b::reset_process( reset_type rt,
                                   sc_descendant_inclusion_info descendants )
 {
-    int                              child_i;    // Index of child accessing.
-    int                              child_n;    // Number of children.
-    sc_process_b*                    child_p;    // Child accessing.
-    const ::std::vector<sc_object*>* children_p; // Vector of children.
 
     // PROCESS THIS OBJECT INSTANCE'S DESCENDANTS IF REQUESTED TO:
 
     if ( descendants == SC_INCLUDE_DESCENDANTS )
     {
-        children_p = &get_child_objects();
-        child_n = children_p->size();
-        for ( child_i = 0; child_i < child_n; child_i++ )
+        const std::vector<sc_object*> children = get_child_objects();
+        int                           child_n  = children.size();
+
+        for ( int child_i = 0; child_i < child_n; child_i++ )
         {
-            child_p = DCAST<sc_process_b*>((*children_p)[child_i]);
+            sc_process_b* child_p = DCAST<sc_process_b*>(children[child_i]);
             if ( child_p ) child_p->reset_process(rt, descendants);
         }
     }

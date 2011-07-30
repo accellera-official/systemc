@@ -1,0 +1,334 @@
+Index: sc_method_process.cpp
+===================================================================
+RCS file: /Users/acg/CVSROOT/systemc-2.3/src/sysc/kernel/sc_method_process.cpp,v
+retrieving revision 1.44
+diff -w -b -r1.44 sc_method_process.cpp
+253a254,282
+> // +----------------------------------------------------------------------------
+> // |"sc_method_process::check_for_throws"
+> // | 
+> // | This method checks to see if this method process should throw an exception
+> // | or not. It is called from sc_simcontext::preempt_with() to see if the
+> // | thread that was executed during the preemption did a kill or other 
+> // | manipulation on this object instance that requires it to throw an 
+> // | exception.
+> // |
+> // | Arguments:
+> // |     old_throw_status = throw status before the preemption.
+> // +----------------------------------------------------------------------------
+> void sc_method_process::check_for_throws( process_throw_type old_throw_status )
+> {
+>     if ( !m_unwinding )
+>     {
+> 	switch( m_throw_status )
+> 	{
+> 	  case THROW_ASYNC_RESET:
+> 	    // @@@@#### queue the method for execution and throw and unwind
+> 	    break;
+>           case THROW_KILL:
+> 	    throw sc_unwind_exception( this, false );
+> 	  default:
+> 	    break;
+> 	}
+>     }
+> }
+> 
+318,321d346
+<     int                              child_i;    // Index of child accessing.
+<     int                              child_n;    // Number of children.
+<     sc_process_b*                    child_p;    // Child accessing.
+<     const ::std::vector<sc_object*>* children_p; // Vector of children.
+327,329c352,355
+<         children_p = &get_child_objects();
+<         child_n = children_p->size();
+<         for ( child_i = 0; child_i < child_n; child_i++ )
+---
+>         const std::vector<sc_object*>& children = get_child_objects();
+>         int                            child_n  = children.size();
+> 
+>         for ( int child_i = 0; child_i < child_n; child_i++ )
+331c357
+<             child_p = DCAST<sc_process_b*>((*children_p)[child_i]);
+---
+>             sc_process_b* child_p = DCAST<sc_process_b*>(children[child_i]);
+379,382d404
+<     int                              child_i;    // Index of child accessing.
+<     int                              child_n;    // Number of children.
+<     sc_process_b*                    child_p;    // Child accessing.
+<     const ::std::vector<sc_object*>* children_p; // Vector of children.
+388,390c410,413
+<         children_p = &get_child_objects();
+<         child_n = children_p->size();
+<         for ( child_i = 0; child_i < child_n; child_i++ )
+---
+>         const std::vector<sc_object*>& children = get_child_objects();
+>         int                            child_n  = children.size();
+> 
+>         for ( int child_i = 0; child_i < child_n; child_i++ )
+392c415
+<             child_p = DCAST<sc_process_b*>((*children_p)[child_i]);
+---
+>             sc_process_b* child_p = DCAST<sc_process_b*>(children[child_i]);
+419,422d441
+<     int                              child_i;    // Index of child accessing.
+<     int                              child_n;    // Number of children.
+<     sc_process_b*                    child_p;    // Child accessing.
+<     const ::std::vector<sc_object*>* children_p; // Vector of children.
+435,437c454,457
+<         children_p = &get_child_objects();
+<         child_n = children_p->size();
+<         for ( child_i = 0; child_i < child_n; child_i++ )
+---
+>         const std::vector<sc_object*> children = get_child_objects();
+>         int                           child_n  = children.size();
+> 
+>         for ( int child_i = 0; child_i < child_n; child_i++ )
+439c459
+<             child_p = DCAST<sc_process_b*>((*children_p)[child_i]);
+---
+>             sc_process_b* child_p = DCAST<sc_process_b*>(children[child_i]);
+444c464,465
+<     // IF THE PROCESS IS CURRENTLY UNWINDING IGNORE THE KILL:
+---
+>     // IF THE PROCESS IS CURRENTLY UNWINDING OR IS ALREADY A ZOMBIE IGNORE THE 
+>     // KILL:
+446c467
+<     if ( m_unwinding )
+---
+>     if ( m_unwinding || (m_state & ps_bit_zombie) )
+452c473
+<     // REMOVE OUR PROCESS FROM EVENTS, ETC., AND QUEUE IT SO IT CAN 
+---
+>     // REMOVE OUR PROCESS FROM EVENTS, ETC., AND IF ITS THE ACTIVE PROCESS
+453a475,478
+>     // 
+>     // Note we set the throw status to kill regardless if we throw or not.
+>     // That lets check_for_throws stumble across it if we were in the call
+>     // chain when the kill call occurred.
+458a484
+>     m_throw_status = THROW_KILL; 
+461d486
+<         m_throw_status = THROW_KILL;
+554,557d578
+<     int                              child_i;    // Index of child accessing.
+<     int                              child_n;    // Number of children.
+<     sc_process_b*                    child_p;    // Child accessing.
+<     const ::std::vector<sc_object*>* children_p; // Vector of children.
+563,565c584,587
+<         children_p = &get_child_objects();
+<         child_n = children_p->size();
+<         for ( child_i = 0; child_i < child_n; child_i++ )
+---
+>         const std::vector<sc_object*>& children = get_child_objects();
+>         int                            child_n  = children.size();
+> 
+>         for ( int child_i = 0; child_i < child_n; child_i++ )
+567c589
+<             child_p = DCAST<sc_process_b*>((*children_p)[child_i]);
+---
+>             sc_process_b* child_p = DCAST<sc_process_b*>(children[child_i]);
+618,621d639
+<     int                              child_i;    // Index of child accessing.
+<     int                              child_n;    // Number of children.
+<     sc_process_b*                    child_p;    // Child accessing.
+<     const ::std::vector<sc_object*>* children_p; // Vector of children.
+627,629c645,648
+<         children_p = &get_child_objects();
+<         child_n = children_p->size();
+<         for ( child_i = 0; child_i < child_n; child_i++ )
+---
+>         const std::vector<sc_object*>& children = get_child_objects();
+>         int                            child_n  = children.size();
+> 
+>         for ( int child_i = 0; child_i < child_n; child_i++ )
+631c650
+<             child_p = DCAST<sc_process_b*>((*children_p)[child_i]);
+---
+>             sc_process_b* child_p = DCAST<sc_process_b*>(children[child_i]);
+738,741d756
+<     int                              child_i;    // Index of child accessing.
+<     int                              child_n;    // Number of children.
+<     sc_process_b*                    child_p;    // Child accessing.
+<     const ::std::vector<sc_object*>* children_p; // Vector of children.
+754,756c769,772
+<         children_p = &get_child_objects();
+<         child_n = children_p->size();
+<         for ( child_i = 0; child_i < child_n; child_i++ )
+---
+>         const std::vector<sc_object*> children = get_child_objects();
+>         int                           child_n  = children.size();
+> 
+>         for ( int child_i = 0; child_i < child_n; child_i++ )
+758c774
+<             child_p = DCAST<sc_process_b*>((*children_p)[child_i]);
+---
+>             sc_process_b* child_p = DCAST<sc_process_b*>(children[child_i]);
+Index: sc_method_process.h
+===================================================================
+RCS file: /Users/acg/CVSROOT/systemc-2.3/src/sysc/kernel/sc_method_process.h,v
+retrieving revision 1.18
+diff -w -b -r1.18 sc_method_process.h
+222a223
+>     void check_for_throws( process_throw_type old_status );
+264d264
+< 
+Index: sc_process.cpp
+===================================================================
+RCS file: /Users/acg/CVSROOT/systemc-2.3/src/sysc/kernel/sc_process.cpp,v
+retrieving revision 1.32
+diff -w -b -r1.32 sc_process.cpp
+621,624d620
+<     int                              child_i;    // Index of child accessing.
+<     int                              child_n;    // Number of children.
+<     sc_process_b*                    child_p;    // Child accessing.
+<     const ::std::vector<sc_object*>* children_p; // Vector of children.
+630,632c626,629
+<         children_p = &get_child_objects();
+<         child_n = children_p->size();
+<         for ( child_i = 0; child_i < child_n; child_i++ )
+---
+>         const std::vector<sc_object*> children = get_child_objects();
+>         int                           child_n  = children.size();
+> 
+>         for ( int child_i = 0; child_i < child_n; child_i++ )
+634c631
+<             child_p = DCAST<sc_process_b*>((*children_p)[child_i]);
+---
+>             sc_process_b* child_p = DCAST<sc_process_b*>(children[child_i]);
+Index: sc_simcontext_int.h
+===================================================================
+RCS file: /Users/acg/CVSROOT/systemc-2.3/src/sysc/kernel/sc_simcontext_int.h,v
+retrieving revision 1.11
+diff -w -b -r1.11 sc_simcontext_int.h
+195a196,197
+>     //   (d) Check to see if the calling method should throw an exception
+>     //       because of activity that occurred during the preemption.
+198a201,205
+>         sc_method_handle                 method_p;   // active method.
+>         sc_process_b::process_throw_type old_status; // method's throw status.
+> 
+> 	method_p = DCAST<sc_method_handle>(sc_get_current_process_b());
+> 	old_status = method_p->m_throw_status;
+204a212
+> 	method_p->check_for_throws( old_status );
+Index: sc_thread_process.cpp
+===================================================================
+RCS file: /Users/acg/CVSROOT/systemc-2.3/src/sysc/kernel/sc_thread_process.cpp,v
+retrieving revision 1.52
+diff -w -b -r1.52 sc_thread_process.cpp
+359,362d358
+<     int                              child_i;    // Index of child accessing.
+<     int                              child_n;    // Number of children.
+<     sc_process_b*                    child_p;    // Child accessing.
+<     const ::std::vector<sc_object*>* children_p; // Vector of children.
+368,370c364,367
+<         children_p = &get_child_objects();
+<         child_n = children_p->size();
+<         for ( child_i = 0; child_i < child_n; child_i++ )
+---
+>         const std::vector<sc_object*>& children = get_child_objects();
+>         int                            child_n  = children.size();
+> 
+>         for ( int child_i = 0; child_i < child_n; child_i++ )
+372c369
+<             child_p = DCAST<sc_process_b*>((*children_p)[child_i]);
+---
+>             sc_process_b* child_p = DCAST<sc_process_b*>(children[child_i]);
+420,423d416
+<     int                              child_i;    // Index of child accessing.
+<     int                              child_n;    // Number of children.
+<     sc_process_b*                    child_p;    // Child accessing.
+<     const ::std::vector<sc_object*>* children_p; // Vector of children.
+429,431c422,425
+<         children_p = &get_child_objects();
+<         child_n = children_p->size();
+<         for ( child_i = 0; child_i < child_n; child_i++ )
+---
+>         const std::vector<sc_object*>& children = get_child_objects();
+>         int                            child_n  = children.size();
+> 
+>         for ( int child_i = 0; child_i < child_n; child_i++ )
+433c427
+<             child_p = DCAST<sc_process_b*>((*children_p)[child_i]);
+---
+>             sc_process_b* child_p = DCAST<sc_process_b*>(children[child_i]);
+461,465d454
+<     int                              child_i;    // index of child accessing.
+<     int                              child_n;    // number of children.
+<     sc_process_b*                    child_p;    // child accessing.
+<     const ::std::vector<sc_object*>* children_p; // vector of children.
+<     sc_simcontext*                   context_p;  // current simulation context.
+474,475d462
+<     context_p = simcontext();
+< 
+480,482c467,470
+<         children_p = &get_child_objects();
+<         child_n = children_p->size();
+<         for ( child_i = 0; child_i < child_n; child_i++ )
+---
+>         const std::vector<sc_object*>& children = get_child_objects();
+>         int                           child_n  = children.size();
+> 
+>         for ( int child_i = 0; child_i < child_n; child_i++ )
+484c472
+<             child_p = DCAST<sc_process_b*>((*children_p)[child_i]);
+---
+>             sc_process_b* child_p = DCAST<sc_process_b*>(children[child_i]);
+506c494
+<         context_p->preempt_with(this);
+---
+>         simcontext()->preempt_with(this);
+544,547d531
+<     int                              child_i;    // Index of child accessing.
+<     int                              child_n;    // Number of children.
+<     sc_process_b*                    child_p;    // Child accessing.
+<     const ::std::vector<sc_object*>* children_p; // Vector of children.
+553,555c537,540
+<         children_p = &get_child_objects();
+<         child_n = children_p->size();
+<         for ( child_i = 0; child_i < child_n; child_i++ )
+---
+>         const std::vector<sc_object*>& children = get_child_objects();
+>         int                            child_n  = children.size();
+> 
+>         for ( int child_i = 0; child_i < child_n; child_i++ )
+557c542
+<             child_p = DCAST<sc_process_b*>((*children_p)[child_i]);
+---
+>             sc_process_b* child_p = DCAST<sc_process_b*>(children[child_i]);
+704,707d688
+<     int                              child_i;    // Index of child accessing.
+<     int                              child_n;    // Number of children.
+<     sc_process_b*                    child_p;    // Child accessing.
+<     const ::std::vector<sc_object*>* children_p; // Vector of children.
+713,715c694,697
+<         children_p = &get_child_objects();
+<         child_n = children_p->size();
+<         for ( child_i = 0; child_i < child_n; child_i++ )
+---
+>         const std::vector<sc_object*>& children = get_child_objects();
+>         int                            child_n  = children.size();
+> 
+>         for ( int child_i = 0; child_i < child_n; child_i++ )
+717c699
+<             child_p = DCAST<sc_process_b*>((*children_p)[child_i]);
+---
+>             sc_process_b* child_p = DCAST<sc_process_b*>(children[child_i]);
+827,830d808
+<     int                              child_i;    // Index of child accessing.
+<     int                              child_n;    // Number of children.
+<     sc_process_b*                    child_p;    // Child accessing.
+<     const ::std::vector<sc_object*>* children_p; // Vector of children.
+843,845c821,824
+<         children_p = &get_child_objects();
+<         child_n = children_p->size();
+<         for ( child_i = 0; child_i < child_n; child_i++ )
+---
+>         const std::vector<sc_object*> children = get_child_objects();
+>         int                           child_n  = children.size();
+> 
+>         for ( int child_i = 0; child_i < child_n; child_i++ )
+847c826
+<             child_p = DCAST<sc_process_b*>((*children_p)[child_i]);
+---
+>             sc_process_b* child_p = DCAST<sc_process_b*>(children[child_i]);

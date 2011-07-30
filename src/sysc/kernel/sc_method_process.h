@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_method_process.h,v $
+// Revision 1.19  2011/07/29 22:43:15  acg
+//  Andy Goodrich: addition of check_for_throws() method.
+//
 // Revision 1.18  2011/07/24 11:18:09  acg
 //  Philipp A. Hartmann: add code to restart a method process after a
 //  self-reset.

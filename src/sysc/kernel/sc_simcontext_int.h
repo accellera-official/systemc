@@ -37,6 +37,11 @@
  *****************************************************************************/
 
 // $Log: sc_simcontext_int.h,v $
+// Revision 1.12  2011/07/29 22:45:06  acg
+//  Andy Goodrich: added invocation of sc_method_process::check_for_throws()
+//  to the preempt_with() code to handle case where the preempting process
+//  causes a throw on the invoking method process.
+//
 // Revision 1.11  2011/04/13 02:45:11  acg
 //  Andy Goodrich: eliminated warning message that occurred if the DEBUG_MSG
 //  macro was used.
