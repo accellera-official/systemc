@@ -468,7 +468,7 @@ void sc_thread_process::kill_process(sc_descendant_inclusion_info descendants )
 
     if ( descendants == SC_INCLUDE_DESCENDANTS )
     {
-        const std::vector<sc_object*>& children = get_child_objects();
+        const std::vector<sc_object*> children = get_child_objects();
         int                           child_n  = children.size();
 
         for ( int child_i = 0; child_i < child_n; child_i++ )
