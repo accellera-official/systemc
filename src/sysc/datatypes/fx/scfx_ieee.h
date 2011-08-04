@@ -665,7 +665,7 @@ inline
 double
 uint64_to_double( uint64 a )
 {
-#if defined( _MSC_VER )
+#if defined( _MSC_VER ) || defined( __clang__ )
     // conversion from uint64 to double not implemented; use int64
     double tmp = static_cast<double>( static_cast<int64>( a ) );
     return ( tmp >= 0 ) ? tmp : tmp + sc_dt::scfx_pow2( 64 );
