@@ -266,7 +266,7 @@ void pool_status() {
 }
 
 
-int main(int argc, char **argv) {
+int sc_main(int argc, char **argv) {
   // no command line parameters //
   // get everything from stdin and build transaction object //
   cout << "\nTLM-2 Endianness Conversion Helper Functions Tester\n";
@@ -303,6 +303,7 @@ int main(int argc, char **argv) {
     delete txns[i];
     pool_status();
   }
+  return 0;
 }
 
 
