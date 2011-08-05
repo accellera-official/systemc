@@ -236,7 +236,7 @@ memory::check_address
   std::ostringstream  msg;   
   msg.str("");
   
-  if  ( (address < 0) || (address >= m_memory_size) )            
+  if ( address >= m_memory_size )
   {
     msg << "Target: " << m_ID 
         <<" address out-of-range";
