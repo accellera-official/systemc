@@ -517,7 +517,7 @@ int sc_report_handler::stop_after(sc_severity severity_, int limit)
 {
     int old = sev_limit[severity_];
 
-    sev_limit[severity_] = limit < 0 ? UINT_MAX: limit;
+    sev_limit[severity_] = limit < 0 ? UINT_MAX : (unsigned) limit;
 
     return old;
 }

@@ -235,7 +235,7 @@ sc_bind_info::~sc_bind_info()
 int
 sc_bind_info::max_size() const
 {
-    return m_max_size ? m_max_size : vec.size();
+    return m_max_size ? m_max_size : (int) vec.size();
 }
 
 sc_port_policy 
