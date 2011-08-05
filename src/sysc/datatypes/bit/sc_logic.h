@@ -87,112 +87,6 @@ enum sc_logic_value_t
 };
 
 
-// friend operator declarations
-    // bitwise and
-
-    inline const sc_logic operator & ( const sc_logic& a, const sc_logic& b );
-
-    inline const sc_logic operator & ( const sc_logic& a, sc_logic_value_t b );
-
-    inline const sc_logic operator & ( const sc_logic& a, bool b );
-
-    inline const sc_logic operator & ( const sc_logic& a, char b );
-
-    inline const sc_logic operator & ( const sc_logic& a, int b );
-
-    inline const sc_logic operator & ( sc_logic_value_t a, const sc_logic& b );
-
-    inline const sc_logic operator & ( bool a, const sc_logic& b );
-
-    inline const sc_logic operator & ( char a, const sc_logic& b );
-
-    inline const sc_logic operator & ( int a, const sc_logic& b );
-
-
-    // bitwise or
-
-    inline const sc_logic operator | ( const sc_logic& a, const sc_logic& b );
-
-    inline const sc_logic operator | ( const sc_logic& a, sc_logic_value_t b );
-
-    inline const sc_logic operator | ( const sc_logic& a, bool b );
-
-    inline const sc_logic operator | ( const sc_logic& a, char b );
-
-    inline const sc_logic operator | ( const sc_logic& a, int b );
-
-    inline const sc_logic operator | ( sc_logic_value_t a, const sc_logic& b );
-
-    inline const sc_logic operator | ( bool a, const sc_logic& b );
-
-    inline const sc_logic operator | ( char a, const sc_logic& b );
-
-    inline const sc_logic operator | ( int a, const sc_logic& b );
-
-
-    // bitwise xor
-
-    inline const sc_logic operator ^ ( const sc_logic& a, const sc_logic& b );
-
-    inline const sc_logic operator ^ ( const sc_logic& a, sc_logic_value_t b );
-
-    inline const sc_logic operator ^ ( const sc_logic& a, bool b );
-
-    inline const sc_logic operator ^ ( const sc_logic& a, char b );
-
-    inline const sc_logic operator ^ ( const sc_logic& a, int b );
-
-    inline const sc_logic operator ^ ( sc_logic_value_t a, const sc_logic& b );
-
-    inline const sc_logic operator ^ ( bool a, const sc_logic& b );
-
-    inline const sc_logic operator ^ ( char a, const sc_logic& b );
-
-    inline const sc_logic operator ^ ( int a, const sc_logic& b );
-
-
-    // relational operators and functions
-
-    inline bool operator == ( const sc_logic& a, const sc_logic& b );
-
-    inline bool operator == ( const sc_logic& a, sc_logic_value_t b );
-
-    inline bool operator == ( const sc_logic& a, bool b );
-
-    inline bool operator == ( const sc_logic& a, char b );
-
-    inline bool operator == ( const sc_logic& a, int b );
-
-    inline bool operator == ( sc_logic_value_t a, const sc_logic& b );
-
-    inline bool operator == ( bool a, const sc_logic& b );
-
-    inline bool operator == ( char a, const sc_logic& b );
-
-    inline bool operator == ( int a, const sc_logic& b );
-
-
-    inline bool operator != ( const sc_logic& a, const sc_logic& b );
-
-    inline bool operator != ( const sc_logic& a, sc_logic_value_t b );
-
-    inline bool operator != ( const sc_logic& a, bool b );
-
-    inline bool operator != ( const sc_logic& a, char b );
-
-    inline bool operator != ( const sc_logic& a, int b );
-
-    inline bool operator != ( sc_logic_value_t a, const sc_logic& b );
-
-    inline bool operator != ( bool a, const sc_logic& b );
-
-    inline bool operator != ( char a, const sc_logic& b );
-
-    inline bool operator != ( int a, const sc_logic& b );
-
-
-
-
 // ----------------------------------------------------------------------------
 //  CLASS : sc_logic
 //
@@ -298,79 +192,50 @@ public:
     ~sc_logic()
 	{}
 
+    // (bitwise) assignment operators
 
-    // assignment operators
+#define DEFN_ASN_OP_T(op,tp)                       \
+    sc_logic& operator op ( tp v )                 \
+        { *this op sc_logic( v ); return *this; }
+
+#define DEFN_ASN_OP(op)                            \
+    DEFN_ASN_OP_T(op, sc_logic_value_t)            \
+    DEFN_ASN_OP_T(op, bool)                        \
+    DEFN_ASN_OP_T(op, char)                        \
+    DEFN_ASN_OP_T(op, int )                        \
+    DEFN_ASN_OP_T(op, const sc_bit& )
 
     sc_logic& operator = ( const sc_logic& a )
-	{ m_val = a.m_val; return *this; }
-
-    sc_logic& operator = ( sc_logic_value_t v )
-	{ *this = sc_logic( v ); return *this; }
-
-    sc_logic& operator = ( bool a )
-	{ *this = sc_logic( a ); return *this; }
-
-    sc_logic& operator = ( char a )
-	{ *this = sc_logic( a ); return *this; }
-
-    sc_logic& operator = ( int a )
-	{ *this = sc_logic( a ); return *this; }
-
-    sc_logic& operator = ( const sc_bit& a )
-	{ *this = sc_logic( a ); return *this; }
-
-
-    // bitwise assignment operators
+        { m_val = a.m_val; return *this; }
 
     sc_logic& operator &= ( const sc_logic& b )
-	{ m_val = and_table[m_val][b.m_val]; return *this; }
-
-    sc_logic& operator &= ( sc_logic_value_t v )
-	{ *this &= sc_logic( v ); return *this; }
-
-    sc_logic& operator &= ( bool b )
-	{ *this &= sc_logic( b ); return *this; }
-
-    sc_logic& operator &= ( char b )
-	{ *this &= sc_logic( b ); return *this; }
-
-    sc_logic& operator &= ( int b )
-	{ *this &= sc_logic( b ); return *this; }
-
+        { m_val = and_table[m_val][b.m_val]; return *this; }
 
     sc_logic& operator |= ( const sc_logic& b )
         { m_val = or_table[m_val][b.m_val]; return *this; }
 
-    sc_logic& operator |= ( sc_logic_value_t v )
-	{ *this |= sc_logic( v ); return *this; }
-
-    sc_logic& operator |= ( bool b )
-	{ *this |= sc_logic( b ); return *this; }
-
-    sc_logic& operator |= ( char b )
-	{ *this |= sc_logic( b ); return *this; }
-
-    sc_logic& operator |= ( int b )
-	{ *this |= sc_logic( b ); return *this; }
-
-
     sc_logic& operator ^= ( const sc_logic& b )
         { m_val = xor_table[m_val][b.m_val]; return *this; }
 
-    sc_logic& operator ^= ( sc_logic_value_t v )
-	{ *this ^= sc_logic( v ); return *this; }
+    DEFN_ASN_OP(=)
+    DEFN_ASN_OP(&=)
+    DEFN_ASN_OP(|=)
+    DEFN_ASN_OP(^=)
 
-    sc_logic& operator ^= ( bool b )
-	{ *this ^= sc_logic( b ); return *this; }
-
-    sc_logic& operator ^= ( char b )
-	{ *this ^= sc_logic( b ); return *this; }
-
-    sc_logic& operator ^= ( int b )
-	{ *this ^= sc_logic( b ); return *this; }
+#undef DEFN_ASN_OP_T
+#undef DEFN_ASN_OP
 
 
     // bitwise operators and functions
+
+    friend const sc_logic operator & ( const sc_logic&, const sc_logic& );
+    friend const sc_logic operator | ( const sc_logic&, const sc_logic& );
+    friend const sc_logic operator ^ ( const sc_logic&, const sc_logic& );
+
+    // relational operators
+
+    friend bool operator == ( const sc_logic&, const sc_logic& );
+    friend bool operator != ( const sc_logic&, const sc_logic& );
 
     // bitwise complement
 
@@ -379,154 +244,6 @@ public:
 
     sc_logic& b_not()
 	{ m_val = not_table[m_val]; return *this; }
-
-
-    // bitwise and
-
-    friend const sc_logic operator & ( const sc_logic& a, const sc_logic& b )
-	{ return sc_logic( sc_logic::and_table[a.m_val][b.m_val] ); }
-
-    friend const sc_logic operator & ( const sc_logic& a, sc_logic_value_t b )
-	{ return ( a & sc_logic( b ) ); }
-
-    friend const sc_logic operator & ( const sc_logic& a, bool b )
-	{ return ( a & sc_logic( b ) ); }
-
-    friend const sc_logic operator & ( const sc_logic& a, char b )
-	{ return ( a & sc_logic( b ) ); }
-
-    friend const sc_logic operator & ( const sc_logic& a, int b )
-	{ return ( a & sc_logic( b ) ); }
-
-    friend const sc_logic operator & ( sc_logic_value_t a, const sc_logic& b )
-	{ return ( sc_logic( a ) & b ); }
-
-    friend const sc_logic operator & ( bool a, const sc_logic& b )
-	{ return ( sc_logic( a ) & b ); }
-
-    friend const sc_logic operator & ( char a, const sc_logic& b )
-	{ return ( sc_logic( a ) & b ); }
-
-    friend const sc_logic operator & ( int a, const sc_logic& b )
-	{ return ( sc_logic( a ) & b ); }
-
-
-    // bitwise or
-
-    friend const sc_logic operator | ( const sc_logic& a, const sc_logic& b )
-	{ return sc_logic( sc_logic::or_table[a.m_val][b.m_val] ); }
-
-    friend const sc_logic operator | ( const sc_logic& a, sc_logic_value_t b )
-	{ return ( a | sc_logic( b ) ); }
-
-    friend const sc_logic operator | ( const sc_logic& a, bool b )
-	{ return ( a | sc_logic( b ) ); }
-
-    friend const sc_logic operator | ( const sc_logic& a, char b )
-	{ return ( a | sc_logic( b ) ); }
-
-    friend const sc_logic operator | ( const sc_logic& a, int b )
-	{ return ( a | sc_logic( b ) ); }
-
-    friend const sc_logic operator | ( sc_logic_value_t a, const sc_logic& b )
-	{ return ( sc_logic( a ) | b ); }
-
-    friend const sc_logic operator | ( bool a, const sc_logic& b )
-	{ return ( sc_logic( a ) | b ); }
-
-    friend const sc_logic operator | ( char a, const sc_logic& b )
-	{ return ( sc_logic( a ) | b ); }
-
-    friend const sc_logic operator | ( int a, const sc_logic& b )
-	{ return ( sc_logic( a ) | b ); }
-
-
-    // bitwise xor
-
-    friend const sc_logic operator ^ ( const sc_logic& a, const sc_logic& b )
-	{ return sc_logic( sc_logic::xor_table[a.m_val][b.m_val] ); }
-
-    friend const sc_logic operator ^ ( const sc_logic& a, sc_logic_value_t b )
-	{ return ( a ^ sc_logic( b ) ); }
-
-    friend const sc_logic operator ^ ( const sc_logic& a, bool b )
-	{ return ( a ^ sc_logic( b ) ); }
-
-    friend const sc_logic operator ^ ( const sc_logic& a, char b )
-	{ return ( a ^ sc_logic( b ) ); }
-
-    friend const sc_logic operator ^ ( const sc_logic& a, int b )
-	{ return ( a ^ sc_logic( b ) ); }
-
-    friend const sc_logic operator ^ ( sc_logic_value_t a, const sc_logic& b )
-	{ return ( sc_logic( a ) ^ b ); }
-
-    friend const sc_logic operator ^ ( bool a, const sc_logic& b )
-	{ return ( sc_logic( a ) ^ b ); }
-
-    friend const sc_logic operator ^ ( char a, const sc_logic& b )
-	{ return ( sc_logic( a ) ^ b ); }
-
-    friend const sc_logic operator ^ ( int a, const sc_logic& b )
-	{ return ( sc_logic( a ) ^ b ); }
-
-
-    // relational operators and functions
-
-    friend bool operator == ( const sc_logic& a, const sc_logic& b )
-	{ return ( (int) a.m_val == b.m_val ); }
-
-    friend bool operator == ( const sc_logic& a, sc_logic_value_t b )
-	{ return ( a == sc_logic( b ) ); }
-
-    friend bool operator == ( const sc_logic& a, bool b )
-	{ return ( a == sc_logic( b ) ); }
-
-    friend bool operator == ( const sc_logic& a, char b )
-	{ return ( a == sc_logic( b ) ); }
-
-    friend bool operator == ( const sc_logic& a, int b )
-	{ return ( a == sc_logic( b ) ); }
-
-    friend bool operator == ( sc_logic_value_t a, const sc_logic& b )
-	{ return ( sc_logic( a ) == b ); }
-
-    friend bool operator == ( bool a, const sc_logic& b )
-	{ return ( sc_logic( a ) == b ); }
-
-    friend bool operator == ( char a, const sc_logic& b )
-	{ return ( sc_logic( a ) == b ); }
-
-    friend bool operator == ( int a, const sc_logic& b )
-	{ return ( sc_logic( a ) == b ); }
-
-
-    friend bool operator != ( const sc_logic& a, const sc_logic& b )
-	{ return ( (int) a.m_val != b.m_val ); }
-
-    friend bool operator != ( const sc_logic& a, sc_logic_value_t b )
-	{ return ( a != sc_logic( b ) ); }
-
-    friend bool operator != ( const sc_logic& a, bool b )
-	{ return ( a != sc_logic( b ) ); }
-
-    friend bool operator != ( const sc_logic& a, char b )
-	{ return ( a != sc_logic( b ) ); }
-
-    friend bool operator != ( const sc_logic& a, int b )
-	{ return ( a != sc_logic( b ) ); }
-
-    friend bool operator != ( sc_logic_value_t a, const sc_logic& b )
-	{ return ( sc_logic( a ) != b ); }
-
-    friend bool operator != ( bool a, const sc_logic& b )
-	{ return ( sc_logic( a ) != b ); }
-
-    friend bool operator != ( char a, const sc_logic& b )
-	{ return ( sc_logic( a ) != b ); }
-
-    friend bool operator != ( int a, const sc_logic& b )
-	{ return ( sc_logic( a ) != b ); }
 
 
     // explicit conversions
@@ -581,6 +298,48 @@ private:
     sc_logic& operator = ( const char* );
 };
 
+// ----------------------------------------------------------------------------
+
+// bitwise operators
+
+inline const sc_logic operator & ( const sc_logic& a, const sc_logic& b )
+	{ return sc_logic( sc_logic::and_table[a.m_val][b.m_val] ); }
+
+inline const sc_logic operator | ( const sc_logic& a, const sc_logic& b )
+	{ return sc_logic( sc_logic::or_table[a.m_val][b.m_val] ); }
+
+inline const sc_logic operator ^ ( const sc_logic& a, const sc_logic& b )
+	{ return sc_logic( sc_logic::xor_table[a.m_val][b.m_val] ); }
+
+#define DEFN_BIN_OP_T(ret,op,tp)                       \
+    inline ret operator op ( const sc_logic& a, tp b ) \
+        { return ( a op sc_logic( b ) ); }             \
+    inline ret operator op ( tp a, const sc_logic& b ) \
+        { return ( sc_logic( a ) op b ); }
+
+#define DEFN_BIN_OP(ret,op)                            \
+    DEFN_BIN_OP_T(ret,op,sc_logic_value_t)             \
+    DEFN_BIN_OP_T(ret,op,bool)                         \
+    DEFN_BIN_OP_T(ret,op,char)                         \
+    DEFN_BIN_OP_T(ret,op,int)
+
+DEFN_BIN_OP(const sc_logic,&)
+DEFN_BIN_OP(const sc_logic,|)
+DEFN_BIN_OP(const sc_logic,^)
+
+// relational operators and functions
+
+inline bool operator == ( const sc_logic& a, const sc_logic& b )
+	{ return ( (int) a.m_val == b.m_val ); }
+
+inline bool operator != ( const sc_logic& a, const sc_logic& b )
+	{ return ( (int) a.m_val != b.m_val ); }
+
+DEFN_BIN_OP(bool,==)
+DEFN_BIN_OP(bool,!=)
+
+#undef DEFN_BIN_OP_T
+#undef DEFN_BIN_OP
 
 // ----------------------------------------------------------------------------
 
@@ -614,6 +373,5 @@ extern const sc_logic sc_logic_X;
 // #endif
 
 } // namespace sc_dt
-
 
 #endif

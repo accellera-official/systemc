@@ -72,166 +72,6 @@ class sc_logic;
 
 extern void sc_deprecated_sc_bit();
 
-// friend operator declarations
-
-    // relational operators and functions
-
-    // MANDATORY
-
-    inline bool operator == ( const sc_bit& a, const sc_bit& b );
-    inline bool operator == ( const sc_bit& a, int b );
-    inline bool operator == ( const sc_bit& a, bool b );
-    inline bool operator == ( const sc_bit& a, char b );
-    inline bool operator == ( int a, const sc_bit& b );
-    inline bool operator == ( bool a, const sc_bit& b );
-    inline bool operator == ( char a, const sc_bit& b );
-
-    // OPTIONAL
-
-    inline bool equal( const sc_bit& a, const sc_bit& b );
-    inline bool equal( const sc_bit& a, int b );
-    inline bool equal( const sc_bit& a, bool b );
-    inline bool equal( const sc_bit& a, char b );
-    inline bool equal( int a, const sc_bit& b );
-    inline bool equal( bool a, const sc_bit& b );
-    inline bool equal( char a, const sc_bit& b );
-
-    // MANDATORY
-
-    inline bool operator != ( const sc_bit& a, const sc_bit& b );
-    inline bool operator != ( const sc_bit& a, int b );
-    inline bool operator != ( const sc_bit& a, bool b );
-    inline bool operator != ( const sc_bit& a, char b );
-    inline bool operator != ( int a, const sc_bit& b );
-    inline bool operator != ( bool a, const sc_bit& b );
-    inline bool operator != ( char a, const sc_bit& b );
-
-    // OPTIONAL
-
-    inline bool not_equal( const sc_bit& a, const sc_bit& b );
-    inline bool not_equal( const sc_bit& a, int b );
-    inline bool not_equal( const sc_bit& a, bool b );
-    inline bool not_equal( const sc_bit& a, char b );
-    inline bool not_equal( int a, const sc_bit& b );
-    inline bool not_equal( bool a, const sc_bit& b );
-    inline bool not_equal( char a, const sc_bit& b );
-
-
-    // bitwise operators and functions
-
-    // bitwise complement
-
-    // MANDATORY
-
-    inline const sc_bit operator ~ ( const sc_bit& a );
-
-    // OPTIONAL
-
-    inline const sc_bit b_not( const sc_bit& a );
-
-    // RECOMMENDED
-
-    inline void b_not( sc_bit& r, const sc_bit& a );
-
-
-    // bitwise or
-
-    // MANDATORY
-
-    inline const sc_bit operator | ( const sc_bit& a, const sc_bit& b );
-    inline const sc_bit operator | ( const sc_bit& a, int b );
-    inline const sc_bit operator | ( const sc_bit& a, bool b );
-    inline const sc_bit operator | ( const sc_bit& a, char b );
-    inline const sc_bit operator | ( int a, const sc_bit& b );
-    inline const sc_bit operator | ( bool a, const sc_bit& b );
-    inline const sc_bit operator | ( char a, const sc_bit& b );
-
-    // OPTIONAL
-
-    inline const sc_bit b_or( const sc_bit& a, const sc_bit& b );
-    inline const sc_bit b_or( const sc_bit& a, int b );
-    inline const sc_bit b_or( const sc_bit& a, bool b );
-    inline const sc_bit b_or( const sc_bit& a, char b );
-    inline const sc_bit b_or( int a, const sc_bit& b );
-    inline const sc_bit b_or( bool a, const sc_bit& b );
-    inline const sc_bit b_or( char a, const sc_bit& b );
-
-    // RECOMMENDED
-
-    inline void b_or( sc_bit& r, const sc_bit& a, const sc_bit& b );
-    inline void b_or( sc_bit& r, const sc_bit& a, int b );
-    inline void b_or( sc_bit& r, const sc_bit& a, bool b );
-    inline void b_or( sc_bit& r, const sc_bit& a, char b );
-    inline void b_or( sc_bit& r, int a, const sc_bit& b );
-    inline void b_or( sc_bit& r, bool a, const sc_bit& b );
-    inline void b_or( sc_bit& r, char a, const sc_bit& b );
-
-
-    // bitwise and
-
-    // MANDATORY
-
-    inline const sc_bit operator & ( const sc_bit& a, const sc_bit& b );
-    inline const sc_bit operator & ( const sc_bit& a, int b );
-    inline const sc_bit operator & ( const sc_bit& a, bool b );
-    inline const sc_bit operator & ( const sc_bit& a, char b );
-    inline const sc_bit operator & ( int a, const sc_bit& b );
-    inline const sc_bit operator & ( bool a, const sc_bit& b );
-    inline const sc_bit operator & ( char a, const sc_bit& b );
-    // OPTIONAL
-
-    inline const sc_bit b_and( const sc_bit& a, const sc_bit& b );
-    inline const sc_bit b_and( const sc_bit& a, int b );
-    inline const sc_bit b_and( const sc_bit& a, bool b );
-    inline const sc_bit b_and( const sc_bit& a, char b );
-    inline const sc_bit b_and( int a, const sc_bit& b );
-    inline const sc_bit b_and( bool a, const sc_bit& b );
-    inline const sc_bit b_and( char a, const sc_bit& b );
-
-    // RECOMMENDED
-
-    inline void b_and( sc_bit& r, const sc_bit& a, const sc_bit& b );
-    inline void b_and( sc_bit& r, const sc_bit& a, int b );
-    inline void b_and( sc_bit& r, const sc_bit& a, bool b );
-    inline void b_and( sc_bit& r, const sc_bit& a, char b );
-    inline void b_and( sc_bit& r, int a, const sc_bit& b );
-    inline void b_and( sc_bit& r, bool a, const sc_bit& b );
-    inline void b_and( sc_bit& r, char a, const sc_bit& b );
-
-
-    // bitwise exor
-
-    // MANDATORY
-
-    inline const sc_bit operator ^ ( const sc_bit& a, const sc_bit& b );
-    inline const sc_bit operator ^ ( const sc_bit& a, int b );
-    inline const sc_bit operator ^ ( const sc_bit& a, bool b );
-    inline const sc_bit operator ^ ( const sc_bit& a, char b );
-    inline const sc_bit operator ^ ( int a, const sc_bit& b );
-    inline const sc_bit operator ^ ( bool a, const sc_bit& b );
-    inline const sc_bit operator ^ ( char a, const sc_bit& b );
-
-    // OPTIONAL
-
-    inline const sc_bit b_xor( const sc_bit& a, const sc_bit& b );
-    inline const sc_bit b_xor( const sc_bit& a, int b );
-    inline const sc_bit b_xor( const sc_bit& a, bool b );
-    inline const sc_bit b_xor( const sc_bit& a, char b );
-    inline const sc_bit b_xor( int a, const sc_bit& b );
-    inline const sc_bit b_xor( bool a, const sc_bit& b );
-    inline const sc_bit b_xor( char a, const sc_bit& b );
-
-    // RECOMMENDED
-
-    inline void b_xor( sc_bit& r, const sc_bit& a, const sc_bit& b );
-    inline void b_xor( sc_bit& r, const sc_bit& a, int b );
-    inline void b_xor( sc_bit& r, const sc_bit& a, bool b );
-    inline void b_xor( sc_bit& r, const sc_bit& a, char b );
-    inline void b_xor( sc_bit& r, int a, const sc_bit& b );
-    inline void b_xor( sc_bit& r, bool a, const sc_bit& b );
-    inline void b_xor( sc_bit& r, char a, const sc_bit& b );
-
-
 // ----------------------------------------------------------------------------
 //  CLASS : sc_bit
 //
@@ -262,6 +102,21 @@ class sc_bit
 	    return ( i == 0 ? false : true );
 	}
 
+    static bool to_value( bool b )
+	{ return b; }
+
+#define DEFN_TO_VALUE_T(tp)              \
+    static bool to_value( tp i )         \
+	{ return to_value( (int) i); }
+
+    DEFN_TO_VALUE_T(unsigned)
+    DEFN_TO_VALUE_T(long)
+    DEFN_TO_VALUE_T(unsigned long)
+    DEFN_TO_VALUE_T(int64)
+    DEFN_TO_VALUE_T(uint64)
+
+#undef DEFN_TO_VALUE_T
+
 public:
 
     // constructors
@@ -273,29 +128,21 @@ public:
 	    sc_deprecated_sc_bit();
 	}
 
-    explicit sc_bit( uint64 a )
-	: m_val( a )
-	{
-	    sc_deprecated_sc_bit();
-	}
+#define DEFN_CTOR_T(tp)              \
+    explicit sc_bit( tp a )          \
+	: m_val( to_value(a) )       \
+	{ sc_deprecated_sc_bit(); }
 
-    explicit sc_bit( bool a )
-	: m_val( a )
-	{
-	    sc_deprecated_sc_bit();
-	}
+    DEFN_CTOR_T(bool)
+    DEFN_CTOR_T(char)
+    DEFN_CTOR_T(int)
+    DEFN_CTOR_T(unsigned)
+    DEFN_CTOR_T(long)
+    DEFN_CTOR_T(unsigned long)
+    DEFN_CTOR_T(int64)
+    DEFN_CTOR_T(uint64)
 
-    explicit sc_bit( int a )
-	: m_val( to_value( a ) )
-	{
-	    sc_deprecated_sc_bit();
-	}
-
-    explicit sc_bit( char a )
-	: m_val( to_value( a ) )
-	{
-	    sc_deprecated_sc_bit();
-	}
+#undef DEFN_CTOR_T
 
     explicit sc_bit( const sc_logic& a );  // non-VSIA
 
@@ -321,26 +168,20 @@ public:
     sc_bit& operator = ( const sc_bit& b )
 	{ m_val = b.m_val; return *this; }
 
-    sc_bit& operator = ( int64 b )
-	{ return ( *this = sc_bit( (int)b ) ); }
+#define DEFN_ASN_OP_T(op,tp) \
+    sc_bit& operator op( tp b ) \
+	{ return ( *this op sc_bit( b ) ); }
 
-    sc_bit& operator = ( uint64 b )
-	{ return ( *this = sc_bit( (int)b ) ); }
+#define DEFN_ASN_OP(op) \
+    DEFN_ASN_OP_T(op,int) \
+    DEFN_ASN_OP_T(op,bool) \
+    DEFN_ASN_OP_T(op,char)
 
-    sc_bit& operator = ( long b )
-	{ return ( *this = sc_bit( (int)b ) ); }
-
-    sc_bit& operator = ( unsigned long b )
-	{ return ( *this = sc_bit( (int)b ) ); }
-
-    sc_bit& operator = ( int b )
-	{ return ( *this = sc_bit( b ) ); }
-
-    sc_bit& operator = ( bool b )
-	{ return ( *this = sc_bit( b ) ); }
-
-    sc_bit& operator = ( char b )
-	{ return ( *this = sc_bit( b ) ); }
+    DEFN_ASN_OP(=)
+    DEFN_ASN_OP_T(=,int64)
+    DEFN_ASN_OP_T(=,uint64)
+    DEFN_ASN_OP_T(=,long)
+    DEFN_ASN_OP_T(=,unsigned long)
 
     sc_bit& operator = ( const sc_logic& b );  // non-VSIA
 
@@ -350,41 +191,18 @@ public:
     sc_bit& operator &= ( const sc_bit& b )
 	{ m_val = ( m_val && b.m_val ); return *this; }
 
-    sc_bit& operator &= ( int b )
-	{ return ( *this &= sc_bit( b ) ); }
-
-    sc_bit& operator &= ( bool b )
-	{ return ( *this &= sc_bit( b ) ); }
-
-    sc_bit& operator &= ( char b )
-	{ return ( *this &= sc_bit( b ) ); }
-
-
     sc_bit& operator |= ( const sc_bit& b )
 	{ m_val = ( m_val || b.m_val ); return *this; }
-
-    sc_bit& operator |= ( int b )
-	{ return ( *this |= sc_bit( b ) ); }
-
-    sc_bit& operator |= ( bool b )
-	{ return ( *this |= sc_bit( b ) ); }
-
-    sc_bit& operator |= ( char b )
-	{ return ( *this |= sc_bit( b ) ); }
-
 
     sc_bit& operator ^= ( const sc_bit& b )
 	{ m_val = ( m_val != b.m_val ); return *this; }
 
-    sc_bit& operator ^= ( int b )
-	{ return ( *this ^= sc_bit( b ) ); }
+    DEFN_ASN_OP(&=)
+    DEFN_ASN_OP(|=)
+    DEFN_ASN_OP(^=)
 
-    sc_bit& operator ^= ( bool b )
-	{ return ( *this ^= sc_bit( b ) ); }
-
-    sc_bit& operator ^= ( char b )
-	{ return ( *this ^= sc_bit( b ) ); }
-
+#undef DEFN_ASN_OP_T
+#undef DEFN_ASN_OP
 
     // conversions
     // MANDATORY
@@ -410,96 +228,8 @@ public:
     // relational operators and functions
 
     // MANDATORY
-
-    friend bool operator == ( const sc_bit& a, const sc_bit& b )
-        { return ( a.m_val == b.m_val ); }
-
-    friend bool operator == ( const sc_bit& a, int b )
-        { return ( a == sc_bit( b ) ); }
-
-    friend bool operator == ( const sc_bit& a, bool b )
-        { return ( a == sc_bit( b ) ); }
-
-    friend bool operator == ( const sc_bit& a, char b )
-        { return ( a == sc_bit( b ) ); }
-
-    friend bool operator == ( int a, const sc_bit& b )
-	{ return ( sc_bit( a ) == b ); }
-
-    friend bool operator == ( bool a, const sc_bit& b )
-	{ return ( sc_bit( a ) == b ); }
-
-    friend bool operator == ( char a, const sc_bit& b )
-	{ return ( sc_bit( a ) == b ); }
-
-    // OPTIONAL
-
-    friend bool equal( const sc_bit& a, const sc_bit& b )
-        { return ( a == b ); }
-
-    friend bool equal( const sc_bit& a, int b )
-        { return ( a == b ); }
-
-    friend bool equal( const sc_bit& a, bool b )
-        { return ( a == b ); }
-
-    friend bool equal( const sc_bit& a, char b )
-        { return ( a == b ); }
-
-    friend bool equal( int a, const sc_bit& b )
-        { return ( a == b ); }
-
-    friend bool equal( bool a, const sc_bit& b )
-        { return ( a == b ); }
-
-    friend bool equal( char a, const sc_bit& b )
-        { return ( a == b ); }
-
-    // MANDATORY
-
-    friend bool operator != ( const sc_bit& a, const sc_bit& b )
-        { return ( a.m_val != b.m_val ); }
-
-    friend bool operator != ( const sc_bit& a, int b )
-        { return ( a != sc_bit( b ) ); }
-
-    friend bool operator != ( const sc_bit& a, bool b )
-        { return ( a != sc_bit( b ) ); }
-
-    friend bool operator != ( const sc_bit& a, char b )
-        { return ( a != sc_bit( b ) ); }
-
-    friend bool operator != ( int a, const sc_bit& b )
-        { return ( sc_bit( a ) != b ); }
-
-    friend bool operator != ( bool a, const sc_bit& b )
-        { return ( sc_bit( a ) != b ); }
-
-    friend bool operator != ( char a, const sc_bit& b )
-        { return ( sc_bit( a ) != b ); }
-
-    // OPTIONAL
-
-    friend bool not_equal( const sc_bit& a, const sc_bit& b )
-        { return ( a != b ); }
-
-    friend bool not_equal( const sc_bit& a, int b )
-        { return ( a != b ); }
-
-    friend bool not_equal( const sc_bit& a, bool b )
-        { return ( a != b ); }
-
-    friend bool not_equal( const sc_bit& a, char b )
-        { return ( a != b ); }
-
-    friend bool not_equal( int a, const sc_bit& b )
-        { return ( a != b ); }
-
-    friend bool not_equal( bool a, const sc_bit& b )
-        { return ( a != b ); }
-
-    friend bool not_equal( char a, const sc_bit& b )
-        { return ( a != b ); }
+    friend bool operator == ( const sc_bit& a, const sc_bit& b );
+    friend bool operator != ( const sc_bit& a, const sc_bit& b );
 
 
     // bitwise operators and functions
@@ -507,240 +237,18 @@ public:
     // bitwise complement
 
     // MANDATORY
-
-    friend const sc_bit operator ~ ( const sc_bit& a )
-        { return sc_bit( ! a.m_val ); }
+    friend const sc_bit operator ~ ( const sc_bit& a );
 
     // RECOMMENDED
-
     sc_bit& b_not()
         { m_val = ( ! m_val ); return *this; }
 
-    // OPTIONAL
 
-    friend const sc_bit b_not( const sc_bit& a )
-        { return ( ~ a ); }
+    // binary bitwise operations
 
-    // RECOMMENDED
-
-    friend void b_not( sc_bit& r, const sc_bit& a )
-        { r = ( ~ a ); }
-
-
-    // bitwise or
-
-    // MANDATORY
-
-    friend const sc_bit operator | ( const sc_bit& a, const sc_bit& b )
-        { return sc_bit( a.m_val || b.m_val ); }
-
-    friend const sc_bit operator | ( const sc_bit& a, int b )
-        { return ( a | sc_bit( b ) ); }
-
-    friend const sc_bit operator | ( const sc_bit& a, bool b )
-        { return ( a | sc_bit( b ) ); }
-
-    friend const sc_bit operator | ( const sc_bit& a, char b )
-        { return ( a | sc_bit( b ) ); }
-
-    friend const sc_bit operator | ( int a, const sc_bit& b )
-	{ return ( sc_bit( a ) | b ); }
-
-    friend const sc_bit operator | ( bool a, const sc_bit& b )
-	{ return ( sc_bit( a ) | b ); }
-
-    friend const sc_bit operator | ( char a, const sc_bit& b )
-	{ return ( sc_bit( a ) | b ); }
-
-    // OPTIONAL
-
-    friend const sc_bit b_or( const sc_bit& a, const sc_bit& b )
-        { return ( a | b ); }
-
-    friend const sc_bit b_or( const sc_bit& a, int b )
-        { return ( a | b ); }
-
-    friend const sc_bit b_or( const sc_bit& a, bool b )
-        { return ( a | b ); }
-
-    friend const sc_bit b_or( const sc_bit& a, char b )
-        { return ( a | b ); }
-
-    friend const sc_bit b_or( int a, const sc_bit& b )
-        { return ( a | b ); }
-
-    friend const sc_bit b_or( bool a, const sc_bit& b )
-        { return ( a | b ); }
-
-    friend const sc_bit b_or( char a, const sc_bit& b )
-        { return ( a | b ); }
-
-    // RECOMMENDED
-
-    friend void b_or( sc_bit& r, const sc_bit& a, const sc_bit& b )
-        { r = ( a | b ); }
-
-    friend void b_or( sc_bit& r, const sc_bit& a, int b )
-        { r = ( a | b ); }
-
-    friend void b_or( sc_bit& r, const sc_bit& a, bool b )
-        { r = ( a | b ); }
-
-    friend void b_or( sc_bit& r, const sc_bit& a, char b )
-        { r = ( a | b ); }
-
-    friend void b_or( sc_bit& r, int a, const sc_bit& b )
-        { r = ( a | b ); }
-
-    friend void b_or( sc_bit& r, bool a, const sc_bit& b )
-        { r = ( a | b ); }
-
-    friend void b_or( sc_bit& r, char a, const sc_bit& b )
-        { r = ( a | b ); }
-
-
-    // bitwise and
-
-    // MANDATORY
-
-    friend const sc_bit operator & ( const sc_bit& a, const sc_bit& b )
-	{ return sc_bit( a.m_val && b.m_val ); }
-
-    friend const sc_bit operator & ( const sc_bit& a, int b )
-	{ return ( a & sc_bit( b ) ); }
-
-    friend const sc_bit operator & ( const sc_bit& a, bool b )
-	{ return ( a & sc_bit( b ) ); }
-
-    friend const sc_bit operator & ( const sc_bit& a, char b )
-	{ return ( a & sc_bit( b ) ); }
-
-    friend const sc_bit operator & ( int a, const sc_bit& b )
-	{ return ( sc_bit( a ) & b ); }
-
-    friend const sc_bit operator & ( bool a, const sc_bit& b )
-	{ return ( sc_bit( a ) & b ); }
-
-    friend const sc_bit operator & ( char a, const sc_bit& b )
-	{ return ( sc_bit( a ) & b ); }
-
-    // OPTIONAL
-
-    friend const sc_bit b_and( const sc_bit& a, const sc_bit& b )
-	{ return ( a & b ); }
-
-    friend const sc_bit b_and( const sc_bit& a, int b )
-	{ return ( a & b ); }
-
-    friend const sc_bit b_and( const sc_bit& a, bool b )
-	{ return ( a & b ); }
-
-    friend const sc_bit b_and( const sc_bit& a, char b )
-	{ return ( a & b ); }
-
-    friend const sc_bit b_and( int a, const sc_bit& b )
-	{ return ( a & b ); }
-
-    friend const sc_bit b_and( bool a, const sc_bit& b )
-	{ return ( a & b ); }
-
-    friend const sc_bit b_and( char a, const sc_bit& b )
-	{ return ( a & b ); }
-
-    // RECOMMENDED
-
-    friend void b_and( sc_bit& r, const sc_bit& a, const sc_bit& b )
-	{ r = ( a & b ); }
-
-    friend void b_and( sc_bit& r, const sc_bit& a, int b )
-	{ r = ( a & b ); }
-
-    friend void b_and( sc_bit& r, const sc_bit& a, bool b )
-	{ r = ( a & b ); }
-
-    friend void b_and( sc_bit& r, const sc_bit& a, char b )
-	{ r = ( a & b ); }
-
-    friend void b_and( sc_bit& r, int a, const sc_bit& b )
-	{ r = ( a & b ); }
-
-    friend void b_and( sc_bit& r, bool a, const sc_bit& b )
-	{ r = ( a & b ); }
-
-    friend void b_and( sc_bit& r, char a, const sc_bit& b )
-	{ r = ( a & b ); }
-
-
-    // bitwise exor
-
-    // MANDATORY
-
-    friend const sc_bit operator ^ ( const sc_bit& a, const sc_bit& b )
-	{ return sc_bit( a.m_val != b.m_val ); }
-
-    friend const sc_bit operator ^ ( const sc_bit& a, int b )
-	{ return ( a ^ sc_bit( b ) ); }
-
-    friend const sc_bit operator ^ ( const sc_bit& a, bool b )
-	{ return ( a ^ sc_bit( b ) ); }
-
-    friend const sc_bit operator ^ ( const sc_bit& a, char b )
-	{ return ( a ^ sc_bit( b ) ); }
-
-    friend const sc_bit operator ^ ( int a, const sc_bit& b )
-	{ return ( sc_bit( a ) ^ b ); }
-
-    friend const sc_bit operator ^ ( bool a, const sc_bit& b )
-	{ return ( sc_bit( a ) ^ b ); }
-
-    friend const sc_bit operator ^ ( char a, const sc_bit& b )
-	{ return ( sc_bit( a ) ^ b ); }
-
-    // OPTIONAL
-
-    friend const sc_bit b_xor( const sc_bit& a, const sc_bit& b )
-	{ return ( a ^ b ); }
-
-    friend const sc_bit b_xor( const sc_bit& a, int b )
-	{ return ( a ^ b ); }
-
-    friend const sc_bit b_xor( const sc_bit& a, bool b )
-	{ return ( a ^ b ); }
-
-    friend const sc_bit b_xor( const sc_bit& a, char b )
-	{ return ( a ^ b ); }
-
-    friend const sc_bit b_xor( int a, const sc_bit& b )
-	{ return ( a ^ b ); }
-
-    friend const sc_bit b_xor( bool a, const sc_bit& b )
-	{ return ( a ^ b ); }
-
-    friend const sc_bit b_xor( char a, const sc_bit& b )
-	{ return ( a ^ b ); }
-
-    // RECOMMENDED
-
-    friend void b_xor( sc_bit& r, const sc_bit& a, const sc_bit& b )
-	{ r = ( a ^ b ); }
-
-    friend void b_xor( sc_bit& r, const sc_bit& a, int b )
-	{ r = ( a ^ b ); }
-
-    friend void b_xor( sc_bit& r, const sc_bit& a, bool b )
-	{ r = ( a ^ b ); }
-
-    friend void b_xor( sc_bit& r, const sc_bit& a, char b )
-	{ r = ( a ^ b ); }
-
-    friend void b_xor( sc_bit& r, int a, const sc_bit& b )
-	{ r = ( a ^ b ); }
-
-    friend void b_xor( sc_bit& r, bool a, const sc_bit& b )
-	{ r = ( a ^ b ); }
-
-    friend void b_xor( sc_bit& r, char a, const sc_bit& b )
-	{ r = ( a ^ b ); }
+    friend const sc_bit operator | ( const sc_bit& a, const sc_bit& b );
+    friend const sc_bit operator & ( const sc_bit& a, const sc_bit& b );
+    friend const sc_bit operator ^ ( const sc_bit& a, const sc_bit& b );
 
 
     // other methods
@@ -755,9 +263,118 @@ private:
     bool m_val;
 };
 
+// ----------------------------------------------------------------------------
+// relational operators and functions
+
+#define DEFN_BIN_FUN_T(ret,fun,tp)          \
+    inline ret fun( const sc_bit& a, tp b ) \
+	{ return fun(a, sc_bit(b) ); }      \
+    inline ret fun( tp b, const sc_bit& a ) \
+	{ return fun( sc_bit(a), b ); }
+
+#define DEFN_BIN_FUN(ret,fun) \
+      DEFN_BIN_FUN_T(ret,fun,bool) \
+      DEFN_BIN_FUN_T(ret,fun,char) \
+      DEFN_BIN_FUN_T(ret,fun,int)
+
+// MANDATORY
+
+inline bool operator == ( const sc_bit& a, const sc_bit& b )
+    { return ( a.m_val == b.m_val ); }
+
+inline bool operator != ( const sc_bit& a, const sc_bit& b )
+    { return ( a.m_val != b.m_val ); }
+
+DEFN_BIN_FUN(bool,operator==)
+DEFN_BIN_FUN(bool,operator!=)
+
+// OPTIONAL
+
+inline bool equal( const sc_bit& a, const sc_bit& b )
+    { return ( a == b ); }
+
+inline bool not_equal( const sc_bit& a, const sc_bit& b )
+    { return ( a != b ); }
+
+DEFN_BIN_FUN(bool,equal)
+DEFN_BIN_FUN(bool,not_equal)
 
 // ----------------------------------------------------------------------------
+// bitwise operators and functions
 
+
+// bitwise complement
+
+    // MANDATORY
+
+    inline const sc_bit operator ~ ( const sc_bit& a )
+	{ return sc_bit( ! a.m_val ); }
+
+    // OPTIONAL
+
+    inline const sc_bit b_not( const sc_bit& a )
+	{ return ( ~ a ); }
+
+    // RECOMMENDED
+
+    inline void b_not( sc_bit& r, const sc_bit& a )
+	{ r = ( ~ a ); }
+
+// binary bitwise operations
+
+    // MANDATORY
+    inline const sc_bit operator & ( const sc_bit& a, const sc_bit& b )
+        { return sc_bit( a.m_val && b.m_val ); }
+
+    inline const sc_bit operator | ( const sc_bit& a, const sc_bit& b )
+        { return sc_bit( a.m_val || b.m_val ); }
+
+    inline const sc_bit operator ^ ( const sc_bit& a, const sc_bit& b )
+        { return sc_bit( a.m_val != b.m_val ); }
+
+    DEFN_BIN_FUN(const sc_bit,operator&)
+    DEFN_BIN_FUN(const sc_bit,operator|)
+    DEFN_BIN_FUN(const sc_bit,operator^)
+
+    // OPTIONAL
+    inline const sc_bit b_and ( const sc_bit& a, const sc_bit& b )
+        { return a & b; }
+
+    inline const sc_bit b_or ( const sc_bit& a, const sc_bit& b )
+        { return a | b; }
+
+    inline const sc_bit b_xor ( const sc_bit& a, const sc_bit& b )
+        { return a ^ b; }
+
+    DEFN_BIN_FUN(const sc_bit,b_and)
+    DEFN_BIN_FUN(const sc_bit,b_or)
+    DEFN_BIN_FUN(const sc_bit,b_xor)
+
+    // RECOMMENDED
+
+#define DEFN_TRN_FUN_T(fun,tp)                                     \
+    inline void fun( sc_bit& r, const sc_bit& a, tp b )            \
+        { r = fun( a, sc_bit(b) ); }                               \
+    inline void fun( sc_bit& r, tp a, const sc_bit& b )            \
+        { r = fun( sc_bit(a), b ); }
+
+#define DEFN_TRN_FUN(fun) \
+    inline void fun( sc_bit& r, const sc_bit& a, const sc_bit& b ) \
+        { r = fun( a , b ); }                                      \
+    DEFN_TRN_FUN_T(fun,int)                                        \
+    DEFN_TRN_FUN_T(fun,bool)                                       \
+    DEFN_TRN_FUN_T(fun,char)
+
+    DEFN_TRN_FUN( b_and )
+    DEFN_TRN_FUN( b_or )
+    DEFN_TRN_FUN( b_xor )
+
+#undef DEFN_BIN_FUN_T
+#undef DEFN_BIN_FUN
+#undef DEFN_TRN_FUN_T
+#undef DEFN_TRN_FUN
+
+// ----------------------------------------------------------------------------
 inline
 ::std::ostream&
 operator << ( ::std::ostream& os, const sc_bit& a )
