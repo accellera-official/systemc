@@ -70,6 +70,8 @@ public:
     bind(m_fw_process);
   }
 
+  using tlm::tlm_target_socket<BUSWIDTH, TYPES>::bind;
+
   // bw transport must come thru us.
   tlm::tlm_bw_transport_if<TYPES> * operator ->() {return &m_bw_process;}
 
@@ -599,6 +601,8 @@ public:
   {
     bind(m_fw_process);
   }
+
+  using tlm::tlm_target_socket<BUSWIDTH, TYPES>::bind;
 
   // bw transport must come thru us.
   tlm::tlm_bw_transport_if<TYPES> * operator ->() {return &m_bw_process;}

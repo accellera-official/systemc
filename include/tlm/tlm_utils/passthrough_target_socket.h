@@ -52,6 +52,8 @@ public:
     bind(m_process);
   }
 
+  using tlm::tlm_target_socket<BUSWIDTH, TYPES>::bind;
+
   // REGISTER_XXX
   void register_nb_transport_fw(MODULE* mod,
                                 sync_enum_type (MODULE::*cb)(transaction_type&,
@@ -260,6 +262,8 @@ public:
   {
     bind(m_process);
   }
+
+  using tlm::tlm_target_socket<BUSWIDTH, TYPES>::bind;
 
   // REGISTER_XXX
   void register_nb_transport_fw(MODULE* mod,
