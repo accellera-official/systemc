@@ -333,6 +333,7 @@ public:
 
     typedef sc_port_base  base_type;
     typedef sc_port_b<IF> this_type;
+    typedef this_type     port_type;
 
 public:
 
@@ -347,10 +348,10 @@ public:
 
     // bind a parent port with type IF to this port
 
-    virtual void bind( this_type& parent_ )
+    virtual void bind( port_type& parent_ )
 	{ base_type::bind( parent_ ); }
 
-    void operator () ( this_type& parent_ )
+    void operator () ( port_type& parent_ )
 	{ this->bind( parent_ ); }
 
 

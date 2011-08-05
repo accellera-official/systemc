@@ -78,6 +78,7 @@ public:
     typedef sc_signal_in_if<data_type>                    if_type;
     typedef sc_port<if_type,1,SC_ONE_OR_MORE_BOUND>       base_type;
     typedef sc_in<data_type>                              this_type;
+    typedef typename base_type::port_type                 base_port_type;
 
     typedef if_type                                       in_if_type;
     typedef base_type                                     in_port_type;
@@ -247,6 +248,14 @@ protected:
     virtual int vbind( sc_interface& );
     virtual int vbind( sc_port_base& );
 
+    // implement virtual base_type port-binding function
+    //  - avoids warnings on some compilers
+    //  - should only be called, when using sc_port_b explicitly
+    //  - errors are detected during elaboration
+
+    virtual void bind( base_port_type& parent_ )
+        { sc_port_base::bind( parent_ ); }
+
 private:
   mutable sc_event_finder* m_change_finder_p;
 
@@ -382,6 +391,7 @@ public:
     typedef sc_signal_in_if<data_type>                     if_type;
     typedef sc_port<if_type,1,SC_ONE_OR_MORE_BOUND>        base_type;
     typedef sc_in<data_type>                               this_type;
+    typedef /* typename */ base_type::port_type            base_port_type;
 
     typedef if_type                                        in_if_type;
     typedef base_type                                      in_port_type;
@@ -604,6 +614,14 @@ protected:
     virtual int vbind( sc_interface& );
     virtual int vbind( sc_port_base& );
 
+    // implement virtual base_type port-binding function
+    //  - avoids warnings on some compilers
+    //  - should only be called, when using sc_port_b explicitly
+    //  - errors are detected during elaboration
+
+    virtual void bind( base_port_type& parent_ )
+        { sc_port_base::bind( parent_ ); }
+
 private:
   mutable sc_event_finder* m_change_finder_p;
   mutable sc_event_finder* m_neg_finder_p;
@@ -647,6 +665,7 @@ public:
     typedef sc_signal_in_if<data_type>                    if_type;
     typedef sc_port<if_type,1,SC_ONE_OR_MORE_BOUND>       base_type;
     typedef sc_in<data_type>                              this_type;
+    typedef /* typename */ base_type::port_type           base_port_type;
 
     typedef if_type                                       in_if_type;
     typedef base_type                                     in_port_type;
@@ -861,6 +880,14 @@ protected:
     // called by pbind (for internal use only)
     virtual int vbind( sc_interface& );
     virtual int vbind( sc_port_base& );
+
+    // implement virtual base_type port-binding function
+    //  - avoids warnings on some compilers
+    //  - should only be called, when using sc_port_b explicitly
+    //  - errors are detected during elaboration
+
+    virtual void bind( base_port_type& parent_ )
+        { sc_port_base::bind( parent_ ); }
 
 private:
   mutable sc_event_finder* m_change_finder_p;
