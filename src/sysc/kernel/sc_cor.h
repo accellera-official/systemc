@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: sc_cor.h,v $
+// Revision 1.6  2011/08/15 16:43:24  acg
+//  Torsten Maehne: changes to remove unused argument warnings.
+//
 // Revision 1.5  2011/02/18 20:27:14  acg
 //  Andy Goodrich: Updated Copyrights.
 //
@@ -93,7 +96,7 @@ public:
     virtual ~sc_cor() {}
 
     // switch stack protection on/off
-    virtual void stack_protect( bool enable ) {}
+    virtual void stack_protect( bool /* enable */ ) {}
 
 private:
 

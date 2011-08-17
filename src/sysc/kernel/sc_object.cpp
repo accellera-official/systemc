@@ -272,12 +272,16 @@ sc_object::sc_object_init(const char* nm)
 
 } 
 
-sc_object::sc_object() : m_parent(0)
+sc_object::sc_object() : 
+    m_attr_cltn_p(0), m_child_events(), m_child_objects(), m_name(),
+    m_parent(0), m_simc(0)
 {
     sc_object_init( sc_gen_unique_name("object") );
 }
 
-sc_object::sc_object( const sc_object& that ) : m_parent(0)
+sc_object::sc_object( const sc_object& that ) : 
+    m_attr_cltn_p(0), m_child_events(), m_child_objects(), m_name(),
+    m_parent(0), m_simc(0)
 {
     sc_object_init( sc_gen_unique_name( that.basename() ) );
 }
@@ -289,7 +293,9 @@ object_name_illegal_char(char ch)
     return (ch == SC_HIERARCHY_CHAR) || isspace(ch);
 }
 
-sc_object::sc_object(const char* nm) : m_parent(0)
+sc_object::sc_object(const char* nm) : 
+    m_attr_cltn_p(0), m_child_events(), m_child_objects(), m_name(),
+    m_parent(0), m_simc(0)
 {
     int namebuf_alloc = 0;
     char* namebuf = 0;

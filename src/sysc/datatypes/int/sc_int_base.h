@@ -135,7 +135,7 @@ protected:
 
     // constructor
 
-    sc_int_bitref_r()
+    sc_int_bitref_r() : sc_value_base(), m_index(), m_obj_p()
         {}
 
     // initializer for sc_core::sc_vpool:
@@ -151,7 +151,7 @@ public:
     // copy constructor
 
     sc_int_bitref_r( const sc_int_bitref_r& a ) :
-        m_index(a.m_index), m_obj_p(a.m_obj_p)
+        sc_value_base(a), m_index(a.m_index), m_obj_p(a.m_obj_p)
         {}
 
     // destructor
@@ -257,7 +257,7 @@ class sc_int_bitref
 
     // constructor
 
-    sc_int_bitref()
+    sc_int_bitref() : sc_int_bitref_r()
       {}
 
 
@@ -318,7 +318,7 @@ protected:
 
     // constructor
 
-    sc_int_subref_r()
+    sc_int_subref_r() : sc_value_base(), m_left(0), m_obj_p(0), m_right(0)
         {}
 
     // initializer for sc_core::sc_vpool:
@@ -335,7 +335,8 @@ public:
     // copy constructor
 
     sc_int_subref_r( const sc_int_subref_r& a ) :
-        m_left( a.m_left ), m_obj_p( a.m_obj_p ), m_right( a.m_right )
+        sc_value_base(a), m_left( a.m_left ), m_obj_p( a.m_obj_p ), 
+	m_right( a.m_right )
         {}
 
     // destructor
@@ -451,7 +452,7 @@ class sc_int_subref
 protected:
 
     // constructor
-    sc_int_subref()
+    sc_int_subref() : sc_int_subref_r()
         {}
 
 public:
@@ -576,7 +577,8 @@ public:
 	{ check_length(); extend_sign(); }
 
     sc_int_base( const sc_int_base& a )
-	: m_val( a.m_val ), m_len( a.m_len ), m_ulen( a.m_ulen )
+	: sc_value_base(a), m_val( a.m_val ), m_len( a.m_len ), 
+	  m_ulen( a.m_ulen )
 	{}
 
     explicit sc_int_base( const sc_int_subref_r& a )

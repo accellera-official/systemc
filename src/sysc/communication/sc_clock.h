@@ -240,34 +240,9 @@ sc_clock::negedge_action()
 
 // ----------------------------------------------------------------------------
 
-// for backward compatibility with 1.0
-
-#if 0 // @@@@####
-inline
-void
-sc_start( sc_clock& clock, const sc_time& duration )
-{
-    clock.start( duration );
-}
-
-inline
-void
-sc_start( sc_clock& clock, double v, sc_time_unit tu )
-{
-    clock.start( v, tu );
-}
-
-inline
-void
-sc_start( sc_clock& clock, double duration = -1 )
-{
-    clock.start( duration );
-}
-#endif
-
 class sc_clock_posedge_callback {
 public:
-    sc_clock_posedge_callback(sc_clock* target_p) { m_target_p = target_p; }
+    sc_clock_posedge_callback(sc_clock* target_p) : m_target_p(target_p) {}
     inline void operator () () { m_target_p->posedge_action(); }
   protected:
     sc_clock* m_target_p;
@@ -275,7 +250,7 @@ public:
 
 class sc_clock_negedge_callback {
   public:
-    sc_clock_negedge_callback(sc_clock* target_p) { m_target_p = target_p; }
+    sc_clock_negedge_callback(sc_clock* target_p) : m_target_p(target_p) {}
     inline void operator () () { m_target_p->negedge_action(); }
   protected:
     sc_clock* m_target_p;

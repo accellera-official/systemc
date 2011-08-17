@@ -252,7 +252,7 @@ SC_MODULE(DUT)
 };
 
 
-int sc_main( int argc, char* argv[] )
+int sc_main( int , char* [] )
 {
 	sc_clock clock;
 	DUT      dut("dut");

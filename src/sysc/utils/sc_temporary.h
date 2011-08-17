@@ -120,14 +120,14 @@ class sc_byte_heap {
 		return (unsigned int)(m_end_p - m_bgn_p);
 	}
 
-	inline sc_byte_heap()
+	inline sc_byte_heap() : 
+	    m_bgn_p(0), m_end_p(0), m_next_p(0)
 	{
-		m_bgn_p = 0;
 	}
 
-	inline sc_byte_heap( int heap_size )
+	inline sc_byte_heap( int heap_size ) :
+	    m_bgn_p(0), m_end_p(0), m_next_p(0)
 	{
-		m_bgn_p = 0;
 		initialize( heap_size );
 	}
 
@@ -190,12 +190,11 @@ class sc_vpool {
 	inline int size();
 };
 
-template<class T> sc_vpool<T>::sc_vpool( int log2, T* pool_p )
+template<class T> sc_vpool<T>::sc_vpool( int log2, T* pool_p ) :
+    m_pool_i( 0 ), m_pool_p( pool_p ? pool_p : new T[1 << log2] ), 
+    m_wrap( ~(-1 << log2) )
 {
 	// if ( log2 > 32 ) SC_REPORT_ERROR(SC_ID_POOL_SIZE_, "");
-	m_pool_i = 0;
-	m_pool_p = pool_p ? pool_p : new T[1 << log2];
-	m_wrap = ~(-1 << log2);
 }
 
 template<class T> sc_vpool<T>::~sc_vpool()

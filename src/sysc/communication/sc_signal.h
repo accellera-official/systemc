@@ -183,6 +183,8 @@ public: // constructors and destructor:
 	    sc_deprecated_trace();
 #           ifdef DEBUG_SYSTEMC
 	        sc_trace( tf, read(), name() ); 
+#           else
+                if ( tf ) {}
 #	    endif
 	}
 
@@ -432,6 +434,8 @@ public: // constructors and destructor:
 	    sc_deprecated_trace();
 #           ifdef DEBUG_SYSTEMC
 	        sc_trace( tf, read(), name() ); 
+#           else
+                if ( tf ) {}
 #           endif
 	}
 
@@ -710,6 +714,8 @@ public: // constructors and destructor:
 	    sc_deprecated_trace();
 #           ifdef DEBUG_SYSTEMC
 	        sc_trace( tf, read(), name() ); 
+#           else
+                if ( tf ) {}
 #           endif
 	}
 
@@ -826,6 +832,9 @@ operator << ( ::std::ostream& os, const sc_signal<T,POL>& a )
     
  *****************************************************************************/
 //$Log: sc_signal.h,v $
+//Revision 1.15  2011/08/15 16:43:24  acg
+// Torsten Maehne: changes to remove unused argument warnings.
+//
 //Revision 1.14  2011/06/25 17:08:38  acg
 // Andy Goodrich: Jerome Cornet's changes to use libtool to build the
 // library.

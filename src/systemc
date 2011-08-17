@@ -34,6 +34,10 @@
  *****************************************************************************/
 
 // $Log: systemc,v $
+// Revision 1.6  2011/08/04 17:12:07  acg
+//  Andy Goodrich: moved systemc and systemc.h back to src level because
+//  of MSVC not doing an install.
+//
 // Revision 1.1  2011/07/02 13:26:48  acg
 //  Andy Goodrich: moved header files up one level.
 //

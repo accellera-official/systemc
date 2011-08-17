@@ -58,6 +58,9 @@
 				 execution problem with using sc_pvector.
  *****************************************************************************/
 // $Log: sc_simcontext.cpp,v $
+// Revision 1.34  2011/08/04 17:15:28  acg
+//  Andy Goodrich: added documentation to crunch() routine.
+//
 // Revision 1.32  2011/07/24 11:16:36  acg
 //  Philipp A. Hartmann: fix reference counting on deferred deletions of
 //  processes.
@@ -550,7 +553,20 @@ sc_simcontext::clean()
 }
 
 
-sc_simcontext::sc_simcontext()
+sc_simcontext::sc_simcontext() :
+    m_object_manager(0), m_module_registry(0), m_port_registry(0),
+    m_export_registry(0), m_prim_channel_registry(0), m_name_gen(0),
+    m_process_table(0), m_curr_proc_info(), m_current_writer(0),
+    m_write_check(false), m_next_proc_id(-1), m_child_events(),
+    m_child_objects(), m_delta_events(), m_timed_events(0), m_trace_files(),
+    m_something_to_trace(false), m_runnable(0), m_collectable(0), 
+    m_time_params(), m_curr_time(SC_ZERO_TIME), m_max_time(SC_ZERO_TIME), 
+    m_change_stamp(0), m_delta_count(0), m_forced_stop(false), m_paused(false),
+    m_ready_to_simulate(false), m_elaboration_done(false),
+    m_execution_phase(phase_initialize), m_error(0),
+    m_in_simulator_control(false), m_end_of_simulation_called(false),
+    m_simulation_status(SC_ELABORATION), m_start_of_simulation_called(false),
+    m_cor_pkg(0), m_cor(0)
 {
     init();
 }
@@ -579,6 +595,24 @@ sc_simcontext::active_object()
     return result_p;
 }
 
+// +----------------------------------------------------------------------------
+// |"sc_simcontext::crunch"
+// | 
+// | This method implements the simulator's execution of processes. It performs
+// | one or more "delta" cycles. Each delta cycle consists of an evaluation,
+// | an update phase, and a notification phase. During the evaluation phase any 
+// | processes that are ready to run are executed. After all the processes have
+// | been executed the update phase is entered. During the update phase the 
+// | values of any signals that have changed are updated. After the updates
+// | have been performed the notification phase is entered. During that phase
+// | any notifications that need to occur because of of signal values changes
+// | are performed. This will result in the queueing of processes for execution
+// | that are sensitive to those notifications. At that point a delta cycle
+// | is complete, and the process is started again unless 'once' is true.
+// |
+// | Arguments:
+// |     once = true if only one delta cycle is to be performed.
+// +----------------------------------------------------------------------------
 inline void
 sc_simcontext::crunch( bool once )
 {
@@ -684,7 +718,10 @@ sc_simcontext::crunch( bool once )
 	}
 #endif
 
-	// PROCESS DELTA NOTIFICATIONS:
+	// NOTIFICATION PHASE:
+	//
+	// Process delta notifications which will queue processes for 
+	// subsequent execution.
 
         int size = m_delta_events.size();
 	if ( size != 0 )
@@ -706,10 +743,14 @@ sc_simcontext::crunch( bool once )
 
 	if ( m_paused ) break;
 
-        // IF ONLY DOING ONE CYCLE, WE ARE DONE. OTHERWISE GET NEW CALLBACKS
+        // IF ONLY DOING ONE CYCLE, WE ARE DONE. OTHERWISE EXECUTE NEW CALLBACKS
 
         if ( once ) break;
     }
+
+    // When this point is reached the processing of delta cycles is complete,
+    // if the completion was because of an error throw the exception specified
+    // by '*m_error'.
 out:
     this->reset_curr_proc();
     if( m_error ) throw *m_error; // re-throw propagated error

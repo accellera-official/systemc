@@ -336,7 +336,7 @@ scfx_rep::set_inf( int sign )
 inline
 scfx_rep::scfx_rep( const char* s )
 : m_mant( min_mant ), m_wp( 2 ), m_sign( 1 ), m_state( normal ),
-  m_r_flag( false )
+  m_msw(0), m_lsw(0), m_r_flag( false )
 {
     from_string( s, SC_DEFAULT_CTE_WL_ );
 }

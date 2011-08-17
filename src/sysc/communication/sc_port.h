@@ -42,6 +42,14 @@
 
 /* 
 $Log: sc_port.h,v $
+Revision 1.8  2011/08/07 19:08:01  acg
+ Andy Goodrich: moved logs to end of file so line number synching works
+ better between versions.
+
+Revision 1.7  2011/08/07 18:53:09  acg
+ Philipp A. Hartmann: add virtual instances of the bind function for
+ base classes to eliminate warning messages for clang platforms.
+
 Revision 1.6  2011/05/09 04:07:37  acg
  Philipp A. Hartmann:
    (1) Restore hierarchy in all phase callbacks.
@@ -333,6 +341,7 @@ public:
 
     typedef sc_port_base  base_type;
     typedef sc_port_b<IF> this_type;
+    typedef this_type     port_type;
 
 public:
 
@@ -347,10 +356,10 @@ public:
 
     // bind a parent port with type IF to this port
 
-    virtual void bind( this_type& parent_ )
+    virtual void bind( port_type& parent_ )
 	{ base_type::bind( parent_ ); }
 
-    void operator () ( this_type& parent_ )
+    void operator () ( port_type& parent_ )
 	{ this->bind( parent_ ); }
 
 
@@ -387,13 +396,14 @@ protected:
     // constructors
 
     explicit sc_port_b( int max_size_, 
-	    sc_port_policy policy=SC_ONE_OR_MORE_BOUND )
-	: base_type( max_size_, policy ), m_interface( 0 )
+	                sc_port_policy policy=SC_ONE_OR_MORE_BOUND ) :
+	base_type( max_size_, policy ), m_interface( 0 ), m_interface_vec()
 	{}
 
     sc_port_b( const char* name_, int max_size_, 
-               sc_port_policy policy=SC_ONE_OR_MORE_BOUND )
-	: base_type( name_, max_size_, policy ), m_interface( 0 )
+               sc_port_policy policy=SC_ONE_OR_MORE_BOUND ) :
+	base_type( name_, max_size_, policy ), m_interface( 0 ), 
+	m_interface_vec()
 	{}
 
 

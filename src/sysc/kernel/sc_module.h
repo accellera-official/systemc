@@ -49,6 +49,9 @@
  *****************************************************************************/
 
 // $Log: sc_module.h,v $
+// Revision 1.10  2011/08/15 16:43:24  acg
+//  Torsten Maehne: changes to remove unused argument warnings.
+//
 // Revision 1.9  2011/03/05 19:44:20  acg
 //  Andy Goodrich: changes for object and event naming and structures.
 //
@@ -383,7 +386,7 @@ protected:
 	{ ::sc_core::at_negedge( s, simcontext() ); }
 
     // Catch uses of watching:
-    void watching( bool expr )
+    void watching( bool /* expr */ )
         { SC_REPORT_ERROR(SC_ID_WATCHING_NOT_ALLOWED_,""); }
 
     // These are protected so that user derived classes can refer to them.

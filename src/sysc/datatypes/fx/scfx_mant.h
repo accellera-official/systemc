@@ -168,14 +168,16 @@ scfx_mant::operator[]( int i )
 
 inline
 scfx_mant::scfx_mant( std::size_t size )
+: m_array(0), m_size(size)
 {
-    m_array = alloc( m_size = size );
+    m_array = alloc( size );
 }
 
 inline
 scfx_mant::scfx_mant( const scfx_mant& rhs )
+: m_array(0), m_size(rhs.m_size)
 {
-    m_array = alloc( m_size = rhs.m_size );
+    m_array = alloc( m_size );
     for( int i = 0; i < m_size; i ++ )
     {
         (*this)[i] = rhs[i];

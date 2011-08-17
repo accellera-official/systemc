@@ -46,6 +46,9 @@
  *****************************************************************************/
 
 // $Log: sc_process.h,v $
+// Revision 1.33  2011/08/15 16:43:24  acg
+//  Torsten Maehne: changes to remove unused argument warnings.
+//
 // Revision 1.32  2011/07/24 11:20:03  acg
 //  Philipp A. Hartmann: process control error message improvements:
 //  (1) Downgrade error to warning for re-kills of processes.
@@ -283,8 +286,9 @@ class sc_process_monitor {
         spm_exit = 0
     };
     virtual ~sc_process_monitor() {}
-    virtual void signal(sc_thread_handle thread_p, int type) {}  
+    virtual void signal(sc_thread_handle thread_p, int type);
 };
+inline void sc_process_monitor::signal(sc_thread_handle thread_p, int type) {}  
 
 //------------------------------------------------------------------------------
 // PROCESS INVOCATION METHOD OR FUNCTION:

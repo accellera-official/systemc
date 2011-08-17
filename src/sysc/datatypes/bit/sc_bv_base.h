@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: sc_bv_base.h,v $
+// Revision 1.2  2011/08/15 16:43:24  acg
+//  Torsten Maehne: changes to remove unused argument warnings.
+//
 // Revision 1.1.1.1  2006/12/15 20:20:04  acg
 // SystemC 2.3
 //
@@ -234,7 +237,7 @@ public:
     void set_word( int i, sc_digit w )
 	{ m_data[i] = w; }
 
-    sc_digit get_cword( int i ) const
+    sc_digit get_cword( int /*i*/ ) const
 	{ return SC_DIGIT_ZERO; }
 
     void set_cword( int i, sc_digit w );
@@ -308,7 +311,7 @@ sc_bv_base::set_bit( int i, sc_logic_value_t value )
 
 inline
 void
-sc_bv_base::set_cword( int i, sc_digit w )
+sc_bv_base::set_cword( int /*i*/, sc_digit w )
 {
     if( w ) {
 	SC_REPORT_WARNING( sc_core::SC_ID_SC_BV_CANNOT_CONTAIN_X_AND_Z_, 0 );

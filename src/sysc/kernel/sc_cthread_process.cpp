@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_cthread_process.cpp,v $
+// Revision 1.10  2011/08/15 16:43:24  acg
+//  Torsten Maehne: changes to remove unused argument warnings.
+//
 // Revision 1.9  2011/02/18 20:27:14  acg
 //  Andy Goodrich: Updated Copyrights.
 //
@@ -91,7 +94,7 @@ namespace sc_core {
 //
 // This virtual method sets the initialization switch for this object instance.
 //------------------------------------------------------------------------------
-void sc_cthread_process::dont_initialize( bool dont )
+void sc_cthread_process::dont_initialize( bool /* dont */ )
 {
     SC_REPORT_WARNING( SC_ID_DONT_INITIALIZE_, 0 );
 }

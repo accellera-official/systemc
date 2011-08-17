@@ -136,7 +136,8 @@ sc_report::sc_report(sc_severity severity_,
 }
 
 sc_report::sc_report(const sc_report& other)
-: severity(other.severity),
+: std::exception(other),
+  severity(other.severity),
   md(other.md),
   msg(empty_dup(other.msg)),
   file(empty_dup(other.file)),

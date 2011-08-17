@@ -35,6 +35,13 @@
  *****************************************************************************/
 
 // $Log: sc_report_handler.cpp,v $
+// Revision 1.7  2011/08/07 19:08:08  acg
+//  Andy Goodrich: moved logs to end of file so line number synching works
+//  better between versions.
+//
+// Revision 1.6  2011/08/07 18:56:03  acg
+//  Philipp A. Hartmann: added cast to ? : to eliminate clang warning message.
+//
 // Revision 1.5  2011/03/23 16:16:49  acg
 //  Andy Goodrich: finish message verbosity support.
 //
@@ -517,7 +524,7 @@ int sc_report_handler::stop_after(sc_severity severity_, int limit)
 {
     int old = sev_limit[severity_];
 
-    sev_limit[severity_] = limit < 0 ? UINT_MAX: limit;
+    sev_limit[severity_] = limit < 0 ? UINT_MAX: (unsigned) limit;
 
     return old;
 }

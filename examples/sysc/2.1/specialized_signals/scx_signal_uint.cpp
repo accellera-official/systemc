@@ -35,6 +35,9 @@
 
 /* 
 $Log: scx_signal_uint.cpp,v $
+Revision 1.2  2011/08/15 16:43:24  acg
+ Torsten Maehne: changes to remove unused argument warnings.
+
 Revision 1.1.1.1  2006/12/15 20:20:03  acg
 SystemC 2.3
 
@@ -115,17 +118,17 @@ sc_dt::sc_uint_base* sc_uint_part_if::part_read_target()
     SC_REPORT_ERROR( SC_ID_OPERATION_ON_NON_SPECIALIZED_SIGNAL_, "int" );
     return 0;
 }
-sc_dt::uint64 sc_uint_part_if::read_part( int left, int right ) const
+sc_dt::uint64 sc_uint_part_if::read_part( int /*left*/, int /*right*/ ) const
 {
     SC_REPORT_ERROR( SC_ID_OPERATION_ON_NON_SPECIALIZED_SIGNAL_, "int" );
     return 0;
 }
-sc_uint_sigref& sc_uint_part_if::select_part( int left, int right )
+sc_uint_sigref& sc_uint_part_if::select_part( int /*left*/, int /*right*/ )
 {
     SC_REPORT_ERROR( SC_ID_OPERATION_ON_NON_SPECIALIZED_SIGNAL_, "int" );
     return *(sc_uint_sigref*)0;
 }
-void sc_uint_part_if::write_part( sc_dt::uint64 v, int left, int right )
+void sc_uint_part_if::write_part( sc_dt::uint64 v, int /*left*/, int /*right*/ )
 {
     SC_REPORT_ERROR( SC_ID_OPERATION_ON_NON_SPECIALIZED_SIGNAL_, "int" );
 }

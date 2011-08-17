@@ -100,7 +100,7 @@ sc_attr_base::name() const
 
 // constructors
 
-sc_attr_cltn::sc_attr_cltn()
+sc_attr_cltn::sc_attr_cltn() : m_cltn()
 {}
 
 sc_attr_cltn::sc_attr_cltn( const sc_attr_cltn& a )

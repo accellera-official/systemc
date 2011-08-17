@@ -43,7 +43,7 @@
 
 
 int
-sc_main(int argc, char *argv[])
+sc_main(int, char *[])
 {
   sc_signal<pkt> pkt_in0;
   sc_signal<pkt> pkt_in1;

@@ -21,24 +21,8 @@
 
   Original Author: Philipp A. Hartmann, OFFIS
 
+ CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
-
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
- *****************************************************************************/
-//$Log: sc_host_mutex.h,v $
-//Revision 1.2  2011/06/25 17:08:38  acg
-// Andy Goodrich: Jerome Cornet's changes to use libtool to build the
-// library.
-//
-//Revision 1.1  2011/04/18 19:04:11  acg
-// Philipp A. Hartman: first check in of file.
-//
 
 #ifndef SC_HOST_MUTEX_H_INCLUDED_
 #define SC_HOST_MUTEX_H_INCLUDED_
@@ -141,6 +125,27 @@ private:
 #undef SC_MTX_TRYLOCK_
 #undef SC_MTX_UNLOCK_
 #undef SC_PTHREAD_NULL_
+
+/*****************************************************************************
+
+  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+  changes you are making here.
+
+      Name, Affiliation, Date:
+  Description of Modification:
+ *****************************************************************************/
+//$Log: sc_host_mutex.h,v $
+//Revision 1.3  2011/08/07 19:08:01  acg
+// Andy Goodrich: moved logs to end of file so line number synching works
+// better between versions.
+//
+//Revision 1.2  2011/06/25 17:08:38  acg
+// Andy Goodrich: Jerome Cornet's changes to use libtool to build the
+// library.
+//
+//Revision 1.1  2011/04/18 19:04:11  acg
+// Philipp A. Hartmann: first check in of file.
+//
 
 #endif
 

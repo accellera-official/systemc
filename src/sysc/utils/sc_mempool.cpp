@@ -114,17 +114,10 @@ private:
 };
 
 sc_allocator::sc_allocator( int blksz, int cellsz )
-{
-    cell_size = cellsz;
-    block_size = sizeof(link) + (((blksz - 1) / cellsz) + 1) * cellsz;
-    block_list = 0;
-    free_list = 0;
-    next_avail = 0;
-
-    total_alloc = 0;
-    total_freed = 0;
-    free_list_alloc = 0;
-}
+  : block_size(sizeof(link) + (((blksz - 1) / cellsz) + 1) * cellsz),
+    cell_size(cellsz), block_list(0), free_list(0), next_avail(0),
+    total_alloc(0), total_freed(0), free_list_alloc(0)
+{}
 
 sc_allocator::~sc_allocator()
 {
@@ -243,7 +236,8 @@ compute_use_default_new()
     return (e != 0) && (atoi(e) != 0);
 }
 
-sc_mempool_int::sc_mempool_int(int blksz, int npools, int incr)
+sc_mempool_int::sc_mempool_int(int blksz, int npools, int incr) :
+    allocators(0), num_pools(0), increment(0), max_size(0)
 {
     use_default_new = compute_use_default_new();
     if (! use_default_new) {

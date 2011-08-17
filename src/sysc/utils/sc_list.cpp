@@ -62,15 +62,13 @@ class sc_plist_elem {
     friend class sc_plist_base;
 
 private:
-    sc_plist_elem() { prev = 0; next = 0; }
-    sc_plist_elem( void* d, sc_plist_elem* p, sc_plist_elem* n )
-    {
-        data = d; prev = p; next = n;
-    }
+    sc_plist_elem() : data(0), prev(0), next(0) 
+    {}
+    sc_plist_elem( void* d, sc_plist_elem* p, sc_plist_elem* n ) :
+        data(d), prev(p), next(n) 
+    {}
     ~sc_plist_elem()
-    {
-
-    }
+    {}
 
     static void* operator new(std::size_t sz)            { return sc_mempool::allocate(sz); }
     static void operator delete(void* p, std::size_t sz) { sc_mempool::release(p, sz);      }
@@ -80,11 +78,7 @@ private:
     sc_plist_elem* next;
 };
 
-sc_plist_base::sc_plist_base()
-{
-    head = 0;
-    tail = 0;
-}
+sc_plist_base::sc_plist_base() : head(0), tail(0) {}
 
 sc_plist_base::~sc_plist_base()
 {
@@ -270,9 +264,9 @@ sc_plist_base::back() const
 
 
 
-sc_plist_base_iter::sc_plist_base_iter( sc_plist_base* l, bool from_tail )
+sc_plist_base_iter::sc_plist_base_iter( sc_plist_base* l, bool from_tail ) :
+    lst(l), ptr( from_tail ? l->tail : l->head )
 {
-    reset( l, from_tail );
 }
 
 void

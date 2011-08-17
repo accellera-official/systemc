@@ -21,7 +21,7 @@
 
   Original Author: Martin Janssen, Synopsys, Inc., 2001-05-21
 
-  Change log appears at end of file
+  CHANGE LOG APPEARS AT THE END OF THE FILE
  *****************************************************************************/
 
 #ifndef SC_SIGNAL_PORTS_H
@@ -78,6 +78,7 @@ public:
     typedef sc_signal_in_if<data_type>                    if_type;
     typedef sc_port<if_type,1,SC_ONE_OR_MORE_BOUND>       base_type;
     typedef sc_in<data_type>                              this_type;
+    typedef typename base_type::port_type                 base_port_type;
 
     typedef if_type                                       in_if_type;
     typedef base_type                                     in_port_type;
@@ -247,6 +248,15 @@ protected:
     virtual int vbind( sc_interface& );
     virtual int vbind( sc_port_base& );
 
+    // implement virtual base_type port-binding function
+    //  - avoids warnings on some compilers
+    //  - should only be called, when using sc_port_b explicitly
+    //  - errors are detected during elaboration
+
+    virtual void bind( base_port_type& parent_ )
+        { sc_port_base::bind( parent_ ); }
+
+
 private:
   mutable sc_event_finder* m_change_finder_p;
 
@@ -382,6 +392,7 @@ public:
     typedef sc_signal_in_if<data_type>                     if_type;
     typedef sc_port<if_type,1,SC_ONE_OR_MORE_BOUND>        base_type;
     typedef sc_in<data_type>                               this_type;
+    typedef /* typename */ base_type::port_type            base_port_type;
 
     typedef if_type                                        in_if_type;
     typedef base_type                                      in_port_type;
@@ -604,6 +615,14 @@ protected:
     virtual int vbind( sc_interface& );
     virtual int vbind( sc_port_base& );
 
+    // implement virtual base_type port-binding function
+    //  - avoids warnings on some compilers
+    //  - should only be called, when using sc_port_b explicitly
+    //  - errors are detected during elaboration
+
+    virtual void bind( base_port_type& parent_ )
+        { sc_port_base::bind( parent_ ); }
+
 private:
   mutable sc_event_finder* m_change_finder_p;
   mutable sc_event_finder* m_neg_finder_p;
@@ -647,6 +666,7 @@ public:
     typedef sc_signal_in_if<data_type>                    if_type;
     typedef sc_port<if_type,1,SC_ONE_OR_MORE_BOUND>       base_type;
     typedef sc_in<data_type>                              this_type;
+    typedef /* typename */ base_type::port_type           base_port_type;
 
     typedef if_type                                       in_if_type;
     typedef base_type                                     in_port_type;
@@ -861,6 +881,14 @@ protected:
     // called by pbind (for internal use only)
     virtual int vbind( sc_interface& );
     virtual int vbind( sc_port_base& );
+
+    // implement virtual base_type port-binding function
+    //  - avoids warnings on some compilers
+    //  - should only be called, when using sc_port_b explicitly
+    //  - errors are detected during elaboration
+
+    virtual void bind( base_port_type& parent_ )
+        { sc_port_base::bind( parent_ ); }
 
 private:
   mutable sc_event_finder* m_change_finder_p;
@@ -1806,6 +1834,14 @@ sc_trace( sc_trace_file* tf, const sc_inout<T>& port,
 
  *****************************************************************************/
 //$Log: sc_signal_ports.h,v $
+//Revision 1.8  2011/08/07 19:08:01  acg
+// Andy Goodrich: moved logs to end of file so line number synching works
+// better between versions.
+//
+//Revision 1.7  2011/08/07 18:53:09  acg
+// Philipp A. Hartmann: add virtual instances of the bind function for
+// base classes to eliminate warning messages for clang platforms.
+//
 //Revision 1.6  2011/04/02 00:03:23  acg
 // Andy Goodrich: catch the other bind()'s that I missed in Philipp's update.
 //

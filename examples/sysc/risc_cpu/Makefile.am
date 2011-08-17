@@ -72,12 +72,12 @@ risc_cpu_EXTRAS = \
 
 risc_cpu_SOURCES = $(CXX_FILES) $(H_FILES)
 
-risc_cpu_LDADD = -L$(top_srcdir)/lib-$(TARGET_ARCH) -lsystemc -lm
+risc_cpu_LDADD = -L$(prefix)/lib-$(TARGET_ARCH) -lsystemc -lm
 
 check_PROGRAMS = risc_cpu
 TESTS = $(check_PROGRAMS) 
 
-INCLUDES = -I$(top_srcdir)/include
+INCLUDES = -I$(prefix)/include
 
 risc_cpu_INSTALLS = $(risc_cpu_SOURCES) $(risc_cpu_EXTRAS)
 

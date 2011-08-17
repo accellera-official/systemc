@@ -112,7 +112,7 @@ public:
                    bool   reorder  = PHASH_DEFAULT_REORDER_FLAG,    
                    hash_fn_t hash_fn = default_ptr_hash_fn,
                    cmpr_fn_t cmpr_fn = 0                             );
-    ~sc_phash_base();
+    virtual ~sc_phash_base();
 
     void set_cmpr_fn(cmpr_fn_t);
     void set_hash_fn(hash_fn_t);
@@ -155,9 +155,13 @@ public:
     void reset(sc_phash_base* t);
     void reset(sc_phash_base& t) { reset(&t); }
 
-    sc_phash_base_iter(sc_phash_base* t) { reset(t); }
-    sc_phash_base_iter(sc_phash_base& t) { reset(t); }
-    ~sc_phash_base_iter() { }
+    sc_phash_base_iter(sc_phash_base* t)
+    : table(t), entry(0), next(0), last(0), index(0)
+        { reset(t); }
+    sc_phash_base_iter(sc_phash_base& t)
+    : table(&t), entry(0), next(0), last(0), index(0)
+        { reset(t); }
+    virtual ~sc_phash_base_iter() { }
 
     bool empty() const;
     void step();

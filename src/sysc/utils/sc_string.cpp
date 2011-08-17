@@ -116,15 +116,13 @@ class sc_string_rep
     friend ::std::istream& operator>>( ::std::istream&, sc_string_old& );
     friend sc_string_old operator+( const char*, const sc_string_old& );
 
-    sc_string_rep( int size = 16 )
+    sc_string_rep( int size = 16 ) :
+        ref_count(1), alloc( sc_roundup( size, 16 ) ), str( new char[alloc] )
     {
-        ref_count = 1;
-        alloc = sc_roundup( size, 16 );
-        str = new char[alloc];
         *str = '\0';
     }
 
-    sc_string_rep( const char* s )
+    sc_string_rep( const char* s ) : ref_count(1), alloc(0), str(0)
     {
         ref_count = 1;
         if (s) {
@@ -156,9 +154,9 @@ class sc_string_rep
 
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
-sc_string_rep::sc_string_rep( const char* s, int n)
+sc_string_rep::sc_string_rep( const char* s, int n) :
+    ref_count(1), alloc(0), str(0)
 {
-    ref_count = 1;
     if (s && n>0) {
         alloc = 1 + n;
         str = strncpy( new char[alloc], s,n );
@@ -197,30 +195,26 @@ sc_string_rep::set_string( const char* s )
 
 // constructors
 
-sc_string_old::sc_string_old( int size )
+sc_string_old::sc_string_old( int size ) : rep( new sc_string_rep(size) )
 {
-    rep = new sc_string_rep( size );
 }
 
-sc_string_old::sc_string_old( const char* s )
+sc_string_old::sc_string_old( const char* s ) : rep( new sc_string_rep(s) )
 {
-    rep = new sc_string_rep( s );
 }
 
-sc_string_old::sc_string_old( const char* s, int n )
+sc_string_old::sc_string_old( const char* s, int n ) : 
+    rep( new sc_string_rep( s, n ) )
 {
-    rep = new sc_string_rep( s, n );
 }
 
-sc_string_old::sc_string_old( const sc_string_old& s )
+sc_string_old::sc_string_old( const sc_string_old& s ) : rep( s.rep )
 {
-    rep = s.rep;
     rep->ref_count ++;
 }
 
-sc_string_old::sc_string_old( sc_string_rep* r )
+sc_string_old::sc_string_old( sc_string_rep* r ) : rep(r)
 {
-    rep = r;
 }
 
 

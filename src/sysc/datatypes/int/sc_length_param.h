@@ -117,16 +117,15 @@ typedef sc_context<sc_length_param> sc_length_context;
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
 inline
-sc_length_param::sc_length_param()
+sc_length_param::sc_length_param() : m_len()
 {
     *this = sc_length_context::default_value();
 }
 
 inline
-sc_length_param::sc_length_param( int len_ )
+sc_length_param::sc_length_param( int len_ ) : m_len(len_)
 {
     SC_CHECK_WL_( len_ );
-    m_len = len_;
 }
 
 inline

@@ -66,7 +66,7 @@ void icache::entry()
 		}
     		if (we.read() == true) { // Write operation
       			wait();
-			if (address < MAX_CODE_LENGTH && address >= 0)
+			if (address < MAX_CODE_LENGTH)
                           icmemory[address] = datain.read();
                         else
                           printf("ICU ALERT: **MEMORY OUT OF RANGE**\n");
@@ -74,7 +74,7 @@ void icache::entry()
     		}
     		else { // Read operation
 			wait(); // Introduce delay needed
-			if (address >= MAX_CODE_LENGTH || address < 0) {
+			if (address >= MAX_CODE_LENGTH) {
 				dataout.write(0xffffffff);
 				printf("ICU ALERT: **MEMORY OUT OF RANGE**\n");
 			}
@@ -86,7 +86,7 @@ void icache::entry()
 			if (PRINT_ICU) {
 				printf("------------------------\n");
 				printf("ICU: fetching mem[%d]\n", address);
-                                if (address < MAX_CODE_LENGTH && address >= 0) 
+                                if (address < MAX_CODE_LENGTH) 
 				  printf("ICU: (%0x)", icmemory[address]); 
        		                cout.setf(ios::dec,ios::basefield);
                         	cout << " at CSIM " << sc_time_stamp() << endl;

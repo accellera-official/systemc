@@ -35,6 +35,9 @@
 
 
 // $Log: sc_value_base.cpp,v $
+// Revision 1.2  2011/08/15 16:43:24  acg
+//  Torsten Maehne: changes to remove unused argument warnings.
+//
 // Revision 1.1.1.1  2006/12/15 20:20:05  acg
 // SystemC 2.3
 //
@@ -54,7 +57,7 @@
 namespace sc_dt
 {
 
-void sc_value_base::concat_clear_data( bool to_ones )
+void sc_value_base::concat_clear_data( bool /* to_ones */ )
 {
     char error_message[128];
     std::sprintf(error_message, 
@@ -62,7 +65,7 @@ void sc_value_base::concat_clear_data( bool to_ones )
     SC_REPORT_ERROR( sc_core::SC_ID_OPERATION_FAILED_, error_message );
 }
 
-bool sc_value_base::concat_get_ctrl( sc_digit* dst_p, int low_i ) const
+bool sc_value_base::concat_get_ctrl( sc_digit* /*dst_p*/, int /*low_i*/ ) const
 {
     char error_message[128];
     std::sprintf(error_message, 
@@ -71,7 +74,7 @@ bool sc_value_base::concat_get_ctrl( sc_digit* dst_p, int low_i ) const
     return false;
 }
 
-bool sc_value_base::concat_get_data( sc_digit* dst_p, int low_i ) const
+bool sc_value_base::concat_get_data( sc_digit* /*dst_p*/, int /*low_i*/ ) const
 {
     char error_message[128];
     std::sprintf(error_message, 
@@ -89,7 +92,7 @@ sc_dt::uint64 sc_value_base::concat_get_uint64() const
     return 0;
 }
 
-int sc_value_base::concat_length(bool* xz_present_p) const
+int sc_value_base::concat_length(bool* /*xz_present_p*/) const
 {
     char error_message[128];
     std::sprintf(error_message, 
@@ -98,7 +101,7 @@ int sc_value_base::concat_length(bool* xz_present_p) const
     return 0;
 }
 
-void sc_value_base::concat_set( int64 src, int i_low )
+void sc_value_base::concat_set( int64 /*src*/, int /*low_i*/ )
 {
     char error_message[128];
     std::sprintf(error_message, 
@@ -106,7 +109,7 @@ void sc_value_base::concat_set( int64 src, int i_low )
     SC_REPORT_ERROR( sc_core::SC_ID_OPERATION_FAILED_, error_message );
 }
 
-void sc_value_base::concat_set( const sc_signed& src, int low_i )
+void sc_value_base::concat_set( const sc_signed& /*src*/, int /*low_i*/ )
 {
     char error_message[128];
     std::sprintf(error_message, 
@@ -114,7 +117,7 @@ void sc_value_base::concat_set( const sc_signed& src, int low_i )
     SC_REPORT_ERROR( sc_core::SC_ID_OPERATION_FAILED_, error_message );
 }
 
-void sc_value_base::concat_set( const sc_unsigned& src, int low_i )
+void sc_value_base::concat_set( const sc_unsigned& /*src*/, int /*low_i*/ )
 {
     char error_message[128];
     std::sprintf(error_message, 
@@ -122,7 +125,7 @@ void sc_value_base::concat_set( const sc_unsigned& src, int low_i )
     SC_REPORT_ERROR( sc_core::SC_ID_OPERATION_FAILED_, error_message );
 }
 
-void sc_value_base::concat_set( uint64 src, int i_low )
+void sc_value_base::concat_set( uint64 /*src*/, int /*low_i*/ )
 {
     char error_message[128];
     std::sprintf(error_message, 

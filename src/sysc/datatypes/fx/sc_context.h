@@ -173,7 +173,8 @@ sc_global<T>* sc_global<T>::m_instance = 0;
 template <class T>
 inline
 sc_global<T>::sc_global()
-: m_proc( 
+: m_map(),
+  m_proc( 
 	reinterpret_cast<const sc_core::sc_process_b*>( -1 ) ), 
 	m_value_ptr( 0 )
 {}

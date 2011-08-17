@@ -132,7 +132,7 @@ SC_MODULE(Writer)
 
 // Main program
 
-int sc_main(int argc, char* argv[])
+int sc_main( int, char* [] )
 {
     sc_clock      clock;
     dpipe<atom,4> delay("pipe");

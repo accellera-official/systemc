@@ -446,7 +446,8 @@ protected:
 
 private:
     sc_concatref(const sc_concatref&);
-    sc_concatref() { }
+    sc_concatref() : m_left_p(0), m_right_p(0), m_len(0), m_len_r(0), m_flags()
+      {}
 };
 
 
@@ -602,6 +603,12 @@ class sc_concat_bool : public sc_value_base
     bool                                     m_value; // Value for this obj.
 
   public:
+
+    // constructor:
+    
+    sc_concat_bool()
+    : sc_value_base(), m_value()
+    {}
 
     // destructor:
 

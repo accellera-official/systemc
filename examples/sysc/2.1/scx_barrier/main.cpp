@@ -71,7 +71,7 @@ SC_MODULE(X)
 	scx_barrier   m_barrier;
 };
 
-int sc_main( int argc, char* argv[] )
+int sc_main( int , char* [] )
 {
 	sc_clock clock;
 	X x("x");

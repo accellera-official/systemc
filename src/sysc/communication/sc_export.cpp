@@ -250,6 +250,7 @@ sc_export_registry::remove( sc_export_base* export_ )
 
 sc_export_registry::sc_export_registry( sc_simcontext& simc_ )
 : m_construction_done(0),
+  m_export_vec(),
   m_simc( &simc_ )
 {
 }

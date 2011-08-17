@@ -46,7 +46,8 @@
 // ----------------------------------------------------------------------------
 
 // Create a CLASS_TYPE number with nb bits.
-CLASS_TYPE::CLASS_TYPE( int nb )
+CLASS_TYPE::CLASS_TYPE( int nb ) :
+    sc_value_base(), sgn(), nbits(), ndigits(), digit()
 {
     sgn = default_sign();
     if( nb > 0 ) {
@@ -68,12 +69,9 @@ CLASS_TYPE::CLASS_TYPE( int nb )
 
 
 // Create a copy of v with sgn s. v is of the same type.
-CLASS_TYPE::CLASS_TYPE(const CLASS_TYPE& v)
+CLASS_TYPE::CLASS_TYPE(const CLASS_TYPE& v) :
+    sc_value_base(v), sgn(v.sgn), nbits(v.nbits), ndigits(v.ndigits), digit()
 {
-  sgn = v.sgn;
-  nbits = v.nbits;
-  ndigits = v.ndigits;
-
 #ifndef SC_MAX_NBITS
   digit = new sc_digit[ndigits];
 #endif
@@ -83,11 +81,9 @@ CLASS_TYPE::CLASS_TYPE(const CLASS_TYPE& v)
 
 
 // Create a copy of v where v is of the different type.
-CLASS_TYPE::CLASS_TYPE(const OTHER_CLASS_TYPE& v)
+CLASS_TYPE::CLASS_TYPE(const OTHER_CLASS_TYPE& v) :
+    sc_value_base(v), sgn(v.sgn), nbits(num_bits(v.nbits)), ndigits(), digit()
 {
-  sgn = v.sgn;
-  nbits = num_bits(v.nbits);
-
 #if (IF_SC_SIGNED == 1)
   ndigits = v.ndigits;
 #else
@@ -102,7 +98,8 @@ CLASS_TYPE::CLASS_TYPE(const OTHER_CLASS_TYPE& v)
 }
 
 // Create a copy of v where v is an sign-less instance.
-CLASS_TYPE::CLASS_TYPE(const sc_bv_base& v) 
+CLASS_TYPE::CLASS_TYPE(const sc_bv_base& v) :
+    sc_value_base(), sgn(), nbits(), ndigits(), digit()
 {
     int nb = v.length();
     sgn = default_sign();
@@ -124,7 +121,8 @@ CLASS_TYPE::CLASS_TYPE(const sc_bv_base& v)
     *this = v;
 }
 
-CLASS_TYPE::CLASS_TYPE(const sc_lv_base& v) 
+CLASS_TYPE::CLASS_TYPE(const sc_lv_base& v) : 
+    sc_value_base(), sgn(), nbits(), ndigits(), digit()
 {
     int nb = v.length();
     sgn = default_sign();
@@ -146,7 +144,8 @@ CLASS_TYPE::CLASS_TYPE(const sc_lv_base& v)
     *this = v;
 }
 
-CLASS_TYPE::CLASS_TYPE(const sc_int_subref_r& v) 
+CLASS_TYPE::CLASS_TYPE(const sc_int_subref_r& v) :
+    sc_value_base(v), sgn(), nbits(), ndigits(), digit()
 {
     int nb = v.length();
     sgn = default_sign();
@@ -168,7 +167,8 @@ CLASS_TYPE::CLASS_TYPE(const sc_int_subref_r& v)
     *this = v.to_uint64();
 }
 
-CLASS_TYPE::CLASS_TYPE(const sc_uint_subref_r& v) 
+CLASS_TYPE::CLASS_TYPE(const sc_uint_subref_r& v) :
+    sc_value_base(v), sgn(), nbits(), ndigits(), digit()
 {
     int nb = v.length();
     sgn = default_sign();
@@ -190,7 +190,8 @@ CLASS_TYPE::CLASS_TYPE(const sc_uint_subref_r& v)
     *this = v.to_uint64();
 }
 
-CLASS_TYPE::CLASS_TYPE(const sc_signed_subref_r& v) 
+CLASS_TYPE::CLASS_TYPE(const sc_signed_subref_r& v) :
+    sc_value_base(v), sgn(), nbits(), ndigits(), digit()
 {
     int nb = v.length();
     sgn = default_sign();
@@ -212,7 +213,8 @@ CLASS_TYPE::CLASS_TYPE(const sc_signed_subref_r& v)
     *this = sc_unsigned(v.m_obj_p, v.m_left, v.m_right);
 }
 
-CLASS_TYPE::CLASS_TYPE(const sc_unsigned_subref_r& v) 
+CLASS_TYPE::CLASS_TYPE(const sc_unsigned_subref_r& v) :
+    sc_value_base(v), sgn(), nbits(), ndigits(), digit()
 {
     int nb = v.length();
     sgn = default_sign();
@@ -2578,12 +2580,9 @@ CLASS_TYPE::set_packed_rep(sc_digit *buf)
 // ----------------------------------------------------------------------------
 
 // Create a copy of v with sgn s.
-CLASS_TYPE::CLASS_TYPE(const CLASS_TYPE& v, small_type s)
+CLASS_TYPE::CLASS_TYPE(const CLASS_TYPE& v, small_type s) :
+    sc_value_base(v), sgn(s), nbits(v.nbits), ndigits(v.ndigits), digit()
 {
-  sgn = s;
-  nbits = v.nbits;
-  ndigits = v.ndigits;
-
 #ifndef SC_MAX_NBITS
   digit = new sc_digit[ndigits];
 #endif
@@ -2593,11 +2592,9 @@ CLASS_TYPE::CLASS_TYPE(const CLASS_TYPE& v, small_type s)
 
 
 // Create a copy of v where v is of the different type.
-CLASS_TYPE::CLASS_TYPE(const OTHER_CLASS_TYPE& v, small_type s)
+CLASS_TYPE::CLASS_TYPE(const OTHER_CLASS_TYPE& v, small_type s) :
+    sc_value_base(v), sgn(s), nbits(num_bits(v.nbits)), ndigits(), digit()
 {
-  sgn = s;
-  nbits = num_bits(v.nbits);
-
 #if (IF_SC_SIGNED == 1)
   ndigits = v.ndigits;
 #else
@@ -2616,10 +2613,9 @@ CLASS_TYPE::CLASS_TYPE(const OTHER_CLASS_TYPE& v, small_type s)
 // defined in class CLASS_TYPE). If alloc is set, delete d.
 CLASS_TYPE::CLASS_TYPE(small_type s, int nb, 
                        int nd, sc_digit *d, 
-                       bool alloc)
+                       bool alloc) :
+    sc_value_base(), sgn(s), nbits(num_bits(nb)), ndigits(), digit()
 {
-  sgn = s;
-  nbits = num_bits(nb);
   ndigits = DIV_CEIL(nbits);
 
 #ifndef SC_MAX_NBITS
@@ -2641,7 +2637,8 @@ CLASS_TYPE::CLASS_TYPE(small_type s, int nb,
 // number of type CLASS_TYPE. The function range(l, r) can have
 // arbitrary precedence between l and r. If l is smaller than r, then
 // the output is the reverse of range(r, l). 
-CLASS_TYPE::CLASS_TYPE(const CLASS_TYPE* u, int l, int r)
+CLASS_TYPE::CLASS_TYPE(const CLASS_TYPE* u, int l, int r) :
+    sc_value_base(), sgn(), nbits(), ndigits(), digit()
 {
   bool reversed = false;
 
@@ -2788,7 +2785,8 @@ CLASS_TYPE::CLASS_TYPE(const CLASS_TYPE* u, int l, int r)
 // number of type OTHER_CLASS_TYPE. The function range(l, r) can have
 // arbitrary precedence between l and r. If l is smaller than r, then
 // the output is the reverse of range(r, l). 
-CLASS_TYPE::CLASS_TYPE(const OTHER_CLASS_TYPE* u, int l, int r)
+CLASS_TYPE::CLASS_TYPE(const OTHER_CLASS_TYPE* u, int l, int r) :
+    sc_value_base(), sgn(), nbits(), ndigits(), digit()
 {
   bool reversed = false;
 

@@ -21,67 +21,8 @@
 
   Original Author: Martin Janssen, Synopsys, Inc., 2001-05-21
 
+ CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
-
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date: Andy Goodrich, Forte,
-                               Bishnupriya Bhattacharya, Cadence Design Systems,
-                               25 August, 2003
-  Description of Modification: phase callbacks
-    
- *****************************************************************************/
-//$Log: sc_prim_channel.h,v $
-//Revision 1.8  2011/05/09 04:07:37  acg
-// Philipp A. Hartmann:
-//   (1) Restore hierarchy in all phase callbacks.
-//   (2) Ensure calls to before_end_of_elaboration.
-//
-//Revision 1.7  2011/05/05 17:44:01  acg
-// Philip A. Hartmann: change in the name of pending_async_updates.
-//
-//Revision 1.6  2011/04/19 15:03:48  acg
-// Philipp A. Hartman: remove ASYNC_UPDATE preprocessor check from header.
-//
-//Revision 1.5  2011/04/19 02:36:26  acg
-// Philipp A. Hartmann: new aysnc_update and mutex support.
-//
-//Revision 1.4  2011/04/05 20:48:09  acg
-// Andy Goodrich: changes to make sure that event(), posedge() and negedge()
-// only return true if the clock has not moved.
-//
-//Revision 1.3  2011/02/18 20:23:45  acg
-// Andy Goodrich: Copyright update.
-//
-//Revision 1.2  2011/01/20 16:52:15  acg
-// Andy Goodrich: changes for IEEE 1666 2011.
-//
-//Revision 1.1.1.1  2006/12/15 20:20:04  acg
-//SystemC 2.3
-//
-//Revision 1.3  2006/05/08 17:52:47  acg
-// Andy Goodrich:
-//   (1) added David Long's forward declarations for friend functions,
-//       methods, and operators to keep the Microsoft compiler happy.
-//   (2) Added delta_count() method to sc_prim_channel for use by
-//       sc_signal so that the friend declaration in sc_simcontext.h
-//	   can be for a non-templated class (i.e., sc_prim_channel.)
-//
-//Revision 1.2  2006/01/03 23:18:26  acg
-//Changed copyright to include 2006.
-//
-//Revision 1.1.1.1  2005/12/19 23:16:43  acg
-//First check in of SystemC 2.1 into its own archive.
-//
-//Revision 1.10  2005/07/30 03:44:11  acg
-//Changes from 2.1.
-//
-//Revision 1.9  2005/06/10 22:43:55  acg
-//Added CVS change log annotation.
-//
 
 #ifndef SC_PRIM_CHANNEL_H
 #define SC_PRIM_CHANNEL_H
@@ -405,6 +346,70 @@ sc_prim_channel::perform_update()
 
 
 } // namespace sc_core
+
+
+/*****************************************************************************
+
+  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+  changes you are making here.
+
+      Name, Affiliation, Date: Andy Goodrich, Forte,
+                               Bishnupriya Bhattacharya, Cadence Design Systems,
+                               25 August, 2003
+  Description of Modification: phase callbacks
+    
+ *****************************************************************************/
+//$Log: sc_prim_channel.h,v $
+//Revision 1.9  2011/08/07 19:08:01  acg
+// Andy Goodrich: moved logs to end of file so line number synching works
+// better between versions.
+//
+//Revision 1.8  2011/05/09 04:07:37  acg
+// Philipp A. Hartmann:
+//   (1) Restore hierarchy in all phase callbacks.
+//   (2) Ensure calls to before_end_of_elaboration.
+//
+//Revision 1.7  2011/05/05 17:44:01  acg
+// Philip A. Hartmann: change in the name of pending_async_updates.
+//
+//Revision 1.6  2011/04/19 15:03:48  acg
+// Philipp A. Hartmann: remove ASYNC_UPDATE preprocessor check from header.
+//
+//Revision 1.5  2011/04/19 02:36:26  acg
+// Philipp A. Hartmann: new aysnc_update and mutex support.
+//
+//Revision 1.4  2011/04/05 20:48:09  acg
+// Andy Goodrich: changes to make sure that event(), posedge() and negedge()
+// only return true if the clock has not moved.
+//
+//Revision 1.3  2011/02/18 20:23:45  acg
+// Andy Goodrich: Copyright update.
+//
+//Revision 1.2  2011/01/20 16:52:15  acg
+// Andy Goodrich: changes for IEEE 1666 2011.
+//
+//Revision 1.1.1.1  2006/12/15 20:20:04  acg
+//SystemC 2.3
+//
+//Revision 1.3  2006/05/08 17:52:47  acg
+// Andy Goodrich:
+//   (1) added David Long's forward declarations for friend functions,
+//       methods, and operators to keep the Microsoft compiler happy.
+//   (2) Added delta_count() method to sc_prim_channel for use by
+//       sc_signal so that the friend declaration in sc_simcontext.h
+//	   can be for a non-templated class (i.e., sc_prim_channel.)
+//
+//Revision 1.2  2006/01/03 23:18:26  acg
+//Changed copyright to include 2006.
+//
+//Revision 1.1.1.1  2005/12/19 23:16:43  acg
+//First check in of SystemC 2.1 into its own archive.
+//
+//Revision 1.10  2005/07/30 03:44:11  acg
+//Changes from 2.1.
+//
+//Revision 1.9  2005/06/10 22:43:55  acg
+//Added CVS change log annotation.
 
 #endif
 

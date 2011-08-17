@@ -92,7 +92,7 @@ class sc_join : public sc_process_monitor {
     int      m_threads_n;   // # of threads still need to wait for.
 };
 
-sc_join::sc_join() : m_threads_n(0) { }
+sc_join::sc_join() : m_join_event(), m_threads_n(0) { }
 
 sc_join::~sc_join() { }
 

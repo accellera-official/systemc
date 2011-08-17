@@ -1200,14 +1200,14 @@ vec_div_large(int ulen, const sc_digit *u,
   xlen = vec_to_char(ulen, u, xlen, x);
 
   // Skip all the leading zeros in x.
-  while ((--xlen >= 0) && (! x[xlen]));
+  while ((--xlen >= 0) && (! x[xlen])) continue;
   xlen++;
 
   // Set (uchar) y = (sc_digit) v.
   ylen = vec_to_char(vlen, v, ylen, y);
 
   // Skip all the leading zeros in y.
-  while ((--ylen >= 0) && (! y[ylen]));
+  while ((--ylen >= 0) && (! y[ylen])) continue;
   ylen++;
 
 #ifdef DEBUG_SYSTEMC
@@ -1401,14 +1401,14 @@ vec_rem_large(int ulen, const sc_digit *u,
   xlen = vec_to_char(ulen, u, xlen, x);
 
   // Skip all the leading zeros in x.
-  while ((--xlen >= 0) && (! x[xlen]));
+  while ((--xlen >= 0) && (! x[xlen])) continue;
   xlen++;
 
   // Set (uchar) y = (sc_digit) v.
   ylen = vec_to_char(vlen, v, ylen, y);
 
   // Skip all the leading zeros in y.
-  while ((--ylen >= 0) && (! y[ylen]));
+  while ((--ylen >= 0) && (! y[ylen])) continue;
   ylen++;
 
 #ifdef DEBUG_SYSTEMC

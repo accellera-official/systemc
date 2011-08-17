@@ -95,6 +95,7 @@ namespace sc_core {
 
 sc_prim_channel::sc_prim_channel()
 : sc_object( 0 ),
+  m_construction_done(0),
   m_registry( simcontext()->get_prim_channel_registry() ),
   m_update_next_p( 0 ) 
 {
@@ -103,6 +104,7 @@ sc_prim_channel::sc_prim_channel()
 
 sc_prim_channel::sc_prim_channel( const char* name_ )
 : sc_object( name_ ),
+  m_construction_done(0),
   m_registry( simcontext()->get_prim_channel_registry() ),
   m_update_next_p( 0 )
 {
@@ -354,6 +356,7 @@ sc_prim_channel_registry::perform_update()
 sc_prim_channel_registry::sc_prim_channel_registry( sc_simcontext& simc_ )
   :  m_async_update_list_p(0)
   ,  m_construction_done(0)
+  ,  m_prim_channel_vec()
   ,  m_simc( &simc_ )
   ,  m_update_list_p((sc_prim_channel*)sc_prim_channel::list_end)
 {

@@ -21,118 +21,8 @@
 
   Original Author: Martin Janssen, Synopsys, Inc., 2002-01-17
 
+ CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
-
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-    
- *****************************************************************************/
-
-// $Log: sc_kernel_ids.h,v $
-// Revision 1.23  2011/07/24 11:15:47  acg
-//  Philipp A. Hartmann: Improvements to error/warning messages related to
-//  process control.
-//
-// Revision 1.22  2011/05/09 04:07:48  acg
-//  Philipp A. Hartmann:
-//    (1) Restore hierarchy in all phase callbacks.
-//    (2) Ensure calls to before_end_of_elaboration.
-//
-// Revision 1.21  2011/04/19 19:15:41  acg
-//  Andy Goodrich: fix so warning message is always issued for a throw_it()
-//  on a method process.
-//
-// Revision 1.20  2011/04/19 15:04:27  acg
-//  Philipp A. Hartman: clean up SC_ID messages.
-//
-// Revision 1.19  2011/04/19 02:39:09  acg
-//  Philipp A. Hartmann: added checks for additional throws during stack unwinds.
-//
-// Revision 1.18  2011/04/05 06:23:45  acg
-//  Andy Goodrich: comments for throws while the simulator is not running.
-//
-// Revision 1.17  2011/04/01 22:30:39  acg
-//  Andy Goodrich: change hard assertion to warning for trigger_dynamic()
-//  getting called when there is only STATIC sensitivity. This can result
-//  because of sc_process_handle::throw_it().
-//
-// Revision 1.16  2011/03/28 13:02:51  acg
-//  Andy Goodrich: Changes for disable() interactions.
-//
-// Revision 1.15  2011/03/07 17:34:21  acg
-//  Andy Goodrich: changed process control corner case message. Added more
-//  place holders for unused message numbers.
-//
-// Revision 1.14  2011/03/06 19:57:11  acg
-//  Andy Goodrich: refinements for the illegal suspend - synchronous reset
-//  interaction.
-//
-// Revision 1.13  2011/03/06 15:56:29  acg
-//  Andy Goodrich: added process control corner case error message, remove
-//  unused messages.
-//
-// Revision 1.12  2011/03/05 19:44:20  acg
-//  Andy Goodrich: changes for object and event naming and structures.
-//
-// Revision 1.11  2011/02/18 20:27:14  acg
-//  Andy Goodrich: Updated Copyrights.
-//
-// Revision 1.10  2011/02/13 21:47:37  acg
-//  Andy Goodrich: update copyright notice.
-//
-// Revision 1.9  2011/02/13 21:29:16  acg
-//  Andy Goodrich: added error messages for throws that occur before
-//  simulator intialization.
-//
-// Revision 1.8  2011/02/11 13:25:24  acg
-//  Andy Goodrich: Philipp A. Hartmann's changes:
-//    (1) Removal of SC_CTHREAD method overloads.
-//    (2) New exception processing code.
-//
-// Revision 1.7  2011/02/07 19:17:20  acg
-//  Andy Goodrich: changes for IEEE 1666 compatibility.
-//
-// Revision 1.6  2011/01/19 23:21:50  acg
-//  Andy Goodrich: changes for IEEE 1666 2011
-//
-// Revision 1.5  2010/07/30 05:21:22  acg
-//  Andy Goodrich: release 2.3 fixes.
-//
-// Revision 1.4  2009/02/28 00:26:58  acg
-//  Andy Goodrich: changed boost name space to sc_boost to allow use with
-//  full boost library applications.
-//
-// Revision 1.3  2008/11/17 15:57:15  acg
-//  Andy Goodrich: added deprecation message for sc_module(const char*)
-//
-// Revision 1.2  2008/05/22 17:06:25  acg
-//  Andy Goodrich: updated copyright notice to include 2008.
-//
-// Revision 1.1.1.1  2006/12/15 20:20:05  acg
-// SystemC 2.3
-//
-// Revision 1.7  2006/08/29 23:37:13  acg
-//  Andy Goodrich: Added check for negative time.
-//
-// Revision 1.6  2006/04/20 17:08:16  acg
-//  Andy Goodrich: 3.0 style process changes.
-//
-// Revision 1.5  2006/01/25 00:31:19  acg
-//  Andy Goodrich: Changed over to use a standard message id of
-//  SC_ID_IEEE_1666_DEPRECATION for all deprecation messages.
-//
-// Revision 1.4  2006/01/24 20:49:04  acg
-// Andy Goodrich: changes to remove the use of deprecated features within the
-// simulator, and to issue warning messages when deprecated features are used.
-//
-// Revision 1.3  2006/01/13 18:44:29  acg
-// Added $Log to record CVS changes into the source.
-//
 
 #ifndef SC_KERNEL_IDS_H
 #define SC_KERNEL_IDS_H
@@ -298,6 +188,123 @@ SC_DEFINE_MESSAGE(SC_ID_RESET_PROCESS_WHILE_NOT_RUNNING_  , 573,
         "a process may not be asynchronously reset while the simulation is not running" )
 SC_DEFINE_MESSAGE(SC_ID_THROW_IT_WHILE_NOT_RUNNING_  , 574,
         "throw_it not allowed unless simulation is running " )
+
+
+/*****************************************************************************
+
+  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+  changes you are making here.
+
+      Name, Affiliation, Date:
+  Description of Modification:
+    
+ *****************************************************************************/
+
+// $Log: sc_kernel_ids.h,v $
+// Revision 1.24  2011/08/07 19:08:04  acg
+//  Andy Goodrich: moved logs to end of file so line number synching works
+//  better between versions.
+//
+// Revision 1.23  2011/07/24 11:15:47  acg
+//  Philipp A. Hartmann: Improvements to error/warning messages related to
+//  process control.
+//
+// Revision 1.22  2011/05/09 04:07:48  acg
+//  Philipp A. Hartmann:
+//    (1) Restore hierarchy in all phase callbacks.
+//    (2) Ensure calls to before_end_of_elaboration.
+//
+// Revision 1.21  2011/04/19 19:15:41  acg
+//  Andy Goodrich: fix so warning message is always issued for a throw_it()
+//  on a method process.
+//
+// Revision 1.20  2011/04/19 15:04:27  acg
+//  Philipp A. Hartmann: clean up SC_ID messages.
+//
+// Revision 1.19  2011/04/19 02:39:09  acg
+//  Philipp A. Hartmann: added checks for additional throws during stack unwinds.
+//
+// Revision 1.18  2011/04/05 06:23:45  acg
+//  Andy Goodrich: comments for throws while the simulator is not running.
+//
+// Revision 1.17  2011/04/01 22:30:39  acg
+//  Andy Goodrich: change hard assertion to warning for trigger_dynamic()
+//  getting called when there is only STATIC sensitivity. This can result
+//  because of sc_process_handle::throw_it().
+//
+// Revision 1.16  2011/03/28 13:02:51  acg
+//  Andy Goodrich: Changes for disable() interactions.
+//
+// Revision 1.15  2011/03/07 17:34:21  acg
+//  Andy Goodrich: changed process control corner case message. Added more
+//  place holders for unused message numbers.
+//
+// Revision 1.14  2011/03/06 19:57:11  acg
+//  Andy Goodrich: refinements for the illegal suspend - synchronous reset
+//  interaction.
+//
+// Revision 1.13  2011/03/06 15:56:29  acg
+//  Andy Goodrich: added process control corner case error message, remove
+//  unused messages.
+//
+// Revision 1.12  2011/03/05 19:44:20  acg
+//  Andy Goodrich: changes for object and event naming and structures.
+//
+// Revision 1.11  2011/02/18 20:27:14  acg
+//  Andy Goodrich: Updated Copyrights.
+//
+// Revision 1.10  2011/02/13 21:47:37  acg
+//  Andy Goodrich: update copyright notice.
+//
+// Revision 1.9  2011/02/13 21:29:16  acg
+//  Andy Goodrich: added error messages for throws that occur before
+//  simulator intialization.
+//
+// Revision 1.8  2011/02/11 13:25:24  acg
+//  Andy Goodrich: Philipp A. Hartmann's changes:
+//    (1) Removal of SC_CTHREAD method overloads.
+//    (2) New exception processing code.
+//
+// Revision 1.7  2011/02/07 19:17:20  acg
+//  Andy Goodrich: changes for IEEE 1666 compatibility.
+//
+// Revision 1.6  2011/01/19 23:21:50  acg
+//  Andy Goodrich: changes for IEEE 1666 2011
+//
+// Revision 1.5  2010/07/30 05:21:22  acg
+//  Andy Goodrich: release 2.3 fixes.
+//
+// Revision 1.4  2009/02/28 00:26:58  acg
+//  Andy Goodrich: changed boost name space to sc_boost to allow use with
+//  full boost library applications.
+//
+// Revision 1.3  2008/11/17 15:57:15  acg
+//  Andy Goodrich: added deprecation message for sc_module(const char*)
+//
+// Revision 1.2  2008/05/22 17:06:25  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.7  2006/08/29 23:37:13  acg
+//  Andy Goodrich: Added check for negative time.
+//
+// Revision 1.6  2006/04/20 17:08:16  acg
+//  Andy Goodrich: 3.0 style process changes.
+//
+// Revision 1.5  2006/01/25 00:31:19  acg
+//  Andy Goodrich: Changed over to use a standard message id of
+//  SC_ID_IEEE_1666_DEPRECATION for all deprecation messages.
+//
+// Revision 1.4  2006/01/24 20:49:04  acg
+// Andy Goodrich: changes to remove the use of deprecated features within the
+// simulator, and to issue warning messages when deprecated features are used.
+//
+// Revision 1.3  2006/01/13 18:44:29  acg
+// Added $Log to record CVS changes into the source.
+//
+
 #endif
 
 // Taf!

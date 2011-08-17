@@ -40,7 +40,7 @@
 #include "source.h"
 #include "sink.h"
 
-int sc_main(int ac, char* av[])
+int sc_main(int , char* [])
 {
  sc_signal<sc_int<16> > in_real;
  sc_signal<sc_int<16> > in_imag;

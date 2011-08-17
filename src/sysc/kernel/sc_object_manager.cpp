@@ -99,10 +99,13 @@ namespace sc_core {
 // ----------------------------------------------------------------------------
 
 sc_object_manager::sc_object_manager() :
+    m_event_it(),
+    m_event_walk_ok(0),
     m_instance_table(),
     m_module_name_stack(0),
-    m_object_stack()
-
+    m_object_it(),
+    m_object_stack(),
+    m_object_walk_ok()
 {
 }
 

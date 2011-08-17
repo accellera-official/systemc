@@ -63,7 +63,7 @@ namespace sc_core {
 //  Unique name generator class.
 // ----------------------------------------------------------------------------
 
-sc_name_gen::sc_name_gen()
+sc_name_gen::sc_name_gen() : m_unique_name_map(), m_unique_name()
 {}
 
 sc_name_gen::~sc_name_gen()

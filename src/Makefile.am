@@ -37,7 +37,11 @@ SUBDIRS = \
 	sysc \
 	.
 
-H_FILES = 
+H_FILES = \
+	systemc \
+	systemc.h
+
+noinst_HEADERS = $(H_FILES)
 
 CXX_FILES =
 
@@ -47,10 +51,17 @@ INCLUDE_DIR = $(prefix)/include
 
 install-data-local:
 	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(prefix)/lib-$(TARGET_ARCH)
+	$(mkinstalldirs) $(INCLUDE_DIR)
+	for file in $(noinst_HEADERS); do \
+          $(INSTALL_DATA) $(srcdir)/$$file $(INCLUDE_DIR)/$$file; \
+        done
 
 uninstall-local:
 	@$(NORMAL_UNINSTALL)
+	-rmdir $(INCLUDE_DIR)
+	for file in $(noinst_HEADERS); do \
+          rm -f $(INCLUDE_DIR)/$$file; \
+        done
 	-rmdir $(INCLUDE_DIR)
 
 ## Taf!

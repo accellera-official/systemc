@@ -55,7 +55,7 @@
 //#include <sys/times.h>
 #include <limits.h>
 
-int sc_main(int ac, char *av[])
+int sc_main(int, char *[])
 {
 
   // ************************ ICACHE ***********************************

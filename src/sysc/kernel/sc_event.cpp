@@ -305,11 +305,16 @@ sc_event::reset()
 // |     name = name of the event.
 // +----------------------------------------------------------------------------
 sc_event::sc_event( const char* name ) :
+    m_name(),
     m_parent_p(NULL),
     m_simc( sc_get_curr_simcontext() ),
     m_notify_type( NONE ),
     m_delta_event_index( -1 ),
-    m_timed( 0 )
+    m_timed( 0 ),
+    m_methods_static(),
+    m_methods_dynamic(),
+    m_threads_static(),
+    m_threads_dynamic()
 {
     // Skip simulator's internally defined events.
 
@@ -324,11 +329,16 @@ sc_event::sc_event( const char* name ) :
 // | hierarchy.
 // +----------------------------------------------------------------------------
 sc_event::sc_event() :
-    m_parent_p(0),
+    m_name(),
+    m_parent_p(NULL),
     m_simc( sc_get_curr_simcontext() ),
     m_notify_type( NONE ),
     m_delta_event_index( -1 ),
-    m_timed( 0 )
+    m_timed( 0 ),
+    m_methods_static(),
+    m_methods_dynamic(),
+    m_threads_static(),
+    m_threads_dynamic()
 {
 
     register_event( NULL );

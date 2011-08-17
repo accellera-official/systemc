@@ -93,12 +93,13 @@ public:
 
     // constructors
 
-    sc_signal_resolved()
-        : base_type( sc_gen_unique_name( "signal_resolved" ) )
-	{}
+    sc_signal_resolved() :
+        base_type( sc_gen_unique_name( "signal_resolved" ) ), m_proc_vec(), 
+	m_val_vec()
+        {}
 
-    explicit sc_signal_resolved( const char* name_ )
-        : base_type( name_ )
+    explicit sc_signal_resolved( const char* name_ ): 
+        base_type( name_ ), m_proc_vec(), m_val_vec()
 	{}
 
 

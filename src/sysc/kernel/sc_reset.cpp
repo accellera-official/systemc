@@ -156,10 +156,9 @@ class sc_reset_finder {
 };
 
 inline sc_reset_finder::sc_reset_finder(
-    bool async, const sc_in<bool>* port_p, bool level, sc_process_b* target_p
-) : 
-    m_async(async), m_level(level), m_in_p(port_p), m_inout_p(0), m_out_p(0), 
-    m_target_p(target_p)
+    bool async, const sc_in<bool>* port_p, bool level, sc_process_b* target_p) :
+    m_async(async), m_level(level), m_next_p(0), m_in_p(port_p), m_inout_p(0), 
+    m_out_p(0), m_target_p(target_p)
 {   
     m_next_p = reset_finder_q;
     reset_finder_q = this;
@@ -168,8 +167,8 @@ inline sc_reset_finder::sc_reset_finder(
 inline sc_reset_finder::sc_reset_finder(
     bool async, const sc_inout<bool>* port_p, bool level, sc_process_b* target_p
 ) : 
-    m_async(async), m_level(level), m_in_p(0), m_inout_p(port_p), m_out_p(0), 
-    m_target_p(target_p)
+    m_async(async), m_level(level), m_next_p(0), m_in_p(0), m_inout_p(port_p), 
+    m_out_p(0), m_target_p(target_p)
 {   
     m_next_p = reset_finder_q;
     reset_finder_q = this;
@@ -178,8 +177,8 @@ inline sc_reset_finder::sc_reset_finder(
 inline sc_reset_finder::sc_reset_finder(
     bool async, const sc_out<bool>* port_p, bool level, sc_process_b* target_p
 ) : 
-    m_async(async), m_level(level), m_in_p(0), m_inout_p(0), m_out_p(port_p), 
-    m_target_p(target_p)
+    m_async(async), m_level(level), m_next_p(0), m_in_p(0), m_inout_p(0),
+    m_out_p(port_p), m_target_p(target_p)
 {   
     m_next_p = reset_finder_q;
     reset_finder_q = this;

@@ -132,11 +132,11 @@ class sc_uint_bitref_r : public sc_value_base
 
 public:
     sc_uint_bitref_r( const sc_uint_bitref_r& init ) :
-	 m_index(init.m_index), m_obj_p(init.m_obj_p)
+	 sc_value_base(init), m_index(init.m_index), m_obj_p(init.m_obj_p)
 	 {}
 
 protected:
-    sc_uint_bitref_r()
+    sc_uint_bitref_r() : sc_value_base(), m_index(0), m_obj_p(0)
         {}
 
     // initializer for sc_core::sc_vpool:
@@ -253,7 +253,7 @@ class sc_uint_bitref
     // constructors
 
 protected:
-    sc_uint_bitref()
+    sc_uint_bitref() : sc_uint_bitref_r()
         {}
 public:
     sc_uint_bitref( const sc_uint_bitref& init ) : sc_uint_bitref_r(init)
@@ -310,11 +310,12 @@ class sc_uint_subref_r : public sc_value_base
 
 public:
     sc_uint_subref_r( const sc_uint_subref_r& init ) :
-        m_left(init.m_left), m_obj_p(init.m_obj_p), m_right(init.m_right)
+        sc_value_base(init), m_left(init.m_left), m_obj_p(init.m_obj_p), 
+	m_right(init.m_right)
 	{}
 
 protected:
-    sc_uint_subref_r()
+    sc_uint_subref_r() : sc_value_base(), m_left(0), m_obj_p(0), m_right(0)
 	{}
 
     // initializer for sc_core::sc_vpool:
@@ -437,7 +438,7 @@ class sc_uint_subref
     // constructors
 
 protected:
-    sc_uint_subref()
+    sc_uint_subref() : sc_uint_subref_r()
         {}
 
 public:
@@ -562,7 +563,7 @@ public:
 	{ check_length(); extend_sign(); }
 
     sc_uint_base( const sc_uint_base& a )
-	: m_val( a.m_val ), m_len( a.m_len ), m_ulen( a.m_ulen )
+        : sc_value_base(a), m_val(a.m_val), m_len(a.m_len), m_ulen(a.m_ulen)
 	{}
 
     explicit sc_uint_base( const sc_uint_subref_r& a )

@@ -291,6 +291,7 @@ bool    sc_pending_activity_at_current_time( const sc_simcontext* );
 bool    sc_pending_activity_at_future_time( const sc_simcontext* );
 sc_time sc_time_to_pending_activity( const sc_simcontext* );
 
+class sc_invoke_method; // @@@@####
 // ----------------------------------------------------------------------------
 //  CLASS : sc_simcontext
 //
@@ -299,6 +300,7 @@ sc_time sc_time_to_pending_activity( const sc_simcontext* );
 
 class sc_simcontext
 {
+    friend class sc_invoke_method; // @@@@####
     friend class sc_event;
     friend class sc_module;
     friend class sc_object;

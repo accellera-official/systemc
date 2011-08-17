@@ -720,7 +720,7 @@ protected:
 
     // constructor
 
-    sc_signed_bitref_r()
+    sc_signed_bitref_r() : sc_value_base(), m_index(0), m_obj_p(0)
         {}
 
     void initialize( const sc_signed* obj_p, int index_ )
@@ -739,7 +739,7 @@ public:
     // copy constructor
 
     sc_signed_bitref_r( const sc_signed_bitref_r& a )
-	: m_index( a.m_index ), m_obj_p( a.m_obj_p )
+	: sc_value_base(a), m_index( a.m_index ), m_obj_p( a.m_obj_p )
 	{}
 
     // capacity
@@ -835,7 +835,7 @@ class sc_signed_bitref
 
 protected:
 
-    sc_signed_bitref()
+    sc_signed_bitref() : sc_signed_bitref_r()
 	{}
 
 public:
@@ -895,7 +895,7 @@ protected:
 
     // constructor
 
-    sc_signed_subref_r()
+    sc_signed_subref_r() : sc_value_base(), m_left(0), m_obj_p(0), m_right(0)
 	{}
 
     void initialize( const sc_signed* obj_p, int left_, int right_ )
@@ -916,7 +916,8 @@ public:
     // copy constructor
 
     sc_signed_subref_r( const sc_signed_subref_r& a )
-	: m_left( a.m_left ), m_obj_p( a.m_obj_p ), m_right( a.m_right )
+	: sc_value_base(a), m_left( a.m_left ), m_obj_p( a.m_obj_p ), 
+	  m_right( a.m_right )
 	{}
 
 
@@ -1006,7 +1007,7 @@ class sc_signed_subref
 
     // constructor
 
-    sc_signed_subref()
+    sc_signed_subref() : sc_signed_subref_r()
         {}
 
 public:

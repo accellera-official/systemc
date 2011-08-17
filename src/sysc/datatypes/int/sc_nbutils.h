@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_nbutils.h,v $
+// Revision 1.4  2011/08/15 16:43:24  acg
+//  Torsten Maehne: changes to remove unused argument warnings.
+//
 // Revision 1.3  2011/02/18 20:19:15  acg
 //  Andy Goodrich: updating Copyright notice.
 //
@@ -912,7 +915,7 @@ inline
 void
 copy_digits_unsigned(small_type &us, 
                      int unb, int und, sc_digit *ud,
-                     int vnb, int vnd, const sc_digit *vd)
+                     int /* vnb */, int vnd, const sc_digit *vd)
 {
 
   if (und <= vnd)
@@ -971,6 +974,8 @@ is_bad_double(double v)
 		       "is_bad_double( double v ) : "
 		       "v is not finite - NaN or Inf" );
   }
+#else
+  if ( v == 0.0 ) {}
 #endif
 }
 

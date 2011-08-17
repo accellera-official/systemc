@@ -25,6 +25,9 @@
  *****************************************************************************/
 
 // $Log: main.cpp,v $
+// Revision 1.2  2011/08/15 16:43:24  acg
+//  Torsten Maehne: changes to remove unused argument warnings.
+//
 // Revision 1.1  2011/06/14 21:25:39  acg
 //  Andy Goodrich: moved examples from 2.2.1 potential release.
 //
@@ -121,7 +124,7 @@ SC_MODULE(TB)
     sc_ttd<sc_uint<8> >::out m_to_dut;
 };
 
-int sc_main(int argc, char* argv[])
+int sc_main(int, char* [])
 {
     sc_clock            clock;
     DUT                 dut("dut");

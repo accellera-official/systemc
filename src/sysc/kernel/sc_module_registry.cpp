@@ -126,8 +126,7 @@ sc_module_registry::remove( sc_module& module_ )
 // constructor
 
 sc_module_registry::sc_module_registry( sc_simcontext& simc_ )
- : m_construction_done(0)
- , m_simc( &simc_ )
+ : m_construction_done(0), m_module_vec(), m_simc( &simc_ )
 {}
 
 

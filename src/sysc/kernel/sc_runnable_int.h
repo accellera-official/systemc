@@ -24,79 +24,8 @@
 
   Original Author: Bishnupriya Bhattacharya , Cadence Design, 28th July, 2003
 
+ CHANGE LOG AT THE END OF THE FILE
  ******************************************************************************/
-
-/*******************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-      Andy Goodrich, Forte Design Systems, 2 September 2003
-      Changed queue heads to instances to eliminate the checks for null heads.
-
- ******************************************************************************/
-
-// $Log: sc_runnable_int.h,v $
-// Revision 1.17  2011/04/13 02:45:11  acg
-//  Andy Goodrich: eliminated warning message that occurred if the DEBUG_MSG
-//  macro was used.
-//
-// Revision 1.16  2011/04/10 22:18:23  acg
-//  Andy Goodrich: debugging message clean up.
-//
-// Revision 1.15  2011/04/08 18:26:07  acg
-//  Andy Goodrich: added execute_method_next() to handle method dispatch
-//   for asynchronous notifications that occur outside the evaluation phase.
-//
-// Revision 1.14  2011/04/01 21:31:10  acg
-//  Andy Goodrich: turn off diagnostic messages by default.
-//
-// Revision 1.13  2011/04/01 21:30:02  acg
-//  Andy Goodrich: inserted conditional displays for queue manipulations.
-//
-// Revision 1.12  2011/03/30 00:01:34  acg
-//  Philip A. Hartman: change break to return in remove_method() to short
-//  circuit the search the way remove_thread() works.
-//
-// Revision 1.11  2011/03/28 13:02:52  acg
-//  Andy Goodrich: Changes for disable() interactions.
-//
-// Revision 1.10  2011/03/06 15:58:17  acg
-//  Andy Goodrich: formatting changes.
-//
-// Revision 1.9  2011/02/18 20:27:14  acg
-//  Andy Goodrich: Updated Copyrights.
-//
-// Revision 1.8  2011/02/13 21:47:38  acg
-//  Andy Goodrich: update copyright notice.
-//
-// Revision 1.7  2011/02/02 06:37:03  acg
-//  Andy Goodrich: removed toggle() method since it is no longer used.
-//
-// Revision 1.6  2011/02/01 21:09:13  acg
-//  Andy Goodrich: addition of toggle_methods() and toggle_threads() calls.
-//
-// Revision 1.5  2011/01/25 20:50:37  acg
-//  Andy Goodrich: changes for IEEE 1666 2011.
-//
-// Revision 1.4  2010/07/22 20:02:33  acg
-//  Andy Goodrich: bug fixes.
-//
-// Revision 1.3  2009/02/28 00:26:58  acg
-//  Andy Goodrich: changed boost name space to sc_boost to allow use with
-//  full boost library applications.
-//
-// Revision 1.2  2008/05/22 17:06:26  acg
-//  Andy Goodrich: updated copyright notice to include 2008.
-//
-// Revision 1.1.1.1  2006/12/15 20:20:05  acg
-// SystemC 2.3
-//
-// Revision 1.4  2006/04/20 17:08:17  acg
-//  Andy Goodrich: 3.0 style process changes.
-//
-// Revision 1.3  2006/01/13 18:44:30  acg
-// Added $Log to record CVS changes into the source.
-//
 
 #ifndef SC_RUNNABLE_INT_H
 #define SC_RUNNABLE_INT_H
@@ -501,16 +430,10 @@ inline void sc_runnable::remove_thread( sc_thread_handle remove_p )
 //
 // This is the object instance constructor for this class.
 //------------------------------------------------------------------------------
-inline sc_runnable::sc_runnable() 
-{
-    m_methods_pop = SC_NO_METHODS;
-    m_methods_push_head = 0;
-    m_methods_push_tail = 0;
-    m_threads_pop = SC_NO_THREADS;
-    m_threads_push_head = 0;
-    m_threads_push_tail = 0;
-}
-
+inline sc_runnable::sc_runnable() : 
+   m_methods_push_head(0), m_methods_push_tail(0), m_methods_pop(SC_NO_METHODS),
+   m_threads_push_head(0), m_threads_push_tail(0), m_threads_pop(SC_NO_THREADS)
+{}
 
 //------------------------------------------------------------------------------
 //"sc_runnable::~sc_runnable"
@@ -562,6 +485,83 @@ inline void sc_runnable::toggle_threads()
 #undef DEBUG_MSG
 
 } // namespace sc_core
+
+
+/*******************************************************************************
+
+  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+  changes you are making here.
+      Andy Goodrich, Forte Design Systems, 2 September 2003
+      Changed queue heads to instances to eliminate the checks for null heads.
+
+ ******************************************************************************/
+
+// $Log: sc_runnable_int.h,v $
+// Revision 1.18  2011/08/07 19:08:04  acg
+//  Andy Goodrich: moved logs to end of file so line number synching works
+//  better between versions.
+//
+// Revision 1.17  2011/04/13 02:45:11  acg
+//  Andy Goodrich: eliminated warning message that occurred if the DEBUG_MSG
+//  macro was used.
+//
+// Revision 1.16  2011/04/10 22:18:23  acg
+//  Andy Goodrich: debugging message clean up.
+//
+// Revision 1.15  2011/04/08 18:26:07  acg
+//  Andy Goodrich: added execute_method_next() to handle method dispatch
+//   for asynchronous notifications that occur outside the evaluation phase.
+//
+// Revision 1.14  2011/04/01 21:31:10  acg
+//  Andy Goodrich: turn off diagnostic messages by default.
+//
+// Revision 1.13  2011/04/01 21:30:02  acg
+//  Andy Goodrich: inserted conditional displays for queue manipulations.
+//
+// Revision 1.12  2011/03/30 00:01:34  acg
+//  Philip A. Hartmann: change break to return in remove_method() to short
+//  circuit the search the way remove_thread() works.
+//
+// Revision 1.11  2011/03/28 13:02:52  acg
+//  Andy Goodrich: Changes for disable() interactions.
+//
+// Revision 1.10  2011/03/06 15:58:17  acg
+//  Andy Goodrich: formatting changes.
+//
+// Revision 1.9  2011/02/18 20:27:14  acg
+//  Andy Goodrich: Updated Copyrights.
+//
+// Revision 1.8  2011/02/13 21:47:38  acg
+//  Andy Goodrich: update copyright notice.
+//
+// Revision 1.7  2011/02/02 06:37:03  acg
+//  Andy Goodrich: removed toggle() method since it is no longer used.
+//
+// Revision 1.6  2011/02/01 21:09:13  acg
+//  Andy Goodrich: addition of toggle_methods() and toggle_threads() calls.
+//
+// Revision 1.5  2011/01/25 20:50:37  acg
+//  Andy Goodrich: changes for IEEE 1666 2011.
+//
+// Revision 1.4  2010/07/22 20:02:33  acg
+//  Andy Goodrich: bug fixes.
+//
+// Revision 1.3  2009/02/28 00:26:58  acg
+//  Andy Goodrich: changed boost name space to sc_boost to allow use with
+//  full boost library applications.
+//
+// Revision 1.2  2008/05/22 17:06:26  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.4  2006/04/20 17:08:17  acg
+//  Andy Goodrich: 3.0 style process changes.
+//
+// Revision 1.3  2006/01/13 18:44:30  acg
+// Added $Log to record CVS changes into the source.
+//
 
 #endif // SC_RUNNABLE_INT_H
 

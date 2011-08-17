@@ -34,6 +34,10 @@
  *****************************************************************************/
 
 // $Log: scfx_ieee.h,v $
+// Revision 1.2  2011/08/07 18:55:24  acg
+//  Philipp A. Hartmann: added guard for __clang__ to get the clang platform
+//  working.
+//
 // Revision 1.1.1.1  2006/12/15 20:20:04  acg
 // SystemC 2.3
 //
@@ -148,21 +152,21 @@ public:
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
     
 inline
-scfx_ieee_double::scfx_ieee_double()
+scfx_ieee_double::scfx_ieee_double() : m_id()
 {
     m_id.d = 0.0;
 }
 
 inline
-scfx_ieee_double::scfx_ieee_double( double d )
+scfx_ieee_double::scfx_ieee_double( double d ) : m_id()
 {
     m_id.d = d;
 }
 
 inline
-scfx_ieee_double::scfx_ieee_double( const scfx_ieee_double& a )
+scfx_ieee_double::scfx_ieee_double( const scfx_ieee_double& a ) : m_id(a.m_id)
 {
-    m_id.d = a.m_id.d;
+    // m_id.d = a.m_id.d;
 }
     
 
@@ -478,21 +482,21 @@ public:
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
     
 inline
-scfx_ieee_float::scfx_ieee_float()
+scfx_ieee_float::scfx_ieee_float() : m_if()
 {
     m_if.f = 0.0;
 }
 
 inline
-scfx_ieee_float::scfx_ieee_float( float f )
+scfx_ieee_float::scfx_ieee_float( float f ) : m_if()
 {
     m_if.f = f;
 }
 
 inline
-scfx_ieee_float::scfx_ieee_float( const scfx_ieee_float& a )
+scfx_ieee_float::scfx_ieee_float( const scfx_ieee_float& a ) : m_if(a.m_if)
 {
-    m_if.f = a.m_if.f;
+    // m_if.f = a.m_if.f;
 }
 
 
@@ -665,7 +669,7 @@ inline
 double
 uint64_to_double( uint64 a )
 {
-#if defined( _MSC_VER )
+#if defined( _MSC_VER ) || defined( __clang__ )
     // conversion from uint64 to double not implemented; use int64
     double tmp = static_cast<double>( static_cast<int64>( a ) );
     return ( tmp >= 0 ) ? tmp : tmp + sc_dt::scfx_pow2( 64 );

@@ -118,9 +118,7 @@ public:
 
 
 vcd_trace::vcd_trace(const std::string& name_, const std::string& vcd_name_)
-: name(name_),
-  vcd_name(vcd_name_),
-  bit_width(0)
+: name(name_), vcd_name(vcd_name_), vcd_var_typ_name(0), bit_width(0)
 {
     /* Intentionally blank */
 }
@@ -312,11 +310,10 @@ protected:
 vcd_bool_trace::vcd_bool_trace(const bool& object_,
 			       const std::string& name_,
 			       const std::string& vcd_name_)
-: vcd_trace(name_, vcd_name_), object(object_)
+: vcd_trace(name_, vcd_name_), object(object_), old_value(object_)
 {
     vcd_var_typ_name = "wire";
     bit_width = 1;
-    old_value = object;
 }
 
 bool
@@ -353,11 +350,10 @@ protected:
 vcd_sc_bit_trace::vcd_sc_bit_trace( const sc_dt::sc_bit& object_,
 				    const std::string& name,
 				    const std::string& vcd_name)
-: vcd_trace(name, vcd_name), object( object_ )
+: vcd_trace(name, vcd_name), object( object_ ), old_value( object_ )
 {
     vcd_var_typ_name = "wire";
     bit_width = 1;
-    old_value = object;
 }
 
 bool
@@ -396,11 +392,10 @@ protected:
 vcd_sc_logic_trace::vcd_sc_logic_trace(const sc_dt::sc_logic& object_,
 				       const std::string& name_,
 				       const std::string& vcd_name_) 
-: vcd_trace(name_, vcd_name_), object(object_)
+: vcd_trace(name_, vcd_name_), object(object_), old_value(object_)
 {
     vcd_var_typ_name = "wire";
     bit_width = 1;
-    old_value = object;
 }
 
 
@@ -673,11 +668,10 @@ vcd_sc_fxval_trace::vcd_sc_fxval_trace( const sc_dt::sc_fxval& object_,
 				        const std::string& name_,
 					const std::string& vcd_name_ )
 : vcd_trace( name_, vcd_name_ ),
-  object( object_ )
+  object( object_ ), old_value( object_ )
 {
     vcd_var_typ_name = "real";
     bit_width = 1;
-    old_value = object;
 }
 
 bool
@@ -717,11 +711,10 @@ vcd_sc_fxval_fast_trace::vcd_sc_fxval_fast_trace(
 					const std::string& name_,
 					const std::string& vcd_name_ )
 : vcd_trace( name_, vcd_name_ ),
-  object( object_ )
+  object( object_ ), old_value( object_ )
 {
     vcd_var_typ_name = "real";
     bit_width = 1;
-    old_value = object;
 }
 
 bool
@@ -890,17 +883,13 @@ vcd_unsigned_int_trace::vcd_unsigned_int_trace(
 					    const std::string& name_,
 					    const std::string& vcd_name_,
 					    int width_) 
-: vcd_trace(name_, vcd_name_), object(object_)
+: vcd_trace(name_, vcd_name_), object(object_), old_value( object_ ),
+  mask((unsigned)-1)
 {
     bit_width = width_;
-    if (bit_width < 32) {
-        mask = ~(-1 << bit_width);
-    } else {
-        mask = 0xffffffff;
-    }
+    if (bit_width < 32) mask = ~(-1 << bit_width);
 
     vcd_var_typ_name = "wire";
-    old_value = object;
 }
 
 
@@ -960,17 +949,12 @@ vcd_unsigned_short_trace::vcd_unsigned_short_trace(
 					const std::string& name_,
 					const std::string& vcd_name_,
 					int width_) 
-: vcd_trace(name_, vcd_name_), object(object_)
+: vcd_trace(name_, vcd_name_), object(object_), old_value(object_), mask(0xffff)
 {
     bit_width = width_;
-    if (bit_width < 16) {
-        mask = ~(-1 << bit_width);
-    } else {
-        mask = 0xffff;
-    }
+    if (bit_width < 16) mask = ~(-1 << bit_width);
 
     vcd_var_typ_name = "wire";
-    old_value = object;
 }
 
 
@@ -1030,17 +1014,11 @@ vcd_unsigned_char_trace::vcd_unsigned_char_trace(
 				const std::string& name_,
 				const std::string& vcd_name_,
 				int width_)
-: vcd_trace(name_, vcd_name_), object(object_)
+: vcd_trace(name_, vcd_name_), object(object_), old_value(object_), mask(0xff)
 {
     bit_width = width_;
-    if (bit_width < 8) {
-        mask = ~(-1 << bit_width);
-    } else {
-        mask = 0xff;
-    }
-
+    if (bit_width < 8) mask = ~(-1 << bit_width);
     vcd_var_typ_name = "wire";
-    old_value = object;
 }
 
 
@@ -1098,17 +1076,13 @@ vcd_unsigned_long_trace::vcd_unsigned_long_trace(
 				const std::string& name_,
 				const std::string& vcd_name_,
 				int width_)
-: vcd_trace(name_, vcd_name_), object(object_)
+: vcd_trace(name_, vcd_name_), object(object_), old_value(object_), 
+  mask((unsigned long)-1)
 {
     bit_width = width_;
-    if (bit_width < 32) {
-        mask = ~(-1 << bit_width);
-    } else {
-        mask = 0xffffffff;
-    }
+    if (bit_width < 32) mask = ~(-1 << bit_width);
 
     vcd_var_typ_name = "wire";
-    old_value = object;
 }
 
 
@@ -1165,17 +1139,13 @@ vcd_signed_int_trace::vcd_signed_int_trace(const signed& object_,
 					   const std::string& name_,
 					   const std::string& vcd_name_,
 					   int width_)
-: vcd_trace(name_, vcd_name_), object(object_)
+: vcd_trace(name_, vcd_name_), object(object_), old_value(object_),  
+  mask((unsigned)-1)
 {
     bit_width = width_;
-    if (bit_width < 32) {
-        mask = ~(-1 << bit_width);
-    } else {
-        mask = 0xffffffff;
-    }
+    if (bit_width < 32) mask = ~(-1 << bit_width);
 
     vcd_var_typ_name = "wire";
-    old_value = object;
 }
 
 
@@ -1233,17 +1203,12 @@ vcd_signed_short_trace::vcd_signed_short_trace(
 					const std::string& name_,
 					const std::string& vcd_name_,
 					int width_)
-: vcd_trace(name_, vcd_name_), object(object_)
+: vcd_trace(name_, vcd_name_), object(object_), old_value(object_), mask(0xffff)
 {
     bit_width = width_;
-    if (bit_width < 16) {
-        mask = ~(-1 << bit_width);
-    } else {
-        mask = 0xffff;
-    }
+    if (bit_width < 16) mask = ~(-1 << bit_width);
 
     vcd_var_typ_name = "wire";
-    old_value = object;
 }
 
 
@@ -1300,17 +1265,12 @@ vcd_signed_char_trace::vcd_signed_char_trace(const char& object_,
 					     const std::string& name_,
 					     const std::string& vcd_name_,
 					     int width_)
-: vcd_trace(name_, vcd_name_), object(object_)
+: vcd_trace(name_, vcd_name_), object(object_), old_value(object_), mask(0xff)
 {
     bit_width = width_;
-    if (bit_width < 8) {
-        mask = ~(-1 << bit_width);
-    } else {
-        mask = 0xff;
-    }
+    if (bit_width < 8) mask = ~(-1 << bit_width);
 
     vcd_var_typ_name = "wire";
-    old_value = object;
 }
 
 
@@ -1367,14 +1327,12 @@ vcd_int64_trace::vcd_int64_trace(const sc_dt::int64& object_,
 					     const std::string& name_,
 					     const std::string& vcd_name_,
 					     int width_)
-: vcd_trace(name_, vcd_name_), object(object_)
+: vcd_trace(name_, vcd_name_), object(object_), old_value(object_), 
+  mask((sc_dt::uint64)-1)
 {
     bit_width = width_;
-	mask = (sc_dt::uint64)-1;
     if (bit_width < 64)  mask = ~(mask << bit_width);
-
     vcd_var_typ_name = "wire";
-    old_value = object;
 }
 
 
@@ -1436,14 +1394,12 @@ vcd_uint64_trace::vcd_uint64_trace(  const sc_dt::uint64& object_,
 				     const std::string& name_,
 				     const std::string& vcd_name_,
 				     int width_)
-: vcd_trace(name_, vcd_name_), object(object_)
+: vcd_trace(name_, vcd_name_), object(object_), old_value(object_),
+  mask((sc_dt::uint64)-1)
 {
     bit_width = width_;
-	mask = (sc_dt::uint64)-1;
-	if ( bit_width < 64 ) mask = ~(mask << bit_width);
-
+    if ( bit_width < 64 ) mask = ~(mask << bit_width);
     vcd_var_typ_name = "wire";
-    old_value = object;
 }
 
 
@@ -1505,17 +1461,12 @@ vcd_signed_long_trace::vcd_signed_long_trace(const long& object_,
 					     const std::string& name_,
 					     const std::string& vcd_name_,
 					     int width_)
-: vcd_trace(name_, vcd_name_), object(object_)
+: vcd_trace(name_, vcd_name_), object(object_), old_value(object_),
+  mask((unsigned long)-1)
 {
     bit_width = width_;
-    if (bit_width < 32) {
-        mask = ~(-1 << bit_width);
-    } else {
-        mask = 0xffffffff;
-    }
-
+    if (bit_width < 32) mask = ~(-1 << bit_width);
     vcd_var_typ_name = "wire";
-    old_value = object;
 }
 
 
@@ -1605,11 +1556,10 @@ protected:
 vcd_double_trace::vcd_double_trace(const double& object_,
 				   const std::string& name_,
 				   const std::string& vcd_name_)
-: vcd_trace(name_, vcd_name_), object(object_)
+: vcd_trace(name_, vcd_name_), object(object_), old_value(object_)
 {
     vcd_var_typ_name = "real";
     bit_width = 1;
-    old_value = object;
 }
 
 bool vcd_double_trace::changed()
@@ -1648,10 +1598,11 @@ vcd_enum_trace::vcd_enum_trace(const unsigned& object_,
 			       const std::string& name_,
 			       const std::string& vcd_name_,
 			       const char** enum_literals_)
-: vcd_trace(name_, vcd_name_), object(object_), literals(enum_literals_)
+: vcd_trace(name_, vcd_name_), object(object_), old_value(object_),
+  mask(0xffffffff), literals(enum_literals_), nliterals(0)
 {
     // find number of bits required to represent enumeration literal - counting loop
-    for (nliterals = 0; enum_literals_[nliterals]; nliterals++);
+    for (nliterals = 0; enum_literals_[nliterals]; nliterals++) continue;
 
     // Figure out number of bits required to represent the number of literals
     bit_width = 0;
@@ -1669,7 +1620,6 @@ vcd_enum_trace::vcd_enum_trace(const unsigned& object_,
     }
 
     vcd_var_typ_name = "wire";
-    old_value = object;
 }       
 
 bool vcd_enum_trace::changed()
@@ -1707,6 +1657,10 @@ void vcd_enum_trace::write(FILE* f)
  *****************************************************************************/
 
 vcd_trace_file::vcd_trace_file(const char *name)
+: fp(0), trace_delta_cycles(false), vcd_name_index(0),
+  previous_time_units_low(0), previous_time_units_high(0), traces(),
+  initialized(false), timescale_unit(sc_get_time_resolution().to_seconds()),
+  timescale_set_by_user(false)
 {
     std::string file_name = name ;
     file_name += ".vcd";

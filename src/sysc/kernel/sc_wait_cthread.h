@@ -127,7 +127,7 @@ public:
 
     sc_cthread_handle cthread_h;
 
-    sc_watch( sc_simcontext* simc )
+    sc_watch( sc_simcontext* simc ) : cthread_h()
     {
         sc_curr_proc_handle cpi = simc->get_curr_proc_info();
         assert( SC_CTHREAD_PROC_ == cpi->kind );

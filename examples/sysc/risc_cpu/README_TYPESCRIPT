@@ -14,7 +14,7 @@
 //           SystemC (TM) Copyright (c) 1988-1999 by Synopsys, Inc.  
 //             
 /////////////////////////////////////////////////////////////////////////
-// IN THIS MACHINE Interger is 4 bytes.
+// IN THIS MACHINE Integer is 4 bytes.
 // IN THIS MACHINE Floating is 4 bytes.
 // IN THIS MACHINE Double is 8 bytes.
 //     

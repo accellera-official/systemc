@@ -68,7 +68,7 @@ public:
 
     sc_ppq_base( int sz, compare_fn_t cmp );
 
-    ~sc_ppq_base();
+    virtual ~sc_ppq_base();
 
     void* top() const
 	{ return m_heap[1]; }

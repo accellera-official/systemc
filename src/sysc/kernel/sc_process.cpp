@@ -24,174 +24,8 @@
                     Bishnupriya Bhattacharya, Cadence Design Systems,
                     25 August, 2003
 
+ CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
-
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date: Andy Goodrich, Forte Design Systems, 12 Aug 05
-  Description of Modification: This is the rewrite of process support. It 
-                               contains some code from the now-defunct 
-                               sc_process_b.cpp, as well as the former 
-                               version of sc_process_b.cpp.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-
- *****************************************************************************/
-
-// $Log: sc_process.cpp,v $
-// Revision 1.34  2011/07/29 22:55:01  acg
-//  Philipp A. Hartmann: add missing include.
-//
-// Revision 1.33  2011/07/29 22:43:41  acg
-//   Philipp A. Hartmann: changes to handle case where a process control
-//   invocation on a child process causes the list of child processes to change.
-//
-// Revision 1.32  2011/07/24 11:20:03  acg
-//  Philipp A. Hartmann: process control error message improvements:
-//  (1) Downgrade error to warning for re-kills of processes.
-//  (2) Add process name to process messages.
-//  (3) drop some superfluous colons in messages.
-//
-// Revision 1.31  2011/04/19 15:04:27  acg
-//  Philipp A. Hartman: clean up SC_ID messages.
-//
-// Revision 1.30  2011/04/14 22:33:43  acg
-//  Andy Goodrich: added missing checks for a process being a zombie.
-//
-// Revision 1.29  2011/04/13 05:00:43  acg
-//  Andy Goodrich: removed check for method process in termination_event()
-//  since with the new IEEE 1666 2011 its legal.
-//
-// Revision 1.28  2011/04/13 02:44:26  acg
-//  Andy Goodrich: added m_unwinding flag in place of THROW_NOW because the
-//  throw status will be set back to THROW_*_RESET if reset is active and
-//  the check for an unwind being complete was expecting THROW_NONE as the
-//  clearing of THROW_NOW.
-//
-// Revision 1.27  2011/04/10 22:17:35  acg
-//  Andy Goodrich: added trigger_reset_event() to allow sc_process.h to
-//  contain the run_process() inline method. sc_process.h cannot have
-//  sc_simcontext information because of recursive includes.
-//
-// Revision 1.26  2011/04/08 22:33:08  acg
-//  Andy Goodrich: moved the semantics() method to the header file and made
-//  it an inline method.
-//
-// Revision 1.25  2011/04/08 18:24:48  acg
-//  Andy Goodrich: moved reset_changed() to .cpp since it needs visibility
-//  to sc_simcontext.
-//
-// Revision 1.24  2011/04/05 20:50:57  acg
-//  Andy Goodrich:
-//    (1) changes to make sure that event(), posedge() and negedge() only
-//        return true if the clock has not moved.
-//    (2) fixes for method self-resumes.
-//    (3) added SC_PRERELEASE_VERSION
-//    (4) removed kernel events from the object hierarchy, added
-//        sc_hierarchy_name_exists().
-//
-// Revision 1.23  2011/04/05 06:25:38  acg
-//  Andy Goodrich: new checks for simulation running in reset_process().
-//
-// Revision 1.22  2011/03/20 13:43:23  acg
-//  Andy Goodrich: added async_signal_is() plus suspend() as a corner case.
-//
-// Revision 1.21  2011/03/12 21:07:51  acg
-//  Andy Goodrich: changes to kernel generated event support.
-//
-// Revision 1.20  2011/03/07 17:38:43  acg
-//  Andy Goodrich: tightening up of checks for undefined interaction between
-//  synchronous reset and suspend.
-//
-// Revision 1.19  2011/03/06 23:30:13  acg
-//  Andy Goodrich: refining suspend - sync reset corner case checking so that
-//  the following are error situations:
-//    (1) Calling suspend on a process with a reset_signal_is() specification
-//        or sync_reset_on() is active.
-//    (2) Calling sync_reset_on() on a suspended process.
-//
-// Revision 1.18  2011/03/06 19:57:11  acg
-//  Andy Goodrich: refinements for the illegal suspend - synchronous reset
-//  interaction.
-//
-// Revision 1.17  2011/03/06 16:47:09  acg
-//  Andy Goodrich: changes for testing sync_reset - suspend corner cases.
-//
-// Revision 1.16  2011/03/06 15:57:57  acg
-//  Andy Goodrich: added process control corner case checks. Changes for
-//  named events.
-//
-// Revision 1.15  2011/02/18 20:27:14  acg
-//  Andy Goodrich: Updated Copyrights.
-//
-// Revision 1.14  2011/02/17 19:52:13  acg
-//  Andy Goodrich:
-//    (1) Simplfied process control usage.
-//    (2) Changed dump_status() to dump_state with new signature.
-//
-// Revision 1.13  2011/02/13 21:47:37  acg
-//  Andy Goodrich: update copyright notice.
-//
-// Revision 1.12  2011/02/13 21:41:34  acg
-//  Andy Goodrich: get the log messages for the previous check in correct.
-//
-// Revision 1.11  2011/02/13 21:32:24  acg
-//  Andy Goodrich: moved sc_process_b::reset_process() from header file
-//  to cpp file. Added dump_status() to print out the status of a
-//  process.
-//
-// Revision 1.10  2011/02/04 15:27:36  acg
-//  Andy Goodrich: changes for suspend-resume semantics.
-//
-// Revision 1.9  2011/02/01 21:06:12  acg
-//  Andy Goodrich: new layout for the process_state enum.
-//
-// Revision 1.8  2011/01/25 20:50:37  acg
-//  Andy Goodrich: changes for IEEE 1666 2011.
-//
-// Revision 1.7  2011/01/19 23:21:50  acg
-//  Andy Goodrich: changes for IEEE 1666 2011
-//
-// Revision 1.6  2011/01/18 20:10:45  acg
-//  Andy Goodrich: changes for IEEE1666_2011 semantics.
-//
-// Revision 1.5  2010/07/22 20:02:33  acg
-//  Andy Goodrich: bug fixes.
-//
-// Revision 1.4  2009/05/22 16:06:29  acg
-//  Andy Goodrich: process control updates.
-//
-// Revision 1.3  2008/05/22 17:06:26  acg
-//  Andy Goodrich: updated copyright notice to include 2008.
-//
-// Revision 1.2  2007/09/20 20:32:35  acg
-//  Andy Goodrich: changes to the semantics of throw_it() to match the
-//  specification. A call to throw_it() will immediately suspend the calling
-//  thread until all the throwees have executed. At that point the calling
-//  thread will be restarted before the execution of any other threads.
-//
-// Revision 1.1.1.1  2006/12/15 20:20:05  acg
-// SystemC 2.3
-//
-// Revision 1.6  2006/04/20 17:08:17  acg
-//  Andy Goodrich: 3.0 style process changes.
-//
-// Revision 1.5  2006/04/11 23:13:21  acg
-//   Andy Goodrich: Changes for reduced reset support that only includes
-//   sc_cthread, but has preliminary hooks for expanding to method and thread
-//   processes also.
-//
-// Revision 1.4  2006/01/24 20:49:05  acg
-// Andy Goodrich: changes to remove the use of deprecated features within the
-// simulator, and to issue warning messages when deprecated features are used.
-//
-// Revision 1.3  2006/01/13 18:44:30  acg
-// Added $Log to record CVS changes into the source.
-//
 
 #include "sysc/kernel/sc_name_gen.h"
 #include "sysc/kernel/sc_cthread_process.h"
@@ -690,15 +524,18 @@ void sc_process_b::reset_process( reset_type rt,
 //------------------------------------------------------------------------------
 sc_process_b::sc_process_b( const char* name_p, bool is_thread, bool free_host,
      SC_ENTRY_FUNC method_p, sc_process_host* host_p, 
-     const sc_spawn_options* opt_p 
+     const sc_spawn_options* /* opt_p  */
 ) :
     sc_object( name_p ),
+    file(0),
+    lineno(0),
     proc_id( simcontext()->next_proc_id()),
     m_active_areset_n(0),
     m_active_reset_n(0),
     m_dont_init( false ),
     m_dynamic_proc( simcontext()->elaboration_done() ),
     m_event_p(0),
+    m_event_count(0),
     m_event_list_p(0),
     m_exist_p(0),
     m_free_host( free_host ),
@@ -709,17 +546,20 @@ sc_process_b::sc_process_b( const char* name_p, bool is_thread, bool free_host,
     m_name_gen_p(0),
     m_process_kind(SC_NO_PROC_),
     m_references_n(1), 
+    m_resets(),
     m_reset_event_p(0),
     m_resume_event_p(0),
     m_runnable_p(0),
     m_semantics_host_p( host_p ),
     m_semantics_method_p ( method_p ),
     m_state(ps_normal),
+    m_static_events(),
     m_sticky_reset(false),
     m_term_event_p(0),
     m_throw_helper_p(0),
     m_throw_status( THROW_NONE ),
     m_timed_out(false),
+    m_timeout_event_p(0),
     m_trigger_type(STATIC),
     m_unwinding(false)
 {
@@ -819,3 +659,178 @@ sc_process_handle::operator sc_thread_handle()
 }
 
 } // namespace sc_core 
+
+
+/*****************************************************************************
+
+  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+  changes you are making here.
+
+      Name, Affiliation, Date: Andy Goodrich, Forte Design Systems, 12 Aug 05
+  Description of Modification: This is the rewrite of process support. It 
+                               contains some code from the now-defunct 
+                               sc_process_b.cpp, as well as the former 
+                               version of sc_process_b.cpp.
+
+      Name, Affiliation, Date:
+  Description of Modification:
+
+ *****************************************************************************/
+
+// $Log: sc_process.cpp,v $
+// Revision 1.36  2011/08/15 16:43:24  acg
+//  Torsten Maehne: changes to remove unused argument warnings.
+//
+// Revision 1.35  2011/08/07 19:08:04  acg
+//  Andy Goodrich: moved logs to end of file so line number synching works
+//  better between versions.
+//
+// Revision 1.34  2011/07/29 22:55:01  acg
+//  Philipp A. Hartmann: add missing include.
+//
+// Revision 1.33  2011/07/29 22:43:41  acg
+//   Philipp A. Hartmann: changes to handle case where a process control
+//   invocation on a child process causes the list of child processes to change.
+//
+// Revision 1.32  2011/07/24 11:20:03  acg
+//  Philipp A. Hartmann: process control error message improvements:
+//  (1) Downgrade error to warning for re-kills of processes.
+//  (2) Add process name to process messages.
+//  (3) drop some superfluous colons in messages.
+//
+// Revision 1.31  2011/04/19 15:04:27  acg
+//  Philipp A. Hartmann: clean up SC_ID messages.
+//
+// Revision 1.30  2011/04/14 22:33:43  acg
+//  Andy Goodrich: added missing checks for a process being a zombie.
+//
+// Revision 1.29  2011/04/13 05:00:43  acg
+//  Andy Goodrich: removed check for method process in termination_event()
+//  since with the new IEEE 1666 2011 its legal.
+//
+// Revision 1.28  2011/04/13 02:44:26  acg
+//  Andy Goodrich: added m_unwinding flag in place of THROW_NOW because the
+//  throw status will be set back to THROW_*_RESET if reset is active and
+//  the check for an unwind being complete was expecting THROW_NONE as the
+//  clearing of THROW_NOW.
+//
+// Revision 1.27  2011/04/10 22:17:35  acg
+//  Andy Goodrich: added trigger_reset_event() to allow sc_process.h to
+//  contain the run_process() inline method. sc_process.h cannot have
+//  sc_simcontext information because of recursive includes.
+//
+// Revision 1.26  2011/04/08 22:33:08  acg
+//  Andy Goodrich: moved the semantics() method to the header file and made
+//  it an inline method.
+//
+// Revision 1.25  2011/04/08 18:24:48  acg
+//  Andy Goodrich: moved reset_changed() to .cpp since it needs visibility
+//  to sc_simcontext.
+//
+// Revision 1.24  2011/04/05 20:50:57  acg
+//  Andy Goodrich:
+//    (1) changes to make sure that event(), posedge() and negedge() only
+//        return true if the clock has not moved.
+//    (2) fixes for method self-resumes.
+//    (3) added SC_PRERELEASE_VERSION
+//    (4) removed kernel events from the object hierarchy, added
+//        sc_hierarchy_name_exists().
+//
+// Revision 1.23  2011/04/05 06:25:38  acg
+//  Andy Goodrich: new checks for simulation running in reset_process().
+//
+// Revision 1.22  2011/03/20 13:43:23  acg
+//  Andy Goodrich: added async_signal_is() plus suspend() as a corner case.
+//
+// Revision 1.21  2011/03/12 21:07:51  acg
+//  Andy Goodrich: changes to kernel generated event support.
+//
+// Revision 1.20  2011/03/07 17:38:43  acg
+//  Andy Goodrich: tightening up of checks for undefined interaction between
+//  synchronous reset and suspend.
+//
+// Revision 1.19  2011/03/06 23:30:13  acg
+//  Andy Goodrich: refining suspend - sync reset corner case checking so that
+//  the following are error situations:
+//    (1) Calling suspend on a process with a reset_signal_is() specification
+//        or sync_reset_on() is active.
+//    (2) Calling sync_reset_on() on a suspended process.
+//
+// Revision 1.18  2011/03/06 19:57:11  acg
+//  Andy Goodrich: refinements for the illegal suspend - synchronous reset
+//  interaction.
+//
+// Revision 1.17  2011/03/06 16:47:09  acg
+//  Andy Goodrich: changes for testing sync_reset - suspend corner cases.
+//
+// Revision 1.16  2011/03/06 15:57:57  acg
+//  Andy Goodrich: added process control corner case checks. Changes for
+//  named events.
+//
+// Revision 1.15  2011/02/18 20:27:14  acg
+//  Andy Goodrich: Updated Copyrights.
+//
+// Revision 1.14  2011/02/17 19:52:13  acg
+//  Andy Goodrich:
+//    (1) Simplfied process control usage.
+//    (2) Changed dump_status() to dump_state with new signature.
+//
+// Revision 1.13  2011/02/13 21:47:37  acg
+//  Andy Goodrich: update copyright notice.
+//
+// Revision 1.12  2011/02/13 21:41:34  acg
+//  Andy Goodrich: get the log messages for the previous check in correct.
+//
+// Revision 1.11  2011/02/13 21:32:24  acg
+//  Andy Goodrich: moved sc_process_b::reset_process() from header file
+//  to cpp file. Added dump_status() to print out the status of a
+//  process.
+//
+// Revision 1.10  2011/02/04 15:27:36  acg
+//  Andy Goodrich: changes for suspend-resume semantics.
+//
+// Revision 1.9  2011/02/01 21:06:12  acg
+//  Andy Goodrich: new layout for the process_state enum.
+//
+// Revision 1.8  2011/01/25 20:50:37  acg
+//  Andy Goodrich: changes for IEEE 1666 2011.
+//
+// Revision 1.7  2011/01/19 23:21:50  acg
+//  Andy Goodrich: changes for IEEE 1666 2011
+//
+// Revision 1.6  2011/01/18 20:10:45  acg
+//  Andy Goodrich: changes for IEEE1666_2011 semantics.
+//
+// Revision 1.5  2010/07/22 20:02:33  acg
+//  Andy Goodrich: bug fixes.
+//
+// Revision 1.4  2009/05/22 16:06:29  acg
+//  Andy Goodrich: process control updates.
+//
+// Revision 1.3  2008/05/22 17:06:26  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
+//
+// Revision 1.2  2007/09/20 20:32:35  acg
+//  Andy Goodrich: changes to the semantics of throw_it() to match the
+//  specification. A call to throw_it() will immediately suspend the calling
+//  thread until all the throwees have executed. At that point the calling
+//  thread will be restarted before the execution of any other threads.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.6  2006/04/20 17:08:17  acg
+//  Andy Goodrich: 3.0 style process changes.
+//
+// Revision 1.5  2006/04/11 23:13:21  acg
+//   Andy Goodrich: Changes for reduced reset support that only includes
+//   sc_cthread, but has preliminary hooks for expanding to method and thread
+//   processes also.
+//
+// Revision 1.4  2006/01/24 20:49:05  acg
+// Andy Goodrich: changes to remove the use of deprecated features within the
+// simulator, and to issue warning messages when deprecated features are used.
+//
+// Revision 1.3  2006/01/13 18:44:30  acg
+// Added $Log to record CVS changes into the source.
+//

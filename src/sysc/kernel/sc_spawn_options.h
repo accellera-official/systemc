@@ -136,7 +136,9 @@ class sc_spawn_options {
     friend class sc_thread_process;
   public:
     sc_spawn_options() :                  
-        m_dont_initialize(false), m_spawn_method(false), m_stack_size(0)
+        m_dont_initialize(false), m_resets(), m_sensitive_events(),
+        m_sensitive_event_finders(), m_sensitive_interfaces(),
+        m_sensitive_port_bases(), m_spawn_method(false), m_stack_size(0)
         { }
 
     ~sc_spawn_options()

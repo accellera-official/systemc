@@ -208,7 +208,7 @@ protected:
                    bool and_list_,
                    bool auto_delete_ = false );
 
-    ~sc_event_list();
+    virtual ~sc_event_list();
 
     void swap( sc_event_list& );
     void move_from( const sc_event_list& );
@@ -548,9 +548,10 @@ extern void notify( double v, sc_time_unit tu, sc_event& e );
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
 inline
-sc_event_list::sc_event_list( bool and_list_, bool auto_delete_ )
-  : m_and_list( and_list_ )
-  , m_auto_delete( auto_delete_ )
+sc_event_list::sc_event_list( bool and_list_, bool auto_delete_ ) 
+  : m_events() 
+  , m_and_list( and_list_ ) 
+  , m_auto_delete( auto_delete_ ) 
   , m_busy( 0 )
 {
 }
@@ -559,7 +560,8 @@ inline
 sc_event_list::sc_event_list( const sc_event& e,
                               bool and_list_,
                               bool auto_delete_ )
-  : m_and_list( and_list_ )
+  : m_events()
+  , m_and_list( and_list_ )
   , m_auto_delete( auto_delete_ )
   , m_busy(0)
 {

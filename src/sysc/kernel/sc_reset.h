@@ -147,7 +147,7 @@ class sc_reset {
 
   protected:
     sc_reset( const sc_signal_in_if<bool>* iface_p ) :
-        m_iface_p(iface_p) {}
+        m_iface_p(iface_p), m_targets() {}
     void notify_processes();
     void remove_process( sc_process_b* );
 

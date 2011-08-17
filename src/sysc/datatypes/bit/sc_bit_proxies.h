@@ -111,6 +111,10 @@ public:
 	: m_obj( a.m_obj ), m_index( a.m_index )
 	{}
 
+    // destructor
+
+    virtual ~sc_bitref_r()
+        {}
 
     // cloning
 

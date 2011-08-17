@@ -36,6 +36,9 @@
 
 
 // $Log: scfx_rep.cpp,v $
+// Revision 1.3  2011/08/15 16:43:24  acg
+//  Torsten Maehne: changes to remove unused argument warnings.
+//
 // Revision 1.2  2009/02/28 00:26:20  acg
 //  Andy Goodrich: bug fixes.
 //
@@ -87,13 +90,15 @@ n_word( int x )
 // ----------------------------------------------------------------------------
 
 scfx_rep::scfx_rep()
-: m_mant( min_mant ), m_r_flag( false )
+: m_mant( min_mant ), m_wp(), m_sign(), m_state(), m_msw(), m_lsw(), 
+  m_r_flag( false )
 {
     set_zero();
 }
 
 scfx_rep::scfx_rep( int a )
-: m_mant( min_mant ), m_r_flag( false )
+: m_mant( min_mant ), m_wp(), m_sign(), m_state(), m_msw(), m_lsw(), 
+  m_r_flag( false )
 {
     if( a != 0 )
     {
@@ -116,7 +121,8 @@ scfx_rep::scfx_rep( int a )
 }
 
 scfx_rep::scfx_rep( unsigned int a )
-: m_mant( min_mant ), m_r_flag( false )
+: m_mant( min_mant ), m_wp(), m_sign(), m_state(), m_msw(), m_lsw(), 
+  m_r_flag( false )
 {
     if( a != 0 )
     {
@@ -131,7 +137,8 @@ scfx_rep::scfx_rep( unsigned int a )
 }
 
 scfx_rep::scfx_rep( long a )
-: m_mant( min_mant ), m_r_flag( false )
+: m_mant( min_mant ), m_wp(), m_sign(), m_state(), m_msw(), m_lsw(), 
+  m_r_flag( false )
 {
     if( a != 0 )
     {
@@ -164,7 +171,8 @@ scfx_rep::scfx_rep( long a )
 }
 
 scfx_rep::scfx_rep( unsigned long a )
-: m_mant( min_mant ), m_r_flag( false )
+: m_mant( min_mant ), m_wp(), m_sign(), m_state(), m_msw(), m_lsw(), 
+  m_r_flag( false )
 {
     if( a != 0 )
     {
@@ -189,8 +197,8 @@ scfx_rep::scfx_rep( unsigned long a )
 }
 
 scfx_rep::scfx_rep( double a )
-: m_mant( min_mant ), m_wp( 0 ), m_state( normal ), m_msw( 0 ), m_lsw( 0 ),
-  m_r_flag( false )
+: m_mant( min_mant ), m_wp( 0 ), m_sign(), m_state( normal ), m_msw( 0 ), 
+  m_lsw( 0 ), m_r_flag( false )
 {
     m_mant.clear();
 
@@ -217,7 +225,8 @@ scfx_rep::scfx_rep( double a )
 }
 
 scfx_rep::scfx_rep( int64 a )
-: m_mant( min_mant ), m_r_flag( false )
+: m_mant( min_mant ), m_wp(), m_sign(), m_state(), m_msw(), m_lsw(), 
+  m_r_flag( false )
 {
     if( a != 0 )
     {
@@ -243,7 +252,8 @@ scfx_rep::scfx_rep( int64 a )
 }
 
 scfx_rep::scfx_rep( uint64 a )
-: m_mant( min_mant ), m_r_flag( false )
+: m_mant( min_mant ), m_wp(), m_sign(), m_state(), m_msw(), m_lsw(), 
+  m_r_flag( false )
 {
     if( a != 0 )
     {
@@ -260,7 +270,8 @@ scfx_rep::scfx_rep( uint64 a )
 }
 
 scfx_rep::scfx_rep( const sc_signed& a )
-: m_mant( min_mant ), m_r_flag( false )
+: m_mant( min_mant ), m_wp(), m_sign(), m_state(), m_msw(), m_lsw(), 
+  m_r_flag( false )
 {
     if( a.iszero() )
 	set_zero();
@@ -302,7 +313,8 @@ scfx_rep::scfx_rep( const sc_signed& a )
 }
 
 scfx_rep::scfx_rep( const sc_unsigned& a )
-: m_mant( min_mant ), m_r_flag( false )
+: m_mant( min_mant ), m_wp(), m_sign(), m_state(), m_msw(), m_lsw(), 
+  m_r_flag( false )
 {
     if( a.iszero() )
 	set_zero();
@@ -1375,7 +1387,7 @@ add_scfx_rep( const scfx_rep& lhs, const scfx_rep& rhs, int max_wl )
 
 static inline
 int
-sub_with_index(       scfx_mant& a, int a_msw, int a_lsw,
+sub_with_index(       scfx_mant& a, int a_msw, int /*a_lsw*/,
 		const scfx_mant& b, int b_msw, int b_lsw )
 {
     unsigned carry = 0;

@@ -247,9 +247,8 @@ inline bool operator < (
 // This version of the object instance constructor for this class creates
 // an object instance whose target needs to be supplied via an assignment.
 //------------------------------------------------------------------------------
-inline sc_process_handle::sc_process_handle()
+inline sc_process_handle::sc_process_handle() : m_target_p(0)
 {
-    m_target_p = (sc_process_b*)0;
 }
 
 
@@ -261,9 +260,9 @@ inline sc_process_handle::sc_process_handle()
 // The supplied sc_object must in fact be an sc_process_b instance.
 //     object_p -> sc_object instance this is handle for.
 //------------------------------------------------------------------------------
-inline sc_process_handle::sc_process_handle( sc_object* object_p )
+inline sc_process_handle::sc_process_handle( sc_object* object_p ) :
+    m_target_p(object_p ? DCAST<sc_process_b*>(object_p) : (sc_process_b*)0)
 {
-    m_target_p = object_p ? DCAST<sc_process_b*>(object_p) : (sc_process_b*)0;
     if ( m_target_p ) m_target_p->reference_increment();
 }
 
@@ -276,9 +275,9 @@ inline sc_process_handle::sc_process_handle( sc_object* object_p )
 // handle and increments the references to its target.
 //     orig = sc_process_handle object instance to be copied from.
 //------------------------------------------------------------------------------
-inline sc_process_handle::sc_process_handle( const sc_process_handle& orig )
+inline sc_process_handle::sc_process_handle( const sc_process_handle& orig ) :
+    m_target_p(orig.m_target_p)
 {
-    m_target_p = orig.m_target_p;
     if ( m_target_p ) m_target_p->reference_increment();
 }
 

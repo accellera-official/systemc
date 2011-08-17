@@ -103,7 +103,8 @@ typedef sc_context<sc_fxcast_switch> sc_fxcast_context;
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
 inline
-sc_fxcast_switch::sc_fxcast_switch()
+sc_fxcast_switch::sc_fxcast_switch() 
+: m_sw()
 {
     *this = sc_fxcast_context::default_value();
 }

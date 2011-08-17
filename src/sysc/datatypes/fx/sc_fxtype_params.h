@@ -126,13 +126,15 @@ typedef sc_context<sc_fxtype_params> sc_fxtype_context;
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
 inline
-sc_fxtype_params::sc_fxtype_params()
+sc_fxtype_params::sc_fxtype_params() 
+: m_wl(), m_iwl(), m_q_mode(), m_o_mode(), m_n_bits()
 {
     *this = sc_fxtype_context::default_value();
 }
 
 inline
 sc_fxtype_params::sc_fxtype_params( int wl_, int iwl_ )
+: m_wl(), m_iwl(), m_q_mode(), m_o_mode(), m_n_bits()
 {
     *this = sc_fxtype_context::default_value();
 
@@ -144,6 +146,7 @@ sc_fxtype_params::sc_fxtype_params( int wl_, int iwl_ )
 inline
 sc_fxtype_params::sc_fxtype_params( sc_q_mode q_mode_,
                                     sc_o_mode o_mode_, int n_bits_ )
+: m_wl(), m_iwl(), m_q_mode(), m_o_mode(), m_n_bits()
 {
     *this = sc_fxtype_context::default_value();
 
@@ -157,6 +160,7 @@ inline
 sc_fxtype_params::sc_fxtype_params( int wl_, int iwl_,
                                     sc_q_mode q_mode_,
                                     sc_o_mode o_mode_, int n_bits_ )
+: m_wl(), m_iwl(), m_q_mode(), m_o_mode(), m_n_bits()
 {
     SC_CHECK_WL_( wl_ );
     SC_CHECK_N_BITS_( n_bits_ );

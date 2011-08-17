@@ -139,7 +139,7 @@ SC_MODULE( X )
     }
 };
 
-int sc_main(int argc, char** argv) {
+int sc_main(int , char** ) {
   E the_E("E");
   X the_X("X");
   // port->IFP

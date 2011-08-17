@@ -41,7 +41,7 @@
 #include "display.h"
 #include "numgen.h"
 
-int sc_main(int ac, char *av[])
+int sc_main(int, char *[])
 {
   //Signals
   sc_signal<double> in1;

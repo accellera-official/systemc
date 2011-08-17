@@ -45,7 +45,7 @@ void exec::entry(){
   int				add1_tmp = 0;
   signed int		        dina_tmp = 0;
   signed int		        dinb_tmp = 0;
-  signed int		        dout_tmp = 0;
+  sc_dt::int64t		        dout_tmp = 0;
   unsigned int		        dest_tmp = 0;
 
   //
@@ -87,7 +87,7 @@ void exec::entry(){
                 	break;
         	case 5:         // multiply assume 2 clock cycle multiplication
                 	dout_tmp = dina_tmp * dinb_tmp;
-                	//wait();	so that BC have something to do
+                	wait();	// so that BC has something to do
                 	wait();
                 	break;
         	case 6:         // divide assume 2 clock cycle multiplication
@@ -96,7 +96,7 @@ void exec::entry(){
 			} else {
                 		dout_tmp = dina_tmp / dinb_tmp;
 			}
-                	// wait();	so that BC have something to do
+                	wait();	 // so that BC has something to do
                 	wait();
                 	break;
         	case 7:         // bitwise NAND
@@ -137,7 +137,7 @@ void exec::entry(){
     		}
     
 
-    		dout.write(dout_tmp);
+    		dout.write(static_cast<signed int>dout_tmp);
     		out_valid.write(true);
 		destout.write(dest_tmp);
 
@@ -146,9 +146,16 @@ void exec::entry(){
 		} else {
 			Z.write(false);
 		}
-		if (dout_tmp > 2^32) {
+                sc_dt::int64 abs_dout = dout_tmp >= 0 ? dout_tmp : -dout_tmp;
+                const sc_dt::int64 carry_mask = sc_dt::int64(1) << 32;
+               if (abs_dout & carry_mask) {
+                       C.write(true);
+               } else {
+                       C.write(false);
+                }
+               if (abs_dout > carry_mask) {
 			V.write(true);
-		}else {
+		} else {
 			V.write(false);
 		}
 		printf("\t\t\t\t\t\t\t-------------------------------\n");

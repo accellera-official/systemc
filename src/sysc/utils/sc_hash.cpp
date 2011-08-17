@@ -77,11 +77,13 @@ private:
 
     sc_phash_elem( void* k, void* c, sc_phash_elem* n )
         : key(k), contents(c), next(n) { }
-    sc_phash_elem() { }
+    sc_phash_elem() : key(0), contents(0), next(0) { }
     ~sc_phash_elem() { }
 
-    static void* operator new(std::size_t sz)            { return sc_mempool::allocate(sz); }
-    static void operator delete(void* p, std::size_t sz) { sc_mempool::release(p, sz);      }
+    static void* operator new(std::size_t sz) 
+        { return sc_mempool::allocate(sz); }
+    static void operator delete(void* p, std::size_t sz) 
+        { sc_mempool::release(p, sz);      }
 };
 
 
@@ -93,15 +95,11 @@ sc_phash_base::sc_phash_base(
     bool reorder,
     unsigned (*hash_fn)(const void*),
     int (*cmp_fn)(const void*, const void*)
-)
+) :
+    default_value(def), num_bins(0), num_entries(0), max_density(density),
+    reorder_flag(reorder), grow_factor(grow), bins(0), hash(hash_fn), 
+    cmpr(cmp_fn)
 {
-    default_value = def;
-    hash          = hash_fn;
-    num_entries   = 0;
-    max_density   = density;
-    grow_factor   = grow;
-    reorder_flag  = reorder;
-
     if (size <= 0)
         size = PHASH_DEFAULT_INIT_TABLE_SIZE;
     else if ((size % 2) == 0)
@@ -110,8 +108,6 @@ sc_phash_base::sc_phash_base(
     bins = new sc_phash_elem*[size];
     for (int i = 0; i < size; ++i)
         bins[i] = 0;
-
-    set_cmpr_fn(cmp_fn);
 }
 
 void

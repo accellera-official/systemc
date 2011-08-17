@@ -126,7 +126,8 @@ sc_bv_base::sc_bv_base( const char* a, int length_ )
 }
 
 sc_bv_base::sc_bv_base( const sc_bv_base& a )
-    : m_len( a.m_len ),
+    : sc_proxy<sc_bv_base>(),
+      m_len( a.m_len ),
       m_size( a.m_size ),
       m_data( new sc_digit[m_size] )
 {

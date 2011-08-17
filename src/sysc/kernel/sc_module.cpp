@@ -173,7 +173,7 @@ class sc_module_dynalloc_list
 {
 public:
 
-    sc_module_dynalloc_list()
+    sc_module_dynalloc_list() : m_list()
         {}
 
     ~sc_module_dynalloc_list();
@@ -255,7 +255,7 @@ sc_module::sc_module_init()
     simcontext()->get_module_registry()->insert( *this );
     simcontext()->hierarchy_push( this );
     m_end_module_called = false;
-	m_module_name_p = 0;
+    m_module_name_p = 0;
     m_port_vec = new std::vector<sc_port_base*>;
     m_port_index = 0;
     m_name_gen = new sc_name_gen;
@@ -265,7 +265,12 @@ sc_module::sc_module( const char* nm )
 : sc_object(nm),
   sensitive(this),
   sensitive_pos(this),
-  sensitive_neg(this)
+  sensitive_neg(this),
+  m_end_module_called(false),
+  m_port_vec(),
+  m_port_index(0),
+  m_name_gen(0),
+  m_module_name_p(0)
 {
     SC_REPORT_WARNING( SC_ID_BAD_SC_MODULE_CONTRUCTOR_, nm );
     sc_module_init();
@@ -298,7 +303,12 @@ sc_module::sc_module()
                   ->operator const char*()),
   sensitive(this),
   sensitive_pos(this),
-  sensitive_neg(this)
+  sensitive_neg(this),
+  m_end_module_called(false),
+  m_port_vec(),
+  m_port_index(0),
+  m_name_gen(0),
+  m_module_name_p(0)
 {
     /* When this form is used, we better have a fresh sc_module_name
        on the top of the stack */
@@ -318,7 +328,12 @@ sc_module::sc_module( const sc_module_name& )
                   ->operator const char*()),
   sensitive(this),
   sensitive_pos(this),
-  sensitive_neg(this)
+  sensitive_neg(this),
+  m_end_module_called(false),
+  m_port_vec(),
+  m_port_index(0),
+  m_name_gen(0),
+  m_module_name_p(0)
 {
     /* For those used to the old style of passing a name to sc_module,
        this constructor will reduce the chance of making a mistake */
@@ -338,7 +353,12 @@ sc_module::sc_module( const std::string& s )
 : sc_object( s.c_str() ),
   sensitive(this),
   sensitive_pos(this),
-  sensitive_neg(this)
+  sensitive_neg(this),
+  m_end_module_called(false),
+  m_port_vec(),
+  m_port_index(0),
+  m_name_gen(0),
+  m_module_name_p(0)
 {
     sc_module_init();
 }

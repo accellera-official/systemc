@@ -35,6 +35,12 @@
 
 /* 
 $Log: scx_signal_unsigned.h,v $
+Revision 1.4  2011/08/15 17:18:21  acg
+ Andy Goodrich: fix blown inclusion of Torsten's edit.
+
+Revision 1.3  2011/08/15 16:43:24  acg
+ Torsten Maehne: changes to remove unused argument warnings.
+
 Revision 1.2  2011/06/28 21:23:02  acg
  Andy Goodrich: merging of SCV tree.
 
@@ -722,6 +728,8 @@ inline void sc_signal<sc_dt::sc_biguint<W> >::register_port(
 			}
 			m_output_p = &port_;
 		}
+#       else
+            if ( &port_ && if_typename_ ) {} // Silence unused args warning.
 #       endif
 }
 

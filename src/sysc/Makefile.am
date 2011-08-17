@@ -42,9 +42,7 @@ SUBDIRS = \
 	datatypes \
 	.
 
-H_FILES = \
-	systemc \
-	systemc.h
+H_FILES = 
 
 noinst_HEADERS = $(H_FILES)
 
