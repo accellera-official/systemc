@@ -106,7 +106,6 @@ class sc_value_base
 template< class T >
 class sc_generic_base {
   public: 
-    virtual ~sc_generic_base() {}
     inline const T* operator-> () const
     {
         return (const T*)this;

@@ -608,7 +608,7 @@ protected:
 
 #undef DECL_CTOR_T
 
-    virtual ~sc_fxnum();
+    ~sc_fxnum();
 
 
     // internal use only;
@@ -1035,7 +1035,7 @@ protected:
 
 #undef DECL_CTOR_T
 
-    virtual ~sc_fxnum_fast();
+    ~sc_fxnum_fast();
 
 
     // internal use only;
