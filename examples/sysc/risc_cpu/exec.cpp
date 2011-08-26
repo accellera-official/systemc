@@ -45,7 +45,7 @@ void exec::entry(){
   int				add1_tmp = 0;
   signed int		        dina_tmp = 0;
   signed int		        dinb_tmp = 0;
-  sc_dt::int64t		        dout_tmp = 0;
+  sc_dt::int64		        dout_tmp = 0;
   unsigned int		        dest_tmp = 0;
 
   //
@@ -137,7 +137,7 @@ void exec::entry(){
     		}
     
 
-    		dout.write(static_cast<signed int>dout_tmp);
+    		dout.write(static_cast<signed int>(dout_tmp));
     		out_valid.write(true);
 		destout.write(dest_tmp);
 
@@ -148,12 +148,12 @@ void exec::entry(){
 		}
                 sc_dt::int64 abs_dout = dout_tmp >= 0 ? dout_tmp : -dout_tmp;
                 const sc_dt::int64 carry_mask = sc_dt::int64(1) << 32;
-               if (abs_dout & carry_mask) {
-                       C.write(true);
-               } else {
-                       C.write(false);
+		if (abs_dout & carry_mask) {
+			C.write(true);
+		} else {
+			C.write(false);
                 }
-               if (abs_dout > carry_mask) {
+		if (abs_dout > carry_mask) {
 			V.write(true);
 		} else {
 			V.write(false);
