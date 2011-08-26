@@ -288,7 +288,7 @@ class sc_process_monitor {
     virtual ~sc_process_monitor() {}
     virtual void signal(sc_thread_handle thread_p, int type);
 };
-inline void sc_process_monitor::signal(sc_thread_handle thread_p, int type) {}  
+inline void sc_process_monitor::signal(sc_thread_handle /*thread_p*/, int /*type*/) {}  
 
 //------------------------------------------------------------------------------
 // PROCESS INVOCATION METHOD OR FUNCTION:
