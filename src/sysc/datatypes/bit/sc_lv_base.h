@@ -314,8 +314,8 @@ sc_lv_base::get_bit( int i ) const
 {
     int wi = i / SC_DIGIT_SIZE;
     int bi = i % SC_DIGIT_SIZE;
-    return sc_logic_value_t( (m_data[wi] >> bi & SC_DIGIT_ONE) |
-			     (((m_ctrl[wi] >> bi) << 1) & SC_DIGIT_TWO) );
+    return sc_logic_value_t( ((m_data[wi] >> bi) & SC_DIGIT_ONE) |
+                             (((m_ctrl[wi] >> bi) << 1) & SC_DIGIT_TWO) );
 }
 
 inline

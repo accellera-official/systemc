@@ -294,7 +294,7 @@ sc_bv_base::get_bit( int i ) const
 {
     int wi = i / SC_DIGIT_SIZE;
     int bi = i % SC_DIGIT_SIZE;
-    return sc_logic_value_t( m_data[wi] >> bi & SC_DIGIT_ONE );
+    return sc_logic_value_t( (m_data[wi] >> bi) & SC_DIGIT_ONE );
 }
 
 inline
