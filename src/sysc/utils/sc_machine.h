@@ -51,21 +51,26 @@
 #ifndef SC_MACHINE_H
 #define SC_MACHINE_H
 
+#include <climits>
+#include "sysc/packages/boost/detail/endian.hpp"
+
 // ----------------------------------------------------------------------------
 //  Little or big endian machine?
 // ----------------------------------------------------------------------------
 
-#if defined( __x86_64__ ) || defined( __i386__ ) || defined(WIN32)
+#if defined( SC_BOOST_LITTLE_ENDIAN )
 #   define SC_LITTLE_ENDIAN
-#elif defined( __ppc__ ) || defined( sparc ) || defined( __hppa )
+#elif defined( SC_BOOST_BIG_ENDIAN )
 #   define SC_BIG_ENDIAN
+#else
+#   error "Could not detect the endianness of the CPU."
 #endif
 
 // ----------------------------------------------------------------------------
 //  Are long data types 32-bit or 64-bit?
 // ----------------------------------------------------------------------------
 
-#if defined( __x86_64__ ) 
+#if ULONG_MAX > 0xffffffffUL
 #   define SC_LONG_64
 #endif
 
