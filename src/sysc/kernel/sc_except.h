@@ -145,8 +145,10 @@ class sc_unwind_exception : public std::exception
 };
 
 inline
-sc_unwind_exception::sc_unwind_exception( const sc_unwind_exception& that ) :
-    std::exception(), m_proc_p( that.m_proc_p ), m_is_reset( that.m_is_reset )
+sc_unwind_exception::sc_unwind_exception( const sc_unwind_exception& that )
+  : std::exception( that )
+  , m_proc_p( that.m_proc_p )
+  , m_is_reset( that.m_is_reset )
 {
     that.m_proc_p = 0; // move to new instance
 }
