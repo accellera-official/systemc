@@ -213,7 +213,6 @@ private:
 
 private:
 
-    int                       m_construction_done; // # of construct. callbacks.
     sc_prim_channel_registry* m_registry;          // Update list manager.
     sc_prim_channel*          m_update_next_p;     // Next entry in update list.
 };
