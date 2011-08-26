@@ -140,7 +140,7 @@ protected:
                    bool and_list_,
                    bool auto_delete_ = false );
 
-    virtual ~sc_event_list();
+    ~sc_event_list();
 
     void swap( sc_event_list& );
     void move_from( const sc_event_list& );
