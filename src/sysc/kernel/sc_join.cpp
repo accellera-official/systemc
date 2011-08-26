@@ -66,6 +66,11 @@
 
 namespace sc_core {
 
+sc_join::sc_join()
+  : m_join_event( (std::string(SC_KERNEL_EVENT_PREFIX)+"_join_event").c_str() )
+  , m_threads_n(0)
+{}
+
 //------------------------------------------------------------------------------
 //"sc_join::add_process - sc_process_b*"
 //

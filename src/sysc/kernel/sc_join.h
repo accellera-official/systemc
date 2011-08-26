@@ -76,8 +76,7 @@ class sc_join : public sc_process_monitor {
     friend class sc_process_b;
     friend class sc_process_handle;
   public:
-    inline sc_join();
-    virtual inline ~sc_join();
+    sc_join();
     void add_process( sc_process_handle process_h );
     inline int process_count();
     virtual void signal(sc_thread_handle thread_p, int type);
@@ -91,11 +90,6 @@ class sc_join : public sc_process_monitor {
     sc_event m_join_event;  // Event to notify when all threads have reported.
     int      m_threads_n;   // # of threads still need to wait for.
 };
-
-sc_join::sc_join() : m_join_event(), m_threads_n(0) { }
-
-sc_join::~sc_join() { }
-
 
 int sc_join::process_count() { return m_threads_n; }
 

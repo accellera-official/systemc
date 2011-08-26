@@ -89,7 +89,7 @@ sc_time_compare( const void* p1, const void* p2 )
 sc_event_queue::sc_event_queue( sc_module_name name_ )
     : sc_module( name_ ),
       m_ppq( 128, sc_time_compare ),
-      m_e(),
+      m_e( (std::string(SC_KERNEL_EVENT_PREFIX)+"_event").c_str() ),
       m_change_stamp(0),
       m_pending_delta(0)
 {
