@@ -56,11 +56,7 @@
 #define SC_NBUTILS_H
 
 
-#if !defined(__ppc__) && !defined(_MSC_VER) && !defined(__x86_64__) && !defined(__i386__) && !defined(__hpux) && !defined( __BORLANDC__ )
-#include <ieeefp.h>
-#else
 #include <cmath>
-#endif
 
 #include "sysc/datatypes/bit/sc_bit_ids.h"
 #include "sysc/datatypes/int/sc_int_ids.h"
