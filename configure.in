@@ -61,7 +61,7 @@ DEBUG_CXXFLAGS="-g"
 OPT_CXXFLAGS="-O3"
 
 case "$target" in
-    x386-apple-*)
+    x386-apple-* | i386-apple-*)
         case "$CXX_COMP" in
             CC)
                 TARGET_ARCH="macosx386"
@@ -74,22 +74,6 @@ case "$target" in
 		AC_MSG_ERROR("sorry...compiler not supported")
 		;;
         esac
-        QT_ARCH="x86_64"
-        ;;
-    i386-apple-*)
-        case "$CXX_COMP" in
-            CC)
-                TARGET_ARCH="macosx386"
-		#CCAS=as
-                ;;
-            c++ | g++)
-                TARGET_ARCH="macosx386"
-                ;;
-            *)
-		AC_MSG_ERROR("sorry...compiler not supported")
-		;;
-        esac
-        #QT_ARCH="iX86"
         QT_ARCH="x86_64"
         ;;
     powerpc-apple-macosx*)
