@@ -261,7 +261,7 @@ inline sc_process_handle::sc_process_handle() : m_target_p(0)
 //     object_p -> sc_object instance this is handle for.
 //------------------------------------------------------------------------------
 inline sc_process_handle::sc_process_handle( sc_object* object_p ) :
-    m_target_p(object_p ? DCAST<sc_process_b*>(object_p) : (sc_process_b*)0)
+    m_target_p(dynamic_cast<sc_process_b*>(object_p))
 {
     if ( m_target_p ) m_target_p->reference_increment();
 }
