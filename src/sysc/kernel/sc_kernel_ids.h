@@ -159,7 +159,7 @@ SC_DEFINE_MESSAGE(SC_ID_THROW_IT_IGNORED_  , 556,
 SC_DEFINE_MESSAGE(SC_ID_NOT_EXPECTING_DYNAMIC_EVENT_NOTIFY_ , 557,
 	"dynamic event notification encountered when sensitivity is static" )
 SC_DEFINE_MESSAGE(SC_ID_DISABLE_WILL_ORPHAN_PROCESS_     , 558,
-	"disable() or dont_initialize() called on process with no static sensitivity, it will be orphaned " ) 
+	"disable() or dont_initialize() called on process with no static sensitivity, it will be orphaned" )
 SC_DEFINE_MESSAGE(SC_ID_PROCESS_CONTROL_CORNER_CASE_     , 559,
 	"Undefined process control interaction" ) 
 SC_DEFINE_MESSAGE(SC_ID_METHOD_TERMINATION_EVENT_        , 560,
