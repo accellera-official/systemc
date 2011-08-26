@@ -81,10 +81,10 @@
 // Added $Log to record CVS changes into the source.
 //
 
+#include <cstdlib>
 #include "sysc/kernel/sc_ver.h"
 #include "sysc/utils/sc_iostream.h"
 #include <cstdlib>
-using std::getenv;
 
 namespace sc_core {
 
@@ -137,18 +137,21 @@ sc_version()
 void
 pln()
 {
+    using std::getenv;
+    using std::cerr;
+    using std::endl;
     static bool lnp = SC_DISABLE_COPYRIGHT_MESSAGE;
     if ( lnp || getenv("SYSTEMC_DISABLE_COPYRIGHT_MESSAGE") != 0 ) 
-        lnp = true;
+	lnp = true;
     if( ! lnp ) {
-        ::std::cerr << ::std::endl;
-	::std::cerr << sc_version() << ::std::endl;
-	::std::cerr << sc_copyright() << ::std::endl;
+        cerr << endl
+	     << sc_version() << endl
+	     << sc_copyright() << endl;
 
 	//  regressions check point
 
         if( getenv( "SYSTEMC_REGRESSION" ) != 0 ) {
-            ::std::cerr << "SystemC Simulation" << ::std::endl;
+            cerr << "SystemC Simulation" << endl;
         }
 
         lnp = true;
