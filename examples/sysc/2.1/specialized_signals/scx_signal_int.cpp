@@ -125,7 +125,7 @@ sc_int_sigref& sc_int_part_if::select_part( int /*left*/, int /*right*/ )
     SC_REPORT_ERROR( SC_ID_OPERATION_ON_NON_SPECIALIZED_SIGNAL_, "int" );
     return *(sc_int_sigref*)0;
 }
-void sc_int_part_if::write_part( sc_dt::uint64 v, int /*left*/, int /*right*/ )
+void sc_int_part_if::write_part( sc_dt::uint64 /*v*/, int /*left*/, int /*right*/ )
 {
     SC_REPORT_ERROR( SC_ID_OPERATION_ON_NON_SPECIALIZED_SIGNAL_, "int" );
 }

@@ -146,21 +146,21 @@ sc_signed_sigref& sc_signed_part_if::select_part( int /*left*/, int /*right*/ )
     SC_REPORT_ERROR( SC_ID_OPERATION_ON_NON_SPECIALIZED_SIGNAL_, "int" );
     return *(sc_signed_sigref*)0;
 }
-void sc_signed_part_if::write_part( int64 v, int /*left*/, int /*right*/ )
+void sc_signed_part_if::write_part( int64 /*v*/, int /*left*/, int /*right*/ )
 {
     SC_REPORT_ERROR( SC_ID_OPERATION_ON_NON_SPECIALIZED_SIGNAL_, "int" );
 }
-void sc_signed_part_if::write_part( uint64 v, int /*left*/, int /*right*/ )
+void sc_signed_part_if::write_part( uint64 /*v*/, int /*left*/, int /*right*/ )
 {
     SC_REPORT_ERROR( SC_ID_OPERATION_ON_NON_SPECIALIZED_SIGNAL_, "int" );
 }
 void sc_signed_part_if::write_part(     
-    const sc_signed& v, int /*left*/, int /*right*/ )
+    const sc_signed& /*v*/, int /*left*/, int /*right*/ )
 { 
     SC_REPORT_ERROR( SC_ID_OPERATION_ON_NON_SPECIALIZED_SIGNAL_, "int" );
 }   
 void sc_signed_part_if::write_part(
-    const sc_unsigned& v, int /*left*/, int /*right*/ )
+    const sc_unsigned& /*v*/, int /*left*/, int /*right*/ )
 {
     SC_REPORT_ERROR( SC_ID_OPERATION_ON_NON_SPECIALIZED_SIGNAL_, "int" );
 }
