@@ -152,7 +152,7 @@ private:
     scx_mutex_w_policy mutex_;
 };
 
-int sc_main (int argc , char *argv[]) 
+int sc_main (int, char*[]) 
 {
   top top1("Top1");
   sc_start(1000, SC_NS);
