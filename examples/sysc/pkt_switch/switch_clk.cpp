@@ -34,7 +34,6 @@
 
  *****************************************************************************/
 
-#include "systemc.h"
 #include "switch_clk.h"
 
 void switch_clk::entry()

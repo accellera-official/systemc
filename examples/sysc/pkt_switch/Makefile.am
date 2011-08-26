@@ -46,7 +46,7 @@ CXX_FILES = \
 	sender.cpp \
 	switch.cpp \
 	switch_clk.cpp
-	
+
 pkt_switch_SOURCES = $(CXX_FILES) $(H_FILES)
 
 pkt_switch_LDADD = -L$(prefix)/lib-$(TARGET_ARCH) -lsystemc -lm
