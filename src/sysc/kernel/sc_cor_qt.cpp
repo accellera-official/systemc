@@ -230,30 +230,6 @@ sc_cor_pkg_qt::get_main()
 
 } // namespace sc_core
 
-#if defined(__ghs__)
-
-//  Provide a method to allow the GHS C++ runtime to find a separate
-//  exception stack for each thread.
-
-extern "C" void __cpp_exception_init(void **eh_glob);
-
-extern "C"
-void *
-__get_eh_globals(void) {
-    static void *main_ghs_eh_globals = NULL;
-    if (sc_core::curr_cor == 0 || sc_core::curr_cor == &sc_core::main_cor) {
-	if (main_ghs_eh_globals == NULL)
-	    __cpp_exception_init(&main_ghs_eh_globals);
-	return main_ghs_eh_globals;
-    } else {
-	if (sc_core::curr_cor->m_ghs_eh_globals == NULL) 
-	    __cpp_exception_init(&sc_core::curr_cor->m_ghs_eh_globals);
-	return sc_core::curr_cor->m_ghs_eh_globals;
-    }
-}
-
-#endif
-
 #endif
 
 // $Log: sc_cor_qt.cpp,v $

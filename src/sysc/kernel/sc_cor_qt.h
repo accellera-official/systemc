@@ -53,9 +53,6 @@ public:
     // constructor
     sc_cor_qt()
 	: m_stack_size( 0 ), m_stack( 0 ), m_sp( 0 ), m_pkg( 0 )
-#if defined(__ghs__)
-          , m_ghs_eh_globals(0)
-#endif
 	{}
 
     // destructor

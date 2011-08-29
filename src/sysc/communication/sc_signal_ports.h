@@ -291,7 +291,6 @@ inline
 void
 sc_in<T>::end_of_elaboration()
 {
-#if !defined(__ghs) // @@@@####
     if( m_traces != 0 ) {
 	for( int i = 0; i < (int)m_traces->size(); ++ i ) {
 	    sc_trace_params* p = (*m_traces)[i];
@@ -300,7 +299,6 @@ sc_in<T>::end_of_elaboration()
 	}
 	remove_traces();
     }
-#endif
 }
 
 
@@ -1151,7 +1149,6 @@ inline
 void
 sc_inout<T>::end_of_elaboration()
 {
-#if !defined(__ghs)
     if( m_init_val != 0 ) {
 	write( *m_init_val );
 	delete m_init_val;
@@ -1165,7 +1162,6 @@ sc_inout<T>::end_of_elaboration()
 	}
 	remove_traces();
     }
-#endif
 }
 
 
