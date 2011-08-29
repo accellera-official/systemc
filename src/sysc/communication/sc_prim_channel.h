@@ -213,7 +213,6 @@ private:
 
 private:
 
-    int                       m_construction_done; // # of construct. callbacks.
     sc_prim_channel_registry* m_registry;          // Update list manager.
     sc_prim_channel*          m_update_next_p;     // Next entry in update list.
 };
@@ -360,6 +359,9 @@ sc_prim_channel::perform_update()
     
  *****************************************************************************/
 //$Log: sc_prim_channel.h,v $
+//Revision 1.10  2011/08/26 21:38:32  acg
+// Philipp A. Hartmann: removed unused switch m_construction_done.
+//
 //Revision 1.9  2011/08/07 19:08:01  acg
 // Andy Goodrich: moved logs to end of file so line number synching works
 // better between versions.

@@ -21,80 +21,9 @@
 
   Original Author: Stan Y. Liao, Synopsys, Inc.
 
+  CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
 
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date: Bishnupriya Bhattacharya, Cadence Design Systems,
-                               25 August, 2003
-  Description of Modification: if module name hierarchy is empty, sc_object 
-                               ctor assumes the currently executing process 
-                               as the parent object to support dynamic process
-                               creation similar to other sc_objects
-
-      Name, Affiliation, Date: Andy Goodrich, Forte Design Systems
-                               5 September 2003
-  Description of Modification: - Made creation of attributes structure
-                                 conditional on its being used. This eliminates
-                                 100 bytes of storage for each normal sc_object.
-
- *****************************************************************************/
-
-
-// $Log: sc_object.cpp,v $
-// Revision 1.13  2011/04/01 21:24:57  acg
-//  Andy Goodrich: removed unused code.
-//
-// Revision 1.12  2011/03/06 15:55:11  acg
-//  Andy Goodrich: Changes for named events.
-//
-// Revision 1.11  2011/03/05 19:44:20  acg
-//  Andy Goodrich: changes for object and event naming and structures.
-//
-// Revision 1.10  2011/03/05 04:45:16  acg
-//  Andy Goodrich: moved active process calculation to the sc_simcontext class.
-//
-// Revision 1.9  2011/03/05 01:39:21  acg
-//  Andy Goodrich: changes for named events.
-//
-// Revision 1.8  2011/02/18 20:27:14  acg
-//  Andy Goodrich: Updated Copyrights.
-//
-// Revision 1.7  2011/02/13 21:47:37  acg
-//  Andy Goodrich: update copyright notice.
-//
-// Revision 1.6  2011/01/25 20:50:37  acg
-//  Andy Goodrich: changes for IEEE 1666 2011.
-//
-// Revision 1.5  2011/01/18 20:10:44  acg
-//  Andy Goodrich: changes for IEEE1666_2011 semantics.
-//
-// Revision 1.4  2010/08/03 17:02:39  acg
-//  Andy Goodrich: formatting changes.
-//
-// Revision 1.3  2009/02/28 00:26:58  acg
-//  Andy Goodrich: changed boost name space to sc_boost to allow use with
-//  full boost library applications.
-//
-// Revision 1.2  2008/05/22 17:06:26  acg
-//  Andy Goodrich: updated copyright notice to include 2008.
-//
-// Revision 1.1.1.1  2006/12/15 20:20:05  acg
-// SystemC 2.3
-//
-// Revision 1.5  2006/04/20 17:08:17  acg
-//  Andy Goodrich: 3.0 style process changes.
-//
-// Revision 1.4  2006/03/21 00:00:34  acg
-//   Andy Goodrich: changed name of sc_get_current_process_base() to be
-//   sc_get_current_process_b() since its returning an sc_process_b instance.
-//
-// Revision 1.3  2006/01/13 18:44:30  acg
-// Added $Log to record CVS changes into the source.
-//
 
 #include <stdio.h>
 #include <cstdlib>
@@ -259,10 +188,12 @@ sc_object::sc_object_init(const char* nm)
     m_name = object_manager->create_name(nm ? nm : sc_object_newname().c_str());
 
 
-    // PLACE THE OBJECT INTO THE HIERARCHY IF A LEAF NAME WAS SUPPLIED:
+    // PLACE THE OBJECT INTO THE HIERARCHY IF A USER LEAF NAME WAS SUPPLIED:
     
 
-    if (nm != NULL) { 
+    if ( nm != NULL && 
+         strncmp(nm, SC_KERNEL_MODULE_PREFIX, strlen(SC_KERNEL_MODULE_PREFIX)) )
+    { 
         object_manager->insert_object(m_name, this); 
         if ( m_parent ) 
 	    m_parent->add_child_object( this );
@@ -301,7 +232,8 @@ sc_object::sc_object(const char* nm) :
     char* namebuf = 0;
     const char* p;
 
-	// null name or "" uses machine generated name.
+    // null name or "" uses machine generated name.
+    
     if ( !nm || strlen(nm) == 0 )
 	nm = sc_gen_unique_name("object");
     p = nm;
@@ -506,3 +438,82 @@ sc_object::attr_cltn() const
 
 } // namespace sc_core
 
+/*****************************************************************************
+
+  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+  changes you are making here.
+
+      Name, Affiliation, Date: Bishnupriya Bhattacharya, Cadence Design Systems,
+                               25 August, 2003
+  Description of Modification: if module name hierarchy is empty, sc_object 
+                               ctor assumes the currently executing process 
+                               as the parent object to support dynamic process
+                               creation similar to other sc_objects
+
+      Name, Affiliation, Date: Andy Goodrich, Forte Design Systems
+                               5 September 2003
+  Description of Modification: - Made creation of attributes structure
+                                 conditional on its being used. This eliminates
+                                 100 bytes of storage for each normal sc_object.
+
+ *****************************************************************************/
+
+
+// $Log: sc_object.cpp,v $
+// Revision 1.15  2011/08/26 20:46:10  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
+// Revision 1.14  2011/08/24 22:05:51  acg
+//  Torsten Maehne: initialization changes to remove warnings.
+//
+// Revision 1.13  2011/04/01 21:24:57  acg
+//  Andy Goodrich: removed unused code.
+//
+// Revision 1.12  2011/03/06 15:55:11  acg
+//  Andy Goodrich: Changes for named events.
+//
+// Revision 1.11  2011/03/05 19:44:20  acg
+//  Andy Goodrich: changes for object and event naming and structures.
+//
+// Revision 1.10  2011/03/05 04:45:16  acg
+//  Andy Goodrich: moved active process calculation to the sc_simcontext class.
+//
+// Revision 1.9  2011/03/05 01:39:21  acg
+//  Andy Goodrich: changes for named events.
+//
+// Revision 1.8  2011/02/18 20:27:14  acg
+//  Andy Goodrich: Updated Copyrights.
+//
+// Revision 1.7  2011/02/13 21:47:37  acg
+//  Andy Goodrich: update copyright notice.
+//
+// Revision 1.6  2011/01/25 20:50:37  acg
+//  Andy Goodrich: changes for IEEE 1666 2011.
+//
+// Revision 1.5  2011/01/18 20:10:44  acg
+//  Andy Goodrich: changes for IEEE1666_2011 semantics.
+//
+// Revision 1.4  2010/08/03 17:02:39  acg
+//  Andy Goodrich: formatting changes.
+//
+// Revision 1.3  2009/02/28 00:26:58  acg
+//  Andy Goodrich: changed boost name space to sc_boost to allow use with
+//  full boost library applications.
+//
+// Revision 1.2  2008/05/22 17:06:26  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.5  2006/04/20 17:08:17  acg
+//  Andy Goodrich: 3.0 style process changes.
+//
+// Revision 1.4  2006/03/21 00:00:34  acg
+//   Andy Goodrich: changed name of sc_get_current_process_base() to be
+//   sc_get_current_process_b() since its returning an sc_process_b instance.
+//
+// Revision 1.3  2006/01/13 18:44:30  acg
+// Added $Log to record CVS changes into the source.
+//

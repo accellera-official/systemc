@@ -21,55 +21,8 @@
 
   Original Author: Martin Janssen, Synopsys, Inc., 2001-05-21
 
+  CHANGE LOG IS AT THE END OF THE FILE
  *****************************************************************************/
-
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date: Bishnupriya Bhattacharya, Cadence Design Systems,
-                               3 October, 2003
-  Description of Modification: sc_clock inherits from sc_signal<bool> only
-                               instead of sc_signal_in_if<bool> and sc_module.
-    
-      Name, Affiliation, Date:
-  Description of Modification:
-    
- *****************************************************************************/
-//$Log: sc_clock.h,v $
-//Revision 1.3  2011/02/18 20:23:45  acg
-// Andy Goodrich: Copyright update.
-//
-//Revision 1.2  2011/01/20 16:52:15  acg
-// Andy Goodrich: changes for IEEE 1666 2011.
-//
-//Revision 1.1.1.1  2006/12/15 20:20:04  acg
-//SystemC 2.3
-//
-//Revision 1.5  2006/01/25 00:31:11  acg
-// Andy Goodrich: Changed over to use a standard message id of
-// SC_ID_IEEE_1666_DEPRECATION for all deprecation messages.
-//
-//Revision 1.4  2006/01/24 20:43:25  acg
-// Andy Goodrich: convert notify_delayed() calls into notify_internal() calls.
-// notify_internal() is an implementation dependent version of notify_delayed()
-// that is simpler, and does not trigger the deprecation warning one would get
-// using notify_delayed().
-//
-//Revision 1.3  2006/01/18 21:42:26  acg
-//Andy Goodrich: Changes for check writer support, and tightening up sc_clock
-//port usage.
-//
-//Revision 1.2  2006/01/03 23:18:26  acg
-//Changed copyright to include 2006.
-//
-//Revision 1.1.1.1  2005/12/19 23:16:43  acg
-//First check in of SystemC 2.1 into its own archive.
-//
-//Revision 1.14  2005/06/10 22:43:55  acg
-//Added CVS change log annotation.
-//
 
 #ifndef SC_CLOCK_H
 #define SC_CLOCK_H
@@ -258,6 +211,61 @@ class sc_clock_negedge_callback {
 
 
 } // namespace sc_core
+
+/*****************************************************************************
+
+  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+  changes you are making here.
+
+      Name, Affiliation, Date: Bishnupriya Bhattacharya, Cadence Design Systems,
+                               3 October, 2003
+  Description of Modification: sc_clock inherits from sc_signal<bool> only
+                               instead of sc_signal_in_if<bool> and sc_module.
+    
+      Name, Affiliation, Date:
+  Description of Modification:
+    
+ *****************************************************************************/
+//$Log: sc_clock.h,v $
+//Revision 1.5  2011/08/26 20:45:39  acg
+// Andy Goodrich: moved the modification log to the end of the file to
+// eliminate source line number skew when check-ins are done.
+//
+//Revision 1.4  2011/08/24 22:05:35  acg
+// Torsten Maehne: initialization changes to remove warnings.
+//
+//Revision 1.3  2011/02/18 20:23:45  acg
+// Andy Goodrich: Copyright update.
+//
+//Revision 1.2  2011/01/20 16:52:15  acg
+// Andy Goodrich: changes for IEEE 1666 2011.
+//
+//Revision 1.1.1.1  2006/12/15 20:20:04  acg
+//SystemC 2.3
+//
+//Revision 1.5  2006/01/25 00:31:11  acg
+// Andy Goodrich: Changed over to use a standard message id of
+// SC_ID_IEEE_1666_DEPRECATION for all deprecation messages.
+//
+//Revision 1.4  2006/01/24 20:43:25  acg
+// Andy Goodrich: convert notify_delayed() calls into notify_internal() calls.
+// notify_internal() is an implementation dependent version of notify_delayed()
+// that is simpler, and does not trigger the deprecation warning one would get
+// using notify_delayed().
+//
+//Revision 1.3  2006/01/18 21:42:26  acg
+//Andy Goodrich: Changes for check writer support, and tightening up sc_clock
+//port usage.
+//
+//Revision 1.2  2006/01/03 23:18:26  acg
+//Changed copyright to include 2006.
+//
+//Revision 1.1.1.1  2005/12/19 23:16:43  acg
+//First check in of SystemC 2.1 into its own archive.
+//
+//Revision 1.14  2005/06/10 22:43:55  acg
+//Added CVS change log annotation.
+//
 
 #endif
 

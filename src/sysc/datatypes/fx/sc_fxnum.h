@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: sc_fxnum.h,v $
+// Revision 1.4  2011/08/24 22:05:43  acg
+//  Torsten Maehne: initialization changes to remove warnings.
+//
 // Revision 1.3  2011/01/19 18:57:40  acg
 //  Andy Goodrich: changes for IEEE_1666_2011.
 //

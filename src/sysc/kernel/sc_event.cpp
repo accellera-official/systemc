@@ -21,87 +21,9 @@
 
   Original Author: Martin Janssen, Synopsys, Inc., 2001-05-21
 
+ CHANGE LOG APPEARS AT THE END OF THE FILE
  *****************************************************************************/
 
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-
- *****************************************************************************/
-
-
-// $Log: sc_event.cpp,v $
-// Revision 1.15  2011/03/12 21:07:51  acg
-//  Andy Goodrich: changes to kernel generated event support.
-//
-// Revision 1.14  2011/03/06 15:55:52  acg
-//  Andy Goodrich: changes for named events.
-//
-// Revision 1.13  2011/03/05 01:39:21  acg
-//  Andy Goodrich: changes for named events.
-//
-// Revision 1.12  2011/02/19 08:33:25  acg
-//  Andy Goodrich: remove }'s that should have been removed before.
-//
-// Revision 1.11  2011/02/19 08:30:53  acg
-//  Andy Goodrich: Moved process queueing into trigger_static from
-//  sc_event::notify.
-//
-// Revision 1.10  2011/02/18 20:27:14  acg
-//  Andy Goodrich: Updated Copyrights.
-//
-// Revision 1.9  2011/02/17 19:49:51  acg
-//  Andy Goodrich:
-//    (1) Changed signature of trigger_dynamic() to return a bool again.
-//    (2) Moved process run queue processing into trigger_dynamic().
-//
-// Revision 1.8  2011/02/16 22:37:30  acg
-//  Andy Goodrich: clean up to remove need for ps_disable_pending.
-//
-// Revision 1.7  2011/02/13 21:47:37  acg
-//  Andy Goodrich: update copyright notice.
-//
-// Revision 1.6  2011/02/01 21:02:28  acg
-//  Andy Goodrich: new return code for trigger_dynamic() calls.
-//
-// Revision 1.5  2011/01/18 20:10:44  acg
-//  Andy Goodrich: changes for IEEE1666_2011 semantics.
-//
-// Revision 1.4  2011/01/06 18:04:05  acg
-//  Andy Goodrich: added code to leave disabled processes on the dynamic
-//  method and thread queues.
-//
-// Revision 1.3  2008/05/22 17:06:25  acg
-//  Andy Goodrich: updated copyright notice to include 2008.
-//
-// Revision 1.2  2007/01/17 22:44:30  acg
-//  Andy Goodrich: fix for Microsoft compiler.
-//
-// Revision 1.7  2006/04/11 23:13:20  acg
-//   Andy Goodrich: Changes for reduced reset support that only includes
-//   sc_cthread, but has preliminary hooks for expanding to method and thread
-//   processes also.
-//
-// Revision 1.6  2006/01/25 00:31:19  acg
-//  Andy Goodrich: Changed over to use a standard message id of
-//  SC_ID_IEEE_1666_DEPRECATION for all deprecation messages.
-//
-// Revision 1.5  2006/01/24 20:59:11  acg
-//  Andy Goodrich: fix up of CVS comments, new version roll.
-//
-// Revision 1.4  2006/01/24 20:48:14  acg
-// Andy Goodrich: added deprecation warnings for notify_delayed(). Added two
-// new implementation-dependent methods, notify_next_delta() & notify_internal()
-// to replace calls to notify_delayed() from within the simulator. These two
-// new methods are simpler than notify_delayed() and should speed up simulations
-//
-// Revision 1.3  2006/01/13 18:44:29  acg
-// Added $Log to record CVS changes into the source.
-//
 #include "sysc/kernel/sc_event.h"
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/kernel/sc_process.h"
@@ -717,5 +639,80 @@ notify( double v, sc_time_unit tu, sc_event& e )
 }
 
 } // namespace sc_core
+
+// $Log: sc_event.cpp,v $
+// Revision 1.17  2011/08/26 20:46:09  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
+// Revision 1.16  2011/08/24 22:05:50  acg
+//  Torsten Maehne: initialization changes to remove warnings.
+//
+// Revision 1.15  2011/03/12 21:07:51  acg
+//  Andy Goodrich: changes to kernel generated event support.
+//
+// Revision 1.14  2011/03/06 15:55:52  acg
+//  Andy Goodrich: changes for named events.
+//
+// Revision 1.13  2011/03/05 01:39:21  acg
+//  Andy Goodrich: changes for named events.
+//
+// Revision 1.12  2011/02/19 08:33:25  acg
+//  Andy Goodrich: remove }'s that should have been removed before.
+//
+// Revision 1.11  2011/02/19 08:30:53  acg
+//  Andy Goodrich: Moved process queueing into trigger_static from
+//  sc_event::notify.
+//
+// Revision 1.10  2011/02/18 20:27:14  acg
+//  Andy Goodrich: Updated Copyrights.
+//
+// Revision 1.9  2011/02/17 19:49:51  acg
+//  Andy Goodrich:
+//    (1) Changed signature of trigger_dynamic() to return a bool again.
+//    (2) Moved process run queue processing into trigger_dynamic().
+//
+// Revision 1.8  2011/02/16 22:37:30  acg
+//  Andy Goodrich: clean up to remove need for ps_disable_pending.
+//
+// Revision 1.7  2011/02/13 21:47:37  acg
+//  Andy Goodrich: update copyright notice.
+//
+// Revision 1.6  2011/02/01 21:02:28  acg
+//  Andy Goodrich: new return code for trigger_dynamic() calls.
+//
+// Revision 1.5  2011/01/18 20:10:44  acg
+//  Andy Goodrich: changes for IEEE1666_2011 semantics.
+//
+// Revision 1.4  2011/01/06 18:04:05  acg
+//  Andy Goodrich: added code to leave disabled processes on the dynamic
+//  method and thread queues.
+//
+// Revision 1.3  2008/05/22 17:06:25  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
+//
+// Revision 1.2  2007/01/17 22:44:30  acg
+//  Andy Goodrich: fix for Microsoft compiler.
+//
+// Revision 1.7  2006/04/11 23:13:20  acg
+//   Andy Goodrich: Changes for reduced reset support that only includes
+//   sc_cthread, but has preliminary hooks for expanding to method and thread
+//   processes also.
+//
+// Revision 1.6  2006/01/25 00:31:19  acg
+//  Andy Goodrich: Changed over to use a standard message id of
+//  SC_ID_IEEE_1666_DEPRECATION for all deprecation messages.
+//
+// Revision 1.5  2006/01/24 20:59:11  acg
+//  Andy Goodrich: fix up of CVS comments, new version roll.
+//
+// Revision 1.4  2006/01/24 20:48:14  acg
+// Andy Goodrich: added deprecation warnings for notify_delayed(). Added two
+// new implementation-dependent methods, notify_next_delta() & notify_internal()
+// to replace calls to notify_delayed() from within the simulator. These two
+// new methods are simpler than notify_delayed() and should speed up simulations
+//
+// Revision 1.3  2006/01/13 18:44:29  acg
+// Added $Log to record CVS changes into the source.
 
 // Taf!

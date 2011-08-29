@@ -35,6 +35,9 @@
 
 /* 
 $Log: scx_signal_int.cpp,v $
+Revision 1.3  2011/08/26 22:28:29  acg
+ Torsten Maehne: eliminate unused argument warnings.
+
 Revision 1.2  2011/08/15 16:43:24  acg
  Torsten Maehne: changes to remove unused argument warnings.
 
@@ -125,7 +128,7 @@ sc_int_sigref& sc_int_part_if::select_part( int /*left*/, int /*right*/ )
     SC_REPORT_ERROR( SC_ID_OPERATION_ON_NON_SPECIALIZED_SIGNAL_, "int" );
     return *(sc_int_sigref*)0;
 }
-void sc_int_part_if::write_part( sc_dt::uint64 v, int /*left*/, int /*right*/ )
+void sc_int_part_if::write_part( sc_dt::uint64 /*v*/, int /*left*/, int /*right*/ )
 {
     SC_REPORT_ERROR( SC_ID_OPERATION_ON_NON_SPECIALIZED_SIGNAL_, "int" );
 }

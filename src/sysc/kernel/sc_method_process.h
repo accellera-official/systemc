@@ -22,110 +22,13 @@
   Original Author: Andy Goodrich, Forte Design Systems, 4 August 2005
                
 
- *****************************************************************************/
-
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-
+  CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
 
 // $Log: sc_method_process.h,v $
-// Revision 1.19  2011/07/29 22:43:15  acg
-//  Andy Goodrich: addition of check_for_throws() method.
-//
-// Revision 1.18  2011/07/24 11:18:09  acg
-//  Philipp A. Hartmann: add code to restart a method process after a
-//  self-reset.
-//
-// Revision 1.17  2011/05/09 04:07:48  acg
-//  Philipp A. Hartmann:
-//    (1) Restore hierarchy in all phase callbacks.
-//    (2) Ensure calls to before_end_of_elaboration.
-//
-// Revision 1.16  2011/04/13 02:41:34  acg
-//  Andy Goodrich: eliminate warning messages generated when the DEBUG_MSG
-//  macro is used.
-//
-// Revision 1.15  2011/04/10 22:12:32  acg
-//  Andy Goodrich: adding debugging macros.
-//
-// Revision 1.14  2011/04/08 22:31:21  acg
-//  Andy Goodrich: added new inline method run_process() to hide the process
-//  implementation for sc_simcontext.
-//
-// Revision 1.13  2011/04/05 20:50:56  acg
-//  Andy Goodrich:
-//    (1) changes to make sure that event(), posedge() and negedge() only
-//        return true if the clock has not moved.
-//    (2) fixes for method self-resumes.
-//    (3) added SC_PRERELEASE_VERSION
-//    (4) removed kernel events from the object hierarchy, added
-//        sc_hierarchy_name_exists().
-//
-// Revision 1.12  2011/04/01 21:24:57  acg
-//  Andy Goodrich: removed unused code.
-//
-// Revision 1.11  2011/02/19 08:30:53  acg
-//  Andy Goodrich: Moved process queueing into trigger_static from
-//  sc_event::notify.
-//
-// Revision 1.10  2011/02/18 20:27:14  acg
-//  Andy Goodrich: Updated Copyrights.
-//
-// Revision 1.9  2011/02/17 19:51:34  acg
-//  Andy Goodrich:
-//    (1) Changed the signature of trigger_dynamic back to a bool.
-//    (2) Removed ready_to_run().
-//    (3) Simplified process control usage.
-//
-// Revision 1.8  2011/02/16 22:37:30  acg
-//  Andy Goodrich: clean up to remove need for ps_disable_pending.
-//
-// Revision 1.7  2011/02/13 21:47:37  acg
-//  Andy Goodrich: update copyright notice.
-//
-// Revision 1.6  2011/02/01 21:05:05  acg
-//  Andy Goodrich: Changes in trigger_dynamic methods to handle new
-//  process control rules about event sensitivity.
-//
-// Revision 1.5  2011/01/18 20:10:44  acg
-//  Andy Goodrich: changes for IEEE1666_2011 semantics.
-//
-// Revision 1.4  2009/07/28 01:10:53  acg
-//  Andy Goodrich: updates for 2.3 release candidate.
-//
-// Revision 1.3  2009/05/22 16:06:29  acg
-//  Andy Goodrich: process control updates.
-//
-// Revision 1.2  2008/05/22 17:06:25  acg
-//  Andy Goodrich: updated copyright notice to include 2008.
-//
-// Revision 1.1.1.1  2006/12/15 20:20:05  acg
-// SystemC 2.3
-//
-// Revision 1.7  2006/05/08 17:57:13  acg
-//  Andy Goodrich: Added David Long's forward declarations for friend functions
-//  to keep the Microsoft C++ compiler happy.
-//
-// Revision 1.6  2006/04/20 17:08:17  acg
-//  Andy Goodrich: 3.0 style process changes.
-//
-// Revision 1.5  2006/04/11 23:13:21  acg
-//   Andy Goodrich: Changes for reduced reset support that only includes
-//   sc_cthread, but has preliminary hooks for expanding to method and thread
-//   processes also.
-//
-// Revision 1.4  2006/01/24 20:49:05  acg
-// Andy Goodrich: changes to remove the use of deprecated features within the
-// simulator, and to issue warning messages when deprecated features are used.
-//
-// Revision 1.3  2006/01/13 18:44:29  acg
-// Added $Log to record CVS changes into the source.
+// Revision 1.21  2011/08/26 20:46:10  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
 //
 
 #if !defined(sc_method_process_h_INCLUDED)
@@ -444,5 +347,100 @@ sc_method_process::trigger_static()
 #undef DEBUG_MSG
 
 } // namespace sc_core 
+
+// Revision 1.20  2011/08/24 22:05:50  acg
+//  Torsten Maehne: initialization changes to remove warnings.
+//
+// Revision 1.19  2011/07/29 22:43:15  acg
+//  Andy Goodrich: addition of check_for_throws() method.
+//
+// Revision 1.18  2011/07/24 11:18:09  acg
+//  Philipp A. Hartmann: add code to restart a method process after a
+//  self-reset.
+//
+// Revision 1.17  2011/05/09 04:07:48  acg
+//  Philipp A. Hartmann:
+//    (1) Restore hierarchy in all phase callbacks.
+//    (2) Ensure calls to before_end_of_elaboration.
+//
+// Revision 1.16  2011/04/13 02:41:34  acg
+//  Andy Goodrich: eliminate warning messages generated when the DEBUG_MSG
+//  macro is used.
+//
+// Revision 1.15  2011/04/10 22:12:32  acg
+//  Andy Goodrich: adding debugging macros.
+//
+// Revision 1.14  2011/04/08 22:31:21  acg
+//  Andy Goodrich: added new inline method run_process() to hide the process
+//  implementation for sc_simcontext.
+//
+// Revision 1.13  2011/04/05 20:50:56  acg
+//  Andy Goodrich:
+//    (1) changes to make sure that event(), posedge() and negedge() only
+//        return true if the clock has not moved.
+//    (2) fixes for method self-resumes.
+//    (3) added SC_PRERELEASE_VERSION
+//    (4) removed kernel events from the object hierarchy, added
+//        sc_hierarchy_name_exists().
+//
+// Revision 1.12  2011/04/01 21:24:57  acg
+//  Andy Goodrich: removed unused code.
+//
+// Revision 1.11  2011/02/19 08:30:53  acg
+//  Andy Goodrich: Moved process queueing into trigger_static from
+//  sc_event::notify.
+//
+// Revision 1.10  2011/02/18 20:27:14  acg
+//  Andy Goodrich: Updated Copyrights.
+//
+// Revision 1.9  2011/02/17 19:51:34  acg
+//  Andy Goodrich:
+//    (1) Changed the signature of trigger_dynamic back to a bool.
+//    (2) Removed ready_to_run().
+//    (3) Simplified process control usage.
+//
+// Revision 1.8  2011/02/16 22:37:30  acg
+//  Andy Goodrich: clean up to remove need for ps_disable_pending.
+//
+// Revision 1.7  2011/02/13 21:47:37  acg
+//  Andy Goodrich: update copyright notice.
+//
+// Revision 1.6  2011/02/01 21:05:05  acg
+//  Andy Goodrich: Changes in trigger_dynamic methods to handle new
+//  process control rules about event sensitivity.
+//
+// Revision 1.5  2011/01/18 20:10:44  acg
+//  Andy Goodrich: changes for IEEE1666_2011 semantics.
+//
+// Revision 1.4  2009/07/28 01:10:53  acg
+//  Andy Goodrich: updates for 2.3 release candidate.
+//
+// Revision 1.3  2009/05/22 16:06:29  acg
+//  Andy Goodrich: process control updates.
+//
+// Revision 1.2  2008/05/22 17:06:25  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.7  2006/05/08 17:57:13  acg
+//  Andy Goodrich: Added David Long's forward declarations for friend functions
+//  to keep the Microsoft C++ compiler happy.
+//
+// Revision 1.6  2006/04/20 17:08:17  acg
+//  Andy Goodrich: 3.0 style process changes.
+//
+// Revision 1.5  2006/04/11 23:13:21  acg
+//   Andy Goodrich: Changes for reduced reset support that only includes
+//   sc_cthread, but has preliminary hooks for expanding to method and thread
+//   processes also.
+//
+// Revision 1.4  2006/01/24 20:49:05  acg
+// Andy Goodrich: changes to remove the use of deprecated features within the
+// simulator, and to issue warning messages when deprecated features are used.
+//
+// Revision 1.3  2006/01/13 18:44:29  acg
+// Added $Log to record CVS changes into the source.
 
 #endif // !defined(sc_method_process_h_INCLUDED)

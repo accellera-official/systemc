@@ -21,51 +21,8 @@
 
   Original Author: Martin Janssen, Synopsys, Inc., 2001-05-21
 
+  CHANGE LOG IS AT THE END OF THE FILE
  *****************************************************************************/
-
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-    
- *****************************************************************************/
-//$Log: sc_signal_ifs.h,v $
-//Revision 1.3  2011/02/18 20:23:45  acg
-// Andy Goodrich: Copyright update.
-//
-//Revision 1.2  2010/12/07 19:50:37  acg
-// Andy Goodrich: addition of writer policies, courtesy of Philipp Hartmann.
-//
-//Revision 1.1.1.1  2006/12/15 20:20:04  acg
-//SystemC 2.3
-//
-//Revision 1.4  2006/08/29 23:35:00  acg
-// Andy Goodrich: added bind_count() method to allow users to determine which
-// ports are connected in before_end_of_elaboration().
-//
-//Revision 1.3  2006/04/11 23:11:57  acg
-//  Andy Goodrich: Changes for reset support that only includes
-//  sc_cthread_process instances.
-//
-//Revision 1.2  2006/01/03 23:18:26  acg
-//Changed copyright to include 2006.
-//
-//Revision 1.1.1.1  2005/12/19 23:16:43  acg
-//First check in of SystemC 2.1 into its own archive.
-//
-//Revision 1.10  2005/09/15 23:01:51  acg
-//Added std:: prefix to appropriate methods and types to get around
-//issues with the Edison Front End.
-//
-//Revision 1.9  2005/06/29 18:12:12  acg
-//Added $log.
-//
-//Revision 1.8  2005/06/10 22:43:55  acg
-//Added CVS change log annotation.
-//
 
 #ifndef SC_SIGNAL_IFS_H
 #define SC_SIGNAL_IFS_H
@@ -299,6 +256,45 @@ private:
 #define sc_signal_out_if sc_signal_inout_if
 
 } // namespace sc_core
+
+//$Log: sc_signal_ifs.h,v $
+//Revision 1.4  2011/08/26 20:45:43  acg
+// Andy Goodrich: moved the modification log to the end of the file to
+// eliminate source line number skew when check-ins are done.
+//
+//Revision 1.3  2011/02/18 20:23:45  acg
+// Andy Goodrich: Copyright update.
+//
+//Revision 1.2  2010/12/07 19:50:37  acg
+// Andy Goodrich: addition of writer policies, courtesy of Philipp Hartmann.
+//
+//Revision 1.1.1.1  2006/12/15 20:20:04  acg
+//SystemC 2.3
+//
+//Revision 1.4  2006/08/29 23:35:00  acg
+// Andy Goodrich: added bind_count() method to allow users to determine which
+// ports are connected in before_end_of_elaboration().
+//
+//Revision 1.3  2006/04/11 23:11:57  acg
+//  Andy Goodrich: Changes for reset support that only includes
+//  sc_cthread_process instances.
+//
+//Revision 1.2  2006/01/03 23:18:26  acg
+//Changed copyright to include 2006.
+//
+//Revision 1.1.1.1  2005/12/19 23:16:43  acg
+//First check in of SystemC 2.1 into its own archive.
+//
+//Revision 1.10  2005/09/15 23:01:51  acg
+//Added std:: prefix to appropriate methods and types to get around
+//issues with the Edison Front End.
+//
+//Revision 1.9  2005/06/29 18:12:12  acg
+//Added $log.
+//
+//Revision 1.8  2005/06/10 22:43:55  acg
+//Added CVS change log annotation.
+//
 
 #endif
 

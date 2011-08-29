@@ -22,139 +22,9 @@
   Original Author: Andy Goodrich, Forte Design Systems, 4 August 2005
                
 
+  CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
 
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-
- *****************************************************************************/
-
-// $Log: sc_thread_process.h,v $
-// Revision 1.28  2011/04/14 22:34:27  acg
-//  Andy Goodrich: removed dead code.
-//
-// Revision 1.27  2011/04/13 05:02:18  acg
-//  Andy Goodrich: added missing check to the wake up code in suspend_me()
-//  so that we just return if the call to suspend_me() was issued from a
-//  stack unwinding.
-//
-// Revision 1.26  2011/04/13 02:44:26  acg
-//  Andy Goodrich: added m_unwinding flag in place of THROW_NOW because the
-//  throw status will be set back to THROW_*_RESET if reset is active and
-//  the check for an unwind being complete was expecting THROW_NONE as the
-//  clearing of THROW_NOW.
-//
-// Revision 1.25  2011/04/11 22:05:14  acg
-//  Andy Goodrich: use the DEBUG_NAME macro in DEBUG_MSG invocations.
-//
-// Revision 1.24  2011/04/10 22:12:32  acg
-//  Andy Goodrich: adding debugging macros.
-//
-// Revision 1.23  2011/04/08 22:41:28  acg
-//  Andy Goodrich: added comment pointing to the description of the reset
-//  mechanism in sc_reset.cpp.
-//
-// Revision 1.22  2011/04/08 18:27:33  acg
-//  Andy Goodrich: added check to make sure we don't schedule a running process
-//  because of it issues a notify() it is sensitive to.
-//
-// Revision 1.21  2011/04/05 06:22:38  acg
-//  Andy Goodrich: expanded comment for trigger_static() initial vetting.
-//
-// Revision 1.20  2011/04/01 21:24:57  acg
-//  Andy Goodrich: removed unused code.
-//
-// Revision 1.19  2011/02/19 08:30:53  acg
-//  Andy Goodrich: Moved process queueing into trigger_static from
-//  sc_event::notify.
-//
-// Revision 1.18  2011/02/18 20:27:14  acg
-//  Andy Goodrich: Updated Copyrights.
-//
-// Revision 1.17  2011/02/17 19:55:58  acg
-//  Andy Goodrich:
-//    (1) Changed signature of trigger_dynamic() back to a bool.
-//    (2) Simplified process control usage.
-//    (3) Changed trigger_static() to recognize process controls and to
-//        do the down-count on wait(N), allowing the elimination of
-//        ready_to_run().
-//
-// Revision 1.16  2011/02/16 22:37:31  acg
-//  Andy Goodrich: clean up to remove need for ps_disable_pending.
-//
-// Revision 1.15  2011/02/13 21:47:38  acg
-//  Andy Goodrich: update copyright notice.
-//
-// Revision 1.14  2011/02/13 21:35:54  acg
-//  Andy Goodrich: added error for performing a wait() during unwinding.
-//
-// Revision 1.13  2011/02/11 13:25:24  acg
-//  Andy Goodrich: Philipp A. Hartmann's changes:
-//    (1) Removal of SC_CTHREAD method overloads.
-//    (2) New exception processing code.
-//
-// Revision 1.12  2011/02/01 23:01:53  acg
-//  Andy Goodrich: removed dead code.
-//
-// Revision 1.11  2011/02/01 21:18:01  acg
-//  Andy Goodrich:
-//  (1) Changes in throw processing for new process control rules.
-//  (2) Support of new process_state enum values.
-//
-// Revision 1.10  2011/01/25 20:50:37  acg
-//  Andy Goodrich: changes for IEEE 1666 2011.
-//
-// Revision 1.9  2011/01/19 23:21:50  acg
-//  Andy Goodrich: changes for IEEE 1666 2011
-//
-// Revision 1.8  2011/01/18 20:10:45  acg
-//  Andy Goodrich: changes for IEEE1666_2011 semantics.
-//
-// Revision 1.7  2011/01/06 17:59:58  acg
-//  Andy Goodrich: removed debugging output.
-//
-// Revision 1.6  2010/07/22 20:02:33  acg
-//  Andy Goodrich: bug fixes.
-//
-// Revision 1.5  2009/07/28 01:10:53  acg
-//  Andy Goodrich: updates for 2.3 release candidate.
-//
-// Revision 1.4  2009/05/22 16:06:29  acg
-//  Andy Goodrich: process control updates.
-//
-// Revision 1.3  2009/03/12 22:59:58  acg
-//  Andy Goodrich: updates for 2.4 stuff.
-//
-// Revision 1.2  2008/05/22 17:06:06  acg
-//  Andy Goodrich: formatting and comments.
-//
-// Revision 1.1.1.1  2006/12/15 20:20:05  acg
-// SystemC 2.3
-//
-// Revision 1.7  2006/05/08 17:57:13  acg
-//  Andy Goodrich: Added David Long's forward declarations for friend functions
-//  to keep the Microsoft C++ compiler happy.
-//
-// Revision 1.6  2006/04/20 17:08:17  acg
-//  Andy Goodrich: 3.0 style process changes.
-//
-// Revision 1.5  2006/04/11 23:13:21  acg
-//   Andy Goodrich: Changes for reduced reset support that only includes
-//   sc_cthread, but has preliminary hooks for expanding to method and thread
-//   processes also.
-//
-// Revision 1.4  2006/01/24 20:49:05  acg
-// Andy Goodrich: changes to remove the use of deprecated features within the
-// simulator, and to issue warning messages when deprecated features are used.
-//
-// Revision 1.3  2006/01/13 18:44:30  acg
-// Added $Log to record CVS changes into the source.
-//
 
 #if !defined(sc_thread_process_h_INCLUDED)
 #define sc_thread_process_h_INCLUDED
@@ -366,7 +236,6 @@ inline void sc_thread_process::suspend_me()
         DEBUG_MSG( DEBUG_NAME , this,"throwing reset");
 	if ( m_reset_event_p ) m_reset_event_p->notify();
         throw sc_unwind_exception( this, true ); 
-	break;
 
       case THROW_USER:
         DEBUG_MSG( DEBUG_NAME, this, "throwing user exception");
@@ -379,7 +248,6 @@ inline void sc_thread_process::suspend_me()
       case THROW_KILL:
         DEBUG_MSG( DEBUG_NAME, this, "throwing kill");
 	throw sc_unwind_exception( this, false );
-	break;
 
       default: // THROWING_NOW
         sc_assert( unwinding_preempted );
@@ -620,5 +488,134 @@ sc_thread_process::trigger_static()
 #undef DEBUG_NAME
 
 } // namespace sc_core 
+
+// $Log: sc_thread_process.h,v $
+// Revision 1.30  2011/08/26 20:46:11  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
+// Revision 1.29  2011/08/24 23:36:12  acg
+//  Andy Goodrich: removed break statements that can never be reached and
+//  which causes warnings in the Greenhills C++ compiler.
+//
+// Revision 1.28  2011/04/14 22:34:27  acg
+//  Andy Goodrich: removed dead code.
+//
+// Revision 1.27  2011/04/13 05:02:18  acg
+//  Andy Goodrich: added missing check to the wake up code in suspend_me()
+//  so that we just return if the call to suspend_me() was issued from a
+//  stack unwinding.
+//
+// Revision 1.26  2011/04/13 02:44:26  acg
+//  Andy Goodrich: added m_unwinding flag in place of THROW_NOW because the
+//  throw status will be set back to THROW_*_RESET if reset is active and
+//  the check for an unwind being complete was expecting THROW_NONE as the
+//  clearing of THROW_NOW.
+//
+// Revision 1.25  2011/04/11 22:05:14  acg
+//  Andy Goodrich: use the DEBUG_NAME macro in DEBUG_MSG invocations.
+//
+// Revision 1.24  2011/04/10 22:12:32  acg
+//  Andy Goodrich: adding debugging macros.
+//
+// Revision 1.23  2011/04/08 22:41:28  acg
+//  Andy Goodrich: added comment pointing to the description of the reset
+//  mechanism in sc_reset.cpp.
+//
+// Revision 1.22  2011/04/08 18:27:33  acg
+//  Andy Goodrich: added check to make sure we don't schedule a running process
+//  because of it issues a notify() it is sensitive to.
+//
+// Revision 1.21  2011/04/05 06:22:38  acg
+//  Andy Goodrich: expanded comment for trigger_static() initial vetting.
+//
+// Revision 1.20  2011/04/01 21:24:57  acg
+//  Andy Goodrich: removed unused code.
+//
+// Revision 1.19  2011/02/19 08:30:53  acg
+//  Andy Goodrich: Moved process queueing into trigger_static from
+//  sc_event::notify.
+//
+// Revision 1.18  2011/02/18 20:27:14  acg
+//  Andy Goodrich: Updated Copyrights.
+//
+// Revision 1.17  2011/02/17 19:55:58  acg
+//  Andy Goodrich:
+//    (1) Changed signature of trigger_dynamic() back to a bool.
+//    (2) Simplified process control usage.
+//    (3) Changed trigger_static() to recognize process controls and to
+//        do the down-count on wait(N), allowing the elimination of
+//        ready_to_run().
+//
+// Revision 1.16  2011/02/16 22:37:31  acg
+//  Andy Goodrich: clean up to remove need for ps_disable_pending.
+//
+// Revision 1.15  2011/02/13 21:47:38  acg
+//  Andy Goodrich: update copyright notice.
+//
+// Revision 1.14  2011/02/13 21:35:54  acg
+//  Andy Goodrich: added error for performing a wait() during unwinding.
+//
+// Revision 1.13  2011/02/11 13:25:24  acg
+//  Andy Goodrich: Philipp A. Hartmann's changes:
+//    (1) Removal of SC_CTHREAD method overloads.
+//    (2) New exception processing code.
+//
+// Revision 1.12  2011/02/01 23:01:53  acg
+//  Andy Goodrich: removed dead code.
+//
+// Revision 1.11  2011/02/01 21:18:01  acg
+//  Andy Goodrich:
+//  (1) Changes in throw processing for new process control rules.
+//  (2) Support of new process_state enum values.
+//
+// Revision 1.10  2011/01/25 20:50:37  acg
+//  Andy Goodrich: changes for IEEE 1666 2011.
+//
+// Revision 1.9  2011/01/19 23:21:50  acg
+//  Andy Goodrich: changes for IEEE 1666 2011
+//
+// Revision 1.8  2011/01/18 20:10:45  acg
+//  Andy Goodrich: changes for IEEE1666_2011 semantics.
+//
+// Revision 1.7  2011/01/06 17:59:58  acg
+//  Andy Goodrich: removed debugging output.
+//
+// Revision 1.6  2010/07/22 20:02:33  acg
+//  Andy Goodrich: bug fixes.
+//
+// Revision 1.5  2009/07/28 01:10:53  acg
+//  Andy Goodrich: updates for 2.3 release candidate.
+//
+// Revision 1.4  2009/05/22 16:06:29  acg
+//  Andy Goodrich: process control updates.
+//
+// Revision 1.3  2009/03/12 22:59:58  acg
+//  Andy Goodrich: updates for 2.4 stuff.
+//
+// Revision 1.2  2008/05/22 17:06:06  acg
+//  Andy Goodrich: formatting and comments.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.7  2006/05/08 17:57:13  acg
+//  Andy Goodrich: Added David Long's forward declarations for friend functions
+//  to keep the Microsoft C++ compiler happy.
+//
+// Revision 1.6  2006/04/20 17:08:17  acg
+//  Andy Goodrich: 3.0 style process changes.
+//
+// Revision 1.5  2006/04/11 23:13:21  acg
+//   Andy Goodrich: Changes for reduced reset support that only includes
+//   sc_cthread, but has preliminary hooks for expanding to method and thread
+//   processes also.
+//
+// Revision 1.4  2006/01/24 20:49:05  acg
+// Andy Goodrich: changes to remove the use of deprecated features within the
+// simulator, and to issue warning messages when deprecated features are used.
+//
+// Revision 1.3  2006/01/13 18:44:30  acg
+// Added $Log to record CVS changes into the source.
 
 #endif // !defined(sc_thread_process_h_INCLUDED)

@@ -768,6 +768,9 @@ void sc_warn_port_constructor()
 
 
 // $Log: sc_port.cpp,v $
+// Revision 1.8  2011/08/24 22:05:36  acg
+//  Torsten Maehne: initialization changes to remove warnings.
+//
 // Revision 1.7  2011/08/15 16:43:24  acg
 //  Torsten Maehne: changes to remove unused argument warnings.
 //

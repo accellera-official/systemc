@@ -21,37 +21,9 @@
 
   Original Author: Andy Goodrich, Forte Design Systems, 5 May 2003
 
+ CHANGE LOG APPEARS AT THE END OF THE FILE
  *****************************************************************************/
 
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-
- *****************************************************************************/
-
-// $Log: sc_join.cpp,v $
-// Revision 1.5  2011/02/18 20:27:14  acg
-//  Andy Goodrich: Updated Copyrights.
-//
-// Revision 1.4  2011/02/13 21:47:37  acg
-//  Andy Goodrich: update copyright notice.
-//
-// Revision 1.3  2009/07/28 01:10:53  acg
-//  Andy Goodrich: updates for 2.3 release candidate.
-//
-// Revision 1.2  2008/05/22 17:06:25  acg
-//  Andy Goodrich: updated copyright notice to include 2008.
-//
-// Revision 1.1.1.1  2006/12/15 20:20:05  acg
-// SystemC 2.3
-//
-// Revision 1.3  2006/01/13 18:44:29  acg
-// Added $Log to record CVS changes into the source.
-//
 
 #include <cassert>
 #include <cstdlib>
@@ -65,6 +37,16 @@
 #include "sysc/kernel/sc_join.h"
 
 namespace sc_core {
+
+//------------------------------------------------------------------------------
+//"sc_join::sc_join"
+//
+// This is the object instance constructor for this class.
+//------------------------------------------------------------------------------
+sc_join::sc_join()
+  : m_join_event( (std::string(SC_KERNEL_EVENT_PREFIX)+"_join_event").c_str() )
+  , m_threads_n(0)
+{}
 
 //------------------------------------------------------------------------------
 //"sc_join::add_process - sc_process_b*"
@@ -130,3 +112,30 @@ void sc_join::signal(sc_thread_handle thread_p, int type)
 }
 
 } // namespace sc_core
+
+// $Log: sc_join.cpp,v $
+// Revision 1.7  2011/08/26 21:45:00  acg
+//  Andy Goodrich: fix internal event naming.
+//
+// Revision 1.6  2011/08/26 20:46:09  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
+// Revision 1.5  2011/02/18 20:27:14  acg
+//  Andy Goodrich: Updated Copyrights.
+//
+// Revision 1.4  2011/02/13 21:47:37  acg
+//  Andy Goodrich: update copyright notice.
+//
+// Revision 1.3  2009/07/28 01:10:53  acg
+//  Andy Goodrich: updates for 2.3 release candidate.
+//
+// Revision 1.2  2008/05/22 17:06:25  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.3  2006/01/13 18:44:29  acg
+// Added $Log to record CVS changes into the source.
+//

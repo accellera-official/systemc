@@ -21,29 +21,8 @@
 
   Original Author: Stan Y. Liao, Synopsys, Inc.
 
+  CHANGE LOG AT END OF FILE
  *****************************************************************************/
-
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-
- *****************************************************************************/
-
-// $Log: sc_mempool.h,v $
-// Revision 1.2  2011/02/18 20:38:44  acg
-//  Andy Goodrich: Updated Copyright notice.
-//
-// Revision 1.1.1.1  2006/12/15 20:20:06  acg
-// SystemC 2.3
-//
-// Revision 1.3  2006/01/13 18:53:11  acg
-// Andy Goodrich: Added $Log command so that CVS comments are reproduced in
-// the source.
-//
 
 #ifndef SC_MEMPOOL_H
 #define SC_MEMPOOL_H
@@ -93,5 +72,20 @@ public:
 };
 
 } // namespace sc_core
+
+// $Log: sc_mempool.h,v $
+// Revision 1.3  2011/08/26 20:46:18  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
+// Revision 1.2  2011/02/18 20:38:44  acg
+//  Andy Goodrich: Updated Copyright notice.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:06  acg
+// SystemC 2.3
+//
+// Revision 1.3  2006/01/13 18:53:11  acg
+// Andy Goodrich: Added $Log command so that CVS comments are reproduced in
+// the source.
 
 #endif

@@ -21,7 +21,7 @@
 
   Original Author: Martin Janssen, Synopsys, Inc., 2001-05-21
 
-  Modification log appears at the end of the file
+  CHANGE LOG IS AT THE END OF THE FILE
  *****************************************************************************/
 
 #ifndef SC_SIGNAL_H
@@ -832,6 +832,10 @@ operator << ( ::std::ostream& os, const sc_signal<T,POL>& a )
     
  *****************************************************************************/
 //$Log: sc_signal.h,v $
+//Revision 1.16  2011/08/26 20:45:42  acg
+// Andy Goodrich: moved the modification log to the end of the file to
+// eliminate source line number skew when check-ins are done.
+//
 //Revision 1.15  2011/08/15 16:43:24  acg
 // Torsten Maehne: changes to remove unused argument warnings.
 //

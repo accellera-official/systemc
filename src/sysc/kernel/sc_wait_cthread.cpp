@@ -22,66 +22,9 @@
   Original Author: Stan Y. Liao, Synopsys, Inc.
                    Martin Janssen, Synopsys, Inc.
 
+  CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
 
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-
- *****************************************************************************/
-
-/* 
-$Log: sc_wait_cthread.cpp,v $
-Revision 1.5  2011/02/18 20:27:14  acg
- Andy Goodrich: Updated Copyrights.
-
-Revision 1.4  2011/02/13 21:47:38  acg
- Andy Goodrich: update copyright notice.
-
-Revision 1.3  2009/10/14 19:07:42  acg
- Andy Goodrich: added an error message for wait(n) being called from an
- SC_METHOD.
-
-Revision 1.2  2008/05/22 17:06:27  acg
- Andy Goodrich: updated copyright notice to include 2008.
-
-Revision 1.1.1.1  2006/12/15 20:20:05  acg
-SystemC 2.3
-
-Revision 1.3  2006/03/13 20:26:51  acg
- Andy Goodrich: Addition of forward class declarations, e.g.,
- sc_reset, to keep gcc 4.x happy.
-
-Revision 1.2  2006/01/03 23:18:45  acg
-Changed copyright to include 2006.
-
-Revision 1.1.1.1  2005/12/19 23:16:44  acg
-First check in of SystemC 2.1 into its own archive.
-
-Revision 1.10  2005/09/15 23:02:18  acg
-Added std:: prefix to appropriate methods and types to get around
-issues with the Edison Front End.
-
-Revision 1.9  2005/09/02 19:03:30  acg
-Changes for dynamic processes. Removal of lambda support.
-
-Revision 1.8  2005/04/04 00:16:08  acg
-Changes for directory name change to sys from systemc.
-Changes for sc_string going to std::string.
-Changes for sc_pvector going to std::vector.
-Changes for reference pools for bit and part selections.
-Changes for const sc_concatref support.
-
-Revision 1.5  2004/09/27 20:49:10  acg
-Andy Goodrich, Forte Design Systems, Inc.
-   - Added a $Log comment so that CVS checkin comments appear in the
-     checkout source.
-
-*/
 
 
 #include "sysc/kernel/sc_kernel_ids.h"
@@ -167,5 +110,58 @@ at_negedge( const sc_signal_in_if<sc_dt::sc_logic>& s, sc_simcontext* simc )
 
 
 } // namespace sc_core
+
+/* 
+$Log: sc_wait_cthread.cpp,v $
+Revision 1.6  2011/08/26 20:46:11  acg
+ Andy Goodrich: moved the modification log to the end of the file to
+ eliminate source line number skew when check-ins are done.
+
+Revision 1.5  2011/02/18 20:27:14  acg
+ Andy Goodrich: Updated Copyrights.
+
+Revision 1.4  2011/02/13 21:47:38  acg
+ Andy Goodrich: update copyright notice.
+
+Revision 1.3  2009/10/14 19:07:42  acg
+ Andy Goodrich: added an error message for wait(n) being called from an
+ SC_METHOD.
+
+Revision 1.2  2008/05/22 17:06:27  acg
+ Andy Goodrich: updated copyright notice to include 2008.
+
+Revision 1.1.1.1  2006/12/15 20:20:05  acg
+SystemC 2.3
+
+Revision 1.3  2006/03/13 20:26:51  acg
+ Andy Goodrich: Addition of forward class declarations, e.g.,
+ sc_reset, to keep gcc 4.x happy.
+
+Revision 1.2  2006/01/03 23:18:45  acg
+Changed copyright to include 2006.
+
+Revision 1.1.1.1  2005/12/19 23:16:44  acg
+First check in of SystemC 2.1 into its own archive.
+
+Revision 1.10  2005/09/15 23:02:18  acg
+Added std:: prefix to appropriate methods and types to get around
+issues with the Edison Front End.
+
+Revision 1.9  2005/09/02 19:03:30  acg
+Changes for dynamic processes. Removal of lambda support.
+
+Revision 1.8  2005/04/04 00:16:08  acg
+Changes for directory name change to sys from systemc.
+Changes for sc_string going to std::string.
+Changes for sc_pvector going to std::vector.
+Changes for reference pools for bit and part selections.
+Changes for const sc_concatref support.
+
+Revision 1.5  2004/09/27 20:49:10  acg
+Andy Goodrich, Forte Design Systems, Inc.
+   - Added a $Log comment so that CVS checkin comments appear in the
+     checkout source.
+
+*/
 
 // Taf!

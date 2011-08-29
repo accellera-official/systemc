@@ -21,50 +21,8 @@
 
   Original Author: Stuart Swan, Cadence Inc.
 
+  CHANGE LOG IS AT THE END OF THE FILE
  *****************************************************************************/
-
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-
- *****************************************************************************/
-
-
-// $Log: sc_event_queue.cpp,v $
-// Revision 1.5  2011/04/08 18:22:46  acg
-//  Philipp A. Hartmann: use the context of the primitive channel to get
-//  the change stamp value.
-//
-// Revision 1.4  2011/04/05 20:48:09  acg
-//  Andy Goodrich: changes to make sure that event(), posedge() and negedge()
-//  only return true if the clock has not moved.
-//
-// Revision 1.3  2011/02/18 20:23:45  acg
-//  Andy Goodrich: Copyright update.
-//
-// Revision 1.2  2010/07/22 20:02:30  acg
-//  Andy Goodrich: bug fixes.
-//
-// Revision 1.1.1.1  2006/12/15 20:20:04  acg
-// SystemC 2.3
-//
-// Revision 1.5  2006/11/28 20:30:48  acg
-//  Andy Goodrich: updated from 2.2 source. sc_event_queue constructors
-//  collapsed into a single constructor with an optional argument to get
-//  the sc_module_name stack done correctly. Class name prefixing added
-//  to sc_semaphore calls to wait() to keep gcc 4.x happy.
-//
-// Revision 1.4  2006/01/26 21:00:50  acg
-//  Andy Goodrich: conversion to use sc_event::notify(SC_ZERO_TIME) instead of
-//  sc_event::notify_delayed()
-//
-// Revision 1.3  2006/01/13 18:47:42  acg
-// Added $Log command so that CVS comments are reproduced in the source.
-//
 
 #include "sysc/communication/sc_event_queue.h"
 #include "sysc/kernel/sc_method_process.h"
@@ -89,11 +47,10 @@ sc_time_compare( const void* p1, const void* p2 )
 sc_event_queue::sc_event_queue( sc_module_name name_ )
     : sc_module( name_ ),
       m_ppq( 128, sc_time_compare ),
-      m_e(),
+      m_e( (std::string(SC_KERNEL_EVENT_PREFIX)+"_event").c_str() ),
       m_change_stamp(0),
       m_pending_delta(0)
 {
-    m_change_stamp=0;
     SC_METHOD( fire_event );
     sensitive << m_e;
     dont_initialize();
@@ -139,3 +96,49 @@ void sc_event_queue::fire_event()
 }
 
 } // namespace sc_core
+
+// $Log: sc_event_queue.cpp,v $
+// Revision 1.9  2011/08/26 22:45:53  acg
+//  Torsten Maehne: remove redundant initialization assignment.
+//
+// Revision 1.8  2011/08/26 21:44:58  acg
+//  Andy Goodrich: fix internal event naming.
+//
+// Revision 1.7  2011/08/26 20:45:39  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
+// Revision 1.6  2011/08/24 22:05:35  acg
+//  Torsten Maehne: initialization changes to remove warnings.
+//
+// Revision 1.5  2011/04/08 18:22:46  acg
+//  Philipp A. Hartmann: use the context of the primitive channel to get
+//  the change stamp value.
+//
+// Revision 1.4  2011/04/05 20:48:09  acg
+//  Andy Goodrich: changes to make sure that event(), posedge() and negedge()
+//  only return true if the clock has not moved.
+//
+// Revision 1.3  2011/02/18 20:23:45  acg
+//  Andy Goodrich: Copyright update.
+//
+// Revision 1.2  2010/07/22 20:02:30  acg
+//  Andy Goodrich: bug fixes.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:04  acg
+// SystemC 2.3
+//
+// Revision 1.5  2006/11/28 20:30:48  acg
+//  Andy Goodrich: updated from 2.2 source. sc_event_queue constructors
+//  collapsed into a single constructor with an optional argument to get
+//  the sc_module_name stack done correctly. Class name prefixing added
+//  to sc_semaphore calls to wait() to keep gcc 4.x happy.
+//
+// Revision 1.4  2006/01/26 21:00:50  acg
+//  Andy Goodrich: conversion to use sc_event::notify(SC_ZERO_TIME) instead of
+//  sc_event::notify_delayed()
+//
+// Revision 1.3  2006/01/13 18:47:42  acg
+// Added $Log command so that CVS comments are reproduced in the source.
+
+// taf

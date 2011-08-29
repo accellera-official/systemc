@@ -678,6 +678,9 @@ sc_process_handle::operator sc_thread_handle()
  *****************************************************************************/
 
 // $Log: sc_process.cpp,v $
+// Revision 1.37  2011/08/24 22:05:51  acg
+//  Torsten Maehne: initialization changes to remove warnings.
+//
 // Revision 1.36  2011/08/15 16:43:24  acg
 //  Torsten Maehne: changes to remove unused argument warnings.
 //

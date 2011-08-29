@@ -23,256 +23,9 @@
   Original Author: Stan Y. Liao, Synopsys, Inc.
                    Martin Janssen, Synopsys, Inc.
 
+  CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
 
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date: Ali Dasdan, Synopsys, Inc.
-  Description of Modification: - Added sc_stop() detection into initial_crunch
-                                 and crunch. This makes it possible to exit out
-                                 of a combinational loop using sc_stop().
-
-      Name, Affiliation, Date: Andy Goodrich, Forte Design Systems 20 May 2003
-  Description of Modification: - sc_stop mode
-                               - phase callbacks
-
-      Name, Affiliation, Date: Bishnupriya Bhattacharya, Cadence Design Systems,
-                               25 August 2003
-  Description of Modification: - support for dynamic process
-                               - support for sc export registry
-                               - new member methods elaborate(), 
-				 prepare_to_simulate(), and initial_crunch()
-				 that are invoked by initialize() in that order
-                               - implement sc_get_last_created_process_handle() for use
-                                 before simulation starts
-                               - remove "set_curr_proc(handle)" from 
-                                 register_method_process and 
-                                 register_thread_process - led to bugs
-                               
-      Name, Affiliation, Date: Andy Goodrich, Forte Design Systems 04 Sep 2003
-  Description of Modification: - changed process existence structures to
-				 linked lists to eliminate exponential 
-				 execution problem with using sc_pvector.
- *****************************************************************************/
-// $Log: sc_simcontext.cpp,v $
-// Revision 1.34  2011/08/04 17:15:28  acg
-//  Andy Goodrich: added documentation to crunch() routine.
-//
-// Revision 1.32  2011/07/24 11:16:36  acg
-//  Philipp A. Hartmann: fix reference counting on deferred deletions of
-//  processes.
-//
-// Revision 1.31  2011/07/01 18:49:07  acg
-//  Andy Goodrich: moved pln() from sc_simcontext.cpp to sc_ver.cpp.
-//
-// Revision 1.30  2011/05/09 04:07:49  acg
-//  Philipp A. Hartmann:
-//    (1) Restore hierarchy in all phase callbacks.
-//    (2) Ensure calls to before_end_of_elaboration.
-//
-// Revision 1.29  2011/04/08 22:39:09  acg
-//  Andy Goodrich: moved method invocation code to sc_method.h so that the
-//  details are hidden from sc_simcontext.
-//
-// Revision 1.28  2011/04/05 20:50:57  acg
-//  Andy Goodrich:
-//    (1) changes to make sure that event(), posedge() and negedge() only
-//        return true if the clock has not moved.
-//    (2) fixes for method self-resumes.
-//    (3) added SC_PRERELEASE_VERSION
-//    (4) removed kernel events from the object hierarchy, added
-//        sc_hierarchy_name_exists().
-//
-// Revision 1.27  2011/04/05 06:14:15  acg
-//  Andy Goodrich: fix typo.
-//
-// Revision 1.26  2011/04/05 06:03:32  acg
-//  Philipp A. Hartmann: added code to set ready to run bit for a suspended
-//  process that does not have dont_initialize specified at simulation
-//  start up.
-//
-// Revision 1.25  2011/04/01 21:31:55  acg
-//  Andy Goodrich: make sure processes suspended before the start of execution
-//  don't get scheduled for initial execution.
-//
-// Revision 1.24  2011/03/28 13:02:52  acg
-//  Andy Goodrich: Changes for disable() interactions.
-//
-// Revision 1.23  2011/03/12 21:07:51  acg
-//  Andy Goodrich: changes to kernel generated event support.
-//
-// Revision 1.22  2011/03/07 17:38:43  acg
-//  Andy Goodrich: tightening up of checks for undefined interaction between
-//  synchronous reset and suspend.
-//
-// Revision 1.21  2011/03/06 19:57:11  acg
-//  Andy Goodrich: refinements for the illegal suspend - synchronous reset
-//  interaction.
-//
-// Revision 1.20  2011/03/06 15:58:50  acg
-//  Andy Goodrich: added escape to turn off process control corner case
-//  checks.
-//
-// Revision 1.19  2011/03/05 04:45:16  acg
-//  Andy Goodrich: moved active process calculation to the sc_simcontext class.
-//
-// Revision 1.18  2011/03/05 01:39:21  acg
-//  Andy Goodrich: changes for named events.
-//
-// Revision 1.17  2011/02/18 20:27:14  acg
-//  Andy Goodrich: Updated Copyrights.
-//
-// Revision 1.16  2011/02/17 19:53:28  acg
-//  Andy Goodrich: eliminated use of ready_to_run() as part of process control
-//  simplification.
-//
-// Revision 1.15  2011/02/13 21:47:38  acg
-//  Andy Goodrich: update copyright notice.
-//
-// Revision 1.14  2011/02/11 13:25:24  acg
-//  Andy Goodrich: Philipp A. Hartmann's changes:
-//    (1) Removal of SC_CTHREAD method overloads.
-//    (2) New exception processing code.
-//
-// Revision 1.13  2011/02/08 08:42:50  acg
-//  Andy Goodrich: fix ordering of check for stopped versus paused.
-//
-// Revision 1.12  2011/02/07 19:17:20  acg
-//  Andy Goodrich: changes for IEEE 1666 compatibility.
-//
-// Revision 1.11  2011/02/02 07:18:11  acg
-//  Andy Goodrich: removed toggle() calls for the new crunch() toggle usage.
-//
-// Revision 1.10  2011/02/01 23:01:53  acg
-//  Andy Goodrich: removed dead code.
-//
-// Revision 1.9  2011/02/01 21:11:59  acg
-//  Andy Goodrich:
-//  (1) Use of new toggle_methods() and toggle_threads() run queue methods
-//      to make sure the thread run queue does not execute when allow preempt_me()
-//      is called from an SC_METHOD.
-//  (2) Use of execute_thread_next() to allow thread execution in the current
-//      delta cycle() rather than push_runnable_thread_front which executed
-//      in the following cycle.
-//
-// Revision 1.8  2011/01/25 20:50:37  acg
-//  Andy Goodrich: changes for IEEE 1666 2011.
-//
-// Revision 1.7  2011/01/19 23:21:50  acg
-//  Andy Goodrich: changes for IEEE 1666 2011
-//
-// Revision 1.6  2011/01/18 20:10:45  acg
-//  Andy Goodrich: changes for IEEE1666_2011 semantics.
-//
-// Revision 1.5  2010/11/20 17:10:57  acg
-//  Andy Goodrich: reset processing changes for new IEEE 1666 standard.
-//
-// Revision 1.4  2010/07/22 20:02:33  acg
-//  Andy Goodrich: bug fixes.
-//
-// Revision 1.3  2008/05/22 17:06:26  acg
-//  Andy Goodrich: updated copyright notice to include 2008.
-//
-// Revision 1.2  2007/09/20 20:32:35  acg
-//  Andy Goodrich: changes to the semantics of throw_it() to match the
-//  specification. A call to throw_it() will immediately suspend the calling
-//  thread until all the throwees have executed. At that point the calling
-//  thread will be restarted before the execution of any other threads.
-//
-// Revision 1.1.1.1  2006/12/15 20:20:05  acg
-// SystemC 2.3
-//
-// Revision 1.21  2006/08/29 23:37:13  acg
-//  Andy Goodrich: Added check for negative time.
-//
-// Revision 1.20  2006/05/26 20:33:16  acg
-//   Andy Goodrich: changes required by additional platform compilers (i.e.,
-//   Microsoft VC++, Sun Forte, HP aCC).
-//
-// Revision 1.19  2006/05/08 17:59:52  acg
-//  Andy Goodrich: added a check before m_curr_time is set to make sure it
-//  is not set to a time before its current value. This will treat
-//  sc_event.notify( ) calls with negative times as calls with a zero time.
-//
-// Revision 1.18  2006/04/20 17:08:17  acg
-//  Andy Goodrich: 3.0 style process changes.
-//
-// Revision 1.17  2006/04/11 23:13:21  acg
-//   Andy Goodrich: Changes for reduced reset support that only includes
-//   sc_cthread, but has preliminary hooks for expanding to method and thread
-//   processes also.
-//
-// Revision 1.16  2006/03/21 00:00:34  acg
-//   Andy Goodrich: changed name of sc_get_current_process_base() to be
-//   sc_get_current_process_b() since its returning an sc_process_b instance.
-//
-// Revision 1.15  2006/03/13 20:26:50  acg
-//  Andy Goodrich: Addition of forward class declarations, e.g.,
-//  sc_reset, to keep gcc 4.x happy.
-//
-// Revision 1.14  2006/02/02 23:42:41  acg
-//  Andy Goodrich: implemented a much better fix to the sc_event_finder
-//  proliferation problem. This new version allocates only a single event
-//  finder for each port for each type of event, e.g., pos(), neg(), and
-//  value_change(). The event finder persists as long as the port does,
-//  which is what the LRM dictates. Because only a single instance is
-//  allocated for each event type per port there is not a potential
-//  explosion of storage as was true in the 2.0.1/2.1 versions.
-//
-// Revision 1.13  2006/02/02 21:29:10  acg
-//  Andy Goodrich: removed the call to sc_event_finder::free_instances() that
-//  was in end_of_elaboration(), leaving only the call in clean(). This is
-//  because the LRM states that sc_event_finder instances are persistent as
-//  long as the sc_module hierarchy is valid.
-//
-// Revision 1.12  2006/02/02 21:09:50  acg
-//  Andy Goodrich: added call to sc_event_finder::free_instances in the clean()
-//  method.
-//
-// Revision 1.11  2006/02/02 20:43:14  acg
-//  Andy Goodrich: Added an existence linked list to sc_event_finder so that
-//  the dynamically allocated instances can be freed after port binding
-//  completes. This replaces the individual deletions in ~sc_bind_ef, as these
-//  caused an exception if an sc_event_finder instance was used more than
-//  once, due to a double freeing of the instance.
-//
-// Revision 1.10  2006/01/31 21:43:26  acg
-//  Andy Goodrich: added comments in constructor to highlight environmental
-//  overrides section.
-//
-// Revision 1.9  2006/01/26 21:04:54  acg
-//  Andy Goodrich: deprecation message changes and additional messages.
-//
-// Revision 1.8  2006/01/25 00:31:19  acg
-//  Andy Goodrich: Changed over to use a standard message id of
-//  SC_ID_IEEE_1666_DEPRECATION for all deprecation messages.
-//
-// Revision 1.7  2006/01/24 20:49:05  acg
-// Andy Goodrich: changes to remove the use of deprecated features within the
-// simulator, and to issue warning messages when deprecated features are used.
-//
-// Revision 1.6  2006/01/19 00:29:52  acg
-// Andy Goodrich: Yet another implementation for signal write checking. This
-// one uses an environment variable SC_SIGNAL_WRITE_CHECK, that when set to
-// DISABLE will disable write checking on signals.
-//
-// Revision 1.5  2006/01/13 18:44:30  acg
-// Added $Log to record CVS changes into the source.
-//
-// Revision 1.4  2006/01/03 23:18:44  acg
-// Changed copyright to include 2006.
-//
-// Revision 1.3  2005/12/20 22:11:10  acg
-// Fixed $Log lines.
-//
-// Revision 1.2  2005/12/20 22:02:30  acg
-// Changed where delta cycles are incremented to match IEEE 1666. Added the
-// event_occurred() method to hide how delta cycle comparisions are done within
-// sc_simcontext. Changed the boolean update_phase to an enum that shows all
-// the phases.
 
 #include "sysc/kernel/sc_cor_fiber.h"
 #include "sysc/kernel/sc_cor_pthread.h"
@@ -292,6 +45,8 @@
 #include "sysc/kernel/sc_simcontext_int.h"
 #include "sysc/kernel/sc_reset.h"
 #include "sysc/kernel/sc_ver.h"
+#include "sysc/kernel/sc_boost.h"
+#include "sysc/kernel/sc_spawn.h"
 #include "sysc/communication/sc_port.h"
 #include "sysc/communication/sc_export.h"
 #include "sysc/communication/sc_prim_channel.h"
@@ -299,6 +54,26 @@
 #include "sysc/utils/sc_mempool.h"
 #include "sysc/utils/sc_list.h"
 #include "sysc/utils/sc_utils_ids.h"
+
+// DEBUGGING MACROS:
+//
+// DEBUG_MSG(NAME,P,MSG)
+//     MSG  = message to print
+//     NAME = name that must match the process for the message to print, or
+//            null if the message should be printed unconditionally.
+//     P    = pointer to process message is for, or NULL in which case the
+//            message will not print.
+#if 0
+#   define DEBUG_NAME ""
+#   define DEBUG_MSG(NAME,P,MSG) \
+    { \
+        if ( P && ( (strlen(NAME)==0) || !strcmp(NAME,P->name())) ) \
+          std::cout << sc_time_stamp() << ": " << P->name() << " ******** " \
+                    << MSG << std::endl; \
+    }
+#else
+#   define DEBUG_MSG(NAME,P,MSG) 
+#endif
 
 namespace sc_core {
 
@@ -472,6 +247,79 @@ sc_notify_time_compare( const void* p1, const void* p2 )
 }
 
 
+// +============================================================================
+// | CLASS sc_invoke_method - class to invoke sc_method's to support 
+// |                          sc_simcontext::preempt_with().
+// +============================================================================
+SC_MODULE(sc_invoke_method)
+{
+    SC_CTOR(sc_invoke_method)
+    {
+    }
+
+    virtual ~sc_invoke_method()
+    {
+	m_invokers.resize(0);
+    }
+
+    // Method to call to execute a method's semantics. 
+    
+    void invoke_method( sc_method_handle method_h )
+    {
+	sc_process_handle invoker_h;  // handle for invocation thread to use.
+	size_t            invokers_n; // number of invocation threads available.
+
+	m_method = method_h;
+
+	// There is not an invocation thread to use, so allocate one.
+
+	invokers_n = m_invokers.size();
+	if ( invokers_n == 0 )
+	{
+	    sc_spawn_options options;
+	    options.dont_initialize();
+	    options.set_stack_size(0x100000);
+	    options.set_sensitivity(&m_dummy);
+	    invoker_h = sc_spawn(sc_bind(&sc_invoke_method::invoker,this), 
+				 sc_gen_unique_name("invoker"), &options);
+	}
+
+	// There is an invocation thread to use, use the last one on the list.
+
+	else
+	{
+	    invoker_h = m_invokers[invokers_n-1];
+	    m_invokers.pop_back();
+	}
+
+	// Fire off the invocation thread to invoke the method's semantics,
+	// When it blocks put it onto the list of invocation threads that
+	// are available.
+
+        sc_get_curr_simcontext()->preempt_with( (sc_thread_handle)invoker_h );
+	m_invokers.push_back(invoker_h);
+    }
+
+    // Thread to call method from:
+
+    void invoker()
+    {
+	sc_process_b* me = sc_get_current_process_b();
+	DEBUG_MSG( DEBUG_NAME, me, "invoker initialization" );
+        for (;; )
+        {
+            DEBUG_MSG( DEBUG_NAME, m_method, "invoker executing method" );
+	    sc_get_curr_simcontext()->set_curr_proc( (sc_process_b*)m_method );
+	    m_method->run_process();
+	    sc_get_curr_simcontext()->set_curr_proc( me );
+	    wait();
+	}
+    }
+
+    sc_event                       m_dummy;    // dummy event to wait on.
+    sc_method_handle               m_method;   // method to be invoked.
+    std::vector<sc_process_handle> m_invokers; // list of invoking threads.
+};
 // ----------------------------------------------------------------------------
 //  CLASS : sc_simcontext
 //
@@ -521,6 +369,7 @@ sc_simcontext::init()
     m_execution_phase = phase_initialize;
     m_error = NULL;
     m_cor_pkg = 0;
+    m_method_invoker_p = NULL;
     m_cor = 0;
     m_in_simulator_control = false;
     m_start_of_simulation_called = false;
@@ -779,6 +628,10 @@ sc_simcontext::elaborate()
         return;
     }
 
+    // Instantiate the method invocation module (keep it out of the registry):
+
+    m_method_invoker_p = new sc_invoke_method(SC_KERNEL_MODULE_PREFIX);
+
     m_simulation_status = SC_BEFORE_END_OF_ELABORATION;
     for( int cd = 0; cd != 4; /* empty */ )
     {
@@ -964,6 +817,7 @@ sc_simcontext::initialize( bool no_crunch )
 {
     m_in_simulator_control = true;
     elaborate();
+
     prepare_to_simulate();
     initial_crunch(no_crunch);
     m_in_simulator_control = false;
@@ -1417,6 +1271,94 @@ sc_simcontext::remove_delta_event( sc_event* e )
     }
     m_delta_events.resize(m_delta_events.size()-1);
     e->m_delta_event_index = -1;
+}
+
+// +----------------------------------------------------------------------------
+// |"sc_simcontext::preempt_with"
+// | 
+// | This method executes the supplied method immediately, suspending the
+// | caller. After executing the supplied method the caller's execution will
+// | be restored. It is used to allow a method to immediately throw an 
+// | exception, e.g., when the method's kill_process() method was called.
+// | There are three cases to consider:
+// |   (1) The caller is a method, e.g., murder by method.
+// |   (2) The caller is a thread instance, e.g., murder by thread.
+// |   (3) The caller is this method instance, e.g., suicide.
+// |
+// | Arguments:
+// |     method_h -> method to be executed.
+// +----------------------------------------------------------------------------
+void 
+sc_simcontext::preempt_with( sc_method_handle method_h )
+{
+    sc_curr_proc_info caller_info;     // process info for caller.
+    sc_method_handle  active_method_h; // active method or null.
+    sc_thread_handle  active_thread_h; // active thread or null.
+
+    // Determine the active process and take the thread to be run off the
+    // run queue, if its there, since we will be explicitly causing its 
+    // execution.
+
+    active_method_h = DCAST<sc_method_handle>(sc_get_current_process_b());
+    active_thread_h = DCAST<sc_thread_handle>(sc_get_current_process_b());
+    if ( method_h->next_runnable() != NULL )
+	remove_runnable_method( method_h );
+
+    // CALLER IS THE METHOD TO BE RUN:
+    //
+    // Should never get here, ignore it unless we are debugging.
+
+    if ( method_h == active_method_h )
+    {
+        DEBUG_MSG(DEBUG_NAME,method_h,"self preemption of active method");
+    }
+
+    // THE CALLER IS A METHOD:
+    //
+    //   (a) Set the current process information to our method.
+    //   (b) Invoke our method directly by-passing the run queue.
+    //   (c) Restore the process info to the caller.
+    //   (d) Check to see if the calling method should throw an exception
+    //       because of activity that occurred during the preemption.
+
+    else if ( active_method_h != NULL )
+    {
+        sc_process_b::process_throw_type old_status;  // method's throw status.
+
+	old_status = active_method_h->m_throw_status;
+	caller_info = m_curr_proc_info;
+        DEBUG_MSG( DEBUG_NAME, method_h,
+	           "preempting active method with this method" );
+	sc_get_curr_simcontext()->set_curr_proc( (sc_process_b*)method_h );
+	method_h->run_process();
+	sc_get_curr_simcontext()->set_curr_proc((sc_process_b*)active_method_h);
+	active_method_h->check_for_throws( old_status );
+    }
+
+    // CALLER IS A THREAD:
+    //
+    //   (a) Use an invocation thread to execute the method.
+
+    else if ( active_thread_h != NULL )
+    {
+        DEBUG_MSG( DEBUG_NAME, method_h,
+	           "preempting active thread with this method" );
+	m_method_invoker_p->invoke_method(method_h);
+    }
+
+    // CALLER IS THE SIMULATOR:
+    //
+    // That is not allowed.
+
+    else
+    {
+	caller_info = m_curr_proc_info;
+        DEBUG_MSG( DEBUG_NAME, method_h,
+	           "preempting no active process with this method" );
+	sc_get_curr_simcontext()->set_curr_proc( (sc_process_b*)method_h );
+	method_h->run_process();
+	m_curr_proc_info = caller_info;
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -1882,4 +1824,260 @@ bool sc_allow_process_control_corners = false;
 // ......................................................................
 
 } // namespace sc_core
+
+/*****************************************************************************
+
+  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+  changes you are making here.
+
+      Name, Affiliation, Date: Ali Dasdan, Synopsys, Inc.
+  Description of Modification: - Added sc_stop() detection into initial_crunch
+                                 and crunch. This makes it possible to exit out
+                                 of a combinational loop using sc_stop().
+
+      Name, Affiliation, Date: Andy Goodrich, Forte Design Systems 20 May 2003
+  Description of Modification: - sc_stop mode
+                               - phase callbacks
+
+      Name, Affiliation, Date: Bishnupriya Bhattacharya, Cadence Design Systems,
+                               25 August 2003
+  Description of Modification: - support for dynamic process
+                               - support for sc export registry
+                               - new member methods elaborate(), 
+				 prepare_to_simulate(), and initial_crunch()
+				 that are invoked by initialize() in that order
+                               - implement sc_get_last_created_process_handle() for use
+                                 before simulation starts
+                               - remove "set_curr_proc(handle)" from 
+                                 register_method_process and 
+                                 register_thread_process - led to bugs
+                               
+      Name, Affiliation, Date: Andy Goodrich, Forte Design Systems 04 Sep 2003
+  Description of Modification: - changed process existence structures to
+				 linked lists to eliminate exponential 
+				 execution problem with using sc_pvector.
+ *****************************************************************************/
+// $Log: sc_simcontext.cpp,v $
+// Revision 1.36  2011/08/26 20:46:10  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
+// Revision 1.35  2011/08/24 22:05:51  acg
+//  Torsten Maehne: initialization changes to remove warnings.
+//
+// Revision 1.34  2011/08/04 17:15:28  acg
+//  Andy Goodrich: added documentation to crunch() routine.
+//
+// Revision 1.32  2011/07/24 11:16:36  acg
+//  Philipp A. Hartmann: fix reference counting on deferred deletions of
+//  processes.
+//
+// Revision 1.31  2011/07/01 18:49:07  acg
+//  Andy Goodrich: moved pln() from sc_simcontext.cpp to sc_ver.cpp.
+//
+// Revision 1.30  2011/05/09 04:07:49  acg
+//  Philipp A. Hartmann:
+//    (1) Restore hierarchy in all phase callbacks.
+//    (2) Ensure calls to before_end_of_elaboration.
+//
+// Revision 1.29  2011/04/08 22:39:09  acg
+//  Andy Goodrich: moved method invocation code to sc_method.h so that the
+//  details are hidden from sc_simcontext.
+//
+// Revision 1.28  2011/04/05 20:50:57  acg
+//  Andy Goodrich:
+//    (1) changes to make sure that event(), posedge() and negedge() only
+//        return true if the clock has not moved.
+//    (2) fixes for method self-resumes.
+//    (3) added SC_PRERELEASE_VERSION
+//    (4) removed kernel events from the object hierarchy, added
+//        sc_hierarchy_name_exists().
+//
+// Revision 1.27  2011/04/05 06:14:15  acg
+//  Andy Goodrich: fix typo.
+//
+// Revision 1.26  2011/04/05 06:03:32  acg
+//  Philipp A. Hartmann: added code to set ready to run bit for a suspended
+//  process that does not have dont_initialize specified at simulation
+//  start up.
+//
+// Revision 1.25  2011/04/01 21:31:55  acg
+//  Andy Goodrich: make sure processes suspended before the start of execution
+//  don't get scheduled for initial execution.
+//
+// Revision 1.24  2011/03/28 13:02:52  acg
+//  Andy Goodrich: Changes for disable() interactions.
+//
+// Revision 1.23  2011/03/12 21:07:51  acg
+//  Andy Goodrich: changes to kernel generated event support.
+//
+// Revision 1.22  2011/03/07 17:38:43  acg
+//  Andy Goodrich: tightening up of checks for undefined interaction between
+//  synchronous reset and suspend.
+//
+// Revision 1.21  2011/03/06 19:57:11  acg
+//  Andy Goodrich: refinements for the illegal suspend - synchronous reset
+//  interaction.
+//
+// Revision 1.20  2011/03/06 15:58:50  acg
+//  Andy Goodrich: added escape to turn off process control corner case
+//  checks.
+//
+// Revision 1.19  2011/03/05 04:45:16  acg
+//  Andy Goodrich: moved active process calculation to the sc_simcontext class.
+//
+// Revision 1.18  2011/03/05 01:39:21  acg
+//  Andy Goodrich: changes for named events.
+//
+// Revision 1.17  2011/02/18 20:27:14  acg
+//  Andy Goodrich: Updated Copyrights.
+//
+// Revision 1.16  2011/02/17 19:53:28  acg
+//  Andy Goodrich: eliminated use of ready_to_run() as part of process control
+//  simplification.
+//
+// Revision 1.15  2011/02/13 21:47:38  acg
+//  Andy Goodrich: update copyright notice.
+//
+// Revision 1.14  2011/02/11 13:25:24  acg
+//  Andy Goodrich: Philipp A. Hartmann's changes:
+//    (1) Removal of SC_CTHREAD method overloads.
+//    (2) New exception processing code.
+//
+// Revision 1.13  2011/02/08 08:42:50  acg
+//  Andy Goodrich: fix ordering of check for stopped versus paused.
+//
+// Revision 1.12  2011/02/07 19:17:20  acg
+//  Andy Goodrich: changes for IEEE 1666 compatibility.
+//
+// Revision 1.11  2011/02/02 07:18:11  acg
+//  Andy Goodrich: removed toggle() calls for the new crunch() toggle usage.
+//
+// Revision 1.10  2011/02/01 23:01:53  acg
+//  Andy Goodrich: removed dead code.
+//
+// Revision 1.9  2011/02/01 21:11:59  acg
+//  Andy Goodrich:
+//  (1) Use of new toggle_methods() and toggle_threads() run queue methods
+//      to make sure the thread run queue does not execute when allow preempt_me()
+//      is called from an SC_METHOD.
+//  (2) Use of execute_thread_next() to allow thread execution in the current
+//      delta cycle() rather than push_runnable_thread_front which executed
+//      in the following cycle.
+//
+// Revision 1.8  2011/01/25 20:50:37  acg
+//  Andy Goodrich: changes for IEEE 1666 2011.
+//
+// Revision 1.7  2011/01/19 23:21:50  acg
+//  Andy Goodrich: changes for IEEE 1666 2011
+//
+// Revision 1.6  2011/01/18 20:10:45  acg
+//  Andy Goodrich: changes for IEEE1666_2011 semantics.
+//
+// Revision 1.5  2010/11/20 17:10:57  acg
+//  Andy Goodrich: reset processing changes for new IEEE 1666 standard.
+//
+// Revision 1.4  2010/07/22 20:02:33  acg
+//  Andy Goodrich: bug fixes.
+//
+// Revision 1.3  2008/05/22 17:06:26  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
+//
+// Revision 1.2  2007/09/20 20:32:35  acg
+//  Andy Goodrich: changes to the semantics of throw_it() to match the
+//  specification. A call to throw_it() will immediately suspend the calling
+//  thread until all the throwees have executed. At that point the calling
+//  thread will be restarted before the execution of any other threads.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.21  2006/08/29 23:37:13  acg
+//  Andy Goodrich: Added check for negative time.
+//
+// Revision 1.20  2006/05/26 20:33:16  acg
+//   Andy Goodrich: changes required by additional platform compilers (i.e.,
+//   Microsoft VC++, Sun Forte, HP aCC).
+//
+// Revision 1.19  2006/05/08 17:59:52  acg
+//  Andy Goodrich: added a check before m_curr_time is set to make sure it
+//  is not set to a time before its current value. This will treat
+//  sc_event.notify( ) calls with negative times as calls with a zero time.
+//
+// Revision 1.18  2006/04/20 17:08:17  acg
+//  Andy Goodrich: 3.0 style process changes.
+//
+// Revision 1.17  2006/04/11 23:13:21  acg
+//   Andy Goodrich: Changes for reduced reset support that only includes
+//   sc_cthread, but has preliminary hooks for expanding to method and thread
+//   processes also.
+//
+// Revision 1.16  2006/03/21 00:00:34  acg
+//   Andy Goodrich: changed name of sc_get_current_process_base() to be
+//   sc_get_current_process_b() since its returning an sc_process_b instance.
+//
+// Revision 1.15  2006/03/13 20:26:50  acg
+//  Andy Goodrich: Addition of forward class declarations, e.g.,
+//  sc_reset, to keep gcc 4.x happy.
+//
+// Revision 1.14  2006/02/02 23:42:41  acg
+//  Andy Goodrich: implemented a much better fix to the sc_event_finder
+//  proliferation problem. This new version allocates only a single event
+//  finder for each port for each type of event, e.g., pos(), neg(), and
+//  value_change(). The event finder persists as long as the port does,
+//  which is what the LRM dictates. Because only a single instance is
+//  allocated for each event type per port there is not a potential
+//  explosion of storage as was true in the 2.0.1/2.1 versions.
+//
+// Revision 1.13  2006/02/02 21:29:10  acg
+//  Andy Goodrich: removed the call to sc_event_finder::free_instances() that
+//  was in end_of_elaboration(), leaving only the call in clean(). This is
+//  because the LRM states that sc_event_finder instances are persistent as
+//  long as the sc_module hierarchy is valid.
+//
+// Revision 1.12  2006/02/02 21:09:50  acg
+//  Andy Goodrich: added call to sc_event_finder::free_instances in the clean()
+//  method.
+//
+// Revision 1.11  2006/02/02 20:43:14  acg
+//  Andy Goodrich: Added an existence linked list to sc_event_finder so that
+//  the dynamically allocated instances can be freed after port binding
+//  completes. This replaces the individual deletions in ~sc_bind_ef, as these
+//  caused an exception if an sc_event_finder instance was used more than
+//  once, due to a double freeing of the instance.
+//
+// Revision 1.10  2006/01/31 21:43:26  acg
+//  Andy Goodrich: added comments in constructor to highlight environmental
+//  overrides section.
+//
+// Revision 1.9  2006/01/26 21:04:54  acg
+//  Andy Goodrich: deprecation message changes and additional messages.
+//
+// Revision 1.8  2006/01/25 00:31:19  acg
+//  Andy Goodrich: Changed over to use a standard message id of
+//  SC_ID_IEEE_1666_DEPRECATION for all deprecation messages.
+//
+// Revision 1.7  2006/01/24 20:49:05  acg
+// Andy Goodrich: changes to remove the use of deprecated features within the
+// simulator, and to issue warning messages when deprecated features are used.
+//
+// Revision 1.6  2006/01/19 00:29:52  acg
+// Andy Goodrich: Yet another implementation for signal write checking. This
+// one uses an environment variable SC_SIGNAL_WRITE_CHECK, that when set to
+// DISABLE will disable write checking on signals.
+//
+// Revision 1.5  2006/01/13 18:44:30  acg
+// Added $Log to record CVS changes into the source.
+//
+// Revision 1.4  2006/01/03 23:18:44  acg
+// Changed copyright to include 2006.
+//
+// Revision 1.3  2005/12/20 22:11:10  acg
+// Fixed $Log lines.
+//
+// Revision 1.2  2005/12/20 22:02:30  acg
+// Changed where delta cycles are incremented to match IEEE 1666. Added the
+// event_occurred() method to hide how delta cycle comparisions are done within
+// sc_simcontext. Changed the boolean update_phase to an enum that shows all
+// the phases.
 // Taf!

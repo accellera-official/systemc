@@ -1080,7 +1080,8 @@ vcd_unsigned_long_trace::vcd_unsigned_long_trace(
   mask((unsigned long)-1)
 {
     bit_width = width_;
-    if (bit_width < 32) mask = ~(-1 << bit_width);
+    if ( bit_width < (int)(sizeof(unsigned long)*8) ) 
+        mask = ~(-1L << bit_width);
 
     vcd_var_typ_name = "wire";
 }
@@ -1465,7 +1466,8 @@ vcd_signed_long_trace::vcd_signed_long_trace(const long& object_,
   mask((unsigned long)-1)
 {
     bit_width = width_;
-    if (bit_width < 32) mask = ~(-1 << bit_width);
+    if ( bit_width < (int)(sizeof(long)*8) ) 
+        mask = ~(-1L << bit_width);
     vcd_var_typ_name = "wire";
 }
 

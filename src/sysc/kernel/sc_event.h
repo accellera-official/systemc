@@ -21,77 +21,9 @@
 
   Original Author: Martin Janssen, Synopsys, Inc., 2001-05-21
 
+  CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
 
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-
- *****************************************************************************/
-
-// $Log: sc_event.h,v $
-// Revision 1.11  2011/03/12 21:07:51  acg
-//  Andy Goodrich: changes to kernel generated event support.
-//
-// Revision 1.10  2011/03/06 15:55:11  acg
-//  Andy Goodrich: Changes for named events.
-//
-// Revision 1.9  2011/03/05 01:39:21  acg
-//  Andy Goodrich: changes for named events.
-//
-// Revision 1.8  2011/02/18 20:27:14  acg
-//  Andy Goodrich: Updated Copyrights.
-//
-// Revision 1.7  2011/02/13 21:47:37  acg
-//  Andy Goodrich: update copyright notice.
-//
-// Revision 1.6  2011/02/01 21:03:23  acg
-//  Andy Goodrich: new return codes for trigger_dynamic calls.
-//
-// Revision 1.5  2011/01/18 20:10:44  acg
-//  Andy Goodrich: changes for IEEE1666_2011 semantics.
-//
-// Revision 1.4  2010/12/07 20:09:11  acg
-// Andy Goodrich: writer policy fix.
-//
-// Revision 1.3  2009/05/22 16:06:29  acg
-//  Andy Goodrich: process control updates.
-//
-// Revision 1.2  2008/05/22 17:06:25  acg
-//  Andy Goodrich: updated copyright notice to include 2008.
-//
-// Revision 1.1.1.1  2006/12/15 20:20:05  acg
-// SystemC 2.3
-//
-// Revision 1.8  2006/05/26 20:33:16  acg
-//   Andy Goodrich: changes required by additional platform compilers (i.e.,
-//   Microsoft VC++, Sun Forte, HP aCC).
-//
-// Revision 1.7  2006/05/08 17:57:51  acg
-// Andy Goodrich: added David Long's forward declarations for friend
-//   functions, methods, and operators to keep the Microsoft compiler happy.
-//
-// Revision 1.6  2006/04/11 23:13:20  acg
-//   Andy Goodrich: Changes for reduced reset support that only includes
-//   sc_cthread, but has preliminary hooks for expanding to method and thread
-//   processes also.
-//
-// Revision 1.5  2006/01/24 20:56:00  acg
-//  Andy Goodrich: fixed up CVS comment.
-//
-// Revision 1.4  2006/01/24 20:48:14  acg
-// Andy Goodrich: added deprecation warnings for notify_delayed(). Added two
-// new implementation-dependent methods, notify_next_delta() & notify_internal()
-// to replace calls to notify_delayed() from within the simulator. These two
-// new methods are simpler than notify_delayed() and should speed up simulations
-//
-// Revision 1.3  2006/01/13 18:44:29  acg
-// Added $Log to record CVS changes into the source.
-//
 
 #ifndef SC_EVENT_H
 #define SC_EVENT_H
@@ -884,6 +816,73 @@ operator & ( sc_event_and_expr expr, sc_event_and_list const & el )
 }
 
 } // namespace sc_core
+
+// $Log: sc_event.h,v $
+// Revision 1.13  2011/08/26 20:46:09  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
+// Revision 1.12  2011/08/24 22:05:50  acg
+//  Torsten Maehne: initialization changes to remove warnings.
+//
+// Revision 1.11  2011/03/12 21:07:51  acg
+//  Andy Goodrich: changes to kernel generated event support.
+//
+// Revision 1.10  2011/03/06 15:55:11  acg
+//  Andy Goodrich: Changes for named events.
+//
+// Revision 1.9  2011/03/05 01:39:21  acg
+//  Andy Goodrich: changes for named events.
+//
+// Revision 1.8  2011/02/18 20:27:14  acg
+//  Andy Goodrich: Updated Copyrights.
+//
+// Revision 1.7  2011/02/13 21:47:37  acg
+//  Andy Goodrich: update copyright notice.
+//
+// Revision 1.6  2011/02/01 21:03:23  acg
+//  Andy Goodrich: new return codes for trigger_dynamic calls.
+//
+// Revision 1.5  2011/01/18 20:10:44  acg
+//  Andy Goodrich: changes for IEEE1666_2011 semantics.
+//
+// Revision 1.4  2010/12/07 20:09:11  acg
+// Andy Goodrich: writer policy fix.
+//
+// Revision 1.3  2009/05/22 16:06:29  acg
+//  Andy Goodrich: process control updates.
+//
+// Revision 1.2  2008/05/22 17:06:25  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.8  2006/05/26 20:33:16  acg
+//   Andy Goodrich: changes required by additional platform compilers (i.e.,
+//   Microsoft VC++, Sun Forte, HP aCC).
+//
+// Revision 1.7  2006/05/08 17:57:51  acg
+// Andy Goodrich: added David Long's forward declarations for friend
+//   functions, methods, and operators to keep the Microsoft compiler happy.
+//
+// Revision 1.6  2006/04/11 23:13:20  acg
+//   Andy Goodrich: Changes for reduced reset support that only includes
+//   sc_cthread, but has preliminary hooks for expanding to method and thread
+//   processes also.
+//
+// Revision 1.5  2006/01/24 20:56:00  acg
+//  Andy Goodrich: fixed up CVS comment.
+//
+// Revision 1.4  2006/01/24 20:48:14  acg
+// Andy Goodrich: added deprecation warnings for notify_delayed(). Added two
+// new implementation-dependent methods, notify_next_delta() & notify_internal()
+// to replace calls to notify_delayed() from within the simulator. These two
+// new methods are simpler than notify_delayed() and should speed up simulations
+//
+// Revision 1.3  2006/01/13 18:44:29  acg
+// Added $Log to record CVS changes into the source.
+//
 
 #endif
 

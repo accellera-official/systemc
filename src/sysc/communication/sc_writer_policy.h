@@ -21,7 +21,7 @@
 
   Original Author: Philipp A: Hartmann, OFFIS
 
-  Modification log appears at the end of the file
+  CHANGE LOG IS AT THE END OF THE FILE
  *****************************************************************************/
 
 
@@ -62,8 +62,6 @@ struct sc_writer_policy_check;
 
 struct sc_writer_policy_nocheck_write
 {
-  virtual ~sc_writer_policy_nocheck_write() {}
-
   bool check_write( sc_object* /* target */, bool /* value_changed */ )
     { return true; }
   void update(){}
@@ -71,8 +69,6 @@ struct sc_writer_policy_nocheck_write
 
 struct sc_writer_policy_check_write
 {
-  virtual ~sc_writer_policy_check_write() {}
-
   bool check_write( sc_object* target, bool value_changed );
   void update(){}
 protected:
@@ -89,8 +85,6 @@ struct sc_writer_policy_check_delta
   sc_writer_policy_check_delta()
     : sc_writer_policy_check_write(true) {}
 
-  virtual ~sc_writer_policy_check_delta() {}
-
   bool check_write( sc_object* target, bool value_changed )
   {
       if( value_changed )
@@ -103,16 +97,12 @@ struct sc_writer_policy_check_delta
 
 struct sc_writer_policy_nocheck_port
 {
-  virtual ~sc_writer_policy_nocheck_port() {}
-
   bool check_port( sc_object*, sc_port_base*, bool )
     { return true; }
 };
 
 struct sc_writer_policy_check_port
 {
-  virtual ~sc_writer_policy_check_port() {}
-
   bool check_port( sc_object* target, sc_port_base* port, bool is_output );
 
 protected:

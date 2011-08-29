@@ -35,7 +35,6 @@
 
 #undef SC_INCLUDE_FX
 
-#include "pkt.h"
 #include "fifo.h"
 
     void fifo::pkt_in(const pkt& data_pkt)

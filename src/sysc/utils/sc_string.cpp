@@ -21,29 +21,8 @@
 
   Original Author: Stan Y. Liao, Synopsys, Inc.
 
+  CHANGE LOG AT END OF FILE
  *****************************************************************************/
-
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-
- *****************************************************************************/
-
-// $Log: sc_string.cpp,v $
-// Revision 1.2  2011/02/18 20:38:44  acg
-//  Andy Goodrich: Updated Copyright notice.
-//
-// Revision 1.1.1.1  2006/12/15 20:20:06  acg
-// SystemC 2.3
-//
-// Revision 1.3  2006/01/13 18:53:11  acg
-// Andy Goodrich: Added $Log command so that CVS comments are reproduced in
-// the source.
-//
 
 #include <assert.h>
 #include <ctype.h>
@@ -124,7 +103,6 @@ class sc_string_rep
 
     sc_string_rep( const char* s ) : ref_count(1), alloc(0), str(0)
     {
-        ref_count = 1;
         if (s) {
             alloc = 1 + strlen(s);
             str = strcpy( new char[alloc], s );
@@ -661,3 +639,26 @@ operator >> ( ::std::istream& is, sc_string_old& s )
     return is;
 }
  } // namespace sc_dt
+
+// $Log: sc_string.cpp,v $
+// Revision 1.5  2011/08/26 22:49:42  acg
+//  Torsten Maehne: remove redudant assignment.
+//
+// Revision 1.4  2011/08/26 20:46:19  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
+// Revision 1.3  2011/08/24 22:05:56  acg
+//  Torsten Maehne: initialization changes to remove warnings.
+//
+// Revision 1.2  2011/02/18 20:38:44  acg
+//  Andy Goodrich: Updated Copyright notice.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:06  acg
+// SystemC 2.3
+//
+// Revision 1.3  2006/01/13 18:53:11  acg
+// Andy Goodrich: Added $Log command so that CVS comments are reproduced in
+// the source.
+
+// taf

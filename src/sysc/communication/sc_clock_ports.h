@@ -21,33 +21,8 @@
 
   Original Author: Martin Janssen, Synopsys, Inc., 2001-05-21
 
+  CHANGE LOG IS AT THE END OF THE FILE
  *****************************************************************************/
-
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-    
- *****************************************************************************/
-//$Log: sc_clock_ports.h,v $
-//Revision 1.2  2011/02/18 20:23:45  acg
-// Andy Goodrich: Copyright update.
-//
-//Revision 1.1.1.1  2006/12/15 20:20:04  acg
-//SystemC 2.3
-//
-//Revision 1.2  2006/01/03 23:18:26  acg
-//Changed copyright to include 2006.
-//
-//Revision 1.1.1.1  2005/12/19 23:16:43  acg
-//First check in of SystemC 2.1 into its own archive.
-//
-//Revision 1.8  2005/06/10 22:43:55  acg
-//Added CVS change log annotation.
-//
 
 #ifndef SC_CLOCK_PORTS_H
 #define SC_CLOCK_PORTS_H
@@ -68,6 +43,27 @@ typedef sc_inout<bool> sc_inout_clk;
 typedef sc_out<bool>   sc_out_clk;
 
 } // namespace sc_core
+
+//$Log: sc_clock_ports.h,v $
+//Revision 1.3  2011/08/26 20:45:39  acg
+// Andy Goodrich: moved the modification log to the end of the file to
+// eliminate source line number skew when check-ins are done.
+//
+//Revision 1.2  2011/02/18 20:23:45  acg
+// Andy Goodrich: Copyright update.
+//
+//Revision 1.1.1.1  2006/12/15 20:20:04  acg
+//SystemC 2.3
+//
+//Revision 1.2  2006/01/03 23:18:26  acg
+//Changed copyright to include 2006.
+//
+//Revision 1.1.1.1  2005/12/19 23:16:43  acg
+//First check in of SystemC 2.1 into its own archive.
+//
+//Revision 1.8  2005/06/10 22:43:55  acg
+//Added CVS change log annotation.
+//
 
 #endif
 

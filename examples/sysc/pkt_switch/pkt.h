@@ -32,6 +32,8 @@
   Description of Modification:
 
  *****************************************************************************/
+#if !defined(PKT_H_INCLUDED)
+#define PKT_H_INCLUDED
 
 #include "systemc.h"
 
@@ -52,7 +54,7 @@ struct pkt {
 
 inline
 ostream&
-operator << ( ostream& os, const pkt& a )
+operator << ( ostream& os, const pkt& /* a */ )
 {
     os << "streaming of struct pkt not implemented";
     return os;
@@ -73,3 +75,4 @@ void
   sc_trace( tf, a.dest2, name + ".dest2" );
   sc_trace( tf, a.dest3, name + ".dest3" );
 }
+#endif // !defined(PKT_H_INCLUDED)

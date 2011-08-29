@@ -21,32 +21,8 @@
 
   Original Author: Philipp A. Hartmann, OFFIS
 
+ CHANGE LOG APPEARS AT THE END OF THE FILE
  *****************************************************************************/
-
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-
- *****************************************************************************/
-
-
-// $Log: sc_except.cpp,v $
-// Revision 1.3  2011/05/09 04:07:48  acg
-//  Philipp A. Hartmann:
-//    (1) Restore hierarchy in all phase callbacks.
-//    (2) Ensure calls to before_end_of_elaboration.
-//
-// Revision 1.2  2011/02/13 21:47:37  acg
-//  Andy Goodrich: update copyright notice.
-//
-// Revision 1.1  2011/02/10 22:47:38  acg
-//  Andy Goodrich: first check in of Philipp A. Hartmann's new exception
-//  processing code.
-//
 
 #include "sysc/kernel/sc_cmnhdr.h"
 //
@@ -142,5 +118,23 @@ sc_handle_exception()
 }
 
 } // namespace sc_core
+
+// $Log: sc_except.cpp,v $
+// Revision 1.4  2011/08/26 20:46:09  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
+// Revision 1.3  2011/05/09 04:07:48  acg
+//  Philipp A. Hartmann:
+//    (1) Restore hierarchy in all phase callbacks.
+//    (2) Ensure calls to before_end_of_elaboration.
+//
+// Revision 1.2  2011/02/13 21:47:37  acg
+//  Andy Goodrich: update copyright notice.
+//
+// Revision 1.1  2011/02/10 22:47:38  acg
+//  Andy Goodrich: first check in of Philipp A. Hartmann's new exception
+//  processing code.
+//
 
 // Taf!

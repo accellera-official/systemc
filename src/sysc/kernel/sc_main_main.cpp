@@ -21,55 +21,9 @@
 
   Original Author: Andy Goodrich, Forte Design Systems
 
+ CHANGE LOG APPEARS AT THE END OF THE FILE
  *****************************************************************************/
 
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-
- *****************************************************************************/
-
-
-// $Log: sc_main_main.cpp,v $
-// Revision 1.8  2011/05/09 04:07:48  acg
-//  Philipp A. Hartmann:
-//    (1) Restore hierarchy in all phase callbacks.
-//    (2) Ensure calls to before_end_of_elaboration.
-//
-// Revision 1.7  2011/02/18 20:27:14  acg
-//  Andy Goodrich: Updated Copyrights.
-//
-// Revision 1.6  2011/02/13 21:47:37  acg
-//  Andy Goodrich: update copyright notice.
-//
-// Revision 1.5  2010/03/15 18:29:25  acg
-//  Andy Goodrich: Changed the default stack size to 128K from 64K.
-//
-// Revision 1.4  2009/10/14 19:06:48  acg
-//  Andy Goodrich: changed the way the "copy" of argv is handled. It is
-//  now passed to sc_main, and the original is referenced via argv_copy.
-//
-// Revision 1.3  2008/05/22 17:06:25  acg
-//  Andy Goodrich: updated copyright notice to include 2008.
-//
-// Revision 1.2  2008/04/11 20:41:28  acg
-//  Andy Goodrich: changed the return value in sc_elab_and_sim() to be 1
-//  when an exception occurs in sc_main() rather than 0.
-//
-// Revision 1.1.1.1  2006/12/15 20:20:05  acg
-// SystemC 2.3
-//
-// Revision 1.4  2006/01/25 00:31:19  acg
-//  Andy Goodrich: Changed over to use a standard message id of
-//  SC_ID_IEEE_1666_DEPRECATION for all deprecation messages.
-//
-// Revision 1.3  2006/01/13 18:44:29  acg
-// Added $Log to record CVS changes into the source.
-//
 
 #include "sysc/kernel/sc_cmnhdr.h"
 #include "sysc/kernel/sc_externs.h"
@@ -158,3 +112,44 @@ sc_elab_and_sim( int argc, char* argv[] )
 }
 
 } // namespace sc_core
+
+// $Log: sc_main_main.cpp,v $
+// Revision 1.9  2011/08/26 20:46:10  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
+// Revision 1.8  2011/05/09 04:07:48  acg
+//  Philipp A. Hartmann:
+//    (1) Restore hierarchy in all phase callbacks.
+//    (2) Ensure calls to before_end_of_elaboration.
+//
+// Revision 1.7  2011/02/18 20:27:14  acg
+//  Andy Goodrich: Updated Copyrights.
+//
+// Revision 1.6  2011/02/13 21:47:37  acg
+//  Andy Goodrich: update copyright notice.
+//
+// Revision 1.5  2010/03/15 18:29:25  acg
+//  Andy Goodrich: Changed the default stack size to 128K from 64K.
+//
+// Revision 1.4  2009/10/14 19:06:48  acg
+//  Andy Goodrich: changed the way the "copy" of argv is handled. It is
+//  now passed to sc_main, and the original is referenced via argv_copy.
+//
+// Revision 1.3  2008/05/22 17:06:25  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
+//
+// Revision 1.2  2008/04/11 20:41:28  acg
+//  Andy Goodrich: changed the return value in sc_elab_and_sim() to be 1
+//  when an exception occurs in sc_main() rather than 0.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.4  2006/01/25 00:31:19  acg
+//  Andy Goodrich: Changed over to use a standard message id of
+//  SC_ID_IEEE_1666_DEPRECATION for all deprecation messages.
+//
+// Revision 1.3  2006/01/13 18:44:29  acg
+// Added $Log to record CVS changes into the source.
+//

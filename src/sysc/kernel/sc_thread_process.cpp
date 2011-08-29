@@ -836,6 +836,9 @@ sc_set_stack_size( sc_thread_handle thread_h, std::size_t size )
  *****************************************************************************/
 
 // $Log: sc_thread_process.cpp,v $
+// Revision 1.57  2011/08/24 22:05:51  acg
+//  Torsten Maehne: initialization changes to remove warnings.
+//
 // Revision 1.56  2011/08/07 19:08:04  acg
 //  Andy Goodrich: moved logs to end of file so line number synching works
 //  better between versions.

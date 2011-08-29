@@ -22,58 +22,9 @@
   Original Author: Stan Y. Liao, Synopsys, Inc.
                    Martin Janssen, Synopsys, Inc.
 
+  CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
 
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date: Bishnupriya Bhattacharya, Cadence Design Systems,
-                               25 August, 2003
-  Description of Modification: add make_static_sensitivity() routines to support
-                               dynamic method process creation with static
-                               sensitivity
-
- *****************************************************************************/
-
-
-// $Log: sc_sensitive.cpp,v $
-// Revision 1.4  2011/02/18 20:27:14  acg
-//  Andy Goodrich: Updated Copyrights.
-//
-// Revision 1.3  2011/02/13 21:47:38  acg
-//  Andy Goodrich: update copyright notice.
-//
-// Revision 1.2  2008/05/22 17:06:26  acg
-//  Andy Goodrich: updated copyright notice to include 2008.
-//
-// Revision 1.1.1.1  2006/12/15 20:20:05  acg
-// SystemC 2.3
-//
-// Revision 1.8  2006/04/11 23:13:21  acg
-//   Andy Goodrich: Changes for reduced reset support that only includes
-//   sc_cthread, but has preliminary hooks for expanding to method and thread
-//   processes also.
-//
-// Revision 1.7  2006/01/27 17:31:24  acg
-//  Andy Goodrich: removed debugging comments from << operator code for types
-//  that are deprecated.
-//
-// Revision 1.6  2006/01/26 21:04:54  acg
-//  Andy Goodrich: deprecation message changes and additional messages.
-//
-// Revision 1.5  2006/01/25 00:31:19  acg
-//  Andy Goodrich: Changed over to use a standard message id of
-//  SC_ID_IEEE_1666_DEPRECATION for all deprecation messages.
-//
-// Revision 1.4  2006/01/24 20:49:05  acg
-// Andy Goodrich: changes to remove the use of deprecated features within the
-// simulator, and to issue warning messages when deprecated features are used.
-//
-// Revision 1.3  2006/01/13 18:44:30  acg
-// Added $Log to record CVS changes into the source.
-//
 
 #include "sysc/kernel/sc_event.h"
 #include "sysc/kernel/sc_kernel_ids.h"
@@ -948,5 +899,59 @@ void sc_sensitive_neg::reset()
 }
 
 } // namespace sc_core
+
+/*****************************************************************************
+
+  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+  changes you are making here.
+
+      Name, Affiliation, Date: Bishnupriya Bhattacharya, Cadence Design Systems,
+                               25 August, 2003
+  Description of Modification: add make_static_sensitivity() routines to support
+                               dynamic method process creation with static
+                               sensitivity
+
+ *****************************************************************************/
+
+// $Log: sc_sensitive.cpp,v $
+// Revision 1.5  2011/08/26 20:46:10  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
+// Revision 1.4  2011/02/18 20:27:14  acg
+//  Andy Goodrich: Updated Copyrights.
+//
+// Revision 1.3  2011/02/13 21:47:38  acg
+//  Andy Goodrich: update copyright notice.
+//
+// Revision 1.2  2008/05/22 17:06:26  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.8  2006/04/11 23:13:21  acg
+//   Andy Goodrich: Changes for reduced reset support that only includes
+//   sc_cthread, but has preliminary hooks for expanding to method and thread
+//   processes also.
+//
+// Revision 1.7  2006/01/27 17:31:24  acg
+//  Andy Goodrich: removed debugging comments from << operator code for types
+//  that are deprecated.
+//
+// Revision 1.6  2006/01/26 21:04:54  acg
+//  Andy Goodrich: deprecation message changes and additional messages.
+//
+// Revision 1.5  2006/01/25 00:31:19  acg
+//  Andy Goodrich: Changed over to use a standard message id of
+//  SC_ID_IEEE_1666_DEPRECATION for all deprecation messages.
+//
+// Revision 1.4  2006/01/24 20:49:05  acg
+// Andy Goodrich: changes to remove the use of deprecated features within the
+// simulator, and to issue warning messages when deprecated features are used.
+//
+// Revision 1.3  2006/01/13 18:44:30  acg
+// Added $Log to record CVS changes into the source.
+//
 
 // Taf!

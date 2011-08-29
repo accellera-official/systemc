@@ -21,39 +21,8 @@
 
   Original Author: Martin Janssen, Synopsys, Inc., 2001-05-21
 
+  CHANGE LOG IS AT THE END OF THE FILE
  *****************************************************************************/
-
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-    
- *****************************************************************************/
-
-
-// $Log: sc_signal_resolved.cpp,v $
-// Revision 1.4  2011/02/18 20:23:45  acg
-//  Andy Goodrich: Copyright update.
-//
-// Revision 1.3  2011/02/07 19:16:50  acg
-//  Andy Goodrich: changes for handling multiple writers.
-//
-// Revision 1.2  2011/01/20 16:52:15  acg
-//  Andy Goodrich: changes for IEEE 1666 2011.
-//
-// Revision 1.1.1.1  2006/12/15 20:20:04  acg
-// SystemC 2.3
-//
-// Revision 1.4  2006/03/21 00:00:27  acg
-//   Andy Goodrich: changed name of sc_get_current_process_base() to be
-//   sc_get_current_process_b() since its returning an sc_process_b instance.
-//
-// Revision 1.3  2006/01/13 18:47:42  acg
-// Added $Log command so that CVS comments are reproduced in the source.
-//
 
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_process_handle.h"
@@ -152,5 +121,30 @@ sc_signal_resolved::update()
 
 
 } // namespace sc_core
+
+// $Log: sc_signal_resolved.cpp,v $
+// Revision 1.5  2011/08/26 20:45:44  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
+// Revision 1.4  2011/02/18 20:23:45  acg
+//  Andy Goodrich: Copyright update.
+//
+// Revision 1.3  2011/02/07 19:16:50  acg
+//  Andy Goodrich: changes for handling multiple writers.
+//
+// Revision 1.2  2011/01/20 16:52:15  acg
+//  Andy Goodrich: changes for IEEE 1666 2011.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:04  acg
+// SystemC 2.3
+//
+// Revision 1.4  2006/03/21 00:00:27  acg
+//   Andy Goodrich: changed name of sc_get_current_process_base() to be
+//   sc_get_current_process_b() since its returning an sc_process_b instance.
+//
+// Revision 1.3  2006/01/13 18:47:42  acg
+// Added $Log command so that CVS comments are reproduced in the source.
+//
 
 // Taf!

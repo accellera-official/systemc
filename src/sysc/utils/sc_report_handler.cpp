@@ -22,60 +22,8 @@
   Original Author: Alex Riesen, Synopsys, Inc.
   see also sc_report.cpp
 
+  CHANGE LOG AT END OF FILE
  *****************************************************************************/
-
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-
- *****************************************************************************/
-
-// $Log: sc_report_handler.cpp,v $
-// Revision 1.7  2011/08/07 19:08:08  acg
-//  Andy Goodrich: moved logs to end of file so line number synching works
-//  better between versions.
-//
-// Revision 1.6  2011/08/07 18:56:03  acg
-//  Philipp A. Hartmann: added cast to ? : to eliminate clang warning message.
-//
-// Revision 1.5  2011/03/23 16:16:49  acg
-//  Andy Goodrich: finish message verbosity support.
-//
-// Revision 1.4  2011/02/18 20:38:44  acg
-//  Andy Goodrich: Updated Copyright notice.
-//
-// Revision 1.3  2011/02/11 13:25:55  acg
-//  Andy Goodrich: Philipp's changes for sc_unwind_exception.
-//
-// Revision 1.2  2011/02/01 23:02:05  acg
-//  Andy Goodrich: IEEE 1666 2011 changes.
-//
-// Revision 1.1.1.1  2006/12/15 20:20:06  acg
-// SystemC 2.3
-//
-// Revision 1.7  2006/05/26 20:35:52  acg
-//  Andy Goodrich: removed debug message that should not have been left in.
-//
-// Revision 1.6  2006/03/21 00:00:37  acg
-//   Andy Goodrich: changed name of sc_get_current_process_base() to be
-//   sc_get_current_process_b() since its returning an sc_process_b instance.
-//
-// Revision 1.5  2006/01/31 21:42:07  acg
-//  Andy Goodrich: Added checks for SC_DEPRECATED_WARNINGS being defined as
-//  DISABLED. If so, we turn off the /IEEE_Std_1666/deprecated message group.
-//
-// Revision 1.4  2006/01/26 21:08:17  acg
-//  Andy Goodrich: conversion to use sc_is_running instead of deprecated
-//  sc_simcontext::is_running()
-//
-// Revision 1.3  2006/01/13 18:53:11  acg
-// Andy Goodrich: Added $Log command so that CVS comments are reproduced in
-// the source.
-//
 
 #include "sysc/utils/sc_iostream.h"
 #include "sysc/kernel/sc_process.h"
@@ -442,6 +390,7 @@ void sc_report_handler::release()
 sc_msg_def * sc_report_handler::add_msg_type(const char * msg_type_)
 {
     sc_msg_def * md = mdlookup(msg_type_);
+    int          msg_type_len;
 
     if ( md )
 	return md;
@@ -460,10 +409,14 @@ sc_msg_def * sc_report_handler::add_msg_type(const char * msg_type_)
 	return 0;
     }
     memset(items->md, 0, sizeof(sc_msg_def) * items->count);
-    items->md->msg_type_data = strdup(msg_type_);
-    items->md->id = -1; // backward compatibility with 2.0+
-
-    if ( !items->md->msg_type_data )
+    msg_type_len = strlen(msg_type_);
+    if ( msg_type_len > 0 )
+    {
+	items->md->msg_type_data = new char[msg_type_len+1];
+	strcpy( items->md->msg_type_data, msg_type_ );
+	items->md->id = -1; // backward compatibility with 2.0+
+    }
+    else
     {
 	delete items->md;
 	delete items;
@@ -647,7 +600,8 @@ bool sc_report_handler::set_log_file_name(const char* name_)
     if ( log_file_name )
 	return false;
 
-    log_file_name = strdup(name_);
+    log_file_name = new char[strlen(name_)+1];
+    strcpy(log_file_name, name_);
     return true;
 }
 
@@ -777,5 +731,51 @@ sc_report_handler::msg_def_items sc_report_handler::msg_terminator =
 };
 
 } // namespace sc_core
+
+// $Log: sc_report_handler.cpp,v $
+// Revision 1.8  2011/08/26 20:46:19  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
+// Revision 1.7  2011/08/07 19:08:08  acg
+//  Andy Goodrich: moved logs to end of file so line number synching works
+//  better between versions.
+//
+// Revision 1.6  2011/08/07 18:56:03  acg
+//  Philipp A. Hartmann: added cast to ? : to eliminate clang warning message.
+//
+// Revision 1.5  2011/03/23 16:16:49  acg
+//  Andy Goodrich: finish message verbosity support.
+//
+// Revision 1.4  2011/02/18 20:38:44  acg
+//  Andy Goodrich: Updated Copyright notice.
+//
+// Revision 1.3  2011/02/11 13:25:55  acg
+//  Andy Goodrich: Philipp's changes for sc_unwind_exception.
+//
+// Revision 1.2  2011/02/01 23:02:05  acg
+//  Andy Goodrich: IEEE 1666 2011 changes.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:06  acg
+// SystemC 2.3
+//
+// Revision 1.7  2006/05/26 20:35:52  acg
+//  Andy Goodrich: removed debug message that should not have been left in.
+//
+// Revision 1.6  2006/03/21 00:00:37  acg
+//   Andy Goodrich: changed name of sc_get_current_process_base() to be
+//   sc_get_current_process_b() since its returning an sc_process_b instance.
+//
+// Revision 1.5  2006/01/31 21:42:07  acg
+//  Andy Goodrich: Added checks for SC_DEPRECATED_WARNINGS being defined as
+//  DISABLED. If so, we turn off the /IEEE_Std_1666/deprecated message group.
+//
+// Revision 1.4  2006/01/26 21:08:17  acg
+//  Andy Goodrich: conversion to use sc_is_running instead of deprecated
+//  sc_simcontext::is_running()
+//
+// Revision 1.3  2006/01/13 18:53:11  acg
+// Andy Goodrich: Added $Log command so that CVS comments are reproduced in
+// the source.
 
 // Taf!

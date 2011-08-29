@@ -21,64 +21,9 @@
 
   Original Author: Martin Janssen, Synopsys, Inc., 2001-05-21
 
+  CHANGE LOG IS AT THE END OF THE FILE
  *****************************************************************************/
 
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date: Bishnupriya Bhattacharya, Cadence Design Systems,
-                               Andy Goodrich, Forte Design Systems,
-                               3 October, 2003
-  Description of Modification: sc_clock inherits from sc_signal<bool> only
-                               instead of sc_signal_in_if<bool> and sc_module.
-                               The 2 methods posedge_action() and
-                               negedge_action() are created using sc_spawn().
-                               boost::bind() is not required, instead a local
-                               bind function can be used since the signatures
-                               of the spawned functions are statically known.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-
- *****************************************************************************/
-
-
-// $Log: sc_clock.cpp,v $
-// Revision 1.5  2011/08/15 16:43:24  acg
-//  Torsten Maehne: changes to remove unused argument warnings.
-//
-// Revision 1.4  2011/03/12 21:07:42  acg
-//  Andy Goodrich: changes to kernel generated event support.
-//
-// Revision 1.3  2011/03/06 15:55:08  acg
-//  Andy Goodrich: Changes for named events.
-//
-// Revision 1.2  2011/02/18 20:23:45  acg
-//  Andy Goodrich: Copyright update.
-//
-// Revision 1.1.1.1  2006/12/15 20:20:04  acg
-// SystemC 2.3
-//
-// Revision 1.8  2006/04/18 23:36:50  acg
-//  Andy Goodrich: made add_trace_internal public until I can figure out
-//  how to do a friend specification for sc_trace in an environment where
-//  there are partial template and full template specifications for its
-//  arguments.
-//
-// Revision 1.7  2006/04/17 16:38:42  acg
-//  Andy Goodrich: added more context to the deprecation message for the
-//  sc_clock constructor.
-//
-// Revision 1.6  2006/01/25 00:31:11  acg
-//  Andy Goodrich: Changed over to use a standard message id of
-//  SC_ID_IEEE_1666_DEPRECATION for all deprecation messages.
-//
-// Revision 1.5  2006/01/24 20:43:24  acg
-// Andy Goodrich: convert notify_delayed() calls into notify_internal() calls.
-// notify_internal() is an implementation dependent version of notify_delayed()
-// that is simpler, and does not trigger the deprecation warning one would get
 // using notify_delayed().
 //
 // Revision 1.4  2006/01/18 21:42:26  acg
@@ -265,7 +210,7 @@ sc_clock::sc_clock( const char* name_,
 // so that the processes are registered with the global simcontext rather
 // than the scope of the clock's parent.
 //------------------------------------------------------------------------------
-#if ( defined(_MSC_VER) && _MSC_VER < 1300 ) //VC++6.0 doesn't support sc_spawn with functor
+#if ( defined(_MSC_VER) && _MSC_VER < 1300 ) //VC++6.0 doesn't support sc_spawn with functor.
 #   define sc_clock_posedge_callback(ptr) sc_clock_posedge_callback
 
 #   define sc_clock_negedge_callback(ptr) sc_clock_negedge_callback
@@ -393,5 +338,67 @@ sc_clock::init( const sc_time& period_,
 
 } // namespace sc_core
 
+/*****************************************************************************
+
+  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+  changes you are making here.
+
+      Name, Affiliation, Date: Bishnupriya Bhattacharya, Cadence Design Systems,
+                               Andy Goodrich, Forte Design Systems,
+                               3 October, 2003
+  Description of Modification: sc_clock inherits from sc_signal<bool> only
+                               instead of sc_signal_in_if<bool> and sc_module.
+                               The 2 methods posedge_action() and
+                               negedge_action() are created using sc_spawn().
+                               boost::bind() is not required, instead a local
+                               bind function can be used since the signatures
+                               of the spawned functions are statically known.
+
+      Name, Affiliation, Date:
+  Description of Modification:
+
+ *****************************************************************************/
+
+// $Log: sc_clock.cpp,v $
+// Revision 1.7  2011/08/26 20:45:39  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
+// Revision 1.6  2011/08/24 22:05:35  acg
+//  Torsten Maehne: initialization changes to remove warnings.
+//
+// Revision 1.5  2011/08/15 16:43:24  acg
+//  Torsten Maehne: changes to remove unused argument warnings.
+//
+// Revision 1.4  2011/03/12 21:07:42  acg
+//  Andy Goodrich: changes to kernel generated event support.
+//
+// Revision 1.3  2011/03/06 15:55:08  acg
+//  Andy Goodrich: Changes for named events.
+//
+// Revision 1.2  2011/02/18 20:23:45  acg
+//  Andy Goodrich: Copyright update.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:04  acg
+// SystemC 2.3
+//
+// Revision 1.8  2006/04/18 23:36:50  acg
+//  Andy Goodrich: made add_trace_internal public until I can figure out
+//  how to do a friend specification for sc_trace in an environment where
+//  there are partial template and full template specifications for its
+//  arguments.
+//
+// Revision 1.7  2006/04/17 16:38:42  acg
+//  Andy Goodrich: added more context to the deprecation message for the
+//  sc_clock constructor.
+//
+// Revision 1.6  2006/01/25 00:31:11  acg
+//  Andy Goodrich: Changed over to use a standard message id of
+//  SC_ID_IEEE_1666_DEPRECATION for all deprecation messages.
+//
+// Revision 1.5  2006/01/24 20:43:24  acg
+// Andy Goodrich: convert notify_delayed() calls into notify_internal() calls.
+// notify_internal() is an implementation dependent version of notify_delayed()
+// that is simpler, and does not trigger the deprecation warning one would get
 
 // Taf!

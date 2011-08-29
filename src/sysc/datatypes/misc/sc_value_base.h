@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: sc_value_base.h,v $
+// Revision 1.3  2011/08/24 22:05:48  acg
+//  Torsten Maehne: initialization changes to remove warnings.
+//
 // Revision 1.2  2011/06/28 21:23:04  acg
 //  Andy Goodrich: merging of SCV tree.
 //

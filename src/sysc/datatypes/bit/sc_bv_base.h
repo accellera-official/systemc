@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: sc_bv_base.h,v $
+// Revision 1.3  2011/08/26 22:32:00  acg
+//  Torsten Maehne: added parentheses to make opearator ordering more obvious.
+//
 // Revision 1.2  2011/08/15 16:43:24  acg
 //  Torsten Maehne: changes to remove unused argument warnings.
 //
@@ -294,7 +297,7 @@ sc_bv_base::get_bit( int i ) const
 {
     int wi = i / SC_DIGIT_SIZE;
     int bi = i % SC_DIGIT_SIZE;
-    return sc_logic_value_t( m_data[wi] >> bi & SC_DIGIT_ONE );
+    return sc_logic_value_t( (m_data[wi] >> bi) & SC_DIGIT_ONE );
 }
 
 inline

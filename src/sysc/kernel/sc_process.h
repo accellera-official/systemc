@@ -22,187 +22,9 @@
   Original Author: Andy Goodrich, Forte Design Systems, 04 August 2005
 
 
+  CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
 
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date: Andy Goodrich, Forte Design Systems, 12 Aug 05
-  Description of Modification: This is the rewrite of process support. It 
-                               contains some code from the original
-                               sc_process.h by Stan Liao, and the now-defunct
-                               sc_process_b.h by Stan Liao and Martin
-                               Janssen, all of Synopsys, Inc., It also contains
-                               code from the original sc_process_b.h by 
-                               Andy Goodrich of Forte Design Systems and
-                               Bishnupriya Bhattacharya of Cadence Design
-                               Systems.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-
- *****************************************************************************/
-
-// $Log: sc_process.h,v $
-// Revision 1.33  2011/08/15 16:43:24  acg
-//  Torsten Maehne: changes to remove unused argument warnings.
-//
-// Revision 1.32  2011/07/24 11:20:03  acg
-//  Philipp A. Hartmann: process control error message improvements:
-//  (1) Downgrade error to warning for re-kills of processes.
-//  (2) Add process name to process messages.
-//  (3) drop some superfluous colons in messages.
-//
-// Revision 1.31  2011/04/13 02:44:26  acg
-//  Andy Goodrich: added m_unwinding flag in place of THROW_NOW because the
-//  throw status will be set back to THROW_*_RESET if reset is active and
-//  the check for an unwind being complete was expecting THROW_NONE as the
-//  clearing of THROW_NOW.
-//
-// Revision 1.30  2011/04/11 22:07:27  acg
-//  Andy Goodrich: check for reset event notification before resetting the
-//  throw_status value.
-//
-// Revision 1.29  2011/04/10 22:17:36  acg
-//  Andy Goodrich: added trigger_reset_event() to allow sc_process.h to
-//  contain the run_process() inline method. sc_process.h cannot have
-//  sc_simcontext information because of recursive includes.
-//
-// Revision 1.28  2011/04/08 22:34:06  acg
-//  Andy Goodrich: moved the semantics() method to this file and made it
-//  an inline method. Added reset processing to the semantics() method.
-//
-// Revision 1.27  2011/04/08 18:24:48  acg
-//  Andy Goodrich: moved reset_changed() to .cpp since it needs visibility
-//  to sc_simcontext.
-//
-// Revision 1.26  2011/04/01 21:24:57  acg
-//  Andy Goodrich: removed unused code.
-//
-// Revision 1.25  2011/03/28 13:02:51  acg
-//  Andy Goodrich: Changes for disable() interactions.
-//
-// Revision 1.24  2011/03/20 13:43:23  acg
-//  Andy Goodrich: added async_signal_is() plus suspend() as a corner case.
-//
-// Revision 1.23  2011/03/12 21:07:51  acg
-//  Andy Goodrich: changes to kernel generated event support.
-//
-// Revision 1.22  2011/03/08 20:49:31  acg
-//  Andy Goodrich: implement coarse checking for synchronous reset - suspend
-//  interaction.
-//
-// Revision 1.21  2011/03/07 17:38:43  acg
-//  Andy Goodrich: tightening up of checks for undefined interaction between
-//  synchronous reset and suspend.
-//
-// Revision 1.20  2011/03/06 19:57:11  acg
-//  Andy Goodrich: refinements for the illegal suspend - synchronous reset
-//  interaction.
-//
-// Revision 1.19  2011/03/05 19:44:20  acg
-//  Andy Goodrich: changes for object and event naming and structures.
-//
-// Revision 1.18  2011/02/19 08:30:53  acg
-//  Andy Goodrich: Moved process queueing into trigger_static from
-//  sc_event::notify.
-//
-// Revision 1.17  2011/02/18 20:27:14  acg
-//  Andy Goodrich: Updated Copyrights.
-//
-// Revision 1.16  2011/02/18 20:10:44  acg
-//  Philipp A. Hartmann: force return expression to be a bool to keep MSVC
-//  happy.
-//
-// Revision 1.15  2011/02/17 19:52:45  acg
-//  Andy Goodrich:
-//    (1) Simplified process control usage.
-//    (2) Changed dump_status() to dump_state() with new signature.
-//
-// Revision 1.14  2011/02/16 22:37:30  acg
-//  Andy Goodrich: clean up to remove need for ps_disable_pending.
-//
-// Revision 1.13  2011/02/13 21:47:37  acg
-//  Andy Goodrich: update copyright notice.
-//
-// Revision 1.12  2011/02/13 21:41:34  acg
-//  Andy Goodrich: get the log messages for the previous check in correct.
-//
-// Revision 1.11  2011/02/13 21:32:24  acg
-//  Andy Goodrich: moved sc_process_b::reset_process() implementation
-//  from header to cpp file . Added dump_status() to print out the status of a
-//  process.
-//
-// Revision 1.10  2011/02/11 13:25:24  acg
-//  Andy Goodrich: Philipp A. Hartmann's changes:
-//    (1) Removal of SC_CTHREAD method overloads.
-//    (2) New exception processing code.
-//
-// Revision 1.9  2011/02/04 15:27:36  acg
-//  Andy Goodrich: changes for suspend-resume semantics.
-//
-// Revision 1.8  2011/02/01 21:06:12  acg
-//  Andy Goodrich: new layout for the process_state enum.
-//
-// Revision 1.7  2011/01/25 20:50:37  acg
-//  Andy Goodrich: changes for IEEE 1666 2011.
-//
-// Revision 1.6  2011/01/19 23:21:50  acg
-//  Andy Goodrich: changes for IEEE 1666 2011
-//
-// Revision 1.5  2011/01/18 20:10:45  acg
-//  Andy Goodrich: changes for IEEE1666_2011 semantics.
-//
-// Revision 1.4  2010/07/22 20:02:33  acg
-//  Andy Goodrich: bug fixes.
-//
-// Revision 1.3  2009/05/22 16:06:29  acg
-//  Andy Goodrich: process control updates.
-//
-// Revision 1.2  2008/05/22 17:06:26  acg
-//  Andy Goodrich: updated copyright notice to include 2008.
-//
-// Revision 1.1.1.1  2006/12/15 20:20:05  acg
-// SystemC 2.3
-//
-// Revision 1.11  2006/05/08 17:58:10  acg
-// Andy Goodrich: added David Long's forward declarations for friend
-//   functions, methods, and operators to keep the Microsoft compiler happy.
-//
-// Revision 1.10  2006/04/28 23:29:01  acg
-//  Andy Goodrich: added an sc_core:: prefix to SC_FUNC_PTR in the
-//  SC_MAKE_FUNC_PTR macro to allow its transpareuse outside of the sc_core
-//  namespace.
-//
-// Revision 1.9  2006/04/28 21:52:57  acg
-//  Andy Goodrich: changed SC_MAKE_FUNC_PTR to use a static cast to address
-//  and AIX issue wrt sc_module's inherited classes.
-//
-// Revision 1.8  2006/04/20 17:08:17  acg
-//  Andy Goodrich: 3.0 style process changes.
-//
-// Revision 1.7  2006/04/11 23:13:21  acg
-//   Andy Goodrich: Changes for reduced reset support that only includes
-//   sc_cthread, but has preliminary hooks for expanding to method and thread
-//   processes also.
-//
-// Revision 1.6  2006/03/13 20:26:50  acg
-//  Andy Goodrich: Addition of forward class declarations, e.g.,
-//  sc_reset, to keep gcc 4.x happy.
-//
-// Revision 1.5  2006/01/31 20:09:10  acg
-//  Andy Goodrich: added explaination of static vs dynamic waits to
-//  sc_process_b::trigger_static.
-//
-// Revision 1.4  2006/01/24 20:49:05  acg
-// Andy Goodrich: changes to remove the use of deprecated features within the
-// simulator, and to issue warning messages when deprecated features are used.
-//
-// Revision 1.3  2006/01/13 18:44:30  acg
-// Added $Log to record CVS changes into the source.
-//
 
 #if !defined(sc_process_h_INCLUDED)
 #define sc_process_h_INCLUDED
@@ -288,7 +110,7 @@ class sc_process_monitor {
     virtual ~sc_process_monitor() {}
     virtual void signal(sc_thread_handle thread_p, int type);
 };
-inline void sc_process_monitor::signal(sc_thread_handle thread_p, int type) {}  
+inline void sc_process_monitor::signal(sc_thread_handle , int ) {}  
 
 //------------------------------------------------------------------------------
 // PROCESS INVOCATION METHOD OR FUNCTION:
@@ -803,18 +625,18 @@ inline void sc_process_b::reference_increment()
 //   (1) For a description of the process reset mechanism see the top of 
 //       the file sc_reset.cpp.
 //------------------------------------------------------------------------------
-void sc_process_b::semantics()
+struct scoped_flag
 {
-    struct scoped_flag
-    {
-      scoped_flag( bool& b ) : ref(b){ ref = true;  }
-      ~scoped_flag()                 { ref = false; }
-      bool& ref;
-    }
+    scoped_flag( bool& b ) : ref(b){ ref = true;  }
+    ~scoped_flag()                 { ref = false; }
+    bool& ref;
+};
+inline void sc_process_b::semantics()
+{
 
     // within this function, the process has a stack associated
 
-    scoped_stack_flag( m_has_stack );
+    scoped_flag scoped_stack_flag( m_has_stack );
 
     assert( m_process_kind != SC_NO_PROC_ );
 
@@ -867,5 +689,194 @@ inline bool sc_process_b::timed_out() const
 }
 
 } // namespace sc_core
+
+/*****************************************************************************
+
+  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+  changes you are making here.
+
+      Name, Affiliation, Date: Andy Goodrich, Forte Design Systems, 12 Aug 05
+  Description of Modification: This is the rewrite of process support. It 
+                               contains some code from the original
+                               sc_process.h by Stan Liao, and the now-defunct
+                               sc_process_b.h by Stan Liao and Martin
+                               Janssen, all of Synopsys, Inc., It also contains
+                               code from the original sc_process_b.h by 
+                               Andy Goodrich of Forte Design Systems and
+                               Bishnupriya Bhattacharya of Cadence Design
+                               Systems.
+
+      Name, Affiliation, Date:
+  Description of Modification:
+
+ *****************************************************************************/
+
+// $Log: sc_process.h,v $
+// Revision 1.36  2011/08/26 22:44:30  acg
+//  Torsten Maehne: eliminate unused argument warning.
+//
+// Revision 1.35  2011/08/26 20:46:10  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
+// Revision 1.34  2011/08/24 22:05:51  acg
+//  Torsten Maehne: initialization changes to remove warnings.
+//
+// Revision 1.33  2011/08/15 16:43:24  acg
+//  Torsten Maehne: changes to remove unused argument warnings.
+//
+// Revision 1.32  2011/07/24 11:20:03  acg
+//  Philipp A. Hartmann: process control error message improvements:
+//  (1) Downgrade error to warning for re-kills of processes.
+//  (2) Add process name to process messages.
+//  (3) drop some superfluous colons in messages.
+//
+// Revision 1.31  2011/04/13 02:44:26  acg
+//  Andy Goodrich: added m_unwinding flag in place of THROW_NOW because the
+//  throw status will be set back to THROW_*_RESET if reset is active and
+//  the check for an unwind being complete was expecting THROW_NONE as the
+//  clearing of THROW_NOW.
+//
+// Revision 1.30  2011/04/11 22:07:27  acg
+//  Andy Goodrich: check for reset event notification before resetting the
+//  throw_status value.
+//
+// Revision 1.29  2011/04/10 22:17:36  acg
+//  Andy Goodrich: added trigger_reset_event() to allow sc_process.h to
+//  contain the run_process() inline method. sc_process.h cannot have
+//  sc_simcontext information because of recursive includes.
+//
+// Revision 1.28  2011/04/08 22:34:06  acg
+//  Andy Goodrich: moved the semantics() method to this file and made it
+//  an inline method. Added reset processing to the semantics() method.
+//
+// Revision 1.27  2011/04/08 18:24:48  acg
+//  Andy Goodrich: moved reset_changed() to .cpp since it needs visibility
+//  to sc_simcontext.
+//
+// Revision 1.26  2011/04/01 21:24:57  acg
+//  Andy Goodrich: removed unused code.
+//
+// Revision 1.25  2011/03/28 13:02:51  acg
+//  Andy Goodrich: Changes for disable() interactions.
+//
+// Revision 1.24  2011/03/20 13:43:23  acg
+//  Andy Goodrich: added async_signal_is() plus suspend() as a corner case.
+//
+// Revision 1.23  2011/03/12 21:07:51  acg
+//  Andy Goodrich: changes to kernel generated event support.
+//
+// Revision 1.22  2011/03/08 20:49:31  acg
+//  Andy Goodrich: implement coarse checking for synchronous reset - suspend
+//  interaction.
+//
+// Revision 1.21  2011/03/07 17:38:43  acg
+//  Andy Goodrich: tightening up of checks for undefined interaction between
+//  synchronous reset and suspend.
+//
+// Revision 1.20  2011/03/06 19:57:11  acg
+//  Andy Goodrich: refinements for the illegal suspend - synchronous reset
+//  interaction.
+//
+// Revision 1.19  2011/03/05 19:44:20  acg
+//  Andy Goodrich: changes for object and event naming and structures.
+//
+// Revision 1.18  2011/02/19 08:30:53  acg
+//  Andy Goodrich: Moved process queueing into trigger_static from
+//  sc_event::notify.
+//
+// Revision 1.17  2011/02/18 20:27:14  acg
+//  Andy Goodrich: Updated Copyrights.
+//
+// Revision 1.16  2011/02/18 20:10:44  acg
+//  Philipp A. Hartmann: force return expression to be a bool to keep MSVC
+//  happy.
+//
+// Revision 1.15  2011/02/17 19:52:45  acg
+//  Andy Goodrich:
+//    (1) Simplified process control usage.
+//    (2) Changed dump_status() to dump_state() with new signature.
+//
+// Revision 1.14  2011/02/16 22:37:30  acg
+//  Andy Goodrich: clean up to remove need for ps_disable_pending.
+//
+// Revision 1.13  2011/02/13 21:47:37  acg
+//  Andy Goodrich: update copyright notice.
+//
+// Revision 1.12  2011/02/13 21:41:34  acg
+//  Andy Goodrich: get the log messages for the previous check in correct.
+//
+// Revision 1.11  2011/02/13 21:32:24  acg
+//  Andy Goodrich: moved sc_process_b::reset_process() implementation
+//  from header to cpp file . Added dump_status() to print out the status of a
+//  process.
+//
+// Revision 1.10  2011/02/11 13:25:24  acg
+//  Andy Goodrich: Philipp A. Hartmann's changes:
+//    (1) Removal of SC_CTHREAD method overloads.
+//    (2) New exception processing code.
+//
+// Revision 1.9  2011/02/04 15:27:36  acg
+//  Andy Goodrich: changes for suspend-resume semantics.
+//
+// Revision 1.8  2011/02/01 21:06:12  acg
+//  Andy Goodrich: new layout for the process_state enum.
+//
+// Revision 1.7  2011/01/25 20:50:37  acg
+//  Andy Goodrich: changes for IEEE 1666 2011.
+//
+// Revision 1.6  2011/01/19 23:21:50  acg
+//  Andy Goodrich: changes for IEEE 1666 2011
+//
+// Revision 1.5  2011/01/18 20:10:45  acg
+//  Andy Goodrich: changes for IEEE1666_2011 semantics.
+//
+// Revision 1.4  2010/07/22 20:02:33  acg
+//  Andy Goodrich: bug fixes.
+//
+// Revision 1.3  2009/05/22 16:06:29  acg
+//  Andy Goodrich: process control updates.
+//
+// Revision 1.2  2008/05/22 17:06:26  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.11  2006/05/08 17:58:10  acg
+// Andy Goodrich: added David Long's forward declarations for friend
+//   functions, methods, and operators to keep the Microsoft compiler happy.
+//
+// Revision 1.10  2006/04/28 23:29:01  acg
+//  Andy Goodrich: added an sc_core:: prefix to SC_FUNC_PTR in the
+//  SC_MAKE_FUNC_PTR macro to allow its transpareuse outside of the sc_core
+//  namespace.
+//
+// Revision 1.9  2006/04/28 21:52:57  acg
+//  Andy Goodrich: changed SC_MAKE_FUNC_PTR to use a static cast to address
+//  and AIX issue wrt sc_module's inherited classes.
+//
+// Revision 1.8  2006/04/20 17:08:17  acg
+//  Andy Goodrich: 3.0 style process changes.
+//
+// Revision 1.7  2006/04/11 23:13:21  acg
+//   Andy Goodrich: Changes for reduced reset support that only includes
+//   sc_cthread, but has preliminary hooks for expanding to method and thread
+//   processes also.
+//
+// Revision 1.6  2006/03/13 20:26:50  acg
+//  Andy Goodrich: Addition of forward class declarations, e.g.,
+//  sc_reset, to keep gcc 4.x happy.
+//
+// Revision 1.5  2006/01/31 20:09:10  acg
+//  Andy Goodrich: added explaination of static vs dynamic waits to
+//  sc_process_b::trigger_static.
+//
+// Revision 1.4  2006/01/24 20:49:05  acg
+// Andy Goodrich: changes to remove the use of deprecated features within the
+// simulator, and to issue warning messages when deprecated features are used.
+//
+// Revision 1.3  2006/01/13 18:44:30  acg
+// Added $Log to record CVS changes into the source.
 
 #endif // !defined(sc_process_h_INCLUDED)

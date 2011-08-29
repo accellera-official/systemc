@@ -22,33 +22,8 @@
 
   Original Author: Stan Y. Liao, Synopsys, Inc.
 
+  CHANGE LOG AT END OF FILE
  *****************************************************************************/
-
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-
- *****************************************************************************/
-
-
-// $Log: sc_hash.cpp,v $
-// Revision 1.3  2011/05/05 17:46:04  acg
-//  Philip A. Hartmann: changes in "swap" support.
-//
-// Revision 1.2  2011/02/18 20:38:43  acg
-//  Andy Goodrich: Updated Copyright notice.
-//
-// Revision 1.1.1.1  2006/12/15 20:20:06  acg
-// SystemC 2.3
-//
-// Revision 1.3  2006/01/13 18:53:10  acg
-// Andy Goodrich: Added $Log command so that CVS comments are reproduced in
-// the source.
-//
 
 #include <assert.h>
 #include <cstdlib>
@@ -652,7 +627,10 @@ sc_strhash_cmp( const void* a, const void* b )
 void*
 sc_strhash_kdup(const void* k)
 {
-    return strdup((const char*) k);
+    char* result;
+    result = new char[strlen((const char*)k)+1];
+    strcpy(result, (const char*) k);
+    return result;
 }
 
 void
@@ -661,3 +639,29 @@ sc_strhash_kfree(void* k)
     if (k) free((char*) k);
 }
  } // namespace sc_core
+
+// $Log: sc_hash.cpp,v $
+// Revision 1.5  2011/08/26 20:42:30  acg
+//  Andy Goodrich:
+//    (1) Replaced strdup with new and strcpy to eliminate issue with the
+//        Greenhills compiler.
+//    (2) Moved modification log to the end of the file to eliminate line
+//        skew when check-ins are done.
+//
+// Revision 1.4  2011/08/24 22:05:56  acg
+//  Torsten Maehne: initialization changes to remove warnings.
+//
+// Revision 1.3  2011/05/05 17:46:04  acg
+//  Philip A. Hartmann: changes in "swap" support.
+//
+// Revision 1.2  2011/02/18 20:38:43  acg
+//  Andy Goodrich: Updated Copyright notice.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:06  acg
+// SystemC 2.3
+//
+// Revision 1.3  2006/01/13 18:53:10  acg
+// Andy Goodrich: Added $Log command so that CVS comments are reproduced in
+// the source.
+
+// taf

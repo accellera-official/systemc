@@ -21,41 +21,8 @@
 
   Original Author: Philipp A. Hartmann, OFFIS
 
+  CHANGE LOG AT END OF FILE
  *****************************************************************************/
-
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-
- *****************************************************************************/
-
-// $Log: sc_vector.h,v $
-// Revision 1.16  2011/07/25 10:21:17  acg
-//  Andy Goodrich: check in aftermath of call to automake.
-//
-// Revision 1.15  2011/04/02 00:04:32  acg
-//  Philipp A. Hartmann: fix distance from member iterators, and
-//  add iterator conversions.
-//
-// Revision 1.14  2011/04/01 22:35:19  acg
-//  Andy Goodrich: spelling fix.
-//
-// Revision 1.13  2011/03/28 13:03:09  acg
-//  Andy Goodrich: Philipp's latest update.
-//
-// Revision 1.12  2011/03/23 16:16:28  acg
-//  Philipp A. Hartmann: rebase implementation on void*
-//      - supports virtual inheritance from sc_object again
-//      - build up get_elements result on demand
-//      - still requires element type to be derived from sc_object
-//
-// Revision 1.11  2011/02/19 16:46:36  acg
-//  Andy Goodrich: finally get the update from Philipp correct!
-//
 
 #ifndef SC_VECTOR_H_INCLUDED_
 #define SC_VECTOR_H_INCLUDED_
@@ -733,6 +700,34 @@ sc_vector_assembly<T,MT>::get_elements() const
 }
 
 } // namespace sc_core
+
+// $Log: sc_vector.h,v $
+// Revision 1.17  2011/08/26 20:46:20  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
+// Revision 1.16  2011/07/25 10:21:17  acg
+//  Andy Goodrich: check in aftermath of call to automake.
+//
+// Revision 1.15  2011/04/02 00:04:32  acg
+//  Philipp A. Hartmann: fix distance from member iterators, and
+//  add iterator conversions.
+//
+// Revision 1.14  2011/04/01 22:35:19  acg
+//  Andy Goodrich: spelling fix.
+//
+// Revision 1.13  2011/03/28 13:03:09  acg
+//  Andy Goodrich: Philipp's latest update.
+//
+// Revision 1.12  2011/03/23 16:16:28  acg
+//  Philipp A. Hartmann: rebase implementation on void*
+//      - supports virtual inheritance from sc_object again
+//      - build up get_elements result on demand
+//      - still requires element type to be derived from sc_object
+//
+// Revision 1.11  2011/02/19 16:46:36  acg
+//  Andy Goodrich: finally get the update from Philipp correct!
+//
 
 #endif // SC_VECTOR_H_INCLUDED_
 // Taf!

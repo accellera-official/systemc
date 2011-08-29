@@ -21,35 +21,8 @@
 
   Original Author: Martin Janssen, Synopsys, Inc., 2001-05-21
 
+  CHANGE LOG IS AT THE END OF THE FILE
  *****************************************************************************/
-
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-    
- *****************************************************************************/
-
-
-// $Log: sc_interface.cpp,v $
-// Revision 1.4  2011/03/12 21:07:42  acg
-//  Andy Goodrich: changes to kernel generated event support.
-//
-// Revision 1.3  2011/03/06 15:55:08  acg
-//  Andy Goodrich: Changes for named events.
-//
-// Revision 1.2  2011/02/18 20:23:45  acg
-//  Andy Goodrich: Copyright update.
-//
-// Revision 1.1.1.1  2006/12/15 20:20:04  acg
-// SystemC 2.3
-//
-// Revision 1.3  2006/01/13 18:47:42  acg
-// Added $Log command so that CVS comments are reproduced in the source.
-//
 
 #include "sysc/communication/sc_interface.h"
 #include "sysc/communication/sc_communication_ids.h"
@@ -100,5 +73,26 @@ sc_interface::sc_interface()
 sc_event sc_interface::m_never_notified(SC_KERNEL_EVENT_PREFIX);
 
 } // namespace sc_core
+
+// $Log: sc_interface.cpp,v $
+// Revision 1.5  2011/08/26 20:45:40  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
+// Revision 1.4  2011/03/12 21:07:42  acg
+//  Andy Goodrich: changes to kernel generated event support.
+//
+// Revision 1.3  2011/03/06 15:55:08  acg
+//  Andy Goodrich: Changes for named events.
+//
+// Revision 1.2  2011/02/18 20:23:45  acg
+//  Andy Goodrich: Copyright update.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:04  acg
+// SystemC 2.3
+//
+// Revision 1.3  2006/01/13 18:47:42  acg
+// Added $Log command so that CVS comments are reproduced in the source.
+//
 
 // Taf!

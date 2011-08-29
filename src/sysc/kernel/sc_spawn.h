@@ -24,55 +24,9 @@
                     Bishnupriya Bhattacharya, Cadence Design Systems,
                     25 August, 2003
 
+  CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
 
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-
- *****************************************************************************/
-
-// $Log: sc_spawn.h,v $
-// Revision 1.6  2011/02/18 20:27:14  acg
-//  Andy Goodrich: Updated Copyrights.
-//
-// Revision 1.5  2011/02/13 21:47:38  acg
-//  Andy Goodrich: update copyright notice.
-//
-// Revision 1.4  2011/02/01 21:14:02  acg
-//  Andy Goodrich: formatting.
-//
-// Revision 1.3  2009/07/28 01:10:53  acg
-//  Andy Goodrich: updates for 2.3 release candidate.
-//
-// Revision 1.2  2008/05/22 17:06:26  acg
-//  Andy Goodrich: updated copyright notice to include 2008.
-//
-// Revision 1.1.1.1  2006/12/15 20:20:05  acg
-// SystemC 2.3
-//
-// Revision 1.6  2006/05/26 20:33:16  acg
-//   Andy Goodrich: changes required by additional platform compilers (i.e.,
-//   Microsoft VC++, Sun Forte, HP aCC).
-//
-// Revision 1.5  2006/05/08 18:01:44  acg
-//  Andy Goodrich: changed the HP-specific implementations of sc_spawn() to
-//  use a static_cast to create their entry functions rather than the
-//  SC_MAKE_FUNC_PTR macro. The HP preprocessor does not parse template
-//  arguments that contain a comma properly.
-//
-// Revision 1.4  2006/04/11 23:13:21  acg
-//   Andy Goodrich: Changes for reduced reset support that only includes
-//   sc_cthread, but has preliminary hooks for expanding to method and thread
-//   processes also.
-//
-// Revision 1.3  2006/01/13 18:44:30  acg
-// Added $Log to record CVS changes into the source.
-//
 
 #if !defined(sc_spawn_h_INCLUDED)
 #define sc_spawn_h_INCLUDED
@@ -336,5 +290,46 @@ inline sc_process_handle sc_spawn(
 #endif // HP
 
 } // namespace sc_core
+
+// $Log: sc_spawn.h,v $
+// Revision 1.7  2011/08/26 20:46:11  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
+// Revision 1.6  2011/02/18 20:27:14  acg
+//  Andy Goodrich: Updated Copyrights.
+//
+// Revision 1.5  2011/02/13 21:47:38  acg
+//  Andy Goodrich: update copyright notice.
+//
+// Revision 1.4  2011/02/01 21:14:02  acg
+//  Andy Goodrich: formatting.
+//
+// Revision 1.3  2009/07/28 01:10:53  acg
+//  Andy Goodrich: updates for 2.3 release candidate.
+//
+// Revision 1.2  2008/05/22 17:06:26  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.6  2006/05/26 20:33:16  acg
+//   Andy Goodrich: changes required by additional platform compilers (i.e.,
+//   Microsoft VC++, Sun Forte, HP aCC).
+//
+// Revision 1.5  2006/05/08 18:01:44  acg
+//  Andy Goodrich: changed the HP-specific implementations of sc_spawn() to
+//  use a static_cast to create their entry functions rather than the
+//  SC_MAKE_FUNC_PTR macro. The HP preprocessor does not parse template
+//  arguments that contain a comma properly.
+//
+// Revision 1.4  2006/04/11 23:13:21  acg
+//   Andy Goodrich: Changes for reduced reset support that only includes
+//   sc_cthread, but has preliminary hooks for expanding to method and thread
+//   processes also.
+//
+// Revision 1.3  2006/01/13 18:44:30  acg
+// Added $Log to record CVS changes into the source.
 
 #endif // !defined(sc_spawn_h_INCLUDED)

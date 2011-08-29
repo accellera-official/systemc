@@ -21,40 +21,16 @@
 
   Original Author: Andy Goodrich, Forte Design Systems, 5 May 2003
 
- *****************************************************************************/
-
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-
+  CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
 
 // $Log: sc_join.h,v $
-// Revision 1.5  2011/02/18 20:27:14  acg
-//  Andy Goodrich: Updated Copyrights.
+// Revision 1.8  2011/08/26 21:45:00  acg
+//  Andy Goodrich: fix internal event naming.
 //
-// Revision 1.4  2011/02/13 21:47:37  acg
-//  Andy Goodrich: update copyright notice.
-//
-// Revision 1.3  2009/07/28 01:10:53  acg
-//  Andy Goodrich: updates for 2.3 release candidate.
-//
-// Revision 1.2  2008/05/22 17:06:25  acg
-//  Andy Goodrich: updated copyright notice to include 2008.
-//
-// Revision 1.1.1.1  2006/12/15 20:20:05  acg
-// SystemC 2.3
-//
-// Revision 1.5  2006/04/28 21:38:27  acg
-//  Andy Goodrich: fixed loop constraint that was using sizeof(sc_thread_handle)
-//  rather than sizeof(sc_process_handle).
-//
-// Revision 1.4  2006/01/13 18:44:29  acg
-// Added $Log to record CVS changes into the source.
+// Revision 1.7  2011/08/26 20:46:09  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
 //
 
 #ifndef SC_JOIN_H
@@ -76,8 +52,7 @@ class sc_join : public sc_process_monitor {
     friend class sc_process_b;
     friend class sc_process_handle;
   public:
-    inline sc_join();
-    virtual inline ~sc_join();
+    sc_join();
     void add_process( sc_process_handle process_h );
     inline int process_count();
     virtual void signal(sc_thread_handle thread_p, int type);
@@ -91,11 +66,6 @@ class sc_join : public sc_process_monitor {
     sc_event m_join_event;  // Event to notify when all threads have reported.
     int      m_threads_n;   // # of threads still need to wait for.
 };
-
-sc_join::sc_join() : m_join_event(), m_threads_n(0) { }
-
-sc_join::~sc_join() { }
-
 
 int sc_join::process_count() { return m_threads_n; }
 
@@ -135,5 +105,30 @@ inline void sc_join::wait_clocked()
 }
 
 } // namespace sc_core
+
+// Revision 1.6  2011/08/24 22:05:50  acg
+//  Torsten Maehne: initialization changes to remove warnings.
+//
+// Revision 1.5  2011/02/18 20:27:14  acg
+//  Andy Goodrich: Updated Copyrights.
+//
+// Revision 1.4  2011/02/13 21:47:37  acg
+//  Andy Goodrich: update copyright notice.
+//
+// Revision 1.3  2009/07/28 01:10:53  acg
+//  Andy Goodrich: updates for 2.3 release candidate.
+//
+// Revision 1.2  2008/05/22 17:06:25  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.5  2006/04/28 21:38:27  acg
+//  Andy Goodrich: fixed loop constraint that was using sizeof(sc_thread_handle)
+//  rather than sizeof(sc_process_handle).
+//
+// Revision 1.4  2006/01/13 18:44:29  acg
+// Added $Log to record CVS changes into the source.
 
 #endif // SC_JOIN_H

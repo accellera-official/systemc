@@ -22,19 +22,55 @@
   Original Author: Andy Goodrich, Forte Design Systems, 4 August 2005
                
 
+ CHANGE LOG APPEARS AT THE END OF THE FILE
  *****************************************************************************/
 
-/*****************************************************************************
+#include "sysc/kernel/sc_cthread_process.h"
+#include "sysc/kernel/sc_simcontext_int.h"
 
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
+namespace sc_core {
 
-      Name, Affiliation, Date:
-  Description of Modification:
+//------------------------------------------------------------------------------
+//"sc_cthread_process::dont_initialize"
+//
+// This virtual method sets the initialization switch for this object instance.
+//------------------------------------------------------------------------------
+void sc_cthread_process::dont_initialize( bool /* dont */ )
+{
+    SC_REPORT_WARNING( SC_ID_DONT_INITIALIZE_, 0 );
+}
 
- *****************************************************************************/
+//------------------------------------------------------------------------------
+//"sc_cthread_process::sc_cthread_process"
+//
+// This is the object instance constructor for this class.
+//------------------------------------------------------------------------------
+sc_cthread_process::sc_cthread_process( const char* name_p, 
+    bool free_host, SC_ENTRY_FUNC method_p, 
+    sc_process_host* host_p, const sc_spawn_options* opt_p 
+):
+    sc_thread_process(name_p, free_host, method_p, host_p, opt_p)
+{
+    m_dont_init = true;
+    m_process_kind = SC_CTHREAD_PROC_;
+}
+
+//------------------------------------------------------------------------------
+//"sc_cthread_process::~sc_cthread_process"
+//
+// This is the object instance constructor for this class.
+//------------------------------------------------------------------------------
+sc_cthread_process::~sc_cthread_process()
+{
+}
+
+} // namespace sc_core 
 
 // $Log: sc_cthread_process.cpp,v $
+// Revision 1.11  2011/08/26 20:46:09  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
 // Revision 1.10  2011/08/15 16:43:24  acg
 //  Torsten Maehne: changes to remove unused argument warnings.
 //
@@ -83,44 +119,3 @@
 // Revision 1.3  2006/01/13 18:44:29  acg
 // Added $Log to record CVS changes into the source.
 //
-
-#include "sysc/kernel/sc_cthread_process.h"
-#include "sysc/kernel/sc_simcontext_int.h"
-
-namespace sc_core {
-
-//------------------------------------------------------------------------------
-//"sc_cthread_process::dont_initialize"
-//
-// This virtual method sets the initialization switch for this object instance.
-//------------------------------------------------------------------------------
-void sc_cthread_process::dont_initialize( bool /* dont */ )
-{
-    SC_REPORT_WARNING( SC_ID_DONT_INITIALIZE_, 0 );
-}
-
-//------------------------------------------------------------------------------
-//"sc_cthread_process::sc_cthread_process"
-//
-// This is the object instance constructor for this class.
-//------------------------------------------------------------------------------
-sc_cthread_process::sc_cthread_process( const char* name_p, 
-    bool free_host, SC_ENTRY_FUNC method_p, 
-    sc_process_host* host_p, const sc_spawn_options* opt_p 
-):
-    sc_thread_process(name_p, free_host, method_p, host_p, opt_p)
-{
-    m_dont_init = true;
-    m_process_kind = SC_CTHREAD_PROC_;
-}
-
-//------------------------------------------------------------------------------
-//"sc_cthread_process::~sc_cthread_process"
-//
-// This is the object instance constructor for this class.
-//------------------------------------------------------------------------------
-sc_cthread_process::~sc_cthread_process()
-{
-}
-
-} // namespace sc_core 

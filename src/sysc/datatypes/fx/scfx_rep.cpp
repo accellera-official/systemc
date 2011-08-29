@@ -36,6 +36,9 @@
 
 
 // $Log: scfx_rep.cpp,v $
+// Revision 1.4  2011/08/24 22:05:43  acg
+//  Torsten Maehne: initialization changes to remove warnings.
+//
 // Revision 1.3  2011/08/15 16:43:24  acg
 //  Torsten Maehne: changes to remove unused argument warnings.
 //

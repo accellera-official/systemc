@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: scfx_ieee.h,v $
+// Revision 1.3  2011/08/24 22:05:43  acg
+//  Torsten Maehne: initialization changes to remove warnings.
+//
 // Revision 1.2  2011/08/07 18:55:24  acg
 //  Philipp A. Hartmann: added guard for __clang__ to get the clang platform
 //  working.

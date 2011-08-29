@@ -35,6 +35,9 @@
 
 
 // $Log: sc_lv_base.cpp,v $
+// Revision 1.2  2011/08/24 22:05:40  acg
+//  Torsten Maehne: initialization changes to remove warnings.
+//
 // Revision 1.1.1.1  2006/12/15 20:20:04  acg
 // SystemC 2.3
 //

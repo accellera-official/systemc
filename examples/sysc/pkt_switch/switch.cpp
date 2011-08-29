@@ -36,9 +36,9 @@
 
 #include "systemc.h"
 #include "pkt.h"
+#include "switch.h"
 #include "fifo.h"
 #include "switch_reg.h"
-#include "switch.h"
 #define SIM_NUM 500
 
 void mcast_pkt_switch :: entry()

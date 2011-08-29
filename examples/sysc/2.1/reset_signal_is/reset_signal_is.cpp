@@ -119,7 +119,7 @@ SC_MODULE(TESTBENCH)
 	sc_signal<int>  m_value;
 };
 
-int sc_main(int argc, char * argv[])
+int sc_main(int, char*[])
 {
 	sc_clock  clock;
 	TESTBENCH testbench("testbench");

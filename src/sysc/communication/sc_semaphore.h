@@ -21,43 +21,8 @@
 
   Original Author: Martin Janssen, Synopsys, Inc., 2001-05-21
 
+  CHANGE LOG IS AT THE END OF THE FILE
  *****************************************************************************/
-
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-    
- *****************************************************************************/
-//$Log: sc_semaphore.h,v $
-//Revision 1.3  2011/02/18 20:23:45  acg
-// Andy Goodrich: Copyright update.
-//
-//Revision 1.2  2010/11/02 16:31:01  acg
-// Andy Goodrich: changed object derivation to use sc_object rather than
-// sc_prim_channel as the parent class.
-//
-//Revision 1.1.1.1  2006/12/15 20:20:04  acg
-//SystemC 2.3
-//
-//Revision 1.4  2006/11/28 20:30:49  acg
-// Andy Goodrich: updated from 2.2 source. sc_event_queue constructors
-// collapsed into a single constructor with an optional argument to get
-// the sc_module_name stack done correctly. Class name prefixing added
-// to sc_semaphore calls to wait() to keep gcc 4.x happy.
-//
-//Revision 1.2  2006/01/03 23:18:26  acg
-//Changed copyright to include 2006.
-//
-//Revision 1.1.1.1  2005/12/19 23:16:43  acg
-//First check in of SystemC 2.1 into its own archive.
-//
-//Revision 1.9  2005/06/10 22:43:55  acg
-//Added CVS change log annotation.
-//
 
 #ifndef SC_SEMAPHORE_H
 #define SC_SEMAPHORE_H
@@ -129,6 +94,37 @@ private:
 };
 
 } // namespace sc_core
+
+//$Log: sc_semaphore.h,v $
+//Revision 1.4  2011/08/26 20:45:42  acg
+// Andy Goodrich: moved the modification log to the end of the file to
+// eliminate source line number skew when check-ins are done.
+//
+//Revision 1.3  2011/02/18 20:23:45  acg
+// Andy Goodrich: Copyright update.
+//
+//Revision 1.2  2010/11/02 16:31:01  acg
+// Andy Goodrich: changed object derivation to use sc_object rather than
+// sc_prim_channel as the parent class.
+//
+//Revision 1.1.1.1  2006/12/15 20:20:04  acg
+//SystemC 2.3
+//
+//Revision 1.4  2006/11/28 20:30:49  acg
+// Andy Goodrich: updated from 2.2 source. sc_event_queue constructors
+// collapsed into a single constructor with an optional argument to get
+// the sc_module_name stack done correctly. Class name prefixing added
+// to sc_semaphore calls to wait() to keep gcc 4.x happy.
+//
+//Revision 1.2  2006/01/03 23:18:26  acg
+//Changed copyright to include 2006.
+//
+//Revision 1.1.1.1  2005/12/19 23:16:43  acg
+//First check in of SystemC 2.1 into its own archive.
+//
+//Revision 1.9  2005/06/10 22:43:55  acg
+//Added CVS change log annotation.
+//
 
 #endif
 

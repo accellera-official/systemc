@@ -22,159 +22,8 @@
   Original Author: Stan Y. Liao, Synopsys, Inc.
                    Martin Janssen, Synopsys, Inc.
 
+  CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
-
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date: Andy Goodrich, Forte Design Systems 20 May 2003
-  Description of Modification: - phase callbacks
-                               - sc_stop mode
-
-      Name, Affiliation, Date: Bishnupriya Bhattacharya, Cadence Design Systems,
-                               25 August, 2003
-  Description of Modification: - support for dynamic process
-                               - support for sc export registry
-                               - new member methods elaborate(), 
-                 prepare_to_simulate(), and initial_crunch()
-                 that are invoked by initialize() in that order
-                               - add sc_get_last_created_process_handle() for 
-                 use before simulation starts
-                               
-      Name, Affiliation, Date: Bishnupriya Bhattacharya, Cadence Design Systems,
-                               3 March, 2004
-  Description of Modification: add sc_get_curr_process_kind()
-
-      Name, Affiliation, Date: 
-  Description of Modification: 
-                               
- *****************************************************************************/
-// $Log: sc_simcontext.h,v $
-// Revision 1.21  2011/05/09 04:07:49  acg
-//  Philipp A. Hartmann:
-//    (1) Restore hierarchy in all phase callbacks.
-//    (2) Ensure calls to before_end_of_elaboration.
-//
-// Revision 1.20  2011/04/08 18:26:07  acg
-//  Andy Goodrich: added execute_method_next() to handle method dispatch
-//   for asynchronous notifications that occur outside the evaluation phase.
-//
-// Revision 1.19  2011/04/05 20:50:57  acg
-//  Andy Goodrich:
-//    (1) changes to make sure that event(), posedge() and negedge() only
-//        return true if the clock has not moved.
-//    (2) fixes for method self-resumes.
-//    (3) added SC_PRERELEASE_VERSION
-//    (4) removed kernel events from the object hierarchy, added
-//        sc_hierarchical_name_exists().
-//
-// Revision 1.18  2011/03/20 13:43:23  acg
-//  Andy Goodrich: added async_signal_is() plus suspend() as a corner case.
-//
-// Revision 1.17  2011/03/07 18:25:19  acg
-//  Andy Goodrich: tightening of check for resume on a disabled process to
-//  only produce an error if it is ready to run.
-//
-// Revision 1.16  2011/03/06 15:58:50  acg
-//  Andy Goodrich: added escape to turn off process control corner case
-//  checks.
-//
-// Revision 1.15  2011/03/05 04:45:16  acg
-//  Andy Goodrich: moved active process calculation to the sc_simcontext class.
-//
-// Revision 1.14  2011/03/05 01:39:21  acg
-//  Andy Goodrich: changes for named events.
-//
-// Revision 1.13  2011/02/18 20:27:14  acg
-//  Andy Goodrich: Updated Copyrights.
-//
-// Revision 1.12  2011/02/13 21:47:38  acg
-//  Andy Goodrich: update copyright notice.
-//
-// Revision 1.11  2011/02/13 21:34:35  acg
-//  Andy Goodrich: added SC_UNITIALIZED enum value to process status so
-//  its possible to detect throws before initialization.
-//
-// Revision 1.10  2011/02/11 13:25:24  acg
-//  Andy Goodrich: Philipp A. Hartmann's changes:
-//    (1) Removal of SC_CTHREAD method overloads.
-//    (2) New exception processing code.
-//
-// Revision 1.9  2011/02/01 21:18:56  acg
-//  Andy Goodrich: addition of new preempt_with() method used to immediately
-//  throw exceptions from threads.
-//
-// Revision 1.8  2011/01/25 20:50:37  acg
-//  Andy Goodrich: changes for IEEE 1666 2011.
-//
-// Revision 1.7  2011/01/19 23:21:50  acg
-//  Andy Goodrich: changes for IEEE 1666 2011
-//
-// Revision 1.6  2011/01/18 20:10:45  acg
-//  Andy Goodrich: changes for IEEE1666_2011 semantics.
-//
-// Revision 1.5  2010/07/22 20:02:33  acg
-//  Andy Goodrich: bug fixes.
-//
-// Revision 1.4  2009/05/22 16:06:29  acg
-//  Andy Goodrich: process control updates.
-//
-// Revision 1.3  2008/05/22 17:06:26  acg
-//  Andy Goodrich: updated copyright notice to include 2008.
-//
-// Revision 1.2  2007/09/20 20:32:35  acg
-//  Andy Goodrich: changes to the semantics of throw_it() to match the
-//  specification. A call to throw_it() will immediately suspend the calling
-//  thread until all the throwees have executed. At that point the calling
-//  thread will be restarted before the execution of any other threads.
-//
-// Revision 1.1.1.1  2006/12/15 20:20:05  acg
-// SystemC 2.3
-//
-// Revision 1.13  2006/05/08 18:00:06  acg
-// Andy Goodrich: added David Long's forward declarations for friend
-//   functions, methods, and operators to keep the Microsoft compiler happy.
-//
-// Revision 1.11  2006/04/11 23:13:21  acg
-//   Andy Goodrich: Changes for reduced reset support that only includes
-//   sc_cthread, but has preliminary hooks for expanding to method and thread
-//   processes also.
-//
-// Revision 1.10  2006/03/21 00:00:34  acg
-//   Andy Goodrich: changed name of sc_get_current_process_base() to be
-//   sc_get_current_process_b() since its returning an sc_process_b instance.
-//
-// Revision 1.9  2006/01/26 21:04:54  acg
-//  Andy Goodrich: deprecation message changes and additional messages.
-//
-// Revision 1.8  2006/01/24 20:49:05  acg
-// Andy Goodrich: changes to remove the use of deprecated features within the
-// simulator, and to issue warning messages when deprecated features are used.
-//
-// Revision 1.7  2006/01/19 00:29:52  acg
-// Andy Goodrich: Yet another implementation for signal write checking. This
-// one uses an environment variable SC_SIGNAL_WRITE_CHECK, that when set to
-// DISABLE will disable write checking on signals.
-//
-// Revision 1.6  2006/01/18 21:42:37  acg
-// Andy Goodrich: Changes for check writer support.
-//
-// Revision 1.5  2006/01/13 18:44:30  acg
-// Added $Log to record CVS changes into the source.
-//
-// Revision 1.4  2006/01/03 23:18:44  acg
-// Changed copyright to include 2006.
-//
-// Revision 1.3  2005/12/20 22:11:10  acg
-// Fixed $Log lines.
-//
-// Revision 1.2  2005/12/20 22:02:30  acg
-// Changed where delta cycles are incremented to match IEEE 1666. Added the
-// event_occurred() method to hide how delta cycle comparisions are done within
-// sc_simcontext. Changed the boolean update_phase to an enum that shows all
-// the phases.
 
 #ifndef SC_SIMCONTEXT_H
 #define SC_SIMCONTEXT_H
@@ -445,6 +294,7 @@ private:
     sc_method_handle pop_runnable_method();
     sc_thread_handle pop_runnable_thread();
 
+    void preempt_with( sc_method_handle );
     inline void preempt_with( sc_thread_handle );
 
     void push_runnable_method( sc_method_handle );
@@ -501,6 +351,7 @@ private:
     sc_time                     m_curr_time;
     mutable sc_time             m_max_time;
  
+    sc_invoke_method*           m_method_invoker_p;
     sc_dt::uint64               m_change_stamp; // "time" change occurred.
     sc_dt::uint64               m_delta_count;
     bool                        m_forced_stop;
@@ -866,5 +717,164 @@ sc_start_of_simulation_invoked()
 extern bool sc_allow_process_control_corners;
 
 } // namespace sc_core
+
+/*****************************************************************************
+
+  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+  changes you are making here.
+
+      Name, Affiliation, Date: Andy Goodrich, Forte Design Systems 20 May 2003
+  Description of Modification: - phase callbacks
+                               - sc_stop mode
+
+      Name, Affiliation, Date: Bishnupriya Bhattacharya, Cadence Design Systems,
+                               25 August, 2003
+  Description of Modification: - support for dynamic process
+                               - support for sc export registry
+                               - new member methods elaborate(), 
+                 prepare_to_simulate(), and initial_crunch()
+                 that are invoked by initialize() in that order
+                               - add sc_get_last_created_process_handle() for 
+                 use before simulation starts
+                               
+      Name, Affiliation, Date: Bishnupriya Bhattacharya, Cadence Design Systems,
+                               3 March, 2004
+  Description of Modification: add sc_get_curr_process_kind()
+
+      Name, Affiliation, Date: 
+  Description of Modification: 
+                               
+ *****************************************************************************/
+// $Log: sc_simcontext.h,v $
+// Revision 1.23  2011/08/26 20:46:10  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
+// Revision 1.22  2011/08/24 22:05:51  acg
+//  Torsten Maehne: initialization changes to remove warnings.
+//
+// Revision 1.21  2011/05/09 04:07:49  acg
+//  Philipp A. Hartmann:
+//    (1) Restore hierarchy in all phase callbacks.
+//    (2) Ensure calls to before_end_of_elaboration.
+//
+// Revision 1.20  2011/04/08 18:26:07  acg
+//  Andy Goodrich: added execute_method_next() to handle method dispatch
+//   for asynchronous notifications that occur outside the evaluation phase.
+//
+// Revision 1.19  2011/04/05 20:50:57  acg
+//  Andy Goodrich:
+//    (1) changes to make sure that event(), posedge() and negedge() only
+//        return true if the clock has not moved.
+//    (2) fixes for method self-resumes.
+//    (3) added SC_PRERELEASE_VERSION
+//    (4) removed kernel events from the object hierarchy, added
+//        sc_hierarchical_name_exists().
+//
+// Revision 1.18  2011/03/20 13:43:23  acg
+//  Andy Goodrich: added async_signal_is() plus suspend() as a corner case.
+//
+// Revision 1.17  2011/03/07 18:25:19  acg
+//  Andy Goodrich: tightening of check for resume on a disabled process to
+//  only produce an error if it is ready to run.
+//
+// Revision 1.16  2011/03/06 15:58:50  acg
+//  Andy Goodrich: added escape to turn off process control corner case
+//  checks.
+//
+// Revision 1.15  2011/03/05 04:45:16  acg
+//  Andy Goodrich: moved active process calculation to the sc_simcontext class.
+//
+// Revision 1.14  2011/03/05 01:39:21  acg
+//  Andy Goodrich: changes for named events.
+//
+// Revision 1.13  2011/02/18 20:27:14  acg
+//  Andy Goodrich: Updated Copyrights.
+//
+// Revision 1.12  2011/02/13 21:47:38  acg
+//  Andy Goodrich: update copyright notice.
+//
+// Revision 1.11  2011/02/13 21:34:35  acg
+//  Andy Goodrich: added SC_UNITIALIZED enum value to process status so
+//  its possible to detect throws before initialization.
+//
+// Revision 1.10  2011/02/11 13:25:24  acg
+//  Andy Goodrich: Philipp A. Hartmann's changes:
+//    (1) Removal of SC_CTHREAD method overloads.
+//    (2) New exception processing code.
+//
+// Revision 1.9  2011/02/01 21:18:56  acg
+//  Andy Goodrich: addition of new preempt_with() method used to immediately
+//  throw exceptions from threads.
+//
+// Revision 1.8  2011/01/25 20:50:37  acg
+//  Andy Goodrich: changes for IEEE 1666 2011.
+//
+// Revision 1.7  2011/01/19 23:21:50  acg
+//  Andy Goodrich: changes for IEEE 1666 2011
+//
+// Revision 1.6  2011/01/18 20:10:45  acg
+//  Andy Goodrich: changes for IEEE1666_2011 semantics.
+//
+// Revision 1.5  2010/07/22 20:02:33  acg
+//  Andy Goodrich: bug fixes.
+//
+// Revision 1.4  2009/05/22 16:06:29  acg
+//  Andy Goodrich: process control updates.
+//
+// Revision 1.3  2008/05/22 17:06:26  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
+//
+// Revision 1.2  2007/09/20 20:32:35  acg
+//  Andy Goodrich: changes to the semantics of throw_it() to match the
+//  specification. A call to throw_it() will immediately suspend the calling
+//  thread until all the throwees have executed. At that point the calling
+//  thread will be restarted before the execution of any other threads.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.13  2006/05/08 18:00:06  acg
+// Andy Goodrich: added David Long's forward declarations for friend
+//   functions, methods, and operators to keep the Microsoft compiler happy.
+//
+// Revision 1.11  2006/04/11 23:13:21  acg
+//   Andy Goodrich: Changes for reduced reset support that only includes
+//   sc_cthread, but has preliminary hooks for expanding to method and thread
+//   processes also.
+//
+// Revision 1.10  2006/03/21 00:00:34  acg
+//   Andy Goodrich: changed name of sc_get_current_process_base() to be
+//   sc_get_current_process_b() since its returning an sc_process_b instance.
+//
+// Revision 1.9  2006/01/26 21:04:54  acg
+//  Andy Goodrich: deprecation message changes and additional messages.
+//
+// Revision 1.8  2006/01/24 20:49:05  acg
+// Andy Goodrich: changes to remove the use of deprecated features within the
+// simulator, and to issue warning messages when deprecated features are used.
+//
+// Revision 1.7  2006/01/19 00:29:52  acg
+// Andy Goodrich: Yet another implementation for signal write checking. This
+// one uses an environment variable SC_SIGNAL_WRITE_CHECK, that when set to
+// DISABLE will disable write checking on signals.
+//
+// Revision 1.6  2006/01/18 21:42:37  acg
+// Andy Goodrich: Changes for check writer support.
+//
+// Revision 1.5  2006/01/13 18:44:30  acg
+// Added $Log to record CVS changes into the source.
+//
+// Revision 1.4  2006/01/03 23:18:44  acg
+// Changed copyright to include 2006.
+//
+// Revision 1.3  2005/12/20 22:11:10  acg
+// Fixed $Log lines.
+//
+// Revision 1.2  2005/12/20 22:02:30  acg
+// Changed where delta cycles are incremented to match IEEE 1666. Added the
+// event_occurred() method to hide how delta cycle comparisions are done within
+// sc_simcontext. Changed the boolean update_phase to an enum that shows all
+// the phases.
 
 #endif

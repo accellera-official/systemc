@@ -22,58 +22,8 @@
 
   Original Author: Martin Janssen, Synopsys, Inc., 2001-05-21
 
+  CHANGE LOG IS AT THE END OF THE FILE
  *****************************************************************************/
-
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date: Andy Goodrich, Forte,
-                               Bishnupriya Bhattacharya, Cadence Design Systems,
-                               25 August, 2003
-
-  Description of Modification: phase callbacks
-    
- *****************************************************************************/
-
-
-// $Log: sc_prim_channel.cpp,v $
-// Revision 1.8  2011/05/09 04:07:37  acg
-//  Philipp A. Hartmann:
-//    (1) Restore hierarchy in all phase callbacks.
-//    (2) Ensure calls to before_end_of_elaboration.
-//
-// Revision 1.7  2011/04/19 02:36:26  acg
-//  Philipp A. Hartmann: new aysnc_update and mutex support.
-//
-// Revision 1.6  2011/02/18 20:31:05  acg
-//  Philipp A. Hartmann: added error messages for calls that cannot be done
-//  after elaboration.
-//
-// Revision 1.5  2011/02/18 20:23:45  acg
-//  Andy Goodrich: Copyright update.
-//
-// Revision 1.4  2011/02/14 17:50:16  acg
-//  Andy Goodrich: testing for sc_port and sc_export instantiations during
-//  end of elaboration and issuing appropriate error messages.
-//
-// Revision 1.3  2010/12/07 20:36:49  acg
-//  Andy Goodrich: fix pointer that should have been initialized to zero.
-//
-// Revision 1.2  2010/12/07 19:50:36  acg
-//  Andy Goodrich: addition of writer policies, courtesy of Philipp Hartmann.
-//
-// Revision 1.1.1.1  2006/12/15 20:20:04  acg
-// SystemC 2.3
-//
-// Revision 1.4  2006/01/26 21:00:50  acg
-//  Andy Goodrich: conversion to use sc_event::notify(SC_ZERO_TIME) instead of
-//  sc_event::notify_delayed()
-//
-// Revision 1.3  2006/01/13 18:47:42  acg
-// Added $Log command so that CVS comments are reproduced in the source.
-//
 
 #include "sysc/communication/sc_prim_channel.h"
 #include "sysc/communication/sc_communication_ids.h"
@@ -95,7 +45,6 @@ namespace sc_core {
 
 sc_prim_channel::sc_prim_channel()
 : sc_object( 0 ),
-  m_construction_done(0),
   m_registry( simcontext()->get_prim_channel_registry() ),
   m_update_next_p( 0 ) 
 {
@@ -104,7 +53,6 @@ sc_prim_channel::sc_prim_channel()
 
 sc_prim_channel::sc_prim_channel( const char* name_ )
 : sc_object( name_ ),
-  m_construction_done(0),
   m_registry( simcontext()->get_prim_channel_registry() ),
   m_update_next_p( 0 )
 {
@@ -421,5 +369,66 @@ sc_prim_channel_registry::simulation_done()
 }
 
 } // namespace sc_core
+
+/*****************************************************************************
+
+  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+  changes you are making here.
+
+      Name, Affiliation, Date: Andy Goodrich, Forte,
+                               Bishnupriya Bhattacharya, Cadence Design Systems,
+                               25 August, 2003
+
+  Description of Modification: phase callbacks
+    
+ *****************************************************************************/
+
+
+// $Log: sc_prim_channel.cpp,v $
+// Revision 1.11  2011/08/26 21:38:32  acg
+//  Philipp A. Hartmann: removed unused switch m_construction_done.
+//
+// Revision 1.10  2011/08/26 20:45:41  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
+// Revision 1.9  2011/08/24 22:05:36  acg
+//  Torsten Maehne: initialization changes to remove warnings.
+//
+// Revision 1.8  2011/05/09 04:07:37  acg
+//  Philipp A. Hartmann:
+//    (1) Restore hierarchy in all phase callbacks.
+//    (2) Ensure calls to before_end_of_elaboration.
+//
+// Revision 1.7  2011/04/19 02:36:26  acg
+//  Philipp A. Hartmann: new aysnc_update and mutex support.
+//
+// Revision 1.6  2011/02/18 20:31:05  acg
+//  Philipp A. Hartmann: added error messages for calls that cannot be done
+//  after elaboration.
+//
+// Revision 1.5  2011/02/18 20:23:45  acg
+//  Andy Goodrich: Copyright update.
+//
+// Revision 1.4  2011/02/14 17:50:16  acg
+//  Andy Goodrich: testing for sc_port and sc_export instantiations during
+//  end of elaboration and issuing appropriate error messages.
+//
+// Revision 1.3  2010/12/07 20:36:49  acg
+//  Andy Goodrich: fix pointer that should have been initialized to zero.
+//
+// Revision 1.2  2010/12/07 19:50:36  acg
+//  Andy Goodrich: addition of writer policies, courtesy of Philipp Hartmann.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:04  acg
+// SystemC 2.3
+//
+// Revision 1.4  2006/01/26 21:00:50  acg
+//  Andy Goodrich: conversion to use sc_event::notify(SC_ZERO_TIME) instead of
+//  sc_event::notify_delayed()
+//
+// Revision 1.3  2006/01/13 18:47:42  acg
+// Added $Log command so that CVS comments are reproduced in the source.
+//
 
 // Taf!

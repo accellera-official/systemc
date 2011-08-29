@@ -41,6 +41,9 @@
  *****************************************************************************/
 
 // $Log: sc_concatref.h,v $
+// Revision 1.6  2011/08/24 22:05:48  acg
+//  Torsten Maehne: initialization changes to remove warnings.
+//
 // Revision 1.5  2009/11/17 19:58:15  acg
 //  Andy Goodrich: fix of shift rhs possibilities to include "int".
 //

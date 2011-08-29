@@ -21,70 +21,9 @@
 
   Original Author: Andy Goodrich, Forte Design Systems
 
+  CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
 
-// $Log: sc_reset.cpp,v $
-// Revision 1.14  2011/04/08 22:37:34  acg
-//  Andy Goodrich: documentation of the reset mechanism and additional
-//  documentation of methods. Removal of check for SC_METHODs in
-//  sc_reset_signal_is() that should not have been there.
-//
-// Revision 1.13  2011/03/20 15:13:01  acg
-//  Andy Goodrich: set the reset flag for async_reset_signal_is to catch
-//  the suspend() corner case.
-//
-// Revision 1.12  2011/03/20 13:43:23  acg
-//  Andy Goodrich: added async_signal_is() plus suspend() as a corner case.
-//
-// Revision 1.11  2011/03/06 19:57:11  acg
-//  Andy Goodrich: refinements for the illegal suspend - synchronous reset
-//  interaction.
-//
-// Revision 1.10  2011/02/18 20:27:14  acg
-//  Andy Goodrich: Updated Copyrights.
-//
-// Revision 1.9  2011/02/13 21:47:37  acg
-//  Andy Goodrich: update copyright notice.
-//
-// Revision 1.8  2011/02/01 21:08:26  acg
-//  Andy Goodrich: new multiple reset support.
-//
-// Revision 1.7  2011/01/06 18:04:38  acg
-//  Andy Goodrich: removed commented out code.
-//
-// Revision 1.6  2010/12/07 20:09:13  acg
-// Andy Goodrich: removed sc_signal overloads since already have sc_signal_in_if overloads.
-//
-// Revision 1.5  2010/11/20 17:10:56  acg
-//  Andy Goodrich: reset processing changes for new IEEE 1666 standard.
-//
-// Revision 1.4  2009/05/22 16:06:29  acg
-//  Andy Goodrich: process control updates.
-//
-// Revision 1.3  2009/03/12 22:59:58  acg
-//  Andy Goodrich: updates for 2.4 stuff.
-//
-// Revision 1.2  2008/05/22 17:06:26  acg
-//  Andy Goodrich: updated copyright notice to include 2008.
-//
-// Revision 1.1.1.1  2006/12/15 20:20:05  acg
-// SystemC 2.3
-//
-// Revision 1.7  2006/12/02 20:58:19  acg
-//  Andy Goodrich: updates from 2.2 for IEEE 1666 support.
-//
-// Revision 1.5  2006/04/11 23:13:21  acg
-//   Andy Goodrich: Changes for reduced reset support that only includes
-//   sc_cthread, but has preliminary hooks for expanding to method and thread
-//   processes also.
-//
-// Revision 1.4  2006/01/24 20:49:05  acg
-// Andy Goodrich: changes to remove the use of deprecated features within the
-// simulator, and to issue warning messages when deprecated features are used.
-//
-// Revision 1.3  2006/01/13 18:44:30  acg
-// Added $Log to record CVS changes into the source.
-//
 
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_reset.h"
@@ -427,3 +366,73 @@ void sc_reset::reset_signal_is(
 }
 
 } // namespace sc_core
+
+// $Log: sc_reset.cpp,v $
+// Revision 1.16  2011/08/26 20:46:10  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
+// Revision 1.15  2011/08/24 22:05:51  acg
+//  Torsten Maehne: initialization changes to remove warnings.
+//
+// Revision 1.14  2011/04/08 22:37:34  acg
+//  Andy Goodrich: documentation of the reset mechanism and additional
+//  documentation of methods. Removal of check for SC_METHODs in
+//  sc_reset_signal_is() that should not have been there.
+//
+// Revision 1.13  2011/03/20 15:13:01  acg
+//  Andy Goodrich: set the reset flag for async_reset_signal_is to catch
+//  the suspend() corner case.
+//
+// Revision 1.12  2011/03/20 13:43:23  acg
+//  Andy Goodrich: added async_signal_is() plus suspend() as a corner case.
+//
+// Revision 1.11  2011/03/06 19:57:11  acg
+//  Andy Goodrich: refinements for the illegal suspend - synchronous reset
+//  interaction.
+//
+// Revision 1.10  2011/02/18 20:27:14  acg
+//  Andy Goodrich: Updated Copyrights.
+//
+// Revision 1.9  2011/02/13 21:47:37  acg
+//  Andy Goodrich: update copyright notice.
+//
+// Revision 1.8  2011/02/01 21:08:26  acg
+//  Andy Goodrich: new multiple reset support.
+//
+// Revision 1.7  2011/01/06 18:04:38  acg
+//  Andy Goodrich: removed commented out code.
+//
+// Revision 1.6  2010/12/07 20:09:13  acg
+// Andy Goodrich: removed sc_signal overloads since already have sc_signal_in_if overloads.
+//
+// Revision 1.5  2010/11/20 17:10:56  acg
+//  Andy Goodrich: reset processing changes for new IEEE 1666 standard.
+//
+// Revision 1.4  2009/05/22 16:06:29  acg
+//  Andy Goodrich: process control updates.
+//
+// Revision 1.3  2009/03/12 22:59:58  acg
+//  Andy Goodrich: updates for 2.4 stuff.
+//
+// Revision 1.2  2008/05/22 17:06:26  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.7  2006/12/02 20:58:19  acg
+//  Andy Goodrich: updates from 2.2 for IEEE 1666 support.
+//
+// Revision 1.5  2006/04/11 23:13:21  acg
+//   Andy Goodrich: Changes for reduced reset support that only includes
+//   sc_cthread, but has preliminary hooks for expanding to method and thread
+//   processes also.
+//
+// Revision 1.4  2006/01/24 20:49:05  acg
+// Andy Goodrich: changes to remove the use of deprecated features within the
+// simulator, and to issue warning messages when deprecated features are used.
+//
+// Revision 1.3  2006/01/13 18:44:30  acg
+// Added $Log to record CVS changes into the source.
+//

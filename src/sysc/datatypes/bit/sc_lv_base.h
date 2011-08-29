@@ -37,6 +37,9 @@
  *****************************************************************************/
 
 // $Log: sc_lv_base.h,v $
+// Revision 1.4  2011/08/26 22:32:00  acg
+//  Torsten Maehne: added parentheses to make opearator ordering more obvious.
+//
 // Revision 1.3  2010/01/27 19:41:29  acg
 //  Andy Goodrich: fix 8 instances of sc_concref constructor invocations
 //  that failed to indicate that their arguments should be freed when the
@@ -314,7 +317,7 @@ sc_lv_base::get_bit( int i ) const
 {
     int wi = i / SC_DIGIT_SIZE;
     int bi = i % SC_DIGIT_SIZE;
-    return sc_logic_value_t( (m_data[wi] >> bi & SC_DIGIT_ONE) |
+    return sc_logic_value_t( ((m_data[wi] >> bi) & SC_DIGIT_ONE) |
 			     (((m_ctrl[wi] >> bi) << 1) & SC_DIGIT_TWO) );
 }
 

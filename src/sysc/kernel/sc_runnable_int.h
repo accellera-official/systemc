@@ -497,6 +497,9 @@ inline void sc_runnable::toggle_threads()
  ******************************************************************************/
 
 // $Log: sc_runnable_int.h,v $
+// Revision 1.19  2011/08/24 22:05:51  acg
+//  Torsten Maehne: initialization changes to remove warnings.
+//
 // Revision 1.18  2011/08/07 19:08:04  acg
 //  Andy Goodrich: moved logs to end of file so line number synching works
 //  better between versions.

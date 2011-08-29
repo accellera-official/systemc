@@ -21,19 +21,29 @@
 
   Original Author: Stan Y. Liao, Synopsys, Inc.
 
+  CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
 
-/*****************************************************************************
 
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
+#ifndef SC_EXTERNS_H
+#define SC_EXTERNS_H
 
-      Name, Affiliation, Date:
-  Description of Modification:
 
- *****************************************************************************/
+
+extern "C" int sc_main( int argc, char* argv[] );
+
+namespace sc_core {
+	extern "C" int sc_elab_and_sim( int argc, char* argv[] );
+	extern "C" int sc_argc();
+	extern "C" const char* const* sc_argv();
+
+} // namespace sc_core
 
 // $Log: sc_externs.h,v $
+// Revision 1.5  2011/08/26 20:46:09  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
 // Revision 1.4  2011/02/18 20:27:14  acg
 //  Andy Goodrich: Updated Copyrights.
 //
@@ -49,19 +59,5 @@
 // Revision 1.3  2006/01/13 18:44:29  acg
 // Added $Log to record CVS changes into the source.
 //
-
-#ifndef SC_EXTERNS_H
-#define SC_EXTERNS_H
-
-
-
-extern "C" int sc_main( int argc, char* argv[] );
-
-namespace sc_core {
-	extern "C" int sc_elab_and_sim( int argc, char* argv[] );
-	extern "C" int sc_argc();
-	extern "C" const char* const* sc_argv();
-
-} // namespace sc_core
 
 #endif

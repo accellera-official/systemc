@@ -185,7 +185,6 @@ wif_uint64_trace::wif_uint64_trace(const sc_dt::uint64& object_,
   mask(static_cast<sc_dt::uint64>(-1))
 {
     bit_width = width_;
-    mask = (sc_dt::uint64)-1;
     if (bit_width < 32) mask = ~(mask << bit_width);
     wif_type = "BIT";
 }
@@ -251,7 +250,6 @@ wif_int64_trace::wif_int64_trace(const sc_dt::int64& object_,
   mask(static_cast<sc_dt::uint64>(-1))
 {
     bit_width = width_;
-    mask = (sc_dt::uint64)-1;
     if (bit_width < 32) mask = ~(mask << bit_width);
     wif_type = "BIT";
 }
@@ -917,8 +915,7 @@ wif_unsigned_short_trace::wif_unsigned_short_trace(
        const std::string& name_,
        const std::string& wif_name_,
        int width_) 
-: wif_trace(name_, wif_name_), object(object_), old_value(object_), mask(0xffff
-)
+: wif_trace(name_, wif_name_), object(object_), old_value(object_), mask(0xffff)
 {
     bit_width = width_;
     if (bit_width < 16) {
@@ -1451,11 +1448,9 @@ wif_enum_trace::wif_enum_trace(const unsigned& object_,
   literals(enum_literals_), nliterals(0), type_name(name_ + "__type__")
 {
     // find number of enumeration literals - counting loop
-    for (nliterals = 0; enum_literals_[nliterals]; nliterals++);
+    for (nliterals = 0; enum_literals_[nliterals]; nliterals++) continue;
 
     bit_width = 0;
-    old_value = object;
-    type_name = name_ + "__type__";
     wif_type = type_name.c_str();
 }       
 

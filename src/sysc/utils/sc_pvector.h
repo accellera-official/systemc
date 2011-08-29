@@ -21,44 +21,8 @@
 
   Original Author: Stan Y. Liao, Synopsys, Inc.
 
+  CHANGE LOG AT END OF FILE
  *****************************************************************************/
-
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-
- *****************************************************************************/
-
-
-// $Log: sc_pvector.h,v $
-// Revision 1.3  2011/02/18 20:38:44  acg
-//  Andy Goodrich: Updated Copyright notice.
-//
-// Revision 1.2  2011/01/20 16:52:21  acg
-//  Andy Goodrich: changes for IEEE 1666 2011.
-//
-// Revision 1.1  2010/12/07 20:11:45  acg
-//  Andy Goodrich: moved sc_pvector class to new header file to allow the
-//  use of sc_vector.h for Philipp Hartmann's new sc_vector class.
-//
-// Revision 1.4  2010/08/03 17:52:15  acg
-//   Andy Goodrich: fix signature for size() method of sc_pvector.
-//
-// Revision 1.3  2008/10/09 21:20:33  acg
-//  Andy Goodrich: fixed the way the end() methods calculate their results.
-//  I had incorrectly cut and pasted code from the begin() method.
-//
-// Revision 1.2  2007/01/17 22:44:34  acg
-//  Andy Goodrich: fix for Microsoft compiler.
-//
-// Revision 1.3  2006/01/13 18:53:11  acg
-// Andy Goodrich: Added $Log command so that CVS comments are reproduced in
-// the source.
-//
 
 #ifndef SC_VECTOR_H
 #define SC_VECTOR_H
@@ -187,5 +151,35 @@ public:
 #undef ADDR_ACCESS
 
 } // namespace sc_core
+
+// $Log: sc_pvector.h,v $
+// Revision 1.4  2011/08/26 20:46:19  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
+// Revision 1.3  2011/02/18 20:38:44  acg
+//  Andy Goodrich: Updated Copyright notice.
+//
+// Revision 1.2  2011/01/20 16:52:21  acg
+//  Andy Goodrich: changes for IEEE 1666 2011.
+//
+// Revision 1.1  2010/12/07 20:11:45  acg
+//  Andy Goodrich: moved sc_pvector class to new header file to allow the
+//  use of sc_vector.h for Philipp Hartmann's new sc_vector class.
+//
+// Revision 1.4  2010/08/03 17:52:15  acg
+//   Andy Goodrich: fix signature for size() method of sc_pvector.
+//
+// Revision 1.3  2008/10/09 21:20:33  acg
+//  Andy Goodrich: fixed the way the end() methods calculate their results.
+//  I had incorrectly cut and pasted code from the begin() method.
+//
+// Revision 1.2  2007/01/17 22:44:34  acg
+//  Andy Goodrich: fix for Microsoft compiler.
+//
+// Revision 1.3  2006/01/13 18:53:11  acg
+// Andy Goodrich: Added $Log command so that CVS comments are reproduced in
+// the source.
+//
 
 #endif

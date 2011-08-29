@@ -35,6 +35,9 @@
 
 /* 
 $Log: scx_signal_signed.cpp,v $
+Revision 1.3  2011/08/26 22:28:29  acg
+ Torsten Maehne: eliminate unused argument warnings.
+
 Revision 1.2  2011/08/15 16:43:24  acg
  Torsten Maehne: changes to remove unused argument warnings.
 
@@ -146,21 +149,21 @@ sc_signed_sigref& sc_signed_part_if::select_part( int /*left*/, int /*right*/ )
     SC_REPORT_ERROR( SC_ID_OPERATION_ON_NON_SPECIALIZED_SIGNAL_, "int" );
     return *(sc_signed_sigref*)0;
 }
-void sc_signed_part_if::write_part( int64 v, int /*left*/, int /*right*/ )
+void sc_signed_part_if::write_part( int64 /*v*/, int /*left*/, int /*right*/ )
 {
     SC_REPORT_ERROR( SC_ID_OPERATION_ON_NON_SPECIALIZED_SIGNAL_, "int" );
 }
-void sc_signed_part_if::write_part( uint64 v, int /*left*/, int /*right*/ )
+void sc_signed_part_if::write_part( uint64 /*v*/, int /*left*/, int /*right*/ )
 {
     SC_REPORT_ERROR( SC_ID_OPERATION_ON_NON_SPECIALIZED_SIGNAL_, "int" );
 }
 void sc_signed_part_if::write_part(     
-    const sc_signed& v, int /*left*/, int /*right*/ )
+    const sc_signed& /*v*/, int /*left*/, int /*right*/ )
 { 
     SC_REPORT_ERROR( SC_ID_OPERATION_ON_NON_SPECIALIZED_SIGNAL_, "int" );
 }   
 void sc_signed_part_if::write_part(
-    const sc_unsigned& v, int /*left*/, int /*right*/ )
+    const sc_unsigned& /*v*/, int /*left*/, int /*right*/ )
 {
     SC_REPORT_ERROR( SC_ID_OPERATION_ON_NON_SPECIALIZED_SIGNAL_, "int" );
 }

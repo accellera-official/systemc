@@ -21,40 +21,9 @@
 
   Original Author: Martin Janssen, Synopsys, Inc., 2001-12-18
 
+  CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
 
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-
- *****************************************************************************/
-
-// $Log: sc_cor.h,v $
-// Revision 1.6  2011/08/15 16:43:24  acg
-//  Torsten Maehne: changes to remove unused argument warnings.
-//
-// Revision 1.5  2011/02/18 20:27:14  acg
-//  Andy Goodrich: Updated Copyrights.
-//
-// Revision 1.4  2011/02/13 21:47:37  acg
-//  Andy Goodrich: update copyright notice.
-//
-// Revision 1.3  2011/01/19 23:21:49  acg
-//  Andy Goodrich: changes for IEEE 1666 2011
-//
-// Revision 1.2  2008/05/22 17:06:24  acg
-//  Andy Goodrich: updated copyright notice to include 2008.
-//
-// Revision 1.1.1.1  2006/12/15 20:20:05  acg
-// SystemC 2.3
-//
-// Revision 1.3  2006/01/13 18:44:29  acg
-// Added $Log to record CVS changes into the source.
-//
 
 #ifndef SC_COR_H
 #define SC_COR_H
@@ -153,6 +122,33 @@ private:
 };
 
 } // namespace sc_core
+
+// $Log: sc_cor.h,v $
+// Revision 1.7  2011/08/26 20:46:09  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
+// Revision 1.6  2011/08/15 16:43:24  acg
+//  Torsten Maehne: changes to remove unused argument warnings.
+//
+// Revision 1.5  2011/02/18 20:27:14  acg
+//  Andy Goodrich: Updated Copyrights.
+//
+// Revision 1.4  2011/02/13 21:47:37  acg
+//  Andy Goodrich: update copyright notice.
+//
+// Revision 1.3  2011/01/19 23:21:49  acg
+//  Andy Goodrich: changes for IEEE 1666 2011
+//
+// Revision 1.2  2008/05/22 17:06:24  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.3  2006/01/13 18:44:29  acg
+// Added $Log to record CVS changes into the source.
+//
 
 #endif
 

@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_nbutils.h,v $
+// Revision 1.5  2011/08/26 23:00:01  acg
+//  Torsten Maehne: remove use of ieeefp.h.
+//
 // Revision 1.4  2011/08/15 16:43:24  acg
 //  Torsten Maehne: changes to remove unused argument warnings.
 //
@@ -56,11 +59,7 @@
 #define SC_NBUTILS_H
 
 
-#if !defined(__ppc__) && !defined(_MSC_VER) && !defined(__x86_64__) && !defined(__i386__) && !defined(__hpux) && !defined( __BORLANDC__ )
-#include <ieeefp.h>
-#else
 #include <cmath>
-#endif
 
 #include "sysc/datatypes/bit/sc_bit_ids.h"
 #include "sysc/datatypes/int/sc_int_ids.h"

@@ -21,17 +21,9 @@
 
   Original Author: Stan Y. Liao, Synopsys, Inc.
 
+ NO AUTOMATIC CHANGE LOG IS GENERATED, EXPLICIT CHANGE LOG AT END OF FILE
  *****************************************************************************/
 
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-
- *****************************************************************************/
 
 #ifndef SC_VER_H
 #define SC_VER_H
@@ -58,7 +50,7 @@ extern const std::string  sc_copyright_string;
 #define SYSTEMC_2_3_0
 #define SC_API_VERSION_STRING sc_api_version_2_3_0
 
-#define SYSTEMC_VERSION       20110815
+#define SYSTEMC_VERSION       20110827
 #define SC_VERSION_ORIGINATOR "OSCI"
 #define SC_VERSION_MAJOR      2
 #define SC_VERSION_MINOR      3
@@ -111,4 +103,13 @@ static SC_API_VERSION_STRING api_version_check;
 
 } // namespace sc_core
 
+/*****************************************************************************
+
+  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+  changes you are making here.
+
+      Name, Affiliation, Date:
+  Description of Modification:
+
+ *****************************************************************************/
 #endif

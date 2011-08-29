@@ -21,59 +21,8 @@
 
   Original Author: Andy Goodrich, Forte Design Systems, 17 June 2003
 
+  CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
-
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-
- *****************************************************************************/
-
-
-// $Log: sc_reset.h,v $
-// Revision 1.9  2011/04/08 22:38:30  acg
-//  Andy Goodrich: added comment pointing to the description of how the
-//  reset mechanism works that is in sc_reset.cpp.
-//
-// Revision 1.8  2011/02/18 20:27:14  acg
-//  Andy Goodrich: Updated Copyrights.
-//
-// Revision 1.7  2011/02/13 21:47:37  acg
-//  Andy Goodrich: update copyright notice.
-//
-// Revision 1.6  2011/01/06 18:00:32  acg
-//  Andy Goodrich: Removed commented out code.
-//
-// Revision 1.5  2010/12/07 20:09:14  acg
-// Andy Goodrich: removed sc_signal signatures since already have sc_signal_in_if signatures.
-//
-// Revision 1.4  2010/11/20 17:10:57  acg
-//  Andy Goodrich: reset processing changes for new IEEE 1666 standard.
-//
-// Revision 1.3  2009/05/22 16:06:29  acg
-//  Andy Goodrich: process control updates.
-//
-// Revision 1.2  2008/05/22 17:06:26  acg
-//  Andy Goodrich: updated copyright notice to include 2008.
-//
-// Revision 1.1.1.1  2006/12/15 20:20:05  acg
-// SystemC 2.3
-//
-// Revision 1.6  2006/12/02 20:58:19  acg
-//  Andy Goodrich: updates from 2.2 for IEEE 1666 support.
-//
-// Revision 1.4  2006/04/11 23:13:21  acg
-//   Andy Goodrich: Changes for reduced reset support that only includes
-//   sc_cthread, but has preliminary hooks for expanding to method and thread
-//   processes also.
-//
-// Revision 1.3  2006/01/13 18:44:30  acg
-// Added $Log to record CVS changes into the source.
-//
 
 #if !defined(sc_reset_h_INCLUDED)
 #define sc_reset_h_INCLUDED
@@ -159,6 +108,53 @@ class sc_reset {
     sc_reset( const sc_reset& );
     const sc_reset& operator = ( const sc_reset& );
 };
+
+// $Log: sc_reset.h,v $
+// Revision 1.11  2011/08/26 20:46:10  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
+// Revision 1.10  2011/08/24 22:05:51  acg
+//  Torsten Maehne: initialization changes to remove warnings.
+//
+// Revision 1.9  2011/04/08 22:38:30  acg
+//  Andy Goodrich: added comment pointing to the description of how the
+//  reset mechanism works that is in sc_reset.cpp.
+//
+// Revision 1.8  2011/02/18 20:27:14  acg
+//  Andy Goodrich: Updated Copyrights.
+//
+// Revision 1.7  2011/02/13 21:47:37  acg
+//  Andy Goodrich: update copyright notice.
+//
+// Revision 1.6  2011/01/06 18:00:32  acg
+//  Andy Goodrich: Removed commented out code.
+//
+// Revision 1.5  2010/12/07 20:09:14  acg
+// Andy Goodrich: removed sc_signal signatures since already have sc_signal_in_if signatures.
+//
+// Revision 1.4  2010/11/20 17:10:57  acg
+//  Andy Goodrich: reset processing changes for new IEEE 1666 standard.
+//
+// Revision 1.3  2009/05/22 16:06:29  acg
+//  Andy Goodrich: process control updates.
+//
+// Revision 1.2  2008/05/22 17:06:26  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.6  2006/12/02 20:58:19  acg
+//  Andy Goodrich: updates from 2.2 for IEEE 1666 support.
+//
+// Revision 1.4  2006/04/11 23:13:21  acg
+//   Andy Goodrich: Changes for reduced reset support that only includes
+//   sc_cthread, but has preliminary hooks for expanding to method and thread
+//   processes also.
+//
+// Revision 1.3  2006/01/13 18:44:30  acg
+// Added $Log to record CVS changes into the source.
 
 } // namespace sc_core
 

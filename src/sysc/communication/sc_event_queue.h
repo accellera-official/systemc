@@ -21,42 +21,8 @@
 
   Original Author: Ulli Holtmann, Synopsys, Inc.
 
+  CHANGE LOG IS AT THE END OF THE FILE
  *****************************************************************************/
-
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-
- *****************************************************************************/
-
-// $Log: sc_event_queue.h,v $
-// Revision 1.4  2011/04/05 20:48:09  acg
-//  Andy Goodrich: changes to make sure that event(), posedge() and negedge()
-//  only return true if the clock has not moved.
-//
-// Revision 1.3  2011/02/18 20:23:45  acg
-//  Andy Goodrich: Copyright update.
-//
-// Revision 1.2  2008/05/20 16:45:52  acg
-//  Andy Goodrich: changed which unique name generator is used from the
-//  global one to the one for sc_modules.
-//
-// Revision 1.1.1.1  2006/12/15 20:20:04  acg
-// SystemC 2.3
-//
-// Revision 1.4  2006/11/28 20:30:48  acg
-//  Andy Goodrich: updated from 2.2 source. sc_event_queue constructors
-//  collapsed into a single constructor with an optional argument to get
-//  the sc_module_name stack done correctly. Class name prefixing added
-//  to sc_semaphore calls to wait() to keep gcc 4.x happy.
-//
-// Revision 1.3  2006/01/13 18:47:42  acg
-// Added $Log command so that CVS comments are reproduced in the source.
-//
 
 #ifndef SC_EVENT_QUEUE_H
 #define SC_EVENT_QUEUE_H
@@ -180,5 +146,34 @@ const sc_event& sc_event_queue::default_event() const
 typedef sc_port<sc_event_queue_if,1,SC_ONE_OR_MORE_BOUND> sc_event_queue_port;
 
 } // namespace sc_core
+
+// $Log: sc_event_queue.h,v $
+// Revision 1.5  2011/08/26 20:45:40  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
+// Revision 1.4  2011/04/05 20:48:09  acg
+//  Andy Goodrich: changes to make sure that event(), posedge() and negedge()
+//  only return true if the clock has not moved.
+//
+// Revision 1.3  2011/02/18 20:23:45  acg
+//  Andy Goodrich: Copyright update.
+//
+// Revision 1.2  2008/05/20 16:45:52  acg
+//  Andy Goodrich: changed which unique name generator is used from the
+//  global one to the one for sc_modules.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:04  acg
+// SystemC 2.3
+//
+// Revision 1.4  2006/11/28 20:30:48  acg
+//  Andy Goodrich: updated from 2.2 source. sc_event_queue constructors
+//  collapsed into a single constructor with an optional argument to get
+//  the sc_module_name stack done correctly. Class name prefixing added
+//  to sc_semaphore calls to wait() to keep gcc 4.x happy.
+//
+// Revision 1.3  2006/01/13 18:47:42  acg
+// Added $Log command so that CVS comments are reproduced in the source.
+//
 
 #endif // SC_EVENT_QUEUE_H

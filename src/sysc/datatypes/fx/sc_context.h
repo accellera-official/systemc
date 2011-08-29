@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: sc_context.h,v $
+// Revision 1.2  2011/08/24 22:05:43  acg
+//  Torsten Maehne: initialization changes to remove warnings.
+//
 // Revision 1.1.1.1  2006/12/15 20:20:04  acg
 // SystemC 2.3
 //

@@ -24,76 +24,8 @@
 
   Original Author: Stan Y. Liao, Synopsys, Inc.
 
+  CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
-
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-
- *****************************************************************************/
-
-// $Log: sc_simcontext_int.h,v $
-// Revision 1.12  2011/07/29 22:45:06  acg
-//  Andy Goodrich: added invocation of sc_method_process::check_for_throws()
-//  to the preempt_with() code to handle case where the preempting process
-//  causes a throw on the invoking method process.
-//
-// Revision 1.11  2011/04/13 02:45:11  acg
-//  Andy Goodrich: eliminated warning message that occurred if the DEBUG_MSG
-//  macro was used.
-//
-// Revision 1.10  2011/04/11 22:05:48  acg
-//  Andy Goodrich: use the DEBUG_NAME macro in DEBUG_MSG invocations.
-//
-// Revision 1.9  2011/04/10 22:12:32  acg
-//  Andy Goodrich: adding debugging macros.
-//
-// Revision 1.8  2011/04/08 18:26:07  acg
-//  Andy Goodrich: added execute_method_next() to handle method dispatch
-//   for asynchronous notifications that occur outside the evaluation phase.
-//
-// Revision 1.7  2011/02/18 20:27:14  acg
-//  Andy Goodrich: Updated Copyrights.
-//
-// Revision 1.6  2011/02/13 21:47:38  acg
-//  Andy Goodrich: update copyright notice.
-//
-// Revision 1.5  2011/02/08 08:17:50  acg
-//  Andy Goodrich: fixed bug in preempt_with() where I was resetting the
-//  process context rather than saving and restoring it.
-//
-// Revision 1.4  2011/02/01 21:12:56  acg
-//  Andy Goodrich: addition of preempt_with() method to allow immediate
-//  execution of threads for throws.
-//
-// Revision 1.3  2011/01/25 20:50:37  acg
-//  Andy Goodrich: changes for IEEE 1666 2011.
-//
-// Revision 1.2  2008/05/22 17:06:26  acg
-//  Andy Goodrich: updated copyright notice to include 2008.
-//
-// Revision 1.1.1.1  2006/12/15 20:20:05  acg
-// SystemC 2.3
-//
-// Revision 1.6  2006/05/26 20:33:16  acg
-//   Andy Goodrich: changes required by additional platform compilers (i.e.,
-//   Microsoft VC++, Sun Forte, HP aCC).
-//
-// Revision 1.5  2006/01/19 00:29:52  acg
-// Andy Goodrich: Yet another implementation for signal write checking. This
-// one uses an environment variable SC_SIGNAL_WRITE_CHECK, that when set to
-// DISABLE will disable write checking on signals.
-//
-// Revision 1.4  2006/01/18 21:42:37  acg
-// Andy Goodrich: Changes for check writer support.
-//
-// Revision 1.3  2006/01/13 18:44:30  acg
-// Added $Log to record CVS changes into the source.
-//
 
 #ifndef SC_SIMCONTEXT_INT_H
 #define SC_SIMCONTEXT_INT_H
@@ -196,7 +128,7 @@ sc_simcontext::preempt_with( sc_thread_handle thread_h )
     // THE CALLER IS A METHOD:
     //
     //   (a) Set the current process information to our thread.
-    //   (b) Invoke our thread directly by passing the run queue.
+    //   (b) Invoke our thread directly by-passing the run queue.
     //   (c) Restore the process info to the caller.
     //   (d) Check to see if the calling method should throw an exception
     //       because of activity that occurred during the preemption.
@@ -327,5 +259,67 @@ extern void sc_defunct_process_function( sc_module* );
 
 #undef DEBUG_MSG
 #undef DEBUG_NAME
+
+// $Log: sc_simcontext_int.h,v $
+// Revision 1.13  2011/08/26 20:46:11  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
+// Revision 1.12  2011/07/29 22:45:06  acg
+//  Andy Goodrich: added invocation of sc_method_process::check_for_throws()
+//  to the preempt_with() code to handle case where the preempting process
+//  causes a throw on the invoking method process.
+//
+// Revision 1.11  2011/04/13 02:45:11  acg
+//  Andy Goodrich: eliminated warning message that occurred if the DEBUG_MSG
+//  macro was used.
+//
+// Revision 1.10  2011/04/11 22:05:48  acg
+//  Andy Goodrich: use the DEBUG_NAME macro in DEBUG_MSG invocations.
+//
+// Revision 1.9  2011/04/10 22:12:32  acg
+//  Andy Goodrich: adding debugging macros.
+//
+// Revision 1.8  2011/04/08 18:26:07  acg
+//  Andy Goodrich: added execute_method_next() to handle method dispatch
+//   for asynchronous notifications that occur outside the evaluation phase.
+//
+// Revision 1.7  2011/02/18 20:27:14  acg
+//  Andy Goodrich: Updated Copyrights.
+//
+// Revision 1.6  2011/02/13 21:47:38  acg
+//  Andy Goodrich: update copyright notice.
+//
+// Revision 1.5  2011/02/08 08:17:50  acg
+//  Andy Goodrich: fixed bug in preempt_with() where I was resetting the
+//  process context rather than saving and restoring it.
+//
+// Revision 1.4  2011/02/01 21:12:56  acg
+//  Andy Goodrich: addition of preempt_with() method to allow immediate
+//  execution of threads for throws.
+//
+// Revision 1.3  2011/01/25 20:50:37  acg
+//  Andy Goodrich: changes for IEEE 1666 2011.
+//
+// Revision 1.2  2008/05/22 17:06:26  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.6  2006/05/26 20:33:16  acg
+//   Andy Goodrich: changes required by additional platform compilers (i.e.,
+//   Microsoft VC++, Sun Forte, HP aCC).
+//
+// Revision 1.5  2006/01/19 00:29:52  acg
+// Andy Goodrich: Yet another implementation for signal write checking. This
+// one uses an environment variable SC_SIGNAL_WRITE_CHECK, that when set to
+// DISABLE will disable write checking on signals.
+//
+// Revision 1.4  2006/01/18 21:42:37  acg
+// Andy Goodrich: Changes for check writer support.
+//
+// Revision 1.3  2006/01/13 18:44:30  acg
+// Added $Log to record CVS changes into the source.
 
 #endif

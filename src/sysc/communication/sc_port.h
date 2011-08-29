@@ -21,97 +21,8 @@
 
   Original Author: Martin Janssen, Synopsys, Inc., 2001-05-21
 
+  CHANGE LOG IS AT THE END OF THE FILE
  *****************************************************************************/
-
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date: Andy Goodrich, Forte,
-                               Bishnupriya Bhattacharya, Cadence Design Systems,
-                               25 August, 2003
-  Description of Modification: phase callbacks
-
-      Name, Affiliation, Date: Andy Goodrich, Forte Design Systems
-                               12 December, 2005
-  Description of Modification: multiport binding policy changes
-
-    
- *****************************************************************************/
-
-/* 
-$Log: sc_port.h,v $
-Revision 1.8  2011/08/07 19:08:01  acg
- Andy Goodrich: moved logs to end of file so line number synching works
- better between versions.
-
-Revision 1.7  2011/08/07 18:53:09  acg
- Philipp A. Hartmann: add virtual instances of the bind function for
- base classes to eliminate warning messages for clang platforms.
-
-Revision 1.6  2011/05/09 04:07:37  acg
- Philipp A. Hartmann:
-   (1) Restore hierarchy in all phase callbacks.
-   (2) Ensure calls to before_end_of_elaboration.
-
-Revision 1.5  2011/03/30 16:46:10  acg
- Andy Goodrich: added a signature and removed a virtual specification
- to eliminate warnings with certain compilers.
-
-Revision 1.4  2011/02/18 20:23:45  acg
- Andy Goodrich: Copyright update.
-
-Revision 1.3  2011/01/20 16:52:15  acg
- Andy Goodrich: changes for IEEE 1666 2011.
-
-Revision 1.2  2010/08/03 18:01:11  acg
- Andy Goodrich: formatting.
-
-Revision 1.1.1.1  2006/12/15 20:20:04  acg
-SystemC 2.3
-
-Revision 1.5  2006/08/29 23:35:00  acg
- Andy Goodrich: added bind_count() method to allow users to determine which
- ports are connected in before_end_of_elaboration().
-
-Revision 1.4  2006/05/08 17:52:47  acg
- Andy Goodrich:
-   (1) added David Long's forward declarations for friend functions,
-       methods, and operators to keep the Microsoft compiler happy.
-   (2) Added delta_count() method to sc_prim_channel for use by
-       sc_signal so that the friend declaration in sc_simcontext.h
-	   can be for a non-templated class (i.e., sc_prim_channel.)
-
-Revision 1.3  2006/01/24 20:46:31  acg
-Andy Goodrich: changes to eliminate use of deprecated features. For instance,
-using notify(SC_ZERO_TIME) in place of notify_delayed().
-
-Revision 1.2  2006/01/03 23:18:26  acg
-Changed copyright to include 2006.
-
-Revision 1.1.1.1  2005/12/19 23:16:43  acg
-First check in of SystemC 2.1 into its own archive.
-
-Revision 1.10  2005/09/15 23:01:51  acg
-Added std:: prefix to appropriate methods and types to get around
-issues with the Edison Front End.
-
-Revision 1.9  2005/08/10 01:35:59  acg
-Changes for 64-bit support.
-
-Revision 1.8  2005/04/03 22:52:51  acg
-Namespace changes.
-
-Revision 1.7  2005/03/21 22:31:32  acg
-Changes to sc_core namespace.
-
-Revision 1.6  2004/09/27 21:02:54  acg
-Andy Goodrich - Forte Design Systems, Inc.
-   - Added a $Log comment so that CVS checkin comments will appear in
-     checked out source.
-
-*/
 
 #ifndef SC_PORT_H
 #define SC_PORT_H
@@ -708,6 +619,103 @@ sc_port_b<IF>::make_sensitive( sc_method_handle handle_p,
 // ----------------------------------------------------------------------------
 
 } // namespace sc_core
+
+/*****************************************************************************
+
+  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+  changes you are making here.
+
+      Name, Affiliation, Date: Andy Goodrich, Forte,
+                               Bishnupriya Bhattacharya, Cadence Design Systems,
+                               25 August, 2003
+  Description of Modification: phase callbacks
+
+      Name, Affiliation, Date: Andy Goodrich, Forte Design Systems
+                               12 December, 2005
+  Description of Modification: multiport binding policy changes
+
+    
+ *****************************************************************************/
+
+/* 
+$Log: sc_port.h,v $
+Revision 1.10  2011/08/26 20:45:41  acg
+ Andy Goodrich: moved the modification log to the end of the file to
+ eliminate source line number skew when check-ins are done.
+
+Revision 1.9  2011/08/24 22:05:36  acg
+ Torsten Maehne: initialization changes to remove warnings.
+
+Revision 1.8  2011/08/07 19:08:01  acg
+ Andy Goodrich: moved logs to end of file so line number synching works
+ better between versions.
+
+Revision 1.7  2011/08/07 18:53:09  acg
+ Philipp A. Hartmann: add virtual instances of the bind function for
+ base classes to eliminate warning messages for clang platforms.
+
+Revision 1.6  2011/05/09 04:07:37  acg
+ Philipp A. Hartmann:
+   (1) Restore hierarchy in all phase callbacks.
+   (2) Ensure calls to before_end_of_elaboration.
+
+Revision 1.5  2011/03/30 16:46:10  acg
+ Andy Goodrich: added a signature and removed a virtual specification
+ to eliminate warnings with certain compilers.
+
+Revision 1.4  2011/02/18 20:23:45  acg
+ Andy Goodrich: Copyright update.
+
+Revision 1.3  2011/01/20 16:52:15  acg
+ Andy Goodrich: changes for IEEE 1666 2011.
+
+Revision 1.2  2010/08/03 18:01:11  acg
+ Andy Goodrich: formatting.
+
+Revision 1.1.1.1  2006/12/15 20:20:04  acg
+SystemC 2.3
+
+Revision 1.5  2006/08/29 23:35:00  acg
+ Andy Goodrich: added bind_count() method to allow users to determine which
+ ports are connected in before_end_of_elaboration().
+
+Revision 1.4  2006/05/08 17:52:47  acg
+ Andy Goodrich:
+   (1) added David Long's forward declarations for friend functions,
+       methods, and operators to keep the Microsoft compiler happy.
+   (2) Added delta_count() method to sc_prim_channel for use by
+       sc_signal so that the friend declaration in sc_simcontext.h
+	   can be for a non-templated class (i.e., sc_prim_channel.)
+
+Revision 1.3  2006/01/24 20:46:31  acg
+Andy Goodrich: changes to eliminate use of deprecated features. For instance,
+using notify(SC_ZERO_TIME) in place of notify_delayed().
+
+Revision 1.2  2006/01/03 23:18:26  acg
+Changed copyright to include 2006.
+
+Revision 1.1.1.1  2005/12/19 23:16:43  acg
+First check in of SystemC 2.1 into its own archive.
+
+Revision 1.10  2005/09/15 23:01:51  acg
+Added std:: prefix to appropriate methods and types to get around
+issues with the Edison Front End.
+
+Revision 1.9  2005/08/10 01:35:59  acg
+Changes for 64-bit support.
+
+Revision 1.8  2005/04/03 22:52:51  acg
+Namespace changes.
+
+Revision 1.7  2005/03/21 22:31:32  acg
+Changes to sc_core namespace.
+
+Revision 1.6  2004/09/27 21:02:54  acg
+Andy Goodrich - Forte Design Systems, Inc.
+   - Added a $Log comment so that CVS checkin comments will appear in
+     checked out source.
+
+*/
 
 #endif
 

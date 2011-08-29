@@ -24,35 +24,18 @@
 
   Original Author: Martin Janssen, Synopsys, Inc., 2001-11-14
 
+  CHANGE LOG AT END OF FILE
  *****************************************************************************/
-
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-
- *****************************************************************************/
-
-
-// $Log: sc_stop_here.cpp,v $
-// Revision 1.2  2011/02/18 20:38:44  acg
-//  Andy Goodrich: Updated Copyright notice.
-//
-// Revision 1.1.1.1  2006/12/15 20:20:06  acg
-// SystemC 2.3
-//
-// Revision 1.3  2006/01/13 18:53:11  acg
-// Andy Goodrich: Added $Log command so that CVS comments are reproduced in
-// the source.
-//
 
 #include "sysc/utils/sc_stop_here.h"
 
 
 namespace sc_core {
+
+static const char* info_id    = 0;
+static const char* warning_id = 0;
+static const char* error_id   = 0;
+static const char* fatal_id   = 0;
 
 // ----------------------------------------------------------------------------
 //  FUNCTION : sc_interrupt_here
@@ -69,20 +52,16 @@ sc_interrupt_here( const char* id, sc_severity severity )
 
     switch( severity ) {
       case SC_INFO: 
-	static const char* info_id;
 	info_id = id;
 	break;
       case SC_WARNING: 
-	static const char* warning_id;
 	warning_id = id;
 	break;
       case SC_ERROR: 
-	static const char* error_id;
 	error_id = id;
 	break;
       default:
       case SC_FATAL: 
-	static const char* fatal_id;
 	fatal_id = id;
 	break;
     }
@@ -104,25 +83,40 @@ sc_stop_here( const char* id, sc_severity severity )
 
     switch( severity ) {
       case SC_INFO: 
-	static const char* info_id;
 	info_id = id;
 	break;
       case SC_WARNING: 
-	static const char* warning_id;
 	warning_id = id;
 	break;
       case SC_ERROR: 
-	static const char* error_id;
 	error_id = id;
 	break;
       default:
       case SC_FATAL: 
-	static const char* fatal_id;
 	fatal_id = id;
 	break;
     }
 }
 
 } // namespace sc_core
+
+// $Log: sc_stop_here.cpp,v $
+// Revision 1.4  2011/08/26 21:49:08  acg
+//  Philipp A. Hartmann: eliminate compiler warning by moving static variables
+//  out of functions.
+//
+// Revision 1.3  2011/08/26 20:46:19  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
+// Revision 1.2  2011/02/18 20:38:44  acg
+//  Andy Goodrich: Updated Copyright notice.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:06  acg
+// SystemC 2.3
+//
+// Revision 1.3  2006/01/13 18:53:11  acg
+// Andy Goodrich: Added $Log command so that CVS comments are reproduced in
+// the source.
 
 // Taf!

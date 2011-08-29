@@ -35,11 +35,9 @@
  *****************************************************************************/
 
 
-#include "systemc.h"
-#include "pkt.h"
+#include <stdlib.h>
+#include <time.h>
 #include "sender.h"
-#include "stdlib.h"
-#include "time.h"
 
 void sender:: entry()
 {

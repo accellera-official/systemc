@@ -33,6 +33,11 @@
 
  *****************************************************************************/
 
+#if defined(SWITCH_H_INCLUDED)
+#define SWITCH_H_INCLUDED
+
+#include "systemc.h"
+#include "pkt.h"
 
 struct mcast_pkt_switch : sc_module {
 
@@ -60,3 +65,4 @@ struct mcast_pkt_switch : sc_module {
   void entry();  
  
 };
+#endif // defined(SWITCH_H_INCLUDED)

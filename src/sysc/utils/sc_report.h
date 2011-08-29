@@ -29,45 +29,8 @@
   Norris Ip, Dean Shea, John Rose, Jasvinder Singh, William Paulsen,
   John Pierce, Rachida Kebichi, Ted Elkind, David Bailey.
 
+  CHANGE LOG AT END OF FILE
  *****************************************************************************/
-
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date: Alex Riesen, Synopsys Inc., Jan 28, 2003
-  Description of Modification: Implementation for SytemC 2.1
-
- *****************************************************************************/
-
-// $Log: sc_report.h,v $
-// Revision 1.7  2011/05/05 17:46:04  acg
-//  Philip A. Hartmann: changes in "swap" support.
-//
-// Revision 1.6  2011/04/19 02:39:44  acg
-//  Andy Goodrich: set proper name for get_verbosity().
-//
-// Revision 1.5  2011/03/23 16:16:48  acg
-//  Andy Goodrich: finish message verbosity support.
-//
-// Revision 1.4  2011/02/18 20:38:44  acg
-//  Andy Goodrich: Updated Copyright notice.
-//
-// Revision 1.3  2011/02/01 23:02:05  acg
-//  Andy Goodrich: IEEE 1666 2011 changes.
-//
-// Revision 1.2  2008/05/20 20:42:50  acg
-//  Andy Goodrich: added sc_core namespace prefix for ID value in sc_assert()
-//  macro.
-//
-// Revision 1.1.1.1  2006/12/15 20:20:06  acg
-// SystemC 2.3
-//
-// Revision 1.3  2006/01/13 18:53:11  acg
-// Andy Goodrich: Added $Log command so that CVS comments are reproduced in
-// the source.
-//
 
 #include <exception>
 #include <string>
@@ -281,5 +244,47 @@ extern const char SC_ID_REGISTER_ID_FAILED_[];
 } // namespace sc_core
 
 #include "sysc/utils/sc_report_handler.h"
+
+/*****************************************************************************
+
+  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+  changes you are making here.
+
+      Name, Affiliation, Date: Alex Riesen, Synopsys Inc., Jan 28, 2003
+  Description of Modification: Implementation for SytemC 2.1
+
+ *****************************************************************************/
+
+// $Log: sc_report.h,v $
+// Revision 1.8  2011/08/26 20:46:19  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
+// Revision 1.7  2011/05/05 17:46:04  acg
+//  Philip A. Hartmann: changes in "swap" support.
+//
+// Revision 1.6  2011/04/19 02:39:44  acg
+//  Andy Goodrich: set proper name for get_verbosity().
+//
+// Revision 1.5  2011/03/23 16:16:48  acg
+//  Andy Goodrich: finish message verbosity support.
+//
+// Revision 1.4  2011/02/18 20:38:44  acg
+//  Andy Goodrich: Updated Copyright notice.
+//
+// Revision 1.3  2011/02/01 23:02:05  acg
+//  Andy Goodrich: IEEE 1666 2011 changes.
+//
+// Revision 1.2  2008/05/20 20:42:50  acg
+//  Andy Goodrich: added sc_core namespace prefix for ID value in sc_assert()
+//  macro.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:06  acg
+// SystemC 2.3
+//
+// Revision 1.3  2006/01/13 18:53:11  acg
+// Andy Goodrich: Added $Log command so that CVS comments are reproduced in
+// the source.
+//
 
 #endif // SC_REPORT_H

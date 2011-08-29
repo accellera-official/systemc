@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: sc_bit_proxies.h,v $
+// Revision 1.7  2011/08/24 22:05:40  acg
+//  Torsten Maehne: initialization changes to remove warnings.
+//
 // Revision 1.6  2010/02/22 14:25:43  acg
 //  Andy Goodrich: removed 'mutable' directive from references, since it
 //  is not a legal C++ construct.

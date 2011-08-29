@@ -21,37 +21,9 @@
 
   Original Author: Philipp A. Hartmann, OFFIS
 
+  CHANGE LOG AT END OF FILE
  *****************************************************************************/
 
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-
- *****************************************************************************/
-
-// $Log: sc_vector.cpp,v $
-// Revision 1.5  2011/04/01 22:35:19  acg
-//  Andy Goodrich: spelling fix.
-//
-// Revision 1.4  2011/03/28 13:03:09  acg
-//  Andy Goodrich: Philipp's latest update.
-//
-// Revision 1.3  2011/03/23 16:16:28  acg
-//  Philipp A. Hartmann: rebase implementation on void*
-//      - supports virtual inheritance from sc_object again
-//      - build up get_elements result on demand
-//      - still requires element type to be derived from sc_object
-//
-// Revision 1.2  2011/02/14 17:54:25  acg
-//  Andy Goodrich: Philipp's addition of early bind checks.
-//
-// Revision 1.1  2011/02/13 21:54:14  acg
-//  Andy Goodrich: turn on embedding of cvs log records.
-//
 
 #include "sc_vector.h"
 
@@ -172,5 +144,28 @@ sc_vector_base::make_name( const char* prefix, size_type /* idx */ )
 }
 
 } // namespace sc_core
+
+// $Log: sc_vector.cpp,v $
+// Revision 1.6  2011/08/26 20:46:20  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
+// Revision 1.5  2011/04/01 22:35:19  acg
+//  Andy Goodrich: spelling fix.
+//
+// Revision 1.4  2011/03/28 13:03:09  acg
+//  Andy Goodrich: Philipp's latest update.
+//
+// Revision 1.3  2011/03/23 16:16:28  acg
+//  Philipp A. Hartmann: rebase implementation on void*
+//      - supports virtual inheritance from sc_object again
+//      - build up get_elements result on demand
+//      - still requires element type to be derived from sc_object
+//
+// Revision 1.2  2011/02/14 17:54:25  acg
+//  Andy Goodrich: Philipp's addition of early bind checks.
+//
+// Revision 1.1  2011/02/13 21:54:14  acg
+//  Andy Goodrich: turn on embedding of cvs log records.
 
 // Taf!

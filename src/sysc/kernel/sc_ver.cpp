@@ -21,70 +21,16 @@
 
     Original Author: Stan Y. Liao, Synopsys, Inc.
 
+  CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
 
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-
- *****************************************************************************/
-
-
-// $Log: sc_ver.cpp,v $
-// Revision 1.12  2011/07/25 10:20:34  acg
-//  Andy Goodrich: check in aftermath of call to automake.
-//
-// Revision 1.11  2011/07/02 12:55:19  acg
-//  Andy Goodrich: automake refresh.
-//
-// Revision 1.10  2011/07/01 18:49:07  acg
-//  Andy Goodrich: moved pln() from sc_simcontext.cpp to sc_ver.cpp.
-//
-// Revision 1.9  2011/07/01 18:33:08  acg
-//  Andy Goodrich: changes for IEEE 1666, removal of macros and use of them.
-//
-// Revision 1.8  2011/04/08 18:27:53  acg
-//  Andy Goodrich: respin of the PoC.
-//
-// Revision 1.7  2011/04/05 20:50:57  acg
-//  Andy Goodrich:
-//    (1) changes to make sure that event(), posedge() and negedge() only
-//        return true if the clock has not moved.
-//    (2) fixes for method self-resumes.
-//    (3) added SC_PRERELEASE_VERSION
-//    (4) removed kernel events from the object hierarchy, added
-//        sc_hierarchy_name_exists().
-//
-// Revision 1.6  2011/02/18 20:27:14  acg
-//  Andy Goodrich: Updated Copyrights.
-//
-// Revision 1.5  2011/02/13 21:47:38  acg
-//  Andy Goodrich: update copyright notice.
-//
-// Revision 1.4  2011/01/18 20:10:45  acg
-//  Andy Goodrich: changes for IEEE1666_2011 semantics.
-//
-// Revision 1.3  2010/11/20 17:10:57  acg
-//  Andy Goodrich: reset processing changes for new IEEE 1666 standard.
-//
-// Revision 1.2  2008/05/22 17:06:27  acg
-//  Andy Goodrich: updated copyright notice to include 2008.
-//
-// Revision 1.1.1.1  2006/12/15 20:20:05  acg
-// SystemC 2.3
-//
-// Revision 1.3  2006/01/13 18:44:30  acg
-// Added $Log to record CVS changes into the source.
-//
 
 #include "sysc/kernel/sc_ver.h"
 #include "sysc/utils/sc_iostream.h"
 #include <cstdlib>
 using std::getenv;
+using std::cerr;
+using std::endl;
 
 namespace sc_core {
 
@@ -141,14 +87,14 @@ pln()
     if ( lnp || getenv("SYSTEMC_DISABLE_COPYRIGHT_MESSAGE") != 0 ) 
         lnp = true;
     if( ! lnp ) {
-        ::std::cerr << ::std::endl;
-	::std::cerr << sc_version() << ::std::endl;
-	::std::cerr << sc_copyright() << ::std::endl;
+        cerr << endl;
+	cerr << sc_version() << endl;
+	cerr << sc_copyright() << endl;
 
 	//  regressions check point
 
         if( getenv( "SYSTEMC_REGRESSION" ) != 0 ) {
-            ::std::cerr << "SystemC Simulation" << ::std::endl;
+            cerr << "SystemC Simulation" << endl;
         }
 
         lnp = true;
@@ -168,4 +114,59 @@ SC_API_VERSION_STRING::SC_API_VERSION_STRING ()
 }
 
 } // namespace sc_core
+
+// $Log: sc_ver.cpp,v $
+// Revision 1.14  2011/08/26 21:56:55  acg
+//  Torsten Maehne: use usings rather than absolute namespace addressing.
+//
+// Revision 1.13  2011/08/26 20:46:11  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
+// Revision 1.12  2011/07/25 10:20:34  acg
+//  Andy Goodrich: check in aftermath of call to automake.
+//
+// Revision 1.11  2011/07/02 12:55:19  acg
+//  Andy Goodrich: automake refresh.
+//
+// Revision 1.10  2011/07/01 18:49:07  acg
+//  Andy Goodrich: moved pln() from sc_simcontext.cpp to sc_ver.cpp.
+//
+// Revision 1.9  2011/07/01 18:33:08  acg
+//  Andy Goodrich: changes for IEEE 1666, removal of macros and use of them.
+//
+// Revision 1.8  2011/04/08 18:27:53  acg
+//  Andy Goodrich: respin of the PoC.
+//
+// Revision 1.7  2011/04/05 20:50:57  acg
+//  Andy Goodrich:
+//    (1) changes to make sure that event(), posedge() and negedge() only
+//        return true if the clock has not moved.
+//    (2) fixes for method self-resumes.
+//    (3) added SC_PRERELEASE_VERSION
+//    (4) removed kernel events from the object hierarchy, added
+//        sc_hierarchy_name_exists().
+//
+// Revision 1.6  2011/02/18 20:27:14  acg
+//  Andy Goodrich: Updated Copyrights.
+//
+// Revision 1.5  2011/02/13 21:47:38  acg
+//  Andy Goodrich: update copyright notice.
+//
+// Revision 1.4  2011/01/18 20:10:45  acg
+//  Andy Goodrich: changes for IEEE1666_2011 semantics.
+//
+// Revision 1.3  2010/11/20 17:10:57  acg
+//  Andy Goodrich: reset processing changes for new IEEE 1666 standard.
+//
+// Revision 1.2  2008/05/22 17:06:27  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.3  2006/01/13 18:44:30  acg
+// Added $Log to record CVS changes into the source.
+//
+
 // Taf!

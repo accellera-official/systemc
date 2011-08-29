@@ -71,6 +71,7 @@ void sc_method_process::check_for_throws( process_throw_type old_throw_status )
 	{
 	  case THROW_ASYNC_RESET:
 	    // @@@@#### queue the method for execution and throw and unwind
+	    simcontext()->preempt_with(this);
 	    break;
           case THROW_KILL:
 	    throw sc_unwind_exception( this, false );
@@ -534,7 +535,8 @@ void sc_method_process::throw_reset( bool async )
 	{
 	    DEBUG_MSG(DEBUG_NAME,this,
 	              "throw_reset: queueing method for execution");
-	    simcontext()->execute_method_next(this);
+	    // simcontext()->execute_method_next(this);
+	    simcontext()->preempt_with(this);
 	}
     }
 }
@@ -803,6 +805,9 @@ bool sc_method_process::trigger_dynamic( sc_event* e )
  *****************************************************************************/
 
 // $Log: sc_method_process.cpp,v $
+// Revision 1.47  2011/08/24 22:05:50  acg
+//  Torsten Maehne: initialization changes to remove warnings.
+//
 // Revision 1.46  2011/08/07 19:08:04  acg
 //  Andy Goodrich: moved logs to end of file so line number synching works
 //  better between versions.

@@ -36,6 +36,9 @@
 
 
 // $Log: sc_nbutils.cpp,v $
+// Revision 1.4  2011/08/24 22:05:46  acg
+//  Torsten Maehne: initialization changes to remove warnings.
+//
 // Revision 1.3  2011/02/18 20:19:15  acg
 //  Andy Goodrich: updating Copyright notice.
 //

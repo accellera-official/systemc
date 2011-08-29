@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: scfx_rep.h,v $
+// Revision 1.6  2011/08/24 22:05:43  acg
+//  Torsten Maehne: initialization changes to remove warnings.
+//
 // Revision 1.5  2011/07/25 10:20:29  acg
 //  Andy Goodrich: check in aftermath of call to automake.
 //

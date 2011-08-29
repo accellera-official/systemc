@@ -21,19 +21,44 @@
 
   Original Author: Andy Goodrich, Forte Design Systems, Inc.
 
+  CHANGE LOG AT END OF FILE
  *****************************************************************************/
 
-/*****************************************************************************
 
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
+#ifndef SC_MACHINE_H
+#define SC_MACHINE_H
 
-      Name, Affiliation, Date:
-  Description of Modification:
+#include <climits>
+#include "sysc/packages/boost/detail/endian.hpp"
 
- *****************************************************************************/
+// ----------------------------------------------------------------------------
+//  Little or big endian machine?
+// ----------------------------------------------------------------------------
+
+#if defined( SC_BOOST_LITTLE_ENDIAN )
+#   define SC_LITTLE_ENDIAN
+#elif defined( SC_BOOST_BIG_ENDIAN )
+#   define SC_BIG_ENDIAN
+#else
+#   error "Could not detect the endianness of the CPU."
+#endif
+
+// ----------------------------------------------------------------------------
+//  Are long data types 32-bit or 64-bit?
+// ----------------------------------------------------------------------------
+
+#if ULONG_MAX > 0xffffffffUL
+#   define SC_LONG_64
+#endif
 
 // $Log: sc_machine.h,v $
+// Revision 1.5  2011/08/26 22:58:23  acg
+//  Torsten Maehne: changes for endian detection.
+//
+// Revision 1.4  2011/08/26 20:46:18  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
 // Revision 1.3  2011/02/18 20:38:44  acg
 //  Andy Goodrich: Updated Copyright notice.
 //
@@ -47,27 +72,5 @@
 // Andy Goodrich: Added $Log command so that CVS comments are reproduced in
 // the source.
 //
-
-#ifndef SC_MACHINE_H
-#define SC_MACHINE_H
-
-// ----------------------------------------------------------------------------
-//  Little or big endian machine?
-// ----------------------------------------------------------------------------
-
-#if defined( __x86_64__ ) || defined( __i386__ ) || defined(WIN32)
-#   define SC_LITTLE_ENDIAN
-#elif defined( __ppc__ ) || defined( sparc ) || defined( __hppa )
-#   define SC_BIG_ENDIAN
-#endif
-
-// ----------------------------------------------------------------------------
-//  Are long data types 32-bit or 64-bit?
-// ----------------------------------------------------------------------------
-
-#if defined( __x86_64__ ) 
-#   define SC_LONG_64
-#endif
-
 
 #endif // !defined(SC_MACHINE_H)

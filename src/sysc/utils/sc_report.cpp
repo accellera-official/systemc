@@ -17,7 +17,7 @@
 
 /*****************************************************************************
 
-  sc_report.h -- Run-time logging and reporting facilities
+  sc_report.cpp -- Run-time logging and reporting facilities
 
   Interface design by SystemC Verification Working Group.
   Implementation by Alex Riesen, Synopsys Inc.
@@ -26,54 +26,9 @@
   Norris Ip, Dean Shea, John Rose, Jasvinder Singh, William Paulsen,
   John Pierce, Rachida Kebichi, Ted Elkind, David Bailey.
 
+  CHANGE LOG AT END OF FILE
  *****************************************************************************/
 
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date: Alex Riesen, Synopsys Inc., Jan 28, 2003
-  Description of Modification: Implementation for SytemC 2.1
-
- *****************************************************************************/
-
-// $Log: sc_report.cpp,v $
-// Revision 1.5  2011/05/05 17:46:04  acg
-//  Philip A. Hartmann: changes in "swap" support.
-//
-// Revision 1.4  2011/03/23 16:16:48  acg
-//  Andy Goodrich: finish message verbosity support.
-//
-// Revision 1.3  2011/02/18 20:38:44  acg
-//  Andy Goodrich: Updated Copyright notice.
-//
-// Revision 1.2  2011/02/01 23:02:05  acg
-//  Andy Goodrich: IEEE 1666 2011 changes.
-//
-// Revision 1.1.1.1  2006/12/15 20:20:06  acg
-// SystemC 2.3
-//
-// Revision 1.7  2006/03/21 00:00:37  acg
-//   Andy Goodrich: changed name of sc_get_current_process_base() to be
-//   sc_get_current_process_b() since its returning an sc_process_b instance.
-//
-// Revision 1.6  2006/01/25 00:31:27  acg
-//  Andy Goodrich: Changed over to use a standard message id of
-//  SC_ID_IEEE_1666_DEPRECATION for all deprecation messages.
-//
-// Revision 1.5  2006/01/24 22:02:30  acg
-//  Andy Goodrich: switch deprecated features warnings to use a single message
-//  id, SC_ID_IEEE_1666_DEPRECATION_.
-//
-// Revision 1.4  2006/01/24 20:53:41  acg
-// Andy Goodrich: added warnings indicating that use of integer ids in reports
-// is deprecated. Added tracing/sc_trace_ids.h to message list.
-//
-// Revision 1.3  2006/01/13 18:53:11  acg
-// Andy Goodrich: Added $Log command so that CVS comments are reproduced in
-// the source.
-//
 
 #include "sysc/kernel/sc_process.h"
 #include "sysc/kernel/sc_simcontext_int.h"
@@ -101,7 +56,17 @@ static void sc_deprecated_report_ids(const char* method)
 static char empty_str[] = "";
 static inline char * empty_dup(const char * p)
 {
-    return p && *p ? strdup(p): empty_str;
+    if ( p && *p )
+    {
+        char* result;
+	result = (char*)malloc(strlen(p)+1);
+	strcpy(result, p);
+        return result;
+    }
+    else
+    {
+        return empty_str;
+    }
 }
 
 sc_report::sc_report() 
@@ -131,8 +96,11 @@ sc_report::sc_report(sc_severity severity_,
   timestamp(new sc_time(sc_time_stamp())),
   process(sc_get_current_process_b()),
   m_verbosity_level(verbosity_level),
-  m_what(strdup(sc_report_compose_message(*this).c_str()))
+  m_what(0)
 {
+  const char* p = sc_report_compose_message(*this).c_str();
+  m_what = new char [strlen(p)+1];
+  strcpy(m_what,p);
 }
 
 sc_report::sc_report(const sc_report& other)
@@ -307,4 +275,51 @@ int sc_report::get_id() const
 }
 
 } // namespace sc_core
+
+// $Log: sc_report.cpp,v $
+// Revision 1.7  2011/08/26 20:43:01  acg
+//  Andy Goodrich:
+//    (1) Replaced strdup with new and strcpy to eliminate issue with the
+//        Greenhills compiler.
+//    (2) Moved modification log to the end of the file to eliminate line
+//        skew when check-ins are done.
+//
+// Revision 1.6  2011/08/24 22:05:56  acg
+//  Torsten Maehne: initialization changes to remove warnings.
+//
+// Revision 1.5  2011/05/05 17:46:04  acg
+//  Philip A. Hartmann: changes in "swap" support.
+//
+// Revision 1.4  2011/03/23 16:16:48  acg
+//  Andy Goodrich: finish message verbosity support.
+//
+// Revision 1.3  2011/02/18 20:38:44  acg
+//  Andy Goodrich: Updated Copyright notice.
+//
+// Revision 1.2  2011/02/01 23:02:05  acg
+//  Andy Goodrich: IEEE 1666 2011 changes.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:06  acg
+// SystemC 2.3
+//
+// Revision 1.7  2006/03/21 00:00:37  acg
+//   Andy Goodrich: changed name of sc_get_current_process_base() to be
+//   sc_get_current_process_b() since its returning an sc_process_b instance.
+//
+// Revision 1.6  2006/01/25 00:31:27  acg
+//  Andy Goodrich: Changed over to use a standard message id of
+//  SC_ID_IEEE_1666_DEPRECATION for all deprecation messages.
+//
+// Revision 1.5  2006/01/24 22:02:30  acg
+//  Andy Goodrich: switch deprecated features warnings to use a single message
+//  id, SC_ID_IEEE_1666_DEPRECATION_.
+//
+// Revision 1.4  2006/01/24 20:53:41  acg
+// Andy Goodrich: added warnings indicating that use of integer ids in reports
+// is deprecated. Added tracing/sc_trace_ids.h to message list.
+//
+// Revision 1.3  2006/01/13 18:53:11  acg
+// Andy Goodrich: Added $Log command so that CVS comments are reproduced in
+// the source.
+
 // taf

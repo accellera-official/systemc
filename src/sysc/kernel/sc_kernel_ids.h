@@ -159,7 +159,7 @@ SC_DEFINE_MESSAGE(SC_ID_THROW_IT_IGNORED_  , 556,
 SC_DEFINE_MESSAGE(SC_ID_NOT_EXPECTING_DYNAMIC_EVENT_NOTIFY_ , 557,
 	"dynamic event notification encountered when sensitivity is static" )
 SC_DEFINE_MESSAGE(SC_ID_DISABLE_WILL_ORPHAN_PROCESS_     , 558,
-	"disable() or dont_initialize() called on process with no static sensitivity, it will be orphaned " ) 
+       "disable() or dont_initialize() called on process with no static sensitivity, it will be orphaned" )
 SC_DEFINE_MESSAGE(SC_ID_PROCESS_CONTROL_CORNER_CASE_     , 559,
 	"Undefined process control interaction" ) 
 SC_DEFINE_MESSAGE(SC_ID_METHOD_TERMINATION_EVENT_        , 560,
@@ -201,6 +201,9 @@ SC_DEFINE_MESSAGE(SC_ID_THROW_IT_WHILE_NOT_RUNNING_  , 574,
  *****************************************************************************/
 
 // $Log: sc_kernel_ids.h,v $
+// Revision 1.25  2011/08/26 22:06:34  acg
+//  Torsten Maehne: formating fix.
+//
 // Revision 1.24  2011/08/07 19:08:04  acg
 //  Andy Goodrich: moved logs to end of file so line number synching works
 //  better between versions.

@@ -145,7 +145,7 @@ public:
   }
 };
 
-int sc_main (int argc , char *argv[]) 
+int sc_main (int, char*[]) 
 {
   top top1("Top1");
   sc_start();

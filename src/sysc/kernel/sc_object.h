@@ -21,67 +21,9 @@
 
   Original Author: Stan Y. Liao, Synopsys, Inc.
 
+  CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
 
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date: Andy Goodrich, Forte Design Systems
-                               5 September 2003
-  Description of Modification: - Made creation of attributes structure      
-                                 conditional on its being used. This eliminates
-                                 100 bytes of storage for each normal sc_object.
-
- *****************************************************************************/
-
-// $Log: sc_object.h,v $
-// Revision 1.11  2011/03/06 15:55:11  acg
-//  Andy Goodrich: Changes for named events.
-//
-// Revision 1.10  2011/03/05 19:44:20  acg
-//  Andy Goodrich: changes for object and event naming and structures.
-//
-// Revision 1.9  2011/03/05 01:39:21  acg
-//  Andy Goodrich: changes for named events.
-//
-// Revision 1.8  2011/02/18 20:27:14  acg
-//  Andy Goodrich: Updated Copyrights.
-//
-// Revision 1.7  2011/02/13 21:47:37  acg
-//  Andy Goodrich: update copyright notice.
-//
-// Revision 1.6  2011/01/25 20:50:37  acg
-//  Andy Goodrich: changes for IEEE 1666 2011.
-//
-// Revision 1.5  2011/01/18 20:10:44  acg
-//  Andy Goodrich: changes for IEEE1666_2011 semantics.
-//
-// Revision 1.4  2010/07/22 20:02:33  acg
-//  Andy Goodrich: bug fixes.
-//
-// Revision 1.3  2009/02/28 00:26:58  acg
-//  Andy Goodrich: changed boost name space to sc_boost to allow use with
-//  full boost library applications.
-//
-// Revision 1.2  2008/05/22 17:06:26  acg
-//  Andy Goodrich: updated copyright notice to include 2008.
-//
-// Revision 1.1.1.1  2006/12/15 20:20:05  acg
-// SystemC 2.3
-//
-// Revision 1.5  2006/04/20 17:08:17  acg
-//  Andy Goodrich: 3.0 style process changes.
-//
-// Revision 1.4  2006/04/11 23:13:21  acg
-//   Andy Goodrich: Changes for reduced reset support that only includes
-//   sc_cthread, but has preliminary hooks for expanding to method and thread
-//   processes also.
-//
-// Revision 1.3  2006/01/13 18:44:30  acg
-// Added $Log to record CVS changes into the source.
-//
 
 #ifndef SC_OBJECT_H
 #define SC_OBJECT_H
@@ -98,6 +40,7 @@ class sc_runnable;
 class sc_simcontext;
 class sc_trace_file;
 
+#define SC_KERNEL_MODULE_PREFIX "$$$$kernel_module$$$$_"
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_object
@@ -217,5 +160,68 @@ sc_object* sc_get_parent( const sc_object* obj_p )
 }
 
 } // namespace sc_core
+
+/*****************************************************************************
+
+  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+  changes you are making here.
+
+      Name, Affiliation, Date: Andy Goodrich, Forte Design Systems
+                               5 September 2003
+  Description of Modification: - Made creation of attributes structure      
+                                 conditional on its being used. This eliminates
+                                 100 bytes of storage for each normal sc_object.
+
+ *****************************************************************************/
+
+// $Log: sc_object.h,v $
+// Revision 1.12  2011/08/26 20:46:10  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
+// Revision 1.11  2011/03/06 15:55:11  acg
+//  Andy Goodrich: Changes for named events.
+//
+// Revision 1.10  2011/03/05 19:44:20  acg
+//  Andy Goodrich: changes for object and event naming and structures.
+//
+// Revision 1.9  2011/03/05 01:39:21  acg
+//  Andy Goodrich: changes for named events.
+//
+// Revision 1.8  2011/02/18 20:27:14  acg
+//  Andy Goodrich: Updated Copyrights.
+//
+// Revision 1.7  2011/02/13 21:47:37  acg
+//  Andy Goodrich: update copyright notice.
+//
+// Revision 1.6  2011/01/25 20:50:37  acg
+//  Andy Goodrich: changes for IEEE 1666 2011.
+//
+// Revision 1.5  2011/01/18 20:10:44  acg
+//  Andy Goodrich: changes for IEEE1666_2011 semantics.
+//
+// Revision 1.4  2010/07/22 20:02:33  acg
+//  Andy Goodrich: bug fixes.
+//
+// Revision 1.3  2009/02/28 00:26:58  acg
+//  Andy Goodrich: changed boost name space to sc_boost to allow use with
+//  full boost library applications.
+//
+// Revision 1.2  2008/05/22 17:06:26  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.5  2006/04/20 17:08:17  acg
+//  Andy Goodrich: 3.0 style process changes.
+//
+// Revision 1.4  2006/04/11 23:13:21  acg
+//   Andy Goodrich: Changes for reduced reset support that only includes
+//   sc_cthread, but has preliminary hooks for expanding to method and thread
+//   processes also.
+//
+// Revision 1.3  2006/01/13 18:44:30  acg
+// Added $Log to record CVS changes into the source.
 
 #endif // SC_OBJECT_H

@@ -21,54 +21,9 @@
 
   Original Author: Stan Y. Liao, Synopsys, Inc.
 
+  CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
 
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date: Gene Bushuyev. Synopsys, Inc.
-  Description of Modification: - Had to add empty public default and copy
-                                 constructors to satisfy VC6.0.
-    
-      Name, Affiliation, Date:
-  Description of Modification:
-
- *****************************************************************************/
-
-// $Log: sc_except.h,v $
-// Revision 1.8  2011/05/09 04:07:48  acg
-//  Philipp A. Hartmann:
-//    (1) Restore hierarchy in all phase callbacks.
-//    (2) Ensure calls to before_end_of_elaboration.
-//
-// Revision 1.7  2011/02/18 20:27:14  acg
-//  Andy Goodrich: Updated Copyrights.
-//
-// Revision 1.6  2011/02/13 21:47:37  acg
-//  Andy Goodrich: update copyright notice.
-//
-// Revision 1.5  2011/02/11 13:25:24  acg
-//  Andy Goodrich: Philipp A. Hartmann's changes:
-//    (1) Removal of SC_CTHREAD method overloads.
-//    (2) New exception processing code.
-//
-// Revision 1.4  2011/01/18 20:10:44  acg
-//  Andy Goodrich: changes for IEEE1666_2011 semantics.
-//
-// Revision 1.3  2009/05/22 16:06:29  acg
-//  Andy Goodrich: process control updates.
-//
-// Revision 1.2  2008/05/22 17:06:25  acg
-//  Andy Goodrich: updated copyright notice to include 2008.
-//
-// Revision 1.1.1.1  2006/12/15 20:20:05  acg
-// SystemC 2.3
-//
-// Revision 1.3  2006/01/13 18:44:29  acg
-// Added $Log to record CVS changes into the source.
-//
 
 #ifndef SC_EXCEPT_H
 #define SC_EXCEPT_H
@@ -145,8 +100,10 @@ class sc_unwind_exception : public std::exception
 };
 
 inline
-sc_unwind_exception::sc_unwind_exception( const sc_unwind_exception& that ) :
-    std::exception(), m_proc_p( that.m_proc_p ), m_is_reset( that.m_is_reset )
+sc_unwind_exception::sc_unwind_exception( const sc_unwind_exception& that )
+  : std::exception( that )
+  , m_proc_p( that.m_proc_p )
+  , m_is_reset( that.m_is_reset )
 {
     that.m_proc_p = 0; // move to new instance
 }
@@ -159,5 +116,61 @@ class sc_report;
 sc_report* sc_handle_exception();
 
 } // namespace sc_core
+
+/*****************************************************************************
+
+  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+  changes you are making here.
+
+      Name, Affiliation, Date: Gene Bushuyev. Synopsys, Inc.
+  Description of Modification: - Had to add empty public default and copy
+                                 constructors to satisfy VC6.0.
+    
+      Name, Affiliation, Date:
+  Description of Modification:
+
+ *****************************************************************************/
+
+// $Log: sc_except.h,v $
+// Revision 1.11  2011/08/26 21:40:26  acg
+//  Philipp A. Hartmann: fix up sc_unwind_exception copy-ctor.
+//
+// Revision 1.10  2011/08/26 20:46:09  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
+// Revision 1.9  2011/08/24 22:05:50  acg
+//  Torsten Maehne: initialization changes to remove warnings.
+//
+// Revision 1.8  2011/05/09 04:07:48  acg
+//  Philipp A. Hartmann:
+//    (1) Restore hierarchy in all phase callbacks.
+//    (2) Ensure calls to before_end_of_elaboration.
+//
+// Revision 1.7  2011/02/18 20:27:14  acg
+//  Andy Goodrich: Updated Copyrights.
+//
+// Revision 1.6  2011/02/13 21:47:37  acg
+//  Andy Goodrich: update copyright notice.
+//
+// Revision 1.5  2011/02/11 13:25:24  acg
+//  Andy Goodrich: Philipp A. Hartmann's changes:
+//    (1) Removal of SC_CTHREAD method overloads.
+//    (2) New exception processing code.
+//
+// Revision 1.4  2011/01/18 20:10:44  acg
+//  Andy Goodrich: changes for IEEE1666_2011 semantics.
+//
+// Revision 1.3  2009/05/22 16:06:29  acg
+//  Andy Goodrich: process control updates.
+//
+// Revision 1.2  2008/05/22 17:06:25  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.3  2006/01/13 18:44:29  acg
+// Added $Log to record CVS changes into the source.
 
 #endif

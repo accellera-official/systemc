@@ -22,96 +22,16 @@
   Original Author: Andy Goodrich, Forte Design Systems, 17 June 2003
                
 
- *****************************************************************************/
-
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-
+  CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
 
 // $Log: sc_process_handle.h,v $
-// Revision 1.18  2011/04/01 22:08:26  acg
-//  Andy Goodrich: remove unused variable.
+// Revision 1.21  2011/08/26 21:54:04  acg
+//  Torsten Maehne: Simplify use of dynamic_cast<> for initializing m_target.
 //
-// Revision 1.17  2011/03/12 21:07:51  acg
-//  Andy Goodrich: changes to kernel generated event support.
-//
-// Revision 1.16  2011/02/18 20:27:14  acg
-//  Andy Goodrich: Updated Copyrights.
-//
-// Revision 1.15  2011/02/17 19:53:03  acg
-//  Andy Goodrich: changed dump_status() to dump_state() with new signature.
-//
-// Revision 1.14  2011/02/13 21:47:37  acg
-//  Andy Goodrich: update copyright notice.
-//
-// Revision 1.13  2011/02/13 21:33:30  acg
-//  Andy Goodrich: added dump_status() to allow the dumping of the status
-//  of a process handle's target.
-//
-// Revision 1.12  2011/02/01 23:01:53  acg
-//  Andy Goodrich: removed dead code.
-//
-// Revision 1.11  2011/02/01 21:07:36  acg
-//  Andy Goodrich: defering of run queue manipulations to the
-//  sc_thread_process::throw_it() method.
-//
-// Revision 1.10  2011/01/25 20:50:37  acg
-//  Andy Goodrich: changes for IEEE 1666 2011.
-//
-// Revision 1.9  2011/01/20 16:52:20  acg
-//  Andy Goodrich: changes for IEEE 1666 2011.
-//
-// Revision 1.8  2011/01/19 23:21:50  acg
-//  Andy Goodrich: changes for IEEE 1666 2011
-//
-// Revision 1.7  2011/01/18 20:10:45  acg
-//  Andy Goodrich: changes for IEEE1666_2011 semantics.
-//
-// Revision 1.6  2010/07/30 05:21:22  acg
-//  Andy Goodrich: release 2.3 fixes.
-//
-// Revision 1.5  2010/07/22 20:02:33  acg
-//  Andy Goodrich: bug fixes.
-//
-// Revision 1.4  2009/05/22 16:06:29  acg
-//  Andy Goodrich: process control updates.
-//
-// Revision 1.3  2008/05/22 17:06:26  acg
-//  Andy Goodrich: updated copyright notice to include 2008.
-//
-// Revision 1.2  2007/09/20 20:32:35  acg
-//  Andy Goodrich: changes to the semantics of throw_it() to match the
-//  specification. A call to throw_it() will immediately suspend the calling
-//  thread until all the throwees have executed. At that point the calling
-//  thread will be restarted before the execution of any other threads.
-//
-// Revision 1.1.1.1  2006/12/15 20:20:05  acg
-// SystemC 2.3
-//
-// Revision 1.7  2006/05/08 17:58:24  acg
-// Andy Goodrich: added David Long's forward declarations for friend
-//   functions, methods, and operators to keep the Microsoft compiler happy.
-//
-// Revision 1.6  2006/04/20 17:08:17  acg
-//  Andy Goodrich: 3.0 style process changes.
-//
-// Revision 1.5  2006/04/11 23:13:21  acg
-//   Andy Goodrich: Changes for reduced reset support that only includes
-//   sc_cthread, but has preliminary hooks for expanding to method and thread
-//   processes also.
-//
-// Revision 1.4  2006/01/24 20:49:05  acg
-// Andy Goodrich: changes to remove the use of deprecated features within the
-// simulator, and to issue warning messages when deprecated features are used.
-//
-// Revision 1.3  2006/01/13 18:44:30  acg
-// Added $Log to record CVS changes into the source.
+// Revision 1.20  2011/08/26 20:46:10  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
 //
 
 #if !defined(sc_process_handle_h_INCLUDED)
@@ -261,7 +181,7 @@ inline sc_process_handle::sc_process_handle() : m_target_p(0)
 //     object_p -> sc_object instance this is handle for.
 //------------------------------------------------------------------------------
 inline sc_process_handle::sc_process_handle( sc_object* object_p ) :
-    m_target_p(object_p ? DCAST<sc_process_b*>(object_p) : (sc_process_b*)0)
+    m_target_p(DCAST<sc_process_b*>(object_p))
 {
     if ( m_target_p ) m_target_p->reference_increment();
 }
@@ -588,5 +508,86 @@ inline sc_process_handle sc_get_last_created_process_handle()
 }
 
 } // namespace sc_core
+
+// Revision 1.19  2011/08/24 22:05:51  acg
+//  Torsten Maehne: initialization changes to remove warnings.
+//
+// Revision 1.18  2011/04/01 22:08:26  acg
+//  Andy Goodrich: remove unused variable.
+//
+// Revision 1.17  2011/03/12 21:07:51  acg
+//  Andy Goodrich: changes to kernel generated event support.
+//
+// Revision 1.16  2011/02/18 20:27:14  acg
+//  Andy Goodrich: Updated Copyrights.
+//
+// Revision 1.15  2011/02/17 19:53:03  acg
+//  Andy Goodrich: changed dump_status() to dump_state() with new signature.
+//
+// Revision 1.14  2011/02/13 21:47:37  acg
+//  Andy Goodrich: update copyright notice.
+//
+// Revision 1.13  2011/02/13 21:33:30  acg
+//  Andy Goodrich: added dump_status() to allow the dumping of the status
+//  of a process handle's target.
+//
+// Revision 1.12  2011/02/01 23:01:53  acg
+//  Andy Goodrich: removed dead code.
+//
+// Revision 1.11  2011/02/01 21:07:36  acg
+//  Andy Goodrich: defering of run queue manipulations to the
+//  sc_thread_process::throw_it() method.
+//
+// Revision 1.10  2011/01/25 20:50:37  acg
+//  Andy Goodrich: changes for IEEE 1666 2011.
+//
+// Revision 1.9  2011/01/20 16:52:20  acg
+//  Andy Goodrich: changes for IEEE 1666 2011.
+//
+// Revision 1.8  2011/01/19 23:21:50  acg
+//  Andy Goodrich: changes for IEEE 1666 2011
+//
+// Revision 1.7  2011/01/18 20:10:45  acg
+//  Andy Goodrich: changes for IEEE1666_2011 semantics.
+//
+// Revision 1.6  2010/07/30 05:21:22  acg
+//  Andy Goodrich: release 2.3 fixes.
+//
+// Revision 1.5  2010/07/22 20:02:33  acg
+//  Andy Goodrich: bug fixes.
+//
+// Revision 1.4  2009/05/22 16:06:29  acg
+//  Andy Goodrich: process control updates.
+//
+// Revision 1.3  2008/05/22 17:06:26  acg
+//  Andy Goodrich: updated copyright notice to include 2008.
+//
+// Revision 1.2  2007/09/20 20:32:35  acg
+//  Andy Goodrich: changes to the semantics of throw_it() to match the
+//  specification. A call to throw_it() will immediately suspend the calling
+//  thread until all the throwees have executed. At that point the calling
+//  thread will be restarted before the execution of any other threads.
+//
+// Revision 1.1.1.1  2006/12/15 20:20:05  acg
+// SystemC 2.3
+//
+// Revision 1.7  2006/05/08 17:58:24  acg
+// Andy Goodrich: added David Long's forward declarations for friend
+//   functions, methods, and operators to keep the Microsoft compiler happy.
+//
+// Revision 1.6  2006/04/20 17:08:17  acg
+//  Andy Goodrich: 3.0 style process changes.
+//
+// Revision 1.5  2006/04/11 23:13:21  acg
+//   Andy Goodrich: Changes for reduced reset support that only includes
+//   sc_cthread, but has preliminary hooks for expanding to method and thread
+//   processes also.
+//
+// Revision 1.4  2006/01/24 20:49:05  acg
+// Andy Goodrich: changes to remove the use of deprecated features within the
+// simulator, and to issue warning messages when deprecated features are used.
+//
+// Revision 1.3  2006/01/13 18:44:30  acg
+// Added $Log to record CVS changes into the source.
 
 #endif // !defined(sc_spawn_h_INCLUDED)
