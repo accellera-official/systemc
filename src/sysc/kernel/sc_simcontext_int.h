@@ -136,17 +136,15 @@ sc_simcontext::preempt_with( sc_thread_handle thread_h )
     if ( active_p == NULL )
     {
         sc_method_handle                 method_p;   // active method.
-        sc_process_b::process_throw_type old_status; // method's throw status.
 
 	method_p = DCAST<sc_method_handle>(sc_get_current_process_b());
-	old_status = method_p->m_throw_status;
 	caller_info = m_curr_proc_info;
         DEBUG_MSG( DEBUG_NAME, thread_h,
 	           "preempting no active thread with this thread" );
 	set_curr_proc( (sc_process_b*)thread_h );
 	m_cor_pkg->yield( thread_h->m_cor_p );
 	m_curr_proc_info = caller_info; 
-	method_p->check_for_throws( old_status );
+	method_p->check_for_throws();
     }
 
     // CALLER IS A THREAD, BUT NOT THE THREAD TO BE RUN:

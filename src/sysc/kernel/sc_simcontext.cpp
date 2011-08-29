@@ -1323,16 +1323,13 @@ sc_simcontext::preempt_with( sc_method_handle method_h )
 
     else if ( active_method_h != NULL )
     {
-        sc_process_b::process_throw_type old_status;  // method's throw status.
-
-	old_status = active_method_h->m_throw_status;
 	caller_info = m_curr_proc_info;
         DEBUG_MSG( DEBUG_NAME, method_h,
 	           "preempting active method with this method" );
 	sc_get_curr_simcontext()->set_curr_proc( (sc_process_b*)method_h );
 	method_h->run_process();
 	sc_get_curr_simcontext()->set_curr_proc((sc_process_b*)active_method_h);
-	active_method_h->check_for_throws( old_status );
+	active_method_h->check_for_throws();
     }
 
     // CALLER IS A THREAD:

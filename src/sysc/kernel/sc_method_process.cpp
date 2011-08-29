@@ -60,10 +60,8 @@ namespace sc_core {
 // | manipulation on this object instance that requires it to throw an 
 // | exception.
 // |
-// | Arguments:
-// |     old_throw_status = throw status before the preemption.
 // +----------------------------------------------------------------------------
-void sc_method_process::check_for_throws( process_throw_type old_throw_status )
+void sc_method_process::check_for_throws()
 {
     if ( !m_unwinding )
     {

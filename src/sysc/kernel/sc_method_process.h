@@ -128,7 +128,7 @@ class sc_method_process : public sc_process_b {
         { return "sc_method_process"; }
 
   protected:
-    void check_for_throws( process_throw_type old_status );
+    void check_for_throws();
     virtual void disable_process(
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
     virtual void enable_process(
