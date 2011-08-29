@@ -63,6 +63,8 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <time.h>
+#include <stdlib.h>    // drand48, srand48
+
 #include "systemc.h"
 
 #define DEBUG_SYSTEMC // #undef this to disable assertions.
@@ -78,9 +80,6 @@
 #define HALF_STR_SIZE ( HALF_NBITS + 2 )
 
 typedef sc_bigint<NBITS>  bigint;
-
-double drand48();
-void srand48(long);
 
 // Return the absolute value of x.
 inline 
