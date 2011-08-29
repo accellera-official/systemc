@@ -405,7 +405,6 @@ sc_string_old::set( int i, char c )
 sc_string_old sc_string_old::to_string(const char* format, ...)
 {
    va_list argptr;
-   int cnt;
    sc_string_old result;
    char buffer[1024]; // static string buffer
    buffer[1023]=000;
@@ -414,9 +413,9 @@ sc_string_old sc_string_old::to_string(const char* format, ...)
 #if defined(WIN32)
    // Windows provides safer implementation
 #if defined(_MSC_VER)
-   cnt = _vsnprintf(buffer, 1024, format, argptr);
+   int cnt = _vsnprintf(buffer, 1024, format, argptr);
 #else
-   cnt = vsnprintf(buffer, 1024, format, argptr);
+   int cnt = vsnprintf(buffer, 1024, format, argptr);
 #endif
    if(cnt>1023) // string too long
    {
@@ -451,7 +450,7 @@ sc_string_old sc_string_old::to_string(const char* format, ...)
    try {
      // this may end up in a core dump
      // if we are lucky we can catch exception
-     cnt = vsprintf(buffer, format, argptr);
+     vsprintf(buffer, format, argptr);
    }
    catch(...)
    {
