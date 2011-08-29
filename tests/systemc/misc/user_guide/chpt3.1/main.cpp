@@ -39,8 +39,6 @@
 #include "sg.h"
 #include "fsmr.h"
 
-extern "C" int atoi(const char *);
-
 int sc_main(int ac, char *av[])
 {
   sc_signal<bool> handshake ("HS");

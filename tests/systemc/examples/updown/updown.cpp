@@ -1,8 +1,8 @@
 #include "systemc.h"
-#include "../examples/sysc/2.1/specialized_signals/scx_signal_int.cpp"
-#include "../examples/sysc/2.1/specialized_signals/scx_signal_signed.cpp"
-#include "../examples/sysc/2.1/specialized_signals/scx_signal_uint.cpp"
-#include "../examples/sysc/2.1/specialized_signals/scx_signal_unsigned.cpp"
+#include "../../include/specialized_signals/scx_signal_int.h"
+#include "../../include/specialized_signals/scx_signal_signed.h"
+#include "../../include/specialized_signals/scx_signal_uint.h"
+#include "../../include/specialized_signals/scx_signal_unsigned.h"
 
 SC_MODULE(up_down)
 {
