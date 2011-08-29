@@ -26,7 +26,7 @@ In file: <removed by verify.pl>
 
 Exception caught
 Error: (E119) sc_semaphore requires an initial value >= 0: semaphore 'semaphore_0'
-In file: ../../../../src/sysc/communication/sc_semaph
+In file: <removed by verify.pl>
 
 Exception caught
 Error: (E119) sc_semaphore requires an initial value >= 0: semaphore 'sem2'

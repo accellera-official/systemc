@@ -1,4 +1,4 @@
 SystemC Simulation
 
 Error: (E117) resolved port not bound to resolved signal: a.port_2 (sc_in_rv)
-In file: $SYSTEMC_HOME/include/sysc/communication/sc_sign
+In file: <removed by verify.pl>
