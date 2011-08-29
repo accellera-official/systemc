@@ -32,7 +32,7 @@
   Description of Modification:
 
  *****************************************************************************/
-#if !defined(PKT_H_INCLUDED)
+#ifndef PKT_H_INCLUDED
 #define PKT_H_INCLUDED
 
 #include "systemc.h"
@@ -75,4 +75,4 @@ void
   sc_trace( tf, a.dest2, name + ".dest2" );
   sc_trace( tf, a.dest3, name + ".dest3" );
 }
-#endif // !defined(PKT_H_INCLUDED)
+#endif // PKT_H_INCLUDED

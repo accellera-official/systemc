@@ -33,7 +33,7 @@
 
  *****************************************************************************/
 
-#if defined(SWITCH_REG_H_INCLUDED)
+#ifndef SWITCH_REG_H_INCLUDED
 #define SWITCH_REG_H_INCLUDED
 
 #include "pkt.h"
@@ -49,4 +49,4 @@ struct switch_reg {
     }
 };
 
-#endif // defined(SWITCH_REG_H_INCLUDED)
+#endif // SWITCH_REG_H_INCLUDED

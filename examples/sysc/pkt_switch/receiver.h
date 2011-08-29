@@ -34,7 +34,7 @@
 
  *****************************************************************************/
 
-#if defined(RECEIVER_H_INCLUDED)
+#ifndef RECEIVER_H_INCLUDED
 #define RECEIVER_H_INCLUDED
 
 #include "systemc.h"
@@ -52,4 +52,4 @@ struct receiver: sc_module {
     }  
  void entry();
 };
-#endif // defined(RECEIVER_H_INCLUDED)
+#endif // RECEIVER_H_INCLUDED
