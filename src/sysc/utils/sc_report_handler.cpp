@@ -412,7 +412,7 @@ sc_msg_def * sc_report_handler::add_msg_type(const char * msg_type_)
     msg_type_len = strlen(msg_type_);
     if ( msg_type_len > 0 )
     {
-	items->md->msg_type_data = new char[msg_type_len+1];
+	items->md->msg_type_data = (char*) malloc(msg_type_len+1);
 	strcpy( items->md->msg_type_data, msg_type_ );
 	items->md->id = -1; // backward compatibility with 2.0+
     }
@@ -600,7 +600,7 @@ bool sc_report_handler::set_log_file_name(const char* name_)
     if ( log_file_name )
 	return false;
 
-    log_file_name = new char[strlen(name_)+1];
+    log_file_name = (char*) malloc( strlen(name_)+1 );
     strcpy(log_file_name, name_);
     return true;
 }

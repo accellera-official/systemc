@@ -58,9 +58,8 @@ static inline char * empty_dup(const char * p)
 {
     if ( p && *p )
     {
-        char* result;
-	result = (char*)malloc(strlen(p)+1);
-	strcpy(result, p);
+        char* result = (char*)malloc(strlen(p)+1);
+        strcpy(result, p);
         return result;
     }
     else
@@ -96,11 +95,8 @@ sc_report::sc_report(sc_severity severity_,
   timestamp(new sc_time(sc_time_stamp())),
   process(sc_get_current_process_b()),
   m_verbosity_level(verbosity_level),
-  m_what(0)
+  m_what( empty_dup( sc_report_compose_message(*this).c_str() ) )
 {
-  const char* p = sc_report_compose_message(*this).c_str();
-  m_what = new char [strlen(p)+1];
-  strcpy(m_what,p);
 }
 
 sc_report::sc_report(const sc_report& other)
