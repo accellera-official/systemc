@@ -384,7 +384,11 @@ sub get_systemc_arch
 	}
     } elsif( $uname_s eq "Darwin" ) {
 	if( $cxx_comp eq "c++" || $cxx_comp eq "g++" ) {
-	    if ( $uname_m eq "i386" )
+	    if ( $uname_m eq "x86_64" )
+	    {
+		$arch = "macosx386";
+	    }
+	    elsif ( $uname_m eq "i386" )
 	    {
 		$arch = "macosx386";
 	    }
@@ -549,13 +553,12 @@ sub init_globals
     $rt_ccflags       = "-Wall";
     $rt_ld            = $rt_cc;
     $rt_ldflags       = $rt_ccflags;
-    $rt_ldrpath       = "-Wl,-rpath=";
     $rt_debug_flag    = "-g";
     $rt_debug_ldflags = "";
     $rt_optimize_flag = "-O2";
 
     if( $rt_systemc_arch eq "gccsparcOS5" ) {
-        $rt_ldrpath       = "-Wl,-R";
+	# use defaults 
     } elsif( $rt_systemc_arch eq "sparcOS5" ) {
         $rt_ccflags       = "";
         $rt_ldflags       = "-xildoff";
@@ -564,8 +567,7 @@ sub init_globals
     } elsif( $rt_systemc_arch eq "gcchpux11" ) {
 	# use defaults
     } elsif( $rt_systemc_arch eq "hpux11" ) {
-       $rt_ccflags       = "-Aa -ext +DA2.0 +DS2.0";
-       $rt_optimize_flag = "+O1";
+	# use defaults
     } elsif( $rt_systemc_arch eq "linux64" ) {
 	# use defaults
     } elsif( $rt_systemc_arch eq "linux" ) {
@@ -576,10 +578,8 @@ sub init_globals
         # use defaults
     } elsif( $rt_systemc_arch eq "macosx" ) {
 	$rt_optimize_flag = "-O3";
-	$rt_ldrpath       = "-Wl,-rpath -Wl,";
     } elsif( $rt_systemc_arch eq "macosx386" ) {
 	$rt_optimize_flag = "-O3";
-	$rt_ldrpath       = "-Wl,-rpath -Wl,";
     } elsif( $rt_systemc_arch eq "cygwin" ) {
 	$rt_ldflags = $rt_ccflags." -Wl,--enable-auto-import";
     } elsif( $rt_systemc_arch eq "mingw" ) {
@@ -2022,8 +2022,11 @@ sub run_test
 	    $command .= "-o $rt_prodname ";
 	    $command .= "$testname.o ";
 	    $command .= "-L. -L$rt_systemc_home/lib-$rt_systemc_arch ";
-	    $command .= "$rt_ldrpath$rt_systemc_home/lib-$rt_systemc_arch ";
 
+            if( $rt_systemc_arch ne "macosx" and
+                $rt_systemc_arch ne "macosx386" ) {
+	        $command .= "-Wl,-R$rt_systemc_home/lib-$rt_systemc_arch ";
+	    }
 	    if( $rt_add_ldpaths ne '' ) {
 		$command .= "$rt_add_ldpaths ";
 	    }
@@ -2111,8 +2114,10 @@ sub run_test
 	    $command .= "-o $rt_prodname ";
 	    $command .= "$ofiles ";
 	    $command .= "-L. -L$rt_systemc_home/lib-$rt_systemc_arch ";
-	    $command .= "$rt_ldrpath$rt_systemc_home/lib-$rt_systemc_arch ";
-
+            if( $rt_systemc_arch ne "macosx" and
+                $rt_systemc_arch ne "macosx386" ) {
+	        $command .= "-Wl,-R$rt_systemc_home/lib-$rt_systemc_arch ";
+	    }
 	    if( $rt_add_ldpaths ne '' ) {
 		$command .= "$rt_add_ldpaths ";
 	    }
