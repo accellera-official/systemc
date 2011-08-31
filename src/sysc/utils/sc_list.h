@@ -41,7 +41,7 @@ class sc_plist_base {
 
 public:
     sc_plist_base();
-    virtual ~sc_plist_base();
+    ~sc_plist_base();
     
     typedef sc_plist_elem* handle_t;
 
@@ -74,7 +74,7 @@ public:
     typedef sc_plist_elem* handle_t;
     
     sc_plist_base_iter( sc_plist_base* l, bool from_tail = false );
-    virtual ~sc_plist_base_iter();
+    ~sc_plist_base_iter();
 
     void reset( sc_plist_base* l, bool from_tail = false );
     bool empty() const;
