@@ -15,7 +15,7 @@
 ##
 ## ****************************************************************************
 ##
-##  examples/sysc/2.1/sc_rvd/Makefile.am --
+##  examples/sysc/2.3/include/Makefile.am --
 ##  Process this file with automake to produce a Makefile.in file.
 ##
 ##  Original Author: Andy Goodrich, Forte Design Systems, 20 Aug 2010
@@ -38,7 +38,7 @@ H_FILES = \
 
 noinst_HEADERS = $(H_FILES) 
 
-INCLUDE_DIR = $(prefix)/examples/sysc/2.2.1/include
+INCLUDE_DIR = $(prefix)/examples/sysc/2.3/include
 
 all:
 

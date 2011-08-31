@@ -460,6 +460,9 @@ sc_object::attr_cltn() const
 
 
 // $Log: sc_object.cpp,v $
+// Revision 1.16  2011/08/29 18:04:32  acg
+//  Philipp A. Hartmann: miscellaneous clean ups.
+//
 // Revision 1.15  2011/08/26 20:46:10  acg
 //  Andy Goodrich: moved the modification log to the end of the file to
 //  eliminate source line number skew when check-ins are done.

@@ -34,7 +34,7 @@
 
  *****************************************************************************/
 
-#if !defined(SWITCH_CLK_H_INCLUDED)
+#ifndef SWITCH_CLK_H_INCLUDED
 #define SWITCH_CLK_H_INCLUDED
 
 #include "systemc.h"
@@ -51,4 +51,4 @@ struct switch_clk: sc_module {
          }
      void entry();
 };
-#endif // !defined(SWITCH_CLK_H_INCLUDED)
+#endif // SWITCH_CLK_H_INCLUDED

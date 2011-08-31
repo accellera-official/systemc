@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: sc_fxnum.h,v $
+// Revision 1.5  2011/08/29 18:04:32  acg
+//  Philipp A. Hartmann: miscellaneous clean ups.
+//
 // Revision 1.4  2011/08/24 22:05:43  acg
 //  Torsten Maehne: initialization changes to remove warnings.
 //
@@ -611,7 +614,7 @@ protected:
 
 #undef DECL_CTOR_T
 
-    virtual ~sc_fxnum();
+    ~sc_fxnum();
 
 
     // internal use only;
@@ -1038,7 +1041,7 @@ protected:
 
 #undef DECL_CTOR_T
 
-    virtual ~sc_fxnum_fast();
+    ~sc_fxnum_fast();
 
 
     // internal use only;

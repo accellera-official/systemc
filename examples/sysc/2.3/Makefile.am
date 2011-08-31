@@ -15,7 +15,7 @@
 ##
 ## ****************************************************************************
 ##
-##  examples/sysc/Makefile.am --
+##  examples/sysc/2.3/Makefile.am --
 ##  Process this file with automake to produce a Makefile.in file.
 ##
 ##  Original Author: Martin Janssen, Synopsys, Inc.

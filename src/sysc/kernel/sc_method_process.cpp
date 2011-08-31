@@ -59,18 +59,14 @@ namespace sc_core {
 // | thread that was executed during the preemption did a kill or other 
 // | manipulation on this object instance that requires it to throw an 
 // | exception.
-// |
-// | Arguments:
-// |     old_throw_status = throw status before the preemption.
 // +----------------------------------------------------------------------------
-void sc_method_process::check_for_throws( process_throw_type old_throw_status )
+void sc_method_process::check_for_throws()
 {
     if ( !m_unwinding )
     {
 	switch( m_throw_status )
 	{
 	  case THROW_ASYNC_RESET:
-	    // @@@@#### queue the method for execution and throw and unwind
 	    simcontext()->preempt_with(this);
 	    break;
           case THROW_KILL:
@@ -805,6 +801,12 @@ bool sc_method_process::trigger_dynamic( sc_event* e )
  *****************************************************************************/
 
 // $Log: sc_method_process.cpp,v $
+// Revision 1.49  2011/08/29 18:24:47  acg
+//  Andy Goodrich: remove temporary comment flagging new preempt_with() call.
+//
+// Revision 1.48  2011/08/29 18:04:32  acg
+//  Philipp A. Hartmann: miscellaneous clean ups.
+//
 // Revision 1.47  2011/08/24 22:05:50  acg
 //  Torsten Maehne: initialization changes to remove warnings.
 //

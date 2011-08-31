@@ -51,6 +51,11 @@ AC_PROG_CXX
 AC_PROG_INSTALL
 
 dnl
+dnl check for pthreads compiler flags.
+dnl
+AX_PTHREAD
+
+dnl
 dnl Set the compiler flags and target architecture.
 dnl
 
@@ -304,6 +309,10 @@ AC_OUTPUT(
  examples/sysc/2.1/scx_barrier/Makefile 
  examples/sysc/2.1/scx_mutex_w_policy/Makefile 
  examples/sysc/2.1/specialized_signals/Makefile 
+ examples/sysc/2.3/Makefile
+ examples/sysc/2.3/include/Makefile
+ examples/sysc/2.3/sc_rvd/Makefile
+ examples/sysc/2.3/sc_ttd/Makefile
 )
 
 

@@ -47,7 +47,7 @@ public:
 
     sc_ppq_base( int sz, compare_fn_t cmp );
 
-    virtual ~sc_ppq_base();
+    ~sc_ppq_base();
 
     void* top() const
 	{ return m_heap[1]; }
@@ -128,6 +128,9 @@ public:
 } // namespace sc_core
 
 // $Log: sc_pq.h,v $
+// Revision 1.5  2011/08/29 18:04:32  acg
+//  Philipp A. Hartmann: miscellaneous clean ups.
+//
 // Revision 1.4  2011/08/26 20:46:18  acg
 //  Andy Goodrich: moved the modification log to the end of the file to
 //  eliminate source line number skew when check-ins are done.

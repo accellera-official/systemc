@@ -175,6 +175,9 @@ sc_object* sc_get_parent( const sc_object* obj_p )
  *****************************************************************************/
 
 // $Log: sc_object.h,v $
+// Revision 1.13  2011/08/29 18:04:32  acg
+//  Philipp A. Hartmann: miscellaneous clean ups.
+//
 // Revision 1.12  2011/08/26 20:46:10  acg
 //  Andy Goodrich: moved the modification log to the end of the file to
 //  eliminate source line number skew when check-ins are done.

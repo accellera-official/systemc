@@ -140,7 +140,7 @@ protected:
                    bool and_list_,
                    bool auto_delete_ = false );
 
-    virtual ~sc_event_list();
+    ~sc_event_list();
 
     void swap( sc_event_list& );
     void move_from( const sc_event_list& );
@@ -818,6 +818,9 @@ operator & ( sc_event_and_expr expr, sc_event_and_list const & el )
 } // namespace sc_core
 
 // $Log: sc_event.h,v $
+// Revision 1.14  2011/08/29 18:04:32  acg
+//  Philipp A. Hartmann: miscellaneous clean ups.
+//
 // Revision 1.13  2011/08/26 20:46:09  acg
 //  Andy Goodrich: moved the modification log to the end of the file to
 //  eliminate source line number skew when check-ins are done.

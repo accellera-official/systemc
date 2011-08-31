@@ -58,7 +58,9 @@
 int sc_main(int, char *[])
 {
   // Silence the following deprecation warning:
-  // Info: (I804) /IEEE_Std_1666/deprecated: positional binding using << or , is  // deprecated, use () instead.
+  // Info: (I804) /IEEE_Std_1666/deprecated: positional binding
+  // using << or , is deprecated, use () instead.
+
 
   sc_report_handler::set_actions("/IEEE_Std_1666/deprecated", SC_DO_NOTHING);
 

@@ -38,7 +38,7 @@
 #include "display.h"
 #include "fir.h"
 
-int sc_main (int argc , char *argv[]) {
+int sc_main (int, char *[]) {
   sc_clock         clock;
   sc_signal<bool>  reset;
   sc_signal<bool>  input_valid;        

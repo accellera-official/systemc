@@ -1323,16 +1323,13 @@ sc_simcontext::preempt_with( sc_method_handle method_h )
 
     else if ( active_method_h != NULL )
     {
-        sc_process_b::process_throw_type old_status;  // method's throw status.
-
-	old_status = active_method_h->m_throw_status;
 	caller_info = m_curr_proc_info;
         DEBUG_MSG( DEBUG_NAME, method_h,
 	           "preempting active method with this method" );
 	sc_get_curr_simcontext()->set_curr_proc( (sc_process_b*)method_h );
 	method_h->run_process();
 	sc_get_curr_simcontext()->set_curr_proc((sc_process_b*)active_method_h);
-	active_method_h->check_for_throws( old_status );
+	active_method_h->check_for_throws();
     }
 
     // CALLER IS A THREAD:
@@ -1858,6 +1855,9 @@ bool sc_allow_process_control_corners = false;
 				 execution problem with using sc_pvector.
  *****************************************************************************/
 // $Log: sc_simcontext.cpp,v $
+// Revision 1.37  2011/08/29 18:04:32  acg
+//  Philipp A. Hartmann: miscellaneous clean ups.
+//
 // Revision 1.36  2011/08/26 20:46:10  acg
 //  Andy Goodrich: moved the modification log to the end of the file to
 //  eliminate source line number skew when check-ins are done.

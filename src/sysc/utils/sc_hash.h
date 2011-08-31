@@ -91,7 +91,7 @@ public:
                    bool   reorder  = PHASH_DEFAULT_REORDER_FLAG,    
                    hash_fn_t hash_fn = default_ptr_hash_fn,
                    cmpr_fn_t cmpr_fn = 0                             );
-    virtual ~sc_phash_base();
+    ~sc_phash_base();
 
     void set_cmpr_fn(cmpr_fn_t);
     void set_hash_fn(hash_fn_t);
@@ -140,7 +140,7 @@ public:
     sc_phash_base_iter(sc_phash_base& t)
     : table(&t), entry(0), next(0), last(0), index(0)
         { reset(t); }
-    virtual ~sc_phash_base_iter() { }
+    ~sc_phash_base_iter() { }
 
     bool empty() const;
     void step();
@@ -435,6 +435,9 @@ public:
 } // namespace sc_core
 
 // $Log: sc_hash.h,v $
+// Revision 1.5  2011/08/29 18:04:32  acg
+//  Philipp A. Hartmann: miscellaneous clean ups.
+//
 // Revision 1.4  2011/08/26 20:46:16  acg
 //  Andy Goodrich: moved the modification log to the end of the file to
 //  eliminate source line number skew when check-ins are done.

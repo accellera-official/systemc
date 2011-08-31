@@ -31,6 +31,9 @@
 #include "sysc/communication/sc_mutex_if.h"
 
 #if defined(WIN32) || defined(_WIN32)
+#ifdef __GNUC__
+#   include <windows.h>
+#endif
 
 #define SC_MTX_TYPE_ CRITICAL_SECTION
 
@@ -135,6 +138,9 @@ private:
   Description of Modification:
  *****************************************************************************/
 //$Log: sc_host_mutex.h,v $
+//Revision 1.4  2011/08/30 21:53:23  acg
+// Jerome Cornet: include window.h for gnu c in windows case.
+//
 //Revision 1.3  2011/08/07 19:08:01  acg
 // Andy Goodrich: moved logs to end of file so line number synching works
 // better between versions.

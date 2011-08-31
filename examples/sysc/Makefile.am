@@ -39,7 +39,8 @@ SUBDIRS = \
 	simple_bus \
 	simple_fifo \
 	simple_perf \
-	2.1
+	2.1 \
+	2.3
 
 EXAMPLES_DIR = $(prefix)/examples/sysc
 

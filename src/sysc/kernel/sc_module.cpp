@@ -743,6 +743,9 @@ sc_module::operator () ( const sc_bind_proxy& p001,
 
 
 // $Log: sc_module.cpp,v $
+// Revision 1.14  2011/08/29 18:04:32  acg
+//  Philipp A. Hartmann: miscellaneous clean ups.
+//
 // Revision 1.13  2011/08/26 20:46:10  acg
 //  Andy Goodrich: moved the modification log to the end of the file to
 //  eliminate source line number skew when check-ins are done.

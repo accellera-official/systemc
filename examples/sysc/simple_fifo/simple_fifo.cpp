@@ -159,7 +159,7 @@ class top : public sc_module
      }
 };
 
-int sc_main (int argc , char *argv[]) {
+int sc_main (int, char *[]) {
    top top1("Top1");
    sc_start();
    return 0;

@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: sc_value_base.h,v $
+// Revision 1.4  2011/08/29 18:04:32  acg
+//  Philipp A. Hartmann: miscellaneous clean ups.
+//
 // Revision 1.3  2011/08/24 22:05:48  acg
 //  Torsten Maehne: initialization changes to remove warnings.
 //
@@ -109,7 +112,6 @@ class sc_value_base
 template< class T >
 class sc_generic_base {
   public: 
-    virtual ~sc_generic_base() {}
     inline const T* operator-> () const
     {
         return (const T*)this;

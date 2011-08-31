@@ -24,7 +24,7 @@
  CHANGE LOG APPEARS AT THE END OF THE FILE
  *****************************************************************************/
 
-#if defined(SC_USE_PTHREADS)
+#if !defined(WIN32) && defined(SC_USE_PTHREADS)
 
 // ORDER OF THE INCLUDES AND namespace sc_core IS IMPORTANT!!!
 
@@ -281,10 +281,13 @@ sc_cor_pkg_pthread::get_main()
 
 } // namespace sc_core
 
-#endif // defined(SC_USE_PTHREADS)
+#endif // !defined(WIN32) && defined(SC_USE_PTHREADS)
 
 
 // $Log: sc_cor_pthread.cpp,v $
+// Revision 1.6  2011/08/30 21:51:04  acg
+//  Jerome Cornet: auto processing of pthread configurations.
+//
 // Revision 1.5  2011/08/26 20:46:09  acg
 //  Andy Goodrich: moved the modification log to the end of the file to
 //  eliminate source line number skew when check-ins are done.

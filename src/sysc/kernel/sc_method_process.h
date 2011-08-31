@@ -26,6 +26,9 @@
  *****************************************************************************/
 
 // $Log: sc_method_process.h,v $
+// Revision 1.22  2011/08/29 18:04:32  acg
+//  Philipp A. Hartmann: miscellaneous clean ups.
+//
 // Revision 1.21  2011/08/26 20:46:10  acg
 //  Andy Goodrich: moved the modification log to the end of the file to
 //  eliminate source line number skew when check-ins are done.
@@ -128,7 +131,7 @@ class sc_method_process : public sc_process_b {
         { return "sc_method_process"; }
 
   protected:
-    void check_for_throws( process_throw_type old_status );
+    void check_for_throws();
     virtual void disable_process(
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
     virtual void enable_process(

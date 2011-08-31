@@ -379,12 +379,7 @@ sc_write_comment( sc_trace_file* tf, const std::string& comment )
 
 // Equivalent of std::fprintf for trace files!
 
-#ifdef __GNUC__
-void tprintf( sc_trace_file* tf,  const char* format, ... )
-    __attribute__ ((format (printf,2,3)));
-#else
 void tprintf( sc_trace_file* tf,  const char* format, ... );
-#endif    
 
 
 // Convert double time to 64-bit integer

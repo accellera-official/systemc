@@ -53,9 +53,6 @@ public:
     // constructor
     sc_cor_qt()
 	: m_stack_size( 0 ), m_stack( 0 ), m_sp( 0 ), m_pkg( 0 )
-#if defined(__ghs__)
-          , m_ghs_eh_globals(0)
-#endif
 	{}
 
     // destructor
@@ -72,10 +69,6 @@ public:
     qt_t*          m_sp;          // stack pointer
 
     sc_cor_pkg_qt* m_pkg;         // the creating coroutine package
-
-#if defined(__ghs__)
-    void* m_ghs_eh_globals;
-#endif
 
 private:
 
@@ -131,6 +124,9 @@ private:
 #endif
 
 // $Log: sc_cor_qt.h,v $
+// Revision 1.6  2011/08/29 18:04:32  acg
+//  Philipp A. Hartmann: miscellaneous clean ups.
+//
 // Revision 1.5  2011/08/26 20:46:09  acg
 //  Andy Goodrich: moved the modification log to the end of the file to
 //  eliminate source line number skew when check-ins are done.

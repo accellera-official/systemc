@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: sc_bit_proxies.h,v $
+// Revision 1.8  2011/08/29 18:04:32  acg
+//  Philipp A. Hartmann: miscellaneous clean ups.
+//
 // Revision 1.7  2011/08/24 22:05:40  acg
 //  Torsten Maehne: initialization changes to remove warnings.
 //
@@ -113,11 +116,6 @@ public:
     sc_bitref_r( const sc_bitref_r<T>& a )
 	: m_obj( a.m_obj ), m_index( a.m_index )
 	{}
-
-    // destructor
-
-    virtual ~sc_bitref_r()
-        {}
 
     // cloning
 
