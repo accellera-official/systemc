@@ -234,7 +234,6 @@ struct Top: sc_module
     count = 30;
     reset_count = 30;
     m.reset();
-    wait(target_awoke_event);
     
     count = 31;
     m.kill();
