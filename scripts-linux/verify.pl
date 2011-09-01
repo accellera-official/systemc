@@ -1637,8 +1637,8 @@ sub scl_strip
     while( $#strip_logfile >= 0 ) {
         ( $_ = shift( @strip_logfile ) ) =~ s|$rt_systemc_home|\$SYSTEMC_HOME|;
 	# remove file and line number information (always changes!)
-	s|^(In file: ).*/src/systemc/.*$|$1<removed by verify\.pl>|;
-	s|^(In file: ).*/include/systemc/.*$|$1<removed by verify\.pl>|;
+	s|^(In file: ).*/src/sysc/.*$|$1<removed by verify\.pl>|;
+	s|^(In file: ).*/include/sysc/.*$|$1<removed by verify\.pl>|;
 	s|^(In file: ).*:.*$|$1<removed by verify\.pl>|;
 	# remove ^M in msvc generated output files
 	s|\r||;
@@ -1967,10 +1967,12 @@ sub run_test
 	if( $rt_systemc_arch =~ /^msvc/ ) {
 	    $command  = "$rt_cc $rt_ccflags $extra_flags ";
 	    $command .= "${slash}I . ${slash}I $rt_systemc_home/src ";
+	    $command .= "${slash}I $rt_tests_dir/systemc/include ";
 	    $command .= "${slash}c ";
 	} else {
 	    $command  = "$rt_cc $rt_ccflags $extra_flags ";
 	    $command .= "-I . -I $rt_systemc_home/include ";
+	    $command .= "-I $rt_tests_dir/systemc/include ";
 	    $command .= "-c ";
 	}
 
@@ -2064,10 +2066,12 @@ sub run_test
 	if( $rt_systemc_arch =~ /^msvc/ ) {
 	    $command  = "$rt_cc $rt_ccflags $extra_flags ";
 	    $command .= "${slash}I . ${slash}I $rt_systemc_home/src ";
+	    $command .= "${slash}I $rt_tests_dir/systemc/include ";
 	    $command .= "${slash}c ";
 	} else {
 	    $command  = "$rt_cc $rt_ccflags $extra_flags ";
 	    $command .= "-I . -I $rt_systemc_home/include ";
+	    $command .= "-I $rt_tests_dir/systemc/include ";
 	    $command .= "-c ";
 	}
 
