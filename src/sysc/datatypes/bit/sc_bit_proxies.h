@@ -2597,15 +2597,17 @@ sc_subref_r<X>::set_word( int i, sc_digit w )
 	n1 = m_lo - i * SC_DIGIT_SIZE;
 	n2 = sc_max( n1 - SC_DIGIT_SIZE, m_hi - 1 );
 	for( int n = n1; n > n2; n -- ) {
-	    m_obj.set_bit( n, sc_logic_value_t( (w >> k ++) & SC_DIGIT_ONE |
-						m_obj[n].value() & SC_DIGIT_TWO ) );
+        m_obj.set_bit( n, sc_logic_value_t(
+                            ( (w >> k ++) & SC_DIGIT_ONE) |
+                            ( m_obj[n].value() & SC_DIGIT_TWO ) ) );
 	}
     } else {
 	n1 = m_lo + i * SC_DIGIT_SIZE;
 	n2 = sc_min( n1 + SC_DIGIT_SIZE, m_hi + 1 );
 	for( int n = n1; n < n2; n ++ ) {
-	    m_obj.set_bit( n, sc_logic_value_t( (w >> k ++) & SC_DIGIT_ONE |
-						m_obj[n].value() & SC_DIGIT_TWO ) );
+        m_obj.set_bit( n, sc_logic_value_t(
+                            ( ( w >> k ++) & SC_DIGIT_ONE ) |
+                            ( m_obj[n].value() & SC_DIGIT_TWO ) ) );
 	}
     }
 }
@@ -2648,15 +2650,17 @@ sc_subref_r<X>::set_cword( int i, sc_digit w )
 	n1 = m_lo - i * SC_DIGIT_SIZE;
 	n2 = sc_max( n1 - SC_DIGIT_SIZE, m_hi - 1 );
 	for( int n = n1; n > n2; n -- ) {
-	    m_obj.set_bit( n, sc_logic_value_t( ((w >> k ++) & SC_DIGIT_ONE) << 1 |
-						m_obj[n].value() & SC_DIGIT_ONE ) );
+        m_obj.set_bit( n, sc_logic_value_t(
+                            ( ((w >> k ++) & SC_DIGIT_ONE) << 1 ) |
+                            ( m_obj[n].value() & SC_DIGIT_ONE ) ) );
 	}
     } else {
 	n1 = m_lo + i * SC_DIGIT_SIZE;
 	n2 = sc_min( n1 + SC_DIGIT_SIZE, m_hi + 1 );
 	for( int n = n1; n < n2; n ++ ) {
-	    m_obj.set_bit( n, sc_logic_value_t( ((w >> k ++) & SC_DIGIT_ONE) << 1 |
-						m_obj[n].value() & SC_DIGIT_ONE ) );
+        m_obj.set_bit( n, sc_logic_value_t(
+                            ( ((w >> k ++) & SC_DIGIT_ONE) << 1  ) |
+                            ( m_obj[n].value() & SC_DIGIT_ONE ) ) );
 	}
     }
 }
