@@ -41,7 +41,7 @@ class sc_plist_base {
 
 public:
     sc_plist_base();
-    virtual ~sc_plist_base();
+    ~sc_plist_base();
     
     typedef sc_plist_elem* handle_t;
 
@@ -74,7 +74,7 @@ public:
     typedef sc_plist_elem* handle_t;
     
     sc_plist_base_iter( sc_plist_base* l, bool from_tail = false );
-    virtual ~sc_plist_base_iter();
+    ~sc_plist_base_iter();
 
     void reset( sc_plist_base* l, bool from_tail = false );
     bool empty() const;
@@ -163,6 +163,9 @@ public:
 } // namespace sc_core
 
 // $Log: sc_list.h,v $
+// Revision 1.5  2011/09/01 15:16:50  acg
+//  Philipp A. Hartmann: revert unnecessary virtual destructors.
+//
 // Revision 1.4  2011/08/26 20:46:18  acg
 //  Andy Goodrich: moved the modification log to the end of the file to
 //  eliminate source line number skew when check-ins are done.

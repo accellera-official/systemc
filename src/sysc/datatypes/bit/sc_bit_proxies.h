@@ -21,54 +21,8 @@
 
   Original Author: Gene Bushuyev, Synopsys, Inc.
 
+ CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
-
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-
- *****************************************************************************/
-
-// $Log: sc_bit_proxies.h,v $
-// Revision 1.8  2011/08/29 18:04:32  acg
-//  Philipp A. Hartmann: miscellaneous clean ups.
-//
-// Revision 1.7  2011/08/24 22:05:40  acg
-//  Torsten Maehne: initialization changes to remove warnings.
-//
-// Revision 1.6  2010/02/22 14:25:43  acg
-//  Andy Goodrich: removed 'mutable' directive from references, since it
-//  is not a legal C++ construct.
-//
-// Revision 1.5  2009/02/28 00:26:14  acg
-//  Andy Goodrich: bug fixes.
-//
-// Revision 1.4  2007/03/14 17:48:37  acg
-//  Andy Goodrich: fixed bug.
-//
-// Revision 1.3  2007/01/18 19:29:18  acg
-//  Andy Goodrich: fixed bug in concatenations of bit selects on sc_lv and
-//  sc_bv types. The offending code was in sc_bitref<X>::set_word and
-//  sc_bitref<X>::get_word. These methods were not writing the bit they
-//  represented, but rather writing an entire word whose index was the
-//  index of the bit they represented. This not only did not write the
-//  correct bit, but clobbered a word that might not even be in the
-//  variable the reference was for.
-//
-// Revision 1.2  2007/01/17 22:45:08  acg
-//  Andy Goodrich: fixed sc_bitref<X>::set_bit().
-//
-// Revision 1.1.1.1  2006/12/15 20:31:36  acg
-// SystemC 2.2
-//
-// Revision 1.3  2006/01/13 18:53:53  acg
-// Andy Goodrich: added $Log command so that CVS comments are reproduced in
-// the source.
-//
 
 #ifndef SC_BIT_PROXIES_H
 #define SC_BIT_PROXIES_H
@@ -2598,14 +2552,14 @@ sc_subref_r<X>::set_word( int i, sc_digit w )
 	n2 = sc_max( n1 - SC_DIGIT_SIZE, m_hi - 1 );
 	for( int n = n1; n > n2; n -- ) {
 	    m_obj.set_bit( n, sc_logic_value_t( (w >> k ++) & SC_DIGIT_ONE |
-						m_obj[n].value() & SC_DIGIT_TWO ) );
+						( m_obj[n].value() & SC_DIGIT_TWO ) ) );
 	}
     } else {
 	n1 = m_lo + i * SC_DIGIT_SIZE;
 	n2 = sc_min( n1 + SC_DIGIT_SIZE, m_hi + 1 );
 	for( int n = n1; n < n2; n ++ ) {
 	    m_obj.set_bit( n, sc_logic_value_t( (w >> k ++) & SC_DIGIT_ONE |
-						m_obj[n].value() & SC_DIGIT_TWO ) );
+						( m_obj[n].value() & SC_DIGIT_TWO ) ) );
 	}
     }
 }
@@ -2649,14 +2603,14 @@ sc_subref_r<X>::set_cword( int i, sc_digit w )
 	n2 = sc_max( n1 - SC_DIGIT_SIZE, m_hi - 1 );
 	for( int n = n1; n > n2; n -- ) {
 	    m_obj.set_bit( n, sc_logic_value_t( ((w >> k ++) & SC_DIGIT_ONE) << 1 |
-						m_obj[n].value() & SC_DIGIT_ONE ) );
+						( m_obj[n].value() & SC_DIGIT_ONE ) ) );
 	}
     } else {
 	n1 = m_lo + i * SC_DIGIT_SIZE;
 	n2 = sc_min( n1 + SC_DIGIT_SIZE, m_hi + 1 );
 	for( int n = n1; n < n2; n ++ ) {
 	    m_obj.set_bit( n, sc_logic_value_t( ((w >> k ++) & SC_DIGIT_ONE) << 1 |
-						m_obj[n].value() & SC_DIGIT_ONE ) );
+						( m_obj[n].value() & SC_DIGIT_ONE ) ) );
 	}
     }
 }
@@ -3870,6 +3824,46 @@ concat( sc_proxy<T1>& a, sc_proxy<T2>& b )
 }
 
 } // namespace sc_dt
+
+// $Log: sc_bit_proxies.h,v $
+// Revision 1.9  2011/09/01 15:03:42  acg
+//  Philipp A. Hartmann: add parentheses to eliminate compiler warnings.
+//
+// Revision 1.8  2011/08/29 18:04:32  acg
+//  Philipp A. Hartmann: miscellaneous clean ups.
+//
+// Revision 1.7  2011/08/24 22:05:40  acg
+//  Torsten Maehne: initialization changes to remove warnings.
+//
+// Revision 1.6  2010/02/22 14:25:43  acg
+//  Andy Goodrich: removed 'mutable' directive from references, since it
+//  is not a legal C++ construct.
+//
+// Revision 1.5  2009/02/28 00:26:14  acg
+//  Andy Goodrich: bug fixes.
+//
+// Revision 1.4  2007/03/14 17:48:37  acg
+//  Andy Goodrich: fixed bug.
+//
+// Revision 1.3  2007/01/18 19:29:18  acg
+//  Andy Goodrich: fixed bug in concatenations of bit selects on sc_lv and
+//  sc_bv types. The offending code was in sc_bitref<X>::set_word and
+//  sc_bitref<X>::get_word. These methods were not writing the bit they
+//  represented, but rather writing an entire word whose index was the
+//  index of the bit they represented. This not only did not write the
+//  correct bit, but clobbered a word that might not even be in the
+//  variable the reference was for.
+//
+// Revision 1.2  2007/01/17 22:45:08  acg
+//  Andy Goodrich: fixed sc_bitref<X>::set_bit().
+//
+// Revision 1.1.1.1  2006/12/15 20:31:36  acg
+// SystemC 2.2
+//
+// Revision 1.3  2006/01/13 18:53:53  acg
+// Andy Goodrich: added $Log command so that CVS comments are reproduced in
+// the source.
+//
 
 
 #endif

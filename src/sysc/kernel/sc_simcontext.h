@@ -140,7 +140,7 @@ bool    sc_pending_activity_at_current_time( const sc_simcontext* );
 bool    sc_pending_activity_at_future_time( const sc_simcontext* );
 sc_time sc_time_to_pending_activity( const sc_simcontext* );
 
-class sc_invoke_method; // @@@@####
+struct sc_invoke_method; 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_simcontext
 //
@@ -149,7 +149,7 @@ class sc_invoke_method; // @@@@####
 
 class sc_simcontext
 {
-    friend class sc_invoke_method; // @@@@####
+    friend class sc_invoke_method; 
     friend class sc_event;
     friend class sc_module;
     friend class sc_object;
@@ -746,6 +746,9 @@ extern bool sc_allow_process_control_corners;
                                
  *****************************************************************************/
 // $Log: sc_simcontext.h,v $
+// Revision 1.25  2011/09/01 15:28:10  acg
+//  Andy Goodrich: the aftermath of automake.
+//
 // Revision 1.24  2011/08/29 18:04:32  acg
 //  Philipp A. Hartmann: miscellaneous clean ups.
 //

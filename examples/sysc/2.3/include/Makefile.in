@@ -405,8 +405,6 @@ all:
 install-data-local:
 	@$(NORMAL_INSTALL)
 	$(mkinstalldirs) .
-	echo $(noinst_HEADERS)
-	echo "XXXX"
 	for file in $(noinst_HEADERS); do \
 		$(INSTALL_DATA) $(srcdir)/$$file ./$$file; \
 	done
