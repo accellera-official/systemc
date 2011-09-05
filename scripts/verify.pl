@@ -1988,7 +1988,7 @@ sub run_test
 
 	if( $rt_systemc_arch =~ /^msvc/ ) {
 	    # translate Cygwin path to Windows path
-	    $command =~ s|/cygdrive/(.)/|$1:/|;
+	    $command =~ s|/cygdrive/(.)/|$1:/|g;
 	}
 
 	&print_log( "Compiling\n" );
@@ -2081,7 +2081,7 @@ sub run_test
 
 	if( $rt_systemc_arch =~ /^msvc/ ) {
 	    # translate Cygwin path to Windows path
-	    $command =~ s|/cygdrive/(.)/|$1:/|;
+	    $command =~ s|/cygdrive/(.)/|$1:/|g;
 	}
 
         # call compile_files to execute command for each C++ file 
