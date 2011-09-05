@@ -91,13 +91,13 @@ Contains the standard TLM-2.0 initiator and target sockets (which are used as th
 Files:
       tlm_sockets.h          (includes the other header files in this directory)
       tlm_initiator_socket.h (defines the initiator sockets:
-      					tlm_initiator_socket_base
+					tlm_initiator_socket_base
+					tlm_initiator_socket_b
 					tlm_initiator_socket
-					tlm_conv_initiator_socket
       tlm_target_socket.h    (defines the target sockets:
-      					tlm_target_socket_base
+					tlm_target_socket_base
+					tlm_target_socket_b
 					tlm_target_socket
-					tlm_conv_target_socket
 
 
 tlm_quantum/
