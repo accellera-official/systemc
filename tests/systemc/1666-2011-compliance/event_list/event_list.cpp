@@ -246,7 +246,7 @@ struct Top: sc_module
   }
   
   sc_event v1, v2, v3, v4;
-  sc_event_or_list  or_list1,  or_list2;;
+  sc_event_or_list  or_list1,  or_list2;
   sc_event_and_list and_list1, and_list2;
   int count;
   

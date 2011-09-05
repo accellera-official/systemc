@@ -39,8 +39,6 @@
 #include <math.h>
 #include "stage3.h"
 
-extern "C" double pow(double, double);
-
 void stage3::entry()
 {
   double a, b;

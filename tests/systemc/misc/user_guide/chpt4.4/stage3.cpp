@@ -40,8 +40,6 @@
 #include "stage3.h"
 #include "f_stage3.h"
 
-extern "C" double pow(double, double);
-
 void stage3::entry()
 {
   double a, b;

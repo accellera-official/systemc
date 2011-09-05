@@ -53,6 +53,7 @@ select( int a, int b, int c )
         x = (a << 16) - (b >> 16);
         return x.to_int();
     }
+    return 0;
 }
 
 int
