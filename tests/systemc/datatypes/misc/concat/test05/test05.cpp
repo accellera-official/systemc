@@ -1,10 +1,10 @@
 // test05.cpp - Concatenation test
 
 #include "systemc.h"
-#include "../../../../include/specialized_signals/scx_signal_int.h"
-#include "../../../../include/specialized_signals/scx_signal_signed.h"
-#include "../../../../include/specialized_signals/scx_signal_uint.h"
-#include "../../../../include/specialized_signals/scx_signal_unsigned.h"
+#include "specialized_signals/scx_signal_int.h"
+#include "specialized_signals/scx_signal_signed.h"
+#include "specialized_signals/scx_signal_uint.h"
+#include "specialized_signals/scx_signal_unsigned.h"
 
 #define COMPARE( a, b ) \
 { \
