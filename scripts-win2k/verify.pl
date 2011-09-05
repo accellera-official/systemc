@@ -566,8 +566,7 @@ sub init_globals
         $rt_debug_flag    = "-g";
 	$rt_optimize_flag = "-O3";
     } elsif( $rt_systemc_arch eq "gcchpux11" ) {
-        $rt_ccflags       = "-Aa -ext +DA2.0 +DS2.0";
-        $rt_optimize_flag = "+O1";
+	# use defaults
     } elsif( $rt_systemc_arch eq "hpux11" ) {
        $rt_ccflags       = "-Aa -ext +DA2.0 +DS2.0";
        $rt_optimize_flag = "+O1";
