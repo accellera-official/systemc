@@ -157,7 +157,7 @@ public:
   virtual const tlm::tlm_bw_transport_if<TYPES>& get_base_interface() const
   {
     display_error("'get_base_interface()' const not allowed for multi-sockets.");
-    return base_type::m_export;
+    return base_type::get_base_interface();
   }
 
   //Override virtual functions of the tlm_initiator_socket:
@@ -168,12 +168,12 @@ public:
   {
     if (!m_beoe_disabled) //we are not bound hierarchically
       base_type::m_export.bind(m_dummy);  //so we bind the dummy to avoid a SystemC error
-    return base_type::m_export; //and then return our own export so that the hierarchical binding is set up properly
+    return base_type::get_base_export(); //and then return our own export so that the hierarchical binding is set up properly
   }
 
   virtual const sc_core::sc_export<tlm::tlm_bw_transport_if<TYPES> >& get_base_export() const
   {
-    return base_type::m_export;
+    return base_type::get_base_export();
   }
 
   //bind against a target socket

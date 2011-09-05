@@ -218,7 +218,7 @@ public:
   virtual const tlm::tlm_fw_transport_if<TYPES>& get_base_interface() const
   {
     display_error("'get_base_interface()' const not allowed for multi-sockets.");
-    return *this;
+    return base_type::get_base_interface();
   }
 
   //just return the export of the underlying tlm_target_socket in case of a hierarchical bind
@@ -230,7 +230,7 @@ public:
   //just return the export of the underlying tlm_target_socket in case of a hierarchical bind
   virtual const sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >& get_base_export() const
   {
-    return *this;
+    return base_type::get_base_export();
   }
 
   //the standard end of elaboration callback
