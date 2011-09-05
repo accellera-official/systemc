@@ -87,13 +87,13 @@ void next_trigger( const sc_time&, const sc_event&, sc_simcontext* );
 void next_trigger( const sc_time&, const sc_event_or_list&, sc_simcontext* );
 void next_trigger( const sc_time&, const sc_event_and_list&, sc_simcontext* );
 
-class sc_invoke_method; // @@@@####
+struct sc_invoke_method; 
 //==============================================================================
 // sc_method_process -
 //
 //==============================================================================
 class sc_method_process : public sc_process_b {
-    friend class sc_invoke_method; // @@@@####
+    friend struct sc_invoke_method; 
     friend void sc_method_cor_fn( void* );
     friend void sc_cmethod_cor_fn( void* );
     friend void sc_set_stack_size( sc_method_handle, std::size_t );

@@ -149,7 +149,7 @@ struct sc_invoke_method;
 
 class sc_simcontext
 {
-    friend class sc_invoke_method; 
+    friend struct sc_invoke_method; 
     friend class sc_event;
     friend class sc_module;
     friend class sc_object;
