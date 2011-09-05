@@ -22,6 +22,9 @@
 // MODIFICATION LOG - modifiers, enter your name, affiliation, date and
 //
 // $Log: proc_ctrl_immed.cpp,v $
+// Revision 1.3  2011/09/01 15:47:15  acg
+//  John Aynsley: correction for immediate method invocation on reset.
+//
 // Revision 1.2  2011/05/08 19:18:46  acg
 //  Andy Goodrich: remove extraneous + prefixes from git diff.
 //
