@@ -141,6 +141,7 @@ bool    sc_pending_activity_at_future_time( const sc_simcontext* );
 sc_time sc_time_to_pending_activity( const sc_simcontext* );
 
 struct sc_invoke_method; 
+
 // ----------------------------------------------------------------------------
 //  CLASS : sc_simcontext
 //
@@ -746,6 +747,9 @@ extern bool sc_allow_process_control_corners;
                                
  *****************************************************************************/
 // $Log: sc_simcontext.h,v $
+// Revision 1.26  2011/09/05 21:20:22  acg
+//  Andy Goodrich: result of automake invocation.
+//
 // Revision 1.25  2011/09/01 15:28:10  acg
 //  Andy Goodrich: the aftermath of automake.
 //

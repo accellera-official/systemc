@@ -2551,15 +2551,17 @@ sc_subref_r<X>::set_word( int i, sc_digit w )
 	n1 = m_lo - i * SC_DIGIT_SIZE;
 	n2 = sc_max( n1 - SC_DIGIT_SIZE, m_hi - 1 );
 	for( int n = n1; n > n2; n -- ) {
-	    m_obj.set_bit( n, sc_logic_value_t( (w >> k ++) & SC_DIGIT_ONE |
-						( m_obj[n].value() & SC_DIGIT_TWO ) ) );
+	    m_obj.set_bit( n, sc_logic_value_t( 
+	                              ( (w >> k ++) & SC_DIGIT_ONE ) |
+				      ( m_obj[n].value() & SC_DIGIT_TWO ) ) );
 	}
     } else {
 	n1 = m_lo + i * SC_DIGIT_SIZE;
 	n2 = sc_min( n1 + SC_DIGIT_SIZE, m_hi + 1 );
 	for( int n = n1; n < n2; n ++ ) {
-	    m_obj.set_bit( n, sc_logic_value_t( (w >> k ++) & SC_DIGIT_ONE |
-						( m_obj[n].value() & SC_DIGIT_TWO ) ) );
+	    m_obj.set_bit( n, sc_logic_value_t( 
+	                                ( (w >> k ++) & SC_DIGIT_ONE ) |
+					( m_obj[n].value() & SC_DIGIT_TWO ) ) );
 	}
     }
 }
@@ -2602,15 +2604,17 @@ sc_subref_r<X>::set_cword( int i, sc_digit w )
 	n1 = m_lo - i * SC_DIGIT_SIZE;
 	n2 = sc_max( n1 - SC_DIGIT_SIZE, m_hi - 1 );
 	for( int n = n1; n > n2; n -- ) {
-	    m_obj.set_bit( n, sc_logic_value_t( ((w >> k ++) & SC_DIGIT_ONE) << 1 |
-						( m_obj[n].value() & SC_DIGIT_ONE ) ) );
+	    m_obj.set_bit( n, sc_logic_value_t( 
+	                             ( ((w >> k ++) & SC_DIGIT_ONE) << 1 ) |
+				     ( m_obj[n].value() & SC_DIGIT_ONE ) ) );
 	}
     } else {
 	n1 = m_lo + i * SC_DIGIT_SIZE;
 	n2 = sc_min( n1 + SC_DIGIT_SIZE, m_hi + 1 );
 	for( int n = n1; n < n2; n ++ ) {
-	    m_obj.set_bit( n, sc_logic_value_t( ((w >> k ++) & SC_DIGIT_ONE) << 1 |
-						( m_obj[n].value() & SC_DIGIT_ONE ) ) );
+	    m_obj.set_bit( n, sc_logic_value_t( 
+	                                ( ((w >> k ++) & SC_DIGIT_ONE) << 1 ) |
+					( m_obj[n].value() & SC_DIGIT_ONE ) ) );
 	}
     }
 }
@@ -3826,6 +3830,10 @@ concat( sc_proxy<T1>& a, sc_proxy<T2>& b )
 } // namespace sc_dt
 
 // $Log: sc_bit_proxies.h,v $
+// Revision 1.10  2011/09/05 21:19:53  acg
+//  Philipp A. Hartmann: added parentheses to expressions to eliminate
+//  compiler warnings.
+//
 // Revision 1.9  2011/09/01 15:03:42  acg
 //  Philipp A. Hartmann: add parentheses to eliminate compiler warnings.
 //

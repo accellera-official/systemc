@@ -26,6 +26,9 @@
  *****************************************************************************/
 
 // $Log: sc_method_process.h,v $
+// Revision 1.23  2011/09/05 21:20:22  acg
+//  Andy Goodrich: result of automake invocation.
+//
 // Revision 1.22  2011/08/29 18:04:32  acg
 //  Philipp A. Hartmann: miscellaneous clean ups.
 //
