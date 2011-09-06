@@ -60,6 +60,7 @@
 
 
 #include <cmath>
+#include <limits>
 
 #include "sysc/datatypes/bit/sc_bit_ids.h"
 #include "sysc/datatypes/int/sc_int_ids.h"
@@ -958,24 +959,28 @@ safe_set(int i, bool v, sc_digit *d)
 // ----------------------------------------------------------------------------
 
 inline
+bool
+is_nan( double v )
+{
+    return std::numeric_limits<double>::has_quiet_NaN && (v != v);
+}
+
+inline
+bool
+is_inf( double v )
+{
+    return v ==  std::numeric_limits<double>::infinity()
+        || v == -std::numeric_limits<double>::infinity();
+}
+
+inline
 void
 is_bad_double(double v)
 {
-// Windows throws exception.
-#if !defined(WIN32) && !defined(__i386__) && !defined(__x86_64__) && !defined( __EDG__ )
-#if defined( __hpux ) && defined( isfinite )
-  // HP-UX 11.00 does not have finite anymore
-  if( ! isfinite( v ) ) {
-#else
-  if (! finite(v)) {
-#endif
+  if( is_nan(v) || is_inf(v) )
       SC_REPORT_ERROR( sc_core::SC_ID_VALUE_NOT_VALID_,
 		       "is_bad_double( double v ) : "
 		       "v is not finite - NaN or Inf" );
-  }
-#else
-  if ( v == 0.0 ) {}
-#endif
 }
 
 } // namespace sc_dt
