@@ -22,6 +22,9 @@
 // MODIFICATION LOG - modifiers, enter your name, affiliation, date and
 //
 // $Log: proc_ctrl_priority.cpp,v $
+// Revision 1.3  2011/09/05 21:23:35  acg
+//  Philipp A. Hartmann: eliminate compiler warnings.
+//
 // Revision 1.2  2011/05/08 19:18:46  acg
 //  Andy Goodrich: remove extraneous + prefixes from git diff.
 //
@@ -47,7 +50,7 @@ struct Top: sc_module
 
     count = 0;
     f1 = f2 = f3 = f4 = f5 = f6 = f7 = f8 = f9 = 0;
-    f10 = f11 = f12 = f13 = f14 = f15 = f16 = f19 = f18 = f19 = 0;
+    f10 = f11 = f12 = f13 = f14 = f15 = f16 = f17 = f18 = f19 = 0;
     f20 = f21 = f22 = f23 = f24 = f25 = f26 = f27 = f28 = f29 = 0;
   }
   

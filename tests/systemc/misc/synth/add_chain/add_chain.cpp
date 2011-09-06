@@ -34,6 +34,9 @@
  *****************************************************************************/
 
 // $Log: add_chain.cpp,v $
+// Revision 1.2  2011/09/05 21:23:35  acg
+//  Philipp A. Hartmann: eliminate compiler warnings.
+//
 // Revision 1.1.1.1  2006/12/15 20:26:13  acg
 // systemc_tests-2.3
 //
@@ -60,7 +63,8 @@ int
 sc_main(int ac, char *av[])
 {
   // turn off multiwrite check for signals.
-  putenv("SC_SIGNAL_WRITE_CHECK=DISABLE");
+  char write_check[] = "SC_SIGNAL_WRITE_CHECK=DISABLE";
+  putenv(write_check);
   sc_get_curr_simcontext()->reset();
 
   sc_clock clk( "CLOCK", 20, SC_NS, 0.5, 0, SC_NS, false);  // Clock function

@@ -22,6 +22,9 @@
 // MODIFICATION LOG - modifiers, enter your name, affiliation, date and
 //
 // $Log: event_list.cpp,v $
+// Revision 1.3  2011/09/05 21:23:30  acg
+//  Philipp A. Hartmann: eliminate compiler warnings.
+//
 // Revision 1.2  2011/05/08 19:18:46  acg
 //  Andy Goodrich: remove extraneous + prefixes from git diff.
 //
@@ -246,7 +249,7 @@ struct Top: sc_module
   }
   
   sc_event v1, v2, v3, v4;
-  sc_event_or_list  or_list1,  or_list2;;
+  sc_event_or_list  or_list1,  or_list2;
   sc_event_and_list and_list1, and_list2;
   int count;
   

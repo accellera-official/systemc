@@ -11,7 +11,7 @@ using std::endl;
 
 struct Object: sc_object
 {
-  Object(char* _n) : sc_object(_n) {}
+  Object(const char* _n) : sc_object(_n) {}
 };
 
 SC_MODULE(M)

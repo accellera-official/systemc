@@ -289,7 +289,7 @@ int lp_write_buf::lp_write_buf_f(unsigned int minor,
 
     /*   if (lp->dev == NULL) */ /* Removed because of a pointer */
     /* The following causes a BC error (bad matching width of n15[1]) */
-    if (lp_table[minor].dev == NULL) {
+    if (lp_table[minor].dev == 0) {
       wait();
       return -ENXIO;
     } else {

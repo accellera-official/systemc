@@ -170,8 +170,11 @@ lc::lookup(sc_uint<32> ip)
  * "not in table" produces a hop of 0
  */
 
-#define TRIE(LN, SK, AD) (((LN&0x1f)<<27) | ((SK&0x7f)<<20) | (AD&0xfffff))
-#define E(LN, NHP, NPX)  (((LN&0x7f)<<25) | ((NHP&0x3ff)<<15) | ((NPX&0x7fff)))
+#define TRIE(LN, SK, AD) \
+  ((((LN)&0x1f)<<27) | (((SK)&0x7f)<<20) | ((AD)&0xfffff))
+#define E(LN, NHP, NPX) \
+  ((((LN)&0x7f)<<25) | (((NHP)&0x3ff)<<15) | ((((NPX))&0x7fff)))
+
 
 #define M_SIZE 52
 sc_uint<32> M[M_SIZE] = {

@@ -80,7 +80,7 @@ class channel :
       write_event_1.notify(5, SC_NS);
       write_event_1.notify(5, SC_NS);
     }
-    else if(3 <= i & i < 6) {
+    else if(3 <= i && i < 6) {
       write_event_1.notify(10, SC_NS);
 	}
     else{

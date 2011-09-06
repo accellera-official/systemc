@@ -40,6 +40,7 @@ select( int a, int b, int c )
     sc_signed x(7);
 
     switch ((c >> 2) & 3) {
+    default:
     case 0:
         x = a + b;
         return x.to_int();
