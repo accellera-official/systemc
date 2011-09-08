@@ -35,6 +35,9 @@
  *****************************************************************************/
 
 // $Log: sc_nbutils.h,v $
+// Revision 1.6  2011/09/08 16:12:15  acg
+//  Philipp A. Hartmann: fix issue with Sun machines wrt real math libraries.
+//
 // Revision 1.5  2011/08/26 23:00:01  acg
 //  Torsten Maehne: remove use of ieeefp.h.
 //
