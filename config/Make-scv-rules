@@ -1,4 +1,0 @@
-           DEFS	= -I.
-       INCLUDES	= -I$(top_srcdir)/src/scv -I$(top_srcdir)/src -I$(top_srcdir)/src/sysc 
-
-   MAIN_LIBRARY  = libscv.la
