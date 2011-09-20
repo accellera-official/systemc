@@ -1,0 +1,903 @@
+
+This is a simple version of an Abstract Bus Model. This version is
+developed using SystemC 2.0, and is verified on all platforms supported
+by SystemC 2.0.
+
+By Ric Hilderink, Synopsys, Inc., 11 Oct 2001.
+Updated by Martin Janssen, Synopsys, Inc., 27 Nov 2001.
+Updated by Holger Keding, Synopsys, Inc., 26 Jan 2002.
+
+This README contains the following sections: 
+
+0.    Getting Started
+0.1   .. Getting Started for Unix
+0.2   .. Getting Started for Windows
+1.    Introduction : the bus model
+1.1   .. Bus Interface
+1.1.1 .... Blocking Interface
+1.1.2 .... Non-Blocking Interface
+1.1.3 .... Direct Interface
+1.2   .. Slave Interface
+1.3   .. Arbiter
+1.4   .. Timing
+1.4.1 .... Blocking Request
+1.4.2 .... Non-Blocking Request
+1.4.3 .... Direct Request
+1.5   .. Interfaces Used
+1.5.1 .... Bus
+1.5.2 .... Arbiter
+2.    The Testbench
+2.1   .. Slaves
+2.1.1 .... Fast Memory Slaves
+2.1.2 .... Slow Memory Slaves
+2.2   .. Masters
+2.2.1 .... Non-Blocking Masters
+2.2.2 .... Blocking Masters
+2.2.3 .... Direct Masters
+2.3   .. The Test 'Schematic'
+2.3.1 .... Construction
+2.3.2 .... Simulation
+2.4   .. Runtime Behavior
+2.4.1 .... Direct Master
+2.4.2 .... Non-Blocking Master
+2.4.3 .... Blocking Master
+2.5   .. Running
+3.    Files
+
+-----------------------------------------------------------------------------
+
+0. Getting Started
+
+0.1 Getting Started for Unix
+
+The simple bus example is now part of the SystemC distribution. It is
+located in directory 'examples/sysc/simple_bus'. To be able to run
+the example, first go to this directory and build the executable,
+e.g.
+
+  For gcc-2.95.2 on Solaris:
+
+  > gmake -f Makefile.gcc
+
+  For SC6.1 and SC6.2 on Solaris:
+
+  > gmake -f Makefile.sun
+
+  For gcc-2.95.2 on Linux:
+
+  > gmake -f Makefile.linux
+
+  For aCC (A.03.15 and A.03.31) on HP-UX:
+
+  > gmake -f Makefile.hp
+
+Now you can run the executable, e.g.
+
+  > simple_bus.x
+
+0.2 Getting Started for Windows
+
+The simple bus example is now part of the SystemC distribution. The
+source code of this example is located in directory
+'examples/sysc/simple_bus'. Project and workspace files for Visual
+C++ are located in directory 'msvc60/examples/simple_bus'. To be able
+to run the example, go to this directory and double-click on the
+simple_bus.dsw file to launch Visual C++ with the workspace file. The
+workspace file will have the proper switches set to compile for Visual
+C++ 6.0. Select 'Build simple_bus.exe' under the Build menu or press
+F7 to build the simple_bus executable.
+
+Now you can select 'Execute simple_bus.exe' under the Build menu or
+press Ctrl+F5 to run the simple_bus executable.
+
+
+1. Introduction : the bus model
+
+This is the description of a simple abstract bus model. The modeling
+is done at the transaction level, and is based on cycle-based
+synchronization.
+
+Cycle-based synchronization: This reduction in timing accuracy results
+in high simulation speed. The goal is to model the organization and
+data movement in the system on a clock by clock basis, as compared to
+the equivalent real system. Sub-cycle events are then of no interest.
+
+Transaction modeling: The communication between components are
+described as function calls. Events or sequences of events on a group
+of wires are represented by a set of function calls in an abstract
+software interface. Transaction modeling of the interfaces enables
+higher simulation speed than pin-based interfaces and also speeds up
+the modeling construction process. 
+
+This example design uses an overall form of synchronization where
+modules attached to the bus execute on the rising clock edge, and the
+bus itself executes on a falling clock edge. This is a modeling
+technique used to achieve very high simulation performance for
+abstract bus models, it does not imply that the actual implementation
+of this design must use a bus that is sensitive to the falling clock
+edge. The final implementation may in fact only have a single clock
+with all logic sensitive only to the rising edge. Other
+synchronization schemes (e.g. reliance on primitive channels and the
+request_update/update scheme) could also have been used, though likely
+they will result in more complicated and slower code for this design.
+
+
+1.1 Bus Interface
+
+The Bus Interface describes the communication between masters and the
+bus. To the bus multiple masters can be connected. Each master is
+identified by a unique priority, that is represented by an unsigned
+integer number. The lower this priority number is, the more important
+the master is. Each bus interface function uses this priority to set
+the importance of the call. There are three sets of communication
+functions (interfaces) defined between the masters and the bus:
+blocking, non-blocking and direct. 
+
+A master can reserve the bus for a subsequent request by using a
+lock flag. If this flag is set and the request is granted at a given
+cycle, then the bus will be locked for the same master in the
+following cycle if that master issues another request.
+
+1.1.1 Blocking Interface
+
+The blocking interface functions move data through the bus in
+burst-mode, and are defined as follows: 
+
+simple_bus_status burst_read(unsigned int unique_priority,
+	 		     int *data,
+			     unsigned int start_address,
+			     unsigned int length = 1,
+	 		     bool lock = false);
+
+simple_bus_status burst_write(unsigned int unique_priority,
+	 		      int *data,
+			      unsigned int start_address,
+			      unsigned int length = 1,
+	 		      bool lock = false);
+
+
+These functions read or write a block of data words (32bit), pointed 
+to by data of size length (in words) from or to start_address. We are
+using byte addressing here, i.e. each valid word address is a multiple
+of four. The value unique_priority specifies the importance of the master 
+as well as the id of the master. If lock is set, there are two separate 
+effects:
+ 1) The function 'reserves' the bus for exclusive use for a next
+    request of the same master. This request must follow immediately
+    after the previous burst request is completed, i.e., when the
+    burst_read() or burst_write() function returns.
+ 2) The function (i.e. the transaction) cannot be interrupted by a
+    request with a higher priority.
+
+After completion the bus returns a simple_bus_status that is one of:
+- SIMPLE_BUS_OK    : Transfer succeeded.
+- SIMPLE_BUS_ERROR : An error occurred during the transfer. Not all
+                     data could be read/written.
+
+Examples of conditions which might result in SIMPLE_BUS_ERROR include
+illegal addresses or address ranges, and writing to a read-only slave.
+Note that interruption of a transaction does not result in
+SIMPLE_BUS_ERROR.
+
+1.1.2 Non-Blocking Interface
+
+The non-blocking interface functions are defined as follows:
+
+void read(unsigned int unique_priority,
+	  int *data,
+	  unsigned int address,
+	  bool lock = false);
+
+void write(unsigned int unique_priority,
+	   int *data,
+	   unsigned int address,
+	   bool lock = false);
+
+simple_bus_status get_status(unsigned int unique_priority);
+
+These functions read or write a single data word, pointed to be
+data at address. The request is handled according the given
+unique_priority. If lock is set, the function 'reserves' the bus for
+exclusive use for a next request of the same master. This request must
+follow immediately after the previous request is completed, i.e. when
+the get_status() function returns SIMPLE_BUS_OK or SIMPLE_BUS_ERROR. 
+
+The functions return immediately. The caller must take care of
+checking the status of the last request, using the function
+get_status(). This function queries the bus for the status of the
+last request made to the bus. Also here the unique_priority of the
+master must be passed in order to get the status of the appropriate
+request. The status of the request is one of:
+
+- SIMPLE_BUS_REQUEST : The request is issued and placed on the queue,
+                       waiting to be served.
+- SIMPLE_BUS_WAIT    : The request is being served but is not completed
+                       yet.
+- SIMPLE_BUS_OK      : The request is completed without errors.
+- SIMPLE_BUS_ERROR   : An error occurred during processing of the
+                       request. The request is finished but the 
+                       transfer did not complete successfully.
+
+A new non-blocking request can be made if the status of the (last)
+request is either SIMPLE_BUS_OK or SIMPLE_BUS_ERROR. Immediately after
+issuing the request, the status becomes in all cases
+SIMPLE_BUS_REQUEST. The status only changes when the bus processes the
+request. When a new request is issued and the current one is not
+completed yet, an error message is produced and the execution is
+aborted.
+
+1.1.3 Direct Interface
+
+The direct interface functions are defined as follows and are the same
+for the bus interface and the slave interface:
+
+bool direct_read(int *data,
+                 unsigned int address);
+
+bool direct_write(int *data,
+	          unsigned int address);
+
+The direct interface functions perform the data transfer through the
+bus, but without using the bus protocol. When the function is invoked,
+the transfer takes place immediately. The return status is either:
+
+- true  : The transfer was successful.
+- false : The transfer was not successful. Possible cause is that the
+          given address cannot be mapped upon a slave, or the memory 
+	  location cannot be read or written.
+
+1.2 Slave Interface
+
+The slave interface describes the communication between the bus and the
+slaves. To the bus multiple slaves can be connected. Each slave models
+some kind of memory that can be accessed through the slave interface.
+
+The slave interface is defined by two sets of functions. The first set
+serves the default operations of read/write data to and from memory,
+while the second set of functions describe the direct interface,
+hereby ignoring possible wait states of the slaves. The direct
+interface is already discussed in section 1.1.3.
+
+The normal-mode functions are defined as follows:
+
+simple_bus_status read(int *data,
+		       unsigned int address);
+
+simple_bus_status write(int *data,
+			unsigned int address);
+
+These functions read or write a single data element, pointed to by
+data in or from the slave's memory at address. The functions return
+instantaneously and the caller must check the status of the transfer by
+checking the return value of the functions. If the returned status is
+SIMPLE_BUS_WAIT, the caller must call the function again until the
+status changes. The status of the interface functions in one of:
+
+- SIMPLE_BUS_WAIT  : The slave issued a wait state.
+- SIMPLE_BUS_OK    : The transfer was successful.
+- SIMPLE_BUS_ERROR : An error occurred during the processing of the
+                     transfer. The transfer is finished but was not
+                     successful. 
+
+If the slave models one or more wait states, the status of the
+interface function will be SIMPLE_BUS_WAIT; in case of an error the
+status will be SIMPLE_BUS_ERROR and the transfer is aborted. Each
+subsequent cycle the status must be checked again until the status
+becomes SIMPLE_BUS_OK. Only then the transfer is completed and the
+slave is ready to accept a next request.
+
+To obtain the memory range of a slave two functions are needed: 
+
+unsigned int start_address() const;
+unsigned int end_address() const;
+
+The start_address function returns the address of the first
+addressable memory location of the slave; the end_address function
+returns the last addressable memory location of the slave.
+
+In the simple bus example these functions are used to perform a check
+for overlapping address spaces of the slaves before the simulation 
+starts and to determine the appropriate slave for the specified 
+address of a bus request.
+
+
+1.3 Arbiter
+
+To the bus more than one master can be connected. Each master is
+independent of the others, so each master can issue a bus request at
+any time. When at a given cycle one or more requests are made for the
+bus, these requests are collected and passed to an arbiter. Out of
+this collection the most suitable request is selected; the other
+requests are kept in the request state. The arbiter is connected to
+the bus by a dedicated interface, and is called with one or more
+requests in the collection:
+
+simple_bus_request *arbitrate(const simple_bus_request_vec &Q);
+
+The arbiter selects the most appropriate request according the
+following rules: 
+
+1. If the current request is a locked burst request, then it is always 
+   selected.
+2. If the last request had its lock flag set and is again
+   'requested', this request is selected from the collection Q and
+   returned, otherwise:
+3. the request with the highest priority (i.e. lowest number) is
+   selected from the collection Q and returned.
+
+The arbiter checks whether all the priorities of the requests are
+unique. If that is not the case, the arbiter will produce an error
+message and abort execution.
+
+The arbiter is called whenever the last master request is fully
+processed by the bus, and when there are one or more new requests made
+by the set of masters.
+
+NOTE: The highest priority is specified by the lowest numerical value
+of the unique_priority parameter. 
+
+1.4 Timing
+
+A bus transfer is initiated by a master request. Each master is
+sensitive to the rising clock edge where it can call a bus interface
+function.
+
+1.4.1 Blocking Request
+
+At the rising clock edge, masters can issue a bus request. The bus
+interface function registers the request in a request form. The status
+of the request becomes SIMPLE_BUS_REQUEST. (The interface function does
+not terminate but waits until the status of the bus is either
+SIMPLE_BUS_OK or SIMPLE_BUS_ERROR, and this status is returned at the
+first rising clock edge after the request is fully completed.)
+
+At the next falling clock edge after the request is issued, the bus
+handles the requests. Since now there is one (or more) request made,
+the arbiter is called to determine the most suitable request. The
+status of this request is set to SIMPLE_BUS_WAIT. This request is then
+executed.
+
+For each data transfer to be made, ranging from start_address to
+start_address + length - 1, the current address is obtained and the
+corresponding slave is selected.  If there is no slave to be found,
+the status of the request is set to SIMPLE_BUS_ERROR.
+
+The master request is transformed into single slave requests, and one
+by one these requests are made to the slave. When the status of the
+slave is SIMPLE_BUS_OK after the call is made, then the transfer of a
+single data element has succeeded, the current address of the master
+request is incremented. If the current address is beyond the last
+to-be-addressed data element, the status of the request is set to
+SIMPLE_BUS_OK and the event is notified, for which the bus interface
+function that issued the request is waiting.
+
+If there are more data elements to be sent to the slave interface, the
+status of the request remains SIMPLE_BUS_WAIT. At the next falling
+clock edge the bus process continues with the data transfer to the
+slave until all data elements are done.
+
+If a slave encounters an error, the status of the request is set to
+SIMPLE_BUS_ERROR and the event is notified, for which the
+bus interface function that issued the request is waiting.
+
+The bus interface function does not actually wait until the status of
+the call becomes SIMPLE_BUS_OK or SIMPLE_BUS_ERROR, but waits for an
+event coming from the bus process indicating that the transfer is
+completed. This event comes at the falling clock edge. An additional
+wait for the next rising clock edge must be issued in order
+to synchronize:
+
+simple_bus_status burst_read(...) {
+  // register request
+  ...
+  wait(request->transfer_done);
+  wait(clock->posedge_event());
+  return get_status(priority);
+}
+
+1.4.2 Non-Blocking Request
+
+A non-blocking master request is done at a rising clock edge. The
+request is registered by the bus by filling in the request form and
+the status of the request is set to SIMPLE_BUS_REQUEST. The
+non-blocking function returns. The status of the request changes as
+soon as the bus handles the request, and that happens at a falling
+clock edge.
+
+Now the master must check for the status of the request until the
+status is either SIMPLE_BUS_OK or SIMPLE_BUS_ERROR. Only the bus
+process can change the status of the request once the request is
+made. And that happens only at a falling clock edge. The same
+procedure is now followed for transferring one single data element
+through the bus as is described for the blocking interface request
+functions.
+
+1.4.3 Direct Request
+
+A direct interface request from a master does not follow the bus
+protocol, but is handled instantaneously. Once the request is issued
+by a master, it is directly transformed into the corresponding direct
+slave interface function call. The only action performed by the bus is
+the selection of the slave according to the address argument of the
+direct interface function call.
+
+At the slave this direct request is also processed immediately without
+honoring the wait states of the slave. The function will return and
+its return value is either true if the given address could be read
+and/or written, or is false if that is not the case.
+
+The return value of the direct request of the bus interface function
+call is the same as for the slave side of the interface, only when the
+address parameter could not be mapped to a slave, it will also return
+false.
+
+1.5 Interfaces Used
+
+class simple_bus_direct_if 
+   : virtual public sc_interface 
+   {...};
+
+class simple_bus_non_blocking_if 
+   : virtual public sc_interface 
+   {...};
+
+class simple_bus_blocking_if 
+   : virtual public sc_interface 
+   {...};
+
+class simple_bus_arbiter_if 
+   : virtual public sc_interface 
+   {...};
+
+class simple_bus_slave_if 
+   : public simple_bus_direct_if
+   {...};
+
+
+1.5.1 Bus
+
+The bus is a hierarchical channel, providing the three different
+bus interfaces, and containing a clock port, an arbiter port and a
+(multi-)port for connecting one or more slaves. 
+
+class simple_bus
+   : public simple_bus_direct_if
+   , public simple_bus_non_blocking_if
+   , public_simple_bus_blocking_if
+   , public sc_module
+   {
+      sc_clk_in clock;
+      sc_port<simple_bus_slave_if, 0> slave_port;
+      sc_port<simple_bus_arbiter_if> arbiter_port;
+      ...
+   };
+
+The implementation of the main process of the bus is a method process,
+using dynamic sensitivity for 'communicating' with the bus interface
+functions. The communication towards the slave interface does not use
+dynamic sensitivity.
+
+1.5.2 Arbiter
+
+The arbiter is a hierarchical channel that provides the
+simple_bus_arbiter_if interface.
+
+class simple_bus_arbiter
+   : public simple_bus_arbiter_if
+   , public sc_module
+   {...};
+
+
+2. The Testbench
+
+The testbench consists of an instantiation of the simple_bus with an
+arbiter, three masters and two slaves. Both slaves model a random
+access memory where the first memory does not have a wait state while
+the second memory has (some). The testbench contains three masters
+where each master issues only requests of a particular interface, like
+only issuing blocking interface function calls, only non-blocking
+interface function calls or only direct interface function calls.
+
+2.1 Slaves
+
+Two kinds of memories are to be modeled: one without wait states and
+one with a configurable number of wait states. 
+
+2.1.1 Fast Memory Slaves
+
+The fast memory slave has no wait states and no clock port. It reacts
+immediately to the bus request and sets the status accordingly. 
+
+class simple_bus_fast_mem
+   : public simple_bus_slave_if
+   , public sc_module
+   {
+   public:
+      // no ports
+
+      // constructor
+      simple_bus_fast_mem(sc_module_name name,
+                          unsigned int start_address,
+                          unsigned int end_address) 
+      ...
+      // interface methods
+      ...
+   };
+
+The start_address points to the first byte of the first word in the 
+memory of this slave and is a word aligned address, i.e. it has to 
+be a multiple of 4. The end_address points to the last byte of the 
+last word in the memory area of this slave, i.e. to address 
+(start_address + storage_size_in_words * 4 - 1).
+
+2.1.2 Slow Memory Slaves
+
+The slow memory slave has a configurable number of wait states
+(constructor argument), and contains a clock port. Once a request is
+made, the status is set to SIMPLE_BUS_WAIT, and a counter is set. Each
+rising clock edge this counter is decremented and checked, and if it
+becomes zero, the status is set to SIMPLE_BUS_OK. This status is
+picked up by the bus at the next falling clock edge.
+
+class simple_bus_slow_mem
+   : public simple_bus_slave_if
+   , public sc_module
+   {
+   public:
+      sc_clk_in clock;
+
+      // constructor
+      simple_bus_slow_mem(sc_module_name name,
+                          unsigned int start_address,
+                          unsigned int end_address, 
+                          unsigned int nr_wait_states)
+      ...
+      // interface methods
+      ...
+   };
+
+The start_address points to the first byte of the first word in the 
+memory of this slave and is a word aligned address, i.e. it has to 
+be a multiple of 4. The end_address points to the last byte of the 
+last word in the memory area of this slave, i.e. to address 
+(start_address + storage_size_in_words * 4 - 1).
+
+2.2 Masters
+
+For the testbench three masters are defined, each using one bus
+interface: blocking, non-blocking or direct. The main_action of each
+master is a thread process.
+
+2.2.1 Non-Blocking Masters
+
+SC_MODULE(simple_bus_master_non_blocking)
+   {
+     // ports
+     sc_clk_in clock;
+     sc_port<simple_bus_non_blocking_if> bus_port;
+
+     // constructor
+     simple_bus_master_non_blocking(sc_module_name name,
+                                    unsigned int unique_priority,
+                                    ...)
+     ...
+   };
+
+In this example the non-blocking master reads data from a memory 
+location, performs an arithmetic operation on this data and writes 
+it back to memory. This happens in a loop so that the memory 
+locations are at least changed each loop iteration.
+
+2.2.2 Blocking Masters
+
+SC_MODULE(simple_bus_master_blocking)
+   {
+     // ports
+     sc_clk_in clock;
+     sc_port<simple_bus_blocking_if> bus_port;
+
+     // constructor
+     simple_bus_master_blocking(sc_module_name name, 
+                                unsigned int unique_priority,
+                                ...)
+     ...
+   };
+
+Here the blocking master reads a block of data, performs the same 
+arithmetic operations on the data as the non-blocking master, and 
+writes it back to memory as a block. This master has a lower 
+priority than the non-blocking master, to enable interrupts of 
+higher prioritized requests during a burst mode transaction. 
+
+2.2.3 Direct Masters
+
+SC_MODULE(simple_bus_master_direct)
+   {
+     // ports
+     sc_clk_in clock;
+     sc_port<simple_bus_direct_if> bus_port;
+
+     // constructor
+     simple_bus_master_direct(sc_module_name name,
+                              ...)
+     ...
+   };
+
+The direct master monitors some memory locations at distinct time intervals 
+and prints them on the screen. 
+
+
+
+---------------------------------------------------------------------------
+      +---------+   +---------+   +---------+
+      | master  |   | master  |   | master  |
+  +-->|   #1    |-->|   #2    |-->|   #3    |
+  |   +-- [*]---+   +---[*]---+   +---[*]---+
+  |        |             |             |
+  |        +-------------+-------------+
+  |                      |                          
+  |      /--------------(.)--------------\
+  +->[*]/        simple_bus               \          +----------+
+  |     \                                 /[*]----(.)| arbiter  |
+  |      \--------------[*]--------------/           +----------+
+  |                     | |                
+  |                 ____/ \____
+clock              /           \
+  |                |           |
+  |            +--(.)--+   +--(.)--+         legend:
+  |            | slave |   | slave |         [*] : port
+  +----------->|  #1   |   |  #2   |         (.) : interface
+               +-------+   +-------+
+
+  Figure 1: the simple_bus with three masters, two slaves and the arbiter.
+---------------------------------------------------------------------------
+
+2.3 The Test 'Schematic'
+
+The testbench contains a bus with arbiter, three different masters,
+each supporting a specific bus interface, and two slaves modeling a
+memory without wait states (fast memory), and a memory with wait
+states (slow memory). The testbench is available as the hierarchical
+module simple_bus_test. 
+
+2.3.1 Construction
+
+The testbench contains the clock channel 'C1' and the different
+instances. These instances are allocated in the simple_bus_test
+constructor and are configured by means of constructor arguments. The
+default argument is the name of the module, but for the masters and
+the slaves additional parameters must be specified.
+
+The memories cover the byte address range [0:ff] where the first half of
+the address space ([0:7f])is covered by a fast memory, and the second
+half of the address space ([0x80:0xff]) is covered by a slow memory
+with 1 wait state:
+
+- simple_bus_fast_mem("mem_fast", // name
+		      0x00,       // start_address
+                      0x7f);      // end_address 
+- simple_bus_slow_mem("mem_slow", // name
+                      0x80,       // start_address
+                      0xff,       // end_address
+                      1);         // number of wait states
+
+For the masters, the unique priority must be defined during
+construction time, except for the direct master. The priority is not
+directly checked during construction, but only during run time by the
+arbiter. If during the same cycle two or more request are issued with
+the same priority, the simulation will abort after issuing an error
+message:
+
+- simple_bus_master_blocking("master_b", 4, ...);      // unique_priority = 4
+- simple_bus_master_non_blocking("master_nb", 3, ...); // unique_priority = 3
+
+2.3.2 Simulation
+
+The simple_bus_test instance is instantiated in the sc_main routine
+and the simulation is started by the sc_start(10000) statement.
+
+This is coded in the simple_bus_main.cpp file. 
+
+2.4 Runtime Behavior
+
+The three different masters issue bus requests independently of each other. 
+A single request, but also multiple requests at the same cycle are possible. 
+Each master has its own behavior. 
+
+2.4.1 Direct Master
+
+The direct master serves as a monitor that reads at certain time
+intervals four adjacent memory locations and prints them on the output
+stream, using the direct bus interface.
+
+With m_address = 0x78, and m_timeout = 100, the direct master performs:
+
+  while (true)
+    {
+      bus_port->direct_read(&mydata[0], m_address);
+      bus_port->direct_read(&mydata[1], m_address+4);
+      bus_port->direct_read(&mydata[2], m_address+8);
+      bus_port->direct_read(&mydata[3], m_address+12);
+
+      if (m_verbose)
+	sb_fprintf(stdout, "%f %s : mem[%x:%x] = (%x, %x, %x, %x)\n",
+		   sc_time_stamp(), name(), m_address, m_address+15, 
+		   mydata[0], mydata[1], mydata[2], mydata[3]);
+
+      wait(m_timeout, SC_NS);
+    }
+
+The parameters m_address and m_timeout are configurable by means of
+constructor arguments. Printing of the memory locations is enabled
+when m_verbose is set. Also that is configurable with a constructor
+argument.
+
+2.4.2 Non-Blocking Master
+
+The non-blocking master reads a word 'data' at byte address 'addr' from 
+memory, using the non-blocking bus interface function and checks whether 
+the operation is successful. 'data' is modified a little bit and written 
+to the same 'addr' in memory. After 'm_timeout' the next iteration is
+started. Each iteration, 'addr' is set to the next word address.
+
+With addr = 0x38, and m_timeout = 20, the non-blocking master
+performs: 
+
+  wait(); // ... for the next rising clock edge
+  while (true)
+    {
+      bus_port->read(m_unique_priority, &mydata, addr, m_lock);
+      while ((bus_port->get_status(m_unique_priority) != SIMPLE_BUS_OK) &&
+	     (bus_port->get_status(m_unique_priority) != SIMPLE_BUS_ERROR))
+	wait();
+      if (bus_port->get_status(m_unique_priority) == SIMPLE_BUS_ERROR)
+	sb_fprintf(stdout, "%f %s : ERROR cannot read from %x\n",
+		   sc_time_stamp(), name(), addr);
+
+      mydata += cnt;
+      cnt++;
+
+      bus_port->write(m_unique_priority, &mydata, addr, m_lock);
+      while ((bus_port->get_status(m_unique_priority) != SIMPLE_BUS_OK) &&
+	     (bus_port->get_status(m_unique_priority) != SIMPLE_BUS_ERROR))
+	wait();
+      if (bus_port->get_status(m_unique_priority) == SIMPLE_BUS_ERROR)
+	sb_fprintf(stdout, "%f %s : ERROR cannot write to %x\n",
+		   sc_time_stamp(), name(), addr);
+ 
+      wait(m_timeout, SC_NS);
+      wait(); // ... for the next rising clock edge
+
+      addr+=4; // next word (byte addressing)
+      if (addr > (m_start_address+0x80)) {
+	addr = m_start_address; cnt = 0; 
+      }
+    }
+
+Initially, all bus interface function calls are not locked. The lock
+can be set by means of a constructor argument.
+
+2.4.3 Blocking Master
+
+The blocking master reads a block of 'data' words at byte 'addr' and of 
+word length 0x10 from memory, performs some arithmetic calculations on them, 
+that takes 0x10 wait states, and writes the block of 'data' back to memory
+at 'addr'. Then it pauses 'm_timeout' nanoseconds before the next 
+iteration starts.
+
+With m_address = 0x4c and m_timeout = 300, the blocking master performs:
+
+  while (true)
+    {
+      wait(); // ... for the next rising clock edge
+      status = bus_port->burst_read(m_unique_priority, mydata, 
+				    m_address, mylength, m_lock);
+      if (status == SIMPLE_BUS_ERROR)
+	sb_fprintf(stdout, "%f %s : blocking-read failed at address %x\n",
+		   sc_time_stamp(), name(), m_address);
+
+      for (i = 0; i < mylength; ++i)
+	{
+	  mydata[i] += i;
+	  wait();
+	}
+
+      status = bus_port->burst_write(m_unique_priority, mydata, 
+				     m_address, mylength, m_lock);
+      if (status == SIMPLE_BUS_ERROR)
+	sb_fprintf(stdout, "%f %s : blocking-write failed at address %x\n", 
+		   sc_time_stamp(), name(), m_address);
+
+      wait(m_timeout, SC_NS);
+    }
+
+Initially, all bus interface function calls are not locked. The lock
+can be set by means of a constructor argument.
+
+2.5 Running
+
+The runtime behavior is best be monitored by inspection of the
+collection of pending requests at the arbiter, and the identification
+of the selected request. The arbiter is called each cycle when there
+are one or multiple requests pending. A burst request is split up in
+separate requests for each slave action.
+
+Let R[p](-) be a request R of priority 'p' without a lock, and let
+R[p](+) be the same request, but now with a lock. For each cycle the
+list of requests is shown with the one selected. 
+
+- R[3](-)  
+// single request, is selected
+
+- R[3](-) R[4](-)  
+// two requests, R[3](-) is selected according priority
+
+- R[3](-) R[3](-) R[4](-) 
+// error: two requests with the same priority. Abort, end of simulation!
+
+It does not matter whether the request is part of a burst-request or
+just a non-blocking request. Each cycle the most appropriate (partial)
+request is selected. When R[4] is part of a burst-request, then it can
+be interrupted by R[3], due to a higher priority. 
+
+When the lock is set, the behavior is slightly different. Not for the
+first selection of a request but for the next one, issued by the same
+master. 
+
+1: R[3](+)
+2: R[3](+)
+// single request for cycle 1 and 2, no conflicts
+
+1: R[3](+)
+2: R[4](+)
+// locked request at cycle 1, but is not followed by a next request. 
+// R[4] is selected at cycle 2.
+
+1: R[4](+)
+2: R[3](-) R[4](+)
+// locked request at cycle 1: selected. Request is issued again at
+// cycle 2, so the lock is kept and the request with a higher priority
+// must wait.
+
+1: R[4](+)
+2: R[3](+) R[4](+)
+// locked request at cycle 1: selected. Request is issued again at
+// cycle 2, so R[4] is selected in cycle 2. R[3] must wait, regardless
+// the higher priority and its lock.
+
+
+3. Files
+
+ChangeLog
+LEGAL
+Makefile.gcc
+Makefile.hp
+Makefile.linux
+Makefile.srcs
+Makefile.sun
+README
+SLIDES.pdf
+simple_bus.cpp
+simple_bus.golden
+simple_bus.h
+simple_bus_arbiter.cpp
+simple_bus_arbiter.h
+simple_bus_arbiter_if.h
+simple_bus_blocking_if.h
+simple_bus_direct_if.h
+simple_bus_fast_mem.h
+simple_bus_main.cpp
+simple_bus_master_blocking.cpp
+simple_bus_master_blocking.h
+simple_bus_master_direct.cpp
+simple_bus_master_direct.h
+simple_bus_master_non_blocking.cpp
+simple_bus_master_non_blocking.h
+simple_bus_non_blocking_if.h
+simple_bus_request.h
+simple_bus_slave_if.h
+simple_bus_slow_mem.h
+simple_bus_test.h
+simple_bus_tools.cpp
+simple_bus_types.cpp
+simple_bus_types.h

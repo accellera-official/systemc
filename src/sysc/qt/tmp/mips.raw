@@ -1,0 +1,16 @@
+mips 1 10000000       17.2 real        16.4 user         0.3 sys  
+mips 6 10000000       48.9 real        45.7 user         0.4 sys  
+mips 7 10000000       19.9 real        19.1 user         0.2 sys  
+mips 8 10000000       46.8 real        45.9 user         0.3 sys  
+mips 14 1000000        3.8 real         3.2 user         0.2 sys  
+mips 15 1000000        4.9 real         4.3 user         0.2 sys  
+mips 16 1000000        5.7 real         5.1 user         0.2 sys  
+mips 17 1000000        7.3 real         6.8 user         0.2 sys  
+mips 10 1000000        7.6 real         7.0 user         0.2 sys  
+mips 11 1000000        8.9 real         8.1 user         0.2 sys  
+mips 12 1000000       10.8 real         8.9 user         0.3 sys  
+mips 13 1000000       11.5 real        10.5 user         0.2 sys  
+mips 18 100000000       19.4 real        18.6 user         0.2 sys  
+mips 19 100000000       23.6 real        18.7 user         0.3 sys  
+mips 20 1000000000       11.9 real        11.3 user         0.2 sys  
+mips 21 100000000        9.5 real         8.9 user         0.2 sys  

@@ -1,0 +1,38 @@
+
+ README for the RSA example:
+===================================================================
+
+ rsa.cpp is an implementation of the RSA public-key cipher. The
+ implementation is based on the one given in the book Cormen et al.,
+ Inroduction to Algorithms, McGRAW Hill, 1991. I'll refer to this book
+ as CLR because of its authors. The purpose of this implementation is
+ to show the usage of arbitrary precision types of SystemC. That is,
+ these types in SystemC can be used to implement algorithmic examples
+ regarding arbitrary precision integers. The algorithms used are not
+ the most efficient ones; however, they are intended for explanatory
+ purposes, so they are simple to understand and perform their job
+ correctly.
+
+ Some background knowledge: A prime number p > 1 is an integer that
+ has only two divisiors, 1 and p itself. For example, 2, 3, 5, 7, and
+ 11 are all primes. If p is not a prime number, it is called a
+ composite number. If we are given two primes p and q, it is easy to
+ find their product p * q; however, if we are given a number m which
+ happens to be the product of two primes p and q that we do not know,
+ it is very difficult to find p and q if m is very large, i.e., it is
+ very difficult to factor m. The RSA public-key cryptosystem is based
+ on this fact. Internally, we use the Miller-Rabin randomized
+ primality test to deal with primes. More information can be obtained
+ from pp. 831-836 in CLR, the first edition.
+
+ Running the appropriate makefile in the rsa directory will create an
+ executable called run.x, which can be executed by typing 'run.x'. The
+ RSA example uses a pseudo-random number generator internally. Such
+ generators need a seed, an integer number, to initialize. A seed can
+ be provided by the user by typing 'run.x <seed>' where <seed> is the
+ integer seed. If no seed is given to run.x, the generator will be
+ initialized with a seed obtained from the system using the time()
+ system call. The seed input can be used to repeat an experiment on
+ the RSA example.
+ 
+ Original Author: Ali Dasdan, Synopsys, Inc.

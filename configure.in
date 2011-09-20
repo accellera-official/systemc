@@ -1,0 +1,319 @@
+dnl ***************************************************************************
+dnl
+dnl  The following code is derived, directly or indirectly, from the SystemC
+dnl  source code Copyright (c) 1996-2002 by all Contributors.
+dnl  All Rights reserved.
+dnl
+dnl  The contents of this file are subject to the restrictions and limitations
+dnl  set forth in the SystemC Open Source License Version 2.3 (the "License");
+dnl  You may not use this file except in compliance with such restrictions and
+dnl  limitations. You may obtain instructions on how to receive a copy of the
+dnl  License at http://www.systemc.org/. Software distributed by Contributors
+dnl  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
+dnl  ANY KIND, either express or implied. See the License for the specific
+dnl  language governing rights and limitations under the License.
+dnl
+dnl ***************************************************************************
+dnl
+dnl  configure.in --
+dnl  Process this file with autoconf to produce a configure script.
+dnl
+dnl  Original Author: Martin Janssen, Synopsys, Inc., 2001-05-21
+dnl
+dnl ***************************************************************************
+dnl
+dnl  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+dnl  changes you are making here.
+dnl
+dnl      Name, Affiliation, Date:
+dnl  Description of Modification:
+dnl
+dnl ***************************************************************************
+
+dnl
+dnl Initialization.
+dnl
+
+AC_INIT([systemc],[2.3.0])
+AC_CONFIG_SRCDIR([NEWS])
+AC_CONFIG_AUX_DIR([config])
+
+dnl
+dnl Some simple checks.
+dnl
+
+AC_CANONICAL_SYSTEM
+AM_INIT_AUTOMAKE([1.10 no-define]) # for .s file support of LIBTOOLFLAGS
+
+AM_PROG_AS
+AC_PROG_CC
+AC_PROG_CXX
+AC_PROG_INSTALL
+
+dnl
+dnl check for pthreads compiler flags.
+dnl
+AX_PTHREAD
+
+dnl
+dnl Set the compiler flags and target architecture.
+dnl
+
+CXX_COMP=`basename $CXX`
+
+EXTRA_CXXFLAGS="-Wall"
+DEBUG_CXXFLAGS="-g"
+OPT_CXXFLAGS="-O3"
+
+case "$target" in
+    x386-apple-* | i386-apple-*)
+        case "$CXX_COMP" in
+            CC)
+                TARGET_ARCH="macosx386"
+		#CCAS=as
+                ;;
+            c++ | g++)
+                TARGET_ARCH="macosx386"
+                ;;
+            *)
+		AC_MSG_ERROR("sorry...compiler not supported")
+		;;
+        esac
+        QT_ARCH="x86_64"
+        ;;
+    powerpc-apple-macosx*)
+        case "$CXX_COMP" in
+            CC)
+                EXTRA_CXXFLAGS=""
+                TARGET_ARCH="macosx"
+		CCAS=as
+                ;;
+            c++ | g++)
+                TARGET_ARCH="macosx"
+                ;;
+            *)
+		AC_MSG_ERROR("sorry...compiler not supported")
+		;;
+        esac
+        QT_ARCH="powerpc-apple-macosx"
+        ;;
+    sparc-sun-solaris*) 
+        case "$CXX_COMP" in
+            CC)
+                EXTRA_CXXFLAGS=""
+                TARGET_ARCH="sparcOS5"
+		CCAS=as
+                ;;
+            c++ | g++)
+                TARGET_ARCH="gccsparcOS5"
+                ;;
+            *)
+                AC_MSG_ERROR("sorry...compiler not supported")
+		;;
+        esac
+        QT_ARCH="sparc-os2"
+        ;;
+    x86_64*linux*)
+        case "$CXX_COMP" in
+            c++ | g++)
+                TARGET_ARCH="linux64"
+                ;;
+            *)
+                AC_MSG_ERROR("sorry...compiler not supported")
+		;;
+        esac
+        QT_ARCH="x86_64"
+        ;;
+    *linux*)
+        case "$CXX_COMP" in
+            c++ | g++)
+               case "$build" in
+               x86_64*linux*)
+                   # It is mandatory to modify CC for libtool to recognize
+                   # cross-compilation
+                   CXX="$CXX -m32"
+                   CCAS="$CCAS -m32"
+                   ;;
+               *)
+                   ;;
+               esac
+                TARGET_ARCH="linux"
+                ;;
+            *)
+                AC_MSG_ERROR("sorry...compiler not supported")
+		;;
+        esac
+        QT_ARCH="iX86"
+        ;;
+    amd64*freebsd* | x86_64*freebsd*)
+        case "$CXX_COMP" in
+            c++ | g++)
+                TARGET_ARCH="freebsd64"
+                ;;
+            *)
+                AC_MSG_ERROR("sorry...compiler not supported")
+            ;;
+        esac
+        QT_ARCH="x86_64"
+        ;;
+    *freebsd*)
+        case "$CXX_COMP" in
+            c++ | g++)
+                TARGET_ARCH="freebsd"
+                ;;
+            *)
+                AC_MSG_ERROR("sorry...compiler not supported")
+            ;;
+        esac
+        QT_ARCH="iX86"
+        ;;
+    *cygwin*)
+        case "$CXX_COMP" in
+            c++ | g++)
+                TARGET_ARCH="cygwin"
+                ;;
+            *)
+                AC_MSG_ERROR("sorry...compiler not supported")
+		;;
+        esac
+        QT_ARCH="iX86"
+        ;;
+    amd64*mingw* | x86_64*mingw*)
+        case "$CXX_COMP" in
+            c++ | g++)
+                TARGET_ARCH="mingw64"
+                ;;
+            *)
+                AC_MSG_ERROR("sorry...compiler not supported")
+            ;;
+        esac
+        QT_ARCH="x86_64"
+        ;;
+    *mingw*)
+        case "$CXX_COMP" in
+            c++ | g++ | *mingw*-g++)
+                TARGET_ARCH="mingw"
+                ;;
+            *)
+                AC_MSG_ERROR("sorry...compiler not supported")
+		;;
+        esac
+        QT_ARCH="iX86"
+        ;;
+    *hpux11*)
+        case "$CXX_COMP" in
+            aCC)
+                EXTRA_CXXFLAGS="-AA -ext +DA2.0 +DS2.0"
+                OPT_CXXFLAGS="+O1"
+                TARGET_ARCH="hpux11"
+        	EXTRA_CFLAGS="-Wa,-w36"
+		CCAS=/usr/ccs/bin/as
+                ;;
+            c++ | g++)
+                TARGET_ARCH="gcchpux11"
+                ;;
+            *)
+                AC_MSG_ERROR("sorry...compiler not supported")
+		;;
+        esac
+        QT_ARCH="hppa"
+        ;;
+    *)
+        AC_MSG_ERROR("sorry...architecture not supported")
+        ;;
+esac
+
+dnl set C-related variables
+dnl
+CC="$CXX"
+AM_CFLAGS="$EXTRA_CXXFLAGS $OPT_CXXFLAGS $EXTRA_CFLAGS"
+
+dnl
+dnl The fixed-point datatypes "package" is included.
+dnl
+
+EXTRA_CXXFLAGS="$EXTRA_CXXFLAGS -DSC_INCLUDE_FX"
+AM_CXXFLAGS="$EXTRA_CXXFLAGS $OPT_CXXFLAGS"
+
+dnl libtools should be put *after* all CC options have been set
+AC_PROG_LIBTOOL
+
+dnl
+dnl Set the default prefix and make sure the prefix is absolute.
+dnl
+
+test "x$prefix" = xNONE && prefix=$srcdir
+current_dir=`pwd`; cd $prefix; prefix=`pwd`; cd $current_dir
+
+dnl
+dnl Substitution variables.
+dnl
+
+AC_SUBST(EXTRA_CXXFLAGS)
+AC_SUBST(DEBUG_CXXFLAGS)
+AC_SUBST(OPT_CXXFLAGS)
+AC_SUBST(TARGET_ARCH)
+AC_SUBST(QT_ARCH)
+AC_SUBST(AM_CFLAGS)
+AC_SUBST(AM_CXXFLAGS)
+
+dnl
+dnl Create the Makefiles.
+dnl
+
+AC_OUTPUT(
+ Makefile 
+ src/Makefile 
+ src/sysc/Makefile 
+ src/sysc/communication/Makefile 
+ src/sysc/datatypes/Makefile 
+ src/sysc/datatypes/bit/Makefile 
+ src/sysc/datatypes/fx/Makefile 
+ src/sysc/datatypes/int/Makefile 
+ src/sysc/datatypes/misc/Makefile 
+ src/sysc/kernel/Makefile 
+ src/sysc/tracing/Makefile 
+ src/sysc/qt/Makefile 
+ src/sysc/utils/Makefile 
+ src/sysc/packages/Makefile 
+ src/sysc/packages/boost/Makefile 
+ src/sysc/packages/boost/bind/Makefile 
+ src/sysc/packages/boost/config/Makefile 
+ src/sysc/packages/boost/config/compiler/Makefile 
+ src/sysc/packages/boost/config/platform/Makefile 
+ src/sysc/packages/boost/config/stdlib/Makefile 
+ src/sysc/packages/boost/mpl/Makefile 
+ src/sysc/packages/boost/mpl/aux_/Makefile 
+ src/sysc/packages/boost/mpl/aux_/config/Makefile 
+ src/sysc/packages/boost/detail/Makefile 
+ src/sysc/packages/boost/utility/Makefile 
+ src/sysc/packages/boost/utility/detail/Makefile 
+ examples/Makefile 
+ examples/sysc/Makefile 
+ examples/sysc/fir/Makefile 
+ examples/sysc/fft/Makefile 
+ examples/sysc/fft/fft_flpt/Makefile 
+ examples/sysc/fft/fft_fxpt/Makefile 
+ examples/sysc/pipe/Makefile 
+ examples/sysc/pkt_switch/Makefile 
+ examples/sysc/rsa/Makefile 
+ examples/sysc/simple_bus/Makefile 
+ examples/sysc/simple_fifo/Makefile 
+ examples/sysc/simple_perf/Makefile 
+ examples/sysc/2.1/Makefile 
+ examples/sysc/2.1/dpipe/Makefile 
+ examples/sysc/2.1/forkjoin/Makefile 
+ examples/sysc/2.1/reset_signal_is/Makefile 
+ examples/sysc/2.1/sc_export/Makefile 
+ examples/sysc/2.1/sc_report/Makefile 
+ examples/sysc/2.1/scx_barrier/Makefile 
+ examples/sysc/2.1/scx_mutex_w_policy/Makefile 
+ examples/sysc/2.1/specialized_signals/Makefile 
+ examples/sysc/2.3/Makefile
+ examples/sysc/2.3/include/Makefile
+ examples/sysc/2.3/sc_rvd/Makefile
+ examples/sysc/2.3/sc_ttd/Makefile
+)
+
+
+dnl Taf!

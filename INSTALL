@@ -1,0 +1,502 @@
+                INSTALL NOTES FOR SystemC Release 2.3
+                -------------------------------------
+
+Contents:
+
+        1. Installation Notes for Unix 
+
+        2. Installation Notes for Windows
+
+
+1. Installation Notes for Unix
+------------------------------
+
+System Requirements
+===================
+
+SystemC can be installed on the following UNIX platforms
+
+  1. Sun Solaris 2.8 with GNU C++ compiler versions gcc-2.95.3, 
+     and gcc-3.2.3
+
+  2. Sun Solaris 2.8 with Sun C++ compiler versions SC6.1, SC6.2, 
+     and Forte 7. 
+       (Note: tests that use the new dynamic process feature do 
+        not compile with SC6.1
+       )
+
+  3. Linux (Redhat 6.2) with GNU C++ compiler versions gcc-2.95.3.
+
+  4. Linux (Redhat 7.2) with GNU C++ compiler version gcc-2.95.3.
+
+  5. Linux (Redhat 8.0) with GNU C++ compiler version gcc-2.95.3, 
+     and gcc-3.2.3.
+
+  6. Linux (Redhat 9.0) with GNU C++ compiler version gcc-3.2.2.
+
+  7. 64-bit Linux (Redhat EL) with GNU C++ compiler version gcc-3.4.4.
+
+  7. HP-UX 11.00 with HP C++ compiler version A.03.39.
+
+  8. MacOS X (Tiger) with GNU C++ compiler versions gcc-3.1, gcc-3.3,
+     and gcc-4.0
+
+
+Sources for Compilers and Related Tools
+=======================================
+
+To build, install, and use SystemC on UNIX platforms, you need the
+following tools:
+
+  1. GNU C++ compiler version gcc-2.95.3:
+       gcc version 2.95.3 20010315 (release)
+
+     or GNU C++ compiler version gcc-3.2.2:
+       gcc version 3.2.2 20030222 (release)
+
+     or GNU C++ compiler version gcc-3.2.3:
+       
+
+     or GNU C++ compiler version gcc-3.1 for MacOS X:
+       gcc version 3.1 20020420 (prerelease)
+
+     or GNU C++ compiler version gcc-3.3 for MacOS X:
+	   gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
+
+     or Sun C++ compiler version SC 6.1:
+       CC: Sun WorkShop 6 update 1 C++ 5.2 Patch 109508-07 2001/12/13
+
+     or Sun C++ compiler version SC6.2:
+       CC: Sun WorkShop 6 update 2 C++ 5.3 Patch 111685-05 2002/02/03
+
+     or Sun C++ compiler version Forte 7:
+       CC: Forte Developer 7 C++ 5.4 Patch 111715-05 2003/02/09
+
+     or HP C++ compiler version A.03.39:
+       aCC: HP ANSI C++ B3910B A.03.39
+
+  2. GNU Make (gmake)
+
+GCC and gmake are free software that you can
+obtain from the following sources:
+
+  GCC           http://www.gnu.org/software/gcc/gcc.html
+
+  gmake         http://www.gnu.org/software/make/make.html
+
+
+Basic SystemC Installation
+==========================
+
+To install SystemC on a UNIX system, do the following steps:
+
+  1. Change to the top level directory (systemc-2.1)
+
+  2. Create a temporary directory, e.g.,
+
+        > mkdir objdir
+
+  3. Change to the temporary directory, e.g.,
+
+        > cd objdir
+
+  4. Set the following environment variable(s):
+
+     For gcc compilers on Solaris:
+
+        > setenv CXX g++
+
+     For SC6.1 or SC6.2 on Solaris:
+
+        > setenv CXX CC
+
+     For gcc compilers on Linux:
+
+        > setenv CXX g++
+
+     For gcc compilers on MacOS X:
+
+        > setenv CXX g++
+
+     For aCC on HP-UX:
+
+        > setenv CXX aCC
+
+     You can also specify an absolute path to the compiler of your choice.
+
+  5. Configure the package for your system, e.g.,
+     (The configure script is explained below.)
+
+        > ../configure
+
+     While the 'configure' script is running, which takes a few moments, 
+     it prints messages to inform you of the features it is checking.
+     It also detects the platform.
+     
+     Note for System V users: 
+     If you are using `csh' on an older version of System V, you might 
+     need to use the `sh ../configure' command instead of '../configure'.
+     Otherwise, `csh' will attempt to `configure' itself.
+
+     SystemC 2.1 includes a fixed-point package that is always built.
+     When compiling your applications with fixed-point types, you still have
+     to use compiler flag -DSC_INCLUDE_FX. Note that compile times increase
+     significantly when using this compiler flag.
+
+     In case you want to install the package in another place than the
+     top level directory (systemc-2.1), configure the package e.g. as
+     follows:
+
+        > ../configure --prefix=/usr/local/systemc-2.1
+
+     Note: make sure you have created the target directory before installing
+           the package. Do _not_ use /usr/local as a prefix.
+
+  6. Compile the package.
+
+     For an optimized SystemC library, enter:
+
+        > gmake
+
+     For a debug SystemC library, enter:
+
+        > gmake debug
+
+  7. Install the package.
+
+        > gmake install
+  
+  8. At this point you may wish to verify the installation by 
+     testing the example suite.
+
+        > gmake check
+
+     this will compile and run the examples in the subdirectory
+     examples.
+
+  9. You can now remove the temporary directory, .e.g,
+
+        > cd ..
+        > rm -rf objdir
+
+     Alternatively, you can keep the temporary directory to allow
+     you to:
+
+     a) Experiment with the examples.
+
+     b) Later uninstall the package. To clean up the temporary 
+        directory, enter:
+
+            > gmake clean
+
+        To uninstall the package, enter:
+
+            > gmake uninstall
+
+
+Running the Examples
+====================
+
+A copy of the examples reside in the temporary directory - see 
+instruction 8 above for details on building and running them. 
+
+In addition, a copy of the example code resides in the directory
+examples at the highest level of the installation.
+
+Use the makefiles provided in  the 'examples' directory as templates 
+for makefiles you need for compiling your own examples.
+        
+     
+Using the Configure Script
+==========================
+ 
+The `configure' shell script tries to determine the correct values for
+various system-dependent variables used during compilation. It uses
+these values to create a `Makefile' in each directory of the package.
+It also creates one or more `.h' files containing system-dependent
+definitions if needed. Then, it creates the following files:
+
+  config.status         A shell script that you can run at another time to
+                        recreate the current configuration.
+
+  config.cache          A file in which the configure test results are
+                        saved to speed up reconfiguration.
+
+                        Data is appended to the config.cache file. 
+                        You can remove unwanted data.
+
+  config.log            A file in which compiler output is saved.
+                        This is used to debug the configure script.
+
+If you need to use other commands to successfully compile the package
+on your system, please try to determine if the configure script can be used 
+for these commands. Then, send either a diff file or instructions about
+the commands you used to the email address provided in the README file.
+This information will be used to improve the installation process in
+the next release.
+
+The `configure.in' file is provided in case you want to change or regenerate
+the `configure' script, for example to use a newer version of `autoconf'. 
+The `configure.in' file is used by the `autoconf' program to create the
+`configure' script.
+
+Note for (key) developers:
+
+  In case you have changed the `configure.in' file or one of the
+  `Makefile.am' files:
+
+  - Use the `config/distclean' script to remove the generated `configure'
+    script, the generated `aclocal.m4' file and the generated `Makefile.am'
+    files.
+
+  - Use the `config/bootstrap' script to generate the `configure' script
+    and the necessary `Makefile.in' files. This script makes use of the
+    GNU auto-tools `aclocal', `automake', and `autoconf'.
+
+
+Compilation and Linking Options
+===============================
+
+Some systems require compilation or linking options that the `configure'
+script does not define. You can define the initial values for these
+options by setting them in your environment before running the
+`configure' script.
+
+Using a Bourne-compatible shell, the command line entry might be:
+
+        > CC=c89 CFLAGS=-O2 LIBS=-lposix ../configure
+
+Or, on systems that have the `env' program, the command line entry might be:
+
+        > env CPPFLAGS=-I/usr/local/include LDFLAGS=-s ../configure
+
+
+Optional Features
+=================
+
+To build optimized libraries (default), from the top level directory run:
+
+        > gmake opt
+
+To build libraries with debug information, from the top level directory run:
+
+        > gmake debug
+
+followed by gmake, and gmake install.
+
+e.g. the following command will rebuild the optimized library from scratch:
+
+        > gmake clean opt install
+
+By default, optimized libraries are built.
+
+
+Specifying the System Type
+==========================
+
+Some features cannot be automatically determined by `configure' unless
+it can detect the host type on which the package will run.
+If it prints a message that it cannot determine the host type, 
+use the `--host=TYPE' option to define it. TYPE can either be a 
+short system name, such as `sun4', or a canonical name with three fields:
+
+     CPU-COMPANY-SYSTEM
+
+See the `config.sub' file for details about the values of each field. If
+the `config.sub' file is not included in the package, the package does not
+need to know the host type.
+
+If you are building compiler tools for cross-compiling, you can also
+use the `--target=TYPE' option to select the type of system for which
+the code is produced and the `--build=TYPE' option to select the type of
+system on which you are compiling the package.
+
+
+Sharing Defaults
+================
+
+You can set the default values that `configure' scripts share by
+creating a site shell script called `config.site'. This file contains the
+default values for variables like `CC', `cache_file', and `prefix'.
+The `configure' script looks for the `config.site' file in the following 
+search precedence:
+
+  1. PREFIX/share/config.site
+
+  2. PREFIX/etc/config.site
+
+Alternatively, you can set the `CONFIG_SITE' environment variable to the
+site script path.
+
+Note: The `configure' script for some systems does not look for a site script.
+
+
+Operation Controls
+==================
+
+The `configure' script recognizes the following options to control its
+operation:
+
+`--cache-file=FILE'
+        Use and save the test results in FILE instead of
+        `./config.cache'. Set FILE to `/dev/null' to disable caching
+        when debugging `configure'.
+
+`--help'
+        Print a summary of `configure' options and exit.
+
+`--quiet'
+`--silent'
+`-q'
+        Do not print messages about checks being made.
+        To suppress all normal output, redirect it to `/dev/null'.
+        Error messages continue to print.
+
+`--srcdir=DIR'
+        Look for the package's source code in directory DIR.
+        Typically `configure' determines the directory automatically.
+
+`--version'
+        Print the version of `autoconf' used to generate the `configure'
+        script and exit.
+
+Other options that are rarely used are available in the `configure' script.
+Use the `--help' option to print a list.
+
+
+
+2. Installation Notes for Windows
+---------------------------------
+
+This release has been ported to Windows NT 4.0 (SP6a) and will
+work with Visual C++ 7.0.
+
+The SystemC distribution includes project and workspace files for
+Visual C++. If you use these project and workspace files the SystemC
+source files are available to your new project. For Visual C++ 6.0 the
+project and workspace files are located in directory:
+
+  ...\systemc-2.1\msvc70
+
+This directory contains two subdirectories: `systemc' and
+`examples'.
+
+The `systemc' directory contains the project and workspace files to
+compile the `systemc.lib' library. Double-click on the `systemc.dsw'
+file to launch Visual C++ with the workspace file. The workspace file
+will have the proper switches set to compile for Visual C++ 6.0.
+Select `Build systemc.lib' under the Build menu or press F7 to build
+`systemc.lib'.
+
+The `examples' directory contains the project and workspace files to
+compile the SystemC examples. Go to one of the examples subdirectories
+and double-click on the .dsw file to launch Visual C++ with the
+workspace file. The workspace file will have the proper switches set
+to compile for Visual C++ 6.0. Select `Build <example>.exe' under the
+Build menu or press F7 to build the example executable.
+
+To create a new design, first create a new project by using the `New'
+menu item under the `File' menu. Select the Projects tab on the dialog
+box that appears and select a Win32 Console Application. Create an
+empty project.
+
+For your own SystemC applications, make sure that the Run Time Type
+Information switch is on by using the `Settings...' menu item under
+the `Project' menu. Select the C/C++ tab, and select the `C++
+Language' category. Make sure that the `Enable Run Time Type
+Information (RTTI)' checkbox is checked.
+
+Also make sure that the SystemC header files are included by selecting
+the C/C++ tab, selecting the `Preprocessor' category, and typing the
+path to the SystemC `src' directory in the text entry field labeled
+`Additional include directories'. The examples use
+e.g. `../../../src'.
+
+Next add the source files to the project by using the `Add To
+Project>Files...' menu item under the `Project' menu. Make sure that
+the files are added to the new project directory just created. Do the
+same for the `systemc.lib' library before building your SystemC
+application.
+
+Visual C++ 7.1
+--------------
+The download directory contains two subdirectories: 'msvc71' and
+'examples'.
+
+The 'msvc71' directory contains the project and workspace files to
+compile the 'systemc.lib' library. Double-click on the 'SystemC.vcproj'
+file to launch Visual C++ 7.1 with the workspace file. The workspace file
+will have the proper switches set to compile for Visual C++ 7.1.
+Select `Build SystemC' under the Build menu or press F7 to build
+`systemc.lib'.
+
+The `examples' directory contains the project and workspace files to
+compile the SystemC examples. Go to one of the examples subdirectories
+and double-click on the .vcproj file to launch Visual C++ with the
+workspace file. The workspace file will have the proper switches set
+to compile for Visual C++ 7.1. Select 'Build <example>.exe' under the
+Build menu or press F7 to build the example executable.
+
+Creating SystemC Applications
+-----------------------------
+
+1. Start Visual Studio. From the Start Page select New Project and Win32 
+   Console Project. Type the project name and select a suitable location 
+   then click OK.
+
+2. Select the Application Settings page of the Win32 Application Wizard 
+   and make sure the 'Empty project' box is ticked. Click 'Finish' to 
+   complete the wizard.
+   
+3. Add new/existing C++ files to the project and edit code.
+
+4. Display the project Property Pages by selecting 'Properties...' from 
+   the Project menu. 
+   
+5. From the C/C++ tab, select the General properties and set 
+   'Detect 64-bit Portability Issues' to No
+
+6. From the C/C++ tab, select the Language properties and set 
+   'Enable Run-Time Type Info' to Yes
+
+7. From the C/C++ tab, select the Command Line properties and add /vmg
+   to the 'Additional Options:' box.
+
+8. From the Linker tab, select the Input properties and type 'systemc.lib' 
+   in the 'Additional Dependencies' box.
+
+9. Click OK
+
+
+Also make sure that the compiler and linker can find the SystemC header 
+and library files respectively. There are two ways to do this:
+
+To update the include file and library directory search paths for all
+projects:
+
+1. Select Tools -> Options . . . and the Projects -> VC++ Directories tab
+   
+2. Select show directories for: Library files
+
+3. Select the 'New' icon and browse to: C:\apps\systemc-2.0.1\msvc71\systemc\debug
+
+4. Select show directories for: Include files
+
+5. Select the 'New' icon and browse to: C:\apps\systemc-2.0.1\src
+
+To add the include file and library directory search paths for the current
+project only:
+
+1. Display the project Property Pages by selecting 'Properties...' from 
+   the Project menu. 
+  
+2. From the C/C++ tab, select the General properties and type the path to the 
+   SystemC 'src' directory in the text entry field labeled
+  'Additional include directories' (e.g. the examples use '../../../src').
+
+3. From the Linker tab, select the General properties and type the path to 
+   the SystemC library:   ...\systemc-2.1\msvc71\systemc\debug'systemc.lib' 
+   in the 'Additional Library Directories:' box.
+
+9. Click OK
+  

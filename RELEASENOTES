@@ -1,0 +1,272 @@
+        Release Notes for SystemC 2.3.0 Release Of 08 September 2011
+        ============================================================
+
+CONTENTS
+========
+
+  1) What's new in this release?
+
+  2) Bug fixes and enhancements
+
+  3) New features
+
+  4) Incompatibitilies with previous releases
+
+  5) Expanded dynamic process support
+
+  6) Experimental features
+
+  7) Known problems
+
+  8) Fixed-point library
+
+
+1) What's new in this release?
+==============================
+
+Compared to the 2.2.0, this release has the following new items:
+
+  - This version of SystemC contains the "Proof of Concept" simulator
+    for the IEEE 1666_2011 SystemC standard. Please consult the IEEE
+    1666_2011 Language Reference Manual for details about the new SystemC
+    standard.
+
+  - Bug fixes, see section 2.
+
+  - Expanded dynamic process capabilities, see section 5.
+
+  - Expanded platform support, see the README.
+
+
+2) Bug fixes and enhancements
+=============================
+
+Following is the list of bug fixes and enhancements for this release:
+
+     - Removed quick threads header inclusion from public includes.
+
+     - Added free BSD support to configure and cleaned up other issues.
+
+     - Plugged memory leak in sc_signal destructors associated with 
+       sc_event instances.
+
+     - Fixed namespace collision issue with sc_boost support.
+
+     - Process control improvements: 
+         (a) Fixed bug in hierarchical killing of processes.
+	 (b) Changes to when deleted processes are actually deleted.
+	 (c) Retain process objects as zombies until all of their children 
+	     have been removed.
+
+     - Replaced last uses of sc_pvector with std::vector<>.
+
+     - Changes to sc_process handle to use a copy/swap idiom for implementing
+       operator = so that the reference counts work properly.
+
+     - Fixed memory leak and race condition in sc_event_queue.
+
+     - Removed internal objects from the object hierarchy for IEEE 1666
+       compatibility.
+
+     - Moved default parameter specifications from friend declarations to
+       the actual function signatures in the fixed point support.
+
+       src/sysc/datatypes/fx/scfx_rep.h
+
+     - The default stack size for threads, SC_DEFAULT_STACK_SIZE, has been 
+       increased from 64K bytes to 128K bytes. This setting is controlled 
+       with a #define, so if necessary, you can set it back to 64K bytes 
+       in your version.
+
+       src/sysc/kernel/sc_constants.h
+
+     - sc_concref uses for 8 cases involving bool or char* operands failed
+       to release the storage they allocated. This has been fixed.
+
+         src/sysc/datatypes/bit/sc_lv_base.h
+
+     - sc_concatref did not have shift operator overloads for the int shift
+       value. It has been added.
+
+       src/sysc/datatypes/misc/sc_concatref.h
+
+     - Plugged a memory leak in operator - for sc_signed operations. If 
+       the two operands were equal it returned a new sc_signed instance 
+       of zero, but did not free its temporary buffer.
+
+     - Added masking for the RADIX size to the conversion of double
+       values to the internal representation of sc_unsigned and
+       sc_signed values. Changes to sc_signed.cpp and sc_unsigned.cpp.
+
+     - Added a static std::vector<sc_object*> field to the sc_object
+       class to return for get_child_objects() rather than a dynamic
+       allocation. Changes to sc_object.h and sc_object.cpp.
+
+     - sc_mutex::lock() & sc_mutex::trylock() now allow owner to apply
+       lock more than once without incident. Previous behavior locked 
+       up the owning process.
+
+     - Fixed list processing for attributes to match that of C++ Standard
+       Library classes.
+       
+         src/sysc/utils/sc_vector.h
+       
+     - Changed .begin() and .end in sc_pvector<T> so that its use by
+       sc_object::attr_cltn().begin() and .end() will return a null
+       pointer if there are no attributes defined.
+
+     - Fixed bug where concatenations involving sc_unsigned instances 
+       with negative values, e.g., from ~X for instance, were returning 
+       zero rather than the actual bits of the value.
+
+     - Added sc_core namespace prefix in the sc_assert() macro.
+
+     - When sc_stop() is called the message informing the user is now
+       issued via SC_REPORT_INFO() rather than just output to cout.
+     
+     - Fixed bug for sc_bigint::and_reduce() where it was not properly
+       detecting the all ones case.
+
+     - Changed the default status value in sc_elab_and_sim() to be 1 
+       rather than 0. This means a non-zero value will be returned
+       if sc_main() generates an exception.
+
+     - Fixed bug in auto-increment and auto-decrement of sc_signed and
+       sc_unsigned values. The original code left the values in sign
+       magnitude form and did not properly trim them. The code now uses
+       *this = *this + 1 and *this = *this -1
+
+     - Expanded naming of signals in sc_vcd_trace.cpp to use 5 characters
+       rather than 3 to accommodate more signals.
+
+     - The mask being used to construct concatenation read values for
+       sc_int<W>, sc_uint<W>, and their part selection classes was 32 bits 
+       when it should have been 64 bits. This meant that selections wider
+       than 32 bits would fail. It is now 64 bits.
+
+         src/sysc/datatypes/int/sc_int_base.cpp:
+         src/sysc/datatypes/int/sc_uint_base.cpp:
+
+     - Fix for logical operators between unsigned int and sc_unsigned
+
+       src/sysc/datatypes/int/sc_nbcommon.inc
+
+         Fixed bit width in CLASS_TYPE::CLASS_TYPE() for the case that
+	 the signature is a buffer of digits and a width. The value of
+	 nbits needs to be set via num_bits() rather than using the
+	 nb parameter. This allows the case where CLASS_TYPE is 
+	 sc_unsigned to get the proper bit width. Without this fix the
+	 high order bit disappears in logical results.
+
+     - Added "kill" assignment to sc_fifo::buf_read() so that things like
+       boost::shared_ptr actually release.
+
+     - Better writer and read checking for sc_fifo<T> ports. 
+
+         src/sysc/communication/sc_fifo.h
+
+            The port binder now checks for blocking interfaces in addition 
+	    to the combined non-blocking - blocking interface.
+
+     - Error message added if wait(N) is called from an SC_METHOD
+
+         src/sysc/kernel/sc_wait_cthread.h
+
+     - Null terminator placed on end of argv_copy.
+
+         src/sysc/kernel/sc_main_main.cpp
+
+     - Mac OS X support modified to accommodate Snow Leopard
+
+         configure.in
+
+       The support for i386 based Macintoshes now includes "-arch i386" 
+       for the command line options for g++/gcc and as. This produces
+       32-bit architecture libraries, as has been true in the past.
+
+3) New features
+===============
+
+Here is an overview of changes in 2.3.0 compared to 2.2.0:
+
+  - Expanded dynamic process capabilities, see section 5.
+
+  - A number of other changes to SystemC functions and classes, e.g.,
+    sc_start() for the new IEEE 1666 standard, IEEE 1666_2011. See the
+    IEEE 1666_2011 Language Reference Manual for details.
+
+  - Boost library used by SystemC is now in the namespace sc_boost 
+    rather than boost. This allows SystemC-based programs to be 
+    combined with programs using later versions of the boost library.
+
+    Note that to use OSCI TLM 2.0 with SystemC 2.3.0 you will need to
+    add the following line before including systemc.h:
+
+       #define sc_boost boost
+
+    This will change the namespace back to boost, which is necessary to
+    compile TLM 2.0 based applications.
+
+  - Addition of sc_prim_channel::async_request_update(). To use this
+    feature you must compile your simulator with SC_INCLUDE_ASYNC_UPDATES
+    defined.
+
+
+4) Incompatibilities with previous releases
+===========================================
+
+Here is a list of known incompatibilities between this release and 2.2.0:
+
+  - The order that processes (SC_METHODS and SC_THREADS) are dispatched 
+    for execution may be different than the order with SystemC 2.2.0 for
+    some SystemC programs. This is related to the new starvation policy 
+    support for the sc_start() function introduced with IEEE 1666_2011.
+
+5) Expanded Dynamic Process Support
+===================================
+
+- This version implements the dynamic process extensions described in the 
+  IEEE 1666_2011 Language Reference Manual.
+
+
+6) Experimental features
+========================
+
+In this section the experimental features of this release are listed.
+
+  - None
+
+7) Known Problems       
+=================
+
+  - The use of the DEBUG_SYSTEMC macro does not work properly with certain
+    compilers (e.g., gcc 2.95.x) if it was not also specified when the
+    SystemC library was built. The problem is caused by the use of the
+    library compiled version of some inline methods. This problem does not
+    appear to be present in the gcc 3.3, Solaris, and aCC compilers.
+    The work-around is to specify DEBUG_SYSTEMC when the SystemC library
+    is built.
+
+
+8) Fixed-point library
+======================
+
+(No change from 2.0.1 Production.)
+
+SystemC contains a fixed-point datatypes package.
+
+Compile-time macro SC_INCLUDE_FX must be defined in order to build
+applications that use fixed point types. You can specify a compiler
+flag, e.g. g++ -DSC_INCLUDE_FX ... or use a define statement before
+you include systemc.h, e.g.
+
+  #define SC_INCLUDE_FX
+  #include "systemc.h"
+
+Due to the large size of the fixed-point datatypes header files,
+compilation can take considerably more time.
+
+If you want to use the fixed-point data types only (i.e., not data-
+types sc_int, sc_uint, sc_bigint, sc_biguint), compilation time can be
+reduced by defining compile-time macro SC_FX_EXCLUDE_OTHER (in addition
+to SC_INCLUDE_FX).
