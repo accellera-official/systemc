@@ -55,9 +55,17 @@ sc_vector_base::get_elements() const
 
   objs_vec_->reserve( size() );
   for( const_iterator it=begin(); it != end(); ++it )
-    objs_vec_->push_back( object_cast( *it ) );
+    if( sc_object* obj = object_cast(*it) )
+      objs_vec_->push_back( obj );
 
   return *objs_vec_;
+}
+
+sc_object*
+sc_vector_base::implicit_cast( ... ) const
+{
+  SC_REPORT_ERROR( SC_ID_VECTOR_NONOBJECT_ELEMENTS_, name() );
+  return NULL;
 }
 
 void
