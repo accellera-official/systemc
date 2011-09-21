@@ -1,0 +1,13 @@
+SystemC Simulation
+
+Warning: (W569) sc_module(const char*) has been deprecated, use sc_module(const sc_module_name&): TB1
+In file: <removed by verify.pl>
+Clk Pos 1
+Clk2 Pos 1
+Clk2 Neg 1
+Clk Neg 1
+Clk Pos 0
+Clk2 Pos 0
+Clk2 Neg 0
+Clk Neg 0
+Example run successfully
