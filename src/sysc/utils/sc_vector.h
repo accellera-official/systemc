@@ -166,6 +166,9 @@ protected:
 
   virtual sc_object* object_cast( void* ) const = 0;
 
+  sc_object* implicit_cast( sc_object* p ) const { return p; }
+  sc_object* implicit_cast( ... /* incompatible */ )  const;
+
 public: 
 
   void report_empty_bind( const char* kind_, bool dst_range_ ) const;
@@ -448,7 +451,7 @@ protected:
   void clear();
 
   virtual sc_object* object_cast( void* p ) const
-    { return static_cast<element_type*>(p); }
+    { return implicit_cast( static_cast<element_type*>(p) ); }
 
 };
 
@@ -573,11 +576,15 @@ public:
     { delete child_vec_; }
 
 private:
+
   sc_vector_assembly( base_type & v, member_type ptr )
     : vec_(&v)
     , ptr_(ptr)
     , child_vec_(0)
   {}
+
+  sc_object* object_cast( pointer p ) const
+    { return vec_->implicit_cast( p ); }
 
   base_type * vec_;
   member_type ptr_;
@@ -692,10 +699,9 @@ sc_vector_assembly<T,MT>::get_elements() const
 
   child_vec_->reserve( size() );
   for( const_iterator it=begin(); it != end(); ++it )
-  {
-    sc_object * p = static_cast<sc_object*>( const_cast<MT*>( &*it ) );
-    child_vec_->push_back( p );
-  }
+    if( sc_object * obj = object_cast( const_cast<MT*>(&*it) ) )
+      child_vec_->push_back( obj );
+
   return *child_vec_;
 }
 
