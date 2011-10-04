@@ -33,6 +33,12 @@
 #include "sysc/communication/sc_interface.h"
 #include "sysc/kernel/sc_object.h"
 
+#if ! defined( SC_DISABLE_VIRTUAL_BIND )
+#  define SC_VIRTUAL_ virtual
+#else
+#  define SC_VIRTUAL_ /* non-virtual */
+#endif
+
 namespace sc_core {
 
 //=============================================================================
@@ -166,7 +172,7 @@ public: // interface access:
 
 
 public: // binding:
-    virtual void bind( IF& interface_ )
+    SC_VIRTUAL_ void bind( IF& interface_ )
     {
     	if ( m_interface_p )
 	{
@@ -253,6 +259,8 @@ private:
 };
 
 } // namespace sc_core
+
+#undef SC_VIRTUAL_
 
 // $Log: sc_export.h,v $
 // Revision 1.7  2011/08/26 20:45:40  acg

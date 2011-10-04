@@ -35,6 +35,12 @@
 #include "sysc/kernel/sc_process.h"
 #include <typeinfo>
 
+#if ! defined( SC_DISABLE_VIRTUAL_BIND )
+#  define SC_VIRTUAL_ virtual
+#else
+#  define SC_VIRTUAL_ /* non-virtual */
+#endif
+
 namespace sc_core {
 
 class sc_event_finder;
@@ -258,7 +264,7 @@ public:
 
     // bind an interface of type IF to this port
 
-    virtual void bind( IF& interface_ )
+    SC_VIRTUAL_ void bind( IF& interface_ )
 	{ base_type::bind( interface_ ); }
 
     void operator () ( IF& interface_ )
@@ -267,7 +273,7 @@ public:
 
     // bind a parent port with type IF to this port
 
-    virtual void bind( port_type& parent_ )
+    SC_VIRTUAL_ void bind( port_type& parent_ )
 	{ base_type::bind( parent_ ); }
 
     void operator () ( port_type& parent_ )
@@ -619,6 +625,8 @@ sc_port_b<IF>::make_sensitive( sc_method_handle handle_p,
 // ----------------------------------------------------------------------------
 
 } // namespace sc_core
+
+#undef SC_VIRTUAL_
 
 /*****************************************************************************
 
