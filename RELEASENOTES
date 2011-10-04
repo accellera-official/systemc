@@ -222,6 +222,12 @@ Here is a list of known incompatibilities between this release and 2.2.0:
     some SystemC programs. This is related to the new starvation policy 
     support for the sc_start() function introduced with IEEE 1666_2011.
 
+  - The various bind() functions for ports and exports are "virtual" as
+    of IEEE 1666-2011.  This leads to an incompatibility with the
+    TLM 2.0.x release.  To use SystemC 2.3 together with TLM 2.0.x,
+    define SC_DISABLE_VIRTUAL_BIND during the build of the simulator and
+    before including systemc.h.
+
 5) Expanded Dynamic Process Support
 ===================================
 
