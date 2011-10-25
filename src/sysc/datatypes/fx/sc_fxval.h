@@ -66,6 +66,11 @@
 #else
 #   define SCFX_EXPLICIT_ explicit
 #endif
+#ifdef SC_FXVAL_IMPLICIT_OTHER
+#  define SCFX_EXPLICIT_OTHER_
+#else
+#  define SCFX_EXPLICIT_OTHER_ explicit
+#endif
 
 namespace sc_dt
 {
@@ -113,18 +118,12 @@ public:
                    sc_fxval( const sc_fxnum&, sc_fxval_observer* = 0 );
                    sc_fxval( const sc_fxnum_fast&, sc_fxval_observer* = 0 );
 #ifndef SC_FX_EXCLUDE_OTHER
-    explicit sc_fxval( int64,
-		       sc_fxval_observer* = 0 );
-    explicit sc_fxval( uint64,
-		       sc_fxval_observer* = 0 );
-    explicit sc_fxval( const sc_int_base&,
-		       sc_fxval_observer* = 0 );
-    explicit sc_fxval( const sc_uint_base&,
-		       sc_fxval_observer* = 0 );
-    explicit sc_fxval( const sc_signed&,
-		       sc_fxval_observer* = 0 );
-    explicit sc_fxval( const sc_unsigned&,
-		       sc_fxval_observer* = 0 );
+    SCFX_EXPLICIT_OTHER_ sc_fxval( int64, sc_fxval_observer* = 0 );
+    SCFX_EXPLICIT_OTHER_ sc_fxval( uint64, sc_fxval_observer* = 0 );
+    SCFX_EXPLICIT_OTHER_ sc_fxval( const sc_int_base&, sc_fxval_observer* = 0 );
+    SCFX_EXPLICIT_OTHER_ sc_fxval( const sc_uint_base&, sc_fxval_observer* = 0 );
+    SCFX_EXPLICIT_OTHER_ sc_fxval( const sc_signed&, sc_fxval_observer* = 0 );
+    SCFX_EXPLICIT_OTHER_ sc_fxval( const sc_unsigned&, sc_fxval_observer* = 0 );
 #endif
 
     ~sc_fxval();
@@ -459,18 +458,12 @@ public:
     sc_fxval_fast( const sc_fxnum&, sc_fxval_fast_observer* = 0 );
     sc_fxval_fast( const sc_fxnum_fast&, sc_fxval_fast_observer* = 0 );
 #ifndef SC_FX_EXCLUDE_OTHER
-    explicit sc_fxval_fast( int64,
-			    sc_fxval_fast_observer* = 0 );
-    explicit sc_fxval_fast( uint64,
-			    sc_fxval_fast_observer* = 0 );
-    explicit sc_fxval_fast( const sc_int_base&,
-			    sc_fxval_fast_observer* = 0 );
-    explicit sc_fxval_fast( const sc_uint_base&,
-			    sc_fxval_fast_observer* = 0 );
-    explicit sc_fxval_fast( const sc_signed&,
-			    sc_fxval_fast_observer* = 0 );
-    explicit sc_fxval_fast( const sc_unsigned&,
-			    sc_fxval_fast_observer* = 0 );
+    SCFX_EXPLICIT_OTHER_ sc_fxval_fast( int64, sc_fxval_fast_observer* = 0 );
+    SCFX_EXPLICIT_OTHER_ sc_fxval_fast( uint64, sc_fxval_fast_observer* = 0 );
+    SCFX_EXPLICIT_OTHER_ sc_fxval_fast( const sc_int_base&, sc_fxval_fast_observer* = 0 );
+    SCFX_EXPLICIT_OTHER_ sc_fxval_fast( const sc_uint_base&, sc_fxval_fast_observer* = 0 );
+    SCFX_EXPLICIT_OTHER_ sc_fxval_fast( const sc_signed&, sc_fxval_fast_observer* = 0 );
+    SCFX_EXPLICIT_OTHER_ sc_fxval_fast( const sc_unsigned&, sc_fxval_fast_observer* = 0 );
 #endif
 
     ~sc_fxval_fast();
@@ -2267,6 +2260,7 @@ operator >> ( ::std::istream& is, sc_fxval_fast& a )
 } // namespace sc_dt
 
 #undef SCFX_EXPLICIT_
+#undef SCFX_EXPLICIT_OTHER_
 
 #endif
 
