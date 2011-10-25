@@ -113,12 +113,13 @@ class sc_thread_process : public sc_process_b {
         SC_ENTRY_FUNC method_p, sc_process_host* host_p, 
         const sc_spawn_options* opt_p );
 
-    virtual ~sc_thread_process();
-
     virtual const char* kind() const
         { return "sc_thread_process"; }
 
   protected:
+    // may not be deleted manually (called from sc_process_b)
+    virtual ~sc_thread_process();
+
     virtual void disable_process( 
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
     virtual void enable_process( 
