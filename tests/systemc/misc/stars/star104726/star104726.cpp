@@ -55,8 +55,8 @@ void quant::do_quant()
      // quantization
       for( v=0; v<8; v++ ) {
         for( u=0; u<8; u++ ) {
-	  //	  ff = (c.get(v,u)<<1) / (COEFF)(coeff_quant[v][u]);
-	  fuv.put(v,u,(ff<0 ? ff : ff+1) >> 1);
+          ff = (c.get(v,u)<<1) / (COEFF)(coeff_quant[v][u]);
+          fuv.put(v,u,(ff<0 ? ff : ff+1) >> 1);
         }
       }
   
