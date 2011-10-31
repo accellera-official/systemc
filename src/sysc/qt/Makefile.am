@@ -68,7 +68,21 @@ INCLUDE_DIR = $(prefix)/include/sysc/qt
 
 qt.o qtmdc.c qtmds.s: configuration
 
-configuration:
+if QT_ARCH_X86
+configuration: md/i386.s
+endif
+if QT_ARCH_X86_64
+configuration: md/iX86_64.s 
+endif
+if QT_ARCH_POWERPC_MACOSX
+configuration: md/powerpc_mach.s md/powerpc.c
+endif
+if QT_ARCH_SPARC
+configuration: md/sparc.s
+endif
+if QT_ARCH_HPPA
+configuration: md/hppa.s
+endif
 	@test -d md || ln -s $(srcdir)/md .
 	@$(srcdir)/config $(QT_ARCH)
 

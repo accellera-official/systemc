@@ -160,6 +160,12 @@ void
 sc_cor_pkg_fiber::abort( sc_cor* next_cor )
 {
     sc_cor_fiber* new_cor = SCAST<sc_cor_fiber*>( next_cor );
+#   if defined(__GNUC__) && __USING_SJLJ_EXCEPTIONS__
+        // Switch SJLJ exception handling function contexts
+        _Unwind_SjLj_Register(&curr_cor->m_eh);
+        _Unwind_SjLj_Unregister(&new_cor->m_eh);
+        curr_cor = new_cor;
+#   endif
     SwitchToFiber( new_cor->m_fiber );
 }
 
