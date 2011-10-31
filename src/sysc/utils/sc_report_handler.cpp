@@ -356,8 +356,7 @@ void sc_report_handler::initialize()
 // clear last_global_report.
 void sc_report_handler::release()
 {
-    if ( last_global_report )
-	delete last_global_report;
+    delete last_global_report;
     last_global_report = 0;
     sc_report_close_default_log();
 
@@ -570,8 +569,7 @@ void sc_report_handler::clear_cached_report()
 	proc->set_last_report(0);
     else
     {
-	if ( last_global_report )
-	    delete last_global_report;
+	delete last_global_report;
 	last_global_report = 0;
     }
 }
@@ -617,8 +615,7 @@ void sc_report_handler::cache_report(const sc_report& rep)
 	proc->set_last_report(new sc_report(rep));
     else
     {
-	if ( last_global_report )
-	    delete last_global_report;
+	delete last_global_report;
 	last_global_report = new sc_report(rep);
     }
 }

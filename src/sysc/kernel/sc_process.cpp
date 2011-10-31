@@ -594,12 +594,13 @@ sc_process_b::~sc_process_b()
 
     // REMOVE ANY STRUCTURES THAT MAY HAVE BEEN BUILT:
 
-    if ( m_last_report_p ) delete m_last_report_p;
-    if ( m_name_gen_p ) delete m_name_gen_p;
-    if ( m_reset_event_p ) delete m_reset_event_p;
-    if ( m_resume_event_p ) delete m_resume_event_p;
-    if ( m_term_event_p ) delete m_term_event_p;
-    if ( m_timeout_event_p ) delete m_timeout_event_p;
+    delete m_last_report_p;
+    delete m_name_gen_p;
+    delete m_reset_event_p;
+    delete m_resume_event_p;
+    delete m_term_event_p;
+    delete m_throw_helper_p;
+    delete m_timeout_event_p;
 
 }
 

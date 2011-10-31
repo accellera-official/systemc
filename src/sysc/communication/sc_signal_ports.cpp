@@ -207,12 +207,10 @@ sc_in<sc_dt::sc_logic>::vbind( sc_port_base& parent_ )
 
 sc_inout<bool>::~sc_inout()
 {
-    if ( m_change_finder_p ) delete m_change_finder_p;
-    if ( m_neg_finder_p ) delete m_neg_finder_p;
-    if ( m_pos_finder_p ) delete m_pos_finder_p;
-    if( m_init_val != 0 ) {
-	delete m_init_val;
-    }
+    delete m_change_finder_p;
+    delete m_neg_finder_p;
+    delete m_pos_finder_p;
+    delete m_init_val;
     remove_traces();
 }
 
@@ -300,12 +298,10 @@ sc_inout<bool>::remove_traces() const
 
 sc_inout<sc_dt::sc_logic>::~sc_inout()
 {
-    if ( m_change_finder_p ) delete m_change_finder_p;
-    if ( m_neg_finder_p ) delete m_neg_finder_p;
-    if ( m_pos_finder_p ) delete m_pos_finder_p;
-    if( m_init_val != 0 ) {
-	delete m_init_val;
-    }
+    delete m_change_finder_p;
+    delete m_neg_finder_p;
+    delete m_pos_finder_p;
+    delete m_init_val;
     remove_traces();
 }
 

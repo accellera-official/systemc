@@ -360,7 +360,7 @@ class sc_process_b : public sc_object {
     void remove_static_events();
     inline void set_last_report( sc_report* last_p )
         {  
-            if ( m_last_report_p ) delete m_last_report_p;
+            delete m_last_report_p;
             m_last_report_p = last_p;
         }
     inline bool timed_out() const;

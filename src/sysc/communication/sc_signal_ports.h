@@ -151,7 +151,7 @@ public:
     virtual ~sc_in()
 	{
 	    remove_traces();
-	    if ( m_change_finder_p ) delete m_change_finder_p;
+	    delete m_change_finder_p;
 	}
 
 
@@ -472,9 +472,9 @@ public:
     virtual ~sc_in()
 	{
 	    remove_traces();
-	    if ( m_change_finder_p ) delete m_change_finder_p;
-	    if ( m_neg_finder_p ) delete m_neg_finder_p;
-	    if ( m_pos_finder_p ) delete m_pos_finder_p;
+	    delete m_change_finder_p;
+	    delete m_neg_finder_p;
+	    delete m_pos_finder_p;
 	}
 
 
@@ -739,9 +739,9 @@ public:
     virtual ~sc_in()
 	{
 	    remove_traces();
-	    if ( m_change_finder_p ) delete m_change_finder_p;
-	    if ( m_neg_finder_p ) delete m_neg_finder_p;
-	    if ( m_pos_finder_p ) delete m_pos_finder_p;
+	    delete m_change_finder_p;
+	    delete m_neg_finder_p;
+	    delete m_pos_finder_p;
 	}
 
 
@@ -1121,10 +1121,8 @@ template <class T>
 inline
 sc_inout<T>::~sc_inout()
 {
-    if ( m_change_finder_p ) delete m_change_finder_p;
-    if( m_init_val != 0 ) {
-	delete m_init_val;
-    }
+    delete m_change_finder_p;
+    delete m_init_val;
     remove_traces();
 }
 
