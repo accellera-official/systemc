@@ -52,7 +52,6 @@ H_FILES = \
 	sc_object.h \
 	sc_process.h \
 	sc_process_handle.h \
-	sc_reset.h \
 	sc_runnable.h \
 	sc_sensitive.h \
 	sc_spawn.h \
@@ -73,6 +72,7 @@ NO_H_FILES = \
 	sc_module_registry.h \
 	sc_name_gen.h \
 	sc_object_manager.h \
+	sc_reset.h \
 	sc_runnable_int.h \
 	sc_simcontext_int.h
 	sc_thread_process.h 
