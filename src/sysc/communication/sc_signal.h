@@ -402,10 +402,6 @@ public: // constructors and destructor:
     virtual bool negedge() const
 	{ return ( event() && ! m_cur_val ); }
 
-    // reset creation
-
-    virtual sc_reset* is_reset() const;
-
     // write the new value
     virtual void write( const bool& );
 
@@ -462,6 +458,9 @@ protected:
     mutable sc_reset* m_reset_p;         // reset mechanism if present.
 
 private:
+
+    // reset creation
+    virtual sc_reset* is_reset() const;
 
     // disabled
     sc_signal( const this_type& );
