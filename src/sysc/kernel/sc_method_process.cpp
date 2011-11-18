@@ -274,12 +274,12 @@ void sc_method_process::kill_process(sc_descendant_inclusion_info descendants)
     // That lets check_for_throws stumble across it if we were in the call
     // chain when the kill call occurred.
 
-    disconnect_process();
     if ( next_runnable() != 0 )
         simcontext()->remove_runnable_method( this );
+    disconnect_process();
 
     m_throw_status = THROW_KILL; 
-    if ( RCAST<sc_method_handle>(sc_get_current_process_b()) == this )
+    if ( sc_get_current_process_b() == this )
     {
         throw sc_unwind_exception( this, false );
     }
@@ -521,7 +521,7 @@ void sc_method_process::throw_reset( bool async )
     if ( async )
     {
         remove_dynamic_events();
-	if ( RCAST<sc_method_handle>(sc_get_current_process_b()) == this )
+	if ( sc_get_current_process_b() == this )
 	{
 	    DEBUG_MSG(DEBUG_NAME,this,"throw_reset: throwing exception");
 	    m_throw_status = THROW_ASYNC_RESET;
