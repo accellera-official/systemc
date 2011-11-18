@@ -29,6 +29,11 @@
 #include "sysc/kernel/sc_name_gen.h"
 #include "sysc/utils/sc_iostream.h"
 
+#if defined(_MSC_VER) && _MSC_VER >= 1310
+// "C4351: new behavior: elements of array will be default initialized"
+#pragma warning(disable: 4351)
+#endif
+
 namespace sc_core {
 
 // ----------------------------------------------------------------------------
