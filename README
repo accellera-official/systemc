@@ -12,51 +12,36 @@ This is the release of the SystemC 2.3.0 Class Library.
 
 2. This release is supported on the following platforms for which it has
    been well tested:
-    o Centos 4  2.6.9-100.ELsmp #1 SMP Fri Feb 18 01:47:46 EST 2011 i686
-      i686 i386 GNU/Linux, g++ 3.4.6
-    o Fedora 14 2.6.35.14-95.fc14.i686 #1 SMP Tue Aug 16 21:30:14 UTC 2011
-      i686 i686 i386 GNU/Linux, g++ 4.5.1
-    o FreeBSD with GNU C++ compiler versions through gcc-4.2.2
-    o FreeBSD 7.4 with GNU C++ compiler version gcc-4.2.1
-    o HP-UX 11.00 with HP C++ compiler version A.03.39
-      (Note: +O1 is the highest safe optimization level)
-    o Linux (Debian 5.0.8) with GNU C++ compiler versions
-      gcc-3.4.6, gcc-4.1.1, gcc-4.3.2
-    o Linux (Debian sid/unstable) with GNU C++ compiler versions
-      gcc-4.4.6, gcc-4.5.3, gcc-4.6.2
-    o Linux (Debian sid/unstable) with Clang C++ compiler version
+
+    o 32-bit Linux (x86) (CentOS 4; Fedora 14,15; Debian 5.0) with
+      GNU C++ compiler versions gcc-3.4.5 through gcc-4.6.2
+    o 32-bit Linux (x86) (Debian) with Clang C++ compiler version
       clang-2.9
-    o 64-bit Linux (Debian 5.0.8) with GNU C++ compiler versions
-      gcc-4.1.1, and gcc-4.3.2
-    o Linux (Redhat 6.2) with GNU C++ compiler version gcc-2.95.3
-    o Linux (Redhat 7.2) with GNU C++ compiler version gcc-2.95.3
-    o Linux (Redhat 8.0) with GNU C++ compiler versions gcc-2.95.3,
-      gcc-3.2.3 and gcc-3.3.2
-    o Linux (Redhat 9.0) with GNU C++ compiler versions gcc-3.2.2,
-	  gcc-3.4.3
-    o Linux (2.6.9-34.EL kernel) with GNU C++ compiler versions gcc-3.4.5
-      and gcc-4.1.0
-    o 64-bit Linux (Redhat 2.6.9-5.0.3.EL) with GNU C++ compiler versions 
-      gcc-3.4.4 through gcc-4.2.2
-    o 64-bit Linux (Debian 5.0.8) with 32-bit GNU C++ compiler version
+    o 64-bit Linux (x86_64) (RedHat RHEL4, Debian 5.0) with
+      GNU C++ compiler versions gcc-3.4.5 through gcc-4.3.2
+    o 64-bit Linux (x86_64) (Debian) with 32-bit GNU C++ compiler version
       gcc-4.3.2 (./configure --target=i686-linux-gnu)
+    o Sun Solaris 2.9 with GNU C++ compiler version gcc-4.4.6
     o MacOSX with GNU C++ compiler versions gcc-3.1 through gcc-4.2.1
     o 64-bit MacOSX with GNU C++ compiler version gcc-4.2.1
-    o Sun Solaris 2.9 with GNU C++ compiler version gcc-4.4.6
-    o Windows NT 4.0 (SP6a) with VC++ 7.0 
-    o Windows XP Professional SP3 (Cygwin 1.5.25) with GNU C++ compiler
+    o 32-bit FreeBSD 7.4 with GNU C++ compiler version gcc-4.2.1
+    o Windows 7 SP1, Microsoft Visual C++ 2005 SP1 (8.0)
+    o Windows 7 SP1, Microsoft Visual C++ 2008 SP1 (9.0)
+    o Windows 7 SP1, Microsoft Visual C++ 2010     (10.0)
+    o Windows XP Prof. SP3, with Microsoft Visual C++ 2010 (10.0)
+    o Windows XP Prof. SP3 (Cygwin 1.5.25) with GNU C++ compiler
       version gcc-4.3.2
-    o Windows XP Professional SP3 (Msys 1.0.16) with MinGW32
+    o Windows XP Prof. SP3 (Msys 1.0.16) with MinGW32
       GNU C++ compiler version gcc-4.5.2
-    o Windows XP Professional SP3 with Microsoft VC++ 10.0
-    o Fedora 15 2.6.40.3-0.fc15.i686 #1 SMP Tue Aug 16 04:24:09 UTC 2011
-      i686 i686 i386 GNU/Linux, g++ 4.6.0
-    o Windows 7 SP1, cygwin 1.7.9 environment with Microsoft Visual C++
-      2005 Express Edition SP1
-    o Windows 7 SP1, cygwin 1.7.9 environment with Microsoft Visual C++
-      2008 Express Edition SP1
-    o Windows 7 SP1, cygwin 1.7.9 environment with Microsoft Visual C++
-      2010 Express Edition
+
+  This release has not yet been tested on the following formerly
+  supported platforms and may no longer work as expected:
+  
+   o Sun Solaris with SUN C++ compiler
+   o HP-UX 11.00 with HP C++ compiler
+   o GNU C++ compiler versions prior to 3.3.x   (all platforms)
+   o Microsoft Visual C++ versions prior to 7.1 (2003)
+
 
 -------------------------------------------------------------------------------
 
