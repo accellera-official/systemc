@@ -2324,8 +2324,9 @@ sub clean_up
 	}
     }
 
-    if( $rt_systemc_arch !~ /^msvc/ ) {
-        rmdir $full_dir || return 0;
+    chdir( $rt_output_dir );
+    while( rmdir( $full_dir ) ) {
+        $full_dir =~ s|/[^/]+$|| ;
     }
 
     1;
