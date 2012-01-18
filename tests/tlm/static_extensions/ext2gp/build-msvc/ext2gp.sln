@@ -1,0 +1,19 @@
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual C++ Express 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ext2gp", "ext2gp.vcproj", "{5DC6D7A1-889D-4410-8011-F7D866D11E9C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5DC6D7A1-889D-4410-8011-F7D866D11E9C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5DC6D7A1-889D-4410-8011-F7D866D11E9C}.Debug|Win32.Build.0 = Debug|Win32
+		{5DC6D7A1-889D-4410-8011-F7D866D11E9C}.Release|Win32.ActiveCfg = Release|Win32
+		{5DC6D7A1-889D-4410-8011-F7D866D11E9C}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
