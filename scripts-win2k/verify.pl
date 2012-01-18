@@ -130,6 +130,7 @@ sub create_mail
     printf MAIL "\n";
     printf MAIL "SYSTEMC_ARCH : %s %s\n", $rt_systemc_arch, "$rt_pthreads";
     printf MAIL "SYSTEMC_HOME : %s\n", $rt_systemc_home;
+    printf MAIL "TLM_HOME     : %s\n", $rt_tlm_home;
     printf MAIL "SYSTEMC_TEST : %s\n", $rt_systemc_test;
     printf MAIL " OUTPUT_DIR  : %s\n", $rt_output_dir;
 
@@ -330,6 +331,25 @@ sub get_systemc_home
     $sysc_home;
 }
 
+# -----------------------------------------------------------------------------
+#  SUB : get_tlm_home
+#
+#  Get the TLM_HOME environment variable's value.
+# -----------------------------------------------------------------------------
+
+sub get_tlm_home
+{
+    if( ! defined $ENV{ 'TLM_HOME' } ) {
+        &print_log( "Error: " .
+		   "environment variable TLM_HOME is not defined!\n" );
+	exit 1;
+    }
+
+    my $tlm_home = $ENV{ 'TLM_HOME' };
+    $tlm_home =~ s|\\|/|g ;  # replace any backslash with forward slash
+    $tlm_home;
+}
+
 
 # -----------------------------------------------------------------------------
 #  SUB : get_systemc_arch
@@ -512,6 +532,7 @@ sub init_globals
     $SIG{ 'ALRM' } = 'alarm_handler';
 
     $rt_systemc_home = &get_systemc_home;
+	$rt_tlm_home = &get_tlm_home;
     $rt_systemc_arch = &get_systemc_arch;
 
     $rt_cleanup = 1;                    # cleanup temp dirs by default
@@ -862,6 +883,11 @@ sub print_intro
         &print_log( "[$working_view] " );
     }
     &print_log( "$rt_systemc_home\n" );
+    &print_log( "TLM_HOME     : " );
+    if( $rt_tlm_home =~ m|^$vob| ) {
+        &print_log( "[$working_view] " );
+    }
+    &print_log( "$rt_tlm_home\n" );
     &print_log( "SYSTEMC_TEST : " );
     if( $rt_systemc_test =~ m|^$vob| ) {
         &print_log( "[$working_view] " );
@@ -1967,12 +1993,16 @@ sub run_test
 	if( $rt_systemc_arch =~ /^msvc/ ) {
 	    $command  = "$rt_cc $rt_ccflags $extra_flags ";
 	    $command .= "${slash}I . ${slash}I $rt_systemc_home/src ";
+		$command .= "${slash}I $rt_tlm_home/include/tlm ";
 	    $command .= "${slash}I $rt_tests_dir/systemc/include ";
+		$command .= "${slash}I $rt_tests_dir/tlm/common/include/models ";
 	    $command .= "${slash}c ";
 	} else {
 	    $command  = "$rt_cc $rt_ccflags $extra_flags ";
 	    $command .= "-I . -I $rt_systemc_home/include ";
+	    $command .= "-I $rt_tlm_home/include/tlm ";
 	    $command .= "-I $rt_tests_dir/systemc/include ";
+		$command .= "-I $rt_tests_dir/tlm/common/include/models ";
 	    $command .= "-c ";
 	}
 
@@ -2066,12 +2096,16 @@ sub run_test
 	if( $rt_systemc_arch =~ /^msvc/ ) {
 	    $command  = "$rt_cc $rt_ccflags $extra_flags ";
 	    $command .= "${slash}I . ${slash}I $rt_systemc_home/src ";
+	    $command .= "${slash}I $rt_tlm_home/include/tlm ";
 	    $command .= "${slash}I $rt_tests_dir/systemc/include ";
+		$command .= "${slash}I $rt_tests_dir/tlm/common/include/models ";
 	    $command .= "${slash}c ";
 	} else {
 	    $command  = "$rt_cc $rt_ccflags $extra_flags ";
 	    $command .= "-I . -I $rt_systemc_home/include ";
+	    $command .= "-I $rt_tlm_home/include/tlm ";
 	    $command .= "-I $rt_tests_dir/systemc/include ";
+		$command .= "-I $rt_tests_dir/tlm/common/include/models ";
 	    $command .= "-c ";
 	}
 
