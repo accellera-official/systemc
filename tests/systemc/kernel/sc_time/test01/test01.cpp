@@ -298,7 +298,7 @@ test_SC_ZERO_TIME()
 int
 sc_main( int, char*[] )
 {
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && _MSC_VER >= 1400
      _set_output_format(_TWO_DIGIT_EXPONENT);
 #endif
     test_print();
