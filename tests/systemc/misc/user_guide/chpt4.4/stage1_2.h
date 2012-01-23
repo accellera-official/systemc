@@ -43,7 +43,7 @@ struct stage1_2 : public sc_module {
   sc_signal<double> diff; // internal signal
 
   //Constructor 
-  stage1_2(const char *NAME,
+  stage1_2(sc_module_name NAME,
 	   sc_clock& TICK,
 	   const sc_signal<double>& IN1,
 	   const sc_signal<double>& IN2,
@@ -53,7 +53,6 @@ struct stage1_2 : public sc_module {
   {
     f_stage1("Stage1", TICK, IN1, IN2, sum, diff);
     f_stage2("Stage2", TICK, sum, diff, PROD, QUOT);
-    end_module();
   }
 };
 

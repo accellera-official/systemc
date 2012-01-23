@@ -43,7 +43,7 @@ struct testbench : public sc_module {
   display D; // component
 
   //Constructor 
-  testbench(const char *NAME,
+  testbench(sc_module_name NAME,
 	    sc_clock& CLK,
 	    const sc_signal<double>& IN_,
 	    sc_signal<double>& OUT1,
@@ -52,7 +52,6 @@ struct testbench : public sc_module {
       N("Numgen", CLK, OUT1, OUT2),
       D("Display", CLK, IN_)
   {
-    end_module();
   }
 };
 

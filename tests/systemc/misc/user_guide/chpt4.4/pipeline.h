@@ -45,7 +45,7 @@ struct pipeline : public sc_module {
   stage1_2 S1_2; // component
 
   //Constructor 
-  pipeline(const char *NAME,
+  pipeline(sc_module_name NAME,
 	   sc_clock& CLK,
 	   const sc_signal<double>& IN1,
 	   const sc_signal<double>& IN2,
@@ -54,7 +54,6 @@ struct pipeline : public sc_module {
       S1_2("Stage1_2", CLK, IN1, IN2, prod, quot)
   {
     f_stage3("Stage3", CLK, prod, quot, OUT_);
-    end_module();
   }
 };
 

@@ -49,7 +49,7 @@ struct testbench : public sc_module {
   clk2_neg clkn2;
 
   // Constructor
-  testbench(const char * NAME,
+  testbench(sc_module_name NAME,
 	    sc_clock&    TICK,
 	    sc_clock&    TICK2)
     : sc_module (NAME),
@@ -62,6 +62,5 @@ struct testbench : public sc_module {
       clkp2 		("CLKP2", TICK2, out_clk2_pos),
       clkn2 		("CLKN2", TICK2, out_clk2_neg)
     {
-	end_module();
     }
 };

@@ -46,7 +46,7 @@ struct stage1_2 : public sc_module {
   stage2 S2; // component
 
   //Constructor 
-  stage1_2(const char *NAME,
+  stage1_2(sc_module_name NAME,
 	   sc_clock& TICK,
 	   const sc_signal<double>& IN1,
 	   const sc_signal<double>& IN2,
@@ -57,7 +57,6 @@ struct stage1_2 : public sc_module {
       S2("Stage2", TICK, sum, diff, PROD, QUOT),
       sum("SigSum")
   {
-    end_module();
   }
 };
 

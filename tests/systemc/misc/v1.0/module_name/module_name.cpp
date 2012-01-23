@@ -55,9 +55,7 @@ struct example : sc_module {
     void block_e();
     void block_f();
 
-    SC_HAS_PROCESS( example );
-
-    example( sc_module_name name )
+    SC_CTOR(example)
     {
         SC_METHOD( block_a );
         sensitive << a;
@@ -134,13 +132,9 @@ struct tb : sc_module {
 
     void tb_proc();
 
-    SC_HAS_PROCESS( tb );
-
-    tb( const char* NAME )
-        : sc_module(NAME)
+    SC_CTOR(tb)
     {
         SC_CTHREAD( tb_proc, clk.pos() );
-        end_module();
     }
 };
 
@@ -161,13 +155,9 @@ struct tb2 : sc_module {
 
     void tb2_proc();
 
-    SC_HAS_PROCESS( tb2 );
-
-    tb2( const char* NAME )
-        : sc_module(NAME)
+    SC_CTOR(tb2)
     {
         SC_CTHREAD( tb2_proc, clk.pos() );
-        end_module();
     }
 };
 
@@ -190,7 +180,7 @@ SC_MODULE( monitor )
     const sc_signal<int>& b;
     const sc_signal<int>& c;
 
-    monitor( sc_module_name NAME,
+    monitor( sc_module_name,
              const sc_signal<int>& A,
              const sc_signal<int>& B,
              const sc_signal<int>& C ) :
