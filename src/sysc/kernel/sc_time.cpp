@@ -176,7 +176,7 @@ sc_time::to_string() const
 	n ++;
     }
     char buf[BUFSIZ];
-    std::sprintf( buf, "%"PRIu64, val );
+    std::sprintf( buf, "%" PRIu64, val );
     std::string result( buf );
     if( n >= 15 ) {
 	for( int i = n - 15; i > 0; -- i ) {
