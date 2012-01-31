@@ -207,9 +207,9 @@ Here is an overview of changes in 2.3.0 compared to 2.2.0:
     This will change the namespace back to boost, which is necessary to
     compile TLM 2.0 based applications.
 
-  - Addition of sc_prim_channel::async_request_update(). To use this
-    feature you must compile your simulator with SC_INCLUDE_ASYNC_UPDATES
-    defined.
+  - Addition of sc_prim_channel::async_request_update().
+    You can disable this feature by compiling your simulator
+    with SC_DISABLE_ASYNC_UPDATES defined.
 
 
 4) Incompatibilities with previous releases
