@@ -36,9 +36,25 @@ host_triplet = @host@
 target_triplet = @target@
 DIST_COMMON = $(noinst_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(top_srcdir)/config/Make-rules
+@WANT_DEBUG_TRUE@am__append_1 = $(DEBUG_CXXFLAGS)
+@WANT_DEBUG_TRUE@am__append_2 = $(DEBUG_CXXFLAGS)
+@WANT_OPTIMIZE_TRUE@am__append_3 = $(OPT_CXXFLAGS)
+@WANT_OPTIMIZE_TRUE@am__append_4 = $(OPT_CXXFLAGS)
+
+# either for async_update locking or pthread processes
+@USES_PTHREADS_LIB_TRUE@am__append_5 = $(PTHREAD_CFLAGS)
+@USES_PTHREADS_LIB_TRUE@am__append_6 = $(PTHREAD_CFLAGS)
+@USES_PTHREADS_LIB_TRUE@am__append_7 = $(PTHREAD_LIBS)
+@DISABLE_ASYNC_UPDATES_TRUE@am__append_8 = -DSC_DISABLE_ASYNC_UPDATES
+@WANT_PTHREADS_THREADS_TRUE@am__append_9 = -DSC_USE_PTHREADS
 subdir = src/sysc/datatypes/fx
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/configure.in
+am__aclocal_m4_deps = $(top_srcdir)/config/ax_pthread.m4 \
+	$(top_srcdir)/config/libtool.m4 \
+	$(top_srcdir)/config/ltoptions.m4 \
+	$(top_srcdir)/config/ltsugar.m4 \
+	$(top_srcdir)/config/ltversion.m4 \
+	$(top_srcdir)/config/lt~obsolete.m4 $(top_srcdir)/configure.in
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
@@ -81,8 +97,6 @@ CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
-AM_CFLAGS = @AM_CFLAGS@
-AM_CXXFLAGS = @AM_CXXFLAGS@
 AR = @AR@
 AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
@@ -102,7 +116,7 @@ CXXDEPMODE = @CXXDEPMODE@
 CXXFLAGS = @CXXFLAGS@
 CYGPATH_W = @CYGPATH_W@
 DEBUG_CXXFLAGS = @DEBUG_CXXFLAGS@
-DEFS = -I.
+DEFS = $(EXTRA_DEFINES)
 DEPDIR = @DEPDIR@
 DSYMUTIL = @DSYMUTIL@
 DUMPBIN = @DUMPBIN@
@@ -122,7 +136,7 @@ INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
-LIBS = @LIBS@
+LIBS = @LIBS@ $(am__append_7)
 LIBTOOL = @LIBTOOL@
 LIPO = @LIPO@
 LN_S = @LN_S@
@@ -143,6 +157,9 @@ PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
+PTHREAD_CC = @PTHREAD_CC@
+PTHREAD_CFLAGS = @PTHREAD_CFLAGS@
+PTHREAD_LIBS = @PTHREAD_LIBS@
 QT_ARCH = @QT_ARCH@
 RANLIB = @RANLIB@
 SED = @SED@
@@ -163,6 +180,7 @@ am__leading_dot = @am__leading_dot@
 am__quote = @am__quote@
 am__tar = @am__tar@
 am__untar = @am__untar@
+ax_pthread_config = @ax_pthread_config@
 bindir = @bindir@
 build = @build@
 build_alias = @build_alias@
@@ -208,6 +226,13 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 INCLUDES = -I$(top_srcdir)/src
 MAIN_LIBRARY = libsystemc.la
+AM_CFLAGS = $(EXTRA_CXXFLAGS) $(EXTRA_CFLAGS) $(am__append_1) \
+	$(am__append_3) $(am__append_5)
+AM_CXXFLAGS = $(EXTRA_CXXFLAGS) $(am__append_2) $(am__append_4) \
+	$(am__append_6)
+
+# always add fix-point support
+EXTRA_DEFINES = -DSC_INCLUDE_FX $(am__append_8) $(am__append_9)
 noinst_LTLIBRARIES = libfx.la
 H_FILES = \
 	fx.h \

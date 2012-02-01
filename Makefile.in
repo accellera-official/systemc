@@ -39,7 +39,12 @@ DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
 	config/depcomp config/install-sh config/ltmain.sh \
 	config/missing config/mkinstalldirs
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/configure.in
+am__aclocal_m4_deps = $(top_srcdir)/config/ax_pthread.m4 \
+	$(top_srcdir)/config/libtool.m4 \
+	$(top_srcdir)/config/ltoptions.m4 \
+	$(top_srcdir)/config/ltsugar.m4 \
+	$(top_srcdir)/config/ltversion.m4 \
+	$(top_srcdir)/config/lt~obsolete.m4 $(top_srcdir)/configure.in
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
@@ -75,8 +80,6 @@ distuninstallcheck_listfiles = find . -type f -print
 distcleancheck_listfiles = find . -type f -print
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
-AM_CFLAGS = @AM_CFLAGS@
-AM_CXXFLAGS = @AM_CXXFLAGS@
 AR = @AR@
 AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
@@ -137,6 +140,9 @@ PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
+PTHREAD_CC = @PTHREAD_CC@
+PTHREAD_CFLAGS = @PTHREAD_CFLAGS@
+PTHREAD_LIBS = @PTHREAD_LIBS@
 QT_ARCH = @QT_ARCH@
 RANLIB = @RANLIB@
 SED = @SED@
@@ -157,6 +163,7 @@ am__leading_dot = @am__leading_dot@
 am__quote = @am__quote@
 am__tar = @am__tar@
 am__untar = @am__untar@
+ax_pthread_config = @ax_pthread_config@
 bindir = @bindir@
 build = @build@
 build_alias = @build_alias@
@@ -216,6 +223,9 @@ INST_FILES = \
 	RELEASENOTES \
 	docs
 
+
+# support local addition of automake macros
+ACLOCAL_AMFLAGS = -I config
 all: all-recursive
 
 .SUFFIXES:
@@ -641,30 +651,6 @@ uninstall-am: uninstall-local
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
 	tags tags-recursive uninstall uninstall-am uninstall-local
 
-
-opt:
-	$(MAKE) all AM_CXXFLAGS="$(EXTRA_CXXFLAGS) $(OPT_CXXFLAGS)"
-
-debug:
-	$(MAKE) all AM_CXXFLAGS="$(EXTRA_CXXFLAGS) $(DEBUG_CXXFLAGS)"
-
-pthreads:
-	$(MAKE) all CXXFLAGS="$(EXTRA_CXXFLAGS) $(OPT_CXXFLAGS) $(PTHREAD_CFLAGS) -DSC_USE_PTHREADS" QT_ARCH="pthreads" LIBS="$(PTHREAD_LIBS) $(LIBS)" #CC="$(PTHREAD_CC)
-
-pthreads_debug:
-	$(MAKE) all AM_CXXFLAGS="$(EXTRA_CXXFLAGS) $(DEBUG_CXXFLAGS) $(PTHREAD_CFLAGS) -DSC_USE_PTHREADS" QT_ARCH="pthreads" LIBS="$(PTHREAD_LIBS) $(LIBS)" #CC="$(PTHREAD_CC)"
-
-pthreads_check:
-	$(MAKE) check AM_CXXFLAGS="$(EXTRA_CXXFLAGS) $(DEBUG_CXXFLAGS) $(PTHREAD_CFLAGS) -DSC_USE_PTHREADS" QT_ARCH="pthreads" LIBS="$(PTHREAD_LIBS) $(LIBS)" #CC="$(PTHREAD_CC)"
-
-async_update:
-	$(MAKE) all AM_CXXFLAGS="$(EXTRA_CXXFLAGS) $(OPT_CXXFLAGS) $(PTHREAD_CFLAGS) -DSC_INCLUDE_ASYNC_UPDATES" LIBS="$(PTHREAD_LIBS) $(LIBS)" #CC="$(PTHREAD_CC)"
-
-async_update_debug:
-	$(MAKE) all AM_CXXFLAGS="$(EXTRA_CXXFLAGS) $(DEBUG_CXXFLAGS) $(PTHREAD_CFLAGS) -DSC_INCLUDE_ASYNC_UPDATES" LIBS="$(PTHREAD_LIBS) $(LIBS)" #CC="$(PTHREAD_CC)"
-
-async_update_check:
-	$(MAKE) check AM_CXXFLAGS="$(EXTRA_CXXFLAGS) $(DEBUG_CXXFLAGS) $(PTHREAD_CFLAGS) -DSC_INCLUDE_ASYNC_UPDATES" LIBS="$(PTHREAD_LIBS) $(LIBS)" #CC="$(PTHREAD_CC)"+
 
 install-data-local:
 	@$(NORMAL_INSTALL)
