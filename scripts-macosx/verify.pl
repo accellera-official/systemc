@@ -1919,6 +1919,7 @@ sub run_test
     local( $linkdir );          # final dir in path to test
     local( $opts );             # command line options passed to compiler
     local( $basename );         # basename for test
+    local( $test_set );         # set of tests (first part of path)
     local( $exit_code );        # exit code returned by system calls
     local( $signal );           # signal on which system call terminated
     local( $tmp );
@@ -1941,6 +1942,9 @@ sub run_test
     
     # making a global to keep track of progress
     $rt_current_test = "$currtestdir/$testname.$type";
+
+    # determine the test set
+    ( $test_set = $currtestdir ) =~ s|^([^/]+)/.*|\1|;
 
     # check for compiler
     # include your compiler check in here
@@ -1993,16 +1997,14 @@ sub run_test
 	if( $rt_systemc_arch =~ /^msvc/ ) {
 	    $command  = "$rt_cc $rt_ccflags $extra_flags ";
 	    $command .= "${slash}I . ${slash}I $rt_systemc_home/src ";
-		$command .= "${slash}I $rt_tlm_home/include/tlm ";
-	    $command .= "${slash}I $rt_tests_dir/systemc/include ";
-		$command .= "${slash}I $rt_tests_dir/tlm/common/include/models ";
+	    $command .= "${slash}I $rt_tlm_home/include/tlm ";
+	    $command .= "${slash}I $rt_systemc_test/include/$test_set ";
 	    $command .= "${slash}c ";
 	} else {
 	    $command  = "$rt_cc $rt_ccflags $extra_flags ";
 	    $command .= "-I . -I $rt_systemc_home/include ";
 	    $command .= "-I $rt_tlm_home/include/tlm ";
-	    $command .= "-I $rt_tests_dir/systemc/include ";
-		$command .= "-I $rt_tests_dir/tlm/common/include/models ";
+	    $command .= "-I $rt_systemc_test/include/$test_set ";
 	    $command .= "-c ";
 	}
 
@@ -2097,15 +2099,13 @@ sub run_test
 	    $command  = "$rt_cc $rt_ccflags $extra_flags ";
 	    $command .= "${slash}I . ${slash}I $rt_systemc_home/src ";
 	    $command .= "${slash}I $rt_tlm_home/include/tlm ";
-	    $command .= "${slash}I $rt_tests_dir/systemc/include ";
-		$command .= "${slash}I $rt_tests_dir/tlm/common/include/models ";
+	    $command .= "${slash}I $rt_systemc_test/include/$test_set ";
 	    $command .= "${slash}c ";
 	} else {
 	    $command  = "$rt_cc $rt_ccflags $extra_flags ";
 	    $command .= "-I . -I $rt_systemc_home/include ";
 	    $command .= "-I $rt_tlm_home/include/tlm ";
-	    $command .= "-I $rt_tests_dir/systemc/include ";
-		$command .= "-I $rt_tests_dir/tlm/common/include/models ";
+	    $command .= "-I $rt_systemc_test/include/$test_set ";
 	    $command .= "-c ";
 	}
 
