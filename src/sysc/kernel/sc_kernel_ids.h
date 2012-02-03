@@ -177,7 +177,8 @@ SC_DEFINE_MESSAGE(SC_ID_UNKNOWN_PROCESS_TYPE_,       566,
 SC_DEFINE_MESSAGE(SC_ID_NEGATIVE_SIMULATION_TIME_, 568,
         "negative simulation interval specified in sc_start call" )
 SC_DEFINE_MESSAGE(SC_ID_BAD_SC_MODULE_CONSTRUCTOR_  , 569,
-        "sc_module(const char*) has been deprecated, use sc_module(const sc_module_name&)" )
+        "sc_module(const char*), sc_module( const std::string&) "
+        "have been deprecated, use sc_module(const sc_module_name&)" )
 SC_DEFINE_MESSAGE(SC_ID_EMPTY_PROCESS_HANDLE_  , 570,
         "attempt to use an empty process handle ignored" )
 SC_DEFINE_MESSAGE(SC_ID_NO_SC_START_ACTIVITY_  , 571,
