@@ -32,7 +32,6 @@
 
 include $(top_srcdir)/config/Make-rules
 
-noinst_LTLIBRARIES = libqt.la
 
 H_FILES = \
 	qt.h \
@@ -57,6 +56,10 @@ C_FILES = \
 
 S_FILES = \
        qtmds.s
+
+if !WANT_PTHREADS_THREADS
+
+noinst_LTLIBRARIES = libqt.la
 
 libqt_la_SOURCES = $(H_FILES) $(C_FILES) $(S_FILES)
 
@@ -86,7 +89,9 @@ endif
 	@test -d md || ln -s $(srcdir)/md .
 	@$(srcdir)/config $(QT_ARCH)
 
-clean:
+endif !WANT_PTHREADS_THREADS
+
+clean-local:
 	-rm -f configuration qtmdc.c qtmds.s
 	-test -h md && rm -f md || true
 
