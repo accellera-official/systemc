@@ -31,8 +31,8 @@ Compared to the 2.2.0, this release has the following new items:
     more details of earlier TLM releases.
 	
   - This version of SystemC contains the "Proof of Concept" simulator
-    for the IEEE 1666_2011 SystemC standard. Please consult the IEEE
-    1666_2011 Language Reference Manual for details about the new SystemC
+    for the IEEE 1666-2011 SystemC standard. Please consult the IEEE
+    1666-2011 Language Reference Manual for details about the new SystemC
     standard.
 
   - Bug fixes, see section 2.
@@ -40,6 +40,11 @@ Compared to the 2.2.0, this release has the following new items:
   - Expanded dynamic process capabilities, see section 5.
 
   - Expanded platform support, see the README.
+
+  - Removed build targets "opt", "debug", "pthreads", "pthreads_debug"
+    on UNIX platforms in favour of new options to the configure script.
+    Added support for building a shared library via libtool.
+    See instructions in INSTALL file.
 
 
 2) Bug fixes and enhancements
@@ -213,7 +218,8 @@ Here is an overview of changes in 2.3.0 compared to 2.2.0:
 
   - Addition of sc_prim_channel::async_request_update().
     You can disable this feature by compiling your simulator
-    with SC_DISABLE_ASYNC_UPDATES defined.
+    with SC_DISABLE_ASYNC_UPDATES defined (or by using the
+    configure script option --disable-async-updates ).
 
   - Immediate self-notification of processes is no longer supported
     due to changes in IEEE 1666-2011 (see sc_event::notify, 5.10.6).

@@ -14,66 +14,46 @@ Contents:
 System Requirements
 ===================
 
-SystemC can be installed on the following UNIX platforms
+SystemC can be installed on the following UNIX, or UNIX-like platforms:
 
-  1. Sun Solaris 2.8 with GNU C++ compiler versions gcc-2.95.3, 
-     and gcc-3.2.3
+    o 32-bit Linux (x86) (CentOS 4; Fedora 14,15; Debian 5.0) with
+      GNU C++ compiler versions gcc-3.4.5 through gcc-4.6.2
 
-  2. Sun Solaris 2.8 with Sun C++ compiler versions SC6.1, SC6.2, 
-     and Forte 7. 
-       (Note: tests that use the new dynamic process feature do 
-        not compile with SC6.1
-       )
+    o 32-bit Linux (x86) (Debian) with Clang C++ compiler version
+      clang-2.9
 
-  3. Linux (Redhat 6.2) with GNU C++ compiler versions gcc-2.95.3.
+    o 64-bit Linux (x86_64) (RedHat RHEL4, Debian 5.0) with
+      GNU C++ compiler versions gcc-3.4.5 through gcc-4.3.2
 
-  4. Linux (Redhat 7.2) with GNU C++ compiler version gcc-2.95.3.
+    o 64-bit Linux (x86_64) (Debian) with 32-bit GNU C++ compiler version
+      gcc-4.3.2 (./configure --target=i686-linux-gnu)
 
-  5. Linux (Redhat 8.0) with GNU C++ compiler version gcc-2.95.3, 
-     and gcc-3.2.3.
+    o Sun Solaris 2.9 with GNU C++ compiler version gcc-4.4.6
 
-  6. Linux (Redhat 9.0) with GNU C++ compiler version gcc-3.2.2.
+    o MacOSX with GNU C++ compiler versions gcc-3.1 through gcc-4.2.1
 
-  7. 64-bit Linux (Redhat EL) with GNU C++ compiler version gcc-3.4.4.
+    o 64-bit MacOSX with GNU C++ compiler version gcc-4.2.1
 
-  7. HP-UX 11.00 with HP C++ compiler version A.03.39.
+    o 32-bit FreeBSD 7.4 with GNU C++ compiler version gcc-4.2.1
 
-  8. MacOS X (Tiger) with GNU C++ compiler versions gcc-3.1, gcc-3.3,
-     and gcc-4.0
+    o Windows XP Prof. SP3 (Cygwin 1.5.25) with GNU C++ compiler
+      version gcc-4.3.2
 
+    o Windows XP Prof. SP3 (Msys 1.0.16) with MinGW32
+      GNU C++ compiler version gcc-4.5.2
+
+An installation of SystemC on other, related platforms may be
+possible as well.
 
 Sources for Compilers and Related Tools
 =======================================
 
-To build, install, and use SystemC on UNIX platforms, you need the
-following tools:
+To build, install, and use SystemC on UNIX platforms, you need
+the following tools:
 
-  1. GNU C++ compiler version gcc-2.95.3:
-       gcc version 2.95.3 20010315 (release)
-
-     or GNU C++ compiler version gcc-3.2.2:
-       gcc version 3.2.2 20030222 (release)
-
-     or GNU C++ compiler version gcc-3.2.3:
-       
-
-     or GNU C++ compiler version gcc-3.1 for MacOS X:
-       gcc version 3.1 20020420 (prerelease)
-
-     or GNU C++ compiler version gcc-3.3 for MacOS X:
-	   gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
-
-     or Sun C++ compiler version SC 6.1:
-       CC: Sun WorkShop 6 update 1 C++ 5.2 Patch 109508-07 2001/12/13
-
-     or Sun C++ compiler version SC6.2:
-       CC: Sun WorkShop 6 update 2 C++ 5.3 Patch 111685-05 2002/02/03
-
-     or Sun C++ compiler version Forte 7:
-       CC: Forte Developer 7 C++ 5.4 Patch 111715-05 2003/02/09
-
-     or HP C++ compiler version A.03.39:
-       aCC: HP ANSI C++ B3910B A.03.39
+  1. GNU C++ compiler, version 3.4.5 or later
+     or
+     Clang C++ compiler version clang-2.9, or later
 
   2. GNU Make (gmake)
 
@@ -90,7 +70,7 @@ Basic SystemC Installation
 
 To install SystemC on a UNIX system, do the following steps:
 
-  1. Change to the top level directory (systemc-2.1)
+  1. Change to the top level directory (systemc-2.3.0)
 
   2. Create a temporary directory, e.g.,
 
@@ -138,29 +118,43 @@ To install SystemC on a UNIX system, do the following steps:
      need to use the `sh ../configure' command instead of '../configure'.
      Otherwise, `csh' will attempt to `configure' itself.
 
-     SystemC 2.1 includes a fixed-point package that is always built.
+     SystemC 2.3 includes a fixed-point package that is always built.
      When compiling your applications with fixed-point types, you still have
      to use compiler flag -DSC_INCLUDE_FX. Note that compile times increase
      significantly when using this compiler flag.
 
      In case you want to install the package in another place than the
-     top level directory (systemc-2.1), configure the package e.g. as
+     top level directory (systemc-2.3.0), configure the package e.g. as
      follows:
 
-        > ../configure --prefix=/usr/local/systemc-2.1
+        > ../configure --prefix=/usr/local/systemc-2.3.0
 
      Note: make sure you have created the target directory before installing
            the package. Do _not_ use /usr/local as a prefix.
 
-  6. Compile the package.
+     Several options are available to the configure script to modify
+     the compiler configuration and the selection of certain features:
 
-     For an optimized SystemC library, enter:
+       --disable-shared        do not build shared library (libsystemc.so)
+       --enable-debug          include debugging symbols
+       --disable-optimize      disable compiler optimization
+       --disable-async-updates disable request_async_update support
+       --enable-pthreads       use POSIX threads for SystemC processes
+
+     See the section on the general usage of the configure script and
+     "../configure --help" for more information.
+
+     Note: if you change the configuration after having compiled the
+           package already, you should run a "gmake clean" before
+           recompiling.
+
+  6. Compile the package.
 
         > gmake
 
-     For a debug SystemC library, enter:
-
-        > gmake debug
+     Note: The explicit gmake targets "opt" and "debug", etc. have
+           been removed in this package.  Use the corresponding
+           options to the configure script instead.
 
   7. Install the package.
 
@@ -246,7 +240,7 @@ Note for (key) developers:
   `Makefile.am' files:
 
   - Use the `config/distclean' script to remove the generated `configure'
-    script, the generated `aclocal.m4' file and the generated `Makefile.am'
+    script, the generated `aclocal.m4' file and the generated `Makefile.in'
     files.
 
   - Use the `config/bootstrap' script to generate the `configure' script
@@ -269,26 +263,6 @@ Using a Bourne-compatible shell, the command line entry might be:
 Or, on systems that have the `env' program, the command line entry might be:
 
         > env CPPFLAGS=-I/usr/local/include LDFLAGS=-s ../configure
-
-
-Optional Features
-=================
-
-To build optimized libraries (default), from the top level directory run:
-
-        > gmake opt
-
-To build libraries with debug information, from the top level directory run:
-
-        > gmake debug
-
-followed by gmake, and gmake install.
-
-e.g. the following command will rebuild the optimized library from scratch:
-
-        > gmake clean opt install
-
-By default, optimized libraries are built.
 
 
 Specifying the System Type
