@@ -58,8 +58,6 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_CLEAN_FILES =
-depcomp =
-am__depfiles_maybe =
 SOURCES =
 DIST_SOURCES =
 HEADERS = $(noinst_HEADERS)
@@ -227,9 +225,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(top_srcdir)/config/Make-rules $(
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  --ignore-deps src/sysc/packages/boost/mpl/aux_/config/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/sysc/packages/boost/mpl/aux_/config/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  --ignore-deps src/sysc/packages/boost/mpl/aux_/config/Makefile
+	  $(AUTOMAKE) --gnu  src/sysc/packages/boost/mpl/aux_/config/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \

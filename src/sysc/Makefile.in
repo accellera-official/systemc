@@ -68,7 +68,7 @@ am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
 am__installdirs = "$(DESTDIR)$(libdir)"
 libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
-libsystemc_la_DEPENDENCIES = kernel/libkernel.la qt/libqt.la \
+libsystemc_la_DEPENDENCIES = kernel/libkernel.la $(QT_LIB) \
 	communication/libcommunication.la tracing/libtracing.la \
 	utils/libutils.la datatypes/bit/libbit.la \
 	datatypes/fx/libfx.la datatypes/int/libint.la \
@@ -79,8 +79,6 @@ libsystemc_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(libsystemc_la_LDFLAGS) $(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I.@am__isrc@
-depcomp =
-am__depfiles_maybe =
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
@@ -261,9 +259,10 @@ NO_CXX_FILES =
 INCLUDE_DIR = $(prefix)/include
 lib_LTLIBRARIES = libsystemc.la
 libsystemc_la_SOURCES = 
+@WANT_PTHREADS_THREADS_FALSE@QT_LIB = qt/libqt.la
 libsystemc_la_LIBADD = \
        kernel/libkernel.la \
-       qt/libqt.la \
+       $(QT_LIB) \
        communication/libcommunication.la \
        tracing/libtracing.la \
        utils/libutils.la \
@@ -285,9 +284,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(top_srcdir)/config/Make-rules $(
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  --ignore-deps src/sysc/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/sysc/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  --ignore-deps src/sysc/Makefile
+	  $(AUTOMAKE) --gnu  src/sysc/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \

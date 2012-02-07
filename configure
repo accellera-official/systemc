@@ -1385,10 +1385,10 @@ Optional Features:
   --enable-fast-install[=PKGS]
                           optimize for fast installation [default=yes]
   --disable-libtool-lock  avoid locking (might break parallel builds)
-  --enable-debug          include debugging symbols default=no
-  --enable-optimize       enable compiler optimization default=yes
-  --enable-async-updates  enable request_async_update support default=auto
-  --enable-pthreads       use POSIX threads for SystemC processes default=no
+  --enable-debug          include debugging symbols
+  --disable-optimize      disable compiler optimization
+  --disable-async-updates disable request_async_update support
+  --enable-pthreads       use POSIX threads for SystemC processes
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
