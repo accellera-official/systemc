@@ -118,8 +118,8 @@ SC_DEFINE_MESSAGE(SC_ID_MODULE_NAME_STACK_EMPTY_     , 533,
 	"constructor?" )
 // available message number 534
 // available message number 535
-// available message number 536
-// available message number 537
+SC_DEFINE_MESSAGE( SC_ID_IMMEDIATE_SELF_NOTIFICATION_, 536,
+         "immediate self-notification ignored as of IEEE 1666-2011" )
 SC_DEFINE_MESSAGE( SC_ID_WAIT_DURING_UNWINDING_      , 537,
          "wait() not allowed during unwinding" )
 SC_DEFINE_MESSAGE(SC_ID_CYCLE_MISSES_EVENTS_         , 538,

@@ -27,14 +27,6 @@
 #ifndef SC_SIGNAL_H
 #define SC_SIGNAL_H
 
-#ifndef __GNUC__
-#  define SC_LIKELY_( x )    !!(x)
-#  define SC_UNLIKELY_( x )  !!(x)
-#else
-#  define SC_LIKELY_( x )    __builtin_expect( !!(x), 1 )
-#  define SC_UNLIKELY_( x )  __builtin_expect( !!(x), 0 )
-#endif
-
 #include "sysc/communication/sc_port.h"
 #include "sysc/communication/sc_prim_channel.h"
 #include "sysc/communication/sc_signal_ifs.h"

@@ -211,6 +211,10 @@ Here is an overview of changes in 2.3.0 compared to 2.2.0:
     You can disable this feature by compiling your simulator
     with SC_DISABLE_ASYNC_UPDATES defined.
 
+  - Immediate self-notification of processes is no longer supported
+    due to changes in IEEE 1666-2011 (see sc_event::notify, 5.10.6).
+    Compile with SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS defined to
+    obtain the old behaviour.
 
 4) Incompatibilities with previous releases
 ===========================================

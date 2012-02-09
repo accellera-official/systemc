@@ -646,6 +646,7 @@ void sc_thread_process::throw_user( const sc_throw_it_helper& helper,
 //       have different overloads for sc_thread_process* and sc_method_process*.
 //       So if you change code here you'll also need to change it in 
 //       sc_method_process.cpp.
+//
 // Result is true if this process should be removed from the event's list,
 // false if not.
 //------------------------------------------------------------------------------
@@ -655,12 +656,22 @@ bool sc_thread_process::trigger_dynamic( sc_event* e )
 
     m_timed_out = false;
 
-    // If this thread is already runnable then we are done, flush the event.
+    // Escape cases:
+    //   (a) If this thread issued the notify() don't schedule it for
+    //       execution, but leave the sensitivity in place.
+    //   (b) If this thread is already runnable can't trigger an event.
 
-    if( is_runnable() )
+    // not possible for thread processes!
+#if 0 // ! defined( SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS )
+    if ( sc_get_current_process_b() == (sc_process_b*)this )
     {
-        return true;
+        report_immediate_self_notification();
+        return false;
     }
+#endif // SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS
+
+    if( is_runnable() ) 
+        return true;
 
     // If a process is disabled then we ignore any events, leaving them enabled:
     //

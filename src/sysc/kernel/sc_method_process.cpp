@@ -622,8 +622,13 @@ void sc_method_process::throw_user( const sc_throw_it_helper& helper,
 //       have different overloads for sc_method_process* and sc_thread_process*.
 //       So if you change code here you'll also need to change it in 
 //       sc_thread_process.cpp.
+//
 // Result is true if this process should be removed from the event's list,
 // false if not.
+//
+// If the triggering process is the same process, the trigger is
+// ignored as well, unless SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS
+// is defined.
 //------------------------------------------------------------------------------
 bool sc_method_process::trigger_dynamic( sc_event* e )
 {
@@ -632,13 +637,19 @@ bool sc_method_process::trigger_dynamic( sc_event* e )
     m_timed_out = false;
 
     // Escape cases:
-    //   (a) If this method issued the notify() don't schedule it for execution,
-    //       but leave the sensitivity in place.
+    //   (a) If this method issued the notify() don't schedule it for
+    //       execution, but leave the sensitivity in place.
     //   (b) If this method is already runnable can't trigger an event.
 
-    if ( sc_get_current_process_b() == (sc_process_b*)this )
+#if ! defined( SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS )
+    if( SC_UNLIKELY_( sc_get_current_process_b() == this ) )
+    {
+        report_immediate_self_notification();
         return false;
-    else if( is_runnable() ) 
+    }
+#endif // SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS
+
+    if( is_runnable() ) 
         return true;
 
     // If a process is disabled then we ignore any events, leaving them enabled:

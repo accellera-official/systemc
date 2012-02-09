@@ -364,7 +364,8 @@ class sc_process_b : public sc_object {
             m_last_report_p = last_p;
         }
     inline bool timed_out() const;
-    void report_error( const char* msgid, const char* msg = "" );
+    void report_error( const char* msgid, const char* msg = "" ) const;
+    void report_immediate_self_notification() const;
 
   protected: // process control methods:
     virtual void disable_process(
