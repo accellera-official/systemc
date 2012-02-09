@@ -627,8 +627,7 @@ sc_strhash_cmp( const void* a, const void* b )
 void*
 sc_strhash_kdup(const void* k)
 {
-    char* result;
-    result = new char[strlen((const char*)k)+1];
+    char* result = (char*) malloc( strlen((const char*)k)+1 );
     strcpy(result, (const char*) k);
     return result;
 }
