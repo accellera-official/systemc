@@ -306,16 +306,6 @@ private:
 private:
 
     enum notify_t { NONE, DELTA, TIMED };
-    enum dt_status {   // status from process' trigger_dynamic() method:
-	dt_rearm = 0,  // dont run the process and dont remove it from 
-	               // the event's queue.
-	dt_remove,     // remove this process from the event's queue, and
-	               // do not schedule it.
-        dt_run,        // the process should be scheduled for execution but the
-                       // the proces should stay on the event's queue.
-        dt_run_remove  // the process should be scheduled for execution and the
-                       // process should be removed from the event's queue.
-    };
 
     std::string     m_name;     // name of object.
     sc_object*      m_parent_p; // parent sc_object for this event.

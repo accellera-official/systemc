@@ -631,16 +631,7 @@ void sc_thread_process::throw_user( const sc_throw_it_helper& helper,
 //------------------------------------------------------------------------------
 //"sc_thread_process::trigger_dynamic"
 //
-// This method returns the status of this object instance with respect to 
-// the supplied event. There are 3 potential values to return:
-//   dt_rearm      - don't execute the thread and don't remove it from the
-//                   event's queue.
-//   dt_remove     - the thread should not be scheduled for execution and
-//                   the process should be moved from the event's thread queue.
-//   dt_run        - the thread should be scheduled for execution but the
-//                   the proces should stay on the event's thread queue.
-//   dt_run_remove - the thread should be scheduled for execution and the
-//                   process should be removed from the event's thread queue.
+// This method sets up a dynamic trigger on an event.
 //
 // Notes:
 //   (1) This method is identical to sc_method_process::trigger_dynamic(), 
