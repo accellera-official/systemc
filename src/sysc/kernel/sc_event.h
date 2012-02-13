@@ -28,10 +28,15 @@
 #ifndef SC_EVENT_H
 #define SC_EVENT_H
 
-#include "sysc/datatypes/bit/sc_logic.h"
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/communication/sc_writer_policy.h"
+
+namespace sc_dt {
+
+class sc_logic; // needed for sc_signal<sc_logic> friend
+
+} // namespace sc_std
 
 namespace sc_core {
 
