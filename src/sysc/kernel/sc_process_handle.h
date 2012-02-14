@@ -79,6 +79,7 @@ class sc_process_handle {
   public:
     inline sc_process_handle();
     inline explicit sc_process_handle( sc_object* object_p );
+    inline explicit sc_process_handle( sc_process_b* process_p );
     inline sc_process_handle( const sc_process_handle& orig );
     inline ~sc_process_handle();
     inline sc_process_handle& operator = ( sc_process_handle src );
@@ -171,7 +172,6 @@ inline sc_process_handle::sc_process_handle() : m_target_p(0)
 {
 }
 
-
 //------------------------------------------------------------------------------
 //"sc_process_handle::sc_process_handle - pointer constructor"
 //
@@ -186,6 +186,19 @@ inline sc_process_handle::sc_process_handle( sc_object* object_p ) :
     if ( m_target_p ) m_target_p->reference_increment();
 }
 
+//------------------------------------------------------------------------------
+//"sc_process_handle::sc_process_handle - pointer constructor"
+//
+// This version of the object instance constructor for this class creates
+// an object instance whose target is the supplied sc_process_b instance.
+// This saves a dynamic cast compared to the sc_object* case.
+//     process_p -> process instance this is handle for.
+//------------------------------------------------------------------------------
+inline sc_process_handle::sc_process_handle( sc_process_b* process_p ) :
+  m_target_p(process_p)
+{
+  if ( m_target_p ) m_target_p->reference_increment();
+}
 
 //------------------------------------------------------------------------------
 //"sc_process_handle::sc_process_handle - copy constructor"
