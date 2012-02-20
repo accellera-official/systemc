@@ -31,7 +31,12 @@
 #ifndef __SIMPLE_TARGET_SOCKET_H__
 #define __SIMPLE_TARGET_SOCKET_H__
 
-#include "tlm.h"
+#ifndef SC_INCLUDE_DYNAMIC_PROCESSES // needed for sc_spawn
+#  define SC_INCLUDE_DYNAMIC_PROCESSES
+#endif
+
+#include <systemc>
+#include <tlm>
 #include "tlm_utils/peq_with_get.h"
 #include <sstream>
 
