@@ -1,3 +1,8 @@
+2012    
+    * SystemC 2.3.0 regression suite released
+	
+	Now also contains TLM2 unit tests
+	
 2003-06-18  Andy Goodrich <acg@forteds.com>
 
     * SystemC 2.1beta regression suite released.
