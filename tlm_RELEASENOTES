@@ -1,0 +1,95 @@
+
+==========================================
+Release Notes for  TLM 2.0.1  2009-July-15
+==========================================
+
+CONTENTS
+========
+
+  1) Supported SystemC versions
+  2) What's changed in this kit?
+  3) Known issues
+
+
+1) Supported SystemC versions
+=============================
+
+SystemC 2.1.v1 and 2.2.0 are supported and have been tested.
+Has been run successfully with Beta versions of SystemC 2.3.x
+
+
+2) What's changed in this kit?
+==============================
+
+Compared to the 2.0.0 kit, the following has changed:
+
+
+a. Added a const modifier to the generic payload methods get_ref_count() and has_mm()
+
+b. Added a const modifier to the phase argument of the notify methods of each of the two PEQs
+
+c. Removed the dependency on the Boost libraries from the code of the multi-socket utilities. The TLM-2 kit now has no dependencies on Boost
+
+d. Changed the implementations of the multi_passthrough_initiator_sockets to provide default implementations for the dmi/debug methods (just like all the other sockets in the tlm_utils)
+
+e. Changed the implementations of the endianness conversion functions so they work correctly on a 64-bit host
+
+f. Fixed bug in simple_target_socket and simple_target_socket_tagged where timing annotation was not acted upon
+
+g. Added an example lt_mixed_endian illustrating use of endianness conversion functions to model memory sharing between big- and little-endian initiators
+
+h. Changed constructors of convenience sockets to provide, for each socket, one default constructor and a second one with a name argument (just like standard sockets)
+
+i. Removed references to tlm::tlm_phase in convenience sockets (and replaced them by phase_type)
+
+j. Removed typedefs initiator/target_socket_type from standard sockets
+
+k. Added PTHREADS support in the examples Makefile
+
+l. Cleaned up examples and unit_tests to eliminate issues identified by Doulos and Jeda protocol checkers and to allow them to pass regressions on both little- and big-endian hosts
+
+m. Added a convenience method set_and_sync() to tlm_quantumkeeper
+
+n. Added method update_original_from() to class tlm_generic_payload
+
+o. Added method cancel_all() to classes peq_with_get and peq_with_cb_and_phase
+
+p. Move tlm_req_rsp and tlm_analysis to a new directory tlm_1
+
+q. Collapse the directory hierarchy below tlm_h by removing tlm_trans
+
+r. Changed "tlm_initiator_socket_export" to "tlm_base_initiator_socket_export", and "tlm_target_socket_port" to "tlm_base_target_socket_port" in default constructors of standard sockets
+
+s. Added a virtual const char* kind() const; method to the standard sockets
+
+t. Added further unit tests
+
+
+
+For a more detailed description of all features of TLM 2.0 check out the TLM-2.0
+LRM that can be found in the documentation subdirectory of this package
+
+
+3) Known issues
+===============
+
+a. when using TLM 2.0 with SystemC 2.1.v1 on 64 bit linux you will need to
+   force 32 bit mode by using the '-m32' flag
+
+b. the tlm_simple_target_socket in tlm_utils does not obey the END_REQ rule
+   when only an nb_ call is registered, an b_ call is being handled in the
+   socket and there is an nb_ call coming in at the same time. In this case
+   the incoming nb_ call will be forwarded to the registered nb_ call without
+   checking whether the earlier b_ call has passed the END_REQ timing point
+
+c. the implementation of the PEQ 'peq_with_get' in tlm_utils does not properly
+   distinguish between immediate notifications and delta notifications. In the
+   case that a immediate and delta notification happen at the same simulation
+   time both types of notifications emerge from the PEQ in the same evaluation
+   phase. This is wrong immediate notifications should overtake delta
+   notifications
+
+d. the lt_dmi example does not run for all platform and library versions. It
+   works for X86 linux, gcc4.0 and SystemC 2.2.0
+
+

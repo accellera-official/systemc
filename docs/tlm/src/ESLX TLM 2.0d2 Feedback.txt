@@ -1,0 +1,48 @@
+ESLX TLM 2.0d2 Feedback
+Jack Donovan <jack.donovan@eslx.com>
+31 Jan 2008
+
+
+Here is the TLM 2.0d2 kit feedback from ESLX. Our feedback is based on our previous system design experience, our consulting experience, and finally our observations from creating the kit examples.
+ 
+There are six different areas of feedback. We have not had the time to distinguish these as "comments" vs. "bugs" vs. "holes in the kit" vs. "a very strong comment" vs. ???.  We have attempted to explain each point, but in the interest of time the description is brief and probably does not “stand alone”.
+ 
+1.     Endianness
+1.1.   bit endianness is not addressed
+1.2.   multi-endian host not addressed (multiple CPUs, we have seen this several times in our consulting, think multiple host CPU’s running SystemC and communicating via a socket, think a PowerPC development board talking to a X86 work station running SystemC).
+1.3.   data streams are not necessarily on word boundaries
+1.4.   no API to return host endianness (you must currently ask if the host is little endian)
+1.5.   cross-target not addressed (read/write spanning targets, not sure this will occur significantly, but a lower level model may start having this behavior)
+
+2.     DMI
+2.1.   no way for an initiator to release a DMI pointer. This requires a rejection if more than one initiator or a broadcast of an “invalidate_direct_mem_ptr”
+2.2.   no way to determine who has a DMI pointer, would eliminate requirement to for an invalidate as a “broadcast”.
+2.3.   invalidation is a broadcast (generating additional traffic) as there is no tracking of  initiator. Could have “thrashing” as two initiators try to perform DMI on a common target.
+2.4.   cross-target not addressed (data that spans multiple targets)
+2.5.   Rely on the target to return the “correct” and/or “optimal” memory range.
+2.6.   The general Endianess issues already discussed on the reflector.
+
+3.     General API
+3.1.   inconsistent enumerated structure [TLM_READ_COMMAND, TLM_ADDRESS_ERROR_RESPONSE, TLM_ACCEPTED, BEGIN_REQ ] (should be hierarchical) [TLM_COMMAND_READ, TLM_RESPONSE_ERROR_ADDRESS, TLM_REPLY_ACCEPTED, TLM_PHASE_REQUEST_BEGIN]
+3.2.   inconsistent use of case and underscores for routine and variable names
+3.3.   no mechanism for returning TLM version / build (makes future changes problematic, should be akin to SystemC)
+3.4.   no way to reject a request (only fail silently - this is a simulator not actual hardware). In the case of bad routing, bad Required Extension, exclusive initiator.
+3.5.   all enumerations should have indeterminate state entries (there should always be an invalid state [usually 0] for sanity checking and the code should not be written to assume the value or order of the enumerators)
+3.6.   no memory mapping support (initiator specifies address range and is returned an array of [target_ID, start, end] tuples)
+3.7.   May have R/W memory physically, but possibly read-only logically after “boot”.
+
+4.     Header layout
+4.1.   random at best
+
+5.     Command and Control (CNC)
+5.1.   no defined global CNC
+5.1.1. no mechanism for model management
+5.1.2. no allowance for additional GP commands
+5.1.3. no mechanism for a target to return its current model
+5.1.4. no mechanism for a target to return its supported commands
+5.1.5. no mechanism for a target to return its supported TLM version
+
+6.     Internal Documentation
+6.1.   no doxygen commenting
+6.2.   no authorship information
+6.3.   no function headers

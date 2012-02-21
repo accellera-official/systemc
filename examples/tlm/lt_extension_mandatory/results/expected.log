@@ -1,0 +1,108 @@
+
+Info: lt_initiator_extension_mandatory.cpp: 0 s - log_start
+      Creating write transaction - Addr: 0x0000000000000000 Data: 0x00000000
+
+Info: lt_target_extension_mandatory.cpp: 0 s - nb_transport_fw
+      Extension present, Data: generic ID
+
+Info: lt_target_extension_mandatory.cpp: 0 s - nb_transport_fw
+      Write request - Addr: 0x0000000000000000
+
+Info: lt_initiator_extension_mandatory.cpp: 10 ns - log_end
+      Received TLM_OK_RESPONSE
+
+Info: lt_target_extension_mandatory.cpp: 10 ns - get_dmi_ptr
+      Extension present, Data: generic ID
+
+Info: lt_initiator_extension_mandatory.cpp: 10 ns - log_start
+      Creating write transaction - Addr: 0x0000000000000004 Data: 0x00000001
+
+Info: lt_initiator_extension_mandatory.cpp: 20 ns - log_end
+      Received TLM_OK_RESPONSE
+
+Info: lt_initiator_extension_mandatory.cpp: 20 ns - log_start
+      Creating write transaction - Addr: 0x0000000000000008 Data: 0x00000002
+
+Info: lt_initiator_extension_mandatory.cpp: 30 ns - log_end
+      Received TLM_OK_RESPONSE
+
+Info: lt_initiator_extension_mandatory.cpp: 30 ns - log_start
+      Creating write transaction - Addr: 0x000000000000000C Data: 0x00000003
+
+Info: lt_initiator_extension_mandatory.cpp: 35 ns - invalidate_direct_mem_ptr
+      Received invalidate request - valid request
+
+Info: lt_initiator_extension_mandatory.cpp: 40 ns - log_end
+      Received TLM_OK_RESPONSE
+
+Info: lt_initiator_extension_mandatory.cpp: 40 ns - log_start
+      Creating write transaction - Addr: 0x0000000000000010 Data: 0x00000004
+
+Info: lt_target_extension_mandatory.cpp: 40 ns - nb_transport_fw
+      Extension present, Data: generic ID
+
+Info: lt_target_extension_mandatory.cpp: 40 ns - nb_transport_fw
+      Write request - Addr: 0x0000000000000010
+
+Info: lt_initiator_extension_mandatory.cpp: 50 ns - log_end
+      Received TLM_OK_RESPONSE
+
+Info: lt_target_extension_mandatory.cpp: 50 ns - get_dmi_ptr
+      Extension present, Data: generic ID
+
+Info: lt_initiator_extension_mandatory.cpp: 50 ns - log_start
+      Creating read transaction - Addr: 0x0000000000000000
+
+Info: lt_initiator_extension_mandatory.cpp: 75 ns - invalidate_direct_mem_ptr
+      Received invalidate request - valid request
+
+Info: lt_initiator_extension_mandatory.cpp: 150 ns - log_end
+      Received TLM_OK_RESPONSE, Data: 0x00000000
+
+Info: lt_initiator_extension_mandatory.cpp: 150 ns - log_start
+      Creating read transaction - Addr: 0x0000000000000004
+
+Info: lt_target_extension_mandatory.cpp: 150 ns - nb_transport_fw
+      Extension present, Data: generic ID
+
+Info: lt_target_extension_mandatory.cpp: 150 ns - nb_transport_fw
+      Read request - Addr: 0x0000000000000004
+
+Info: lt_initiator_extension_mandatory.cpp: 250 ns - log_end
+      Received TLM_OK_RESPONSE, Data: 0x00000001
+
+Info: lt_target_extension_mandatory.cpp: 250 ns - get_dmi_ptr
+      Extension present, Data: generic ID
+
+Info: lt_initiator_extension_mandatory.cpp: 250 ns - log_start
+      Creating read transaction - Addr: 0x0000000000000008
+
+Info: lt_initiator_extension_mandatory.cpp: 275 ns - invalidate_direct_mem_ptr
+      Received invalidate request - valid request
+
+Info: lt_initiator_extension_mandatory.cpp: 350 ns - log_end
+      Received TLM_OK_RESPONSE, Data: 0x00000002
+
+Info: lt_initiator_extension_mandatory.cpp: 350 ns - log_start
+      Creating read transaction - Addr: 0x000000000000000C
+
+Info: lt_target_extension_mandatory.cpp: 350 ns - nb_transport_fw
+      Extension present, Data: generic ID
+
+Info: lt_target_extension_mandatory.cpp: 350 ns - nb_transport_fw
+      Read request - Addr: 0x000000000000000C
+
+Info: lt_initiator_extension_mandatory.cpp: 450 ns - log_end
+      Received TLM_OK_RESPONSE, Data: 0x00000003
+
+Info: lt_target_extension_mandatory.cpp: 450 ns - get_dmi_ptr
+      Extension present, Data: generic ID
+
+Info: lt_initiator_extension_mandatory.cpp: 450 ns - log_start
+      Creating read transaction - Addr: 0x0000000000000010
+
+Info: lt_initiator_extension_mandatory.cpp: 475 ns - invalidate_direct_mem_ptr
+      Received invalidate request - valid request
+
+Info: lt_initiator_extension_mandatory.cpp: 550 ns - log_end
+      Received TLM_OK_RESPONSE, Data: 0x00000004

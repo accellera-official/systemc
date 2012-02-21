@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="systemc"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		AdditionalOptions="/vmg"
+		AdditionalIncludeDirectories="&quot;$(SYSTEMC)\..\src&quot;;&quot;$(TLM)\include\tlm&quot;"
+		PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS;SC_INCLUDE_DYNAMIC_PROCESSES"
+		RuntimeTypeInfo="true"
+		WarningLevel="4"
+		Detect64BitPortabilityProblems="true"
+		DisableSpecificWarnings="4100;4127;4267;4505"
+	/>
+	<UserMacro
+		Name="SYSTEMC"
+		Value="C:\ESLX\projects\systemc-2.2.0\msvc71"
+		PerformEnvironmentSet="true"
+	/>
+	<UserMacro
+		Name="TLM"
+		Value="C:\ESLX\projects\TLMWG\tlm2"
+		PerformEnvironmentSet="true"
+	/>
+</VisualStudioPropertySheet>

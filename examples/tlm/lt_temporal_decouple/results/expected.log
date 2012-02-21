@@ -1,0 +1,1996 @@
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      Initiator: 101 Starting Traffic
+
+Info: traffic_generator.cpp: 0 s - traffic_generator_thread
+      Initiator: 102 Starting Traffic
+
+Info: lt_td_initiator.cpp: 0 s - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: memory.cpp: 0 s - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000000 Data: 0x00000000
+
+Info: lt_synch_target.cpp: 0 s - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 80 ns),
+
+Info: lt_initiator.cpp: 0 s - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 0 s - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000000 Data: 0x00000000
+
+Info: lt_synch_target.cpp: 0 s - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 80 ns),
+
+Info: lt_synch_target.cpp: 80 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_td_initiator.cpp: 80 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 0 s and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 80 ns - initiator_thread
+      Initiator: 101 the quantum keeper needs synching
+
+Info: lt_synch_target.cpp: 80 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_initiator.cpp: 80 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 0 s
+
+Info: lt_td_initiator.cpp: 80 ns - initiator_thread
+      Initiator: 101 return from quantum keeper synch
+
+Info: lt_initiator.cpp: 80 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 80 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000004 Data: 0x00000004
+
+Info: lt_synch_target.cpp: 80 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 80 ns),
+
+Info: lt_td_initiator.cpp: 80 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: memory.cpp: 80 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000004 Data: 0x00000004
+
+Info: lt_synch_target.cpp: 80 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 80 ns),
+
+Info: lt_synch_target.cpp: 160 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_initiator.cpp: 160 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 0 s
+
+Info: lt_synch_target.cpp: 160 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_td_initiator.cpp: 160 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 0 s and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 160 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: memory.cpp: 160 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000008 Data: 0x00000008
+
+Info: lt_synch_target.cpp: 160 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 80 ns),
+
+Info: lt_initiator.cpp: 160 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 160 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000008 Data: 0x00000008
+
+Info: lt_synch_target.cpp: 160 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 80 ns),
+
+Info: lt_synch_target.cpp: 240 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_td_initiator.cpp: 240 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 0 s and quantum keeper to be set
+      
+
+Info: lt_synch_target.cpp: 240 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_initiator.cpp: 240 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 0 s
+
+Info: lt_td_initiator.cpp: 240 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: memory.cpp: 240 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x000000000000000C Data: 0x0000000C
+
+Info: lt_synch_target.cpp: 240 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 80 ns),
+
+Info: lt_initiator.cpp: 240 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 240 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x000000000000000C Data: 0x0000000C
+
+Info: lt_synch_target.cpp: 240 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 80 ns),
+
+Info: lt_synch_target.cpp: 320 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_td_initiator.cpp: 320 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 0 s and quantum keeper to be set
+      
+
+Info: lt_synch_target.cpp: 320 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_initiator.cpp: 320 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 0 s
+
+Info: lt_td_initiator.cpp: 320 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: memory.cpp: 320 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000010 Data: 0x00000010
+
+Info: lt_synch_target.cpp: 320 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 80 ns),
+
+Info: lt_initiator.cpp: 320 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 320 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000010 Data: 0x00000010
+
+Info: lt_synch_target.cpp: 320 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 80 ns),
+
+Info: lt_synch_target.cpp: 400 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_td_initiator.cpp: 400 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 0 s and quantum keeper to be set
+      
+
+Info: lt_synch_target.cpp: 400 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_initiator.cpp: 400 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 0 s
+
+Info: lt_td_initiator.cpp: 400 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: memory.cpp: 400 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000014 Data: 0x00000014
+
+Info: lt_synch_target.cpp: 400 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 80 ns),
+
+Info: lt_initiator.cpp: 400 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 400 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000014 Data: 0x00000014
+
+Info: lt_synch_target.cpp: 400 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 80 ns),
+
+Info: lt_synch_target.cpp: 480 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_td_initiator.cpp: 480 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 0 s and quantum keeper to be set
+      
+
+Info: lt_synch_target.cpp: 480 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_initiator.cpp: 480 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 0 s
+
+Info: lt_td_initiator.cpp: 480 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: memory.cpp: 480 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000018 Data: 0x00000018
+
+Info: lt_synch_target.cpp: 480 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 80 ns),
+
+Info: lt_initiator.cpp: 480 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 480 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000018 Data: 0x00000018
+
+Info: lt_synch_target.cpp: 480 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 80 ns),
+
+Info: lt_synch_target.cpp: 560 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_td_initiator.cpp: 560 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 0 s and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 560 ns - initiator_thread
+      Initiator: 101 the quantum keeper needs synching
+
+Info: lt_synch_target.cpp: 560 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_initiator.cpp: 560 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 0 s
+
+Info: lt_td_initiator.cpp: 560 ns - initiator_thread
+      Initiator: 101 return from quantum keeper synch
+
+Info: lt_initiator.cpp: 560 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 560 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x000000000000001C Data: 0x0000001C
+
+Info: lt_synch_target.cpp: 560 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 80 ns),
+
+Info: lt_td_initiator.cpp: 560 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: memory.cpp: 560 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x000000000000001C Data: 0x0000001C
+
+Info: lt_synch_target.cpp: 560 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 80 ns),
+
+Info: lt_synch_target.cpp: 640 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_initiator.cpp: 640 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 0 s
+
+Info: lt_synch_target.cpp: 640 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_td_initiator.cpp: 640 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 0 s and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 640 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: memory.cpp: 640 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000020 Data: 0x00000020
+
+Info: lt_synch_target.cpp: 640 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 80 ns),
+
+Info: lt_initiator.cpp: 640 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 640 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000020 Data: 0x00000020
+
+Info: lt_synch_target.cpp: 640 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 80 ns),
+
+Info: lt_synch_target.cpp: 720 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_td_initiator.cpp: 720 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 0 s and quantum keeper to be set
+      
+
+Info: lt_synch_target.cpp: 720 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_initiator.cpp: 720 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 0 s
+
+Info: lt_td_initiator.cpp: 720 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: memory.cpp: 720 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000024 Data: 0x00000024
+
+Info: lt_synch_target.cpp: 720 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 80 ns),
+
+Info: lt_initiator.cpp: 720 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 720 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000024 Data: 0x00000024
+
+Info: lt_synch_target.cpp: 720 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 80 ns),
+
+Info: lt_synch_target.cpp: 800 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_td_initiator.cpp: 800 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 0 s and quantum keeper to be set
+      
+
+Info: lt_synch_target.cpp: 800 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_initiator.cpp: 800 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 0 s
+
+Info: lt_td_initiator.cpp: 800 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: memory.cpp: 800 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000028 Data: 0x00000028
+
+Info: lt_synch_target.cpp: 800 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 80 ns),
+
+Info: lt_initiator.cpp: 800 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 800 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000028 Data: 0x00000028
+
+Info: lt_synch_target.cpp: 800 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 80 ns),
+
+Info: lt_synch_target.cpp: 880 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_td_initiator.cpp: 880 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 0 s and quantum keeper to be set
+      
+
+Info: lt_synch_target.cpp: 880 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_initiator.cpp: 880 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 0 s
+
+Info: lt_td_initiator.cpp: 880 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: memory.cpp: 880 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x000000000000002C Data: 0x0000002C
+
+Info: lt_synch_target.cpp: 880 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 80 ns),
+
+Info: lt_initiator.cpp: 880 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 880 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x000000000000002C Data: 0x0000002C
+
+Info: lt_synch_target.cpp: 880 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 80 ns),
+
+Info: lt_synch_target.cpp: 960 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_td_initiator.cpp: 960 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 0 s and quantum keeper to be set
+      
+
+Info: lt_synch_target.cpp: 960 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_initiator.cpp: 960 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 0 s
+
+Info: lt_td_initiator.cpp: 960 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: memory.cpp: 960 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000030 Data: 0x00000030
+
+Info: lt_synch_target.cpp: 960 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 80 ns),
+
+Info: lt_initiator.cpp: 960 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 960 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000030 Data: 0x00000030
+
+Info: lt_synch_target.cpp: 960 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 80 ns),
+
+Info: lt_synch_target.cpp: 1040 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_td_initiator.cpp: 1040 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 0 s and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 1040 ns - initiator_thread
+      Initiator: 101 the quantum keeper needs synching
+
+Info: lt_synch_target.cpp: 1040 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_initiator.cpp: 1040 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 0 s
+
+Info: lt_td_initiator.cpp: 1040 ns - initiator_thread
+      Initiator: 101 return from quantum keeper synch
+
+Info: lt_initiator.cpp: 1040 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 1040 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000034 Data: 0x00000034
+
+Info: lt_synch_target.cpp: 1040 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 80 ns),
+
+Info: lt_td_initiator.cpp: 1040 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: memory.cpp: 1040 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000034 Data: 0x00000034
+
+Info: lt_synch_target.cpp: 1040 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 80 ns),
+
+Info: lt_synch_target.cpp: 1120 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_initiator.cpp: 1120 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 0 s
+
+Info: lt_synch_target.cpp: 1120 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_td_initiator.cpp: 1120 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 0 s and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 1120 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: memory.cpp: 1120 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000038 Data: 0x00000038
+
+Info: lt_synch_target.cpp: 1120 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 80 ns),
+
+Info: lt_initiator.cpp: 1120 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 1120 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000038 Data: 0x00000038
+
+Info: lt_synch_target.cpp: 1120 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 80 ns),
+
+Info: lt_synch_target.cpp: 1200 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_td_initiator.cpp: 1200 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 0 s and quantum keeper to be set
+      
+
+Info: lt_synch_target.cpp: 1200 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_initiator.cpp: 1200 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 0 s
+
+Info: lt_td_initiator.cpp: 1200 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: memory.cpp: 1200 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x000000000000003C Data: 0x0000003C
+
+Info: lt_synch_target.cpp: 1200 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 80 ns),
+
+Info: lt_initiator.cpp: 1200 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 1200 ns - print
+      ID: 201 COMMAND: WRITE Length: 04
+      Addr: 0x000000000000003C Data: 0x0000003C
+
+Info: lt_synch_target.cpp: 1200 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 80 ns),
+
+Info: lt_synch_target.cpp: 1280 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_td_initiator.cpp: 1280 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 0 s and quantum keeper to be set
+      
+
+Info: lt_synch_target.cpp: 1280 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_initiator.cpp: 1280 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 0 s
+
+Info: lt_td_initiator.cpp: 1280 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: memory.cpp: 1280 ns - print
+      ID: 201 COMMAND: READ Length: 04
+      Addr: 0x0000000000000000 Data: 0x00000000
+
+Info: lt_synch_target.cpp: 1280 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 120 ns),
+
+Info: lt_initiator.cpp: 1280 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 1280 ns - print
+      ID: 201 COMMAND: READ Length: 04
+      Addr: 0x0000000000000000 Data: 0x00000000
+
+Info: lt_synch_target.cpp: 1280 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 120 ns),
+
+Info: lt_synch_target.cpp: 1400 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_td_initiator.cpp: 1400 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 0 s and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 1400 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: memory.cpp: 1400 ns - print
+      ID: 201 COMMAND: READ Length: 04
+      Addr: 0x0000000000000004 Data: 0x00000004
+
+Info: lt_synch_target.cpp: 1400 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 120 ns),
+
+Info: lt_synch_target.cpp: 1400 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_initiator.cpp: 1400 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 0 s
+
+Info: lt_initiator.cpp: 1400 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 1400 ns - print
+      ID: 201 COMMAND: READ Length: 04
+      Addr: 0x0000000000000004 Data: 0x00000004
+
+Info: lt_synch_target.cpp: 1400 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 120 ns),
+
+Info: lt_synch_target.cpp: 1520 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_td_initiator.cpp: 1520 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 0 s and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 1520 ns - initiator_thread
+      Initiator: 101 the quantum keeper needs synching
+
+Info: lt_synch_target.cpp: 1520 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_initiator.cpp: 1520 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 0 s
+
+Info: lt_initiator.cpp: 1520 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 1520 ns - print
+      ID: 201 COMMAND: READ Length: 04
+      Addr: 0x0000000000000008 Data: 0x00000008
+
+Info: lt_synch_target.cpp: 1520 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 120 ns),
+
+Info: lt_td_initiator.cpp: 1520 ns - initiator_thread
+      Initiator: 101 return from quantum keeper synch
+
+Info: lt_td_initiator.cpp: 1520 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: memory.cpp: 1520 ns - print
+      ID: 201 COMMAND: READ Length: 04
+      Addr: 0x0000000000000008 Data: 0x00000008
+
+Info: lt_synch_target.cpp: 1520 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 120 ns),
+
+Info: lt_synch_target.cpp: 1640 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_initiator.cpp: 1640 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 0 s
+
+Info: lt_synch_target.cpp: 1640 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_td_initiator.cpp: 1640 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 0 s and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 1640 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: memory.cpp: 1640 ns - print
+      ID: 201 COMMAND: READ Length: 04
+      Addr: 0x000000000000000C Data: 0x0000000C
+
+Info: lt_synch_target.cpp: 1640 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 120 ns),
+
+Info: lt_initiator.cpp: 1640 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 1640 ns - print
+      ID: 201 COMMAND: READ Length: 04
+      Addr: 0x000000000000000C Data: 0x0000000C
+
+Info: lt_synch_target.cpp: 1640 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 120 ns),
+
+Info: lt_synch_target.cpp: 1760 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_td_initiator.cpp: 1760 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 0 s and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 1760 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: memory.cpp: 1760 ns - print
+      ID: 201 COMMAND: READ Length: 04
+      Addr: 0x0000000000000010 Data: 0x00000010
+
+Info: lt_synch_target.cpp: 1760 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 120 ns),
+
+Info: lt_synch_target.cpp: 1760 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_initiator.cpp: 1760 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 0 s
+
+Info: lt_initiator.cpp: 1760 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 1760 ns - print
+      ID: 201 COMMAND: READ Length: 04
+      Addr: 0x0000000000000010 Data: 0x00000010
+
+Info: lt_synch_target.cpp: 1760 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 120 ns),
+
+Info: lt_synch_target.cpp: 1880 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_td_initiator.cpp: 1880 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 0 s and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 1880 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: memory.cpp: 1880 ns - print
+      ID: 201 COMMAND: READ Length: 04
+      Addr: 0x0000000000000014 Data: 0x00000014
+
+Info: lt_synch_target.cpp: 1880 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 120 ns),
+
+Info: lt_synch_target.cpp: 1880 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_initiator.cpp: 1880 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 0 s
+
+Info: lt_initiator.cpp: 1880 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 1880 ns - print
+      ID: 201 COMMAND: READ Length: 04
+      Addr: 0x0000000000000014 Data: 0x00000014
+
+Info: lt_synch_target.cpp: 1880 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 120 ns),
+
+Info: lt_synch_target.cpp: 2 us - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_td_initiator.cpp: 2 us - initiator_thread
+      Initiator: 101 b_transport returned delay = 0 s and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 2 us - initiator_thread
+      Initiator: 101 the quantum keeper needs synching
+
+Info: lt_synch_target.cpp: 2 us - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_initiator.cpp: 2 us - initiator_thread
+      Initiator: 102 b_transport returned delay = 0 s
+
+Info: lt_initiator.cpp: 2 us - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 2 us - print
+      ID: 201 COMMAND: READ Length: 04
+      Addr: 0x0000000000000018 Data: 0x00000018
+
+Info: lt_synch_target.cpp: 2 us - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 120 ns),
+
+Info: lt_td_initiator.cpp: 2 us - initiator_thread
+      Initiator: 101 return from quantum keeper synch
+
+Info: lt_td_initiator.cpp: 2 us - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: memory.cpp: 2 us - print
+      ID: 201 COMMAND: READ Length: 04
+      Addr: 0x0000000000000018 Data: 0x00000018
+
+Info: lt_synch_target.cpp: 2 us - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 120 ns),
+
+Info: lt_synch_target.cpp: 2120 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_initiator.cpp: 2120 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 0 s
+
+Info: lt_synch_target.cpp: 2120 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_td_initiator.cpp: 2120 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 0 s and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 2120 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: memory.cpp: 2120 ns - print
+      ID: 201 COMMAND: READ Length: 04
+      Addr: 0x000000000000001C Data: 0x0000001C
+
+Info: lt_synch_target.cpp: 2120 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 120 ns),
+
+Info: lt_initiator.cpp: 2120 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 2120 ns - print
+      ID: 201 COMMAND: READ Length: 04
+      Addr: 0x000000000000001C Data: 0x0000001C
+
+Info: lt_synch_target.cpp: 2120 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 120 ns),
+
+Info: lt_synch_target.cpp: 2240 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_td_initiator.cpp: 2240 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 0 s and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 2240 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: memory.cpp: 2240 ns - print
+      ID: 201 COMMAND: READ Length: 04
+      Addr: 0x0000000000000020 Data: 0x00000020
+
+Info: lt_synch_target.cpp: 2240 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 120 ns),
+
+Info: lt_synch_target.cpp: 2240 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_initiator.cpp: 2240 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 0 s
+
+Info: lt_initiator.cpp: 2240 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 2240 ns - print
+      ID: 201 COMMAND: READ Length: 04
+      Addr: 0x0000000000000020 Data: 0x00000020
+
+Info: lt_synch_target.cpp: 2240 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 120 ns),
+
+Info: lt_synch_target.cpp: 2360 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_td_initiator.cpp: 2360 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 0 s and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 2360 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: memory.cpp: 2360 ns - print
+      ID: 201 COMMAND: READ Length: 04
+      Addr: 0x0000000000000024 Data: 0x00000024
+
+Info: lt_synch_target.cpp: 2360 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 120 ns),
+
+Info: lt_synch_target.cpp: 2360 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_initiator.cpp: 2360 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 0 s
+
+Info: lt_initiator.cpp: 2360 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 2360 ns - print
+      ID: 201 COMMAND: READ Length: 04
+      Addr: 0x0000000000000024 Data: 0x00000024
+
+Info: lt_synch_target.cpp: 2360 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 120 ns),
+
+Info: lt_synch_target.cpp: 2480 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_td_initiator.cpp: 2480 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 0 s and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 2480 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: memory.cpp: 2480 ns - print
+      ID: 201 COMMAND: READ Length: 04
+      Addr: 0x0000000000000028 Data: 0x00000028
+
+Info: lt_synch_target.cpp: 2480 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 120 ns),
+
+Info: lt_synch_target.cpp: 2480 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_initiator.cpp: 2480 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 0 s
+
+Info: lt_initiator.cpp: 2480 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 2480 ns - print
+      ID: 201 COMMAND: READ Length: 04
+      Addr: 0x0000000000000028 Data: 0x00000028
+
+Info: lt_synch_target.cpp: 2480 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 120 ns),
+
+Info: lt_synch_target.cpp: 2600 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_td_initiator.cpp: 2600 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 0 s and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 2600 ns - initiator_thread
+      Initiator: 101 the quantum keeper needs synching
+
+Info: lt_synch_target.cpp: 2600 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_initiator.cpp: 2600 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 0 s
+
+Info: lt_initiator.cpp: 2600 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 2600 ns - print
+      ID: 201 COMMAND: READ Length: 04
+      Addr: 0x000000000000002C Data: 0x0000002C
+
+Info: lt_synch_target.cpp: 2600 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 120 ns),
+
+Info: lt_td_initiator.cpp: 2600 ns - initiator_thread
+      Initiator: 101 return from quantum keeper synch
+
+Info: lt_td_initiator.cpp: 2600 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: memory.cpp: 2600 ns - print
+      ID: 201 COMMAND: READ Length: 04
+      Addr: 0x000000000000002C Data: 0x0000002C
+
+Info: lt_synch_target.cpp: 2600 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 120 ns),
+
+Info: lt_synch_target.cpp: 2720 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_initiator.cpp: 2720 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 0 s
+
+Info: lt_synch_target.cpp: 2720 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_td_initiator.cpp: 2720 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 0 s and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 2720 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: memory.cpp: 2720 ns - print
+      ID: 201 COMMAND: READ Length: 04
+      Addr: 0x0000000000000030 Data: 0x00000030
+
+Info: lt_synch_target.cpp: 2720 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 120 ns),
+
+Info: lt_initiator.cpp: 2720 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 2720 ns - print
+      ID: 201 COMMAND: READ Length: 04
+      Addr: 0x0000000000000030 Data: 0x00000030
+
+Info: lt_synch_target.cpp: 2720 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 120 ns),
+
+Info: lt_synch_target.cpp: 2840 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_td_initiator.cpp: 2840 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 0 s and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 2840 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: memory.cpp: 2840 ns - print
+      ID: 201 COMMAND: READ Length: 04
+      Addr: 0x0000000000000034 Data: 0x00000034
+
+Info: lt_synch_target.cpp: 2840 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 120 ns),
+
+Info: lt_synch_target.cpp: 2840 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_initiator.cpp: 2840 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 0 s
+
+Info: lt_initiator.cpp: 2840 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 2840 ns - print
+      ID: 201 COMMAND: READ Length: 04
+      Addr: 0x0000000000000034 Data: 0x00000034
+
+Info: lt_synch_target.cpp: 2840 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 120 ns),
+
+Info: lt_synch_target.cpp: 2960 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_td_initiator.cpp: 2960 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 0 s and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 2960 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: memory.cpp: 2960 ns - print
+      ID: 201 COMMAND: READ Length: 04
+      Addr: 0x0000000000000038 Data: 0x00000038
+
+Info: lt_synch_target.cpp: 2960 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 120 ns),
+
+Info: lt_synch_target.cpp: 2960 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_initiator.cpp: 2960 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 0 s
+
+Info: lt_initiator.cpp: 2960 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 2960 ns - print
+      ID: 201 COMMAND: READ Length: 04
+      Addr: 0x0000000000000038 Data: 0x00000038
+
+Info: lt_synch_target.cpp: 2960 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 120 ns),
+
+Info: lt_synch_target.cpp: 3080 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_td_initiator.cpp: 3080 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 0 s and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 3080 ns - initiator_thread
+      Initiator: 101 the quantum keeper needs synching
+
+Info: lt_synch_target.cpp: 3080 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_initiator.cpp: 3080 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 0 s
+
+Info: lt_initiator.cpp: 3080 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 3080 ns - print
+      ID: 201 COMMAND: READ Length: 04
+      Addr: 0x000000000000003C Data: 0x0000003C
+
+Info: lt_synch_target.cpp: 3080 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 120 ns),
+
+Info: lt_td_initiator.cpp: 3080 ns - initiator_thread
+      Initiator: 101 return from quantum keeper synch
+
+Info: lt_td_initiator.cpp: 3080 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: memory.cpp: 3080 ns - print
+      ID: 201 COMMAND: READ Length: 04
+      Addr: 0x000000000000003C Data: 0x0000003C
+
+Info: lt_synch_target.cpp: 3080 ns - custom_b_transport
+      Target: 201 Forcing a synch in a temporal decoupled initiator with wait( 120 ns),
+
+Info: lt_synch_target.cpp: 3200 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_initiator.cpp: 3200 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 0 s
+
+Info: lt_synch_target.cpp: 3200 ns - custom_b_transport
+      Target: 201 return from wait will return a delay of 0 s
+
+Info: lt_td_initiator.cpp: 3200 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 0 s and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 3200 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: memory.cpp: 3200 ns - print
+      ID: 202 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000000 Data: 0xEFFFFFFF
+
+Info: lt_target.cpp: 3200 ns - custom_b_transport
+      Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
+
+Info: lt_td_initiator.cpp: 3200 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 40 ns and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 3200 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 40 ns)
+
+Info: memory.cpp: 3200 ns - print
+      ID: 202 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000004 Data: 0xEFFFFFFB
+
+Info: lt_target.cpp: 3200 ns - custom_b_transport
+      Target: 202 returned delay of 40 ns + 10 ns + 30 ns = 80 ns
+
+Info: lt_td_initiator.cpp: 3200 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 80 ns and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 3200 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 80 ns)
+
+Info: memory.cpp: 3200 ns - print
+      ID: 202 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000008 Data: 0xEFFFFFF7
+
+Info: lt_target.cpp: 3200 ns - custom_b_transport
+      Target: 202 returned delay of 80 ns + 10 ns + 30 ns = 120 ns
+
+Info: lt_td_initiator.cpp: 3200 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 120 ns and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 3200 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 120 ns)
+
+Info: memory.cpp: 3200 ns - print
+      ID: 202 COMMAND: WRITE Length: 04
+      Addr: 0x000000000000000C Data: 0xEFFFFFF3
+
+Info: lt_target.cpp: 3200 ns - custom_b_transport
+      Target: 202 returned delay of 120 ns + 10 ns + 30 ns = 160 ns
+
+Info: lt_td_initiator.cpp: 3200 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 160 ns and quantum keeper to be set
+      
+
+Info: lt_initiator.cpp: 3200 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 3200 ns - print
+      ID: 202 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000000 Data: 0xEFFFFFFF
+
+Info: lt_target.cpp: 3200 ns - custom_b_transport
+      Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
+
+Info: lt_initiator.cpp: 3200 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 40 ns
+
+Info: lt_td_initiator.cpp: 3200 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 160 ns)
+
+Info: memory.cpp: 3200 ns - print
+      ID: 202 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000010 Data: 0xEFFFFFEF
+
+Info: lt_target.cpp: 3200 ns - custom_b_transport
+      Target: 202 returned delay of 160 ns + 10 ns + 30 ns = 200 ns
+
+Info: lt_td_initiator.cpp: 3200 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 200 ns and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 3200 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 200 ns)
+
+Info: memory.cpp: 3200 ns - print
+      ID: 202 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000014 Data: 0xEFFFFFEB
+
+Info: lt_target.cpp: 3200 ns - custom_b_transport
+      Target: 202 returned delay of 200 ns + 10 ns + 30 ns = 240 ns
+
+Info: lt_td_initiator.cpp: 3200 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 240 ns and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 3200 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 240 ns)
+
+Info: memory.cpp: 3200 ns - print
+      ID: 202 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000018 Data: 0xEFFFFFE7
+
+Info: lt_target.cpp: 3200 ns - custom_b_transport
+      Target: 202 returned delay of 240 ns + 10 ns + 30 ns = 280 ns
+
+Info: lt_td_initiator.cpp: 3200 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 280 ns and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 3200 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 280 ns)
+
+Info: memory.cpp: 3200 ns - print
+      ID: 202 COMMAND: WRITE Length: 04
+      Addr: 0x000000000000001C Data: 0xEFFFFFE3
+
+Info: lt_target.cpp: 3200 ns - custom_b_transport
+      Target: 202 returned delay of 280 ns + 10 ns + 30 ns = 320 ns
+
+Info: lt_td_initiator.cpp: 3200 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 320 ns and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 3200 ns - initiator_thread
+      Initiator: 101 the quantum keeper needs synching
+
+Info: lt_initiator.cpp: 3240 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 3240 ns - print
+      ID: 202 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000004 Data: 0xEFFFFFFB
+
+Info: lt_target.cpp: 3240 ns - custom_b_transport
+      Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
+
+Info: lt_initiator.cpp: 3240 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 40 ns
+
+Info: lt_initiator.cpp: 3280 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 3280 ns - print
+      ID: 202 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000008 Data: 0xEFFFFFF7
+
+Info: lt_target.cpp: 3280 ns - custom_b_transport
+      Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
+
+Info: lt_initiator.cpp: 3280 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 40 ns
+
+Info: lt_initiator.cpp: 3320 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 3320 ns - print
+      ID: 202 COMMAND: WRITE Length: 04
+      Addr: 0x000000000000000C Data: 0xEFFFFFF3
+
+Info: lt_target.cpp: 3320 ns - custom_b_transport
+      Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
+
+Info: lt_initiator.cpp: 3320 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 40 ns
+
+Info: lt_initiator.cpp: 3360 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 3360 ns - print
+      ID: 202 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000010 Data: 0xEFFFFFEF
+
+Info: lt_target.cpp: 3360 ns - custom_b_transport
+      Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
+
+Info: lt_initiator.cpp: 3360 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 40 ns
+
+Info: lt_initiator.cpp: 3400 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 3400 ns - print
+      ID: 202 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000014 Data: 0xEFFFFFEB
+
+Info: lt_target.cpp: 3400 ns - custom_b_transport
+      Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
+
+Info: lt_initiator.cpp: 3400 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 40 ns
+
+Info: lt_initiator.cpp: 3440 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 3440 ns - print
+      ID: 202 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000018 Data: 0xEFFFFFE7
+
+Info: lt_target.cpp: 3440 ns - custom_b_transport
+      Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
+
+Info: lt_initiator.cpp: 3440 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 40 ns
+
+Info: lt_initiator.cpp: 3480 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 3480 ns - print
+      ID: 202 COMMAND: WRITE Length: 04
+      Addr: 0x000000000000001C Data: 0xEFFFFFE3
+
+Info: lt_target.cpp: 3480 ns - custom_b_transport
+      Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
+
+Info: lt_initiator.cpp: 3480 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 40 ns
+
+Info: lt_td_initiator.cpp: 3520 ns - initiator_thread
+      Initiator: 101 return from quantum keeper synch
+
+Info: lt_td_initiator.cpp: 3520 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: memory.cpp: 3520 ns - print
+      ID: 202 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000020 Data: 0xEFFFFFDF
+
+Info: lt_target.cpp: 3520 ns - custom_b_transport
+      Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
+
+Info: lt_td_initiator.cpp: 3520 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 40 ns and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 3520 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 40 ns)
+
+Info: memory.cpp: 3520 ns - print
+      ID: 202 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000024 Data: 0xEFFFFFDB
+
+Info: lt_target.cpp: 3520 ns - custom_b_transport
+      Target: 202 returned delay of 40 ns + 10 ns + 30 ns = 80 ns
+
+Info: lt_td_initiator.cpp: 3520 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 80 ns and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 3520 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 80 ns)
+
+Info: memory.cpp: 3520 ns - print
+      ID: 202 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000028 Data: 0xEFFFFFD7
+
+Info: lt_target.cpp: 3520 ns - custom_b_transport
+      Target: 202 returned delay of 80 ns + 10 ns + 30 ns = 120 ns
+
+Info: lt_td_initiator.cpp: 3520 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 120 ns and quantum keeper to be set
+      
+
+Info: lt_initiator.cpp: 3520 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 3520 ns - print
+      ID: 202 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000020 Data: 0xEFFFFFDF
+
+Info: lt_target.cpp: 3520 ns - custom_b_transport
+      Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
+
+Info: lt_initiator.cpp: 3520 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 40 ns
+
+Info: lt_td_initiator.cpp: 3520 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 120 ns)
+
+Info: memory.cpp: 3520 ns - print
+      ID: 202 COMMAND: WRITE Length: 04
+      Addr: 0x000000000000002C Data: 0xEFFFFFD3
+
+Info: lt_target.cpp: 3520 ns - custom_b_transport
+      Target: 202 returned delay of 120 ns + 10 ns + 30 ns = 160 ns
+
+Info: lt_td_initiator.cpp: 3520 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 160 ns and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 3520 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 160 ns)
+
+Info: memory.cpp: 3520 ns - print
+      ID: 202 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000030 Data: 0xEFFFFFCF
+
+Info: lt_target.cpp: 3520 ns - custom_b_transport
+      Target: 202 returned delay of 160 ns + 10 ns + 30 ns = 200 ns
+
+Info: lt_td_initiator.cpp: 3520 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 200 ns and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 3520 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 200 ns)
+
+Info: memory.cpp: 3520 ns - print
+      ID: 202 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000034 Data: 0xEFFFFFCB
+
+Info: lt_target.cpp: 3520 ns - custom_b_transport
+      Target: 202 returned delay of 200 ns + 10 ns + 30 ns = 240 ns
+
+Info: lt_td_initiator.cpp: 3520 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 240 ns and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 3520 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 240 ns)
+
+Info: memory.cpp: 3520 ns - print
+      ID: 202 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000038 Data: 0xEFFFFFC7
+
+Info: lt_target.cpp: 3520 ns - custom_b_transport
+      Target: 202 returned delay of 240 ns + 10 ns + 30 ns = 280 ns
+
+Info: lt_td_initiator.cpp: 3520 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 280 ns and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 3520 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 280 ns)
+
+Info: memory.cpp: 3520 ns - print
+      ID: 202 COMMAND: WRITE Length: 04
+      Addr: 0x000000000000003C Data: 0xEFFFFFC3
+
+Info: lt_target.cpp: 3520 ns - custom_b_transport
+      Target: 202 returned delay of 280 ns + 10 ns + 30 ns = 320 ns
+
+Info: lt_td_initiator.cpp: 3520 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 320 ns and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 3520 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 320 ns)
+
+Info: memory.cpp: 3520 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x0000000000000000 Data: 0xEFFFFFFF
+
+Info: lt_target.cpp: 3520 ns - custom_b_transport
+      Target: 202 returned delay of 320 ns + 10 ns + 50 ns = 380 ns
+
+Info: lt_td_initiator.cpp: 3520 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 380 ns and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 3520 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 380 ns)
+
+Info: memory.cpp: 3520 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x0000000000000004 Data: 0xEFFFFFFB
+
+Info: lt_target.cpp: 3520 ns - custom_b_transport
+      Target: 202 returned delay of 380 ns + 10 ns + 50 ns = 440 ns
+
+Info: lt_td_initiator.cpp: 3520 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 440 ns and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 3520 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 440 ns)
+
+Info: memory.cpp: 3520 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x0000000000000008 Data: 0xEFFFFFF7
+
+Info: lt_target.cpp: 3520 ns - custom_b_transport
+      Target: 202 returned delay of 440 ns + 10 ns + 50 ns = 500 ns
+
+Info: lt_td_initiator.cpp: 3520 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 500 ns and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 3520 ns - initiator_thread
+      Initiator: 101 the quantum keeper needs synching
+
+Info: lt_initiator.cpp: 3560 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 3560 ns - print
+      ID: 202 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000024 Data: 0xEFFFFFDB
+
+Info: lt_target.cpp: 3560 ns - custom_b_transport
+      Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
+
+Info: lt_initiator.cpp: 3560 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 40 ns
+
+Info: lt_initiator.cpp: 3600 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 3600 ns - print
+      ID: 202 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000028 Data: 0xEFFFFFD7
+
+Info: lt_target.cpp: 3600 ns - custom_b_transport
+      Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
+
+Info: lt_initiator.cpp: 3600 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 40 ns
+
+Info: lt_initiator.cpp: 3640 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 3640 ns - print
+      ID: 202 COMMAND: WRITE Length: 04
+      Addr: 0x000000000000002C Data: 0xEFFFFFD3
+
+Info: lt_target.cpp: 3640 ns - custom_b_transport
+      Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
+
+Info: lt_initiator.cpp: 3640 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 40 ns
+
+Info: lt_initiator.cpp: 3680 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 3680 ns - print
+      ID: 202 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000030 Data: 0xEFFFFFCF
+
+Info: lt_target.cpp: 3680 ns - custom_b_transport
+      Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
+
+Info: lt_initiator.cpp: 3680 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 40 ns
+
+Info: lt_initiator.cpp: 3720 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 3720 ns - print
+      ID: 202 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000034 Data: 0xEFFFFFCB
+
+Info: lt_target.cpp: 3720 ns - custom_b_transport
+      Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
+
+Info: lt_initiator.cpp: 3720 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 40 ns
+
+Info: lt_initiator.cpp: 3760 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 3760 ns - print
+      ID: 202 COMMAND: WRITE Length: 04
+      Addr: 0x0000000000000038 Data: 0xEFFFFFC7
+
+Info: lt_target.cpp: 3760 ns - custom_b_transport
+      Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
+
+Info: lt_initiator.cpp: 3760 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 40 ns
+
+Info: lt_initiator.cpp: 3800 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 3800 ns - print
+      ID: 202 COMMAND: WRITE Length: 04
+      Addr: 0x000000000000003C Data: 0xEFFFFFC3
+
+Info: lt_target.cpp: 3800 ns - custom_b_transport
+      Target: 202 returned delay of 0 s + 10 ns + 30 ns = 40 ns
+
+Info: lt_initiator.cpp: 3800 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 40 ns
+
+Info: lt_initiator.cpp: 3840 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 3840 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x0000000000000000 Data: 0xEFFFFFFF
+
+Info: lt_target.cpp: 3840 ns - custom_b_transport
+      Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
+
+Info: lt_initiator.cpp: 3840 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 60 ns
+
+Info: lt_initiator.cpp: 3900 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 3900 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x0000000000000004 Data: 0xEFFFFFFB
+
+Info: lt_target.cpp: 3900 ns - custom_b_transport
+      Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
+
+Info: lt_initiator.cpp: 3900 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 60 ns
+
+Info: lt_initiator.cpp: 3960 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 3960 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x0000000000000008 Data: 0xEFFFFFF7
+
+Info: lt_target.cpp: 3960 ns - custom_b_transport
+      Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
+
+Info: lt_initiator.cpp: 3960 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 60 ns
+
+Info: lt_td_initiator.cpp: 4020 ns - initiator_thread
+      Initiator: 101 return from quantum keeper synch
+
+Info: lt_td_initiator.cpp: 4020 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: memory.cpp: 4020 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x000000000000000C Data: 0xEFFFFFF3
+
+Info: lt_target.cpp: 4020 ns - custom_b_transport
+      Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
+
+Info: lt_td_initiator.cpp: 4020 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 60 ns and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 4020 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 60 ns)
+
+Info: memory.cpp: 4020 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x0000000000000010 Data: 0xEFFFFFEF
+
+Info: lt_target.cpp: 4020 ns - custom_b_transport
+      Target: 202 returned delay of 60 ns + 10 ns + 50 ns = 120 ns
+
+Info: lt_td_initiator.cpp: 4020 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 120 ns and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 4020 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 120 ns)
+
+Info: memory.cpp: 4020 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x0000000000000014 Data: 0xEFFFFFEB
+
+Info: lt_target.cpp: 4020 ns - custom_b_transport
+      Target: 202 returned delay of 120 ns + 10 ns + 50 ns = 180 ns
+
+Info: lt_td_initiator.cpp: 4020 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 180 ns and quantum keeper to be set
+      
+
+Info: lt_initiator.cpp: 4020 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 4020 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x000000000000000C Data: 0xEFFFFFF3
+
+Info: lt_target.cpp: 4020 ns - custom_b_transport
+      Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
+
+Info: lt_initiator.cpp: 4020 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 60 ns
+
+Info: lt_td_initiator.cpp: 4020 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 180 ns)
+
+Info: memory.cpp: 4020 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x0000000000000018 Data: 0xEFFFFFE7
+
+Info: lt_target.cpp: 4020 ns - custom_b_transport
+      Target: 202 returned delay of 180 ns + 10 ns + 50 ns = 240 ns
+
+Info: lt_td_initiator.cpp: 4020 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 240 ns and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 4020 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 240 ns)
+
+Info: memory.cpp: 4020 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x000000000000001C Data: 0xEFFFFFE3
+
+Info: lt_target.cpp: 4020 ns - custom_b_transport
+      Target: 202 returned delay of 240 ns + 10 ns + 50 ns = 300 ns
+
+Info: lt_td_initiator.cpp: 4020 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 300 ns and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 4020 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 300 ns)
+
+Info: memory.cpp: 4020 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x0000000000000020 Data: 0xEFFFFFDF
+
+Info: lt_target.cpp: 4020 ns - custom_b_transport
+      Target: 202 returned delay of 300 ns + 10 ns + 50 ns = 360 ns
+
+Info: lt_td_initiator.cpp: 4020 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 360 ns and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 4020 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 360 ns)
+
+Info: memory.cpp: 4020 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x0000000000000024 Data: 0xEFFFFFDB
+
+Info: lt_target.cpp: 4020 ns - custom_b_transport
+      Target: 202 returned delay of 360 ns + 10 ns + 50 ns = 420 ns
+
+Info: lt_td_initiator.cpp: 4020 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 420 ns and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 4020 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 420 ns)
+
+Info: memory.cpp: 4020 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x0000000000000028 Data: 0xEFFFFFD7
+
+Info: lt_target.cpp: 4020 ns - custom_b_transport
+      Target: 202 returned delay of 420 ns + 10 ns + 50 ns = 480 ns
+
+Info: lt_td_initiator.cpp: 4020 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 480 ns and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 4020 ns - initiator_thread
+      Initiator: 101 the quantum keeper needs synching
+
+Info: lt_initiator.cpp: 4080 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 4080 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x0000000000000010 Data: 0xEFFFFFEF
+
+Info: lt_target.cpp: 4080 ns - custom_b_transport
+      Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
+
+Info: lt_initiator.cpp: 4080 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 60 ns
+
+Info: lt_initiator.cpp: 4140 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 4140 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x0000000000000014 Data: 0xEFFFFFEB
+
+Info: lt_target.cpp: 4140 ns - custom_b_transport
+      Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
+
+Info: lt_initiator.cpp: 4140 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 60 ns
+
+Info: lt_initiator.cpp: 4200 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 4200 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x0000000000000018 Data: 0xEFFFFFE7
+
+Info: lt_target.cpp: 4200 ns - custom_b_transport
+      Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
+
+Info: lt_initiator.cpp: 4200 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 60 ns
+
+Info: lt_initiator.cpp: 4260 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 4260 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x000000000000001C Data: 0xEFFFFFE3
+
+Info: lt_target.cpp: 4260 ns - custom_b_transport
+      Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
+
+Info: lt_initiator.cpp: 4260 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 60 ns
+
+Info: lt_initiator.cpp: 4320 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 4320 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x0000000000000020 Data: 0xEFFFFFDF
+
+Info: lt_target.cpp: 4320 ns - custom_b_transport
+      Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
+
+Info: lt_initiator.cpp: 4320 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 60 ns
+
+Info: lt_initiator.cpp: 4380 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 4380 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x0000000000000024 Data: 0xEFFFFFDB
+
+Info: lt_target.cpp: 4380 ns - custom_b_transport
+      Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
+
+Info: lt_initiator.cpp: 4380 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 60 ns
+
+Info: lt_initiator.cpp: 4440 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 4440 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x0000000000000028 Data: 0xEFFFFFD7
+
+Info: lt_target.cpp: 4440 ns - custom_b_transport
+      Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
+
+Info: lt_initiator.cpp: 4440 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 60 ns
+
+Info: lt_td_initiator.cpp: 4500 ns - initiator_thread
+      Initiator: 101 return from quantum keeper synch
+
+Info: lt_td_initiator.cpp: 4500 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 0 s)
+
+Info: memory.cpp: 4500 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x000000000000002C Data: 0xEFFFFFD3
+
+Info: lt_target.cpp: 4500 ns - custom_b_transport
+      Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
+
+Info: lt_td_initiator.cpp: 4500 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 60 ns and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 4500 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 60 ns)
+
+Info: memory.cpp: 4500 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x0000000000000030 Data: 0xEFFFFFCF
+
+Info: lt_target.cpp: 4500 ns - custom_b_transport
+      Target: 202 returned delay of 60 ns + 10 ns + 50 ns = 120 ns
+
+Info: lt_td_initiator.cpp: 4500 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 120 ns and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 4500 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 120 ns)
+
+Info: memory.cpp: 4500 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x0000000000000034 Data: 0xEFFFFFCB
+
+Info: lt_target.cpp: 4500 ns - custom_b_transport
+      Target: 202 returned delay of 120 ns + 10 ns + 50 ns = 180 ns
+
+Info: lt_td_initiator.cpp: 4500 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 180 ns and quantum keeper to be set
+      
+
+Info: lt_initiator.cpp: 4500 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 4500 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x000000000000002C Data: 0xEFFFFFD3
+
+Info: lt_target.cpp: 4500 ns - custom_b_transport
+      Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
+
+Info: lt_initiator.cpp: 4500 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 60 ns
+
+Info: lt_td_initiator.cpp: 4500 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 180 ns)
+
+Info: memory.cpp: 4500 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x0000000000000038 Data: 0xEFFFFFC7
+
+Info: lt_target.cpp: 4500 ns - custom_b_transport
+      Target: 202 returned delay of 180 ns + 10 ns + 50 ns = 240 ns
+
+Info: lt_td_initiator.cpp: 4500 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 240 ns and quantum keeper to be set
+      
+
+Info: lt_td_initiator.cpp: 4500 ns - initiator_thread
+      Initiator: 101 b_transport(GP, 240 ns)
+
+Info: memory.cpp: 4500 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x000000000000003C Data: 0xEFFFFFC3
+
+Info: lt_target.cpp: 4500 ns - custom_b_transport
+      Target: 202 returned delay of 240 ns + 10 ns + 50 ns = 300 ns
+
+Info: lt_td_initiator.cpp: 4500 ns - initiator_thread
+      Initiator: 101 b_transport returned delay = 300 ns and quantum keeper to be set
+      
+
+Info: traffic_generator.cpp: 4500 ns - traffic_generator_thread
+      Traffic Generator : 101
+=========================================================
+            ####  Traffic Generator Complete  #### 
+
+Info: lt_initiator.cpp: 4560 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 4560 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x0000000000000030 Data: 0xEFFFFFCF
+
+Info: lt_target.cpp: 4560 ns - custom_b_transport
+      Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
+
+Info: lt_initiator.cpp: 4560 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 60 ns
+
+Info: lt_initiator.cpp: 4620 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 4620 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x0000000000000034 Data: 0xEFFFFFCB
+
+Info: lt_target.cpp: 4620 ns - custom_b_transport
+      Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
+
+Info: lt_initiator.cpp: 4620 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 60 ns
+
+Info: lt_initiator.cpp: 4680 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 4680 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x0000000000000038 Data: 0xEFFFFFC7
+
+Info: lt_target.cpp: 4680 ns - custom_b_transport
+      Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
+
+Info: lt_initiator.cpp: 4680 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 60 ns
+
+Info: lt_initiator.cpp: 4740 ns - initiator_thread
+      Initiator: 102 b_transport(GP, 0 s)
+
+Info: memory.cpp: 4740 ns - print
+      ID: 202 COMMAND: READ Length: 04
+      Addr: 0x000000000000003C Data: 0xEFFFFFC3
+
+Info: lt_target.cpp: 4740 ns - custom_b_transport
+      Target: 202 returned delay of 0 s + 10 ns + 50 ns = 60 ns
+
+Info: lt_initiator.cpp: 4740 ns - initiator_thread
+      Initiator: 102 b_transport returned delay = 60 ns
+
+Info: traffic_generator.cpp: 4800 ns - traffic_generator_thread
+      Traffic Generator : 102
+=========================================================
+            ####  Traffic Generator Complete  #### 
