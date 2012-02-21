@@ -1,7 +1,4 @@
 
-* TLM_2_0_LRM.pdf
-  The definitive OSCI TLM-2.0 Language Reference Manual
-
 * TLM_2_0_presentation.ppt
   TLM_2_0_presentation.pdf
   An introductory training overview of TLM 2.0.
@@ -17,4 +14,4 @@
   It is necessarily high-level and devoid of any specific detail.
 
   
-If you require further help, you are welcome to post questions to tlm2_forum@lists.systemc.org
+If you require further help, you are welcome to post questions to tlm2_forum@lists.accellera.org
