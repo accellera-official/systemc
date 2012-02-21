@@ -2,6 +2,8 @@
                 ==================================
 
 This is the release of the SystemC 2.3.0 Class Library.
+This release includes TLM (Transaction Level Modeling) code, as described in the 
+IEEE 1666-2011 Language Reference Manual.
 
 -------------------------------------------------------------------------------
                 IMPORTANT
@@ -71,9 +73,9 @@ Additional information
 
    SystemC has a web site at
 
-       http://www.systemc.org
+       http://www.accellera.org
      
-   Discussion forum: http://www.systemc.org/login_forum.html
+   Discussion forum: http://www.accellera.org/login_forum.html
 
    You can post the bugs and suggestions of general interest to the forum.
    When reporting bugs please specify the following information (if
