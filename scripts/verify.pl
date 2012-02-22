@@ -1522,9 +1522,9 @@ sub compile_files
     while( <FILE> ) {
         $temp = $_;				# <link_dir>/<basename>.cpp
 
-        chop( $temp );
+        $temp =~ s|\s+$||;
         $file = `basename $temp .cpp`;		# file = <basename>
-        chop( $file );
+        $file =~ s|\s+$||;
 
 	$newcommand = $command;
 	if( $rt_systemc_arch =~ /^msvc/ ) {
