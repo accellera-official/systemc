@@ -258,14 +258,18 @@ void sc_method_process::kill_process(sc_descendant_inclusion_info descendants)
         }
     }
 
-    // IF THE PROCESS IS CURRENTLY UNWINDING OR IS ALREADY A ZOMBIE IGNORE THE 
-    // KILL:
+    // IF THE PROCESS IS CURRENTLY UNWINDING OR IS ALREADY A ZOMBIE
+    // IGNORE THE KILL:
 
-    if ( m_unwinding || (m_state & ps_bit_zombie) )
+    if ( m_unwinding )
     {
         SC_REPORT_WARNING( SC_ID_PROCESS_ALREADY_UNWINDING_, name() );
-	return; 
+        return;
     }
+
+    if ( m_state & ps_bit_zombie )
+        return;
+
 
     // REMOVE OUR PROCESS FROM EVENTS, ETC., AND IF ITS THE ACTIVE PROCESS
     // THROW ITS KILL. 
@@ -506,13 +510,17 @@ void sc_method_process::resume_process(
 //------------------------------------------------------------------------------
 void sc_method_process::throw_reset( bool async )
 {
-    // If the process is currently unwinding ignore the throw:
+    // IF THE PROCESS IS CURRENTLY UNWINDING OR IS ALREADY A ZOMBIE
+    // IGNORE THE RESET:
 
     if ( m_unwinding )
     {
         SC_REPORT_WARNING( SC_ID_PROCESS_ALREADY_UNWINDING_, name() );
-	return;
+        return;
     }
+
+    if ( m_state & ps_bit_zombie )
+        return;
 
     // Set the throw status and if its an asynchronous reset throw an
     // exception:

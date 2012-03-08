@@ -240,13 +240,17 @@ void sc_thread_process::kill_process(sc_descendant_inclusion_info descendants )
         }
     }
 
-    // IF THE PROCESS IS CURRENTLY UNWINDING IGNORE THE KILL:
+    // IF THE PROCESS IS CURRENTLY UNWINDING OR IS ALREADY A ZOMBIE
+    // IGNORE THE KILL:
 
     if ( m_unwinding )
     {
         SC_REPORT_WARNING( SC_ID_PROCESS_ALREADY_UNWINDING_, name() );
-	return; 
+        return;
     }
+
+    if ( m_state & ps_bit_zombie )
+        return;
 
     // SET UP TO KILL THE PROCESS IF SIMULATION HAS STARTED:
     //
@@ -254,7 +258,6 @@ void sc_thread_process::kill_process(sc_descendant_inclusion_info descendants )
 
     if ( sc_is_running() && m_has_stack )
     {
-	if ( m_state & ps_bit_zombie ) return;
         m_throw_status = THROW_KILL;
         m_wait_cycle_n = 0;
         simcontext()->preempt_with(this);
@@ -511,17 +514,17 @@ void sc_thread_process::suspend_process(
 //------------------------------------------------------------------------------
 void sc_thread_process::throw_reset( bool async )
 {     
-    // If the thread to be reset is dead ignore the call.
-
-    if ( m_state & ps_bit_zombie ) return;
-
-    // IF THE PROCESS IS CURRENTLY UNWINDING IGNORE THE RESET:
+    // IF THE PROCESS IS CURRENTLY UNWINDING OR IS ALREADY A ZOMBIE
+    // IGNORE THE RESET:
 
     if ( m_unwinding )
     {
         SC_REPORT_WARNING( SC_ID_PROCESS_ALREADY_UNWINDING_, name() );
-	return; 
+        return;
     }
+
+    if ( m_state & ps_bit_zombie )
+        return;
 
 
     // Set the throw type and clear any pending dynamic events: 
