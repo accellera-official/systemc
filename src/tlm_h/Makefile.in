@@ -14,6 +14,7 @@
 
 @SET_MAKE@
 
+
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
@@ -46,7 +47,7 @@ DIST_COMMON = $(noinst_HEADERS) $(srcdir)/Makefile.am \
 @USES_PTHREADS_LIB_TRUE@am__append_7 = $(PTHREAD_LIBS)
 @DISABLE_ASYNC_UPDATES_TRUE@am__append_8 = -DSC_DISABLE_ASYNC_UPDATES
 @WANT_PTHREADS_THREADS_TRUE@am__append_9 = -DSC_USE_PTHREADS
-subdir = src
+subdir = src/tlm_h
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/config/ax_pthread.m4 \
 	$(top_srcdir)/config/libtool.m4 \
@@ -58,6 +59,7 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_CLEAN_FILES =
+LTLIBRARIES = $(noinst_LTLIBRARIES)
 SOURCES =
 DIST_SOURCES =
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
@@ -212,25 +214,19 @@ AM_CXXFLAGS = $(EXTRA_CXXFLAGS) $(am__append_2) $(am__append_4) \
 
 # always add fix-point support
 EXTRA_DEFINES = -DSC_INCLUDE_FX $(am__append_8) $(am__append_9)
-
-# order of SUBDIRS is important, sysc needs to go first:
 SUBDIRS = \
-	sysc \
-	tlm_h \
-	tlm_utils \
-	tlm_1 \
+	tlm_2_interfaces \
+	tlm_quantum \
+	tlm_generic_payload \
+	tlm_sockets \
 	.
 
+noinst_LTLIBRARIES = 
 H_FILES = \
-	systemc \
-	systemc.h \
-	tlm \
-	tlm.h
+	tlm_version.h
 
 noinst_HEADERS = $(H_FILES)
-CXX_FILES = 
-NO_CXX_FILES = 
-INCLUDE_DIR = $(prefix)/include
+INCLUDE_DIR = $(prefix)/include/tlm_h
 all: all-recursive
 
 .SUFFIXES:
@@ -243,9 +239,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(top_srcdir)/config/Make-rules $(
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/tlm_h/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  src/Makefile
+	  $(AUTOMAKE) --gnu  src/tlm_h/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -263,6 +259,15 @@ $(top_srcdir)/configure:  $(am__configure_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
+
+clean-noinstLTLIBRARIES:
+	-test -z "$(noinst_LTLIBRARIES)" || rm -f $(noinst_LTLIBRARIES)
+	@list='$(noinst_LTLIBRARIES)'; for p in $$list; do \
+	  dir="`echo $$p | sed -e 's|/[^/]*$$||'`"; \
+	  test "$$dir" != "$$p" || dir=.; \
+	  echo "rm -f \"$${dir}/so_locations\""; \
+	  rm -f "$${dir}/so_locations"; \
+	done
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -446,7 +451,7 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-recursive
-all-am: Makefile $(HEADERS)
+all-am: Makefile $(LTLIBRARIES) $(HEADERS)
 installdirs: installdirs-recursive
 installdirs-am:
 install: install-recursive
@@ -475,7 +480,8 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-recursive
 
-clean-am: clean-generic clean-libtool mostlyclean-am
+clean-am: clean-generic clean-libtool clean-noinstLTLIBRARIES \
+	mostlyclean-am
 
 distclean: distclean-recursive
 	-rm -f Makefile
@@ -532,32 +538,32 @@ uninstall-am: uninstall-local
 
 .PHONY: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) CTAGS GTAGS \
 	all all-am check check-am clean clean-generic clean-libtool \
-	ctags ctags-recursive distclean distclean-generic \
-	distclean-libtool distclean-tags distdir dvi dvi-am html \
-	html-am info info-am install install-am install-data \
-	install-data-am install-data-local install-dvi install-dvi-am \
-	install-exec install-exec-am install-html install-html-am \
-	install-info install-info-am install-man install-pdf \
-	install-pdf-am install-ps install-ps-am install-strip \
-	installcheck installcheck-am installdirs installdirs-am \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	tags tags-recursive uninstall uninstall-am uninstall-local
+	clean-noinstLTLIBRARIES ctags ctags-recursive distclean \
+	distclean-generic distclean-libtool distclean-tags distdir dvi \
+	dvi-am html html-am info info-am install install-am \
+	install-data install-data-am install-data-local install-dvi \
+	install-dvi-am install-exec install-exec-am install-html \
+	install-html-am install-info install-info-am install-man \
+	install-pdf install-pdf-am install-ps install-ps-am \
+	install-strip installcheck installcheck-am installdirs \
+	installdirs-am maintainer-clean maintainer-clean-generic \
+	mostlyclean mostlyclean-generic mostlyclean-libtool pdf pdf-am \
+	ps ps-am tags tags-recursive uninstall uninstall-am \
+	uninstall-local
 
 
 install-data-local:
 	@$(NORMAL_INSTALL)
 	$(mkinstalldirs) $(INCLUDE_DIR)
 	for file in $(noinst_HEADERS); do \
-          $(INSTALL_DATA) $(srcdir)/$$file $(INCLUDE_DIR)/$$file; \
-        done
+	  $(INSTALL_DATA) $(srcdir)/$$file $(INCLUDE_DIR)/$$file; \
+	done
 
 uninstall-local:
 	@$(NORMAL_UNINSTALL)
-	-rmdir $(INCLUDE_DIR)
 	for file in $(noinst_HEADERS); do \
-          rm -f $(INCLUDE_DIR)/$$file; \
-        done
+	  rm -f $(INCLUDE_DIR)/$$file; \
+	done
 	-rmdir $(INCLUDE_DIR)
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

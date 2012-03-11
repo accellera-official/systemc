@@ -8884,7 +8884,7 @@ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
 else
   ac_cv_header_stdc=no
 fi
-rm -f -r conftest*
+rm -f conftest*
 
 fi
 
@@ -8905,7 +8905,7 @@ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
 else
   ac_cv_header_stdc=no
 fi
-rm -f -r conftest*
+rm -f conftest*
 
 fi
 
@@ -16668,7 +16668,7 @@ echo "${ECHO_T}$enable_pthreads" >&6; }
 
 
 
-ac_config_files="$ac_config_files Makefile src/Makefile src/sysc/Makefile src/sysc/communication/Makefile src/sysc/datatypes/Makefile src/sysc/datatypes/bit/Makefile src/sysc/datatypes/fx/Makefile src/sysc/datatypes/int/Makefile src/sysc/datatypes/misc/Makefile src/sysc/kernel/Makefile src/sysc/tracing/Makefile src/sysc/qt/Makefile src/sysc/utils/Makefile src/sysc/packages/Makefile src/sysc/packages/boost/Makefile src/sysc/packages/boost/bind/Makefile src/sysc/packages/boost/config/Makefile src/sysc/packages/boost/config/compiler/Makefile src/sysc/packages/boost/config/platform/Makefile src/sysc/packages/boost/config/stdlib/Makefile src/sysc/packages/boost/mpl/Makefile src/sysc/packages/boost/mpl/aux_/Makefile src/sysc/packages/boost/mpl/aux_/config/Makefile src/sysc/packages/boost/detail/Makefile src/sysc/packages/boost/utility/Makefile src/sysc/packages/boost/utility/detail/Makefile examples/Makefile examples/sysc/Makefile examples/sysc/fir/Makefile examples/sysc/fft/Makefile examples/sysc/fft/fft_flpt/Makefile examples/sysc/fft/fft_fxpt/Makefile examples/sysc/pipe/Makefile examples/sysc/pkt_switch/Makefile examples/sysc/rsa/Makefile examples/sysc/simple_bus/Makefile examples/sysc/simple_fifo/Makefile examples/sysc/simple_perf/Makefile examples/sysc/2.1/Makefile examples/sysc/2.1/dpipe/Makefile examples/sysc/2.1/forkjoin/Makefile examples/sysc/2.1/reset_signal_is/Makefile examples/sysc/2.1/sc_export/Makefile examples/sysc/2.1/sc_report/Makefile examples/sysc/2.1/scx_barrier/Makefile examples/sysc/2.1/scx_mutex_w_policy/Makefile examples/sysc/2.1/specialized_signals/Makefile examples/sysc/2.3/Makefile examples/sysc/2.3/include/Makefile examples/sysc/2.3/sc_rvd/Makefile examples/sysc/2.3/sc_ttd/Makefile"
+ac_config_files="$ac_config_files Makefile src/Makefile src/sysc/Makefile src/sysc/communication/Makefile src/sysc/datatypes/Makefile src/sysc/datatypes/bit/Makefile src/sysc/datatypes/fx/Makefile src/sysc/datatypes/int/Makefile src/sysc/datatypes/misc/Makefile src/sysc/kernel/Makefile src/sysc/tracing/Makefile src/sysc/qt/Makefile src/sysc/utils/Makefile src/sysc/packages/Makefile src/sysc/packages/boost/Makefile src/sysc/packages/boost/bind/Makefile src/sysc/packages/boost/config/Makefile src/sysc/packages/boost/config/compiler/Makefile src/sysc/packages/boost/config/platform/Makefile src/sysc/packages/boost/config/stdlib/Makefile src/sysc/packages/boost/mpl/Makefile src/sysc/packages/boost/mpl/aux_/Makefile src/sysc/packages/boost/mpl/aux_/config/Makefile src/sysc/packages/boost/detail/Makefile src/sysc/packages/boost/utility/Makefile src/sysc/packages/boost/utility/detail/Makefile examples/Makefile examples/sysc/Makefile examples/sysc/fir/Makefile examples/sysc/fft/Makefile examples/sysc/fft/fft_flpt/Makefile examples/sysc/fft/fft_fxpt/Makefile examples/sysc/pipe/Makefile examples/sysc/pkt_switch/Makefile examples/sysc/rsa/Makefile examples/sysc/simple_bus/Makefile examples/sysc/simple_fifo/Makefile examples/sysc/simple_perf/Makefile examples/sysc/2.1/Makefile examples/sysc/2.1/dpipe/Makefile examples/sysc/2.1/forkjoin/Makefile examples/sysc/2.1/reset_signal_is/Makefile examples/sysc/2.1/sc_export/Makefile examples/sysc/2.1/sc_report/Makefile examples/sysc/2.1/scx_barrier/Makefile examples/sysc/2.1/scx_mutex_w_policy/Makefile examples/sysc/2.1/specialized_signals/Makefile examples/sysc/2.3/Makefile examples/sysc/2.3/include/Makefile examples/sysc/2.3/sc_rvd/Makefile examples/sysc/2.3/sc_ttd/Makefile examples/tlm/Makefile src/tlm_utils/Makefile src/tlm_1/tlm_analysis/Makefile src/tlm_1/Makefile src/tlm_1/tlm_req_rsp/tlm_channels/Makefile src/tlm_1/tlm_req_rsp/tlm_channels/tlm_req_rsp_channels/Makefile src/tlm_1/tlm_req_rsp/tlm_channels/tlm_fifo/Makefile src/tlm_1/tlm_req_rsp/Makefile src/tlm_1/tlm_req_rsp/tlm_ports/Makefile src/tlm_1/tlm_req_rsp/tlm_adapters/Makefile src/tlm_1/tlm_req_rsp/tlm_1_interfaces/Makefile src/tlm_h/tlm_2_interfaces/Makefile src/tlm_h/Makefile src/tlm_h/tlm_generic_payload/Makefile src/tlm_h/tlm_sockets/Makefile src/tlm_h/tlm_quantum/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -17766,6 +17766,22 @@ do
     "examples/sysc/2.3/include/Makefile") CONFIG_FILES="$CONFIG_FILES examples/sysc/2.3/include/Makefile" ;;
     "examples/sysc/2.3/sc_rvd/Makefile") CONFIG_FILES="$CONFIG_FILES examples/sysc/2.3/sc_rvd/Makefile" ;;
     "examples/sysc/2.3/sc_ttd/Makefile") CONFIG_FILES="$CONFIG_FILES examples/sysc/2.3/sc_ttd/Makefile" ;;
+    "examples/tlm/Makefile") CONFIG_FILES="$CONFIG_FILES examples/tlm/Makefile" ;;
+    "src/tlm_utils/Makefile") CONFIG_FILES="$CONFIG_FILES src/tlm_utils/Makefile" ;;
+    "src/tlm_1/tlm_analysis/Makefile") CONFIG_FILES="$CONFIG_FILES src/tlm_1/tlm_analysis/Makefile" ;;
+    "src/tlm_1/Makefile") CONFIG_FILES="$CONFIG_FILES src/tlm_1/Makefile" ;;
+    "src/tlm_1/tlm_req_rsp/tlm_channels/Makefile") CONFIG_FILES="$CONFIG_FILES src/tlm_1/tlm_req_rsp/tlm_channels/Makefile" ;;
+    "src/tlm_1/tlm_req_rsp/tlm_channels/tlm_req_rsp_channels/Makefile") CONFIG_FILES="$CONFIG_FILES src/tlm_1/tlm_req_rsp/tlm_channels/tlm_req_rsp_channels/Makefile" ;;
+    "src/tlm_1/tlm_req_rsp/tlm_channels/tlm_fifo/Makefile") CONFIG_FILES="$CONFIG_FILES src/tlm_1/tlm_req_rsp/tlm_channels/tlm_fifo/Makefile" ;;
+    "src/tlm_1/tlm_req_rsp/Makefile") CONFIG_FILES="$CONFIG_FILES src/tlm_1/tlm_req_rsp/Makefile" ;;
+    "src/tlm_1/tlm_req_rsp/tlm_ports/Makefile") CONFIG_FILES="$CONFIG_FILES src/tlm_1/tlm_req_rsp/tlm_ports/Makefile" ;;
+    "src/tlm_1/tlm_req_rsp/tlm_adapters/Makefile") CONFIG_FILES="$CONFIG_FILES src/tlm_1/tlm_req_rsp/tlm_adapters/Makefile" ;;
+    "src/tlm_1/tlm_req_rsp/tlm_1_interfaces/Makefile") CONFIG_FILES="$CONFIG_FILES src/tlm_1/tlm_req_rsp/tlm_1_interfaces/Makefile" ;;
+    "src/tlm_h/tlm_2_interfaces/Makefile") CONFIG_FILES="$CONFIG_FILES src/tlm_h/tlm_2_interfaces/Makefile" ;;
+    "src/tlm_h/Makefile") CONFIG_FILES="$CONFIG_FILES src/tlm_h/Makefile" ;;
+    "src/tlm_h/tlm_generic_payload/Makefile") CONFIG_FILES="$CONFIG_FILES src/tlm_h/tlm_generic_payload/Makefile" ;;
+    "src/tlm_h/tlm_sockets/Makefile") CONFIG_FILES="$CONFIG_FILES src/tlm_h/tlm_sockets/Makefile" ;;
+    "src/tlm_h/tlm_quantum/Makefile") CONFIG_FILES="$CONFIG_FILES src/tlm_h/tlm_quantum/Makefile" ;;
 
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}

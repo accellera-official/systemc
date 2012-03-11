@@ -13,7 +13,6 @@
 # PARTICULAR PURPOSE.
 
 @SET_MAKE@
-
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
@@ -33,8 +32,8 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
-DIST_COMMON = $(noinst_HEADERS) $(srcdir)/Makefile.am \
-	$(srcdir)/Makefile.in $(top_srcdir)/config/Make-rules
+DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
+	$(top_srcdir)/config/Make-rules
 @WANT_DEBUG_TRUE@am__append_1 = $(DEBUG_CXXFLAGS)
 @WANT_DEBUG_TRUE@am__append_2 = $(DEBUG_CXXFLAGS)
 @WANT_OPTIMIZE_TRUE@am__append_3 = $(OPT_CXXFLAGS)
@@ -46,7 +45,7 @@ DIST_COMMON = $(noinst_HEADERS) $(srcdir)/Makefile.am \
 @USES_PTHREADS_LIB_TRUE@am__append_7 = $(PTHREAD_LIBS)
 @DISABLE_ASYNC_UPDATES_TRUE@am__append_8 = -DSC_DISABLE_ASYNC_UPDATES
 @WANT_PTHREADS_THREADS_TRUE@am__append_9 = -DSC_USE_PTHREADS
-subdir = src
+subdir = src/tlm_1/tlm_req_rsp/tlm_channels
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/config/ax_pthread.m4 \
 	$(top_srcdir)/config/libtool.m4 \
@@ -67,7 +66,6 @@ RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	install-pdf-recursive install-ps-recursive install-recursive \
 	installcheck-recursive installdirs-recursive pdf-recursive \
 	ps-recursive uninstall-recursive
-HEADERS = $(noinst_HEADERS)
 RECURSIVE_CLEAN_TARGETS = mostlyclean-recursive clean-recursive	\
   distclean-recursive maintainer-clean-recursive
 ETAGS = etags
@@ -212,25 +210,12 @@ AM_CXXFLAGS = $(EXTRA_CXXFLAGS) $(am__append_2) $(am__append_4) \
 
 # always add fix-point support
 EXTRA_DEFINES = -DSC_INCLUDE_FX $(am__append_8) $(am__append_9)
-
-# order of SUBDIRS is important, sysc needs to go first:
 SUBDIRS = \
-	sysc \
-	tlm_h \
-	tlm_utils \
-	tlm_1 \
+	tlm_fifo \
+	tlm_req_rsp_channels \
 	.
 
-H_FILES = \
-	systemc \
-	systemc.h \
-	tlm \
-	tlm.h
-
-noinst_HEADERS = $(H_FILES)
-CXX_FILES = 
-NO_CXX_FILES = 
-INCLUDE_DIR = $(prefix)/include
+INCLUDE_DIR = $(prefix)/include/tlm_1/tlm_req_rsp/tlm_channels
 all: all-recursive
 
 .SUFFIXES:
@@ -243,9 +228,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(top_srcdir)/config/Make-rules $(
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/tlm_1/tlm_req_rsp/tlm_channels/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  src/Makefile
+	  $(AUTOMAKE) --gnu  src/tlm_1/tlm_req_rsp/tlm_channels/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -446,7 +431,7 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-recursive
-all-am: Makefile $(HEADERS)
+all-am: Makefile
 installdirs: installdirs-recursive
 installdirs-am:
 install: install-recursive
@@ -547,17 +532,9 @@ uninstall-am: uninstall-local
 
 install-data-local:
 	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(INCLUDE_DIR)
-	for file in $(noinst_HEADERS); do \
-          $(INSTALL_DATA) $(srcdir)/$$file $(INCLUDE_DIR)/$$file; \
-        done
 
 uninstall-local:
 	@$(NORMAL_UNINSTALL)
-	-rmdir $(INCLUDE_DIR)
-	for file in $(noinst_HEADERS); do \
-          rm -f $(INCLUDE_DIR)/$$file; \
-        done
 	-rmdir $(INCLUDE_DIR)
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
