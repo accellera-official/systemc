@@ -3,7 +3,7 @@ eval "exec perl -S $0 $*"
 # *****************************************************************************
 #
 #  The following code is derived, directly or indirectly, from the SystemC
-#  source code Copyright (c) 1996-2011 by all Contributors.
+#  source code Copyright (c) 1996-2012 by all Contributors.
 #  All Rights reserved.
 #
 #  The contents of this file are subject to the restrictions and limitations
@@ -334,18 +334,37 @@ sub get_systemc_home
 # -----------------------------------------------------------------------------
 #  SUB : get_tlm_home
 #
-#  Get the TLM_HOME environment variable's value.
+#  Get the TLM_HOME environment variable's value, it it exists.
+#  Otherwise set TLM_HOME to SYSTEMC_HOME
+#  TLM_HOME should be set to the directory containing tlm.h
+#
 # -----------------------------------------------------------------------------
 
 sub get_tlm_home
 {
-    if( ! defined $ENV{ 'TLM_HOME' } ) {
+    my $tlm_home;
+    
+    if( defined $ENV{ 'TLM_HOME' } ) {
+    
+      $tlm_home = $ENV{ 'TLM_HOME' };
+    
+    } elsif ( defined $ENV{ 'SYSTEMC_HOME' } ) {
+    
+      $tlm_home = $ENV{ 'SYSTEMC_HOME' };
+    	if( $rt_systemc_arch =~ /^msvc/ ) {
+  	    $tlm_home .= "/src";
+ 	    } else {
+  	    $tlm_home .= "/include";
+      }
+ 	    
+    } else {   
+    
         &print_log( "Error: " .
-		   "environment variable TLM_HOME is not defined!\n" );
-	exit 1;
+		    "TLM environment: neither TLM_HOME nor SYSTEMC_HOME are defined!\n" );
+	     exit 1;
+    
     }
-
-    my $tlm_home = $ENV{ 'TLM_HOME' };
+    
     $tlm_home =~ s|\\|/|g ;  # replace any backslash with forward slash
     $tlm_home;
 }
@@ -531,9 +550,9 @@ sub init_globals
     $SIG{ 'QUIT' } = 'interrupt_handler';
     $SIG{ 'ALRM' } = 'alarm_handler';
 
-    $rt_systemc_home = &get_systemc_home;
-	$rt_tlm_home = &get_tlm_home;
     $rt_systemc_arch = &get_systemc_arch;
+    $rt_systemc_home = &get_systemc_home;
+	  $rt_tlm_home = &get_tlm_home;
 
     $rt_cleanup = 1;                    # cleanup temp dirs by default
     $rt_mail = 0;                       # send mail with results
@@ -1997,13 +2016,13 @@ sub run_test
 	if( $rt_systemc_arch =~ /^msvc/ ) {
 	    $command  = "$rt_cc $rt_ccflags $extra_flags ";
 	    $command .= "${slash}I . ${slash}I $rt_systemc_home/src ";
-	    $command .= "${slash}I $rt_tlm_home/include/tlm ";
+	    $command .= "${slash}I $rt_tlm_home/src ";
 	    $command .= "${slash}I $rt_systemc_test/include/$test_set ";
 	    $command .= "${slash}c ";
 	} else {
 	    $command  = "$rt_cc $rt_ccflags $extra_flags ";
 	    $command .= "-I . -I $rt_systemc_home/include ";
-	    $command .= "-I $rt_tlm_home/include/tlm ";
+	    $command .= "-I $rt_tlm_home/include ";
 	    $command .= "-I $rt_systemc_test/include/$test_set ";
 	    $command .= "-c ";
 	}
@@ -2098,13 +2117,13 @@ sub run_test
 	if( $rt_systemc_arch =~ /^msvc/ ) {
 	    $command  = "$rt_cc $rt_ccflags $extra_flags ";
 	    $command .= "${slash}I . ${slash}I $rt_systemc_home/src ";
-	    $command .= "${slash}I $rt_tlm_home/include/tlm ";
+	    $command .= "${slash}I $rt_tlm_home/src ";
 	    $command .= "${slash}I $rt_systemc_test/include/$test_set ";
 	    $command .= "${slash}c ";
 	} else {
 	    $command  = "$rt_cc $rt_ccflags $extra_flags ";
 	    $command .= "-I . -I $rt_systemc_home/include ";
-	    $command .= "-I $rt_tlm_home/include/tlm ";
+	    $command .= "-I $rt_tlm_home/include ";
 	    $command .= "-I $rt_systemc_test/include/$test_set ";
 	    $command .= "-c ";
 	}
