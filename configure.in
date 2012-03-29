@@ -25,8 +25,8 @@ dnl
 dnl  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
 dnl  changes you are making here.
 dnl
-dnl      Name, Affiliation, Date:
-dnl  Description of Modification:
+dnl      Name, Affiliation, Date: Alan Fitch, Doulos, 2012-03-10
+dnl  Description of Modification: TLM2 files added
 dnl
 dnl ***************************************************************************
 
@@ -391,6 +391,22 @@ AC_OUTPUT(
  examples/sysc/2.3/include/Makefile
  examples/sysc/2.3/sc_rvd/Makefile
  examples/sysc/2.3/sc_ttd/Makefile
+ examples/tlm/Makefile
+ src/tlm_utils/Makefile
+ src/tlm_1/tlm_analysis/Makefile
+ src/tlm_1/Makefile
+ src/tlm_1/tlm_req_rsp/tlm_channels/Makefile
+ src/tlm_1/tlm_req_rsp/tlm_channels/tlm_req_rsp_channels/Makefile
+ src/tlm_1/tlm_req_rsp/tlm_channels/tlm_fifo/Makefile
+ src/tlm_1/tlm_req_rsp/Makefile
+ src/tlm_1/tlm_req_rsp/tlm_ports/Makefile
+ src/tlm_1/tlm_req_rsp/tlm_adapters/Makefile
+ src/tlm_1/tlm_req_rsp/tlm_1_interfaces/Makefile
+ src/tlm_h/tlm_2_interfaces/Makefile
+ src/tlm_h/Makefile
+ src/tlm_h/tlm_generic_payload/Makefile
+ src/tlm_h/tlm_sockets/Makefile
+ src/tlm_h/tlm_quantum/Makefile
 )
 
 

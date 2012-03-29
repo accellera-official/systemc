@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual C++ Express 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lt_extension_mandatory", "lt_extension_mandatory.vcproj", "{54F8C078-369E-4AA4-9859-264839C6F89A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{54F8C078-369E-4AA4-9859-264839C6F89A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{54F8C078-369E-4AA4-9859-264839C6F89A}.Debug|Win32.Build.0 = Debug|Win32
+		{54F8C078-369E-4AA4-9859-264839C6F89A}.Release|Win32.ActiveCfg = Release|Win32
+		{54F8C078-369E-4AA4-9859-264839C6F89A}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

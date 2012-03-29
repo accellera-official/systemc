@@ -1,0 +1,13 @@
+<area shape="rect" id="node3" href="$tlm__req__rsp_8h.html" title="include/tlm/tlm_1/tlm_req_rsp/tlm_req_rsp.h" alt="" coords="823,238,1097,266">
+<area shape="rect" id="node23" href="$tlm__adapters_8h.html" title="include/tlm/tlm_1/tlm_req_rsp/tlm_adapters/tlm_adapters.h" alt="" coords="843,83,1203,111">
+<area shape="rect" id="node28" href="$tlm__put__get__imp_8h.html" title="include/tlm/tlm_1/tlm_req_rsp/tlm_channels/tlm_req_rsp_channels/tlm_put_get_imp.h" alt="" coords="1227,83,1741,111">
+<area shape="rect" id="node5" href="$tlm_8h.html" title="include/tlm/tlm.h" alt="" coords="901,315,1019,343">
+<area shape="rect" id="node7" href="$instance__specific__extensions_8h.html" title="include/tlm/tlm_utils/instance_specific_extensions.h" alt="" coords="5,393,328,421">
+<area shape="rect" id="node9" href="$multi__socket__bases_8h.html" title="include/tlm/tlm_utils/multi_socket_bases.h" alt="" coords="352,393,619,421">
+<area shape="rect" id="node15" href="$passthrough__target__socket_8h.html" title="include/tlm/tlm_utils/passthrough_target_socket.h" alt="" coords="643,393,952,421">
+<area shape="rect" id="node17" href="$peq__with__cb__and__phase_8h.html" title="include/tlm/tlm_utils/peq_with_cb_and_phase.h" alt="" coords="976,393,1269,421">
+<area shape="rect" id="node19" href="$simple__initiator__socket_8h.html" title="include/tlm/tlm_utils/simple_initiator_socket.h" alt="" coords="1293,393,1579,421">
+<area shape="rect" id="node21" href="$simple__target__socket_8h.html" title="include/tlm/tlm_utils/simple_target_socket.h" alt="" coords="1603,393,1877,421">
+<area shape="rect" id="node11" href="$multi__passthrough__initiator__socket_8h.html" title="include/tlm/tlm_utils/multi_passthrough_initiator_socket.h" alt="" coords="123,470,475,498">
+<area shape="rect" id="node13" href="$multi__passthrough__target__socket_8h.html" title="include/tlm/tlm_utils/multi_passthrough_target_socket.h" alt="" coords="499,470,843,498">
+<area shape="rect" id="node25" href="$tlm__req__rsp__channels_8h.html" title="include/tlm/tlm_1/tlm_req_rsp/tlm_channels/tlm_req_rsp_channels/tlm_req_rsp_channels.h" alt="" coords="843,161,1389,189">

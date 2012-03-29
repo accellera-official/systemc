@@ -1,0 +1,12 @@
+<area shape="rect" id="node3" href="$classtlm_1_1tlm__base__target__socket.html" title="tlm_base_target_socket\&lt; BUSWIDTH, tlm_fw_transport_if\&lt; TYPES \&gt;, tlm_bw_transport_if\&lt; TYPES \&gt;, 1,sc_core::SC_ONE_OR_MORE_BOUND \&gt;" alt="" coords="135,106,1007,134">
+<area shape="rect" id="node15" href="$classtlm_1_1tlm__base__target__socket.html" title="tlm_base_target_socket\&lt; BUSWIDTH, tlm_fw_transport_if\&lt; TYPES \&gt;, tlm_bw_transport_if\&lt; TYPES \&gt;, N,POL \&gt;" alt="" coords="236,157,905,185">
+<area shape="rect" id="node5" href="$classtlm_1_1tlm__target__socket.html" title="tlm::tlm_target_socket\&lt; BUSWIDTH, TYPES \&gt;" alt="" coords="1083,106,1376,134">
+<area shape="rect" id="node7" href="$classtlm__utils_1_1passthrough__target__socket.html" title="tlm_utils::passthrough_target_socket\&lt; MODULE, BUSWIDTH, TYPES \&gt;" alt="" coords="1475,5,1915,33">
+<area shape="rect" id="node9" href="$classtlm__utils_1_1passthrough__target__socket__tagged.html" title="tlm_utils::passthrough_target_socket_tagged\&lt; MODULE, BUSWIDTH, TYPES \&gt;" alt="" coords="1451,55,1939,83">
+<area shape="rect" id="node11" href="$classtlm__utils_1_1simple__target__socket.html" title="tlm_utils::simple_target_socket\&lt; MODULE, BUSWIDTH, TYPES \&gt;" alt="" coords="1491,106,1899,134">
+<area shape="rect" id="node13" href="$classtlm__utils_1_1simple__target__socket__tagged.html" title="tlm_utils::simple_target_socket_tagged\&lt; MODULE, BUSWIDTH, TYPES \&gt;" alt="" coords="1468,157,1921,185">
+<area shape="rect" id="node17" href="$classtlm_1_1tlm__target__socket.html" title="tlm::tlm_target_socket\&lt; BUSWIDTH, TYPES, N, POL \&gt;" alt="" coords="1057,157,1401,185">
+<area shape="rect" id="node19" href="$classtlm_1_1tlm__target__socket.html" title="tlm::tlm_target_socket\&lt; BUSWIDTH, TYPES, N,POL \&gt;" alt="" coords="1059,207,1400,235">
+<area shape="rect" id="node21" href="$classtlm__utils_1_1multi__target__base.html" title="tlm_utils::multi_target_base\&lt; BUSWIDTH, TYPES, N,POL \&gt;" alt="" coords="1509,207,1880,235">
+<area shape="rect" id="node25" href="$classtlm__utils_1_1multi__target__base.html" title="tlm_utils::multi_target_base\&lt; BUSWIDTH, TYPES, N, POL \&gt;" alt="" coords="1507,258,1883,286">
+<area shape="rect" id="node23" href="$classtlm__utils_1_1multi__passthrough__target__socket.html" title="tlm_utils::multi_passthrough_target_socket\&lt; MODULE, BUSWIDTH, TYPES, N, POL \&gt;" alt="" coords="1987,207,2515,235">

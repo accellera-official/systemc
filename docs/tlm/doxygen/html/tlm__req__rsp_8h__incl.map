@@ -1,0 +1,14 @@
+<area shape="rect" id="node3" href="$tlm__core__ifs_8h.html" title="tlm_1_interfaces/tlm_core_ifs.h" alt="" coords="1881,315,2081,343">
+<area shape="rect" id="node7" href="$tlm__master__slave__ifs_8h.html" title="tlm_1_interfaces/tlm_master_slave_ifs.h" alt="" coords="5,238,256,266">
+<area shape="rect" id="node10" href="$tlm__req__rsp__channels_8h.html" title="tlm_channels/tlm_req_rsp_channels/tlm_req_rsp_channels.h" alt="" coords="789,83,1160,111">
+<area shape="rect" id="node33" href="$tlm__nonblocking__port_8h.html" title="tlm_ports/tlm_nonblocking_port.h" alt="" coords="2144,238,2357,266">
+<area shape="rect" id="node5" href="$tlm__tag_8h.html" title="tlm_1/tlm_req_rsp/tlm_1_interfaces/tlm_tag.h" alt="" coords="1975,393,2257,421">
+<area shape="rect" id="node12" href="$tlm__adapters_8h.html" title="tlm_1/tlm_req_rsp/tlm_adapters/tlm_adapters.h" alt="" coords="664,161,957,189">
+<area shape="rect" id="node15" href="$tlm__fifo_8h.html" title="tlm_1/tlm_req_rsp/tlm_channels/tlm_fifo/tlm_fifo.h" alt="" coords="985,161,1292,189">
+<area shape="rect" id="node30" href="$tlm__put__get__imp_8h.html" title="tlm_1/tlm_req_rsp/tlm_channels/tlm_req_rsp_channels/tlm_put_get_imp.h" alt="" coords="185,161,633,189">
+<area shape="rect" id="node17" href="$tlm__fifo__ifs_8h.html" title="tlm_1/tlm_req_rsp/tlm_1_interfaces/tlm_fifo_ifs.h" alt="" coords="1016,238,1315,266">
+<area shape="rect" id="node20" href="$circular__buffer_8h.html" title="tlm_1/tlm_req_rsp/tlm_channels/tlm_fifo/circular_buffer.h" alt="" coords="645,238,992,266">
+<area shape="rect" id="node24" href="$tlm__fifo__put__get_8h.html" title="tlm_1/tlm_req_rsp/tlm_channels/tlm_fifo/tlm_fifo_put_get.h" alt="" coords="1712,238,2069,266">
+<area shape="rect" id="node26" href="$tlm__fifo__peek_8h.html" title="tlm_1/tlm_req_rsp/tlm_channels/tlm_fifo/tlm_fifo_peek.h" alt="" coords="280,238,621,266">
+<area shape="rect" id="node28" href="$tlm__fifo__resize_8h.html" title="tlm_1/tlm_req_rsp/tlm_channels/tlm_fifo/tlm_fifo_resize.h" alt="" coords="1339,238,1688,266">
+<area shape="rect" id="node36" href="$tlm__event__finder_8h.html" title="tlm_1/tlm_req_rsp/tlm_ports/tlm_event_finder.h" alt="" coords="2105,315,2396,343">

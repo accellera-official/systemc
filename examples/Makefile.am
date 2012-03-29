@@ -32,6 +32,7 @@
 
 SUBDIRS = \
 	sysc \
+	tlm \
 	.
 
 EXAMPLES_DIR = $(prefix)/examples

@@ -191,6 +191,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 SUBDIRS = \
 	sysc \
+	tlm \
 	.
 
 EXAMPLES_DIR = $(prefix)/examples

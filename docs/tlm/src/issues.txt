@@ -1,0 +1,21 @@
+0003 - /include/tlm_h/tlm_generic_payload/tlm_helpers.h needs to be renamed
+       'tlm_gp_helpers.h' or promoted to tlm_core
+       [OS]: namespace part is fixed.
+
+0004 - There are variables beginning with underscore characters (_)
+       [TW] No specific instances noted - keep an eye out for them.
+
+0016 - I think we need to review the changes in the tlm_core directory from TLM
+       1.0 to now. There are quite a few changes, and the question is if we
+       really want to have those, or if the changes are only artifacts of the
+       draft 1 release that are obsolete now. I don't know.
+       [John's addition]: We need to remove the "delayed and annotated
+       blocking and non-blocking interfaces" of the TLM2.0-draft1 kit?
+
+0017 - Can we rename the tlm_core directory to something more meaningful?  If I
+       understand it correctly, then the tlm_core is supposed to hold the TLM
+       1.0 interfaces, which in my mind are not at the core of things for 2.0.
+
+0019 - TLM ports initiator/target ports do not appear to have the GP material
+       integrated
+

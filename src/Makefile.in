@@ -216,11 +216,16 @@ EXTRA_DEFINES = -DSC_INCLUDE_FX $(am__append_8) $(am__append_9)
 # order of SUBDIRS is important, sysc needs to go first:
 SUBDIRS = \
 	sysc \
+	tlm_h \
+	tlm_utils \
+	tlm_1 \
 	.
 
 H_FILES = \
 	systemc \
-	systemc.h
+	systemc.h \
+	tlm \
+	tlm.h
 
 noinst_HEADERS = $(H_FILES)
 CXX_FILES = 

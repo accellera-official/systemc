@@ -1,0 +1,11 @@
+<area shape="rect" id="node3" href="$tlm__adapters_8h.html" title="tlm_1/tlm_req_rsp/tlm_adapters/tlm_adapters.h" alt="" coords="39,83,332,111">
+<area shape="rect" id="node11" href="$tlm__fifo_8h.html" title="tlm_1/tlm_req_rsp/tlm_channels/tlm_fifo/tlm_fifo.h" alt="" coords="968,83,1275,111">
+<area shape="rect" id="node26" href="$tlm__put__get__imp_8h.html" title="tlm_1/tlm_req_rsp/tlm_channels/tlm_req_rsp_channels/tlm_put_get_imp.h" alt="" coords="356,83,804,111">
+<area shape="rect" id="node5" href="$tlm__master__slave__ifs_8h.html" title="tlm_1/tlm_req_rsp/tlm_1_interfaces/tlm_master_slave_ifs.h" alt="" coords="5,161,365,189">
+<area shape="rect" id="node7" href="$tlm__core__ifs_8h.html" title="tlm_1/tlm_req_rsp/tlm_1_interfaces/tlm_core_ifs.h" alt="" coords="208,238,517,266">
+<area shape="rect" id="node9" href="$tlm__tag_8h.html" title="tlm_1/tlm_req_rsp/tlm_1_interfaces/tlm_tag.h" alt="" coords="221,315,504,343">
+<area shape="rect" id="node13" href="$tlm__fifo__ifs_8h.html" title="tlm_1/tlm_req_rsp/tlm_1_interfaces/tlm_fifo_ifs.h" alt="" coords="389,161,688,189">
+<area shape="rect" id="node16" href="$circular__buffer_8h.html" title="tlm_1/tlm_req_rsp/tlm_channels/tlm_fifo/circular_buffer.h" alt="" coords="712,161,1059,189">
+<area shape="rect" id="node20" href="$tlm__fifo__put__get_8h.html" title="tlm_1/tlm_req_rsp/tlm_channels/tlm_fifo/tlm_fifo_put_get.h" alt="" coords="1083,161,1440,189">
+<area shape="rect" id="node22" href="$tlm__fifo__peek_8h.html" title="tlm_1/tlm_req_rsp/tlm_channels/tlm_fifo/tlm_fifo_peek.h" alt="" coords="1464,161,1805,189">
+<area shape="rect" id="node24" href="$tlm__fifo__resize_8h.html" title="tlm_1/tlm_req_rsp/tlm_channels/tlm_fifo/tlm_fifo_resize.h" alt="" coords="1829,161,2179,189">

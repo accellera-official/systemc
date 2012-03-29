@@ -1,0 +1,131 @@
+0001 - /include/tlm_h/tlm_generic_payload/tlm_array.h is an array class
+       implementation.  Is there a reason for using this over the stdlibc++
+       array class? If not, it should be removed and tlm_gp.h updated
+       appropriately. If if needs to stay, it should either be renamed to
+       tlm_gp_array.h or promoted to tlm_core.
+       [OS]: No change required.
+
+0002 - The namespace for tlm_analysis needs to be renamed 'tlm_analysis'. It is
+       presently named 'analysis'.
+       [TW] Agreed. Further, we need to add the tlm_ prefix to the classnames.
+       [OS] No action is required for the namespaces, everything is now
+            natively in namespace tlm. I agree with the class names.
+       [TW] tlm_ prefix added to class names.
+
+0005 - Endianness can be determined using #include <endian.h> which defines
+       __BYTE_ORDER, __LITTLE_ENDIAN and __BIG_ENDIAN for gcc compilers. An
+       addition can be made to tlm_platform.h for MSVC. (MacOSX runs on both
+       big and little endian architectures)
+       [OS]: tlm_platform.h is gone, we need to find a different place.
+       [TW]: GP serializers now have an alternative solution.
+
+0006 - The namespace for tlm_generic_payload needs to be renamed to
+       'tlm_generic_payload'.  It is presently named 'tlm_generic_payload_ns'.
+       [OS]: Everything is in namespace tlm now.
+
+0007 - Include guards should be consistent. The Unix convention is full name in
+       uppercase beginning and ending with two underscores; and non-alphabetic
+       characters replaced by underscores. (tlm_somestuff_here.h -->
+       __TLM_SOMESTUFF_HERE_H__)
+       [OS]: FIXED
+
+0008 - when building /unit_test/tlm/bus (unix) 
+       warning: 'class tlm_quantum::tlm_qk_dummy::tlm_quantumkeeper<tlm_quantum::tlm_qk_dummy::tlm_dummy>'
+       has virtual functions but non-virtual destructor
+       [OS]: FIXED
+
+0009 - when building /unit_test/gp_extension/GenericPayload (Windows)
+       c:\eslx\projects\tlmwg\tlm2\unit_test\tlm\gp_extension\genericpayload\include\tlm_master.h(148)
+       : warning C4312: 'type cast' : conversion from 'unsigned int' to 'void *' of greater size
+       [OS]: FIXED
+
+0010 - when building /unit_test/gp_extension/GenericPayload (Windows)
+       c:\eslx\projects\tlmwg\tlm2\unit_test\tlm\gp_extension\genericpayload\include\tlm_master.h(102)
+       : see reference to function template instantiation
+       'void tlm_master::write<unsigned int>(unsigned int,DT)' being compiled
+        with
+        [
+            DT=unsigned int
+        ]
+       [OS]: FIXED
+
+0011 - explicitly sized variables (8, 16, 32, 64) should use explicitly sized
+       type [u]int[8,16,32,64]_t or sc_dt::[u]int64 over compiler dependent
+       types (char, short, long) as these vary by implementation <stdint.h>
+       [OS]: No, everything except long and 64-bit data types is compiler
+             and machine independent. We use standardized C++ data types
+             wherever possible.
+
+0012 - all 64-bit variables should use sc_dt::[u]int64 or [u]int64_t <stdint.h>
+       as long long is not part of the C++ standard
+       [OS]: use sc_dt::[u]int64 to be aligned with the SystemC kernel.
+
+0013 - there is a circular include file reference
+       /include/tlm_h/tlm_core/tlm_fifo/tlm_fifo.h
+       /include/tlm_h/tlm_core/tlm_fifo/tlm_fifo_put_get.h
+       [OS]: FIXED, tlm_fifo_*.h must not be included directly so the circular
+             include was not needed anyway.
+    
+0014 - We should consistently use #include <systemc>, not #include <systemc.h>.
+       We stated in the meeting that we only supported SystemC versions >=
+       2.1.v1, so I think we should use this include style to keep the SystemC
+       namespaces intact.
+       [OS]: FIXED
+
+0015 - We should review the namespace structure in the kit. From my perspective
+       it's very unclean and dangerous to first define the classes in no
+       namespace at all, move them to an intermediate namespace using something
+       like "namespace foo{ #include...}" in the mid-level include files, and
+       finally break the intermediate namespaces up again and moving everything
+       into the tlm namespace in the top-level tlm.h. Got lost in the
+       description? Me too.
+
+       The problem is that although we might state that users should only
+       include the top-level tlm.h, we cannot really enforce this rule. So, if
+       somebody does a #include "tlm_h/tlm_generic_payload/tlm_gp.h" because
+       he's only interested in the GP, he'd end up with the GP defined in a
+       different namespace. This error might not surface immediately, so it
+       might be somewhat hard to catch.
+
+       Why not define everything properly in the tlm namespace from the
+       beginning?  For the non-public stuff (like tlm_array, tlm_fifo(?) we
+       could use e.g. namespace tlm_utils, but that's really optional.
+       [OS]: FIXED.
+
+0018 - TLM 2 requirement 8.5 specifies the examples and unit tests
+       (regressions) pass Purify.  Question: Who will be responsible for this?
+       [TW] I propose the primary code author be responsible for purify analysis;
+       if Purify isn't accessible, I think a comparable code quality tool may
+       be substituted.
+       [TW] Olaf has provided details for using  valgrind.
+
+0021 - TLM 2 requriement 8.10 specifies that there are to be no open namespaces
+       in the include files.Question: What are the implications on those in the
+       headers?
+       [OS]: FIXED
+       
+0022 - What is the minimum version of GCC to be supported?
+       [OS]: gcc 3.x?
+       [TW]: Agreed.
+
+0023 - GP extension test (make run) fails on Intel Macintosh
+       make: *** [run] Error 139
+       [OS]: candidate is array bounds write violation in
+       tlm_annotated::tlm_generic_payload_ns::copy_data(unsigned char...
+       [OS]: fixed a wrong delete in ~tlm_memory, but did it help?
+       [CW]: I've udpated tlm_helper.h to generically detect endianness and no
+       longer see this problem.
+       
+0024 - GP extension test (./generic_payload_extension.exe) seg faults on Intel
+       Macintosh
+       [CW]: I've udpated tlm_helper.h to generically detect endianness and no
+       longer see this problem.
+
+0025 - GP test (make run) produces incorrect results on Intel Macintosh (not
+       correctly detecting endianness)
+       [CW]: I've udpated tlm_helper.h to generically detect endianness and no
+       longer see this problem.
+
+0020 - TLM ports master/slave need to be changed to initiator/target
+       (2007-10-18 call)
+       [OS]: FIXED

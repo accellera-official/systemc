@@ -1,4 +1,9 @@
-* SystemC 2.2 (this release)
+* SystemC 2.3.0
+  Release of SystemC 2.3
+  - Compliance to IEEE 1666-2011
+  - Per LRM, includes TLM 2
+
+* SystemC 2.2
   Beta release of SystemC 2.2
   - Bug fixes.
   - Code cleanup.
