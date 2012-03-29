@@ -33,6 +33,7 @@
 include $(top_srcdir)/config/Make-rules
 
 H_FILES = \
+	instance_specific_extensions.h \
 	multi_passthrough_initiator_socket.h \
 	multi_passthrough_target_socket.h \
 	multi_socket_bases.h \

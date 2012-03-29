@@ -203,6 +203,7 @@ AM_CXXFLAGS = $(EXTRA_CXXFLAGS) $(am__append_2) $(am__append_4) \
 # always add fix-point support
 EXTRA_DEFINES = -DSC_INCLUDE_FX $(am__append_8) $(am__append_9)
 H_FILES = \
+	instance_specific_extensions.h \
 	multi_passthrough_initiator_socket.h \
 	multi_passthrough_target_socket.h \
 	multi_socket_bases.h \
