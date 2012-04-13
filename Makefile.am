@@ -30,6 +30,8 @@
 ##
 ## ****************************************************************************
 
+DOXYGEN=doxygen
+
 SUBDIRS = \
 	src \
 	examples \
@@ -77,5 +79,9 @@ uninstall-local:
 	  done; \
 	fi
 	@(cd ./examples; $(MAKE) uninstall;)
+
+doxygen:
+	@(cd docs/sysc/doxygen && $(DOXYGEN))
+	@(cd docs/tlm/doxygen && $(DOXYGEN))
 
 ## Taf!

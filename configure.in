@@ -34,7 +34,7 @@ dnl
 dnl Initialization.
 dnl
 
-AC_INIT([systemc],[2.3.0])
+AC_INIT([SystemC],[2.3.0])
 AC_CONFIG_SRCDIR([NEWS])
 AC_CONFIG_AUX_DIR([config])
 AC_CONFIG_MACRO_DIR([config])
@@ -366,6 +366,21 @@ AC_OUTPUT(
  src/sysc/packages/boost/detail/Makefile 
  src/sysc/packages/boost/utility/Makefile 
  src/sysc/packages/boost/utility/detail/Makefile 
+ src/tlm_1/tlm_analysis/Makefile
+ src/tlm_1/Makefile
+ src/tlm_1/tlm_req_rsp/tlm_channels/Makefile
+ src/tlm_1/tlm_req_rsp/tlm_channels/tlm_req_rsp_channels/Makefile
+ src/tlm_1/tlm_req_rsp/tlm_channels/tlm_fifo/Makefile
+ src/tlm_1/tlm_req_rsp/Makefile
+ src/tlm_1/tlm_req_rsp/tlm_ports/Makefile
+ src/tlm_1/tlm_req_rsp/tlm_adapters/Makefile
+ src/tlm_1/tlm_req_rsp/tlm_1_interfaces/Makefile
+ src/tlm_h/tlm_2_interfaces/Makefile
+ src/tlm_h/Makefile
+ src/tlm_h/tlm_generic_payload/Makefile
+ src/tlm_h/tlm_sockets/Makefile
+ src/tlm_h/tlm_quantum/Makefile
+ src/tlm_utils/Makefile
  examples/Makefile 
  examples/sysc/Makefile 
  examples/sysc/fir/Makefile 
@@ -392,21 +407,8 @@ AC_OUTPUT(
  examples/sysc/2.3/sc_rvd/Makefile
  examples/sysc/2.3/sc_ttd/Makefile
  examples/tlm/Makefile
- src/tlm_utils/Makefile
- src/tlm_1/tlm_analysis/Makefile
- src/tlm_1/Makefile
- src/tlm_1/tlm_req_rsp/tlm_channels/Makefile
- src/tlm_1/tlm_req_rsp/tlm_channels/tlm_req_rsp_channels/Makefile
- src/tlm_1/tlm_req_rsp/tlm_channels/tlm_fifo/Makefile
- src/tlm_1/tlm_req_rsp/Makefile
- src/tlm_1/tlm_req_rsp/tlm_ports/Makefile
- src/tlm_1/tlm_req_rsp/tlm_adapters/Makefile
- src/tlm_1/tlm_req_rsp/tlm_1_interfaces/Makefile
- src/tlm_h/tlm_2_interfaces/Makefile
- src/tlm_h/Makefile
- src/tlm_h/tlm_generic_payload/Makefile
- src/tlm_h/tlm_sockets/Makefile
- src/tlm_h/tlm_quantum/Makefile
+ docs/sysc/doxygen/Doxyfile
+ docs/tlm/doxygen/Doxyfile
 )
 
 
