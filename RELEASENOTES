@@ -1,5 +1,5 @@
-	Release Notes for SystemC 2.1 regression test suite
-        =====================================================
+	Release Notes for SystemC 2.3.0 regression test suite
+    =====================================================
 
 CONTENTS
 ========
@@ -16,22 +16,24 @@ CONTENTS
 1) What's new in this release?
 ==============================
 
-Compared to the previous release, this release has the following new
-items:
+TLM2 and SystemC regressions are now combined into this single suite.
 
-  - Since this is the first public release of the SystemC regression
-    test suite, everything is new.
+Compatibility across different platforms has been greatly improved.
 
-  - This version contains 632 regression tests, which take several
-    hours to finish.
-
+Improved coverage of SystemC features, including new 1666-2011 regression tests.
 
 2) Bug fixes and enhancements
 =============================
 
-Following is the list of bug fixes and enhancements for this release:
+This is a summary of the main changes:
 
-  - None.
+  Combined SystemC regressions and TLM2 Unit Tests into a single structure
+  
+  Improved include structure
+  
+  Regression script verify.pl now tested on many platforms, so multiple copies of the 
+  script have been removed.
+  
 
 
 3) Other changes
@@ -49,11 +51,8 @@ Here is a list of known limitations in this release:
 
   - Not all options of the verify.pl script are fully functional.
 
-  - The regression test suite currently covers about 80% of the
-    SystemC source code. We strive to get this number up to 100%.
-    Especially for the data types more tests are needed.
-
-  - The organization of the tests in the test suite can (and must) be
-    improved.
+  - The regression test suite does not cover all the SystemC source code, thought
+    is is improved compared to previous versions.
 
   - Some datatype tests take a long time to either compile or run.
+
