@@ -21,11 +21,11 @@
 @goto end
 
 :error_no_VSINSTALLDIR
-@echo ERROR: VSINSTALLDIR variable is not set. 
+@echo ERROR: VSINSTALLDIR variable is not set.
 @goto end
 
 :error_no_VCINSTALLDIR
-@echo ERROR: VCINSTALLDIR variable is not set. 
+@echo ERROR: VCINSTALLDIR variable is not set.
 @goto end
 
 :end

@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/vmg"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(TLM)\include\tlm\tlm_utils&quot;;&quot;$(TLM)\unit_test\tlm\common\include\models&quot;;..\include;..\..\common\include"
+				AdditionalIncludeDirectories="..\include;..\..\common\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				StringPooling="true"
 				MinimalRebuild="true"
@@ -128,7 +128,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/vmg"
-				AdditionalIncludeDirectories="&quot;$(TLM)\include\tlm\tlm_utils&quot;;&quot;$(TLM)\unit_test\tlm\common\include\models&quot;;..\include;..\..\common\include"
+				AdditionalIncludeDirectories="..\include;..\..\common\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;SC_INCLUDE_FX"
 				StringPooling="false"
 				MinimalRebuild="false"

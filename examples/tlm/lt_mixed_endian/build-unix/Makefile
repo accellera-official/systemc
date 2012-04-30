@@ -5,10 +5,8 @@ EXAMPLE_NAME = lt_mixed_endian
 
 SRCDIR           = ../src
 SRCDIRCOMMON     = ../../common/src
-SRCDIRCOMMONTLM1 = ../../common_tlm_1/src
 
-INCDIR =    -I$(TLM_HOME)/include \
-            -I../include \
+INCDIR =    -I../include \
             -I../../common/include
 
 CFLAGS = $(FLAGS) $(INCDIR)
@@ -29,8 +27,8 @@ all: announce $(OBJ_NAME).exe
 
 announce:
 	@if  ( test ! -d $(FLAG_BATCH) ); \
-	 	then echo; echo "$(EXAMPLE_NAME):"; echo; \
-	 fi
+		then echo; echo "$(EXAMPLE_NAME):"; echo; \
+	fi
 
 check: announce $(OBJ_NAME).exe
 	@$(VALGRIND) ./$(OBJ_NAME).exe < ../results/input.txt | grep "::" > run.log
@@ -74,4 +72,3 @@ clean:
 	rm -f *.o *.log $(OBJ_NAME).exe
 
 # DO NOT DELETE
-

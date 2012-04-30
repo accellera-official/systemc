@@ -4,13 +4,8 @@ OBJ_NAME = at_mixed_targets
 
 SRCDIR           = ../src
 SRCDIRCOMMON     = ../../common/src
-SRCDIRCOMMONTLM1 = ../../common_tlm_1/src
 
-INCDIR =    -I$(TLM) \
-            -I$(TLM)/tlm_h \
-            -I$(TLM)/tlm_utils \
-            -I$(TLM)/../../unit_test/tlm/common/include/models \
-            -I../include \
+INCDIR =    -I../include \
             -I../../common/include 
 
 # Note: putting $(INCDIR) before $(FLAGS) should ensure the correct 
@@ -35,10 +30,10 @@ all: announce $(OBJ_NAME).exe
 announce:
 	@if  not defined $(FLAG_BATCH) echo. , echo $(OBJ_NAME):
 
-# Notes: 
+# Notes:
 # 1. two lines starting @type filter out lines containing
 #    "stopped by user" so that differences in messages between SystemC 2.2.0
-#    and SystemC 2.2.1 are not significant. 
+#    and SystemC 2.3.0 are not significant.
 # 2. The full path to find is used as some users may have cygwin installed,
 #    which includes another version of find
 # 3. find /v returns all lines that don't match. fc /w ignores (collapses)
@@ -64,7 +59,7 @@ $(OBJ_NAME)_top.obj: $(SRCDIR)/$(OBJ_NAME)_top.cpp
 
 initiator_top.obj: $(SRCDIR)/initiator_top.cpp
 	$(CC) /c $(CFLAGS) /Fo"$@" %s
-	
+
 traffic_generator.obj: $(SRCDIRCOMMON)/traffic_generator.cpp
 	$(CC) /c $(CFLAGS) /Fo"$@" %s
 
@@ -85,6 +80,6 @@ at_target_4_phase.obj: $(SRCDIRCOMMON)/at_target_4_phase.cpp
 
 select_initiator.obj: $(SRCDIRCOMMON)/select_initiator.cpp
 	$(CC) /c $(CFLAGS) /Fo"$@" %s
-	
+
 clean:
 	del $(OBJ_NAME).exe *.obj *.log *.idb *.pdb *ilk
