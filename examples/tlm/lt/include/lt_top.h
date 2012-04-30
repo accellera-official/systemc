@@ -34,7 +34,7 @@
 #include "lt_target.h"                        // lt memory target
 #include "at_target_1_phase.h"                // at and lt memory target
 #include "initiator_top.h"                    // processor abstraction initiator
-#include "SimpleBusLT.h"                      // Bus/Router Implementation
+#include "models/SimpleBusLT.h"               // Bus/Router Implementation
 
 /// Top wrapper Module
 class lt_top                                  // Declare SC_MODULE

@@ -34,7 +34,7 @@
 #include "at_target_2_phase.h"                      // at memory target
 #include "at_target_4_phase.h"                      // at memory target
 #include "initiator_top.h"                          // processor abstraction initiator
-#include "SimpleBusAT.h"                            // Bus/Router Implementation
+#include "models/SimpleBusAT.h"                     // Bus/Router Implementation
 
 /// Top wrapper Module
 class example_system_top             

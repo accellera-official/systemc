@@ -7,10 +7,7 @@ SRCDIR           = ../src
 SRCDIRCOMMON     = ../../common/src
 SRCDIRCOMMONTLM1 = ../../common_tlm_1/src
 
-INCDIR =    -I$(TLM_HOME)/include/tlm \
-            -I$(TLM_HOME)/include/tlm/tlm_h \
-            -I$(TLM_HOME)/include/tlm/tlm_utils \
-            -I$(TLM_HOME)/unit_test/tlm/common/include/models \
+INCDIR =    -I$(TLM_HOME)/include \
             -I../include \
             -I../../common/include
 

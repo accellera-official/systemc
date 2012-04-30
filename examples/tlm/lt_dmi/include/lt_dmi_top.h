@@ -31,7 +31,7 @@
 #include "tlm.h"                                // TLM header
 #include "lt_dmi_target.h"                      // lt wih DMI support mem target
 #include "initiator_top.h"                      // top for lt with DMI initiator
-#include "SimpleBusLT.h"                        // Bus/Router Implementation
+#include "models/SimpleBusLT.h"                 // Bus/Router Implementation
 
 /// Top wrapper Module
 class lt_dmi_top                                // Declare SC_MODULE
