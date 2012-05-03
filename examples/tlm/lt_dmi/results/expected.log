@@ -144,10 +144,10 @@ Info: lt_dmi_initiator.cpp: 70 ns - initiator_thread
       Initiator: 102 b_transport returned a delay of 35 ns
 
 Info: lt_dmi_target.cpp: 100 ns - toggle_dmi_method
-      Target: 201 DMI has been enabled in this target
+      Target: 202 DMI has been enabled in this target
 
 Info: lt_dmi_target.cpp: 100 ns - toggle_dmi_method
-      Target: 202 DMI has been enabled in this target
+      Target: 201 DMI has been enabled in this target
 
 Info: lt_dmi_initiator.cpp: 105 ns - initiator_thread
       Initiator: 101 gp_tpr was returned with dmi_allowed set to 0
@@ -2072,15 +2072,6 @@ Info: lt_dmi_initiator.cpp: 1080 ns - initiator_thread
       Initiator: 102 dmi based transaction returned a delay of 30 ns
 
 Info: lt_dmi_target.cpp: 1100 ns - toggle_dmi_method
-      Target: 201 invalidate_direct_ptr (0, 4096);
-
-Info: dmi_memory.cpp: 1100 ns - invalidate_dmi_ptr
-      Initiator:101 DMI Pointer not invalidated for (0, 4096)
-
-Info: dmi_memory.cpp: 1100 ns - invalidate_dmi_ptr
-      Initiator:102 DMI Pointer not invalidated for (0, 4096)
-
-Info: lt_dmi_target.cpp: 1100 ns - toggle_dmi_method
       Target: 202 invalidate_direct_ptr (0, 4096);
 
 Info: dmi_memory.cpp: 1100 ns - invalidate_dmi_ptr
@@ -2088,6 +2079,15 @@ Info: dmi_memory.cpp: 1100 ns - invalidate_dmi_ptr
 
 Info: dmi_memory.cpp: 1100 ns - invalidate_dmi_ptr
       Initiator:102 DMI Pointer not invalidated for (268435456, 268439552)
+
+Info: lt_dmi_target.cpp: 1100 ns - toggle_dmi_method
+      Target: 201 invalidate_direct_ptr (0, 4096);
+
+Info: dmi_memory.cpp: 1100 ns - invalidate_dmi_ptr
+      Initiator:101 DMI Pointer not invalidated for (0, 4096)
+
+Info: dmi_memory.cpp: 1100 ns - invalidate_dmi_ptr
+      Initiator:102 DMI Pointer not invalidated for (0, 4096)
 
 Info: lt_dmi_initiator.cpp: 1110 ns - initiator_thread
       Initiator: 101 End of processing
@@ -2818,4 +2818,5 @@ Info: traffic_generator.cpp: 1940 ns - traffic_generator_thread
       Traffic Generator : 102
 =========================================================
             ####  Traffic Generator Complete  #### 
-SystemC: simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.
