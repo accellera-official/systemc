@@ -432,7 +432,7 @@ sub get_systemc_arch
 	if( $cxx_comp eq "c++" || $cxx_comp eq "g++" ) {
 	    if ( $uname_m eq "x86_64" )
 	    {
-		$arch = "macosx386";
+		$arch = "macosxx86_64";
 	    }
 	    elsif ( $uname_m eq "i386" )
 	    {
@@ -629,6 +629,9 @@ sub init_globals
 	$rt_optimize_flag = "-O3";
 	$rt_ldrpath       = "-Wl,-rpath -Wl,";
     } elsif( $rt_systemc_arch eq "macosx386" ) {
+	$rt_optimize_flag = "-O3";
+	$rt_ldrpath       = "-Wl,-rpath -Wl,";
+    } elsif( $rt_systemc_arch eq "macosxx86_64" ) {
 	$rt_optimize_flag = "-O3";
 	$rt_ldrpath       = "-Wl,-rpath -Wl,";
     } elsif( $rt_systemc_arch eq "cygwin" ) {
