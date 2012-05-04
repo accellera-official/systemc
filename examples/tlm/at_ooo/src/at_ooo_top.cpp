@@ -33,7 +33,6 @@
 #include "at_target_2_phase.h"                      // memory target
 #include "at_target_ooo_2_phase.h"                  // memory target
 #include "initiator_top.h"                          // initiator
-#include "SimpleBusAT.h"                            // simple bus
 #include "tlm.h"                                    // TLM header
 
 /*=============================================================================

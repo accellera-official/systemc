@@ -4,12 +4,10 @@ OBJ_NAME = at_2_phase
 
 SRCDIR           = ../src
 SRCDIRCOMMON     = ../../common/src
-SRCDIRCOMMONTLM1 = ../../common_tlm_1/src
 
 INCDIR =    -I../include \
-            -I../../common/include \
-            -I$(TLM_HOME)/unit_test/tlm/common/include/models
- 
+            -I../../common/include
+
 CFLAGS = $(FLAGS) $(INCDIR)
 
 OBJS   =    $(OBJ_NAME).o \
@@ -27,9 +25,9 @@ all: announce $(OBJ_NAME).exe
 
 announce:
 	@if  ( test ! -d $(FLAG_BATCH) ); \
-	 	then echo; echo "$(OBJ_NAME):"; echo; \
-	 fi
-	
+		then echo; echo "$(OBJ_NAME):"; echo; \
+	fi
+
 check: announce $(OBJ_NAME).exe
 	@$(VALGRIND) ./$(OBJ_NAME).exe > run.log
 	@cat run.log | grep -v "stopped by user" | awk '{if($$0!="") print $$0}' > run_trimmed.log
@@ -71,4 +69,3 @@ clean:
 	rm -f *.o *.log $(OBJ_NAME).exe
 
 # DO NOT DELETE
-

@@ -35,7 +35,7 @@
 #include "lt_synch_target.h"            // lt target requiring synch'ing
 #include "initiator_top.h"              // "normal" lt iniator
 #include "td_initiator_top.h"           // initiator_top with lt with td
-#include "SimpleBusLT.h"                // Bus/Router Implementation
+#include "models/SimpleBusLT.h"         // Bus/Router Implementation
 
 /// Top wrapper Module
 class lt_temporal_decouple_top        // Declare the SC_MODULE   

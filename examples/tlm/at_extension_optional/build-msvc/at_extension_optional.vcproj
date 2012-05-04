@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/vmg"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\include;..\..\common\include;&quot;$(TLM)\unit_test\tlm\common\include\models&quot;"
+				AdditionalIncludeDirectories="..\include;..\..\common\include"
 				PreprocessorDefinitions="USING_EXTENSION_OPTIONAL"
 				StringPooling="true"
 				MinimalRebuild="true"
@@ -128,7 +128,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/vmg"
-				AdditionalIncludeDirectories="..\include;..\..\common\include;&quot;$(TLM)\unit_test\tlm\common\include\models&quot;"
+				AdditionalIncludeDirectories="..\include;..\..\common\include"
 				PreprocessorDefinitions="USING_EXTENSION_OPTIONAL"
 				StringPooling="false"
 				MinimalRebuild="false"

@@ -18,14 +18,14 @@
 #ifndef __TLM_HEADER__
 #define __TLM_HEADER__
 
-#include <systemc>    /// main SystemC header
+#include <systemc>    // main SystemC header
 
-#include "tlm_h/tlm_version.h"
-#include "tlm_1/tlm_analysis/tlm_analysis.h"
-#include "tlm_1/tlm_req_rsp/tlm_req_rsp.h"
-#include "tlm_h/tlm_2_interfaces/tlm_2_interfaces.h"
-#include "tlm_h/tlm_generic_payload/tlm_generic_payload.h"
-#include "tlm_h/tlm_sockets/tlm_sockets.h"
-#include "tlm_h/tlm_quantum/tlm_quantum.h"
+#include "tlm_core/tlm_2/tlm_version.h"
+#include "tlm_core/tlm_1/tlm_analysis/tlm_analysis.h"
+#include "tlm_core/tlm_1/tlm_req_rsp/tlm_req_rsp.h"
+#include "tlm_core/tlm_2/tlm_2_interfaces/tlm_2_interfaces.h"
+#include "tlm_core/tlm_2/tlm_generic_payload/tlm_generic_payload.h"
+#include "tlm_core/tlm_2/tlm_sockets/tlm_sockets.h"
+#include "tlm_core/tlm_2/tlm_quantum/tlm_quantum.h"
 
 #endif /* TLM_HEADER_INCLUDED_ */

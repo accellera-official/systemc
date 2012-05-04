@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/vmg"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\include;..\..\common\include;&quot;$(TLM)\unit_test\tlm\common\include\models&quot;"
+				AdditionalIncludeDirectories="..\include;..\..\common\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				StringPooling="true"
 				MinimalRebuild="true"
@@ -128,7 +128,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/vmg"
-				AdditionalIncludeDirectories="..\include;..\..\common\include;&quot;$(TLM)\unit_test\tlm\common\include\models&quot;"
+				AdditionalIncludeDirectories="..\include;..\..\common\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;SC_INCLUDE_FX"
 				StringPooling="false"
 				MinimalRebuild="false"
@@ -244,18 +244,6 @@
 			</File>
 			<File
 				RelativePath="..\..\common\include\reporting.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\include\tlm\tlm_utils\simple_initiator_socket.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\include\tlm\tlm_utils\simple_target_socket.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\include\tlm\tlm.h"
 				>
 			</File>
 		</Filter>

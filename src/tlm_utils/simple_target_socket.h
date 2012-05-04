@@ -32,7 +32,7 @@
 #define __SIMPLE_TARGET_SOCKET_H__
 
 #include "tlm.h"
-#include "peq_with_get.h"
+#include "tlm_utils/peq_with_get.h"
 #include <sstream>
 
 namespace tlm_utils {

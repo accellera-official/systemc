@@ -71,11 +71,32 @@ case "$target" in
     x386-apple-* | i386-apple-*)
         case "$CXX_COMP" in
             CC)
-                TARGET_ARCH="macosx386"
-		#CCAS=as
+                TARGET_ARCH="macosx"
+                CCASFLAGS="-arch i386"
+                CXX="${CXX} -arch i386"
                 ;;
             c++ | g++)
-                TARGET_ARCH="macosx386"
+                TARGET_ARCH="macosx"
+                CCASFLAGS="-arch i386"
+                CXX="${CXX} -arch i386"
+                ;;
+            *)
+		AC_MSG_ERROR("sorry...compiler not supported")
+		;;
+        esac
+        QT_ARCH="iX86"
+        ;;
+    x86_64-apple-*)
+        case "$CXX_COMP" in
+            CC)
+                TARGET_ARCH="macosx64"
+                CCASFLAGS="-arch x86_64"
+                CXX="${CXX} -arch x86_64"
+                ;;
+            c++ | g++)
+                TARGET_ARCH="macosx64"
+                CCASFLAGS="-arch x86_64"
+                CXX="${CXX} -arch x86_64"
                 ;;
             *)
 		AC_MSG_ERROR("sorry...compiler not supported")
@@ -87,11 +108,14 @@ case "$target" in
         case "$CXX_COMP" in
             CC)
                 EXTRA_CXXFLAGS=""
-                TARGET_ARCH="macosx"
-		CCAS=as
+                TARGET_ARCH="macosxppc"
+                CCASFLAGS="-arch ppc"
+                CXX="${CXX} -arch ppc"
                 ;;
             c++ | g++)
-                TARGET_ARCH="macosx"
+                TARGET_ARCH="macosxppc"
+                CCASFLAGS="-arch ppc"
+                CXX="${CXX} -arch ppc"
                 ;;
             *)
 		AC_MSG_ERROR("sorry...compiler not supported")
@@ -366,20 +390,20 @@ AC_OUTPUT(
  src/sysc/packages/boost/detail/Makefile 
  src/sysc/packages/boost/utility/Makefile 
  src/sysc/packages/boost/utility/detail/Makefile 
- src/tlm_1/tlm_analysis/Makefile
- src/tlm_1/Makefile
- src/tlm_1/tlm_req_rsp/tlm_channels/Makefile
- src/tlm_1/tlm_req_rsp/tlm_channels/tlm_req_rsp_channels/Makefile
- src/tlm_1/tlm_req_rsp/tlm_channels/tlm_fifo/Makefile
- src/tlm_1/tlm_req_rsp/Makefile
- src/tlm_1/tlm_req_rsp/tlm_ports/Makefile
- src/tlm_1/tlm_req_rsp/tlm_adapters/Makefile
- src/tlm_1/tlm_req_rsp/tlm_1_interfaces/Makefile
- src/tlm_h/tlm_2_interfaces/Makefile
- src/tlm_h/Makefile
- src/tlm_h/tlm_generic_payload/Makefile
- src/tlm_h/tlm_sockets/Makefile
- src/tlm_h/tlm_quantum/Makefile
+ src/tlm_core/tlm_1/tlm_analysis/Makefile
+ src/tlm_core/tlm_1/Makefile
+ src/tlm_core/tlm_1/tlm_req_rsp/tlm_channels/Makefile
+ src/tlm_core/tlm_1/tlm_req_rsp/tlm_channels/tlm_req_rsp_channels/Makefile
+ src/tlm_core/tlm_1/tlm_req_rsp/tlm_channels/tlm_fifo/Makefile
+ src/tlm_core/tlm_1/tlm_req_rsp/Makefile
+ src/tlm_core/tlm_1/tlm_req_rsp/tlm_ports/Makefile
+ src/tlm_core/tlm_1/tlm_req_rsp/tlm_adapters/Makefile
+ src/tlm_core/tlm_1/tlm_req_rsp/tlm_1_interfaces/Makefile
+ src/tlm_core/tlm_2/tlm_2_interfaces/Makefile
+ src/tlm_core/tlm_2/Makefile
+ src/tlm_core/tlm_2/tlm_generic_payload/Makefile
+ src/tlm_core/tlm_2/tlm_sockets/Makefile
+ src/tlm_core/tlm_2/tlm_quantum/Makefile
  src/tlm_utils/Makefile
  examples/Makefile 
  examples/sysc/Makefile 
