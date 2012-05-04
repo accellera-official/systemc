@@ -71,12 +71,12 @@ case "$target" in
     x386-apple-* | i386-apple-*)
         case "$CXX_COMP" in
             CC)
-                TARGET_ARCH="macosx386"
+                TARGET_ARCH="macosx"
                 CCASFLAGS="-arch i386"
                 CXX="${CXX} -arch i386"
                 ;;
             c++ | g++)
-                TARGET_ARCH="macosx386"
+                TARGET_ARCH="macosx"
                 CCASFLAGS="-arch i386"
                 CXX="${CXX} -arch i386"
                 ;;
@@ -89,12 +89,12 @@ case "$target" in
     x86_64-apple-*)
         case "$CXX_COMP" in
             CC)
-                TARGET_ARCH="macosxx86_64"
+                TARGET_ARCH="macosx64"
                 CCASFLAGS="-arch x86_64"
                 CXX="${CXX} -arch x86_64"
                 ;;
             c++ | g++)
-                TARGET_ARCH="macosxx86_64"
+                TARGET_ARCH="macosx64"
                 CCASFLAGS="-arch x86_64"
                 CXX="${CXX} -arch x86_64"
                 ;;
@@ -108,12 +108,12 @@ case "$target" in
         case "$CXX_COMP" in
             CC)
                 EXTRA_CXXFLAGS=""
-                TARGET_ARCH="macosx"
+                TARGET_ARCH="macosxppc"
                 CCASFLAGS="-arch ppc"
                 CXX="${CXX} -arch ppc"
                 ;;
             c++ | g++)
-                TARGET_ARCH="macosx"
+                TARGET_ARCH="macosxppc"
                 CCASFLAGS="-arch ppc"
                 CXX="${CXX} -arch ppc"
                 ;;
