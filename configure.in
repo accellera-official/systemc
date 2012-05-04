@@ -72,10 +72,31 @@ case "$target" in
         case "$CXX_COMP" in
             CC)
                 TARGET_ARCH="macosx386"
-		#CCAS=as
+                CCASFLAGS="-arch i386"
+                CXX="${CXX} -arch i386"
                 ;;
             c++ | g++)
                 TARGET_ARCH="macosx386"
+                CCASFLAGS="-arch i386"
+                CXX="${CXX} -arch i386"
+                ;;
+            *)
+		AC_MSG_ERROR("sorry...compiler not supported")
+		;;
+        esac
+        QT_ARCH="iX86"
+        ;;
+    x86_64-apple-*)
+        case "$CXX_COMP" in
+            CC)
+                TARGET_ARCH="macosxx86_64"
+                CCASFLAGS="-arch x86_64"
+                CXX="${CXX} -arch x86_64"
+                ;;
+            c++ | g++)
+                TARGET_ARCH="macosxx86_64"
+                CCASFLAGS="-arch x86_64"
+                CXX="${CXX} -arch x86_64"
                 ;;
             *)
 		AC_MSG_ERROR("sorry...compiler not supported")
@@ -88,10 +109,13 @@ case "$target" in
             CC)
                 EXTRA_CXXFLAGS=""
                 TARGET_ARCH="macosx"
-		CCAS=as
+                CCASFLAGS="-arch ppc"
+                CXX="${CXX} -arch ppc"
                 ;;
             c++ | g++)
                 TARGET_ARCH="macosx"
+                CCASFLAGS="-arch ppc"
+                CXX="${CXX} -arch ppc"
                 ;;
             *)
 		AC_MSG_ERROR("sorry...compiler not supported")
