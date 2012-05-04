@@ -432,15 +432,15 @@ sub get_systemc_arch
 	if( $cxx_comp eq "c++" || $cxx_comp eq "g++" ) {
 	    if ( $uname_m eq "x86_64" )
 	    {
-		$arch = "macosxx86_64";
+		$arch = "macosx64";
 	    }
 	    elsif ( $uname_m eq "i386" )
 	    {
-		$arch = "macosx386";
+		$arch = "macosx";
 	    }
 	    else
 	    {
-		$arch = "macosx";
+		$arch = "macosxppc";
 	    }
 	} else {
 	    die "Error: unsupported compiler '$cxx'\n";
@@ -617,21 +617,11 @@ sub init_globals
     } elsif( $rt_systemc_arch eq "hpux11" ) {
         $rt_ccflags       = "-Aa -ext +DA2.0 +DS2.0";
         $rt_optimize_flag = "+O1";
-    } elsif( $rt_systemc_arch eq "linux64" ) {
-	# use defaults
-    } elsif( $rt_systemc_arch eq "linux" ) {
-	# use defaults
-    } elsif( $rt_systemc_arch eq "freebsd64" ) {
+    } elsif( $rt_systemc_arch =~ /^linux(64)?/ ) {
         # use defaults
-    } elsif( $rt_systemc_arch eq "freebsd" ) {
+    } elsif( $rt_systemc_arch =~ /^freebsd(64)?/ ) {
         # use defaults
-    } elsif( $rt_systemc_arch eq "macosx" ) {
-	$rt_optimize_flag = "-O3";
-	$rt_ldrpath       = "-Wl,-rpath -Wl,";
-    } elsif( $rt_systemc_arch eq "macosx386" ) {
-	$rt_optimize_flag = "-O3";
-	$rt_ldrpath       = "-Wl,-rpath -Wl,";
-    } elsif( $rt_systemc_arch eq "macosxx86_64" ) {
+    } elsif( $rt_systemc_arch =~ /^macosx(ppc)?(64)?/ ) {
 	$rt_optimize_flag = "-O3";
 	$rt_ldrpath       = "-Wl,-rpath -Wl,";
     } elsif( $rt_systemc_arch eq "cygwin" ) {
