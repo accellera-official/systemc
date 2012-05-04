@@ -1,27 +1,41 @@
-*.[oa]
+# ignore common patterns
+.*.sw?
+.#*
 *~
 *.exe
+*.l[oa]
+*.[oa]
 *.Plo
-*.la
-*.lo
 *.so
-.#*
+
+# ignore autoconf files
+/aclocal.m4
+/autom4te.cache/
+/config/config.guess
+/config/config.sub
+/config/depcomp
+/config/distclean
+/config/install-sh
+/config/libtool.m4
+/config/ltmain.sh
+/config/lt~obsolete.m4
+/config/ltoptions.m4
+/config/ltsugar.m4
+/config/ltversion.m4
+/config/missing
+/config/mkinstalldirs
+/configure
+
 Makefile
 Makefile.in
-aclocal.m4
-autom4te.cache/
-configure
-config/config.guess
-config/config.sub
-config/depcomp
-config/distclean
-config/install-sh
-config/libtool.m4
-config/ltmain.sh
-config/ltoptions.m4
-config/ltsugar.m4
-config/ltversion.m4
-config/lt~obsolete.m4
-config/missing
-config/mkinstalldirs
-objdir/
+
+# ignore recommended build directory
+/objdir/
+
+# ignore in-tree installation
+/include/
+/lib-*/
+
+# ignore Doxygen documentation
+/docs/*/doxygen/html/
+/docs/*/doxygen/*.tag
