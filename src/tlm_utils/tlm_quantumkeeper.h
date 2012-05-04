@@ -21,7 +21,7 @@
 #ifndef __TLM_QUANTUMKEEPER_H__
 #define __TLM_QUANTUMKEEPER_H__
 
-#include "tlm_h/tlm_quantum/tlm_global_quantum.h"
+#include "tlm_core/tlm_2/tlm_quantum/tlm_global_quantum.h"
 
 namespace tlm_utils {
 

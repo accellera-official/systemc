@@ -17,7 +17,7 @@
 #ifndef __MULTI_PASSTHROUGH_TARGET_SOCKET_H__
 #define __MULTI_PASSTHROUGH_TARGET_SOCKET_H__
 
-#include "multi_socket_bases.h"
+#include "tlm_utils/multi_socket_bases.h"
 #include <sstream>
 
 namespace tlm_utils {

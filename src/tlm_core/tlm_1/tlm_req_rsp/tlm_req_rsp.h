@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2011 by all Contributors.
+  source code Copyright (c) 1996-2008 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -15,17 +15,21 @@
 
  *****************************************************************************/
 
-#ifndef __TLM_HEADER__
-#define __TLM_HEADER__
+#ifndef __TLM_REQ_RSP_H__
+#define __TLM_REQ_RSP_H__
 
-#include <systemc>    // main SystemC header
+// The unannotated TLM interfaces
 
-#include "tlm_core/tlm_2/tlm_version.h"
-#include "tlm_core/tlm_1/tlm_analysis/tlm_analysis.h"
-#include "tlm_core/tlm_1/tlm_req_rsp/tlm_req_rsp.h"
-#include "tlm_core/tlm_2/tlm_2_interfaces/tlm_2_interfaces.h"
-#include "tlm_core/tlm_2/tlm_generic_payload/tlm_generic_payload.h"
-#include "tlm_core/tlm_2/tlm_sockets/tlm_sockets.h"
-#include "tlm_core/tlm_2/tlm_quantum/tlm_quantum.h"
+#include "tlm_core/tlm_1/tlm_req_rsp/tlm_1_interfaces/tlm_core_ifs.h"
+#include "tlm_core/tlm_1/tlm_req_rsp/tlm_1_interfaces/tlm_master_slave_ifs.h"
 
-#endif /* TLM_HEADER_INCLUDED_ */
+// The channels : tlm_fifo, tlm_transport_channel and tlm_req_rsp_channel
+
+#include "tlm_core/tlm_1/tlm_req_rsp/tlm_channels/tlm_req_rsp_channels/tlm_req_rsp_channels.h"
+
+// Some non blocking ports to provide static sensitivity
+
+#include "tlm_core/tlm_1/tlm_req_rsp/tlm_ports/tlm_nonblocking_port.h"
+
+
+#endif /* __TLM_REQ_RSP_H__ */

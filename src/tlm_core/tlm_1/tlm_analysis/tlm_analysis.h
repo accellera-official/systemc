@@ -1,7 +1,7 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2011 by all Contributors.
+  source code Copyright (c) 1996-2008 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
@@ -15,17 +15,17 @@
 
  *****************************************************************************/
 
-#ifndef __TLM_HEADER__
-#define __TLM_HEADER__
+#ifndef __TLM_ANALYSIS_H__
+#define __TLM_ANALYSIS_H__
 
-#include <systemc>    // main SystemC header
 
-#include "tlm_core/tlm_2/tlm_version.h"
-#include "tlm_core/tlm_1/tlm_analysis/tlm_analysis.h"
-#include "tlm_core/tlm_1/tlm_req_rsp/tlm_req_rsp.h"
-#include "tlm_core/tlm_2/tlm_2_interfaces/tlm_2_interfaces.h"
-#include "tlm_core/tlm_2/tlm_generic_payload/tlm_generic_payload.h"
-#include "tlm_core/tlm_2/tlm_sockets/tlm_sockets.h"
-#include "tlm_core/tlm_2/tlm_quantum/tlm_quantum.h"
+#include "tlm_core/tlm_1/tlm_analysis/tlm_write_if.h"
+#include "tlm_core/tlm_1/tlm_analysis/tlm_analysis_if.h"
 
-#endif /* TLM_HEADER_INCLUDED_ */
+#include "tlm_core/tlm_1/tlm_analysis/tlm_analysis_triple.h"
+#include "tlm_core/tlm_1/tlm_analysis/tlm_analysis_port.h"
+#include "tlm_core/tlm_1/tlm_analysis/tlm_analysis_fifo.h"
+
+#endif 
+
+

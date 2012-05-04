@@ -2,9 +2,9 @@
 TLM-2.0 standard utilities
 ==========================
 	
-Dir: include/tlm/tlm_utils
 
 SubDirs: 
+Dir: include/tlm_utils
 
 Files: README.txt
        instance_specific_extensions.h
