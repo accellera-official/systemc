@@ -69,23 +69,46 @@ OPT_CXXFLAGS="-O3"
 
 case "$target" in
     x386-apple-* | i386-apple-*)
-        case "$CXX_COMP" in
-            CC)
-                TARGET_ARCH="macosx"
-                CCASFLAGS="-arch i386"
-                CXX="${CXX} -arch i386"
-                ;;
-            c++ | g++)
-                TARGET_ARCH="macosx"
-                CCASFLAGS="-arch i386"
-                CXX="${CXX} -arch i386"
-                ;;
-            *)
-		AC_MSG_ERROR("sorry...compiler not supported")
+        case `uname -m` in
+	    x86_64)
+	        echo "@@@@@@@ 1 "
+		case "$CXX_COMP" in
+		    CC)
+			TARGET_ARCH="macosx64"
+			CCASFLAGS="-arch x86_64"
+			CXX="${CXX} -arch x86_64"
+			;;
+		    c++ | g++)
+			TARGET_ARCH="macosx64"
+			CCASFLAGS="-arch x86_64"
+			CXX="${CXX} -arch x86_64"
+			;;
+		    *)
+			AC_MSG_ERROR("sorry...compiler not supported")
+			;;
+		esac
+		QT_ARCH="x86_64"
 		;;
-        esac
-        QT_ARCH="iX86"
-        ;;
+            *)
+		case "$CXX_COMP" in
+		    CC)
+			TARGET_ARCH="macosx"
+			CCASFLAGS="-arch i386"
+			CXX="${CXX} -arch i386"
+			;;
+		    c++ | g++)
+			TARGET_ARCH="macosx"
+			CCASFLAGS="-arch i386"
+			CXX="${CXX} -arch i386"
+			;;
+		    *)
+			AC_MSG_ERROR("sorry...compiler not supported")
+			;;
+		esac
+		QT_ARCH="iX86"
+		;;
+	esac
+	;;
     x86_64-apple-*)
         case "$CXX_COMP" in
             CC)
