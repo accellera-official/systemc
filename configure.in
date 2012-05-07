@@ -71,7 +71,6 @@ case "$target" in
     x386-apple-* | i386-apple-*)
         case `uname -m` in
 	    x86_64)
-	        echo "@@@@@@@ 1 "
 		case "$CXX_COMP" in
 		    CC)
 			TARGET_ARCH="macosx64"
