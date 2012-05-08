@@ -659,9 +659,7 @@ WARN_LOGFILE           =
 # with spaces.
 
 INPUT                  = @top_srcdir@/src/tlm \
-                         @top_srcdir@/src/tlm.h \
-                         @top_srcdir@/src/tlm_h \
-                         @top_srcdir@/src/tlm_1 \
+                         @top_srcdir@/src/tlm_core \
                          @top_srcdir@/src/tlm_utils
 
 # This tag can be used to specify the character encoding of the source files
