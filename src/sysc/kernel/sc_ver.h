@@ -57,7 +57,9 @@ extern const std::string  sc_copyright_string;
 #define SC_VERSION_PATCH      0
 #define SC_IS_PRERELEASE      1
 
-#define IEEE_1666_SYSTEMC     201201L
+/// compliancy with IEEE 1666-2011 (see 8.6.5)
+#define IEEE_1666_SYSTEMC     201101L
+
 #define SC_COPYRIGHT "        Copyright (c) 1996-2012 by all Contributors,\n        ALL RIGHTS RESERVED\n"
 
 // token stringification
