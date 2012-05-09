@@ -514,7 +514,7 @@ extern void qt_vstart(void);
 #define QUICKTHREADS_RETURN_INDEX ((QUICKTHREADS_BLOCKI_FRAME_SIZE+PPC_LR_SAVE)/sizeof(PPC_W))
 
 /* static variable used to get the stack bottom in "VARGS" initialization */
-static void *qt_sp_bottom_save;
+/* static void *qt_sp_bottom_save; */
 
 #define QUICKTHREADS_ARG_INDEX(i) ((QUICKTHREADS_BLOCKI_FRAME_SIZE+PPC_PAR(i))/sizeof(PPC_W))
 
