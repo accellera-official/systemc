@@ -94,8 +94,7 @@ case "$target" in
         esac
         case "$CXX_COMP" in
             CC | c++ | g++)
-#               CCAS="as"
-                EXTRA_ASFLAGS="-arch ${CPU_ARCH}"
+                EXTRA_ASFLAGS="-arch ${CPU_ARCH} -x assembler"
                 EXTRA_CXXFLAGS="-arch ${CPU_ARCH}"
                 ;;
             *)
