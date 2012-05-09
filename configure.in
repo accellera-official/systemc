@@ -341,6 +341,7 @@ AM_CONDITIONAL([QT_ARCH_POWERPC_MACOSX], [ test "${QT_ARCH}" = "powerpc-apple-ma
 AM_CONDITIONAL([QT_ARCH_SPARC], [ test "${QT_ARCH}" = "sparc-os2" ])
 AM_CONDITIONAL([QT_ARCH_X86], [ test "${QT_ARCH}" = "iX86" ])
 AM_CONDITIONAL([QT_ARCH_HPPA], [ test "${QT_ARCH}" = "hppa" ])
+AM_CONDITIONAL([QT_ARCH_PTHREADS], [ test "${QT_ARCH}" = "pthreads" ])
 
 dnl
 dnl Substitution variables.
