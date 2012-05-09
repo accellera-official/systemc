@@ -102,7 +102,7 @@ protected:
 public:
 
     // internal use only;
-    sc_fxval( scfx_rep* );
+    explicit sc_fxval( scfx_rep* );
 
 
     explicit       sc_fxval( sc_fxval_observer* = 0 );

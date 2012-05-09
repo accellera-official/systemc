@@ -58,9 +58,13 @@ lib_LTLIBRARIES = libsystemc.la
 
 libsystemc_la_SOURCES =
 
+if !WANT_PTHREADS_THREADS
+QT_LIB=qt/libqt.la
+endif
+
 libsystemc_la_LIBADD = \
        kernel/libkernel.la \
-       qt/libqt.la \
+       $(QT_LIB) \
        communication/libcommunication.la \
        tracing/libtracing.la \
        utils/libutils.la \

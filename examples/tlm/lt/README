@@ -1,0 +1,12 @@
+This directory contains an example of a simple TLM platform implemented on top of the blocking transport interface.
+
+The convenience API is the same as in the example lt_min_system.
+
+Using:
+
+* cd build-unix
+* set SYSTEMC_HOME environment variable
+* make
+* make run
+
+

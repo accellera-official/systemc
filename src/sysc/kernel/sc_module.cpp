@@ -149,21 +149,6 @@ sc_module::sc_module_init()
     m_name_gen = new sc_name_gen;
 }
 
-sc_module::sc_module( const char* nm )
-: sc_object(nm),
-  sensitive(this),
-  sensitive_pos(this),
-  sensitive_neg(this),
-  m_end_module_called(false),
-  m_port_vec(),
-  m_port_index(0),
-  m_name_gen(0),
-  m_module_name_p(0)
-{
-    SC_REPORT_WARNING( SC_ID_BAD_SC_MODULE_CONSTRUCTOR_, nm );
-    sc_module_init();
-}
-
 /*
  *  This form of the constructor assumes that the user has
  *  used an sc_module_name parameter for his/her constructor.
@@ -237,6 +222,27 @@ sc_module::sc_module( const sc_module_name& )
     m_module_name_p = mod_name; // must come after sc_module_init call.
 }
 
+/* --------------------------------------------------------------------
+ *
+ * Deprecated constructors:
+ *   sc_module( const char* )
+ *   sc_module( const std::string& )
+ */
+sc_module::sc_module( const char* nm )
+: sc_object(nm),
+  sensitive(this),
+  sensitive_pos(this),
+  sensitive_neg(this),
+  m_end_module_called(false),
+  m_port_vec(),
+  m_port_index(0),
+  m_name_gen(0),
+  m_module_name_p(0)
+{
+    SC_REPORT_WARNING( SC_ID_BAD_SC_MODULE_CONSTRUCTOR_, nm );
+    sc_module_init();
+}
+
 sc_module::sc_module( const std::string& s )
 : sc_object( s.c_str() ),
   sensitive(this),
@@ -248,8 +254,11 @@ sc_module::sc_module( const std::string& s )
   m_name_gen(0),
   m_module_name_p(0)
 {
+    SC_REPORT_WARNING( SC_ID_BAD_SC_MODULE_CONSTRUCTOR_, s.c_str() );
     sc_module_init();
 }
+
+/* -------------------------------------------------------------------- */
 
 sc_module::~sc_module()
 {

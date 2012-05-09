@@ -29,8 +29,9 @@
 #include "sysc/communication/sc_communication_ids.h"
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_module.h"
-#if defined(SC_INCLUDE_ASYNC_UPDATES)
-#   include "sysc/communication/sc_host_mutex.h"
+
+#ifndef SC_DISABLE_ASYNC_UPDATES
+#  include "sysc/communication/sc_host_mutex.h"
 #endif
 
 namespace sc_core {
@@ -153,7 +154,7 @@ sc_prim_channel::simulation_done()
 
 class sc_prim_channel_registry::async_update_list
 {
-#ifdef SC_INCLUDE_ASYNC_UPDATES
+#ifndef SC_DISABLE_ASYNC_UPDATES
 public:
 
     bool pending() const
@@ -193,7 +194,7 @@ private:
     std::vector< sc_prim_channel* > m_push_queue;
     std::vector< sc_prim_channel* > m_pop_queue;
 
-#endif // SC_INCLUDE_ASYNC_UPDATES
+#endif // ! SC_DISABLE_ASYNC_UPDATES
 };
 
 // ----------------------------------------------------------------------------
@@ -250,7 +251,7 @@ sc_prim_channel_registry::remove( sc_prim_channel& prim_channel_ )
 bool
 sc_prim_channel_registry::pending_async_updates() const
 {
-#ifdef SC_INCLUDE_ASYNC_UPDATES
+#ifndef SC_DISABLE_ASYNC_UPDATES
     return m_async_update_list_p->pending();
 #else
     return false;
@@ -260,7 +261,7 @@ sc_prim_channel_registry::pending_async_updates() const
 void
 sc_prim_channel_registry::async_request_update( sc_prim_channel& prim_channel_ )
 {
-#ifdef SC_INCLUDE_ASYNC_UPDATES
+#ifndef SC_DISABLE_ASYNC_UPDATES
     m_async_update_list_p->append( prim_channel_ );
 #else
     SC_REPORT_ERROR( SC_ID_NO_ASYNC_UPDATE_, prim_channel_.name() );
@@ -279,7 +280,7 @@ sc_prim_channel_registry::perform_update()
     // Update the values for the primitive channels set external to the
     // simulator.
 
-#ifdef SC_INCLUDE_ASYNC_UPDATES
+#ifndef SC_DISABLE_ASYNC_UPDATES
     if( m_async_update_list_p->pending() )
 	m_async_update_list_p->accept_updates();
 #endif
@@ -308,7 +309,7 @@ sc_prim_channel_registry::sc_prim_channel_registry( sc_simcontext& simc_ )
   ,  m_simc( &simc_ )
   ,  m_update_list_p((sc_prim_channel*)sc_prim_channel::list_end)
 {
-#   if defined(SC_INCLUDE_ASYNC_UPDATES)
+#   ifndef SC_DISABLE_ASYNC_UPDATES
         m_async_update_list_p = new async_update_list();
 #   endif
 }

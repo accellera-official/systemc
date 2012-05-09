@@ -101,6 +101,16 @@
 
 #endif
 
+// helper macros to aid branch prediction on GCC (compatible) compilers
+
+#ifndef __GNUC__
+#  define SC_LIKELY_( x )    !!(x)
+#  define SC_UNLIKELY_( x )  !!(x)
+#else
+#  define SC_LIKELY_( x )    __builtin_expect( !!(x), 1 )
+#  define SC_UNLIKELY_( x )  __builtin_expect( !!(x), 0 )
+#endif
+
 // ----------------------------------------------------------------------------
 
 #include <cassert>

@@ -318,25 +318,34 @@ inline bool sc_method_process::run_process()
 //------------------------------------------------------------------------------
 //"sc_method_process::trigger_static"
 //
-// This inline method returns true if this object instance should be placed on 
-// the queue of runnable processes. This is the case if the following criteria
+// This inline method adds the current method to the queue of runnable
+// processes, if required.  This is the case if the following criteria
 // are met:
 //   (1) The process is in a runnable state.
 //   (2) The process is not already on the run queue.
-//   (3) The process is expecting a static trigger, dynamic event waits take
-//       priority.
+//   (3) The process is expecting a static trigger, 
+//       dynamic event waits take priority.
+//
+//
+// If the triggering process is the same process, the trigger is
+// ignored as well, unless SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS
+// is defined.
 //------------------------------------------------------------------------------
 inline
 void
 sc_method_process::trigger_static()
 {
-    if ( (m_state & ps_bit_disabled) || is_runnable() || 
-          m_trigger_type != STATIC 
-	 || sc_get_current_process_b() == (sc_process_b*)this
-    ) {
+    if ( (m_state & ps_bit_disabled) || is_runnable() ||
+          m_trigger_type != STATIC )
+        return;
+
+#if ! defined( SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS )
+    if( SC_UNLIKELY_( sc_get_current_process_b() == this ) )
+    {
+        report_immediate_self_notification();
         return;
     }
-    if ( m_state & ps_bit_disabled ) return;
+#endif // SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS
 
     // If we get here then the method is has satisfied its wait, if its 
     // suspended mark its state as ready to run. If its not suspended then 

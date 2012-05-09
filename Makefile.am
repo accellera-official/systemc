@@ -30,6 +30,8 @@
 ##
 ## ****************************************************************************
 
+DOXYGEN=doxygen
+
 SUBDIRS = \
 	src \
 	examples \
@@ -46,29 +48,8 @@ INST_FILES = \
 	RELEASENOTES \
 	docs
 
-opt:
-	$(MAKE) all AM_CXXFLAGS="$(EXTRA_CXXFLAGS) $(OPT_CXXFLAGS)"
-
-debug:
-	$(MAKE) all AM_CXXFLAGS="$(EXTRA_CXXFLAGS) $(DEBUG_CXXFLAGS)"
-
-pthreads:
-	$(MAKE) all CXXFLAGS="$(EXTRA_CXXFLAGS) $(OPT_CXXFLAGS) $(PTHREAD_CFLAGS) -DSC_USE_PTHREADS" QT_ARCH="pthreads" LIBS="$(PTHREAD_LIBS) $(LIBS)" #CC="$(PTHREAD_CC)
-
-pthreads_debug:
-	$(MAKE) all AM_CXXFLAGS="$(EXTRA_CXXFLAGS) $(DEBUG_CXXFLAGS) $(PTHREAD_CFLAGS) -DSC_USE_PTHREADS" QT_ARCH="pthreads" LIBS="$(PTHREAD_LIBS) $(LIBS)" #CC="$(PTHREAD_CC)"
-
-pthreads_check:
-	$(MAKE) check AM_CXXFLAGS="$(EXTRA_CXXFLAGS) $(DEBUG_CXXFLAGS) $(PTHREAD_CFLAGS) -DSC_USE_PTHREADS" QT_ARCH="pthreads" LIBS="$(PTHREAD_LIBS) $(LIBS)" #CC="$(PTHREAD_CC)"
-
-async_update:
-	$(MAKE) all AM_CXXFLAGS="$(EXTRA_CXXFLAGS) $(OPT_CXXFLAGS) $(PTHREAD_CFLAGS) -DSC_INCLUDE_ASYNC_UPDATES" LIBS="$(PTHREAD_LIBS) $(LIBS)" #CC="$(PTHREAD_CC)"
-
-async_update_debug:
-	$(MAKE) all AM_CXXFLAGS="$(EXTRA_CXXFLAGS) $(DEBUG_CXXFLAGS) $(PTHREAD_CFLAGS) -DSC_INCLUDE_ASYNC_UPDATES" LIBS="$(PTHREAD_LIBS) $(LIBS)" #CC="$(PTHREAD_CC)"
-
-async_update_check:
-	$(MAKE) check AM_CXXFLAGS="$(EXTRA_CXXFLAGS) $(DEBUG_CXXFLAGS) $(PTHREAD_CFLAGS) -DSC_INCLUDE_ASYNC_UPDATES" LIBS="$(PTHREAD_LIBS) $(LIBS)" #CC="$(PTHREAD_CC)"+
+# support local addition of automake macros
+ACLOCAL_AMFLAGS= -I config
 
 install-data-local:
 	@$(NORMAL_INSTALL)
@@ -98,5 +79,9 @@ uninstall-local:
 	  done; \
 	fi
 	@(cd ./examples; $(MAKE) uninstall;)
+
+doxygen:
+	@(cd docs/sysc/doxygen && $(DOXYGEN))
+	@(cd docs/tlm/doxygen && $(DOXYGEN))
 
 ## Taf!

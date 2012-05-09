@@ -1,0 +1,67 @@
+TLM 2d2 Initial feedback
+Mark Burton <mark.burton@greensocs.com>
+31 Jan 2008
+
+1 Low level API
+1.1 Blocking interface (untimed)
+1.1.1 b_transport(TRANS& trans)
+1.1.2 "TLM1 legacy interface"
+1.1.3 No timing information may be transmitted
+1.2 Nonblocking interface (loosely timed, aproximate timed)
+1.2.1 nb_transport(TRANS& trans, PHASE& phase, sc_core::sc_time& t)
+1.2.1.1 Templated
+1.2.1.1.1 typename TRANS = tlm_generic_payload
+1.2.1.1.2 typename PHASE = tlm_phase
+1.2.1.1.3 enum tlm_phase { BEGIN_REQ, END_REQ, BEGIN_RESP, END_RESP }
+1.2.1.1.4 enum tlm_sync_enum { TLM_REJECTED, TLM_ACCEPTED, TLM_UPDATED, TLM_COMPLETED }
+1.2.2 Transaction object can be returned
+1.2.2.1 WITH the return value
+1.2.2.2 OR by making an explicit BACKWARD PATH nb_transport call
+1.3 Direct Memory Interface and Debug Transaction Interface
+1.3.1 Direct access and debug access to an area of memory owned by a target
+
+2 TRANS argument: generic payload (tlm_generic_payload)
+2.1 Interoperability
+2.1.1 specific transaction type "to ease interoperability between models where the precise details of the transaction attributes are less important"
+2.1.1.1 What does the second part of the sentence mean in detail?
+2.1.1.2 "For maximum interoperability, application should use tlm_generic_payload"
+2.1.2 "In order to model specific protocols, applications may substitute their own transaction type"
+2.1.2.1 Q: isn't "modeling a specific protocol" the normal case in TLM?
+2.1.2.2 The initiator is responsible for deleting or pooling the transaction object after the call
+
+3 PHASE argument
+3.1 Q (4.2.7a): "Successive calls to nb_transport with the same phase shall not mark timing points."
+3.1.1 It doesnt become clear whether this is seen from the viewpoint of one single component (initiator may not issue several requests in a row) or from the transaction point of view (involving initiator and target). I guess, only the latter makes sense.
+3.1.2 This is in contrast to 4.2.11. The following model in my opinion would make absolutely sense: (1) initiator calls nb_transact with PHASE=BEGIN_REQ. (2) target returns TLM_UPDATED and sets PHASE=END_REQ. Then the master could (safely) call nb_transact with PHASE=BEGIN_REQ again (even without actually increasing simulation time, i.e. using the 'temporal decoupled' mode). This, however, would violate rule 4.2.7a. Due to this rule, the target is obliged to additionally do a backward nb_transact call with PHASE=BEGIN_RESP. This may affect both simulation performance and modeling efficiency.
+
+4 Coding Styles (loosely-timed, approximate timed)
+4.1 Q (4.2.7e): "..., each caller/callee connection requires (notionally, at least) a separate protocol state machine."
+4.1.1 An advantage of having a transaction container is that the components can attach private state information to the container. With this techniqe the lines of code for the protocol state machines can be reduced, which could be mentioned in the text.
+4.2 Q (4.2.8h): "Having the caller pass a positive value for the time argument to nb_transport is normally associated with the LT coding style, but is still technically possible in an AT model."
+4.2.1 This sounds as if for AT another method should be preferred. What is the recommended transport mechanism for AT models?
+4.2.1.1 Later on, the manual only discusses nb_transport for AT.
+4.2.1.2 This is in contrast to 4.2.8i, where it is said that calling nb_transport with positive time value in combination with a PEQ is characteristic to AT models.
+4.2.1.3 Mental note (4.2.8i): When using the LT coding style, a problem with out-of-order execution may occur, which must be taken care of by the model writer. This will become especially problematic when mixing LT and AT models.
+4.3 Q (4.2.8k)
+4.3.1 The last option, caller does a wait(t) after issuing the request, sounds dangerous: in case of randomized process execution order it could happen that the suspended thread awakes after the response has been received. This would complicate the code (need both internal event and state variable).It should be proposed to always use an internal event which is fired by nb_transact upon reception of the response.
+4.4 There are three different methods to indicate the completion of a transaction (and the user may decide how to use and mix them, 4.2.10 and 4.2.11 do not help):
+4.4.1 nb_transact returns TLM_COMPLETED
+4.4.2 an attribute in the transaction container marks the completion
+4.4.3 the phase marks the completion
+4.5 Mental note: With the proposed TLM fabric, the creation of  "interoperable" models that can handle any of the available transport techniques does not make sense. This would result in a salmagundi of if-then-else clauses, internal events, and state variables. Instead, the TLM2 user must make a selection of his "favorite" techniques and adhere strictly to this coding style.
+4.5.1 The different TLM2 coding styles cannot be (efficiently) mixed.
+4.5.2 Result: if the GreenBus low-level transport is to become TLM2, the GreenBus Generic Protocol should make a clear decision on which "coding style" to use. In other words, there should be one Generic Protocol for LT, and one Generic Protocol for AT. Mixed models should be supported with bridges.
+
+5 Important techniques
+5.1 Single transaction object passed by reference (non-const)
+
+6 Overall impression / Conclusions
+6.1 TLM2 offers so many (incompatible) possibilities of modeling transactions that it will be hard for a "newbie" to get his models right.
+6.2 The user manual describes the framework on a per-method basis. Thus, the user gets a lot of "puzzle pieces" that he must put together in his head while reading. I think it would be easier to understand the intended modeling methodologies if the document would provide one chapter per proposed coding style, i.e., one chapter for untimed, one for loosely-timed, and one for approximately timed modeling.
+6.3 ...
+
+7 Differences to GreenBus
+7.1 nb_transact has a return value (tlm_sync_enum)
+7.2 PEQ is not mandatory. Initiator and/or target need not necessarily have a PEQ.
+7.2.1 (4.2.8f): In nonblocking communication, callee immediately gets notified, independent of the delay time t specified by the caller. If the caller does not know what its state will be at sc_time_stamp()+t, it must return TLM_ACCEPTED and internally create a timed notification. For the latter the tlm_peq is proposed.
+7.2.2 ...

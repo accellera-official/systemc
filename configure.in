@@ -25,8 +25,8 @@ dnl
 dnl  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
 dnl  changes you are making here.
 dnl
-dnl      Name, Affiliation, Date:
-dnl  Description of Modification:
+dnl      Name, Affiliation, Date: Alan Fitch, Doulos, 2012-03-10
+dnl  Description of Modification: TLM2 files added
 dnl
 dnl ***************************************************************************
 
@@ -34,9 +34,10 @@ dnl
 dnl Initialization.
 dnl
 
-AC_INIT([systemc],[2.3.0])
+AC_INIT([SystemC],[2.3.0])
 AC_CONFIG_SRCDIR([NEWS])
 AC_CONFIG_AUX_DIR([config])
+AC_CONFIG_MACRO_DIR([config])
 
 dnl
 dnl Some simple checks.
@@ -45,15 +46,16 @@ dnl
 AC_CANONICAL_SYSTEM
 AM_INIT_AUTOMAKE([1.10 no-define]) # for .s file support of LIBTOOLFLAGS
 
+dnl
+dnl reset default compiler flags
+dnl
+: ${CFLAGS=""}
+: ${CXXFLAGS=""}
+
 AM_PROG_AS
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INSTALL
-
-dnl
-dnl check for pthreads compiler flags.
-dnl
-AX_PTHREAD
 
 dnl
 dnl Set the compiler flags and target architecture.
@@ -69,11 +71,32 @@ case "$target" in
     x386-apple-* | i386-apple-*)
         case "$CXX_COMP" in
             CC)
-                TARGET_ARCH="macosx386"
-		#CCAS=as
+                TARGET_ARCH="macosx"
+                CCASFLAGS="-arch i386"
+                CXX="${CXX} -arch i386"
                 ;;
             c++ | g++)
-                TARGET_ARCH="macosx386"
+                TARGET_ARCH="macosx"
+                CCASFLAGS="-arch i386"
+                CXX="${CXX} -arch i386"
+                ;;
+            *)
+		AC_MSG_ERROR("sorry...compiler not supported")
+		;;
+        esac
+        QT_ARCH="iX86"
+        ;;
+    x86_64-apple-*)
+        case "$CXX_COMP" in
+            CC)
+                TARGET_ARCH="macosx64"
+                CCASFLAGS="-arch x86_64"
+                CXX="${CXX} -arch x86_64"
+                ;;
+            c++ | g++)
+                TARGET_ARCH="macosx64"
+                CCASFLAGS="-arch x86_64"
+                CXX="${CXX} -arch x86_64"
                 ;;
             *)
 		AC_MSG_ERROR("sorry...compiler not supported")
@@ -85,11 +108,14 @@ case "$target" in
         case "$CXX_COMP" in
             CC)
                 EXTRA_CXXFLAGS=""
-                TARGET_ARCH="macosx"
-		CCAS=as
+                TARGET_ARCH="macosxppc"
+                CCASFLAGS="-arch ppc"
+                CXX="${CXX} -arch ppc"
                 ;;
             c++ | g++)
-                TARGET_ARCH="macosx"
+                TARGET_ARCH="macosxppc"
+                CCASFLAGS="-arch ppc"
+                CXX="${CXX} -arch ppc"
                 ;;
             *)
 		AC_MSG_ERROR("sorry...compiler not supported")
@@ -223,6 +249,12 @@ case "$target" in
         ;;
 esac
 
+dnl
+dnl check for pthreads compiler flags.
+dnl
+AX_PTHREAD
+
+
 dnl Set conditionals for various quick thread architectures:
 
 AM_CONDITIONAL([QT_ARCH_X86_64], [ test "${QT_ARCH}" = "x86_64" ])
@@ -234,14 +266,6 @@ AM_CONDITIONAL([QT_ARCH_HPPA], [ test "${QT_ARCH}" = "hppa" ])
 dnl set C-related variables
 dnl
 CC="$CXX"
-AM_CFLAGS="$EXTRA_CXXFLAGS $OPT_CXXFLAGS $EXTRA_CFLAGS"
-
-dnl
-dnl The fixed-point datatypes "package" is included.
-dnl
-
-EXTRA_CXXFLAGS="$EXTRA_CXXFLAGS -DSC_INCLUDE_FX"
-AM_CXXFLAGS="$EXTRA_CXXFLAGS $OPT_CXXFLAGS"
 
 dnl libtools should be put *after* all CC options have been set
 AC_PROG_LIBTOOL
@@ -254,6 +278,78 @@ test "x$prefix" = xNONE && prefix=$srcdir
 current_dir=`pwd`; cd $prefix; prefix=`pwd`; cd $current_dir
 
 dnl
+dnl add debugging symbols to library
+dnl
+AC_MSG_CHECKING([whether to add debug symbols to the SystemC library])
+AC_ARG_ENABLE([debug],
+  AS_HELP_STRING([--enable-debug],[include debugging symbols]),
+  [case "${enableval}" in
+    yes|no) : ;;
+    *) AC_MSG_ERROR([bad value ${enableval} for --enable-debug]) ;;
+  esac],[enable_debug=no])
+AM_CONDITIONAL([WANT_DEBUG], [test x$enable_debug = xyes])
+AC_MSG_RESULT($enable_debug)
+
+dnl
+dnl switch off compiler optimization
+dnl
+AC_MSG_CHECKING([whether to enable compiler optimization])
+AC_ARG_ENABLE([optimize],
+  AS_HELP_STRING([--disable-optimize],[disable compiler optimization]),
+  [case "${enableval}" in
+    yes|no) : ;;
+    *) AC_MSG_ERROR([bad value ${enableval} for --enable-optimize]) ;;
+  esac],[enable_optimize=yes])
+AM_CONDITIONAL([WANT_OPTIMIZE], [test x$enable_optimize = xyes])
+AC_MSG_RESULT($enable_optimize)
+
+dnl
+dnl async_request_update support
+dnl
+AC_MSG_CHECKING([whether to add support for asynchronous update requests])
+support_async_updates=yes
+if test x$ax_pthread_ok = xno ; then
+case "${TARGET_ARCH}" in
+ cygwin|mingw*) support_async_updates=yes ;; dnl no pthreads needed on Windows
+ *)             support_async_updates=no  ;;
+esac
+fi
+AC_ARG_ENABLE([async-updates],
+  AS_HELP_STRING([--disable-async-updates],
+                 [disable request_async_update support]),
+  [case "${enableval}" in
+    yes) if test x"$support_async_updates" = xno ; then
+            AC_MSG_WARN([no pthread support found])
+         fi
+         support_async_updates=yes ;;
+    no)  support_async_updates=no ;;
+    *) AC_MSG_ERROR([bad value ${enableval} for --enable-async-updates]) ;;
+  esac],[enable_async_updates=${support_async_updates}])
+AM_CONDITIONAL([DISABLE_ASYNC_UPDATES],
+               [test x"$support_async_updates" = xno])
+AC_MSG_RESULT($support_async_updates)
+
+dnl
+dnl use pthreads for SystemC processes
+dnl
+AC_MSG_CHECKING([whether to use POSIX threads for SystemC processes])
+AC_ARG_ENABLE([pthreads],
+  AS_HELP_STRING([--enable-pthreads],
+                 [use POSIX threads for SystemC processes]),
+  [case "${enableval}" in
+    yes) if test x"$ax_pthread_ok" = xyes ; then : ; else
+           enable_pthreads=no
+           AC_MSG_WARN([no pthread support found, ignore --enable-pthreads])
+         fi ;;
+    no)  : ;;
+    *) AC_MSG_ERROR([bad value ${enableval} for --enable-pthreads]) ;;
+  esac],[enable_pthreads=no])
+AM_CONDITIONAL([WANT_PTHREADS_THREADS], [test x"$enable_pthreads" = xyes])
+
+AM_CONDITIONAL([USES_PTHREADS_LIB],
+  [test x"$enable_pthreads" = xyes -o x"$support_async_updates" = xyes ])
+AC_MSG_RESULT($enable_pthreads)
+dnl
 dnl Substitution variables.
 dnl
 
@@ -262,8 +358,6 @@ AC_SUBST(DEBUG_CXXFLAGS)
 AC_SUBST(OPT_CXXFLAGS)
 AC_SUBST(TARGET_ARCH)
 AC_SUBST(QT_ARCH)
-AC_SUBST(AM_CFLAGS)
-AC_SUBST(AM_CXXFLAGS)
 
 dnl
 dnl Create the Makefiles.
@@ -296,6 +390,21 @@ AC_OUTPUT(
  src/sysc/packages/boost/detail/Makefile 
  src/sysc/packages/boost/utility/Makefile 
  src/sysc/packages/boost/utility/detail/Makefile 
+ src/tlm_core/tlm_1/tlm_analysis/Makefile
+ src/tlm_core/tlm_1/Makefile
+ src/tlm_core/tlm_1/tlm_req_rsp/tlm_channels/Makefile
+ src/tlm_core/tlm_1/tlm_req_rsp/tlm_channels/tlm_req_rsp_channels/Makefile
+ src/tlm_core/tlm_1/tlm_req_rsp/tlm_channels/tlm_fifo/Makefile
+ src/tlm_core/tlm_1/tlm_req_rsp/Makefile
+ src/tlm_core/tlm_1/tlm_req_rsp/tlm_ports/Makefile
+ src/tlm_core/tlm_1/tlm_req_rsp/tlm_adapters/Makefile
+ src/tlm_core/tlm_1/tlm_req_rsp/tlm_1_interfaces/Makefile
+ src/tlm_core/tlm_2/tlm_2_interfaces/Makefile
+ src/tlm_core/tlm_2/Makefile
+ src/tlm_core/tlm_2/tlm_generic_payload/Makefile
+ src/tlm_core/tlm_2/tlm_sockets/Makefile
+ src/tlm_core/tlm_2/tlm_quantum/Makefile
+ src/tlm_utils/Makefile
  examples/Makefile 
  examples/sysc/Makefile 
  examples/sysc/fir/Makefile 
@@ -321,6 +430,9 @@ AC_OUTPUT(
  examples/sysc/2.3/include/Makefile
  examples/sysc/2.3/sc_rvd/Makefile
  examples/sysc/2.3/sc_ttd/Makefile
+ examples/tlm/Makefile
+ docs/sysc/doxygen/Doxyfile
+ docs/tlm/doxygen/Doxyfile
 )
 
 

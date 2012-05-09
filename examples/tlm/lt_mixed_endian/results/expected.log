@@ -1,0 +1,96 @@
+101 BE32 :: cmd: s8 0   0 1 2 3 4 5 6 7
+101 BE32 :: write transaction length 8 (10) x 8-bit completed
+101 BE32 :: cmd: l8 0   8
+101 BE32 :: read transaction length 8 (10) x 8-bit completed, returning:
+101 BE32 :: 0 1 2 3 4 5 6 7
+101 BE32 :: cmd: l8 1   7
+101 BE32 :: read transaction length 7 (10) x 8-bit completed, returning:
+101 BE32 :: 1 2 3 4 5 6 7
+101 BE32 :: cmd: l8 5   3
+101 BE32 :: read transaction length 3 (10) x 8-bit completed, returning:
+101 BE32 :: 5 6 7
+101 BE32 :: cmd: l16 0   4
+101 BE32 :: read transaction length 4 (10) x 16-bit completed, returning:
+101 BE32 :: 1 203 405 607
+101 BE32 :: cmd: l16 2   3
+101 BE32 :: read transaction length 3 (10) x 16-bit completed, returning:
+101 BE32 :: 203 405 607
+101 BE32 :: cmd: l16 4   1
+101 BE32 :: read transaction length 1 (10) x 16-bit completed, returning:
+101 BE32 :: 405
+101 BE32 :: cmd: l32 0   2
+101 BE32 :: read transaction length 2 (10) x 32-bit completed, returning:
+101 BE32 :: 10203 4050607
+101 BE32 :: cmd: l32 4   1
+101 BE32 :: read transaction length 1 (10) x 32-bit completed, returning:
+101 BE32 :: 4050607
+102 LE32 :: cmd: s8 0   0 1 2 3 4 5 6 7
+102 LE32 :: write transaction length 8 (10) x 8-bit completed
+102 LE32 :: cmd: l8 0   8
+102 LE32 :: read transaction length 8 (10) x 8-bit completed, returning:
+102 LE32 :: 0 1 2 3 4 5 6 7
+102 LE32 :: cmd: l8 1   7
+102 LE32 :: read transaction length 7 (10) x 8-bit completed, returning:
+102 LE32 :: 1 2 3 4 5 6 7
+102 LE32 :: cmd: l8 5   3
+102 LE32 :: read transaction length 3 (10) x 8-bit completed, returning:
+102 LE32 :: 5 6 7
+102 LE32 :: cmd: l16 0   4
+102 LE32 :: read transaction length 4 (10) x 16-bit completed, returning:
+102 LE32 :: 100 302 504 706
+102 LE32 :: cmd: l16 2   3
+102 LE32 :: read transaction length 3 (10) x 16-bit completed, returning:
+102 LE32 :: 302 504 706
+102 LE32 :: cmd: l16 4   1
+102 LE32 :: read transaction length 1 (10) x 16-bit completed, returning:
+102 LE32 :: 504
+102 LE32 :: cmd: l32 0   2
+102 LE32 :: read transaction length 2 (10) x 32-bit completed, returning:
+102 LE32 :: 3020100 7060504
+102 LE32 :: cmd: l32 4   1
+102 LE32 :: read transaction length 1 (10) x 32-bit completed, returning:
+102 LE32 :: 7060504
+101 BE32 :: cmd: l8 0   8
+101 BE32 :: read transaction length 8 (10) x 8-bit completed, returning:
+101 BE32 :: 3 2 1 0 7 6 5 4
+101 BE32 :: cmd: l8 1   7
+101 BE32 :: read transaction length 7 (10) x 8-bit completed, returning:
+101 BE32 :: 2 1 0 7 6 5 4
+101 BE32 :: cmd: l8 5   3
+101 BE32 :: read transaction length 3 (10) x 8-bit completed, returning:
+101 BE32 :: 6 5 4
+101 BE32 :: cmd: l16 0   4
+101 BE32 :: read transaction length 4 (10) x 16-bit completed, returning:
+101 BE32 :: 302 100 706 504
+101 BE32 :: cmd: l16 2   3
+101 BE32 :: read transaction length 3 (10) x 16-bit completed, returning:
+101 BE32 :: 100 706 504
+101 BE32 :: cmd: l32 0   2
+101 BE32 :: read transaction length 2 (10) x 32-bit completed, returning:
+101 BE32 :: 3020100 7060504
+101 BE32 :: cmd: l32 4   1
+101 BE32 :: read transaction length 1 (10) x 32-bit completed, returning:
+101 BE32 :: 7060504
+101 BE32 :: cmd: s32 20 13579bdf
+101 BE32 :: write transaction length 1 (10) x 32-bit completed
+102 LE32 :: cmd: l32 20   1
+102 LE32 :: read transaction length 1 (10) x 32-bit completed, returning:
+102 LE32 :: 13579bdf
+102 LE32 :: cmd: s32 30   00000000
+102 LE32 :: write transaction length 1 (10) x 32-bit completed
+102 LE32 :: cmd: s16 30   ea62
+102 LE32 :: write transaction length 1 (10) x 16-bit completed
+101 BE32 :: cmd: l16 30   1
+101 BE32 :: read transaction length 1 (10) x 16-bit completed, returning:
+101 BE32 :: 0
+101 BE32 :: cmd: l16 32   1
+101 BE32 :: read transaction length 1 (10) x 16-bit completed, returning:
+101 BE32 :: ea62
+101 BE32 :: cmd: s8 42   5a
+101 BE32 :: write transaction length 1 (10) x 8-bit completed
+102 LE32 :: cmd: l8 42   1
+102 LE32 :: read transaction length 1 (10) x 8-bit completed, returning:
+102 LE32 :: 0
+102 LE32 :: cmd: l8 41   1
+102 LE32 :: read transaction length 1 (10) x 8-bit completed, returning:
+102 LE32 :: 5a

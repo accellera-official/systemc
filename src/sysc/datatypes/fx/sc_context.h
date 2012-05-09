@@ -139,6 +139,7 @@ enum sc_context_begin
 template <class T>
 class sc_context
 {
+    // disabled
     sc_context( const sc_context<T>& );
     void* operator new( std::size_t );
 
@@ -231,28 +232,6 @@ sc_global<T>::value_ptr()
 //
 //  Template context class; co-routine safe.
 // ----------------------------------------------------------------------------
-
-template <class T>
-inline
-sc_context<T>::sc_context( const sc_context<T>& )
-: m_value(),
-  m_def_value_ptr( sc_global<T>::instance()->value_ptr() ),
-  m_old_value_ptr( 0 )
-{
-    // this constructor should never be called
-    SC_REPORT_FATAL( sc_core::SC_ID_INTERNAL_ERROR_, "should never be called" );
-}
-
-template <class T>
-inline
-void*
-sc_context<T>::operator new( std::size_t )
-{
-    // this method should never be called
-    SC_REPORT_FATAL( sc_core::SC_ID_INTERNAL_ERROR_, "should never be called" );
-    return (void*)0;
-}
-
 
 template <class T>
 inline

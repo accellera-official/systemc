@@ -1,4 +1,38 @@
-           DEFS	= -I.
-       INCLUDES	= -I$(top_srcdir)/src
 
-   MAIN_LIBRARY	= libsystemc.la
+        DEFS = $(EXTRA_DEFINES)
+    INCLUDES = -I$(top_srcdir)/src
+MAIN_LIBRARY = libsystemc.la
+
+    AM_CFLAGS=$(EXTRA_CXXFLAGS) \
+              $(EXTRA_CFLAGS)
+
+  AM_CXXFLAGS=$(EXTRA_CXXFLAGS)
+
+
+if WANT_DEBUG
+  AM_CFLAGS+=$(DEBUG_CXXFLAGS)
+  AM_CXXFLAGS+=$(DEBUG_CXXFLAGS)
+endif
+
+if WANT_OPTIMIZE
+    AM_CFLAGS+=$(OPT_CXXFLAGS)
+  AM_CXXFLAGS+=$(OPT_CXXFLAGS)
+endif
+
+# either for async_update locking or pthread processes
+if USES_PTHREADS_LIB
+    AM_CFLAGS+=$(PTHREAD_CFLAGS)
+  AM_CXXFLAGS+=$(PTHREAD_CFLAGS)
+         LIBS+=$(PTHREAD_LIBS)
+endif
+
+# always add fix-point support
+EXTRA_DEFINES=-DSC_INCLUDE_FX
+
+if DISABLE_ASYNC_UPDATES
+  EXTRA_DEFINES+=-DSC_DISABLE_ASYNC_UPDATES
+endif
+
+if WANT_PTHREADS_THREADS
+  EXTRA_DEFINES+=-DSC_USE_PTHREADS
+endif

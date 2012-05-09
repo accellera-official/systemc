@@ -240,13 +240,17 @@ void sc_thread_process::kill_process(sc_descendant_inclusion_info descendants )
         }
     }
 
-    // IF THE PROCESS IS CURRENTLY UNWINDING IGNORE THE KILL:
+    // IF THE PROCESS IS CURRENTLY UNWINDING OR IS ALREADY A ZOMBIE
+    // IGNORE THE KILL:
 
     if ( m_unwinding )
     {
         SC_REPORT_WARNING( SC_ID_PROCESS_ALREADY_UNWINDING_, name() );
-	return; 
+        return;
     }
+
+    if ( m_state & ps_bit_zombie )
+        return;
 
     // SET UP TO KILL THE PROCESS IF SIMULATION HAS STARTED:
     //
@@ -254,7 +258,6 @@ void sc_thread_process::kill_process(sc_descendant_inclusion_info descendants )
 
     if ( sc_is_running() && m_has_stack )
     {
-	if ( m_state & ps_bit_zombie ) return;
         m_throw_status = THROW_KILL;
         m_wait_cycle_n = 0;
         simcontext()->preempt_with(this);
@@ -511,17 +514,17 @@ void sc_thread_process::suspend_process(
 //------------------------------------------------------------------------------
 void sc_thread_process::throw_reset( bool async )
 {     
-    // If the thread to be reset is dead ignore the call.
-
-    if ( m_state & ps_bit_zombie ) return;
-
-    // IF THE PROCESS IS CURRENTLY UNWINDING IGNORE THE RESET:
+    // IF THE PROCESS IS CURRENTLY UNWINDING OR IS ALREADY A ZOMBIE
+    // IGNORE THE RESET:
 
     if ( m_unwinding )
     {
         SC_REPORT_WARNING( SC_ID_PROCESS_ALREADY_UNWINDING_, name() );
-	return; 
+        return;
     }
+
+    if ( m_state & ps_bit_zombie )
+        return;
 
 
     // Set the throw type and clear any pending dynamic events: 
@@ -628,16 +631,7 @@ void sc_thread_process::throw_user( const sc_throw_it_helper& helper,
 //------------------------------------------------------------------------------
 //"sc_thread_process::trigger_dynamic"
 //
-// This method returns the status of this object instance with respect to 
-// the supplied event. There are 3 potential values to return:
-//   dt_rearm      - don't execute the thread and don't remove it from the
-//                   event's queue.
-//   dt_remove     - the thread should not be scheduled for execution and
-//                   the process should be moved from the event's thread queue.
-//   dt_run        - the thread should be scheduled for execution but the
-//                   the proces should stay on the event's thread queue.
-//   dt_run_remove - the thread should be scheduled for execution and the
-//                   process should be removed from the event's thread queue.
+// This method sets up a dynamic trigger on an event.
 //
 // Notes:
 //   (1) This method is identical to sc_method_process::trigger_dynamic(), 
@@ -646,6 +640,7 @@ void sc_thread_process::throw_user( const sc_throw_it_helper& helper,
 //       have different overloads for sc_thread_process* and sc_method_process*.
 //       So if you change code here you'll also need to change it in 
 //       sc_method_process.cpp.
+//
 // Result is true if this process should be removed from the event's list,
 // false if not.
 //------------------------------------------------------------------------------
@@ -655,12 +650,22 @@ bool sc_thread_process::trigger_dynamic( sc_event* e )
 
     m_timed_out = false;
 
-    // If this thread is already runnable then we are done, flush the event.
+    // Escape cases:
+    //   (a) If this thread issued the notify() don't schedule it for
+    //       execution, but leave the sensitivity in place.
+    //   (b) If this thread is already runnable can't trigger an event.
 
-    if( is_runnable() )
+    // not possible for thread processes!
+#if 0 // ! defined( SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS )
+    if ( sc_get_current_process_b() == (sc_process_b*)this )
     {
-        return true;
+        report_immediate_self_notification();
+        return false;
     }
+#endif // SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS
+
+    if( is_runnable() ) 
+        return true;
 
     // If a process is disabled then we ignore any events, leaving them enabled:
     //

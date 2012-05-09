@@ -1106,7 +1106,7 @@ void vcd_unsigned_long_trace::write(FILE* f)
         }
     }
     else{
-        unsigned bit_mask = 1 << (bit_width-1);
+        unsigned long bit_mask = 1ul << (bit_width-1);
         for (bitindex = 0; bitindex < bit_width; bitindex++) {
             rawdata[bitindex] = (object & bit_mask)? '1' : '0';
             bit_mask = bit_mask >> 1;
@@ -1491,7 +1491,7 @@ void vcd_signed_long_trace::write(FILE* f)
         }
     }
     else{
-        unsigned bit_mask = 1 << (bit_width-1);
+        unsigned long bit_mask = 1ul << (bit_width-1);
         for (bitindex = 0; bitindex < bit_width; bitindex++) {
             rawdata[bitindex] = (object & bit_mask)? '1' : '0';
             bit_mask = bit_mask >> 1;
@@ -1641,7 +1641,7 @@ void vcd_enum_trace::write(FILE* f)
             rawdata[bitindex] = 'x';
         }
     } else {
-        unsigned bit_mask = 1 << (bit_width-1);
+        unsigned long bit_mask = 1ul << (bit_width-1);
         for (bitindex = 0; bitindex < bit_width; bitindex++) {
             rawdata[bitindex] = (object & bit_mask)? '1' : '0';
             bit_mask = bit_mask >> 1;

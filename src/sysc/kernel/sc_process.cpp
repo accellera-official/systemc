@@ -336,13 +336,31 @@ sc_process_b::remove_static_events()
 // the process' name() appended to the report.
 //------------------------------------------------------------------------------
 void
-sc_process_b::report_error( const char* msgid, const char* msg )
+sc_process_b::report_error( const char* msgid, const char* msg ) const
 {
     std::stringstream sstr;
     if( msg && msg[0] )
         sstr << msg << ": ";
     sstr << name();
     SC_REPORT_ERROR( msgid, sstr.str().c_str() );
+}
+
+
+//------------------------------------------------------------------------------
+// "sc_process_b::report_immediate_self_notification"
+//
+// This method is used to report an immediate self-notification
+// that used to trigger the process before the clarification in 1666-2011.
+// The warning is only reported once.
+//------------------------------------------------------------------------------
+void
+sc_process_b::report_immediate_self_notification() const
+{
+    static bool once = false;
+    if( !once ) {
+      SC_REPORT_WARNING( SC_ID_IMMEDIATE_SELF_NOTIFICATION_, name() );
+      once = true;
+    }
 }
 
 //------------------------------------------------------------------------------

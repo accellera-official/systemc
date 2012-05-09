@@ -35,11 +35,16 @@ include $(top_srcdir)/config/Make-rules
 # order of SUBDIRS is important, sysc needs to go first:
 SUBDIRS = \
 	sysc \
+	tlm_core/tlm_1 \
+	tlm_core/tlm_2 \
+	tlm_utils \
 	.
 
 H_FILES = \
 	systemc \
-	systemc.h
+	systemc.h \
+	tlm \
+	tlm.h
 
 noinst_HEADERS = $(H_FILES)
 

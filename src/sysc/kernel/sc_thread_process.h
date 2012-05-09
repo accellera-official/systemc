@@ -440,14 +440,18 @@ inline sc_cor* get_cor_pointer( sc_process_b* process_p )
 //------------------------------------------------------------------------------
 //"sc_thread_process::trigger_static"
 //
-// This inline method returns true if this object instance should be placed on 
-// the queue of runnable processes. This is the case if the following criteria
+// This inline method adds the current thread to the queue of runnable
+// processes, if required.  This is the case if the following criteria
 // are met:
 //   (1) The process is in a runnable state.
 //   (2) The process is not already on the run queue.
-//   (3) The process is expecting a static trigger, dynamic event waits take
-//       priority.
+//   (3) The process is expecting a static trigger,
+//       dynamic event waits take priority.
 //   (4) The process' static wait count is zero.
+//
+// If the triggering process is the same process, the trigger is
+// ignored as well, unless SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS
+// is defined.
 //------------------------------------------------------------------------------
 inline
 void
@@ -459,16 +463,22 @@ sc_thread_process::trigger_static()
     //    (c) its waiting on a dynamic event
     //    (d) its wait count is not satisfied
 
-    if ( (m_state & ps_bit_disabled) || is_runnable() || 
-         (sc_get_current_process_b() == (sc_process_b*)this) ||
-         m_trigger_type != STATIC )
+    if ( (m_state & ps_bit_disabled) || is_runnable() ||
+          m_trigger_type != STATIC )
+        return;
+
+#if ! defined( SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS )
+    if( SC_UNLIKELY_( sc_get_current_process_b() == this ) )
     {
+        report_immediate_self_notification();
         return;
     }
+#endif // SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS
+
     if ( m_wait_cycle_n > 0 )
     {
-	--m_wait_cycle_n;
-	return;
+        --m_wait_cycle_n;
+        return;
     }
 
     // If we get here then the thread is has satisfied its wait criteria, if 

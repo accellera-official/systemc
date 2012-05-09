@@ -121,10 +121,11 @@ protected:
     void sc_module_init();
 
     // constructor
-    sc_module( const char* nm );
-    sc_module( const std::string& nm );
-    sc_module( const sc_module_name& nm ); /* for those used to old style */
     sc_module();
+    sc_module( const sc_module_name& nm ); /* for those used to old style */
+
+    /* DEPRECATED */ sc_module( const char* nm ); 
+    /* DEPRECATED */ sc_module( const std::string& nm );
 
 public:
 

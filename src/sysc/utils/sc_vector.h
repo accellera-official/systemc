@@ -221,7 +221,7 @@ class sc_member_access
 
     typedef ElementType element_type;
     typedef AccessType  access_type;
-    typedef access_type (element_type::*member_type);
+    typedef access_type (ElementType::*member_type);
     typedef access_type type;
     typedef typename sc_meta::remove_const<type>::type plain_type;
     typedef typename sc_meta::remove_const<ElementType>::type plain_elem_type;
@@ -445,7 +445,7 @@ public:
   // member-wise access
 
   template< typename MT >
-  sc_vector_assembly<T,MT> assemble( MT (element_type::*member_ptr) )
+  sc_vector_assembly<T,MT> assemble( MT (T::*member_ptr) )
     { return sc_vector_assembly<T,MT>( *this, member_ptr ); }
 
 protected:
@@ -481,7 +481,7 @@ public:
   typedef typename const_iterator::pointer    const_pointer;
 
 
-  typedef access_type (element_type::*member_type);
+  typedef access_type (T::*member_type);
 
   const char* name() const { return vec_->name(); }
   const char* kind() const { return "sc_vector_assembly"; }
