@@ -66,82 +66,43 @@ DEBUG_CXXFLAGS="-g"
 OPT_CXXFLAGS="-O3"
 
 case "$target" in
-    x386-apple-* | i386-apple-*)
-        case `uname -m` in
-	    x86_64)
-		case "$CXX_COMP" in
-		    CC)
-			TARGET_ARCH="macosx64"
-			CCASFLAGS="-arch x86_64"
-			CXX="${CXX} -arch x86_64"
-			;;
-		    c++ | g++)
-			TARGET_ARCH="macosx64"
-			CCASFLAGS="-arch x86_64"
-			CXX="${CXX} -arch x86_64"
-			;;
-		    *)
-			AC_MSG_ERROR("sorry...compiler not supported")
-			;;
-		esac
-		QT_ARCH="x86_64"
-		;;
-            *)
-		case "$CXX_COMP" in
-		    CC)
-			TARGET_ARCH="macosx"
-			CCASFLAGS="-arch i386"
-			CXX="${CXX} -arch i386"
-			;;
-		    c++ | g++)
-			TARGET_ARCH="macosx"
-			CCASFLAGS="-arch i386"
-			CXX="${CXX} -arch i386"
-			;;
-		    *)
-			AC_MSG_ERROR("sorry...compiler not supported")
-			;;
-		esac
-		QT_ARCH="iX86"
-		;;
-	esac
-	;;
-    x86_64-apple-*)
-        case "$CXX_COMP" in
-            CC)
+    *-apple-*)
+        CPU_ARCH="${target_cpu}"
+        case "$target_cpu" in
+            x86_64)
+                QT_ARCH="x86_64"
                 TARGET_ARCH="macosx64"
-                CCASFLAGS="-arch x86_64"
-                CXX="${CXX} -arch x86_64"
                 ;;
-            c++ | g++)
-                TARGET_ARCH="macosx64"
-                CCASFLAGS="-arch x86_64"
-                CXX="${CXX} -arch x86_64"
+            x386 | i386)
+                TARGET_ARCH="macosx"
+                CPU_ARCH="i386"
+                QT_ARCH="iX86"
+                ;;
+            powerpc)
+                TARGET_ARCH="macosxppc"
+                CPU_ARCH="ppc"
+                QT_ARCH="powerpc-apple-macosx"
+                ;;
+            powerpc64)
+                TARGET_ARCH="macosxppc64"
+                CPU_ARCH="ppc64"
+                QT_ARCH="pthreads"
                 ;;
             *)
-		AC_MSG_ERROR("sorry...compiler not supported")
-		;;
+                AC_MSG_ERROR("sorry...architecture not supported")
+                ;;
         esac
-        QT_ARCH="x86_64"
-        ;;
-    powerpc-apple-macosx*)
         case "$CXX_COMP" in
-            CC)
+            CC | c++ | g++)
+#               CCAS="as"
+                CCASFLAGS="-arch ${CPU_ARCH}"
                 EXTRA_CXXFLAGS=""
-                TARGET_ARCH="macosxppc"
-                CCASFLAGS="-arch ppc"
-                CXX="${CXX} -arch ppc"
-                ;;
-            c++ | g++)
-                TARGET_ARCH="macosxppc"
-                CCASFLAGS="-arch ppc"
-                CXX="${CXX} -arch ppc"
+                CXX="${CXX} -arch ${CPU_ARCH}"
                 ;;
             *)
-		AC_MSG_ERROR("sorry...compiler not supported")
-		;;
+                AC_MSG_ERROR("sorry...compiler not supported")
+                ;;
         esac
-        QT_ARCH="powerpc-apple-macosx"
         ;;
     sparc-sun-solaris*) 
         case "$CXX_COMP" in
