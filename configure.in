@@ -94,8 +94,8 @@ case "$target" in
         esac
         case "$CXX_COMP" in
             CC | c++ | g++)
+                EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -arch ${CPU_ARCH}"
                 EXTRA_ASFLAGS="-arch ${CPU_ARCH} -x assembler"
-                EXTRA_CXXFLAGS="-arch ${CPU_ARCH}"
                 ;;
             *)
                 AC_MSG_ERROR("sorry...compiler not supported")
@@ -118,59 +118,57 @@ case "$target" in
         esac
         QT_ARCH="sparc-os2"
         ;;
-    x86_64*linux*)
-        case "$CXX_COMP" in
-            c++ | g++)
-                TARGET_ARCH="linux64"
-                ;;
-            *)
-                AC_MSG_ERROR("sorry...compiler not supported")
-		;;
-        esac
-        QT_ARCH="x86_64"
-        ;;
     *linux*)
-        case "$CXX_COMP" in
-            c++ | g++)
-               case "$build" in
-               x86_64*linux*)
-                   # It is mandatory to modify CC for libtool to recognize
-                   # cross-compilation
-                   EXTRA_CXXFLAGS="-m32"
-                   EXTRA_ASFLAGS="-m32"
-                   ;;
-               *)
-                   ;;
-               esac
+        case "$target_cpu" in
+            x86_64 | amd64)
+                TARGET_ARCH="linux64"
+                CPU_ARCH=64
+                QT_ARCH="x86_64"
+                ;;
+            i*86)
                 TARGET_ARCH="linux"
+                CPU_ARCH=32
+                QT_ARCH="iX86"
                 ;;
             *)
-                AC_MSG_ERROR("sorry...compiler not supported")
-		;;
+                AC_MSG_ERROR("sorry...architecture not supported")
+            ;;
         esac
-        QT_ARCH="iX86"
-        ;;
-    amd64*freebsd* | x86_64*freebsd*)
         case "$CXX_COMP" in
             c++ | g++)
-                TARGET_ARCH="freebsd64"
+                EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -m${CPU_ARCH}"
+                EXTRA_ASFLAGS="-m${CPU_ARCH}"
                 ;;
             *)
                 AC_MSG_ERROR("sorry...compiler not supported")
             ;;
         esac
-        QT_ARCH="x86_64"
         ;;
     *freebsd*)
+        case "$target_cpu" in
+            x86_64 | amd64)
+                TARGET_ARCH="freebsd64"
+                CPU_ARCH=64
+                QT_ARCH="x86_64"
+                ;;
+            i*86)
+                TARGET_ARCH="freebsd"
+                CPU_ARCH=32
+                QT_ARCH="iX86"
+                ;;
+            *)
+                AC_MSG_ERROR("sorry...architecture not supported")
+            ;;
+        esac
         case "$CXX_COMP" in
             c++ | g++)
-                TARGET_ARCH="freebsd"
+                EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -m${CPU_ARCH}"
+                EXTRA_ASFLAGS="-m${CPU_ARCH}"
                 ;;
             *)
                 AC_MSG_ERROR("sorry...compiler not supported")
             ;;
         esac
-        QT_ARCH="iX86"
         ;;
     *cygwin*)
         case "$CXX_COMP" in
@@ -179,31 +177,35 @@ case "$target" in
                 ;;
             *)
                 AC_MSG_ERROR("sorry...compiler not supported")
-		;;
+            ;;
         esac
         QT_ARCH="iX86"
         ;;
-    amd64*mingw* | x86_64*mingw*)
-        case "$CXX_COMP" in
-            c++ | g++)
+    *mingw*)
+        case "$target_cpu" in
+            x86_64 | amd64)
                 TARGET_ARCH="mingw64"
+                CPU_ARCH=64
+                QT_ARCH="x86_64"
+                ;;
+            i*86)
+                TARGET_ARCH="mingw"
+                CPU_ARCH=32
+                QT_ARCH="iX86"
+                ;;
+            *)
+                AC_MSG_ERROR("sorry...architecture not supported")
+            ;;
+        esac
+        case "$CXX_COMP" in
+            c++ | g++ | *mingw*-g++)
+                EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -m${CPU_ARCH}"
+                EXTRA_ASFLAGS="-m${CPU_ARCH}"
                 ;;
             *)
                 AC_MSG_ERROR("sorry...compiler not supported")
             ;;
         esac
-        QT_ARCH="x86_64"
-        ;;
-    *mingw*)
-        case "$CXX_COMP" in
-            c++ | g++ | *mingw*-g++)
-                TARGET_ARCH="mingw"
-                ;;
-            *)
-                AC_MSG_ERROR("sorry...compiler not supported")
-		;;
-        esac
-        QT_ARCH="iX86"
         ;;
     *hpux11*)
         case "$CXX_COMP" in
