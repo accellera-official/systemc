@@ -50,7 +50,7 @@ extern const std::string  sc_copyright_string;
 #define SYSTEMC_2_3_0
 #define SC_API_VERSION_STRING sc_api_version_2_3_0
 
-#define SYSTEMC_VERSION       20111022
+#define SYSTEMC_VERSION       20111121
 #define SC_VERSION_ORIGINATOR "OSCI"
 #define SC_VERSION_MAJOR      2
 #define SC_VERSION_MINOR      3

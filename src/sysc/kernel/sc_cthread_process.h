@@ -60,7 +60,6 @@ class sc_cthread_process : public sc_thread_process {
     sc_cthread_process( const char* name_p, bool free_host,
         SC_ENTRY_FUNC method_p, sc_process_host* host_p, 
         const sc_spawn_options* opt_p );
-    virtual ~sc_cthread_process();
 
     virtual void dont_initialize( bool dont );
     virtual const char* kind() const
@@ -71,6 +70,9 @@ private:
     sc_cthread_process( const char*   nm,
             SC_ENTRY_FUNC fn,
             sc_process_host*    host );
+
+    // may not be deleted manually (called from sc_process_b)
+    virtual ~sc_cthread_process();
 
     bool eval_watchlist();
     bool eval_watchlist_curr_level();

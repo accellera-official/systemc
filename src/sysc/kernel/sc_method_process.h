@@ -128,8 +128,6 @@ class sc_method_process : public sc_process_b {
         SC_ENTRY_FUNC method_p, sc_process_host* host_p, 
         const sc_spawn_options* opt_p );
 
-    virtual ~sc_method_process();
-
     virtual const char* kind() const
         { return "sc_method_process"; }
 
@@ -169,6 +167,10 @@ class sc_method_process : public sc_process_b {
     sc_cor*                          m_cor;        // Thread's coroutine.
     std::size_t                      m_stack_size; // Thread stack size.
     std::vector<sc_process_monitor*> m_monitor_q;  // Thread monitors.
+
+  private:
+    // may not be deleted manually (called from sc_process_b)
+    virtual ~sc_method_process();
 
   private: // disabled
     sc_method_process( const sc_method_process& );

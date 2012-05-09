@@ -96,6 +96,7 @@ template <>
 class sc_signal_in_if<bool>
 : virtual public sc_interface
 {
+    friend class sc_reset;
 public:
 
     // get the value changed event
@@ -124,9 +125,6 @@ public:
     // was there a negative edge event?
     virtual bool negedge() const = 0;
 
-	// designate this object as a reset signal.
-	virtual sc_reset* is_reset() const = 0; 
-
 protected:
 
     // constructor
@@ -139,6 +137,10 @@ private:
     // disabled
     sc_signal_in_if( const sc_signal_in_if<bool>& );
     sc_signal_in_if<bool>& operator = ( const sc_signal_in_if<bool>& );
+
+    // designate this object as a reset signal
+    virtual sc_reset* is_reset() const
+      { return NULL; }
 };
 
 

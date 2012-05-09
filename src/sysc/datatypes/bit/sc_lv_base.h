@@ -145,7 +145,7 @@ public:
     // destructor
 
     virtual ~sc_lv_base()
-	{ if( m_data != 0 ) delete [] m_data; }
+	{ delete [] m_data; }
 
 
     // assignment operators

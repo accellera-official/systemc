@@ -1562,23 +1562,25 @@ sc_start( const sc_time& duration, sc_starvation_policy p )
     if ( p == SC_RUN_TO_TIME )
         exit_time = context_p->m_curr_time + duration;
 
+    // called with duration = SC_ZERO_TIME for the first time
+    static bool initialisation_delta =
+         ( starting_delta == 0 && exit_time == SC_ZERO_TIME );
+
     // If the simulation status is bad issue the appropriate message:
 
     status = context_p->sim_status();
     if( status != SC_SIM_OK ) 
     {
-	if ( status == SC_SIM_USER_STOP )
-	    SC_REPORT_ERROR(SC_ID_SIMULATION_START_AFTER_STOP_, "");        
+        if ( status == SC_SIM_USER_STOP )
+            SC_REPORT_ERROR(SC_ID_SIMULATION_START_AFTER_STOP_, "");
         if ( status == SC_SIM_ERROR )
             SC_REPORT_ERROR(SC_ID_SIMULATION_START_AFTER_ERROR_, "");
+        return;
     }
 
     // If the simulation status is good perform the simulation:
 
-    else
-    {
-	context_p->simulate( duration );
-    }
+    context_p->simulate( duration );
 
     // Update the current time to the exit time if that is the starvation
     // policy:
@@ -1587,13 +1589,18 @@ sc_start( const sc_time& duration, sc_starvation_policy p )
         context_p->m_curr_time = exit_time;
 
     // If there was no activity and the simulation clock did not move warn
-    // the user:
+    // the user, except if we're in a first sc_start(SC_ZERO_TIME) for
+    // initialisation (only):
 
-    if ( starting_delta == sc_delta_count() && 
-         context_p->m_curr_time == entry_time ) 
+    if ( !initialisation_delta &&
+         starting_delta == sc_delta_count() &&
+         context_p->m_curr_time == entry_time )
     {
         SC_REPORT_WARNING(SC_ID_NO_SC_START_ACTIVITY_, "");
     }
+
+    // subsequent calls are not initial ones
+    initialisation_delta = false;
 }
 
 void

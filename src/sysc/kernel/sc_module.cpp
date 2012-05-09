@@ -160,8 +160,7 @@ sc_module::sc_module( const char* nm )
   m_name_gen(0),
   m_module_name_p(0)
 {
-    if ( nm )
-	SC_REPORT_WARNING( SC_ID_BAD_SC_MODULE_CONTRUCTOR_, nm );
+    SC_REPORT_WARNING( SC_ID_BAD_SC_MODULE_CONSTRUCTOR_, nm );
     sc_module_init();
 }
 

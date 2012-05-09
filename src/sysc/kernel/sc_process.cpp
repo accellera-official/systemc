@@ -79,13 +79,11 @@ void sc_process_b::add_static_event( const sc_event& e )
     {
       case SC_THREAD_PROC_:
       case SC_CTHREAD_PROC_:
-        thread_h = DCAST<sc_thread_handle>( this );
-        assert( thread_h != 0 );
+        thread_h = SCAST<sc_thread_handle>( this );
         e.add_static( thread_h );
         break;
       case SC_METHOD_PROC_:
-        method_h = DCAST<sc_method_handle>( this );
-        assert( method_h != 0 );
+        method_h = SCAST<sc_method_handle>( this );
         e.add_static( method_h );
         break;
       default:
@@ -116,8 +114,7 @@ void sc_process_b::disconnect_process()
     {
       case SC_THREAD_PROC_:
       case SC_CTHREAD_PROC_:
-        thread_h = DCAST<sc_thread_handle>(this);
-        assert( thread_h );
+        thread_h = SCAST<sc_thread_handle>(this);
         mon_n = thread_h->m_monitor_q.size();
         if ( mon_n )
         {
@@ -262,8 +259,7 @@ sc_process_b::remove_dynamic_events( bool skip_timeout )
     {
       case SC_THREAD_PROC_:
       case SC_CTHREAD_PROC_:
-        thread_h = DCAST<sc_thread_handle>(this);
-        assert( thread_h );
+        thread_h = SCAST<sc_thread_handle>(this);
 	if ( thread_h->m_timeout_event_p && !skip_timeout ) {
 	    thread_h->m_timeout_event_p->remove_dynamic(thread_h);
 	    thread_h->m_timeout_event_p->cancel();
@@ -277,8 +273,7 @@ sc_process_b::remove_dynamic_events( bool skip_timeout )
         }
         break;
       case SC_METHOD_PROC_:
-        method_h = DCAST<sc_method_handle>(this);
-        assert( method_h );
+        method_h = SCAST<sc_method_handle>(this);
 	if ( method_h->m_timeout_event_p && !skip_timeout ) {
 	    method_h->m_timeout_event_p->remove_dynamic(method_h);
 	    method_h->m_timeout_event_p->cancel();
@@ -313,8 +308,7 @@ sc_process_b::remove_static_events()
     {
       case SC_THREAD_PROC_:
       case SC_CTHREAD_PROC_:
-        thread_h = DCAST<sc_thread_handle>( this );
-        assert( thread_h != 0 );
+        thread_h = SCAST<sc_thread_handle>( this );
         for( int i = m_static_events.size() - 1; i >= 0; -- i ) {
             m_static_events[i]->remove_static( thread_h );
         }
@@ -594,12 +588,13 @@ sc_process_b::~sc_process_b()
 
     // REMOVE ANY STRUCTURES THAT MAY HAVE BEEN BUILT:
 
-    if ( m_last_report_p ) delete m_last_report_p;
-    if ( m_name_gen_p ) delete m_name_gen_p;
-    if ( m_reset_event_p ) delete m_reset_event_p;
-    if ( m_resume_event_p ) delete m_resume_event_p;
-    if ( m_term_event_p ) delete m_term_event_p;
-    if ( m_timeout_event_p ) delete m_timeout_event_p;
+    delete m_last_report_p;
+    delete m_name_gen_p;
+    delete m_reset_event_p;
+    delete m_resume_event_p;
+    delete m_term_event_p;
+    delete m_throw_helper_p;
+    delete m_timeout_event_p;
 
 }
 

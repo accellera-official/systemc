@@ -328,6 +328,9 @@ class sc_process_b : public sc_object {
     sc_process_b( const char* name_p, bool is_thread, bool free_host, 
         SC_ENTRY_FUNC method_p, sc_process_host* host_p, 
         const sc_spawn_options* opt_p );
+
+  protected:
+    // may not be deleted manually (called from destroy_process())
     virtual ~sc_process_b();
 
   public:
@@ -357,7 +360,7 @@ class sc_process_b : public sc_object {
     void remove_static_events();
     inline void set_last_report( sc_report* last_p )
         {  
-            if ( m_last_report_p ) delete m_last_report_p;
+            delete m_last_report_p;
             m_last_report_p = last_p;
         }
     inline bool timed_out() const;

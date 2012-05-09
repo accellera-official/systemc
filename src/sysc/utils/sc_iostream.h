@@ -21,51 +21,21 @@
 
   Original Author: Martin Janssen, Synopsys, Inc.
 
+  Note: Deprecated in the meantime, since all supported
+        compilers are supposed to have a working C++
+        standard library.
+
   CHANGE LOG AT END OF FILE
  *****************************************************************************/
 
 #ifndef SC_IOSTREAM_H
 #define SC_IOSTREAM_H
 
-#if !defined( _MSC_VER ) && /*!defined( __HP_aCC ) &&*/ !defined( __BORLANDC__ )
-
-#   include <iostream>
-
-#   if defined(__GNUC__) && (__GNUC__ == 2) // Maintain compatibility for 2.95.x
-#   	include <strstream>
-#   else
-#   	include <sstream>
-#   endif
-
-#   include <fstream>
-#   include <cstddef>
-#   include <cstring>
-
-#else
-#if defined( _MSC_VER )
-    // VC++6 with standard library
-
-#  include <iostream>
-#  include <strstream>
-    
-#  include <fstream>
-
-#  include <cstddef>
-
-#else
-/*
-#if defined( __HP_aCC )
-    // HP aCC
-
-#   include <iostream.h>
-#   include <strstream.h>
-#   include <fstream.h>
-
-#endif // HP
-*/
-#endif // MSC
-#endif // Everyone else
-
+#include <iostream>
+#include <sstream>
+#include <fstream>
+#include <cstddef>
+#include <cstring>
 
 // shortcuts that save some typing
 

@@ -234,7 +234,7 @@ sc_object::sc_object(const char* nm) :
 
     // null name or "" uses machine generated name.
     
-    if ( !nm || strlen(nm) == 0 )
+    if ( !nm || !*nm )
 	nm = sc_gen_unique_name("object");
     p = nm;
 
@@ -271,7 +271,7 @@ sc_object::sc_object(const char* nm) :
 sc_object::~sc_object()
 {
     detach();
-    if ( m_attr_cltn_p ) delete m_attr_cltn_p;
+    delete m_attr_cltn_p;
 }
 
 //------------------------------------------------------------------------------

@@ -185,6 +185,7 @@ class sc_event_and_list
 
 protected:
 
+    explicit
     sc_event_and_list( bool auto_delete_ );
 
 public:
@@ -219,6 +220,7 @@ class sc_event_or_list
 
 protected:
 
+    explicit
     sc_event_or_list( bool auto_delete_ );
 
 public:

@@ -87,7 +87,7 @@ class sc_byte_heap {
 
     inline void initialize( int heap_size=0x100000 )
     {
-		if ( m_bgn_p ) delete [] m_bgn_p;
+        delete [] m_bgn_p;
         m_bgn_p = new char[heap_size];
         m_end_p = &m_bgn_p[heap_size];
         m_next_p = m_bgn_p;
@@ -111,7 +111,7 @@ class sc_byte_heap {
 
 	inline ~sc_byte_heap()
 	{
-		if ( m_bgn_p ) delete [] m_bgn_p;
+		delete [] m_bgn_p;
 	}
 
 };

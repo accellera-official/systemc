@@ -32,57 +32,59 @@
 #include <string>
 
 #include "sysc/kernel/sc_object.h"
+#include "sysc/packages/boost/config.hpp"
+#include "sysc/packages/boost/utility/enable_if.hpp"
 
 //#define SC_VECTOR_HEADER_ONLY_
 
 namespace sc_core {
 namespace sc_meta {
+
+  using ::sc_boost::enable_if;
+
   // simplistic version to avoid Boost et.al.
   template< typename T > struct remove_const          { typedef T type; };
   template< typename T > struct remove_const<const T> { typedef T type; };
 
-  template< bool B, typename T = void >
-  struct enable_if_c { typedef T type; };
-  template< typename T>
-  struct enable_if_c<false,T>{};
-
-  template< typename Cond, typename T = void >
-  struct enable_if : enable_if_c< Cond::value, T > {};
-  
-  template< typename, typename >
-  struct is_same      { static const bool value = false; };
+  template< typename T, typename U >
+  struct is_same      { SC_BOOST_STATIC_CONSTANT( bool, value = false ); };
   template< typename T >
-  struct is_same<T,T> { static const bool value = true; };
+  struct is_same<T,T> { SC_BOOST_STATIC_CONSTANT( bool, value = true );  };
 
-  template< typename >
-  struct is_const { static const bool value = false; };
   template< typename T >
-  struct is_const< const T> { static const bool value = true; };
+  struct is_const           { SC_BOOST_STATIC_CONSTANT( bool, value = false ); };
+  template< typename T >
+  struct is_const< const T> { SC_BOOST_STATIC_CONSTANT( bool, value = true );  };
 
   template< typename CT, typename T >
   struct is_more_const {
-    static const bool value
-        = is_same< typename remove_const<CT>::type
+    SC_BOOST_STATIC_CONSTANT( bool, value
+       = ( is_same< typename remove_const<CT>::type
                  , typename remove_const<T>::type
                  >::value
-          && ( is_const<CT>::value >= is_const<T>::value );
+          && ( is_const<CT>::value >= is_const<T>::value ) ) );
   };
 
-  template< typename T > struct get_first_param;
-  template< typename R, typename P1 >
-  struct get_first_param< R (P1) > { typedef P1 type; };
+  struct special_result {};
+  template< typename T > struct remove_special_fptr {};
+  template< typename T > 
+  struct remove_special_fptr< special_result& (*)( T ) >
+    { typedef T type; };
 
-#define SC_ENABLE_IF_( Cond ) \
-  typename ::sc_core::sc_meta::enable_if< \
-    typename ::sc_core::sc_meta::get_first_param< void Cond >::type \
-  >::type * = NULL
+#define SC_RPTYPE_(Type)                                   \
+  typename ::sc_core::sc_meta::remove_special_fptr         \
+    < ::sc_core::sc_meta::special_result& (*) Type >::type
+
+#define SC_ENABLE_IF_( Cond )                              \
+  typename ::sc_core::sc_meta::enable_if                   \
+    < SC_RPTYPE_(Cond) >::type * = NULL
 
 } // namespace sc_meta
 
 // forward declarations
-template< typename >           class sc_vector;
-template< typename, typename > class sc_vector_assembly;
-template< typename, typename > class sc_vector_iter;
+template< typename T >              class sc_vector;
+template< typename T, typename MT > class sc_vector_assembly;
+template< typename T, typename MT > class sc_vector_iter;
 
 // implementation-defined
 template< typename Container, typename ArgumentIterator >
@@ -458,7 +460,7 @@ protected:
 template< typename T, typename MT >
 class sc_vector_assembly
 {
-  template< typename > friend class sc_vector;
+  template< typename U > friend class sc_vector;
 
 public:
 
@@ -706,6 +708,8 @@ sc_vector_assembly<T,MT>::get_elements() const
 }
 
 } // namespace sc_core
+#undef SC_RPTYPE_
+#undef SC_ENABLE_IF_
 
 // $Log: sc_vector.h,v $
 // Revision 1.17  2011/08/26 20:46:20  acg
