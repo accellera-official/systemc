@@ -374,6 +374,7 @@ AC_OUTPUT(
  src/sysc/packages/boost/Makefile 
  src/sysc/packages/boost/bind/Makefile 
  src/sysc/packages/boost/config/Makefile 
+ src/sysc/packages/boost/config/abi/Makefile
  src/sysc/packages/boost/config/compiler/Makefile 
  src/sysc/packages/boost/config/platform/Makefile 
  src/sysc/packages/boost/config/stdlib/Makefile 

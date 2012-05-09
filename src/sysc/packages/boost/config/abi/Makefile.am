@@ -15,10 +15,10 @@
 ##
 ## ****************************************************************************
 ##
-##  src/sysc/packages/boost/config/Makefile.am --
+##  src/sysc/packages/boost/config/abi/Makefile.am --
 ##  Process this file with automake to produce a Makefile.in file.
 ##
-##  Original Author: Martin Janssen, Synopsys, Inc., 2001-05-21
+##  Original Author: Torsten Maehne, UPMC, Paris, 2012-05-09
 ##
 ## ****************************************************************************
 ##
@@ -35,23 +35,14 @@ include $(top_srcdir)/config/Make-rules.sysc
 noinst_LTLIBRARIES =
 
 H_FILES = \
-	posix_features.hpp \
-	select_compiler_config.hpp \
-	select_platform_config.hpp \
-	select_stdlib_config.hpp \
-	suffix.hpp \
-	user.hpp
+	borland_prefix.hpp \
+	borland_suffix.hpp \
+	msvc_prefix.hpp \
+	msvc_suffix.hpp
 
 noinst_HEADERS = $(H_FILES)
 
-SUBDIRS = \
-	abi \
-	compiler \
-	platform \
-	stdlib \
-	.
-
-INCLUDE_DIR = $(prefix)/include/sysc/packages/boost/config
+INCLUDE_DIR = $(prefix)/include/sysc/packages/boost/config/abi
 
 install-data-local:
 	@$(NORMAL_INSTALL)
