@@ -30,6 +30,8 @@
 ##
 ## ****************************************************************************
 
+include $(top_srcdir)/config/Make-rules.examples
+
 CXX_FILES = \
 	main.cpp \
 	scx_signal_int.cpp \
@@ -45,8 +47,6 @@ H_FILES = \
 
 check_PROGRAMS = specialized_signals
 TESTS = $(check_PROGRAMS) 
-
-INCLUDES = -I$(prefix)/include
 
 specialized_signals_SOURCES = $(CXX_FILES) $(H_FILES)
 

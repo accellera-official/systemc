@@ -30,6 +30,8 @@
 ##
 ## ****************************************************************************
 
+include $(top_srcdir)/config/Make-rules.examples
+
 H_FILES = \
 	display.h    \
 	fir.h        \
@@ -66,8 +68,6 @@ fir_INSTALLS = \
 check_PROGRAMS = fir fir_rtl
 
 TESTS = fir fir_rtl
-
-INCLUDES = -I$(prefix)/include
 
 all:
 	@echo "Use make check to compile this example"

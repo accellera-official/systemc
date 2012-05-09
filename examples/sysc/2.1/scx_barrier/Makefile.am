@@ -30,6 +30,8 @@
 ##
 ## ****************************************************************************
 
+include $(top_srcdir)/config/Make-rules.examples
+
 CXX_FILES = \
 	main.cpp 
 
@@ -38,8 +40,6 @@ H_FILES = \
 
 check_PROGRAMS = scx_barrier
 TESTS = $(check_PROGRAMS) 
-
-INCLUDES = -I$(prefix)/include
 
 scx_barrier_SOURCES = $(CXX_FILES) $(H_FILES)
 

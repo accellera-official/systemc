@@ -30,6 +30,8 @@
 ##
 ## ****************************************************************************
 
+include $(top_srcdir)/config/Make-rules.examples
+
 SUBDIRS = \
 	dpipe \
 	forkjoin \

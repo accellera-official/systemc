@@ -30,6 +30,8 @@
 ##
 ## ****************************************************************************
 
+include $(top_srcdir)/config/Make-rules.examples
+
 CXX_FILES = \
 	main.cpp 
 
@@ -38,7 +40,7 @@ H_FILES =
 check_PROGRAMS = sc_ttd
 TESTS = $(check_PROGRAMS) 
 
-INCLUDES = -I$(prefix)/include -I../include
+INCLUDES += -I../include
 
 sc_ttd_SOURCES = $(CXX_FILES) $(H_FILES)
 

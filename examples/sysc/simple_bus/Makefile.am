@@ -30,6 +30,8 @@
 ##
 ## ****************************************************************************
 
+include $(top_srcdir)/config/Make-rules.examples
+
 H_FILES = \
 	simple_bus.h \
 	simple_bus_arbiter.h \
@@ -48,23 +50,21 @@ H_FILES = \
 	simple_bus_types.h
 
 CXX_FILES = \
-    simple_bus.cpp                     \
-    simple_bus_arbiter.cpp             \
-    simple_bus_main.cpp                \
-    simple_bus_master_blocking.cpp     \
-    simple_bus_master_direct.cpp       \
-    simple_bus_master_non_blocking.cpp \
-    simple_bus_types.cpp               \
-    simple_bus_tools.cpp
-	
+	simple_bus.cpp                     \
+	simple_bus_arbiter.cpp             \
+	simple_bus_main.cpp                \
+	simple_bus_master_blocking.cpp     \
+	simple_bus_master_direct.cpp       \
+	simple_bus_master_non_blocking.cpp \
+	simple_bus_types.cpp               \
+	simple_bus_tools.cpp
+
 simple_bus_SOURCES = $(CXX_FILES) $(H_FILES)
 
 simple_bus_LDADD = -L$(prefix)/lib-$(TARGET_ARCH) -lsystemc -lm
 
 check_PROGRAMS = simple_bus 
 TESTS = $(check_PROGRAMS) 
-
-INCLUDES = -I$(prefix)/include
 
 simple_bus_INSTALLS = $(simple_bus_SOURCES) README SLIDES.pdf LEGAL
 

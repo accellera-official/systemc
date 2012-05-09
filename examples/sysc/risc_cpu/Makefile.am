@@ -30,6 +30,8 @@
 ##
 ## ****************************************************************************
 
+include $(top_srcdir)/config/Make-rules.examples
+
 H_FILES = \
 	bios.h \
 	dcache.h \
@@ -76,8 +78,6 @@ risc_cpu_LDADD = -L$(prefix)/lib-$(TARGET_ARCH) -lsystemc -lm
 
 check_PROGRAMS = risc_cpu
 TESTS = $(check_PROGRAMS) 
-
-INCLUDES = -I$(prefix)/include
 
 risc_cpu_INSTALLS = $(risc_cpu_SOURCES) $(risc_cpu_EXTRAS)
 

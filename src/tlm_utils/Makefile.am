@@ -30,7 +30,7 @@
 ##
 ## ****************************************************************************
 
-include $(top_srcdir)/config/Make-rules
+include $(top_srcdir)/config/Make-rules.sysc
 
 H_FILES = \
 	instance_specific_extensions.h \

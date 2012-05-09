@@ -32,7 +32,7 @@
 ##
 ## ****************************************************************************
 
-include $(top_srcdir)/config/Make-rules
+include $(top_srcdir)/config/Make-rules.sysc
 
 H_FILES = \
 	adl.hpp \

@@ -30,19 +30,19 @@
 ##
 ## ****************************************************************************
 
+include $(top_srcdir)/config/Make-rules.examples
+
 H_FILES = 
 
 CXX_FILES = \
 	simple_perf.cpp 
-	
+
 simple_perf_SOURCES = $(CXX_FILES) $(H_FILES)
 
 simple_perf_LDADD = -L$(prefix)/lib-$(TARGET_ARCH) -lsystemc -lm
 
 check_PROGRAMS = simple_perf
 TESTS = $(check_PROGRAMS) 
-
-INCLUDES = -I$(prefix)/include
 
 
 all:

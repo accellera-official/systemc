@@ -30,6 +30,8 @@
 ##
 ## ****************************************************************************
 
+include $(top_srcdir)/config/Make-rules.examples
+
 CXX_FILES = \
 	scx_mutex_w_policy.cpp 
 
@@ -37,8 +39,6 @@ H_FILES =
 
 check_PROGRAMS = scx_mutex_w_policy
 TESTS = $(check_PROGRAMS) 
-
-INCLUDES = -I$(prefix)/include
 
 scx_mutex_w_policy_SOURCES = $(CXX_FILES) $(H_FILES)
 

@@ -30,7 +30,7 @@
 ##
 ## ****************************************************************************
 
-include $(top_srcdir)/config/Make-rules
+include $(top_srcdir)/config/Make-rules.sysc
 
 H_FILES = \
 	tlm_event_finder.h \

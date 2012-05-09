@@ -30,6 +30,8 @@
 ##
 ## ****************************************************************************
 
+include $(top_srcdir)/config/Make-rules.examples
+
 CXX_FILES = \
 	reset_signal_is.cpp 
 
@@ -37,8 +39,6 @@ H_FILES =
 
 check_PROGRAMS = reset_signal_is
 TESTS = $(check_PROGRAMS) 
-
-INCLUDES = -I$(prefix)/include
 
 reset_signal_is_SOURCES = $(CXX_FILES) $(H_FILES)
 
