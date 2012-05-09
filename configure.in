@@ -95,9 +95,8 @@ case "$target" in
         case "$CXX_COMP" in
             CC | c++ | g++)
 #               CCAS="as"
-                CCASFLAGS="-arch ${CPU_ARCH}"
-                EXTRA_CXXFLAGS=""
-                CXX="${CXX} -arch ${CPU_ARCH}"
+                EXTRA_ASFLAGS="-arch ${CPU_ARCH}"
+                EXTRA_CXXFLAGS="-arch ${CPU_ARCH}"
                 ;;
             *)
                 AC_MSG_ERROR("sorry...compiler not supported")
@@ -138,8 +137,8 @@ case "$target" in
                x86_64*linux*)
                    # It is mandatory to modify CC for libtool to recognize
                    # cross-compilation
-                   CXX="$CXX -m32"
-                   CCAS="$CCAS -m32"
+                   EXTRA_CXXFLAGS="-m32"
+                   EXTRA_ASFLAGS="-m32"
                    ;;
                *)
                    ;;
@@ -347,6 +346,8 @@ dnl
 dnl Substitution variables.
 dnl
 AC_SUBST(EXTRA_CXXFLAGS)
+AC_SUBST(EXTRA_CFLAGS)
+AC_SUBST(EXTRA_ASFLAGS)
 AC_SUBST(DEBUG_CXXFLAGS)
 AC_SUBST(OPT_CXXFLAGS)
 AC_SUBST(TARGET_ARCH)
