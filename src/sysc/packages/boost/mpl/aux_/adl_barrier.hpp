@@ -38,7 +38,7 @@ namespace sc_aux { using namespace SC_BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE::sc_au
 
 #else // SC_BOOST_MPL_CFG_NO_ADL_BARRIER_NAMESPACE
 
-#   define SC_BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE sc_boost::mpl
+#   define SC_BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE sc_boost::sc_mpl
 #   define SC_BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_OPEN namespace sc_boost { namespace sc_mpl {
 #   define SC_BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_CLOSE }}
 #   define SC_BOOST_MPL_AUX_ADL_BARRIER_DECL(type) /**/
