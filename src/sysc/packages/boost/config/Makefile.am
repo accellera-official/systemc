@@ -45,7 +45,6 @@ H_FILES = \
 noinst_HEADERS = $(H_FILES)
 
 SUBDIRS = \
-	abi \
 	compiler \
 	platform \
 	stdlib \

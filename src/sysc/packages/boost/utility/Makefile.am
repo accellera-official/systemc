@@ -38,18 +38,9 @@ noinst_LTLIBRARIES =
 
 H_FILES = \
 	addressof.hpp \
-	base_from_member.hpp \
-	compare_pointees.hpp \
-	enable_if.hpp \
-	in_place_factory.hpp \
-	result_of.hpp \
-	typed_in_place_factory.hpp \
-	value_init.hpp
+	enable_if.hpp
 
 noinst_HEADERS = $(H_FILES)
-
-SUBDIRS = \
-	detail
 
 CXX_FILES = 
 
