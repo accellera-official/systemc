@@ -208,8 +208,10 @@ Here is an overview of changes in 2.3.0 compared to 2.2.0:
     IEEE 1666_2011 Language Reference Manual for details.
 
   - Boost library used by SystemC is now in the namespace sc_boost 
-    rather than boost. This allows SystemC-based programs to be 
-    combined with programs using later versions of the boost library.
+    rather than boost.  Only parts directly related to sc_bind and
+    sc_(c)ref are kept, other previously included parts of Boost
+    have been removed.  This allows SystemC-based programs to be
+    combined with programs using later versions of the Boost library.
 
     Note that to use OSCI TLM 2.0 with SystemC 2.3.0 you will need to
     add the following line before including systemc.h:
