@@ -64,15 +64,15 @@ namespace tlm
 #define TLM_VERSION_MAJOR                   2           ///< version major level ( numeric )
 #define TLM_VERSION_MINOR                   0           ///< version minor level ( numeric )
 #define TLM_VERSION_PATCH                   2           ///< version patch level ( numeric )
-#define TLM_VERSION_ORIGINATOR              "TLMWG"     ///< TLM creator string
+#define TLM_VERSION_ORIGINATOR              "ACCELLERA" ///< TLM creator string
 #define TLM_VERSION_SEPARATOR               "."         ///< version string separator
 
 #define TLM_IS_PRERELEASE                   1           ///< pre-release flag ( 1 / 0 )
 #define TLM_VERSION_PRERELEASE              "ALPHA"     ///< pre-release version string
 
-#define TLM_VERSION_RELEASE_YEAR            "2011"      ///< release year  ( YYYY )
+#define TLM_VERSION_RELEASE_YEAR            "2012"      ///< release year  ( YYYY )
 #define TLM_VERSION_RELEASE_MONTH           "05"        ///< release month ( MM )
-#define TLM_VERSION_RELEASE_DAY             "05"        ///< release day   ( DD )
+#define TLM_VERSION_RELEASE_DAY             "11"        ///< release day   ( DD )
 
 #define TLM_COPYRIGHT                       "        Copyright (c) 1996-" TLM_VERSION_RELEASE_YEAR " by all Contributors\n" \
                                             "                    ALL RIGHTS RESERVED"
