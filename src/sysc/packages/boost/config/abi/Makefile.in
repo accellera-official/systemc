@@ -48,7 +48,7 @@ DIST_COMMON = $(noinst_HEADERS) $(srcdir)/Makefile.am \
 @USES_PTHREADS_LIB_TRUE@am__append_7 = $(PTHREAD_LIBS)
 @DISABLE_ASYNC_UPDATES_TRUE@am__append_8 = -DSC_DISABLE_ASYNC_UPDATES
 @WANT_PTHREADS_THREADS_TRUE@am__append_9 = -DSC_USE_PTHREADS
-subdir = src/sysc/tracing
+subdir = src/sysc/packages/boost/config/abi
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/config/ax_pthread.m4 \
 	$(top_srcdir)/configure.in
@@ -57,34 +57,10 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 mkinstalldirs = $(install_sh) -d
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
-libtracing_la_LIBADD =
-am__objects_1 =
-am__objects_2 = sc_trace.lo sc_vcd_trace.lo sc_wif_trace.lo
-am_libtracing_la_OBJECTS = $(am__objects_1) $(am__objects_2)
-libtracing_la_OBJECTS = $(am_libtracing_la_OBJECTS)
-DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp =
 am__depfiles_maybe =
-CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
-	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
-LTCXXCOMPILE = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
-	--mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
-	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
-CXXLD = $(CXX)
-CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
-	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
-	$(LDFLAGS) -o $@
-COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-LTCOMPILE = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
-	--mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
-	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-CCLD = $(CC)
-LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
-	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
-	$(LDFLAGS) -o $@
-SOURCES = $(libtracing_la_SOURCES)
-DIST_SOURCES = $(libtracing_la_SOURCES)
+SOURCES =
+DIST_SOURCES =
 HEADERS = $(noinst_HEADERS)
 ETAGS = etags
 CTAGS = ctags
@@ -231,25 +207,18 @@ AM_CCASFLAGS = $(EXTRA_ASFLAGS)
 
 # always add fix-point support
 EXTRA_DEFINES = -DSC_INCLUDE_FX $(am__append_8) $(am__append_9)
-noinst_LTLIBRARIES = libtracing.la
+noinst_LTLIBRARIES = 
 H_FILES = \
-	sc_trace.h \
-	sc_vcd_trace.h \
-	sc_wif_trace.h
+	borland_prefix.hpp \
+	borland_suffix.hpp \
+	msvc_prefix.hpp \
+	msvc_suffix.hpp
 
 noinst_HEADERS = $(H_FILES)
-CXX_FILES = \
-	sc_trace.cpp \
-	sc_vcd_trace.cpp \
-	sc_wif_trace.cpp
-
-NO_CXX_FILES = 
-libtracing_la_SOURCES = $(H_FILES) $(CXX_FILES)
-INCLUDE_DIR = $(prefix)/include/sysc/tracing
+INCLUDE_DIR = $(prefix)/include/sysc/packages/boost/config/abi
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .cpp .lo .o .obj
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(top_srcdir)/config/Make-rules.sysc $(top_srcdir)/config/Make-rules.common $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -259,9 +228,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(top_srcdir)/config/Make-rules.sy
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  --ignore-deps src/sysc/tracing/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  --ignore-deps src/sysc/packages/boost/config/abi/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  --ignore-deps src/sysc/tracing/Makefile
+	  $(AUTOMAKE) --gnu  --ignore-deps src/sysc/packages/boost/config/abi/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -288,23 +257,6 @@ clean-noinstLTLIBRARIES:
 	  echo "rm -f \"$${dir}/so_locations\""; \
 	  rm -f "$${dir}/so_locations"; \
 	done
-libtracing.la: $(libtracing_la_OBJECTS) $(libtracing_la_DEPENDENCIES) 
-	$(CXXLINK)  $(libtracing_la_OBJECTS) $(libtracing_la_LIBADD) $(LIBS)
-
-mostlyclean-compile:
-	-rm -f *.$(OBJEXT)
-
-distclean-compile:
-	-rm -f *.tab.c
-
-.cpp.o:
-	$(CXXCOMPILE) -c -o $@ $<
-
-.cpp.obj:
-	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
-
-.cpp.lo:
-	$(LTCXXCOMPILE) -c -o $@ $<
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -421,8 +373,7 @@ clean-am: clean-generic clean-libtool clean-noinstLTLIBRARIES \
 
 distclean: distclean-am
 	-rm -f Makefile
-distclean-am: clean-am distclean-compile distclean-generic \
-	distclean-tags
+distclean-am: clean-am distclean-generic distclean-tags
 
 dvi: dvi-am
 
@@ -458,8 +409,7 @@ maintainer-clean-am: distclean-am maintainer-clean-generic
 
 mostlyclean: mostlyclean-am
 
-mostlyclean-am: mostlyclean-compile mostlyclean-generic \
-	mostlyclean-libtool
+mostlyclean-am: mostlyclean-generic mostlyclean-libtool
 
 pdf: pdf-am
 
@@ -475,15 +425,14 @@ uninstall-am: uninstall-local
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
 	clean-libtool clean-noinstLTLIBRARIES ctags distclean \
-	distclean-compile distclean-generic distclean-libtool \
-	distclean-tags distdir dvi dvi-am html html-am info info-am \
-	install install-am install-data install-data-am \
-	install-data-local install-dvi install-dvi-am install-exec \
-	install-exec-am install-html install-html-am install-info \
-	install-info-am install-man install-pdf install-pdf-am \
-	install-ps install-ps-am install-strip installcheck \
-	installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	distclean-generic distclean-libtool distclean-tags distdir dvi \
+	dvi-am html html-am info info-am install install-am \
+	install-data install-data-am install-data-local install-dvi \
+	install-dvi-am install-exec install-exec-am install-html \
+	install-html-am install-info install-info-am install-man \
+	install-pdf install-pdf-am install-ps install-ps-am \
+	install-strip installcheck installcheck-am installdirs \
+	maintainer-clean maintainer-clean-generic mostlyclean \
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
 	tags uninstall uninstall-am uninstall-local
 
