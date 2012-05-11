@@ -1,6 +1,7 @@
 
         DEFS = $(EXTRA_DEFINES)
-    INCLUDES = -I$(top_srcdir)/src
+# top-level SystemC include directory is added in Make-rules.{sysc,examples}
+    INCLUDES =
 MAIN_LIBRARY = libsystemc.la
 
     AM_CFLAGS=$(EXTRA_CXXFLAGS) \
@@ -8,6 +9,7 @@ MAIN_LIBRARY = libsystemc.la
 
   AM_CXXFLAGS=$(EXTRA_CXXFLAGS)
 
+ AM_CCASFLAGS=$(EXTRA_ASFLAGS)
 
 if WANT_DEBUG
   AM_CFLAGS+=$(DEBUG_CXXFLAGS)

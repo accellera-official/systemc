@@ -30,7 +30,7 @@
 ##
 ## ****************************************************************************
 
-include $(top_srcdir)/config/Make-rules
+include $(top_srcdir)/config/Make-rules.sysc
 
 
 H_FILES = \
@@ -72,19 +72,22 @@ INCLUDE_DIR = $(prefix)/include/sysc/qt
 qt.o qtmdc.c qtmds.s: configuration
 
 if QT_ARCH_X86
-configuration: md/i386.s
+configuration: md/i386.s md/null.c
 endif
 if QT_ARCH_X86_64
-configuration: md/iX86_64.s 
+configuration: md/iX86_64.s md/null.c
 endif
 if QT_ARCH_POWERPC_MACOSX
 configuration: md/powerpc_mach.s md/powerpc.c
 endif
 if QT_ARCH_SPARC
-configuration: md/sparc.s
+configuration: md/sparc.s md/null.c
 endif
 if QT_ARCH_HPPA
-configuration: md/hppa.s
+configuration: md/hppa.s md/null.c
+endif
+if QT_ARCH_PTHREADS
+configuration: md/null.s md/null.c
 endif
 	@test -d md || ln -s $(srcdir)/md .
 	@$(srcdir)/config $(QT_ARCH)

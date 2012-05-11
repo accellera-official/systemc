@@ -30,7 +30,7 @@
 ##
 ## ****************************************************************************
 
-include $(top_srcdir)/config/Make-rules
+include $(top_srcdir)/config/Make-rules.sysc
 
 # order of SUBDIRS is important, sysc needs to go first:
 SUBDIRS = \

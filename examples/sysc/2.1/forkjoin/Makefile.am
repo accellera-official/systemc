@@ -30,19 +30,19 @@
 ##
 ## ****************************************************************************
 
+include $(top_srcdir)/config/Make-rules.examples
+
 H_FILES = 
 
 CXX_FILES = \
 	forkjoin.cpp 
-	
+
 forkjoin_SOURCES = $(CXX_FILES) $(H_FILES) README.txt
 
 forkjoin_LDADD = -L$(prefix)/lib-$(TARGET_ARCH) -lsystemc -lm
 
 check_PROGRAMS = forkjoin
 TESTS = $(check_PROGRAMS) 
-
-INCLUDES = -I$(prefix)/include
 
 
 all:

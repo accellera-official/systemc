@@ -30,6 +30,8 @@
 ##
 ## ****************************************************************************
 
+include $(top_srcdir)/config/Make-rules.examples
+
 CXX_FILES = \
 	display.cpp \
 	main.cpp \
@@ -47,8 +49,6 @@ H_FILES = \
 
 check_PROGRAMS = pipe
 TESTS = $(check_PROGRAMS) 
-
-INCLUDES = -I$(prefix)/include
 
 pipe_SOURCES = $(CXX_FILES) $(H_FILES)
 

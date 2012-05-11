@@ -21,9 +21,8 @@
 ##  Original Author: Alan Fitch, Doulos, 2012-03-10
 ##
 ## ****************************************************************************
-##
 
-include $(top_srcdir)/config/Make-rules
+include $(top_srcdir)/config/Make-rules.sysc
 
 SUBDIRS = \
 	tlm_analysis \

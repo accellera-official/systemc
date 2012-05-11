@@ -30,19 +30,19 @@
 ##
 ## ****************************************************************************
 
+include $(top_srcdir)/config/Make-rules.examples
+
 H_FILES = 
 
 CXX_FILES = \
 	rsa.cpp
-	
+
 rsa_SOURCES = $(CXX_FILES) $(H_FILES)
 
 rsa_LDADD = -L$(prefix)/lib-$(TARGET_ARCH) -lsystemc -lm
 
 check_PROGRAMS = rsa
 TESTS = $(check_PROGRAMS) 
-
-INCLUDES = -I$(prefix)/include
 
 
 all:

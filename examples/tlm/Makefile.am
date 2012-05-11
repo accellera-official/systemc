@@ -30,6 +30,8 @@
 ##
 ## ****************************************************************************
 
+include $(top_srcdir)/config/Make-rules.examples
+
 INST_FILES = \
 	at_1_phase \
 	at_1_phase \
@@ -46,7 +48,7 @@ INST_FILES = \
 	lt_extension_mandatory \
 	lt_mixed_endian \
 	lt_temporal_decouple
-  
+
 # support local addition of automake macros
 ACLOCAL_AMFLAGS= -I config
 

@@ -1,7 +1,7 @@
 ## ****************************************************************************
 ##
 ##  The following code is derived, directly or indirectly, from the SystemC
-##  source code Copyright (c) 1996-2003 by all Contributors.
+##  source code Copyright (c) 1996-2005 by all Contributors.
 ##  All Rights reserved.
 ##
 ##  The contents of this file are subject to the restrictions and limitations
@@ -15,54 +15,47 @@
 ##
 ## ****************************************************************************
 ##
-##  examples/sysc/simple_perf/Makefile.am --
+##  src/sysc/packages/boost/config/abi/Makefile.am --
 ##  Process this file with automake to produce a Makefile.in file.
 ##
-##  Original Author: Andy Goodrich, Forte Design Systems, 17 June 2003
+##  Original Author: Torsten Maehne, UPMC, Paris, 2012-05-09
 ##
 ## ****************************************************************************
 ##
-##  MODIFICATION LOG - modifiers, enter your name, affiliation and
-##  changes you are making here:
+##  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+##  changes you are making here.
 ##
-##  Modifier Name & Affiliation:
+##      Name, Affiliation, Date:
 ##  Description of Modification:
 ##
 ## ****************************************************************************
 
-include $(top_srcdir)/config/Make-rules.examples
+include $(top_srcdir)/config/Make-rules.sysc
 
-H_FILES = 
+noinst_LTLIBRARIES =
 
-CXX_FILES = \
-	simple_perf.cpp 
+H_FILES = \
+	borland_prefix.hpp \
+	borland_suffix.hpp \
+	msvc_prefix.hpp \
+	msvc_suffix.hpp
 
-simple_perf_SOURCES = $(CXX_FILES) $(H_FILES)
+noinst_HEADERS = $(H_FILES)
 
-simple_perf_LDADD = -L$(prefix)/lib-$(TARGET_ARCH) -lsystemc -lm
-
-check_PROGRAMS = simple_perf
-TESTS = $(check_PROGRAMS) 
-
-
-all:
-	@echo "To compile and run this example type"
-	@echo "   make check "
+INCLUDE_DIR = $(prefix)/include/sysc/packages/boost/config/abi
 
 install-data-local:
 	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) .
-	for file in $(simple_perf_SOURCES); do \
-		$(INSTALL_DATA) $(srcdir)/$$file ./$$file; \
+	$(mkinstalldirs) $(INCLUDE_DIR)
+	for file in $(noinst_HEADERS); do \
+	  $(INSTALL_DATA) $(srcdir)/$$file $(INCLUDE_DIR)/$$file; \
 	done
-
-
 
 uninstall-local:
 	@$(NORMAL_UNINSTALL)
-	for file in $(simple_perf_SOURCES); do \
-		rm -f ./$$file; \
+	for file in $(noinst_HEADERS); do \
+	  rm -f $(INCLUDE_DIR)/$$file; \
 	done
-
+	-rmdir $(INCLUDE_DIR)
 
 ## Taf!

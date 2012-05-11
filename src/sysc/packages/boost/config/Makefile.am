@@ -30,7 +30,7 @@
 ##
 ## ****************************************************************************
 
-include $(top_srcdir)/config/Make-rules
+include $(top_srcdir)/config/Make-rules.sysc
 
 noinst_LTLIBRARIES =
 
@@ -45,6 +45,7 @@ H_FILES = \
 noinst_HEADERS = $(H_FILES)
 
 SUBDIRS = \
+	abi \
 	compiler \
 	platform \
 	stdlib \

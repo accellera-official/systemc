@@ -30,6 +30,8 @@
 ##
 ## ****************************************************************************
 
+include $(top_srcdir)/config/Make-rules.examples
+
 CXX_FILES = \
 	main.cpp 
 
@@ -37,8 +39,6 @@ H_FILES =
 
 check_PROGRAMS = dpipe
 TESTS = $(check_PROGRAMS) 
-
-INCLUDES = -I$(prefix)/include
 
 dpipe_SOURCES = $(CXX_FILES) $(H_FILES)
 
