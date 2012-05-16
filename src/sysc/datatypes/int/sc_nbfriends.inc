@@ -17,7 +17,7 @@
 
 /*****************************************************************************
 
-  sc_nbfriends.cpp -- Friend functions for both sc_signed and sc_unsigned
+  sc_nbfriends.inc -- Friend functions for both sc_signed and sc_unsigned
                       classes. The vec_* functions are called through either
                       these functions or those in sc_nbexterns.cpp. These
                       functions perform their work on two inputs u and v, and
