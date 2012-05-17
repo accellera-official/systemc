@@ -427,9 +427,9 @@ sc_string_old sc_string_old::to_string(const char* format, ...)
        buf_size*=2;
        buf = new char[buf_size];
 #if defined(_MSC_VER)
-       cnt = _vsnprintf(buffer, buf_size, format, argptr);
+       cnt = _vsnprintf(buf, buf_size, format, argptr);
 #else
-       cnt = vsnprintf(buffer, buf_size, format, argptr);
+       cnt = vsnprintf(buf, buf_size, format, argptr);
 #endif
        if(buf_size<max_size && cnt>=buf_size)
          delete[] buf;
