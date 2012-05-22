@@ -342,65 +342,18 @@ Use the `--help' option to print a list.
 2. Installation Notes for Windows
 ---------------------------------
 
-This release has been ported to Windows NT 4.0 (SP6a) and will
-work with Visual C++ 7.0.
+This release has been tested on Visual C++ 2005/2008/2010, Windows XP, and Windows 7.
 
-The SystemC distribution includes project and workspace files for
-Visual C++. If you use these project and workspace files the SystemC
-source files are available to your new project. For Visual C++ 6.0 the
-project and workspace files are located in directory:
 
-  ...\systemc-2.1\msvc70
-
-This directory contains two subdirectories: `systemc' and
-`examples'.
-
-The `systemc' directory contains the project and workspace files to
-compile the `systemc.lib' library. Double-click on the `systemc.dsw'
-file to launch Visual C++ with the workspace file. The workspace file
-will have the proper switches set to compile for Visual C++ 6.0.
-Select `Build systemc.lib' under the Build menu or press F7 to build
-`systemc.lib'.
-
-The `examples' directory contains the project and workspace files to
-compile the SystemC examples. Go to one of the examples subdirectories
-and double-click on the .dsw file to launch Visual C++ with the
-workspace file. The workspace file will have the proper switches set
-to compile for Visual C++ 6.0. Select `Build <example>.exe' under the
-Build menu or press F7 to build the example executable.
-
-To create a new design, first create a new project by using the `New'
-menu item under the `File' menu. Select the Projects tab on the dialog
-box that appears and select a Win32 Console Application. Create an
-empty project.
-
-For your own SystemC applications, make sure that the Run Time Type
-Information switch is on by using the `Settings...' menu item under
-the `Project' menu. Select the C/C++ tab, and select the `C++
-Language' category. Make sure that the `Enable Run Time Type
-Information (RTTI)' checkbox is checked.
-
-Also make sure that the SystemC header files are included by selecting
-the C/C++ tab, selecting the `Preprocessor' category, and typing the
-path to the SystemC `src' directory in the text entry field labeled
-`Additional include directories'. The examples use
-e.g. `../../../src'.
-
-Next add the source files to the project by using the `Add To
-Project>Files...' menu item under the `Project' menu. Make sure that
-the files are added to the new project directory just created. Do the
-same for the `systemc.lib' library before building your SystemC
-application.
-
-Visual C++ 7.1
---------------
-The download directory contains two subdirectories: 'msvc71' and
+Visual C++ 2005 (compiler version 8.0)
+--------------------------------------
+The download directory contains two subdirectories: 'msvc80' and
 'examples'.
 
-The 'msvc71' directory contains the project and workspace files to
-compile the 'systemc.lib' library. Double-click on the 'SystemC.vcproj'
-file to launch Visual C++ 7.1 with the workspace file. The workspace file
-will have the proper switches set to compile for Visual C++ 7.1.
+The 'msvc80' directory contains the project and workspace files to
+compile the 'systemc.lib' library. Double-click on the 'SystemC.sln'
+file to launch Visual C++ 2005 with the workspace file. The workspace file
+will have the proper switches set to compile for Visual C++ 2005.
 Select `Build SystemC' under the Build menu or press F7 to build
 `systemc.lib'.
 
@@ -408,7 +361,7 @@ The `examples' directory contains the project and workspace files to
 compile the SystemC examples. Go to one of the examples subdirectories
 and double-click on the .vcproj file to launch Visual C++ with the
 workspace file. The workspace file will have the proper switches set
-to compile for Visual C++ 7.1. Select 'Build <example>.exe' under the
+to compile for Visual C++ 2005. Select 'Build <example>.exe' under the
 Build menu or press F7 to build the example executable.
 
 Creating SystemC Applications
@@ -452,11 +405,11 @@ projects:
    
 2. Select show directories for: Library files
 
-3. Select the 'New' icon and browse to: C:\apps\systemc-2.0.1\msvc71\systemc\debug
+3. Select the 'New' icon and browse to: C:\systemc-2.3.0\msvc80\systemc\debug
 
 4. Select show directories for: Include files
 
-5. Select the 'New' icon and browse to: C:\apps\systemc-2.0.1\src
+5. Select the 'New' icon and browse to: C:\systemc-2.3.0\src
 
 To add the include file and library directory search paths for the current
 project only:
@@ -469,7 +422,7 @@ project only:
   'Additional include directories' (e.g. the examples use '../../../src').
 
 3. From the Linker tab, select the General properties and type the path to 
-   the SystemC library:   ...\systemc-2.1\msvc71\systemc\debug'systemc.lib' 
+   the SystemC library:   ...\systemc-2.3.0\msvc80\systemc\debug'systemc.lib' 
    in the 'Additional Library Directories:' box.
 
 9. Click OK
