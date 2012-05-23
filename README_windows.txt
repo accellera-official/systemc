@@ -32,7 +32,9 @@ Running the regressions
    before launching a Cygwin shell. The quickest way to do this is to launch a 
    Visual C++ 2010 command prompt:
 
-   Start > Programs >  Microsoft Visual Studio 2010 Express > Visual Studio Command Prompt (2010
+   Start > Programs >  Microsoft Visual Studio 2010 Express > Visual Studio Command Prompt (2010)
+
+   [Note: for Visual C++ 2005, you should also run "c:\Program Files\Microsoft Platform SDK\setenv.cmd"]
 
 2) From that command prompt, launch a Cygwin shell
 
@@ -44,26 +46,23 @@ The remaining commands are typed at the Cygwin prompt that should have now appea
    directory, e.g.
 
       export SYSTEMC_HOME=C:\SystemC.2.3.0
-		
-3) The TLM_HOME environment variable should be set to a TLM2 install
 
-      export TLM_HOME=c:\TLM2.0.1
-
-4) Set the compiler
+3) Set the compiler
 
    export CXX=cl
  
-5) Change to the systemc-regressions folder and create a directory to hold the test results and cd into it, e.g.
+4) Change to the systemc-regressions folder and create a directory to hold the test results and cd into it, e.g.
 
    cd systemc-regressions
    mkdir run
    cd run
    
-6) Run the verify.pl script as described in the main releasenotes, e.g.
+5) Run the verify.pl script as described in the main releasenotes, e.g.
 
    ../scripts/verify.pl systemc     (runs all systemc tests using release library)
    ../scripts/verify.pl -g systemc  (runs all systemc tests using debug library)
    ../scripts/verify.pl tlm         (runs all tlm2 tests using release library)
    ../scripts/verity.pl -g tlm      (runs all tlm2 tests using debug library)
    
-7) After all tests are complete, the output summary should show 100% passes
+6) After all tests are complete, the output summary should show 100% passes for
+both systemc and tlm.
