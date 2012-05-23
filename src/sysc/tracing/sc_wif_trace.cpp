@@ -185,7 +185,8 @@ wif_uint64_trace::wif_uint64_trace(const sc_dt::uint64& object_,
   mask(static_cast<sc_dt::uint64>(-1))
 {
     bit_width = width_;
-    if (bit_width < 32) mask = ~(mask << bit_width);
+    if (bit_width < (int)(sizeof(sc_dt::uint64)*BITS_PER_BYTE))
+        mask = ~(mask << bit_width);
     wif_type = "BIT";
 }
 
@@ -1044,13 +1045,11 @@ wif_unsigned_long_trace::wif_unsigned_long_trace(const unsigned long& object_,
 					     const std::string& wif_name_,
 					     int width_) 
 : wif_trace(name_, wif_name_), object(object_), old_value(object_),
-  mask(0xffffffff)
+  mask((unsigned long)-1L)
 {
     bit_width = width_;
-    if (bit_width < 32) {
-        mask = ~(-1 << bit_width);
-    } else {
-        mask = 0xffffffff;
+    if (bit_width < (int)(sizeof(unsigned long)*BITS_PER_BYTE)) {
+        mask = ~(-1L << bit_width);
     }
 
     wif_type = "BIT";
@@ -1075,7 +1074,7 @@ void wif_unsigned_long_trace::write(FILE* f)
         }
     }
     else{
-        unsigned bit_mask = 1 << (bit_width-1);
+        unsigned long bit_mask = 1ul << (bit_width-1);
         for (bitindex = 0; bitindex < bit_width; bitindex++) {
             buf[bitindex] = (object & bit_mask)? '1' : '0';
             bit_mask = bit_mask >> 1;
@@ -1302,13 +1301,11 @@ wif_signed_long_trace::wif_signed_long_trace(const long& object_,
 					     const std::string& wif_name_,
 					     int width_) 
 : wif_trace(name_, wif_name_), object(object_), old_value(object_),
-  mask(0xffffffff)
+  mask((unsigned long)-1L)
 {
     bit_width = width_;
-    if (bit_width < 32) {
-        mask = ~(-1 << bit_width);
-    } else {
-        mask = 0xffffffff;
+    if (bit_width < (int)(sizeof(long)*BITS_PER_BYTE)) {
+        mask = ~(-1L << bit_width);
     }
 
     wif_type = "BIT";
@@ -1332,7 +1329,7 @@ void wif_signed_long_trace::write(FILE* f)
             buf[bitindex]='0';
         }
     } else {
-        unsigned bit_mask = 1 << (bit_width-1);
+        unsigned long bit_mask = 1ul << (bit_width-1);
         for (bitindex = 0; bitindex < bit_width; bitindex++) {
             buf[bitindex] = (object & bit_mask)? '1' : '0';
             bit_mask = bit_mask >> 1;
