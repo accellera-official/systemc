@@ -1,4 +1,3 @@
-#!/usr/bin/perl
 # The following code snippet from the PERLRUN(1) man page ensures the
 # script to be interpreted by the Perl interpreter even if the "shebang"
 # in the first line is ignored and the script is started to be
