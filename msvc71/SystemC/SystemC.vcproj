@@ -354,19 +354,10 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
-				RelativePath="..\..\src\sysc\packages\boost\assert.hpp">
-			</File>
-			<File
 				RelativePath="..\..\src\sysc\packages\boost\bind.hpp">
 			</File>
 			<File
-				RelativePath="..\..\src\sysc\packages\boost\checked_delete.hpp">
-			</File>
-			<File
 				RelativePath="..\..\src\sysc\packages\boost\config.hpp">
-			</File>
-			<File
-				RelativePath="..\..\src\sysc\packages\boost\current_function.hpp">
 			</File>
 			<File
 				RelativePath="..\..\src\sysc\datatypes\fx\fx.h">
@@ -783,19 +774,7 @@
 				RelativePath="..\..\src\sysc\datatypes\fx\scfx_utils.h">
 			</File>
 			<File
-				RelativePath="..\..\src\sysc\packages\boost\shared_ptr.hpp">
-			</File>
-			<File
 				RelativePath="..\..\src\systemc.h">
-			</File>
-			<File
-				RelativePath="..\..\src\sysc\packages\boost\throw_exception.hpp">
-			</File>
-			<File
-				RelativePath="..\..\src\sysc\packages\boost\type.hpp">
-			</File>
-			<File
-				RelativePath="..\..\src\sysc\packages\boost\weak_ptr.hpp">
 			</File>
 		</Filter>
 		<Filter

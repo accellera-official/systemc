@@ -42,7 +42,8 @@ noinst_HEADERS = $(H_FILES)
 CXX_FILES = 
 
 SUBDIRS = \
-	config
+	config  \
+	.
 
 
 INCLUDE_DIR = $(prefix)/include/sysc/packages/boost/mpl/aux_
