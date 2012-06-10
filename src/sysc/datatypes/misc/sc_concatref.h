@@ -244,7 +244,12 @@ public:
 	    result_p->ndigits = DIV_CEIL(result_p->nbits);
             result_p->digit = (sc_digit*)sc_core::sc_temp_heap.allocate( 
                 sizeof(sc_digit)*result_p->ndigits );
-	    result_p->digit[result_p->ndigits-1] = 0;
+#if defined(_MSC_VER)
+            // workaround spurious initialisation issue on MS Visual C++
+            memset( result_p->digit, 0, sizeof(sc_digit)*result_p->ndigits );
+#else
+            result_p->digit[result_p->ndigits-1] = 0;
+#endif
             right_non_zero = m_right_p->concat_get_data( result_p->digit, 0 );
             left_non_zero = m_left_p->concat_get_data(result_p->digit, m_len_r); 
             if ( left_non_zero || right_non_zero ) 
