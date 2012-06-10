@@ -51,8 +51,11 @@ Here is a list of known limitations in this release:
 
   - Not all options of the verify.pl script are fully functional.
 
-  - The regression test suite does not cover all the SystemC source code, thought
-    is is improved compared to previous versions.
+  - The regression test suite does not cover all the SystemC source code,
+    though it is improved compared to previous versions.
 
   - Some datatype tests take a long time to either compile or run.
 
+  - On Mac OS X 10.6.8 (Snow Leopard), the verify.pl script does not
+    detect the correct architecture (x86_64) correctly.  You can
+    run the regressions against a 32-bit version of SystemC.
