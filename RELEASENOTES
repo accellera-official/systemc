@@ -57,5 +57,5 @@ Here is a list of known limitations in this release:
   - Some datatype tests take a long time to either compile or run.
 
   - On Mac OS X 10.6.8 (Snow Leopard), the verify.pl script does not
-    detect the correct architecture (x86_64) correctly.  You can
+    detect the x86_64 architecture correctly.  You can
     run the regressions against a 32-bit version of SystemC.
