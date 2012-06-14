@@ -24,14 +24,15 @@ CONTENTS
   8) Fixed-point library
 
   9) TLM Release Notes
-  
+
+
 1) What's new in this release?
 ==============================
 
 Compared to the 2.2.0, this release has the following new items:
 
-  - TLM is merged into the main SystemC release. Please see section 9) below for 
-    more details of earlier TLM releases.
+  - TLM is merged into the main SystemC release. Please see section 9) below
+    for more details of earlier TLM releases.
 	
   - This version of SystemC contains the "Proof of Concept" simulator
     for the IEEE 1666-2011 SystemC standard. Please consult the IEEE
@@ -45,7 +46,7 @@ Compared to the 2.2.0, this release has the following new items:
   - Expanded platform support, see the README.
 
   - Removed build targets "opt", "debug", "pthreads", "pthreads_debug"
-    on UNIX platforms in favour of new options to the configure script.
+    on UNIX-like platforms in favour of new options to the configure script.
     Added support for building a shared library via libtool.
     See instructions in INSTALL file.
 
@@ -57,8 +58,6 @@ Following is the list of bug fixes and enhancements for this release:
 
      - Removed quick threads header inclusion from public includes.
 
-     - Added free BSD support to configure and cleaned up other issues.
-
      - Plugged memory leak in sc_signal destructors associated with 
        sc_event instances.
 
@@ -66,9 +65,9 @@ Following is the list of bug fixes and enhancements for this release:
 
      - Process control improvements: 
          (a) Fixed bug in hierarchical killing of processes.
-	 (b) Changes to when deleted processes are actually deleted.
-	 (c) Retain process objects as zombies until all of their children 
-	     have been removed.
+         (b) Changes to when deleted processes are actually deleted.
+         (c) Retain process objects as zombies until all of their children 
+             have been removed.
 
      - Replaced last uses of sc_pvector with std::vector<>.
 
@@ -120,9 +119,9 @@ Following is the list of bug fixes and enhancements for this release:
 
      - Fixed list processing for attributes to match that of C++ Standard
        Library classes.
-       
-         src/sysc/utils/sc_vector.h
-       
+
+         src/sysc/utils/sc_pvector.h
+
      - Changed .begin() and .end in sc_pvector<T> so that its use by
        sc_object::attr_cltn().begin() and .end() will return a null
        pointer if there are no attributes defined.
@@ -138,6 +137,11 @@ Following is the list of bug fixes and enhancements for this release:
      
      - Fixed bug for sc_bigint::and_reduce() where it was not properly
        detecting the all ones case.
+
+     - Fixed exception handling and propagation throughout the library.
+       All exceptions (and sc_reports with SC_THROW action) thrown
+       from processes are consistently forwarded to the main thread
+       and can be caught in sc_main.
 
      - Changed the default status value in sc_elab_and_sim() to be 1 
        rather than 0. This means a non-zero value will be returned
@@ -164,11 +168,11 @@ Following is the list of bug fixes and enhancements for this release:
        src/sysc/datatypes/int/sc_nbcommon.inc
 
          Fixed bit width in CLASS_TYPE::CLASS_TYPE() for the case that
-	 the signature is a buffer of digits and a width. The value of
-	 nbits needs to be set via num_bits() rather than using the
-	 nb parameter. This allows the case where CLASS_TYPE is 
-	 sc_unsigned to get the proper bit width. Without this fix the
-	 high order bit disappears in logical results.
+         the signature is a buffer of digits and a width. The value of
+         bits needs to be set via num_bits() rather than using the
+         b parameter. This allows the case where CLASS_TYPE is 
+         sc_unsigned to get the proper bit width. Without this fix the
+         high order bit disappears in logical results.
 
      - Added "kill" assignment to sc_fifo::buf_read() so that things like
        boost::shared_ptr actually release.
@@ -178,7 +182,7 @@ Following is the list of bug fixes and enhancements for this release:
          src/sysc/communication/sc_fifo.h
 
             The port binder now checks for blocking interfaces in addition 
-	    to the combined non-blocking - blocking interface.
+            to the combined non-blocking - blocking interface.
 
      - Error message added if wait(N) is called from an SC_METHOD
 
@@ -188,13 +192,19 @@ Following is the list of bug fixes and enhancements for this release:
 
          src/sysc/kernel/sc_main_main.cpp
 
-     - Mac OS X support modified to accommodate Snow Leopard
+     - Mac OS X support modified to support 32/64 bit builds
 
          configure.in
 
-       The support for i386 based Macintoshes now includes "-arch i386" 
-       for the command line options for g++/gcc and as. This produces
-       32-bit architecture libraries, as has been true in the past.
+       The support for i386 based Macintoshes now includes the required
+       "-arch <CPU>" for the command line options for g++/gcc and as.
+       This produces 32/64-bit architecture libraries, as supported by
+       the CPU.  You can override the selection by specifying an explicit
+       --build= option to the configure call.
+
+     - Fixed the the module hierarchy stack during the invocation of all
+       elaboration and simulation callbacks.
+
 
 3) New features
 ===============
@@ -213,14 +223,6 @@ Here is an overview of changes in 2.3.0 compared to 2.2.0:
     have been removed.  This allows SystemC-based programs to be
     combined with programs using later versions of the Boost library.
 
-    Note that to use OSCI TLM 2.0 with SystemC 2.3.0 you will need to
-    add the following line before including systemc.h:
-
-       #define sc_boost boost
-
-    This will change the namespace back to boost, which is necessary to
-    compile TLM 2.0 based applications.
-
   - Addition of sc_prim_channel::async_request_update().
     You can disable this feature by compiling your simulator
     with SC_DISABLE_ASYNC_UPDATES defined (or by using the
@@ -230,6 +232,7 @@ Here is an overview of changes in 2.3.0 compared to 2.2.0:
     due to changes in IEEE 1666-2011 (see sc_event::notify, 5.10.6).
     Compile with SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS defined to
     obtain the old behaviour.
+
 
 4) Incompatibilities with previous releases
 ===========================================
@@ -261,7 +264,7 @@ In this section the experimental features of this release are listed.
 
   - None
 
-7) Known Problems       
+7) Known Problems
 =================
 
   - The use of the DEBUG_SYSTEMC macro does not work properly with certain
@@ -272,13 +275,28 @@ In this section the experimental features of this release are listed.
     The work-around is to specify DEBUG_SYSTEMC when the SystemC library
     is built.
 
+  - Using the (deprecated) sc_string_old class with very long strings
+    (>1024 bytes) is subject to a buffer overflow.
+
+  - Tracing "(unsigned) long" values to WIF trace files is broken on
+    64-bit platforms.  Trace sc_dt::(u)int64 instead.
+
+  - The sign-extension of mixed-signedness logic expressions (&,|)
+    involving one sc_bigint<> operand and a limited width type is
+    inconsistent between 32-bit and 64-bit platforms in some rare corner
+    cases.  Convert both operands to sc_bigint<> first.
+
 
 8) Fixed-point library
 ======================
 
-(No change from 2.0.1 Production.)
-
 SystemC contains a fixed-point datatypes package.
+
+Changes compared to SystemC 2.0.1
+
+ - support for explicit construction from "float" values
+ - removing a conversion ambiguity by marking some constructors of
+   sc_fxval[_fast] classes as 'explicit'
 
 Compile-time macro SC_INCLUDE_FX must be defined in order to build
 applications that use fixed point types. You can specify a compiler
@@ -296,13 +314,10 @@ types sc_int, sc_uint, sc_bigint, sc_biguint), compilation time can be
 reduced by defining compile-time macro SC_FX_EXCLUDE_OTHER (in addition
 to SC_INCLUDE_FX).
 
+
+
 9) TLM Release Notes
 ====================
-
-
-==========================================
-Release Notes for  TLM 2.0.1  2009-July-15
-==========================================
 
 CONTENTS
 ========
@@ -312,64 +327,49 @@ CONTENTS
   3) Known issues
 
 
-1) Supported SystemC versions
-=============================
+9.1) Supported SystemC versions
+===============================
 
-SystemC 2.1.v1 and 2.2.0 are supported and have been tested.
-Has been run successfully with Beta versions of SystemC 2.3.x
-
-
-2) What's changed in this kit?
-==============================
-
-Compared to the 2.0.0 kit, the following has changed:
+SystemC 2.2.0 and 2.3.0 are supported and have been tested.
+SystemC 2.1.v1 is still supported in principle, but has not
+been tested extensively.
 
 
-a. Added a const modifier to the generic payload methods get_ref_count() and has_mm()
+9.2) What's changed in this kit?
+================================
 
-b. Added a const modifier to the phase argument of the notify methods of each of the two PEQs
+Compared to the standalone 2.0.1 kit, the following has changed:
 
-c. Removed the dependency on the Boost libraries from the code of the multi-socket utilities. The TLM-2 kit now has no dependencies on Boost
+a. Imported standalone TLM-2.0 implementation into core SystemC
+   package.  Reorganized header structure:
+    {src,include}/
+      tlm_core/
+        tlm_1/
+        tlm_2/
+      tlm_utils/
 
-d. Changed the implementations of the multi_passthrough_initiator_sockets to provide default implementations for the dmi/debug methods (just like all the other sockets in the tlm_utils)
+b. Changes according to IEEE 1666-2011:
 
-e. Changed the implementations of the endianness conversion functions so they work correctly on a 64-bit host
+   - added <tlm> header file
+   - renamed DECLARE_EXTENDED_PHASE to TLM_DECLARE_EXTENDED_PHASE
+   - added const overloads to get_base_* functions in socket classes
+   - added tlm_gp_option for debug/DMI
+   - made bind() functions virtual
 
-f. Fixed bug in simple_target_socket and simple_target_socket_tagged where timing annotation was not acted upon
+c. Some minor bug fixes in b->nb conversion in simple_target_socket(_tagged)
+   to correctly handle time annotations.
 
-g. Added an example lt_mixed_endian illustrating use of endianness conversion functions to model memory sharing between big- and little-endian initiators
+d. Bug fixes and cleanups in tlm_fifo and circular_buffer implementation
 
-h. Changed constructors of convenience sockets to provide, for each socket, one default constructor and a second one with a name argument (just like standard sockets)
+e. Dropped namespace tlm_qk_internal and cleaned up tlm_global_quantum
+   implementation
 
-i. Removed references to tlm::tlm_phase in convenience sockets (and replaced them by phase_type)
-
-j. Removed typedefs initiator/target_socket_type from standard sockets
-
-k. Added PTHREADS support in the examples Makefile
-
-l. Cleaned up examples and unit_tests to eliminate issues identified by Doulos and Jeda protocol checkers and to allow them to pass regressions on both little- and big-endian hosts
-
-m. Added a convenience method set_and_sync() to tlm_quantumkeeper
-
-n. Added method update_original_from() to class tlm_generic_payload
-
-o. Added method cancel_all() to classes peq_with_get and peq_with_cb_and_phase
-
-p. Move tlm_req_rsp and tlm_analysis to a new directory tlm_1
-
-q. Collapse the directory hierarchy below tlm_h by removing tlm_trans
-
-r. Changed "tlm_initiator_socket_export" to "tlm_base_initiator_socket_export", and "tlm_target_socket_port" to "tlm_base_target_socket_port" in default constructors of standard sockets
-
-s. Added a virtual const char* kind() const; method to the standard sockets
-
-t. Added further unit tests
+f. Correctly clean up all bound copies of an analysis interface in
+   tlm_analysis_port::unbind
 
 
-
-
-3) Known issues
-===============
+9.3) Known issues
+=================
 
 a. when using TLM 2.0 with SystemC 2.1.v1 on 64 bit linux you will need to
    force 32 bit mode by using the '-m32' flag
@@ -387,7 +387,20 @@ c. the implementation of the PEQ 'peq_with_get' in tlm_utils does not properly
    phase. This is wrong immediate notifications should overtake delta
    notifications
 
-d. the lt_dmi example does not run for all platform and library versions. It
-   works for X86 linux, gcc4.0 and SystemC 2.2.0
+d. the lt_dmi example does not run for all platform and library versions.
+   It works for X86 linux, gcc4.0 and SystemC 2.2.0
+
+e. the nb2b_thread dynamic process in the simple_target_socket[_tagged] is
+   created with a static sensitivity list but that event gets deleted in the
+   nb2b_thread implementation.  This may be beyond the limits of IEEE 1666-2011.
+
+f. in the same nb2b_thread process the implementation only allows to terminate
+   a transaction through a tlm::TLM_COMPLETED return value on the bw_nb_transport
+   call (return coming from the initiator).  In case the initiator finishes the
+   response phase with a tlm::TLM_UPDATED return value and a tlm::END_RESP phase,
+   the transaction will not finish.
+
+g. the get_base_interface function(s) of tlm_utils::multi_passthrough_target_socket
+   throws an error when bound hiararchically.  This is against the intent in 1666-2011.
 
 

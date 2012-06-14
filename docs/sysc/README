@@ -1,19 +1,14 @@
-The current directory contains the following files:
 
-WhitePaper20.pdf - Introduction to SystemC 2.0
+This directory contains
 
-FuncSpec20.pdf   - Functional specification for SystemC 2.0
+doxygen - a folder containing a command file for doxygen which may
+be used to generate browseable documentation of the SystemC class library.
+Please see www.doxygen.org for usage.
 
-UserGuide20.pdf  - SystemC 2.0 User's Guide
+archived - documentation from earlier versions of SystemC, much of which is now out-of-date.
 
-SystemC_2_1_overview.pdf - An overview of new features in SystemC 2.1
+SystemC 2011 New Features.pdf
+A presentation outlining the new features of IEEE 1666-2011, first given at 
+DVCON (Design and Verification Conference) in February 2012.
 
-SystemC_2_1_features.pdf - A more detailed description of new features in 2.1
-
-Note that the SystemC 2.0 User's Guide covers primarily the SystemC 1.0
-language features. We recommend that you use the combination of the
-SystemC 2.0 User's Guide and the Functional Specification for SystemC 2.0
-as a User's Guide for the SystemC 2.0 language.
-
-If you don't have Adobe Acrobat Reader(tm) you can download it from:
-http://www.adobe.com/products/acrobat/
+README - this file.

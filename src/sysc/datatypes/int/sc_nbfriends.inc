@@ -17,7 +17,7 @@
 
 /*****************************************************************************
 
-  sc_nbfriends.cpp -- Friend functions for both sc_signed and sc_unsigned
+  sc_nbfriends.inc -- Friend functions for both sc_signed and sc_unsigned
                       classes. The vec_* functions are called through either
                       these functions or those in sc_nbexterns.cpp. These
                       functions perform their work on two inputs u and v, and
@@ -108,7 +108,7 @@ ADD_HELPER(small_type us, int unb, int und,
     
     if (cmp_res == 0) { // u == v
 #ifndef SC_MAX_NBITS
-      delete d;
+      delete[] d;
 #endif
       return CLASS_TYPE();
     }
@@ -309,9 +309,12 @@ MOD_HELPER(small_type us,
 
   us = check_for_zero(us, nd - 1, d);
 
-  if (us == SC_ZERO)
+  if (us == SC_ZERO) {
+#ifndef SC_MAX_NBITS
+    delete[] d;
+#endif
     return CLASS_TYPE();
-  else
+  } else
     return CLASS_TYPE(us, sc_min(unb, vnb), nd - 1, d);
 
 }

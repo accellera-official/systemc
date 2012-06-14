@@ -1,58 +1,18 @@
 
-====================================
-README  for  TLM-2.0.1  2009-July-15
-====================================
+========================================
+README  for  TLM (part of SystemC 2.3.0)
+========================================
 
-This is the proof of concept implementation for the OSCI TLM-2.0 standard.
-
-This release includes the OSCI TLM-2.0 Language Reference Manual
+This is the proof of concept implementation for the OSCI TLM-2.0 standard,
+as defined by the IEEE 1666-2011 SystemC Language Reference Manual.
 
 -------------------------------------------------------------------------------
                 IMPORTANT
 
-1. This version of the TLM-2.0 standard is a further evolution of draft 2 which
-   in itself represents a significant evolution since the draft 1 kit.  
-   This version is not, nor was it intended to be, backwards compatible with 
-   draft 2 and draft 1.
-   
-2. The version number 2.0.1 signifies the version of the software release, not 
-   the version of the OSCI TLM-2.0 standard. This version of the
-   TLM-2.0 proof of concept implementation is intended to be fully compliant 
-   with the OSCI TLM-2.0 Language Reference Manual.
-
-3. This release has been tested on the following platforms:
-
-   32-bit platforms
-     Linux Redhat 3              with gcc 3.2.3  and SystemC-2.2.0
-     Linux Redhat Enterprise 4   with gcc-3.3.2  and SystemC-2.2.0
-     Linux Redhat Enterprise 4   with gcc-3.4.3  and SystemC-2.2.0
-     Linux Redhat Enterprise 4   with gcc-3.4.4  and SystemC-2.2.0
-     Linux Redhat Enterprise 5   with gcc-4.1.2  and SystemC-2.2.0
-     Linux Fedora 11             with gcc-4.4.0  and SystemC-2.2.0
-     Linux Fedora 11             with gcc-4.4.0  and 2.3.16jun09_beta
-
-     Windows XP Cygwin (Cygming) with gcc-3.4.   and SystemC-2.1.v1
-
-     Windows XP SP2/SP3          with MS Visual C++ 2008 Express Edition 
-                                                 and SystemC-2.2.0
-                                                 
-     SPARC Solaris 5.8           with gcc 3.3.2  and SystemC-2.2.0
-     SPARC Solaris 5.8           with gcc 3.4.2  and SystemC-2.2.0
-     
-   64-bit platforms
-     Linux RedHat Enterprise 4   with gcc-3.4.3  and SystemC-2.2.0
-     Linux RedHat Enterprise 4   with gcc-4.0.3  and SystemC-2.2.0
-     Linux SUSE Enterprise 9     with gcc-4.2.2  and SystemC-2.2.0
-     
-
-   But to have SystemC itself work with gcc-4.2.2 or gcc-4.4.0 requires the following 
-   change:
-   Edit the file systemc-2.2.0/include/sysc/packages/boost/bind/placeholders.hpp
-   change line 28
-   from
-     #if defined(__BORLANDC__)
-   to
-     #if defined(__BORLANDC__) || defined(__GNUC__)
+1. This version of the TLM-2.0 code is version 2.0.2. It has some minor changes
+   compared to the previous version. For details of changes, please refer to the
+   SystemC RELEASENOTES file.
+      
 
 -------------------------------------------------------------------------------
 
@@ -63,43 +23,44 @@ Licensing and Copyright
 
 Installation
 
-   No installation, as such, required; simply extract contents of the
-   downloaded package.
+   Please follow the INSTALL instructions for SystemC.
 
 Release Notes
 
-   See the separate RELEASENOTES file that provides up-to date
-   information about this release of TLM 2.0.
+   See the separate SystemC RELEASENOTES file.
 
 User Documentation
 
-   You can find documentation for this release in the docs directory. There is 
-   doxygen generated documentation in the doxygen/ subdirectory of docs/ the 
-   user manual and training presentation can be found in the release/ 
-   subdirectory of docs/. It is recommended that you start with the training 
-   presentation (TLM_2_0_presentation.pps) and then the Language Reference Manual 
-   (TLM-2.0 LRM.pdf).
+   You can find documentation for this release in the docs directory. 
+   A doxygen.in configuration file is available which may be used to build
+   documentation using Doxygen (www.doxygen.org).
+   
+   The TLM library is documented in the IEEE 1666-2011 SystemC Language Reference Manual.
+   This may be obtained by visiting the Accellera Systems Initiative at www.accellera.org.
+
+   Some older documentation has been retained in the docs/release directory. It is
+   recommended that you start with the training presentation (TLM_2_0_presentation.pps) 
+   and then obtain and read the SystemC Language Reference Manual 
+
    See docs/release/README.txt for a description and status of the other 
    documentation.
 
 Directory Structure
 
-   The TLM kit's directory structure has been patterned after that used 
-   for the SystemC language and Verification library (SCV).
-   Dirs: include/   : contains the TLM 2.0 standard headers
-         unit_test/ : contains a set of tests for TLM 2.0
-	 examples/  : contains the examples that come with the TLM 2.0 kit
-	 docs/	    : contains the documentation for TLM 2.0
+   SystemC and TLM code now have a common directory structure. The TLM header
+   files are in the same include directory as the SystemC header files.
+   
+   The previous unit_test directory has been merged into the separate systemc-regressions
+   download, available from www.accellera.org.
+   
+   There are some examples in the folder examples/tlm, and documentation in 
+   docs/tlm.
+   
 
 Build Support
  
-   To use TLM2.0 all you need is the SystemC headers. TLM2.0 has been tested
-   with SystemC versions 2.2.0 and 2.1.v1. 
    
-   In earlier versions of TLM-2.0, the multi_passthrough sockets in the tlm_utils 
-   directory depended on the boost library. This is not true of the current release.
-   
-   Support for building the examples and unit tests is provided for 'unix', and
+   Support for building the examples  is provided for 'unix', and
    'msvc' (project and make files).
 
    Makefiles work hierarchically.  Build is the default target; 'clean', 
@@ -110,24 +71,15 @@ Build Support
    $SYSTEMC_HOME/lib-$TARGET_ARCH is a directory containing the systemc library.
    On Windows, the SYSTEMC and TLM environments variables should be used.
 
-   Please check the README.txt file for the unit_tests how to setup the build
-   environment for different compiler and library versions.
 
 Examples
 
-   There is a set of examples available under the examples/ directory, they
+   There is a set of examples available under the examples/tlm directory, they
    illustrate the key features of the TLM 2.0 standard. For more information see
    the README.txt. 
 
-Unit Tests
-
-   The unit tests, though not as complete or documented as the examples, can 
-   be illustrative for other features of the kit such as payload extensions, 
-   UT & AT modeling, transactors, temporal decoupling, direct memory interface,
-   etc.
-   See instructions in unit_test/README.txt
 
 Problems
 
-   Any problems related to the use of this kit can be submitted to 
+   Any problems related to the use of this proof-of-concept code can be submitted to 
    tlm2_forum@lists.systemc.org.

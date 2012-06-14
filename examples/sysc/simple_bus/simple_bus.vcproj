@@ -1,121 +1,185 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.10"
+	Version="8.00"
 	Name="simple_bus"
 	ProjectGUID="{CE91C43D-8F06-4821-A84A-C561D9A19558}"
-	Keyword="Win32Proj">
+	Keyword="Win32Proj"
+	>
 	<Platforms>
 		<Platform
-			Name="Win32"/>
+			Name="Win32"
+		/>
 	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="Debug"
 			IntermediateDirectory="Debug"
 			ConfigurationType="1"
-			CharacterSet="2">
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/vmg"
 				Optimization="0"
 				AdditionalIncludeDirectories="$(SYSTEMC)\..\src"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;NOGDI"
-				MinimalRebuild="TRUE"
+				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="5"
-				RuntimeTypeInfo="TRUE"
+				RuntimeLibrary="1"
+				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="FALSE"
-				DebugInformationFormat="4"/>
+				Detect64BitPortabilityProblems="false"
+				DebugInformationFormat="4"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="systemc.lib"
 				OutputFile="$(OutDir)/simple_bus.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="$(SYSTEMC)\SystemC\Debug"
-				GenerateDebugInformation="TRUE"
+				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/simple_bus.pdb"
 				SubSystem="1"
-				TargetMachine="1"/>
+				TargetMachine="1"
+			/>
 			<Tool
-				Name="VCMIDLTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCManifestTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCBscMakeTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCAppVerifierTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
+				Name="VCWebDeploymentTool"
+			/>
 			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="Release"
 			IntermediateDirectory="Release"
 			ConfigurationType="1"
-			CharacterSet="2">
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/vmg"
 				AdditionalIncludeDirectories="$(SYSTEMC)\..\src"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
-				MinimalRebuild="TRUE"
+				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="4"
-				BufferSecurityCheck="FALSE"
-				RuntimeTypeInfo="TRUE"
+				RuntimeLibrary="0"
+				BufferSecurityCheck="false"
+				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="FALSE"
-				DebugInformationFormat="3"/>
+				Detect64BitPortabilityProblems="false"
+				DebugInformationFormat="3"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="systemc.lib"
 				OutputFile="$(OutDir)/simple_bus.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(SYSTEMC)\SystemC\Release"
-				GenerateDebugInformation="FALSE"
+				GenerateDebugInformation="false"
 				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				TargetMachine="1"/>
+				TargetMachine="1"
+			/>
 			<Tool
-				Name="VCMIDLTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCManifestTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCBscMakeTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCAppVerifierTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
+				Name="VCWebDeploymentTool"
+			/>
 			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 	</Configurations>
 	<References>
@@ -124,86 +188,112 @@
 		<Filter
 			Name="Source Files"
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
+			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
+			>
 			<File
-				RelativePath=".\simple_bus.cpp">
+				RelativePath=".\simple_bus.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\simple_bus_arbiter.cpp">
+				RelativePath=".\simple_bus_arbiter.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\simple_bus_main.cpp">
+				RelativePath=".\simple_bus_main.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\simple_bus_master_blocking.cpp">
+				RelativePath=".\simple_bus_master_blocking.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\simple_bus_master_direct.cpp">
+				RelativePath=".\simple_bus_master_direct.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\simple_bus_master_non_blocking.cpp">
+				RelativePath=".\simple_bus_master_non_blocking.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\simple_bus_tools.cpp">
+				RelativePath=".\simple_bus_tools.cpp"
+				>
 			</File>
 			<File
-				RelativePath=".\simple_bus_types.cpp">
+				RelativePath=".\simple_bus_types.cpp"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
+			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
+			>
 			<File
-				RelativePath=".\simple_bus.h">
+				RelativePath=".\simple_bus.h"
+				>
 			</File>
 			<File
-				RelativePath=".\simple_bus_arbiter.h">
+				RelativePath=".\simple_bus_arbiter.h"
+				>
 			</File>
 			<File
-				RelativePath=".\simple_bus_arbiter_if.h">
+				RelativePath=".\simple_bus_arbiter_if.h"
+				>
 			</File>
 			<File
-				RelativePath=".\simple_bus_blocking_if.h">
+				RelativePath=".\simple_bus_blocking_if.h"
+				>
 			</File>
 			<File
-				RelativePath=".\simple_bus_direct_if.h">
+				RelativePath=".\simple_bus_direct_if.h"
+				>
 			</File>
 			<File
-				RelativePath=".\simple_bus_fast_mem.h">
+				RelativePath=".\simple_bus_fast_mem.h"
+				>
 			</File>
 			<File
-				RelativePath=".\simple_bus_master_blocking.h">
+				RelativePath=".\simple_bus_master_blocking.h"
+				>
 			</File>
 			<File
-				RelativePath=".\simple_bus_master_direct.h">
+				RelativePath=".\simple_bus_master_direct.h"
+				>
 			</File>
 			<File
-				RelativePath=".\simple_bus_master_non_blocking.h">
+				RelativePath=".\simple_bus_master_non_blocking.h"
+				>
 			</File>
 			<File
-				RelativePath=".\simple_bus_non_blocking_if.h">
+				RelativePath=".\simple_bus_non_blocking_if.h"
+				>
 			</File>
 			<File
-				RelativePath=".\simple_bus_request.h">
+				RelativePath=".\simple_bus_request.h"
+				>
 			</File>
 			<File
-				RelativePath=".\simple_bus_slave_if.h">
+				RelativePath=".\simple_bus_slave_if.h"
+				>
 			</File>
 			<File
-				RelativePath=".\simple_bus_slow_mem.h">
+				RelativePath=".\simple_bus_slow_mem.h"
+				>
 			</File>
 			<File
-				RelativePath=".\simple_bus_test.h">
+				RelativePath=".\simple_bus_test.h"
+				>
 			</File>
 			<File
-				RelativePath=".\simple_bus_types.h">
+				RelativePath=".\simple_bus_types.h"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
-			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}">
+			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
+			>
 		</Filter>
 	</Files>
 	<Globals>

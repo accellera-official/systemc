@@ -60,7 +60,7 @@ namespace sc_core {
 //   This is the non-initialized object instance constructor. It does not 
 //   allocate the heap storage, that is done by the initialize() method.
 //
-// sc_byte_heap()
+// sc_byte_heap(int)
 //   This is the initializing object instance constructor. It does allocates
 //   a heap of the specified number of bytes.
 //       heap_size = number of bytes to allocate for the heap.
