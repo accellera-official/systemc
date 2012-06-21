@@ -134,13 +134,7 @@ const unsigned int tlm_version_major        ( TLM_VERSION_MAJOR               );
 const unsigned int tlm_version_minor        ( TLM_VERSION_MINOR               );
 const unsigned int tlm_version_patch        ( TLM_VERSION_PATCH               );
 
-const bool         tlm_is_prerelease        (
-#if ( TLM_IS_PRERELEASE == TRUE )
-                                              true
-#else   /* TLM_IS_PRERELEASE == TRUE */
-                                              false
-#endif  /* TLM_IS_PRERELEASE == TRUE */
-                                                                              );
+const bool         tlm_is_prerelease        ( TLM_IS_PRERELEASE               );
 
 const std::string  tlm_version_string       ( TLM_VERSION_STRING              );
 const std::string  tlm_version_originator   ( TLM_VERSION_ORIGINATOR          );
