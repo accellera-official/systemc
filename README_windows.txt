@@ -45,7 +45,7 @@ The remaining commands are typed at the Cygwin prompt that should have now appea
 2) The SYSTEMC_HOME environment variable must be set to SystemC install 
    directory, e.g.
 
-      export SYSTEMC_HOME=C:\SystemC.2.3.0
+      export SYSTEMC_HOME=/cygdrive/c/systemc-2.3.0
 
 3) Set the compiler
 
