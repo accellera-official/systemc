@@ -1,15 +1,17 @@
 	INSTALL NOTES FOR SystemC 2.3.0 regression test suite
-	-----------------------------------------------------
-
-Contents:
-
-	1. Installation Notes for Unix 
-
-	2. Installation Notes for Windows
+	=====================================================
 
 
-1. Installation Notes for Unix
-------------------------------
+CONTENTS
+========
+
+	1) Installation Notes for Unix 
+
+	2) Installation Notes for Windows
+
+
+1) Installation Notes for Unix
+==============================
 
 All you have to do is unpack the systemc_tests-2.3.0.tgz file in the
 directory of your choice, .e.g,
@@ -22,14 +24,13 @@ source code and scripts.
 Refer to the README file on how to run the regression tests.
 
 
-2. Installation Notes for Windows
----------------------------------
+2) Installation Notes for Windows
+=================================
 
-Unpack the regression tests using a suitable compression programme, e.g. 7zip.
+Unpack the regression tests using a suitable compression programme, e.g., 7zip.
 
 Refer to the README file on how to run the regression tests, but also to 
 scripts/README_windows.txt for more details.
-
 
 Note: You need Cygwin to run the regression tests on Windows.
       Cygwin is free software that can be obtained from:
