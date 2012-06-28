@@ -11,39 +11,41 @@ Contents:
 1. Installation Notes for Unix
 ------------------------------
 
+
 System Requirements
 ===================
 
 SystemC can be installed on the following UNIX, or UNIX-like platforms:
 
-    o 32-bit Linux (x86) (CentOS 4; Fedora 14,15; Debian 5.0) with
-      GNU C++ compiler versions gcc-3.4.5 through gcc-4.6.2
-
+    o 32-bit Linux (x86) (RedHat Enterprise Linux 4, 5, 6; Fedora 14, 15;
+      Debian 5.0; Ubuntu 10.04LTS, 12.04LTS) with GNU C++ compiler versions
+      gcc-3.4.5 through gcc-4.6.2
     o 32-bit Linux (x86) (Debian) with Clang C++ compiler version
       clang-2.9
-
-    o 64-bit Linux (x86_64) (RedHat RHEL4, Debian 5.0) with
-      GNU C++ compiler versions gcc-3.4.5 through gcc-4.3.2
-
-    o 64-bit Linux (x86_64) (Debian) with 32-bit GNU C++ compiler version
+    o 64-bit Linux (x86_64) (RedHat Enterprise Linux 4, 5, 6; Fedora 17;
+      Debian 5.0; Ubuntu 10.04LTS, 12.04LTS) with GNU C++ compiler versions
+      gcc-3.4.5 through gcc-4.7.0
+    o 64-bit Linux (x86_64) (Debian 5.0) with 32-bit GNU C++ compiler version
       gcc-4.3.2 (./configure --target=i686-linux-gnu)
-
-    o Sun Solaris 2.9 with GNU C++ compiler version gcc-4.4.6
-
-    o MacOSX with GNU C++ compiler versions gcc-3.1 through gcc-4.2.1
-
-    o 64-bit MacOSX with GNU C++ compiler version gcc-4.2.1
-
+    o Sun Solaris 9 (sparc32) with GNU C++ compiler version gcc-3.3.3
+      through gcc-4.4.6
+    o 32-bit Mac OS X (ppc, i386) (10.5 Leopard, 10.6 Snow Leopard, 10.7 Lion)
+      with GNU C++ compiler versions gcc-3.1 through gcc-4.2.1
+    o 64-bit Mac OS X (x86_64) (10.6 Snow Leopard, 10.7 Lion) with
+      GNU C++ compiler version gcc-4.2.1
     o 32-bit FreeBSD 7.4 with GNU C++ compiler version gcc-4.2.1
-
+    o Windows 7 SP1, Microsoft Visual C++ 2005 SP1 (8.0)
+    o Windows 7 SP1, Microsoft Visual C++ 2008 SP1 (9.0)
+    o Windows 7 SP1, Microsoft Visual C++ 2010     (10.0)
+    o Windows XP Prof. SP3, with Microsoft Visual C++ 2010 (10.0)
     o Windows XP Prof. SP3 (Cygwin 1.5.25) with GNU C++ compiler
       version gcc-4.3.2
-
     o Windows XP Prof. SP3 (Msys 1.0.16) with MinGW32
-      GNU C++ compiler version gcc-4.5.2
+      GNU C++ compiler version gcc-4.5.2 through gcc-4.6.2
 
 An installation of SystemC on other, related platforms may be
 possible as well.
+
 
 Sources for Compilers and Related Tools
 =======================================
@@ -53,14 +55,16 @@ the following tools:
 
   1. GNU C++ compiler, version 3.4.5 or later
      or
-     Clang C++ compiler version clang-2.9, or later
+     Clang C++ compiler version clang-2.9 or later
 
   2. GNU Make (gmake)
 
-GCC and gmake are free software that you can
+GCC, Clang, and gmake are free software that you can
 obtain from the following sources:
 
   GCC           http://www.gnu.org/software/gcc/gcc.html
+
+  Clang         http://clang.llvm.org/
 
   gmake         http://www.gnu.org/software/make/make.html
 
@@ -338,15 +342,15 @@ Other options that are rarely used are available in the `configure' script.
 Use the `--help' option to print a list.
 
 
-
 2. Installation Notes for Windows
 ---------------------------------
 
 This release has been tested on Visual C++ 2005/2008/2010, Windows XP, and Windows 7.
 
 
-Visual C++ 2005 (compiler version 8.0)
---------------------------------------
+Microsoft Visual C++ 2005 (compiler version 8.0) or later
+---------------------------------------------------------
+
 The download directory contains two subdirectories: 'msvc80' and
 'examples'.
 
@@ -363,6 +367,7 @@ and double-click on the .vcproj file to launch Visual C++ with the
 workspace file. The workspace file will have the proper switches set
 to compile for Visual C++ 2005. Select 'Build <example>.exe' under the
 Build menu or press F7 to build the example executable.
+
 
 Creating SystemC Applications
 -----------------------------
@@ -401,7 +406,7 @@ and library files respectively. There are two ways to do this:
 To update the include file and library directory search paths for all
 projects:
 
-1. Select Tools -> Options . . . and the Projects -> VC++ Directories tab
+1. Select Tools -> Options... and the Projects -> VC++ Directories tab
    
 2. Select show directories for: Library files
 
@@ -419,7 +424,7 @@ project only:
   
 2. From the C/C++ tab, select the General properties and type the path to the 
    SystemC 'src' directory in the text entry field labeled
-  'Additional include directories' (e.g. the examples use '../../../src').
+  'Additional include directories' (e.g. the examples use '..\..\..\src').
 
 3. From the Linker tab, select the General properties and type the path to 
    the SystemC library:   ...\systemc-2.3.0\msvc80\systemc\debug'systemc.lib' 
