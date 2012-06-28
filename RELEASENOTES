@@ -31,11 +31,11 @@ CONTENTS
 
 Compared to the 2.2.0, this release has the following new items:
 
-  - TLM is merged into the main SystemC release. Please see section 9) below
-    for more details of earlier TLM releases.
+  - TLM-2.0 is merged into the main SystemC release. Please see section 9)
+    below for more details of earlier TLM releases.
 	
   - This version of SystemC contains the "Proof of Concept" simulator
-    for the IEEE 1666-2011 SystemC standard. Please consult the IEEE
+    for the IEEE 1666-2011 SystemC standard. Please consult the IEEE Std
     1666-2011 Language Reference Manual for details about the new SystemC
     standard.
 
@@ -69,7 +69,7 @@ Following is the list of bug fixes and enhancements for this release:
          (c) Retain process objects as zombies until all of their children 
              have been removed.
 
-     - Replaced last uses of sc_pvector with std::vector<>.
+     - Replaced remaining uses of sc_pvector with std::vector<>.
 
      - Changes to sc_process handle to use a copy/swap idiom for implementing
        operator = so that the reference counts work properly.
@@ -82,14 +82,14 @@ Following is the list of bug fixes and enhancements for this release:
      - Moved default parameter specifications from friend declarations to
        the actual function signatures in the fixed point support.
 
-       src/sysc/datatypes/fx/scfx_rep.h
+         src/sysc/datatypes/fx/scfx_rep.h
 
      - The default stack size for threads, SC_DEFAULT_STACK_SIZE, has been 
        increased from 64K bytes to 128K bytes. This setting is controlled 
        with a #define, so if necessary, you can set it back to 64K bytes 
        in your version.
 
-       src/sysc/kernel/sc_constants.h
+         src/sysc/kernel/sc_constants.h
 
      - sc_concref uses for 8 cases involving bool or char* operands failed
        to release the storage they allocated. This has been fixed.
@@ -99,7 +99,7 @@ Following is the list of bug fixes and enhancements for this release:
      - sc_concatref did not have shift operator overloads for the int shift
        value. It has been added.
 
-       src/sysc/datatypes/misc/sc_concatref.h
+         src/sysc/datatypes/misc/sc_concatref.h
 
      - Plugged a memory leak in operator - for sc_signed operations. If 
        the two operands were equal it returned a new sc_signed instance 
@@ -150,7 +150,7 @@ Following is the list of bug fixes and enhancements for this release:
      - Fixed bug in auto-increment and auto-decrement of sc_signed and
        sc_unsigned values. The original code left the values in sign
        magnitude form and did not properly trim them. The code now uses
-       *this = *this + 1 and *this = *this -1
+       *this = *this + 1 and *this = *this -1.
 
      - Expanded naming of signals in sc_vcd_trace.cpp to use 5 characters
        rather than 3 to accommodate more signals.
@@ -163,9 +163,9 @@ Following is the list of bug fixes and enhancements for this release:
          src/sysc/datatypes/int/sc_int_base.cpp:
          src/sysc/datatypes/int/sc_uint_base.cpp:
 
-     - Fix for logical operators between unsigned int and sc_unsigned
+     - Fix for logical operators between unsigned int and sc_unsigned.
 
-       src/sysc/datatypes/int/sc_nbcommon.inc
+         src/sysc/datatypes/int/sc_nbcommon.inc
 
          Fixed bit width in CLASS_TYPE::CLASS_TYPE() for the case that
          the signature is a buffer of digits and a width. The value of
@@ -184,7 +184,7 @@ Following is the list of bug fixes and enhancements for this release:
             The port binder now checks for blocking interfaces in addition 
             to the combined non-blocking - blocking interface.
 
-     - Error message added if wait(N) is called from an SC_METHOD
+     - Error message added if wait(N) is called from an SC_METHOD.
 
          src/sysc/kernel/sc_wait_cthread.h
 
@@ -192,15 +192,15 @@ Following is the list of bug fixes and enhancements for this release:
 
          src/sysc/kernel/sc_main_main.cpp
 
-     - Mac OS X support modified to support 32/64 bit builds
+     - Mac OS X support modified to support 32/64 bit builds.
 
          configure.in
 
-       The support for i386 based Macintoshes now includes the required
-       "-arch <CPU>" for the command line options for g++/gcc and as.
-       This produces 32/64-bit architecture libraries, as supported by
-       the CPU.  You can override the selection by specifying an explicit
-       --build= option to the configure call.
+         The support for i386 based Macintoshes now includes the required
+         "-arch <CPU>" for the command line options for g++/gcc and as.
+         This produces 32/64-bit architecture libraries, as supported by
+         the CPU. You can override the selection by specifying an explicit
+         --build= option to the configure call.
 
      - Fixed the the module hierarchy stack during the invocation of all
        elaboration and simulation callbacks.
@@ -218,15 +218,15 @@ Here is an overview of changes in 2.3.0 compared to 2.2.0:
     IEEE 1666_2011 Language Reference Manual for details.
 
   - Boost library used by SystemC is now in the namespace sc_boost 
-    rather than boost.  Only parts directly related to sc_bind and
+    rather than boost. Only parts directly related to sc_bind and
     sc_(c)ref are kept, other previously included parts of Boost
-    have been removed.  This allows SystemC-based programs to be
+    have been removed. This allows SystemC-based programs to be
     combined with programs using later versions of the Boost library.
 
   - Addition of sc_prim_channel::async_request_update().
     You can disable this feature by compiling your simulator
     with SC_DISABLE_ASYNC_UPDATES defined (or by using the
-    configure script option --disable-async-updates ).
+    configure script option --disable-async-updates).
 
   - Immediate self-notification of processes is no longer supported
     due to changes in IEEE 1666-2011 (see sc_event::notify, 5.10.6).
@@ -250,11 +250,12 @@ Here is a list of known incompatibilities between this release and 2.2.0:
     define SC_DISABLE_VIRTUAL_BIND during the build of the simulator and
     before including systemc.h.
 
+
 5) Expanded Dynamic Process Support
 ===================================
 
 - This version implements the dynamic process extensions described in the 
-  IEEE 1666_2011 Language Reference Manual.
+  IEEE Std 1666-2011 Language Reference Manual.
 
 
 6) Experimental features
@@ -284,7 +285,7 @@ In this section the experimental features of this release are listed.
   - The sign-extension of mixed-signedness logic expressions (&,|)
     involving one sc_bigint<> operand and a limited width type is
     inconsistent between 32-bit and 64-bit platforms in some rare corner
-    cases.  Convert both operands to sc_bigint<> first.
+    cases. Convert both operands to sc_bigint<> first.
 
 
 8) Fixed-point library
@@ -294,14 +295,15 @@ SystemC contains a fixed-point datatypes package.
 
 Changes compared to SystemC 2.0.1
 
- - support for explicit construction from "float" values
- - removing a conversion ambiguity by marking some constructors of
-   sc_fxval[_fast] classes as 'explicit'
+  - support for explicit construction from "float" values
+
+  - removing a conversion ambiguity by marking some constructors of
+    sc_fxval[_fast] classes as 'explicit'
 
 Compile-time macro SC_INCLUDE_FX must be defined in order to build
 applications that use fixed point types. You can specify a compiler
-flag, e.g. g++ -DSC_INCLUDE_FX ... or use a define statement before
-you include systemc.h, e.g.
+flag, e.g., g++ -DSC_INCLUDE_FX ... or use a define statement before
+you include systemc.h, e.g.:
 
   #define SC_INCLUDE_FX
   #include "systemc.h"
@@ -313,7 +315,6 @@ If you want to use the fixed-point data types only (i.e., not data-
 types sc_int, sc_uint, sc_bigint, sc_biguint), compilation time can be
 reduced by defining compile-time macro SC_FX_EXCLUDE_OTHER (in addition
 to SC_INCLUDE_FX).
-
 
 
 9) TLM Release Notes
@@ -341,7 +342,7 @@ been tested extensively.
 Compared to the standalone 2.0.1 kit, the following has changed:
 
 a. Imported standalone TLM-2.0 implementation into core SystemC
-   package.  Reorganized header structure:
+   package. Reorganized header structure:
     {src,include}/
       tlm_core/
         tlm_1/
@@ -359,48 +360,47 @@ b. Changes according to IEEE 1666-2011:
 c. Some minor bug fixes in b->nb conversion in simple_target_socket(_tagged)
    to correctly handle time annotations.
 
-d. Bug fixes and cleanups in tlm_fifo and circular_buffer implementation
+d. Bug fixes and cleanups in tlm_fifo and circular_buffer implementation.
 
 e. Dropped namespace tlm_qk_internal and cleaned up tlm_global_quantum
-   implementation
+   implementation.
 
 f. Correctly clean up all bound copies of an analysis interface in
-   tlm_analysis_port::unbind
+   tlm_analysis_port::unbind.
 
 
 9.3) Known issues
 =================
 
-a. when using TLM 2.0 with SystemC 2.1.v1 on 64 bit linux you will need to
-   force 32 bit mode by using the '-m32' flag
+a. When using TLM 2.0 with SystemC 2.1.v1 on 64 bit linux, you will need to
+   force 32 bit mode by using the '-m32' flag.
 
-b. the tlm_simple_target_socket in tlm_utils does not obey the END_REQ rule
+b. The tlm_simple_target_socket in tlm_utils does not obey the END_REQ rule
    when only an nb_ call is registered, an b_ call is being handled in the
    socket and there is an nb_ call coming in at the same time. In this case
    the incoming nb_ call will be forwarded to the registered nb_ call without
-   checking whether the earlier b_ call has passed the END_REQ timing point
+   checking whether the earlier b_ call has passed the END_REQ timing point.
 
-c. the implementation of the PEQ 'peq_with_get' in tlm_utils does not properly
+c. The implementation of the PEQ 'peq_with_get' in tlm_utils does not properly
    distinguish between immediate notifications and delta notifications. In the
    case that a immediate and delta notification happen at the same simulation
    time both types of notifications emerge from the PEQ in the same evaluation
    phase. This is wrong immediate notifications should overtake delta
-   notifications
+   notifications.
 
-d. the lt_dmi example does not run for all platform and library versions.
-   It works for X86 linux, gcc4.0 and SystemC 2.2.0
+d. The lt_dmi example does not run for all platform and library versions.
+   It works for X86 Linux, gcc4.0 and SystemC 2.2.0.
 
-e. the nb2b_thread dynamic process in the simple_target_socket[_tagged] is
+e. The nb2b_thread dynamic process in the simple_target_socket[_tagged] is
    created with a static sensitivity list but that event gets deleted in the
-   nb2b_thread implementation.  This may be beyond the limits of IEEE 1666-2011.
+   nb2b_thread implementation. This may be beyond the limits of IEEE Std 1666-2011.
 
-f. in the same nb2b_thread process the implementation only allows to terminate
+f. In the same nb2b_thread process the implementation only allows to terminate
    a transaction through a tlm::TLM_COMPLETED return value on the bw_nb_transport
-   call (return coming from the initiator).  In case the initiator finishes the
+   call (return coming from the initiator). In case the initiator finishes the
    response phase with a tlm::TLM_UPDATED return value and a tlm::END_RESP phase,
    the transaction will not finish.
 
-g. the get_base_interface function(s) of tlm_utils::multi_passthrough_target_socket
-   throws an error when bound hiararchically.  This is against the intent in 1666-2011.
-
-
+g. The get_base_interface function(s) of tlm_utils::multi_passthrough_target_socket
+   throws an error when bound hiararchically. This is against the intent in
+   IEEE Std 1666-2011.
