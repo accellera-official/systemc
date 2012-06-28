@@ -1,7 +1,9 @@
-This archived directory contains old documentation, much of which is now out-of-date.
-SystemC is now defined by the IEEE 1666 Language Reference Manual, which may be obtained by visiting www.accellera.org
+=============================================
+README for the archived SystemC documentation
+=============================================
 
-Here is the original README message:
+This archive directory contains old documentation, much of which is now out-of-date.
+SystemC is now defined by the IEEE Std 1666 Language Reference Manual, which may be obtained by visiting <http://www.accellera.org/>.
 
 The current directory contains the following files:
 
