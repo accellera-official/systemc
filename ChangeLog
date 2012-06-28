@@ -1,6 +1,20 @@
 See also docs/tlm/ChangeLog.
 
-2012  Combined SystemC 2.3 / TLM  release
+2012-06-30  Andy Goodrich <acg@forteds.com>
+
+	* Combined SystemC 2.3 / TLM-2.0 released.
+
+2007-03-14  Andy Goodrich <acg@forteds.com>
+
+	* SystemC 2.2 released.
+
+2006-06-05  Andy Goodrich <acg@forteds.com>
+
+	* SystemC 2.2 Beta released to the public.
+
+2005-07-14  Andy Goodrich <acg@forteds.com>
+
+	* SystemC 2.1v1 released.
 
 2003-12-02  Andy Goodrich <acg@forteds.com>
 
