@@ -1,15 +1,27 @@
-2012    
-    * SystemC 2.3.0 regression suite released
-	
-	Now also contains TLM2 unit tests
-	
+2012-06-30  Andy Goodrich <acg@forteds.com>
+
+	* SystemC 2.3.0 regression test suite released.
+
+	* Now also contains the TLM-2.0 unit tests
+
+2007-03-14  Andy Goodrich <acg@forteds.com>
+
+	* SystemC 2.2 regression test suite released.
+
+2006-06-05  Andy Goodrich <acg@forteds.com>
+
+	* SystemC 2.2 Beta regression test suite released to the public.
+
+2005-07-14  Andy Goodrich <acg@forteds.com>
+
+	* SystemC 2.1v1 regression test suite released.
+
 2003-06-18  Andy Goodrich <acg@forteds.com>
 
-    * SystemC 2.1beta regression suite released.
+	* SystemC 2.1beta regression test suite released.
 
 2002-04-05  Martin Janssen  <martin.janssen@synopsys.com>
 
 	* SystemC 2.0.1 regression test suite released.
 
-	First public release of the regression test suite for SystemC.
-	
+	* First public release of the regression test suite for SystemC.
