@@ -946,7 +946,7 @@ exit:
 void
 sc_simcontext::do_sc_stop_action()
 {
-    SC_REPORT_INFO("/ASI/SystemC","Simulation stopped by user.");
+    SC_REPORT_INFO("/OSCI/SystemC","Simulation stopped by user.");
     if (m_start_of_simulation_called) {
 	end();
 	m_in_simulator_control = false;
