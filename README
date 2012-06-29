@@ -17,12 +17,14 @@ IEEE 1666-2011 Language Reference Manual.
 
     o 32-bit Linux (x86) (RedHat Enterprise Linux 4, 5, 6; Fedora 14, 15;
       Debian 5.0; Ubuntu 10.04LTS, 12.04LTS) with GNU C++ compiler versions
-      gcc-3.4.5 through gcc-4.6.2
-    o 32-bit Linux (x86) (Debian) with Clang C++ compiler version
-      clang-2.9
+      gcc-3.3.2 through gcc-4.6.2
+    o 32-bit Linux (x86) (Debian, Ubuntu 12.04LTS) with Clang C++ compiler
+      version clang-2.9 through clang-3.0
     o 64-bit Linux (x86_64) (RedHat Enterprise Linux 4, 5, 6; Fedora 17;
       Debian 5.0; Ubuntu 10.04LTS, 12.04LTS) with GNU C++ compiler versions
       gcc-3.4.5 through gcc-4.7.0
+    o 64-bit Linux (x86_64) (Ubuntu 12.04LTS) with Clang C++ compiler
+      version clang-3.0
     o 64-bit Linux (x86_64) (Debian 5.0) with 32-bit GNU C++ compiler version
       gcc-4.3.2 (./configure --target=i686-linux-gnu)
     o Sun Solaris 9 (sparc32) with GNU C++ compiler version gcc-3.3.3
