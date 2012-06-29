@@ -60,6 +60,7 @@ struct Top: sc_module
   sc_process_handle m;  
   sc_event ev, ev2, ev3;
   int count;
+  sc_time last_time;
   bool reached_end;
   
   void T()
@@ -110,31 +111,42 @@ struct Top: sc_module
     sc_assert( sc_delta_count() == 11 );
 
     count = 9;
+    last_time = sc_time_stamp();
     sc_pause(); // 1st pause
     wait(ev);
     sc_assert( sc_delta_count() == 12 );
 
     count = 10;
+    last_time = sc_time_stamp();
     sc_pause(); // 2nd pause
     wait(ev);
     sc_assert( sc_delta_count() == 13 );
 
     count = 11;
+    last_time = sc_time_stamp();
     sc_pause(); // 3rd pause
     wait(ev);
     sc_assert( sc_delta_count() == 14 );
 
     count = 12;
+    last_time = sc_time_stamp();
     sc_pause(); // 4th pause
     wait(ev);
     sc_assert( sc_delta_count() == 15 );
     
     count = 13;
+    last_time = sc_time_stamp();
     sc_pause(); // 5th pause
     wait(ev);
     sc_assert( sc_delta_count() == 16 );
     
+     count = 14;
+     wait(ev);
+     sc_assert( sc_delta_count() == 17 );
+ 
+    last_time = sc_time_stamp();
     reached_end = true;
+    sc_stop();
   }
   
   void M()
@@ -158,6 +170,7 @@ struct Top: sc_module
       case 11: sc_assert( sc_delta_count() == 14 ); break;
       case 12: sc_assert( sc_delta_count() == 15 ); break;
       case 13: sc_assert( sc_delta_count() == 16 ); break;
+      case 14: sc_assert( sc_delta_count() == 17 ); break;
     }
   }
     
@@ -177,7 +190,6 @@ int sc_main(int argc, char* argv[])
   top.ev.notify();  // Wake from 1st pause on immed notification
   
   sc_start();
-  
   sc_assert( sc_delta_count() == 13 );
   sc_assert( sc_get_status() == SC_PAUSED );
   sc_assert( sc_pending_activity_at_current_time() == false );
@@ -189,18 +201,22 @@ int sc_main(int argc, char* argv[])
   sc_assert( sc_get_status() == SC_PAUSED );
   sc_start(SC_ZERO_TIME);
   sc_assert( sc_delta_count() == 13 );
+  sc_assert( top.last_time == sc_time_stamp() );
   
   sc_start(1, SC_NS);
   sc_assert( sc_delta_count() == 13 );
   sc_assert( top.count == 10 );
+  // sc_assert( top.last_time == sc_time_stamp() );
 
   top.ev.notify(SC_ZERO_TIME); // Wake from 2nd pause on delta notification
   sc_start(1, SC_NS);
   sc_assert( sc_delta_count() == 14 );
+  sc_assert( top.last_time == sc_time_stamp() );
   
   top.ev.notify(1, SC_NS);   // Wake from 3rd pause on timed notification
   sc_start(2, SC_NS);
   sc_assert( sc_delta_count() == 15 );
+  sc_assert( top.last_time == sc_time_stamp() );
   
   top.ev.notify(2, SC_NS);   // Future notification beyond the subsequent start
   sc_assert( sc_pending_activity_at_current_time() == false );
@@ -210,17 +226,23 @@ int sc_main(int argc, char* argv[])
 
   sc_start();
   sc_assert( sc_delta_count() == 16 );
+  sc_assert( top.last_time == sc_time_stamp() );
 
   top.ev.notify();  // Wake from 5th pause on immed notification
   sc_start(SC_ZERO_TIME);
   sc_assert( sc_delta_count() == 17 );
+  sc_assert( top.last_time == sc_time_stamp() );
   
   sc_assert( sc_get_status() == SC_PAUSED );
-  sc_stop();
+
+  top.ev.notify(1, SC_NS);   // Future notification before calling sc_stop
+  sc_start(2, SC_NS);
 
   sc_assert( sc_get_status() == SC_STOPPED );
+  sc_assert( sc_end_of_simulation_invoked() );
+  sc_assert( top.last_time == sc_time_stamp() );
+  sc_assert( top.reached_end );
 
-  sc_assert( top.reached_end );    
   cout << endl << "Success" << endl;
   return 0;
 }
