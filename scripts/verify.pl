@@ -428,17 +428,26 @@ sub get_systemc_arch
 	}
     } elsif( $uname_s eq "Darwin" ) {
 	if( $cxx_comp eq "c++" || $cxx_comp eq "g++" ) {
+	    chop ( $cpu64bit = `sysctl -n hw.cpu64bit_capable 2> /dev/null` );
 	    if ( $uname_m eq "x86_64" )
 	    {
 		$arch = "macosx64";
 	    }
 	    elsif ( $uname_m eq "i386" )
 	    {
-		$arch = "macosx";
+		if ( $cpu64bit eq "1" ) {
+		    $arch = "macosx64";
+		} else {
+		    $arch = "macosx";
+		}
 	    }
 	    else
 	    {
-		$arch = "macosxppc";
+		if ( $cpu64bit eq "1" ) {
+		    $arch = "macosxppc64";
+		} else {
+		    $arch = "macosxppc";
+		}
 	    }
 	} else {
 	    die "Error: unsupported compiler '$cxx'\n";
