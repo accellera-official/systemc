@@ -81,7 +81,7 @@ extern const std::string  sc_copyright_string;
     "_" SC_VERSION_PRERELEASE "_" SC_VERSION_RELEASE_DATE \
     "-" SC_VERSION_ORIGINATOR
 #else
-#  define SC_VERSION_PRERELEASE // nothing
+#  define SC_VERSION_PRERELEASE "" // nothing
 #  define SC_VERSION \
     SC_STRINGIFY_HELPER_( SC_VERSION_MAJOR.SC_VERSION_MINOR.SC_VERSION_PATCH ) \
     "-" SC_VERSION_ORIGINATOR
