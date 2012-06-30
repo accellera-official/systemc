@@ -70,7 +70,7 @@ namespace tlm
 #define TLM_IS_PRERELEASE                   0           ///< pre-release flag ( 1 / 0 )
 
 #if TLM_IS_PRERELEASE
-#    define TLM_VERSION_PRERELEASE          "ALPHA"     ///< pre-release version string
+#    define TLM_VERSION_PRERELEASE          "pub_rev"   ///< pre-release version string
 #else
 #    define TLM_VERSION_PRERELEASE          ""          ///< pre-release version string
 #endif
