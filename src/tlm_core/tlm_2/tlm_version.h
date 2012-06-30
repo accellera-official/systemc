@@ -68,7 +68,12 @@ namespace tlm
 #define TLM_VERSION_SEPARATOR               "."         ///< version string separator
 
 #define TLM_IS_PRERELEASE                   0           ///< pre-release flag ( 1 / 0 )
-#define TLM_VERSION_PRERELEASE              "ALPHA"     ///< pre-release version string
+
+#if TLM_IS_PRERELEASE
+#    define TLM_VERSION_PRERELEASE          "ALPHA"     ///< pre-release version string
+#else
+#    define TLM_VERSION_PRERELEASE          ""          ///< pre-release version string
+#endif
 
 #define TLM_VERSION_RELEASE_YEAR            "2012"      ///< release year  ( YYYY )
 #define TLM_VERSION_RELEASE_MONTH           "05"        ///< release month ( MM )
