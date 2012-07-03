@@ -1,10 +1,4 @@
 SystemC Simulation
-
-Warning: (W569) sc_module(const char*) has been deprecated, use sc_module(const sc_module_name&): tbb1
-In file: <removed by verify.pl>
-
-Warning: (W569) sc_module(const char*) has been deprecated, use sc_module(const sc_module_name&): tbb2
-In file: <removed by verify.pl>
 block_f 32
 block_e 0
 tb_proc 

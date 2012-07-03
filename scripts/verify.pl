@@ -1,9 +1,16 @@
-eval "exec perl -S $0 $*"
-  if 0;
+#!/usr/bin/perl
+# The following code snippet from the PERLRUN(1) man page ensures the
+# script to be interpreted by the Perl interpreter even if the "shebang"
+# in the first line is ignored and the script is started to be
+# interpreted as a shell script. It is valid code in Perl as well as
+# csh, sh, and work-alike shells.
+eval '(exit $?0)' && eval 'exec perl -S $0 ${1+"$@"}'
+& eval 'exec /usr/bin/perl -S $0 $argv:q'
+        if $running_under_some_shell;
 # *****************************************************************************
 #
 #  The following code is derived, directly or indirectly, from the SystemC
-#  source code Copyright (c) 1996-2011 by all Contributors.
+#  source code Copyright (c) 1996-2012 by all Contributors.
 #  All Rights reserved.
 #
 #  The contents of this file are subject to the restrictions and limitations
@@ -130,6 +137,7 @@ sub create_mail
     printf MAIL "\n";
     printf MAIL "SYSTEMC_ARCH : %s %s\n", $rt_systemc_arch, "$rt_pthreads";
     printf MAIL "SYSTEMC_HOME : %s\n", $rt_systemc_home;
+    printf MAIL "TLM_HOME     : %s\n", $rt_tlm_home;
     printf MAIL "SYSTEMC_TEST : %s\n", $rt_systemc_test;
     printf MAIL " OUTPUT_DIR  : %s\n", $rt_output_dir;
 
@@ -330,6 +338,44 @@ sub get_systemc_home
     $sysc_home;
 }
 
+# -----------------------------------------------------------------------------
+#  SUB : get_tlm_home
+#
+#  Get the TLM_HOME environment variable's value, it it exists.
+#  Otherwise set TLM_HOME to SYSTEMC_HOME
+#  TLM_HOME should be set to the directory containing tlm.h
+#
+# -----------------------------------------------------------------------------
+
+sub get_tlm_home
+{
+    my $tlm_home;
+    
+    if( defined $ENV{ 'TLM_HOME' } ) {
+    
+      $tlm_home = $ENV{ 'TLM_HOME' };
+    
+    } elsif ( defined $ENV{ 'SYSTEMC_HOME' } ) {
+    
+      $tlm_home = $ENV{ 'SYSTEMC_HOME' };
+    	if( $rt_systemc_arch =~ /^msvc/ ) {
+  	    $tlm_home .= "/src";
+ 	    } else {
+  	    $tlm_home .= "/include";
+      }
+ 	    
+    } else {   
+    
+        &print_log( "Error: " .
+		    "TLM environment: neither TLM_HOME nor SYSTEMC_HOME are defined!\n" );
+	     exit 1;
+    
+    }
+    
+    $tlm_home =~ s|\\|/|g ;  # replace any backslash with forward slash
+    $tlm_home;
+}
+
 
 # -----------------------------------------------------------------------------
 #  SUB : get_systemc_arch
@@ -386,15 +432,15 @@ sub get_systemc_arch
 	if( $cxx_comp eq "c++" || $cxx_comp eq "g++" ) {
 	    if ( $uname_m eq "x86_64" )
 	    {
-		$arch = "macosx386";
+		$arch = "macosx64";
 	    }
 	    elsif ( $uname_m eq "i386" )
 	    {
-		$arch = "macosx386";
+		$arch = "macosx";
 	    }
 	    else
 	    {
-		$arch = "macosx";
+		$arch = "macosxppc";
 	    }
 	} else {
 	    die "Error: unsupported compiler '$cxx'\n";
@@ -511,8 +557,9 @@ sub init_globals
     $SIG{ 'QUIT' } = 'interrupt_handler';
     $SIG{ 'ALRM' } = 'alarm_handler';
 
-    $rt_systemc_home = &get_systemc_home;
     $rt_systemc_arch = &get_systemc_arch;
+    $rt_systemc_home = &get_systemc_home;
+	  $rt_tlm_home = &get_tlm_home;
 
     $rt_cleanup = 1;                    # cleanup temp dirs by default
     $rt_mail = 0;                       # send mail with results
@@ -570,18 +617,11 @@ sub init_globals
     } elsif( $rt_systemc_arch eq "hpux11" ) {
         $rt_ccflags       = "-Aa -ext +DA2.0 +DS2.0";
         $rt_optimize_flag = "+O1";
-    } elsif( $rt_systemc_arch eq "linux64" ) {
-	# use defaults
-    } elsif( $rt_systemc_arch eq "linux" ) {
-	# use defaults
-    } elsif( $rt_systemc_arch eq "freebsd64" ) {
+    } elsif( $rt_systemc_arch =~ /^linux(64)?/ ) {
         # use defaults
-    } elsif( $rt_systemc_arch eq "freebsd" ) {
+    } elsif( $rt_systemc_arch =~ /^freebsd(64)?/ ) {
         # use defaults
-    } elsif( $rt_systemc_arch eq "macosx" ) {
-	$rt_optimize_flag = "-O3";
-	$rt_ldrpath       = "-Wl,-rpath -Wl,";
-    } elsif( $rt_systemc_arch eq "macosx386" ) {
+    } elsif( $rt_systemc_arch =~ /^macosx(ppc)?(64)?/ ) {
 	$rt_optimize_flag = "-O3";
 	$rt_ldrpath       = "-Wl,-rpath -Wl,";
     } elsif( $rt_systemc_arch eq "cygwin" ) {
@@ -862,6 +902,11 @@ sub print_intro
         &print_log( "[$working_view] " );
     }
     &print_log( "$rt_systemc_home\n" );
+    &print_log( "TLM_HOME     : " );
+    if( $rt_tlm_home =~ m|^$vob| ) {
+        &print_log( "[$working_view] " );
+    }
+    &print_log( "$rt_tlm_home\n" );
     &print_log( "SYSTEMC_TEST : " );
     if( $rt_systemc_test =~ m|^$vob| ) {
         &print_log( "[$working_view] " );
@@ -1496,9 +1541,9 @@ sub compile_files
     while( <FILE> ) {
         $temp = $_;				# <link_dir>/<basename>.cpp
 
-        chop( $temp );
+        $temp =~ s|\s+$||;
         $file = `basename $temp .cpp`;		# file = <basename>
-        chop( $file );
+        $file =~ s|\s+$||;
 
 	$newcommand = $command;
 	if( $rt_systemc_arch =~ /^msvc/ ) {
@@ -1893,6 +1938,7 @@ sub run_test
     local( $linkdir );          # final dir in path to test
     local( $opts );             # command line options passed to compiler
     local( $basename );         # basename for test
+    local( $test_set );         # set of tests (first part of path)
     local( $exit_code );        # exit code returned by system calls
     local( $signal );           # signal on which system call terminated
     local( $tmp );
@@ -1915,6 +1961,9 @@ sub run_test
     
     # making a global to keep track of progress
     $rt_current_test = "$currtestdir/$testname.$type";
+
+    # determine the test set
+    ( $test_set = $currtestdir ) =~ s|^([^/]+)/.*|\1|;
 
     # check for compiler
     # include your compiler check in here
@@ -1966,13 +2015,15 @@ sub run_test
 	# compile command
 	if( $rt_systemc_arch =~ /^msvc/ ) {
 	    $command  = "$rt_cc $rt_ccflags $extra_flags ";
+	    $command .= "${slash}I $rt_tlm_home ";
 	    $command .= "${slash}I . ${slash}I $rt_systemc_home/src ";
-	    $command .= "${slash}I $rt_tests_dir/systemc/include ";
+	    $command .= "${slash}I $rt_systemc_test/include/$test_set ";
 	    $command .= "${slash}c ";
 	} else {
 	    $command  = "$rt_cc $rt_ccflags $extra_flags ";
+	    $command .= "-I $rt_tlm_home ";
 	    $command .= "-I . -I $rt_systemc_home/include ";
-	    $command .= "-I $rt_tests_dir/systemc/include ";
+	    $command .= "-I $rt_systemc_test/include/$test_set ";
 	    $command .= "-c ";
 	}
 
@@ -2065,13 +2116,15 @@ sub run_test
 	# compile command
 	if( $rt_systemc_arch =~ /^msvc/ ) {
 	    $command  = "$rt_cc $rt_ccflags $extra_flags ";
+	    $command .= "${slash}I $rt_tlm_home ";
 	    $command .= "${slash}I . ${slash}I $rt_systemc_home/src ";
-	    $command .= "${slash}I $rt_tests_dir/systemc/include ";
+	    $command .= "${slash}I $rt_systemc_test/include/$test_set ";
 	    $command .= "${slash}c ";
 	} else {
 	    $command  = "$rt_cc $rt_ccflags $extra_flags ";
+	    $command .= "-I $rt_tlm_home ";
 	    $command .= "-I . -I $rt_systemc_home/include ";
-	    $command .= "-I $rt_tests_dir/systemc/include ";
+	    $command .= "-I $rt_systemc_test/include/$test_set ";
 	    $command .= "-c ";
 	}
 
