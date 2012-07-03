@@ -5,6 +5,3 @@ In file: <removed by verify.pl>
 
 Warning: (W509) module construction not properly completed: did you forget to add a sc_module_name parameter to your module constructor?: module 'm'
 In file: <removed by verify.pl>
-
-Warning: (W571) no activity or clock movement for sc_start() invocation
-In file: <removed by verify.pl>

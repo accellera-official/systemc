@@ -2,9 +2,6 @@ SystemC Simulation
 
 Info: (I804) /IEEE_Std_1666/deprecated: positional binding using << or , is deprecated, use () instead.
 
-Warning: (W571) no activity or clock movement for sc_start() invocation
-In file: <removed by verify.pl>
-
 Info: (I804) /IEEE_Std_1666/deprecated: You can turn off warnings about
              IEEE 1666 deprecated features by placing this method call as the
              first statement in your sc_main() function:
