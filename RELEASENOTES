@@ -1,5 +1,6 @@
-	Release Notes for SystemC 2.3.0 regression test suite
-    =====================================================
+        Release Notes for SystemC 2.3.0 regression test suite
+        =====================================================
+
 
 CONTENTS
 ========
@@ -20,20 +21,20 @@ TLM2 and SystemC regressions are now combined into this single suite.
 
 Compatibility across different platforms has been greatly improved.
 
-Improved coverage of SystemC features, including new 1666-2011 regression tests.
+Improved coverage of SystemC features, including new IEEE Std 1666-2011 regression tests.
+
 
 2) Bug fixes and enhancements
 =============================
 
 This is a summary of the main changes:
 
-  Combined SystemC regressions and TLM2 Unit Tests into a single structure
+  - Combined SystemC regressions and TLM2 Unit Tests into a single structure.
   
-  Improved include structure
+  - Improved include structure.
   
-  Regression script verify.pl now tested on many platforms, so multiple copies of the 
-  script have been removed.
-  
+  - Regression script verify.pl now tested on many platforms, so multiple copies of the 
+    script have been removed.
 
 
 3) Other changes
@@ -57,5 +58,5 @@ Here is a list of known limitations in this release:
   - Some datatype tests take a long time to either compile or run.
 
   - On Mac OS X 10.6.8 (Snow Leopard), the verify.pl script does not
-    detect the x86_64 architecture correctly.  You can
-    run the regressions against a 32-bit version of SystemC.
+    detect the x86_64 architecture correctly. You can run the
+    regressions against a 32-bit version of SystemC.

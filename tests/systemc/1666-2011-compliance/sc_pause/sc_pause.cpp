@@ -282,7 +282,7 @@ SC_MODULE(Top)
   
   void immed_ev_handler()
   {
-    sc_assert( sc_time_stamp() == sc_time(43, SC_US) );
+    sc_assert( sc_time_stamp() == sc_time(42, SC_US) );
     sc_assert( sc_delta_count() == immed_ev_delta );
     immed_ev_delta = 999;
   }
@@ -291,7 +291,7 @@ SC_MODULE(Top)
 void spawned_while_paused()
 {
   cout << "spawned_while_paused() awoke" << endl;
-  sc_assert( sc_time_stamp() == sc_time(43, SC_US) );
+  sc_assert( sc_time_stamp() == sc_time(42, SC_US) );
   sc_assert( sc_get_status() == SC_RUNNING );
   sc_assert( sc_pending_activity() == true );
 }
@@ -323,7 +323,7 @@ int sc_main(int argc, char* argv[])
   cout << "sc_get_status() == " << hex << sc_get_status() << " PAUSED" << endl;
   sc_assert( sc_get_status() == SC_PAUSED );
   sc_assert( sc_is_running() == true );
-  sc_assert( sc_time_stamp() == sc_time(43, SC_US) );
+  sc_assert( sc_time_stamp() == sc_time(42, SC_US) );
 
   // Schedule an immediate notification
   top.immed_ev.notify();
