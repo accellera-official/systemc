@@ -3,7 +3,7 @@
 
 This is the production release of the SystemC 2.3.0 regression test suite.
 
-Note: for Windows users, please also refer to scripts/README_windows.txt
+Note: for Windows users, please also refer to README_windows.txt
 
 Contents:
 
@@ -62,11 +62,10 @@ Contents:
 
   The 'verify.pl' script is located in the 'scripts' directory of the
   SystemC regression test suite. It requires the environment variable
-  'SYSTEMC_HOME' to be set to your SystemC installation, and for TLM2, the 
-  environment variable TLM_HOME. Furthermore, you must use the 'CXX' 
-  environment variable to select the appropriate
-  target architecture, just like with 'configure' when configuring
-  SystemC. Valid settings for 'CXX' on the different platforms are:
+  'SYSTEMC_HOME' to be set to your SystemC installation.
+  Furthermore, you must use the 'CXX' environment variable to select 
+  the appropriate target architecture, just like with 'configure' when 
+  configuring SystemC. Valid settings for 'CXX' on the different platforms are:
 
   - Solaris 2.7 and Solaris 2.8:
     o c++, g++ -> gccsparcOS5 (default)
@@ -93,8 +92,13 @@ Contents:
 
     > ../scripts/verify.pl systemc
 
-  runs all the SystemC tests in the regression test suite. The directories
-  should be relative to '$SYSTEMC_TEST/tests'. By specifying
+  runs all the SystemC tests in the regression test suite, and
+
+    > ../scripts/verify.pl tlm
+  
+  runs the TLM2 tests.
+  
+  The directories should be relative to '$SYSTEMC_TEST/tests'. By specifying
   subdirectories, it is possible to run only a subset of the tests in
   the regression test suite, e.g.
 
@@ -133,6 +137,8 @@ Contents:
     should _never_ run the tests in the directory in which the test
     sources are located (i.e. '$SYSTEMC_TEST/tests').
 
+  NOTE: you may override the default TLM2 installation by setting the environment
+  variable TLM_HOME.
 
 -------------------------------------------------------------------------------
 3. Adding new tests

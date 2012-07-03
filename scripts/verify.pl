@@ -1,8 +1,6 @@
-#!/usr/bin/perl
 # The following code snippet from the PERLRUN(1) man page ensures the
-# script to be interpreted by the Perl interpreter even if the "shebang"
-# in the first line is ignored and the script is started to be
-# interpreted as a shell script. It is valid code in Perl as well as
+# script to be interpreted by the Perl interpreter even if it is started
+# to be interpreted as a shell script. It is valid code in Perl as well as
 # csh, sh, and work-alike shells.
 eval '(exit $?0)' && eval 'exec perl -S $0 ${1+"$@"}'
 & eval 'exec /usr/bin/perl -S $0 $argv:q'
