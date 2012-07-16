@@ -30,6 +30,7 @@
 #include <vector>
 #include <iterator>
 #include <string>
+#include <algorithm> // std::swap
 
 #include "sysc/kernel/sc_object.h"
 #include "sysc/packages/boost/config.hpp"
@@ -563,12 +564,18 @@ public:
     , child_vec_(0)
   {}
 
-  sc_vector_assembly& operator=( const sc_vector_assembly& other )
+  sc_vector_assembly& operator=( sc_vector_assembly other_copy )
   {
-    vec_ = other.vec_;
-    ptr_ = other.ptr_;
-    delete child_vec_;
-    child_vec_ = 0;
+    swap( other_copy );
+    return *this;
+  }
+
+  void swap( sc_vector_assembly & that )
+  {
+    using std::swap;
+    swap( vec_,       that.vec_ );
+    swap( ptr_,       that.ptr_ );
+    swap( child_vec_, that.child_vec_ );
   }
 
   void report_empty_bind( const char* kind_, bool dst_empty_ ) const
