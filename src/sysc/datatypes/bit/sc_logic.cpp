@@ -44,7 +44,6 @@
 // the source.
 //
 
-#include "sysc/utils/sc_string.h"
 #include "sysc/datatypes/bit/sc_bit_ids.h"
 #include "sysc/datatypes/bit/sc_logic.h"
 
