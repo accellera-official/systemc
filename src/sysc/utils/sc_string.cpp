@@ -402,6 +402,13 @@ sc_string_old::set( int i, char c )
     rep->str[i] = c;
 }
 
+#if defined(_MSC_VER)
+   // Windows provides safer implementation
+#  define sc_vsnprintf _vsnprintf
+#else
+#  define sc_vsnprintf vsnprintf
+#endif
+
 sc_string_old sc_string_old::to_string(const char* format, ...)
 {
    va_list argptr;
@@ -410,29 +417,18 @@ sc_string_old sc_string_old::to_string(const char* format, ...)
    buffer[1023]=000;
 
    va_start(argptr, format);
-#if defined(WIN32)
-   // Windows provides safer implementation
-#if defined(_MSC_VER)
-   int cnt = _vsnprintf(buffer, 1024, format, argptr);
-#else
-   int cnt = vsnprintf(buffer, 1024, format, argptr);
-#endif
+   int cnt = sc_vsnprintf(buffer, 1024, format, argptr);
    if(cnt>1023) // string too long
    {
      int buf_size = 1024;
      const int max_size = 65000;
-     char* buf; // dynamic buffer
+     char* buf = 0; // dynamic string buffer
      do
      {
+       delete[] buf;
        buf_size*=2;
        buf = new char[buf_size];
-#if defined(_MSC_VER)
-       cnt = _vsnprintf(buf, buf_size, format, argptr);
-#else
-       cnt = vsnprintf(buf, buf_size, format, argptr);
-#endif
-       if(buf_size<max_size && cnt>=buf_size)
-         delete[] buf;
+       cnt = sc_vsnprintf(buf, buf_size, format, argptr);
      }
      while( buf_size<max_size && cnt>=buf_size);
      if(cnt>=buf_size)
@@ -446,20 +442,7 @@ sc_string_old sc_string_old::to_string(const char* format, ...)
    }
    else
      result = buffer;
-#else
-   try {
-     // this may end up in a core dump
-     // if we are lucky we can catch exception
-     vsprintf(buffer, format, argptr);
-   }
-   catch(...)
-   {
-     SC_REPORT_WARNING( sc_core::SC_ID_STRING_TOO_LONG_,
-			"program may become unstable" );
-   }
-   buffer[1023]=000; // in case it's longer
-   result = buffer;
-#endif
+
    va_end(argptr);
 
    return result;
