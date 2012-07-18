@@ -407,6 +407,7 @@ AC_OUTPUT(
  examples/sysc/fft/fft_fxpt/Makefile 
  examples/sysc/pipe/Makefile 
  examples/sysc/pkt_switch/Makefile 
+ examples/sysc/risc_cpu/Makefile 
  examples/sysc/rsa/Makefile 
  examples/sysc/simple_bus/Makefile 
  examples/sysc/simple_fifo/Makefile 

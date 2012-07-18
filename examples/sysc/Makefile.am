@@ -37,6 +37,7 @@ SUBDIRS = \
 	fir \
 	pipe \
 	pkt_switch \
+	risc_cpu \
 	rsa \
 	simple_bus \
 	simple_fifo \
