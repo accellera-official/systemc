@@ -2022,15 +2022,17 @@ sub run_test
 	# compile command
 	if( $rt_systemc_arch =~ /^msvc/ ) {
 	    $command  = "$rt_cc $rt_ccflags $extra_flags ";
-	    $command .= "${slash}I $rt_tlm_home ";
-	    $command .= "${slash}I . ${slash}I $rt_systemc_home/src ";
+	    $command .= "${slash}I . ";
 	    $command .= "${slash}I $rt_systemc_test/include/$test_set ";
+	    $command .= "${slash}I $rt_tlm_home ";
+	    $command .= "${slash}I $rt_systemc_home/src ";
 	    $command .= "${slash}c ";
 	} else {
 	    $command  = "$rt_cc $rt_ccflags $extra_flags ";
-	    $command .= "-I $rt_tlm_home ";
-	    $command .= "-I . -I $rt_systemc_home/include ";
+	    $command .= "-I . ";
 	    $command .= "-I $rt_systemc_test/include/$test_set ";
+	    $command .= "-I $rt_tlm_home ";
+	    $command .= "-I $rt_systemc_home/include ";
 	    $command .= "-c ";
 	}
 
@@ -2123,15 +2125,17 @@ sub run_test
 	# compile command
 	if( $rt_systemc_arch =~ /^msvc/ ) {
 	    $command  = "$rt_cc $rt_ccflags $extra_flags ";
-	    $command .= "${slash}I $rt_tlm_home ";
-	    $command .= "${slash}I . ${slash}I $rt_systemc_home/src ";
+	    $command .= "${slash}I . ";
 	    $command .= "${slash}I $rt_systemc_test/include/$test_set ";
+	    $command .= "${slash}I $rt_tlm_home ";
+	    $command .= "${slash}I $rt_systemc_home/src ";
 	    $command .= "${slash}c ";
 	} else {
 	    $command  = "$rt_cc $rt_ccflags $extra_flags ";
-	    $command .= "-I $rt_tlm_home ";
-	    $command .= "-I . -I $rt_systemc_home/include ";
+	    $command .= "-I . ";
 	    $command .= "-I $rt_systemc_test/include/$test_set ";
+	    $command .= "-I $rt_tlm_home ";
+	    $command .= "-I $rt_systemc_home/include ";
 	    $command .= "-c ";
 	}
 
