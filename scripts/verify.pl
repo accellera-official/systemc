@@ -524,26 +524,31 @@ sub get_systemc_arch
 
     # check arch and set architecture specific options
 
-    if( $arch =~ /^macosx/ ) {
-        if ( $arch eq "macosx64" ) {
-            $rt_cpuarch = "x86_64";
-        } elsif ( $arch eq "macosx" ) {
-            $rt_cpuarch = "i386";
-        } elsif ( $arch eq "macosxppc64" ) {
-            $rt_cpuarch = "ppc64";
-        } elsif ( $arch eq "macosxppc" ) {
-            $rt_cpuarch = "ppc";
+    if( $arch =~ /^macosx(ppc)?(64)?/ ) {
+        if( $1 eq 'ppc' ) {
+            if( $2 eq '64' ) {
+                $rt_cpuarch = "ppc64";
+            } else {
+                $rt_cpuarch = "ppc";
+            }
+        } else {
+            if( $2 eq '64' ) {
+                $rt_cpuarch = "x86_64";
+            } else {
+                $rt_cpuarch = "i686";
+            }
         }
     }
 
-    elsif( $arch =~ m/(linux|freebsd|mingw|cygwin)(64)?/ ) {
-        $rt_cpuarch = $2;
-        if( !$rt_cpuarch ) {
+    elsif( $arch =~ /^(linux|freebsd|mingw|cygwin)(64)?/ ) {
+        if( $2 eq '64' ) {
+            $rt_cpuarch = $2;
+        } else {
             $rt_cpuarch = '32';
         }
     }
 
-    elsif( $arch =~ /(gcc)?(sparcOS5|hpux11)/ ) {
+    elsif( $arch =~ /^(gcc)?(sparcOS5|hpux11)/ ) {
         # do nothing
     }
 
