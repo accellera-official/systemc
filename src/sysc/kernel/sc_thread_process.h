@@ -163,7 +163,6 @@ class sc_thread_process : public sc_process_b {
 
   protected:
     sc_cor*                          m_cor_p;        // Thread's coroutine.
-    static sc_cor*                   m_dead_cor_p;   // Coroutine to delete.
     std::vector<sc_process_monitor*> m_monitor_q;    // Thread monitors.
     std::size_t                      m_stack_size;   // Thread stack size.
     int                              m_wait_cycle_n; // # of waits to be done.
