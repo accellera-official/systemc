@@ -1,0 +1,199 @@
+Development process of the Accellera SystemC implementation
+===========================================================
+v0.9, September 2012
+  Initial proposal to the LWG
+:toc:
+
+In this document, the internal development process for Accellera's SystemC
+Language Working Group (and TLM Working Group) is described.  This mostly
+relates to the development and maintenance procedures for the ASI
+proof-of-concept implementation of SystemC (and TLM).  This document
+focuses on the technical aspects related to the development of the ASI
+SystemC implementation.  Legal and formal procedures are documented at
+http://accellera.org.
+
+
+[[sec:repository]]
+Repository organization
+-----------------------
+
+The central source code repository of the ASI SystemC implementation is
+hosted in two Git [1] repositories at GitHub (http://github.com).  The
+repositories are private to the `OSCI-WG` organization and can be found at:
+
+ * http://github.com/OSCI-WG/systemc             (core SystemC library)
+ * http://github.com/OSCI-WG/systemc-regressions (regression test suite)
+
+Members of the `OSCI-WG` organization with the necessary access rights can
+clone the repositories via SSH from the locations
+
+ * git@github.com:OSCI-WG/systemc.git
+ * git@github.com:OSCI-WG/systemc-regressions.git
+
+respectively.  To obtain access to the repositories and the GitHub
+organization in general, LWG members can ask the LWG chairs at
+(lwg-chair@lists.accellera.org) including their GitHub account information.
+
+Comprehensive documentation about Git [1], a distributed version control
+system, can be found in the 'Pro Git' book, available online at [2].  Since
+Git is 'distributed', it is a very natural choice for the distributed
+development process needed for the collaboratively evolving
+proof-of-concept implementation of SystemC.
+
+In order to contribute changes to the different repositories, it is
+recommended to create personal (or company-based) forks of the repositories
+at GitHub [3] and push the proposed changes (bugfixes, features, ...)
+there.  Details of the intended work-flow are described in the next section
+(<<sec:branching>>).
+
+.References
+ 1. Git version control system - http://git-scm.com
+ 2. Pro Git Book - http://git-scm.com/book
+ 3. https://help.github.com/articles/fork-a-repo
+
+
+[[sec:branching]]
+Development flow
+----------------
+
+Basic branch setup
+~~~~~~~~~~~~~~~~~~
+
+The main idea is to have two main branches, one for the development,
+one for the releases.
+
+master::
+    The latest and greatest `HEAD` of the LWG development.
+    This is, were all the new features and fixes go.
+
+release::
+    This branch is used to create the release tarballs, both
+    internal and public snapshots.
+
+For the *regressions*, the `release` branch is more or less just a pointer
+to the latest revision of a snapshot (or release).  It is still useful
+to keep a named branching point, in case of required hotfixes.
+
+For the *core library*, the `release` branch is be different from the
+`master` branch.  The idea is to fully track the contents of the released
+tarball.  This means
+
+  - the Automake generated files are added to this tree.
+  - ASI internal files are stripped
+    (`.gitignore`, internal documentation, ...)
+
+To prepare a release, the `master` branch would then be merged into the
+`release` branch, the automake files would be updated (if necessary) and
+the clean working tree could be used as baseline for the tarball (e.g.
+via `git-archive(1)`).  Details are described in the next section
+(<<sec:release>>).
+
+Based on these branches, a development model similar to the well-known
+branching model described in [1] can be deployed.  Not all aspects of this
+model are needed for the ASI SystemC implementation, as we usually maintain
+only a single (i.e. the latest) release of the kernel.
+
+.References
+1. A successful Git branching model -
+   http://nvie.com/posts/a-successful-git-branching-model/
+
+Adding a feature (set)
+~~~~~~~~~~~~~~~~~~~~~~
+
+*TODO*: To be written.
+
+ * use a feature branch for complex contributions
+   (named `<company>-<feature-xyz>`, e.g. `<cadence-process-control>`)
+ * code up your contribution, push to the feature branch in your fork
+   at GitHub
+ * send a pull-request (manually or via GitHub)
+ * merge feature branch to `master` branch
+
+NOTE: *Commit messages*
+  Though not required, it’s a good idea to begin the commit message with a
+  single short (less than 50 character) line summarizing the change,
+  followed by a blank line and then a more thorough description. Tools that
+  turn commits into email, for example, use the first line on the
+  `Subject:` line and the rest of the commit in the body.
+
+Tracking release tarballs
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In order to track the release traballs (both LWG-internal and public ones),
+a tool named `pristine-tar` [1] is used, a tool which enables to track
+archives directly within the repository.
+
+When looking at the branches (e.g. by using `gitk --all`), you may notice
+an additional, separate branch called `pristine-tar`.  This branch contains
+the metadata for the pristine-tar tool [1].  `pristine-tar` enables
+tracking original archives with minimal overhead, since only small binary 
+deltas instead of the full tarballs are stored within the repository.
+
+NOTE: Currently, only Linux (and recently Mac OS X) are supported platforms
+      for `pristine-tar`.  Porting to Windows (MinGW) is to be done in the
+      future, which should be possible to the required extent for the
+      use with SystemC.
+
+.Basic workflow
+---------------
+  # adding an archive
+  pristine-tar [-m message] commit systemc-2.3.1.tgz release
+  git push origin pristine-tar
+
+  # retrieving an archive
+  pristine-tar checkout systemc-2.3.1.tgz
+---------------
+
+The maintenance of the `pristine-tar` branch (i.e. adding new archives to
+the `pristine-tar` branch) is done by the LWG chairs during the release
+management (<<sec:release>>).
+
+.References
+1. `pristine-tar` - http://joeyh.name/code/pristine-tar/
+
+
+Maintaining a private (set of) branches
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*TODO*: Outline maintenance of an in-house forking model, seamlessly
+        integrated with the LWG's flow.
+
+Vendor's may be interested in maintaining their own, in-house flow
+to align the internal development of a derived SystemC implementation,
+while being able to pick fixes from the ASI tree (and hopefully)
+contributing fixes and features back to the proof-of-concept
+implementation.
+
+[[sec:release]]
+Release management
+------------------
+
+*TODO*: write documentation how to generate release tarballs.
+
+* git checkout release
+* git merge    master
+* autoreconf -f
+* check `git status`, commit new and updated automake files
+* git archive
+
+*TODO*: describe tagging policy
+
+Issue tracking
+--------------
+
+*TODO*: add issue tracking details
+
+ * Use GitHub issue tracker
+ * Define tags for severities and categories
+ * Use pull-requests
+
+Changelog
+---------
+
+.v0.9 - Initial proposal to the ASI LWG (2012-09-04)
+
+ * Presented and discussing during the LWG phone conference
+
+.Authors
+ * Philipp A. Hartmann <philipp.hartmann@offis.de>
+ * Torsten Maehne      <Torsten.Maehne@lip6.fr>
+
