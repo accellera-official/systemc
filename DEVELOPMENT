@@ -241,15 +241,31 @@ the [feature branch section](#sec:feature-branch).
 Release management
 ---------------------------------------------------------------------
 
-*TODO*: write documentation how to generate release tarballs.
+*TODO*: write documentation how to generate release tar balls.
 
-* git checkout release
-* git merge    master
-* autoreconf -f
-* check `git status`, commit new and updated automake files
-* git archive
+* `git checkout release`
+* `git merge    master`
+* Remove any internal documents, not meant for release.
+* `autoreconf -f` or `config/bootstrap`
+* Check `git status`, commit new and updated automake files.
+* Use `git archive` to create the release tar balls, e.g.:
 
-*TODO*: describe tagging policy
+    git archive --format=tar --prefix=systemc-<version>/ HEAD | bzip2 > systemc-<version>.tar.bz2
+    git archive --format=tar --prefix=systemc_tests-<version>/ HEAD | bzip2 > systemc_tests-<version>.tar.bz2
+    git archive --format=tar.gz --prefix=systemc-<version>/ HEAD  systemc-<version>.tar.gz
+    git archive --format=zip --prefix=systemc-<version>/ HEAD systemc-<version>.zip
+
+* The `<version` mentioned in the release tar ball name should follow
+one of the three standard formats:
+
+  * `x.x.x_<isodate>_beta` for beta versions
+  * `x.x.x_<isodate>_pub_rev` for public review versions, and
+  * `x.x.x` for final release versions.
+
+* The name of the generated archive excluding its file type extension
+  is used to tag the commit on the `master` branch from which was last
+  merged to prepare the release.
+
 
 ---------------------------------------------------------------------
 Issue tracking
