@@ -10,6 +10,7 @@ focuses on the technical aspects related to the development of the ASI
 SystemC implementation.  Legal and formal procedures are documented at
 <http://accellera.org>.
 
+
 ---------------------------------------------------------------------
 Repository organization
 ---------------------------------------------------------------------
@@ -24,12 +25,12 @@ repositories are private to the `OSCI-WG` organization and can be found at:
 Members of the `OSCI-WG` organization with the necessary access rights can
 clone the repositories via SSH from the locations
 
- * git@github.com:OSCI-WG/systemc.git
- * git@github.com:OSCI-WG/systemc-regressions.git`
+ * `git@github.com:OSCI-WG/systemc.git`
+ * `git@github.com:OSCI-WG/systemc-regressions.git`
 
 respectively.  To obtain access to the repositories and the GitHub
-organization in general, LWG members can ask the LWG chairs at
-<lwg-chair@lists.accellera.org> including their GitHub account information.
+organization in general, LWG members can contact the LWG chairs at
+<mailto:lwg-chair@lists.accellera.org> including their GitHub account name.
 
 Comprehensive documentation about [Git] [1], a distributed version control
 system, can be found in the [Pro Git book] [2], also available online.
@@ -39,13 +40,15 @@ implementation of SystemC.
 
 In order to contribute changes to the different repositories, it is
 recommended to create personal (or company-based) [forks] [3] of the
-repositories at GitHub and push the proposed changes (bugfixes, features,
-...) there.  Details of the intended work-flow are described in the next
-[section](#sec:branching).
+repositories on GitHub and push the proposed changes (bugfixes,
+features, ...) there.  These forks are also only accessible to members
+of the OSCI-WG organization. Details of the intended work-flow are
+described in the next [section](#sec:branching).
 
 [1]: http://git-scm.com "Git version control system"
 [2]: http://git-scm.com/book "Pro Git Book"
 [3]: https://help.github.com/articles/fork-a-repo
+
 
 ---------------------------------------------------------------------
 <a id="sec:branching" />
@@ -64,43 +67,44 @@ one for the releases.
 
 * **release**
 
-  This branch is used to create the release tarballs, both
+  This branch is used to create the release tar balls, both
   internal and public snapshots.
 
 For the **regressions**, the `release` branch is more or less just a pointer
 to the latest revision of a snapshot (or release).  It is still useful
 to keep a named branching point, in case of required hotfixes.
 
-For the **core library**, the `release` branch is be different from the
+For the **core library**, the `release` branch is to be different from the
 `master` branch.  The idea is to fully track the contents of the released
-tarball.  This means
+tar ball.  This means
 
-  - the Automake generated files are added to this tree.
+  - The Automake generated files are added to this tree.
   - ASI internal files are stripped
-    (`.gitignore`, internal documentation, ...)
+    (`.gitignore`, internal documentation, ...).
 
 To prepare a release, the `master` branch would then be merged into the
 `release` branch, the automake files would be updated (if necessary) and
-the clean working tree could be used as baseline for the tarball (e.g.
+the clean working tree could be used as baseline for the tar ball (e.g.,
 via `git-archive(1)`).  Details are described in the next section
 [release management](#sec:release).
 
 Based on these branches, a development model similar to the well-known
 ["successful branching model"] [4] can be deployed.  Not all aspects of this
 model are needed for the ASI SystemC implementation, as we usually maintain
-only a single (i.e. the latest) release of the kernel.
+only a single (i.e., the latest) release of the kernel.
 
 
 [4]: http://nvie.com/posts/a-successful-git-branching-model/
-     "A successful Git branching model"
+     "'A successful Git branching model' by Vincent Driessen"
 
 
+<a id="sec:feature-branch" />
 ### Adding a feature (set)
 
 *TODO*: To be written.
 
  * use a feature branch for complex contributions
-   (named `<company>-<feature-xyz>`, e.g. `<cadence-process-control>`)
+   (named `<company>-<feature-xyz>`, e.g., `cadence-process-control`)
  * code up your contribution, push to the feature branch in your fork
    at GitHub
  * send a pull-request (manually or via GitHub)
