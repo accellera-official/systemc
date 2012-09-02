@@ -25,8 +25,8 @@ repositories are private to the `OSCI-WG` organization and can be found at:
 Members of the `OSCI-WG` organization with the necessary access rights can
 clone the repositories via SSH from the locations
 
- * `git@github.com:OSCI-WG/systemc.git`
- * `git@github.com:OSCI-WG/systemc-regressions.git`
+>    git clone git@github.com:OSCI-WG/systemc.git
+>    git clone git@github.com:OSCI-WG/systemc-regressions.git
 
 respectively.  To obtain access to the repositories and the GitHub
 organization in general, LWG members can contact the LWG chairs at
@@ -43,7 +43,17 @@ recommended to create personal (or company-based) [forks] [3] of the
 repositories on GitHub and push the proposed changes (bugfixes,
 features, ...) there.  These forks are also only accessible to members
 of the OSCI-WG organization. Details of the intended work-flow are
-described in the next [section](#sec:branching).
+described in the next [section](#sec:branching). It is convenient to
+add this GitHub fork as a remote to your local clone of the
+repository:
+
+>    cd <repo>/
+>    git remote add github git@github.com:<your-account>/<repo>.git
+
+Any changes can be then pushed to GitHub using:
+
+>    git push github <local-branch>:<remote-branch>
+
 
 [1]: http://git-scm.com "Git version control system"
 [2]: http://git-scm.com/book "Pro Git Book"
