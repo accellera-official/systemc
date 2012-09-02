@@ -109,16 +109,18 @@ only a single (i.e., the latest) release of the kernel.
 
 
 <a id="sec:feature-branch" />
-### Adding a feature (set)
+### Adding a feature (set) or fixing a bug
 
-*TODO*: To be written.
+The development of a new contribution in form of a feature or a bug
+fix is best done in a new feature branch, wich is forked and checked
+out from the ASI `master` branch:
 
- * use a feature branch for complex contributions
-   (named `<company>-<feature-xyz>`, e.g., `cadence-process-control`)
- * code up your contribution, push to the feature branch in your fork
-   at GitHub
- * send a pull-request (manually or via GitHub)
- * merge feature branch to `master` branch
+>    git checkout -b <company>-<feature-xyz>
+
+Then code up the new contribution. Please try to facilitate code
+review by other ASI members by logically grouping your changes into
+one commit per addressed issue. For the commit messages, please
+consider to follow these suggestions: 
 
 >  *Note:* **Commit messages**
 >
@@ -127,6 +129,29 @@ only a single (i.e., the latest) release of the kernel.
 >  followed by a blank line and then a more thorough description. Tools
 >  that turn commits into email, for example, use the first line on the
 >  `Subject:` line and the rest of the commit in the body.
+
+During the development of the contribution, the `master` branch may
+receive other commits. In that case, consider to rebase the commits in
+your feature branch onto the `HEAD` of the `master` branch to keep the
+history clean. Once the contribution is ready for review by the
+working group, push the feature branch in your fork of the respective
+repository on GitHub:
+
+> git push <your-github-fork-remote-name> <company>-<feature-xyz>
+
+Then, send a pull request either manually or via GitHub to initiate
+the code review by the working group members. In case the contribution
+is accepted, it will be merged into the ASI `master` branch by the
+responsible source code maintainer. Instead of fully merging the
+contribution, the maintainer may choose to cherry pick individual
+commits or to rebase the feature branch on an intermittently updated
+`master`. He may also request additional changes to be done by the
+submitter. In that case, the submitter may need to merge recent
+changes to the `master` branch into his feature branch before carrying
+out the requested changes.
+
+After the contribution has been fully merged into `master`, the
+feature branch in the local and Github fork may be deleted.
 
 
 ### Tracking release tar balls
