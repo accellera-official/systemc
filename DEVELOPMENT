@@ -202,6 +202,40 @@ while being able to pick fixes from the ASI tree (and hopefully)
 contributing fixes and features back to the proof-of-concept
 implementation.
 
+For this purpose members may employ the already mentioned ["successful
+branching model"] [4] by Vincent Driessen. The vendor can branch its
+own development branch, e.g., `develop-<vendor>` from the already
+tracked ASI's development branch `master` in his clone of the ASI
+repository. The vendor is then able to integrate commits on the ASI
+development branch by merging it into his his vendor development
+branch.
+
+Bug fixes to be contributed back to ASI consist usually of one or
+several isolated commits. They need to be cherry picked from the
+vendor's development branch into a new branch created from the ASI
+development branch:
+
+>    git checkout -b <vendor>-fix-<bug> origin/master
+>    git cherry-pick <commit>...
+
+Once, the bug fix branch is ready, it should be pushed into the
+vendor's github account and a pull request created, as described in
+the [feature branch section](#sec:feature-branch).
+
+A new feature consists usually of a series of commits developed in a
+dedicated feature branched of the vendor's or ASI's development
+branch. Only in the first case, a rebase on the top of the ASI's
+development branch is necessary. To this end, branch first from the
+feature branch:
+
+>    git checkout -b <vendor>-<new-feature> <private-feature-branch>
+>    git rebase [-i|--interactive] --onto origin/master develop-<vendor>
+
+Once, the bug fix branch is ready, it should be pushed into the
+vendor's github account and a pull request created, as described in
+the [feature branch section](#sec:feature-branch).
+
+
 ---------------------------------------------------------------------
 <a id="sec:release" />
 Release management
