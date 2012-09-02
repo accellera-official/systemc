@@ -118,22 +118,25 @@ only a single (i.e., the latest) release of the kernel.
 >  that turn commits into email, for example, use the first line on the
 >  `Subject:` line and the rest of the commit in the body.
 
-### Tracking release tarballs
 
-In order to track the release traballs (both LWG-internal and public ones),
-a tool named [`pristine-tar`] [5] is used, a tool which enables to track
+### Tracking release tar balls
+
+In order to track the release tar balls (both LWG-internal and public
+ones), a tool named [`pristine-tar`] [5] is used.  It enables to track
 archives directly within the repository.
 
-When looking at the branches (e.g. by using `gitk --all`), you may notice
+When looking at the branches (e.g., by using `gitk --all`), you may notice
 an additional, separate branch called `pristine-tar`.  This branch contains
 the metadata for the pristine-tar tool.  `pristine-tar` enables
 tracking original archives with minimal overhead, since only small binary 
-deltas instead of the full tarballs are stored within the repository.
+deltas instead of the full tar balls are stored within the repository.
 
 > *NOTE*: Currently, only Linux (and recently Mac OS X) are supported
 >         platforms for `pristine-tar`.  Porting to Windows (MinGW) is
->         to be done in the future, which should be possible to the
->         required extent for the use with SystemC.
+>         to be done in the future, which should be possible with
+>         reasonable effort to support the required use cases within
+>         the ASI SystemC working groups.
+
 
 #### Basic workflow
 
@@ -145,7 +148,7 @@ deltas instead of the full tarballs are stored within the repository.
 >     pristine-tar checkout systemc-2.3.1.tgz
 
 
-The maintenance of the `pristine-tar` branch (i.e. adding new archives to
+The maintenance of the `pristine-tar` branch (i.e., adding new archives to
 the `pristine-tar` branch) is done by the LWG chairs during the [release
 management](#sec:release).
 
