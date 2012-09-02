@@ -189,16 +189,20 @@ Issue tracking
  * Define tags for severities and categories
  * Use pull-requests
 
----------------------------------------------------------------------
 
-#### Changelog
+---------------------------------------------------------------------
+Changelog
+---------------------------------------------------------------------
 
 * v0.9 - Initial proposal to the ASI LWG (2012-09-04)
 
  * Presented and discussing during the LWG phone conference
 
 
-#### Authors
+---------------------------------------------------------------------
+Authors
+---------------------------------------------------------------------
+
   * Philipp A. Hartmann <philipp.hartmann@offis.de>
   * Torsten Maehne      <Torsten.Maehne@lip6.fr>
 
