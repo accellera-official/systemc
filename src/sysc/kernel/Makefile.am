@@ -101,6 +101,7 @@ CXX_FILES = \
 	sc_reset.cpp \
 	sc_sensitive.cpp \
 	sc_simcontext.cpp \
+	sc_spawn_options.cpp \
 	sc_thread_process.cpp \
 	sc_time.cpp \
 	sc_ver.cpp \

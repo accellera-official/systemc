@@ -404,6 +404,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\sysc\kernel\sc_spawn_options.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\sysc\utils\sc_stop_here.cpp"
 				>
 			</File>
