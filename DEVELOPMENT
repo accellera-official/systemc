@@ -161,7 +161,7 @@ kernel.
 ### Adding a feature (set)
 
 The development of a new contribution in form of a feature or a
-complex bug fix is best done in a new feature branch, wich is
+complex bug fix is best done in a new feature branch, which is
 forked and checked out from the ASI `master` branch:
 
 >     git checkout -b <company>-<feature-xyz> master
@@ -180,7 +180,7 @@ consider to follow these suggestions:
 >  `Subject:` line and the rest of the commit in the body.
 
 During the development of the contribution, the `master` branch may
-receive other commits. In that case, consider to rebase the commits in
+receive other commits. In that case, consider rebasing the commits in
 your feature branch onto the `HEAD` of the `master` branch to keep the
 history clean. Once the contribution is ready for review by the
 working group, push the feature branch in your fork of the respective
@@ -218,7 +218,7 @@ feature branch in the local and Github fork may be deleted.
 ### Tracking release tar balls
 
 In order to track the release tar balls (both LWG-internal and public
-ones), a tool named [`pristine-tar`] [5] is used.  It enables to track
+ones), a tool named [`pristine-tar`] [5] is used.  It enables tracking
 archives directly within the repository.
 
 When looking at the branches (e.g., by using `gitk --all`), you may notice
