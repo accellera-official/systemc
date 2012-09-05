@@ -103,7 +103,7 @@ public:
     virtual const std::vector<sc_object*>& get_child_objects() const
         { return m_child_objects; }
 
-    sc_object* get_parent() const { return m_parent; } 
+    sc_object* get_parent() const;
     sc_object* get_parent_object() const { return m_parent; }
 
 protected:
