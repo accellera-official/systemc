@@ -76,7 +76,7 @@ template<class T> inline reference_wrapper<T const> SC_BOOST_REF_CONST cref(T co
 
 template<typename T>
 class is_reference_wrapper
-    : public sc_mpl::false_
+    : public mpl::false_
 {
 };
 
@@ -90,7 +90,7 @@ class unwrap_reference
 #  define SC_AUX_REFERENCE_WRAPPER_METAFUNCTIONS_DEF(X) \
 template<typename T> \
 class is_reference_wrapper< X > \
-    : public sc_mpl::true_ \
+    : public mpl::true_ \
 { \
 }; \
 \
@@ -120,7 +120,7 @@ SC_AUX_REFERENCE_WRAPPER_METAFUNCTIONS_DEF(reference_wrapper<T> const volatile)
 namespace sc_boost
 {
 
-namespace sc_detail
+namespace detail
 {
   typedef char (&yes_reference_wrapper_t)[1];
   typedef char (&no_reference_wrapper_t)[2];
@@ -157,15 +157,15 @@ class is_reference_wrapper
  public:
     SC_BOOST_STATIC_CONSTANT(
         bool, value = (
-             sizeof(sc_detail::is_reference_wrapper_test(type<T>()))
-            == sizeof(sc_detail::yes_reference_wrapper_t)));
+             sizeof(detail::is_reference_wrapper_test(type<T>()))
+            == sizeof(detail::yes_reference_wrapper_t)));
     
-    typedef ::sc_boost::sc_mpl::bool_<value> type;
+    typedef ::sc_boost::mpl::bool_<value> type;
 };
 
 template <typename T>
 class unwrap_reference
-    : public sc_detail::reference_unwrapper<
+    : public detail::reference_unwrapper<
         is_reference_wrapper<T>::value
       >::template apply<T>
 {};
