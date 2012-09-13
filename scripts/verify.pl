@@ -556,11 +556,7 @@ sub get_systemc_arch
     }
 
     elsif( $arch =~ /^msvc/ ) {
-        if( $uname_s =~ /^CYGWIN_NT/ ) {
-            $slash = '/';
-        } else {
-            $slash = '//';
-        }
+        # do nothing
     }
 
     $rt_cc = $cxx;
@@ -700,6 +696,7 @@ sub prepare_environment
     $rt_debug_flag    = "-g";
     $rt_debug_ldflags = "";
     $rt_optimize_flag = "-O2";
+    $rt_systemc_include = "$rt_systemc_home/include";
 
     if( $rt_systemc_arch eq "gccsparcOS5" ) {
         $rt_ldrpath       = "-Wl,-R";
@@ -732,15 +729,15 @@ sub prepare_environment
         $rt_ldflags       = $rt_ccflags;
         # use defaults
     } elsif( $rt_systemc_arch =~ /^msvc(71|8|9|10|11)/ ) {
-        $rt_cc = "CL.EXE";
-        $rt_ccflags = "${slash}nologo ${slash}GR ${slash}EHsc "
-                     ."${slash}Zm800 ${slash}vmg "
-                     ."${slash}D \"_USE_MATH_DEFINES\"";
-        $rt_ld = "LINK.EXE";
-        $rt_ldflags = "${slash}nologo ${slash}LTCG ${slash}NODEFAULTLIB:LIBCD ";
-        $rt_debug_flag    = "${slash}GZ ${slash}MTd ${slash}Zi";
-        $rt_debug_ldflags = "${slash}DEBUG ${slash}PDB:$rt_prodname.pdb";
-        $rt_optimize_flag = "${slash}O2";
+        $rt_cc              = "CL.EXE";
+        $rt_ccflags         = "-nologo -GR -EHsc -Zm800 -vmg "
+                             ."-D \"_USE_MATH_DEFINES\"";
+        $rt_ld              = "LINK.EXE";
+        $rt_ldflags         = "-nologo -LTCG -NODEFAULTLIB:LIBCD "
+                             ."-SUBSYSTEM:CONSOLE ";
+        $rt_debug_flag      = "-GZ -MTd -Zi";
+        $rt_debug_ldflags   = "-DEBUG -PDB:$rt_prodname.pdb";
+        $rt_systemc_include = "$rt_systemc_home/src";
     }
 }
 
@@ -1596,7 +1593,7 @@ sub compile_files
 	$newcommand = $command;
 	if( $rt_systemc_arch =~ /^msvc/ ) {
             $ofilestring .= " $file.obj";
-           $newcommand  .= " ${slash}Fo$file.obj $temp";
+           $newcommand  .= " -Fo$file.obj $temp";
 	} else {
             $ofilestring .= " $file.o";
             $newcommand  .= " -o $file.o $temp";
@@ -2060,22 +2057,13 @@ sub run_test
     #
     if( $type =~ /$rt_test_type{'s'}/ ) {
 
-	# compile command
-	if( $rt_systemc_arch =~ /^msvc/ ) {
-	    $command  = "$rt_cc $rt_ccflags $extra_flags ";
-	    $command .= "${slash}I . ";
-	    $command .= "${slash}I $rt_systemc_test/include/$test_set ";
-	    $command .= "${slash}I $rt_tlm_home ";
-	    $command .= "${slash}I $rt_systemc_home/src ";
-	    $command .= "${slash}c ";
-	} else {
-	    $command  = "$rt_cc $rt_ccflags $extra_flags ";
-	    $command .= "-I . ";
-	    $command .= "-I $rt_systemc_test/include/$test_set ";
-	    $command .= "-I $rt_tlm_home ";
-	    $command .= "-I $rt_systemc_home/include ";
-	    $command .= "-c ";
-	}
+        # compile command
+        $command  = "$rt_cc $rt_ccflags $extra_flags ";
+        $command .= "-I . ";
+        $command .= "-I $rt_systemc_test/include/$test_set ";
+        $command .= "-I $rt_tlm_home ";
+        $command .= "-I $rt_systemc_include ";
+        $command .= "-c ";
 
         # add user provided options to command
 	$command .= " $opts";
@@ -2116,7 +2104,7 @@ sub run_test
         }
 
 	if( $rt_systemc_arch =~ /^msvc/ ) {
-	    $command .= "${slash}out:$rt_prodname ";
+	    $command .= "-out:$rt_prodname ";
 	    $command .= "$testname.obj ";
             if( $rt_props & $rt_test_props{ 'debug' } ) {
                 $command .= "$rt_systemc_home/$rt_systemc_arch/"
@@ -2163,22 +2151,13 @@ sub run_test
     #
     if( $type =~ /$rt_test_type{'f'}/ ) {
 
-	# compile command
-	if( $rt_systemc_arch =~ /^msvc/ ) {
-	    $command  = "$rt_cc $rt_ccflags $extra_flags ";
-	    $command .= "${slash}I . ";
-	    $command .= "${slash}I $rt_systemc_test/include/$test_set ";
-	    $command .= "${slash}I $rt_tlm_home ";
-	    $command .= "${slash}I $rt_systemc_home/src ";
-	    $command .= "${slash}c ";
-	} else {
-	    $command  = "$rt_cc $rt_ccflags $extra_flags ";
-	    $command .= "-I . ";
-	    $command .= "-I $rt_systemc_test/include/$test_set ";
-	    $command .= "-I $rt_tlm_home ";
-	    $command .= "-I $rt_systemc_home/include ";
-	    $command .= "-c ";
-	}
+        # compile command
+        $command  = "$rt_cc $rt_ccflags $extra_flags ";
+        $command .= "-I . ";
+        $command .= "-I $rt_systemc_test/include/$test_set ";
+        $command .= "-I $rt_tlm_home ";
+        $command .= "-I $rt_systemc_include ";
+        $command .= "-c ";
 
         # add user provided options to command
 	$command .= " $opts";
@@ -2211,7 +2190,7 @@ sub run_test
         }
 
 	if( $rt_systemc_arch =~ /^msvc/ ) {
-	    $command .= "${slash}out:$rt_prodname ";
+	    $command .= "-out:$rt_prodname ";
 	    $command .= "$ofiles ";
             if( $rt_props & $rt_test_props{ 'debug' } ) {
                 $command .= "$rt_systemc_home/$rt_systemc_arch/"
