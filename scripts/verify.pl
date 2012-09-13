@@ -500,6 +500,9 @@ sub get_systemc_arch
 		elsif ( $v_string =~ /.+Version 16\.00/) {   # 2010
 		    $arch = "msvc10";
 		}
+		elsif ( $v_string =~ /.+Version 17\.00/) {   # 2011/12
+		    $arch = "msvc11";
+		}
 		else {
 		    die "Error: unsupported compiler '$cxx' ($v_string)\n";
                 }
@@ -728,7 +731,7 @@ sub prepare_environment
         $rt_ccflags      .= " -m${rt_cpuarch}";
         $rt_ldflags       = $rt_ccflags;
         # use defaults
-    } elsif( $rt_systemc_arch =~ /^msvc(71|8|9|10)/ ) {
+    } elsif( $rt_systemc_arch =~ /^msvc(71|8|9|10|11)/ ) {
         $rt_cc = "CL.EXE";
         $rt_ccflags = "${slash}nologo ${slash}GR ${slash}EHsc "
                      ."${slash}Zm800 ${slash}vmg "
