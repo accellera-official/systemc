@@ -28,7 +28,13 @@
 #ifndef SC_WRITER_POLICY_H_INCLUDED_
 #define SC_WRITER_POLICY_H_INCLUDED_
 
-
+#if !defined(SC_DEFAULT_WRITER_POLICY)
+#  if defined(SC_NO_WRITE_CHECK)
+#    define SC_DEFAULT_WRITER_POLICY SC_UNCHECKED_WRITERS
+#  else
+#    define SC_DEFAULT_WRITER_POLICY SC_ONE_WRITER
+#  endif
+#endif
 
 namespace sc_core {
 
@@ -54,7 +60,7 @@ enum sc_writer_policy
 };
 
 // signal forward declaration
-template< typename T, sc_writer_policy POL = SC_ONE_WRITER >
+template< typename T, sc_writer_policy POL = SC_DEFAULT_WRITER_POLICY >
 class sc_signal;
 
 template< sc_writer_policy >

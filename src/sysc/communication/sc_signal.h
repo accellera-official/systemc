@@ -67,7 +67,7 @@ sc_writer_policy_check_write::check_write( sc_object* target, bool )
 //  The sc_signal<T> primitive channel class.
 // ----------------------------------------------------------------------------
 
-template< class T, sc_writer_policy POL /* = SC_ONE_WRITER */ >
+template< class T, sc_writer_policy POL /* = SC_DEFAULT_WRITER_POLICY */ >
 class sc_signal
   : public    sc_signal_inout_if<T>
   , public    sc_prim_channel

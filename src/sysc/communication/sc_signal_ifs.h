@@ -212,7 +212,7 @@ public:
     // write the new value
     virtual void write( const T& ) = 0;
     virtual sc_writer_policy get_writer_policy() const
-        { return SC_ONE_WRITER; }
+        { return SC_DEFAULT_WRITER_POLICY; }
 private:
     // disabled
     sc_signal_write_if( const sc_signal_write_if<T>& );
