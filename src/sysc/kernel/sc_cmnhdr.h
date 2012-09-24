@@ -69,12 +69,11 @@
 #define _WIN32_WINNT 0x0400
 #include <Windows.h>
 
-
-// MSVC6.0 for() scope bug
-
-#define for if( false ); else for
-
+#if _MSC_VER < 1300 // MSVC6.0 for() scope bug
+#  define for if( false ); else for
 #endif
+
+#endif 
 
 
 // ----------------------------------------------------------------------------
