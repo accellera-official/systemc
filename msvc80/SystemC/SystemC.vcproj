@@ -682,6 +682,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\sysc\communication\sc_host_mutex.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\sysc\datatypes\int\sc_int.h"
 				>
 			</File>
@@ -743,6 +747,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\sysc\datatypes\bit\sc_lv_base.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\sysc\utils\sc_machine.h"
 				>
 			</File>
 			<File
