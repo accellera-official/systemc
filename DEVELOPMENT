@@ -14,6 +14,7 @@ focuses on the technical aspects related to the development of the ASI
 SystemC implementation.  Legal and formal procedures are documented at
 <http://accellera.org>.
 
+
 ---------------------------------------------------------------------
 Repository organization
 ---------------------------------------------------------------------
@@ -85,6 +86,7 @@ Git commands and workflow can be found [online] [4].
 <a id="sec:branching" />
 Development flow
 ---------------------------------------------------------------------
+
 
 ### Basic branch setup
 
@@ -214,6 +216,7 @@ feature branch in the local and Github fork may be deleted.
 
 [6]: https://help.github.com/articles/using-pull-requests
      "Using Pull Requests - github:help"
+
 
 ### Tracking release tar balls
 
@@ -348,7 +351,6 @@ performed by the maintainer
   >     # git tag -a [-s] "<package> <version>" <package>-<version>
   >     git tag -a "SystemC 2.3.0" systemc-2.3.0 release
 
-
 4. **Create the release tarball**
 
   `git archive` can then be used to create the release tarball.
@@ -377,6 +379,7 @@ performed by the maintainer
   >            <package>-<version>
 
   *NOTE:* The tag needs to be pushed explicitly.
+
 
 ---------------------------------------------------------------------
 Issue tracking
