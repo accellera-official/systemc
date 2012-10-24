@@ -56,7 +56,8 @@ sc_writer_policy_check_write::check_write( sc_object* target, bool )
        m_writer_p = writer_p;
   } else if( SC_UNLIKELY_(m_writer_p != writer_p && writer_p != 0) ) {
        sc_signal_invalid_writer( target, m_writer_p, writer_p, m_check_delta );
-       return false;
+       // error has been suppressed, ignore check as well
+       // return false;
   }
   return true;
 }
