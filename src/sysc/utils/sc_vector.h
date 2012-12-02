@@ -319,10 +319,10 @@ public:
   this_type  operator--(int){ this_type old(*this); --it_; return old; }
 
   // advance
-  this_type  operator+( difference_type n )
+  this_type  operator+( difference_type n ) const
     { return this_type( it_ + n, get_policy()); }
-  this_type  operator-( difference_type n )
-    { return this_type( it_ + n, get_policy()); }
+  this_type  operator-( difference_type n ) const
+    { return this_type( it_ - n, get_policy()); }
 
   this_type& operator+=( difference_type n ) { it_+=n; return *this; }
   this_type& operator-=( difference_type n ) { it_-=n; return *this; }
