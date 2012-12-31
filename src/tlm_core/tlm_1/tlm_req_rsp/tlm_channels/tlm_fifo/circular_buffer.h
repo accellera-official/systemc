@@ -229,17 +229,26 @@ circular_buffer<T>::buf_free( void* & buf )
 template < typename T >
 inline void
 circular_buffer<T>::buf_write( void* buf, int n, const T & t )
-    { new (static_cast<T*>(buf) + n) T(t); }
+{
+  T* p = static_cast<T*>(buf) + n;
+  new (p) T(t);
+}
 
 template < typename T >
 inline T&
 circular_buffer<T>::buf_read( void* buf, int n ) const
-    { return *(static_cast<T*>(buf) + n); }
+{
+  T* p = static_cast<T*>(buf) + n;
+  return *p;
+}
 
 template < typename T >
 inline void
 circular_buffer<T>::buf_clear( void* buf, int n )
-    { (static_cast<T*>(buf) + n)->~T(); }
+{
+  T* p = static_cast<T*>(buf) + n;
+  p->~T();
+}
 
 } // namespace tlm
 
