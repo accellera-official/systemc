@@ -36,6 +36,7 @@ public:
   ~circular_buffer();
 
   void resize( int size );
+  void clear();
 
   T read();
   void write( const T & );
@@ -125,11 +126,20 @@ circular_buffer<T>::circular_buffer( int size )
 }
 
 template < typename T >
-circular_buffer<T>::~circular_buffer()
+void
+circular_buffer<T>::clear()
 {
   for( int i=0; i < used(); i++ ) {
     buf_clear( m_buf, i );
   }
+  m_free = m_size;
+  m_used = m_ri = m_wi = 0;
+}
+
+template < typename T >
+circular_buffer<T>::~circular_buffer()
+{
+  clear();
   buf_free( m_buf );
 }
 
