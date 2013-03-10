@@ -971,7 +971,7 @@ namespace sc_bi
 
 // add_value
 
-#if !defined(SC_BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) || (__SUNPRO_CC >= 0x530)
+#if !defined(SC_BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) || (defined(__SUNPRO_CC) && (__SUNPRO_CC >= 0x530))
 
 template<class T> struct add_value
 {
