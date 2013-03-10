@@ -74,12 +74,10 @@
 
 #include "sysc/utils/sc_iostream.h"
 #include "sysc/kernel/sc_constants.h"   // For SC_MAX_NBITS
-#include "sysc/utils/sc_string.h"      // For sc_numrep
+#include "sysc/utils/sc_string.h"       // For sc_numrep
 
-
-#if defined( __SUNPRO_CC ) || defined( _MSC_VER ) || 1
+// Activate support mixed operands for concatenation via the comma operator
 #define SC_DT_MIXED_COMMA_OPERATORS
-#endif
 
 
 namespace sc_dt
