@@ -63,14 +63,14 @@ extern void qt_vstart (void);
 
 /* Hold 4 saved regs plus two return pcs (qt_error, qt_start) plus
    three args. */
-#define QUICKTHREADS_STKBASE	(9 * 4)
+#define QUICKTHREADS_STKBASE	(13 * 4)
 
 /* Hold 4 saved regs plus one return pc (qt_vstart). */
 #define QUICKTHREADS_VSTKBASE	(5 * 4)
 
 
-/* Stack must be 4-byte aligned. */
-#define QUICKTHREADS_STKALIGN	(4)
+/* Stack must be 16-byte aligned at function call instr. (SSE data support) */
+#define QUICKTHREADS_STKALIGN	(16)
 
 
 /* Where to place various arguments. */
@@ -85,16 +85,20 @@ extern void qt_vstart (void);
 #define QUICKTHREADS_VARGT_INDEX		(QUICKTHREADS_EDI)
 
 
-#define QUICKTHREADS_EBX	0
-#define QUICKTHREADS_EDI	1
-#define QUICKTHREADS_ESI	2
-#define QUICKTHREADS_EBP	3
-#define QUICKTHREADS_PC	4
+#define QUICKTHREADS_EBX        0
+#define QUICKTHREADS_EDI        1
+#define QUICKTHREADS_ESI        2
+#define QUICKTHREADS_EBP        3
+#define QUICKTHREADS_POP0       4
+#define QUICKTHREADS_POP1       5
+#define QUICKTHREADS_POP2       6
+#define QUICKTHREADS_PC         7
 /* The following are defined only for non-varargs. */
-#define QUICKTHREADS_RPC	5
-#define QUICKTHREADS_ARG0	6
-#define QUICKTHREADS_ARG1	7
-#define QUICKTHREADS_ARG2	8
+#define QUICKTHREADS_POPE       8
+#define QUICKTHREADS_ARG0       9
+#define QUICKTHREADS_ARG1      10
+#define QUICKTHREADS_ARG2      11
+#define QUICKTHREADS_RPC       12
 
 
 /* Stack grows down.  The top of the stack is the first thing to
@@ -103,9 +107,17 @@ extern void qt_vstart (void);
 
 extern void qt_error (void);
 
-/* Push on the error return address. */
+/* For correct 16-byte stack alignment (auto-relocatable functions) */
+extern void qt_tramp (void);
+extern void qt_align (void);
+
+/* Push on the error return address and the alignment/trampoline functions. */
 #define QUICKTHREADS_ARGS_MD(sto) \
-  (QUICKTHREADS_SPUT (sto, QUICKTHREADS_RPC, qt_error))
+  (QUICKTHREADS_SPUT (sto, QUICKTHREADS_POP0, qt_align), \
+   QUICKTHREADS_SPUT (sto, QUICKTHREADS_POP1, qt_align), \
+   QUICKTHREADS_SPUT (sto, QUICKTHREADS_POP2, qt_align), \
+   QUICKTHREADS_SPUT (sto, QUICKTHREADS_POPE, qt_tramp), \
+   QUICKTHREADS_SPUT (sto, QUICKTHREADS_RPC, qt_error))
 
 
 /* When varargs are pushed, allocate space for all the args. */
