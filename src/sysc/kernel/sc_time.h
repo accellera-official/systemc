@@ -84,6 +84,7 @@ public:
     sc_time( sc_dt::uint64, bool scale );
     sc_time( const sc_time& );
 
+    static sc_time from_value( sc_dt::uint64 );
 
     // assignment operator
 
@@ -119,11 +120,13 @@ public:
 
     sc_time& operator *= ( double );
     sc_time& operator /= ( double );
+    sc_time& operator %= ( const sc_time& );
 
     friend const sc_time operator * ( const sc_time&, double );
     friend const sc_time operator * ( double, const sc_time& );
     friend const sc_time operator / ( const sc_time&, double );
     friend double        operator / ( const sc_time&, const sc_time& );
+    friend const sc_time operator % ( const sc_time&, const sc_time& );
 
 
     // print function
@@ -284,6 +287,13 @@ sc_time::operator /= ( double d )
     return *this;
 }
 
+inline
+sc_time&
+sc_time::operator %= ( const sc_time& t )
+{
+    m_value %= t.m_value;
+    return *this;
+}
 
 inline
 const sc_time
@@ -316,6 +326,13 @@ operator / ( const sc_time& t1, const sc_time& t2 )
     return ( t1.to_double() / t2.to_double() );
 }
 
+inline
+const sc_time
+operator % ( const sc_time& t1, const sc_time& t2 )
+{
+    sc_time tmp(t1);
+    return tmp %= t2;
+}
 
 // print operator
 

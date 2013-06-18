@@ -137,6 +137,18 @@ sc_time::sc_time( sc_dt::uint64 v, bool scale )
     }
 }
 
+sc_time
+sc_time::from_value( sc_dt::uint64 v )
+{
+    sc_time t;
+    if( v != 0 ) {
+        sc_time_params* time_params = sc_get_curr_simcontext()->m_time_params;
+        time_params->time_resolution_fixed = true;
+        t.m_value = v;
+    }
+    return t;
+}
+
 
 // conversion functions
 
