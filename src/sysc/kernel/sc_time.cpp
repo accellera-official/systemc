@@ -101,6 +101,13 @@ sc_time::sc_time( double v, sc_time_unit tu, sc_simcontext* simc )
 sc_time::sc_time( double v, bool scale )
 : m_value( 0 )
 {
+    static bool warn_constructor=true;
+    if ( warn_constructor ) {
+        warn_constructor=false;
+        SC_REPORT_INFO(SC_ID_IEEE_1666_DEPRECATION_,
+            "deprecated constructor: sc_time(double,bool)");
+    }
+
     if( v != 0 ) {
 	sc_time_params* time_params = sc_get_curr_simcontext()->m_time_params;
 	if( scale ) {
@@ -121,6 +128,13 @@ sc_time::sc_time( double v, bool scale )
 sc_time::sc_time( sc_dt::uint64 v, bool scale )
 : m_value( 0 )
 {
+    static bool warn_constructor=true;
+    if ( warn_constructor ) {
+        warn_constructor=false;
+        SC_REPORT_INFO(SC_ID_IEEE_1666_DEPRECATION_,
+            "deprecated constructor: sc_time(uint64,bool)");
+    }
+
     if( v != 0 ) {
 	sc_time_params* time_params = sc_get_curr_simcontext()->m_time_params;
 	if( scale ) {

@@ -80,11 +80,13 @@ public:
     sc_time();
     sc_time( double, sc_time_unit );
     sc_time( double, sc_time_unit, sc_simcontext* );
-    sc_time( double, bool scale );
-    sc_time( sc_dt::uint64, bool scale );
     sc_time( const sc_time& );
 
     static sc_time from_value( sc_dt::uint64 );
+
+    // deprecated, use from_value(v)
+    sc_time( double, bool scale );
+    sc_time( sc_dt::uint64, bool scale );
 
     // assignment operator
 
