@@ -304,7 +304,7 @@ sc_set_time_resolution( double v, sc_time_unit tu )
 sc_time 
 sc_get_time_resolution()
 {
-    return sc_time( sc_dt::UINT64_ONE, false );
+    return sc_time::from_value( sc_dt::UINT64_ONE );
 }
 
 
@@ -375,8 +375,9 @@ sc_get_default_time_unit()
         SC_REPORT_INFO(SC_ID_IEEE_1666_DEPRECATION_,
             "deprecated function: sc_get_default_time_unit");
     }
-    return sc_time( sc_get_curr_simcontext()->m_time_params->default_time_unit,
-		    false );
+    return sc_time::from_value(
+              sc_get_curr_simcontext()->m_time_params->default_time_unit
+           );
 }
 
 
