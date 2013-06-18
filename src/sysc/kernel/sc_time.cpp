@@ -368,7 +368,7 @@ sc_set_default_time_unit( double v, sc_time_unit tu )
 sc_time
 sc_get_default_time_unit()
 {
-    bool warn_get_default_time_unit = true;
+    static bool warn_get_default_time_unit = true;
     if ( warn_get_default_time_unit )
     {
         warn_get_default_time_unit=false;
