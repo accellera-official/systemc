@@ -55,7 +55,7 @@ extern const std::string  sc_copyright_string;
 #define SC_VERSION_MAJOR      2
 #define SC_VERSION_MINOR      3
 #define SC_VERSION_PATCH      0
-#define SC_IS_PRERELEASE      1
+#define SC_IS_PRERELEASE      0
 
 /// compliancy with IEEE 1666-2011 (see 8.6.5)
 #define IEEE_1666_SYSTEMC     201101L
@@ -81,7 +81,7 @@ extern const std::string  sc_copyright_string;
     "_" SC_VERSION_PRERELEASE "_" SC_VERSION_RELEASE_DATE \
     "-" SC_VERSION_ORIGINATOR
 #else
-#  define SC_VERSION_PRERELEASE // nothing
+#  define SC_VERSION_PRERELEASE "" // nothing
 #  define SC_VERSION \
     SC_STRINGIFY_HELPER_( SC_VERSION_MAJOR.SC_VERSION_MINOR.SC_VERSION_PATCH ) \
     "-" SC_VERSION_ORIGINATOR
