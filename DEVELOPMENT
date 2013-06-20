@@ -23,8 +23,8 @@ The central source code repository of the ASI SystemC implementation is
 hosted in two [Git] [1] repositories at [GitHub](http://github.com).  The
 repositories are private to the `OSCI-WG` organization and can be found at:
 
- * <http://github.com/OSCI-WG/systemc>             (core SystemC library)
- * <http://github.com/OSCI-WG/systemc-regressions> (regression test suite)
+ * <https://github.com/OSCI-WG/systemc>             (core SystemC library)
+ * <https://github.com/OSCI-WG/systemc-regressions> (regression test suite)
 
 Members of the `OSCI-WG` organization with the necessary access rights can
 clone the repositories via SSH from the locations
@@ -39,7 +39,7 @@ organization in general, LWG members can contact the LWG chairs at
 >  *Note:*
 >  Using an explicit name of the 'remote' (`-o osci-wg`) is recommended
 >  to allow using the default remote name `origin` for a personal fork
->  where you can push your changes by default, see [below](#sec:branching).
+>  where you can push your changes by default, see [below](#basic-branch-setup).
 
 Comprehensive documentation about [Git] [1], a distributed version control
 system, can be found in the [Pro Git book] [2], also available online.
@@ -52,7 +52,7 @@ recommended to create personal (or company-based) [forks] [3] of the
 repositories on GitHub and push the proposed changes (bugfixes,
 features, ...) there.  These forks are also only accessible to members
 of the OSCI-WG organization. Details of the intended work-flow are
-described in the next [section](#sec:branching). It is convenient to
+described in the next [section](#basic-branch-setup). It is convenient to
 add this GitHub fork as a remote to your local clone of the
 repository:
 
@@ -82,7 +82,6 @@ Git commands and workflow can be found [online] [4].
 
 
 ---------------------------------------------------------------------
-<a id="sec:branching" />
 Development flow
 ---------------------------------------------------------------------
 
@@ -119,7 +118,7 @@ To prepare a release, the `master` branch would then be merged into the
 `release` branch, the automake files would be updated (if necessary) and
 the clean working tree could be used as baseline for the tarball (e.g.,
 via `git-archive(1)`).  Details are described in the next section
-[release management](#sec:release).  The history of the (core library)
+[release management](#release-management).  The history of the (core library)
 repostitory could then look like shown in the following graph
 (time progresses upwards):
 
@@ -157,7 +156,6 @@ kernel.
 [5]: http://nvie.com/posts/a-successful-git-branching-model/ "'A successful Git branching model' by Vincent Driessen"
 
 
-<a id="sec:feature-branch" />
 ### Adding a feature (set)
 
 The development of a new contribution in form of a feature or a
@@ -264,7 +262,7 @@ deltas instead of the full tarballs are stored within the repository.
 
 The maintenance of the `pristine-tar` branch (i.e., adding new archives to
 the `pristine-tar` branch) is done by the LWG chairs during the [release
-management](#sec:release).
+management](#release-management).
 
 [7]: http://joeyh.name/code/pristine-tar/ "pristine-tar homepage"
 
@@ -298,7 +296,7 @@ development branch:
 
 Once, the bug fix branch is ready, it should be pushed into the
 vendor's github account and a pull request created, as described in
-the [feature branch section](#sec:feature-branch).
+the [feature branch section](#adding-a-feature-set).
 
 A new feature consists usually of a series of commits developed in a
 dedicated feature branched of the vendor's or ASI's development
@@ -311,11 +309,10 @@ feature branch:
 
 Once, the bug fix branch is ready, it should be pushed into the
 vendor's github account and a pull request created, as described in
-the [feature branch section](#sec:feature-branch).
+the [feature branch section](#adding-a-feature-set).
 
 
 ---------------------------------------------------------------------
-<a id="sec:release" />
 Release management
 ---------------------------------------------------------------------
 
