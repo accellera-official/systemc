@@ -64,7 +64,7 @@ namespace tlm
 #define TLM_VERSION_MAJOR                   2           ///< version major level ( numeric )
 #define TLM_VERSION_MINOR                   0           ///< version minor level ( numeric )
 #define TLM_VERSION_PATCH                   2           ///< version patch level ( numeric )
-#define TLM_VERSION_ORIGINATOR              "ACCELLERA" ///< TLM creator string
+#define TLM_VERSION_ORIGINATOR              "ASI"       ///< TLM creator string
 #define TLM_VERSION_SEPARATOR               "."         ///< version string separator
 
 #define TLM_IS_PRERELEASE                   1           ///< pre-release flag ( 1 / 0 )
@@ -134,13 +134,7 @@ const unsigned int tlm_version_major        ( TLM_VERSION_MAJOR               );
 const unsigned int tlm_version_minor        ( TLM_VERSION_MINOR               );
 const unsigned int tlm_version_patch        ( TLM_VERSION_PATCH               );
 
-const bool         tlm_is_prerelease        (
-#if ( TLM_IS_PRERELEASE == TRUE )
-                                              true
-#else   /* TLM_IS_PRERELEASE == TRUE */
-                                              false
-#endif  /* TLM_IS_PRERELEASE == TRUE */
-                                                                              );
+const bool         tlm_is_prerelease        ( TLM_IS_PRERELEASE               );
 
 const std::string  tlm_version_string       ( TLM_VERSION_STRING              );
 const std::string  tlm_version_originator   ( TLM_VERSION_ORIGINATOR          );

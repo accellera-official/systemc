@@ -1,4 +1,3 @@
-
 TLM-2.0 interoperability layer header files
 ===========================================
 
@@ -15,19 +14,19 @@ Files: README.txt
 
 Comments
 ========
+
 User code should only #include the tlm or tlm.h header file in the include/
 directory and avoid including any of the include files in this directory
 directly. All objects defined in this file hierarchy are in the tlm namespace.
 
 tlm_version.h contains the definitions for the version string and integer values
 
-
-
 The header files are organizated, by subdirectory, as follows:
 
 
 tlm_2_interfaces/
 -----------------
+
 Contains the TLM-2.0 core interfaces
 
 Files:
@@ -49,6 +48,7 @@ Files:
 
 tlm_generic_payload/
 --------------------
+
 Contains the TLM-2.0 generic payload and associated classes and helper functions
 
 Files:
@@ -86,6 +86,7 @@ Files:
 
 tlm_sockets/
 ------------
+
 Contains the standard TLM-2.0 initiator and target sockets (which are used as
 the base classes for the convenience sockets in tlm_utils)
 

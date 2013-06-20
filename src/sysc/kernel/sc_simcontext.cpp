@@ -1582,11 +1582,17 @@ sc_start( const sc_time& duration, sc_starvation_policy p )
 
     context_p->simulate( duration );
 
+    // Re-check the status:
+
+    status = context_p->sim_status();
+
     // Update the current time to the exit time if that is the starvation
     // policy:
 
-    if ( p == SC_RUN_TO_TIME )
+    if ( p == SC_RUN_TO_TIME && !context_p->m_paused && status == SC_SIM_OK )
+    {
         context_p->m_curr_time = exit_time;
+    }
 
     // If there was no activity and the simulation clock did not move warn
     // the user, except if we're in a first sc_start(SC_ZERO_TIME) for
@@ -1594,7 +1600,8 @@ sc_start( const sc_time& duration, sc_starvation_policy p )
 
     if ( !initialisation_delta &&
          starting_delta == sc_delta_count() &&
-         context_p->m_curr_time == entry_time )
+         context_p->m_curr_time == entry_time &&
+         status == SC_SIM_OK )
     {
         SC_REPORT_WARNING(SC_ID_NO_SC_START_ACTIVITY_, "");
     }

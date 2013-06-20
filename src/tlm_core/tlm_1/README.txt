@@ -1,4 +1,3 @@
-
 TLM-1.0 header files
 ====================
 
@@ -12,17 +11,17 @@ Files: README.txt
 
 Comments
 ========
+
 User code should only #include the tlm or tlm.h header file in the include/
 directory and avoid including any of the include files in this directory
 directly.  All objects defined in this file hierarchy are in the tlm namespace.
-
-
 
 The header files are organizated, by subdirectory, as follows:
 
 
 tlm_analysis/ 
 --------------
+
 This contains the analysis interfaces, ports, and fifos. These files were not
 part of the original TLM-1.0 release, but have been grouped with TLM-1.0 in this
 release of TLM-2.0
@@ -38,6 +37,7 @@ Files:
 
 tlm_req_rsp/
 ------------
+
 This provides support for TLM modeling based on a request/response pair that 
 are passed by value. This is the original TLM 1.0 standard, with the addition 
 of an overloading of the blocking transport method with pass-by-reference arguments.

@@ -1,7 +1,6 @@
-
-========================================
-README  for  TLM (part of SystemC 2.3.0)
-========================================
+==========================================
+README for TLM-2.0 (part of SystemC 2.3.0)
+==========================================
 
 This is the proof of concept implementation for the OSCI TLM-2.0 standard,
 as defined by the IEEE 1666-2011 SystemC Language Reference Manual.
@@ -12,7 +11,6 @@ as defined by the IEEE 1666-2011 SystemC Language Reference Manual.
 1. This version of the TLM-2.0 code is version 2.0.2. It has some minor changes
    compared to the previous version. For details of changes, please refer to the
    SystemC RELEASENOTES file.
-      
 
 -------------------------------------------------------------------------------
 
@@ -56,9 +54,7 @@ Directory Structure
    There are some examples in the folder examples/tlm, and documentation in 
    docs/tlm.
    
-
 Build Support
- 
    
    Support for building the examples  is provided for 'unix', and
    'msvc' (project and make files).
@@ -71,13 +67,11 @@ Build Support
    $SYSTEMC_HOME/lib-$TARGET_ARCH is a directory containing the systemc library.
    On Windows, the SYSTEMC and TLM environments variables should be used.
 
-
 Examples
 
    There is a set of examples available under the examples/tlm directory, they
-   illustrate the key features of the TLM 2.0 standard. For more information see
+   illustrate the key features of the TLM-2.0 standard. For more information see
    the README.txt. 
-
 
 Problems
 
