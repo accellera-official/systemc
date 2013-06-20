@@ -3,7 +3,7 @@ Development process of the Accellera SystemC implementation
 v1.0, June 2013
 
 *An HTML-rendered copy of this document can be found at
- <https://github.com/OSCI-WG/systemc/blob/master/DEVELOPMENT>.*
+ <https://github.com/OSCI-WG/systemc/blob/master/docs/DEVELOPMENT.md>.*
 
 
 In this document, the internal development process for Accellera's SystemC
