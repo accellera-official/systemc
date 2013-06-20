@@ -1,9 +1,9 @@
 Development process of the Accellera SystemC implementation
 ===========================================================
-v0.9, September 2012
+v1.0, June 2013
 
 *An HTML-rendered copy of this document can be found at
- <https://github.com/OSCI-WG/systemc/wiki/development>.*
+ <https://github.com/OSCI-WG/systemc/blob/master/DEVELOPMENT>.*
 
 
 In this document, the internal development process for Accellera's SystemC
@@ -12,7 +12,7 @@ relates to the development and maintenance procedures for the ASI
 proof-of-concept implementation of SystemC (and TLM).  This document
 focuses on the technical aspects related to the development of the ASI
 SystemC implementation.  Legal and formal procedures are documented at
-<http://accellera.org>.
+<http://accellera.org/about/policies>.
 
 
 ---------------------------------------------------------------------
@@ -131,13 +131,13 @@ repostitory could then look like shown in the following graph
         |         /      |           o - [systemc-2.3.0.1]
         |        /    -- o          /|
         |       /    /   |         o |
-        ^      |  o--    …          \|
-        |      o  …      | --------- o - [systemc-2.3.0]
-        |      |  o      …/          |
-        |      o   \---- o -[public] …
+        ^      |  o--   ...         \|
+        |      o ...     |  -------- o - [systemc-2.3.0]
+        |      |  o     .../         |
+        |      o   \---- o -[public] ..
         ^       \       \|           |
         |        ------- o           o   (internal snapshot)
-        |                …           |
+        |               ...          |
         ^                            o - [systemc-2.2.0]
 
 It should usually be sufficient to keep the two branches `master`
@@ -469,6 +469,10 @@ assigned.
 ---------------------------------------------------------------------
 Changelog
 ---------------------------------------------------------------------
+
+* v1.0 - Development flow implemented at GitHub (2013-06-20)
+
+ * Issue tracking documented
 
 * v0.9 - Initial proposal to the ASI LWG (2012-09-25)
 
