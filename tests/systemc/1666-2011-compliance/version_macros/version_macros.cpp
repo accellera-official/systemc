@@ -50,7 +50,9 @@ int sc_main(int argc, char* argv[])
   sc_assert(  SC_VERSION_PRERELEASE   == sc_version_prerelease );
   sc_assert(  SC_IS_PRERELEASE        == sc_is_prerelease );
   sc_assert(  SC_VERSION              == sc_version_string );
+  sc_assert(  sc_release()            == sc_version_string );
   sc_assert(  SC_COPYRIGHT            == sc_copyright_string );
+  sc_assert(  sc_copyright()          == sc_copyright_string );
 
   cout << "IEEE_1666_SYSTEMC = "       << IEEE_1666_SYSTEMC << endl;
 
