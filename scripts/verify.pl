@@ -425,19 +425,17 @@ sub get_systemc_arch
         } elsif( $uname_s eq "Darwin" ) {
             if( $cxx_comp eq "c++" || $cxx_comp eq "g++" )
             {
-                local( $cpu64bit );
-                $cpu64bit = `sysctl -n hw.cpu64bit_capable 2> /dev/null`;
-                chop( $cpu64bit );
-
-                $arch = "macosx";
-                if ( $uname_m eq "x86_64" ) {
-                    $arch .= "64";
-                } elsif ( $uname_m =~ /^[ix].86$/ and $cpu64bit eq "1" ) {
-                    $arch .= "64";
-                } elsif ( $cpu64bit eq "1" ) {
-                    $arch .= "ppc64";
+                if ( $uname_m =~ /x86_64|[ix].86/ ) {
+                    $arch = "macosx";
                 } else {
-                    $arch .= "ppc";
+                    $arch = "macosxppc";
+                }
+                my $macosx64_chk="( echo '#ifdef __LP64__' ;"
+                                ." echo IS_64BIT_ARCH ; "
+                                ." echo '#endif' )";
+                $macosx64_chk=` $macosx64_chk | $cxx -E - 2>/dev/null `;
+                if ( $macosx64_chk =~ /IS_64BIT_ARCH/ ) {
+                    $arch.="64";
                 }
             }
 
