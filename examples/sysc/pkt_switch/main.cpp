@@ -122,7 +122,7 @@ sc_main(int, char *[])
 
   sc_start(0, SC_NS);
 
-#if !defined(__SUNPRO_CC)
+#ifndef __SUNPRO_CC
   id0.write(0); 
   id1.write(1);
   id2.write(2);
