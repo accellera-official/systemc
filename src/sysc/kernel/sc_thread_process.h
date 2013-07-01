@@ -49,12 +49,14 @@
 #   define DEBUG_MSG(NAME,P,MSG) \
     { \
         if ( P && ( (strlen(NAME)==0) || !strcmp(NAME,P->name())) ) \
-          std::cout << sc_time_stamp() << ": " << P->name() << " ******** " \
-                    << MSG << std::endl; \
+          std::cout << "**** " << sc_time_stamp() << " ("  \
+	            << sc_get_current_process_name() << "): " << MSG \
+		    << " - " << P->name() << std::endl; \
     }
 #else
 #   define DEBUG_MSG(NAME,P,MSG) 
 #endif
+
 
 namespace sc_core {
 
@@ -234,12 +236,12 @@ inline void sc_thread_process::suspend_me()
     {
       case THROW_ASYNC_RESET:
       case THROW_SYNC_RESET:
-        DEBUG_MSG( DEBUG_NAME , this,"throwing reset");
+        DEBUG_MSG( DEBUG_NAME , this, "throwing reset for");
 	if ( m_reset_event_p ) m_reset_event_p->notify();
         throw sc_unwind_exception( this, true ); 
 
       case THROW_USER:
-        DEBUG_MSG( DEBUG_NAME, this, "throwing user exception");
+        DEBUG_MSG( DEBUG_NAME, this, "invoking throw_it for");
 	m_throw_status = m_active_areset_n ? THROW_ASYNC_RESET :
 	                                  (m_active_reset_n ? THROW_SYNC_RESET :
 			                  THROW_NONE);
@@ -247,7 +249,7 @@ inline void sc_thread_process::suspend_me()
 	break;
 
       case THROW_KILL:
-        DEBUG_MSG( DEBUG_NAME, this, "throwing kill");
+        DEBUG_MSG( DEBUG_NAME, this, "throwing kill for");
 	throw sc_unwind_exception( this, false );
 
       default: // THROWING_NOW

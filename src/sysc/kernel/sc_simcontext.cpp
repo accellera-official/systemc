@@ -68,12 +68,14 @@
 #   define DEBUG_MSG(NAME,P,MSG) \
     { \
         if ( P && ( (strlen(NAME)==0) || !strcmp(NAME,P->name())) ) \
-          std::cout << sc_time_stamp() << ": " << P->name() << " ******** " \
-                    << MSG << std::endl; \
+          std::cout << "**** " << sc_time_stamp() << " ("  \
+	            << sc_get_current_process_name() << "): " << MSG \
+		    << " - " << P->name() << std::endl; \
     }
 #else
 #   define DEBUG_MSG(NAME,P,MSG) 
 #endif
+
 
 namespace sc_core {
 
@@ -297,6 +299,7 @@ SC_MODULE(sc_invoke_method)
 	// are available.
 
         sc_get_curr_simcontext()->preempt_with( (sc_thread_handle)invoker_h );
+	DEBUG_MSG( DEBUG_NAME, m_method, "back from preemption" ); 
 	m_invokers.push_back(invoker_h);
     }
 
@@ -312,6 +315,7 @@ SC_MODULE(sc_invoke_method)
 	    sc_get_curr_simcontext()->set_curr_proc( (sc_process_b*)m_method );
 	    m_method->run_process();
 	    sc_get_curr_simcontext()->set_curr_proc( me );
+            DEBUG_MSG( DEBUG_NAME, m_method, "back from executing method" );
 	    wait();
 	}
     }
@@ -320,6 +324,7 @@ SC_MODULE(sc_invoke_method)
     sc_method_handle               m_method;   // method to be invoked.
     std::vector<sc_process_handle> m_invokers; // list of invoking threads.
 };
+
 // ----------------------------------------------------------------------------
 //  CLASS : sc_simcontext
 //
@@ -1325,7 +1330,7 @@ sc_simcontext::preempt_with( sc_method_handle method_h )
     {
 	caller_info = m_curr_proc_info;
         DEBUG_MSG( DEBUG_NAME, method_h,
-	           "preempting active method with this method" );
+	           "preempting active method with method" );
 	sc_get_curr_simcontext()->set_curr_proc( (sc_process_b*)method_h );
 	method_h->run_process();
 	sc_get_curr_simcontext()->set_curr_proc((sc_process_b*)active_method_h);
@@ -1339,7 +1344,7 @@ sc_simcontext::preempt_with( sc_method_handle method_h )
     else if ( active_thread_h != NULL )
     {
         DEBUG_MSG( DEBUG_NAME, method_h,
-	           "preempting active thread with this method" );
+	           "preempting active thread with method" );
 	m_method_invoker_p->invoke_method(method_h);
     }
 
@@ -1351,7 +1356,7 @@ sc_simcontext::preempt_with( sc_method_handle method_h )
     {
 	caller_info = m_curr_proc_info;
         DEBUG_MSG( DEBUG_NAME, method_h,
-	           "preempting no active process with this method" );
+	           "preempting no active process with method" );
 	sc_get_curr_simcontext()->set_curr_proc( (sc_process_b*)method_h );
 	method_h->run_process();
 	m_curr_proc_info = caller_info;

@@ -47,9 +47,10 @@
 #   define DEBUG_NAME ""
 #   define DEBUG_MSG(NAME,P,MSG) \
     { \
-	if ( P && ( (strlen(NAME)==0) || !strcmp(NAME,P->name())) ) \
-	  std::cout << sc_time_stamp() << ": " << P->name() << " ******** " \
-		    << MSG << std::endl; \
+        if ( P && ( (strlen(NAME)==0) || !strcmp(NAME,P->name())) ) \
+          std::cout << "**** " << sc_time_stamp() << " ("  \
+	            << sc_get_current_process_name() << "): " << MSG \
+		    << " - " << P->name() << std::endl; \
     }
 #else
 #   define DEBUG_MSG(NAME,P,MSG) 
@@ -102,7 +103,7 @@ inline void sc_runnable::dump() const
 //------------------------------------------------------------------------------
 inline void sc_runnable::execute_method_next( sc_method_handle method_h )
 {
-    DEBUG_MSG(DEBUG_NAME,method_h,"executing this method next");
+    DEBUG_MSG(DEBUG_NAME,method_h,"pushing this method to execute next");
     method_h->set_next_runnable( m_methods_pop );
     m_methods_pop = method_h;
 }
@@ -116,7 +117,7 @@ inline void sc_runnable::execute_method_next( sc_method_handle method_h )
 //------------------------------------------------------------------------------
 inline void sc_runnable::execute_thread_next( sc_thread_handle thread_h )
 {
-    DEBUG_MSG(DEBUG_NAME,thread_h,"executing this thread next");
+    DEBUG_MSG(DEBUG_NAME,thread_h,"pushing this thread to execute next");
     thread_h->set_next_runnable( m_threads_pop );
     m_threads_pop = thread_h;
 }
@@ -307,7 +308,7 @@ inline sc_thread_handle sc_runnable::pop_thread()
     {
 	    result_p = 0;
     }
-    DEBUG_MSG(DEBUG_NAME,result_p,"popping thread");
+    DEBUG_MSG(DEBUG_NAME,result_p,"popping thread for execution");
     return result_p;
 }
 
