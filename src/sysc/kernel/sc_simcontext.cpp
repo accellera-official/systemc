@@ -284,6 +284,7 @@ SC_MODULE(sc_invoke_method)
 	    options.set_sensitivity(&m_dummy);
 	    invoker_h = sc_spawn(sc_bind(&sc_invoke_method::invoker,this), 
 				 sc_gen_unique_name("invoker"), &options);
+	    ((sc_process_b*)invoker_h)->detach();
 	}
 
 	// There is an invocation thread to use, use the last one on the list.
@@ -307,14 +308,18 @@ SC_MODULE(sc_invoke_method)
 
     void invoker()
     {
-	sc_process_b* me = sc_get_current_process_b();
+	sc_simcontext* csc_p = sc_get_curr_simcontext();
+	sc_process_b*  me = sc_get_current_process_b();
+
 	DEBUG_MSG( DEBUG_NAME, me, "invoker initialization" );
         for (;; )
         {
             DEBUG_MSG( DEBUG_NAME, m_method, "invoker executing method" );
-	    sc_get_curr_simcontext()->set_curr_proc( (sc_process_b*)m_method );
+	    csc_p->set_curr_proc( (sc_process_b*)m_method );
+	    csc_p->get_active_invokers().push_back((sc_thread_handle)me);
 	    m_method->run_process();
-	    sc_get_curr_simcontext()->set_curr_proc( me );
+	    csc_p->set_curr_proc( me );
+	    csc_p->get_active_invokers().pop_back();
             DEBUG_MSG( DEBUG_NAME, m_method, "back from executing method" );
 	    wait();
 	}

@@ -196,6 +196,8 @@ public:
     int sim_status() const;
     bool elaboration_done() const;
 
+    std::vector<sc_thread_handle>& get_active_invokers();
+
     sc_object_manager* get_object_manager();
 
     inline sc_status get_status() const;
@@ -335,6 +337,8 @@ private:
     sc_object*                  m_current_writer;
     bool                        m_write_check;
     int                         m_next_proc_id;
+
+    std::vector<sc_thread_handle> m_active_invokers;
 
     std::vector<sc_event*>      m_child_events;
     std::vector<sc_object*>     m_child_objects;

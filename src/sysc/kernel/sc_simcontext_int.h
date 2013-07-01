@@ -145,17 +145,30 @@ sc_simcontext::preempt_with( sc_thread_handle thread_h )
     // THE CALLER IS A METHOD:
     //
     //   (a) Set the current process information to our thread.
-    //   (b) Invoke our thread directly by-passing the run queue.
-    //   (c) Restore the process info to the caller.
-    //   (d) Check to see if the calling method should throw an exception
+    //   (b) If the method was called by an invoker thread push that thread
+    //       onto the front of the run queue, this will cause the method
+    //       to be resumed after this thread waits.
+    //   (c) Invoke our thread directly by-passing the run queue.
+    //   (d) Restore the process info to the caller.
+    //   (e) Check to see if the calling method should throw an exception
     //       because of activity that occurred during the preemption.
 
     if ( active_p == NULL )
     {
-        sc_method_handle                 method_p;   // active method.
+	std::vector<sc_thread_handle>* invokers_p;  // active invokers stack.
+	sc_thread_handle           invoke_thread_p; // latest invocation thread.
+        sc_method_handle           method_p;        // active method.
 
 	method_p = DCAST<sc_method_handle>(sc_get_current_process_b());
+	invokers_p = &get_active_invokers();
 	caller_info = m_curr_proc_info;
+	if ( invokers_p->size() != 0 )
+	{
+	    invoke_thread_p = invokers_p->back();
+	    DEBUG_MSG( DEBUG_NAME, invoke_thread_p, 
+	        "queueing invocation thread to execute next" );
+	    execute_thread_next(invoke_thread_p);
+	}
         DEBUG_MSG( DEBUG_NAME, thread_h, "preempting method with thread" );
 	set_curr_proc( (sc_process_b*)thread_h );
 	m_cor_pkg->yield( thread_h->m_cor_p );
@@ -263,6 +276,13 @@ void
 sc_simcontext::remove_runnable_thread( sc_thread_handle thread_h )
 {
     m_runnable->remove_thread( thread_h );
+}
+
+inline
+std::vector<sc_thread_handle>&
+sc_simcontext::get_active_invokers()
+{
+    return m_active_invokers;
 }
 
 // ----------------------------------------------------------------------------

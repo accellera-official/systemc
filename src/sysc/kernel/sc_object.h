@@ -52,6 +52,7 @@ class sc_object
 {
     friend class sc_event;
     friend class sc_module;
+    friend struct sc_invoke_method;
     friend class sc_module_dynalloc_list;
     friend class sc_object_manager;
     friend class sc_process_b;
