@@ -42,12 +42,14 @@
 #   define DEBUG_MSG(NAME,P,MSG) \
     { \
         if ( P && ( (strlen(NAME)==0) || !strcmp(NAME,P->name())) ) \
-          std::cout << sc_time_stamp() << ": " << P->name() << " ******** " \
-                    << MSG << std::endl; \
+          std::cout << "**** " << sc_time_stamp() << " ("  \
+	            << sc_get_current_process_name() << "): " << MSG \
+		    << " - " << P->name() << std::endl; \
     }
 #else
 #   define DEBUG_MSG(NAME,P,MSG) 
 #endif
+
 
 namespace sc_core {
 
@@ -615,7 +617,7 @@ void sc_thread_process::throw_user( const sc_throw_it_helper& helper,
     if( m_has_stack )
     {
         remove_dynamic_events();
-        DEBUG_MSG(DEBUG_NAME,this,"throwing user exception");
+        DEBUG_MSG(DEBUG_NAME,this,"throwing user exception to");
         m_throw_status = THROW_USER;
         if ( m_throw_helper_p != 0 ) delete m_throw_helper_p;
         m_throw_helper_p = helper.clone();

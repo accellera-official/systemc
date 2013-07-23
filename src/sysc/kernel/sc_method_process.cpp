@@ -42,8 +42,9 @@
 #   define DEBUG_MSG(NAME,P,MSG) \
     { \
         if ( P && ( (strlen(NAME)==0) || !strcmp(NAME,P->name())) ) \
-          std::cout << sc_time_stamp() << ": " << P->name() << " ******** " \
-                    << MSG << std::endl; \
+          std::cout << "**** " << sc_time_stamp() << " ("  \
+	            << sc_get_current_process_name() << "): " << MSG \
+		    << " - " << P->name() << std::endl; \
     }
 #else
 #   define DEBUG_MSG(NAME,P,MSG) 
@@ -538,8 +539,7 @@ void sc_method_process::throw_reset( bool async )
 	else 
 	{
 	    DEBUG_MSG(DEBUG_NAME,this,
-	              "throw_reset: queueing method for execution");
-	    // simcontext()->execute_method_next(this);
+	              "throw_reset: queueing this method for execution");
 	    simcontext()->preempt_with(this);
 	}
     }
