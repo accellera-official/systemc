@@ -758,10 +758,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\sysc\kernel\sc_macros_int.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\src\sysc\utils\sc_mempool.h"
 				>
 			</File>

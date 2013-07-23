@@ -32,7 +32,6 @@
 #include "sysc/kernel/sc_cor_qt.h"
 #include "sysc/kernel/sc_event.h"
 #include "sysc/kernel/sc_kernel_ids.h"
-#include "sysc/kernel/sc_macros_int.h"
 #include "sysc/kernel/sc_module.h"
 #include "sysc/kernel/sc_module_registry.h"
 #include "sysc/kernel/sc_name_gen.h"

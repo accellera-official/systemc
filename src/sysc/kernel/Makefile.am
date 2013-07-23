@@ -67,7 +67,6 @@ NO_H_FILES = \
 	sc_cor_pthread.h \
 	sc_cor_qt.h \
 	sc_cthread_process.h \
-	sc_macros_int.h \
 	sc_method_process.h \
 	sc_module_registry.h \
 	sc_name_gen.h \
