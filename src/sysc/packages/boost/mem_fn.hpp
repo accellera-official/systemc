@@ -33,7 +33,7 @@ namespace sc_boost
 #define SC_BOOST_MEM_FN_CLASS_F , class F
 #define SC_BOOST_MEM_FN_TYPEDEF(X)
 
-namespace sc_mfi // mem_fun_impl
+namespace _mfi // mem_fun_impl
 {
 
 template<class V> struct mf
@@ -197,14 +197,14 @@ template<> struct mf<void>
 
 #endif
 
-} // namespace sc_mfi
+} // namespace _mfi
 
 #else // #ifdef SC_BOOST_NO_VOID_RETURNS
 
 #define SC_BOOST_MEM_FN_CLASS_F
 #define SC_BOOST_MEM_FN_TYPEDEF(X) typedef X;
 
-namespace sc_mfi
+namespace _mfi
 {
 
 #define SC_BOOST_MEM_FN_RETURN return
@@ -255,7 +255,7 @@ namespace sc_mfi
 
 #undef SC_BOOST_MEM_FN_RETURN
 
-} // namespace sc_mfi
+} // namespace _mfi
 
 #undef SC_BOOST_MEM_FN_CLASS_F
 #undef SC_BOOST_MEM_FN_TYPEDEF
@@ -308,7 +308,7 @@ namespace sc_mfi
 
 // data member support
 
-namespace sc_mfi
+namespace _mfi
 {
 
 template<class R, class T> class dm
@@ -382,11 +382,11 @@ public:
     }
 };
 
-} // namespace sc_mfi
+} // namespace _mfi
 
-template<class R, class T> sc_mfi::dm<R, T> mem_fn(R T::*f)
+template<class R, class T> _mfi::dm<R, T> mem_fn(R T::*f)
 {
-    return sc_mfi::dm<R, T>(f);
+    return _mfi::dm<R, T>(f);
 }
 
 } // namespace sc_boost
