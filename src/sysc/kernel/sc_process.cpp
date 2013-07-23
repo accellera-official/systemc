@@ -315,8 +315,7 @@ sc_process_b::remove_static_events()
         m_static_events.resize(0);
         break;
       case SC_METHOD_PROC_:
-        method_h = DCAST<sc_method_handle>( this );
-        assert( method_h != 0 );
+        method_h = SCAST<sc_method_handle>( this );
         for( int i = m_static_events.size() - 1; i >= 0; -- i ) {
             m_static_events[i]->remove_static( method_h );
         }
