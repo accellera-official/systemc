@@ -151,17 +151,24 @@ sc_time::sc_time( sc_dt::uint64 v, bool scale )
     }
 }
 
+#ifdef SC_TIME_ALLOW_MAXTIME_CREATION
+#  define SC_MAXTIME_ALLOWED_ 1
+#else
+#  define SC_MAXTIME_ALLOWED_ 0
+#endif
+
 sc_time
 sc_time::from_value( sc_dt::uint64 v )
 {
     sc_time t;
-    if( v != 0 ) {
+    if( v != 0 && !(SC_MAXTIME_ALLOWED_ && v == ~sc_dt::UINT64_ZERO) ) {
         sc_time_params* time_params = sc_get_curr_simcontext()->m_time_params;
         time_params->time_resolution_fixed = true;
-        t.m_value = v;
     }
+    t.m_value = v;
     return t;
 }
+#undef SC_MAXTIME_ALLOWED_
 
 
 // conversion functions
