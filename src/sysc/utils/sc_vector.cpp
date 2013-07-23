@@ -100,10 +100,7 @@ sc_vector_base::check_init( size_type n ) const
   sc_simcontext* simc = simcontext();
   sc_assert( simc == sc_get_curr_simcontext() );
 
-  sc_object* parent_p = simc->get_object_manager()->hierarchy_curr();
-  if ( !parent_p )
-        parent_p = static_cast<sc_object*>( sc_get_current_process_b() );
-
+  sc_object* parent_p = simc->active_object();
   if( parent_p != get_parent_object() )
   {
     std::stringstream str;
