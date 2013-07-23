@@ -585,6 +585,18 @@ sc_simcontext::write_check() const
 class sc_process_handle;
 sc_process_handle sc_get_current_process_handle();
 
+// Get the current object hierarchy context
+//
+// Returns a pointer the the sc_object (module or process) that
+// would become the parent object of a newly created element
+// of the SystemC object hierarchy, or NULL.
+//
+inline sc_object*
+sc_get_current_hierarchy()
+{
+  return sc_get_curr_simcontext()->active_object();
+}
+
 inline
 sc_process_b*
 sc_get_current_process_b()
