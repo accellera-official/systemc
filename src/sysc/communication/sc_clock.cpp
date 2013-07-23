@@ -52,7 +52,7 @@ namespace sc_core {
 // constructors
 
 sc_clock::sc_clock() : 
-    sc_signal<bool>( sc_gen_unique_name( "clock" ) ),
+    base_type( sc_gen_unique_name( "clock" ) ),
     m_period(), m_duty_cycle(), m_start_time(), m_posedge_first(),
     m_posedge_time(), m_negedge_time(),
     m_next_posedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
@@ -70,7 +70,7 @@ sc_clock::sc_clock() :
 }
 
 sc_clock::sc_clock( const char* name_ ) :
-    sc_signal<bool>( name_ ),
+    base_type( name_ ),
     m_period(), m_duty_cycle(), m_start_time(), m_posedge_first(),
     m_posedge_time(), m_negedge_time(),
     m_next_posedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
@@ -91,7 +91,7 @@ sc_clock::sc_clock( const char* name_,
 		    double         duty_cycle_,
 		    const sc_time& start_time_,
 		    bool           posedge_first_ ) :
-    sc_signal<bool>( name_ ),
+    base_type( name_ ),
     m_period(), m_duty_cycle(), m_start_time(), m_posedge_first(),
     m_posedge_time(), m_negedge_time(),
     m_next_posedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
@@ -117,7 +117,7 @@ sc_clock::sc_clock( const char* name_,
 		    double         period_v_,
 		    sc_time_unit   period_tu_,
 		    double         duty_cycle_ ) :
-    sc_signal<bool>( name_ ),
+    base_type( name_ ),
     m_period(), m_duty_cycle(), m_start_time(), m_posedge_first(),
     m_posedge_time(), m_negedge_time(),
     m_next_posedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
@@ -141,7 +141,7 @@ sc_clock::sc_clock( const char* name_,
 		    double         start_time_v_,
 		    sc_time_unit   start_time_tu_,
 		    bool           posedge_first_ ) :
-    sc_signal<bool>( name_ ),
+    base_type( name_ ),
     m_period(), m_duty_cycle(), m_start_time(), m_posedge_first(),
     m_posedge_time(), m_negedge_time(),
     m_next_posedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
@@ -169,7 +169,7 @@ sc_clock::sc_clock( const char* name_,
 		    double         duty_cycle_,
 		    double         start_time_,  // in default time units
 		    bool           posedge_first_ ) :
-    sc_signal<bool>( name_ ),
+    base_type( name_ ),
     m_period(), m_duty_cycle(), m_start_time(), m_posedge_first(),
     m_posedge_time(), m_negedge_time(),
     m_next_posedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 

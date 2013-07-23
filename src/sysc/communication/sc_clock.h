@@ -41,8 +41,9 @@ namespace sc_core {
 // ----------------------------------------------------------------------------
 
 class sc_clock
-: public sc_signal<bool>
+  : public sc_signal<bool,SC_ONE_WRITER>
 {
+  typedef sc_signal<bool,SC_ONE_WRITER> base_type;
 public:
 
     friend class sc_clock_posedge_callback;

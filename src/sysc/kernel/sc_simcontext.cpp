@@ -355,9 +355,15 @@ sc_simcontext::init()
     // CHECK FOR ENVIRONMENT VARIABLES THAT MODIFY SIMULATOR EXECUTION:
 
     const char* write_check = std::getenv("SC_SIGNAL_WRITE_CHECK");
-    m_write_check = ( (write_check==0) || strcmp(write_check,"DISABLE") ) ?
-      true : false;
-
+    m_write_check = true;
+    if( write_check && strcmp(write_check,"DISABLE") == 0 )
+    {
+        SC_REPORT_WARNING( SC_ID_IEEE_1666_DEPRECATION_,
+            "SC_SIGNAL_WRITE_CHECK=DISABLE is deprecated.\n"
+            "Use signals with a proper sc_writer_policy instead."
+        );
+        m_write_check = false;
+    }
 
     // FINISH INITIALIZATIONS:
 
