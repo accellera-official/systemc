@@ -121,3 +121,7 @@
 #ifdef SC_INCLUDE_DYNAMIC_PROCESSES
 #    include "sysc/kernel/sc_dynamic_processes.h"
 #endif // SC_INCLUDE_DYNAMIC_PROCESSES
+
+#ifdef SC_USE_SC_STRING_OLD
+#    include "sysc/utils/sc_string.h"
+#endif // SC_USE_SC_STRING_OLD

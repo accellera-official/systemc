@@ -41,6 +41,7 @@
 #include "sysc/utils/sc_hash.h"
 #include "sysc/utils/sc_iostream.h"
 #include "sysc/utils/sc_list.h"
+#include "sysc/utils/sc_utils_ids.h"
 #include "sysc/utils/sc_mempool.h"
 
 namespace sc_core {
@@ -434,6 +435,20 @@ sc_object::attr_cltn() const
 {
     if ( !m_attr_cltn_p ) m_attr_cltn_p = new sc_attr_cltn;
     return *m_attr_cltn_p;
+}
+
+sc_object*
+sc_object::get_parent() const
+{
+    static bool warn_sc_get_parent_deprecated=true;
+    if ( warn_sc_get_parent_deprecated )
+    {
+        warn_sc_get_parent_deprecated=false;
+        SC_REPORT_INFO(sc_core::SC_ID_IEEE_1666_DEPRECATION_,
+          "sc_object::get_parent() is deprecated, "
+          "use get_parent_object() instead");
+    }
+    return get_parent_object();
 }
 
 } // namespace sc_core

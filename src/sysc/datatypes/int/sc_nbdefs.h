@@ -74,7 +74,6 @@
 
 #include "sysc/utils/sc_iostream.h"
 #include "sysc/kernel/sc_constants.h"   // For SC_MAX_NBITS
-#include "sysc/utils/sc_string.h"       // For sc_numrep
 
 // Activate support mixed operands for concatenation via the comma operator
 #define SC_DT_MIXED_COMMA_OPERATORS
@@ -82,6 +81,28 @@
 
 namespace sc_dt
 {
+
+// ----------------------------------------------------------------------------
+//  ENUM : sc_numrep
+//
+//  Enumeration of number representations for character string conversion.
+// ----------------------------------------------------------------------------
+
+enum sc_numrep
+{
+    SC_NOBASE = 0,
+    SC_BIN    = 2,
+    SC_OCT    = 8,
+    SC_DEC    = 10,
+    SC_HEX    = 16,
+    SC_BIN_US,
+    SC_BIN_SM,
+    SC_OCT_US,
+    SC_OCT_SM,
+    SC_HEX_US,
+    SC_HEX_SM,
+    SC_CSD
+};
 
 // Sign of a number:
 #define SC_NEG       -1     // Negative number

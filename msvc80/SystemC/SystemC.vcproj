@@ -404,6 +404,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\sysc\kernel\sc_spawn_options.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\sysc\utils\sc_stop_here.cpp"
 				>
 			</File>
@@ -678,6 +682,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\sysc\communication\sc_host_mutex.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\sysc\datatypes\int\sc_int.h"
 				>
 			</File>
@@ -742,11 +750,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\sysc\kernel\sc_macros.h"
+				RelativePath="..\..\src\sysc\utils\sc_machine.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\sysc\kernel\sc_macros_int.h"
+				RelativePath="..\..\src\sysc\kernel\sc_macros.h"
 				>
 			</File>
 			<File

@@ -88,34 +88,6 @@ namespace sc_core {
 
 
 /*
- *  Note that sc_get_curr_simcontext() may also be a member
- *  of sc_module. The idea is that if we are inside an sc_module,
- *  then its associated simcontext should always be the current
- *  simcontext.
- */
-
-#define W_BEGIN                                                               \
-    do {                                                                      \
-        sc_watch __aux_watch( sc_get_curr_simcontext() );
-
-#define W_DO                                                                  \
-        try {                                                                 \
-            __watching_first( __aux_watch.cthread_h );
-
-#define W_ESCAPE                                                              \
-        }                                                                     \
-        catch( int sc_level ) {                                               \
-            __sanitycheck_watchlists( __aux_watch.cthread_h );                \
-            if( sc_level < __watch_level( __aux_watch.cthread_h ) ) {         \
-                throw sc_level;                                               \
-            }
-
-#define W_END                                                                 \
-        }                                                                     \
-    } while( false );
-
-
-/*
  *  These help debugging --
  *  -- user can find out where each process is stopped at.
  */

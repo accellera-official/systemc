@@ -37,6 +37,13 @@ Makefile.in
 /include/
 /lib-*/
 
+# ignore MSVC build files
+/msvc*/SystemC/SystemC.suo
+/msvc*/SystemC/SystemC.ncb
+/msvc*/SystemC/SystemC.vcproj.*
+/msvc*/SystemC/Release/
+/msvc*/SystemC/Debug/
+
 # ignore Doxygen documentation
 /docs/*/doxygen/html/
 /docs/*/doxygen/*.tag

@@ -56,28 +56,6 @@ class sc_string_rep;
     sc_string_old operator + ( const char* s, const sc_string_old& t );
 
 
-// ----------------------------------------------------------------------------
-//  ENUM : sc_numrep
-//
-//  Enumeration of number representations for character string conversion.
-// ----------------------------------------------------------------------------
-
-enum sc_numrep
-{
-    SC_NOBASE = 0,
-    SC_BIN    = 2,
-    SC_OCT    = 8,
-    SC_DEC    = 10,
-    SC_HEX    = 16,
-    SC_BIN_US,
-    SC_BIN_SM,
-    SC_OCT_US,
-    SC_OCT_SM,
-    SC_HEX_US,
-    SC_HEX_SM,
-    SC_CSD
-};
-
 // We use typedefs for istream and ostream here to get around some finickiness
 // from aCC:
 

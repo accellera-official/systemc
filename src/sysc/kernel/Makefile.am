@@ -52,7 +52,6 @@ H_FILES = \
 	sc_object.h \
 	sc_process.h \
 	sc_process_handle.h \
-	sc_reset.h \
 	sc_runnable.h \
 	sc_sensitive.h \
 	sc_spawn.h \
@@ -68,11 +67,11 @@ NO_H_FILES = \
 	sc_cor_pthread.h \
 	sc_cor_qt.h \
 	sc_cthread_process.h \
-	sc_macros_int.h \
 	sc_method_process.h \
 	sc_module_registry.h \
 	sc_name_gen.h \
 	sc_object_manager.h \
+	sc_reset.h \
 	sc_runnable_int.h \
 	sc_simcontext_int.h
 	sc_thread_process.h 
@@ -101,6 +100,7 @@ CXX_FILES = \
 	sc_reset.cpp \
 	sc_sensitive.cpp \
 	sc_simcontext.cpp \
+	sc_spawn_options.cpp \
 	sc_thread_process.cpp \
 	sc_time.cpp \
 	sc_ver.cpp \

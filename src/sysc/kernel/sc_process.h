@@ -34,7 +34,6 @@
 #include "sysc/kernel/sc_constants.h"
 #include "sysc/kernel/sc_object.h"
 #include "sysc/kernel/sc_kernel_ids.h"
-#include "sysc/kernel/sc_reset.h"
 #include "sysc/communication/sc_export.h"
 
 namespace sc_core {
