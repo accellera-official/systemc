@@ -46,7 +46,7 @@ the extension before/after setting/clearing the extension.
 #ifndef __INSTANCE_SPECIFIC_EXTENSIONS_H__
 #define __INSTANCE_SPECIFIC_EXTENSIONS_H__
 
-#include "tlm.h"
+#include <tlm>
 
 namespace tlm_utils {
 

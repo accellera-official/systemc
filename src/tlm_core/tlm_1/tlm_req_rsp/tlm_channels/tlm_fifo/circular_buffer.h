@@ -36,6 +36,7 @@ public:
   ~circular_buffer();
 
   void resize( int size );
+  void clear();
 
   T read();
   void write( const T & );
@@ -125,11 +126,20 @@ circular_buffer<T>::circular_buffer( int size )
 }
 
 template < typename T >
-circular_buffer<T>::~circular_buffer()
+void
+circular_buffer<T>::clear()
 {
   for( int i=0; i < used(); i++ ) {
     buf_clear( m_buf, i );
   }
+  m_free = m_size;
+  m_used = m_ri = m_wi = 0;
+}
+
+template < typename T >
+circular_buffer<T>::~circular_buffer()
+{
+  clear();
   buf_free( m_buf );
 }
 
@@ -229,17 +239,26 @@ circular_buffer<T>::buf_free( void* & buf )
 template < typename T >
 inline void
 circular_buffer<T>::buf_write( void* buf, int n, const T & t )
-    { new (static_cast<T*>(buf) + n) T(t); }
+{
+  T* p = static_cast<T*>(buf) + n;
+  new (p) T(t);
+}
 
 template < typename T >
 inline T&
 circular_buffer<T>::buf_read( void* buf, int n ) const
-    { return *(static_cast<T*>(buf) + n); }
+{
+  T* p = static_cast<T*>(buf) + n;
+  return *p;
+}
 
 template < typename T >
 inline void
 circular_buffer<T>::buf_clear( void* buf, int n )
-    { (static_cast<T*>(buf) + n)->~T(); }
+{
+  T* p = static_cast<T*>(buf) + n;
+  p->~T();
+}
 
 } // namespace tlm
 

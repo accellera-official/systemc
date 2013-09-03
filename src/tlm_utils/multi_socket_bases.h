@@ -19,8 +19,7 @@
 #define __MULTI_SOCKET_BASES_H__
 
 #include <systemc>
-
-#include "tlm.h"
+#include <tlm>
 
 #include <map>
 #include <sstream>

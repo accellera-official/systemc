@@ -18,7 +18,7 @@
 #ifndef __PASSTHROUGH_TARGET_SOCKET_H__
 #define __PASSTHROUGH_TARGET_SOCKET_H__
 
-#include "tlm.h"
+#include <tlm>
 #include <sstream>
 
 namespace tlm_utils {
