@@ -1578,7 +1578,7 @@ sc_start( const sc_time& duration, sc_starvation_policy p )
         exit_time = context_p->m_curr_time + duration;
 
     // called with duration = SC_ZERO_TIME for the first time
-    static bool initialisation_delta =
+    static bool init_delta_or_pending_updates =
          ( starting_delta == 0 && exit_time == SC_ZERO_TIME );
 
     // If the simulation status is bad issue the appropriate message:
@@ -1592,6 +1592,9 @@ sc_start( const sc_time& duration, sc_starvation_policy p )
             SC_REPORT_ERROR(SC_ID_SIMULATION_START_AFTER_ERROR_, "");
         return;
     }
+
+    if ( context_p->m_prim_channel_registry->pending_updates() )
+        init_delta_or_pending_updates = true;
 
     // If the simulation status is good perform the simulation:
 
@@ -1611,9 +1614,9 @@ sc_start( const sc_time& duration, sc_starvation_policy p )
 
     // If there was no activity and the simulation clock did not move warn
     // the user, except if we're in a first sc_start(SC_ZERO_TIME) for
-    // initialisation (only):
+    // initialisation (only) or there have been pending updates:
 
-    if ( !initialisation_delta &&
+    if ( !init_delta_or_pending_updates &&
          starting_delta == sc_delta_count() &&
          context_p->m_curr_time == entry_time &&
          status == SC_SIM_OK )
@@ -1621,8 +1624,8 @@ sc_start( const sc_time& duration, sc_starvation_policy p )
         SC_REPORT_WARNING(SC_ID_NO_SC_START_ACTIVITY_, "");
     }
 
-    // subsequent calls are not initial ones
-    initialisation_delta = false;
+    // reset init/update flag for subsequent calls
+    init_delta_or_pending_updates = false;
 }
 
 void
