@@ -592,7 +592,7 @@ sc_process_handle sc_get_current_process_handle();
 // of the SystemC object hierarchy, or NULL.
 //
 inline sc_object*
-sc_get_current_hierarchy()
+sc_get_current_object()
 {
   return sc_get_curr_simcontext()->active_object();
 }
