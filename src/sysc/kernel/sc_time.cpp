@@ -125,7 +125,7 @@ sc_time::sc_time( double v, bool scale )
     }
 }
 
-sc_time::sc_time( sc_dt::uint64 v, bool scale )
+sc_time::sc_time( value_type v, bool scale )
 : m_value( 0 )
 {
     static bool warn_constructor=true;
@@ -158,7 +158,7 @@ sc_time::sc_time( sc_dt::uint64 v, bool scale )
 #endif
 
 sc_time
-sc_time::from_value( sc_dt::uint64 v )
+sc_time::from_value( value_type v )
 {
     sc_time t;
     if( v != 0 && !(SC_MAXTIME_ALLOWED_ && v == ~sc_dt::UINT64_ZERO) ) {
@@ -192,12 +192,12 @@ sc_time::to_seconds() const
 const std::string
 sc_time::to_string() const
 {
-    sc_dt::uint64 val = m_value;
+    value_type val = m_value;
     if( val == 0 ) {
 	return std::string( "0 s" );
     }
     sc_time_params* time_params = sc_get_curr_simcontext()->m_time_params;
-    sc_dt::uint64 tr = SCAST<sc_dt::int64>( time_params->time_resolution );
+    value_type tr = SCAST<sc_dt::int64>( time_params->time_resolution );
     int n = 0;
     while( ( tr % 10 ) == 0 ) {
 	tr /= 10;
