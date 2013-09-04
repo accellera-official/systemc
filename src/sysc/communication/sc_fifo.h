@@ -33,6 +33,7 @@
 #include "sysc/communication/sc_fifo_ifs.h"
 #include "sysc/kernel/sc_event.h"
 #include "sysc/kernel/sc_simcontext.h"
+#include "sysc/utils/sc_string.h"
 #include "sysc/tracing/sc_trace.h"
 #include <typeinfo>
 

@@ -68,6 +68,7 @@
 #include "sysc/datatypes/bit/sc_bit_ids.h"
 #include "sysc/datatypes/int/sc_int_ids.h"
 #include "sysc/datatypes/int/sc_nbdefs.h"
+#include "sysc/utils/sc_string.h"
 #include "sysc/utils/sc_report.h"
 
 

@@ -31,6 +31,7 @@
 #include "sysc/communication/sc_prim_channel.h"
 #include "sysc/communication/sc_signal_ifs.h"
 #include "sysc/communication/sc_writer_policy.h"
+#include "sysc/utils/sc_string.h"
 #include "sysc/kernel/sc_event.h"
 #include "sysc/kernel/sc_process.h"
 #include "sysc/kernel/sc_simcontext.h"
