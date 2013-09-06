@@ -48,6 +48,7 @@ sc_bit(1).to_char() = 1
 
 int sc_main(int argc, char* arg[]) 
 {
+    sc_report_handler::set_actions("/IEEE_Std_1666/deprecated", SC_DO_NOTHING);
     cout << "sc_bit(1).to_char() = " << sc_bit(1).to_char() << endl;
 
     return 0;

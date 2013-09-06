@@ -1564,7 +1564,7 @@ long_min / int_min : 0x1
 long_min / uint_max : 0xf.7fffffff8
 long_min / ulong_max : 0xf.7fffffff8
 long_min / double_min : -Inf
-long_min / double_max : 0x.f7ffffffffffff8e-247
+long_min / double_max : 0x.8e-248
 long_min / float_min : 0xee+39
 long_min / float_max : 0x.f7fffff7fffff8e-23
 long_min * zero_min : 0x0
@@ -1938,7 +1938,7 @@ int_min / int_min : 0x1
 int_min / uint_max : 0xf.7fffffff8
 int_min / ulong_max : 0xf.7fffffff8
 int_min / double_min : -Inf
-int_min / double_max : 0x.f7ffffffffffff8e-247
+int_min / double_max : 0x.8e-248
 int_min / float_min : 0xee+39
 int_min / float_max : 0x.f7fffff7fffff8e-23
 int_min * zero_min : 0x0
