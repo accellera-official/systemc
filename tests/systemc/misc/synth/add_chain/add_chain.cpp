@@ -51,6 +51,7 @@
 // Andy Goodrich: Changes for the fact signal write checking is enabled.
 //
 
+#define SC_NO_WRITE_CHECK
 #include "systemc.h"
 #include "define.h"
 #include "display.h"
@@ -62,11 +63,6 @@
 int
 sc_main(int ac, char *av[])
 {
-  // turn off multiwrite check for signals.
-  char write_check[] = "SC_SIGNAL_WRITE_CHECK=DISABLE";
-  putenv(write_check);
-  sc_get_curr_simcontext()->reset();
-
   sc_clock clk( "CLOCK", 20, SC_NS, 0.5, 0, SC_NS, false);  // Clock function
   testbench tb1("TB1", clk );	// Testbench Instance
 
