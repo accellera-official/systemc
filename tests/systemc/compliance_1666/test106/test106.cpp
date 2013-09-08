@@ -40,7 +40,7 @@ SC_MODULE(Top)
 
 int sc_main(int argc, char* argv[])
 {
-  assert(sc_delta_count() == 0);
+  sc_assert(sc_delta_count() == 0);
 
   Top top("top");
   sc_start();

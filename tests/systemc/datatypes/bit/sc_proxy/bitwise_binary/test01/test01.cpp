@@ -57,25 +57,25 @@ sc_main( int, char*[] )
     bv2 = bv;
     bv1 &= I;
     bv2 = bv2 & I;
-    assert( bv1 == bv2 );
+    sc_assert( bv1 == bv2 );
 
     bv1 = bv;
     bv2 = bv;
     bv1 &= U;
     bv2 = bv2 & U;
-    assert( bv1 == bv2 );
+    sc_assert( bv1 == bv2 );
 
     lv1 = lv;
     lv2 = lv;
     lv1 &= I;
     lv2 = lv2 & I;
-    assert( lv1 == lv2 );
+    sc_assert( lv1 == lv2 );
 
     lv1 = lv;
     lv2 = lv;
     lv1 &= U;
     lv2 = lv2 & U;
-    assert( lv1 == lv2 );
+    sc_assert( lv1 == lv2 );
 
     // |
 
@@ -83,25 +83,25 @@ sc_main( int, char*[] )
     bv2 = bv;
     bv1 |= I;
     bv2 = bv2 | I;
-    assert( bv1 == bv2 );
+    sc_assert( bv1 == bv2 );
 
     bv1 = bv;
     bv2 = bv;
     bv1 |= U;
     bv2 = bv2 | U;
-    assert( bv1 == bv2 );
+    sc_assert( bv1 == bv2 );
 
     lv1 = lv;
     lv2 = lv;
     lv1 |= I;
     lv2 = lv2 | I;
-    assert( lv1 == lv2 );
+    sc_assert( lv1 == lv2 );
 
     lv1 = lv;
     lv2 = lv;
     lv1 |= U;
     lv2 = lv2 | U;
-    assert( lv1 == lv2 );
+    sc_assert( lv1 == lv2 );
 
     // ^
 
@@ -109,25 +109,25 @@ sc_main( int, char*[] )
     bv2 = bv;
     bv1 ^= I;
     bv2 = bv2 ^ I;
-    assert( bv1 == bv2 );
+    sc_assert( bv1 == bv2 );
 
     bv1 = bv;
     bv2 = bv;
     bv1 ^= U;
     bv2 = bv2 ^ U;
-    assert( bv1 == bv2 );
+    sc_assert( bv1 == bv2 );
 
     lv1 = lv;
     lv2 = lv;
     lv1 ^= I;
     lv2 = lv2 ^ I;
-    assert( lv1 == lv2 );
+    sc_assert( lv1 == lv2 );
 
     lv1 = lv;
     lv2 = lv;
     lv1 ^= U;
     lv2 = lv2 ^ U;
-    assert( lv1 == lv2 );
+    sc_assert( lv1 == lv2 );
 
     cout << "OK" << endl;
 

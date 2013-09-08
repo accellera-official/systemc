@@ -164,7 +164,7 @@ struct Initiator: sc_module
     int*             ptr = reinterpret_cast<int*>( trans.get_data_ptr() );
 
     if (cmd == tlm::TLM_READ_COMMAND)
-      assert( *ptr == -int(adr) );
+      sc_assert( *ptr == -int(adr) );
   }
 
   mm   m_mm;
@@ -267,7 +267,7 @@ struct Interconnect: sc_module
   {
     route_extension* ext = 0;
     accessor(trans).get_extension(ext);
-    assert(ext);
+    sc_assert(ext);
 
     tlm::tlm_sync_enum status;
     status = targ_socket[ ext->id ]->nb_transport_bw( trans, phase, delay );
@@ -332,7 +332,7 @@ struct Target: sc_module
     }
     else if ( cmd == tlm::TLM_WRITE_COMMAND )
     {
-      assert( *reinterpret_cast<unsigned int*>(ptr) == adr );
+      sc_assert( *reinterpret_cast<unsigned int*>(ptr) == adr );
     }
 
     trans.set_response_status( tlm::TLM_OK_RESPONSE );

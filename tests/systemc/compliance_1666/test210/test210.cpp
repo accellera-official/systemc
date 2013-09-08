@@ -38,24 +38,24 @@ SC_MODULE(Top)
 
     sc_object* obj;
     obj = sc_find_object("");
-    assert(obj == 0);
+    sc_assert(obj == 0);
     obj = sc_find_object("foo");
-    assert(obj == 0);
+    sc_assert(obj == 0);
     obj = sc_find_object("top.m.foo");
-    assert(obj == 0);
+    sc_assert(obj == 0);
     obj = sc_find_object("top");
-    assert(strcmp(obj->kind(), "sc_module") == 0);
+    sc_assert(strcmp(obj->kind(), "sc_module") == 0);
     obj = sc_find_object("top.m");
-    assert(strcmp(obj->kind(), "sc_module") == 0);
+    sc_assert(strcmp(obj->kind(), "sc_module") == 0);
     obj = sc_find_object("top.m.sig");
-    assert(strcmp(obj->kind(), "sc_signal") == 0);
+    sc_assert(strcmp(obj->kind(), "sc_signal") == 0);
     obj = sc_find_object("top.m.T");
-    assert(sc_process_handle(obj).valid());
-    assert(strcmp(sc_process_handle(obj).name(), "top.m.T") == 0);
+    sc_assert(sc_process_handle(obj).valid());
+    sc_assert(strcmp(sc_process_handle(obj).name(), "top.m.T") == 0);
 
     object_count = 0;
     recurse_hierarchy(m);
-    assert(object_count == 3);
+    sc_assert(object_count == 3);
   }
 };
 
@@ -64,53 +64,53 @@ int sc_main(int argc, char* argv[])
   cout << "Should be silent..." << endl;
 
   std::vector<sc_object*> tops = sc_get_top_level_objects();
-  assert(tops.size() == 0);
+  sc_assert(tops.size() == 0);
 
   Top top("top");
 
   tops = sc_get_top_level_objects();
-  assert(tops.size() == 1);
-  assert(strcmp(tops[0]->name(), "top") == 0);
+  sc_assert(tops.size() == 1);
+  sc_assert(strcmp(tops[0]->name(), "top") == 0);
 
   M m2("m2");
 
   tops = sc_get_top_level_objects();
-  assert(tops.size() == 2);
-  assert(strcmp(tops[0]->name(), "top") == 0);
-  assert(strcmp(tops[1]->name(), "m2") == 0);
+  sc_assert(tops.size() == 2);
+  sc_assert(strcmp(tops[0]->name(), "top") == 0);
+  sc_assert(strcmp(tops[1]->name(), "m2") == 0);
 
   sc_signal<int> sig("sig2");
 
   tops = sc_get_top_level_objects();
-  assert(tops.size() == 3);
-  assert(strcmp(tops[0]->name(), "top") == 0);
-  assert(strcmp(tops[1]->name(), "m2") == 0);
-  assert(strcmp(tops[2]->name(), "sig2") == 0);
+  sc_assert(tops.size() == 3);
+  sc_assert(strcmp(tops[0]->name(), "top") == 0);
+  sc_assert(strcmp(tops[1]->name(), "m2") == 0);
+  sc_assert(strcmp(tops[2]->name(), "sig2") == 0);
 
   sc_object* obj;
   obj = sc_find_object("");
-  assert(obj == 0);
+  sc_assert(obj == 0);
   obj = sc_find_object("foo");
-  assert(obj == 0);
+  sc_assert(obj == 0);
   obj = sc_find_object("top.m.foo");
-  assert(obj == 0);
+  sc_assert(obj == 0);
   obj = sc_find_object("top");
-  assert(strcmp(obj->kind(), "sc_module") == 0);
+  sc_assert(strcmp(obj->kind(), "sc_module") == 0);
   obj = sc_find_object("sig2");
-  assert(strcmp(obj->kind(), "sc_signal") == 0);
+  sc_assert(strcmp(obj->kind(), "sc_signal") == 0);
   obj = sc_find_object("m2");
-  assert(strcmp(obj->kind(), "sc_module") == 0);
+  sc_assert(strcmp(obj->kind(), "sc_module") == 0);
   obj = sc_find_object("top.m");
-  assert(strcmp(obj->kind(), "sc_module") == 0);
+  sc_assert(strcmp(obj->kind(), "sc_module") == 0);
   obj = sc_find_object("top.m.sig");
-  assert(strcmp(obj->kind(), "sc_signal") == 0);
+  sc_assert(strcmp(obj->kind(), "sc_signal") == 0);
   obj = sc_find_object("top.m.T");
-  assert(sc_process_handle(obj).valid());
-  assert(strcmp(sc_process_handle(obj).name(), "top.m.T") == 0);
+  sc_assert(sc_process_handle(obj).valid());
+  sc_assert(strcmp(sc_process_handle(obj).name(), "top.m.T") == 0);
 
   object_count = 0;
   recurse_hierarchy(tops[0]);
-  assert(object_count == 4);
+  sc_assert(object_count == 4);
 
   sc_start();
 

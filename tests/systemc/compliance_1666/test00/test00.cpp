@@ -60,12 +60,12 @@ void check_form_of_suffix(std::string s)
   std::string charset = "0123456789";
   while (!s.empty())
   {
-    assert(s[0] == '_');
+    sc_assert(s[0] == '_');
   s = s.substr(1);
-  assert(!s.empty());
+  sc_assert(!s.empty());
   do
   {
-    assert(charset.find(s[0]) < charset.size());
+    sc_assert(charset.find(s[0]) < charset.size());
     s = s.substr(1);
   } while (!s.empty() && (s[0] != '_'));
   }
@@ -75,7 +75,7 @@ struct Chan: i_f, sc_object
 {
   virtual void write()
   {
-    assert(std::string(name()).substr(0,17) == "top.m_dest.object");
+    sc_assert(std::string(name()).substr(0,17) == "top.m_dest.object");
     check_form_of_suffix(std::string(name()).substr(17));
   }
 };
@@ -138,7 +138,7 @@ struct Prim: sc_prim_channel
     sc_spawn(sc_bind(&Prim::Th_ref, this, sc_ref(ref_arg)));
     sc_spawn(sc_bind(&Prim::Th_cref, this, sc_cref(cref_arg)));
     wait(1, SC_NS);
-    assert(ref_arg == 99);
+    sc_assert(ref_arg == 99);
   }
   sc_event ev;
   void Th(int i)
@@ -151,7 +151,7 @@ struct Prim: sc_prim_channel
     sc_time t(sc_time_stamp());
     sc_process_handle h = sc_spawn(&f);
     wait(h.terminated_event());
-    assert(sc_time_stamp() == t + sc_time(33, SC_PS));
+    sc_assert(sc_time_stamp() == t + sc_time(33, SC_PS));
   }
   void Th_cref(const int& arg)
   {
@@ -177,13 +177,13 @@ SC_MODULE(M)
     }
     catch (sc_report& rpt) {
       cout << "Caught rpt " << rpt.what() << endl;
-      assert(rpt.get_severity() == SC_INFO);
-      assert(std::string(rpt.get_msg_type()) == "msg_type");
-      assert(std::string(rpt.get_msg()) == "msg");
-      assert(rpt.get_time() == sc_time(10, SC_NS));
-      assert(std::string(rpt.get_process_name()) == "top.m.T");
+      sc_assert(rpt.get_severity() == SC_INFO);
+      sc_assert(std::string(rpt.get_msg_type()) == "msg_type");
+      sc_assert(std::string(rpt.get_msg()) == "msg");
+      sc_assert(rpt.get_time() == sc_time(10, SC_NS));
+      sc_assert(std::string(rpt.get_process_name()) == "top.m.T");
 
-      assert(sc_report_handler::get_count(SC_INFO) == 1);
+      sc_assert(sc_report_handler::get_count(SC_INFO) == 1);
       sc_report rpt2 = rpt; // Copy constructor
 
       prim.write();
@@ -194,11 +194,11 @@ SC_MODULE(M)
   }
   void proc(sc_report* rpt)
   {
-    assert(rpt->get_severity() == SC_INFO);
-    assert(std::string(rpt->get_msg_type()) == "msg_type");
-    assert(std::string(rpt->get_msg()) == "msg");
-    assert(rpt->get_time() == sc_time(10, SC_NS));
-    assert(std::string(rpt->get_process_name()) == "top.m.T");
+    sc_assert(rpt->get_severity() == SC_INFO);
+    sc_assert(std::string(rpt->get_msg_type()) == "msg_type");
+    sc_assert(std::string(rpt->get_msg()) == "msg");
+    sc_assert(rpt->get_time() == sc_time(10, SC_NS));
+    sc_assert(std::string(rpt->get_process_name()) == "top.m.T");
     rpt->get_file_name();
     rpt->get_line_number();
   }
@@ -217,9 +217,9 @@ struct CM: sc_module
     SC_CTHREAD(CT, clk.pos());
       reset_signal_is(reset, true);
 
-    assert(sc_start_of_simulation_invoked() == false);
-    assert(sc_end_of_simulation_invoked() == false);
-    assert(sc_is_running() == false);
+    sc_assert(sc_start_of_simulation_invoked() == false);
+    sc_assert(sc_end_of_simulation_invoked() == false);
+    sc_assert(sc_is_running() == false);
   }
 
   bool first;
@@ -227,38 +227,38 @@ struct CM: sc_module
   void CT()
   {
     if (first)
-      assert(sc_time_stamp() == sc_time(5, SC_US));
+      sc_assert(sc_time_stamp() == sc_time(5, SC_US));
     else
-      assert(sc_time_stamp() == sc_time(30, SC_US));
+      sc_assert(sc_time_stamp() == sc_time(30, SC_US));
     first = false;
 
-    assert(sc_start_of_simulation_invoked() == true);
-    assert(sc_end_of_simulation_invoked() == false);
-    assert(sc_is_running() == true);
+    sc_assert(sc_start_of_simulation_invoked() == true);
+    sc_assert(sc_end_of_simulation_invoked() == false);
+    sc_assert(sc_is_running() == true);
 
     while(1)
     {
       wait();
-      assert(sc_time_stamp() == sc_time(15, SC_US));
+      sc_assert(sc_time_stamp() == sc_time(15, SC_US));
       wait();
-      assert(sc_time_stamp() == sc_time(25, SC_US));
+      sc_assert(sc_time_stamp() == sc_time(25, SC_US));
       wait();
-      assert(false);
+      sc_assert(false);
     }
   }
 
   void start_of_simulation()
   {
-    assert(sc_start_of_simulation_invoked() == false);
-    assert(sc_end_of_simulation_invoked() == false);
-    assert(sc_is_running() == false);
+    sc_assert(sc_start_of_simulation_invoked() == false);
+    sc_assert(sc_end_of_simulation_invoked() == false);
+    sc_assert(sc_is_running() == false);
   }
 
   void end_of_simulation()
   {
-    assert(sc_start_of_simulation_invoked() == true);
-    assert(sc_end_of_simulation_invoked() == false);
-    assert(sc_is_running() == false);
+    sc_assert(sc_start_of_simulation_invoked() == true);
+    sc_assert(sc_end_of_simulation_invoked() == false);
+    sc_assert(sc_is_running() == false);
   }
 };
 
@@ -307,39 +307,39 @@ SC_MODULE(Top)
   }
   void T2()
   {
-    assert(sc_min(-1,1) == -1);
-    assert(sc_max(-1,1) == 1);
-    assert(sc_abs(-1) == 1);
+    sc_assert(sc_min(-1,1) == -1);
+    sc_assert(sc_max(-1,1) == 1);
+    sc_assert(sc_abs(-1) == 1);
 
-    assert(sc_min(sc_int<8>(-1),sc_int<8>(1)) == sc_int<8>(-1));
-    assert(sc_max(sc_int<8>(-1),sc_int<8>(1)) == sc_int<8>(1));
-    assert(sc_abs(sc_int<8>(-1)) == sc_int<8>(1));
+    sc_assert(sc_min(sc_int<8>(-1),sc_int<8>(1)) == sc_int<8>(-1));
+    sc_assert(sc_max(sc_int<8>(-1),sc_int<8>(1)) == sc_int<8>(1));
+    sc_assert(sc_abs(sc_int<8>(-1)) == sc_int<8>(1));
 
-    assert(sc_min(sc_bigint<256>(-1),sc_bigint<256>(1)) == sc_bigint<256>(-1));
-    assert(sc_max(sc_bigint<256>(-1),sc_bigint<256>(1)) == sc_bigint<256>(1));
-    assert(sc_abs(sc_bigint<256>(-1)) == sc_bigint<256>(1));
+    sc_assert(sc_min(sc_bigint<256>(-1),sc_bigint<256>(1)) == sc_bigint<256>(-1));
+    sc_assert(sc_max(sc_bigint<256>(-1),sc_bigint<256>(1)) == sc_bigint<256>(1));
+    sc_assert(sc_abs(sc_bigint<256>(-1)) == sc_bigint<256>(1));
   }
 };
 
 int sc_main(int argc, char* argv[])
 {
-  assert(sc_delta_count() == 0);
-  assert(sc_is_running() == 0);
-  assert(sc_time_stamp() == sc_time(SC_ZERO_TIME));
-  assert(sc_report_handler::get_count(SC_INFO) == 0);
-  assert(sc_report_handler::get_count("foo") == 0);
+  sc_assert(sc_delta_count() == 0);
+  sc_assert(sc_is_running() == 0);
+  sc_assert(sc_time_stamp() == sc_time(SC_ZERO_TIME));
+  sc_assert(sc_report_handler::get_count(SC_INFO) == 0);
+  sc_assert(sc_report_handler::get_count("foo") == 0);
 
   sc_actions act1 = sc_report_handler::get_new_action_id();
   sc_actions act2 = sc_report_handler::get_new_action_id();
   while (act2 != SC_UNSPECIFIED)
   {
-    assert(act2 != act1);
+    sc_assert(act2 != act1);
     act2 = sc_report_handler::get_new_action_id();
   }
-  assert(sc_report_handler::get_log_file_name() == 0);
-  assert(sc_get_top_level_objects().size() == 0);
-  assert(sc_find_object("foo") == 0);
-  assert(!sc_get_current_process_handle().valid());
+  sc_assert(sc_report_handler::get_log_file_name() == 0);
+  sc_assert(sc_get_top_level_objects().size() == 0);
+  sc_assert(sc_find_object("foo") == 0);
+  sc_assert(!sc_get_current_process_handle().valid());
 
   sc_copyright();
   sc_version();
@@ -358,19 +358,19 @@ int sc_main(int argc, char* argv[])
   "abcdefghijklmnopqrstuvwxyzABSCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-";
 
   for (unsigned int i = 0; i < major.size(); i++)
-    assert(charset.find(major[i]) < charset.size());
+    sc_assert(charset.find(major[i]) < charset.size());
   for (unsigned int i = 0; i < minor.size(); i++)
-    assert(charset.find(minor[i]) < charset.size());
+    sc_assert(charset.find(minor[i]) < charset.size());
   for (unsigned int i = 0; i < patch.size(); i++)
-    assert(charset.find(patch[i]) < charset.size());
+    sc_assert(charset.find(patch[i]) < charset.size());
   for (unsigned int i = 0; i < originator.size(); i++)
-    assert(charset.find(originator[i]) < charset.size());
+    sc_assert(charset.find(originator[i]) < charset.size());
 
   Top top("top");
   sc_start();
 
   sc_stop();
-  assert(sc_end_of_simulation_invoked() == true);
+  sc_assert(sc_end_of_simulation_invoked() == true);
 
   cout << endl << "Success" << endl;
   return 0;

@@ -10,9 +10,9 @@ using std::endl;
 void global()
 {
   wait();
-  assert(sc_time_stamp() == sc_time(0, SC_NS));
+  sc_assert(sc_time_stamp() == sc_time(0, SC_NS));
   wait(3);
-  assert(sc_time_stamp() == sc_time(3, SC_NS));
+  sc_assert(sc_time_stamp() == sc_time(3, SC_NS));
 }
 
 struct Prim: sc_prim_channel
@@ -20,9 +20,9 @@ struct Prim: sc_prim_channel
   void method()
   {
     wait();
-    assert(sc_time_stamp() == sc_time(4, SC_NS));
+    sc_assert(sc_time_stamp() == sc_time(4, SC_NS));
     wait(3);
-    assert(sc_time_stamp() == sc_time(7, SC_NS));
+    sc_assert(sc_time_stamp() == sc_time(7, SC_NS));
   }
 };
 
@@ -40,9 +40,9 @@ SC_MODULE(M)
     global();
     prim.method();
     wait();
-    assert(sc_time_stamp() == sc_time(8, SC_NS));
+    sc_assert(sc_time_stamp() == sc_time(8, SC_NS));
     wait(3);
-    assert(sc_time_stamp() == sc_time(11, SC_NS));
+    sc_assert(sc_time_stamp() == sc_time(11, SC_NS));
     sc_stop();
   }
 };

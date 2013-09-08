@@ -74,7 +74,7 @@ sc_main( int argc, char* argv[] )
                     x = qi;
                     y = qj;
                     z = x * y;
-                    assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
+                    sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
                             (qi * qj) );
                     bool s;
                     s = ((x < 0) != (y < 0));
@@ -107,7 +107,7 @@ sc_main( int argc, char* argv[] )
                         cout << "xhi = " << xhi << endl;
                         cout << "ylo = " << ylo << endl;
                         cout << "yhi = " << yhi << endl;
-                        assert(false);
+                        sc_assert(false);
                     }
                 }
             }

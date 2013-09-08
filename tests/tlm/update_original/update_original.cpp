@@ -137,11 +137,11 @@ struct Initiator: sc_module
         for (unsigned int i = 0; i < len; i++)
           if (bel)
             if (byte_enable[i % bel])
-              assert( data[i] == ext->ptr[i] );
+              sc_assert( data[i] == ext->ptr[i] );
             else
-              assert( data[i] == 0x99 );
+              sc_assert( data[i] == 0x99 );
           else
-            assert( data[i] == ext->ptr[i] );
+            sc_assert( data[i] == ext->ptr[i] );
 
       }
       trans->release();
@@ -210,14 +210,14 @@ struct Target: sc_module
 
     my_extension* ext;
     trans.get_extension(ext);
-    assert( ext );
+    sc_assert( ext );
 
-    assert( len == ext->len );
-    assert( bel == ext->bel );
+    sc_assert( len == ext->len );
+    sc_assert( bel == ext->bel );
     for (unsigned int i = 0; i < bel; i++)
-      assert( byt[i] == ext->byt[i] );
+      sc_assert( byt[i] == ext->byt[i] );
     for (unsigned int i = 0; i < len; i++)
-      assert( ptr[i] == ext->ptr[i] );
+      sc_assert( ptr[i] == ext->ptr[i] );
 
     if (cmd == tlm::TLM_READ_COMMAND)
     {

@@ -55,28 +55,28 @@ SC_MODULE(M)
   {}
   void end_of_elaboration()
   {
-    assert(p1.size() == 1);
-    assert(p2.size() == 1);
-    assert(p3.size() == 2);
-    assert(p4.size() == 3);
-    assert(p5.size() == 0);
-    assert(p6.size() == 1);
-    assert(p7.size() == 2);
-    assert(p8.size() == 0);
-    assert(p9.size() == 1);
-    assert(p10.size() == 2);
-    assert(p11.size() == 1);
-    assert(p12.size() == 3);
+    sc_assert(p1.size() == 1);
+    sc_assert(p2.size() == 1);
+    sc_assert(p3.size() == 2);
+    sc_assert(p4.size() == 3);
+    sc_assert(p5.size() == 0);
+    sc_assert(p6.size() == 1);
+    sc_assert(p7.size() == 2);
+    sc_assert(p8.size() == 0);
+    sc_assert(p9.size() == 1);
+    sc_assert(p10.size() == 2);
+    sc_assert(p11.size() == 1);
+    sc_assert(p12.size() == 3);
 
-    assert(p1_all_2.size() == 2);
-    assert(p2_all_2.size() == 2);
-    assert(p3_all_2.size() == 2);
-    assert(p4_all_5.size() == 5);
-    assert(p5_all_2.size() == 2);
+    sc_assert(p1_all_2.size() == 2);
+    sc_assert(p2_all_2.size() == 2);
+    sc_assert(p3_all_2.size() == 2);
+    sc_assert(p4_all_5.size() == 5);
+    sc_assert(p5_all_2.size() == 2);
 
-    assert(p6_zero.size() == 0);
-    assert(p7_one.size() == 1);
-    assert(p8_two.size() == 2);
+    sc_assert(p6_zero.size() == 0);
+    sc_assert(p7_one.size() == 1);
+    sc_assert(p8_two.size() == 2);
   }
 };
 
