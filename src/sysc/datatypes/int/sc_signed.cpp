@@ -563,7 +563,7 @@ sc_signed::operator=(double v)
     sgn = SC_POS;
   register int i = 0;
   while (floor(v) && (i < ndigits)) {
-#ifndef WIN32
+#ifndef _WIN32
     digit[i++] = ((sc_digit)floor(remainder(v, DIGIT_RADIX))) & DIGIT_MASK;
 #else
     digit[i++] = ((sc_digit)floor(fmod(v, DIGIT_RADIX))) & DIGIT_MASK;

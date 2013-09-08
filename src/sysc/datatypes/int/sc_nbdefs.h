@@ -152,7 +152,7 @@ typedef unsigned int sc_digit;	// 32-bit unsigned integer
 
 // Support for the long long type. This type is not in the standard
 // but is usually supported by compilers.
-#ifndef WIN32
+#ifndef _WIN32
 #   if defined(__x86_64__)
         typedef long long          int64;
         typedef unsigned long long uint64;
@@ -194,7 +194,7 @@ typedef unsigned int sc_digit;	// 32-bit unsigned integer
 // Above, BITS_PER_X is mainly used for sc_signed, and BITS_PER_UX is
 // mainly used for sc_unsigned.
 
-#if defined( WIN32 ) || defined( __SUNPRO_CC ) || defined( __HP_aCC )
+#if defined( _WIN32 ) || defined( __SUNPRO_CC ) || defined( __HP_aCC )
 typedef unsigned long fmtflags;
 #else
 typedef ::std::ios::fmtflags fmtflags;
