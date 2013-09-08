@@ -29,7 +29,7 @@
 #define SC_COR_QT_H
 
 
-#if !defined(WIN32) && !defined(SC_USE_PTHREADS)
+#if !defined(_WIN32) && !defined(WIN32) && !defined(WIN64)  && !defined(SC_USE_PTHREADS)
 
 #include "sysc/kernel/sc_cor.h"
 #include "sysc/qt/qt.h"
@@ -37,7 +37,7 @@
 namespace sc_core {
 
 class sc_cor_pkg_qt;
-
+typedef sc_cor_pkg_qt sc_cor_pkg_t;
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_cor_qt
