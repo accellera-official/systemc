@@ -251,7 +251,8 @@ wif_int64_trace::wif_int64_trace(const sc_dt::int64& object_,
   mask(static_cast<sc_dt::uint64>(-1))
 {
     bit_width = width_;
-    if (bit_width < 32) mask = ~(mask << bit_width);
+    if (bit_width < (int)(sizeof(sc_dt::int64)*BITS_PER_BYTE))
+        mask = ~(mask << bit_width);
     wif_type = "BIT";
 }
 
@@ -454,7 +455,7 @@ void wif_sc_unsigned_trace::write(FILE* f)
 
     int bitindex;
     for(bitindex = object.length() - 1; bitindex >= 0; --bitindex) {
-        *buf_ptr++ = "01"[(object)[bitindex]];
+        *buf_ptr++ = "01"[object[bitindex].to_bool()];
     }
     *buf_ptr = '\0';
     std::fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf); 
@@ -504,7 +505,7 @@ void wif_sc_signed_trace::write(FILE* f)
 
     int bitindex;
     for(bitindex = object.length() - 1; bitindex >= 0; --bitindex) {
-        *buf_ptr++ = "01"[(object)[bitindex]];
+        *buf_ptr++ = "01"[object[bitindex].to_bool()];
     }
     *buf_ptr = '\0';
 
@@ -555,7 +556,7 @@ void wif_sc_uint_base_trace::write(FILE* f)
 
     int bitindex;
     for(bitindex = object.length() - 1; bitindex >= 0; --bitindex) {
-        *buf_ptr++ = "01"[(object)[bitindex]];
+        *buf_ptr++ = "01"[object[bitindex].to_bool()];
     }
     *buf_ptr = '\0';
     std::fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf); 
@@ -605,7 +606,7 @@ void wif_sc_int_base_trace::write(FILE* f)
 
     int bitindex;
     for(bitindex = object.length() - 1; bitindex >= 0; --bitindex) {
-        *buf_ptr++ = "01"[(object)[bitindex]];
+        *buf_ptr++ = "01"[object[bitindex].to_bool()];
     }
     *buf_ptr = '\0';
 
@@ -750,7 +751,7 @@ wif_sc_fxnum_trace::write( FILE* f )
     int bitindex;
     for( bitindex = object.wl() - 1; bitindex >= 0; -- bitindex )
     {
-        *buf_ptr ++ = "01"[(object)[bitindex]];
+        *buf_ptr ++ = "01"[object[bitindex]];
     }
     *buf_ptr = '\0';
 
@@ -813,7 +814,7 @@ wif_sc_fxnum_fast_trace::write( FILE* f )
     int bitindex;
     for( bitindex = object.wl() - 1; bitindex >= 0; -- bitindex )
     {
-        *buf_ptr ++ = "01"[(object)[bitindex]];
+        *buf_ptr ++ = "01"[object[bitindex]];
     }
     *buf_ptr = '\0';
 
@@ -855,8 +856,6 @@ wif_unsigned_int_trace::wif_unsigned_int_trace(const unsigned& object_,
     bit_width = width_;
     if (bit_width < 32) {
         mask = ~(-1 << bit_width);
-    } else {
-        mask = 0xffffffff;
     }
 
     wif_type = "BIT";
@@ -920,9 +919,7 @@ wif_unsigned_short_trace::wif_unsigned_short_trace(
 {
     bit_width = width_;
     if (bit_width < 16) {
-        mask = ~(-1 << bit_width);
-    } else {
-        mask = 0xffff;
+        mask = (unsigned short)~(-1 << bit_width);
     }
 
     wif_type = "BIT";
@@ -984,9 +981,7 @@ wif_unsigned_char_trace::wif_unsigned_char_trace(const unsigned char& object_,
 {
     bit_width = width_;
     if (bit_width < 8) {
-        mask = ~(-1 << bit_width);
-    } else {
-        mask = 0xff;
+        mask = (unsigned char)~(-1 << bit_width);
     }
 
     wif_type = "BIT";
@@ -1113,8 +1108,6 @@ wif_signed_int_trace::wif_signed_int_trace(const signed& object_,
     bit_width = width_;
     if (bit_width < 32) {
         mask = ~(-1 << bit_width);
-    } else {
-        mask = 0xffffffff;
     }
 
     wif_type = "BIT";
@@ -1176,9 +1169,7 @@ wif_signed_short_trace::wif_signed_short_trace(const short& object_,
 {
     bit_width = width_;
     if (bit_width < 16) {
-        mask = ~(-1 << bit_width);
-    } else {
-        mask = 0xffff;
+        mask = (unsigned short)~(-1 << bit_width);
     }
 
     wif_type = "BIT";
@@ -1240,9 +1231,7 @@ wif_signed_char_trace::wif_signed_char_trace(const char& object_,
 {
     bit_width = width_;
     if (bit_width < 8) {
-        mask = ~(-1 << bit_width);
-    } else {
-        mask = 0xff;
+        mask = (unsigned char)~(-1 << bit_width);
     }
 
     wif_type = "BIT";

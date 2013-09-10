@@ -460,7 +460,7 @@ vcd_sc_unsigned_trace::write(FILE* f)
 
     int bitindex;
     for (bitindex = object.length() - 1; bitindex >= 0; --bitindex) {
-        *rawdata_ptr++ = "01"[(object)[bitindex]];
+        *rawdata_ptr++ = "01"[object[bitindex].to_bool()];
     }
     *rawdata_ptr = '\0';
     compose_data_line(rawdata, compdata);
@@ -516,7 +516,7 @@ vcd_sc_signed_trace::write(FILE* f)
 
     int bitindex;
     for (bitindex = object.length() - 1; bitindex >= 0; --bitindex) {
-        *rawdata_ptr++ = "01"[(object)[bitindex]];
+        *rawdata_ptr++ = "01"[object[bitindex].to_bool()];
     }
     *rawdata_ptr = '\0';
     compose_data_line(rawdata, compdata);
@@ -573,7 +573,7 @@ vcd_sc_uint_base_trace::write(FILE* f)
 
     int bitindex;
     for (bitindex = object.length()-1; bitindex >= 0; --bitindex) {
-        *rawdata_ptr++ = "01"[int((object)[bitindex])];
+        *rawdata_ptr++ = "01"[object[bitindex].to_bool()];
     }
     *rawdata_ptr = '\0';
     compose_data_line(rawdata, compdata);
@@ -629,7 +629,7 @@ vcd_sc_int_base_trace::write(FILE* f)
 
     int bitindex;
     for (bitindex = object.length()-1; bitindex >= 0; --bitindex) {
-        *rawdata_ptr++ = "01"[int((object)[bitindex])];
+        *rawdata_ptr++ = "01"[object[bitindex].to_bool()];
     }
     *rawdata_ptr = '\0';
     compose_data_line(rawdata, compdata);
@@ -779,7 +779,7 @@ vcd_sc_fxnum_trace::write( FILE* f )
     int bitindex;
     for( bitindex = object.wl() - 1; bitindex >= 0; -- bitindex )
     {
-        *rawdata_ptr ++ = "01"[(object)[bitindex]];
+        *rawdata_ptr ++ = "01"[object[bitindex]];
     }
     *rawdata_ptr = '\0';
     compose_data_line( rawdata, compdata );
@@ -844,7 +844,7 @@ vcd_sc_fxnum_fast_trace::write( FILE* f )
     int bitindex;
     for( bitindex = object.wl() - 1; bitindex >= 0; -- bitindex )
     {
-        *rawdata_ptr ++ = "01"[(object)[bitindex]];
+        *rawdata_ptr ++ = "01"[object[bitindex]];
     }
     *rawdata_ptr = '\0';
     compose_data_line( rawdata, compdata );
@@ -952,7 +952,7 @@ vcd_unsigned_short_trace::vcd_unsigned_short_trace(
 : vcd_trace(name_, vcd_name_), object(object_), old_value(object_), mask(0xffff)
 {
     bit_width = width_;
-    if (bit_width < 16) mask = ~(-1 << bit_width);
+    if (bit_width < 16) mask = (unsigned short)~(-1 << bit_width);
 
     vcd_var_typ_name = "wire";
 }
@@ -1017,7 +1017,7 @@ vcd_unsigned_char_trace::vcd_unsigned_char_trace(
 : vcd_trace(name_, vcd_name_), object(object_), old_value(object_), mask(0xff)
 {
     bit_width = width_;
-    if (bit_width < 8) mask = ~(-1 << bit_width);
+    if (bit_width < 8) mask = (unsigned char)~(-1 << bit_width);
     vcd_var_typ_name = "wire";
 }
 
@@ -1207,7 +1207,7 @@ vcd_signed_short_trace::vcd_signed_short_trace(
 : vcd_trace(name_, vcd_name_), object(object_), old_value(object_), mask(0xffff)
 {
     bit_width = width_;
-    if (bit_width < 16) mask = ~(-1 << bit_width);
+    if (bit_width < 16) mask = (unsigned short)~(-1 << bit_width);
 
     vcd_var_typ_name = "wire";
 }
@@ -1269,7 +1269,7 @@ vcd_signed_char_trace::vcd_signed_char_trace(const char& object_,
 : vcd_trace(name_, vcd_name_), object(object_), old_value(object_), mask(0xff)
 {
     bit_width = width_;
-    if (bit_width < 8) mask = ~(-1 << bit_width);
+    if (bit_width < 8) mask = (unsigned char)~(-1 << bit_width);
 
     vcd_var_typ_name = "wire";
 }
