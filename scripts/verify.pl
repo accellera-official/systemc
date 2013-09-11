@@ -1887,7 +1887,7 @@ sub diff_log
     local( $ref ) = "$rt_tests_dir/$golden_logfile";
 
     # do diff
-    if( ! open( DIFFCMD_OUT, "diff --strip-trailing-cr $new $ref |" ) ) {
+    if( ! open( DIFFCMD_OUT, "diff -a -w $new $ref |" ) ) {
 	&print_log( "Error: diff on '$new' and '$ref' failed\n" );
 	return 'diff_prog_fail';
     }
@@ -2082,7 +2082,7 @@ sub run_test
 
 	if( $rt_systemc_arch =~ /^msvc/ ) {
 	    # translate Cygwin path to Windows path
-	    $command =~ s|/cygdrive/(.)/|$1:/|g;
+	    $command =~ s!/(cygdrive|drives)/(.)/!$2:/!g;
 	}
 
 	&print_log( "Compiling\n" );
@@ -2148,7 +2148,7 @@ sub run_test
 
 	if( $rt_systemc_arch =~ /^msvc/ ) {
 	    # translate Cygwin path to Windows path
-	    $command =~ s|/cygdrive/(.)/|$1:/|;
+	    $command =~ s!/(cygdrive|drives)/(.)/!$2:/!g;
 	}
 
 	&print_log( "Linking\n" );
@@ -2173,7 +2173,7 @@ sub run_test
 
 	if( $rt_systemc_arch =~ /^msvc/ ) {
 	    # translate Cygwin path to Windows path
-	    $command =~ s|/cygdrive/(.)/|$1:/|g;
+	    $command =~ s!/(cygdrive|drives)/(.)/!$2:/!g;
 	}
 
         # call compile_files to execute command for each C++ file 
@@ -2237,7 +2237,7 @@ sub run_test
 
 	if( $rt_systemc_arch =~ /^msvc/ ) {
 	    # translate Cygwin path to Windows path
-	    $command =~ s|/cygdrive/(.)/|$1:/|;
+	    $command =~ s!/(cygdrive|drives)/(.)/!$2:/!g;
 	}
 
 	&print_log( "Linking\n" );
