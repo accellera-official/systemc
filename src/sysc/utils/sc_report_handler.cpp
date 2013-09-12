@@ -191,6 +191,9 @@ int sc_report_handler::get_count(const char* msg_type_, sc_severity severity_)
 
 sc_msg_def * sc_report_handler::mdlookup(const char * msg_type_)
 {
+    if( !msg_type_ ) // if msg_type is NULL, report unknown error
+        msg_type_ = SC_ID_UNKNOWN_ERROR_;
+
     for ( msg_def_items * item = messages; item; item = item->next )
     {
 	for ( int i = 0; i < item->count; ++i )
