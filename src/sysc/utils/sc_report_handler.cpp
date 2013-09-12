@@ -546,9 +546,18 @@ sc_actions sc_report_handler::force()
     return force(0);
 }
 
-void sc_report_handler::set_handler(sc_report_handler_proc handler_)
+sc_report_handler_proc
+sc_report_handler::set_handler(sc_report_handler_proc handler_)
 {
+    sc_report_handler_proc old = handler;
     handler = handler_ ? handler_: &sc_report_handler::default_handler;
+    return old;
+}
+
+sc_report_handler_proc
+sc_report_handler::get_handler()
+{
+    return handler;
 }
 
 sc_report* sc_report_handler::get_cached_report()
