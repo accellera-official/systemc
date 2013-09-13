@@ -154,7 +154,7 @@ circular_buffer<T>::resize( int size )
   for( i = 0; i < size && i < used(); i++ ) {
 
     buf_write( new_buf, i, peek_data( i ) );
-    buf_clear( m_buf, (m_ri + i) % size );
+    buf_clear( m_buf, (m_ri + i) % m_size );
 
   }
 
