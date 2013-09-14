@@ -386,7 +386,7 @@ sub get_systemc_arch
     local( $uname_s ) = `uname -s`;
     local( $uname_r ) = `uname -r`;
     local( $uname_m ) = `uname -m`;
-    local( $arch );
+    local( $arch )    = $rt_systemc_arch; # check for override
     local( $cxx );
     local( $cxx_comp );
 
@@ -401,87 +401,63 @@ sub get_systemc_arch
     }
     chop( $cxx_comp = `basename $cxx` );
 
-    if( $uname_s eq "SunOS" ) {
-	if( $uname_r =~ /^5/ ) {
-	    if( $cxx_comp eq "CC" ) {
-		$arch = "sparcOS5";
-	    } elsif( $cxx_comp eq "c++" || $cxx_comp eq "g++" ) {
-		$arch = "gccsparcOS5";
-	    } else {
-		die "Error: unsupported compiler '$cxx'\n";
-	    }
-	} else {
-	    die "Error: unsupported architecture '$uname_s $uname_r'\n";
-	}
-    } elsif( $uname_s eq "HP-UX" ) {
-        if( $uname_r =~ /^B.11/ ) {
-	    if( $cxx_comp eq "aCC" ) {
-		$arch = "hpux11";
-	    } elsif( $cxx_comp eq "c++" || $cxx_comp eq "g++" ) {
-		$arch = "gcchpux11";
-		# die "Error: unsupported compiler '$cxx'\n";
-	    } else {
-		die "Error: unsupported compiler '$cxx'\n";
-	    }
-	} else {
-	    die "Error: unsupported architecture '$uname_s $uname_r'\n";
-	}
-    } elsif( $uname_s eq "Darwin" ) {
-	if( $cxx_comp eq "c++" || $cxx_comp eq "g++" ) {
-	    if ( $uname_m eq "x86_64" )
-	    {
-		$arch = "macosx64";
-	    }
-	    elsif ( $uname_m eq "i386" )
-	    {
-		$arch = "macosx";
-	    }
-	    else
-	    {
-		$arch = "macosxppc";
-	    }
-	} else {
-	    die "Error: unsupported compiler '$cxx'\n";
-	}
-    } elsif( $uname_s eq "Linux" ) {
-	if( $uname_r =~ /^[23]/ ) {
-	    if( $cxx_comp eq "c++" || $cxx_comp eq "g++" ) {
-	        if ( $uname_m eq "x86_64" )
-		{
-		    $arch = "linux64";
-		}
-		else
-		{
-		    $arch = "linux";
-		}
-	    } else {
-		die "Error: unsupported compiler '$cxx'\n";
-	    }
-	} else {
-	    die "Error: unsupported architecture '$uname_s $uname_r'\n";
-	}
-    } elsif( $uname_s eq "FreeBSD" ) {
+    if( defined $ENV{'SYSTEMC_ARCH'} ) {
+         $arch = $ENV{'SYSTEMC_ARCH'} unless ($arch);
+    }
+
+    if( !$arch ) {
+        # arch not explicitly set, detect automatically
+
+        if( $uname_s eq "SunOS" and $uname_r =~ /^5/ ) {
+            if( $cxx_comp eq "CC" ) {
+                $arch = "sparcOS5";
+            } elsif( $cxx_comp eq "c++" || $cxx_comp eq "g++" ) {
+                $arch = "gccsparcOS5";
+            }
+
+        } elsif( $uname_s eq "HP-UX" and $uname_r =~ /^B.11/ ) {
+            if( $cxx_comp eq "aCC" ) {
+                $arch = "hpux11";
+            } elsif( $cxx_comp eq "c++" || $cxx_comp eq "g++" ) {
+                $arch = "gcchpux11";
+            }
+
+        } elsif( $uname_s eq "Darwin" ) {
+            if( $cxx_comp eq "c++" || $cxx_comp eq "g++" )
+            {
+                if ( $uname_m =~ /x86_64|[ix].86/ ) {
+                    $arch = "macosx";
+                } else {
+                    $arch = "macosxppc";
+                }
+                my $macosx64_chk="( echo '#ifdef __LP64__' ;"
+                                ." echo IS_64BIT_ARCH ; "
+                                ." echo '#endif' )";
+                $macosx64_chk=` $macosx64_chk | $cxx -E - 2>/dev/null `;
+                if ( $macosx64_chk =~ /IS_64BIT_ARCH/ ) {
+                    $arch.="64";
+                }
+            }
+
+        } elsif( $uname_s eq "Linux" and $uname_r =~ /^[23]/ ) {
+            if( $cxx_comp eq "c++" || $cxx_comp eq "g++" ) {
+                $arch = "linux";
+                if ( $uname_m eq "x86_64" || $uname_m eq "amd64" ) {
+                    $arch .= "64";
+                }
+            }
+
+        } elsif( $uname_s eq "FreeBSD" ) {
            if( $cxx_comp eq "c++" || $cxx_comp eq "g++" ) {
-               if ( $uname_m eq "x86_64" || $uname_m eq "amd64" )
-               {
-                   $arch = "freebsd64";
-               }
-               else
-               {
-                   $arch = "freebsd";
-               }
-           } else {
-               die "Error: unsupported compiler '$cxx'\n";
+                $arch = "freebsd";
+                if ( $uname_m eq "x86_64" || $uname_m eq "amd64" ) {
+                    $arch .= "64";
+                }
            }
-    } elsif( $uname_s =~ /^(CYGWIN|MINGW32)_NT/ ) {
-	if( $uname_r =~ /^1\./ ) { # both Cygwin and MinGW report 1.x as of now
-	    if( $uname_s =~ /^CYGWIN_NT/ ) {
-		$arch  = "cygwin";
-		$slash = '/';
-	    } else {
-		$arch  = "mingw";
-		$slash = '//';
-	    }
+
+        } elsif( $uname_s =~ /^(CYGWIN|MINGW32)_NT/ ) {
+
+	        # check windows compiler
 	    if( $cxx_comp =~ /^cl(\.exe)?/i ) {
 		#find MSVC version
 		#reassign stderr and stdout
@@ -522,19 +498,63 @@ sub get_systemc_arch
 		elsif ( $v_string =~ /.+Version 16\.00/) {   # 2010
 		    $arch = "msvc10";
 		}
-		else {
-		  die "Error: unsupported compiler '$cxx'\n";
+		elsif ( $v_string =~ /.+Version 17\.00/) {   # 2011/12
+		    $arch = "msvc11";
 		}
-	    } elsif( $cxx_comp eq "c++" || $cxx_comp eq "g++" ) {
-		# use MinGW/Cygwin GCC compiler
-	    } else {
-		die "Error: unsupported compiler '$cxx'\n";
-	    }
-	} else {
-	    die "Error: unsupported architecture '$uname_s $uname_r'\n";
-	}
-    } else {
-	die "Error: unsupported architecture '$uname_s $uname_r'\n";
+		else {
+		    die "Error: unsupported compiler '$cxx' ($v_string)\n";
+                }
+
+            } elsif( $cxx_comp eq "c++" || $cxx_comp eq "g++" ) {
+                # use MinGW/Cygwin GCC compiler
+                if( $uname_s =~ /^CYGWIN_NT/ ) {
+                    # TODO: detect 64-bit capability
+                    $arch  = "cygwin";
+                } else {
+                    # TODO: detect 64-bit capability
+                    $arch  = "mingw";
+                }
+            }
+        }
+    } # arch detection
+
+    if( !$arch ) {
+        die "Error: unsupported compiler '$cxx' or"
+                 ." architecture '$uname_s $uname_r'\n";
+    }
+
+    # check arch and set architecture specific options
+
+    if( $arch =~ /^macosx(ppc)?(64)?/ ) {
+        if( $1 eq 'ppc' ) {
+            if( $2 eq '64' ) {
+                $rt_cpuarch = "ppc64";
+            } else {
+                $rt_cpuarch = "ppc";
+            }
+        } else {
+            if( $2 eq '64' ) {
+                $rt_cpuarch = "x86_64";
+            } else {
+                $rt_cpuarch = "i686";
+            }
+        }
+    }
+
+    elsif( $arch =~ /^(linux|freebsd|mingw|cygwin)(64)?/ ) {
+        if( $2 eq '64' ) {
+            $rt_cpuarch = $2;
+        } else {
+            $rt_cpuarch = '32';
+        }
+    }
+
+    elsif( $arch =~ /^(gcc)?(sparcOS5|hpux11)/ ) {
+        # do nothing
+    }
+
+    elsif( $arch =~ /^msvc/ ) {
+        # do nothing
     }
 
     $rt_cc = $cxx;
@@ -554,10 +574,6 @@ sub init_globals
     $SIG{ 'INT' }  = 'interrupt_handler';
     $SIG{ 'QUIT' } = 'interrupt_handler';
     $SIG{ 'ALRM' } = 'alarm_handler';
-
-    $rt_systemc_arch = &get_systemc_arch;
-    $rt_systemc_home = &get_systemc_home;
-	  $rt_tlm_home = &get_tlm_home;
 
     $rt_cleanup = 1;                    # cleanup temp dirs by default
     $rt_mail = 0;                       # send mail with results
@@ -591,52 +607,6 @@ sub init_globals
     $rt_dir_permissions  = 0777;
 
     $ENV{ 'SYSTEMC_REGRESSION' } = 1;
-
-    # Set compiler and compiler flags
-    #
-    # defaults
-    $rt_ccflags       = "-Wall";
-    $rt_ld            = $rt_cc;
-    $rt_ldflags       = $rt_ccflags;
-    $rt_ldrpath       = "-Wl,-rpath=";
-    $rt_debug_flag    = "-g";
-    $rt_debug_ldflags = "";
-    $rt_optimize_flag = "-O2";
-
-    if( $rt_systemc_arch eq "gccsparcOS5" ) {
-        $rt_ldrpath       = "-Wl,-R";
-    } elsif( $rt_systemc_arch eq "sparcOS5" ) {
-        $rt_ccflags       = "";
-        $rt_ldflags       = "-xildoff";
-        $rt_debug_flag    = "-g";
-	$rt_optimize_flag = "-O3";
-    } elsif( $rt_systemc_arch eq "gcchpux11" ) {
-        #use defaults
-    } elsif( $rt_systemc_arch eq "hpux11" ) {
-        $rt_ccflags       = "-Aa -ext +DA2.0 +DS2.0";
-        $rt_optimize_flag = "+O1";
-    } elsif( $rt_systemc_arch =~ /^linux(64)?/ ) {
-        # use defaults
-    } elsif( $rt_systemc_arch =~ /^freebsd(64)?/ ) {
-        # use defaults
-    } elsif( $rt_systemc_arch =~ /^macosx(ppc)?(64)?/ ) {
-	$rt_optimize_flag = "-O3";
-	$rt_ldrpath       = "-Wl,-rpath -Wl,";
-    } elsif( $rt_systemc_arch eq "cygwin" ) {
-	$rt_ldflags = $rt_ccflags." -Wl,--enable-auto-import";
-    } elsif( $rt_systemc_arch eq "mingw" ) {
-	# use defaults
-    } elsif( $rt_systemc_arch =~ /^msvc(71|8|9|10)/ ) {
-	$rt_cc = "CL.EXE";
-	$rt_ccflags = "${slash}nologo ${slash}GR ${slash}EHsc "
-	             ."${slash}Zm800 ${slash}vmg "
-		     ."${slash}D \"_USE_MATH_DEFINES\"";
-	$rt_ld = "LINK.EXE";
-	$rt_ldflags = "${slash}nologo ${slash}LTCG ${slash}NODEFAULTLIB:LIBCD ";
-        $rt_debug_flag    = "${slash}GZ ${slash}MTd ${slash}Zi";
-        $rt_debug_ldflags = "${slash}DEBUG ${slash}PDB:$rt_prodname.pdb";
-	$rt_optimize_flag = "${slash}O2";
-    }
 
     $rt_add_ldpaths = '';  # additional link paths
     if( defined $ENV{ 'RT_ADD_LDPATHS' } ) {
@@ -701,6 +671,74 @@ sub init_globals
     );
 }
 
+# -----------------------------------------------------------------------------
+#  SUB : prepare_environment
+#
+#  Setup compiler/architecture environment.
+# -----------------------------------------------------------------------------
+
+sub prepare_environment
+{
+
+    $rt_systemc_arch = &get_systemc_arch;
+    $rt_systemc_home = &get_systemc_home;
+    $rt_tlm_home     = &get_tlm_home;
+
+    # Set compiler and compiler flags
+    #
+    # defaults
+    $rt_ccflags       = "-Wall";
+    $rt_ld            = $rt_cc;
+    $rt_ldflags       = $rt_ccflags;
+    $rt_ldrpath       = "-Wl,-rpath=";
+    $rt_debug_flag    = "-g";
+    $rt_debug_ldflags = "";
+    $rt_optimize_flag = "-O2";
+    $rt_systemc_include = "$rt_systemc_home/include";
+
+    if( $rt_systemc_arch eq "gccsparcOS5" ) {
+        $rt_ldrpath       = "-Wl,-R";
+    } elsif( $rt_systemc_arch eq "sparcOS5" ) {
+        $rt_ccflags       = "";
+        $rt_ldflags       = "-xildoff";
+        $rt_debug_flag    = "-g";
+        $rt_optimize_flag = "-O3";
+    } elsif( $rt_systemc_arch eq "gcchpux11" ) {
+        #use defaults
+    } elsif( $rt_systemc_arch eq "hpux11" ) {
+        $rt_ccflags       = "-Aa -ext +DA2.0 +DS2.0";
+        $rt_optimize_flag = "+O1";
+    } elsif( $rt_systemc_arch =~ /^linux(64)?/ ) {
+        $rt_ccflags      .= " -m${rt_cpuarch}";
+        $rt_ldflags       = $rt_ccflags;
+    } elsif( $rt_systemc_arch =~ /^freebsd(64)?/ ) {
+        $rt_ccflags      .= " -m${rt_cpuarch}";
+        $rt_ldflags       = $rt_ccflags;
+    } elsif( $rt_systemc_arch =~ /^macosx(ppc)?(64)?/ ) {
+        $rt_ccflags      .= " -arch ${rt_cpuarch} ";
+        $rt_ldflags       = $rt_ccflags;
+        $rt_optimize_flag = "-O3";
+        $rt_ldrpath       = "-Wl,-rpath -Wl,";
+    } elsif( $rt_systemc_arch =~ /^cygwin(64)?/ ) {
+        $rt_ccflags      .= " -m${rt_cpuarch}";
+        $rt_ldflags       = $rt_ccflags." -Wl,--enable-auto-import";
+    } elsif( $rt_systemc_arch =~ /^mingw(64)?/ ) {
+        $rt_ccflags      .= " -m${rt_cpuarch}";
+        $rt_ldflags       = $rt_ccflags;
+        # use defaults
+    } elsif( $rt_systemc_arch =~ /^msvc(71|8|9|10|11)/ ) {
+        $rt_cc              = "CL.EXE";
+        $rt_ccflags         = "-nologo -GR -EHsc -Zm800 -vmg "
+                             ."-D \"_USE_MATH_DEFINES\"";
+        $rt_ld              = "LINK.EXE";
+        $rt_ldflags         = "-nologo -LTCG -NODEFAULTLIB:LIBCD "
+                             ."-SUBSYSTEM:CONSOLE ";
+        $rt_debug_flag      = "-GZ -MTd -Zi";
+        $rt_debug_ldflags   = "-DEBUG -PDB:$rt_prodname.pdb";
+        $rt_systemc_include = "$rt_systemc_home/src";
+    }
+}
+
 
 # -----------------------------------------------------------------------------
 #  SUB : usage
@@ -720,6 +758,7 @@ Usage: $0 [<options>] <directories|names>
                    sharing the same basename will be run.
     <options>
       -no-cleanup  Do not clean up temporary files and directories.
+      -arch <arch> Override SystemC architecture.
       -f <file>    Use file to supply tests.
       -g           Compile tests with debug flag.
       -m           Send mail with results.
@@ -772,7 +811,13 @@ sub parse_args
 		$rt_cleanup = 0;
 		next;
 	    }
-	  
+
+	    if( $arg =~ /^-arch/ ) {
+		$arg = shift @arglist;
+		$rt_systemc_arch = $arg;
+		next;
+	    }
+
 	    # include file
 	    if( $arg =~ /^-f/ ) {
 		$arg = shift @arglist;
@@ -1546,7 +1591,7 @@ sub compile_files
 	$newcommand = $command;
 	if( $rt_systemc_arch =~ /^msvc/ ) {
             $ofilestring .= " $file.obj";
-           $newcommand  .= " ${slash}Fo$file.obj $temp";
+           $newcommand  .= " -Fo$file.obj $temp";
 	} else {
             $ofilestring .= " $file.o";
             $newcommand  .= " -o $file.o $temp";
@@ -2010,20 +2055,13 @@ sub run_test
     #
     if( $type =~ /$rt_test_type{'s'}/ ) {
 
-	# compile command
-	if( $rt_systemc_arch =~ /^msvc/ ) {
-	    $command  = "$rt_cc $rt_ccflags $extra_flags ";
-	    $command .= "${slash}I $rt_tlm_home ";
-	    $command .= "${slash}I . ${slash}I $rt_systemc_home/src ";
-	    $command .= "${slash}I $rt_systemc_test/include/$test_set ";
-	    $command .= "${slash}c ";
-	} else {
-	    $command  = "$rt_cc $rt_ccflags $extra_flags ";
-	    $command .= "-I $rt_tlm_home ";
-	    $command .= "-I . -I $rt_systemc_home/include ";
-	    $command .= "-I $rt_systemc_test/include/$test_set ";
-	    $command .= "-c ";
-	}
+        # compile command
+        $command  = "$rt_cc $rt_ccflags $extra_flags ";
+        $command .= "-I . ";
+        $command .= "-I $rt_systemc_test/include/$test_set ";
+        $command .= "-I $rt_tlm_home ";
+        $command .= "-I $rt_systemc_include ";
+        $command .= "-c ";
 
         # add user provided options to command
 	$command .= " $opts";
@@ -2064,7 +2102,7 @@ sub run_test
         }
 
 	if( $rt_systemc_arch =~ /^msvc/ ) {
-	    $command .= "${slash}out:$rt_prodname ";
+	    $command .= "-out:$rt_prodname ";
 	    $command .= "$testname.obj ";
             if( $rt_props & $rt_test_props{ 'debug' } ) {
                 $command .= "$rt_systemc_home/$rt_systemc_arch/"
@@ -2111,20 +2149,13 @@ sub run_test
     #
     if( $type =~ /$rt_test_type{'f'}/ ) {
 
-	# compile command
-	if( $rt_systemc_arch =~ /^msvc/ ) {
-	    $command  = "$rt_cc $rt_ccflags $extra_flags ";
-	    $command .= "${slash}I $rt_tlm_home ";
-	    $command .= "${slash}I . ${slash}I $rt_systemc_home/src ";
-	    $command .= "${slash}I $rt_systemc_test/include/$test_set ";
-	    $command .= "${slash}c ";
-	} else {
-	    $command  = "$rt_cc $rt_ccflags $extra_flags ";
-	    $command .= "-I $rt_tlm_home ";
-	    $command .= "-I . -I $rt_systemc_home/include ";
-	    $command .= "-I $rt_systemc_test/include/$test_set ";
-	    $command .= "-c ";
-	}
+        # compile command
+        $command  = "$rt_cc $rt_ccflags $extra_flags ";
+        $command .= "-I . ";
+        $command .= "-I $rt_systemc_test/include/$test_set ";
+        $command .= "-I $rt_tlm_home ";
+        $command .= "-I $rt_systemc_include ";
+        $command .= "-c ";
 
         # add user provided options to command
 	$command .= " $opts";
@@ -2157,7 +2188,7 @@ sub run_test
         }
 
 	if( $rt_systemc_arch =~ /^msvc/ ) {
-	    $command .= "${slash}out:$rt_prodname ";
+	    $command .= "-out:$rt_prodname ";
 	    $command .= "$ofiles ";
             if( $rt_props & $rt_test_props{ 'debug' } ) {
                 $command .= "$rt_systemc_home/$rt_systemc_arch/"
@@ -2324,8 +2355,9 @@ sub clean_up
 	}
     }
 
-    if( $rt_systemc_arch !~ /^msvc/ ) {
-        rmdir $full_dir || return 0;
+    chdir( $rt_output_dir );
+    while( rmdir( $full_dir ) ) {
+        $full_dir =~ s|/[^/]+$|| ;
     }
 
     1;
@@ -2346,6 +2378,8 @@ sub main
     local( $tests );
     local( $files );
     ( $tests, $files ) = &parse_args( @ARGV );
+
+    &prepare_environment;
 
     &print_intro;
 
