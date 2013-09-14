@@ -41,6 +41,12 @@
 #   endif
 #endif // PRIu64
 
+#ifdef SC_TIME_ALLOW_MAXTIME_CREATION
+#  define SC_MAXTIME_ALLOWED_ 1
+#else
+#  define SC_MAXTIME_ALLOWED_ 0
+#endif
+
 namespace sc_core {
 
 static
@@ -151,12 +157,6 @@ sc_time::sc_time( value_type v, bool scale )
     }
 }
 
-#ifdef SC_TIME_ALLOW_MAXTIME_CREATION
-#  define SC_MAXTIME_ALLOWED_ 1
-#else
-#  define SC_MAXTIME_ALLOWED_ 0
-#endif
-
 sc_time
 sc_time::from_value( value_type v )
 {
@@ -168,7 +168,6 @@ sc_time::from_value( value_type v )
     t.m_value = v;
     return t;
 }
-#undef SC_MAXTIME_ALLOWED_
 
 
 // conversion functions
@@ -177,6 +176,11 @@ double
 sc_time::to_default_time_units() const
 {
     sc_time_params* time_params = sc_get_curr_simcontext()->m_time_params;
+#   if SC_MAXTIME_ALLOWED_
+        if( m_value == 0 )
+            return 0.0;
+        time_params->time_resolution_fixed = true;
+#   endif // SC_MAXTIME_ALLOWED_
     return ( sc_dt::uint64_to_double( m_value ) /
 	     sc_dt::uint64_to_double( time_params->default_time_unit ) );
 }
@@ -185,6 +189,11 @@ double
 sc_time::to_seconds() const
 {
     sc_time_params* time_params = sc_get_curr_simcontext()->m_time_params;
+#   if SC_MAXTIME_ALLOWED_
+        if( m_value == 0 )
+            return 0.0;
+        time_params->time_resolution_fixed = true;
+#   endif // SC_MAXTIME_ALLOWED_
     return ( sc_dt::uint64_to_double( m_value ) *
 	     time_params->time_resolution * 1e-15 );
 }
@@ -197,6 +206,9 @@ sc_time::to_string() const
 	return std::string( "0 s" );
     }
     sc_time_params* time_params = sc_get_curr_simcontext()->m_time_params;
+#   if SC_MAXTIME_ALLOWED_
+        time_params->time_resolution_fixed = true;
+#   endif // SC_MAXTIME_ALLOWED_
     value_type tr = SCAST<sc_dt::int64>( time_params->time_resolution );
     int n = 0;
     while( ( tr % 10 ) == 0 ) {
@@ -406,6 +418,7 @@ sc_get_default_time_unit()
 
 const sc_time SC_ZERO_TIME;
 
+#undef SC_MAXTIME_ALLOWED_
 
 } // namespace sc_core
 
