@@ -498,11 +498,16 @@ sub get_systemc_arch
 		elsif ( $v_string =~ /.+Version 16\.00/) {   # 2010
 		    $arch = "msvc10";
 		}
-		elsif ( $v_string =~ /.+Version 17\.00/) {   # 2011/12
+		elsif ( $v_string =~ /.+Version 17\.00/) {   # 2012
 		    $arch = "msvc11";
 		}
 		else {
 		    die "Error: unsupported compiler '$cxx' ($v_string)\n";
+                }
+
+                # check for Win64 compiler
+                if ( $v_string =~ /for x64/ ) { # TODO: improve check
+                    $arch .= "-x64";
                 }
 
             } elsif( $cxx_comp eq "c++" || $cxx_comp eq "g++" ) {
@@ -726,13 +731,16 @@ sub prepare_environment
         $rt_ccflags      .= " -m${rt_cpuarch}";
         $rt_ldflags       = $rt_ccflags;
         # use defaults
-    } elsif( $rt_systemc_arch =~ /^msvc(71|8|9|10|11)/ ) {
+    } elsif( $rt_systemc_arch =~ /^msvc(71|80|90|10|11)(-x64)?/ ) {
+        my $x64 = $2;
         $rt_cc              = "CL.EXE";
         $rt_ccflags         = "-nologo -GR -EHsc -Zm800 -vmg "
-                             ."-D \"_USE_MATH_DEFINES\"";
+                             ."-D \"_USE_MATH_DEFINES\" ";
+        $rt_ccflags        .= "-MACHINE:X64" unless (!$x64);
         $rt_ld              = "LINK.EXE";
         $rt_ldflags         = "-nologo -LTCG -NODEFAULTLIB:LIBCD "
                              ."-SUBSYSTEM:CONSOLE ";
+        $rt_ldflags        .= "-MACHINE:X64 " unless (!$x64);
         $rt_debug_flag      = "-GZ -MTd -Zi";
         $rt_debug_ldflags   = "-DEBUG -PDB:$rt_prodname.pdb";
         $rt_systemc_include = "$rt_systemc_home/src";
@@ -1879,7 +1887,7 @@ sub diff_log
     local( $ref ) = "$rt_tests_dir/$golden_logfile";
 
     # do diff
-    if( ! open( DIFFCMD_OUT, "diff --strip-trailing-cr $new $ref |" ) ) {
+    if( ! open( DIFFCMD_OUT, "diff -a -w $new $ref |" ) ) {
 	&print_log( "Error: diff on '$new' and '$ref' failed\n" );
 	return 'diff_prog_fail';
     }
@@ -2074,7 +2082,7 @@ sub run_test
 
 	if( $rt_systemc_arch =~ /^msvc/ ) {
 	    # translate Cygwin path to Windows path
-	    $command =~ s|/cygdrive/(.)/|$1:/|g;
+	    $command =~ s!/(cygdrive|drives)/(.)/!$2:/!g;
 	}
 
 	&print_log( "Compiling\n" );
@@ -2101,15 +2109,18 @@ sub run_test
             $command .= "$rt_debug_ldflags ";
         }
 
-	if( $rt_systemc_arch =~ /^msvc/ ) {
+	if( $rt_systemc_arch =~ /^(msvc[0-9]*)(-x64)?$/ ) {
+	    my $msvc = $1;
+	    my $x64  = $2;
+            $x64 =~ s|-|/|;
 	    $command .= "-out:$rt_prodname ";
 	    $command .= "$testname.obj ";
             if( $rt_props & $rt_test_props{ 'debug' } ) {
-                $command .= "$rt_systemc_home/$rt_systemc_arch/"
-                            ."systemc/Debug/systemc.lib ";
+                $command .= "$rt_systemc_home/$msvc/"
+                            ."systemc${x64}/Debug/systemc.lib ";
             } else {
-                $command .= "$rt_systemc_home/$rt_systemc_arch/"
-                           ."systemc/Release/systemc.lib ";
+                $command .= "$rt_systemc_home/$msvc/"
+                           ."systemc${x64}/Release/systemc.lib ";
             }
 	} else {
 	    $command .= "-o $rt_prodname ";
@@ -2137,7 +2148,7 @@ sub run_test
 
 	if( $rt_systemc_arch =~ /^msvc/ ) {
 	    # translate Cygwin path to Windows path
-	    $command =~ s|/cygdrive/(.)/|$1:/|;
+	    $command =~ s!/(cygdrive|drives)/(.)/!$2:/!g;
 	}
 
 	&print_log( "Linking\n" );
@@ -2162,7 +2173,7 @@ sub run_test
 
 	if( $rt_systemc_arch =~ /^msvc/ ) {
 	    # translate Cygwin path to Windows path
-	    $command =~ s|/cygdrive/(.)/|$1:/|g;
+	    $command =~ s!/(cygdrive|drives)/(.)/!$2:/!g;
 	}
 
         # call compile_files to execute command for each C++ file 
@@ -2187,15 +2198,19 @@ sub run_test
             $command .= "$rt_debug_ldflags ";
         }
 
-	if( $rt_systemc_arch =~ /^msvc/ ) {
+	if( $rt_systemc_arch =~ /^(msvc[0-9]*)(-x64)?$/ ) {
+	    my $msvc = $1;
+	    my $x64  = $2;
+            $x64 =~ s|-|/|;
 	    $command .= "-out:$rt_prodname ";
 	    $command .= "$ofiles ";
+
             if( $rt_props & $rt_test_props{ 'debug' } ) {
-                $command .= "$rt_systemc_home/$rt_systemc_arch/"
-                            ."systemc/Debug/systemc.lib ";
+                $command .= "$rt_systemc_home/$msvc/"
+                            ."systemc${x64}/Debug/systemc.lib ";
             } else {
-                $command .= "$rt_systemc_home/$rt_systemc_arch/"
-                           ."systemc/Release/systemc.lib ";
+                $command .= "$rt_systemc_home/$msvc/"
+                           ."systemc${x64}/Release/systemc.lib ";
             }
 	} else {
 	    $command .= "-o $rt_prodname ";
@@ -2222,7 +2237,7 @@ sub run_test
 
 	if( $rt_systemc_arch =~ /^msvc/ ) {
 	    # translate Cygwin path to Windows path
-	    $command =~ s|/cygdrive/(.)/|$1:/|;
+	    $command =~ s!/(cygdrive|drives)/(.)/!$2:/!g;
 	}
 
 	&print_log( "Linking\n" );
