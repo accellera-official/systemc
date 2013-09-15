@@ -62,7 +62,6 @@ sub set_systemc_test
 
     if ( defined $ENV{ 'SYSTEMC_PTHREADS' } )
     {
-        $lpthreads = "-lpthread";
 	$rt_pthreads = " (pthreads)";
     }
     if( defined $ENV{ 'SYSTEMC_TEST' } ) {
@@ -700,6 +699,7 @@ sub prepare_environment
     $rt_debug_ldflags = "";
     $rt_optimize_flag = "-O2";
     $rt_systemc_include = "$rt_systemc_home/include";
+    $rt_systemc_ldpath  = "$rt_systemc_home/lib-$rt_systemc_arch";
 
     if( $rt_systemc_arch eq "gccsparcOS5" ) {
         $rt_ldrpath       = "-Wl,-R";
@@ -731,8 +731,10 @@ sub prepare_environment
         $rt_ccflags      .= " -m${rt_cpuarch}";
         $rt_ldflags       = $rt_ccflags;
         # use defaults
-    } elsif( $rt_systemc_arch =~ /^msvc(71|80|90|10|11)(-x64)?/ ) {
-        my $x64 = $2;
+    } elsif( $rt_systemc_arch =~ /^(msvc[0-9]*)(-x64)?$/ ) {
+        my $msvc = $1;
+        my $x64  = $2;
+        $x64 =~ s|-|/|;
         $rt_cc              = "CL.EXE";
         $rt_ccflags         = "-nologo -GR -EHsc -Zm800 -vmg "
                              ."-D \"_USE_MATH_DEFINES\" ";
@@ -744,6 +746,28 @@ sub prepare_environment
         $rt_debug_flag      = "-GZ -MTd -Zi";
         $rt_debug_ldflags   = "-DEBUG -PDB:$rt_prodname.pdb";
         $rt_systemc_include = "$rt_systemc_home/src";
+
+        $rt_systemc_ldpath  = "$rt_systemc_home/$msvc/systemc${x64}";
+        if( $rt_props & $rt_test_props{ 'debug' } ) {
+            $rt_systemc_ldpath .= "/Debug";
+        } else {
+            $rt_systemc_ldpath .= "/Release";
+        }
+    }
+
+    # include directories
+    @rt_includes = ( $rt_tlm_home, $rt_systemc_include );
+    # libraries paths
+    @rt_ldpaths  = ( $rt_systemc_ldpath );
+    # libraries (basenames only)
+    @rt_ldlibs   = ( "systemc" );
+    push( @rt_ldlibs, "pthread" ) unless (!$rt_pthreads);
+
+    if( $rt_add_ldpaths ne '' ) {
+        push( @rt_ldpaths, split(" ", $rt_add_ldpaths) );
+    }
+    if( $rt_add_ldlibs ne '' ) {
+        push( @rt_ldlibs, split(" ", $rt_add_ldlibs) );
     }
 }
 
@@ -2065,10 +2089,8 @@ sub run_test
 
         # compile command
         $command  = "$rt_cc $rt_ccflags $extra_flags ";
-        $command .= "-I . ";
-        $command .= "-I $rt_systemc_test/include/$test_set ";
-        $command .= "-I $rt_tlm_home ";
-        $command .= "-I $rt_systemc_include ";
+        $command .= "-I . -I $rt_systemc_test/include/$test_set ";
+        $command .= join( '', map { "-I $_ " } @rt_includes );
         $command .= "-c ";
 
         # add user provided options to command
@@ -2109,33 +2131,18 @@ sub run_test
             $command .= "$rt_debug_ldflags ";
         }
 
-	if( $rt_systemc_arch =~ /^(msvc[0-9]*)(-x64)?$/ ) {
-	    my $msvc = $1;
-	    my $x64  = $2;
-            $x64 =~ s|-|/|;
+	if( $rt_systemc_arch =~ /^msvc/ ) {
 	    $command .= "-out:$rt_prodname ";
 	    $command .= "$testname.obj ";
-            if( $rt_props & $rt_test_props{ 'debug' } ) {
-                $command .= "$rt_systemc_home/$msvc/"
-                            ."systemc${x64}/Debug/systemc.lib ";
-            } else {
-                $command .= "$rt_systemc_home/$msvc/"
-                           ."systemc${x64}/Release/systemc.lib ";
-            }
+            $command .= join( '', map { "-LIBPATH:$_ " } @rt_ldpaths );
+            $command .= join( '', map { "$_.lib " } @rt_ldlibs );
+
 	} else {
 	    $command .= "-o $rt_prodname ";
 	    $command .= "$testname.o ";
-	    $command .= "-L. -L$rt_systemc_home/lib-$rt_systemc_arch ";
-	    $command .= "$rt_ldrpath$rt_systemc_home/lib-$rt_systemc_arch ";
-
-	    if( $rt_add_ldpaths ne '' ) {
-		$command .= "$rt_add_ldpaths ";
-	    }
-
-	    $command .= "-lsystemc $lpthreads ";
-	    if( $rt_add_ldlibs ne '' ) {
-		$command .= "$rt_add_ldlibs ";
-	    }
+            $command .= "-L. ";
+            $command .= join('', map { "-L$_ $rt_ldrpath$_ " } @rt_ldpaths);
+            $command .= join('', map { "-l$_ " } @rt_ldlibs);
 	}
 
         if( $rt_systemc_arch !~ /^msvc/ ) {
@@ -2162,10 +2169,8 @@ sub run_test
 
         # compile command
         $command  = "$rt_cc $rt_ccflags $extra_flags ";
-        $command .= "-I . ";
-        $command .= "-I $rt_systemc_test/include/$test_set ";
-        $command .= "-I $rt_tlm_home ";
-        $command .= "-I $rt_systemc_include ";
+        $command .= "-I . -I $rt_systemc_test/include/$test_set ";
+        $command .= join( '', map { "-I $_ " } @rt_includes );
         $command .= "-c ";
 
         # add user provided options to command
@@ -2198,33 +2203,17 @@ sub run_test
             $command .= "$rt_debug_ldflags ";
         }
 
-	if( $rt_systemc_arch =~ /^(msvc[0-9]*)(-x64)?$/ ) {
-	    my $msvc = $1;
-	    my $x64  = $2;
-            $x64 =~ s|-|/|;
+	if( $rt_systemc_arch =~ /^msvc/ ) {
 	    $command .= "-out:$rt_prodname ";
 	    $command .= "$ofiles ";
+            $command .= join('', map { "-LIBPATH:$_ " } @rt_ldpaths );
+            $command .= join('', map { "$_.lib " } @rt_ldlibs );
 
-            if( $rt_props & $rt_test_props{ 'debug' } ) {
-                $command .= "$rt_systemc_home/$msvc/"
-                            ."systemc${x64}/Debug/systemc.lib ";
-            } else {
-                $command .= "$rt_systemc_home/$msvc/"
-                           ."systemc${x64}/Release/systemc.lib ";
-            }
 	} else {
 	    $command .= "-o $rt_prodname ";
 	    $command .= "$ofiles ";
-	    $command .= "-L. -L$rt_systemc_home/lib-$rt_systemc_arch ";
-	    $command .= "$rt_ldrpath$rt_systemc_home/lib-$rt_systemc_arch ";
-
-	    if( $rt_add_ldpaths ne '' ) {
-		$command .= "$rt_add_ldpaths ";
-	    }
-	    $command .= "-lsystemc $lpthreads ";
-	    if( $rt_add_ldlibs ne '' ) {
-		$command .= "$rt_add_ldlibs ";
-	    }
+            $command .= join('', map { "-L$_ $rt_ldrpath$_ " } @rt_ldpaths);
+            $command .= join('', map { "-l$_ " } @rt_ldlibs);
 	}
 
         if( $rt_systemc_arch !~ /^msvc/ ) {
