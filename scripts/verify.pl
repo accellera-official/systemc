@@ -588,6 +588,7 @@ sub init_globals
     $rt_prodname = "systemc.exe";       # simulation executable name
     $rt_quick_tests = 0;
     $rt_tests_dir = "$rt_systemc_test/tests";
+    $rt_common_include_dir = "include/common"; # relative to $rt_systemc_test
     $rt_time_tests = 0;
     $rt_verbose  = 0;
 
@@ -756,12 +757,20 @@ sub prepare_environment
     }
 
     # include directories
-    @rt_includes = ( $rt_tlm_home, $rt_systemc_include );
+    @rt_includes = ();
+    push( @rt_includes, $rt_tlm_home )
+        unless ( $rt_tlm_home eq $rt_systemc_include );
+    push( @rt_includes, $rt_systemc_include );
+
     # libraries paths
     @rt_ldpaths  = ( $rt_systemc_ldpath );
     # libraries (basenames only)
     @rt_ldlibs   = ( "systemc" );
     push( @rt_ldlibs, "pthread" ) unless (!$rt_pthreads);
+
+    # prepend common include directory, if exists
+    unshift ( @rt_includes, "$rt_systemc_test/$rt_common_include_dir" )
+        unless (!-d "$rt_systemc_test/$rt_common_include_dir" );
 
     if( $rt_add_ldpaths ne '' ) {
         push( @rt_ldpaths, split(" ", $rt_add_ldpaths) );
