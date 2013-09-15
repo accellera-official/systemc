@@ -2024,6 +2024,7 @@ sub run_test
     local( $sym_opts );         # options to simulator (sym)
     local( $err_file );
     local( $scl_include );
+    local( @test_set_includes ) = ( '.' );
 
     &print_log( "\n" );
 
@@ -2039,6 +2040,11 @@ sub run_test
 
     # determine the test set
     ( $test_set = $currtestdir ) =~ s|^([^/]+)/.*|\1|;
+
+    # add local include dir, if exists
+    push ( @test_set_includes, "$rt_systemc_test/include/$test_set" )
+        unless (!-d "$rt_systemc_test/include/$test_set" );
+    push ( @test_set_includes, @rt_includes );
 
     # check for compiler
     # include your compiler check in here
@@ -2089,8 +2095,7 @@ sub run_test
 
         # compile command
         $command  = "$rt_cc $rt_ccflags $extra_flags ";
-        $command .= "-I . -I $rt_systemc_test/include/$test_set ";
-        $command .= join( '', map { "-I $_ " } @rt_includes );
+        $command .= join( '', map { "-I $_ " } @test_set_includes );
         $command .= "-c ";
 
         # add user provided options to command
@@ -2169,8 +2174,7 @@ sub run_test
 
         # compile command
         $command  = "$rt_cc $rt_ccflags $extra_flags ";
-        $command .= "-I . -I $rt_systemc_test/include/$test_set ";
-        $command .= join( '', map { "-I $_ " } @rt_includes );
+        $command .= join( '', map { "-I $_ " } @test_set_includes );
         $command .= "-c ";
 
         # add user provided options to command
