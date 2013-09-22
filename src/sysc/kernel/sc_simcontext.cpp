@@ -1565,7 +1565,7 @@ sc_start( const sc_time& duration, sc_starvation_policy p )
     sc_simcontext* context_p;      // current simulation context.
     sc_time        entry_time;     // simulation time upon entry.
     sc_time        exit_time;      // simulation time to set upon exit.
-    size_t         starting_delta; // delta count upon entry.
+    sc_dt::uint64  starting_delta; // delta count upon entry.
     int            status;         // current simulation status.
 
     // Set up based on the arguments passed to us:
