@@ -495,7 +495,7 @@ sc_simcontext::max_time() const
 {
     if ( m_max_time == SC_ZERO_TIME )
     {
-        m_max_time = sc_time(~(sc_dt::uint64)0, false);
+        m_max_time = sc_time::from_value( ~sc_dt::UINT64_ZERO );
     }
     return m_max_time;
 }

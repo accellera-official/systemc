@@ -61,7 +61,7 @@ sc_clock::sc_clock() :
                           "_next_negedge_event").c_str())
 
 {
-    init( sc_time( 1.0, true ),
+    init( sc_time::from_value(simcontext()->m_time_params->default_time_unit),
 	  0.5,
 	  SC_ZERO_TIME,
 	  true );
@@ -78,7 +78,7 @@ sc_clock::sc_clock( const char* name_ ) :
     m_next_negedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
 			   std::string(name_) + "_next_negedge_event").c_str())
 {
-    init( sc_time( 1.0, true ),
+    init( sc_time::from_value(simcontext()->m_time_params->default_time_unit),
 	  0.5,
 	  SC_ZERO_TIME,
 	  true );
@@ -187,9 +187,12 @@ sc_clock::sc_clock( const char* name_,
 	   "    sc_time_unit");
     }
 
-    init( sc_time( period_, true ),
+    sc_time default_time =
+      sc_time::from_value( simcontext()->m_time_params->default_time_unit );
+
+    init( ( period_ * default_time ),
 	  duty_cycle_,
-	  sc_time( start_time_, true ),
+	  ( start_time_ * default_time ),
 	  posedge_first_ );
 
     if( posedge_first_ ) {

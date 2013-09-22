@@ -41,6 +41,12 @@
 #   endif
 #endif // PRIu64
 
+#ifdef SC_TIME_ALLOW_MAXTIME_CREATION
+#  define SC_MAXTIME_ALLOWED_ 1
+#else
+#  define SC_MAXTIME_ALLOWED_ 0
+#endif
+
 namespace sc_core {
 
 static
@@ -101,6 +107,13 @@ sc_time::sc_time( double v, sc_time_unit tu, sc_simcontext* simc )
 sc_time::sc_time( double v, bool scale )
 : m_value( 0 )
 {
+    static bool warn_constructor=true;
+    if ( warn_constructor ) {
+        warn_constructor=false;
+        SC_REPORT_INFO(SC_ID_IEEE_1666_DEPRECATION_,
+            "deprecated constructor: sc_time(double,bool)");
+    }
+
     if( v != 0 ) {
 	sc_time_params* time_params = sc_get_curr_simcontext()->m_time_params;
 	if( scale ) {
@@ -118,9 +131,16 @@ sc_time::sc_time( double v, bool scale )
     }
 }
 
-sc_time::sc_time( sc_dt::uint64 v, bool scale )
+sc_time::sc_time( value_type v, bool scale )
 : m_value( 0 )
 {
+    static bool warn_constructor=true;
+    if ( warn_constructor ) {
+        warn_constructor=false;
+        SC_REPORT_INFO(SC_ID_IEEE_1666_DEPRECATION_,
+            "deprecated constructor: sc_time(uint64,bool)");
+    }
+
     if( v != 0 ) {
 	sc_time_params* time_params = sc_get_curr_simcontext()->m_time_params;
 	if( scale ) {
@@ -137,6 +157,18 @@ sc_time::sc_time( sc_dt::uint64 v, bool scale )
     }
 }
 
+sc_time
+sc_time::from_value( value_type v )
+{
+    sc_time t;
+    if( v != 0 && !(SC_MAXTIME_ALLOWED_ && v == ~sc_dt::UINT64_ZERO) ) {
+        sc_time_params* time_params = sc_get_curr_simcontext()->m_time_params;
+        time_params->time_resolution_fixed = true;
+    }
+    t.m_value = v;
+    return t;
+}
+
 
 // conversion functions
 
@@ -144,6 +176,11 @@ double
 sc_time::to_default_time_units() const
 {
     sc_time_params* time_params = sc_get_curr_simcontext()->m_time_params;
+#   if SC_MAXTIME_ALLOWED_
+        if( m_value == 0 )
+            return 0.0;
+        time_params->time_resolution_fixed = true;
+#   endif // SC_MAXTIME_ALLOWED_
     return ( sc_dt::uint64_to_double( m_value ) /
 	     sc_dt::uint64_to_double( time_params->default_time_unit ) );
 }
@@ -152,6 +189,11 @@ double
 sc_time::to_seconds() const
 {
     sc_time_params* time_params = sc_get_curr_simcontext()->m_time_params;
+#   if SC_MAXTIME_ALLOWED_
+        if( m_value == 0 )
+            return 0.0;
+        time_params->time_resolution_fixed = true;
+#   endif // SC_MAXTIME_ALLOWED_
     return ( sc_dt::uint64_to_double( m_value ) *
 	     time_params->time_resolution * 1e-15 );
 }
@@ -159,12 +201,15 @@ sc_time::to_seconds() const
 const std::string
 sc_time::to_string() const
 {
-    sc_dt::uint64 val = m_value;
+    value_type val = m_value;
     if( val == 0 ) {
 	return std::string( "0 s" );
     }
     sc_time_params* time_params = sc_get_curr_simcontext()->m_time_params;
-    sc_dt::uint64 tr = SCAST<sc_dt::int64>( time_params->time_resolution );
+#   if SC_MAXTIME_ALLOWED_
+        time_params->time_resolution_fixed = true;
+#   endif // SC_MAXTIME_ALLOWED_
+    value_type tr = SCAST<sc_dt::int64>( time_params->time_resolution );
     int n = 0;
     while( ( tr % 10 ) == 0 ) {
 	tr /= 10;
@@ -292,7 +337,7 @@ sc_set_time_resolution( double v, sc_time_unit tu )
 sc_time 
 sc_get_time_resolution()
 {
-    return sc_time( sc_dt::UINT64_ONE, false );
+    return sc_time::from_value( sc_dt::UINT64_ONE );
 }
 
 
@@ -356,15 +401,16 @@ sc_set_default_time_unit( double v, sc_time_unit tu )
 sc_time
 sc_get_default_time_unit()
 {
-    bool warn_get_default_time_unit = true;
+    static bool warn_get_default_time_unit = true;
     if ( warn_get_default_time_unit )
     {
         warn_get_default_time_unit=false;
         SC_REPORT_INFO(SC_ID_IEEE_1666_DEPRECATION_,
             "deprecated function: sc_get_default_time_unit");
     }
-    return sc_time( sc_get_curr_simcontext()->m_time_params->default_time_unit,
-		    false );
+    return sc_time::from_value(
+              sc_get_curr_simcontext()->m_time_params->default_time_unit
+           );
 }
 
 
@@ -372,6 +418,7 @@ sc_get_default_time_unit()
 
 const sc_time SC_ZERO_TIME;
 
+#undef SC_MAXTIME_ALLOWED_
 
 } // namespace sc_core
 
