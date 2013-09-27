@@ -613,6 +613,12 @@ sub init_globals
 
     $ENV{ 'SYSTEMC_REGRESSION' } = 1;
 
+    @rt_add_defines = ();
+    if( defined $ENV{ 'RT_ADD_DEFINES' } ) {
+        push( @rt_add_defines, split(' ', $ENV{ 'RT_ADD_DEFINES' } ) )
+            unless( !$ENV{ 'RT_ADD_DEFINES' } );
+    }
+
     @rt_add_includes = ();
     if( defined $ENV{ 'RT_ADD_INCLUDES' } ) {
         push( @rt_add_includes, split(' ', $ENV{ 'RT_ADD_INCLUDES' } ) )
@@ -710,6 +716,9 @@ sub prepare_environment
     $rt_systemc_include = "$rt_systemc_home/include";
     $rt_systemc_ldpath  = "$rt_systemc_home/lib-$rt_systemc_arch";
 
+    # predefined macros
+    @rt_defines = ();
+
     if( $rt_systemc_arch eq "gccsparcOS5" ) {
         $rt_ldrpath       = "-Wl,-R";
     } elsif( $rt_systemc_arch eq "sparcOS5" ) {
@@ -745,9 +754,9 @@ sub prepare_environment
         my $x64  = $2;
         $x64 =~ s|-|/|;
         $rt_cc              = "CL.EXE";
-        $rt_ccflags         = "-nologo -GR -EHsc -Zm800 -vmg "
-                             ."-D \"_USE_MATH_DEFINES\" ";
+        $rt_ccflags         = "-nologo -GR -EHsc -Zm800 -vmg ";
         $rt_ccflags        .= "-MACHINE:X64" unless (!$x64);
+        push @rt_defines, '_USE_MATH:DEFINES';
         $rt_ld              = "LINK.EXE";
         $rt_ldflags         = "-nologo -LTCG -NODEFAULTLIB:LIBCD "
                              ."-SUBSYSTEM:CONSOLE ";
@@ -775,6 +784,9 @@ sub prepare_environment
     # libraries (basenames only)
     @rt_ldlibs   = ( "systemc" );
     push( @rt_ldlibs, "pthread" ) unless (!$rt_pthreads);
+
+    # add additional predefined macros
+    push( @rt_defines, @rt_add_defines );
 
     # prepend common include directory, if exists
     push ( @rt_add_includes, "$rt_systemc_test/$rt_common_include_dir" )
@@ -808,11 +820,12 @@ Usage: $0 [<options>] <directories|names>
     <options>
       -no-cleanup  Do not clean up temporary files and directories.
       -arch <arch> Override SystemC architecture.
+      -D <symbol>  Additional predefined macros (may be added multiple times).
       -f <file>    Use file to supply tests.
       -g           Compile tests with debug flag.
       -I <dir>     Additional include directory (may be added multiple times).
       -m           Send mail with results.
-      -o <opts>    Additional compiler options.
+      -o <opts>    Additional (custom) compiler options.
       -O           Compile tests with optimize flag.
       -purecov     Link tests with purecov.
       -purify      Link tests with purify.
@@ -865,6 +878,13 @@ sub parse_args
             if( $arg =~ /^-arch/ ) {
                 $arg = shift @arglist;
                 $rt_systemc_arch = $arg;
+                next;
+            }
+
+            # add predefined macro
+            if( $arg =~ /^-D/ ) {
+                $arg = shift @arglist;
+                push @rt_add_defines, $arg;
                 next;
             }
 
@@ -2120,6 +2140,7 @@ sub run_test
 
         # compile command
         $command  = "$rt_cc $rt_ccflags $extra_flags ";
+        $command .= join( '', map { "-D $_ " } @rt_defines );
         $command .= join( '', map { "-I $_ " } @test_set_includes );
         $command .= "-c ";
 
@@ -2199,6 +2220,7 @@ sub run_test
 
         # compile command
         $command  = "$rt_cc $rt_ccflags $extra_flags ";
+        $command .= join( '', map { "-D $_ " } @rt_defines );
         $command .= join( '', map { "-I $_ " } @test_set_includes );
         $command .= "-c ";
 
