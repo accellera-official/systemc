@@ -613,13 +613,15 @@ sub init_globals
 
     $ENV{ 'SYSTEMC_REGRESSION' } = 1;
 
-    $rt_add_ldpaths = '';  # additional link paths
+    @rt_add_ldpaths = ();  # additional link paths
     if( defined $ENV{ 'RT_ADD_LDPATHS' } ) {
-        $rt_add_ldpaths = $ENV{ 'RT_ADD_LDPATHS' };
+        push( @rt_add_ldpaths, split( ' ', $ENV{ 'RT_ADD_LDPATHS' } ) )
+            unless( !$ENV{ 'RT_ADD_LDPATHS' } );
     }
-    $rt_add_ldlibs = '';   # additional link libraries
+    @rt_add_ldlibs = ();   # additional link libraries
     if( defined $ENV{ 'RT_ADD_LDLIBS' } ) {
-        $rt_add_ldlibs = $ENV{ 'RT_ADD_LDLIBS' };
+        push( @rt_add_ldlibs, split( ' ', $ENV{ 'RT_ADD_LDLIBS' } ) )
+            unless( !$ENV{ 'RT_ADD_LDLIBS' } );
     }
     $rt_add_filter = '';   # additional filter for scl_strip
     if( defined $ENV{ 'RT_ADD_FILTER' } ) {
@@ -772,12 +774,9 @@ sub prepare_environment
     unshift ( @rt_includes, "$rt_systemc_test/$rt_common_include_dir" )
         unless (!-d "$rt_systemc_test/$rt_common_include_dir" );
 
-    if( $rt_add_ldpaths ne '' ) {
-        push( @rt_ldpaths, split(" ", $rt_add_ldpaths) );
-    }
-    if( $rt_add_ldlibs ne '' ) {
-        push( @rt_ldlibs, split(" ", $rt_add_ldlibs) );
-    }
+    # additional libraries
+    push( @rt_ldpaths, @rt_add_ldpaths );
+    push( @rt_ldlibs,  @rt_add_ldlibs );
 }
 
 
