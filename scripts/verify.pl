@@ -613,6 +613,12 @@ sub init_globals
 
     $ENV{ 'SYSTEMC_REGRESSION' } = 1;
 
+    @rt_add_includes = ();
+    if( defined $ENV{ 'RT_ADD_INCLUDES' } ) {
+        push( @rt_add_includes, split(' ', $ENV{ 'RT_ADD_INCLUDES' } ) )
+            unless( !$ENV{ 'RT_ADD_INCLUDES' } );
+    }
+
     @rt_add_ldpaths = ();  # additional link paths
     if( defined $ENV{ 'RT_ADD_LDPATHS' } ) {
         push( @rt_add_ldpaths, split( ' ', $ENV{ 'RT_ADD_LDPATHS' } ) )
@@ -771,8 +777,11 @@ sub prepare_environment
     push( @rt_ldlibs, "pthread" ) unless (!$rt_pthreads);
 
     # prepend common include directory, if exists
-    unshift ( @rt_includes, "$rt_systemc_test/$rt_common_include_dir" )
+    push ( @rt_add_includes, "$rt_systemc_test/$rt_common_include_dir" )
         unless (!-d "$rt_systemc_test/$rt_common_include_dir" );
+
+    # additional include directories
+    unshift ( @rt_includes, @rt_add_includes );
 
     # additional libraries
     push( @rt_ldpaths, @rt_add_ldpaths );
@@ -801,6 +810,7 @@ Usage: $0 [<options>] <directories|names>
       -arch <arch> Override SystemC architecture.
       -f <file>    Use file to supply tests.
       -g           Compile tests with debug flag.
+      -I <dir>     Additional include directory (may be added multiple times).
       -m           Send mail with results.
       -o <opts>    Additional compiler options.
       -O           Compile tests with optimize flag.
@@ -868,6 +878,13 @@ sub parse_args
             # compile with debug flag
             if( $arg =~ /^-g/ ) {
                 $rt_props = $rt_props | $rt_test_props{ 'debug' };
+                next;
+            }
+
+            # add include directory
+            if( $arg =~ /^-I/ ) {
+                $arg = shift @arglist;
+                push @rt_add_includes, $arg;
                 next;
             }
 
