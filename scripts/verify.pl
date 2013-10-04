@@ -1079,13 +1079,14 @@ sub get_props
     if( -e "$dir/$rt_dontrun" ) {
         $props = $props | $rt_test_props{ 'dontrun' };
     } else {
-        @tmp = grep( /^\.not/, @files );
-        if( $#tmp >= 0 ) {       # found arch restrictions
-            &print_log( "NYI: .not<arch> control\n" );
+        if( grep( /^\.not$rt_systemc_arch$/, @files ) > 0 ) {
+            # found arch exclusion
+            $props = $props | $rt_test_props{ 'dontrun' };
         }
         @tmp = grep( /^\.only/, @files );
         if( $#tmp >= 0 ) {       # found arch restrictions
-            &print_log( "NYI: .only<arch> control\n" );
+            $props = $props | $rt_test_props{ 'dontrun' }
+                unless ( grep( /^\.only$rt_systemc_arch$/, @tmp ) > 0 );
         }
     }
 
