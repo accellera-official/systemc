@@ -44,7 +44,7 @@
 
 /*
  * This program exhibits a bug in the management by QT of the stack of each
- * systemC process. At least on i686 & x86_64, GCC makes the assumption that
+ * SystemC process. At least on i686 & x86_64, GCC makes the assumption that
  * the stack is aligned on a 16-byte boundary on each C/C++ function entry.
  * This convention allows GCC to respects constraints of automatic (stack)
  * variable alignment, using the __attribute)__ ((align(X))) GCC extension.
@@ -53,14 +53,32 @@
  * required by instructions operands, actually used by fxsave instruction.
  *
  * The attached code shows up the problem by crashing when fxsave is executed
- * in a systemC thread, adn executin correctyl the *same* code on the initial
+ * in a SystemC thread, and executing correctly the *same* code on the initial
  * process stack, as initialized by the libc runtime.
  *
- * This misbehavior does not occurs systematically for x86_64 (no crash,
+ * This misbehavior does not occur systematically for x86_64 (no crash,
  * or crash difficult to reproduce with standard malloc()), but often does
- * with i686. Notice that the instructiono with teh right alignment is shown
+ * with i686. Notice that the instruction with the right alignment is shown
  * when using the myfpxregs address which is aligned on 16-byte boundary.
  */
+
+#if defined(__x86_64__)
+#  define FXSAVE "fxsaveq"
+#else
+#  define FXSAVE "fxsave"
+#endif
+
+#if defined(__GNUC__)
+#  define ALIGN( Align ) __attribute__((aligned(Align)))
+#elif defined(_MSC_VER)
+#  define ALIGN( Align ) __declspec(align(Align))
+#endif
+
+#if defined(__GNUC__) && ( defined(__x86_64__) || defined(__i386__) )
+#  define ASM( Assembly ) __asm__ __volatile__( Assembly )
+#else
+#  define ASM( Assembly ) /* not implemented */
+#endif
 
 // Class
 SC_MODULE(C)
@@ -71,25 +89,25 @@ public:
     }
     void run(void) 
     { 
-        char fpxregs64[512+15] __attribute__ ((aligned(16)));
-        char *myfpxregs = fpxregs64;
-        while ((unsigned long)myfpxregs & 0xF)
-	       myfpxregs++;
+        char fpxregs64[512+15] ALIGN(16);
 
         cout << "Inside C::run() " << endl; 
-#if __x86_64
-        __asm__ __volatile__("fxsaveq (%0)"
-                            :: "r"(myfpxregs));
+
+        // manually enforce alignment (volatile to avoid optmizations)
+        char * volatile myfpxregs = fpxregs64;
+        while ((uintptr_t)myfpxregs & 0xF)
+            myfpxregs++;
+
+        // the "real" requirement: enforced alignment works
+        sc_assert( !((uintptr_t)fpxregs64 & 0xF) );
+        sc_assert( !((uintptr_t)myfpxregs & 0xF) );
+        sc_assert( myfpxregs == fpxregs64 );
+
+        // test assembly on supported platforms
+        ASM( FXSAVE " (%0)" :: "r"(myfpxregs) );
         cout << "Between C::run() " << endl; 
-        __asm__ __volatile__("fxsaveq %0"
-                            : "=m"(fpxregs64));
-#else
-        __asm__ __volatile__("fxsave (%0)"
-                            :: "r"(myfpxregs));
-        cout << "Between C::run() " << endl; 
-        __asm__ __volatile__("fxsave %0"
-                            : "=m"(fpxregs64));
-#endif
+        ASM( FXSAVE " %0" : "=m"(fpxregs64) );
+
         cout << "Out of C::run() " << endl; 
     }
 };
@@ -97,16 +115,10 @@ public:
 int sc_main(int , char** ) {
   C the_C("C");
 
-  char fpxregs64[512] __attribute__ ((aligned(16)));
+  char fpxregs64[512] ALIGN(16);
 
   cout << "Inside sc_main() " << endl; 
-#if __x86_64
-  __asm__ __volatile__("fxsaveq %0"
-                            : "=m"(fpxregs64));
-#else
-  __asm__ __volatile__("fxsave %0"
-                            : "=m"(fpxregs64));
-#endif
+  ASM( FXSAVE " %0" : "=m"(fpxregs64) );
   sc_start(1, SC_NS);
   cout << "Out of sc_main() " << endl; 
   return 0;
