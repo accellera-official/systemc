@@ -51,6 +51,18 @@
 #endif
 
 
+// force 16-byte alignment on coroutine entry functions, needed for
+// QuickThreads (32-bit, see also fixes in qt/md/{i386,iX86_64}.[hs]),
+// and MinGW32 / Cygwin32 compilers on Windows platforms
+#if defined(__GNUC__) && !defined(__ICC) && !defined(__x86_64__) && \
+    (__GNUC__ > 4 || __GNUC__ == 4 && __GNUC_MINOR__ > 1 )
+# define SC_ALIGNED_STACK_ \
+    __attribute__((force_align_arg_pointer))
+#else
+# define SC_ALIGNED_STACK_ /* empty */
+#endif
+
+
 namespace sc_core {
 
 //------------------------------------------------------------------------------
@@ -58,6 +70,7 @@ namespace sc_core {
 // 
 // This function invokes the coroutine for the supplied object instance.
 //------------------------------------------------------------------------------
+SC_ALIGNED_STACK_
 void sc_thread_cor_fn( void* arg )
 {
     sc_simcontext*   simc_p = sc_get_curr_simcontext();
