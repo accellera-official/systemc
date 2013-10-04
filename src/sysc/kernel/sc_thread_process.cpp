@@ -24,10 +24,13 @@
  CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
 
+#include "sysc/kernel/sc_cmnhdr.h"
+#include "sysc/kernel/sc_constants.h"
 #include "sysc/kernel/sc_thread_process.h"
 #include "sysc/kernel/sc_process_handle.h"
 #include "sysc/kernel/sc_simcontext_int.h"
 #include "sysc/kernel/sc_module.h"
+#include "sysc/utils/sc_machine.h"
 
 // DEBUGGING MACROS:
 //
@@ -51,6 +54,29 @@
 #endif
 
 
+//------------------------------------------------------------------------------
+// user-defined default stack-size
+//------------------------------------------------------------------------------
+#if defined(SC_OVERRIDE_DEFAULT_STACK_SIZE)
+#   define SC_DEFAULT_STACK_SIZE_ SC_OVERRIDE_DEFAULT_STACK_SIZE
+
+//------------------------------------------------------------------------------
+// architecture-specific default stack sizes
+//------------------------------------------------------------------------------
+#elif !defined(SC_USE_PTHREADS) && (defined(__CYGWIN32__) || defined(__CYGWIN32))
+#   define SC_DEFAULT_STACK_SIZE_ 0x50000
+
+#elif defined(SC_LONG_64) || defined(__x86_64__) || defined(__LP64__) || \
+      defined(_M_X64) || defined(_M_AMD64)
+#   define SC_DEFAULT_STACK_SIZE_ 0x40000
+
+#else
+#   define SC_DEFAULT_STACK_SIZE_ 0x20000
+
+#endif // SC_DEFAULT_STACK_SIZE_
+
+
+//------------------------------------------------------------------------------
 // force 16-byte alignment on coroutine entry functions, needed for
 // QuickThreads (32-bit, see also fixes in qt/md/{i386,iX86_64}.[hs]),
 // and MinGW32 / Cygwin32 compilers on Windows platforms
@@ -64,6 +90,10 @@
 
 
 namespace sc_core {
+
+const int SC_DEFAULT_STACK_SIZE   = SC_DEFAULT_STACK_SIZE_;
+#undef SC_DEFAULT_STACK_SIZE_
+#undef SC_OVERRIDE_DEFAULT_STACK_SIZE
 
 //------------------------------------------------------------------------------
 //"sc_thread_cor_fn"
