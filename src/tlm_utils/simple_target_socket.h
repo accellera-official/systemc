@@ -448,8 +448,10 @@ private:
           sc_core::wait(m_end_response);
         }
         t = sc_core::SC_ZERO_TIME;
-        phase_type phase = tlm::BEGIN_RESP;
-        if (m_owner->bw_nb_transport(*trans, phase, t) != tlm::TLM_COMPLETED) {
+        phase_type phase    = tlm::BEGIN_RESP;
+        sync_enum_type sync = m_owner->bw_nb_transport(*trans, phase, t);
+        if ( !(sync == tlm::TLM_COMPLETED ||
+              (sync == tlm::TLM_UPDATED && phase == tlm::END_RESP)) ) {
           m_response_in_progress = true;
         }
 
@@ -1001,8 +1003,10 @@ private:
           sc_core::wait(m_end_response);
         }
         t = sc_core::SC_ZERO_TIME;
-        phase_type phase = tlm::BEGIN_RESP;
-        if (m_owner->bw_nb_transport(*trans, phase, t) != tlm::TLM_COMPLETED) {
+        phase_type phase    = tlm::BEGIN_RESP;
+        sync_enum_type sync = m_owner->bw_nb_transport(*trans, phase, t);
+        if ( !(sync == tlm::TLM_COMPLETED ||
+              (sync == tlm::TLM_UPDATED && phase == tlm::END_RESP)) ) {
           m_response_in_progress = true;
         }
 
