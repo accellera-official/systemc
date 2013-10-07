@@ -32,7 +32,7 @@
   CHANGE LOG AT END OF FILE
  *****************************************************************************/
 
-#include <exception>
+#include "sysc/kernel/sc_except.h"
 #include <string>
 
 namespace sc_core {
@@ -102,10 +102,11 @@ const std::string sc_report_compose_message( const sc_report& );
 class sc_report : public std::exception
 {
     friend class sc_report_handler;
+    friend sc_report* sc_handle_exception();
+
+    sc_report(); // used internally by sc_handle_exception
 
 public:
-
-    sc_report();
 
     sc_report(const sc_report&);
 
