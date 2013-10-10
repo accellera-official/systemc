@@ -20,6 +20,8 @@
 #include "tlm_utils/simple_initiator_socket.h"
 #include "tlm_utils/multi_passthrough_target_socket.h"
 
+class introspection_extension;
+
 class initiator_module : public sc_core::sc_module
 {
 public:
@@ -35,6 +37,7 @@ public:
  
   void process()
   {
+    // To verify regular TLM-2 access from initiators are OK
     tlm::tlm_generic_payload transaction;
     
     unsigned char byte = 0x42;
@@ -72,9 +75,36 @@ public:
   }
   
   virtual void transport(int port, tlm::tlm_generic_payload & transaction, sc_core::sc_time & t) {}
-  virtual unsigned int transport_dbg(int port, tlm::tlm_generic_payload & transaction) { return 0; }
+
+  virtual unsigned int transport_dbg(int port, tlm::tlm_generic_payload & transaction)
+  {
+    if ((transaction.get_command() == tlm::TLM_IGNORE_COMMAND) &&
+        transaction.get_extension<introspection_extension>())
+    {
+      std::cout << "Received successfully introspection extension!" << std::endl;
+    }
+
+    return 0;
+  }
+
   virtual bool get_direct_mem_ptr(int port, tlm::tlm_generic_payload & transaction, tlm::tlm_dmi & dmi_data) { return false; }
 
+};
+
+// Simple empty extension to verify the target module is receiving it
+class introspection_extension : public tlm::tlm_extension<introspection_extension>
+{
+public:
+  
+  virtual tlm_extension_base * clone() const
+  {
+    return new introspection_extension;
+  }
+  
+  virtual void copy_from(tlm_extension_base const & ext)
+  {
+  }
+  
 };
 
 class introspector_module : public sc_core::sc_module
@@ -101,6 +131,10 @@ public:
     transaction.set_byte_enable_length(0);
     transaction.set_dmi_allowed(false);
     transaction.set_response_status(tlm::TLM_INCOMPLETE_RESPONSE);
+    
+    introspection_extension *ext = new introspection_extension;
+    
+    transaction.set_extension(ext);
     
     sc_core::sc_time t = sc_core::SC_ZERO_TIME;
     
