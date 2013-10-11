@@ -58,6 +58,9 @@ lib_LTLIBRARIES = libsystemc.la
 
 libsystemc_la_SOURCES =
 
+# dummy C++ source to cause C++ linking
+nodist_EXTRA_libsystemc_la_SOURCES = sc_nonexistent.cpp
+
 if !WANT_PTHREADS_THREADS
 QT_LIB=qt/libqt.la
 endif

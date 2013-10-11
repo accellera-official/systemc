@@ -240,8 +240,21 @@ dnl set C-related variables
 dnl
 CC="$CXX"
 
-dnl libtools should be put *after* all CC options have been set
+dnl
+dnl Libtool setup
+dnl
+dnl - libtools should be put *after* all CC options have been set
+dnl  - explicitly use C++ for libtool initialization
+AC_LANG([C++])
+dnl  - need to pass EXTRA_CXXFLAGS to Libtool via CXXFLAGS to correctly
+dnl    detect C++ library dependencies, esp. for cross-compilation
+CXXFLAGS_USER="${CXXFLAGS}"
+CXXFLAGS="${EXTRA_CXXFLAGS} ${CXXFLAGS}"
+dnl
 AC_PROG_LIBTOOL
+dnl  - restore user-given CXXFLAGS
+CXXFLAGS="${CXXFLAGS_USER}"
+
 
 dnl
 dnl Set the default prefix and make sure the prefix is absolute.
