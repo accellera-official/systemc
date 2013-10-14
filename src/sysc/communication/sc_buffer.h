@@ -39,7 +39,7 @@ namespace sc_core {
 //  The sc_buffer<T> primitive channel class.
 // ----------------------------------------------------------------------------
 
-template< typename T, sc_writer_policy POL = SC_ONE_WRITER >
+template< typename T, sc_writer_policy POL = SC_DEFAULT_WRITER_POLICY >
 class sc_buffer
 : public sc_signal<T,POL>
 {
