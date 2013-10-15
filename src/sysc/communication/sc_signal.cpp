@@ -124,6 +124,17 @@ void sc_deprecated_trace()
     }
 }
 
+sc_event*
+sc_lazy_kernel_event( sc_event** ev, const char* name )
+{
+    if ( !*ev ) {
+        std::string kernel_name = SC_KERNEL_EVENT_PREFIX "_";
+        kernel_name.append( name );
+        *ev = new sc_event( kernel_name.c_str() );
+    }
+    return *ev;
+
+}
 
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
@@ -191,6 +202,30 @@ sc_signal<bool,POL>::update()
         m_change_stamp = simcontext()->change_stamp();
     }
 }
+
+// (edge) event methods
+
+template< sc_writer_policy POL >
+const sc_event&
+sc_signal<bool,POL>::value_changed_event() const
+{
+    return *sc_lazy_kernel_event(&m_change_event_p,"value_changed_event");
+}
+
+template< sc_writer_policy POL >
+const sc_event&
+sc_signal<bool,POL>::posedge_event() const
+{
+    return *sc_lazy_kernel_event(&m_posedge_event_p,"posedge_event");
+}
+
+template< sc_writer_policy POL >
+const sc_event&
+sc_signal<bool,POL>::negedge_event() const
+{
+    return *sc_lazy_kernel_event(&m_negedge_event_p,"negedge_event");
+}
+
 
 // reset support:
 
@@ -279,6 +314,30 @@ sc_signal<sc_dt::sc_logic,POL>::update()
 	m_change_stamp = simcontext()->change_stamp();
     }
 }
+
+// (edge) event methods
+
+template< sc_writer_policy POL >
+const sc_event&
+sc_signal<sc_dt::sc_logic,POL>::value_changed_event() const
+{
+    return *sc_lazy_kernel_event(&m_change_event_p,"value_changed_event");
+}
+
+template< sc_writer_policy POL >
+const sc_event&
+sc_signal<sc_dt::sc_logic,POL>::posedge_event() const
+{
+    return *sc_lazy_kernel_event(&m_posedge_event_p,"posedge_event");
+}
+
+template< sc_writer_policy POL >
+const sc_event&
+sc_signal<sc_dt::sc_logic,POL>::negedge_event() const
+{
+    return *sc_lazy_kernel_event(&m_negedge_event_p,"negedge_event");
+}
+
 
 // template instantiations for writer policies
 
