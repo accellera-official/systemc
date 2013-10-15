@@ -49,8 +49,8 @@ SC_MODULE( proc1 )
 
   proc1( sc_module_name NAME,
 	 sc_signal<bool>& CLK )
-    : clk(CLK)
   {
+    clk(CLK);
     SC_THREAD( entry );
     sensitive << clk;
     obj1 = 0;
@@ -97,7 +97,7 @@ int sc_main(int ac, char *av[])
   sc_trace(tf, P1.obj2, "Short", 12);
   sc_trace(tf, P1.obj3, "Int", 14);
   sc_trace(tf, P1.obj4, "Long", 14);
-  sc_trace(tf, P1.obj5, "int64", 44);
+  sc_trace(tf, P1.obj5, "Int64", 44);
   sc_trace(tf, clock, "Clock");
 
   clock.write(0);

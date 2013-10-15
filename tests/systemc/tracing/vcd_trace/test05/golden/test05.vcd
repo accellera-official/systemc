@@ -8,7 +8,7 @@ $var wire    4  aaa  Char [3:0]  $end
 $var wire   12  aab  Short [11:0]  $end
 $var wire   14  aac  Int [13:0]  $end
 $var wire   14  aad  Long [13:0]  $end
-$var wire   44  aae  Long [43:0]  $end
+$var wire   44  aae  Int64 [43:0]  $end
 $var wire    1  aaf  Clock       $end
 $upscope $end
 $enddefinitions  $end

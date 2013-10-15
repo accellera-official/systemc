@@ -10,7 +10,7 @@ declare  O2   "Int"  BIT  0 13 variable ;
 start_trace O2 ;
 declare  O3   "Long"  BIT  0 13 variable ;
 start_trace O3 ;
-declare  O4   "int64"  BIT  0 43 variable ;
+declare  O4   "Int64"  BIT  0 43 variable ;
 start_trace O4 ;
 declare  O5   "Clock"  BIT  variable ;
 start_trace O5 ;
