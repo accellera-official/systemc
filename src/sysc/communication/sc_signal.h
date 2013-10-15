@@ -167,7 +167,7 @@ public: // constructors and destructor:
 
 
     const T& get_new_value() const
-	{ return m_new_val; }
+        { sc_deprecated_get_new_value(); return m_new_val; }
 
 
     void trace( sc_trace_file* tf ) const
@@ -414,7 +414,7 @@ public: // constructors and destructor:
 
 
     const bool& get_new_value() const
-	{ return m_new_val; }
+	{ sc_deprecated_get_new_value(); return m_new_val; }
 
 
     void trace( sc_trace_file* tf ) const
@@ -606,7 +606,7 @@ public: // constructors and destructor:
 
 
     const sc_dt::sc_logic& get_new_value() const
-	{ return m_new_val; }
+        { sc_deprecated_get_new_value();  return m_new_val; }
 
 
     void trace( sc_trace_file* tf ) const
