@@ -62,6 +62,9 @@ public:
 	: base_type( name_ )
 	{}
 
+    sc_buffer( const char* name_, const T& initial_value_ )
+      : base_type( name_, initial_value_ )
+    {}
 
     // interface methods
 

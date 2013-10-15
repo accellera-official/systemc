@@ -94,6 +94,13 @@ public: // constructors and destructor:
 	  m_change_stamp( ~sc_dt::UINT64_ONE ), m_new_val( T() )
     {}
 
+    sc_signal( const char* name_, const T& initial_value_ )
+      : sc_prim_channel( name_ )
+      , m_change_event_p( 0 )
+      , m_cur_val( initial_value_ )
+      , m_change_stamp( ~sc_dt::UINT64_ONE )
+      , m_new_val( initial_value_ )
+    {}
 
     virtual ~sc_signal()
 	{
@@ -307,6 +314,17 @@ public: // constructors and destructor:
           m_reset_p( 0 )
 	{}
 
+    sc_signal( const char* name_, bool initial_value_ )
+      : sc_prim_channel( name_ )
+      , m_change_event_p( 0 )
+      , m_cur_val( initial_value_ )
+      , m_change_stamp( ~sc_dt::UINT64_ONE )
+      , m_negedge_event_p( 0 )
+      , m_new_val( initial_value_ )
+      , m_posedge_event_p( 0 )
+      , m_reset_p( 0 )
+    {}
+
     virtual ~sc_signal();
 
 
@@ -456,6 +474,16 @@ public: // constructors and destructor:
 	  m_new_val(),
 	  m_posedge_event_p( 0 )
 	{}
+
+    sc_signal( const char* name_, sc_dt::sc_logic initial_value_ )
+      : sc_prim_channel( name_ )
+      , m_change_event_p( 0 )
+      , m_cur_val( initial_value_ )
+      , m_change_stamp( ~sc_dt::UINT64_ONE )
+      , m_negedge_event_p( 0 )
+      , m_new_val( initial_value_ )
+      , m_posedge_event_p( 0 )
+    {}
 
     virtual ~sc_signal()
 	{
