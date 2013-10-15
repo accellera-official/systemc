@@ -117,10 +117,7 @@ void
 sc_buffer<T,POL>::update()
 {
     base_type::policy_type::update();
-    this->m_cur_val = this->m_new_val;
-    if ( base_type::m_change_event_p )
-        base_type::m_change_event_p->notify(SC_ZERO_TIME);
-    this->m_change_stamp = base_type::simcontext()->change_stamp();
+    base_type::do_update();
 }
 
 } // namespace sc_core

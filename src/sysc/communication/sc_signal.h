@@ -177,6 +177,7 @@ public: // constructors and destructor:
 protected:
 
     virtual void update();
+            void do_update();
 
 protected:
 
@@ -250,12 +251,18 @@ sc_signal<T,POL>::update()
 {
     policy_type::update();
     if( !( m_new_val == m_cur_val ) ) {
-	m_cur_val = m_new_val;
-	if ( m_change_event_p ) m_change_event_p->notify_next_delta();
-	m_change_stamp = simcontext()->change_stamp();
+        do_update();
     }
 }
 
+template< class T, sc_writer_policy POL >
+void
+sc_signal<T,POL>::do_update()
+{
+    m_cur_val = m_new_val;
+    if ( m_change_event_p ) m_change_event_p->notify_next_delta();
+    m_change_stamp = simcontext()->change_stamp();
+}
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_signal<bool>
@@ -388,6 +395,7 @@ public: // constructors and destructor:
 protected:
 
     virtual void update();
+            void do_update();
 
     virtual bool is_clock() const { return false; }
 
@@ -543,6 +551,7 @@ public: // constructors and destructor:
 protected:
 
     virtual void update();
+            void do_update();
 
 protected:
 
