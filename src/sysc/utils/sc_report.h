@@ -51,8 +51,6 @@ enum sc_severity {
     SC_MAX_SEVERITY
 };
 
-typedef unsigned sc_actions;
-
 // ----------------------------------------------------------------------------
 //  ENUM : sc_verbosity
 //
@@ -74,6 +72,8 @@ typedef unsigned sc_actions;
 //  Enumeration of actions on an exception (implementation specific)
 // ----------------------------------------------------------------------------
 
+typedef unsigned sc_actions;
+
 enum {
     SC_UNSPECIFIED  = 0x0000, // look for lower-priority rule
     SC_DO_NOTHING   = 0x0001, // take no action (ignore if other bits set)
@@ -83,7 +83,13 @@ enum {
     SC_CACHE_REPORT = 0x0010, // save report to cache
     SC_INTERRUPT    = 0x0020, // call sc_interrupt_here(...)
     SC_STOP         = 0x0040, // call sc_stop()
-    SC_ABORT        = 0x0080  // call abort()
+    SC_ABORT        = 0x0080, // call abort()
+
+    // default action constants
+    SC_DEFAULT_INFO_ACTIONS    = SC_LOG | SC_DISPLAY,
+    SC_DEFAULT_WARNING_ACTIONS = SC_LOG | SC_DISPLAY,
+    SC_DEFAULT_ERROR_ACTIONS   = SC_LOG | SC_CACHE_REPORT | SC_THROW,
+    SC_DEFAULT_FATAL_ACTIONS   = SC_LOG | SC_DISPLAY | SC_CACHE_REPORT | SC_ABORT
 };
 
 class sc_object;
@@ -179,16 +185,6 @@ public:  // backward compatibility with 2.0+
     int get_id() const;
 };
 typedef std::exception sc_exception;
-
-#define SC_DEFAULT_INFO_ACTIONS \
-   (::sc_core::SC_LOG | ::sc_core::SC_DISPLAY)
-#define SC_DEFAULT_WARNING_ACTIONS \
-   (::sc_core::SC_LOG | ::sc_core::SC_DISPLAY)
-#define SC_DEFAULT_ERROR_ACTIONS \
-   (::sc_core::SC_LOG | ::sc_core::SC_CACHE_REPORT | ::sc_core::SC_THROW)
-#define SC_DEFAULT_FATAL_ACTIONS \
-   (::sc_core::SC_LOG | ::sc_core::SC_DISPLAY | \
-    ::sc_core::SC_CACHE_REPORT | ::sc_core::SC_ABORT)
 
 
 // ----------------------------------------------------------------------------
