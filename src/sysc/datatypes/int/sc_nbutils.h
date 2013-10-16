@@ -87,9 +87,11 @@ is_valid_base(sc_numrep base)
     case SC_BIN_US: case SC_BIN_SM: 
     case SC_OCT_US: case SC_OCT_SM:
     case SC_HEX_US: case SC_HEX_SM:
+    case SC_CSD:
       SC_REPORT_ERROR( sc_core::SC_ID_NOT_IMPLEMENTED_,
 		       "is_valid_base( sc_numrep base ) : "
-		       "base ending in _US and _SM is not supported yet" );
+		       "bases SC_CSD, or ending in _US and _SM are not supported" );
+      break;
     default:
       char msg[BUFSIZ];
       std::sprintf( msg, "is_valid_base( sc_numrep base ) : "
