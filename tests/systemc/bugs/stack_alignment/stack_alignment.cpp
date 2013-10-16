@@ -69,9 +69,11 @@
 #endif
 
 #if defined(__GNUC__)
-#  define ALIGN( Align ) __attribute__((aligned(Align)))
+#  define ALIGNED_ARRAY( Type, Name, Size, Align ) \
+	  Type Name[Size] __attribute__((aligned(Align)))
 #elif defined(_MSC_VER)
-#  define ALIGN( Align ) __declspec(align(Align))
+#  define ALIGNED_ARRAY( Type, Name, Size, Align ) \
+      __declspec(align(Align)) Type Name[Size]
 #endif
 
 #if defined(__GNUC__) && ( defined(__x86_64__) || defined(__i386__) )
@@ -89,7 +91,7 @@ public:
     }
     void run(void) 
     { 
-        char fpxregs64[512+15] ALIGN(16);
+        ALIGNED_ARRAY( char, fpxregs64, 512+15, 16 );
 
         cout << "Inside C::run() " << endl; 
 
@@ -115,7 +117,7 @@ public:
 int sc_main(int , char** ) {
   C the_C("C");
 
-  char fpxregs64[512] ALIGN(16);
+  ALIGNED_ARRAY( char, fpxregs64, 512, 16 );
 
   cout << "Inside sc_main() " << endl; 
   ASM( FXSAVE " %0" : "=m"(fpxregs64) );
