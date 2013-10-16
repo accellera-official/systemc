@@ -256,7 +256,7 @@ sc_unsigned_subref::operator = ( double v )
     register int i = 0;
 
     while (floor(v) && (i < nd)) {
-#ifndef WIN32
+#ifndef _WIN32
 	d[i++] = (sc_digit) floor(remainder(v, DIGIT_RADIX));
 #else
 	d[i++] = (sc_digit) floor(fmod(v, DIGIT_RADIX));

@@ -68,7 +68,7 @@ const int MAX_NDIGITS      = DIV_CEIL(SC_MAX_NBITS) + 2;
 
 // Support for the long long type. This type is not in the standard
 // but is usually supported by compilers.
-#if !defined(WIN32) || defined(__MINGW32__)
+#if !defined(_WIN32) || defined(__MINGW32__)
 const uint64 UINT64_ZERO   = 0ULL;
 const uint64 UINT64_ONE    = 1ULL;
 const uint64 UINT64_32ONES = 0x00000000ffffffffULL;

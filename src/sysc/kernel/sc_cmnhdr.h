@@ -32,8 +32,8 @@
 
 // all windows 32-bit compilers should define WIN32
 
-#if defined( _MSC_VER ) || defined( __BORLANDC__ )
-#ifndef WIN32
+#if defined(_WIN32) || defined( _MSC_VER ) || defined( __BORLANDC__ )
+#if !defined(WIN32) && !defined(WIN64) && !defined(_WIN64)
 #define WIN32
 #endif
 #endif

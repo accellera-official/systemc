@@ -29,7 +29,8 @@
 #define SC_COR_FIBER_H
 
 
-#ifdef WIN32
+#if defined(_WIN32) || defined(WIN32) || defined(WIN64)
+
 #ifdef __GNUC__
 #   include <windows.h>
 #endif
@@ -47,6 +48,7 @@
 namespace sc_core {
 
 class sc_cor_pkg_fiber;
+typedef sc_cor_pkg_fiber sc_cor_pkg_t;
 
 #if( defined(_MSC_VER) && _MSC_VER >= 1300 )
 typedef std::size_t size_t;

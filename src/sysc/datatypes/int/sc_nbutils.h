@@ -567,7 +567,7 @@ from_uint(int ulen, sc_digit *u, Type v)
   register int i = 0;
 
   while (v && (i < ulen)) {
-#ifndef WIN32
+#ifndef _WIN32
     u[i++] = static_cast<sc_digit>( v & DIGIT_MASK );
 #else
     u[i++] = ((sc_digit) v) & DIGIT_MASK;

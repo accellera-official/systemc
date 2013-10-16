@@ -24,7 +24,7 @@
  CHANGE LOG APPEARS AT THE END OF THE FILE
  *****************************************************************************/
 
-#ifdef WIN32
+#if defined(_WIN32) || defined(WIN32) || defined(WIN64)
 
 
 #include "sysc/kernel/sc_cor_fiber.h"
@@ -64,7 +64,7 @@ static sc_cor_fiber* curr_cor;
 sc_cor_fiber::~sc_cor_fiber()
 {
     if( m_fiber != 0 ) {
-#     ifdef WIN32
+#     ifdef _WIN32
       PVOID cur_fiber = GetCurrentFiber();
       if (m_fiber != cur_fiber)
 #     endif

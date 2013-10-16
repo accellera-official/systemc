@@ -696,15 +696,7 @@ sc_simcontext::prepare_to_simulate()
     }
 
     // instantiate the coroutine package
-#   if defined(WIN32)
-        m_cor_pkg = new sc_cor_pkg_fiber( this );
-#   else
-#       if defined(SC_USE_PTHREADS)
-            m_cor_pkg = new sc_cor_pkg_pthread( this );
-#       else
-			m_cor_pkg = new sc_cor_pkg_qt( this );
-#       endif
-#   endif
+    m_cor_pkg = new sc_cor_pkg_t( this );
     m_cor = m_cor_pkg->get_main();
 
     // NOTIFY ALL OBJECTS THAT SIMULATION IS ABOUT TO START:

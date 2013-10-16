@@ -24,7 +24,7 @@
  CHANGE LOG APPEARS AT THE END OF THE FILE
  *****************************************************************************/
 
-#if !defined(WIN32) && !defined(SC_USE_PTHREADS)
+#if !defined(_WIN32) && !defined(WIN32) && !defined(SC_USE_PTHREADS)
 
 #include <unistd.h>
 #include <sys/mman.h>

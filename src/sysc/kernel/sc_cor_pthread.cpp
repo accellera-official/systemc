@@ -24,7 +24,7 @@
  CHANGE LOG APPEARS AT THE END OF THE FILE
  *****************************************************************************/
 
-#if !defined(WIN32) && defined(SC_USE_PTHREADS)
+#if !defined(_WIN32) && !defined(WIN32) && defined(SC_USE_PTHREADS)
 
 // ORDER OF THE INCLUDES AND namespace sc_core IS IMPORTANT!!!
 
@@ -281,7 +281,7 @@ sc_cor_pkg_pthread::get_main()
 
 } // namespace sc_core
 
-#endif // !defined(WIN32) && defined(SC_USE_PTHREADS)
+#endif // !defined(_WIN32) && !defined(WIN32) && defined(SC_USE_PTHREADS)
 
 
 // $Log: sc_cor_pthread.cpp,v $
