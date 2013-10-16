@@ -505,7 +505,7 @@ vec_copy(int n, sc_digit *u, const sc_digit *v)
   assert((n > 0) && (u != NULL) && (v != NULL));
 #endif
 
-  for (register int i = 0; i < n; ++i)
+  for (int i = 0; i < n; ++i)
     u[i] = v[i];
 }
 
@@ -537,9 +537,9 @@ vec_complement(int ulen, sc_digit *u)
   assert((ulen > 0) && (u != NULL));
 #endif
 
-  register sc_digit carry = 1;
+  sc_digit carry = 1;
 
-  for (register int i = 0; i < ulen; ++i) {
+  for (int i = 0; i < ulen; ++i) {
     carry += (~u[i] & DIGIT_MASK);
     u[i] = carry & DIGIT_MASK;
     carry >>= BITS_PER_DIGIT;
@@ -566,7 +566,7 @@ from_uint(int ulen, sc_digit *u, Type v)
   assert(v >= 0);
 #endif
 
-  register int i = 0;
+  int i = 0;
 
   while (v && (i < ulen)) {
 #ifndef _WIN32

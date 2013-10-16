@@ -253,7 +253,7 @@ sc_unsigned_subref::operator = ( double v )
     if (v < 0)
 	v = -v;
 
-    register int i = 0;
+    int i = 0;
 
     while (floor(v) && (i < nd)) {
 #ifndef _WIN32
