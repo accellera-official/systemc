@@ -145,15 +145,15 @@ case "$target" in
             ;;
         esac
         ;;
-    *freebsd*)
+    *freebsd* | dragonfly* | *netbsd* | openbsd*)
         case "$target_cpu" in
             x86_64 | amd64)
-                TARGET_ARCH="freebsd64"
+                TARGET_ARCH="bsd64"
                 CPU_ARCH=64
                 QT_ARCH="x86_64"
                 ;;
             i*86)
-                TARGET_ARCH="freebsd"
+                TARGET_ARCH="bsd"
                 CPU_ARCH=32
                 QT_ARCH="iX86"
                 ;;
