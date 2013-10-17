@@ -73,10 +73,8 @@ NO_H_FILES = \
 	sc_object_manager.h \
 	sc_reset.h \
 	sc_runnable_int.h \
-	sc_simcontext_int.h
+	sc_simcontext_int.h \
 	sc_thread_process.h 
-
-noinst_HEADERS = $(H_FILES)
 
 CXX_FILES = \
 	sc_attribute.cpp \
@@ -107,24 +105,9 @@ CXX_FILES = \
 	sc_wait.cpp \
 	sc_wait_cthread.cpp
 
-NO_CXX_FILES =
+localincludedir = $(includedir)/sysc/kernel
+nobase_localinclude_HEADERS = $(H_FILES)
 
-libkernel_la_SOURCES = $(H_FILES) $(CXX_FILES)
-
-INCLUDE_DIR = $(prefix)/include/sysc/kernel
-
-install-data-local:
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(INCLUDE_DIR)
-	for file in $(noinst_HEADERS); do \
-	  $(INSTALL_DATA) $(srcdir)/$$file $(INCLUDE_DIR)/$$file; \
-	done
-
-uninstall-local:
-	@$(NORMAL_UNINSTALL)
-	for file in $(noinst_HEADERS); do \
-	  rm -f $(INCLUDE_DIR)/$$file; \
-	done
-	-rmdir $(INCLUDE_DIR)
+libkernel_la_SOURCES = $(NO_H_FILES) $(CXX_FILES)
 
 ## Taf!

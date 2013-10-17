@@ -44,16 +44,12 @@ SUBDIRS = \
 
 H_FILES = 
 
-noinst_HEADERS = $(H_FILES)
-
 CXX_FILES =
 
-NO_CXX_FILES =
-
-INCLUDE_DIR = $(prefix)/include
+localincludedir = $(includedir)/sysc
+nobase_localinclude_HEADERS = $(H_FILES)
 
 libarchdir = $(libdir)$(LIB_ARCH_SUFFIX)
-
 libarch_LTLIBRARIES = libsystemc.la
 
 libsystemc_la_SOURCES =
@@ -77,19 +73,5 @@ libsystemc_la_LIBADD = \
        datatypes/misc/libmisc.la 
 
 libsystemc_la_LDFLAGS = -release $(VERSION) -L$(libarchdir)
-
-install-data-local:
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(INCLUDE_DIR)
-	for file in $(noinst_HEADERS); do \
-	  $(INSTALL_DATA) $(srcdir)/$$file $(INCLUDE_DIR)/$$file; \
-	done
-
-uninstall-local:
-	@$(NORMAL_UNINSTALL)
-	for file in $(noinst_HEADERS); do \
-	  rm -f $(INCLUDE_DIR)/$$file; \
-	done
-	-rmdir $(INCLUDE_DIR)
 
 ## Taf!

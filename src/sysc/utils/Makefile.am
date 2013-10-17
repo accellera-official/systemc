@@ -52,8 +52,6 @@ H_FILES = \
 NO_H_FILES = \
 	sc_stop_here.h
 
-noinst_HEADERS = $(H_FILES)
-
 CXX_FILES = \
 	sc_hash.cpp \
 	sc_list.cpp \
@@ -66,24 +64,9 @@ CXX_FILES = \
 	sc_utils_ids.cpp \
 	sc_vector.cpp
 
-NO_CXX_FILES =
+localincludedir = $(includedir)/sysc/utils
+nobase_localinclude_HEADERS = $(H_FILES)
 
-libutils_la_SOURCES = $(H_FILES) $(CXX_FILES)
-
-INCLUDE_DIR = $(prefix)/include/sysc/utils
-
-install-data-local:
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(INCLUDE_DIR)
-	for file in $(noinst_HEADERS); do \
-	  $(INSTALL_DATA) $(srcdir)/$$file $(INCLUDE_DIR)/$$file; \
-	done
-
-uninstall-local:
-	@$(NORMAL_UNINSTALL)
-	for file in $(noinst_HEADERS); do \
-	  rm -f $(INCLUDE_DIR)/$$file; \
-	done
-	-rmdir $(INCLUDE_DIR)
+libutils_la_SOURCES = $(NO_H_FILES) $(CXX_FILES)
 
 ## Taf!
