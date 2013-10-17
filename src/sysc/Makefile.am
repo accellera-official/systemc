@@ -52,6 +52,9 @@ nobase_localinclude_HEADERS = $(H_FILES)
 libarchdir = $(libdir)$(LIB_ARCH_SUFFIX)
 libarch_LTLIBRARIES = libsystemc.la
 
+pkgconfigdir = $(libarchdir)/pkgconfig
+pkgconfig_DATA = systemc.pc
+
 libsystemc_la_SOURCES =
 
 # dummy C++ source to cause C++ linking

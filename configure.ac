@@ -456,8 +456,26 @@ AM_CONDITIONAL([QT_ARCH_HPPA], [ test "${QT_ARCH}" = "hppa" ])
 AM_CONDITIONAL([QT_ARCH_PTHREADS], [ test "${QT_ARCH}" = "pthreads" ])
 
 dnl
+dnl pkg-config setup
+dnl
+PKGCONFIG_DEFINES=
+PKGCONFIG_CFLAGS=
+PKGCONFIG_LDPRIV=
+
+dnl add pthread (private) dependency
+#AM_COND_IF([USES_PTHREADS_LIB],[
+if test -z "${USES_PTHREADS_LIB_TRUE}" ; then
+  PKGCONFIG_CFLAGS="${PTHREAD_CFLAGS}"
+  PKGCONFIG_LDPRIV="${PTHREAD_LIBS} ${EXPLICIT_LPTHREAD}"
+fi
+#])
+
+dnl
 dnl Substitution variables.
 dnl
+AC_SUBST(PKGCONFIG_DEFINES)
+AC_SUBST(PKGCONFIG_CFLAGS)
+AC_SUBST(PKGCONFIG_LDPRIV)
 AC_SUBST(EXTRA_CXXFLAGS)
 AC_SUBST(EXTRA_CFLAGS)
 AC_SUBST(EXTRA_ASFLAGS)
@@ -476,6 +494,7 @@ AC_OUTPUT(
  Makefile 
  src/Makefile 
  src/sysc/Makefile 
+ src/sysc/systemc.pc
  src/sysc/communication/Makefile 
  src/sysc/datatypes/Makefile 
  src/sysc/kernel/Makefile 
