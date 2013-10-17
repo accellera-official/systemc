@@ -265,6 +265,23 @@ test "x$prefix" = xNONE && prefix=$srcdir
 current_dir=`pwd`; cd $prefix; prefix=`pwd`; cd $current_dir
 
 dnl
+dnl handle library arch suffix
+dnl
+LIB_ARCH_SUFFIX='-${TARGET_ARCH}'
+AC_MSG_CHECKING([for SystemC library arch suffix])
+AC_ARG_WITH([arch-suffix],
+  [AS_HELP_STRING([--with-arch-suffix],
+                  [add suffix to library installation directory @<:@default=-<target arch>@:>@])],
+  [case "x$withval" in
+     xyes)  with_arch_suffix=default ;;
+     xno|x) with_arch_suffix=no ; LIB_ARCH_SUFFIX="" ;;
+     *)     LIB_ARCH_SUFFIX="${withval}" ;;
+   esac],
+  [with_arch_suffix=default]
+) # AC_ARG_WITH archsuffix
+AC_MSG_RESULT($with_arch_suffix (TARGET_ARCH=${TARGET_ARCH}))
+
+dnl
 dnl add debugging symbols to library
 dnl
 AC_MSG_CHECKING([whether to add debug symbols to the SystemC library])
@@ -368,6 +385,7 @@ AC_SUBST(EXPLICIT_LPTHREAD)
 AC_SUBST(DEBUG_CXXFLAGS)
 AC_SUBST(OPT_CXXFLAGS)
 AC_SUBST(TARGET_ARCH)
+AC_SUBST(LIB_ARCH_SUFFIX)
 AC_SUBST(QT_ARCH)
 
 dnl

@@ -52,9 +52,9 @@ NO_CXX_FILES =
 
 INCLUDE_DIR = $(prefix)/include
 
-libdir = $(prefix)/lib-$(TARGET_ARCH)
+libarchdir = $(libdir)$(LIB_ARCH_SUFFIX)
 
-lib_LTLIBRARIES = libsystemc.la
+libarch_LTLIBRARIES = libsystemc.la
 
 libsystemc_la_SOURCES =
 
@@ -76,7 +76,7 @@ libsystemc_la_LIBADD = \
        datatypes/int/libint.la \
        datatypes/misc/libmisc.la 
 
-libsystemc_la_LDFLAGS = -release $(VERSION) -L$(prefix)/lib-$(TARGET_ARCH)
+libsystemc_la_LDFLAGS = -release $(VERSION) -L$(libarchdir)
 
 install-data-local:
 	@$(NORMAL_INSTALL)
@@ -84,9 +84,6 @@ install-data-local:
 	for file in $(noinst_HEADERS); do \
 	  $(INSTALL_DATA) $(srcdir)/$$file $(INCLUDE_DIR)/$$file; \
 	done
-	$(mkinstalldirs) $(prefix)/lib-$(TARGET_ARCH)
-	$(INSTALL_DATA) $(MAIN_LIBRARY) \
-	    $(prefix)/lib-$(TARGET_ARCH)/$(MAIN_LIBRARY)
 
 uninstall-local:
 	@$(NORMAL_UNINSTALL)
@@ -94,7 +91,5 @@ uninstall-local:
 	  rm -f $(INCLUDE_DIR)/$$file; \
 	done
 	-rmdir $(INCLUDE_DIR)
-	rm -f $(prefix)/lib-$(TARGET_ARCH)/$(MAIN_LIBRARY)
-	-rmdir $(prefix)/lib-$(TARGET_ARCH)
 
 ## Taf!
