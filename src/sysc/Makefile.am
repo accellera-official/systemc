@@ -67,10 +67,7 @@ libsystemc_la_LIBADD = \
        communication/libcommunication.la \
        tracing/libtracing.la \
        utils/libutils.la \
-       datatypes/bit/libbit.la \
-       datatypes/fx/libfx.la \
-       datatypes/int/libint.la \
-       datatypes/misc/libmisc.la 
+       datatypes/libdatatypes.la
 
 libsystemc_la_LDFLAGS = -release $(VERSION) -L$(libarchdir)
 

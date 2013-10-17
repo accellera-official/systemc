@@ -45,7 +45,7 @@ dnl
 dnl Some simple checks.
 dnl
 AC_CANONICAL_SYSTEM
-AM_INIT_AUTOMAKE([1.10 no-define]) # for .s file support of LIBTOOLFLAGS
+AM_INIT_AUTOMAKE([1.10 no-define subdir-objects]) # for .s file support of LIBTOOLFLAGS
 
 dnl
 dnl reset default compiler flags
@@ -474,10 +474,6 @@ AC_OUTPUT(
  src/sysc/Makefile 
  src/sysc/communication/Makefile 
  src/sysc/datatypes/Makefile 
- src/sysc/datatypes/bit/Makefile 
- src/sysc/datatypes/fx/Makefile 
- src/sysc/datatypes/int/Makefile 
- src/sysc/datatypes/misc/Makefile 
  src/sysc/kernel/Makefile 
  src/sysc/tracing/Makefile 
  src/sysc/qt/Makefile 
