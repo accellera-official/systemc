@@ -483,20 +483,7 @@ AC_OUTPUT(
  src/sysc/qt/Makefile 
  src/sysc/utils/Makefile 
  src/sysc/packages/boost/Makefile 
- src/tlm_core/tlm_1/tlm_analysis/Makefile
- src/tlm_core/tlm_1/Makefile
- src/tlm_core/tlm_1/tlm_req_rsp/tlm_channels/Makefile
- src/tlm_core/tlm_1/tlm_req_rsp/tlm_channels/tlm_req_rsp_channels/Makefile
- src/tlm_core/tlm_1/tlm_req_rsp/tlm_channels/tlm_fifo/Makefile
- src/tlm_core/tlm_1/tlm_req_rsp/Makefile
- src/tlm_core/tlm_1/tlm_req_rsp/tlm_ports/Makefile
- src/tlm_core/tlm_1/tlm_req_rsp/tlm_adapters/Makefile
- src/tlm_core/tlm_1/tlm_req_rsp/tlm_1_interfaces/Makefile
- src/tlm_core/tlm_2/tlm_2_interfaces/Makefile
- src/tlm_core/tlm_2/Makefile
- src/tlm_core/tlm_2/tlm_generic_payload/Makefile
- src/tlm_core/tlm_2/tlm_sockets/Makefile
- src/tlm_core/tlm_2/tlm_quantum/Makefile
+ src/tlm_core/Makefile
  src/tlm_utils/Makefile
  examples/Makefile 
  examples/sysc/Makefile 

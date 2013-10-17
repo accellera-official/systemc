@@ -35,8 +35,7 @@ include $(top_srcdir)/config/Make-rules.sysc
 # order of SUBDIRS is important, sysc needs to go first:
 SUBDIRS = \
 	sysc \
-	tlm_core/tlm_1 \
-	tlm_core/tlm_2 \
+	tlm_core  \
 	tlm_utils \
 	.
 
@@ -68,5 +67,8 @@ uninstall-local:
           rm -f $(INCLUDE_DIR)/$$file; \
         done
 	-rmdir $(INCLUDE_DIR)
+
+EXTRA_DIST += \
+	README_TLM.txt
 
 ## Taf!
