@@ -39,8 +39,6 @@ CXX_FILES = \
 
 forkjoin_SOURCES = $(CXX_FILES) $(H_FILES) README.txt
 
-forkjoin_LDADD = -L$(prefix)/lib-$(TARGET_ARCH) -lsystemc -lm
-
 check_PROGRAMS = forkjoin
 TESTS = $(check_PROGRAMS) 
 

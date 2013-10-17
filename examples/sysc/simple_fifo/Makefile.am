@@ -39,8 +39,6 @@ CXX_FILES = \
 
 simple_fifo_SOURCES = $(CXX_FILES) $(H_FILES)
 
-simple_fifo_LDADD = -L$(prefix)/lib-$(TARGET_ARCH) -lsystemc -lm
-
 check_PROGRAMS = simple_fifo
 TESTS = $(check_PROGRAMS) 
 

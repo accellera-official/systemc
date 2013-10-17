@@ -50,8 +50,6 @@ TESTS = $(check_PROGRAMS)
 
 specialized_signals_SOURCES = $(CXX_FILES) $(H_FILES)
 
-specialized_signals_LDADD = -L$(prefix)/lib-$(TARGET_ARCH) -lsystemc -lm
-
 specialized_signals_INSTALLS = $(specialized_signals_SOURCES) 
 
 

@@ -39,8 +39,6 @@ CXX_FILES = \
 
 rsa_SOURCES = $(CXX_FILES) $(H_FILES)
 
-rsa_LDADD = -L$(prefix)/lib-$(TARGET_ARCH) -lsystemc -lm
-
 check_PROGRAMS = rsa
 TESTS = $(check_PROGRAMS) 
 

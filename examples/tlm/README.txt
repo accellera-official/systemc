@@ -38,8 +38,8 @@ Other targets are:
 To run the makefiles the following environment needs to be set:
    On Unix/Linux/MacOS,
       $SYSTEMC_HOME should point to the SystemC installation
-      $TARGET_ARCH defines the appendix of the SystemC library directory
-      these should be set such that $SYSTEMC_HOME/lib-$TARGET_ARCH is a
+      $ARCH_SUFFIX defines the appendix of the SystemC library directory
+      these should be set such that $SYSTEMC_HOME/lib$ARCH_SUFFIX is a
       directory containing the SystemC library.
    On Windows, the SYSTEMC environment variable should be used.
 

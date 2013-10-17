@@ -1,9 +1,10 @@
 ## Variable that points to SystemC installation path
 SYSTEMC = ../../..
 
+ARCH_SUFFIX?=-$(TARGET_ARCH)
 
 INCDIR = -I. -I.. -I$(SYSTEMC)/include
-LIBDIR = -L. -L.. -L$(SYSTEMC)/lib-$(TARGET_ARCH)
+LIBDIR = -L. -L.. -L$(SYSTEMC)/lib$(ARCH_SUFFIX)
 
 LIBS   =  -lsystemc -lm $(EXTRA_LIBS)
 
@@ -12,7 +13,7 @@ EXE    = $(MODULE).x
 
 .SUFFIXES: .cc .cpp .o .x
 
-$(EXE): $(OBJS) $(SYSTEMC)/lib-$(TARGET_ARCH)/libsystemc.a 
+$(EXE): $(OBJS) $(SYSTEMC)/lib$(ARCH_SUFFIX)/libsystemc.a 
 	$(CC) $(CFLAGS) $(INCDIR) $(LIBDIR) -o $@ $(OBJS) $(LIBS) 2>&1 | c++filt
 
 .cpp.o:

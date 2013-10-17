@@ -51,16 +51,12 @@ FIR_CXX_FILES = \
 
 fir_SOURCES = $(COMMON_CXX_FILES) $(FIR_CXX_FILES) $(H_FILES)
 
-fir_LDADD = -L$(prefix)/lib-$(TARGET_ARCH) -lsystemc -lm
-
 FIR_RTL_CXX_FILES = \
 	fir_fsm.cpp \
 	fir_data.cpp \
 	main_rtl.cpp 
 
 fir_rtl_SOURCES = $(COMMON_CXX_FILES) $(FIR_RTL_CXX_FILES) $(H_FILES)
-
-fir_rtl_LDADD = -L$(prefix)/lib-$(TARGET_ARCH) -lsystemc -lm
 
 fir_INSTALLS = \
 	$(FIR_CXX_FILES) $(COMMON_CXX_FILES) $(FIR_RTL_CXX_FILES) $(H_FILES)

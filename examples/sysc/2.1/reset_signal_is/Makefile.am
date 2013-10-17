@@ -42,8 +42,6 @@ TESTS = $(check_PROGRAMS)
 
 reset_signal_is_SOURCES = $(CXX_FILES) $(H_FILES)
 
-reset_signal_is_LDADD = -L$(prefix)/lib-$(TARGET_ARCH) -lsystemc -lm
-
 reset_signal_is_INSTALLS = $(reset_signal_is_SOURCES) 
 
 

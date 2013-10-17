@@ -42,8 +42,6 @@ TESTS = $(check_PROGRAMS)
 
 scx_mutex_w_policy_SOURCES = $(CXX_FILES) $(H_FILES)
 
-scx_mutex_w_policy_LDADD = -L$(prefix)/lib-$(TARGET_ARCH) -lsystemc -lm
-
 scx_mutex_w_policy_INSTALLS = $(scx_mutex_w_policy_SOURCES) 
 
 

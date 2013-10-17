@@ -74,8 +74,6 @@ risc_cpu_EXTRAS = \
 
 risc_cpu_SOURCES = $(CXX_FILES) $(H_FILES)
 
-risc_cpu_LDADD = -L$(prefix)/lib-$(TARGET_ARCH) -lsystemc -lm
-
 check_PROGRAMS = risc_cpu
 TESTS = $(check_PROGRAMS) 
 

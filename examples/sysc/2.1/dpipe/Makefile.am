@@ -42,8 +42,6 @@ TESTS = $(check_PROGRAMS)
 
 dpipe_SOURCES = $(CXX_FILES) $(H_FILES)
 
-dpipe_LDADD = -L$(prefix)/lib-$(TARGET_ARCH) -lsystemc -lm
-
 dpipe_INSTALLS = $(dpipe_SOURCES) 
 
 
