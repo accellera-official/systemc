@@ -32,16 +32,6 @@
 
 include $(top_srcdir)/config/Make-rules.sysc
 
-SUBDIRS = \
-	bind \
-	config \
-	detail \
-	mpl \
-	utility \
-	.
-
-noinst_LTLIBRARIES =
-
 H_FILES = \
 	bind.hpp \
 	config.hpp \
@@ -49,22 +39,86 @@ H_FILES = \
 	mem_fn.hpp \
 	non_type.hpp \
 	ref.hpp \
-	type.hpp
+	type.hpp \
+	\
+	bind/apply.hpp \
+	bind/arg.hpp \
+	bind/bind_cc.hpp \
+	bind/bind_mf_cc.hpp \
+	bind/bind_template.hpp \
+	bind/make_adaptable.hpp \
+	bind/mem_fn_cc.hpp \
+	bind/mem_fn_template.hpp \
+	bind/mem_fn_vw.hpp \
+	bind/placeholders.hpp \
+	bind/protect.hpp \
+	\
+	config/compiler/borland.hpp \
+	config/compiler/comeau.hpp \
+	config/compiler/common_edg.hpp \
+	config/compiler/compaq_cxx.hpp \
+	config/compiler/digitalmars.hpp \
+	config/compiler/gcc.hpp \
+	config/compiler/greenhills.hpp \
+	config/compiler/hp_acc.hpp \
+	config/compiler/intel.hpp \
+	config/compiler/kai.hpp \
+	config/compiler/metrowerks.hpp \
+	config/compiler/mpw.hpp \
+	config/compiler/sgi_mipspro.hpp \
+	config/compiler/sunpro_cc.hpp \
+	config/compiler/vacpp.hpp \
+	config/compiler/visualc.hpp \
+	config/platform/aix.hpp \
+	config/platform/amigaos.hpp \
+	config/platform/beos.hpp \
+	config/platform/bsd.hpp \
+	config/platform/cygwin.hpp \
+	config/platform/hpux.hpp \
+	config/platform/irix.hpp \
+	config/platform/linux.hpp \
+	config/platform/macos.hpp \
+	config/platform/solaris.hpp \
+	config/platform/win32.hpp \
+	config/posix_features.hpp \
+	config/select_compiler_config.hpp \
+	config/select_platform_config.hpp \
+	config/select_stdlib_config.hpp \
+	config/stdlib/dinkumware.hpp \
+	config/stdlib/libcomo.hpp \
+	config/stdlib/libstdcpp3.hpp \
+	config/stdlib/modena.hpp \
+	config/stdlib/msl.hpp \
+	config/stdlib/roguewave.hpp \
+	config/stdlib/sgi.hpp \
+	config/stdlib/stlport.hpp \
+	config/stdlib/vacpp.hpp \
+	config/suffix.hpp \
+	config/user.hpp \
+	\
+	detail/endian.hpp \
+	detail/workaround.hpp \
+	\
+	mpl/aux_/adl_barrier.hpp \
+	mpl/aux_/config/adl.hpp \
+	mpl/aux_/config/gcc.hpp \
+	mpl/aux_/config/intel.hpp \
+	mpl/aux_/config/msvc.hpp \
+	mpl/aux_/config/static_constant.hpp \
+	mpl/aux_/config/workaround.hpp \
+	mpl/bool.hpp \
+	mpl/bool_fwd.hpp \
+	mpl/integral_c_tag.hpp \
+	\
+	utility/addressof.hpp \
+	utility/enable_if.hpp
 
-noinst_HEADERS = $(H_FILES)
 
-INCLUDE_DIR = $(prefix)/include/sysc/packages/boost
+EXTRA_DIST += \
+	LICENSE_1_0.txt
 
-install-data-local:
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(INCLUDE_DIR)
-	for file in $(noinst_HEADERS); do \
-	  $(INSTALL_DATA) $(srcdir)/$$file $(INCLUDE_DIR)/$$file; \
-	done
+localincludedir = $(includedir)/sysc/packages/boost
+nobase_localinclude_HEADERS = $(H_FILES)
 
-uninstall-local:
-	@$(NORMAL_UNINSTALL)
-	for file in $(noinst_HEADERS); do \
-	  rm -f $(INCLUDE_DIR)/$$file; \
-	done
-	-rmdir $(INCLUDE_DIR)
+
+## Taf!

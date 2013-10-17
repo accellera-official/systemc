@@ -38,7 +38,7 @@ SUBDIRS = \
 	communication \
 	tracing \
 	utils \
-	packages \
+	packages/boost \
 	datatypes \
 	.
 

@@ -482,18 +482,7 @@ AC_OUTPUT(
  src/sysc/tracing/Makefile 
  src/sysc/qt/Makefile 
  src/sysc/utils/Makefile 
- src/sysc/packages/Makefile 
  src/sysc/packages/boost/Makefile 
- src/sysc/packages/boost/bind/Makefile 
- src/sysc/packages/boost/config/Makefile 
- src/sysc/packages/boost/config/compiler/Makefile 
- src/sysc/packages/boost/config/platform/Makefile 
- src/sysc/packages/boost/config/stdlib/Makefile 
- src/sysc/packages/boost/mpl/Makefile 
- src/sysc/packages/boost/mpl/aux_/Makefile 
- src/sysc/packages/boost/mpl/aux_/config/Makefile 
- src/sysc/packages/boost/detail/Makefile 
- src/sysc/packages/boost/utility/Makefile 
  src/tlm_core/tlm_1/tlm_analysis/Makefile
  src/tlm_core/tlm_1/Makefile
  src/tlm_core/tlm_1/tlm_req_rsp/tlm_channels/Makefile
