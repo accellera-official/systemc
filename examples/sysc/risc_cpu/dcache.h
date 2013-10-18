@@ -63,7 +63,7 @@ struct dcache : sc_module {
         SC_CTHREAD(entry, CLK.pos());
 
 	// initialize instruction dmemory from external file
-	FILE *fp = fopen("dcache","r");
+	FILE *fp = fopen("dcache.img","r");
 	int size=0;
 	int i=0;
 	int mem_word;

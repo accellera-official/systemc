@@ -62,7 +62,7 @@ struct bios : sc_module {
         SC_CTHREAD(entry, CLK.pos());
 
 	// initialize instruction imemory from external file
-	FILE *fp = fopen("bios","r");
+	FILE *fp = fopen("bios.img","r");
 	int size=0;
 	int mem_word;
   	imemory 	= new unsigned[4000];

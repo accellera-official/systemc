@@ -66,7 +66,7 @@ struct icache : sc_module {
 
 	// initialize instruction icmemory from external file
 	pid = 0;
-	FILE *fp = fopen("icache","r");
+	FILE *fp = fopen("icache.img","r");
 	int size=0;
 	int mem_word;
   	icmemory 	= new unsigned[MAX_CODE_LENGTH];
