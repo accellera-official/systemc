@@ -61,22 +61,72 @@
 #ifndef SC_NBUTILS_H
 #define SC_NBUTILS_H
 
-
 #include <cmath>
 #include <limits>
 
 #include "sysc/datatypes/bit/sc_bit_ids.h"
 #include "sysc/datatypes/int/sc_int_ids.h"
 #include "sysc/datatypes/int/sc_nbdefs.h"
-#include "sysc/utils/sc_string.h"
 #include "sysc/utils/sc_report.h"
 
 
 namespace sc_dt
 {
 
+//-----------------------------------------------------------------------------
+//"sc_io_base"
+//
+// This inline function returns the type of an i/o stream's base as a SystemC
+// base designator.
+//   stream_object = reference to the i/o stream whose base is to be returned.
+//
+//"sc_io_show_base"
+//
+// This inline function returns true if the base should be shown when a SystemC
+// value is displayed via the supplied stream operator.
+//   stream_object = reference to the i/o stream to return showbase value for.
+//-----------------------------------------------------------------------------
+#if defined(__GNUC__) || defined(_MSC_VER)
+    inline sc_numrep
+    sc_io_base( systemc_ostream& os, sc_numrep def_base )
+    {
+        std::ios::fmtflags flags = os.flags() & std::ios::basefield;
+        if ( flags & ::std::ios::dec ) return  SC_DEC;
+        if ( flags & ::std::ios::hex ) return  SC_HEX;
+        if ( flags & ::std::ios::oct ) return  SC_OCT;
+        return def_base;
+    }
+
+    inline bool
+    sc_io_show_base( systemc_ostream& os )
+    {
+        return (os.flags() & ::std::ios::showbase) != 0 ;
+    }
+#else   // Other
+    inline sc_numrep
+    sc_io_base( systemc_ostream& /*unused*/, sc_numrep /*unused*/ )
+    {
+        return SC_DEC;
+    }
+    inline bool
+    sc_io_show_base( systemc_ostream& /*unused*/ )
+    {
+        return false;
+    }
+#endif
+
+const std::string to_string( sc_numrep );
+
 inline
-void
+systemc_ostream&
+operator << ( systemc_ostream& os, sc_numrep numrep )
+{
+    os << to_string( numrep );
+    return os;
+}
+
+// only used within vec_from_str (non-standard, deprecated)
+inline void
 is_valid_base(sc_numrep base)
 {
   switch (base) {
@@ -100,6 +150,8 @@ is_valid_base(sc_numrep base)
       SC_REPORT_ERROR( sc_core::SC_ID_VALUE_NOT_VALID_, msg );
   }
 }
+
+// ----------------------------------------------------------------------------
 
 // One transition of the FSM to find base and sign of a number.
 extern

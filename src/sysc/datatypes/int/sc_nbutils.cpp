@@ -64,6 +64,43 @@ namespace sc_dt
 {
 
 // ----------------------------------------------------------------------------
+//  ENUM : sc_numrep
+//
+//  Enumeration of number representations for character string conversion.
+// ----------------------------------------------------------------------------
+
+const std::string
+to_string( sc_numrep numrep )
+{
+    switch( numrep )
+    {
+#   define CASE_ENUM2STR( Value ) \
+      case Value: return #Value
+
+      CASE_ENUM2STR(SC_DEC);
+
+      CASE_ENUM2STR(SC_BIN);
+      CASE_ENUM2STR(SC_BIN_US);
+      CASE_ENUM2STR(SC_BIN_SM);
+
+      CASE_ENUM2STR(SC_OCT);
+      CASE_ENUM2STR(SC_OCT_US);
+      CASE_ENUM2STR(SC_OCT_SM);
+
+      CASE_ENUM2STR(SC_HEX);
+      CASE_ENUM2STR(SC_HEX_US);
+      CASE_ENUM2STR(SC_HEX_SM);
+
+      CASE_ENUM2STR(SC_CSD);
+
+#   undef CASE_ENUM2STR
+
+    default:
+      return "unknown";
+    }
+}
+
+// ----------------------------------------------------------------------------
 //  SECTION: General utility functions.
 // ----------------------------------------------------------------------------
 

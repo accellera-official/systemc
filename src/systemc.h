@@ -281,7 +281,6 @@ using sc_dt::sc_max;
 using sc_dt::sc_min;
 using sc_dt::sc_numrep;
 using sc_dt::sc_signed;
-using sc_dt::sc_string_old;
 using sc_dt::sc_uint;
 using sc_dt::sc_uint_base;
 using sc_dt::sc_unsigned;
@@ -372,6 +371,7 @@ using namespace sc_core;
 #endif // !defined( __HP_aCC )
 
 #ifdef SC_USE_SC_STRING_OLD
+	using   sc_dt::sc_string_old;
 	typedef sc_dt::sc_string_old sc_string;
 #endif
 #ifdef SC_USE_STD_STRING
