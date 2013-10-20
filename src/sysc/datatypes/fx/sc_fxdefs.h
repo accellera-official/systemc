@@ -49,7 +49,6 @@
 #include "sysc/utils/sc_machine.h"
 #include "sysc/datatypes/fx/sc_fx_ids.h"
 #include "sysc/datatypes/int/sc_nbutils.h"
-#include "sysc/utils/sc_string.h"
 
 
 namespace sc_dt
