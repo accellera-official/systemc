@@ -35,6 +35,10 @@
 
 // test of sc_dt::sc_string_old's pos() method -- star 124010
 
+#ifdef SC_USE_STD_STRING
+#   undef SC_USE_STD_STRING
+#endif
+#define SC_USE_SC_STRING_OLD
 #include "systemc.h"
 
 int
