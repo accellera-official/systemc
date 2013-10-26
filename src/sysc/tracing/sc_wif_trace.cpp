@@ -62,6 +62,7 @@
 #include <assert.h>
 #include <time.h>
 #include <cstdlib>
+#include <vector>
 
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_ver.h"
@@ -451,14 +452,19 @@ bool wif_sc_unsigned_trace::changed()
 
 void wif_sc_unsigned_trace::write(FILE* f)
 {
-    char buf[1000], *buf_ptr = buf;
+    static std::vector<char> buf(1024);
 
-    int bitindex;
-    for(bitindex = object.length() - 1; bitindex >= 0; --bitindex) {
+    if ( buf.size() < (size_t)object.length() ) {
+        size_t sz = ( (size_t)object.length() + 4096 ) & (~(size_t)(4096-1));
+        std::vector<char>( sz ).swap( buf ); // resize without copying values
+    }
+    char *buf_ptr = buf.data();
+
+    for(int bitindex = object.length() - 1; bitindex >= 0; --bitindex) {
         *buf_ptr++ = "01"[object[bitindex].to_bool()];
     }
     *buf_ptr = '\0';
-    std::fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf); 
+    std::fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf.data());
     old_value = object;
 }
 
@@ -501,15 +507,20 @@ bool wif_sc_signed_trace::changed()
 
 void wif_sc_signed_trace::write(FILE* f)
 {
-    char buf[1000], *buf_ptr = buf;
+    static std::vector<char> buf(1024);
 
-    int bitindex;
-    for(bitindex = object.length() - 1; bitindex >= 0; --bitindex) {
+    if ( buf.size() < (size_t)object.length() ) {
+        size_t sz = ( (size_t)object.length() + 4096 ) & (~(size_t)(4096-1));
+        std::vector<char>( sz ).swap( buf ); // resize without copying values
+    }
+    char *buf_ptr = buf.data();
+
+    for(int bitindex = object.length() - 1; bitindex >= 0; --bitindex) {
         *buf_ptr++ = "01"[object[bitindex].to_bool()];
     }
     *buf_ptr = '\0';
 
-    std::fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf); 
+    std::fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf.data());
     old_value = object;
 }
 
@@ -746,16 +757,21 @@ wif_sc_fxnum_trace::changed()
 void
 wif_sc_fxnum_trace::write( FILE* f )
 {
-    char buf[1000], *buf_ptr = buf;
+    static std::vector<char> buf(1024);
 
-    int bitindex;
-    for( bitindex = object.wl() - 1; bitindex >= 0; -- bitindex )
+    if ( buf.size() < (size_t)object.wl() ) {
+        size_t sz = ( (size_t)object.wl() + 4096 ) & (~(size_t)(4096-1));
+        std::vector<char>( sz ).swap( buf ); // resize without copying values
+    }
+    char *buf_ptr = buf.data();
+
+    for(int bitindex = object.wl() - 1; bitindex >= 0; --bitindex)
     {
         *buf_ptr ++ = "01"[object[bitindex]];
     }
     *buf_ptr = '\0';
 
-    std::fprintf( f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf );
+    std::fprintf( f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf.data());
     old_value = object;
 }
 
@@ -809,16 +825,21 @@ wif_sc_fxnum_fast_trace::changed()
 void
 wif_sc_fxnum_fast_trace::write( FILE* f )
 {
-    char buf[1000], *buf_ptr = buf;
+    static std::vector<char> buf(1024);
 
-    int bitindex;
-    for( bitindex = object.wl() - 1; bitindex >= 0; -- bitindex )
+    if ( buf.size() < (size_t)object.wl() ) {
+        size_t sz = ( (size_t)object.wl() + 4096 ) & (~(size_t)(4096-1));
+        std::vector<char>( sz ).swap( buf ); // resize without copying values
+    }
+    char *buf_ptr = buf.data();
+
+    for(int bitindex = object.wl() - 1; bitindex >= 0; --bitindex)
     {
         *buf_ptr ++ = "01"[object[bitindex]];
     }
     *buf_ptr = '\0';
 
-    std::fprintf( f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf );
+    std::fprintf( f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf.data());
     old_value = object;
 }
 

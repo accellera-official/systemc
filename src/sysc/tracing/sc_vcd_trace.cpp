@@ -52,6 +52,7 @@
 #include <assert.h>
 #include <time.h>
 #include <cstdlib>
+#include <vector>
 
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_ver.h"
@@ -455,17 +456,22 @@ vcd_sc_unsigned_trace::changed()
 void
 vcd_sc_unsigned_trace::write(FILE* f)
 {
-    char rawdata[1000], *rawdata_ptr = rawdata;
-    char compdata[1000];
+    static std::vector<char> comp(1024), raw(1024);
 
-    int bitindex;
-    for (bitindex = object.length() - 1; bitindex >= 0; --bitindex) {
+    if ( comp.size() < (size_t)object.length() ) {
+        size_t sz = ( (size_t)object.length() + 4096 ) & (~(size_t)(4096-1));
+        std::vector<char>( sz ).swap( comp ); // resize without copying values
+        std::vector<char>( sz ).swap( raw );
+    }
+    char *rawdata_ptr  = raw.data();
+
+    for (int bitindex = object.length() - 1; bitindex >= 0; --bitindex) {
         *rawdata_ptr++ = "01"[object[bitindex].to_bool()];
     }
     *rawdata_ptr = '\0';
-    compose_data_line(rawdata, compdata);
+    compose_data_line(raw.data(), comp.data());
 
-    std::fputs(compdata, f);
+    std::fputs(comp.data(), f);
     old_value = object;
 }
 
@@ -511,17 +517,22 @@ vcd_sc_signed_trace::changed()
 void
 vcd_sc_signed_trace::write(FILE* f)
 {
-    char rawdata[1000], *rawdata_ptr = rawdata;
-    char compdata[1000];
+    static std::vector<char> comp(1024), raw(1024);
 
-    int bitindex;
-    for (bitindex = object.length() - 1; bitindex >= 0; --bitindex) {
+    if ( comp.size() < (size_t)object.length() ) {
+        size_t sz = ( (size_t)object.length() + 4096 ) & (~(size_t)(4096-1));
+        std::vector<char>( sz ).swap( comp ); // resize without copying values
+        std::vector<char>( sz ).swap( raw );
+    }
+    char *rawdata_ptr  = raw.data();
+
+    for (int bitindex = object.length() - 1; bitindex >= 0; --bitindex) {
         *rawdata_ptr++ = "01"[object[bitindex].to_bool()];
     }
     *rawdata_ptr = '\0';
-    compose_data_line(rawdata, compdata);
+    compose_data_line(raw.data(), comp.data());
 
-    std::fputs(compdata, f);
+    std::fputs(comp.data(), f);
     old_value = object;
 }
 
@@ -773,18 +784,23 @@ vcd_sc_fxnum_trace::changed()
 void
 vcd_sc_fxnum_trace::write( FILE* f )
 {
-    char rawdata[1000], *rawdata_ptr = rawdata;
-    char compdata[1000];
+    static std::vector<char> comp(1024), raw(1024);
 
-    int bitindex;
-    for( bitindex = object.wl() - 1; bitindex >= 0; -- bitindex )
+    if ( comp.size() < (size_t)object.wl() ) {
+        size_t sz = ( (size_t)object.wl() + 4096 ) & (~(size_t)(4096-1));
+        std::vector<char>( sz ).swap( comp ); // resize without copying values
+        std::vector<char>( sz ).swap( raw );
+    }
+    char *rawdata_ptr  = raw.data();
+
+    for(int bitindex = object.wl() - 1; bitindex >= 0; -- bitindex )
     {
         *rawdata_ptr ++ = "01"[object[bitindex]];
     }
     *rawdata_ptr = '\0';
-    compose_data_line( rawdata, compdata );
+    compose_data_line( raw.data(), comp.data() );
 
-    std::fputs( compdata, f );
+    std::fputs( comp.data(), f );
     old_value = object;
 }
 
@@ -838,18 +854,23 @@ vcd_sc_fxnum_fast_trace::changed()
 void
 vcd_sc_fxnum_fast_trace::write( FILE* f )
 {
-    char rawdata[1000], *rawdata_ptr = rawdata;
-    char compdata[1000];
+    static std::vector<char> comp(1024), raw(1024);
 
-    int bitindex;
-    for( bitindex = object.wl() - 1; bitindex >= 0; -- bitindex )
+    if ( comp.size() < (size_t)object.wl() ) {
+        size_t sz = ( (size_t)object.wl() + 4096 ) & (~(size_t)(4096-1));
+        std::vector<char>( sz ).swap( comp ); // resize without copying values
+        std::vector<char>( sz ).swap( raw );
+    }
+    char *rawdata_ptr  = raw.data();
+
+    for(int bitindex = object.wl() - 1; bitindex >= 0; -- bitindex )
     {
         *rawdata_ptr ++ = "01"[object[bitindex]];
     }
     *rawdata_ptr = '\0';
-    compose_data_line( rawdata, compdata );
+    compose_data_line( raw.data(), comp.data() );
 
-    std::fputs( compdata, f );
+    std::fputs( comp.data(), f );
     old_value = object;
 }
 
