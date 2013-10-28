@@ -118,6 +118,72 @@ assign_v_( sc_proxy<X>& px, const T& a );
 const std::string convert_to_bin( const char* s );
 const std::string convert_to_fmt( const std::string& s, sc_numrep numrep, bool );
 
+// ----------------------------------------------------------------------------
+//  CLASS TEMPLATE : sc_proxy_traits
+//
+// Template traits helper to select the correct bit/value/vector_types for
+// sc_proxy-based vector classes.
+//
+// All types derived from/based on a bit-vector contain typedef to a plain bool,
+// all others point to the sc_logic_value_t/sc_logic/sc_lv_base types.
+// ----------------------------------------------------------------------------
+
+template<typename X> struct sc_proxy_traits;
+
+template<> struct sc_proxy_traits<sc_bv_base>
+{
+    typedef sc_proxy_traits<sc_bv_base> traits_type;
+    typedef bool                        value_type;
+    typedef bool                        bit_type;
+    typedef sc_bv_base                  vector_type;
+    typedef traits_type                 type;
+};
+
+template<> struct sc_proxy_traits<sc_lv_base>
+{
+    typedef sc_proxy_traits<sc_lv_base> traits_type;
+    typedef sc_logic_value_t            value_type;
+    typedef sc_logic                    bit_type;
+    typedef sc_lv_base                  vector_type;
+    typedef traits_type                 type;
+};
+
+
+template<typename X> struct sc_proxy_traits<sc_bitref_r<X> >
+  : sc_proxy_traits<X> {};
+
+template<typename X> struct sc_proxy_traits<sc_bitref<X> >
+  : sc_proxy_traits<X> {};
+
+
+template<typename X> struct sc_proxy_traits<sc_subref_r<X> >
+  : sc_proxy_traits<X> {};
+
+template<typename X> struct sc_proxy_traits<sc_subref<X> >
+  : sc_proxy_traits<X> {};
+
+
+template<typename X> struct sc_proxy_traits<sc_proxy<X> >
+  : sc_proxy_traits<X> {};
+
+
+template< typename X, typename Y > struct sc_mixed_proxy_traits_helper
+  : sc_proxy_traits<sc_lv_base> {}; // logic vector by default
+
+template<typename X> struct sc_mixed_proxy_traits_helper<X,X>
+  : X {};
+
+
+template<typename X, typename Y> struct sc_proxy_traits< sc_concref_r<X,Y> >
+  : sc_mixed_proxy_traits_helper< typename X::traits_type::type
+                                , typename Y::traits_type::type >
+{};
+
+template<typename X, typename Y> struct sc_proxy_traits<sc_concref<X,Y> >
+  : sc_mixed_proxy_traits_helper< typename X::traits_type::type
+                                , typename Y::traits_type::type >
+{};
+
 
 // ----------------------------------------------------------------------------
 //  CLASS TEMPLATE : sc_proxy
@@ -130,6 +196,8 @@ template <class X>
 class sc_proxy // #### : public sc_value_base
 {
 public:
+    typedef typename sc_proxy_traits<X>::type traits_type;
+    typedef typename traits_type::bit_type    bit_type;
 
     // virtual destructor
 
