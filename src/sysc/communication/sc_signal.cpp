@@ -124,6 +124,17 @@ void sc_deprecated_trace()
     }
 }
 
+sc_event*
+sc_lazy_kernel_event( sc_event** ev, const char* name )
+{
+    if ( !*ev ) {
+        std::string kernel_name = SC_KERNEL_EVENT_PREFIX "_";
+        kernel_name.append( name );
+        *ev = new sc_event( kernel_name.c_str() );
+    }
+    return *ev;
+
+}
 
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
@@ -177,20 +188,53 @@ sc_signal<bool,POL>::update()
 {
     policy_type::update();
     if( !( m_new_val == m_cur_val ) ) {
-        // order of execution below is important, the notify_processes() call
-        // must come after the update of m_cur_val for things to work properly!
-        m_cur_val = m_new_val;
-	if ( m_reset_p ) m_reset_p->notify_processes();
-
-        if ( m_change_event_p ) m_change_event_p->notify_next_delta();
-        if( m_cur_val ) {
-            if ( m_posedge_event_p ) m_posedge_event_p->notify_next_delta();
-        } else {
-            if ( m_negedge_event_p ) m_negedge_event_p->notify_next_delta();
-        }
-        m_change_stamp = simcontext()->change_stamp();
+        do_update();
     }
 }
+
+template< sc_writer_policy POL >
+void
+sc_signal<bool,POL>::do_update()
+{
+    // order of execution below is important, the notify_processes() call
+    // must come after the update of m_cur_val for things to work properly!
+
+    m_cur_val = m_new_val;
+
+    if ( m_reset_p ) m_reset_p->notify_processes();
+
+    if ( m_change_event_p ) m_change_event_p->notify_next_delta();
+
+    sc_event* event_p = this->m_cur_val
+                      ? m_posedge_event_p : m_negedge_event_p;
+    if ( event_p ) event_p->notify_next_delta();
+
+    m_change_stamp = simcontext()->change_stamp();
+}
+
+// (edge) event methods
+
+template< sc_writer_policy POL >
+const sc_event&
+sc_signal<bool,POL>::value_changed_event() const
+{
+    return *sc_lazy_kernel_event(&m_change_event_p,"value_changed_event");
+}
+
+template< sc_writer_policy POL >
+const sc_event&
+sc_signal<bool,POL>::posedge_event() const
+{
+    return *sc_lazy_kernel_event(&m_posedge_event_p,"posedge_event");
+}
+
+template< sc_writer_policy POL >
+const sc_event&
+sc_signal<bool,POL>::negedge_event() const
+{
+    return *sc_lazy_kernel_event(&m_negedge_event_p,"negedge_event");
+}
+
 
 // reset support:
 
@@ -269,16 +313,51 @@ sc_signal<sc_dt::sc_logic,POL>::update()
 {
     policy_type::update();
     if( !( m_new_val == m_cur_val ) ) {
-	m_cur_val = m_new_val;
-	if ( m_change_event_p ) m_change_event_p->notify_next_delta();
-	if( m_posedge_event_p && (m_cur_val == sc_dt::SC_LOGIC_1) ) {
-	    m_posedge_event_p->notify_next_delta();
-	} else if( m_negedge_event_p && (m_cur_val == sc_dt::SC_LOGIC_0) ) {
-	    m_negedge_event_p->notify_next_delta();
-	}
-	m_change_stamp = simcontext()->change_stamp();
+        do_update();
     }
 }
+
+template< sc_writer_policy POL >
+void
+sc_signal<sc_dt::sc_logic,POL>::do_update()
+{
+    m_cur_val = m_new_val;
+
+    if ( m_change_event_p ) m_change_event_p->notify_next_delta();
+
+    if( m_posedge_event_p && (this->m_cur_val == sc_dt::SC_LOGIC_1) ) {
+        m_posedge_event_p->notify_next_delta();
+    }
+    else if( m_negedge_event_p && (this->m_cur_val == sc_dt::SC_LOGIC_0) ) {
+        m_negedge_event_p->notify_next_delta();
+    }
+
+    m_change_stamp = simcontext()->change_stamp();
+}
+
+// (edge) event methods
+
+template< sc_writer_policy POL >
+const sc_event&
+sc_signal<sc_dt::sc_logic,POL>::value_changed_event() const
+{
+    return *sc_lazy_kernel_event(&m_change_event_p,"value_changed_event");
+}
+
+template< sc_writer_policy POL >
+const sc_event&
+sc_signal<sc_dt::sc_logic,POL>::posedge_event() const
+{
+    return *sc_lazy_kernel_event(&m_posedge_event_p,"posedge_event");
+}
+
+template< sc_writer_policy POL >
+const sc_event&
+sc_signal<sc_dt::sc_logic,POL>::negedge_event() const
+{
+    return *sc_lazy_kernel_event(&m_negedge_event_p,"negedge_event");
+}
+
 
 // template instantiations for writer policies
 

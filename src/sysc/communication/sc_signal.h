@@ -46,6 +46,7 @@ namespace sc_core {
 extern void sc_deprecated_get_data_ref();
 extern void sc_deprecated_get_new_value();
 extern void sc_deprecated_trace();
+extern sc_event * sc_lazy_kernel_event( sc_event**, const char* name );
 
 inline
 bool
@@ -93,6 +94,13 @@ public: // constructors and destructor:
 	  m_change_stamp( ~sc_dt::UINT64_ONE ), m_new_val( T() )
     {}
 
+    sc_signal( const char* name_, const T& initial_value_ )
+      : sc_prim_channel( name_ )
+      , m_change_event_p( 0 )
+      , m_cur_val( initial_value_ )
+      , m_change_stamp( ~sc_dt::UINT64_ONE )
+      , m_new_val( initial_value_ )
+    {}
 
     virtual ~sc_signal()
 	{
@@ -109,28 +117,14 @@ public: // constructors and destructor:
 
     // get the default event
     virtual const sc_event& default_event() const
-	{ 
-	    if ( !m_change_event_p ) 
-	    {
-	        m_change_event_p = new sc_event( 
-		    (std::string(SC_KERNEL_EVENT_PREFIX)+
-		    "_value_changed_event").c_str());; 
-	    }
-	    return *m_change_event_p; 
-	}
-
+      { return value_changed_event(); }
 
     // get the value changed event
     virtual const sc_event& value_changed_event() const
-	{ 
-	    if ( !m_change_event_p ) 
-	    {
-	        m_change_event_p = new sc_event( 
-		    (std::string(SC_KERNEL_EVENT_PREFIX)+
-		    "_value_changed_event").c_str());; 
-	    }
-	    return *m_change_event_p; 
-	}
+    {
+        return *sc_lazy_kernel_event( &m_change_event_p
+                                    , "value_changed_event");
+    }
 
 
     // read the current value
@@ -167,7 +161,7 @@ public: // constructors and destructor:
 
 
     const T& get_new_value() const
-	{ return m_new_val; }
+        { sc_deprecated_get_new_value(); return m_new_val; }
 
 
     void trace( sc_trace_file* tf ) const
@@ -190,6 +184,7 @@ public: // constructors and destructor:
 protected:
 
     virtual void update();
+            void do_update();
 
 protected:
 
@@ -263,12 +258,18 @@ sc_signal<T,POL>::update()
 {
     policy_type::update();
     if( !( m_new_val == m_cur_val ) ) {
-	m_cur_val = m_new_val;
-	if ( m_change_event_p ) m_change_event_p->notify_next_delta();
-	m_change_stamp = simcontext()->change_stamp();
+        do_update();
     }
 }
 
+template< class T, sc_writer_policy POL >
+void
+sc_signal<T,POL>::do_update()
+{
+    m_cur_val = m_new_val;
+    if ( m_change_event_p ) m_change_event_p->notify_next_delta();
+    m_change_stamp = simcontext()->change_stamp();
+}
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_signal<bool>
@@ -313,6 +314,17 @@ public: // constructors and destructor:
           m_reset_p( 0 )
 	{}
 
+    sc_signal( const char* name_, bool initial_value_ )
+      : sc_prim_channel( name_ )
+      , m_change_event_p( 0 )
+      , m_cur_val( initial_value_ )
+      , m_change_stamp( ~sc_dt::UINT64_ONE )
+      , m_negedge_event_p( 0 )
+      , m_new_val( initial_value_ )
+      , m_posedge_event_p( 0 )
+      , m_reset_p( 0 )
+    {}
+
     virtual ~sc_signal();
 
 
@@ -325,52 +337,16 @@ public: // constructors and destructor:
 
     // get the default event
     virtual const sc_event& default_event() const
-	{ 
-	    if ( !m_change_event_p ) 
-	    {
-	        m_change_event_p = new sc_event(
-		    (std::string(SC_KERNEL_EVENT_PREFIX)+
-		    "_value_changed_event").c_str());; 
-	    }
-	    return *m_change_event_p; 
-	}
-
+        { return value_changed_event(); }
 
     // get the value changed event
-    virtual const sc_event& value_changed_event() const
-	{ 
-	    if ( !m_change_event_p ) 
-	    {
-	        m_change_event_p = new sc_event( 
-		    (std::string(SC_KERNEL_EVENT_PREFIX)+
-		    "_value_changed_event").c_str());; 
-	    }
-	    return *m_change_event_p; 
-	}
+    virtual const sc_event& value_changed_event() const;
 
     // get the positive edge event
-    virtual const sc_event& posedge_event() const
-	{ 
-	    if ( !m_posedge_event_p )
-	    {
-	        m_posedge_event_p = new sc_event(
-		    (std::string(SC_KERNEL_EVENT_PREFIX)+
-		    "_posedge_event").c_str());; 
-	    }
-	    return *m_posedge_event_p; 
-	}
+    virtual const sc_event& posedge_event() const;
 
     // get the negative edge event
-    virtual const sc_event& negedge_event() const
-	{ 
-	    if ( !m_negedge_event_p )
-	    {
-	        m_negedge_event_p = new sc_event(
-		    (std::string(SC_KERNEL_EVENT_PREFIX)+
-		    "_negedge_event").c_str());; 
-	    }
-	    return *m_negedge_event_p; 
-	}
+    virtual const sc_event& negedge_event() const;
 
 
     // read the current value
@@ -414,7 +390,7 @@ public: // constructors and destructor:
 
 
     const bool& get_new_value() const
-	{ return m_new_val; }
+	{ sc_deprecated_get_new_value(); return m_new_val; }
 
 
     void trace( sc_trace_file* tf ) const
@@ -437,6 +413,7 @@ public: // constructors and destructor:
 protected:
 
     virtual void update();
+            void do_update();
 
     virtual bool is_clock() const { return false; }
 
@@ -498,6 +475,16 @@ public: // constructors and destructor:
 	  m_posedge_event_p( 0 )
 	{}
 
+    sc_signal( const char* name_, sc_dt::sc_logic initial_value_ )
+      : sc_prim_channel( name_ )
+      , m_change_event_p( 0 )
+      , m_cur_val( initial_value_ )
+      , m_change_stamp( ~sc_dt::UINT64_ONE )
+      , m_negedge_event_p( 0 )
+      , m_new_val( initial_value_ )
+      , m_posedge_event_p( 0 )
+    {}
+
     virtual ~sc_signal()
 	{
 	    delete m_change_event_p;
@@ -515,52 +502,16 @@ public: // constructors and destructor:
 
     // get the default event
     virtual const sc_event& default_event() const
-	{ 
-	    if ( !m_change_event_p ) 
-	    {
-	        m_change_event_p = new sc_event( 
-		    (std::string(SC_KERNEL_EVENT_PREFIX)+
-		    "_value_changed_event").c_str());; 
-	    }
-	    return *m_change_event_p; 
-	}
-
+        { return value_changed_event(); }
 
     // get the value changed event
-    virtual const sc_event& value_changed_event() const
-	{ 
-	    if ( !m_change_event_p ) 
-	    {
-	        m_change_event_p = new sc_event( 
-		    (std::string(SC_KERNEL_EVENT_PREFIX)+
-		    "_value_changed_event").c_str());; 
-	    }
-	    return *m_change_event_p; 
-	}
+    virtual const sc_event& value_changed_event() const;
 
     // get the positive edge event
-    virtual const sc_event& posedge_event() const
-	{ 
-	    if ( !m_posedge_event_p )
-	    {
-	        m_posedge_event_p = new sc_event(
-		    (std::string(SC_KERNEL_EVENT_PREFIX)+
-		    "_posedge_event").c_str());; 
-	    }
-	    return *m_posedge_event_p; 
-	}
+    virtual const sc_event& posedge_event() const;
 
     // get the negative edge event
-    virtual const sc_event& negedge_event() const
-	{ 
-	    if ( !m_negedge_event_p )
-	    {
-	        m_negedge_event_p = new sc_event(
-		    (std::string(SC_KERNEL_EVENT_PREFIX)+
-		    "_negedge_event").c_str());; 
-	    }
-	    return *m_negedge_event_p; 
-	}
+    virtual const sc_event& negedge_event() const;
 
 
     // read the current value
@@ -606,7 +557,7 @@ public: // constructors and destructor:
 
 
     const sc_dt::sc_logic& get_new_value() const
-	{ return m_new_val; }
+        { sc_deprecated_get_new_value();  return m_new_val; }
 
 
     void trace( sc_trace_file* tf ) const
@@ -628,6 +579,7 @@ public: // constructors and destructor:
 protected:
 
     virtual void update();
+            void do_update();
 
 protected:
 
