@@ -1,8 +1,9 @@
 
         DEFS = $(EXTRA_DEFINES)
 # top-level SystemC include directory is added in Make-rules.{sysc,examples}
-    INCLUDES =
 MAIN_LIBRARY = libsystemc.la
+
+ AM_CPPFLAGS =
 
     AM_CFLAGS=$(EXTRA_CXXFLAGS) \
               $(EXTRA_CFLAGS)
@@ -25,7 +26,7 @@ endif
 if USES_PTHREADS_LIB
     AM_CFLAGS+=$(PTHREAD_CFLAGS)
   AM_CXXFLAGS+=$(PTHREAD_CFLAGS)
-         LIBS+=$(PTHREAD_LIBS)
+   AM_LDFLAGS=$(PTHREAD_LIBS)
 endif
 
 # always add fix-point support

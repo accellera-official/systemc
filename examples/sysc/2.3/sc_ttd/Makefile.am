@@ -40,7 +40,7 @@ H_FILES =
 check_PROGRAMS = sc_ttd
 TESTS = $(check_PROGRAMS) 
 
-INCLUDES += -I../include
+AM_CPPFLAGS += -I../include
 
 sc_ttd_SOURCES = $(CXX_FILES) $(H_FILES)
 
