@@ -824,6 +824,8 @@ Usage: $0 [<options>] <directories|names>
       -f <file>    Use file to supply tests.
       -g           Compile tests with debug flag.
       -I <dir>     Additional include directory (may be added multiple times).
+      -L <dir>     Additional linker directory (may be added multiple times).
+      -l <libname> Additional library to link (may be added mutliple times).
       -m           Send mail with results.
       -o <opts>    Additional (custom) compiler options.
       -O           Compile tests with optimize flag.
@@ -905,6 +907,20 @@ sub parse_args
             if( $arg =~ /^-I/ ) {
                 $arg = shift @arglist;
                 push @rt_add_includes, $arg;
+                next;
+            }
+
+            # add linker directory
+            if( $arg =~ /^-L/ ) {
+                $arg = shift @arglist;
+                push @rt_add_ldpaths, $arg;
+                next;
+            }
+
+            # add library to link
+            if( $arg =~ /^-l/ ) {
+                $arg = shift @arglist;
+                push @rt_add_ldlibs, $arg;
                 next;
             }
 
