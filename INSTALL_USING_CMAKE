@@ -1,0 +1,176 @@
+
+
+ Install Notes for SystemC Using CMake to Configure the Build Process
+
+       Torsten Maehne, Université Pierre et Marie Curie, France
+                              2013-10-31
+
+
+Table of Contents
+=================
+
+1. Introduction
+2. Installation Steps
+
+
+1. Introduction
+===============
+
+The original autotools-based build system of the SystemC distribution
+only supports a limited number of OS/processor/compiler platforms and
+initially did not allow the compilation of shared libraries. This was
+the motivation to implement a more flexible configuration system for
+SystemC using CMake <http://www.cmake.org/>. Depending on the
+operating system, processor, compiler, and available dependency
+libraries, it can configure the sources and generate the necessary
+files to compile/install SystemC using GNU Make, Ninja or an IDE such as
+Eclipse, Xcode, MS Visual Studio C++, or Kdevelop.
+
+The CMake build scripts are compatible with CMake >2.8.5 and have been
+tested on the following OS/processor/compiler platforms:
+
+- Mac OS X >= 10.6 (GCC, Clang): i386, x86_64
+
+Currently untested, but considered by the build script (based on the
+autotools scripts) are:
+
+- Linux (GCC, Clang): i386, x86_64
+
+- Mac OS X 10.5, 10.6 (GCC, CLang): ppc, ppc64
+
+- Windows (Cygwin GCC, MingW32 GCC, Visual C++): x86, AMD64
+
+- Solaris (GCC and native compiler): sparc
+
+- HP-UX (GCC and native compiler): hppa
+
+The build process can be configured by the users through the
+configuration variables offered to the user in the CMake console and
+GUI (ccmake and cmake-gui, respectively). 
+
+CMake suggests to prefer out-of-source builds in contrast to in-source
+builds to clearly separate the source from the generated files. Thus,
+the build can be cleaned easily by deleting the build directory.
+
+
+2. Installation Steps
+=====================
+
+Typically, the following steps need to be followed to compile the
+sources using CMake:
+
+1.) Download and install CMake from <http://www.cmake.org/> (Linux
+distributions provide often a package). Note, the CMake script have been
+developed for CMake >= 2.8.5.
+
+2.) Create a build subdirectory:
+
+  $ pwd
+  .../systemc/
+  $ mkdir build
+
+3.) Launch the interactive cmake console program ccmake (on Unix) or
+the CMake GUI (Unix, Mac OS X, Windows) and specify the source
+(.../systemc) and build directory (.../systemc/build). For
+the console based ccmake, this is done by changing into the build
+directory and launching ccmake with the relative path to the source root
+directory as an argument:
+
+  $ cd build/
+  $ ccmake ..
+
+For cmake-gui, the same approach works:
+
+  $ cd build/
+  $ cmake-gui ..
+
+Alternatively, the CMake GUI allows to directly enter the paths to the
+sources and build directoy in the top of its main window.
+
+4.) Configure the sources by pressing 'c' or clicking on
+"Configure". Depending on the operating system, CMake will ask the user
+what it should generate Makefiles or IDE project files (Eclipse,
+Xcode, Kdevelop, MS Visual Studio C++). CMake will parse the file
+CMakeLists.txt in the source root directory and configure the sources
+accordingly carrying out all necessary platform-specific checks. 
+
+The CMake build scripts detect the actual features provided by the
+target (Unix or Windows) platform. On Unix (including OS X), shared
+libraries can be built. If the QuickThreads library provides support
+for the target processor, it will be automatically used. Otherwise, we
+rely on Pthreads on Unix and Fiber on Windows. By default, the SystemC
+library installation will follow the GNU standard installation layout
+so that also other SystemC libraries (SystemC, SCV, TLM, AMS
+extensions) can be installed into the same directory hierarchy (Unix:
+/opt/systemc/; Windows: $ENV{ProgramFiles}/SystemC/). The target
+platform's conventions are respected meaning usually include/ for the
+headers and lib/, lib64/, or lib/<multiarch-tuple>/ for the libraries.
+The lib-${SYSTEMC_TARGET_ARCH})/ convention is not used by default, as
+${SYSTEMC_TARGET_ARCH} does not reliably encode the
+OS/processor/compiler tuple.
+
+The build process can be configured through the configuration
+variables offered to the user in the CMake console and GUI (ccmake and
+cmake-gui, respectively). Each variable is annotated with a brief
+documentation string. The most important variables are:
+
+BUILD_EXAMPLES                Build the SystemC examples (default: OFF).
+
+BUILD_SHARED_LIBS             Build shared instead of static libraries
+                              (default: ON).
+
+BUILD_SOURCE_DOC              Build source code documentation using Doxygen
+                              (default: OFF).
+
+CMAKE_BUILD_TYPE              Build type (default: Release).
+
+CMAKE_OSX_ARCHITECTURES       Architectures for cross-compilation on Mac OS X
+                              (default: empty, i.e., only for the system
+                              processor).
+
+CMAKE_VERBOSE_MAKEFILE        Generate a verbose Makefile (default: OFF).
+
+QT_ARCH                       QuickThreads architecture (auto-detected:
+                              hppa, x86_64, i386, powerpc_mach,
+                              powerpc_sys5, IGNORE).
+
+SystemC_DIR                   Root directory of the SystemC libraries
+                              installation (default $SystemC_DIR,
+                              /opt/systemc/ (Unix, Cygwin, MSYS), or
+                              $ENV{ProgramFiles}/SystemC/ (MinGW and
+                              MS Visual Studio)). CMAKE_INSTALL_PREFIX will
+                              be set to its value.
+
+SYSTEMC_TARGET_ARCH           Target architecture according to the
+                              Accellera SystemC conventions set either from
+                              $ENV{SYSTEMC_TARGET_ARCH} or detected by CMake.
+
+SET_LIBDIR_WITH_TARGET_ARCH   Set the CMAKE_INSTALL_LIBDIR to
+                              lib-${SYSTEMC_TARGET_ARCH}/ and update
+                              CMAKE_INSTALL_FULL_LIBDIR accordingly.
+
+SUPPORT_ASYNC_REQUEST_UPDATE  Support async_request_update() of
+                              primitive channels (default: ON).
+
+WANT_PTHREADS_THREADS         Use POSIX threads to implement the SystemC
+                              coroutines instead of QuickThreads on Unix or
+                              Fiber on Windows (default: OFF).
+
+Other configuration variables will be proposed by CMake depending on the OS
+and detected processor, compiler, and libraries. For more information, please
+refer to the CMake documentation or <http://www.cmake.org/>.
+
+The configuration step needs to be repeated until no new configuration
+variables appear.
+
+5.) Generate the Makefiles or IDE project files by pressing 'g' or
+clicking on "Generate".
+
+6.) Compile, test, and install the libraries using make or the IDE:
+
+  $ make
+  $ make test
+  $ sudo make install
+
+More documentation on using CMake is available from the the CMake Wiki
+<http://www.cmake.org/Wiki/CMake>.
