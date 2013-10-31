@@ -30,7 +30,7 @@ Eclipse, Xcode, MS Visual Studio C++, or Kdevelop.
 The CMake build scripts are compatible with CMake >2.8.5 and have been
 tested on the following OS/processor/compiler platforms:
 
-- Mac OS X >= 10.6 (GCC, Clang): i386, x86_64
+- Mac OS X >= 10.5 (GCC, Clang): i386, x86_64, ppc
 
 - Linux (GCC, Clang): i386, x86_64
 
@@ -41,7 +41,7 @@ autotools scripts) are:
 
 - Linux (GCC, Clang): sparc, powerpc
 
-- Mac OS X 10.5, 10.6 (GCC, CLang): ppc, ppc64
+- Mac OS X <= 10.5 (GCC): ppc64
 
 - Windows (Cygwin GCC, MingW32 GCC, Visual C++): x86, AMD64
 

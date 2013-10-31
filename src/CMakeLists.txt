@@ -452,7 +452,7 @@ endif (APPLE)
 # Build rules for SystemC library
 ###############################################################################
 
-include_directories (BEFORE ${CMAKE_CURRENT_SOURCE_DIR})
+include_directories (BEFORE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/sysc/qt)
 add_library (systemc ${systemc_SOURCES} ${systemc_HEADERS} ${QT_SOURCES} ${QT_HEADERS})
 set_target_properties (systemc
                        PROPERTIES
