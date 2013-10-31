@@ -58,20 +58,20 @@
 # The CMake build scripts are compatible with CMake >2.8.5 and have been tested
 # on the following OS/processor/compiler platforms:
 #
-# - Mac OS X (>= 10.6): i386, x86_64 (GCC, Clang)
+# - Mac OS X >= 10.6 (GCC, Clang): i386, x86_64
 #
 # Currently untested, but considered by the build script (based on the
 # autotools scripts) are:
 #
-# - Linux: i386, x86_64
+# - Linux (GCC, Clang): i386, x86_64
 #
-# - Mac OS X: ppc, ppc64
+# - Mac OS X 10.5, 10.6 (GCC, CLang): ppc, ppc64
 #
-# - Windows (Cygwin, MingW32, Visual C++): x86, AMD64
+# - Windows (Cygwin GCC, MingW32 GCC, Visual C++): x86, AMD64
 #
-# - Solaris (gcc and native compiler): sparc
+# - Solaris (GCC and native compiler): sparc
 #
-# - HP-UX (gcc and native compiler): hppa
+# - HP-UX (GCC and native compiler): hppa
 #
 # The build process can be configured through the configuration variables
 # offered to the user in the CMake console and GUI (ccmake and cmake-gui,
@@ -114,7 +114,7 @@
 #                               CMAKE_INSTALL_FULL_LIBDIR accordingly.
 #
 # SUPPORT_ASYNC_REQUEST_UPDATE  Support async_request_update() of
-#                               primitive channels (default: ON).
+#                               primitive channels (default: TRUE).
 #
 # WANT_PTHREADS_THREADS         Use POSIX threads to implement the SystemC
 #                               coroutines instead of QuickThreads on Unix or
@@ -197,11 +197,14 @@ if (BUILD_EXAMPLES)
   enable_testing ()
 endif (BUILD_EXAMPLES)
 
+option (SUPPORT_ASYNC_REQUEST_UPDATE
+        "Support async_request_update() of primitive channels (default: TRUE)."
+        TRUE)
+
 option (WANT_PTHREADS_THREADS
         "Use POSIX threads to implement the SystemC coroutines instead
-of QuickThreads library on Unix or Fiber on Windows (default: FALSE)"
+of QuickThreads library on Unix or Fiber on Windows (default: FALSE)."
         FALSE)
-
 
 ###############################################################################
 # Set SYSTEMC_TARGET_ARCH and QT_ARCH depending on OS and processor type
@@ -520,6 +523,8 @@ if (APPLE)
   message (STATUS "CMAKE_OSX_DEPLOYMENT_TARGET = ${CMAKE_OSX_DEPLOYMENT_TARGET}")
   message (STATUS "CMAKE_OSX_SYSROOT = ${CMAKE_OSX_SYSROOT}")
 endif(APPLE)
+message (STATUS "Threads_FOUND = ${Threads_FOUND}")
+message (STATUS "CMAKE_USE_PTHREADS_INIT = ${CMAKE_USE_PTHREADS_INIT}")
 message (STATUS "------------------------------------------------------------------------")
 message (STATUS "CMAKE_INSTALL_PREFIX = ${CMAKE_INSTALL_PREFIX}")
 message (STATUS "CMAKE_INSTALL_DOCDIR = ${CMAKE_INSTALL_DOCDIR}")

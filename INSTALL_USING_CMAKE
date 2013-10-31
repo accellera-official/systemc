@@ -150,7 +150,7 @@ SET_LIBDIR_WITH_TARGET_ARCH   Set the CMAKE_INSTALL_LIBDIR to
                               CMAKE_INSTALL_FULL_LIBDIR accordingly.
 
 SUPPORT_ASYNC_REQUEST_UPDATE  Support async_request_update() of
-                              primitive channels (default: ON).
+                              primitive channels (default: TRUE).
 
 WANT_PTHREADS_THREADS         Use POSIX threads to implement the SystemC
                               coroutines instead of QuickThreads on Unix or
