@@ -267,7 +267,7 @@ if (NOT SYSTEMC_TARGET_ARCH)
   elseif (UNIX AND CMAKE_SYSTEM_NAME STREQUAL "Linux" AND HAS__powerpc_DEFINED)
     # Untested platform.
     set (_TARGET_ARCH "linuxppc")
-  elseif (UNIX AND CMAKE_SYSTEM_NAME STREQUAL "Linux" AND (HAS__sparc_DEFINED or HAS__sparc__DEFINED))
+  elseif (UNIX AND CMAKE_SYSTEM_NAME STREQUAL "Linux" AND (HAS__sparc_DEFINED OR HAS__sparc__DEFINED))
     # Untested platform.
     set (_TARGET_ARCH "linuxsparc")
   elseif (UNIX AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
@@ -280,13 +280,13 @@ if (NOT SYSTEMC_TARGET_ARCH)
   elseif (UNIX AND CMAKE_SYSTEM_NAME MATCHES ".*BSD" AND HAS__powerpc_DEFINED)
     # Untested platform.
     set (_TARGET_ARCH "bsdppc")
-  elseif (UNIX AND CMAKE_SYSTEM_NAME MATCHES ".*BSD" AND (HAS__sparc_DEFINED or HAS__sparc__DEFINED))
+  elseif (UNIX AND CMAKE_SYSTEM_NAME MATCHES ".*BSD" AND (HAS__sparc_DEFINED OR HAS__sparc__DEFINED))
     # Untested platform.
     set (_TARGET_ARCH "bsdsparc")
   elseif (UNIX AND CMAKE_SYSTEM_NAME STREQUAL ".*BSD")
     # Untested platform.
     set (_TARGET_ARCH "bsdunknown")
-  elseif (UNIX AND CMAKE_SYSTEM_NAME STREQUAL "SunOS" AND (HAS__sparc_DEFINED or HAS__sparc__DEFINED))
+  elseif (UNIX AND CMAKE_SYSTEM_NAME STREQUAL "SunOS" AND (HAS__sparc_DEFINED OR HAS__sparc__DEFINED))
     # Untested platform.
     set (_TARGET_ARCH "sparcOS5")
     if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
