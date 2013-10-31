@@ -60,10 +60,14 @@
 #
 # - Mac OS X >= 10.6 (GCC, Clang): i386, x86_64
 #
+# - Linux (GCC, Clang): i386, x86_64
+#
+# - Windows (MingW32 GCC + optionally MSYS): x86
+#
 # Currently untested, but considered by the build script (based on the
 # autotools scripts) are:
 #
-# - Linux (GCC, Clang): i386, x86_64
+# - Linux (GCC, Clang): sparc, powerpc
 #
 # - Mac OS X 10.5, 10.6 (GCC, CLang): ppc, ppc64
 #
