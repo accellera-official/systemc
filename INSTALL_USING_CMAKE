@@ -39,6 +39,8 @@ tested on the following OS/processor/compiler platforms:
 Currently untested, but considered by the build script (based on the
 autotools scripts) are:
 
+- *BSD (GCC, Clang): i386, x86_64
+
 - Linux (GCC, Clang): sparc, powerpc
 
 - Mac OS X <= 10.5 (GCC): ppc64

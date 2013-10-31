@@ -67,6 +67,8 @@
 # Currently untested, but considered by the build script (based on the
 # autotools scripts) are:
 #
+# - *BSD (GCC, Clang): i386, x86_64
+#
 # - Linux (GCC, Clang): sparc, powerpc
 #
 # - Mac OS X <= 10.5 (GCC): ppc64
@@ -281,12 +283,6 @@ if (NOT SYSTEMC_TARGET_ARCH)
     set (_TARGET_ARCH "bsd")
   elseif (UNIX AND CMAKE_SYSTEM_NAME MATCHES ".*BSD" AND HAS__x86_64__DEFINED)
     set (_TARGET_ARCH "bsd64")
-  elseif (UNIX AND CMAKE_SYSTEM_NAME MATCHES ".*BSD" AND HAS__powerpc_DEFINED)
-    # Untested platform.
-    set (_TARGET_ARCH "bsdppc")
-  elseif (UNIX AND CMAKE_SYSTEM_NAME MATCHES ".*BSD" AND (HAS__sparc_DEFINED OR HAS__sparc__DEFINED))
-    # Untested platform.
-    set (_TARGET_ARCH "bsdsparc")
   elseif (UNIX AND CMAKE_SYSTEM_NAME STREQUAL ".*BSD")
     # Untested platform.
     set (_TARGET_ARCH "bsdunknown")
