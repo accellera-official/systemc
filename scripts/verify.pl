@@ -756,7 +756,7 @@ sub prepare_environment
         $rt_cc              = "CL.EXE";
         $rt_ccflags         = "-nologo -GR -EHsc -Zm800 -vmg ";
         $rt_ccflags        .= "-MACHINE:X64" unless (!$x64);
-        push @rt_defines, '_USE_MATH:DEFINES';
+        push @rt_defines, '_USE_MATH_DEFINES';
         $rt_ld              = "LINK.EXE";
         $rt_ldflags         = "-nologo -LTCG -NODEFAULTLIB:LIBCD "
                              ."-SUBSYSTEM:CONSOLE ";
