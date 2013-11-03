@@ -167,19 +167,30 @@ cmake_minimum_required (VERSION 2.8.5)
 ###############################################################################
 
 project (SystemC CXX C)
-set (SystemC_MAJOR_VERSION 2)
-set (SystemC_MINOR_VERSION 3)
-set (SystemC_PATCH_VERSION 0)
-set (SystemC_VERSION "${SystemC_MAJOR_VERSION}.${SystemC_MINOR_VERSION}.${SystemC_PATCH_VERSION}")
-set (SystemC_SOVERSION "${SystemC_MAJOR_VERSION}.${SystemC_MINOR_VERSION}")
-set (SystemC_REVISION "2012-07-01")
+set (SystemC_VERSION_MAJOR 2)
+set (SystemC_VERSION_MINOR 3)
+set (SystemC_VERSION_PATCH 0)
+set (SystemC_VERSION_IS_PRERELEASE 1)
+set (SystemC_VERSION_PRERELEASE "pub_rev")
+set (SystemC_VERSION_RELEASE_DATE 20120701) # TODO: Extract date from commit.
+set (SystemC_VERSION "${SystemC_VERSION_MAJOR}.${SystemC_VERSION_MINOR}.${SystemC_VERSION_PATCH}")
+if (SystemC_IS_PRERELEASE)
+  set (SystemC_VERSION "${SystemC_VERSION}_${SystemC_VERSION_PRERELEASE}_${SystemC_VERSION_RELEASE_DATE}")
+endif (SystemC_IS_PRERELEASE)
+set (SystemC_SOVERSION "${SystemC_VERSION_MAJOR}.${SystemC_VERSION_MINOR}")
 
-set (SystemCTLM_MAJOR_VERSION 2)
-set (SystemCTLM_MINOR_VERSION 0)
-set (SystemCTLM_PATCH_VERSION 2)
-set (SystemCTLM_VERSION "${SystemCTLM_MAJOR_VERSION}.${SystemCTLM_MINOR_VERSION}.${SystemCTLM_PATCH_VERSION}")
+
+set (SystemCTLM_VERSION_MAJOR 2)
+set (SystemCTLM_VERSION_MINOR 0)
+set (SystemCTLM_VERSION_PATCH 2)
+set (SystemCTLM_VERSION_IS_PRERELEASE 1)
+set (SystemCTLM_VERSION_PRERELEASE "pub_rev")
+set (SystemCTLM_VERSION_RELEASE_DATE "20120511") # TODO: Extract date from commit.
+set (SystemCTLM_VERSION "${SystemCTLM_VERSION_MAJOR}.${SystemCTLM_VERSION_MINOR}.${SystemCTLM_VERSION_PATCH}")
+if (SystemCTLM_IS_PRERELEASE)
+  set (SystemCTLM_VERSION "${SystemCTLM_VERSION}_${SystemCTLM_VERSION_PRERELEASE}_${SystemCTLM_VERSION_RELEASE_DATE}")
+endif (SystemCTLM_IS_PRERELEASE)
 set (SystemCTLM_SOVERSION "${SystemCTLM_MAJOR_VERSION}.${SystemCTLM_MINOR_VERSION}")
-set (SystemCTLM_REVISION "2012-05-11")
 
 
 ###############################################################################
@@ -523,11 +534,12 @@ include (GNUInstallDirs)
 ###############################################################################
 
 message (STATUS "========================================================================")
-message (STATUS "Settings to build ${CMAKE_PROJECT_NAME}")
+message (STATUS "Settings to build SystemC ${SystemC_VERSION} (${SystemC_VERSION_RELEASE_DATE}) and TLM ${SystemCTLM_VERSION} (${SystemCTLM_VERSION_RELEASE_DATE})")
 message (STATUS "------------------------------------------------------------------------")
 message (STATUS "BUILD_EXAMPLES = ${BUILD_EXAMPLES}")
 message (STATUS "BUILD_SHARED_LIBS = ${BUILD_SHARED_LIBS}")
 message (STATUS "BUILD_SOURCE_DOC = ${BUILD_SOURCE_DOC}")
+message (STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
 message (STATUS "------------------------------------------------------------------------")
 message (STATUS "CMAKE_SYSTEM = ${CMAKE_SYSTEM}")
 message (STATUS "CMAKE_SYSTEM_PROCESSOR = ${CMAKE_SYSTEM_PROCESSOR}")
