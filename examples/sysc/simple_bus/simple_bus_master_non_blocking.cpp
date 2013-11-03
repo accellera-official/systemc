@@ -50,8 +50,8 @@ void simple_bus_master_non_blocking::main_action()
 	     (bus_port->get_status(m_unique_priority) != SIMPLE_BUS_ERROR))
 	wait();
       if (bus_port->get_status(m_unique_priority) == SIMPLE_BUS_ERROR)
-	sb_fprintf(stdout, "%g %s : ERROR cannot read from %x\n",
-		   sc_time_stamp().to_double(), name(), addr);
+	sb_fprintf(stdout, "%s %s : ERROR cannot read from %x\n",
+		   sc_time_stamp().to_string().c_str(), name(), addr);
 
       mydata += cnt;
       cnt++;
@@ -61,8 +61,8 @@ void simple_bus_master_non_blocking::main_action()
 	     (bus_port->get_status(m_unique_priority) != SIMPLE_BUS_ERROR))
 	wait();
       if (bus_port->get_status(m_unique_priority) == SIMPLE_BUS_ERROR)
-	sb_fprintf(stdout, "%g %s : ERROR cannot write to %x\n",
-		   sc_time_stamp().to_double(), name(), addr);
+	sb_fprintf(stdout, "%s %s : ERROR cannot write to %x\n",
+		   sc_time_stamp().to_string().c_str(), name(), addr);
  
       wait(m_timeout, SC_NS);
       wait(); // ... for the next rising clock edge

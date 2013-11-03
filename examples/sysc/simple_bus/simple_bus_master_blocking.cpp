@@ -48,8 +48,8 @@ void simple_bus_master_blocking::main_action()
       status = bus_port->burst_read(m_unique_priority, mydata, 
 				    m_address, mylength, m_lock);
       if (status == SIMPLE_BUS_ERROR)
-	sb_fprintf(stdout, "%g %s : blocking-read failed at address %x\n",
-		   sc_time_stamp().to_double(), name(), m_address);
+	sb_fprintf(stdout, "%s %s : blocking-read failed at address %x\n",
+		   sc_time_stamp().to_string().c_str(), name(), m_address);
 
       for (i = 0; i < mylength; ++i)
 	{
@@ -60,8 +60,8 @@ void simple_bus_master_blocking::main_action()
       status = bus_port->burst_write(m_unique_priority, mydata, 
 				     m_address, mylength, m_lock);
       if (status == SIMPLE_BUS_ERROR)
-	sb_fprintf(stdout, "%g %s : blocking-write failed at address %x\n",
-		   sc_time_stamp().to_double(), name(), m_address);
+	sb_fprintf(stdout, "%s %s : blocking-write failed at address %x\n",
+		   sc_time_stamp().to_string().c_str(), name(), m_address);
 
       wait(m_timeout, SC_NS);
     }
