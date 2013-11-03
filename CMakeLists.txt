@@ -153,6 +153,9 @@
 #   config/run_test_with_input.sh.in, used for the TLM examples execution, with
 #   a platform-independent solution.
 #
+# - Turn on the compiler warnings by default once SystemC is supposed to
+#   compile without any warnings on recent compiler versions.
+#
 ###############################################################################
 
 
@@ -419,6 +422,18 @@ endif (WANT_PTHREADS_THREADS OR NOT QT_ARCH OR (SUPPORT_ASYNC_REQUEST_UPDATE AND
 ###############################################################################
 
 add_definitions (-DSC_INCLUDE_FX)
+
+# # TODO: Turn on all compiler warnings once SystemC is supposed to compile without any.
+# #       (SystemC 2.3.0 still causes some warnings during compilation.)
+# # Set additional compiler flags for known compilers.
+# if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+#   if (NOT CMAKE_C_FLAGS)
+#     set (CMAKE_C_FLAGS "-Wall -Wextra" CACHE STRING "Flags used by the compiler during all build types." FORCE)
+#   endif (NOT CMAKE_C_FLAGS)
+#   if (NOT CMAKE_CXX_FLAGS)
+#     set (CMAKE_CXX_FLAGS "-Wall -Wextra" CACHE STRING "Flags used by the compiler during all build types." FORCE)
+#   endif (NOT CMAKE_CXX_FLAGS)
+# endif (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 
 if (APPLE)
   # On Mac OS X, the linker needs to be told that it's OK that _sc_main is an undefined symbol.
