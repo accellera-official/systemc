@@ -142,6 +142,8 @@
 #
 # - Configure the TLM version from within the build system.
 #
+# - Extract the release dates from the commit date.
+#
 # - Check whether preprocessor definitions WIN32, _LIB, _DEBUG, _CONSOLE, and
 #   NOGDI are necessary on WIN32 platforms (MSVC and MinGW).
 #

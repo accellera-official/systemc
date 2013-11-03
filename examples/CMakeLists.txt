@@ -44,10 +44,10 @@ if (NOT BUILD_EXAMPLES)
 endif (NOT BUILD_EXAMPLES)
 
 if (WIN32)
-  # Not sure, if these preprocessor definitions are strictly required
-  # to build console applications with Visual Studio
-  # Instead of _CONSOLE, _LIB may be more appropriate
-  # Maybe also WIN32, _WIN32, _WIN64 needs to be #defined to generate correct VC projects.
+  # Not sure, if these preprocessor definitions are strictly required to build
+  # console applications with Visual Studio. Instead of _CONSOLE, _LIB may be
+  # more appropriate. Maybe also WIN32, _WIN32, _WIN64 needs to be #defined to
+  # generate correct VS projects.
   #
   # Resources:
   # <http://social.msdn.microsoft.com/Forums/en-US/vclanguage/thread/9e45a760-f2b8-47b2-8b8c-dfeeb1b24c92/>.
