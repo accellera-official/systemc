@@ -13,6 +13,16 @@ Table of Contents
 
 2. Installation Steps
 
+3. Cross compilation
+
+   3.1 Cross Compilation for 32-bit on a 64-bit platform using GCC
+
+   3.2 Cross Compilation on OS X
+
+   3.3 Generic Cross Compilation to a Target System
+
+4. Ressources
+
 
 1. Introduction
 ===============
@@ -181,3 +191,138 @@ clicking on "Generate".
 
 More documentation on using CMake is available from the the CMake Wiki
 <http://www.cmake.org/Wiki/CMake>.
+
+
+3. Cross Compilation
+====================
+
+CMake supports cross compilation on a host system for a different
+target architecture. Depending on the scenario, different approaches
+can be 
+
+
+3.1 Cross Compilation for 32-bit on a 64-bit platform using GCC
+---------------------------------------------------------------
+
+This section is primarily relevant for users of 64-bit versions of
+Linux and Windows.
+
+On 64-bit platforms like Linux x86_64 and Windows AMD64, the OS
+provides usually for backward-compatability the capability to execute
+64-bit and 32-bit applications. To this end, it provides 32-bit and
+64-bit versions of all runtime libraries (on Linux, they can be
+usually found in the lib/ and lib64/ directories). On these platforms,
+the GCC toolchain is usually installed in a multilib variant, which
+supports the compilation and linking of 64-bit and 32-bit applications
+and libraries. The word width of the target architecture is simply
+chosen with the "-m64" or "-m32" option, which has to be consistently
+passed at each compiler and linker call.
+
+Therefore, it is in priciple sufficient to add "-m32" to the
+corresponding CMake variables containing the flags to be passed to the
+linker and compiler:
+
+CMAKE_C_FLAGS
+CMAKE_CXX_FLAGS
+CMAKE_EXE_LINKER_FLAGS
+CMAKE_MODULE_LINKER_FLAGS
+CMAKE_SHARED_LINKER_FLAGS
+CMAKE_STATIC_LINKER_FLAGS
+
+These flags should be already set upon the first CMake invocation in a
+new build directory, as most system introspection results are cached
+over multiple CMake runs. You can do so via the "-D<VAR>=<VALUE>"
+option of cmake, ccmake, and cmake-gui.
+
+In a similar way, the particular C or C++ compiler can be chosen by
+providing the name (optionally preceded by the path) of the compiler
+executables:
+
+CMAKE_C_COMPILER
+CMAKE_CXX_COMPILER
+
+However, it is very handy to know that CMake honors the standard
+environment variables CC (C compiler), CXX (C++ compiler), CFLAGS (C
+compiler flags), CXXFLAGS (C++ compiler flags), and LDFLAGS (linker
+flags), which are also used by other tools such as GNU Make, to
+initialize the above variables upon its first call in a new build
+directory. Note, that CPPFLAGS is currently ignored by CMake
+<http://www.cmake.org/Bug/view.php?id=12928>.
+
+On certain platforms, CMake might have trouble to find the right
+library for the target processor architecture when using
+find_package() or find_library() in the CMake scripts. In that case, it
+can help to explicitly set the following global property in your CMake
+file before issuing any find_package() or find_library() in your CMake
+script:
+
+set_property (GLOBAL FIND_LIBRARY_USE_LIB64_PATHS <TRUE|FALSE>)
+
+If set to TRUE, it will look for the library in lib64/ instead of lib/.
+This property is usually automatically set on platforms known to need
+it, but depending on the chosen compiler options, it may need adjustment.
+
+
+3.2 Cross Compilation on OS X
+-----------------------------
+
+On OS X, a similar approach as in section 3.1 can be adopted. However,
+it has to be noted that Apple's version of GCC and Clang don't support
+"-m32" and "-m64", but the more flexible "-arch
+<i686|x86_64|ppc|ppc64>" parameter. The latter can be even repeated
+several times on the command line to create universal binaries able to
+run on several processor architectures. CMake has native support for
+this command line option, which value can be set centrally in the
+CMake scripts and will be then passed on to the compilers and linker.
+It is sufficient to set the variable CMAKE_OSX_ARCHITECTURES to the
+desired target architecture(s). Multiple architectures are separated
+with a ';'. You can do so already on the command line
+
+$ cmake .. -DCMAKE_OSX_ARCHITECTURES=x86_64;i686;ppc
+
+or in variable editors of ccmake and cmake-gui.
+
+If you are using MacPorts or Homebrew versions of GCC, you will have
+to make sure that you install universal variants of the compiler
+toolchain. Then, you can follow the instruction in section 3.1.
+
+
+3.3 Generic Cross Compilation to a Target System
+------------------------------------------------
+
+As CMake cannot guess the target system, a number of variables have to
+be preset so that the correct compiler toolchain and libraries are
+found. It is recommended to do this with a socalled toolchain file,
+which is passed as an argument to cmake, ccmake or cmake-gui using the
+option "-DCMAKE_TOOLCHAIN_FILE=<path-to-file>". The file in CMake
+syntax has to define the following variables:
+
+CMAKE_SYSTEM_NAME (mandatory), e.g., "Linux", "Windows", "Darwin"
+CMAKE_SYSTEM_VERSION (optional)
+CMAKE_SYSTEM_PROCESSOR (optional), e.g., "i686", "x86_64", "ppc", "ppc64"
+CMAKE_C_COMPILER (mandatory), name of C compiler executable
+CMAKE_CXX_COMPILER (mandatory), name of C compiler executable
+CMAKE_FIND_ROOT_PATH (optional), root to target include and library directories
+CMAKE_FIND_ROOT_PATH_MODE_PROGRAM, either "NEVER", "ONLY", or "BOTH" (default)
+CMAKE_FIND_ROOT_PATH_MODE_LIBRARY, either "NEVER", "ONLY", or "BOTH" (default)
+CMAKE_FIND_ROOT_PATH_MODE_INCLUDE, either "NEVER", "ONLY", or "BOTH" (default)
+
+The necessary steps are discussed in detail on the CMake Wiki
+<http://www.cmake.org/Wiki/CMake_Cross_Compiling>.
+
+
+4. Ressources
+=============
+
+[1] CMake - Cross Platform Make Homepage <http://www.cmake.org>
+
+[2] CMake Documentation <http://www.cmake.org/cmake/help/documentation.html>
+
+[3] CMake Wiki <http://www.cmake.org/Wiki/CMake/>
+
+|4] Ken Martin, Bill Hoffman: "Mastering CMake", Kitware.
+    <http://www.cmake.org/cmake/help/book.html>
+
+[5] The MacPorts Project Homepage <http://www.macports.org>
+
+[6] Homebrew -- The missing package manager for OS X. <http://brew.sh>
