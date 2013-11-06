@@ -269,7 +269,7 @@ it, but depending on the chosen compiler options, it may need adjustment.
 On OS X, a similar approach as in section 3.1 can be adopted. However,
 it has to be noted that Apple's version of GCC and Clang don't support
 "-m32" and "-m64", but the more flexible "-arch
-<i686|x86_64|ppc|ppc64>" parameter. The latter can be even repeated
+<i386|x86_64|ppc|ppc64>" parameter. The latter can be even repeated
 several times on the command line to create universal binaries able to
 run on several processor architectures. CMake has native support for
 this command line option, which value can be set centrally in the
@@ -278,7 +278,7 @@ It is sufficient to set the variable CMAKE_OSX_ARCHITECTURES to the
 desired target architecture(s). Multiple architectures are separated
 with a ';'. You can do so already on the command line
 
-$ cmake .. -DCMAKE_OSX_ARCHITECTURES=x86_64;i686;ppc
+$ cmake .. -DCMAKE_OSX_ARCHITECTURES=x86_64;i386;ppc
 
 or in variable editors of ccmake and cmake-gui.
 
@@ -299,7 +299,7 @@ syntax has to define the following variables:
 
 CMAKE_SYSTEM_NAME (mandatory), e.g., "Linux", "Windows", "Darwin"
 CMAKE_SYSTEM_VERSION (optional)
-CMAKE_SYSTEM_PROCESSOR (optional), e.g., "i686", "x86_64", "ppc", "ppc64"
+CMAKE_SYSTEM_PROCESSOR (optional), e.g., "i386", "x86_64", "ppc", "ppc64"
 CMAKE_C_COMPILER (mandatory), name of C compiler executable
 CMAKE_CXX_COMPILER (mandatory), name of C compiler executable
 CMAKE_FIND_ROOT_PATH (optional), root to target include and library directories
