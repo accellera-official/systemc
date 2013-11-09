@@ -28,8 +28,9 @@
 #ifndef SC_VER_H
 #define SC_VER_H
 
-#include "sysc/kernel/sc_macros.h" // SC_CONCAT_UNDERSCORE_
-                                   // SC_STRINGIFY_HELPER_
+#include "sysc/kernel/sc_macros.h"               // SC_CONCAT_UNDERSCORE_
+                                                 // SC_STRINGIFY_HELPER_
+#include "sysc/communication/sc_writer_policy.h" // SC_DEFAULT_WRITER_POLICY
 
 #include <string>
 
@@ -97,11 +98,63 @@ extern const std::string  sc_copyright_string;
       SC_CONCAT_UNDERSCORE_( SC_VERSION_MINOR, \
                              SC_VERSION_PATCH ) ) )
 
+// explicitly avoid macro expansion
+#define SC_API_DEFINED_( Symbol ) \
+  Symbol ## _DEFINED_
+#define SC_API_UNDEFINED_( Symbol ) \
+  Symbol ## _UNDEFINED_
+
+// Some preprocessor switches need to be consistent between the application
+// and the library (e.g. if sizes of classes are affected or other parts of
+// the ABI are affected).  (Some of) these are checked here at link-time as
+// well, by setting template parameters to sc_api_version_XXX, while only
+// one variant is defined in sc_ver.cpp.
+
+// SC_DISABLE_VIRTUAL_BIND
+#if defined( SC_DISABLE_VIRTUAL_BIND )
+# define SC_DISABLE_VIRTUAL_BIND_CHECK_ \
+    SC_API_DEFINED_(SC_DISABLE_VIRTUAL_BIND)
+#else
+# define SC_DISABLE_VIRTUAL_BIND_CHECK_ \
+    SC_API_UNDEFINED_(SC_DISABLE_VIRTUAL_BIND)
+#endif
+extern const int SC_DISABLE_VIRTUAL_BIND_CHECK_;
+
+// Some preprocessor switches need to be consistent between different
+// translation units of an application.  Those can't be easily checked
+// during link-time.  Instead, perform a check during run-time by
+// passing the value to the constructor of the api_version_check object.
+
+// Note: Template and constructor parameters are not passed as default
+//       values to avoid ODR violations in the check itself.
+
+template // use pointers for more verbose error messages
+<
+  const int * DisableVirtualBind
+>
 struct SC_API_VERSION_STRING
-  { SC_API_VERSION_STRING(); };
+{
+  SC_API_VERSION_STRING
+    (
+       // SC_DEFAULT_WRITER_POLICY
+       sc_writer_policy default_writer_policy
+    );
+};
 
+#if !defined( SC_DISABLE_API_VERSION_CHECK ) // disabled in sc_ver.cpp
+static
+SC_API_VERSION_STRING
+<
+  & SC_DISABLE_VIRTUAL_BIND_CHECK_
+>
+api_version_check
+(
+  SC_DEFAULT_WRITER_POLICY
+);
+#endif // SC_DISABLE_API_VERSION_CHECK
 
-static SC_API_VERSION_STRING api_version_check;
+//#undef SC_API_DEFINED_
+//#undef SC_API_UNDEFINED_
 
 } // namespace sc_core
 

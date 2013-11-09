@@ -54,6 +54,8 @@
 #include <cstdlib>
 #include <vector>
 
+#define SC_DISABLE_API_VERSION_CHECK // for in-library sc_ver.h inclusion
+
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_ver.h"
 #include "sysc/datatypes/bit/sc_bit.h"

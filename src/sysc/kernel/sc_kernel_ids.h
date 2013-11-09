@@ -81,7 +81,8 @@ SC_DEFINE_MESSAGE(SC_ID_SET_DEFAULT_TIME_UNIT_       , 515,
 	"set default time unit failed" )
 SC_DEFINE_MESSAGE(SC_ID_DEFAULT_TIME_UNIT_CHANGED_   , 516,
 	"default time unit changed to time resolution" )
-// available message number 517
+SC_DEFINE_MESSAGE(SC_ID_INCONSISTENT_API_CONFIG_     , 517,
+	"inconsistent library configuration detected" )
 // available message number 518
 SC_DEFINE_MESSAGE(SC_ID_WAIT_NOT_ALLOWED_            , 519,
 	"wait() is only allowed in SC_THREADs and SC_CTHREADs" )

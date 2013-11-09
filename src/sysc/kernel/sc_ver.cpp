@@ -24,10 +24,15 @@
   CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
 
+#include <cstddef>
+#include <cstdlib>
+
+#define SC_DISABLE_API_VERSION_CHECK // for in-library sc_ver.h inclusion
 
 #include "sysc/kernel/sc_ver.h"
+#include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/utils/sc_iostream.h"
-#include <cstdlib>
+#include "sysc/utils/sc_report.h"
 
 using std::getenv;
 using std::strcmp;
@@ -114,6 +119,18 @@ pln()
     }
 }
 
+#define SC_API_PERFORM_CHECK_( Type, Name, Symbol ) \
+  do { \
+    static bool SC_CONCAT_UNDERSCORE_( Name, config_seen ) = false; \
+    static Type SC_CONCAT_UNDERSCORE_( Name, config ); \
+    if( ! SC_CONCAT_UNDERSCORE_( Name, config_seen ) ) { \
+      SC_CONCAT_UNDERSCORE_( Name, config_seen ) = true; \
+      SC_CONCAT_UNDERSCORE_( Name, config ) = Name; \
+    } else if( SC_CONCAT_UNDERSCORE_( Name, config ) != Name ) { \
+      SC_REPORT_FATAL( SC_ID_INCONSISTENT_API_CONFIG_, Symbol ); \
+    } \
+  } while( false )
+
 // THIS CONSTRUCTOR ROOTS OUT OLD OBJECTS AT LINK TIME
 //
 // Each source file which includes sc_ver.h for this SystemC version 
@@ -121,9 +138,33 @@ pln()
 // in it. That object instanciation will cause the constructor below 
 // to be invoked. If the version of the SystemC being linked against
 // does not contain the constructor below a linkage error will occur.
+//
+// Some preprocessor switches need to be consistent between the application
+// and the library (e.g. if sizes of classes are affected or other parts of
+// the ABI are affected).  (Some of) these are checked here at link-time as
+// well, by setting template parameters to sc_api_version_XXX, while only
+// one variant is defined here.
+//
+// Some preprocessor switches need to be consistent between different
+// translation units of an application.  Those can't be easily checked
+// during link-time.  Instead, perform a check during run-time by
+// passing the value to the constructor of the api_version_check object.
 
-SC_API_VERSION_STRING::SC_API_VERSION_STRING ()
+const int SC_DISABLE_VIRTUAL_BIND_CHECK_ = 1;
+
+template<>
+SC_API_VERSION_STRING
+<
+  & SC_DISABLE_VIRTUAL_BIND_CHECK_
+>
+::SC_API_VERSION_STRING
+(
+  sc_writer_policy default_writer_policy
+)
 {
+  SC_API_PERFORM_CHECK_( sc_writer_policy
+                          , default_writer_policy
+                          , "SC_DEFAULT_WRITER_POLICY" );
 }
 
 } // namespace sc_core
