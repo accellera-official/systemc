@@ -28,6 +28,9 @@
 #ifndef SC_VER_H
 #define SC_VER_H
 
+#include "sysc/kernel/sc_macros.h" // SC_CONCAT_UNDERSCORE_
+                                   // SC_STRINGIFY_HELPER_
+
 #include <string>
 
 namespace sc_core {
@@ -48,8 +51,7 @@ extern const std::string  sc_version_string;
 extern const std::string  sc_copyright_string;
 
 #define SYSTEMC_2_3_0
-#define SC_API_VERSION_STRING sc_api_version_2_3_0
-
+ 
 #define SYSTEMC_VERSION       20120701
 #define SC_VERSION_ORIGINATOR "ASI"
 #define SC_VERSION_MAJOR      2
@@ -60,16 +62,10 @@ extern const std::string  sc_copyright_string;
 /// compliancy with IEEE 1666-2011 (see 8.6.5)
 #define IEEE_1666_SYSTEMC     201101L
 
-#define SC_COPYRIGHT "        Copyright (c) 1996-2012 by all Contributors,\n        ALL RIGHTS RESERVED\n"
+#define SC_COPYRIGHT                               \
+  "Copyright (c) 1996-2013 by all Contributors,\n" \
+  "ALL RIGHTS RESERVED\n"
 
-// token stringification
-
-#define SC_STRINGIFY_HELPER_( Arg ) \
-  SC_STRINGIFY_HELPER_DEFERRED_( Arg )
-#define SC_STRINGIFY_HELPER_DEFERRED_( Arg ) \
-  SC_STRINGIFY_HELPER_MORE_DEFERRED_( Arg )
-#define SC_STRINGIFY_HELPER_MORE_DEFERRED_( Arg ) \
-  #Arg 
 
 #define SC_VERSION_RELEASE_DATE \
   SC_STRINGIFY_HELPER_( SYSTEMC_VERSION )
@@ -95,10 +91,14 @@ extern const std::string  sc_copyright_string;
 // to be invoked. If the version of the SystemC being linked against
 // does not contain the constructor below a linkage error will occur.
 
-class SC_API_VERSION_STRING {
-  public:
-    SC_API_VERSION_STRING ();
-};
+#define SC_API_VERSION_STRING \
+      SC_CONCAT_UNDERSCORE_( sc_api_version, \
+      SC_CONCAT_UNDERSCORE_( SC_VERSION_MAJOR, \
+      SC_CONCAT_UNDERSCORE_( SC_VERSION_MINOR, \
+                             SC_VERSION_PATCH ) ) )
+
+struct SC_API_VERSION_STRING
+  { SC_API_VERSION_STRING(); };
 
 
 static SC_API_VERSION_STRING api_version_check;

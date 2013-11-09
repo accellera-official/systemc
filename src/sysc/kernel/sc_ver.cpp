@@ -28,7 +28,9 @@
 #include "sysc/kernel/sc_ver.h"
 #include "sysc/utils/sc_iostream.h"
 #include <cstdlib>
+
 using std::getenv;
+using std::strcmp;
 using std::cerr;
 using std::endl;
 
@@ -39,8 +41,7 @@ const char copyright[] = SC_COPYRIGHT;
 
 static
 const char systemc_version[] =
-    "             SystemC " SC_VERSION
-    " --- " __DATE__ " " __TIME__;
+    "SystemC " SC_VERSION " --- " __DATE__ " " __TIME__;
 
 const unsigned int sc_version_major = SC_VERSION_MAJOR;
 const unsigned int sc_version_minor = SC_VERSION_MINOR;
@@ -86,12 +87,24 @@ pln()
     static bool lnp = SC_DISABLE_COPYRIGHT_MESSAGE;
     if ( lnp || getenv("SYSTEMC_DISABLE_COPYRIGHT_MESSAGE") != 0 ) 
         lnp = true;
+    if ( const char * lnp_env = getenv("SC_COPYRIGHT_MESSAGE") ) {
+        lnp = !strcmp( lnp_env, "DISABLE" );
+    }
     if( ! lnp ) {
-        cerr << endl;
-	cerr << sc_version() << endl;
-	cerr << sc_copyright() << endl;
 
-	//  regressions check point
+        static const char indent[] = "        ";
+        std::string       line;
+        std::stringstream copyright;
+
+        // temporary stream to print copyright line-wise with indentation
+        copyright << sc_copyright();
+
+        cerr << endl;
+        cerr << indent << sc_version() << endl;
+        while( getline( copyright, line ) )
+            cerr << indent << line << endl;
+
+        //  regressions check point
 
         if( getenv( "SYSTEMC_REGRESSION" ) != 0 ) {
             cerr << "SystemC Simulation" << endl;
