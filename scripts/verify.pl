@@ -446,9 +446,9 @@ sub get_systemc_arch
                 }
             }
 
-        } elsif( $uname_s eq "FreeBSD" ) {
+        } elsif( $uname_s =~ /((free|net|open)bsd|dragonfly)/i ) {
            if( $cxx_comp eq "c++" || $cxx_comp eq "g++" ) {
-                $arch = "freebsd";
+                $arch = "bsd";
                 if ( $uname_m eq "x86_64" || $uname_m eq "amd64" ) {
                     $arch .= "64";
                 }
@@ -545,9 +545,9 @@ sub get_systemc_arch
         }
     }
 
-    elsif( $arch =~ /^(linux|freebsd|mingw|cygwin)(64)?/ ) {
-        if( $2 eq '64' ) {
-            $rt_cpuarch = $2;
+    elsif( $arch =~ /^(linux|(free)?bsd|mingw|cygwin)(64)?/ ) {
+        if( $3 eq '64' ) {
+            $rt_cpuarch = $3;
         } else {
             $rt_cpuarch = '32';
         }
@@ -734,7 +734,7 @@ sub prepare_environment
     } elsif( $rt_systemc_arch =~ /^linux(64)?/ ) {
         $rt_ccflags      .= " -m${rt_cpuarch}";
         $rt_ldflags       = $rt_ccflags;
-    } elsif( $rt_systemc_arch =~ /^freebsd(64)?/ ) {
+    } elsif( $rt_systemc_arch =~ /^(free)bsd(64)?/ ) {
         $rt_ccflags      .= " -m${rt_cpuarch}";
         $rt_ldflags       = $rt_ccflags;
     } elsif( $rt_systemc_arch =~ /^macosx(ppc)?(64)?/ ) {
