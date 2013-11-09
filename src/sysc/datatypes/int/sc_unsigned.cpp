@@ -540,7 +540,7 @@ sc_unsigned::operator=(double v)
 {
   is_bad_double(v);
   sgn = SC_POS;
-  register int i = 0;
+  int i = 0;
   while (floor(v) && (i < ndigits)) {
 #ifndef _WIN32
     digit[i++] = ((sc_digit)floor(remainder(v, DIGIT_RADIX))) & DIGIT_MASK;

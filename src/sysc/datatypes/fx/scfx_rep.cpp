@@ -1590,7 +1590,7 @@ multiply( scfx_rep& result, const scfx_rep& lhs, const scfx_rep& rhs,
 
     for( i1 = 0; i1 * half_word_incr < len_lhs; i1 += half_word_incr )
     {
-	register word_short ls;
+	word_short ls;
 	ls.l = 0;
 
 	half_word v1 = s1[i1];

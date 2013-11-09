@@ -37,6 +37,16 @@
 #include <cstddef>
 #include <cstring>
 
+// We use typedefs for istream and ostream here to get around some finickiness
+// from aCC:
+
+namespace sc_dt {
+
+typedef ::std::istream systemc_istream;
+typedef ::std::ostream systemc_ostream;
+
+} // namespace sc_dt
+
 // shortcuts that save some typing
 
 #ifdef CCAST
