@@ -110,6 +110,16 @@ extern const std::string  sc_copyright_string;
 // well, by setting template parameters to sc_api_version_XXX, while only
 // one variant is defined in sc_ver.cpp.
 
+// DEBUG_SYSTEMC
+#if defined( DEBUG_SYSTEMC )
+# define DEBUG_SYSTEMC_CHECK_ \
+    SC_CONFIG_DEFINED_(DEBUG_SYSTEMC)
+#else
+# define DEBUG_SYSTEMC_CHECK_ \
+    SC_CONFIG_UNDEFINED_(DEBUG_SYSTEMC)
+#endif
+extern const int DEBUG_SYSTEMC_CHECK_;
+
 // SC_DISABLE_VIRTUAL_BIND
 #if defined( SC_DISABLE_VIRTUAL_BIND )
 # define SC_DISABLE_VIRTUAL_BIND_CHECK_ \
@@ -130,6 +140,7 @@ extern const int SC_DISABLE_VIRTUAL_BIND_CHECK_;
 
 template // use pointers for more verbose error messages
 <
+  const int * DebugSystemC,
   const int * DisableVirtualBind
 >
 struct SC_API_VERSION_STRING
@@ -145,6 +156,7 @@ struct SC_API_VERSION_STRING
 static
 SC_API_VERSION_STRING
 <
+  & DEBUG_SYSTEMC_CHECK_,
   & SC_DISABLE_VIRTUAL_BIND_CHECK_
 >
 api_version_check
