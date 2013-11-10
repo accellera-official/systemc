@@ -15,7 +15,7 @@ dnl  language governing rights and limitations under the License.
 dnl
 dnl ***************************************************************************
 dnl
-dnl  configure.in --
+dnl  configure.ac --
 dnl  Process this file with autoconf to produce a configure script.
 dnl
 dnl  Original Author: Martin Janssen, Synopsys, Inc., 2001-05-21
@@ -27,6 +27,9 @@ dnl  changes you are making here.
 dnl
 dnl      Name, Affiliation, Date: Alan Fitch, Doulos, 2012-03-10
 dnl  Description of Modification: TLM2 files added
+dnl
+dnl      Name, Affiliation, Date: Philipp A. Hartmann, OFFIS, 2013-08-20
+dnl  Description of Modification: Installation/configuration reimplemented
 dnl
 dnl ***************************************************************************
 
@@ -258,27 +261,101 @@ CXXFLAGS="${CXXFLAGS_USER}"
 
 
 dnl
-dnl Set the default prefix and make sure the prefix is absolute.
+dnl Setup installation directories
 dnl
+AC_MSG_CHECKING([for SystemC install layout])
 
-test "x$prefix" = xNONE && prefix=$srcdir
-current_dir=`pwd`; cd $prefix; prefix=`pwd`; cd $current_dir
+AC_ARG_WITH([unix-layout],
+  [AS_HELP_STRING([--with-unix-layout],
+                  [use Unix directory layout for installation
+                   @<:@default=no@:>@])],
+  [case "x$withval" in
+     xyes)  sysc_install_layout=Unix ;;
+     xno|x) sysc_install_layout=classic ; ;;
+     *)     AC_MSG_ERROR([Unknown install layout requested.]) ;;
+   esac],
+  [sysc_install_layout=classic]
+) # AC_ARG_WITH gnu-layout
+
+abs_srcdir=`cd "$srcdir" && pwd`
+abs_builddir=`pwd`
+if test "x$prefix" = "xNONE" ; then
+  dnl Set the default prefix and make sure the prefix is absolute.
+  prefix="$abs_srcdir"
+  dnl Ignore install layout, when installing to $srcdir
+  sysc_install_layout=ignored
+fi
+
+AC_MSG_RESULT($sysc_install_layout)
+
+dnl
+dnl Setup "classic" installation layout, if not overridden
+dnl
+rootdocdir='${docdir}'
+if test $sysc_install_layout = Unix ; then
+
+  dnl Automake/GNU/Unix defaults are kept,
+  dnl but default library architecture suffix cleared
+  LIB_ARCH_SUFFIX=''
+
+else dnl classic/ignored (if not explicitly given)
+
+  sysc_install_layout=classic
+  if test x$datarootdir = x'${prefix}/share' ; then
+    datarootdir='${prefix}'
+  fi
+  if test x$datadir = x'${datarootdir}' ; then
+    datadir='${prefix}'
+  fi
+  if test x$docdir = x'${datarootdir}/doc/${PACKAGE_TARNAME}' ; then
+    dnl main documentation
+    docdir='${prefix}/docs'
+    dnl "core" documentation (from root directory)
+    rootdocdir='${prefix}'
+  fi
+
+  dnl default library arch suffix is target arch
+  LIB_ARCH_SUFFIX='-${TARGET_ARCH}'
+
+fi
+
+AC_SUBST([rootdocdir])
+AC_SUBST([examplesdir], ['${rootdocdir}/examples'] )
+AC_SUBST([libarchdir],  ['${libdir}${LIB_ARCH_SUFFIX}'] )
+
+AM_CONDITIONAL([SEPARATE_INSTALL_TREE],
+  [ test "x${prefix}" != "x${abs_srcdir}" ])
+dnl Check for out-of-tree build
+AM_CONDITIONAL([SEPARATE_BUILD_TREE],
+  [ test "x${abs_srcdir}" != "x${abs_builddir}" ])
+
+#AM_COND_IF([SEPARATE_BUILD_TREE],[
+if test -z "${SEPARATE_BUILD_TREE_TRUE}" ; then
+  if test "x${prefix}" = "x${abs_builddir}" ; then
+    AC_MSG_ERROR([Installation to build directory not supported.])
+  fi
+fi
+#])
 
 dnl
 dnl handle library arch suffix
 dnl
-LIB_ARCH_SUFFIX='-${TARGET_ARCH}'
 AC_MSG_CHECKING([for SystemC library arch suffix])
 AC_ARG_WITH([arch-suffix],
   [AS_HELP_STRING([--with-arch-suffix],
-                  [add suffix to library installation directory @<:@default=-<target arch>@:>@])],
+                  [add suffix to library installation directory
+                   @<:@default=-<target-arch>@:>@])],
   [case "x$withval" in
-     xyes)  with_arch_suffix=default ;;
-     xno|x) with_arch_suffix=no ; LIB_ARCH_SUFFIX="" ;;
+     xyes)  with_arch_suffix=yes
+            LIB_ARCH_SUFFIX='-${TARGET_ARCH}'
+            ;;
+     xno|x) with_arch_suffix=no
+            LIB_ARCH_SUFFIX=""
+            ;;
      *)     LIB_ARCH_SUFFIX="${withval}" ;;
    esac],
   [with_arch_suffix=default]
-) # AC_ARG_WITH archsuffix
+) # AC_ARG_WITH arch-suffix
 AC_MSG_RESULT($with_arch_suffix (TARGET_ARCH=${TARGET_ARCH}))
 
 dnl
@@ -463,5 +540,50 @@ AC_OUTPUT(
  docs/tlm/doxygen/Doxyfile
 )
 
+dnl
+dnl print configuration summary
+dnl
+SYSTEMC_HOME=$prefix
+prefix='<SYSTEMC_HOME>' dnl replace for printing
+dnl ... resolve aliases
+eval "sysc_includedir=\"${includedir}\""
+eval "sysc_includedir=\"${sysc_includedir}\""
+eval "sysc_libdir=\"${libdir}${LIB_ARCH_SUFFIX}\""
+eval "sysc_libdir=\"${sysc_libdir}\""
+eval "sysc_docdir=\"${docdir}\""
+eval "sysc_docdir=\"${sysc_docdir}\""
+eval "sysc_examplesdir=\"${examplesdir}\""
+eval "sysc_examplesdir=\"${sysc_examplesdir}\""
+eval "sysc_examplesdir=\"${sysc_examplesdir}\""
+eval "sysc_examplesdir=\"${sysc_examplesdir}\""
+eval "sysc_prefix=\"${SYSTEMC_HOME}\""
+dnl ... restore prefix
+prefix=$SYSTEMC_HOME
+
+cat <<EOF | tee -a config.log
+---------------------------------------------------------------------
+Configuration summary of $PACKAGE_STRING for $target
+---------------------------------------------------------------------
+
+ Directory setup (based on $sysc_install_layout layout):
+   Installation prefix (aka SYSTEMC_HOME):
+      ${sysc_prefix}
+   Header files  : ${sysc_includedir}
+   Libraries     : ${sysc_libdir}
+   Documentation : ${sysc_docdir}
+   Examples      : ${sysc_examplesdir}
+
+ Architecture    : ${TARGET_ARCH}
+ Compiler (flags): ${CXX}
+     ${CXXFLAGS}
+
+ Optional features:
+   Pthread processes   : $enable_pthreads
+   async_request_update: $enable_async_updates
+   Debugging symbols   : $enable_debug
+   Optimization        : $enable_optimize
+
+---------------------------------------------------------------------
+EOF
 
 dnl Taf!
