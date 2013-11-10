@@ -524,31 +524,8 @@ AC_OUTPUT(
  src/tlm_utils/Makefile
  examples/Makefile 
  examples/sysc/Makefile 
- examples/sysc/fir/Makefile 
- examples/sysc/fft/Makefile 
- examples/sysc/fft/fft_flpt/Makefile 
- examples/sysc/fft/fft_fxpt/Makefile 
- examples/sysc/pipe/Makefile 
- examples/sysc/pkt_switch/Makefile 
- examples/sysc/risc_cpu/Makefile 
- examples/sysc/rsa/Makefile 
- examples/sysc/simple_bus/Makefile 
- examples/sysc/simple_fifo/Makefile 
- examples/sysc/simple_perf/Makefile 
- examples/sysc/2.1/Makefile 
- examples/sysc/2.1/dpipe/Makefile 
- examples/sysc/2.1/forkjoin/Makefile 
- examples/sysc/2.1/reset_signal_is/Makefile 
- examples/sysc/2.1/sc_export/Makefile 
- examples/sysc/2.1/sc_report/Makefile 
- examples/sysc/2.1/scx_barrier/Makefile 
- examples/sysc/2.1/scx_mutex_w_policy/Makefile 
- examples/sysc/2.1/specialized_signals/Makefile 
- examples/sysc/2.3/Makefile
- examples/sysc/2.3/include/Makefile
- examples/sysc/2.3/sc_rvd/Makefile
- examples/sysc/2.3/sc_ttd/Makefile
  examples/tlm/Makefile
+ examples/tlm/common/Makefile
  docs/Makefile
  docs/sysc/doxygen/Doxyfile
  docs/tlm/doxygen/Doxyfile

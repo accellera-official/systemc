@@ -1,34 +1,156 @@
+## ***************************************************************************
+##
+##  The following code is derived, directly or indirectly, from the SystemC
+##  source code Copyright (c) 1996-2013 by all Contributors.
+##  All Rights reserved.
+##
+##  The contents of this file are subject to the restrictions and limitations
+##  set forth in the SystemC Open Source License Version 3.1 (the "License");
+##  You may not use this file except in compliance with such restrictions and
+##  limitations. You may obtain instructions on how to receive a copy of the
+##  License at http://www.systemc.org/. Software distributed by Contributors
+##  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
+##  ANY KIND, either express or implied. See the License for the specific
+##  language governing rights and limitations under the License.
+##
+## ***************************************************************************
+##
+##  Makefile.defs -- simple generic SystemC example build rules
+##
+##  Include this file from your own Makefile to obtain a simple build
+##  environment.  You need to set at least the variables
+##    MODULE - name of the application
+##    OBJS   - list of required object files
+##  to make things work.
+##
+##  Original Author: Philipp A. Hartmann, OFFIS
+##
+## ***************************************************************************
+##
+##  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+##  changes you are making here.
+##
+##      Name, Affiliation, Date:
+##  Description of Modification:
+##
+## ***************************************************************************
+
+## include site configuration, if it exists in known common places
+
+SYSTEMC_MAKEFILE_SITE?=Makefile.site
+SYSTEMC_MAKEFILE_PATH+= . .. ../.. ../../.. $(SYSTEMC_HOME) \
+  $(SYSTEMC_HOME)/examples $(SYSTEMC_HOME)/share/systemc/examples
+SYSTEMC_MAKEFILE ?= $(word 1,\
+  $(wildcard $(SYSTEMC_MAKEFILE_PATH:=/$(SYSTEMC_MAKEFILE_SITE))))
+ifneq (,$(SYSTEMC_MAKEFILE))
+include $(SYSTEMC_MAKEFILE)
+endif
+
+## ***************************************************************************
+## guess config from environment
+## (if not automatically found from Makefile.site)
+
 ## Variable that points to SystemC installation path
-SYSTEMC = ../../..
+SYSTEMC_HOME?=../../..
+SYSTEMC?=$(SYSTEMC_HOME)
 
-ARCH_SUFFIX?=-$(TARGET_ARCH)
+TARGET_ARCH      ?= linux
+ARCH_SUFFIX      ?= -$(TARGET_ARCH)
+LDFLAG_RPATH     ?= -Wl,-rpath=
 
-INCDIR = -I. -I.. -I$(SYSTEMC)/include
-LIBDIR = -L. -L.. -L$(SYSTEMC)/lib$(ARCH_SUFFIX)
+SYSTEMC_INC_DIR  ?= $(SYSTEMC)/include
+SYSTEMC_LIB_DIR  ?= $(SYSTEMC)/lib$(ARCH_SUFFIX)
 
-LIBS   =  -lsystemc -lm $(EXTRA_LIBS)
+SYSTEMC_DEFINES  ?=
+SYSTEMC_CXXFLAGS ?= -Wall
+SYSTEMC_LDFLAGS  ?= -L $(SYSTEMC_LIB_DIR) \
+                    $(LDFLAG_RPATH)$(SYSTEMC_LIB_DIR)
+SYSTEMC_LIBS     ?= -lsystemc -lm
 
+## Add 'PTHREADS=1' to command line for a pthreads build
+## (should not be needed in most cases)
+ifdef PTHREADS
+SYSTEMC_CXXFLAGS += -pthread
+SYSTEMC_LIBS     += -lpthread
+endif
 
-EXE    = $(MODULE).x
+## ***************************************************************************
+## example defaults
+
+FILTER ?= cat
+
+INCDIR   += -I. -I.. -I$(SYSTEMC_INC_DIR)
+LIBDIR   += -L. -L..
+
+CXXFLAGS  += $(CFLAGS) $(SYSTEMC_CXXFLAGS) $(INCDIR) $(SYSTEMC_DEFINES)
+LDFLAGS   += $(CFLAGS) $(SYSTEMC_CXXFLAGS) $(LIBDIR) $(SYSTEMC_LDFLAGS)
+LIBS      += $(SYSTEMC_LIBS) $(EXTRA_LIBS)
+
+# "real" Makefile needs to set MODULE
+ifeq (,$(strip $(MODULE)))
+$(error MODULE not set. Cannot build.)
+endif
+
+# use g++ by default, unless user specifies CXX explicitly
+ifeq (default,$(origin CXX))
+CXX=g++
+endif
+# use CXX by default, unless user specifies CC explicitly
+ifeq (default,$(origin CC))
+CC=$(CXX)
+endif
+
+## ***************************************************************************
+## build rules
 
 .SUFFIXES: .cc .cpp .o .x
 
-$(EXE): $(OBJS) $(SYSTEMC)/lib$(ARCH_SUFFIX)/libsystemc.a 
-	$(CC) $(CFLAGS) $(INCDIR) $(LIBDIR) -o $@ $(OBJS) $(LIBS) 2>&1 | c++filt
+EXEEXT?=.x
+EXE   := $(MODULE)$(EXEEXT)
+
+all: announce $(EXE)
+
+announce:
+	@if test x1 = x$(FLAG_BATCH) ; then \
+		echo; echo "*** $(MODULE):"; echo; \
+	fi
+
+check: announce all
+	@if test -f "$(INPUT)" ; then INPUT="< $(INPUT)" ; fi ; \
+		eval "$(VALGRIND) ./$(EXE) $(ARGS) $${INPUT} > run.log"
+	@cat run.log | grep -v "stopped by user" | \
+		$(FILTER) | awk '{if($$0!="") print $$0}' > run_trimmed.log
+	@if test -f "$(GOLDEN)" ; then \
+	  cat "$(GOLDEN)" | grep -v "stopped by user" | \
+		awk '{if($$0!="") print $$0}' > ./expected_trimmed.log ; \
+	  diff ./run_trimmed.log ./expected_trimmed.log > diff.log 2>&1 ; \
+	  if [ -s diff.log ]; then \
+	    echo "***ERROR:"; cat diff.log; \
+	  else echo "OK"; fi \
+	fi
+
+
+run: announce all
+	@if test -f "$(INPUT)" ; then INPUT="< $(INPUT)" ; fi ; \
+		eval "./$(EXE) $(ARGS) $${INPUT}"
+
+$(EXE): $(OBJS) $(SYSTEMC_LIB_DIR)/libsystemc.a
+	$(CC) $(LDFLAGS) -o $@ $(OBJS) $(LIBS) 2>&1 | c++filt
+	@test -x $@
 
 .cpp.o:
-	$(CC) $(CFLAGS) $(INCDIR) -c $<
+	$(CC) $(CXXFLAGS) -c $< -o $@
 
 .cc.o:
-	$(CC) $(CFLAGS) $(INCDIR) -c $<
+	$(CC) $(CXXFLAGS) -c $< -o $@
 
-clean::
-	rm -f $(OBJS) *~ $(EXE) core
+clean:: announce
+	rm -f $(OBJS) *~ $(EXE) $(EXTRA_CLEAN) core
 
-ultraclean: clean
+ultraclean: announce clean
 	rm -f Makefile.deps
 
 Makefile.deps:
-#	$(CC) $(CFLAGS) $(INCDIR) -M $(SRCS) >> Makefile.deps
+#	$(CC) $(CXXFLAGS) -M $(SRCS) >> Makefile.deps
 
 #include Makefile.deps

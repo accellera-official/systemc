@@ -1,0 +1,104 @@
+## ****************************************************************************
+##
+##  The following code is derived, directly or indirectly, from the SystemC
+##  source code Copyright (c) 1996-2013 by all Contributors.
+##  All Rights reserved.
+##
+##  The contents of this file are subject to the restrictions and limitations
+##  set forth in the SystemC Open Source License Version 3.1 (the "License");
+##  You may not use this file except in compliance with such restrictions and
+##  limitations. You may obtain instructions on how to receive a copy of the
+##  License at http://www.systemc.org/. Software distributed by Contributors
+##  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
+##  ANY KIND, either express or implied. See the License for the specific
+##  language governing rights and limitations under the License.
+##
+## ****************************************************************************
+##
+##  test.am --
+##  Included from a Makefile.am to provide example-specific information
+##
+##  Original Author: Philipp A. Hartmann, OFFIS, 2013-05-20
+##
+## ****************************************************************************
+##
+##  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+##  changes you are making here.
+##
+##      Name, Affiliation, Date:
+##  Description of Modification:
+##
+## ***************************************************************************
+
+## Generic example setup
+## (should be kept in sync among all test.am files)
+
+check_PROGRAMS += %D%/test
+
+%C%_test_CPPFLAGS = \
+	$(AM_CPPFLAGS)
+
+%C%_test_SOURCES = \
+	$(%C%_H_FILES) \
+	$(%C%_CXX_FILES)
+
+examples_BUILD += \
+	$(%C%_BUILD)
+
+examples_CLEAN += \
+	%D%/run.log \
+	%D%/expexted_trimmed.log \
+	%D%/run_trimmed.log \
+	%D%/diff.log
+
+examples_FILES += \
+	$(%C%_H_FILES) \
+	$(%C%_CXX_FILES) \
+	$(%C%_BUILD) \
+	$(%C%_EXTRA)
+
+## example-specific details
+
+%C%_H_FILES = \
+	%D%/simple_bus.h \
+	%D%/simple_bus_arbiter.h \
+	%D%/simple_bus_arbiter_if.h \
+	%D%/simple_bus_blocking_if.h \
+	%D%/simple_bus_direct_if.h \
+	%D%/simple_bus_fast_mem.h \
+	%D%/simple_bus_master_blocking.h \
+	%D%/simple_bus_master_direct.h \
+	%D%/simple_bus_master_non_blocking.h \
+	%D%/simple_bus_non_blocking_if.h \
+	%D%/simple_bus_request.h \
+	%D%/simple_bus_slave_if.h \
+	%D%/simple_bus_slow_mem.h \
+	%D%/simple_bus_test.h \
+	%D%/simple_bus_types.h
+
+%C%_CXX_FILES = \
+	%D%/simple_bus.cpp                     \
+	%D%/simple_bus_arbiter.cpp             \
+	%D%/simple_bus_main.cpp                \
+	%D%/simple_bus_master_blocking.cpp     \
+	%D%/simple_bus_master_direct.cpp       \
+	%D%/simple_bus_master_non_blocking.cpp \
+	%D%/simple_bus_types.cpp               \
+	%D%/simple_bus_tools.cpp
+
+%C%_BUILD = \
+	%D%/golden.log
+
+%C%_EXTRA = \
+	%D%/simple_bus.vcproj \
+	%D%/Makefile \
+	%D%/ChangeLog \
+	%D%/README \
+	%D%/SLIDES.pdf \
+	%D%/LEGAL
+
+#%C%_FILTER = 
+#export %C%_FILTER
+
+## Taf!
+## :vim:ft=automake:

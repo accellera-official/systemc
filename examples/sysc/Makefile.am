@@ -22,37 +22,92 @@
 ##
 ## ****************************************************************************
 ##
-##  MODIFICATION LOG - modifiers, enter your name, affiliation and
-##  changes you are making here:
+##  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+##  changes you are making here.
 ##
-##  Modifier Name & Affiliation:
-##  Description of Modification:
+##      Name, Affiliation, Date: Philipp Hartmann, OFFIS, 2013-05-20
+##  Description of Modification: Rewritten for (mostly) non-recursive build,
 ##
 ## ****************************************************************************
 
 include $(top_srcdir)/config/Make-rules.examples
 
-SUBDIRS = \
-	fft \
-	fir \
-	pipe \
-	pkt_switch \
-	risc_cpu \
-	rsa \
-	simple_bus \
-	simple_fifo \
-	simple_perf \
-	2.1 \
-	2.3
+all:
+	@echo "To compile and run the examples type"
+	@echo "   make check "
 
-EXAMPLES_DIR = $(prefix)/examples/sysc
+## use a wrapper script to check expected outputs
+TESTS = $(check_SCRIPTS)
+check_SCRIPTS  = $(examples_TESTS:=.sh)
 
-install-data-local:
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(EXAMPLES_DIR)
+## ************************************************************************
+## additional data for installation
 
-uninstall-local:
-	@$(NORMAL_UNINSTALL)
-	-rmdir $(EXAMPLES_DIR)
+syscexamplesdir = $(examplesdir)/sysc
+
+examples_FILES = \
+	Makefile.all \
+	Makefile.defs \
+	Readme_msvc80.txt \
+	\
+	fft/README
+
+## ************************************************************************
+
+examples_INPUT =input.txt
+examples_GOLDEN=golden.log
+
+## filled later
+examples_BUILD =
+examples_CLEAN =
+check_PROGRAMS =
+
+##
+## list of SystemC examples
+##
+
+## main examples
+
+include fft/fft_flpt/test.am
+include fft/fft_fxpt/test.am
+include fir/test.am
+include pipe/test.am
+include pkt_switch/test.am
+include risc_cpu/test.am
+include rsa/test.am
+include simple_bus/test.am
+include simple_fifo/test.am
+include simple_perf/test.am
+
+## 2.1 examples
+
+include 2.1/dpipe/test.am
+include 2.1/forkjoin/test.am
+include 2.1/reset_signal_is/test.am
+include 2.1/sc_export/test.am
+include 2.1/sc_report/test.am
+include 2.1/scx_barrier/test.am
+include 2.1/scx_mutex_w_policy/test.am
+include 2.1/specialized_signals/test.am
+
+## 2.3 examples
+
+include 2.3/sc_rvd/test.am
+include 2.3/sc_ttd/test.am
+
+## ************************************************************************
+
+# install examples?
+if SEPARATE_INSTALL_TREE
+nobase_syscexamples_DATA = \
+	$(examples_FILES)
+endif
+
+EXTRA_DIST += \
+	$(examples_FILES)
+
+CLEANFILES += \
+	$(examples_CLEAN) \
+	$(check_SCRIPTS)
 
 ## Taf!

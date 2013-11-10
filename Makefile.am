@@ -54,6 +54,7 @@ EXTRA_DIST = \
 	$(DOC_FILES) \
 	\
 	config/bootstrap \
+	config/test.sh.in \
 	\
 	msvc80/SystemC/SystemC.sln \
 	msvc80/SystemC/SystemC.vcproj
