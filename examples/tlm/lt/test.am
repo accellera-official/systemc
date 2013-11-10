@@ -32,57 +32,65 @@
 
 ## Generic example setup
 ## (should be kept in sync among all test.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##      included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D%: lt
+##   %C%: lt
 
-check_PROGRAMS += %D%/test
+check_PROGRAMS += lt/test
 
-%C%_test_CPPFLAGS = \
-	-I$(srcdir)/%D%/include \
+lt_test_CPPFLAGS = \
+	-I$(srcdir)/lt/include \
 	$(CPPFLAGS_TLMTESTS)
 
-%C%_test_SOURCES = \
-	$(%C%_H_FILES) \
-	$(%C%_CXX_FILES)
+lt_test_SOURCES = \
+	$(lt_H_FILES) \
+	$(lt_CXX_FILES)
 
 examples_BUILD += \
-	$(%C%_BUILD)
+	$(lt_BUILD)
 
 examples_CLEAN += \
-	%D%/run.log \
-	%D%/expexted_trimmed.log \
-	%D%/run_trimmed.log \
-	%D%/diff.log
+	lt/run.log \
+	lt/expexted_trimmed.log \
+	lt/run_trimmed.log \
+	lt/diff.log
 
 examples_FILES += \
-	$(%C%_H_FILES) \
-	$(%C%_CXX_FILES) \
-	$(%C%_BUILD) \
-	$(%C%_EXTRA)
+	$(lt_H_FILES) \
+	$(lt_CXX_FILES) \
+	$(lt_BUILD) \
+	$(lt_EXTRA)
 
 ## example-specific details
 
-%C%_H_FILES = \
-	%D%/include/initiator_top.h \
-	%D%/include/lt_top.h
+lt_H_FILES = \
+	lt/include/initiator_top.h \
+	lt/include/lt_top.h
 
-%C%_CXX_FILES = \
-	%D%/src/initiator_top.cpp \
-	%D%/src/lt.cpp \
-	%D%/src/lt_top.cpp
+lt_CXX_FILES = \
+	lt/src/initiator_top.cpp \
+	lt/src/lt.cpp \
+	lt/src/lt_top.cpp
 
-%C%_BUILD = \
-	%D%/results/expected.log
+lt_BUILD = \
+	lt/results/expected.log
 
-%C%_EXTRA = \
-	%D%/README \
-	%D%/build-msvc/Makefile \
-	%D%/build-msvc/lt.sln \
-	%D%/build-msvc/lt.vcproj \
-	%D%/build-unix/Makefile \
-	%D%/docs/lt_example.pdf \
-	%D%/docs/lt_example.ppt
+lt_EXTRA = \
+	lt/README \
+	lt/build-msvc/Makefile \
+	lt/build-msvc/lt.sln \
+	lt/build-msvc/lt.vcproj \
+	lt/build-unix/Makefile \
+	lt/docs/lt_example.pdf \
+	lt/docs/lt_example.ppt
 
-#%C%_FILTER = 
-#export %C%_FILTER
+#lt_FILTER = 
+#export lt_FILTER
 
 ## Taf!
 ## :vim: ft=automake:

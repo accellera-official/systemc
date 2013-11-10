@@ -32,72 +32,80 @@
 
 ## Generic example setup
 ## (should be kept in sync among all test.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##      included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D%: at_extension_optional
+##   %C%: at_extension_optional
 
-check_PROGRAMS += %D%/test
+check_PROGRAMS += at_extension_optional/test
 
-%C%_test_CPPFLAGS = \
-	-I$(srcdir)/%D%/include \
+at_extension_optional_test_CPPFLAGS = \
+	-I$(srcdir)/at_extension_optional/include \
 	$(CPPFLAGS_TLMTESTS)
 
-%C%_test_SOURCES = \
-	$(%C%_H_FILES) \
-	$(%C%_CXX_FILES)
+at_extension_optional_test_SOURCES = \
+	$(at_extension_optional_H_FILES) \
+	$(at_extension_optional_CXX_FILES)
 
 examples_BUILD += \
-	$(%C%_BUILD)
+	$(at_extension_optional_BUILD)
 
 examples_CLEAN += \
-	%D%/run.log \
-	%D%/expexted_trimmed.log \
-	%D%/run_trimmed.log \
-	%D%/diff.log
+	at_extension_optional/run.log \
+	at_extension_optional/expexted_trimmed.log \
+	at_extension_optional/run_trimmed.log \
+	at_extension_optional/diff.log
 
 examples_FILES += \
-	$(%C%_H_FILES) \
-	$(%C%_CXX_FILES) \
-	$(%C%_BUILD) \
-	$(%C%_EXTRA)
+	$(at_extension_optional_H_FILES) \
+	$(at_extension_optional_CXX_FILES) \
+	$(at_extension_optional_BUILD) \
+	$(at_extension_optional_EXTRA)
 
 ## example-specific details
 
-%C%_test_CPPFLAGS += \
+at_extension_optional_test_CPPFLAGS += \
 	-DUSING_EXTENSION_OPTIONAL
 
-%C%_H_FILES = \
-	%D%/include/at_extension_optional_top.h \
-	%D%/include/initiator_top.h
+at_extension_optional_H_FILES = \
+	at_extension_optional/include/at_extension_optional_top.h \
+	at_extension_optional/include/initiator_top.h
 
-%C%_CXX_FILES = \
-	%D%/src/at_extension_optional.cpp \
-	%D%/src/at_extension_optional_top.cpp \
-	%D%/src/initiator_top.cpp
+at_extension_optional_CXX_FILES = \
+	at_extension_optional/src/at_extension_optional.cpp \
+	at_extension_optional/src/at_extension_optional_top.cpp \
+	at_extension_optional/src/initiator_top.cpp
 
-%C%_SHARED_CXX_FILES = \
-	%D%/at_target_4_phase.cpp \
-	%D%/traffic_generator.cpp
+at_extension_optional_SHARED_CXX_FILES = \
+	at_extension_optional/at_target_4_phase.cpp \
+	at_extension_optional/traffic_generator.cpp
 
-%C%_BUILD = \
-	%D%/results/expected.log
+at_extension_optional_BUILD = \
+	at_extension_optional/results/expected.log
 
-%C%_EXTRA = \
-	%D%/build-msvc/Makefile \
-	%D%/build-msvc/at_extension_optional.sln \
-	%D%/build-msvc/at_extension_optional.vcproj \
-	%D%/build-unix/Makefile \
-	%D%/docs/at_extension_optional_example.pdf \
-	%D%/docs/at_extension_optional_example.ppt
+at_extension_optional_EXTRA = \
+	at_extension_optional/build-msvc/Makefile \
+	at_extension_optional/build-msvc/at_extension_optional.sln \
+	at_extension_optional/build-msvc/at_extension_optional.vcproj \
+	at_extension_optional/build-unix/Makefile \
+	at_extension_optional/docs/at_extension_optional_example.pdf \
+	at_extension_optional/docs/at_extension_optional_example.ppt
 
-#%C%_FILTER = 
-#export %C%_FILTER
+#at_extension_optional_FILTER = 
+#export at_extension_optional_FILTER
 
-$(%C%_SHARED_CXX_FILES) :
+$(at_extension_optional_SHARED_CXX_FILES) :
 	$(AM_V_GEN)$(INSTALL_DATA) $(srcdir)/common/src/$(@F) $@
 
-nodist_%C%_test_SOURCES = \
-	$(%C%_SHARED_CXX_FILES)
+nodist_at_extension_optional_test_SOURCES = \
+	$(at_extension_optional_SHARED_CXX_FILES)
 
 CLEANFILES += \
-	$(%C%_SHARED_CXX_FILES)
+	$(at_extension_optional_SHARED_CXX_FILES)
 
 ## Taf!
 ## :vim:ft=automake:

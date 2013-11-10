@@ -32,58 +32,66 @@
 
 ## Generic example setup
 ## (should be kept in sync among all test.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##      included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D%: lt_extension_mandatory
+##   %C%: lt_extension_mandatory
 
-check_PROGRAMS += %D%/test
+check_PROGRAMS += lt_extension_mandatory/test
 
-%C%_test_CPPFLAGS = \
-	-I$(srcdir)/%D%/include \
+lt_extension_mandatory_test_CPPFLAGS = \
+	-I$(srcdir)/lt_extension_mandatory/include \
 	$(CPPFLAGS_TLMTESTS)
 
-%C%_test_SOURCES = \
-	$(%C%_H_FILES) \
-	$(%C%_CXX_FILES)
+lt_extension_mandatory_test_SOURCES = \
+	$(lt_extension_mandatory_H_FILES) \
+	$(lt_extension_mandatory_CXX_FILES)
 
 examples_BUILD += \
-	$(%C%_BUILD)
+	$(lt_extension_mandatory_BUILD)
 
 examples_CLEAN += \
-	%D%/run.log \
-	%D%/expexted_trimmed.log \
-	%D%/run_trimmed.log \
-	%D%/diff.log
+	lt_extension_mandatory/run.log \
+	lt_extension_mandatory/expexted_trimmed.log \
+	lt_extension_mandatory/run_trimmed.log \
+	lt_extension_mandatory/diff.log
 
 examples_FILES += \
-	$(%C%_H_FILES) \
-	$(%C%_CXX_FILES) \
-	$(%C%_BUILD) \
-	$(%C%_EXTRA)
+	$(lt_extension_mandatory_H_FILES) \
+	$(lt_extension_mandatory_CXX_FILES) \
+	$(lt_extension_mandatory_BUILD) \
+	$(lt_extension_mandatory_EXTRA)
 
 ## example-specific details
 
-%C%_H_FILES = \
-	%D%/include/lt_extension_mandatory_top.h \
-	%D%/include/lt_initiator_extension_mandatory.h \
-	%D%/include/lt_target_extension_mandatory.h
+lt_extension_mandatory_H_FILES = \
+	lt_extension_mandatory/include/lt_extension_mandatory_top.h \
+	lt_extension_mandatory/include/lt_initiator_extension_mandatory.h \
+	lt_extension_mandatory/include/lt_target_extension_mandatory.h
 
-%C%_CXX_FILES = \
-	%D%/src/lt_extension_mandatory.cpp \
-	%D%/src/lt_extension_mandatory_top.cpp \
-	%D%/src/lt_initiator_extension_mandatory.cpp \
-	%D%/src/lt_target_extension_mandatory.cpp
+lt_extension_mandatory_CXX_FILES = \
+	lt_extension_mandatory/src/lt_extension_mandatory.cpp \
+	lt_extension_mandatory/src/lt_extension_mandatory_top.cpp \
+	lt_extension_mandatory/src/lt_initiator_extension_mandatory.cpp \
+	lt_extension_mandatory/src/lt_target_extension_mandatory.cpp
 
-%C%_BUILD = \
-	%D%/results/expected.log
+lt_extension_mandatory_BUILD = \
+	lt_extension_mandatory/results/expected.log
 
-%C%_EXTRA = \
-	%D%/build-msvc/Makefile \
-	%D%/build-msvc/lt_extension_mandatory.sln \
-	%D%/build-msvc/lt_extension_mandatory.vcproj \
-	%D%/build-unix/Makefile \
-	%D%/docs/lt_extension_mandatory_example.pdf \
-	%D%/docs/lt_extension_mandatory_example.ppt
+lt_extension_mandatory_EXTRA = \
+	lt_extension_mandatory/build-msvc/Makefile \
+	lt_extension_mandatory/build-msvc/lt_extension_mandatory.sln \
+	lt_extension_mandatory/build-msvc/lt_extension_mandatory.vcproj \
+	lt_extension_mandatory/build-unix/Makefile \
+	lt_extension_mandatory/docs/lt_extension_mandatory_example.pdf \
+	lt_extension_mandatory/docs/lt_extension_mandatory_example.ppt
 
-#%C%_FILTER = 
-#export %C%_FILTER
+#lt_extension_mandatory_FILTER = 
+#export lt_extension_mandatory_FILTER
 
 ## Taf!
 ## :vim: ft=automake:

@@ -32,74 +32,82 @@
 
 ## Generic example setup
 ## (should be kept in sync among all test.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##      included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D%: fft/fft_fxpt
+##   %C%: fft_fft_fxpt
 
-check_PROGRAMS += %D%/test
+check_PROGRAMS += fft/fft_fxpt/test
 
-%C%_test_CPPFLAGS = \
+fft_fft_fxpt_test_CPPFLAGS = \
 	$(AM_CPPFLAGS)
 
-%C%_test_SOURCES = \
-	$(%C%_H_FILES) \
-	$(%C%_CXX_FILES)
+fft_fft_fxpt_test_SOURCES = \
+	$(fft_fft_fxpt_H_FILES) \
+	$(fft_fft_fxpt_CXX_FILES)
 
 examples_BUILD += \
-	$(%C%_BUILD)
+	$(fft_fft_fxpt_BUILD)
 
 examples_CLEAN += \
-	%D%/run.log \
-	%D%/expexted_trimmed.log \
-	%D%/run_trimmed.log \
-	%D%/diff.log
+	fft/fft_fxpt/run.log \
+	fft/fft_fxpt/expexted_trimmed.log \
+	fft/fft_fxpt/run_trimmed.log \
+	fft/fft_fxpt/diff.log
 
 examples_FILES += \
-	$(%C%_H_FILES) \
-	$(%C%_CXX_FILES) \
-	$(%C%_BUILD) \
-	$(%C%_EXTRA)
+	$(fft_fft_fxpt_H_FILES) \
+	$(fft_fft_fxpt_CXX_FILES) \
+	$(fft_fft_fxpt_BUILD) \
+	$(fft_fft_fxpt_EXTRA)
 
 ## example-specific details
 
 examples_CLEAN += \
-	%D%/out_real \
-	%D%/out_imag
+	fft/fft_fxpt/out_real \
+	fft/fft_fxpt/out_imag
 
-%C%_H_FILES = \
-	%D%/fft.h \
-	%D%/sink.h \
-	%D%/source.h
+fft_fft_fxpt_H_FILES = \
+	fft/fft_fxpt/fft.h \
+	fft/fft_fxpt/sink.h \
+	fft/fft_fxpt/source.h
 
-%C%_CXX_FILES = \
-	%D%/fft.cpp \
-	%D%/main.cpp \
-	%D%/sink.cpp \
-	%D%/source.cpp
+fft_fft_fxpt_CXX_FILES = \
+	fft/fft_fxpt/fft.cpp \
+	fft/fft_fxpt/main.cpp \
+	fft/fft_fxpt/sink.cpp \
+	fft/fft_fxpt/source.cpp
 
-%C%_BUILD = \
-	%D%/in_imag \
-	%D%/in_imag.1 \
-	%D%/in_imag.2 \
-	%D%/in_imag.3 \
-	%D%/in_imag.4 \
-	%D%/in_real \
-	%D%/in_real.1 \
-	%D%/in_real.2 \
-	%D%/in_real.3 \
-	%D%/in_real.4 \
-	%D%/out_imag.1.golden \
-	%D%/out_imag.2.golden \
-	%D%/out_imag.3.golden \
-	%D%/out_imag.4.golden \
-	%D%/out_real.1.golden \
-	%D%/out_real.2.golden \
-	%D%/out_real.3.golden \
-	%D%/out_real.4.golden
+fft_fft_fxpt_BUILD = \
+	fft/fft_fxpt/in_imag \
+	fft/fft_fxpt/in_imag.1 \
+	fft/fft_fxpt/in_imag.2 \
+	fft/fft_fxpt/in_imag.3 \
+	fft/fft_fxpt/in_imag.4 \
+	fft/fft_fxpt/in_real \
+	fft/fft_fxpt/in_real.1 \
+	fft/fft_fxpt/in_real.2 \
+	fft/fft_fxpt/in_real.3 \
+	fft/fft_fxpt/in_real.4 \
+	fft/fft_fxpt/out_imag.1.golden \
+	fft/fft_fxpt/out_imag.2.golden \
+	fft/fft_fxpt/out_imag.3.golden \
+	fft/fft_fxpt/out_imag.4.golden \
+	fft/fft_fxpt/out_real.1.golden \
+	fft/fft_fxpt/out_real.2.golden \
+	fft/fft_fxpt/out_real.3.golden \
+	fft/fft_fxpt/out_real.4.golden
 
-%C%_EXTRA = \
-	%D%/fft_fxpt.vcproj \
-	%D%/Makefile
+fft_fft_fxpt_EXTRA = \
+	fft/fft_fxpt/fft_fxpt.vcproj \
+	fft/fft_fxpt/Makefile
 
-#%C%_FILTER = 
-#export %C%_FILTER
+#fft_fft_fxpt_FILTER = 
+#export fft_fft_fxpt_FILTER
 
 ## Taf!
 ## :vim:ft=automake:

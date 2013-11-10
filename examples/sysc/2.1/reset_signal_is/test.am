@@ -32,46 +32,55 @@
 
 ## Generic example setup
 ## (should be kept in sync among all test.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##       included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D% = 2.1/reset_signal_is
+##   %C% = 2.1_reset_signal_is
 
-check_PROGRAMS += %D%/test
 
-%C%_test_CPPFLAGS = \
+check_PROGRAMS += 2.1/reset_signal_is/test
+
+2_1_reset_signal_is_test_CPPFLAGS = \
 	$(AM_CPPFLAGS)
 
-%C%_test_SOURCES = \
-	$(%C%_H_FILES) \
-	$(%C%_CXX_FILES)
+2_1_reset_signal_is_test_SOURCES = \
+	$(2_1_reset_signal_is_H_FILES) \
+	$(2_1_reset_signal_is_CXX_FILES)
 
 examples_BUILD += \
-	$(%C%_BUILD)
+	$(2_1_reset_signal_is_BUILD)
 
 examples_CLEAN += \
-	%D%/run.log \
-	%D%/expexted_trimmed.log \
-	%D%/run_trimmed.log \
-	%D%/diff.log
+	2.1/reset_signal_is/run.log \
+	2.1/reset_signal_is/expexted_trimmed.log \
+	2.1/reset_signal_is/run_trimmed.log \
+	2.1/reset_signal_is/diff.log
 
 examples_FILES += \
-	$(%C%_H_FILES) \
-	$(%C%_CXX_FILES) \
-	$(%C%_BUILD) \
-	$(%C%_EXTRA)
+	$(2_1_reset_signal_is_H_FILES) \
+	$(2_1_reset_signal_is_CXX_FILES) \
+	$(2_1_reset_signal_is_BUILD) \
+	$(2_1_reset_signal_is_EXTRA)
 
 ## example-specific details
 
-%C%_H_FILES =
+2_1_reset_signal_is_H_FILES =
 
-%C%_CXX_FILES = \
-	%D%/reset_signal_is.cpp
+2_1_reset_signal_is_CXX_FILES = \
+	2.1/reset_signal_is/reset_signal_is.cpp
 
-%C%_BUILD =
+2_1_reset_signal_is_BUILD =
 
-%C%_EXTRA = \
-	%D%/reset_signal_is.vcproj \
-	%D%/Makefile
+2_1_reset_signal_is_EXTRA = \
+	2.1/reset_signal_is/reset_signal_is.vcproj \
+	2.1/reset_signal_is/Makefile
 
-#%C%_FILTER = 
-#export %C%_FILTER
+#2_1_reset_signal_is_FILTER = 
+#export 2_1_reset_signal_is_FILTER
 
 ## Taf!
 ## :vim:ft=automake:

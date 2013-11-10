@@ -32,47 +32,55 @@
 
 ## Generic example setup
 ## (should be kept in sync among all test.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##      included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D%: 2.1/scx_barrier
+##   %C%: 2_1_scx_barrier
 
-check_PROGRAMS += %D%/test
+check_PROGRAMS += 2.1/scx_barrier/test
 
-%C%_test_CPPFLAGS = \
+2_1_scx_barrier_test_CPPFLAGS = \
 	$(AM_CPPFLAGS)
 
-%C%_test_SOURCES = \
-	$(%C%_H_FILES) \
-	$(%C%_CXX_FILES)
+2_1_scx_barrier_test_SOURCES = \
+	$(2_1_scx_barrier_H_FILES) \
+	$(2_1_scx_barrier_CXX_FILES)
 
 examples_BUILD += \
-	$(%C%_BUILD)
+	$(2_1_scx_barrier_BUILD)
 
 examples_CLEAN += \
-	%D%/run.log \
-	%D%/expexted_trimmed.log \
-	%D%/run_trimmed.log \
-	%D%/diff.log
+	2.1/scx_barrier/run.log \
+	2.1/scx_barrier/expexted_trimmed.log \
+	2.1/scx_barrier/run_trimmed.log \
+	2.1/scx_barrier/diff.log
 
 examples_FILES += \
-	$(%C%_H_FILES) \
-	$(%C%_CXX_FILES) \
-	$(%C%_BUILD) \
-	$(%C%_EXTRA)
+	$(2_1_scx_barrier_H_FILES) \
+	$(2_1_scx_barrier_CXX_FILES) \
+	$(2_1_scx_barrier_BUILD) \
+	$(2_1_scx_barrier_EXTRA)
 
 ## example-specific details
 
-%C%_H_FILES = \
-	%D%/scx_barrier.h
+2_1_scx_barrier_H_FILES = \
+	2.1/scx_barrier/scx_barrier.h
 
-%C%_CXX_FILES = \
-	%D%/main.cpp
+2_1_scx_barrier_CXX_FILES = \
+	2.1/scx_barrier/main.cpp
 
-%C%_BUILD =
+2_1_scx_barrier_BUILD =
 
-%C%_EXTRA = \
-	%D%/scx_barrier.vcproj \
-	%D%/Makefile
+2_1_scx_barrier_EXTRA = \
+	2.1/scx_barrier/scx_barrier.vcproj \
+	2.1/scx_barrier/Makefile
 
-#%C%_FILTER = 
-#export %C%_FILTER
+#2_1_scx_barrier_FILTER = 
+#export 2_1_scx_barrier_FILTER
 
 ## Taf!
 ## :vim:ft=automake:

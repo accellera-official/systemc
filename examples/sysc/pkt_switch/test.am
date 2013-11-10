@@ -32,59 +32,67 @@
 
 ## Generic example setup
 ## (should be kept in sync among all test.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##      included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D%: pkt_switch
+##   %C%: pkt_switch
 
-check_PROGRAMS += %D%/test
+check_PROGRAMS += pkt_switch/test
 
-%C%_test_CPPFLAGS = \
+pkt_switch_test_CPPFLAGS = \
 	$(AM_CPPFLAGS)
 
-%C%_test_SOURCES = \
-	$(%C%_H_FILES) \
-	$(%C%_CXX_FILES)
+pkt_switch_test_SOURCES = \
+	$(pkt_switch_H_FILES) \
+	$(pkt_switch_CXX_FILES)
 
 examples_BUILD += \
-	$(%C%_BUILD)
+	$(pkt_switch_BUILD)
 
 examples_CLEAN += \
-	%D%/run.log \
-	%D%/expexted_trimmed.log \
-	%D%/run_trimmed.log \
-	%D%/diff.log
+	pkt_switch/run.log \
+	pkt_switch/expexted_trimmed.log \
+	pkt_switch/run_trimmed.log \
+	pkt_switch/diff.log
 
 examples_FILES += \
-	$(%C%_H_FILES) \
-	$(%C%_CXX_FILES) \
-	$(%C%_BUILD) \
-	$(%C%_EXTRA)
+	$(pkt_switch_H_FILES) \
+	$(pkt_switch_CXX_FILES) \
+	$(pkt_switch_BUILD) \
+	$(pkt_switch_EXTRA)
 
 ## example-specific details
 
-%C%_H_FILES = \
-	%D%/fifo.h \
-	%D%/pkt.h \
-	%D%/receiver.h \
-	%D%/sender.h \
-	%D%/switch.h \
-	%D%/switch_clk.h \
-	%D%/switch_reg.h
+pkt_switch_H_FILES = \
+	pkt_switch/fifo.h \
+	pkt_switch/pkt.h \
+	pkt_switch/receiver.h \
+	pkt_switch/sender.h \
+	pkt_switch/switch.h \
+	pkt_switch/switch_clk.h \
+	pkt_switch/switch_reg.h
 
-%C%_CXX_FILES = \
-	%D%/fifo.cpp \
-	%D%/main.cpp \
-	%D%/receiver.cpp \
-	%D%/sender.cpp \
-	%D%/switch.cpp \
-	%D%/switch_clk.cpp
+pkt_switch_CXX_FILES = \
+	pkt_switch/fifo.cpp \
+	pkt_switch/main.cpp \
+	pkt_switch/receiver.cpp \
+	pkt_switch/sender.cpp \
+	pkt_switch/switch.cpp \
+	pkt_switch/switch_clk.cpp
 
-%C%_BUILD =
+pkt_switch_BUILD =
 
-%C%_EXTRA = \
-	%D%/pkt_switch.vcproj \
-	%D%/Makefile \
-	%D%/README
+pkt_switch_EXTRA = \
+	pkt_switch/pkt_switch.vcproj \
+	pkt_switch/Makefile \
+	pkt_switch/README
 
-#%C%_FILTER = 
-#export %C%_FILTER
+#pkt_switch_FILTER = 
+#export pkt_switch_FILTER
 
 ## Taf!
 ## :vim:ft=automake:

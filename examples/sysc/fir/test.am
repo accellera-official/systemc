@@ -32,75 +32,82 @@
 
 ## Generic example setup
 ## (should be kept in sync among all test.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##       included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D%: fir
+##   %C%: fir
 
-check_PROGRAMS += %D%/test %D%/test_rtl
+check_PROGRAMS += fir/test fir/test_rtl
 
-%C%_test_CPPFLAGS = \
+fir_test_CPPFLAGS = \
 	$(AM_CPPFLAGS)
 
-%C%_test_SOURCES = \
-	$(%C%_H_FILES) \
-	$(%C%_CXX_COMMON) \
-	$(%C%_CXX_FILES)
+fir_test_SOURCES = \
+	$(fir_H_FILES) \
+	$(fir_CXX_COMMON) \
+	$(fir_CXX_FILES)
 
-%C%_test_rtl_SOURCES = \
-	$(%C%_H_FILES) \
-	$(%C%_CXX_COMMON) \
-	$(%C%_rtl_CXX_FILES)
+fir_test_rtl_SOURCES = \
+	$(fir_H_FILES) \
+	$(fir_CXX_COMMON) \
+	$(fir_rtl_CXX_FILES)
 
 examples_BUILD += \
-	$(%C%_BUILD)
+	$(fir_BUILD)
 
 examples_CLEAN += \
-	%D%/run.log \
-	%D%/expexted_trimmed.log \
-	%D%/run_trimmed.log \
-	%D%/diff.log
+	fir/run.log \
+	fir/expexted_trimmed.log \
+	fir/run_trimmed.log \
+	fir/diff.log
 
 examples_FILES += \
-	$(%C%_H_FILES) \
-	$(%C%_CXX_COMMON) \
-	$(%C%_CXX_FILES) \
-	$(%C%_rtl_CXX_FILES) \
-	$(%C%_BUILD) \
-	$(%C%_EXTRA)
+	$(fir_H_FILES) \
+	$(fir_CXX_COMMON) \
+	$(fir_CXX_FILES) \
+	$(fir_rtl_CXX_FILES) \
+	$(fir_BUILD) \
+	$(fir_EXTRA)
 
 ## example-specific details
 
-%C%_H_FILES = \
-	%D%/display.h    \
-	%D%/fir.h        \
-	%D%/fir_const.h  \
-	%D%/fir_data.h   \
-	%D%/fir_fsm.h    \
-	%D%/fir_top.h    \
-	%D%/stimulus.h
+fir_H_FILES = \
+	fir/display.h    \
+	fir/fir.h        \
+	fir/fir_const.h  \
+	fir/fir_data.h   \
+	fir/fir_fsm.h    \
+	fir/fir_top.h    \
+	fir/stimulus.h
 
-%C%_CXX_COMMON = \
-	%D%/stimulus.cpp \
-	%D%/display.cpp
+fir_CXX_COMMON = \
+	fir/stimulus.cpp \
+	fir/display.cpp
 
-%C%_CXX_FILES = \
-	%D%/fir.cpp \
-	%D%/main.cpp
+fir_CXX_FILES = \
+	fir/fir.cpp \
+	fir/main.cpp
 
-%C%_rtl_CXX_FILES = \
-	%D%/fir_fsm.cpp \
-	%D%/fir_data.cpp \
-	%D%/main_rtl.cpp
+fir_rtl_CXX_FILES = \
+	fir/fir_fsm.cpp \
+	fir/fir_data.cpp \
+	fir/main_rtl.cpp
 
-%C%_BUILD =
+fir_BUILD =
 
-%C%_EXTRA = \
-	%D%/log \
-	%D%/rtl_log \
-	%D%/fir.vcproj \
-	%D%/Makefile \
-	%D%/README
+fir_EXTRA = \
+	fir/log \
+	fir/rtl_log \
+	fir/fir.vcproj \
+	fir/Makefile \
+	fir/README
 
-
-#%C%_FILTER = 
-#export %C%_FILTER
+#fir_FILTER = 
+#export fir_FILTER
 
 ## Taf!
 ## :vim:ft=automake:

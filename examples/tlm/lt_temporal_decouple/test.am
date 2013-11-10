@@ -32,59 +32,67 @@
 
 ## Generic example setup
 ## (should be kept in sync among all test.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##       included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D%: lt_temporal_decouple
+##   %C%: lt_temporal_decouple
 
-check_PROGRAMS += %D%/test
+check_PROGRAMS += lt_temporal_decouple/test
 
-%C%_test_CPPFLAGS = \
-	-I$(srcdir)/%D%/include \
+lt_temporal_decouple_test_CPPFLAGS = \
+	-I$(srcdir)/lt_temporal_decouple/include \
 	$(CPPFLAGS_TLMTESTS)
 
-%C%_test_SOURCES = \
-	$(%C%_H_FILES) \
-	$(%C%_CXX_FILES)
+lt_temporal_decouple_test_SOURCES = \
+	$(lt_temporal_decouple_H_FILES) \
+	$(lt_temporal_decouple_CXX_FILES)
 
 examples_BUILD += \
-	$(%C%_BUILD)
+	$(lt_temporal_decouple_BUILD)
 
 examples_CLEAN += \
-	%D%/run.log \
-	%D%/expexted_trimmed.log \
-	%D%/run_trimmed.log \
-	%D%/diff.log
+	lt_temporal_decouple/run.log \
+	lt_temporal_decouple/expexted_trimmed.log \
+	lt_temporal_decouple/run_trimmed.log \
+	lt_temporal_decouple/diff.log
 
 examples_FILES += \
-	$(%C%_H_FILES) \
-	$(%C%_CXX_FILES) \
-	$(%C%_BUILD) \
-	$(%C%_EXTRA)
+	$(lt_temporal_decouple_H_FILES) \
+	$(lt_temporal_decouple_CXX_FILES) \
+	$(lt_temporal_decouple_BUILD) \
+	$(lt_temporal_decouple_EXTRA)
 
 ## example-specific details
 
-%C%_H_FILES = \
-	%D%/include/initiator_top.h \
-	%D%/include/lt_temporal_decouple_top.h \
-	%D%/include/td_initiator_top.h
+lt_temporal_decouple_H_FILES = \
+	lt_temporal_decouple/include/initiator_top.h \
+	lt_temporal_decouple/include/lt_temporal_decouple_top.h \
+	lt_temporal_decouple/include/td_initiator_top.h
 
-%C%_CXX_FILES = \
-	%D%/src/initiator_top.cpp \
-	%D%/src/lt_temporal_decouple.cpp \
-	%D%/src/lt_temporal_decouple_top.cpp \
-	%D%/src/td_initiator_top.cpp
+lt_temporal_decouple_CXX_FILES = \
+	lt_temporal_decouple/src/initiator_top.cpp \
+	lt_temporal_decouple/src/lt_temporal_decouple.cpp \
+	lt_temporal_decouple/src/lt_temporal_decouple_top.cpp \
+	lt_temporal_decouple/src/td_initiator_top.cpp
 
-%C%_BUILD = \
-	%D%/results/expected.log
+lt_temporal_decouple_BUILD = \
+	lt_temporal_decouple/results/expected.log
 
-%C%_EXTRA = \
-	%D%/README \
-	%D%/build-msvc/Makefile \
-	%D%/build-msvc/lt_temporal_decouple.sln \
-	%D%/build-msvc/lt_temporal_decouple.vcproj \
-	%D%/build-unix/Makefile \
-	%D%/docs/lt_temporal_decouple_example.pdf \
-	%D%/docs/lt_temporal_decouple_example.ppt
+lt_temporal_decouple_EXTRA = \
+	lt_temporal_decouple/README \
+	lt_temporal_decouple/build-msvc/Makefile \
+	lt_temporal_decouple/build-msvc/lt_temporal_decouple.sln \
+	lt_temporal_decouple/build-msvc/lt_temporal_decouple.vcproj \
+	lt_temporal_decouple/build-unix/Makefile \
+	lt_temporal_decouple/docs/lt_temporal_decouple_example.pdf \
+	lt_temporal_decouple/docs/lt_temporal_decouple_example.ppt
 
-#%C%_FILTER = 
-#export %C%_FILTER
+#lt_temporal_decouple_FILTER = 
+#export lt_temporal_decouple_FILTER
 
 ## Taf!
 ## :vim: ft=automake:

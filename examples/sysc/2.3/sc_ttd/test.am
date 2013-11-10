@@ -32,50 +32,58 @@
 
 ## Generic example setup
 ## (should be kept in sync among all test.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##       included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D%: 2.3/sc_ttd
+##   %C%: 2_3_sc_ttd
 
-check_PROGRAMS += %D%/test
+check_PROGRAMS += 2.3/sc_ttd/test
 
-%C%_test_CPPFLAGS = \
+2_3_sc_ttd_test_CPPFLAGS = \
 	$(AM_CPPFLAGS)
 
-%C%_test_SOURCES = \
-	$(%C%_H_FILES) \
-	$(%C%_CXX_FILES)
+2_3_sc_ttd_test_SOURCES = \
+	$(2_3_sc_ttd_H_FILES) \
+	$(2_3_sc_ttd_CXX_FILES)
 
 examples_BUILD += \
-	$(%C%_BUILD)
+	$(2_3_sc_ttd_BUILD)
 
 examples_CLEAN += \
-	%D%/run.log \
-	%D%/expexted_trimmed.log \
-	%D%/run_trimmed.log \
-	%D%/diff.log
+	2.3/sc_ttd/run.log \
+	2.3/sc_ttd/expexted_trimmed.log \
+	2.3/sc_ttd/run_trimmed.log \
+	2.3/sc_ttd/diff.log
 
 examples_FILES += \
-	$(%C%_H_FILES) \
-	$(%C%_CXX_FILES) \
-	$(%C%_BUILD) \
-	$(%C%_EXTRA)
+	$(2_3_sc_ttd_H_FILES) \
+	$(2_3_sc_ttd_CXX_FILES) \
+	$(2_3_sc_ttd_BUILD) \
+	$(2_3_sc_ttd_EXTRA)
 
 ## example-specific details
 
-%C%_test_CPPFLAGS += \
-	-I $(srcdir)/%D%/../include
+2_3_sc_ttd_test_CPPFLAGS += \
+	-I $(srcdir)/2.3/sc_ttd/../include
 
-%C%_H_FILES = \
-	%D%/../include/sc_ttd.h
+2_3_sc_ttd_H_FILES = \
+	2.3/sc_ttd/../include/sc_ttd.h
 
-%C%_CXX_FILES = \
-	%D%/main.cpp
+2_3_sc_ttd_CXX_FILES = \
+	2.3/sc_ttd/main.cpp
 
-%C%_BUILD =
+2_3_sc_ttd_BUILD =
 
-%C%_EXTRA = \
-	%D%/sc_ttd.vcproj \
-	%D%/Makefile
+2_3_sc_ttd_EXTRA = \
+	2.3/sc_ttd/sc_ttd.vcproj \
+	2.3/sc_ttd/Makefile
 
-#%C%_FILTER = 
-#export %C%_FILTER
+#2_3_sc_ttd_FILTER = 
+#export 2_3_sc_ttd_FILTER
 
 ## Taf!
 ## :vim:ft=automake:

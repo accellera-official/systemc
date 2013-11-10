@@ -32,46 +32,54 @@
 
 ## Generic example setup
 ## (should be kept in sync among all test.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##       included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D%: 2.1/dpipe
+##   %C%: 2_1_dpipe
 
-check_PROGRAMS += %D%/test
+check_PROGRAMS += 2.1/dpipe/test
 
-%C%_test_CPPFLAGS = \
+2_1_dpipe_test_CPPFLAGS = \
 	$(AM_CPPFLAGS)
 
-%C%_test_SOURCES = \
-	$(%C%_H_FILES) \
-	$(%C%_CXX_FILES)
+2_1_dpipe_test_SOURCES = \
+	$(2_1_dpipe_H_FILES) \
+	$(2_1_dpipe_CXX_FILES)
 
 examples_BUILD += \
-	$(%C%_BUILD)
+	$(2_1_dpipe_BUILD)
 
 examples_CLEAN += \
-	%D%/run.log \
-	%D%/expexted_trimmed.log \
-	%D%/run_trimmed.log \
-	%D%/diff.log
+	2.1/dpipe/run.log \
+	2.1/dpipe/expexted_trimmed.log \
+	2.1/dpipe/run_trimmed.log \
+	2.1/dpipe/diff.log
 
 examples_FILES += \
-	$(%C%_H_FILES) \
-	$(%C%_CXX_FILES) \
-	$(%C%_BUILD) \
-	$(%C%_EXTRA)
+	$(2_1_dpipe_H_FILES) \
+	$(2_1_dpipe_CXX_FILES) \
+	$(2_1_dpipe_BUILD) \
+	$(2_1_dpipe_EXTRA)
 
 ## example-specific details
 
-%C%_H_FILES =
+2_1_dpipe_H_FILES =
 
-%C%_CXX_FILES = \
-	%D%/main.cpp
+2_1_dpipe_CXX_FILES = \
+	2.1/dpipe/main.cpp
 
-%C%_BUILD =
+2_1_dpipe_BUILD =
 
-%C%_EXTRA = \
-	%D%/dpipe.vcproj \
-	%D%/Makefile
+2_1_dpipe_EXTRA = \
+	2.1/dpipe/dpipe.vcproj \
+	2.1/dpipe/Makefile
 
-#%C%_FILTER = 
-#export %C%_FILTER
+#2_1_dpipe_FILTER = 
+#export 2_1_dpipe_FILTER
 
 ## Taf!
 ## :vim:ft=automake:

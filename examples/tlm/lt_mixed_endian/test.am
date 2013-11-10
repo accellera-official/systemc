@@ -32,61 +32,69 @@
 
 ## Generic example setup
 ## (should be kept in sync among all test.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##      included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D%: lt_mixed_endian
+##   %C%: lt_mixed_endian
 
-check_PROGRAMS += %D%/test
+check_PROGRAMS += lt_mixed_endian/test
 
-%C%_test_CPPFLAGS = \
-	-I$(srcdir)/%D%/include \
+lt_mixed_endian_test_CPPFLAGS = \
+	-I$(srcdir)/lt_mixed_endian/include \
 	$(CPPFLAGS_TLMTESTS)
 
-%C%_test_SOURCES = \
-	$(%C%_H_FILES) \
-	$(%C%_CXX_FILES)
+lt_mixed_endian_test_SOURCES = \
+	$(lt_mixed_endian_H_FILES) \
+	$(lt_mixed_endian_CXX_FILES)
 
 examples_BUILD += \
-	$(%C%_BUILD)
+	$(lt_mixed_endian_BUILD)
 
 examples_CLEAN += \
-	%D%/run.log \
-	%D%/expexted_trimmed.log \
-	%D%/run_trimmed.log \
-	%D%/diff.log
+	lt_mixed_endian/run.log \
+	lt_mixed_endian/expexted_trimmed.log \
+	lt_mixed_endian/run_trimmed.log \
+	lt_mixed_endian/diff.log
 
 examples_FILES += \
-	$(%C%_H_FILES) \
-	$(%C%_CXX_FILES) \
-	$(%C%_BUILD) \
-	$(%C%_EXTRA)
+	$(lt_mixed_endian_H_FILES) \
+	$(lt_mixed_endian_CXX_FILES) \
+	$(lt_mixed_endian_BUILD) \
+	$(lt_mixed_endian_EXTRA)
 
 ## example-specific details
 
-%C%_H_FILES = \
-	%D%/include/initiator_top.h \
-	%D%/include/lt_top.h \
-	%D%/include/me_traffic_generator.h
+lt_mixed_endian_H_FILES = \
+	lt_mixed_endian/include/initiator_top.h \
+	lt_mixed_endian/include/lt_top.h \
+	lt_mixed_endian/include/me_traffic_generator.h
 
-%C%_CXX_FILES = \
-	%D%/src/initiator_top.cpp \
-	%D%/src/lt.cpp \
-	%D%/src/lt_top.cpp \
-	%D%/src/me_traffic_generator.cpp
+lt_mixed_endian_CXX_FILES = \
+	lt_mixed_endian/src/initiator_top.cpp \
+	lt_mixed_endian/src/lt.cpp \
+	lt_mixed_endian/src/lt_top.cpp \
+	lt_mixed_endian/src/me_traffic_generator.cpp
 
-%C%_BUILD = \
-	%D%/results/expected.log \
-	%D%/results/input.txt
+lt_mixed_endian_BUILD = \
+	lt_mixed_endian/results/expected.log \
+	lt_mixed_endian/results/input.txt
 
-%C%_EXTRA = \
-	%D%/README \
-	%D%/build-msvc/Makefile \
-	%D%/build-msvc/README.txt \
-	%D%/build-msvc/lt.sln \
-	%D%/build-msvc/lt.vcproj \
-	%D%/build-unix/Makefile \
-	%D%/docs/lt_mixed_endian_example.pdf \
-	%D%/docs/lt_mixed_endian_example.ppt
+lt_mixed_endian_EXTRA = \
+	lt_mixed_endian/README \
+	lt_mixed_endian/build-msvc/Makefile \
+	lt_mixed_endian/build-msvc/README.txt \
+	lt_mixed_endian/build-msvc/lt.sln \
+	lt_mixed_endian/build-msvc/lt.vcproj \
+	lt_mixed_endian/build-unix/Makefile \
+	lt_mixed_endian/docs/lt_mixed_endian_example.pdf \
+	lt_mixed_endian/docs/lt_mixed_endian_example.ppt
 
-%C%_FILTER = "'::'"
-export %C%_FILTER
+lt_mixed_endian_FILTER = "'::'"
+export lt_mixed_endian_FILTER
 
 ## Taf!
 ## :vim: ft=automake:

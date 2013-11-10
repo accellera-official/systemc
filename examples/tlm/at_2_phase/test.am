@@ -32,56 +32,64 @@
 
 ## Generic example setup
 ## (should be kept in sync among all test.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##      included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D%: at_2_phase
+##   %C%: at_2_phase
 
-check_PROGRAMS += %D%/test
+check_PROGRAMS += at_2_phase/test
 
-%C%_test_CPPFLAGS = \
-	-I$(srcdir)/%D%/include \
+at_2_phase_test_CPPFLAGS = \
+	-I$(srcdir)/at_2_phase/include \
 	$(CPPFLAGS_TLMTESTS)
 
-%C%_test_SOURCES = \
-	$(%C%_H_FILES) \
-	$(%C%_CXX_FILES)
+at_2_phase_test_SOURCES = \
+	$(at_2_phase_H_FILES) \
+	$(at_2_phase_CXX_FILES)
 
 examples_BUILD += \
-	$(%C%_BUILD)
+	$(at_2_phase_BUILD)
 
 examples_CLEAN += \
-	%D%/run.log \
-	%D%/expexted_trimmed.log \
-	%D%/run_trimmed.log \
-	%D%/diff.log
+	at_2_phase/run.log \
+	at_2_phase/expexted_trimmed.log \
+	at_2_phase/run_trimmed.log \
+	at_2_phase/diff.log
 
 examples_FILES += \
-	$(%C%_H_FILES) \
-	$(%C%_CXX_FILES) \
-	$(%C%_BUILD) \
-	$(%C%_EXTRA)
+	$(at_2_phase_H_FILES) \
+	$(at_2_phase_CXX_FILES) \
+	$(at_2_phase_BUILD) \
+	$(at_2_phase_EXTRA)
 
 ## example-specific details
 
-%C%_H_FILES = \
-	%D%/include/at_2_phase_top.h \
-	%D%/include/initiator_top.h
+at_2_phase_H_FILES = \
+	at_2_phase/include/at_2_phase_top.h \
+	at_2_phase/include/initiator_top.h
 
-%C%_CXX_FILES = \
-	%D%/src/at_2_phase.cpp \
-	%D%/src/at_2_phase_top.cpp \
-	%D%/src/initiator_top.cpp
+at_2_phase_CXX_FILES = \
+	at_2_phase/src/at_2_phase.cpp \
+	at_2_phase/src/at_2_phase_top.cpp \
+	at_2_phase/src/initiator_top.cpp
 
-%C%_BUILD = \
-	%D%/results/expected.log
+at_2_phase_BUILD = \
+	at_2_phase/results/expected.log
 
-%C%_EXTRA = \
-	%D%/build-msvc/Makefile \
-	%D%/build-msvc/at_2_phase.sln \
-	%D%/build-msvc/at_2_phase.vcproj \
-	%D%/build-unix/Makefile \
-	%D%/docs/at_2_phase_example.pdf \
-	%D%/docs/at_2_phase_example.ppt
+at_2_phase_EXTRA = \
+	at_2_phase/build-msvc/Makefile \
+	at_2_phase/build-msvc/at_2_phase.sln \
+	at_2_phase/build-msvc/at_2_phase.vcproj \
+	at_2_phase/build-unix/Makefile \
+	at_2_phase/docs/at_2_phase_example.pdf \
+	at_2_phase/docs/at_2_phase_example.ppt
 
-#%C%_FILTER =
-#export %C%_FILTER
+#at_2_phase_FILTER =
+#export at_2_phase_FILTER
 
 ## Taf!
 ## :vim:ft=automake:

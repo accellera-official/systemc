@@ -32,59 +32,67 @@
 
 ## Generic example setup
 ## (should be kept in sync among all test.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##      included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D%: pipe
+##   %C%: pipe
 
-check_PROGRAMS += %D%/test
+check_PROGRAMS += pipe/test
 
-%C%_test_CPPFLAGS = \
+pipe_test_CPPFLAGS = \
 	$(AM_CPPFLAGS)
 
-%C%_test_SOURCES = \
-	$(%C%_H_FILES) \
-	$(%C%_CXX_FILES)
+pipe_test_SOURCES = \
+	$(pipe_H_FILES) \
+	$(pipe_CXX_FILES)
 
 examples_BUILD += \
-	$(%C%_BUILD)
+	$(pipe_BUILD)
 
 examples_CLEAN += \
-	%D%/run.log \
-	%D%/expexted_trimmed.log \
-	%D%/run_trimmed.log \
-	%D%/diff.log
+	pipe/run.log \
+	pipe/expexted_trimmed.log \
+	pipe/run_trimmed.log \
+	pipe/diff.log
 
 examples_FILES += \
-	$(%C%_H_FILES) \
-	$(%C%_CXX_FILES) \
-	$(%C%_BUILD) \
-	$(%C%_EXTRA)
+	$(pipe_H_FILES) \
+	$(pipe_CXX_FILES) \
+	$(pipe_BUILD) \
+	$(pipe_EXTRA)
 
 ## example-specific details
 
-%C%_H_FILES = \
-	%D%/display.h \
-	%D%/numgen.h \
-	%D%/stage1.h \
-	%D%/stage2.h \
-	%D%/stage3.h
+pipe_H_FILES = \
+	pipe/display.h \
+	pipe/numgen.h \
+	pipe/stage1.h \
+	pipe/stage2.h \
+	pipe/stage3.h
 
-%C%_CXX_FILES = \
-	%D%/display.cpp \
-	%D%/main.cpp \
-	%D%/numgen.cpp \
-	%D%/stage1.cpp \
-	%D%/stage2.cpp \
-	%D%/stage3.cpp
+pipe_CXX_FILES = \
+	pipe/display.cpp \
+	pipe/main.cpp \
+	pipe/numgen.cpp \
+	pipe/stage1.cpp \
+	pipe/stage2.cpp \
+	pipe/stage3.cpp
 
-%C%_BUILD = \
-	%D%/golden.log
+pipe_BUILD = \
+	pipe/golden.log
 
-%C%_EXTRA = \
-	%D%/pipe.vcproj \
-	%D%/Makefile \
-	%D%/README
+pipe_EXTRA = \
+	pipe/pipe.vcproj \
+	pipe/Makefile \
+	pipe/README
 
 
-#%C%_FILTER = 
-#export %C%_FILTER
+#pipe_FILTER = 
+#export pipe_FILTER
 
 ## Taf!
 ## :vim:ft=automake:

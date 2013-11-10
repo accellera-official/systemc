@@ -32,47 +32,55 @@
 
 ## Generic example setup
 ## (should be kept in sync among all test.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##      included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D%: rsa
+##   %C%: rsa
 
-check_PROGRAMS += %D%/test
+check_PROGRAMS += rsa/test
 
-%C%_test_CPPFLAGS = \
+rsa_test_CPPFLAGS = \
 	$(AM_CPPFLAGS)
 
-%C%_test_SOURCES = \
-	$(%C%_H_FILES) \
-	$(%C%_CXX_FILES)
+rsa_test_SOURCES = \
+	$(rsa_H_FILES) \
+	$(rsa_CXX_FILES)
 
 examples_BUILD += \
-	$(%C%_BUILD)
+	$(rsa_BUILD)
 
 examples_CLEAN += \
-	%D%/run.log \
-	%D%/expexted_trimmed.log \
-	%D%/run_trimmed.log \
-	%D%/diff.log
+	rsa/run.log \
+	rsa/expexted_trimmed.log \
+	rsa/run_trimmed.log \
+	rsa/diff.log
 
 examples_FILES += \
-	$(%C%_H_FILES) \
-	$(%C%_CXX_FILES) \
-	$(%C%_BUILD) \
-	$(%C%_EXTRA)
+	$(rsa_H_FILES) \
+	$(rsa_CXX_FILES) \
+	$(rsa_BUILD) \
+	$(rsa_EXTRA)
 
 ## example-specific details
 
-%C%_H_FILES =
+rsa_H_FILES =
 
-%C%_CXX_FILES = \
-	%D%/rsa.cpp
+rsa_CXX_FILES = \
+	rsa/rsa.cpp
 
-%C%_BUILD =
+rsa_BUILD =
 
-%C%_EXTRA = \
-	%D%/rsa.vcproj \
-	%D%/Makefile \
-	%D%/README
+rsa_EXTRA = \
+	rsa/rsa.vcproj \
+	rsa/Makefile \
+	rsa/README
 
-#%C%_FILTER = 
-#export %C%_FILTER
+#rsa_FILTER = 
+#export rsa_FILTER
 
 ## Taf!
 ## :vim:ft=automake:

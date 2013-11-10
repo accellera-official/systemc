@@ -32,47 +32,55 @@
 
 ## Generic example setup
 ## (should be kept in sync among all test.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##      included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D%: simple_fifo
+##   %C%: simple_fifo
 
-check_PROGRAMS += %D%/test
+check_PROGRAMS += simple_fifo/test
 
-%C%_test_CPPFLAGS = \
+simple_fifo_test_CPPFLAGS = \
 	$(AM_CPPFLAGS)
 
-%C%_test_SOURCES = \
-	$(%C%_H_FILES) \
-	$(%C%_CXX_FILES)
+simple_fifo_test_SOURCES = \
+	$(simple_fifo_H_FILES) \
+	$(simple_fifo_CXX_FILES)
 
 examples_BUILD += \
-	$(%C%_BUILD)
+	$(simple_fifo_BUILD)
 
 examples_CLEAN += \
-	%D%/run.log \
-	%D%/expexted_trimmed.log \
-	%D%/run_trimmed.log \
-	%D%/diff.log
+	simple_fifo/run.log \
+	simple_fifo/expexted_trimmed.log \
+	simple_fifo/run_trimmed.log \
+	simple_fifo/diff.log
 
 examples_FILES += \
-	$(%C%_H_FILES) \
-	$(%C%_CXX_FILES) \
-	$(%C%_BUILD) \
-	$(%C%_EXTRA)
+	$(simple_fifo_H_FILES) \
+	$(simple_fifo_CXX_FILES) \
+	$(simple_fifo_BUILD) \
+	$(simple_fifo_EXTRA)
 
 ## example-specific details
 
-%C%_H_FILES =
+simple_fifo_H_FILES =
 
-%C%_CXX_FILES = \
-	%D%/simple_fifo.cpp
+simple_fifo_CXX_FILES = \
+	simple_fifo/simple_fifo.cpp
 
-%C%_BUILD =
+simple_fifo_BUILD =
 
-%C%_EXTRA = \
-	%D%/simple_fifo.vcproj \
-	%D%/Makefile
+simple_fifo_EXTRA = \
+	simple_fifo/simple_fifo.vcproj \
+	simple_fifo/Makefile
 
 
-#%C%_FILTER = 
-#export %C%_FILTER
+#simple_fifo_FILTER = 
+#export simple_fifo_FILTER
 
 ## Taf!
 ## :vim:ft=automake:
