@@ -71,6 +71,7 @@ EXTRA_CXXFLAGS="-Wall"
 DEBUG_CXXFLAGS="-g"
 OPT_CXXFLAGS="-O3"
 EXPLICIT_LPTHREAD="-lpthread"
+LDFLAG_RPATH="-Wl,-rpath="
 
 case "$target" in
     *-apple-*)
@@ -99,31 +100,29 @@ case "$target" in
                 AC_MSG_ERROR("sorry...architecture not supported")
                 ;;
         esac
-        case "$CXX_COMP" in
-            CC | c++ | g++)
+        if test x$GXX = xyes ; then
                 EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -arch ${CPU_ARCH}"
-                EXTRA_ASFLAGS="-arch ${CPU_ARCH} -x assembler"
-                ;;
-            *)
+                EXTRA_ASFLAGS ="-arch ${CPU_ARCH} -x assembler"
+                LDFLAG_RPATH  ="-Wl,-rpath -Wl,";
+        else
                 AC_MSG_ERROR("sorry...compiler not supported")
-                ;;
-        esac
+        fi
         ;;
     sparc-sun-solaris*) 
-        case "$CXX_COMP" in
-            CC)
+        QT_ARCH="sparc-os2"
+        if test x$GXX = xyes ; then
+                TARGET_ARCH="gccsparcOS5"
+                LDFLAG_RPATH="-Wl,-R"
+        else
+            if test $CXX_COMP = CC ; then
                 EXTRA_CXXFLAGS=""
                 TARGET_ARCH="sparcOS5"
-		CCAS=as
-                ;;
-            c++ | g++)
-                TARGET_ARCH="gccsparcOS5"
-                ;;
-            *)
+                LDFLAG_RPATH="-Wl,-R"
+                CCAS=as
+            else
                 AC_MSG_ERROR("sorry...compiler not supported")
-		;;
-        esac
-        QT_ARCH="sparc-os2"
+            fi
+        fi
         ;;
     *linux*)
         case "$target_cpu" in
@@ -141,15 +140,12 @@ case "$target" in
                 AC_MSG_ERROR("sorry...architecture not supported")
             ;;
         esac
-        case "$CXX_COMP" in
-            c++ | g++)
+        if test x$GXX = xyes ; then
                 EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -m${CPU_ARCH}"
                 EXTRA_ASFLAGS="-m${CPU_ARCH}"
-                ;;
-            *)
+        else
                 AC_MSG_ERROR("sorry...compiler not supported")
-            ;;
-        esac
+        fi
         ;;
     *freebsd* | dragonfly* | *netbsd* | openbsd*)
         case "$target_cpu" in
@@ -167,26 +163,35 @@ case "$target" in
                 AC_MSG_ERROR("sorry...architecture not supported")
             ;;
         esac
-        case "$CXX_COMP" in
-            c++ | g++)
+        if test x$GXX = xyes ; then
                 EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -m${CPU_ARCH}"
                 EXTRA_ASFLAGS="-m${CPU_ARCH}"
-                ;;
-            *)
+        else
                 AC_MSG_ERROR("sorry...compiler not supported")
-            ;;
-        esac
+        fi
         ;;
     *cygwin*)
-        case "$CXX_COMP" in
-            c++ | g++)
+        case "$target_cpu" in
+            x86_64 | amd64)
+                TARGET_ARCH="cygwin64"
+                CPU_ARCH=64
+                QT_ARCH="x86_64"
+                ;;
+            i*86)
                 TARGET_ARCH="cygwin"
+                CPU_ARCH=32
+                QT_ARCH="iX86"
                 ;;
             *)
-                AC_MSG_ERROR("sorry...compiler not supported")
+                AC_MSG_ERROR("sorry...architecture not supported")
             ;;
         esac
-        QT_ARCH="iX86"
+        if test x$GXX = xyes ; then
+                EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -m${CPU_ARCH}"
+                EXTRA_ASFLAGS="-m${CPU_ARCH}"
+        else
+                AC_MSG_ERROR("sorry...compiler not supported")
+        fi
         ;;
     *mingw*)
         case "$target_cpu" in
@@ -204,33 +209,28 @@ case "$target" in
                 AC_MSG_ERROR("sorry...architecture not supported")
             ;;
         esac
-        case "$CXX_COMP" in
-            c++ | g++ | *mingw*-g++)
+        if test x$GXX = xyes ; then
                 EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -m${CPU_ARCH}"
                 EXTRA_ASFLAGS="-m${CPU_ARCH}"
-                ;;
-            *)
+        else
                 AC_MSG_ERROR("sorry...compiler not supported")
-            ;;
-        esac
+        fi
         ;;
     *hpux11*)
-        case "$CXX_COMP" in
-            aCC)
+        QT_ARCH="hppa"
+        if test x$GXX = xyes ; then
+                TARGET_ARCH="gcchpux11"
+        else
+            if test "$CXX_COMP" = "aCC" ; then
                 EXTRA_CXXFLAGS="-AA -ext +DA2.0 +DS2.0"
                 OPT_CXXFLAGS="+O1"
                 TARGET_ARCH="hpux11"
-        	EXTRA_CFLAGS="-Wa,-w36"
-		CCAS=/usr/ccs/bin/as
-                ;;
-            c++ | g++)
-                TARGET_ARCH="gcchpux11"
-                ;;
-            *)
+                EXTRA_CFLAGS="-Wa,-w36"
+                CCAS=/usr/ccs/bin/as
+            else
                 AC_MSG_ERROR("sorry...compiler not supported")
-		;;
-        esac
-        QT_ARCH="hppa"
+            fi
+        fi
         ;;
     *)
         AC_MSG_ERROR("sorry...architecture not supported")
@@ -462,6 +462,7 @@ AC_SUBST(EXTRA_CXXFLAGS)
 AC_SUBST(EXTRA_CFLAGS)
 AC_SUBST(EXTRA_ASFLAGS)
 AC_SUBST(EXPLICIT_LPTHREAD)
+AC_SUBST(LDFLAG_RPATH)
 AC_SUBST(DEBUG_CXXFLAGS)
 AC_SUBST(OPT_CXXFLAGS)
 AC_SUBST(TARGET_ARCH)
