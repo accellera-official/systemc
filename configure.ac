@@ -508,6 +508,7 @@ AC_OUTPUT(
  examples/sysc/2.3/sc_rvd/Makefile
  examples/sysc/2.3/sc_ttd/Makefile
  examples/tlm/Makefile
+ docs/Makefile
  docs/sysc/doxygen/Doxyfile
  docs/tlm/doxygen/Doxyfile
 )

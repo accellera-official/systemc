@@ -1,11 +1,11 @@
 ## ****************************************************************************
 ##
 ##  The following code is derived, directly or indirectly, from the SystemC
-##  source code Copyright (c) 1996-2004 by all Contributors.
+##  source code Copyright (c) 1996-2013 by all Contributors.
 ##  All Rights reserved.
 ##
 ##  The contents of this file are subject to the restrictions and limitations
-##  set forth in the SystemC Open Source License Version 2.4 (the "License");
+##  set forth in the SystemC Open Source License Version 3.1 (the "License");
 ##  You may not use this file except in compliance with such restrictions and
 ##  limitations. You may obtain instructions on how to receive a copy of the
 ##  License at http://www.systemc.org/. Software distributed by Contributors
@@ -18,7 +18,7 @@
 ##  Makefile.am --
 ##  Process this file with automake to produce a Makefile.in file.
 ##
-##  Original Author: Martin Janssen, Synopsys, Inc., 2001-05-21
+##  Original Author: Philipp A. Hartmann, OFFIS, 2013-05-20
 ##
 ## ****************************************************************************
 ##
@@ -30,48 +30,56 @@
 ##
 ## ****************************************************************************
 
-# support local addition of automake macros
-ACLOCAL_AMFLAGS= -I config
+include $(top_srcdir)/config/Make-rules.common
 
-DOXYGEN=doxygen
-
-SUBDIRS = \
-	docs \
-	src \
-	examples
+## Core documentation (see also root directory)
 
 DOC_FILES = \
-	AUTHORS \
-	COPYING \
-	ChangeLog \
-	INSTALL \
-	LICENSE \
-	NEWS \
-	README \
-	RELEASENOTES
+	License.pdf
 
-EXTRA_DIST = \
-	$(DOC_FILES) \
-	\
-	config/bootstrap \
-	\
-	msvc80/SystemC/SystemC.sln \
-	msvc80/SystemC/SystemC.vcproj
+##
+## SystemC documentation
+##   find sysc -type f -a -not -name "*.in" -printf "\t%p \\\\\n"
+DOC_FILES += \
+	sysc/README \
+	sysc/archived/README \
+	sysc/archived/FuncSpec20.pdf \
+	sysc/archived/WhitePaper20.pdf \
+	sysc/archived/UserGuide20.pdf \
+	sysc/archived/SystemC_2_1_overview.pdf \
+	sysc/archived/SystemC_2_1_features.pdf \
+	sysc/SystemC_2011_New_Features.pdf
+
+##
+## TLM-2.0 documentation
+##   find tlm -type f -a -not -name "*.in" -printf "\t%p \\\\\n"
+##
+DOC_FILES += \
+	tlm/ChangeLog \
+	tlm/release/TLM_2_0_requirements.pdf \
+	tlm/release/TLM_2_0_white_paper.pdf \
+	tlm/release/README.txt \
+	tlm/release/TLM_2_0_presentation.ppt \
+	tlm/release/TLM_2_0_presentation.pdf \
+	tlm/tlm_README
 
 ## ****************************************************************************
 
 ## install documentation?
 if SEPARATE_INSTALL_TREE
 
-rootdoc_DATA = \
+nobase_doc_DATA = \
 	$(DOC_FILES)
+
+## Install, but do not distribute Doxygen configuration
+nobase_doc_DATA += \
+	sysc/doxygen/Doxyfile \
+	tlm/doxygen/Doxyfile
 
 endif # SEPARATE_INSTALL_TREE
 
-## ****************************************************************************
-
-doxygen:
-	@(cd docs/sysc/doxygen && $(DOXYGEN))
-	@(cd docs/tlm/doxygen  && $(DOXYGEN))
+## add documentation to distribution
+EXTRA_DIST += \
+	$(DOC_FILES)
 
 ## Taf!
