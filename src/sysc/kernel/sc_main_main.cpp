@@ -31,6 +31,7 @@
 #include "sysc/utils/sc_iostream.h"
 #include "sysc/utils/sc_report.h"
 #include "sysc/utils/sc_report_handler.h"
+#include "sysc/utils/sc_utils_ids.h"
 #include <vector>
 
 namespace sc_core {
@@ -97,15 +98,24 @@ sc_elab_and_sim( int argc, char* argv[] )
 
     // IF DEPRECATION WARNINGS WERE ISSUED TELL THE USER HOW TO TURN THEM OFF 
 
-    if ( sc_report_handler::get_count("/IEEE_Std_1666/deprecated") > 0 )
+    if ( sc_report_handler::get_count( SC_ID_IEEE_1666_DEPRECATION_ ) > 0 )
     {
-        SC_REPORT_INFO("/IEEE_Std_1666/deprecated",
-          "You can turn off warnings about\n" \
-		  "             IEEE 1666 deprecated features by placing this method " \
-		  "call as the\n" \
-		  "             first statement in your sc_main() function:\n" \
-          "\n  sc_report_handler::set_actions(\"/IEEE_Std_1666/deprecated\", " \
-          "SC_DO_NOTHING);\n\n" );
+        std::stringstream ss;
+
+#       define MSGNL  "\n             "
+#       define CODENL "\n  "
+
+        ss <<
+          "You can turn off warnings about" MSGNL
+          "IEEE 1666 deprecated features by placing this method call" MSGNL
+          "as the first statement in your sc_main() function:\n" CODENL
+          "sc_core::sc_report_handler::set_actions( "
+          "\"" << SC_ID_IEEE_1666_DEPRECATION_ << "\"," CODENL
+          "                                         " /* indent param */
+          "sc_core::SC_DO_NOTHING );"
+          << std::endl;
+
+        SC_REPORT_INFO( SC_ID_IEEE_1666_DEPRECATION_, ss.str().c_str() );
     }
 
     return status;

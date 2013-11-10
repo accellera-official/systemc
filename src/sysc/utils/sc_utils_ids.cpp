@@ -80,8 +80,8 @@ int initialize()
     const char* deprecation_warn = std::getenv("SC_DEPRECATION_WARNINGS");
     if ( (deprecation_warn!=0) && !std::strcmp(deprecation_warn,"DISABLE") )
     {
-        sc_report_handler::set_actions("/IEEE_Std_1666/deprecated", 
-            SC_DO_NOTHING);
+        sc_report_handler::set_actions( SC_ID_IEEE_1666_DEPRECATION_
+                                      , SC_DO_NOTHING);
     }
     return 42;
 }
