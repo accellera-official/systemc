@@ -47,6 +47,9 @@ dnl
 AC_CANONICAL_SYSTEM
 AM_INIT_AUTOMAKE([1.10 no-define subdir-objects]) # for .s file support of LIBTOOLFLAGS
 
+dnl enable silent rules, if present
+m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+
 dnl
 dnl reset default compiler flags
 dnl
