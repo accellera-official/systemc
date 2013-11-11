@@ -37,11 +37,11 @@
 ###############################################################################
 
 
-include_directories (BEFORE ${SystemC_SOURCE_DIR}/src)
-
 if (NOT BUILD_EXAMPLES)
   set_directory_properties (PROPERTIES EXCLUDE_FROM_ALL 1)
 endif (NOT BUILD_EXAMPLES)
+
+include_directories (BEFORE ${SystemC_SOURCE_DIR}/src)
 
 if (WIN32)
   # Not sure, if these preprocessor definitions are strictly required to build
@@ -55,7 +55,6 @@ if (WIN32)
   # <http://www.sunlightd.com/Archive/Windows/FAQ.aspx>
   # <http://msdn.microsoft.com/en-us/library/9yb4317s(v=vs.80).aspx>
   # <http://www.windows-api.com/microsoft/VC-MFC/32308312/preprocessor-definitions-for-x64-projects.aspx>
-
   add_definitions (-D_CONSOLE -DNOGDI)
 endif (WIN32)
 

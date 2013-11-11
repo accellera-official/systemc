@@ -58,9 +58,9 @@
 # The CMake build scripts are compatible with CMake >2.8.5 and have been tested
 # on the following OS/processor/compiler platforms:
 #
-# - Mac OS X >= 10.5 (GCC, Clang): i386, x86_64, ppc
-#
 # - Linux (GCC, Clang): i386, x86_64
+#
+# - Mac OS X >= 10.5 (GCC, Clang): i386, x86_64, ppc
 #
 # - Windows (MingW32 GCC + optionally MSYS): x86
 #
@@ -71,7 +71,7 @@
 #
 # - Linux (GCC, Clang): sparc, powerpc
 #
-# - Mac OS X <= 10.5 (GCC): ppc64
+# - Mac OS X <= 10.5 (GCC): ppc, ppc64
 #
 # - Windows (Cygwin GCC, MingW32 GCC, Visual C++): x86, AMD64
 #
@@ -547,7 +547,6 @@ message (STATUS "SYSTEMC_TARGET_ARCH = ${SYSTEMC_TARGET_ARCH}")
 message (STATUS "QT_ARCH = ${QT_ARCH}")
 message (STATUS "WANT_PTHREADS_THREADS = ${WANT_PTHREADS_THREADS}")
 if (APPLE)
-  message (STATUS "N_OSX_ARCHITECTURES = ${N_OSX_ARCHITECTURES}")
   message (STATUS "CMAKE_OSX_ARCHITECTURES = ${CMAKE_OSX_ARCHITECTURES}")
   message (STATUS "CMAKE_OSX_DEPLOYMENT_TARGET = ${CMAKE_OSX_DEPLOYMENT_TARGET}")
   message (STATUS "CMAKE_OSX_SYSROOT = ${CMAKE_OSX_SYSROOT}")
@@ -556,12 +555,10 @@ message (STATUS "Threads_FOUND = ${Threads_FOUND}")
 message (STATUS "CMAKE_USE_PTHREADS_INIT = ${CMAKE_USE_PTHREADS_INIT}")
 message (STATUS "------------------------------------------------------------------------")
 message (STATUS "CMAKE_INSTALL_PREFIX = ${CMAKE_INSTALL_PREFIX}")
+message (STATUS "CMAKE_INSTALL_BINDIR = ${CMAKE_INSTALL_BINDIR}")
 message (STATUS "CMAKE_INSTALL_DOCDIR = ${CMAKE_INSTALL_DOCDIR}")
 message (STATUS "CMAKE_INSTALL_INCLUDEDIR = ${CMAKE_INSTALL_INCLUDEDIR}")
 message (STATUS "CMAKE_INSTALL_LIBDIR = ${CMAKE_INSTALL_LIBDIR}")
-message (STATUS "CMAKE_INSTALL_FULL_DOCDIR = ${CMAKE_INSTALL_FULL_DOCDIR}")
-message (STATUS "CMAKE_INSTALL_FULL_INCLUDEDIR = ${CMAKE_INSTALL_FULL_INCLUDEDIR}")
-message (STATUS "CMAKE_INSTALL_FULL_LIBDIR = ${CMAKE_INSTALL_FULL_LIBDIR}")
 message (STATUS "========================================================================")
 
 
