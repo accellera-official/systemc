@@ -394,14 +394,11 @@ if (NOT DEFINED QT_ARCH)
   unset (_QT_ARCH)
 endif (NOT DEFINED QT_ARCH)
 
-# Check for assembler to build QuickThreads otherwise fall back to Pthreads
 if (QT_ARCH)
-  # Enable assembler language support
-  enable_language (ASM-ATT)
-  if (NOT CMAKE_ASM-ATT_COMPILER_WORKS)
-    message (SEND_ERROR "No assembler found to compile QuickThreads.")
-  endif (NOT CMAKE_ASM-ATT_COMPILER_WORKS)
+  # To build QuickThreads, enable the assembler support.
+  enable_language (ASM)
 else (QT_ARCH)
+  # Otherwise, fall back to Pthreads or Fiber.
   if (NOT MSVC)
     set (WANT_PTHREADS_THREADS TRUE CACHE BOOL
          "Use POSIX threads to implement the SystemC coroutines instead of QuickThreads library on Unix or Fiber on Windows (default: OFF)"
