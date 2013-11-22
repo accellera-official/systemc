@@ -41,7 +41,7 @@
 ##   %D%: fir
 ##   %C%: fir
 
-check_PROGRAMS += fir/test fir/test_rtl
+examples_TESTS += fir/test fir/test_rtl
 
 fir_test_CPPFLAGS = \
 	$(AM_CPPFLAGS)

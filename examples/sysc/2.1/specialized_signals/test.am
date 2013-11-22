@@ -41,7 +41,7 @@
 ##   %D%: 2.1/specialized_signals
 ##   %C%: 2_1_specialized_signals
 
-check_PROGRAMS += 2.1/specialized_signals/test
+examples_TESTS += 2.1/specialized_signals/test
 
 2_1_specialized_signals_test_CPPFLAGS = \
 	$(AM_CPPFLAGS)

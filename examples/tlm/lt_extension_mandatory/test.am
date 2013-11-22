@@ -41,7 +41,7 @@
 ##   %D%: lt_extension_mandatory
 ##   %C%: lt_extension_mandatory
 
-check_PROGRAMS += lt_extension_mandatory/test
+examples_TESTS += lt_extension_mandatory/test
 
 lt_extension_mandatory_test_CPPFLAGS = \
 	-I$(srcdir)/lt_extension_mandatory/include \

@@ -41,7 +41,7 @@
 ##   %D%: rsa
 ##   %C%: rsa
 
-check_PROGRAMS += rsa/test
+examples_TESTS += rsa/test
 
 rsa_test_CPPFLAGS = \
 	$(AM_CPPFLAGS)

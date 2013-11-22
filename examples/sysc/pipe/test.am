@@ -41,7 +41,7 @@
 ##   %D%: pipe
 ##   %C%: pipe
 
-check_PROGRAMS += pipe/test
+examples_TESTS += pipe/test
 
 pipe_test_CPPFLAGS = \
 	$(AM_CPPFLAGS)

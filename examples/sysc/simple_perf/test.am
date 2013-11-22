@@ -41,7 +41,7 @@
 ##   %D%: simple_perf
 ##   %C%: simple_perf
 
-check_PROGRAMS += simple_perf/test
+examples_TESTS += simple_perf/test
 
 simple_perf_test_CPPFLAGS = \
 	$(AM_CPPFLAGS)

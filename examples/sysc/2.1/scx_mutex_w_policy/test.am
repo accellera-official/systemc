@@ -41,7 +41,7 @@
 ##   %D%: 2.1/scx_mutex_w_policy
 ##   %C%: 2_1_scx_mutex_w_policy
 
-check_PROGRAMS += 2.1/scx_mutex_w_policy/test
+examples_TESTS += 2.1/scx_mutex_w_policy/test
 
 2_1_scx_mutex_w_policy_test_CPPFLAGS = \
 	$(AM_CPPFLAGS)

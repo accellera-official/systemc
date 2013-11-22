@@ -41,7 +41,7 @@
 ##   %D%: at_mixed_targets
 ##   %C%: at_mixed_targets
 
-check_PROGRAMS += at_mixed_targets/test
+examples_TESTS += at_mixed_targets/test
 
 at_mixed_targets_test_CPPFLAGS = \
 	-I$(srcdir)/at_mixed_targets/include \

@@ -41,7 +41,7 @@
 ##   %D%: 2.1/dpipe
 ##   %C%: 2_1_dpipe
 
-check_PROGRAMS += 2.1/dpipe/test
+examples_TESTS += 2.1/dpipe/test
 
 2_1_dpipe_test_CPPFLAGS = \
 	$(AM_CPPFLAGS)

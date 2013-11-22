@@ -41,7 +41,7 @@
 ##   %D%: 2.3/sc_ttd
 ##   %C%: 2_3_sc_ttd
 
-check_PROGRAMS += 2.3/sc_ttd/test
+examples_TESTS += 2.3/sc_ttd/test
 
 2_3_sc_ttd_test_CPPFLAGS = \
 	$(AM_CPPFLAGS)

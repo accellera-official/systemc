@@ -41,7 +41,7 @@
 ##   %D%: 2.3/sc_rvd
 ##   %C%: 2_3_sc_rvd
 
-check_PROGRAMS += 2.3/sc_rvd/test
+examples_TESTS += 2.3/sc_rvd/test
 
 2_3_sc_rvd_test_CPPFLAGS = \
 	$(AM_CPPFLAGS)

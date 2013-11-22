@@ -41,7 +41,7 @@
 ##   %D%: lt_mixed_endian
 ##   %C%: lt_mixed_endian
 
-check_PROGRAMS += lt_mixed_endian/test
+examples_TESTS += lt_mixed_endian/test
 
 lt_mixed_endian_test_CPPFLAGS = \
 	-I$(srcdir)/lt_mixed_endian/include \

@@ -41,7 +41,7 @@
 ##   %D%: simple_bus
 ##   %C%: simple_bus
 
-check_PROGRAMS += simple_bus/test
+examples_TESTS += simple_bus/test
 
 simple_bus_test_CPPFLAGS = \
 	$(AM_CPPFLAGS)

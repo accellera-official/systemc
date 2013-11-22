@@ -41,7 +41,7 @@
 ##   %D%: 2.1/sc_export
 ##   %C%: 2_1_sc_export
 
-check_PROGRAMS += 2.1/sc_export/test
+examples_TESTS += 2.1/sc_export/test
 
 2_1_sc_export_test_CPPFLAGS = \
 	$(AM_CPPFLAGS)

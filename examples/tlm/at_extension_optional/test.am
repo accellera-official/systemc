@@ -41,7 +41,7 @@
 ##   %D%: at_extension_optional
 ##   %C%: at_extension_optional
 
-check_PROGRAMS += at_extension_optional/test
+examples_TESTS += at_extension_optional/test
 
 at_extension_optional_test_CPPFLAGS = \
 	-I$(srcdir)/at_extension_optional/include \

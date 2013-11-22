@@ -41,7 +41,7 @@
 ##   %D%: simple_fifo
 ##   %C%: simple_fifo
 
-check_PROGRAMS += simple_fifo/test
+examples_TESTS += simple_fifo/test
 
 simple_fifo_test_CPPFLAGS = \
 	$(AM_CPPFLAGS)

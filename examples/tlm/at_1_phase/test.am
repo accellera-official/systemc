@@ -41,7 +41,7 @@
 ##   %D%: at_1_phase
 ##   %C%: at_1_phase
 
-check_PROGRAMS += at_1_phase/test
+examples_TESTS += at_1_phase/test
 
 at_1_phase_test_CPPFLAGS = \
 	-I$(srcdir)/at_1_phase/include \

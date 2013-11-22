@@ -41,7 +41,7 @@
 ##   %D%: pkt_switch
 ##   %C%: pkt_switch
 
-check_PROGRAMS += pkt_switch/test
+examples_TESTS += pkt_switch/test
 
 pkt_switch_test_CPPFLAGS = \
 	$(AM_CPPFLAGS)

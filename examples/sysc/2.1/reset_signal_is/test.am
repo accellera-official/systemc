@@ -42,7 +42,7 @@
 ##   %C% = 2.1_reset_signal_is
 
 
-check_PROGRAMS += 2.1/reset_signal_is/test
+examples_TESTS += 2.1/reset_signal_is/test
 
 2_1_reset_signal_is_test_CPPFLAGS = \
 	$(AM_CPPFLAGS)

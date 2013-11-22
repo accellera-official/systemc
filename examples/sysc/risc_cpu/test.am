@@ -41,7 +41,7 @@
 ##   %D%: risc_cpu
 ##   %C%: risc_cpu
 
-check_PROGRAMS += risc_cpu/test
+examples_TESTS += risc_cpu/test
 
 risc_cpu_test_CPPFLAGS = \
 	$(AM_CPPFLAGS)

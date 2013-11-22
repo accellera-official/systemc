@@ -41,7 +41,7 @@
 ##   %D%: lt
 ##   %C%: lt
 
-check_PROGRAMS += lt/test
+examples_TESTS += lt/test
 
 lt_test_CPPFLAGS = \
 	-I$(srcdir)/lt/include \

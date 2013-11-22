@@ -41,7 +41,7 @@
 ##   %D%: fft/fft_fxpt
 ##   %C%: fft_fft_fxpt
 
-check_PROGRAMS += fft/fft_fxpt/test
+examples_TESTS += fft/fft_fxpt/test
 
 fft_fft_fxpt_test_CPPFLAGS = \
 	$(AM_CPPFLAGS)

@@ -42,7 +42,7 @@
 ##   %C%: 2.1_forkjoin
 ##
 
-check_PROGRAMS += 2.1/forkjoin/test
+examples_TESTS += 2.1/forkjoin/test
 
 2_1_forkjoin_test_CPPFLAGS = \
 	$(AM_CPPFLAGS)

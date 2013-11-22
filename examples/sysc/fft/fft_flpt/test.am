@@ -41,7 +41,7 @@
 ##   %D%: fft/fft_flpt
 ##   %C%: fft_fft_flpt
 
-check_PROGRAMS += fft/fft_flpt/test
+examples_TESTS += fft/fft_flpt/test
 
 fft_fft_flpt_test_CPPFLAGS = \
 	$(AM_CPPFLAGS)

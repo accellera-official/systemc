@@ -42,7 +42,7 @@
 ##   %C%: 2_1_sc_report
 ##
 
-check_PROGRAMS += 2.1/sc_report/test
+examples_TESTS += 2.1/sc_report/test
 
 2_1_sc_report_test_CPPFLAGS = \
 	$(AM_CPPFLAGS)

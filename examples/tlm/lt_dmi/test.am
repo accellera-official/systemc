@@ -41,7 +41,7 @@
 ##   %D%: lt_dmi
 ##   %C%: lt_dmi
 
-check_PROGRAMS += lt_dmi/test
+examples_TESTS += lt_dmi/test
 
 lt_dmi_test_CPPFLAGS = \
 	-I$(srcdir)/lt_dmi/include \

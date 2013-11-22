@@ -39,6 +39,7 @@ all:
 ## use a wrapper script to check expected outputs
 TESTS = $(check_SCRIPTS)
 check_SCRIPTS  = $(examples_TESTS:=.sh)
+check_PROGRAMS = $(examples_TESTS)
 
 ## ************************************************************************
 ## additional data for installation
@@ -60,7 +61,7 @@ examples_GOLDEN=golden.log
 ## filled later
 examples_BUILD =
 examples_CLEAN =
-check_PROGRAMS =
+examples_TESTS =
 
 ##
 ## list of SystemC examples

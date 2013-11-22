@@ -41,7 +41,7 @@
 ##   %D%: 2.1/scx_barrier
 ##   %C%: 2_1_scx_barrier
 
-check_PROGRAMS += 2.1/scx_barrier/test
+examples_TESTS += 2.1/scx_barrier/test
 
 2_1_scx_barrier_test_CPPFLAGS = \
 	$(AM_CPPFLAGS)

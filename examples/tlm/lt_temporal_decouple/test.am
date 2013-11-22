@@ -41,7 +41,7 @@
 ##   %D%: lt_temporal_decouple
 ##   %C%: lt_temporal_decouple
 
-check_PROGRAMS += lt_temporal_decouple/test
+examples_TESTS += lt_temporal_decouple/test
 
 lt_temporal_decouple_test_CPPFLAGS = \
 	-I$(srcdir)/lt_temporal_decouple/include \
