@@ -41,7 +41,7 @@
 #   endif
 #endif // PRIu64
 
-#ifdef SC_TIME_ALLOW_MAXTIME_CREATION
+#ifdef SC_ENABLE_EARLY_MAXTIME_CREATION
 #  define SC_MAXTIME_ALLOWED_ 1
 #else
 #  define SC_MAXTIME_ALLOWED_ 0
