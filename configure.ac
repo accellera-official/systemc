@@ -392,11 +392,14 @@ dnl
 dnl async_request_update support
 dnl
 AC_MSG_CHECKING([whether to add support for asynchronous update requests])
-support_async_updates=yes
-if test x$ax_pthread_ok = xno ; then
+support_async_updates=no
+if test x$ax_pthread_ok = xyes ; then
+support_async_updates=pthread
+elif test x$ax_pthread_ok = xno ; then
 case "${TARGET_ARCH}" in
- cygwin|mingw*) support_async_updates=yes ;; dnl no pthreads needed on Windows
- *)             support_async_updates=no  ;;
+ dnl no pthreads needed on MSVC/MinGW
+ mingw*|msvc*) support_async_updates=native ;;
+ *)            ;;
 esac
 fi
 AC_ARG_ENABLE([async-updates],
@@ -404,15 +407,23 @@ AC_ARG_ENABLE([async-updates],
                  [disable request_async_update support]),
   [case "${enableval}" in
     yes) if test x"$support_async_updates" = xno ; then
-            AC_MSG_WARN([no pthread support found])
+            AC_MSG_WARN([no native/pthread support found, disabled])
+            enable_async_updates=no
+            support_async_updates=disabled
          fi
-         support_async_updates=yes ;;
-    no)  support_async_updates=no ;;
+         ;;
+    no)  support_async_updates=disabled ;;
     *) AC_MSG_ERROR([bad value ${enableval} for --enable-async-updates]) ;;
-  esac],[enable_async_updates=${support_async_updates}])
+  esac],
+  [if test x${support_async_updates} != xno; then
+     enable_async_updates=yes
+   else
+     enable_async_updates=no
+   fi]
+  )
 AM_CONDITIONAL([DISABLE_ASYNC_UPDATES],
-               [test x"$support_async_updates" = xno])
-AC_MSG_RESULT($support_async_updates)
+               [test x"$enable_async_updates" = xno])
+AC_MSG_RESULT($enable_async_updates)
 
 dnl
 dnl use pthreads for SystemC processes
@@ -443,7 +454,7 @@ fi
 AM_CONDITIONAL([WANT_PTHREADS_THREADS], [test x"$enable_pthreads" = xyes])
 
 AM_CONDITIONAL([USES_PTHREADS_LIB],
-  [test x"$enable_pthreads" = xyes -o x"$support_async_updates" = xyes ])
+  [test x"$enable_pthreads" = xyes -o x"$support_async_updates" = xpthread ])
 AC_MSG_RESULT($enable_pthreads)
 
 dnl
