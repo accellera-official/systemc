@@ -32,7 +32,8 @@
 
 include $(top_srcdir)/config/Make-rules.sysc
 
-libarchdir   = $(libdir)$(LIB_ARCH_SUFFIX)
+pkgconfigdir = $(libarchdir)/pkgconfig
+pkgconfig_DATA = tlm-2.0.pc
 
 H_FILES = \
 	tlm_2/tlm_version.h \
