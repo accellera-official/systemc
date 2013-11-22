@@ -32,15 +32,19 @@
 
 include $(top_srcdir)/config/Make-rules.sysc
 
+if WANT_QT_THREADS
+QT_LIB    = qt/libqt.la
+QT_SUBDIR = qt
+endif
+
 SUBDIRS = \
 	kernel \
-	qt \
+	$(QT_SUBDIR) \
 	communication \
 	tracing \
 	utils \
 	packages/boost \
-	datatypes \
-	.
+	datatypes
 
 H_FILES = 
 
@@ -60,9 +64,6 @@ libsystemc_la_SOURCES =
 # dummy C++ source to cause C++ linking
 nodist_EXTRA_libsystemc_la_SOURCES = sc_nonexistent.cpp
 
-if !WANT_PTHREADS_THREADS
-QT_LIB=qt/libqt.la
-endif
 
 libsystemc_la_LIBADD = \
        kernel/libkernel.la \

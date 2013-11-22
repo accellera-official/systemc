@@ -61,6 +61,7 @@ AM_PROG_AS
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INSTALL
+AC_PROG_LN_S
 
 dnl
 dnl Set the compiler flags and target architecture.
@@ -195,16 +196,17 @@ case "$target" in
         fi
         ;;
     *mingw*)
+        QT_ARCH="none" # use WinFiber on MinGW platforms
         case "$target_cpu" in
             x86_64 | amd64)
                 TARGET_ARCH="mingw64"
                 CPU_ARCH=64
-                QT_ARCH="x86_64"
+                # QT_ARCH="x86_64"
                 ;;
             i*86)
                 TARGET_ARCH="mingw"
                 CPU_ARCH=32
-                QT_ARCH="iX86"
+                # QT_ARCH="iX86"
                 ;;
             *)
                 AC_MSG_ERROR("sorry...architecture not supported")
@@ -451,7 +453,10 @@ if test x"$QT_ARCH" = xpthreads -a x"$enable_pthreads" = xno ; then
   fi
 fi
 
-AM_CONDITIONAL([WANT_PTHREADS_THREADS], [test x"$enable_pthreads" = xyes])
+AM_CONDITIONAL([WANT_PTHREADS_THREADS],
+     [test x"$enable_pthreads" = xyes])
+AM_CONDITIONAL([WANT_QT_THREADS],
+     [test x"$enable_pthreads" = xno -a x"$QT_ARCH" != xnone ])
 
 AM_CONDITIONAL([USES_PTHREADS_LIB],
   [test x"$enable_pthreads" = xyes -o x"$support_async_updates" = xpthread ])

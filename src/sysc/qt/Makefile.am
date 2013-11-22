@@ -135,7 +135,7 @@ CLEANFILES += \
 	$(ARCH_FILES) \
 	configuration
 
-if !WANT_PTHREADS_THREADS
+if WANT_QT_THREADS
 
 BUILT_SOURCES = \
 	configuration
@@ -173,6 +173,9 @@ if QT_ARCH_PTHREADS
 QT_ARCH_IMPL = md/null.s md/null.c
 endif
 
+# ensure to use a working link command in 'config'
+export LN_S
+
 configuration:
 if SEPARATE_BUILD_TREE # copy arch files to build tree
 	$(AM_V_at)for file in $(QT_ARCH_IMPL); do  \
@@ -187,6 +190,6 @@ CLEANFILES += \
 	$(QT_ARCH_IMPL)
 endif # SEPARATE_BUILD_TREE
 
-endif #  !WANT_PTHREADS_THREADS
+endif #  WANT_QT_THREADS
 
 ## Taf!
