@@ -66,7 +66,8 @@ examples_FILES = \
 	build-msvc/vsvars32VC7.bat \
 	\
 	build-unix/Makefile \
-	build-unix/Makefile.defs \
+	build-unix/Makefile.config \
+	build-unix/Makefile.rules \
 	\
 	README.txt
 
