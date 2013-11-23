@@ -64,7 +64,7 @@ struct bios : sc_module {
 	// initialize instruction imemory from external file
 	FILE *fp = fopen("bios.img","r");
 	int size=0;
-	int mem_word;
+	unsigned mem_word;
   	imemory 	= new unsigned[4000];
   	itagmemory 	= new unsigned[4000];
 	printf("** ALERT ** BIOS: initialize BIOS\n");

@@ -51,7 +51,6 @@ void decode::entry()
   unsigned int  offset_tmp = 0;
   signed   int  label_tmp = 0;
   unsigned int  longlabel_tmp = 0;
-  unsigned int  lastreg_tmp = 0;
   signed int	srcA_tmp = 0;
   signed int	srcB_tmp = 0;
   signed int	srcC_tmp = 0;
@@ -118,9 +117,9 @@ void decode::entry()
 		srcB_tmp = cpu_reg[regB_tmp];
 		srcC_tmp = cpu_reg[regC_tmp];
 		wait();
-                lastreg_tmp = regC_tmp;
                 cout << "\t\t\t-------------------------------" << endl;
 /******************************************************************************
+		unsigned int lastreg_tmp = regC_tmp;
 		if (regA_tmp == lastreg_tmp){
 			forward_A.write(true);
 			forward_B.write(false);

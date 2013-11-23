@@ -68,7 +68,7 @@ struct icache : sc_module {
 	pid = 0;
 	FILE *fp = fopen("icache.img","r");
 	int size=0;
-	int mem_word;
+	unsigned int mem_word;
   	icmemory 	= new unsigned[MAX_CODE_LENGTH];
   	ictagmemory 	= new unsigned[MAX_CODE_LENGTH];
 	for (size = 0; size < MAX_CODE_LENGTH; size++) {	// initialize bad data

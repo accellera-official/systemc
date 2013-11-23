@@ -66,7 +66,7 @@ struct dcache : sc_module {
 	FILE *fp = fopen("dcache.img","r");
 	int size=0;
 	int i=0;
-	int mem_word;
+	unsigned mem_word;
   	dmemory = new unsigned[4000];
   	dsmemory = new unsigned[4000];
   	dtagmemory = new unsigned[4000];

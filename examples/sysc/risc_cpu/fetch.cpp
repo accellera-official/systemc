@@ -42,12 +42,10 @@
 void fetch::entry()
 {
    unsigned addr_tmp=0;
-   unsigned datao_tmp=0;
    unsigned datai_tmp=0;
    unsigned lock_tmp = 0;
 
    addr_tmp = 1;
-   datao_tmp = 0xdeadbeef;
 
    // Now booting from default values
    reset.write(true);
