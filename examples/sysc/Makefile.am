@@ -48,8 +48,9 @@ syscexamplesdir = $(examplesdir)/sysc
 
 examples_FILES = \
 	Makefile.all \
-	Makefile.defs \
-	Readme_msvc80.txt \
+	Makefile.config \
+	Makefile.rules \
+	README.txt \
 	\
 	fft/README
 

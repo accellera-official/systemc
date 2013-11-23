@@ -15,13 +15,16 @@
 ##
 ## ***************************************************************************
 ##
-##  Makefile.defs -- simple generic SystemC example build rules
+##  Makefile.rules -- simple generic SystemC example build rules
 ##
 ##  Include this file from your own Makefile to obtain a simple build
 ##  environment.  You need to set at least the variables
 ##    MODULE - name of the application
 ##    OBJS   - list of required object files
 ##  to make things work.
+##
+##  The environment is assumed to be set up from Makefile.config file and
+##  the main example Makefile.
 ##
 ##  Original Author: Philipp A. Hartmann, OFFIS
 ##
@@ -34,35 +37,26 @@
 ##  Description of Modification:
 ##
 ## ***************************************************************************
-
-## include site configuration, if it exists in known common places
-
-SYSTEMC_MAKEFILE_SITE?=Makefile.site
-SYSTEMC_MAKEFILE_PATH+= . .. ../.. ../../.. $(SYSTEMC_HOME) \
-  $(SYSTEMC_HOME)/examples $(SYSTEMC_HOME)/share/systemc/examples
-SYSTEMC_MAKEFILE ?= $(word 1,\
-  $(wildcard $(SYSTEMC_MAKEFILE_PATH:=/$(SYSTEMC_MAKEFILE_SITE))))
-ifneq (,$(SYSTEMC_MAKEFILE))
-include $(SYSTEMC_MAKEFILE)
-endif
-
-## ***************************************************************************
-## guess config from environment
-## (if not automatically found from Makefile.site)
+## complete config, if not set from Makefile.config
 
 ## Variable that points to SystemC installation path
-SYSTEMC_HOME?=../../..
-SYSTEMC?=$(SYSTEMC_HOME)
+## needs to be set, fallback to SYSTEMC otherwise
+SYSTEMC_HOME?=$(SYSTEMC)
 
-TARGET_ARCH      ?= linux
+## Select the TARGET_ARCH needs to be set
+# TARGET_ARCH      ?= linux
+
+## default values for additional setup variables
+ifneq (,$(strip $(TARGET_ARCH)))
 ARCH_SUFFIX      ?= -$(TARGET_ARCH)
+endif
 LDFLAG_RPATH     ?= -Wl,-rpath=
 
-SYSTEMC_INC_DIR  ?= $(SYSTEMC)/include
-SYSTEMC_LIB_DIR  ?= $(SYSTEMC)/lib$(ARCH_SUFFIX)
+SYSTEMC_INC_DIR  ?= $(SYSTEMC_HOME)/include
+SYSTEMC_LIB_DIR  ?= $(SYSTEMC_HOME)/lib$(ARCH_SUFFIX)
 
 SYSTEMC_DEFINES  ?=
-SYSTEMC_CXXFLAGS ?= -Wall
+SYSTEMC_CXXFLAGS ?= $(FLAGS_COMMON) $(FLAGS_STRICT) $(FLAGS_WERROR)
 SYSTEMC_LDFLAGS  ?= -L $(SYSTEMC_LIB_DIR) \
                     $(LDFLAG_RPATH)$(SYSTEMC_LIB_DIR)
 SYSTEMC_LIBS     ?= -lsystemc -lm
@@ -76,6 +70,7 @@ endif
 
 ## ***************************************************************************
 ## example defaults
+## - basic configuration should be set from Makefile.config
 
 FILTER ?= cat
 
@@ -89,6 +84,20 @@ LIBS      += $(SYSTEMC_LIBS) $(EXTRA_LIBS)
 # "real" Makefile needs to set MODULE
 ifeq (,$(strip $(MODULE)))
 $(error MODULE not set. Cannot build.)
+endif
+
+# basic check for SystemC directory
+ifeq (,$(wildcard $(SYSTEMC_HOME)/.))
+$(error SYSTEMC_HOME [$(SYSTEMC_HOME)] is not present. \
+        Please update Makefile.config)
+endif
+ifeq (,$(wildcard $(SYSTEMC_INC_DIR)/systemc.h))
+$(error systemc.h [$(SYSTEMC_INC_DIR)] not found. \
+        Please update Makefile.config)
+endif
+ifeq (,$(wildcard $(SYSTEMC_LIB_DIR)/libsystemc*))
+$(error SystemC library [$(SYSTEMC_LIB_DIR)] not found. \
+        Please update Makefile.config)
 endif
 
 # use g++ by default, unless user specifies CXX explicitly
@@ -105,6 +114,7 @@ endif
 
 .SUFFIXES: .cc .cpp .o .x
 
+GOLDEN?=golden.log
 EXEEXT?=.x
 EXE   := $(MODULE)$(EXEEXT)
 
@@ -145,10 +155,11 @@ $(EXE): $(OBJS) $(SYSTEMC_LIB_DIR)/libsystemc.a
 	$(CC) $(CXXFLAGS) -c $< -o $@
 
 clean:: announce
-	rm -f $(OBJS) *~ $(EXE) $(EXTRA_CLEAN) core
+	rm -f $(OBJS) $(EXE) core $(EXTRA_CLEAN) \
+		run.log run_trimmed.log expected_trimmed.log diff.log
 
 ultraclean: announce clean
-	rm -f Makefile.deps
+	rm -f Makefile.deps *~
 
 Makefile.deps:
 #	$(CC) $(CXXFLAGS) -M $(SRCS) >> Makefile.deps
