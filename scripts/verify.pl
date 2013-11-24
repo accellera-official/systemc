@@ -373,6 +373,20 @@ sub get_tlm_home
     $tlm_home;
 }
 
+# -----------------------------------------------------------------------------
+#  SUB : cxx_is_gcc_compatible
+#
+#  Check, whether compiler is GCC compatible
+# -----------------------------------------------------------------------------
+sub cxx_is_gcc_compatible
+{
+    my $cxx = $_[0];
+    my $gcc_chk="( echo '#ifdef __GNUC__' ;"
+                ." echo IS_GCC_COMPATIBLE ; "
+                ." echo '#endif' )";
+    $gcc_chk=` $gcc_chk | $cxx -E - 2>/dev/null `;
+    scalar( $gcc_chk =~ /IS_GCC_COMPATIBLE/ );
+}
 
 # -----------------------------------------------------------------------------
 #  SUB : get_systemc_arch
@@ -410,19 +424,19 @@ sub get_systemc_arch
         if( $uname_s eq "SunOS" and $uname_r =~ /^5/ ) {
             if( $cxx_comp eq "CC" ) {
                 $arch = "sparcOS5";
-            } elsif( $cxx_comp eq "c++" || $cxx_comp eq "g++" ) {
+            } elsif( cxx_is_gcc_compatible($cxx) ) {
                 $arch = "gccsparcOS5";
             }
 
         } elsif( $uname_s eq "HP-UX" and $uname_r =~ /^B.11/ ) {
             if( $cxx_comp eq "aCC" ) {
                 $arch = "hpux11";
-            } elsif( $cxx_comp eq "c++" || $cxx_comp eq "g++" ) {
+            } elsif( cxx_is_gcc_compatible($cxx) ) {
                 $arch = "gcchpux11";
             }
 
         } elsif( $uname_s eq "Darwin" ) {
-            if( $cxx_comp eq "c++" || $cxx_comp eq "g++" )
+            if( cxx_is_gcc_compatible($cxx) )
             {
                 if ( $uname_m =~ /x86_64|[ix].86/ ) {
                     $arch = "macosx";
@@ -439,7 +453,7 @@ sub get_systemc_arch
             }
 
         } elsif( $uname_s eq "Linux" and $uname_r =~ /^[23]/ ) {
-            if( $cxx_comp eq "c++" || $cxx_comp eq "g++" ) {
+            if( cxx_is_gcc_compatible($cxx) ) {
                 $arch = "linux";
                 if ( $uname_m eq "x86_64" || $uname_m eq "amd64" ) {
                     $arch .= "64";
@@ -447,12 +461,12 @@ sub get_systemc_arch
             }
 
         } elsif( $uname_s =~ /((free|net|open)bsd|dragonfly)/i ) {
-           if( $cxx_comp eq "c++" || $cxx_comp eq "g++" ) {
+            if( cxx_is_gcc_compatible($cxx) ) {
                 $arch = "bsd";
                 if ( $uname_m eq "x86_64" || $uname_m eq "amd64" ) {
                     $arch .= "64";
                 }
-           }
+            }
 
         } elsif( $uname_s =~ /^(CYGWIN|MINGW32)_NT/ ) {
 
@@ -509,7 +523,7 @@ sub get_systemc_arch
                     $arch .= "-x64";
                 }
 
-            } elsif( $cxx_comp eq "c++" || $cxx_comp eq "g++" ) {
+            } elsif( cxx_is_gcc_compatible($cxx) ) {
                 # use MinGW/Cygwin GCC compiler
                 if( $uname_s =~ /^CYGWIN_NT/ ) {
                     # TODO: detect 64-bit capability
