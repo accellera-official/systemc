@@ -898,8 +898,12 @@ sub parse_args
             }
 
             # add predefined macro
-            if( $arg =~ /^-D/ ) {
-                $arg = shift @arglist;
+            if( $arg =~ /^-D(.*)/ ) {
+                if( length($1) ) {
+                    $arg = $1;
+                } else {
+                    $arg = shift @arglist;
+                }
                 push @rt_add_defines, $arg;
                 next;
             }
@@ -918,22 +922,34 @@ sub parse_args
             }
 
             # add include directory
-            if( $arg =~ /^-I/ ) {
-                $arg = shift @arglist;
+            if( $arg =~ /^-I(.*)/ ) {
+                if( length($1) ) {
+                    $arg = $1;
+                } else {
+                    $arg = shift @arglist;
+                }
                 push @rt_add_includes, $arg;
                 next;
             }
 
             # add linker directory
-            if( $arg =~ /^-L/ ) {
-                $arg = shift @arglist;
+            if( $arg =~ /^-L(.*)/ ) {
+                if( length($1) ) {
+                    $arg = $1;
+                } else {
+                    $arg = shift @arglist;
+                }
                 push @rt_add_ldpaths, $arg;
                 next;
             }
 
             # add library to link
-            if( $arg =~ /^-l/ ) {
-                $arg = shift @arglist;
+            if( $arg =~ /^-l(.*)/ ) {
+                if( length($1) ) {
+                    $arg = $1;
+                } else {
+                    $arg = shift @arglist;
+                }
                 push @rt_add_ldlibs, $arg;
                 next;
             }
