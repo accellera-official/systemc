@@ -105,7 +105,7 @@ case "$target" in
         if test x$GXX = xyes ; then
                 EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -arch ${CPU_ARCH}"
                 EXTRA_ASFLAGS ="-arch ${CPU_ARCH} -x assembler"
-                LDFLAG_RPATH  ="-Wl,-rpath -Wl,";
+                LDFLAG_RPATH="-Wl,-rpath -Wl,"
         else
                 AC_MSG_ERROR("sorry...compiler not supported")
         fi
