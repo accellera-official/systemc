@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="at_1 phase"
+	Name="at_1_phase"
 	ProjectGUID="{54F8C078-369E-4AA4-9859-264839C6F89A}"
 	RootNamespace="winbuild"
 	Keyword="Win32Proj"
@@ -17,10 +17,10 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="Debug"
-			IntermediateDirectory="Debug"
+			OutputDirectory="$(ProjectDir)\$(IntDir)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;..\..\build-msvc\systemc.vsprops"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;$(ProjectDir)\..\..\build-msvc\systemc.vsprops"
 			CharacterSet="2"
 			>
 			<Tool
@@ -40,7 +40,6 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/vmg"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\include;..\..\common\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
@@ -52,9 +51,8 @@
 				UsePrecompiledHeader="0"
 				BrowseInformation="1"
 				WarningLevel="4"
-				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="4"
-				DisableSpecificWarnings="4100;4127;4267;4121;4512"
+				DisableSpecificWarnings="4121"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -67,11 +65,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="systemc.lib "
+				AdditionalDependencies="systemc.lib"
 				ShowProgress="0"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(SYSTEMC)\SystemC\$(OutDir)"
+				AdditionalLibraryDirectories="$(SYSTEMC)\SystemC\$(IntDir)"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/$(ProjectName).pdb"
 				SubSystem="1"
@@ -104,8 +102,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="Release"
-			IntermediateDirectory="Release"
+			OutputDirectory="$(ProjectDir)\$(IntDir)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;..\..\build-msvc\systemc.vsprops"
 			CharacterSet="2"
@@ -129,16 +127,14 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/vmg"
 				AdditionalIncludeDirectories="..\include;..\..\common\include"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;SC_INCLUDE_FX"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				StringPooling="false"
 				MinimalRebuild="false"
-				BasicRuntimeChecks="0"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
 				WarningLevel="4"
-				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
-				DisableSpecificWarnings="4100;4127;4267;4121;4512"
+				DisableSpecificWarnings="4121"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -155,7 +151,7 @@
 				ShowProgress="2"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="$(SYSTEMC)\SystemC\$(OutDir)"
+				AdditionalLibraryDirectories="$(SYSTEMC)\SystemC\$(IntDir)"
 				GenerateDebugInformation="false"
 				SubSystem="1"
 				OptimizeReferences="2"

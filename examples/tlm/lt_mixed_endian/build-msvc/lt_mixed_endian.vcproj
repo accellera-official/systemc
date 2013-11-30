@@ -2,8 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="lt"
-	ProjectGUID="{8235921F-4E7D-455C-9C15-48B891B95573}"
+	Name="lt_mixed_endian"
+	ProjectGUID="{2791E41A-B893-4F21-9A93-02226EED404B}"
 	RootNamespace="winbuild"
 	Keyword="Win32Proj"
 	>
@@ -214,11 +214,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\src\lt_target.cpp"
+				RelativePath="..\src\lt_top.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\lt_top.cpp"
+				RelativePath="..\src\me_traffic_generator.cpp"
 				>
 			</File>
 			<File
@@ -256,11 +256,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\common\include\lt_target.h"
+				RelativePath="..\include\lt_top.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\lt_top.h"
+				RelativePath="..\include\me_traffic_generator.h"
 				>
 			</File>
 			<File
