@@ -4,6 +4,7 @@
 	Version="8.00"
 	Name="rsa"
 	ProjectGUID="{99D7F4F7-B5B9-486E-B0B3-00E0F553B26C}"
+	RootNamespace="rsa"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -51,6 +52,7 @@
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="4"
+				DisableSpecificWarnings="4996"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -64,11 +66,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="systemc.lib"
-				OutputFile="$(OutDir)/rsa.exe"
+				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(SYSTEMC)\SystemC\Debug"
+				AdditionalLibraryDirectories="$(SYSTEMC)\SystemC\$(IntDir)"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)/rsa.pdb"
+				ProgramDatabaseFile="$(OutDir)/$(ProjectName).pdb"
 				SubSystem="1"
 				TargetMachine="1"
 			/>
@@ -126,7 +128,7 @@
 				AdditionalIncludeDirectories="$(SYSTEMC)\..\src"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				MinimalRebuild="true"
-				BasicRuntimeChecks="3"
+				BasicRuntimeChecks="0"
 				RuntimeLibrary="0"
 				BufferSecurityCheck="false"
 				RuntimeTypeInfo="true"
@@ -134,6 +136,7 @@
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
+				DisableSpecificWarnings="4996"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -147,9 +150,9 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="systemc.lib"
-				OutputFile="$(OutDir)/rsa.exe"
+				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="$(SYSTEMC)\SystemC\Release"
+				AdditionalLibraryDirectories="$(SYSTEMC)\SystemC\$(IntDir)"
 				GenerateDebugInformation="false"
 				SubSystem="1"
 				OptimizeReferences="2"

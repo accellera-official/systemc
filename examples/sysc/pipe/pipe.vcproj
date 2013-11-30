@@ -3,6 +3,8 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="pipe"
+	ProjectGUID="{2993F85A-036B-489A-8EE5-ED27E2B1A4E6}"
+	RootNamespace="pipe"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -50,6 +52,7 @@
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="4"
+				DisableSpecificWarnings="4996"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -63,11 +66,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="systemc.lib"
-				OutputFile="$(OutDir)/pipe.exe"
+				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(SYSTEMC)\SystemC\Debug"
+				AdditionalLibraryDirectories="$(SYSTEMC)\SystemC\$(IntDir)"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)/pipe.pdb"
+				ProgramDatabaseFile="$(OutDir)/$(ProjectName).pdb"
 				SubSystem="1"
 				TargetMachine="1"
 			/>
@@ -125,7 +128,7 @@
 				AdditionalIncludeDirectories="$(SYSTEMC)\..\src"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				MinimalRebuild="true"
-				BasicRuntimeChecks="3"
+				BasicRuntimeChecks="0"
 				RuntimeLibrary="0"
 				BufferSecurityCheck="false"
 				RuntimeTypeInfo="true"
@@ -133,6 +136,7 @@
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
+				DisableSpecificWarnings="4996"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -146,9 +150,9 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="systemc.lib"
-				OutputFile="$(OutDir)/pipe.exe"
+				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="$(SYSTEMC)\SystemC\Release"
+				AdditionalLibraryDirectories="$(SYSTEMC)\SystemC\$(IntDir)"
 				GenerateDebugInformation="false"
 				SubSystem="1"
 				OptimizeReferences="2"

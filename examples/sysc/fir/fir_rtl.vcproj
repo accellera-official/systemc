@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="sc_report"
-	ProjectGUID="{823D7385-FB5C-4823-AE8D-2B2032250085}"
-	RootNamespace="sc_report"
+	Name="fir_rtl"
+	ProjectGUID="{1C76D968-D583-4B12-A138-D52A8AA6E835}"
+	RootNamespace="fir_rtl"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -17,11 +17,12 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(ProjectDir)\$(IntDir)"
+			OutputDirectory="$(ProjectDir)$(IntDir)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
+			BuildLogFile="$(IntDir)\BuildLog-$(ProjectName).htm"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -65,10 +66,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="systemc.lib"
+				AdditionalDependencies="fir_common.lib systemc.lib"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(SYSTEMC)\SystemC\$(IntDir)"
+				AdditionalLibraryDirectories="$(OutDir);$(SYSTEMC)\SystemC\$(IntDir)"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/$(ProjectName).pdb"
 				SubSystem="1"
@@ -101,11 +102,12 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(ProjectDir)\$(IntDir)"
+			OutputDirectory="$(ProjectDir)$(IntDir)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
+			BuildLogFile="$(IntDir)\BuildLog-$(ProjectName).htm"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -194,7 +196,15 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\main.cpp"
+				RelativePath=".\fir_data.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\fir_fsm.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\main_rtl.cpp"
 				>
 			</File>
 		</Filter>
@@ -203,6 +213,22 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\fir_const.h"
+				>
+			</File>
+			<File
+				RelativePath=".\fir_data.h"
+				>
+			</File>
+			<File
+				RelativePath=".\fir_fsm.h"
+				>
+			</File>
+			<File
+				RelativePath=".\fir_top.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"

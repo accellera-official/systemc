@@ -4,6 +4,7 @@
 	Version="8.00"
 	Name="SystemC"
 	ProjectGUID="{86DF4B8C-CF94-4EA8-B529-78997F0F30A7}"
+	RootNamespace="SystemC"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -55,7 +56,7 @@
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"
-				DebugInformationFormat="4"
+				DebugInformationFormat="3"
 				DisableSpecificWarnings="4244;4996"
 				UndefinePreprocessorDefinitions="interface"
 			/>

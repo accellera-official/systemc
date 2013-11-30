@@ -4,6 +4,7 @@
 	Version="8.00"
 	Name="fir"
 	ProjectGUID="{EF9191E5-B7F6-499A-A3CB-55283EFD6370}"
+	RootNamespace="fir"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -16,11 +17,12 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="Debug"
-			IntermediateDirectory="Debug"
+			OutputDirectory="$(ProjectDir)$(IntDir)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
+			BuildLogFile="$(IntDir)\BuildLog-$(ProjectName).htm"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -51,6 +53,7 @@
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="4"
+				DisableSpecificWarnings="4996"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -63,12 +66,12 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="systemc.lib"
-				OutputFile="$(OutDir)/fir.exe"
+				AdditionalDependencies="fir_common.lib systemc.lib"
+				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(SYSTEMC)\SystemC\Debug"
+				AdditionalLibraryDirectories="$(OutDir);$(SYSTEMC)\SystemC\$(IntDir)"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)/fir.pdb"
+				ProgramDatabaseFile="$(OutDir)/$(ProjectName).pdb"
 				SubSystem="1"
 				TargetMachine="1"
 			/>
@@ -99,11 +102,12 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="Release"
-			IntermediateDirectory="Release"
+			OutputDirectory="$(ProjectDir)$(IntDir)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
+			BuildLogFile="$(IntDir)\BuildLog-$(ProjectName).htm"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -126,7 +130,7 @@
 				AdditionalIncludeDirectories="$(SYSTEMC)\..\src"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				MinimalRebuild="true"
-				BasicRuntimeChecks="3"
+				BasicRuntimeChecks="0"
 				RuntimeLibrary="0"
 				BufferSecurityCheck="false"
 				RuntimeTypeInfo="true"
@@ -134,6 +138,7 @@
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
+				DisableSpecificWarnings="4996"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -147,9 +152,9 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="systemc.lib"
-				OutputFile="$(OutDir)/fir.exe"
+				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="$(SYSTEMC)\SystemC\Release"
+				AdditionalLibraryDirectories="$(SYSTEMC)\SystemC\$(IntDir)"
 				GenerateDebugInformation="false"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -191,31 +196,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\display.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\fir.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\fir_data.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\fir_fsm.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\main.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\main_rtl.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\stimulus.cpp"
 				>
 			</File>
 		</Filter>
@@ -225,31 +210,11 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\display.h"
-				>
-			</File>
-			<File
 				RelativePath=".\fir.h"
 				>
 			</File>
 			<File
 				RelativePath=".\fir_const.h"
-				>
-			</File>
-			<File
-				RelativePath=".\fir_data.h"
-				>
-			</File>
-			<File
-				RelativePath=".\fir_fsm.h"
-				>
-			</File>
-			<File
-				RelativePath=".\fir_top.h"
-				>
-			</File>
-			<File
-				RelativePath=".\stimulus.h"
 				>
 			</File>
 		</Filter>

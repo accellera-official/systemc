@@ -3,7 +3,8 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="sc_ttd"
-	ProjectGUID="{5777AF4E-C70F-4EDF-924C-3520152CDDC9}"
+	ProjectGUID="{4A6AD027-9C4C-42BD-A5CE-C7BED609690E}"
+	RootNamespace="sc_ttd"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -41,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/vmg"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(SYSTEMC)\..\src"
+				AdditionalIncludeDirectories="$(ProjectDir)\..\include;$(SYSTEMC)\..\src"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;NOGDI"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -51,6 +52,7 @@
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="4"
+				DisableSpecificWarnings="4996"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -64,11 +66,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="systemc.lib"
-				OutputFile="$(OutDir)/sc_ttd.exe"
+				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(SYSTEMC)\SystemC\Debug"
+				AdditionalLibraryDirectories="$(SYSTEMC)\SystemC\$(IntDir)"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)/sc_ttd.pdb"
+				ProgramDatabaseFile="$(OutDir)/$(ProjectName).pdb"
 				SubSystem="1"
 				TargetMachine="1"
 			/>
@@ -126,7 +128,7 @@
 				AdditionalIncludeDirectories="$(SYSTEMC)\..\src"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				MinimalRebuild="true"
-				BasicRuntimeChecks="3"
+				BasicRuntimeChecks="0"
 				RuntimeLibrary="0"
 				BufferSecurityCheck="false"
 				RuntimeTypeInfo="true"
@@ -134,6 +136,7 @@
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
+				DisableSpecificWarnings="4996"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -147,9 +150,9 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="systemc.lib"
-				OutputFile="$(OutDir)/sc_ttd.exe"
+				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="$(SYSTEMC)\SystemC\Release"
+				AdditionalLibraryDirectories="$(SYSTEMC)\SystemC\$(IntDir)"
 				GenerateDebugInformation="false"
 				SubSystem="1"
 				OptimizeReferences="2"
