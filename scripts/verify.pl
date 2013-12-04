@@ -847,6 +847,7 @@ Usage: $0 [<options>] <directories|names>
       -purify      Link tests with purify.
       -quantify    Link tests with quantify.
       -Q           Run quick tests only.
+      -recheck     Run previously failed tests (taken from $rt_output_file)
       -t <time>    Set the timeout for a test in minutes (default 5 minutes).
       -T           Measure runtime of tests in seconds.
       -v           Verbose output.
@@ -997,6 +998,22 @@ sub parse_args
                 next;
             }
 
+            # re-check previously failing tests
+            if( $arg =~ /^-recheck/ ) {
+                open( OLD_OUTPUT_FH, "<$rt_output_file" )
+                  or die "Error: Cannot open output of previous run (-recheck)\n";
+                while( my $line = <OLD_OUTPUT_FH> ) {
+                    if( $line =~ /^(.*) : (.*)$/ ) {
+                        my $old_test = $2;
+                        if( grep { $_ eq $1 } %rt_error_code ) {
+                            $tests .= ' '.$old_test;
+                        }
+                    }
+                }
+                close OLD_OUTPUT_FH;
+                next;
+            }
+
             # timeout value
             if( $arg =~ /^-t/ ) {
                 $arg = shift @arglist;
@@ -1016,8 +1033,7 @@ sub parse_args
                 next;
             }
 
-            &print_log( "Error: unknown argument '$arg'\n");
-            exit 1;
+            die "Error: unknown argument '$arg'\n";
         }
 
         # must be test
