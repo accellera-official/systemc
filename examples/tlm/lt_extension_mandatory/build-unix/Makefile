@@ -1,4 +1,6 @@
-MODULE = lt_extension_mandatory
+include ../../build-unix/Makefile.config
+
+PROJECT = lt_extension_mandatory
 
 VPATH = \
 	../src \
@@ -9,14 +11,14 @@ INCDIR = \
 	-I../../common/include
 
 OBJS = \
-	$(MODULE).o \
-	$(MODULE)_top.o \
+	$(PROJECT).o \
+	$(PROJECT)_top.o \
 	lt_initiator_extension_mandatory.o \
 	lt_target_extension_mandatory.o \
+	\
 	extension_initiator_id.o \
 	report.o
 
--include ../../build-unix/Makefile.config
- include ../../build-unix/Makefile.rules
+include ../../build-unix/Makefile.rules
 
 # DO NOT DELETE

@@ -1,4 +1,6 @@
-MODULE = lt_dmi
+include ../../build-unix/Makefile.config
+
+PROJECT = lt_dmi
 
 VPATH = \
 	../src \
@@ -9,17 +11,17 @@ INCDIR = \
 	-I../../common/include
 
 OBJS = \
-	$(MODULE).o \
-	$(MODULE)_top.o \
+	$(PROJECT).o \
+	$(PROJECT)_top.o \
+	initiator_top.o \
+	\
+	dmi_memory.o \
 	lt_dmi_initiator.o \
 	lt_dmi_target.o \
-	initiator_top.o \
 	memory.o \
-	dmi_memory.o \
 	report.o \
 	traffic_generator.o
 
--include ../../build-unix/Makefile.config
- include ../../build-unix/Makefile.rules
+include ../../build-unix/Makefile.rules
 
 # DO NOT DELETE

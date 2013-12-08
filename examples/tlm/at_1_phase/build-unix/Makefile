@@ -1,4 +1,6 @@
-MODULE = at_1_phase
+include ../../build-unix/Makefile.config
+
+PROJECT = at_1_phase
 
 VPATH = \
 	../src \
@@ -9,16 +11,16 @@ INCDIR = \
 	-I../../common/include
 
 OBJS = \
-	$(MODULE).o \
-	$(MODULE)_top.o \
+	$(PROJECT).o \
+	$(PROJECT)_top.o \
 	initiator_top.o \
-	traffic_generator.o \
+	\
+	at_target_1_phase.o \
 	memory.o \
 	report.o \
-	at_target_1_phase.o \
-	select_initiator.o
+	select_initiator.o \
+	traffic_generator.o
 
--include ../../build-unix/Makefile.config
- include ../../build-unix/Makefile.rules
+include ../../build-unix/Makefile.rules
 
 # DO NOT DELETE

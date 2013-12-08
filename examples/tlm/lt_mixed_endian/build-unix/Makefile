@@ -1,4 +1,6 @@
-MODULE = lt_mixed_endian
+include ../../build-unix/Makefile.config
+
+PROJECT = lt_mixed_endian
 
 VPATH = \
 	../src \
@@ -11,18 +13,18 @@ INCDIR = \
 OBJS = \
 	lt.o \
 	lt_top.o \
-	lt_initiator.o \
-	memory.o \
+	initiator_top.o \
+	me_traffic_generator.o \
+	\
 	at_target_1_phase.o \
 	at_target_4_phase.o \
-	initiator_top.o \
-	report.o \
-	me_traffic_generator.o
+	lt_initiator.o \
+	memory.o \
+	report.o
 
 INPUT  = ../results/input.txt
 FILTER = grep "::"
 
--include ../../build-unix/Makefile.config
- include ../../build-unix/Makefile.rules
+include ../../build-unix/Makefile.rules
 
 # DO NOT DELETE

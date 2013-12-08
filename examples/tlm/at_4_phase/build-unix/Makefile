@@ -1,21 +1,26 @@
-MODULE = at_4_phase
+include ../../build-unix/Makefile.config
 
-VPATH  =    ../src \
-            ../../common/src
+PROJECT = at_4_phase
 
-INCDIR =    -I../include \
-            -I../../common/include
+VPATH = \
+	../src \
+	../../common/src
 
-OBJS   =    $(MODULE).o \
-            $(MODULE)_top.o \
-            initiator_top.o \
-            traffic_generator.o \
-            memory.o \
-            report.o \
-            at_target_4_phase.o \
-            select_initiator.o
+INCDIR = \
+	-I../include \
+	-I../../common/include
 
--include ../../build-unix/Makefile.config
- include ../../build-unix/Makefile.rules
+OBJS = \
+	$(PROJECT).o \
+	$(PROJECT)_top.o \
+	initiator_top.o \
+	\
+	at_target_4_phase.o \
+	memory.o \
+	report.o \
+	select_initiator.o \
+	traffic_generator.o
+
+include ../../build-unix/Makefile.rules
 
 # DO NOT DELETE
