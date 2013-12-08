@@ -1,5 +1,6 @@
-MODULE = rsa
-OBJS   = $(MODULE).o
+include ../Makefile.config
 
--include ../Makefile.config
- include ../Makefile.rules
+PROJECT = rsa
+OBJS    = $(PROJECT).o
+
+include ../Makefile.rules

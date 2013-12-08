@@ -1,6 +1,7 @@
-MODULE:= pipe
-SRCS  := $(wildcard *.cpp)
-OBJS  := $(SRCS:.cpp=.o)
+include ../Makefile.config
 
--include ../Makefile.config
- include ../Makefile.rules
+PROJECT := pipe
+SRCS    := $(wildcard *.cpp)
+OBJS    := $(SRCS:.cpp=.o)
+
+include ../Makefile.rules

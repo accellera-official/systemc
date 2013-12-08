@@ -1,6 +1,7 @@
-MODULE:= risc_cpu
-SRCS  := $(wildcard *.cpp)
-OBJS  := $(SRCS:.cpp=.o)
+include ../Makefile.config
 
--include ../Makefile.config
- include ../Makefile.rules
+PROJECT := risc_cpu
+SRCS    := $(wildcard *.cpp)
+OBJS    := $(SRCS:.cpp=.o)
+
+include ../Makefile.rules

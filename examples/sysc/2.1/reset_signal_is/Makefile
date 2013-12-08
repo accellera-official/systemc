@@ -1,6 +1,7 @@
 SYSTEMC_HOME ?= ../../../..
-MODULE = reset_signal_is
-OBJS   = $(MODULE).o
+include ../../Makefile.config
 
--include ../../Makefile.config
- include ../../Makefile.rules
+PROJECT = reset_signal_is
+OBJS    = $(PROJECT).o
+
+include ../../Makefile.rules

@@ -1,6 +1,7 @@
 SYSTEMC_HOME ?= ../../../..
-MODULE = dpipe
-OBJS   = main.o
+include ../../Makefile.config
 
--include ../../Makefile.config
- include ../../Makefile.rules
+PROJECT = dpipe
+OBJS    = main.o
+
+include ../../Makefile.rules

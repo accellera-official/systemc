@@ -19,8 +19,8 @@
 ##
 ##  Include this file from your own Makefile to obtain a simple build
 ##  environment.  You need to set at least the variables
-##    MODULE - name of the application
-##    OBJS   - list of required object files
+##    PROJECT - name of the application
+##    OBJS    - list of required object files
 ##  to make things work.
 ##
 ##  The environment is assumed to be set up from Makefile.config file and
@@ -81,9 +81,9 @@ CXXFLAGS  += $(CFLAGS) $(SYSTEMC_CXXFLAGS) $(INCDIR) $(SYSTEMC_DEFINES)
 LDFLAGS   += $(CFLAGS) $(SYSTEMC_CXXFLAGS) $(LIBDIR) $(SYSTEMC_LDFLAGS)
 LIBS      += $(SYSTEMC_LIBS) $(EXTRA_LIBS)
 
-# "real" Makefile needs to set MODULE
-ifeq (,$(strip $(MODULE)))
-$(error MODULE not set. Cannot build.)
+# "real" Makefile needs to set PROJECT
+ifeq (,$(strip $(PROJECT)))
+$(error PROJECT not set. Cannot build.)
 endif
 
 # basic check for SystemC directory
@@ -116,13 +116,13 @@ endif
 
 GOLDEN?=golden.log
 EXEEXT?=.x
-EXE   := $(MODULE)$(EXEEXT)
+EXE   := $(PROJECT)$(EXEEXT)
 
 all: announce $(EXE)
 
 announce:
 	@if test x1 = x$(FLAG_BATCH) ; then \
-		echo; echo "*** $(MODULE):"; echo; \
+		echo; echo "*** $(PROJECT):"; echo; \
 	fi
 
 check: announce all
