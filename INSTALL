@@ -7,6 +7,8 @@ Contents:
 
         2. Installation Notes for Windows
 
+        3. SystemC Library Configuration Switches
+
 
 1. Installation Notes for Unix
 ------------------------------
@@ -467,4 +469,208 @@ project only:
    in the 'Additional Library Directories:' box.
 
 9. Click OK
-  
+
+
+
+
+3. SystemC Library Configuration Switches
+-----------------------------------------
+
+In addition to the explicitly selectable feature given as options to
+the `configure' script (see 1.), some aspects of the library
+implementation can be controlled via
+
+ - preprocessor switches given during library build
+ - preprocessor switches added while building a SystemC application
+ - environment variables
+
+The currently supported switches are documented in this section.
+
+Preprocessor switches
+=====================
+
+Additional preprocessor switches for the library build can be passed
+to the configure script via the CXXFLAGS variable:
+
+  ../configure CXXFLAGS="-DSC_OVERRIDE_DEFAULT_STACK_SIZE=0x80000"
+
+In Visual C++, the preprocessor symbols can be added to the project
+configuration via the 'C/C++' tab under the 'Preprocessor' properties
+in the 'Preprocessor definitions' setting.
+
+
+ * SC_DEFAULT_WRITER_POLICY=<sc_writer_policy> -
+   Override default value for the signal writer policy
+
+   This setting allows deactivating the multiple writer checks for
+   sc_signals at (application) compile time.  This mechanism supersedes
+   the old environment variable SC_SIGNAL_WRITE_CHECK (see below).
+
+   Supported values:
+      SC_ONE_WRITER        (default)
+      SC_MANY_WRITERS      (allow multiple writers in different deltas)
+      SC_UNCHECKED_WRITERS (non-standard, disable all checks)
+
+   Note: Only effective when building an application.
+
+   Note: This setting needs to be consistently set across all
+         translation units of an application.
+
+
+ * SC_DISABLE_ASYNC_UPDATES -
+   Exclude the "async_request_update" support
+
+   Note: This option is usually set by the `configure` option
+     --disable-async-update, or
+     --enable-async-update=no
+
+   On non-Automake platforms (e.g. Visual C++), this preprocessor
+   symbol can be used to manually build the library with this feature.
+
+   Note: Only effective during library build.
+
+
+ * SC_DISABLE_VIRTUAL_BIND - 
+   Keep the "bind" function of sc_ports non-virtual
+
+   When this symbol is defined, the "bind" function in sc_ports is
+   kept non-virtual (although it is required to be 'virtual' since
+   IEEE 1666-2011).
+
+   Note: This symbol needs to be consistently defined in the library
+         and any application linking against the built library.
+
+
+ * SC_DISABLE_COPYRIGHT_MESSAGE -
+   Do not print the copyright message when starting the application
+
+   Note: This does not remove the copyright from the binary.
+         sc_core::sc_copyright() still works as expected.
+   Note: Only effective during library build.
+   See : Environment variable SC_COPYRIGHT_MESSAGE
+
+
+ * SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS -
+   Allow a process to trigger itself immediately
+
+   Allow a method process to trigger itself immediately by using
+      next_trigger( ev ); // or a static sensitivity
+      ev.notify();
+
+   This behaviour has been disabled by default in IEEE 1666-2011 and
+   can be reenabled by this option.
+
+   Note: Only effective during library build.
+
+
+ * SC_ENABLE_EARLY_MAXTIME_CREATION -
+   Allow creation of sc_time objects with a value of sc_max_time()
+   before finalizing the time resolution
+
+   In IEEE 1666-2011, it is not allowed to create sc_time objects with
+   a non-SC_ZERO_TIME value before setting/changing the time resolution.
+
+   This preprocessor switch activates an extension to allow the
+   initialization of sc_time variables with sc_max_time() while
+   still accepting changes to the time resolution afterwards.
+
+     sc_time t = sc_max_time();
+     sc_set_time_resolution( 1, SC_NS ); // OK, with this extension
+
+   The time resolution will still be fixed, once you have explicitly or
+   implicitly relied on the physical value (i.e. the relation to seconds)
+   of any sc_time object.
+
+   Note: Only effective during library build.
+
+
+ * SC_INCLUDE_DYNAMIC_PROCESSES -
+   Enable dynamic process support (sc_spawn, sc_bind)
+
+   To improve compilation times, the fixpoint datatypes are not enabled
+   by default in an SystemC application.
+
+   Define this symbol before including the SystemC header in your
+   application, if you want to use dynamically spawned processes.
+
+   Note: Can be optionally set per translation unit in an application.
+
+   Note: Some TLM convenience sockets require this feature and define
+         the symbol for you if needed.
+
+
+ * SC_INCLUDE_FX -
+   Enable SystemC fix-point datatypes
+
+   To improve compilation times, the fixpoint datatypes are not enabled
+   by default in an SystemC application.
+
+   Define this symbol before including the SystemC header in your
+   application, if you want to use the SystemC fixpoint types.
+
+   Note: Is by default always defined during the library build to enable
+         later use of the fixpoint datatypes in an application.
+
+   Note: Can be optionally set per translation unit in an application.
+
+
+ * SC_INCLUDE_STRSTREAM -
+   Include (deprecated) <strstream> header from <systemc.h>
+
+   Pre-standard C++ compilers had support for an old stringstream
+   implementation called 'strstream'.  In the unlikely case that your
+   application still relies on this deprecated class and that <systemc.h>
+   includes this header for you automatically, you now need to define this
+   symbol when building your application.
+
+   Note: Only effective when building an application.
+
+
+ * SC_OVERRIDE_DEFAULT_STACK_SIZE=<size> -
+   Define the default stack size used for SystemC (thread) processes
+
+   Note: Only effective during library build.
+
+
+ * SC_USE_SC_STRING_OLD / SC_USE_STD_STRING -
+   Define 'sc_string' symbol.
+
+   Pre-IEEE-1666 versions of SystemC included an 'sc_string' class for
+   string objects.  This class has been superseeded by 'std::string' these
+   days.
+
+   If your application still relies on 'sc_string' being available, set one
+   of the two supported preprocessor switches to provide it:
+
+   SC_USE_SC_STRING_OLD -
+     Uses old implementation `sc_string_old' to provide `sc_string':
+       typedef sc_string_old sc_string; 
+
+   SC_USE_STD_STRING -
+     Provide `sc_string' as an alias to `std::string':
+       typedef std::string sc_string;
+
+
+Influential environment variables
+=================================
+
+Currently, three environment variables are checked at library load time
+and influence the SystemC library's behaviour:
+
+ 1) SC_COPYRIGHT_MESSAGE=DISABLE -
+    Run-time alternative to SC_DISABLE_COPYRIGHT_MESSAGE (see above).
+
+ 2) SC_SIGNAL_WRITE_CHECK=DISABLE
+    Run-time alternative to SC_DEFAULT_WRITER_POLICY=SC_UNCHECKED_WRITERS
+    (see above)
+
+ 3) SC_DEPRECATION_WARNINGS=DISABLE
+    Do not issue warnings about using deprecated features as of
+    IEEE 1666-2011.
+
+Usually, it is not recommended to use any of these variables in new or
+on-going projects.  They have been added to simplify the transition of
+legacy code.
+
+
+// Taf!
