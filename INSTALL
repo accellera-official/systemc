@@ -626,6 +626,20 @@ in the 'Preprocessor definitions' setting.
    Note: Only effective when building an application.
 
 
+ * SC_INCLUDE_WINDOWS_H -
+   Explicitly include <windows.h> header from <systemc> header
+
+   Previous versions of SystemC always included the full <windows.h>
+   header on all Windows platforms.  This adds unnecessary bloat to
+   many SystemC applications, reducing compilation times.
+
+   If you rely on the inclusion of the <windows.h> header in your
+   application, you can add this symbol to the list of preprocessor
+   switches for your compiler.
+
+   Note: Only effective when building an application.
+
+
  * SC_OVERRIDE_DEFAULT_STACK_SIZE=<size> -
    Define the default stack size used for SystemC (thread) processes
 
