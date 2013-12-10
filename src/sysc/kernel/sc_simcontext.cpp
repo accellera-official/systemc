@@ -26,6 +26,7 @@
   CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
 
+#define SC_DISABLE_API_VERSION_CHECK // for in-library sc_ver.h inclusion
 
 #include "sysc/kernel/sc_cor_fiber.h"
 #include "sysc/kernel/sc_cor_pthread.h"

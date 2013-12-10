@@ -475,6 +475,7 @@ AM_CONDITIONAL([QT_ARCH_PTHREADS], [ test "${QT_ARCH}" = "pthreads" ])
 dnl
 dnl pkg-config setup
 dnl
+LIBCONFIG_DEFINES=
 PKGCONFIG_DEFINES=
 PKGCONFIG_CFLAGS=
 PKGCONFIG_LDPRIV=
@@ -488,8 +489,25 @@ fi
 #])
 
 dnl
+dnl check for additional (header+lib) compiler flags
+dnl
+# AC_CHECK_DEFINE([DEBUG_SYSTEMC],
+#   [PKGCONFIG_DEFINES="${PKGCONFIG_DEFINES} -DDEBUG_SYSTEMC"])
+AC_CHECK_DEFINE([SC_DISABLE_VIRTUAL_BIND],
+  [PKGCONFIG_DEFINES="${PKGCONFIG_DEFINES} -DSC_DISABLE_VIRTUAL_BIND"])
+
+dnl
+dnl check for additional library compiler flags (documentation only)
+dnl
+AC_CHECK_DEFINE([SC_ENABLE_IMMEDIATE_SELF_NOTIFICATION],
+  [LIBCONFIG_DEFINES="${LIBCONFIG_DEFINES} -DSC_ENABLE_IMMEDIATE_SELF_NOTIFICATION"])
+AC_CHECK_DEFINE([SC_ENABLE_EARLY_MAXTIME_CREATION],
+  [LIBCONFIG_DEFINES="${LIBCONFIG_DEFINES} -DSC_ENABLE_EARLY_MAXTIME_CREATION"])
+
+dnl
 dnl Substitution variables.
 dnl
+AC_SUBST(LIBCONFIG_DEFINES)
 AC_SUBST(PKGCONFIG_DEFINES)
 AC_SUBST(PKGCONFIG_CFLAGS)
 AC_SUBST(PKGCONFIG_LDPRIV)
@@ -573,6 +591,8 @@ Configuration summary of $PACKAGE_STRING for $target
    async_request_update: $enable_async_updates
    Debugging symbols   : $enable_debug
    Optimization        : $enable_optimize
+   Additional settings :
+     ${PKGCONFIG_DEFINES} ${LIBCONFIG_DEFINES}
 
 ---------------------------------------------------------------------
 EOF
