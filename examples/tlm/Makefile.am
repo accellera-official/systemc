@@ -56,14 +56,10 @@ tlmexamplesdir = $(examplesdir)/tlm
 examples_FILES = \
 	build-msvc/Makefile \
 	build-msvc/Makefile.config \
-	build-msvc/MakefileVC7.config \
-	build-msvc/MakefileVC9.config \
 	build-msvc/openhere.bat \
 	build-msvc/READMEcommandlinemsvc.txt \
 	build-msvc/systemc.vsprops \
-	build-msvc/vcvars32VC9.bat \
-	build-msvc/vsvars32.bat \
-	build-msvc/vsvars32VC7.bat \
+	build-msvc/vsvars.bat \
 	\
 	build-unix/Makefile \
 	build-unix/Makefile.config \
