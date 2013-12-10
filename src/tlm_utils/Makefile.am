@@ -44,20 +44,8 @@ H_FILES = \
 	simple_target_socket.h \
 	tlm_quantumkeeper.h
 
-noinst_HEADERS = $(H_FILES)
+localincludedir = $(includedir)/tlm_utils
+nobase_localinclude_HEADERS = $(H_FILES)
 
-INCLUDE_DIR = $(prefix)/include/tlm_utils
-
-install-data-local:
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(INCLUDE_DIR)
-	for file in $(noinst_HEADERS); do \
-	  $(INSTALL_DATA) $(srcdir)/$$file $(INCLUDE_DIR)/$$file; \
-	done
-
-uninstall-local:
-	@$(NORMAL_UNINSTALL)
-	for file in $(noinst_HEADERS); do \
-	  rm -f $(INCLUDE_DIR)/$$file; \
-	done
-	-rmdir $(INCLUDE_DIR)
+EXTRA_DIST += \
+	README.txt

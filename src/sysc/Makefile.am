@@ -32,38 +32,38 @@
 
 include $(top_srcdir)/config/Make-rules.sysc
 
+if WANT_QT_THREADS
+QT_LIB    = qt/libqt.la
+QT_SUBDIR = qt
+endif
+
 SUBDIRS = \
 	kernel \
-	qt \
+	$(QT_SUBDIR) \
 	communication \
 	tracing \
 	utils \
-	packages \
-	datatypes \
-	.
+	packages/boost \
+	datatypes
 
 H_FILES = 
 
-noinst_HEADERS = $(H_FILES)
-
 CXX_FILES =
 
-NO_CXX_FILES =
+localincludedir = $(includedir)/sysc
+nobase_localinclude_HEADERS = $(H_FILES)
 
-INCLUDE_DIR = $(prefix)/include
+libarchdir = $(libdir)$(LIB_ARCH_SUFFIX)
+libarch_LTLIBRARIES = libsystemc.la
 
-libdir = $(prefix)/lib-$(TARGET_ARCH)
-
-lib_LTLIBRARIES = libsystemc.la
+pkgconfigdir = $(libarchdir)/pkgconfig
+pkgconfig_DATA = systemc.pc
 
 libsystemc_la_SOURCES =
 
 # dummy C++ source to cause C++ linking
 nodist_EXTRA_libsystemc_la_SOURCES = sc_nonexistent.cpp
 
-if !WANT_PTHREADS_THREADS
-QT_LIB=qt/libqt.la
-endif
 
 libsystemc_la_LIBADD = \
        kernel/libkernel.la \
@@ -71,30 +71,8 @@ libsystemc_la_LIBADD = \
        communication/libcommunication.la \
        tracing/libtracing.la \
        utils/libutils.la \
-       datatypes/bit/libbit.la \
-       datatypes/fx/libfx.la \
-       datatypes/int/libint.la \
-       datatypes/misc/libmisc.la 
+       datatypes/libdatatypes.la
 
-libsystemc_la_LDFLAGS = -release $(VERSION) -L$(prefix)/lib-$(TARGET_ARCH)
-
-install-data-local:
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(INCLUDE_DIR)
-	for file in $(noinst_HEADERS); do \
-	  $(INSTALL_DATA) $(srcdir)/$$file $(INCLUDE_DIR)/$$file; \
-	done
-	$(mkinstalldirs) $(prefix)/lib-$(TARGET_ARCH)
-	$(INSTALL_DATA) $(MAIN_LIBRARY) \
-	    $(prefix)/lib-$(TARGET_ARCH)/$(MAIN_LIBRARY)
-
-uninstall-local:
-	@$(NORMAL_UNINSTALL)
-	for file in $(noinst_HEADERS); do \
-	  rm -f $(INCLUDE_DIR)/$$file; \
-	done
-	-rmdir $(INCLUDE_DIR)
-	rm -f $(prefix)/lib-$(TARGET_ARCH)/$(MAIN_LIBRARY)
-	-rmdir $(prefix)/lib-$(TARGET_ARCH)
+libsystemc_la_LDFLAGS = -release $(VERSION) -L$(libarchdir)
 
 ## Taf!

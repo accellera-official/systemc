@@ -85,9 +85,9 @@ struct decode : sc_module {
   //Constructor 
   SC_CTOR(decode) {
       SC_CTHREAD(entry, CLK.pos());
-        FILE *fp = fopen("register","r");
+        FILE *fp = fopen("register.img","r");
         int size=0;
-        int mem_word;
+        unsigned mem_word;
 	printf("** ALERT ** ID: initialize Architectural Registers\n");
         while (fscanf(fp,"%x", &mem_word) != EOF) {
                 cpu_reg[size] = mem_word;

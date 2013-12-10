@@ -48,8 +48,8 @@ void simple_bus_master_direct::main_action()
       bus_port->direct_read(&mydata[3], m_address+12);
 
       if (m_verbose)
-      	sb_fprintf(stdout, "%g %s : mem[%x:%x] = (%x, %x, %x, %x)\n",
-		      sc_time_stamp().to_double(), name(), m_address, 
+      	sb_fprintf(stdout, "%s %s : mem[%x:%x] = (%x, %x, %x, %x)\n",
+		      sc_time_stamp().to_string().c_str(), name(), m_address, 
 		      m_address+15, 
 		      mydata[0], mydata[1], mydata[2], mydata[3]);
 

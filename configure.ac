@@ -15,7 +15,7 @@ dnl  language governing rights and limitations under the License.
 dnl
 dnl ***************************************************************************
 dnl
-dnl  configure.in --
+dnl  configure.ac --
 dnl  Process this file with autoconf to produce a configure script.
 dnl
 dnl  Original Author: Martin Janssen, Synopsys, Inc., 2001-05-21
@@ -27,6 +27,9 @@ dnl  changes you are making here.
 dnl
 dnl      Name, Affiliation, Date: Alan Fitch, Doulos, 2012-03-10
 dnl  Description of Modification: TLM2 files added
+dnl
+dnl      Name, Affiliation, Date: Philipp A. Hartmann, OFFIS, 2013-08-20
+dnl  Description of Modification: Installation/configuration reimplemented
 dnl
 dnl ***************************************************************************
 
@@ -42,7 +45,11 @@ dnl
 dnl Some simple checks.
 dnl
 AC_CANONICAL_SYSTEM
-AM_INIT_AUTOMAKE([1.10 no-define]) # for .s file support of LIBTOOLFLAGS
+AM_INIT_AUTOMAKE([1.10 tar-pax -Werror -Wno-portability no-define subdir-objects])
+dnl 1.10 needed for .s file support of LIBTOOLFLAGS
+
+dnl enable silent rules, if present
+m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
 dnl
 dnl reset default compiler flags
@@ -54,6 +61,7 @@ AM_PROG_AS
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INSTALL
+AC_PROG_LN_S
 
 dnl
 dnl Set the compiler flags and target architecture.
@@ -65,6 +73,7 @@ EXTRA_CXXFLAGS="-Wall"
 DEBUG_CXXFLAGS="-g"
 OPT_CXXFLAGS="-O3"
 EXPLICIT_LPTHREAD="-lpthread"
+LDFLAG_RPATH="-Wl,-rpath="
 
 case "$target" in
     *-apple-*)
@@ -93,31 +102,29 @@ case "$target" in
                 AC_MSG_ERROR("sorry...architecture not supported")
                 ;;
         esac
-        case "$CXX_COMP" in
-            CC | c++ | g++)
+        if test x$GXX = xyes ; then
                 EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -arch ${CPU_ARCH}"
-                EXTRA_ASFLAGS="-arch ${CPU_ARCH} -x assembler"
-                ;;
-            *)
+                EXTRA_ASFLAGS ="-arch ${CPU_ARCH} -x assembler"
+                LDFLAG_RPATH="-Wl,-rpath -Wl,"
+        else
                 AC_MSG_ERROR("sorry...compiler not supported")
-                ;;
-        esac
+        fi
         ;;
     sparc-sun-solaris*) 
-        case "$CXX_COMP" in
-            CC)
+        QT_ARCH="sparc-os2"
+        if test x$GXX = xyes ; then
+                TARGET_ARCH="gccsparcOS5"
+                LDFLAG_RPATH="-Wl,-R"
+        else
+            if test $CXX_COMP = CC ; then
                 EXTRA_CXXFLAGS=""
                 TARGET_ARCH="sparcOS5"
-		CCAS=as
-                ;;
-            c++ | g++)
-                TARGET_ARCH="gccsparcOS5"
-                ;;
-            *)
+                LDFLAG_RPATH="-Wl,-R"
+                CCAS=as
+            else
                 AC_MSG_ERROR("sorry...compiler not supported")
-		;;
-        esac
-        QT_ARCH="sparc-os2"
+            fi
+        fi
         ;;
     *linux*)
         case "$target_cpu" in
@@ -135,25 +142,22 @@ case "$target" in
                 AC_MSG_ERROR("sorry...architecture not supported")
             ;;
         esac
-        case "$CXX_COMP" in
-            c++ | g++)
+        if test x$GXX = xyes ; then
                 EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -m${CPU_ARCH}"
                 EXTRA_ASFLAGS="-m${CPU_ARCH}"
-                ;;
-            *)
+        else
                 AC_MSG_ERROR("sorry...compiler not supported")
-            ;;
-        esac
+        fi
         ;;
-    *freebsd*)
+    *freebsd* | dragonfly* | *netbsd* | openbsd*)
         case "$target_cpu" in
             x86_64 | amd64)
-                TARGET_ARCH="freebsd64"
+                TARGET_ARCH="bsd64"
                 CPU_ARCH=64
                 QT_ARCH="x86_64"
                 ;;
             i*86)
-                TARGET_ARCH="freebsd"
+                TARGET_ARCH="bsd"
                 CPU_ARCH=32
                 QT_ARCH="iX86"
                 ;;
@@ -161,70 +165,75 @@ case "$target" in
                 AC_MSG_ERROR("sorry...architecture not supported")
             ;;
         esac
-        case "$CXX_COMP" in
-            c++ | g++)
+        if test x$GXX = xyes ; then
                 EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -m${CPU_ARCH}"
                 EXTRA_ASFLAGS="-m${CPU_ARCH}"
-                ;;
-            *)
+        else
                 AC_MSG_ERROR("sorry...compiler not supported")
-            ;;
-        esac
+        fi
         ;;
     *cygwin*)
-        case "$CXX_COMP" in
-            c++ | g++)
+        case "$target_cpu" in
+            x86_64 | amd64)
+                TARGET_ARCH="cygwin64"
+                CPU_ARCH=64
+                QT_ARCH="x86_64"
+                ;;
+            i*86)
                 TARGET_ARCH="cygwin"
+                CPU_ARCH=32
+                QT_ARCH="iX86"
                 ;;
             *)
-                AC_MSG_ERROR("sorry...compiler not supported")
+                AC_MSG_ERROR("sorry...architecture not supported")
             ;;
         esac
-        QT_ARCH="iX86"
+        if test x$GXX = xyes ; then
+                EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -m${CPU_ARCH}"
+                EXTRA_ASFLAGS="-m${CPU_ARCH}"
+        else
+                AC_MSG_ERROR("sorry...compiler not supported")
+        fi
         ;;
     *mingw*)
+        QT_ARCH="none" # use WinFiber on MinGW platforms
         case "$target_cpu" in
             x86_64 | amd64)
                 TARGET_ARCH="mingw64"
                 CPU_ARCH=64
-                QT_ARCH="x86_64"
+                # QT_ARCH="x86_64"
                 ;;
             i*86)
                 TARGET_ARCH="mingw"
                 CPU_ARCH=32
-                QT_ARCH="iX86"
+                # QT_ARCH="iX86"
                 ;;
             *)
                 AC_MSG_ERROR("sorry...architecture not supported")
             ;;
         esac
-        case "$CXX_COMP" in
-            c++ | g++ | *mingw*-g++)
+        if test x$GXX = xyes ; then
                 EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -m${CPU_ARCH}"
                 EXTRA_ASFLAGS="-m${CPU_ARCH}"
-                ;;
-            *)
+        else
                 AC_MSG_ERROR("sorry...compiler not supported")
-            ;;
-        esac
+        fi
         ;;
     *hpux11*)
-        case "$CXX_COMP" in
-            aCC)
+        QT_ARCH="hppa"
+        if test x$GXX = xyes ; then
+                TARGET_ARCH="gcchpux11"
+        else
+            if test "$CXX_COMP" = "aCC" ; then
                 EXTRA_CXXFLAGS="-AA -ext +DA2.0 +DS2.0"
                 OPT_CXXFLAGS="+O1"
                 TARGET_ARCH="hpux11"
-        	EXTRA_CFLAGS="-Wa,-w36"
-		CCAS=/usr/ccs/bin/as
-                ;;
-            c++ | g++)
-                TARGET_ARCH="gcchpux11"
-                ;;
-            *)
+                EXTRA_CFLAGS="-Wa,-w36"
+                CCAS=/usr/ccs/bin/as
+            else
                 AC_MSG_ERROR("sorry...compiler not supported")
-		;;
-        esac
-        QT_ARCH="hppa"
+            fi
+        fi
         ;;
     *)
         AC_MSG_ERROR("sorry...architecture not supported")
@@ -258,11 +267,102 @@ CXXFLAGS="${CXXFLAGS_USER}"
 
 
 dnl
-dnl Set the default prefix and make sure the prefix is absolute.
+dnl Setup installation directories
 dnl
+AC_MSG_CHECKING([for SystemC install layout])
 
-test "x$prefix" = xNONE && prefix=$srcdir
-current_dir=`pwd`; cd $prefix; prefix=`pwd`; cd $current_dir
+AC_ARG_WITH([unix-layout],
+  [AS_HELP_STRING([--with-unix-layout],
+                  [use Unix directory layout for installation
+                   @<:@default=no@:>@])],
+  [case "x$withval" in
+     xyes)  sysc_install_layout=Unix ;;
+     xno|x) sysc_install_layout=classic ; ;;
+     *)     AC_MSG_ERROR([Unknown install layout requested.]) ;;
+   esac],
+  [sysc_install_layout=classic]
+) # AC_ARG_WITH gnu-layout
+
+abs_srcdir=`cd "$srcdir" && pwd`
+abs_builddir=`pwd`
+if test "x$prefix" = "xNONE" ; then
+  dnl Set the default prefix and make sure the prefix is absolute.
+  prefix="$abs_srcdir"
+  dnl Ignore install layout, when installing to $srcdir
+  sysc_install_layout=ignored
+fi
+
+AC_MSG_RESULT($sysc_install_layout)
+
+dnl
+dnl Setup "classic" installation layout, if not overridden
+dnl
+rootdocdir='${docdir}'
+if test $sysc_install_layout = Unix ; then
+
+  dnl Automake/GNU/Unix defaults are kept,
+  dnl but default library architecture suffix cleared
+  LIB_ARCH_SUFFIX=''
+
+else dnl classic/ignored (if not explicitly given)
+
+  sysc_install_layout=classic
+  if test x$datarootdir = x'${prefix}/share' ; then
+    datarootdir='${prefix}'
+  fi
+  if test x$datadir = x'${datarootdir}' ; then
+    datadir='${prefix}'
+  fi
+  if test x$docdir = x'${datarootdir}/doc/${PACKAGE_TARNAME}' ; then
+    dnl main documentation
+    docdir='${prefix}/docs'
+    dnl "core" documentation (from root directory)
+    rootdocdir='${prefix}'
+  fi
+
+  dnl default library arch suffix is target arch
+  LIB_ARCH_SUFFIX='-${TARGET_ARCH}'
+
+fi
+
+AC_SUBST([rootdocdir])
+AC_SUBST([examplesdir], ['${rootdocdir}/examples'] )
+AC_SUBST([libarchdir],  ['${libdir}${LIB_ARCH_SUFFIX}'] )
+
+AM_CONDITIONAL([SEPARATE_INSTALL_TREE],
+  [ test "x${prefix}" != "x${abs_srcdir}" ])
+dnl Check for out-of-tree build
+AM_CONDITIONAL([SEPARATE_BUILD_TREE],
+  [ test "x${abs_srcdir}" != "x${abs_builddir}" ])
+
+#AM_COND_IF([SEPARATE_BUILD_TREE],[
+if test -z "${SEPARATE_BUILD_TREE_TRUE}" ; then
+  if test "x${prefix}" = "x${abs_builddir}" ; then
+    AC_MSG_ERROR([Installation to build directory not supported.])
+  fi
+fi
+#])
+
+dnl
+dnl handle library arch suffix
+dnl
+AC_MSG_CHECKING([for SystemC library arch suffix])
+AC_ARG_WITH([arch-suffix],
+  [AS_HELP_STRING([--with-arch-suffix],
+                  [add suffix to library installation directory
+                   @<:@default=-<target-arch>@:>@])],
+  [case "x$withval" in
+     xyes)  with_arch_suffix=yes
+            LIB_ARCH_SUFFIX='-${TARGET_ARCH}'
+            ;;
+     xno|x) with_arch_suffix=no
+            LIB_ARCH_SUFFIX=""
+            ;;
+     *)     LIB_ARCH_SUFFIX="${withval}" ;;
+   esac],
+  [with_arch_suffix=default]
+) # AC_ARG_WITH arch-suffix
+AC_MSG_RESULT($with_arch_suffix (TARGET_ARCH=${TARGET_ARCH}))
 
 dnl
 dnl add debugging symbols to library
@@ -294,11 +394,14 @@ dnl
 dnl async_request_update support
 dnl
 AC_MSG_CHECKING([whether to add support for asynchronous update requests])
-support_async_updates=yes
-if test x$ax_pthread_ok = xno ; then
+support_async_updates=no
+if test x$ax_pthread_ok = xyes ; then
+support_async_updates=pthread
+elif test x$ax_pthread_ok = xno ; then
 case "${TARGET_ARCH}" in
- cygwin|mingw*) support_async_updates=yes ;; dnl no pthreads needed on Windows
- *)             support_async_updates=no  ;;
+ dnl no pthreads needed on MSVC/MinGW
+ mingw*|msvc*) support_async_updates=native ;;
+ *)            ;;
 esac
 fi
 AC_ARG_ENABLE([async-updates],
@@ -306,15 +409,23 @@ AC_ARG_ENABLE([async-updates],
                  [disable request_async_update support]),
   [case "${enableval}" in
     yes) if test x"$support_async_updates" = xno ; then
-            AC_MSG_WARN([no pthread support found])
+            AC_MSG_WARN([no native/pthread support found, disabled])
+            enable_async_updates=no
+            support_async_updates=disabled
          fi
-         support_async_updates=yes ;;
-    no)  support_async_updates=no ;;
+         ;;
+    no)  support_async_updates=disabled ;;
     *) AC_MSG_ERROR([bad value ${enableval} for --enable-async-updates]) ;;
-  esac],[enable_async_updates=${support_async_updates}])
+  esac],
+  [if test x${support_async_updates} != xno; then
+     enable_async_updates=yes
+   else
+     enable_async_updates=no
+   fi]
+  )
 AM_CONDITIONAL([DISABLE_ASYNC_UPDATES],
-               [test x"$support_async_updates" = xno])
-AC_MSG_RESULT($support_async_updates)
+               [test x"$enable_async_updates" = xno])
+AC_MSG_RESULT($enable_async_updates)
 
 dnl
 dnl use pthreads for SystemC processes
@@ -342,10 +453,13 @@ if test x"$QT_ARCH" = xpthreads -a x"$enable_pthreads" = xno ; then
   fi
 fi
 
-AM_CONDITIONAL([WANT_PTHREADS_THREADS], [test x"$enable_pthreads" = xyes])
+AM_CONDITIONAL([WANT_PTHREADS_THREADS],
+     [test x"$enable_pthreads" = xyes])
+AM_CONDITIONAL([WANT_QT_THREADS],
+     [test x"$enable_pthreads" = xno -a x"$QT_ARCH" != xnone ])
 
 AM_CONDITIONAL([USES_PTHREADS_LIB],
-  [test x"$enable_pthreads" = xyes -o x"$support_async_updates" = xyes ])
+  [test x"$enable_pthreads" = xyes -o x"$support_async_updates" = xpthread ])
 AC_MSG_RESULT($enable_pthreads)
 
 dnl
@@ -359,15 +473,35 @@ AM_CONDITIONAL([QT_ARCH_HPPA], [ test "${QT_ARCH}" = "hppa" ])
 AM_CONDITIONAL([QT_ARCH_PTHREADS], [ test "${QT_ARCH}" = "pthreads" ])
 
 dnl
+dnl pkg-config setup
+dnl
+PKGCONFIG_DEFINES=
+PKGCONFIG_CFLAGS=
+PKGCONFIG_LDPRIV=
+
+dnl add pthread (private) dependency
+#AM_COND_IF([USES_PTHREADS_LIB],[
+if test -z "${USES_PTHREADS_LIB_TRUE}" ; then
+  PKGCONFIG_CFLAGS="${PTHREAD_CFLAGS}"
+  PKGCONFIG_LDPRIV="${PTHREAD_LIBS} ${EXPLICIT_LPTHREAD}"
+fi
+#])
+
+dnl
 dnl Substitution variables.
 dnl
+AC_SUBST(PKGCONFIG_DEFINES)
+AC_SUBST(PKGCONFIG_CFLAGS)
+AC_SUBST(PKGCONFIG_LDPRIV)
 AC_SUBST(EXTRA_CXXFLAGS)
 AC_SUBST(EXTRA_CFLAGS)
 AC_SUBST(EXTRA_ASFLAGS)
 AC_SUBST(EXPLICIT_LPTHREAD)
+AC_SUBST(LDFLAG_RPATH)
 AC_SUBST(DEBUG_CXXFLAGS)
 AC_SUBST(OPT_CXXFLAGS)
 AC_SUBST(TARGET_ARCH)
+AC_SUBST(LIB_ARCH_SUFFIX)
 AC_SUBST(QT_ARCH)
 
 dnl
@@ -377,73 +511,70 @@ AC_OUTPUT(
  Makefile 
  src/Makefile 
  src/sysc/Makefile 
+ src/sysc/systemc.pc
  src/sysc/communication/Makefile 
  src/sysc/datatypes/Makefile 
- src/sysc/datatypes/bit/Makefile 
- src/sysc/datatypes/fx/Makefile 
- src/sysc/datatypes/int/Makefile 
- src/sysc/datatypes/misc/Makefile 
  src/sysc/kernel/Makefile 
  src/sysc/tracing/Makefile 
  src/sysc/qt/Makefile 
  src/sysc/utils/Makefile 
- src/sysc/packages/Makefile 
  src/sysc/packages/boost/Makefile 
- src/sysc/packages/boost/bind/Makefile 
- src/sysc/packages/boost/config/Makefile 
- src/sysc/packages/boost/config/compiler/Makefile 
- src/sysc/packages/boost/config/platform/Makefile 
- src/sysc/packages/boost/config/stdlib/Makefile 
- src/sysc/packages/boost/mpl/Makefile 
- src/sysc/packages/boost/mpl/aux_/Makefile 
- src/sysc/packages/boost/mpl/aux_/config/Makefile 
- src/sysc/packages/boost/detail/Makefile 
- src/sysc/packages/boost/utility/Makefile 
- src/tlm_core/tlm_1/tlm_analysis/Makefile
- src/tlm_core/tlm_1/Makefile
- src/tlm_core/tlm_1/tlm_req_rsp/tlm_channels/Makefile
- src/tlm_core/tlm_1/tlm_req_rsp/tlm_channels/tlm_req_rsp_channels/Makefile
- src/tlm_core/tlm_1/tlm_req_rsp/tlm_channels/tlm_fifo/Makefile
- src/tlm_core/tlm_1/tlm_req_rsp/Makefile
- src/tlm_core/tlm_1/tlm_req_rsp/tlm_ports/Makefile
- src/tlm_core/tlm_1/tlm_req_rsp/tlm_adapters/Makefile
- src/tlm_core/tlm_1/tlm_req_rsp/tlm_1_interfaces/Makefile
- src/tlm_core/tlm_2/tlm_2_interfaces/Makefile
- src/tlm_core/tlm_2/Makefile
- src/tlm_core/tlm_2/tlm_generic_payload/Makefile
- src/tlm_core/tlm_2/tlm_sockets/Makefile
- src/tlm_core/tlm_2/tlm_quantum/Makefile
+ src/tlm_core/Makefile
+ src/tlm_core/tlm-2.0.pc
  src/tlm_utils/Makefile
  examples/Makefile 
  examples/sysc/Makefile 
- examples/sysc/fir/Makefile 
- examples/sysc/fft/Makefile 
- examples/sysc/fft/fft_flpt/Makefile 
- examples/sysc/fft/fft_fxpt/Makefile 
- examples/sysc/pipe/Makefile 
- examples/sysc/pkt_switch/Makefile 
- examples/sysc/risc_cpu/Makefile 
- examples/sysc/rsa/Makefile 
- examples/sysc/simple_bus/Makefile 
- examples/sysc/simple_fifo/Makefile 
- examples/sysc/simple_perf/Makefile 
- examples/sysc/2.1/Makefile 
- examples/sysc/2.1/dpipe/Makefile 
- examples/sysc/2.1/forkjoin/Makefile 
- examples/sysc/2.1/reset_signal_is/Makefile 
- examples/sysc/2.1/sc_export/Makefile 
- examples/sysc/2.1/sc_report/Makefile 
- examples/sysc/2.1/scx_barrier/Makefile 
- examples/sysc/2.1/scx_mutex_w_policy/Makefile 
- examples/sysc/2.1/specialized_signals/Makefile 
- examples/sysc/2.3/Makefile
- examples/sysc/2.3/include/Makefile
- examples/sysc/2.3/sc_rvd/Makefile
- examples/sysc/2.3/sc_ttd/Makefile
  examples/tlm/Makefile
+ examples/tlm/common/Makefile
+ docs/Makefile
  docs/sysc/doxygen/Doxyfile
  docs/tlm/doxygen/Doxyfile
 )
 
+dnl
+dnl print configuration summary
+dnl
+SYSTEMC_HOME=$prefix
+prefix='<SYSTEMC_HOME>' dnl replace for printing
+dnl ... resolve aliases
+eval "sysc_includedir=\"${includedir}\""
+eval "sysc_includedir=\"${sysc_includedir}\""
+eval "sysc_libdir=\"${libdir}${LIB_ARCH_SUFFIX}\""
+eval "sysc_libdir=\"${sysc_libdir}\""
+eval "sysc_docdir=\"${docdir}\""
+eval "sysc_docdir=\"${sysc_docdir}\""
+eval "sysc_examplesdir=\"${examplesdir}\""
+eval "sysc_examplesdir=\"${sysc_examplesdir}\""
+eval "sysc_examplesdir=\"${sysc_examplesdir}\""
+eval "sysc_examplesdir=\"${sysc_examplesdir}\""
+eval "sysc_prefix=\"${SYSTEMC_HOME}\""
+dnl ... restore prefix
+prefix=$SYSTEMC_HOME
+
+cat <<EOF | tee -a config.log
+---------------------------------------------------------------------
+Configuration summary of $PACKAGE_STRING for $target
+---------------------------------------------------------------------
+
+ Directory setup (based on $sysc_install_layout layout):
+   Installation prefix (aka SYSTEMC_HOME):
+      ${sysc_prefix}
+   Header files  : ${sysc_includedir}
+   Libraries     : ${sysc_libdir}
+   Documentation : ${sysc_docdir}
+   Examples      : ${sysc_examplesdir}
+
+ Architecture    : ${TARGET_ARCH}
+ Compiler (flags): ${CXX}
+     ${CXXFLAGS}
+
+ Optional features:
+   Pthread processes   : $enable_pthreads
+   async_request_update: $enable_async_updates
+   Debugging symbols   : $enable_debug
+   Optimization        : $enable_optimize
+
+---------------------------------------------------------------------
+EOF
 
 dnl Taf!

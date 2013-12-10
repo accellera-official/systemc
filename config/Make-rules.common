@@ -1,7 +1,8 @@
-
-        DEFS = $(EXTRA_DEFINES)
 # top-level SystemC include directory is added in Make-rules.{sysc,examples}
-MAIN_LIBRARY = libsystemc.la
+
+# build flags
+
+        DEFS = $(PKGCONFIG_DEFINES) $(EXTRA_DEFINES)
 
  AM_CPPFLAGS =
 
@@ -39,3 +40,8 @@ endif
 if WANT_PTHREADS_THREADS
   EXTRA_DEFINES+=-DSC_USE_PTHREADS
 endif
+
+# initialize some useful variables (filled later)
+
+CLEANFILES =
+EXTRA_DIST =

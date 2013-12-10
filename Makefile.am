@@ -30,14 +30,17 @@
 ##
 ## ****************************************************************************
 
+# support local addition of automake macros
+ACLOCAL_AMFLAGS= -I config
+
 DOXYGEN=doxygen
 
 SUBDIRS = \
+	docs \
 	src \
-	examples \
-	.
+	examples
 
-INST_FILES = \
+DOC_FILES = \
 	AUTHORS \
 	COPYING \
 	ChangeLog \
@@ -45,43 +48,31 @@ INST_FILES = \
 	LICENSE \
 	NEWS \
 	README \
-	RELEASENOTES \
-	docs
+	RELEASENOTES
 
-# support local addition of automake macros
-ACLOCAL_AMFLAGS= -I config
+EXTRA_DIST = \
+	$(DOC_FILES) \
+	\
+	config/bootstrap \
+	config/test.sh.in \
+	\
+	msvc80/SystemC/SystemC.sln \
+	msvc80/SystemC/SystemC.vcproj
 
-install-data-local:
-	@$(NORMAL_INSTALL)
-	for file in $(INST_FILES); do \
-	  d=$(srcdir); \
-	  if test -d $$d/$$file; then \
-	    test -d $(prefix)/$$file \
-	    || cp -pr $$d/$$file $(prefix) || :; \
-	  else \
-	    test -f $(prefix)/$$file \
-	    || cp -p $$d/$$file $(prefix)/$$file || :; \
-	  fi; \
-	done
-#@(cd ./examples; $(MAKE) install;)
+## ****************************************************************************
 
-uninstall-local:
-	@$(NORMAL_UNINSTALL)
-	w=`pwd`; cd $(srcdir); s=`pwd`; cd $$w; \
-	if test $(prefix) != $$s; then \
-	  for file in $(INST_FILES); do \
-	    d=$(srcdir); \
-	    if test -d $$d/$$file; then \
-	      rm -rf $(prefix)/$$file; \
-	    else \
-	      rm -f $(prefix)/$$file; \
-	    fi; \
-	  done; \
-	fi
-	@(cd ./examples; $(MAKE) uninstall;)
+## install documentation?
+if SEPARATE_INSTALL_TREE
+
+rootdoc_DATA = \
+	$(DOC_FILES)
+
+endif # SEPARATE_INSTALL_TREE
+
+## ****************************************************************************
 
 doxygen:
 	@(cd docs/sysc/doxygen && $(DOXYGEN))
-	@(cd docs/tlm/doxygen && $(DOXYGEN))
+	@(cd docs/tlm/doxygen  && $(DOXYGEN))
 
 ## Taf!
