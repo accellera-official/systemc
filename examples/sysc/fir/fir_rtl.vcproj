@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="risc_cpu"
-	ProjectGUID="{7E89CFF9-22EE-45E4-942B-100C34D8AD72}"
-	RootNamespace="risc_cpu"
+	Name="fir_rtl"
+	ProjectGUID="{1C76D968-D583-4B12-A138-D52A8AA6E835}"
+	RootNamespace="fir_rtl"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -25,6 +25,7 @@
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
+			BuildLogFile="$(IntDir)\BuildLog-$(ProjectName).htm"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -68,10 +69,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="systemc.lib"
+				AdditionalDependencies="fir_common.lib systemc.lib"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(SYSTEMC)\SystemC\$(IntDir)"
+				AdditionalLibraryDirectories="$(OutDir);$(SYSTEMC)\SystemC\$(IntDir)"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/$(ProjectName).pdb"
 				SubSystem="1"
@@ -109,6 +110,7 @@
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
+			BuildLogFile="$(IntDir)\BuildLog-$(ProjectName).htm"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -194,6 +196,7 @@
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
+			BuildLogFile="$(IntDir)\BuildLog-$(ProjectName).htm"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -238,10 +241,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="systemc.lib"
+				AdditionalDependencies="fir_common.lib systemc.lib"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(SYSTEMC)\SystemC\$(IntDir)"
+				AdditionalLibraryDirectories="$(OutDir);$(SYSTEMC)\SystemC\$(IntDir)"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(IntDir)\$(ProjectName).pdb"
 				SubSystem="1"
@@ -279,6 +282,7 @@
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
+			BuildLogFile="$(IntDir)\BuildLog-$(ProjectName).htm"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -369,47 +373,15 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\bios.cpp"
+				RelativePath=".\fir_data.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\dcache.cpp"
+				RelativePath=".\fir_fsm.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\decode.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\exec.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\fetch.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\floating.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\icache.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\main.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\mmxu.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\paging.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\pic.cpp"
+				RelativePath=".\main_rtl.cpp"
 				>
 			</File>
 		</Filter>
@@ -419,47 +391,19 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\bios.h"
+				RelativePath=".\fir_const.h"
 				>
 			</File>
 			<File
-				RelativePath=".\dcache.h"
+				RelativePath=".\fir_data.h"
 				>
 			</File>
 			<File
-				RelativePath=".\decode.h"
+				RelativePath=".\fir_fsm.h"
 				>
 			</File>
 			<File
-				RelativePath=".\directive.h"
-				>
-			</File>
-			<File
-				RelativePath=".\exec.h"
-				>
-			</File>
-			<File
-				RelativePath=".\fetch.h"
-				>
-			</File>
-			<File
-				RelativePath=".\floating.h"
-				>
-			</File>
-			<File
-				RelativePath=".\icache.h"
-				>
-			</File>
-			<File
-				RelativePath=".\mmxu.h"
-				>
-			</File>
-			<File
-				RelativePath=".\paging.h"
-				>
-			</File>
-			<File
-				RelativePath=".\pic.h"
+				RelativePath=".\fir_top.h"
 				>
 			</File>
 		</Filter>

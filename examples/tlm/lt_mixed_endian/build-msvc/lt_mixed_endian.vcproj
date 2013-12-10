@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="risc_cpu"
-	ProjectGUID="{7E89CFF9-22EE-45E4-942B-100C34D8AD72}"
-	RootNamespace="risc_cpu"
+	Name="lt_mixed_endian"
+	ProjectGUID="{2791E41A-B893-4F21-9A93-02226EED404B}"
+	RootNamespace="winbuild"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -23,7 +23,7 @@
 			OutputDirectory="$(ProjectDir)\$(IntDir)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;..\..\build-msvc\systemc.vsprops"
 			CharacterSet="2"
 			>
 			<Tool
@@ -43,19 +43,20 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/vmg"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(SYSTEMC)\..\src"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;NOGDI"
+				AdditionalIncludeDirectories="..\include;..\..\common\include"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				StringPooling="true"
 				MinimalRebuild="true"
+				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="0"
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="false"
+				BrowseInformation="1"
+				WarningLevel="4"
 				DebugInformationFormat="4"
-				DisableSpecificWarnings="4996"
+				DisableSpecificWarnings="4121"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -69,6 +70,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="systemc.lib"
+				ShowProgress="0"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="$(SYSTEMC)\SystemC\$(IntDir)"
@@ -103,11 +105,98 @@
 			/>
 		</Configuration>
 		<Configuration
+			Name="Debug|x64"
+			OutputDirectory="$(ProjectDir)\$(IntDir)"
+			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			ConfigurationType="1"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;..\..\build-msvc\systemc.vsprops"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="..\include;..\..\common\include"
+				PreprocessorDefinitions="WIN64;_DEBUG;_CONSOLE"
+				StringPooling="true"
+				MinimalRebuild="true"
+				ExceptionHandling="1"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="1"
+				RuntimeTypeInfo="true"
+				UsePrecompiledHeader="0"
+				BrowseInformation="1"
+				WarningLevel="4"
+				DebugInformationFormat="3"
+				DisableSpecificWarnings="4121"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="systemc.lib"
+				ShowProgress="0"
+				OutputFile="$(OutDir)\$(ProjectName).exe"
+				LinkIncremental="2"
+				AdditionalLibraryDirectories="$(SYSTEMC)\SystemC\$(IntDir)"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(OutDir)/$(ProjectName).pdb"
+				SubSystem="1"
+				TargetMachine="17"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="$(ProjectDir)\$(IntDir)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;..\..\build-msvc\systemc.vsprops"
 			CharacterSet="2"
 			>
 			<Tool
@@ -128,18 +217,15 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/vmg"
-				AdditionalIncludeDirectories="$(SYSTEMC)\..\src"
+				AdditionalIncludeDirectories="..\include;..\..\common\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
-				MinimalRebuild="true"
-				BasicRuntimeChecks="0"
+				StringPooling="false"
+				MinimalRebuild="false"
 				RuntimeLibrary="0"
-				BufferSecurityCheck="false"
-				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="0"
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="false"
+				WarningLevel="4"
 				DebugInformationFormat="3"
-				DisableSpecificWarnings="4996"
+				DisableSpecificWarnings="4121"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -153,6 +239,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="systemc.lib"
+				ShowProgress="2"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(SYSTEMC)\SystemC\$(IntDir)"
@@ -188,96 +275,11 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="Debug|x64"
-			OutputDirectory="$(ProjectDir)\$(IntDir)"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
-			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
-			CharacterSet="2"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-				TargetEnvironment="3"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				AdditionalOptions="/vmg"
-				Optimization="0"
-				AdditionalIncludeDirectories="$(SYSTEMC)\..\src"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;NOGDI"
-				MinimalRebuild="true"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
-				RuntimeTypeInfo="true"
-				UsePrecompiledHeader="0"
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="false"
-				DebugInformationFormat="3"
-				DisableSpecificWarnings="4267;4996"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="systemc.lib"
-				OutputFile="$(OutDir)\$(ProjectName).exe"
-				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(SYSTEMC)\SystemC\$(IntDir)"
-				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(IntDir)\$(ProjectName).pdb"
-				SubSystem="1"
-				TargetMachine="17"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
 			Name="Release|x64"
 			OutputDirectory="$(ProjectDir)\$(IntDir)"
 			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;..\..\build-msvc\systemc.vsprops"
 			CharacterSet="2"
 			>
 			<Tool
@@ -299,18 +301,15 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/vmg"
-				AdditionalIncludeDirectories="$(SYSTEMC)\..\src"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
-				MinimalRebuild="true"
-				BasicRuntimeChecks="0"
+				AdditionalIncludeDirectories="..\include;..\..\common\include"
+				PreprocessorDefinitions="WIN64;NDEBUG;_CONSOLE"
+				StringPooling="false"
+				MinimalRebuild="false"
 				RuntimeLibrary="0"
-				BufferSecurityCheck="false"
-				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="0"
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="false"
+				WarningLevel="4"
 				DebugInformationFormat="3"
-				DisableSpecificWarnings="4267;4996"
+				DisableSpecificWarnings="4121"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -324,11 +323,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="systemc.lib"
+				ShowProgress="2"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(SYSTEMC)\SystemC\$(IntDir)"
 				GenerateDebugInformation="false"
-				ProgramDatabaseFile="$(IntDir)\$(ProjectName).pdb"
 				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -369,47 +368,43 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\bios.cpp"
+				RelativePath="..\..\common\src\at_target_1_phase.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\dcache.cpp"
+				RelativePath="..\..\common\src\at_target_4_phase.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\decode.cpp"
+				RelativePath="..\src\initiator_top.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\exec.cpp"
+				RelativePath="..\src\lt.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\fetch.cpp"
+				RelativePath="..\..\common\src\lt_initiator.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\floating.cpp"
+				RelativePath="..\src\lt_top.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\icache.cpp"
+				RelativePath="..\src\me_traffic_generator.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\main.cpp"
+				RelativePath="..\..\common\src\memory.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\mmxu.cpp"
+				RelativePath="..\..\common\src\report.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\paging.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\pic.cpp"
+				RelativePath="..\..\common\src\traffic_generator.cpp"
 				>
 			</File>
 		</Filter>
@@ -419,47 +414,43 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\bios.h"
+				RelativePath="..\..\common\include\at_target_1_phase.h"
 				>
 			</File>
 			<File
-				RelativePath=".\dcache.h"
+				RelativePath="..\..\common\include\at_target_4_phase.h"
 				>
 			</File>
 			<File
-				RelativePath=".\decode.h"
+				RelativePath="..\include\initiator_top.h"
 				>
 			</File>
 			<File
-				RelativePath=".\directive.h"
+				RelativePath="..\..\common\include\lt_initiator.h"
 				>
 			</File>
 			<File
-				RelativePath=".\exec.h"
+				RelativePath="..\include\lt_top.h"
 				>
 			</File>
 			<File
-				RelativePath=".\fetch.h"
+				RelativePath="..\include\me_traffic_generator.h"
 				>
 			</File>
 			<File
-				RelativePath=".\floating.h"
+				RelativePath="..\..\common\include\memory.h"
 				>
 			</File>
 			<File
-				RelativePath=".\icache.h"
+				RelativePath="..\..\common\include\reporting.h"
 				>
 			</File>
 			<File
-				RelativePath=".\mmxu.h"
+				RelativePath="..\..\common\include\models\SimpleBusLT.h"
 				>
 			</File>
 			<File
-				RelativePath=".\paging.h"
-				>
-			</File>
-			<File
-				RelativePath=".\pic.h"
+				RelativePath="..\..\common\include\traffic_generator.h"
 				>
 			</File>
 		</Filter>

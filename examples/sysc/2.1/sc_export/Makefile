@@ -1,6 +1,7 @@
 SYSTEMC_HOME ?= ../../../..
-MODULE = sc_export
-OBJS   = main.o
+include ../../Makefile.config
 
--include ../../Makefile.config
- include ../../Makefile.rules
+PROJECT = sc_export
+OBJS    = main.o
+
+include ../../Makefile.rules

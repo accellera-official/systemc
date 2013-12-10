@@ -1,4 +1,6 @@
-MODULE = at_extension_optional
+include ../../build-unix/Makefile.config
+
+PROJECT = at_extension_optional
 
 VPATH = \
 	../src \
@@ -11,18 +13,18 @@ INCDIR = \
 CXXFLAGS += -DUSING_EXTENSION_OPTIONAL
 
 OBJS = \
-	$(MODULE).o \
-	$(MODULE)_top.o \
+	$(PROJECT).o \
+	$(PROJECT)_top.o \
 	initiator_top.o \
-	traffic_generator.o \
+	\
+	at_target_2_phase.o \
+	at_target_4_phase.o \
+	extension_initiator_id.o \
 	memory.o \
 	report.o \
-	at_target_4_phase.o \
-	at_target_2_phase.o \
 	select_initiator.o \
-	extension_initiator_id.o
+	traffic_generator.o
 
--include ../../build-unix/Makefile.config
- include ../../build-unix/Makefile.rules
+include ../../build-unix/Makefile.rules
 
 # DO NOT DELETE

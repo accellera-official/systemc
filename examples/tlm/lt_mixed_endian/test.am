@@ -87,8 +87,8 @@ lt_mixed_endian_EXTRA = \
 	lt_mixed_endian/README \
 	lt_mixed_endian/build-msvc/Makefile \
 	lt_mixed_endian/build-msvc/README.txt \
-	lt_mixed_endian/build-msvc/lt.sln \
-	lt_mixed_endian/build-msvc/lt.vcproj \
+	lt_mixed_endian/build-msvc/lt_mixed_endian.sln \
+	lt_mixed_endian/build-msvc/lt_mixed_endian.vcproj \
 	lt_mixed_endian/build-unix/Makefile \
 	lt_mixed_endian/docs/lt_mixed_endian_example.pdf \
 	lt_mixed_endian/docs/lt_mixed_endian_example.ppt

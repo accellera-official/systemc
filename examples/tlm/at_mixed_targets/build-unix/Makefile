@@ -1,4 +1,6 @@
-MODULE = at_mixed_targets
+include ../../build-unix/Makefile.config
+
+PROJECT = at_mixed_targets
 
 VPATH = \
 	../src \
@@ -9,18 +11,18 @@ INCDIR = \
 	-I../../common/include
 
 OBJS   = \
-	$(MODULE).o \
-	$(MODULE)_top.o \
+	$(PROJECT).o \
+	$(PROJECT)_top.o \
 	initiator_top.o \
-	traffic_generator.o \
-	memory.o \
-	report.o \
+	\
 	at_target_1_phase.o \
 	at_target_2_phase.o \
 	at_target_4_phase.o \
-	select_initiator.o
+	memory.o \
+	report.o \
+	select_initiator.o \
+	traffic_generator.o
 
--include ../../build-unix/Makefile.config
- include ../../build-unix/Makefile.rules
+include ../../build-unix/Makefile.rules
 
 # DO NOT DELETE
