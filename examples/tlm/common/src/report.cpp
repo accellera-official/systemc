@@ -30,71 +30,66 @@
 namespace report {
 std::string print(const tlm::tlm_phase phase)
 {
-  std::string os;
+  std::stringstream os;
   switch (phase)
   {
     case tlm::BEGIN_REQ:
       {
-        os =  "BEGIN_REQ";
+        os <<  "BEGIN_REQ";
         break;
       }
     case tlm::END_REQ:
       {
-        os = "END_REQ";
+        os << "END_REQ";
         break;
       }
     case tlm::BEGIN_RESP:
       {
-        os = "BEGIN_RESP";
+        os << "BEGIN_RESP";
         break;
       }
     case tlm::END_RESP:
       {
-        os = "END_RESP";
+        os << "END_RESP";
         break;
       }
     default:
       {
-//        char buffer[8];
-//        snprintf(buffer,8," %d",int(phase));
-//        os += buffer;
-        os += "UNKNOWN: " + phase;
+        os << "UNKNOWN_" << phase;
         break;
       }
   }//end switch
-  return os;
+  return os.str();
 }
 
 std::string print(const tlm::tlm_sync_enum status)
 { //
-  std::string os ( "TLM_" );
+  std::stringstream os;
+  // os << "TLM_" ;
   switch (status)
   {
     case tlm::TLM_COMPLETED:
       {
-        os = "COMPLETED";
+        os << "COMPLETED";
         break;
       }
     case tlm::TLM_UPDATED:
       {
-        os = "UPDATED";
+        os << "UPDATED";
         break;
       }
     case tlm::TLM_ACCEPTED:
       {
-        os = "ACCEPTED";
+        os << "ACCEPTED";
         break;
       }
     default:
       {
-//        char buffer[8];
-//        snprintf(buffer,8," %d",int(status));
-//        os += buffer;
-        os += "UNKNOWN: " + os;
+        os << "UNKNOWN_" << status;
         break;
       }
   }//end switch
-  return os;
+  return os.str();
 }
 //=====================================================================
 //

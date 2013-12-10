@@ -649,7 +649,7 @@ get_sign(Type &u)
 
   // no positive number representable for minimum value,
   // leave as is to avoid Undefined Behaviour
-  if( SC_LIKELY_( u > std::numeric_limits<Type>::min() ) )
+  if( SC_LIKELY_( u > (std::numeric_limits<Type>::min)() ) )
     u = -u;
 
   return SC_NEG;
