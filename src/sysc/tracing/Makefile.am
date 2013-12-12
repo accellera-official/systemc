@@ -35,14 +35,17 @@ include $(top_srcdir)/config/Make-rules.sysc
 noinst_LTLIBRARIES = libtracing.la
 
 H_FILES = \
-	sc_trace.h
+	sc_trace.h \
+	sc_tracing_ids.h
 
 NO_H_FILES = \
+	sc_trace_file_base.h \
 	sc_vcd_trace.h \
 	sc_wif_trace.h
 
 CXX_FILES = \
 	sc_trace.cpp \
+	sc_trace_file_base.cpp \
 	sc_vcd_trace.cpp \
 	sc_wif_trace.cpp
 

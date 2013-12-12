@@ -59,29 +59,23 @@
 
 #include <cstdio>
 #include "sysc/datatypes/int/sc_nbdefs.h"
-#include "sysc/tracing/sc_trace.h"
+#include "sysc/tracing/sc_trace_file_base.h"
 
 namespace sc_core {
 
 class wif_trace;  // defined in wif_trace.cc
 template<class T> class wif_T_trace;
 
-class wif_trace_file : public sc_trace_file{
+class wif_trace_file
+  : public sc_trace_file_base
+{
 public:
     enum wif_enum {WIF_BIT=0, WIF_MVL=1, WIF_REAL=2, WIF_LAST};
 
-    void set_time_unit( double, sc_time_unit );
-    // sc_set_wif_time_unit is deprecated.
-#if 0 // deprecated
-    inline void sc_set_wif_time_unit(int exponent10_seconds)
-        { set_time_unit(exponent10_seconds); }
-#endif
-
     // Create a wif trace file.
     // `Name' forms the base of the name to which `.awif' is added.
-    wif_trace_file(const char *name);
+    explicit wif_trace_file(const char *name);
 
-    // Flush results and close file.
     ~wif_trace_file();
 
 protected:
@@ -171,10 +165,7 @@ protected:
     template<class T>
     void traceT(const T& object, const std::string& name, wif_enum type)
     {
-      if(initialized)
-        put_error_message("No traces can be added once simulation has"
-        " started.\nTo add traces, create a new wif trace file.", false);
-      else
+        if( add_trace_check(name) )
             traces.push_back( new wif_T_trace<T>( object, name
                                                 , obtain_name(),type ) );
     }
@@ -196,25 +187,18 @@ protected:
     // Output a comment to the trace file
      void write_comment(const std::string& comment);
 
-    // Also trace transitions between delta cycles if flag is true.
-     void delta_cycles(bool flag);
-
     // Write trace info for cycle.
      void cycle(bool delta_cycle);
 
 private:
     // Initialize the tracing mechanism
-    void initialize();
+    virtual void do_initialize();
 
-    // Pointer to the file that needs to be written
-    FILE* fp;
+    unsigned wif_name_index;           // Number of variables traced
 
-    bool trace_delta_cycles;    // = 1 means trace the delta cycles
-
-    unsigned wif_name_index;    // Number of variables traced
-
-    unsigned previous_time_units_low, previous_time_units_high; // Previous time as 64 bit integer
-    double previous_time;       // Previous time as a double
+    unsigned previous_time_units_low;  // Previous time as 64 bit integer
+    unsigned previous_time_units_high;
+    double   previous_time;            // Previous time as a double
 
 public:
     // Create wif names for each variable
@@ -222,11 +206,6 @@ public:
 
     // Array to store the variables traced
     std::vector<wif_trace*> traces;
-
-protected:
-    bool   initialized;           // = true means initialized
-    double timescale_unit;        // in seconds
-    bool   timescale_set_by_user; // = true means set by user
 };
 
 } //  namespace sc_core

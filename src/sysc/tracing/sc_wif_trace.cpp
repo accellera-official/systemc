@@ -59,8 +59,6 @@
  *****************************************************************************/
 
 
-#include <assert.h>
-#include <time.h>
 #include <cstdlib>
 #include <vector>
 
@@ -79,8 +77,6 @@
 #include "sysc/tracing/sc_wif_trace.h"
 
 namespace sc_core {
-
-static bool running_regression = false;
 
 // Forward declarations for functions that come later in the file
 static char map_sc_logic_state_to_wif_state(char in_char);
@@ -128,25 +124,27 @@ wif_trace::wif_trace(const std::string& name_,
 {
     /* Intentionally blank */
 }
-        
+
 void
 wif_trace::print_variable_declaration_line( FILE* f )
 {
-    char buf[2000];
-
-    if( bit_width < 0 ) {
-        std::sprintf( buf, "Traced object \"%s\" has < 0 Bits, cannot be traced.",
-	      name.c_str() );
-        put_error_message( buf, false );
-    } else {
-        std::fprintf( f, "declare  %s   \"%s\"  %s  ",
-	    wif_name.c_str(), name.c_str(), wif_type );
-	if( bit_width > 0 ) {
-	    std::fprintf( f, "0 %d ", bit_width - 1 );
-	}
-	std::fprintf( f, "variable ;\n" );
-	std::fprintf( f, "start_trace %s ;\n", wif_name.c_str() );
+    if( bit_width < 0 )
+    {
+        std::stringstream ss;
+        ss << "'" << name << "' has < 0 bits";
+        SC_REPORT_ERROR( SC_ID_TRACING_OBJECT_IGNORED_
+                       , ss.str().c_str() );
+        return;
     }
+
+    std::fprintf( f, "declare  %s   \"%s\"  %s  ",
+                  wif_name.c_str(), name.c_str(), wif_type );
+
+    if( bit_width > 0 ) {
+        std::fprintf( f, "0 %d ", bit_width - 1 );
+    }
+    std::fprintf( f, "variable ;\n" );
+    std::fprintf( f, "start_trace %s ;\n", wif_name.c_str() );
 }
 
 void
@@ -1484,21 +1482,22 @@ bool wif_enum_trace::changed()
 
 void wif_enum_trace::write(FILE* f)
 {
-    char buf[2000];
     static bool warning_issued = false;
+    const char* lit;
 
     if (object >= nliterals) { // Note unsigned value is always greater than 0
         if (!warning_issued) {
-	    std::sprintf(buf, "Tracing error: Value of enumerated type undefined");
-	    put_error_message(buf, false);
-	    warning_issued = true;
-	}
-	std::fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(),
-		"SC_WIF_UNDEF");
+            SC_REPORT_WARNING( SC_ID_TRACING_INVALID_ENUM_VALUE_ 
+                             , name.c_str() );
+            warning_issued = true;
+        }
+        lit = "SC_WIF_UNDEF";
     }
-    else 
-        std::fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(),
-		literals[object]);
+    else
+    {
+        lit = literals[object];
+    }
+    std::fprintf( f, "assign %s \"%s\" ;\n", wif_name.c_str(), lit );
     old_value = object;
 }
 
@@ -1554,27 +1553,16 @@ typedef wif_T_trace<sc_dt::sc_lv_base> wif_sc_lv_trace;
 
 
 wif_trace_file::wif_trace_file(const char * name)
-: fp(0), trace_delta_cycles(false), wif_name_index(0),
-  previous_time_units_low(0), previous_time_units_high(0), previous_time(0.0),
-  traces(), initialized(false),
-  timescale_unit(sc_get_time_resolution().to_seconds()),
-  timescale_set_by_user(false)
-
-{
-    std::string file_name = name ;
-    file_name += ".awif";
-    fp = fopen(file_name.c_str(), "w");
-    if (!fp) {
-        std::string msg = 
-		std::string("Cannot write trace file '") + file_name +
-	    "'";
-	::std::cerr << "FATAL: " << msg << "\n";
-        exit(1);
-    }
-}
+  : sc_trace_file_base( name, "awif" )
+  , wif_name_index(0)
+  , previous_time_units_low(0)
+  , previous_time_units_high(0)
+  , previous_time(0.0)
+  , traces()
+{}
 
 
-void wif_trace_file::initialize()
+void wif_trace_file::do_initialize()
 {
     char buf[2000];
 
@@ -1602,25 +1590,13 @@ void wif_trace_file::initialize()
     else if(timescale_unit == 1e2)   std::sprintf(buf,"17");
     std::fprintf(fp,"header  %s \"%s\" ;\n\n", buf, sc_version());
 
-    //date:
-    time_t long_time;
-    time(&long_time);
-    struct tm* p_tm;
-    p_tm = localtime(&long_time);
-    strftime(buf, 199, "%b %d, %Y       %H:%M:%S", p_tm);
-    std::fprintf(fp, "comment \"ASCII WIF file produced on date:  %s\" ;\n", buf);
+    std::fprintf(fp, "comment \"ASCII WIF file produced on date:  %s\" ;\n"
+                , localtime_string().c_str());
  
     //version:
     std::fprintf(fp, "comment \"Created by %s\" ;\n", sc_version());
     //conversion info
     std::fprintf(fp, "comment \"Convert this file to binary WIF format using a2wif\" ;\n\n");
-
-
-    running_regression = ( getenv( "SYSTEMC_REGRESSION" ) != NULL );
-    // Don't print message if running regression
-    if( ! timescale_set_by_user && ! running_regression ) {
-	::std::cout << "WARNING: Default time step is used for WIF tracing." << ::std::endl;
-    }
 
     // Define the two types we need to represent bool and sc_logic
     std::fprintf(fp, "type scalar \"BIT\" enum '0', '1' ;\n");
@@ -1663,11 +1639,7 @@ void wif_trace_file::initialize()
 void                                                                          \
 wif_trace_file::trace( const tp& object_, const std::string& name_ )          \
 {                                                                             \
-    if( initialized ) {                                                       \
-        put_error_message(                                                \
-	    "No traces can be added once simulation has started.\n"           \
-            "To add traces, create a new wif trace file.", false );           \
-    }                                                                         \
+    if( add_trace_check(name_) )                                              \
         traces.push_back( new wif_ ## tp ## _trace( object_,                  \
                                                     name_,                    \
                                                     obtain_name() ) );        \
@@ -1682,11 +1654,7 @@ DEFN_TRACE_METHOD(double)
 void                                                                          \
 wif_trace_file::trace(const sc_dt::tp& object_, const std::string& name_)     \
 {                                                                             \
-    if( initialized ) {                                                       \
-        put_error_message(                                                \
-	    "No traces can be added once simulation has started.\n"               \
-            "To add traces, create a new wif trace file.", false );           \
-    }                                                                         \
+    if( add_trace_check(name_) )                                              \
         traces.push_back( new wif_ ## tp ## _trace( object_,                  \
                                                     name_,                    \
                                                     obtain_name() ) );        \
@@ -1714,11 +1682,7 @@ wif_trace_file::trace( const tp&          object_,                            \
                        const std::string& name_,                              \
                        int                width_ )                            \
 {                                                                             \
-    if( initialized ) {                                                       \
-        put_error_message(                                                \
-	    "No traces can be added once simulation has started.\n"           \
-            "To add traces, create a new wif trace file.", false );           \
-    }                                                                         \
+    if( add_trace_check(name_) )                                              \
         traces.push_back( new wif_signed_ ## tp ## _trace( object_,           \
                                                            name_,             \
                                                            obtain_name(),     \
@@ -1731,11 +1695,7 @@ wif_trace_file::trace( const unsigned tp& object_,                            \
                        const std::string& name_,                              \
                        int                width_ )                            \
 {                                                                             \
-    if( initialized ) {                                                       \
-        put_error_message(                                                \
-	    "No traces can be added once simulation has started.\n"           \
-            "To add traces, create a new wif trace file.", false );           \
-    }                                                                         \
+    if( add_trace_check(name_) )                                              \
         traces.push_back( new wif_unsigned_ ## tp ## _trace( object_,         \
                                                              name_,           \
                                                              obtain_name(),   \
@@ -1762,11 +1722,7 @@ wif_trace_file::trace( const sc_dt::tp&   object_,                            \
                        const std::string& name_,                              \
                        int                width_ )                            \
 {                                                                             \
-    if( initialized ) {                                                       \
-        put_error_message(                                                \
-	    "No traces can be added once simulation has started.\n"           \
-            "To add traces, create a new wif trace file.", false );           \
-    }                                                                         \
+    if( add_trace_check(name_) )                                              \
         traces.push_back( new wif_ ## tp ## _trace( object_,                  \
                                                     name_,                    \
                                                     obtain_name(),            \
@@ -1782,11 +1738,7 @@ wif_trace_file::trace( const unsigned& object_,
 		       const std::string& name_,
 		       const char** enum_literals_ )
 {
-    if( initialized ) {
-        put_error_message(
-	    "No traces can be added once simulation has started.\n"
-	    "To add traces, create a new wif trace file.", false );
-    }
+    if( add_trace_check(name_) )
         traces.push_back( new wif_enum_trace( object_,
                                               name_,
                                               obtain_name(),
@@ -1811,16 +1763,11 @@ wif_trace_file::trace( const sc_dt::sc_lv_base& object_,
 void
 wif_trace_file::write_comment(const std::string& comment)
 {
+    if(!fp) open_fp();
     //no newline in comments allowed
     std::fprintf(fp, "comment \"%s\" ;\n", comment.c_str());
 }
 
-
-void
-wif_trace_file::delta_cycles(bool flag)
-{
-    trace_delta_cycles = flag;
-}
 
 void
 wif_trace_file::cycle(bool this_is_a_delta_cycle)
@@ -1828,12 +1775,10 @@ wif_trace_file::cycle(bool this_is_a_delta_cycle)
     unsigned now_units_high, now_units_low;
 
     // Trace delta cycles only when enabled
-    if (!trace_delta_cycles && this_is_a_delta_cycle) return;
+    if (!delta_cycles() && this_is_a_delta_cycle) return;
 
     // Check for initialization
-    if (!initialized) {
-        initialize();
-        initialized = true;
+    if( initialize() ) {
         return;
     };
 
@@ -1901,55 +1846,12 @@ wif_trace_file::obtain_name()
     return buf;
 }
 
-// Set the time unit
-void wif_trace_file::set_time_unit(double v, sc_time_unit tu)
-{
-    if(initialized)
-    {        
-	put_error_message(
-	    "Trace timescale unit cannot be changed once tracing has begun.",
-	    false
-        );
-        std::cout << "To change the scale, create a new trace file." 
-		  << std::endl;
-        return;    
-    }
-
-    switch ( tu )
-    {
-      case SC_FS:  v = v * 1e-15; break;
-      case SC_PS:  v = v * 1e-12; break;
-      case SC_NS:  v = v * 1e-9;  break;
-      case SC_US:  v = v * 1e-6;  break;
-      case SC_MS:  v = v * 1e-3;  break;
-      case SC_SEC:                break;
-      default:                    
-	  	put_error_message("Unknown time unit specified ",true);
-		std::cout << tu << std::endl;
-		break;
-    }
-    timescale_unit = v;
-
-    // EMIT ADVISORY MESSAGE ABOUT CHANGE IN TIME SCALE:
-
-    char buf[200];
-    std::sprintf(buf,
-        "Note: VCD trace timescale unit is set by user to %e sec.\n",
-        timescale_unit);
-    ::std::cout << buf << ::std::flush;
-
-	timescale_set_by_user = true;
-}
-
-// Cleanup and close trace file
 wif_trace_file::~wif_trace_file()
 {
-    int i;
-    for (i = 0; i < (int)traces.size(); i++) {
+    for( int i = 0; i < (int)traces.size(); i++ ) {
         wif_trace* t = traces[i];
         delete t;
     }
-    fclose(fp);
 }
 
 // Map sc_logic values to values understandable by WIF
@@ -1982,27 +1884,13 @@ map_sc_logic_state_to_wif_state(char in_char)
     return out_char;
 }
 
-
-#if 0
-// no output should be done directly to ::std::cout, cerr, etc.
-void
-put_error_message(const char* msg, bool just_warning)
-{
-    if(just_warning){
-	::std::cout << "WIF Trace Warning:\n" << msg << "\n" << ::std::endl;
-    }
-    else{
-	::std::cout << "WIF Trace ERROR:\n" << msg << "\n" << ::std::endl;
-    }
-}
-#endif // 0
+// ----------------------------------------------------------------------------
 
 // Create the trace file
 sc_trace_file*
 sc_create_wif_trace_file(const char * name)
 {
     sc_trace_file *tf = new wif_trace_file(name);
-    sc_get_curr_simcontext()->add_trace_file(tf);
     return tf;
 }
 
@@ -2011,7 +1899,6 @@ void
 sc_close_wif_trace_file( sc_trace_file* tf )
 {
     wif_trace_file* wif_tf = static_cast<wif_trace_file*>(tf);
-    sc_get_curr_simcontext()->remove_trace_file(wif_tf);
     delete wif_tf;
 }
 

@@ -75,9 +75,6 @@ class sc_time;
 
 template <class T> class sc_signal_in_if;
 
-// Write error message
-void put_error_message(const char* msg, bool just_warning);
-
 
 // Base class for all kinds of trace files. 
 
@@ -380,13 +377,6 @@ sc_write_comment( sc_trace_file* tf, const std::string& comment )
 // Equivalent of std::fprintf for trace files!
 
 void tprintf( sc_trace_file* tf,  const char* format, ... );
-
-
-// Convert double time to 64-bit integer
-
-extern void double_to_special_int64( double in,
-				     unsigned* high,
-				     unsigned* low );
 
 // ----------------------------------------------------------------------------
 // Create VCD file

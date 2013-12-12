@@ -47,9 +47,7 @@
 #ifndef SC_VCD_TRACE_H
 #define SC_VCD_TRACE_H
 
-
-#include <cstdio>
-#include "sysc/tracing/sc_trace.h"
+#include "sysc/tracing/sc_trace_file_base.h"
 
 namespace sc_core {
 
@@ -64,18 +62,17 @@ template<class T> class vcd_T_trace;
 // ----------------------------------------------------------------------------
 
 class vcd_trace_file
-: public sc_trace_file
+  : public sc_trace_file_base
 {
 public:
 
     enum vcd_enum {VCD_WIRE=0, VCD_REAL=1, VCD_LAST};
+
 	// sc_set_vcd_time_unit is deprecated.
 #if 0 // deprecated
     inline void sc_set_vcd_time_unit(int exponent10_seconds)
     	{ set_time_unit(exponent10_seconds); }
 #endif
-
-    virtual void set_time_unit( double v, sc_time_unit tu);
 
     // Create a Vcd trace file.
     // `Name' forms the base of the name to which `.vcd' is added.
@@ -174,10 +171,7 @@ protected:
     void traceT(const T& object, const std::string& name, 
     	vcd_enum type=VCD_WIRE)
     {
-      if(initialized)
-         put_error_message("No traces can be added once simulation has"
-         " started.\nTo add traces, create a new vcd trace file.", false);
-      else
+        if( add_trace_check(name) )
             traces.push_back(new vcd_T_trace<T>( object, name
                                                , obtain_name(),type) );
     }
@@ -198,25 +192,18 @@ protected:
     // Output a comment to the trace file
      void write_comment(const std::string& comment);
 
-    // Also trace transitions between delta cycles if flag is true.
-     void delta_cycles(bool flag);
-
     // Write trace info for cycle.
      void cycle(bool delta_cycle);
 
 private:
 
-    // Initialize the tracing
-    void initialize();
+    // Initialize the VCD tracing
+    virtual void do_initialize();
 
-    // Pointer to the file that needs to be written
-    FILE* fp;
+    unsigned vcd_name_index;           // Number of variables traced
 
-    bool trace_delta_cycles;    // = 1 means trace the delta cycles
-
-    unsigned vcd_name_index;    // Number of variables traced
-
-    unsigned previous_time_units_low, previous_time_units_high; // Previous time unit as 64-bit integer
+    unsigned previous_time_units_low;  // Previous time unit as 64-bit integer
+    unsigned previous_time_units_high;
 
 public:
 
@@ -226,10 +213,6 @@ public:
     // Create VCD names for each variable
     std::string obtain_name();
 
-protected:
-    bool   initialized;           // = true means initialized
-    double timescale_unit;        // in seconds
-    bool   timescale_set_by_user; // = true means set by user
 };
 
 } // namespace sc_core
