@@ -95,7 +95,7 @@ int sc_main(int ac, char *av[])
   proc1 P1("P1", clock);
 
   tf = sc_create_vcd_trace_file("test01");
-  ((vcd_trace_file *) tf)->set_time_unit(1.0, SC_PS);
+  tf->set_time_unit(1.0, SC_PS);
   sc_trace(tf, P1.obj1, "Bool");
   sc_trace(tf, P1.obj2, "SC_Logic");
   sc_trace(tf, P1.obj3, "SC_BV");
