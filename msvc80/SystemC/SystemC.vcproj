@@ -562,6 +562,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\sysc\tracing\sc_trace_file_base.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\sysc\datatypes\int\sc_uint_base.cpp"
 				>
 			</File>
@@ -1081,6 +1085,14 @@
 			</File>
 			<File
 				RelativePath="..\..\src\sysc\tracing\sc_trace.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\sysc\tracing\sc_trace_file_base.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\sysc\tracing\sc_tracing_ids.h"
 				>
 			</File>
 			<File
