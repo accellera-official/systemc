@@ -2014,17 +2014,17 @@ put_error_message(const char* msg, bool just_warning)
 sc_trace_file*
 sc_create_wif_trace_file(const char * name)
 {
-    sc_trace_file *tf;
-
-    tf = new wif_trace_file(name);
+    sc_trace_file *tf = new wif_trace_file(name);
     sc_get_curr_simcontext()->add_trace_file(tf);
     return tf;
 }
 
+
 void
 sc_close_wif_trace_file( sc_trace_file* tf )
 {
-    wif_trace_file* wif_tf = (wif_trace_file*)tf;
+    wif_trace_file* wif_tf = static_cast<wif_trace_file*>(tf);
+    sc_get_curr_simcontext()->remove_trace_file(wif_tf);
     delete wif_tf;
 }
 

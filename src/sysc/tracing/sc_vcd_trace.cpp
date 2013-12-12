@@ -2286,17 +2286,16 @@ void vcd_trace_file::set_time_unit(double v, sc_time_unit tu)
 sc_trace_file*
 sc_create_vcd_trace_file(const char * name)
 {
-  sc_trace_file *tf;
-
-  tf = new vcd_trace_file(name);
-  sc_get_curr_simcontext()->add_trace_file(tf);
-  return tf;
+    sc_trace_file * tf = new vcd_trace_file(name);
+    sc_get_curr_simcontext()->add_trace_file(tf);
+    return tf;
 }
 
 void
 sc_close_vcd_trace_file( sc_trace_file* tf )
 {
-    vcd_trace_file* vcd_tf = (vcd_trace_file*)tf;
+    vcd_trace_file* vcd_tf = static_cast<vcd_trace_file*>(tf);
+    sc_get_curr_simcontext()->remove_trace_file(vcd_tf);
     delete vcd_tf; 
 }
 
