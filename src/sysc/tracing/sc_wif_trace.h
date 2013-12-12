@@ -233,10 +233,7 @@ protected:
     bool   timescale_set_by_user; // = true means set by user
 };
 
-// Create WIF file
-extern sc_trace_file *sc_create_wif_trace_file(const char *name);
-extern void sc_close_wif_trace_file( sc_trace_file* tf );
-
 } //  namespace sc_core
 
-#endif
+#endif // SC_WIF_TRACE_H
+// Taf!

@@ -388,6 +388,18 @@ extern void double_to_special_int64( double in,
 				     unsigned* high,
 				     unsigned* low );
 
+// ----------------------------------------------------------------------------
+// Create VCD file
+extern sc_trace_file *sc_create_vcd_trace_file(const char* name);
+extern void sc_close_vcd_trace_file( sc_trace_file* tf );
+
+
+// ----------------------------------------------------------------------------
+// Create WIF file
+extern sc_trace_file *sc_create_wif_trace_file(const char *name);
+extern void sc_close_wif_trace_file( sc_trace_file* tf );
+
 } // namespace sc_core
 
-#endif
+#endif // SC_TRACE_H
+// Taf

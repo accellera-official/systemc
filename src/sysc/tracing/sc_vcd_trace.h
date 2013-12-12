@@ -232,12 +232,7 @@ protected:
     bool   timescale_set_by_user; // = true means set by user
 };
 
-
-// ----------------------------------------------------------------------------
-
-// Create VCD file
-extern sc_trace_file *sc_create_vcd_trace_file(const char* name);
-extern void sc_close_vcd_trace_file( sc_trace_file* tf );
-
 } // namespace sc_core
-#endif
+
+#endif // SC_VCD_TRACE_H
+// Taf!
