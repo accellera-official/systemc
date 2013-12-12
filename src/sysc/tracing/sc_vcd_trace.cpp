@@ -1810,18 +1810,16 @@ void vcd_trace_file::initialize()
 
 #define DEFN_TRACE_METHOD(tp)                                                 \
 void                                                                          \
-vcd_trace_file::trace(const tp& object_, const std::string& name_)       \
+vcd_trace_file::trace(const tp& object_, const std::string& name_)            \
 {                                                                             \
     if( initialized ) {                                                       \
         put_error_message(                                                \
 	    "No traces can be added once simulation has started.\n"               \
             "To add traces, create a new vcd trace file.", false );           \
     }                                                                         \
-    std::string temp_vcd_name;                                           \
-    create_vcd_name( &temp_vcd_name );                                        \
-    traces.push_back( new vcd_ ## tp ## _trace( object_,                      \
-						name_,                        \
-						temp_vcd_name ) );            \
+        traces.push_back( new vcd_ ## tp ## _trace( object_,                  \
+                                                    name_,                    \
+                                                    obtain_name() ) );        \
 }
 
 DEFN_TRACE_METHOD(bool)
@@ -1831,18 +1829,16 @@ DEFN_TRACE_METHOD(double)
 #undef DEFN_TRACE_METHOD
 #define DEFN_TRACE_METHOD(tp)                                                 \
 void                                                                          \
-vcd_trace_file::trace(const sc_dt::tp& object_, const std::string& name_)\
+vcd_trace_file::trace(const sc_dt::tp& object_, const std::string& name_)     \
 {                                                                             \
     if( initialized ) {                                                       \
         put_error_message(                                                \
 	    "No traces can be added once simulation has started.\n"           \
             "To add traces, create a new vcd trace file.", false );           \
     }                                                                         \
-    std::string temp_vcd_name;                                           \
-    create_vcd_name( &temp_vcd_name );                                        \
-    traces.push_back( new vcd_ ## tp ## _trace( object_,                      \
-						name_,                        \
-						temp_vcd_name ) );            \
+        traces.push_back( new vcd_ ## tp ## _trace( object_,                  \
+                                                    name_,                    \
+                                                    obtain_name() ) );        \
 }
 
 DEFN_TRACE_METHOD(sc_bit)
@@ -1863,27 +1859,8 @@ DEFN_TRACE_METHOD(sc_fxnum_fast)
 
 #define DEFN_TRACE_METHOD_SIGNED(tp)                                          \
 void                                                                          \
-vcd_trace_file::trace( const tp&        object_,                              \
-                       const std::string& name_,                         \
-                       int              width_ )                              \
-{                                                                             \
-    if( initialized ) {                                                       \
-        put_error_message(                                                \
-	    "No traces can be added once simulation has started.\n"           \
-            "To add traces, create a new vcd trace file.", false );           \
-    }                                                                         \
-    std::string temp_vcd_name;                                           \
-    create_vcd_name( &temp_vcd_name );                                        \
-    traces.push_back( new vcd_signed_ ## tp ## _trace( object_,               \
-					               name_,                 \
-						       temp_vcd_name,         \
-                                                       width_ ) );            \
-}
-
-#define DEFN_TRACE_METHOD_UNSIGNED(tp)                                        \
-void                                                                          \
-vcd_trace_file::trace( const unsigned tp& object_,                            \
-                       const std::string&   name_,                       \
+vcd_trace_file::trace( const tp&          object_,                            \
+                       const std::string& name_,                              \
                        int                width_ )                            \
 {                                                                             \
     if( initialized ) {                                                       \
@@ -1891,12 +1868,27 @@ vcd_trace_file::trace( const unsigned tp& object_,                            \
 	    "No traces can be added once simulation has started.\n"           \
             "To add traces, create a new vcd trace file.", false );           \
     }                                                                         \
-    std::string temp_vcd_name;                                           \
-    create_vcd_name( &temp_vcd_name );                                        \
-    traces.push_back( new vcd_unsigned_ ## tp ## _trace( object_,             \
-				                         name_,               \
-						         temp_vcd_name,       \
-                                                         width_ ) );          \
+        traces.push_back( new vcd_signed_ ## tp ## _trace( object_,           \
+                                                           name_,             \
+                                                           obtain_name(),     \
+                                                           width_ ) );        \
+}
+
+#define DEFN_TRACE_METHOD_UNSIGNED(tp)                                        \
+void                                                                          \
+vcd_trace_file::trace( const unsigned tp& object_,                            \
+                       const std::string& name_,                              \
+                       int                width_ )                            \
+{                                                                             \
+    if( initialized ) {                                                       \
+        put_error_message(                                                \
+	    "No traces can be added once simulation has started.\n"           \
+            "To add traces, create a new vcd trace file.", false );           \
+    }                                                                         \
+        traces.push_back( new vcd_unsigned_ ## tp ## _trace( object_,         \
+                                                             name_,           \
+                                                             obtain_name(),   \
+                                                             width_ ) );      \
 }
 
 DEFN_TRACE_METHOD_SIGNED(char)
@@ -1914,8 +1906,8 @@ DEFN_TRACE_METHOD_UNSIGNED(long)
 
 #define DEFN_TRACE_METHOD_LONG_LONG(tp)                                       \
 void                                                                          \
-vcd_trace_file::trace( const sc_dt::tp& object_,                              \
-                       const std::string&   name_,                       \
+vcd_trace_file::trace( const sc_dt::tp&   object_,                            \
+                       const std::string& name_,                              \
                        int                width_ )                            \
 {                                                                             \
     if( initialized ) {                                                       \
@@ -1923,34 +1915,31 @@ vcd_trace_file::trace( const sc_dt::tp& object_,                              \
 	    "No traces can be added once simulation has started.\n"           \
             "To add traces, create a new vcd trace file.", false );           \
     }                                                                         \
-    std::string temp_vcd_name;                                           \
-    create_vcd_name( &temp_vcd_name );                                        \
-    traces.push_back( new vcd_ ## tp ## _trace( object_,                      \
-				                         name_,               \
-						         temp_vcd_name,       \
-                                                         width_ ) );          \
+        traces.push_back( new vcd_ ## tp ## _trace( object_,                  \
+                                                    name_,                    \
+                                                    obtain_name(),            \
+                                                    width_ ) );               \
 }
+
 DEFN_TRACE_METHOD_LONG_LONG(int64)
 DEFN_TRACE_METHOD_LONG_LONG(uint64)
 
 #undef DEFN_TRACE_METHOD_LONG_LONG
 
 void
-vcd_trace_file::trace( const unsigned& object_,
-		       const std::string& name_,
-		       const char** enum_literals_ )
+vcd_trace_file::trace( const unsigned&    object_,
+                       const std::string& name_,
+                       const char**       enum_literals_ )
 {
     if( initialized ) {
         put_error_message(
 	    "No traces can be added once simulation has started.\n"
 	    "To add traces, create a new vcd trace file.", false );
     }
-    std::string temp_vcd_name;
-    create_vcd_name( &temp_vcd_name );
-    traces.push_back( new vcd_enum_trace( object_,
-					  name_,
-					  temp_vcd_name,
-					  enum_literals_ ) );
+        traces.push_back( new vcd_enum_trace( object_,
+                                              name_,
+                                              obtain_name(),
+                                              enum_literals_ ) );
 }
 
 
@@ -2110,31 +2099,15 @@ vcd_trace_file::cycle(bool this_is_a_delta_cycle)
     }
 }
 
+#if 0
 void
 vcd_trace_file::create_vcd_name(std::string* p_destination)
 {
-    const char first_type_used = 'a';
-    const int used_types_count = 'z' - 'a' + 1;
-    int result;
-
-    char char4 = (char)(vcd_name_index % used_types_count);
-
-    result = vcd_name_index / used_types_count;
-    char char3 = (char)(result % used_types_count);
-
-    result = result / used_types_count;
-    char char2 = (char)(result % used_types_count);
-
-    char buf[20];
-    std::sprintf(buf, "%c%c%c",
-            char2 + first_type_used,
-            char3 + first_type_used,
-            char4 + first_type_used);
-    *p_destination = buf;
-    vcd_name_index++;
+    obtain_name.swap( *p_destination );
 }
+#endif
 
-// same as above
+// Create a VCD name for a variable
 std::string
 vcd_trace_file::obtain_name()
 {

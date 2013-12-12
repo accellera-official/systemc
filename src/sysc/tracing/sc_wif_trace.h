@@ -175,8 +175,8 @@ protected:
         put_error_message("No traces can be added once simulation has"
         " started.\nTo add traces, create a new wif trace file.", false);
       else
-        traces.push_back(new wif_T_trace<T>(object, name,
-          obtain_new_index(),type));
+            traces.push_back( new wif_T_trace<T>( object, name
+                                                , obtain_name(),type ) );
     }
 
     // Trace sc_bv_base (sc_bv)
@@ -206,9 +206,6 @@ private:
     // Initialize the tracing mechanism
     void initialize();
 
-    // Create wif names for each variable
-    void create_wif_name(std::string* ptr_to_str);
-
     // Pointer to the file that needs to be written
     FILE* fp;
 
@@ -220,9 +217,8 @@ private:
     double previous_time;       // Previous time as a double
 
 public:
-
-    // same as create_wif_name (corrected style)
-    std::string obtain_new_index();
+    // Create wif names for each variable
+    std::string obtain_name();
 
     // Array to store the variables traced
     std::vector<wif_trace*> traces;

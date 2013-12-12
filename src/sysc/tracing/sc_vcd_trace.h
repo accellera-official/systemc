@@ -178,7 +178,8 @@ protected:
          put_error_message("No traces can be added once simulation has"
          " started.\nTo add traces, create a new vcd trace file.", false);
       else
-        traces.push_back(new vcd_T_trace<T>(object, name, obtain_name(),type));
+            traces.push_back(new vcd_T_trace<T>( object, name
+                                               , obtain_name(),type) );
     }
 
    // Trace sc_dt::sc_bv_base (sc_dt::sc_bv)
@@ -207,8 +208,6 @@ private:
 
     // Initialize the tracing
     void initialize();
-    // Create VCD names for each variable
-    void create_vcd_name(std::string* p_destination);
 
     // Pointer to the file that needs to be written
     FILE* fp;
@@ -223,7 +222,8 @@ public:
 
     // Array to store the variables traced
     std::vector<vcd_trace*> traces;
-    // same as create_vcd_name (corrected style)
+
+    // Create VCD names for each variable
     std::string obtain_name();
 
 protected:

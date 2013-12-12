@@ -1661,18 +1661,16 @@ void wif_trace_file::initialize()
 
 #define DEFN_TRACE_METHOD(tp)                                                 \
 void                                                                          \
-wif_trace_file::trace( const tp& object_, const std::string& name_ )     \
+wif_trace_file::trace( const tp& object_, const std::string& name_ )          \
 {                                                                             \
     if( initialized ) {                                                       \
         put_error_message(                                                \
 	    "No traces can be added once simulation has started.\n"           \
             "To add traces, create a new wif trace file.", false );           \
     }                                                                         \
-    std::string temp_wif_name;                                           \
-    create_wif_name( &temp_wif_name );                                        \
-    traces.push_back( new wif_ ## tp ## _trace( object_,                      \
-						name_,                        \
-						temp_wif_name ) );            \
+        traces.push_back( new wif_ ## tp ## _trace( object_,                  \
+                                                    name_,                    \
+                                                    obtain_name() ) );        \
 }
 
 DEFN_TRACE_METHOD(bool)
@@ -1682,18 +1680,16 @@ DEFN_TRACE_METHOD(double)
 #undef DEFN_TRACE_METHOD
 #define DEFN_TRACE_METHOD(tp)                                                 \
 void                                                                          \
-wif_trace_file::trace(const sc_dt::tp& object_, const std::string& name_)\
+wif_trace_file::trace(const sc_dt::tp& object_, const std::string& name_)     \
 {                                                                             \
     if( initialized ) {                                                       \
         put_error_message(                                                \
 	    "No traces can be added once simulation has started.\n"               \
             "To add traces, create a new wif trace file.", false );           \
     }                                                                         \
-    std::string temp_wif_name;                                           \
-    create_wif_name( &temp_wif_name );                                        \
-    traces.push_back( new wif_ ## tp ## _trace( object_,                      \
-						name_,                        \
-						temp_wif_name ) );            \
+        traces.push_back( new wif_ ## tp ## _trace( object_,                  \
+                                                    name_,                    \
+                                                    obtain_name() ) );        \
 }
 
 DEFN_TRACE_METHOD(sc_bit)
@@ -1714,27 +1710,8 @@ DEFN_TRACE_METHOD(sc_fxnum_fast)
 
 #define DEFN_TRACE_METHOD_SIGNED(tp)                                          \
 void                                                                          \
-wif_trace_file::trace( const tp&        object_,                              \
-                       const std::string& name_,                         \
-                       int              width_ )                              \
-{                                                                             \
-    if( initialized ) {                                                       \
-        put_error_message(                                                \
-	    "No traces can be added once simulation has started.\n"           \
-            "To add traces, create a new wif trace file.", false );           \
-    }                                                                         \
-    std::string temp_wif_name;                                           \
-    create_wif_name( &temp_wif_name );                                        \
-    traces.push_back( new wif_signed_ ## tp ## _trace( object_,               \
-						       name_,                 \
-						       temp_wif_name,         \
-                                                       width_ ) );            \
-}
-
-#define DEFN_TRACE_METHOD_UNSIGNED(tp)                                        \
-void                                                                          \
-wif_trace_file::trace( const unsigned tp& object_,                            \
-                       const std::string&   name_,                       \
+wif_trace_file::trace( const tp&          object_,                            \
+                       const std::string& name_,                              \
                        int                width_ )                            \
 {                                                                             \
     if( initialized ) {                                                       \
@@ -1742,12 +1719,27 @@ wif_trace_file::trace( const unsigned tp& object_,                            \
 	    "No traces can be added once simulation has started.\n"           \
             "To add traces, create a new wif trace file.", false );           \
     }                                                                         \
-    std::string temp_wif_name;                                           \
-    create_wif_name( &temp_wif_name );                                        \
-    traces.push_back( new wif_unsigned_ ## tp ## _trace( object_,             \
-						         name_,               \
-						         temp_wif_name,       \
-                                                         width_ ) );          \
+        traces.push_back( new wif_signed_ ## tp ## _trace( object_,           \
+                                                           name_,             \
+                                                           obtain_name(),     \
+                                                           width_ ) );        \
+}
+
+#define DEFN_TRACE_METHOD_UNSIGNED(tp)                                        \
+void                                                                          \
+wif_trace_file::trace( const unsigned tp& object_,                            \
+                       const std::string& name_,                              \
+                       int                width_ )                            \
+{                                                                             \
+    if( initialized ) {                                                       \
+        put_error_message(                                                \
+	    "No traces can be added once simulation has started.\n"           \
+            "To add traces, create a new wif trace file.", false );           \
+    }                                                                         \
+        traces.push_back( new wif_unsigned_ ## tp ## _trace( object_,         \
+                                                             name_,           \
+                                                             obtain_name(),   \
+                                                             width_ ) );      \
 }
 
 DEFN_TRACE_METHOD_SIGNED(char)
@@ -1766,8 +1758,8 @@ DEFN_TRACE_METHOD_UNSIGNED(long)
 
 #define DEFN_TRACE_METHOD_LONG_LONG(tp)                                       \
 void                                                                          \
-wif_trace_file::trace( const sc_dt::tp& object_,                              \
-                       const std::string&   name_,                       \
+wif_trace_file::trace( const sc_dt::tp&   object_,                            \
+                       const std::string& name_,                              \
                        int                width_ )                            \
 {                                                                             \
     if( initialized ) {                                                       \
@@ -1775,12 +1767,10 @@ wif_trace_file::trace( const sc_dt::tp& object_,                              \
 	    "No traces can be added once simulation has started.\n"           \
             "To add traces, create a new wif trace file.", false );           \
     }                                                                         \
-    std::string temp_wif_name;                                           \
-    create_wif_name( &temp_wif_name );                                        \
-    traces.push_back( new wif_ ## tp ## _trace( object_,                      \
-						name_,                        \
-						temp_wif_name,                \
-                                                width_ ) );                   \
+        traces.push_back( new wif_ ## tp ## _trace( object_,                  \
+                                                    name_,                    \
+                                                    obtain_name(),            \
+                                                    width_ ) );               \
 }
 
 DEFN_TRACE_METHOD_LONG_LONG(int64)
@@ -1797,12 +1787,10 @@ wif_trace_file::trace( const unsigned& object_,
 	    "No traces can be added once simulation has started.\n"
 	    "To add traces, create a new wif trace file.", false );
     }
-    std::string temp_wif_name;
-    create_wif_name( &temp_wif_name );
-    traces.push_back( new wif_enum_trace( object_,
-					  name_,
-					  temp_wif_name,
-					  enum_literals_ ) );
+        traces.push_back( new wif_enum_trace( object_,
+                                              name_,
+                                              obtain_name(),
+                                              enum_literals_ ) );
 }
 
 void
@@ -1896,22 +1884,21 @@ wif_trace_file::cycle(bool this_is_a_delta_cycle)
     }
 }
 
-// Create a WIF name for a variable
+#if 0
 void
 wif_trace_file::create_wif_name(std::string* ptr_to_str)
 {
-    char buf[50];
-    std::sprintf(buf,"O%d", wif_name_index);
-    *ptr_to_str = buf; 
-    wif_name_index++;
+  obtain_name().swap(*ptr_to_str);
 }
+#endif
 
+// Create a WIF name for a variable
 std::string
-wif_trace_file::obtain_new_index()
+wif_trace_file::obtain_name()
 {
     char buf[32];
     std::sprintf( buf, "O%d", wif_name_index ++ );
-    return std::string( buf );
+    return buf;
 }
 
 // Set the time unit
