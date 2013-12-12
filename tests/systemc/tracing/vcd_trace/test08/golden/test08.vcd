@@ -4,11 +4,11 @@ $timescale
 $end
 
 $scope module SystemC $end
-$var wire    1  aaa  Clock       $end
-$var wire   32  aab  Int [31:0]  $end
-$var wire    8  aac  Char [7:0]  $end
-$var real    1  aad  Float       $end
-$var wire    1  aae  Logic       $end
+$var wire    1  aaaaa  Clock       $end
+$var wire   32  aaaab  Int [31:0]  $end
+$var wire    8  aaaac  Char [7:0]  $end
+$var real    1  aaaad  Float       $end
+$var wire    1  aaaae  Logic       $end
 $upscope $end
 $enddefinitions  $end
 
@@ -17,150 +17,150 @@ All initial values are dumped below at time 0 sec = 0 timescale units.
 $end
 
 $dumpvars
-0aaa
-b0 aab
-b0 aac
-r0 aad
-0aae
+0aaaaa
+b0 aaaab
+b0 aaaac
+r0 aaaad
+0aaaae
 $end
 
 #0
-1aaa
-b1111111111 aab
-b1111 aac
-r-4 aad
-xaae
+1aaaaa
+b1111111111 aaaab
+b1111 aaaac
+r-4 aaaad
+xaaaae
 
 #10000
-0aaa
-b1010 aab
-b1000 aac
-r1000.234558105469 aad
-zaae
+0aaaaa
+b1010 aaaab
+b1000 aaaac
+r1000.234558105469 aaaad
+zaaaae
 
 #20000
-1aaa
-b1111111111 aab
-b1111 aac
-r-4 aad
-xaae
+1aaaaa
+b1111111111 aaaab
+b1111 aaaac
+r-4 aaaad
+xaaaae
 
 #30000
-0aaa
-b1010 aab
-b1000 aac
-r1000.234558105469 aad
-zaae
+0aaaaa
+b1010 aaaab
+b1000 aaaac
+r1000.234558105469 aaaad
+zaaaae
 
 #40000
-1aaa
-b1111111111 aab
-b1111 aac
-r-4 aad
-xaae
+1aaaaa
+b1111111111 aaaab
+b1111 aaaac
+r-4 aaaad
+xaaaae
 
 #50000
-0aaa
-b1010 aab
-b1000 aac
-r1000.234558105469 aad
-zaae
+0aaaaa
+b1010 aaaab
+b1000 aaaac
+r1000.234558105469 aaaad
+zaaaae
 
 #60000
-1aaa
-b1111111111 aab
-b1111 aac
-r-4 aad
-xaae
+1aaaaa
+b1111111111 aaaab
+b1111 aaaac
+r-4 aaaad
+xaaaae
 
 #70000
-0aaa
-b1010 aab
-b1000 aac
-r1000.234558105469 aad
-zaae
+0aaaaa
+b1010 aaaab
+b1000 aaaac
+r1000.234558105469 aaaad
+zaaaae
 
 #80000
-1aaa
-b1111111111 aab
-b1111 aac
-r-4 aad
-xaae
+1aaaaa
+b1111111111 aaaab
+b1111 aaaac
+r-4 aaaad
+xaaaae
 
 #90000
-0aaa
-b1010 aab
-b1000 aac
-r1000.234558105469 aad
-zaae
+0aaaaa
+b1010 aaaab
+b1000 aaaac
+r1000.234558105469 aaaad
+zaaaae
 
 #100000
-1aaa
-b1111111111 aab
-b1111 aac
-r-4 aad
-xaae
+1aaaaa
+b1111111111 aaaab
+b1111 aaaac
+r-4 aaaad
+xaaaae
 
 #110000
-0aaa
-b1010 aab
-b1000 aac
-r1000.234558105469 aad
-zaae
+0aaaaa
+b1010 aaaab
+b1000 aaaac
+r1000.234558105469 aaaad
+zaaaae
 
 #120000
-1aaa
-b1111111111 aab
-b1111 aac
-r-4 aad
-xaae
+1aaaaa
+b1111111111 aaaab
+b1111 aaaac
+r-4 aaaad
+xaaaae
 
 #130000
-0aaa
-b1010 aab
-b1000 aac
-r1000.234558105469 aad
-zaae
+0aaaaa
+b1010 aaaab
+b1000 aaaac
+r1000.234558105469 aaaad
+zaaaae
 
 #140000
-1aaa
-b1111111111 aab
-b1111 aac
-r-4 aad
-xaae
+1aaaaa
+b1111111111 aaaab
+b1111 aaaac
+r-4 aaaad
+xaaaae
 
 #150000
-0aaa
-b1010 aab
-b1000 aac
-r1000.234558105469 aad
-zaae
+0aaaaa
+b1010 aaaab
+b1000 aaaac
+r1000.234558105469 aaaad
+zaaaae
 
 #160000
-1aaa
-b1111111111 aab
-b1111 aac
-r-4 aad
-xaae
+1aaaaa
+b1111111111 aaaab
+b1111 aaaac
+r-4 aaaad
+xaaaae
 
 #170000
-0aaa
-b1010 aab
-b1000 aac
-r1000.234558105469 aad
-zaae
+0aaaaa
+b1010 aaaab
+b1000 aaaac
+r1000.234558105469 aaaad
+zaaaae
 
 #180000
-1aaa
-b1111111111 aab
-b1111 aac
-r-4 aad
-xaae
+1aaaaa
+b1111111111 aaaab
+b1111 aaaac
+r-4 aaaad
+xaaaae
 
 #190000
-0aaa
-b1010 aab
-b1000 aac
-r1000.234558105469 aad
-zaae
+0aaaaa
+b1010 aaaab
+b1000 aaaac
+r1000.234558105469 aaaad
+zaaaae
 
