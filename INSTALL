@@ -587,8 +587,8 @@ in the 'Preprocessor definitions' setting.
  * SC_INCLUDE_DYNAMIC_PROCESSES -
    Enable dynamic process support (sc_spawn, sc_bind)
 
-   To improve compilation times, the fixpoint datatypes are not enabled
-   by default in an SystemC application.
+   To improve compilation times, the functions for spawing dynamic
+   processes are not included by default in an SystemC application.
 
    Define this symbol before including the SystemC header in your
    application, if you want to use dynamically spawned processes.
