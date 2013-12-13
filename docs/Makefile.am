@@ -35,7 +35,7 @@ include $(top_srcdir)/config/Make-rules.common
 ## Core documentation (see also root directory)
 
 DOC_FILES = \
-	License.pdf
+	SystemC_Open_Source_License.pdf
 
 ##
 ## SystemC documentation
