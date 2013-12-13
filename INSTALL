@@ -182,11 +182,14 @@ To install SystemC on a UNIX system, do the following steps:
        --disable-optimize      disable compiler optimization
        --disable-async-updates disable request_async_update support
        --enable-pthreads       use POSIX threads for SystemC processes
+       --enable-phase-callbacks
+                               enable simulation phase callbacks (experimental)
+
 
      See the section on the general usage of the configure script and
      "../configure --help" for more information.
 
-     Note: if you change the configuration after having compiled the
+     Note: If you change the configuration after having compiled the
            package already, you should run a "gmake clean" before
            recompiling.
 
@@ -580,6 +583,17 @@ in the 'Preprocessor definitions' setting.
    The time resolution will still be fixed, once you have explicitly or
    implicitly relied on the physical value (i.e. the relation to seconds)
    of any sc_time object.
+
+   Note: Only effective during library build.
+
+
+ * SC_ENABLE_SIMULATION_PHASE_CALLBACKS         (experimental)
+   Enable a generic simulation phase callback mechanism.
+
+   Note: This option is usually set by the `configure` option
+     --enable-phase-callbacks
+
+   See the RELEASENOTES for more information about this feature.
 
    Note: Only effective during library build.
 
