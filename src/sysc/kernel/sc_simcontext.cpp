@@ -47,6 +47,7 @@
 #include "sysc/kernel/sc_ver.h"
 #include "sysc/kernel/sc_boost.h"
 #include "sysc/kernel/sc_spawn.h"
+#include "sysc/kernel/sc_phase_callback_registry.h"
 #include "sysc/communication/sc_port.h"
 #include "sysc/communication/sc_export.h"
 #include "sysc/communication/sc_prim_channel.h"
@@ -76,6 +77,13 @@
 #   define DEBUG_MSG(NAME,P,MSG) 
 #endif
 
+#if SC_HAS_PHASE_CALLBACKS_
+#  define SC_DO_PHASE_CALLBACK_( Kind ) \
+    m_phase_cb_registry->Kind()
+#else
+#  define SC_DO_PHASE_CALLBACK_( Kind ) \
+    ((void)0) /* do nothing */
+#endif
 
 namespace sc_core {
 
@@ -347,6 +355,7 @@ sc_simcontext::init()
     m_port_registry = new sc_port_registry( *this );
     m_export_registry = new sc_export_registry( *this );
     m_prim_channel_registry = new sc_prim_channel_registry( *this );
+    m_phase_cb_registry = new sc_phase_callback_registry( *this );
     m_name_gen = new sc_name_gen;
     m_process_table = new sc_process_table;
     m_current_writer = 0;
@@ -395,6 +404,7 @@ sc_simcontext::clean()
     delete m_port_registry;
     delete m_export_registry;
     delete m_prim_channel_registry;
+    delete m_phase_cb_registry;
     delete m_name_gen;
     delete m_process_table;
     m_child_objects.resize(0);
@@ -414,7 +424,8 @@ sc_simcontext::clean()
 
 sc_simcontext::sc_simcontext() :
     m_object_manager(0), m_module_registry(0), m_port_registry(0),
-    m_export_registry(0), m_prim_channel_registry(0), m_name_gen(0),
+    m_export_registry(0), m_prim_channel_registry(0),
+    m_phase_cb_registry(0), m_name_gen(0),
     m_process_table(0), m_curr_proc_info(), m_current_writer(0),
     m_write_check(false), m_next_proc_id(-1), m_child_events(),
     m_child_objects(), m_delta_events(), m_timed_events(0), m_trace_files(),
@@ -549,12 +560,14 @@ sc_simcontext::crunch( bool once )
 	m_execution_phase = phase_update;
 	if ( !empty_eval_phase ) 
 	{
+//	    SC_DO_PHASE_CALLBACK_(evaluation_done);
 	    m_change_stamp++;
 	    m_delta_count ++;
 	}
 	m_prim_channel_registry->perform_update();
+	SC_DO_PHASE_CALLBACK_(update_done);
 	m_execution_phase = phase_notify;
-	
+
 	if( m_something_to_trace ) {
 	    trace_cycle( /* delta cycle? */ true );
 	}
@@ -592,7 +605,7 @@ sc_simcontext::crunch( bool once )
 	    } while( -- i >= 0 );
 	    m_delta_events.resize(0);
 	}
-	
+
 	if( m_runnable->is_empty() ) {
 	    // no more runnable processes
 	    break;
@@ -623,12 +636,14 @@ sc_simcontext::cycle( const sc_time& t)
 
     m_in_simulator_control = true;
     crunch(); 
+    SC_DO_PHASE_CALLBACK_(before_timestep);
     trace_cycle( /* delta cycle? */ false );
     m_curr_time += t;
     if ( next_time(next_event_time) && next_event_time <= m_curr_time) {
         SC_REPORT_WARNING(SC_ID_CYCLE_MISSES_EVENTS_, "");
     }
     m_in_simulator_control = false;
+    SC_DO_PHASE_CALLBACK_(simulation_paused);
 }
 
 void
@@ -657,6 +672,7 @@ sc_simcontext::elaborate()
         }
 
     }
+    SC_DO_PHASE_CALLBACK_(construction_done);
 
     // SIGNAL THAT ELABORATION IS DONE
     //
@@ -671,6 +687,7 @@ sc_simcontext::elaborate()
     m_export_registry->elaboration_done();
     m_prim_channel_registry->elaboration_done();
     m_module_registry->elaboration_done();
+    SC_DO_PHASE_CALLBACK_(elaboration_done);
     sc_reset::reconcile_resets();
 
     // check for call(s) to sc_stop
@@ -701,6 +718,7 @@ sc_simcontext::prepare_to_simulate()
     m_export_registry->start_simulation();
     m_prim_channel_registry->start_simulation();
     m_module_registry->start_simulation();
+    SC_DO_PHASE_CALLBACK_(start_simulation);
     m_start_of_simulation_called = true;
 
     // CHECK FOR CALL(S) TO sc_stop 
@@ -790,6 +808,8 @@ sc_simcontext::prepare_to_simulate()
         } while( -- i >= 0 );
         m_delta_events.resize(0);
     }
+
+    SC_DO_PHASE_CALLBACK_(initialization_done);
 }
 
 void
@@ -805,6 +825,7 @@ sc_simcontext::initial_crunch( bool no_crunch )
     if( m_error ) {
         return;
     }
+
     if( m_something_to_trace ) {
         trace_cycle( false );
     }
@@ -876,12 +897,17 @@ sc_simcontext::simulate( const sc_time& duration )
     {
 	m_in_simulator_control = true;
   	crunch( true );
-	if( m_error ) return;
+	if( m_error ) {
+	    m_in_simulator_control = false;
+	    return;
+	}
 	if( m_something_to_trace ) trace_cycle( /* delta cycle? */ false );
-	if( m_forced_stop ) 
-	    do_sc_stop_action(); 
-	m_in_simulator_control = false;
-	return;
+        if( m_forced_stop ) {
+            do_sc_stop_action();
+            return;
+        }
+        // return via implicit pause
+        goto exit_pause;
     }
 
     // NON-ZERO DURATION: EXECUTE UP TO THAT TIME, OR UNTIL EVENT STARVATION:
@@ -896,26 +922,23 @@ sc_simcontext::simulate( const sc_time& duration )
 	if( m_something_to_trace ) {
 	    trace_cycle( false );
 	}
-	// check for call(s) to sc_stop() or sc_pause().
-	if( m_forced_stop ) {
-	    do_sc_stop_action();
-	    return;
-	}
-	else if ( m_paused ) 
-	{
-	    m_in_simulator_control = false;
-	    return;
-	}
-	
+        // check for call(s) to sc_stop() or sc_pause().
+        if( m_forced_stop ) {
+            do_sc_stop_action();
+            return;
+        }
+        if( m_paused ) goto exit_pause; // return explicit pause
+
 	t = m_curr_time; 
 
 	do {
 	    // See note 1 above:
 
-            if ( !next_time(t) || (t > until_t ) ) goto exit;
+            if ( !next_time(t) || (t > until_t ) ) goto exit_time;
 	    if ( t > m_curr_time ) 
 	    {
-	        m_curr_time = t;
+		SC_DO_PHASE_CALLBACK_(before_timestep);
+		m_curr_time = t;
 		m_change_stamp++;
 	    }
 
@@ -931,17 +954,19 @@ sc_simcontext::simulate( const sc_time& duration )
 	    } while( m_timed_events->size() &&
 		     m_timed_events->top()->notify_time() == t );
 
-	    // if ( t > m_curr_time ) m_curr_time = t;
 	} while( m_runnable->is_empty() );
     } while ( t < until_t ); // hold off on the delta for the until_t time.
 
-exit:
+exit_time:  // final simulation time update, if needed
     if ( t > m_curr_time && t <= until_t ) 
     {
+        SC_DO_PHASE_CALLBACK_(before_timestep);
         m_curr_time = t;
-	m_change_stamp++;
+        m_change_stamp++;
     }
+exit_pause: // call pause callback upon implicit or explicit pause
     m_in_simulator_control = false;
+    SC_DO_PHASE_CALLBACK_(simulation_paused);
 }
 
 void
@@ -953,6 +978,7 @@ sc_simcontext::do_sc_stop_action()
 	m_in_simulator_control = false;
     }
     m_simulation_status = SC_STOPPED;
+    SC_DO_PHASE_CALLBACK_(simulation_stopped);
 }
 
 void
@@ -1015,6 +1041,7 @@ sc_simcontext::end()
     m_export_registry->simulation_done();
     m_prim_channel_registry->simulation_done();
     m_module_registry->simulation_done();
+    SC_DO_PHASE_CALLBACK_(simulation_done);
     m_end_of_simulation_called = true;
 }
 
@@ -1863,6 +1890,11 @@ std::ostream& operator << ( std::ostream& os, sc_status s )
       PRINT_STATUS( SC_STOPPED );
       PRINT_STATUS( SC_END_OF_SIMULATION );
 
+      PRINT_STATUS( SC_END_OF_INITIALIZATION );
+//      PRINT_STATUS( SC_END_OF_EVALUATION );
+      PRINT_STATUS( SC_END_OF_UPDATE );
+      PRINT_STATUS( SC_BEFORE_TIMESTEP );
+
       PRINT_STATUS( SC_STATUS_ANY );
 
 #   undef PRINT_STATUS
@@ -1885,7 +1917,7 @@ print_status_expression( std::ostream& os, sc_status s )
     unsigned               is_set = SC_ELABORATION;
 
     // collect bits
-    while( is_set & SC_STATUS_ANY )
+    while( is_set <= SC_STATUS_LAST )
     {
         if( s & is_set )
             bits.push_back( (sc_status)is_set );

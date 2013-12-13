@@ -51,7 +51,14 @@ enum sc_status
     SC_STOPPED                   = 0x40, // when scheduler stopped by sc_stop()
     SC_END_OF_SIMULATION         = 0x80, // during end_of_simulation()
 
-    SC_STATUS_ANY                = 0xff
+    // detailed simulation phases (for dynamic callbacks)
+    SC_END_OF_INITIALIZATION     = 0x100, // after initialization
+//    SC_END_OF_EVALUATION         = 0x200, // between eval and update
+    SC_END_OF_UPDATE             = 0x400, // after update/notify phase
+    SC_BEFORE_TIMESTEP           = 0x800, // before next time step
+
+    SC_STATUS_LAST               = SC_BEFORE_TIMESTEP,
+    SC_STATUS_ANY                = 0xdff
 };
 
 // pretty-printing of sc_status values

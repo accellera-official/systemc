@@ -30,6 +30,7 @@
 #include "sysc/kernel/sc_object.h"
 #include "sysc/kernel/sc_module.h"
 #include "sysc/kernel/sc_simcontext_int.h"
+#include "sysc/kernel/sc_phase_callback_registry.h"
 
 namespace sc_core {
 
@@ -77,6 +78,15 @@ sc_object::hierarchy_scope::~hierarchy_scope()
 {
     if( scope_ )
         scope_->simcontext()->hierarchy_pop();
+}
+
+
+// -----------------------------------------------------------------------
+
+inline void
+sc_object::do_simulation_phase_callback()
+{
+    simulation_phase_callback();
 }
 
 // -----------------------------------------------------------------------

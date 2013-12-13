@@ -50,6 +50,7 @@ class sc_module_registry;
 class sc_name_gen;
 class sc_object;
 class sc_object_manager;
+class sc_phase_callback_registry;
 class sc_process_handle;
 class sc_port_registry;
 class sc_prim_channel_registry;
@@ -140,6 +141,7 @@ class sc_simcontext
     friend class sc_time;
     friend class sc_clock;
     friend class sc_method_process;
+    friend class sc_phase_callback_registry;
     friend class sc_process_b;
     friend class sc_process_handle;
     friend class sc_prim_channel;
@@ -312,6 +314,7 @@ private:
     sc_port_registry*           m_port_registry;
     sc_export_registry*         m_export_registry;
     sc_prim_channel_registry*   m_prim_channel_registry;
+    sc_phase_callback_registry* m_phase_cb_registry;
 
     sc_name_gen*                m_name_gen;
 
