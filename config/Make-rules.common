@@ -33,14 +33,6 @@ endif
 # always add fix-point support
 EXTRA_DEFINES=-DSC_INCLUDE_FX
 
-if DISABLE_ASYNC_UPDATES
-  EXTRA_DEFINES+=-DSC_DISABLE_ASYNC_UPDATES
-endif
-
-if WANT_PTHREADS_THREADS
-  EXTRA_DEFINES+=-DSC_USE_PTHREADS
-endif
-
 # initialize some useful variables (filled later)
 
 CLEANFILES =
