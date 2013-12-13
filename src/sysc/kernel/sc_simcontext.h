@@ -30,6 +30,7 @@
 
 #include "sysc/kernel/sc_cmnhdr.h"
 #include "sysc/kernel/sc_process.h"
+#include "sysc/kernel/sc_status.h"
 #include "sysc/kernel/sc_time.h"
 #include "sysc/utils/sc_hash.h"
 #include "sysc/utils/sc_pq.h"
@@ -72,24 +73,6 @@ struct sc_curr_proc_info
 };
 
 typedef const sc_curr_proc_info* sc_curr_proc_handle;
-
-// simulation status codes
-
-const int SC_SIM_OK        = 0;
-const int SC_SIM_ERROR     = 1;
-const int SC_SIM_USER_STOP = 2;
-
-enum sc_status { // sc_get_status values:
-    SC_UNITIALIZED=0x00,               // initialize() not called yet.
-    SC_ELABORATION=0x01,               // during module hierarchy construction.
-    SC_BEFORE_END_OF_ELABORATION=0x02, // during before_end_of_elaboration().
-    SC_END_OF_ELABORATION=0x04,        // during end_of_elaboration().
-    SC_START_OF_SIMULATION=0x08,       // during start_of_simulation().
-    SC_RUNNING=0x10,                   // initialization, evaluation or update.
-    SC_PAUSED=0x20,                    // when scheduler stopped by sc_pause().
-    SC_STOPPED=0x40,                   // when scheduler stopped by sc_stop().
-    SC_END_OF_SIMULATION=0x80          // during end_of_simulation().
-};
 
 enum sc_stop_mode {          // sc_stop modes:
     SC_STOP_FINISH_DELTA,

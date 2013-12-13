@@ -1838,6 +1838,74 @@ bool sc_allow_process_control_corners = false;
 // .                                    .                               .
 // ......................................................................
 
+// ----------------------------------------------------------------------------
+
+static std::ostream&
+print_status_expression( std::ostream& os, sc_status s );
+
+// utility helper to print a simulation status
+std::ostream& operator << ( std::ostream& os, sc_status s )
+{
+    // print primitive values
+    switch(s)
+    {
+#   define PRINT_STATUS( Status ) \
+      case Status: { os << #Status; } break
+
+      PRINT_STATUS( SC_UNITIALIZED );
+      PRINT_STATUS( SC_ELABORATION );
+      PRINT_STATUS( SC_BEFORE_END_OF_ELABORATION );
+      PRINT_STATUS( SC_END_OF_ELABORATION );
+      PRINT_STATUS( SC_START_OF_SIMULATION );
+
+      PRINT_STATUS( SC_RUNNING );
+      PRINT_STATUS( SC_PAUSED );
+      PRINT_STATUS( SC_STOPPED );
+      PRINT_STATUS( SC_END_OF_SIMULATION );
+
+      PRINT_STATUS( SC_STATUS_ANY );
+
+#   undef PRINT_STATUS
+    default:
+
+      if( s & SC_STATUS_ANY ) // combination of status bits
+        print_status_expression( os, s );
+      else                    // invalid number, print hex value
+        os << "0x" << std::hex << +s;
+    }
+
+    return os;
+}
+
+// pretty-print a combination of sc_status bits (i.e. a callback mask)
+static std::ostream&
+print_status_expression( std::ostream& os, sc_status s )
+{
+    std::vector<sc_status> bits;
+    unsigned               is_set = SC_ELABORATION;
+
+    // collect bits
+    while( is_set & SC_STATUS_ANY )
+    {
+        if( s & is_set )
+            bits.push_back( (sc_status)is_set );
+        is_set <<= 1;
+    }
+    if( s & ~SC_STATUS_ANY ) // remaining bits
+        bits.push_back( (sc_status)( s & ~SC_STATUS_ANY ) );
+
+    // print expression
+    std::size_t i=0, n=bits.size();
+    if ( n>1 )
+        os << "(";
+    for( ; i<n-1; ++i )
+        os << bits[i] << "|";
+    os << bits[i];
+    if ( n>1 )
+        os << ")";
+    return os;
+}
+
 } // namespace sc_core
 
 /*****************************************************************************

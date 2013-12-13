@@ -56,6 +56,7 @@ H_FILES = \
 	sc_sensitive.h \
 	sc_spawn.h \
 	sc_spawn_options.h \
+	sc_status.h \
 	sc_simcontext.h \
 	sc_time.h \
 	sc_ver.h \
