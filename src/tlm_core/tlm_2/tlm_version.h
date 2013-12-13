@@ -63,11 +63,11 @@ namespace tlm
 
 #define TLM_VERSION_MAJOR                   2           ///< version major level ( numeric )
 #define TLM_VERSION_MINOR                   0           ///< version minor level ( numeric )
-#define TLM_VERSION_PATCH                   2           ///< version patch level ( numeric )
-#define TLM_VERSION_ORIGINATOR              "ASI"       ///< TLM creator string
+#define TLM_VERSION_PATCH                   3           ///< version patch level ( numeric )
+#define TLM_VERSION_ORIGINATOR              "Accellera" ///< TLM creator string
 #define TLM_VERSION_SEPARATOR               "."         ///< version string separator
 
-#define TLM_IS_PRERELEASE                   0           ///< pre-release flag ( 1 / 0 )
+#define TLM_IS_PRERELEASE                   1           ///< pre-release flag ( 1 / 0 )
 
 #if TLM_IS_PRERELEASE
 #    define TLM_VERSION_PRERELEASE          "pub_rev"   ///< pre-release version string

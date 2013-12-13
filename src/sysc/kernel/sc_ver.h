@@ -54,11 +54,11 @@ extern const std::string  sc_copyright_string;
 #define SYSTEMC_2_3_0
  
 #define SYSTEMC_VERSION       20120701
-#define SC_VERSION_ORIGINATOR "ASI"
+#define SC_VERSION_ORIGINATOR "Accellera"
 #define SC_VERSION_MAJOR      2
 #define SC_VERSION_MINOR      3
-#define SC_VERSION_PATCH      0
-#define SC_IS_PRERELEASE      0
+#define SC_VERSION_PATCH      1
+#define SC_IS_PRERELEASE      1
 
 /// compliancy with IEEE 1666-2011 (see 8.6.5)
 #define IEEE_1666_SYSTEMC     201101L

@@ -1,15 +1,15 @@
-                SystemC Class Library (Rel. 2.3.0)
+                SystemC Class Library (Rel. 2.3.1)
                 ==================================
 
-This is the release of the SystemC 2.3.0 Class Library.
-This release includes TLM (Transaction Level Modeling) code, as described in the 
-IEEE 1666-2011 Language Reference Manual.
+This is the release of the SystemC 2.3.1 Class Library.
+This release includes TLM 2.0.3 (Transaction Level Modeling) code,
+as described in the IEEE 1666-2011 Language Reference Manual.
 
 -------------------------------------------------------------------------------
                 IMPORTANT
 
-1. This is the release of SystemC 2.3.0. This release contains bug 
-   fixes for SystemC 2.2.0 as well as adding IEEE Std 1666(tm) compliance
+1. This is the release of SystemC 2.3.1. This release contains bug 
+   fixes for SystemC 2.3.0 as well as adding some experimental
    features.
 
 2. This release is supported on the following platforms for which it has
@@ -45,7 +45,7 @@ IEEE 1666-2011 Language Reference Manual.
 
   This release has not yet been tested on the following formerly
   supported platforms and may no longer work as expected:
-  
+
    o GNU C++ compiler versions prior to 3.3.x (all platforms)
    o Sun Solaris with SUN C++ compiler
    o HP-UX 11.00 with HP C++ compiler
@@ -82,8 +82,8 @@ Additional information
    SystemC has a web site at
 
        http://www.accellera.org
-     
-   Discussion forum: http://www.accellera.org/login_forum.html
+
+   Discussion forum: http://forums.accellera.org/forum/9-systemc/
 
    You can post the bugs and suggestions of general interest to the forum.
    When reporting bugs please specify the following information (if
