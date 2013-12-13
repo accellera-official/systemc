@@ -1027,13 +1027,13 @@ sc_simcontext::hierarchy_push( sc_module* mod )
 sc_module*
 sc_simcontext::hierarchy_pop()
 {
-	return DCAST<sc_module*>( m_object_manager->hierarchy_pop() );
+	return static_cast<sc_module*>( m_object_manager->hierarchy_pop() );
 }
 
 sc_module*
 sc_simcontext::hierarchy_curr() const
 {
-    return DCAST<sc_module*>( m_object_manager->hierarchy_curr() );
+    return static_cast<sc_module*>( m_object_manager->hierarchy_curr() );
 }
     
 sc_object*

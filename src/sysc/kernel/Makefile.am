@@ -70,6 +70,7 @@ NO_H_FILES = \
 	sc_method_process.h \
 	sc_module_registry.h \
 	sc_name_gen.h \
+	sc_object_int.h \
 	sc_object_manager.h \
 	sc_reset.h \
 	sc_runnable_int.h \

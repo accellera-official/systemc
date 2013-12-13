@@ -39,6 +39,7 @@
 #include "sysc/kernel/sc_process_handle.h"
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_simcontext_int.h"
+#include "sysc/kernel/sc_object_int.h"
 #include "sysc/kernel/sc_reset.h"
 #include "sysc/communication/sc_communication_ids.h"
 #include "sysc/communication/sc_interface.h"
@@ -378,9 +379,8 @@ sc_module::before_end_of_elaboration()
 void
 sc_module::construction_done()
 {
-    simcontext()->hierarchy_push( this );
+    hierarchy_scope scope(this);
     before_end_of_elaboration();
-    simcontext()->hierarchy_pop();
 }
 
 // called by elaboration_done (does nothing by default)
@@ -405,9 +405,8 @@ sc_module::elaboration_done( bool& error_ )
 	}
 	error_ = true;
     }
-    simcontext()->hierarchy_push( this );
+    hierarchy_scope scope(this);
     end_of_elaboration();
-    simcontext()->hierarchy_pop();
 }
 
 // called by start_simulation (does nothing by default)
@@ -419,9 +418,8 @@ sc_module::start_of_simulation()
 void
 sc_module::start_simulation()
 {
-    simcontext()->hierarchy_push( this );
+    hierarchy_scope scope(this);
     start_of_simulation();
-    simcontext()->hierarchy_pop();
 }
 
 // called by simulation_done (does nothing by default)
@@ -433,9 +431,8 @@ sc_module::end_of_simulation()
 void
 sc_module::simulation_done()
 {
-    simcontext()->hierarchy_push( this );
+    hierarchy_scope scope(this);
     end_of_simulation();
-    simcontext()->hierarchy_pop();
 }
 
 void
