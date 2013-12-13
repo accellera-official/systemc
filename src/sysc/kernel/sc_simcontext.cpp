@@ -965,6 +965,7 @@ exit_time:  // final simulation time update, if needed
         m_change_stamp++;
     }
 exit_pause: // call pause callback upon implicit or explicit pause
+    m_execution_phase      = phase_evaluate;
     m_in_simulator_control = false;
     SC_DO_PHASE_CALLBACK_(simulation_paused);
 }
@@ -1122,10 +1123,26 @@ sc_simcontext::create_method_process(
 {
     sc_method_handle handle = 
         new sc_method_process(name_p, free_host, method_p, host_p, opt_p);
-    if ( m_ready_to_simulate ) {
-	if ( !handle->dont_initialize() ) {
-	    push_runnable_method( handle );
-	}
+    if ( m_ready_to_simulate ) { // dynamic process
+	if ( !handle->dont_initialize() )
+        {
+#ifdef SC_HAS_PHASE_CALLBACKS_
+            if( SC_UNLIKELY_( m_simulation_status
+                            & (SC_END_OF_UPDATE|SC_BEFORE_TIMESTEP) ) )
+            {
+                std::stringstream msg;
+                msg << m_simulation_status 
+                    << ":\n\t immediate method spawning of "
+                       "`" << handle->name() << "' ignored";
+                SC_REPORT_WARNING( SC_ID_PHASE_CALLBACK_FORBIDDEN_
+                                 , msg.str().c_str() );
+            }
+            else
+#endif // SC_HAS_PHASE_CALLBACKS_
+            {
+                push_runnable_method( handle );
+            }
+        }
     } else {
 	m_process_table->push_front( handle );
     }
@@ -1140,11 +1157,27 @@ sc_simcontext::create_thread_process(
 {
     sc_thread_handle handle = 
         new sc_thread_process(name_p, free_host, method_p, host_p, opt_p);
-    if ( m_ready_to_simulate ) {
+    if ( m_ready_to_simulate ) { // dynamic process
 	handle->prepare_for_simulation();
-	if ( !handle->dont_initialize() ) {
-	    push_runnable_thread( handle );
-	}
+        if ( !handle->dont_initialize() )
+        {
+#ifdef SC_HAS_PHASE_CALLBACKS_
+            if( SC_UNLIKELY_( m_simulation_status
+                            & (SC_END_OF_UPDATE|SC_BEFORE_TIMESTEP) ) )
+            {
+                std::stringstream msg;
+                msg << m_simulation_status 
+                    << ":\n\t immediate thread spawning of "
+                       "`" << handle->name() << "' ignored";
+                SC_REPORT_WARNING( SC_ID_PHASE_CALLBACK_FORBIDDEN_
+                                 , msg.str().c_str() );
+            }
+            else
+#endif // SC_HAS_PHASE_CALLBACKS_
+            {
+                push_runnable_thread( handle );
+            }
+        }
     } else {
 	m_process_table->push_front( handle );
     }

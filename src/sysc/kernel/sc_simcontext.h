@@ -243,6 +243,7 @@ public:
     bool evaluation_phase() const;
     bool is_running() const;
     bool update_phase() const;
+    bool notify_phase() const;
     bool get_error();
     void set_error( sc_report* );
 
@@ -521,6 +522,13 @@ bool
 sc_simcontext::update_phase() const
 {
     return m_execution_phase == phase_update;
+}
+
+inline
+bool
+sc_simcontext::notify_phase() const
+{
+    return m_execution_phase == phase_notify;
 }
 
 inline
