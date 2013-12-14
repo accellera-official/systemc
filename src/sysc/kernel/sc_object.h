@@ -41,8 +41,6 @@ class sc_runnable;
 class sc_simcontext;
 class sc_trace_file;
 
-#define SC_KERNEL_MODULE_PREFIX "$$$$kernel_module$$$$_"
-
 // ----------------------------------------------------------------------------
 //  CLASS : sc_object
 //

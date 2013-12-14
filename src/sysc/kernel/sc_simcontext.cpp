@@ -267,6 +267,8 @@ SC_MODULE(sc_invoke_method)
 {
     SC_CTOR(sc_invoke_method)
     {
+      // remove from object hierarchy
+      detach();
     }
 
     virtual ~sc_invoke_method()
@@ -655,9 +657,11 @@ sc_simcontext::elaborate()
         return;
     }
 
-    // Instantiate the method invocation module (keep it out of the registry):
+    // Instantiate the method invocation module
+    // (not added to public object hierarchy)
 
-    m_method_invoker_p = new sc_invoke_method(SC_KERNEL_MODULE_PREFIX);
+    m_method_invoker_p =
+      new sc_invoke_method("$$$$kernel_module$$$$_invoke_method" );
 
     m_simulation_status = SC_BEFORE_END_OF_ELABORATION;
     for( int cd = 0; cd != 4; /* empty */ )
