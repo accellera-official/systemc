@@ -1,14 +1,14 @@
 SystemC Simulation
-Status before sc_start(1,SC_NS) = 1
+Status before sc_start(1,SC_NS) = SC_ELABORATION
 0 s dynamic_method_and_events: initialization call
 0 s dynamic_method_negedge: initialization call
 0 s dynamic_method_posedge: initialization call
-Status during sc_start(1,SC_NS) = 16
+Status during sc_start(1,SC_NS) = SC_RUNNING
 0 s: stimulus (203) - disabling all processes
 0 s dynamic_thread_and_events: initialization call
 0 s dynamic_thread_negedge: initialization call
 0 s dynamic_thread_posedge: initialization call
-Status after sc_start(1,SC_NS) = 32
+Status after sc_start(1,SC_NS) = SC_PAUSED
 
 3 ns: stimulus (236) - enabling all processes
 3500 ps dynamic_method_negedge: awakened
