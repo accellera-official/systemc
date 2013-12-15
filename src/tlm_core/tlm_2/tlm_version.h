@@ -75,12 +75,13 @@ namespace tlm
 #    define TLM_VERSION_PRERELEASE          ""          ///< pre-release version string
 #endif
 
-#define TLM_VERSION_RELEASE_YEAR            "2012"      ///< release year  ( YYYY )
-#define TLM_VERSION_RELEASE_MONTH           "05"        ///< release month ( MM )
-#define TLM_VERSION_RELEASE_DAY             "11"        ///< release day   ( DD )
+#define TLM_VERSION_RELEASE_YEAR            "2013"      ///< release year  ( YYYY )
+#define TLM_VERSION_RELEASE_MONTH           "12"        ///< release month ( MM )
+#define TLM_VERSION_RELEASE_DAY             "15"        ///< release day   ( DD )
 
-#define TLM_COPYRIGHT                       "        Copyright (c) 1996-" TLM_VERSION_RELEASE_YEAR " by all Contributors\n" \
-                                            "                    ALL RIGHTS RESERVED"
+#define TLM_COPYRIGHT \
+  "Copyright (c) 1996-" TLM_VERSION_RELEASE_YEAR " by all Contributors\n" \
+  "ALL RIGHTS RESERVED"
 
 /************************** do not modify below this line *******************************/
 
@@ -122,7 +123,7 @@ namespace tlm
                                             TLM_VERSION_STRING_PRE_END \
                                             TLM_VERSION_ORIGINATOR
 
-#define TLM_VERSION_STRING_2                "             TLM " \
+#define TLM_VERSION_STRING_2                "TLM " \
                                             TLM_VERSION_STRING_MMP \
                                             " --- " \
                                             TLM_VERSION_RELEASE_YEAR \

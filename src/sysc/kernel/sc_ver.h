@@ -51,9 +51,9 @@ extern const bool         sc_is_prerelease;
 extern const std::string  sc_version_string;
 extern const std::string  sc_copyright_string;
 
-#define SYSTEMC_2_3_0
+#define SYSTEMC_2_3_1
  
-#define SYSTEMC_VERSION       20120701
+#define SYSTEMC_VERSION       20131215
 #define SC_VERSION_ORIGINATOR "Accellera"
 #define SC_VERSION_MAJOR      2
 #define SC_VERSION_MINOR      3
