@@ -1,4 +1,4 @@
-        Release Notes for SystemC 2.3.0 regression test suite
+        Release Notes for SystemC 2.3.1 regression test suite
         =====================================================
 
 
@@ -57,6 +57,7 @@ Here is a list of known limitations in this release:
 
   - Some datatype tests take a long time to either compile or run.
 
-  - On Mac OS X 10.6.8 (Snow Leopard), the verify.pl script does not
-    detect the x86_64 architecture correctly. You can run the
-    regressions against a 32-bit version of SystemC.
+  - Some golden log comparisons may fail between compiler versions and/or
+    with enabled optimizations.  As long as the differences to the provided
+    golden log files are only in the least-significant digits of floating point
+    numbers, those changes are assumed to be safely ignorable.

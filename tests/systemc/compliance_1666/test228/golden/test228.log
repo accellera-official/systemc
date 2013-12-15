@@ -1,5 +1,6 @@
 SystemC Simulation
 Should be silent except for some renaming warnings...
-Note: VCD trace timescale unit is set by user to 1.000000e-09 sec.
+
+Info: (I703) tracing timescale unit set: 1 ns (vcd.vcd)
 
 Success

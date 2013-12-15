@@ -12,9 +12,9 @@ m_cur_val for c5( "c5", t1, 0.1, t2 ) is: 0
 m_cur_val for c6( "c6", t1, 0.1, t2, false ) is: 1
 
 Info: (I804) /IEEE_Std_1666/deprecated: You can turn off warnings about
-             IEEE 1666 deprecated features by placing this method call as the
-             first statement in your sc_main() function:
+             IEEE 1666 deprecated features by placing this method call
+             as the first statement in your sc_main() function:
 
-  sc_report_handler::set_actions("/IEEE_Std_1666/deprecated", SC_DO_NOTHING);
-
+  sc_core::sc_report_handler::set_actions( "/IEEE_Std_1666/deprecated",
+                                           sc_core::SC_DO_NOTHING );
 

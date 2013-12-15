@@ -4,8 +4,8 @@ $timescale
 $end
 
 $scope module SystemC $end
-$var wire    1  aaa  clk       $end
-$var wire   37  aab  mod.a [36:0]  $end
+$var wire    1  aaaaa  clk       $end
+$var wire   37  aaaab  mod.a [36:0]  $end
 $upscope $end
 $enddefinitions  $end
 
@@ -14,17 +14,17 @@ All initial values are dumped below at time 0 sec = 0 timescale units.
 $end
 
 $dumpvars
-1aaa
-b0 aab
+1aaaaa
+b0 aaaab
 $end
 
 #25000
-0aaa
+0aaaaa
 
 #50000
-1aaa
-b1100 aab
+1aaaaa
+b1100 aaaab
 
 #75000
-0aaa
+0aaaaa
 

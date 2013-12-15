@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.4 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -40,25 +40,28 @@
 
 template <class T>
 void
-test_constructors()
+test_constructors( T const & val = T() )
 {
     sc_signal<T> sig1;
     sc_signal<T> sig2( "sig2" );
+    sc_signal<T> sig3( "sig3", val );
 
-    cout << sig1.name() << endl;
-    cout << sig2.name() << endl;
+    cout << sig1.name() << " = " << sig1.read() << endl;
+    cout << sig2.name() << " = " << sig2.read() << endl;
+    cout << sig3.name() << " = " << sig3.read() << endl;
+    cout << endl;
 }
 
 int
 sc_main( int, char*[] )
 {
-    test_constructors<int>();
+    test_constructors( 42 );
 
     // bool specialization
-    test_constructors<bool>();
+    test_constructors( true );
 
     // sc_logic specialization
-    test_constructors<sc_logic>();
+    test_constructors( SC_LOGIC_0 );
 
     return 0;
 }
