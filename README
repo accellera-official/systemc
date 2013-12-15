@@ -9,11 +9,13 @@ as described in the IEEE 1666-2011 Language Reference Manual.
                 IMPORTANT
 
 1. This is the release of SystemC 2.3.1. This release contains bug 
-   fixes for SystemC 2.3.0 as well as adding some experimental
+   fixes for SystemC 2.3.0 as well as adding some minor and experimental
    features.
 
 2. This release is supported on the following platforms for which it has
    been well tested:
+
+    o TODO: update this list
 
     o 32-bit Linux (x86) (RedHat Enterprise Linux 4, 5, 6; Fedora 14, 15;
       Debian 5.0; Ubuntu 10.04LTS, 12.04LTS) with GNU C++ compiler versions
@@ -47,8 +49,8 @@ as described in the IEEE 1666-2011 Language Reference Manual.
   supported platforms and may no longer work as expected:
 
    o GNU C++ compiler versions prior to 3.3.x (all platforms)
-   o Sun Solaris with SUN C++ compiler
-   o HP-UX 11.00 with HP C++ compiler
+   o Sun Solaris with GNU C++ or SUN C++ compiler
+   o HP-UX 11.00 with GNU C++ or HP C++ compiler
    o Mac OS X prior 10.5 Leopard with GNU C++ compiler
    o Microsoft Visual C++ versions prior to 8.0 (2005)
 
@@ -97,7 +99,8 @@ Additional information
      6) code sample, not more than 100 lines to demonstrate the problem 
 
    Note: All bugs will only be tested against the latest publicly available 
-   version of the product. 
+         version of the product.
+
    Note: All C++ compilers that SystemC supports have bugs of different
-   degree of severity. We cannot fix those bugs. Please report them to
-   the compiler vendor.
+         degree of severity. We cannot fix those bugs. Please report them
+         to the compiler vendor.
