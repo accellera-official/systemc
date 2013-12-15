@@ -1,14 +1,14 @@
 dnl ***************************************************************************
 dnl
 dnl  The following code is derived, directly or indirectly, from the SystemC
-dnl  source code Copyright (c) 1996-2002 by all Contributors.
+dnl  source code Copyright (c) 1996-2014 by all Contributors.
 dnl  All Rights reserved.
 dnl
 dnl  The contents of this file are subject to the restrictions and limitations
-dnl  set forth in the SystemC Open Source License Version 2.3 (the "License");
+dnl  set forth in the SystemC Open Source License (the "License");
 dnl  You may not use this file except in compliance with such restrictions and
 dnl  limitations. You may obtain instructions on how to receive a copy of the
-dnl  License at http://www.systemc.org/. Software distributed by Contributors
+dnl  License at http://www.accellera.org/. Software distributed by Contributors
 dnl  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
 dnl  ANY KIND, either express or implied. See the License for the specific
 dnl  language governing rights and limitations under the License.

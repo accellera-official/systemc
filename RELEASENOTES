@@ -1,4 +1,4 @@
-                Release Notes for SystemC 2.3.0
+                Release Notes for SystemC 2.3.1
                 ===============================
 
         Andrew C. Goodrich,  Forte Design Systems
@@ -29,26 +29,22 @@ CONTENTS
 1) What's new in this release?
 ==============================
 
-Compared to the 2.2.0, this release has the following new items:
+Compared to the 2.3.0, this release has the following new items:
 
-  - TLM-2.0 is merged into the main SystemC release. Please see section 9)
-    below for more details of earlier TLM releases.
-	
+  - TODO: update this section with highlights from
+    https://github.com/OSCI-WG/systemc/issues?labels=&milestone=2&state=closed
+
   - This version of SystemC contains the "Proof of Concept" simulator
     for the IEEE 1666-2011 SystemC standard. Please consult the IEEE Std
     1666-2011 Language Reference Manual for details about the new SystemC
     standard.
 
+  - TLM-2.0 is merged into the main SystemC release since 2.3.0.
+    Please see section 9) below for more details related to TLM.
+
   - Bug fixes, see section 2.
 
-  - Expanded dynamic process capabilities, see section 5.
-
   - Expanded platform support, see the README.
-
-  - Removed build targets "opt", "debug", "pthreads", "pthreads_debug"
-    on UNIX-like platforms in favour of new options to the configure script.
-    Added support for building a shared library via libtool.
-    See instructions in INSTALL file.
 
 
 2) Bug fixes and enhancements
@@ -56,186 +52,33 @@ Compared to the 2.2.0, this release has the following new items:
 
 Following is the list of bug fixes and enhancements for this release:
 
-     - Removed quick threads header inclusion from public includes.
-
-     - Plugged memory leak in sc_signal destructors associated with 
-       sc_event instances.
-
-     - Fixed namespace collision issue with sc_boost support.
-
-     - Process control improvements: 
-         (a) Fixed bug in hierarchical killing of processes.
-         (b) Changes to when deleted processes are actually deleted.
-         (c) Retain process objects as zombies until all of their children 
-             have been removed.
-
-     - Replaced remaining uses of sc_pvector with std::vector<>.
-
-     - Changes to sc_process handle to use a copy/swap idiom for implementing
-       operator = so that the reference counts work properly.
-
-     - Fixed memory leak and race condition in sc_event_queue.
-
-     - Removed internal objects from the object hierarchy for IEEE 1666
-       compatibility.
-
-     - Moved default parameter specifications from friend declarations to
-       the actual function signatures in the fixed point support.
-
-         src/sysc/datatypes/fx/scfx_rep.h
+     - TODO: update this section from
+       https://github.com/OSCI-WG/systemc/issues?labels=&milestone=2&state=closed
 
      - The default stack size for threads, SC_DEFAULT_STACK_SIZE, has been 
-       increased from 64K bytes to 128K bytes. This setting is controlled 
-       with a #define, so if necessary, you can set it back to 64K bytes 
-       in your version.
-
-         src/sysc/kernel/sc_constants.h
-
-     - sc_concref uses for 8 cases involving bool or char* operands failed
-       to release the storage they allocated. This has been fixed.
-
-         src/sysc/datatypes/bit/sc_lv_base.h
-
-     - sc_concatref did not have shift operator overloads for the int shift
-       value. It has been added.
-
-         src/sysc/datatypes/misc/sc_concatref.h
-
-     - Plugged a memory leak in operator - for sc_signed operations. If 
-       the two operands were equal it returned a new sc_signed instance 
-       of zero, but did not free its temporary buffer.
-
-     - Added masking for the RADIX size to the conversion of double
-       values to the internal representation of sc_unsigned and
-       sc_signed values. Changes to sc_signed.cpp and sc_unsigned.cpp.
-
-     - Added a static std::vector<sc_object*> field to the sc_object
-       class to return for get_child_objects() rather than a dynamic
-       allocation. Changes to sc_object.h and sc_object.cpp.
-
-     - sc_mutex::lock() & sc_mutex::trylock() now allow owner to apply
-       lock more than once without incident. Previous behavior locked 
-       up the owning process.
-
-     - Fixed list processing for attributes to match that of C++ Standard
-       Library classes.
-
-         src/sysc/utils/sc_pvector.h
-
-     - Changed .begin() and .end in sc_pvector<T> so that its use by
-       sc_object::attr_cltn().begin() and .end() will return a null
-       pointer if there are no attributes defined.
-
-     - Fixed bug where concatenations involving sc_unsigned instances 
-       with negative values, e.g., from ~X for instance, were returning 
-       zero rather than the actual bits of the value.
-
-     - Added sc_core namespace prefix in the sc_assert() macro.
-
-     - When sc_stop() is called the message informing the user is now
-       issued via SC_REPORT_INFO() rather than just output to cout.
-     
-     - Fixed bug for sc_bigint::and_reduce() where it was not properly
-       detecting the all ones case.
-
-     - Fixed exception handling and propagation throughout the library.
-       All exceptions (and sc_reports with SC_THROW action) thrown
-       from processes are consistently forwarded to the main thread
-       and can be caught in sc_main.
-
-     - Changed the default status value in sc_elab_and_sim() to be 1 
-       rather than 0. This means a non-zero value will be returned
-       if sc_main() generates an exception.
-
-     - Fixed bug in auto-increment and auto-decrement of sc_signed and
-       sc_unsigned values. The original code left the values in sign
-       magnitude form and did not properly trim them. The code now uses
-       *this = *this + 1 and *this = *this -1.
+       increased
+       TODO: document this.
 
      - Expanded naming of signals in sc_vcd_trace.cpp to use 5 characters
-       rather than 3 to accommodate more signals.
-
-     - The mask being used to construct concatenation read values for
-       sc_int<W>, sc_uint<W>, and their part selection classes was 32 bits 
-       when it should have been 64 bits. This meant that selections wider
-       than 32 bits would fail. It is now 64 bits.
-
-         src/sysc/datatypes/int/sc_int_base.cpp:
-         src/sysc/datatypes/int/sc_uint_base.cpp:
-
-     - Fix for logical operators between unsigned int and sc_unsigned.
-
-         src/sysc/datatypes/int/sc_nbcommon.inc
-
-         Fixed bit width in CLASS_TYPE::CLASS_TYPE() for the case that
-         the signature is a buffer of digits and a width. The value of
-         bits needs to be set via num_bits() rather than using the
-         b parameter. This allows the case where CLASS_TYPE is 
-         sc_unsigned to get the proper bit width. Without this fix the
-         high order bit disappears in logical results.
-
-     - Added "kill" assignment to sc_fifo::buf_read() so that things like
-       boost::shared_ptr actually release.
-
-     - Better writer and read checking for sc_fifo<T> ports. 
-
-         src/sysc/communication/sc_fifo.h
-
-            The port binder now checks for blocking interfaces in addition 
-            to the combined non-blocking - blocking interface.
-
-     - Error message added if wait(N) is called from an SC_METHOD.
-
-         src/sysc/kernel/sc_wait_cthread.h
-
-     - Null terminator placed on end of argv_copy.
-
-         src/sysc/kernel/sc_main_main.cpp
-
-     - Mac OS X support modified to support 32/64 bit builds.
-
-         configure.in
-
-         The support for i386 based Macintoshes now includes the required
-         "-arch <CPU>" for the command line options for g++/gcc and as.
-         This produces 32/64-bit architecture libraries, as supported by
-         the CPU. You can override the selection by specifying an explicit
-         --build= option to the configure call.
-
-     - Fixed the the module hierarchy stack during the invocation of all
-       elaboration and simulation callbacks.
+       rather than 3 to accommodate more signals (incomplete in 2.3.0).
 
 
 3) New features
 ===============
 
-Here is an overview of changes in 2.3.0 compared to 2.2.0:
+Here is an overview of changes in 2.3.1 compared to 2.3.0:
 
-  - Expanded dynamic process capabilities, see section 5.
+  - TODO: Update this section from
+    https://github.com/OSCI-WG/systemc/issues?labels=05-feature&milestone=2&state=closed
 
-  - A number of other changes to SystemC functions and classes, e.g.,
-    sc_start() for the new IEEE 1666 standard, IEEE 1666_2011. See the
-    IEEE 1666_2011 Language Reference Manual for details.
-
-  - Boost library used by SystemC is now in the namespace sc_boost 
-    rather than boost. Only parts directly related to sc_bind and
-    sc_(c)ref are kept, other previously included parts of Boost
-    have been removed. This allows SystemC-based programs to be
-    combined with programs using later versions of the Boost library.
-
-  - Addition of sc_prim_channel::async_request_update().
-    You can disable this feature by compiling your simulator
-    with SC_DISABLE_ASYNC_UPDATES defined (or by using the
-    configure script option --disable-async-updates).
-
-  - Immediate self-notification of processes is no longer supported
-    due to changes in IEEE 1666-2011 (see sc_event::notify, 5.10.6).
-    Compile with SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS defined to
-    obtain the old behaviour.
 
 
 4) Incompatibilities with previous releases
 ===========================================
+
+Here is a list of known incompatibilities between this release and 2.3.0:
+
+  - TODO: update this section
 
 Here is a list of known incompatibilities between this release and 2.2.0:
 
@@ -250,6 +93,8 @@ Here is a list of known incompatibilities between this release and 2.2.0:
     define SC_DISABLE_VIRTUAL_BIND during the build of the simulator and
     before including systemc.h.
 
+  - TODO: document cleanups (windows.h, strstream, sc_string, tracing, ...)
+
 
 5) Expanded Dynamic Process Support
 ===================================
@@ -263,7 +108,7 @@ Here is a list of known incompatibilities between this release and 2.2.0:
 
 In this section the experimental features of this release are listed.
 
-  - None
+  - TODO: document phase callback feature
 
 7) Known Problems
 =================
@@ -276,16 +121,13 @@ In this section the experimental features of this release are listed.
     The work-around is to specify DEBUG_SYSTEMC when the SystemC library
     is built.
 
-  - Using the (deprecated) sc_string_old class with very long strings
-    (>1024 bytes) is subject to a buffer overflow.
-
-  - Tracing "(unsigned) long" values to WIF trace files is broken on
-    64-bit platforms.  Trace sc_dt::(u)int64 instead.
-
   - The sign-extension of mixed-signedness logic expressions (&,|)
     involving one sc_bigint<> operand and a limited width type is
     inconsistent between 32-bit and 64-bit platforms in some rare corner
     cases. Convert both operands to sc_bigint<> first.
+
+  - TODO: document open issues from
+    https://github.com/OSCI-WG/systemc/issues?milestone=3&labels=&state=open
 
 
 8) Fixed-point library
@@ -331,7 +173,7 @@ CONTENTS
 9.1) Supported SystemC versions
 ===============================
 
-SystemC 2.2.0 and 2.3.0 are supported and have been tested.
+SystemC 2.2.0 and 2.3.x are supported and have been tested.
 SystemC 2.1.v1 is still supported in principle, but has not
 been tested extensively.
 
@@ -339,68 +181,27 @@ been tested extensively.
 9.2) What's changed in this kit?
 ================================
 
-Compared to the standalone 2.0.1 kit, the following has changed:
+Compared to the standalone 2.0.2 kit, the following has changed:
 
-a. Imported standalone TLM-2.0 implementation into core SystemC
-   package. Reorganized header structure:
-    {src,include}/
-      tlm_core/
-        tlm_1/
-        tlm_2/
-      tlm_utils/
-
-b. Changes according to IEEE 1666-2011:
-
-   - added <tlm> header file
-   - renamed DECLARE_EXTENDED_PHASE to TLM_DECLARE_EXTENDED_PHASE
-   - added const overloads to get_base_* functions in socket classes
-   - added tlm_gp_option for debug/DMI
-   - made bind() functions virtual
-
-c. Some minor bug fixes in b->nb conversion in simple_target_socket(_tagged)
-   to correctly handle time annotations.
-
-d. Bug fixes and cleanups in tlm_fifo and circular_buffer implementation.
-
-e. Dropped namespace tlm_qk_internal and cleaned up tlm_global_quantum
-   implementation.
-
-f. Correctly clean up all bound copies of an analysis interface in
-   tlm_analysis_port::unbind.
+TODO: document fixed issues from
+      https://github.com/OSCI-WG/systemc/issues?milestone=2&labels=tlm&state=closed
 
 
 9.3) Known issues
 =================
 
-a. When using TLM 2.0 with SystemC 2.1.v1 on 64 bit linux, you will need to
-   force 32 bit mode by using the '-m32' flag.
-
-b. The tlm_simple_target_socket in tlm_utils does not obey the END_REQ rule
+a. The tlm_simple_target_socket in tlm_utils does not obey the END_REQ rule
    when only an nb_ call is registered, an b_ call is being handled in the
    socket and there is an nb_ call coming in at the same time. In this case
    the incoming nb_ call will be forwarded to the registered nb_ call without
    checking whether the earlier b_ call has passed the END_REQ timing point.
 
-c. The implementation of the PEQ 'peq_with_get' in tlm_utils does not properly
+b. The implementation of the PEQ 'peq_with_get' in tlm_utils does not properly
    distinguish between immediate notifications and delta notifications. In the
    case that a immediate and delta notification happen at the same simulation
    time both types of notifications emerge from the PEQ in the same evaluation
    phase. This is wrong immediate notifications should overtake delta
    notifications.
 
-d. The lt_dmi example does not run for all platform and library versions.
-   It works for X86 Linux, gcc4.0 and SystemC 2.2.0.
-
-e. The nb2b_thread dynamic process in the simple_target_socket[_tagged] is
-   created with a static sensitivity list but that event gets deleted in the
-   nb2b_thread implementation. This may be beyond the limits of IEEE Std 1666-2011.
-
-f. In the same nb2b_thread process the implementation only allows to terminate
-   a transaction through a tlm::TLM_COMPLETED return value on the bw_nb_transport
-   call (return coming from the initiator). In case the initiator finishes the
-   response phase with a tlm::TLM_UPDATED return value and a tlm::END_RESP phase,
-   the transaction will not finish.
-
-g. The get_base_interface function(s) of tlm_utils::multi_passthrough_target_socket
-   throws an error when bound hiararchically. This is against the intent in
-   IEEE Std 1666-2011.
+TODO: document open issues from
+      https://github.com/OSCI-WG/systemc/issues?milestone=&labels=tlm&state=open

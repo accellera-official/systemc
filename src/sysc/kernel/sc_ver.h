@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2011 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 3.0 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -51,9 +51,9 @@ extern const bool         sc_is_prerelease;
 extern const std::string  sc_version_string;
 extern const std::string  sc_copyright_string;
 
-#define SYSTEMC_2_3_0
+#define SYSTEMC_2_3_1
  
-#define SYSTEMC_VERSION       20120701
+#define SYSTEMC_VERSION       20131215
 #define SC_VERSION_ORIGINATOR "Accellera"
 #define SC_VERSION_MAJOR      2
 #define SC_VERSION_MINOR      3
@@ -64,7 +64,7 @@ extern const std::string  sc_copyright_string;
 #define IEEE_1666_SYSTEMC     201101L
 
 #define SC_COPYRIGHT                               \
-  "Copyright (c) 1996-2013 by all Contributors,\n" \
+  "Copyright (c) 1996-2014 by all Contributors,\n" \
   "ALL RIGHTS RESERVED\n"
 
 

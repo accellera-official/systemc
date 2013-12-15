@@ -1,3 +1,9 @@
+* SystemC 2.3.1
+  Release of SystemC 2.3.1
+  - Bug fixes.
+  - Code cleanup.
+  - Some experimental new features.
+
 * SystemC 2.3.0
   Release of SystemC 2.3.0
   - Compliance to IEEE Std 1666-2011

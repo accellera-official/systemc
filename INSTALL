@@ -451,11 +451,11 @@ projects:
    
 2. Select show directories for: Library files
 
-3. Select the 'New' icon and browse to: C:\systemc-2.3.0\msvc80\systemc\debug
+3. Select the 'New' icon and browse to: C:\systemc-2.3.1\msvc80\systemc\debug
 
 4. Select show directories for: Include files
 
-5. Select the 'New' icon and browse to: C:\systemc-2.3.0\src
+5. Select the 'New' icon and browse to: C:\systemc-2.3.1\src
 
 To add the include file and library directory search paths for the current
 project only:
@@ -468,7 +468,7 @@ project only:
   'Additional include directories' (e.g. the examples use '..\..\..\src').
 
 3. From the Linker tab, select the General properties and type the path to 
-   the SystemC library:   ...\systemc-2.3.0\msvc80\systemc\debug'systemc.lib' 
+   the SystemC library:   ...\systemc-2.3.1\msvc80\systemc\debug'systemc.lib' 
    in the 'Additional Library Directories:' box.
 
 9. Click OK

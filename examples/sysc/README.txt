@@ -55,4 +55,4 @@ Debug or Release modes.
 
 The project files assume an environment variable name SYSTEMC exists and 
 contains the path to the mscv80 subdirectory that is part of the SystemC 
-installation (e.g. C:\systemc-2.3.0\msvc80).
+installation (e.g. C:\systemc-2.3.1\msvc80).
