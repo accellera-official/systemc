@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2006 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.4 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -56,7 +56,6 @@ void floating::entry(){
 
 
   int				exponent_diff_tmp = 0;
-  int				exponent_tmp = 0;
   unsigned int			significant_result = 0;
   unsigned int			overflow_sign_tmp = 0;
   unsigned int			result_exp_tmp = 0;
@@ -101,12 +100,10 @@ void floating::entry(){
 	}	
 
 	if (exponent_diff_tmp > 0) {
-		exponent_tmp = fpua_exponent_tmp;
 		//printf("shift significant B to Right\n");
        		fpub_significand_tmp = fpub_significand_tmp >> exponent_diff_tmp ;
 		fpub_exponent_tmp = fpua_exponent_tmp;
 	} else {
-		exponent_tmp = fpub_exponent_tmp;
 		//printf("shift significant A to Right\n");
        		fpua_significand_tmp = fpua_significand_tmp >> exponent_diff_tmp ;
 		fpua_exponent_tmp = fpub_exponent_tmp;

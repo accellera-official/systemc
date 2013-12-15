@@ -4,14 +4,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2011 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 3.0 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -32,7 +32,7 @@
   CHANGE LOG AT END OF FILE
  *****************************************************************************/
 
-#include <exception>
+#include "sysc/kernel/sc_except.h"
 #include <string>
 
 namespace sc_core {
@@ -102,10 +102,11 @@ const std::string sc_report_compose_message( const sc_report& );
 class sc_report : public std::exception
 {
     friend class sc_report_handler;
+    friend sc_report* sc_handle_exception();
+
+    sc_report(); // used internally by sc_handle_exception
 
 public:
-
-    sc_report();
 
     sc_report(const sc_report&);
 
@@ -179,11 +180,15 @@ public:  // backward compatibility with 2.0+
 };
 typedef std::exception sc_exception;
 
-#define SC_DEFAULT_INFO_ACTIONS (SC_LOG | SC_DISPLAY)
-#define SC_DEFAULT_WARNING_ACTIONS (SC_LOG | SC_DISPLAY)
-#define SC_DEFAULT_ERROR_ACTIONS (SC_LOG | SC_CACHE_REPORT | SC_THROW)
+#define SC_DEFAULT_INFO_ACTIONS \
+   (::sc_core::SC_LOG | ::sc_core::SC_DISPLAY)
+#define SC_DEFAULT_WARNING_ACTIONS \
+   (::sc_core::SC_LOG | ::sc_core::SC_DISPLAY)
+#define SC_DEFAULT_ERROR_ACTIONS \
+   (::sc_core::SC_LOG | ::sc_core::SC_CACHE_REPORT | ::sc_core::SC_THROW)
 #define SC_DEFAULT_FATAL_ACTIONS \
-(SC_LOG | SC_DISPLAY | SC_CACHE_REPORT | SC_ABORT)
+   (::sc_core::SC_LOG | ::sc_core::SC_DISPLAY | \
+    ::sc_core::SC_CACHE_REPORT | ::sc_core::SC_ABORT)
 
 
 // ----------------------------------------------------------------------------
@@ -192,25 +197,26 @@ typedef std::exception sc_exception;
 //  Use these macros to report an info, warning, error, or fatal.
 // ----------------------------------------------------------------------------
 
-#define SC_REPORT_INFO(id,msg) \
-    sc_core::sc_report_handler::report( \
-	    sc_core::SC_INFO, id, msg, __FILE__, __LINE__ )
+#define SC_REPORT_INFO( msg_type, msg )    \
+    ::sc_core::sc_report_handler::report(  \
+            ::sc_core::SC_INFO, msg_type, msg, __FILE__, __LINE__ )
 
-#define SC_REPORT_INFO_VERB( msg_type , msg, verbosity ) \
-    sc_report_handler::report( SC_INFO , msg_type , msg , verbosity, \
+#define SC_REPORT_INFO_VERB( msg_type, msg, verbosity )   \
+    ::sc_core::sc_report_handler::report(                 \
+            ::sc_core::SC_INFO, msg_type, msg, verbosity, \
                                __FILE__ , __LINE__ )
 
-#define SC_REPORT_WARNING(id,msg) \
-    sc_core::sc_report_handler::report(\
-	    sc_core::SC_WARNING, id, msg, __FILE__, __LINE__)
+#define SC_REPORT_WARNING( msg_type, msg ) \
+    ::sc_core::sc_report_handler::report(  \
+            ::sc_core::SC_WARNING, msg_type, msg, __FILE__, __LINE__ )
 
-#define SC_REPORT_ERROR(id,msg) \
-    sc_core::sc_report_handler::report( \
-	    sc_core::SC_ERROR, id, msg, __FILE__, __LINE__ )
+#define SC_REPORT_ERROR( msg_type, msg )  \
+    ::sc_core::sc_report_handler::report( \
+            ::sc_core::SC_ERROR, msg_type, msg, __FILE__, __LINE__ )
 
-#define SC_REPORT_FATAL(id,msg) \
-    sc_core::sc_report_handler::report( \
-	    sc_core::SC_FATAL, id, msg, __FILE__, __LINE__ )
+#define SC_REPORT_FATAL( msg_type, msg )  \
+    ::sc_core::sc_report_handler::report( \
+            ::sc_core::SC_FATAL, msg_type, msg, __FILE__, __LINE__ )
 
 // ----------------------------------------------------------------------------
 //  MACRO : sc_assert(expr)
@@ -221,15 +227,16 @@ typedef std::exception sc_exception;
 
 #ifdef NDEBUG
 
-#define sc_assert(expr)                                                       \
+#define sc_assert(expr) \
  ((void) 0)
 
 #else
 
-#define sc_assert(expr)                                                       \
- ((void) ((expr) ? 0 : (SC_REPORT_FATAL( sc_core::SC_ID_ASSERTION_FAILED_ , #expr ), 0)))
+#define sc_assert(expr) \
+ ((void)((expr) ? 0 :   \
+     (SC_REPORT_FATAL( ::sc_core::SC_ID_ASSERTION_FAILED_, #expr ), 0)))
 
-#endif
+#endif // NDEBUG
 
 extern const char SC_ID_UNKNOWN_ERROR_[];
 extern const char SC_ID_WITHOUT_MESSAGE_[];

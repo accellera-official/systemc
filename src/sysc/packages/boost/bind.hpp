@@ -44,7 +44,7 @@
 namespace sc_boost
 {
 
-namespace sc_bi // implementation details
+namespace _bi // implementation details
 {
 
 // result_traits
@@ -130,16 +130,16 @@ template<class F> inline F & unwrap(reference_wrapper<F> const * f, int)
 
 #if !( defined(__MWERKS__) && SC_BOOST_WORKAROUND(__MWERKS__, <= 0x3004) )
 
-template<class R, class T> inline sc_mfi::dm<R, T> unwrap(R T::* * pm, int)
+template<class R, class T> inline _mfi::dm<R, T> unwrap(R T::* * pm, int)
 {
-    return sc_mfi::dm<R, T>(*pm);
+    return _mfi::dm<R, T>(*pm);
 }
 
 #if !SC_BOOST_WORKAROUND(__IBMCPP__, SC_BOOST_TESTED_AT(600))
 // IBM/VisualAge 6.0 is not able to handle this overload.
-template<class R, class T> inline sc_mfi::dm<R, T> unwrap(R T::* const * pm, int)
+template<class R, class T> inline _mfi::dm<R, T> unwrap(R T::* const * pm, int)
 {
-    return sc_mfi::dm<R, T>(*pm);
+    return _mfi::dm<R, T>(*pm);
 }
 #endif
 
@@ -154,9 +154,9 @@ public:
 
     list0() {}
 
-    template<class T> T & operator[] (sc_bi::value<T> & v) const { return v.get(); }
+    template<class T> T & operator[] (_bi::value<T> & v) const { return v.get(); }
 
-    template<class T> T const & operator[] (sc_bi::value<T> const & v) const { return v.get(); }
+    template<class T> T const & operator[] (_bi::value<T> const & v) const { return v.get(); }
 
     template<class T> T & operator[] (reference_wrapper<T> const & v) const { return v.get(); }
 
@@ -204,9 +204,9 @@ public:
 
     A1 operator[] (sc_boost::arg<1> (*) ()) const { return a1_; }
 
-    template<class T> T & operator[] ( sc_bi::value<T> & v ) const { return v.get(); }
+    template<class T> T & operator[] ( _bi::value<T> & v ) const { return v.get(); }
 
-    template<class T> T const & operator[] ( sc_bi::value<T> const & v ) const { return v.get(); }
+    template<class T> T const & operator[] ( _bi::value<T> const & v ) const { return v.get(); }
 
     template<class T> T & operator[] (reference_wrapper<T> const & v) const { return v.get(); }
 
@@ -261,9 +261,9 @@ public:
     A1 operator[] (sc_boost::arg<1> (*) ()) const { return a1_; }
     A2 operator[] (sc_boost::arg<2> (*) ()) const { return a2_; }
 
-    template<class T> T & operator[] (sc_bi::value<T> & v) const { return v.get(); }
+    template<class T> T & operator[] (_bi::value<T> & v) const { return v.get(); }
 
-    template<class T> T const & operator[] (sc_bi::value<T> const & v) const { return v.get(); }
+    template<class T> T const & operator[] (_bi::value<T> const & v) const { return v.get(); }
 
     template<class T> T & operator[] (reference_wrapper<T> const & v) const { return v.get(); }
 
@@ -322,9 +322,9 @@ public:
     A2 operator[] (sc_boost::arg<2> (*) ()) const { return a2_; }
     A3 operator[] (sc_boost::arg<3> (*) ()) const { return a3_; }
 
-    template<class T> T & operator[] (sc_bi::value<T> & v) const { return v.get(); }
+    template<class T> T & operator[] (_bi::value<T> & v) const { return v.get(); }
 
-    template<class T> T const & operator[] (sc_bi::value<T> const & v) const { return v.get(); }
+    template<class T> T const & operator[] (_bi::value<T> const & v) const { return v.get(); }
 
     template<class T> T & operator[] (reference_wrapper<T> const & v) const { return v.get(); }
 
@@ -387,9 +387,9 @@ public:
     A3 operator[] (sc_boost::arg<3> (*) ()) const { return a3_; }
     A4 operator[] (sc_boost::arg<4> (*) ()) const { return a4_; }
 
-    template<class T> T & operator[] (sc_bi::value<T> & v) const { return v.get(); }
+    template<class T> T & operator[] (_bi::value<T> & v) const { return v.get(); }
 
-    template<class T> T const & operator[] (sc_bi::value<T> const & v) const { return v.get(); }
+    template<class T> T const & operator[] (_bi::value<T> const & v) const { return v.get(); }
 
     template<class T> T & operator[] (reference_wrapper<T> const & v) const { return v.get(); }
 
@@ -458,9 +458,9 @@ public:
     A4 operator[] (sc_boost::arg<4> (*) ()) const { return a4_; }
     A5 operator[] (sc_boost::arg<5> (*) ()) const { return a5_; }
 
-    template<class T> T & operator[] (sc_bi::value<T> & v) const { return v.get(); }
+    template<class T> T & operator[] (_bi::value<T> & v) const { return v.get(); }
 
-    template<class T> T const & operator[] (sc_bi::value<T> const & v) const { return v.get(); }
+    template<class T> T const & operator[] (_bi::value<T> const & v) const { return v.get(); }
 
     template<class T> T & operator[] (reference_wrapper<T> const & v) const { return v.get(); }
 
@@ -533,9 +533,9 @@ public:
     A5 operator[] (sc_boost::arg<5> (*) ()) const { return a5_; }
     A6 operator[] (sc_boost::arg<6> (*) ()) const { return a6_; }
 
-    template<class T> T & operator[] (sc_bi::value<T> & v) const { return v.get(); }
+    template<class T> T & operator[] (_bi::value<T> & v) const { return v.get(); }
 
-    template<class T> T const & operator[] (sc_bi::value<T> const & v) const { return v.get(); }
+    template<class T> T const & operator[] (_bi::value<T> const & v) const { return v.get(); }
 
     template<class T> T & operator[] (reference_wrapper<T> const & v) const { return v.get(); }
 
@@ -612,9 +612,9 @@ public:
     A6 operator[] (sc_boost::arg<6> (*) ()) const { return a6_; }
     A7 operator[] (sc_boost::arg<7> (*) ()) const { return a7_; }
 
-    template<class T> T & operator[] (sc_bi::value<T> & v) const { return v.get(); }
+    template<class T> T & operator[] (_bi::value<T> & v) const { return v.get(); }
 
-    template<class T> T const & operator[] (sc_bi::value<T> const & v) const { return v.get(); }
+    template<class T> T const & operator[] (_bi::value<T> const & v) const { return v.get(); }
 
     template<class T> T & operator[] (reference_wrapper<T> const & v) const { return v.get(); }
 
@@ -696,9 +696,9 @@ public:
     A7 operator[] (sc_boost::arg<7> (*) ()) const { return a7_; }
     A8 operator[] (sc_boost::arg<8> (*) ()) const { return a8_; }
 
-    template<class T> T & operator[] (sc_bi::value<T> & v) const { return v.get(); }
+    template<class T> T & operator[] (_bi::value<T> & v) const { return v.get(); }
 
-    template<class T> T const & operator[] (sc_bi::value<T> const & v) const { return v.get(); }
+    template<class T> T const & operator[] (_bi::value<T> const & v) const { return v.get(); }
 
     template<class T> T & operator[] (reference_wrapper<T> const & v) const { return v.get(); }
 
@@ -784,9 +784,9 @@ public:
     A8 operator[] (sc_boost::arg<8> (*) ()) const { return a8_; }
     A9 operator[] (sc_boost::arg<9> (*) ()) const { return a9_; }
 
-    template<class T> T & operator[] (sc_bi::value<T> & v) const { return v.get(); }
+    template<class T> T & operator[] (_bi::value<T> & v) const { return v.get(); }
 
-    template<class T> T const & operator[] (sc_bi::value<T> const & v) const { return v.get(); }
+    template<class T> T const & operator[] (_bi::value<T> const & v) const { return v.get(); }
 
     template<class T> T & operator[] (reference_wrapper<T> const & v) const { return v.get(); }
 
@@ -924,7 +924,7 @@ public:
 
 #ifndef SC_BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 
-// put overloads in sc_bi, rely on ADL
+// put overloads in _bi, rely on ADL
 
 # ifndef SC_BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 
@@ -946,41 +946,41 @@ template<class R, class F, class L> bool function_equal_impl( bind_t<R, F, L> co
 
 // put overloads in boost
 
-} // namespace sc_bi
+} // namespace _bi
 
 # ifndef SC_BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 
-template<class R, class F, class L> bool function_equal( sc_bi::bind_t<R, F, L> const & a, sc_bi::bind_t<R, F, L> const & b )
+template<class R, class F, class L> bool function_equal( _bi::bind_t<R, F, L> const & a, _bi::bind_t<R, F, L> const & b )
 {
     return a.compare(b);
 }
 
 # else
 
-template<class R, class F, class L> bool function_equal_impl( sc_bi::bind_t<R, F, L> const & a, sc_bi::bind_t<R, F, L> const & b, int )
+template<class R, class F, class L> bool function_equal_impl( _bi::bind_t<R, F, L> const & a, _bi::bind_t<R, F, L> const & b, int )
 {
     return a.compare(b);
 }
 
 # endif // #ifndef SC_BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 
-namespace sc_bi
+namespace _bi
 {
 
 #endif // SC_BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 
 // add_value
 
-#if !defined(SC_BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) || (__SUNPRO_CC >= 0x530)
+#if !defined(SC_BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) || (defined(__SUNPRO_CC) && (__SUNPRO_CC >= 0x530))
 
 template<class T> struct add_value
 {
-    typedef sc_bi::value<T> type;
+    typedef _bi::value<T> type;
 };
 
 template<class T> struct add_value< value<T> >
 {
-    typedef sc_bi::value<T> type;
+    typedef _bi::value<T> type;
 };
 
 template<class T> struct add_value< reference_wrapper<T> >
@@ -1199,16 +1199,16 @@ SC_BOOST_BIND_OPERATOR( >=, greater_equal )
 
 #endif
 
-} // namespace sc_bi
+} // namespace _bi
 
 // visit_each
 
-template<class V, class T> void visit_each(V & v, sc_bi::value<T> const & t, int)
+template<class V, class T> void visit_each(V & v, _bi::value<T> const & t, int)
 {
     SC_BOOST_BIND_VISIT_EACH(v, t.get(), 0);
 }
 
-template<class V, class R, class F, class L> void visit_each(V & v, sc_bi::bind_t<R, F, L> const & t, int)
+template<class V, class R, class F, class L> void visit_each(V & v, _bi::bind_t<R, F, L> const & t, int)
 {
     t.accept(v);
 }
@@ -1222,165 +1222,165 @@ template<class V, class R, class F, class L> void visit_each(V & v, sc_bi::bind_
 // generic function objects
 
 template<class R, class F>
-    sc_bi::bind_t<R, F, sc_bi::list0>
+    _bi::bind_t<R, F, _bi::list0>
     SC_BOOST_BIND(F f)
 {
-    typedef sc_bi::list0 list_type;
-    return sc_bi::bind_t<R, F, list_type> (f, list_type());
+    typedef _bi::list0 list_type;
+    return _bi::bind_t<R, F, list_type> (f, list_type());
 }
 
 template<class R, class F, class A1>
-    sc_bi::bind_t<R, F, typename sc_bi::list_av_1<A1>::type>
+    _bi::bind_t<R, F, typename _bi::list_av_1<A1>::type>
     SC_BOOST_BIND(F f, A1 a1)
 {
-    typedef typename sc_bi::list_av_1<A1>::type list_type;
-    return sc_bi::bind_t<R, F, list_type> (f, list_type(a1));
+    typedef typename _bi::list_av_1<A1>::type list_type;
+    return _bi::bind_t<R, F, list_type> (f, list_type(a1));
 }
 
 template<class R, class F, class A1, class A2>
-    sc_bi::bind_t<R, F, typename sc_bi::list_av_2<A1, A2>::type>
+    _bi::bind_t<R, F, typename _bi::list_av_2<A1, A2>::type>
     SC_BOOST_BIND(F f, A1 a1, A2 a2)
 {
-    typedef typename sc_bi::list_av_2<A1, A2>::type list_type;
-    return sc_bi::bind_t<R, F, list_type> (f, list_type(a1, a2));
+    typedef typename _bi::list_av_2<A1, A2>::type list_type;
+    return _bi::bind_t<R, F, list_type> (f, list_type(a1, a2));
 }
 
 template<class R, class F, class A1, class A2, class A3>
-    sc_bi::bind_t<R, F, typename sc_bi::list_av_3<A1, A2, A3>::type>
+    _bi::bind_t<R, F, typename _bi::list_av_3<A1, A2, A3>::type>
     SC_BOOST_BIND(F f, A1 a1, A2 a2, A3 a3)
 {
-    typedef typename sc_bi::list_av_3<A1, A2, A3>::type list_type;
-    return sc_bi::bind_t<R, F, list_type>(f, list_type(a1, a2, a3));
+    typedef typename _bi::list_av_3<A1, A2, A3>::type list_type;
+    return _bi::bind_t<R, F, list_type>(f, list_type(a1, a2, a3));
 }
 
 template<class R, class F, class A1, class A2, class A3, class A4>
-    sc_bi::bind_t<R, F, typename sc_bi::list_av_4<A1, A2, A3, A4>::type>
+    _bi::bind_t<R, F, typename _bi::list_av_4<A1, A2, A3, A4>::type>
     SC_BOOST_BIND(F f, A1 a1, A2 a2, A3 a3, A4 a4)
 {
-    typedef typename sc_bi::list_av_4<A1, A2, A3, A4>::type list_type;
-    return sc_bi::bind_t<R, F, list_type>(f, list_type(a1, a2, a3, a4));
+    typedef typename _bi::list_av_4<A1, A2, A3, A4>::type list_type;
+    return _bi::bind_t<R, F, list_type>(f, list_type(a1, a2, a3, a4));
 }
 
 template<class R, class F, class A1, class A2, class A3, class A4, class A5>
-    sc_bi::bind_t<R, F, typename sc_bi::list_av_5<A1, A2, A3, A4, A5>::type>
+    _bi::bind_t<R, F, typename _bi::list_av_5<A1, A2, A3, A4, A5>::type>
     SC_BOOST_BIND(F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5)
 {
-    typedef typename sc_bi::list_av_5<A1, A2, A3, A4, A5>::type list_type;
-    return sc_bi::bind_t<R, F, list_type>(f, list_type(a1, a2, a3, a4, a5));
+    typedef typename _bi::list_av_5<A1, A2, A3, A4, A5>::type list_type;
+    return _bi::bind_t<R, F, list_type>(f, list_type(a1, a2, a3, a4, a5));
 }
 
 template<class R, class F, class A1, class A2, class A3, class A4, class A5, class A6>
-    sc_bi::bind_t<R, F, typename sc_bi::list_av_6<A1, A2, A3, A4, A5, A6>::type>
+    _bi::bind_t<R, F, typename _bi::list_av_6<A1, A2, A3, A4, A5, A6>::type>
     SC_BOOST_BIND(F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6)
 {
-    typedef typename sc_bi::list_av_6<A1, A2, A3, A4, A5, A6>::type list_type;
-    return sc_bi::bind_t<R, F, list_type>(f, list_type(a1, a2, a3, a4, a5, a6));
+    typedef typename _bi::list_av_6<A1, A2, A3, A4, A5, A6>::type list_type;
+    return _bi::bind_t<R, F, list_type>(f, list_type(a1, a2, a3, a4, a5, a6));
 }
 
 template<class R, class F, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
-    sc_bi::bind_t<R, F, typename sc_bi::list_av_7<A1, A2, A3, A4, A5, A6, A7>::type>
+    _bi::bind_t<R, F, typename _bi::list_av_7<A1, A2, A3, A4, A5, A6, A7>::type>
     SC_BOOST_BIND(F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7)
 {
-    typedef typename sc_bi::list_av_7<A1, A2, A3, A4, A5, A6, A7>::type list_type;
-    return sc_bi::bind_t<R, F, list_type>(f, list_type(a1, a2, a3, a4, a5, a6, a7));
+    typedef typename _bi::list_av_7<A1, A2, A3, A4, A5, A6, A7>::type list_type;
+    return _bi::bind_t<R, F, list_type>(f, list_type(a1, a2, a3, a4, a5, a6, a7));
 }
 
 template<class R, class F, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
-    sc_bi::bind_t<R, F, typename sc_bi::list_av_8<A1, A2, A3, A4, A5, A6, A7, A8>::type>
+    _bi::bind_t<R, F, typename _bi::list_av_8<A1, A2, A3, A4, A5, A6, A7, A8>::type>
     SC_BOOST_BIND(F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8)
 {
-    typedef typename sc_bi::list_av_8<A1, A2, A3, A4, A5, A6, A7, A8>::type list_type;
-    return sc_bi::bind_t<R, F, list_type>(f, list_type(a1, a2, a3, a4, a5, a6, a7, a8));
+    typedef typename _bi::list_av_8<A1, A2, A3, A4, A5, A6, A7, A8>::type list_type;
+    return _bi::bind_t<R, F, list_type>(f, list_type(a1, a2, a3, a4, a5, a6, a7, a8));
 }
 
 template<class R, class F, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
-    sc_bi::bind_t<R, F, typename sc_bi::list_av_9<A1, A2, A3, A4, A5, A6, A7, A8, A9>::type>
+    _bi::bind_t<R, F, typename _bi::list_av_9<A1, A2, A3, A4, A5, A6, A7, A8, A9>::type>
     SC_BOOST_BIND(F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9)
 {
-    typedef typename sc_bi::list_av_9<A1, A2, A3, A4, A5, A6, A7, A8, A9>::type list_type;
-    return sc_bi::bind_t<R, F, list_type>(f, list_type(a1, a2, a3, a4, a5, a6, a7, a8, a9));
+    typedef typename _bi::list_av_9<A1, A2, A3, A4, A5, A6, A7, A8, A9>::type list_type;
+    return _bi::bind_t<R, F, list_type>(f, list_type(a1, a2, a3, a4, a5, a6, a7, a8, a9));
 }
 
 // generic function objects, alternative syntax
 
 template<class R, class F>
-    sc_bi::bind_t<R, F, sc_bi::list0>
+    _bi::bind_t<R, F, _bi::list0>
     SC_BOOST_BIND(sc_boost::type<R>, F f)
 {
-    typedef sc_bi::list0 list_type;
-    return sc_bi::bind_t<R, F, list_type> (f, list_type());
+    typedef _bi::list0 list_type;
+    return _bi::bind_t<R, F, list_type> (f, list_type());
 }
 
 template<class R, class F, class A1>
-    sc_bi::bind_t<R, F, typename sc_bi::list_av_1<A1>::type>
+    _bi::bind_t<R, F, typename _bi::list_av_1<A1>::type>
     SC_BOOST_BIND(sc_boost::type<R>, F f, A1 a1)
 {
-    typedef typename sc_bi::list_av_1<A1>::type list_type;
-    return sc_bi::bind_t<R, F, list_type> (f, list_type(a1));
+    typedef typename _bi::list_av_1<A1>::type list_type;
+    return _bi::bind_t<R, F, list_type> (f, list_type(a1));
 }
 
 template<class R, class F, class A1, class A2>
-    sc_bi::bind_t<R, F, typename sc_bi::list_av_2<A1, A2>::type>
+    _bi::bind_t<R, F, typename _bi::list_av_2<A1, A2>::type>
     SC_BOOST_BIND(sc_boost::type<R>, F f, A1 a1, A2 a2)
 {
-    typedef typename sc_bi::list_av_2<A1, A2>::type list_type;
-    return sc_bi::bind_t<R, F, list_type> (f, list_type(a1, a2));
+    typedef typename _bi::list_av_2<A1, A2>::type list_type;
+    return _bi::bind_t<R, F, list_type> (f, list_type(a1, a2));
 }
 
 template<class R, class F, class A1, class A2, class A3>
-    sc_bi::bind_t<R, F, typename sc_bi::list_av_3<A1, A2, A3>::type>
+    _bi::bind_t<R, F, typename _bi::list_av_3<A1, A2, A3>::type>
     SC_BOOST_BIND(sc_boost::type<R>, F f, A1 a1, A2 a2, A3 a3)
 {
-    typedef typename sc_bi::list_av_3<A1, A2, A3>::type list_type;
-    return sc_bi::bind_t<R, F, list_type>(f, list_type(a1, a2, a3));
+    typedef typename _bi::list_av_3<A1, A2, A3>::type list_type;
+    return _bi::bind_t<R, F, list_type>(f, list_type(a1, a2, a3));
 }
 
 template<class R, class F, class A1, class A2, class A3, class A4>
-    sc_bi::bind_t<R, F, typename sc_bi::list_av_4<A1, A2, A3, A4>::type>
+    _bi::bind_t<R, F, typename _bi::list_av_4<A1, A2, A3, A4>::type>
     SC_BOOST_BIND(sc_boost::type<R>, F f, A1 a1, A2 a2, A3 a3, A4 a4)
 {
-    typedef typename sc_bi::list_av_4<A1, A2, A3, A4>::type list_type;
-    return sc_bi::bind_t<R, F, list_type>(f, list_type(a1, a2, a3, a4));
+    typedef typename _bi::list_av_4<A1, A2, A3, A4>::type list_type;
+    return _bi::bind_t<R, F, list_type>(f, list_type(a1, a2, a3, a4));
 }
 
 template<class R, class F, class A1, class A2, class A3, class A4, class A5>
-    sc_bi::bind_t<R, F, typename sc_bi::list_av_5<A1, A2, A3, A4, A5>::type>
+    _bi::bind_t<R, F, typename _bi::list_av_5<A1, A2, A3, A4, A5>::type>
     SC_BOOST_BIND(sc_boost::type<R>, F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5)
 {
-    typedef typename sc_bi::list_av_5<A1, A2, A3, A4, A5>::type list_type;
-    return sc_bi::bind_t<R, F, list_type>(f, list_type(a1, a2, a3, a4, a5));
+    typedef typename _bi::list_av_5<A1, A2, A3, A4, A5>::type list_type;
+    return _bi::bind_t<R, F, list_type>(f, list_type(a1, a2, a3, a4, a5));
 }
 
 template<class R, class F, class A1, class A2, class A3, class A4, class A5, class A6>
-    sc_bi::bind_t<R, F, typename sc_bi::list_av_6<A1, A2, A3, A4, A5, A6>::type>
+    _bi::bind_t<R, F, typename _bi::list_av_6<A1, A2, A3, A4, A5, A6>::type>
     SC_BOOST_BIND(sc_boost::type<R>, F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6)
 {
-    typedef typename sc_bi::list_av_6<A1, A2, A3, A4, A5, A6>::type list_type;
-    return sc_bi::bind_t<R, F, list_type>(f, list_type(a1, a2, a3, a4, a5, a6));
+    typedef typename _bi::list_av_6<A1, A2, A3, A4, A5, A6>::type list_type;
+    return _bi::bind_t<R, F, list_type>(f, list_type(a1, a2, a3, a4, a5, a6));
 }
 
 template<class R, class F, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
-    sc_bi::bind_t<R, F, typename sc_bi::list_av_7<A1, A2, A3, A4, A5, A6, A7>::type>
+    _bi::bind_t<R, F, typename _bi::list_av_7<A1, A2, A3, A4, A5, A6, A7>::type>
     SC_BOOST_BIND(sc_boost::type<R>, F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7)
 {
-    typedef typename sc_bi::list_av_7<A1, A2, A3, A4, A5, A6, A7>::type list_type;
-    return sc_bi::bind_t<R, F, list_type>(f, list_type(a1, a2, a3, a4, a5, a6, a7));
+    typedef typename _bi::list_av_7<A1, A2, A3, A4, A5, A6, A7>::type list_type;
+    return _bi::bind_t<R, F, list_type>(f, list_type(a1, a2, a3, a4, a5, a6, a7));
 }
 
 template<class R, class F, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
-    sc_bi::bind_t<R, F, typename sc_bi::list_av_8<A1, A2, A3, A4, A5, A6, A7, A8>::type>
+    _bi::bind_t<R, F, typename _bi::list_av_8<A1, A2, A3, A4, A5, A6, A7, A8>::type>
     SC_BOOST_BIND(sc_boost::type<R>, F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8)
 {
-    typedef typename sc_bi::list_av_8<A1, A2, A3, A4, A5, A6, A7, A8>::type list_type;
-    return sc_bi::bind_t<R, F, list_type>(f, list_type(a1, a2, a3, a4, a5, a6, a7, a8));
+    typedef typename _bi::list_av_8<A1, A2, A3, A4, A5, A6, A7, A8>::type list_type;
+    return _bi::bind_t<R, F, list_type>(f, list_type(a1, a2, a3, a4, a5, a6, a7, a8));
 }
 
 template<class R, class F, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
-    sc_bi::bind_t<R, F, typename sc_bi::list_av_9<A1, A2, A3, A4, A5, A6, A7, A8, A9>::type>
+    _bi::bind_t<R, F, typename _bi::list_av_9<A1, A2, A3, A4, A5, A6, A7, A8, A9>::type>
     SC_BOOST_BIND(sc_boost::type<R>, F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9)
 {
-    typedef typename sc_bi::list_av_9<A1, A2, A3, A4, A5, A6, A7, A8, A9>::type list_type;
-    return sc_bi::bind_t<R, F, list_type>(f, list_type(a1, a2, a3, a4, a5, a6, a7, a8, a9));
+    typedef typename _bi::list_av_9<A1, A2, A3, A4, A5, A6, A7, A8, A9>::type list_type;
+    return _bi::bind_t<R, F, list_type>(f, list_type(a1, a2, a3, a4, a5, a6, a7, a8, a9));
 }
 
 #if !defined(SC_BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(SC_BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
@@ -1388,83 +1388,83 @@ template<class R, class F, class A1, class A2, class A3, class A4, class A5, cla
 // adaptable function objects
 
 template<class F>
-    sc_bi::bind_t<sc_bi::unspecified, F, sc_bi::list0>
+    _bi::bind_t<_bi::unspecified, F, _bi::list0>
     SC_BOOST_BIND(F f)
 {
-    typedef sc_bi::list0 list_type;
-    return sc_bi::bind_t<sc_bi::unspecified, F, list_type> (f, list_type());
+    typedef _bi::list0 list_type;
+    return _bi::bind_t<_bi::unspecified, F, list_type> (f, list_type());
 }
 
 template<class F, class A1>
-    sc_bi::bind_t<sc_bi::unspecified, F, typename sc_bi::list_av_1<A1>::type>
+    _bi::bind_t<_bi::unspecified, F, typename _bi::list_av_1<A1>::type>
     SC_BOOST_BIND(F f, A1 a1)
 {
-    typedef typename sc_bi::list_av_1<A1>::type list_type;
-    return sc_bi::bind_t<sc_bi::unspecified, F, list_type> (f, list_type(a1));
+    typedef typename _bi::list_av_1<A1>::type list_type;
+    return _bi::bind_t<_bi::unspecified, F, list_type> (f, list_type(a1));
 }
 
 template<class F, class A1, class A2>
-    sc_bi::bind_t<sc_bi::unspecified, F, typename sc_bi::list_av_2<A1, A2>::type>
+    _bi::bind_t<_bi::unspecified, F, typename _bi::list_av_2<A1, A2>::type>
     SC_BOOST_BIND(F f, A1 a1, A2 a2)
 {
-    typedef typename sc_bi::list_av_2<A1, A2>::type list_type;
-    return sc_bi::bind_t<sc_bi::unspecified, F, list_type> (f, list_type(a1, a2));
+    typedef typename _bi::list_av_2<A1, A2>::type list_type;
+    return _bi::bind_t<_bi::unspecified, F, list_type> (f, list_type(a1, a2));
 }
 
 template<class F, class A1, class A2, class A3>
-    sc_bi::bind_t<sc_bi::unspecified, F, typename sc_bi::list_av_3<A1, A2, A3>::type>
+    _bi::bind_t<_bi::unspecified, F, typename _bi::list_av_3<A1, A2, A3>::type>
     SC_BOOST_BIND(F f, A1 a1, A2 a2, A3 a3)
 {
-    typedef typename sc_bi::list_av_3<A1, A2, A3>::type list_type;
-    return sc_bi::bind_t<sc_bi::unspecified, F, list_type>(f, list_type(a1, a2, a3));
+    typedef typename _bi::list_av_3<A1, A2, A3>::type list_type;
+    return _bi::bind_t<_bi::unspecified, F, list_type>(f, list_type(a1, a2, a3));
 }
 
 template<class F, class A1, class A2, class A3, class A4>
-    sc_bi::bind_t<sc_bi::unspecified, F, typename sc_bi::list_av_4<A1, A2, A3, A4>::type>
+    _bi::bind_t<_bi::unspecified, F, typename _bi::list_av_4<A1, A2, A3, A4>::type>
     SC_BOOST_BIND(F f, A1 a1, A2 a2, A3 a3, A4 a4)
 {
-    typedef typename sc_bi::list_av_4<A1, A2, A3, A4>::type list_type;
-    return sc_bi::bind_t<sc_bi::unspecified, F, list_type>(f, list_type(a1, a2, a3, a4));
+    typedef typename _bi::list_av_4<A1, A2, A3, A4>::type list_type;
+    return _bi::bind_t<_bi::unspecified, F, list_type>(f, list_type(a1, a2, a3, a4));
 }
 
 template<class F, class A1, class A2, class A3, class A4, class A5>
-    sc_bi::bind_t<sc_bi::unspecified, F, typename sc_bi::list_av_5<A1, A2, A3, A4, A5>::type>
+    _bi::bind_t<_bi::unspecified, F, typename _bi::list_av_5<A1, A2, A3, A4, A5>::type>
     SC_BOOST_BIND(F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5)
 {
-    typedef typename sc_bi::list_av_5<A1, A2, A3, A4, A5>::type list_type;
-    return sc_bi::bind_t<sc_bi::unspecified, F, list_type>(f, list_type(a1, a2, a3, a4, a5));
+    typedef typename _bi::list_av_5<A1, A2, A3, A4, A5>::type list_type;
+    return _bi::bind_t<_bi::unspecified, F, list_type>(f, list_type(a1, a2, a3, a4, a5));
 }
 
 template<class F, class A1, class A2, class A3, class A4, class A5, class A6>
-    sc_bi::bind_t<sc_bi::unspecified, F, typename sc_bi::list_av_6<A1, A2, A3, A4, A5, A6>::type>
+    _bi::bind_t<_bi::unspecified, F, typename _bi::list_av_6<A1, A2, A3, A4, A5, A6>::type>
     SC_BOOST_BIND(F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6)
 {
-    typedef typename sc_bi::list_av_6<A1, A2, A3, A4, A5, A6>::type list_type;
-    return sc_bi::bind_t<sc_bi::unspecified, F, list_type>(f, list_type(a1, a2, a3, a4, a5, a6));
+    typedef typename _bi::list_av_6<A1, A2, A3, A4, A5, A6>::type list_type;
+    return _bi::bind_t<_bi::unspecified, F, list_type>(f, list_type(a1, a2, a3, a4, a5, a6));
 }
 
 template<class F, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
-    sc_bi::bind_t<sc_bi::unspecified, F, typename sc_bi::list_av_7<A1, A2, A3, A4, A5, A6, A7>::type>
+    _bi::bind_t<_bi::unspecified, F, typename _bi::list_av_7<A1, A2, A3, A4, A5, A6, A7>::type>
     SC_BOOST_BIND(F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7)
 {
-    typedef typename sc_bi::list_av_7<A1, A2, A3, A4, A5, A6, A7>::type list_type;
-    return sc_bi::bind_t<sc_bi::unspecified, F, list_type>(f, list_type(a1, a2, a3, a4, a5, a6, a7));
+    typedef typename _bi::list_av_7<A1, A2, A3, A4, A5, A6, A7>::type list_type;
+    return _bi::bind_t<_bi::unspecified, F, list_type>(f, list_type(a1, a2, a3, a4, a5, a6, a7));
 }
 
 template<class F, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
-    sc_bi::bind_t<sc_bi::unspecified, F, typename sc_bi::list_av_8<A1, A2, A3, A4, A5, A6, A7, A8>::type>
+    _bi::bind_t<_bi::unspecified, F, typename _bi::list_av_8<A1, A2, A3, A4, A5, A6, A7, A8>::type>
     SC_BOOST_BIND(F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8)
 {
-    typedef typename sc_bi::list_av_8<A1, A2, A3, A4, A5, A6, A7, A8>::type list_type;
-    return sc_bi::bind_t<sc_bi::unspecified, F, list_type>(f, list_type(a1, a2, a3, a4, a5, a6, a7, a8));
+    typedef typename _bi::list_av_8<A1, A2, A3, A4, A5, A6, A7, A8>::type list_type;
+    return _bi::bind_t<_bi::unspecified, F, list_type>(f, list_type(a1, a2, a3, a4, a5, a6, a7, a8));
 }
 
 template<class F, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
-    sc_bi::bind_t<sc_bi::unspecified, F, typename sc_bi::list_av_9<A1, A2, A3, A4, A5, A6, A7, A8, A9>::type>
+    _bi::bind_t<_bi::unspecified, F, typename _bi::list_av_9<A1, A2, A3, A4, A5, A6, A7, A8, A9>::type>
     SC_BOOST_BIND(F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9)
 {
-    typedef typename sc_bi::list_av_9<A1, A2, A3, A4, A5, A6, A7, A8, A9>::type list_type;
-    return sc_bi::bind_t<sc_bi::unspecified, F, list_type>(f, list_type(a1, a2, a3, a4, a5, a6, a7, a8, a9));
+    typedef typename _bi::list_av_9<A1, A2, A3, A4, A5, A6, A7, A8, A9>::type list_type;
+    return _bi::bind_t<_bi::unspecified, F, list_type>(f, list_type(a1, a2, a3, a4, a5, a6, a7, a8, a9));
 }
 
 #endif // !defined(SC_BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(SC_BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
@@ -1567,7 +1567,7 @@ template<class F, class A1, class A2, class A3, class A4, class A5, class A6, cl
 
 #if defined(__GNUC__) && (__GNUC__ == 2)
 
-namespace sc_bi
+namespace _bi
 {
 
 template<class T> struct add_cref
@@ -1585,26 +1585,26 @@ template<> struct add_cref<void>
     typedef void type;
 };
 
-} // namespace sc_bi
+} // namespace _bi
 
 template<class R, class T, class A1>
-sc_bi::bind_t< typename sc_bi::add_cref<R>::type, sc_mfi::dm<R, T>, typename sc_bi::list_av_1<A1>::type >
+_bi::bind_t< typename _bi::add_cref<R>::type, _mfi::dm<R, T>, typename _bi::list_av_1<A1>::type >
     SC_BOOST_BIND(R T::*f, A1 a1)
 {
-    typedef sc_mfi::dm<R, T> F;
-    typedef typename sc_bi::list_av_1<A1>::type list_type;
-    return sc_bi::bind_t<typename sc_bi::add_cref<R>::type, F, list_type>(F(f), list_type(a1));
+    typedef _mfi::dm<R, T> F;
+    typedef typename _bi::list_av_1<A1>::type list_type;
+    return _bi::bind_t<typename _bi::add_cref<R>::type, F, list_type>(F(f), list_type(a1));
 }
 
 #else
 
 template<class R, class T, class A1>
-sc_bi::bind_t< R const &, sc_mfi::dm<R, T>, typename sc_bi::list_av_1<A1>::type >
+_bi::bind_t< R const &, _mfi::dm<R, T>, typename _bi::list_av_1<A1>::type >
     SC_BOOST_BIND(R T::*f, A1 a1)
 {
-    typedef sc_mfi::dm<R, T> F;
-    typedef typename sc_bi::list_av_1<A1>::type list_type;
-    return sc_bi::bind_t<R const &, F, list_type>(F(f), list_type(a1));
+    typedef _mfi::dm<R, T> F;
+    typedef typename _bi::list_av_1<A1>::type list_type;
+    return _bi::bind_t<R const &, F, list_type>(F(f), list_type(a1));
 }
 
 #endif
@@ -1612,12 +1612,12 @@ sc_bi::bind_t< R const &, sc_mfi::dm<R, T>, typename sc_bi::list_av_1<A1>::type 
 */
 
 template<class R, class T, class A1>
-sc_bi::bind_t< R, sc_mfi::dm<R, T>, typename sc_bi::list_av_1<A1>::type >
+_bi::bind_t< R, _mfi::dm<R, T>, typename _bi::list_av_1<A1>::type >
     SC_BOOST_BIND(R T::*f, A1 a1)
 {
-    typedef sc_mfi::dm<R, T> F;
-    typedef typename sc_bi::list_av_1<A1>::type list_type;
-    return sc_bi::bind_t<R, F, list_type>( F(f), list_type(a1) );
+    typedef _mfi::dm<R, T> F;
+    typedef typename _bi::list_av_1<A1>::type list_type;
+    return _bi::bind_t<R, F, list_type>( F(f), list_type(a1) );
 }
 
 } // sc_namespace sc_boost

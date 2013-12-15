@@ -1,0 +1,118 @@
+## ****************************************************************************
+##
+##  The following code is derived, directly or indirectly, from the SystemC
+##  source code Copyright (c) 1996-2014 by all Contributors.
+##  All Rights reserved.
+##
+##  The contents of this file are subject to the restrictions and limitations
+##  set forth in the SystemC Open Source License (the "License");
+##  You may not use this file except in compliance with such restrictions and
+##  limitations. You may obtain instructions on how to receive a copy of the
+##  License at http://www.accellera.org/. Software distributed by Contributors
+##  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
+##  ANY KIND, either express or implied. See the License for the specific
+##  language governing rights and limitations under the License.
+##
+## ****************************************************************************
+##
+##  test.am --
+##  Included from a Makefile.am to provide example-specific information
+##
+##  Original Author: Philipp A. Hartmann, OFFIS, 2013-05-20
+##
+## ****************************************************************************
+##
+##  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+##  changes you are making here.
+##
+##      Name, Affiliation, Date:
+##  Description of Modification:
+##
+## ***************************************************************************
+
+## Generic example setup
+## (should be kept in sync among all test.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##      included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D%: risc_cpu
+##   %C%: risc_cpu
+
+examples_TESTS += risc_cpu/test
+
+risc_cpu_test_CPPFLAGS = \
+	$(AM_CPPFLAGS)
+
+risc_cpu_test_SOURCES = \
+	$(risc_cpu_H_FILES) \
+	$(risc_cpu_CXX_FILES)
+
+examples_BUILD += \
+	$(risc_cpu_BUILD)
+
+examples_CLEAN += \
+	risc_cpu/run.log \
+	risc_cpu/expexted_trimmed.log \
+	risc_cpu/run_trimmed.log \
+	risc_cpu/diff.log
+
+examples_FILES += \
+	$(risc_cpu_H_FILES) \
+	$(risc_cpu_CXX_FILES) \
+	$(risc_cpu_BUILD) \
+	$(risc_cpu_EXTRA)
+
+## example-specific details
+
+risc_cpu_H_FILES = \
+	risc_cpu/bios.h \
+	risc_cpu/dcache.h \
+	risc_cpu/decode.h \
+	risc_cpu/directive.h \
+	risc_cpu/exec.h \
+	risc_cpu/fetch.h \
+	risc_cpu/floating.h \
+	risc_cpu/icache.h \
+	risc_cpu/mmxu.h \
+	risc_cpu/paging.h \
+	risc_cpu/pic.h
+
+risc_cpu_CXX_FILES = \
+	risc_cpu/bios.cpp \
+	risc_cpu/dcache.cpp \
+	risc_cpu/decode.cpp \
+	risc_cpu/exec.cpp \
+	risc_cpu/fetch.cpp \
+	risc_cpu/floating.cpp \
+	risc_cpu/icache.cpp \
+	risc_cpu/main.cpp \
+	risc_cpu/mmxu.cpp \
+	risc_cpu/paging.cpp \
+	risc_cpu/pic.cpp
+
+risc_cpu_BUILD = \
+	risc_cpu/bios.img \
+	risc_cpu/dcache.img \
+	risc_cpu/icache.img \
+	risc_cpu/printout.img \
+	risc_cpu/program.img \
+	risc_cpu/register.img
+
+risc_cpu_EXTRA = \
+	risc_cpu/assembler.pl \
+	risc_cpu/abc.asm \
+	risc_cpu/test.asm \
+	risc_cpu/test1.asm \
+	risc_cpu/README \
+	risc_cpu/README_TYPESCRIPT \
+	risc_cpu/risc_cpu.vcproj \
+	risc_cpu/Makefile
+
+#risc_cpu_FILTER = 
+#export risc_cpu_FILTER
+
+## Taf!
+## :vim:ft=automake:

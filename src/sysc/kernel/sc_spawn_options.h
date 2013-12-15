@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2011 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 3.0 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -41,44 +41,7 @@ class sc_port_base;
 class sc_interface;
 class sc_event_finder;
 class sc_process_b;
-
-// +============================================================================
-// | CLASS sc_spawn_reset_base - Class to do a generic access to an 
-// |                             sc_spawn_rest object instance
-// +===========================================================================
-class sc_spawn_reset_base
-{
-  public:
-    sc_spawn_reset_base( bool async, bool level ) : 
-	m_async( async ), m_level(level)
-    {}
-    virtual ~sc_spawn_reset_base() {}
-    virtual void specify_reset() = 0;
-
-  protected:
-    bool m_async;   // = true if async reset.
-    bool m_level;   // level indicating reset.
-};
-
-// +============================================================================
-// | CLASS sc_spawn_reset<SOURCE> - Reset specification for sc_spawn_options.
-// +===========================================================================
-template<typename SOURCE>
-class sc_spawn_reset : public sc_spawn_reset_base
-{
-  public:
-    sc_spawn_reset( bool async, const SOURCE& source, bool level ) :
-	sc_spawn_reset_base(async, level), m_source(source)
-    {}
-    virtual ~sc_spawn_reset() {}
-    virtual void specify_reset()
-    {
-	sc_reset::reset_signal_is( m_async, m_source, m_level );
-    }
-
-  protected:
-    const SOURCE& m_source; // source of reset signal.
-};
+class sc_spawn_reset_base;
 
 //=============================================================================
 // CLASS sc_spawn_options
@@ -96,64 +59,21 @@ class sc_spawn_options {
         m_sensitive_port_bases(), m_spawn_method(false), m_stack_size(0)
         { }
 
-    ~sc_spawn_options()
-    {
-        size_t resets_n = m_resets.size();
-	for ( size_t reset_i = 0; reset_i < resets_n; reset_i++ )
-	    delete m_resets[reset_i];
-    }
+    ~sc_spawn_options();
 
-    void async_reset_signal_is( const sc_in<bool>& port, bool level )
-    {
-        m_resets.push_back(
-	    new sc_spawn_reset<sc_in<bool> >(true, port, level) );
-    }
+    void async_reset_signal_is( const sc_in<bool>&,           bool level );
+    void async_reset_signal_is( const sc_inout<bool>&,        bool level );
+    void async_reset_signal_is( const sc_out<bool>&,          bool level );
+    void async_reset_signal_is( const sc_signal_in_if<bool>&, bool level );
 
-    void async_reset_signal_is( const sc_inout<bool>& port, bool level )
-    {
-        m_resets.push_back(
-	    new sc_spawn_reset<sc_inout<bool> >(true, port, level) );
-    }
-
-    void async_reset_signal_is( const sc_out<bool>& port, bool level )
-    {
-        m_resets.push_back(
-	    new sc_spawn_reset<sc_out<bool> >(true, port, level) );
-    }
-
-    void async_reset_signal_is( const sc_signal_in_if<bool>& port, bool level )
-    {
-        m_resets.push_back(
-	    new sc_spawn_reset<sc_signal_in_if<bool> >(true, port, level) );
-    }
+    void reset_signal_is( const sc_in<bool>&,           bool level );
+    void reset_signal_is( const sc_inout<bool>&,        bool level );
+    void reset_signal_is( const sc_out<bool>&,          bool level );
+    void reset_signal_is( const sc_signal_in_if<bool>&, bool level );
 
     void dont_initialize()   { m_dont_initialize = true; }
 
     bool is_method() const   { return m_spawn_method; }
-
-    void reset_signal_is( const sc_in<bool>& port, bool level )
-    {
-        m_resets.push_back(
-	    new sc_spawn_reset<sc_in<bool> >(false, port, level) );
-    }
-
-    void reset_signal_is( const sc_inout<bool>& port, bool level )
-    {
-        m_resets.push_back(
-	    new sc_spawn_reset<sc_inout<bool> >(false, port, level) );
-    }
-
-    void reset_signal_is( const sc_out<bool>& port, bool level )
-    {
-        m_resets.push_back(
-	    new sc_spawn_reset<sc_out<bool> >(false, port, level) );
-    }
-
-    void reset_signal_is( const sc_signal_in_if<bool>& port, bool level )
-    {
-        m_resets.push_back(
-	    new sc_spawn_reset<sc_signal_in_if<bool> >(false, port, level) );
-    }
 
     void set_stack_size(int stack_size) { m_stack_size = stack_size; }
 
@@ -175,15 +95,7 @@ class sc_spawn_options {
     void spawn_method()                 { m_spawn_method = true; }
 
   protected:
-    void specify_resets() const
-    {
-        size_t resets_n; // number of reset specifications to process.
-	resets_n = m_resets.size();
-	for ( size_t reset_i = 0; reset_i < resets_n; reset_i++ )
-	{
-	    m_resets[reset_i]->specify_reset();
-	}
-    }
+    void specify_resets() const;
 
   private:
     sc_spawn_options( const sc_spawn_options& );

@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2006 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.4 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -74,9 +74,6 @@ namespace sc_core {
 class sc_time;
 
 template <class T> class sc_signal_in_if;
-
-// Write error message
-void put_error_message(const char* msg, bool just_warning);
 
 
 // Base class for all kinds of trace files. 
@@ -381,13 +378,18 @@ sc_write_comment( sc_trace_file* tf, const std::string& comment )
 
 void tprintf( sc_trace_file* tf,  const char* format, ... );
 
+// ----------------------------------------------------------------------------
+// Create VCD file
+extern sc_trace_file *sc_create_vcd_trace_file(const char* name);
+extern void sc_close_vcd_trace_file( sc_trace_file* tf );
 
-// Convert double time to 64-bit integer
 
-extern void double_to_special_int64( double in,
-				     unsigned* high,
-				     unsigned* low );
+// ----------------------------------------------------------------------------
+// Create WIF file
+extern sc_trace_file *sc_create_wif_trace_file(const char *name);
+extern void sc_close_wif_trace_file( sc_trace_file* tf );
 
 } // namespace sc_core
 
-#endif
+#endif // SC_TRACE_H
+// Taf

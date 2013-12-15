@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2006 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.4 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -107,7 +107,7 @@ void simple_bus::main_action()
   else
     // monitor slave wait states
     if (m_verbose)
-      sb_fprintf(stdout, "%g SLV [%d]\n", sc_time_stamp().to_double(),
+      sb_fprintf(stdout, "%s SLV [%d]\n", sc_time_stamp().to_string().c_str(),
 		 m_current_request->address);
   if (m_current_request)
     handle_request();
@@ -151,8 +151,8 @@ void simple_bus::read(unsigned int unique_priority
 		      , bool lock)
 {
   if (m_verbose)
-    sb_fprintf(stdout, "%g %s : read(%d) @ %x\n",
-	       sc_time_stamp().to_double(), name(), unique_priority, address);
+    sb_fprintf(stdout, "%s %s : read(%d) @ %x\n",
+	       sc_time_stamp().to_string().c_str(), name(), unique_priority, address);
   
   simple_bus_request *request = get_request(unique_priority);
 
@@ -178,8 +178,8 @@ void simple_bus::write(unsigned int unique_priority
 		       , bool lock)
 {
   if (m_verbose) 
-    sb_fprintf(stdout, "%g %s : write(%d) @ %x\n",
-	       sc_time_stamp().to_double(), name(), unique_priority, address);
+    sb_fprintf(stdout, "%s %s : write(%d) @ %x\n",
+	       sc_time_stamp().to_string().c_str(), name(), unique_priority, address);
 
   simple_bus_request *request = get_request(unique_priority);
 
@@ -216,8 +216,8 @@ simple_bus_status simple_bus::burst_read(unsigned int unique_priority
 {
   if (m_verbose) 
   {
-    sb_fprintf(stdout, "%g %s : burst_read(%d) @ %x\n",
-	sc_time_stamp().to_double(), name(), unique_priority, 
+    sb_fprintf(stdout, "%s %s : burst_read(%d) @ %x\n",
+	sc_time_stamp().to_string().c_str(), name(), unique_priority, 
 	start_address);
   }
 	
@@ -246,8 +246,8 @@ simple_bus_status simple_bus::burst_write(unsigned int unique_priority
 					  , bool lock)
 {
   if (m_verbose) 
-    sb_fprintf(stdout, "%g %s : burst_write(%d) @ %x\n",
-	       sc_time_stamp().to_double(), name(), unique_priority, 
+    sb_fprintf(stdout, "%s %s : burst_write(%d) @ %x\n",
+	       sc_time_stamp().to_string().c_str(), name(), unique_priority, 
 	       start_address);
 	
   simple_bus_request *request = get_request(unique_priority);
@@ -283,8 +283,8 @@ simple_bus_status simple_bus::burst_write(unsigned int unique_priority
 void simple_bus::handle_request()
 {
   if (m_verbose)
-      sb_fprintf(stdout, "%g %s Handle Slave(%d)\n",
-		 sc_time_stamp().to_double(), name(), 
+      sb_fprintf(stdout, "%s %s Handle Slave(%d)\n",
+		 sc_time_stamp().to_string().c_str(), name(), 
 		 m_current_request->priority);
 
   m_current_request->status = SIMPLE_BUS_WAIT;
@@ -386,8 +386,8 @@ simple_bus_request * simple_bus::get_next_request()
 	  (request->status == SIMPLE_BUS_WAIT))
 	{
 	  if (m_verbose) 
-	    sb_fprintf(stdout, "%g %s : request (%d) [%s]\n",
-		       sc_time_stamp().to_double(), name(), 
+	    sb_fprintf(stdout, "%s %s : request (%d) [%s]\n",
+		       sc_time_stamp().to_string().c_str(), name(), 
 		       request->priority, simple_bus_status_str[request->status]);
 	  Q.push_back(request);
 	}

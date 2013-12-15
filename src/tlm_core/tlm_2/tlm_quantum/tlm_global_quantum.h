@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2011 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 3.0 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -73,13 +73,9 @@ public:
   sc_core::sc_time compute_local_quantum()
   {
     if (m_global_quantum != sc_core::SC_ZERO_TIME) {
-      const sc_dt::uint64 current = sc_core::sc_time_stamp().value();
-      const sc_dt::uint64 g_quant = m_global_quantum.value();
-      const sc_dt::uint64 tmp = (current/g_quant+sc_dt::uint64(1)) * g_quant;
-      const sc_core::sc_time remainder = sc_core::sc_time(tmp - current,
-                                                          false);
-      return remainder;
-
+      const sc_core::sc_time current = sc_core::sc_time_stamp();
+      const sc_core::sc_time g_quant = m_global_quantum;
+      return g_quant - (current % g_quant);
     } else {
       return sc_core::SC_ZERO_TIME;
     }

@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2011 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 3.0 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -31,6 +31,7 @@
 #include "sysc/utils/sc_iostream.h"
 #include "sysc/utils/sc_report.h"
 #include "sysc/utils/sc_report_handler.h"
+#include "sysc/utils/sc_utils_ids.h"
 #include <vector>
 
 namespace sc_core {
@@ -97,15 +98,24 @@ sc_elab_and_sim( int argc, char* argv[] )
 
     // IF DEPRECATION WARNINGS WERE ISSUED TELL THE USER HOW TO TURN THEM OFF 
 
-    if ( sc_report_handler::get_count("/IEEE_Std_1666/deprecated") > 0 )
+    if ( sc_report_handler::get_count( SC_ID_IEEE_1666_DEPRECATION_ ) > 0 )
     {
-        SC_REPORT_INFO("/IEEE_Std_1666/deprecated",
-          "You can turn off warnings about\n" \
-		  "             IEEE 1666 deprecated features by placing this method " \
-		  "call as the\n" \
-		  "             first statement in your sc_main() function:\n" \
-          "\n  sc_report_handler::set_actions(\"/IEEE_Std_1666/deprecated\", " \
-          "SC_DO_NOTHING);\n\n" );
+        std::stringstream ss;
+
+#       define MSGNL  "\n             "
+#       define CODENL "\n  "
+
+        ss <<
+          "You can turn off warnings about" MSGNL
+          "IEEE 1666 deprecated features by placing this method call" MSGNL
+          "as the first statement in your sc_main() function:\n" CODENL
+          "sc_core::sc_report_handler::set_actions( "
+          "\"" << SC_ID_IEEE_1666_DEPRECATION_ << "\"," CODENL
+          "                                         " /* indent param */
+          "sc_core::SC_DO_NOTHING );"
+          << std::endl;
+
+        SC_REPORT_INFO( SC_ID_IEEE_1666_DEPRECATION_, ss.str().c_str() );
     }
 
     return status;

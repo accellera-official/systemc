@@ -1,0 +1,85 @@
+## ****************************************************************************
+##
+##  The following code is derived, directly or indirectly, from the SystemC
+##  source code Copyright (c) 1996-2014 by all Contributors.
+##  All Rights reserved.
+##
+##  The contents of this file are subject to the restrictions and limitations
+##  set forth in the SystemC Open Source License (the "License");
+##  You may not use this file except in compliance with such restrictions and
+##  limitations. You may obtain instructions on how to receive a copy of the
+##  License at http://www.accellera.org/. Software distributed by Contributors
+##  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
+##  ANY KIND, either express or implied. See the License for the specific
+##  language governing rights and limitations under the License.
+##
+## ****************************************************************************
+##
+##  test.am --
+##  Included from a Makefile.am to provide example-specific information
+##
+##  Original Author: Philipp A. Hartmann, OFFIS, 2013-05-20
+##
+## ****************************************************************************
+##
+##  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+##  changes you are making here.
+##
+##      Name, Affiliation, Date:
+##  Description of Modification:
+##
+## ***************************************************************************
+
+## Generic example setup
+## (should be kept in sync among all test.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##      included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D%: simple_perf
+##   %C%: simple_perf
+
+examples_TESTS += simple_perf/test
+
+simple_perf_test_CPPFLAGS = \
+	$(AM_CPPFLAGS)
+
+simple_perf_test_SOURCES = \
+	$(simple_perf_H_FILES) \
+	$(simple_perf_CXX_FILES)
+
+examples_BUILD += \
+	$(simple_perf_BUILD)
+
+examples_CLEAN += \
+	simple_perf/run.log \
+	simple_perf/expexted_trimmed.log \
+	simple_perf/run_trimmed.log \
+	simple_perf/diff.log
+
+examples_FILES += \
+	$(simple_perf_H_FILES) \
+	$(simple_perf_CXX_FILES) \
+	$(simple_perf_BUILD) \
+	$(simple_perf_EXTRA)
+
+## example-specific details
+
+simple_perf_H_FILES =
+
+simple_perf_CXX_FILES = \
+	simple_perf/simple_perf.cpp
+
+simple_perf_BUILD =
+
+simple_perf_EXTRA = \
+	simple_perf/simple_perf.vcproj \
+	simple_perf/Makefile
+
+#simple_perf_FILTER = 
+#export simple_perf_FILTER
+
+## Taf!
+## :vim:ft=automake:

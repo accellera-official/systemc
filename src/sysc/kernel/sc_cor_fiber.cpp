@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2011 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 3.0 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -24,8 +24,11 @@
  CHANGE LOG APPEARS AT THE END OF THE FILE
  *****************************************************************************/
 
-#ifdef WIN32
+#if defined(_WIN32) || defined(WIN32) || defined(WIN64)
 
+#ifndef SC_INCLUDE_WINDOWS_H
+#  define SC_INCLUDE_WINDOWS_H // include Windows.h, if needed
+#endif
 
 #include "sysc/kernel/sc_cor_fiber.h"
 #include "sysc/kernel/sc_simcontext.h"
@@ -56,7 +59,7 @@ static sc_cor_fiber* curr_cor;
 // ----------------------------------------------------------------------------
 //  CLASS : sc_cor_fiber
 //
-//  Coroutine class implemented with QuickThreads.
+//  Coroutine class implemented with Windows fibers.
 // ----------------------------------------------------------------------------
 
 // destructor
@@ -64,11 +67,9 @@ static sc_cor_fiber* curr_cor;
 sc_cor_fiber::~sc_cor_fiber()
 {
     if( m_fiber != 0 ) {
-#     ifdef WIN32
       PVOID cur_fiber = GetCurrentFiber();
       if (m_fiber != cur_fiber)
-#     endif
-	DeleteFiber( m_fiber );
+         DeleteFiber( m_fiber );
     }
 }
 

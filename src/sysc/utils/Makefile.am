@@ -1,14 +1,14 @@
 ## ****************************************************************************
 ##
 ##  The following code is derived, directly or indirectly, from the SystemC
-##  source code Copyright (c) 1996-2005 by all Contributors.
+##  source code Copyright (c) 1996-2014 by all Contributors.
 ##  All Rights reserved.
 ##
 ##  The contents of this file are subject to the restrictions and limitations
-##  set forth in the SystemC Open Source License Version 2.4 (the "License");
+##  set forth in the SystemC Open Source License (the "License");
 ##  You may not use this file except in compliance with such restrictions and
 ##  limitations. You may obtain instructions on how to receive a copy of the
-##  License at http://www.systemc.org/. Software distributed by Contributors
+##  License at http://www.accellera.org/. Software distributed by Contributors
 ##  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
 ##  ANY KIND, either express or implied. See the License for the specific
 ##  language governing rights and limitations under the License.
@@ -52,8 +52,6 @@ H_FILES = \
 NO_H_FILES = \
 	sc_stop_here.h
 
-noinst_HEADERS = $(H_FILES)
-
 CXX_FILES = \
 	sc_hash.cpp \
 	sc_list.cpp \
@@ -66,24 +64,9 @@ CXX_FILES = \
 	sc_utils_ids.cpp \
 	sc_vector.cpp
 
-NO_CXX_FILES =
+localincludedir = $(includedir)/sysc/utils
+nobase_localinclude_HEADERS = $(H_FILES)
 
-libutils_la_SOURCES = $(H_FILES) $(CXX_FILES)
-
-INCLUDE_DIR = $(prefix)/include/sysc/utils
-
-install-data-local:
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(INCLUDE_DIR)
-	for file in $(noinst_HEADERS); do \
-	  $(INSTALL_DATA) $(srcdir)/$$file $(INCLUDE_DIR)/$$file; \
-	done
-
-uninstall-local:
-	@$(NORMAL_UNINSTALL)
-	for file in $(noinst_HEADERS); do \
-	  rm -f $(INCLUDE_DIR)/$$file; \
-	done
-	-rmdir $(INCLUDE_DIR)
+libutils_la_SOURCES = $(NO_H_FILES) $(CXX_FILES)
 
 ## Taf!

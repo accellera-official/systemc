@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2011 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 3.0 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -71,49 +71,26 @@ sc_abs( const T& a )
 
 namespace sc_core {
 
+// token stringification
 
-#if defined(__GNUC__) && defined(USE_RTTI)
-#define HAVE_CAST_OPERATORS
-#endif
-
-
-#if defined(__GNUC__)
-// 10.3.5 - Some compilers (e.g. K&A C++) do not support the
-// construct in which a virtual function defined in a subclass returns
-// a pointer or reference to a class D whereas the declaration of the
-// same virtual function in the base class returns a pointer or
-// reference to a base class B of D.
-#define ANSI_VIRTUAL_RETURN_INHERITED_TYPE
-#endif
+#define SC_STRINGIFY_HELPER_( Arg ) \
+  SC_STRINGIFY_HELPER_DEFERRED_( Arg )
+#define SC_STRINGIFY_HELPER_DEFERRED_( Arg ) \
+  SC_STRINGIFY_HELPER_MORE_DEFERRED_( Arg )
+#define SC_STRINGIFY_HELPER_MORE_DEFERRED_( Arg ) \
+  #Arg 
 
 
-/*
- *  Note that sc_get_curr_simcontext() may also be a member
- *  of sc_module. The idea is that if we are inside an sc_module,
- *  then its associated simcontext should always be the current
- *  simcontext.
- */
+// token concatenation
 
-#define W_BEGIN                                                               \
-    do {                                                                      \
-        sc_watch __aux_watch( sc_get_curr_simcontext() );
-
-#define W_DO                                                                  \
-        try {                                                                 \
-            __watching_first( __aux_watch.cthread_h );
-
-#define W_ESCAPE                                                              \
-        }                                                                     \
-        catch( int sc_level ) {                                               \
-            __sanitycheck_watchlists( __aux_watch.cthread_h );                \
-            if( sc_level < __watch_level( __aux_watch.cthread_h ) ) {         \
-                throw sc_level;                                               \
-            }
-
-#define W_END                                                                 \
-        }                                                                     \
-    } while( false );
-
+#define SC_CONCAT_HELPER_( a, b ) \
+  SC_CONCAT_HELPER_DEFERRED_( a, b )
+#define SC_CONCAT_HELPER_DEFERRED_( a, b ) \
+  SC_CONCAT_HELPER_MORE_DEFERRED_( a,b )
+#define SC_CONCAT_HELPER_MORE_DEFERRED_( a, b ) \
+  a ## b
+#define SC_CONCAT_UNDERSCORE_( a, b ) \
+  SC_CONCAT_HELPER_( a, SC_CONCAT_HELPER_( _, b ) )
 
 /*
  *  These help debugging --
@@ -121,16 +98,16 @@ namespace sc_core {
  */
 
 #define WAIT()                                                                \
-    sc_set_location( __FILE__, __LINE__ );                                    \
-    wait()
+    ::sc_core::sc_set_location( __FILE__, __LINE__ );                         \
+    ::sc_core::wait()
 
 #define WAITN(n)                                                              \
-    sc_set_location( __FILE__, __LINE__ );                                    \
-    wait(n)
+    ::sc_core::sc_set_location( __FILE__, __LINE__ );                         \
+    ::sc_core::wait(n)
 
-#define WAIT_UNTIL(expr)                                                    \
-    sc_set_location( __FILE__, __LINE__ );                                    \
-    do { wait(); } while( !(expr) )
+#define WAIT_UNTIL(expr)                                                      \
+    ::sc_core::sc_set_location( __FILE__, __LINE__ );                         \
+    do { ::sc_core::wait(); } while( !(expr) )
 
 } // namespace sc_core
 

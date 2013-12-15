@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2011 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 3.0 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -26,6 +26,7 @@
 
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_module.h"
+#include "sysc/kernel/sc_object_int.h"
 #include "sysc/kernel/sc_method_process.h"
 #include "sysc/kernel/sc_thread_process.h"
 #include "sysc/communication/sc_communication_ids.h"
@@ -554,11 +555,9 @@ sc_port_base::complete_binding()
 void
 sc_port_base::construction_done()
 {
-    sc_module* parent = DCAST<sc_module*>( get_parent_object() );
-    sc_assert( parent );
-    simcontext()->hierarchy_push( parent );
+    sc_module* parent = static_cast<sc_module*>( get_parent_object() );
+    sc_object::hierarchy_scope scope( parent );
     before_end_of_elaboration();
-    simcontext()->hierarchy_pop();
 }
 
 void
@@ -567,31 +566,26 @@ sc_port_base::elaboration_done()
     assert( m_bind_info != 0 && m_bind_info->complete );
     delete m_bind_info;
     m_bind_info = 0;
-    sc_module* parent = DCAST<sc_module*>( get_parent_object() );
-    sc_assert( parent );
-    simcontext()->hierarchy_push( parent );
+
+    sc_module* parent = static_cast<sc_module*>( get_parent_object() );
+    sc_object::hierarchy_scope scope( parent );
     end_of_elaboration();
-    simcontext()->hierarchy_pop();
 }
 
 void
 sc_port_base::start_simulation()
 {
-    sc_module* parent = DCAST<sc_module*>( get_parent_object() );
-    sc_assert( parent );
-    simcontext()->hierarchy_push( parent );
+    sc_module* parent = static_cast<sc_module*>( get_parent_object() );
+    sc_object::hierarchy_scope scope( parent );
     start_of_simulation();
-    simcontext()->hierarchy_pop();
 }
 
 void
 sc_port_base::simulation_done()
 {
-    sc_module* parent = DCAST<sc_module*>( get_parent_object() );
-    sc_assert( parent );
-    simcontext()->hierarchy_push( parent );
+    sc_module* parent = static_cast<sc_module*>( get_parent_object() );
+    sc_object::hierarchy_scope scope( parent );
     end_of_simulation();
-    simcontext()->hierarchy_pop();
 }
 
 

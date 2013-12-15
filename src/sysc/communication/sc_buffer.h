@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2011 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 3.0 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -39,7 +39,7 @@ namespace sc_core {
 //  The sc_buffer<T> primitive channel class.
 // ----------------------------------------------------------------------------
 
-template< typename T, sc_writer_policy POL = SC_ONE_WRITER >
+template< typename T, sc_writer_policy POL = SC_DEFAULT_WRITER_POLICY >
 class sc_buffer
 : public sc_signal<T,POL>
 {
@@ -62,6 +62,9 @@ public:
 	: base_type( name_ )
 	{}
 
+    sc_buffer( const char* name_, const T& initial_value_ )
+      : base_type( name_, initial_value_ )
+    {}
 
     // interface methods
 
@@ -117,10 +120,7 @@ void
 sc_buffer<T,POL>::update()
 {
     base_type::policy_type::update();
-    this->m_cur_val = this->m_new_val;
-    if ( base_type::m_change_event_p )
-        base_type::m_change_event_p->notify(SC_ZERO_TIME);
-    this->m_change_stamp = base_type::simcontext()->change_stamp();
+    base_type::do_update();
 }
 
 } // namespace sc_core

@@ -4,11 +4,15 @@
 	Version="8.00"
 	Name="SystemC"
 	ProjectGUID="{86DF4B8C-CF94-4EA8-B529-78997F0F30A7}"
+	RootNamespace="SystemC"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
 		<Platform
 			Name="Win32"
+		/>
+		<Platform
+			Name="x64"
 		/>
 	</Platforms>
 	<ToolFiles>
@@ -52,8 +56,80 @@
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"
-				DebugInformationFormat="4"
+				DebugInformationFormat="3"
 				DisableSpecificWarnings="4244;4996"
+				UndefinePreprocessorDefinitions="interface"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+				OutputFile="$(OutDir)/SystemC.lib"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Debug|x64"
+			OutputDirectory="$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			ConfigurationType="4"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalOptions="/vmg"
+				Optimization="0"
+				AdditionalIncludeDirectories="../../src"
+				PreprocessorDefinitions="WIN64;_DEBUG;_LIB;SC_INCLUDE_FX"
+				IgnoreStandardIncludePath="false"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="1"
+				DisableLanguageExtensions="false"
+				RuntimeTypeInfo="true"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="3"
+				DisableSpecificWarnings="4244;4267;4996"
 				UndefinePreprocessorDefinitions="interface"
 			/>
 			<Tool
@@ -150,6 +226,72 @@
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
+		<Configuration
+			Name="Release|x64"
+			OutputDirectory="$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			ConfigurationType="4"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalOptions="/vmg"
+				AdditionalIncludeDirectories="../../src"
+				PreprocessorDefinitions="WIN64;NDEBUG;_LIB;SC_INCLUDE_FX"
+				RuntimeLibrary="0"
+				RuntimeTypeInfo="true"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="3"
+				DisableSpecificWarnings="4244;4267;4996"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+				OutputFile="$(OutDir)/SystemC.lib"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
 	</Configurations>
 	<References>
 	</References>
@@ -181,14 +323,6 @@
 			</File>
 			<File
 				RelativePath="..\..\src\sysc\kernel\sc_cor_fiber.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\sysc\kernel\sc_cor_pthread.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\sysc\kernel\sc_cor_qt.cpp"
 				>
 			</File>
 			<File
@@ -344,6 +478,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\sysc\kernel\sc_phase_callback_registry.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\sysc\communication\sc_port.cpp"
 				>
 			</File>
@@ -404,6 +542,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\sysc\kernel\sc_spawn_options.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\sysc\utils\sc_stop_here.cpp"
 				>
 			</File>
@@ -421,6 +563,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\sysc\tracing\sc_trace.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\sysc\tracing\sc_trace_file_base.cpp"
 				>
 			</File>
 			<File
@@ -582,14 +728,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\sysc\kernel\sc_cor_pthread.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\sysc\kernel\sc_cor_qt.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\src\sysc\kernel\sc_cthread_process.h"
 				>
 			</File>
@@ -678,6 +816,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\sysc\communication\sc_host_mutex.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\sysc\datatypes\int\sc_int.h"
 				>
 			</File>
@@ -742,11 +884,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\sysc\kernel\sc_macros.h"
+				RelativePath="..\..\src\sysc\utils\sc_machine.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\sysc\kernel\sc_macros_int.h"
+				RelativePath="..\..\src\sysc\kernel\sc_macros.h"
 				>
 			</File>
 			<File
@@ -806,7 +948,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\sysc\kernel\sc_object_int.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\sysc\kernel\sc_object_manager.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\sysc\kernel\sc_phase_callback_registry.h"
 				>
 			</File>
 			<File
@@ -926,6 +1076,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\sysc\kernel\sc_status.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\sysc\utils\sc_stop_here.h"
 				>
 			</File>
@@ -947,6 +1101,14 @@
 			</File>
 			<File
 				RelativePath="..\..\src\sysc\tracing\sc_trace.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\sysc\tracing\sc_trace_file_base.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\sysc\tracing\sc_tracing_ids.h"
 				>
 			</File>
 			<File

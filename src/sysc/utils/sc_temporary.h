@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2011 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 3.0 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -26,6 +26,8 @@
 
 #ifndef SC_TEMPORARY_H
 #define SC_TEMPORARY_H
+
+#include <cstddef>                // std::size_t
 
 namespace sc_core {
 
@@ -71,10 +73,10 @@ class sc_byte_heap {
     char*  m_end_p;  // End of heap storage.
     char*  m_next_p; // Next heap location to be allocated.
 
-    inline char* allocate( int bytes_n )
+    inline char* allocate( std::size_t bytes_n )
     {
         char*   result_p;
-        bytes_n = (bytes_n + 7) & 0xfffffff8;
+        bytes_n = (bytes_n + 7) & ((std::size_t)(-8));
         result_p = m_next_p;
         m_next_p += bytes_n;
         if ( m_next_p >= m_end_p )
@@ -85,17 +87,17 @@ class sc_byte_heap {
         return result_p; 
     }
 
-    inline void initialize( int heap_size=0x100000 )
+    inline void initialize( std::size_t heap_size=0x100000 )
     {
         delete [] m_bgn_p;
         m_bgn_p = new char[heap_size];
         m_end_p = &m_bgn_p[heap_size];
         m_next_p = m_bgn_p;
     }
-    
-	inline unsigned int length()
+
+	inline std::size_t length()
 	{
-		return (unsigned int)(m_end_p - m_bgn_p);
+		return (std::size_t)(m_end_p - m_bgn_p);
 	}
 
 	inline sc_byte_heap() : 
@@ -103,7 +105,7 @@ class sc_byte_heap {
 	{
 	}
 
-	inline sc_byte_heap( int heap_size ) :
+		inline sc_byte_heap( std::size_t heap_size ) :
 	    m_bgn_p(0), m_end_p(0), m_next_p(0)
 	{
 		initialize( heap_size );
@@ -156,21 +158,22 @@ class sc_byte_heap {
 template<class T>
 class sc_vpool {
   protected:
-	int m_pool_i;	// Index of next entry to m_pool_m to provide.
-	T*  m_pool_p;	// Vector of temporaries.
-	int m_wrap;		// Mask to wrap vector index.
+	std::size_t m_pool_i;	// Index of next entry to m_pool_m to provide.
+	T*          m_pool_p;	// Vector of temporaries.
+	std::size_t m_wrap;		// Mask to wrap vector index.
 
   public:
 	inline sc_vpool( int log2, T* pool_p=0 );
 	inline ~sc_vpool();
 	inline T* allocate();
 	inline void reset();
-	inline int size();
+	inline std::size_t size();
 };
 
-template<class T> sc_vpool<T>::sc_vpool( int log2, T* pool_p ) :
-    m_pool_i( 0 ), m_pool_p( pool_p ? pool_p : new T[1 << log2] ), 
-    m_wrap( ~(-1 << log2) )
+template<class T> sc_vpool<T>::sc_vpool( int log2, T* pool_p )
+  : m_pool_i( 0 )
+  , m_pool_p( pool_p ? pool_p : new T[static_cast<std::size_t>(1) << log2] )
+  , m_wrap( ~(static_cast<std::size_t>(-1) << log2) )
 {
 	// if ( log2 > 32 ) SC_REPORT_ERROR(SC_ID_POOL_SIZE_, "");
 }
@@ -194,7 +197,7 @@ template<class T> void sc_vpool<T>::reset()
 	m_pool_i = 0;
 }
 
-template<class T> int sc_vpool<T>::size()
+template<class T> std::size_t sc_vpool<T>::size()
 {
 	return m_wrap + 1;
 }

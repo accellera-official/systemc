@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2011 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 3.0 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -24,10 +24,13 @@
  CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
 
+#include "sysc/kernel/sc_cmnhdr.h"
+#include "sysc/kernel/sc_constants.h"
 #include "sysc/kernel/sc_thread_process.h"
 #include "sysc/kernel/sc_process_handle.h"
 #include "sysc/kernel/sc_simcontext_int.h"
 #include "sysc/kernel/sc_module.h"
+#include "sysc/utils/sc_machine.h"
 
 // DEBUGGING MACROS:
 //
@@ -42,20 +45,62 @@
 #   define DEBUG_MSG(NAME,P,MSG) \
     { \
         if ( P && ( (strlen(NAME)==0) || !strcmp(NAME,P->name())) ) \
-          std::cout << sc_time_stamp() << ": " << P->name() << " ******** " \
-                    << MSG << std::endl; \
+          std::cout << "**** " << sc_time_stamp() << " ("  \
+	            << sc_get_current_process_name() << "): " << MSG \
+		    << " - " << P->name() << std::endl; \
     }
 #else
 #   define DEBUG_MSG(NAME,P,MSG) 
 #endif
 
+
+//------------------------------------------------------------------------------
+// user-defined default stack-size
+//------------------------------------------------------------------------------
+#if defined(SC_OVERRIDE_DEFAULT_STACK_SIZE)
+#   define SC_DEFAULT_STACK_SIZE_ SC_OVERRIDE_DEFAULT_STACK_SIZE
+
+//------------------------------------------------------------------------------
+// architecture-specific default stack sizes
+//------------------------------------------------------------------------------
+#elif !defined(SC_USE_PTHREADS) && (defined(__CYGWIN32__) || defined(__CYGWIN32))
+#   define SC_DEFAULT_STACK_SIZE_ 0x50000
+
+#elif defined(SC_LONG_64) || defined(__x86_64__) || defined(__LP64__) || \
+      defined(_M_X64) || defined(_M_AMD64)
+#   define SC_DEFAULT_STACK_SIZE_ 0x40000
+
+#else
+#   define SC_DEFAULT_STACK_SIZE_ 0x20000
+
+#endif // SC_DEFAULT_STACK_SIZE_
+
+
+//------------------------------------------------------------------------------
+// force 16-byte alignment on coroutine entry functions, needed for
+// QuickThreads (32-bit, see also fixes in qt/md/{i386,iX86_64}.[hs]),
+// and MinGW32 / Cygwin32 compilers on Windows platforms
+#if defined(__GNUC__) && !defined(__ICC) && !defined(__x86_64__) && \
+    (__GNUC__ > 4 || __GNUC__ == 4 && __GNUC_MINOR__ > 1 )
+# define SC_ALIGNED_STACK_ \
+    __attribute__((force_align_arg_pointer))
+#else
+# define SC_ALIGNED_STACK_ /* empty */
+#endif
+
+
 namespace sc_core {
+
+const int SC_DEFAULT_STACK_SIZE   = SC_DEFAULT_STACK_SIZE_;
+#undef SC_DEFAULT_STACK_SIZE_
+#undef SC_OVERRIDE_DEFAULT_STACK_SIZE
 
 //------------------------------------------------------------------------------
 //"sc_thread_cor_fn"
 // 
 // This function invokes the coroutine for the supplied object instance.
 //------------------------------------------------------------------------------
+SC_ALIGNED_STACK_
 void sc_thread_cor_fn( void* arg )
 {
     sc_simcontext*   simc_p = sc_get_curr_simcontext();
@@ -615,7 +660,7 @@ void sc_thread_process::throw_user( const sc_throw_it_helper& helper,
     if( m_has_stack )
     {
         remove_dynamic_events();
-        DEBUG_MSG(DEBUG_NAME,this,"throwing user exception");
+        DEBUG_MSG(DEBUG_NAME,this,"throwing user exception to");
         m_throw_status = THROW_USER;
         if ( m_throw_helper_p != 0 ) delete m_throw_helper_p;
         m_throw_helper_p = helper.clone();

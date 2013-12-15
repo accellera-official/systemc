@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2005 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.3 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -2530,7 +2530,7 @@ CLASS_TYPE::get_packed_rep(sc_digit *buf) const
   // operations at the expense of complicating the code. We can do it
   // if we see any performance problems.
 
-  for (register int i = length() - 1; i >= 0; --i) {
+  for (int i = length() - 1; i >= 0; --i) {
 
     if ((digit_or_d[digit_ord(i)] & one_and_zeros(bit_ord(i))) != 0) // Test.
 
@@ -2558,7 +2558,7 @@ CLASS_TYPE::set_packed_rep(sc_digit *buf)
   vec_zero(ndigits, digit);
 
   // Copy the bits from buf to digit.
-  for (register int i = length() - 1; i >= 0; --i) {
+  for (int i = length() - 1; i >= 0; --i) {
 
     if ((buf[i / BITS_PER_DIGIT_TYPE] & 
          one_and_zeros(i % BITS_PER_DIGIT_TYPE)) != 0) // Test.
@@ -2713,7 +2713,7 @@ CLASS_TYPE::CLASS_TYPE(const CLASS_TYPE* u, int l, int r) :
   }
   else {
     
-    for (register int i = right_digit; i <= left_digit; ++i)
+    for (int i = right_digit; i <= left_digit; ++i)
       d[i - right_digit] = u->digit[i];
     
     vec_shift_right(nd, d, r - right_digit * BITS_PER_DIGIT, 0);
@@ -2740,7 +2740,7 @@ CLASS_TYPE::CLASS_TYPE(const CLASS_TYPE* u, int l, int r) :
 
     // Deletions will start from the left end and move one position
     // after each deletion.
-    register sc_digit del_mask = one_and_zeros(bit_ord(l - r));
+    sc_digit del_mask = one_and_zeros(bit_ord(l - r));
       
     while (del_mask) {
       vec_shift_right(ndigits, digit, 1, ((d[nd_less_1] & del_mask) != 0));
@@ -2752,7 +2752,7 @@ CLASS_TYPE::CLASS_TYPE(const CLASS_TYPE* u, int l, int r) :
     // Insertion to digit will always occur at the left end.
     sc_digit ins_mask = one_and_zeros(BITS_PER_DIGIT - 1);
 
-    for (register int j = nd - 2; j >= 0; --j) { // j = nd - 2
+    for (int j = nd - 2; j >= 0; --j) { // j = nd - 2
 
       // Deletions will start from the left end and move one position
       // after each deletion.
@@ -2861,7 +2861,7 @@ CLASS_TYPE::CLASS_TYPE(const OTHER_CLASS_TYPE* u, int l, int r) :
   }
   else {
     
-    for (register int i = right_digit; i <= left_digit; ++i)
+    for (int i = right_digit; i <= left_digit; ++i)
       d[i - right_digit] = u->digit[i];
     
     vec_shift_right(nd, d, r - right_digit * BITS_PER_DIGIT, 0);
@@ -2888,7 +2888,7 @@ CLASS_TYPE::CLASS_TYPE(const OTHER_CLASS_TYPE* u, int l, int r) :
 
     // Deletions will start from the left end and move one position
     // after each deletion.
-    register sc_digit del_mask = one_and_zeros(bit_ord(l - r));
+    sc_digit del_mask = one_and_zeros(bit_ord(l - r));
       
     while (del_mask) {
       vec_shift_right(ndigits, digit, 1, ((d[nd_less_1] & del_mask) != 0));
@@ -2900,7 +2900,7 @@ CLASS_TYPE::CLASS_TYPE(const OTHER_CLASS_TYPE* u, int l, int r) :
     // Insertion to digit will always occur at the left end.
     sc_digit ins_mask = one_and_zeros(BITS_PER_DIGIT - 1);
 
-    for (register int j = nd - 2; j >= 0; --j) { // j = nd - 2
+    for (int j = nd - 2; j >= 0; --j) { // j = nd - 2
 
       // Deletions will start from the left end and move one position
       // after each deletion.
