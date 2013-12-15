@@ -36,15 +36,20 @@ noinst_LTLIBRARIES = libtracing.la
 
 H_FILES = \
 	sc_trace.h \
+	sc_tracing_ids.h
+
+NO_H_FILES = \
+	sc_trace_file_base.h \
 	sc_vcd_trace.h \
 	sc_wif_trace.h
 
 CXX_FILES = \
 	sc_trace.cpp \
+	sc_trace_file_base.cpp \
 	sc_vcd_trace.cpp \
 	sc_wif_trace.cpp
 
-libtracing_la_SOURCES = $(H_FILES) $(CXX_FILES)
+libtracing_la_SOURCES = $(H_FILES) $(NO_H_FILES) $(CXX_FILES)
 
 localincludedir = $(includedir)/sysc/tracing
 nobase_localinclude_HEADERS = $(H_FILES)

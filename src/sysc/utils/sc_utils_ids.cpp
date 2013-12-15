@@ -39,6 +39,7 @@ namespace sc_core {
 #include "sysc/datatypes/bit/sc_bit_ids.h"
 #include "sysc/datatypes/fx/sc_fx_ids.h"
 #include "sysc/datatypes/int/sc_int_ids.h"
+#include "sysc/tracing/sc_tracing_ids.h"
 #undef SC_DEFINE_MESSAGE
 
 
@@ -63,6 +64,9 @@ static sc_msg_def texts[] = {
 
 #undef SC_INT_IDS_H
 #include "sysc/datatypes/int/sc_int_ids.h"
+
+#undef SC_TRACING_IDS_H
+#include "sysc/tracing/sc_tracing_ids.h"
 
 #undef SC_DEFINE_MESSAGE
 };

@@ -26,6 +26,8 @@
   CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
 
+#include <algorithm>
+
 #define SC_DISABLE_API_VERSION_CHECK // for in-library sc_ver.h inclusion
 
 #include "sysc/kernel/sc_cor_fiber.h"
@@ -1191,6 +1193,14 @@ sc_simcontext::add_trace_file( sc_trace_file* tf )
     m_something_to_trace = true;
 }
 
+void
+sc_simcontext::remove_trace_file( sc_trace_file* tf )
+{
+    m_trace_files.erase(
+        remove( m_trace_files.begin(), m_trace_files.end(), tf )
+    );
+    m_something_to_trace = ( m_trace_files.size() > 0 );
+}
 
 sc_cor*
 sc_simcontext::next_cor()
