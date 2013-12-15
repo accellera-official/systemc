@@ -149,7 +149,7 @@ AT=@
 # Notes:
 # 1. two lines starting @type filter out lines containing
 #    "stopped by user" so that differences in messages between SystemC 2.2.0
-#    and SystemC 2.3.0 are not significant.
+#    and SystemC 2.3.0 (or later) are not significant.
 # 2. find /v returns all lines that don't match.
 #    fc /w ignores (collapses)  white space
 check: announce $(EXECUTABLE)
