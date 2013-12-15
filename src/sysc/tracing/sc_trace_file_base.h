@@ -40,6 +40,13 @@
 
 #include <cstdio>
 
+// use callback-based tracing implementation
+#if defined( SC_ENABLE_SIMULATION_PHASE_CALLBACKS_TRACING )
+#  define SC_TRACING_PHASE_CALLBACKS_ 1
+#  include "sysc/kernel/sc_object.h"
+#else
+#  define SC_TRACING_PHASE_CALLBACKS_ 0
+#endif
 
 #include "sysc/tracing/sc_trace.h"
 #include "sysc/tracing/sc_tracing_ids.h"
@@ -49,6 +56,9 @@ namespace sc_core {
 // shared implementation of trace files
 class sc_trace_file_base
   : public sc_trace_file
+#if SC_TRACING_PHASE_CALLBACKS_
+  , private sc_object // to be used as callback target
+#endif
 {
 public:
     const char* filename() const
@@ -79,6 +89,11 @@ protected:
 
     // Flush results and close file.
     virtual ~sc_trace_file_base();
+
+#if SC_TRACING_PHASE_CALLBACKS_
+private:
+    virtual void simulation_phase_callback();
+#endif // SC_TRACING_PHASE_CALLBACKS_
 
 protected:
     FILE* fp;                          // pointer to the trace file

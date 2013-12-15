@@ -40,6 +40,7 @@ class sc_phase_callback_registry;
 class sc_runnable;
 class sc_simcontext;
 class sc_trace_file;
+class sc_trace_file_base;
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_object
@@ -58,6 +59,7 @@ class sc_object
     friend class sc_process_b;
     friend class sc_runnable;
     friend class sc_simcontext;
+    friend class sc_trace_file_base;
 
 public:
     typedef unsigned phase_cb_mask;
