@@ -477,14 +477,18 @@ dnl
 AC_MSG_CHECKING([whether to enable simulation phase callbacks (experimental)])
 AC_ARG_ENABLE([phase-callbacks],
   [AS_HELP_STRING([--enable-phase-callbacks],
-                 [enable simulation phase callbacks (experimental)])],
+                  [enable simulation phase callbacks (experimental)
+                   @<:@yes|tracing|no(=default)@:>@])],
   [case x"$enableval" in
     xyes|x)        enable_phase_callbacks=yes ;;
+    xtracing)      enable_phase_callbacks=tracing ;;
     xno|xdefault)  enable_phase_callbacks=no  ;;
     *) AC_MSG_ERROR([bad value ${enableval} for --enable-phase-callbacks]) ;;
   esac],[enable_phase_callbacks=no])
 AM_CONDITIONAL([ENABLE_CALLBACKS],
-               [test x"$enable_phase_callbacks" != xno])
+               [test x"$enable_phase_callbacks" = xyes])
+AM_CONDITIONAL([ENABLE_CALLBACKS_TRACING],
+               [test x"$enable_phase_callbacks" = xtracing])
 AC_MSG_RESULT($enable_phase_callbacks)
 
 dnl

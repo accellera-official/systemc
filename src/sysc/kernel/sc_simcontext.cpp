@@ -87,6 +87,14 @@
     ((void)0) /* do nothing */
 #endif
 
+#if defined( SC_ENABLE_SIMULATION_PHASE_CALLBACKS_TRACING )
+// use callback based tracing
+#  define SC_SIMCONTEXT_TRACING_  0
+#else
+// enable tracing via explicit trace_cycle calls from simulator loop
+#  define SC_SIMCONTEXT_TRACING_  1
+#endif
+
 namespace sc_core {
 
 sc_stop_mode stop_mode = SC_STOP_FINISH_DELTA;
@@ -267,6 +275,8 @@ SC_MODULE(sc_invoke_method)
 {
     SC_CTOR(sc_invoke_method)
     {
+      // remove from object hierarchy
+      detach();
     }
 
     virtual ~sc_invoke_method()
@@ -570,9 +580,11 @@ sc_simcontext::crunch( bool once )
 	SC_DO_PHASE_CALLBACK_(update_done);
 	m_execution_phase = phase_notify;
 
+#if SC_SIMCONTEXT_TRACING_
 	if( m_something_to_trace ) {
 	    trace_cycle( /* delta cycle? */ true );
 	}
+#endif
 
         // check for call(s) to sc_stop
         if( m_forced_stop ) {
@@ -639,7 +651,11 @@ sc_simcontext::cycle( const sc_time& t)
     m_in_simulator_control = true;
     crunch(); 
     SC_DO_PHASE_CALLBACK_(before_timestep);
-    trace_cycle( /* delta cycle? */ false );
+#if SC_SIMCONTEXT_TRACING_
+    if( m_something_to_trace ) {
+        trace_cycle( /* delta cycle? */ false );
+    }
+#endif
     m_curr_time += t;
     if ( next_time(next_event_time) && next_event_time <= m_curr_time) {
         SC_REPORT_WARNING(SC_ID_CYCLE_MISSES_EVENTS_, "");
@@ -655,9 +671,11 @@ sc_simcontext::elaborate()
         return;
     }
 
-    // Instantiate the method invocation module (keep it out of the registry):
+    // Instantiate the method invocation module
+    // (not added to public object hierarchy)
 
-    m_method_invoker_p = new sc_invoke_method(SC_KERNEL_MODULE_PREFIX);
+    m_method_invoker_p =
+      new sc_invoke_method("$$$$kernel_module$$$$_invoke_method" );
 
     m_simulation_status = SC_BEFORE_END_OF_ELABORATION;
     for( int cd = 0; cd != 4; /* empty */ )
@@ -828,9 +846,12 @@ sc_simcontext::initial_crunch( bool no_crunch )
         return;
     }
 
+#if SC_SIMCONTEXT_TRACING_
     if( m_something_to_trace ) {
         trace_cycle( false );
     }
+#endif
+
     // check for call(s) to sc_stop
     if( m_forced_stop ) {
         do_sc_stop_action();
@@ -903,7 +924,10 @@ sc_simcontext::simulate( const sc_time& duration )
 	    m_in_simulator_control = false;
 	    return;
 	}
-	if( m_something_to_trace ) trace_cycle( /* delta cycle? */ false );
+#if SC_SIMCONTEXT_TRACING_
+        if( m_something_to_trace )
+            trace_cycle( /* delta cycle? */ false );
+#endif
         if( m_forced_stop ) {
             do_sc_stop_action();
             return;
@@ -921,9 +945,11 @@ sc_simcontext::simulate( const sc_time& duration )
 	    m_in_simulator_control = false;
 	    return;
 	}
+#if SC_SIMCONTEXT_TRACING_
 	if( m_something_to_trace ) {
 	    trace_cycle( false );
 	}
+#endif
         // check for call(s) to sc_stop() or sc_pause().
         if( m_forced_stop ) {
             do_sc_stop_action();

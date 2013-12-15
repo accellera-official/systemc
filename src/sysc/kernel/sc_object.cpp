@@ -190,19 +190,13 @@ sc_object::sc_object_init(const char* nm)
     m_name = object_manager->create_name(nm ? nm : sc_object_newname().c_str());
 
 
-    // PLACE THE OBJECT INTO THE HIERARCHY IF A USER LEAF NAME WAS SUPPLIED:
-    
+    // PLACE THE OBJECT INTO THE HIERARCHY
 
-    if ( nm != NULL && 
-         strncmp(nm, SC_KERNEL_MODULE_PREFIX, strlen(SC_KERNEL_MODULE_PREFIX)) )
-    { 
-        object_manager->insert_object(m_name, this); 
-        if ( m_parent ) 
-	    m_parent->add_child_object( this );
-	else
-	    m_simc->add_child_object( this ); 
-    } 
-
+    object_manager->insert_object(m_name, this);
+    if ( m_parent )
+        m_parent->add_child_object( this );
+    else
+        m_simc->add_child_object( this );
 } 
 
 sc_object::sc_object() : 

@@ -588,13 +588,21 @@ in the 'Preprocessor definitions' setting.
 
 
  * SC_ENABLE_SIMULATION_PHASE_CALLBACKS         (experimental)
+   SC_ENABLE_SIMULATION_PHASE_CALLBACKS_TRACING (experimental) -
    Enable a generic simulation phase callback mechanism.
 
    Note: This option is usually set by the `configure` option
-     --enable-phase-callbacks
+     --enable-phase-callbacks, or
+     --enable-phase-callbacks=tracing
 
    See the RELEASENOTES for more information about this feature.
 
+   The *_TRACING variant of this flag enables the sc_trace
+   implementation use these callbacks, instead of hard-coded updates
+   from the main simulator loop.
+
+   Note: Setting tracing flag includes the generic phase callback
+         infrastructure automatically.
    Note: Only effective during library build.
 
 

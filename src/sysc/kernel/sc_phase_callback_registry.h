@@ -20,7 +20,7 @@
   sc_phase_callback_registry.h -- Definition of the simulation phase callbacks
 
   The most critical functions are defined inline in this file.  Only active,
-  if SC_ENABLE_SIMULATION_PHASE_CALLBACKS is defined during the
+  if SC_ENABLE_SIMULATION_PHASE_CALLBACKS[_TRACING] is defined during the
   SystemC library build.
 
   Original Author: Philipp A. Hartmann, OFFIS, 2013-02-15
@@ -31,7 +31,8 @@
 #ifndef SC_PHASE_CALLBACK_REGISTRY_H_INCLUDED_
 #define SC_PHASE_CALLBACK_REGISTRY_H_INCLUDED_
 
-#if defined( SC_ENABLE_SIMULATION_PHASE_CALLBACKS )
+#if defined( SC_ENABLE_SIMULATION_PHASE_CALLBACKS ) \
+ || defined( SC_ENABLE_SIMULATION_PHASE_CALLBACKS_TRACING )
 #  define SC_HAS_PHASE_CALLBACKS_ 1
 #else
 #  define SC_HAS_PHASE_CALLBACKS_ 0
