@@ -30,6 +30,7 @@
 
 #include "sysc/kernel/sc_cmnhdr.h"
 #include "sysc/kernel/sc_process.h"
+#include "sysc/kernel/sc_status.h"
 #include "sysc/kernel/sc_time.h"
 #include "sysc/utils/sc_hash.h"
 #include "sysc/utils/sc_pq.h"
@@ -49,6 +50,7 @@ class sc_module_registry;
 class sc_name_gen;
 class sc_object;
 class sc_object_manager;
+class sc_phase_callback_registry;
 class sc_process_handle;
 class sc_port_registry;
 class sc_prim_channel_registry;
@@ -72,24 +74,6 @@ struct sc_curr_proc_info
 };
 
 typedef const sc_curr_proc_info* sc_curr_proc_handle;
-
-// simulation status codes
-
-const int SC_SIM_OK        = 0;
-const int SC_SIM_ERROR     = 1;
-const int SC_SIM_USER_STOP = 2;
-
-enum sc_status { // sc_get_status values:
-    SC_UNITIALIZED=0x00,               // initialize() not called yet.
-    SC_ELABORATION=0x01,               // during module hierarchy construction.
-    SC_BEFORE_END_OF_ELABORATION=0x02, // during before_end_of_elaboration().
-    SC_END_OF_ELABORATION=0x04,        // during end_of_elaboration().
-    SC_START_OF_SIMULATION=0x08,       // during start_of_simulation().
-    SC_RUNNING=0x10,                   // initialization, evaluation or update.
-    SC_PAUSED=0x20,                    // when scheduler stopped by sc_pause().
-    SC_STOPPED=0x40,                   // when scheduler stopped by sc_stop().
-    SC_END_OF_SIMULATION=0x80          // during end_of_simulation().
-};
 
 enum sc_stop_mode {          // sc_stop modes:
     SC_STOP_FINISH_DELTA,
@@ -157,6 +141,7 @@ class sc_simcontext
     friend class sc_time;
     friend class sc_clock;
     friend class sc_method_process;
+    friend class sc_phase_callback_registry;
     friend class sc_process_b;
     friend class sc_process_handle;
     friend class sc_prim_channel;
@@ -258,6 +243,7 @@ public:
     bool evaluation_phase() const;
     bool is_running() const;
     bool update_phase() const;
+    bool notify_phase() const;
     bool get_error();
     void set_error( sc_report* );
 
@@ -329,6 +315,7 @@ private:
     sc_port_registry*           m_port_registry;
     sc_export_registry*         m_export_registry;
     sc_prim_channel_registry*   m_prim_channel_registry;
+    sc_phase_callback_registry* m_phase_cb_registry;
 
     sc_name_gen*                m_name_gen;
 
@@ -535,6 +522,13 @@ bool
 sc_simcontext::update_phase() const
 {
     return m_execution_phase == phase_update;
+}
+
+inline
+bool
+sc_simcontext::notify_phase() const
+{
+    return m_execution_phase == phase_notify;
 }
 
 inline

@@ -40,7 +40,7 @@ AC_INIT([SystemC],
         [2.3.1],
         [http://forums.accellera.org/forum/9-systemc/],
         [systemc],
-        [http://accellera.org/community/systemc/],
+        [http://accellera.org/],
 )
 dnl version of the included TLM library
 TLM_PACKAGE_VERSION=2.0.3
@@ -472,6 +472,22 @@ AM_CONDITIONAL([USES_PTHREADS_LIB],
 AC_MSG_RESULT($enable_pthreads)
 
 dnl
+dnl enable simulation phase callbacks (experimental)
+dnl
+AC_MSG_CHECKING([whether to enable simulation phase callbacks (experimental)])
+AC_ARG_ENABLE([phase-callbacks],
+  [AS_HELP_STRING([--enable-phase-callbacks],
+                 [enable simulation phase callbacks (experimental)])],
+  [case x"$enableval" in
+    xyes|x)        enable_phase_callbacks=yes ;;
+    xno|xdefault)  enable_phase_callbacks=no  ;;
+    *) AC_MSG_ERROR([bad value ${enableval} for --enable-phase-callbacks]) ;;
+  esac],[enable_phase_callbacks=no])
+AM_CONDITIONAL([ENABLE_CALLBACKS],
+               [test x"$enable_phase_callbacks" != xno])
+AC_MSG_RESULT($enable_phase_callbacks)
+
+dnl
 dnl Set conditionals for various quick thread architectures:
 dnl
 AM_CONDITIONAL([QT_ARCH_X86_64], [ test "${QT_ARCH}" = "x86_64" ])
@@ -596,13 +612,13 @@ Configuration summary of $PACKAGE_STRING for $target
      ${CXXFLAGS}
 
  Optional features:
-   Pthread processes   : $enable_pthreads
-   async_request_update: $enable_async_updates
-   Debugging symbols   : $enable_debug
-   Optimization        : $enable_optimize
-   Additional settings :
+   Pthread processes              : $enable_pthreads
+   async_request_update           : $enable_async_updates
+   Phase callbacks (experimental) : $enable_phase_callbacks
+   Include debugging symbols      : $enable_debug
+   Enable compiler optimizations  : $enable_optimize
+   Additional settings            :
      ${PKGCONFIG_DEFINES} ${LIBCONFIG_DEFINES}
-
 ---------------------------------------------------------------------
 EOF
 

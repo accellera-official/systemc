@@ -149,10 +149,14 @@ SC_DEFINE_MESSAGE( SC_ID_SIMULATION_START_AFTER_ERROR_, 548,
        "attempt to restart simulation after error" )
 SC_DEFINE_MESSAGE( SC_ID_SIMULATION_UNCAUGHT_EXCEPTION_, 549,
        "uncaught exception" )
-// available message number 550
-// available message number 551
-// available message number 552
-// available message number 553
+SC_DEFINE_MESSAGE(SC_ID_PHASE_CALLBACKS_UNSUPPORTED_   , 550,
+       "simulation phase callbacks not enabled")
+SC_DEFINE_MESSAGE(SC_ID_PHASE_CALLBACK_NOT_IMPLEMENTED_, 551,
+       "empty simulation phase callback called" )
+SC_DEFINE_MESSAGE(SC_ID_PHASE_CALLBACK_REGISTER_,        552,
+       "register simulation phase callback" )
+SC_DEFINE_MESSAGE(SC_ID_PHASE_CALLBACK_FORBIDDEN_,       553,
+       "forbidden action in simulation phase callback" )
 // available message number 554
 // available message number 555
 SC_DEFINE_MESSAGE(SC_ID_THROW_IT_IGNORED_  , 556,

@@ -56,6 +56,7 @@ H_FILES = \
 	sc_sensitive.h \
 	sc_spawn.h \
 	sc_spawn_options.h \
+	sc_status.h \
 	sc_simcontext.h \
 	sc_time.h \
 	sc_ver.h \
@@ -70,7 +71,9 @@ NO_H_FILES = \
 	sc_method_process.h \
 	sc_module_registry.h \
 	sc_name_gen.h \
+	sc_object_int.h \
 	sc_object_manager.h \
+	sc_phase_callback_registry.h \
 	sc_reset.h \
 	sc_runnable_int.h \
 	sc_simcontext_int.h \
@@ -94,6 +97,7 @@ CXX_FILES = \
 	sc_name_gen.cpp \
 	sc_object.cpp \
 	sc_object_manager.cpp \
+	sc_phase_callback_registry.cpp \
 	sc_process.cpp \
 	sc_reset.cpp \
 	sc_sensitive.cpp \

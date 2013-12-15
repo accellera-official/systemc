@@ -478,6 +478,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\sysc\kernel\sc_phase_callback_registry.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\sysc\communication\sc_port.cpp"
 				>
 			</File>
@@ -940,7 +944,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\sysc\kernel\sc_object_int.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\sysc\kernel\sc_object_manager.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\sysc\kernel\sc_phase_callback_registry.h"
 				>
 			</File>
 			<File
@@ -1057,6 +1069,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\sysc\kernel\sc_spawn_options.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\sysc\kernel\sc_status.h"
 				>
 			</File>
 			<File

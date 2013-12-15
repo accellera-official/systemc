@@ -2,6 +2,18 @@ include $(top_srcdir)/config/Make-rules.common
 
 AM_CPPFLAGS += -I$(top_srcdir)/src
 
+if DISABLE_ASYNC_UPDATES
+  EXTRA_DEFINES+=-DSC_DISABLE_ASYNC_UPDATES
+endif
+
+if ENABLE_CALLBACKS
+  EXTRA_DEFINES+=-DSC_ENABLE_SIMULATION_PHASE_CALLBACKS
+endif
+
+if WANT_PTHREADS_THREADS
+  EXTRA_DEFINES+=-DSC_USE_PTHREADS
+endif
+
 # either for async_update locking or pthread processes
 if USES_PTHREADS_LIB
 # Libtool/GCC do not play well together on some platforms
