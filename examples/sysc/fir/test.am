@@ -102,7 +102,9 @@ fir_BUILD =
 fir_EXTRA = \
 	fir/log \
 	fir/rtl_log \
+	fir/fir_common.vcproj \
 	fir/fir.vcproj \
+	fir/fir_rtl.vcproj \
 	fir/Makefile \
 	fir/README
 
