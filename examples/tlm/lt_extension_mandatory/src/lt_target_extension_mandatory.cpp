@@ -80,12 +80,11 @@ lt_target_extension_mandatory::nb_transport_fw                  ///< non-blockin
   
     REPORT_INFO ( filename,  __FUNCTION__, msg.str () );
     
-    sc_dt::uint64 address = trans.get_address();
+    sc_dt::uint64   address = trans.get_address();
+    unsigned char * data    = trans.get_data_ptr();
     
     assert ( address <= m_max_address );
   
-    unsigned int& data = *reinterpret_cast<unsigned int*>(trans.get_data_ptr());
-    
     msg.str ( "" );
         
     switch ( trans.get_command () )
@@ -97,8 +96,8 @@ lt_target_extension_mandatory::nb_transport_fw                  ///< non-blockin
         msg << "Write request - "
             << "Addr: 0x" << internal << setw ( sizeof(sc_dt::uint64) * 2 ) 
             << setfill( '0' ) << uppercase << hex << trans.get_address ();
-    
-        *reinterpret_cast<unsigned int*>( &m_memory [ address ] ) = data;
+
+        memcpy( &m_memory [ address ], data, sizeof(unsigned int) );
         t += sc_time(10, SC_NS);
         
         break;
@@ -112,8 +111,8 @@ lt_target_extension_mandatory::nb_transport_fw                  ///< non-blockin
             << "Addr: 0x" << internal << setw ( sizeof(sc_dt::uint64) * 2 ) 
             << setfill( '0' ) << uppercase << hex << trans.get_address ();
     
-        data  = *reinterpret_cast<unsigned int*>( &m_memory [ address ] );
-        t      += sc_time(100, SC_NS);
+        memcpy( data, &m_memory [ address ], sizeof(unsigned int) );
+        t += sc_time(100, SC_NS);
       
         break;
       }
