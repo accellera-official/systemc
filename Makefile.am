@@ -57,7 +57,8 @@ EXTRA_DIST = \
 	config/test.sh.in \
 	\
 	msvc80/SystemC/SystemC.sln \
-	msvc80/SystemC/SystemC.vcproj
+	msvc80/SystemC/SystemC.vcproj \
+	msvc80/SystemC/SystemC-examples.sln
 
 ## ****************************************************************************
 
