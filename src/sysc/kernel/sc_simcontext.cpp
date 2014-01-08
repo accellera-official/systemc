@@ -1171,6 +1171,12 @@ sc_simcontext::create_method_process(
                 push_runnable_method( handle );
             }
         }
+        else if ( handle->m_static_events.size() == 0 )
+        {
+            SC_REPORT_WARNING( SC_ID_DISABLE_WILL_ORPHAN_PROCESS_,
+                               handle->name() );
+        }
+
     } else {
 	m_process_table->push_front( handle );
     }
@@ -1206,6 +1212,12 @@ sc_simcontext::create_thread_process(
                 push_runnable_thread( handle );
             }
         }
+        else if ( handle->m_static_events.size() == 0 )
+        {
+            SC_REPORT_WARNING( SC_ID_DISABLE_WILL_ORPHAN_PROCESS_,
+                               handle->name() );
+        }
+
     } else {
 	m_process_table->push_front( handle );
     }
