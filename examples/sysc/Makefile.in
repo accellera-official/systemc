@@ -792,7 +792,9 @@ fir_BUILD =
 fir_EXTRA = \
 	fir/log \
 	fir/rtl_log \
+	fir/fir_common.vcproj \
 	fir/fir.vcproj \
+	fir/fir_rtl.vcproj \
 	fir/Makefile \
 	fir/README
 
@@ -1140,6 +1142,7 @@ simple_perf_EXTRA = \
 
 2_1_specialized_signals_BUILD = 
 2_1_specialized_signals_EXTRA = \
+	2.1/specialized_signals/specialized_signals.vcproj \
 	2.1/specialized_signals/Makefile
 
 2_3_sc_rvd_test_CPPFLAGS = $(AM_CPPFLAGS) -I \

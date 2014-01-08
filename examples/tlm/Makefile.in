@@ -529,12 +529,13 @@ SUBDIRS = \
 check_SCRIPTS = $(examples_TESTS:=.sh)
 tlmexamplesdir = $(examplesdir)/tlm
 examples_FILES = build-msvc/Makefile build-msvc/Makefile.config \
-	build-msvc/openhere.bat build-msvc/READMEcommandlinemsvc.txt \
-	build-msvc/systemc.vsprops build-msvc/vsvars.bat \
-	build-unix/Makefile build-unix/Makefile.config \
-	build-unix/Makefile.rules README.txt $(at_1_phase_H_FILES) \
-	$(at_1_phase_CXX_FILES) $(at_1_phase_BUILD) \
-	$(at_1_phase_EXTRA) $(at_2_phase_H_FILES) \
+	build-msvc/Makefile.rules build-msvc/openhere.bat \
+	build-msvc/READMEcommandlinemsvc.txt \
+	build-msvc/systemc.vsprops build-msvc/tlm.sln \
+	build-msvc/vsvars.bat build-unix/Makefile \
+	build-unix/Makefile.config build-unix/Makefile.rules \
+	README.txt $(at_1_phase_H_FILES) $(at_1_phase_CXX_FILES) \
+	$(at_1_phase_BUILD) $(at_1_phase_EXTRA) $(at_2_phase_H_FILES) \
 	$(at_2_phase_CXX_FILES) $(at_2_phase_BUILD) \
 	$(at_2_phase_EXTRA) $(at_4_phase_H_FILES) \
 	$(at_4_phase_CXX_FILES) $(at_4_phase_BUILD) \

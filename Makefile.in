@@ -347,7 +347,8 @@ EXTRA_DIST = \
 	config/test.sh.in \
 	\
 	msvc80/SystemC/SystemC.sln \
-	msvc80/SystemC/SystemC.vcproj
+	msvc80/SystemC/SystemC.vcproj \
+	msvc80/SystemC/SystemC-examples.sln
 
 @SEPARATE_INSTALL_TREE_TRUE@rootdoc_DATA = \
 @SEPARATE_INSTALL_TREE_TRUE@	$(DOC_FILES)
