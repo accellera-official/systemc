@@ -106,8 +106,8 @@ Following is the list of bug fixes and enhancements for this release:
   - Fix several integer conversion warnings raised by some compilers
     throughout the SystemC implementation.
 
-  - Fixed incorrect GCC i386/x86_64 function call alignment when using
-    the QuickThreads/WinFiber-based process implementations (16-byte
+  - Fixed incorrect GCC i386/x86_64 function call stack alignment when
+    using the QuickThreads/WinFiber-based process implementations (16-byte
     boundary).  This avoids segmentation faults in some cases where the
     stricter stack requirement is implicitly assumed by the compiler.
 
@@ -441,7 +441,7 @@ Note: These features are not enabled in the default library
 
      sc_core::sc_set_time_resolution( double, sc_time_unit )
 
-   happens before the construction of the first non-SC_ZERO_TIME 
+   happens before the construction of the first non-SC_ZERO_TIME
    sc_time object.
 
    This can be inconvenient in cases, where an "uninitialized sc_time value"
@@ -463,6 +463,49 @@ Note: These features are not enabled in the default library
 7) Known Problems
 =================
 
+  - When building the SystemC library with QuickThreads support, the
+    resulting shared library is marked as requiring an executable stack
+    by certain compilers/assemblers (or rather not marked as not needing
+    one).  As a result, some system security systems (like SELinux) might
+    refuse to load the library.  As a workaround for GNU (compatible)
+    assemblers, pass the assembler flags variable with the option
+      CCASFLAGS="-Wa,--noexecstack"
+    to the `configure' script before building the SystemC library.
+
+
+  - IEEE 1666-2011 does not explicitly define the behaviour in the corner
+    cases of attempting to create sc_time objects smaller than the time
+    resolution or bigger than sc_max_time().  This implementation currently
+    truncates "small" sc_time objects to SC_ZERO_TIME, while "too big"
+    objects wrap-around sc_max_time() and lead to a value modulo modulo
+    the maximum time.  In both cases, no warning is generated.
+
+
+  - The sign-extension of mixed-signedness logic expressions (&,|)
+    involving one sc_bigint<> operand and C++ builtin integral types
+    (int, short, etc.) is inconsistent between 32-bit and 64-bit
+    platforms in some cases. Convert both operands to sc_bigint<> first.
+
+
+  - The definition of sc_dt::(u)int64 differs from std::(u)int64_t types
+    on some platforms.  This may lead to problems with function overloads
+    and/or format-string placeholders.  As a workaround, convert these
+    values explicitly to the correct type before passing them to functions
+    expecting one of these types.  For sc_time, use the new nested type
+    sc_time::value_type to hold values of the underlying representation.
+
+
+  - Bit/logic-vector reductions (or_reduce, and_reduce, etc.) return an
+    'sc_logic_value_t' enum value, instead of a bool or sc_logic (as required
+    by IEEE 1666-2011).  Using the return value of these functions in a
+    boolean context, e.g.
+      if( lv.or_reduce() ) { /* ... */ }
+    might lead to wrong results in case of 'X' or 'Z' bits in the vector.
+    Avoid this by converting the result to an 'sc_logic' first and perform
+    a safe conversion to bool:
+      if( sc_logic( lv.or_reduce() ).to_bool() ) { /* ... */ }
+
+
   - The use of the DEBUG_SYSTEMC macro does not work properly with certain
     compilers (e.g., gcc 2.95.x) if it was not also specified when the
     SystemC library was built. The problem is caused by the use of the
@@ -470,14 +513,6 @@ Note: These features are not enabled in the default library
     appear to be present in the gcc 3.3, Solaris, and aCC compilers.
     The work-around is to specify DEBUG_SYSTEMC when the SystemC library
     is built.
-
-  - The sign-extension of mixed-signedness logic expressions (&,|)
-    involving one sc_bigint<> operand and a limited width type is
-    inconsistent between 32-bit and 64-bit platforms in some rare corner
-    cases. Convert both operands to sc_bigint<> first.
-
-  - TODO: document open issues from
-    https://github.com/OSCI-WG/systemc/issues?milestone=3&labels=&state=open
 
 
 8) Fixed-point library
@@ -608,6 +643,3 @@ b. The implementation of the PEQ 'peq_with_get' in tlm_utils does not properly
    time both types of notifications emerge from the PEQ in the same evaluation
    phase. This is wrong immediate notifications should overtake delta
    notifications.
-
-TODO: document open issues from
-      https://github.com/OSCI-WG/systemc/issues?milestone=&labels=tlm&state=open
