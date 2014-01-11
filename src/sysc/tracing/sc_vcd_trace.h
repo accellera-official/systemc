@@ -197,6 +197,11 @@ protected:
 
 private:
 
+#if SC_TRACING_PHASE_CALLBACKS_
+    // avoid hidden overload warnings
+    virtual void trace( sc_trace_file* ) const { sc_assert(false); }
+#endif // SC_TRACING_PHASE_CALLBACKS_
+
     // Initialize the VCD tracing
     virtual void do_initialize();
 
