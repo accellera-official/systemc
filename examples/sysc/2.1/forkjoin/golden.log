@@ -1,0 +1,36 @@
+
+Round robin thread 1 at time 100 ns
+Round robin thread 2 at time 110 ns
+Round robin thread 3 at time 120 ns
+Round robin thread 4 at time 130 ns
+Round robin thread 1 at time 140 ns
+Round robin thread 2 at time 150 ns
+Round robin thread 3 at time 160 ns
+Round robin thread 4 at time 170 ns
+Round robin thread 1 at time 180 ns
+Round robin thread 2 at time 190 ns
+Round robin thread 3 at time 200 ns
+Round robin thread 4 at time 210 ns
+Returned int is 0
+
+
+Thread 0 ending.
+Thread 1 ending.
+Thread 2 ending.
+Thread 3 ending.
+Thread 4 ending.
+Thread 5 ending.
+Thread 6 ending.
+Thread 7 ending.
+Thread 8 ending.
+Thread 9 ending.
+
+Test_function sees 3.14159
+Returned int is 3
+
+void_function sees 1.2345
+
+ref_function sees 9.8765
+Returned int is 9
+
+Done.
