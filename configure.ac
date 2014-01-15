@@ -523,15 +523,18 @@ dnl
 # AC_CHECK_DEFINE([DEBUG_SYSTEMC],
 #   [PKGCONFIG_DEFINES="${PKGCONFIG_DEFINES} -DDEBUG_SYSTEMC"])
 AC_CHECK_DEFINE([SC_DISABLE_VIRTUAL_BIND],
-  [PKGCONFIG_DEFINES="${PKGCONFIG_DEFINES} -DSC_DISABLE_VIRTUAL_BIND"])
+  [PKGCONFIG_DEFINES="${PKGCONFIG_DEFINES} -DSC_DISABLE_VIRTUAL_BIND"
+   sysc_non_1666=yes])
 
 dnl
 dnl check for additional library compiler flags (documentation only)
 dnl
 AC_CHECK_DEFINE([SC_ENABLE_IMMEDIATE_SELF_NOTIFICATION],
-  [LIBCONFIG_DEFINES="${LIBCONFIG_DEFINES} -DSC_ENABLE_IMMEDIATE_SELF_NOTIFICATION"])
+  [LIBCONFIG_DEFINES="${LIBCONFIG_DEFINES} -DSC_ENABLE_IMMEDIATE_SELF_NOTIFICATION"
+   sysc_non_1666=yes])
 AC_CHECK_DEFINE([SC_ENABLE_EARLY_MAXTIME_CREATION],
-  [LIBCONFIG_DEFINES="${LIBCONFIG_DEFINES} -DSC_ENABLE_EARLY_MAXTIME_CREATION"])
+  [LIBCONFIG_DEFINES="${LIBCONFIG_DEFINES} -DSC_ENABLE_EARLY_MAXTIME_CREATION"
+   sysc_non_1666=yes])
 
 dnl
 dnl Substitution variables.
@@ -581,6 +584,13 @@ AC_OUTPUT(
 dnl
 dnl print configuration summary
 dnl
+
+dnl invert "async_updates" setting for output
+AS_VAR_IF([enable_async_updates],[yes],
+          [disable_async_updates=no],
+          [disable_async_updates=yes
+           sysc_non_1666=yes])
+
 SYSTEMC_HOME=$prefix
 prefix='<SYSTEMC_HOME>' dnl replace for printing
 dnl ... resolve aliases
@@ -615,15 +625,22 @@ Configuration summary of $PACKAGE_STRING for $target
  Compiler (flags): ${CXX}
      ${CXXFLAGS}
 
- Optional features:
-   Pthread processes              : $enable_pthreads
-   async_request_update           : $enable_async_updates
-   Phase callbacks (experimental) : $enable_phase_callbacks
-   Include debugging symbols      : $enable_debug
+ Build settings:
    Enable compiler optimizations  : $enable_optimize
+   Include debugging symbols      : $enable_debug
+   Use pthreads for processes     : $enable_pthreads
+   Disable async_request_update   : $disable_async_updates
+   Phase callbacks (experimental) : $enable_phase_callbacks
    Additional settings            :
      ${PKGCONFIG_DEFINES} ${LIBCONFIG_DEFINES}
 ---------------------------------------------------------------------
 EOF
+if test x${sysc_non_1666+set} = xset ; then
+cat <<EOF | tee -a config.log
+WARNING: The selected SystemC library configuration is non-conforming
+         to IEEE Std. 1666-2011. See INSTALL.
+---------------------------------------------------------------------
+EOF
+fi
 
 dnl Taf!
