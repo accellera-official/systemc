@@ -1,4 +1,4 @@
-!include <..\..\build-msvc/Makefile.config>
+!include <..\..\build-msvc\Makefile.config>
 
 PROJECT = at_extension_optional
 
@@ -7,17 +7,17 @@ CXXFLAGS_DEFINES = \
 	/DUSING_EXTENSION_OPTIONAL
 
 OBJS = \
-	$(OBJDIR)\$(PROJECT).obj \
-	$(OBJDIR)\$(PROJECT)_top.obj \
-	$(OBJDIR)\initiator_top.obj \
+	$(OUTDIR)\$(PROJECT).obj \
+	$(OUTDIR)\$(PROJECT)_top.obj \
+	$(OUTDIR)\initiator_top.obj \
 	\
-	$(OBJDIR)\at_target_2_phase.obj \
-	$(OBJDIR)\at_target_4_phase.obj \
-	$(OBJDIR)\extension_initiator_id.obj \
-	$(OBJDIR)\memory.obj \
-	$(OBJDIR)\report.obj \
-	$(OBJDIR)\select_initiator.obj \
-	$(OBJDIR)\traffic_generator.obj
+	$(OUTDIR)\at_target_2_phase.obj \
+	$(OUTDIR)\at_target_4_phase.obj \
+	$(OUTDIR)\extension_initiator_id.obj \
+	$(OUTDIR)\memory.obj \
+	$(OUTDIR)\report.obj \
+	$(OUTDIR)\select_initiator.obj \
+	$(OUTDIR)\traffic_generator.obj
 
 
 !include <..\..\build-msvc/Makefile.rules>
