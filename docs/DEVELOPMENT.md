@@ -8,9 +8,9 @@ v1.0, June 2013
 
 In this document, the internal development process for Accellera's SystemC
 Language Working Group (and TLM Working Group) is described.  This mostly
-relates to the development and maintenance procedures for the ASI
+relates to the development and maintenance procedures for the
 proof-of-concept implementation of SystemC (and TLM).  This document
-focuses on the technical aspects related to the development of the ASI
+focuses on the technical aspects related to the development of the
 SystemC implementation.  Legal and formal procedures are documented at
 <http://accellera.org/about/policies>.
 
@@ -19,7 +19,7 @@ SystemC implementation.  Legal and formal procedures are documented at
 Repository organization
 ---------------------------------------------------------------------
 
-The central source code repository of the ASI SystemC implementation is
+The central source code repository of the Accellera SystemC implementation is
 hosted in two [Git] [1] repositories at [GitHub](http://github.com).  The
 repositories are private to the `OSCI-WG` organization and can be found at:
 
@@ -149,7 +149,7 @@ point for the last `release`.
 If more sophisticated version branches are needed, a development
 model similar to the well-known ["successful branching model"] [5]
 can be deployed.  Not all aspects of this model are expected to
-be needed for the ASI SystemC implementation, as we usually
+be needed for the SystemC implementation, as we usually
 maintain only a single (i.e., the latest) public release of the
 kernel.
 
@@ -165,7 +165,7 @@ forked and checked out from the ASI `master` branch:
       git checkout -b <company>-<feature-xyz> master
 
 Then code up the new contribution.  Please try to facilitate code
-review by other ASI members by logically grouping your changes into
+review by other Accellera members by logically grouping your changes into
 one commit per addressed issue. For the commit messages, please
 consider to follow these suggestions: 
 
@@ -207,7 +207,7 @@ clone of the repository
       git diff master..<remote-name>/<company-feature-xyz>
       git log <remote-name>/<company-feature-xyz>
 
-After the contribution is accepted, it will be merged into the ASI
+After the contribution is accepted, it will be merged into the working group's
 `master` branch by the responsible source code maintainer.  This should
 be done with an explicit *merge commit*, to keep the individual 
 contributions separated:
@@ -272,23 +272,23 @@ management](#release-management).
 *TODO*: Outline maintenance of an in-house forking model, seamlessly
         integrated with the LWG's flow.
 
-Vendor's may be interested in maintaining their own, in-house flow
+Vendors may be interested in maintaining their own, in-house flow
 to align the internal development of a derived SystemC implementation,
-while being able to pick fixes from the ASI tree (and hopefully)
+while being able to pick fixes from the Accellera Working Group's tree (and hopefully)
 contributing fixes and features back to the proof-of-concept
 implementation.
 
 For this purpose members may employ the already mentioned ["successful
 branching model"] [4] by Vincent Driessen. The vendor can branch its
 own development branch, e.g., `develop-<vendor>` from the already
-tracked ASI's development branch `master` in his clone of the ASI
-repository. The vendor is then able to integrate commits on the ASI
+tracked working group development branch `master` in his clone of the WG
+repository. The vendor is then able to integrate commits on the WG
 development branch by merging it into his his vendor development
 branch.
 
-Bug fixes to be contributed back to ASI consist usually of one or
-several isolated commits. They need to be cherry picked from the
-vendor's development branch into a new branch created from the ASI
+Bug fixes to be contributed back to the WG consist usually of one or
+several isolated commits. They need to be cherry-picked from the
+vendor's development branch into a new branch created from the WG
 development branch:
 
       git checkout -b <vendor>-fix-<bug> origin/master
@@ -299,8 +299,8 @@ vendor's github account and a pull request created, as described in
 the [feature branch section](#adding-a-feature-set).
 
 A new feature consists usually of a series of commits developed in a
-dedicated feature branched of the vendor's or ASI's development
-branch. Only in the first case, a rebase on the top of the ASI's
+dedicated feature branched of the vendor's or WG's development
+branch. Only in the first case, a rebase on the top of the WG's
 development branch is necessary. To this end, branch first from the
 feature branch:
 
@@ -402,7 +402,7 @@ performed by the maintainer
 Issue tracking
 ---------------------------------------------------------------------
 
-Open issues (bugs, cleanups, features) related to ASI's proof-of-concept
+Open issues (bugs, cleanups, features) related to the proof-of-concept
 implementation of SystemC/TLM are tracked in GitHub's issue tracking system:
 
  * <https://github.com/OSCI-WG/systemc/issues>             (core library)
@@ -485,4 +485,5 @@ Authors
 
   * Philipp A. Hartmann <philipp.hartmann@offis.de>
   * Torsten Maehne      <Torsten.Maehne@lip6.fr>
+  * Minor cosmetics edits, Lynn Bannister <lynn@accellera.org>
 
