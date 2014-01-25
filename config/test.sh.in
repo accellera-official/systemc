@@ -34,6 +34,10 @@
 #set -x
 #set -e
 
+# override user's SHELL (e.g. for SHELL=/bin/tcsh)
+SHELL=@SHELL@
+export SHELL
+
 ## SystemC / TLM example test to run
 TEST=@TEST@
 INPUT=@TESTINPUT@
