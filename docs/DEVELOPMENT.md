@@ -249,6 +249,11 @@ deltas instead of the full tarballs are stored within the repository.
 >         support the required use cases within the ASI SystemC working
 >         groups.
 
+> *NOTE:* The use of the `pristine-tar` tool is entirely optional
+>         since the archives can be downloaded directly from the
+>         GitHub repository based on the tags:
+>           https://github.com/OSCI-WG/systemc/releases
+
 
 #### Basic workflow
 
@@ -355,18 +360,17 @@ performed by the maintainer
   for creating the release tarballs should be marked with an *annotated*
   and optionally signed Git tag.
 
-        # git tag -a -m "<package> <version>" <package>-<version> <refspec>
-        git tag -a -m "SystemC 2.3.0" systemc-2.3.0 release
+        # git tag -a -m "<package> <version>" <version> <refspec>
+        git tag -a -m "SystemC 2.3.0" 2.3.0 release
 
-  The tag name follow the pattern `<package>-<version>`, where `version`
-  follows the versioning rules in IEEE 1666-2011, which means it should
-  follow one of the three standard formats:
+  The tagname should contain the `<version>`, following the versioning rules
+  in IEEE 1666-2011.  There are three standard formats:
   * `x.x.x_beta_<isodate>` for beta/internal versions
   * `x.x.x_pub_rev_<isodate>` for public review versions, and
   * `x.x.x` for public release versions.
 
-  *NOTE:* The tag should be on the `release` branch, to enable the
-  automated tarball creation in the next step.
+> *NOTE:* The tag should be on the `release` branch, to enable the
+> automated tarball creation in the next step.
 
 4. **Create the release tarball**
 
@@ -374,17 +378,24 @@ performed by the maintainer
   `git describe` can be used to obtain the correct tarball name
   based on the current tag.
 
-        VERSION="`git describe release`" \
-          git archive --format=tar.gz --prefix=${VERSION}/ release \
-            > ${VERSION}.tar.gz
+        PACKAGE="`basename $(git rev-parse --show-toplevel)`" # or direcly 'systemc'
+        VERSION="`git describe release`"
+        git archive -o ${PACKAGE}-${VERSION}.tgz \
+                    --prefix=${PACKAGE}-${VERSION}/ release
 
-  *NOTE:* Even without a tag, a quick-shot release of the
-          release branch can be generated this way.
+> *NOTE:* Even without a tag, a quick-shot release of the
+>         release branch can be generated this way.
 
-  The resulting archive should then be added to the `pristine-tar`
+  The resulting archive can then be added to the `pristine-tar`
   branch to keep track of the release history:
 
-        pristine-tar commit ${VERSION}.tgz release
+        pristine-tar commit ${PACKAGE}-${VERSION}.tgz release
+
+> *NOTE:* The use of the `pristine-tar` tool is entirely optional
+>         since the archives can be downloaded directly from the
+>         GitHub repository based on the tags:
+>         * <https://github.com/OSCI-WG/systemc/releases>
+>         * <https://github.com/OSCI-WG/systemc-regressions/releases>
 
 5. **Publish the release**
 
@@ -393,9 +404,9 @@ performed by the maintainer
 
         git push osci-wg \
                master release pristine-tar \
-               <package>-<version>
+               <version>
 
-  *NOTE:* The tag needs to be pushed explicitly.
+> *NOTE:* The tag needs to be pushed explicitly.
 
 
 ---------------------------------------------------------------------
