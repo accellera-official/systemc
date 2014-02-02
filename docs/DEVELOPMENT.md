@@ -419,43 +419,35 @@ different parts of the implementation:
 Additional labels are used to classify issues according to their
 severity (10 highest), according to the following guidelines:
 
- * `10-critical`
- 
+ * `10-critical`   
    Show-stoppers that must be fixed, affects all (or at least most)
    platforms and violates fundamental specifications for most applications.
 
- * `09-serious`
-
+ * `09-serious`  
    At least one of the explicitly supported platforms is affected and
    causes significant problems for many applications.
  
- * `06-medium`
-
+ * `06-medium`  
    Covers an area, where the standard may not be clearly specified.  May
    require changes to external/standard API.
  
- * `05-feature`
-
+ * `05-feature`  
    New feature proposal, beyond the current standard. Includes internal
    (and external, providing adoption by IEEE P1666 WG) API changes.
  
- * `04-errata`
-
+ * `04-errata`  
    Inconvenience (errata) for users of many platforms, workaround available.
    Solution may require internal API changes.
 
- * `02-documentation`
-
+ * `02-documentation`  
    Documentation inconsistency or insufficiency (e.g. whitepaper unclear
    or misleading), no code changes.
 
- * `01-inconvenience`
-
+ * `01-inconvenience`  
    Inconvenience (workaround available), for some platforms
    (e.g. users of Visual Studio 2003)
  
- * `00-cosmetic`
-
+ * `00-cosmetic`  
    Changes addressing performance or clarity of implementation,
    no API changes. 
 
