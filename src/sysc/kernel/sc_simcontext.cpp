@@ -1235,7 +1235,7 @@ void
 sc_simcontext::remove_trace_file( sc_trace_file* tf )
 {
     m_trace_files.erase(
-        remove( m_trace_files.begin(), m_trace_files.end(), tf )
+        std::remove( m_trace_files.begin(), m_trace_files.end(), tf )
     );
     m_something_to_trace = ( m_trace_files.size() > 0 );
 }
