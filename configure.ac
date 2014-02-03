@@ -66,9 +66,10 @@ dnl
 : ${CFLAGS=""}
 : ${CXXFLAGS=""}
 
-AM_PROG_AS
-AC_PROG_CC
 AC_PROG_CXX
+: ${CC="${CXX}"}
+AC_PROG_CC
+AM_PROG_AS
 AC_PROG_INSTALL
 AC_PROG_LN_S
 
@@ -253,10 +254,6 @@ dnl check for pthreads compiler flags.
 dnl
 AX_PTHREAD
 
-dnl
-dnl set C-related variables
-dnl
-CC="$CXX"
 
 dnl
 dnl Libtool setup
