@@ -129,7 +129,6 @@ case "$target" in
                 EXTRA_CXXFLAGS=""
                 TARGET_ARCH="sparcOS5"
                 LDFLAG_RPATH="-Wl,-R"
-                CCAS=as
             else
                 AC_MSG_ERROR("sorry...compiler not supported")
             fi
