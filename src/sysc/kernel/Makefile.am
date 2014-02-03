@@ -81,9 +81,7 @@ NO_H_FILES = \
 
 CXX_FILES = \
 	sc_attribute.cpp \
-	sc_cor_fiber.cpp \
-	sc_cor_pthread.cpp \
-	sc_cor_qt.cpp \
+	$(CXX_COR_FILES) \
 	sc_cthread_process.cpp \
 	sc_event.cpp \
 	sc_except.cpp \
@@ -108,6 +106,17 @@ CXX_FILES = \
 	sc_ver.cpp \
 	sc_wait.cpp \
 	sc_wait_cthread.cpp
+
+# co-routine implementation
+if WANT_QT_THREADS
+CXX_COR_FILES = sc_cor_qt.cpp
+else
+if WANT_PTHREADS_THREADS
+CXX_COR_FILES = sc_cor_pthread.cpp
+else
+CXX_COR_FILES = sc_cor_fiber.cpp
+endif
+endif # co-routine implementation
 
 localincludedir = $(includedir)/sysc/kernel
 nobase_localinclude_HEADERS = $(H_FILES)
