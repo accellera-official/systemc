@@ -289,7 +289,7 @@ SC_MODULE(sc_invoke_method)
     void invoke_method( sc_method_handle method_h )
     {
 	sc_process_handle invoker_h;  // handle for invocation thread to use.
-	size_t            invokers_n; // number of invocation threads available.
+	std::vector<sc_process_handle>::size_type invokers_n; // number of invocation threads available.
 
 	m_method = method_h;
 
@@ -2008,7 +2008,7 @@ print_status_expression( std::ostream& os, sc_status s )
         bits.push_back( (sc_status)( s & ~SC_STATUS_ANY ) );
 
     // print expression
-    std::size_t i=0, n=bits.size();
+    std::vector<sc_status>::size_type i=0, n=bits.size();
     if ( n>1 )
         os << "(";
     for( ; i<n-1; ++i )

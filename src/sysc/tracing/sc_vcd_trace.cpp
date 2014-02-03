@@ -455,6 +455,7 @@ void
 vcd_sc_unsigned_trace::write(FILE* f)
 {
     static std::vector<char> compdata(1024), rawdata(1024);
+    typedef std::vector<char>::size_type size_t;
 
     if ( compdata.size() < (size_t)object.length() ) {
         size_t sz = ( (size_t)object.length() + 4096 ) & (~(size_t)(4096-1));
@@ -516,6 +517,7 @@ void
 vcd_sc_signed_trace::write(FILE* f)
 {
     static std::vector<char> compdata(1024), rawdata(1024);
+    typedef std::vector<char>::size_type size_t;
 
     if ( compdata.size() < (size_t)object.length() ) {
         size_t sz = ( (size_t)object.length() + 4096 ) & (~(size_t)(4096-1));
@@ -783,6 +785,7 @@ void
 vcd_sc_fxnum_trace::write( FILE* f )
 {
     static std::vector<char> compdata(1024), rawdata(1024);
+    typedef std::vector<char>::size_type size_t;
 
     if ( compdata.size() < (size_t)object.wl() ) {
         size_t sz = ( (size_t)object.wl() + 4096 ) & (~(size_t)(4096-1));
@@ -853,6 +856,7 @@ void
 vcd_sc_fxnum_fast_trace::write( FILE* f )
 {
     static std::vector<char> compdata(1024), rawdata(1024);
+    typedef std::vector<char>::size_type size_t;
 
     if ( compdata.size() < (size_t)object.wl() ) {
         size_t sz = ( (size_t)object.wl() + 4096 ) & (~(size_t)(4096-1));

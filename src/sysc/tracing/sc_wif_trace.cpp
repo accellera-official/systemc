@@ -453,6 +453,7 @@ bool wif_sc_unsigned_trace::changed()
 void wif_sc_unsigned_trace::write(FILE* f)
 {
     static std::vector<char> buf(1024);
+    typedef std::vector<char>::size_type size_t;
 
     if ( buf.size() < (size_t)object.length() ) {
         size_t sz = ( (size_t)object.length() + 4096 ) & (~(size_t)(4096-1));
@@ -508,6 +509,7 @@ bool wif_sc_signed_trace::changed()
 void wif_sc_signed_trace::write(FILE* f)
 {
     static std::vector<char> buf(1024);
+    typedef std::vector<char>::size_type size_t;
 
     if ( buf.size() < (size_t)object.length() ) {
         size_t sz = ( (size_t)object.length() + 4096 ) & (~(size_t)(4096-1));
@@ -758,6 +760,7 @@ void
 wif_sc_fxnum_trace::write( FILE* f )
 {
     static std::vector<char> buf(1024);
+    typedef std::vector<char>::size_type size_t;
 
     if ( buf.size() < (size_t)object.wl() ) {
         size_t sz = ( (size_t)object.wl() + 4096 ) & (~(size_t)(4096-1));
@@ -826,6 +829,7 @@ void
 wif_sc_fxnum_fast_trace::write( FILE* f )
 {
     static std::vector<char> buf(1024);
+    typedef std::vector<char>::size_type size_t;
 
     if ( buf.size() < (size_t)object.wl() ) {
         size_t sz = ( (size_t)object.wl() + 4096 ) & (~(size_t)(4096-1));
