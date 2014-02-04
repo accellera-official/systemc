@@ -13,11 +13,13 @@ LDADD = $(top_builddir)/src/sysc/libsystemc.la
 ## (pattern rule is GNU extension, but we require GNU make, see INSTALL)
 %.sh: %$(EXEEXT) $(TESTSCRIPT_IN) 
 	$(AM_V_GEN)set -e ; rm -f $@ ; \
-	  $(SED) -e 's#@TEST@#$*#' \
-	         -e 's#@TESTINPUT@#$(examples_INPUT)#' \
-	         -e 's#@TESTGOLDEN@#$(examples_GOLDEN)#' $(TESTSCRIPT_IN) > $@ ; \
+	  $(SED) -e 's#@'SHELL'@#@SHELL@#' \
+	         -e 's#@'TEST'@#$*#' \
+	         -e 's#@'TESTINPUT'@#$(examples_INPUT)#' \
+	         -e 's#@'TESTGOLDEN'@#$(examples_GOLDEN)#' $(TESTSCRIPT_IN) > $@ ; \
 	  chmod a+x $@
 TESTSCRIPT_IN=$(top_srcdir)/config/test.sh.in
+
 
 ## ************************************************************************
 ## copy required run files in objdir tree, if needed
