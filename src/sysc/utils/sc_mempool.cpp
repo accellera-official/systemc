@@ -46,6 +46,7 @@ static bool use_default_new = false;
 
 
 #include <stdio.h>
+#include <stdlib.h> // duplicate (c)stdlib.h headers for Solaris
 #include <cstdlib>
 #include "sysc/utils/sc_mempool.h"
 

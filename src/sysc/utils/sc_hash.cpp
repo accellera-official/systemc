@@ -26,6 +26,7 @@
  *****************************************************************************/
 
 #include <assert.h>
+#include <stdlib.h> // duplicate (c)stdlib.h headers for Solaris
 #include <cstdlib>
 #include <cstddef>
 
