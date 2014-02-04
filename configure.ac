@@ -66,9 +66,10 @@ dnl
 : ${CFLAGS=""}
 : ${CXXFLAGS=""}
 
-AM_PROG_AS
-AC_PROG_CC
 AC_PROG_CXX
+: ${CC="${CXX}"}
+AC_PROG_CC
+AM_PROG_AS
 AC_PROG_INSTALL
 AC_PROG_LN_S
 
@@ -113,7 +114,8 @@ case "$target" in
         esac
         if test x$GXX = xyes ; then
                 EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -arch ${CPU_ARCH}"
-                EXTRA_ASFLAGS ="-arch ${CPU_ARCH} -x assembler"
+                EXTRA_CFLAGS="-xc"
+                EXTRA_ASFLAGS="-arch ${CPU_ARCH} -x assembler"
                 LDFLAG_RPATH="-Wl,-rpath -Wl,"
         else
                 AC_MSG_ERROR("sorry...compiler not supported")
@@ -123,13 +125,13 @@ case "$target" in
         QT_ARCH="sparc-os2"
         if test x$GXX = xyes ; then
                 TARGET_ARCH="gccsparcOS5"
+                EXTRA_CFLAGS="-xc"
                 LDFLAG_RPATH="-Wl,-R"
         else
-            if test $CXX_COMP = CC ; then
+            if test x$CXX_COMP = xCC ; then
                 EXTRA_CXXFLAGS=""
                 TARGET_ARCH="sparcOS5"
                 LDFLAG_RPATH="-Wl,-R"
-                CCAS=as
             else
                 AC_MSG_ERROR("sorry...compiler not supported")
             fi
@@ -153,6 +155,7 @@ case "$target" in
         esac
         if test x$GXX = xyes ; then
                 EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -m${CPU_ARCH}"
+                EXTRA_CFLAGS="-xc"
                 EXTRA_ASFLAGS="-m${CPU_ARCH}"
         else
                 AC_MSG_ERROR("sorry...compiler not supported")
@@ -176,6 +179,7 @@ case "$target" in
         esac
         if test x$GXX = xyes ; then
                 EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -m${CPU_ARCH}"
+                EXTRA_CFLAGS="-xc"
                 EXTRA_ASFLAGS="-m${CPU_ARCH}"
         else
                 AC_MSG_ERROR("sorry...compiler not supported")
@@ -199,6 +203,7 @@ case "$target" in
         esac
         if test x$GXX = xyes ; then
                 EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -m${CPU_ARCH}"
+                EXTRA_CFLAGS="-xc"
                 EXTRA_ASFLAGS="-m${CPU_ARCH}"
         else
                 AC_MSG_ERROR("sorry...compiler not supported")
@@ -223,6 +228,7 @@ case "$target" in
         esac
         if test x$GXX = xyes ; then
                 EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -m${CPU_ARCH}"
+                EXTRA_CFLAGS="-xc"
                 EXTRA_ASFLAGS="-m${CPU_ARCH}"
         else
                 AC_MSG_ERROR("sorry...compiler not supported")
@@ -254,10 +260,6 @@ dnl check for pthreads compiler flags.
 dnl
 AX_PTHREAD
 
-dnl
-dnl set C-related variables
-dnl
-CC="$CXX"
 
 dnl
 dnl Libtool setup
@@ -523,15 +525,18 @@ dnl
 # AC_CHECK_DEFINE([DEBUG_SYSTEMC],
 #   [PKGCONFIG_DEFINES="${PKGCONFIG_DEFINES} -DDEBUG_SYSTEMC"])
 AC_CHECK_DEFINE([SC_DISABLE_VIRTUAL_BIND],
-  [PKGCONFIG_DEFINES="${PKGCONFIG_DEFINES} -DSC_DISABLE_VIRTUAL_BIND"])
+  [PKGCONFIG_DEFINES="${PKGCONFIG_DEFINES} -DSC_DISABLE_VIRTUAL_BIND"
+   sysc_non_1666=yes])
 
 dnl
 dnl check for additional library compiler flags (documentation only)
 dnl
 AC_CHECK_DEFINE([SC_ENABLE_IMMEDIATE_SELF_NOTIFICATION],
-  [LIBCONFIG_DEFINES="${LIBCONFIG_DEFINES} -DSC_ENABLE_IMMEDIATE_SELF_NOTIFICATION"])
+  [LIBCONFIG_DEFINES="${LIBCONFIG_DEFINES} -DSC_ENABLE_IMMEDIATE_SELF_NOTIFICATION"
+   sysc_non_1666=yes])
 AC_CHECK_DEFINE([SC_ENABLE_EARLY_MAXTIME_CREATION],
-  [LIBCONFIG_DEFINES="${LIBCONFIG_DEFINES} -DSC_ENABLE_EARLY_MAXTIME_CREATION"])
+  [LIBCONFIG_DEFINES="${LIBCONFIG_DEFINES} -DSC_ENABLE_EARLY_MAXTIME_CREATION"
+   sysc_non_1666=yes])
 
 dnl
 dnl Substitution variables.
@@ -581,6 +586,17 @@ AC_OUTPUT(
 dnl
 dnl print configuration summary
 dnl
+
+dnl invert "async_updates" setting for output
+AS_VAR_IF([enable_async_updates],[yes],
+          [disable_async_updates=no],
+          [disable_async_updates=yes
+           sysc_non_1666=yes])
+
+AS_IF([test -z "${WANT_QT_THREADS_TRUE}"],[sysc_coroutine="QuickThreads"],
+      [test -z "${WANT_PTHREADS_THREADS_TRUE}"],[sysc_coroutine="Pthreads"],
+      [sysc_coroutine="WinFiber"])
+
 SYSTEMC_HOME=$prefix
 prefix='<SYSTEMC_HOME>' dnl replace for printing
 dnl ... resolve aliases
@@ -615,15 +631,22 @@ Configuration summary of $PACKAGE_STRING for $target
  Compiler (flags): ${CXX}
      ${CXXFLAGS}
 
- Optional features:
-   Pthread processes              : $enable_pthreads
-   async_request_update           : $enable_async_updates
-   Phase callbacks (experimental) : $enable_phase_callbacks
-   Include debugging symbols      : $enable_debug
+ Build settings:
    Enable compiler optimizations  : $enable_optimize
+   Include debugging symbols      : $enable_debug
+   Coroutine package for processes: $sysc_coroutine
+   Disable async_request_update   : $disable_async_updates
+   Phase callbacks (experimental) : $enable_phase_callbacks
    Additional settings            :
      ${PKGCONFIG_DEFINES} ${LIBCONFIG_DEFINES}
 ---------------------------------------------------------------------
 EOF
+if test x${sysc_non_1666+set} = xset ; then
+cat <<EOF | tee -a config.log
+WARNING: The selected SystemC library configuration is non-conforming
+         to IEEE Std. 1666-2011. See INSTALL.
+---------------------------------------------------------------------
+EOF
+fi
 
 dnl Taf!
