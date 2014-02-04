@@ -41,8 +41,6 @@ using std::endl;
 
 namespace sc_core {
 
-static
-const char copyright[] = SC_COPYRIGHT;
 
 static
 const char systemc_version[] =

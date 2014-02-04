@@ -28,10 +28,10 @@
 
 // ORDER OF THE INCLUDES AND namespace sc_core IS IMPORTANT!!!
 
-using namespace std;
-
 #include "sysc/kernel/sc_cor_pthread.h"
 #include "sysc/kernel/sc_simcontext.h"
+
+using namespace std;
 
 namespace sc_core {
 
