@@ -246,35 +246,6 @@ extern const unsigned int UINT_ONE;
 
 #endif
 
-
-#if defined(_MSC_VER) && ( _MSC_VER < 1300 )
-    // VC++6 bug
-    ::std::ostream& operator << ( ::std::ostream&, int64 );
-    ::std::ostream& operator << ( ::std::ostream&, uint64 );
-#endif
-
 } // namespace sc_dt
-
-
-#if defined(_MSC_VER) && ( _MSC_VER < 1300 )
-
-    inline
-    ::std::ostream&
-    operator << ( ::std::ostream& os, sc_dt::int64 a )
-    {
-	sc_dt::operator << ( os, a );
-	return os;
-    }
-
-    inline
-    ::std::ostream&
-    operator << ( ::std::ostream& os, sc_dt::uint64 a )
-    {
-	sc_dt::operator << ( os, a );
-	return os;
-    }
-
-#endif
-
 
 #endif

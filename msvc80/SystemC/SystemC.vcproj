@@ -386,10 +386,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\sysc\datatypes\int\sc_int64_io.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\src\sysc\datatypes\int\sc_int64_mask.cpp"
 				>
 			</File>
