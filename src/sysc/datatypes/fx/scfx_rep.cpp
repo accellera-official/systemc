@@ -66,6 +66,8 @@
 #include "sysc/datatypes/bit/sc_bv_base.h"
 
 #include <ctype.h>
+#include <cstdio>
+#include <stdlib.h>
 #include <math.h>
 
 

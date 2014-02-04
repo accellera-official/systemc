@@ -74,7 +74,7 @@ template< typename T >
 inline void
 erase_remove( std::vector<T>* vec, T const& t )
 {
-    vec->erase( remove( vec->begin(), vec->end(), t ) );
+    vec->erase( std::remove( vec->begin(), vec->end(), t ) );
 }
 
 }  // namespace anonymous

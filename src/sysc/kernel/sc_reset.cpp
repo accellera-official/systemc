@@ -131,11 +131,11 @@ inline sc_reset_finder::sc_reset_finder(
 //------------------------------------------------------------------------------
 void sc_reset::notify_processes()
 {
-    bool             active;       // true if reset is active.
-    sc_reset_target* entry_p;      // reset entry processing.
-    size_t           process_i;    // index of process resetting.
-    size_t           process_n;    // # of processes to reset.
-    bool             value;        // value of our signal.
+    bool                                    active;       // true if reset is active.
+    sc_reset_target*                        entry_p;      // reset entry processing.
+    std::vector<sc_reset_target>::size_type process_i;    // index of process resetting.
+    std::vector<sc_reset_target>::size_type process_n;    // # of processes to reset.
+    bool                                    value;        // value of our signal.
 
     value = m_iface_p->read();
     process_n = m_targets.size();

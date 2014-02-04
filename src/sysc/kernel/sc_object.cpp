@@ -25,9 +25,11 @@
  *****************************************************************************/
 
 
-#include <stdio.h>
 #include <cstdlib>
 #include <cassert>
+#include <stddef.h>
+#include <cstdio>
+#include <string.h>
 #include <ctype.h>
 
 #include "sysc/kernel/sc_externs.h"

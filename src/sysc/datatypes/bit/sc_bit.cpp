@@ -59,7 +59,7 @@
 #include "sysc/utils/sc_utils_ids.h"
 #include "sysc/datatypes/bit/sc_logic.h"
 
-#include <stdio.h>
+#include <cstdio>
 
 
 namespace sc_dt

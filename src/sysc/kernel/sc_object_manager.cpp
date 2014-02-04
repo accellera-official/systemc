@@ -29,6 +29,7 @@
 #include <cstdlib>
 #include <cassert>
 #include <ctype.h>
+#include <stddef.h>
 #include <algorithm> // pick up std::sort.
 
 #include "sysc/utils/sc_iostream.h"

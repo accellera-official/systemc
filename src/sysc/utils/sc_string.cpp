@@ -26,7 +26,7 @@
 
 #include <assert.h>
 #include <ctype.h>
-#include <stdio.h>
+#include <cstdio>
 #include <stdarg.h>
 #include <string.h>
 
