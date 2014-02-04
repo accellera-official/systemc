@@ -16,7 +16,7 @@
 // written by Andy Goodrich, Forte Design Systms, Inc.  */
 
 /* NOTE: double-labeled `_name' and `name' for System V compatability.  */
-/* NOTE: Comment lines start with '/*' and '//' ONLY.  Sorry! */
+/* NOTE: Mixed C/C++-style comments used. Sorry! */
 
     .text
     .align 2
