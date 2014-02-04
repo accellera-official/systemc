@@ -17,7 +17,7 @@
 
 /*****************************************************************************
 
-  sc_int64_mask.cpp -- Fills the mask_int lookup table to enable efficient
+  sc_int64_mask.inc -- Fills the mask_int lookup table to enable efficient
                        part-selection on 64-bit sc_ints and sc_uints.
 
   Original Author: Amit Rao, Synopsys, Inc.

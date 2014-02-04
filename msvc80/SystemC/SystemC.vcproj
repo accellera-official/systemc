@@ -382,15 +382,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\sysc\datatypes\int\sc_int32_mask.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\sysc\datatypes\int\sc_int64_mask.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\src\sysc\datatypes\int\sc_int_base.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\sysc\datatypes\int\sc_int_mask.cpp"
 				>
 			</File>
 			<File
@@ -825,6 +821,14 @@
 			</File>
 			<File
 				RelativePath="..\..\src\sysc\datatypes\int\sc_int_ids.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\sysc\datatypes\int\sc_int32_mask.inc"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\sysc\datatypes\int\sc_int64_mask.inc"
 				>
 			</File>
 			<File
