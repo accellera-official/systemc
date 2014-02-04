@@ -25,6 +25,10 @@
   CHANGE LOG AT END OF FILE
  *****************************************************************************/
 
+#include <cstdio>
+#include <stdlib.h>
+#include <string.h>
+
 #include "sysc/utils/sc_iostream.h"
 #include "sysc/kernel/sc_process.h"
 #include "sysc/kernel/sc_simcontext_int.h"

@@ -50,6 +50,7 @@
 
 
 #include <cstdlib>
+#include <string.h>
 #include <vector>
 
 #define SC_DISABLE_API_VERSION_CHECK // for in-library sc_ver.h inclusion
