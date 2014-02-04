@@ -593,6 +593,10 @@ AS_VAR_IF([enable_async_updates],[yes],
           [disable_async_updates=yes
            sysc_non_1666=yes])
 
+AS_IF([test -z "${WANT_QT_THREADS_TRUE}"],[sysc_coroutine="QuickThreads"],
+      [test -z "${WANT_PTHREADS_THREADS_TRUE}"],[sysc_coroutine="Pthreads"],
+      [sysc_coroutine="WinFiber"])
+
 SYSTEMC_HOME=$prefix
 prefix='<SYSTEMC_HOME>' dnl replace for printing
 dnl ... resolve aliases
@@ -630,7 +634,7 @@ Configuration summary of $PACKAGE_STRING for $target
  Build settings:
    Enable compiler optimizations  : $enable_optimize
    Include debugging symbols      : $enable_debug
-   Use pthreads for processes     : $enable_pthreads
+   Coroutine package for processes: $sysc_coroutine
    Disable async_request_update   : $disable_async_updates
    Phase callbacks (experimental) : $enable_phase_callbacks
    Additional settings            :
