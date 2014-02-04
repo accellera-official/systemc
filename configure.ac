@@ -114,6 +114,7 @@ case "$target" in
         esac
         if test x$GXX = xyes ; then
                 EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -arch ${CPU_ARCH}"
+                EXTRA_CFLAGS="-xc"
                 EXTRA_ASFLAGS="-arch ${CPU_ARCH} -x assembler"
                 LDFLAG_RPATH="-Wl,-rpath -Wl,"
         else
@@ -124,9 +125,10 @@ case "$target" in
         QT_ARCH="sparc-os2"
         if test x$GXX = xyes ; then
                 TARGET_ARCH="gccsparcOS5"
+                EXTRA_CFLAGS="-xc"
                 LDFLAG_RPATH="-Wl,-R"
         else
-            if test $CXX_COMP = CC ; then
+            if test x$CXX_COMP = xCC ; then
                 EXTRA_CXXFLAGS=""
                 TARGET_ARCH="sparcOS5"
                 LDFLAG_RPATH="-Wl,-R"
@@ -153,6 +155,7 @@ case "$target" in
         esac
         if test x$GXX = xyes ; then
                 EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -m${CPU_ARCH}"
+                EXTRA_CFLAGS="-xc"
                 EXTRA_ASFLAGS="-m${CPU_ARCH}"
         else
                 AC_MSG_ERROR("sorry...compiler not supported")
@@ -176,6 +179,7 @@ case "$target" in
         esac
         if test x$GXX = xyes ; then
                 EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -m${CPU_ARCH}"
+                EXTRA_CFLAGS="-xc"
                 EXTRA_ASFLAGS="-m${CPU_ARCH}"
         else
                 AC_MSG_ERROR("sorry...compiler not supported")
@@ -199,6 +203,7 @@ case "$target" in
         esac
         if test x$GXX = xyes ; then
                 EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -m${CPU_ARCH}"
+                EXTRA_CFLAGS="-xc"
                 EXTRA_ASFLAGS="-m${CPU_ARCH}"
         else
                 AC_MSG_ERROR("sorry...compiler not supported")
@@ -223,6 +228,7 @@ case "$target" in
         esac
         if test x$GXX = xyes ; then
                 EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -m${CPU_ARCH}"
+                EXTRA_CFLAGS="-xc"
                 EXTRA_ASFLAGS="-m${CPU_ARCH}"
         else
                 AC_MSG_ERROR("sorry...compiler not supported")
