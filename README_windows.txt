@@ -22,10 +22,10 @@ When you install SystemC, make sure that the folder that contains the SystemC
 Visual C++ project has the correct name for the version of Visual C++ you are 
 using.
 
+For Visual C++ 2012      : msvc11
 For Visual C++ 2010      : msvc10
 For Visual C++ 2008      : msvc90
 For Visual C++ 2005      : msvc80
-For Visual C++ 2003 .NET : msvc71
 
 
 Running the regressions

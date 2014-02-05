@@ -55,7 +55,7 @@ This is a summary of the main changes:
     and/or '-g' for further analysis.
 
 
-  - verify.pl now accept all GCC-compatible compilers
+  - verify.pl now accepts all GCC-compatible compilers
 
     Instead of relying on the hard-coded name of the compiler's executable,
     check for the predefined macro __GNUC__ to detect GCC-compatible
@@ -98,3 +98,8 @@ Here is a list of known limitations in this release:
   - Some golden log comparisons may fail in case of disabled/differently
     configured library options.  Check the test output/diff for missing
     features and re-check your SystemC library configuration.
+
+  - Some paths in this release are longer than the historical 99 character
+    limit of tar archives, and several Windows archivers (e.g. WinZip)
+    have been reported to trip over this.  The open source archiver 7-zip
+    (http://7-zip.org) is known to work.
