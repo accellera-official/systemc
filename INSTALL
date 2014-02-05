@@ -19,36 +19,61 @@ System Requirements
 
 SystemC can be installed on the following UNIX, or UNIX-like platforms:
 
-    o 32-bit Linux (x86) (RedHat Enterprise Linux 4, 5, 6; Fedora 14, 15;
-      Debian 5.0; Ubuntu 10.04LTS, 12.04LTS) with GNU C++ compiler versions
-      gcc-3.3.2 through gcc-4.7.0
-    o 32-bit Linux (x86) (Debian, Ubuntu 12.04LTS) with Clang C++ compiler
-      version clang-2.9 through clang-3.1
-    o 64-bit Linux (x86_64) (RedHat Enterprise Linux 4, 5, 6; Fedora 17;
-      Debian 5.0; Ubuntu 10.04LTS, 12.04LTS) with GNU C++ compiler versions
-      gcc-3.4.5 through gcc-4.7.0
-    o 64-bit Linux (x86_64) (Ubuntu 12.04LTS) with Clang C++ compiler
-      version clang-3.1
-    o 64-bit Linux (x86_64) (Debian 5.0) with 32-bit GNU C++ compiler version
-      gcc-4.1.1 through gcc-4.7.0 (./configure --target=i686-linux-gnu)
-    o Sun Solaris 9 (sparc32) with GNU C++ compiler version gcc-3.3.3
-      through gcc-4.4.6
-    o 32-bit Mac OS X (ppc, i386) (10.5 Leopard, 10.6 Snow Leopard, 10.7 Lion)
-      with GNU C++ compiler versions gcc-3.1 through gcc-4.2.1
-    o 64-bit Mac OS X (x86_64) (10.6 Snow Leopard, 10.7 Lion) with
-      GNU C++ compiler version gcc-4.2.1
-    o 32-bit FreeBSD 7.4 with GNU C++ compiler version gcc-4.2.1
-    o Windows 7 SP1, Microsoft Visual C++ 2005 SP1 (8.0)
-    o Windows 7 SP1, Microsoft Visual C++ 2008 SP1 (9.0)
-    o Windows 7 SP1, Microsoft Visual C++ 2010     (10.0)
-    o Windows XP Prof. SP3, with Microsoft Visual C++ 2010 (10.0)
-    o Windows XP Prof. SP3 (Cygwin 1.5.25) with GNU C++ compiler
-      version gcc-4.3.2
-    o Windows XP Prof. SP3 (Msys 1.0.16) with MinGW32
-      GNU C++ compiler version gcc-4.5.2 through gcc-4.6.2
+  o Linux
+    * Architectures
+      - x86 (32-bit)
+      - x86_64 (64-bit)
+      - x86 (32-bit) application running on x86_64 (64-bit) kernel
+        (../configure --host=i686-linux-gnu)
+    * Compilers
+      - GNU C++ compiler
+      - Clang C++ compiler
+      - or compatible
 
-An installation of SystemC on other, related platforms may be
-possible as well.
+  o Mac OS X
+    * Architectures
+      - x86 (32-bit)
+      - x86_64 (64-bit)
+      - powerpc (32-bit)   [deprecated]
+      - powerpc64 (64-bit) [deprecated]
+    * Compilers
+      - GNU C++ compiler
+      - Clang C++ compiler
+      - or compatible
+
+  o Solaris
+    * Architectures
+      - SPARC32
+    * Compilers
+      - GNU C++ compiler
+      - Solaris Studio
+
+  o BSD
+    * Architectures
+      - x86 (32-bit)
+      - x86_64 (64-bit)
+    * Compilers
+      - GNU C++ compiler
+      - Clang C++ compiler
+      - or compatible
+
+  o Windows
+    * Compatibility layer
+      - Cygwin
+      - MinGW / MSYS
+    * Architectures
+      - x86 (32-bit)
+      - x86_64 (64-bit)
+    * Compilers
+      - GNU C++ compiler
+      - or compatible
+
+Note: Not all combinations are equally well-tested and some combinations
+      may not work as expected.  Please report your findings by following
+      the instructions in the README file.
+
+The README file contains a list of detailed platforms, architectures,
+and compiler versions that have been used for testing this release.
 
 
 Sources for Compilers and Related Tools
@@ -57,9 +82,9 @@ Sources for Compilers and Related Tools
 To build, install, and use SystemC on UNIX platforms, you need
 the following tools:
 
-  1. GNU C++ compiler, version 3.3.2 or later
+  1. GNU C++ compiler, version 3.4 or later
      or
-     Clang C++ compiler version clang-2.9 or later
+     Clang C++ compiler version 3.0 or later
 
   2. GNU Make (gmake)
 
@@ -88,29 +113,35 @@ To install SystemC on a UNIX system, do the following steps:
 
         > cd objdir
 
-  4. Set the following environment variable(s):
+  4. Choose your compiler by setting the CXX environment variable
+     (the configure script tries to guess the default compiler, if
+      this step is omitted):
 
-     For gcc compilers on Solaris:
+     If you use a POSIX-compatible shell (e.g. bash):
+
+        > export CXX="<compiler>"
+
+     e.g. for GCC compilers
+
+        > export CXX=g++
+
+     The Clang compiler is usually named 'clang++', thus e.g.
+
+        > export CXX=clang++
+
+     When using a C shell (e.g. csh/tcsh), the syntax to set the
+     environment variable is different:
 
         > setenv CXX g++
 
-     For SC6.1 or SC6.2 on Solaris:
+     For the Solaris Studio compilers, use
 
         > setenv CXX CC
 
-     For gcc compilers on Linux:
-
-        > setenv CXX g++
-
-     For gcc compilers on MacOS X:
-
-        > setenv CXX g++
-
-     For aCC on HP-UX:
-
-        > setenv CXX aCC
-
      You can also specify an absolute path to the compiler of your choice.
+
+     See also the Section "Compilation and Linking Options" below.
+
 
   5. Configure the package for your system, e.g.,
      (The configure script is explained below.)
@@ -139,7 +170,7 @@ To install SystemC on a UNIX system, do the following steps:
 
      Note: make sure you have created the target directory before installing
            the package. Do _not_ use /usr/local as a prefix, unless you
-           follow the UNIX/FHS directory layouts (see below).
+           follow the Unix/FHS directory layouts (see below).
 
      A fine grained configuration of the installation directories can
      be achieved via additional options, given to the configure script.
@@ -218,8 +249,7 @@ To install SystemC on a UNIX system, do the following steps:
         > cd ..
         > rm -rf objdir
 
-     Alternatively, you can keep the temporary directory to allow
-     you to:
+     Alternatively, you can keep the temporary directory to allow you to:
 
      a) Experiment with the examples.
 
@@ -282,7 +312,7 @@ The `configure.ac' file is used by the `autoconf' program to create the
 
 Note for (key) developers:
 
-  In case you have changed the `configure.in' file or one of the
+  In case you have changed the `configure.ac' file or one of the
   `Makefile.am' files:
 
   - Use the `config/distclean' script to remove the generated `configure'
@@ -388,6 +418,8 @@ Use the `--help' option to print a list.
 This release has been tested on Visual C++ 2005/2008/2010/2012, running
 on Windows XP and Windows 7.
 
+Note: This section covers the installation based on Microsoft Visual C++.
+      For Cygwin or MinGW-based installations, see Section 1.
 
 Microsoft Visual C++ 2005 (compiler version 8.0) or later
 ---------------------------------------------------------
@@ -408,6 +440,14 @@ and double-click on the .vcproj file to launch Visual C++ with the
 workspace file. The workspace file will have the proper switches set
 to compile for Visual C++ 2005. Select 'Build <example>.exe' under the
 Build menu or press F7 to build the example executable.
+
+For convenience, a combined solution file 'SystemC-examples.sln' with
+all example projects can be found in the 'msvc80' directory.  A similar
+solution file for the TLM examples is located in 'examples/tlm/build-msvc'.
+
+The provided project files are prepared for both the 32-bit 'Win32' and
+64-bit 'x64' configurations.  Please refer to the Microsoft Visual Studio
+documentation for details about 64-bit builds.
 
 
 Creating SystemC Applications
@@ -462,7 +502,7 @@ project only:
 
 1. Display the project Property Pages by selecting 'Properties...' from 
    the Project menu. 
-  
+
 2. From the C/C++ tab, select the General properties and type the path to the 
    SystemC 'src' directory in the text entry field labeled
   'Additional include directories' (e.g. the examples use '..\..\..\src').
