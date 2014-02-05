@@ -31,6 +31,7 @@
 #ifndef SC_IOSTREAM_H
 #define SC_IOSTREAM_H
 
+#include <ios>
 #include <iostream>
 #include <sstream>
 #include <fstream>

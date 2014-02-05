@@ -86,7 +86,7 @@ namespace sc_dt
 // value is displayed via the supplied stream operator.
 //   stream_object = reference to the i/o stream to return showbase value for.
 //-----------------------------------------------------------------------------
-#if defined(__GNUC__) || defined(_MSC_VER)
+#if defined(__GNUC__) || defined(_MSC_VER) || defined(__SUNPRO_CC)
     inline sc_numrep
     sc_io_base( systemc_ostream& os, sc_numrep def_base )
     {
