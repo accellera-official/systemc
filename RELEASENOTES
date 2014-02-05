@@ -520,6 +520,10 @@ Note: These features are not enabled in the default library
     the warning (e.g. 'CXXFLAGS=-Wno-overloaded-virtual').
     This also affects the TLM-2.0 sockets, see Section 9.3.
 
+  - Some paths in this release are longer than the historical 99 character
+    limit of tar archives, and several Windows archivers (e.g. WinZip) 
+    have been reported to trip over this.  The open source archiver 7-zip
+    (http://7-zip.org) is known to work.
 
 8) Fixed-point library
 ======================
