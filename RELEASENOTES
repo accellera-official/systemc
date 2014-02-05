@@ -424,10 +424,6 @@ Note: These features are not enabled in the default library
        std::cout << sc_core::sc_get_status() << std::endl;
      }
 
-
-   For more information, see the presentation available at
-     TODO: add link/file location
-
    A related feature is the triggering of sc_trace updates via these
    simulation phase callbacks instead of the hard-coded calls in various
    places of the simulation loop.  This feature has to be enabled separately,
