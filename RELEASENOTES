@@ -515,6 +515,16 @@ Note: These features are not enabled in the default library
     is built.
 
 
+  - On some recent compilers (e.g. Clang, Solaris Studio), warnings are
+    generated about the "hidden overloaded virtual function" bind of the
+    sc_port(_b) class templates in the 'specialized_signals' example.
+    These warnings are caused by the introduction of the virtual bind
+    implementation in IEEE 1666-2011.
+    As a workaround, check your compiler documentation how to suppress
+    the warning (e.g. 'CXXFLAGS=-Wno-overloaded-virtual').
+    This also affects the TLM-2.0 sockets, see Section 9.3.
+
+
 8) Fixed-point library
 ======================
 
@@ -643,3 +653,12 @@ b. The implementation of the PEQ 'peq_with_get' in tlm_utils does not properly
    time both types of notifications emerge from the PEQ in the same evaluation
    phase. This is wrong immediate notifications should overtake delta
    notifications.
+
+c. On some recent compilers (e.g. Clang, Solaris Studio), warnings are generated
+   about the "hidden overloaded virtual function" bind of the sc_port(_b)
+   class templates when using the TLM-2.0 sockets.  These warnings are caused by
+   the introduction of the virtual bind implementation in IEEE 1666-2011.
+   As a workaround in your application, check your compiler documentation how to
+   suppress the warning (e.g. adding the flag -Wno-overloaded-virtual), or mark
+   the SystemC include directory as "system directory" by using
+   '-isystem ${SYSTEMC_HOME}/include' (or equivalent) instead of the usual '-I'.
