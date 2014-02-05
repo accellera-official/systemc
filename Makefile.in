@@ -324,7 +324,6 @@ top_srcdir = @top_srcdir@
 
 # support local addition of automake macros
 ACLOCAL_AMFLAGS = -I config
-DOXYGEN = doxygen
 SUBDIRS = \
 	docs \
 	src \
@@ -877,8 +876,7 @@ uninstall-am: uninstall-rootdocDATA
 
 
 doxygen:
-	@(cd docs/sysc/doxygen && $(DOXYGEN))
-	@(cd docs/tlm/doxygen  && $(DOXYGEN))
+	@(cd docs && $(MAKE) $@)
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

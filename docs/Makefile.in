@@ -60,12 +60,13 @@ DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 	$(top_srcdir)/config/Make-rules.common
 @WANT_DEBUG_TRUE@am__append_1 = $(DEBUG_CXXFLAGS)
 @WANT_DEBUG_TRUE@am__append_2 = $(DEBUG_CXXFLAGS)
-@WANT_OPTIMIZE_TRUE@am__append_3 = $(OPT_CXXFLAGS)
+@WANT_DEBUG_TRUE@am__append_3 = $(DEBUG_CXXFLAGS)
 @WANT_OPTIMIZE_TRUE@am__append_4 = $(OPT_CXXFLAGS)
+@WANT_OPTIMIZE_TRUE@am__append_5 = $(OPT_CXXFLAGS)
 
 # either for async_update locking or pthread processes
-@USES_PTHREADS_LIB_TRUE@am__append_5 = $(PTHREAD_CFLAGS)
 @USES_PTHREADS_LIB_TRUE@am__append_6 = $(PTHREAD_CFLAGS)
+@USES_PTHREADS_LIB_TRUE@am__append_7 = $(PTHREAD_CFLAGS)
 subdir = docs
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/config/ax_check_define.m4 \
@@ -273,10 +274,10 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AM_CPPFLAGS = 
 AM_CFLAGS = $(EXTRA_CXXFLAGS) $(EXTRA_CFLAGS) $(am__append_1) \
-	$(am__append_3) $(am__append_5)
-AM_CXXFLAGS = $(EXTRA_CXXFLAGS) $(am__append_2) $(am__append_4) \
-	$(am__append_6)
-AM_CCASFLAGS = $(EXTRA_ASFLAGS)
+	$(am__append_4) $(am__append_6)
+AM_CXXFLAGS = $(EXTRA_CXXFLAGS) $(am__append_2) $(am__append_5) \
+	$(am__append_7)
+AM_CCASFLAGS = $(EXTRA_ASFLAGS) $(am__append_3)
 @USES_PTHREADS_LIB_TRUE@AM_LDFLAGS = $(PTHREAD_LIBS)
 
 # always add fix-point support
@@ -285,6 +286,7 @@ EXTRA_DEFINES = -DSC_INCLUDE_FX
 # initialize some useful variables (filled later)
 CLEANFILES = 
 EXTRA_DIST = $(DOC_FILES)
+DOXYGEN = doxygen
 DOC_FILES = SystemC_Open_Source_License.pdf sysc/README \
 	sysc/archived/README sysc/archived/FuncSpec20.pdf \
 	sysc/archived/WhitePaper20.pdf sysc/archived/UserGuide20.pdf \
@@ -517,6 +519,13 @@ uninstall-am: uninstall-nobase_docDATA
 	mostlyclean mostlyclean-generic mostlyclean-libtool pdf pdf-am \
 	ps ps-am uninstall uninstall-am uninstall-nobase_docDATA
 
+
+doxygen: sysc/doxygen/Doxyfile tlm/doxygen/Doxyfile
+	@(cd sysc/doxygen && $(DOXYGEN))
+	@(cd tlm/doxygen  && $(DOXYGEN))
+
+%/Doxyfile: %/Doxyfile.in
+	(cd $(top_builddir) && $(SHELL) config.status docs/$@)
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

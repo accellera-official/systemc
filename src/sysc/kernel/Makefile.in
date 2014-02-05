@@ -62,16 +62,17 @@ DIST_COMMON = $(nobase_localinclude_HEADERS) $(srcdir)/Makefile.am \
 	$(top_srcdir)/config/Make-rules.sysc
 @WANT_DEBUG_TRUE@am__append_1 = $(DEBUG_CXXFLAGS)
 @WANT_DEBUG_TRUE@am__append_2 = $(DEBUG_CXXFLAGS)
-@WANT_OPTIMIZE_TRUE@am__append_3 = $(OPT_CXXFLAGS)
+@WANT_DEBUG_TRUE@am__append_3 = $(DEBUG_CXXFLAGS)
 @WANT_OPTIMIZE_TRUE@am__append_4 = $(OPT_CXXFLAGS)
+@WANT_OPTIMIZE_TRUE@am__append_5 = $(OPT_CXXFLAGS)
 
 # either for async_update locking or pthread processes
-@USES_PTHREADS_LIB_TRUE@am__append_5 = $(PTHREAD_CFLAGS)
 @USES_PTHREADS_LIB_TRUE@am__append_6 = $(PTHREAD_CFLAGS)
-@DISABLE_ASYNC_UPDATES_TRUE@am__append_7 = -DSC_DISABLE_ASYNC_UPDATES
-@ENABLE_CALLBACKS_TRUE@am__append_8 = -DSC_ENABLE_SIMULATION_PHASE_CALLBACKS
-@ENABLE_CALLBACKS_TRACING_TRUE@am__append_9 = -DSC_ENABLE_SIMULATION_PHASE_CALLBACKS_TRACING
-@WANT_PTHREADS_THREADS_TRUE@am__append_10 = -DSC_USE_PTHREADS
+@USES_PTHREADS_LIB_TRUE@am__append_7 = $(PTHREAD_CFLAGS)
+@DISABLE_ASYNC_UPDATES_TRUE@am__append_8 = -DSC_DISABLE_ASYNC_UPDATES
+@ENABLE_CALLBACKS_TRUE@am__append_9 = -DSC_ENABLE_SIMULATION_PHASE_CALLBACKS
+@ENABLE_CALLBACKS_TRACING_TRUE@am__append_10 = -DSC_ENABLE_SIMULATION_PHASE_CALLBACKS_TRACING
+@WANT_PTHREADS_THREADS_TRUE@am__append_11 = -DSC_USE_PTHREADS
 subdir = src/sysc/kernel
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/config/ax_check_define.m4 \
@@ -88,17 +89,33 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libkernel_la_LIBADD =
+am__libkernel_la_SOURCES_DIST = sc_cor_fiber.h sc_cor_pthread.h \
+	sc_cor_qt.h sc_cthread_process.h sc_method_process.h \
+	sc_module_registry.h sc_name_gen.h sc_object_int.h \
+	sc_object_manager.h sc_phase_callback_registry.h sc_reset.h \
+	sc_runnable_int.h sc_simcontext_int.h sc_thread_process.h \
+	sc_attribute.cpp sc_cor_fiber.cpp sc_cor_pthread.cpp \
+	sc_cor_qt.cpp sc_cthread_process.cpp sc_event.cpp \
+	sc_except.cpp sc_join.cpp sc_main.cpp sc_main_main.cpp \
+	sc_method_process.cpp sc_module.cpp sc_module_name.cpp \
+	sc_module_registry.cpp sc_name_gen.cpp sc_object.cpp \
+	sc_object_manager.cpp sc_phase_callback_registry.cpp \
+	sc_process.cpp sc_reset.cpp sc_sensitive.cpp sc_simcontext.cpp \
+	sc_spawn_options.cpp sc_thread_process.cpp sc_time.cpp \
+	sc_ver.cpp sc_wait.cpp sc_wait_cthread.cpp
 am__objects_1 =
-am__objects_2 = sc_attribute.lo sc_cor_fiber.lo sc_cor_pthread.lo \
-	sc_cor_qt.lo sc_cthread_process.lo sc_event.lo sc_except.lo \
-	sc_join.lo sc_main.lo sc_main_main.lo sc_method_process.lo \
-	sc_module.lo sc_module_name.lo sc_module_registry.lo \
-	sc_name_gen.lo sc_object.lo sc_object_manager.lo \
-	sc_phase_callback_registry.lo sc_process.lo sc_reset.lo \
-	sc_sensitive.lo sc_simcontext.lo sc_spawn_options.lo \
-	sc_thread_process.lo sc_time.lo sc_ver.lo sc_wait.lo \
-	sc_wait_cthread.lo
-am_libkernel_la_OBJECTS = $(am__objects_1) $(am__objects_2)
+@WANT_PTHREADS_THREADS_FALSE@@WANT_QT_THREADS_FALSE@am__objects_2 = sc_cor_fiber.lo
+@WANT_PTHREADS_THREADS_TRUE@@WANT_QT_THREADS_FALSE@am__objects_2 = sc_cor_pthread.lo
+@WANT_QT_THREADS_TRUE@am__objects_2 = sc_cor_qt.lo
+am__objects_3 = sc_attribute.lo $(am__objects_2) sc_cthread_process.lo \
+	sc_event.lo sc_except.lo sc_join.lo sc_main.lo sc_main_main.lo \
+	sc_method_process.lo sc_module.lo sc_module_name.lo \
+	sc_module_registry.lo sc_name_gen.lo sc_object.lo \
+	sc_object_manager.lo sc_phase_callback_registry.lo \
+	sc_process.lo sc_reset.lo sc_sensitive.lo sc_simcontext.lo \
+	sc_spawn_options.lo sc_thread_process.lo sc_time.lo sc_ver.lo \
+	sc_wait.lo sc_wait_cthread.lo
+am_libkernel_la_OBJECTS = $(am__objects_1) $(am__objects_3)
 libkernel_la_OBJECTS = $(am_libkernel_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -146,7 +163,7 @@ AM_V_GEN = $(am__v_GEN_@AM_V@)
 am__v_GEN_ = $(am__v_GEN_@AM_DEFAULT_V@)
 am__v_GEN_0 = @echo "  GEN   " $@;
 SOURCES = $(libkernel_la_SOURCES)
-DIST_SOURCES = $(libkernel_la_SOURCES)
+DIST_SOURCES = $(am__libkernel_la_SOURCES_DIST)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -334,21 +351,15 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AM_CPPFLAGS = -I$(top_srcdir)/src
 AM_CFLAGS = $(EXTRA_CXXFLAGS) $(EXTRA_CFLAGS) $(am__append_1) \
-	$(am__append_3) $(am__append_5)
-AM_CXXFLAGS = $(EXTRA_CXXFLAGS) $(am__append_2) $(am__append_4) \
-	$(am__append_6)
-AM_CCASFLAGS = $(EXTRA_ASFLAGS)
-
-# either for async_update locking or pthread processes
-# Libtool/GCC do not play well together on some platforms
-# with C++ libraries and libpthread dependency, see e.g.
-# http://lists.gnu.org/archive/html/libtool/2012-02/msg00003.html
-@USES_PTHREADS_LIB_TRUE@AM_LDFLAGS = $(PTHREAD_LIBS) \
-@USES_PTHREADS_LIB_TRUE@	$(EXPLICIT_LPTHREAD)
+	$(am__append_4) $(am__append_6)
+AM_CXXFLAGS = $(EXTRA_CXXFLAGS) $(am__append_2) $(am__append_5) \
+	$(am__append_7)
+AM_CCASFLAGS = $(EXTRA_ASFLAGS) $(am__append_3)
+@USES_PTHREADS_LIB_TRUE@AM_LDFLAGS = $(PTHREAD_LIBS)
 
 # always add fix-point support
-EXTRA_DEFINES = -DSC_INCLUDE_FX $(am__append_7) $(am__append_8) \
-	$(am__append_9) $(am__append_10)
+EXTRA_DEFINES = -DSC_INCLUDE_FX $(am__append_8) $(am__append_9) \
+	$(am__append_10) $(am__append_11)
 
 # initialize some useful variables (filled later)
 CLEANFILES = 
@@ -401,9 +412,7 @@ NO_H_FILES = \
 
 CXX_FILES = \
 	sc_attribute.cpp \
-	sc_cor_fiber.cpp \
-	sc_cor_pthread.cpp \
-	sc_cor_qt.cpp \
+	$(CXX_COR_FILES) \
 	sc_cthread_process.cpp \
 	sc_event.cpp \
 	sc_except.cpp \
@@ -429,6 +438,11 @@ CXX_FILES = \
 	sc_wait.cpp \
 	sc_wait_cthread.cpp
 
+@WANT_PTHREADS_THREADS_FALSE@@WANT_QT_THREADS_FALSE@CXX_COR_FILES = sc_cor_fiber.cpp
+@WANT_PTHREADS_THREADS_TRUE@@WANT_QT_THREADS_FALSE@CXX_COR_FILES = sc_cor_pthread.cpp
+
+# co-routine implementation
+@WANT_QT_THREADS_TRUE@CXX_COR_FILES = sc_cor_qt.cpp
 localincludedir = $(includedir)/sysc/kernel
 nobase_localinclude_HEADERS = $(H_FILES)
 libkernel_la_SOURCES = $(NO_H_FILES) $(CXX_FILES)

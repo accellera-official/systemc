@@ -64,16 +64,23 @@ DIST_COMMON = $(nobase_localinclude_HEADERS) $(srcdir)/Makefile.am \
 	$(top_srcdir)/config/Make-rules.sysc
 @WANT_DEBUG_TRUE@am__append_1 = $(DEBUG_CXXFLAGS)
 @WANT_DEBUG_TRUE@am__append_2 = $(DEBUG_CXXFLAGS)
-@WANT_OPTIMIZE_TRUE@am__append_3 = $(OPT_CXXFLAGS)
+@WANT_DEBUG_TRUE@am__append_3 = $(DEBUG_CXXFLAGS)
 @WANT_OPTIMIZE_TRUE@am__append_4 = $(OPT_CXXFLAGS)
+@WANT_OPTIMIZE_TRUE@am__append_5 = $(OPT_CXXFLAGS)
 
 # either for async_update locking or pthread processes
-@USES_PTHREADS_LIB_TRUE@am__append_5 = $(PTHREAD_CFLAGS)
 @USES_PTHREADS_LIB_TRUE@am__append_6 = $(PTHREAD_CFLAGS)
-@DISABLE_ASYNC_UPDATES_TRUE@am__append_7 = -DSC_DISABLE_ASYNC_UPDATES
-@ENABLE_CALLBACKS_TRUE@am__append_8 = -DSC_ENABLE_SIMULATION_PHASE_CALLBACKS
-@ENABLE_CALLBACKS_TRACING_TRUE@am__append_9 = -DSC_ENABLE_SIMULATION_PHASE_CALLBACKS_TRACING
-@WANT_PTHREADS_THREADS_TRUE@am__append_10 = -DSC_USE_PTHREADS
+@USES_PTHREADS_LIB_TRUE@am__append_7 = $(PTHREAD_CFLAGS)
+@DISABLE_ASYNC_UPDATES_TRUE@am__append_8 = -DSC_DISABLE_ASYNC_UPDATES
+@ENABLE_CALLBACKS_TRUE@am__append_9 = -DSC_ENABLE_SIMULATION_PHASE_CALLBACKS
+@ENABLE_CALLBACKS_TRACING_TRUE@am__append_10 = -DSC_ENABLE_SIMULATION_PHASE_CALLBACKS_TRACING
+@WANT_PTHREADS_THREADS_TRUE@am__append_11 = -DSC_USE_PTHREADS
+
+# either for async_update locking or pthread processes
+# Libtool/GCC do not play well together on some platforms
+# with C++ libraries and libpthread dependency, see e.g.
+# http://lists.gnu.org/archive/html/libtool/2012-02/msg00003.html
+@USES_PTHREADS_LIB_TRUE@am__append_12 = $(EXPLICIT_LPTHREAD)
 subdir = src/sysc
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/config/ax_check_define.m4 \
@@ -118,9 +125,12 @@ am__uninstall_files_from_dir = { \
 am__installdirs = "$(DESTDIR)$(libarchdir)" \
 	"$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(localincludedir)"
 LTLIBRARIES = $(libarch_LTLIBRARIES)
+am__DEPENDENCIES_1 =
+@USES_PTHREADS_LIB_TRUE@am__DEPENDENCIES_2 = $(am__DEPENDENCIES_1)
 libsystemc_la_DEPENDENCIES = kernel/libkernel.la $(QT_LIB) \
 	communication/libcommunication.la tracing/libtracing.la \
-	utils/libutils.la datatypes/libdatatypes.la
+	utils/libutils.la datatypes/libdatatypes.la \
+	$(am__DEPENDENCIES_2)
 am_libsystemc_la_OBJECTS =
 libsystemc_la_OBJECTS = $(am_libsystemc_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
@@ -358,21 +368,15 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AM_CPPFLAGS = -I$(top_srcdir)/src
 AM_CFLAGS = $(EXTRA_CXXFLAGS) $(EXTRA_CFLAGS) $(am__append_1) \
-	$(am__append_3) $(am__append_5)
-AM_CXXFLAGS = $(EXTRA_CXXFLAGS) $(am__append_2) $(am__append_4) \
-	$(am__append_6)
-AM_CCASFLAGS = $(EXTRA_ASFLAGS)
-
-# either for async_update locking or pthread processes
-# Libtool/GCC do not play well together on some platforms
-# with C++ libraries and libpthread dependency, see e.g.
-# http://lists.gnu.org/archive/html/libtool/2012-02/msg00003.html
-@USES_PTHREADS_LIB_TRUE@AM_LDFLAGS = $(PTHREAD_LIBS) \
-@USES_PTHREADS_LIB_TRUE@	$(EXPLICIT_LPTHREAD)
+	$(am__append_4) $(am__append_6)
+AM_CXXFLAGS = $(EXTRA_CXXFLAGS) $(am__append_2) $(am__append_5) \
+	$(am__append_7)
+AM_CCASFLAGS = $(EXTRA_ASFLAGS) $(am__append_3)
+@USES_PTHREADS_LIB_TRUE@AM_LDFLAGS = $(PTHREAD_LIBS)
 
 # always add fix-point support
-EXTRA_DEFINES = -DSC_INCLUDE_FX $(am__append_7) $(am__append_8) \
-	$(am__append_9) $(am__append_10)
+EXTRA_DEFINES = -DSC_INCLUDE_FX $(am__append_8) $(am__append_9) \
+	$(am__append_10) $(am__append_11)
 
 # initialize some useful variables (filled later)
 CLEANFILES = 
@@ -399,14 +403,9 @@ libsystemc_la_SOURCES =
 
 # dummy C++ source to cause C++ linking
 nodist_EXTRA_libsystemc_la_SOURCES = sc_nonexistent.cpp
-libsystemc_la_LIBADD = \
-       kernel/libkernel.la \
-       $(QT_LIB) \
-       communication/libcommunication.la \
-       tracing/libtracing.la \
-       utils/libutils.la \
-       datatypes/libdatatypes.la
-
+libsystemc_la_LIBADD = kernel/libkernel.la $(QT_LIB) \
+	communication/libcommunication.la tracing/libtracing.la \
+	utils/libutils.la datatypes/libdatatypes.la $(am__append_12)
 libsystemc_la_LDFLAGS = -release $(VERSION) -L$(libarchdir)
 all: all-recursive
 

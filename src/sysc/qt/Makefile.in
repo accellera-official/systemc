@@ -62,18 +62,20 @@ DIST_COMMON = README $(noinst_HEADERS) $(srcdir)/Makefile.am \
 	$(top_srcdir)/config/Make-rules.sysc INSTALL
 @WANT_DEBUG_TRUE@am__append_1 = $(DEBUG_CXXFLAGS)
 @WANT_DEBUG_TRUE@am__append_2 = $(DEBUG_CXXFLAGS)
-@WANT_OPTIMIZE_TRUE@am__append_3 = $(OPT_CXXFLAGS)
+@WANT_DEBUG_TRUE@am__append_3 = $(DEBUG_CXXFLAGS)
 @WANT_OPTIMIZE_TRUE@am__append_4 = $(OPT_CXXFLAGS)
+@WANT_OPTIMIZE_TRUE@am__append_5 = $(OPT_CXXFLAGS)
 
 # either for async_update locking or pthread processes
-@USES_PTHREADS_LIB_TRUE@am__append_5 = $(PTHREAD_CFLAGS)
 @USES_PTHREADS_LIB_TRUE@am__append_6 = $(PTHREAD_CFLAGS)
-@DISABLE_ASYNC_UPDATES_TRUE@am__append_7 = -DSC_DISABLE_ASYNC_UPDATES
-@ENABLE_CALLBACKS_TRUE@am__append_8 = -DSC_ENABLE_SIMULATION_PHASE_CALLBACKS
-@ENABLE_CALLBACKS_TRACING_TRUE@am__append_9 = -DSC_ENABLE_SIMULATION_PHASE_CALLBACKS_TRACING
-@WANT_PTHREADS_THREADS_TRUE@am__append_10 = -DSC_USE_PTHREADS
-@SEPARATE_BUILD_TREE_TRUE@@WANT_QT_THREADS_TRUE@am__append_11 = \
-@SEPARATE_BUILD_TREE_TRUE@@WANT_QT_THREADS_TRUE@	$(QT_ARCH_IMPL)
+@USES_PTHREADS_LIB_TRUE@am__append_7 = $(PTHREAD_CFLAGS)
+@DISABLE_ASYNC_UPDATES_TRUE@am__append_8 = -DSC_DISABLE_ASYNC_UPDATES
+@ENABLE_CALLBACKS_TRUE@am__append_9 = -DSC_ENABLE_SIMULATION_PHASE_CALLBACKS
+@ENABLE_CALLBACKS_TRACING_TRUE@am__append_10 = -DSC_ENABLE_SIMULATION_PHASE_CALLBACKS_TRACING
+@WANT_PTHREADS_THREADS_TRUE@am__append_11 = -DSC_USE_PTHREADS
+@QT_ARCH_POWERPC_MACOSX_TRUE@@WANT_QT_THREADS_TRUE@am__append_12 = qtmdc.c
+@SEPARATE_BUILD_TREE_TRUE@@WANT_QT_THREADS_TRUE@am__append_13 = \
+@SEPARATE_BUILD_TREE_TRUE@@WANT_QT_THREADS_TRUE@	 $(QT_ARCH_IMPL)
 
 subdir = src/sysc/qt
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -94,8 +96,10 @@ libqt_la_LIBADD =
 am__libqt_la_SOURCES_DIST = qt.c
 am__objects_1 = libqt_la-qt.lo
 @WANT_QT_THREADS_TRUE@am_libqt_la_OBJECTS = $(am__objects_1)
-am__objects_2 = libqt_la-qtmdc.lo libqt_la-qtmds.lo
-@WANT_QT_THREADS_TRUE@nodist_libqt_la_OBJECTS = $(am__objects_2)
+@QT_ARCH_POWERPC_MACOSX_TRUE@@WANT_QT_THREADS_TRUE@am__objects_2 = libqt_la-qtmdc.lo
+@WANT_QT_THREADS_TRUE@am__objects_3 = libqt_la-qtmds.lo \
+@WANT_QT_THREADS_TRUE@	$(am__objects_2)
+@WANT_QT_THREADS_TRUE@nodist_libqt_la_OBJECTS = $(am__objects_3)
 libqt_la_OBJECTS = $(am_libqt_la_OBJECTS) $(nodist_libqt_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -298,24 +302,18 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AM_CPPFLAGS = -I$(top_srcdir)/src
 AM_CFLAGS = $(EXTRA_CXXFLAGS) $(EXTRA_CFLAGS) $(am__append_1) \
-	$(am__append_3) $(am__append_5)
-AM_CXXFLAGS = $(EXTRA_CXXFLAGS) $(am__append_2) $(am__append_4) \
-	$(am__append_6)
-AM_CCASFLAGS = $(EXTRA_ASFLAGS)
-
-# either for async_update locking or pthread processes
-# Libtool/GCC do not play well together on some platforms
-# with C++ libraries and libpthread dependency, see e.g.
-# http://lists.gnu.org/archive/html/libtool/2012-02/msg00003.html
-@USES_PTHREADS_LIB_TRUE@AM_LDFLAGS = $(PTHREAD_LIBS) \
-@USES_PTHREADS_LIB_TRUE@	$(EXPLICIT_LPTHREAD)
+	$(am__append_4) $(am__append_6)
+AM_CXXFLAGS = $(EXTRA_CXXFLAGS) $(am__append_2) $(am__append_5) \
+	$(am__append_7)
+AM_CCASFLAGS = $(EXTRA_ASFLAGS) $(am__append_3)
+@USES_PTHREADS_LIB_TRUE@AM_LDFLAGS = $(PTHREAD_LIBS)
 
 # always add fix-point support
-EXTRA_DEFINES = -DSC_INCLUDE_FX $(am__append_7) $(am__append_8) \
-	$(am__append_9) $(am__append_10)
+EXTRA_DEFINES = -DSC_INCLUDE_FX $(am__append_8) $(am__append_9) \
+	$(am__append_10) $(am__append_11)
 
 # initialize some useful variables (filled later)
-CLEANFILES = $(ARCH_FILES) configuration $(am__append_11)
+CLEANFILES = $(QT_ARCH_FILES) configuration $(am__append_13)
 EXTRA_DIST = CHANGES config INSTALL Makefile.base README README.MISC \
 	README.PORT b.h meas.c stp.c stp.h time/assim time/cswap \
 	time/go time/init time/prim time/raw time/README.time \
@@ -344,10 +342,6 @@ NO_H_FILES = \
 
 noinst_HEADERS = \
 	$(NO_H_FILES)
-
-ARCH_FILES = \
-	qtmdc.c \
-	qtmds.s
 
 C_FILES = \
 	qt.c
@@ -388,7 +382,7 @@ NO_S_FILES = \
 
 @WANT_QT_THREADS_TRUE@noinst_LTLIBRARIES = libqt.la
 @WANT_QT_THREADS_TRUE@nodist_libqt_la_SOURCES = \
-@WANT_QT_THREADS_TRUE@	$(ARCH_FILES)
+@WANT_QT_THREADS_TRUE@	$(QT_ARCH_FILES)
 
 @WANT_QT_THREADS_TRUE@libqt_la_SOURCES = \
 @WANT_QT_THREADS_TRUE@	$(C_FILES)
@@ -399,6 +393,9 @@ NO_S_FILES = \
 @WANT_QT_THREADS_TRUE@qtmds_o_CCASFLAGS = \
 @WANT_QT_THREADS_TRUE@	$(AM_CCASFLAGS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES)
 
+
+# only add qtmdc.c to QT_ARCH_FILES, if needed for the platform (!=null.c)
+@WANT_QT_THREADS_TRUE@QT_ARCH_FILES = qtmds.s $(am__append_12)
 @QT_ARCH_HPPA_TRUE@@WANT_QT_THREADS_TRUE@QT_ARCH_IMPL = md/hppa.s md/null.c
 @QT_ARCH_POWERPC_MACOSX_TRUE@@WANT_QT_THREADS_TRUE@QT_ARCH_IMPL = md/powerpc_mach.s md/powerpc.c
 @QT_ARCH_PTHREADS_TRUE@@WANT_QT_THREADS_TRUE@QT_ARCH_IMPL = md/null.s md/null.c
