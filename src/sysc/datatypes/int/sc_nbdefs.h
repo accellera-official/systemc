@@ -216,12 +216,6 @@ typedef unsigned int sc_digit;	// 32-bit unsigned integer
 // Above, BITS_PER_X is mainly used for sc_signed, and BITS_PER_UX is
 // mainly used for sc_unsigned.
 
-#if defined( _WIN32 ) || defined( __HP_aCC )
-typedef unsigned long fmtflags;
-#else
-typedef ::std::ios::fmtflags fmtflags;
-#endif
-
 extern const small_type NB_DEFAULT_BASE ;
 
 // For sc_int code:

@@ -46,6 +46,12 @@ namespace sc_dt {
 typedef ::std::istream systemc_istream;
 typedef ::std::ostream systemc_ostream;
 
+#if defined( __HP_aCC ) // FIXME: still needed?
+typedef unsigned long fmtflags;
+#else
+typedef ::std::ios::fmtflags fmtflags;
+#endif
+
 } // namespace sc_dt
 
 // shortcuts that save some typing
