@@ -50,6 +50,13 @@ struct Top: sc_module
   
   void control()
   {
+    // create another (orphaned) instance of "target"
+    {
+      sc_spawn_options opt;
+      opt.dont_initialize();
+      sc_spawn( sc_bind( &Top::target, this ), "dyn_target", &opt );
+    }
+
     wait(10, SC_NS);
     f0 = 1;
     target_handle.kill();

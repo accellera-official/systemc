@@ -30,7 +30,7 @@ Refer to the README file on how to run the regression tests.
 Unpack the regression tests using a suitable compression programme, e.g., 7zip.
 
 Refer to the README file on how to run the regression tests, but also to 
-scripts/README_windows.txt for more details.
+README_windows.txt for more details.
 
 Note: You need Cygwin to run the regression tests on Windows.
       Cygwin is free software that can be obtained from:
