@@ -424,10 +424,6 @@ Note: These features are not enabled in the default library
        std::cout << sc_core::sc_get_status() << std::endl;
      }
 
-
-   For more information, see the presentation available at
-     TODO: add link/file location
-
    A related feature is the triggering of sc_trace updates via these
    simulation phase callbacks instead of the hard-coded calls in various
    places of the simulation loop.  This feature has to be enabled separately,
@@ -514,6 +510,20 @@ Note: These features are not enabled in the default library
     The work-around is to specify DEBUG_SYSTEMC when the SystemC library
     is built.
 
+
+  - On some recent compilers (e.g. Clang, Solaris Studio), warnings are
+    generated about the "hidden overloaded virtual function" bind of the
+    sc_port(_b) class templates in the 'specialized_signals' example.
+    These warnings are caused by the introduction of the virtual bind
+    implementation in IEEE 1666-2011.
+    As a workaround, check your compiler documentation how to suppress
+    the warning (e.g. 'CXXFLAGS=-Wno-overloaded-virtual').
+    This also affects the TLM-2.0 sockets, see Section 9.3.
+
+  - Some paths in this release are longer than the historical 99 character
+    limit of tar archives, and several Windows archivers (e.g. WinZip) 
+    have been reported to trip over this.  The open source archiver 7-zip
+    (http://7-zip.org) is known to work.
 
 8) Fixed-point library
 ======================
@@ -643,3 +653,12 @@ b. The implementation of the PEQ 'peq_with_get' in tlm_utils does not properly
    time both types of notifications emerge from the PEQ in the same evaluation
    phase. This is wrong immediate notifications should overtake delta
    notifications.
+
+c. On some recent compilers (e.g. Clang, Solaris Studio), warnings are generated
+   about the "hidden overloaded virtual function" bind of the sc_port(_b)
+   class templates when using the TLM-2.0 sockets.  These warnings are caused by
+   the introduction of the virtual bind implementation in IEEE 1666-2011.
+   As a workaround in your application, check your compiler documentation how to
+   suppress the warning (e.g. adding the flag -Wno-overloaded-virtual), or mark
+   the SystemC include directory as "system directory" by using
+   '-isystem ${SYSTEMC_HOME}/include' (or equivalent) instead of the usual '-I'.

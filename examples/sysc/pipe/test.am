@@ -82,8 +82,9 @@ pipe_CXX_FILES = \
 	pipe/stage2.cpp \
 	pipe/stage3.cpp
 
-pipe_BUILD = \
-	pipe/golden.log
+# floating-point outputs vary accross platforms
+#pipe_BUILD = \
+#	pipe/golden.log
 
 pipe_EXTRA = \
 	pipe/pipe.vcproj \

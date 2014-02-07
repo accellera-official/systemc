@@ -24,7 +24,7 @@
   CHANGE LOG IS AT THE END OF THE FILE
  *****************************************************************************/
 
-#include <stdio.h>
+#include <cstdio>
 
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_process_handle.h"

@@ -73,6 +73,14 @@ libsystemc_la_LIBADD = \
        utils/libutils.la \
        datatypes/libdatatypes.la
 
+# either for async_update locking or pthread processes
+if USES_PTHREADS_LIB
+# Libtool/GCC do not play well together on some platforms
+# with C++ libraries and libpthread dependency, see e.g.
+# http://lists.gnu.org/archive/html/libtool/2012-02/msg00003.html
+libsystemc_la_LIBADD+=$(EXPLICIT_LPTHREAD)
+endif
+
 libsystemc_la_LDFLAGS = -release $(VERSION) -L$(libarchdir)
 
 ## Taf!

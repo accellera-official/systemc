@@ -50,6 +50,8 @@
 // the source.
 //
 
+#include <string.h>
+
 #include "sysc/datatypes/bit/sc_bit_ids.h"
 #include "sysc/datatypes/bit/sc_bv_base.h"
 #include "sysc/datatypes/fx/sc_fix.h"

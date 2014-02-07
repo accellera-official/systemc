@@ -78,8 +78,8 @@ class sc_spawn_reset : public sc_spawn_reset_base
 
 sc_spawn_options::~sc_spawn_options()
 {
-    size_t resets_n = m_resets.size();
-    for ( size_t reset_i = 0; reset_i < resets_n; reset_i++ )
+    std::vector<sc_spawn_reset_base*>::size_type resets_n = m_resets.size();
+    for ( std::vector<sc_spawn_reset_base*>::size_type reset_i = 0; reset_i < resets_n; reset_i++ )
         delete m_resets[reset_i];
 }
 
@@ -111,9 +111,9 @@ SC_DEFINE_RESET_SIGNALS( sc_signal_in_if<bool> )
 void
 sc_spawn_options::specify_resets() const
 {
-    size_t resets_n; // number of reset specifications to process.
+    std::vector<sc_spawn_reset_base*>::size_type resets_n; // number of reset specifications to process.
     resets_n = m_resets.size();
-    for ( size_t reset_i = 0; reset_i < resets_n; reset_i++ )
+    for ( std::vector<sc_spawn_reset_base*>::size_type reset_i = 0; reset_i < resets_n; reset_i++ )
         m_resets[reset_i]->specify_reset();
 }
 

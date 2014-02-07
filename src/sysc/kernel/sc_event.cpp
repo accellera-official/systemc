@@ -24,6 +24,9 @@
  CHANGE LOG APPEARS AT THE END OF THE FILE
  *****************************************************************************/
 
+#include <stdlib.h>
+#include <string.h>
+
 #include "sysc/kernel/sc_event.h"
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/kernel/sc_phase_callback_registry.h"

@@ -55,6 +55,9 @@
 //
 
 #include <ctype.h>
+#include <cstdio>
+#include <string.h>
+
 #include "sysc/datatypes/int/sc_int_ids.h"
 #include "sysc/datatypes/int/sc_nbutils.h"
 #include "sysc/kernel/sc_macros.h"

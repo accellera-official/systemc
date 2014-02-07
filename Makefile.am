@@ -33,8 +33,6 @@
 # support local addition of automake macros
 ACLOCAL_AMFLAGS= -I config
 
-DOXYGEN=doxygen
-
 SUBDIRS = \
 	docs \
 	src \
@@ -73,7 +71,6 @@ endif # SEPARATE_INSTALL_TREE
 ## ****************************************************************************
 
 doxygen:
-	@(cd docs/sysc/doxygen && $(DOXYGEN))
-	@(cd docs/tlm/doxygen  && $(DOXYGEN))
+	@(cd docs && $(MAKE) $@)
 
 ## Taf!

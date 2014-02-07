@@ -52,10 +52,6 @@ NO_H_FILES = \
 noinst_HEADERS = \
 	$(NO_H_FILES)
 
-ARCH_FILES = \
-	qtmdc.c \
-	qtmds.s
-
 C_FILES = \
 	qt.c
 
@@ -132,7 +128,7 @@ EXTRA_DIST += \
 	$(NO_S_FILES)
 
 CLEANFILES += \
-	$(ARCH_FILES) \
+	$(QT_ARCH_FILES) \
 	configuration
 
 if WANT_QT_THREADS
@@ -143,7 +139,7 @@ BUILT_SOURCES = \
 noinst_LTLIBRARIES = libqt.la
 
 nodist_libqt_la_SOURCES = \
-	$(ARCH_FILES)
+	$(QT_ARCH_FILES)
 
 libqt_la_SOURCES = \
 	$(C_FILES)
@@ -154,6 +150,10 @@ libqt_la_LIBTOOLFLAGS = \
 qtmds_o_CCASFLAGS = \
 	$(AM_CCASFLAGS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES)
 
+# only add qtmdc.c to QT_ARCH_FILES, if needed for the platform (!=null.c)
+QT_ARCH_FILES = \
+	qtmds.s
+
 if QT_ARCH_X86
 QT_ARCH_IMPL = md/i386.s md/null.c
 endif
@@ -161,6 +161,7 @@ if QT_ARCH_X86_64
 QT_ARCH_IMPL = md/iX86_64.s md/null.c
 endif
 if QT_ARCH_POWERPC_MACOSX
+QT_ARCH_FILES+=qtmdc.c
 QT_ARCH_IMPL = md/powerpc_mach.s md/powerpc.c
 endif
 if QT_ARCH_SPARC
@@ -187,7 +188,7 @@ endif # SEPARATE_BUILD_TREE
 
 if SEPARATE_BUILD_TREE
 CLEANFILES += \
-	$(QT_ARCH_IMPL)
+	 $(QT_ARCH_IMPL)
 endif # SEPARATE_BUILD_TREE
 
 endif #  WANT_QT_THREADS

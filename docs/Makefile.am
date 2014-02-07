@@ -32,6 +32,8 @@
 
 include $(top_srcdir)/config/Make-rules.common
 
+DOXYGEN=doxygen
+
 ## Core documentation (see also root directory)
 
 DOC_FILES = \
@@ -81,5 +83,12 @@ endif # SEPARATE_INSTALL_TREE
 ## add documentation to distribution
 EXTRA_DIST += \
 	$(DOC_FILES)
+
+doxygen: sysc/doxygen/Doxyfile tlm/doxygen/Doxyfile
+	@(cd sysc/doxygen && $(DOXYGEN))
+	@(cd tlm/doxygen  && $(DOXYGEN))
+
+%/Doxyfile: %/Doxyfile.in
+	(cd $(top_builddir) && $(SHELL) config.status docs/$@)
 
 ## Taf!

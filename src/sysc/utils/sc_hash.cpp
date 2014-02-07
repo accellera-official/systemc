@@ -26,8 +26,10 @@
  *****************************************************************************/
 
 #include <assert.h>
+#include <stdlib.h> // duplicate (c)stdlib.h headers for Solaris
 #include <cstdlib>
 #include <cstddef>
+#include <string.h>
 
 #include "sysc/kernel/sc_cmnhdr.h"
 #include "sysc/utils/sc_hash.h"
