@@ -738,7 +738,7 @@ sub prepare_environment
     } elsif( $rt_systemc_arch eq "sparcOS5" ) {
         $rt_ccflags       = "";
         $rt_ldflags       = "-xildoff";
-        $rt_debug_flag    = "-g";
+        $rt_ldrpath       = "-Wl,-R";
         $rt_optimize_flag = "-O3";
     } elsif( $rt_systemc_arch eq "gcchpux11" ) {
         #use defaults
