@@ -51,10 +51,10 @@ as described in the IEEE 1666-2011 Language Reference Manual.
       - GNU C++ compiler versions gcc-4.2.1 through gcc-4.8.2;
       - Clang C++ compiler version clang-3.3
 
-    o 32-bit Solaris (sparc32)
+    o 32-bit Solaris (SPARC)
       (Sun Solaris 10, Oracle Solaris 11)
       - GNU C++ compiler versions gcc-3.4.3 through gcc-4.8.1;
-      - Sun Studio compiler versions 12, 12.1, 12.2, 12.3
+      - Sun/Solaris Studio compiler versions 12, 12.1, 12.2, 12.3
 
     o Windows 7 SP1 (WoW64)
       - Microsoft Visual Studio 2005 SP1               (8.0) (Win32 and x64);
@@ -62,13 +62,12 @@ as described in the IEEE 1666-2011 Language Reference Manual.
       - Microsoft Visual Studio 2010 Express SP1      (10.0) (Win32);
       - Microsoft Visual Studio 2012 Express Update 4 (11.0) (Win32 and x64)
 
-    o Windows 7 SP1 (WoW64) (Cygwin 1.7.17)
+    o Windows 7 SP1 (WoW64), (Cygwin 1.7.17)
       - GNU C++ compiler versions gcc-3.4.4 through gcc-4.3.4 (x86)
 
-    o Windows 7 SP1 (WoW64), Msys 1.0.17(0.48/3/2) with compilers
-      - MinGW32 GCC versions 4.5.2, 4.7.0 (x86)
-      - MinGW32-w64 GCC version 4.8.1     (x86)
-      - MinGW32-w64 GCC version 4.8.1     (x86_64)
+    o Windows 7 SP1 (WoW64), Msys 1.0.17(0.48/3/2)
+      - MinGW32 GNU C++ compiler versions 4.5.2 through 4.7.0 (x86);
+      - MinGW-w64 GNU C++ compiler version 4.8.1 (x86 and x86_64)
 
 
   This release has not yet been tested or is known not to work as expected
@@ -76,7 +75,7 @@ as described in the IEEE 1666-2011 Language Reference Manual.
 
     o GNU C++ compiler versions prior to 3.4.x (all platforms)
     o HP-UX 11.00 or later with GNU C++ or HP C++ compiler
-    o Sun/Oracle Solaris with Solaris Sudio C++ compiler prior to 12.x
+    o Sun/Oracle Solaris with Sun Studio C++ compiler prior to 12.x
     o Mac OS X prior 10.6 Snow Leopard with GNU C++ compiler
     o Microsoft Visual C++ versions prior to 8.0 (2005)
 

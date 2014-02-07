@@ -43,10 +43,10 @@ SystemC can be installed on the following UNIX, or UNIX-like platforms:
 
   o Solaris
     * Architectures
-      - SPARC32
+      - SPARC (32-bit)
     * Compilers
       - GNU C++ compiler
-      - Solaris Studio
+      - Sun/Solaris Studio
 
   o BSD
     * Architectures
@@ -134,7 +134,7 @@ To install SystemC on a UNIX system, do the following steps:
 
         > setenv CXX g++
 
-     For the Solaris Studio compilers, use
+     For the Sun/Solaris Studio compilers, use
 
         > setenv CXX CC
 
