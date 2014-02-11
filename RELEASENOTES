@@ -400,11 +400,11 @@ Note: These features are not enabled in the default library
    an application may register any sc_object to subscribe to a (set of)
    elaboration/simulation phases for dynamic callbacks explicitly:
 
-     // trigger "obj" before updating the simulation time
-     obj.register_simulation_phase_callback( SC_BEFORE_TIMESTEP );
+     // trigger current object before updating the simulation time
+     this->register_simulation_phase_callback( SC_BEFORE_TIMESTEP );
 
-     // trigger "obj" before returning to "sc_start"
-     obj.register_simulation_phase_callback( SC_PAUSED | SC_STOPPED );
+     // trigger current object before returning to "sc_start"
+     this->register_simulation_phase_callback( SC_PAUSED | SC_STOPPED );
 
    Unsubscribing from any simulation phase is possible via the corresponding
       unregister_simulation_phase_callback( callback_mask )
