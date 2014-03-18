@@ -166,7 +166,7 @@
 #error "Compiler not supported or configured - please reconfigure"
 #endif
 //
-// last known and checked version is 1900 (VC 2013):
+// last known and checked version is 1800 (VC 12.0 / 2013):
 #if (_MSC_VER > 1800)
 #  if defined(SC_BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
