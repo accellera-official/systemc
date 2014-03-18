@@ -415,8 +415,8 @@ Use the `--help' option to print a list.
 2. Installation Notes for Windows
 ---------------------------------
 
-This release has been tested on Visual C++ 2005/2008/2010/2012, running
-on Windows XP and Windows 7.
+This release has been tested on Visual C++ versions 2005 through 2013,
+running on Windows 7.
 
 
 Note: This section covers the installation based on Microsoft Visual C++.
