@@ -62,7 +62,7 @@ case $1 in
 		esac
 
 #		${LN_S} md/hppa.h qtmd.h
-		${LN_S} md/null.c qtmdc.c
+#		${LN_S} md/null.c qtmdc.c
 		${LN_S} md/hppa.s qtmds.s
 #		${LN_S} md/hppa_b.s qtmdb.s
 		iter_init=10000000
@@ -95,7 +95,7 @@ case $1 in
 				;;
 		esac
 		: "Intel X386 64-bit and compatibles"
-		${LN_S} md/null.c qtmdc.c
+#		${LN_S} md/null.c qtmdc.c
 		iter_init=10000000
 		iter_runone=1000000
 		iter_blockint=1000000
@@ -130,7 +130,7 @@ case $1 in
         : "Intel 80386 and compatibles (not '286...)"
 #       ${LN_S} md/default.Makefile Makefile.md
 #       ${LN_S} md/i386.h qtmd.h
-        ${LN_S} md/null.c qtmdc.c
+#       ${LN_S} md/null.c qtmdc.c
 #       ${LN_S} md/i386.README README.md
         iter_init=10000000
         iter_runone=1000000
@@ -155,7 +155,7 @@ case $1 in
 		: "Motorola 68000 family -- incomplete!"
 #		${LN_S} md/default.Makefile Makefile.md
 #		${LN_S} md/m68k.h qtmd.h
-		${LN_S} md/null.c qtmdc.c
+#		${LN_S} md/null.c qtmdc.c
 		${LN_S} md/m68k.s qtmds.s
 #		${LN_S} md/m68k_b.s qtmdb.s
 #		${LN_S} md/null.README README.md
@@ -203,7 +203,7 @@ case $1 in
 
 #		${LN_S} md/default.Makefile Makefile.md
 #		${LN_S} md/mips.h qtmd.h
-		${LN_S} md/null.c qtmdc.c
+#		${LN_S} md/null.c qtmdc.c
 #		${LN_S} md/mips_b.s qtmdb.s
 #		${LN_S} md/null.README README.md
 		iter_init=10000000
@@ -241,7 +241,7 @@ case $1 in
 
  		${LN_S} md/default.Makefile Makefile.md
 #		${LN_S} md/sparc.h qtmd.h
-		${LN_S} md/null.c qtmdc.c
+#		${LN_S} md/null.c qtmdc.c
 		iter_init=10000000
 		iter_runone=1000000
 		iter_blockint=1000000
@@ -264,7 +264,7 @@ case $1 in
 		: "DEC VAX processors."
 #		${LN_S} md/default.Makefile Makefile.md
 #		${LN_S} md/vax.h qtmd.h
-		${LN_S} md/null.c qtmdc.c
+#		${LN_S} md/null.c qtmdc.c
 		${LN_S} md/vax.s qtmds.s
 #		${LN_S} md/vax_b.s qtmdb.s
 #		${LN_S} md/null.README README.md
@@ -291,7 +291,7 @@ case $1 in
 		: "Varargs is not currently supported."
 #		${LN_S} md/ksr1.Makefile Makefile.md
 #		${LN_S} md/ksr1.h qtmd.h
-		${LN_S} md/null.c qtmdc.c
+#		${LN_S} md/null.c qtmdc.c
 		${LN_S} md/ksr1.s qtmds.s
 #		${LN_S} md/ksr1_b.s qtmdb.s
 #		${LN_S} md/null.README README.md
@@ -353,10 +353,10 @@ tem V ABI"
 	pthreads*)
 		: Posix thread support rather than Quick threads.
 #		${LN_S} md/hppa.h qtmd.h
-		${LN_S} md/null.c qtmdc.c
-		${LN_S} md/null.s qtmds.s
+#		${LN_S} md/null.c qtmdc.c
+#		${LN_S} md/null.s qtmds.s
 #		${LN_S} md/hppa_b.s qtmdb.s
-		cp md/pthreads.Makefile Makefile
+#		cp md/pthreads.Makefile Makefile
 		exit 0
 		;;
 
