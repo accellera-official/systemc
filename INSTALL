@@ -237,7 +237,7 @@ To install SystemC on a UNIX system, do the following steps:
 
         > gmake check
 
-     this will compile and run the examples in the subdirectory
+     This will compile and run the examples in the subdirectory
      examples.
 
   8. Install the package.
@@ -266,7 +266,7 @@ To install SystemC on a UNIX system, do the following steps:
 Running the Examples
 ====================
 
-A copy of the examples reside in the temporary directory - see 
+Copies of the examples reside in the temporary directory - see
 instruction 7 above for details on building and running them.
 
 In addition, a copy of the example code resides in the directory
