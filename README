@@ -61,6 +61,7 @@ as described in the IEEE 1666-2011 Language Reference Manual.
       - Microsoft Visual Studio 2008 Express SP1       (9.0) (Win32);
       - Microsoft Visual Studio 2010 Express SP1      (10.0) (Win32);
       - Microsoft Visual Studio 2012 Express Update 4 (11.0) (Win32 and x64)
+      - Microsoft Visual Studio 2013 Express Update 1 (12.0) (Win32 and x64)
 
     o Windows 7 SP1 (WoW64), (Cygwin 1.7.17)
       - GNU C++ compiler versions gcc-3.4.4 through gcc-4.3.4 (x86)
