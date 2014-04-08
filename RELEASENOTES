@@ -466,15 +466,15 @@ Note: These features are not enabled in the default library
     refuse to load the library.  As a workaround for GNU (compatible)
     assemblers, pass the assembler flags variable with the option
       CCASFLAGS="-Wa,--noexecstack"
-    to the `configure' script before building the SystemC library.
+    to the `configure' script call before building the SystemC library.
 
 
   - IEEE 1666-2011 does not explicitly define the behaviour in the corner
     cases of attempting to create sc_time objects smaller than the time
     resolution or bigger than sc_max_time().  This implementation currently
     truncates "small" sc_time objects to SC_ZERO_TIME, while "too big"
-    objects wrap-around sc_max_time() and lead to a value modulo modulo
-    the maximum time.  In both cases, no warning is generated.
+    objects wrap-around sc_max_time() and lead to a value modulo the
+    maximum time.  In both cases, no warning is generated.
 
 
   - The sign-extension of mixed-signedness logic expressions (&,|)
@@ -517,13 +517,19 @@ Note: These features are not enabled in the default library
     These warnings are caused by the introduction of the virtual bind
     implementation in IEEE 1666-2011.
     As a workaround, check your compiler documentation how to suppress
-    the warning (e.g. 'CXXFLAGS=-Wno-overloaded-virtual').
+    the warning (e.g. 'CXXFLAGS=-Wno-overloaded-virtual') or mark
+    the SystemC include directory as "system directory" by using
+    '-isystem ${SYSTEMC_HOME}/include' (or equivalent) instead of
+    the usual '-I'.
+
     This also affects the TLM-2.0 sockets, see Section 9.3.
 
+
   - Some paths in this release are longer than the historical 99 character
-    limit of tar archives, and several Windows archivers (e.g. WinZip) 
+    limit of tar archives, and several Windows archivers (e.g. WinZip)
     have been reported to trip over this.  The open source archiver 7-zip
     (http://7-zip.org) is known to work.
+
 
 8) Fixed-point library
 ======================
