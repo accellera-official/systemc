@@ -646,7 +646,7 @@ sc_module::operator () ( const sc_bind_proxy& p001,
     {
         warn_only_once = false;
 	SC_REPORT_INFO(SC_ID_IEEE_1666_DEPRECATION_,
-	 "multiple () binding depreacted, use explicit port binding instead." );
+	 "multiple () binding deprecated, use explicit port binding instead." );
     }
 
     TRY_BIND( p001 );
