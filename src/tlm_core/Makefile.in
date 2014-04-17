@@ -58,7 +58,7 @@ build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
 DIST_COMMON = $(nobase_localinclude_HEADERS) $(srcdir)/Makefile.am \
-	$(srcdir)/Makefile.in $(srcdir)/tlm-2.0.pc.in \
+	$(srcdir)/Makefile.in $(srcdir)/tlm.pc.in \
 	$(top_srcdir)/config/Make-rules.common \
 	$(top_srcdir)/config/Make-rules.sysc
 @WANT_DEBUG_TRUE@am__append_1 = $(DEBUG_CXXFLAGS)
@@ -86,7 +86,7 @@ am__aclocal_m4_deps = $(top_srcdir)/config/ax_check_define.m4 \
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
-CONFIG_CLEAN_FILES = tlm-2.0.pc
+CONFIG_CLEAN_FILES = tlm.pc
 CONFIG_CLEAN_VPATH_FILES =
 AM_V_GEN = $(am__v_GEN_@AM_V@)
 am__v_GEN_ = $(am__v_GEN_@AM_DEFAULT_V@)
@@ -299,7 +299,7 @@ EXTRA_DEFINES = -DSC_INCLUDE_FX $(am__append_8) $(am__append_9) \
 CLEANFILES = 
 EXTRA_DIST = tlm_1/README.txt tlm_2/README.txt
 pkgconfigdir = $(libarchdir)/pkgconfig
-pkgconfig_DATA = tlm-2.0.pc
+pkgconfig_DATA = tlm.pc
 H_FILES = \
 	tlm_2/tlm_version.h \
 	tlm_2/tlm_2_interfaces/tlm_2_interfaces.h \
@@ -382,7 +382,7 @@ $(top_srcdir)/configure:  $(am__configure_deps)
 $(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
-tlm-2.0.pc: $(top_builddir)/config.status $(srcdir)/tlm-2.0.pc.in
+tlm.pc: $(top_builddir)/config.status $(srcdir)/tlm.pc.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 
 mostlyclean-libtool:

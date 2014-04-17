@@ -16341,7 +16341,7 @@ fi
 
 
 
-ac_config_files="$ac_config_files Makefile src/Makefile src/sysc/Makefile src/sysc/systemc.pc src/sysc/communication/Makefile src/sysc/datatypes/Makefile src/sysc/kernel/Makefile src/sysc/tracing/Makefile src/sysc/qt/Makefile src/sysc/utils/Makefile src/sysc/packages/boost/Makefile src/tlm_core/Makefile src/tlm_core/tlm-2.0.pc src/tlm_utils/Makefile examples/Makefile examples/sysc/Makefile examples/tlm/Makefile examples/tlm/common/Makefile docs/Makefile docs/sysc/doxygen/Doxyfile docs/tlm/doxygen/Doxyfile"
+ac_config_files="$ac_config_files Makefile src/Makefile src/sysc/Makefile src/sysc/systemc.pc src/sysc/communication/Makefile src/sysc/datatypes/Makefile src/sysc/kernel/Makefile src/sysc/tracing/Makefile src/sysc/qt/Makefile src/sysc/utils/Makefile src/sysc/packages/boost/Makefile src/tlm_core/Makefile src/tlm_core/tlm.pc src/tlm_utils/Makefile examples/Makefile examples/sysc/Makefile examples/tlm/Makefile examples/tlm/common/Makefile docs/Makefile docs/sysc/doxygen/Doxyfile docs/tlm/doxygen/Doxyfile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -17538,7 +17538,7 @@ do
     "src/sysc/utils/Makefile") CONFIG_FILES="$CONFIG_FILES src/sysc/utils/Makefile" ;;
     "src/sysc/packages/boost/Makefile") CONFIG_FILES="$CONFIG_FILES src/sysc/packages/boost/Makefile" ;;
     "src/tlm_core/Makefile") CONFIG_FILES="$CONFIG_FILES src/tlm_core/Makefile" ;;
-    "src/tlm_core/tlm-2.0.pc") CONFIG_FILES="$CONFIG_FILES src/tlm_core/tlm-2.0.pc" ;;
+    "src/tlm_core/tlm.pc") CONFIG_FILES="$CONFIG_FILES src/tlm_core/tlm.pc" ;;
     "src/tlm_utils/Makefile") CONFIG_FILES="$CONFIG_FILES src/tlm_utils/Makefile" ;;
     "examples/Makefile") CONFIG_FILES="$CONFIG_FILES examples/Makefile" ;;
     "examples/sysc/Makefile") CONFIG_FILES="$CONFIG_FILES examples/sysc/Makefile" ;;
