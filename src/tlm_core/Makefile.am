@@ -33,7 +33,7 @@
 include $(top_srcdir)/config/Make-rules.sysc
 
 pkgconfigdir = $(libarchdir)/pkgconfig
-pkgconfig_DATA = tlm-2.0.pc
+pkgconfig_DATA = tlm.pc
 
 H_FILES = \
 	tlm_2/tlm_version.h \
