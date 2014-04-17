@@ -1,7 +1,7 @@
 This directory allows the examples to be launched from 
 the command line on Windows.
 
-It has been tested on Windows XP SP2 with the following compiler versions:
+It has been tested on Windows 7 with the following compiler versions:
 
   Microsoft Visual Studio 2005 .NET Professional SP1
   Microsoft Visual C++ 2005 .NET Express Edition SP1

@@ -15,7 +15,7 @@ as described in the IEEE 1666-2011 Language Reference Manual.
    which it has been well tested:
 
     o 64-bit Linux (x86_64)
-      (RedHat Enterprise Linux 5, 6; ScientificLinux 5, 6; Debian 7; Ubuntu 12)
+      (RedHat Enterprise Linux 5, 6; Scientific Linux 5, 6; Debian 7; Ubuntu 12)
       - GNU C++ compiler versions gcc-3.4.6 through gcc-4.9.0;
       - Clang C++ compiler versions clang-3.0 through clang-3.5
 
@@ -25,7 +25,7 @@ as described in the IEEE 1666-2011 Language Reference Manual.
       - Clang C++ compiler versions clang-3.0 through clang-3.5
 
     o 32-bit Linux (x86)
-      (ScientificLinux 5, 6; Debian 6, 7; Ubuntu 12)
+      (Scientific Linux 5, 6; Debian 6, 7; Ubuntu 12)
       - GNU C++ compiler versions gcc-3.4.6 through gcc-4.9.0;
       - Clang C++ compiler versions clang-3.0 through clang-3.4
 
