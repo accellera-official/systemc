@@ -751,7 +751,7 @@ sub prepare_environment
     } elsif( $rt_systemc_arch =~ /^linux(64)?/ ) {
         $rt_ccflags      .= " -m${rt_cpuarch}";
         $rt_ldflags       = $rt_ccflags;
-    } elsif( $rt_systemc_arch =~ /^(free)bsd(64)?/ ) {
+    } elsif( $rt_systemc_arch =~ /^(free)?bsd(64)?/ ) {
         $rt_ccflags      .= " -m${rt_cpuarch}";
         $rt_ldflags       = $rt_ccflags;
     } elsif( $rt_systemc_arch =~ /^macosx(ppc)?(64)?/ ) {
