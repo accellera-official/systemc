@@ -8,9 +8,9 @@ v1.0, June 2013
 
 In this document, the internal development process for Accellera's SystemC
 Language Working Group (and TLM Working Group) is described.  This mostly
-relates to the development and maintenance procedures for the ASI
+relates to the development and maintenance procedures for the
 proof-of-concept implementation of SystemC (and TLM).  This document
-focuses on the technical aspects related to the development of the ASI
+focuses on the technical aspects related to the development of the
 SystemC implementation.  Legal and formal procedures are documented at
 <http://accellera.org/about/policies>.
 
@@ -19,7 +19,7 @@ SystemC implementation.  Legal and formal procedures are documented at
 Repository organization
 ---------------------------------------------------------------------
 
-The central source code repository of the ASI SystemC implementation is
+The central source code repository of the Accellera SystemC implementation is
 hosted in two [Git] [1] repositories at [GitHub](http://github.com).  The
 repositories are private to the `OSCI-WG` organization and can be found at:
 
@@ -149,7 +149,7 @@ point for the last `release`.
 If more sophisticated version branches are needed, a development
 model similar to the well-known ["successful branching model"] [5]
 can be deployed.  Not all aspects of this model are expected to
-be needed for the ASI SystemC implementation, as we usually
+be needed for the SystemC implementation, as we usually
 maintain only a single (i.e., the latest) public release of the
 kernel.
 
@@ -165,7 +165,7 @@ forked and checked out from the ASI `master` branch:
       git checkout -b <company>-<feature-xyz> master
 
 Then code up the new contribution.  Please try to facilitate code
-review by other ASI members by logically grouping your changes into
+review by other Accellera members by logically grouping your changes into
 one commit per addressed issue. For the commit messages, please
 consider to follow these suggestions: 
 
@@ -207,7 +207,7 @@ clone of the repository
       git diff master..<remote-name>/<company-feature-xyz>
       git log <remote-name>/<company-feature-xyz>
 
-After the contribution is accepted, it will be merged into the ASI
+After the contribution is accepted, it will be merged into the working group's
 `master` branch by the responsible source code maintainer.  This should
 be done with an explicit *merge commit*, to keep the individual 
 contributions separated:
@@ -249,6 +249,11 @@ deltas instead of the full tarballs are stored within the repository.
 >         support the required use cases within the ASI SystemC working
 >         groups.
 
+> *NOTE:* The use of the `pristine-tar` tool is entirely optional
+>         since the archives can be downloaded directly from the
+>         GitHub repository based on the tags:
+>           https://github.com/OSCI-WG/systemc/releases
+
 
 #### Basic workflow
 
@@ -272,23 +277,23 @@ management](#release-management).
 *TODO*: Outline maintenance of an in-house forking model, seamlessly
         integrated with the LWG's flow.
 
-Vendor's may be interested in maintaining their own, in-house flow
+Vendors may be interested in maintaining their own, in-house flow
 to align the internal development of a derived SystemC implementation,
-while being able to pick fixes from the ASI tree (and hopefully)
+while being able to pick fixes from the Accellera Working Group's tree (and hopefully)
 contributing fixes and features back to the proof-of-concept
 implementation.
 
 For this purpose members may employ the already mentioned ["successful
 branching model"] [4] by Vincent Driessen. The vendor can branch its
 own development branch, e.g., `develop-<vendor>` from the already
-tracked ASI's development branch `master` in his clone of the ASI
-repository. The vendor is then able to integrate commits on the ASI
+tracked working group development branch `master` in his clone of the WG
+repository. The vendor is then able to integrate commits on the WG
 development branch by merging it into his his vendor development
 branch.
 
-Bug fixes to be contributed back to ASI consist usually of one or
-several isolated commits. They need to be cherry picked from the
-vendor's development branch into a new branch created from the ASI
+Bug fixes to be contributed back to the WG consist usually of one or
+several isolated commits. They need to be cherry-picked from the
+vendor's development branch into a new branch created from the WG
 development branch:
 
       git checkout -b <vendor>-fix-<bug> origin/master
@@ -299,8 +304,8 @@ vendor's github account and a pull request created, as described in
 the [feature branch section](#adding-a-feature-set).
 
 A new feature consists usually of a series of commits developed in a
-dedicated feature branched of the vendor's or ASI's development
-branch. Only in the first case, a rebase on the top of the ASI's
+dedicated feature branched of the vendor's or WG's development
+branch. Only in the first case, a rebase on the top of the WG's
 development branch is necessary. To this end, branch first from the
 feature branch:
 
@@ -355,18 +360,17 @@ performed by the maintainer
   for creating the release tarballs should be marked with an *annotated*
   and optionally signed Git tag.
 
-        # git tag -a -m "<package> <version>" <package>-<version> <refspec>
-        git tag -a -m "SystemC 2.3.0" systemc-2.3.0 release
+        # git tag -a -m "<package> <version>" <version> <refspec>
+        git tag -a -m "SystemC 2.3.0" 2.3.0 release
 
-  The tag name follow the pattern `<package>-<version>`, where `version`
-  follows the versioning rules in IEEE 1666-2011, which means it should
-  follow one of the three standard formats:
+  The tagname should contain the `<version>`, following the versioning rules
+  in IEEE 1666-2011.  There are three standard formats:
   * `x.x.x_beta_<isodate>` for beta/internal versions
   * `x.x.x_pub_rev_<isodate>` for public review versions, and
   * `x.x.x` for public release versions.
 
-  *NOTE:* The tag should be on the `release` branch, to enable the
-  automated tarball creation in the next step.
+> *NOTE:* The tag should be on the `release` branch, to enable the
+> automated tarball creation in the next step.
 
 4. **Create the release tarball**
 
@@ -374,17 +378,24 @@ performed by the maintainer
   `git describe` can be used to obtain the correct tarball name
   based on the current tag.
 
-        VERSION="`git describe release`" \
-          git archive --format=tar.gz --prefix=${VERSION}/ release \
-            > ${VERSION}.tar.gz
+        PACKAGE="`basename $(git rev-parse --show-toplevel)`" # or direcly 'systemc'
+        VERSION="`git describe release`"
+        git archive -o ${PACKAGE}-${VERSION}.tgz \
+                    --prefix=${PACKAGE}-${VERSION}/ release
 
-  *NOTE:* Even without a tag, a quick-shot release of the
-          release branch can be generated this way.
+> *NOTE:* Even without a tag, a quick-shot release of the
+>         release branch can be generated this way.
 
-  The resulting archive should then be added to the `pristine-tar`
+  The resulting archive can then be added to the `pristine-tar`
   branch to keep track of the release history:
 
-        pristine-tar commit ${VERSION}.tgz release
+        pristine-tar commit ${PACKAGE}-${VERSION}.tgz release
+
+> *NOTE:* The use of the `pristine-tar` tool is entirely optional
+>         since the archives can be downloaded directly from the
+>         GitHub repository based on the tags:
+>         * <https://github.com/OSCI-WG/systemc/releases>
+>         * <https://github.com/OSCI-WG/systemc-regressions/releases>
 
 5. **Publish the release**
 
@@ -393,16 +404,16 @@ performed by the maintainer
 
         git push osci-wg \
                master release pristine-tar \
-               <package>-<version>
+               <version>
 
-  *NOTE:* The tag needs to be pushed explicitly.
+> *NOTE:* The tag needs to be pushed explicitly.
 
 
 ---------------------------------------------------------------------
 Issue tracking
 ---------------------------------------------------------------------
 
-Open issues (bugs, cleanups, features) related to ASI's proof-of-concept
+Open issues (bugs, cleanups, features) related to the proof-of-concept
 implementation of SystemC/TLM are tracked in GitHub's issue tracking system:
 
  * <https://github.com/OSCI-WG/systemc/issues>             (core library)
@@ -419,43 +430,35 @@ different parts of the implementation:
 Additional labels are used to classify issues according to their
 severity (10 highest), according to the following guidelines:
 
- * `10-critical`
- 
+ * `10-critical`   
    Show-stoppers that must be fixed, affects all (or at least most)
    platforms and violates fundamental specifications for most applications.
 
- * `09-serious`
-
+ * `09-serious`  
    At least one of the explicitly supported platforms is affected and
    causes significant problems for many applications.
  
- * `06-medium`
-
+ * `06-medium`  
    Covers an area, where the standard may not be clearly specified.  May
    require changes to external/standard API.
  
- * `05-feature`
-
+ * `05-feature`  
    New feature proposal, beyond the current standard. Includes internal
    (and external, providing adoption by IEEE P1666 WG) API changes.
  
- * `04-errata`
-
+ * `04-errata`  
    Inconvenience (errata) for users of many platforms, workaround available.
    Solution may require internal API changes.
 
- * `02-documentation`
-
+ * `02-documentation`  
    Documentation inconsistency or insufficiency (e.g. whitepaper unclear
    or misleading), no code changes.
 
- * `01-inconvenience`
-
+ * `01-inconvenience`  
    Inconvenience (workaround available), for some platforms
    (e.g. users of Visual Studio 2003)
  
- * `00-cosmetic`
-
+ * `00-cosmetic`  
    Changes addressing performance or clarity of implementation,
    no API changes. 
 
@@ -485,4 +488,5 @@ Authors
 
   * Philipp A. Hartmann <philipp.hartmann@offis.de>
   * Torsten Maehne      <Torsten.Maehne@lip6.fr>
+  * Minor cosmetics edits, Lynn Bannister <lynn@accellera.org>
 
