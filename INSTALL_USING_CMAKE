@@ -147,6 +147,21 @@ CMAKE_OSX_ARCHITECTURES       Architectures for cross-compilation on Mac OS X
 
 CMAKE_VERBOSE_MAKEFILE        Generate a verbose Makefile (default: OFF).
 
+DISABLE_ASYNC_UPDATES         Disable async_request_update() support.
+
+DISABLE_VIRTUAL_BIND          Disable the definition of bind() member
+                              functions of ports and exports as "virtual",
+                              which is incompatible with old TLM library
+                              implementations (< 2.0.2).
+
+ENABLE_IMMEDIATE_SELF_NOTIFICATIONS  Enable immediate self-notification of
+                              processes, which is no longer supported due to
+                              changes in IEEE Std 1666-2011 (see
+                              sc_event::notify, 5.10.6).
+
+ENABLE_PTHREADS               Use POSIX threads for SystemC processes instead
+                              of QuickThreads on Unix or Fiber on Windows.
+
 QT_ARCH                       QuickThreads architecture (auto-detected:
                               hppa, x86_64, i386, powerpc_mach,
                               powerpc_sys5, IGNORE).
@@ -165,13 +180,6 @@ SYSTEMC_TARGET_ARCH           Target architecture according to the
 SET_LIBDIR_WITH_TARGET_ARCH   Set the CMAKE_INSTALL_LIBDIR to
                               lib-${SYSTEMC_TARGET_ARCH}/ and update
                               CMAKE_INSTALL_FULL_LIBDIR accordingly.
-
-SUPPORT_ASYNC_REQUEST_UPDATE  Support async_request_update() of
-                              primitive channels (default: TRUE).
-
-WANT_PTHREADS_THREADS         Use POSIX threads to implement the SystemC
-                              coroutines instead of QuickThreads on Unix or
-                              Fiber on Windows (default: OFF).
 
 Other configuration variables will be proposed by CMake depending on the OS
 and detected processor, compiler, and libraries. For more information, please
@@ -198,7 +206,7 @@ More documentation on using CMake is available from the the CMake Wiki
 
 CMake supports cross compilation on a host system for a different
 target architecture. Depending on the scenario, different approaches
-can be 
+can be used.
 
 
 3.1 Cross Compilation for 32-bit on a 64-bit platform using GCC

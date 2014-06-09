@@ -100,6 +100,21 @@
 #
 # CMAKE_VERBOSE_MAKEFILE        Generate a verbose Makefile (default: OFF).
 #
+# DISABLE_ASYNC_UPDATES         Disable async_request_update() support.
+#
+# DISABLE_VIRTUAL_BIND          Disable the definition of bind() member
+#                               functions of ports and exports as "virtual",
+#                               which is incompatible with old TLM library
+#                               implementations (< 2.0.2).
+#
+# ENABLE_IMMEDIATE_SELF_NOTIFICATIONS  Enable immediate self-notification of
+#                               processes, which is no longer supported due to
+#                               changes in IEEE Std 1666-2011 (see
+#                               sc_event::notify, 5.10.6).
+#
+# ENABLE_PTHREADS               Use POSIX threads for SystemC processes instead
+#                               of QuickThreads on Unix or Fiber on Windows.
+#
 # QT_ARCH                       QuickThreads architecture (auto-detected:
 #                               hppa, x86_64, i386, powerpc_mach,
 #                               powerpc_sys5, IGNORE).
@@ -118,13 +133,6 @@
 # SET_LIBDIR_WITH_TARGET_ARCH   Set the CMAKE_INSTALL_LIBDIR to
 #                               lib-${SYSTEMC_TARGET_ARCH}/ and update
 #                               CMAKE_INSTALL_FULL_LIBDIR accordingly.
-#
-# SUPPORT_ASYNC_REQUEST_UPDATE  Support async_request_update() of
-#                               primitive channels (default: TRUE).
-#
-# WANT_PTHREADS_THREADS         Use POSIX threads to implement the SystemC
-#                               coroutines instead of QuickThreads on Unix or
-#                               Fiber on Windows (default: OFF).
 #
 # Other configuration variables will be proposed by CMake depending on the OS
 # and detected processor, compiler, and libraries. For more information, please
@@ -219,14 +227,16 @@ if (BUILD_EXAMPLES)
   enable_testing ()
 endif (BUILD_EXAMPLES)
 
-option (SUPPORT_ASYNC_REQUEST_UPDATE
-        "Support async_request_update() of primitive channels (default: TRUE)."
-        TRUE)
+option (DISABLE_ASYNC_UPDATES "Disable async_request_update() support." FALSE)
 
-option (WANT_PTHREADS_THREADS
-        "Use POSIX threads to implement the SystemC coroutines instead
-of QuickThreads library on Unix or Fiber on Windows (default: FALSE)."
+option (DISABLE_VIRTUAL_BIND "Disable the definition of bind() member functions of ports and exports as \"virtual\", which is incompatible with old TLM library implementations (< 2.0.2)." FALSE)
+
+option (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS "Enable immediate self-notification of processes, which is no longer supported due to changes in IEEE Std 1666-2011 (see sc_event::notify, 5.10.6)." FALSE)
+
+option (ENABLE_PTHREADS
+        "Use POSIX threads for SystemC processes instead of QuickThreads on Unix or Fiber on Windows."
         FALSE)
+
 
 ###############################################################################
 # Set SYSTEMC_TARGET_ARCH and QT_ARCH depending on OS and processor type
@@ -368,7 +378,7 @@ endif (APPLE AND CMAKE_OSX_ARCHITECTURES)
 # Set QuickThreads architecture based on the detected preprocessor symbols.
 if (NOT DEFINED QT_ARCH)
   message (STATUS "Detect the target processor architecture for QuickThreads.")
-  if (WANT_PTHREADS_THREADS)
+  if (ENABLE_PTHREADS)
     set (_QT_ARCH "IGNORE") # Pthreads will be used for the SystemC coroutines.
   elseif (MSVC)
     set (_QT_ARCH "IGNORE") # Fibers will be used for the SystemC coroutines.
@@ -386,10 +396,10 @@ if (NOT DEFINED QT_ARCH)
     set (_QT_ARCH "powerpc_mach")
   elseif (HAS__powerpc__DEFINED)
     set (_QT_ARCH "powerpc_sys5")
-  else (WANT_PTHREADS_THREADS)
+  else (ENABLE_PTHREADS)
     message (WARNING "QuickThreads is not supported on ${CMAKE_SYSTEM} on ${CMAKE_SYSTEM_PROCESSOR}.")
     set (_QT_ARCH "IGNORE")
-  endif (WANT_PTHREADS_THREADS)
+  endif (ENABLE_PTHREADS)
   set (QT_ARCH ${_QT_ARCH} CACHE STRING "QuickThreads architecture (IGNORE, sparc, hppa, x86_64, i386, powerpc_mach, powerpc_sys5).")
   unset (_QT_ARCH)
 endif (NOT DEFINED QT_ARCH)
@@ -400,8 +410,8 @@ if (QT_ARCH)
 else (QT_ARCH)
   # Otherwise, fall back to Pthreads or Fiber.
   if (NOT MSVC)
-    set (WANT_PTHREADS_THREADS TRUE CACHE BOOL
-         "Use POSIX threads to implement the SystemC coroutines instead of QuickThreads library on Unix or Fiber on Windows (default: OFF)"
+    set (ENABLE_PTHREADS TRUE CACHE BOOL
+         "Use POSIX threads for SystemC processes instead of QuickThreads on Unix or Fiber on Windows."
          FORCE)
   endif (NOT MSVC)
 endif (QT_ARCH)
@@ -411,25 +421,37 @@ endif (QT_ARCH)
 # Configure Pthreads if necessary.
 ###############################################################################
 
-if (WANT_PTHREADS_THREADS OR NOT QT_ARCH OR (SUPPORT_ASYNC_REQUEST_UPDATE AND NOT WIN32))
+if (ENABLE_PTHREADS OR NOT QT_ARCH OR (NOT DISABLE_ASYNC_UPDATES AND NOT WIN32))
   set (CMAKE_THREAD_PREFER_PTHREAD)
   find_package (Threads REQUIRED)
 
   if (NOT CMAKE_USE_PTHREADS_INIT)
     message (SEND_ERROR "Failed to find the Pthreads library required to implement the SystemC coroutines and async_request_update() of primitive channels on Unix.")
   endif (NOT CMAKE_USE_PTHREADS_INIT)
-  if (WANT_PTHREADS_THREADS)
+  if (ENABLE_PTHREADS)
     add_definitions (-DSC_USE_PTHREADS)
-  endif (WANT_PTHREADS_THREADS)
+  endif (ENABLE_PTHREADS)
   link_libraries (${CMAKE_THREAD_LIBS_INIT})
-endif (WANT_PTHREADS_THREADS OR NOT QT_ARCH OR (SUPPORT_ASYNC_REQUEST_UPDATE AND NOT WIN32))
+endif (ENABLE_PTHREADS OR NOT QT_ARCH OR (NOT DISABLE_ASYNC_UPDATES AND NOT WIN32))
 
 
 ###############################################################################
-# Set the platform-dependent compiler definitions.
+# Set the preprocessor definitions and platform-dependent compiler flags.
 ###############################################################################
 
 add_definitions (-DSC_INCLUDE_FX)
+
+if (DISABLE_ASYNC_UPDATES)
+  add_definitions (-DSC_DISABLE_ASYNC_UPDATES)
+endif (DISABLE_ASYNC_UPDATES)
+
+if (DISABLE_VIRTUAL_BIND)
+  add_definitions (-DSC_DISABLE_VIRTUAL_BIND)
+endif (DISABLE_VIRTUAL_BIND)
+
+if (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS)
+  add_definitions (-DSC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS)
+endif (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS)
 
 # # TODO: Turn on all compiler warnings once SystemC is supposed to compile without any.
 # #       (SystemC 2.3.0 still causes some warnings during compilation.)
@@ -449,6 +471,7 @@ if (APPLE)
   set (CMAKE_SHARED_MODULE_CREATE_CXX_FLAGS "${CMAKE_SHARED_MODULE_CREATE_CXX_FLAGS} -Wl,-U,_sc_main")
 endif (APPLE)
 
+# TODO: Check required preprocessor definitions for WIN32.
 if (WIN32)
   add_definitions (-DWIN32) # Needed?
   if (MSVC)
@@ -456,13 +479,15 @@ if (WIN32)
     add_definitions(-D_LIB)               # Needed?
     # Is the definition of _DEBUG needed or already handled by CMake?
     if (CMAKE_BUILD_TYPE MATCHES "Debug|RelWithDebInfo")
-      add_definitions(-D_DEBUG)
+      add_definitions (-D_DEBUG) # Needed?
+    else (CMAKE_BUILD_TYPE MATCHES "Debug|RelWithDebInfo")
+      add_definitions (-DNDEBUG) # Needed?
     endif (CMAKE_BUILD_TYPE MATCHES "Debug|RelWithDebInfo")
     add_definitions(-D_USE_MATH_DEFINES)  # Needed?
     # Suppress warnings about sprintf from Visual C++ 2005
-    add_definitions (-D_CRT_SECURE_NO_DEPRECATE)
+    add_definitions (-D_CRT_SECURE_NO_DEPRECATE) # Needed?
     # Suppress warnings from Visual C++ 2008
-    add_definitions (-D_CRT_SECURE_NO_WARNINGS)
+    add_definitions (-D_CRT_SECURE_NO_WARNINGS) # Needed?
   endif (MSVC)
 endif (WIN32)
 
@@ -475,7 +500,7 @@ endif (WIN32)
 set (CMAKE_SKIP_BUILD_RPATH  FALSE)
 # For build, don't use the install RPATH already (but later on when
 # installing).
-set (CMAKE_BUILD_WITH_INSTALL_RPATH FALSE) 
+set (CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
 # Set the RPATH to be used when installing.
 set (CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR}")
 # Add the automatically determined parts of the RPATH, which point to
@@ -537,19 +562,46 @@ message (STATUS "BUILD_EXAMPLES = ${BUILD_EXAMPLES}")
 message (STATUS "BUILD_SHARED_LIBS = ${BUILD_SHARED_LIBS}")
 message (STATUS "BUILD_SOURCE_DOC = ${BUILD_SOURCE_DOC}")
 message (STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
+if (DISABLE_ASYNC_UPDATES)
+  message ("DISABLE_ASYNC_UPDATES = ${DISABLE_ASYNC_UPDATES}")
+else (DISABLE_ASYNC_UPDATES)
+  message (STATUS "DISABLE_ASYNC_UPDATES = ${DISABLE_ASYNC_UPDATES}")
+endif (DISABLE_ASYNC_UPDATES)
+if (DISABLE_VIRTUAL_BIND)
+  message ("DISABLE_VIRTUAL_BIND = ${DISABLE_VIRTUAL_BIND}")
+else (DISABLE_VIRTUAL_BIND)
+  message (STATUS "DISABLE_VIRTUAL_BIND = ${DISABLE_VIRTUAL_BIND}")
+endif (DISABLE_VIRTUAL_BIND)
+if (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS)
+  message ("ENABLE_IMMEDIATE_SELF_NOTIFICATIONS = ${ENABLE_IMMEDIATE_SELF_NOTIFICATIONS}")
+else (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS)
+  message (STATUS "ENABLE_IMMEDIATE_SELF_NOTIFICATIONS = ${ENABLE_IMMEDIATE_SELF_NOTIFICATIONS}")
+endif (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS)
+if (ENABLE_PTHREADS)
+  message ("ENABLE_PTHREADS = ${ENABLE_PTHREADS}")
+else (ENABLE_PTHREADS)
+  message (STATUS "ENABLE_PTHREADS = ${ENABLE_PTHREADS}")
+endif (ENABLE_PTHREADS)
 message (STATUS "------------------------------------------------------------------------")
 message (STATUS "CMAKE_SYSTEM = ${CMAKE_SYSTEM}")
 message (STATUS "CMAKE_SYSTEM_PROCESSOR = ${CMAKE_SYSTEM_PROCESSOR}")
 message (STATUS "SYSTEMC_TARGET_ARCH = ${SYSTEMC_TARGET_ARCH}")
 message (STATUS "QT_ARCH = ${QT_ARCH}")
-message (STATUS "WANT_PTHREADS_THREADS = ${WANT_PTHREADS_THREADS}")
-if (APPLE)
+if (DEFINED CMAKE_OSX_ARCHITECTURES)
   message (STATUS "CMAKE_OSX_ARCHITECTURES = ${CMAKE_OSX_ARCHITECTURES}")
+endif (DEFINED CMAKE_OSX_ARCHITECTURES)
+if (DEFINED CMAKE_OSX_DEPLOYMENT_TARGET)
   message (STATUS "CMAKE_OSX_DEPLOYMENT_TARGET = ${CMAKE_OSX_DEPLOYMENT_TARGET}")
+endif (DEFINED CMAKE_OSX_DEPLOYMENT_TARGET)
+if (DEFINED CMAKE_OSX_SYSROOT)
   message (STATUS "CMAKE_OSX_SYSROOT = ${CMAKE_OSX_SYSROOT}")
-endif(APPLE)
-message (STATUS "Threads_FOUND = ${Threads_FOUND}")
-message (STATUS "CMAKE_USE_PTHREADS_INIT = ${CMAKE_USE_PTHREADS_INIT}")
+endif(DEFINED CMAKE_OSX_SYSROOT)
+if (DEFINED Threads_FOUND)
+  message (STATUS "Threads_FOUND = ${Threads_FOUND}")
+endif (DEFINED Threads_FOUND)
+if (DEFINED CMAKE_USE_PTHREADS_INIT)
+  message (STATUS "CMAKE_USE_PTHREADS_INIT = ${CMAKE_USE_PTHREADS_INIT}")
+endif (DEFINED CMAKE_USE_PTHREADS_INIT)
 message (STATUS "------------------------------------------------------------------------")
 message (STATUS "CMAKE_INSTALL_PREFIX = ${CMAKE_INSTALL_PREFIX}")
 message (STATUS "CMAKE_INSTALL_BINDIR = ${CMAKE_INSTALL_BINDIR}")
