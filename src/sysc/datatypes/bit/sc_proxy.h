@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2006 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.4 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -66,7 +66,6 @@
 #include "sysc/datatypes/int/sc_unsigned.h"
 #include "sysc/datatypes/int/sc_int_base.h"
 #include "sysc/datatypes/int/sc_uint_base.h"
-#include "sysc/utils/sc_string.h"
 #include "sysc/datatypes/bit/sc_bit.h"
 #include "sysc/datatypes/bit/sc_bit_ids.h"
 #include "sysc/datatypes/bit/sc_logic.h"
@@ -118,6 +117,72 @@ assign_v_( sc_proxy<X>& px, const T& a );
 const std::string convert_to_bin( const char* s );
 const std::string convert_to_fmt( const std::string& s, sc_numrep numrep, bool );
 
+// ----------------------------------------------------------------------------
+//  CLASS TEMPLATE : sc_proxy_traits
+//
+// Template traits helper to select the correct bit/value/vector_types for
+// sc_proxy-based vector classes.
+//
+// All types derived from/based on a bit-vector contain typedef to a plain bool,
+// all others point to the sc_logic_value_t/sc_logic/sc_lv_base types.
+// ----------------------------------------------------------------------------
+
+template<typename X> struct sc_proxy_traits;
+
+template<> struct sc_proxy_traits<sc_bv_base>
+{
+    typedef sc_proxy_traits<sc_bv_base> traits_type;
+    typedef bool                        value_type;
+    typedef bool                        bit_type;
+    typedef sc_bv_base                  vector_type;
+    typedef traits_type                 type;
+};
+
+template<> struct sc_proxy_traits<sc_lv_base>
+{
+    typedef sc_proxy_traits<sc_lv_base> traits_type;
+    typedef sc_logic_value_t            value_type;
+    typedef sc_logic                    bit_type;
+    typedef sc_lv_base                  vector_type;
+    typedef traits_type                 type;
+};
+
+
+template<typename X> struct sc_proxy_traits<sc_bitref_r<X> >
+  : sc_proxy_traits<X> {};
+
+template<typename X> struct sc_proxy_traits<sc_bitref<X> >
+  : sc_proxy_traits<X> {};
+
+
+template<typename X> struct sc_proxy_traits<sc_subref_r<X> >
+  : sc_proxy_traits<X> {};
+
+template<typename X> struct sc_proxy_traits<sc_subref<X> >
+  : sc_proxy_traits<X> {};
+
+
+template<typename X> struct sc_proxy_traits<sc_proxy<X> >
+  : sc_proxy_traits<X> {};
+
+
+template< typename X, typename Y > struct sc_mixed_proxy_traits_helper
+  : sc_proxy_traits<sc_lv_base> {}; // logic vector by default
+
+template<typename X> struct sc_mixed_proxy_traits_helper<X,X>
+  : X {};
+
+
+template<typename X, typename Y> struct sc_proxy_traits< sc_concref_r<X,Y> >
+  : sc_mixed_proxy_traits_helper< typename X::traits_type::type
+                                , typename Y::traits_type::type >
+{};
+
+template<typename X, typename Y> struct sc_proxy_traits<sc_concref<X,Y> >
+  : sc_mixed_proxy_traits_helper< typename X::traits_type::type
+                                , typename Y::traits_type::type >
+{};
+
 
 // ----------------------------------------------------------------------------
 //  CLASS TEMPLATE : sc_proxy
@@ -130,6 +195,8 @@ template <class X>
 class sc_proxy // #### : public sc_value_base
 {
 public:
+    typedef typename sc_proxy_traits<X>::type traits_type;
+    typedef typename traits_type::bit_type    bit_type;
 
     // virtual destructor
 

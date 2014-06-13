@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2006 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.4 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -47,9 +47,7 @@
 #ifndef SC_VCD_TRACE_H
 #define SC_VCD_TRACE_H
 
-
-#include <cstdio>
-#include "sysc/tracing/sc_trace.h"
+#include "sysc/tracing/sc_trace_file_base.h"
 
 namespace sc_core {
 
@@ -64,18 +62,17 @@ template<class T> class vcd_T_trace;
 // ----------------------------------------------------------------------------
 
 class vcd_trace_file
-: public sc_trace_file
+  : public sc_trace_file_base
 {
 public:
 
     enum vcd_enum {VCD_WIRE=0, VCD_REAL=1, VCD_LAST};
+
 	// sc_set_vcd_time_unit is deprecated.
 #if 0 // deprecated
     inline void sc_set_vcd_time_unit(int exponent10_seconds)
     	{ set_time_unit(exponent10_seconds); }
 #endif
-
-    virtual void set_time_unit( double v, sc_time_unit tu);
 
     // Create a Vcd trace file.
     // `Name' forms the base of the name to which `.vcd' is added.
@@ -174,11 +171,9 @@ protected:
     void traceT(const T& object, const std::string& name, 
     	vcd_enum type=VCD_WIRE)
     {
-      if(initialized)
-         put_error_message("No traces can be added once simulation has"
-         " started.\nTo add traces, create a new vcd trace file.", false);
-      else
-        traces.push_back(new vcd_T_trace<T>(object, name, obtain_name(),type));
+        if( add_trace_check(name) )
+            traces.push_back(new vcd_T_trace<T>( object, name
+                                               , obtain_name(),type) );
     }
 
    // Trace sc_dt::sc_bv_base (sc_dt::sc_bv)
@@ -197,47 +192,35 @@ protected:
     // Output a comment to the trace file
      void write_comment(const std::string& comment);
 
-    // Also trace transitions between delta cycles if flag is true.
-     void delta_cycles(bool flag);
-
     // Write trace info for cycle.
      void cycle(bool delta_cycle);
 
 private:
 
-    // Initialize the tracing
-    void initialize();
-    // Create VCD names for each variable
-    void create_vcd_name(std::string* p_destination);
+#if SC_TRACING_PHASE_CALLBACKS_
+    // avoid hidden overload warnings
+    virtual void trace( sc_trace_file* ) const { sc_assert(false); }
+#endif // SC_TRACING_PHASE_CALLBACKS_
 
-    // Pointer to the file that needs to be written
-    FILE* fp;
+    // Initialize the VCD tracing
+    virtual void do_initialize();
 
-    bool trace_delta_cycles;    // = 1 means trace the delta cycles
+    unsigned vcd_name_index;           // Number of variables traced
 
-    unsigned vcd_name_index;    // Number of variables traced
-
-    unsigned previous_time_units_low, previous_time_units_high; // Previous time unit as 64-bit integer
+    unsigned previous_time_units_low;  // Previous time unit as 64-bit integer
+    unsigned previous_time_units_high;
 
 public:
 
     // Array to store the variables traced
     std::vector<vcd_trace*> traces;
-    // same as create_vcd_name (corrected style)
+
+    // Create VCD names for each variable
     std::string obtain_name();
 
-protected:
-    bool   initialized;           // = true means initialized
-    double timescale_unit;        // in seconds
-    bool   timescale_set_by_user; // = true means set by user
 };
 
-
-// ----------------------------------------------------------------------------
-
-// Create VCD file
-extern sc_trace_file *sc_create_vcd_trace_file(const char* name);
-extern void sc_close_vcd_trace_file( sc_trace_file* tf );
-
 } // namespace sc_core
-#endif
+
+#endif // SC_VCD_TRACE_H
+// Taf!

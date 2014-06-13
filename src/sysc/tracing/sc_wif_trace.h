@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2006 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.4 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -59,29 +59,23 @@
 
 #include <cstdio>
 #include "sysc/datatypes/int/sc_nbdefs.h"
-#include "sysc/tracing/sc_trace.h"
+#include "sysc/tracing/sc_trace_file_base.h"
 
 namespace sc_core {
 
 class wif_trace;  // defined in wif_trace.cc
 template<class T> class wif_T_trace;
 
-class wif_trace_file : public sc_trace_file{
+class wif_trace_file
+  : public sc_trace_file_base
+{
 public:
     enum wif_enum {WIF_BIT=0, WIF_MVL=1, WIF_REAL=2, WIF_LAST};
 
-    void set_time_unit( double, sc_time_unit );
-    // sc_set_wif_time_unit is deprecated.
-#if 0 // deprecated
-    inline void sc_set_wif_time_unit(int exponent10_seconds)
-        { set_time_unit(exponent10_seconds); }
-#endif
-
     // Create a wif trace file.
     // `Name' forms the base of the name to which `.awif' is added.
-    wif_trace_file(const char *name);
+    explicit wif_trace_file(const char *name);
 
-    // Flush results and close file.
     ~wif_trace_file();
 
 protected:
@@ -171,12 +165,9 @@ protected:
     template<class T>
     void traceT(const T& object, const std::string& name, wif_enum type)
     {
-      if(initialized)
-        put_error_message("No traces can be added once simulation has"
-        " started.\nTo add traces, create a new wif trace file.", false);
-      else
-        traces.push_back(new wif_T_trace<T>(object, name,
-          obtain_new_index(),type));
+        if( add_trace_check(name) )
+            traces.push_back( new wif_T_trace<T>( object, name
+                                                , obtain_name(),type ) );
     }
 
     // Trace sc_bv_base (sc_bv)
@@ -196,47 +187,34 @@ protected:
     // Output a comment to the trace file
      void write_comment(const std::string& comment);
 
-    // Also trace transitions between delta cycles if flag is true.
-     void delta_cycles(bool flag);
-
     // Write trace info for cycle.
      void cycle(bool delta_cycle);
 
 private:
+
+#if SC_TRACING_PHASE_CALLBACKS_
+    // avoid hidden overload warnings
+    virtual void trace( sc_trace_file* ) const { sc_assert(false); }
+#endif // SC_TRACING_PHASE_CALLBACKS_
+
     // Initialize the tracing mechanism
-    void initialize();
+    virtual void do_initialize();
 
-    // Create wif names for each variable
-    void create_wif_name(std::string* ptr_to_str);
+    unsigned wif_name_index;           // Number of variables traced
 
-    // Pointer to the file that needs to be written
-    FILE* fp;
-
-    bool trace_delta_cycles;    // = 1 means trace the delta cycles
-
-    unsigned wif_name_index;    // Number of variables traced
-
-    unsigned previous_time_units_low, previous_time_units_high; // Previous time as 64 bit integer
-    double previous_time;       // Previous time as a double
+    unsigned previous_time_units_low;  // Previous time as 64 bit integer
+    unsigned previous_time_units_high;
+    double   previous_time;            // Previous time as a double
 
 public:
-
-    // same as create_wif_name (corrected style)
-    std::string obtain_new_index();
+    // Create wif names for each variable
+    std::string obtain_name();
 
     // Array to store the variables traced
     std::vector<wif_trace*> traces;
-
-protected:
-    bool   initialized;           // = true means initialized
-    double timescale_unit;        // in seconds
-    bool   timescale_set_by_user; // = true means set by user
 };
-
-// Create WIF file
-extern sc_trace_file *sc_create_wif_trace_file(const char *name);
-extern void sc_close_wif_trace_file( sc_trace_file* tf );
 
 } //  namespace sc_core
 
-#endif
+#endif // SC_WIF_TRACE_H
+// Taf!

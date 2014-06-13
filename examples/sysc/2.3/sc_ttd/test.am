@@ -1,0 +1,89 @@
+## ****************************************************************************
+##
+##  The following code is derived, directly or indirectly, from the SystemC
+##  source code Copyright (c) 1996-2014 by all Contributors.
+##  All Rights reserved.
+##
+##  The contents of this file are subject to the restrictions and limitations
+##  set forth in the SystemC Open Source License (the "License");
+##  You may not use this file except in compliance with such restrictions and
+##  limitations. You may obtain instructions on how to receive a copy of the
+##  License at http://www.accellera.org/. Software distributed by Contributors
+##  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
+##  ANY KIND, either express or implied. See the License for the specific
+##  language governing rights and limitations under the License.
+##
+## ****************************************************************************
+##
+##  test.am --
+##  Included from a Makefile.am to provide example-specific information
+##
+##  Original Author: Philipp A. Hartmann, OFFIS, 2013-05-20
+##
+## ****************************************************************************
+##
+##  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+##  changes you are making here.
+##
+##      Name, Affiliation, Date:
+##  Description of Modification:
+##
+## ***************************************************************************
+
+## Generic example setup
+## (should be kept in sync among all test.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##       included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D%: 2.3/sc_ttd
+##   %C%: 2_3_sc_ttd
+
+examples_TESTS += 2.3/sc_ttd/test
+
+2_3_sc_ttd_test_CPPFLAGS = \
+	$(AM_CPPFLAGS)
+
+2_3_sc_ttd_test_SOURCES = \
+	$(2_3_sc_ttd_H_FILES) \
+	$(2_3_sc_ttd_CXX_FILES)
+
+examples_BUILD += \
+	$(2_3_sc_ttd_BUILD)
+
+examples_CLEAN += \
+	2.3/sc_ttd/run.log \
+	2.3/sc_ttd/expexted_trimmed.log \
+	2.3/sc_ttd/run_trimmed.log \
+	2.3/sc_ttd/diff.log
+
+examples_FILES += \
+	$(2_3_sc_ttd_H_FILES) \
+	$(2_3_sc_ttd_CXX_FILES) \
+	$(2_3_sc_ttd_BUILD) \
+	$(2_3_sc_ttd_EXTRA)
+
+## example-specific details
+
+2_3_sc_ttd_test_CPPFLAGS += \
+	-I $(srcdir)/2.3/sc_ttd/../include
+
+2_3_sc_ttd_H_FILES = \
+	2.3/sc_ttd/../include/sc_ttd.h
+
+2_3_sc_ttd_CXX_FILES = \
+	2.3/sc_ttd/main.cpp
+
+2_3_sc_ttd_BUILD =
+
+2_3_sc_ttd_EXTRA = \
+	2.3/sc_ttd/sc_ttd.vcproj \
+	2.3/sc_ttd/Makefile
+
+#2_3_sc_ttd_FILTER = 
+#export 2_3_sc_ttd_FILTER
+
+## Taf!
+## :vim:ft=automake:

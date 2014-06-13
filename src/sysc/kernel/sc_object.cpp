@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2011 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 3.0 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -25,9 +25,11 @@
  *****************************************************************************/
 
 
-#include <stdio.h>
 #include <cstdlib>
 #include <cassert>
+#include <stddef.h>
+#include <cstdio>
+#include <string.h>
 #include <ctype.h>
 
 #include "sysc/kernel/sc_externs.h"
@@ -35,12 +37,14 @@
 #include "sysc/kernel/sc_module.h"
 #include "sysc/kernel/sc_object.h"
 #include "sysc/kernel/sc_object_manager.h"
+#include "sysc/kernel/sc_phase_callback_registry.h"
 #include "sysc/kernel/sc_process_handle.h"
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_event.h"
 #include "sysc/utils/sc_hash.h"
 #include "sysc/utils/sc_iostream.h"
 #include "sysc/utils/sc_list.h"
+#include "sysc/utils/sc_utils_ids.h"
 #include "sysc/utils/sc_mempool.h"
 
 namespace sc_core {
@@ -188,19 +192,13 @@ sc_object::sc_object_init(const char* nm)
     m_name = object_manager->create_name(nm ? nm : sc_object_newname().c_str());
 
 
-    // PLACE THE OBJECT INTO THE HIERARCHY IF A USER LEAF NAME WAS SUPPLIED:
-    
+    // PLACE THE OBJECT INTO THE HIERARCHY
 
-    if ( nm != NULL && 
-         strncmp(nm, SC_KERNEL_MODULE_PREFIX, strlen(SC_KERNEL_MODULE_PREFIX)) )
-    { 
-        object_manager->insert_object(m_name, this); 
-        if ( m_parent ) 
-	    m_parent->add_child_object( this );
-	else
-	    m_simc->add_child_object( this ); 
-    } 
-
+    object_manager->insert_object(m_name, this);
+    if ( m_parent )
+        m_parent->add_child_object( this );
+    else
+        m_simc->add_child_object( this );
 } 
 
 sc_object::sc_object() : 
@@ -270,6 +268,9 @@ sc_object::sc_object(const char* nm) :
 
 sc_object::~sc_object()
 {
+#if SC_HAS_PHASE_CALLBACKS_
+    unregister_simulation_phase_callback( SC_STATUS_ANY );
+#endif
     detach();
     delete m_attr_cltn_p;
 }
@@ -435,6 +436,49 @@ sc_object::attr_cltn() const
     if ( !m_attr_cltn_p ) m_attr_cltn_p = new sc_attr_cltn;
     return *m_attr_cltn_p;
 }
+
+sc_object*
+sc_object::get_parent() const
+{
+    static bool warn_sc_get_parent_deprecated=true;
+    if ( warn_sc_get_parent_deprecated )
+    {
+        warn_sc_get_parent_deprecated=false;
+        SC_REPORT_INFO(sc_core::SC_ID_IEEE_1666_DEPRECATION_,
+          "sc_object::get_parent() is deprecated, "
+          "use get_parent_object() instead");
+    }
+    return get_parent_object();
+}
+
+// ----------------------------------------------------------------------------
+// simulation phase callbacks
+
+
+sc_object::phase_cb_mask
+sc_object::register_simulation_phase_callback( phase_cb_mask mask )
+{
+    mask = simcontext()->m_phase_cb_registry
+                       ->register_callback(*this, mask);
+    return mask;
+}
+
+
+sc_object::phase_cb_mask
+sc_object::unregister_simulation_phase_callback( phase_cb_mask mask )
+{
+    mask = simcontext()->m_phase_cb_registry
+                       ->unregister_callback(*this, mask);
+    return mask;
+}
+
+
+void
+sc_object::simulation_phase_callback()
+{
+    SC_REPORT_WARNING( SC_ID_PHASE_CALLBACK_NOT_IMPLEMENTED_, name() );
+}
+
 
 } // namespace sc_core
 

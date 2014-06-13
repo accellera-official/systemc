@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2011 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 3.0 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -80,7 +80,7 @@ public:
       : base_type(sc_core::sc_gen_unique_name("multi_passthrough_target_socket"))
       , m_hierarch_bind(0)
       , m_eoe_disabled(false)
-      , m_dummy(42)
+      , m_export_callback_created(false)
   {
   }
 
@@ -89,7 +89,7 @@ public:
       : base_type(name)
       , m_hierarch_bind(0)
       , m_eoe_disabled(false)
-      , m_dummy(42)
+      , m_export_callback_created(false)
   {
   }
 
@@ -111,9 +111,7 @@ public:
     SC_REPORT_ERROR("/OSCI_TLM-2/multi_socket", s.str().c_str());
   }
 
-  //register callback for nb transport of fw interface
-  void register_nb_transport_fw(MODULE* mod,
-                              nb_cb cb)
+  void check_export_binding()
   {
     //if our export hasn't been bound yet (due to a hierarch binding)
     //  we bind it now.
@@ -121,7 +119,32 @@ public:
     //otherwise the socket was useless. Nevertheless, the target socket may still
     // stay unbound afterwards.
     if (!sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::get_interface())
-      sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::bind(m_dummy);
+    {
+      // We bind to a callback_binder that will be used as the first interface
+      // i.e. calls to the sc_export will have the same ID as calls from the first initator
+      // socket bound
+      callback_binder_fw<TYPES> * binder;
+
+      if (m_binders.size() == 0)
+      {
+        binder = new callback_binder_fw<TYPES>(m_binders.size());
+        m_binders.push_back(binder);
+        m_export_callback_created = true;
+      }
+      else
+      {
+        binder = m_binders[0];
+      }
+
+      sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::bind(*binder);
+    }
+  }
+
+  //register callback for nb transport of fw interface
+  void register_nb_transport_fw(MODULE* mod,
+                              nb_cb cb)
+  {
+    check_export_binding();
 
     //warn if there already is a callback
     if (!m_nb_f.empty()){
@@ -137,13 +160,7 @@ public:
   void register_b_transport(MODULE* mod,
                               b_cb cb)
   {
-    //if our export hasn't been bound yet (due to a hierarch binding)
-    //  we bind it now.
-    //We do that here as the user of the target port HAS to bind at least on callback,
-    //otherwise the socket was useless. Nevertheless, the target socket may still
-    // stay unbound afterwards.
-    if (!sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::get_interface())
-      sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::bind(m_dummy);
+    check_export_binding();
 
     //warn if there already is a callback
     if (!m_b_f.empty()){
@@ -159,13 +176,7 @@ public:
   void register_transport_dbg(MODULE* mod,
                               dbg_cb cb)
   {
-    //if our export hasn't been bound yet (due to a hierarch binding)
-    //  we bind it now.
-    //We do that here as the user of the target port HAS to bind at least on callback,
-    //otherwise the socket was useless. Nevertheless, the target socket may still
-    // stay unbound afterwards.
-    if (!sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::get_interface())
-      sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::bind(m_dummy);
+    check_export_binding();
 
     //warn if there already is a callback
     if (!m_dbg_f.empty()){
@@ -181,13 +192,7 @@ public:
   void register_get_direct_mem_ptr(MODULE* mod,
                                    dmi_cb cb)
   {
-    //if our export hasn't been bound yet (due to a hierarch binding)
-    //  we bind it now.
-    //We do that here as the user of the target port HAS to bind at least on callback,
-    //otherwise the socket was useless. Nevertheless, the target socket may still
-    // stay unbound afterwards.
-    if (!sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::get_interface())
-      sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >::bind(m_dummy);
+    check_export_binding();
 
     //warn if there already is a callback
     if (!m_dmi_f.empty()){
@@ -210,7 +215,11 @@ public:
     //error if this socket is already bound hierarchically
     if (m_hierarch_bind) display_error("Socket already bound hierarchically.");
 
-    m_binders.push_back(new callback_binder_fw<TYPES>(m_binders.size()));
+    if (!m_export_callback_created)
+      m_binders.push_back(new callback_binder_fw<TYPES>(m_binders.size()));
+    else
+      m_export_callback_created = false;
+
     return *m_binders[m_binders.size()-1];
   }
 
@@ -313,7 +322,7 @@ protected:
 
   base_type*  m_hierarch_bind; //pointer to hierarchical bound multi port
   bool m_eoe_disabled; //bool that diables callback bindings at end of elaboration
-  callback_binder_fw<TYPES> m_dummy; //a dummy to bind to the export
+  bool m_export_callback_created; // bool to indicate that a callback has already been created for export binding
 
   //callbacks as functors
   // (allows to pass the callback to another socket that does not know the type of the module that owns

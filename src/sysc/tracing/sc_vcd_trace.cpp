@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2006 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.4 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -49,9 +49,11 @@
  *****************************************************************************/
 
 
-#include <assert.h>
-#include <time.h>
 #include <cstdlib>
+#include <string.h>
+#include <vector>
+
+#define SC_DISABLE_API_VERSION_CHECK // for in-library sc_ver.h inclusion
 
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_ver.h"
@@ -67,14 +69,12 @@
 
 namespace sc_core {
 
-static bool running_regression = false;
-
 // Forward declarations for functions that come later in the file
 // Map sc_dt::sc_logic to printable VCD
 static char map_sc_logic_state_to_vcd_state(char in_char);
 
 // Remove name problems associated with [] in vcd names
-static void remove_vcd_name_problems(std::string& name);
+static void remove_vcd_name_problems(vcd_trace const* vcd, std::string& name);
 
 const char* vcd_types[vcd_trace_file::VCD_LAST]={"wire","real"};
 
@@ -106,7 +106,7 @@ public:
     virtual void print_variable_declaration_line(FILE* f);
 
     void compose_data_line(char* rawdata, char* compdata);
-    std::string compose_line(const std::string data);
+    std::string compose_line(const std::string& data);
 
     virtual ~vcd_trace();
 
@@ -126,7 +126,7 @@ vcd_trace::vcd_trace(const std::string& name_, const std::string& vcd_name_)
 void
 vcd_trace::compose_data_line(char* rawdata, char* compdata)
 {
-    assert(rawdata != compdata);
+    sc_assert(rawdata != compdata);
 
     if(bit_width == 0)
     {
@@ -149,7 +149,7 @@ vcd_trace::compose_data_line(char* rawdata, char* compdata)
 
 // same as above but not that ugly
 std::string
-vcd_trace::compose_line(const std::string data)
+vcd_trace::compose_line(const std::string& data)
 {
   if(bit_width == 0)
     return "";
@@ -165,33 +165,33 @@ vcd_trace::print_variable_declaration_line(FILE* f)
 
     if ( bit_width <= 0 )
     {
-        std::sprintf(buf, "Traced object \"%s\" has 0 Bits, cannot be traced.",
-	             name.c_str());
-        put_error_message(buf, false);
+        std::stringstream ss;
+        ss << "'" << name << "' has 0 bits";
+        SC_REPORT_ERROR( SC_ID_TRACING_OBJECT_IGNORED_
+                       , ss.str().c_str() );
+        return;
+    }
+
+    std::string namecopy = name; 
+    remove_vcd_name_problems(this, namecopy);
+    if ( bit_width == 1 )
+    {
+        std::sprintf(buf, "$var %s  % 3d  %s  %s       $end\n",
+                     vcd_var_typ_name,
+                     bit_width,
+                     vcd_name.c_str(),
+                     namecopy.c_str());
     }
     else
     {
-	std::string namecopy = name; 
-	remove_vcd_name_problems(namecopy);
-	if ( bit_width == 1 )
-	{
-	    std::sprintf(buf, "$var %s  % 3d  %s  %s       $end\n",
-		         vcd_var_typ_name,
-		         bit_width,
-		         vcd_name.c_str(),
-		         namecopy.c_str());
-	}
-	else
-	{
-	    std::sprintf(buf, "$var %s  % 3d  %s  %s [%d:0]  $end\n",
-                         vcd_var_typ_name,
-		         bit_width,
-		         vcd_name.c_str(),
-		         namecopy.c_str(),
-		         bit_width-1);
-	}
-        std::fputs(buf, f);
+        std::sprintf(buf, "$var %s  % 3d  %s  %s [%d:0]  $end\n",
+                     vcd_var_typ_name,
+                     bit_width,
+                     vcd_name.c_str(),
+                     namecopy.c_str(),
+                     bit_width-1);
     }
+    std::fputs(buf, f);
 }
 
 void
@@ -455,17 +455,23 @@ vcd_sc_unsigned_trace::changed()
 void
 vcd_sc_unsigned_trace::write(FILE* f)
 {
-    char rawdata[1000], *rawdata_ptr = rawdata;
-    char compdata[1000];
+    static std::vector<char> compdata(1024), rawdata(1024);
+    typedef std::vector<char>::size_type size_t;
 
-    int bitindex;
-    for (bitindex = object.length() - 1; bitindex >= 0; --bitindex) {
-        *rawdata_ptr++ = "01"[(object)[bitindex]];
+    if ( compdata.size() < (size_t)object.length() ) {
+        size_t sz = ( (size_t)object.length() + 4096 ) & (~(size_t)(4096-1));
+        std::vector<char>( sz ).swap( compdata ); // resize without copying values
+        std::vector<char>( sz ).swap( rawdata );
+    }
+    char *rawdata_ptr  = &rawdata[0];
+
+    for (int bitindex = object.length() - 1; bitindex >= 0; --bitindex) {
+        *rawdata_ptr++ = "01"[object[bitindex].to_bool()];
     }
     *rawdata_ptr = '\0';
-    compose_data_line(rawdata, compdata);
+    compose_data_line(&rawdata[0], &compdata[0]);
 
-    std::fputs(compdata, f);
+    std::fputs(&compdata[0], f);
     old_value = object;
 }
 
@@ -511,17 +517,23 @@ vcd_sc_signed_trace::changed()
 void
 vcd_sc_signed_trace::write(FILE* f)
 {
-    char rawdata[1000], *rawdata_ptr = rawdata;
-    char compdata[1000];
+    static std::vector<char> compdata(1024), rawdata(1024);
+    typedef std::vector<char>::size_type size_t;
 
-    int bitindex;
-    for (bitindex = object.length() - 1; bitindex >= 0; --bitindex) {
-        *rawdata_ptr++ = "01"[(object)[bitindex]];
+    if ( compdata.size() < (size_t)object.length() ) {
+        size_t sz = ( (size_t)object.length() + 4096 ) & (~(size_t)(4096-1));
+        std::vector<char>( sz ).swap( compdata ); // resize without copying values
+        std::vector<char>( sz ).swap( rawdata );
+    }
+    char *rawdata_ptr  = &rawdata[0];
+
+    for (int bitindex = object.length() - 1; bitindex >= 0; --bitindex) {
+        *rawdata_ptr++ = "01"[object[bitindex].to_bool()];
     }
     *rawdata_ptr = '\0';
-    compose_data_line(rawdata, compdata);
+    compose_data_line(&rawdata[0], &compdata[0]);
 
-    std::fputs(compdata, f);
+    std::fputs(&compdata[0], f);
     old_value = object;
 }
 
@@ -573,7 +585,7 @@ vcd_sc_uint_base_trace::write(FILE* f)
 
     int bitindex;
     for (bitindex = object.length()-1; bitindex >= 0; --bitindex) {
-        *rawdata_ptr++ = "01"[int((object)[bitindex])];
+        *rawdata_ptr++ = "01"[object[bitindex].to_bool()];
     }
     *rawdata_ptr = '\0';
     compose_data_line(rawdata, compdata);
@@ -629,7 +641,7 @@ vcd_sc_int_base_trace::write(FILE* f)
 
     int bitindex;
     for (bitindex = object.length()-1; bitindex >= 0; --bitindex) {
-        *rawdata_ptr++ = "01"[int((object)[bitindex])];
+        *rawdata_ptr++ = "01"[object[bitindex].to_bool()];
     }
     *rawdata_ptr = '\0';
     compose_data_line(rawdata, compdata);
@@ -773,18 +785,24 @@ vcd_sc_fxnum_trace::changed()
 void
 vcd_sc_fxnum_trace::write( FILE* f )
 {
-    char rawdata[1000], *rawdata_ptr = rawdata;
-    char compdata[1000];
+    static std::vector<char> compdata(1024), rawdata(1024);
+    typedef std::vector<char>::size_type size_t;
 
-    int bitindex;
-    for( bitindex = object.wl() - 1; bitindex >= 0; -- bitindex )
+    if ( compdata.size() < (size_t)object.wl() ) {
+        size_t sz = ( (size_t)object.wl() + 4096 ) & (~(size_t)(4096-1));
+        std::vector<char>( sz ).swap( compdata ); // resize without copying values
+        std::vector<char>( sz ).swap( rawdata );
+    }
+    char *rawdata_ptr  = &rawdata[0];
+
+    for(int bitindex = object.wl() - 1; bitindex >= 0; -- bitindex )
     {
-        *rawdata_ptr ++ = "01"[(object)[bitindex]];
+        *rawdata_ptr ++ = "01"[object[bitindex]];
     }
     *rawdata_ptr = '\0';
-    compose_data_line( rawdata, compdata );
+    compose_data_line( &rawdata[0], &compdata[0] );
 
-    std::fputs( compdata, f );
+    std::fputs( &compdata[0], f );
     old_value = object;
 }
 
@@ -838,18 +856,24 @@ vcd_sc_fxnum_fast_trace::changed()
 void
 vcd_sc_fxnum_fast_trace::write( FILE* f )
 {
-    char rawdata[1000], *rawdata_ptr = rawdata;
-    char compdata[1000];
+    static std::vector<char> compdata(1024), rawdata(1024);
+    typedef std::vector<char>::size_type size_t;
 
-    int bitindex;
-    for( bitindex = object.wl() - 1; bitindex >= 0; -- bitindex )
+    if ( compdata.size() < (size_t)object.wl() ) {
+        size_t sz = ( (size_t)object.wl() + 4096 ) & (~(size_t)(4096-1));
+        std::vector<char>( sz ).swap( compdata ); // resize without copying values
+        std::vector<char>( sz ).swap( rawdata );
+    }
+    char *rawdata_ptr  = &rawdata[0];
+
+    for(int bitindex = object.wl() - 1; bitindex >= 0; -- bitindex )
     {
-        *rawdata_ptr ++ = "01"[(object)[bitindex]];
+        *rawdata_ptr ++ = "01"[object[bitindex]];
     }
     *rawdata_ptr = '\0';
-    compose_data_line( rawdata, compdata );
+    compose_data_line( &rawdata[0], &compdata[0] );
 
-    std::fputs( compdata, f );
+    std::fputs( &compdata[0], f );
     old_value = object;
 }
 
@@ -952,7 +976,7 @@ vcd_unsigned_short_trace::vcd_unsigned_short_trace(
 : vcd_trace(name_, vcd_name_), object(object_), old_value(object_), mask(0xffff)
 {
     bit_width = width_;
-    if (bit_width < 16) mask = ~(-1 << bit_width);
+    if (bit_width < 16) mask = (unsigned short)~(-1 << bit_width);
 
     vcd_var_typ_name = "wire";
 }
@@ -1017,7 +1041,7 @@ vcd_unsigned_char_trace::vcd_unsigned_char_trace(
 : vcd_trace(name_, vcd_name_), object(object_), old_value(object_), mask(0xff)
 {
     bit_width = width_;
-    if (bit_width < 8) mask = ~(-1 << bit_width);
+    if (bit_width < 8) mask = (unsigned char)~(-1 << bit_width);
     vcd_var_typ_name = "wire";
 }
 
@@ -1207,7 +1231,7 @@ vcd_signed_short_trace::vcd_signed_short_trace(
 : vcd_trace(name_, vcd_name_), object(object_), old_value(object_), mask(0xffff)
 {
     bit_width = width_;
-    if (bit_width < 16) mask = ~(-1 << bit_width);
+    if (bit_width < 16) mask = (unsigned short)~(-1 << bit_width);
 
     vcd_var_typ_name = "wire";
 }
@@ -1269,7 +1293,7 @@ vcd_signed_char_trace::vcd_signed_char_trace(const char& object_,
 : vcd_trace(name_, vcd_name_), object(object_), old_value(object_), mask(0xff)
 {
     bit_width = width_;
-    if (bit_width < 8) mask = ~(-1 << bit_width);
+    if (bit_width < 8) mask = (unsigned char)~(-1 << bit_width);
 
     vcd_var_typ_name = "wire";
 }
@@ -1659,42 +1683,21 @@ void vcd_enum_trace::write(FILE* f)
  *****************************************************************************/
 
 vcd_trace_file::vcd_trace_file(const char *name)
-: fp(0), trace_delta_cycles(false), vcd_name_index(0),
-  previous_time_units_low(0), previous_time_units_high(0), traces(),
-  initialized(false), timescale_unit(sc_get_time_resolution().to_seconds()),
-  timescale_set_by_user(false)
-{
-    std::string file_name = name ;
-    file_name += ".vcd";
-    fp = fopen(file_name.c_str(), "w");
-    if (!fp) {
-        std::string msg = std::string("Cannot write trace file '") +
-	                file_name + "'";
-	::std::cerr << "FATAL: " << msg << "\n";
-        exit(1);
-    }
-    trace_delta_cycles = false; // Make this the default
-    initialized = false;
-    vcd_name_index = 0;
-
-    // default time step is the time resolution
-    timescale_unit = sc_get_time_resolution().to_seconds();
-
-    timescale_set_by_user = false;
-}
+  : sc_trace_file_base( name, "vcd" )
+  , vcd_name_index(0)
+  , previous_time_units_low(0)
+  , previous_time_units_high(0)
+  , traces()
+{}
 
 
-void vcd_trace_file::initialize()
+void
+vcd_trace_file::do_initialize()
 {
     char buf[2000];
 
     //date:
-    time_t long_time;
-    time(&long_time);
-    struct tm* p_tm;
-    p_tm = localtime(&long_time);
-    strftime(buf, 199, "%b %d, %Y       %H:%M:%S", p_tm);
-    std::fprintf(fp, "$date\n     %s\n$end\n\n", buf);
+    std::fprintf(fp, "$date\n     %s\n$end\n\n", localtime_string().c_str() );
 
     //version:
     std::fprintf(fp, "$version\n %s\n$end\n\n", sc_version());
@@ -1736,19 +1739,11 @@ void vcd_trace_file::initialize()
         }
     }
 
-
-    running_regression = ( getenv( "SYSTEMC_REGRESSION" ) != NULL );
-    // Don't print message if running regression
-    if( ! timescale_set_by_user && ! running_regression ) {
-	::std::cout << "WARNING: Default time step is used for VCD tracing." << ::std::endl;
-    }
-
     // Create a dummy scope
     std::fputs("$scope module SystemC $end\n", fp);
 
     //variable definitions:
-    int i;
-    for (i = 0; i < (int)traces.size(); i++) {
+    for (int i = 0; i < (int)traces.size(); i++) {
         vcd_trace* t = traces[i];
         t->set_width(); // needed for all vectors
         t->print_variable_declaration_line(fp);
@@ -1774,9 +1769,8 @@ void vcd_trace_file::initialize()
 
 
     std::fputs("$dumpvars\n",fp);
-    for (i = 0; i < (int)traces.size(); i++) {
-        vcd_trace* t = traces[i];
-        t->write(fp);
+    for (int i = 0; i < (int)traces.size(); i++) {
+        traces[i]->write(fp);
         std::fputc('\n', fp);
     }
     std::fputs("$end\n\n", fp);
@@ -1787,18 +1781,12 @@ void vcd_trace_file::initialize()
 
 #define DEFN_TRACE_METHOD(tp)                                                 \
 void                                                                          \
-vcd_trace_file::trace(const tp& object_, const std::string& name_)       \
+vcd_trace_file::trace(const tp& object_, const std::string& name_)            \
 {                                                                             \
-    if( initialized ) {                                                       \
-        put_error_message(                                                \
-	    "No traces can be added once simulation has started.\n"               \
-            "To add traces, create a new vcd trace file.", false );           \
-    }                                                                         \
-    std::string temp_vcd_name;                                           \
-    create_vcd_name( &temp_vcd_name );                                        \
-    traces.push_back( new vcd_ ## tp ## _trace( object_,                      \
-						name_,                        \
-						temp_vcd_name ) );            \
+    if( add_trace_check(name_) )                                              \
+        traces.push_back( new vcd_ ## tp ## _trace( object_,                  \
+                                                    name_,                    \
+                                                    obtain_name() ) );        \
 }
 
 DEFN_TRACE_METHOD(bool)
@@ -1808,18 +1796,12 @@ DEFN_TRACE_METHOD(double)
 #undef DEFN_TRACE_METHOD
 #define DEFN_TRACE_METHOD(tp)                                                 \
 void                                                                          \
-vcd_trace_file::trace(const sc_dt::tp& object_, const std::string& name_)\
+vcd_trace_file::trace(const sc_dt::tp& object_, const std::string& name_)     \
 {                                                                             \
-    if( initialized ) {                                                       \
-        put_error_message(                                                \
-	    "No traces can be added once simulation has started.\n"           \
-            "To add traces, create a new vcd trace file.", false );           \
-    }                                                                         \
-    std::string temp_vcd_name;                                           \
-    create_vcd_name( &temp_vcd_name );                                        \
-    traces.push_back( new vcd_ ## tp ## _trace( object_,                      \
-						name_,                        \
-						temp_vcd_name ) );            \
+    if( add_trace_check(name_) )                                              \
+        traces.push_back( new vcd_ ## tp ## _trace( object_,                  \
+                                                    name_,                    \
+                                                    obtain_name() ) );        \
 }
 
 DEFN_TRACE_METHOD(sc_bit)
@@ -1840,40 +1822,28 @@ DEFN_TRACE_METHOD(sc_fxnum_fast)
 
 #define DEFN_TRACE_METHOD_SIGNED(tp)                                          \
 void                                                                          \
-vcd_trace_file::trace( const tp&        object_,                              \
-                       const std::string& name_,                         \
-                       int              width_ )                              \
+vcd_trace_file::trace( const tp&          object_,                            \
+                       const std::string& name_,                              \
+                       int                width_ )                            \
 {                                                                             \
-    if( initialized ) {                                                       \
-        put_error_message(                                                \
-	    "No traces can be added once simulation has started.\n"           \
-            "To add traces, create a new vcd trace file.", false );           \
-    }                                                                         \
-    std::string temp_vcd_name;                                           \
-    create_vcd_name( &temp_vcd_name );                                        \
-    traces.push_back( new vcd_signed_ ## tp ## _trace( object_,               \
-					               name_,                 \
-						       temp_vcd_name,         \
-                                                       width_ ) );            \
+    if( add_trace_check(name_) )                                              \
+        traces.push_back( new vcd_signed_ ## tp ## _trace( object_,           \
+                                                           name_,             \
+                                                           obtain_name(),     \
+                                                           width_ ) );        \
 }
 
 #define DEFN_TRACE_METHOD_UNSIGNED(tp)                                        \
 void                                                                          \
 vcd_trace_file::trace( const unsigned tp& object_,                            \
-                       const std::string&   name_,                       \
+                       const std::string& name_,                              \
                        int                width_ )                            \
 {                                                                             \
-    if( initialized ) {                                                       \
-        put_error_message(                                                \
-	    "No traces can be added once simulation has started.\n"           \
-            "To add traces, create a new vcd trace file.", false );           \
-    }                                                                         \
-    std::string temp_vcd_name;                                           \
-    create_vcd_name( &temp_vcd_name );                                        \
-    traces.push_back( new vcd_unsigned_ ## tp ## _trace( object_,             \
-				                         name_,               \
-						         temp_vcd_name,       \
-                                                         width_ ) );          \
+    if( add_trace_check(name_) )                                              \
+        traces.push_back( new vcd_unsigned_ ## tp ## _trace( object_,         \
+                                                             name_,           \
+                                                             obtain_name(),   \
+                                                             width_ ) );      \
 }
 
 DEFN_TRACE_METHOD_SIGNED(char)
@@ -1891,49 +1861,39 @@ DEFN_TRACE_METHOD_UNSIGNED(long)
 
 #define DEFN_TRACE_METHOD_LONG_LONG(tp)                                       \
 void                                                                          \
-vcd_trace_file::trace( const sc_dt::tp& object_,                              \
-                       const std::string&   name_,                       \
+vcd_trace_file::trace( const sc_dt::tp&   object_,                            \
+                       const std::string& name_,                              \
                        int                width_ )                            \
 {                                                                             \
-    if( initialized ) {                                                       \
-        put_error_message(                                                \
-	    "No traces can be added once simulation has started.\n"           \
-            "To add traces, create a new vcd trace file.", false );           \
-    }                                                                         \
-    std::string temp_vcd_name;                                           \
-    create_vcd_name( &temp_vcd_name );                                        \
-    traces.push_back( new vcd_ ## tp ## _trace( object_,                      \
-				                         name_,               \
-						         temp_vcd_name,       \
-                                                         width_ ) );          \
+    if( add_trace_check(name_) )                                              \
+        traces.push_back( new vcd_ ## tp ## _trace( object_,                  \
+                                                    name_,                    \
+                                                    obtain_name(),            \
+                                                    width_ ) );               \
 }
+
 DEFN_TRACE_METHOD_LONG_LONG(int64)
 DEFN_TRACE_METHOD_LONG_LONG(uint64)
 
 #undef DEFN_TRACE_METHOD_LONG_LONG
 
 void
-vcd_trace_file::trace( const unsigned& object_,
-		       const std::string& name_,
-		       const char** enum_literals_ )
+vcd_trace_file::trace( const unsigned&    object_,
+                       const std::string& name_,
+                       const char**       enum_literals_ )
 {
-    if( initialized ) {
-        put_error_message(
-	    "No traces can be added once simulation has started.\n"
-	    "To add traces, create a new vcd trace file.", false );
-    }
-    std::string temp_vcd_name;
-    create_vcd_name( &temp_vcd_name );
-    traces.push_back( new vcd_enum_trace( object_,
-					  name_,
-					  temp_vcd_name,
-					  enum_literals_ ) );
+    if( add_trace_check(name_) )
+        traces.push_back( new vcd_enum_trace( object_,
+                                              name_,
+                                              obtain_name(),
+                                              enum_literals_ ) );
 }
 
 
 void
 vcd_trace_file::write_comment(const std::string& comment)
 {
+    if(!fp) open_fp();
     //no newline in comments allowed, as some viewers may crash
     std::fputs("$comment\n", fp);
     std::fputs(comment.c_str(), fp);
@@ -1941,27 +1901,18 @@ vcd_trace_file::write_comment(const std::string& comment)
 }
 
 void
-vcd_trace_file::delta_cycles(bool flag)
-{
-    trace_delta_cycles = flag;
-}
-
-void
 vcd_trace_file::cycle(bool this_is_a_delta_cycle)
 {
-    char message[4000];
     unsigned this_time_units_high, this_time_units_low;
-    
+
     // Just to make g++ shut up in the optimized mode
     this_time_units_high = this_time_units_low = 0;
 
     // Trace delta cycles only when enabled
-    if (!trace_delta_cycles && this_is_a_delta_cycle) return;
+    if (!delta_cycles() && this_is_a_delta_cycle) return;
 
     // Check for initialization
-    if (!initialized) {
-        initialize();
-        initialized = true;
+    if( initialize() ) {
         return;
     };
 
@@ -2001,8 +1952,9 @@ vcd_trace_file::cycle(bool this_is_a_delta_cycle)
         }
         static bool warned = false;
         if(!warned){
-	    ::std::cout << "Note: VCD delta cycling with pseudo timesteps (1 unit) "
-                    "is performed.\n" << ::std::endl;
+            SC_REPORT_INFO( SC_ID_TRACING_VCD_DELTA_CYCLE_
+                          , sc_time( timescale_unit, SC_SEC )
+                              .to_string().c_str() );
             warned = true;
         }
     }
@@ -2013,16 +1965,15 @@ vcd_trace_file::cycle(bool this_is_a_delta_cycle)
 	( now_units_high != 0 || now_units_low != 0 ) ) {
 	// Don't print the message at time zero
         static bool warned = false;
-        if( ! warned && ! running_regression ) {
-            std::sprintf(message,
-                    "Multiple cycles found with same (%u) time units count.\n"
-                    "Waveform viewers will only show the states of the last one.\n"
-                    "Use ((vcd_trace_file*)vcdfile)->sc_set_vcd_time_unit(int exponent10_seconds)\n"
-                    "to increase time resolution.",
-                    now_units_low
-                    );
-            put_error_message(message, true);
-            warned = true;
+        if( ! warned ) {
+            std::stringstream ss;
+            ss << "units count: " << now_units_low << "\n"
+               "\tWaveform viewers will only show the states of the last one.\n"
+               "\tUse `tracefile->set_time_unit(double, sc_time_unit);'"
+                  " to increase the time resolution.";
+            SC_REPORT_WARNING( SC_ID_TRACING_VCD_DUPLICATE_TIME_
+                             , ss.str().c_str() );
+            // warned = true;
         }
     }
 
@@ -2032,18 +1983,19 @@ vcd_trace_file::cycle(bool this_is_a_delta_cycle)
     if(!this_is_a_delta_cycle && !now_equals_previous_time && 
         !now_later_than_previous_time){
         static bool warned = false;
-        if(!warned){
-            std::sprintf(message,
-                    "Cycle found with falling (%u -> %u) time units count.\n"
-                    "This can occur when delta cycling is activated.\n"
-                    "Cycles with falling time are not shown.\n"
-                    "Use ((vcd_trace_file*)vcdfile)->sc_set_vcd_time_unit(int exponent10_seconds)\n"
-                    "to increase time resolution.",
-                    previous_time_units_low, now_units_low);
-            put_error_message(message, true);
-            warned = true;
+        if(!warned) {
+            std::stringstream ss;
+            ss << "units count (" 
+               << previous_time_units_low << "->" << now_units_low << ")\n"
+               "\tThis can occur when delta cycling is activated."
+                  " Cycles with falling time are not shown.\n"
+               "\tUse `tracefile->set_time_unit(double, sc_time_unit);'"
+                  " to increase the time resolution.";
+            SC_REPORT_WARNING( SC_ID_TRACING_VCD_DUPLICATE_TIME_
+                             , ss.str().c_str() );
+            // warned = true;
         }
-	// Note that we don't set this_time_units_high/low to any value only
+        // Note that we don't set this_time_units_high/low to any value only
         // in this case because we are not going to do any tracing. In the
         // optimized mode, the compiler complains because of this. Therefore,
         // we include the lines at the very beginning of this function to make
@@ -2087,31 +2039,15 @@ vcd_trace_file::cycle(bool this_is_a_delta_cycle)
     }
 }
 
+#if 0
 void
 vcd_trace_file::create_vcd_name(std::string* p_destination)
 {
-    const char first_type_used = 'a';
-    const int used_types_count = 'z' - 'a' + 1;
-    int result;
-
-    char char4 = (char)(vcd_name_index % used_types_count);
-
-    result = vcd_name_index / used_types_count;
-    char char3 = (char)(result % used_types_count);
-
-    result = result / used_types_count;
-    char char2 = (char)(result % used_types_count);
-
-    char buf[20];
-    std::sprintf(buf, "%c%c%c",
-            char2 + first_type_used,
-            char3 + first_type_used,
-            char4 + first_type_used);
-    *p_destination = buf;
-    vcd_name_index++;
+    obtain_name.swap( *p_destination );
 }
+#endif
 
-// same as above
+// Create a VCD name for a variable
 std::string
 vcd_trace_file::obtain_name()
 {
@@ -2147,12 +2083,10 @@ vcd_trace_file::obtain_name()
 
 vcd_trace_file::~vcd_trace_file()
 {
-    int i;
-    for (i = 0; i < (int)traces.size(); i++) {
+    for( int i = 0; i < (int)traces.size(); i++ ) {
         vcd_trace* t = traces[i];
         delete t;
     }
-    fclose(fp);
 }
 
 
@@ -2193,11 +2127,9 @@ map_sc_logic_state_to_vcd_state(char in_char)
 
 static
 void
-remove_vcd_name_problems(std::string& name)
+remove_vcd_name_problems(vcd_trace const* vcd, std::string& name)
 {
-    char message[4000];
     static bool warned = false;
-
     bool braces_removed = false;
     for (unsigned int i = 0; i< name.length(); i++) {
       if (name[i] == '[') {
@@ -2211,69 +2143,30 @@ remove_vcd_name_problems(std::string& name)
     }
 
     if(braces_removed && !warned){
-        std::sprintf(message,
-                "Traced objects found with name containing [], which may be\n"
-                "interpreted by the waveform viewer in unexpected ways.\n"
-                "So the [] is automatically replaced by ().");
-        put_error_message(message, true);
-        warned = true;
+        std::stringstream ss;
+        ss << vcd->name << ":\n"
+            "\tTraced objects found with name containing [], which may be\n"
+            "\tinterpreted by the waveform viewer in unexpected ways.\n"
+            "\tSo the [] is automatically replaced by ().";
+
+        SC_REPORT_WARNING( SC_ID_TRACING_OBJECT_NAME_FILTERED_
+                         , ss.str().c_str() );
     }
 }
 
-// set the time unit.
-void vcd_trace_file::set_time_unit(double v, sc_time_unit tu)
-{
-    if(initialized)
-    {        
-	put_error_message(
-	    "Trace timescale unit cannot be changed once tracing has begun.",
-	    false
-        );
-        std::cout << "To change the scale, create a new trace file." 
-		  << std::endl;
-        return;    
-    }
+// ----------------------------------------------------------------------------
 
-    switch ( tu )
-    {
-      case SC_FS:  v = v * 1e-15; break;
-	  case SC_PS:  v = v * 1e-12; break;
-      case SC_NS:  v = v * 1e-9;  break;
-      case SC_US:  v = v * 1e-6;  break;
-      case SC_MS:  v = v * 1e-3;  break;
-      case SC_SEC:                break;
-      default:                    
-	  	put_error_message("Unknown time unit specified ",true);
-		std::cout << tu << std::endl;
-		break;
-    }
-
-    timescale_unit = v;
-
-    // EMIT ADVISORY MESSAGE ABOUT CHANGE IN TIME SCALE:
-
-    char buf[200];
-    std::sprintf(buf,
-        "Note: VCD trace timescale unit is set by user to %e sec.\n",
-        timescale_unit);
-    ::std::cout << buf << ::std::flush;
-
-	timescale_set_by_user = true;
-}
 sc_trace_file*
 sc_create_vcd_trace_file(const char * name)
 {
-  sc_trace_file *tf;
-
-  tf = new vcd_trace_file(name);
-  sc_get_curr_simcontext()->add_trace_file(tf);
-  return tf;
+    sc_trace_file * tf = new vcd_trace_file(name);
+    return tf;
 }
 
 void
 sc_close_vcd_trace_file( sc_trace_file* tf )
 {
-    vcd_trace_file* vcd_tf = (vcd_trace_file*)tf;
+    vcd_trace_file* vcd_tf = static_cast<vcd_trace_file*>(tf);
     delete vcd_tf; 
 }
 

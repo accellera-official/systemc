@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2011 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 3.0 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -24,6 +24,10 @@
 
   CHANGE LOG AT END OF FILE
  *****************************************************************************/
+
+#include <cstdio>
+#include <stdlib.h>
+#include <string.h>
 
 #include "sysc/utils/sc_iostream.h"
 #include "sysc/kernel/sc_process.h"
@@ -191,6 +195,9 @@ int sc_report_handler::get_count(const char* msg_type_, sc_severity severity_)
 
 sc_msg_def * sc_report_handler::mdlookup(const char * msg_type_)
 {
+    if( !msg_type_ ) // if msg_type is NULL, report unknown error
+        msg_type_ = SC_ID_UNKNOWN_ERROR_;
+
     for ( msg_def_items * item = messages; item; item = item->next )
     {
 	for ( int i = 0; i < item->count; ++i )
@@ -546,9 +553,18 @@ sc_actions sc_report_handler::force()
     return force(0);
 }
 
-void sc_report_handler::set_handler(sc_report_handler_proc handler_)
+sc_report_handler_proc
+sc_report_handler::set_handler(sc_report_handler_proc handler_)
 {
+    sc_report_handler_proc old = handler;
     handler = handler_ ? handler_: &sc_report_handler::default_handler;
+    return old;
+}
+
+sc_report_handler_proc
+sc_report_handler::get_handler()
+{
+    return handler;
 }
 
 sc_report* sc_report_handler::get_cached_report()

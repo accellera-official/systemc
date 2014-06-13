@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2011 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 3.0 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -53,78 +53,7 @@ namespace sc_dt {
 class sc_string_rep;
 
 // friend operator declarations
-    sc_string_old operator + ( const char* s, const sc_string_old& t );
-
-
-// ----------------------------------------------------------------------------
-//  ENUM : sc_numrep
-//
-//  Enumeration of number representations for character string conversion.
-// ----------------------------------------------------------------------------
-
-enum sc_numrep
-{
-    SC_NOBASE = 0,
-    SC_BIN    = 2,
-    SC_OCT    = 8,
-    SC_DEC    = 10,
-    SC_HEX    = 16,
-    SC_BIN_US,
-    SC_BIN_SM,
-    SC_OCT_US,
-    SC_OCT_SM,
-    SC_HEX_US,
-    SC_HEX_SM,
-    SC_CSD
-};
-
-// We use typedefs for istream and ostream here to get around some finickiness
-// from aCC:
-
-typedef ::std::istream systemc_istream;
-typedef ::std::ostream systemc_ostream;
-
-const std::string to_string( sc_numrep );
-
-//------------------------------------------------------------------------------
-//"sc_io_base"
-//
-// This inline function returns the type of an i/o stream's base as a SystemC
-// base designator.
-//     stream_object = reference to the i/o stream whose base is to be returned.
-//
-//"sc_io_show_base"
-//
-// This inline function returns true if the base should be shown when a SystemC
-// value is displayed via the supplied stream operator.
-//     stream_object = reference to the i/o stream to return showbase value for.
-//------------------------------------------------------------------------------
-#if defined(__GNUC__) || defined(_MSC_VER)
-    inline sc_numrep sc_io_base( systemc_ostream& stream_object,
-        sc_numrep def_base )
-    {
-	::std::ios::fmtflags flags =
-	    stream_object.flags() & ::std::ios::basefield;
-	if ( flags & ::std::ios::dec ) return  SC_DEC;
-	if ( flags & ::std::ios::hex ) return  SC_HEX;
-	if ( flags & ::std::ios::oct ) return  SC_OCT;
-	return def_base;
-    }
-    inline bool sc_io_show_base( systemc_ostream& stream_object )
-    {
-	return (stream_object.flags() & ::std::ios::showbase) != 0 ;
-    }
-#else   // Other
-    inline sc_numrep sc_io_base( systemc_ostream& stream_object,
-        sc_numrep def_base )
-    {
-        return SC_DEC;
-    }
-    inline bool sc_io_show_base( systemc_ostream& stream_object )
-    {
-        return false;
-    }
-#endif
+sc_string_old operator + ( const char* s, const sc_string_old& t );
 
 
 // ----------------------------------------------------------------------------
@@ -294,15 +223,6 @@ private:
 
 
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
-
-inline
-systemc_ostream&
-operator << ( systemc_ostream& os, sc_numrep numrep )
-{
-    os << to_string( numrep );
-    return os;
-}
-
 
 inline
 systemc_ostream&

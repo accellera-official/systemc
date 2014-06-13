@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2011 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 3.0 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -152,7 +152,7 @@ bool sc_uint_subref_r::concat_get_ctrl( sc_digit* dst_p, int low_i ) const
     int       dst_i;	   // Word in dst_p now processing.
     int       end_i;	   // Highest order word in dst_p to process.
     int       left_shift;  // Left shift for val.
-    sc_digit  mask;	   // Mask for bits to extract or keep.
+    uint_type mask;	   // Mask for bits to extract or keep.
 
     dst_i = low_i / BITS_PER_DIGIT;
     left_shift = low_i % BITS_PER_DIGIT;
@@ -583,7 +583,7 @@ bool sc_uint_base::concat_get_ctrl( sc_digit* dst_p, int low_i ) const
     int       dst_i;       // Word in dst_p now processing.
     int       end_i;       // Highest order word in dst_p to process.
     int       left_shift;  // Left shift for val.
-    sc_digit  mask;        // Mask for bits to extract or keep.
+    uint_type mask;        // Mask for bits to extract or keep.
 
     dst_i = low_i / BITS_PER_DIGIT;
     left_shift = low_i % BITS_PER_DIGIT;

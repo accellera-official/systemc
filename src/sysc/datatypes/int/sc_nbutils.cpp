@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2011 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 3.0 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -55,6 +55,9 @@
 //
 
 #include <ctype.h>
+#include <cstdio>
+#include <string.h>
+
 #include "sysc/datatypes/int/sc_int_ids.h"
 #include "sysc/datatypes/int/sc_nbutils.h"
 #include "sysc/kernel/sc_macros.h"
@@ -62,6 +65,43 @@
 
 namespace sc_dt
 {
+
+// ----------------------------------------------------------------------------
+//  ENUM : sc_numrep
+//
+//  Enumeration of number representations for character string conversion.
+// ----------------------------------------------------------------------------
+
+const std::string
+to_string( sc_numrep numrep )
+{
+    switch( numrep )
+    {
+#   define CASE_ENUM2STR( Value ) \
+      case Value: return #Value
+
+      CASE_ENUM2STR(SC_DEC);
+
+      CASE_ENUM2STR(SC_BIN);
+      CASE_ENUM2STR(SC_BIN_US);
+      CASE_ENUM2STR(SC_BIN_SM);
+
+      CASE_ENUM2STR(SC_OCT);
+      CASE_ENUM2STR(SC_OCT_US);
+      CASE_ENUM2STR(SC_OCT_SM);
+
+      CASE_ENUM2STR(SC_HEX);
+      CASE_ENUM2STR(SC_HEX_US);
+      CASE_ENUM2STR(SC_HEX_SM);
+
+      CASE_ENUM2STR(SC_CSD);
+
+#   undef CASE_ENUM2STR
+
+    default:
+      return "unknown";
+    }
+}
 
 // ----------------------------------------------------------------------------
 //  SECTION: General utility functions.
@@ -599,7 +639,7 @@ vec_add(int ulen, const sc_digit *u,
   const sc_digit *uend = (u + ulen);
   const sc_digit *vend = (v + vlen);
 
-  register sc_digit carry = 0;   // Also used as sum to save space.
+  sc_digit carry = 0;   // Also used as sum to save space.
 
   // Add along the shorter v.
   while (v < vend) {
@@ -639,11 +679,11 @@ vec_add_on(int ulen, sc_digit *ubegin,
   assert(ulen >= vlen);
 #endif
 
-  register sc_digit *u = ubegin;
+  sc_digit *u = ubegin;
   const sc_digit *uend = (u + ulen);
   const sc_digit *vend = (v + vlen);
 
-  register sc_digit carry = 0;   // Also used as sum to save space.
+  sc_digit carry = 0;   // Also used as sum to save space.
 
   // Add along the shorter v.
   while (v < vend) {
@@ -688,10 +728,10 @@ vec_add_on2(int ulen, sc_digit *ubegin,
   assert(ulen < vlen);
 #endif
 
-  register sc_digit *u = ubegin;
+  sc_digit *u = ubegin;
   const sc_digit *uend = (u + ulen);
 
-  register sc_digit carry = 0;   // Also used as sum to save space.
+  sc_digit carry = 0;   // Also used as sum to save space.
 
   // Add along the shorter u.
   while (u < uend) {
@@ -726,7 +766,7 @@ vec_add_small(int ulen, const sc_digit *u,
   const sc_digit *uend = (u + ulen);
 
   // Add along the shorter v.
-  register sc_digit carry = (*u++) + v;
+  sc_digit carry = (*u++) + v;
   (*w++) = carry & DIGIT_MASK;
   carry >>= BITS_PER_DIGIT;
 
@@ -756,7 +796,7 @@ vec_add_small_on(int ulen, sc_digit *u, sc_digit v)
   assert((ulen > 0) && (u != NULL));
 #endif
 
-  register int i = 0;
+  int i = 0;
 
   while (v && (i < ulen)) {
     v += u[i];
@@ -794,7 +834,7 @@ vec_sub(int ulen, const sc_digit *u,
   const sc_digit *uend = (u + ulen);
   const sc_digit *vend = (v + vlen);
 
-  register sc_digit borrow = 0;   // Also used as diff to save space.
+  sc_digit borrow = 0;   // Also used as diff to save space.
 
   // Subtract along the shorter v.
   while (v < vend) {
@@ -834,11 +874,11 @@ vec_sub_on(int ulen, sc_digit *ubegin,
   assert(ulen >= vlen);
 #endif
 
-  register sc_digit *u = ubegin;
+  sc_digit *u = ubegin;
   const sc_digit *uend = (u + ulen);
   const sc_digit *vend = (v + vlen);
 
-  register sc_digit borrow = 0;   // Also used as diff to save space.
+  sc_digit borrow = 0;   // Also used as diff to save space.
 
   // Subtract along the shorter v.
   while (v < vend) {
@@ -873,10 +913,10 @@ vec_sub_on2(int ulen, sc_digit *ubegin,
   assert((vlen > 0) && (v != NULL));
 #endif
 
-  register sc_digit *u = ubegin;
+  sc_digit *u = ubegin;
   const sc_digit *uend = (u + sc_min(ulen, vlen));
 
-  register sc_digit borrow = 0;   // Also used as diff to save space.
+  sc_digit borrow = 0;   // Also used as diff to save space.
 
   // Subtract along the shorter u.
   while (u < uend) {
@@ -910,7 +950,7 @@ vec_sub_small(int ulen, const sc_digit *u,
   const sc_digit *uend = (u + ulen);
 
   // Add along the shorter v.
-  register sc_digit borrow = ((*u++) + DIGIT_RADIX) - v;
+  sc_digit borrow = ((*u++) + DIGIT_RADIX) - v;
   (*w++) = borrow & DIGIT_MASK;
   borrow = 1 - (borrow >> BITS_PER_DIGIT);
 
@@ -941,7 +981,7 @@ vec_sub_small_on(int ulen, sc_digit *u, sc_digit v)
   assert((ulen > 0) && (u != NULL));
 #endif
 
-  for (register int i = 0; i < ulen; ++i) {
+  for (int i = 0; i < ulen; ++i) {
     v = (u[i] + DIGIT_RADIX) - v;    
     u[i] = v & DIGIT_MASK;
     v = 1 - (v >> BITS_PER_DIGIT);
@@ -1038,11 +1078,11 @@ vec_mul(int ulen, const sc_digit *u,
     assert(u_h == (u_h & HALF_DIGIT_MASK));
 #endif
 
-    register sc_digit carry = 0;
+    sc_digit carry = 0;
 
-    register sc_digit *w = (wbegin++);
+    sc_digit *w = (wbegin++);
 
-    register const sc_digit *v = vbegin;
+    const sc_digit *v = vbegin;
 
     while (v < vend) {
 
@@ -1091,7 +1131,7 @@ vec_mul_small(int ulen, const sc_digit *u,
 
   const sc_digit *uend = (u + ulen);
 
-  register sc_digit carry = 0;
+  sc_digit carry = 0;
 
   while (u < uend) {
 
@@ -1131,9 +1171,9 @@ vec_mul_small_on(int ulen, sc_digit *u, sc_digit v)
 
 #define prod_h carry
 
-  register sc_digit carry = 0;
+  sc_digit carry = 0;
 
-  for (register int i = 0; i < ulen; ++i) {
+  for (int i = 0; i < ulen; ++i) {
 
 #ifdef DEBUG_SYSTEMC
     // The overflow bits must be zero.
@@ -1224,15 +1264,15 @@ vec_div_large(int ulen, const sc_digit *u,
   x[xlen] = 0;
 
   // The first two digits of y.
-  register sc_digit y2 = (y[ylen - 1] << BITS_PER_BYTE) + y[ylen - 2];
+  sc_digit y2 = (y[ylen - 1] << BITS_PER_BYTE) + y[ylen - 2];
 
   const sc_digit DOUBLE_BITS_PER_BYTE = 2 * BITS_PER_BYTE;
 
   // Find each q[k].
-  for (register int k = (xlen - ylen); k >= 0; --k) {
+  for (int k = (xlen - ylen); k >= 0; --k) {
 
     // qk is a guess for q[k] such that q[k] = qk or qk - 1.
-    register sc_digit qk;
+    sc_digit qk;
 
     // Find qk by just using 2 digits of y and 3 digits of x. The
     // following code assumes that sizeof(sc_digit) >= 3 BYTEs.
@@ -1247,12 +1287,12 @@ vec_div_large(int ulen, const sc_digit *u,
     // q[k] = qk or qk - 1. The following if-statement determines which:
     if (qk) {
 
-      register uchar *xk = (x + k);  // A shortcut for x[k].
+      uchar *xk = (x + k);  // A shortcut for x[k].
 
       // x = x - y * qk :
-      register sc_digit carry = 0;
+      sc_digit carry = 0;
 
-      for (register int i = 0; i < ylen; ++i) {
+      for (int i = 0; i < ylen; ++i) {
         carry += y[i] * qk;
         sc_digit diff = (xk[i] + BYTE_RADIX) - (carry & BYTE_MASK);
         xk[i] = (uchar)(diff & BYTE_MASK);
@@ -1276,7 +1316,7 @@ vec_div_large(int ulen, const sc_digit *u,
           // That is, x = x - y * (qk - 1) = x - y * qk + y = x_above + y.
           carry = 0;
 
-          for (register int i = 0; i < ylen; ++i) {
+          for (int i = 0; i < ylen; ++i) {
             carry += xk[i] + y[i];
             xk[i] = (uchar)(carry & BYTE_MASK);
             carry >>= BITS_PER_BYTE;
@@ -1343,7 +1383,7 @@ vec_div_small(int ulen, const sc_digit *u,
 
 #define q_h r
 
-  register sc_digit r = 0;
+  sc_digit r = 0;
   const sc_digit *ubegin = u;
 
   u += ulen;
@@ -1358,7 +1398,7 @@ vec_div_small(int ulen, const sc_digit *u,
     assert(high_half(u_AB) == high_half_masked(u_AB));
 #endif
 
-    register sc_digit num = concat(r, high_half(u_AB));  // num = r|A
+    sc_digit num = concat(r, high_half(u_AB));  // num = r|A
     q_h = num / v;                           // C
     num = concat((num % v), low_half(u_AB)); // num = (((r|A) % v)|B) 
     (*--q) = concat(q_h, num / v);           // q = C|D
@@ -1425,15 +1465,15 @@ vec_rem_large(int ulen, const sc_digit *u,
   x[xlen] = 0;
 
   // The first two digits of y.
-  register sc_digit y2 = (y[ylen - 1] << BITS_PER_BYTE) + y[ylen - 2];
+  sc_digit y2 = (y[ylen - 1] << BITS_PER_BYTE) + y[ylen - 2];
 
   const sc_digit DOUBLE_BITS_PER_BYTE = 2 * BITS_PER_BYTE;
 
   // Find each q[k].
-  for (register int k = xlen - ylen; k >= 0; --k) {
+  for (int k = xlen - ylen; k >= 0; --k) {
 
     // qk is a guess for q[k] such that q[k] = qk or qk - 1.
-    register sc_digit qk;
+    sc_digit qk;
 
     // Find qk by just using 2 digits of y and 3 digits of x. The
     // following code assumes that sizeof(sc_digit) >= 3 BYTEs.
@@ -1448,12 +1488,12 @@ vec_rem_large(int ulen, const sc_digit *u,
     // q[k] = qk or qk - 1. The following if-statement determines which.
     if (qk) {
 
-      register uchar *xk = (x + k);  // A shortcut for x[k].
+      uchar *xk = (x + k);  // A shortcut for x[k].
 
       // x = x - y * qk;
-      register sc_digit carry = 0;
+      sc_digit carry = 0;
 
-      for (register int i = 0; i < ylen; ++i) {
+      for (int i = 0; i < ylen; ++i) {
         carry += y[i] * qk;
         sc_digit diff = (xk[i] + BYTE_RADIX) - (carry & BYTE_MASK);
         xk[i] = (uchar)(diff & BYTE_MASK);
@@ -1475,7 +1515,7 @@ vec_rem_large(int ulen, const sc_digit *u,
           // x = x - y * (qk - 1) = x - y * qk + y = x_above + y.
           carry = 0;
 
-          for (register int i = 0; i < ylen; ++i) {
+          for (int i = 0; i < ylen; ++i) {
             carry += xk[i] + y[i];
             xk[i] = (uchar)(carry & BYTE_MASK);
             carry >>= BITS_PER_BYTE;
@@ -1513,13 +1553,13 @@ vec_rem_small(int ulen, const sc_digit *u, sc_digit v)
 
   // This function is adapted from vec_div_small().
 
-  register sc_digit r = 0;
+  sc_digit r = 0;
   const sc_digit *ubegin = u;
 
   u += ulen;
 
   while (ubegin < u) {
-    register sc_digit u_AB = (*--u);  // A|B
+    sc_digit u_AB = (*--u);  // A|B
 
 #ifdef DEBUG_SYSTEMC
     // The overflow bits must be zero.
@@ -1546,7 +1586,7 @@ vec_rem_on_small(int ulen, sc_digit *u, sc_digit v)
 
 #define q_h r
 
-  register sc_digit r = 0;
+  sc_digit r = 0;
   const sc_digit *ubegin = u;
 
   u += ulen;
@@ -1560,7 +1600,7 @@ vec_rem_on_small(int ulen, sc_digit *u, sc_digit v)
     assert(high_half(u_AB) == high_half_masked(u_AB));
 #endif
 
-    register sc_digit num = concat(r, high_half(u_AB));  // num = r|A
+    sc_digit num = concat(r, high_half(u_AB));  // num = r|A
     q_h = num / v;                           // C
     num = concat((num % v), low_half(u_AB)); // num = (((r|A) % v)|B) 
     (*u) = concat(q_h, num / v);             // q = C|D
@@ -1585,10 +1625,10 @@ vec_to_char(int ulen, const sc_digit *u,
   assert((vlen > 0) && (v != NULL));
 #endif
 
-  register int nbits = ulen * BITS_PER_DIGIT;
+  int nbits = ulen * BITS_PER_DIGIT;
 
-  register int right = 0;
-  register int left = right + BITS_PER_BYTE - 1;
+  int right = 0;
+  int left = right + BITS_PER_BYTE - 1;
 
   vlen = 0;
 
@@ -1597,7 +1637,7 @@ vec_to_char(int ulen, const sc_digit *u,
     int left_digit = left / BITS_PER_DIGIT;
     int right_digit = right / BITS_PER_DIGIT;
 
-    register int nsr = ((vlen << LOG2_BITS_PER_BYTE) % BITS_PER_DIGIT);
+    int nsr = ((vlen << LOG2_BITS_PER_BYTE) % BITS_PER_DIGIT);
 
     int d = u[right_digit] >> nsr;
 
@@ -1640,16 +1680,16 @@ vec_from_char(int ulen, const uchar *u,
 
   (*v) = (sc_digit) u[ulen - 1];
 
-  for (register int i = ulen - 2; i >= 0; --i) {
+  for (int i = ulen - 2; i >= 0; --i) {
 
     // Manual inlining of vec_shift_left().
 
-    register sc_digit *viter = v;
+    sc_digit *viter = v;
 
-    register sc_digit carry = 0;
+    sc_digit carry = 0;
 
     while (viter < vend) {
-      register sc_digit vval = (*viter);
+      sc_digit vval = (*viter);
       (*viter++) = (((vval & mask) << BITS_PER_BYTE) | carry);
       carry = vval >> nsr;
     }
@@ -1693,7 +1733,7 @@ vec_shift_left(int ulen, sc_digit *u, int nsl)
     if (nd) {
 
       // Shift left for nd digits.
-      for (register int j = ulen - 1; j >= nd; --j)
+      for (int j = ulen - 1; j >= nd; --j)
         u[j] = u[j - nd];
       
       vec_zero( sc_min( nd, ulen ), u );
@@ -1706,16 +1746,16 @@ vec_shift_left(int ulen, sc_digit *u, int nsl)
   }
 
   // Shift left if nsl < BITS_PER_DIGIT.
-  register sc_digit *uiter = u;
+  sc_digit *uiter = u;
   sc_digit *uend = uiter + ulen;
 
   int nsr = BITS_PER_DIGIT - nsl;
   sc_digit mask = one_and_ones(nsr);
 
-  register sc_digit carry = 0;
+  sc_digit carry = 0;
 
   while (uiter < uend) {
-    register sc_digit uval = (*uiter);
+    sc_digit uval = (*uiter);
     (*uiter++) = (((uval & mask) << nsl) | carry);
     carry = uval >> nsr;
   }
@@ -1757,11 +1797,11 @@ vec_shift_right(int ulen, sc_digit *u, int nsr, sc_digit fill)
     if (nd) {
 
       // Shift right for nd digits.
-      for (register int j = 0; j < (ulen - nd); ++j)
+      for (int j = 0; j < (ulen - nd); ++j)
         u[j] = u[j + nd];
 
       if (fill) {
-        for (register int j = ulen - sc_min( nd, ulen ); j < ulen; ++j)
+        for (int j = ulen - sc_min( nd, ulen ); j < ulen; ++j)
           u[j] = fill;
       }
       else
@@ -1776,15 +1816,15 @@ vec_shift_right(int ulen, sc_digit *u, int nsr, sc_digit fill)
 
   // Shift right if nsr < BITS_PER_DIGIT.
   sc_digit *ubegin = u;
-  register sc_digit *uiter = (ubegin + ulen);
+  sc_digit *uiter = (ubegin + ulen);
 
   int nsl = BITS_PER_DIGIT - nsr;
   sc_digit mask = one_and_ones(nsr);
 
-  register sc_digit carry = (fill & mask) << nsl;
+  sc_digit carry = (fill & mask) << nsl;
 
   while (ubegin < uiter) {
-    register sc_digit uval = (*--uiter);
+    sc_digit uval = (*--uiter);
     (*uiter) = (uval >> nsr) | carry;
     carry = (uval & mask) << nsl;
   }
@@ -1829,7 +1869,7 @@ vec_reverse(int unb, int und, sc_digit *ud,
   // Based on the value of the ith in d, find the value of the jth bit
   // in ud.
 
-  for (register int i = l, j = r; i >= r; --i, ++j) {
+  for (int i = l, j = r; i >= r; --i, ++j) {
 
     if ((d[digit_ord(i)] & one_and_zeros(bit_ord(i))) != 0) // Test.
       ud[digit_ord(j)] |= one_and_zeros(bit_ord(j));     // Set.

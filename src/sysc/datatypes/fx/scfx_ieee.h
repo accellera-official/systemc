@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2006 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.4 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -65,13 +65,15 @@ class scfx_ieee_double;
 union ieee_float;
 class scfx_ieee_float;
 
+#define SCFX_MASK_(Size) \
+   ((1u << (Size))-1u)
 
 // ----------------------------------------------------------------------------
 //  UNION : ieee_double
 //
 //  IEEE 754 double-precision format.
 // ----------------------------------------------------------------------------
-    
+
 union ieee_double
 {
 
@@ -100,7 +102,11 @@ const unsigned int SCFX_IEEE_DOUBLE_BIAS   =  1023U;
 const int          SCFX_IEEE_DOUBLE_E_MAX  =  1023;
 const int          SCFX_IEEE_DOUBLE_E_MIN  = -1022;
 
-const unsigned int SCFX_IEEE_DOUBLE_M_SIZE =    52;
+const unsigned int SCFX_IEEE_DOUBLE_M_SIZE  =    52;
+const unsigned int SCFX_IEEE_DOUBLE_M0_SIZE =    20;
+const unsigned int SCFX_IEEE_DOUBLE_M1_SIZE =    32;
+const unsigned int SCFX_IEEE_DOUBLE_E_SIZE  =    11;
+
 
 
 // ----------------------------------------------------------------------------
@@ -208,7 +214,7 @@ inline
 void
 scfx_ieee_double::negative( unsigned int a )
 {
-    m_id.s.negative = a;
+    m_id.s.negative = a & SCFX_MASK_(1);
 }
 
 inline
@@ -222,7 +228,8 @@ inline
 void
 scfx_ieee_double::exponent( int a )
 {
-    m_id.s.exponent = SCFX_IEEE_DOUBLE_BIAS + a;
+    m_id.s.exponent = (SCFX_IEEE_DOUBLE_BIAS + a)
+                      & SCFX_MASK_(SCFX_IEEE_DOUBLE_E_SIZE);
 }
 
 inline
@@ -236,7 +243,7 @@ inline
 void
 scfx_ieee_double::mantissa0( unsigned int a )
 {
-    m_id.s.mantissa0 = a;
+    m_id.s.mantissa0 = a & SCFX_MASK_(SCFX_IEEE_DOUBLE_M0_SIZE);
 }
 
 inline
@@ -250,7 +257,7 @@ inline
 void
 scfx_ieee_double::mantissa1( unsigned int a )
 {
-    m_id.s.mantissa1 = a;
+    m_id.s.mantissa1 = a; // & SCFX_MASK_(SCFX_IEEE_DOUBLE_M1_SIZE);
 }
 
 
@@ -439,6 +446,7 @@ const int          SCFX_IEEE_FLOAT_E_MAX  =  127;
 const int          SCFX_IEEE_FLOAT_E_MIN  = -126;
 
 const unsigned int SCFX_IEEE_FLOAT_M_SIZE =   23;
+const unsigned int SCFX_IEEE_FLOAT_E_SIZE =    8;
 
 
 // ----------------------------------------------------------------------------
@@ -538,7 +546,7 @@ inline
 void
 scfx_ieee_float::negative( unsigned int a )
 {
-    m_if.s.negative = a;
+    m_if.s.negative = a & SCFX_MASK_(1);
 }
 
 inline
@@ -552,7 +560,8 @@ inline
 void
 scfx_ieee_float::exponent( int a )
 {
-    m_if.s.exponent = SCFX_IEEE_FLOAT_BIAS + a;
+    m_if.s.exponent = (SCFX_IEEE_FLOAT_BIAS + a)
+                      & SCFX_MASK_(SCFX_IEEE_FLOAT_E_SIZE);
 }
 
 inline
@@ -566,7 +575,7 @@ inline
 void
 scfx_ieee_float::mantissa( unsigned int a )
 {
-    m_if.s.mantissa = a;
+    m_if.s.mantissa = a & SCFX_MASK_(SCFX_IEEE_FLOAT_M_SIZE);
 }
 
 
@@ -683,6 +692,7 @@ uint64_to_double( uint64 a )
 
 } // namespace sc_dt
 
+#undef SCFX_MASK_
 
 #endif
 

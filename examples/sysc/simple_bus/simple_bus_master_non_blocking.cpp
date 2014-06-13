@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2006 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.4 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -50,8 +50,8 @@ void simple_bus_master_non_blocking::main_action()
 	     (bus_port->get_status(m_unique_priority) != SIMPLE_BUS_ERROR))
 	wait();
       if (bus_port->get_status(m_unique_priority) == SIMPLE_BUS_ERROR)
-	sb_fprintf(stdout, "%g %s : ERROR cannot read from %x\n",
-		   sc_time_stamp().to_double(), name(), addr);
+	sb_fprintf(stdout, "%s %s : ERROR cannot read from %x\n",
+		   sc_time_stamp().to_string().c_str(), name(), addr);
 
       mydata += cnt;
       cnt++;
@@ -61,8 +61,8 @@ void simple_bus_master_non_blocking::main_action()
 	     (bus_port->get_status(m_unique_priority) != SIMPLE_BUS_ERROR))
 	wait();
       if (bus_port->get_status(m_unique_priority) == SIMPLE_BUS_ERROR)
-	sb_fprintf(stdout, "%g %s : ERROR cannot write to %x\n",
-		   sc_time_stamp().to_double(), name(), addr);
+	sb_fprintf(stdout, "%s %s : ERROR cannot write to %x\n",
+		   sc_time_stamp().to_string().c_str(), name(), addr);
  
       wait(m_timeout, SC_NS);
       wait(); // ... for the next rising clock edge

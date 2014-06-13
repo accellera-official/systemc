@@ -13,7 +13,7 @@
 // purpose. */
 
 /* NOTE: double-labeled `_name' and `name' for System V compatability.  */
-/* NOTE: Comment lines start with '/*' and '//' ONLY.  Sorry! */
+/* NOTE: Mixed C/C++-style comments used. Sorry! */
 
 /* Callee-save: %esi, %edi, %ebx, %ebp
 // Caller-save: %eax, %ecx
@@ -33,6 +33,8 @@
 	.globl qt_block
 	.globl _qt_blocki
 	.globl qt_blocki
+	.globl _qt_align
+	.globl qt_align
 
 /* These all have the type signature
 //
@@ -85,9 +87,18 @@ qt_common:
 	popl %edi		/* Restore callee-save, sp+=4. */
 	popl %esi		/* Restore callee-save, sp+=4. */
 	popl %ebp		/* Restore callee-save, sp+=4. */
+_qt_align:
+qt_align:
 	ret			/* Resume the stopped function. */
-	hlt
 
+	.globl _qt_tramp
+	.globl qt_tramp
+_qt_tramp:
+qt_tramp:
+	movl 12(%esp), %eax	/* Load 'qt_error' address */
+	sub $4, %esp		/* Align stack pointer to 16-byte boundary */
+	jmp *%eax		/* call 'qt_error' */
+	hlt			/* 'qt_error' never returns */
 
 /* Start a varargs thread. */
 

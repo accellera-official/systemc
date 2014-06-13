@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2011 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 3.0 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -74,16 +74,36 @@
 
 #include "sysc/utils/sc_iostream.h"
 #include "sysc/kernel/sc_constants.h"   // For SC_MAX_NBITS
-#include "sysc/utils/sc_string.h"      // For sc_numrep
 
-
-#if defined( __SUNPRO_CC ) || defined( _MSC_VER ) || 1
+// Activate support mixed operands for concatenation via the comma operator
 #define SC_DT_MIXED_COMMA_OPERATORS
-#endif
 
 
 namespace sc_dt
 {
+
+// ----------------------------------------------------------------------------
+//  ENUM : sc_numrep
+//
+//  Enumeration of number representations for character string conversion.
+// ----------------------------------------------------------------------------
+
+enum sc_numrep
+{
+    SC_NOBASE = 0,
+    SC_BIN    = 2,
+    SC_OCT    = 8,
+    SC_DEC    = 10,
+    SC_HEX    = 16,
+    SC_BIN_US,
+    SC_BIN_SM,
+    SC_OCT_US,
+    SC_OCT_SM,
+    SC_HEX_US,
+    SC_HEX_SM,
+    SC_CSD
+};
+
 
 // Sign of a number:
 #define SC_NEG       -1     // Negative number
@@ -154,7 +174,7 @@ typedef unsigned int sc_digit;	// 32-bit unsigned integer
 
 // Support for the long long type. This type is not in the standard
 // but is usually supported by compilers.
-#ifndef WIN32
+#ifndef _WIN32
 #   if defined(__x86_64__)
         typedef long long          int64;
         typedef unsigned long long uint64;
@@ -196,7 +216,7 @@ typedef unsigned int sc_digit;	// 32-bit unsigned integer
 // Above, BITS_PER_X is mainly used for sc_signed, and BITS_PER_UX is
 // mainly used for sc_unsigned.
 
-#if defined( WIN32 ) || defined( __SUNPRO_CC ) || defined( __HP_aCC )
+#if defined( _WIN32 ) || defined( __HP_aCC )
 typedef unsigned long fmtflags;
 #else
 typedef ::std::ios::fmtflags fmtflags;

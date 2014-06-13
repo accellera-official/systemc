@@ -1,0 +1,97 @@
+## ****************************************************************************
+##
+##  The following code is derived, directly or indirectly, from the SystemC
+##  source code Copyright (c) 1996-2014 by all Contributors.
+##  All Rights reserved.
+##
+##  The contents of this file are subject to the restrictions and limitations
+##  set forth in the SystemC Open Source License (the "License");
+##  You may not use this file except in compliance with such restrictions and
+##  limitations. You may obtain instructions on how to receive a copy of the
+##  License at http://www.accellera.org/. Software distributed by Contributors
+##  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
+##  ANY KIND, either express or implied. See the License for the specific
+##  language governing rights and limitations under the License.
+##
+## ****************************************************************************
+##
+##  test.am --
+##  Included from a Makefile.am to provide example-specific information
+##
+##  Original Author: Philipp A. Hartmann, OFFIS, 2013-05-20
+##
+## ****************************************************************************
+##
+##  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+##  changes you are making here.
+##
+##      Name, Affiliation, Date:
+##  Description of Modification:
+##
+## ***************************************************************************
+
+## Generic example setup
+## (should be kept in sync among all test.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##      included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D%: at_ooo
+##   %C%: at_ooo
+
+examples_TESTS += at_ooo/test
+
+at_ooo_test_CPPFLAGS = \
+	-I$(srcdir)/at_ooo/include \
+	$(CPPFLAGS_TLMTESTS)
+
+at_ooo_test_SOURCES = \
+	$(at_ooo_H_FILES) \
+	$(at_ooo_CXX_FILES)
+
+examples_BUILD += \
+	$(at_ooo_BUILD)
+
+examples_CLEAN += \
+	at_ooo/run.log \
+	at_ooo/expexted_trimmed.log \
+	at_ooo/run_trimmed.log \
+	at_ooo/diff.log
+
+examples_FILES += \
+	$(at_ooo_H_FILES) \
+	$(at_ooo_CXX_FILES) \
+	$(at_ooo_BUILD) \
+	$(at_ooo_EXTRA)
+
+## example-specific details
+
+at_ooo_H_FILES = \
+	at_ooo/include/at_ooo_top.h \
+	at_ooo/include/at_target_ooo_2_phase.h \
+	at_ooo/include/initiator_top.h
+
+at_ooo_CXX_FILES = \
+	at_ooo/src/at_ooo.cpp \
+	at_ooo/src/at_ooo_top.cpp \
+	at_ooo/src/at_target_ooo_2_phase.cpp \
+	at_ooo/src/initiator_top.cpp
+
+at_ooo_BUILD = \
+	at_ooo/results/expected.log
+
+at_ooo_EXTRA = \
+	at_ooo/build-msvc/Makefile \
+	at_ooo/build-msvc/at_ooo.sln \
+	at_ooo/build-msvc/at_ooo.vcproj \
+	at_ooo/build-unix/Makefile \
+	at_ooo/docs/at_ooo_example.pdf \
+	at_ooo/docs/at_ooo_example.ppt
+
+#at_ooo_FILTER = 
+#export at_ooo_FILTER
+
+## Taf!
+## :vim: ft=automake:

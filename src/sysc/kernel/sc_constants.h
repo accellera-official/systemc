@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2011 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 3.0 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -25,12 +25,6 @@
   CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
 
-// $Log: sc_constants.h,v $
-// Revision 1.7  2011/08/26 20:46:09  acg
-//  Andy Goodrich: moved the modification log to the end of the file to
-//  eliminate source line number skew when check-ins are done.
-//
-
 #ifndef SC_CONSTANTS_H
 #define SC_CONSTANTS_H
 
@@ -44,15 +38,11 @@ namespace sc_core {
 //#define SC_MAX_NBITS    510    // 17 * BITS_PER_DIGIT
 
 
-const int SC_DEFAULT_STACK_SIZE   =
-#if !defined(SC_USE_PTHREADS) && \
-    ( defined(__CYGWIN32__) || defined(__CYGWIN32) )
-  0x50000;
-#else
-  0x20000;
-#endif
+// deprecated in 1666-2005 and later, but kept for backwards compatibility
+//  - can be set by defining SC_OVERRIDE_DEFAULT_STACK_SIZE
+//  - defaults defined in sc_thread_process.cpp
+extern const int SC_DEFAULT_STACK_SIZE;
 
-const int SC_MAX_WATCH_LEVEL      = 16;
 
 #ifdef DEBUG_SYSTEMC
 const int SC_MAX_NUM_DELTA_CYCLES = 10000;
@@ -60,6 +50,11 @@ const int SC_MAX_NUM_DELTA_CYCLES = 10000;
 
 } // namespace sc_core
 
+// $Log: sc_constants.h,v $
+// Revision 1.7  2011/08/26 20:46:09  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
 // Revision 1.6  2011/02/18 20:33:26  acg
 //  Philipp A. Hartmann: added default stack size for CYGWIN32.
 //

@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2011 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 3.0 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -29,14 +29,26 @@
 #ifndef SC_CMNHDR_H
 #define SC_CMNHDR_H
 
+// include useful platform information from Boost
+#include "sysc/packages/boost/config.hpp"
+
+#if defined(_WIN32) || defined(_MSC_VER) || defined(__BORLANDC__) || \
+	defined(__MINGW32__)
 
 // all windows 32-bit compilers should define WIN32
-
-#if defined( _MSC_VER ) || defined( __BORLANDC__ )
-#ifndef WIN32
+#if !defined(WIN32) && !defined(WIN64) && !defined(_WIN64)
 #define WIN32
 #endif
+
+// Windows Version Build Option
+#ifndef _WIN32_WINNT
+#define _WIN32_WINNT 0x0400
 #endif
+
+// remember to later include windows.h, if needed
+#define SC_HAS_WINDOWS_H_
+
+#endif // WIN32
 
 // ----------------------------------------------------------------------------
 
@@ -63,44 +75,9 @@
 // identifier was truncated to '255' characters in the browser information
 #pragma warning(disable: 4786)
 
-
-// Windows Version Build Option
-
-#define _WIN32_WINNT 0x0400
-#include <Windows.h>
-
-
-// MSVC6.0 for() scope bug
-
-#define for if( false ); else for
-
-#endif
-
+#endif 
 
 // ----------------------------------------------------------------------------
-
-#ifdef __BORLANDC__
-
-// Windows Version Build Option
-
-#define _WIN32_WINNT 0x0400
-#include <Windows.h>
-
-#endif
-
-
-// ----------------------------------------------------------------------------
-
-// Windows Version Build Option
-
-#ifdef __MINGW32__
-
-#ifndef _WIN32_WINNT
-#define _WIN32_WINNT 0x0400
-#endif
-
-#endif
-
 // helper macros to aid branch prediction on GCC (compatible) compilers
 
 #ifndef __GNUC__
@@ -117,7 +94,14 @@
 #include <cstdio>
 #include <cstdlib>
 
+#endif // SC_CMNHDR_H
 
+// ----------------------------------------------------------------------------
+// only include Windows.h, if explicitly requested
+// (deliberately outside of include guards to enable later effect)
+#if defined(SC_HAS_WINDOWS_H_) && defined(SC_INCLUDE_WINDOWS_H)
+#  undef SC_HAS_WINDOWS_H_
+#  include <Windows.h>
 #endif
 
 // $Log: sc_cmnhdr.h,v $

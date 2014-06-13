@@ -24,22 +24,22 @@
 #   define SC_BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_OPEN namespace sc_mpl_ {
 #   define SC_BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_CLOSE }
 #   define SC_BOOST_MPL_AUX_ADL_BARRIER_DECL(type) \
-    namespace sc_boost { namespace sc_mpl { \
+    namespace sc_boost { namespace mpl { \
     using ::SC_BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE::type; \
     } } \
 /**/
 
 #if !defined(SC_BOOST_MPL_PREPROCESSING_MODE)
-namespace SC_BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE { namespace sc_aux {} }
-namespace sc_boost { namespace sc_mpl { using namespace SC_BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE; 
-namespace sc_aux { using namespace SC_BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE::sc_aux; }
+namespace SC_BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE { namespace aux {} }
+namespace sc_boost { namespace mpl { using namespace SC_BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE;
+namespace aux { using namespace SC_BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE::aux; }
 }}
 #endif
 
 #else // SC_BOOST_MPL_CFG_NO_ADL_BARRIER_NAMESPACE
 
-#   define SC_BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE sc_boost::sc_mpl
-#   define SC_BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_OPEN namespace sc_boost { namespace sc_mpl {
+#   define SC_BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE sc_boost::mpl
+#   define SC_BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_OPEN namespace sc_boost { namespace mpl {
 #   define SC_BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_CLOSE }}
 #   define SC_BOOST_MPL_AUX_ADL_BARRIER_DECL(type) /**/
 

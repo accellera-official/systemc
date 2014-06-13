@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2006 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.4 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -47,9 +47,10 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-#include "sysc/utils/sc_iostream.h"
 #include "sysc/tracing/sc_trace.h"
+#include "sysc/tracing/sc_tracing_ids.h"
 #include "sysc/communication/sc_signal_ifs.h"
+#include "sysc/utils/sc_report.h"
 #include "sysc/utils/sc_utils_ids.h"
 
 namespace sc_core {
@@ -59,17 +60,6 @@ namespace sc_core {
 sc_trace_file::sc_trace_file()
 {
   /* Intentionally blank */
-}
-
-void
-put_error_message(const char* msg, bool just_warning)
-{
-    if(just_warning){
-        ::std::cout << "Trace Warning:\n" << msg << "\n" << ::std::endl;
-    }
-    else{
-        ::std::cout << "Trace ERROR:\n" << msg << "\n" << ::std::endl;
-    }
 }
 
 void tprintf(sc_trace_file* tf,  const char* format, ...)
@@ -143,7 +133,7 @@ sc_trace(sc_trace_file* /* not used */,
 	 const void* /* not used */,
 	 const std::string& name)
 {
-    ::std::cout << "Object " << name << " will not be traced" << ::std::endl;
+    SC_REPORT_WARNING( SC_ID_TRACING_OBJECT_IGNORED_, name.c_str() );
 }
 
 
@@ -212,9 +202,9 @@ sc_trace( sc_trace_file* tf,
     static bool warn_sc_trace_literals=true;
     if ( warn_sc_trace_literals )
     {
-    	warn_sc_trace_literals=false;
+        warn_sc_trace_literals=false;
         SC_REPORT_INFO(SC_ID_IEEE_1666_DEPRECATION_,
-	    "tracing of enumerated literals is deprecated" );
+            "tracing of enumerated literals is deprecated" );
     }
 
     if( tf ) tf->trace( object, name, enum_literals );

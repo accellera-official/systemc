@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2011 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 3.0 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -39,6 +39,7 @@ namespace sc_core {
 #include "sysc/datatypes/bit/sc_bit_ids.h"
 #include "sysc/datatypes/fx/sc_fx_ids.h"
 #include "sysc/datatypes/int/sc_int_ids.h"
+#include "sysc/tracing/sc_tracing_ids.h"
 #undef SC_DEFINE_MESSAGE
 
 
@@ -64,6 +65,9 @@ static sc_msg_def texts[] = {
 #undef SC_INT_IDS_H
 #include "sysc/datatypes/int/sc_int_ids.h"
 
+#undef SC_TRACING_IDS_H
+#include "sysc/tracing/sc_tracing_ids.h"
+
 #undef SC_DEFINE_MESSAGE
 };
 static sc_report_handler::msg_def_items items = {
@@ -80,8 +84,8 @@ int initialize()
     const char* deprecation_warn = std::getenv("SC_DEPRECATION_WARNINGS");
     if ( (deprecation_warn!=0) && !std::strcmp(deprecation_warn,"DISABLE") )
     {
-        sc_report_handler::set_actions("/IEEE_Std_1666/deprecated", 
-            SC_DO_NOTHING);
+        sc_report_handler::set_actions( SC_ID_IEEE_1666_DEPRECATION_
+                                      , SC_DO_NOTHING);
     }
     return 42;
 }

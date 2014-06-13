@@ -14,7 +14,7 @@
 namespace sc_boost
 {
 
-namespace sc_bi
+namespace _bi
 {
 
 template<class R, class F> class af0
@@ -155,31 +155,31 @@ private:
     F f_;
 };
 
-} // namespace sc_bi
+} // namespace _bi
 
-template<class R, class F> sc_bi::af0<R, F> make_adaptable(F f)
+template<class R, class F> _bi::af0<R, F> make_adaptable(F f)
 {
-    return sc_bi::af0<R, F>(f);
+    return _bi::af0<R, F>(f);
 }
 
-template<class R, class A1, class F> sc_bi::af1<R, A1, F> make_adaptable(F f)
+template<class R, class A1, class F> _bi::af1<R, A1, F> make_adaptable(F f)
 {
-    return sc_bi::af1<R, A1, F>(f);
+    return _bi::af1<R, A1, F>(f);
 }
 
-template<class R, class A1, class A2, class F> sc_bi::af2<R, A1, A2, F> make_adaptable(F f)
+template<class R, class A1, class A2, class F> _bi::af2<R, A1, A2, F> make_adaptable(F f)
 {
-    return sc_bi::af2<R, A1, A2, F>(f);
+    return _bi::af2<R, A1, A2, F>(f);
 }
 
-template<class R, class A1, class A2, class A3, class F> sc_bi::af3<R, A1, A2, A3, F> make_adaptable(F f)
+template<class R, class A1, class A2, class A3, class F> _bi::af3<R, A1, A2, A3, F> make_adaptable(F f)
 {
-    return sc_bi::af3<R, A1, A2, A3, F>(f);
+    return _bi::af3<R, A1, A2, A3, F>(f);
 }
 
-template<class R, class A1, class A2, class A3, class A4, class F> sc_bi::af4<R, A1, A2, A3, A4, F> make_adaptable(F f)
+template<class R, class A1, class A2, class A3, class A4, class F> _bi::af4<R, A1, A2, A3, A4, F> make_adaptable(F f)
 {
-    return sc_bi::af4<R, A1, A2, A3, A4, F>(f);
+    return _bi::af4<R, A1, A2, A3, A4, F>(f);
 }
 
 } // namespace sc_boost

@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2011 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 3.0 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -24,8 +24,12 @@
  CHANGE LOG APPEARS AT THE END OF THE FILE
  *****************************************************************************/
 
+#include <stdlib.h>
+#include <string.h>
+
 #include "sysc/kernel/sc_event.h"
 #include "sysc/kernel/sc_kernel_ids.h"
+#include "sysc/kernel/sc_phase_callback_registry.h"
 #include "sysc/kernel/sc_process.h"
 #include "sysc/kernel/sc_process_handle.h"
 #include "sysc/kernel/sc_simcontext_int.h"
@@ -60,7 +64,7 @@ sc_event::cancel()
     }
     case TIMED: {
         // remove this event from the timed events set
-        assert( m_timed != 0 );
+        sc_assert( m_timed != 0 );
         m_timed->m_event = 0;
         m_timed = 0;
         m_notify_type = NONE;
@@ -76,8 +80,17 @@ void
 sc_event::notify()
 {
     // immediate notification
-    if( m_simc->update_phase() ) {
+    if(
+        // coming from sc_prim_channel::update
+        m_simc->update_phase()
+#if SC_HAS_PHASE_CALLBACKS_
+        // coming from phase callbacks
+        || m_simc->notify_phase()
+#endif
+      )
+    {
         SC_REPORT_ERROR( SC_ID_IMMEDIATE_NOTIFICATION_, "" );
+        return;
     }
     cancel();
     trigger();
@@ -90,9 +103,22 @@ sc_event::notify( const sc_time& t )
         return;
     }
     if( t == SC_ZERO_TIME ) {
+#       if SC_HAS_PHASE_CALLBACKS_
+            if( SC_UNLIKELY_( m_simc->get_status()
+                              & (SC_END_OF_UPDATE|SC_BEFORE_TIMESTEP) ) )
+            {
+                std::stringstream msg;
+                msg << m_simc->get_status()
+                    << ":\n\t delta notification of `"
+                    << name() << "' ignored";
+                SC_REPORT_WARNING( SC_ID_PHASE_CALLBACK_FORBIDDEN_
+                                 , msg.str().c_str() );
+                return;
+            }
+#       endif
         if( m_notify_type == TIMED ) {
             // remove this event from the timed events set
-            assert( m_timed != 0 );
+            sc_assert( m_timed != 0 );
             m_timed->m_event = 0;
             m_timed = 0;
         }
@@ -101,8 +127,21 @@ sc_event::notify( const sc_time& t )
         m_notify_type = DELTA;
         return;
     }
+#   if SC_HAS_PHASE_CALLBACKS_
+        if( SC_UNLIKELY_( m_simc->get_status()
+                        & (SC_END_OF_UPDATE|SC_BEFORE_TIMESTEP) ) )
+        {
+            std::stringstream msg;
+            msg << m_simc->get_status()
+                << ":\n\t timed notification of `"
+                << name() << "' ignored";
+            SC_REPORT_WARNING( SC_ID_PHASE_CALLBACK_FORBIDDEN_
+                             , msg.str().c_str() );
+            return;
+        }
+#   endif
     if( m_notify_type == TIMED ) {
-        assert( m_timed != 0 );
+        sc_assert( m_timed != 0 );
         if( m_timed->m_notify_time <= m_simc->time_stamp() + t ) {
             return;
         }

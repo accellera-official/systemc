@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2011 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 3.0 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -63,8 +63,8 @@ namespace tlm
 
 #define TLM_VERSION_MAJOR                   2           ///< version major level ( numeric )
 #define TLM_VERSION_MINOR                   0           ///< version minor level ( numeric )
-#define TLM_VERSION_PATCH                   2           ///< version patch level ( numeric )
-#define TLM_VERSION_ORIGINATOR              "ASI"       ///< TLM creator string
+#define TLM_VERSION_PATCH                   3           ///< version patch level ( numeric )
+#define TLM_VERSION_ORIGINATOR              "Accellera" ///< TLM creator string
 #define TLM_VERSION_SEPARATOR               "."         ///< version string separator
 
 #define TLM_IS_PRERELEASE                   0           ///< pre-release flag ( 1 / 0 )
@@ -75,12 +75,13 @@ namespace tlm
 #    define TLM_VERSION_PRERELEASE          ""          ///< pre-release version string
 #endif
 
-#define TLM_VERSION_RELEASE_YEAR            "2012"      ///< release year  ( YYYY )
-#define TLM_VERSION_RELEASE_MONTH           "05"        ///< release month ( MM )
-#define TLM_VERSION_RELEASE_DAY             "11"        ///< release day   ( DD )
+#define TLM_VERSION_RELEASE_YEAR            "2013"      ///< release year  ( YYYY )
+#define TLM_VERSION_RELEASE_MONTH           "12"        ///< release month ( MM )
+#define TLM_VERSION_RELEASE_DAY             "15"        ///< release day   ( DD )
 
-#define TLM_COPYRIGHT                       "        Copyright (c) 1996-" TLM_VERSION_RELEASE_YEAR " by all Contributors\n" \
-                                            "                    ALL RIGHTS RESERVED"
+#define TLM_COPYRIGHT \
+  "Copyright (c) 1996-" TLM_VERSION_RELEASE_YEAR " by all Contributors\n" \
+  "ALL RIGHTS RESERVED"
 
 /************************** do not modify below this line *******************************/
 
@@ -122,7 +123,7 @@ namespace tlm
                                             TLM_VERSION_STRING_PRE_END \
                                             TLM_VERSION_ORIGINATOR
 
-#define TLM_VERSION_STRING_2                "             TLM " \
+#define TLM_VERSION_STRING_2                "TLM " \
                                             TLM_VERSION_STRING_MMP \
                                             " --- " \
                                             TLM_VERSION_RELEASE_YEAR \

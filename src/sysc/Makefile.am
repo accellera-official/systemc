@@ -1,14 +1,14 @@
 ## ****************************************************************************
 ##
 ##  The following code is derived, directly or indirectly, from the SystemC
-##  source code Copyright (c) 1996-2005 by all Contributors.
+##  source code Copyright (c) 1996-2014 by all Contributors.
 ##  All Rights reserved.
 ##
 ##  The contents of this file are subject to the restrictions and limitations
-##  set forth in the SystemC Open Source License Version 2.4 (the "License");
+##  set forth in the SystemC Open Source License (the "License");
 ##  You may not use this file except in compliance with such restrictions and
 ##  limitations. You may obtain instructions on how to receive a copy of the
-##  License at http://www.systemc.org/. Software distributed by Contributors
+##  License at http://www.accellera.org/. Software distributed by Contributors
 ##  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
 ##  ANY KIND, either express or implied. See the License for the specific
 ##  language governing rights and limitations under the License.
@@ -32,35 +32,38 @@
 
 include $(top_srcdir)/config/Make-rules.sysc
 
+if WANT_QT_THREADS
+QT_LIB    = qt/libqt.la
+QT_SUBDIR = qt
+endif
+
 SUBDIRS = \
 	kernel \
-	qt \
+	$(QT_SUBDIR) \
 	communication \
 	tracing \
 	utils \
-	packages \
-	datatypes \
-	.
+	packages/boost \
+	datatypes
 
 H_FILES = 
 
-noinst_HEADERS = $(H_FILES)
-
 CXX_FILES =
 
-NO_CXX_FILES =
+localincludedir = $(includedir)/sysc
+nobase_localinclude_HEADERS = $(H_FILES)
 
-INCLUDE_DIR = $(prefix)/include
+libarchdir = $(libdir)$(LIB_ARCH_SUFFIX)
+libarch_LTLIBRARIES = libsystemc.la
 
-libdir = $(prefix)/lib-$(TARGET_ARCH)
-
-lib_LTLIBRARIES = libsystemc.la
+pkgconfigdir = $(libarchdir)/pkgconfig
+pkgconfig_DATA = systemc.pc
 
 libsystemc_la_SOURCES =
 
-if !WANT_PTHREADS_THREADS
-QT_LIB=qt/libqt.la
-endif
+# dummy C++ source to cause C++ linking
+nodist_EXTRA_libsystemc_la_SOURCES = sc_nonexistent.cpp
+
 
 libsystemc_la_LIBADD = \
        kernel/libkernel.la \
@@ -68,30 +71,16 @@ libsystemc_la_LIBADD = \
        communication/libcommunication.la \
        tracing/libtracing.la \
        utils/libutils.la \
-       datatypes/bit/libbit.la \
-       datatypes/fx/libfx.la \
-       datatypes/int/libint.la \
-       datatypes/misc/libmisc.la 
+       datatypes/libdatatypes.la
 
-libsystemc_la_LDFLAGS = -release $(VERSION) -L$(prefix)/lib-$(TARGET_ARCH)
+# either for async_update locking or pthread processes
+if USES_PTHREADS_LIB
+# Libtool/GCC do not play well together on some platforms
+# with C++ libraries and libpthread dependency, see e.g.
+# http://lists.gnu.org/archive/html/libtool/2012-02/msg00003.html
+libsystemc_la_LIBADD+=$(EXPLICIT_LPTHREAD)
+endif
 
-install-data-local:
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(INCLUDE_DIR)
-	for file in $(noinst_HEADERS); do \
-	  $(INSTALL_DATA) $(srcdir)/$$file $(INCLUDE_DIR)/$$file; \
-	done
-	$(mkinstalldirs) $(prefix)/lib-$(TARGET_ARCH)
-	$(INSTALL_DATA) $(MAIN_LIBRARY) \
-	    $(prefix)/lib-$(TARGET_ARCH)/$(MAIN_LIBRARY)
-
-uninstall-local:
-	@$(NORMAL_UNINSTALL)
-	for file in $(noinst_HEADERS); do \
-	  rm -f $(INCLUDE_DIR)/$$file; \
-	done
-	-rmdir $(INCLUDE_DIR)
-	rm -f $(prefix)/lib-$(TARGET_ARCH)/$(MAIN_LIBRARY)
-	-rmdir $(prefix)/lib-$(TARGET_ARCH)
+libsystemc_la_LDFLAGS = -release $(VERSION) -L$(libarchdir)
 
 ## Taf!

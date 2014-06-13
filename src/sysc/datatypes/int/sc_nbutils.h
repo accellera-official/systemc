@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2011 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 3.0 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -61,22 +61,72 @@
 #ifndef SC_NBUTILS_H
 #define SC_NBUTILS_H
 
-
 #include <cmath>
 #include <limits>
 
 #include "sysc/datatypes/bit/sc_bit_ids.h"
 #include "sysc/datatypes/int/sc_int_ids.h"
 #include "sysc/datatypes/int/sc_nbdefs.h"
-#include "sysc/utils/sc_string.h"
 #include "sysc/utils/sc_report.h"
 
 
 namespace sc_dt
 {
 
+//-----------------------------------------------------------------------------
+//"sc_io_base"
+//
+// This inline function returns the type of an i/o stream's base as a SystemC
+// base designator.
+//   stream_object = reference to the i/o stream whose base is to be returned.
+//
+//"sc_io_show_base"
+//
+// This inline function returns true if the base should be shown when a SystemC
+// value is displayed via the supplied stream operator.
+//   stream_object = reference to the i/o stream to return showbase value for.
+//-----------------------------------------------------------------------------
+#if defined(__GNUC__) || defined(_MSC_VER) || defined(__SUNPRO_CC)
+    inline sc_numrep
+    sc_io_base( systemc_ostream& os, sc_numrep def_base )
+    {
+        std::ios::fmtflags flags = os.flags() & std::ios::basefield;
+        if ( flags & ::std::ios::dec ) return  SC_DEC;
+        if ( flags & ::std::ios::hex ) return  SC_HEX;
+        if ( flags & ::std::ios::oct ) return  SC_OCT;
+        return def_base;
+    }
+
+    inline bool
+    sc_io_show_base( systemc_ostream& os )
+    {
+        return (os.flags() & ::std::ios::showbase) != 0 ;
+    }
+#else   // Other
+    inline sc_numrep
+    sc_io_base( systemc_ostream& /*unused*/, sc_numrep /*unused*/ )
+    {
+        return SC_DEC;
+    }
+    inline bool
+    sc_io_show_base( systemc_ostream& /*unused*/ )
+    {
+        return false;
+    }
+#endif
+
+const std::string to_string( sc_numrep );
+
 inline
-void
+systemc_ostream&
+operator << ( systemc_ostream& os, sc_numrep numrep )
+{
+    os << to_string( numrep );
+    return os;
+}
+
+// only used within vec_from_str (non-standard, deprecated)
+inline void
 is_valid_base(sc_numrep base)
 {
   switch (base) {
@@ -87,9 +137,11 @@ is_valid_base(sc_numrep base)
     case SC_BIN_US: case SC_BIN_SM: 
     case SC_OCT_US: case SC_OCT_SM:
     case SC_HEX_US: case SC_HEX_SM:
+    case SC_CSD:
       SC_REPORT_ERROR( sc_core::SC_ID_NOT_IMPLEMENTED_,
 		       "is_valid_base( sc_numrep base ) : "
-		       "base ending in _US and _SM is not supported yet" );
+		       "bases SC_CSD, or ending in _US and _SM are not supported" );
+      break;
     default:
       char msg[BUFSIZ];
       std::sprintf( msg, "is_valid_base( sc_numrep base ) : "
@@ -98,6 +150,8 @@ is_valid_base(sc_numrep base)
       SC_REPORT_ERROR( sc_core::SC_ID_VALUE_NOT_VALID_, msg );
   }
 }
+
+// ----------------------------------------------------------------------------
 
 // One transition of the FSM to find base and sign of a number.
 extern
@@ -503,7 +557,7 @@ vec_copy(int n, sc_digit *u, const sc_digit *v)
   assert((n > 0) && (u != NULL) && (v != NULL));
 #endif
 
-  for (register int i = 0; i < n; ++i)
+  for (int i = 0; i < n; ++i)
     u[i] = v[i];
 }
 
@@ -535,9 +589,9 @@ vec_complement(int ulen, sc_digit *u)
   assert((ulen > 0) && (u != NULL));
 #endif
 
-  register sc_digit carry = 1;
+  sc_digit carry = 1;
 
-  for (register int i = 0; i < ulen; ++i) {
+  for (int i = 0; i < ulen; ++i) {
     carry += (~u[i] & DIGIT_MASK);
     u[i] = carry & DIGIT_MASK;
     carry >>= BITS_PER_DIGIT;
@@ -564,10 +618,10 @@ from_uint(int ulen, sc_digit *u, Type v)
   assert(v >= 0);
 #endif
 
-  register int i = 0;
+  int i = 0;
 
   while (v && (i < ulen)) {
-#ifndef WIN32
+#ifndef _WIN32
     u[i++] = static_cast<sc_digit>( v & DIGIT_MASK );
 #else
     u[i++] = ((sc_digit) v) & DIGIT_MASK;
@@ -590,13 +644,15 @@ get_sign(Type &u)
   if (u > 0)
     return SC_POS;
 
-  else if (u == 0)
+  if (u == 0)
     return SC_ZERO;
 
-  else {
+  // no positive number representable for minimum value,
+  // leave as is to avoid Undefined Behaviour
+  if( SC_LIKELY_( u > (std::numeric_limits<Type>::min)() ) )
     u = -u;
-    return SC_NEG;
-  }
+
+  return SC_NEG;
 }
 
 

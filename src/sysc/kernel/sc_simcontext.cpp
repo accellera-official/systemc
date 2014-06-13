@@ -1,14 +1,14 @@
 /****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2011 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 3.0 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -26,13 +26,15 @@
   CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
 
+#include <algorithm>
+
+#define SC_DISABLE_API_VERSION_CHECK // for in-library sc_ver.h inclusion
 
 #include "sysc/kernel/sc_cor_fiber.h"
 #include "sysc/kernel/sc_cor_pthread.h"
 #include "sysc/kernel/sc_cor_qt.h"
 #include "sysc/kernel/sc_event.h"
 #include "sysc/kernel/sc_kernel_ids.h"
-#include "sysc/kernel/sc_macros_int.h"
 #include "sysc/kernel/sc_module.h"
 #include "sysc/kernel/sc_module_registry.h"
 #include "sysc/kernel/sc_name_gen.h"
@@ -47,6 +49,7 @@
 #include "sysc/kernel/sc_ver.h"
 #include "sysc/kernel/sc_boost.h"
 #include "sysc/kernel/sc_spawn.h"
+#include "sysc/kernel/sc_phase_callback_registry.h"
 #include "sysc/communication/sc_port.h"
 #include "sysc/communication/sc_export.h"
 #include "sysc/communication/sc_prim_channel.h"
@@ -68,11 +71,28 @@
 #   define DEBUG_MSG(NAME,P,MSG) \
     { \
         if ( P && ( (strlen(NAME)==0) || !strcmp(NAME,P->name())) ) \
-          std::cout << sc_time_stamp() << ": " << P->name() << " ******** " \
-                    << MSG << std::endl; \
+          std::cout << "**** " << sc_time_stamp() << " ("  \
+	            << sc_get_current_process_name() << "): " << MSG \
+		    << " - " << P->name() << std::endl; \
     }
 #else
 #   define DEBUG_MSG(NAME,P,MSG) 
+#endif
+
+#if SC_HAS_PHASE_CALLBACKS_
+#  define SC_DO_PHASE_CALLBACK_( Kind ) \
+    m_phase_cb_registry->Kind()
+#else
+#  define SC_DO_PHASE_CALLBACK_( Kind ) \
+    ((void)0) /* do nothing */
+#endif
+
+#if defined( SC_ENABLE_SIMULATION_PHASE_CALLBACKS_TRACING )
+// use callback based tracing
+#  define SC_SIMCONTEXT_TRACING_  0
+#else
+// enable tracing via explicit trace_cycle calls from simulator loop
+#  define SC_SIMCONTEXT_TRACING_  1
 #endif
 
 namespace sc_core {
@@ -255,6 +275,8 @@ SC_MODULE(sc_invoke_method)
 {
     SC_CTOR(sc_invoke_method)
     {
+      // remove from object hierarchy
+      detach();
     }
 
     virtual ~sc_invoke_method()
@@ -267,7 +289,7 @@ SC_MODULE(sc_invoke_method)
     void invoke_method( sc_method_handle method_h )
     {
 	sc_process_handle invoker_h;  // handle for invocation thread to use.
-	size_t            invokers_n; // number of invocation threads available.
+	std::vector<sc_process_handle>::size_type invokers_n; // number of invocation threads available.
 
 	m_method = method_h;
 
@@ -282,6 +304,7 @@ SC_MODULE(sc_invoke_method)
 	    options.set_sensitivity(&m_dummy);
 	    invoker_h = sc_spawn(sc_bind(&sc_invoke_method::invoker,this), 
 				 sc_gen_unique_name("invoker"), &options);
+	    ((sc_process_b*)invoker_h)->detach();
 	}
 
 	// There is an invocation thread to use, use the last one on the list.
@@ -297,6 +320,7 @@ SC_MODULE(sc_invoke_method)
 	// are available.
 
         sc_get_curr_simcontext()->preempt_with( (sc_thread_handle)invoker_h );
+	DEBUG_MSG( DEBUG_NAME, m_method, "back from preemption" ); 
 	m_invokers.push_back(invoker_h);
     }
 
@@ -304,14 +328,19 @@ SC_MODULE(sc_invoke_method)
 
     void invoker()
     {
-	sc_process_b* me = sc_get_current_process_b();
+	sc_simcontext* csc_p = sc_get_curr_simcontext();
+	sc_process_b*  me = sc_get_current_process_b();
+
 	DEBUG_MSG( DEBUG_NAME, me, "invoker initialization" );
         for (;; )
         {
             DEBUG_MSG( DEBUG_NAME, m_method, "invoker executing method" );
-	    sc_get_curr_simcontext()->set_curr_proc( (sc_process_b*)m_method );
+	    csc_p->set_curr_proc( (sc_process_b*)m_method );
+	    csc_p->get_active_invokers().push_back((sc_thread_handle)me);
 	    m_method->run_process();
-	    sc_get_curr_simcontext()->set_curr_proc( me );
+	    csc_p->set_curr_proc( me );
+	    csc_p->get_active_invokers().pop_back();
+            DEBUG_MSG( DEBUG_NAME, m_method, "back from executing method" );
 	    wait();
 	}
     }
@@ -320,6 +349,7 @@ SC_MODULE(sc_invoke_method)
     sc_method_handle               m_method;   // method to be invoked.
     std::vector<sc_process_handle> m_invokers; // list of invoking threads.
 };
+
 // ----------------------------------------------------------------------------
 //  CLASS : sc_simcontext
 //
@@ -337,6 +367,7 @@ sc_simcontext::init()
     m_port_registry = new sc_port_registry( *this );
     m_export_registry = new sc_export_registry( *this );
     m_prim_channel_registry = new sc_prim_channel_registry( *this );
+    m_phase_cb_registry = new sc_phase_callback_registry( *this );
     m_name_gen = new sc_name_gen;
     m_process_table = new sc_process_table;
     m_current_writer = 0;
@@ -385,6 +416,7 @@ sc_simcontext::clean()
     delete m_port_registry;
     delete m_export_registry;
     delete m_prim_channel_registry;
+    delete m_phase_cb_registry;
     delete m_name_gen;
     delete m_process_table;
     m_child_objects.resize(0);
@@ -404,7 +436,8 @@ sc_simcontext::clean()
 
 sc_simcontext::sc_simcontext() :
     m_object_manager(0), m_module_registry(0), m_port_registry(0),
-    m_export_registry(0), m_prim_channel_registry(0), m_name_gen(0),
+    m_export_registry(0), m_prim_channel_registry(0),
+    m_phase_cb_registry(0), m_name_gen(0),
     m_process_table(0), m_curr_proc_info(), m_current_writer(0),
     m_write_check(false), m_next_proc_id(-1), m_child_events(),
     m_child_objects(), m_delta_events(), m_timed_events(0), m_trace_files(),
@@ -539,15 +572,19 @@ sc_simcontext::crunch( bool once )
 	m_execution_phase = phase_update;
 	if ( !empty_eval_phase ) 
 	{
+//	    SC_DO_PHASE_CALLBACK_(evaluation_done);
 	    m_change_stamp++;
 	    m_delta_count ++;
 	}
 	m_prim_channel_registry->perform_update();
+	SC_DO_PHASE_CALLBACK_(update_done);
 	m_execution_phase = phase_notify;
-	
+
+#if SC_SIMCONTEXT_TRACING_
 	if( m_something_to_trace ) {
 	    trace_cycle( /* delta cycle? */ true );
 	}
+#endif
 
         // check for call(s) to sc_stop
         if( m_forced_stop ) {
@@ -582,7 +619,7 @@ sc_simcontext::crunch( bool once )
 	    } while( -- i >= 0 );
 	    m_delta_events.resize(0);
 	}
-	
+
 	if( m_runnable->is_empty() ) {
 	    // no more runnable processes
 	    break;
@@ -613,12 +650,18 @@ sc_simcontext::cycle( const sc_time& t)
 
     m_in_simulator_control = true;
     crunch(); 
-    trace_cycle( /* delta cycle? */ false );
+    SC_DO_PHASE_CALLBACK_(before_timestep);
+#if SC_SIMCONTEXT_TRACING_
+    if( m_something_to_trace ) {
+        trace_cycle( /* delta cycle? */ false );
+    }
+#endif
     m_curr_time += t;
     if ( next_time(next_event_time) && next_event_time <= m_curr_time) {
         SC_REPORT_WARNING(SC_ID_CYCLE_MISSES_EVENTS_, "");
     }
     m_in_simulator_control = false;
+    SC_DO_PHASE_CALLBACK_(simulation_paused);
 }
 
 void
@@ -628,9 +671,11 @@ sc_simcontext::elaborate()
         return;
     }
 
-    // Instantiate the method invocation module (keep it out of the registry):
+    // Instantiate the method invocation module
+    // (not added to public object hierarchy)
 
-    m_method_invoker_p = new sc_invoke_method(SC_KERNEL_MODULE_PREFIX);
+    m_method_invoker_p =
+      new sc_invoke_method("$$$$kernel_module$$$$_invoke_method" );
 
     m_simulation_status = SC_BEFORE_END_OF_ELABORATION;
     for( int cd = 0; cd != 4; /* empty */ )
@@ -647,6 +692,7 @@ sc_simcontext::elaborate()
         }
 
     }
+    SC_DO_PHASE_CALLBACK_(construction_done);
 
     // SIGNAL THAT ELABORATION IS DONE
     //
@@ -661,6 +707,7 @@ sc_simcontext::elaborate()
     m_export_registry->elaboration_done();
     m_prim_channel_registry->elaboration_done();
     m_module_registry->elaboration_done();
+    SC_DO_PHASE_CALLBACK_(elaboration_done);
     sc_reset::reconcile_resets();
 
     // check for call(s) to sc_stop
@@ -681,15 +728,7 @@ sc_simcontext::prepare_to_simulate()
     }
 
     // instantiate the coroutine package
-#   if defined(WIN32)
-        m_cor_pkg = new sc_cor_pkg_fiber( this );
-#   else
-#       if defined(SC_USE_PTHREADS)
-            m_cor_pkg = new sc_cor_pkg_pthread( this );
-#       else
-			m_cor_pkg = new sc_cor_pkg_qt( this );
-#       endif
-#   endif
+    m_cor_pkg = new sc_cor_pkg_t( this );
     m_cor = m_cor_pkg->get_main();
 
     // NOTIFY ALL OBJECTS THAT SIMULATION IS ABOUT TO START:
@@ -699,6 +738,7 @@ sc_simcontext::prepare_to_simulate()
     m_export_registry->start_simulation();
     m_prim_channel_registry->start_simulation();
     m_module_registry->start_simulation();
+    SC_DO_PHASE_CALLBACK_(start_simulation);
     m_start_of_simulation_called = true;
 
     // CHECK FOR CALL(S) TO sc_stop 
@@ -788,6 +828,8 @@ sc_simcontext::prepare_to_simulate()
         } while( -- i >= 0 );
         m_delta_events.resize(0);
     }
+
+    SC_DO_PHASE_CALLBACK_(initialization_done);
 }
 
 void
@@ -803,9 +845,13 @@ sc_simcontext::initial_crunch( bool no_crunch )
     if( m_error ) {
         return;
     }
+
+#if SC_SIMCONTEXT_TRACING_
     if( m_something_to_trace ) {
         trace_cycle( false );
     }
+#endif
+
     // check for call(s) to sc_stop
     if( m_forced_stop ) {
         do_sc_stop_action();
@@ -849,8 +895,7 @@ sc_simcontext::simulate( const sc_time& duration )
 	return;
     }
 
-    sc_time non_overflow_time = 
-        sc_time(~sc_dt::UINT64_ZERO, false) - m_curr_time;
+    sc_time non_overflow_time = sc_max_time() - m_curr_time;
     if ( duration > non_overflow_time )
     {
 	SC_REPORT_ERROR(SC_ID_SIMULATION_TIME_OVERFLOW_, "");
@@ -875,12 +920,20 @@ sc_simcontext::simulate( const sc_time& duration )
     {
 	m_in_simulator_control = true;
   	crunch( true );
-	if( m_error ) return;
-	if( m_something_to_trace ) trace_cycle( /* delta cycle? */ false );
-	if( m_forced_stop ) 
-	    do_sc_stop_action(); 
-	m_in_simulator_control = false;
-	return;
+	if( m_error ) {
+	    m_in_simulator_control = false;
+	    return;
+	}
+#if SC_SIMCONTEXT_TRACING_
+        if( m_something_to_trace )
+            trace_cycle( /* delta cycle? */ false );
+#endif
+        if( m_forced_stop ) {
+            do_sc_stop_action();
+            return;
+        }
+        // return via implicit pause
+        goto exit_pause;
     }
 
     // NON-ZERO DURATION: EXECUTE UP TO THAT TIME, OR UNTIL EVENT STARVATION:
@@ -892,29 +945,28 @@ sc_simcontext::simulate( const sc_time& duration )
 	    m_in_simulator_control = false;
 	    return;
 	}
+#if SC_SIMCONTEXT_TRACING_
 	if( m_something_to_trace ) {
 	    trace_cycle( false );
 	}
-	// check for call(s) to sc_stop() or sc_pause().
-	if( m_forced_stop ) {
-	    do_sc_stop_action();
-	    return;
-	}
-	else if ( m_paused ) 
-	{
-	    m_in_simulator_control = false;
-	    return;
-	}
-	
+#endif
+        // check for call(s) to sc_stop() or sc_pause().
+        if( m_forced_stop ) {
+            do_sc_stop_action();
+            return;
+        }
+        if( m_paused ) goto exit_pause; // return explicit pause
+
 	t = m_curr_time; 
 
 	do {
 	    // See note 1 above:
 
-            if ( !next_time(t) || (t > until_t ) ) goto exit;
+            if ( !next_time(t) || (t > until_t ) ) goto exit_time;
 	    if ( t > m_curr_time ) 
 	    {
-	        m_curr_time = t;
+		SC_DO_PHASE_CALLBACK_(before_timestep);
+		m_curr_time = t;
 		m_change_stamp++;
 	    }
 
@@ -930,17 +982,20 @@ sc_simcontext::simulate( const sc_time& duration )
 	    } while( m_timed_events->size() &&
 		     m_timed_events->top()->notify_time() == t );
 
-	    // if ( t > m_curr_time ) m_curr_time = t;
 	} while( m_runnable->is_empty() );
     } while ( t < until_t ); // hold off on the delta for the until_t time.
 
-exit:
+exit_time:  // final simulation time update, if needed
     if ( t > m_curr_time && t <= until_t ) 
     {
+        SC_DO_PHASE_CALLBACK_(before_timestep);
         m_curr_time = t;
-	m_change_stamp++;
+        m_change_stamp++;
     }
+exit_pause: // call pause callback upon implicit or explicit pause
+    m_execution_phase      = phase_evaluate;
     m_in_simulator_control = false;
+    SC_DO_PHASE_CALLBACK_(simulation_paused);
 }
 
 void
@@ -952,6 +1007,7 @@ sc_simcontext::do_sc_stop_action()
 	m_in_simulator_control = false;
     }
     m_simulation_status = SC_STOPPED;
+    SC_DO_PHASE_CALLBACK_(simulation_stopped);
 }
 
 void
@@ -1014,6 +1070,7 @@ sc_simcontext::end()
     m_export_registry->simulation_done();
     m_prim_channel_registry->simulation_done();
     m_module_registry->simulation_done();
+    SC_DO_PHASE_CALLBACK_(simulation_done);
     m_end_of_simulation_called = true;
 }
 
@@ -1026,13 +1083,13 @@ sc_simcontext::hierarchy_push( sc_module* mod )
 sc_module*
 sc_simcontext::hierarchy_pop()
 {
-	return DCAST<sc_module*>( m_object_manager->hierarchy_pop() );
+	return static_cast<sc_module*>( m_object_manager->hierarchy_pop() );
 }
 
 sc_module*
 sc_simcontext::hierarchy_curr() const
 {
-    return DCAST<sc_module*>( m_object_manager->hierarchy_curr() );
+    return static_cast<sc_module*>( m_object_manager->hierarchy_curr() );
 }
     
 sc_object*
@@ -1094,10 +1151,32 @@ sc_simcontext::create_method_process(
 {
     sc_method_handle handle = 
         new sc_method_process(name_p, free_host, method_p, host_p, opt_p);
-    if ( m_ready_to_simulate ) {
-	if ( !handle->dont_initialize() ) {
-	    push_runnable_method( handle );
-	}
+    if ( m_ready_to_simulate ) { // dynamic process
+	if ( !handle->dont_initialize() )
+        {
+#ifdef SC_HAS_PHASE_CALLBACKS_
+            if( SC_UNLIKELY_( m_simulation_status
+                            & (SC_END_OF_UPDATE|SC_BEFORE_TIMESTEP) ) )
+            {
+                std::stringstream msg;
+                msg << m_simulation_status 
+                    << ":\n\t immediate method spawning of "
+                       "`" << handle->name() << "' ignored";
+                SC_REPORT_WARNING( SC_ID_PHASE_CALLBACK_FORBIDDEN_
+                                 , msg.str().c_str() );
+            }
+            else
+#endif // SC_HAS_PHASE_CALLBACKS_
+            {
+                push_runnable_method( handle );
+            }
+        }
+        else if ( handle->m_static_events.size() == 0 )
+        {
+            SC_REPORT_WARNING( SC_ID_DISABLE_WILL_ORPHAN_PROCESS_,
+                               handle->name() );
+        }
+
     } else {
 	m_process_table->push_front( handle );
     }
@@ -1112,11 +1191,33 @@ sc_simcontext::create_thread_process(
 {
     sc_thread_handle handle = 
         new sc_thread_process(name_p, free_host, method_p, host_p, opt_p);
-    if ( m_ready_to_simulate ) {
+    if ( m_ready_to_simulate ) { // dynamic process
 	handle->prepare_for_simulation();
-	if ( !handle->dont_initialize() ) {
-	    push_runnable_thread( handle );
-	}
+        if ( !handle->dont_initialize() )
+        {
+#ifdef SC_HAS_PHASE_CALLBACKS_
+            if( SC_UNLIKELY_( m_simulation_status
+                            & (SC_END_OF_UPDATE|SC_BEFORE_TIMESTEP) ) )
+            {
+                std::stringstream msg;
+                msg << m_simulation_status 
+                    << ":\n\t immediate thread spawning of "
+                       "`" << handle->name() << "' ignored";
+                SC_REPORT_WARNING( SC_ID_PHASE_CALLBACK_FORBIDDEN_
+                                 , msg.str().c_str() );
+            }
+            else
+#endif // SC_HAS_PHASE_CALLBACKS_
+            {
+                push_runnable_thread( handle );
+            }
+        }
+        else if ( handle->m_static_events.size() == 0 )
+        {
+            SC_REPORT_WARNING( SC_ID_DISABLE_WILL_ORPHAN_PROCESS_,
+                               handle->name() );
+        }
+
     } else {
 	m_process_table->push_front( handle );
     }
@@ -1130,6 +1231,14 @@ sc_simcontext::add_trace_file( sc_trace_file* tf )
     m_something_to_trace = true;
 }
 
+void
+sc_simcontext::remove_trace_file( sc_trace_file* tf )
+{
+    m_trace_files.erase(
+        std::remove( m_trace_files.begin(), m_trace_files.end(), tf )
+    );
+    m_something_to_trace = ( m_trace_files.size() > 0 );
+}
 
 sc_cor*
 sc_simcontext::next_cor()
@@ -1325,7 +1434,7 @@ sc_simcontext::preempt_with( sc_method_handle method_h )
     {
 	caller_info = m_curr_proc_info;
         DEBUG_MSG( DEBUG_NAME, method_h,
-	           "preempting active method with this method" );
+	           "preempting active method with method" );
 	sc_get_curr_simcontext()->set_curr_proc( (sc_process_b*)method_h );
 	method_h->run_process();
 	sc_get_curr_simcontext()->set_curr_proc((sc_process_b*)active_method_h);
@@ -1339,7 +1448,7 @@ sc_simcontext::preempt_with( sc_method_handle method_h )
     else if ( active_thread_h != NULL )
     {
         DEBUG_MSG( DEBUG_NAME, method_h,
-	           "preempting active thread with this method" );
+	           "preempting active thread with method" );
 	m_method_invoker_p->invoke_method(method_h);
     }
 
@@ -1351,7 +1460,7 @@ sc_simcontext::preempt_with( sc_method_handle method_h )
     {
 	caller_info = m_curr_proc_info;
         DEBUG_MSG( DEBUG_NAME, method_h,
-	           "preempting no active process with this method" );
+	           "preempting no active process with method" );
 	sc_get_curr_simcontext()->set_curr_proc( (sc_process_b*)method_h );
 	method_h->run_process();
 	m_curr_proc_info = caller_info;
@@ -1551,7 +1660,7 @@ sc_start( const sc_time& duration, sc_starvation_policy p )
     sc_simcontext* context_p;      // current simulation context.
     sc_time        entry_time;     // simulation time upon entry.
     sc_time        exit_time;      // simulation time to set upon exit.
-    size_t         starting_delta; // delta count upon entry.
+    sc_dt::uint64  starting_delta; // delta count upon entry.
     int            status;         // current simulation status.
 
     // Set up based on the arguments passed to us:
@@ -1563,7 +1672,7 @@ sc_start( const sc_time& duration, sc_starvation_policy p )
         exit_time = context_p->m_curr_time + duration;
 
     // called with duration = SC_ZERO_TIME for the first time
-    static bool initialisation_delta =
+    static bool init_delta_or_pending_updates =
          ( starting_delta == 0 && exit_time == SC_ZERO_TIME );
 
     // If the simulation status is bad issue the appropriate message:
@@ -1577,6 +1686,9 @@ sc_start( const sc_time& duration, sc_starvation_policy p )
             SC_REPORT_ERROR(SC_ID_SIMULATION_START_AFTER_ERROR_, "");
         return;
     }
+
+    if ( context_p->m_prim_channel_registry->pending_updates() )
+        init_delta_or_pending_updates = true;
 
     // If the simulation status is good perform the simulation:
 
@@ -1596,9 +1708,9 @@ sc_start( const sc_time& duration, sc_starvation_policy p )
 
     // If there was no activity and the simulation clock did not move warn
     // the user, except if we're in a first sc_start(SC_ZERO_TIME) for
-    // initialisation (only):
+    // initialisation (only) or there have been pending updates:
 
-    if ( !initialisation_delta &&
+    if ( !init_delta_or_pending_updates &&
          starting_delta == sc_delta_count() &&
          context_p->m_curr_time == entry_time &&
          status == SC_SIM_OK )
@@ -1606,14 +1718,14 @@ sc_start( const sc_time& duration, sc_starvation_policy p )
         SC_REPORT_WARNING(SC_ID_NO_SC_START_ACTIVITY_, "");
     }
 
-    // subsequent calls are not initial ones
-    initialisation_delta = false;
+    // reset init/update flag for subsequent calls
+    init_delta_or_pending_updates = false;
 }
 
 void
 sc_start()  
 {
-    sc_start( sc_time(~sc_dt::UINT64_ZERO, false) - sc_time_stamp(), 
+    sc_start( sc_max_time() - sc_time_stamp(),
               SC_EXIT_ON_STARVATION );
 }
 
@@ -1833,6 +1945,79 @@ bool sc_allow_process_control_corners = false;
 // .                 +----------+     enable      +----------+          .
 // .                                    .                               .
 // ......................................................................
+
+// ----------------------------------------------------------------------------
+
+static std::ostream&
+print_status_expression( std::ostream& os, sc_status s );
+
+// utility helper to print a simulation status
+std::ostream& operator << ( std::ostream& os, sc_status s )
+{
+    // print primitive values
+    switch(s)
+    {
+#   define PRINT_STATUS( Status ) \
+      case Status: { os << #Status; } break
+
+      PRINT_STATUS( SC_UNITIALIZED );
+      PRINT_STATUS( SC_ELABORATION );
+      PRINT_STATUS( SC_BEFORE_END_OF_ELABORATION );
+      PRINT_STATUS( SC_END_OF_ELABORATION );
+      PRINT_STATUS( SC_START_OF_SIMULATION );
+
+      PRINT_STATUS( SC_RUNNING );
+      PRINT_STATUS( SC_PAUSED );
+      PRINT_STATUS( SC_STOPPED );
+      PRINT_STATUS( SC_END_OF_SIMULATION );
+
+      PRINT_STATUS( SC_END_OF_INITIALIZATION );
+//      PRINT_STATUS( SC_END_OF_EVALUATION );
+      PRINT_STATUS( SC_END_OF_UPDATE );
+      PRINT_STATUS( SC_BEFORE_TIMESTEP );
+
+      PRINT_STATUS( SC_STATUS_ANY );
+
+#   undef PRINT_STATUS
+    default:
+
+      if( s & SC_STATUS_ANY ) // combination of status bits
+        print_status_expression( os, s );
+      else                    // invalid number, print hex value
+        os << "0x" << std::hex << +s;
+    }
+
+    return os;
+}
+
+// pretty-print a combination of sc_status bits (i.e. a callback mask)
+static std::ostream&
+print_status_expression( std::ostream& os, sc_status s )
+{
+    std::vector<sc_status> bits;
+    unsigned               is_set = SC_ELABORATION;
+
+    // collect bits
+    while( is_set <= SC_STATUS_LAST )
+    {
+        if( s & is_set )
+            bits.push_back( (sc_status)is_set );
+        is_set <<= 1;
+    }
+    if( s & ~SC_STATUS_ANY ) // remaining bits
+        bits.push_back( (sc_status)( s & ~SC_STATUS_ANY ) );
+
+    // print expression
+    std::vector<sc_status>::size_type i=0, n=bits.size();
+    if ( n>1 )
+        os << "(";
+    for( ; i<n-1; ++i )
+        os << bits[i] << "|";
+    os << bits[i];
+    if ( n>1 )
+        os << ")";
+    return os;
+}
 
 } // namespace sc_core
 

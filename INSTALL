@@ -7,6 +7,8 @@ Contents:
 
         2. Installation Notes for Windows
 
+        3. SystemC Library Configuration Switches
+
 
 1. Installation Notes for Unix
 ------------------------------
@@ -17,36 +19,61 @@ System Requirements
 
 SystemC can be installed on the following UNIX, or UNIX-like platforms:
 
-    o 32-bit Linux (x86) (RedHat Enterprise Linux 4, 5, 6; Fedora 14, 15;
-      Debian 5.0; Ubuntu 10.04LTS, 12.04LTS) with GNU C++ compiler versions
-      gcc-3.3.2 through gcc-4.7.0
-    o 32-bit Linux (x86) (Debian, Ubuntu 12.04LTS) with Clang C++ compiler
-      version clang-2.9 through clang-3.1
-    o 64-bit Linux (x86_64) (RedHat Enterprise Linux 4, 5, 6; Fedora 17;
-      Debian 5.0; Ubuntu 10.04LTS, 12.04LTS) with GNU C++ compiler versions
-      gcc-3.4.5 through gcc-4.7.0
-    o 64-bit Linux (x86_64) (Ubuntu 12.04LTS) with Clang C++ compiler
-      version clang-3.1
-    o 64-bit Linux (x86_64) (Debian 5.0) with 32-bit GNU C++ compiler version
-      gcc-4.1.1 through gcc-4.7.0 (./configure --target=i686-linux-gnu)
-    o Sun Solaris 9 (sparc32) with GNU C++ compiler version gcc-3.3.3
-      through gcc-4.4.6
-    o 32-bit Mac OS X (ppc, i386) (10.5 Leopard, 10.6 Snow Leopard, 10.7 Lion)
-      with GNU C++ compiler versions gcc-3.1 through gcc-4.2.1
-    o 64-bit Mac OS X (x86_64) (10.6 Snow Leopard, 10.7 Lion) with
-      GNU C++ compiler version gcc-4.2.1
-    o 32-bit FreeBSD 7.4 with GNU C++ compiler version gcc-4.2.1
-    o Windows 7 SP1, Microsoft Visual C++ 2005 SP1 (8.0)
-    o Windows 7 SP1, Microsoft Visual C++ 2008 SP1 (9.0)
-    o Windows 7 SP1, Microsoft Visual C++ 2010     (10.0)
-    o Windows XP Prof. SP3, with Microsoft Visual C++ 2010 (10.0)
-    o Windows XP Prof. SP3 (Cygwin 1.5.25) with GNU C++ compiler
-      version gcc-4.3.2
-    o Windows XP Prof. SP3 (Msys 1.0.16) with MinGW32
-      GNU C++ compiler version gcc-4.5.2 through gcc-4.6.2
+  o Linux
+    * Architectures
+      - x86 (32-bit)
+      - x86_64 (64-bit)
+      - x86 (32-bit) application running on x86_64 (64-bit) kernel
+        (../configure --host=i686-linux-gnu)
+    * Compilers
+      - GNU C++ compiler
+      - Clang C++ compiler
+      - or compatible
 
-An installation of SystemC on other, related platforms may be
-possible as well.
+  o Mac OS X
+    * Architectures
+      - x86 (32-bit)
+      - x86_64 (64-bit)
+      - powerpc (32-bit)   [deprecated]
+      - powerpc64 (64-bit) [deprecated]
+    * Compilers
+      - GNU C++ compiler
+      - Clang C++ compiler
+      - or compatible
+
+  o Solaris
+    * Architectures
+      - SPARC (32-bit)
+    * Compilers
+      - GNU C++ compiler
+      - Sun/Solaris Studio
+
+  o BSD
+    * Architectures
+      - x86 (32-bit)
+      - x86_64 (64-bit)
+    * Compilers
+      - GNU C++ compiler
+      - Clang C++ compiler
+      - or compatible
+
+  o Windows
+    * Compatibility layer
+      - Cygwin
+      - MinGW / MSYS
+    * Architectures
+      - x86 (32-bit)
+      - x86_64 (64-bit)
+    * Compilers
+      - GNU C++ compiler
+      - or compatible
+
+Note: Not all combinations are equally well-tested and some combinations
+      may not work as expected.  Please report your findings by following
+      the instructions in the README file.
+
+The README file contains a list of detailed platforms, architectures,
+and compiler versions that have been used for testing this release.
 
 
 Sources for Compilers and Related Tools
@@ -55,9 +82,9 @@ Sources for Compilers and Related Tools
 To build, install, and use SystemC on UNIX platforms, you need
 the following tools:
 
-  1. GNU C++ compiler, version 3.3.2 or later
+  1. GNU C++ compiler, version 3.4 or later
      or
-     Clang C++ compiler version clang-2.9 or later
+     Clang C++ compiler version 3.0 or later
 
   2. GNU Make (gmake)
 
@@ -76,7 +103,7 @@ Basic SystemC Installation
 
 To install SystemC on a UNIX system, do the following steps:
 
-  1. Change to the top level directory (systemc-2.3.0)
+  1. Change to the top level directory (systemc-2.3.1)
 
   2. Create a temporary directory, e.g.,
 
@@ -86,29 +113,35 @@ To install SystemC on a UNIX system, do the following steps:
 
         > cd objdir
 
-  4. Set the following environment variable(s):
+  4. Choose your compiler by setting the CXX environment variable
+     (the configure script tries to guess the default compiler, if
+      this step is omitted):
 
-     For gcc compilers on Solaris:
+     If you use a POSIX-compatible shell (e.g. bash):
+
+        > export CXX="<compiler>"
+
+     e.g. for GCC compilers
+
+        > export CXX=g++
+
+     The Clang compiler is usually named 'clang++', thus e.g.
+
+        > export CXX=clang++
+
+     When using a C shell (e.g. csh/tcsh), the syntax to set the
+     environment variable is different:
 
         > setenv CXX g++
 
-     For SC6.1 or SC6.2 on Solaris:
+     For the Sun/Solaris Studio compilers, use
 
         > setenv CXX CC
 
-     For gcc compilers on Linux:
-
-        > setenv CXX g++
-
-     For gcc compilers on MacOS X:
-
-        > setenv CXX g++
-
-     For aCC on HP-UX:
-
-        > setenv CXX aCC
-
      You can also specify an absolute path to the compiler of your choice.
+
+     See also the Section "Compilation and Linking Options" below.
+
 
   5. Configure the package for your system, e.g.,
      (The configure script is explained below.)
@@ -130,13 +163,47 @@ To install SystemC on a UNIX system, do the following steps:
      significantly when using this compiler flag.
 
      In case you want to install the package in another place than the
-     top level directory (systemc-2.3.0), configure the package e.g. as
+     top level directory (systemc-2.3.1), configure the package e.g. as
      follows:
 
-        > ../configure --prefix=/usr/local/systemc-2.3.0
+        > ../configure --prefix=/usr/local/systemc-2.3.1
 
      Note: make sure you have created the target directory before installing
-           the package. Do _not_ use /usr/local as a prefix.
+           the package. Do _not_ use /usr/local as a prefix, unless you
+           follow the Unix/FHS directory layouts (see below).
+
+     A fine grained configuration of the installation directories can
+     be achieved via additional options, given to the configure script.
+
+     By default, the files are installed directly to the PREFIX directory
+     root and the library is installed to PREFIX/lib-<TARGETARCH>,
+     depending on the current target architecture.  This may be undesired
+     in cases where the package is meant to be installed in a system-wide
+     location as part of shared (default) library and include hierarchies
+     (e.g. /usr/local, /usr, /opt, ...).  To follow the Unix/FHS directory
+     standards, you can use the following options:
+
+       --with-unix-layout     use Unix directory layout for installation
+                              [default=no]
+         when "yes", the following (fine-grained) settings will be used:
+
+       --includedir=DIR       C++ header files      [PREFIX/include]
+       --libdir=DIR           object code libraries [EPREFIX/lib]
+       --docdir=DIR           documentation root    [DATAROOTDIR/doc/systemc]
+
+     The library destination itself can be further and separately configured
+     by using the following option:
+
+       --with-arch-suffix     add suffix to library installation directory
+                              [default=-<TARGETARCH>]
+
+     With this option, one can easily follow e.g. the "multi-arch"
+     conventions on some platforms:
+
+       ../configure --with-arch-suffix=32                # lib32
+       ../configure --with-arch-suffix=/x86_64-linux-gnu # lib/x86_64-linux-gnu
+
+
 
      Several options are available to the configure script to modify
      the compiler configuration and the selection of certain features:
@@ -146,11 +213,14 @@ To install SystemC on a UNIX system, do the following steps:
        --disable-optimize      disable compiler optimization
        --disable-async-updates disable request_async_update support
        --enable-pthreads       use POSIX threads for SystemC processes
+       --enable-phase-callbacks
+                               enable simulation phase callbacks (experimental)
+
 
      See the section on the general usage of the configure script and
      "../configure --help" for more information.
 
-     Note: if you change the configuration after having compiled the
+     Note: If you change the configuration after having compiled the
            package already, you should run a "gmake clean" before
            recompiling.
 
@@ -162,25 +232,24 @@ To install SystemC on a UNIX system, do the following steps:
            been removed in this package.  Use the corresponding
            options to the configure script instead.
 
-  7. Install the package.
-
-        > gmake install
-  
-  8. At this point you may wish to verify the installation by 
+  7. At this point you may wish to verify the compiled package by
      testing the example suite.
 
         > gmake check
 
-     this will compile and run the examples in the subdirectory
+     This will compile and run the examples in the subdirectory
      examples.
+
+  8. Install the package.
+
+        > gmake install
 
   9. You can now remove the temporary directory, .e.g,
 
         > cd ..
         > rm -rf objdir
 
-     Alternatively, you can keep the temporary directory to allow
-     you to:
+     Alternatively, you can keep the temporary directory to allow you to:
 
      a) Experiment with the examples.
 
@@ -197,16 +266,17 @@ To install SystemC on a UNIX system, do the following steps:
 Running the Examples
 ====================
 
-A copy of the examples reside in the temporary directory - see 
-instruction 8 above for details on building and running them. 
+Copies of the examples reside in the temporary directory - see
+instruction 7 above for details on building and running them.
 
 In addition, a copy of the example code resides in the directory
-examples at the highest level of the installation.
+examples at the highest level of the installation (or in the
+shared documentation install directory).
 
 Use the makefiles provided in  the 'examples' directory as templates 
 for makefiles you need for compiling your own examples.
-        
-     
+
+
 Using the Configure Script
 ==========================
  
@@ -235,14 +305,14 @@ the commands you used to the email address provided in the README file.
 This information will be used to improve the installation process in
 the next release.
 
-The `configure.in' file is provided in case you want to change or regenerate
+The `configure.ac' file is provided in case you want to change or regenerate
 the `configure' script, for example to use a newer version of `autoconf'. 
-The `configure.in' file is used by the `autoconf' program to create the
+The `configure.ac' file is used by the `autoconf' program to create the
 `configure' script.
 
 Note for (key) developers:
 
-  In case you have changed the `configure.in' file or one of the
+  In case you have changed the `configure.ac' file or one of the
   `Makefile.am' files:
 
   - Use the `config/distclean' script to remove the generated `configure'
@@ -262,13 +332,10 @@ script does not define. You can define the initial values for these
 options by setting them in your environment before running the
 `configure' script.
 
-Using a Bourne-compatible shell, the command line entry might be:
+Instead of passing the variables via the environment, it is preferred
+to pass the values as options to the configure script:
 
-        > CC=c89 CFLAGS=-O2 LIBS=-lposix ../configure
-
-Or, on systems that have the `env' program, the command line entry might be:
-
-        > env CPPFLAGS=-I/usr/local/include LDFLAGS=-s ../configure
+  > ../configure CXX=g++-4.4 LIBS=-lposix
 
 
 Specifying the System Type
@@ -314,8 +381,8 @@ Note: The `configure' script for some systems does not look for a site script.
 Operation Controls
 ==================
 
-The `configure' script recognizes the following options to control its
-operation:
+The `configure' script recognizes the following additional options to control
+its operation:
 
 `--cache-file=FILE'
         Use and save the test results in FILE instead of
@@ -344,10 +411,27 @@ Other options that are rarely used are available in the `configure' script.
 Use the `--help' option to print a list.
 
 
+
 2. Installation Notes for Windows
 ---------------------------------
 
-This release has been tested on Visual C++ 2005/2008/2010, Windows XP, and Windows 7.
+This release has been tested on Visual C++ versions 2005 through 2013,
+running on Windows 7.
+
+
+Note: This section covers the installation based on Microsoft Visual C++.
+      For Cygwin or MinGW-based installations, see Section 1.
+
+
+Note: If you experience spurious errors about missing files in the
+      downloaded archive, please make sure to either download the
+      ZIP archive from accellera.org or use a reliable archive software,
+      fully supporting modern tar archive versions.
+
+      Some paths in the SystemC archive are longer than the historical
+      99 character limit, and several Windows archivers (e.g. WinZip)
+      have been reported to trip over this.  The open source archiver
+      7-zip (http://7-zip.org) is known to work.
 
 
 Microsoft Visual C++ 2005 (compiler version 8.0) or later
@@ -369,6 +453,14 @@ and double-click on the .vcproj file to launch Visual C++ with the
 workspace file. The workspace file will have the proper switches set
 to compile for Visual C++ 2005. Select 'Build <example>.exe' under the
 Build menu or press F7 to build the example executable.
+
+For convenience, a combined solution file 'SystemC-examples.sln' with
+all example projects can be found in the 'msvc80' directory.  A similar
+solution file for the TLM examples is located in 'examples/tlm/build-msvc'.
+
+The provided project files are prepared for both the 32-bit 'Win32' and
+64-bit 'x64' configurations.  Please refer to the Microsoft Visual Studio
+documentation for details about 64-bit builds.
 
 
 Creating SystemC Applications
@@ -412,25 +504,262 @@ projects:
    
 2. Select show directories for: Library files
 
-3. Select the 'New' icon and browse to: C:\systemc-2.3.0\msvc80\systemc\debug
+3. Select the 'New' icon and browse to: C:\systemc-2.3.1\msvc80\systemc\debug
 
 4. Select show directories for: Include files
 
-5. Select the 'New' icon and browse to: C:\systemc-2.3.0\src
+5. Select the 'New' icon and browse to: C:\systemc-2.3.1\src
 
 To add the include file and library directory search paths for the current
 project only:
 
 1. Display the project Property Pages by selecting 'Properties...' from 
    the Project menu. 
-  
+
 2. From the C/C++ tab, select the General properties and type the path to the 
    SystemC 'src' directory in the text entry field labeled
   'Additional include directories' (e.g. the examples use '..\..\..\src').
 
 3. From the Linker tab, select the General properties and type the path to 
-   the SystemC library:   ...\systemc-2.3.0\msvc80\systemc\debug'systemc.lib' 
+   the SystemC library:   ...\systemc-2.3.1\msvc80\systemc\debug'systemc.lib' 
    in the 'Additional Library Directories:' box.
 
 9. Click OK
-  
+
+
+
+
+3. SystemC Library Configuration Switches
+-----------------------------------------
+
+In addition to the explicitly selectable feature given as options to
+the `configure' script (see 1.), some aspects of the library
+implementation can be controlled via
+
+ - preprocessor switches given during library build
+ - preprocessor switches added while building a SystemC application
+ - environment variables
+
+The currently supported switches are documented in this section.
+
+Preprocessor switches
+=====================
+
+Additional preprocessor switches for the library build can be passed
+to the configure script via the CXXFLAGS variable:
+
+  ../configure CXXFLAGS="-DSC_OVERRIDE_DEFAULT_STACK_SIZE=0x80000"
+
+In Visual C++, the preprocessor symbols can be added to the project
+configuration via the 'C/C++' tab under the 'Preprocessor' properties
+in the 'Preprocessor definitions' setting.
+
+
+ * SC_DEFAULT_WRITER_POLICY=<sc_writer_policy> -
+   Override default value for the signal writer policy
+
+   This setting allows deactivating the multiple writer checks for
+   sc_signals at (application) compile time.  This mechanism supersedes
+   the old environment variable SC_SIGNAL_WRITE_CHECK (see below).
+
+   Supported values:
+      SC_ONE_WRITER        (default)
+      SC_MANY_WRITERS      (allow multiple writers in different deltas)
+      SC_UNCHECKED_WRITERS (non-standard, disable all checks)
+
+   Note: Only effective when building an application.
+
+   Note: This setting needs to be consistently set across all
+         translation units of an application.
+
+
+ * SC_DISABLE_ASYNC_UPDATES -
+   Exclude the "async_request_update" support
+
+   Note: This option is usually set by the `configure` option
+     --disable-async-update, or
+     --enable-async-update=no
+
+   On non-Automake platforms (e.g. Visual C++), this preprocessor
+   symbol can be used to manually build the library with this feature.
+
+   Note: Only effective during library build.
+
+
+ * SC_DISABLE_VIRTUAL_BIND - 
+   Keep the "bind" function of sc_ports non-virtual
+
+   When this symbol is defined, the "bind" function in sc_ports is
+   kept non-virtual (although it is required to be 'virtual' since
+   IEEE 1666-2011).
+
+   Note: This symbol needs to be consistently defined in the library
+         and any application linking against the built library.
+
+
+ * SC_DISABLE_COPYRIGHT_MESSAGE -
+   Do not print the copyright message when starting the application
+
+   Note: This does not remove the copyright from the binary.
+         sc_core::sc_copyright() still works as expected.
+   Note: Only effective during library build.
+   See : Environment variable SC_COPYRIGHT_MESSAGE
+
+
+ * SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS -
+   Allow a process to trigger itself immediately
+
+   Allow a method process to trigger itself immediately by using
+      next_trigger( ev ); // or a static sensitivity
+      ev.notify();
+
+   This behaviour has been disabled by default in IEEE 1666-2011 and
+   can be reenabled by this option.
+
+   Note: Only effective during library build.
+
+
+ * SC_ENABLE_EARLY_MAXTIME_CREATION -
+   Allow creation of sc_time objects with a value of sc_max_time()
+   before finalizing the time resolution
+
+   In IEEE 1666-2011, it is not allowed to create sc_time objects with
+   a non-SC_ZERO_TIME value before setting/changing the time resolution.
+
+   This preprocessor switch activates an extension to allow the
+   initialization of sc_time variables with sc_max_time() while
+   still accepting changes to the time resolution afterwards.
+
+     sc_time t = sc_max_time();
+     sc_set_time_resolution( 1, SC_NS ); // OK, with this extension
+
+   The time resolution will still be fixed, once you have explicitly or
+   implicitly relied on the physical value (i.e. the relation to seconds)
+   of any sc_time object.
+
+   Note: Only effective during library build.
+
+
+ * SC_ENABLE_SIMULATION_PHASE_CALLBACKS         (experimental)
+   SC_ENABLE_SIMULATION_PHASE_CALLBACKS_TRACING (experimental) -
+   Enable a generic simulation phase callback mechanism.
+
+   Note: This option is usually set by the `configure` option
+     --enable-phase-callbacks, or
+     --enable-phase-callbacks=tracing
+
+   See the RELEASENOTES for more information about this feature.
+
+   The *_TRACING variant of this flag enables the sc_trace
+   implementation use these callbacks, instead of hard-coded updates
+   from the main simulator loop.
+
+   Note: Setting tracing flag includes the generic phase callback
+         infrastructure automatically.
+   Note: Only effective during library build.
+
+
+ * SC_INCLUDE_DYNAMIC_PROCESSES -
+   Enable dynamic process support (sc_spawn, sc_bind)
+
+   To improve compilation times, the functions for spawing dynamic
+   processes are not included by default in an SystemC application.
+
+   Define this symbol before including the SystemC header in your
+   application, if you want to use dynamically spawned processes.
+
+   Note: Can be optionally set per translation unit in an application.
+
+   Note: Some TLM convenience sockets require this feature and define
+         the symbol for you if needed.
+
+
+ * SC_INCLUDE_FX -
+   Enable SystemC fix-point datatypes
+
+   To improve compilation times, the fixpoint datatypes are not enabled
+   by default in an SystemC application.
+
+   Define this symbol before including the SystemC header in your
+   application, if you want to use the SystemC fixpoint types.
+
+   Note: Is by default always defined during the library build to enable
+         later use of the fixpoint datatypes in an application.
+
+   Note: Can be optionally set per translation unit in an application.
+
+
+ * SC_INCLUDE_STRSTREAM -
+   Include (deprecated) <strstream> header from <systemc.h>
+
+   Pre-standard C++ compilers had support for an old stringstream
+   implementation called 'strstream'.  In the unlikely case that your
+   application still relies on this deprecated class and that <systemc.h>
+   includes this header for you automatically, you now need to define this
+   symbol when building your application.
+
+   Note: Only effective when building an application.
+
+
+ * SC_INCLUDE_WINDOWS_H -
+   Explicitly include <windows.h> header from <systemc> header
+
+   Previous versions of SystemC always included the full <windows.h>
+   header on all Windows platforms.  This adds unnecessary bloat to
+   many SystemC applications, reducing compilation times.
+
+   If you rely on the inclusion of the <windows.h> header in your
+   application, you can add this symbol to the list of preprocessor
+   switches for your compiler.
+
+   Note: Only effective when building an application.
+
+
+ * SC_OVERRIDE_DEFAULT_STACK_SIZE=<size> -
+   Define the default stack size used for SystemC (thread) processes
+
+   Note: Only effective during library build.
+
+
+ * SC_USE_SC_STRING_OLD / SC_USE_STD_STRING -
+   Define 'sc_string' symbol.
+
+   Pre-IEEE-1666 versions of SystemC included an 'sc_string' class for
+   string objects.  This class has been superseeded by 'std::string' these
+   days.
+
+   If your application still relies on 'sc_string' being available, set one
+   of the two supported preprocessor switches to provide it:
+
+   SC_USE_SC_STRING_OLD -
+     Uses old implementation `sc_string_old' to provide `sc_string':
+       typedef sc_string_old sc_string; 
+
+   SC_USE_STD_STRING -
+     Provide `sc_string' as an alias to `std::string':
+       typedef std::string sc_string;
+
+
+Influential environment variables
+=================================
+
+Currently, three environment variables are checked at library load time
+and influence the SystemC library's behaviour:
+
+ 1) SC_COPYRIGHT_MESSAGE=DISABLE -
+    Run-time alternative to SC_DISABLE_COPYRIGHT_MESSAGE (see above).
+
+ 2) SC_SIGNAL_WRITE_CHECK=DISABLE
+    Run-time alternative to SC_DEFAULT_WRITER_POLICY=SC_UNCHECKED_WRITERS
+    (see above)
+
+ 3) SC_DEPRECATION_WARNINGS=DISABLE
+    Do not issue warnings about using deprecated features as of
+    IEEE 1666-2011.
+
+Usually, it is not recommended to use any of these variables in new or
+on-going projects.  They have been added to simplify the transition of
+legacy code.
+
+
+// Taf!

@@ -1,14 +1,14 @@
 ## ****************************************************************************
 ##
 ##  The following code is derived, directly or indirectly, from the SystemC
-##  source code Copyright (c) 1996-2004 by all Contributors.
+##  source code Copyright (c) 1996-2014 by all Contributors.
 ##  All Rights reserved.
 ##
 ##  The contents of this file are subject to the restrictions and limitations
-##  set forth in the SystemC Open Source License Version 2.4 (the "License");
+##  set forth in the SystemC Open Source License (the "License");
 ##  You may not use this file except in compliance with such restrictions and
 ##  limitations. You may obtain instructions on how to receive a copy of the
-##  License at http://www.systemc.org/. Software distributed by Contributors
+##  License at http://www.accellera.org/. Software distributed by Contributors
 ##  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
 ##  ANY KIND, either express or implied. See the License for the specific
 ##  language governing rights and limitations under the License.
@@ -30,14 +30,15 @@
 ##
 ## ****************************************************************************
 
-DOXYGEN=doxygen
+# support local addition of automake macros
+ACLOCAL_AMFLAGS= -I config
 
 SUBDIRS = \
+	docs \
 	src \
-	examples \
-	.
+	examples
 
-INST_FILES = \
+DOC_FILES = \
 	AUTHORS \
 	COPYING \
 	ChangeLog \
@@ -45,43 +46,31 @@ INST_FILES = \
 	LICENSE \
 	NEWS \
 	README \
-	RELEASENOTES \
-	docs
+	RELEASENOTES
 
-# support local addition of automake macros
-ACLOCAL_AMFLAGS= -I config
+EXTRA_DIST = \
+	$(DOC_FILES) \
+	\
+	config/bootstrap \
+	config/test.sh.in \
+	\
+	msvc80/SystemC/SystemC.sln \
+	msvc80/SystemC/SystemC.vcproj \
+	msvc80/SystemC/SystemC-examples.sln
 
-install-data-local:
-	@$(NORMAL_INSTALL)
-	for file in $(INST_FILES); do \
-	  d=$(srcdir); \
-	  if test -d $$d/$$file; then \
-	    test -d $(prefix)/$$file \
-	    || cp -pr $$d/$$file $(prefix) || :; \
-	  else \
-	    test -f $(prefix)/$$file \
-	    || cp -p $$d/$$file $(prefix)/$$file || :; \
-	  fi; \
-	done
-#@(cd ./examples; $(MAKE) install;)
+## ****************************************************************************
 
-uninstall-local:
-	@$(NORMAL_UNINSTALL)
-	w=`pwd`; cd $(srcdir); s=`pwd`; cd $$w; \
-	if test $(prefix) != $$s; then \
-	  for file in $(INST_FILES); do \
-	    d=$(srcdir); \
-	    if test -d $$d/$$file; then \
-	      rm -rf $(prefix)/$$file; \
-	    else \
-	      rm -f $(prefix)/$$file; \
-	    fi; \
-	  done; \
-	fi
-	@(cd ./examples; $(MAKE) uninstall;)
+## install documentation?
+if SEPARATE_INSTALL_TREE
+
+rootdoc_DATA = \
+	$(DOC_FILES)
+
+endif # SEPARATE_INSTALL_TREE
+
+## ****************************************************************************
 
 doxygen:
-	@(cd docs/sysc/doxygen && $(DOXYGEN))
-	@(cd docs/tlm/doxygen && $(DOXYGEN))
+	@(cd docs && $(MAKE) $@)
 
 ## Taf!

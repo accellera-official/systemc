@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2006 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 2.4 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -137,67 +137,68 @@ sc_numrep
 scfx_parse_prefix( const char*& s )
 {
     if( s[0] == '0' ) {
-	switch( s[1] ) {
-	case 'b':
-	case 'B':
-	{
-	    if( (s[2] == 'u' || s[2] == 'U') && (s[3] == 's' || s[3] == 'S') ) {
-		s += 4;
-		return SC_BIN_US;
-	    }
-	    if( (s[2] == 's' || s[2] == 'S') && (s[3] == 'm' || s[3] == 'M') ) {
-		s += 4;
-		return SC_BIN_SM;
-	    }
-	    s += 2;
-	    return SC_BIN;
-	}
-	case 'o':
-	case 'O':
-	{
-	    if( (s[2] == 'u' || s[2] == 'U') && (s[3] == 's' || s[3] == 'S') ) {
-		s += 4;
-		return SC_OCT_US;
-	    }
-	    if( (s[2] == 's' || s[2] == 'S') && (s[3] == 'm' || s[3] == 'M') ) {
-		s += 4;
-		return SC_OCT_SM;
-	    }
-	    s += 2;
-	    return SC_OCT;
-	}
-	case 'x':
-	case 'X':
-	{
-	    if( (s[2] == 'u' || s[2] == 'U') && (s[3] == 's' || s[3] == 'S') ) {
-		s += 4;
-		return SC_HEX_US;
-	    }
-	    if( (s[2] == 's' || s[2] == 'S') && (s[3] == 'm' || s[3] == 'M') ) {
-		s += 4;
-		return SC_HEX_SM;
-	    }
-	    s += 2;
-	    return SC_HEX;
-	}
-	case 'd':
-	case 'D':
-	{
-	    s += 2;
-	    return SC_DEC;
-	}
-	case 'c':
-	case 'C':
-	{
-	    if( (s[2] == 's' || s[2] == 'S') && (s[3] == 'd' || s[3] == 'D') ) {
-		s += 4;
-		return SC_CSD;
-	    }
-	    break;
-	}
-	default:
-	    break;
-	}
+        switch( s[1] )
+        {
+	    case 'b':
+	    case 'B':
+            {
+	        if( (s[2] == 'u' || s[2] == 'U') && (s[3] == 's' || s[3] == 'S') ) {
+		    s += 4;
+                    return SC_BIN_US;
+                }
+                if( (s[2] == 's' || s[2] == 'S') && (s[3] == 'm' || s[3] == 'M') ) {
+                    s += 4;
+                    return SC_BIN_SM;
+                }
+                s += 2;
+                return SC_BIN;
+            }
+	    case 'o':
+	    case 'O':
+	    {
+                if( (s[2] == 'u' || s[2] == 'U') && (s[3] == 's' || s[3] == 'S') ) {
+                    s += 4;
+                    return SC_OCT_US;
+                }
+                if( (s[2] == 's' || s[2] == 'S') && (s[3] == 'm' || s[3] == 'M') ) {
+                    s += 4;
+                    return SC_OCT_SM;
+                }
+                s += 2;
+                return SC_OCT;
+            }
+  	    case 'x':
+	    case 'X':
+            {
+                if( (s[2] == 'u' || s[2] == 'U') && (s[3] == 's' || s[3] == 'S') ) {
+                    s += 4;
+                    return SC_HEX_US;
+                }
+                if( (s[2] == 's' || s[2] == 'S') && (s[3] == 'm' || s[3] == 'M') ) {
+                    s += 4;
+                    return SC_HEX_SM;
+                }
+                s += 2;
+                return SC_HEX;
+            }
+   	    case 'd':
+	    case 'D':
+            {
+                s += 2;
+                return SC_DEC;
+            }
+	    case 'c':
+	    case 'C':
+            {
+                if( (s[2] == 's' || s[2] == 'S') && (s[3] == 'd' || s[3] == 'D') ) {
+                    s += 4;
+                    return SC_CSD;
+                }
+                break;
+            }
+            default:
+                break;
+        }
     }
 
     return SC_DEC;
@@ -407,14 +408,15 @@ scfx_to_digit( char c, sc_numrep numrep )
 	}
 	case SC_CSD:
 	{
-	    if( c == '-' )
-		to_digit = -1;
-	    else
-		to_digit = c - '0';
+            if( c == '-' )
+                to_digit = -1;
+            else
+                to_digit = c - '0';
+            break;
 	}
-	default:
-	    to_digit = -2;
-    };
+        default:
+            to_digit = -2;
+    }
 
     return to_digit;
 }

@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2011 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 3.0 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -52,7 +52,7 @@ namespace sc_core {
 // constructors
 
 sc_clock::sc_clock() : 
-    sc_signal<bool>( sc_gen_unique_name( "clock" ) ),
+    base_type( sc_gen_unique_name( "clock" ) ),
     m_period(), m_duty_cycle(), m_start_time(), m_posedge_first(),
     m_posedge_time(), m_negedge_time(),
     m_next_posedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
@@ -61,7 +61,7 @@ sc_clock::sc_clock() :
                           "_next_negedge_event").c_str())
 
 {
-    init( sc_time( 1.0, true ),
+    init( sc_time::from_value(simcontext()->m_time_params->default_time_unit),
 	  0.5,
 	  SC_ZERO_TIME,
 	  true );
@@ -70,7 +70,7 @@ sc_clock::sc_clock() :
 }
 
 sc_clock::sc_clock( const char* name_ ) :
-    sc_signal<bool>( name_ ),
+    base_type( name_ ),
     m_period(), m_duty_cycle(), m_start_time(), m_posedge_first(),
     m_posedge_time(), m_negedge_time(),
     m_next_posedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
@@ -78,7 +78,7 @@ sc_clock::sc_clock( const char* name_ ) :
     m_next_negedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
 			   std::string(name_) + "_next_negedge_event").c_str())
 {
-    init( sc_time( 1.0, true ),
+    init( sc_time::from_value(simcontext()->m_time_params->default_time_unit),
 	  0.5,
 	  SC_ZERO_TIME,
 	  true );
@@ -91,7 +91,7 @@ sc_clock::sc_clock( const char* name_,
 		    double         duty_cycle_,
 		    const sc_time& start_time_,
 		    bool           posedge_first_ ) :
-    sc_signal<bool>( name_ ),
+    base_type( name_ ),
     m_period(), m_duty_cycle(), m_start_time(), m_posedge_first(),
     m_posedge_time(), m_negedge_time(),
     m_next_posedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
@@ -117,7 +117,7 @@ sc_clock::sc_clock( const char* name_,
 		    double         period_v_,
 		    sc_time_unit   period_tu_,
 		    double         duty_cycle_ ) :
-    sc_signal<bool>( name_ ),
+    base_type( name_ ),
     m_period(), m_duty_cycle(), m_start_time(), m_posedge_first(),
     m_posedge_time(), m_negedge_time(),
     m_next_posedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
@@ -141,7 +141,7 @@ sc_clock::sc_clock( const char* name_,
 		    double         start_time_v_,
 		    sc_time_unit   start_time_tu_,
 		    bool           posedge_first_ ) :
-    sc_signal<bool>( name_ ),
+    base_type( name_ ),
     m_period(), m_duty_cycle(), m_start_time(), m_posedge_first(),
     m_posedge_time(), m_negedge_time(),
     m_next_posedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
@@ -169,7 +169,7 @@ sc_clock::sc_clock( const char* name_,
 		    double         duty_cycle_,
 		    double         start_time_,  // in default time units
 		    bool           posedge_first_ ) :
-    sc_signal<bool>( name_ ),
+    base_type( name_ ),
     m_period(), m_duty_cycle(), m_start_time(), m_posedge_first(),
     m_posedge_time(), m_negedge_time(),
     m_next_posedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
@@ -187,9 +187,12 @@ sc_clock::sc_clock( const char* name_,
 	   "    sc_time_unit");
     }
 
-    init( sc_time( period_, true ),
+    sc_time default_time =
+      sc_time::from_value( simcontext()->m_time_params->default_time_unit );
+
+    init( ( period_ * default_time ),
 	  duty_cycle_,
-	  sc_time( start_time_, true ),
+	  ( start_time_ * default_time ),
 	  posedge_first_ );
 
     if( posedge_first_ ) {

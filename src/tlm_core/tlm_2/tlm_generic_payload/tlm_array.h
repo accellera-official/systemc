@@ -1,14 +1,14 @@
 /*****************************************************************************
 
   The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2008 by all Contributors.
+  source code Copyright (c) 1996-2014 by all Contributors.
   All Rights reserved.
 
   The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License Version 3.0 (the "License");
+  set forth in the SystemC Open Source License (the "License");
   You may not use this file except in compliance with such restrictions and
   limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.systemc.org/. Software distributed by Contributors
+  License at http://www.accellera.org/. Software distributed by Contributors
   under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
   ANY KIND, either express or implied. See the License for the specific
   language governing rights and limitations under the License.
@@ -41,151 +41,46 @@ namespace tlm {
 // The size can be dynamically expanded using the expand(uint) method. There
 // is no shrinking mechanism implemented, because the extension mechanism
 // does not require this feature. Bear in mind that calling the expand method
-// may invalidate all direct pointers into the m_data array.
+// may invalidate all direct pointers into the array.
 
 
 //the tlm_array shall always be used with T=tlm_extension_base*
 template <typename T>
 class tlm_array
+  : private std::vector<T>
 {
+    typedef std::vector<T>                base_type;
+    typedef typename base_type::size_type size_type;
 public:
 
     // constructor:
-    tlm_array(unsigned int size = 0, T default_value = 0)
-        : m_data(0)
-        , m_size(0)
-        , m_entries(NULL)
-        , m_last_entry(0)
+    tlm_array(size_type size = 0, T const & default_value = T() )
+        : base_type(size,default_value)
+        , m_entries()
         , m_default(default_value)
     {
-        expand(size);
+        //m_entries.reserve(size); // optional
     }
 
     // copy constructor:
-    tlm_array(const tlm_array& orig)
-    {
-        m_size = orig.size();
-        m_last_entry=orig.m_last_entry;        
-        if (m_size>0)
-        {
-            try {
-                m_data = new T[m_size];
-            }
-            catch (std::exception &e) {
-                report_error(e); return;
-            }
-            try {
-                m_entries = new T*[m_size];
-            }
-            catch (std::exception &e) {
-                report_error(e); return;
-            }
-            for(unsigned int i=0; i<m_size; i++)
-            {
-                m_data[i] = orig.m_data[i];
-                m_entries[i] = orig.m_entries[i];
-            }
-        }
-    }
-    
+    // tlm_array(const tlm_array& orig) = default;
+
     // destructor:
-    ~tlm_array()
-    {
-        if (m_size>0) {delete[] m_data; delete [] m_entries;}
-        m_size = 0;
-    }
+    // ~tlm_array() = default;
 
     // operators for dereferencing:
-    T& operator[](const unsigned int index)
-    {
-        // assert(index < m_size);
-        return m_data[index];
-    }
-    const T& operator[](const unsigned int index) const
-    {
-        // assert(index < m_size);
-        return m_data[index];
-    }
+    using base_type::operator[];
 
     // array size:
-    unsigned int size() const {return m_size;}
+    using base_type::size;
 
     // expand the array if needed:
-    void expand(unsigned int new_size)
+    void expand(size_type new_size)
     {
-        if (new_size > m_size)
+        if (new_size > size())
         {
-            unsigned int i;
-            if(m_size==0)
-            {
-                try {
-                    m_data = new T[new_size];
-                }
-                catch (std::exception &e) {
-                    report_error(e); return;
-                }
-
-                try {
-                    m_entries = new T*[new_size];
-                }
-                catch (std::exception &e) {
-                    report_error(e); return;
-                }
-                
-                for(i=0; i<new_size; i++)
-                {
-                    m_data[i] = m_default;
-                    m_entries[i] = NULL;
-                }
-                m_size = new_size;
-                m_last_entry=0;
-            }
-            else
-            {
-                T* tmp = m_data;
-                T** tmp2 = m_entries;
-                try {
-                    m_data = new T[new_size];
-                }
-                catch (std::exception &e) {
-                    report_error(e); return;
-                }
-                try {
-                    m_entries = new T*[new_size];
-                }
-                catch (std::exception &e) {
-                    report_error(e); return;
-                }
-                
-                for(i=0; i<m_size; i++)
-                {
-                    m_data[i] = tmp[i];
-                }
-                
-                //since the array new the cache entries have to be update
-                for (unsigned int j=0; j<m_size; j++)
-                {
-                    if (tmp[j]) //if there was a valid extension in the old array ...
-                    {
-                        for (unsigned int i=0; i<m_last_entry; i++) //...we search its position in the old cache
-                        {
-                            if (tmp[j]==(*tmp2[i])) //...and if it was in the old cache
-                            {
-                                 m_entries[i]=&m_data[j]; //...we put it into the same position in the new cache
-                            }
-                        }
-                    }
-                }
-                
-                for(i=m_size; i<new_size; i++)
-                {
-                    m_data[i] = m_default;
-                    m_entries[i] = NULL;
-                }
-                m_size = new_size;
-                delete[] tmp;
-                delete[] tmp2;
-            }
+            base_type::resize(new_size);
+            //m_entries.reserve(new_size); // optional
         }
     }
 
@@ -196,40 +91,28 @@ public:
     // it stores this slot in a cache of active slots
     void insert_in_cache(T* p)
     {
-        m_entries[m_last_entry++]=p;
+        //assert( (p-&(*this)[0]) < size() );
+        m_entries.push_back( p-&(*this)[0] );
     }
 
     //this functions clears all active slots of the array
     void free_entire_cache()
     {
-        while(m_last_entry)
+        while(m_entries.size())
         {
-            m_last_entry--;
-            if (*m_entries[m_last_entry]) //we make sure no one cleared the slot manually
-              (*m_entries[m_last_entry])->free(); //...and then we call free on the content of the slot
-            *m_entries[m_last_entry]=0;   //afterwards we set the slot to NULL
+            if ((*this)[m_entries.back()])      //we make sure no one cleared the slot manually
+              (*this)[m_entries.back()]->free();//...and then we call free on the content of the slot
+            (*this)[m_entries.back()]=0;        //afterwards we set the slot to NULL
+            m_entries.pop_back();
         }
     }
 
 protected:
-    T* m_data;
-    unsigned int m_size;
-
-    T** m_entries;
-    unsigned int m_last_entry;
-
+    std::vector<size_type> m_entries;
     T m_default;
 
     // disabled:
     tlm_array& operator=(const tlm_array<T>&);
-    
-    // Report allocation error:
-    void report_error(std::exception &e)
-    {
-        std::string msg("Allocation of array failed: ");
-        msg += e.what();
-        SC_REPORT_FATAL(kind_string, msg.c_str());
-    }
 };
 
 

@@ -11,7 +11,9 @@
 # ignore autoconf files
 /aclocal.m4
 /autom4te.cache/
-# config.guess is patched locally to detect properly ppc, ppc64, i386, and x86_64 on Mac OS X
+/config/compile
+# config.guess is patched locally to detect properly
+# ppc, ppc64, i386, and x86_64 on Mac OS X
 #/config/config.guess
 #/config/config.sub
 /config/depcomp
@@ -25,17 +27,30 @@
 /config/ltversion.m4
 /config/missing
 /config/mkinstalldirs
+/config/test-driver
 /configure
 
 Makefile
 Makefile.in
 
-# ignore recommended build directory
-/objdir/
+# ignore recommended build directory and variants
+/objdir*/
 
 # ignore in-tree installation
 /include/
 /lib-*/
+
+# ignore MSVC build files
+*.suo
+*.ncb
+*.vcproj.*
+Release/
+Debug/
+#/msvc*/SystemC/SystemC.suo
+#/msvc*/SystemC/SystemC.ncb
+#/msvc*/SystemC/SystemC.vcproj.*
+#/msvc*/SystemC/Release/
+#/msvc*/SystemC/Debug/
 
 # ignore Doxygen documentation
 /docs/*/doxygen/html/
