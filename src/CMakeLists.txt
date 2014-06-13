@@ -333,10 +333,10 @@ set (systemc_SOURCES sysc/communication/sc_clock.cpp
                      sysc/datatypes/fx/scfx_pow10.cpp
                      sysc/datatypes/fx/scfx_rep.cpp
                      sysc/datatypes/fx/scfx_utils.cpp
-                     sysc/datatypes/int/sc_int32_mask.cpp
-                     sysc/datatypes/int/sc_int64_io.cpp
-                     sysc/datatypes/int/sc_int64_mask.cpp
+                     sysc/datatypes/int/sc_int32_mask.inc
+                     sysc/datatypes/int/sc_int64_mask.inc
                      sysc/datatypes/int/sc_int_base.cpp
+                     sysc/datatypes/int/sc_int_mask.cpp
                      sysc/datatypes/int/sc_length_param.cpp
                      sysc/datatypes/int/sc_nbdefs.cpp
                      sysc/datatypes/int/sc_nbexterns.cpp
