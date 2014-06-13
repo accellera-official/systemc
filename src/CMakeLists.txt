@@ -129,14 +129,15 @@ set (systemc_PUBLIC_HEADERS sysc/communication/sc_buffer.h
                             sysc/kernel/sc_join.h
                             sysc/kernel/sc_kernel_ids.h
                             sysc/kernel/sc_macros.h
-                            sysc/kernel/sc_macros_int.h
                             sysc/kernel/sc_method_process.h
                             sysc/kernel/sc_module.h
                             sysc/kernel/sc_module_name.h
                             sysc/kernel/sc_module_registry.h
                             sysc/kernel/sc_name_gen.h
                             sysc/kernel/sc_object.h
+                            sysc/kernel/sc_object_int.h
                             sysc/kernel/sc_object_manager.h
+                            sysc/kernel/sc_phase_callback_registry.h
                             sysc/kernel/sc_process.h
                             sysc/kernel/sc_process_handle.h
                             sysc/kernel/sc_reset.h
@@ -147,6 +148,7 @@ set (systemc_PUBLIC_HEADERS sysc/communication/sc_buffer.h
                             sysc/kernel/sc_simcontext_int.h
                             sysc/kernel/sc_spawn.h
                             sysc/kernel/sc_spawn_options.h
+                            sysc/kernel/sc_status.h
                             sysc/kernel/sc_thread_process.h
                             sysc/kernel/sc_time.h
                             sysc/kernel/sc_ver.h
@@ -227,6 +229,8 @@ set (systemc_PUBLIC_HEADERS sysc/communication/sc_buffer.h
                             sysc/packages/boost/utility/addressof.hpp
                             sysc/packages/boost/utility/enable_if.hpp
                             sysc/tracing/sc_trace.h
+                            sysc/tracing/sc_trace_file_base.h
+                            sysc/tracing/sc_tracing_ids.h
                             sysc/tracing/sc_vcd_trace.h
                             sysc/tracing/sc_wif_trace.h
                             sysc/utils/sc_hash.h
@@ -359,16 +363,19 @@ set (systemc_SOURCES sysc/communication/sc_clock.cpp
                      sysc/kernel/sc_name_gen.cpp
                      sysc/kernel/sc_object.cpp
                      sysc/kernel/sc_object_manager.cpp
+                     sysc/kernel/sc_phase_callback_registry.cpp
                      sysc/kernel/sc_process.cpp
                      sysc/kernel/sc_reset.cpp
                      sysc/kernel/sc_sensitive.cpp
                      sysc/kernel/sc_simcontext.cpp
+                     sysc/kernel/sc_spawn_options.cpp
                      sysc/kernel/sc_thread_process.cpp
                      sysc/kernel/sc_time.cpp
                      sysc/kernel/sc_ver.cpp
                      sysc/kernel/sc_wait.cpp
                      sysc/kernel/sc_wait_cthread.cpp
                      sysc/tracing/sc_trace.cpp
+                     sysc/tracing/sc_trace_file_base.cpp
                      sysc/tracing/sc_vcd_trace.cpp
                      sysc/tracing/sc_wif_trace.cpp
                      sysc/utils/sc_hash.cpp

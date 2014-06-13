@@ -46,6 +46,6 @@ endif (BUILD_SOURCE_DOC)
 add_subdirectory (sysc)
 add_subdirectory (tlm)
 
-install (FILES License.pdf
+install (FILES SystemC_Open_Source_License.pdf
          DESTINATION ${CMAKE_INSTALL_DOCDIR}
          COMPONENT doc)

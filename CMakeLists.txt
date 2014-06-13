@@ -107,13 +107,26 @@
 #                               which is incompatible with old TLM library
 #                               implementations (< 2.0.2).
 #
+# ENABLE_EARLY_MAXTIME_CREATION Allow creation of sc_time objects with a value
+#                               of sc_max_time() before finalizing the time
+#                               resolution.
+#
 # ENABLE_IMMEDIATE_SELF_NOTIFICATIONS  Enable immediate self-notification of
 #                               processes, which is no longer supported due to
 #                               changes in IEEE Std 1666-2011 (see
 #                               sc_event::notify, 5.10.6).
 #
+# ENABLE_PHASE_CALLBACKS        Enable the simulation phase callbacks (experimental).
+#
+# ENABLE_PHASE_CALLBACKS_TRACING  Enable usage of the (experimental) simulation
+#                               phase callbacks for the implementation of
+#                               sc_trace().
+#
 # ENABLE_PTHREADS               Use POSIX threads for SystemC processes instead
 #                               of QuickThreads on Unix or Fiber on Windows.
+#
+# OVERRIDE_DEFAULT_STACK_SIZE   Define the default stack size used for SystemC
+#                               (thread) processes. (> 0)
 #
 # QT_ARCH                       QuickThreads architecture (auto-detected:
 #                               hppa, x86_64, i386, powerpc_mach,
@@ -150,6 +163,8 @@
 ###############################################################################
 #
 # TODO:
+#
+# - Check examples output against golden.log files when executing them as test.
 #
 # - Configure the SystemC version from within the build system.
 #
@@ -232,21 +247,31 @@ if (BUILD_EXAMPLES)
   enable_testing ()
 endif (BUILD_EXAMPLES)
 
-option (DISABLE_ASYNC_UPDATES "Disable async_request_update() support." FALSE)
+option (DISABLE_ASYNC_UPDATES "Disable async_request_update() support." OFF)
 
-option (DISABLE_VIRTUAL_BIND "Disable the definition of bind() member functions of ports and exports as \"virtual\", which is incompatible with old TLM library implementations (< 2.0.2)." FALSE)
+option (DISABLE_COPYRIGHT_MESSAGE "Do not print the copyright message when starting the application." OFF)
 
-option (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS "Enable immediate self-notification of processes, which is no longer supported due to changes in IEEE Std 1666-2011 (see sc_event::notify, 5.10.6)." FALSE)
+option (DISABLE_VIRTUAL_BIND "Disable the definition of bind() member functions of ports and exports as \"virtual\", which is incompatible with old TLM library implementations (< 2.0.2)." OFF)
+
+option (ENABLE_EARLY_MAXTIME_CREATION "Allow creation of sc_time objects with a value of sc_max_time() before finalizing the time resolution." ON)
+
+option (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS "Enable immediate self-notification of processes, which is no longer supported due to changes in IEEE Std 1666-2011 (see sc_event::notify, 5.10.6)." OFF)
+
+option (ENABLE_PHASE_CALLBACKS "Enable the simulation phase callbacks (experimental)." OFF)
+
+option (ENABLE_PHASE_CALLBACKS_TRACING "Enable the use of the (experimental) simulation phase callbacks for the sc_trace() implementation." ON)
 
 option (ENABLE_PTHREADS
         "Use POSIX threads for SystemC processes instead of QuickThreads on Unix or Fiber on Windows."
-        FALSE)
+        OFF)
 
 option (INSTALL_TO_LIB_BUILD_TYPE_DIR "Install the libraries to lib-${CMAKE_BUILD_TYPE} to enable parallel installation of the different build variants. (default: ON)" ON)
 
 if (CMAKE_HOST_UNIX)
   option (INSTALL_LIB_TARGET_ARCH_SYMLINK "Install a symlink lib-<target-arch> to lib-${CMAKE_BUILD_TYPE} facilitating the linking of user code, which build system assumes to find the SystemC libraries under lib-<target-arch>." OFF)
 endif (CMAKE_HOST_UNIX)
+
+set (OVERRIDE_DEFAULT_STACK_SIZE 0 CACHE STRING "Define the default stack size used for SystemC (thread) processes. (> 0)")
 
 
 ###############################################################################
@@ -455,13 +480,35 @@ if (DISABLE_ASYNC_UPDATES)
   add_definitions (-DSC_DISABLE_ASYNC_UPDATES)
 endif (DISABLE_ASYNC_UPDATES)
 
+if (DISABLE_COPYRIGHT_MESSAGE)
+  add_definitions (-DSC_DISABLE_COPYRIGHT_MESSAGE)
+endif (DISABLE_COPYRIGHT_MESSAGE)
+
 if (DISABLE_VIRTUAL_BIND)
   add_definitions (-DSC_DISABLE_VIRTUAL_BIND)
 endif (DISABLE_VIRTUAL_BIND)
 
+if (ENABLE_EARLY_MAXTIME_CREATION)
+  add_definitions (-DSC_ENABLE_EARLY_MAXTIME_CREATION)
+endif (ENABLE_EARLY_MAXTIME_CREATION)
+
 if (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS)
   add_definitions (-DSC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS)
 endif (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS)
+
+if (ENABLE_PHASE_CALLBACKS)
+  add_definitions (-DSC_ENABLE_SIMULATION_PHASE_CALLBACKS)
+endif (ENABLE_PHASE_CALLBACKS)
+
+if (ENABLE_PHASE_CALLBACKS_TRACING)
+  add_definitions (-DSC_ENABLE_SIMULATION_PHASE_CALLBACKS_TRACING)
+endif (ENABLE_PHASE_CALLBACKS_TRACING)
+
+if (OVERRIDE_DEFAULT_STACK_SIZE GREATER 0)
+  add_definitions (-DSC_OVERRIDE_DEFAULT_STACK_SIZE=${OVERRIDE_DEFAULT_STACK_SIZE})
+elseif (OVERRIDE_DEFAULT_STACK_SIZE LESS 0)
+  message (SEND_ERROR "Negative default stack size requested for SystemC (thread) processes.")
+endif (OVERRIDE_DEFAULT_STACK_SIZE GREATER 0)
 
 # # TODO: Turn on all compiler warnings once SystemC is supposed to compile without any.
 # #       (SystemC 2.3.0 still causes some warnings during compilation.)
@@ -590,11 +637,14 @@ if (DISABLE_VIRTUAL_BIND)
 else (DISABLE_VIRTUAL_BIND)
   message (STATUS "DISABLE_VIRTUAL_BIND = ${DISABLE_VIRTUAL_BIND}")
 endif (DISABLE_VIRTUAL_BIND)
+message (STATUS "ENABLE_EARLY_MAXTIME_CREATION = ${ENABLE_EARLY_MAXTIME_CREATION}")
 if (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS)
   message ("ENABLE_IMMEDIATE_SELF_NOTIFICATIONS = ${ENABLE_IMMEDIATE_SELF_NOTIFICATIONS}")
 else (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS)
   message (STATUS "ENABLE_IMMEDIATE_SELF_NOTIFICATIONS = ${ENABLE_IMMEDIATE_SELF_NOTIFICATIONS}")
 endif (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS)
+message (STATUS "ENABLE_PHASE_CALLBACKS = ${ENABLE_PHASE_CALLBACKS}")
+message (STATUS "ENABLE_PHASE_CALLBACKS_TRACING = ${ENABLE_PHASE_CALLBACKS_TRACING}")
 if (ENABLE_PTHREADS)
   message ("ENABLE_PTHREADS = ${ENABLE_PTHREADS}")
 else (ENABLE_PTHREADS)
@@ -602,6 +652,9 @@ else (ENABLE_PTHREADS)
 endif (ENABLE_PTHREADS)
 message (STATUS "INSTALL_TO_LIB_BUILD_TYPE_DIR = ${INSTALL_TO_LIB_BUILD_TYPE_DIR}")
 message (STATUS "INSTALL_LIB_TARGET_ARCH_SYMLINK = ${INSTALL_LIB_TARGET_ARCH_SYMLINK}")
+if (OVERRIDE_DEFAULT_STACK_SIZE GREATER 0)
+  message ("OVERRIDE_DEFAULT_STACK_SIZE = ${OVERRIDE_DEFAULT_STACK_SIZE}")
+endif (OVERRIDE_DEFAULT_STACK_SIZE GREATER 0)
 message (STATUS "------------------------------------------------------------------------")
 message (STATUS "CMAKE_SYSTEM = ${CMAKE_SYSTEM}")
 message (STATUS "CMAKE_SYSTEM_PROCESSOR = ${CMAKE_SYSTEM_PROCESSOR}")

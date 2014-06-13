@@ -68,15 +68,14 @@ set (risc_cpu_EXTRAS  README
                       README_TYPESCRIPT
                       abc.asm
                       assembler.pl
-                      bios
-                      dcache
-                      icache
-                      printout
-                      program
-                      register
+                      bios.img
+                      dcache.img
+                      icache.img
+                      printout.img
+                      program.img
+                      register.img
                       test.asm
-                      test1.asm
-                      run_risc_cpu.sh)
+                      test1.asm)
 
 add_executable (risc_cpu ${risc_cpu_SOURCES} ${risc_cpu_HEADERS})
 target_link_libraries (risc_cpu systemc)
@@ -85,4 +84,4 @@ foreach (risc_cpu_EXTRA ${risc_cpu_EXTRAS})
   configure_file (${CMAKE_CURRENT_SOURCE_DIR}/${risc_cpu_EXTRA} ${CMAKE_CURRENT_BINARY_DIR}/${risc_cpu_EXTRA} COPYONLY)
 endforeach (risc_cpu_EXTRA ${risc_cpu_EXTRAS})
 
-add_test (risc_cpu sh ${CMAKE_CURRENT_BINARY_DIR}/run_risc_cpu.sh)
+add_test (risc_cpu risc_cpu)
