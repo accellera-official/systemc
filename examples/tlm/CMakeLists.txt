@@ -47,7 +47,7 @@ set (COMMON_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/common/src)
 
 macro (configure_and_add_test TEST_PROG)
   get_target_property(TEST_PROGRAM ${TEST_PROG} LOCATION)
-  configure_file (${CMAKE_SOURCE_DIR}/config/run_test.sh.in
+  configure_file (${CMAKE_SOURCE_DIR}/cmake/run_test.sh.in
                   ${CMAKE_CURRENT_BINARY_DIR}/run_test.sh @ONLY)
   add_test (${TEST_PROGRAM} sh ${CMAKE_CURRENT_BINARY_DIR}/run_test.sh)
   set_tests_properties (${TEST_PROGRAM}
@@ -57,7 +57,7 @@ endmacro (configure_and_add_test)
 macro (configure_and_add_test_with_input TEST_PROG TEST_INPUT)
   set (TEST_PROGRAM ${TEST_PROG})
   set (TEST_INPUT_FILE ${TEST_INPUT})
-  configure_file (${CMAKE_SOURCE_DIR}/config/run_test_with_input.sh.in
+  configure_file (${CMAKE_SOURCE_DIR}/cmake/run_test_with_input.sh.in
                   ${CMAKE_CURRENT_BINARY_DIR}/run_test.sh @ONLY)
   add_test (${TEST_PROGRAM} sh ${CMAKE_CURRENT_BINARY_DIR}/run_test.sh)
   set_tests_properties (${TEST_PROGRAM}
