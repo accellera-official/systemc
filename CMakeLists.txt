@@ -138,11 +138,10 @@
 #                               (default: ON)
 #
 # INSTALL_LIB_TARGET_ARCH_SYMLINK  On Unix, install a symlink lib-<target-arch>
-#                               to ${CMAKE_INSTALL_LIBDIR} to help user code
-#                               to link to the SystemC libraries, which build
-#                               system expects this lib-<target-arch>
-#                               to exist under the SystemC root directory.
-#                               (default: OFF)
+#                               to lib-${CMAKE_BUILD_TYPE} facilitating the
+#                               linking of user code, which build system assumes
+#                               to find the SystemC libraries under
+#                               lib-<target-arch>. (default: OFF)
 #
 # Other configuration variables will be proposed by CMake depending on the OS
 # and detected processor, compiler, and libraries. For more information, please
@@ -246,7 +245,7 @@ option (ENABLE_PTHREADS
 option (INSTALL_TO_LIB_BUILD_TYPE_DIR "Install the libraries to lib-${CMAKE_BUILD_TYPE} to enable parallel installation of the different build variants. (default: ON)" ON)
 
 if (CMAKE_HOST_UNIX)
-  option (INSTALL_LIB_TARGET_ARCH_SYMLINK "Install a symlink lib-<target-arch> to lib-${CMAKE_BUILD_TYPE} to help user code not to link to the SystemC libraries, which build system expects this lib-<target-arch> to exist under the SystemC root directory. (default: OFF)" OFF)
+  option (INSTALL_LIB_TARGET_ARCH_SYMLINK "Install a symlink lib-<target-arch> to lib-${CMAKE_BUILD_TYPE} facilitating the linking of user code, which build system assumes to find the SystemC libraries under lib-<target-arch>." OFF)
 endif (CMAKE_HOST_UNIX)
 
 
