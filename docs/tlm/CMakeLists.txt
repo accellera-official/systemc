@@ -41,4 +41,5 @@ add_subdirectory(doxygen)
 add_subdirectory(release)
 
 install (FILES ChangeLog tlm_README
-         DESTINATION ${CMAKE_INSTALL_DOCDIR}/tlm)
+         DESTINATION ${CMAKE_INSTALL_DOCDIR}/tlm
+         COMPONENT doc)

@@ -47,4 +47,5 @@ add_subdirectory (sysc)
 add_subdirectory (tlm)
 
 install (FILES License.pdf
-         DESTINATION ${CMAKE_INSTALL_DOCDIR})
+         DESTINATION ${CMAKE_INSTALL_DOCDIR}
+         COMPONENT doc)

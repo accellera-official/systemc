@@ -51,8 +51,8 @@
 # into the same directory hierarchy (Unix: /opt/systemc/;
 # Windows: $ENV{ProgramFiles}/SystemC/). The target platform's conventions are
 # respected meaning usually include/ for the headers and lib/, lib64/, or
-# lib/<multiarch-tuple>/ for the libraries. The lib-${SYSTEMC_TARGET_ARCH})/
-# convention is not used by default, as ${SYSTEMC_TARGET_ARCH} does not
+# lib/<multiarch-tuple>/ for the libraries. The lib-${SystemC_TARGET_ARCH})/
+# convention is not used by default, as ${SystemC_TARGET_ARCH} does not
 # reliably encode the OS/processor/compiler tuple.
 #
 # The CMake build scripts are compatible with CMake >2.8.5 and have been tested
@@ -119,20 +119,30 @@
 #                               hppa, x86_64, i386, powerpc_mach,
 #                               powerpc_sys5, IGNORE).
 #
-# SystemC_DIR                   Root directory of the SystemC libraries
-#                               installation (default $SystemC_DIR,
+# SystemC_ROOT_DIR              Root directory of the SystemC libraries
+#                               installation (default $SYSTEMC_ROOT_DIR,
+#                               $SYSTEMC_ROOT, $SYSTEMC_HOME, $SYSTEMC_PATH
 #                               /opt/systemc/ (Unix, Cygwin, MSYS), or
 #                               $ENV{ProgramFiles}/SystemC/ (MinGW and
 #                               MS Visual Studio)). CMAKE_INSTALL_PREFIX will
 #                               be set to its value.
 #
-# SYSTEMC_TARGET_ARCH           Target architecture according to the
+# SystemC_TARGET_ARCH           Target architecture according to the
 #                               Accellera SystemC conventions set either from
-#                               $ENV{SYSTEMC_TARGET_ARCH} or detected by CMake.
+#                               $ENV{SYSTEMC_TARGET_ARCH}, $ENV{SYSTEMC_ARCH},
+#                               or detected by CMake.
 #
-# SET_LIBDIR_WITH_TARGET_ARCH   Set the CMAKE_INSTALL_LIBDIR to
-#                               lib-${SYSTEMC_TARGET_ARCH}/ and update
-#                               CMAKE_INSTALL_FULL_LIBDIR accordingly.
+# INSTALL_TO_LIB_BUILD_TYPE_DIR Install the libraries to a
+#                               lib-${CMAKE_BUILD_TYPE}/ to enable parallel
+#                               installation of the different build variants.
+#                               (default: ON)
+#
+# INSTALL_LIB_TARGET_ARCH_SYMLINK  On Unix, install a symlink lib-<target-arch>
+#                               to ${CMAKE_INSTALL_LIBDIR} to help user code
+#                               to link to the SystemC libraries, which build
+#                               system expects this lib-<target-arch>
+#                               to exist under the SystemC root directory.
+#                               (default: OFF)
 #
 # Other configuration variables will be proposed by CMake depending on the OS
 # and detected processor, compiler, and libraries. For more information, please
@@ -141,10 +151,6 @@
 ###############################################################################
 #
 # TODO:
-#
-# - Generate CMake project configuration files so that other CMake projects
-#   (e.g., SCV, SystemC AMS) can automatically find the SystemC library.
-#   <http://www.cmake.org/Wiki/CMake/Tutorials/How_to_create_a_ProjectConfig.cmake_file>
 #
 # - Configure the SystemC version from within the build system.
 #
@@ -188,17 +194,17 @@ endif (SystemC_IS_PRERELEASE)
 set (SystemC_SOVERSION "${SystemC_VERSION_MAJOR}.${SystemC_VERSION_MINOR}")
 
 
-set (SystemCTLM_VERSION_MAJOR 2)
-set (SystemCTLM_VERSION_MINOR 0)
-set (SystemCTLM_VERSION_PATCH 2)
-set (SystemCTLM_VERSION_IS_PRERELEASE 1)
-set (SystemCTLM_VERSION_PRERELEASE "pub_rev")
-set (SystemCTLM_VERSION_RELEASE_DATE "20120511") # TODO: Extract date from commit.
-set (SystemCTLM_VERSION "${SystemCTLM_VERSION_MAJOR}.${SystemCTLM_VERSION_MINOR}.${SystemCTLM_VERSION_PATCH}")
-if (SystemCTLM_IS_PRERELEASE)
-  set (SystemCTLM_VERSION "${SystemCTLM_VERSION}_${SystemCTLM_VERSION_PRERELEASE}_${SystemCTLM_VERSION_RELEASE_DATE}")
-endif (SystemCTLM_IS_PRERELEASE)
-set (SystemCTLM_SOVERSION "${SystemCTLM_MAJOR_VERSION}.${SystemCTLM_MINOR_VERSION}")
+set (TLM_VERSION_MAJOR 2)
+set (TLM_VERSION_MINOR 0)
+set (TLM_VERSION_PATCH 2)
+set (TLM_VERSION_IS_PRERELEASE 1)
+set (TLM_VERSION_PRERELEASE "pub_rev")
+set (TLM_VERSION_RELEASE_DATE "20120511") # TODO: Extract date from commit.
+set (TLM_VERSION "${TLM_VERSION_MAJOR}.${TLM_VERSION_MINOR}.${TLM_VERSION_PATCH}")
+if (TLM_IS_PRERELEASE)
+  set (TLM_VERSION "${TLM_VERSION}_${TLM_VERSION_PRERELEASE}_${TLM_VERSION_RELEASE_DATE}")
+endif (TLM_IS_PRERELEASE)
+set (TLM_SOVERSION "${TLM_MAJOR_VERSION}.${TLM_MINOR_VERSION}")
 
 
 ###############################################################################
@@ -237,9 +243,15 @@ option (ENABLE_PTHREADS
         "Use POSIX threads for SystemC processes instead of QuickThreads on Unix or Fiber on Windows."
         FALSE)
 
+option (INSTALL_TO_LIB_BUILD_TYPE_DIR "Install the libraries to lib-${CMAKE_BUILD_TYPE} to enable parallel installation of the different build variants. (default: ON)" ON)
+
+if (CMAKE_HOST_UNIX)
+  option (INSTALL_LIB_TARGET_ARCH_SYMLINK "Install a symlink lib-<target-arch> to lib-${CMAKE_BUILD_TYPE} to help user code not to link to the SystemC libraries, which build system expects this lib-<target-arch> to exist under the SystemC root directory. (default: OFF)" OFF)
+endif (CMAKE_HOST_UNIX)
+
 
 ###############################################################################
-# Set SYSTEMC_TARGET_ARCH and QT_ARCH depending on OS and processor type
+# Set SystemC_TARGET_ARCH and QT_ARCH depending on OS and processor type
 ###############################################################################
 
 message (STATUS "Checking OS and processor type.")
@@ -272,9 +284,9 @@ if (NOT APPLE OR (APPLE AND (N_OSX_ARCHITECTURES LESS 2)))
 endif (NOT APPLE OR (APPLE AND (N_OSX_ARCHITECTURES LESS 2)))
 
 
-# Set SYSTEMC_TARGET_ARCH according to the detected
+# Set SystemC_TARGET_ARCH according to the detected
 # OS/processor/compiler platform
-if (NOT SYSTEMC_TARGET_ARCH)
+if (NOT SystemC_TARGET_ARCH)
   if ($ENV{SYSTEMC_TARGET_ARCH})
     message (STATUS "Using SYSTEMC_TARGET_ARCH from the environment.")
     set (_TARGET_ARCH $ENV{SYSTEMC_TARGET_ARCH})
@@ -355,9 +367,9 @@ if (NOT SYSTEMC_TARGET_ARCH)
     # Unknown platform, so guess a SystemC target architecture value.
     string (TOLOWER "${CMAKE_SYSTEM_NAME}${CMAKE_PROCESSOR_NAME}" _TARGET_ARCH)
   endif ($ENV{SYSTEMC_TARGET_ARCH})
-  set (SYSTEMC_TARGET_ARCH ${_TARGET_ARCH} CACHE STRING "SystemC Target Architecture")
+  set (SystemC_TARGET_ARCH ${_TARGET_ARCH} CACHE STRING "SystemC Target Architecture")
   unset (_TARGET_ARCH)
-endif (NOT SYSTEMC_TARGET_ARCH)
+endif (NOT SystemC_TARGET_ARCH)
 
 
 ###############################################################################
@@ -431,7 +443,6 @@ if (ENABLE_PTHREADS OR NOT QT_ARCH OR (NOT DISABLE_ASYNC_UPDATES AND NOT WIN32))
   if (ENABLE_PTHREADS)
     add_definitions (-DSC_USE_PTHREADS)
   endif (ENABLE_PTHREADS)
-  link_libraries (${CMAKE_THREAD_LIBS_INIT})
 endif (ENABLE_PTHREADS OR NOT QT_ARCH OR (NOT DISABLE_ASYNC_UPDATES AND NOT WIN32))
 
 
@@ -493,6 +504,57 @@ endif (WIN32)
 
 
 ###############################################################################
+# Set the installation paths
+###############################################################################
+
+# If necessary, default-initialize SystemC_ROOT_DIR and set
+# CMAKE_INSTALL_PREFIX to its value.
+if (NOT SystemC_ROOT_DIR)
+  if ($ENV{SYSTEMC_ROOT_DIR})
+    set (_SystemC_ROOT_DIR $ENV{SYSTEMC_ROOT_DIR})
+  elseif ($ENV{SYSTEMC_ROOT})
+    set (_SystemC_ROOT_DIR $ENV{SYSTEMC_ROOT})
+  elseif ($ENV{SYSTEMC_HOME})
+    set (_SystemC_ROOT_DIR $ENV{SYSTEMC_HOME})
+  elseif (UNIX)
+    set (_SystemC_ROOT_DIR "/opt/systemc")
+  elseif (WIN32)
+    file (TO_CMAKE_PATH $ENV{ProgramFiles} _WIN32_INSTALL_PREFIX)
+    set (_SystemC_ROOT_DIR "${_WIN32_INSTALL_PREFIX}/SystemC")
+    unset (_WIN32_INSTALL_PREFIX)
+  else ($ENV{SYSTEMC_ROOT_DIR})
+    set (_SystemC_ROOT_DIR "${CMAKE_INSTALL_PREFIX}/systemc")
+  endif ($ENV{SYSTEMC_ROOT_DIR})
+  set (SystemC_ROOT_DIR ${_SystemC_ROOT_DIR} CACHE PATH "installation root for the SystemC libraries")
+  unset (_SystemC_ROOT_DIR)
+endif (NOT SystemC_ROOT_DIR)
+set (CMAKE_INSTALL_PREFIX ${SystemC_ROOT_DIR} CACHE PATH "Install directory used by install." FORCE)
+
+# Set the installation paths for headers, libraries, and documentation.
+set (CMAKE_INSTALL_DOCDIR "share/doc/systemc") # otherwise mixed-case
+if (INSTALL_TO_LIB_BUILD_TYPE_DIR)
+  # Install libraries to lib-${CMAKE_BUILD_TYPE} so that different build variants
+  # of the library can be installed in parallel to the same SystemC root
+  # directory. The find_package() mechanism in config-mode of CMake will then
+  # automatically find the correct libraries matching the chosen
+  # ${CMAKE_BUILD_TYPE}.
+  set (_INSTALL_LIBDIR lib-${CMAKE_BUILD_TYPE})
+  string (TOLOWER ${_INSTALL_LIBDIR} _INSTALL_LIBDIR)
+  set (CMAKE_INSTALL_LIBDIR ${_INSTALL_LIBDIR})
+  unset (_INSTALL_LIBDIR)
+endif (INSTALL_TO_LIB_BUILD_TYPE_DIR)
+include (GNUInstallDirs)
+
+# Install symlink lib-<target-arch> to lib-${CMAKE_BUILD_TYPE}
+if (INSTALL_LIB_TARGET_ARCH_SYMLINK AND CMAKE_HOST_UNIX)
+  install (CODE "
+    EXECUTE_PROCESS(COMMAND cmake -E create_symlink ${CMAKE_INSTALL_LIBDIR} lib-${SystemC_TARGET_ARCH}
+                    WORKING_DIRECTORY ${CMAKE_INSTALL_PREFIX})
+  ")
+endif (INSTALL_LIB_TARGET_ARCH_SYMLINK AND CMAKE_HOST_UNIX)
+
+
+###############################################################################
 # Configure RPATH so that all targets find the libraries they link to
 ###############################################################################
 
@@ -502,53 +564,10 @@ set (CMAKE_SKIP_BUILD_RPATH  FALSE)
 # installing).
 set (CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
 # Set the RPATH to be used when installing.
-set (CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR}")
+set (CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}")
 # Add the automatically determined parts of the RPATH, which point to
 # directories outside the build tree, to the install RPATH.
 set (CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-
-
-###############################################################################
-# Set the installation paths
-###############################################################################
-
-# If necessary, default-initialize SystemC_DIR and set
-# CMAKE_INSTALL_PREFIX to its value.
-if (NOT SystemC_DIR)
-  if ($ENV{SystemC_DIR})
-    set (_SystemC_DIR $ENV{SystemC_DIR})
-  elseif ($ENV{SYSTEMC_ROOT})
-    set (_SystemC_DIR $ENV{SYSTEMC_ROOT})
-  elseif ($ENV{SYSTEMC_HOME})
-    set (_SystemC_DIR $ENV{SYSTEMC_HOME})
-  elseif (UNIX)
-    set (_SystemC_DIR "/opt/systemc")
-  elseif (WIN32)
-    file (TO_CMAKE_PATH $ENV{ProgramFiles} _WIN32_INSTALL_PREFIX)
-    set (_SystemC_DIR "${_WIN32_INSTALL_PREFIX}/SystemC")
-    unset (_WIN32_INSTALL_PREFIX)
-  else ($ENV{SystemC_DIR})
-    set (_SystemC_DIR "${CMAKE_INSTALL_PREFIX}/systemc")
-  endif ($ENV{SystemC_DIR})
-  set (SystemC_DIR ${_SystemC_DIR} CACHE PATH "installation root for the SystemC libraries")
-  unset (_SystemC_DIR)
-endif (NOT SystemC_DIR)
-set (CMAKE_INSTALL_PREFIX ${SystemC_DIR} CACHE PATH "Install directory used by install." FORCE)
-
-# Force SYSTEMC_TARGET_ARCH library directory if requested.
-option (SET_LIBDIR_WITH_TARGET_ARCH
-        "Set the library installation directory to lib-${SYSTEMC_TARGET_ARCH}"
-        OFF)
-if (SET_LIBDIR_WITH_TARGET_ARCH)
-  set(CMAKE_INSTALL_LIBDIR "lib-${SYSTEMC_TARGET_ARCH}" CACHE PATH
-      "object code libraries (lib-<SYSTEMC_TARGET_ARCH>)" FORCE)
-  set (SET_LIBDIR_WITH_TARGET_ARCH OFF CACHE BOOL
-       "Set the library installation directory to lib-${SYSTEMC_TARGET_ARCH}"
-       FORCE)
-endif (SET_LIBDIR_WITH_TARGET_ARCH)
-
-# Set the installation paths for headers, libraries, and documentation.
-include (GNUInstallDirs)
 
 
 ###############################################################################
@@ -556,7 +575,7 @@ include (GNUInstallDirs)
 ###############################################################################
 
 message (STATUS "========================================================================")
-message (STATUS "Settings to build SystemC ${SystemC_VERSION} (${SystemC_VERSION_RELEASE_DATE}) and TLM ${SystemCTLM_VERSION} (${SystemCTLM_VERSION_RELEASE_DATE})")
+message (STATUS "Settings to build SystemC ${SystemC_VERSION} (${SystemC_VERSION_RELEASE_DATE}) and TLM ${TLM_VERSION} (${TLM_VERSION_RELEASE_DATE})")
 message (STATUS "------------------------------------------------------------------------")
 message (STATUS "BUILD_EXAMPLES = ${BUILD_EXAMPLES}")
 message (STATUS "BUILD_SHARED_LIBS = ${BUILD_SHARED_LIBS}")
@@ -582,10 +601,12 @@ if (ENABLE_PTHREADS)
 else (ENABLE_PTHREADS)
   message (STATUS "ENABLE_PTHREADS = ${ENABLE_PTHREADS}")
 endif (ENABLE_PTHREADS)
+message (STATUS "INSTALL_TO_LIB_BUILD_TYPE_DIR = ${INSTALL_TO_LIB_BUILD_TYPE_DIR}")
+message (STATUS "INSTALL_LIB_TARGET_ARCH_SYMLINK = ${INSTALL_LIB_TARGET_ARCH_SYMLINK}")
 message (STATUS "------------------------------------------------------------------------")
 message (STATUS "CMAKE_SYSTEM = ${CMAKE_SYSTEM}")
 message (STATUS "CMAKE_SYSTEM_PROCESSOR = ${CMAKE_SYSTEM_PROCESSOR}")
-message (STATUS "SYSTEMC_TARGET_ARCH = ${SYSTEMC_TARGET_ARCH}")
+message (STATUS "SystemC_TARGET_ARCH = ${SystemC_TARGET_ARCH}")
 message (STATUS "QT_ARCH = ${QT_ARCH}")
 if (DEFINED CMAKE_OSX_ARCHITECTURES)
   message (STATUS "CMAKE_OSX_ARCHITECTURES = ${CMAKE_OSX_ARCHITECTURES}")
@@ -602,6 +623,9 @@ endif (DEFINED Threads_FOUND)
 if (DEFINED CMAKE_USE_PTHREADS_INIT)
   message (STATUS "CMAKE_USE_PTHREADS_INIT = ${CMAKE_USE_PTHREADS_INIT}")
 endif (DEFINED CMAKE_USE_PTHREADS_INIT)
+if (DEFINED CMAKE_THREAD_LIBS_INIT)
+  message (STATUS "CMAKE_THREAD_LIBS_INIT = ${CMAKE_THREAD_LIBS_INIT}")
+endif (DEFINED CMAKE_THREAD_LIBS_INIT)
 message (STATUS "------------------------------------------------------------------------")
 message (STATUS "CMAKE_INSTALL_PREFIX = ${CMAKE_INSTALL_PREFIX}")
 message (STATUS "CMAKE_INSTALL_BINDIR = ${CMAKE_INSTALL_BINDIR}")
@@ -628,8 +652,61 @@ install (FILES AUTHORS
                COPYING
                ChangeLog
                INSTALL
+               INSTALL_USING_CMAKE
                LICENSE
                NEWS
                README
                RELEASENOTES
-         DESTINATION ${CMAKE_INSTALL_DOCDIR})
+         DESTINATION ${CMAKE_INSTALL_DOCDIR}
+         COMPONENT doc)
+
+
+###############################################################################
+# Provide package of the SystemC library to other programs using CMake
+###############################################################################
+
+set (INSTALL_CMAKEDIR cmake)
+set (INSTALL_FULL_CMAKEDIR ${CMAKE_INSTALL_PREFIX}/${INSTALL_CMAKEDIR})
+
+# Export the systemc library target for usage by other programs
+# ... to local build tree
+export (TARGETS systemc FILE SystemCTargets.cmake)
+# ... to installation tree
+install (EXPORT SystemCTargets DESTINATION ${INSTALL_CMAKEDIR}
+                               COMPONENT dev)
+
+# Register the SystemC package for use from the build tree.
+# (This registers the build tree with the global CMake-registry.)
+export (PACKAGE SystemC)
+export (PACKAGE TLM)
+
+# Create the SystemCConfig.cmake, and SystemCConfigVersion files
+# ... for the build tree
+set(CONF_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/src" "${PROJECT_BINARY_DIR}/src")
+configure_file(cmake/SystemCConfig.cmake.in
+  "${PROJECT_BINARY_DIR}/SystemCConfig.cmake" @ONLY)
+configure_file(cmake/TLMConfig.cmake.in
+  "${PROJECT_BINARY_DIR}/TLMConfig.cmake" @ONLY)
+# ... for the install tree
+file (RELATIVE_PATH REL_INCLUDEDIR
+                    "${INSTALL_FULL_CMAKEDIR}" "${CMAKE_INSTALL_FULL_INCLUDEDIR}")
+set(CONF_INCLUDE_DIRS "\${SystemC_CMAKE_DIR}/${REL_INCLUDEDIR}")
+configure_file(cmake/SystemCConfig.cmake.in
+  "${PROJECT_BINARY_DIR}/cmake/SystemCConfig.cmake" @ONLY)
+configure_file(cmake/TLMConfig.cmake.in
+  "${PROJECT_BINARY_DIR}/cmake/TLMConfig.cmake" @ONLY)
+# ... for both
+configure_file(cmake/SystemCConfigVersion.cmake.in
+  "${PROJECT_BINARY_DIR}/SystemCConfigVersion.cmake" @ONLY)
+configure_file(cmake/TLMConfigVersion.cmake.in
+  "${PROJECT_BINARY_DIR}/TLMConfigVersion.cmake" @ONLY)
+unset (REL_INCLUDEDIR)
+unset (CONF_INCLUDE_DIRS)
+
+# Install the FooBarConfig.cmake and FooBarConfigVersion.cmake
+install(FILES "${PROJECT_BINARY_DIR}/cmake/SystemCConfig.cmake"
+              "${PROJECT_BINARY_DIR}/SystemCConfigVersion.cmake"
+              "${PROJECT_BINARY_DIR}/cmake/TLMConfig.cmake"
+              "${PROJECT_BINARY_DIR}/TLMConfigVersion.cmake"
+        DESTINATION "${INSTALL_CMAKEDIR}"
+        COMPONENT dev)

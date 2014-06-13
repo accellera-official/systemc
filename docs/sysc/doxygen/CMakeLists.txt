@@ -62,5 +62,6 @@ if (BUILD_SOURCE_DOC)
   add_custom_target (doxygen-sysc
                      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/index.html)
   install (DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/html
-           DESTINATION ${CMAKE_INSTALL_DOCDIR}/sysc/doxygen)
+           DESTINATION ${CMAKE_INSTALL_DOCDIR}/sysc/doxygen
+           COMPONENT doc)
 endif (BUILD_SOURCE_DOC)

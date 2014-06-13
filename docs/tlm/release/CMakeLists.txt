@@ -42,4 +42,5 @@ install (FILES README.txt
                TLM_2_0_white_paper.pdf
                TLM_2_0_presentation.pdf
                TLM_2_0_requirements.pdf
-         DESTINATION ${CMAKE_INSTALL_DOCDIR}/tlm/release)
+         DESTINATION ${CMAKE_INSTALL_DOCDIR}/tlm/release
+         COMPONENT doc)

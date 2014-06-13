@@ -42,4 +42,5 @@ add_subdirectory(doxygen)
 
 install (FILES README
                "SystemC 2011 New Features.pdf"
-         DESTINATION ${CMAKE_INSTALL_DOCDIR}/sysc)
+         DESTINATION ${CMAKE_INSTALL_DOCDIR}/sysc
+         COMPONENT doc)

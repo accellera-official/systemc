@@ -454,6 +454,10 @@ endif (APPLE)
 
 include_directories (BEFORE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/sysc/qt)
 add_library (systemc ${systemc_SOURCES} ${systemc_HEADERS} ${QT_SOURCES} ${QT_HEADERS})
+if (DEFINED ${CMAKE_THREAD_LIBS_INIT})
+  target_link_libraries (systemc ${CMAKE_THREAD_LIBS_INIT})
+endif (DEFINED ${CMAKE_THREAD_LIBS_INIT})
+
 set_target_properties (systemc
                        PROPERTIES
                        LINKER_LANGUAGE CXX
@@ -466,12 +470,15 @@ set_target_properties (systemc
 # Install rules for SystemC library
 ###############################################################################
 
-install (TARGETS systemc RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+install (TARGETS systemc EXPORT  SystemCTargets
+                         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
                          LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-                         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+                         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+                         COMPONENT lib)
 
 foreach (HEADER_FILE ${systemc_PUBLIC_HEADERS} ${QT_PUBLIC_HEADERS})
   get_filename_component (HEADER_INSTALL_PATH ${HEADER_FILE} PATH)
   install (FILES ${HEADER_FILE}
-           DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${HEADER_INSTALL_PATH})
+           DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${HEADER_INSTALL_PATH}
+           COMPONENT dev)
 endforeach (HEADER_FILE ${systemc_PUBLIC_HEADERS} ${QT_PUBLIC_HEADERS})

@@ -43,4 +43,5 @@ install (FILES FuncSpec20.pdf
                SystemC_2_1_overview.pdf
                UserGuide20.pdf
                WhitePaper20.pdf
-         DESTINATION ${CMAKE_INSTALL_DOCDIR}/sysc/archived)
+         DESTINATION ${CMAKE_INSTALL_DOCDIR}/sysc/archived
+         COMPONENT doc)

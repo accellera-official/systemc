@@ -63,7 +63,7 @@ autotools scripts) are:
 
 The build process can be configured by the users through the
 configuration variables offered to the user in the CMake console and
-GUI (ccmake and cmake-gui, respectively). 
+GUI (ccmake and cmake-gui, respectively).
 
 CMake suggests to prefer out-of-source builds in contrast to in-source
 builds to clearly separate the source from the generated files. Thus,
@@ -109,7 +109,7 @@ sources and build directoy in the top of its main window.
 what it should generate Makefiles or IDE project files (Eclipse,
 Xcode, Kdevelop, MS Visual Studio C++). CMake will parse the file
 CMakeLists.txt in the source root directory and configure the sources
-accordingly carrying out all necessary platform-specific checks. 
+accordingly carrying out all necessary platform-specific checks.
 
 The CMake build scripts detect the actual features provided by the
 target (Unix or Windows) platform. On Unix (including OS X), shared
@@ -166,20 +166,29 @@ QT_ARCH                       QuickThreads architecture (auto-detected:
                               hppa, x86_64, i386, powerpc_mach,
                               powerpc_sys5, IGNORE).
 
-SystemC_DIR                   Root directory of the SystemC libraries
-                              installation (default $SystemC_DIR,
+SystemC_ROOT_DIR              Root directory of the SystemC libraries
+                              installation (default $SYSTEMC_ROOT_DIR,
+                              $SYSTEMC_ROOT, $SYSTEMC_HOME, $SYSTEMC_PATH
                               /opt/systemc/ (Unix, Cygwin, MSYS), or
                               $ENV{ProgramFiles}/SystemC/ (MinGW and
                               MS Visual Studio)). CMAKE_INSTALL_PREFIX will
                               be set to its value.
 
-SYSTEMC_TARGET_ARCH           Target architecture according to the
+SystemC_TARGET_ARCH           Target architecture according to the
                               Accellera SystemC conventions set either from
-                              $ENV{SYSTEMC_TARGET_ARCH} or detected by CMake.
+                              $ENV{SYSTEMC_TARGET_ARCH}, $ENV{SYSTEMC_ARCH},
+                              or detected by CMake.
 
-SET_LIBDIR_WITH_TARGET_ARCH   Set the CMAKE_INSTALL_LIBDIR to
-                              lib-${SYSTEMC_TARGET_ARCH}/ and update
-                              CMAKE_INSTALL_FULL_LIBDIR accordingly.
+INSTALL_TO_LIB_BUILD_TYPE_DIR Install the libraries to lib-${CMAKE_BUILD_TYPE}
+                              to enable parallel installation of the different
+                              build variants. (default: ON)
+
+INSTALL_LIB_TARGET_ARCH_SYMLINK  On Unix, install a symlink lib-<target-arch>
+                              to lib-${CMAKE_BUILD_TYPE} to help user code not
+                              to link to the SystemC libraries, which build
+                              system expects this lib-<target-arch>
+                              to exist under the SystemC root directory.
+                              (default: OFF)
 
 Other configuration variables will be proposed by CMake depending on the OS
 and detected processor, compiler, and libraries. For more information, please
