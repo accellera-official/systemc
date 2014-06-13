@@ -510,17 +510,15 @@ elseif (OVERRIDE_DEFAULT_STACK_SIZE LESS 0)
   message (SEND_ERROR "Negative default stack size requested for SystemC (thread) processes.")
 endif (OVERRIDE_DEFAULT_STACK_SIZE GREATER 0)
 
-# # TODO: Turn on all compiler warnings once SystemC is supposed to compile without any.
-# #       (SystemC 2.3.0 still causes some warnings during compilation.)
-# # Set additional compiler flags for known compilers.
-# if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-#   if (NOT CMAKE_C_FLAGS)
-#     set (CMAKE_C_FLAGS "-Wall -Wextra" CACHE STRING "Flags used by the compiler during all build types." FORCE)
-#   endif (NOT CMAKE_C_FLAGS)
-#   if (NOT CMAKE_CXX_FLAGS)
-#     set (CMAKE_CXX_FLAGS "-Wall -Wextra" CACHE STRING "Flags used by the compiler during all build types." FORCE)
-#   endif (NOT CMAKE_CXX_FLAGS)
-# endif (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+# Set additional compiler flags for known compilers.
+if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+  if (NOT CMAKE_C_FLAGS)
+    set (CMAKE_C_FLAGS "-Wall -Wextra" CACHE STRING "Flags used by the compiler during all build types." FORCE)
+  endif (NOT CMAKE_C_FLAGS)
+  if (NOT CMAKE_CXX_FLAGS)
+    set (CMAKE_CXX_FLAGS "-Wall -Wextra" CACHE STRING "Flags used by the compiler during all build types." FORCE)
+  endif (NOT CMAKE_CXX_FLAGS)
+endif (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 
 if (APPLE)
   # On Mac OS X, the linker needs to be told that it's OK that _sc_main is an undefined symbol.
