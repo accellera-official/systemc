@@ -706,7 +706,7 @@ in the 'Preprocessor definitions' setting.
 
    Previous versions of SystemC always included the full <windows.h>
    header on all Windows platforms.  This adds unnecessary bloat to
-   many SystemC applications, reducing compilation times.
+   many SystemC applications, increasing compilation times.
 
    If you rely on the inclusion of the <windows.h> header in your
    application, you can add this symbol to the list of preprocessor
