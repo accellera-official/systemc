@@ -55,7 +55,7 @@
 # convention is not used by default, as ${SystemC_TARGET_ARCH} does not
 # reliably encode the OS/processor/compiler tuple.
 #
-# The CMake build scripts are compatible with CMake >2.8.5 and have been tested
+# The CMake build scripts are compatible with CMake >=2.8.5 and have been tested
 # on the following OS/processor/compiler platforms:
 #
 # - Linux (GCC, Clang): i386, x86_64
