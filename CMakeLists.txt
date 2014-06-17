@@ -89,7 +89,7 @@
 # BUILD_SHARED_LIBS             Build shared instead of static libraries
 #                               (default: ON).
 #
-# BUILD_SOURCE_DOC              Build source code documentation using Doxygen
+# BUILD_SOURCE_DOCUMENTATION    Build source code documentation using Doxygen
 #                               (default: OFF).
 #
 # CMAKE_BUILD_TYPE              Build type (default: Release).
@@ -241,7 +241,7 @@ if (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
   set (BUILD_SHARED_LIBS OFF CACHE BOOL "Build shared libraries" FORCE)
 endif (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
 
-option (BUILD_SOURCE_DOC "Build source documentation with Doxygen." OFF)
+option (BUILD_SOURCE_DOCUMENTATION "Build source documentation with Doxygen." OFF)
 option (BUILD_EXAMPLES "Build SystemC and TLM examples." OFF)
 if (BUILD_EXAMPLES)
   enable_testing ()
@@ -626,7 +626,7 @@ message (STATUS "Settings to build SystemC ${SystemC_VERSION} (${SystemC_VERSION
 message (STATUS "------------------------------------------------------------------------")
 message (STATUS "BUILD_EXAMPLES = ${BUILD_EXAMPLES}")
 message (STATUS "BUILD_SHARED_LIBS = ${BUILD_SHARED_LIBS}")
-message (STATUS "BUILD_SOURCE_DOC = ${BUILD_SOURCE_DOC}")
+message (STATUS "BUILD_SOURCE_DOCUMENTATION = ${BUILD_SOURCE_DOCUMENTATION}")
 message (STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
 if (DISABLE_ASYNC_UPDATES)
   message ("DISABLE_ASYNC_UPDATES = ${DISABLE_ASYNC_UPDATES}")

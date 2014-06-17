@@ -38,30 +38,32 @@
 
 
 ###############################################################################
-# Build source documentation with Doxygen
-###############################################################################
-# Attention: Currently, the Doxygen-generated documentation is written to the
-# source tree!
+# Build the source code documentation with Doxygen
 ###############################################################################
 
-if (BUILD_SOURCE_DOC)
-  set (PACKAGE_NAME ${PROJECT_NAME})
-  set (PACKAGE_VERSION ${PROJECT_VERSION})
+if (BUILD_SOURCE_DOCUMENTATION)
+  set (TLM_PACKAGE_VERSION ${TLM_VERSION})
   set (top_srcdir ${CMAKE_SOURCE_DIR})
-  set (top_bindir ${CMAKE_BINARY_DIR})
 
   configure_file (${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in
                   ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
-  if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/html)
-    file (MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/html)
-  endif (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/html)
-  add_custom_command (OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/html/index.html
-                      COMMAND ${DOXYGEN_EXECUTABLE} ARGS ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+  if (NOT EXISTS ${CMAKE_CURRENT_BINARY_DIR}/html)
+    file (MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html)
+  endif (NOT EXISTS ${CMAKE_CURRENT_BINARY_DIR}/html)
+  set_source_files_properties (${CMAKE_CURRENT_BINARY_DIR}/html
+                               PROPERTIES GENERATED 1)
+  add_custom_command (OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/html/index.html
+                      COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
-                              systemc)
+                              systemc
+                      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+                      COMMENT "Building the TLM source code documentation using Doxygen.")
   add_custom_target (doxygen-tlm
-                     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/index.html)
-  install (DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/html
+                     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/html/index.html)
+  install (DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html
            DESTINATION ${CMAKE_INSTALL_DOCDIR}/tlm/doxygen
            COMPONENT doc)
-endif (BUILD_SOURCE_DOC)
+  install (FILES ${CMAKE_CURRENT_BINARY_DIR}/tlm.tag
+           DESTINATION ${CMAKE_INSTALL_DOCDIR}/tlm/doxygen
+           COMPONENT doc)
+endif (BUILD_SOURCE_DOCUMENTATION)

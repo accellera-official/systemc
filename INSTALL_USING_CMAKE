@@ -136,7 +136,7 @@ BUILD_EXAMPLES                Build the SystemC examples (default: OFF).
 BUILD_SHARED_LIBS             Build shared instead of static libraries
                               (default: ON).
 
-BUILD_SOURCE_DOC              Build source code documentation using Doxygen
+BUILD_SOURCE_DOCUMENTATION    Build source code documentation using Doxygen
                               (default: OFF).
 
 CMAKE_BUILD_TYPE              Build type (default: Release).

@@ -37,11 +37,11 @@
 ###############################################################################
 
 
-if (BUILD_SOURCE_DOC)
+if (BUILD_SOURCE_DOCUMENTATION)
   find_package (Doxygen REQUIRED)
   add_custom_target (doxygen ALL
                      DEPENDS doxygen-sysc doxygen-tlm)
-endif (BUILD_SOURCE_DOC)
+endif (BUILD_SOURCE_DOCUMENTATION)
 
 add_subdirectory (sysc)
 add_subdirectory (tlm)
