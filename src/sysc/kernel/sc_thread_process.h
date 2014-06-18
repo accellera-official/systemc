@@ -204,9 +204,10 @@ inline void sc_thread_process::set_stack_size( std::size_t size )
 //------------------------------------------------------------------------------
 inline void sc_thread_process::suspend_me()
 {
+#ifndef NDEBUG
     // remember, if we're currently unwinding
-
     bool unwinding_preempted = m_unwinding;
+#endif
 
     sc_simcontext* simc_p = simcontext();
     sc_cor*         cor_p = simc_p->next_cor();
