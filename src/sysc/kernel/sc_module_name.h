@@ -80,7 +80,11 @@ private:
     sc_module_name& operator = ( const sc_module_name& );
 };
 
+#ifndef NDEBUG  // avoid unused parameter compiler warning
 inline void sc_module_name::clear_module( sc_module* module_p )
+#else
+inline void sc_module_name::clear_module( sc_module* )
+#endif
 {
     assert( m_module_p == module_p );
     m_module_p = 0;
