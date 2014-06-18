@@ -605,6 +605,9 @@ endif (INSTALL_LIB_TARGET_ARCH_SYMLINK AND CMAKE_HOST_UNIX)
 # Configure RPATH so that all targets find the libraries they link to
 ###############################################################################
 
+# Starting from CMake 2.8.12 use CMake's full RPATH support on Mac OS X
+set (CMAKE_MACOSX_RPATH TRUE)
+
 # Use, i.e., don't skip, the full RPATH for the build tree.
 set (CMAKE_SKIP_BUILD_RPATH  FALSE)
 # For build, don't use the install RPATH already (but later on when
@@ -615,6 +618,12 @@ set (CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}")
 # Add the automatically determined parts of the RPATH, which point to
 # directories outside the build tree, to the install RPATH.
 set (CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
+# Set the RPATH to be used when installing, but only if it's not a system directory
+list (FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_FULL_LIBDIR}" isSystemDir)
+if ("${isSystemDir}" STREQUAL "-1")
+  set (CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}")
+endif ("${isSystemDir}" STREQUAL "-1")
 
 
 ###############################################################################
