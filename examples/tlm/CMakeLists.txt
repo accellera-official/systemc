@@ -46,7 +46,9 @@ include_directories (BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/common/include)
 set (COMMON_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/common/src)
 
 # TODO: Don't use the LOCATION target property, which is deprecated in CMake 3.0.0.
-cmake_policy(SET CMP0026 OLD)
+if (POLICY CMP0026)
+  cmake_policy(SET CMP0026 OLD)
+endif (POLICY CMP0026)
 
 macro (configure_and_add_test TEST_PROG)
   get_target_property(TEST_PROGRAM ${TEST_PROG} LOCATION)
