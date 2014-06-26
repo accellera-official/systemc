@@ -184,6 +184,9 @@
 # - Turn on the compiler warnings by default once SystemC is supposed to
 #   compile without any warnings on recent compiler versions.
 #
+# - Fix Xcode build settings warning by properly initializing
+#   CMAKE_OSX_ARCHITECTURES (cf. CMake issue 0014736).
+#
 ###############################################################################
 
 
