@@ -205,9 +205,9 @@ set (SystemC_VERSION_IS_PRERELEASE 1)
 set (SystemC_VERSION_PRERELEASE "pub_rev")
 set (SystemC_VERSION_RELEASE_DATE 20120701) # TODO: Extract date from commit.
 set (SystemC_VERSION "${SystemC_VERSION_MAJOR}.${SystemC_VERSION_MINOR}.${SystemC_VERSION_PATCH}")
-if (SystemC_IS_PRERELEASE)
+if (SystemC_VERSION_IS_PRERELEASE)
   set (SystemC_VERSION "${SystemC_VERSION}_${SystemC_VERSION_PRERELEASE}_${SystemC_VERSION_RELEASE_DATE}")
-endif (SystemC_IS_PRERELEASE)
+endif (SystemC_VERSION_IS_PRERELEASE)
 set (SystemC_SOVERSION "${SystemC_VERSION_MAJOR}.${SystemC_VERSION_MINOR}")
 
 
