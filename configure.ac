@@ -66,9 +66,16 @@ dnl
 : ${CFLAGS=""}
 : ${CXXFLAGS=""}
 
+dnl check for C++ compiler
 AC_PROG_CXX
+
+dnl extract C++ compiler name (used for matching CC and aCC below)
+CXX_COMP=`set $CXX; basename $1`
+
+dnl check for C compiler (default to C++ compiler)
 : ${CC="${CXX}"}
 AC_PROG_CC
+
 AM_PROG_AS
 AC_PROG_INSTALL
 AC_PROG_LN_S
@@ -77,183 +84,114 @@ dnl
 dnl Set the compiler flags and target architecture.
 dnl
 
-CXX_COMP=`set $CXX; basename $1`
-
 EXTRA_CXXFLAGS="-Wall"
+EXTRA_CFLAGS="-xc"
+EXTRA_ASFLAGS=""
+EXTRA_LDFLAGS=""
 DEBUG_CXXFLAGS="-g"
 OPT_CXXFLAGS="-O3"
 EXPLICIT_LPTHREAD="-lpthread"
 LDFLAG_RPATH="-Wl,-rpath="
 
-case "$target" in
-    *-apple-*)
-        CPU_ARCH="${target_cpu}"
-        case "$target_cpu" in
-            x86_64)
-                QT_ARCH="x86_64"
-                TARGET_ARCH="macosx64"
-                ;;
-            x386 | i386)
-                TARGET_ARCH="macosx"
-                CPU_ARCH="i386"
-                QT_ARCH="iX86"
-                ;;
-            powerpc)
-                TARGET_ARCH="macosxppc"
-                CPU_ARCH="ppc"
-                QT_ARCH="powerpc-apple-macosx"
-                ;;
-            powerpc64)
-                TARGET_ARCH="macosxppc64"
-                CPU_ARCH="ppc64"
-                QT_ARCH="pthreads"
-                ;;
-            *)
-                AC_MSG_ERROR("sorry...architecture not supported")
-                ;;
-        esac
-        if test x$GXX = xyes ; then
-                EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -arch ${CPU_ARCH}"
-                EXTRA_CFLAGS="-xc"
-                EXTRA_ASFLAGS="-arch ${CPU_ARCH} -x assembler"
-                LDFLAG_RPATH="-Wl,-rpath -Wl,"
-        else
-                AC_MSG_ERROR("sorry...compiler not supported")
-        fi
-        ;;
-    sparc-sun-solaris*) 
-        QT_ARCH="sparc-os2"
-        if test x$GXX = xyes ; then
-                TARGET_ARCH="gccsparcOS5"
-                EXTRA_CFLAGS="-xc"
-                LDFLAG_RPATH="-Wl,-R"
-        else
-            if test x$CXX_COMP = xCC ; then
-                EXTRA_CXXFLAGS=""
-                TARGET_ARCH="sparcOS5"
-                LDFLAG_RPATH="-Wl,-R"
-            else
-                AC_MSG_ERROR("sorry...compiler not supported")
-            fi
-        fi
-        ;;
-    *linux*)
-        case "$target_cpu" in
-            x86_64 | amd64)
-                TARGET_ARCH="linux64"
-                CPU_ARCH=64
-                QT_ARCH="x86_64"
-                ;;
-            i*86)
-                TARGET_ARCH="linux"
-                CPU_ARCH=32
-                QT_ARCH="iX86"
-                ;;
-            *)
-                AC_MSG_ERROR("sorry...architecture not supported")
-            ;;
-        esac
-        if test x$GXX = xyes ; then
-                EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -m${CPU_ARCH}"
-                EXTRA_CFLAGS="-xc"
-                EXTRA_ASFLAGS="-m${CPU_ARCH}"
-        else
-                AC_MSG_ERROR("sorry...compiler not supported")
-        fi
-        ;;
-    *freebsd* | dragonfly* | *netbsd* | openbsd*)
-        case "$target_cpu" in
-            x86_64 | amd64)
-                TARGET_ARCH="bsd64"
-                CPU_ARCH=64
-                QT_ARCH="x86_64"
-                ;;
-            i*86)
-                TARGET_ARCH="bsd"
-                CPU_ARCH=32
-                QT_ARCH="iX86"
-                ;;
-            *)
-                AC_MSG_ERROR("sorry...architecture not supported")
-            ;;
-        esac
-        if test x$GXX = xyes ; then
-                EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -m${CPU_ARCH}"
-                EXTRA_CFLAGS="-xc"
-                EXTRA_ASFLAGS="-m${CPU_ARCH}"
-        else
-                AC_MSG_ERROR("sorry...compiler not supported")
-        fi
-        ;;
-    *cygwin*)
-        case "$target_cpu" in
-            x86_64 | amd64)
-                TARGET_ARCH="cygwin64"
-                CPU_ARCH=64
-                QT_ARCH="x86_64"
-                ;;
-            i*86)
-                TARGET_ARCH="cygwin"
-                CPU_ARCH=32
-                QT_ARCH="iX86"
-                ;;
-            *)
-                AC_MSG_ERROR("sorry...architecture not supported")
-            ;;
-        esac
-        if test x$GXX = xyes ; then
-                EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -m${CPU_ARCH}"
-                EXTRA_CFLAGS="-xc"
-                EXTRA_ASFLAGS="-m${CPU_ARCH}"
-        else
-                AC_MSG_ERROR("sorry...compiler not supported")
-        fi
-        ;;
-    *mingw*)
-        QT_ARCH="none" # use WinFiber on MinGW platforms
-        case "$target_cpu" in
-            x86_64 | amd64)
-                TARGET_ARCH="mingw64"
-                CPU_ARCH=64
-                # QT_ARCH="x86_64"
-                ;;
-            i*86)
-                TARGET_ARCH="mingw"
-                CPU_ARCH=32
-                # QT_ARCH="iX86"
-                ;;
-            *)
-                AC_MSG_ERROR("sorry...architecture not supported")
-            ;;
-        esac
-        if test x$GXX = xyes ; then
-                EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -m${CPU_ARCH}"
-                EXTRA_CFLAGS="-xc"
-                EXTRA_ASFLAGS="-m${CPU_ARCH}"
-        else
-                AC_MSG_ERROR("sorry...compiler not supported")
-        fi
-        ;;
-    *hpux11*)
-        QT_ARCH="hppa"
-        if test x$GXX = xyes ; then
-                TARGET_ARCH="gcchpux11"
-        else
-            if test "$CXX_COMP" = "aCC" ; then
-                EXTRA_CXXFLAGS="-AA -ext +DA2.0 +DS2.0"
-                OPT_CXXFLAGS="+O1"
-                TARGET_ARCH="hpux11"
-                EXTRA_CFLAGS="-Wa,-w36"
-                CCAS=/usr/ccs/bin/as
-            else
-                AC_MSG_ERROR("sorry...compiler not supported")
-            fi
-        fi
-        ;;
-    *)
-        AC_MSG_ERROR("sorry...architecture not supported")
-        ;;
-esac
+dnl
+dnl Prepare architecture alias (to be refined later)
+dnl
+AS_CASE([$target],
+  [*-apple-*],        [TARGET_ARCH=macosx],
+  [*linux*],          [TARGET_ARCH=linux],
+  [*bsd*|*dragonfly*],[TARGET_ARCH=bsd],
+  [*mingw*],          [TARGET_ARCH=mingw],
+  [*cygwin*],         [TARGET_ARCH=cygwin],
+  [sparc-*-solaris*], [TARGET_ARCH=sparcOS5],
+  [*hpux11*],         [TARGET_ARCH=hpux11],
+  dnl default
+  [AC_MSG_ERROR("sorry...architecture not supported")])
+
+dnl Adjust for GCC on Solaris and HP-UX
+AS_CASE([${TARGET_ARCH}],
+  [hpux11|sparcOS5],
+    [AS_VAR_IF([GXX],[yes],[TARGET_ARCH="gcc${TARGET_ARCH}"])])
+
+dnl
+dnl Refine architecture settings
+dnl
+AS_CASE([${TARGET_ARCH}],
+  [linux|bsd|mingw|cygwin],dnl
+    [# check CPU architecture
+     AS_CASE([${target_cpu}], dnl
+       [x86_64|amd64], dnl
+         [TARGET_ARCH="${TARGET_ARCH}64"
+          QT_ARCH="x86_64"
+          CPU_ARCH=64],
+       [x*86|i*86], dnl
+         [QT_ARCH="iX86"
+          CPU_ARCH=32],
+       [AC_MSG_ERROR("sorry...architecture not supported")])
+
+     # check compiler
+     AS_VAR_IF([GXX],[yes],dnl
+       [EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -m${CPU_ARCH}"
+        EXTRA_ASFLAGS="${EXTRA_ASFLAGS} -m${CPU_ARCH}"],
+       [AC_MSG_ERROR("sorry...compiler not supported")])
+
+     # use WinFiber on MinGW platforms
+     AS_CASE([${TARGET_ARCH}],
+       [mingw*],[QT_ARCH="none"])
+    ],
+
+  [macosx],dnl
+    [LDFLAG_RPATH="-Wl,-rpath -Wl,"
+     # check CPU architecture
+     AS_CASE([${target_cpu}], dnl
+       [x86_64|amd64], dnl
+         [TARGET_ARCH="${TARGET_ARCH}64"
+          CPU_ARCH="x86_64"
+          QT_ARCH="x86_64"],
+       [x*86|i*86], dnl
+         [CPU_ARCH="i386"
+          QT_ARCH="iX86"],
+       [powerpc64], dnl
+         [TARGET_ARCH="${TARGET_ARCH}ppc64"
+          CPU_ARCH="ppc64"
+          QT_ARCH="pthreads"],
+       [powerpc], dnl
+         [TARGET_ARCH="${TARGET_ARCH}ppc"
+          CPU_ARCH="ppc"
+          QT_ARCH="powerpc-apple-macosx"],
+       [AC_MSG_ERROR("sorry...architecture not supported")])
+
+     # check compiler
+     AS_VAR_IF([GXX],[yes],dnl
+       [EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -arch ${CPU_ARCH}"
+        EXTRA_ASFLAGS="${EXTRA_ASFLAGS} -arch ${CPU_ARCH} -x assembler"],
+       [AC_MSG_ERROR("sorry...compiler not supported")])
+    ],
+
+  [gcchpux11],dnl
+    [QT_ARCH="hppa"],
+  [hpux11],dnl
+    [QT_ARCH="hppa"
+     AS_VAR_IF([CXX_COMP],[aCC], dnl
+       [EXTRA_CXXFLAGS="-AA -ext +DA2.0 +DS2.0"
+        EXTRA_CFLAGS="-Wa,-w36"
+        OPT_CXXFLAGS="+O1"
+        : ${CCAS=/usr/ccs/bin/as}],
+       [AC_MSG_ERROR("sorry...compiler not supported")])],
+
+  [gccsparcOS5],dnl
+    [QT_ARCH="sparc-os2"
+     LDFLAG_RPATH="-Wl,-R"],
+  [sparcOS5],dnl
+    [QT_ARCH="sparc-os2"
+     LDFLAG_RPATH="-Wl,-R"
+     AS_VAR_IF([CXX_COMP],[CC], dnl
+       [EXTRA_CXXFLAGS=""
+        EXTRA_CFLAGS=""],
+       [AC_MSG_ERROR("sorry...compiler not supported")])]
+) dnl AS_CASE([$TARGET_ARCH])
+
+dnl include EXTRA_CXXFLAGS in EXTRA_(C|AS)FLAGS by default
+EXTRA_CFLAGS="${EXTRA_CXXFLAGS} ${EXTRA_CFLAGS}"
 
 dnl
 dnl check for pthreads compiler flags.
@@ -547,6 +485,7 @@ AC_SUBST(PKGCONFIG_LDPRIV)
 AC_SUBST(EXTRA_CXXFLAGS)
 AC_SUBST(EXTRA_CFLAGS)
 AC_SUBST(EXTRA_ASFLAGS)
+AC_SUBST(EXTRA_LDFLAGS)
 AC_SUBST(EXPLICIT_LPTHREAD)
 AC_SUBST(LDFLAG_RPATH)
 AC_SUBST(DEBUG_CXXFLAGS)
