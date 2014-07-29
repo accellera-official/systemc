@@ -204,10 +204,8 @@ inline void sc_thread_process::set_stack_size( std::size_t size )
 //------------------------------------------------------------------------------
 inline void sc_thread_process::suspend_me()
 {
-#ifndef NDEBUG
     // remember, if we're currently unwinding
     bool unwinding_preempted = m_unwinding;
-#endif
 
     sc_simcontext* simc_p = simcontext();
     sc_cor*         cor_p = simc_p->next_cor();
@@ -253,7 +251,9 @@ inline void sc_thread_process::suspend_me()
 	throw sc_unwind_exception( this, false );
 
       default: // THROWING_NOW
-        sc_assert( unwinding_preempted );
+        if( !unwinding_preempted )
+            SC_REPORT_FATAL( SC_ID_INTERNAL_ERROR_
+                           , "unexpected unwinding/throw status" );
         DEBUG_MSG( DEBUG_NAME, this, "restarting thread");
         break;
     }
