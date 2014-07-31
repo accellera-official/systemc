@@ -72,9 +72,33 @@ AC_PROG_CXX
 dnl extract C++ compiler name (used for matching CC and aCC below)
 CXX_COMP=`set $CXX; basename $1`
 
+dnl check for clang++
+AC_CACHE_CHECK([whether we are using a Clang/LLVM C++ compiler],
+  [sc_cv_clangxx],
+  [AC_LANG_PUSH([C++])
+   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[[
+#ifndef __clang__
+not clang
+#endif
+]])],dnl
+   [sc_cv_clangxx=yes],[sc_cv_clangxx=no])
+   AC_LANG_POP([C++])])
+
 dnl check for C compiler (default to C++ compiler)
 : ${CC="${CXX}"}
 AC_PROG_CC
+
+dnl check for clang
+AC_CACHE_CHECK([whether we are using a Clang/LLVM C compiler],
+  [sc_cv_clang],
+  [AC_LANG_PUSH([C])
+   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[[
+#ifndef __clang__
+not clang
+#endif
+]])],dnl
+  [sc_cv_clang=yes],[sc_cv_clang=no])
+  AC_LANG_POP([C])])
 
 AM_PROG_AS
 AC_PROG_INSTALL
@@ -192,6 +216,14 @@ AS_CASE([${TARGET_ARCH}],
 
 dnl include EXTRA_CXXFLAGS in EXTRA_(C|AS)FLAGS by default
 EXTRA_CFLAGS="${EXTRA_CXXFLAGS} ${EXTRA_CFLAGS}"
+
+dnl suppress clang's warnings about unused command-line arguments
+dnl (currently enforced for assembler and linker only)
+AS_IF([test "$sc_cv_clangxx" = yes],dnl CXX is used for linking
+  [EXTRA_LDFLAGS="${EXTRA_LDFLAGS} -Wc,-Qunused-arguments"])
+AS_IF([test "$sc_cv_clang" = yes -a "$CCAS" = "$CC"], dnl CC used as assembler
+  [EXTRA_ASFLAGS="${EXTRA_ASFLAGS} -Qunused-arguments"])
+
 
 dnl
 dnl check for pthreads compiler flags.
