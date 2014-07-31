@@ -588,14 +588,50 @@ dnl print configuration summary
 dnl
 
 dnl invert "async_updates" setting for output
-AS_VAR_IF([enable_async_updates],[yes],
-          [disable_async_updates=no],
+AS_VAR_IF([enable_async_updates],[yes],dnl
+          [disable_async_updates=no],dnl
           [disable_async_updates=yes
            sysc_non_1666=yes])
 
 AS_IF([test -z "${WANT_QT_THREADS_TRUE}"],[sysc_coroutine="QuickThreads"],
       [test -z "${WANT_PTHREADS_THREADS_TRUE}"],[sysc_coroutine="Pthreads"],
       [sysc_coroutine="WinFiber"])
+
+sysc_compiler="${CXX}"
+AS_VAR_IF([CC],["${CXX}"],dnl
+  [AS_VAR_APPEND([sysc_compiler],[" (C/C++)"])],dnl
+  [AS_VAR_APPEND([sysc_compiler],[" (C++) / ${CC} (C)"])])
+AS_VAR_IF([CCAS],["${CC}"],[],dnl
+  [AS_VAR_APPEND([sysc_compiler],[" / ${CCAS} (Assembler)"])])
+
+dnl prepare printing of command-line flags
+sysc_flags=""
+AS_IF([test -n "${CFLAGS}"],dnl
+  [AS_VAR_APPEND([sysc_flags],dnl
+    ["   C compiler flags (CFLAGS)      : ${CFLAGS}${as_nl}"])])
+AS_IF([test -n "${CXXFLAGS}"],dnl
+  [AS_VAR_APPEND([sysc_flags],dnl
+    ["   C++ compiler flags (CXXFLAGS)  : ${CXXFLAGS}${as_nl}"])])
+AS_IF([test -n "${CCASFLAGS}"],dnl
+  [AS_VAR_APPEND([sysc_flags],dnl
+    ["   Assembler flags (CCASFLAGS)    : ${CCASFLAGS}${as_nl}"])])
+AS_IF([test -n "${LDFLAGS}"],dnl
+  [AS_VAR_APPEND([sysc_flags],dnl
+    ["   Linker flags (LDFLAGS)         : ${LDFLAGS}${as_nl}"])])
+AS_IF([test -n "${sysc_flags}"],dnl
+[sysc_flags="${as_nl} User-provided command-line flags :${as_nl}${sysc_flags}"])
+
+dnl prepare printing of additional settings
+AS_IF([test -n "${PKGCONFIG_DEFINES}" -o -n "${LIBCONFIG_DEFINES}"],[dnl
+sysc_additional="${as_nl} Detected additional settings:"
+AS_IF([test -n "${PKGCONFIG_DEFINES}"],dnl
+  [AS_VAR_APPEND([sysc_additional],dnl
+                 ["${as_nl}    ${PKGCONFIG_DEFINES}"])])
+AS_IF([test -n "${LIBCONFIG_DEFINES}"],dnl
+  [AS_VAR_APPEND([sysc_additional],dnl
+                 ["${as_nl}    ${LIBCONFIG_DEFINES}"])])
+AS_VAR_APPEND([sysc_additional],["${as_nl}"])dnl
+]) dnl additional settings
 
 SYSTEMC_HOME=$prefix
 prefix='<SYSTEMC_HOME>' dnl replace for printing
@@ -628,25 +664,22 @@ Configuration summary of $PACKAGE_STRING for $target
    Examples      : ${sysc_examplesdir}
 
  Architecture    : ${TARGET_ARCH}
- Compiler (flags): ${CXX}
-     ${CXXFLAGS}
-
+ Compiler        : ${sysc_compiler}
+ ${sysc_flags}
  Build settings:
    Enable compiler optimizations  : $enable_optimize
    Include debugging symbols      : $enable_debug
    Coroutine package for processes: $sysc_coroutine
    Disable async_request_update   : $disable_async_updates
    Phase callbacks (experimental) : $enable_phase_callbacks
-   Additional settings            :
-     ${PKGCONFIG_DEFINES} ${LIBCONFIG_DEFINES}
+ ${sysc_additional}
 ---------------------------------------------------------------------
 EOF
-if test x${sysc_non_1666+set} = xset ; then
+AS_IF([${sysc_non_1666+:} false],[dnl
 cat <<EOF | tee -a config.log
 WARNING: The selected SystemC library configuration is non-conforming
          to IEEE Std. 1666-2011. See INSTALL.
 ---------------------------------------------------------------------
-EOF
-fi
+EOF])
 
 dnl Taf!
