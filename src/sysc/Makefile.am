@@ -81,6 +81,6 @@ if USES_PTHREADS_LIB
 libsystemc_la_LIBADD+=$(EXPLICIT_LPTHREAD)
 endif
 
-libsystemc_la_LDFLAGS = -release $(VERSION) -L$(libarchdir)
+libsystemc_la_LDFLAGS = $(EXTRA_LDFLAGS) -release $(VERSION)
 
 ## Taf!
