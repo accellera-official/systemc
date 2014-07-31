@@ -256,11 +256,10 @@ AC_ARG_WITH([unix-layout],
   [AS_HELP_STRING([--with-unix-layout],
                   [use Unix directory layout for installation
                    @<:@default=no@:>@])],
-  [case "x$withval" in
-     xyes)  sysc_install_layout=Unix ;;
-     xno|x) sysc_install_layout=classic ; ;;
-     *)     AC_MSG_ERROR([Unknown install layout requested.]) ;;
-   esac],
+  [AS_CASE(["x$withval"],
+     [xyes], [sysc_install_layout=Unix],
+     [xno|x],[sysc_install_layout=classic],
+     [AC_MSG_ERROR([Unknown install layout requested.])])],
   [sysc_install_layout=classic]
 ) # AC_ARG_WITH gnu-layout
 
@@ -272,7 +271,6 @@ if test "x$prefix" = "xNONE" ; then
   dnl Ignore install layout, when installing to $srcdir
   sysc_install_layout=ignored
 fi
-
 AC_MSG_RESULT($sysc_install_layout)
 
 dnl
@@ -310,10 +308,10 @@ AC_SUBST([rootdocdir])
 AC_SUBST([examplesdir], ['${rootdocdir}/examples'] )
 AC_SUBST([libarchdir],  ['${libdir}${LIB_ARCH_SUFFIX}'] )
 
-AM_CONDITIONAL([SEPARATE_INSTALL_TREE],
+AM_CONDITIONAL([SEPARATE_INSTALL_TREE],dnl
   [ test "x${prefix}" != "x${abs_srcdir}" ])
 dnl Check for out-of-tree build
-AM_CONDITIONAL([SEPARATE_BUILD_TREE],
+AM_CONDITIONAL([SEPARATE_BUILD_TREE],dnl
   [ test "x${abs_srcdir}" != "x${abs_builddir}" ])
 
 #AM_COND_IF([SEPARATE_BUILD_TREE],[
@@ -332,15 +330,12 @@ AC_ARG_WITH([arch-suffix],
   [AS_HELP_STRING([--with-arch-suffix],
                   [add suffix to library installation directory
                    @<:@default=-<target-arch>@:>@])],
-  [case "x$withval" in
-     xyes)  with_arch_suffix=yes
-            LIB_ARCH_SUFFIX='-${TARGET_ARCH}'
-            ;;
-     xno|x) with_arch_suffix=no
-            LIB_ARCH_SUFFIX=""
-            ;;
-     *)     LIB_ARCH_SUFFIX="${withval}" ;;
-   esac],
+  [AS_CASE(["x$withval"],dnl
+    [xyes],[with_arch_suffix=yes
+            LIB_ARCH_SUFFIX='-${TARGET_ARCH}'],
+    [xno|x],[with_arch_suffix=no
+             LIB_ARCH_SUFFIX=""],
+    [LIB_ARCH_SUFFIX="${withval}"])],
   [with_arch_suffix=default]
 ) # AC_ARG_WITH arch-suffix
 AC_MSG_RESULT($with_arch_suffix (TARGET_ARCH=${TARGET_ARCH}))
@@ -351,10 +346,10 @@ dnl
 AC_MSG_CHECKING([whether to add debug symbols to the SystemC library])
 AC_ARG_ENABLE([debug],
   AS_HELP_STRING([--enable-debug],[include debugging symbols]),
-  [case "${enableval}" in
-    yes|no) : ;;
-    *) AC_MSG_ERROR([bad value ${enableval} for --enable-debug]) ;;
-  esac],[enable_debug=no])
+  [AS_CASE(["${enableval}"],dnl
+    [yes|no],[],
+    [AC_MSG_ERROR([bad value ${enableval} for --enable-debug])])],
+  [enable_debug=no])
 AM_CONDITIONAL([WANT_DEBUG], [test x$enable_debug = xyes])
 AC_MSG_RESULT($enable_debug)
 
@@ -364,10 +359,10 @@ dnl
 AC_MSG_CHECKING([whether to enable compiler optimization])
 AC_ARG_ENABLE([optimize],
   AS_HELP_STRING([--disable-optimize],[disable compiler optimization]),
-  [case "${enableval}" in
-    yes|no) : ;;
-    *) AC_MSG_ERROR([bad value ${enableval} for --enable-optimize]) ;;
-  esac],[enable_optimize=yes])
+  [AS_CASE(["${enableval}"],dnl
+    [yes|no],[],
+    [AC_MSG_ERROR([bad value ${enableval} for --enable-optimize])])],
+  [enable_optimize=yes])
 AM_CONDITIONAL([WANT_OPTIMIZE], [test x$enable_optimize = xyes])
 AC_MSG_RESULT($enable_optimize)
 
@@ -376,34 +371,24 @@ dnl async_request_update support
 dnl
 AC_MSG_CHECKING([whether to add support for asynchronous update requests])
 support_async_updates=no
-if test x$ax_pthread_ok = xyes ; then
-support_async_updates=pthread
-elif test x$ax_pthread_ok = xno ; then
-case "${TARGET_ARCH}" in
- dnl no pthreads needed on MSVC/MinGW
- mingw*|msvc*) support_async_updates=native ;;
- *)            ;;
-esac
-fi
+AS_IF([test x$ax_pthread_ok = xyes],[support_async_updates=pthread],
+      [test x$ax_pthread_ok = xno], [AS_CASE(["${TARGET_ARCH}"], dnl
+           dnl no pthreads needed on MSVC/MinGW
+           [mingw*|msvc*],[support_async_updates=native])])
 AC_ARG_ENABLE([async-updates],
   AS_HELP_STRING([--disable-async-updates],
                  [disable request_async_update support]),
-  [case "${enableval}" in
-    yes) if test x"$support_async_updates" = xno ; then
-            AC_MSG_WARN([no native/pthread support found, disabled])
-            enable_async_updates=no
-            support_async_updates=disabled
-         fi
-         ;;
-    no)  support_async_updates=disabled ;;
-    *) AC_MSG_ERROR([bad value ${enableval} for --enable-async-updates]) ;;
-  esac],
-  [if test x${support_async_updates} != xno; then
-     enable_async_updates=yes
-   else
-     enable_async_updates=no
-   fi]
-  )
+  [AS_CASE(["${enableval}"],dnl
+    [yes],[AS_IF([test $support_async_updates = no],dnl
+            [AC_MSG_WARN([no native/pthread support found, disabled])
+             enable_async_updates=no
+             support_async_updates=disabled])],
+    [no], [support_async_updates=disabled],
+    [AC_MSG_ERROR([bad value ${enableval} for --enable-async-updates])])],
+  [AS_IF([test ${support_async_updates} != no],
+      [enable_async_updates=yes],
+      [enable_async_updates=no])]dnl
+)
 AM_CONDITIONAL([DISABLE_ASYNC_UPDATES],
                [test x"$enable_async_updates" = xno])
 AC_MSG_RESULT($enable_async_updates)
@@ -415,31 +400,28 @@ AC_MSG_CHECKING([whether to use POSIX threads for SystemC processes])
 AC_ARG_ENABLE([pthreads],
   AS_HELP_STRING([--enable-pthreads],
                  [use POSIX threads for SystemC processes]),
-  [case "${enableval}" in
-    yes) if test x"$ax_pthread_ok" = xyes ; then
-           QT_ARCH=pthreads
-         else
-           enable_pthreads=no
-           AC_MSG_WARN([no pthread support found, ignore --enable-pthreads])
-         fi ;;
-    no)  : ;;
-    *) AC_MSG_ERROR([bad value ${enableval} for --enable-pthreads]) ;;
-  esac],[enable_pthreads=no])
+  [AS_CASE(["${enableval}"],dnl
+    [yes],dnl
+      [AS_IF([test x"$ax_pthread_ok" = xyes],[QT_ARCH=pthreads],
+        [enable_pthreads=no
+         AC_MSG_WARN([no pthread support found, ignore --enable-pthreads])]
+      )],
+    [no],[],
+    [AC_MSG_ERROR([bad value ${enableval} for --enable-pthreads])])],
+  [enable_pthreads=no])
 
-if test x"$QT_ARCH" = xpthreads -a x"$enable_pthreads" = xno ; then
-  if test x"$ax_pthread_ok" = xyes ; then
-    enable_pthreads=yes
-  else
-    AC_MSG_ERROR([pthread processes required on target architecture ${target}])
-  fi
-fi
+AS_IF([test x"$QT_ARCH" = xpthreads -a x"$enable_pthreads" = xno],[dnl
+  AS_IF([test x"$ax_pthread_ok" = xyes],dnl
+    [enable_pthreads=yes],
+    [AC_MSG_ERROR([pthread processes required on target architecture ${target}])])dnl
+])
 
-AM_CONDITIONAL([WANT_PTHREADS_THREADS],
+AM_CONDITIONAL([WANT_PTHREADS_THREADS],dnl
      [test x"$enable_pthreads" = xyes])
-AM_CONDITIONAL([WANT_QT_THREADS],
+AM_CONDITIONAL([WANT_QT_THREADS],dnl
      [test x"$enable_pthreads" = xno -a x"$QT_ARCH" != xnone ])
 
-AM_CONDITIONAL([USES_PTHREADS_LIB],
+AM_CONDITIONAL([USES_PTHREADS_LIB],dnl
   [test x"$enable_pthreads" = xyes -o x"$support_async_updates" = xpthread ])
 AC_MSG_RESULT($enable_pthreads)
 
@@ -451,15 +433,15 @@ AC_ARG_ENABLE([phase-callbacks],
   [AS_HELP_STRING([--enable-phase-callbacks],
                   [enable simulation phase callbacks (experimental)
                    @<:@yes|tracing|no(=default)@:>@])],
-  [case x"$enableval" in
-    xyes|x)        enable_phase_callbacks=yes ;;
-    xtracing)      enable_phase_callbacks=tracing ;;
-    xno|xdefault)  enable_phase_callbacks=no  ;;
-    *) AC_MSG_ERROR([bad value ${enableval} for --enable-phase-callbacks]) ;;
-  esac],[enable_phase_callbacks=no])
-AM_CONDITIONAL([ENABLE_CALLBACKS],
+  [AS_CASE(["${enableval}"],dnl
+    [yes],       [enable_phase_callbacks=yes],
+    [tracing],   [enable_phase_callbacks=tracing],
+    [no|default],[enable_phase_callbacks=no],
+    [AC_MSG_ERROR([bad value ${enableval} for --enable-phase-callbacks])])],
+  [enable_phase_callbacks=no])
+AM_CONDITIONAL([ENABLE_CALLBACKS],dnl
                [test x"$enable_phase_callbacks" = xyes])
-AM_CONDITIONAL([ENABLE_CALLBACKS_TRACING],
+AM_CONDITIONAL([ENABLE_CALLBACKS_TRACING],dnl
                [test x"$enable_phase_callbacks" = xtracing])
 AC_MSG_RESULT($enable_phase_callbacks)
 
@@ -493,17 +475,17 @@ dnl check for additional (header+lib) compiler flags
 dnl
 # AC_CHECK_DEFINE([DEBUG_SYSTEMC],
 #   [PKGCONFIG_DEFINES="${PKGCONFIG_DEFINES} -DDEBUG_SYSTEMC"])
-AC_CHECK_DEFINE([SC_DISABLE_VIRTUAL_BIND],
+AC_CHECK_DEFINE([SC_DISABLE_VIRTUAL_BIND],dnl
   [PKGCONFIG_DEFINES="${PKGCONFIG_DEFINES} -DSC_DISABLE_VIRTUAL_BIND"
    sysc_non_1666=yes])
 
 dnl
 dnl check for additional library compiler flags (documentation only)
 dnl
-AC_CHECK_DEFINE([SC_ENABLE_IMMEDIATE_SELF_NOTIFICATION],
+AC_CHECK_DEFINE([SC_ENABLE_IMMEDIATE_SELF_NOTIFICATION],dnl
   [LIBCONFIG_DEFINES="${LIBCONFIG_DEFINES} -DSC_ENABLE_IMMEDIATE_SELF_NOTIFICATION"
    sysc_non_1666=yes])
-AC_CHECK_DEFINE([SC_ENABLE_EARLY_MAXTIME_CREATION],
+AC_CHECK_DEFINE([SC_ENABLE_EARLY_MAXTIME_CREATION],dnl
   [LIBCONFIG_DEFINES="${LIBCONFIG_DEFINES} -DSC_ENABLE_EARLY_MAXTIME_CREATION"
    sysc_non_1666=yes])
 
