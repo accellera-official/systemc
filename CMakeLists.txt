@@ -164,6 +164,9 @@
 #
 # TODO:
 #
+# - Detect C++'11-compatible compiler and then pass the right flags
+#   to use C++'11 language and library features.
+#
 # - Check examples output against golden.log files when executing them as test.
 #
 # - Configure the SystemC version from within the build system.
