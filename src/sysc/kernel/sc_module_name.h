@@ -83,7 +83,7 @@ private:
 inline void sc_module_name::clear_module( sc_module* module_p )
 {
     assert( m_module_p == module_p );
-    m_module_p = 0;
+    m_module_p = module_p = 0; // avoid unused parameter warning (module_p)
 }
 
 inline void sc_module_name::set_module( sc_module* module_p )
