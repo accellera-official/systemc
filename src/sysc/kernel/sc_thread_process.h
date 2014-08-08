@@ -443,7 +443,7 @@ inline sc_cor* get_cor_pointer( sc_process_b* process_p )
 //"sc_thread_process::trigger_static"
 //
 // This inline method adds the current thread to the queue of runnable
-// processes, if required.  This is the case if the following criteria
+// processes if required.  This is the case if the following criteria
 // are met:
 //   (1) The process is in a runnable state.
 //   (2) The process is not already on the run queue.
@@ -460,9 +460,9 @@ void
 sc_thread_process::trigger_static()
 {
     // No need to try queueing this thread if one of the following is true:
-    //    (a) its disabled
-    //    (b) its already queued for execution
-    //    (c) its waiting on a dynamic event
+    //    (a) it is disabled
+    //    (b) it is already queued for execution
+    //    (c) it is waiting on a dynamic event
     //    (d) its wait count is not satisfied
 
     if ( (m_state & ps_bit_disabled) || is_runnable() ||
@@ -483,9 +483,9 @@ sc_thread_process::trigger_static()
         return;
     }
 
-    // If we get here then the thread is has satisfied its wait criteria, if
-    // its suspended mark its state as ready to run. If its not suspended then
-    // push it onto the runnable queue.
+    // If we get here, then the thread has satisfied its wait criteria. If it is
+    // suspended, then mark its state as ready to run. If it is not suspended,
+    // then push it onto the runnable queue.
 
     if ( m_state & ps_bit_suspended )
     {
