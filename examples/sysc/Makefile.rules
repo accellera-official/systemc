@@ -109,7 +109,7 @@ GOLDEN?=golden.log
 EXEEXT?=.x
 EXE   := $(PROJECT)$(EXEEXT)
 
-all: announce $(EXE)
+all: announce build
 
 announce:
 	@if test x1 = x$(FLAG_BATCH) ; then \
@@ -130,10 +130,11 @@ check: announce all
 	  else echo "OK"; fi \
 	fi
 
-
 run: announce all
 	@if test -f "$(INPUT)" ; then INPUT="< $(INPUT)" ; fi ; \
 		eval "./$(EXE) $(ARGS) $${INPUT}"
+
+build: announce $(EXE)
 
 $(EXE): $(OBJS) $(SYSTEMC_LIB_DIR)/libsystemc.a
 	$(CXX) $(LDFLAGS) -o $@ $(OBJS) $(LIBS) 2>&1 | c++filt
