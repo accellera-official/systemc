@@ -145,14 +145,14 @@ run: announce all
 		eval "./$(EXE) $(ARGS) $${INPUT}"
 
 $(EXE): $(OBJS) $(SYSTEMC_LIB_DIR)/libsystemc.a
-	$(CC) $(LDFLAGS) -o $@ $(OBJS) $(LIBS) 2>&1 | c++filt
+	$(CXX) $(LDFLAGS) -o $@ $(OBJS) $(LIBS) 2>&1 | c++filt
 	@test -x $@
 
 .cpp.o:
-	$(CC) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 .cc.o:
-	$(CC) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:: announce
 	rm -f $(OBJS) $(EXE) core $(EXTRA_CLEAN) \
@@ -162,6 +162,6 @@ ultraclean: announce clean
 	rm -f Makefile.deps *~
 
 Makefile.deps:
-#	$(CC) $(CXXFLAGS) -M $(SRCS) >> Makefile.deps
+#	$(CXX) $(CXXFLAGS) -M $(SRCS) >> Makefile.deps
 
 #include Makefile.deps
