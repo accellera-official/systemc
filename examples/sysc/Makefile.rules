@@ -100,15 +100,6 @@ $(error SystemC library [$(SYSTEMC_LIB_DIR)] not found. \
         Please update Makefile.config)
 endif
 
-# use g++ by default, unless user specifies CXX explicitly
-ifeq (default,$(origin CXX))
-CXX=g++
-endif
-# use CXX by default, unless user specifies CC explicitly
-ifeq (default,$(origin CC))
-CC=$(CXX)
-endif
-
 ## ***************************************************************************
 ## build rules
 
