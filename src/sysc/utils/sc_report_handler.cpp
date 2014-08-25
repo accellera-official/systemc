@@ -704,6 +704,21 @@ sc_report_handler::msg_def_items * sc_report_handler::messages =
     &sc_report_handler::msg_terminator;
 
 
+sc_actions sc_report_handler::catch_actions = SC_DEFAULT_CATCH_ACTIONS;
+
+sc_actions sc_report_handler::set_catch_actions(sc_actions act)
+{
+    //sc_assert( !(act | SC_THROW) ); // allow SC_THROW?
+    sc_actions old = catch_actions;
+    catch_actions = act;
+    return old;
+}
+
+sc_actions sc_report_handler::get_catch_actions()
+{
+    return catch_actions;
+}
+
 //
 // predefined messages
 //

@@ -78,13 +78,16 @@ sc_elab_and_sim( int argc, char* argv[] )
     }
     catch( const sc_report& x )
     {
-        sc_report_handler::get_handler()(x, SC_DISPLAY);
+        sc_report_handler::get_handler()
+            ( x, sc_report_handler::get_catch_actions() );
     }
     catch( ... )
     {
         // translate other escaping exceptions
         sc_report*  err_p = sc_handle_exception();
-        if( err_p ) sc_report_handler::get_handler()(*err_p, SC_DISPLAY);
+        if( err_p )
+            sc_report_handler::get_handler()
+                ( *err_p, sc_report_handler::get_catch_actions() );
         delete err_p;
     }
 
