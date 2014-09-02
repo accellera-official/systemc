@@ -263,6 +263,8 @@ class sc_vector_iter
 
   typedef typename sc_meta::remove_const<ElementType>::type plain_type;
   typedef const plain_type                                  const_plain_type;
+  typedef typename sc_direct_access<plain_type>::const_policy
+    const_direct_policy;
 
   friend class sc_vector< plain_type >;
   template< typename, typename > friend class sc_vector_assembly;
@@ -281,6 +283,8 @@ class sc_vector_iter
 
   typedef typename select_iter<ElementType>::type          raw_iterator;
   typedef sc_vector_iter< const_plain_type, const_policy > const_iterator;
+  typedef sc_vector_iter< const_plain_type, const_direct_policy >
+    const_direct_iterator;
 
   // underlying vector iterator
 
@@ -328,12 +332,18 @@ public:
   this_type& operator-=( difference_type n ) { it_-=n; return *this; }
 
   // relations
-  bool operator== ( const this_type& that ) const { return it_ == that.it_; }
-  bool operator!= ( const this_type& that ) const { return it_ != that.it_; }
-  bool operator<= ( const this_type& that ) const { return it_ <= that.it_; }
-  bool operator>= ( const this_type& that ) const { return it_ >= that.it_; }
-  bool operator<  ( const this_type& that ) const { return it_ < that.it_; }
-  bool operator>  ( const this_type& that ) const { return it_ > that.it_; }
+  bool operator==( const const_direct_iterator& that ) const
+    { return it_ == that.it_; }
+  bool operator!=( const const_direct_iterator& that ) const
+    { return it_ != that.it_; }
+  bool operator<=( const const_direct_iterator& that ) const
+    { return it_ <= that.it_; }
+  bool operator>=( const const_direct_iterator& that ) const
+    { return it_ >= that.it_; }
+  bool operator< ( const const_direct_iterator& that ) const
+    { return it_ < that.it_; }
+  bool operator> ( const const_direct_iterator& that ) const
+    { return it_ > that.it_; }
 
   // dereference
   reference operator*() const
@@ -344,7 +354,7 @@ public:
     { return *access_policy::get( static_cast<element_type*>(it_[n]) ); }
 
   // distance
-  difference_type operator-( this_type const& that ) const
+  difference_type operator-( const_direct_iterator const& that ) const
     { return it_-that.it_; }
 
 }; // sc_vector_iter
