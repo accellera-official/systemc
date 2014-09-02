@@ -11,14 +11,10 @@ SUBDIRS := \
 	../lt_mixed_endian \
 	../lt_temporal_decouple
 
-TARGETS := build run check clean
+TARGETS := all build run check clean
 .PHONY: $(TARGETS)
 
-## default target
-all: build
-
-## forwarding rule
-$(TARGETS):
+$(TARGETS): %:
 	@set -e ; for i in $(SUBDIRS); do \
 		$(MAKE) -C $$i/build-unix FLAG_BATCH=1 $@ ; \
 	done
