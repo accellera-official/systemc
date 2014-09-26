@@ -641,7 +641,7 @@ sc_vector<T>::init( size_type n, Creator c )
         std::string  name  = make_name( basename(), i );
         const char*  cname = name.c_str();
 
-        void* p = c( cname, i ) ; // call Creator
+        element_type* p = c( cname, i ) ; // call Creator
         base_type::push_back(p);
       }
     }
