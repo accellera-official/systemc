@@ -735,7 +735,7 @@ sub prepare_environment
 
     # predefined macros
     @rt_defines = ();
-    push @rt_defines, 'SYSTEMC_CHECK_ASSERT';
+    push @rt_defines, 'SC_ENABLE_ASSERTIONS';
 
     if( $rt_systemc_arch eq "gccsparcOS5" ) {
         $rt_ldrpath       = "-Wl,-R";
