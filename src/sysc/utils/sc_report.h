@@ -221,18 +221,18 @@ typedef std::exception sc_exception;
 //  and simulation time, if the simulation is running.
 // ----------------------------------------------------------------------------
 
-#ifdef NDEBUG
+#if defined(NDEBUG) && !defined(SYSTEMC_CHECK_ASSERT) // disable assertions
 
 #define sc_assert(expr) \
  ((void) 0)
 
-#else
+#else // enable assertions
 
 #define sc_assert(expr) \
  ((void)((expr) ? 0 :   \
      (SC_REPORT_FATAL( ::sc_core::SC_ID_ASSERTION_FAILED_, #expr ), 0)))
 
-#endif // NDEBUG
+#endif // !NDEBUG || SYSTEMC_CHECK_ASSERT
 
 extern const char SC_ID_UNKNOWN_ERROR_[];
 extern const char SC_ID_WITHOUT_MESSAGE_[];
