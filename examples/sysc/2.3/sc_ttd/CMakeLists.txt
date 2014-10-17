@@ -37,6 +37,8 @@
 ###############################################################################
 
 
+include_directories (${CMAKE_CURRENT_SOURCE_DIR}/../include)
+
 add_executable (sc_ttd main.cpp)
 target_link_libraries (sc_ttd systemc)
 add_test (sc_ttd sc_ttd)

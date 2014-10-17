@@ -37,9 +37,18 @@
 ###############################################################################
 
 
-add_subdirectory (2.1)
-add_subdirectory (2.3)
-add_subdirectory (fft)
+add_subdirectory (2.1/dpipe)
+add_subdirectory (2.1/forkjoin)
+add_subdirectory (2.1/reset_signal_is)
+add_subdirectory (2.1/sc_export)
+add_subdirectory (2.1/sc_report)
+add_subdirectory (2.1/scx_barrier)
+add_subdirectory (2.1/scx_mutex_w_policy)
+add_subdirectory (2.1/specialized_signals)
+add_subdirectory (2.3/sc_rvd)
+add_subdirectory (2.3/sc_ttd)
+add_subdirectory (fft/fft_flpt)
+add_subdirectory (fft/fft_fxpt)
 add_subdirectory (fir)
 add_subdirectory (pipe)
 add_subdirectory (pkt_switch)
