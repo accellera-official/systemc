@@ -21,7 +21,7 @@ public:
       ptr = free_list->trans;
 
       // Delete generic payload and all extensions
-      assert(ptr);
+      sc_assert(ptr);
       delete ptr;
 
       free_list = free_list->next;

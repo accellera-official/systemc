@@ -39,11 +39,11 @@ SC_MODULE(M)
   void T()
   {
     wait();
-    assert(sc_time_stamp() == sc_time(1, SC_NS));
+    sc_assert(sc_time_stamp() == sc_time(1, SC_NS));
     wait();
-    assert(sc_time_stamp() == sc_time(11, SC_NS));
+    sc_assert(sc_time_stamp() == sc_time(11, SC_NS));
     wait();
-    assert(sc_time_stamp() == sc_time(111, SC_NS));
+    sc_assert(sc_time_stamp() == sc_time(111, SC_NS));
     flag = true;
     wait();
     flag = false;
@@ -57,19 +57,19 @@ SC_MODULE(M)
   void T2()
   {
     wait();
-    assert(sc_time_stamp() == sc_time(1, SC_NS));
+    sc_assert(sc_time_stamp() == sc_time(1, SC_NS));
     wait();
-    assert(sc_time_stamp() == sc_time(11, SC_NS));
+    sc_assert(sc_time_stamp() == sc_time(11, SC_NS));
     wait();
-    assert(sc_time_stamp() == sc_time(111, SC_NS));
+    sc_assert(sc_time_stamp() == sc_time(111, SC_NS));
     flag2 = true;
     wait();
     flag2 = false;
   }
   void end_of_simulation()
   {
-    assert( flag );
-    assert( flag2 );
+    sc_assert( flag );
+    sc_assert( flag2 );
   }
 };
 

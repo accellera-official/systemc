@@ -11,12 +11,12 @@ void check_form_of_suffix(std::string s)
   std::string charset = "0123456789";
   while (!s.empty())
   {
-    assert(s[0] == '_');
+    sc_assert(s[0] == '_');
     s = s.substr(1);
-    assert(!s.empty());
+    sc_assert(!s.empty());
     do
     {
-      assert(charset.find(s[0]) < charset.size());
+      sc_assert(charset.find(s[0]) < charset.size());
       s = s.substr(1);
     } while (!s.empty() && (s[0] != '_'));
   }
@@ -42,16 +42,16 @@ struct Top: sc_module
     m = new M("m");
 
     std::string s = eq.basename();
-    assert (s.substr(0,11) == "event_queue");
-    assert (s.size() > 11);
+    sc_assert (s.substr(0,11) == "event_queue");
+    sc_assert (s.size() > 11);
     check_form_of_suffix(s.substr(11));
 
     s = eq.name();
-    assert (s.substr(0,15) == "top.event_queue");
-    assert (s.size() > 15);
+    sc_assert (s.substr(0,15) == "top.event_queue");
+    sc_assert (s.size() > 15);
     check_form_of_suffix(s.substr(15));
 
-    assert (std::string(eq.kind()) == "sc_event_queue");
+    sc_assert (std::string(eq.kind()) == "sc_event_queue");
   }
 };
 

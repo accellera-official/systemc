@@ -133,7 +133,7 @@ public:
     //first make sure that there is no BTag (just for debugging)
     BTag* btag;
     accessMySpecificExtensions(trans).get_extension(btag);
-    assert(!btag);
+    sc_assert(!btag);
     BTag tag; //now add our BTag
     bool added_mm=!trans.has_mm(); //in case there is no MM in we add it now
     if (added_mm){
@@ -157,7 +157,7 @@ public:
   void free(transaction_type* txn){
     BTag* btag;
     accessMySpecificExtensions(*txn).get_extension(btag);
-    assert(btag);
+    sc_assert(btag);
     txn->reset(); //clean off all extension that were added down stream
     btag->event.notify();
   }
@@ -173,7 +173,7 @@ public:
         // Transaction not yet finished
         if (phase != tlm::BEGIN_REQ)
         {
-          assert(phase!=tlm::END_RESP);
+          sc_assert(phase!=tlm::END_RESP);
           m_bwPEQ.notify(trans,phase,t);
         }
         break;
@@ -181,13 +181,13 @@ public:
         // Transaction finished
         ConnectionInfo* connInfo;
         accessMySpecificExtensions(trans).get_extension(connInfo);
-        assert(connInfo);
+        sc_assert(connInfo);
         connInfo->alreadyComplete=true;
         phase=tlm::BEGIN_RESP;
         m_bwPEQ.notify(trans, phase, t);
         break;
       default:
-        assert(0); exit(1);
+        sc_assert(0); exit(1);
     };
   }
 
@@ -202,7 +202,7 @@ public:
     m_fwPEQ.notify(trans,phase,t);
     if (phase==tlm::BEGIN_REQ){
       //add our private information to the txn
-      assert(!connInfo);
+      sc_assert(!connInfo);
       connInfo=m_connInfoPool.construct();
       connInfo->fwID=decode(trans.get_address());
       connInfo->bwID=initiator_id;
@@ -215,7 +215,7 @@ public:
       return tlm::TLM_COMPLETED;
     }
     else
-      {assert(0); exit(1);}
+      {sc_assert(0); exit(1);}
     return tlm::TLM_ACCEPTED;
   }
 
@@ -227,7 +227,7 @@ public:
     if (phase != tlm::END_REQ && phase != tlm::BEGIN_RESP) {
       std::cout << "ERROR: '" << name()
                 << "': Illegal phase received from target." << std::endl;
-      assert(false); exit(1);
+      sc_assert(false); exit(1);
     }
     //simply stuff it into the bw PEQ
     m_bwPEQ.notify(trans,phase,t);
@@ -238,15 +238,15 @@ public:
     //first get our private info from the txn
     ConnectionInfo* connInfo;
     accessMySpecificExtensions(trans).get_extension(connInfo);
-    assert(connInfo);
+    sc_assert(connInfo);
     phase_type p=phase;
     sc_core::sc_time t=sc_core::SC_ZERO_TIME;
     BTag* btag;
     accessMySpecificExtensions(trans).get_extension(btag);
     bool doCall=btag==NULL; //we only will do a bw call if we are not in a wrapped b_transport
     if ((phase==tlm::END_REQ) | (connInfo->clearReq)){ //in case the target left out end_req clearReq reminds us to unlock the req port
-      assert(m_pendingReqs[connInfo->fwID].size());
-      assert(m_pendingReqs[connInfo->fwID].front()==&trans);
+      sc_assert(m_pendingReqs[connInfo->fwID].size());
+      sc_assert(m_pendingReqs[connInfo->fwID].front()==&trans);
       m_pendingReqs[connInfo->fwID].pop_front(); //allow another req to start at this target
       if (m_pendingReqs[connInfo->fwID].size()){ //there was a pending req
         phase_type ph=tlm::BEGIN_REQ;
@@ -277,7 +277,7 @@ public:
             }
             break;
           default:
-            assert(0); exit(1);
+            sc_assert(0); exit(1);
 
         };
     }
@@ -288,7 +288,7 @@ public:
   void fwPEQcb(transaction_type& trans, const phase_type& phase){
     ConnectionInfo* connInfo;
     accessMySpecificExtensions(trans).get_extension(connInfo);
-    assert(connInfo);
+    sc_assert(connInfo);
     phase_type ph=phase;
     sc_core::sc_time t=sc_core::SC_ZERO_TIME;
     if (phase==tlm::BEGIN_REQ){
@@ -306,9 +306,9 @@ public:
       accessMySpecificExtensions(trans).clear_extension(connInfo); //remove our specific extension as it is not needed any more
       if (!connInfo->alreadyComplete) {
         sync_enum_type tmp=initiator_socket[connInfo->fwID]->nb_transport_fw(trans, ph, t);
-        assert(tmp==tlm::TLM_COMPLETED);
+        sc_assert(tmp==tlm::TLM_COMPLETED);
       }
-      assert(m_pendingResps[connInfo->bwID].size());
+      sc_assert(m_pendingResps[connInfo->bwID].size());
       m_pendingResps[connInfo->bwID].pop_front(); //remove current response
       if (m_pendingResps[connInfo->bwID].size()){ //if there was one pending
         ph=tlm::BEGIN_RESP; //schedule its transmission

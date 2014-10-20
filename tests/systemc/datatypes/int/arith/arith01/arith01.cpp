@@ -35,7 +35,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
 #include "systemc.h"
 
 /*
@@ -69,7 +68,7 @@ crunch(sc_signed& z, int31 v31, int u, int v)
         z += v;
         v31.q *= u;
         v31.q += v;
-        assert(z == v31.q);
+        sc_assert(z == v31.q);
     }
 }
 
@@ -92,35 +91,35 @@ sc_main( int argc, char* argv[] )
 
     y = -256;
     v.q = -256;
-    assert(y == v.q);
+    sc_assert(y == v.q);
     cout << y << '\t' << v.q << endl;
     for (int i = 0; i < 1000; ++i) {
         y++;
         v.q++;
         fix_int9(v);
         cout << y << '\t' << v.q << endl;
-        assert(y == v.q);
+        sc_assert(y == v.q);
     }
     for (int i = 0; i < 1000; ++i) {
         y--;
         v.q--;
         fix_int9(v);
         cout << y << '\t' << v.q << endl;
-        assert(y == v.q);
+        sc_assert(y == v.q);
     }
     for (int i = 0; i < 1000; ++i) {
         ++y;
         ++v.q;
         fix_int9(v);
         cout << y << '\t' << v.q << endl;
-        assert(y == v.q);
+        sc_assert(y == v.q);
     }
     for (int i = 0; i < 1000; ++i) {
         --y;
         --v.q;
         fix_int9(v);
         cout << y << '\t' << v.q << endl;
-        assert(y == v.q);
+        sc_assert(y == v.q);
     }
 
     z = 129023;

@@ -86,7 +86,7 @@ public:
   }
 
   void free (T* cont){
-    assert(used);
+    sc_assert(used);
     entry* e=used;
     used=e->next;
     e->that=cont;

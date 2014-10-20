@@ -20,19 +20,19 @@ SC_MODULE(M)
   {
     SC_REPORT_FATAL("/JA", "A bad thing has happened");
     wait(1, SC_NS);
-    assert(sc_report_handler::get_count(SC_FATAL) == 1);
+    sc_assert(sc_report_handler::get_count(SC_FATAL) == 1);
     global_flag_1 = true;
 
     sc_report_handler::stop_after(SC_FATAL, 0);
     SC_REPORT_FATAL("/JA", "A bad thing has happened");
     wait(1, SC_NS);
-    assert(sc_report_handler::get_count(SC_FATAL) == 2);
+    sc_assert(sc_report_handler::get_count(SC_FATAL) == 2);
     global_flag_2 = true;
 
     sc_report_handler::stop_after(SC_FATAL, -1);
     SC_REPORT_FATAL("/JA", "A bad thing has happened");
     wait(1, SC_NS);
-    assert(sc_report_handler::get_count(SC_FATAL) == 3);
+    sc_assert(sc_report_handler::get_count(SC_FATAL) == 3);
     global_flag_3 = true;
   }
 };
@@ -55,13 +55,13 @@ int sc_main(int argc, char* argv[])
   Top top("top");
   sc_start();
 
-  assert(global_flag_1);
-  assert(global_flag_2);
-  assert(global_flag_3);
-  assert(sc_report_handler::get_count(SC_INFO) == 0);
-  assert(sc_report_handler::get_count(SC_WARNING) == 0);
-  assert(sc_report_handler::get_count(SC_ERROR) == 0);
-  assert(sc_report_handler::get_count(SC_FATAL) == 3);
+  sc_assert(global_flag_1);
+  sc_assert(global_flag_2);
+  sc_assert(global_flag_3);
+  sc_assert(sc_report_handler::get_count(SC_INFO) == 0);
+  sc_assert(sc_report_handler::get_count(SC_WARNING) == 0);
+  sc_assert(sc_report_handler::get_count(SC_ERROR) == 0);
+  sc_assert(sc_report_handler::get_count(SC_FATAL) == 3);
 
   cout << endl << "Success" << endl;
   return 0;

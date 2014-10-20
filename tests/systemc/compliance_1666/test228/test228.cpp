@@ -41,9 +41,9 @@ SC_MODULE(Mod)
     sc_fxval fxv;
     sc_fxval_fast fxvf;
 
-    assert(sc_abs(-1) == 1);
-    assert(sc_max(1, 2) == 2);
-    assert(sc_min(1, 2) == 1);
+    sc_assert(sc_abs(-1) == 1);
+    sc_assert(sc_max(1, 2) == 2);
+    sc_assert(sc_min(1, 2) == 1);
     sc_copyright();
     sc_version();
     sc_release();
@@ -55,7 +55,7 @@ SC_MODULE(Mod)
     sev = SC_WARNING;
     sev = SC_ERROR;
     sev = SC_FATAL;
-    assert (sev == SC_FATAL);
+    sc_assert (sev == SC_FATAL);
 
     sc_actions act;
     act = SC_DO_NOTHING;
