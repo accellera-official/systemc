@@ -606,6 +606,17 @@ in the 'Preprocessor definitions' setting.
    See : Environment variable SC_COPYRIGHT_MESSAGE
 
 
+ * SC_ENABLE_ASSERTIONS -
+   Always enable the `sc_assert' expressions
+
+   Some build systems define `NDEBUG' by default in optimised build
+   configurations. As a result, the SystemC assertion macro `sc_assert()'
+   is disabled (similar to the C `assert()' macro).  By defining this
+   preprocessor symbol (when building the library and/or an application),
+   the `sc_assert()' checks are always enabled, irrespectively of the
+   definition of `NDEBUG'.
+
+
  * SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS -
    Allow a process to trigger itself immediately
 
