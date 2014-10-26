@@ -259,6 +259,8 @@ option (DISABLE_COPYRIGHT_MESSAGE "Do not print the copyright message when start
 
 option (DISABLE_VIRTUAL_BIND "Disable the definition of bind() member functions of ports and exports as \"virtual\", which is incompatible with old TLM library implementations (< 2.0.2)." OFF)
 
+option (ENABLE_ASSERTIONS "Always enable the `sc_assert' expressions." ON)
+
 option (ENABLE_EARLY_MAXTIME_CREATION "Allow creation of sc_time objects with a value of sc_max_time() before finalizing the time resolution." ON)
 
 option (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS "Enable immediate self-notification of processes, which is no longer supported due to changes in IEEE Std 1666-2011 (see sc_event::notify, 5.10.6)." OFF)
@@ -493,6 +495,10 @@ endif (DISABLE_COPYRIGHT_MESSAGE)
 if (DISABLE_VIRTUAL_BIND)
   add_definitions (-DSC_DISABLE_VIRTUAL_BIND)
 endif (DISABLE_VIRTUAL_BIND)
+
+if (ENABLE_ASSERTIONS)
+  add_definitions (-DSC_ENABLE_ASSERTIONS)
+endif (ENABLE_ASSERTIONS)
 
 if (ENABLE_EARLY_MAXTIME_CREATION)
   add_definitions (-DSC_ENABLE_EARLY_MAXTIME_CREATION)
