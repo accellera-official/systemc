@@ -48,6 +48,7 @@ H_FILES = \
 nobase_include_HEADERS = $(H_FILES)
 
 EXTRA_DIST += \
-	README_TLM.txt
+	README_TLM.txt \
+	CMakeLists.txt
 
 ## Taf!

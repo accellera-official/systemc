@@ -36,5 +36,9 @@ SUBDIRS = \
 	sysc \
 	tlm
 
+## add CMake scripts to distribution
+EXTRA_DIST += \
+	CMakeLists.txt
+
 
 ## Taf!

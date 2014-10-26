@@ -46,7 +46,8 @@ DOC_FILES = \
 	LICENSE \
 	NEWS \
 	README \
-	RELEASENOTES
+	RELEASENOTES \
+	cmake/INSTALL_USING_CMAKE
 
 EXTRA_DIST = \
 	$(DOC_FILES) \
@@ -56,7 +57,15 @@ EXTRA_DIST = \
 	\
 	msvc80/SystemC/SystemC.sln \
 	msvc80/SystemC/SystemC.vcproj \
-	msvc80/SystemC/SystemC-examples.sln
+	msvc80/SystemC/SystemC-examples.sln \
+	\
+	CMakeLists.txt \
+	cmake/SystemCConfig.cmake.in \
+	cmake/SystemCConfigVersion.cmake.in \
+	cmake/TLMConfig.cmake.in \
+	cmake/TLMConfigVersion.cmake.in \
+	cmake/run_test.sh.in \
+	cmake/run_test_with_input.sh.in
 
 ## ****************************************************************************
 
