@@ -417,17 +417,13 @@ if (QT_ARCH STREQUAL "sparc")
   add_custom_command (OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/sysc/qt/md/sparc.s
                       COMMAND sed 's/_qt_/qt_/' ${CMAKE_CURRENT_SOURCE_DIR}/sysc/qt/md/sparc.s > ${CMAKE_CURRENT_BINARY_DIR}/sysc/qt/md/sparc.s
                       DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/sysc/qt/md/sparc.s)
-  set (QT_SOURCES ${CMAKE_CURRENT_BINARY_DIR}/sysc/qt/md/sparc.s
-                  sysc/qt/md/null.c)
+  set (QT_SOURCES ${CMAKE_CURRENT_BINARY_DIR}/sysc/qt/md/sparc.s)
 elseif (QT_ARCH STREQUAL "hppa")
-  set (QT_SOURCES sysc/qt/md/hppa.s
-                  sysc/qt/md/null.c)
+  set (QT_SOURCES sysc/qt/md/hppa.s)
 elseif (QT_ARCH STREQUAL "x86_64")
-  set (QT_SOURCES sysc/qt/md/iX86_64.s
-                  sysc/qt/md/null.c)
+  set (QT_SOURCES sysc/qt/md/iX86_64.s)
 elseif (QT_ARCH STREQUAL "i386")
-  set (QT_SOURCES sysc/qt/md/i386.s
-                  sysc/qt/md/null.c)
+  set (QT_SOURCES sysc/qt/md/i386.s)
 elseif (QT_ARCH STREQUAL "powerpc_mach")
   set (QT_SOURCES sysc/qt/md/powerpc_mach.s
                   sysc/qt/md/powerpc.c)
@@ -435,8 +431,7 @@ elseif (QT_ARCH STREQUAL "powerpc_sys5")
   set (QT_SOURCES sysc/qt/md/powerpc_sys5.s
                   sysc/qt/md/powerpc.c)
 else (QT_ARCH STREQUAL "sparc")
-  set (QT_SOURCES sysc/qt/md/null.s
-                  sysc/qt/md/null.c)
+  set (QT_SOURCES sysc/qt/md/null.s)
 endif (QT_ARCH STREQUAL "sparc")
 set (QT_SOURCES sysc/qt/qt.c ${QT_SOURCES})
 
