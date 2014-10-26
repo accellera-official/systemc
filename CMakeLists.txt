@@ -471,20 +471,22 @@ endif (QT_ARCH)
 
 
 ###############################################################################
-# Configure Pthreads if necessary.
+# Configure Pthreads or Fiber if necessary.
 ###############################################################################
 
-if (ENABLE_PTHREADS OR NOT QT_ARCH OR (NOT DISABLE_ASYNC_UPDATES AND NOT WIN32))
+if (ENABLE_PTHREADS OR (QT_ARCH AND NOT DISABLE_ASYNC_UPDATES) OR NOT QT_ARCH)
   set (CMAKE_THREAD_PREFER_PTHREAD)
   find_package (Threads REQUIRED)
 
-  if (NOT CMAKE_USE_PTHREADS_INIT)
+  if ((ENABLE_PTHREADS OR (QT_ARCH AND NOT DISABLE_ASYNC_UPDATES)) AND NOT CMAKE_USE_PTHREADS_INIT)
     message (SEND_ERROR "Failed to find the Pthreads library required to implement the SystemC coroutines and async_request_update() of primitive channels on Unix.")
-  endif (NOT CMAKE_USE_PTHREADS_INIT)
+  elseif (NOT CMAKE_USE_WIN32_INIT)
+    message (SEND_ERROR "Failed to find the Fiber library required to implement the SystemC coroutines and async_request_update() of primitive channels on Windows.")
+  endif ((ENABLE_PTHREADS OR (QT_ARCH AND NOT DISABLE_ASYNC_UPDATES)) AND NOT CMAKE_USE_PTHREADS_INIT)
   if (ENABLE_PTHREADS)
     add_definitions (-DSC_USE_PTHREADS)
   endif (ENABLE_PTHREADS)
-endif (ENABLE_PTHREADS OR NOT QT_ARCH OR (NOT DISABLE_ASYNC_UPDATES AND NOT WIN32))
+endif (ENABLE_PTHREADS OR (QT_ARCH AND NOT DISABLE_ASYNC_UPDATES) OR NOT QT_ARCH)
 
 
 ###############################################################################
