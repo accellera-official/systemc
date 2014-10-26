@@ -430,8 +430,6 @@ elseif (QT_ARCH STREQUAL "powerpc_mach")
 elseif (QT_ARCH STREQUAL "powerpc_sys5")
   set (QT_SOURCES sysc/qt/md/powerpc_sys5.s
                   sysc/qt/md/powerpc.c)
-else (QT_ARCH STREQUAL "sparc")
-  set (QT_SOURCES sysc/qt/md/null.s)
 endif (QT_ARCH STREQUAL "sparc")
 set (QT_SOURCES sysc/qt/qt.c ${QT_SOURCES})
 
