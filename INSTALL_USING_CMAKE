@@ -34,7 +34,7 @@ the motivation to implement a more flexible configuration system for
 SystemC using CMake <http://www.cmake.org/>. Depending on the
 operating system, processor, compiler, and available dependency
 libraries, it can configure the sources and generate the necessary
-files to compile/install SystemC using GNU Make, Ninja or an IDE such as
+files to compile/install SystemC using GNU Make, Ninja, or an IDE such as
 Eclipse, Xcode, MS Visual Studio C++, or Kdevelop.
 
 The CMake build scripts are compatible with CMake >2.8.5 and have been
@@ -234,7 +234,7 @@ and libraries. The word width of the target architecture is simply
 chosen with the "-m64" or "-m32" option, which has to be consistently
 passed at each compiler and linker call.
 
-Therefore, it is in priciple sufficient to add "-m32" to the
+Therefore, it is in principle sufficient to add "-m32" to the
 corresponding CMake variables containing the flags to be passed to the
 linker and compiler:
 
@@ -283,7 +283,7 @@ it, but depending on the chosen compiler options, it may need adjustment.
 -----------------------------
 
 On OS X, a similar approach as in section 3.1 can be adopted. However,
-it has to be noted that Apple's version of GCC and Clang don't support
+it has to be noted that Apple's versions of GCC and Clang don't support
 "-m32" and "-m64", but the more flexible "-arch
 <i386|x86_64|ppc|ppc64>" parameter. The latter can be even repeated
 several times on the command line to create universal binaries able to
@@ -308,7 +308,7 @@ toolchain. Then, you can follow the instruction in section 3.1.
 
 As CMake cannot guess the target system, a number of variables have to
 be preset so that the correct compiler toolchain and libraries are
-found. It is recommended to do this with a socalled toolchain file,
+found. It is recommended to do this with a so-called toolchain file,
 which is passed as an argument to cmake, ccmake or cmake-gui using the
 option "-DCMAKE_TOOLCHAIN_FILE=<path-to-file>". The file in CMake
 syntax has to define the following variables:
