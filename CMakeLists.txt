@@ -727,7 +727,7 @@ install (FILES AUTHORS
                COPYING
                ChangeLog
                INSTALL
-               INSTALL_USING_CMAKE
+               cmake/INSTALL_USING_CMAKE
                LICENSE
                NEWS
                README
