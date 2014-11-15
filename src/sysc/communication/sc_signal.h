@@ -52,8 +52,8 @@ bool
 sc_writer_policy_check_write::check_write( sc_object* target, bool )
 {
   sc_object* writer_p = sc_get_curr_simcontext()->get_current_writer();
-  if( SC_UNLIKELY_(m_writer_p == 0) ) {
-       m_writer_p = writer_p;
+  if( SC_UNLIKELY_( !m_writer_p.valid() ) ) {
+       sc_process_handle( writer_p ).swap( m_writer_p );
   } else if( SC_UNLIKELY_(m_writer_p != writer_p && writer_p != 0) ) {
        sc_signal_invalid_writer( target, m_writer_p, writer_p, m_check_delta );
        // error has been suppressed, ignore check as well

@@ -36,6 +36,8 @@
 #  endif
 #endif
 
+#include "sysc/kernel/sc_process_handle.h"
+
 namespace sc_core {
 
 class sc_object;
@@ -79,9 +81,9 @@ struct sc_writer_policy_check_write
   void update(){}
 protected:
   sc_writer_policy_check_write( bool check_delta = false )
-    : m_check_delta( check_delta ), m_writer_p(NULL) {}
+    : m_check_delta( check_delta ), m_writer_p() {}
   const bool         m_check_delta;
-  sc_object*         m_writer_p;
+  sc_process_handle  m_writer_p;
 };
 
 struct sc_writer_policy_check_delta
@@ -98,7 +100,7 @@ struct sc_writer_policy_check_delta
       return true;
   }
 
-  void update(){ m_writer_p = NULL; }
+  void update(){ sc_process_handle().swap( m_writer_p ); }
 };
 
 struct sc_writer_policy_nocheck_port
