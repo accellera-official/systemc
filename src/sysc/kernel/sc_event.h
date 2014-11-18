@@ -326,8 +326,6 @@ private:
 
 #define SC_KERNEL_EVENT_PREFIX "$$$$kernel_event$$$$_"
 
-extern sc_event sc_non_event; // Event that never happens.
-
 // ----------------------------------------------------------------------------
 //  CLASS : sc_event_timed
 //
