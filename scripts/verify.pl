@@ -712,8 +712,12 @@ sub init_globals
 #
 #  Add a directory to the library search path, if it exists.
 #
-#  Prefer an arch-specific suffix first.  The following locations are checked
-#  for a given `$dir' and the _first_ match is returned:
+#  Prefer an arch-specific suffix first.  In case an optional second argument
+#  is given, it is used as a specific relative path on MSVC, that is interleaved
+#  with the different suffixes according to the patterns below.
+#
+#  The following locations are checked for a given `$dir' (+ optional `$local`)
+#  and the _first_ match is returned:
 #
 #  Unix-like architectures:
 #    1. `$dir/lib-<arch>`
@@ -722,17 +726,17 @@ sub init_globals
 #    4. `$dir`
 #
 #  MS Visual C++ (assuming `<config>` matches `Debug` or `Release`):
-#    1. `$dir/msvc<ver>/x64/<config>` (64-bit only)
-#    2. `$dir/x64/<config>`           (64-bit only)
-#    2. `$dir/msvc<ver>/<config>`
-#    3. `$dir`/<config>`
+#    1. `$dir/msvc<ver>/$local/x64/<config>`  (64-bit only)
+#    2. `$dir/$local/x64/<config>`            (64-bit only)
+#    2. `$dir/msvc<ver>/$local/<config>`
+#    3. `$dir/$local/<config>`
 #    4. `$dir`
 #
 # -----------------------------------------------------------------------------
 
 sub add_to_ldpath
 {
-    my ( $dir ) = @_;
+    my ( $dir, $local ) = @_;
     my @candidates = ();
 
     &print_log( "\nDIAG: check ldpath '$dir'\n" ) if $rt_diag >= 4;
@@ -743,15 +747,18 @@ sub add_to_ldpath
         my $suffix;
         $x64 =~ s|-|/|;
 
+        $local = "/$local" if ( $local );
+
         if( $rt_props & $rt_test_props{ 'debug' } ) {
             $suffix = '/Debug';
         } else {
             $suffix = '/Release';
         }
-        push @candidates, "$dir$msvc$x64$suffix" if ( -d "$dir$msvc$x64$suffix" );
-        push @candidates, "$dir$x64$suffix"      if ( -d "$dir$x64$suffix" );
-        push @candidates, "$dir$msvc$suffix"     if ( -d "$dir$msvc$suffix" );
-        push @candidates, "$dir$suffix"          if ( -d "$dir$suffix" );
+        push @candidates, "$dir$msvc$local$x64$suffix" if ( -d "$dir$msvc$local$x64$suffix" );
+        push @candidates, "$dir$local$x64$suffix"      if ( -d "$dir$local$x64$suffix" );
+        push @candidates, "$dir$msvc$local$suffix"     if ( -d "$dir$msvc$local$suffix" );
+        push @candidates, "$dir$local$suffix"          if ( -d "$dir$local$suffix" );
+        push @candidates, "$dir$local$suffix"          if ( -d "$dir$local$suffix" );
 
     } else {
         my $lib  = "/lib";
@@ -797,7 +804,7 @@ sub prepare_environment
     $rt_debug_ldflags = "";
     $rt_optimize_flag = "-O2";
     $rt_systemc_include = "$rt_systemc_home/include";
-    $rt_systemc_ldpath  = "$rt_systemc_home/lib";
+    $rt_systemc_ldpath  = "$rt_systemc_home";
 
     # predefined macros
     @rt_defines = ();
@@ -848,7 +855,6 @@ sub prepare_environment
         $rt_debug_flag      = "-GZ -MTd -Zi";
         $rt_debug_ldflags   = "-DEBUG -PDB:$rt_prodname.pdb";
         $rt_systemc_include = "$rt_systemc_home/src";
-        $rt_systemc_ldpath  = "$rt_systemc_home/$msvc/systemc";
     }
 
     # include directories
@@ -858,7 +864,7 @@ sub prepare_environment
     push( @rt_includes, $rt_systemc_include );
 
     # libraries paths
-    @rt_ldpaths  = add_to_ldpath( $rt_systemc_ldpath );
+    @rt_ldpaths  = add_to_ldpath( $rt_systemc_ldpath, "systemc" );
     # libraries (basenames only)
     @rt_ldlibs   = ( "systemc" );
     push( @rt_ldlibs, "pthread" ) unless (!$rt_pthreads);
