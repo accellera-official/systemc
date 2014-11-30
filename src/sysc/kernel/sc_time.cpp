@@ -27,6 +27,7 @@
 
 #include <cmath>
 #include <cstdio>
+#include <cstdlib>
 
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/kernel/sc_simcontext.h"
@@ -67,6 +68,16 @@ const char* time_units[] = {
     "us",
     "ms",
     "s"
+};
+
+static
+const char* time_units_sc[] = {
+    "SC_FS",
+    "SC_PS",
+    "SC_NS",
+    "SC_US",
+    "SC_MS",
+    "SC_SEC"
 };
 
 
@@ -169,6 +180,41 @@ sc_time::from_value( value_type v )
     return t;
 }
 
+sc_time
+sc_time::from_symbol( double v, const char* unit )
+{
+    sc_time t;
+    if( !unit || !*unit ) {
+        SC_REPORT_ERROR( SC_ID_TIME_CONVERSION_FAILED_, "no time unit given" );
+        return t;
+    }
+    unsigned tu = SC_FS;
+    while( tu <= SC_SEC
+          && std::strcmp( unit, time_units[tu] ) != 0
+          && std::strcmp( unit, time_units_sc[tu] ) != 0 )
+      { ++tu; }
+
+    if( tu > SC_SEC ) {
+        SC_REPORT_ERROR( SC_ID_TIME_CONVERSION_FAILED_, "invalid unit given" );
+        return t;
+    }
+
+    t = sc_time( v, static_cast<sc_time_unit>(tu) );
+    return t;
+}
+
+sc_time
+sc_time::from_string( const char * str )
+{
+    char * endptr = NULL;
+    double v = str ? std::strtod( str, &endptr ) : 0.0;
+    if( str == endptr || v < 0.0 ) {
+        SC_REPORT_ERROR( SC_ID_TIME_CONVERSION_FAILED_, "invalid value given" );
+        return SC_ZERO_TIME;
+    }
+    while( *endptr && std::isspace( *endptr ) ) ++endptr; // skip whitespace
+    return from_symbol( v, endptr );
+}
 
 // conversion functions
 

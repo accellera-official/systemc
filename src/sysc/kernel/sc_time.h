@@ -84,6 +84,10 @@ public:
     sc_time( const sc_time& );
 
     static sc_time from_value( value_type );
+    // convert time unit from string
+    // "fs"/"SC_FS"->SC_FS, "ps"/"SC_PS"->SC_PS, "ns"/"SC_NS"->SC_NS, ...
+    static sc_time from_symbol( double, const char* unit );
+    static sc_time from_string( const char * str );
 
     // deprecated, use from_value(v)
     sc_time( double, bool scale );
