@@ -80,6 +80,84 @@ const char* time_units_sc[] = {
     "SC_SEC"
 };
 
+// ----------------------------------------------------------------------------
+//  CLASS : sc_time_tuple
+//
+//  The time tuple helper class.
+// ----------------------------------------------------------------------------
+
+void
+sc_time_tuple::init( value_type val )
+{
+    sc_time_params* time_params = sc_get_curr_simcontext()->m_time_params;
+#   if SC_MAXTIME_ALLOWED_
+        time_params->time_resolution_fixed = true;
+#   endif // SC_MAXTIME_ALLOWED_
+
+    value_type tr  = SCAST<sc_dt::int64>( time_params->time_resolution );
+    unsigned scale = 0;
+    while( ( tr % 10 ) == 0 ) {
+        tr /= 10;
+        scale++;
+    }
+    sc_assert( tr == 1 );
+
+    unsigned tu = scale / 3;
+    while( tu < SC_SEC && ( val % 10 ) == 0 ) {
+        val /= 10;
+        scale++;
+        tu += ( 0 == ( scale % 3 ) );
+    }
+
+    m_value  = val;
+    m_unit   = static_cast<sc_time_unit>( tu );
+    m_offset = 1;
+    for( scale %= 3; scale != 0 ; scale-- )
+        m_offset *= 10;
+}
+
+bool
+sc_time_tuple::has_value() const
+{
+    return ( m_value < ( (~sc_dt::UINT64_ZERO) / m_offset ) );
+}
+
+sc_time::value_type
+sc_time_tuple::value() const
+{
+    if( !has_value() )
+        SC_REPORT_ERROR( SC_ID_TIME_CONVERSION_FAILED_
+                       , "sc_time_tuple value overflow" );
+    return m_value * m_offset;
+}
+
+const char *
+sc_time_tuple::symbol() const
+{
+    return time_units[m_unit];
+}
+
+std::string
+sc_time_tuple::to_string() const
+{
+    std::string result;
+
+    if ( !m_value )
+        std::string( "0 s" ).swap( result );
+    else
+    {
+        char buf[BUFSIZ];
+        std::sprintf( buf, "%" PRIu64, m_value );
+        std::string( buf ).swap( result );
+
+        for( unsigned zeros = m_offset; zeros > 1; zeros /= 10 )
+            result += '0';
+        result += ' ';
+        result += time_units[m_unit];
+    }
+    return result;
+}
+
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_time
@@ -242,46 +320,6 @@ sc_time::to_seconds() const
 #   endif // SC_MAXTIME_ALLOWED_
     return ( sc_dt::uint64_to_double( m_value ) *
 	     time_params->time_resolution * 1e-15 );
-}
-
-const std::string
-sc_time::to_string() const
-{
-    value_type val = m_value;
-    if( val == 0 ) {
-	return std::string( "0 s" );
-    }
-    sc_time_params* time_params = sc_get_curr_simcontext()->m_time_params;
-#   if SC_MAXTIME_ALLOWED_
-        time_params->time_resolution_fixed = true;
-#   endif // SC_MAXTIME_ALLOWED_
-    value_type tr = SCAST<sc_dt::int64>( time_params->time_resolution );
-    int n = 0;
-    while( ( tr % 10 ) == 0 ) {
-	tr /= 10;
-	n ++;
-    }
-    sc_assert( tr == 1 );
-    while( ( val % 10 ) == 0 ) {
-	val /= 10;
-	n ++;
-    }
-    char buf[BUFSIZ];
-    std::sprintf( buf, "%" PRIu64, val );
-    std::string result( buf );
-    if( n >= 15 ) {
-	for( int i = n - 15; i > 0; -- i ) {
-	    result += "0";
-	}
-	result += " s";
-    } else {
-	for( int i = n % 3; i > 0; -- i ) {
-	    result += "0";
-	}
-	result += " ";
-	result += time_units[n / 3];
-    }
-    return result;
 }
 
 

@@ -63,6 +63,7 @@ enum sc_time_unit
     SC_SEC
 };
 
+class sc_time_tuple;
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_time
@@ -105,6 +106,7 @@ public:
     double to_default_time_units() const;
     double to_seconds() const;
     const std::string to_string() const;
+    sc_time_tuple to_tuple() const; // normalized time unit
 
 
     // relational operators
@@ -145,6 +147,40 @@ private:
     value_type m_value;
 };
 
+// ----------------------------------------------------------------------------
+//  CLASS : sc_time_tuple
+//
+//  The time tuple helper class.
+// ----------------------------------------------------------------------------
+
+class sc_time_tuple
+{
+    typedef sc_time::value_type value_type;
+    friend class sc_time;
+
+private:
+    explicit sc_time_tuple( value_type v );
+    void init( value_type v );
+
+public:
+    sc_time_tuple()
+      : m_value(), m_unit( SC_SEC ), m_offset(1) {}
+
+    bool         has_value() const;
+    value_type   value()     const;
+    sc_time_unit unit()      const { return m_unit; } // normalized unit
+    const char * symbol()    const;               // normalized unit symbol
+
+    operator sc_time() const { return sc_time( to_double(), m_unit ); }
+
+    double      to_double() const; // relative to the normalized unit
+    std::string to_string() const;
+
+private:
+    value_type   m_value;
+    sc_time_unit m_unit;
+    unsigned     m_offset;
+};
 
 // print operator
 
@@ -165,6 +201,13 @@ sc_time::sc_time( const sc_time& t )
 : m_value( t.m_value )
 {}
 
+inline
+sc_time_tuple::sc_time_tuple( value_type v )
+  : m_value(), m_unit( SC_SEC ), m_offset(1)
+{
+    if( v )
+        init( v );
+}
 
 // assignment operator
 
@@ -188,10 +231,34 @@ sc_time::value() const  // relative to the time resolution
 
 
 inline
+sc_time_tuple
+sc_time::to_tuple() const  // normalized relative to the time resolution
+{
+    return sc_time_tuple( m_value );
+}
+
+
+inline
 double
 sc_time::to_double() const  // relative to the time resolution
 {
     return sc_dt::uint64_to_double( m_value );
+}
+
+
+inline
+double
+sc_time_tuple::to_double() const // relative to the normalized time unit
+{
+    return sc_dt::uint64_to_double( m_value ) * m_offset;
+}
+
+
+inline
+const std::string
+sc_time::to_string() const
+{
+    return to_tuple().to_string();
 }
 
 
