@@ -777,7 +777,8 @@ sub add_to_ldpath
     &print_log( "DIAG: add ldpath '".$candidates[0]."'\n" )
       if scalar @candidates && $rt_diag >= 2;
 
-    ( $candidates[0] ); # return first found directory
+    # return first found directory
+    ( scalar @candidates ) ? ( $candidates[0] ) : ();
 }
 
 # -----------------------------------------------------------------------------
