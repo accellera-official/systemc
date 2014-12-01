@@ -87,7 +87,7 @@ void sc_process_b::add_static_event( const sc_event& e )
         e.add_static( method_h );
         break;
       default:
-        assert( false );
+        sc_assert( false );
         break;
     }
 }
@@ -166,7 +166,7 @@ void sc_process_b::disconnect_process()
 //------------------------------------------------------------------------------
 void sc_process_b::delete_process()
 {
-    assert( m_references_n == 0 );
+    sc_assert( m_references_n == 0 );
 
     // Immediate deletion:
 

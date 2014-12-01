@@ -1373,7 +1373,7 @@ sc_simcontext::remove_delta_event( sc_event* e )
 {
     int i = e->m_delta_event_index;
     int j = m_delta_events.size() - 1;
-    assert( i >= 0 && i <= j );
+    sc_assert( i >= 0 && i <= j );
     if( i != j ) {
 	sc_event** l_delta_events = &m_delta_events[0];
 	l_delta_events[i] = l_delta_events[j];
@@ -1837,6 +1837,7 @@ sc_defunct_process_function( sc_module* )
     // sc_cthread_process'es. In a correctly constructed world, this
     // function should never be called; hence the assert.
     assert( false );
+    sc_assert( false );
 }
 
 //------------------------------------------------------------------------------

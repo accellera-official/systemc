@@ -147,7 +147,7 @@ sc_cor_pkg_pthread::sc_cor_pkg_pthread( sc_simcontext* simc )
     {
         pthread_cond_init( &create_condition, PTHREAD_NULL );
         pthread_mutex_init( &create_mutex, PTHREAD_NULL );
-        assert( active_cor_p == 0 );
+        sc_assert( active_cor_p == 0 );
         main_cor.m_pkg_p = this;
 		DEBUGF << &main_cor << ": is main co-routine" << std::endl;
         active_cor_p = &main_cor;

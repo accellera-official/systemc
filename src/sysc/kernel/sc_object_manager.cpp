@@ -30,6 +30,7 @@
 #include <cassert>
 #include <cctype>
 #include <cstddef>
+#include <cctype>
 #include <algorithm> // pick up std::sort.
 
 #include "sysc/utils/sc_iostream.h"
@@ -317,7 +318,7 @@ sc_object_manager::next_object()
 {
     sc_object* result_p; // result to return.
 
-    assert( m_object_walk_ok );
+    sc_assert( m_object_walk_ok );
 
     if ( m_object_it == m_instance_table.end() ) return NULL;
     m_object_it++;

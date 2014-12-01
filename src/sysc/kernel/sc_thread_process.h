@@ -180,7 +180,7 @@ class sc_thread_process : public sc_process_b {
 //------------------------------------------------------------------------------
 inline void sc_thread_process::set_stack_size( std::size_t size )
 {
-    assert( size );
+    sc_assert( size );
     m_stack_size = size;
 }
 

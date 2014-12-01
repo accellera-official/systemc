@@ -215,7 +215,7 @@ sc_time::to_string() const
 	tr /= 10;
 	n ++;
     }
-    assert( tr == 1 );
+    sc_assert( tr == 1 );
     while( ( val % 10 ) == 0 ) {
 	val /= 10;
 	n ++;

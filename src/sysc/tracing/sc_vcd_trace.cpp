@@ -66,6 +66,7 @@
 #include "sysc/datatypes/int/sc_uint_base.h"
 #include "sysc/datatypes/fx/fx.h"
 #include "sysc/tracing/sc_vcd_trace.h"
+#include "sysc/utils/sc_report.h" // sc_assert
 
 namespace sc_core {
 
@@ -2039,13 +2040,6 @@ vcd_trace_file::cycle(bool this_is_a_delta_cycle)
     }
 }
 
-#if 0
-void
-vcd_trace_file::create_vcd_name(std::string* p_destination)
-{
-    obtain_name.swap( *p_destination );
-}
-#endif
 
 // Create a VCD name for a variable
 std::string

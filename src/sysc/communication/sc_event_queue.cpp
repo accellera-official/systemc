@@ -87,7 +87,7 @@ void sc_event_queue::fire_event()
         return;
     }
     sc_time* t = m_ppq.extract_top();
-    assert( *t==sc_time_stamp() );
+    sc_assert( *t==sc_time_stamp() );
     delete t;
 
     if ( m_ppq.size() > 0 ) {

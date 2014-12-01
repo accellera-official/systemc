@@ -25,7 +25,6 @@
  *****************************************************************************/
 
 
-#include <cassert>
 #include <cstdlib>
 #include <cstddef>
 
@@ -59,7 +58,7 @@ sc_join::sc_join()
 void sc_join::add_process( sc_process_b* process_p )
 {
     sc_thread_handle handle = DCAST<sc_thread_handle>(process_p);
-    assert( handle != 0 );
+    sc_assert( handle != 0 );
     m_threads_n++;
     handle->add_monitor( this );
 }

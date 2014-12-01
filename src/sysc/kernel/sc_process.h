@@ -29,7 +29,6 @@
 #if !defined(sc_process_h_INCLUDED)
 #define sc_process_h_INCLUDED
 
-#include <cassert>
 #include "sysc/utils/sc_iostream.h"
 #include "sysc/kernel/sc_constants.h"
 #include "sysc/kernel/sc_object.h"
@@ -613,7 +612,7 @@ inline void sc_process_b::reference_decrement()
 //------------------------------------------------------------------------------
 inline void sc_process_b::reference_increment()
 {
-    assert(m_references_n != 0);
+    sc_assert(m_references_n != 0);
     m_references_n++;
 }
 
@@ -641,7 +640,7 @@ inline void sc_process_b::semantics()
 
     scoped_flag scoped_stack_flag( m_has_stack );
 
-    assert( m_process_kind != SC_NO_PROC_ );
+    sc_assert( m_process_kind != SC_NO_PROC_ );
 
     // Determine the reset status of this object instance and potentially
     // trigger its notify event:

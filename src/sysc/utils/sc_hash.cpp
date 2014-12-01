@@ -32,7 +32,7 @@
 #include "sysc/kernel/sc_cmnhdr.h"
 #include "sysc/utils/sc_hash.h"
 #include "sysc/utils/sc_mempool.h"
-#include "sysc/utils/sc_report.h"
+#include "sysc/utils/sc_report.h"  // sc_assert
 
 namespace sc_core {
 
@@ -344,7 +344,7 @@ sc_phash_base::remove( const void* k, void** pk, void** pc )
         *pc = ptr->contents;
     }
 
-    assert(*last == ptr);
+    sc_assert(*last == ptr);
     *last = ptr->next;
     delete ptr;
     --num_entries;
