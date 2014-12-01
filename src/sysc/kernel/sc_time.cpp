@@ -25,8 +25,8 @@
  *****************************************************************************/
 
 
-#include <math.h>
-#include <stdio.h>
+#include <cmath>
+#include <cstdio>
 
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/kernel/sc_simcontext.h"
@@ -215,7 +215,7 @@ sc_time::to_string() const
 	tr /= 10;
 	n ++;
     }
-    assert( tr == 1 );
+    sc_assert( tr == 1 );
     while( ( val % 10 ) == 0 ) {
 	val /= 10;
 	n ++;
