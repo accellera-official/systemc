@@ -896,7 +896,7 @@ sc_simcontext::simulate( const sc_time& duration )
 	return;
     }
 
-    sc_time non_overflow_time = sc_max_time() - m_curr_time;
+    sc_time non_overflow_time = max_time() - m_curr_time;
     if ( duration > non_overflow_time )
     {
 	SC_REPORT_ERROR(SC_ID_SIMULATION_TIME_OVERFLOW_, "");
