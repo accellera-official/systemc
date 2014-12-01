@@ -38,10 +38,11 @@
 //     P    = pointer to process message is for, or NULL in which case the
 //            message will not print.
 #if 0
+#   include <cstring>
 #   define DEBUG_NAME ""
 #   define DEBUG_MSG(NAME,P,MSG) \
     { \
-        if ( P && ( (strlen(NAME)==0) || !strcmp(NAME,P->name())) ) \
+        if ( P && ( (std::strlen(NAME)==0) || !std::strcmp(NAME,P->name())) ) \
           std::cout << "**** " << sc_time_stamp() << " ("  \
 	            << sc_get_current_process_name() << "): " << MSG \
 		    << " - " << P->name() << std::endl; \

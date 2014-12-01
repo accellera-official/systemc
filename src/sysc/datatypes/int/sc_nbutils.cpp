@@ -54,9 +54,9 @@
 // source.
 //
 
-#include <ctype.h>
+#include <cctype>
 #include <cstdio>
-#include <string.h>
+#include <cstring>
 
 #include "sysc/datatypes/int/sc_int_ids.h"
 #include "sysc/datatypes/int/sc_nbutils.h"

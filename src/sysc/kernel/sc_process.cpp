@@ -43,7 +43,7 @@ namespace sc_core {
 // Note the special name for 'non_event' - this makes sure it does not
 // appear as a named event.
 
-std::vector<sc_event*> sc_process_handle::empty_event_vector;
+std::vector<sc_event*>  sc_process_handle::empty_event_vector;
 std::vector<sc_object*> sc_process_handle::empty_object_vector;
 sc_event                sc_process_handle::non_event(SC_KERNEL_EVENT_PREFIX);
 

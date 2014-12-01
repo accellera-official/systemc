@@ -26,8 +26,8 @@
  *****************************************************************************/
 
 #include <cstdio>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 
 #include "sysc/utils/sc_iostream.h"
 #include "sysc/kernel/sc_process.h"

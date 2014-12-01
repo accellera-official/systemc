@@ -24,8 +24,8 @@
  CHANGE LOG APPEARS AT THE END OF THE FILE
  *****************************************************************************/
 
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 
 #include "sysc/kernel/sc_event.h"
 #include "sysc/kernel/sc_kernel_ids.h"
@@ -37,6 +37,10 @@
 #include "sysc/utils/sc_utils_ids.h"
 
 namespace sc_core {
+
+using std::malloc;
+using std::strrchr;
+using std::strncmp;
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_event

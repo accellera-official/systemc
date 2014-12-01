@@ -45,10 +45,11 @@ static const char* dont_use_envstring = "SYSTEMC_MEMPOOL_DONT_USE";
 static bool use_default_new = false;
 
 
-#include <stdio.h>
-#include <stdlib.h> // duplicate (c)stdlib.h headers for Solaris
+#include <cstdio>
 #include <cstdlib>
 #include "sysc/utils/sc_mempool.h"
+
+using std::printf;
 
 namespace sc_core {
 
@@ -128,7 +129,7 @@ sc_allocator::allocate()
         return result;
     }
     else {  // (next_avail == 0)
-        link* new_block = (link*) malloc(block_size);  // need alignment?
+        link* new_block = (link*) std::malloc(block_size);  // need alignment?
         new_block->next = (link*) block_list;
         block_list = (char*) new_block;
         result = (block_list + sizeof(link));
