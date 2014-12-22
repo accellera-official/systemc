@@ -708,6 +708,80 @@ sub init_globals
 }
 
 # -----------------------------------------------------------------------------
+#  SUB : add_to_ldpath
+#
+#  Add a directory to the library search path, if it exists.
+#
+#  Prefer an arch-specific suffix first.  In case an optional second argument
+#  is given, it is used as a specific relative path on MSVC, that is interleaved
+#  with the different suffixes according to the patterns below.
+#
+#  The following locations are checked for a given `$dir' (+ optional `$local`)
+#  and the _first_ match is returned:
+#
+#  Unix-like architectures:
+#    1. `$dir/lib-<arch>`
+#    2. `$dir-<arch>`
+#    3. `$dir/lib`
+#    4. `$dir`
+#
+#  MS Visual C++ (assuming `<config>` matches `Debug` or `Release`):
+#    1. `$dir/msvc<ver>/$local/x64/<config>`  (64-bit only)
+#    2. `$dir/$local/x64/<config>`            (64-bit only)
+#    2. `$dir/msvc<ver>/$local/<config>`
+#    3. `$dir/$local/<config>`
+#    4. `$dir`
+#
+# -----------------------------------------------------------------------------
+
+sub add_to_ldpath
+{
+    my ( $dir, $local ) = @_;
+    my @candidates = ();
+
+    &print_log( "\nDIAG: check ldpath '$dir'\n" ) if $rt_diag >= 4;
+
+    if( $rt_systemc_arch =~ /^(msvc[0-9]*)(-x64)?$/ ) {
+        my $msvc = "/$1";
+        my $x64  = $2;
+        my $suffix;
+        $x64 =~ s|-|/|;
+
+        $local = "/$local" if ( $local );
+
+        if( $rt_props & $rt_test_props{ 'debug' } ) {
+            $suffix = '/Debug';
+        } else {
+            $suffix = '/Release';
+        }
+        push @candidates, "$dir$msvc$local$x64$suffix" if ( -d "$dir$msvc$local$x64$suffix" );
+        push @candidates, "$dir$local$x64$suffix"      if ( -d "$dir$local$x64$suffix" );
+        push @candidates, "$dir$msvc$local$suffix"     if ( -d "$dir$msvc$local$suffix" );
+        push @candidates, "$dir$local$suffix"          if ( -d "$dir$local$suffix" );
+        push @candidates, "$dir$local$suffix"          if ( -d "$dir$local$suffix" );
+
+    } else {
+        my $lib  = "/lib";
+        my $arch = "-$rt_systemc_arch";
+        push @candidates, "$dir$lib$arch"        if ( -d "$dir$lib$arch" );
+        push @candidates, "$dir$arch"            if ( -d "$dir$arch" );
+        push @candidates, "$dir$lib"             if ( -d "$dir$lib" );
+    }
+
+    # use given (existing) directory directly
+    push @candidates, $dir if ( -d "$dir" );
+
+    &print_log( "WARN: ignoring invalid ldpath '$dir'\n" )
+      unless scalar @candidates;
+
+    &print_log( "DIAG: add ldpath '".$candidates[0]."'\n" )
+      if scalar @candidates && $rt_diag >= 2;
+
+    # return first found directory
+    ( scalar @candidates ) ? ( $candidates[0] ) : ();
+}
+
+# -----------------------------------------------------------------------------
 #  SUB : prepare_environment
 #
 #  Setup compiler/architecture environment.
@@ -731,7 +805,7 @@ sub prepare_environment
     $rt_debug_ldflags = "";
     $rt_optimize_flag = "-O2";
     $rt_systemc_include = "$rt_systemc_home/include";
-    $rt_systemc_ldpath  = "$rt_systemc_home/lib-$rt_systemc_arch";
+    $rt_systemc_ldpath  = "$rt_systemc_home";
 
     # predefined macros
     @rt_defines = ();
@@ -782,13 +856,6 @@ sub prepare_environment
         $rt_debug_flag      = "-GZ -MTd -Zi";
         $rt_debug_ldflags   = "-DEBUG -PDB:$rt_prodname.pdb";
         $rt_systemc_include = "$rt_systemc_home/src";
-
-        $rt_systemc_ldpath  = "$rt_systemc_home/$msvc/systemc${x64}";
-        if( $rt_props & $rt_test_props{ 'debug' } ) {
-            $rt_systemc_ldpath .= "/Debug";
-        } else {
-            $rt_systemc_ldpath .= "/Release";
-        }
     }
 
     # include directories
@@ -798,7 +865,7 @@ sub prepare_environment
     push( @rt_includes, $rt_systemc_include );
 
     # libraries paths
-    @rt_ldpaths  = ( $rt_systemc_ldpath );
+    @rt_ldpaths  = add_to_ldpath( $rt_systemc_ldpath, "systemc" );
     # libraries (basenames only)
     @rt_ldlibs   = ( "systemc" );
     push( @rt_ldlibs, "pthread" ) unless (!$rt_pthreads);
@@ -814,7 +881,7 @@ sub prepare_environment
     unshift ( @rt_includes, @rt_add_includes );
 
     # additional libraries
-    push( @rt_ldpaths, @rt_add_ldpaths );
+    push( @rt_ldpaths, map { add_to_ldpath($_) } @rt_add_ldpaths );
     push( @rt_ldlibs,  @rt_add_ldlibs );
 }
 
@@ -2153,16 +2220,16 @@ sub run_test
     # determine the test set
     ( $test_set = $currtestdir ) =~ s|^([^/]+)/.*|\1|;
 
+    # cd and create symlink
+    $linkdir = &setup_for_test( $currtestdir );
+
+    # add test directory to includes
+    push ( @test_set_includes, $linkdir );
     # add local include dir, if exists
     push ( @test_set_includes, "$rt_systemc_test/include/$test_set" )
         unless (!-d "$rt_systemc_test/include/$test_set" );
+    # add global include dirs
     push ( @test_set_includes, @rt_includes );
-
-    # check for compiler
-    # include your compiler check in here
-
-    # cd and create symlink
-    $linkdir = &setup_for_test( $currtestdir );
 
     # extract base name
     $basename = "$linkdir/$testname";
