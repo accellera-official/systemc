@@ -2220,16 +2220,16 @@ sub run_test
     # determine the test set
     ( $test_set = $currtestdir ) =~ s|^([^/]+)/.*|\1|;
 
+    # cd and create symlink
+    $linkdir = &setup_for_test( $currtestdir );
+
+    # add test directory to includes
+    push ( @test_set_includes, $linkdir );
     # add local include dir, if exists
     push ( @test_set_includes, "$rt_systemc_test/include/$test_set" )
         unless (!-d "$rt_systemc_test/include/$test_set" );
+    # add global include dirs
     push ( @test_set_includes, @rt_includes );
-
-    # check for compiler
-    # include your compiler check in here
-
-    # cd and create symlink
-    $linkdir = &setup_for_test( $currtestdir );
 
     # extract base name
     $basename = "$linkdir/$testname";
