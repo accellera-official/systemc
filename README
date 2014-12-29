@@ -126,6 +126,10 @@ CONTENTS
 
     > ../scripts/verify.pl systemc tlm
 
+  or simply
+
+    > ../scripts/verify.pl .
+
   runs everything.
 
   The directories should be relative to '$SYSTEMC_TEST/tests'.

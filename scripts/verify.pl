@@ -2218,7 +2218,8 @@ sub run_test
     $rt_current_test = "$currtestdir/$testname.$type";
 
     # determine the test set
-    ( $test_set = $currtestdir ) =~ s|^([^/]+)/.*|\1|;
+    ( $test_set = $currtestdir ) =~ s|^(\./)*([^/]+)/.*|\2|;
+    $test_set = undef if ( $test_set eq '.' );
 
     # cd and create symlink
     $linkdir = &setup_for_test( $currtestdir );
@@ -2227,7 +2228,7 @@ sub run_test
     push ( @test_set_includes, $linkdir );
     # add local include dir, if exists
     push ( @test_set_includes, "$rt_systemc_test/include/$test_set" )
-        unless (!-d "$rt_systemc_test/include/$test_set" );
+        if ( defined $test_set && -d "$rt_systemc_test/include/$test_set" );
     # add global include dirs
     push ( @test_set_includes, @rt_includes );
 
