@@ -72,8 +72,8 @@
 // source.
 //
 
-#include <ctype.h>
-#include <math.h>
+#include <cctype>
+#include <cmath>
 
 #include "sysc/kernel/sc_cmnhdr.h"
 #include "sysc/kernel/sc_macros.h"
@@ -562,11 +562,11 @@ sc_signed::operator=(double v)
   else
     sgn = SC_POS;
   int i = 0;
-  while (floor(v) && (i < ndigits)) {
+  while (std::floor(v) && (i < ndigits)) {
 #ifndef _WIN32
-    digit[i++] = ((sc_digit)floor(remainder(v, DIGIT_RADIX))) & DIGIT_MASK;
+    digit[i++] = ((sc_digit)std::floor(remainder(v, DIGIT_RADIX))) & DIGIT_MASK;
 #else
-    digit[i++] = ((sc_digit)floor(fmod(v, DIGIT_RADIX))) & DIGIT_MASK;
+    digit[i++] = ((sc_digit)std::floor(std::fmod(v, DIGIT_RADIX))) & DIGIT_MASK;
 #endif
     v /= DIGIT_RADIX;
   }

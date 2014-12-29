@@ -1,0 +1,15 @@
+( m_in_bigint4, m_inout_bigint4, m_in_biguint4, m_inout_biguint4, m_in_int4, m_inout_int4, m_in_uint4, m_inout_uint4 ) = 012345678
+m_signal_bigint8 = 18
+m_signal_biguint8 = 027
+m_signal_int8 = 36
+m_signal_uint8 = 045
+m_signal_bigint8 = 12
+m_inout_bigint4 = 3
+m_signal_biguint8 = 045
+m_inout_biguint4 = 06
+m_signal_int8 = 78
+m_inout_int4 = 9
+m_signal_uint8 = 0ab
+m_inout_uint4 = 0c
+
+Info: /OSCI/SystemC: Simulation stopped by user.

@@ -80,7 +80,8 @@ examples_FILES += \
 	2.1/specialized_signals/scx_signal_signed.cpp \
 	2.1/specialized_signals/scx_signal_unsigned.cpp 
 
-2_1_specialized_signals_BUILD =
+2_1_specialized_signals_BUILD = \
+	2.1/specialized_signals/golden.log
 
 2_1_specialized_signals_EXTRA = \
 	2.1/specialized_signals/specialized_signals.vcproj \

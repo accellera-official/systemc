@@ -243,16 +243,24 @@ typedef sc_event_expr<sc_event_or_list> sc_event_or_expr;
 
 class sc_event
 {
-    friend class sc_clock;
     friend class sc_event_list;
     friend class sc_event_timed;
     friend class sc_simcontext;
     friend class sc_object;
     friend class sc_process_b;
+    friend class sc_process_handle;
     friend class sc_method_process;
     friend class sc_thread_process;
-    template<typename IF, sc_writer_policy POL> friend class sc_signal;
     friend void sc_thread_cor_fn( void* arg );
+    friend class sc_interface;
+    friend class sc_clock;
+    friend class sc_event_queue;
+    friend sc_event * sc_lazy_kernel_event( sc_event**, const char* );
+    template<typename IF, sc_writer_policy POL> friend class sc_signal;
+    template<typename IF> friend class sc_fifo;
+    friend class sc_semaphore;
+    friend class sc_mutex;
+    friend class sc_join;
 
 public:
 
@@ -296,7 +304,7 @@ private:
     bool remove_dynamic( sc_method_handle ) const;
     bool remove_dynamic( sc_thread_handle ) const;
 
-    void register_event( const char* name );
+    void register_event( const char* name, bool is_kernel_event = false );
     void reset();
 
     void trigger();
@@ -318,15 +326,13 @@ private:
     mutable std::vector<sc_thread_handle> m_threads_dynamic;
 
 private:
+    static struct kernel_tag {} kernel_event;
+    explicit sc_event( kernel_tag, const char* name = NULL );
 
     // disabled
     sc_event( const sc_event& );
     sc_event& operator = ( const sc_event& );
 };
-
-#define SC_KERNEL_EVENT_PREFIX "$$$$kernel_event$$$$_"
-
-extern sc_event sc_non_event; // Event that never happens.
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_event_timed

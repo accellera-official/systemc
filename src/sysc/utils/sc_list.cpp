@@ -25,7 +25,6 @@
  *****************************************************************************/
 
 
-#include <assert.h>
 #include <cstddef>
 
 #include "sysc/kernel/sc_cmnhdr.h"

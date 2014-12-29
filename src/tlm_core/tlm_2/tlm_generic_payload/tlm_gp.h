@@ -77,7 +77,7 @@ class tlm_extension : public tlm_extension_base
 {
 public:
     virtual tlm_extension_base* clone() const = 0;
-    virtual void copy_from(tlm_extension_base const &ext) = 0; //{assert(typeid(this)==typeid(ext)); assert(ID === ext.ID); assert(0);}
+    virtual void copy_from(tlm_extension_base const &ext) = 0; //{sc_assert(typeid(this)==typeid(ext)); sc_assert(ID === ext.ID); sc_assert(0);}
     virtual ~tlm_extension() {}
     const static unsigned int ID;
 };
@@ -159,8 +159,8 @@ public:
     {
     }
 
-    void acquire(){assert(m_mm != 0); m_ref_count++;}
-    void release(){assert(m_mm != 0 && m_ref_count > 0); if (--m_ref_count==0) m_mm->free(this);}
+    void acquire(){sc_assert(m_mm != 0); m_ref_count++;}
+    void release(){sc_assert(m_mm != 0 && m_ref_count > 0); if (--m_ref_count==0) m_mm->free(this);}
     int get_ref_count() const {return m_ref_count;}
     void set_mm(tlm_mm_interface* mm) { m_mm = mm; }
     bool has_mm() const { return m_mm != 0; }
@@ -545,7 +545,7 @@ public:
         tlm_extension_base* tmp = m_extensions[index];
         m_extensions[index] = ext;
         if (!tmp) m_extensions.insert_in_cache(&m_extensions[index]);
-        assert(m_mm != 0);
+        sc_assert(m_mm != 0);
         return tmp;
     }
 

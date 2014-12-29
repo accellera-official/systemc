@@ -73,7 +73,8 @@ examples_FILES += \
 2_1_sc_report_CXX_FILES = \
 	2.1/sc_report/main.cpp
 
-2_1_sc_report_BUILD =
+2_1_sc_report_BUILD = \
+	2.1/sc_report/golden.log
 
 2_1_sc_report_EXTRA = \
 	2.1/sc_report/sc_report.vcproj \

@@ -50,7 +50,7 @@
 // the source.
 //
 
-#include <string.h>
+#include <cstring>
 
 #include "sysc/datatypes/bit/sc_bit_ids.h"
 #include "sysc/datatypes/bit/sc_bv_base.h"

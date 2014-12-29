@@ -97,7 +97,9 @@ fir_rtl_CXX_FILES = \
 	fir/fir_data.cpp \
 	fir/main_rtl.cpp
 
-fir_BUILD =
+# output varies between fir/fir_rtl
+#fir_BUILD = \
+#	fir/golden.log
 
 fir_EXTRA = \
 	fir/log \

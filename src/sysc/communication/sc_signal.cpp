@@ -128,9 +128,7 @@ sc_event*
 sc_lazy_kernel_event( sc_event** ev, const char* name )
 {
     if ( !*ev ) {
-        std::string kernel_name = SC_KERNEL_EVENT_PREFIX "_";
-        kernel_name.append( name );
-        *ev = new sc_event( kernel_name.c_str() );
+        *ev = new sc_event( sc_event::kernel_event, name );
     }
     return *ev;
 

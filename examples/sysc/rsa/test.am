@@ -72,7 +72,9 @@ rsa_H_FILES =
 rsa_CXX_FILES = \
 	rsa/rsa.cpp
 
-rsa_BUILD =
+# output is randomized across runs
+#rsa_BUILD = \
+#	rsa/golden.log
 
 rsa_EXTRA = \
 	rsa/rsa.vcproj \

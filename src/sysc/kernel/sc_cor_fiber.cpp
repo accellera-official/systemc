@@ -90,7 +90,7 @@ sc_cor_pkg_fiber::sc_cor_pkg_fiber( sc_simcontext* simc )
 {
     if( ++ instance_count == 1 ) {
         // initialize the main coroutine
-        assert( main_cor.m_fiber == 0 );
+        sc_assert( main_cor.m_fiber == 0 );
         main_cor.m_fiber = ConvertThreadToFiber( 0 );
 
         if( !main_cor.m_fiber && GetLastError() == ERROR_ALREADY_FIBER ) {
@@ -99,11 +99,11 @@ sc_cor_pkg_fiber::sc_cor_pkg_fiber( sc_simcontext* simc )
             // -> store current fiber
             main_cor.m_fiber = GetCurrentFiber();
         }
-        assert( main_cor.m_fiber != 0 );
+        sc_assert( main_cor.m_fiber != 0 );
 
 #       if defined(__GNUC__) && __USING_SJLJ_EXCEPTIONS__
             // initialize the current coroutine
-            assert( curr_cor == 0 );
+            sc_assert( curr_cor == 0 );
             curr_cor = &main_cor;
 #       endif
     }
