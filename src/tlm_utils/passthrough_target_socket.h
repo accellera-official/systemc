@@ -114,7 +114,7 @@ private:
         SC_REPORT_WARNING("/OSCI_TLM-2/passthrough_socket",s.str().c_str());
 
       } else {
-        assert(!m_mod || m_mod == mod);
+        sc_assert(!m_mod || m_mod == mod);
         m_mod = mod;
         m_nb_transport_ptr = p;
       }
@@ -127,7 +127,7 @@ private:
         s << m_name << ": blocking callback allready registered";
         SC_REPORT_WARNING("/OSCI_TLM-2/passthrough_socket",s.str().c_str());
       } else {
-        assert(!m_mod || m_mod == mod);
+        sc_assert(!m_mod || m_mod == mod);
         m_mod = mod;
         m_b_transport_ptr = p;
       }
@@ -140,7 +140,7 @@ private:
         s << m_name << ": debug callback allready registered";
         SC_REPORT_WARNING("/OSCI_TLM-2/passthrough_socket",s.str().c_str());
       } else {
-        assert(!m_mod || m_mod == mod);
+        sc_assert(!m_mod || m_mod == mod);
         m_mod = mod;
         m_transport_dbg_ptr = p;
       }
@@ -153,7 +153,7 @@ private:
         s << m_name << ": get DMI pointer callback allready registered";
         SC_REPORT_WARNING("/OSCI_TLM-2/passthrough_socket",s.str().c_str());
       } else {
-        assert(!m_mod || m_mod == mod);
+        sc_assert(!m_mod || m_mod == mod);
         m_mod = mod;
         m_get_direct_mem_ptr = p;
       }
@@ -165,7 +165,7 @@ private:
     {
       if (m_nb_transport_ptr) {
         // forward call
-        assert(m_mod);
+        sc_assert(m_mod);
         return (m_mod->*m_nb_transport_ptr)(trans, phase, t);
 
       } else {
@@ -180,7 +180,7 @@ private:
     {
       if (m_b_transport_ptr) {
         // forward call
-        assert(m_mod);
+        sc_assert(m_mod);
         return (m_mod->*m_b_transport_ptr)(trans, t);
 
       } else {
@@ -194,7 +194,7 @@ private:
     {
       if (m_transport_dbg_ptr) {
         // forward call
-        assert(m_mod);
+        sc_assert(m_mod);
         return (m_mod->*m_transport_dbg_ptr)(trans);
 
       } else {
@@ -208,7 +208,7 @@ private:
     {
       if (m_get_direct_mem_ptr) {
         // forward call
-        assert(m_mod);
+        sc_assert(m_mod);
         return (m_mod->*m_get_direct_mem_ptr)(trans, dmi_data);
 
       } else {
@@ -349,7 +349,7 @@ private:
         s << m_name << ": non-blocking callback allready registered";
         SC_REPORT_WARNING("/OSCI_TLM-2/passthrough_socket",s.str().c_str());
       } else {
-        assert(!m_mod || m_mod == mod);
+        sc_assert(!m_mod || m_mod == mod);
         m_mod = mod;
         m_nb_transport_ptr = p;
       }
@@ -362,7 +362,7 @@ private:
         s << m_name << ": blocking callback allready registered";
         SC_REPORT_WARNING("/OSCI_TLM-2/passthrough_socket",s.str().c_str());
       } else {
-        assert(!m_mod || m_mod == mod);
+        sc_assert(!m_mod || m_mod == mod);
         m_mod = mod;
         m_b_transport_ptr = p;
       }
@@ -375,7 +375,7 @@ private:
         s << m_name << ": debug callback allready registered";
         SC_REPORT_WARNING("/OSCI_TLM-2/passthrough_socket",s.str().c_str());
       } else {
-        assert(!m_mod || m_mod == mod);
+        sc_assert(!m_mod || m_mod == mod);
         m_mod = mod;
         m_transport_dbg_ptr = p;
       }
@@ -388,7 +388,7 @@ private:
         s << m_name << ": get DMI pointer callback allready registered";
         SC_REPORT_WARNING("/OSCI_TLM-2/passthrough_socket",s.str().c_str());
       } else {
-        assert(!m_mod || m_mod == mod);
+        sc_assert(!m_mod || m_mod == mod);
         m_mod = mod;
         m_get_direct_mem_ptr = p;
       }
@@ -400,7 +400,7 @@ private:
     {
       if (m_nb_transport_ptr) {
         // forward call
-        assert(m_mod);
+        sc_assert(m_mod);
         return (m_mod->*m_nb_transport_ptr)(m_nb_transport_user_id, trans, phase, t);
 
       } else {
@@ -415,7 +415,7 @@ private:
     {
       if (m_b_transport_ptr) {
         // forward call
-        assert(m_mod);
+        sc_assert(m_mod);
         return (m_mod->*m_b_transport_ptr)(m_b_transport_user_id, trans, t);
 
       } else {
@@ -429,7 +429,7 @@ private:
     {
       if (m_transport_dbg_ptr) {
         // forward call
-        assert(m_mod);
+        sc_assert(m_mod);
         return (m_mod->*m_transport_dbg_ptr)(m_transport_dbg_user_id, trans);
 
       } else {
@@ -443,7 +443,7 @@ private:
     {
       if (m_get_direct_mem_ptr) {
         // forward call
-        assert(m_mod);
+        sc_assert(m_mod);
         return (m_mod->*m_get_direct_mem_ptr)(m_get_dmi_user_id, trans, dmi_data);
 
       } else {

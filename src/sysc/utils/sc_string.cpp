@@ -24,15 +24,22 @@
   CHANGE LOG AT END OF FILE
  *****************************************************************************/
 
-#include <assert.h>
-#include <ctype.h>
+#include <cctype>
 #include <cstdio>
-#include <stdarg.h>
-#include <string.h>
+#include <cstdarg>
+#include <cstring>
 
 #include "sysc/utils/sc_iostream.h"
 #include "sysc/utils/sc_string.h"
+#include "sysc/utils/sc_report.h"  // sc_assert
 #include "sysc/utils/sc_utils_ids.h"
+#include "sysc/utils/sc_report.h"
+
+using std::isspace;
+using std::strcmp;
+using std::strcpy;
+using std::strlen;
+using std::strncpy;
 
 namespace sc_dt {
 
@@ -78,7 +85,7 @@ class sc_string_rep
 
     ~sc_string_rep()
     {
-        assert( ref_count == 0 );
+        sc_assert( ref_count == 0 );
         delete[] str;
     }
 
@@ -372,7 +379,7 @@ sc_string_old::set( int i, char c )
 
 sc_string_old sc_string_old::to_string(const char* format, ...)
 {
-   va_list argptr;
+   std::va_list argptr;
    sc_string_old result;
    char buffer[1024]; // static string buffer
    buffer[1023]=000;

@@ -258,14 +258,14 @@ public:
 	// an extend_sign on a concatenation uses the whole length of 
 	// the concatenation to determine how many words to set.
     void set_word( int wi, sc_digit w )
-	{ assert ( wi < m_size ); m_data[wi] = w; }
+	{ sc_assert ( wi < m_size ); m_data[wi] = w; }
 	 
 
     sc_digit get_cword( int wi ) const
 	{ return m_ctrl[wi]; }
 
     void set_cword( int wi, sc_digit w )
-	{ assert ( wi < m_size ); m_ctrl[wi] = w; }
+	{ sc_assert ( wi < m_size ); m_ctrl[wi] = w; }
 
     void clean_tail();
 

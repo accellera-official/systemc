@@ -1,0 +1,5 @@
+t1 got mutex at 1 ns
+t2 got mutex at 11 ns
+t3 got mutex at 21 ns
+
+

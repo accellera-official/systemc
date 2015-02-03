@@ -26,9 +26,9 @@
 
 
 #include <cassert>
-#include <math.h>
-#include <stddef.h>
-#include <stdio.h>
+#include <cmath>
+#include <cstddef>
+#include <cstdio>
 
 #include "sysc/kernel/sc_event.h"
 #include "sysc/kernel/sc_kernel_ids.h"

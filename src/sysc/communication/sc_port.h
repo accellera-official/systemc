@@ -538,7 +538,7 @@ void
 sc_port_b<IF>::add_interface( sc_interface* interface_ )
 {
     IF* iface = DCAST<IF*>( interface_ );
-    assert( iface != 0 );
+    sc_assert( iface != 0 );
 
     // make sure that the interface is not already bound:
 
@@ -585,7 +585,7 @@ sc_port_b<IF>::make_sensitive( sc_thread_handle handle_p,
         for ( int if_i = 0; if_i < if_n; if_i++ )
 	{
 	    IF* iface_p = m_interface_vec[if_i];
-	    assert( iface_p != 0 );
+	    sc_assert( iface_p != 0 );
 	    add_static_event( handle_p, iface_p->default_event() );
 	}
     }
@@ -606,7 +606,7 @@ sc_port_b<IF>::make_sensitive( sc_method_handle handle_p,
         for ( int if_i = 0; if_i < if_n; if_i++ )
 	{
 	    IF* iface_p = m_interface_vec[if_i];
-	    assert( iface_p != 0 );
+	    sc_assert( iface_p != 0 );
 	    add_static_event( handle_p, iface_p->default_event() );
 	}
     }

@@ -72,8 +72,8 @@ sc_cor_qt::stack_protect( bool enable )
 #       endif 
     }
 
-    assert( pagesize != 0 );
-    assert( m_stack_size > ( 2 * pagesize ) );
+    sc_assert( pagesize != 0 );
+    sc_assert( m_stack_size > ( 2 * pagesize ) );
 
 #ifdef QUICKTHREADS_GROW_DOWN
     // Stacks grow from high address down to low address
@@ -104,7 +104,7 @@ sc_cor_qt::stack_protect( bool enable )
             ret = mprotect( redzone, pagesize - 1, PROT_READ | PROT_WRITE );
     }
 
-    assert( ret == 0 );
+    sc_assert( ret == 0 );
 }
 
 
@@ -136,7 +136,7 @@ sc_cor_pkg_qt::sc_cor_pkg_qt( sc_simcontext* simc )
 {
     if( ++ instance_count == 1 ) {
 	// initialize the current coroutine
-	assert( curr_cor == 0 );
+	sc_assert( curr_cor == 0 );
 	curr_cor = &main_cor;
     }
 }

@@ -28,8 +28,7 @@
 #ifndef SC_COR_H
 #define SC_COR_H
 
-
-#include <cassert>
+#include <cassert> // use plain assert, sc_report may not be available, yet
 #include <cstdlib>
 
 namespace sc_core {

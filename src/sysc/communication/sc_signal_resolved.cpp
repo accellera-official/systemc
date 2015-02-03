@@ -58,7 +58,7 @@ sc_logic_resolve( sc_dt::sc_logic& result_,
 {
     int sz = values_.size();
 
-    assert( sz != 0 );
+    sc_assert( sz != 0 );
 
     if( sz == 1 ) {
 	result_ = values_[0];
