@@ -625,6 +625,10 @@ sub init_globals
 
     $ENV{ 'SYSTEMC_REGRESSION' } = 1;
 
+    # MSVC runtime library defaults
+    $rt_msvc_runtime     = '-MT';
+    $rt_msvc_runtime_dbg = $rt_msvc_runtime.'d';
+
     @rt_add_defines = ();
     if( defined $ENV{ 'RT_ADD_DEFINES' } ) {
         push( @rt_add_defines, split(' ', $ENV{ 'RT_ADD_DEFINES' } ) )
@@ -841,17 +845,18 @@ sub prepare_environment
         my $x64  = $2;
         $x64 =~ s|-|/|;
         $rt_cc              = "CL.EXE";
-        $rt_ccflags         = "-nologo -GR -EHsc -Zm800 -vmg ";
-        $rt_ccflags        .= "-MACHINE:X64" unless (!$x64);
-        push @rt_defines, '_USE_MATH_DEFINES';
+        $rt_ccflags         = "-nologo -GR -EHsc -Zm800 -vmg";
+        $rt_ccflags        .= " -MACHINE:X64" unless (!$x64);
         $rt_ld              = "LINK.EXE";
-        $rt_ldflags         = "-nologo -LTCG -NODEFAULTLIB:LIBCD "
-                             ."-SUBSYSTEM:CONSOLE ";
-        $rt_ldflags        .= "-MACHINE:X64 " unless (!$x64);
-        $rt_debug_flag      = "-GZ -MTd -Zi";
+        $rt_ldflags         = "-nologo -SUBSYSTEM:CONSOLE";
+        $rt_ldflags        .= " -MACHINE:X64" unless (!$x64);
+        $rt_debug_flag      = "-RTC1 -Zi";
         $rt_debug_ldflags   = "-DEBUG -PDB:$rt_prodname.pdb";
+
         $rt_systemc_include = "$rt_systemc_home/src"
             unless -d $rt_systemc_include;
+
+        push @rt_defines, '_USE_MATH_DEFINES';
     }
 
     # include directories
@@ -906,6 +911,7 @@ Usage: $0 [<options>] <directories|names>
       -I <dir>     Additional include directory (may be added multiple times).
       -L <dir>     Additional linker directory (may be added multiple times).
       -l <libname> Additional library to link (may be added mutliple times).
+      -M(D,T)[d]   Select MSVC runtime library (default: ${rt_msvc_runtime}[d])
       -m           Send mail with results.
       -o <opts>    Additional (custom) compiler options.
       -O           Compile tests with optimize flag.
@@ -1018,6 +1024,13 @@ sub parse_args
                     $arg = shift @arglist;
                 }
                 push @rt_add_ldlibs, $arg;
+                next;
+            }
+
+            # MSVC runtime library
+            if( $arg =~ /^-M(D|T)d?$/ ) {
+                $rt_msvc_runtime     = $arg;
+                $rt_msvc_runtime_dbg = $arg; # override both runtimes explicitly
                 next;
             }
 
@@ -2248,11 +2261,15 @@ sub run_test
 
     local( $extra_flags ) = "";
     if( $rt_props & $rt_test_props{ 'debug' } ) {
+        $rt_msvc_runtime = $rt_msvc_runtime_dbg; # prefer debug runtime
         $extra_flags .= " $rt_debug_flag";
     }
     if( $rt_props & $rt_test_props{ 'optimize' } ) {
         $extra_flags .= " $rt_optimize_flag";
     }
+
+    # add MSVC runtime (need to be done here, as we need to consider debug flag)
+    $extra_flags .= " $rt_msvc_runtime" if $rt_systemc_arch =~ /^msvc/;
 
     local( $pure ) = "";
     local( $pure_log );
