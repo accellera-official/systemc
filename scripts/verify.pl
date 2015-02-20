@@ -134,7 +134,7 @@ sub create_mail
     printf MAIL "\n";
     printf MAIL "SYSTEMC_ARCH : %s %s\n", $rt_systemc_arch, "$rt_pthreads";
     printf MAIL "SYSTEMC_HOME : %s\n", $rt_systemc_home;
-    printf MAIL "TLM_HOME     : %s\n", $rt_tlm_home;
+    printf MAIL "TLM_HOME     : %s\n", $rt_tlm_home unless !defined($rt_tlm_home);
     printf MAIL "SYSTEMC_TEST : %s\n", $rt_systemc_test;
     printf MAIL " OUTPUT_DIR  : %s\n", $rt_output_dir;
 
@@ -354,12 +354,7 @@ sub get_tlm_home
 
     } elsif ( defined $ENV{ 'SYSTEMC_HOME' } ) {
 
-      $tlm_home = $ENV{ 'SYSTEMC_HOME' };
-            if( $rt_systemc_arch =~ /^msvc/ ) {
-              $tlm_home .= "/src";
-             } else {
-              $tlm_home .= "/include";
-      }
+      $tlm_home = undef;
 
     } else {
 
@@ -855,13 +850,13 @@ sub prepare_environment
         $rt_ldflags        .= "-MACHINE:X64 " unless (!$x64);
         $rt_debug_flag      = "-GZ -MTd -Zi";
         $rt_debug_ldflags   = "-DEBUG -PDB:$rt_prodname.pdb";
-        $rt_systemc_include = "$rt_systemc_home/src";
+        $rt_systemc_include = "$rt_systemc_home/src"
+            unless -d $rt_systemc_include;
     }
 
     # include directories
     @rt_includes = ();
-    push( @rt_includes, $rt_tlm_home )
-        unless ( $rt_tlm_home eq $rt_systemc_include );
+    push( @rt_includes, $rt_tlm_home ) if defined( $rt_tlm_home );
     push( @rt_includes, $rt_systemc_include );
 
     # libraries paths
@@ -1156,10 +1151,14 @@ sub print_intro
     }
     &print_log( "$rt_systemc_home\n" );
     &print_log( "TLM_HOME     : " );
-    if( $rt_tlm_home =~ m|^$vob| ) {
-        &print_log( "[$working_view] " );
+    if( defined($rt_tlm_home) ) {
+      if( $rt_tlm_home =~ m|^$vob| ) {
+          &print_log( "[$working_view] " );
+      }
+      &print_log( "$rt_tlm_home\n" );
+    } else {
+      &print_log( "<inherited>\n" );
     }
-    &print_log( "$rt_tlm_home\n" );
     &print_log( "SYSTEMC_TEST : " );
     if( $rt_systemc_test =~ m|^$vob| ) {
         &print_log( "[$working_view] " );
