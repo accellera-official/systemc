@@ -106,7 +106,6 @@ public:
     double to_default_time_units() const;
     double to_seconds() const;
     const std::string to_string() const;
-    sc_time_tuple to_tuple() const; // normalized time unit
 
 
     // relational operators
@@ -166,6 +165,8 @@ public:
     sc_time_tuple()
       : m_value(), m_unit( SC_SEC ), m_offset(1) {}
 
+    sc_time_tuple( const sc_time & t );
+
     bool         has_value() const;
     value_type   value()     const;
     sc_time_unit unit()      const { return m_unit; } // normalized unit
@@ -189,6 +190,8 @@ inline ::std::ostream& operator << ( ::std::ostream&, const sc_time& );
 
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
+extern const sc_time SC_ZERO_TIME;
+
 // constructors
 
 inline
@@ -208,6 +211,15 @@ sc_time_tuple::sc_time_tuple( value_type v )
     if( v )
         init( v );
 }
+
+inline
+sc_time_tuple::sc_time_tuple( const sc_time& t )
+  : m_value(), m_unit( SC_SEC ), m_offset(1)
+{
+    if( t != SC_ZERO_TIME )
+        init( t.value() );
+}
+
 
 // assignment operator
 
@@ -231,14 +243,6 @@ sc_time::value() const  // relative to the time resolution
 
 
 inline
-sc_time_tuple
-sc_time::to_tuple() const  // normalized relative to the time resolution
-{
-    return sc_time_tuple( m_value );
-}
-
-
-inline
 double
 sc_time::to_double() const  // relative to the time resolution
 {
@@ -258,7 +262,7 @@ inline
 const std::string
 sc_time::to_string() const
 {
-    return to_tuple().to_string();
+    return sc_time_tuple( *this ).to_string();
 }
 
 
@@ -440,8 +444,6 @@ struct sc_time_params
 
 
 // ----------------------------------------------------------------------------
-
-extern const sc_time SC_ZERO_TIME;
 
 
 // functions for accessing the time resolution and default time unit
