@@ -80,14 +80,17 @@ public:
     // constructors
 
     sc_time();
-    sc_time( double, sc_time_unit );
-    sc_time( double, sc_time_unit, sc_simcontext* );
     sc_time( const sc_time& );
 
-    static sc_time from_value( value_type );
+    sc_time( double, sc_time_unit );
+    sc_time( double, sc_time_unit, sc_simcontext* );
+
     // convert time unit from string
     // "fs"/"SC_FS"->SC_FS, "ps"/"SC_PS"->SC_PS, "ns"/"SC_NS"->SC_NS, ...
-    static sc_time from_symbol( double, const char* unit );
+    sc_time( double, const char* unit );
+    sc_time( double, const char* unit, sc_simcontext* );
+
+    static sc_time from_value( value_type );
     static sc_time from_string( const char * str );
 
     // deprecated, use from_value(v)

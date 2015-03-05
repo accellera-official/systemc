@@ -255,10 +255,10 @@ sc_time::from_value( value_type v )
     return t;
 }
 
-sc_time
-sc_time::from_symbol( double v, const char* unit )
+static sc_time::value_type
+from_val_and_symbol( double v, const char* unit, sc_time_params* tp )
 {
-    sc_time t;
+    sc_time::value_type t = 0;
     if( !unit || !*unit ) {
         SC_REPORT_ERROR( SC_ID_TIME_CONVERSION_FAILED_, "no time unit given" );
         return t;
@@ -274,9 +274,17 @@ sc_time::from_symbol( double v, const char* unit )
         return t;
     }
 
-    t = sc_time( v, static_cast<sc_time_unit>(tu) );
-    return t;
+    return from_val_and_unit( v, static_cast<sc_time_unit>(tu), tp );
 }
+
+sc_time::sc_time( double v, const char* unit )
+  : m_value
+     ( from_val_and_symbol( v, unit, sc_get_curr_simcontext()->m_time_params ) )
+{}
+
+sc_time::sc_time( double v, const char* unit, sc_simcontext* simc )
+  : m_value( from_val_and_symbol( v, unit, simc->m_time_params ) )
+{}
 
 sc_time
 sc_time::from_string( const char * str )
@@ -288,7 +296,7 @@ sc_time::from_string( const char * str )
         return SC_ZERO_TIME;
     }
     while( *endptr && std::isspace( *endptr ) ) ++endptr; // skip whitespace
-    return from_symbol( v, endptr );
+    return sc_time( v, endptr );
 }
 
 // conversion functions
