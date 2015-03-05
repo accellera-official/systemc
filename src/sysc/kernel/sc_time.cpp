@@ -167,31 +167,28 @@ sc_time_tuple::to_string() const
 
 // constructors
 
-sc_time::sc_time( double v, sc_time_unit tu )
-: m_value( 0 )
+static sc_time::value_type
+from_val_and_unit( double v, sc_time_unit tu, sc_time_params* tp )
 {
+    sc_time::value_type t = 0;
     if( v != 0 ) {
-	sc_time_params* time_params = sc_get_curr_simcontext()->m_time_params;
-	double scale_fac = time_values[tu] / time_params->time_resolution;
-	// linux bug workaround; don't change next two lines
-	volatile double tmp = v * scale_fac + 0.5;
-	m_value = SCAST<sc_dt::int64>( tmp );
-	time_params->time_resolution_fixed = true;
+        double scale_fac = time_values[tu] / tp->time_resolution;
+        // linux bug workaround; don't change next two lines
+        volatile double tmp = v * scale_fac + 0.5;
+        t = SCAST<sc_dt::int64>( tmp );
+        tp->time_resolution_fixed = true;
     }
+    return t;
 }
 
+sc_time::sc_time( double v, sc_time_unit tu )
+  : m_value
+      ( from_val_and_unit( v, tu, sc_get_curr_simcontext()->m_time_params ) )
+{}
+
 sc_time::sc_time( double v, sc_time_unit tu, sc_simcontext* simc )
-: m_value( 0 )
-{
-    if( v != 0 ) {
-	sc_time_params* time_params = simc->m_time_params;
-	double scale_fac = time_values[tu] / time_params->time_resolution;
-	// linux bug workaround; don't change next two lines
-	volatile double tmp = v * scale_fac + 0.5;
-	m_value = SCAST<sc_dt::int64>( tmp );
-	time_params->time_resolution_fixed = true;
-    }
-}
+  : m_value( from_val_and_unit( v, tu, simc->m_time_params ) )
+{}
 
 sc_time::sc_time( double v, bool scale )
 : m_value( 0 )
