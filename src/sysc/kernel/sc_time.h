@@ -170,10 +170,10 @@ public:
 
     sc_time_tuple( const sc_time & t );
 
-    bool         has_value() const;
-    value_type   value()     const;
-    sc_time_unit unit()      const { return m_unit; } // normalized unit
-    const char * symbol()    const;               // normalized unit symbol
+    bool         has_value()   const;
+    value_type   value()       const;
+    sc_time_unit unit()        const { return m_unit; } // normalized unit
+    const char * unit_symbol() const;                   // normalized unit symbol
 
     operator sc_time() const { return sc_time( to_double(), m_unit ); }
 

@@ -132,7 +132,7 @@ sc_time_tuple::value() const
 }
 
 const char *
-sc_time_tuple::symbol() const
+sc_time_tuple::unit_symbol() const
 {
     return time_units[m_unit];
 }
