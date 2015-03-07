@@ -28,7 +28,7 @@
 
 void check_time( const sc_time& t, sc_time_unit tu, const std::string & str )
 {
-    sc_time_tuple tp = t.to_tuple();
+    sc_time_tuple tp = t;
 
     std::cout << t.to_string() << ", value=" << t.value() << std::endl;
     std::cout << "  ";
@@ -36,7 +36,7 @@ void check_time( const sc_time& t, sc_time_unit tu, const std::string & str )
         std::cout << "t.value=" << tp.value();
     else
         std::cout << "t.double=" << tp.to_double();
-    std::cout << ", t.unit="  << tp.symbol()
+    std::cout << ", t.unit="  << tp.unit_symbol()
               << std::endl;
 
     sc_assert( tp.has_value() );
@@ -47,12 +47,12 @@ void check_time( const sc_time& t, sc_time_unit tu, const std::string & str )
     sc_time u = sc_time::from_string( str.c_str() );
     sc_assert( t == u );
     sc_assert( u == tp );
-    sc_assert( tp.unit() == u.to_tuple().unit() );
+    sc_assert( tp.unit() == sc_time_tuple(u).unit() );
 
-    u = sc_time::from_symbol( tp.to_double(), tp.symbol() );
+    u = sc_time( tp.to_double(), tp.unit_symbol() );
     sc_assert( t == u );
     sc_assert( u == tp );
-    sc_assert( tp.unit() == u.to_tuple().unit() );
+    sc_assert( tp.unit() == sc_time_tuple(u).unit() );
 }
 
 int sc_main( int, char*[] )
