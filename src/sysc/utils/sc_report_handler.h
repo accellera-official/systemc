@@ -116,6 +116,10 @@ public:
     static bool set_log_file_name(const char* filename);
     static const char* get_log_file_name();
 
+    // how the implementation should handle caught (sc_report) exceptions
+    static sc_actions set_catch_actions(sc_actions);
+    static sc_actions get_catch_actions();
+
 public: // private, actually
 
     struct msg_def_items
@@ -141,6 +145,7 @@ protected:
     static unsigned     sev_call_count[SC_MAX_SEVERITY];
     static sc_report*   last_global_report;
     static sc_actions   available_actions;
+    static sc_actions   catch_actions;
     static char*        log_file_name;
     static int          verbosity_level;
 
