@@ -105,11 +105,6 @@ struct auto_close_log
     }
 } auto_close;
 
-const char* sc_report::get_process_name() const
-{
-	return process ? process->name() : 0;
-}
-
 
 //
 // The official handler of the exception reporting

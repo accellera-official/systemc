@@ -142,10 +142,7 @@ public:
 
     int get_verbosity() const { return m_verbosity_level; }
 
-    bool valid () const
-        {
-	    return process != 0;
-	}
+    bool valid () const;
 
     virtual const char* what() const throw()
         { 
@@ -169,7 +166,7 @@ protected:
     char*              file;
     int                line;
     sc_time*           timestamp;
-    sc_object*         process;
+    char*              process_name;
     int                m_verbosity_level;
     char*              m_what;
 
