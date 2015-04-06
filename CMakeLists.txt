@@ -199,8 +199,10 @@
 #   of CMake-generated Xcode project while ensuring to build only for the
 #   selected QuickThreads architecture.
 #
-# - Review compiler flags to reduce the number of generated compiler warnings
-#   (especially with recent Clang versions, e.g., Apple Clang 6.0).
+# - Review the compiler flags that reduce the number of generated compiler
+#   warnings (especially with recent Clang versions, e.g., Apple Clang 6.0).
+#   With the chosen flags, the SystemC library compiles without warnings, but
+#   some examples still produce warnings.
 #
 ###############################################################################
 
@@ -545,10 +547,10 @@ endif (OVERRIDE_DEFAULT_STACK_SIZE GREATER 0)
 # Set additional compiler flags for known compilers.
 if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
   if (NOT CMAKE_C_FLAGS)
-    set (CMAKE_C_FLAGS "-Wall -Wextra" CACHE STRING "Flags used by the compiler during all build types." FORCE)
+    set (CMAKE_C_FLAGS "-Wall -Wextra -Wno-unused-parameter -Wno-unused-variable" CACHE STRING "Flags used by the compiler during all build types." FORCE)
   endif (NOT CMAKE_C_FLAGS)
   if (NOT CMAKE_CXX_FLAGS)
-    set (CMAKE_CXX_FLAGS "-Wall -Wextra" CACHE STRING "Flags used by the compiler during all build types." FORCE)
+    set (CMAKE_CXX_FLAGS "-Wall -Wextra -Wno-unused-parameter -Wno-unused-variable" CACHE STRING "Flags used by the compiler during all build types." FORCE)
   endif (NOT CMAKE_CXX_FLAGS)
 endif (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 
