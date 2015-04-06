@@ -190,6 +190,18 @@
 # - Fix Xcode build settings warning by properly initializing
 #   CMAKE_OSX_ARCHITECTURES (cf. CMake issue 0014736).
 #
+# - Fix confusing "Warning: Did not find file Compiler/-ASM" due to no
+#   specification of an Assembler dialect. The warning disappears if "ASM-ATT"
+#   is used instead of "ASM" as argument to enable_language(). However, this
+#   currently breaks compilation of QuickThreads with Xcode.
+#
+# - Fix "Validate Project Settings: Update to recommended settings" warning
+#   of CMake-generated Xcode project while ensuring to build only for the
+#   selected QuickThreads architecture.
+#
+# - Review compiler flags to reduce the number of generated compiler warnings
+#   (especially with recent Clang versions, e.g., Apple Clang 6.0).
+#
 ###############################################################################
 
 
