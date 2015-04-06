@@ -164,10 +164,10 @@
 #
 # TODO:
 #
-# - Detect C++'11-compatible compiler and then pass the right flags
-#   to use C++'11 language and library features.
-#
-# - Check examples output against golden.log files when executing them as test.
+# - Improve further the directory layout for the installation of SystemC and
+#   libraries using it. The installed CMake project configuration files should
+#   be automatically found by other CMake projects (e.g., SCV, SystemC AMS).
+#   <http://www.cmake.org/Wiki/CMake/Tutorials/How_to_create_a_ProjectConfig.cmake_file>
 #
 # - Configure the SystemC version from within the build system.
 #
@@ -175,34 +175,37 @@
 #
 # - Extract the release dates from the commit date.
 #
-# - Check whether preprocessor definitions WIN32, _LIB, _DEBUG, _CONSOLE, and
-#   NOGDI are necessary on WIN32 platforms (MSVC and MinGW).
+# - Detect C++'11-compatible compiler and then pass the right flags
+#   to use C++'11 language and library features.
 #
-# - Don't generate source documentation with Doxygen in the source tree.
+# - Check examples output against golden.log files when executing them as test.
 #
 # - Replace the shell script wrappers config/run_test.sh.in and
 #   config/run_test_with_input.sh.in, used for the TLM examples execution, with
 #   a platform-independent solution.
 #
-# - Turn on the compiler warnings by default once SystemC is supposed to
-#   compile without any warnings on recent compiler versions.
+# - Check whether preprocessor definitions WIN32, _LIB, _DEBUG, _CONSOLE, and
+#   NOGDI are necessary on WIN32 platforms (MSVC and MinGW).
+#
+# - Don't generate source documentation with Doxygen in the source tree.
+#
+# - Turn on more compiler warnings by default once SystemC is supposed to
+#   compile without any warnings on recent compiler versions. Currently, the
+#   compiler warning flags are set to reduce the number of generated compiler
+#   warnings (especially with recent Clang versions, e.g., Apple Clang 6.0) to
+#   an acceptable amount. With the chosen flags, the SystemC library compiles
+#   without warnings, but some examples still produce warnings.
 #
 # - Fix Xcode build settings warning by properly initializing
-#   CMAKE_OSX_ARCHITECTURES (cf. CMake issue 0014736).
+#   CMAKE_OSX_ARCHITECTURES (cf. CMake issue 0014736). Ensure to build only
+#   for the selected QuickThreads architecture!
 #
 # - Fix confusing "Warning: Did not find file Compiler/-ASM" due to no
 #   specification of an Assembler dialect. The warning disappears if "ASM-ATT"
 #   is used instead of "ASM" as argument to enable_language(). However, this
 #   currently breaks compilation of QuickThreads with Xcode.
 #
-# - Fix "Validate Project Settings: Update to recommended settings" warning
-#   of CMake-generated Xcode project while ensuring to build only for the
-#   selected QuickThreads architecture.
-#
-# - Review the compiler flags that reduce the number of generated compiler
-#   warnings (especially with recent Clang versions, e.g., Apple Clang 6.0).
-#   With the chosen flags, the SystemC library compiles without warnings, but
-#   some examples still produce warnings.
+# - Test on as many different hardware / OS platforms as possible.
 #
 ###############################################################################
 
