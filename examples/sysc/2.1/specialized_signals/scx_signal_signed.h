@@ -106,6 +106,13 @@ Andy Goodrich - Forte Design Systems, Inc.
 #    define SC_TEMPLATE template<> template<int W>
 #endif
 
+#if defined(__clang__) || \
+   (defined(__GNUC__) && ((__GNUC__ * 1000 + __GNUC_MINOR__) >= 4006))
+// ignore warning about deliberately hidden "bind()" overloads
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#endif
+
 // FORWARD REFERENCES AND USINGS:
 
 using sc_dt::int64;
@@ -1638,4 +1645,8 @@ void sc_signed_sigref::operator = ( const sc_signed_sigref& v )
 
 #undef SC_TEMPLATE
 } // namespace sc_core
+#if defined(__clang__) || \
+   (defined(__GNUC__) && ((__GNUC__ * 1000 + __GNUC_MINOR__) >= 4006))
+#pragma GCC diagnostic pop
+#endif
 #endif // !defined(SC_SIGNAL_SIGNED_H)
