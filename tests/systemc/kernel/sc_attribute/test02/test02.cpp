@@ -65,17 +65,20 @@ sc_main( int, char*[] )
    cout << endl;
    cout << "added attributes to the attribute collection class" << endl;
   
-   if(att_cltn.push_back(&a1) == true)
+   if(att_cltn.push_back(&a1) == true) {
      cout << a1.name() << "   ";
      cout << a1.value <<endl;
+   }
 
-   if(att_cltn.push_back(&a3) == true)
+   if(att_cltn.push_back(&a3) == true) {
      cout << a3.name() << "   ";
      cout << a3.value <<endl;
+   }
 
-   if(att_cltn.push_back(&a4) == true)
+   if(att_cltn.push_back(&a4) == true) {
      cout << a4.name() << "   ";
-     cout << a4.value <<endl<<endl; 
+     cout << a4.value <<endl<<endl;
+   }
     
    cout<<"size of the class\n";
    cout<< att_cltn.size()<<endl<<endl;
