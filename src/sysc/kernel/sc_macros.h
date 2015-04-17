@@ -94,18 +94,18 @@ namespace sc_core {
 
 /*
  *  These help debugging --
- *  -- user can find out where each process is stopped at.
+ *  -- the user can find out at which location in their source file a process calls wait.
  */
 
-#define WAIT()                                                                \
+#define SC_WAIT()                                                                \
     ::sc_core::sc_set_location( __FILE__, __LINE__ );                         \
     ::sc_core::wait()
 
-#define WAITN(n)                                                              \
+#define SC_WAITN(n)                                                              \
     ::sc_core::sc_set_location( __FILE__, __LINE__ );                         \
     ::sc_core::wait(n)
 
-#define WAIT_UNTIL(expr)                                                      \
+#define SC_WAIT_UNTIL(expr)                                                      \
     ::sc_core::sc_set_location( __FILE__, __LINE__ );                         \
     do { ::sc_core::wait(); } while( !(expr) )
 
