@@ -274,9 +274,7 @@ SC_MODULE(sc_invoke_method)
     }
 
     virtual ~sc_invoke_method()
-    {
-	m_invokers.resize(0);
-    }
+    {}
 
     // Method to call to execute a method's semantics.
 
@@ -406,18 +404,13 @@ sc_simcontext::init()
 void
 sc_simcontext::clean()
 {
+    delete m_method_invoker_p;
     delete m_error;
     delete m_cor_pkg;
     delete m_time_params;
     delete m_collectable;
     delete m_runnable;
-    for( int i = m_trace_files.size() - 1; i >= 0; -- i ) {
-	delete m_trace_files[i];
-    }
-    m_trace_files.resize(0);
     delete m_timed_events;
-    m_delta_events.resize(0);
-    m_child_objects.resize(0);
     delete m_process_table;
     delete m_name_gen;
     delete m_phase_cb_registry;
@@ -426,6 +419,9 @@ sc_simcontext::clean()
     delete m_port_registry;
     delete m_module_registry;
     delete m_object_manager;
+    m_delta_events.clear();
+    m_child_objects.clear();
+    m_trace_files.clear();
 }
 
 
@@ -613,7 +609,7 @@ sc_simcontext::crunch( bool once )
 	    do {
 		l_events[i]->trigger();
 	    } while( -- i >= 0 );
-	    m_delta_events.resize(0);
+	    m_delta_events.clear();
 	}
 
 	if( m_runnable->is_empty() ) {
@@ -821,7 +817,7 @@ sc_simcontext::prepare_to_simulate()
         do {
             l_delta_events[i]->trigger();
         } while( -- i >= 0 );
-        m_delta_events.resize(0);
+        m_delta_events.clear();
     }
 
     SC_DO_PHASE_CALLBACK_(initialization_done);
@@ -1334,7 +1330,7 @@ sc_simcontext::remove_child_event( sc_event* event_ )
     for( int i = 0; i < size; ++ i ) {
 	if( event_ == m_child_events[i] ) {
 	    m_child_events[i] = m_child_events[size - 1];
-	    m_child_events.resize(size-1);
+	    m_child_events.pop_back();
 	    return;
 	}
     }
@@ -1348,7 +1344,7 @@ sc_simcontext::remove_child_object( sc_object* object_ )
     for( int i = 0; i < size; ++ i ) {
 	if( object_ == m_child_objects[i] ) {
 	    m_child_objects[i] = m_child_objects[size - 1];
-	    m_child_objects.resize(size-1);
+	    m_child_objects.pop_back();
 	    return;
 	}
     }
@@ -1417,7 +1413,7 @@ sc_simcontext::remove_delta_event( sc_event* e )
 	l_delta_events[i] = l_delta_events[j];
 	l_delta_events[i]->m_delta_event_index = i;
     }
-    m_delta_events.resize(m_delta_events.size()-1);
+    m_delta_events.pop_back();
     e->m_delta_event_index = -1;
 }
 
