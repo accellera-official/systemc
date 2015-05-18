@@ -91,6 +91,7 @@ public:
     sc_time( double, const char* unit, sc_simcontext* );
 
     static sc_time from_value( value_type );
+    static sc_time from_seconds( double );
     static sc_time from_string( const char * str );
 
     // deprecated, use from_value(v)
@@ -221,6 +222,13 @@ sc_time_tuple::sc_time_tuple( const sc_time& t )
 {
     if( t != SC_ZERO_TIME )
         init( t.value() );
+}
+
+inline
+sc_time
+sc_time::from_seconds( double v )
+{
+    return sc_time( v, SC_SEC );
 }
 
 
