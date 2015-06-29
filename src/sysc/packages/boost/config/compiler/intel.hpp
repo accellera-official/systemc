@@ -105,16 +105,20 @@
 //
 #if defined(SC_BOOST_NO_INTRINSIC_WCHAR_T)
 #include <cwchar>
+namespace sc_boost {
 template< typename T > struct assert_no_intrinsic_wchar_t;
 template<> struct assert_no_intrinsic_wchar_t<wchar_t> { typedef void type; };
 // if you see an error here then you need to unset SC_BOOST_NO_INTRINSIC_WCHAR_T
 // where it is defined above:
 typedef assert_no_intrinsic_wchar_t<unsigned short>::type assert_no_intrinsic_wchar_t_;
+} // namespace sc_boost
 #else
+namespace sc_boost {
 template< typename T > struct assert_intrinsic_wchar_t;
 template<> struct assert_intrinsic_wchar_t<wchar_t> {};
 // if you see an error here then define SC_BOOST_NO_INTRINSIC_WCHAR_T on the command line:
 template<> struct assert_intrinsic_wchar_t<unsigned short> {};
+} // namespace sc_boost
 #endif
 
 #if _MSC_VER+0 >= 1000
