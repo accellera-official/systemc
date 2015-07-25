@@ -99,15 +99,18 @@ namespace sc_core {
 
 #define SC_WAIT()                                                                \
     ::sc_core::sc_set_location( __FILE__, __LINE__ );                         \
-    ::sc_core::wait()
+    ::sc_core::wait();							      \
+    ::sc_core::sc_set_location( NULL, 0 )
 
 #define SC_WAITN(n)                                                              \
     ::sc_core::sc_set_location( __FILE__, __LINE__ );                         \
-    ::sc_core::wait(n)
+    ::sc_core::wait(n);							      \
+    ::sc_core::sc_set_location( NULL, 0 )
 
 #define SC_WAIT_UNTIL(expr)                                                      \
     ::sc_core::sc_set_location( __FILE__, __LINE__ );                         \
-    do { ::sc_core::wait(); } while( !(expr) )
+    do { ::sc_core::wait(); } while( !(expr) );				      \
+    ::sc_core::sc_set_location( NULL, 0 )
 
 } // namespace sc_core
 
