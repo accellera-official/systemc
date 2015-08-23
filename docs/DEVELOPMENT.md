@@ -1,6 +1,6 @@
 Development process of the Accellera SystemC implementation
 ===========================================================
-v1.0, June 2013
+v1.1, August 2015
 
 *An HTML-rendered copy of this document can be found at
  <https://github.com/OSCI-WG/systemc/blob/master/docs/DEVELOPMENT.md>.*
@@ -111,7 +111,7 @@ tarball.  This requires the following changes compared to the `master`
 branch:
 
   - The Automake generated files are added to this tree.
-  - ASI internal files are stripped
+  - Accellera internal files are stripped
     (`.gitignore`, internal documentation, ...).
 
 To prepare a release, the `master` branch would then be merged into the
@@ -160,7 +160,7 @@ kernel.
 
 The development of a new contribution in form of a feature or a
 complex bug fix is best done in a new feature branch, which is
-forked and checked out from the ASI `master` branch:
+forked and checked out from the Accellera `master` branch:
 
       git checkout -b <company>-<feature-xyz> master
 
@@ -171,7 +171,7 @@ consider to follow these suggestions:
 
 >  *Note:* **Commit messages**
 >
->  Though not required, it’s a good idea to begin the commit message with
+>  Though not required, it's a good idea to begin the commit message with
 >  a single short (less than 50 character) line summarizing the change,
 >  followed by a blank line and then a more thorough description. Tools
 >  that turn commits into email, for example, use the first line on the
@@ -229,47 +229,6 @@ feature branch in the local and Github fork may be deleted.
       git push  origin :<company-feature-xyz>  # delete remote branch
 
 [6]: https://help.github.com/articles/using-pull-requests "Using Pull Requests - github:help"
-
-
-### Tracking release tarballs
-
-In order to track the release tarballs (both LWG-internal and public
-ones), a tool named [`pristine-tar`] [7] is used.  It enables tracking
-archives directly within the repository.
-
-When looking at the branches (e.g., by using `gitk --all`), you may notice
-an additional, separate branch called `pristine-tar`.  This branch contains
-the metadata for the pristine-tar tool.  `pristine-tar` enables
-tracking original archives with minimal overhead, since only small binary 
-deltas instead of the full tarballs are stored within the repository.
-
-> *NOTE*: Currently, only Linux and Mac OS X are supported platforms for
->         `pristine-tar`.  Porting to Windows (MinGW) is to be done in the
->         future, which should be possible with reasonable effort to
->         support the required use cases within the ASI SystemC working
->         groups.
-
-> *NOTE:* The use of the `pristine-tar` tool is entirely optional
->         since the archives can be downloaded directly from the
->         GitHub repository based on the tags:
->           https://github.com/OSCI-WG/systemc/releases
-
-
-#### Basic workflow
-
-      # adding an archive (done by the maintainer)
-      pristine-tar [-m message] commit systemc-2.3.1.tgz release
-      git push origin pristine-tar
-
-      # retrieving an archive
-      pristine-tar checkout systemc-2.3.0.tgz
-
-
-The maintenance of the `pristine-tar` branch (i.e., adding new archives to
-the `pristine-tar` branch) is done by the LWG chairs during the [release
-management](#release-management).
-
-[7]: http://joeyh.name/code/pristine-tar/ "pristine-tar homepage"
 
 
 ### Maintaining a private (set of) branches
@@ -386,28 +345,18 @@ performed by the maintainer
 > *NOTE:* Even without a tag, a quick-shot release of the
 >         release branch can be generated this way.
 
-  The resulting archive can then be added to the `pristine-tar`
-  branch to keep track of the release history:
-
-        pristine-tar commit ${PACKAGE}-${VERSION}.tgz release
-
-> *NOTE:* The use of the `pristine-tar` tool is entirely optional
->         since the archives can be downloaded directly from the
->         GitHub repository based on the tags:
->         * <https://github.com/OSCI-WG/systemc/releases>
->         * <https://github.com/OSCI-WG/systemc-regressions/releases>
-
 5. **Publish the release**
 
-  Upload the archive to the LWG area for internal review and
-  push the changes to GitHub.
+  Upload the archive to the LWG area for internal review
+  and push the changes to GitHub.
 
-        git push osci-wg \
-               master release pristine-tar \
-               <version>
+        git push osci-wg master release <version>
 
 > *NOTE:* The tag needs to be pushed explicitly.
 
+> *NOTE:* For each tag pushed to the GitHub repository, the corresponding
+          release archive can be downloaded from GitHub directly via
+          `https://github.com/osci-wg/systemc/releases/tag/<version>`.
 
 ---------------------------------------------------------------------
 Issue tracking
@@ -473,11 +422,17 @@ assigned.
 Changelog
 ---------------------------------------------------------------------
 
+* v1.1 (2015-08-23)
+
+ * Dropped obsolete `pristine-tar` section
+ * Changed "ASI" to Accellera throughout the document
+ * Updated contact information
+
 * v1.0 - Development flow implemented at GitHub (2013-06-20)
 
  * Issue tracking documented
 
-* v0.9 - Initial proposal to the ASI LWG (2012-09-25)
+* v0.9 - Initial proposal to the Accellera SystemC LWG (2012-09-25)
 
  * To be discussed during the October LWG phone conference
 
@@ -486,7 +441,7 @@ Changelog
 Authors
 ---------------------------------------------------------------------
 
-  * Philipp A. Hartmann <philipp.hartmann@offis.de>
-  * Torsten Maehne      <Torsten.Maehne@lip6.fr>
+  * Philipp A. Hartmann <philipp.a.hartmann@intel.com>
+  * Torsten Maehne      <torsten.maehne@bfh.ch>
   * Minor cosmetics edits, Lynn Bannister <lynn@accellera.org>
 
