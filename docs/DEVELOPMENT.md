@@ -277,6 +277,42 @@ the [feature branch section](#adding-a-feature-set).
 
 
 ---------------------------------------------------------------------
+Versioning scheme
+---------------------------------------------------------------------
+
+In general, the versioning pattern for the SystemC/TLM proof-of-concept
+implementation follows the scheme defined in IEEE Std. 1666-2011 (8.6.5),
+based on `Major.Minor.Patch` numbers and a date (for prereleases).
+
+*Note:* In general, no compatibility guarantees are attached to these version
+        numbers, not even for PoC implementation itself, to avoid burdens
+        across different SystemC implementations.
+
+The individual parts of the SystemC/TLM versions reported via the corresponding
+header files should be  be handled according to the following criteria:
+
+ * Update **major version** only together with
+   * IEEE 1666 update
+   * and/or major new language features (e.g. in pre-releases for IEEE update)
+ * Update **minor version** for new Accellera standard release
+   * Significant language extension proposals to be added to next IEEE release
+ * Update **patch version** for minor API changes
+ * Update `SYSTEMC_VERSION` date macro after every pull-request merge
+   * ISO8601 date format (YYYYMMDD)
+   * Done by the PoC maintainers
+ * The versions of SystemC and TLM are incremented separately
+   * SystemC (`src/sysc/kernel/sc_ver.h`)
+   * TLM (`src/tlm_core/tlm_2/tlm_version.h`)
+
+*Note:* Changes only affecting documentation, examples, or the build system
+        should not lead to a change of the version
+        (not even `SYSTEMC_VERSION` macro).
+
+The overall release date (see [next section](#release-management)) of the
+PoC release tarball should reflect the date of the archive creation.
+
+
+---------------------------------------------------------------------
 Release management
 ---------------------------------------------------------------------
 
@@ -289,8 +325,7 @@ performed by the maintainer
   information in the package should be updated within the `master`
   branch.  This includes files like
   - `ChangeLog`, `RELEASENOTES`, `README`, `INSTALL`
-  - `src/sysc/kernel/sc_ver.h`,
-    `src/tlm_core/tlm_version.h`
+  - [Version headers](#versioning-scheme)
 
   During the release preparation phase, other functional changes
   should not be added/merged to the `master` branch.
@@ -424,6 +459,7 @@ Changelog
 
 * v1.1 (2015-08-23)
 
+ * Add versioning scheme section
  * Dropped obsolete `pristine-tar` section
  * Changed "ASI" to Accellera throughout the document
  * Updated contact information
