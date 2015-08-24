@@ -167,8 +167,9 @@ sc_time_tuple::to_string() const
 
 // constructors
 
+namespace /* anonymous */ {
 static sc_time::value_type
-from_val_and_unit( double v, sc_time_unit tu, sc_time_params* tp )
+from_value_and_unit( double v, sc_time_unit tu, sc_time_params* tp )
 {
     sc_time::value_type t = 0;
     if( v != 0 ) {
@@ -180,14 +181,15 @@ from_val_and_unit( double v, sc_time_unit tu, sc_time_params* tp )
     }
     return t;
 }
+} /* anonymous namespace */
 
 sc_time::sc_time( double v, sc_time_unit tu )
   : m_value
-      ( from_val_and_unit( v, tu, sc_get_curr_simcontext()->m_time_params ) )
+      ( from_value_and_unit( v, tu, sc_get_curr_simcontext()->m_time_params ) )
 {}
 
 sc_time::sc_time( double v, sc_time_unit tu, sc_simcontext* simc )
-  : m_value( from_val_and_unit( v, tu, simc->m_time_params ) )
+  : m_value( from_value_and_unit( v, tu, simc->m_time_params ) )
 {}
 
 sc_time::sc_time( double v, bool scale )
@@ -255,8 +257,9 @@ sc_time::from_value( value_type v )
     return t;
 }
 
+namespace /* anonymous */ {
 static sc_time::value_type
-from_val_and_symbol( double v, const char* unit, sc_time_params* tp )
+from_value_and_unit_symbol( double v, const char* unit, sc_time_params* tp )
 {
     sc_time::value_type t = 0;
     if( !unit || !*unit ) {
@@ -274,16 +277,17 @@ from_val_and_symbol( double v, const char* unit, sc_time_params* tp )
         return t;
     }
 
-    return from_val_and_unit( v, static_cast<sc_time_unit>(tu), tp );
+    return from_value_and_unit( v, static_cast<sc_time_unit>(tu), tp );
 }
+} /* anonymous namespace */
 
 sc_time::sc_time( double v, const char* unit )
   : m_value
-     ( from_val_and_symbol( v, unit, sc_get_curr_simcontext()->m_time_params ) )
+     ( from_value_and_unit_symbol( v, unit, sc_get_curr_simcontext()->m_time_params ) )
 {}
 
 sc_time::sc_time( double v, const char* unit, sc_simcontext* simc )
-  : m_value( from_val_and_symbol( v, unit, simc->m_time_params ) )
+  : m_value( from_value_and_symbol( v, unit, simc->m_time_params ) )
 {}
 
 sc_time
