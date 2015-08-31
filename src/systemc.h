@@ -61,7 +61,8 @@
 
 // C++11 deprecates std::gets, as it can't be used safely.
 // Compilers are starting to remove it from their headers.
-#if defined(_MSC_VER) && (_MSC_VER >= 1900)
+#if defined(__cplusplus) && (__cplusplus >= 201103L) || \
+    defined(_MSC_VER) && (_MSC_VER >= 1900)
 #define SC_NO_STDGETS_
 #endif
 
