@@ -1,0 +1,148 @@
+/*****************************************************************************
+
+  The following code is derived, directly or indirectly, from the SystemC
+  source code Copyright (c) 1996-2015 by all Contributors.
+  All Rights reserved.
+
+  The contents of this file are subject to the restrictions and limitations
+  set forth in the SystemC Open Source License (the "License");
+  You may not use this file except in compliance with such restrictions and
+  limitations. You may obtain instructions on how to receive a copy of the
+  License at http://www.accellera.org/. Software distributed by Contributors
+  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
+  ANY KIND, either express or implied. See the License for the specific
+  language governing rights and limitations under the License.
+
+ *****************************************************************************/
+
+/*****************************************************************************
+
+  wait.cpp -- 
+
+  Original Author: Daniel Aarno, Intel, Corp 2015-07-23
+
+ *****************************************************************************/
+
+/*****************************************************************************
+
+  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+  changes you are making here.
+
+      Name, Affiliation, Date:
+  Description of Modification:
+
+ *****************************************************************************/
+
+#include <systemc>
+
+using sc_core::sc_time;
+using sc_core::SC_US;
+
+namespace {
+int first_line = 0;
+
+bool endsWith(const std::string &str, const std::string &ending) {
+    if (ending.size() > str.size()) {
+        return false;
+    }
+    return std::equal(ending.rbegin(), ending.rend(), str.rbegin());
+}
+
+bool waitFunIsTrue() {
+  if (sc_core::sc_time_stamp() < sc_time(2000, SC_US)) {
+    return false;
+  }
+
+  if (sc_core::sc_time_stamp() < sc_time(3000, SC_US)) {
+    sc_time delay(10, SC_US);
+    SC_WAITN(delay);
+    return false;
+  }
+
+  if (sc_core::sc_time_stamp() < sc_time(4000, SC_US)) {
+    return false;
+  }
+
+  return true;
+}
+
+SC_MODULE(Wait) {
+  SC_CTOR(Wait) : clk( "clk", 10, SC_US, 0.5, 100, SC_US) {
+    SC_THREAD(thread);
+    sensitive << clk;
+  }
+
+  void thread() {
+    sc_time delay(10, SC_US);
+    wait(delay);  // 1st
+
+    first_line = __LINE__ + 1;
+    SC_WAITN(delay);  // Wait some time
+    wait(delay);  // 2nd
+
+    SC_WAIT();  // Wait for clk
+    wait(delay);  // 3rd
+
+    SC_WAIT_UNTIL(sc_core::sc_time_stamp() > sc_time(1000, SC_US));
+    wait(delay);  // 4th
+
+    SC_WAIT_UNTIL(waitFunIsTrue());
+  }
+
+  sc_core::sc_clock clk;
+};
+
+}  // namespace
+
+int sc_main(int argc, char ** argv) {
+  Wait w("dut");
+
+  sc_core::sc_object *o = sc_core::sc_find_object("dut.thread");
+  sc_core::sc_process_b *thread = dynamic_cast<sc_core::sc_process_b*>(o);
+  sc_assert(thread->file == NULL);  // 1st wait(delay)
+  sc_assert(thread->lineno == 0);
+  sc_core::sc_start(sc_time(15, SC_US));
+
+  int lineno = first_line;
+  sc_assert(endsWith(thread->file, "wait.cpp"));  // SC_WAITN
+  sc_assert(thread->lineno == lineno);
+  sc_core::sc_start(sc_time(10, SC_US));
+  sc_assert(thread->file == NULL);  // 2nd wait(delay)
+  sc_assert(thread->lineno == 0);
+  sc_core::sc_start(sc_time(10, SC_US));
+
+  lineno += 3;
+  sc_assert(endsWith(thread->file, "wait.cpp"));  // SC_WAIT
+  sc_assert(thread->lineno == lineno);
+  sc_core::sc_start(sc_time(70, SC_US));
+  sc_assert(thread->file == NULL);  // 3rd wait(delay)
+  sc_assert(thread->lineno == 0);
+  sc_core::sc_start(sc_time(10, SC_US));
+
+  lineno += 3;
+  sc_assert(endsWith(thread->file, "wait.cpp"));  // SC_WAIT_UNTIL
+  sc_assert(thread->lineno == lineno);
+  sc_core::sc_start(sc_time(900, SC_US));
+  sc_assert(thread->file == NULL);  // 4th wait(delay)
+  sc_assert(thread->lineno == 0);
+
+  // Ensure that SC_WAIT_UNTIL can handle nested wait calls
+  sc_core::sc_start(sc_time(10, SC_US));
+  lineno += 3;
+  sc_assert(endsWith(thread->file, "wait.cpp"));  // 2nd SC_WAIT_UNTIL
+  sc_assert(thread->lineno == lineno);
+  sc_core::sc_start(sc_time(980, SC_US));  // time should be 2005
+  sc_assert(endsWith(thread->file, "wait.cpp"));  // SC_WAITN in waitFunIsTrue
+  sc_assert(thread->lineno == 58);
+  sc_core::sc_start(sc_time(95, SC_US));
+  sc_assert(endsWith(thread->file, "wait.cpp"));
+  sc_assert(thread->lineno == 58);
+  sc_core::sc_start(sc_time(910, SC_US));
+  sc_assert(endsWith(thread->file, "wait.cpp"));  // 2nd SC_WAIT_UNTIL
+  sc_assert(thread->lineno == lineno);
+  sc_core::sc_start(sc_time(1000, SC_US));
+  sc_assert(thread->file == NULL);  // done
+  sc_assert(thread->lineno == 0);
+
+  return 0;
+}
