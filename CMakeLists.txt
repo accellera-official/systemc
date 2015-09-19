@@ -31,8 +31,8 @@
 # MODIFICATION LOG - modifiers, enter your name, affiliation, date and
 # changes you are making here.
 #
-#     Name, Affiliation, Date:
-# Description of Modification:
+#     Name, Affiliation, Date: Guillaume Delbergue, GreenSocs, 08 Mar, 2016
+# Description of Modification: Extract SystemC/TLM version and date
 #
 ###############################################################################
 
@@ -214,31 +214,57 @@
 
 cmake_minimum_required (VERSION 2.8.5)
 
-
-###############################################################################
-# Project attributes
-###############################################################################
-
 project (SystemC CXX C)
-set (SystemC_VERSION_MAJOR 2)
-set (SystemC_VERSION_MINOR 3)
-set (SystemC_VERSION_PATCH 0)
-set (SystemC_VERSION_IS_PRERELEASE 1)
-set (SystemC_VERSION_PRERELEASE "pub_rev")
-set (SystemC_VERSION_RELEASE_DATE 20120701) # TODO: Extract date from commit.
+
+set(SystemC_VERSION_FILE "${PROJECT_SOURCE_DIR}/src/sysc/kernel/sc_ver.h")
+if(EXISTS ${SystemC_VERSION_FILE})
+    file(READ ${SystemC_VERSION_FILE} SYSTEMC_VERSION_FILE_CONTENT)
+    string(REGEX MATCH "SC_VERSION_MAJOR[ \t]+([0-9]+)" SystemC_VERSION_MAJOR ${SYSTEMC_VERSION_FILE_CONTENT})
+    string(REGEX MATCH "([0-9]+)" SystemC_VERSION_MAJOR ${SystemC_VERSION_MAJOR})
+    string(REGEX MATCH "SC_VERSION_MINOR[ \t]+([0-9]+)" SystemC_VERSION_MINOR ${SYSTEMC_VERSION_FILE_CONTENT})
+    string(REGEX MATCH "([0-9]+)" SystemC_VERSION_MINOR ${SystemC_VERSION_MINOR})
+    string(REGEX MATCH "SC_VERSION_PATCH[ \t]+([0-9]+)" SystemC_VERSION_PATCH ${SYSTEMC_VERSION_FILE_CONTENT})
+    string(REGEX MATCH "([0-9]+)" SystemC_VERSION_PATCH ${SystemC_VERSION_PATCH})
+    string(REGEX MATCH "SC_IS_PRERELEASE[ \t]+([0-9]+)" SystemC_VERSION_IS_PRERELEASE ${SYSTEMC_VERSION_FILE_CONTENT})
+    string(REGEX MATCH "([0-9]+)" SystemC_VERSION_IS_PRERELEASE ${SystemC_VERSION_IS_PRERELEASE})
+    string(REGEX MATCH "SC_VERSION_PRERELEASE[ \t]+\"([^\".]+)\"" SystemC_VERSION_PRERELEASE ${SYSTEMC_VERSION_FILE_CONTENT})
+    string(REGEX REPLACE "(.*)\"(.*)\"" "\\2" SystemC_VERSION_PRERELEASE ${SystemC_VERSION_PRERELEASE})
+    string(REGEX MATCH "SYSTEMC_VERSION[ \t]+([0-9]+)" SystemC_VERSION_RELEASE_DATE ${SYSTEMC_VERSION_FILE_CONTENT})
+    string(REGEX MATCH "([0-9]+)" SystemC_VERSION_RELEASE_DATE ${SystemC_VERSION_RELEASE_DATE})
+else()
+    message (FATAL_ERROR "Unable to read SystemC version file")
+endif()
+
 set (SystemC_VERSION "${SystemC_VERSION_MAJOR}.${SystemC_VERSION_MINOR}.${SystemC_VERSION_PATCH}")
 if (SystemC_VERSION_IS_PRERELEASE)
   set (SystemC_VERSION "${SystemC_VERSION}_${SystemC_VERSION_PRERELEASE}_${SystemC_VERSION_RELEASE_DATE}")
 endif (SystemC_VERSION_IS_PRERELEASE)
 set (SystemC_SOVERSION "${SystemC_VERSION_MAJOR}.${SystemC_VERSION_MINOR}")
 
+set(TLM_VERSION_FILE "${PROJECT_SOURCE_DIR}/src/tlm_core/tlm_2/tlm_version.h")
+if(EXISTS ${TLM_VERSION_FILE})
+    file(READ ${TLM_VERSION_FILE} TLM_VERSION_FILE_CONTENT)
+    string(REGEX MATCH "TLM_VERSION_MAJOR[ \t]+([0-9]+)" TLM_VERSION_MAJOR ${TLM_VERSION_FILE_CONTENT})
+    string(REGEX MATCH "([0-9]+)" TLM_VERSION_MAJOR ${TLM_VERSION_MAJOR})
+    string(REGEX MATCH "TLM_VERSION_MINOR[ \t]+([0-9]+)" TLM_VERSION_MINOR ${TLM_VERSION_FILE_CONTENT})
+    string(REGEX MATCH "([0-9]+)" TLM_VERSION_MINOR ${TLM_VERSION_MINOR})
+    string(REGEX MATCH "TLM_VERSION_PATCH[ \t]+([0-9]+)" TLM_VERSION_PATCH ${TLM_VERSION_FILE_CONTENT})
+    string(REGEX MATCH "([0-9]+)" TLM_VERSION_PATCH ${TLM_VERSION_PATCH})
+    string(REGEX MATCH "TLM_IS_PRERELEASE[ \t]+([0-9]+)" TLM_VERSION_IS_PRERELEASE ${TLM_VERSION_FILE_CONTENT})
+    string(REGEX MATCH "([0-9]+)" TLM_VERSION_IS_PRERELEASE ${TLM_VERSION_IS_PRERELEASE})
+    string(REGEX MATCH "TLM_VERSION_PRERELEASE[ \t]+\"([^\".]+)\"" TLM_VERSION_PRERELEASE ${TLM_VERSION_FILE_CONTENT})
+    string(REGEX REPLACE "(.*)\"(.*)\"" "\\2" TLM_VERSION_PRERELEASE ${TLM_VERSION_PRERELEASE})
+    string(REGEX MATCH "TLM_VERSION_RELEASE_YEAR[ \t]+\"([0-9]+)\"" TLM_VERSION_RELEASE_YEAR ${TLM_VERSION_FILE_CONTENT})
+    string(REGEX MATCH "([0-9]+)" TLM_VERSION_RELEASE_YEAR ${TLM_VERSION_RELEASE_YEAR})
+    string(REGEX MATCH "TLM_VERSION_RELEASE_MONTH[ \t]+\"([0-9]+)\"" TLM_VERSION_RELEASE_MONTH ${TLM_VERSION_FILE_CONTENT})
+    string(REGEX MATCH "([0-9]+)" TLM_VERSION_RELEASE_MONTH ${TLM_VERSION_RELEASE_MONTH})
+    string(REGEX MATCH "TLM_VERSION_RELEASE_DAY[ \t]+\"([0-9]+)\"" TLM_VERSION_RELEASE_DAY ${TLM_VERSION_FILE_CONTENT})
+    string(REGEX MATCH "([0-9]+)" TLM_VERSION_RELEASE_DAY ${TLM_VERSION_RELEASE_DAY})
+else()
+    message(FATAL_ERROR "Unable to read TLM version file")
+endif()
 
-set (TLM_VERSION_MAJOR 2)
-set (TLM_VERSION_MINOR 0)
-set (TLM_VERSION_PATCH 2)
-set (TLM_VERSION_IS_PRERELEASE 1)
-set (TLM_VERSION_PRERELEASE "pub_rev")
-set (TLM_VERSION_RELEASE_DATE "20120511") # TODO: Extract date from commit.
+set (TLM_VERSION_RELEASE_DATE "${TLM_VERSION_RELEASE_YEAR}${TLM_VERSION_RELEASE_MONTH}${TLM_VERSION_RELEASE_DAY}")
 set (TLM_VERSION "${TLM_VERSION_MAJOR}.${TLM_VERSION_MINOR}.${TLM_VERSION_PATCH}")
 if (TLM_IS_PRERELEASE)
   set (TLM_VERSION "${TLM_VERSION}_${TLM_VERSION_PRERELEASE}_${TLM_VERSION_RELEASE_DATE}")
