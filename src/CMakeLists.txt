@@ -412,6 +412,8 @@ set (QT_PRIVATE_HEADERS sysc/qt/b.h
                         sysc/qt/copyright.h
                         sysc/qt/stp.h)
 
+set (QT_HEADERS ${QT_PUBLIC_HEADERS} ${QT_PRIVATE_HEADERS})
+
 # Set QuickThread sources used by SystemC depending on target platform
 if (QT_ARCH STREQUAL "sparc")
   add_custom_command (OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/sysc/qt/md/sparc.s
@@ -432,6 +434,10 @@ elseif (QT_ARCH STREQUAL "powerpc_sys5")
                   sysc/qt/md/powerpc.c)
 endif (QT_ARCH STREQUAL "sparc")
 set (QT_SOURCES sysc/qt/qt.c ${QT_SOURCES})
+if (QT_ARCH)
+  set (systemc_HEADERS ${systemc_HEADERS} ${QT_HEADERS})
+  set (systemc_SOURCES ${systemc_SOURCES} ${QT_SOURCES})
+endif (QT_ARCH)
 
 if (APPLE)
   if (N_OSX_ARCHITECTURES EQUAL 1)
@@ -453,7 +459,7 @@ endif (APPLE)
 ###############################################################################
 
 include_directories (BEFORE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/sysc/qt)
-add_library (systemc ${systemc_SOURCES} ${systemc_HEADERS} ${QT_SOURCES} ${QT_HEADERS})
+add_library (systemc ${systemc_SOURCES} ${systemc_HEADERS})
 if (DEFINED ${CMAKE_THREAD_LIBS_INIT})
   target_link_libraries (systemc ${CMAKE_THREAD_LIBS_INIT})
 endif (DEFINED ${CMAKE_THREAD_LIBS_INIT})
