@@ -207,6 +207,8 @@
 #
 # - Test on as many different hardware / OS platforms as possible.
 #
+# - Set more reliably the needed compiler options, e.g., /vmg for MSVC.
+#
 ###############################################################################
 
 
