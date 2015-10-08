@@ -54,6 +54,7 @@
 
 namespace sc_core {
 
+SC_API_TEMPLATE_ template class SC_API sc_ppq<sc_time*>;
 
 // ---------------------------------------------------------------------------
 // sc_event_queue_if
@@ -66,6 +67,12 @@ public:
     virtual void notify (const sc_time& when) =0;
     virtual void cancel_all() =0;
 };
+
+} // namespace sc_core
+
+SC_API_VECTOR_(sc_core::sc_event_queue_if*);
+
+namespace sc_core {
 
 // ---------------------------------------------------------------------------
 // sc_event_queue: a queue that can contain any number of pending 
@@ -144,6 +151,7 @@ const sc_event& sc_event_queue::default_event() const
 // Using event queue as a port
 //
 typedef sc_port<sc_event_queue_if,1,SC_ONE_OR_MORE_BOUND> sc_event_queue_port;
+SC_API_TEMPLATE_ template class SC_API sc_port<sc_event_queue_if,1,SC_ONE_OR_MORE_BOUND>;
 
 } // namespace sc_core
 

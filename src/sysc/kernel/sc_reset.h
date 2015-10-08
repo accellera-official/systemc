@@ -64,6 +64,13 @@ inline std::ostream& operator << ( std::ostream& os,
     return os;
 }
 
+} // namespace sc_core
+
+// explicitly instantiate std::vector<sc_reset_target>
+SC_API_VECTOR_(sc_core::sc_reset_target);
+
+namespace sc_core {
+
 //==============================================================================
 // CLASS sc_reset - RESET INFORMATION FOR A RESET SIGNAL
 //

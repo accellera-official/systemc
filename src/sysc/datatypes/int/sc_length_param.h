@@ -107,6 +107,7 @@ private:
     int m_len;
 };
 
+} // namespace sc_dt
 
 // ----------------------------------------------------------------------------
 //  TYPEDEF : sc_length_context
@@ -114,6 +115,15 @@ private:
 //  Context type for the length parameter type.
 // ----------------------------------------------------------------------------
 
+namespace sc_core {
+SC_API_TEMPLATE_ template class SC_API
+  sc_phash<const sc_process_b*, const sc_dt::sc_length_param*>;
+} // namespace sc_core
+
+namespace sc_dt {
+
+SC_API_TEMPLATE_ template class SC_API sc_global<sc_length_param>;
+SC_API_TEMPLATE_ template class SC_API sc_context<sc_length_param>;
 typedef sc_context<sc_length_param> sc_length_context;
 
 

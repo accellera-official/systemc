@@ -64,6 +64,7 @@
 #include "sysc/datatypes/fx/scfx_utils.h"
 
 #include "sysc/datatypes/bit/sc_bv_base.h"
+#include "sysc/datatypes/bit/sc_lv_base.h"
 
 #include <ctype.h>
 #include <math.h>

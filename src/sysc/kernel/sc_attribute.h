@@ -66,6 +66,12 @@ private:
     sc_attr_base& operator = ( const sc_attr_base& );
 };
 
+} // namespace sc_core
+
+// explicitly instantiate/export std::vector<sc_attr_base*>
+SC_API_VECTOR_(sc_core::sc_attr_base*);
+
+namespace sc_core {
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_attr_cltn

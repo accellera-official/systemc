@@ -44,6 +44,7 @@
 namespace sc_core {
 
 class sc_event_finder;
+class sc_port_base;
 
 struct sc_bind_info;
 
@@ -54,6 +55,11 @@ enum sc_port_policy
     SC_ALL_BOUND  
 }; 
 
+} // namespace sc_core
+
+SC_API_VECTOR_(sc_core::sc_port_base*);
+
+namespace sc_core {
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //  BEWARE: Ports can only be created and bound during elaboration.

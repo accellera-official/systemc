@@ -86,13 +86,25 @@
 #include "sysc/datatypes/int/sc_signed.h"
 #include "sysc/datatypes/int/sc_unsigned.h"
 
+namespace sc_dt {
+
+// classes defined in this module
+class sc_concatref;
+class sc_concat_bool;
+
+} // namespace sc_dt
+
 namespace sc_core {
 
 extern sc_byte_heap SC_API sc_temp_heap; // Temporary storage.
+
+// explicit template instantiations
+SC_API_TEMPLATE_ template class SC_API sc_vpool<sc_dt::sc_concatref>;
+SC_API_TEMPLATE_ template class SC_API sc_vpool<sc_dt::sc_concat_bool>;
+
 } // namespace sc_core
 
-namespace sc_dt
-{
+namespace sc_dt {
 
 // ----------------------------------------------------------------------------
 //  CLASS TEMPLATE : sc_concatref

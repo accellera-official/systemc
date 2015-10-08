@@ -61,6 +61,13 @@ class sc_method_process;
 class sc_cthread_process;
 class sc_thread_process;
 
+} // namespace sc_core
+
+// export explicit std::vector<> template instantiations
+SC_API_VECTOR_(sc_core::sc_trace_file*);
+
+namespace sc_core {
+
 template< typename > class sc_plist;
 typedef sc_plist< sc_process_b* > sc_process_list;
 
