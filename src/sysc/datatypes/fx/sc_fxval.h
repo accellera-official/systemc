@@ -90,7 +90,7 @@ class sc_fxnum_fast;
 //  Fixed-point value type; arbitrary precision.
 // ----------------------------------------------------------------------------
 
-class sc_fxval
+class SC_API sc_fxval
 {
 
     friend class sc_fxnum;
@@ -434,7 +434,7 @@ private:
 //  Fixed-point value type; limited precision.
 // ----------------------------------------------------------------------------
 
-class sc_fxval_fast
+class SC_API sc_fxval_fast
 {
 
     friend class sc_fxnum_fast;

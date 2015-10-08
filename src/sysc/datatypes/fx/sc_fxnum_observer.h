@@ -108,7 +108,7 @@ class sc_fxnum_fast;
 //  Abstract base class for fixed-point types observers; arbitrary precision.
 // ----------------------------------------------------------------------------
 
-class sc_fxnum_observer
+class SC_API sc_fxnum_observer
 {
 
 protected:
@@ -134,7 +134,7 @@ public:
 //  Abstract base class for fixed-point types observers; limited precision.
 // ----------------------------------------------------------------------------
 
-class sc_fxnum_fast_observer
+class SC_API sc_fxnum_fast_observer
 {
 
 protected:

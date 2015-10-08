@@ -28,6 +28,7 @@
 #ifndef SC_EVENT_H
 #define SC_EVENT_H
 
+#include "sysc/kernel/sc_cmnhdr.h"
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/communication/sc_writer_policy.h"
@@ -49,7 +50,7 @@ class sc_event_and_list;
 class sc_object;
 
 // friend function declarations
-    int sc_notify_time_compare( const void*, const void* );
+SC_API int sc_notify_time_compare( const void*, const void* );
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_event_expr
@@ -120,7 +121,7 @@ private:
 //  Base class for lists of events.
 // ----------------------------------------------------------------------------
 
-class sc_event_list
+class SC_API sc_event_list
 {
     friend class sc_process_b;
     friend class sc_method_process;
@@ -179,7 +180,7 @@ private:
 //  AND list of events.
 // ----------------------------------------------------------------------------
 
-class sc_event_and_list
+class SC_API sc_event_and_list
 : public sc_event_list
 {
     friend class sc_event;
@@ -214,7 +215,7 @@ typedef sc_event_expr<sc_event_and_list> sc_event_and_expr;
 //  OR list of events.
 // ----------------------------------------------------------------------------
 
-class sc_event_or_list
+class SC_API sc_event_or_list
 : public sc_event_list
 {
     friend class sc_event;
@@ -246,7 +247,7 @@ typedef sc_event_expr<sc_event_or_list> sc_event_or_expr;
 //  The event class.
 // ----------------------------------------------------------------------------
 
-class sc_event
+class SC_API sc_event
 {
     friend class sc_clock;
     friend class sc_event_list;
@@ -341,12 +342,12 @@ extern sc_event sc_non_event; // Event that never happens.
 //  Class for storing the time to notify a timed event.
 // ----------------------------------------------------------------------------
 
-class sc_event_timed
+class SC_API sc_event_timed
 {
     friend class sc_event;
     friend class sc_simcontext;
 
-    friend int sc_notify_time_compare( const void*, const void* );
+    friend SC_API int sc_notify_time_compare( const void*, const void* );
 
 private:
 

@@ -109,7 +109,7 @@ class sc_fxval_fast;
 //  arbitrary precision.
 // ----------------------------------------------------------------------------
 
-class sc_fxval_observer
+class SC_API sc_fxval_observer
 {
 
 protected:
@@ -136,7 +136,7 @@ public:
 //  limited precision.
 // ----------------------------------------------------------------------------
 
-class sc_fxval_fast_observer
+class SC_API sc_fxval_fast_observer
 {
 
 protected:

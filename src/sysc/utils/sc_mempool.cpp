@@ -47,6 +47,7 @@ static bool use_default_new = false;
 
 #include <stdio.h>
 #include <cstdlib>
+#include "sysc/kernel/sc_cmnhdr.h"
 #include "sysc/utils/sc_mempool.h"
 
 namespace sc_core {
@@ -64,7 +65,7 @@ namespace sc_core {
 //  block becomes the head of <block_list>.
 
 
-class sc_allocator {
+class SC_API sc_allocator {
     friend class sc_mempool;
 
 public:
@@ -191,7 +192,7 @@ static const int cell_size_to_allocator[] = {
 };
 
 
-class sc_mempool_int {
+class SC_API sc_mempool_int {
     friend class sc_mempool;
 
 public:

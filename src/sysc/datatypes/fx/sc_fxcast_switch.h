@@ -65,7 +65,7 @@ class sc_fxcast_switch;
 //  Fixed-point cast switch class.
 // ----------------------------------------------------------------------------
 
-class sc_fxcast_switch
+class SC_API sc_fxcast_switch
 {
 
 public:

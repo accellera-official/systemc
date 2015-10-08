@@ -67,7 +67,7 @@ namespace sc_dt
 
 #if !defined(WIN32) || defined(__MINGW32__)
 
-const uint_type mask_int[SC_INTWIDTH][SC_INTWIDTH] = 
+SC_API const uint_type mask_int[SC_INTWIDTH][SC_INTWIDTH] = 
 {
 {
 0xfffffffffffffffeULL
@@ -2281,7 +2281,7 @@ const uint_type mask_int[SC_INTWIDTH][SC_INTWIDTH] =
 
 #else //end of #ifndef WIN32
 
-const uint_type mask_int[SC_INTWIDTH][SC_INTWIDTH] = 
+SC_API const uint_type mask_int[SC_INTWIDTH][SC_INTWIDTH] = 
 {
 {
 0xfffffffffffffffei64

@@ -31,6 +31,8 @@
 #include <string>
 #include <vector>
 
+#include "sysc/kernel/sc_cmnhdr.h"
+
 namespace sc_core {
 
 // ----------------------------------------------------------------------------
@@ -39,7 +41,7 @@ namespace sc_core {
 //  Attribute base class.
 // ----------------------------------------------------------------------------
 
-class sc_attr_base
+class SC_API sc_attr_base
 {
 public:
 
@@ -72,7 +74,7 @@ private:
 //  Note: iterate over the collection by using iterators.
 // ----------------------------------------------------------------------------
 
-class sc_attr_cltn
+class SC_API sc_attr_cltn
 {
 public:
 

@@ -44,12 +44,12 @@ class sc_process_handle;
 class sc_thread_process;
 class sc_reset;
 
-const char* sc_gen_unique_name( const char*, bool preserve_first );
-sc_process_handle sc_get_current_process_handle();
+SC_API const char* sc_gen_unique_name( const char*, bool preserve_first );
+SC_API  sc_process_handle sc_get_current_process_handle();
 void sc_thread_cor_fn( void* arg );
-bool timed_out( sc_simcontext* );
+SC_API bool timed_out( sc_simcontext* );
 
-extern bool sc_allow_process_control_corners; // see sc_simcontext.cpp.
+SC_API extern bool sc_allow_process_control_corners; // see sc_simcontext.cpp.
 
 
 // Process handles as forward references:
@@ -84,7 +84,7 @@ enum sc_descendant_inclusion_info {
 // their methods (e.g., sc_module)
 //==============================================================================
 
-class sc_process_host 
+class SC_API sc_process_host 
 {
   public:
     sc_process_host() {}
@@ -102,7 +102,7 @@ class sc_process_host
 // sc_join.) Its methods should be overloaded where notifications are desired.
 //==============================================================================
 
-class sc_process_monitor {
+class SC_API sc_process_monitor {
   public:
     enum {
         spm_exit = 0
@@ -149,7 +149,7 @@ inline void sc_process_monitor::signal(sc_thread_handle , int ) {}
 // COMPILER NOT DOES SUPPORT CAST TO void (sc_process_host::*)() from (T::*)():
 
 #else // !defined(SC_USE_MEMBER_FUNC_PTR)
-    class sc_process_call_base {
+    class SC_API sc_process_call_base {
       public:
         inline sc_process_call_base()
         {
@@ -196,7 +196,7 @@ inline void sc_process_monitor::signal(sc_thread_handle , int ) {}
 #endif // !defined(SC_USE_MEMBER_FUNC_PTR)
 
 
-extern void sc_set_stack_size( sc_thread_handle, std::size_t );
+extern SC_API void sc_set_stack_size( sc_thread_handle, std::size_t );
 
 class sc_event;
 class sc_event_list;
@@ -224,7 +224,7 @@ class sc_unwind_exception;
 // that deletion will occur each time a new exception is thrown ( see 
 // sc_thread_process::suspend_me() ).
 //==============================================================================
-class sc_throw_it_helper {
+class SC_API sc_throw_it_helper {
   public:
     virtual sc_throw_it_helper* clone() const = 0;
     virtual void throw_it() = 0;
@@ -265,7 +265,7 @@ class sc_throw_it : public sc_throw_it_helper
 //       method call: sync_reset_on - sync_reset_off.
 //       
 //==============================================================================
-class sc_process_b : public sc_object { 
+class SC_API sc_process_b : public sc_object { 
     friend class sc_simcontext;      // Allow static processes to have base.
     friend class sc_cthread_process; // Child can access parent.
     friend class sc_method_process;  // Child can access parent.
@@ -284,10 +284,10 @@ class sc_process_b : public sc_object {
     friend class sc_reset_finder;
     friend class sc_unwind_exception;
 
-    friend const char* sc_gen_unique_name( const char*, bool preserve_first );
-    friend sc_process_handle sc_get_current_process_handle();
+    friend SC_API const char* sc_gen_unique_name( const char*, bool preserve_first );
+    friend SC_API sc_process_handle sc_get_current_process_handle();
     friend void sc_thread_cor_fn( void* arg );
-    friend bool timed_out( sc_simcontext* );
+    friend SC_API bool timed_out( sc_simcontext* );
 
   public:
     enum process_throw_type {
@@ -629,7 +629,7 @@ inline void sc_process_b::reference_increment()
 //   (1) For a description of the process reset mechanism see the top of 
 //       the file sc_reset.cpp.
 //------------------------------------------------------------------------------
-struct scoped_flag
+struct SC_API scoped_flag
 {
     scoped_flag( bool& b ) : ref(b){ ref = true;  }
     ~scoped_flag()                 { ref = false; }

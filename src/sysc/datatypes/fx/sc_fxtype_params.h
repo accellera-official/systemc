@@ -65,7 +65,7 @@ class sc_fxtype_params;
 //  Fixed-point type parameters class.
 // ----------------------------------------------------------------------------
 
-class sc_fxtype_params
+class SC_API sc_fxtype_params
 {
 public:
 

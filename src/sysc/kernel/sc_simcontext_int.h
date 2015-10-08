@@ -250,7 +250,7 @@ sc_simcontext::remove_runnable_thread( sc_thread_handle thread_h )
 
 // ----------------------------------------------------------------------------
 
-extern void sc_defunct_process_function( sc_module* );
+extern SC_API void sc_defunct_process_function( sc_module* );
 
 
 } // namespace sc_core

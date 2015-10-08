@@ -59,7 +59,7 @@ namespace sc_core {
 // sc_event_queue_if
 // ---------------------------------------------------------------------------
 
-class sc_event_queue_if : public virtual sc_interface
+class SC_API sc_event_queue_if : public virtual sc_interface
 {
 public:
     virtual void notify (double when, sc_time_unit base) =0;
@@ -72,7 +72,7 @@ public:
 // delta, or timed events.
 // ---------------------------------------------------------------------------
 
-class sc_event_queue: 
+class SC_API sc_event_queue: 
   public sc_event_queue_if,
   public sc_module
 {

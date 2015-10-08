@@ -44,9 +44,9 @@ namespace sc_core {
 
 // to avoid code bloat in sc_signal<T>
 
-extern void sc_deprecated_get_data_ref();
-extern void sc_deprecated_get_new_value();
-extern void sc_deprecated_trace();
+extern SC_API void sc_deprecated_get_data_ref();
+extern SC_API void sc_deprecated_get_new_value();
+extern SC_API void sc_deprecated_trace();
 
 inline
 bool
@@ -276,7 +276,7 @@ sc_signal<T,POL>::update()
 //  Specialization of sc_signal<T> for type bool.
 // ----------------------------------------------------------------------------
 
-class sc_reset;
+class SC_API sc_reset;
 
 template< sc_writer_policy POL >
 class sc_signal<bool,POL>

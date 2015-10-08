@@ -62,7 +62,7 @@
 namespace sc_dt
 {
 
-const uint_type mask_int[SC_INTWIDTH][SC_INTWIDTH] = 
+SC_API const uint_type mask_int[SC_INTWIDTH][SC_INTWIDTH] = 
 {
 {
 0xfffffffeU

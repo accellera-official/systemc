@@ -87,7 +87,8 @@
 #include "sysc/datatypes/int/sc_unsigned.h"
 
 namespace sc_core {
-    extern sc_byte_heap sc_temp_heap; // Temporary storage.
+
+extern sc_byte_heap SC_API sc_temp_heap; // Temporary storage.
 } // namespace sc_core
 
 namespace sc_dt
@@ -99,7 +100,7 @@ namespace sc_dt
 //  Proxy class for sized bit concatenation.
 // ----------------------------------------------------------------------------
 
-class sc_concatref : public sc_generic_base<sc_concatref>, public sc_value_base
+class SC_API sc_concatref : public sc_generic_base<sc_concatref>, public sc_value_base
 {
 public:
     friend class sc_core::sc_vpool<sc_concatref>;
@@ -604,7 +605,7 @@ operator >> ( ::std::istream& is, sc_concatref& a )
 //  Proxy class for read-only boolean values in concatenations.
 // ----------------------------------------------------------------------------
 
-class sc_concat_bool : public sc_value_base
+class SC_API sc_concat_bool : public sc_value_base
 {
   protected:
     static sc_core::sc_vpool<sc_concat_bool> m_pool;  // Temporaries pool.

@@ -71,7 +71,7 @@ class sc_bv_base;
 //  Arbitrary size bit vector base class.
 // ----------------------------------------------------------------------------
 
-class sc_bv_base
+class SC_API sc_bv_base
     : public sc_proxy<sc_bv_base>
 {
     friend class sc_lv_base;

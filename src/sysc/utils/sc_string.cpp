@@ -88,7 +88,7 @@ to_string( sc_numrep numrep )
 //  Reference counting string implementation class.
 // ----------------------------------------------------------------------------
 
-class sc_string_rep
+class SC_API sc_string_rep
 {
     friend class sc_string_old;
     friend ::std::ostream& operator<<( ::std::ostream&, const sc_string_old& );

@@ -46,7 +46,7 @@ class sc_process_b;
 // | CLASS sc_spawn_reset_base - Class to do a generic access to an 
 // |                             sc_spawn_rest object instance
 // +===========================================================================
-class sc_spawn_reset_base
+class SC_API sc_spawn_reset_base
 {
   public:
     sc_spawn_reset_base( bool async, bool level ) : 
@@ -84,7 +84,7 @@ class sc_spawn_reset : public sc_spawn_reset_base
 // CLASS sc_spawn_options
 //
 //=============================================================================
-class sc_spawn_options {
+class SC_API sc_spawn_options {
     friend class sc_cthread_process;
     friend class sc_method_process;
     friend class sc_process_b;

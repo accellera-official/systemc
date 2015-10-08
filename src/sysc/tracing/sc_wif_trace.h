@@ -234,8 +234,8 @@ protected:
 };
 
 // Create WIF file
-extern sc_trace_file *sc_create_wif_trace_file(const char *name);
-extern void sc_close_wif_trace_file( sc_trace_file* tf );
+SC_API extern sc_trace_file *sc_create_wif_trace_file(const char *name);
+SC_API extern void sc_close_wif_trace_file( sc_trace_file* tf );
 
 } //  namespace sc_core
 

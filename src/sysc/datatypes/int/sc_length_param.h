@@ -66,9 +66,9 @@ namespace sc_dt
 class sc_length_param;
 
 // friend operator declarations
-    bool operator == ( const sc_length_param&,
+    SC_API bool operator == ( const sc_length_param&,
                               const sc_length_param& );
-    bool operator != ( const sc_length_param&,
+    SC_API bool operator != ( const sc_length_param&,
 			      const sc_length_param& );
 
 
@@ -78,7 +78,7 @@ class sc_length_param;
 //  Length parameter type.
 // ----------------------------------------------------------------------------
 
-class sc_length_param
+class SC_API sc_length_param
 {
 public:
 
@@ -89,9 +89,9 @@ public:
 
     sc_length_param& operator = ( const sc_length_param& );
 
-    friend bool operator == ( const sc_length_param&,
+    friend SC_API bool operator == ( const sc_length_param&,
                               const sc_length_param& );
-    friend bool operator != ( const sc_length_param&,
+    friend SC_API bool operator != ( const sc_length_param&,
 			      const sc_length_param& );
 
     int len() const;

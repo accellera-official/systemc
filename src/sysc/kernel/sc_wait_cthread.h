@@ -40,12 +40,12 @@ namespace sc_core
 
 // for SC_CTHREADs
 
-extern
+SC_API extern
 void
 halt( sc_simcontext* = sc_get_curr_simcontext() );
 
 
-extern
+SC_API extern
 void
 wait( int,
       sc_simcontext* = sc_get_curr_simcontext() );
@@ -73,7 +73,7 @@ at_negedge( const sc_signal_in_if<sc_dt::sc_logic>&,
 
 
 
-class sc_watch
+class SC_API sc_watch
 {
 public:
 

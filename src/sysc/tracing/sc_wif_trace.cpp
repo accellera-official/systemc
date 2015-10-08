@@ -2002,7 +2002,7 @@ put_error_message(const char* msg, bool just_warning)
 #endif // 0
 
 // Create the trace file
-sc_trace_file*
+SC_API sc_trace_file*
 sc_create_wif_trace_file(const char * name)
 {
     sc_trace_file *tf;
@@ -2012,7 +2012,7 @@ sc_create_wif_trace_file(const char * name)
     return tf;
 }
 
-void
+SC_API void
 sc_close_wif_trace_file( sc_trace_file* tf )
 {
     wif_trace_file* wif_tf = (wif_trace_file*)tf;

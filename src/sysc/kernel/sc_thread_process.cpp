@@ -818,7 +818,7 @@ bool sc_thread_process::trigger_dynamic( sc_event* e )
 //"sc_set_stack_size"
 //
 //------------------------------------------------------------------------------
-void
+SC_API void
 sc_set_stack_size( sc_thread_handle thread_h, std::size_t size )
 {
     thread_h->set_stack_size( size );

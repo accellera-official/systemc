@@ -39,7 +39,7 @@ namespace sc_core {
 //  The sc_signal_resolved input port class.
 // ----------------------------------------------------------------------------
 
-class sc_in_resolved
+class SC_API sc_in_resolved
     : public sc_in<sc_dt::sc_logic>
 {
 public:
@@ -129,7 +129,7 @@ private:
 //  The sc_signal_resolved input/output port class.
 // ----------------------------------------------------------------------------
 
-class sc_inout_resolved
+class SC_API sc_inout_resolved
     : public sc_inout<sc_dt::sc_logic>
 {
 public:
@@ -233,7 +233,7 @@ private:
 // sc_inout_resolved. For debugging reasons, a class is provided instead
 // of a typedef.
 
-class sc_out_resolved
+class SC_API sc_out_resolved
     : public sc_inout_resolved
 {
 public:

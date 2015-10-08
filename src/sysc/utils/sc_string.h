@@ -84,7 +84,7 @@ enum sc_numrep
 typedef ::std::istream systemc_istream;
 typedef ::std::ostream systemc_ostream;
 
-const std::string to_string( sc_numrep );
+SC_API const std::string to_string( sc_numrep );
 
 //------------------------------------------------------------------------------
 //"sc_io_base"
@@ -133,7 +133,7 @@ const std::string to_string( sc_numrep );
 //  String class (yet another).
 // ----------------------------------------------------------------------------
 
-class sc_string_old
+class SC_API sc_string_old
 {
     friend systemc_ostream& operator << (systemc_ostream& os, const sc_string_old& a);
     friend systemc_istream& operator >> ( systemc_istream& is, sc_string_old& a );

@@ -26,6 +26,7 @@
 
 #ifndef SC_TEMPORARY_H
 #define SC_TEMPORARY_H
+#include "sysc/kernel/sc_cmnhdr.h"
 
 namespace sc_core {
 
@@ -65,7 +66,7 @@ namespace sc_core {
 //   a heap of the specified number of bytes.
 //       heap_size = number of bytes to allocate for the heap.
 //------------------------------------------------------------------------------
-class sc_byte_heap {
+class SC_API sc_byte_heap {
   public:
     char*  m_bgn_p;  // Beginning of heap storage.
     char*  m_end_p;  // End of heap storage.

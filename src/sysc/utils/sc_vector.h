@@ -102,7 +102,7 @@ sc_vector_do_operator_paren( Container & cont
                            , ArgumentIterator  last
                            , typename Container::iterator from );
 
-class sc_vector_base
+class SC_API sc_vector_base
   : public sc_object
 {
 

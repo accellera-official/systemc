@@ -28,7 +28,6 @@
 #ifndef SC_OBJECT_H
 #define SC_OBJECT_H
 
-
 #include "sysc/utils/sc_iostream.h"
 #include "sysc/kernel/sc_attribute.h"
 
@@ -48,7 +47,7 @@ class sc_trace_file;
 //  Abstract base class of all SystemC `simulation' objects.
 // ----------------------------------------------------------------------------
 
-class sc_object 
+class SC_API sc_object 
 {
     friend class sc_event;
     friend class sc_module;

@@ -48,7 +48,7 @@ namespace sc_core {
 // ----------------------------------------------------------------------------
 
 extern
-void
+SC_API void
 sc_interrupt_here( const char* id, sc_severity severity );
 
 
@@ -59,7 +59,7 @@ sc_interrupt_here( const char* id, sc_severity severity );
 // ----------------------------------------------------------------------------
 
 extern
-void
+SC_API void
 sc_stop_here( const char* id, sc_severity severity );
 
 } // namespace sc_core

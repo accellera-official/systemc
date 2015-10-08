@@ -57,6 +57,7 @@
 #define SC_CONTEXT_H
 
 
+#include "sysc/kernel/sc_cmnhdr.h"
 #include "sysc/datatypes/fx/sc_fx_ids.h"
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/utils/sc_hash.h"
@@ -83,7 +84,7 @@ template <class T> class sc_context;
 //  Empty class that is used for its type only.
 // ----------------------------------------------------------------------------
 
-class sc_without_context {};
+class SC_API sc_without_context {};
 
 
 // ----------------------------------------------------------------------------

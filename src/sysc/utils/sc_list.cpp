@@ -36,7 +36,7 @@
 
 namespace sc_core {
 
-class sc_plist_elem {
+class SC_API sc_plist_elem {
     friend class sc_plist_base_iter;
     friend class sc_plist_base;
 

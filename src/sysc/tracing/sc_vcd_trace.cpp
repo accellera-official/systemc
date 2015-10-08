@@ -2260,7 +2260,7 @@ void vcd_trace_file::set_time_unit(double v, sc_time_unit tu)
 
 	timescale_set_by_user = true;
 }
-sc_trace_file*
+SC_API sc_trace_file*
 sc_create_vcd_trace_file(const char * name)
 {
   sc_trace_file *tf;
@@ -2270,7 +2270,7 @@ sc_create_vcd_trace_file(const char * name)
   return tf;
 }
 
-void
+SC_API void
 sc_close_vcd_trace_file( sc_trace_file* tf )
 {
     vcd_trace_file* vcd_tf = (vcd_trace_file*)tf;

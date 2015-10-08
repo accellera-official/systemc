@@ -87,20 +87,20 @@ class sc_signed;
 class sc_unsigned;
 
 // function declarations
-void multiply( scfx_rep&, const scfx_rep&, const scfx_rep&, 
+SC_API void multiply( scfx_rep&, const scfx_rep&, const scfx_rep&, 
 	       int max_wl = SC_DEFAULT_MAX_WL_ );
-scfx_rep*  neg_scfx_rep( const scfx_rep& );
-scfx_rep*  mult_scfx_rep( const scfx_rep&, const scfx_rep&, 
+SC_API scfx_rep*  neg_scfx_rep( const scfx_rep& );
+SC_API scfx_rep*  mult_scfx_rep( const scfx_rep&, const scfx_rep&, 
 	                  int max_wl = SC_DEFAULT_MAX_WL_ );
-scfx_rep*  div_scfx_rep( const scfx_rep&, const scfx_rep&, 
+SC_API scfx_rep*  div_scfx_rep( const scfx_rep&, const scfx_rep&, 
 	                 int max_wl = SC_DEFAULT_DIV_WL_ );
-scfx_rep*  add_scfx_rep( const scfx_rep&, const scfx_rep&, 
+SC_API scfx_rep*  add_scfx_rep( const scfx_rep&, const scfx_rep&, 
 	                 int max_wl = SC_DEFAULT_MAX_WL_ );
-scfx_rep*  sub_scfx_rep( const scfx_rep&, const scfx_rep&, 
+SC_API scfx_rep*  sub_scfx_rep( const scfx_rep&, const scfx_rep&, 
 	                 int max_wl = SC_DEFAULT_MAX_WL_ );
-scfx_rep*  lsh_scfx_rep( const scfx_rep&, int );
-scfx_rep*  rsh_scfx_rep( const scfx_rep&, int );
-int        cmp_scfx_rep( const scfx_rep&, const scfx_rep& );
+SC_API scfx_rep*  lsh_scfx_rep( const scfx_rep&, int );
+SC_API scfx_rep*  rsh_scfx_rep( const scfx_rep&, int );
+SC_API int        cmp_scfx_rep( const scfx_rep&, const scfx_rep& );
 
 
 const int min_mant = 4;
@@ -113,7 +113,7 @@ const int bits_in_word = sizeof(word) * CHAR_BIT;
 //  CLASS : scfx_index
 // ----------------------------------------------------------------------------
 
-class scfx_index
+class SC_API scfx_index
 {
 
 public:
@@ -139,7 +139,7 @@ private:
 //  Arbitrary-precision fixed-point implementation class.
 // ----------------------------------------------------------------------------
 
-class scfx_rep
+class SC_API scfx_rep
 {
     enum state
     {
@@ -193,20 +193,20 @@ public:
 
     void operator = ( const scfx_rep& );
 
-    friend void multiply( scfx_rep&, const scfx_rep&, const scfx_rep&, int );
+    friend SC_API void multiply( scfx_rep&, const scfx_rep&, const scfx_rep&, int );
 
-    friend scfx_rep* neg_scfx_rep( const scfx_rep& );
-    friend scfx_rep* mult_scfx_rep( const scfx_rep&, const scfx_rep&, int );
-    friend scfx_rep* div_scfx_rep( const scfx_rep&, const scfx_rep&, int );
-    friend scfx_rep* add_scfx_rep( const scfx_rep&, const scfx_rep&, int );
-    friend scfx_rep* sub_scfx_rep( const scfx_rep&, const scfx_rep&, int );
-    friend scfx_rep* lsh_scfx_rep( const scfx_rep&, int );
-    friend scfx_rep* rsh_scfx_rep( const scfx_rep&, int );
+    friend SC_API scfx_rep* neg_scfx_rep( const scfx_rep& );
+    friend SC_API scfx_rep* mult_scfx_rep( const scfx_rep&, const scfx_rep&, int );
+    friend SC_API scfx_rep* div_scfx_rep( const scfx_rep&, const scfx_rep&, int );
+    friend SC_API scfx_rep* add_scfx_rep( const scfx_rep&, const scfx_rep&, int );
+    friend SC_API scfx_rep* sub_scfx_rep( const scfx_rep&, const scfx_rep&, int );
+    friend SC_API scfx_rep* lsh_scfx_rep( const scfx_rep&, int );
+    friend SC_API scfx_rep* rsh_scfx_rep( const scfx_rep&, int );
 
     void lshift( int );
     void rshift( int );
 
-    friend int        cmp_scfx_rep( const scfx_rep&, const scfx_rep& );
+    friend SC_API int        cmp_scfx_rep( const scfx_rep&, const scfx_rep& );
 
     void cast( const scfx_params&, bool&, bool& );
 

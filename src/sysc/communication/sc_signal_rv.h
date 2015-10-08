@@ -41,7 +41,7 @@ class sc_process_b;
 //  Resolution function for sc_dt::sc_lv<W>.
 // ----------------------------------------------------------------------------
 
-extern const sc_dt::sc_logic_value_t sc_logic_resolution_tbl[4][4];
+extern SC_API const sc_dt::sc_logic_value_t sc_logic_resolution_tbl[4][4];
 
 
 template <int W>

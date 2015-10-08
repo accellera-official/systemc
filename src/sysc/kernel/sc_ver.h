@@ -29,23 +29,24 @@
 #define SC_VER_H
 
 #include <string>
+#include "sysc/kernel/sc_cmnhdr.h"
 
 namespace sc_core {
 
-extern const char* sc_copyright();
-extern const char* sc_release();
-extern const char* sc_version();
+extern SC_API const char* sc_copyright();
+extern SC_API const char* sc_release();
+extern SC_API const char* sc_version();
 
-extern const unsigned int sc_version_major;
-extern const unsigned int sc_version_minor;
-extern const unsigned int sc_version_patch;
+extern SC_API const unsigned int sc_version_major;
+extern SC_API const unsigned int sc_version_minor;
+extern SC_API const unsigned int sc_version_patch;
 
-extern const std::string  sc_version_originator;
-extern const std::string  sc_version_release_date;
-extern const std::string  sc_version_prerelease;
-extern const bool         sc_is_prerelease;
-extern const std::string  sc_version_string;
-extern const std::string  sc_copyright_string;
+extern SC_API const std::string  sc_version_originator;
+extern SC_API const std::string  sc_version_release_date;
+extern SC_API const std::string  sc_version_prerelease;
+extern SC_API const bool         sc_is_prerelease;
+extern SC_API const std::string  sc_version_string;
+extern SC_API const std::string  sc_copyright_string;
 
 #define SYSTEMC_2_3_0
 #define SC_API_VERSION_STRING sc_api_version_2_3_0
@@ -95,7 +96,7 @@ extern const std::string  sc_copyright_string;
 // to be invoked. If the version of the SystemC being linked against
 // does not contain the constructor below a linkage error will occur.
 
-class SC_API_VERSION_STRING {
+class SC_API SC_API_VERSION_STRING {
   public:
     SC_API_VERSION_STRING ();
 };

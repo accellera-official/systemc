@@ -370,7 +370,7 @@ sc_get_default_time_unit()
 
 // ----------------------------------------------------------------------------
 
-const sc_time SC_ZERO_TIME;
+SC_API const sc_time SC_ZERO_TIME;
 
 
 } // namespace sc_core

@@ -49,9 +49,9 @@ namespace sc_core {
 //  FOR INTERNAL USE ONLY!
 // ----------------------------------------------------------------------------
 
-extern void sc_deprecated_add_trace();
+extern SC_API void sc_deprecated_add_trace();
 
-struct sc_trace_params
+struct SC_API sc_trace_params
 {
     sc_trace_file*        tf;
     std::string      name;
@@ -386,7 +386,7 @@ sc_in<T>::vbind( sc_port_base& parent_ )
 // ----------------------------------------------------------------------------
 
 template <>
-class sc_in<bool> : 
+class SC_API sc_in<bool> : 
     public sc_port<sc_signal_in_if<bool>,1,SC_ONE_OR_MORE_BOUND>
 {
 public:
@@ -660,7 +660,7 @@ private:
 // ----------------------------------------------------------------------------
 
 template <>
-class sc_in<sc_dt::sc_logic>
+class SC_API sc_in<sc_dt::sc_logic>
 : public sc_port<sc_signal_in_if<sc_dt::sc_logic>,1,SC_ONE_OR_MORE_BOUND>
 {
 public:
@@ -1216,7 +1216,7 @@ sc_inout<T>::remove_traces() const
 // ----------------------------------------------------------------------------
 
 template <>
-class sc_inout<bool> : 
+class SC_API sc_inout<bool> : 
     public sc_port<sc_signal_inout_if<bool>,1,SC_ONE_OR_MORE_BOUND>
 {
 public:
@@ -1452,7 +1452,7 @@ private:
 // ----------------------------------------------------------------------------
 
 template <>
-class sc_inout<sc_dt::sc_logic>
+class SC_API sc_inout<sc_dt::sc_logic>
 : public sc_port<sc_signal_inout_if<sc_dt::sc_logic>,1,SC_ONE_OR_MORE_BOUND>
 {
 public:

@@ -69,7 +69,6 @@
 #define _WIN32_WINNT 0x0400
 #include <Windows.h>
 
-
 // MSVC6.0 for() scope bug
 
 #define for if( false ); else for
@@ -116,6 +115,22 @@
 #include <cassert>
 #include <cstdio>
 #include <cstdlib>
+
+// ----------------------------------------------------------------------------
+
+// build SystemC DLL on Windows
+#if defined(SC_WIN_DLL) && (defined(_WIN32) || defined(_WIN64))
+
+# if defined(SC_BUILD) // building SystemC library
+#   define SC_API  __declspec(dllexport)
+
+# else                 // building SystemC application
+#   define SC_API  __declspec(dllimport)
+# endif // SC_BUILD
+
+#else // !SC_WIN_DLL
+# define SC_API /* nothing */
+#endif // SC_WIN_DLL
 
 
 #endif
