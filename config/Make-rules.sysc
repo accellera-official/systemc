@@ -1,3 +1,4 @@
 include $(top_srcdir)/config/Make-rules.common
 
 INCLUDES += -I$(top_srcdir)/src
+DEFS     += -DSC_BUILD
