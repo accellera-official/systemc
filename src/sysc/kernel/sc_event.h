@@ -260,7 +260,7 @@ class SC_API sc_event
     friend class sc_interface;
     friend class sc_clock;
     friend class sc_event_queue;
-    friend sc_event * sc_lazy_kernel_event( sc_event**, const char* );
+    friend SC_API sc_event * sc_lazy_kernel_event( sc_event**, const char* );
     template<typename IF, sc_writer_policy POL> friend class sc_signal;
     template<typename IF> friend class sc_fifo;
     friend class sc_semaphore;
