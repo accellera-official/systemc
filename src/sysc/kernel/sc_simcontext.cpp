@@ -1952,7 +1952,7 @@ static std::ostream&
 print_status_expression( std::ostream& os, sc_status s );
 
 // utility helper to print a simulation status
-std::ostream& operator << ( std::ostream& os, sc_status s )
+SC_API std::ostream& operator << ( std::ostream& os, sc_status s )
 {
     // print primitive values
     switch(s)

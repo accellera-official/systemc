@@ -126,7 +126,7 @@ private:
 
 namespace sc_core {
 SC_API_TEMPLATE_ template class SC_API
-  sc_phash<const sc_process_b*, const sc_dt::sc_fxtype_params*>;
+  sc_phash<void*, const sc_dt::sc_fxtype_params*>;
 } // namespace sc_core
 
 namespace sc_dt {

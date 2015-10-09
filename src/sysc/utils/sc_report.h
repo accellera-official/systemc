@@ -103,7 +103,7 @@ SC_API const std::string sc_report_compose_message( const sc_report& );
 class SC_API sc_report : public std::exception
 {
     friend class sc_report_handler;
-    friend sc_report* sc_handle_exception();
+    friend SC_API sc_report* sc_handle_exception();
 
     sc_report(); // used internally by sc_handle_exception
 

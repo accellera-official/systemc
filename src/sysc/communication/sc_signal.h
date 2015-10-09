@@ -279,7 +279,7 @@ sc_signal<T,POL>::do_update()
 class SC_API sc_reset;
 
 template< sc_writer_policy POL >
-class sc_signal<bool,POL>
+class SC_API sc_signal<bool,POL>
   : public    sc_signal_inout_if<bool>
   , public    sc_prim_channel
   , protected sc_writer_policy_check<POL>
@@ -442,7 +442,7 @@ private:
 // ----------------------------------------------------------------------------
 
 template< sc_writer_policy POL >
-class sc_signal<sc_dt::sc_logic,POL>
+class SC_API sc_signal<sc_dt::sc_logic,POL>
   : public    sc_signal_inout_if<sc_dt::sc_logic>
   , public    sc_prim_channel
   , protected sc_writer_policy_check<POL>
