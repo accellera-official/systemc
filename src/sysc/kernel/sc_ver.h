@@ -155,7 +155,14 @@ struct SC_API_VERSION_STRING
     );
 };
 
-#if !defined( SC_DISABLE_API_VERSION_CHECK ) // disabled in sc_ver.cpp
+#if !defined(SC_BUILD)
+// import explicitly instantiated template
+SC_API_TEMPLATE_ template struct SC_API SC_API_VERSION_STRING
+<
+  &SC_DISABLE_VIRTUAL_BIND_CHECK_
+>;
+
+#if !defined(SC_DISABLE_API_VERSION_CHECK)
 static
 SC_API_VERSION_STRING
 <
@@ -167,6 +174,7 @@ api_version_check
   SC_DEFAULT_WRITER_POLICY
 );
 #endif // SC_DISABLE_API_VERSION_CHECK
+#endif // SC_BUILD
 
 //#undef SC_API_DEFINED_
 //#undef SC_API_UNDEFINED_

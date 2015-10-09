@@ -27,8 +27,6 @@
 #include <cstddef>
 #include <cstdlib>
 
-#define SC_DISABLE_API_VERSION_CHECK // for in-library sc_ver.h inclusion
-
 #include "sysc/kernel/sc_ver.h"
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/utils/sc_iostream.h"
