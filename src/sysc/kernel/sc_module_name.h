@@ -47,7 +47,7 @@ class sc_simcontext;
 //  Module name class.
 // ----------------------------------------------------------------------------
 
-class sc_module_name
+class SC_API sc_module_name
 {
     friend class sc_module;
     friend class sc_object_manager;

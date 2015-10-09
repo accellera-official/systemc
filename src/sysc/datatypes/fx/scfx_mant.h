@@ -73,7 +73,7 @@ typedef unsigned short half_word;
 //  Mantissa class.
 // ----------------------------------------------------------------------------
 
-class scfx_mant
+class SC_API scfx_mant
 {
 
     word* m_array;
@@ -376,7 +376,7 @@ inc( scfx_mant& mant )
 //  Mantissa reference class.
 // ----------------------------------------------------------------------------
 
-class scfx_mant_ref
+class SC_API scfx_mant_ref
 {
 
     scfx_mant* m_mant;

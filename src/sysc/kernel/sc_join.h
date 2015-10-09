@@ -48,7 +48,7 @@ namespace sc_core {
 // execution. The threads whose completion is to be monitored are registered,
 // and upon their completion an event notification will occur.
 //==============================================================================
-class sc_join : public sc_process_monitor {
+class SC_API sc_join : public sc_process_monitor {
     friend class sc_process_b;
     friend class sc_process_handle;
   public:

@@ -46,32 +46,32 @@ static
 const char systemc_version[] =
     "SystemC " SC_VERSION " --- " __DATE__ " " __TIME__;
 
-const unsigned int sc_version_major = SC_VERSION_MAJOR;
-const unsigned int sc_version_minor = SC_VERSION_MINOR;
-const unsigned int sc_version_patch = SC_VERSION_PATCH;
-const bool         sc_is_prerelease = SC_IS_PRERELEASE;
+SC_API const unsigned int sc_version_major = SC_VERSION_MAJOR;
+SC_API const unsigned int sc_version_minor = SC_VERSION_MINOR;
+SC_API const unsigned int sc_version_patch = SC_VERSION_PATCH;
+SC_API const bool         sc_is_prerelease = SC_IS_PRERELEASE;
 
-const std::string  sc_version_originator   = SC_VERSION_ORIGINATOR;
-const std::string  sc_version_release_date = SC_VERSION_RELEASE_DATE;
-const std::string  sc_version_prerelease   = SC_VERSION_PRERELEASE;
-const std::string  sc_version_string       = SC_VERSION;
-const std::string  sc_copyright_string     = SC_COPYRIGHT;
+SC_API const std::string  sc_version_originator   = SC_VERSION_ORIGINATOR;
+SC_API const std::string  sc_version_release_date = SC_VERSION_RELEASE_DATE;
+SC_API const std::string  sc_version_prerelease   = SC_VERSION_PRERELEASE;
+SC_API const std::string  sc_version_string       = SC_VERSION;
+SC_API const std::string  sc_copyright_string     = SC_COPYRIGHT;
 
-const char*
+SC_API const char*
 sc_copyright()
 {
     return SC_COPYRIGHT;
 }
 
 
-const char*
+SC_API const char*
 sc_release()
 {
     return SC_VERSION;
 }
 
 
-const char*
+SC_API const char*
 sc_version()
 {
     return systemc_version;
@@ -84,7 +84,7 @@ sc_version()
 
 // ----------------------------------------------------------------------------
 
-void
+SC_API void
 pln()
 {
     static bool lnp = SC_DISABLE_COPYRIGHT_MESSAGE;

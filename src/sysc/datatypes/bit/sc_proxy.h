@@ -114,8 +114,8 @@ assign_v_( sc_proxy<X>& px, const T& a );
 
 // other functions; forward declarations
 
-const std::string convert_to_bin( const char* s );
-const std::string convert_to_fmt( const std::string& s, sc_numrep numrep, bool );
+SC_API const std::string convert_to_bin( const char* s );
+SC_API const std::string convert_to_fmt( const std::string& s, sc_numrep numrep, bool );
 
 // ----------------------------------------------------------------------------
 //  CLASS TEMPLATE : sc_proxy_traits

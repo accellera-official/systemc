@@ -65,7 +65,7 @@ class sc_fxcast_switch;
 //  Fixed-point cast switch class.
 // ----------------------------------------------------------------------------
 
-class sc_fxcast_switch
+class SC_API sc_fxcast_switch
 {
 
 public:
@@ -93,6 +93,7 @@ private:
 
 };
 
+} // namespace sc_dt
 
 // ----------------------------------------------------------------------------
 //  TYPEDEF : sc_fxcast_context
@@ -100,6 +101,15 @@ private:
 //  Context type for the fixed-point cast switch parameter.
 // ----------------------------------------------------------------------------
 
+namespace sc_core {
+SC_API_TEMPLATE_ template class SC_API
+  sc_phash<const sc_process_b*, const sc_dt::sc_fxcast_switch*>;
+} // namespace sc_core
+
+namespace sc_dt {
+
+SC_API_TEMPLATE_ template class SC_API sc_global<sc_fxcast_switch>;
+SC_API_TEMPLATE_ template class SC_API sc_context<sc_fxcast_switch>;
 typedef sc_context<sc_fxcast_switch> sc_fxcast_context;
 
 

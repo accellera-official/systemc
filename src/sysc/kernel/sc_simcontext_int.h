@@ -287,7 +287,7 @@ sc_simcontext::get_active_invokers()
 
 // ----------------------------------------------------------------------------
 
-extern void sc_defunct_process_function( sc_module* );
+extern SC_API void sc_defunct_process_function( sc_module* );
 
 
 } // namespace sc_core

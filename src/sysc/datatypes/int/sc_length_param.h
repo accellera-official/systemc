@@ -66,9 +66,9 @@ namespace sc_dt
 class sc_length_param;
 
 // friend operator declarations
-    bool operator == ( const sc_length_param&,
+    SC_API bool operator == ( const sc_length_param&,
                               const sc_length_param& );
-    bool operator != ( const sc_length_param&,
+    SC_API bool operator != ( const sc_length_param&,
 			      const sc_length_param& );
 
 
@@ -78,7 +78,7 @@ class sc_length_param;
 //  Length parameter type.
 // ----------------------------------------------------------------------------
 
-class sc_length_param
+class SC_API sc_length_param
 {
 public:
 
@@ -89,9 +89,9 @@ public:
 
     sc_length_param& operator = ( const sc_length_param& );
 
-    friend bool operator == ( const sc_length_param&,
+    friend SC_API bool operator == ( const sc_length_param&,
                               const sc_length_param& );
-    friend bool operator != ( const sc_length_param&,
+    friend SC_API bool operator != ( const sc_length_param&,
 			      const sc_length_param& );
 
     int len() const;
@@ -107,6 +107,7 @@ private:
     int m_len;
 };
 
+} // namespace sc_dt
 
 // ----------------------------------------------------------------------------
 //  TYPEDEF : sc_length_context
@@ -114,6 +115,15 @@ private:
 //  Context type for the length parameter type.
 // ----------------------------------------------------------------------------
 
+namespace sc_core {
+SC_API_TEMPLATE_ template class SC_API
+  sc_phash<const sc_process_b*, const sc_dt::sc_length_param*>;
+} // namespace sc_core
+
+namespace sc_dt {
+
+SC_API_TEMPLATE_ template class SC_API sc_global<sc_length_param>;
+SC_API_TEMPLATE_ template class SC_API sc_context<sc_length_param>;
 typedef sc_context<sc_length_param> sc_length_context;
 
 

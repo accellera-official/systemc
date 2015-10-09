@@ -188,9 +188,9 @@ typedef unsigned int sc_digit;	// 32-bit unsigned integer
 #else
     typedef __int64            int64;
     typedef unsigned __int64   uint64;
-    extern const uint64        UINT64_ZERO;
-    extern const uint64        UINT64_ONE;
-    extern const uint64        UINT64_32ONES;
+    extern SC_API const uint64        UINT64_ZERO;
+    extern SC_API const uint64        UINT64_ONE;
+    extern SC_API const uint64        UINT64_32ONES;
 #endif
 
 
@@ -233,8 +233,8 @@ extern const small_type NB_DEFAULT_BASE ;
 typedef int64 int_type;
 typedef uint64 uint_type;
 #define SC_INTWIDTH 64
-extern const uint64 UINT_ZERO;
-extern const uint64 UINT_ONE;
+extern SC_API const uint64 UINT_ZERO;
+extern SC_API const uint64 UINT_ONE;
 
 #else
 
