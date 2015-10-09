@@ -65,6 +65,10 @@ class SC_API sc_join : public sc_process_monitor {
   protected:
     sc_event m_join_event;  // Event to notify when all threads have reported.
     int      m_threads_n;   // # of threads still need to wait for.
+
+  private:
+    sc_join( const sc_join& );
+    sc_join& operator = ( const sc_join& );
 };
 
 int sc_join::process_count() { return m_threads_n; }
