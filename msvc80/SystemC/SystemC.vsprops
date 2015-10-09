@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="SystemC"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		AdditionalOptions="/vmg"
+		PreprocessorDefinitions="SC_INCLUDE_FX"
+		WarningLevel="3"
+		DisableSpecificWarnings="4244;4267;4996"
+		UndefinePreprocessorDefinitions="interface"
+	/>
+	<UserMacro
+		Name="SYSTEMC_VERSION"
+		Value="2.3.1"
+		PerformEnvironmentSet="true"
+	/>
+</VisualStudioPropertySheet>
