@@ -33,6 +33,11 @@
 
 #include "sysc/kernel/sc_cmnhdr.h"
 
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(push)
+#pragma warning(disable: 4251) // DLL import for std::string
+#endif
+
 namespace sc_core {
 
 // ----------------------------------------------------------------------------
@@ -185,6 +190,10 @@ private:
 };
 
 } // namespace sc_core
+
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(pop)
+#endif
 
 // $Log: sc_attribute.h,v $
 // Revision 1.6  2011/08/26 20:46:08  acg

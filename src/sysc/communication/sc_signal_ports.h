@@ -40,6 +40,11 @@
 #  define SC_VIRTUAL_ /* non-virtual */
 #endif
 
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(push)
+#pragma warning(disable: 4251) // DLL import for std::string
+#endif
+
 namespace sc_core {
 
 // ----------------------------------------------------------------------------
@@ -1840,6 +1845,10 @@ sc_trace( sc_trace_file* tf, const sc_inout<T>& port,
 } // namespace sc_core
 
 #undef SC_VIRTUAL_
+
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(pop)
+#endif
 
 /*****************************************************************************
 

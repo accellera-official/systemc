@@ -31,6 +31,11 @@
 #include "sysc/utils/sc_iostream.h"
 #include "sysc/kernel/sc_attribute.h"
 
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(push)
+#pragma warning(disable: 4251) // DLL import for std::string
+#endif
+
 namespace sc_core {
 
 class sc_event;
@@ -159,6 +164,10 @@ sc_object* sc_get_parent( const sc_object* obj_p )
 }
 
 } // namespace sc_core
+
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(pop)
+#endif
 
 /*****************************************************************************
 

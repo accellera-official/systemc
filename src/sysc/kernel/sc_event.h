@@ -33,6 +33,11 @@
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/communication/sc_writer_policy.h"
 
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(push)
+#pragma warning(disable: 4251) // DLL import for std::string
+#endif
+
 namespace sc_dt {
 
 class sc_logic; // needed for sc_signal<sc_logic> friend
@@ -814,6 +819,10 @@ operator & ( sc_event_and_expr expr, sc_event_and_list const & el )
 }
 
 } // namespace sc_core
+
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(pop)
+#endif
 
 // $Log: sc_event.h,v $
 // Revision 1.14  2011/08/29 18:04:32  acg
