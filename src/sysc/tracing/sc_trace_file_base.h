@@ -51,6 +51,11 @@
 #include "sysc/tracing/sc_trace.h"
 #include "sysc/tracing/sc_tracing_ids.h"
 
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(push)
+#pragma warning(disable: 4251) // DLL import for std::string
+#endif
+
 namespace sc_core {
 
 // shared implementation of trace files
@@ -123,6 +128,10 @@ void SC_API double_to_special_int64( double in, unsigned* high, unsigned* low );
 SC_API std::string localtime_string();
 
 } // namespace sc_core
+
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(pop)
+#endif
 
 /*****************************************************************************
 
