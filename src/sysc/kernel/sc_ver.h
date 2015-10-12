@@ -28,6 +28,7 @@
 #ifndef SC_VER_H
 #define SC_VER_H
 
+#include "sysc/kernel/sc_cmnhdr.h"
 #include "sysc/kernel/sc_macros.h"               // SC_CONCAT_UNDERSCORE_
                                                  // SC_STRINGIFY_HELPER_
 #include "sysc/communication/sc_writer_policy.h" // SC_DEFAULT_WRITER_POLICY
@@ -36,20 +37,20 @@
 
 namespace sc_core {
 
-extern const char* sc_copyright();
-extern const char* sc_release();
-extern const char* sc_version();
+extern SC_API const char* sc_copyright();
+extern SC_API const char* sc_release();
+extern SC_API const char* sc_version();
 
-extern const unsigned int sc_version_major;
-extern const unsigned int sc_version_minor;
-extern const unsigned int sc_version_patch;
+extern SC_API const unsigned int sc_version_major;
+extern SC_API const unsigned int sc_version_minor;
+extern SC_API const unsigned int sc_version_patch;
 
-extern const std::string  sc_version_originator;
-extern const std::string  sc_version_release_date;
-extern const std::string  sc_version_prerelease;
-extern const bool         sc_is_prerelease;
-extern const std::string  sc_version_string;
-extern const std::string  sc_copyright_string;
+extern SC_API const std::string  sc_version_originator;
+extern SC_API const std::string  sc_version_release_date;
+extern SC_API const std::string  sc_version_prerelease;
+extern SC_API const bool         sc_is_prerelease;
+extern SC_API const std::string  sc_version_string;
+extern SC_API const std::string  sc_copyright_string;
 
 #define SYSTEMC_2_3_1
  
@@ -154,7 +155,14 @@ struct SC_API_VERSION_STRING
     );
 };
 
-#if !defined( SC_DISABLE_API_VERSION_CHECK ) // disabled in sc_ver.cpp
+#if !defined(SC_BUILD)
+// import explicitly instantiated template
+SC_API_TEMPLATE_ template struct SC_API SC_API_VERSION_STRING
+<
+  &SC_DISABLE_VIRTUAL_BIND_CHECK_
+>;
+
+#if !defined(SC_DISABLE_API_VERSION_CHECK)
 static
 SC_API_VERSION_STRING
 <
@@ -166,6 +174,7 @@ api_version_check
   SC_DEFAULT_WRITER_POLICY
 );
 #endif // SC_DISABLE_API_VERSION_CHECK
+#endif // SC_BUILD
 
 //#undef SC_API_DEFINED_
 //#undef SC_API_UNDEFINED_

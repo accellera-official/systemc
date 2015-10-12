@@ -34,6 +34,7 @@
 
 #include "sysc/kernel/sc_except.h"
 #include <string>
+#include "sysc/kernel/sc_cmnhdr.h"
 
 namespace sc_core {
 
@@ -97,7 +98,7 @@ class sc_time;
 struct sc_msg_def;
 class sc_report;
 class sc_report_handler;
-const std::string sc_report_compose_message( const sc_report& );
+SC_API const std::string sc_report_compose_message( const sc_report& );
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_report
@@ -105,10 +106,10 @@ const std::string sc_report_compose_message( const sc_report& );
 //  Exception reporting
 // ----------------------------------------------------------------------------
 
-class sc_report : public std::exception
+class SC_API sc_report : public std::exception
 {
     friend class sc_report_handler;
-    friend sc_report* sc_handle_exception();
+    friend SC_API sc_report* sc_handle_exception();
 
     sc_report(); // used internally by sc_handle_exception
 
@@ -234,15 +235,15 @@ typedef std::exception sc_exception;
 
 #endif // defined(NDEBUG) && !defined(SC_ENABLE_ASSERTIONS)
 
-extern const char SC_ID_UNKNOWN_ERROR_[];
-extern const char SC_ID_WITHOUT_MESSAGE_[];
-extern const char SC_ID_NOT_IMPLEMENTED_[];
-extern const char SC_ID_INTERNAL_ERROR_[];
-extern const char SC_ID_ASSERTION_FAILED_[];
-extern const char SC_ID_OUT_OF_BOUNDS_[];
+extern SC_API const char SC_ID_UNKNOWN_ERROR_[];
+extern SC_API const char SC_ID_WITHOUT_MESSAGE_[];
+extern SC_API const char SC_ID_NOT_IMPLEMENTED_[];
+extern SC_API const char SC_ID_INTERNAL_ERROR_[];
+extern SC_API const char SC_ID_ASSERTION_FAILED_[];
+extern SC_API const char SC_ID_OUT_OF_BOUNDS_[];
 
 // backward compatibility with 2.0+
-extern const char SC_ID_REGISTER_ID_FAILED_[];
+extern SC_API const char SC_ID_REGISTER_ID_FAILED_[];
 
 } // namespace sc_core
 

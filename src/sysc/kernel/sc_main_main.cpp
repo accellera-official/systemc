@@ -24,10 +24,12 @@
  CHANGE LOG APPEARS AT THE END OF THE FILE
  *****************************************************************************/
 
+#define SC_DISABLE_API_VERSION_CHECK // for in-library sc_ver.h inclusion
 
 #include "sysc/kernel/sc_cmnhdr.h"
 #include "sysc/kernel/sc_externs.h"
 #include "sysc/kernel/sc_except.h"
+#include "sysc/kernel/sc_ver.h"
 #include "sysc/utils/sc_iostream.h"
 #include "sysc/utils/sc_report.h"
 #include "sysc/utils/sc_report_handler.h"

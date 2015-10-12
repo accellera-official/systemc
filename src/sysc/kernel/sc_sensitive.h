@@ -56,7 +56,7 @@ template <class T> class sc_signal_in_if;
 //  Static sensitivity class for events.
 // ----------------------------------------------------------------------------
 
-class sc_sensitive
+class SC_API sc_sensitive
 {
     friend class sc_module;
 
@@ -134,7 +134,7 @@ private:
 //  Static sensitivity class for positive edge events.
 // ----------------------------------------------------------------------------
 
-class sc_sensitive_pos
+class SC_API sc_sensitive_pos
 {
     friend class sc_module;
 
@@ -200,7 +200,7 @@ private:
 //  Static sensitivity class for negative edge events.
 // ----------------------------------------------------------------------------
 
-class sc_sensitive_neg
+class SC_API sc_sensitive_neg
 {
     friend class sc_module;
 

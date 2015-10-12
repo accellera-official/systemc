@@ -66,7 +66,7 @@ class sc_ufix_fast;
 //  "Unconstrained" unsigned fixed-point class; arbitrary precision.
 // ----------------------------------------------------------------------------
 
-class sc_ufix : public sc_fxnum
+class SC_API sc_ufix : public sc_fxnum
 {
 
 public:
@@ -301,7 +301,7 @@ public:
 //  "Unconstrained" unsigned fixed-point class; limited precision.
 // ----------------------------------------------------------------------------
 
-class sc_ufix_fast : public sc_fxnum_fast
+class SC_API sc_ufix_fast : public sc_fxnum_fast
 {
 
 public:

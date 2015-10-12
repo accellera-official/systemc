@@ -62,8 +62,6 @@
 #include <cstdlib>
 #include <vector>
 
-#define SC_DISABLE_API_VERSION_CHECK // for in-library sc_ver.h inclusion
-
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_ver.h"
 #include "sysc/datatypes/bit/sc_bit.h"
@@ -1891,15 +1889,14 @@ map_sc_logic_state_to_wif_state(char in_char)
 // ----------------------------------------------------------------------------
 
 // Create the trace file
-sc_trace_file*
+SC_API sc_trace_file*
 sc_create_wif_trace_file(const char * name)
 {
     sc_trace_file *tf = new wif_trace_file(name);
     return tf;
 }
 
-
-void
+SC_API void
 sc_close_wif_trace_file( sc_trace_file* tf )
 {
     wif_trace_file* wif_tf = static_cast<wif_trace_file*>(tf);

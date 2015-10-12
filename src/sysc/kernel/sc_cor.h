@@ -30,6 +30,7 @@
 
 #include <cassert> // use plain assert, sc_report may not be available, yet
 #include <cstdlib>
+#include "sysc/kernel/sc_cmnhdr.h"
 
 namespace sc_core {
 
@@ -51,7 +52,7 @@ typedef void (sc_cor_fn)( void* );
 //  Coroutine abstract base class.
 // ----------------------------------------------------------------------------
 
-class sc_cor
+class SC_API sc_cor
 {
 protected:
 
@@ -80,7 +81,7 @@ private:
 //  Coroutine package abstract base class.
 // ----------------------------------------------------------------------------
 
-class sc_cor_pkg
+class SC_API sc_cor_pkg
 {
 public:
 

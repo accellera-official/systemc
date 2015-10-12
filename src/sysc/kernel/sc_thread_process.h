@@ -66,7 +66,7 @@ class sc_event_and_list;
 class sc_event_or_list;
 class sc_reset;
 void sc_thread_cor_fn( void* );
-void sc_set_stack_size( sc_thread_handle, std::size_t );
+SC_API void sc_set_stack_size( sc_thread_handle, std::size_t );
 class sc_event;
 class sc_join;
 class sc_module;
@@ -76,15 +76,15 @@ class sc_simcontext;
 class sc_runnable;
 
 sc_cor* get_cor_pointer( sc_process_b* process_p );
-void sc_set_stack_size( sc_thread_handle thread_h, std::size_t size );
-void wait( sc_simcontext* );
-void wait( const sc_event&, sc_simcontext* );
-void wait( const sc_event_or_list&, sc_simcontext* );
-void wait( const sc_event_and_list&, sc_simcontext* );
-void wait( const sc_time&, sc_simcontext* );
-void wait( const sc_time&, const sc_event&, sc_simcontext* );
-void wait( const sc_time&, const sc_event_or_list&, sc_simcontext* );
-void wait( const sc_time&, const sc_event_and_list&, sc_simcontext* );
+SC_API void sc_set_stack_size( sc_thread_handle thread_h, std::size_t size );
+SC_API void wait( sc_simcontext* );
+SC_API void wait( const sc_event&, sc_simcontext* );
+SC_API void wait( const sc_event_or_list&, sc_simcontext* );
+SC_API void wait( const sc_event_and_list&, sc_simcontext* );
+SC_API void wait( const sc_time&, sc_simcontext* );
+SC_API void wait( const sc_time&, const sc_event&, sc_simcontext* );
+SC_API void wait( const sc_time&, const sc_event_or_list&, sc_simcontext* );
+SC_API void wait( const sc_time&, const sc_event_and_list&, sc_simcontext* );
 
 //==============================================================================
 // sc_thread_process -
