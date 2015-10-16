@@ -2,8 +2,9 @@
 
 int main()
 {
-    char* argv[] = { "0", "1", "2", "3", "4" };
-    return sc_elab_and_sim( sizeof(argv)/sizeof(char*), argv );
+    char *argv[] = { strdup("0"), strdup("1"), strdup("2"), strdup("3"),
+                     strdup("4") };
+    return sc_elab_and_sim( sizeof argv / sizeof argv[0], argv );
 }
 
 int sc_main(int argc, char* argv[])
