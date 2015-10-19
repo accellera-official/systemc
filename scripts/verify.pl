@@ -452,7 +452,7 @@ sub get_systemc_arch
                 }
             }
 
-        } elsif( $uname_s eq "Linux" and $uname_r =~ /^[234]/ ) {
+        } elsif( $uname_s eq "Linux" ) {
             if( cxx_is_gcc_compatible($cxx) ) {
                 $arch = "linux";
                 if ( $uname_m eq "x86_64" || $uname_m eq "amd64" ) {
