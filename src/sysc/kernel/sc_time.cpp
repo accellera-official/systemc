@@ -287,7 +287,7 @@ sc_time::sc_time( double v, const char* unit )
 {}
 
 sc_time::sc_time( double v, const char* unit, sc_simcontext* simc )
-  : m_value( from_value_and_symbol( v, unit, simc->m_time_params ) )
+  : m_value( from_value_and_unit_symbol( v, unit, simc->m_time_params ) )
 {}
 
 sc_time
