@@ -139,6 +139,7 @@ class sc_simcontext
     friend class sc_module;
     friend class sc_object;
     friend class sc_time;
+    friend class sc_time_tuple;
     friend class sc_clock;
     friend class sc_method_process;
     friend class sc_phase_callback_registry;
