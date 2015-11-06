@@ -330,6 +330,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				OutputFile="$(OutDir)\SystemC-$(SYSTEMC_VERSION).dll"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -407,6 +408,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				OutputFile="$(OutDir)\SystemC-$(SYSTEMC_VERSION).dll"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
