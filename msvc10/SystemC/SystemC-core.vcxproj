@@ -523,7 +523,9 @@
     <ClInclude Include="..\..\src\sysc\utils\sc_report_handler.h" />
     <ClInclude Include="..\..\src\sysc\utils\sc_stop_here.h" />
     <ClInclude Include="..\..\src\sysc\utils\sc_string.h" />
+    <ClInclude Include="..\..\src\sysc\utils\sc_string_view.h" />
     <ClInclude Include="..\..\src\sysc\utils\sc_temporary.h" />
+    <ClInclude Include="..\..\src\sysc\utils\sc_typeindex.h" />
     <ClInclude Include="..\..\src\sysc\utils\sc_utils_ids.h" />
     <ClInclude Include="..\..\src\sysc\utils\sc_vector.h" />
   </ItemGroup>
