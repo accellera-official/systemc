@@ -306,13 +306,12 @@ public:
   sc_vector_iter() : access_policy(), it_() {}
 
   // iterator conversions to more const, and/or direct iterators
-  template< typename OtherElement, typename OtherPolicy >
-  sc_vector_iter( const sc_vector_iter<OtherElement, OtherPolicy>& it
-      , SC_ENABLE_IF_((
-          sc_meta::is_more_const< element_type
-                                , typename OtherPolicy::element_type >
-        ))
-      )
+  template< typename It >
+  sc_vector_iter( const It& it
+    , SC_ENABLE_IF_((
+        sc_meta::is_more_const< element_type
+                              , typename It::policy::element_type >
+      )) )
     : access_policy( it.get_policy() ), it_( it.it_ )
   {}
 
