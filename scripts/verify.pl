@@ -665,8 +665,9 @@ sub init_globals
                        'dontrun',    0x20,   # dir marked dontrun or
                                              #   is not for this arch
                        'optimize',   0x40,   # compile with optimize flag
-                       'purecov',    0x80    # link with purecov
-                       );
+                       'purecov',    0x80,   # link with purecov
+                       'windll',     0x100   # link against DLL (Windows)
+                     );
 
     # Defines for striplog functions
     $rt_sim_pat        = '^SystemC';
@@ -753,6 +754,11 @@ sub add_to_ldpath
         } else {
             $suffix = '/Release';
         }
+
+        if( $rt_props & $rt_test_props{ 'windll' } ) {
+            $suffix .= 'DLL';
+        }
+
         push @candidates, "$dir$msvc$local$x64$suffix" if ( -d "$dir$msvc$local$x64$suffix" );
         push @candidates, "$dir$local$x64$suffix"      if ( -d "$dir$local$x64$suffix" );
         push @candidates, "$dir$msvc$local$suffix"     if ( -d "$dir$msvc$local$suffix" );
@@ -856,6 +862,9 @@ sub prepare_environment
         $rt_systemc_include = "$rt_systemc_home/src"
             unless -d $rt_systemc_include;
 
+        push @rt_defines, 'SC_WIN_DLL'
+          unless (!($rt_props & $rt_test_props{'windll'}));
+
         push @rt_defines, '_USE_MATH_DEFINES';
     }
 
@@ -883,6 +892,11 @@ sub prepare_environment
     # additional libraries
     push( @rt_ldpaths, map { add_to_ldpath($_) } @rt_add_ldpaths );
     push( @rt_ldlibs,  @rt_add_ldlibs );
+
+    # prepend library paths to $PATH, if running against Windows DLL
+    if( $rt_props & $rt_test_props{'windll'} ) {
+        $ENV{'PATH'} = join( ":", @rt_ldpaths).":".$ENV{'PATH'};
+    }
 }
 
 
@@ -905,6 +919,7 @@ Usage: $0 [<options>] <directories|names>
     <options>
       -no-cleanup  Do not clean up temporary files and directories.
       -arch <arch> Override SystemC architecture.
+      -dll         Link against SystemC DLL (Windows/MSVC only).
       -D <symbol>  Additional predefined macros (may be added multiple times).
       -f <file>    Use file to supply tests.
       -g           Compile tests with debug flag.
@@ -1031,6 +1046,15 @@ sub parse_args
             if( $arg =~ /^-M(D|T)d?$/ ) {
                 $rt_msvc_runtime     = $arg;
                 $rt_msvc_runtime_dbg = $arg; # override both runtimes explicitly
+                next;
+            }
+
+            # link against SystemC DLL (Windows)
+            if( $arg =~ /^-dll$/ ) {
+                $rt_props = $rt_props | $rt_test_props{ 'windll' };
+                # force DLL-based runtimes
+                $rt_msvc_runtime     =~ s/T/D/;
+                $rt_msvc_runtime_dbg =~ s/T/D/;
                 next;
             }
 
