@@ -911,7 +911,7 @@ Usage: $0 [<options>] <directories|names>
       -I <dir>     Additional include directory (may be added multiple times).
       -L <dir>     Additional linker directory (may be added multiple times).
       -l <libname> Additional library to link (may be added mutliple times).
-      -M(D,T)[d]   Select MSVC runtime library (default: ${rt_msvc_runtime}[d])
+      -M(D,T)[d]   Select MSVC runtime library (default: ${rt_msvc_runtime}[d]).
       -m           Send mail with results.
       -o <opts>    Additional (custom) compiler options.
       -O           Compile tests with optimize flag.
@@ -919,7 +919,7 @@ Usage: $0 [<options>] <directories|names>
       -purify      Link tests with purify.
       -quantify    Link tests with quantify.
       -Q           Run quick tests only.
-      -recheck     Run previously failed tests (taken from $rt_output_file)
+      -recheck     Run previously failed tests (taken from $rt_output_file).
       -t <time>    Set the timeout for a test in minutes (default 5 minutes).
       -T           Measure runtime of tests in seconds.
       -v           Verbose output.
