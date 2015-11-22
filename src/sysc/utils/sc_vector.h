@@ -36,13 +36,6 @@
 #include "sysc/packages/boost/config.hpp"
 #include "sysc/packages/boost/utility/enable_if.hpp"
 
-#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
-#pragma warning(push)
-#pragma warning(disable: 4251) // DLL import for std::vector<void*>
-#endif
-
-//#define SC_VECTOR_HEADER_ONLY_
-
 namespace sc_core {
 namespace sc_meta {
 
@@ -108,6 +101,13 @@ sc_vector_do_operator_paren( Container & cont
                            , ArgumentIterator  last
                            , typename Container::iterator from );
 
+class sc_vector_element;  // opaque pointer
+
+} // namespace sc_core
+
+SC_API_VECTOR_(sc_core::sc_vector_element*);
+
+namespace sc_core {
 class SC_API sc_vector_base
   : public sc_object
 {
@@ -117,7 +117,8 @@ class SC_API sc_vector_base
 
 public:
 
-  typedef std::vector< void* >          storage_type;
+  typedef sc_vector_element*            handle_type;
+  typedef std::vector< handle_type >    storage_type;
   typedef storage_type::size_type       size_type;
   typedef storage_type::difference_type difference_type;
 
@@ -146,7 +147,7 @@ protected:
   ~sc_vector_base()
     { delete objs_vec_; }
 
-  void * & at( size_type i )
+  void * at( size_type i )
     { return vec_[i]; }
 
   void const * at( size_type i ) const
@@ -159,7 +160,7 @@ protected:
     { vec_.clear(); }
 
   void push_back( void* item )
-    { vec_.push_back(item); }
+    { vec_.push_back( static_cast<handle_type>(item) ); }
 
   void check_index( size_type i ) const;
   bool check_init( size_type n )  const;
@@ -352,11 +353,11 @@ public:
 
   // dereference
   reference operator*() const
-    { return *access_policy::get( static_cast<element_type*>(*it_) ); }
+    { return *access_policy::get( static_cast<element_type*>((void*)*it_) ); }
   pointer   operator->() const
-    { return access_policy::get( static_cast<element_type*>(*it_) ); }
+    { return access_policy::get( static_cast<element_type*>((void*)*it_) ); }
   reference operator[]( difference_type n ) const
-    { return *access_policy::get( static_cast<element_type*>(it_[n]) ); }
+    { return *access_policy::get( static_cast<element_type*>((void*)it_[n]) ); }
 
   // distance
   difference_type operator-( const_direct_iterator const& that ) const
@@ -666,7 +667,6 @@ sc_vector<T>::clear()
   while ( i --> 0 )
   {
     delete &( (*this)[i] );
-    base_type::at(i) = 0;
   }
   base_type::clear();
 }
@@ -732,10 +732,6 @@ sc_vector_assembly<T,MT>::get_elements() const
 } // namespace sc_core
 #undef SC_RPTYPE_
 #undef SC_ENABLE_IF_
-
-#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
-#pragma warning(pop)
-#endif
 
 // $Log: sc_vector.h,v $
 // Revision 1.17  2011/08/26 20:46:20  acg
