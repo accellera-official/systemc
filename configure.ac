@@ -528,17 +528,12 @@ dnl
 AC_OUTPUT(
  Makefile 
  src/Makefile 
+ src/systemc.pc
+ src/tlm.pc
  src/sysc/Makefile 
- src/sysc/systemc.pc
- src/sysc/communication/Makefile 
- src/sysc/datatypes/Makefile 
- src/sysc/kernel/Makefile 
- src/sysc/tracing/Makefile 
- src/sysc/utils/Makefile 
  src/sysc/packages/boost/Makefile 
  src/sysc/packages/qt/Makefile 
  src/tlm_core/Makefile
- src/tlm_core/tlm.pc
  src/tlm_utils/Makefile
  examples/Makefile 
  examples/sysc/Makefile 

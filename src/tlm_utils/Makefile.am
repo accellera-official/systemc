@@ -46,8 +46,11 @@ H_FILES = \
 	simple_target_socket.h \
 	tlm_quantumkeeper.h
 
+EXTRA_DIST += \
+	README.txt
+
 localincludedir = $(includedir)/tlm_utils
 nobase_localinclude_HEADERS = $(H_FILES)
 
-EXTRA_DIST += \
-	README.txt
+noinst_LTLIBRARIES = libtlm_utils.la
+libtlm_utils_la_SOURCES = $(NO_H_FILES) $(CXX_FILES)

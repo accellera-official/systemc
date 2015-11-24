@@ -34,9 +34,6 @@
 
 include $(top_srcdir)/config/Make-rules.sysc
 
-pkgconfigdir = $(libarchdir)/pkgconfig
-pkgconfig_DATA = tlm.pc
-
 H_FILES = \
 	tlm_2/tlm_version.h \
 	tlm_2/tlm_2_interfaces/tlm_2_interfaces.h \
@@ -89,3 +86,6 @@ EXTRA_DIST += \
 
 localincludedir = $(includedir)/tlm_core
 nobase_localinclude_HEADERS = $(H_FILES)
+
+noinst_LTLIBRARIES = libtlm_core.la
+libtlm_core_la_SOURCES = $(NO_H_FILES) $(CXX_FILES)

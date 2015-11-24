@@ -41,7 +41,7 @@ all:
 check_LTLIBRARIES = libtlm20examples.la
 libtlm20examples_la_SOURCES  = $(CXX_FILES)
 libtlm20examples_la_CPPFLAGS = -I$(srcdir)/include $(AM_CPPFLAGS)
-libtlm20examples_la_LIBADD   = $(top_builddir)/src/sysc/libsystemc.la
+libtlm20examples_la_LIBADD   = $(top_builddir)/src/libsystemc.la
 
 
 H_FILES = \
