@@ -80,6 +80,9 @@ H_FILES = \
 	tlm_1/tlm_req_rsp/tlm_ports/tlm_event_finder.h \
 	tlm_1/tlm_req_rsp/tlm_ports/tlm_nonblocking_port.h
 
+CXX_FILES = \
+	tlm_2/tlm_generic_payload/tlm_phase.cpp
+
 EXTRA_DIST += \
 	tlm_1/README.txt \
 	tlm_2/README.txt
