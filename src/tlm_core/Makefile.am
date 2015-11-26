@@ -81,7 +81,8 @@ H_FILES = \
 	tlm_1/tlm_req_rsp/tlm_ports/tlm_nonblocking_port.h
 
 CXX_FILES = \
-	tlm_2/tlm_generic_payload/tlm_phase.cpp
+	tlm_2/tlm_generic_payload/tlm_phase.cpp \
+	tlm_2/tlm_quantum/tlm_global_quantum.cpp
 
 EXTRA_DIST += \
 	tlm_1/README.txt \
