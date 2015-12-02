@@ -28,6 +28,7 @@
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
+#include <cctype>
 
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/kernel/sc_simcontext.h"

@@ -121,7 +121,7 @@ protected:
 
     // called by complete_binding (for internal use only)
     virtual void add_interface( sc_interface* ) = 0;
-	virtual int interface_count() = 0;
+    virtual int interface_count() const = 0;
     virtual const char* if_typename() const = 0;
 
     // called by construction_done (does nothing by default)
@@ -351,7 +351,7 @@ private:
     // called by complete_binding (for internal use only)
     virtual void add_interface( sc_interface* );
     virtual const char* if_typename() const;
-	virtual int interface_count();
+    virtual int interface_count() const;
 
     // disabled
     sc_port_b();
@@ -575,7 +575,7 @@ sc_port_b<IF>::if_typename() const
 template <class IF>
 inline
 int
-sc_port_b<IF>::interface_count()
+sc_port_b<IF>::interface_count() const
 {
 	return m_interface_vec.size();
 }
