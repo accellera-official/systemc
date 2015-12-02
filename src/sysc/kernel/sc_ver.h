@@ -53,7 +53,7 @@ extern const std::string  sc_copyright_string;
 
 #define SYSTEMC_2_3_2
  
-#define SYSTEMC_VERSION       20151103
+#define SYSTEMC_VERSION       20151201
 #define SC_VERSION_ORIGINATOR "Accellera"
 #define SC_VERSION_MAJOR      2
 #define SC_VERSION_MINOR      3
