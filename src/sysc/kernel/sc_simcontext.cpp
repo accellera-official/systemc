@@ -649,13 +649,12 @@ sc_simcontext::cycle( const sc_time& t)
 
     m_in_simulator_control = true;
     crunch(); 
-    SC_DO_PHASE_CALLBACK_(before_timestep);
 #if SC_SIMCONTEXT_TRACING_
     if( m_something_to_trace ) {
         trace_cycle( /* delta cycle? */ false );
     }
 #endif
-    m_curr_time += t;
+    do_timestep( m_curr_time + t );
     if ( next_time(next_event_time) && next_event_time <= m_curr_time) {
         SC_REPORT_WARNING(SC_ID_CYCLE_MISSES_EVENTS_, "");
     }
@@ -962,12 +961,8 @@ sc_simcontext::simulate( const sc_time& duration )
 	    // See note 1 above:
 
             if ( !next_time(t) || (t > until_t ) ) goto exit_time;
-	    if ( t > m_curr_time ) 
-	    {
-		SC_DO_PHASE_CALLBACK_(before_timestep);
-		m_curr_time = t;
-		m_change_stamp++;
-	    }
+            if ( t > m_curr_time )
+                do_timestep(t);
 
 	    // PROCESS TIMED NOTIFICATIONS AT THE CURRENT TIME
 
@@ -985,16 +980,21 @@ sc_simcontext::simulate( const sc_time& duration )
     } while ( t < until_t ); // hold off on the delta for the until_t time.
 
 exit_time:  // final simulation time update, if needed
-    if ( t > m_curr_time && t <= until_t ) 
-    {
-        SC_DO_PHASE_CALLBACK_(before_timestep);
-        m_curr_time = t;
-        m_change_stamp++;
-    }
+    if ( t > m_curr_time && t <= until_t )
+        do_timestep(t);
 exit_pause: // call pause callback upon implicit or explicit pause
     m_execution_phase      = phase_evaluate;
     m_in_simulator_control = false;
     SC_DO_PHASE_CALLBACK_(simulation_paused);
+}
+
+void
+sc_simcontext::do_timestep(const sc_time& t)
+{
+    sc_assert( m_curr_time < t );
+    SC_DO_PHASE_CALLBACK_(before_timestep);
+    m_curr_time = t;
+    m_change_stamp++;
 }
 
 void
@@ -1742,9 +1742,10 @@ sc_start( const sc_time& duration, sc_starvation_policy p )
     // Update the current time to the exit time if that is the starvation
     // policy:
 
-    if ( p == SC_RUN_TO_TIME && !context_p->m_paused && status == SC_SIM_OK )
+    if ( p == SC_RUN_TO_TIME && !context_p->m_paused && status == SC_SIM_OK
+         && context_p->m_curr_time < exit_time )
     {
-        context_p->m_curr_time = exit_time;
+        context_p->do_timestep( exit_time );
     }
 
     // If there was no activity and the simulation clock did not move warn

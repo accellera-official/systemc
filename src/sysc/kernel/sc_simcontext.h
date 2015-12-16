@@ -319,6 +319,7 @@ private:
     void suspend_current_process();
 
     void do_sc_stop_action();
+    void do_timestep( const sc_time& );
     void mark_to_collect_process( sc_process_b* zombie_p );
 
 private:
