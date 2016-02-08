@@ -189,6 +189,7 @@ sc_cor_pkg_pthread::create( std::size_t stack_size, sc_cor_fn* fn, void* arg )
 
     pthread_attr_t attr;
 	pthread_attr_init( &attr ); 
+	pthread_attr_setdetachstate( &attr, PTHREAD_CREATE_DETACHED );
 	if ( stack_size != 0 )
 	{
 		pthread_attr_setstacksize( &attr, stack_size );
