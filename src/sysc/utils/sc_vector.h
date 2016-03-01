@@ -306,13 +306,20 @@ public:
   sc_vector_iter() : access_policy(), it_() {}
 
   // iterator conversions to more const, and/or direct iterators
-  template< typename OtherElement, typename OtherPolicy >
-  sc_vector_iter( const sc_vector_iter<OtherElement, OtherPolicy>& it
-      , SC_ENABLE_IF_((
-          sc_meta::is_more_const< element_type
-                                , typename OtherPolicy::element_type >
-        ))
-      )
+  //
+  // Note: There is a minor risk to match unrelated classes (i.e. not sc_vector_iter<T,POL>),
+  //       but MSVC 2005 does not correctly consider a restricted conversion constructor
+  //       sc_vector_iter( const sc_vector_iter<OtherType,OtherPolicy>, SC_ENABLE_IF_ ...).
+  //       To reduce this risk, the types used in the enable-if condition could be further
+  //       tailored towards sc_vector(_iter), should the need arise.
+  //
+  // See also: sc_direct_access conversion constructor
+  template< typename It >
+  sc_vector_iter( const It& it
+    , SC_ENABLE_IF_((
+        sc_meta::is_more_const< element_type
+                              , typename It::policy::element_type >
+      )) )
     : access_policy( it.get_policy() ), it_( it.it_ )
   {}
 
