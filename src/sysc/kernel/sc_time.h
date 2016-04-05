@@ -63,7 +63,7 @@ enum sc_time_unit
     SC_SEC
 };
 
-class sc_time_tuple;
+class SC_API sc_time_tuple;
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_time
@@ -71,7 +71,7 @@ class sc_time_tuple;
 //  The time class.
 // ----------------------------------------------------------------------------
 
-class sc_time
+class SC_API sc_time
 {
 public:
 
@@ -156,7 +156,7 @@ private:
 //  The time tuple helper class.
 // ----------------------------------------------------------------------------
 
-class sc_time_tuple
+class SC_API sc_time_tuple
 {
     typedef sc_time::value_type value_type;
     friend class sc_time;
@@ -194,7 +194,7 @@ inline ::std::ostream& operator << ( ::std::ostream&, const sc_time& );
 
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
-extern const sc_time SC_ZERO_TIME;
+extern SC_API const sc_time SC_ZERO_TIME;
 
 // constructors
 
@@ -440,7 +440,7 @@ operator << ( ::std::ostream& os, const sc_time& t )
 //  Struct that holds the time resolution and default time unit.
 // ----------------------------------------------------------------------------
 
-struct sc_time_params
+struct SC_API sc_time_params
 {
     double time_resolution;		// in femto seconds
     bool   time_resolution_specified;
@@ -456,14 +456,13 @@ struct sc_time_params
 
 // ----------------------------------------------------------------------------
 
-
 // functions for accessing the time resolution and default time unit
 
-extern void    sc_set_time_resolution( double, sc_time_unit );
-extern sc_time sc_get_time_resolution();
+SC_API extern void    sc_set_time_resolution( double, sc_time_unit );
+SC_API extern sc_time sc_get_time_resolution();
 
-extern void    sc_set_default_time_unit( double, sc_time_unit );
-extern sc_time sc_get_default_time_unit();
+SC_API extern void    sc_set_default_time_unit( double, sc_time_unit );
+SC_API extern sc_time sc_get_default_time_unit();
 
 } // namespace sc_core
 

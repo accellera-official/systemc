@@ -43,11 +43,21 @@ class sc_event_finder;
 class sc_process_b;
 class sc_spawn_reset_base;
 
+} // namespace sc_core
+
+// explicitly export std::vector<> instantiations
+SC_API_VECTOR_(sc_core::sc_event_finder*);
+SC_API_VECTOR_(sc_core::sc_interface*);
+SC_API_VECTOR_(sc_core::sc_spawn_reset_base*);
+
+namespace sc_core {
+
+
 //=============================================================================
 // CLASS sc_spawn_options
 //
 //=============================================================================
-class sc_spawn_options {
+class SC_API sc_spawn_options {
     friend class sc_cthread_process;
     friend class sc_method_process;
     friend class sc_process_b;

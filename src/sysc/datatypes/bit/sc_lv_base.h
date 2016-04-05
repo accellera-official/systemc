@@ -82,7 +82,7 @@ class sc_lv_base;
 //  Arbitrary size logic vector base class.
 // ----------------------------------------------------------------------------
 
-class sc_lv_base
+class SC_API sc_lv_base
     : public sc_proxy<sc_lv_base>
 {
     friend class sc_bv_base;
@@ -1818,6 +1818,9 @@ concat( bool a, sc_proxy<T>& b )
 }
 
 #endif
+
+SC_API_TEMPLATE_ template class SC_API sc_proxy<sc_lv_base>;
+SC_API_TEMPLATE_ template class SC_API sc_proxy<sc_bv_base>;
 
 } // namespace sc_dt
 

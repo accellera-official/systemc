@@ -40,7 +40,7 @@ namespace sc_core {
 //  The clock channel.
 // ----------------------------------------------------------------------------
 
-class sc_clock
+class SC_API sc_clock
   : public sc_signal<bool,SC_ONE_WRITER>
 {
   typedef sc_signal<bool,SC_ONE_WRITER> base_type;
@@ -194,7 +194,7 @@ sc_clock::negedge_action()
 
 // ----------------------------------------------------------------------------
 
-class sc_clock_posedge_callback {
+class SC_API sc_clock_posedge_callback {
 public:
     sc_clock_posedge_callback(sc_clock* target_p) : m_target_p(target_p) {}
     inline void operator () () { m_target_p->posedge_action(); }
@@ -202,7 +202,7 @@ public:
     sc_clock* m_target_p;
 };
 
-class sc_clock_negedge_callback {
+class SC_API sc_clock_negedge_callback {
   public:
     sc_clock_negedge_callback(sc_clock* target_p) : m_target_p(target_p) {}
     inline void operator () () { m_target_p->negedge_action(); }

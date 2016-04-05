@@ -28,6 +28,8 @@
 #ifndef SC_LIST_H
 #define SC_LIST_H
 
+#include <sysc/kernel/sc_cmnhdr.h>
+
 namespace sc_core {
 
 //Some forward declarations
@@ -36,7 +38,7 @@ template<class T> class sc_plist_iter;
 
 typedef void (*sc_plist_map_fn)( void* data, void* arg );
 
-class sc_plist_base {
+class SC_API sc_plist_base {
     friend class sc_plist_base_iter;
 
 public:
@@ -69,7 +71,7 @@ private:
 };
 
 
-class sc_plist_base_iter {
+class SC_API sc_plist_base_iter {
 public:
     typedef sc_plist_elem* handle_t;
     

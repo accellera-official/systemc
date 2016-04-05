@@ -53,8 +53,6 @@
 #include <cstring>
 #include <vector>
 
-#define SC_DISABLE_API_VERSION_CHECK // for in-library sc_ver.h inclusion
-
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_ver.h"
 #include "sysc/datatypes/bit/sc_bit.h"
@@ -2150,14 +2148,14 @@ remove_vcd_name_problems(vcd_trace const* vcd, std::string& name)
 
 // ----------------------------------------------------------------------------
 
-sc_trace_file*
+SC_API sc_trace_file*
 sc_create_vcd_trace_file(const char * name)
 {
     sc_trace_file * tf = new vcd_trace_file(name);
     return tf;
 }
 
-void
+SC_API void
 sc_close_vcd_trace_file( sc_trace_file* tf )
 {
     vcd_trace_file* vcd_tf = static_cast<vcd_trace_file*>(tf);
