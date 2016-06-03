@@ -94,6 +94,30 @@ const std::string sc_report_compose_message(const sc_report& rep)
     return str;
 }
 
+//
+// Private class to handle log files
+//
+class sc_log_file_handle
+{
+protected:
+	// not CopyConstructible
+	sc_log_file_handle(sc_log_file_handle const &);	
+	
+	// not CopyAssignable
+	void operator=(sc_log_file_handle const &);
+
+public:
+	sc_log_file_handle();
+	sc_log_file_handle(const char *);
+	void update_file_name(const char *);
+	bool release();
+	::std::ofstream& operator*();
+
+private:
+	std::string log_file_name;
+	::std::ofstream log_stream; 
+};
+
 sc_log_file_handle::sc_log_file_handle()
 {}
 
@@ -136,28 +160,23 @@ sc_log_file_handle::update_file_name(const char * fname)
 	}
 }
 
-void
+bool
 sc_log_file_handle::release()
 {
-	log_stream.close();
-	log_file_name.clear();
+	if (log_stream.is_open())
+	{
+		log_stream.close();
+		log_file_name.clear();
+		return false;
+	}
+	return true;
 }
 
 ::std::ofstream& 
 sc_log_file_handle::operator*()
 { return log_stream;	}
 
-bool sc_report_close_default_log();
-
 static sc_log_file_handle log_stream;
-static
-struct auto_close_log
-{
-    ~auto_close_log()
-    {
-	sc_report_close_default_log();
-    }
-} auto_close;
 
 const char* sc_report::get_process_name() const
 {
@@ -205,10 +224,10 @@ void sc_report_handler::default_handler(const sc_report& rep,
 // not documented, but available
 bool sc_report_close_default_log()
 {
-    log_stream.release();
+    bool ret = log_stream.release();
     sc_report_handler::set_log_file_name(NULL);
 
-    return true;
+    return ret;
 }
 
 int sc_report_handler::get_count(sc_severity severity_) 

@@ -53,26 +53,6 @@ struct SC_API sc_msg_def
     int          id; // backward compatibility with 2.0+
 };
 
-class sc_log_file_handle
-{
-protected:
-	// not CopyConstructible
-	sc_log_file_handle(sc_log_file_handle const &);	
-	
-	// not CopyAssignable
-	void operator=(sc_log_file_handle const &);
-
-public:
-	sc_log_file_handle();
-	sc_log_file_handle(const char *);
-	void update_file_name(const char *);
-	void release();
-	::std::ofstream& operator*();
-
-private:
-	std::string log_file_name;
-	::std::ofstream log_stream; 
-};
 
 typedef void (* sc_report_handler_proc)(const sc_report&, const sc_actions &);
 class sc_report;
