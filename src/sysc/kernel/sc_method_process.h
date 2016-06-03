@@ -76,7 +76,7 @@ namespace sc_core {
 
 void sc_method_cor_fn( void* );
 void sc_cmethod_cor_fn( void* );
-void sc_set_stack_size( sc_method_handle, std::size_t );
+SC_API void sc_set_stack_size( sc_method_handle, std::size_t );
 class sc_event;
 class sc_module;
 class sc_process_table;
@@ -84,14 +84,14 @@ class sc_process_handle;
 class sc_simcontext;
 class sc_runnable;
 
-void next_trigger( sc_simcontext* );
-void next_trigger( const sc_event&, sc_simcontext* );
-void next_trigger( const sc_event_or_list&, sc_simcontext* );
-void next_trigger( const sc_event_and_list&, sc_simcontext* );
-void next_trigger( const sc_time&, sc_simcontext* );
-void next_trigger( const sc_time&, const sc_event&, sc_simcontext* );
-void next_trigger( const sc_time&, const sc_event_or_list&, sc_simcontext* );
-void next_trigger( const sc_time&, const sc_event_and_list&, sc_simcontext* );
+SC_API void next_trigger( sc_simcontext* );
+SC_API void next_trigger( const sc_event&, sc_simcontext* );
+SC_API void next_trigger( const sc_event_or_list&, sc_simcontext* );
+SC_API void next_trigger( const sc_event_and_list&, sc_simcontext* );
+SC_API void next_trigger( const sc_time&, sc_simcontext* );
+SC_API void next_trigger( const sc_time&, const sc_event&, sc_simcontext* );
+SC_API void next_trigger( const sc_time&, const sc_event_or_list&, sc_simcontext* );
+SC_API void next_trigger( const sc_time&, const sc_event_and_list&, sc_simcontext* );
 
 struct sc_invoke_method; 
 //==============================================================================

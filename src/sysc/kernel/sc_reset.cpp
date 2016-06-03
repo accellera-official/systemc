@@ -70,7 +70,7 @@ static sc_reset_finder* reset_finder_q=0;  // Q of reset finders to reconcile.
 //                   has been bound the information in this class will be used
 //                   to initialize its sc_reset object instance.
 //==============================================================================
-class sc_reset_finder {
+class SC_API sc_reset_finder {
     friend class sc_reset;
   public:
     sc_reset_finder( bool async, const sc_in<bool>* port_p, bool level, 

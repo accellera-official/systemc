@@ -48,7 +48,7 @@ class sc_process_b;
 // This class describes a reset condition associated with an sc_process_b
 // instance. 
 //==============================================================================
-class sc_reset_target {
+class SC_API sc_reset_target {
   public:
     bool          m_async;     // true asynchronous reset, false synchronous.
     bool          m_level;     // level for reset.
@@ -65,13 +65,20 @@ inline std::ostream& operator << ( std::ostream& os,
     return os;
 }
 
+} // namespace sc_core
+
+// explicitly instantiate std::vector<sc_reset_target>
+SC_API_VECTOR_(sc_core::sc_reset_target);
+
+namespace sc_core {
+
 //==============================================================================
 // CLASS sc_reset - RESET INFORMATION FOR A RESET SIGNAL
 //
 // See the top of sc_reset.cpp for an explaination of how the reset mechanism
 // is implemented.
 //==============================================================================
-class sc_reset {
+class SC_API sc_reset {
     friend class sc_cthread_process;
     friend class sc_method_process; 
     friend class sc_module; 

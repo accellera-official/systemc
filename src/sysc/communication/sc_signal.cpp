@@ -359,13 +359,13 @@ sc_signal<sc_dt::sc_logic,POL>::negedge_event() const
 
 // template instantiations for writer policies
 
-template class sc_signal<bool,SC_ONE_WRITER>;
-template class sc_signal<bool,SC_MANY_WRITERS>;
-template class sc_signal<bool,SC_UNCHECKED_WRITERS>;
+template class SC_API sc_signal<bool,SC_ONE_WRITER>;
+template class SC_API sc_signal<bool,SC_MANY_WRITERS>;
+template class SC_API sc_signal<bool,SC_UNCHECKED_WRITERS>;
 
-template class sc_signal<sc_dt::sc_logic,SC_ONE_WRITER>;
-template class sc_signal<sc_dt::sc_logic,SC_MANY_WRITERS>;
-template class sc_signal<sc_dt::sc_logic,SC_UNCHECKED_WRITERS>;
+template class SC_API sc_signal<sc_dt::sc_logic,SC_ONE_WRITER>;
+template class SC_API sc_signal<sc_dt::sc_logic,SC_MANY_WRITERS>;
+template class SC_API sc_signal<sc_dt::sc_logic,SC_UNCHECKED_WRITERS>;
 
 } // namespace sc_core
 

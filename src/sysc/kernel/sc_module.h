@@ -54,7 +54,7 @@ template<class T> class sc_out;
 //  Used for positional binding.
 // ----------------------------------------------------------------------------
 
-struct sc_bind_proxy
+struct SC_API sc_bind_proxy
 {
     sc_interface* iface;
     sc_port_base* port;
@@ -65,7 +65,7 @@ struct sc_bind_proxy
 };
 
 
-extern const sc_bind_proxy SC_BIND_PROXY_NIL;
+extern SC_API const sc_bind_proxy SC_BIND_PROXY_NIL;
 
 
 // ----------------------------------------------------------------------------
@@ -74,7 +74,7 @@ extern const sc_bind_proxy SC_BIND_PROXY_NIL;
 //  Base class for all structural entities.
 // ----------------------------------------------------------------------------
 
-class sc_module
+class SC_API sc_module
 : public sc_object, public sc_process_host
 {
     friend class sc_module_name;
@@ -383,7 +383,7 @@ public:
 
 };
 
-extern sc_module* sc_module_dynalloc(sc_module*);
+extern SC_API sc_module* sc_module_dynalloc(sc_module*);
 #define SC_NEW(x)  ::sc_core::sc_module_dynalloc(new x);
 
 

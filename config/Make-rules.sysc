@@ -2,6 +2,8 @@ include $(top_srcdir)/config/Make-rules.common
 
 AM_CPPFLAGS += -I$(top_srcdir)/src
 
+EXTRA_DEFINES+=-DSC_BUILD
+
 if DISABLE_ASYNC_UPDATES
   EXTRA_DEFINES+=-DSC_DISABLE_ASYNC_UPDATES
 endif

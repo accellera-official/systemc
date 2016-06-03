@@ -28,8 +28,6 @@
 
 #include <algorithm>
 
-#define SC_DISABLE_API_VERSION_CHECK // for in-library sc_ver.h inclusion
-
 #include "sysc/kernel/sc_cor_fiber.h"
 #include "sysc/kernel/sc_cor_pthread.h"
 #include "sysc/kernel/sc_cor_qt.h"
@@ -249,7 +247,7 @@ sc_process_table::thread_q_head()
     return m_thread_q;
 }
 
-int
+SC_API int
 sc_notify_time_compare( const void* p1, const void* p2 )
 {
     const sc_event_timed* et1 = static_cast<const sc_event_timed*>( p1 );
@@ -1523,15 +1521,15 @@ sc_simcontext::trace_cycle( bool delta_cycle )
 	static sc_simcontext sc_default_global_context;
 	sc_simcontext* sc_curr_simcontext = &sc_default_global_context;
 #else
-	sc_simcontext* sc_curr_simcontext = 0;
-	sc_simcontext* sc_default_global_context = 0;
+	SC_API sc_simcontext* sc_curr_simcontext = 0;
+	SC_API sc_simcontext* sc_default_global_context = 0;
 #endif
 #else
 // Not MT-safe!
 static sc_simcontext* sc_curr_simcontext = 0;
 
 
-sc_simcontext*
+SC_API sc_simcontext*
 sc_get_curr_simcontext()
 {
     if( sc_curr_simcontext == 0 ) {
@@ -1549,7 +1547,7 @@ sc_get_curr_simcontext()
 
 // Generates unique names within each module.
 
-const char*
+SC_API const char*
 sc_gen_unique_name( const char* basename_, bool preserve_first )
 {
     sc_simcontext* simc = sc_get_curr_simcontext();
@@ -1577,7 +1575,7 @@ sc_gen_unique_name( const char* basename_, bool preserve_first )
 // pointer to the raw sc_process_b instance, which may be acquired via
 // sc_get_current_process_b().
 
-sc_process_handle
+SC_API sc_process_handle
 sc_get_current_process_handle()
 {
     return ( sc_is_running() ) ?
@@ -1586,7 +1584,7 @@ sc_get_current_process_handle()
 }
 
 // THE FOLLOWING FUNCTION IS DEPRECATED IN 2.1
-sc_process_b*
+SC_API sc_process_b*
 sc_get_curr_process_handle()
 {
     static bool warn=true;
@@ -1613,7 +1611,7 @@ sc_simcontext::pending_activity_at_current_time() const
 
 // Return time of next activity.
 
-sc_time sc_time_to_pending_activity( const sc_simcontext* simc_p ) 
+SC_API sc_time sc_time_to_pending_activity( const sc_simcontext* simc_p ) 
 {
     // If there is an activity pending at the current time
     // return a delta of zero.
@@ -1638,7 +1636,7 @@ sc_time sc_time_to_pending_activity( const sc_simcontext* simc_p )
 
 // Set the random seed for controlled randomization -- not yet implemented
 
-void
+SC_API void
 sc_set_random_seed( unsigned int )
 {
     SC_REPORT_WARNING( SC_ID_NOT_IMPLEMENTED_,
@@ -1655,7 +1653,7 @@ sc_set_random_seed( unsigned int )
 // |     duration = the amount of time the simulator should execute.
 // |     p        = event starvation policy.
 // +----------------------------------------------------------------------------
-void
+SC_API void
 sc_start( const sc_time& duration, sc_starvation_policy p )
 {
     sc_simcontext* context_p;      // current simulation context.
@@ -1723,7 +1721,7 @@ sc_start( const sc_time& duration, sc_starvation_policy p )
     init_delta_or_pending_updates = false;
 }
 
-void
+SC_API void
 sc_start()  
 {
     sc_start( sc_max_time() - sc_time_stamp(),
@@ -1755,7 +1753,7 @@ sc_start( double duration )  // in default time units
 }
 #endif // 
 
-void
+SC_API void
 sc_stop()
 {
     sc_get_curr_simcontext()->stop();
@@ -1764,7 +1762,7 @@ sc_stop()
 
 // The following function is deprecated in favor of sc_start(SC_ZERO_TIME):
 
-void
+SC_API void
 sc_initialize()
 {
     static bool warning_initialize = true;
@@ -1780,7 +1778,7 @@ sc_initialize()
 
 // The following function has been deprecated in favor of sc_start(duration):
 
-void
+SC_API void
 sc_cycle( const sc_time& duration )
 {
     static bool warning_cycle = true;
@@ -1794,30 +1792,30 @@ sc_cycle( const sc_time& duration )
     sc_get_curr_simcontext()->cycle( duration );
 }
 
-sc_event* sc_find_event( const char* name )
+SC_API sc_event* sc_find_event( const char* name )
 {
     return sc_get_curr_simcontext()->get_object_manager()->find_event( name );
 }
 
-sc_object* sc_find_object( const char* name )
+SC_API sc_object* sc_find_object( const char* name )
 {
     return sc_get_curr_simcontext()->get_object_manager()->find_object( name );
 }
 
 
-const sc_time&
+SC_API const sc_time&
 sc_max_time()
 {
     return sc_get_curr_simcontext()->max_time();
 }
 
-const sc_time&
+SC_API const sc_time&
 sc_time_stamp()
 {
     return sc_get_curr_simcontext()->time_stamp();
 }
 
-double
+SC_API double
 sc_simulation_time()
 {
     static bool warn_simulation_time=true;
@@ -1830,7 +1828,7 @@ sc_simulation_time()
     return sc_get_curr_simcontext()->time_stamp().to_default_time_units();
 }
 
-void
+SC_API void
 sc_defunct_process_function( sc_module* )
 {
     // This function is pointed to by defunct sc_thread_process'es and
@@ -1846,7 +1844,7 @@ sc_defunct_process_function( sc_module* )
 // This function sets the mode of operation when sc_stop() is called.
 //     mode = SC_STOP_IMMEDIATE or SC_STOP_FINISH_DELTA.
 //------------------------------------------------------------------------------
-void sc_set_stop_mode(sc_stop_mode mode)
+SC_API void sc_set_stop_mode(sc_stop_mode mode)
 {
     if ( sc_is_running() )
     {
@@ -1866,13 +1864,13 @@ void sc_set_stop_mode(sc_stop_mode mode)
     }
 }
 
-sc_stop_mode
+SC_API sc_stop_mode
 sc_get_stop_mode()
 {
     return stop_mode;
 }
 
-bool sc_is_unwinding()
+SC_API bool sc_is_unwinding()
 { 
     return sc_get_current_process_handle().is_unwinding();
 }
@@ -1954,7 +1952,7 @@ static std::ostream&
 print_status_expression( std::ostream& os, sc_status s );
 
 // utility helper to print a simulation status
-std::ostream& operator << ( std::ostream& os, sc_status s )
+SC_API std::ostream& operator << ( std::ostream& os, sc_status s )
 {
     // print primitive values
     switch(s)

@@ -33,6 +33,11 @@
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/communication/sc_writer_policy.h"
 
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(push)
+#pragma warning(disable: 4251) // DLL import for std::string
+#endif
+
 namespace sc_core {
 
 // forward declarations
@@ -44,7 +49,7 @@ class sc_event_and_list;
 class sc_object;
 
 // friend function declarations
-    int sc_notify_time_compare( const void*, const void* );
+SC_API int sc_notify_time_compare( const void*, const void* );
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_event_expr
@@ -115,7 +120,7 @@ private:
 //  Base class for lists of events.
 // ----------------------------------------------------------------------------
 
-class sc_event_list
+class SC_API sc_event_list
 {
     friend class sc_process_b;
     friend class sc_method_process;
@@ -174,7 +179,7 @@ private:
 //  AND list of events.
 // ----------------------------------------------------------------------------
 
-class sc_event_and_list
+class SC_API sc_event_and_list
 : public sc_event_list
 {
     friend class sc_event;
@@ -209,7 +214,7 @@ typedef sc_event_expr<sc_event_and_list> sc_event_and_expr;
 //  OR list of events.
 // ----------------------------------------------------------------------------
 
-class sc_event_or_list
+class SC_API sc_event_or_list
 : public sc_event_list
 {
     friend class sc_event;
@@ -241,7 +246,7 @@ typedef sc_event_expr<sc_event_or_list> sc_event_or_expr;
 //  The event class.
 // ----------------------------------------------------------------------------
 
-class sc_event
+class SC_API sc_event
 {
     friend class sc_event_list;
     friend class sc_event_timed;
@@ -255,7 +260,7 @@ class sc_event
     friend class sc_interface;
     friend class sc_clock;
     friend class sc_event_queue;
-    friend sc_event * sc_lazy_kernel_event( sc_event**, const char* );
+    friend SC_API sc_event * sc_lazy_kernel_event( sc_event**, const char* );
     template<typename IF, sc_writer_policy POL> friend class sc_signal;
     template<typename IF> friend class sc_fifo;
     friend class sc_semaphore;
@@ -340,12 +345,12 @@ private:
 //  Class for storing the time to notify a timed event.
 // ----------------------------------------------------------------------------
 
-class sc_event_timed
+class SC_API sc_event_timed
 {
     friend class sc_event;
     friend class sc_simcontext;
 
-    friend int sc_notify_time_compare( const void*, const void* );
+    friend SC_API int sc_notify_time_compare( const void*, const void* );
 
 private:
 
@@ -812,6 +817,10 @@ operator & ( sc_event_and_expr expr, sc_event_and_list const & el )
 }
 
 } // namespace sc_core
+
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(pop)
+#endif
 
 // $Log: sc_event.h,v $
 // Revision 1.14  2011/08/29 18:04:32  acg

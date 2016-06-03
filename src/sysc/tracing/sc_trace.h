@@ -75,10 +75,9 @@ class sc_time;
 
 template <class T> class sc_signal_in_if;
 
-
 // Base class for all kinds of trace files. 
 
-class sc_trace_file
+class SC_API sc_trace_file
 {
     friend class sc_simcontext;
     
@@ -173,13 +172,13 @@ protected:
 // tracing object is passed.
 
 #define DECL_TRACE_FUNC_REF_A(tp)     \
-void                                  \
+SC_API void                                  \
 sc_trace( sc_trace_file* tf,          \
 	  const tp& object,               \
 	  const std::string& name );
 
 #define DECL_TRACE_FUNC_PTR_A(tp)     \
-void                                  \
+SC_API void                                  \
 sc_trace( sc_trace_file* tf,          \
 	  const tp* object,               \
 	  const std::string& name );        \
@@ -309,22 +308,22 @@ sc_trace( sc_trace_file* tf,
 
 // specializations for signals of type char, short, int, long
 
-void sc_trace( sc_trace_file* tf,
+SC_API void sc_trace( sc_trace_file* tf,
 	       const sc_signal_in_if<char>& object,
 	       const std::string& name,
 	       int width );
 
-void sc_trace( sc_trace_file* tf,
+SC_API void sc_trace( sc_trace_file* tf,
 	       const sc_signal_in_if<short>& object,
 	       const std::string& name,
 	       int width );
 
-void sc_trace( sc_trace_file* tf,
+SC_API void sc_trace( sc_trace_file* tf,
 	       const sc_signal_in_if<int>& object,
 	       const std::string& name,
 	       int width );
 
-void sc_trace( sc_trace_file* tf,
+SC_API void sc_trace( sc_trace_file* tf,
 	       const sc_signal_in_if<long>& object,
 	       const std::string& name,
 	       int width );
@@ -339,7 +338,7 @@ void sc_trace( sc_trace_file* tf,
 // in the trace file. Enum literals is a null terminated array of null
 // terminated char* literal strings.
 
-void
+SC_API void
 sc_trace( sc_trace_file* tf,
 	  const unsigned int& object,
 	  const std::string& name,
@@ -348,7 +347,7 @@ sc_trace( sc_trace_file* tf,
 
 // Dummy function for arbitrary types of value, does nothing
 
-extern void sc_trace( sc_trace_file* tf,
+extern SC_API void sc_trace( sc_trace_file* tf,
 		      const void* object,
 		      const std::string& name );
 
@@ -357,7 +356,7 @@ extern void sc_trace( sc_trace_file* tf,
 // Default is to turn on delta cycle tracing.
 
 inline
-void
+SC_API void
 sc_trace_delta_cycles( sc_trace_file* tf, bool on = true )
 {
     if( tf ) tf->delta_cycles( on );
@@ -367,7 +366,7 @@ sc_trace_delta_cycles( sc_trace_file* tf, bool on = true )
 // Output a comment to the trace file
 
 inline
-void
+SC_API void
 sc_write_comment( sc_trace_file* tf, const std::string& comment )
 {
     if( tf ) tf->write_comment( comment );
@@ -376,18 +375,18 @@ sc_write_comment( sc_trace_file* tf, const std::string& comment )
 
 // Equivalent of std::fprintf for trace files!
 
-void tprintf( sc_trace_file* tf,  const char* format, ... );
+SC_API void tprintf( sc_trace_file* tf,  const char* format, ... );
 
 // ----------------------------------------------------------------------------
 // Create VCD file
-extern sc_trace_file *sc_create_vcd_trace_file(const char* name);
-extern void sc_close_vcd_trace_file( sc_trace_file* tf );
+extern SC_API sc_trace_file *sc_create_vcd_trace_file(const char* name);
+extern SC_API void sc_close_vcd_trace_file( sc_trace_file* tf );
 
 
 // ----------------------------------------------------------------------------
 // Create WIF file
-extern sc_trace_file *sc_create_wif_trace_file(const char *name);
-extern void sc_close_wif_trace_file( sc_trace_file* tf );
+extern SC_API sc_trace_file *sc_create_wif_trace_file(const char *name);
+extern SC_API void sc_close_wif_trace_file( sc_trace_file* tf );
 
 } // namespace sc_core
 
