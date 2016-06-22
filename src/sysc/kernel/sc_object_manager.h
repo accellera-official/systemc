@@ -51,12 +51,18 @@ class sc_object_manager
     friend class sc_simcontext;
 
 protected:
+    enum sc_name_origin
+    {
+        SC_NAME_OBJECT,
+        SC_NAME_EVENT
+    };
+
     struct table_entry
     {
-        table_entry() : m_event_p(NULL), m_object_p(NULL) {}
+        table_entry() : m_element_p(NULL) {}
 
-	sc_event*  m_event_p;   // if non-null this is an sc_event.
-        sc_object* m_object_p;  // if non-null this is an sc_object.
+	    void*          m_element_p; // can be an sc_object or an sc_event
+        sc_name_origin m_name_origin;
     };
 
 public:
@@ -65,6 +71,8 @@ public:
 
     sc_object_manager();
     ~sc_object_manager();
+
+    bool name_exists(const std::string& name);
 
     sc_event* find_event(const char* name);
 
