@@ -333,6 +333,7 @@ sc_object_manager::insert_external_name(const std::string& name)
         m_instance_table[name].m_name_origin = SC_NAME_EXTERNAL;
         return true;
     } else {
+        SC_REPORT_WARNING( SC_ID_NAME_EXISTS_, name.c_str());
         return false;
     }
 }
