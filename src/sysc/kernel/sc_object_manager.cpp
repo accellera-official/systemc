@@ -445,8 +445,7 @@ sc_object_manager::top_of_module_name_stack()
 // |"sc_object_manager::remove_event"
 // | 
 // | This method removes the sc_event instance with the supplied name from
-// | the table of instances. Note we just clear the pointer since if the name
-// | was for an sc_object the m_element_p pointer will be null anyway.
+// | the table of instances.
 // |
 // | Arguments:
 // |     name = name of the event to be removed.
@@ -459,7 +458,7 @@ sc_object_manager::remove_event(const std::string& name)
     if(it != m_instance_table.end()
        && it->second.m_name_origin == SC_NAME_EVENT)
     {
-        it->second.m_element_p = NULL;
+        m_instance_table.erase(it);
     }
 }
 
@@ -467,8 +466,7 @@ sc_object_manager::remove_event(const std::string& name)
 // |"sc_object_manager::remove_object"
 // | 
 // | This method removes the sc_object instance with the supplied name from
-// | the table of instances. Note we just clear the pointer since if the name
-// | was for an sc_event the m_element_p pointer will be null anyway.
+// | the table of instances.
 // |
 // | Arguments:
 // |     name = name of the object to be removed.
@@ -481,7 +479,7 @@ sc_object_manager::remove_object(const std::string& name)
     if(it != m_instance_table.end()
        && it->second.m_name_origin == SC_NAME_OBJECT)
     {
-        it->second.m_element_p = NULL;
+        m_instance_table.erase(it);
     }
 }
 
@@ -489,8 +487,7 @@ sc_object_manager::remove_object(const std::string& name)
 // |"sc_object_manager::remove_external_name"
 // |
 // | This method removes the name instance with the supplied name from
-// | the table of instances. Note we just clear the pointer since if the name
-// | was for an sc_object the m_element_p pointer will be null anyway.
+// | the table of instances.
 // |
 // | Arguments:
 // |     name = external name to be removed.
