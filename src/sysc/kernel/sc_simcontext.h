@@ -209,6 +209,10 @@ public:
     sc_export_registry* get_export_registry();
     sc_prim_channel_registry* get_prim_channel_registry();
 
+    bool register_hierarchical_name(const std::string& name);
+    bool unregister_hierarchical_name(const std::string& name);
+    bool hierarchical_name_exists(const std::string& name);
+
     // to generate unique names for objects in an MT-Safe way
     const char* gen_unique_name( const char* basename_, 
                                  bool preserve_first = false 
@@ -720,11 +724,52 @@ sc_end_of_simulation_invoked()
 
 inline bool sc_hierarchical_name_exists( const char* name )
 {
-    return sc_find_object(name) || sc_find_event(name);
+    return sc_get_curr_simcontext()->hierarchical_name_exists(name);
+}
+
+inline bool sc_hierarchical_name_exists( const sc_object* parent,
+                                         const char* name )
+{
+    std::string absolute_name = std::string(parent->name()) +
+                                SC_HIERARCHY_CHAR + std::string(name);
+    return sc_get_curr_simcontext()->hierarchical_name_exists(absolute_name);
 }
 
 inline
-bool 
+bool
+sc_register_hierarchical_name(const char* name)
+{
+    return sc_get_curr_simcontext()->register_hierarchical_name(name);
+}
+
+inline
+bool
+sc_register_hierarchical_name(const sc_object* parent, const char* name)
+{
+    std::string absolute_name = std::string(parent->name()) +
+            SC_HIERARCHY_CHAR + std::string(name);
+    return sc_get_curr_simcontext()->register_hierarchical_name(absolute_name);
+}
+
+inline
+bool
+sc_unregister_hierarchical_name(const char* name)
+{
+    return sc_get_curr_simcontext()->unregister_hierarchical_name(name);
+}
+
+inline
+bool
+sc_unregister_hierarchical_name(const sc_object* parent, const char* name)
+{
+    std::string absolute_name = std::string(parent->name()) +
+            SC_HIERARCHY_CHAR + std::string(name);
+    return sc_get_curr_simcontext()
+               ->unregister_hierarchical_name(absolute_name);
+}
+
+inline
+bool
 sc_start_of_simulation_invoked()
 {
     return sc_get_curr_simcontext()->m_start_of_simulation_called;

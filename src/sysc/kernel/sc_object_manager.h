@@ -54,7 +54,8 @@ protected:
     enum sc_name_origin
     {
         SC_NAME_OBJECT,
-        SC_NAME_EVENT
+        SC_NAME_EVENT,
+        SC_NAME_EXTERNAL
     };
 
     struct table_entry
@@ -94,8 +95,10 @@ private:
     std::string create_name( const char* leaf_name );
     void insert_event(const std::string& name, sc_event* obj);
     void insert_object(const std::string& name, sc_object* obj);
+    bool insert_external_name(const std::string& name);
     void remove_event(const std::string& name);
     void remove_object(const std::string& name);
+    bool remove_external_name(const std::string& name);
 
 private:
 

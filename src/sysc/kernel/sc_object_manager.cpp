@@ -169,7 +169,11 @@ sc_object_manager::name_exists(const std::string& name)
     instance_table_t::iterator it;
     it = m_instance_table.find(name);
     if(it != m_instance_table.end()) {
-        return it->second.m_element_p;
+        if(it->second.m_name_origin == SC_NAME_EXTERNAL) {
+            return true;
+        } else {
+            return it->second.m_element_p;
+        }
     } else {
         return false;
     }
@@ -310,6 +314,27 @@ int
 sc_object_manager::hierarchy_size()
 {
     return m_object_stack.size();
+}
+
+// +----------------------------------------------------------------------------
+// |"sc_object_manager::insert_external_name"
+// |
+// | This method inserts the supplied name into the instance table using
+// | the supplied name.
+// |
+// | Arguments:
+// |     name     =  external to be inserted.
+// +----------------------------------------------------------------------------
+bool
+sc_object_manager::insert_external_name(const std::string& name)
+{
+    if(!name_exists(name)) {
+        m_instance_table[name].m_element_p = NULL;
+        m_instance_table[name].m_name_origin = SC_NAME_EXTERNAL;
+        return true;
+    } else {
+        return false;
+    }
 }
 
 // +----------------------------------------------------------------------------
@@ -457,6 +482,31 @@ sc_object_manager::remove_object(const std::string& name)
        && it->second.m_name_origin == SC_NAME_OBJECT)
     {
         it->second.m_element_p = NULL;
+    }
+}
+
+// +----------------------------------------------------------------------------
+// |"sc_object_manager::remove_external_name"
+// |
+// | This method removes the name instance with the supplied name from
+// | the table of instances. Note we just clear the pointer since if the name
+// | was for an sc_object the m_element_p pointer will be null anyway.
+// |
+// | Arguments:
+// |     name = external name to be removed.
+// +----------------------------------------------------------------------------
+bool
+sc_object_manager::remove_external_name(const std::string& name)
+{
+    instance_table_t::iterator it;     // instance table iterator.
+    it = m_instance_table.find(name);
+    if(it != m_instance_table.end()
+       && it->second.m_name_origin == SC_NAME_EXTERNAL)
+    {
+        m_instance_table.erase(it);
+        return true;
+    } else {
+        return false;
     }
 }
 
