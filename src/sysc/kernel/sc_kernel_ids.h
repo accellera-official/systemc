@@ -117,7 +117,8 @@ SC_DEFINE_MESSAGE(SC_ID_MODULE_NAME_STACK_EMPTY_     , 533,
 	"module name stack is empty: did you forget to "
 	"add a sc_module_name parameter to your module "
 	"constructor?" )
-// available message number 534
+SC_DEFINE_MESSAGE(SC_ID_NAME_EXISTS_                 , 534,
+	"name already exists")
 // available message number 535
 SC_DEFINE_MESSAGE( SC_ID_IMMEDIATE_SELF_NOTIFICATION_, 536,
          "immediate self-notification ignored as of IEEE 1666-2011" )
