@@ -209,9 +209,14 @@ public:
     sc_export_registry* get_export_registry();
     sc_prim_channel_registry* get_prim_channel_registry();
 
-    bool register_hierarchical_name(const std::string& name);
-    bool unregister_hierarchical_name(const std::string& name);
-    bool hierarchical_name_exists(const std::string& name);
+    const std::string get_hierarchical_name(const sc_object* parent,
+                                            const std::string& name);
+    bool register_hierarchical_name(const sc_object* parent,
+                                    const std::string& name);
+    bool unregister_hierarchical_name(const sc_object* parent,
+                                      const std::string& name);
+    bool hierarchical_name_exists(const sc_object* parent,
+                                  const std::string& name);
 
     // to generate unique names for objects in an MT-Safe way
     const char* gen_unique_name( const char* basename_, 
@@ -722,50 +727,47 @@ sc_end_of_simulation_invoked()
     return sc_get_curr_simcontext()->m_end_of_simulation_called;
 }
 
-inline bool sc_hierarchical_name_exists( const char* name )
+inline
+bool
+sc_hierarchical_name_exists( const char* name )
 {
-    return sc_get_curr_simcontext()->hierarchical_name_exists(name);
+    return sc_get_curr_simcontext()->hierarchical_name_exists(NULL, name);
 }
 
-inline bool sc_hierarchical_name_exists( const sc_object* parent,
-                                         const char* name )
+inline
+bool
+sc_hierarchical_name_exists( const sc_object* parent,
+                             const char* name )
 {
-    std::string absolute_name = std::string(parent->name()) +
-                                SC_HIERARCHY_CHAR + std::string(name);
-    return sc_get_curr_simcontext()->hierarchical_name_exists(absolute_name);
+    return sc_get_curr_simcontext()->hierarchical_name_exists(parent, name);
 }
 
 inline
 bool
 sc_register_hierarchical_name(const char* name)
 {
-    return sc_get_curr_simcontext()->register_hierarchical_name(name);
+    return sc_get_curr_simcontext()->register_hierarchical_name(NULL, name);
 }
 
 inline
 bool
 sc_register_hierarchical_name(const sc_object* parent, const char* name)
 {
-    std::string absolute_name = std::string(parent->name()) +
-            SC_HIERARCHY_CHAR + std::string(name);
-    return sc_get_curr_simcontext()->register_hierarchical_name(absolute_name);
+    return sc_get_curr_simcontext()->register_hierarchical_name(parent, name);
 }
 
 inline
 bool
 sc_unregister_hierarchical_name(const char* name)
 {
-    return sc_get_curr_simcontext()->unregister_hierarchical_name(name);
+    return sc_get_curr_simcontext()->unregister_hierarchical_name(NULL, name);
 }
 
 inline
 bool
 sc_unregister_hierarchical_name(const sc_object* parent, const char* name)
 {
-    std::string absolute_name = std::string(parent->name()) +
-            SC_HIERARCHY_CHAR + std::string(name);
-    return sc_get_curr_simcontext()
-               ->unregister_hierarchical_name(absolute_name);
+    return sc_get_curr_simcontext()->unregister_hierarchical_name(parent, name);
 }
 
 inline
