@@ -166,17 +166,7 @@ std::string sc_object_manager::create_name(const char* leaf_name)
 bool
 sc_object_manager::name_exists(const std::string& name)
 {
-    instance_table_t::iterator it;
-    it = m_instance_table.find(name);
-    if(it != m_instance_table.end()) {
-        if(it->second.m_name_origin == SC_NAME_EXTERNAL) {
-            return true;
-        } else {
-            return it->second.m_element_p;
-        }
-    } else {
-        return false;
-    }
+    return (m_instance_table.find(name) != m_instance_table.end());
 }
 
 // +----------------------------------------------------------------------------
