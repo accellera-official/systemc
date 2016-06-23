@@ -78,7 +78,7 @@ sc_object_manager::~sc_object_manager()
     {
         if(it->second.m_name_origin == SC_NAME_OBJECT) {
             sc_object* obj_p = static_cast<sc_object*>(it->second.m_element_p);
-            if ( obj_p ) obj_p->m_simc = 0;
+            obj_p->m_simc = 0;
         }
     }
 }
@@ -237,8 +237,7 @@ sc_object_manager::first_object()
 	  m_object_it++ )
     {
         if(m_object_it->second.m_name_origin == SC_NAME_OBJECT) {
-            result_p = static_cast<sc_object*>(m_object_it->second.m_element_p);
-            if ( result_p ) break;
+            return static_cast<sc_object*>(m_object_it->second.m_element_p);
         }
     }
     return result_p;
@@ -389,8 +388,7 @@ sc_object_manager::next_object()
 	  m_object_it++ )
     {
         if(m_object_it->second.m_name_origin == SC_NAME_OBJECT) {
-            result_p = static_cast<sc_object*>(m_object_it->second.m_element_p);
-            if ( result_p ) break;
+            return static_cast<sc_object*>(m_object_it->second.m_element_p);
         }
     }
     return result_p;
