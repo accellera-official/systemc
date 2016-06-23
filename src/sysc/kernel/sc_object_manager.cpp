@@ -323,7 +323,15 @@ sc_object_manager::insert_external_name(const std::string& name)
         m_instance_table[name].m_name_origin = SC_NAME_EXTERNAL;
         return true;
     } else {
-        SC_REPORT_WARNING( SC_ID_NAME_EXISTS_, name.c_str());
+        table_entry element = m_instance_table[name];
+        std::stringstream msg;
+        msg << name << " ("
+            << ((element.m_name_origin == SC_NAME_OBJECT)
+                ? (static_cast<sc_object*>(element.m_element_p))->kind()
+                : (element.m_name_origin == SC_NAME_EVENT)
+                    ? "event" : "external name")
+            << ")";
+        SC_REPORT_WARNING( SC_ID_NAME_EXISTS_, msg.str().c_str());
         return false;
     }
 }
