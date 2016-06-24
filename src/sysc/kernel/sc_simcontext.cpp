@@ -1117,7 +1117,7 @@ sc_simcontext::find_object( const char* name )
     return m_object_manager->find_object( name );
 }
 
-const std::string
+std::string
 sc_simcontext::get_hierarchical_name(const sc_object* parent,
                                      const std::string& name)
 {
