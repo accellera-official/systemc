@@ -38,6 +38,7 @@
 
 
 include_directories (include)
+add_definitions(-DUSING_EXTENSION_OPTIONAL)
 add_executable (at_extension_optional src/at_extension_optional.cpp
                                       src/at_extension_optional_top.cpp
                                       src/initiator_top.cpp
