@@ -169,12 +169,6 @@
 #   be automatically found by other CMake projects (e.g., SCV, SystemC AMS).
 #   <http://www.cmake.org/Wiki/CMake/Tutorials/How_to_create_a_ProjectConfig.cmake_file>
 #
-# - Configure the SystemC version from within the build system.
-#
-# - Configure the TLM version from within the build system.
-#
-# - Extract the release dates from the commit date.
-#
 # - Detect C++'11-compatible compiler and then pass the right flags
 #   to use C++'11 language and library features.
 #
