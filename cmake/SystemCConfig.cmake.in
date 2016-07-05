@@ -14,6 +14,26 @@ if (@CMAKE_USE_PTHREADS_INIT@)
   endif (NOT CMAKE_USE_PTHREADS_INIT)
 endif (@CMAKE_USE_PTHREADS_INIT@)
 
+if (MSVC)
+  # Select method to represent pointers to class members in MSVC such
+  # that a pointer to a member of a class may be declared before
+  # defining the class itself. All code linking to the SystemC library
+  # requires this compiler option to be set.
+  if (NOT CMAKE_C_FLAGS MATCHES "/vmg")
+    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /vmg" CACHE STRING "Flags used by the compiler during all build types." FORCE)
+  endif (NOT CMAKE_C_FLAGS MATCHES "/vmg")
+  if (NOT CMAKE_CXX_FLAGS MATCHES "/vmg")
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /vmg" CACHE STRING "Flags used by the compiler during all build types." FORCE)
+  endif (NOT CMAKE_CXX_FLAGS MATCHES "/vmg")
+  # Enable parallel compiles of object files for same target when using MSVC.
+  if (NOT CMAKE_C_FLAGS MATCHES "/MP")
+    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /MP" CACHE STRING "Flags used by the compiler during all build types." FORCE)
+  endif (NOT CMAKE_C_FLAGS MATCHES "/MP")
+  if (NOT CMAKE_CXX_FLAGS MATCHES "/MP")
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP" CACHE STRING "Flags used by the compiler during all build types." FORCE)
+  endif (NOT CMAKE_CXX_FLAGS MATCHES "/MP")
+endif (MSVC)
+
 set (SystemC_TARGET_ARCH @SystemC_TARGET_ARCH@)
 
 # Preprocessor definitions

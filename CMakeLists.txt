@@ -209,6 +209,9 @@
 #
 # - Set more reliably the needed compiler options, e.g., /vmg for MSVC.
 #
+# - Check whether SystemCConfig.cmake.in should define further compiler options
+#   beyond those defined currently for MSVC (/vmg /MP).
+#
 ###############################################################################
 
 
