@@ -76,8 +76,10 @@ sc_object_manager::~sc_object_manager()
 
     for ( it = m_instance_table.begin(); it != m_instance_table.end(); it++) 
     {
-        sc_object* obj_p = it->second.m_object_p;
-        if ( obj_p ) obj_p->m_simc = 0;
+        if(it->second.m_name_origin == SC_NAME_OBJECT) {
+            sc_object* obj_p = static_cast<sc_object*>(it->second.m_element_p);
+            obj_p->m_simc = 0;
+        }
     }
 }
 
@@ -127,12 +129,10 @@ std::string sc_object_manager::create_name(const char* leaf_name)
     clash = false; 
     for (;;)
     {
-	instance_table_t::iterator it = m_instance_table.find(result_string);
-	if ( it == m_instance_table.end() ||
-	     (it->second.m_event_p == NULL && it->second.m_object_p == NULL ) )
-	{
-	    break;
-	}
+	    if ( !name_exists(result_string) )
+	    {
+	        break;
+	    }
         clash = true; 
         leafname_string = sc_gen_unique_name(leafname_string.c_str(), false); 
 	if (parent_p) {
@@ -154,6 +154,22 @@ std::string sc_object_manager::create_name(const char* leaf_name)
 }
 
 // +----------------------------------------------------------------------------
+// |"sc_object_manager::name_exists"
+// |
+// | This method returns true if the supplied name exists in the hierarchy
+// | or false if the element does not exist.
+// |
+// | Arguments:
+// |     name = name of the element
+// | Result is a boolean
+// +----------------------------------------------------------------------------
+bool
+sc_object_manager::name_exists(const std::string& name)
+{
+    return (m_instance_table.find(name) != m_instance_table.end());
+}
+
+// +----------------------------------------------------------------------------
 // |"sc_object_manager::find_event"
 // | 
 // | This method returns the sc_event with the supplied name, or a NULL if
@@ -168,7 +184,13 @@ sc_object_manager::find_event(const char* name)
 {
     instance_table_t::iterator it;
     it = m_instance_table.find(name);
-    return it == m_instance_table.end() ? NULL : it->second.m_event_p;
+    if(it != m_instance_table.end()
+       && it->second.m_name_origin == SC_NAME_EVENT)
+    {
+        return static_cast<sc_event*>(it->second.m_element_p);
+    } else {
+        return NULL;
+    }
 }
 
 // +----------------------------------------------------------------------------
@@ -186,7 +208,13 @@ sc_object_manager::find_object(const char* name)
 {
     instance_table_t::iterator it;
     it = m_instance_table.find(name);
-    return it == m_instance_table.end() ? NULL : it->second.m_object_p;
+    if(it != m_instance_table.end()
+       && it->second.m_name_origin == SC_NAME_OBJECT)
+    {
+        return static_cast<sc_object*>(it->second.m_element_p);
+    } else {
+        return NULL;
+    }
 }
 
 
@@ -208,8 +236,9 @@ sc_object_manager::first_object()
           m_object_it != m_instance_table.end(); 
 	  m_object_it++ )
     {
-        result_p = m_object_it->second.m_object_p;
-	if ( result_p ) break;
+        if(m_object_it->second.m_name_origin == SC_NAME_OBJECT) {
+            return static_cast<sc_object*>(m_object_it->second.m_element_p);
+        }
     }
     return result_p;
 }
@@ -277,6 +306,36 @@ sc_object_manager::hierarchy_size()
 }
 
 // +----------------------------------------------------------------------------
+// |"sc_object_manager::insert_external_name"
+// |
+// | This method inserts the supplied name into the instance table using
+// | the supplied name.
+// |
+// | Arguments:
+// |     name     =  external to be inserted.
+// +----------------------------------------------------------------------------
+bool
+sc_object_manager::insert_external_name(const std::string& name)
+{
+    if(!name_exists(name)) {
+        m_instance_table[name].m_element_p = NULL;
+        m_instance_table[name].m_name_origin = SC_NAME_EXTERNAL;
+        return true;
+    } else {
+        table_entry element = m_instance_table[name];
+        std::stringstream msg;
+        msg << name << " ("
+            << ((element.m_name_origin == SC_NAME_OBJECT)
+                ? (static_cast<sc_object*>(element.m_element_p))->kind()
+                : (element.m_name_origin == SC_NAME_EVENT)
+                    ? "event" : "external name")
+            << ")";
+        SC_REPORT_WARNING( SC_ID_NAME_EXISTS_, msg.str().c_str());
+        return false;
+    }
+}
+
+// +----------------------------------------------------------------------------
 // |"sc_object_manager::insert_event"
 // | 
 // | This method inserts the supplied sc_event instance into the instance
@@ -289,7 +348,8 @@ sc_object_manager::hierarchy_size()
 void
 sc_object_manager::insert_event(const std::string& name, sc_event* event_p)
 {
-    m_instance_table[name].m_event_p = event_p;
+    m_instance_table[name].m_element_p = static_cast<void*>(event_p);
+    m_instance_table[name].m_name_origin = SC_NAME_EVENT;
 }
 
 // +----------------------------------------------------------------------------
@@ -305,7 +365,8 @@ sc_object_manager::insert_event(const std::string& name, sc_event* event_p)
 void
 sc_object_manager::insert_object(const std::string& name, sc_object* object_p)
 {
-    m_instance_table[name].m_object_p = object_p;
+    m_instance_table[name].m_element_p = static_cast<void*>(object_p);
+    m_instance_table[name].m_name_origin = SC_NAME_OBJECT;
 }
 
 // +----------------------------------------------------------------------------
@@ -326,8 +387,9 @@ sc_object_manager::next_object()
     for ( result_p = NULL; m_object_it != m_instance_table.end(); 
 	  m_object_it++ )
     {
-        result_p = m_object_it->second.m_object_p;
-	if ( result_p ) break;
+        if(m_object_it->second.m_name_origin == SC_NAME_OBJECT) {
+            return static_cast<sc_object*>(m_object_it->second.m_element_p);
+        }
     }
     return result_p;
 }
@@ -380,8 +442,7 @@ sc_object_manager::top_of_module_name_stack()
 // |"sc_object_manager::remove_event"
 // | 
 // | This method removes the sc_event instance with the supplied name from
-// | the table of instances. Note we just clear the pointer since if the name
-// | was for an sc_object the m_event_p pointer will be null anyway.
+// | the table of instances.
 // |
 // | Arguments:
 // |     name = name of the event to be removed.
@@ -391,15 +452,18 @@ sc_object_manager::remove_event(const std::string& name)
 {
     instance_table_t::iterator it;     // instance table iterator.
     it = m_instance_table.find(name);
-    if ( it != m_instance_table.end() ) it->second.m_event_p = NULL;
+    if(it != m_instance_table.end()
+       && it->second.m_name_origin == SC_NAME_EVENT)
+    {
+        m_instance_table.erase(it);
+    }
 }
 
 // +----------------------------------------------------------------------------
 // |"sc_object_manager::remove_object"
 // | 
 // | This method removes the sc_object instance with the supplied name from
-// | the table of instances. Note we just clear the pointer since if the name
-// | was for an sc_event the m_object_p pointer will be null anyway.
+// | the table of instances.
 // |
 // | Arguments:
 // |     name = name of the object to be removed.
@@ -409,7 +473,35 @@ sc_object_manager::remove_object(const std::string& name)
 {
     instance_table_t::iterator it;     // instance table iterator.
     it = m_instance_table.find(name);
-    if ( it != m_instance_table.end() ) it->second.m_object_p = NULL;
+    if(it != m_instance_table.end()
+       && it->second.m_name_origin == SC_NAME_OBJECT)
+    {
+        m_instance_table.erase(it);
+    }
+}
+
+// +----------------------------------------------------------------------------
+// |"sc_object_manager::remove_external_name"
+// |
+// | This method removes the name instance with the supplied name from
+// | the table of instances.
+// |
+// | Arguments:
+// |     name = external name to be removed.
+// +----------------------------------------------------------------------------
+bool
+sc_object_manager::remove_external_name(const std::string& name)
+{
+    instance_table_t::iterator it;     // instance table iterator.
+    it = m_instance_table.find(name);
+    if(it != m_instance_table.end()
+       && it->second.m_name_origin == SC_NAME_EXTERNAL)
+    {
+        m_instance_table.erase(it);
+        return true;
+    } else {
+        return false;
+    }
 }
 
 } // namespace sc_core
