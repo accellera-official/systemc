@@ -48,5 +48,5 @@ add_executable (at_mixed_targets src/at_mixed_targets.cpp
                                  ${COMMON_SRC_DIR}/at_target_2_phase.cpp
                                  ${COMMON_SRC_DIR}/at_target_4_phase.cpp
                                  ${COMMON_SRC_DIR}/select_initiator.cpp)
-target_link_libraries (at_mixed_targets systemc)
+target_link_libraries (at_mixed_targets ${SystemC_LIBRARIES})
 configure_and_add_test (at_mixed_targets)

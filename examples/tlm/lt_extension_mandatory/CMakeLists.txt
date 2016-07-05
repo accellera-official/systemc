@@ -44,5 +44,5 @@ add_executable (lt_extension_mandatory src/lt_extension_mandatory.cpp
                                        src/lt_target_extension_mandatory.cpp
                                        ${COMMON_SRC_DIR}/extension_initiator_id.cpp
                                        ${COMMON_SRC_DIR}/report.cpp)
-target_link_libraries (lt_extension_mandatory systemc)
+target_link_libraries (lt_extension_mandatory ${SystemC_LIBRARIES})
 configure_and_add_test (lt_extension_mandatory)

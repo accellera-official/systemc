@@ -206,6 +206,9 @@
 # - Check whether SystemCConfig.cmake.in should define further compiler options
 #   beyond those defined currently for MSVC (/vmg /MP).
 #
+# - Find a better way to make sure all code linking to the SystemC library is
+#   also linking to ${CMAKE_THREAD_LIBS_INIT} if needed.
+#
 ###############################################################################
 
 

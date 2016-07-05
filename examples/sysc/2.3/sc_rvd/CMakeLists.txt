@@ -40,5 +40,5 @@
 include_directories (${CMAKE_CURRENT_SOURCE_DIR}/../include)
 
 add_executable (sc_rvd main.cpp)
-target_link_libraries (sc_rvd systemc)
+target_link_libraries (sc_rvd ${SystemC_LIBRARIES})
 add_test (sc_rvd sc_rvd)

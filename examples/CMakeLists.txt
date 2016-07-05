@@ -58,5 +58,12 @@ if (WIN32)
   add_definitions (-D_CONSOLE -DNOGDI)
 endif (WIN32)
 
+# On many platforms (e.g., Linux), code that links to SystemC also needs to
+# link to ${CMAKE_THREAD_LIBS_INIT}.
+#
+# TODO: Check why CMake doesn't add automatically ${CMAKE_THREAD_LIBS_INIT},
+# as already target systemc depends on it.
+set (SystemC_LIBRARIES systemc ${CMAKE_THREAD_LIBS_INIT})
+
 add_subdirectory (sysc)
 add_subdirectory (tlm)

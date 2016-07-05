@@ -51,5 +51,5 @@ set (pipe_SOURCES display.cpp
                   stage3.cpp)
 
 add_executable (pipe ${pipe_SOURCES} ${pipe_HEADERS})
-target_link_libraries (pipe systemc)
+target_link_libraries (pipe ${SystemC_LIBRARIES})
 add_test (pipe pipe)

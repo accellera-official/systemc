@@ -47,5 +47,5 @@ add_executable (lt_mixed_endian src/lt.cpp
                                 ${COMMON_SRC_DIR}/at_target_4_phase.cpp
                                 ${COMMON_SRC_DIR}/memory.cpp
                                 ${COMMON_SRC_DIR}/report.cpp)
-target_link_libraries (lt_mixed_endian systemc)
+target_link_libraries (lt_mixed_endian ${SystemC_LIBRARIES})
 configure_and_add_test_with_input (lt_mixed_endian results/input.txt)

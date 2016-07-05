@@ -47,5 +47,5 @@ add_executable (lt_dmi src/lt_dmi.cpp
                        ${COMMON_SRC_DIR}/dmi_memory.cpp
                        ${COMMON_SRC_DIR}/report.cpp
                        ${COMMON_SRC_DIR}/traffic_generator.cpp)
-target_link_libraries (lt_dmi systemc)
+target_link_libraries (lt_dmi ${SystemC_LIBRARIES})
 configure_and_add_test (lt_dmi)

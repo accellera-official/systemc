@@ -49,5 +49,5 @@ add_executable (lt_temporal_decouple src/lt_temporal_decouple.cpp
                                      ${COMMON_SRC_DIR}/memory.cpp
                                      ${COMMON_SRC_DIR}/report.cpp
                                      ${COMMON_SRC_DIR}/traffic_generator.cpp)
-target_link_libraries (lt_temporal_decouple systemc)
+target_link_libraries (lt_temporal_decouple ${SystemC_LIBRARIES})
 configure_and_add_test (lt_temporal_decouple)

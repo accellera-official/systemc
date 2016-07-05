@@ -49,5 +49,5 @@ add_executable (at_extension_optional src/at_extension_optional.cpp
                                       ${COMMON_SRC_DIR}/at_target_4_phase.cpp
                                       ${COMMON_SRC_DIR}/select_initiator.cpp
                                       ${COMMON_SRC_DIR}/extension_initiator_id.cpp)
-target_link_libraries (at_extension_optional systemc)
+target_link_libraries (at_extension_optional ${SystemC_LIBRARIES})
 configure_and_add_test (at_extension_optional)

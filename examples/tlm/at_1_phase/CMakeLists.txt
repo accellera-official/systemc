@@ -46,5 +46,5 @@ add_executable (at_1_phase src/at_1_phase.cpp
                            ${COMMON_SRC_DIR}/report.cpp
                            ${COMMON_SRC_DIR}/at_target_1_phase.cpp
                            ${COMMON_SRC_DIR}/select_initiator.cpp)
-target_link_libraries (at_1_phase systemc)
+target_link_libraries (at_1_phase ${SystemC_LIBRARIES})
 configure_and_add_test (at_1_phase)

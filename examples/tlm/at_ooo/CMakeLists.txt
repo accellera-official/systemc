@@ -47,5 +47,5 @@ add_executable (at_ooo src/at_ooo.cpp
                        ${COMMON_SRC_DIR}/report.cpp
                        ${COMMON_SRC_DIR}/select_initiator.cpp
                        ${COMMON_SRC_DIR}/traffic_generator.cpp)
-target_link_libraries (at_ooo systemc)
+target_link_libraries (at_ooo ${SystemC_LIBRARIES})
 configure_and_add_test (at_ooo)

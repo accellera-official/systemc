@@ -66,7 +66,7 @@ set (IMAGE_FILES in_imag
                  out_real.4.golden)
 
 add_executable (fft_flpt ${fft_flpt_SOURCES} ${fft_flpt_HEADERS})
-target_link_libraries (fft_flpt systemc)
+target_link_libraries (fft_flpt ${SystemC_LIBRARIES})
 
 foreach (IMAGE_FILE ${IMAGE_FILES})
   configure_file (${CMAKE_CURRENT_SOURCE_DIR}/${IMAGE_FILE} ${CMAKE_CURRENT_BINARY_DIR}/${IMAGE_FILE} COPYONLY)

@@ -78,7 +78,7 @@ set (risc_cpu_EXTRAS  README
                       test1.asm)
 
 add_executable (risc_cpu ${risc_cpu_SOURCES} ${risc_cpu_HEADERS})
-target_link_libraries (risc_cpu systemc)
+target_link_libraries (risc_cpu ${SystemC_LIBRARIES})
 
 foreach (risc_cpu_EXTRA ${risc_cpu_EXTRAS})
   configure_file (${CMAKE_CURRENT_SOURCE_DIR}/${risc_cpu_EXTRA} ${CMAKE_CURRENT_BINARY_DIR}/${risc_cpu_EXTRA} COPYONLY)
