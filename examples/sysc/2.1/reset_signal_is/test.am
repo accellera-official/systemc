@@ -56,7 +56,7 @@ examples_BUILD += \
 
 examples_CLEAN += \
 	2.1/reset_signal_is/run.log \
-	2.1/reset_signal_is/expexted_trimmed.log \
+	2.1/reset_signal_is/expected_trimmed.log \
 	2.1/reset_signal_is/run_trimmed.log \
 	2.1/reset_signal_is/diff.log
 

@@ -55,7 +55,7 @@ examples_BUILD += \
 
 examples_CLEAN += \
 	risc_cpu/run.log \
-	risc_cpu/expexted_trimmed.log \
+	risc_cpu/expected_trimmed.log \
 	risc_cpu/run_trimmed.log \
 	risc_cpu/diff.log
 

@@ -55,7 +55,7 @@ examples_BUILD += \
 
 examples_CLEAN += \
 	2.1/specialized_signals/run.log \
-	2.1/specialized_signals/expexted_trimmed.log \
+	2.1/specialized_signals/expected_trimmed.log \
 	2.1/specialized_signals/run_trimmed.log \
 	2.1/specialized_signals/diff.log
 

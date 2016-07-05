@@ -56,7 +56,7 @@ examples_BUILD += \
 
 examples_CLEAN += \
 	lt_temporal_decouple/run.log \
-	lt_temporal_decouple/expexted_trimmed.log \
+	lt_temporal_decouple/expected_trimmed.log \
 	lt_temporal_decouple/run_trimmed.log \
 	lt_temporal_decouple/diff.log
 

@@ -55,7 +55,7 @@ examples_BUILD += \
 
 examples_CLEAN += \
 	simple_fifo/run.log \
-	simple_fifo/expexted_trimmed.log \
+	simple_fifo/expected_trimmed.log \
 	simple_fifo/run_trimmed.log \
 	simple_fifo/diff.log
 
