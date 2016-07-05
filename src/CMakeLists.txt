@@ -469,7 +469,7 @@ set_target_properties (systemc
                        LINKER_LANGUAGE CXX
                        VERSION ${SystemC_VERSION}
                        SOVERSION ${SystemC_SOVERSION}
-		       INSTALL_NAME_DIR ${CMAKE_INSTALL_FULL_LIBDIR})
+                       INSTALL_NAME_DIR ${CMAKE_INSTALL_FULL_LIBDIR})
 
 
 ###############################################################################
