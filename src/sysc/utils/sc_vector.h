@@ -178,8 +178,15 @@ protected:
   sc_object* implicit_cast( sc_object* p ) const { return p; }
   sc_object* implicit_cast( ... /* incompatible */ )  const;
 
-public: 
+  class context_scope
+  {
+    sc_vector_base* owner_;
+  public:
+    explicit context_scope(sc_vector_base* owner);
+    ~context_scope();
+  };
 
+public: 
   void report_empty_bind( const char* kind_, bool dst_range_ ) const;
 
 private:
@@ -645,6 +652,7 @@ sc_vector<T>::init( size_type n, Creator c )
 {
   if ( base_type::check_init(n) )
   {
+    sc_vector_base::context_scope _( this );
     base_type::reserve( n );
     try
     {

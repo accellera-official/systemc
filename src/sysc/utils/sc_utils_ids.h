@@ -51,8 +51,7 @@ SC_DEFINE_MESSAGE(SC_ID_IEEE_1666_DEPRECATION_,
 		  804, "/IEEE_Std_1666/deprecated" )
 SC_DEFINE_MESSAGE(SC_ID_VECTOR_INIT_CALLED_TWICE_,
                   805, "sc_vector::init has already been called" )
-SC_DEFINE_MESSAGE(SC_ID_VECTOR_INIT_INVALID_CONTEXT_,
-                  806, "sc_vector::init called from invalid object context" )
+// available message number 806
 SC_DEFINE_MESSAGE(SC_ID_VECTOR_BIND_EMPTY_,
                   807, "sc_vector::bind called with empty range" )
 SC_DEFINE_MESSAGE(SC_ID_VECTOR_NONOBJECT_ELEMENTS_,
