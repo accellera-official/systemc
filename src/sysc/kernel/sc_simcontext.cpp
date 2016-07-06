@@ -392,6 +392,7 @@ sc_simcontext::init()
     m_max_time = SC_ZERO_TIME;
     m_change_stamp = 0;
     m_delta_count = 0;
+    m_initial_delta_count_at_current_time = 0;
     m_forced_stop = false;
     m_paused = false;
     m_ready_to_simulate = false;
@@ -442,7 +443,8 @@ sc_simcontext::sc_simcontext() :
     m_child_objects(), m_delta_events(), m_timed_events(0), m_trace_files(),
     m_something_to_trace(false), m_runnable(0), m_collectable(0), 
     m_time_params(), m_curr_time(SC_ZERO_TIME), m_max_time(SC_ZERO_TIME), 
-    m_change_stamp(0), m_delta_count(0), m_forced_stop(false), m_paused(false),
+    m_change_stamp(0), m_delta_count(0), m_initial_delta_count_at_current_time(0),
+    m_forced_stop(false), m_paused(false),
     m_ready_to_simulate(false), m_elaboration_done(false),
     m_execution_phase(phase_initialize), m_error(0),
     m_in_simulator_control(false), m_end_of_simulation_called(false),
@@ -995,6 +997,7 @@ sc_simcontext::do_timestep(const sc_time& t)
     SC_DO_PHASE_CALLBACK_(before_timestep);
     m_curr_time = t;
     m_change_stamp++;
+    m_initial_delta_count_at_current_time = m_delta_count;
 }
 
 void
