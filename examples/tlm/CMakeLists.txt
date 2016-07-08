@@ -45,27 +45,24 @@ add_definitions (-DSC_INCLUDE_DYNAMIC_PROCESSES)
 include_directories (BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/common/include)
 set (COMMON_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/common/src)
 
-# TODO: Don't use the LOCATION target property, which is deprecated in CMake 3.0.0.
-if (POLICY CMP0026)
-  cmake_policy(SET CMP0026 OLD)
-endif (POLICY CMP0026)
-
 macro (configure_and_add_test TEST_PROG)
-  get_target_property(TEST_PROGRAM ${TEST_PROG} LOCATION)
+  string (REPLACE "${CMAKE_SOURCE_DIR}/" "" TEST_NAME
+                  "${CMAKE_CURRENT_SOURCE_DIR}/${TEST_PROG}")
   configure_file (${CMAKE_SOURCE_DIR}/cmake/run_test.sh.in
                   ${CMAKE_CURRENT_BINARY_DIR}/run_test.sh @ONLY)
-  add_test (${TEST_PROGRAM} sh ${CMAKE_CURRENT_BINARY_DIR}/run_test.sh)
-  set_tests_properties (${TEST_PROGRAM}
+  add_test (${TEST_NAME} sh ${CMAKE_CURRENT_BINARY_DIR}/run_test.sh)
+  set_tests_properties (${TEST_NAME}
                         PROPERTIES FAIL_REGULAR_EXPRESSION "^[*][*][*]ERROR")
 endmacro (configure_and_add_test)
 
 macro (configure_and_add_test_with_input TEST_PROG TEST_INPUT)
-  set (TEST_PROGRAM ${TEST_PROG})
+  string (REPLACE "${CMAKE_SOURCE_DIR}/" "" TEST_NAME
+                  "${CMAKE_CURRENT_SOURCE_DIR}/${TEST_PROG}")
   set (TEST_INPUT_FILE ${TEST_INPUT})
   configure_file (${CMAKE_SOURCE_DIR}/cmake/run_test_with_input.sh.in
                   ${CMAKE_CURRENT_BINARY_DIR}/run_test.sh @ONLY)
-  add_test (${TEST_PROGRAM} sh ${CMAKE_CURRENT_BINARY_DIR}/run_test.sh)
-  set_tests_properties (${TEST_PROGRAM}
+  add_test (${TEST_NAME} sh ${CMAKE_CURRENT_BINARY_DIR}/run_test.sh)
+  set_tests_properties (${TEST_NAME}
                         PROPERTIES FAIL_REGULAR_EXPRESSION "^[*][*][*]ERROR")
 endmacro (configure_and_add_test_with_input)
 
