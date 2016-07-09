@@ -196,6 +196,7 @@ void sc_reset::reconcile_resets()
 	    now_p->m_target_p->initially_in_reset( now_p->m_async );
         delete now_p;
     }
+    reset_finder_q = NULL;
 }
 
 
