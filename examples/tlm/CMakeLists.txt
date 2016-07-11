@@ -46,36 +46,31 @@ include_directories (BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/common/include)
 set (COMMON_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/common/src)
 
 macro (configure_and_add_test TEST_PROG)
+  if (${ARGC} GREATER 3)
+    message (FATAL_ERROR "Wrong number of arguments for configure_and_add_test (NAME [INPUT] [GOLDEN]).")
+  endif (${ARGC} GREATER 3)
   string (REPLACE "${CMAKE_SOURCE_DIR}/" "" TEST_NAME
                   "${CMAKE_CURRENT_SOURCE_DIR}/${TEST_PROG}")
   if (NOT SHELL)
     set (SHELL /bin/sh)
   endif (NOT SHELL)
   set (TEST ${CMAKE_CURRENT_BINARY_DIR}/${TEST_PROG})
-  unset (TESTINPUT)
-  set (TESTGOLDEN ${CMAKE_CURRENT_SOURCE_DIR}/results/expected.log)
+  if (${ARGC} LESS 2)
+    unset (TESTINPUT)
+  else (${ARGC} LESS 2)
+    set (TESTINPUT ${CMAKE_CURRENT_SOURCE_DIR}/${ARGV1})
+  endif (${ARGC} LESS 2)
+  if (${ARGC} LESS 3)
+    set (TESTGOLDEN ${CMAKE_CURRENT_SOURCE_DIR}/results/expected.log)
+  else (${ARGC} LESS 3)
+    set (TESTGOLDEN ${CMAKE_CURRENT_SOURCE_DIR}/${ARGV2})
+  endif (${ARGC} LESS 3)
   configure_file (${CMAKE_SOURCE_DIR}/config/test.sh.in
                   ${CMAKE_CURRENT_BINARY_DIR}/test.sh @ONLY)
-  add_test (${TEST_NAME} sh ${CMAKE_CURRENT_BINARY_DIR}/test.sh)
+  add_test (${TEST_NAME} ${SHELL} ${CMAKE_CURRENT_BINARY_DIR}/test.sh)
   set_tests_properties (${TEST_NAME}
                         PROPERTIES FAIL_REGULAR_EXPRESSION "^[*][*][*]ERROR")
 endmacro (configure_and_add_test)
-
-macro (configure_and_add_test_with_input TEST_PROG TEST_INPUT)
-  string (REPLACE "${CMAKE_SOURCE_DIR}/" "" TEST_NAME
-                  "${CMAKE_CURRENT_SOURCE_DIR}/${TEST_PROG}")
-  if (NOT SHELL)
-    set (SHELL /bin/sh)
-  endif (NOT SHELL)
-  set (TEST ${CMAKE_CURRENT_BINARY_DIR}/${TEST_PROG})
-  set (TESTINPUT ${CMAKE_CURRENT_SOURCE_DIR}/${TEST_INPUT})
-  set (TESTGOLDEN ${CMAKE_CURRENT_SOURCE_DIR}/results/expected.log)
-  configure_file (${CMAKE_SOURCE_DIR}/config/test.sh.in
-                  ${CMAKE_CURRENT_BINARY_DIR}/test.sh @ONLY)
-  add_test (${TEST_NAME} sh ${CMAKE_CURRENT_BINARY_DIR}/test.sh)
-  set_tests_properties (${TEST_NAME}
-                        PROPERTIES FAIL_REGULAR_EXPRESSION "^[*][*][*]ERROR")
-endmacro (configure_and_add_test_with_input)
 
 
 ########################################################################
