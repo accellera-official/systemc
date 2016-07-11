@@ -48,9 +48,15 @@ set (COMMON_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/common/src)
 macro (configure_and_add_test TEST_PROG)
   string (REPLACE "${CMAKE_SOURCE_DIR}/" "" TEST_NAME
                   "${CMAKE_CURRENT_SOURCE_DIR}/${TEST_PROG}")
-  configure_file (${CMAKE_SOURCE_DIR}/cmake/run_test.sh.in
-                  ${CMAKE_CURRENT_BINARY_DIR}/run_test.sh @ONLY)
-  add_test (${TEST_NAME} sh ${CMAKE_CURRENT_BINARY_DIR}/run_test.sh)
+  if (NOT SHELL)
+    set (SHELL /bin/sh)
+  endif (NOT SHELL)
+  set (TEST ${CMAKE_CURRENT_BINARY_DIR}/${TEST_PROG})
+  unset (TESTINPUT)
+  set (TESTGOLDEN ${CMAKE_CURRENT_SOURCE_DIR}/results/expected.log)
+  configure_file (${CMAKE_SOURCE_DIR}/config/test.sh.in
+                  ${CMAKE_CURRENT_BINARY_DIR}/test.sh @ONLY)
+  add_test (${TEST_NAME} sh ${CMAKE_CURRENT_BINARY_DIR}/test.sh)
   set_tests_properties (${TEST_NAME}
                         PROPERTIES FAIL_REGULAR_EXPRESSION "^[*][*][*]ERROR")
 endmacro (configure_and_add_test)
@@ -58,10 +64,15 @@ endmacro (configure_and_add_test)
 macro (configure_and_add_test_with_input TEST_PROG TEST_INPUT)
   string (REPLACE "${CMAKE_SOURCE_DIR}/" "" TEST_NAME
                   "${CMAKE_CURRENT_SOURCE_DIR}/${TEST_PROG}")
-  set (TEST_INPUT_FILE ${TEST_INPUT})
-  configure_file (${CMAKE_SOURCE_DIR}/cmake/run_test_with_input.sh.in
-                  ${CMAKE_CURRENT_BINARY_DIR}/run_test.sh @ONLY)
-  add_test (${TEST_NAME} sh ${CMAKE_CURRENT_BINARY_DIR}/run_test.sh)
+  if (NOT SHELL)
+    set (SHELL /bin/sh)
+  endif (NOT SHELL)
+  set (TEST ${CMAKE_CURRENT_BINARY_DIR}/${TEST_PROG})
+  set (TESTINPUT ${CMAKE_CURRENT_SOURCE_DIR}/${TEST_INPUT})
+  set (TESTGOLDEN ${CMAKE_CURRENT_SOURCE_DIR}/results/expected.log)
+  configure_file (${CMAKE_SOURCE_DIR}/config/test.sh.in
+                  ${CMAKE_CURRENT_BINARY_DIR}/test.sh @ONLY)
+  add_test (${TEST_NAME} sh ${CMAKE_CURRENT_BINARY_DIR}/test.sh)
   set_tests_properties (${TEST_NAME}
                         PROPERTIES FAIL_REGULAR_EXPRESSION "^[*][*][*]ERROR")
 endmacro (configure_and_add_test_with_input)
