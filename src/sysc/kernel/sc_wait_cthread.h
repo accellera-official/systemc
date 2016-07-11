@@ -32,11 +32,12 @@
 
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/datatypes/bit/sc_logic.h"
-#include "sysc/communication/sc_signal_ifs.h"
 
 
 namespace sc_core 
 {
+
+template <class T> class sc_signal_in_if;
 
 // for SC_CTHREADs
 
