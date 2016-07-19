@@ -17,6 +17,8 @@
 # top-level SystemC include directory is added in Make-rules.{sysc,examples}
 
 # build flags
+
+
 VPATH = @srcdir@
 am__is_gnu_make = test -n '$(MAKEFILE_LIST)' && test -n '$(MAKELEVEL)'
 am__make_running_with_option = \
@@ -82,9 +84,10 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
-DIST_COMMON = $(top_srcdir)/config/Make-rules.examples \
+DIST_COMMON = $(top_srcdir)/config/Make-rules.sysc \
 	$(top_srcdir)/config/Make-rules.common $(srcdir)/Makefile.in \
-	$(srcdir)/Makefile.am
+	$(srcdir)/Makefile.am $(top_srcdir)/config/depcomp \
+	$(noinst_HEADERS) INSTALL README
 @WANT_DEBUG_TRUE@am__append_1 = $(DEBUG_CXXFLAGS)
 @WANT_DEBUG_TRUE@am__append_2 = $(DEBUG_CXXFLAGS)
 @WANT_DEBUG_TRUE@am__append_3 = $(DEBUG_CXXFLAGS)
@@ -95,8 +98,15 @@ DIST_COMMON = $(top_srcdir)/config/Make-rules.examples \
 @USES_PTHREADS_LIB_TRUE@am__append_6 = $(PTHREAD_CFLAGS)
 @USES_PTHREADS_LIB_TRUE@am__append_7 = $(PTHREAD_CFLAGS)
 @USES_PTHREADS_LIB_TRUE@am__append_8 = $(PTHREAD_LIBS)
-@SEPARATE_BUILD_TREE_TRUE@am__append_9 = $(examples_BUILD)
-subdir = examples
+@DISABLE_ASYNC_UPDATES_TRUE@am__append_9 = -DSC_DISABLE_ASYNC_UPDATES
+@ENABLE_CALLBACKS_TRUE@am__append_10 = -DSC_ENABLE_SIMULATION_PHASE_CALLBACKS
+@ENABLE_CALLBACKS_TRACING_TRUE@am__append_11 = -DSC_ENABLE_SIMULATION_PHASE_CALLBACKS_TRACING
+@WANT_PTHREADS_THREADS_TRUE@am__append_12 = -DSC_USE_PTHREADS
+@QT_ARCH_POWERPC_MACOSX_TRUE@@WANT_QT_THREADS_TRUE@am__append_13 = qtmdc.c
+@SEPARATE_BUILD_TREE_TRUE@@WANT_QT_THREADS_TRUE@am__append_14 = \
+@SEPARATE_BUILD_TREE_TRUE@@WANT_QT_THREADS_TRUE@	 $(QT_ARCH_IMPL)
+
+subdir = src/sysc/packages/qt
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/config/ax_check_define.m4 \
 	$(top_srcdir)/config/ax_pthread.m4 $(top_srcdir)/configure.ac
@@ -105,6 +115,24 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 mkinstalldirs = $(install_sh) -d
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
+LTLIBRARIES = $(noinst_LTLIBRARIES)
+libqt_la_LIBADD =
+am__libqt_la_SOURCES_DIST = qt.c
+am__objects_1 = libqt_la-qt.lo
+@WANT_QT_THREADS_TRUE@am_libqt_la_OBJECTS = $(am__objects_1)
+@QT_ARCH_POWERPC_MACOSX_TRUE@@WANT_QT_THREADS_TRUE@am__objects_2 = libqt_la-qtmdc.lo
+@WANT_QT_THREADS_TRUE@am__objects_3 = libqt_la-qtmds.lo \
+@WANT_QT_THREADS_TRUE@	$(am__objects_2)
+@WANT_QT_THREADS_TRUE@nodist_libqt_la_OBJECTS = $(am__objects_3)
+libqt_la_OBJECTS = $(am_libqt_la_OBJECTS) $(nodist_libqt_la_OBJECTS)
+AM_V_lt = $(am__v_lt_@AM_V@)
+am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
+am__v_lt_0 = --silent
+am__v_lt_1 = 
+libqt_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
+	$(libqt_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) \
+	$(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+@WANT_QT_THREADS_TRUE@am_libqt_la_rpath =
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -117,29 +145,44 @@ AM_V_at = $(am__v_at_@AM_V@)
 am__v_at_ = $(am__v_at_@AM_DEFAULT_V@)
 am__v_at_0 = @
 am__v_at_1 = 
-SOURCES =
-DIST_SOURCES =
-RECURSIVE_TARGETS = all-recursive check-recursive cscopelist-recursive \
-	ctags-recursive dvi-recursive html-recursive info-recursive \
-	install-data-recursive install-dvi-recursive \
-	install-exec-recursive install-html-recursive \
-	install-info-recursive install-pdf-recursive \
-	install-ps-recursive install-recursive installcheck-recursive \
-	installdirs-recursive pdf-recursive ps-recursive \
-	tags-recursive uninstall-recursive
+DEFAULT_INCLUDES = -I.@am__isrc@
+depcomp = $(SHELL) $(top_srcdir)/config/depcomp
+am__depfiles_maybe = depfiles
+am__mv = mv -f
+COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+LTCOMPILE = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) \
+	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
+	$(AM_CFLAGS) $(CFLAGS)
+AM_V_CC = $(am__v_CC_@AM_V@)
+am__v_CC_ = $(am__v_CC_@AM_DEFAULT_V@)
+am__v_CC_0 = @echo "  CC      " $@;
+am__v_CC_1 = 
+CCLD = $(CC)
+LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+AM_V_CCLD = $(am__v_CCLD_@AM_V@)
+am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
+am__v_CCLD_0 = @echo "  CCLD    " $@;
+am__v_CCLD_1 = 
+CCASCOMPILE = $(CCAS) $(AM_CCASFLAGS) $(CCASFLAGS)
+LTCCASCOMPILE = $(LIBTOOL) $(AM_V_lt) $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=compile $(CCAS) $(AM_CCASFLAGS) \
+	$(CCASFLAGS)
+AM_V_CCAS = $(am__v_CCAS_@AM_V@)
+am__v_CCAS_ = $(am__v_CCAS_@AM_DEFAULT_V@)
+am__v_CCAS_0 = @echo "  CCAS    " $@;
+am__v_CCAS_1 = 
+SOURCES = $(libqt_la_SOURCES) $(nodist_libqt_la_SOURCES)
+DIST_SOURCES = $(am__libqt_la_SOURCES_DIST)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
     *) (install-info --version) >/dev/null 2>&1;; \
   esac
-RECURSIVE_CLEAN_TARGETS = mostlyclean-recursive clean-recursive	\
-  distclean-recursive maintainer-clean-recursive
-am__recursive_targets = \
-  $(RECURSIVE_TARGETS) \
-  $(RECURSIVE_CLEAN_TARGETS) \
-  $(am__extra_recursive_targets)
-AM_RECURSIVE_TARGETS = $(am__recursive_targets:-recursive=) TAGS CTAGS \
-	distdir
+HEADERS = $(noinst_HEADERS)
 am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP)
 # Read a list of newline-separated strings from the standard input,
 # and print each of them once, without duplicates.  Input order is
@@ -159,33 +202,7 @@ am__define_uniq_tagged_files = \
   done | $(am__uniquify_input)`
 ETAGS = etags
 CTAGS = ctags
-DIST_SUBDIRS = $(SUBDIRS)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-am__relativize = \
-  dir0=`pwd`; \
-  sed_first='s,^\([^/]*\)/.*$$,\1,'; \
-  sed_rest='s,^[^/]*/*,,'; \
-  sed_last='s,^.*/\([^/]*\)$$,\1,'; \
-  sed_butlast='s,/*[^/]*$$,,'; \
-  while test -n "$$dir1"; do \
-    first=`echo "$$dir1" | sed -e "$$sed_first"`; \
-    if test "$$first" != "."; then \
-      if test "$$first" = ".."; then \
-        dir2=`echo "$$dir0" | sed -e "$$sed_last"`/"$$dir2"; \
-        dir0=`echo "$$dir0" | sed -e "$$sed_butlast"`; \
-      else \
-        first2=`echo "$$dir2" | sed -e "$$sed_first"`; \
-        if test "$$first2" = "$$first"; then \
-          dir2=`echo "$$dir2" | sed -e "$$sed_rest"`; \
-        else \
-          dir2="../$$dir2"; \
-        fi; \
-        dir0="$$dir0"/"$$first"; \
-      fi; \
-    fi; \
-    dir1=`echo "$$dir1" | sed -e "$$sed_rest"`; \
-  done; \
-  reldir="$$dir2"
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
 AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
@@ -335,7 +352,7 @@ target_vendor = @target_vendor@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-AM_CPPFLAGS = -I$(SYSTEMC_INC_DIR)
+AM_CPPFLAGS = -I$(top_srcdir)/src
 AM_CFLAGS = $(EXTRA_CFLAGS) $(am__append_2) $(am__append_5) \
 	$(am__append_7)
 AM_CXXFLAGS = $(EXTRA_CXXFLAGS) $(am__append_1) $(am__append_4) \
@@ -344,23 +361,104 @@ AM_CCASFLAGS = $(EXTRA_ASFLAGS) $(am__append_3)
 AM_LDFLAGS = $(EXTRA_LDFLAGS) $(am__append_8)
 
 # always add fix-point support
-EXTRA_DEFINES = -DSC_INCLUDE_FX
+EXTRA_DEFINES = -DSC_INCLUDE_FX -DSC_BUILD $(am__append_9) \
+	$(am__append_10) $(am__append_11) $(am__append_12)
 
 # initialize some useful variables (filled later)
-CLEANFILES = $(am__append_9)
-EXTRA_DIST = 
-SYSTEMC_INC_DIR = $(top_srcdir)/src
-SYSTEMC_LIB_DIR = $(libdir)$(LIB_ARCH_SUFFIX)
-LDADD = $(top_builddir)/src/sysc/libsystemc.la
-TESTSCRIPT_IN = $(top_srcdir)/config/test.sh.in
-SUBDIRS = \
-	sysc \
-	tlm
+CLEANFILES = $(QT_ARCH_FILES) configuration $(am__append_14)
+EXTRA_DIST = CHANGES config INSTALL Makefile.base README README.MISC \
+	README.PORT b.h meas.c stp.c stp.h time/assim time/cswap \
+	time/go time/init time/prim time/raw time/README.time \
+	md/axp.1.Makefile md/axp.2.Makefile md/axp.Makefile \
+	md/axp.README md/default.Makefile md/hppa-cnx.Makefile \
+	md/hppa.Makefile md/i386.README md/ksr1.Makefile \
+	md/m88k.Makefile md/null.README md/powerpc.README \
+	md/pthreads.Makefile md/solaris.README $(NO_C_FILES) \
+	$(NO_H_FILES) $(NO_S_FILES)
+NO_H_FILES = \
+	copyright.h \
+	qt.h \
+	qtmd.h \
+	\
+	md/axp.h \
+	md/hppa.h \
+	md/i386.h \
+	md/iX86_64.h \
+	md/ksr1.h \
+	md/m88k.h \
+	md/mips.h \
+	md/powerpc_mach.h \
+	md/powerpc_sys5.h \
+	md/sparc.h \
+	md/vax.h
 
-all: all-recursive
+noinst_HEADERS = \
+	$(NO_H_FILES)
+
+C_FILES = \
+	qt.c
+
+NO_C_FILES = \
+	md/axp.c \
+	md/m88k.c \
+	md/null.c \
+	md/powerpc.c
+
+NO_S_FILES = \
+	md/axp_b.s \
+	md/axp.s \
+	md/hppa_b.s \
+	md/hppa.s \
+	md/i386_b.s \
+	md/i386.s \
+	md/iX86_64.s \
+	md/ksr1_b.s \
+	md/ksr1.s \
+	md/m88k_b.s \
+	md/m88k.s \
+	md/mips_b.s \
+	md/mips-irix5.s \
+	md/mips.s \
+	md/null.s \
+	md/powerpc_mach_b.s \
+	md/powerpc_mach.s \
+	md/powerpc_sys5_b.s \
+	md/powerpc_sys5.s \
+	md/sparc_b.s \
+	md/sparc.s \
+	md/vax_b.s \
+	md/vax.s
+
+@WANT_QT_THREADS_TRUE@BUILT_SOURCES = \
+@WANT_QT_THREADS_TRUE@	configuration
+
+@WANT_QT_THREADS_TRUE@noinst_LTLIBRARIES = libqt.la
+@WANT_QT_THREADS_TRUE@nodist_libqt_la_SOURCES = \
+@WANT_QT_THREADS_TRUE@	$(QT_ARCH_FILES)
+
+@WANT_QT_THREADS_TRUE@libqt_la_SOURCES = \
+@WANT_QT_THREADS_TRUE@	$(C_FILES)
+
+@WANT_QT_THREADS_TRUE@libqt_la_LIBTOOLFLAGS = \
+@WANT_QT_THREADS_TRUE@	--tag=CC
+
+@WANT_QT_THREADS_TRUE@qtmds_o_CCASFLAGS = \
+@WANT_QT_THREADS_TRUE@	$(AM_CCASFLAGS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES)
+
+
+# only add qtmdc.c to QT_ARCH_FILES, if needed for the platform (!=null.c)
+@WANT_QT_THREADS_TRUE@QT_ARCH_FILES = qtmds.s $(am__append_13)
+@QT_ARCH_HPPA_TRUE@@WANT_QT_THREADS_TRUE@QT_ARCH_IMPL = md/hppa.s
+@QT_ARCH_POWERPC_MACOSX_TRUE@@WANT_QT_THREADS_TRUE@QT_ARCH_IMPL = md/powerpc_mach.s md/powerpc.c
+@QT_ARCH_SPARC_TRUE@@WANT_QT_THREADS_TRUE@QT_ARCH_IMPL = md/sparc.s
+@QT_ARCH_X86_64_TRUE@@WANT_QT_THREADS_TRUE@QT_ARCH_IMPL = md/iX86_64.s
+@QT_ARCH_X86_TRUE@@WANT_QT_THREADS_TRUE@QT_ARCH_IMPL = md/i386.s
+all: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) all-am
 
 .SUFFIXES:
-$(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(top_srcdir)/config/Make-rules.examples $(top_srcdir)/config/Make-rules.common $(am__configure_deps)
+.SUFFIXES: .c .lo .o .obj .s
+$(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(top_srcdir)/config/Make-rules.sysc $(top_srcdir)/config/Make-rules.common $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
 	    *$$dep*) \
@@ -369,9 +467,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(top_srcdir)/config/Make-rules.ex
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu examples/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu src/sysc/packages/qt/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu examples/Makefile
+	  $(AUTOMAKE) --gnu src/sysc/packages/qt/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -381,7 +479,7 @@ Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	    echo ' cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)'; \
 	    cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe);; \
 	esac;
-$(top_srcdir)/config/Make-rules.examples $(top_srcdir)/config/Make-rules.common:
+$(top_srcdir)/config/Make-rules.sysc $(top_srcdir)/config/Make-rules.common:
 
 $(top_builddir)/config.status: $(top_srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
@@ -392,67 +490,93 @@ $(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
 
+clean-noinstLTLIBRARIES:
+	-test -z "$(noinst_LTLIBRARIES)" || rm -f $(noinst_LTLIBRARIES)
+	@list='$(noinst_LTLIBRARIES)'; \
+	locs=`for p in $$list; do echo $$p; done | \
+	      sed 's|^[^/]*$$|.|; s|/[^/]*$$||; s|$$|/so_locations|' | \
+	      sort -u`; \
+	test -z "$$locs" || { \
+	  echo rm -f $${locs}; \
+	  rm -f $${locs}; \
+	}
+
+libqt.la: $(libqt_la_OBJECTS) $(libqt_la_DEPENDENCIES) $(EXTRA_libqt_la_DEPENDENCIES) 
+	$(AM_V_CCLD)$(libqt_la_LINK) $(am_libqt_la_rpath) $(libqt_la_OBJECTS) $(libqt_la_LIBADD) $(LIBS)
+
+mostlyclean-compile:
+	-rm -f *.$(OBJEXT)
+
+distclean-compile:
+	-rm -f *.tab.c
+
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libqt_la-qt.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libqt_la-qtmdc.Plo@am__quote@
+
+.c.o:
+@am__fastdepCC_TRUE@	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
+@am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ $< &&\
+@am__fastdepCC_TRUE@	$(am__mv) $$depbase.Tpo $$depbase.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(COMPILE) -c -o $@ $<
+
+.c.obj:
+@am__fastdepCC_TRUE@	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.obj$$||'`;\
+@am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ `$(CYGPATH_W) '$<'` &&\
+@am__fastdepCC_TRUE@	$(am__mv) $$depbase.Tpo $$depbase.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(COMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+
+.c.lo:
+@am__fastdepCC_TRUE@	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.lo$$||'`;\
+@am__fastdepCC_TRUE@	$(LTCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ $< &&\
+@am__fastdepCC_TRUE@	$(am__mv) $$depbase.Tpo $$depbase.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LTCOMPILE) -c -o $@ $<
+
+libqt_la-qt.lo: qt.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(libqt_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libqt_la-qt.lo -MD -MP -MF $(DEPDIR)/libqt_la-qt.Tpo -c -o libqt_la-qt.lo `test -f 'qt.c' || echo '$(srcdir)/'`qt.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libqt_la-qt.Tpo $(DEPDIR)/libqt_la-qt.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='qt.c' object='libqt_la-qt.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(libqt_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libqt_la-qt.lo `test -f 'qt.c' || echo '$(srcdir)/'`qt.c
+
+libqt_la-qtmdc.lo: qtmdc.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(libqt_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libqt_la-qtmdc.lo -MD -MP -MF $(DEPDIR)/libqt_la-qtmdc.Tpo -c -o libqt_la-qtmdc.lo `test -f 'qtmdc.c' || echo '$(srcdir)/'`qtmdc.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libqt_la-qtmdc.Tpo $(DEPDIR)/libqt_la-qtmdc.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='qtmdc.c' object='libqt_la-qtmdc.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(libqt_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libqt_la-qtmdc.lo `test -f 'qtmdc.c' || echo '$(srcdir)/'`qtmdc.c
+
+.s.o:
+	$(AM_V_CCAS)$(CCASCOMPILE) -c -o $@ $<
+
+.s.obj:
+	$(AM_V_CCAS)$(CCASCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+
+.s.lo:
+	$(AM_V_CCAS)$(LTCCASCOMPILE) -c -o $@ $<
+
+libqt_la-qtmds.lo: qtmds.s
+	$(AM_V_CCAS)$(LIBTOOL) $(AM_V_lt) $(libqt_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CCAS) $(AM_CCASFLAGS) $(CCASFLAGS) -c -o libqt_la-qtmds.lo `test -f 'qtmds.s' || echo '$(srcdir)/'`qtmds.s
+
 mostlyclean-libtool:
 	-rm -f *.lo
 
 clean-libtool:
 	-rm -rf .libs _libs
 
-# This directory's subdirectories are mostly independent; you can cd
-# into them and run 'make' without going through this Makefile.
-# To change the values of 'make' variables: instead of editing Makefiles,
-# (1) if the variable is set in 'config.status', edit 'config.status'
-#     (which will cause the Makefiles to be regenerated when you run 'make');
-# (2) otherwise, pass the desired values on the 'make' command line.
-$(am__recursive_targets):
-	@fail=; \
-	if $(am__make_keepgoing); then \
-	  failcom='fail=yes'; \
-	else \
-	  failcom='exit 1'; \
-	fi; \
-	dot_seen=no; \
-	target=`echo $@ | sed s/-recursive//`; \
-	case "$@" in \
-	  distclean-* | maintainer-clean-*) list='$(DIST_SUBDIRS)' ;; \
-	  *) list='$(SUBDIRS)' ;; \
-	esac; \
-	for subdir in $$list; do \
-	  echo "Making $$target in $$subdir"; \
-	  if test "$$subdir" = "."; then \
-	    dot_seen=yes; \
-	    local_target="$$target-am"; \
-	  else \
-	    local_target="$$target"; \
-	  fi; \
-	  ($(am__cd) $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$local_target) \
-	  || eval $$failcom; \
-	done; \
-	if test "$$dot_seen" = "no"; then \
-	  $(MAKE) $(AM_MAKEFLAGS) "$$target-am" || exit 1; \
-	fi; test -z "$$fail"
-
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique
-tags: tags-recursive
+tags: tags-am
 TAGS: tags
 
 tags-am: $(TAGS_DEPENDENCIES) $(am__tagged_files)
 	set x; \
 	here=`pwd`; \
-	if ($(ETAGS) --etags-include --version) >/dev/null 2>&1; then \
-	  include_option=--etags-include; \
-	  empty_fix=.; \
-	else \
-	  include_option=--include; \
-	  empty_fix=; \
-	fi; \
-	list='$(SUBDIRS)'; for subdir in $$list; do \
-	  if test "$$subdir" = .; then :; else \
-	    test ! -f $$subdir/TAGS || \
-	      set "$$@" "$$include_option=$$here/$$subdir/TAGS"; \
-	  fi; \
-	done; \
 	$(am__define_uniq_tagged_files); \
 	shift; \
 	if test -z "$(ETAGS_ARGS)$$*$$unique"; then :; else \
@@ -465,7 +589,7 @@ tags-am: $(TAGS_DEPENDENCIES) $(am__tagged_files)
 	      $$unique; \
 	  fi; \
 	fi
-ctags: ctags-recursive
+ctags: ctags-am
 
 CTAGS: ctags
 ctags-am: $(TAGS_DEPENDENCIES) $(am__tagged_files)
@@ -478,7 +602,7 @@ GTAGS:
 	here=`$(am__cd) $(top_builddir) && pwd` \
 	  && $(am__cd) $(top_srcdir) \
 	  && gtags -i $(GTAGS_ARGS) "$$here"
-cscopelist: cscopelist-recursive
+cscopelist: cscopelist-am
 
 cscopelist-am: $(am__tagged_files)
 	list='$(am__tagged_files)'; \
@@ -527,46 +651,21 @@ distdir: $(DISTFILES)
 	    || exit 1; \
 	  fi; \
 	done
-	@list='$(DIST_SUBDIRS)'; for subdir in $$list; do \
-	  if test "$$subdir" = .; then :; else \
-	    $(am__make_dryrun) \
-	      || test -d "$(distdir)/$$subdir" \
-	      || $(MKDIR_P) "$(distdir)/$$subdir" \
-	      || exit 1; \
-	    dir1=$$subdir; dir2="$(distdir)/$$subdir"; \
-	    $(am__relativize); \
-	    new_distdir=$$reldir; \
-	    dir1=$$subdir; dir2="$(top_distdir)"; \
-	    $(am__relativize); \
-	    new_top_distdir=$$reldir; \
-	    echo " (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) top_distdir="$$new_top_distdir" distdir="$$new_distdir" \\"; \
-	    echo "     am__remove_distdir=: am__skip_length_check=: am__skip_mode_fix=: distdir)"; \
-	    ($(am__cd) $$subdir && \
-	      $(MAKE) $(AM_MAKEFLAGS) \
-	        top_distdir="$$new_top_distdir" \
-	        distdir="$$new_distdir" \
-		am__remove_distdir=: \
-		am__skip_length_check=: \
-		am__skip_mode_fix=: \
-	        distdir) \
-	      || exit 1; \
-	  fi; \
-	done
 check-am: all-am
-check: check-recursive
-@SEPARATE_BUILD_TREE_FALSE@all-local:
-all-am: Makefile all-local
-installdirs: installdirs-recursive
-installdirs-am:
-install: install-recursive
-install-exec: install-exec-recursive
-install-data: install-data-recursive
-uninstall: uninstall-recursive
+check: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) check-am
+all-am: Makefile $(LTLIBRARIES) $(HEADERS)
+installdirs:
+install: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) install-am
+install-exec: install-exec-am
+install-data: install-data-am
+uninstall: uninstall-am
 
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
 
-installcheck: installcheck-recursive
+installcheck: installcheck-am
 install-strip:
 	if test -z '$(STRIP)'; then \
 	  $(MAKE) $(AM_MAKEFLAGS) INSTALL_PROGRAM="$(INSTALL_STRIP_PROGRAM)" \
@@ -589,106 +688,104 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
-clean: clean-recursive
+	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
+clean: clean-am
 
-clean-am: clean-generic clean-libtool mostlyclean-am
+clean-am: clean-generic clean-libtool clean-noinstLTLIBRARIES \
+	mostlyclean-am
 
-distclean: distclean-recursive
+distclean: distclean-am
+	-rm -rf ./$(DEPDIR)
 	-rm -f Makefile
-distclean-am: clean-am distclean-generic distclean-tags
+distclean-am: clean-am distclean-compile distclean-generic \
+	distclean-tags
 
-dvi: dvi-recursive
+dvi: dvi-am
 
 dvi-am:
 
-html: html-recursive
+html: html-am
 
 html-am:
 
-info: info-recursive
+info: info-am
 
 info-am:
 
 install-data-am:
 
-install-dvi: install-dvi-recursive
+install-dvi: install-dvi-am
 
 install-dvi-am:
 
 install-exec-am:
 
-install-html: install-html-recursive
+install-html: install-html-am
 
 install-html-am:
 
-install-info: install-info-recursive
+install-info: install-info-am
 
 install-info-am:
 
 install-man:
 
-install-pdf: install-pdf-recursive
+install-pdf: install-pdf-am
 
 install-pdf-am:
 
-install-ps: install-ps-recursive
+install-ps: install-ps-am
 
 install-ps-am:
 
 installcheck-am:
 
-maintainer-clean: maintainer-clean-recursive
+maintainer-clean: maintainer-clean-am
+	-rm -rf ./$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
-mostlyclean: mostlyclean-recursive
+mostlyclean: mostlyclean-am
 
-mostlyclean-am: mostlyclean-generic mostlyclean-libtool
+mostlyclean-am: mostlyclean-compile mostlyclean-generic \
+	mostlyclean-libtool
 
-pdf: pdf-recursive
+pdf: pdf-am
 
 pdf-am:
 
-ps: ps-recursive
+ps: ps-am
 
 ps-am:
 
 uninstall-am:
 
-.MAKE: $(am__recursive_targets) install-am install-strip
+.MAKE: all check install install-am install-strip
 
-.PHONY: $(am__recursive_targets) CTAGS GTAGS TAGS all all-am all-local \
-	check check-am clean clean-generic clean-libtool cscopelist-am \
-	ctags ctags-am distclean distclean-generic distclean-libtool \
-	distclean-tags distdir dvi dvi-am html html-am info info-am \
-	install install-am install-data install-data-am install-dvi \
-	install-dvi-am install-exec install-exec-am install-html \
-	install-html-am install-info install-info-am install-man \
-	install-pdf install-pdf-am install-ps install-ps-am \
-	install-strip installcheck installcheck-am installdirs \
-	installdirs-am maintainer-clean maintainer-clean-generic \
-	mostlyclean mostlyclean-generic mostlyclean-libtool pdf pdf-am \
-	ps ps-am tags tags-am uninstall uninstall-am
+.PHONY: CTAGS GTAGS TAGS all all-am check check-am clean clean-generic \
+	clean-libtool clean-noinstLTLIBRARIES cscopelist-am ctags \
+	ctags-am distclean distclean-compile distclean-generic \
+	distclean-libtool distclean-tags distdir dvi dvi-am html \
+	html-am info info-am install install-am install-data \
+	install-data-am install-dvi install-dvi-am install-exec \
+	install-exec-am install-html install-html-am install-info \
+	install-info-am install-man install-pdf install-pdf-am \
+	install-ps install-ps-am install-strip installcheck \
+	installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+	tags tags-am uninstall uninstall-am
 
 
-%.sh: %$(EXEEXT) $(TESTSCRIPT_IN) 
-	$(AM_V_GEN)set -e ; rm -f $@ ; \
-	  $(SED) -e 's#@'SHELL'@#@SHELL@#' \
-	         -e 's#@'TEST'@#$*#' \
-	         -e 's#@'TESTINPUT'@#$(examples_INPUT)#' \
-	         -e 's#@'TESTGOLDEN'@#$(examples_GOLDEN)#' $(TESTSCRIPT_IN) > $@ ; \
-	  chmod a+x $@
+# ensure to use a working link command in 'config'
+@WANT_QT_THREADS_TRUE@export LN_S
 
-@SEPARATE_BUILD_TREE_TRUE@all-local: copy-check-data
-
-# needed to put extra run files in objdir tree
-@SEPARATE_BUILD_TREE_TRUE@copy-check-data:
-@SEPARATE_BUILD_TREE_TRUE@	$(AM_V_GEN)for file in $(examples_BUILD); do    \
-@SEPARATE_BUILD_TREE_TRUE@	  if test ! -e ./$$file ; then                  \
-@SEPARATE_BUILD_TREE_TRUE@	    $(MKDIR_P) `dirname "$$file"` ;             \
-@SEPARATE_BUILD_TREE_TRUE@	    $(INSTALL_DATA) $(srcdir)/$$file ./$$file ; \
-@SEPARATE_BUILD_TREE_TRUE@		fi ; \
-@SEPARATE_BUILD_TREE_TRUE@	done
+@WANT_QT_THREADS_TRUE@configuration:
+@SEPARATE_BUILD_TREE_TRUE@@WANT_QT_THREADS_TRUE@	$(AM_V_at)for file in $(QT_ARCH_IMPL); do  \
+@SEPARATE_BUILD_TREE_TRUE@@WANT_QT_THREADS_TRUE@	  $(MKDIR_P) `dirname "$$file"` ;             \
+@SEPARATE_BUILD_TREE_TRUE@@WANT_QT_THREADS_TRUE@	  $(INSTALL_DATA) $(srcdir)/$$file ./$$file ; \
+@SEPARATE_BUILD_TREE_TRUE@@WANT_QT_THREADS_TRUE@	done
+@WANT_QT_THREADS_TRUE@	$(AM_V_GEN)$(SHELL) $(srcdir)/config $(QT_ARCH)
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
