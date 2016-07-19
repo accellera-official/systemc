@@ -55,7 +55,7 @@ examples_BUILD += \
 
 examples_CLEAN += \
 	rsa/run.log \
-	rsa/expexted_trimmed.log \
+	rsa/expected_trimmed.log \
 	rsa/run_trimmed.log \
 	rsa/diff.log
 

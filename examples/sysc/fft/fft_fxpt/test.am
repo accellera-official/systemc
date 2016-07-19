@@ -55,7 +55,7 @@ examples_BUILD += \
 
 examples_CLEAN += \
 	fft/fft_fxpt/run.log \
-	fft/fft_fxpt/expexted_trimmed.log \
+	fft/fft_fxpt/expected_trimmed.log \
 	fft/fft_fxpt/run_trimmed.log \
 	fft/fft_fxpt/diff.log
 

@@ -61,7 +61,7 @@ examples_BUILD += \
 
 examples_CLEAN += \
 	fir/run.log \
-	fir/expexted_trimmed.log \
+	fir/expected_trimmed.log \
 	fir/run_trimmed.log \
 	fir/diff.log
 

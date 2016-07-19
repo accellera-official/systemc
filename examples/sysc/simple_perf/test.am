@@ -55,7 +55,7 @@ examples_BUILD += \
 
 examples_CLEAN += \
 	simple_perf/run.log \
-	simple_perf/expexted_trimmed.log \
+	simple_perf/expected_trimmed.log \
 	simple_perf/run_trimmed.log \
 	simple_perf/diff.log
 

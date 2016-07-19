@@ -55,7 +55,7 @@ examples_BUILD += \
 
 examples_CLEAN += \
 	2.1/scx_barrier/run.log \
-	2.1/scx_barrier/expexted_trimmed.log \
+	2.1/scx_barrier/expected_trimmed.log \
 	2.1/scx_barrier/run_trimmed.log \
 	2.1/scx_barrier/diff.log
 
