@@ -54,7 +54,7 @@ namespace sc_dt
 //  word memory management
 // ----------------------------------------------------------------------------
 
-class word_list { // Entry in free_words bucket.
+class SC_API word_list { // Entry in free_words bucket.
   public:
     word_list* m_next_p;
 };

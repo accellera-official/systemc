@@ -3,7 +3,7 @@
 
 Contents:
 
-        1. Installation Notes for Unix 
+        1. Installation Notes for Unix
 
         2. Installation Notes for Windows
 
@@ -148,12 +148,12 @@ To install SystemC on a UNIX system, do the following steps:
 
         > ../configure
 
-     While the 'configure' script is running, which takes a few moments, 
+     While the 'configure' script is running, which takes a few moments,
      it prints messages to inform you of the features it is checking.
      It also detects the platform.
-     
-     Note for System V users: 
-     If you are using `csh' on an older version of System V, you might 
+
+     Note for System V users:
+     If you are using `csh' on an older version of System V, you might
      need to use the `sh ../configure' command instead of '../configure'.
      Otherwise, `csh' will attempt to `configure' itself.
 
@@ -253,7 +253,7 @@ To install SystemC on a UNIX system, do the following steps:
 
      a) Experiment with the examples.
 
-     b) Later uninstall the package. To clean up the temporary 
+     b) Later uninstall the package. To clean up the temporary
         directory, enter:
 
             > gmake clean
@@ -273,13 +273,13 @@ In addition, a copy of the example code resides in the directory
 examples at the highest level of the installation (or in the
 shared documentation install directory).
 
-Use the makefiles provided in  the 'examples' directory as templates 
+Use the makefiles provided in  the 'examples' directory as templates
 for makefiles you need for compiling your own examples.
 
 
 Using the Configure Script
 ==========================
- 
+
 The `configure' shell script tries to determine the correct values for
 various system-dependent variables used during compilation. It uses
 these values to create a `Makefile' in each directory of the package.
@@ -292,21 +292,21 @@ definitions if needed. Then, it creates the following files:
   config.cache          A file in which the configure test results are
                         saved to speed up reconfiguration.
 
-                        Data is appended to the config.cache file. 
+                        Data is appended to the config.cache file.
                         You can remove unwanted data.
 
   config.log            A file in which compiler output is saved.
                         This is used to debug the configure script.
 
 If you need to use other commands to successfully compile the package
-on your system, please try to determine if the configure script can be used 
+on your system, please try to determine if the configure script can be used
 for these commands. Then, send either a diff file or instructions about
 the commands you used to the email address provided in the README file.
 This information will be used to improve the installation process in
 the next release.
 
 The `configure.ac' file is provided in case you want to change or regenerate
-the `configure' script, for example to use a newer version of `autoconf'. 
+the `configure' script, for example to use a newer version of `autoconf'.
 The `configure.ac' file is used by the `autoconf' program to create the
 `configure' script.
 
@@ -343,8 +343,8 @@ Specifying the System Type
 
 Some features cannot be automatically determined by `configure' unless
 it can detect the host type on which the package will run.
-If it prints a message that it cannot determine the host type, 
-use the `--host=TYPE' option to define it. TYPE can either be a 
+If it prints a message that it cannot determine the host type,
+use the `--host=TYPE' option to define it. TYPE can either be a
 short system name, such as `sun4', or a canonical name with three fields:
 
      CPU-COMPANY-SYSTEM
@@ -365,7 +365,7 @@ Sharing Defaults
 You can set the default values that `configure' scripts share by
 creating a site shell script called `config.site'. This file contains the
 default values for variables like `CC', `cache_file', and `prefix'.
-The `configure' script looks for the `config.site' file in the following 
+The `configure' script looks for the `config.site' file in the following
 search precedence:
 
   1. PREFIX/share/config.site
@@ -462,46 +462,49 @@ The provided project files are prepared for both the 32-bit 'Win32' and
 64-bit 'x64' configurations.  Please refer to the Microsoft Visual Studio
 documentation for details about 64-bit builds.
 
+In addition to building static libraries for SystemC, the provided project
+files include support for building a SystemC DLL (configurations DebugDLL,
+ReleaseDLL).
 
 Creating SystemC Applications
 -----------------------------
 
-1. Start Visual Studio. From the Start Page select New Project and Win32 
-   Console Project. Type the project name and select a suitable location 
+1. Start Visual Studio. From the Start Page select New Project and Win32
+   Console Project. Type the project name and select a suitable location
    then click OK.
 
-2. Select the Application Settings page of the Win32 Application Wizard 
-   and make sure the 'Empty project' box is ticked. Click 'Finish' to 
+2. Select the Application Settings page of the Win32 Application Wizard
+   and make sure the 'Empty project' box is ticked. Click 'Finish' to
    complete the wizard.
-   
+
 3. Add new/existing C++ files to the project and edit code.
 
-4. Display the project Property Pages by selecting 'Properties...' from 
-   the Project menu. 
-   
-5. From the C/C++ tab, select the General properties and set 
+4. Display the project Property Pages by selecting 'Properties...' from
+   the Project menu.
+
+5. From the C/C++ tab, select the General properties and set
    'Detect 64-bit Portability Issues' to No
 
-6. From the C/C++ tab, select the Language properties and set 
+6. From the C/C++ tab, select the Language properties and set
    'Enable Run-Time Type Info' to Yes
 
 7. From the C/C++ tab, select the Command Line properties and add /vmg
    to the 'Additional Options:' box.
 
-8. From the Linker tab, select the Input properties and type 'systemc.lib' 
+8. From the Linker tab, select the Input properties and type 'systemc.lib'
    in the 'Additional Dependencies' box.
 
 9. Click OK
 
 
-Also make sure that the compiler and linker can find the SystemC header 
+Also make sure that the compiler and linker can find the SystemC header
 and library files respectively. There are two ways to do this:
 
 To update the include file and library directory search paths for all
 projects:
 
 1. Select Tools -> Options... and the Projects -> VC++ Directories tab
-   
+
 2. Select show directories for: Library files
 
 3. Select the 'New' icon and browse to: C:\systemc-2.3.1\msvc80\systemc\debug
@@ -513,15 +516,15 @@ projects:
 To add the include file and library directory search paths for the current
 project only:
 
-1. Display the project Property Pages by selecting 'Properties...' from 
-   the Project menu. 
+1. Display the project Property Pages by selecting 'Properties...' from
+   the Project menu.
 
-2. From the C/C++ tab, select the General properties and type the path to the 
+2. From the C/C++ tab, select the General properties and type the path to the
    SystemC 'src' directory in the text entry field labeled
   'Additional include directories' (e.g. the examples use '..\..\..\src').
 
-3. From the Linker tab, select the General properties and type the path to 
-   the SystemC library:   ...\systemc-2.3.1\msvc80\systemc\debug'systemc.lib' 
+3. From the Linker tab, select the General properties and type the path to
+   the SystemC library:   ...\systemc-2.3.1\msvc80\systemc\debug'systemc.lib'
    in the 'Additional Library Directories:' box.
 
 9. Click OK
@@ -552,7 +555,9 @@ to the configure script via the CXXFLAGS variable:
 
 In Visual C++, the preprocessor symbols can be added to the project
 configuration via the 'C/C++' tab under the 'Preprocessor' properties
-in the 'Preprocessor definitions' setting.
+in the 'Preprocessor definitions' setting.  Alternatively, you can add
+the switches to the 'SystemC.vsprops' property sheet to apply these
+settings to all build configurations.
 
 
  * SC_DEFAULT_WRITER_POLICY=<sc_writer_policy> -
@@ -586,7 +591,7 @@ in the 'Preprocessor definitions' setting.
    Note: Only effective during library build.
 
 
- * SC_DISABLE_VIRTUAL_BIND - 
+ * SC_DISABLE_VIRTUAL_BIND -
    Keep the "bind" function of sc_ports non-virtual
 
    When this symbol is defined, the "bind" function in sc_ports is
@@ -604,6 +609,17 @@ in the 'Preprocessor definitions' setting.
          sc_core::sc_copyright() still works as expected.
    Note: Only effective during library build.
    See : Environment variable SC_COPYRIGHT_MESSAGE
+
+
+ * SC_ENABLE_ASSERTIONS -
+   Always enable the `sc_assert' expressions
+
+   Some build systems define `NDEBUG' by default in optimised build
+   configurations. As a result, the SystemC assertion macro `sc_assert()'
+   is disabled (similar to the C `assert()' macro).  By defining this
+   preprocessor symbol (when building the library and/or an application),
+   the `sc_assert()' checks are always enabled, irrespectively of the
+   definition of `NDEBUG'.
 
 
  * SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS -
@@ -706,7 +722,7 @@ in the 'Preprocessor definitions' setting.
 
    Previous versions of SystemC always included the full <windows.h>
    header on all Windows platforms.  This adds unnecessary bloat to
-   many SystemC applications, reducing compilation times.
+   many SystemC applications, increasing compilation times.
 
    If you rely on the inclusion of the <windows.h> header in your
    application, you can add this symbol to the list of preprocessor
@@ -733,11 +749,20 @@ in the 'Preprocessor definitions' setting.
 
    SC_USE_SC_STRING_OLD -
      Uses old implementation `sc_string_old' to provide `sc_string':
-       typedef sc_string_old sc_string; 
+       typedef sc_string_old sc_string;
 
    SC_USE_STD_STRING -
      Provide `sc_string' as an alias to `std::string':
        typedef std::string sc_string;
+
+
+ * SC_WIN_DLL -
+   Build (against) a DLL build of SystemC (Windows/MSVC only)
+
+   Needs to be set when building a SystemC DLL on Windows, as well
+   as when building an application/library to be linked against a
+   DLL version of SystemC.
+
 
 
 Influential environment variables

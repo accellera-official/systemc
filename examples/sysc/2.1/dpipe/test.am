@@ -55,7 +55,7 @@ examples_BUILD += \
 
 examples_CLEAN += \
 	2.1/dpipe/run.log \
-	2.1/dpipe/expexted_trimmed.log \
+	2.1/dpipe/expected_trimmed.log \
 	2.1/dpipe/run_trimmed.log \
 	2.1/dpipe/diff.log
 
@@ -72,7 +72,8 @@ examples_FILES += \
 2_1_dpipe_CXX_FILES = \
 	2.1/dpipe/main.cpp
 
-2_1_dpipe_BUILD =
+2_1_dpipe_BUILD = \
+	2.1/dpipe/golden.log
 
 2_1_dpipe_EXTRA = \
 	2.1/dpipe/dpipe.vcproj \

@@ -1,15 +1,13 @@
 #! /bin/sh
 
-if [ "`uname -s`" = "Darwin" ]
-then
-    aclocal -I config && \
-           glibtoolize --automake --force --copy && \
-           automake --add-missing --copy && \
-           autoconf 
-else
-    aclocal -I config && \
-           libtoolize --automake --force --copy && \
-           automake --add-missing --copy && \
-           autoconf 
+LIBTOOLIZE=libtoolize
+if test x"`uname -s`" = "xDarwin" ; then
+LIBTOOLIZE=glibtoolize
 fi
+
+aclocal -I config && \
+   $LIBTOOLIZE --automake --force --copy && \
+   automake --add-missing --copy && \
+   autoconf
+
 # Taf!

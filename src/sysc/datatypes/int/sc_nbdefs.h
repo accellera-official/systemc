@@ -188,9 +188,9 @@ typedef unsigned int sc_digit;	// 32-bit unsigned integer
 #else
     typedef __int64            int64;
     typedef unsigned __int64   uint64;
-    extern const uint64        UINT64_ZERO;
-    extern const uint64        UINT64_ONE;
-    extern const uint64        UINT64_32ONES;
+    extern SC_API const uint64        UINT64_ZERO;
+    extern SC_API const uint64        UINT64_ONE;
+    extern SC_API const uint64        UINT64_32ONES;
 #endif
 
 
@@ -216,12 +216,6 @@ typedef unsigned int sc_digit;	// 32-bit unsigned integer
 // Above, BITS_PER_X is mainly used for sc_signed, and BITS_PER_UX is
 // mainly used for sc_unsigned.
 
-#if defined( _WIN32 ) || defined( __HP_aCC )
-typedef unsigned long fmtflags;
-#else
-typedef ::std::ios::fmtflags fmtflags;
-#endif
-
 extern const small_type NB_DEFAULT_BASE ;
 
 // For sc_int code:
@@ -233,8 +227,8 @@ extern const small_type NB_DEFAULT_BASE ;
 typedef int64 int_type;
 typedef uint64 uint_type;
 #define SC_INTWIDTH 64
-extern const uint64 UINT_ZERO;
-extern const uint64 UINT_ONE;
+extern SC_API const uint64 UINT_ZERO;
+extern SC_API const uint64 UINT_ONE;
 
 #else
 
@@ -246,35 +240,6 @@ extern const unsigned int UINT_ONE;
 
 #endif
 
-
-#if defined(_MSC_VER) && ( _MSC_VER < 1300 )
-    // VC++6 bug
-    ::std::ostream& operator << ( ::std::ostream&, int64 );
-    ::std::ostream& operator << ( ::std::ostream&, uint64 );
-#endif
-
 } // namespace sc_dt
-
-
-#if defined(_MSC_VER) && ( _MSC_VER < 1300 )
-
-    inline
-    ::std::ostream&
-    operator << ( ::std::ostream& os, sc_dt::int64 a )
-    {
-	sc_dt::operator << ( os, a );
-	return os;
-    }
-
-    inline
-    ::std::ostream&
-    operator << ( ::std::ostream& os, sc_dt::uint64 a )
-    {
-	sc_dt::operator << ( os, a );
-	return os;
-    }
-
-#endif
-
 
 #endif

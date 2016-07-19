@@ -29,7 +29,7 @@
 #define SC_PQ_H
 
 
-#include <cassert>
+#include "sysc/kernel/sc_cmnhdr.h"
 
 namespace sc_core {
 
@@ -39,7 +39,7 @@ namespace sc_core {
 //  Priority queue base class.
 // ----------------------------------------------------------------------------
 
-class sc_ppq_base
+class SC_API sc_ppq_base
 {
 public:
 

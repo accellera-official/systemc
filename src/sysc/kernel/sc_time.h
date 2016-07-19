@@ -63,6 +63,7 @@ enum sc_time_unit
     SC_SEC
 };
 
+class SC_API sc_time_tuple;
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_time
@@ -70,7 +71,7 @@ enum sc_time_unit
 //  The time class.
 // ----------------------------------------------------------------------------
 
-class sc_time
+class SC_API sc_time
 {
 public:
 
@@ -79,11 +80,19 @@ public:
     // constructors
 
     sc_time();
-    sc_time( double, sc_time_unit );
-    sc_time( double, sc_time_unit, sc_simcontext* );
     sc_time( const sc_time& );
 
+    sc_time( double, sc_time_unit );
+    sc_time( double, sc_time_unit, sc_simcontext* );
+
+    // convert time unit from string
+    // "fs"/"SC_FS"->SC_FS, "ps"/"SC_PS"->SC_PS, "ns"/"SC_NS"->SC_NS, ...
+    sc_time( double, const char* unit );
+    sc_time( double, const char* unit, sc_simcontext* );
+
     static sc_time from_value( value_type );
+    static sc_time from_seconds( double );
+    static sc_time from_string( const char * str );
 
     // deprecated, use from_value(v)
     sc_time( double, bool scale );
@@ -141,6 +150,42 @@ private:
     value_type m_value;
 };
 
+// ----------------------------------------------------------------------------
+//  CLASS : sc_time_tuple
+//
+//  The time tuple helper class.
+// ----------------------------------------------------------------------------
+
+class SC_API sc_time_tuple
+{
+    typedef sc_time::value_type value_type;
+    friend class sc_time;
+
+private:
+    explicit sc_time_tuple( value_type v );
+    void init( value_type v );
+
+public:
+    sc_time_tuple()
+      : m_value(), m_unit( SC_SEC ), m_offset(1) {}
+
+    sc_time_tuple( const sc_time & t );
+
+    bool         has_value()   const;
+    value_type   value()       const;
+    sc_time_unit unit()        const { return m_unit; } // normalized unit
+    const char * unit_symbol() const;                   // normalized unit symbol
+
+    operator sc_time() const { return sc_time( to_double(), m_unit ); }
+
+    double      to_double() const; // relative to the normalized unit
+    std::string to_string() const;
+
+private:
+    value_type   m_value;
+    sc_time_unit m_unit;
+    unsigned     m_offset;
+};
 
 // print operator
 
@@ -148,6 +193,8 @@ inline ::std::ostream& operator << ( ::std::ostream&, const sc_time& );
 
 
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
+
+extern SC_API const sc_time SC_ZERO_TIME;
 
 // constructors
 
@@ -160,6 +207,29 @@ inline
 sc_time::sc_time( const sc_time& t )
 : m_value( t.m_value )
 {}
+
+inline
+sc_time_tuple::sc_time_tuple( value_type v )
+  : m_value(), m_unit( SC_SEC ), m_offset(1)
+{
+    if( v )
+        init( v );
+}
+
+inline
+sc_time_tuple::sc_time_tuple( const sc_time& t )
+  : m_value(), m_unit( SC_SEC ), m_offset(1)
+{
+    if( t != SC_ZERO_TIME )
+        init( t.value() );
+}
+
+inline
+sc_time
+sc_time::from_seconds( double v )
+{
+    return sc_time( v, SC_SEC );
+}
 
 
 // assignment operator
@@ -188,6 +258,22 @@ double
 sc_time::to_double() const  // relative to the time resolution
 {
     return sc_dt::uint64_to_double( m_value );
+}
+
+
+inline
+double
+sc_time_tuple::to_double() const // relative to the normalized time unit
+{
+    return sc_dt::uint64_to_double( m_value ) * m_offset;
+}
+
+
+inline
+const std::string
+sc_time::to_string() const
+{
+    return sc_time_tuple( *this ).to_string();
 }
 
 
@@ -354,7 +440,7 @@ operator << ( ::std::ostream& os, const sc_time& t )
 //  Struct that holds the time resolution and default time unit.
 // ----------------------------------------------------------------------------
 
-struct sc_time_params
+struct SC_API sc_time_params
 {
     double time_resolution;		// in femto seconds
     bool   time_resolution_specified;
@@ -370,16 +456,13 @@ struct sc_time_params
 
 // ----------------------------------------------------------------------------
 
-extern const sc_time SC_ZERO_TIME;
-
-
 // functions for accessing the time resolution and default time unit
 
-extern void    sc_set_time_resolution( double, sc_time_unit );
-extern sc_time sc_get_time_resolution();
+SC_API extern void    sc_set_time_resolution( double, sc_time_unit );
+SC_API extern sc_time sc_get_time_resolution();
 
-extern void    sc_set_default_time_unit( double, sc_time_unit );
-extern sc_time sc_get_default_time_unit();
+SC_API extern void    sc_set_default_time_unit( double, sc_time_unit );
+SC_API extern sc_time sc_get_default_time_unit();
 
 } // namespace sc_core
 

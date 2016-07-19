@@ -44,8 +44,8 @@
 
  *****************************************************************************/
 
-#include <stdarg.h>
-#include <stdio.h>
+#include <cstdarg>
+#include <cstdio>
 
 #include "sysc/tracing/sc_trace.h"
 #include "sysc/tracing/sc_tracing_ids.h"
@@ -62,7 +62,7 @@ sc_trace_file::sc_trace_file()
   /* Intentionally blank */
 }
 
-void tprintf(sc_trace_file* tf,  const char* format, ...)
+void SC_API tprintf(sc_trace_file* tf,  const char* format, ...)
 {
     static char buffer[4096];
     va_list ap;
@@ -83,7 +83,7 @@ void sc_trace_file::delta_cycles(bool)
 }
 
 
-void
+SC_API void
 sc_trace( sc_trace_file* tf,
 	  const sc_signal_in_if<char>& object,
 	  const std::string& name,
@@ -94,7 +94,7 @@ sc_trace( sc_trace_file* tf,
     }
 }
 
-void
+SC_API void
 sc_trace( sc_trace_file* tf,
 	  const sc_signal_in_if<short>& object,
 	  const std::string& name,
@@ -105,7 +105,7 @@ sc_trace( sc_trace_file* tf,
     }
 }
 
-void
+SC_API void
 sc_trace( sc_trace_file* tf,
 	  const sc_signal_in_if<int>& object,
 	  const std::string& name,
@@ -116,7 +116,7 @@ sc_trace( sc_trace_file* tf,
     }
 }
 
-void
+SC_API void
 sc_trace( sc_trace_file* tf,
 	  const sc_signal_in_if<long>& object,
 	  const std::string& name,
@@ -128,7 +128,7 @@ sc_trace( sc_trace_file* tf,
 }
 
 
-void
+SC_API void
 sc_trace(sc_trace_file* /* not used */,
 	 const void* /* not used */,
 	 const std::string& name)
@@ -154,7 +154,7 @@ void double_to_special_int64(double in, unsigned* high, unsigned* low)
 // ----------------------------------------------------------------------------
 
 #define DEFN_TRACE_FUNC_REF_A(tp)                                             \
-void                                                                          \
+SC_API void                                                                          \
 sc_trace( sc_trace_file* tf, const tp& object, const std::string& name ) \
 {                                                                             \
     if( tf ) {                                                                \
@@ -163,7 +163,7 @@ sc_trace( sc_trace_file* tf, const tp& object, const std::string& name ) \
 }
 
 #define DEFN_TRACE_FUNC_PTR_A(tp)                                             \
-void                                                                          \
+SC_API void                                                                          \
 sc_trace( sc_trace_file* tf, const tp* object, const std::string& name ) \
 {                                                                             \
     if( tf ) {                                                                \
@@ -193,7 +193,7 @@ DEFN_TRACE_FUNC_REF_A( sc_dt::sc_lv_base )
 #undef DEFN_TRACE_FUNC_A
 
 
-void
+SC_API void
 sc_trace( sc_trace_file* tf,
 	  const unsigned int& object,
 	  const std::string& name,

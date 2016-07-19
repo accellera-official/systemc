@@ -24,15 +24,18 @@
  CHANGE LOG APPEARS AT THE END OF THE FILE
  *****************************************************************************/
 
+#define SC_DISABLE_API_VERSION_CHECK // for in-library sc_ver.h inclusion
 
 #include "sysc/kernel/sc_cmnhdr.h"
 #include "sysc/kernel/sc_externs.h"
 #include "sysc/kernel/sc_except.h"
+#include "sysc/kernel/sc_ver.h"
 #include "sysc/utils/sc_iostream.h"
 #include "sysc/utils/sc_report.h"
 #include "sysc/utils/sc_report_handler.h"
 #include "sysc/utils/sc_utils_ids.h"
 #include <vector>
+#include <algorithm>
 
 namespace sc_core {
 
@@ -68,9 +71,13 @@ sc_elab_and_sim( int argc, char* argv[] )
     int status = 1;
     argc_copy = argc;
     argv_copy = argv;
-    std::vector<char*> argv_call;
-    for ( int i = 0; i < argc; i++ ) 
-        argv_call.push_back(argv[i]);
+
+    // Copy argv into a new structure to prevent sc_main from modifying the
+    // result returned from sc_argv.
+    std::vector<char*> argv_call(argc + 1, NULL);
+    for ( int i = 0; i < argc; i++ ) {
+        argv_call[i] = strdup(argv[i]);
+    }
 
     try
     {
@@ -95,6 +102,8 @@ sc_elab_and_sim( int argc, char* argv[] )
         if( err_p ) message_function( err_p->what() );
         delete err_p;
     }
+
+    std::for_each(argv_call.begin(), argv_call.end(), free);
 
     // IF DEPRECATION WARNINGS WERE ISSUED TELL THE USER HOW TO TURN THEM OFF 
 

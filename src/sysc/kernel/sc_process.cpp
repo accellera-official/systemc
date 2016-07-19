@@ -43,9 +43,9 @@ namespace sc_core {
 // Note the special name for 'non_event' - this makes sure it does not
 // appear as a named event.
 
-std::vector<sc_event*> sc_process_handle::empty_event_vector;
+std::vector<sc_event*>  sc_process_handle::empty_event_vector;
 std::vector<sc_object*> sc_process_handle::empty_object_vector;
-sc_event                sc_process_handle::non_event(SC_KERNEL_EVENT_PREFIX);
+sc_event                sc_process_handle::non_event( sc_event::kernel_event );
 
 // Last process that was created:
 
@@ -87,7 +87,7 @@ void sc_process_b::add_static_event( const sc_event& e )
         e.add_static( method_h );
         break;
       default:
-        assert( false );
+        sc_assert( false );
         break;
     }
 }
@@ -166,7 +166,7 @@ void sc_process_b::disconnect_process()
 //------------------------------------------------------------------------------
 void sc_process_b::delete_process()
 {
-    assert( m_references_n == 0 );
+    sc_assert( m_references_n == 0 );
 
     // Immediate deletion:
 
@@ -315,8 +315,7 @@ sc_process_b::remove_static_events()
         m_static_events.resize(0);
         break;
       case SC_METHOD_PROC_:
-        method_h = DCAST<sc_method_handle>( this );
-        assert( method_h != 0 );
+        method_h = SCAST<sc_method_handle>( this );
         for( int i = m_static_events.size() - 1; i >= 0; -- i ) {
             m_static_events[i]->remove_static( method_h );
         }
@@ -445,8 +444,7 @@ sc_event& sc_process_b::reset_event()
 {
     if ( !m_reset_event_p ) 
     {
-        m_reset_event_p = new sc_event(
-	         (std::string(SC_KERNEL_EVENT_PREFIX)+"_reset_event").c_str() );
+        m_reset_event_p = new sc_event( sc_event::kernel_event, "reset_event" );
     }
     return *m_reset_event_p;
 }
@@ -579,8 +577,7 @@ sc_process_b::sc_process_b( const char* name_p, bool is_thread, bool free_host,
     // THIS OBJECT INSTANCE IS NOW THE LAST CREATED PROCESS:
 
     m_last_created_process_p = this;
-    m_timeout_event_p = new sc_event(
-	          (std::string(SC_KERNEL_EVENT_PREFIX)+"_free_event").c_str() );
+    m_timeout_event_p = new sc_event( sc_event::kernel_event, "free_event" );
 }
 
 //------------------------------------------------------------------------------
@@ -626,8 +623,7 @@ sc_event& sc_process_b::terminated_event()
 {
     if ( !m_term_event_p ) 
     {
-        m_term_event_p = new sc_event(
-	          (std::string(SC_KERNEL_EVENT_PREFIX)+"_term_event").c_str() );
+        m_term_event_p = new sc_event( sc_event::kernel_event, "term_event" );
     }
     return *m_term_event_p;
 }

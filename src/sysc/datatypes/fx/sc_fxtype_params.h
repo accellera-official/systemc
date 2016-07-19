@@ -65,7 +65,7 @@ class sc_fxtype_params;
 //  Fixed-point type parameters class.
 // ----------------------------------------------------------------------------
 
-class sc_fxtype_params
+class SC_API sc_fxtype_params
 {
 public:
 
@@ -116,6 +116,7 @@ private:
     int       m_n_bits;
 };
 
+} // namespace sc_dt
 
 // ----------------------------------------------------------------------------
 //  TYPEDEF : sc_fxtype_context
@@ -123,6 +124,15 @@ private:
 //  Context type for the fixed-point type parameters.
 // ----------------------------------------------------------------------------
 
+namespace sc_core {
+SC_API_TEMPLATE_ template class SC_API
+  sc_phash<void*, const sc_dt::sc_fxtype_params*>;
+} // namespace sc_core
+
+namespace sc_dt {
+
+SC_API_TEMPLATE_ template class SC_API sc_global<sc_fxtype_params>;
+SC_API_TEMPLATE_ template class SC_API sc_context<sc_fxtype_params>;
 typedef sc_context<sc_fxtype_params> sc_fxtype_context;
 
 

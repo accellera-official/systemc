@@ -71,6 +71,7 @@
 #ifndef SC_INT_BASE_H
 #define SC_INT_BASE_H
 
+#include "sysc/kernel/sc_cmnhdr.h"
 #include "sysc/kernel/sc_object.h"
 #include "sysc/datatypes/misc/sc_value_base.h"
 #include "sysc/datatypes/int/sc_int_ids.h"
@@ -105,8 +106,11 @@ class sc_fxval_fast;
 class sc_fxnum;
 class sc_fxnum_fast;
 
+} // namespace sc_dt
 
-extern const uint_type mask_int[SC_INTWIDTH][SC_INTWIDTH];
+namespace sc_dt {
+
+extern SC_API const uint_type mask_int[SC_INTWIDTH][SC_INTWIDTH];
 
 // friend operator declarations
     // relational operators
@@ -130,7 +134,7 @@ extern const uint_type mask_int[SC_INTWIDTH][SC_INTWIDTH];
 //  Proxy class for sc_int bit selection (r-value only).
 // ----------------------------------------------------------------------------
 
-class sc_int_bitref_r : public sc_value_base
+class SC_API sc_int_bitref_r : public sc_value_base
 {
     friend class sc_int_base;
 
@@ -251,7 +255,7 @@ operator << ( ::std::ostream&, const sc_int_bitref_r& );
 //  Proxy class for sc_int bit selection (r-value and l-value).
 // ----------------------------------------------------------------------------
 
-class sc_int_bitref
+class SC_API sc_int_bitref
     : public sc_int_bitref_r
 {
     friend class sc_int_base;
@@ -311,7 +315,7 @@ operator >> ( ::std::istream&, sc_int_bitref& );
 //  Proxy class for sc_int part selection (r-value only).
 // ----------------------------------------------------------------------------
 
-class sc_int_subref_r : public sc_value_base
+class SC_API sc_int_subref_r : public sc_value_base
 {
     friend class sc_int_base;
     friend class sc_int_signal;
@@ -445,7 +449,7 @@ operator << ( ::std::ostream&, const sc_int_subref_r& );
 //  Proxy class for sc_int part selection (r-value and l-value).
 // ----------------------------------------------------------------------------
 
-class sc_int_subref
+class SC_API sc_int_subref
     : public sc_int_subref_r
 {
     friend class sc_int_base;
@@ -534,7 +538,7 @@ operator >> ( ::std::istream&, sc_int_subref& );
 //  Base class for sc_int.
 // ----------------------------------------------------------------------------
 
-class sc_int_base : public sc_value_base
+class SC_API sc_int_base : public sc_value_base
 {
     friend class sc_int_bitref_r;
     friend class sc_int_bitref;
@@ -1374,6 +1378,11 @@ operator >> ( ::std::istream& is, sc_int_base& a )
 
 } // namespace sc_dt
 
+// explicitly export template instantiations
+namespace sc_core {
+    SC_API_TEMPLATE_ template class SC_API sc_vpool<sc_dt::sc_int_bitref>;
+    SC_API_TEMPLATE_ template class SC_API sc_vpool<sc_dt::sc_int_subref>;
+} // namespace sc_core
 
 #endif
 

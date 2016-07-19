@@ -85,6 +85,8 @@ H_FILES = \
 	misc/sc_value_base.h
 
 NO_H_FILES = \
+	int/sc_int32_mask.inc \
+	int/sc_int64_mask.inc \
 	int/sc_nbcommon.inc \
 	int/sc_nbfriends.inc \
 	int/sc_signed_bitref.inc \
@@ -113,9 +115,7 @@ CXX_FILES = \
 	fx/scfx_utils.cpp \
 	\
 	int/sc_int_base.cpp \
-	int/sc_int32_mask.cpp \
-	int/sc_int64_io.cpp \
-	int/sc_int64_mask.cpp \
+	int/sc_int_mask.cpp \
 	int/sc_length_param.cpp \
 	int/sc_nbdefs.cpp \
 	int/sc_nbexterns.cpp \

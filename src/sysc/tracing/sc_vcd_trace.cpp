@@ -50,10 +50,8 @@
 
 
 #include <cstdlib>
-#include <string.h>
+#include <cstring>
 #include <vector>
-
-#define SC_DISABLE_API_VERSION_CHECK // for in-library sc_ver.h inclusion
 
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_ver.h"
@@ -66,6 +64,7 @@
 #include "sysc/datatypes/int/sc_uint_base.h"
 #include "sysc/datatypes/fx/fx.h"
 #include "sysc/tracing/sc_vcd_trace.h"
+#include "sysc/utils/sc_report.h" // sc_assert
 
 namespace sc_core {
 
@@ -2039,13 +2038,6 @@ vcd_trace_file::cycle(bool this_is_a_delta_cycle)
     }
 }
 
-#if 0
-void
-vcd_trace_file::create_vcd_name(std::string* p_destination)
-{
-    obtain_name.swap( *p_destination );
-}
-#endif
 
 // Create a VCD name for a variable
 std::string
@@ -2156,14 +2148,14 @@ remove_vcd_name_problems(vcd_trace const* vcd, std::string& name)
 
 // ----------------------------------------------------------------------------
 
-sc_trace_file*
+SC_API sc_trace_file*
 sc_create_vcd_trace_file(const char * name)
 {
     sc_trace_file * tf = new vcd_trace_file(name);
     return tf;
 }
 
-void
+SC_API void
 sc_close_vcd_trace_file( sc_trace_file* tf )
 {
     vcd_trace_file* vcd_tf = static_cast<vcd_trace_file*>(tf);

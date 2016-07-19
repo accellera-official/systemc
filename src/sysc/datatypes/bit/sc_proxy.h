@@ -114,8 +114,8 @@ assign_v_( sc_proxy<X>& px, const T& a );
 
 // other functions; forward declarations
 
-const std::string convert_to_bin( const char* s );
-const std::string convert_to_fmt( const std::string& s, sc_numrep numrep, bool );
+SC_API const std::string convert_to_bin( const char* s );
+SC_API const std::string convert_to_fmt( const std::string& s, sc_numrep numrep, bool );
 
 // ----------------------------------------------------------------------------
 //  CLASS TEMPLATE : sc_proxy_traits
@@ -1066,7 +1066,7 @@ b_and_assign_( sc_proxy<X>& px, const sc_proxy<Y>& py )
 {
     X& x = px.back_cast();
     const Y& y = py.back_cast();
-    assert( x.length() == y.length() );
+    sc_assert( x.length() == y.length() );
     int sz = x.size();
     for( int i = 0; i < sz; ++ i ) {
 	sc_digit x_dw, x_cw, y_dw, y_cw;
@@ -1090,7 +1090,7 @@ b_or_assign_( sc_proxy<X>& px, const sc_proxy<Y>& py )
 {
     X& x = px.back_cast();
     const Y& y = py.back_cast();
-    assert( x.length() == y.length() );
+    sc_assert( x.length() == y.length() );
     int sz = x.size();
     for( int i = 0; i < sz; ++ i ) {
 	sc_digit x_dw, x_cw, y_dw, y_cw;
@@ -1114,7 +1114,7 @@ b_xor_assign_( sc_proxy<X>& a, const sc_proxy<Y>& b )
 {
     X& x = a.back_cast();
     const Y& y = b.back_cast();
-    assert( x.length() == y.length() );
+    sc_assert( x.length() == y.length() );
     int sz = x.size();
     for( int i = 0; i < sz; ++ i ) {
 	sc_digit x_dw, x_cw, y_dw, y_cw;

@@ -55,7 +55,7 @@ examples_BUILD += \
 
 examples_CLEAN += \
 	fft/fft_fxpt/run.log \
-	fft/fft_fxpt/expexted_trimmed.log \
+	fft/fft_fxpt/expected_trimmed.log \
 	fft/fft_fxpt/run_trimmed.log \
 	fft/fft_fxpt/diff.log
 
@@ -83,6 +83,7 @@ fft_fft_fxpt_CXX_FILES = \
 	fft/fft_fxpt/source.cpp
 
 fft_fft_fxpt_BUILD = \
+	fft/fft_fxpt/golden.log \
 	fft/fft_fxpt/in_imag \
 	fft/fft_fxpt/in_imag.1 \
 	fft/fft_fxpt/in_imag.2 \

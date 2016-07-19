@@ -70,7 +70,7 @@ static sc_reset_finder* reset_finder_q=0;  // Q of reset finders to reconcile.
 //                   has been bound the information in this class will be used
 //                   to initialize its sc_reset object instance.
 //==============================================================================
-class sc_reset_finder {
+class SC_API sc_reset_finder {
     friend class sc_reset;
   public:
     sc_reset_finder( bool async, const sc_in<bool>* port_p, bool level, 
@@ -183,7 +183,7 @@ void sc_reset::reconcile_resets()
             iface_p = DCAST<const sc_signal_in_if<bool>*>(
                 now_p->m_out_p->get_interface());
         }
-        assert( iface_p != 0 );
+        sc_assert( iface_p != 0 );
         reset_p = iface_p->is_reset();
 	now_p->m_target_p->m_resets.push_back(reset_p);
 	reset_target.m_async = now_p->m_async;
@@ -247,7 +247,7 @@ void sc_reset::reset_signal_is( bool async, const sc_in<bool>& port, bool level)
     sc_process_b*                process_p;
     
     process_p = (sc_process_b*)sc_get_current_process_handle();
-    assert( process_p );
+    sc_assert( process_p );
     process_p->m_has_reset_signal = true;
     switch ( process_p->proc_kind() )
     {
@@ -273,7 +273,7 @@ void sc_reset::reset_signal_is(
     sc_process_b*                process_p;
     
     process_p = (sc_process_b*)sc_get_current_process_handle();
-    assert( process_p );
+    sc_assert( process_p );
     process_p->m_has_reset_signal = true;
     switch ( process_p->proc_kind() )
     {
@@ -299,7 +299,7 @@ void sc_reset::reset_signal_is(
     sc_process_b*                process_p;
     
     process_p = (sc_process_b*)sc_get_current_process_handle();
-    assert( process_p );
+    sc_assert( process_p );
     process_p->m_has_reset_signal = true;
     switch ( process_p->proc_kind() )
     {
@@ -344,7 +344,7 @@ void sc_reset::reset_signal_is(
     sc_reset*       reset_p;      // reset object.
 
     process_p = sc_process_b::last_created_process_base();
-    assert( process_p );
+    sc_assert( process_p );
     process_p->m_has_reset_signal = true;
     switch ( process_p->proc_kind() )
     {

@@ -44,6 +44,7 @@
 namespace sc_core {
 
 class sc_event_finder;
+class sc_port_base;
 
 struct sc_bind_info;
 
@@ -54,6 +55,11 @@ enum sc_port_policy
     SC_ALL_BOUND  
 }; 
 
+} // namespace sc_core
+
+SC_API_VECTOR_(sc_core::sc_port_base*);
+
+namespace sc_core {
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //  BEWARE: Ports can only be created and bound during elaboration.
@@ -66,7 +72,7 @@ enum sc_port_policy
 //  Abstract base class for class sc_port_b.
 // ----------------------------------------------------------------------------
 
-class sc_port_base
+class SC_API sc_port_base
 : public sc_object
 {
     friend class sc_module;
@@ -115,7 +121,7 @@ protected:
 
     // called by complete_binding (for internal use only)
     virtual void add_interface( sc_interface* ) = 0;
-	virtual int interface_count() = 0;
+    virtual int interface_count() const = 0;
     virtual const char* if_typename() const = 0;
 
     // called by construction_done (does nothing by default)
@@ -345,7 +351,7 @@ private:
     // called by complete_binding (for internal use only)
     virtual void add_interface( sc_interface* );
     virtual const char* if_typename() const;
-	virtual int interface_count();
+    virtual int interface_count() const;
 
     // disabled
     sc_port_b();
@@ -367,7 +373,7 @@ private:
 //  to this port. N <= 0 means no maximum.
 // ----------------------------------------------------------------------------
 
-extern void sc_warn_port_constructor();
+extern SC_API void sc_warn_port_constructor();
 
 template <class IF, int N = 1, sc_port_policy P=SC_ONE_OR_MORE_BOUND>
 class sc_port
@@ -538,7 +544,7 @@ void
 sc_port_b<IF>::add_interface( sc_interface* interface_ )
 {
     IF* iface = DCAST<IF*>( interface_ );
-    assert( iface != 0 );
+    sc_assert( iface != 0 );
 
     // make sure that the interface is not already bound:
 
@@ -569,7 +575,7 @@ sc_port_b<IF>::if_typename() const
 template <class IF>
 inline
 int
-sc_port_b<IF>::interface_count()
+sc_port_b<IF>::interface_count() const
 {
 	return m_interface_vec.size();
 }
@@ -585,7 +591,7 @@ sc_port_b<IF>::make_sensitive( sc_thread_handle handle_p,
         for ( int if_i = 0; if_i < if_n; if_i++ )
 	{
 	    IF* iface_p = m_interface_vec[if_i];
-	    assert( iface_p != 0 );
+	    sc_assert( iface_p != 0 );
 	    add_static_event( handle_p, iface_p->default_event() );
 	}
     }
@@ -606,7 +612,7 @@ sc_port_b<IF>::make_sensitive( sc_method_handle handle_p,
         for ( int if_i = 0; if_i < if_n; if_i++ )
 	{
 	    IF* iface_p = m_interface_vec[if_i];
-	    assert( iface_p != 0 );
+	    sc_assert( iface_p != 0 );
 	    add_static_event( handle_p, iface_p->default_event() );
 	}
     }

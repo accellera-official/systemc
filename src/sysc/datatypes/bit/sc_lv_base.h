@@ -82,7 +82,7 @@ class sc_lv_base;
 //  Arbitrary size logic vector base class.
 // ----------------------------------------------------------------------------
 
-class sc_lv_base
+class SC_API sc_lv_base
     : public sc_proxy<sc_lv_base>
 {
     friend class sc_bv_base;
@@ -258,14 +258,14 @@ public:
 	// an extend_sign on a concatenation uses the whole length of 
 	// the concatenation to determine how many words to set.
     void set_word( int wi, sc_digit w )
-	{ assert ( wi < m_size ); m_data[wi] = w; }
+	{ sc_assert ( wi < m_size ); m_data[wi] = w; }
 	 
 
     sc_digit get_cword( int wi ) const
 	{ return m_ctrl[wi]; }
 
     void set_cword( int wi, sc_digit w )
-	{ assert ( wi < m_size ); m_ctrl[wi] = w; }
+	{ sc_assert ( wi < m_size ); m_ctrl[wi] = w; }
 
     void clean_tail();
 
@@ -1818,6 +1818,9 @@ concat( bool a, sc_proxy<T>& b )
 }
 
 #endif
+
+SC_API_TEMPLATE_ template class SC_API sc_proxy<sc_lv_base>;
+SC_API_TEMPLATE_ template class SC_API sc_proxy<sc_bv_base>;
 
 } // namespace sc_dt
 

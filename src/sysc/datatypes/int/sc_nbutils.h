@@ -155,31 +155,31 @@ is_valid_base(sc_numrep base)
 
 // One transition of the FSM to find base and sign of a number.
 extern
-small_type 
+SC_API small_type 
 fsm_move(char c, small_type &b, small_type &s, small_type &state);
 
 // Parse a character string into its equivalent binary bits.
 extern
-void parse_binary_bits( 
+SC_API void parse_binary_bits( 
     const char* src_p, int dst_n, sc_digit* data_p, sc_digit* ctrl_p=0
 );
 
 
 // Parse a character string into its equivalent hexadecimal bits.
 extern
-void parse_hex_bits( 
+SC_API void parse_hex_bits( 
     const char* src_p, int dst_n, sc_digit* data_p, sc_digit* ctrl_p=0
 );
 
 
 // Find the base and sign of a number in v.
 extern 
-const char *
+SC_API const char *
 get_base_and_sign(const char *v, small_type &base, small_type &sign);
 
 // Create a number out of v in base.
 extern 
-small_type 
+SC_API small_type 
 vec_from_str(int unb, int und, sc_digit *u, 
              const char *v, sc_numrep base = SC_NOBASE) ;
 
@@ -199,27 +199,27 @@ vec_from_str(int unb, int und, sc_digit *u,
 // ----------------------------------------------------------------------------
 
 extern 
-void 
+SC_API void 
 vec_add(int ulen, const sc_digit *u, 
         int vlen, const sc_digit *v, sc_digit *w);
 
 extern 
-void 
+SC_API void 
 vec_add_on(int ulen, sc_digit *u, 
            int vlen, const sc_digit *v);
 
 extern 
-void 
+SC_API void 
 vec_add_on2(int ulen, sc_digit *u, 
             int vlen, const sc_digit *v);
 
 extern 
-void 
+SC_API void 
 vec_add_small(int ulen, const sc_digit *u,
               sc_digit v, sc_digit *w);
 
 extern 
-void 
+SC_API void 
 vec_add_small_on(int ulen, sc_digit *u, sc_digit v);
 
 
@@ -228,27 +228,27 @@ vec_add_small_on(int ulen, sc_digit *u, sc_digit v);
 // ----------------------------------------------------------------------------
 
 extern 
-void 
+SC_API void 
 vec_sub(int ulen, const sc_digit *u, 
         int vlen, const sc_digit *v, sc_digit *w);
 
 extern 
-void 
+SC_API void 
 vec_sub_on(int ulen, sc_digit *u, 
            int vlen, const sc_digit *v);
 
 extern 
-void 
+SC_API void 
 vec_sub_on2(int ulen, sc_digit *u,
             int vlen, const sc_digit *v);
 
 extern 
-void 
+SC_API void 
 vec_sub_small(int ulen, const sc_digit *u,
               sc_digit v, sc_digit *w);
 
 extern 
-void 
+SC_API void 
 vec_sub_small_on(int ulen, sc_digit *u, sc_digit v);
 
 
@@ -257,17 +257,17 @@ vec_sub_small_on(int ulen, sc_digit *u, sc_digit v);
 // ----------------------------------------------------------------------------
 
 extern 
-void 
+SC_API void 
 vec_mul(int ulen, const sc_digit *u, 
         int vlen, const sc_digit *v, sc_digit *w);
 
 extern 
-void 
+SC_API void 
 vec_mul_small(int ulen, const sc_digit *u,
               sc_digit v, sc_digit *w);
 
 extern 
-void 
+SC_API void 
 vec_mul_small_on(int ulen, sc_digit *u, sc_digit v);
 
 
@@ -276,12 +276,12 @@ vec_mul_small_on(int ulen, sc_digit *u, sc_digit v);
 // ----------------------------------------------------------------------------
 
 extern 
-void 
+SC_API void 
 vec_div_large(int ulen, const sc_digit *u, 
               int vlen, const sc_digit *v, sc_digit *w);
 
 extern 
-void 
+SC_API void 
 vec_div_small(int ulen, const sc_digit *u, 
               sc_digit v, sc_digit *w);
 
@@ -291,16 +291,16 @@ vec_div_small(int ulen, const sc_digit *u,
 // ----------------------------------------------------------------------------
 
 extern 
-void 
+SC_API void 
 vec_rem_large(int ulen, const sc_digit *u, 
               int vlen, const sc_digit *v, sc_digit *w);
 
 extern 
-sc_digit 
+SC_API sc_digit 
 vec_rem_small(int ulen, const sc_digit *u, sc_digit v);
 
 extern 
-sc_digit 
+SC_API sc_digit 
 vec_rem_on_small(int ulen, sc_digit *u, sc_digit v);
 
 
@@ -309,12 +309,12 @@ vec_rem_on_small(int ulen, sc_digit *u, sc_digit v);
 // ----------------------------------------------------------------------------
 
 extern 
-int 
+SC_API int 
 vec_to_char(int ulen, const sc_digit *u, 
             int vlen, uchar *v);
 
 extern 
-void 
+SC_API void 
 vec_from_char(int ulen, const uchar *u,
               int vlen, sc_digit *v);
 
@@ -324,15 +324,15 @@ vec_from_char(int ulen, const uchar *u,
 // ----------------------------------------------------------------------------
 
 extern 
-void 
+SC_API void 
 vec_shift_left(int ulen, sc_digit *u, int nsl);
 
 extern 
-void 
+SC_API void 
 vec_shift_right(int vlen, sc_digit *u, int nsr, sc_digit fill = 0);
 
 extern
-void 
+SC_API void 
 vec_reverse(int unb, int und, sc_digit *ud, 
             int l, int r = 0);
 
@@ -431,16 +431,16 @@ vec_cmp(int ulen, const sc_digit *u,
 {
 
 #ifdef DEBUG_SYSTEMC
-  // assert((ulen <= 0) || (u != NULL));
-  // assert((vlen <= 0) || (v != NULL));
+  // sc_assert((ulen <= 0) || (u != NULL));
+  // sc_assert((vlen <= 0) || (v != NULL));
 
   // ulen and vlen can be equal to 0 because vec_cmp can be called
   // after vec_skip_leading_zeros.
-  assert((ulen >= 0) && (u != NULL));
-  assert((vlen >= 0) && (v != NULL));
+  sc_assert((ulen >= 0) && (u != NULL));
+  sc_assert((vlen >= 0) && (v != NULL));
   // If ulen > 0, then the leading digit of u must be non-zero.
-  assert((ulen <= 0) || (u[ulen - 1] != 0));
-  assert((vlen <= 0) || (v[vlen - 1] != 0));
+  sc_assert((ulen <= 0) || (u[ulen - 1] != 0));
+  sc_assert((vlen <= 0) || (v[vlen - 1] != 0));
 #endif
 
   if (ulen != vlen)
@@ -456,7 +456,7 @@ vec_cmp(int ulen, const sc_digit *u,
 #ifdef DEBUG_SYSTEMC
   // Test to see if the result is wrong due to the presence of
   // overflow bits.
-  assert((u[ulen] & DIGIT_MASK) != (v[ulen] & DIGIT_MASK));
+  sc_assert((u[ulen] & DIGIT_MASK) != (v[ulen] & DIGIT_MASK));
 #endif
 
   return (int) (u[ulen] - v[ulen]);
@@ -473,8 +473,8 @@ vec_find_first_nonzero(int ulen, const sc_digit *u)
 {
 
 #ifdef DEBUG_SYSTEMC
-  // assert((ulen <= 0) || (u != NULL));
-  assert((ulen > 0) && (u != NULL));
+  // sc_assert((ulen <= 0) || (u != NULL));
+  sc_assert((ulen > 0) && (u != NULL));
 #endif
 
   while ((--ulen >= 0) && (! u[ulen]))
@@ -494,8 +494,8 @@ vec_skip_leading_zeros(int ulen, const sc_digit *u)
 {
 
 #ifdef DEBUG_SYSTEMC
-  // assert((ulen <= 0) || (u != NULL));
-  assert((ulen > 0) && (u != NULL));
+  // sc_assert((ulen <= 0) || (u != NULL));
+  sc_assert((ulen > 0) && (u != NULL));
 #endif
 
   return (1 + vec_find_first_nonzero(ulen, u));
@@ -513,8 +513,8 @@ vec_skip_and_cmp(int ulen, const sc_digit *u,
 {
 
 #ifdef DEBUG_SYSTEMC
-  assert((ulen > 0) && (u != NULL));
-  assert((vlen > 0) && (v != NULL));
+  sc_assert((ulen > 0) && (u != NULL));
+  sc_assert((vlen > 0) && (v != NULL));
 #endif
 
   ulen = vec_skip_leading_zeros(ulen, u);
@@ -531,7 +531,7 @@ vec_zero(int from, int ulen, sc_digit *u)
 {
 
 #ifdef DEBUG_SYSTEMC
-  assert((ulen > 0) && (u != NULL));
+  sc_assert((ulen > 0) && (u != NULL));
 #endif
 
   for(int i = from; i < ulen; i++)
@@ -554,7 +554,7 @@ vec_copy(int n, sc_digit *u, const sc_digit *v)
 {
 
 #ifdef DEBUG_SYSTEMC
-  assert((n > 0) && (u != NULL) && (v != NULL));
+  sc_assert((n > 0) && (u != NULL) && (v != NULL));
 #endif
 
   for (int i = 0; i < n; ++i)
@@ -569,9 +569,9 @@ vec_copy_and_zero(int ulen, sc_digit *u,
 {
 
 #ifdef DEBUG_SYSTEMC
-  assert((ulen > 0) && (u != NULL));
-  assert((vlen > 0) && (v != NULL));
-  assert(ulen >= vlen);
+  sc_assert((ulen > 0) && (u != NULL));
+  sc_assert((vlen > 0) && (v != NULL));
+  sc_assert(ulen >= vlen);
 #endif
 
   vec_copy(vlen, u, v);
@@ -586,7 +586,7 @@ vec_complement(int ulen, sc_digit *u)
 {
 
 #ifdef DEBUG_SYSTEMC
-  assert((ulen > 0) && (u != NULL));
+  sc_assert((ulen > 0) && (u != NULL));
 #endif
 
   sc_digit carry = 1;
@@ -613,9 +613,9 @@ from_uint(int ulen, sc_digit *u, Type v)
 {
 
 #ifdef DEBUG_SYSTEMC
-  // assert((ulen <= 0) || (u != NULL));
-  assert((ulen > 0) && (u != NULL));
-  assert(v >= 0);
+  // sc_assert((ulen <= 0) || (u != NULL));
+  sc_assert((ulen > 0) && (u != NULL));
+  sc_assert(v >= 0);
 #endif
 
   int i = 0;
@@ -719,8 +719,8 @@ check_for_zero(small_type s, int ulen, const sc_digit *u)
 {
 
 #ifdef DEBUG_SYSTEMC
-  // assert(ulen >= 0);
-  assert((ulen > 0) && (u != NULL));
+  // sc_assert(ulen >= 0);
+  sc_assert((ulen > 0) && (u != NULL));
 #endif
 
   if (vec_find_first_nonzero(ulen, u) < 0)
@@ -738,8 +738,8 @@ check_for_zero(int ulen, const sc_digit *u)
 {
 
 #ifdef DEBUG_SYSTEMC
-  // assert(ulen >= 0);
-  assert((ulen > 0) && (u != NULL));
+  // sc_assert(ulen >= 0);
+  sc_assert((ulen > 0) && (u != NULL));
 #endif
 
   if (vec_find_first_nonzero(ulen, u) < 0)
@@ -772,7 +772,7 @@ void
 trim(small_type added, int nb, int nd, sc_digit *d)
 {
 #ifdef DEBUG_SYSTEMC
-  assert((nb > 0) && (nd > 0) && (d != NULL));
+  sc_assert((nb > 0) && (nd > 0) && (d != NULL));
 #endif
 
   d[nd - 1] &= one_and_ones(bit_ord(nb - 1) + added);    
@@ -813,7 +813,7 @@ void
 trim_signed(int nb, int nd, sc_digit *d)
 {
 #ifdef DEBUG_SYSTEMC
-  assert((nb > 0) && (nd > 0) && (d != NULL));
+  sc_assert((nb > 0) && (nd > 0) && (d != NULL));
 #endif
 
   d[nd - 1] &= one_and_ones(bit_ord(nb - 1) + 1);
@@ -828,7 +828,7 @@ convert_signed_2C_to_SM(int nb, int nd, sc_digit *d)
 {
 
 #ifdef DEBUG_SYSTEMC
-  assert((nb > 0) && (nd > 0) && (d != NULL));
+  sc_assert((nb > 0) && (nd > 0) && (d != NULL));
 #endif
 
   small_type s;
@@ -896,7 +896,7 @@ void
 trim_unsigned(int nb, int nd, sc_digit *d)
 {
 #ifdef DEBUG_SYSTEMC
-  assert((nb > 0) && (nd > 0) && (d != NULL));
+  sc_assert((nb > 0) && (nd > 0) && (d != NULL));
 #endif
 
   d[nd - 1] &= one_and_ones(bit_ord(nb - 1));    
@@ -999,7 +999,7 @@ safe_set(int i, bool v, sc_digit *d)
 {
 
 #ifdef DEBUG_SYSTEMC
-  assert((i >= 0) && (d != NULL));
+  sc_assert((i >= 0) && (d != NULL));
 #endif
 
   int bit_num = bit_ord(i);

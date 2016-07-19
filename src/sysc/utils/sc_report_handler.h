@@ -36,7 +36,7 @@ namespace sc_core {
 //  Exception message definition structure
 // ----------------------------------------------------------------------------
 
-struct sc_msg_def
+struct SC_API sc_msg_def
 {
     const char*  msg_type;
     sc_actions   actions;
@@ -53,8 +53,8 @@ struct sc_msg_def
 
 typedef void (* sc_report_handler_proc)(const sc_report&, const sc_actions &);
 class sc_report;
-extern bool sc_report_close_default_log();
-class sc_report_handler
+extern SC_API bool sc_report_close_default_log();
+class SC_API sc_report_handler
 {
 public:
     static void report(sc_severity,

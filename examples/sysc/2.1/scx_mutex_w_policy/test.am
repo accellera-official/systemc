@@ -55,7 +55,7 @@ examples_BUILD += \
 
 examples_CLEAN += \
 	2.1/scx_mutex_w_policy/run.log \
-	2.1/scx_mutex_w_policy/expexted_trimmed.log \
+	2.1/scx_mutex_w_policy/expected_trimmed.log \
 	2.1/scx_mutex_w_policy/run_trimmed.log \
 	2.1/scx_mutex_w_policy/diff.log
 
@@ -72,7 +72,8 @@ examples_FILES += \
 2_1_scx_mutex_w_policy_CXX_FILES = \
 	2.1/scx_mutex_w_policy/scx_mutex_w_policy.cpp
 
-2_1_scx_mutex_w_policy_BUILD =
+2_1_scx_mutex_w_policy_BUILD = \
+	2.1/scx_mutex_w_policy/golden.log
 
 2_1_scx_mutex_w_policy_EXTRA = \
 	2.1/scx_mutex_w_policy/scx_mutex_w_policy.vcproj \

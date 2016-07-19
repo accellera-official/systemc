@@ -55,7 +55,7 @@ examples_BUILD += \
 
 examples_CLEAN += \
 	pkt_switch/run.log \
-	pkt_switch/expexted_trimmed.log \
+	pkt_switch/expected_trimmed.log \
 	pkt_switch/run_trimmed.log \
 	pkt_switch/diff.log
 
@@ -84,7 +84,9 @@ pkt_switch_CXX_FILES = \
 	pkt_switch/switch.cpp \
 	pkt_switch/switch_clk.cpp
 
-pkt_switch_BUILD =
+# output is randomized across runs
+#pkt_switch_BUILD = \
+#	pkt_switch/golden.log
 
 pkt_switch_EXTRA = \
 	pkt_switch/pkt_switch.vcproj \

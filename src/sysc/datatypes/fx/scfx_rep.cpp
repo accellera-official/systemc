@@ -64,11 +64,12 @@
 #include "sysc/datatypes/fx/scfx_utils.h"
 
 #include "sysc/datatypes/bit/sc_bv_base.h"
+#include "sysc/datatypes/bit/sc_lv_base.h"
 
-#include <ctype.h>
+#include <cctype>
 #include <cstdio>
-#include <stdlib.h>
-#include <math.h>
+#include <cstdlib>
+#include <cmath>
 
 
 namespace sc_dt
@@ -548,7 +549,7 @@ scfx_rep::from_string( const char* s, int cte_wl )
     {
 	for( const char *e = end + 2; *e; ++ e )
 	    SCFX_FAIL_IF_( ! scfx_is_digit( *e, SC_DEC ) );
-	exponent = atoi( end + 1 );
+	exponent = std::atoi( end + 1 );
     }
 
     //
@@ -953,7 +954,7 @@ print_dec( scfx_string& s, const scfx_rep& num, int w_prefix, sc_fmt fmt )
     {
 	double int_wl = ( int_part.m_msw - int_part.m_wp ) * bits_in_word
 	              + scfx_find_msb( int_part.m_mant[int_part.m_msw] ) + 1;
-	int_digits = (int) ceil( int_wl * log10( 2. ) );
+	int_digits = (int) std::ceil( int_wl * std::log10( 2. ) );
 
 	int len = s.length();
 	s.append( int_digits );
@@ -999,7 +1000,7 @@ print_dec( scfx_string& s, const scfx_rep& num, int w_prefix, sc_fmt fmt )
 	double frac_wl = ( frac_part.m_wp - frac_part.m_msw ) * bits_in_word
 	               - scfx_find_msb( frac_part.m_mant[frac_part.m_msw] )
                        - 1;
-	frac_zeros = (int) floor( frac_wl * log10( 2. ) );
+	frac_zeros = (int) std::floor( frac_wl * std::log10( 2. ) );
 
 	scfx_rep temp;
 	sc_dt::multiply( temp, frac_part, pow10_fx( frac_zeros ) );
@@ -1154,9 +1155,9 @@ print_other( scfx_string& s, const scfx_rep& a, sc_numrep numrep, int w_prefix,
 	    step = 0;
     }
 
-    msb = (int) ceil( double( msb + 1 ) / step ) * step - 1;
+    msb = (int) std::ceil( double( msb + 1 ) / step ) * step - 1;
 
-    lsb = (int) floor( double( lsb ) / step ) * step;
+    lsb = (int) std::floor( double( lsb ) / step ) * step;
 
     if( msb < 0 )
     {
