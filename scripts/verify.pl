@@ -6,20 +6,54 @@ eval '(exit $?0)' && eval 'exec perl -S $0 ${1+"$@"}'
 & eval 'exec /usr/bin/perl -S $0 $argv:q'
         if $running_under_some_shell;
 # *****************************************************************************
+#  Copyright 2011-2016 Accellera Systems Initiative Inc. (Accellera). All rights reserved.
+#  Accellera Systems Initiative, 8698 Elk Grove Bldv Suite 1, #114, Elk Grove, CA 95624, USA
 #
-#  The following code is derived, directly or indirectly, from the SystemC
-#  source code Copyright (c) 1996-2014 by all Contributors.
-#  All Rights reserved.
+#  Copyright 2006-2016 Cadence Design Systems, Inc. All rights reserved.
+#  Cadence Design Systems, Inc. 2655 Seely Ave., San Jose, CA, USA
 #
-#  The contents of this file are subject to the restrictions and limitations
-#  set forth in the SystemC Open Source License (the "License");
-#  You may not use this file except in compliance with such restrictions and
-#  limitations. You may obtain instructions on how to receive a copy of the
-#  License at http://www.accellera.org/. Software distributed by Contributors
-#  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-#  ANY KIND, either express or implied. See the License for the specific
-#  language governing rights and limitations under the License.
+#  Copyright 2011-2016 Circuitsutra Technologies Pvt Ltd. All rights reserved.
+#  Circuitsutra Technologies Pvt Ltd,
+#  Regus, Ground Floor, Tapasya Corp Heights, Sector 126, Noida, 201303, UP, India
 #
+#  Copyright 2006-2016 Doulos. All rights reserved.
+#  Doulos, Church Hatch, 22 Market Place, Ringwood, Hampshire, BH24 1AW, United Kingdom
+#
+#  Copyright 2014-2016 Fraunhofer-Gesellschaft. All rights reserved.
+#  Fraunhofer-Gesellschaft, Postfach 20 07 33, 80007 Munich, Germany
+#
+#  Copyright 2014-2016 Intel Corp. All rights reserved.
+#  Intel Corp., 2200 Mission College Blvd., Santa Clara, CA 95054-1549, USA
+#
+#  Copyright 2006-2016 Mentor Graphics Corporation. All rights reserved.
+#  Mentor Graphics Corporation, 8005 SW Boeckman Road, Wilsonville, OR 97070, USA
+#
+#  Copyright 2009-2016 OFFIS eV. All rights reserved.
+#  OFFIS eV, Escherweg 2, 26121 Oldenburg, Germany
+#
+#  Copyright 2011-2016 STMicroelectronics International NV. All rights reserved.
+#  STMicroelectronics, 39, Chemin de Champ-des-Filles, Plan-Les-Ouates, Geneva, Switzerland
+#
+#  Copyright 1996-2016 Synopsys, Inc. All rights reserved.
+#  Synopsys, Inc., 690 East Middlefield Road Mountain View, CA 94043, USA
+#
+#  Copyright 2011-2016 Universite Pierre et Marie Curie (UPMC). All rights reserved.
+#  Universite Pierre et Marie Curie, b.c. 167, 4 place Jussieu, 75252 Paris, France
+#
+#  Copyright 2011-2016 XtremeEDA Corporation. All rights reserved.
+#  XtremeEDA Corporation, 201-1339 Wellington St. West, Ottowa, Ontario K1Y3B8, Canada
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 # *****************************************************************************
 #
 #  verify.pl - Regression test script for SystemC 2.0 (and higher).
