@@ -121,7 +121,11 @@
 #if defined(SC_BUILD) // building SystemC library
 # define SC_API_TEMPLATE_ /* empty - instantiate template in translation unit */
 #else
-# define SC_API_TEMPLATE_ extern
+# if defined(__GNUC__) && __cplusplus < 201101L
+#  define SC_API_TEMPLATE_ __extension__ extern
+# else
+#  define SC_API_TEMPLATE_ extern
+# endif
 #endif
 
 // explicitly instantiate and export/import an std::vector specialization

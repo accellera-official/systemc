@@ -37,7 +37,7 @@ dnl
 dnl Initialization.
 dnl
 AC_INIT([SystemC],
-        [2.3.1],
+        [2.3.2],
         [http://forums.accellera.org/forum/9-systemc/],
         [systemc],
         [http://accellera.org/],

@@ -55,7 +55,7 @@ examples_BUILD += \
 
 examples_CLEAN += \
 	2.1/dpipe/run.log \
-	2.1/dpipe/expexted_trimmed.log \
+	2.1/dpipe/expected_trimmed.log \
 	2.1/dpipe/run_trimmed.log \
 	2.1/dpipe/diff.log
 

@@ -492,7 +492,7 @@ sc_msg_def * sc_report_handler::add_msg_type(const char * msg_type_)
     }
     else
     {
-	delete items->md;
+	delete [] items->md;
 	delete items;
 	return 0;
     }

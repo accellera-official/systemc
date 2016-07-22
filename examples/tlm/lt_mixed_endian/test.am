@@ -56,7 +56,7 @@ examples_BUILD += \
 
 examples_CLEAN += \
 	lt_mixed_endian/run.log \
-	lt_mixed_endian/expexted_trimmed.log \
+	lt_mixed_endian/expected_trimmed.log \
 	lt_mixed_endian/run_trimmed.log \
 	lt_mixed_endian/diff.log
 

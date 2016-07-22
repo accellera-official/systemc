@@ -55,7 +55,7 @@ examples_BUILD += \
 
 examples_CLEAN += \
 	pkt_switch/run.log \
-	pkt_switch/expexted_trimmed.log \
+	pkt_switch/expected_trimmed.log \
 	pkt_switch/run_trimmed.log \
 	pkt_switch/diff.log
 
