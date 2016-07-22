@@ -28,6 +28,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <fstream>
 
 #include "sysc/utils/sc_iostream.h"
 #include "sysc/kernel/sc_process.h"
