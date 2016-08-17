@@ -1,7 +1,7 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lt_temporal_decouple", "lt_temporal_decouple.vcproj", "{B1CE1D0B-CDC0-4207-849E-9C25335EB88C}"
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lt_temporal_decouple", "lt_temporal_decouple.vcxproj", "{B1CE1D0B-CDC0-4207-849E-9C25335EB88C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,7 +1,7 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "at_2_ phase", "at_2_phase.vcproj", "{487A123F-10AC-4532-8D27-48DB8F6D4684}"
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "at_2_phase", "at_2_phase.vcxproj", "{487A123F-10AC-4532-8D27-48DB8F6D4684}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
