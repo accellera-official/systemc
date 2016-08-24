@@ -21,16 +21,13 @@ Usage
 1. Check the settings in the file Makefile.config
 
   Check the path to the SystemC installation.  Usually, it should
-  be sufficient to set the SYSTEMC_HOME environment variable to
-  point to the root of the SystemC directory.
+  be sufficient to set the SYSTEMC_HOME environment and MSVC environment.
 
-  The SYSTEMC variable then points to the Visual C++ build directory
-  (%SYSTEMC_HOME%\msvc80\SystemC).  If you want to use SystemC with
-  newer versions of MSVC, it is recommended to copy the MSVC80 project
+  If you want to use SystemC with newer versions of MSVC, 
+  it is recommended to copy the MSVC80 project
   files to a new subdirectory (msvc<version>/SystemC) before upgrading
-  the project files.  Afterwards, update the SYSTEMC variable to point
-  to the newly versions MSVC directory, e.g.:
-    set SYSTEMC=%SYSTEMC_HOME%\msvc110\SystemC
+  the project files.  Afterwards, update the MSVC variable to point
+  to the newly versions msvc directory.
 
   If you use a full-featured Visual Studio version, you might
   want to use the VCBuild-based command-line interface.

@@ -38,19 +38,17 @@ Other targets are:
 To run the makefiles the following environment needs to be set:
    On Unix/Linux/MacOS,
       $SYSTEMC_HOME should point to the SystemC installation
-      $ARCH_SUFFIX defines the appendix of the SystemC library directory
-      these should be set such that $SYSTEMC_HOME/lib$ARCH_SUFFIX is a
-      directory containing the SystemC library.
-   On Windows, the SYSTEMC environment variable should be used.
+  
+   On Windows, the SYSTEMC_HOME and MSVC environment variable should be used.
 
 To run the Visual C++ solutions (.sln) or project (.vcproj) files, you must edit 
-the Property sheet as follows:
+the Property sheet tlm_examples.props as follows:
 
 1 Select Property Manager from the View menu
 2 Under projectName > Debug | Win32 select systemc
 3 Select Properties from the View menu
 4 Select User Macros under Common Properties
-5 Update the SYSTEMC entry and apply
+5 Update the MSVC entry and apply
 
 
 The examples:
