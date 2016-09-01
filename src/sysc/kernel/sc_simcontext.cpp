@@ -412,26 +412,26 @@ sc_simcontext::init()
 void
 sc_simcontext::clean()
 {
-    delete m_object_manager;
-    delete m_module_registry;
-    delete m_port_registry;
-    delete m_export_registry;
-    delete m_prim_channel_registry;
-    delete m_phase_cb_registry;
-    delete m_name_gen;
-    delete m_process_table;
-    m_child_objects.resize(0);
-    m_delta_events.resize(0);
-    delete m_timed_events;
+    delete m_error;
+    delete m_cor_pkg;
+    delete m_time_params;
+    delete m_collectable;
+    delete m_runnable;
     for( int i = m_trace_files.size() - 1; i >= 0; -- i ) {
 	delete m_trace_files[i];
     }
     m_trace_files.resize(0);
-    delete m_runnable;
-    delete m_collectable;
-    delete m_time_params;
-    delete m_cor_pkg;
-    delete m_error;
+    delete m_timed_events;
+    m_delta_events.resize(0);
+    m_child_objects.resize(0);
+    delete m_process_table;
+    delete m_name_gen;
+    delete m_phase_cb_registry;
+    delete m_prim_channel_registry;
+    delete m_export_registry;
+    delete m_port_registry;
+    delete m_module_registry;
+    delete m_object_manager;
 }
 
 
