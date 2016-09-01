@@ -59,8 +59,8 @@ set (fir_rtl_SOURCES fir_fsm.cpp
 
 add_executable (fir ${fir_SOURCES} ${fir_COMMON_HEADERS})
 target_link_libraries (fir ${SystemC_LIBRARIES})
-add_test (fir fir)
+configure_and_add_test (fir)
 
 add_executable (fir_rtl ${fir_rtl_SOURCES} ${fir_COMMON_HEADERS})
 target_link_libraries (fir_rtl ${SystemC_LIBRARIES})
-add_test (fir_rtl fir_rtl)
+configure_and_add_test (fir_rtl)

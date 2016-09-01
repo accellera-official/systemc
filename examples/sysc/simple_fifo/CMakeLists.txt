@@ -39,4 +39,4 @@
 
 add_executable (simple_fifo simple_fifo.cpp)
 target_link_libraries (simple_fifo ${SystemC_LIBRARIES})
-add_test (simple_fifo simple_fifo)
+configure_and_add_test (simple_fifo)

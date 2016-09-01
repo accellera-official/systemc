@@ -72,4 +72,4 @@ foreach (IMAGE_FILE ${IMAGE_FILES})
   configure_file (${CMAKE_CURRENT_SOURCE_DIR}/${IMAGE_FILE} ${CMAKE_CURRENT_BINARY_DIR}/${IMAGE_FILE} COPYONLY)
 endforeach (IMAGE_FILE ${IMAGE_FILES})
 
-add_test (fft_fxpt fft_fxpt)
+configure_and_add_test (fft_fxpt)

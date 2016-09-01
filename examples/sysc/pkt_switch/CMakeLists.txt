@@ -54,4 +54,4 @@ set (pkt_switch_SOURCES main.cpp
 
 add_executable (pkt_switch ${pkt_switch_SOURCES} ${pkt_switch_HEADERS})
 target_link_libraries (pkt_switch ${SystemC_LIBRARIES})
-add_test (pkt_switch pkt_switch)
+configure_and_add_test (pkt_switch)

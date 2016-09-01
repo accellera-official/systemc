@@ -39,4 +39,4 @@
 
 add_executable (forkjoin forkjoin.cpp)
 target_link_libraries (forkjoin ${SystemC_LIBRARIES})
-add_test (forkjoin forkjoin)
+configure_and_add_test (forkjoin)

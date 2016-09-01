@@ -39,4 +39,4 @@
 
 add_executable (sc_export main.cpp)
 target_link_libraries (sc_export ${SystemC_LIBRARIES})
-add_test (sc_export sc_export)
+configure_and_add_test (sc_export)

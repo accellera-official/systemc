@@ -39,4 +39,4 @@
 
 add_executable (reset_signal_is reset_signal_is.cpp)
 target_link_libraries (reset_signal_is ${SystemC_LIBRARIES})
-add_test (reset_signal_is reset_signal_is)
+configure_and_add_test (reset_signal_is)

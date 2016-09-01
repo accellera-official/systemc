@@ -39,4 +39,4 @@
 
 add_executable (scx_mutex_w_policy scx_mutex_w_policy.cpp)
 target_link_libraries (scx_mutex_w_policy ${SystemC_LIBRARIES})
-add_test (scx_mutex_w_policy scx_mutex_w_policy)
+configure_and_add_test (scx_mutex_w_policy)

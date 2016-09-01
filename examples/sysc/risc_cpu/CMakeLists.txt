@@ -84,4 +84,4 @@ foreach (risc_cpu_EXTRA ${risc_cpu_EXTRAS})
   configure_file (${CMAKE_CURRENT_SOURCE_DIR}/${risc_cpu_EXTRA} ${CMAKE_CURRENT_BINARY_DIR}/${risc_cpu_EXTRA} COPYONLY)
 endforeach (risc_cpu_EXTRA ${risc_cpu_EXTRAS})
 
-add_test (risc_cpu risc_cpu)
+configure_and_add_test (risc_cpu)

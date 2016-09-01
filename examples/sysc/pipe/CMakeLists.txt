@@ -52,4 +52,4 @@ set (pipe_SOURCES display.cpp
 
 add_executable (pipe ${pipe_SOURCES} ${pipe_HEADERS})
 target_link_libraries (pipe ${SystemC_LIBRARIES})
-add_test (pipe pipe)
+configure_and_add_test (pipe)

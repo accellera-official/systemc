@@ -51,4 +51,4 @@ set (specialized_signals_SOURCES main.cpp
 add_executable (specialized_signals ${specialized_signals_SOURCES}
                                     ${specialized_signals_HEADERS})
 target_link_libraries (specialized_signals ${SystemC_LIBRARIES})
-add_test (specialized_signals specialized_signals)
+configure_and_add_test (specialized_signals)

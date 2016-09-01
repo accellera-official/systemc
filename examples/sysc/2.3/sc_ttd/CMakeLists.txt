@@ -41,4 +41,4 @@ include_directories (${CMAKE_CURRENT_SOURCE_DIR}/../include)
 
 add_executable (sc_ttd main.cpp)
 target_link_libraries (sc_ttd ${SystemC_LIBRARIES})
-add_test (sc_ttd sc_ttd)
+configure_and_add_test (sc_ttd)

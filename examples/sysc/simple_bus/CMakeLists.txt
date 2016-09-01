@@ -64,4 +64,4 @@ set (simple_bus_SOURCES simple_bus.cpp
 
 add_executable (simple_bus ${simple_bus_SOURCES} ${simple_bus_HEADERS})
 target_link_libraries (simple_bus ${SystemC_LIBRARIES})
-add_test (simple_bus simple_bus)
+configure_and_add_test (simple_bus)
