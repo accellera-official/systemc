@@ -394,46 +394,46 @@ set (systemc_SOURCES sysc/communication/sc_clock.cpp
 # Configure QuickThreads
 ###############################################################################
 
-set (QT_PUBLIC_HEADERS sysc/qt/md/axp.h
-                       sysc/qt/md/hppa.h
-                       sysc/qt/md/i386.h
-                       sysc/qt/md/iX86_64.h
-                       sysc/qt/md/ksr1.h
-                       sysc/qt/md/m88k.h
-                       sysc/qt/md/mips.h
-                       sysc/qt/md/powerpc_mach.h
-                       sysc/qt/md/powerpc_sys5.h
-                       sysc/qt/md/sparc.h
-                       sysc/qt/md/vax.h
-                       sysc/qt/qt.h
-                       sysc/qt/qtmd.h)
+set (QT_PUBLIC_HEADERS sysc/packages/qt/md/axp.h
+                       sysc/packages/qt/md/hppa.h
+                       sysc/packages/qt/md/i386.h
+                       sysc/packages/qt/md/iX86_64.h
+                       sysc/packages/qt/md/ksr1.h
+                       sysc/packages/qt/md/m88k.h
+                       sysc/packages/qt/md/mips.h
+                       sysc/packages/qt/md/powerpc_mach.h
+                       sysc/packages/qt/md/powerpc_sys5.h
+                       sysc/packages/qt/md/sparc.h
+                       sysc/packages/qt/md/vax.h
+                       sysc/packages/qt/qt.h
+                       sysc/packages/qt/qtmd.h)
 
-set (QT_PRIVATE_HEADERS sysc/qt/b.h
-                        sysc/qt/copyright.h
-                        sysc/qt/stp.h)
+set (QT_PRIVATE_HEADERS sysc/packages/qt/b.h
+                        sysc/packages/qt/copyright.h
+                        sysc/packages/qt/stp.h)
 
 set (QT_HEADERS ${QT_PUBLIC_HEADERS} ${QT_PRIVATE_HEADERS})
 
 # Set QuickThread sources used by SystemC depending on target platform
 if (QT_ARCH STREQUAL "sparc")
-  add_custom_command (OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/sysc/qt/md/sparc.s
-                      COMMAND sed 's/_qt_/qt_/' ${CMAKE_CURRENT_SOURCE_DIR}/sysc/qt/md/sparc.s > ${CMAKE_CURRENT_BINARY_DIR}/sysc/qt/md/sparc.s
-                      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/sysc/qt/md/sparc.s)
-  set (QT_SOURCES ${CMAKE_CURRENT_BINARY_DIR}/sysc/qt/md/sparc.s)
+  add_custom_command (OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/sysc/packages/qt/md/sparc.s
+                      COMMAND sed 's/_qt_/qt_/' ${CMAKE_CURRENT_SOURCE_DIR}/sysc/packages/qt/md/sparc.s > ${CMAKE_CURRENT_BINARY_DIR}/sysc/packages/qt/md/sparc.s
+                      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/sysc/packages/qt/md/sparc.s)
+  set (QT_SOURCES ${CMAKE_CURRENT_BINARY_DIR}/sysc/packages/qt/md/sparc.s)
 elseif (QT_ARCH STREQUAL "hppa")
-  set (QT_SOURCES sysc/qt/md/hppa.s)
+  set (QT_SOURCES sysc/packages/qt/md/hppa.s)
 elseif (QT_ARCH STREQUAL "x86_64")
-  set (QT_SOURCES sysc/qt/md/iX86_64.s)
+  set (QT_SOURCES sysc/packages/qt/md/iX86_64.s)
 elseif (QT_ARCH STREQUAL "i386")
-  set (QT_SOURCES sysc/qt/md/i386.s)
+  set (QT_SOURCES sysc/packages/qt/md/i386.s)
 elseif (QT_ARCH STREQUAL "powerpc_mach")
-  set (QT_SOURCES sysc/qt/md/powerpc_mach.s
-                  sysc/qt/md/powerpc.c)
+  set (QT_SOURCES sysc/packages/qt/md/powerpc_mach.s
+                  sysc/packages/qt/md/powerpc.c)
 elseif (QT_ARCH STREQUAL "powerpc_sys5")
-  set (QT_SOURCES sysc/qt/md/powerpc_sys5.s
-                  sysc/qt/md/powerpc.c)
+  set (QT_SOURCES sysc/packages/qt/md/powerpc_sys5.s
+                  sysc/packages/qt/md/powerpc.c)
 endif (QT_ARCH STREQUAL "sparc")
-set (QT_SOURCES sysc/qt/qt.c ${QT_SOURCES})
+set (QT_SOURCES sysc/packages/qt/qt.c ${QT_SOURCES})
 if (QT_ARCH)
   set (systemc_HEADERS ${systemc_HEADERS} ${QT_HEADERS})
   set (systemc_SOURCES ${systemc_SOURCES} ${QT_SOURCES})
