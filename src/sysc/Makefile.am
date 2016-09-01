@@ -33,17 +33,17 @@
 include $(top_srcdir)/config/Make-rules.sysc
 
 if WANT_QT_THREADS
-QT_LIB    = qt/libqt.la
-QT_SUBDIR = qt
+QT_LIB    = packages/qt/libqt.la
+QT_SUBDIR = packages/qt
 endif
 
 SUBDIRS = \
 	kernel \
-	$(QT_SUBDIR) \
 	communication \
 	tracing \
 	utils \
 	packages/boost \
+	$(QT_SUBDIR) \
 	datatypes
 
 H_FILES = 

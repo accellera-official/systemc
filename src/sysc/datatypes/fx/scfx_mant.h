@@ -170,10 +170,10 @@ scfx_mant::operator[]( int i )
 }
 
 inline
-scfx_mant::scfx_mant( std::size_t size )
-: m_array(0), m_size(size)
+scfx_mant::scfx_mant( std::size_t size_ )
+: m_array(0), m_size(size_)
 {
-    m_array = alloc( size );
+    m_array = alloc( size_ );
 }
 
 inline

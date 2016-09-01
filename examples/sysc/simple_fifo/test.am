@@ -72,7 +72,8 @@ simple_fifo_H_FILES =
 simple_fifo_CXX_FILES = \
 	simple_fifo/simple_fifo.cpp
 
-simple_fifo_BUILD =
+simple_fifo_BUILD = \
+	simple_fifo/golden.log
 
 simple_fifo_EXTRA = \
 	simple_fifo/simple_fifo.vcproj \

@@ -25,11 +25,12 @@
  *****************************************************************************/
 
 
-#include <stdio.h>
+#include <cstdio>
 #include <cstdlib>
 #include <cassert>
-#include <ctype.h>
-#include <stddef.h>
+#include <cctype>
+#include <cstddef>
+#include <cctype>
 #include <algorithm> // pick up std::sort.
 
 #include "sysc/utils/sc_iostream.h"
@@ -222,7 +223,7 @@ sc_object_manager::first_object()
 sc_object*
 sc_object_manager::hierarchy_curr()
 {
-    size_t     hierarchy_n; // current size of the hierarchy.
+    std::size_t hierarchy_n;  // current size of the hierarchy.
 
     hierarchy_n = m_object_stack.size();
     return hierarchy_n ? m_object_stack[hierarchy_n-1] : 0;
@@ -237,8 +238,8 @@ sc_object_manager::hierarchy_curr()
 sc_object*
 sc_object_manager::hierarchy_pop()
 {
-    size_t     hierarchy_n; // current size of the hierarchy.
-    sc_object* result_p;    // object to return.
+    std::size_t hierarchy_n;  // current size of the hierarchy.
+    sc_object*  result_p;     // object to return.
 
     hierarchy_n = m_object_stack.size();
     if ( hierarchy_n == 0 ) return NULL;
@@ -317,7 +318,7 @@ sc_object_manager::next_object()
 {
     sc_object* result_p; // result to return.
 
-    assert( m_object_walk_ok );
+    sc_assert( m_object_walk_ok );
 
     if ( m_object_it == m_instance_table.end() ) return NULL;
     m_object_it++;

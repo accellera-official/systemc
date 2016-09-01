@@ -104,7 +104,7 @@ sc_sensitive::operator << ( sc_process_handle handle_ )
 	m_mode = SC_METHOD_;
 	break;
       default:
-	assert(0);
+	sc_assert(0);
     }
     m_handle = (sc_process_b*)handle_;
     return *this;
@@ -207,7 +207,7 @@ sc_sensitive::make_static_sensitivity(
 	return;
     }
     sc_thread_handle handle_t = as_thread_handle( handle_ );
-    // assert(handle_t);
+    // sc_assert(handle_t);
     port_.make_sensitive( handle_t );
 }
 
@@ -252,7 +252,7 @@ sc_sensitive::make_static_sensitivity(
 	    return;
         }
 	sc_thread_handle handle_t = as_thread_handle( handle_ );
-	// assert(handle_t);
+	// sc_assert(handle_t);
 	event_finder_.port().make_sensitive( handle_t, &event_finder_);
     }
 }
@@ -396,7 +396,7 @@ sc_sensitive_pos::operator << ( sc_process_handle handle_ )
 	m_mode = SC_METHOD_;
 	break;
       default:
-	assert(0);
+	sc_assert(0);
     }
     m_handle = (sc_process_b*)handle_;
     return *this;
@@ -671,7 +671,7 @@ sc_sensitive_neg::operator << ( sc_process_handle handle_ )
 	m_mode = SC_METHOD_;
 	break;
       default:
-	assert(0);
+	sc_assert(0);
     }
     m_handle = (sc_process_b*)handle_;
     return *this;

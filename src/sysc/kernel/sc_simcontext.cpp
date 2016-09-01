@@ -67,10 +67,11 @@
 //     P    = pointer to process message is for, or NULL in which case the
 //            message will not print.
 #if 0
+#   include <cstring>
 #   define DEBUG_NAME ""
 #   define DEBUG_MSG(NAME,P,MSG) \
     { \
-        if ( P && ( (strlen(NAME)==0) || !strcmp(NAME,P->name())) ) \
+        if ( P && ( (std::strlen(NAME)==0) || !std::strcmp(NAME,P->name())) ) \
           std::cout << "**** " << sc_time_stamp() << " ("  \
 	            << sc_get_current_process_name() << "): " << MSG \
 		    << " - " << P->name() << std::endl; \
@@ -895,7 +896,7 @@ sc_simcontext::simulate( const sc_time& duration )
 	return;
     }
 
-    sc_time non_overflow_time = sc_max_time() - m_curr_time;
+    sc_time non_overflow_time = max_time() - m_curr_time;
     if ( duration > non_overflow_time )
     {
 	SC_REPORT_ERROR(SC_ID_SIMULATION_TIME_OVERFLOW_, "");
@@ -1372,7 +1373,7 @@ sc_simcontext::remove_delta_event( sc_event* e )
 {
     int i = e->m_delta_event_index;
     int j = m_delta_events.size() - 1;
-    assert( i >= 0 && i <= j );
+    sc_assert( i >= 0 && i <= j );
     if( i != j ) {
 	sc_event** l_delta_events = &m_delta_events[0];
 	l_delta_events[i] = l_delta_events[j];
@@ -1836,6 +1837,7 @@ sc_defunct_process_function( sc_module* )
     // sc_cthread_process'es. In a correctly constructed world, this
     // function should never be called; hence the assert.
     assert( false );
+    sc_assert( false );
 }
 
 //------------------------------------------------------------------------------

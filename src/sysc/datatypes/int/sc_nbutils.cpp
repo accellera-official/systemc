@@ -54,9 +54,9 @@
 // source.
 //
 
-#include <ctype.h>
+#include <cctype>
 #include <cstdio>
-#include <string.h>
+#include <cstring>
 
 #include "sysc/datatypes/int/sc_int_ids.h"
 #include "sysc/datatypes/int/sc_nbutils.h"
@@ -158,7 +158,7 @@ fsm_move(char c, small_type &b, small_type &s, small_type &state)
 
   default:
     // Any other state is not possible.
-    assert((0 <= state) && (state <= 3));
+    sc_assert((0 <= state) && (state <= 3));
 
   } // switch
 
@@ -176,7 +176,7 @@ const char
 {
 
 #ifdef DEBUG_SYSTEMC
-  assert(v != NULL);
+  sc_assert(v != NULL);
 #endif
 
   const small_type STATE_START = 0;
@@ -206,7 +206,7 @@ const char
   // Test to see if the above loop executed more than it should
   // have. The max number of skipped chars is equal to the length of
   // the longest format specifier, e.g., "-0x".
-  assert(nskip <= 3);
+  sc_assert(nskip <= 3);
 #endif
 
   v += nskip;
@@ -548,8 +548,8 @@ vec_from_str(int unb, int und, sc_digit *u,
 {
 
 #ifdef DEBUG_SYSTEMC
-  assert((unb > 0) && (und > 0) && (u != NULL));
-  assert(v != NULL);
+  sc_assert((unb > 0) && (und > 0) && (u != NULL));
+  sc_assert(v != NULL);
 #endif
 
   is_valid_base(base);
@@ -630,10 +630,10 @@ vec_add(int ulen, const sc_digit *u,
 {
 
 #ifdef DEBUG_SYSTEMC
-  assert((ulen > 0) && (u != NULL));
-  assert((vlen > 0) && (v != NULL));
-  assert(w != NULL);
-  assert(ulen >= vlen);
+  sc_assert((ulen > 0) && (u != NULL));
+  sc_assert((vlen > 0) && (v != NULL));
+  sc_assert(w != NULL);
+  sc_assert(ulen >= vlen);
 #endif
 
   const sc_digit *uend = (u + ulen);
@@ -674,9 +674,9 @@ vec_add_on(int ulen, sc_digit *ubegin,
 {
 
 #ifdef DEBUG_SYSTEMC
-  assert((ulen > 0) && (ubegin != NULL));
-  assert((vlen > 0) && (v != NULL));
-  assert(ulen >= vlen);
+  sc_assert((ulen > 0) && (ubegin != NULL));
+  sc_assert((vlen > 0) && (v != NULL));
+  sc_assert(ulen >= vlen);
 #endif
 
   sc_digit *u = ubegin;
@@ -723,9 +723,9 @@ vec_add_on2(int ulen, sc_digit *ubegin,
 {
 
 #ifdef DEBUG_SYSTEMC
-  assert((ulen > 0) && (ubegin != NULL));
-  assert((vlen > 0) && (v != NULL));
-  assert(ulen < vlen);
+  sc_assert((ulen > 0) && (ubegin != NULL));
+  sc_assert((vlen > 0) && (v != NULL));
+  sc_assert(ulen < vlen);
 #endif
 
   sc_digit *u = ubegin;
@@ -759,8 +759,8 @@ vec_add_small(int ulen, const sc_digit *u,
 {
 
 #ifdef DEBUG_SYSTEMC
-  assert((ulen > 0) && (u != NULL));
-  assert(w != NULL);
+  sc_assert((ulen > 0) && (u != NULL));
+  sc_assert(w != NULL);
 #endif
 
   const sc_digit *uend = (u + ulen);
@@ -793,7 +793,7 @@ vec_add_small_on(int ulen, sc_digit *u, sc_digit v)
 {
 
 #ifdef DEBUG_SYSTEMC
-  assert((ulen > 0) && (u != NULL));
+  sc_assert((ulen > 0) && (u != NULL));
 #endif
 
   int i = 0;
@@ -825,10 +825,10 @@ vec_sub(int ulen, const sc_digit *u,
 {
 
 #ifdef DEBUG_SYSTEMC
-  assert((ulen > 0) && (u != NULL));
-  assert((vlen > 0) && (v != NULL));
-  assert(w != NULL);
-  assert(ulen >= vlen);
+  sc_assert((ulen > 0) && (u != NULL));
+  sc_assert((vlen > 0) && (v != NULL));
+  sc_assert(w != NULL);
+  sc_assert(ulen >= vlen);
 #endif
 
   const sc_digit *uend = (u + ulen);
@@ -851,7 +851,7 @@ vec_sub(int ulen, const sc_digit *u,
   }
 
 #ifdef DEBUG_SYSTEMC
-  assert(borrow == 0);
+  sc_assert(borrow == 0);
 #endif
 
   // Copy the rest of u to the result.
@@ -869,9 +869,9 @@ vec_sub_on(int ulen, sc_digit *ubegin,
 {
 
 #ifdef DEBUG_SYSTEMC
-  assert((ulen > 0) && (ubegin != NULL));
-  assert((vlen > 0) && (v != NULL));
-  assert(ulen >= vlen);
+  sc_assert((ulen > 0) && (ubegin != NULL));
+  sc_assert((vlen > 0) && (v != NULL));
+  sc_assert(ulen >= vlen);
 #endif
 
   sc_digit *u = ubegin;
@@ -895,7 +895,7 @@ vec_sub_on(int ulen, sc_digit *ubegin,
   }
 
 #ifdef DEBUG_SYSTEMC
-  assert(borrow == 0);
+  sc_assert(borrow == 0);
 #endif
 
 }
@@ -909,8 +909,8 @@ vec_sub_on2(int ulen, sc_digit *ubegin,
 {
 
 #ifdef DEBUG_SYSTEMC
-  assert((ulen > 0) && (ubegin != NULL));
-  assert((vlen > 0) && (v != NULL));
+  sc_assert((ulen > 0) && (ubegin != NULL));
+  sc_assert((vlen > 0) && (v != NULL));
 #endif
 
   sc_digit *u = ubegin;
@@ -943,8 +943,8 @@ vec_sub_small(int ulen, const sc_digit *u,
 {
 
 #ifdef DEBUG_SYSTEMC
-  assert(ulen > 0);
-  assert(u != NULL);
+  sc_assert(ulen > 0);
+  sc_assert(u != NULL);
 #endif
 
   const sc_digit *uend = (u + ulen);
@@ -962,7 +962,7 @@ vec_sub_small(int ulen, const sc_digit *u,
   }
 
 #ifdef DEBUG_SYSTEMC
-  assert(borrow == 0);
+  sc_assert(borrow == 0);
 #endif
 
   // Copy the rest of u to the result.
@@ -978,7 +978,7 @@ vec_sub_small_on(int ulen, sc_digit *u, sc_digit v)
 {
 
 #ifdef DEBUG_SYSTEMC
-  assert((ulen > 0) && (u != NULL));
+  sc_assert((ulen > 0) && (u != NULL));
 #endif
 
   for (int i = 0; i < ulen; ++i) {
@@ -988,7 +988,7 @@ vec_sub_small_on(int ulen, sc_digit *u, sc_digit v)
   }
 
 #ifdef DEBUG_SYSTEMC
-  assert(v == 0);
+  sc_assert(v == 0);
 #endif
 
 }
@@ -1057,9 +1057,9 @@ vec_mul(int ulen, const sc_digit *u,
   */
 
 #ifdef DEBUG_SYSTEMC
-  assert((ulen > 0) && (u != NULL));
-  assert((vlen > 0) && (vbegin != NULL));
-  assert(wbegin != NULL);
+  sc_assert((ulen > 0) && (u != NULL));
+  sc_assert((vlen > 0) && (vbegin != NULL));
+  sc_assert(wbegin != NULL);
 #endif
 
 #define prod_h carry
@@ -1075,7 +1075,7 @@ vec_mul(int ulen, const sc_digit *u,
 
 #ifdef DEBUG_SYSTEMC
     // The overflow bits must be zero.
-    assert(u_h == (u_h & HALF_DIGIT_MASK));
+    sc_assert(u_h == (u_h & HALF_DIGIT_MASK));
 #endif
 
     sc_digit carry = 0;
@@ -1093,7 +1093,7 @@ vec_mul(int ulen, const sc_digit *u,
 
 #ifdef DEBUG_SYSTEMC
       // The overflow bits must be zero.
-      assert(v_h == (v_h & HALF_DIGIT_MASK));
+      sc_assert(v_h == (v_h & HALF_DIGIT_MASK));
 #endif
 
       sc_digit prod_l = (*w) + u_l * v_l + low_half(carry);
@@ -1122,9 +1122,9 @@ vec_mul_small(int ulen, const sc_digit *u,
 {
 
 #ifdef DEBUG_SYSTEMC
-  assert((ulen > 0) && (u != NULL));
-  assert(w != NULL);
-  assert((0 < v) && (v < HALF_DIGIT_RADIX));
+  sc_assert((ulen > 0) && (u != NULL));
+  sc_assert(w != NULL);
+  sc_assert((0 < v) && (v < HALF_DIGIT_RADIX));
 #endif
 
 #define prod_h carry
@@ -1139,7 +1139,7 @@ vec_mul_small(int ulen, const sc_digit *u,
 
 #ifdef DEBUG_SYSTEMC
     // The overflow bits must be zero.
-    assert(high_half(u_AB) == high_half_masked(u_AB));
+    sc_assert(high_half(u_AB) == high_half_masked(u_AB));
 #endif
 
     sc_digit prod_l = v * low_half(u_AB) + low_half(carry);
@@ -1165,8 +1165,8 @@ vec_mul_small_on(int ulen, sc_digit *u, sc_digit v)
 {
 
 #ifdef DEBUG_SYSTEMC
-  assert((ulen > 0) && (u != NULL));
-  assert((0 < v) && (v < HALF_DIGIT_RADIX));
+  sc_assert((ulen > 0) && (u != NULL));
+  sc_assert((0 < v) && (v < HALF_DIGIT_RADIX));
 #endif
 
 #define prod_h carry
@@ -1177,7 +1177,7 @@ vec_mul_small_on(int ulen, sc_digit *u, sc_digit v)
 
 #ifdef DEBUG_SYSTEMC
     // The overflow bits must be zero.
-    assert(high_half(u[i]) == high_half_masked(u[i]));
+    sc_assert(high_half(u[i]) == high_half_masked(u[i]));
 #endif
 
     sc_digit prod_l = v * low_half(u[i]) + low_half(carry);
@@ -1211,10 +1211,10 @@ vec_div_large(int ulen, const sc_digit *u,
 {
 
 #ifdef DEBUG_SYSTEMC
-  assert((ulen > 0) && (u != NULL));
-  assert((vlen > 0) && (v != NULL));
-  assert(w != NULL);
-  assert(BITS_PER_DIGIT >= 3 * BITS_PER_BYTE);
+  sc_assert((ulen > 0) && (u != NULL));
+  sc_assert((vlen > 0) && (v != NULL));
+  sc_assert(w != NULL);
+  sc_assert(BITS_PER_DIGIT >= 3 * BITS_PER_BYTE);
 #endif
 
   // We will compute q = x / y where x = u and y = v. The reason for
@@ -1254,8 +1254,8 @@ vec_div_large(int ulen, const sc_digit *u,
   ylen++;
 
 #ifdef DEBUG_SYSTEMC
-  assert(xlen > 1);
-  assert(ylen > 1);
+  sc_assert(xlen > 1);
+  sc_assert(ylen > 1);
 #endif
 
   // At this point, all the leading zeros are eliminated from x and y.
@@ -1376,9 +1376,9 @@ vec_div_small(int ulen, const sc_digit *u,
   //        r = (((r|A) % v)|B) % v
 
 #ifdef DEBUG_SYSTEMC
-  assert((ulen > 0) && (u != NULL));
-  assert(q != NULL);
-  assert((0 < v) && (v < HALF_DIGIT_RADIX));
+  sc_assert((ulen > 0) && (u != NULL));
+  sc_assert(q != NULL);
+  sc_assert((0 < v) && (v < HALF_DIGIT_RADIX));
 #endif
 
 #define q_h r
@@ -1395,7 +1395,7 @@ vec_div_small(int ulen, const sc_digit *u,
 
 #ifdef DEBUG_SYSTEMC
     // The overflow bits must be zero.
-    assert(high_half(u_AB) == high_half_masked(u_AB));
+    sc_assert(high_half(u_AB) == high_half_masked(u_AB));
 #endif
 
     sc_digit num = concat(r, high_half(u_AB));  // num = r|A
@@ -1419,10 +1419,10 @@ vec_rem_large(int ulen, const sc_digit *u,
 {
 
 #ifdef DEBUG_SYSTEMC
-  assert((ulen > 0) && (u != NULL));
-  assert((vlen > 0) && (v != NULL));
-  assert(w != NULL);
-  assert(BITS_PER_DIGIT >= 3 * BITS_PER_BYTE);
+  sc_assert((ulen > 0) && (u != NULL));
+  sc_assert((vlen > 0) && (v != NULL));
+  sc_assert(w != NULL);
+  sc_assert(BITS_PER_DIGIT >= 3 * BITS_PER_BYTE);
 #endif
 
   // This function is adapted from vec_div_large.
@@ -1455,8 +1455,8 @@ vec_rem_large(int ulen, const sc_digit *u,
   ylen++;
 
 #ifdef DEBUG_SYSTEMC
-  assert(xlen > 1);
-  assert(ylen > 1);
+  sc_assert(xlen > 1);
+  sc_assert(ylen > 1);
 #endif
 
   // At this point, all the leading zeros are eliminated from x and y.
@@ -1547,8 +1547,8 @@ vec_rem_small(int ulen, const sc_digit *u, sc_digit v)
 {
 
 #ifdef DEBUG_SYSTEMC
-  assert((ulen > 0) && (u != NULL));
-  assert((0 < v) && (v < HALF_DIGIT_RADIX));
+  sc_assert((ulen > 0) && (u != NULL));
+  sc_assert((0 < v) && (v < HALF_DIGIT_RADIX));
 #endif
 
   // This function is adapted from vec_div_small().
@@ -1563,7 +1563,7 @@ vec_rem_small(int ulen, const sc_digit *u, sc_digit v)
 
 #ifdef DEBUG_SYSTEMC
     // The overflow bits must be zero.
-    assert(high_half(u_AB) == high_half_masked(u_AB));
+    sc_assert(high_half(u_AB) == high_half_masked(u_AB));
 #endif
 
     // r = (((r|A) % v)|B) % v
@@ -1580,8 +1580,8 @@ vec_rem_on_small(int ulen, sc_digit *u, sc_digit v)
 {
 
 #ifdef DEBUG_SYSTEMC
-  assert((ulen > 0) && (u != NULL));
-  assert(v > 0);
+  sc_assert((ulen > 0) && (u != NULL));
+  sc_assert(v > 0);
 #endif
 
 #define q_h r
@@ -1597,7 +1597,7 @@ vec_rem_on_small(int ulen, sc_digit *u, sc_digit v)
 
 #ifdef DEBUG_SYSTEMC
     // The overflow bits must be zero.
-    assert(high_half(u_AB) == high_half_masked(u_AB));
+    sc_assert(high_half(u_AB) == high_half_masked(u_AB));
 #endif
 
     sc_digit num = concat(r, high_half(u_AB));  // num = r|A
@@ -1621,8 +1621,8 @@ vec_to_char(int ulen, const sc_digit *u,
 {
 
 #ifdef DEBUG_SYSTEMC
-  assert((ulen > 0) && (u != NULL));
-  assert((vlen > 0) && (v != NULL));
+  sc_assert((ulen > 0) && (u != NULL));
+  sc_assert((vlen > 0) && (v != NULL));
 #endif
 
   int nbits = ulen * BITS_PER_DIGIT;
@@ -1668,9 +1668,9 @@ vec_from_char(int ulen, const uchar *u,
 {
 
 #ifdef DEBUG_SYSTEMC
-  assert((ulen > 0) && (u != NULL));
-  assert((vlen > 0) && (v != NULL));
-  assert(sizeof(uchar) <= sizeof(sc_digit));
+  sc_assert((ulen > 0) && (u != NULL));
+  sc_assert((vlen > 0) && (v != NULL));
+  sc_assert(sizeof(uchar) <= sizeof(sc_digit));
 #endif
 
   sc_digit *vend = (v + vlen);
@@ -1710,7 +1710,7 @@ vec_shift_left(int ulen, sc_digit *u, int nsl)
 {
 
 #ifdef DEBUG_SYSTEMC
-  assert((ulen > 0) && (u != NULL));
+  sc_assert((ulen > 0) && (u != NULL));
 #endif
 
   if (nsl <= 0)
@@ -1772,7 +1772,7 @@ vec_shift_right(int ulen, sc_digit *u, int nsr, sc_digit fill)
 {
 
 #ifdef DEBUG_SYSTEMC
-  assert((ulen > 0) && (u != NULL));
+  sc_assert((ulen > 0) && (u != NULL));
 #endif
 
   // fill is usually either 0 or DIGIT_MASK; it can be any value.
@@ -1840,8 +1840,8 @@ vec_reverse(int unb, int und, sc_digit *ud,
 {
 
 #ifdef DEBUG_SYSTEMC
-  assert((unb > 0) && (und > 0) && (ud != NULL));
-  assert((0 <= r) && (r <= l) && (l < unb));
+  sc_assert((unb > 0) && (und > 0) && (ud != NULL));
+  sc_assert((0 <= r) && (r <= l) && (l < unb));
 #endif
 
   if (l < r) {

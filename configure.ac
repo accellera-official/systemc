@@ -520,9 +520,9 @@ AC_OUTPUT(
  src/sysc/datatypes/Makefile 
  src/sysc/kernel/Makefile 
  src/sysc/tracing/Makefile 
- src/sysc/qt/Makefile 
  src/sysc/utils/Makefile 
  src/sysc/packages/boost/Makefile 
+ src/sysc/packages/qt/Makefile 
  src/tlm_core/Makefile
  src/tlm_core/tlm.pc
  src/tlm_utils/Makefile

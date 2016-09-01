@@ -86,7 +86,7 @@ public:
                                                              phase_type&,
                                                              sc_core::sc_time&))
   {
-    assert(!sc_core::sc_get_curr_simcontext()->elaboration_done());
+    sc_assert(!sc_core::sc_get_curr_simcontext()->elaboration_done());
     m_fw_process.set_nb_transport_ptr(mod, cb);
   }
 
@@ -94,14 +94,14 @@ public:
                             void (MODULE::*cb)(transaction_type&,
                                                sc_core::sc_time&))
   {
-    assert(!sc_core::sc_get_curr_simcontext()->elaboration_done());
+    sc_assert(!sc_core::sc_get_curr_simcontext()->elaboration_done());
     m_fw_process.set_b_transport_ptr(mod, cb);
   }
 
   void register_transport_dbg(MODULE* mod,
                               unsigned int (MODULE::*cb)(transaction_type&))
   {
-    assert(!sc_core::sc_get_curr_simcontext()->elaboration_done());
+    sc_assert(!sc_core::sc_get_curr_simcontext()->elaboration_done());
     m_fw_process.set_transport_dbg_ptr(mod, cb);
   }
 
@@ -109,7 +109,7 @@ public:
                                    bool (MODULE::*cb)(transaction_type&,
                                                       tlm::tlm_dmi&))
   {
-    assert(!sc_core::sc_get_curr_simcontext()->elaboration_done());
+    sc_assert(!sc_core::sc_get_curr_simcontext()->elaboration_done());
     m_fw_process.set_get_direct_mem_ptr(mod, cb);
   }
 
@@ -158,7 +158,7 @@ private:
           return tlm::TLM_COMPLETED;
 
         } else {
-          assert(0); exit(1);
+          sc_assert(0); exit(1);
         }
 
 //        return tlm::TLM_COMPLETED;  //Should not reach here
@@ -211,7 +211,7 @@ private:
         s << m_name << ": non-blocking callback allready registered";
         SC_REPORT_WARNING("/OSCI_TLM-2/simple_socket",s.str().c_str());
       } else {
-        assert(!m_mod || m_mod == mod);
+        sc_assert(!m_mod || m_mod == mod);
         m_mod = mod;
         m_nb_transport_ptr = p;
       }
@@ -224,7 +224,7 @@ private:
         s << m_name << ": blocking callback allready registered";
         SC_REPORT_WARNING("/OSCI_TLM-2/simple_socket",s.str().c_str());
       } else {
-        assert(!m_mod || m_mod == mod);
+        sc_assert(!m_mod || m_mod == mod);
         m_mod = mod;
         m_b_transport_ptr = p;
       }
@@ -237,7 +237,7 @@ private:
         s << m_name << ": debug callback allready registered";
         SC_REPORT_WARNING("/OSCI_TLM-2/simple_socket",s.str().c_str());
       } else {
-        assert(!m_mod || m_mod == mod);
+        sc_assert(!m_mod || m_mod == mod);
         m_mod = mod;
         m_transport_dbg_ptr = p;
       }
@@ -250,7 +250,7 @@ private:
         s << m_name << ": get DMI pointer callback allready registered";
         SC_REPORT_WARNING("/OSCI_TLM-2/simple_socket",s.str().c_str());
       } else {
-        assert(!m_mod || m_mod == mod);
+        sc_assert(!m_mod || m_mod == mod);
         m_mod = mod;
         m_get_direct_mem_ptr = p;
       }
@@ -262,7 +262,7 @@ private:
     {
       if (m_nb_transport_ptr) {
         // forward call
-        assert(m_mod);
+        sc_assert(m_mod);
         return (m_mod->*m_nb_transport_ptr)(trans, phase, t);
 
       } else if (m_b_transport_ptr) {
@@ -291,7 +291,7 @@ private:
           return tlm::TLM_COMPLETED;
 
         } else {
-          assert(0); exit(1);
+          sc_assert(0); exit(1);
 //          return tlm::TLM_COMPLETED;   ///< unreachable code
         }
 
@@ -307,7 +307,7 @@ private:
     {
       if (m_b_transport_ptr) {
         // forward call
-        assert(m_mod);
+        sc_assert(m_mod);
         (m_mod->*m_b_transport_ptr)(trans, t);
         return;
 
@@ -349,7 +349,7 @@ private:
     {
       if (m_transport_dbg_ptr) {
         // forward call
-        assert(m_mod);
+        sc_assert(m_mod);
         return (m_mod->*m_transport_dbg_ptr)(trans);
 
       } else {
@@ -363,7 +363,7 @@ private:
     {
       if (m_get_direct_mem_ptr) {
         // forward call
-        assert(m_mod);
+        sc_assert(m_mod);
         return (m_mod->*m_get_direct_mem_ptr)(trans, dmi_data);
 
       } else {
@@ -433,7 +433,7 @@ private:
         sc_core::sc_time t = sc_core::SC_ZERO_TIME;
 
         // forward call
-        assert(m_mod);
+        sc_assert(m_mod);
         (m_mod->*m_b_transport_ptr)(*trans, t);
 
         sc_core::wait(t);
@@ -463,8 +463,8 @@ private:
 
         transaction_type* trans;
         while ((trans = m_peq.get_next_transaction())!=0) {
-          assert(m_mod);
-          assert(m_nb_transport_ptr);
+          sc_assert(m_mod);
+          sc_assert(m_nb_transport_ptr);
           phase_type phase = tlm::BEGIN_REQ;
           sc_core::sc_time t = sc_core::SC_ZERO_TIME;
 
@@ -474,7 +474,7 @@ private:
             // notify transaction is finished
             typename std::map<transaction_type*, sc_core::sc_event *>::iterator it =
               m_owner->m_pending_trans.find(trans);
-            assert(it != m_owner->m_pending_trans.end());
+            sc_assert(it != m_owner->m_pending_trans.end());
             it->second->notify(t);
             m_owner->m_pending_trans.erase(it);
             break;
@@ -503,19 +503,19 @@ private:
               // notify transaction is finished
               typename std::map<transaction_type*, sc_core::sc_event *>::iterator it =
                 m_owner->m_pending_trans.find(trans);
-              assert(it != m_owner->m_pending_trans.end());
+              sc_assert(it != m_owner->m_pending_trans.end());
               it->second->notify(t);
               m_owner->m_pending_trans.erase(it);
               break;
             }
 
             default:
-              assert(0); exit(1);
+              sc_assert(0); exit(1);
             };
             break;
 
           default:
-            assert(0); exit(1);
+            sc_assert(0); exit(1);
           };
         }
       }
@@ -524,7 +524,7 @@ private:
     void free(tlm::tlm_generic_payload* trans)
     {
       mm_end_event_ext* ext = trans->template get_extension<mm_end_event_ext>();
-      assert(ext);
+      sc_assert(ext);
       // notif event first before freeing extensions (reset)
       ext->done.notify();
       trans->reset();
@@ -607,7 +607,7 @@ public:
                                                              sc_core::sc_time&),
                                 int id)
   {
-    assert(!sc_core::sc_get_curr_simcontext()->elaboration_done());
+    sc_assert(!sc_core::sc_get_curr_simcontext()->elaboration_done());
     m_fw_process.set_nb_transport_ptr(mod, cb);
     m_fw_process.set_nb_transport_user_id(id);
   }
@@ -618,7 +618,7 @@ public:
                                                sc_core::sc_time&),
                             int id)
   {
-    assert(!sc_core::sc_get_curr_simcontext()->elaboration_done());
+    sc_assert(!sc_core::sc_get_curr_simcontext()->elaboration_done());
     m_fw_process.set_b_transport_ptr(mod, cb);
     m_fw_process.set_b_transport_user_id(id);
   }
@@ -628,7 +628,7 @@ public:
                                                          transaction_type&),
                               int id)
   {
-    assert(!sc_core::sc_get_curr_simcontext()->elaboration_done());
+    sc_assert(!sc_core::sc_get_curr_simcontext()->elaboration_done());
     m_fw_process.set_transport_dbg_ptr(mod, cb);
     m_fw_process.set_transport_dbg_user_id(id);
   }
@@ -639,7 +639,7 @@ public:
                                                       tlm::tlm_dmi&),
                                    int id)
   {
-    assert(!sc_core::sc_get_curr_simcontext()->elaboration_done());
+    sc_assert(!sc_core::sc_get_curr_simcontext()->elaboration_done());
     m_fw_process.set_get_direct_mem_ptr(mod, cb);
     m_fw_process.set_get_dmi_user_id(id);
   }
@@ -689,7 +689,7 @@ private:
           return tlm::TLM_COMPLETED;
 
         } else {
-          assert(0); exit(1);
+          sc_assert(0); exit(1);
         }
 
 //        return tlm::TLM_COMPLETED;  //Should not reach here
@@ -755,7 +755,7 @@ private:
         s << m_name << ": non-blocking callback allready registered";
         SC_REPORT_WARNING("/OSCI_TLM-2/simple_socket",s.str().c_str());
       } else {
-        assert(!m_mod || m_mod == mod);
+        sc_assert(!m_mod || m_mod == mod);
         m_mod = mod;
         m_nb_transport_ptr = p;
       }
@@ -768,7 +768,7 @@ private:
         s << m_name << ": blocking callback allready registered";
         SC_REPORT_WARNING("/OSCI_TLM-2/simple_socket",s.str().c_str());
       } else {
-        assert(!m_mod || m_mod == mod);
+        sc_assert(!m_mod || m_mod == mod);
         m_mod = mod;
         m_b_transport_ptr = p;
       }
@@ -781,7 +781,7 @@ private:
         s << m_name << ": debug callback allready registered";
         SC_REPORT_WARNING("/OSCI_TLM-2/simple_socket",s.str().c_str());
       } else {
-        assert(!m_mod || m_mod == mod);
+        sc_assert(!m_mod || m_mod == mod);
         m_mod = mod;
         m_transport_dbg_ptr = p;
       }
@@ -794,7 +794,7 @@ private:
         s << m_name << ": get DMI pointer callback allready registered";
         SC_REPORT_WARNING("/OSCI_TLM-2/simple_socket",s.str().c_str());
       } else {
-        assert(!m_mod || m_mod == mod);
+        sc_assert(!m_mod || m_mod == mod);
         m_mod = mod;
         m_get_direct_mem_ptr = p;
       }
@@ -806,7 +806,7 @@ private:
     {
       if (m_nb_transport_ptr) {
         // forward call
-        assert(m_mod);
+        sc_assert(m_mod);
         return (m_mod->*m_nb_transport_ptr)(m_nb_transport_user_id, trans, phase, t);
 
       } else if (m_b_transport_ptr) {
@@ -836,7 +836,7 @@ private:
           return tlm::TLM_COMPLETED;
 
         } else {
-          assert(0); exit(1);
+          sc_assert(0); exit(1);
 //          return tlm::TLM_COMPLETED;   ///< unreachable code
         }
 
@@ -852,7 +852,7 @@ private:
     {
       if (m_b_transport_ptr) {
         // forward call
-        assert(m_mod);
+        sc_assert(m_mod);
         (m_mod->*m_b_transport_ptr)(m_b_transport_user_id, trans, t);
         return;
 
@@ -894,7 +894,7 @@ private:
     {
       if (m_transport_dbg_ptr) {
         // forward call
-        assert(m_mod);
+        sc_assert(m_mod);
         return (m_mod->*m_transport_dbg_ptr)(m_transport_dbg_user_id, trans);
 
       } else {
@@ -908,7 +908,7 @@ private:
     {
       if (m_get_direct_mem_ptr) {
         // forward call
-        assert(m_mod);
+        sc_assert(m_mod);
         return (m_mod->*m_get_direct_mem_ptr)(m_get_dmi_user_id, trans, dmi_data);
 
       } else {
@@ -976,7 +976,7 @@ private:
         sc_core::sc_time t = sc_core::SC_ZERO_TIME;
 
         // forward call
-        assert(m_mod);
+        sc_assert(m_mod);
         (m_mod->*m_b_transport_ptr)(m_b_transport_user_id, *trans, t);
 
         sc_core::wait(t);
@@ -1006,8 +1006,8 @@ private:
 
         transaction_type* trans;
         while ((trans = m_peq.get_next_transaction())!=0) {
-          assert(m_mod);
-          assert(m_nb_transport_ptr);
+          sc_assert(m_mod);
+          sc_assert(m_nb_transport_ptr);
           phase_type phase = tlm::BEGIN_REQ;
           sc_core::sc_time t = sc_core::SC_ZERO_TIME;
 
@@ -1017,7 +1017,7 @@ private:
             // notify transaction is finished
             typename std::map<transaction_type*, sc_core::sc_event *>::iterator it =
               m_owner->m_pending_trans.find(trans);
-            assert(it != m_owner->m_pending_trans.end());
+            sc_assert(it != m_owner->m_pending_trans.end());
             it->second->notify(t);
             m_owner->m_pending_trans.erase(it);
             break;
@@ -1046,19 +1046,19 @@ private:
               // notify transaction is finished
               typename std::map<transaction_type*, sc_core::sc_event *>::iterator it =
                 m_owner->m_pending_trans.find(trans);
-              assert(it != m_owner->m_pending_trans.end());
+              sc_assert(it != m_owner->m_pending_trans.end());
               it->second->notify(t);
               m_owner->m_pending_trans.erase(it);
               break;
             }
 
             default:
-              assert(0); exit(1);
+              sc_assert(0); exit(1);
             };
             break;
 
           default:
-            assert(0); exit(1);
+            sc_assert(0); exit(1);
           };
         }
       }
@@ -1067,7 +1067,7 @@ private:
     void free(tlm::tlm_generic_payload* trans)
     {
       mm_end_event_ext* ext = trans->template get_extension<mm_end_event_ext>();
-      assert(ext);
+      sc_assert(ext);
       // notif event first before freeing extensions (reset)
       ext->done.notify();
       trans->reset();

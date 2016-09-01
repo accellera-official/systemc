@@ -233,12 +233,12 @@ sc_global<T>::value_ptr()
 
 template <class T>
 inline
-sc_context<T>::sc_context( const T& value_, sc_context_begin begin )
+sc_context<T>::sc_context( const T& value_, sc_context_begin begin_ )
 : m_value( value_ ),
   m_def_value_ptr( sc_global<T>::instance()->value_ptr() ),
   m_old_value_ptr( 0 )
 {
-    if( begin == SC_NOW )
+    if( begin_ == SC_NOW )
     {
 	m_old_value_ptr = m_def_value_ptr;
 	m_def_value_ptr = &m_value;

@@ -73,7 +73,8 @@ examples_FILES += \
 2_1_scx_barrier_CXX_FILES = \
 	2.1/scx_barrier/main.cpp
 
-2_1_scx_barrier_BUILD =
+2_1_scx_barrier_BUILD = \
+	2.1/scx_barrier/golden.log
 
 2_1_scx_barrier_EXTRA = \
 	2.1/scx_barrier/scx_barrier.vcproj \

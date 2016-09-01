@@ -20,7 +20,7 @@
 extern "C" {
 #endif
 
-#include <sysc/qt/qtmd.h>
+#include "sysc/packages/qt/qtmd.h"
 
 
 /* A QuickThreads thread is represented by it's current stack pointer.

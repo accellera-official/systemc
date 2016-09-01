@@ -47,8 +47,7 @@
 //
 
 #include <cstdlib>
-#include <assert.h>
-#include <ctype.h>
+#include <cctype>
 #include <cstdio>
 
 #include "sysc/datatypes/int/sc_int_ids.h"

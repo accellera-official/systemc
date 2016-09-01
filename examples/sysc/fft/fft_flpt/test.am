@@ -83,6 +83,7 @@ fft_fft_flpt_CXX_FILES = \
 	fft/fft_flpt/source.cpp
 
 fft_fft_flpt_BUILD = \
+	fft/fft_flpt/golden.log \
 	fft/fft_flpt/in_imag \
 	fft/fft_flpt/in_imag.1 \
 	fft/fft_flpt/in_imag.2 \

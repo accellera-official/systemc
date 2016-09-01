@@ -30,8 +30,8 @@
  *****************************************************************************/
 
 
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 
 #include "sysc/kernel/sc_process.h"
 #include "sysc/kernel/sc_simcontext_int.h"

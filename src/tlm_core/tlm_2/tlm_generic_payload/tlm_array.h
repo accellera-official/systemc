@@ -20,8 +20,6 @@
 #define __TLM_ARRAY_H__
 
 #include <systemc>
-#include <exception>
-// unused for the time being: #include <cassert>
 
 namespace tlm {
 
@@ -91,7 +89,7 @@ public:
     // it stores this slot in a cache of active slots
     void insert_in_cache(T* p)
     {
-        //assert( (p-&(*this)[0]) < size() );
+        //sc_assert( (p-&(*this)[0]) < size() );
         m_entries.push_back( p-&(*this)[0] );
     }
 
