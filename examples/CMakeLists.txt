@@ -41,6 +41,11 @@ if (NOT BUILD_EXAMPLES)
   set_directory_properties (PROPERTIES EXCLUDE_FROM_ALL 1)
 endif (NOT BUILD_EXAMPLES)
 
+
+########################################################################
+# Common definitions for all examples.
+########################################################################
+
 include_directories (BEFORE ${SystemC_SOURCE_DIR}/src)
 
 if (WIN32)
@@ -64,6 +69,40 @@ endif (WIN32)
 # TODO: Check why CMake doesn't add automatically ${CMAKE_THREAD_LIBS_INIT},
 # as already target systemc depends on it.
 set (SystemC_LIBRARIES systemc ${CMAKE_THREAD_LIBS_INIT})
+
+
+# configure_and_add_test (NAME [INPUT] [GOLDEN])
+macro (configure_and_add_test TEST_PROG)
+  if (${ARGC} GREATER 3)
+    message (FATAL_ERROR "Wrong number of arguments for configure_and_add_test (NAME [INPUT] [GOLDEN]).")
+  endif (${ARGC} GREATER 3)
+  string (REPLACE "${CMAKE_SOURCE_DIR}/" "" TEST_NAME
+                  "${CMAKE_CURRENT_SOURCE_DIR}/${TEST_PROG}")
+  if (NOT SHELL)
+    set (SHELL /bin/sh)
+  endif (NOT SHELL)
+  set (TEST ${CMAKE_CURRENT_BINARY_DIR}/${TEST_PROG})
+  if (${ARGC} LESS 2)
+    unset (TESTINPUT)
+  else (${ARGC} LESS 2)
+    set (TESTINPUT ${CMAKE_CURRENT_SOURCE_DIR}/${ARGV1})
+  endif (${ARGC} LESS 2)
+  if (${ARGC} LESS 3)
+    set (TESTGOLDEN ${CMAKE_CURRENT_SOURCE_DIR}/results/expected.log)
+  else (${ARGC} LESS 3)
+    set (TESTGOLDEN ${CMAKE_CURRENT_SOURCE_DIR}/${ARGV2})
+  endif (${ARGC} LESS 3)
+  configure_file (${CMAKE_SOURCE_DIR}/config/test.sh.in
+                  ${CMAKE_CURRENT_BINARY_DIR}/test.sh @ONLY)
+  add_test (${TEST_NAME} ${SHELL} ${CMAKE_CURRENT_BINARY_DIR}/test.sh)
+  set_tests_properties (${TEST_NAME}
+                        PROPERTIES FAIL_REGULAR_EXPRESSION "^[*][*][*]ERROR")
+endmacro (configure_and_add_test)
+
+
+########################################################################
+# Add the SystemC and TLM examples.
+########################################################################
 
 add_subdirectory (sysc)
 add_subdirectory (tlm)
