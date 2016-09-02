@@ -60,6 +60,10 @@ dnl 1.10 needed for .s file support of LIBTOOLFLAGS
 dnl enable silent rules, if present
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
+dnl define AS_VAR_APPEND, if not present (on older Autoconf versions)
+m4_ifndef([AS_VAR_APPEND],[as_fn_append () { eval $[1]=\$$[1]\$[2]; }
+AC_DEFUN([AS_VAR_APPEND],[as_fn_append $1 $2])])dnl
+
 dnl
 dnl reset default compiler flags
 dnl
