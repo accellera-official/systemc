@@ -130,12 +130,6 @@ class sc_fxnum_fast;
 
 } // namespace sc_dt
 
-// explicit template instantiations
-namespace sc_core {
-SC_API_TEMPLATE_ template class SC_API sc_vpool<sc_dt::sc_signed_bitref>;
-SC_API_TEMPLATE_ template class SC_API sc_vpool<sc_dt::sc_signed_subref>;
-} // namespace sc_core
-
 namespace sc_dt {
 
 // Helper function declarations
@@ -2385,5 +2379,10 @@ operator >> ( ::std::istream& is, sc_signed& a )
 
 } // namespace sc_dt
 
+// explicit template instantiations
+namespace sc_core {
+	SC_API_TEMPLATE_ template class SC_API sc_vpool<sc_dt::sc_signed_bitref>;
+	SC_API_TEMPLATE_ template class SC_API sc_vpool<sc_dt::sc_signed_subref>;
+} // namespace sc_core
 
 #endif
