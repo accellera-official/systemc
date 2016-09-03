@@ -459,6 +459,7 @@ endif (APPLE)
 ###############################################################################
 
 include_directories (BEFORE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/sysc/qt)
+add_definitions (-DSC_BUILD)  # building the SystemC library itself
 add_library (systemc ${systemc_SOURCES} ${systemc_HEADERS})
 if (DEFINED ${CMAKE_THREAD_LIBS_INIT})
   target_link_libraries (systemc ${CMAKE_THREAD_LIBS_INIT})

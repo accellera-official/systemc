@@ -291,8 +291,7 @@ else (NOT (WIN32 OR CYGWIN))
   option (BUILD_SHARED_LIBS "Build shared libraries." OFF)
 endif (NOT (WIN32 OR CYGWIN))
 if (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
-  message (WARNING "Only static libraries are supported on the Windows platform.")
-  set (BUILD_SHARED_LIBS OFF CACHE BOOL "Build shared libraries" FORCE)
+  message (WARNING "DLL support on Windows is still experimental and requires more testing!")
 endif (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
 
 option (BUILD_SOURCE_DOCUMENTATION "Build source documentation with Doxygen." OFF)
@@ -577,6 +576,10 @@ if (OVERRIDE_DEFAULT_STACK_SIZE GREATER 0)
 elseif (OVERRIDE_DEFAULT_STACK_SIZE LESS 0)
   message (SEND_ERROR "Negative default stack size requested for SystemC (thread) processes.")
 endif (OVERRIDE_DEFAULT_STACK_SIZE GREATER 0)
+
+if (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
+  add_definitions (-DSC_WIN_DLL)
+endif (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
 
 # Set additional compiler flags for known compilers.
 if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
