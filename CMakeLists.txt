@@ -172,11 +172,9 @@
 # - Detect C++'11-compatible compiler and then pass the right flags
 #   to use C++'11 language and library features.
 #
-# - Check examples output against golden.log files when executing them as test.
-#
-# - Replace the shell script wrappers config/run_test.sh.in and
-#   config/run_test_with_input.sh.in, used for the TLM examples execution, with
-#   a platform-independent solution.
+# - Replace the shell script wrappers config/test.sh.in used for the examples
+#   execution, with a platform-independent solution (on Windows, a Unix Shell
+#   is required, e.g., using MSYS2 or Cygwin).
 #
 # - Check whether preprocessor definitions WIN32, _LIB, _DEBUG, _CONSOLE, and
 #   NOGDI are necessary on WIN32 platforms (MSVC and MinGW).
@@ -205,6 +203,11 @@
 #
 # - Check whether SystemCConfig.cmake.in should define further compiler options
 #   beyond those defined currently for MSVC (/vmg /MP).
+#
+# - Check whether SystemCConfig.cmake.in forwards all necessary
+#   preprocessor definitions that need to be consistent for compilation of
+#   SystemC libraries as well as applications (e.g., remove
+#   SC_ENABLE_ASSERTIONS?).
 #
 # - Find a better way to make sure all code linking to the SystemC library is
 #   also linking to ${CMAKE_THREAD_LIBS_INIT} if needed.
