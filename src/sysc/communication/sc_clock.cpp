@@ -34,6 +34,12 @@
 // Added $Log command so that CVS comments are reproduced in the source.
 //
 
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+// disable warning about explicit instantiation of sc_signal
+// without implementation in this translation unit (-> sc_signal.cpp)
+#pragma warning(disable:4661)
+#endif
+
 #include "sysc/communication/sc_clock.h"
 #include "sysc/communication/sc_communication_ids.h"
 #include "sysc/kernel/sc_simcontext.h"

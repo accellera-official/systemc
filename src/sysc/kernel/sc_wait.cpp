@@ -51,7 +51,7 @@ void warn_cthread_wait()
     }
 }
 
-void
+SC_API void
 wait( sc_simcontext* simc )
 {
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();
@@ -70,7 +70,7 @@ wait( sc_simcontext* simc )
 
 // dynamic sensitivity for SC_THREADs and SC_CTHREADs
 
-void
+SC_API void
 wait( const sc_event& e, sc_simcontext* simc )
 {
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();
@@ -94,7 +94,7 @@ wait( const sc_event& e, sc_simcontext* simc )
     }
 }
 
-void
+SC_API void
 wait( const sc_event_or_list& el, sc_simcontext* simc )
 {
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();
@@ -120,7 +120,7 @@ wait( const sc_event_or_list& el, sc_simcontext* simc )
     }
 }
 
-void
+SC_API void
 wait( const sc_event_and_list& el, sc_simcontext* simc )
 {
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();
@@ -144,7 +144,7 @@ wait( const sc_event_and_list& el, sc_simcontext* simc )
     }
 }
 
-void
+SC_API void
 wait( const sc_time& t, sc_simcontext* simc )
 {
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();
@@ -168,7 +168,7 @@ wait( const sc_time& t, sc_simcontext* simc )
     }
 }
 
-void
+SC_API void
 wait( const sc_time& t, const sc_event& e, sc_simcontext* simc )
 {
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();
@@ -192,7 +192,7 @@ wait( const sc_time& t, const sc_event& e, sc_simcontext* simc )
     }
 }
 
-void
+SC_API void
 wait( const sc_time& t, const sc_event_or_list& el, sc_simcontext* simc )
 {
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();
@@ -216,7 +216,7 @@ wait( const sc_time& t, const sc_event_or_list& el, sc_simcontext* simc )
     }
 }
 
-void
+SC_API void
 wait( const sc_time& t, const sc_event_and_list& el, sc_simcontext* simc )
 {
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();
@@ -243,7 +243,7 @@ wait( const sc_time& t, const sc_event_and_list& el, sc_simcontext* simc )
 
 // static sensitivity for SC_METHODs
 
-void
+SC_API void
 next_trigger( sc_simcontext* simc )
 {
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();
@@ -258,7 +258,7 @@ next_trigger( sc_simcontext* simc )
 
 // dynamic sensitivity for SC_METHODs
 
-void
+SC_API void
 next_trigger( const sc_event& e, sc_simcontext* simc )
 {
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();
@@ -270,7 +270,7 @@ next_trigger( const sc_event& e, sc_simcontext* simc )
     }
 }
 
-void
+SC_API void
 next_trigger( const sc_event_or_list& el, sc_simcontext* simc )
 {
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();
@@ -282,7 +282,7 @@ next_trigger( const sc_event_or_list& el, sc_simcontext* simc )
     }
 }
 
-void
+SC_API void
 next_trigger( const sc_event_and_list& el, sc_simcontext* simc )
 {
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();
@@ -294,7 +294,7 @@ next_trigger( const sc_event_and_list& el, sc_simcontext* simc )
     }
 }
 
-void
+SC_API void
 next_trigger( const sc_time& t, sc_simcontext* simc )
 {
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();
@@ -306,7 +306,7 @@ next_trigger( const sc_time& t, sc_simcontext* simc )
     }
 }
 
-void
+SC_API void
 next_trigger( const sc_time& t, const sc_event& e, sc_simcontext* simc )
 {
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();
@@ -318,7 +318,7 @@ next_trigger( const sc_time& t, const sc_event& e, sc_simcontext* simc )
     }
 }
 
-void
+SC_API void
 next_trigger( const sc_time& t, const sc_event_or_list& el, sc_simcontext* simc)
 {
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();
@@ -330,7 +330,7 @@ next_trigger( const sc_time& t, const sc_event_or_list& el, sc_simcontext* simc)
     }
 }
 
-void
+SC_API void
 next_trigger(const sc_time& t, const sc_event_and_list& el, sc_simcontext* simc)
 {
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();
@@ -345,7 +345,7 @@ next_trigger(const sc_time& t, const sc_event_and_list& el, sc_simcontext* simc)
 
 // for SC_METHODs and SC_THREADs and SC_CTHREADs
 
-bool
+SC_API bool
 timed_out( sc_simcontext* simc )
 {
     static bool warn_timed_out=true; 
@@ -364,7 +364,7 @@ timed_out( sc_simcontext* simc )
 
 // misc.
 
-void
+SC_API void
 sc_set_location( const char* file, int lineno, sc_simcontext* simc )
 {
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();

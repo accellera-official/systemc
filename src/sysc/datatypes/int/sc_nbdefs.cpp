@@ -73,19 +73,19 @@ const uint64 UINT64_ZERO   = 0ULL;
 const uint64 UINT64_ONE    = 1ULL;
 const uint64 UINT64_32ONES = 0x00000000ffffffffULL;
 #else
-const uint64 UINT64_ZERO   = 0i64;
-const uint64 UINT64_ONE    = 1i64;
-const uint64 UINT64_32ONES = 0x00000000ffffffffi64;
+SC_API const uint64 UINT64_ZERO   = 0i64;
+SC_API const uint64 UINT64_ONE    = 1i64;
+SC_API const uint64 UINT64_32ONES = 0x00000000ffffffffi64;
 #endif
 
 const small_type NB_DEFAULT_BASE = SC_DEC;
 
 #ifndef _32BIT_
-const uint64 UINT_ZERO = UINT64_ZERO;
-const uint64 UINT_ONE  = UINT64_ONE;
+SC_API const uint64 UINT_ZERO = UINT64_ZERO;
+SC_API const uint64 UINT_ONE  = UINT64_ONE;
 #else
-const unsigned int UINT_ZERO = 0U;
-const unsigned int UINT_ONE  = 1U;
+SC_API const unsigned int UINT_ZERO = 0U;
+SC_API const unsigned int UINT_ONE  = 1U;
 #endif
 
 } // namespace sc_dt

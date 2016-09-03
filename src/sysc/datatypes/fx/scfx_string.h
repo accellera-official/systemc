@@ -72,7 +72,7 @@ class scfx_string;
 //  Simple string class for internal use.
 // ----------------------------------------------------------------------------
 
-class scfx_string
+class SC_API scfx_string
 {
     void resize( std::size_t );
 

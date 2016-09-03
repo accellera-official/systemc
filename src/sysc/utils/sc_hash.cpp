@@ -40,9 +40,9 @@ namespace sc_core {
 // approximate it by size_t
 typedef std::size_t uintptr_t;
 
-const double PHASH_DEFAULT_GROW_FACTOR     = 2.0;
+SC_API const double PHASH_DEFAULT_GROW_FACTOR     = 2.0;
 
-class sc_phash_elem {
+class SC_API sc_phash_elem {
     friend class sc_phash_base;
     friend class sc_phash_base_iter;
 
@@ -588,21 +588,21 @@ sc_phash_base_iter::set_contents( void* c )
 
 /****************************************************************************/
 
-unsigned 
+SC_API unsigned 
 default_ptr_hash_fn(const void* p)
 {
     return static_cast<unsigned>(((uintptr_t)(p) >> 2) * 2654435789U);
 
 }
 
-unsigned
+SC_API unsigned
 default_int_hash_fn(const void* p)
 {
     return static_cast<unsigned>((uintptr_t)(p) * 3141592661U);
 }
 
 
-unsigned
+SC_API unsigned
 default_str_hash_fn(const void* p)
 {
     if (!p) return 0;
@@ -619,13 +619,13 @@ default_str_hash_fn(const void* p)
     return h;
 }
 
-int
+SC_API int
 sc_strhash_cmp( const void* a, const void* b )
 {
     return std::strcmp( (const char*) a, (const char*) b );
 }
 
-void*
+SC_API void*
 sc_strhash_kdup(const void* k)
 {
     char* result = (char*) std::malloc( std::strlen((const char*)k)+1 );
@@ -633,7 +633,7 @@ sc_strhash_kdup(const void* k)
     return result;
 }
 
-void
+SC_API void
 sc_strhash_kfree(void* k)
 {
     if (k) std::free((char*) k);

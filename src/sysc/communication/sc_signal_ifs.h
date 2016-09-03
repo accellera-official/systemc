@@ -34,7 +34,7 @@
 
 namespace sc_dt
 {
-    class sc_logic;
+    class SC_API sc_logic;
 }
 
 namespace sc_core {
@@ -90,7 +90,7 @@ private:
 //  Specialization of sc_signal_in_if<T> for type bool.
 // ----------------------------------------------------------------------------
 
-class sc_reset;
+class SC_API sc_reset;
 
 template <>
 class sc_signal_in_if<bool>
@@ -151,7 +151,7 @@ private:
 // ----------------------------------------------------------------------------
 
 template <>
-class sc_signal_in_if<sc_dt::sc_logic>
+class SC_API sc_signal_in_if<sc_dt::sc_logic>
 : virtual public sc_interface
 {
 public:

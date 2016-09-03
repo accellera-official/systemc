@@ -44,6 +44,7 @@
 namespace sc_core {
 
 class sc_event_finder;
+class sc_port_base;
 
 struct sc_bind_info;
 
@@ -54,6 +55,11 @@ enum sc_port_policy
     SC_ALL_BOUND  
 }; 
 
+} // namespace sc_core
+
+SC_API_VECTOR_(sc_core::sc_port_base*);
+
+namespace sc_core {
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //  BEWARE: Ports can only be created and bound during elaboration.
@@ -66,7 +72,7 @@ enum sc_port_policy
 //  Abstract base class for class sc_port_b.
 // ----------------------------------------------------------------------------
 
-class sc_port_base
+class SC_API sc_port_base
 : public sc_object
 {
     friend class sc_module;
@@ -367,7 +373,7 @@ private:
 //  to this port. N <= 0 means no maximum.
 // ----------------------------------------------------------------------------
 
-extern void sc_warn_port_constructor();
+extern SC_API void sc_warn_port_constructor();
 
 template <class IF, int N = 1, sc_port_policy P=SC_ONE_OR_MORE_BOUND>
 class sc_port

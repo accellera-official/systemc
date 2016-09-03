@@ -42,10 +42,10 @@ namespace sc_core {
 
 // to avoid code bloat in sc_signal<T>
 
-extern void sc_deprecated_get_data_ref();
-extern void sc_deprecated_get_new_value();
-extern void sc_deprecated_trace();
-extern sc_event * sc_lazy_kernel_event( sc_event**, const char* name );
+extern SC_API void sc_deprecated_get_data_ref();
+extern SC_API void sc_deprecated_get_new_value();
+extern SC_API void sc_deprecated_trace();
+extern SC_API sc_event * sc_lazy_kernel_event( sc_event**, const char* name );
 
 inline
 bool
@@ -276,10 +276,10 @@ sc_signal<T,POL>::do_update()
 //  Specialization of sc_signal<T> for type bool.
 // ----------------------------------------------------------------------------
 
-class sc_reset;
+class SC_API sc_reset;
 
 template< sc_writer_policy POL >
-class sc_signal<bool,POL>
+class SC_API sc_signal<bool,POL>
   : public    sc_signal_inout_if<bool>
   , public    sc_prim_channel
   , protected sc_writer_policy_check<POL>
@@ -442,7 +442,7 @@ private:
 // ----------------------------------------------------------------------------
 
 template< sc_writer_policy POL >
-class sc_signal<sc_dt::sc_logic,POL>
+class SC_API sc_signal<sc_dt::sc_logic,POL>
   : public    sc_signal_inout_if<sc_dt::sc_logic>
   , public    sc_prim_channel
   , protected sc_writer_policy_check<POL>
@@ -604,8 +604,6 @@ operator << ( ::std::ostream& os, const sc_signal<T,POL>& a )
 {
     return ( os << a.read() );
 }
-
-
 
 } // namespace sc_core
 
