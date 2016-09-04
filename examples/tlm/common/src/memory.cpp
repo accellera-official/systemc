@@ -58,6 +58,17 @@ memory::memory
 /// clear memory
   memset(m_memory, 0, size_t(m_memory_size));              
 
+  sc_assert(m_memory_width > 0);
+  sc_assert(m_memory_size % m_memory_width == 0);
+
+  std::ostringstream  msg;   
+  msg.str("");
+  if ( m_memory_width > m_memory_size )
+  {
+    msg << "Target: " << m_ID 
+        <<" memory width is bigger than memory size";
+    REPORT_FATAL(filename, __FUNCTION__, msg.str());
+  }
 } // end Constructor
 
 //==============================================================================
