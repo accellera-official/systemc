@@ -63,9 +63,7 @@ EXTRA_DIST = \
 	cmake/SystemCConfig.cmake.in \
 	cmake/SystemCConfigVersion.cmake.in \
 	cmake/TLMConfig.cmake.in \
-	cmake/TLMConfigVersion.cmake.in \
-	cmake/run_test.sh.in \
-	cmake/run_test_with_input.sh.in
+	cmake/TLMConfigVersion.cmake.in
 
 ## ****************************************************************************
 
