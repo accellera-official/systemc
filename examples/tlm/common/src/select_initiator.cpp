@@ -48,11 +48,8 @@ select_initiator::select_initiator                  // constructor
 , m_send_end_rsp_PEQ  ("send_end_rsp_PEQ")          /// init PEQ name
 , m_ID            (ID)                              /// init initiator ID
 , m_end_rsp_delay (end_rsp_delay)                   /// init end response delay
-
+, m_enable_target_tracking (true)                   /// init tracking mode
 {
- m_enable_target_tracking = true;   /// init style tracking mode????
-
-
   // bind initiator to the export
   initiator_socket (*this);
 
