@@ -131,7 +131,6 @@ private:
                           m_send_end_rsp_PEQ;           // send end response PEQ
   unsigned int            m_ID;                         // initiator ID
   sc_core::sc_time        m_end_rsp_delay;              // end response delay
-  bool                    m_nb_trans_fw_prev_warning;
   bool                    m_enable_target_tracking;     // ? remove 
 }; 
  #endif /* __SELECT_INITIATOR_H__ */
