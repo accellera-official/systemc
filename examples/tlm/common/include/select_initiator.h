@@ -30,8 +30,8 @@
 #define __SELECT_INITIATOR_H__
 
 #include "tlm.h"                                    // TLM headers
-#include <map>                                      // STL map
 #include "tlm_utils/peq_with_get.h"                 // Payload event queue FIFO
+#include <map>                                      // STL map
 
 class select_initiator                              /// TLM AT select_initiator
 :         public sc_core::sc_module                 /// inherit from SC module base clase
