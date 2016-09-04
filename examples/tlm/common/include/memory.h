@@ -104,15 +104,15 @@ class memory
     
    private:
     
-   unsigned int          m_ID;                    ///< initiator ID
-   sc_core::sc_time      m_read_delay;            ///< read delay
-   sc_core::sc_time      m_write_delay;           ///< write delay
-   sc_dt::uint64         m_memory_size;           ///< memory size (bytes)
-   unsigned int          m_memory_width;          ///< memory width (bytes)
+   const unsigned int     m_ID;                   ///< initiator ID
+   const sc_core::sc_time m_read_delay;           ///< read delay
+   const sc_core::sc_time m_write_delay;          ///< write delay
+   const sc_dt::uint64    m_memory_size;          ///< memory size (bytes)
+   const unsigned int     m_memory_width;         ///< memory width (bytes)
     
-   unsigned char         *m_memory;               ///< memory
+   unsigned char          *m_memory;              ///< memory
    
-   bool                  m_previous_warning;      ///< limits to one message
+   bool                   m_previous_warning;     ///< limits to one message
     
 }; 
  #endif /* __MEMORY_H__ */
