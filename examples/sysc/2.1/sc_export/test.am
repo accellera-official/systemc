@@ -55,7 +55,7 @@ examples_BUILD += \
 
 examples_CLEAN += \
 	2.1/sc_export/run.log \
-	2.1/sc_export/expexted_trimmed.log \
+	2.1/sc_export/expected_trimmed.log \
 	2.1/sc_export/run_trimmed.log \
 	2.1/sc_export/diff.log
 

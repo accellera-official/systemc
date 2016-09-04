@@ -55,7 +55,7 @@ examples_BUILD += \
 
 examples_CLEAN += \
 	2.3/sc_rvd/run.log \
-	2.3/sc_rvd/expexted_trimmed.log \
+	2.3/sc_rvd/expected_trimmed.log \
 	2.3/sc_rvd/run_trimmed.log \
 	2.3/sc_rvd/diff.log
 
