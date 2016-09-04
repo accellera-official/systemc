@@ -209,6 +209,15 @@ public:
     sc_export_registry* get_export_registry();
     sc_prim_channel_registry* get_prim_channel_registry();
 
+    std::string get_hierarchical_name(const sc_object* parent,
+                                      const std::string& name);
+    bool register_hierarchical_name(const sc_object* parent,
+                                    const std::string& name);
+    bool unregister_hierarchical_name(const sc_object* parent,
+                                      const std::string& name);
+    bool hierarchical_name_exists(const sc_object* parent,
+                                  const std::string& name);
+
     // to generate unique names for objects in an MT-Safe way
     const char* gen_unique_name( const char* basename_, 
                                  bool preserve_first = false 
@@ -718,13 +727,51 @@ sc_end_of_simulation_invoked()
     return sc_get_curr_simcontext()->m_end_of_simulation_called;
 }
 
-inline bool sc_hierarchical_name_exists( const char* name )
+inline
+bool
+sc_hierarchical_name_exists( const char* name )
 {
-    return sc_find_object(name) || sc_find_event(name);
+    return sc_get_curr_simcontext()->hierarchical_name_exists(NULL, name);
 }
 
 inline
-bool 
+bool
+sc_hierarchical_name_exists( const sc_object* parent,
+                             const char* name )
+{
+    return sc_get_curr_simcontext()->hierarchical_name_exists(parent, name);
+}
+
+inline
+bool
+sc_register_hierarchical_name(const char* name)
+{
+    return sc_get_curr_simcontext()->register_hierarchical_name(NULL, name);
+}
+
+inline
+bool
+sc_register_hierarchical_name(const sc_object* parent, const char* name)
+{
+    return sc_get_curr_simcontext()->register_hierarchical_name(parent, name);
+}
+
+inline
+bool
+sc_unregister_hierarchical_name(const char* name)
+{
+    return sc_get_curr_simcontext()->unregister_hierarchical_name(NULL, name);
+}
+
+inline
+bool
+sc_unregister_hierarchical_name(const sc_object* parent, const char* name)
+{
+    return sc_get_curr_simcontext()->unregister_hierarchical_name(parent, name);
+}
+
+inline
+bool
 sc_start_of_simulation_invoked()
 {
     return sc_get_curr_simcontext()->m_start_of_simulation_called;
