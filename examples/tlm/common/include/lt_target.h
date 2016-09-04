@@ -86,9 +86,7 @@ class lt_target
   const sc_core::sc_time    m_accept_delay;         ///< accept delay
   const sc_core::sc_time    m_read_response_delay;  ///< read response delay
   const sc_core::sc_time    m_write_response_delay; ///< write response delays
-  
-        bool                m_trans_dbg_prev_warning;
-          
+
         memory              m_target_memory;
 };
 
