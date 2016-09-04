@@ -2,7 +2,7 @@
     The following code is derived, directly or indirectly, from the SystemC
     source code Copyright (c) 1996-2014 by all Contributors.
     All Rights reserved.
- 
+
     The contents of this file are subject to the restrictions and limitations
     set forth in the SystemC Open Source License (the "License");
     You may not use this file except in compliance with such restrictions and
@@ -26,14 +26,14 @@
 
 #include "lt_target.h"                        // our header
 #include "reporting.h"                            // reporting macros
-                    
+
 using namespace  std;
 
 static const char *filename = "lt_target.cpp"; ///< filename for reporting
 
 SC_HAS_PROCESS(lt_target);
 ///Constructor
-lt_target::lt_target                      
+lt_target::lt_target
 ( sc_core::sc_module_name module_name               // module name
 , const unsigned int        ID                      // target ID
 , const char                *memory_socket          // socket name
@@ -57,47 +57,40 @@ lt_target::lt_target
   , m_read_response_delay         // delay for reads
   , m_write_response_delay        // delay for writes
   , m_memory_size                 // memory size (bytes)
-  , m_memory_width                // memory width (bytes)      
+  , m_memory_width                // memory width (bytes)
   )
-  
+
 {
-  
+
   m_memory_socket.register_b_transport(this, &lt_target::custom_b_transport);
 
 }
 
 //==============================================================================
-//  b_transport implementation calls from initiators 
+//  b_transport implementation calls from initiators
 //
 //=============================================================================
-void                                        
+void
 lt_target::custom_b_transport
-( tlm::tlm_generic_payload  &payload                // ref to  Generic Payload 
-, sc_core::sc_time          &delay_time             // delay time 
+( tlm::tlm_generic_payload  &payload                // ref to  Generic Payload
+, sc_core::sc_time          &delay_time             // delay time
 )
 {
- 
-  std::ostringstream  msg;                          
+
+  std::ostringstream  msg;
   msg.str("");
   sc_core::sc_time      mem_op_time;
-  
+
   m_target_memory.operation(payload, mem_op_time);
 
-  msg << "Target: " << m_ID               
-      << " returned delay of " << delay_time 
+  msg << "Target: " << m_ID
+      << " returned delay of " << delay_time
       << " + " << m_accept_delay << " + " << mem_op_time;
 
   delay_time = delay_time + m_accept_delay + mem_op_time;
-  
+
   msg << " = " << delay_time;
   REPORT_INFO(filename,  __FUNCTION__, msg.str());
-  
-  return;     
+
+  return;
 }
-
-
-
-
-
-
-
