@@ -212,6 +212,12 @@
 # - Find a better way to make sure all code linking to the SystemC library is
 #   also linking to ${CMAKE_THREAD_LIBS_INIT} if needed.
 #
+# - Fix execution of the unit tests from within Xcode:
+#
+#     [...]
+#     make: *** [RUN_TESTS_buildpart_0] Error 8
+#     Command /bin/sh failed with exit code 2
+#
 ###############################################################################
 
 
