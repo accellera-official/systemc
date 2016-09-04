@@ -129,8 +129,8 @@ private:
   sc_core::sc_event       m_enable_next_request_event;
   tlm_utils::peq_with_get<tlm::tlm_generic_payload>
                           m_send_end_rsp_PEQ;           // send end response PEQ
-  unsigned int            m_ID;                         // initiator ID
-  sc_core::sc_time        m_end_rsp_delay;              // end response delay
+  const unsigned int      m_ID;                         // initiator ID
+  const sc_core::sc_time  m_end_rsp_delay;              // end response delay
   bool                    m_enable_target_tracking;     // ? remove
 };
  #endif /* __SELECT_INITIATOR_H__ */
