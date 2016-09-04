@@ -90,7 +90,6 @@ private:
   sc_core::sc_fifo <gp_ptr>  m_response_fifo;  ///< response SC FIFO
   
   const unsigned int         m_ID;             ///< initiator ID
-  bool                       m_enable_target_tracking; ///< track target timing
     
   select_initiator           m_initiator;      ///< TLM initiator instance
   traffic_generator          m_traffic_gen;    ///< traffic generator instance
