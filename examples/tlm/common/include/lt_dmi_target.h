@@ -99,9 +99,7 @@ class lt_dmi_target
   const sc_core::sc_time    m_accept_delay;         ///< accept delay
   const sc_core::sc_time    m_read_response_delay;  ///< read response delay
   const sc_core::sc_time    m_write_response_delay; ///< write response delays
-  
-        bool                m_trans_dbg_prev_warning;
-        
+
         bool                m_dmi_enabled;
   const sc_core::sc_time    m_start_dmi_delay;
   const sc_core::sc_time    m_dmi_duration;
