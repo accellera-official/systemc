@@ -170,6 +170,27 @@ sc_object_manager::name_exists(const std::string& name)
 }
 
 // +----------------------------------------------------------------------------
+// |"sc_object_manager::get_name"
+// |
+// | This method returns the pointer to the supplied name if it exists in the
+// | hierarchy or NULL if it doesn't exist.
+// |
+// | Arguments:
+// |     name = name of the element
+// | Result is a pointer to the name or NULL if it doesn't exist.
+// +----------------------------------------------------------------------------
+const char*
+sc_object_manager::get_name(const std::string& name)
+{
+    instance_table_t::iterator it = m_instance_table.find(name);
+    if(it != m_instance_table.end()) {
+        return it->first.c_str();
+    } else {
+        return NULL;
+    }
+}
+
+// +----------------------------------------------------------------------------
 // |"sc_object_manager::find_event"
 // | 
 // | This method returns the sc_event with the supplied name, or a NULL if
