@@ -1151,6 +1151,14 @@ sc_simcontext::hierarchical_name_exists(const sc_object* parent,
             construct_hierarchical_name(parent, name));
 }
 
+const char*
+sc_simcontext::get_hierarchical_name(const sc_object* parent,
+                                     const std::string& name)
+{
+    return m_object_manager->get_name(
+            construct_hierarchical_name(parent, name));
+}
+
 // to generate unique names for objects in an MT-Safe way
 
 const char*

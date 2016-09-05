@@ -217,6 +217,8 @@ public:
                                       const std::string& name);
     bool hierarchical_name_exists(const sc_object* parent,
                                   const std::string& name);
+    const char* get_hierarchical_name(const sc_object* parent,
+                                      const std::string& name);
 
     // to generate unique names for objects in an MT-Safe way
     const char* gen_unique_name( const char* basename_, 
@@ -740,6 +742,20 @@ sc_hierarchical_name_exists( const sc_object* parent,
                              const char* name )
 {
     return sc_get_curr_simcontext()->hierarchical_name_exists(parent, name);
+}
+
+inline
+const char*
+sc_get_hierarchical_name(const char* name)
+{
+    return sc_get_curr_simcontext()->get_hierarchical_name(NULL, name);
+}
+
+inline
+const char*
+sc_get_hierarchical_name(const sc_object* parent, const char* name)
+{
+    return sc_get_curr_simcontext()->get_hierarchical_name(parent, name);
 }
 
 inline
