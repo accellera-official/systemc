@@ -636,7 +636,7 @@ inline void sc_signal<sc_dt::sc_uint<W> >::register_port(
 			m_output_p = &port_;
 		}
 #       else
-            if ( &port_ && if_typename_ ) {} // Silence unused args warning.
+		if ( port_.name() && if_typename_ ) {} // Silence unused args warning.
 #       endif
 }
 
