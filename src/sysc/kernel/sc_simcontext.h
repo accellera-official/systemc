@@ -209,8 +209,8 @@ public:
     sc_export_registry* get_export_registry();
     sc_prim_channel_registry* get_prim_channel_registry();
 
-    std::string get_hierarchical_name(const sc_object* parent,
-                                      const std::string& name);
+    std::string construct_hierarchical_name(const sc_object* parent,
+                                            const std::string& name);
     bool register_hierarchical_name(const sc_object* parent,
                                     const std::string& name);
     bool unregister_hierarchical_name(const sc_object* parent,

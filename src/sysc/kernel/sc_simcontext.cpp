@@ -1118,8 +1118,8 @@ sc_simcontext::find_object( const char* name )
 }
 
 std::string
-sc_simcontext::get_hierarchical_name(const sc_object* parent,
-                                     const std::string& name)
+sc_simcontext::construct_hierarchical_name(const sc_object* parent,
+                                           const std::string& name)
 {
     std::string hierarchical_name = parent ? ( std::string(parent->name())
                                                + SC_HIERARCHY_CHAR ) : "";
@@ -1131,23 +1131,24 @@ bool
 sc_simcontext::register_hierarchical_name(const sc_object* parent,
                                           const std::string& name)
 {
-    return m_object_manager->insert_external_name(get_hierarchical_name(parent,
-                                                                        name));
+    return m_object_manager->insert_external_name(
+            construct_hierarchical_name(parent, name));
 }
 
 bool
 sc_simcontext::unregister_hierarchical_name(const sc_object* parent,
                                             const std::string& name)
 {
-    return m_object_manager->remove_external_name(get_hierarchical_name(parent,
-                                                                        name));
+    return m_object_manager->remove_external_name(
+            construct_hierarchical_name(parent, name));
 }
 
 bool
 sc_simcontext::hierarchical_name_exists(const sc_object* parent,
                                         const std::string& name)
 {
-    return m_object_manager->name_exists(get_hierarchical_name(parent, name));
+    return m_object_manager->name_exists(
+            construct_hierarchical_name(parent, name));
 }
 
 // to generate unique names for objects in an MT-Safe way
