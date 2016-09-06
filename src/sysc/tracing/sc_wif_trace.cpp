@@ -878,7 +878,7 @@ wif_unsigned_int_trace::wif_unsigned_int_trace(const unsigned& object_,
 {
     bit_width = width_;
     if (bit_width < 32) {
-        mask = ~(-1 << bit_width);
+        mask = ~(~0U << bit_width);
     }
 
     wif_type = "BIT";
@@ -942,7 +942,7 @@ wif_unsigned_short_trace::wif_unsigned_short_trace(
 {
     bit_width = width_;
     if (bit_width < 16) {
-        mask = (unsigned short)~(-1 << bit_width);
+        mask = (unsigned short)~(~0U << bit_width);
     }
 
     wif_type = "BIT";
@@ -1004,7 +1004,7 @@ wif_unsigned_char_trace::wif_unsigned_char_trace(const unsigned char& object_,
 {
     bit_width = width_;
     if (bit_width < 8) {
-        mask = (unsigned char)~(-1 << bit_width);
+        mask = (unsigned char)~(~0U << bit_width);
     }
 
     wif_type = "BIT";
@@ -1067,7 +1067,7 @@ wif_unsigned_long_trace::wif_unsigned_long_trace(const unsigned long& object_,
 {
     bit_width = width_;
     if (bit_width < (int)(sizeof(unsigned long)*BITS_PER_BYTE)) {
-        mask = ~(-1L << bit_width);
+        mask = ~(~0UL << bit_width);
     }
 
     wif_type = "BIT";
@@ -1130,7 +1130,7 @@ wif_signed_int_trace::wif_signed_int_trace(const signed& object_,
 {
     bit_width = width_;
     if (bit_width < 32) {
-        mask = ~(-1 << bit_width);
+        mask = ~(~0U << bit_width);
     }
 
     wif_type = "BIT";
@@ -1192,7 +1192,7 @@ wif_signed_short_trace::wif_signed_short_trace(const short& object_,
 {
     bit_width = width_;
     if (bit_width < 16) {
-        mask = (unsigned short)~(-1 << bit_width);
+        mask = (unsigned short)~(~0U << bit_width);
     }
 
     wif_type = "BIT";
@@ -1254,7 +1254,7 @@ wif_signed_char_trace::wif_signed_char_trace(const char& object_,
 {
     bit_width = width_;
     if (bit_width < 8) {
-        mask = (unsigned char)~(-1 << bit_width);
+        mask = (unsigned char)~(~0U << bit_width);
     }
 
     wif_type = "BIT";
@@ -1317,7 +1317,7 @@ wif_signed_long_trace::wif_signed_long_trace(const long& object_,
 {
     bit_width = width_;
     if (bit_width < (int)(sizeof(long)*BITS_PER_BYTE)) {
-        mask = ~(-1L << bit_width);
+        mask = ~(~0UL << bit_width);
     }
 
     wif_type = "BIT";
