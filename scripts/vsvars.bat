@@ -14,6 +14,8 @@ if "%1" == "2012"  goto check_MSVC110
 if "%1" == "12.0"  goto check_MSVC120
 if "%1" == "2013"  goto check_MSVC120
 if "%1" == "2014"  goto check_MSVC120
+if "%1" == "14.0"  goto check_MSVC140
+if "%1" == "2015"  goto check_MSVC140
 
 if not "%1" == "" set SYSTEMC_MSVC_PLATFORM=%1
 if     "%1" == "" set SYSTEMC_MSVC_PLATFORM=x86
@@ -45,6 +47,11 @@ goto load_MSVC
 :check_MSVC120
 set SYSTEMC_MSVC_VERSION=12.0 (2013)
 set VSINSTALLDIR=%VS120COMNTOOLS%..\..\
+goto load_MSVC
+
+:check_MSVC140
+set SYSTEMC_MSVC_VERSION=14.0 (2015)
+set VSINSTALLDIR=%VS140COMNTOOLS%..\..\
 goto load_MSVC
 
 :load_MSVC
