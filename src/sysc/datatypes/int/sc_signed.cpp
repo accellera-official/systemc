@@ -153,7 +153,7 @@ bool sc_signed::concat_get_ctrl( sc_digit* dst_p, int low_i ) const
 
     // ALL DATA TO BE MOVED IS IN A SINGLE WORD:
 
-    mask = ~(-1 << left_shift);    
+    mask = ~(~0U << left_shift);    
     dst_p[dst_i] = ( dst_p[dst_i] & ~mask );         
     dst_i++;
 
@@ -197,7 +197,7 @@ bool sc_signed::concat_get_data( sc_digit* dst_p, int low_i ) const
 
         if ( dst_i == end_i )
         {
-            mask = ~(-1 << left_shift);
+            mask = ~(~0U << left_shift);
             dst_p[dst_i] = ( ( dst_p[dst_i] & mask ) | 
                 (digit[0] << left_shift) ) & DIGIT_MASK;
         }
@@ -212,7 +212,7 @@ bool sc_signed::concat_get_data( sc_digit* dst_p, int low_i ) const
                 dst_p[dst_i] = digit[src_i];
             }
             high_i = high_i % BITS_PER_DIGIT;
-            mask = ~(-2 << high_i) & DIGIT_MASK;
+            mask = ~(~1U << high_i) & DIGIT_MASK;
             dst_p[dst_i] = digit[src_i] & mask;
         }
 
@@ -223,7 +223,7 @@ bool sc_signed::concat_get_data( sc_digit* dst_p, int low_i ) const
         {
             high_i = high_i % BITS_PER_DIGIT;
             right_shift = BITS_PER_DIGIT - left_shift;
-            mask = ~(-1 << left_shift);
+            mask = ~(~0U << left_shift);
             right_word = digit[0];
             dst_p[dst_i] = (dst_p[dst_i] & mask) | 
                 ((right_word << left_shift) & DIGIT_MASK);
@@ -235,7 +235,7 @@ bool sc_signed::concat_get_data( sc_digit* dst_p, int low_i ) const
                 right_word = left_word;
             }
             left_word = (src_i < ndigits) ? digit[src_i] : 0;
-            mask = ~(-2 << high_i) & DIGIT_MASK;
+            mask = ~(~1U << high_i) & DIGIT_MASK;
             dst_p[dst_i] = ((left_word << left_shift) |
                 (right_word >> right_shift)) & mask;
         }
@@ -251,9 +251,9 @@ bool sc_signed::concat_get_data( sc_digit* dst_p, int low_i ) const
 	result = true;
         if ( dst_i == end_i )
         {
-            mask = ~(-1 << nbits);
+            mask = ~(~0U << nbits);
             right_word = ((digit[0] ^ DIGIT_MASK) + 1) & mask;
-            mask = ~(-1 << left_shift);
+            mask = ~(~0U << left_shift);
             dst_p[dst_i] = ( ( dst_p[dst_i] & mask ) | 
                 (right_word << left_shift) ) & DIGIT_MASK;
         }
@@ -271,7 +271,7 @@ bool sc_signed::concat_get_data( sc_digit* dst_p, int low_i ) const
                 carry = right_word >> BITS_PER_DIGIT;
             }
             high_i = high_i % BITS_PER_DIGIT;
-            mask = (~(-2 << high_i)) & DIGIT_MASK;
+            mask = (~(~1U << high_i)) & DIGIT_MASK;
             right_word = (src_i < ndigits) ? 
 	        (digit[src_i] ^ DIGIT_MASK) + carry : DIGIT_MASK + carry;
             dst_p[dst_i] = right_word & mask;
@@ -284,7 +284,7 @@ bool sc_signed::concat_get_data( sc_digit* dst_p, int low_i ) const
         {
             high_i = high_i % BITS_PER_DIGIT;
             right_shift = BITS_PER_DIGIT - left_shift;
-            mask = ~(-1 << left_shift);
+            mask = ~(~0U << left_shift);
             carry = 1;
             right_word = (digit[0] ^ DIGIT_MASK) + carry;
             dst_p[dst_i] = (dst_p[dst_i] & mask) | 
@@ -301,7 +301,7 @@ bool sc_signed::concat_get_data( sc_digit* dst_p, int low_i ) const
             }
             left_word = (src_i < ndigits) ? 
 	        (digit[src_i] ^ DIGIT_MASK) + carry : carry;
-            mask = ~(-2 << high_i) & DIGIT_MASK;
+            mask = ~(~1U << high_i) & DIGIT_MASK;
             dst_p[dst_i] = ((left_word << left_shift) |
                 (right_word >> right_shift)) & mask;
         }
@@ -318,7 +318,7 @@ bool sc_signed::concat_get_data( sc_digit* dst_p, int low_i ) const
 
         if ( dst_i == end_i )
         {
-            mask = ~(-1 << nbits) << left_shift;
+            mask = ~(~0U << nbits) << left_shift;
             dst_p[dst_i] = dst_p[dst_i] & ~mask;
         }
 
@@ -333,7 +333,7 @@ bool sc_signed::concat_get_data( sc_digit* dst_p, int low_i ) const
                 dst_p[dst_i] = 0;
             }
             high_i = high_i % BITS_PER_DIGIT;
-            mask = ~(-2 << high_i) & DIGIT_MASK;
+            mask = ~(~1U << high_i) & DIGIT_MASK;
             dst_p[dst_i] = 0; // #### digit[src_i] & mask;
         }
 
@@ -344,7 +344,7 @@ bool sc_signed::concat_get_data( sc_digit* dst_p, int low_i ) const
         {
             high_i = high_i % BITS_PER_DIGIT;
             right_shift = BITS_PER_DIGIT - left_shift;
-            mask = ~(-1 << left_shift);
+            mask = ~(~0U << left_shift);
             dst_p[dst_i] = (dst_p[dst_i] & mask);
             for ( dst_i++; dst_i <= end_i; dst_i++ )
             {
@@ -438,8 +438,8 @@ bool sc_signed::and_reduce() const
 	    if ( (current & DIGIT_MASK) != DIGIT_MASK ) return false;
 	}
 	current = (current >> BITS_PER_DIGIT) + (digit[i]^DIGIT_MASK);
-	if ( (current & ~(-1 << (nbits % BITS_PER_DIGIT))) == 
-	    (sc_digit) ~(-1 << (nbits % BITS_PER_DIGIT)) ) 
+	if ( (current & ~(~0U << (nbits % BITS_PER_DIGIT))) == 
+	    (sc_digit) ~(~0U << (nbits % BITS_PER_DIGIT)) ) 
 		return true;
     }
     return false;
