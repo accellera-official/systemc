@@ -164,6 +164,10 @@
 #
 # TODO:
 #
+# - Enable the compilation of SystemC as a DLL on Windows! To make it work, the
+#   SystemC library has to be at least split into libsystemc-core.dll and a
+#   static libsystemc.lib.
+#
 # - Improve further the directory layout for the installation of SystemC and
 #   libraries using it. The installed CMake project configuration files should
 #   be automatically found by other CMake projects (e.g., SCV, SystemC AMS).
@@ -297,7 +301,7 @@ else (NOT (WIN32 OR CYGWIN))
   option (BUILD_SHARED_LIBS "Build shared libraries." OFF)
 endif (NOT (WIN32 OR CYGWIN))
 if (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
-  message (WARNING "DLL support on Windows is still experimental and requires more testing!")
+  message (WARNING "The compilation of SystemC as a DLL on Windows is currently broken! To make it work, the SystemC library has to be at least split into libsystemc-core.dll and a static libsystemc.lib.")
 endif (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
 
 option (BUILD_SOURCE_DOCUMENTATION "Build source documentation with Doxygen." OFF)
