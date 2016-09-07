@@ -100,16 +100,16 @@ sc_core::sc_vpool<sc_uint_bitref> sc_uint_bitref::m_pool(9);
 
 // #### OPTIMIZE
 void sc_uint_bitref::concat_set(int64 src, int low_i)
-{   
+{
     sc_uint_base aa( 1 );
     *this = aa = (low_i < 64) ? src >> low_i : src >> 63;
 }
 
 void sc_uint_bitref::concat_set(const sc_signed& src, int low_i)
 {
-    sc_uint_base aa( 1 );     
+    sc_uint_base aa( 1 );
     if ( low_i < src.length() )
-        *this = aa = 1 & (src >> low_i);      
+        *this = aa = 1 & (src >> low_i);
     else
         *this = aa = (src < 0) ? (int_type)-1 : 0;
 }
@@ -156,7 +156,7 @@ bool sc_uint_subref_r::concat_get_ctrl( sc_digit* dst_p, int low_i ) const
 
     dst_i = low_i / BITS_PER_DIGIT;
     left_shift = low_i % BITS_PER_DIGIT;
-    end_i = (low_i + (m_left-m_right)) / BITS_PER_DIGIT; 
+    end_i = (low_i + (m_left-m_right)) / BITS_PER_DIGIT;
 
     mask = ~(~0U << left_shift);
     dst_p[dst_i] = (sc_digit)((dst_p[dst_i] & mask));
@@ -179,7 +179,7 @@ bool sc_uint_subref_r::concat_get_data( sc_digit* dst_p, int low_i ) const
 
     dst_i = low_i / BITS_PER_DIGIT;
     left_shift = low_i % BITS_PER_DIGIT;
-    high_i = low_i + (m_left-m_right); 
+    high_i = low_i + (m_left-m_right);
     end_i = high_i / BITS_PER_DIGIT;
     mask = ~mask_int[m_left][m_right];
     val = (m_obj_p->m_val & mask) >> m_right;
@@ -189,7 +189,7 @@ bool sc_uint_subref_r::concat_get_data( sc_digit* dst_p, int low_i ) const
     // PROCESS THE FIRST WORD:
 
     mask = ~(~0U << left_shift);
-    dst_p[dst_i] = (sc_digit)(((dst_p[dst_i] & mask)) | 
+    dst_p[dst_i] = (sc_digit)(((dst_p[dst_i] & mask)) |
 	((val << left_shift) & DIGIT_MASK));
 
     switch ( end_i - dst_i )
@@ -237,7 +237,7 @@ sc_core::sc_vpool<sc_uint_subref> sc_uint_subref::m_pool(9);
 
 // assignment operators
 
-sc_uint_subref& 
+sc_uint_subref&
 sc_uint_subref::operator = ( uint_type v )
 {
     uint_type val = m_obj_p->m_val;
@@ -286,26 +286,26 @@ void sc_uint_subref::concat_set(int64 src, int low_i)
     *this = aa = (low_i < 64) ? src >> low_i : src >> 63;
 }
 
-void sc_uint_subref::concat_set(const sc_signed& src, int low_i)   
+void sc_uint_subref::concat_set(const sc_signed& src, int low_i)
 {
-    sc_uint_base aa( length() );   
+    sc_uint_base aa( length() );
     if ( low_i < src.length() )
         *this = aa = src >> low_i;
     else
         *this = aa = (src < 0) ? (int_type)-1 : 0;
 }
 
-void sc_uint_subref::concat_set(const sc_unsigned& src, int low_i)   
+void sc_uint_subref::concat_set(const sc_unsigned& src, int low_i)
 {
     sc_uint_base aa( length() );
     if ( low_i < src.length() )
         *this = aa = src >> low_i;
     else
         *this = aa = 0;
-} 
+}
 
-void sc_uint_subref::concat_set(uint64 src, int low_i)   
-{      
+void sc_uint_subref::concat_set(uint64 src, int low_i)
+{
     sc_uint_base aa( length() );
     *this = aa = (low_i < 64) ? src >> low_i : 0;
 }
@@ -378,7 +378,7 @@ sc_uint_base::check_value() const
 
 // constructors
 
-sc_uint_base::sc_uint_base( const sc_bv_base& v ) 
+sc_uint_base::sc_uint_base( const sc_bv_base& v )
     : m_val(0), m_len( v.length() ), m_ulen( SC_INTWIDTH - m_len )
 {
     check_length();
@@ -456,7 +456,7 @@ sc_uint_base::operator = ( const sc_signed& a )
     return *this;
 }
 
-sc_uint_base& 
+sc_uint_base&
 sc_uint_base::operator = ( const sc_unsigned& a )
 {
     int minlen = sc_min( m_len, a.length() );
@@ -579,7 +579,7 @@ sc_uint_base::xor_reduce() const
 
 
 bool sc_uint_base::concat_get_ctrl( sc_digit* dst_p, int low_i ) const
-{    
+{
     int       dst_i;       // Word in dst_p now processing.
     int       end_i;       // Highest order word in dst_p to process.
     int       left_shift;  // Left shift for val.
@@ -615,7 +615,7 @@ bool sc_uint_base::concat_get_ctrl( sc_digit* dst_p, int low_i ) const
 //   low_i =  first bit within dst_p to be set.
 //------------------------------------------------------------------------------
 bool sc_uint_base::concat_get_data( sc_digit* dst_p, int low_i ) const
-{    
+{
     int       dst_i;       // Word in dst_p now processing.
     int       end_i;       // Highest order word in dst_p to process.
     int       high_i;      // Index of high order bit in dst_p to set.
@@ -642,7 +642,7 @@ bool sc_uint_base::concat_get_data( sc_digit* dst_p, int low_i ) const
     // PROCESS THE FIRST WORD:
 
     mask = ~((uint_type)-1 << left_shift);
-    dst_p[dst_i] = (sc_digit)(((dst_p[dst_i] & mask)) | 
+    dst_p[dst_i] = (sc_digit)(((dst_p[dst_i] & mask)) |
 	((val << left_shift) & DIGIT_MASK));
 
     switch ( end_i - dst_i )
@@ -690,9 +690,9 @@ void sc_uint_base::concat_set(int64 src, int low_i)
 void sc_uint_base::concat_set(const sc_signed& src, int low_i)
 {
     if ( low_i < src.length() )
-        *this = src >> low_i;                             
+        *this = src >> low_i;
     else
-        *this = (src < 0) ? (int_type)-1 : 0; 
+        *this = (src < 0) ? (int_type)-1 : 0;
 }
 
 void sc_uint_base::concat_set(const sc_unsigned& src, int low_i)

@@ -342,7 +342,7 @@ public:
     // copy constructor
 
     sc_int_subref_r( const sc_int_subref_r& a ) :
-        sc_value_base(a), m_left( a.m_left ), m_obj_p( a.m_obj_p ), 
+        sc_value_base(a), m_left( a.m_left ), m_obj_p( a.m_obj_p ),
 	m_right( a.m_right )
         {}
 
@@ -584,7 +584,7 @@ public:
 	{ check_length(); extend_sign(); }
 
     sc_int_base( const sc_int_base& a )
-	: sc_value_base(a), m_val( a.m_val ), m_len( a.m_len ), 
+	: sc_value_base(a), m_val( a.m_val ), m_len( a.m_len ),
 	  m_ulen( a.m_ulen )
 	{}
 
