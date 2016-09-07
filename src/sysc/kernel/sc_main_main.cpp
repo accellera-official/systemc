@@ -76,7 +76,8 @@ sc_elab_and_sim( int argc, char* argv[] )
     // result returned from sc_argv.
     std::vector<char*> argv_call(argc + 1, NULL);
     for ( int i = 0; i < argc; i++ ) {
-        argv_call[i] = strdup(argv[i]);
+        argv_call[i] = (char*) std::malloc( std::strlen(argv[i]) + 1 );
+        std::strcpy(argv_call[i], argv[i]);
     }
 
     try
