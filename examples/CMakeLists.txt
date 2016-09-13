@@ -70,6 +70,19 @@ endif (WIN32)
 # as already target systemc depends on it.
 set (SystemC_LIBRARIES systemc ${CMAKE_THREAD_LIBS_INIT})
 
+# If possible, find a more powerful platform-specific diff tool than "cmake -E compare_files"
+find_program (DIFF_COMMAND
+              NAMES diff diff.exe fc fc.exe
+              PATHS ENV PATH)
+if (DIFF_COMMAND MATCHES diff)
+  set (DIFF_OPTIONS -u CACHE STRING "Diff command options.")
+elseif (DIFF_COMMAND MATCHES fc)
+  set (DIFF_OPTIONS /N CACHE STRING "Diff command options.")
+else (DIFF_COMMAND MATCHES diff)
+  set (DIFF_COMMAND ${CMAKE_COMMAND} CACHE FILEPATH "Path to diff command.")
+  set (DIFF_OPTIONS -E compare_files CACHE FILEPATH "Diff command options.")
+endif (DIFF_COMMAND MATCHES diff)
+mark_as_advanced (DIFF_COMMAND DIFF_OPTIONS)
 
 # configure_and_add_test (NAME [INPUT] [GOLDEN])
 macro (configure_and_add_test TEST_PROG)
@@ -78,35 +91,39 @@ macro (configure_and_add_test TEST_PROG)
   endif (${ARGC} GREATER 3)
   string (REPLACE "${CMAKE_SOURCE_DIR}/" "" TEST_NAME
                   "${CMAKE_CURRENT_SOURCE_DIR}/${TEST_PROG}")
-  set (TEST ${CMAKE_CURRENT_BINARY_DIR}/${TEST_PROG})
+  #string(REGEX REPLACE "[^A-Za-z0-9_]" "_" TEST_NAME ${TEST_NAME})
   if (${ARGC} LESS 2)
-    unset (TESTINPUT)
+    unset (TEST_INPUT)
   else (${ARGC} LESS 2)
-    set (TESTINPUT ${CMAKE_CURRENT_SOURCE_DIR}/${ARGV1})
-    if (NOT EXISTS ${TESTINPUT})
-      message (SEND_ERROR "The specified input file ${TESTINPUT} for test ${TEST_NAME} does not exist.")
-      unset (TESTINPUT)
-    endif (NOT EXISTS ${TESTINPUT})
+    set (TEST_INPUT ${CMAKE_CURRENT_SOURCE_DIR}/${ARGV1})
+    if (NOT EXISTS ${TEST_INPUT})
+      message (SEND_ERROR "The specified input file ${TEST_INPUT} for test ${TEST_NAME} does not exist.")
+      unset (TEST_INPUT)
+    endif (NOT EXISTS ${TEST_INPUT})
   endif (${ARGC} LESS 2)
   if (${ARGC} LESS 3)
     if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/golden.log)
-      set (TESTGOLDEN ${CMAKE_CURRENT_SOURCE_DIR}/golden.log)
+      set (TEST_GOLDEN ${CMAKE_CURRENT_SOURCE_DIR}/golden.log)
     elseif (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/results/expected.log)
-      set (TESTGOLDEN ${CMAKE_CURRENT_SOURCE_DIR}/results/expected.log)
+      set (TEST_GOLDEN ${CMAKE_CURRENT_SOURCE_DIR}/results/expected.log)
     else (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/golden.log)
-      unset (TESTGOLDEN)
+      unset (TEST_GOLDEN)
     endif (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/golden.log)
   else (${ARGC} LESS 3)
-    set (TESTGOLDEN ${CMAKE_CURRENT_SOURCE_DIR}/${ARGV2})
-    if (NOT EXISTS ${TESTGOLDEN})
-      message (SEND_ERROR "The specified golden reference file ${TESTGOLDEN} for test ${TEST_NAME} does not exist.")
-      unset (TESTGOLDEN)
-    endif (NOT EXISTS ${TESTGOLDEN})
+    set (TEST_GOLDEN ${CMAKE_CURRENT_SOURCE_DIR}/${ARGV2})
+    if (NOT EXISTS ${TEST_GOLDEN})
+      message (SEND_ERROR "The specified golden reference file ${TEST_GOLDEN} for test ${TEST_NAME} does not exist.")
+      unset (TEST_GOLDEN)
+    endif (NOT EXISTS ${TEST_GOLDEN})
   endif (${ARGC} LESS 3)
-  find_program (SHELL sh)
-  configure_file (${CMAKE_SOURCE_DIR}/config/test.sh.in
-                  ${CMAKE_CURRENT_BINARY_DIR}/test.sh @ONLY)
-  add_test (${TEST_NAME} ${SHELL} ${CMAKE_CURRENT_BINARY_DIR}/test.sh)
+  add_test (NAME ${TEST_NAME}
+            COMMAND ${CMAKE_COMMAND} "-DTEST_EXE=$<TARGET_FILE:${TEST_PROG}>"
+                                     "-DTEST_DIR=${CMAKE_CURRENT_BINARY_DIR}"
+                                     "-DTEST_INPUT=${TEST_INPUT}"
+                                     "-DTEST_GOLDEN=${TEST_GOLDEN}"
+                                     "-DDIFF_COMMAND=${DIFF_COMMAND}"
+                                     "-DDIFF_OPTIONS=${DIFF_OPTIONS}"
+                                     -P ${PROJECT_SOURCE_DIR}/cmake/run_test.cmake)
   set_tests_properties (${TEST_NAME}
                         PROPERTIES FAIL_REGULAR_EXPRESSION "^[*][*][*]ERROR")
 endmacro (configure_and_add_test)

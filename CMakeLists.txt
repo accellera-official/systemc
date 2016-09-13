@@ -176,10 +176,6 @@
 # - Detect C++'11-compatible compiler and then pass the right flags
 #   to use C++'11 language and library features.
 #
-# - Replace the shell script wrappers config/test.sh.in used for the examples
-#   execution, with a platform-independent solution (on Windows, a Unix Shell
-#   is required, e.g., using MSYS2 or Cygwin).
-#
 # - Check whether preprocessor definitions WIN32, _LIB, _DEBUG, _CONSOLE, and
 #   NOGDI are necessary on WIN32 platforms (MSVC and MinGW).
 #
@@ -216,16 +212,10 @@
 # - Find a better way to make sure all code linking to the SystemC library is
 #   also linking to ${CMAKE_THREAD_LIBS_INIT} if needed.
 #
-# - Fix execution of the unit tests from within Xcode:
-#
-#     [...]
-#     make: *** [RUN_TESTS_buildpart_0] Error 8
-#     Command /bin/sh failed with exit code 2
-#
 ###############################################################################
 
 
-cmake_minimum_required (VERSION 2.8.5)
+cmake_minimum_required (VERSION 2.8.11)
 
 project (SystemC CXX C)
 
