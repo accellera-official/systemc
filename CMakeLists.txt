@@ -188,15 +188,6 @@
 #   an acceptable amount. With the chosen flags, the SystemC library compiles
 #   without warnings, but some examples still produce warnings.
 #
-# - Fix Xcode build settings warning by properly initializing
-#   CMAKE_OSX_ARCHITECTURES (cf. CMake issue 0014736). Ensure to build only
-#   for the selected QuickThreads architecture!
-#
-# - Fix confusing "Warning: Did not find file Compiler/-ASM" due to no
-#   specification of an Assembler dialect. The warning disappears if "ASM-ATT"
-#   is used instead of "ASM" as argument to enable_language(). However, this
-#   currently breaks compilation of QuickThreads with Xcode.
-#
 # - Test on as many different hardware / OS platforms as possible.
 #
 # - Set more reliably the needed compiler options, e.g., /vmg for MSVC.
