@@ -79,9 +79,9 @@ enum sc_descendant_inclusion_info {
 } // namespace sc_core
 
 // explititly export std::vector<> instantiations
-SC_API_VECTOR_(sc_core::sc_reset*);
-SC_API_VECTOR_(sc_core::sc_method_handle);
-SC_API_VECTOR_(sc_core::sc_thread_handle);
+SC_API_VECTOR_DECL_(sc_core::sc_reset*);
+SC_API_VECTOR_DECL_(sc_core::sc_method_handle);
+SC_API_VECTOR_DECL_(sc_core::sc_thread_handle);
 
 namespace sc_core {
 

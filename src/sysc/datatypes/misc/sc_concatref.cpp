@@ -55,5 +55,7 @@ namespace sc_dt {
 } // namespace sc_dt
 
 namespace sc_core {
+    SC_API_TEMPLATE_IMPL_ template class SC_API sc_vpool<sc_dt::sc_concatref>;
+    SC_API_TEMPLATE_IMPL_ template class SC_API sc_vpool<sc_dt::sc_concat_bool>;
     sc_byte_heap             sc_temp_heap(0x300000);
 } // namespace sc_core

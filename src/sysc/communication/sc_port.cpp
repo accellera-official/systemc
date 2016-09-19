@@ -37,6 +37,8 @@
 #include "sysc/communication/sc_port.h"
 #include "sysc/communication/sc_signal_ifs.h"
 
+SC_API_VECTOR_IMPL_(sc_core::sc_port_base*);
+
 namespace sc_core {
 
 // ----------------------------------------------------------------------------

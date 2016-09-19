@@ -40,6 +40,9 @@
 
 #include <sstream>
 
+SC_API_VECTOR_IMPL_(sc_core::sc_event*);
+SC_API_VECTOR_IMPL_(const sc_core::sc_event*);
+
 namespace sc_core {
 
 using std::malloc;

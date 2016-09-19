@@ -56,7 +56,7 @@
 
 namespace sc_core {
 
-SC_API_TEMPLATE_ template class SC_API sc_ppq<sc_time*>;
+SC_API_TEMPLATE_DECL_ template class SC_API sc_ppq<sc_time*>;
 
 // ---------------------------------------------------------------------------
 // sc_event_queue_if
@@ -72,7 +72,7 @@ public:
 
 } // namespace sc_core
 
-SC_API_VECTOR_(sc_core::sc_event_queue_if*);
+SC_API_VECTOR_DECL_(sc_core::sc_event_queue_if*);
 
 namespace sc_core {
 
@@ -153,7 +153,7 @@ const sc_event& sc_event_queue::default_event() const
 // Using event queue as a port
 //
 typedef sc_port<sc_event_queue_if,1,SC_ONE_OR_MORE_BOUND> sc_event_queue_port;
-SC_API_TEMPLATE_ template class SC_API sc_port<sc_event_queue_if,1,SC_ONE_OR_MORE_BOUND>;
+SC_API_TEMPLATE_DECL_ template class SC_API sc_port<sc_event_queue_if,1,SC_ONE_OR_MORE_BOUND>;
 
 } // namespace sc_core
 

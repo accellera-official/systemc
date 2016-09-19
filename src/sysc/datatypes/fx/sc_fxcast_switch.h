@@ -104,14 +104,14 @@ private:
 // ----------------------------------------------------------------------------
 
 namespace sc_core {
-SC_API_TEMPLATE_ template class SC_API
+  SC_API_TEMPLATE_DECL_ template class SC_API
   sc_phash<void*, const sc_dt::sc_fxcast_switch*>;
 } // namespace sc_core
 
 namespace sc_dt {
 
-SC_API_TEMPLATE_ template class SC_API sc_global<sc_fxcast_switch>;
-SC_API_TEMPLATE_ template class SC_API sc_context<sc_fxcast_switch>;
+SC_API_TEMPLATE_DECL_ template class SC_API sc_global<sc_fxcast_switch>;
+SC_API_TEMPLATE_DECL_ template class SC_API sc_context<sc_fxcast_switch>;
 typedef sc_context<sc_fxcast_switch> sc_fxcast_context;
 
 

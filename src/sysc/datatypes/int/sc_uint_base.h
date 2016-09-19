@@ -1350,8 +1350,8 @@ operator >> ( ::std::istream& is, sc_uint_base& a )
 
 // explicit template instantiations
 namespace sc_core {
-    SC_API_TEMPLATE_ template class SC_API sc_vpool<sc_dt::sc_uint_bitref>;
-    SC_API_TEMPLATE_ template class SC_API sc_vpool<sc_dt::sc_uint_subref>;
+    SC_API_TEMPLATE_DECL_ template class SC_API sc_vpool<sc_dt::sc_uint_bitref>;
+    SC_API_TEMPLATE_DECL_ template class SC_API sc_vpool<sc_dt::sc_uint_subref>;
 } // namespace sc_core
 
 #endif

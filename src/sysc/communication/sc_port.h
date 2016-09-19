@@ -59,7 +59,7 @@ enum sc_port_policy
 
 } // namespace sc_core
 
-SC_API_VECTOR_(sc_core::sc_port_base*);
+SC_API_VECTOR_DECL_(sc_core::sc_port_base*);
 
 namespace sc_core {
 

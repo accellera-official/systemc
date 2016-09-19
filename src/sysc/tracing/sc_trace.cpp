@@ -55,6 +55,8 @@
 #include "sysc/utils/sc_report.h"
 #include "sysc/utils/sc_utils_ids.h"
 
+SC_API_VECTOR_IMPL_(sc_core::sc_trace_file*);
+
 namespace sc_core {
 
 // Trace file common functions.

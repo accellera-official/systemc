@@ -118,14 +118,14 @@ private:
 // ----------------------------------------------------------------------------
 
 namespace sc_core {
-SC_API_TEMPLATE_ template class SC_API
+  SC_API_TEMPLATE_DECL_ template class SC_API
   sc_phash<void*, const sc_dt::sc_length_param*>;
 } // namespace sc_core
 
 namespace sc_dt {
 
-SC_API_TEMPLATE_ template class SC_API sc_global<sc_length_param>;
-SC_API_TEMPLATE_ template class SC_API sc_context<sc_length_param>;
+SC_API_TEMPLATE_DECL_ template class SC_API sc_global<sc_length_param>;
+SC_API_TEMPLATE_DECL_ template class SC_API sc_context<sc_length_param>;
 typedef sc_context<sc_length_param> sc_length_context;
 
 

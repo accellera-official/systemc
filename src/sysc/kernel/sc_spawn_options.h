@@ -48,9 +48,9 @@ class sc_spawn_reset_base;
 } // namespace sc_core
 
 // explicitly export std::vector<> instantiations
-SC_API_VECTOR_(sc_core::sc_event_finder*);
-SC_API_VECTOR_(sc_core::sc_interface*);
-SC_API_VECTOR_(sc_core::sc_spawn_reset_base*);
+SC_API_VECTOR_DECL_(sc_core::sc_event_finder*);
+SC_API_VECTOR_DECL_(sc_core::sc_interface*);
+SC_API_VECTOR_DECL_(sc_core::sc_spawn_reset_base*);
 
 namespace sc_core {
 

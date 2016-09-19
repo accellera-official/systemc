@@ -68,7 +68,7 @@ class sc_thread_process;
 } // namespace sc_core
 
 // export explicit std::vector<> template instantiations
-SC_API_VECTOR_(sc_core::sc_trace_file*);
+SC_API_VECTOR_DECL_(sc_core::sc_trace_file*);
 
 namespace sc_core {
 

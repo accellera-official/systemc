@@ -90,6 +90,10 @@
 #include "sysc/datatypes/fx/sc_fix.h"
 #include "sysc/datatypes/fx/scfx_other_defs.h"
 
+namespace sc_core {
+    SC_API_TEMPLATE_IMPL_ template class SC_API sc_vpool<sc_dt::sc_signed_bitref>;
+    SC_API_TEMPLATE_IMPL_ template class SC_API sc_vpool<sc_dt::sc_signed_subref>;
+} // namespace sc_core
 
 namespace sc_dt
 {

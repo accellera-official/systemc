@@ -119,31 +119,35 @@
 
 // declare certain template instantiations as "extern" during library build
 // to force their instantiation into the (shared) SystemC library
+#define SC_API_TEMPLATE_IMPL_ /* empty - instantiate template in translation unit */
 
-#if defined(SC_BUILD) // building SystemC library
-# define SC_API_TEMPLATE_ /* empty - instantiate template in translation unit */
+#if defined(__GNUC__) && __cplusplus < 201101L
+# define SC_API_TEMPLATE_DECL_ __extension__ extern
 #else
-# if defined(__GNUC__) && __cplusplus < 201101L
-#  define SC_API_TEMPLATE_ __extension__ extern
-# else
-#  define SC_API_TEMPLATE_ extern
-# endif
+# define SC_API_TEMPLATE_DECL_ extern
 #endif
 
+#define SC_API_TEMPLATE_ SC_API_TEMPLATE_DECL_
+
 // explicitly instantiate and export/import an std::vector specialization
-#define SC_API_VECTOR_(Type) \
-  SC_API_TEMPLATE_ template class SC_API ::std::allocator<Type>; \
-  SC_API_TEMPLATE_ template class SC_API ::std::vector<Type,::std::allocator<Type> >
+#define SC_API_VECTOR_IMPL_(Type) \
+  SC_API_TEMPLATE_IMPL_ template class SC_API ::std::allocator<Type>; \
+  SC_API_TEMPLATE_IMPL_ template class SC_API ::std::vector<Type,::std::allocator<Type> >
+
+// std::vector specialization declaration
+#define SC_API_VECTOR_DECL_(Type) \
+  SC_API_TEMPLATE_DECL_ template class SC_API ::std::allocator<Type>; \
+  SC_API_TEMPLATE_DECL_ template class SC_API ::std::vector<Type,::std::allocator<Type> >
 
 namespace sc_core {
 class SC_API sc_object;
 class SC_API sc_event;
 } // namespace sc_core
 
-// export explicit std::vector<> template instantiations
-SC_API_VECTOR_(sc_core::sc_object*);
-SC_API_VECTOR_(sc_core::sc_event*);
-SC_API_VECTOR_(const sc_core::sc_event*);
+// std::vector<> template declarations
+SC_API_VECTOR_DECL_(sc_core::sc_object*);
+SC_API_VECTOR_DECL_(sc_core::sc_event*);
+SC_API_VECTOR_DECL_(const sc_core::sc_event*);
 
 #endif // SC_CMNHDR_H
 
