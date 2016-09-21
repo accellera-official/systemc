@@ -166,7 +166,31 @@ std::string sc_object_manager::create_name(const char* leaf_name)
 bool
 sc_object_manager::name_exists(const std::string& name)
 {
-    return (m_instance_table.find(name) != m_instance_table.end());
+    instance_table_t::const_iterator it = m_instance_table.find(name);
+    return (it != m_instance_table.end()) &&
+           (it->second.m_name_origin != SC_NAME_NONE);
+}
+
+// +----------------------------------------------------------------------------
+// |"sc_object_manager::get_name"
+// |
+// | This method returns the pointer to the supplied name if it exists in the
+// | hierarchy or NULL if it doesn't exist.
+// |
+// | Arguments:
+// |     name = name of the element
+// | Result is a pointer to the name or NULL if it doesn't exist.
+// +----------------------------------------------------------------------------
+const char*
+sc_object_manager::get_name(const std::string& name)
+{
+    instance_table_t::iterator it = m_instance_table.find(name);
+    if (it != m_instance_table.end() &&
+        it->second.m_name_origin != SC_NAME_NONE) {
+        return it->first.c_str();
+    } else {
+        return NULL;
+    }
 }
 
 // +----------------------------------------------------------------------------
@@ -455,7 +479,8 @@ sc_object_manager::remove_event(const std::string& name)
     if(it != m_instance_table.end()
        && it->second.m_name_origin == SC_NAME_EVENT)
     {
-        m_instance_table.erase(it);
+        it->second.m_element_p = NULL;
+        it->second.m_name_origin = SC_NAME_NONE;
     }
 }
 
@@ -476,7 +501,8 @@ sc_object_manager::remove_object(const std::string& name)
     if(it != m_instance_table.end()
        && it->second.m_name_origin == SC_NAME_OBJECT)
     {
-        m_instance_table.erase(it);
+        it->second.m_element_p = NULL;
+        it->second.m_name_origin = SC_NAME_NONE;
     }
 }
 
@@ -497,7 +523,8 @@ sc_object_manager::remove_external_name(const std::string& name)
     if(it != m_instance_table.end()
        && it->second.m_name_origin == SC_NAME_EXTERNAL)
     {
-        m_instance_table.erase(it);
+        it->second.m_element_p = NULL;
+        it->second.m_name_origin = SC_NAME_NONE;
         return true;
     } else {
         return false;
