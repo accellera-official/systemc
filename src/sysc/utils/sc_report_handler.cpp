@@ -28,6 +28,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <fstream>
 
 #include "sysc/utils/sc_iostream.h"
 #include "sysc/kernel/sc_process.h"
@@ -93,17 +94,90 @@ const std::string sc_report_compose_message(const sc_report& rep)
 
     return str;
 }
-bool sc_report_close_default_log();
 
-static ::std::ofstream* log_stream = 0;
-static
-struct auto_close_log
+//
+// Private class to handle log files
+//
+class sc_log_file_handle
 {
-    ~auto_close_log()
-    {
-	sc_report_close_default_log();
-    }
-} auto_close;
+protected:
+	// not CopyConstructible
+	sc_log_file_handle(sc_log_file_handle const &);	
+	
+	// not CopyAssignable
+	void operator=(sc_log_file_handle const &);
+
+public:
+	sc_log_file_handle();
+	sc_log_file_handle(const char *);
+	void update_file_name(const char *);
+	bool release();
+	::std::ofstream& operator*();
+
+private:
+	std::string log_file_name;
+	::std::ofstream log_stream; 
+};
+
+sc_log_file_handle::sc_log_file_handle()
+{}
+
+sc_log_file_handle::sc_log_file_handle(const char * fname)
+: log_file_name(fname)
+, log_stream(fname)
+{}
+
+void
+sc_log_file_handle::update_file_name(const char * fname)
+{
+	if (!fname)
+	{
+		release();
+	}
+	else //fname != NULL
+	{
+		if (log_file_name.empty())
+		{
+			if (log_stream.is_open()) //should be closed already
+				log_stream.close();
+			log_file_name = fname;
+			log_stream.open(fname);
+		}
+		else // log_file_name not empty
+		{
+			// filename changed?
+			if (log_file_name != fname)
+			{
+				// new filename
+				release();
+				log_file_name = fname;
+				log_stream.open(fname);
+			}
+			else
+			{
+				// nothing to do
+			}
+		}
+	}
+}
+
+bool
+sc_log_file_handle::release()
+{
+	if (log_stream.is_open())
+	{
+		log_stream.close();
+		log_file_name.clear();
+		return false;
+	}
+	return true;
+}
+
+::std::ofstream& 
+sc_log_file_handle::operator*()
+{ return log_stream;	}
+
+static sc_log_file_handle log_stream;
 
 const char* sc_report::get_process_name() const
 {
@@ -124,8 +198,7 @@ void sc_report_handler::default_handler(const sc_report& rep,
 
     if ( (actions & SC_LOG) && get_log_file_name() )
     {
-	if ( !log_stream )
-	    log_stream = new ::std::ofstream(get_log_file_name()); // ios::trunc
+		log_stream.update_file_name(get_log_file_name());
 
 	*log_stream << rep.get_time() << ": "
 	    << sc_report_compose_message(rep) << ::std::endl;
@@ -152,14 +225,10 @@ void sc_report_handler::default_handler(const sc_report& rep,
 // not documented, but available
 bool sc_report_close_default_log()
 {
-    delete log_stream;
+    bool ret = log_stream.release();
     sc_report_handler::set_log_file_name(NULL);
 
-    if ( !log_stream )
-	return false;
-
-    log_stream = 0;
-    return true;
+    return ret;
 }
 
 int sc_report_handler::get_count(sc_severity severity_) 
