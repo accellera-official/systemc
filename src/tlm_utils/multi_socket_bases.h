@@ -15,8 +15,8 @@
 
  *****************************************************************************/
 
-#ifndef __MULTI_SOCKET_BASES_H__
-#define __MULTI_SOCKET_BASES_H__
+#ifndef TLM_UTILS_MULTI_SOCKET_BASES_H_INCLUDED_
+#define TLM_UTILS_MULTI_SOCKET_BASES_H_INCLUDED_
 
 #include <systemc>
 #include <tlm>
@@ -305,27 +305,14 @@ needed to do hierarchical bindings.
 */
 template <unsigned int BUSWIDTH = 32,
           typename TYPES = tlm::tlm_base_protocol_types,
-          unsigned int N=0
-#if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
-          ,sc_core::sc_port_policy POL = sc_core::SC_ONE_OR_MORE_BOUND
-#endif
-          >
-class multi_init_base: public tlm::tlm_initiator_socket<BUSWIDTH,
-                                                  TYPES,
-                                                  N
-#if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
-                                                  ,POL
-#endif
-                                                  >{
+          unsigned int N=0,
+          sc_core::sc_port_policy POL = sc_core::SC_ONE_OR_MORE_BOUND>
+class multi_init_base
+  : public tlm::tlm_initiator_socket<BUSWIDTH, TYPES, N, POL>
+{
 public:
   //typedef for the base type: the standard tlm initiator socket
-  typedef tlm::tlm_initiator_socket<BUSWIDTH,
-                              TYPES,
-                              N
-#if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
-                              ,POL
-#endif
-                              > base_type;
+  typedef tlm::tlm_initiator_socket<BUSWIDTH, TYPES, N, POL> base_type;
   
   //this method shall disable the code that does the callback binding
   // that registers callbacks to binders
@@ -355,27 +342,14 @@ needed to do hierarchical bindings.
 */
 template <unsigned int BUSWIDTH = 32,
           typename TYPES = tlm::tlm_base_protocol_types,
-          unsigned int N=0
-#if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
-          ,sc_core::sc_port_policy POL = sc_core::SC_ONE_OR_MORE_BOUND
-#endif
-          >
-class multi_target_base: public tlm::tlm_target_socket<BUSWIDTH, 
-                                                TYPES,
-                                                N
-#if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)                                                
-                                                ,POL
-#endif
-                                                >{
+          unsigned int N=0,
+          sc_core::sc_port_policy POL = sc_core::SC_ONE_OR_MORE_BOUND>
+class multi_target_base
+  : public tlm::tlm_target_socket<BUSWIDTH, TYPES, N, POL>
+{
 public:
   //typedef for the base type: the standard tlm target socket
-  typedef tlm::tlm_target_socket<BUSWIDTH, 
-                              TYPES,
-                              N
-#if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
-                              ,POL
-#endif
-                              > base_type;
+  typedef tlm::tlm_target_socket<BUSWIDTH, TYPES, N, POL > base_type;
   
   //this method shall return the multi_init_base to which the
   // multi_init_base is bound hierarchically
@@ -413,4 +387,4 @@ public:
 };
 
 }
-#endif
+#endif // TLM_UTILS_MULTI_SOCKET_BASES_H_INCLUDED_
