@@ -75,6 +75,7 @@ public:
     ~sc_object_manager();
 
     bool name_exists(const std::string& name);
+    const char* get_name(const std::string& name);
 
     sc_event* find_event(const char* name);
 
