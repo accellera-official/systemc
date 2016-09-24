@@ -26,7 +26,7 @@
 
 
 #include <cmath>
-#include <cstdio>
+#include <sstream>
 #include <cstdlib>
 #include <cctype>
 
@@ -34,14 +34,6 @@
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_time.h"
 #include "sysc/utils/sc_utils_ids.h"
-
-#if !defined(PRIu64)
-#   if defined(_MSC_VER) || defined(__MINGW32__)
-#       define PRIu64 "I64u"
-#   else
-#       define PRIu64 "llu"
-#   endif
-#endif // PRIu64
 
 #ifdef SC_ENABLE_EARLY_MAXTIME_CREATION
 #  define SC_MAXTIME_ALLOWED_ 1
@@ -141,22 +133,18 @@ sc_time_tuple::unit_symbol() const
 std::string
 sc_time_tuple::to_string() const
 {
-    std::string result;
+    std::ostringstream oss;
 
-    if ( !m_value )
-        std::string( "0 s" ).swap( result );
-    else
-    {
-        char buf[BUFSIZ];
-        std::sprintf( buf, "%" PRIu64, m_value );
-        std::string( buf ).swap( result );
-
-        for( unsigned zeros = m_offset; zeros > 1; zeros /= 10 )
-            result += '0';
-        result += ' ';
-        result += time_units[m_unit];
+    if ( !m_value ) {
+        oss.str("0 s");
+    } else {
+        oss << m_value;
+        for( unsigned zeros = m_offset; zeros > 1; zeros /= 10 ) {
+            oss << '0';
+        }
+        oss << ' ' << time_units[m_unit];
     }
-    return result;
+    return oss.str();
 }
 
 
