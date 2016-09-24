@@ -215,7 +215,7 @@ bool sc_int_subref_r::concat_get_data( sc_digit* dst_p, int low_i ) const
 
     // PROCESS THE FIRST WORD:
 
-    mask = ~(~0U << left_shift);
+    mask = ~(~UINT_ZERO << left_shift);
     dst_p[dst_i] = (sc_digit)((dst_p[dst_i] & mask) |
 		((val << left_shift) & DIGIT_MASK));
 
@@ -617,7 +617,7 @@ bool sc_int_base::concat_get_ctrl( sc_digit* dst_p, int low_i ) const
     left_shift = low_i % BITS_PER_DIGIT;
     end_i = (low_i + (m_len-1)) / BITS_PER_DIGIT;
 
-    mask = ~(~0U << left_shift);
+    mask = ~(~UINT_ZERO << left_shift);
     dst_p[dst_i] = (sc_digit)(dst_p[dst_i] & mask);
 	dst_i++;
 	for ( ; dst_i <= end_i; dst_i++ ) dst_p[dst_i] = 0;
@@ -666,7 +666,7 @@ bool sc_int_base::concat_get_data( sc_digit* dst_p, int low_i ) const
 
     // PROCESS THE FIRST WORD:
 
-    mask = (~0U << left_shift);
+    mask = (~UINT_ZERO << left_shift);
     dst_p[dst_i] = (sc_digit)((dst_p[dst_i] & ~mask) |
 		((val <<left_shift) & DIGIT_MASK));
     switch ( end_i - dst_i )
