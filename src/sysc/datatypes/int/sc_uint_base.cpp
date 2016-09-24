@@ -591,7 +591,7 @@ bool sc_uint_base::concat_get_ctrl( sc_digit* dst_p, int low_i ) const
 
     // PROCESS THE FIRST WORD:
 
-    mask = ~((uint_type)-1 << left_shift);
+    mask = ~(~UINT_ZERO << left_shift);
     dst_p[dst_i] = (sc_digit)((dst_p[dst_i] & mask));
 
     dst_i++;
@@ -635,13 +635,13 @@ bool sc_uint_base::concat_get_data( sc_digit* dst_p, int low_i ) const
 
     if ( m_len < 64 )
     {
-	mask = ~((uint_type)-1 << m_len);
+	mask = ~(~UINT_ZERO << m_len);
         val &=  mask;
     }
 
     // PROCESS THE FIRST WORD:
 
-    mask = ~((uint_type)-1 << left_shift);
+    mask = ~(~UINT_ZERO << left_shift);
     dst_p[dst_i] = (sc_digit)(((dst_p[dst_i] & mask)) |
 	((val << left_shift) & DIGIT_MASK));
 

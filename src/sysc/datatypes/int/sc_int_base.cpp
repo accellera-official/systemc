@@ -660,7 +660,7 @@ bool sc_int_base::concat_get_data( sc_digit* dst_p, int low_i ) const
 
     if ( m_len < 64 )
     {
-	mask = ~((uint_type)-1 << m_len);
+	mask = ~(~UINT_ZERO << m_len);
         val &=  mask;
     }
 
