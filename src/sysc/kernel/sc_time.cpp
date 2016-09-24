@@ -136,7 +136,7 @@ sc_time_tuple::to_string() const
     std::ostringstream oss;
 
     if ( !m_value ) {
-        oss.str("0 s");
+        oss << "0 s";
     } else {
         oss << m_value;
         for( unsigned zeros = m_offset; zeros > 1; zeros /= 10 ) {
