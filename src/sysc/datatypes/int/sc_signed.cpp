@@ -439,7 +439,7 @@ bool sc_signed::and_reduce() const
 	}
 	current = (current >> BITS_PER_DIGIT) + (digit[i]^DIGIT_MASK);
 	if ( (current & ~(~0U << (nbits % BITS_PER_DIGIT))) ==
-	    (sc_digit) ~(~0U << (nbits % BITS_PER_DIGIT)) )
+	     static_cast<sc_digit>(~(~0U << (nbits % BITS_PER_DIGIT))) )
 		return true;
     }
     return false;

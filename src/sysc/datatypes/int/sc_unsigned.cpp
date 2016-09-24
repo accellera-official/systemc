@@ -425,7 +425,7 @@ bool sc_unsigned::and_reduce() const
     for ( i = 0; i < ndigits-1; i++ )
         if ( (digit[i] & DIGIT_MASK) != DIGIT_MASK ) return false;
     if ( (digit[i] & ~(~0U << ((nbits-1) % BITS_PER_DIGIT))) ==
-        (sc_digit)~(~0U << ((nbits-1) % BITS_PER_DIGIT)))
+         static_cast<sc_digit>(~(~0U << ((nbits-1) % BITS_PER_DIGIT))) )
 		return true;
     return false;
 }
