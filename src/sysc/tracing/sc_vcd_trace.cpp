@@ -907,7 +907,7 @@ vcd_unsigned_int_trace::vcd_unsigned_int_trace(
 					    const std::string& vcd_name_,
 					    int width_)
 : vcd_trace(name_, vcd_name_), object(object_), old_value( object_ ),
-  mask((unsigned)-1)
+  mask(~0U)
 {
     bit_width = width_;
     if (bit_width < 32) mask = ~(~0U << bit_width);
@@ -972,7 +972,7 @@ vcd_unsigned_short_trace::vcd_unsigned_short_trace(
 					const std::string& name_,
 					const std::string& vcd_name_,
 					int width_)
-: vcd_trace(name_, vcd_name_), object(object_), old_value(object_), mask(0xffff)
+: vcd_trace(name_, vcd_name_), object(object_), old_value(object_), mask(static_cast<unsigned short>(~0U))
 {
     bit_width = width_;
     if (bit_width < 16) mask = (unsigned short)~(~0U << bit_width);
@@ -1037,7 +1037,7 @@ vcd_unsigned_char_trace::vcd_unsigned_char_trace(
 				const std::string& name_,
 				const std::string& vcd_name_,
 				int width_)
-: vcd_trace(name_, vcd_name_), object(object_), old_value(object_), mask(0xff)
+: vcd_trace(name_, vcd_name_), object(object_), old_value(object_), mask(static_cast<unsigned char>(~0U))
 {
     bit_width = width_;
     if (bit_width < 8) mask = (unsigned char)~(~0U << bit_width);
@@ -1100,7 +1100,7 @@ vcd_unsigned_long_trace::vcd_unsigned_long_trace(
 				const std::string& vcd_name_,
 				int width_)
 : vcd_trace(name_, vcd_name_), object(object_), old_value(object_),
-  mask((unsigned long)-1)
+  mask(~0UL)
 {
     bit_width = width_;
     if ( bit_width < (int)(sizeof(unsigned long)*8) )
@@ -1164,7 +1164,7 @@ vcd_signed_int_trace::vcd_signed_int_trace(const signed& object_,
 					   const std::string& vcd_name_,
 					   int width_)
 : vcd_trace(name_, vcd_name_), object(object_), old_value(object_),
-  mask((unsigned)-1)
+  mask(~0U)
 {
     bit_width = width_;
     if (bit_width < 32) mask = ~(~0U << bit_width);
@@ -1227,7 +1227,7 @@ vcd_signed_short_trace::vcd_signed_short_trace(
 					const std::string& name_,
 					const std::string& vcd_name_,
 					int width_)
-: vcd_trace(name_, vcd_name_), object(object_), old_value(object_), mask(0xffff)
+: vcd_trace(name_, vcd_name_), object(object_), old_value(object_), mask(static_cast<unsigned short>(~0U))
 {
     bit_width = width_;
     if (bit_width < 16) mask = (unsigned short)~(~0U << bit_width);
@@ -1289,7 +1289,7 @@ vcd_signed_char_trace::vcd_signed_char_trace(const char& object_,
 					     const std::string& name_,
 					     const std::string& vcd_name_,
 					     int width_)
-: vcd_trace(name_, vcd_name_), object(object_), old_value(object_), mask(0xff)
+: vcd_trace(name_, vcd_name_), object(object_), old_value(object_), mask(static_cast<unsigned char>(~0U))
 {
     bit_width = width_;
     if (bit_width < 8) mask = (unsigned char)~(~0U << bit_width);
@@ -1486,7 +1486,7 @@ vcd_signed_long_trace::vcd_signed_long_trace(const long& object_,
 					     const std::string& vcd_name_,
 					     int width_)
 : vcd_trace(name_, vcd_name_), object(object_), old_value(object_),
-  mask((unsigned long)-1)
+  mask(~0UL)
 {
     bit_width = width_;
     if ( bit_width < (int)(sizeof(long)*8) )
@@ -1624,7 +1624,7 @@ vcd_enum_trace::vcd_enum_trace(const unsigned& object_,
 			       const std::string& vcd_name_,
 			       const char** enum_literals_)
 : vcd_trace(name_, vcd_name_), object(object_), old_value(object_),
-  mask(0xffffffff), literals(enum_literals_), nliterals(0)
+  mask(~0U), literals(enum_literals_), nliterals(0)
 {
     // find number of bits required to represent enumeration literal - counting loop
     for (nliterals = 0; enum_literals_[nliterals]; nliterals++) continue;
@@ -1641,7 +1641,7 @@ vcd_enum_trace::vcd_enum_trace(const unsigned& object_,
     if (bit_width < 32) {
       mask = ~(~0U << bit_width);
     } else {
-      mask = 0xffffffff;
+      mask = ~0U;
     }
 
     vcd_var_typ_name = "wire";
