@@ -898,7 +898,7 @@ void wif_unsigned_int_trace::write(FILE* f)
 
     // Check for overflow
     if ((object & mask) != object) {
-        for (bitindex = 0; bitindex < bit_width; bitindex++){
+        for (bitindex = 0; bitindex < bit_width; bitindex++) {
             buf[bitindex] = '0';
         }
     }
@@ -962,7 +962,7 @@ void wif_unsigned_short_trace::write(FILE* f)
 
     // Check for overflow
     if ((object & mask) != object) {
-        for (bitindex = 0; bitindex < bit_width; bitindex++){
+        for (bitindex = 0; bitindex < bit_width; bitindex++) {
             buf[bitindex]='0';
         }
     }
@@ -1024,7 +1024,7 @@ void wif_unsigned_char_trace::write(FILE* f)
 
     // Check for overflow
     if ((object & mask) != object) {
-        for (bitindex = 0; bitindex < bit_width; bitindex++){
+        for (bitindex = 0; bitindex < bit_width; bitindex++) {
             buf[bitindex]='0';
         }
     }
@@ -1087,7 +1087,7 @@ void wif_unsigned_long_trace::write(FILE* f)
 
     // Check for overflow
     if ((object & mask) != object) {
-        for (bitindex = 0; bitindex < bit_width; bitindex++){
+        for (bitindex = 0; bitindex < bit_width; bitindex++) {
             buf[bitindex]='0';
         }
     }

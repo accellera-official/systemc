@@ -936,7 +936,7 @@ vcd_unsigned_int_trace::write(FILE* f)
             rawdata[bitindex] = 'x';
         }
     }
-    else{
+    else {
         unsigned bit_mask = 1 << (bit_width-1);
         for (bitindex = 0; bitindex < bit_width; bitindex++) {
             rawdata[bitindex] = (object & bit_mask)? '1' : '0';
@@ -1001,7 +1001,7 @@ vcd_unsigned_short_trace::write(FILE* f)
             rawdata[bitindex] = 'x';
         }
     }
-    else{
+    else {
         unsigned bit_mask = 1 << (bit_width-1);
         for (bitindex = 0; bitindex < bit_width; bitindex++) {
             rawdata[bitindex] = (object & bit_mask)? '1' : '0';
@@ -1063,7 +1063,7 @@ void vcd_unsigned_char_trace::write(FILE* f)
             rawdata[bitindex] = 'x';
         }
     }
-    else{
+    else {
         unsigned bit_mask = 1 << (bit_width-1);
         for (bitindex = 0; bitindex < bit_width; bitindex++) {
             rawdata[bitindex] = (object & bit_mask)? '1' : '0';
@@ -1128,7 +1128,7 @@ void vcd_unsigned_long_trace::write(FILE* f)
             rawdata[bitindex] = 'x';
         }
     }
-    else{
+    else {
         unsigned long bit_mask = 1ul << (bit_width-1);
         for (bitindex = 0; bitindex < bit_width; bitindex++) {
             rawdata[bitindex] = (object & bit_mask)? '1' : '0';
@@ -1191,7 +1191,7 @@ void vcd_signed_int_trace::write(FILE* f)
             rawdata[bitindex] = 'x';
         }
     }
-    else{
+    else {
         unsigned bit_mask = 1 << (bit_width-1);
         for (bitindex = 0; bitindex < bit_width; bitindex++) {
             rawdata[bitindex] = (object & bit_mask)? '1' : '0';
@@ -1254,7 +1254,7 @@ void vcd_signed_short_trace::write(FILE* f)
             rawdata[bitindex] = 'x';
         }
     }
-    else{
+    else {
         unsigned bit_mask = 1 << (bit_width-1);
         for (bitindex = 0; bitindex < bit_width; bitindex++) {
             rawdata[bitindex] = (object & bit_mask)? '1' : '0';
@@ -1316,7 +1316,7 @@ void vcd_signed_char_trace::write(FILE* f)
             rawdata[bitindex] = 'x';
         }
     }
-    else{
+    else {
         unsigned bit_mask = 1 << (bit_width-1);
         for (bitindex = 0; bitindex < bit_width; bitindex++) {
             rawdata[bitindex] = (object & bit_mask)? '1' : '0';
@@ -1380,7 +1380,7 @@ void vcd_int64_trace::write(FILE* f)
         }
     }
     else
-	{
+    {
         sc_dt::uint64 bit_mask = 1;
         bit_mask = bit_mask << (bit_width-1);
         for (bitindex = 0; bitindex < bit_width; bitindex++) {
@@ -1440,17 +1440,16 @@ void vcd_uint64_trace::write(FILE* f)
 
     // Check for overflow
     if ((object & mask) != object)
-	{
-        for (bitindex = 0; bitindex < bit_width; bitindex++){
+    {
+        for (bitindex = 0; bitindex < bit_width; bitindex++) {
             rawdata[bitindex] = 'x';
         }
     }
     else
-	{
+    {
         sc_dt::uint64 bit_mask = 1;
         bit_mask = bit_mask << (bit_width-1);
-        for (bitindex = 0; bitindex < bit_width; bitindex++)
-		{
+        for (bitindex = 0; bitindex < bit_width; bitindex++) {
             rawdata[bitindex] = (object & bit_mask)? '1' : '0';
             bit_mask = bit_mask >> 1;
         }
@@ -1512,7 +1511,7 @@ void vcd_signed_long_trace::write(FILE* f)
             rawdata[bitindex] = 'x';
         }
     }
-    else{
+    else {
         unsigned long bit_mask = 1ul << (bit_width-1);
         for (bitindex = 0; bitindex < bit_width; bitindex++) {
             rawdata[bitindex] = (object & bit_mask)? '1' : '0';
@@ -1659,7 +1658,7 @@ void vcd_enum_trace::write(FILE* f)
 
     // Check for overflow
     if ((object & mask) != object) {
-        for (bitindex = 0; bitindex < bit_width; bitindex++){
+        for (bitindex = 0; bitindex < bit_width; bitindex++) {
             rawdata[bitindex] = 'x';
         }
     } else {
