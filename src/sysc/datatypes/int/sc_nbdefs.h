@@ -29,8 +29,9 @@
   MODIFICATION LOG - modifiers, enter your name, affiliation, date and
   changes you are making here.
 
-      Name, Affiliation, Date:
-  Description of Modification:
+      Name, Affiliation, Date: Torsten Maehne, Berner Fachhochschule, 2016-09-24
+  Description of Modification: Move constant definitions to the header so that
+                               that their value is known at compile time.
 
  *****************************************************************************/
 
