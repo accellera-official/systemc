@@ -457,8 +457,8 @@ vcd_sc_unsigned_trace::write(FILE* f)
     static std::vector<char> compdata(1024), rawdata(1024);
     typedef std::vector<char>::size_type size_t;
 
-    if ( compdata.size() < (size_t)object.length() ) {
-        size_t sz = ( (size_t)object.length() + 4096 ) & (~(size_t)(4096-1));
+    if ( compdata.size() < static_cast<size_t>(object.length()) ) {
+        size_t sz = ( static_cast<size_t>(object.length()) + 4096 ) & (~static_cast<size_t>(4096-1));
         std::vector<char>( sz ).swap( compdata ); // resize without copying values
         std::vector<char>( sz ).swap( rawdata );
     }
@@ -519,8 +519,8 @@ vcd_sc_signed_trace::write(FILE* f)
     static std::vector<char> compdata(1024), rawdata(1024);
     typedef std::vector<char>::size_type size_t;
 
-    if ( compdata.size() < (size_t)object.length() ) {
-        size_t sz = ( (size_t)object.length() + 4096 ) & (~(size_t)(4096-1));
+    if ( compdata.size() < static_cast<size_t>(object.length()) ) {
+        size_t sz = ( static_cast<size_t>(object.length()) + 4096 ) & (~static_cast<size_t>(4096-1));
         std::vector<char>( sz ).swap( compdata ); // resize without copying values
         std::vector<char>( sz ).swap( rawdata );
     }
@@ -787,8 +787,8 @@ vcd_sc_fxnum_trace::write( FILE* f )
     static std::vector<char> compdata(1024), rawdata(1024);
     typedef std::vector<char>::size_type size_t;
 
-    if ( compdata.size() < (size_t)object.wl() ) {
-        size_t sz = ( (size_t)object.wl() + 4096 ) & (~(size_t)(4096-1));
+    if ( compdata.size() < static_cast<size_t>(object.wl()) ) {
+        size_t sz = ( static_cast<size_t>(object.wl()) + 4096 ) & (~static_cast<size_t>(4096-1));
         std::vector<char>( sz ).swap( compdata ); // resize without copying values
         std::vector<char>( sz ).swap( rawdata );
     }
@@ -858,8 +858,8 @@ vcd_sc_fxnum_fast_trace::write( FILE* f )
     static std::vector<char> compdata(1024), rawdata(1024);
     typedef std::vector<char>::size_type size_t;
 
-    if ( compdata.size() < (size_t)object.wl() ) {
-        size_t sz = ( (size_t)object.wl() + 4096 ) & (~(size_t)(4096-1));
+    if ( compdata.size() < static_cast<size_t>(object.wl()) ) {
+        size_t sz = ( static_cast<size_t>(object.wl()) + 4096 ) & (~static_cast<size_t>(4096-1));
         std::vector<char>( sz ).swap( compdata ); // resize without copying values
         std::vector<char>( sz ).swap( rawdata );
     }
@@ -975,7 +975,7 @@ vcd_unsigned_short_trace::vcd_unsigned_short_trace(
 : vcd_trace(name_, vcd_name_), object(object_), old_value(object_), mask(static_cast<unsigned short>(~0U))
 {
     bit_width = width_;
-    if (bit_width < 16) mask = (unsigned short)~(~0U << bit_width);
+    if (bit_width < 16) mask = static_cast<unsigned short>(~(~0U << bit_width));
 
     vcd_var_typ_name = "wire";
 }
@@ -1040,7 +1040,7 @@ vcd_unsigned_char_trace::vcd_unsigned_char_trace(
 : vcd_trace(name_, vcd_name_), object(object_), old_value(object_), mask(static_cast<unsigned char>(~0U))
 {
     bit_width = width_;
-    if (bit_width < 8) mask = (unsigned char)~(~0U << bit_width);
+    if (bit_width < 8) mask = static_cast<unsigned char>(~(~0U << bit_width));
     vcd_var_typ_name = "wire";
 }
 
@@ -1103,7 +1103,7 @@ vcd_unsigned_long_trace::vcd_unsigned_long_trace(
   mask(~0UL)
 {
     bit_width = width_;
-    if ( bit_width < (int)(sizeof(unsigned long)*8) )
+    if ( bit_width < static_cast<int>(sizeof(unsigned long)*8) )
         mask = ~(~0UL << bit_width);
 
     vcd_var_typ_name = "wire";
@@ -1186,8 +1186,8 @@ void vcd_signed_int_trace::write(FILE* f)
     int bitindex;
 
     // Check for overflow
-    if (((unsigned) object & mask) != (unsigned) object) {
-        for (bitindex = 0; bitindex < bit_width; bitindex++){
+    if ((static_cast<unsigned>(object) & mask) != static_cast<unsigned>(object)) {
+        for (bitindex = 0; bitindex < bit_width; bitindex++) {
             rawdata[bitindex] = 'x';
         }
     }
@@ -1230,7 +1230,7 @@ vcd_signed_short_trace::vcd_signed_short_trace(
 : vcd_trace(name_, vcd_name_), object(object_), old_value(object_), mask(static_cast<unsigned short>(~0U))
 {
     bit_width = width_;
-    if (bit_width < 16) mask = (unsigned short)~(~0U << bit_width);
+    if (bit_width < 16) mask = static_cast<unsigned short>(~(~0U << bit_width));
 
     vcd_var_typ_name = "wire";
 }
@@ -1249,8 +1249,8 @@ void vcd_signed_short_trace::write(FILE* f)
     int bitindex;
 
     // Check for overflow
-    if (((unsigned short) object & mask) != (unsigned short) object) {
-        for (bitindex = 0; bitindex < bit_width; bitindex++){
+    if ((static_cast<unsigned short>(object) & mask) != static_cast<unsigned short>(object)) {
+        for (bitindex = 0; bitindex < bit_width; bitindex++) {
             rawdata[bitindex] = 'x';
         }
     }
@@ -1292,7 +1292,7 @@ vcd_signed_char_trace::vcd_signed_char_trace(const char& object_,
 : vcd_trace(name_, vcd_name_), object(object_), old_value(object_), mask(static_cast<unsigned char>(~0U))
 {
     bit_width = width_;
-    if (bit_width < 8) mask = (unsigned char)~(~0U << bit_width);
+    if (bit_width < 8) mask = static_cast<unsigned char>(~(~0U << bit_width));
 
     vcd_var_typ_name = "wire";
 }
@@ -1311,8 +1311,8 @@ void vcd_signed_char_trace::write(FILE* f)
     int bitindex;
 
     // Check for overflow
-    if (((unsigned char) object & mask) != (unsigned char) object) {
-        for (bitindex = 0; bitindex < bit_width; bitindex++){
+    if ((static_cast<unsigned char>(object) & mask) != static_cast<unsigned char>(object)) {
+        for (bitindex = 0; bitindex < bit_width; bitindex++) {
             rawdata[bitindex] = 'x';
         }
     }
@@ -1373,10 +1373,9 @@ void vcd_int64_trace::write(FILE* f)
     int bitindex;
 
     // Check for overflow
-    if (((sc_dt::uint64) object & mask) != (sc_dt::uint64) object)
-	{
-        for (bitindex = 0; bitindex < bit_width; bitindex++)
-		{
+    if ((static_cast<sc_dt::uint64>(object) & mask) != static_cast<sc_dt::uint64>(object))
+    {
+        for (bitindex = 0; bitindex < bit_width; bitindex++) {
             rawdata[bitindex] = 'x';
         }
     }
@@ -1489,7 +1488,7 @@ vcd_signed_long_trace::vcd_signed_long_trace(const long& object_,
   mask(~0UL)
 {
     bit_width = width_;
-    if ( bit_width < (int)(sizeof(long)*8) )
+    if ( bit_width < static_cast<int>(sizeof(long)*8) )
         mask = ~(~0UL << bit_width);
     vcd_var_typ_name = "wire";
 }
@@ -1508,8 +1507,8 @@ void vcd_signed_long_trace::write(FILE* f)
     int bitindex;
 
     // Check for overflow
-    if (((unsigned long) object & mask) != (unsigned long) object) {
-        for (bitindex = 0; bitindex < bit_width; bitindex++){
+    if ((static_cast<unsigned long>(object) & mask) != static_cast<unsigned long>(object)) {
+        for (bitindex = 0; bitindex < bit_width; bitindex++) {
             rawdata[bitindex] = 'x';
         }
     }
@@ -2048,19 +2047,19 @@ vcd_trace_file::obtain_name()
     int result;
 
     result = vcd_name_index;
-    char char6 = (char)(vcd_name_index % used_types_count);
+    char char6 = static_cast<char>(vcd_name_index % used_types_count);
 
     result = result / used_types_count;
-    char char5 = (char)(result % used_types_count);
+    char char5 = static_cast<char>(result % used_types_count);
 
     result = result / used_types_count;
-    char char4 = (char)(result % used_types_count);
+    char char4 = static_cast<char>(result % used_types_count);
 
     result = result / used_types_count;
-    char char3 = (char)(result % used_types_count);
+    char char3 = static_cast<char>(result % used_types_count);
 
     result = result / used_types_count;
-    char char2 = (char)(result % used_types_count);
+    char char2 = static_cast<char>(result % used_types_count);
 
     char buf[20];
     std::sprintf(buf, "%c%c%c%c%c",

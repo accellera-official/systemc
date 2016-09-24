@@ -184,7 +184,7 @@ wif_uint64_trace::wif_uint64_trace(const sc_dt::uint64& object_,
   mask(static_cast<sc_dt::uint64>(-1))
 {
     bit_width = width_;
-    if (bit_width < (int)(sizeof(sc_dt::uint64)*BITS_PER_BYTE))
+    if (bit_width < static_cast<int>(sizeof(sc_dt::uint64)*BITS_PER_BYTE))
         mask = ~(mask << bit_width);
     wif_type = "BIT";
 }
@@ -250,7 +250,7 @@ wif_int64_trace::wif_int64_trace(const sc_dt::int64& object_,
   mask(static_cast<sc_dt::uint64>(-1))
 {
     bit_width = width_;
-    if (bit_width < (int)(sizeof(sc_dt::int64)*BITS_PER_BYTE))
+    if (bit_width < static_cast<int>(sizeof(sc_dt::int64)*BITS_PER_BYTE))
         mask = ~(mask << bit_width);
     wif_type = "BIT";
 }
@@ -268,7 +268,7 @@ void wif_int64_trace::write(FILE* f)
     int bitindex;
 
     // Check for overflow
-    if ((object & mask) != (sc_dt::uint64)object)
+    if ((object & mask) != static_cast<sc_dt::uint64>(object))
     {
         for (bitindex = 0; bitindex < bit_width; bitindex++)
         {
@@ -453,8 +453,8 @@ void wif_sc_unsigned_trace::write(FILE* f)
     static std::vector<char> buf(1024);
     typedef std::vector<char>::size_type size_t;
 
-    if ( buf.size() < (size_t)object.length() ) {
-        size_t sz = ( (size_t)object.length() + 4096 ) & (~(size_t)(4096-1));
+    if ( buf.size() < static_cast<size_t>(object.length()) ) {
+        size_t sz = ( static_cast<size_t>(object.length()) + 4096 ) & (~static_cast<size_t>(4096-1));
         std::vector<char>( sz ).swap( buf ); // resize without copying values
     }
     char *buf_ptr = &buf[0];
@@ -509,8 +509,8 @@ void wif_sc_signed_trace::write(FILE* f)
     static std::vector<char> buf(1024);
     typedef std::vector<char>::size_type size_t;
 
-    if ( buf.size() < (size_t)object.length() ) {
-        size_t sz = ( (size_t)object.length() + 4096 ) & (~(size_t)(4096-1));
+    if ( buf.size() < static_cast<size_t>(object.length()) ) {
+        size_t sz = ( static_cast<size_t>(object.length()) + 4096 ) & (~static_cast<size_t>(4096-1));
         std::vector<char>( sz ).swap( buf ); // resize without copying values
     }
     char *buf_ptr = &buf[0];
@@ -760,8 +760,8 @@ wif_sc_fxnum_trace::write( FILE* f )
     static std::vector<char> buf(1024);
     typedef std::vector<char>::size_type size_t;
 
-    if ( buf.size() < (size_t)object.wl() ) {
-        size_t sz = ( (size_t)object.wl() + 4096 ) & (~(size_t)(4096-1));
+    if ( buf.size() < static_cast<size_t>(object.wl()) ) {
+        size_t sz = ( static_cast<size_t>(object.wl()) + 4096 ) & (~static_cast<size_t>(4096-1));
         std::vector<char>( sz ).swap( buf ); // resize without copying values
     }
     char *buf_ptr = &buf[0];
@@ -829,8 +829,8 @@ wif_sc_fxnum_fast_trace::write( FILE* f )
     static std::vector<char> buf(1024);
     typedef std::vector<char>::size_type size_t;
 
-    if ( buf.size() < (size_t)object.wl() ) {
-        size_t sz = ( (size_t)object.wl() + 4096 ) & (~(size_t)(4096-1));
+    if ( buf.size() < static_cast<size_t>(object.wl()) ) {
+      size_t sz = ( static_cast<size_t>(object.wl()) + 4096 ) & (~static_cast<size_t>(4096-1));
         std::vector<char>( sz ).swap( buf ); // resize without copying values
     }
     char *buf_ptr = &buf[0];
@@ -942,7 +942,7 @@ wif_unsigned_short_trace::wif_unsigned_short_trace(
 {
     bit_width = width_;
     if (bit_width < 16) {
-        mask = (unsigned short)~(~0U << bit_width);
+        mask = static_cast<unsigned short>(~(~0U << bit_width));
     }
 
     wif_type = "BIT";
@@ -1004,7 +1004,7 @@ wif_unsigned_char_trace::wif_unsigned_char_trace(const unsigned char& object_,
 {
     bit_width = width_;
     if (bit_width < 8) {
-        mask = (unsigned char)~(~0U << bit_width);
+        mask = static_cast<unsigned char>(~(~0U << bit_width));
     }
 
     wif_type = "BIT";
@@ -1066,7 +1066,7 @@ wif_unsigned_long_trace::wif_unsigned_long_trace(const unsigned long& object_,
   mask(~0UL)
 {
     bit_width = width_;
-    if (bit_width < (int)(sizeof(unsigned long)*BITS_PER_BYTE)) {
+    if (bit_width < static_cast<int>(sizeof(unsigned long)*BITS_PER_BYTE)) {
         mask = ~(~0UL << bit_width);
     }
 
@@ -1149,8 +1149,8 @@ void wif_signed_int_trace::write(FILE* f)
     int bitindex;
 
     // Check for overflow
-    if (((unsigned) object & mask) != (unsigned) object) {
-        for (bitindex = 0; bitindex < bit_width; bitindex++){
+    if ((static_cast<unsigned>(object) & mask) != static_cast<unsigned>(object)) {
+        for (bitindex = 0; bitindex < bit_width; bitindex++) {
             buf[bitindex]='0';
         }
     }
@@ -1192,7 +1192,7 @@ wif_signed_short_trace::wif_signed_short_trace(const short& object_,
 {
     bit_width = width_;
     if (bit_width < 16) {
-        mask = (unsigned short)~(~0U << bit_width);
+        mask = static_cast<unsigned short>(~(~0U << bit_width));
     }
 
     wif_type = "BIT";
@@ -1211,8 +1211,8 @@ void wif_signed_short_trace::write(FILE* f)
     int bitindex;
 
     // Check for overflow
-    if (((unsigned short) object & mask) != (unsigned short) object) {
-        for (bitindex = 0; bitindex < bit_width; bitindex++){
+    if ((static_cast<unsigned short>(object) & mask) != static_cast<unsigned short>(object)) {
+        for (bitindex = 0; bitindex < bit_width; bitindex++) {
             buf[bitindex]='0';
         }
     }
@@ -1254,7 +1254,7 @@ wif_signed_char_trace::wif_signed_char_trace(const char& object_,
 {
     bit_width = width_;
     if (bit_width < 8) {
-        mask = (unsigned char)~(~0U << bit_width);
+        mask = static_cast<unsigned char>(~(~0U << bit_width));
     }
 
     wif_type = "BIT";
@@ -1273,8 +1273,8 @@ void wif_signed_char_trace::write(FILE* f)
     int bitindex;
 
     // Check for overflow
-    if (((unsigned char) object & mask) != (unsigned char) object) {
-        for (bitindex = 0; bitindex < bit_width; bitindex++){
+    if ((static_cast<unsigned char>(object) & mask) != static_cast<unsigned char>(object)) {
+        for (bitindex = 0; bitindex < bit_width; bitindex++) {
             buf[bitindex]='0';
         }
     }
@@ -1316,7 +1316,7 @@ wif_signed_long_trace::wif_signed_long_trace(const long& object_,
   mask(~0UL)
 {
     bit_width = width_;
-    if (bit_width < (int)(sizeof(long)*BITS_PER_BYTE)) {
+    if (bit_width < static_cast<int>(sizeof(long)*BITS_PER_BYTE)) {
         mask = ~(~0UL << bit_width);
     }
 
@@ -1336,8 +1336,8 @@ void wif_signed_long_trace::write(FILE* f)
     int bitindex;
 
     // Check for overflow
-    if (((unsigned long) object & mask) != (unsigned long) object) {
-        for (bitindex = 0; bitindex < bit_width; bitindex++){
+    if ((static_cast<unsigned long>(object) & mask) != static_cast<unsigned long>(object)) {
+        for (bitindex = 0; bitindex < bit_width; bitindex++) {
             buf[bitindex]='0';
         }
     } else {
