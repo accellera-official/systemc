@@ -21,7 +21,7 @@
                  arithmetic. This file defines all the constants needed.
 
   Original Author: Ali Dasdan, Synopsys, Inc.
-  
+
  *****************************************************************************/
 
 /*****************************************************************************
@@ -164,10 +164,10 @@ const int MAX_NDIGITS = DIV_CEIL(SC_MAX_NBITS) + 2;
 #endif
 
 // Support for "digit" vectors used to hold the values of sc_signed,
-// sc_unsigned, sc_bv_base,  and sc_lv_base data types. This type is also used 
-// in the concatenation support. An sc_digit is currently an unsigned 32-bit 
+// sc_unsigned, sc_bv_base,  and sc_lv_base data types. This type is also used
+// in the concatenation support. An sc_digit is currently an unsigned 32-bit
 // quantity. The typedef used is an unsigned int, rather than an unsigned long,
-// since the unsigned long data type varies in size between 32-bit and 64-bit 
+// since the unsigned long data type varies in size between 32-bit and 64-bit
 // machines.
 
 typedef unsigned int sc_digit;	// 32-bit unsigned integer
