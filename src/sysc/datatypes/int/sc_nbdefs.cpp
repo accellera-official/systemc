@@ -17,11 +17,11 @@
 
 /*****************************************************************************
 
-  sc_nbdefs.h -- Top level header file for arbitrary precision signed/unsigned
-                 arithmetic. This file defines all the constants needed.
+  sc_nbdefs.cpp -- Top level header file for arbitrary precision signed/unsigned
+                   arithmetic. This file defines all the constants needed.
 
   Original Author: Ali Dasdan, Synopsys, Inc.
-  
+
  *****************************************************************************/
 
 /*****************************************************************************
@@ -64,28 +64,6 @@ const int MAX_NDIGITS      = DIV_CEIL(SC_MAX_NBITS) + 2;
 // DIV_CEIL(y) <= DIV_CEIL(SC_MAX_NBITS) + 2. This is the reason for +2
 // above. With this change, MAX_NDIGITS must be enough to hold the
 // result of any operation.
-#endif
-
-// Support for the long long type. This type is not in the standard
-// but is usually supported by compilers.
-#if !defined(_WIN32) || defined(__MINGW32__)
-const uint64 UINT64_ZERO   = 0ULL;
-const uint64 UINT64_ONE    = 1ULL;
-const uint64 UINT64_32ONES = 0x00000000ffffffffULL;
-#else
-SC_API const uint64 UINT64_ZERO   = 0i64;
-SC_API const uint64 UINT64_ONE    = 1i64;
-SC_API const uint64 UINT64_32ONES = 0x00000000ffffffffi64;
-#endif
-
-const small_type NB_DEFAULT_BASE = SC_DEC;
-
-#ifndef _32BIT_
-SC_API const uint64 UINT_ZERO = UINT64_ZERO;
-SC_API const uint64 UINT_ONE  = UINT64_ONE;
-#else
-SC_API const unsigned int UINT_ZERO = 0U;
-SC_API const unsigned int UINT_ONE  = 1U;
 #endif
 
 } // namespace sc_dt

@@ -182,15 +182,19 @@ typedef unsigned int sc_digit;	// 32-bit unsigned integer
         typedef int64_t            int64;
         typedef uint64_t           uint64;
 #   endif
-    extern const uint64        UINT64_ZERO;
-    extern const uint64        UINT64_ONE;
-    extern const uint64        UINT64_32ONES;
 #else
     typedef __int64            int64;
     typedef unsigned __int64   uint64;
-    extern SC_API const uint64        UINT64_ZERO;
-    extern SC_API const uint64        UINT64_ONE;
-    extern SC_API const uint64        UINT64_32ONES;
+#endif
+
+#if !defined(_WIN32) || defined(__MINGW32__)
+    const uint64 UINT64_ZERO   = 0ULL;
+    const uint64 UINT64_ONE    = 1ULL;
+    const uint64 UINT64_32ONES = 0x00000000ffffffffULL;
+#else
+    const uint64 UINT64_ZERO   = 0i64;
+    const uint64 UINT64_ONE    = 1i64;
+    const uint64 UINT64_32ONES = 0x00000000ffffffffi64;
 #endif
 
 
@@ -216,7 +220,7 @@ typedef unsigned int sc_digit;	// 32-bit unsigned integer
 // Above, BITS_PER_X is mainly used for sc_signed, and BITS_PER_UX is
 // mainly used for sc_unsigned.
 
-extern const small_type NB_DEFAULT_BASE ;
+const small_type NB_DEFAULT_BASE = SC_DEC;
 
 // For sc_int code:
 #define LLWIDTH  BITS_PER_INT64
@@ -224,21 +228,21 @@ extern const small_type NB_DEFAULT_BASE ;
 
 #ifndef _32BIT_
 
-typedef int64 int_type;
-typedef uint64 uint_type;
-#define SC_INTWIDTH 64
-extern SC_API const uint64 UINT_ZERO;
-extern SC_API const uint64 UINT_ONE;
+    typedef int64 int_type;
+    typedef uint64 uint_type;
+#   define SC_INTWIDTH 64
+    const uint64 UINT_ZERO = UINT64_ZERO;
+    const uint64 UINT_ONE = UINT64_ONE;
 
-#else
+#else // _32BIT_
 
-typedef int int_type;
-typedef unsigned int uint_type;
-#define SC_INTWIDTH 32
-extern const unsigned int UINT_ZERO;
-extern const unsigned int UINT_ONE;
+    typedef int int_type;
+    typedef unsigned int uint_type;
+#   define SC_INTWIDTH 32
+    const unsigned int UINT_ZERO = 0U;
+    const unsigned int UINT_ONE = 1U;
 
-#endif
+#endif // _32BIT_
 
 } // namespace sc_dt
 
