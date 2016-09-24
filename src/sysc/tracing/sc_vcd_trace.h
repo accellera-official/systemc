@@ -51,7 +51,7 @@
 
 namespace sc_core {
 
-class vcd_trace;  // defined in vcd_trace.cpp
+class vcd_trace;  // defined in sc_vcd_trace.cpp
 template<class T> class vcd_T_trace;
 
 
