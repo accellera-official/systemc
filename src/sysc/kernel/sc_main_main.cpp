@@ -115,18 +115,17 @@ sc_elab_and_sim( int argc, char* argv[] )
     {
         std::stringstream ss;
 
-#       define MSGNL  "\n             "
-#       define CODENL "\n  "
+        const char MSGNL[] = "\n             ";
+        const char CODENL[] = "\n  ";
 
-        ss <<
-          "You can turn off warnings about" MSGNL
-          "IEEE 1666 deprecated features by placing this method call" MSGNL
-          "as the first statement in your sc_main() function:\n" CODENL
-          "sc_core::sc_report_handler::set_actions( "
-          "\"" << SC_ID_IEEE_1666_DEPRECATION_ << "\"," CODENL
-          "                                         " /* indent param */
-          "sc_core::SC_DO_NOTHING );"
-          << std::endl;
+        ss << "You can turn off warnings about" << MSGNL
+           << "IEEE 1666 deprecated features by placing this method call" << MSGNL
+           << "as the first statement in your sc_main() function:\n" << CODENL
+           << "sc_core::sc_report_handler::set_actions( "
+           << "\"" << SC_ID_IEEE_1666_DEPRECATION_ << "\"," << CODENL
+           << "                                         " /* indent param */
+           << "sc_core::SC_DO_NOTHING );"
+           << std::endl;
 
         SC_REPORT_INFO( SC_ID_IEEE_1666_DEPRECATION_, ss.str().c_str() );
     }
