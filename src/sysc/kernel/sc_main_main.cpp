@@ -54,12 +54,12 @@ message_function( const char* s )
 
 bool sc_in_action = false;
 
-int sc_argc() 
+int sc_argc()
 {
     return argc_copy;
 }
 
-const char* const* sc_argv() 
+const char* const* sc_argv()
 {
     return argv_copy;
 }
@@ -109,7 +109,7 @@ sc_elab_and_sim( int argc, char* argv[] )
         delete[] argv_call[i];
     }
 
-    // IF DEPRECATION WARNINGS WERE ISSUED TELL THE USER HOW TO TURN THEM OFF 
+    // IF DEPRECATION WARNINGS WERE ISSUED TELL THE USER HOW TO TURN THEM OFF
 
     if ( sc_report_handler::get_count( SC_ID_IEEE_1666_DEPRECATION_ ) > 0 )
     {
