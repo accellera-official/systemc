@@ -75,9 +75,10 @@ sc_elab_and_sim( int argc, char* argv[] )
     // Copy argv into a new structure to prevent sc_main from modifying the
     // result returned from sc_argv.
     std::vector<char*> argv_call(argc + 1, NULL);
-    for ( int i = 0; i < argc; i++ ) {
-        argv_call[i] = (char*) std::malloc( std::strlen(argv[i]) + 1 );
-        std::strcpy(argv_call[i], argv[i]);
+    for ( int i = 0; i < argc; ++i ) {
+        std::size_t size = std::strlen(argv[i]) + 1;
+        argv_call[i] = new char[size];
+        std::copy(argv[i], argv[i] + size, argv_call[i]);
     }
 
     try
@@ -104,7 +105,9 @@ sc_elab_and_sim( int argc, char* argv[] )
         delete err_p;
     }
 
-    std::for_each(argv_call.begin(), argv_call.end(), free);
+    for ( int i = 0; i < argc; ++i ) {
+        delete[] argv_call[i];
+    }
 
     // IF DEPRECATION WARNINGS WERE ISSUED TELL THE USER HOW TO TURN THEM OFF 
 
