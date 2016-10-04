@@ -25,14 +25,15 @@
   CHANGE LOG AT END OF FILE
  *****************************************************************************/
 
-#include <cstdlib>
-#include <cstddef>
-#include <cstring>
-
 #include "sysc/kernel/sc_cmnhdr.h"
 #include "sysc/utils/sc_hash.h"
 #include "sysc/utils/sc_mempool.h"
 #include "sysc/utils/sc_report.h"  // sc_assert
+
+#include <cstdlib>
+#include <cstddef>
+#include <cstring>
+#include <algorithm>
 
 namespace sc_core {
 
@@ -628,15 +629,17 @@ sc_strhash_cmp( const void* a, const void* b )
 SC_API void*
 sc_strhash_kdup(const void* k)
 {
-    char* result = (char*) std::malloc( std::strlen((const char*)k)+1 );
-    std::strcpy(result, (const char*) k);
+    std::size_t size = std::strlen((const char*)k)+1;
+    char* result = new char[size];
+    std::copy(static_cast<const char*>(k), static_cast<const char*>(k) + size,
+              result);
     return result;
 }
 
 SC_API void
 sc_strhash_kfree(void* k)
 {
-    if (k) std::free((char*) k);
+    delete[] static_cast<char*>(k);
 }
  } // namespace sc_core
 
