@@ -57,9 +57,9 @@ private:
     sc_phash_elem() : key(0), contents(0), next(0) { }
     ~sc_phash_elem() { }
 
-    static void* operator new(std::size_t sz) 
+    static void* operator new(std::size_t sz)
         { return sc_mempool::allocate(sz); }
-    static void operator delete(void* p, std::size_t sz) 
+    static void operator delete(void* p, std::size_t sz)
         { sc_mempool::release(p, sz);      }
 };
 
@@ -74,7 +74,7 @@ sc_phash_base::sc_phash_base(
     int (*cmp_fn)(const void*, const void*)
 ) :
     default_value(def), num_bins(0), num_entries(0), max_density(density),
-    reorder_flag(reorder), grow_factor(grow), bins(0), hash(hash_fn), 
+    reorder_flag(reorder), grow_factor(grow), bins(0), hash(hash_fn),
     cmpr(cmp_fn)
 {
     if (size <= 0)
@@ -589,7 +589,7 @@ sc_phash_base_iter::set_contents( void* c )
 
 /****************************************************************************/
 
-SC_API unsigned 
+SC_API unsigned
 default_ptr_hash_fn(const void* p)
 {
     return static_cast<unsigned>(((uintptr_t)(p) >> 2) * 2654435789U);
