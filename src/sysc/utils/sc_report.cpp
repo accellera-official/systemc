@@ -73,7 +73,7 @@ static inline char * empty_dup(const char * p)
     }
 }
 
-sc_report::sc_report() 
+sc_report::sc_report()
 : severity(SC_INFO),
   md(0),
   msg(empty_dup(0)),
@@ -138,7 +138,7 @@ sc_report::swap( sc_report & that )
     swap( process,           that.process );
     swap( m_verbosity_level, that.m_verbosity_level );
     swap( m_what,            that.m_what );
-} 
+}
 
 sc_report::~sc_report() throw()
 {

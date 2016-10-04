@@ -58,17 +58,17 @@ enum sc_severity {
 //  Enumeration of message verbosity.
 // ----------------------------------------------------------------------------
 
- enum sc_verbosity { 
-     SC_NONE = 0, 
-     SC_LOW = 100, 
-     SC_MEDIUM = 200, 
+ enum sc_verbosity {
+     SC_NONE = 0,
+     SC_LOW = 100,
+     SC_MEDIUM = 200,
      SC_HIGH = 300,
-     SC_FULL = 400, 
+     SC_FULL = 400,
      SC_DEBUG = 500
  };
 
 // ----------------------------------------------------------------------------
-//  ENUM : 
+//  ENUM :
 //
 //  Enumeration of actions on an exception (implementation specific)
 // ----------------------------------------------------------------------------
@@ -148,7 +148,7 @@ public:
 	}
 
     virtual const char* what() const throw()
-        { 
+        {
 	    return m_what;
 	}
 
