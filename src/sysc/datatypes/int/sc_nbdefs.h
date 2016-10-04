@@ -155,7 +155,7 @@ typedef int small_type;
 #define DIV_CEIL(x) DIV_CEIL2(x, BITS_PER_DIGIT)
 
 #ifdef SC_MAX_NBITS
-const int MAX_NDIGITS = DIV_CEIL(SC_MAX_NBITS) + 2;
+static const int MAX_NDIGITS = DIV_CEIL(SC_MAX_NBITS) + 2;
 // Consider a number with x bits another with y bits. The maximum
 // number of bits happens when we multiply them. The result will have
 // (x + y) bits. Assume that x + y <= SC_MAX_NBITS. Then, DIV_CEIL(x) +
@@ -189,13 +189,13 @@ typedef unsigned int sc_digit;	// 32-bit unsigned integer
 #endif
 
 #if !defined(_WIN32) || defined(__MINGW32__)
-    const uint64 UINT64_ZERO   = 0ULL;
-    const uint64 UINT64_ONE    = 1ULL;
-    const uint64 UINT64_32ONES = 0x00000000ffffffffULL;
+    static const uint64 UINT64_ZERO   = 0ULL;
+    static const uint64 UINT64_ONE    = 1ULL;
+    static const uint64 UINT64_32ONES = 0x00000000ffffffffULL;
 #else
-    const uint64 UINT64_ZERO   = 0i64;
-    const uint64 UINT64_ONE    = 1i64;
-    const uint64 UINT64_32ONES = 0x00000000ffffffffi64;
+    static const uint64 UINT64_ZERO   = 0i64;
+    static const uint64 UINT64_ONE    = 1i64;
+    static const uint64 UINT64_32ONES = 0x00000000ffffffffi64;
 #endif
 
 
@@ -221,7 +221,7 @@ typedef unsigned int sc_digit;	// 32-bit unsigned integer
 // Above, BITS_PER_X is mainly used for sc_signed, and BITS_PER_UX is
 // mainly used for sc_unsigned.
 
-const small_type NB_DEFAULT_BASE = SC_DEC;
+static const small_type NB_DEFAULT_BASE = SC_DEC;
 
 // For sc_int code:
 #define LLWIDTH  BITS_PER_INT64
@@ -232,16 +232,16 @@ const small_type NB_DEFAULT_BASE = SC_DEC;
     typedef int64 int_type;
     typedef uint64 uint_type;
 #   define SC_INTWIDTH 64
-    const uint64 UINT_ZERO = UINT64_ZERO;
-    const uint64 UINT_ONE = UINT64_ONE;
+    static const uint64 UINT_ZERO = UINT64_ZERO;
+    static const uint64 UINT_ONE = UINT64_ONE;
 
 #else // _32BIT_
 
     typedef int int_type;
     typedef unsigned int uint_type;
 #   define SC_INTWIDTH 32
-    const unsigned int UINT_ZERO = 0U;
-    const unsigned int UINT_ONE = 1U;
+    static const unsigned int UINT_ZERO = 0U;
+    static const unsigned int UINT_ONE = 1U;
 
 #endif // _32BIT_
 
