@@ -652,7 +652,9 @@ sc_vector<T>::init( size_type n, Creator c )
 {
   if ( base_type::check_init(n) )
   {
-    sc_vector_base::context_scope _( this );
+    // restore SystemC hierarchy context, if needed
+    sc_vector_base::context_scope scope( this );
+
     base_type::reserve( n );
     try
     {
