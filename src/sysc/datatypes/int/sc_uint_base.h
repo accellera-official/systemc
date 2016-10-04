@@ -316,7 +316,7 @@ class SC_API sc_uint_subref_r : public sc_value_base
 
 public:
     sc_uint_subref_r( const sc_uint_subref_r& init ) :
-        sc_value_base(init), m_left(init.m_left), m_obj_p(init.m_obj_p), 
+        sc_value_base(init), m_left(init.m_left), m_obj_p(init.m_obj_p),
 	m_right(init.m_right)
 	{}
 
