@@ -29,23 +29,23 @@
 
 #include "tlm.h"                                // TLM headers
 
-class memory                          
+class memory
 {
 // Member Methods  ====================================================
-  
+
   public:
-    
+
 //=====================================================================
 /// @fn memory.h
 //
 ///  @brief memory Constructor
 //
 ///  @details
-//       Initialize member variables, include allocating and initializing 
+//       Initialize member variables, include allocating and initializing
 //       the actual memory
 //
 //=====================================================================
-  memory              
+  memory
   (
     const unsigned int ID                 ///< initiator ID for messaging
   , sc_core::sc_time   read_delay         ///< delay for reads
@@ -65,12 +65,12 @@ class memory
  ///    and updating the time based upon initialization parameters
  ///
  ///===================================================================
-  void  
+  void
   operation(
-      tlm::tlm_generic_payload  &gp           ///< TLM2 GP reference 
-    , sc_core::sc_time          &delay_time   ///< transaction delay 
-    );    
-   
+      tlm::tlm_generic_payload  &gp           ///< TLM2 GP reference
+    , sc_core::sc_time          &delay_time   ///< transaction delay
+    );
+
  //====================================================================
  /// @fn get_delay
  ///
@@ -82,37 +82,37 @@ class memory
  ///    and updating the time based upon initialization parameters
  ///
  ///===================================================================
-  void 
+  void
   get_delay(
       tlm::tlm_generic_payload  &gp           ///< TLM2 GP reference
     , sc_core::sc_time          &delay_time   ///< time to be updated
     );
-  
+
   unsigned char* get_mem_ptr(void);
 
   private:
- 
+
 /// Check the address vs. range passed at construction
-	  
-  tlm::tlm_response_status 
+
+  tlm::tlm_response_status
   check_address
   (
-    tlm::tlm_generic_payload  &gp        
-  );   
-  
+    tlm::tlm_generic_payload  &gp
+  );
+
 // Member Variables/Objects  ===================================================
-    
+
    private:
-    
-   unsigned int          m_ID;                    ///< initiator ID
-   sc_core::sc_time      m_read_delay;            ///< read delay
-   sc_core::sc_time      m_write_delay;           ///< write delay
-   sc_dt::uint64         m_memory_size;           ///< memory size (bytes)
-   unsigned int          m_memory_width;          ///< memory width (bytes)
-    
-   unsigned char         *m_memory;               ///< memory
-   
-   bool                  m_previous_warning;      ///< limits to one message
-    
-}; 
+
+   const unsigned int     m_ID;                   ///< initiator ID
+   const sc_core::sc_time m_read_delay;           ///< read delay
+   const sc_core::sc_time m_write_delay;          ///< write delay
+   const sc_dt::uint64    m_memory_size;          ///< memory size (bytes)
+   const unsigned int     m_memory_width;         ///< memory width (bytes)
+
+   unsigned char          *m_memory;              ///< memory
+
+   bool                   m_previous_warning;     ///< limits to one message
+
+};
  #endif /* __MEMORY_H__ */
