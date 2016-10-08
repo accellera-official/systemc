@@ -25,14 +25,15 @@
   CHANGE LOG AT END OF FILE
  *****************************************************************************/
 
-#include <cstdlib>
-#include <cstddef>
-#include <cstring>
-
 #include "sysc/kernel/sc_cmnhdr.h"
 #include "sysc/utils/sc_hash.h"
 #include "sysc/utils/sc_mempool.h"
 #include "sysc/utils/sc_report.h"  // sc_assert
+
+#include <cstdlib>
+#include <cstddef>
+#include <cstring>
+#include <algorithm>
 
 namespace sc_core {
 
@@ -56,9 +57,9 @@ private:
     sc_phash_elem() : key(0), contents(0), next(0) { }
     ~sc_phash_elem() { }
 
-    static void* operator new(std::size_t sz) 
+    static void* operator new(std::size_t sz)
         { return sc_mempool::allocate(sz); }
-    static void operator delete(void* p, std::size_t sz) 
+    static void operator delete(void* p, std::size_t sz)
         { sc_mempool::release(p, sz);      }
 };
 
@@ -73,7 +74,7 @@ sc_phash_base::sc_phash_base(
     int (*cmp_fn)(const void*, const void*)
 ) :
     default_value(def), num_bins(0), num_entries(0), max_density(density),
-    reorder_flag(reorder), grow_factor(grow), bins(0), hash(hash_fn), 
+    reorder_flag(reorder), grow_factor(grow), bins(0), hash(hash_fn),
     cmpr(cmp_fn)
 {
     if (size <= 0)
@@ -588,7 +589,7 @@ sc_phash_base_iter::set_contents( void* c )
 
 /****************************************************************************/
 
-SC_API unsigned 
+SC_API unsigned
 default_ptr_hash_fn(const void* p)
 {
     return static_cast<unsigned>(((uintptr_t)(p) >> 2) * 2654435789U);
@@ -628,15 +629,17 @@ sc_strhash_cmp( const void* a, const void* b )
 SC_API void*
 sc_strhash_kdup(const void* k)
 {
-    char* result = (char*) std::malloc( std::strlen((const char*)k)+1 );
-    std::strcpy(result, (const char*) k);
+    std::size_t size = std::strlen((const char*)k)+1;
+    char* result = new char[size];
+    std::copy(static_cast<const char*>(k), static_cast<const char*>(k) + size,
+              result);
     return result;
 }
 
 SC_API void
 sc_strhash_kfree(void* k)
 {
-    if (k) std::free((char*) k);
+    delete[] static_cast<char*>(k);
 }
  } // namespace sc_core
 
