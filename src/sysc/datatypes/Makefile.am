@@ -117,7 +117,6 @@ CXX_FILES = \
 	int/sc_int_base.cpp \
 	int/sc_int_mask.cpp \
 	int/sc_length_param.cpp \
-	int/sc_nbdefs.cpp \
 	int/sc_nbexterns.cpp \
 	int/sc_nbutils.cpp \
 	int/sc_signed.cpp \

@@ -922,7 +922,7 @@ public:
     // copy constructor
 
     sc_signed_subref_r( const sc_signed_subref_r& a )
-	: sc_value_base(a), m_left( a.m_left ), m_obj_p( a.m_obj_p ), 
+	: sc_value_base(a), m_left( a.m_left ), m_obj_p( a.m_obj_p ),
 	  m_right( a.m_right )
 	{}
 

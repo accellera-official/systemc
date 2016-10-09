@@ -122,7 +122,7 @@ void floating::entry(){
 	switch (opcode_tmp) {
 	case 0:         // Stall
 		opcode_encode = "STALL";
-		dout_tmp = dout_tmp;
+		// dout_tmp = dout_tmp;  // keeps its value
 		wait();
 		break;
 	case 3:         // add

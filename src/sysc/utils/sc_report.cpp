@@ -62,8 +62,9 @@ static inline char * empty_dup(const char * p)
     if ( p && *p )
     {
         char* result;
-        result = (char*)malloc(strlen(p)+1);
-        strcpy(result, p);
+        std::size_t size = strlen(p)+1;
+        result = new char[size];
+        std::copy(p, p + size, result);
         return result;
     }
     else
@@ -72,7 +73,7 @@ static inline char * empty_dup(const char * p)
     }
 }
 
-sc_report::sc_report() 
+sc_report::sc_report()
 : severity(SC_INFO),
   md(0),
   msg(empty_dup(0)),
@@ -137,17 +138,17 @@ sc_report::swap( sc_report & that )
     swap( process,           that.process );
     swap( m_verbosity_level, that.m_verbosity_level );
     swap( m_what,            that.m_what );
-} 
+}
 
 sc_report::~sc_report() throw()
 {
     if ( file != empty_str )
-	free(file);
+	delete[] file;
     if ( msg != empty_str )
-	free(msg);
+	delete[] msg;
     delete timestamp;
     if ( m_what != empty_str )
-    free(m_what);
+	delete[] m_what;
 }
 
 const char * sc_report::get_msg_type() const
