@@ -153,7 +153,7 @@ void sc_method_process::disable_process(
 
         for ( int child_i = 0; child_i < child_n; child_i++ )
         {
-            sc_process_b* child_p = DCAST<sc_process_b*>(children[child_i]);
+            sc_process_b* child_p = dynamic_cast<sc_process_b*>(children[child_i]);
             if ( child_p ) child_p->disable_process(descendants);
         }
     }
@@ -211,7 +211,7 @@ void sc_method_process::enable_process(
 
         for ( int child_i = 0; child_i < child_n; child_i++ )
         {
-            sc_process_b* child_p = DCAST<sc_process_b*>(children[child_i]);
+            sc_process_b* child_p = dynamic_cast<sc_process_b*>(children[child_i]);
             if ( child_p ) child_p->enable_process(descendants);
         }
     }
@@ -255,7 +255,7 @@ void sc_method_process::kill_process(sc_descendant_inclusion_info descendants)
 
         for ( int child_i = 0; child_i < child_n; child_i++ )
         {
-            sc_process_b* child_p = DCAST<sc_process_b*>(children[child_i]);
+            sc_process_b* child_p = dynamic_cast<sc_process_b*>(children[child_i]);
             if ( child_p ) child_p->kill_process(descendants);
         }
     }
@@ -308,7 +308,7 @@ sc_method_process::sc_method_process( const char* name_p,
 
     // CHECK IF THIS IS AN sc_module-BASED PROCESS AND SIMUALTION HAS STARTED:
 
-    if ( DCAST<sc_module*>(host_p) != 0 && sc_is_running() )
+    if ( dynamic_cast<sc_module*>(host_p) != 0 && sc_is_running() )
     {
         report_error( SC_ID_MODULE_METHOD_AFTER_START_, "" );
     }
@@ -390,7 +390,7 @@ void sc_method_process::suspend_process(
 
         for ( int child_i = 0; child_i < child_n; child_i++ )
         {
-            sc_process_b* child_p = DCAST<sc_process_b*>(children[child_i]);
+            sc_process_b* child_p = dynamic_cast<sc_process_b*>(children[child_i]);
             if ( child_p ) child_p->suspend_process(descendants);
         }
     }
@@ -423,7 +423,7 @@ void sc_method_process::suspend_process(
 	m_state = m_state | ps_bit_ready_to_run;
 	simcontext()->remove_runnable_method( this );
     }
-    if ( sc_get_current_process_b() == DCAST<sc_process_b*>(this)  )
+    if ( sc_get_current_process_b() == dynamic_cast<sc_process_b*>(this)  )
     {
 	m_state = m_state | ps_bit_ready_to_run;
     }
@@ -451,7 +451,7 @@ void sc_method_process::resume_process(
 
         for ( int child_i = 0; child_i < child_n; child_i++ )
         {
-            sc_process_b* child_p = DCAST<sc_process_b*>(children[child_i]);
+            sc_process_b* child_p = dynamic_cast<sc_process_b*>(children[child_i]);
             if ( child_p ) child_p->resume_process(descendants);
         }
     }
@@ -480,7 +480,7 @@ void sc_method_process::resume_process(
     {
 	m_state = m_state & ~ps_bit_ready_to_run;
 	if ( next_runnable() == 0 && 
-	   ( sc_get_current_process_b() != DCAST<sc_process_b*>(this) ) )
+	   ( sc_get_current_process_b() != dynamic_cast<sc_process_b*>(this) ) )
         {
 	    simcontext()->push_runnable_method(this);
 	    remove_dynamic_events();  
@@ -579,7 +579,7 @@ void sc_method_process::throw_user( const sc_throw_it_helper& helper,
 
         for ( int child_i = 0; child_i < child_n; child_i++ )
         {
-            sc_process_b* child_p = DCAST<sc_process_b*>(children[child_i]);
+            sc_process_b* child_p = dynamic_cast<sc_process_b*>(children[child_i]);
             if ( child_p ) 
 	    {
 	        DEBUG_MSG(DEBUG_NAME,child_p,"about to throw user on");

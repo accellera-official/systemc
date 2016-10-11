@@ -45,14 +45,14 @@ static
 sc_method_handle
 as_method_handle( sc_process_b* handle_ )
 {
-    return DCAST<sc_method_handle>( handle_ );
+    return dynamic_cast<sc_method_handle>( handle_ );
 }
 
 static
 sc_thread_handle
 as_thread_handle( sc_process_b* handle_ )
 {
-    return DCAST<sc_thread_handle>( handle_ );
+    return dynamic_cast<sc_thread_handle>( handle_ );
 }
 
 static 

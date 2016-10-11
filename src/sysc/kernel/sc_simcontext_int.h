@@ -139,7 +139,7 @@ sc_simcontext::preempt_with( sc_thread_handle thread_h )
     // run queue, if its there, since we will be explicitly causing its 
     // execution.
 
-    active_p = DCAST<sc_thread_handle>(sc_get_current_process_b());
+    active_p = dynamic_cast<sc_thread_handle>(sc_get_current_process_b());
     if ( thread_h->next_runnable() != NULL )
 	remove_runnable_thread( thread_h );
 
@@ -160,7 +160,7 @@ sc_simcontext::preempt_with( sc_thread_handle thread_h )
 	sc_thread_handle           invoke_thread_p; // latest invocation thread.
         sc_method_handle           method_p;        // active method.
 
-	method_p = DCAST<sc_method_handle>(sc_get_current_process_b());
+	method_p = dynamic_cast<sc_method_handle>(sc_get_current_process_b());
 	invokers_p = &get_active_invokers();
 	caller_info = m_curr_proc_info;
 	if ( invokers_p->size() != 0 )

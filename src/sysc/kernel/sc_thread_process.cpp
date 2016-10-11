@@ -178,7 +178,7 @@ void sc_thread_process::disable_process(
 
         for ( int child_i = 0; child_i < child_n; child_i++ )
         {
-            sc_process_b* child_p = DCAST<sc_process_b*>(children[child_i]);
+            sc_process_b* child_p = dynamic_cast<sc_process_b*>(children[child_i]);
             if ( child_p ) child_p->disable_process(descendants);
         }
     }
@@ -236,7 +236,7 @@ void sc_thread_process::enable_process(
 
         for ( int child_i = 0; child_i < child_n; child_i++ )
         {
-            sc_process_b* child_p = DCAST<sc_process_b*>(children[child_i]);
+            sc_process_b* child_p = dynamic_cast<sc_process_b*>(children[child_i]);
             if ( child_p ) child_p->enable_process(descendants);
         }
     }
@@ -281,7 +281,7 @@ void sc_thread_process::kill_process(sc_descendant_inclusion_info descendants )
 
         for ( int child_i = 0; child_i < child_n; child_i++ )
         {
-            sc_process_b* child_p = DCAST<sc_process_b*>(children[child_i]);
+            sc_process_b* child_p = dynamic_cast<sc_process_b*>(children[child_i]);
             if ( child_p ) child_p->kill_process(descendants);
         }
     }
@@ -354,7 +354,7 @@ void sc_thread_process::resume_process(
 
         for ( int child_i = 0; child_i < child_n; child_i++ )
         {
-            sc_process_b* child_p = DCAST<sc_process_b*>(children[child_i]);
+            sc_process_b* child_p = dynamic_cast<sc_process_b*>(children[child_i]);
             if ( child_p ) child_p->resume_process(descendants);
         }
     }
@@ -402,7 +402,7 @@ sc_thread_process::sc_thread_process( const char* name_p, bool free_host,
 
     // CHECK IF THIS IS AN sc_module-BASED PROCESS AND SIMULATION HAS STARTED:
 
-    if ( DCAST<sc_module*>(host_p) != 0 && sc_is_running() )
+    if ( dynamic_cast<sc_module*>(host_p) != 0 && sc_is_running() )
     {
         report_error( SC_ID_MODULE_THREAD_AFTER_START_ );
     }
@@ -511,7 +511,7 @@ void sc_thread_process::suspend_process(
 
         for ( int child_i = 0; child_i < child_n; child_i++ )
         {
-            sc_process_b* child_p = DCAST<sc_process_b*>(children[child_i]);
+            sc_process_b* child_p = dynamic_cast<sc_process_b*>(children[child_i]);
             if ( child_p ) child_p->suspend_process(descendants);
         }
     }
@@ -544,7 +544,7 @@ void sc_thread_process::suspend_process(
 	m_state = m_state | ps_bit_ready_to_run;
 	simcontext()->remove_runnable_thread( this );
     }
-    if ( sc_get_current_process_b() == DCAST<sc_process_b*>(this)  )
+    if ( sc_get_current_process_b() == dynamic_cast<sc_process_b*>(this)  )
     {
 	m_state = m_state | ps_bit_ready_to_run;
 	suspend_me();
@@ -638,7 +638,7 @@ void sc_thread_process::throw_user( const sc_throw_it_helper& helper,
 
         for ( int child_i = 0; child_i < child_n; child_i++ )
         {
-            sc_process_b* child_p = DCAST<sc_process_b*>(children[child_i]);
+            sc_process_b* child_p = dynamic_cast<sc_process_b*>(children[child_i]);
             if ( child_p )
 	    {
 	        DEBUG_MSG(DEBUG_NAME,child_p,"about to throw user on");

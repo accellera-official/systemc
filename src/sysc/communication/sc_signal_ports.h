@@ -314,7 +314,7 @@ sc_in<T>::end_of_elaboration()
     if( m_traces != 0 ) {
 	for( int i = 0; i < (int)m_traces->size(); ++ i ) {
 	    sc_trace_params* p = (*m_traces)[i];
-	    in_if_type* iface = DCAST<in_if_type*>( this->get_interface() );
+	    in_if_type* iface = dynamic_cast<in_if_type*>( this->get_interface() );
 	    sc_trace( p->tf, iface->read(), p->name );
 	}
 	remove_traces();
@@ -378,12 +378,12 @@ inline
 int
 sc_in<T>::vbind( sc_port_base& parent_ )
 {
-    in_port_type* in_parent = DCAST<in_port_type*>( &parent_ );
+    in_port_type* in_parent = dynamic_cast<in_port_type*>( &parent_ );
     if( in_parent != 0 ) {
 	sc_port_base::bind( *in_parent );
 	return 0;
     }
-    inout_port_type* inout_parent = DCAST<inout_port_type*>( &parent_ );
+    inout_port_type* inout_parent = dynamic_cast<inout_port_type*>( &parent_ );
     if( inout_parent != 0 ) {
 	sc_port_base::bind( *inout_parent );
 	return 0;
@@ -1152,7 +1152,7 @@ inline
 void
 sc_inout<T>::initialize( const data_type& value_ )
 {
-    inout_if_type* iface = DCAST<inout_if_type*>( this->get_interface() );
+    inout_if_type* iface = dynamic_cast<inout_if_type*>( this->get_interface() );
     if( iface != 0 ) {
 	iface->write( value_ );
     } else {
@@ -1179,7 +1179,7 @@ sc_inout<T>::end_of_elaboration()
     if( m_traces != 0 ) {
 	for( int i = 0; i < (int)m_traces->size(); ++ i ) {
 	    sc_trace_params* p = (*m_traces)[i];
-	    in_if_type* iface = DCAST<in_if_type*>( this->get_interface() );
+	    in_if_type* iface = dynamic_cast<in_if_type*>( this->get_interface() );
 	    sc_trace( p->tf, iface->read(), p->name );
 	}
 	remove_traces();
@@ -1815,7 +1815,7 @@ sc_trace(sc_trace_file* tf, const sc_in<T>& port, const std::string& name)
     const sc_signal_in_if<T>* iface = 0;
     if (sc_get_curr_simcontext()->elaboration_done() )
     {
-	iface = DCAST<const sc_signal_in_if<T>*>( port.get_interface() );
+	iface = dynamic_cast<const sc_signal_in_if<T>*>( port.get_interface() );
     }
 
     if ( iface )
@@ -1833,7 +1833,7 @@ sc_trace( sc_trace_file* tf, const sc_inout<T>& port,
     const sc_signal_in_if<T>* iface = 0;
     if (sc_get_curr_simcontext()->elaboration_done() )
     {
-	iface =DCAST<const sc_signal_in_if<T>*>( port.get_interface() );
+	iface = dynamic_cast<const sc_signal_in_if<T>*>( port.get_interface() );
     }
 
     if ( iface )

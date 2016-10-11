@@ -120,8 +120,8 @@ inline
 const sc_event&
 sc_event_finder_t<IF>::find_event( sc_interface* if_p ) const
 {
-    const IF* iface = ( if_p ) ? DCAST<const IF*>( if_p ) :
-		                 DCAST<const IF*>( port().get_interface() );
+    const IF* iface = ( if_p ) ? dynamic_cast<const IF*>( if_p ) :
+		                 dynamic_cast<const IF*>( port().get_interface() );
     if( iface == 0 ) {
 		report_error( SC_ID_FIND_EVENT_, "port is not bound" );
     }

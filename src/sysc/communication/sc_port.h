@@ -512,7 +512,7 @@ inline
 int
 sc_port_b<IF>::vbind( sc_interface& interface_ )
 {
-    IF* iface = DCAST<IF*>( &interface_ );
+    IF* iface = dynamic_cast<IF*>( &interface_ );
     if( iface == 0 ) {
 	// type mismatch
 	return 2;
@@ -526,7 +526,7 @@ inline
 int
 sc_port_b<IF>::vbind( sc_port_base& parent_ )
 {
-    this_type* parent = DCAST<this_type*>( &parent_ );
+    this_type* parent = dynamic_cast<this_type*>( &parent_ );
     if( parent == 0 ) {
 	// type mismatch
 	return 2;
@@ -543,7 +543,7 @@ inline
 void
 sc_port_b<IF>::add_interface( sc_interface* interface_ )
 {
-    IF* iface = DCAST<IF*>( interface_ );
+    IF* iface = dynamic_cast<IF*>( interface_ );
     sc_assert( iface != 0 );
 
     // make sure that the interface is not already bound:

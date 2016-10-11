@@ -53,7 +53,7 @@ sc_in_resolved::end_of_elaboration()
 {
     base_type::end_of_elaboration();
     // check if bound channel is a resolved signal
-    if( DCAST<sc_signal_resolved*>( get_interface() ) == 0 ) {
+    if( dynamic_cast<sc_signal_resolved*>( get_interface() ) == 0 ) {
 	char msg[BUFSIZ];
 	std::sprintf( msg, "%s (%s)", name(), kind() );
 	SC_REPORT_ERROR( SC_ID_RESOLVED_PORT_NOT_BOUND_, msg );
@@ -74,7 +74,7 @@ sc_inout_resolved::end_of_elaboration()
 {
     base_type::end_of_elaboration();
     // check if bound channel is a resolved signal
-    if( DCAST<sc_signal_resolved*>( get_interface() ) == 0 ) {
+    if( dynamic_cast<sc_signal_resolved*>( get_interface() ) == 0 ) {
 	char msg[BUFSIZ];
 	std::sprintf( msg, "%s (%s)", name(), kind() );
 	SC_REPORT_ERROR( SC_ID_RESOLVED_PORT_NOT_BOUND_, msg );

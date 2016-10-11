@@ -1452,8 +1452,8 @@ sc_simcontext::preempt_with( sc_method_handle method_h )
     // run queue, if its there, since we will be explicitly causing its 
     // execution.
 
-    active_method_h = DCAST<sc_method_handle>(sc_get_current_process_b());
-    active_thread_h = DCAST<sc_thread_handle>(sc_get_current_process_b());
+    active_method_h = dynamic_cast<sc_method_handle>(sc_get_current_process_b());
+    active_thread_h = dynamic_cast<sc_thread_handle>(sc_get_current_process_b());
     if ( method_h->next_runnable() != NULL )
 	remove_runnable_method( method_h );
 
@@ -1522,7 +1522,7 @@ sc_simcontext::preempt_with( sc_method_handle method_h )
 void sc_simcontext::requeue_current_process()
 {
     sc_thread_handle thread_p;
-    thread_p = DCAST<sc_thread_handle>(get_curr_proc_info()->process_handle);
+    thread_p = dynamic_cast<sc_thread_handle>(get_curr_proc_info()->process_handle);
     if ( thread_p )
     {
 	execute_thread_next( thread_p );
@@ -1539,7 +1539,7 @@ void sc_simcontext::requeue_current_process()
 void sc_simcontext::suspend_current_process()
 {
     sc_thread_handle thread_p;
-    thread_p = DCAST<sc_thread_handle>(get_curr_proc_info()->process_handle);
+    thread_p = dynamic_cast<sc_thread_handle>(get_curr_proc_info()->process_handle);
     if ( thread_p )
     {
 	thread_p->suspend_me(); 

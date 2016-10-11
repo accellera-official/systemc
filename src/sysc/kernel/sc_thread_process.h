@@ -436,7 +436,7 @@ sc_thread_handle sc_thread_process::next_runnable()
 
 inline sc_cor* get_cor_pointer( sc_process_b* process_p )
 {
-    sc_thread_handle thread_p = DCAST<sc_thread_handle>(process_p);
+    sc_thread_handle thread_p = dynamic_cast<sc_thread_handle>(process_p);
     return thread_p->m_cor_p;
 }
 

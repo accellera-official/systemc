@@ -170,17 +170,17 @@ void sc_reset::reconcile_resets()
         next_p = now_p->m_next_p;
         if ( now_p->m_in_p )
         {
-            iface_p = DCAST<const sc_signal_in_if<bool>*>(
+            iface_p = dynamic_cast<const sc_signal_in_if<bool>*>(
                 now_p->m_in_p->get_interface());
         }
         else if ( now_p->m_inout_p )
         {
-            iface_p = DCAST<const sc_signal_in_if<bool>*>(
+            iface_p = dynamic_cast<const sc_signal_in_if<bool>*>(
                 now_p->m_inout_p->get_interface());
         }
         else
         {
-            iface_p = DCAST<const sc_signal_in_if<bool>*>(
+            iface_p = dynamic_cast<const sc_signal_in_if<bool>*>(
                 now_p->m_out_p->get_interface());
         }
         sc_assert( iface_p != 0 );
@@ -254,7 +254,7 @@ void sc_reset::reset_signal_is( bool async, const sc_in<bool>& port, bool level)
       case SC_THREAD_PROC_:
       case SC_METHOD_PROC_:
       case SC_CTHREAD_PROC_:
-        iface_p = DCAST<const sc_signal_in_if<bool>*>(port.get_interface());
+        iface_p = dynamic_cast<const sc_signal_in_if<bool>*>(port.get_interface());
         if ( iface_p )
             reset_signal_is( async, *iface_p, level );
         else
@@ -280,7 +280,7 @@ void sc_reset::reset_signal_is(
       case SC_THREAD_PROC_:
       case SC_METHOD_PROC_:
       case SC_CTHREAD_PROC_:
-        iface_p = DCAST<const sc_signal_in_if<bool>*>(port.get_interface());
+        iface_p = dynamic_cast<const sc_signal_in_if<bool>*>(port.get_interface());
         if ( iface_p )
             reset_signal_is( async, *iface_p, level );
         else
@@ -306,7 +306,7 @@ void sc_reset::reset_signal_is(
       case SC_THREAD_PROC_:
       case SC_METHOD_PROC_:
       case SC_CTHREAD_PROC_:
-        iface_p = DCAST<const sc_signal_in_if<bool>*>(port.get_interface());
+        iface_p = dynamic_cast<const sc_signal_in_if<bool>*>(port.get_interface());
         if ( iface_p )
             reset_signal_is( async, *iface_p, level );
         else

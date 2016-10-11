@@ -480,7 +480,7 @@ void sc_process_b::reset_process( reset_type rt,
 
         for ( int child_i = 0; child_i < child_n; child_i++ )
         {
-            sc_process_b* child_p = DCAST<sc_process_b*>(children[child_i]);
+            sc_process_b* child_p = dynamic_cast<sc_process_b*>(children[child_i]);
             if ( child_p ) child_p->reset_process(rt, descendants);
         }
     }
@@ -646,7 +646,7 @@ void sc_process_b::trigger_reset_event()
 //------------------------------------------------------------------------------
 sc_process_handle::operator sc_cthread_handle()  
 {
-    return DCAST<sc_cthread_handle>(m_target_p); 
+    return dynamic_cast<sc_cthread_handle>(m_target_p); 
 }
 
 //------------------------------------------------------------------------------
@@ -655,7 +655,7 @@ sc_process_handle::operator sc_cthread_handle()
 //------------------------------------------------------------------------------
 sc_process_handle::operator sc_method_handle()  
 {
-    return DCAST<sc_method_handle>(m_target_p); 
+    return dynamic_cast<sc_method_handle>(m_target_p); 
 }
 
 //------------------------------------------------------------------------------
@@ -664,7 +664,7 @@ sc_process_handle::operator sc_method_handle()
 //------------------------------------------------------------------------------
 sc_process_handle::operator sc_thread_handle()  
 {
-    return DCAST<sc_thread_handle>(m_target_p); 
+    return dynamic_cast<sc_thread_handle>(m_target_p); 
 }
 
 } // namespace sc_core 
