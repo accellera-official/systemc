@@ -159,7 +159,7 @@ extern "C"
 void
 sc_cor_qt_wrapper( void* arg, void* cor, qt_userf_t* fn )
 {
-    curr_cor = RCAST<sc_cor_qt*>( cor );
+    curr_cor = reinterpret_cast<sc_cor_qt*>( cor );
     // invoke the user function
     (*(sc_cor_fn*) fn)( arg );
     // not reached
@@ -187,7 +187,7 @@ extern "C"
 void*
 sc_cor_qt_yieldhelp( qt_t* sp, void* old_cor, void* )
 {
-    RCAST<sc_cor_qt*>( old_cor )->m_sp = sp;
+    reinterpret_cast<sc_cor_qt*>( old_cor )->m_sp = sp;
     return 0;
 }
 

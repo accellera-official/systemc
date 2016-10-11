@@ -105,7 +105,7 @@ SC_ALIGNED_STACK_
 void sc_thread_cor_fn( void* arg )
 {
     sc_simcontext*   simc_p = sc_get_curr_simcontext();
-    sc_thread_handle thread_h = RCAST<sc_thread_handle>( arg );
+    sc_thread_handle thread_h = reinterpret_cast<sc_thread_handle>( arg );
 
     // PROCESS THE THREAD AND PROCESS ANY EXCEPTIONS THAT ARE THROWN:
 

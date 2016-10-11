@@ -550,7 +550,7 @@ void
 sc_event_timed::deallocate( void* p )
 {
     if( p != 0 ) {
-        sc_event_timed_u* q = RCAST<sc_event_timed_u*>( p );
+        sc_event_timed_u* q = reinterpret_cast<sc_event_timed_u*>( p );
         q->next = free_list;
         free_list = q;
     }

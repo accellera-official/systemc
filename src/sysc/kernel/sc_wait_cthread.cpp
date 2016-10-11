@@ -44,7 +44,7 @@ halt( sc_simcontext* simc )
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();
     switch( cpi->kind ) {
     case SC_CTHREAD_PROC_: {
-	RCAST<sc_cthread_handle>( cpi->process_handle )->wait_halt();
+	reinterpret_cast<sc_cthread_handle>( cpi->process_handle )->wait_halt();
 	break;
     }
     default:
@@ -66,7 +66,7 @@ wait( int n, sc_simcontext* simc )
     switch( cpi->kind ) {
       case SC_THREAD_PROC_: 
       case SC_CTHREAD_PROC_: 
-	RCAST<sc_cthread_handle>( cpi->process_handle )->wait_cycles( n );
+	reinterpret_cast<sc_cthread_handle>( cpi->process_handle )->wait_cycles( n );
         break;
       default:
         SC_REPORT_ERROR( SC_ID_WAIT_NOT_ALLOWED_, "\n        "
