@@ -2935,7 +2935,7 @@ void
 CLASS_TYPE::dump(::std::ostream& os) const
 {
   // Save the current setting, and set the base to decimal.
-  fmtflags old_flags = os.setf(::std::ios::dec, ::std::ios::basefield);
+  ::std::ios::fmtflags old_flags = os.setf(::std::ios::dec, ::std::ios::basefield);
 
   os << "width = " << length() << ::std::endl;
   os << "value = " << *this << ::std::endl;
