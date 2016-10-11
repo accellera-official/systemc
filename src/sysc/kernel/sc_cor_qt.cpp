@@ -194,7 +194,7 @@ sc_cor_qt_yieldhelp( qt_t* sp, void* old_cor, void* )
 void
 sc_cor_pkg_qt::yield( sc_cor* next_cor )
 {
-    sc_cor_qt* new_cor = SCAST<sc_cor_qt*>( next_cor );
+    sc_cor_qt* new_cor = static_cast<sc_cor_qt*>( next_cor );
     sc_cor_qt* old_cor = curr_cor;
     curr_cor = new_cor;
     QUICKTHREADS_BLOCK( sc_cor_qt_yieldhelp, old_cor, 0, new_cor->m_sp );
@@ -213,7 +213,7 @@ sc_cor_qt_aborthelp( qt_t*, void*, void* )
 void
 sc_cor_pkg_qt::abort( sc_cor* next_cor )
 {
-    sc_cor_qt* new_cor = SCAST<sc_cor_qt*>( next_cor );
+    sc_cor_qt* new_cor = static_cast<sc_cor_qt*>( next_cor );
     sc_cor_qt* old_cor = curr_cor;
     curr_cor = new_cor;
     QUICKTHREADS_ABORT( sc_cor_qt_aborthelp, old_cor, 0, new_cor->m_sp );

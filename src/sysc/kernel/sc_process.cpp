@@ -79,11 +79,11 @@ void sc_process_b::add_static_event( const sc_event& e )
     {
       case SC_THREAD_PROC_:
       case SC_CTHREAD_PROC_:
-        thread_h = SCAST<sc_thread_handle>( this );
+        thread_h = static_cast<sc_thread_handle>( this );
         e.add_static( thread_h );
         break;
       case SC_METHOD_PROC_:
-        method_h = SCAST<sc_method_handle>( this );
+        method_h = static_cast<sc_method_handle>( this );
         e.add_static( method_h );
         break;
       default:
@@ -114,7 +114,7 @@ void sc_process_b::disconnect_process()
     {
       case SC_THREAD_PROC_:
       case SC_CTHREAD_PROC_:
-        thread_h = SCAST<sc_thread_handle>(this);
+        thread_h = static_cast<sc_thread_handle>(this);
         mon_n = thread_h->m_monitor_q.size();
         if ( mon_n )
         {
@@ -259,7 +259,7 @@ sc_process_b::remove_dynamic_events( bool skip_timeout )
     {
       case SC_THREAD_PROC_:
       case SC_CTHREAD_PROC_:
-        thread_h = SCAST<sc_thread_handle>(this);
+        thread_h = static_cast<sc_thread_handle>(this);
 	if ( thread_h->m_timeout_event_p && !skip_timeout ) {
 	    thread_h->m_timeout_event_p->remove_dynamic(thread_h);
 	    thread_h->m_timeout_event_p->cancel();
@@ -273,7 +273,7 @@ sc_process_b::remove_dynamic_events( bool skip_timeout )
         }
         break;
       case SC_METHOD_PROC_:
-        method_h = SCAST<sc_method_handle>(this);
+        method_h = static_cast<sc_method_handle>(this);
 	if ( method_h->m_timeout_event_p && !skip_timeout ) {
 	    method_h->m_timeout_event_p->remove_dynamic(method_h);
 	    method_h->m_timeout_event_p->cancel();
@@ -308,14 +308,14 @@ sc_process_b::remove_static_events()
     {
       case SC_THREAD_PROC_:
       case SC_CTHREAD_PROC_:
-        thread_h = SCAST<sc_thread_handle>( this );
+        thread_h = static_cast<sc_thread_handle>( this );
         for( int i = m_static_events.size() - 1; i >= 0; -- i ) {
             m_static_events[i]->remove_static( thread_h );
         }
         m_static_events.resize(0);
         break;
       case SC_METHOD_PROC_:
-        method_h = SCAST<sc_method_handle>( this );
+        method_h = static_cast<sc_method_handle>( this );
         for( int i = m_static_events.size() - 1; i >= 0; -- i ) {
             m_static_events[i]->remove_static( method_h );
         }

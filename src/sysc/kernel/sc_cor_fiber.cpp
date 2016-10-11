@@ -144,7 +144,7 @@ sc_cor_pkg_fiber::create( std::size_t stack_size, sc_cor_fn* fn, void* arg )
 void
 sc_cor_pkg_fiber::yield( sc_cor* next_cor )
 {
-    sc_cor_fiber* new_cor = SCAST<sc_cor_fiber*>( next_cor );
+    sc_cor_fiber* new_cor = static_cast<sc_cor_fiber*>( next_cor );
 #   if defined(__GNUC__) && __USING_SJLJ_EXCEPTIONS__
         // Switch SJLJ exception handling function contexts
         _Unwind_SjLj_Register(&curr_cor->m_eh);
@@ -160,7 +160,7 @@ sc_cor_pkg_fiber::yield( sc_cor* next_cor )
 void
 sc_cor_pkg_fiber::abort( sc_cor* next_cor )
 {
-    sc_cor_fiber* new_cor = SCAST<sc_cor_fiber*>( next_cor );
+    sc_cor_fiber* new_cor = static_cast<sc_cor_fiber*>( next_cor );
 #   if defined(__GNUC__) && __USING_SJLJ_EXCEPTIONS__
         // Switch SJLJ exception handling function contexts
         _Unwind_SjLj_Register(&curr_cor->m_eh);

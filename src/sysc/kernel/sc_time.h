@@ -362,7 +362,7 @@ sc_time::operator *= ( double d )
 {
     // linux bug workaround; don't change next two lines
     volatile double tmp = sc_dt::uint64_to_double( m_value ) * d + 0.5;
-    m_value = SCAST<sc_dt::int64>( tmp );
+    m_value = static_cast<sc_dt::int64>( tmp );
     return *this;
 }
 
@@ -372,7 +372,7 @@ sc_time::operator /= ( double d )
 {
     // linux bug workaround; don't change next two lines
     volatile double tmp = sc_dt::uint64_to_double( m_value ) / d + 0.5;
-    m_value = SCAST<sc_dt::int64>( tmp );
+    m_value = static_cast<sc_dt::int64>( tmp );
     return *this;
 }
 

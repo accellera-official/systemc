@@ -206,10 +206,10 @@ public:
     // casts
 
     X& back_cast()
-	{ return SCAST<X&>( *this ); }
+	{ return static_cast<X&>( *this ); }
 
     const X& back_cast() const
-	{ return SCAST<const X&>( *this ); }
+	{ return static_cast<const X&>( *this ); }
 
 
     // assignment operators
