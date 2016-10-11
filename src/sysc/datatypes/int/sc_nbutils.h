@@ -88,7 +88,7 @@ namespace sc_dt
 //-----------------------------------------------------------------------------
 #if defined(__GNUC__) || defined(_MSC_VER) || defined(__SUNPRO_CC)
     inline sc_numrep
-    sc_io_base( systemc_ostream& os, sc_numrep def_base )
+    sc_io_base( ::std::ostream& os, sc_numrep def_base )
     {
         std::ios::fmtflags flags = os.flags() & std::ios::basefield;
         if ( flags & ::std::ios::dec ) return  SC_DEC;
@@ -98,18 +98,18 @@ namespace sc_dt
     }
 
     inline bool
-    sc_io_show_base( systemc_ostream& os )
+    sc_io_show_base( ::std::ostream& os )
     {
         return (os.flags() & ::std::ios::showbase) != 0 ;
     }
 #else   // Other
     inline sc_numrep
-    sc_io_base( systemc_ostream& /*unused*/, sc_numrep /*unused*/ )
+    sc_io_base( ::std::ostream& /*unused*/, sc_numrep /*unused*/ )
     {
         return SC_DEC;
     }
     inline bool
-    sc_io_show_base( systemc_ostream& /*unused*/ )
+    sc_io_show_base( ::std::ostream& /*unused*/ )
     {
         return false;
     }
@@ -118,8 +118,8 @@ namespace sc_dt
 const std::string to_string( sc_numrep );
 
 inline
-systemc_ostream&
-operator << ( systemc_ostream& os, sc_numrep numrep )
+::std::ostream&
+operator << ( ::std::ostream& os, sc_numrep numrep )
 {
     os << to_string( numrep );
     return os;
