@@ -914,7 +914,7 @@ inline sc_unsigned_sigref& sc_signal<sc_dt::sc_biguint<W> >::select_part(
 	int left, int right)
 {
     sc_unsigned_sigref* result_p = sc_unsigned_sigref::m_pool.allocate();
-    result_p->initialize(DCAST<sc_unsigned_part_if*>(this), left, right);
+    result_p->initialize(dynamic_cast<sc_unsigned_part_if*>(this), left, right);
     return *result_p;
 }
 
@@ -1000,12 +1000,12 @@ class sc_in<sc_dt::sc_biguint<W> > :
         }       
     virtual inline int vbind( sc_port_base& parent_ )
         {
-            in_port_type* in_parent = DCAST<in_port_type*>( &parent_ );  
+            in_port_type* in_parent = dynamic_cast<in_port_type*>( &parent_ );  
             if( in_parent != 0 ) {
                 sc_port_base::bind( *in_parent );
                 return 0;
             }
-            inout_port_type* inout_parent = DCAST<inout_port_type*>( &parent_ );
+            inout_port_type* inout_parent = dynamic_cast<inout_port_type*>( &parent_ );
             if( inout_parent != 0 ) {
                 sc_port_base::bind( *inout_parent );
                 return 0;
@@ -1263,7 +1263,7 @@ class sc_inout<sc_dt::sc_biguint<W> > :
         }       
     virtual inline int vbind( sc_port_base& parent_ )
         {
-            inout_port_type* inout_parent = DCAST<inout_port_type*>( &parent_ );
+            inout_port_type* inout_parent = dynamic_cast<inout_port_type*>( &parent_ );
             if( inout_parent != 0 ) {
                 sc_port_base::bind( *inout_parent );
                 return 0;
@@ -1417,7 +1417,7 @@ class sc_inout<sc_dt::sc_biguint<W> > :
 
     inline void initialize( const sc_dt::sc_biguint<W>& value_ )
     {
-        inout_if_type* iface = DCAST<inout_if_type*>( this->get_interface() );     
+        inout_if_type* iface = dynamic_cast<inout_if_type*>( this->get_interface() );     
         if( iface != 0 ) {
             iface->write( value_ );
         } else {
