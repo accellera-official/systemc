@@ -125,7 +125,7 @@ sc_event_finder_t<IF>::find_event( sc_interface* if_p ) const
     if( iface == 0 ) {
 		report_error( SC_ID_FIND_EVENT_, "port is not bound" );
     }
-    return (CCAST<IF*>( iface )->*m_event_method) ();
+    return (const_cast<IF*>( iface )->*m_event_method) ();
 }
 
 } // namespace sc_core

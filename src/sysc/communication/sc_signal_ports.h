@@ -120,12 +120,12 @@ public:
 	{}
 
     explicit sc_in( const in_if_type& interface_ )
-        : base_type( CCAST<in_if_type&>( interface_ ) ), m_traces( 0 ),
+        : base_type( const_cast<in_if_type&>( interface_ ) ), m_traces( 0 ),
 	  m_change_finder_p(0)
         {}
 
     sc_in( const char* name_, const in_if_type& interface_ )
-	: base_type( name_, CCAST<in_if_type&>( interface_ ) ), m_traces( 0 ),
+	: base_type( name_, const_cast<in_if_type&>( interface_ ) ), m_traces( 0 ),
 	  m_change_finder_p(0)
 	{}
 
@@ -172,10 +172,10 @@ public:
     // bind to in interface
 
     SC_VIRTUAL_ void bind( const in_if_type& interface_ )
-	{ sc_port_base::bind( CCAST<in_if_type&>( interface_ ) ); }
+	{ sc_port_base::bind( const_cast<in_if_type&>( interface_ ) ); }
 
     SC_VIRTUAL_ void bind( in_if_type& interface_ )
-	{ this->bind( CCAST<const in_if_type&>( interface_ ) ); }
+	{ this->bind( const_cast<const in_if_type&>( interface_ ) ); }
 
     void operator () ( const in_if_type& interface_ )
 	{ this->bind( interface_ ); }
@@ -436,12 +436,12 @@ public:
 	{}
 
     explicit sc_in( const in_if_type& interface_ )
-	: base_type( CCAST<in_if_type&>( interface_ ) ), m_traces( 0 ), 
+	: base_type( const_cast<in_if_type&>( interface_ ) ), m_traces( 0 ), 
 	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
     sc_in( const char* name_, const in_if_type& interface_ )
-	: base_type( name_, CCAST<in_if_type&>( interface_ ) ), m_traces( 0 ),
+	: base_type( name_, const_cast<in_if_type&>( interface_ ) ), m_traces( 0 ),
 	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
@@ -497,10 +497,10 @@ public:
     // bind to in interface
 
     SC_VIRTUAL_ void bind( const in_if_type& interface_ )
-	{ sc_port_base::bind( CCAST<in_if_type&>( interface_ ) ); }
+	{ sc_port_base::bind( const_cast<in_if_type&>( interface_ ) ); }
 
     SC_VIRTUAL_ void bind( in_if_type& interface_ )
-	{ this->bind( CCAST<const in_if_type&>( interface_ ) ); }
+	{ this->bind( const_cast<const in_if_type&>( interface_ ) ); }
 
     void operator () ( const in_if_type& interface_ )
 	{ this->bind( interface_ ); }
@@ -712,12 +712,12 @@ public:
 	{}
 
     explicit sc_in( const in_if_type& interface_ )
-	: base_type( CCAST<in_if_type&>( interface_ ) ), m_traces( 0 ),
+	: base_type( const_cast<in_if_type&>( interface_ ) ), m_traces( 0 ),
 	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
     sc_in( const char* name_, const in_if_type& interface_ )
-	: base_type( name_, CCAST<in_if_type&>( interface_ ) ), m_traces( 0 ),
+	: base_type( name_, const_cast<in_if_type&>( interface_ ) ), m_traces( 0 ),
 	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
@@ -766,10 +766,10 @@ public:
     // bind to in interface
 
     SC_VIRTUAL_ void bind( const in_if_type& interface_ )
-	{ sc_port_base::bind( CCAST<in_if_type&>( interface_ ) ); }
+	{ sc_port_base::bind( const_cast<in_if_type&>( interface_ ) ); }
 
     SC_VIRTUAL_ void bind( in_if_type& interface_ )
-	{ this->bind( CCAST<const in_if_type&>( interface_ ) ); }
+	{ this->bind( const_cast<const in_if_type&>( interface_ ) ); }
 
     void operator () ( const in_if_type& interface_ )
 	{ this->bind( interface_ ); }
