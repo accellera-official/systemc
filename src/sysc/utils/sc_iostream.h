@@ -38,16 +38,6 @@
 #include <cstddef>
 #include <cstring>
 
-// We use typedefs for istream and ostream here to get around some finickiness
-// from aCC:
-
-namespace sc_dt {
-
-typedef ::std::istream systemc_istream;
-typedef ::std::ostream systemc_ostream;
-
-} // namespace sc_dt
-
 // $Log: sc_iostream.h,v $
 // Revision 1.3  2011/08/26 20:46:18  acg
 //  Andy Goodrich: moved the modification log to the end of the file to
