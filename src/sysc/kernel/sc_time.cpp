@@ -416,7 +416,7 @@ sc_set_time_resolution( double v, sc_time_unit tu )
     time_params->time_resolution_specified = true;
 }
 
-sc_time 
+sc_time
 sc_get_time_resolution()
 {
     return sc_time::from_value( sc_dt::UINT64_ONE );
@@ -433,7 +433,7 @@ sc_set_default_time_unit( double v, sc_time_unit tu )
         SC_REPORT_INFO(SC_ID_IEEE_1666_DEPRECATION_,
 	    "deprecated function: sc_set_default_time_unit");
     }
-    
+
     // first perform the necessary checks
 
     // must be positive

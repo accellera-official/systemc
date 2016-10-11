@@ -56,7 +56,7 @@ wait( sc_simcontext* simc )
 {
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();
     switch( cpi->kind ) {
-    case SC_THREAD_PROC_: 
+    case SC_THREAD_PROC_:
     case SC_CTHREAD_PROC_: {
 	reinterpret_cast<sc_cthread_handle>( cpi->process_handle )->wait_cycles();
         break;
@@ -348,7 +348,7 @@ next_trigger(const sc_time& t, const sc_event_and_list& el, sc_simcontext* simc)
 SC_API bool
 timed_out( sc_simcontext* simc )
 {
-    static bool warn_timed_out=true; 
+    static bool warn_timed_out=true;
     if ( warn_timed_out )
     {
         warn_timed_out = false;
@@ -375,7 +375,7 @@ sc_set_location( const char* file, int lineno, sc_simcontext* simc )
 
 } // namespace sc_core
 
-/* 
+/*
 $Log: sc_wait.cpp,v $
 Revision 1.6  2011/08/26 20:46:11  acg
  Andy Goodrich: moved the modification log to the end of the file to

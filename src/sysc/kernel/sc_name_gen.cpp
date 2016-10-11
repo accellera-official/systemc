@@ -69,7 +69,7 @@ sc_name_gen::gen_unique_name( const char* basename_, bool preserve_first )
 	m_unique_name_map.insert( const_cast<char*>( basename_ ), c );
 	if (preserve_first) {
 	    std::sprintf( m_unique_name, "%s", basename_ );
-	} else {    
+	} else {
             std::sprintf( m_unique_name, "%s_%d", basename_, *c );
         }
     } else {

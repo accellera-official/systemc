@@ -61,7 +61,7 @@ void sc_process_b::add_static_event( const sc_event& e )
 {
     sc_method_handle method_h; // This process as a method.
     sc_thread_handle thread_h; // This process as a thread.
-    
+
 
     // CHECK TO SEE IF WE ARE ALREADY REGISTERED WITH THE EVENT:
 
@@ -106,7 +106,7 @@ void sc_process_b::disconnect_process()
 
     // IF THIS OBJECT IS PINING FOR THE FJORDS WE ARE DONE:
 
-    if ( m_state & ps_bit_zombie ) return;    
+    if ( m_state & ps_bit_zombie ) return;
 
     // IF THIS IS A THREAD SIGNAL ANY MONITORS WAITING FOR IT TO EXIT:
 
@@ -120,7 +120,7 @@ void sc_process_b::disconnect_process()
         {
             for ( int mon_i = 0; mon_i < mon_n; mon_i++ )
             {
-                thread_h->m_monitor_q[mon_i]->signal( thread_h, 
+                thread_h->m_monitor_q[mon_i]->signal( thread_h,
 			      sc_process_monitor::spm_exit);
             }
         }
@@ -145,7 +145,7 @@ void sc_process_b::disconnect_process()
     //
     // (1) We wait to set the process kind until after doing the removals
     //     above.
-    // (2) Decrementing the reference count will result in actual object 
+    // (2) Decrementing the reference count will result in actual object
     //     deletion if we hit zero.
 
     m_state = ps_bit_zombie;
@@ -174,13 +174,13 @@ void sc_process_b::delete_process()
     {
         delete this;
     }
-  
+
     // Deferred deletion: note we set the reference count to one  for the call
     // to reference_decrement that occurs in sc_simcontext::crunch().
-  
+
     else
     {
-	m_references_n = 1; 
+	m_references_n = 1;
         detach();
         simcontext()->mark_to_collect_process( this );
     }
@@ -206,7 +206,7 @@ std::string sc_process_b::dump_state() const
 {
     std::string result;
     result = "[";
-    if ( m_state == ps_normal ) 
+    if ( m_state == ps_normal )
     {
         result += " normal";
     }
@@ -364,11 +364,11 @@ sc_process_b::report_immediate_self_notification() const
 
 //------------------------------------------------------------------------------
 //"sc_process_b::reset_changed"
-//      
+//
 // This method is called when there is a change in the value of the
 // signal that was specified via reset_signal_is, or the value of the
 // m_sticky_reset field. We get called any time m_sticky_reset changes
-// or a signal value changes since, since we may need to throw an exception 
+// or a signal value changes since, since we may need to throw an exception
 // or clear one. Note that this method may be called when there is no
 // active process, but rather the main simulator is executing so we must
 // check for that case.
@@ -378,11 +378,11 @@ sc_process_b::report_immediate_self_notification() const
 //     asserted = true if reset being asserted, false if being deasserted.
 //------------------------------------------------------------------------------
 void sc_process_b::reset_changed( bool async, bool asserted )
-{       
+{
 
     // Error out on the corner case:
 
-    if ( !sc_allow_process_control_corners && !async && 
+    if ( !sc_allow_process_control_corners && !async &&
          (m_state & ps_bit_suspended) )
     {
 	report_error( SC_ID_PROCESS_CONTROL_CORNER_CASE_,
@@ -391,7 +391,7 @@ void sc_process_b::reset_changed( bool async, bool asserted )
 
     // IF THIS OBJECT IS PUSHING UP DAISIES WE ARE DONE:
 
-    if ( m_state & ps_bit_zombie ) return;    
+    if ( m_state & ps_bit_zombie ) return;
 
     // Reset is being asserted:
 
@@ -412,7 +412,7 @@ void sc_process_b::reset_changed( bool async, bool asserted )
 
     // Reset is being deasserted:
 
-    else 
+    else
     {
         if ( async )
 	{
@@ -426,23 +426,23 @@ void sc_process_b::reset_changed( bool async, bool asserted )
 
     // Clear the throw type if there are no active resets.
 
-    if ( (m_throw_status == THROW_SYNC_RESET || 
+    if ( (m_throw_status == THROW_SYNC_RESET ||
           m_throw_status == THROW_ASYNC_RESET) &&
          m_active_areset_n == 0 && m_active_reset_n == 0 && !m_sticky_reset )
     {
         m_throw_status = THROW_NONE;
     }
-}       
+}
 
 //------------------------------------------------------------------------------
 //"sc_process_b::reset_event"
 //
-// This method returns a reference to the reset event for this object 
+// This method returns a reference to the reset event for this object
 // instance. If no event exists one is allocated.
 //------------------------------------------------------------------------------
 sc_event& sc_process_b::reset_event()
 {
-    if ( !m_reset_event_p ) 
+    if ( !m_reset_event_p )
     {
         m_reset_event_p = new sc_event( sc_event::kernel_event, "reset_event" );
     }
@@ -453,10 +453,10 @@ sc_event& sc_process_b::reset_event()
 //"sc_process_b::reset_process"
 //
 // This inline method changes the reset state of this object instance and
-// conditionally its descendants. 
+// conditionally its descendants.
 //
-// Notes: 
-//   (1) It is called for sync_reset_on() and sync_reset_off(). It is not used 
+// Notes:
+//   (1) It is called for sync_reset_on() and sync_reset_off(). It is not used
 //       for signal sensitive resets, though all reset flow ends up in
 //       reset_changed().
 //
@@ -524,7 +524,7 @@ void sc_process_b::reset_process( reset_type rt,
 	    reset_changed( false, false );
 	}
         break;
-    }   
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -533,7 +533,7 @@ void sc_process_b::reset_process( reset_type rt,
 // This is the object instance constructor for this class.
 //------------------------------------------------------------------------------
 sc_process_b::sc_process_b( const char* name_p, bool is_thread, bool free_host,
-     SC_ENTRY_FUNC method_p, sc_process_host* host_p, 
+     SC_ENTRY_FUNC method_p, sc_process_host* host_p,
      const sc_spawn_options* /* opt_p  */
 ) :
     sc_object( name_p ),
@@ -555,7 +555,7 @@ sc_process_b::sc_process_b( const char* name_p, bool is_thread, bool free_host,
     m_last_report_p(0),
     m_name_gen_p(0),
     m_process_kind(SC_NO_PROC_),
-    m_references_n(1), 
+    m_references_n(1),
     m_resets(),
     m_reset_event_p(0),
     m_resume_event_p(0),
@@ -587,7 +587,7 @@ sc_process_b::sc_process_b( const char* name_p, bool is_thread, bool free_host,
 //------------------------------------------------------------------------------
 sc_process_b::~sc_process_b()
 {
-   
+
     // REDIRECT ANY CHILDREN AS CHILDREN OF THE SIMULATION CONTEXT:
 
     orphan_child_objects();
@@ -616,12 +616,12 @@ sc_process_b::~sc_process_b()
 //------------------------------------------------------------------------------
 //"sc_process_b::terminated_event"
 //
-// This method returns a reference to the terminated event for this object 
+// This method returns a reference to the terminated event for this object
 // instance. If no event exists one is allocated.
 //------------------------------------------------------------------------------
 sc_event& sc_process_b::terminated_event()
 {
-    if ( !m_term_event_p ) 
+    if ( !m_term_event_p )
     {
         m_term_event_p = new sc_event( sc_event::kernel_event, "term_event" );
     }
@@ -630,9 +630,9 @@ sc_event& sc_process_b::terminated_event()
 
 // +----------------------------------------------------------------------------
 // |"sc_process_b::trigger_reset_event"
-// | 
+// |
 // | This method triggers the notify event. It exists because we can't get
-// | sc_event context in sc_process.h because the includes would be 
+// | sc_event context in sc_process.h because the includes would be
 // | circular... sigh...
 // +----------------------------------------------------------------------------
 void sc_process_b::trigger_reset_event()
@@ -644,30 +644,30 @@ void sc_process_b::trigger_reset_event()
 //"sc_process_handle::operator sc_cthread_handle"
 //
 //------------------------------------------------------------------------------
-sc_process_handle::operator sc_cthread_handle()  
+sc_process_handle::operator sc_cthread_handle()
 {
-    return dynamic_cast<sc_cthread_handle>(m_target_p); 
+    return dynamic_cast<sc_cthread_handle>(m_target_p);
 }
 
 //------------------------------------------------------------------------------
 //"sc_process_handle::sc_method_handle"
 //
 //------------------------------------------------------------------------------
-sc_process_handle::operator sc_method_handle()  
+sc_process_handle::operator sc_method_handle()
 {
-    return dynamic_cast<sc_method_handle>(m_target_p); 
+    return dynamic_cast<sc_method_handle>(m_target_p);
 }
 
 //------------------------------------------------------------------------------
 //"sc_process_handle::sc_thread_handle"
 //
 //------------------------------------------------------------------------------
-sc_process_handle::operator sc_thread_handle()  
+sc_process_handle::operator sc_thread_handle()
 {
-    return dynamic_cast<sc_thread_handle>(m_target_p); 
+    return dynamic_cast<sc_thread_handle>(m_target_p);
 }
 
-} // namespace sc_core 
+} // namespace sc_core
 
 
 /*****************************************************************************
@@ -676,9 +676,9 @@ sc_process_handle::operator sc_thread_handle()
   changes you are making here.
 
       Name, Affiliation, Date: Andy Goodrich, Forte Design Systems, 12 Aug 05
-  Description of Modification: This is the rewrite of process support. It 
-                               contains some code from the now-defunct 
-                               sc_process_b.cpp, as well as the former 
+  Description of Modification: This is the rewrite of process support. It
+                               contains some code from the now-defunct
+                               sc_process_b.cpp, as well as the former
                                version of sc_process_b.cpp.
 
       Name, Affiliation, Date:

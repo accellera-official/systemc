@@ -56,7 +56,7 @@ sc_in<bool>::end_of_elaboration()
 // called by sc_trace
 
 void
-sc_in<bool>::add_trace_internal(sc_trace_file* tf_, 
+sc_in<bool>::add_trace_internal(sc_trace_file* tf_,
 	const std::string& name_) const
 {
     if( tf_ != 0 ) {
@@ -68,7 +68,7 @@ sc_in<bool>::add_trace_internal(sc_trace_file* tf_,
 }
 
 void
-sc_in<bool>::add_trace(sc_trace_file* tf_, 
+sc_in<bool>::add_trace(sc_trace_file* tf_,
 	const std::string& name_) const
 {
     sc_deprecated_add_trace();
@@ -139,7 +139,7 @@ sc_in<sc_dt::sc_logic>::end_of_elaboration()
 // called by sc_trace
 
 void
-sc_in<sc_dt::sc_logic>::add_trace_internal( sc_trace_file* tf_, 
+sc_in<sc_dt::sc_logic>::add_trace_internal( sc_trace_file* tf_,
     const std::string& name_ ) const
 {
     if( tf_ != 0 ) {
@@ -151,7 +151,7 @@ sc_in<sc_dt::sc_logic>::add_trace_internal( sc_trace_file* tf_,
 }
 
 void
-sc_in<sc_dt::sc_logic>::add_trace( sc_trace_file* tf_, 
+sc_in<sc_dt::sc_logic>::add_trace( sc_trace_file* tf_,
     const std::string& name_ ) const
 {
     sc_deprecated_add_trace();
@@ -256,7 +256,7 @@ sc_inout<bool>::end_of_elaboration()
 // called by sc_trace
 
 void
-sc_inout<bool>::add_trace_internal( sc_trace_file* tf_, 
+sc_inout<bool>::add_trace_internal( sc_trace_file* tf_,
     const std::string& name_ ) const
 {
     if( tf_ != 0 ) {
@@ -268,7 +268,7 @@ sc_inout<bool>::add_trace_internal( sc_trace_file* tf_,
 }
 
 void
-sc_inout<bool>::add_trace( sc_trace_file* tf_, 
+sc_inout<bool>::add_trace( sc_trace_file* tf_,
     const std::string& name_ ) const
 {
     sc_deprecated_add_trace();

@@ -327,7 +327,7 @@ sc_in<T>::end_of_elaboration()
 template <class T>
 inline
 void
-sc_in<T>::add_trace_internal( sc_trace_file* tf_, const std::string& name_ ) 
+sc_in<T>::add_trace_internal( sc_trace_file* tf_, const std::string& name_ )
 const
 {
     if( tf_ != 0 ) {
@@ -341,7 +341,7 @@ const
 template <class T>
 inline
 void
-sc_in<T>::add_trace( sc_trace_file* tf_, const std::string& name_ ) 
+sc_in<T>::add_trace( sc_trace_file* tf_, const std::string& name_ )
 const
 {
     sc_deprecated_add_trace();
@@ -402,7 +402,7 @@ sc_in<T>::vbind( sc_port_base& parent_ )
 SC_API_TEMPLATE_ template class SC_API sc_port<sc_signal_in_if<bool>,1,SC_ONE_OR_MORE_BOUND>;
 
 template <>
-class SC_API sc_in<bool> : 
+class SC_API sc_in<bool> :
     public sc_port<sc_signal_in_if<bool>,1,SC_ONE_OR_MORE_BOUND>
 {
 public:
@@ -426,17 +426,17 @@ public:
     // constructors
 
     sc_in()
-	: base_type(), m_traces( 0 ), m_change_finder_p(0), 
+	: base_type(), m_traces( 0 ), m_change_finder_p(0),
 	  m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
     explicit sc_in( const char* name_ )
-	: base_type( name_ ), m_traces( 0 ), m_change_finder_p(0), 
+	: base_type( name_ ), m_traces( 0 ), m_change_finder_p(0),
 	  m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
     explicit sc_in( const in_if_type& interface_ )
-	: base_type( const_cast<in_if_type&>( interface_ ) ), m_traces( 0 ), 
+	: base_type( const_cast<in_if_type&>( interface_ ) ), m_traces( 0 ),
 	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
 
@@ -475,7 +475,7 @@ public:
 	: base_type( *(in_if_type*)parent_.get_interface() ) , m_traces( 0 ),
 	  m_change_finder_p(0), m_neg_finder_p(0), m_pos_finder_p(0)
 	{}
-#endif 
+#endif
 
     sc_in( const char* name_, this_type& parent_ )
 	: base_type( name_, parent_ ), m_traces( 0 ),
@@ -565,7 +565,7 @@ public:
 	{
 	    m_pos_finder_p = new sc_event_finder_t<in_if_type>(
 	        *this, &in_if_type::posedge_event );
-	} 
+	}
 	return *m_pos_finder_p;
     }
 
@@ -577,7 +577,7 @@ public:
 	{
 	    m_neg_finder_p = new sc_event_finder_t<in_if_type>(
 	        *this, &in_if_type::negedge_event );
-	} 
+	}
 	return *m_neg_finder_p;
     }
 
@@ -656,7 +656,7 @@ private:
 #if defined(TESTING)
 #else
     sc_in( const this_type& );
-#endif 
+#endif
     this_type& operator = ( const this_type& );
 
 #ifdef __GNUC__
@@ -834,7 +834,7 @@ public:
 	{
 	    m_pos_finder_p = new sc_event_finder_t<in_if_type>(
 	        *this, &in_if_type::posedge_event );
-	} 
+	}
 	return *m_pos_finder_p;
     }
 
@@ -846,7 +846,7 @@ public:
 	{
 	    m_neg_finder_p = new sc_event_finder_t<in_if_type>(
 	        *this, &in_if_type::negedge_event );
-	} 
+	}
 	return *m_neg_finder_p;
     }
 
@@ -1192,7 +1192,7 @@ sc_inout<T>::end_of_elaboration()
 template <class T>
 inline
 void
-sc_inout<T>::add_trace_internal( sc_trace_file* tf_, const std::string& name_) 
+sc_inout<T>::add_trace_internal( sc_trace_file* tf_, const std::string& name_)
 const
 {
     if( tf_ != 0 ) {
@@ -1236,7 +1236,7 @@ sc_inout<T>::remove_traces() const
 SC_API_TEMPLATE_ template class SC_API sc_port<sc_signal_inout_if<bool>,1,SC_ONE_OR_MORE_BOUND>;
 
 template <>
-class SC_API sc_inout<bool> : 
+class SC_API sc_inout<bool> :
     public sc_port<sc_signal_inout_if<bool>,1,SC_ONE_OR_MORE_BOUND>
 {
 public:
@@ -1345,7 +1345,7 @@ public:
 	{
 	    m_pos_finder_p = new sc_event_finder_t<in_if_type>(
 	        *this, &in_if_type::posedge_event );
-	} 
+	}
 	return *m_pos_finder_p;
     }
 
@@ -1357,7 +1357,7 @@ public:
 	{
 	    m_neg_finder_p = new sc_event_finder_t<in_if_type>(
 	        *this, &in_if_type::negedge_event );
-	} 
+	}
 	return *m_neg_finder_p;
     }
 
@@ -1583,7 +1583,7 @@ public:
 	{
 	    m_pos_finder_p = new sc_event_finder_t<in_if_type>(
 	        *this, &in_if_type::posedge_event );
-	} 
+	}
 	return *m_pos_finder_p;
     }
 
@@ -1595,7 +1595,7 @@ public:
 	{
 	    m_neg_finder_p = new sc_event_finder_t<in_if_type>(
 	        *this, &in_if_type::negedge_event );
-	} 
+	}
 	return *m_neg_finder_p;
     }
 
@@ -1827,7 +1827,7 @@ sc_trace(sc_trace_file* tf, const sc_in<T>& port, const std::string& name)
 template <class T>
 inline
 void
-sc_trace( sc_trace_file* tf, const sc_inout<T>& port, 
+sc_trace( sc_trace_file* tf, const sc_inout<T>& port,
     const std::string& name )
 {
     const sc_signal_in_if<T>* iface = 0;

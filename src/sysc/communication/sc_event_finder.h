@@ -54,7 +54,7 @@ public:
     virtual const sc_event& find_event( sc_interface* if_p = 0 ) const = 0;
 
 protected:
-    
+
     // constructor
     sc_event_finder( const sc_port_base& );
 

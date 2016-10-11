@@ -51,7 +51,7 @@ sc_join::sc_join()
 //"sc_join::add_process - sc_process_b*"
 //
 // This method adds a process to this join object instance. This consists of
-// incrementing the count of processes in the join process and adding this 
+// incrementing the count of processes in the join process and adding this
 // object instance to the supplied thread's monitoring queue.
 //     process_p -> thread to be monitored.
 //------------------------------------------------------------------------------
@@ -68,7 +68,7 @@ void sc_join::add_process( sc_process_b* process_p )
 //"sc_join::add_process - sc_process_handle"
 //
 // This method adds a process to this join object instance. This consists of
-// incrementing the count of processes in the join process and adding this 
+// incrementing the count of processes in the join process and adding this
 // object instance to the supplied thread's monitoring queue.
 //     process_h = handle for process to be monitored.
 //------------------------------------------------------------------------------
@@ -84,7 +84,7 @@ void sc_join::add_process( sc_process_handle process_h )
     }
     else
     {
-        SC_REPORT_ERROR( SC_ID_JOIN_ON_METHOD_HANDLE_, 0 ); 
+        SC_REPORT_ERROR( SC_ID_JOIN_ON_METHOD_HANDLE_, 0 );
     }
 }
 
@@ -93,8 +93,8 @@ void sc_join::add_process( sc_process_handle process_h )
 //"sc_join::signal"
 //
 // This virtual method is called when a process being monitored by this object
-// instance sends a signal. If the signal type is spm_exit and the count of 
-// threads that we are waiting to terminate on goes to zero we fire our join 
+// instance sends a signal. If the signal type is spm_exit and the count of
+// threads that we are waiting to terminate on goes to zero we fire our join
 // event.
 //     thread_p -> thread that is signalling.
 //     type     =  type of signal being sent.

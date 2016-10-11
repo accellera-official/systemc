@@ -20,7 +20,7 @@
   sc_thread_process.cpp -- Thread process implementation
 
   Original Author: Andy Goodrich, Forte Design Systems, 4 August 2005
-               
+
  CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
 
@@ -51,7 +51,7 @@
 		    << " - " << P->name() << std::endl; \
     }
 #else
-#   define DEBUG_MSG(NAME,P,MSG) 
+#   define DEBUG_MSG(NAME,P,MSG)
 #endif
 
 
@@ -98,7 +98,7 @@ const int SC_DEFAULT_STACK_SIZE   = SC_DEFAULT_STACK_SIZE_;
 
 //------------------------------------------------------------------------------
 //"sc_thread_cor_fn"
-// 
+//
 // This function invokes the coroutine for the supplied object instance.
 //------------------------------------------------------------------------------
 SC_ALIGNED_STACK_
@@ -150,7 +150,7 @@ void sc_thread_cor_fn( void* arg )
 
     if ( active_p == (sc_process_b*)thread_h )
     {
-     
+
         sc_core::sc_cor* x = simc_p->next_cor();
 	simc_p->cor_pkg()->abort( x );
     }
@@ -167,7 +167,7 @@ void sc_thread_cor_fn( void* arg )
 //------------------------------------------------------------------------------
 void sc_thread_process::disable_process(
     sc_descendant_inclusion_info descendants )
-{     
+{
 
     // IF NEEDED PROPOGATE THE DISABLE REQUEST THROUGH OUR DESCENDANTS:
 
@@ -188,9 +188,9 @@ void sc_thread_process::disable_process(
     if ( !sc_allow_process_control_corners )
     {
 	switch( m_trigger_type )
-	{ 
+	{
 	  case AND_LIST_TIMEOUT:
-	  case EVENT_TIMEOUT: 
+	  case EVENT_TIMEOUT:
 	  case OR_LIST_TIMEOUT:
 	  case TIMEOUT:
 	    report_error(SC_ID_PROCESS_CONTROL_CORNER_CASE_,
@@ -203,11 +203,11 @@ void sc_thread_process::disable_process(
 
     // DISABLE OUR OBJECT INSTANCE:
 
-    m_state = m_state | ps_bit_disabled; 
+    m_state = m_state | ps_bit_disabled;
 
     // IF THIS CALL IS BEFORE THE SIMULATION DON'T RUN THE THREAD:
 
-    if ( !sc_is_running() ) 
+    if ( !sc_is_running() )
     {
 	m_state = m_state | ps_bit_ready_to_run;
         simcontext()->remove_runnable_thread(this);
@@ -218,7 +218,7 @@ void sc_thread_process::disable_process(
 //"sc_thread_process::enable_process"
 //
 // This method resumes the execution of this process, and if requested, its
-// descendants. If the process was suspended and has a resumption pending it 
+// descendants. If the process was suspended and has a resumption pending it
 // will be dispatched in the next delta cycle. Otherwise the state will be
 // adjusted to indicate it is no longer suspended, but no immediate execution
 // will occur.
@@ -245,7 +245,7 @@ void sc_thread_process::enable_process(
     //
     // If it was disabled and ready to run then put it on the run queue.
 
-    m_state = m_state & ~ps_bit_disabled; 
+    m_state = m_state & ~ps_bit_disabled;
     if ( m_state == ps_bit_ready_to_run && sc_allow_process_control_corners )
     {
         m_state = ps_normal;
@@ -309,7 +309,7 @@ void sc_thread_process::kill_process(sc_descendant_inclusion_info descendants )
         simcontext()->preempt_with(this);
     }
 
-    // IF THE SIMULATION HAS NOT STARTED REMOVE TRACES OF OUR PROCESS FROM 
+    // IF THE SIMULATION HAS NOT STARTED REMOVE TRACES OF OUR PROCESS FROM
     // EVENT QUEUES, ETC.:
 
     else
@@ -336,7 +336,7 @@ void sc_thread_process::prepare_for_simulation()
 //"sc_thread_process::resume_process"
 //
 // This method resumes the execution of this process, and if requested, its
-// descendants. If the process was suspended and has a resumption pending it 
+// descendants. If the process was suspended and has a resumption pending it
 // will be dispatched in the next delta cycle. Otherwise the state will be
 // adjusted to indicate it is no longer suspended, but no immediate execution
 // will occur.
@@ -365,7 +365,7 @@ void sc_thread_process::resume_process(
          (m_state & ps_bit_suspended) )
     {
 	m_state = m_state & ~ps_bit_suspended;
-        report_error(SC_ID_PROCESS_CONTROL_CORNER_CASE_, 
+        report_error(SC_ID_PROCESS_CONTROL_CORNER_CASE_,
 	             "call to resume() on a disabled suspended thread");
     }
 
@@ -378,7 +378,7 @@ void sc_thread_process::resume_process(
     if ( m_state & ps_bit_ready_to_run )
     {
 	m_state = m_state & ~ps_bit_ready_to_run;
-	if ( next_runnable() == 0 )  
+	if ( next_runnable() == 0 )
 	    simcontext()->push_runnable_thread(this);
 	remove_dynamic_events();  // order important.
     }
@@ -390,11 +390,11 @@ void sc_thread_process::resume_process(
 // This is the object instance constructor for this class.
 //------------------------------------------------------------------------------
 sc_thread_process::sc_thread_process( const char* name_p, bool free_host,
-    SC_ENTRY_FUNC method_p, sc_process_host* host_p, 
-    const sc_spawn_options* opt_p 
+    SC_ENTRY_FUNC method_p, sc_process_host* host_p,
+    const sc_spawn_options* opt_p
 ):
     sc_process_b(
-        name_p ? name_p : sc_gen_unique_name("thread_p"), 
+        name_p ? name_p : sc_gen_unique_name("thread_p"),
         true, free_host, method_p, host_p, opt_p),
     m_cor_p(0), m_monitor_q(), m_stack_size(SC_DEFAULT_STACK_SIZE),
     m_wait_cycle_n(0)
@@ -482,13 +482,13 @@ sc_thread_process::~sc_thread_process()
 // This methods signals the list of monitors for this object instance.
 //------------------------------------------------------------------------------
 void sc_thread_process::signal_monitors(int type)
-{       
+{
     int mon_n;  // # of monitors present.
-        
+
     mon_n = m_monitor_q.size();
     for ( int mon_i = 0; mon_i < mon_n; mon_i++ )
         m_monitor_q[mon_i]->signal(this, type);
-}   
+}
 
 
 //------------------------------------------------------------------------------
@@ -500,7 +500,7 @@ void sc_thread_process::signal_monitors(int type)
 //------------------------------------------------------------------------------
 void sc_thread_process::suspend_process(
     sc_descendant_inclusion_info descendants )
-{     
+{
 
     // IF NEEDED PROPOGATE THE SUSPEND REQUEST THROUGH OUR DESCENDANTS:
 
@@ -517,7 +517,7 @@ void sc_thread_process::suspend_process(
     }
 
     // CORNER CASE CHECKS, THE FOLLOWING ARE ERRORS:
-    //   (a) if this thread has a reset_signal_is specification 
+    //   (a) if this thread has a reset_signal_is specification
     //   (b) if this thread is in synchronous reset
 
     if ( !sc_allow_process_control_corners && m_has_reset_signal )
@@ -539,7 +539,7 @@ void sc_thread_process::suspend_process(
     //     scheduling of the process, and we need to call suspend_me() here.
 
     m_state = m_state | ps_bit_suspended;
-    if ( next_runnable() != 0 ) 
+    if ( next_runnable() != 0 )
     {
 	m_state = m_state | ps_bit_ready_to_run;
 	simcontext()->remove_runnable_thread( this );
@@ -555,11 +555,11 @@ void sc_thread_process::suspend_process(
 //"sc_thread_process::throw_reset"
 //
 // This virtual method is invoked when an reset is to be thrown. The
-// method will cancel any dynamic waits. If the reset is asynchronous it will 
-// queue this object instance to be executed. 
+// method will cancel any dynamic waits. If the reset is asynchronous it will
+// queue this object instance to be executed.
 //------------------------------------------------------------------------------
 void sc_thread_process::throw_reset( bool async )
-{     
+{
     // IF THE PROCESS IS CURRENTLY UNWINDING OR IS ALREADY A ZOMBIE
     // IGNORE THE RESET:
 
@@ -573,20 +573,20 @@ void sc_thread_process::throw_reset( bool async )
         return;
 
 
-    // Set the throw type and clear any pending dynamic events: 
+    // Set the throw type and clear any pending dynamic events:
 
     m_throw_status = async ? THROW_ASYNC_RESET : THROW_SYNC_RESET;
     m_wait_cycle_n = 0;
 
     // If this is an asynchronous reset:
     //
-    //   (a) Cancel any dynamic events 
+    //   (a) Cancel any dynamic events
     //   (b) Set the thread up for execution:
     //         (i) If we are in the execution phase do it now.
     //         (ii) If we are not queue it to execute next when we hit
     //              the execution phase.
 
-    if ( async ) 
+    if ( async )
     {
         m_state = m_state & ~ps_bit_ready_to_run;
         remove_dynamic_events();
@@ -608,8 +608,8 @@ void sc_thread_process::throw_reset( bool async )
 //"sc_thread_process::throw_user"
 //
 // This virtual method is invoked when a user exception is to be thrown.
-// If requested it will also throw the exception to the children of this 
-// object instance. The order of dispatch for the processes that are 
+// If requested it will also throw the exception to the children of this
+// object instance. The order of dispatch for the processes that are
 // thrown the exception is from youngest child to oldest child and then
 // this process instance. This means that this instance will be pushed onto
 // the front of the simulator's runnable queue and then the children will
@@ -620,13 +620,13 @@ void sc_thread_process::throw_reset( bool async )
 //------------------------------------------------------------------------------
 void sc_thread_process::throw_user( const sc_throw_it_helper& helper,
     sc_descendant_inclusion_info descendants )
-{     
+{
 
     // IF THE SIMULATION IS NOT ACTAULLY RUNNING THIS IS AN ERROR:
 
     if ( sc_get_status() != SC_RUNNING )
     {
-        report_error( SC_ID_THROW_IT_WHILE_NOT_RUNNING_ ); 
+        report_error( SC_ID_THROW_IT_WHILE_NOT_RUNNING_ );
     }
 
     // IF NEEDED PROPOGATE THE THROW REQUEST THROUGH OUR DESCENDANTS:
@@ -652,7 +652,7 @@ void sc_thread_process::throw_user( const sc_throw_it_helper& helper,
     if ( m_unwinding )
     {
         SC_REPORT_WARNING( SC_ID_PROCESS_ALREADY_UNWINDING_, name() );
-	return; 
+	return;
     }
 
     // SET UP THE THROW REQUEST FOR THIS OBJECT INSTANCE AND QUEUE IT FOR
@@ -680,11 +680,11 @@ void sc_thread_process::throw_user( const sc_throw_it_helper& helper,
 // This method sets up a dynamic trigger on an event.
 //
 // Notes:
-//   (1) This method is identical to sc_method_process::trigger_dynamic(), 
-//       but they cannot be combined as sc_process_b::trigger_dynamic() 
+//   (1) This method is identical to sc_method_process::trigger_dynamic(),
+//       but they cannot be combined as sc_process_b::trigger_dynamic()
 //       because the signatures things like sc_event::remove_dynamic()
 //       have different overloads for sc_thread_process* and sc_method_process*.
-//       So if you change code here you'll also need to change it in 
+//       So if you change code here you'll also need to change it in
 //       sc_method_process.cpp.
 //
 // Result is true if this process should be removed from the event's list,
@@ -710,7 +710,7 @@ bool sc_thread_process::trigger_dynamic( sc_event* e )
     }
 #endif // SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS
 
-    if( is_runnable() ) 
+    if( is_runnable() )
         return true;
 
     // If a process is disabled then we ignore any events, leaving them enabled:
@@ -722,7 +722,7 @@ bool sc_thread_process::trigger_dynamic( sc_event* e )
     {
         if ( e == m_timeout_event_p )
 	{
-	    remove_dynamic_events( true );  
+	    remove_dynamic_events( true );
 	    return true;
 	}
 	else
@@ -737,9 +737,9 @@ bool sc_thread_process::trigger_dynamic( sc_event* e )
     // Every case needs to set 'rc' and continue on to the end of
     // this method to allow suspend processing to work correctly.
 
-    switch( m_trigger_type ) 
+    switch( m_trigger_type )
     {
-      case EVENT: 
+      case EVENT:
 	m_event_p = 0;
 	m_trigger_type = STATIC;
 	break;
@@ -765,11 +765,11 @@ bool sc_thread_process::trigger_dynamic( sc_event* e )
 	m_trigger_type = STATIC;
 	break;
 
-      case TIMEOUT: 
+      case TIMEOUT:
 	m_trigger_type = STATIC;
 	break;
 
-      case EVENT_TIMEOUT: 
+      case EVENT_TIMEOUT:
         if ( e == m_timeout_event_p )
 	{
 	    m_timed_out = true;
@@ -790,9 +790,9 @@ bool sc_thread_process::trigger_dynamic( sc_event* e )
         if ( e == m_timeout_event_p )
 	{
             m_timed_out = true;
-            m_event_list_p->remove_dynamic( this, e ); 
+            m_event_list_p->remove_dynamic( this, e );
             m_event_list_p->auto_delete();
-            m_event_list_p = 0; 
+            m_event_list_p = 0;
             m_trigger_type = STATIC;
 	}
 
@@ -800,20 +800,20 @@ bool sc_thread_process::trigger_dynamic( sc_event* e )
 	{
             m_timeout_event_p->cancel();
             m_timeout_event_p->reset();
-	    m_event_list_p->remove_dynamic( this, e ); 
+	    m_event_list_p->remove_dynamic( this, e );
 	    m_event_list_p->auto_delete();
-	    m_event_list_p = 0; 
+	    m_event_list_p = 0;
 	    m_trigger_type = STATIC;
 	}
 	break;
-      
+
       case AND_LIST_TIMEOUT:
         if ( e == m_timeout_event_p )
 	{
             m_timed_out = true;
-            m_event_list_p->remove_dynamic( this, e ); 
+            m_event_list_p->remove_dynamic( this, e );
             m_event_list_p->auto_delete();
-            m_event_list_p = 0; 
+            m_event_list_p = 0;
             m_trigger_type = STATIC;
 	}
 
@@ -826,7 +826,7 @@ bool sc_thread_process::trigger_dynamic( sc_event* e )
 		m_timeout_event_p->reset();
 		// no need to remove_dynamic
 		m_event_list_p->auto_delete();
-		m_event_list_p = 0; 
+		m_event_list_p = 0;
 		m_trigger_type = STATIC;
 	    }
 	    else
@@ -843,8 +843,8 @@ bool sc_thread_process::trigger_dynamic( sc_event* e )
       }
     }
 
-    // If we get here then the thread is has satisfied its wait criteria, if 
-    // its suspended mark its state as ready to run. If its not suspended then 
+    // If we get here then the thread is has satisfied its wait criteria, if
+    // its suspended mark its state as ready to run. If its not suspended then
     // push it onto the runnable queue.
 
     if ( (m_state & ps_bit_suspended) )
@@ -873,7 +873,7 @@ sc_set_stack_size( sc_thread_handle thread_h, std::size_t size )
 #undef DEBUG_MSG
 #undef DEBUG_NAME
 
-} // namespace sc_core 
+} // namespace sc_core
 
 
 /*****************************************************************************

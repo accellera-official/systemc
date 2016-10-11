@@ -63,13 +63,13 @@ sc_cor_qt::stack_protect( bool enable )
     // Code still needs to be ported to WIN32
 
     static std::size_t pagesize;
-    
+
     if( pagesize == 0 ) {
 #       if defined(__ppc__)
 	    pagesize = getpagesize();
 #       else
 	    pagesize = sysconf( _SC_PAGESIZE );
-#       endif 
+#       endif
     }
 
     sc_assert( pagesize != 0 );
@@ -93,8 +93,8 @@ sc_cor_qt::stack_protect( bool enable )
 
     if( enable ) {
         ret = mprotect( redzone, pagesize - 1, PROT_NONE );
-    } 
-    
+    }
+
     // Revert the red zone to normal memory usage. Try to make it read - write -
     // execute. If that does not work then settle for read - write
 
@@ -172,7 +172,7 @@ sc_cor_pkg_qt::create( std::size_t stack_size, sc_cor_fn* fn, void* arg )
     cor->m_pkg = this;
     cor->m_stack_size = stack_size;
     cor->m_stack = new char[cor->m_stack_size];
-    void* sto = stack_align( cor->m_stack, QUICKTHREADS_STKALIGN, 
+    void* sto = stack_align( cor->m_stack, QUICKTHREADS_STKALIGN,
                              &cor->m_stack_size );
     cor->m_sp = QUICKTHREADS_SP(sto, cor->m_stack_size - QUICKTHREADS_STKALIGN);
     cor->m_sp = QUICKTHREADS_ARGS( cor->m_sp, arg, cor, (qt_userf_t*) fn,
