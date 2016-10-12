@@ -1,18 +1,13 @@
 SystemC Simulation
 async1 executed on:
-	negedge i[0]
 	posedge i[1]
 aproc0 executed on:
-	negedge i[1]
 	posedge i[2]
 async3 executed on:
-	negedge i[2]
 	posedge i[3]
 aproc1 executed on:
-	negedge i[2]
 	posedge i[3]
 async0 executed on:
-	negedge i[3]
 	negedge i[4]
 async1 executed on:
 	posedge i[5]
