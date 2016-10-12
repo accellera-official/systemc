@@ -84,14 +84,11 @@ void
 sc_event::notify()
 {
     // immediate notification
-    if(
-        // coming from sc_prim_channel::update
-        m_simc->update_phase()
-#if SC_HAS_PHASE_CALLBACKS_
-        // coming from phase callbacks
-        || m_simc->notify_phase()
-#endif
-      )
+    if( !m_simc->evaluation_phase() )
+        // coming from
+        //  * elaboration
+        //  * sc_prim_channel::update
+        //  * phase callbacks
     {
         SC_REPORT_ERROR( SC_ID_IMMEDIATE_NOTIFICATION_, "" );
         return;

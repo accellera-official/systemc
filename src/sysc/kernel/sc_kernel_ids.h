@@ -89,7 +89,7 @@ SC_DEFINE_MESSAGE(SC_ID_WAIT_NOT_ALLOWED_            , 519,
 SC_DEFINE_MESSAGE(SC_ID_NEXT_TRIGGER_NOT_ALLOWED_    , 520,
 	"next_trigger() is only allowed in SC_METHODs" )
 SC_DEFINE_MESSAGE(SC_ID_IMMEDIATE_NOTIFICATION_      , 521,
-	"immediate notification is not allowed during the update phase" )
+	"immediate notification is not allowed during update phase or elaboration" )
 SC_DEFINE_MESSAGE(SC_ID_HALT_NOT_ALLOWED_            , 522,
 	"halt() is only allowed in SC_CTHREADs" )
 SC_DEFINE_MESSAGE(SC_ID_WATCHING_NOT_ALLOWED_        , 523,
