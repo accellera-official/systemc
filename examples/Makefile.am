@@ -36,17 +36,7 @@ include $(top_srcdir)/config/Make-rules.examples
 
 SUBDIRS = \
 	sysc \
-	tlm \
-	.
+	tlm
 
-EXAMPLES_DIR = $(prefix)/examples
-
-install-data-local:
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(EXAMPLES_DIR)
-
-uninstall-local:
-	@$(NORMAL_UNINSTALL)
-	-rmdir $(EXAMPLES_DIR)
 
 ## Taf!

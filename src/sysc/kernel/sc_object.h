@@ -38,11 +38,11 @@ namespace sc_core {
 
 class sc_event;
 class sc_module;
+class sc_phase_callback_registry;
 class sc_runnable;
 class sc_simcontext;
 class sc_trace_file;
-
-#define SC_KERNEL_MODULE_PREFIX "$$$$kernel_module$$$$_"
+class sc_trace_file_base;
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_object
@@ -50,16 +50,21 @@ class sc_trace_file;
 //  Abstract base class of all SystemC `simulation' objects.
 // ----------------------------------------------------------------------------
 
-class sc_object 
+class sc_object
 {
     friend class sc_event;
     friend class sc_module;
+    friend struct sc_invoke_method;
     friend class sc_module_dynalloc_list;
     friend class sc_object_manager;
+    friend class sc_phase_callback_registry;
     friend class sc_process_b;
     friend class sc_runnable;
+    friend class sc_simcontext;
+    friend class sc_trace_file_base;
 
 public:
+    typedef unsigned phase_cb_mask;
 
     const char* name() const
         { return m_name.c_str(); }
@@ -104,7 +109,7 @@ public:
     virtual const std::vector<sc_object*>& get_child_objects() const
         { return m_child_objects; }
 
-    sc_object* get_parent() const { return m_parent; } 
+    sc_object* get_parent() const;
     sc_object* get_parent_object() const { return m_parent; }
 
 protected:
@@ -123,7 +128,14 @@ protected:
     virtual bool remove_child_event( sc_event* event_p );
     virtual bool remove_child_object( sc_object* object_p );
 
+    phase_cb_mask register_simulation_phase_callback( phase_cb_mask );
+    phase_cb_mask unregister_simulation_phase_callback( phase_cb_mask );
+
+    class hierarchy_scope;
+
 private:
+            void do_simulation_phase_callback();
+    virtual void simulation_phase_callback();
 
     void detach();
     virtual void orphan_child_events();

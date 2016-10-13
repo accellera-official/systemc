@@ -16,7 +16,7 @@
 // written by Andy Goodrich, Forte Design Systms, Inc.  */
 
 /* NOTE: double-labeled `_name' and `name' for System V compatability.  */
-/* NOTE: Comment lines start with '/*' and '//' ONLY.  Sorry! */
+/* NOTE: Mixed C/C++-style comments used. Sorry! */
 
     .text
     .align 2
@@ -27,6 +27,8 @@
     .globl qt_block
     .globl _qt_blocki
     .globl qt_blocki
+    .globl _qt_align
+    .globl qt_align
 
 _qt_abort:
 qt_abort:
@@ -34,14 +36,11 @@ _qt_block:
 qt_block:
 _qt_blocki:
 qt_blocki:
-	                 /* 14 (return address.) */
-    pushq %rbp       /* 13 (push stack frame top.) */
+	                 /* 11 (return address.) */
+        pushq %rbp       /* 10 (push stack frame top.) */
 	movq  %rsp, %rbp /* set new stack frame top. */
 	                 /* save registers. */
-	pushq %r8        /* 12 ... */
-	pushq %r9        /* 11 ... */
-	pushq %r10       /* 10 ... */
-	pushq %r11       /*  9 ... */
+	subq $8, %rsp    /*  9 (Stack alignment) */
 	pushq %r12       /*  8 ... */
 	pushq %r13       /*  7 ... */
 	pushq %r14       /*  6 ... */
@@ -56,7 +55,7 @@ qt_blocki:
     movq %rsp, %rdi  /* set current stack as save argument. */
 	movq %rcx, %rsp  /* swap stacks. */
 	movq %rcx, %rbp  /* adjust stack frame pointer. */
-	addq $13*8, %rbp /* ... */
+	addq $10*8, %rbp /* ... */
     call *%rax      /* call function to save stack pointer. */
 
 	                /* restore registers. */
@@ -69,9 +68,7 @@ qt_blocki:
 	popq %r14       /* ... */
 	popq %r13       /* ... */
 	popq %r12       /* ... */
-	popq %r11       /* ... */
-	popq %r10       /* ... */
-	popq %r9        /* ... */
-	popq %r8        /* ... */
 	leave           /* unwind stack. */
+_qt_align:
+qt_align:
 	ret             /* return. */

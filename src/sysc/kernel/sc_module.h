@@ -41,7 +41,6 @@
 #include "sysc/kernel/sc_process.h"
 #include "sysc/kernel/sc_process_handle.h"
 #include "sysc/utils/sc_list.h"
-#include "sysc/utils/sc_string.h"
 
 namespace sc_core {
 

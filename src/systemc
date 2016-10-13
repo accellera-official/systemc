@@ -109,8 +109,7 @@
 #   include "sysc/datatypes/fx/fx.h"
 #endif // SC_INCLUDE_FX
 
-#include "sysc/tracing/sc_vcd_trace.h"
-#include "sysc/tracing/sc_wif_trace.h"
+#include "sysc/tracing/sc_trace.h"
 
 #include "sysc/utils/sc_iostream.h"
 #include "sysc/utils/sc_utils_ids.h"
@@ -123,3 +122,7 @@
 #ifdef SC_INCLUDE_DYNAMIC_PROCESSES
 #    include "sysc/kernel/sc_dynamic_processes.h"
 #endif // SC_INCLUDE_DYNAMIC_PROCESSES
+
+#ifdef SC_USE_SC_STRING_OLD
+#    include "sysc/utils/sc_string.h"
+#endif // SC_USE_SC_STRING_OLD

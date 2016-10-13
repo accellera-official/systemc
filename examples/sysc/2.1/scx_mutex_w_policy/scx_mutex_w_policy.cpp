@@ -15,7 +15,7 @@
 // within the "System Design with SystemC" book.
 //
 // To obtain the book and find additional source code downloads, etc., visit
-//     www.systemc.org 
+//     www.accellera.org 
 // Look in the "Products & Solutions" -> "SystemC Books". Then look at the
 // entry for "System Design with SystemC".
 //

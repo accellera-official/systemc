@@ -46,7 +46,7 @@ simple_bus_arbiter::arbitrate(const simple_bus_request_vec &requests)
 
   if (m_verbose) 
     { // shows the list of pending requests
-      sb_fprintf(stdout, "%g %s :", sc_time_stamp().to_double(), name());
+      sb_fprintf(stdout, "%s %s :", sc_time_stamp().to_string().c_str(), name());
       for (i = 0; i < requests.size(); ++i)
 	{
 	  simple_bus_request *request = requests[i];

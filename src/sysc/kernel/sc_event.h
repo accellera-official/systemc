@@ -30,15 +30,10 @@
 #ifndef SC_EVENT_H
 #define SC_EVENT_H
 
+#include "sysc/kernel/sc_cmnhdr.h"
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/communication/sc_writer_policy.h"
-
-namespace sc_dt {
-
-class sc_logic; // needed for sc_signal<sc_logic> friend
-
-} // namespace sc_std
 
 namespace sc_core {
 
@@ -259,8 +254,6 @@ class sc_event
     friend class sc_method_process;
     friend class sc_thread_process;
     template<typename IF, sc_writer_policy POL> friend class sc_signal;
-    friend class sc_signal<bool>;
-    friend class sc_signal<sc_dt::sc_logic>;
     friend void sc_thread_cor_fn( void* arg );
 
 public:
@@ -709,7 +702,7 @@ sc_event_or_list::swap( sc_event_or_list & that )
 
 inline
 sc_event_and_list::sc_event_and_list()
-  : sc_event_list( false )
+  : sc_event_list( true )
 {}
 
 inline

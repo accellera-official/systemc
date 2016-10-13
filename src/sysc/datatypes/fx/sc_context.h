@@ -109,12 +109,11 @@ public:
     const T*& value_ptr();
 
 private:
-
     static sc_global<T>* m_instance;
 
-    sc_core::sc_phash<const sc_core::sc_process_b*,const T*> m_map;
-    const sc_core::sc_process_b*                             m_proc;
-    const T*                                                    m_value_ptr;
+    sc_core::sc_phash<void*,const T*> m_map;
+    void*                             m_proc; // context (current process or NULL)
+    const T*                          m_value_ptr;
 
 };
 
@@ -175,14 +174,13 @@ private:
 template <class T>
 sc_global<T>* sc_global<T>::m_instance = 0;
 
-
 template <class T>
 inline
 sc_global<T>::sc_global()
-: m_map(),
-  m_proc( 
-	reinterpret_cast<const sc_core::sc_process_b*>( -1 ) ), 
-	m_value_ptr( 0 )
+  : m_map()
+  // use &m_instance as unique "non-process" key (NULL denotes 'sc_main' context)
+  , m_proc( &m_instance )
+  , m_value_ptr( 0 )
 {}
 
 
@@ -191,7 +189,7 @@ inline
 void
 sc_global<T>::update()
 {
-    const sc_core::sc_process_b* p = sc_core::sc_get_current_process_b();
+    void* p = sc_core::sc_get_current_process_b();
     if( p != m_proc )
     {
         const T* vp = m_map[p];

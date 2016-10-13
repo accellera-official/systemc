@@ -202,9 +202,7 @@ public:
         if (it->second.to) {
           phase = tlm::END_RESP;
           t = sc_core::SC_ZERO_TIME;
-          #if ( ! NDEBUG )
           sync_enum_type r = (*it->second.to)->nb_transport_fw(*trans, phase, t);
-          #endif /* ! NDEBUG */
           assert(r == tlm::TLM_COMPLETED);
         }
 

@@ -1,3 +1,42 @@
 include $(top_srcdir)/config/Make-rules.common
 
-INCLUDES += -I$(prefix)/include
+SYSTEMC_INC_DIR = $(top_srcdir)/src
+SYSTEMC_LIB_DIR = $(libdir)$(LIB_ARCH_SUFFIX)
+
+AM_CPPFLAGS += -I$(SYSTEMC_INC_DIR)
+
+LDADD = $(top_builddir)/src/sysc/libsystemc.la
+
+
+## ************************************************************************
+## Create a run script for the examples
+## (pattern rule is GNU extension, but we require GNU make, see INSTALL)
+%.sh: %$(EXEEXT) $(TESTSCRIPT_IN) 
+	$(AM_V_GEN)set -e ; rm -f $@ ; \
+	  $(SED) -e 's#@'SHELL'@#@SHELL@#' \
+	         -e 's#@'TEST'@#$*#' \
+	         -e 's#@'TESTINPUT'@#$(examples_INPUT)#' \
+	         -e 's#@'TESTGOLDEN'@#$(examples_GOLDEN)#' $(TESTSCRIPT_IN) > $@ ; \
+	  chmod a+x $@
+TESTSCRIPT_IN=$(top_srcdir)/config/test.sh.in
+
+
+## ************************************************************************
+## copy required run files in objdir tree, if needed
+
+if SEPARATE_BUILD_TREE
+
+all-local: copy-check-data
+
+# needed to put extra run files in objdir tree
+copy-check-data:
+	$(AM_V_GEN)for file in $(examples_BUILD); do    \
+	  if test ! -e ./$$file ; then                  \
+	    $(MKDIR_P) `dirname "$$file"` ;             \
+	    $(INSTALL_DATA) $(srcdir)/$$file ./$$file ; \
+		fi ; \
+	done
+
+CLEANFILES += $(examples_BUILD)
+
+endif # out-of-tree build

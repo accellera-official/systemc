@@ -1,0 +1,87 @@
+#!/bin/sh
+## ****************************************************************************
+##
+##  The following code is derived, directly or indirectly, from the SystemC
+##  source code Copyright (c) 1996-2014 by all Contributors.
+##  All Rights reserved.
+##
+##  The contents of this file are subject to the restrictions and limitations
+##  set forth in the SystemC Open Source License (the "License");
+##  You may not use this file except in compliance with such restrictions and
+##  limitations. You may obtain instructions on how to receive a copy of the
+##  License at http://www.accellera.org/. Software distributed by Contributors
+##  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
+##  ANY KIND, either express or implied. See the License for the specific
+##  language governing rights and limitations under the License.
+##
+## ****************************************************************************
+##
+##  test-run.sh.in --
+##  Process this file (during `make check') to produce a test-run.sh file.
+##
+##  Original Author: Philipp A. Hartmann, 2013-05-20
+##
+## ****************************************************************************
+##
+##  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+##  changes you are making here.
+##
+##      Name, Affiliation, Date:
+##  Description of Modification:
+##
+## ****************************************************************************
+
+#set -x
+#set -e
+
+# override user's SHELL (e.g. for SHELL=/bin/tcsh)
+SHELL=@SHELL@
+export SHELL
+
+## SystemC / TLM example test to run
+TEST=@TEST@
+INPUT=@TESTINPUT@
+GOLDEN=@TESTGOLDEN@
+
+# prepare environment
+TESTNAME=`dirname "${TEST}" | sed "s:[^A-Za-z0-9_\@]:_:g" `
+TESTDIR=`dirname "$0"`
+TESTEXE=`basename "${TEST}"`
+export TEST TESTDIR TESTEXE
+
+# switch to test directory and restart
+if test ! x"$TESTDIR" = x. ; then
+  cd "$TESTDIR"
+  exec ${SHELL} `basename "$0"` "$@"
+fi
+
+if test ! -f "${INPUT}" ; then INPUT="" ; fi
+eval FILTER=\"\${${TESTNAME}_FILTER}\" 2>/dev/null
+
+if test "x${INPUT}"  != x ; then INPUT="< ${INPUT}" ; fi
+if test "x${FILTER}" != x ; then FILTER="| grep \"${FILTER}\"" ; fi
+
+# run test executable
+eval "./${TESTEXE} ${INPUT} ${FILTER} > run.log"
+result=$?
+
+# no golden -> return exit status
+if test ! -e "${GOLDEN}" ; then exit $result ; fi
+
+cat run.log | grep -v "stopped by user" |  \
+  awk '{if($0!="") print $0}' > run_trimmed.log
+cat ${GOLDEN} | grep -v "stopped by user" | \
+  awk '{if($0!="") print $0}' > ./expected_trimmed.log
+
+diff ./run_trimmed.log ./expected_trimmed.log > diff.log 2>&1;
+result=$?
+
+if test -s diff.log ; then
+  echo "***ERROR:"
+  cat diff.log 
+else
+  echo "OK"
+fi
+
+rm -f *_trimmed.log run.log diff.log
+exit $result

@@ -139,67 +139,68 @@ sc_numrep
 scfx_parse_prefix( const char*& s )
 {
     if( s[0] == '0' ) {
-	switch( s[1] ) {
-	case 'b':
-	case 'B':
-	{
-	    if( (s[2] == 'u' || s[2] == 'U') && (s[3] == 's' || s[3] == 'S') ) {
-		s += 4;
-		return SC_BIN_US;
-	    }
-	    if( (s[2] == 's' || s[2] == 'S') && (s[3] == 'm' || s[3] == 'M') ) {
-		s += 4;
-		return SC_BIN_SM;
-	    }
-	    s += 2;
-	    return SC_BIN;
-	}
-	case 'o':
-	case 'O':
-	{
-	    if( (s[2] == 'u' || s[2] == 'U') && (s[3] == 's' || s[3] == 'S') ) {
-		s += 4;
-		return SC_OCT_US;
-	    }
-	    if( (s[2] == 's' || s[2] == 'S') && (s[3] == 'm' || s[3] == 'M') ) {
-		s += 4;
-		return SC_OCT_SM;
-	    }
-	    s += 2;
-	    return SC_OCT;
-	}
-	case 'x':
-	case 'X':
-	{
-	    if( (s[2] == 'u' || s[2] == 'U') && (s[3] == 's' || s[3] == 'S') ) {
-		s += 4;
-		return SC_HEX_US;
-	    }
-	    if( (s[2] == 's' || s[2] == 'S') && (s[3] == 'm' || s[3] == 'M') ) {
-		s += 4;
-		return SC_HEX_SM;
-	    }
-	    s += 2;
-	    return SC_HEX;
-	}
-	case 'd':
-	case 'D':
-	{
-	    s += 2;
-	    return SC_DEC;
-	}
-	case 'c':
-	case 'C':
-	{
-	    if( (s[2] == 's' || s[2] == 'S') && (s[3] == 'd' || s[3] == 'D') ) {
-		s += 4;
-		return SC_CSD;
-	    }
-	    break;
-	}
-	default:
-	    break;
-	}
+        switch( s[1] )
+        {
+	    case 'b':
+	    case 'B':
+            {
+	        if( (s[2] == 'u' || s[2] == 'U') && (s[3] == 's' || s[3] == 'S') ) {
+		    s += 4;
+                    return SC_BIN_US;
+                }
+                if( (s[2] == 's' || s[2] == 'S') && (s[3] == 'm' || s[3] == 'M') ) {
+                    s += 4;
+                    return SC_BIN_SM;
+                }
+                s += 2;
+                return SC_BIN;
+            }
+	    case 'o':
+	    case 'O':
+	    {
+                if( (s[2] == 'u' || s[2] == 'U') && (s[3] == 's' || s[3] == 'S') ) {
+                    s += 4;
+                    return SC_OCT_US;
+                }
+                if( (s[2] == 's' || s[2] == 'S') && (s[3] == 'm' || s[3] == 'M') ) {
+                    s += 4;
+                    return SC_OCT_SM;
+                }
+                s += 2;
+                return SC_OCT;
+            }
+  	    case 'x':
+	    case 'X':
+            {
+                if( (s[2] == 'u' || s[2] == 'U') && (s[3] == 's' || s[3] == 'S') ) {
+                    s += 4;
+                    return SC_HEX_US;
+                }
+                if( (s[2] == 's' || s[2] == 'S') && (s[3] == 'm' || s[3] == 'M') ) {
+                    s += 4;
+                    return SC_HEX_SM;
+                }
+                s += 2;
+                return SC_HEX;
+            }
+   	    case 'd':
+	    case 'D':
+            {
+                s += 2;
+                return SC_DEC;
+            }
+	    case 'c':
+	    case 'C':
+            {
+                if( (s[2] == 's' || s[2] == 'S') && (s[3] == 'd' || s[3] == 'D') ) {
+                    s += 4;
+                    return SC_CSD;
+                }
+                break;
+            }
+            default:
+                break;
+        }
     }
 
     return SC_DEC;
@@ -409,14 +410,15 @@ scfx_to_digit( char c, sc_numrep numrep )
 	}
 	case SC_CSD:
 	{
-	    if( c == '-' )
-		to_digit = -1;
-	    else
-		to_digit = c - '0';
+            if( c == '-' )
+                to_digit = -1;
+            else
+                to_digit = c - '0';
+            break;
 	}
-	default:
-	    to_digit = -2;
-    };
+        default:
+            to_digit = -2;
+    }
 
     return to_digit;
 }

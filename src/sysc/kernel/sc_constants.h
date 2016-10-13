@@ -27,12 +27,6 @@
   CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
 
-// $Log: sc_constants.h,v $
-// Revision 1.7  2011/08/26 20:46:09  acg
-//  Andy Goodrich: moved the modification log to the end of the file to
-//  eliminate source line number skew when check-ins are done.
-//
-
 #ifndef SC_CONSTANTS_H
 #define SC_CONSTANTS_H
 
@@ -46,15 +40,11 @@ namespace sc_core {
 //#define SC_MAX_NBITS    510    // 17 * BITS_PER_DIGIT
 
 
-const int SC_DEFAULT_STACK_SIZE   =
-#if !defined(SC_USE_PTHREADS) && \
-    ( defined(__CYGWIN32__) || defined(__CYGWIN32) )
-  0x50000;
-#else
-  0x20000;
-#endif
+// deprecated in 1666-2005 and later, but kept for backwards compatibility
+//  - can be set by defining SC_OVERRIDE_DEFAULT_STACK_SIZE
+//  - defaults defined in sc_thread_process.cpp
+extern const int SC_DEFAULT_STACK_SIZE;
 
-const int SC_MAX_WATCH_LEVEL      = 16;
 
 #ifdef DEBUG_SYSTEMC
 const int SC_MAX_NUM_DELTA_CYCLES = 10000;
@@ -62,6 +52,11 @@ const int SC_MAX_NUM_DELTA_CYCLES = 10000;
 
 } // namespace sc_core
 
+// $Log: sc_constants.h,v $
+// Revision 1.7  2011/08/26 20:46:09  acg
+//  Andy Goodrich: moved the modification log to the end of the file to
+//  eliminate source line number skew when check-ins are done.
+//
 // Revision 1.6  2011/02/18 20:33:26  acg
 //  Philipp A. Hartmann: added default stack size for CYGWIN32.
 //

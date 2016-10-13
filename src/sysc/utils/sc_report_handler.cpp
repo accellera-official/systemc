@@ -27,6 +27,10 @@
   CHANGE LOG AT END OF FILE
  *****************************************************************************/
 
+#include <cstdio>
+#include <stdlib.h>
+#include <string.h>
+
 #include "sysc/utils/sc_iostream.h"
 #include "sysc/kernel/sc_process.h"
 #include "sysc/kernel/sc_simcontext_int.h"
@@ -193,6 +197,9 @@ int sc_report_handler::get_count(const char* msg_type_, sc_severity severity_)
 
 sc_msg_def * sc_report_handler::mdlookup(const char * msg_type_)
 {
+    if( !msg_type_ ) // if msg_type is NULL, report unknown error
+        msg_type_ = SC_ID_UNKNOWN_ERROR_;
+
     for ( msg_def_items * item = messages; item; item = item->next )
     {
 	for ( int i = 0; i < item->count; ++i )
@@ -548,9 +555,18 @@ sc_actions sc_report_handler::force()
     return force(0);
 }
 
-void sc_report_handler::set_handler(sc_report_handler_proc handler_)
+sc_report_handler_proc
+sc_report_handler::set_handler(sc_report_handler_proc handler_)
 {
+    sc_report_handler_proc old = handler;
     handler = handler_ ? handler_: &sc_report_handler::default_handler;
+    return old;
+}
+
+sc_report_handler_proc
+sc_report_handler::get_handler()
+{
+    return handler;
 }
 
 sc_report* sc_report_handler::get_cached_report()

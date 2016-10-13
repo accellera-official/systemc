@@ -75,13 +75,9 @@ public:
   sc_core::sc_time compute_local_quantum()
   {
     if (m_global_quantum != sc_core::SC_ZERO_TIME) {
-      const sc_dt::uint64 current = sc_core::sc_time_stamp().value();
-      const sc_dt::uint64 g_quant = m_global_quantum.value();
-      const sc_dt::uint64 tmp = (current/g_quant+sc_dt::uint64(1)) * g_quant;
-      const sc_core::sc_time remainder = sc_core::sc_time(tmp - current,
-                                                          false);
-      return remainder;
-
+      const sc_core::sc_time current = sc_core::sc_time_stamp();
+      const sc_core::sc_time g_quant = m_global_quantum;
+      return g_quant - (current % g_quant);
     } else {
       return sc_core::SC_ZERO_TIME;
     }

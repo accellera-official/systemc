@@ -155,7 +155,7 @@ bool sc_int_subref_r::concat_get_ctrl( sc_digit* dst_p, int low_i ) const
     int       dst_i;       // Word in dst_p now processing.
     int       end_i;       // Highest order word in dst_p to process.
     int       high_i;      // Index of high order bit in dst_p to set.
-    sc_digit  mask;        // Mask for bits to extract or keep.
+    uint_type mask;        // Mask for bits to extract or keep.
 
     dst_i = low_i / BITS_PER_DIGIT;
     high_i = low_i + (m_left-m_right);
@@ -613,7 +613,7 @@ bool sc_int_base::concat_get_ctrl( sc_digit* dst_p, int low_i ) const
     int        dst_i;       // Word in dst_p now processing.
     int        end_i;       // Highest order word in dst_p to process.
     int        left_shift;  // Left shift for val.
-     uint_type mask;        // Mask for bits to extract or keep.
+    uint_type  mask;        // Mask for bits to extract or keep.
 
     dst_i = low_i / BITS_PER_DIGIT;
     left_shift = low_i % BITS_PER_DIGIT;

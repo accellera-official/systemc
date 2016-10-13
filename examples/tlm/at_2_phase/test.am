@@ -1,0 +1,95 @@
+## ****************************************************************************
+##
+##  The following code is derived, directly or indirectly, from the SystemC
+##  source code Copyright (c) 1996-2014 by all Contributors.
+##  All Rights reserved.
+##
+##  The contents of this file are subject to the restrictions and limitations
+##  set forth in the SystemC Open Source License (the "License");
+##  You may not use this file except in compliance with such restrictions and
+##  limitations. You may obtain instructions on how to receive a copy of the
+##  License at http://www.accellera.org/. Software distributed by Contributors
+##  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
+##  ANY KIND, either express or implied. See the License for the specific
+##  language governing rights and limitations under the License.
+##
+## ****************************************************************************
+##
+##  test.am --
+##  Included from a Makefile.am to provide example-specific information
+##
+##  Original Author: Philipp A. Hartmann, OFFIS, 2013-05-20
+##
+## ****************************************************************************
+##
+##  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+##  changes you are making here.
+##
+##      Name, Affiliation, Date:
+##  Description of Modification:
+##
+## ***************************************************************************
+
+## Generic example setup
+## (should be kept in sync among all test.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##      included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D%: at_2_phase
+##   %C%: at_2_phase
+
+examples_TESTS += at_2_phase/test
+
+at_2_phase_test_CPPFLAGS = \
+	-I$(srcdir)/at_2_phase/include \
+	$(CPPFLAGS_TLMTESTS)
+
+at_2_phase_test_SOURCES = \
+	$(at_2_phase_H_FILES) \
+	$(at_2_phase_CXX_FILES)
+
+examples_BUILD += \
+	$(at_2_phase_BUILD)
+
+examples_CLEAN += \
+	at_2_phase/run.log \
+	at_2_phase/expexted_trimmed.log \
+	at_2_phase/run_trimmed.log \
+	at_2_phase/diff.log
+
+examples_FILES += \
+	$(at_2_phase_H_FILES) \
+	$(at_2_phase_CXX_FILES) \
+	$(at_2_phase_BUILD) \
+	$(at_2_phase_EXTRA)
+
+## example-specific details
+
+at_2_phase_H_FILES = \
+	at_2_phase/include/at_2_phase_top.h \
+	at_2_phase/include/initiator_top.h
+
+at_2_phase_CXX_FILES = \
+	at_2_phase/src/at_2_phase.cpp \
+	at_2_phase/src/at_2_phase_top.cpp \
+	at_2_phase/src/initiator_top.cpp
+
+at_2_phase_BUILD = \
+	at_2_phase/results/expected.log
+
+at_2_phase_EXTRA = \
+	at_2_phase/build-msvc/Makefile \
+	at_2_phase/build-msvc/at_2_phase.sln \
+	at_2_phase/build-msvc/at_2_phase.vcproj \
+	at_2_phase/build-unix/Makefile \
+	at_2_phase/docs/at_2_phase_example.pdf \
+	at_2_phase/docs/at_2_phase_example.ppt
+
+#at_2_phase_FILTER =
+#export at_2_phase_FILTER
+
+## Taf!
+## :vim:ft=automake:

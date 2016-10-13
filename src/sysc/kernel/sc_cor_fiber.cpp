@@ -26,8 +26,11 @@
  CHANGE LOG APPEARS AT THE END OF THE FILE
  *****************************************************************************/
 
-#ifdef WIN32
+#if defined(_WIN32) || defined(WIN32) || defined(WIN64)
 
+#ifndef SC_INCLUDE_WINDOWS_H
+#  define SC_INCLUDE_WINDOWS_H // include Windows.h, if needed
+#endif
 
 #include "sysc/kernel/sc_cor_fiber.h"
 #include "sysc/kernel/sc_simcontext.h"
@@ -58,7 +61,7 @@ static sc_cor_fiber* curr_cor;
 // ----------------------------------------------------------------------------
 //  CLASS : sc_cor_fiber
 //
-//  Coroutine class implemented with QuickThreads.
+//  Coroutine class implemented with Windows fibers.
 // ----------------------------------------------------------------------------
 
 // destructor
@@ -66,11 +69,9 @@ static sc_cor_fiber* curr_cor;
 sc_cor_fiber::~sc_cor_fiber()
 {
     if( m_fiber != 0 ) {
-#     ifdef WIN32
       PVOID cur_fiber = GetCurrentFiber();
       if (m_fiber != cur_fiber)
-#     endif
-	DeleteFiber( m_fiber );
+         DeleteFiber( m_fiber );
     }
 }
 

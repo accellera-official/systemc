@@ -23,7 +23,7 @@
 
                      From "An Introduction to System Level Modeling in
                      SystemC 2.0". By Stuart Swan, Cadence Design Systems.
-                     Available at www.systemc.org
+                     Available at www.accellera.org
 
   Original Author: Stuart Swan, Cadence Design Systems, 2001-06-18
 
@@ -106,7 +106,7 @@ class producer : public sc_module
      void main()
      {
        const char *str =
-         "Visit www.systemc.org and see what SystemC can do for you today!\n";
+         "Visit www.accellera.org and see what SystemC can do for you today!\n";
 
        while (*str)
          out->write(*str++);

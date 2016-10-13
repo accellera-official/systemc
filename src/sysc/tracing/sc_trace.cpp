@@ -49,9 +49,10 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-#include "sysc/utils/sc_iostream.h"
 #include "sysc/tracing/sc_trace.h"
+#include "sysc/tracing/sc_tracing_ids.h"
 #include "sysc/communication/sc_signal_ifs.h"
+#include "sysc/utils/sc_report.h"
 #include "sysc/utils/sc_utils_ids.h"
 
 namespace sc_core {
@@ -61,17 +62,6 @@ namespace sc_core {
 sc_trace_file::sc_trace_file()
 {
   /* Intentionally blank */
-}
-
-void
-put_error_message(const char* msg, bool just_warning)
-{
-    if(just_warning){
-        ::std::cout << "Trace Warning:\n" << msg << "\n" << ::std::endl;
-    }
-    else{
-        ::std::cout << "Trace ERROR:\n" << msg << "\n" << ::std::endl;
-    }
 }
 
 void tprintf(sc_trace_file* tf,  const char* format, ...)
@@ -145,7 +135,7 @@ sc_trace(sc_trace_file* /* not used */,
 	 const void* /* not used */,
 	 const std::string& name)
 {
-    ::std::cout << "Object " << name << " will not be traced" << ::std::endl;
+    SC_REPORT_WARNING( SC_ID_TRACING_OBJECT_IGNORED_, name.c_str() );
 }
 
 
@@ -214,9 +204,9 @@ sc_trace( sc_trace_file* tf,
     static bool warn_sc_trace_literals=true;
     if ( warn_sc_trace_literals )
     {
-    	warn_sc_trace_literals=false;
+        warn_sc_trace_literals=false;
         SC_REPORT_INFO(SC_ID_IEEE_1666_DEPRECATION_,
-	    "tracing of enumerated literals is deprecated" );
+            "tracing of enumerated literals is deprecated" );
     }
 
     if( tf ) tf->trace( object, name, enum_literals );

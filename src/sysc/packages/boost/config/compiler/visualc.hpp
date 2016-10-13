@@ -137,13 +137,21 @@
       // Note: these are so far off, they are not really supported
 #     define SC_BOOST_COMPILER_VERSION 5.0
 #   elif _MSC_VER < 1300
-#       define SC_BOOST_COMPILER_VERSION 6.0
-#   elif _MSC_VER == 1300
+#     define SC_BOOST_COMPILER_VERSION 6.0
+#   elif _MSC_VER < 1310
 #     define SC_BOOST_COMPILER_VERSION 7.0
-#   elif _MSC_VER == 1310
+#   elif _MSC_VER < 1400
 #     define SC_BOOST_COMPILER_VERSION 7.1
-#   elif _MSC_VER == 1400
+#   elif _MSC_VER < 1500
 #     define SC_BOOST_COMPILER_VERSION 8.0
+#   elif _MSC_VER < 1600
+#     define SC_BOOST_COMPILER_VERSION 9.0
+#   elif _MSC_VER < 1700
+#     define SC_BOOST_COMPILER_VERSION 10.0
+#   elif _MSC_VER < 1800
+#     define SC_BOOST_COMPILER_VERSION 11.0
+#   elif _MSC_VER < 1900
+#     define SC_BOOST_COMPILER_VERSION 12.0
 #   else
 #     define SC_BOOST_COMPILER_VERSION _MSC_VER
 #   endif
@@ -158,8 +166,8 @@
 #error "Compiler not supported or configured - please reconfigure"
 #endif
 //
-// last known and checked version is 1400 (VC9):
-#if (_MSC_VER > 1500)
+// last known and checked version is 1800 (VC 12.0 / 2013):
+#if (_MSC_VER > 1800)
 #  if defined(SC_BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  else

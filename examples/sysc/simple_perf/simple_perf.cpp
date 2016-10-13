@@ -24,7 +24,7 @@
                      This example is derived from the design presented within
                      "An Introduction to System Level Modeling in SystemC 2.0"
                      By Stuart Swan, Cadence Design Systems.
-                     Available at www.systemc.org
+                     Available at www.accellera.org
 
                      The system being modeled has a producer block that
                      sends characters to a consumer block via a fifo.
@@ -184,7 +184,7 @@ class producer : public sc_module
     void main()
     {
       const char *str =
-	"Visit www.systemc.org and see what SystemC can do for you today!\n";
+	"Visit www.accellera.org and see what SystemC can do for you today!\n";
       const char *p = str;
       int total = 100000;
 

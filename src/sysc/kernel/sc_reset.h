@@ -40,6 +40,7 @@ template<typename IF, sc_writer_policy POL> class sc_signal;
 template<typename DATA> class sc_in;
 template<typename DATA> class sc_inout;
 template<typename DATA> class sc_out;
+template<typename SOURCE> class sc_spawn_reset;
 class sc_reset;
 class sc_process_b;
 

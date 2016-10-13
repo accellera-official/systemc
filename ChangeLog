@@ -1,5 +1,9 @@
 See also docs/tlm/ChangeLog.
 
+2014-04-17  Philipp A. Hartmann <philipp.hartmann@offis.de>
+
+	* Combined SystemC 2.3.1 / TLM 2.0.3 officially released.
+
 2012-07-01  Andy Goodrich <acg@forteds.com>
 
 	* Combined SystemC 2.3.0 / TLM-2.0.2 officially released.

@@ -29,13 +29,13 @@
 #ifndef SC_HOST_MUTEX_H_INCLUDED_
 #define SC_HOST_MUTEX_H_INCLUDED_
 
+#ifndef SC_INCLUDE_WINDOWS_H
+#  define SC_INCLUDE_WINDOWS_H // include Windows.h, if needed
+#endif
 #include "sysc/kernel/sc_cmnhdr.h"
 #include "sysc/communication/sc_mutex_if.h"
 
 #if defined(WIN32) || defined(_WIN32)
-#ifdef __GNUC__
-#   include <windows.h>
-#endif
 
 #define SC_MTX_TYPE_ CRITICAL_SECTION
 

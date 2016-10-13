@@ -14,16 +14,16 @@
 namespace sc_boost
 {
 
-namespace sc_bi
+namespace _bi
 {
 
-template<class F> class protectedsc_bind_t
+template<class F> class protected_bind_t
 {
 public:
 
     typedef typename F::result_type result_type;
 
-    explicit protectedsc_bind_t(F f): f_(f)
+    explicit protected_bind_t(F f): f_(f)
     {
     }
 
@@ -132,11 +132,11 @@ private:
     F f_;
 };
 
-} // namespace sc_bi
+} // namespace _bi
 
-template<class F> sc_bi::protectedsc_bind_t<F> protect(F f)
+template<class F> _bi::protected_bind_t<F> protect(F f)
 {
-    return sc_bi::protectedsc_bind_t<F>(f);
+    return _bi::protected_bind_t<F>(f);
 }
 
 } // namespace sc_boost

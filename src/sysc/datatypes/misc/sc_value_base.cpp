@@ -48,10 +48,10 @@
 // the source.
 //
 
-#include <stdio.h>
 #include <cstdlib>
 #include <assert.h>
 #include <ctype.h>
+#include <cstdio>
 
 #include "sysc/datatypes/int/sc_int_ids.h"
 #include "sysc/datatypes/misc/sc_value_base.h"

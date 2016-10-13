@@ -58,7 +58,6 @@ void floating::entry(){
 
 
   int				exponent_diff_tmp = 0;
-  int				exponent_tmp = 0;
   unsigned int			significant_result = 0;
   unsigned int			overflow_sign_tmp = 0;
   unsigned int			result_exp_tmp = 0;
@@ -103,12 +102,10 @@ void floating::entry(){
 	}	
 
 	if (exponent_diff_tmp > 0) {
-		exponent_tmp = fpua_exponent_tmp;
 		//printf("shift significant B to Right\n");
        		fpub_significand_tmp = fpub_significand_tmp >> exponent_diff_tmp ;
 		fpub_exponent_tmp = fpua_exponent_tmp;
 	} else {
-		exponent_tmp = fpub_exponent_tmp;
 		//printf("shift significant A to Right\n");
        		fpua_significand_tmp = fpua_significand_tmp >> exponent_diff_tmp ;
 		fpua_exponent_tmp = fpub_exponent_tmp;

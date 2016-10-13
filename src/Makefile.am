@@ -37,8 +37,7 @@ include $(top_srcdir)/config/Make-rules.sysc
 # order of SUBDIRS is important, sysc needs to go first:
 SUBDIRS = \
 	sysc \
-	tlm_core/tlm_1 \
-	tlm_core/tlm_2 \
+	tlm_core  \
 	tlm_utils \
 	.
 
@@ -48,27 +47,9 @@ H_FILES = \
 	tlm \
 	tlm.h
 
-noinst_HEADERS = $(H_FILES)
+nobase_include_HEADERS = $(H_FILES)
 
-CXX_FILES =
-
-NO_CXX_FILES =
-
-INCLUDE_DIR = $(prefix)/include
-
-install-data-local:
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(INCLUDE_DIR)
-	for file in $(noinst_HEADERS); do \
-          $(INSTALL_DATA) $(srcdir)/$$file $(INCLUDE_DIR)/$$file; \
-        done
-
-uninstall-local:
-	@$(NORMAL_UNINSTALL)
-	-rmdir $(INCLUDE_DIR)
-	for file in $(noinst_HEADERS); do \
-          rm -f $(INCLUDE_DIR)/$$file; \
-        done
-	-rmdir $(INCLUDE_DIR)
+EXTRA_DIST += \
+	README_TLM.txt
 
 ## Taf!

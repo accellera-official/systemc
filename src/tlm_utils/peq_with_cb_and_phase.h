@@ -24,9 +24,13 @@
 #ifndef __PEQ_WITH_CB_AND_PHASE_H__
 #define __PEQ_WITH_CB_AND_PHASE_H__
 
+#ifndef SC_INCLUDE_DYNAMIC_PROCESSES // needed for sc_spawn
+#  define SC_INCLUDE_DYNAMIC_PROCESSES
+#endif
+
 #include <vector>
 #include <systemc>
-#include "tlm.h"
+#include <tlm>
 
 namespace tlm_utils {
 

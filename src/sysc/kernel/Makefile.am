@@ -54,11 +54,11 @@ H_FILES = \
 	sc_object.h \
 	sc_process.h \
 	sc_process_handle.h \
-	sc_reset.h \
 	sc_runnable.h \
 	sc_sensitive.h \
 	sc_spawn.h \
 	sc_spawn_options.h \
+	sc_status.h \
 	sc_simcontext.h \
 	sc_time.h \
 	sc_ver.h \
@@ -70,22 +70,20 @@ NO_H_FILES = \
 	sc_cor_pthread.h \
 	sc_cor_qt.h \
 	sc_cthread_process.h \
-	sc_macros_int.h \
 	sc_method_process.h \
 	sc_module_registry.h \
 	sc_name_gen.h \
+	sc_object_int.h \
 	sc_object_manager.h \
+	sc_phase_callback_registry.h \
+	sc_reset.h \
 	sc_runnable_int.h \
-	sc_simcontext_int.h
+	sc_simcontext_int.h \
 	sc_thread_process.h 
-
-noinst_HEADERS = $(H_FILES)
 
 CXX_FILES = \
 	sc_attribute.cpp \
-	sc_cor_fiber.cpp \
-	sc_cor_pthread.cpp \
-	sc_cor_qt.cpp \
+	$(CXX_COR_FILES) \
 	sc_cthread_process.cpp \
 	sc_event.cpp \
 	sc_except.cpp \
@@ -99,34 +97,32 @@ CXX_FILES = \
 	sc_name_gen.cpp \
 	sc_object.cpp \
 	sc_object_manager.cpp \
+	sc_phase_callback_registry.cpp \
 	sc_process.cpp \
 	sc_reset.cpp \
 	sc_sensitive.cpp \
 	sc_simcontext.cpp \
+	sc_spawn_options.cpp \
 	sc_thread_process.cpp \
 	sc_time.cpp \
 	sc_ver.cpp \
 	sc_wait.cpp \
 	sc_wait_cthread.cpp
 
-NO_CXX_FILES =
+# co-routine implementation
+if WANT_QT_THREADS
+CXX_COR_FILES = sc_cor_qt.cpp
+else
+if WANT_PTHREADS_THREADS
+CXX_COR_FILES = sc_cor_pthread.cpp
+else
+CXX_COR_FILES = sc_cor_fiber.cpp
+endif
+endif # co-routine implementation
 
-libkernel_la_SOURCES = $(H_FILES) $(CXX_FILES)
+localincludedir = $(includedir)/sysc/kernel
+nobase_localinclude_HEADERS = $(H_FILES)
 
-INCLUDE_DIR = $(prefix)/include/sysc/kernel
-
-install-data-local:
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(INCLUDE_DIR)
-	for file in $(noinst_HEADERS); do \
-	  $(INSTALL_DATA) $(srcdir)/$$file $(INCLUDE_DIR)/$$file; \
-	done
-
-uninstall-local:
-	@$(NORMAL_UNINSTALL)
-	for file in $(noinst_HEADERS); do \
-	  rm -f $(INCLUDE_DIR)/$$file; \
-	done
-	-rmdir $(INCLUDE_DIR)
+libkernel_la_SOURCES = $(NO_H_FILES) $(CXX_FILES)
 
 ## Taf!

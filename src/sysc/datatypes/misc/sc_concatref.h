@@ -80,7 +80,6 @@
 #include "sysc/kernel/sc_object.h"
 #include "sysc/datatypes/misc/sc_value_base.h"
 #include "sysc/utils/sc_temporary.h"
-#include "sysc/utils/sc_string.h"
 #include "sysc/datatypes/bit/sc_bv.h"
 #include "sysc/datatypes/bit/sc_lv.h"
 #include "sysc/datatypes/int/sc_int_base.h"
