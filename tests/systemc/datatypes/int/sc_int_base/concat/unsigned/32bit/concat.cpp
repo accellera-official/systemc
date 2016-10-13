@@ -45,9 +45,11 @@ int sc_main(int ac, char* av[] )
   sc_uint_base a_su32(WIDTH), b_su32(WIDTH);
 
   for(int i=0; i < WIDTH-1; i++ ){
-      cout << "i = " << i << endl;
+      cout << "i = " << i << ": ";
       a_su32 = i;
       b_su32 = (a_su32.range(WIDTH-1,i+1), a_su32.range(i,0));
+      // Output variables to avoid erroneous optimization observed on RHEL6 with g++-4.4.6.
+      cout << a_su32 << (a_su32 == b_su32 ? " == " : " != ") << b_su32 << endl;
       assert( a_su32 == b_su32 );
   }
 

@@ -75,6 +75,15 @@ crunch(sc_signed& z, int31 v31, int u, int v)
     }
 }
 
+// Function to fix result in int9 struct to correctly under-/overflow
+// within its 9 bits range and still ensure the correct sign encoding
+// over the full size of the integer variable. Otherwise, compiler
+// optimization may lead to spurious assertion errors.
+void
+fix_int9(int9& v) {
+  v.q %= 0x200;
+}
+
 int
 sc_main( int argc, char* argv[] )
 {
@@ -85,24 +94,34 @@ sc_main( int argc, char* argv[] )
 
     y = -256;
     v.q = -256;
+    assert(y == v.q);
+    cout << y << '\t' << v.q << endl;
     for (int i = 0; i < 1000; ++i) {
-        cout << y << '\t' << v.q << endl;
         y++;
         v.q++;
+        fix_int9(v);
+        cout << y << '\t' << v.q << endl;
         assert(y == v.q);
     }
     for (int i = 0; i < 1000; ++i) {
-        cout << y << '\t' << v.q << endl;
         y--;
         v.q--;
+        fix_int9(v);
+        cout << y << '\t' << v.q << endl;
         assert(y == v.q);
     }
     for (int i = 0; i < 1000; ++i) {
-        cout << ++y << '\t' << ++v.q << endl;
+        ++y;
+        ++v.q;
+        fix_int9(v);
+        cout << y << '\t' << v.q << endl;
         assert(y == v.q);
     }
     for (int i = 0; i < 1000; ++i) {
-        cout << --y << '\t' << --v.q << endl;
+        --y;
+        --v.q;
+        fix_int9(v);
+        cout << y << '\t' << v.q << endl;
         assert(y == v.q);
     }
 

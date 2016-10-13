@@ -42,25 +42,28 @@
 
 template <class T>
 void
-test_constructors()
+test_constructors( T const & val = T() )
 {
     sc_signal<T> sig1;
     sc_signal<T> sig2( "sig2" );
+    sc_signal<T> sig3( "sig3", val );
 
-    cout << sig1.name() << endl;
-    cout << sig2.name() << endl;
+    cout << sig1.name() << " = " << sig1.read() << endl;
+    cout << sig2.name() << " = " << sig2.read() << endl;
+    cout << sig3.name() << " = " << sig3.read() << endl;
+    cout << endl;
 }
 
 int
 sc_main( int, char*[] )
 {
-    test_constructors<int>();
+    test_constructors( 42 );
 
     // bool specialization
-    test_constructors<bool>();
+    test_constructors( true );
 
     // sc_logic specialization
-    test_constructors<sc_logic>();
+    test_constructors( SC_LOGIC_0 );
 
     return 0;
 }

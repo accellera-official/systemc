@@ -38,6 +38,7 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#define SC_NO_WRITE_CHECK
 #include "systemc.h"
 
 typedef sc_bv<4> bool_vector4;

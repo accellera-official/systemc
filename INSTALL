@@ -1,4 +1,4 @@
-	INSTALL NOTES FOR SystemC 2.3.0 regression test suite
+	INSTALL NOTES FOR SystemC 2.3.1 regression test suite
 	=====================================================
 
 
@@ -13,12 +13,12 @@ CONTENTS
 1) Installation Notes for Unix
 ==============================
 
-All you have to do is unpack the systemc_tests-2.3.0.tgz file in the
+All you have to do is unpack the systemc_regressions-2.3.1.tgz file in the
 directory of your choice, .e.g,
 
-  > gtar zxvf systemc_tests-2.3.0.tgz
+  > gtar zxvf systemc_regressions-2.3.1.tgz
 
-This will create the directory systemc_tests-2.3.0 containing the test
+This will create the directory systemc_regressions-2.3.1 containing the test
 source code and scripts.
 
 Refer to the README file on how to run the regression tests.
@@ -30,7 +30,7 @@ Refer to the README file on how to run the regression tests.
 Unpack the regression tests using a suitable compression programme, e.g., 7zip.
 
 Refer to the README file on how to run the regression tests, but also to 
-scripts/README_windows.txt for more details.
+README_windows.txt for more details.
 
 Note: You need Cygwin to run the regression tests on Windows.
       Cygwin is free software that can be obtained from:

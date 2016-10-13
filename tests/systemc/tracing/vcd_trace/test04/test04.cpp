@@ -98,7 +98,7 @@ int sc_main(int ac, char *av[])
   sc_trace(tf, P1.obj2, "Short");
   sc_trace(tf, P1.obj3, "Int");
   sc_trace(tf, P1.obj4, "Long");
-  sc_trace(tf, P1.obj5, "int64");
+  sc_trace(tf, P1.obj5, "Int64");
   sc_trace(tf, clock, "Clock");
 
   clock.write(0);

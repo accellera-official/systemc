@@ -1,7 +1,7 @@
-                 SystemC 2.3.0 regression test suite
+                 SystemC 2.3.1 regression test suite
                  ===================================
 
-This is the production release of the SystemC 2.3.0 regression test suite.
+This is the production release of the SystemC 2.3.1 regression test suite.
 
 Note: for Windows users, please also refer to README_windows.txt
 
@@ -27,8 +27,8 @@ CONTENTS
   which must be located in /usr/bin, or in your path if running on Windows.
 
   The 'tests' directory contains the regression tests. The directory
-  has a 'systemc' directory, and a 'tlm' directory. Each of these contains other
-  subdirectories. Actual tests are located in leaf directories.
+  has a 'systemc' directory, and a 'tlm' directory. Each of these contains
+  other subdirectories. Actual tests are located in leaf directories.
 
   An actual test directory contains one or more source code files
   (ending in .cpp). If the directory contains one source code file,
@@ -66,29 +66,52 @@ CONTENTS
   The 'verify.pl' script is located in the 'scripts' directory of the
   SystemC regression test suite. It requires the environment variable
   'SYSTEMC_HOME' to be set to your SystemC installation.
-  Furthermore, you must use the 'CXX' environment variable to select 
-  the appropriate target architecture, just like with 'configure' when 
-  configuring SystemC. Valid settings for 'CXX' on the different platforms are:
+
+  Furthermore, you must use the 'CXX' environment variable to select
+  the appropriate target architecture, just like with 'configure' when
+  configuring SystemC.  In some cases (e.g. for testing cross-compiled
+  libraries), the automatic architecture detection can be overridden
+  by specifying the SystemC architecture name via the '-arch' option:
+
+    # assume a 64-bit compiler on Windows/MinGW32
+    > ../scripts/verify.pl -arch mingw64
+
+  Valid settings for 'CXX' on the different platforms are:
+
+  - Linux (multiple architectures):
+    o c++, g++ -> linux[64] (default)
+
+  - Mac OS X (multiple architectures):
+    o c++, g++ -> macosx[ppc][64]
 
   - Solaris 2.7 and Solaris 2.8:
     o c++, g++ -> gccsparcOS5 (default)
     o CC       -> sparcOS5
 
-  - Linux (Redhat 6.2 and Redhat 7.2):
-    o c++, g++ -> linux (default)
-
-  - HP-UX 11.00:
+  - HP-UX 11.00 (untested):
+    o c++, g++ -> gcchpux11
     o aCC      -> hpux11
 
-  - Cygwin 1.3.x (to run the regression tests for Visual C++):
-    o cl       -> msvc71   (Visual C++ 2003 .NET)
-               -> msvc80   (Visual C++ 2005)
+  - Windows (Cygwin 1.3 or later, MinGW32/MSYS 1.0.x)
+
+    Note:
+      To run the regression tests on Windows, a basic Un*x shell
+      environment like Cygwin or MinGW/MSYS is required.
+      See also: README_Windows.txt
+
+    o cl       -> msvc80   (Visual C++ 2005)
                -> msvc90   (Visual C++ 2008)
                -> msvc10   (Visual C++ 2010)
+               -> msvc11   (Visual C++ 2012)
+               -> msvc12   (Visual C++ 2013)
+    o c++, g++ -> cygwin   (default on Cygwin)
+               -> cygwin64 (64-bit Cygwin, untested)
+               -> mingw    (default on MinGW/MSYS)
+               -> mingw64  (64-bit MinGW-w64 compiler)
 
   Default, the 'verify.pl' script assumes that the tests are located
   in '../tests' (wrt the location of the script itself). This can be
-  overrruled with environment variable 'SYSTEMC_TEST'.
+  overruled with environment variable 'SYSTEMC_TEST'.
 
   The 'verify.pl' script takes directories and names of tests as
   arguments. For example
@@ -98,12 +121,16 @@ CONTENTS
   runs all the SystemC tests in the regression test suite, and
 
     > ../scripts/verify.pl tlm
-  
-  runs the TLM2 tests.
-  
-  The directories should be relative to '$SYSTEMC_TEST/tests'. By specifying
-  subdirectories, it is possible to run only a subset of the tests in
-  the regression test suite, e.g.
+
+  runs the TLM2 tests, and
+
+    > ../scripts/verify.pl systemc tlm
+
+  runs everything.
+
+  The directories should be relative to '$SYSTEMC_TEST/tests'.
+  By specifying subdirectories, it is possible to run only a subset
+  of the tests in the regression test suite, e.g.
 
     > ../scripts/verify.pl systemc/datatypes/fx
 
@@ -118,6 +145,7 @@ CONTENTS
   script. Most notibly, '-f <file>' which can be used to have a file
   containing the tests you want to run, '-v' to run with verbose
   output, and '-g' to run with debug version of the SystemC Library.
+  See '-h' for a list of options.
 
   Note:
     Currently, not all options are fully implemented, and some may
@@ -140,8 +168,9 @@ CONTENTS
     should _never_ run the tests in the directory in which the test
     sources are located (i.e. '$SYSTEMC_TEST/tests').
 
-  NOTE: you may override the default TLM2 installation by setting the environment
-  variable TLM_HOME.
+  Note:
+    You may override the default TLM2 installation by setting the
+    environment variable TLM_HOME.
 
 
 3) Adding new tests

@@ -1,6 +1,8 @@
 SystemC Simulation
 test_print
 0 s
+
+Info: (I804) /IEEE_Std_1666/deprecated: deprecated constructor: sc_time(uint64,bool)
 1230 ps
 12300 ns
 1230 us
@@ -27,6 +29,8 @@ test_constructors
 10 ns
 11 ns
 0 s
+
+Info: (I804) /IEEE_Std_1666/deprecated: deprecated constructor: sc_time(double,bool)
 1234 ps
 1235 ps
 18446744073709550383 ps
@@ -101,3 +105,11 @@ test_arithmetic
 1 ps
 test_SC_ZERO_TIME
 0 s
+
+Info: (I804) /IEEE_Std_1666/deprecated: You can turn off warnings about
+             IEEE 1666 deprecated features by placing this method call
+             as the first statement in your sc_main() function:
+
+  sc_core::sc_report_handler::set_actions( "/IEEE_Std_1666/deprecated",
+                                           sc_core::SC_DO_NOTHING );
+

@@ -60,11 +60,6 @@
 int
 sc_main(int ac, char *av[])
 {
-  // turn off multiwrite check for signals.
-  char write_check[] = "SC_SIGNAL_WRITE_CHECK=DISABLE";
-  putenv(write_check);
-  sc_get_curr_simcontext()->reset();
-
   sc_clock clk( "CLOCK", 20, SC_NS, 0.5, 10, SC_NS); // Clock function
   testbench tb1("TB1", clk );	// Testbench Instance
   sc_start();	 // Simulation runs forever 
