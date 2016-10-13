@@ -49,26 +49,26 @@ sc_main(int ac, char* av[])
     x[4] = 0;
     x[5] = 1;
 
-    assert( x == 38 );
+    sc_assert( x == 38 );
     cout << x << endl;
 
     x[5] = 0;
     x[31] = 1;
 
 #if !defined( _MSC_VER )
-    assert((uint64)x == 0xffffffff80000006ULL);
+    sc_assert((uint64)x == 0xffffffff80000006ULL);
 #else
-    assert((uint64)x == 0xffffffff80000006ui64);
+    sc_assert((uint64)x == 0xffffffff80000006ui64);
 #endif
     cout << x << endl;
 
     x.range(31,5) = 10;
-    assert(x == 326);
+    sc_assert(x == 326);
     cout << x << endl;
 
     x = 0;
     x.range(21,7) = 9;
-    assert(x == 1152);
+    sc_assert(x == 1152);
     cout << x << endl;
 
     return 0;

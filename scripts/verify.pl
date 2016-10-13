@@ -168,7 +168,7 @@ sub create_mail
     printf MAIL "\n";
     printf MAIL "SYSTEMC_ARCH : %s %s\n", $rt_systemc_arch, "$rt_pthreads";
     printf MAIL "SYSTEMC_HOME : %s\n", $rt_systemc_home;
-    printf MAIL "TLM_HOME     : %s\n", $rt_tlm_home;
+    printf MAIL "TLM_HOME     : %s\n", $rt_tlm_home unless !defined($rt_tlm_home);
     printf MAIL "SYSTEMC_TEST : %s\n", $rt_systemc_test;
     printf MAIL " OUTPUT_DIR  : %s\n", $rt_output_dir;
 
@@ -388,12 +388,7 @@ sub get_tlm_home
 
     } elsif ( defined $ENV{ 'SYSTEMC_HOME' } ) {
 
-      $tlm_home = $ENV{ 'SYSTEMC_HOME' };
-            if( $rt_systemc_arch =~ /^msvc/ ) {
-              $tlm_home .= "/src";
-             } else {
-              $tlm_home .= "/include";
-      }
+      $tlm_home = undef;
 
     } else {
 
@@ -486,7 +481,7 @@ sub get_systemc_arch
                 }
             }
 
-        } elsif( $uname_s eq "Linux" and $uname_r =~ /^[23]/ ) {
+        } elsif( $uname_s eq "Linux" ) {
             if( cxx_is_gcc_compatible($cxx) ) {
                 $arch = "linux";
                 if ( $uname_m eq "x86_64" || $uname_m eq "amd64" ) {
@@ -550,6 +545,9 @@ sub get_systemc_arch
                 }
                 elsif ( $v_string =~ /.+Version 18\.00/) {   # 2013
                     $arch = "msvc12";
+                }
+                elsif ( $v_string =~ /.+Version 19\.00/) {   # 2015
+                    $arch = "msvc14";
                 }
                 else {
                     die "Error: unsupported compiler '$cxx' ($v_string)\n";
@@ -664,6 +662,10 @@ sub init_globals
 
     $ENV{ 'SYSTEMC_REGRESSION' } = 1;
 
+    # MSVC runtime library defaults
+    $rt_msvc_runtime     = '-MT';
+    $rt_msvc_runtime_dbg = $rt_msvc_runtime.'d';
+
     @rt_add_defines = ();
     if( defined $ENV{ 'RT_ADD_DEFINES' } ) {
         push( @rt_add_defines, split(' ', $ENV{ 'RT_ADD_DEFINES' } ) )
@@ -700,8 +702,9 @@ sub init_globals
                        'dontrun',    0x20,   # dir marked dontrun or
                                              #   is not for this arch
                        'optimize',   0x40,   # compile with optimize flag
-                       'purecov',    0x80    # link with purecov
-                       );
+                       'purecov',    0x80,   # link with purecov
+                       'windll',     0x100   # link against DLL (Windows)
+                     );
 
     # Defines for striplog functions
     $rt_sim_pat        = '^SystemC';
@@ -742,6 +745,85 @@ sub init_globals
 }
 
 # -----------------------------------------------------------------------------
+#  SUB : add_to_ldpath
+#
+#  Add a directory to the library search path, if it exists.
+#
+#  Prefer an arch-specific suffix first.  In case an optional second argument
+#  is given, it is used as a specific relative path on MSVC, that is interleaved
+#  with the different suffixes according to the patterns below.
+#
+#  The following locations are checked for a given `$dir' (+ optional `$local`)
+#  and the _first_ match is returned:
+#
+#  Unix-like architectures:
+#    1. `$dir/lib-<arch>`
+#    2. `$dir-<arch>`
+#    3. `$dir/lib`
+#    4. `$dir`
+#
+#  MS Visual C++ (assuming `<config>` matches `Debug` or `Release`):
+#    1. `$dir/msvc<ver>/$local/x64/<config>`  (64-bit only)
+#    2. `$dir/$local/x64/<config>`            (64-bit only)
+#    2. `$dir/msvc<ver>/$local/<config>`
+#    3. `$dir/$local/<config>`
+#    4. `$dir`
+#
+# -----------------------------------------------------------------------------
+
+sub add_to_ldpath
+{
+    my ( $dir, $local ) = @_;
+    my @candidates = ();
+
+    &print_log( "\nDIAG: check ldpath '$dir'\n" ) if $rt_diag >= 4;
+
+    if( $rt_systemc_arch =~ /^(msvc[0-9]*)(-x64)?$/ ) {
+        my $msvc = "/$1";
+        my $x64  = $2;
+        my $suffix;
+        $x64 =~ s|-|/|;
+
+        $local = "/$local" if ( $local );
+
+        if( $rt_props & $rt_test_props{ 'debug' } ) {
+            $suffix = '/Debug';
+        } else {
+            $suffix = '/Release';
+        }
+
+        if( $rt_props & $rt_test_props{ 'windll' } ) {
+            $suffix .= 'DLL';
+        }
+
+        push @candidates, "$dir$msvc$local$x64$suffix" if ( -d "$dir$msvc$local$x64$suffix" );
+        push @candidates, "$dir$local$x64$suffix"      if ( -d "$dir$local$x64$suffix" );
+        push @candidates, "$dir$msvc$local$suffix"     if ( -d "$dir$msvc$local$suffix" );
+        push @candidates, "$dir$local$suffix"          if ( -d "$dir$local$suffix" );
+        push @candidates, "$dir$local$suffix"          if ( -d "$dir$local$suffix" );
+
+    } else {
+        my $lib  = "/lib";
+        my $arch = "-$rt_systemc_arch";
+        push @candidates, "$dir$lib$arch"        if ( -d "$dir$lib$arch" );
+        push @candidates, "$dir$arch"            if ( -d "$dir$arch" );
+        push @candidates, "$dir$lib"             if ( -d "$dir$lib" );
+    }
+
+    # use given (existing) directory directly
+    push @candidates, $dir if ( -d "$dir" );
+
+    &print_log( "WARN: ignoring invalid ldpath '$dir'\n" )
+      unless scalar @candidates;
+
+    &print_log( "DIAG: add ldpath '".$candidates[0]."'\n" )
+      if scalar @candidates && $rt_diag >= 2;
+
+    # return first found directory
+    ( scalar @candidates ) ? ( $candidates[0] ) : ();
+}
+
+# -----------------------------------------------------------------------------
 #  SUB : prepare_environment
 #
 #  Setup compiler/architecture environment.
@@ -765,10 +847,11 @@ sub prepare_environment
     $rt_debug_ldflags = "";
     $rt_optimize_flag = "-O2";
     $rt_systemc_include = "$rt_systemc_home/include";
-    $rt_systemc_ldpath  = "$rt_systemc_home/lib-$rt_systemc_arch";
+    $rt_systemc_ldpath  = "$rt_systemc_home";
 
     # predefined macros
     @rt_defines = ();
+    push @rt_defines, 'SC_ENABLE_ASSERTIONS';
 
     if( $rt_systemc_arch eq "gccsparcOS5" ) {
         $rt_ldrpath       = "-Wl,-R";
@@ -785,7 +868,7 @@ sub prepare_environment
     } elsif( $rt_systemc_arch =~ /^linux(64)?/ ) {
         $rt_ccflags      .= " -m${rt_cpuarch}";
         $rt_ldflags       = $rt_ccflags;
-    } elsif( $rt_systemc_arch =~ /^(free)bsd(64)?/ ) {
+    } elsif( $rt_systemc_arch =~ /^(free)?bsd(64)?/ ) {
         $rt_ccflags      .= " -m${rt_cpuarch}";
         $rt_ldflags       = $rt_ccflags;
     } elsif( $rt_systemc_arch =~ /^macosx(ppc)?(64)?/ ) {
@@ -805,33 +888,30 @@ sub prepare_environment
         my $x64  = $2;
         $x64 =~ s|-|/|;
         $rt_cc              = "CL.EXE";
-        $rt_ccflags         = "-nologo -GR -EHsc -Zm800 -vmg ";
-        $rt_ccflags        .= "-MACHINE:X64" unless (!$x64);
-        push @rt_defines, '_USE_MATH_DEFINES';
+        $rt_ccflags         = "-nologo -GR -EHsc -Zm800 -vmg";
+        $rt_ccflags        .= " -MACHINE:X64" unless (!$x64);
         $rt_ld              = "LINK.EXE";
-        $rt_ldflags         = "-nologo -LTCG -NODEFAULTLIB:LIBCD "
-                             ."-SUBSYSTEM:CONSOLE ";
-        $rt_ldflags        .= "-MACHINE:X64 " unless (!$x64);
-        $rt_debug_flag      = "-GZ -MTd -Zi";
+        $rt_ldflags         = "-nologo -SUBSYSTEM:CONSOLE";
+        $rt_ldflags        .= " -MACHINE:X64" unless (!$x64);
+        $rt_debug_flag      = "-RTC1 -Zi";
         $rt_debug_ldflags   = "-DEBUG -PDB:$rt_prodname.pdb";
-        $rt_systemc_include = "$rt_systemc_home/src";
 
-        $rt_systemc_ldpath  = "$rt_systemc_home/$msvc/systemc${x64}";
-        if( $rt_props & $rt_test_props{ 'debug' } ) {
-            $rt_systemc_ldpath .= "/Debug";
-        } else {
-            $rt_systemc_ldpath .= "/Release";
-        }
+        $rt_systemc_include = "$rt_systemc_home/src"
+            unless -d $rt_systemc_include;
+
+        push @rt_defines, 'SC_WIN_DLL'
+          unless (!($rt_props & $rt_test_props{'windll'}));
+
+        push @rt_defines, '_USE_MATH_DEFINES';
     }
 
     # include directories
     @rt_includes = ();
-    push( @rt_includes, $rt_tlm_home )
-        unless ( $rt_tlm_home eq $rt_systemc_include );
+    push( @rt_includes, $rt_tlm_home ) if defined( $rt_tlm_home );
     push( @rt_includes, $rt_systemc_include );
 
     # libraries paths
-    @rt_ldpaths  = ( $rt_systemc_ldpath );
+    @rt_ldpaths  = add_to_ldpath( $rt_systemc_ldpath, "systemc" );
     # libraries (basenames only)
     @rt_ldlibs   = ( "systemc" );
     push( @rt_ldlibs, "pthread" ) unless (!$rt_pthreads);
@@ -847,8 +927,13 @@ sub prepare_environment
     unshift ( @rt_includes, @rt_add_includes );
 
     # additional libraries
-    push( @rt_ldpaths, @rt_add_ldpaths );
+    push( @rt_ldpaths, map { add_to_ldpath($_) } @rt_add_ldpaths );
     push( @rt_ldlibs,  @rt_add_ldlibs );
+
+    # prepend library paths to $PATH, if running against Windows DLL
+    if( $rt_props & $rt_test_props{'windll'} ) {
+        $ENV{'PATH'} = join( ":", @rt_ldpaths).":".$ENV{'PATH'};
+    }
 }
 
 
@@ -871,12 +956,14 @@ Usage: $0 [<options>] <directories|names>
     <options>
       -no-cleanup  Do not clean up temporary files and directories.
       -arch <arch> Override SystemC architecture.
+      -dll         Link against SystemC DLL (Windows/MSVC only).
       -D <symbol>  Additional predefined macros (may be added multiple times).
       -f <file>    Use file to supply tests.
       -g           Compile tests with debug flag.
       -I <dir>     Additional include directory (may be added multiple times).
       -L <dir>     Additional linker directory (may be added multiple times).
       -l <libname> Additional library to link (may be added mutliple times).
+      -M(D,T)[d]   Select MSVC runtime library (default: ${rt_msvc_runtime}[d]).
       -m           Send mail with results.
       -o <opts>    Additional (custom) compiler options.
       -O           Compile tests with optimize flag.
@@ -884,7 +971,7 @@ Usage: $0 [<options>] <directories|names>
       -purify      Link tests with purify.
       -quantify    Link tests with quantify.
       -Q           Run quick tests only.
-      -recheck     Run previously failed tests (taken from $rt_output_file)
+      -recheck     Run previously failed tests (taken from $rt_output_file).
       -t <time>    Set the timeout for a test in minutes (default 5 minutes).
       -T           Measure runtime of tests in seconds.
       -v           Verbose output.
@@ -989,6 +1076,22 @@ sub parse_args
                     $arg = shift @arglist;
                 }
                 push @rt_add_ldlibs, $arg;
+                next;
+            }
+
+            # MSVC runtime library
+            if( $arg =~ /^-M(D|T)d?$/ ) {
+                $rt_msvc_runtime     = $arg;
+                $rt_msvc_runtime_dbg = $arg; # override both runtimes explicitly
+                next;
+            }
+
+            # link against SystemC DLL (Windows)
+            if( $arg =~ /^-dll$/ ) {
+                $rt_props = $rt_props | $rt_test_props{ 'windll' };
+                # force DLL-based runtimes
+                $rt_msvc_runtime     =~ s/T/D/;
+                $rt_msvc_runtime_dbg =~ s/T/D/;
                 next;
             }
 
@@ -1122,10 +1225,14 @@ sub print_intro
     }
     &print_log( "$rt_systemc_home\n" );
     &print_log( "TLM_HOME     : " );
-    if( $rt_tlm_home =~ m|^$vob| ) {
-        &print_log( "[$working_view] " );
+    if( defined($rt_tlm_home) ) {
+      if( $rt_tlm_home =~ m|^$vob| ) {
+          &print_log( "[$working_view] " );
+      }
+      &print_log( "$rt_tlm_home\n" );
+    } else {
+      &print_log( "<inherited>\n" );
     }
-    &print_log( "$rt_tlm_home\n" );
     &print_log( "SYSTEMC_TEST : " );
     if( $rt_systemc_test =~ m|^$vob| ) {
         &print_log( "[$working_view] " );
@@ -2184,18 +2291,19 @@ sub run_test
     $rt_current_test = "$currtestdir/$testname.$type";
 
     # determine the test set
-    ( $test_set = $currtestdir ) =~ s|^([^/]+)/.*|\1|;
-
-    # add local include dir, if exists
-    push ( @test_set_includes, "$rt_systemc_test/include/$test_set" )
-        unless (!-d "$rt_systemc_test/include/$test_set" );
-    push ( @test_set_includes, @rt_includes );
-
-    # check for compiler
-    # include your compiler check in here
+    ( $test_set = $currtestdir ) =~ s|^(\./)*([^/]+)/.*|\2|;
+    $test_set = undef if ( $test_set eq '.' );
 
     # cd and create symlink
     $linkdir = &setup_for_test( $currtestdir );
+
+    # add test directory to includes
+    push ( @test_set_includes, $linkdir );
+    # add local include dir, if exists
+    push ( @test_set_includes, "$rt_systemc_test/include/$test_set" )
+        if ( defined $test_set && -d "$rt_systemc_test/include/$test_set" );
+    # add global include dirs
+    push ( @test_set_includes, @rt_includes );
 
     # extract base name
     $basename = "$linkdir/$testname";
@@ -2214,11 +2322,15 @@ sub run_test
 
     local( $extra_flags ) = "";
     if( $rt_props & $rt_test_props{ 'debug' } ) {
+        $rt_msvc_runtime = $rt_msvc_runtime_dbg; # prefer debug runtime
         $extra_flags .= " $rt_debug_flag";
     }
     if( $rt_props & $rt_test_props{ 'optimize' } ) {
         $extra_flags .= " $rt_optimize_flag";
     }
+
+    # add MSVC runtime (need to be done here, as we need to consider debug flag)
+    $extra_flags .= " $rt_msvc_runtime" if $rt_systemc_arch =~ /^msvc/;
 
     local( $pure ) = "";
     local( $pure_log );

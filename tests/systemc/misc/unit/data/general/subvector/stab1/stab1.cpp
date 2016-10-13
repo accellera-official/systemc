@@ -51,26 +51,26 @@ sc_main( int argc, char* argv[] )
         x[i] = ((i & 1) ^ ((i >> 1) & 1));
     };
     for (i = 0; i < 325; ++i) {
-        assert( x[i] == ((i & 1) ^ ((i >> 1) & 1)) );
+        sc_assert( x[i] == ((i & 1) ^ ((i >> 1) & 1)) );
     };
     for (i = 0; i < 142; ++i) {
         y[i] = ((i & 1) ^ ((i >> 2) & 1));
     }
     for (i = 0; i < 142; ++i) {
-        // assert( y[i] == char((i & 1) ^ ((i >> 2) & 1)) );
-        assert( y[i] == ((i & 1) ^ ((i >> 2) & 1)) );
+        // sc_assert( y[i] == char((i & 1) ^ ((i >> 2) & 1)) );
+        sc_assert( y[i] == ((i & 1) ^ ((i >> 2) & 1)) );
     }
     for (i = 0; i < 103; ++i) {
         z[i] = (((i >> 2) & 1) ^ ((i >> 1) & 1));
     }
     for (i = 0; i < 103; ++i) {
-        assert( (bool) z[i] == (((i >> 2) & 1) ^ ((i >> 1) & 1)) );
+        sc_assert( (bool) z[i] == (((i >> 2) & 1) ^ ((i >> 1) & 1)) );
     }
     for (i = 0; i < 291; ++i) {
         w[i] = (((i >> 3) & 1) ^ ((i >> 1) & 1));
     }
     for (i = 0; i < 291; ++i) {
-        assert( (bool) w[i] == (((i >> 3) & 1) ^ ((i >> 1) & 1)) );
+        sc_assert( (bool) w[i] == (((i >> 3) & 1) ^ ((i >> 1) & 1)) );
     }
 
     cout << x << endl;
@@ -112,8 +112,8 @@ sc_main( int argc, char* argv[] )
             foo = x.range(i + 224, i);
             foo1 = x.range(i, i + 224);
             for (j = 0; j < 225; ++j) {
-                assert( foo[j] == x[i + j] );
-                assert( foo1[224 - j] == x[i + j] );
+                sc_assert( foo[j] == x[i + j] );
+                sc_assert( foo1[224 - j] == x[i + j] );
             }
 
             sc_lv<42> bar;
@@ -121,8 +121,8 @@ sc_main( int argc, char* argv[] )
             bar = y.range(i + 41, i);
             bar1 = y.range(i, i + 41);
             for (j = 0; j < 42; ++j) {
-                assert( bar[j] == y[i + j] );
-                assert( bar1[41 - j] == y[i + j] );
+                sc_assert( bar[j] == y[i + j] );
+                sc_assert( bar1[41 - j] == y[i + j] );
             }
 
             sc_signed baz(3);
@@ -130,8 +130,8 @@ sc_main( int argc, char* argv[] )
             baz = z.range(i + 2, i);
             baz1 = z.range(i, i + 2);
             for (j = 0; j < 3; ++j) {
-                assert( baz[j] == z[i + j] );
-                assert( baz1[2 - j] == z[i + j] );
+                sc_assert( baz[j] == z[i + j] );
+                sc_assert( baz1[2 - j] == z[i + j] );
             }
 
             sc_unsigned quux(191);
@@ -139,8 +139,8 @@ sc_main( int argc, char* argv[] )
             quux = w.range(i + 190, i);
             quux1 = w.range(i, i + 190);
             for (j = 0; j < 191; ++j) {
-                assert( quux[j] == w[i + j] );
-                assert( quux1[190 - j] == w[i + j] );
+                sc_assert( quux[j] == w[i + j] );
+                sc_assert( quux1[190 - j] == w[i + j] );
             }
         }
     }

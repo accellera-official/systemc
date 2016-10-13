@@ -48,7 +48,7 @@ int sc_main(int ac, char* av[] )
       cout << "i = " << i << endl;
       a_si64 = i;
       b_si64 = (a_si64.range(WIDTH-1,i+1), a_si64.range(i,0));
-      assert( a_si64 == b_si64 );
+      sc_assert( a_si64 == b_si64 );
   }
 
   return 0;

@@ -84,8 +84,8 @@ sc_main(int, char**)
 
                     sc_signed ty(x);
                     TEST(x,ty );
-                    assert( ty >= 0 );
-                    assert((! x[i-1]) || (ty.length() == i+1) );
+                    sc_assert( ty >= 0 );
+                    sc_assert((! x[i-1]) || (ty.length() == i+1) );
 
                     z = x + y;
                     TEST(static_cast<sc_bigint<32> >( z.range(31,0) ),

@@ -236,7 +236,7 @@ SC_MODULE( mod_a )
 	    next_trigger( SC_ZERO_TIME );
 	    break;
 	default:
-	    assert( false );
+	    sc_assert( false );
         }
 	receiver_state ++;
     }

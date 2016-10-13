@@ -40,7 +40,7 @@ public:
     }
     void copy_from(tlm_extension_base const & e)
     {
-        assert(typeid(this) == typeid(e));
+        sc_assert(typeid(this) == typeid(e));
         m_data = static_cast<my_extension const &>(e).m_data;
     }
     

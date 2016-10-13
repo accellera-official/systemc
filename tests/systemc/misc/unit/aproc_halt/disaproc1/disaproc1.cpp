@@ -119,13 +119,13 @@ aproc2::entry()
         }
         wait();
         if (loops < 1) {
-            // assert( a.sensitive_aprocs_neg.size() == 2 );
-            // assert( a.sensitive_aprocs.size() == 2 );
+            // sc_assert( a.sensitive_aprocs_neg.size() == 2 );
+            // sc_assert( a.sensitive_aprocs.size() == 2 );
         }
         if (loops > 5) {
             /* By this time aproc1 should have died. */
-            // assert( a.sensitive_aprocs_neg.size() == 1 );
-            // assert( a.sensitive_aprocs.size() == 1 );
+            // sc_assert( a.sensitive_aprocs_neg.size() == 1 );
+            // sc_assert( a.sensitive_aprocs.size() == 1 );
         }
         loops++;
     }

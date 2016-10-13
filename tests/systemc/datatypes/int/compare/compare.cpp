@@ -46,32 +46,32 @@ int sc_main(int argc, char* argv[] )
   a = -5;
   b = -1;
   c = -1;
-  assert(a <= b);
-  assert(a <= c);
+  sc_assert(a <= b);
+  sc_assert(a <= c);
 
   a = -5;
   b = 0;
   c = 0;
-  assert(a <= b);
-  assert(a <= c);
+  sc_assert(a <= b);
+  sc_assert(a <= c);
 
   a = -5;
   b = 5;
   c = 5;
-  assert(a <= b);
-  assert(a <= c);
+  sc_assert(a <= b);
+  sc_assert(a <= c);
 
   a = 0;
   b = 5;
   c = 5;
-  assert(a <= b);
-  assert(a <= c);
+  sc_assert(a <= b);
+  sc_assert(a <= c);
 
   a = 5;
   b = 10;
   c = 10;
-  assert(a <= b);
-  assert(a <= c);
+  sc_assert(a <= b);
+  sc_assert(a <= c);
   
   return 0;
 }

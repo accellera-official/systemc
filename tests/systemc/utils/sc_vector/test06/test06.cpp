@@ -81,9 +81,7 @@ SC_MODULE( module )
   SC_CTOR(module)
     : sub_vec( "sub_modules" )
     , in_vec( "in_vec" )
-  {
-    init(4);
-  }
+  {}
 
   void init( unsigned n_sub )
   {
@@ -100,8 +98,7 @@ SC_MODULE( module )
 int sc_main(int, char* [])
 {
   module m("dut");
-
-  // m.sub_vec.init(3); // call from invalid context
+  m.init(4); // calls from external context
 
   PRINT_VECTOR( m.get_child_objects() );
 

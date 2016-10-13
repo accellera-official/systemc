@@ -200,7 +200,7 @@ public:
                   break;
                   
               default:
-                  assert(0); exit(1);
+                  sc_assert(0); exit(1);
               };
     
               logEndTransaction(trans);
@@ -214,7 +214,7 @@ public:
                                                  tmp))
                   {
                       // FIXME: No support for separate read/write ranges
-                      assert(tmp.is_read_write_allowed());
+                      sc_assert(tmp.is_read_write_allowed());
                       mDMIData = tmp;
                   }
               }
@@ -235,7 +235,7 @@ public:
           return tlm::TLM_ACCEPTED;
           
       case tlm::BEGIN_RESP:
-          assert(t == sc_core::SC_ZERO_TIME); // FIXME: can t != 0?
+          sc_assert(t == sc_core::SC_ZERO_TIME); // FIXME: can t != 0?
           mEndEvent.notify(t);
           // Not needed to update the phase if true is returned
           return tlm::TLM_COMPLETED;
@@ -244,7 +244,7 @@ public:
       case tlm::END_RESP: // fall-through
       default:
           // A target should never call nb_transport with these phases
-          assert(0); exit(1);
+          sc_assert(0); exit(1);
 //          return tlm::TLM_COMPLETED;  //unreachable code
       };
   }

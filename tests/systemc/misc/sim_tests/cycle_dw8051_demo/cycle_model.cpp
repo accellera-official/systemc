@@ -1259,7 +1259,7 @@ void cycle_model::exec_bus_cycle(bus_cycle_type op, int addr, int data, int* res
     }
   } while(mem_idle>0);
   
-  assert(cycles==(stretch_cycles+1));
+  sc_assert(cycles==(stretch_cycles+1));
   cycle_count += cycles;
   cycles2execute-=cycles;
   return;
@@ -1276,7 +1276,7 @@ void cycle_model::exec_bus_cycle(bus_cycle_type op, int addr, int data, int* res
 //------------------------------------------------------------------------
 int cycle_model::fetch_instr(int ad) {
 
-  assert((ad<MEM_SIZE)&&(ad>=0));
+  sc_assert((ad<MEM_SIZE)&&(ad>=0));
   
   int temp;
   exec_bus_cycle(OP_IDLE, 0,0, &temp);
@@ -1362,7 +1362,7 @@ int cycle_model::fetch_operand(operand* op) {
     break;
   }
   case o_reg: {
-    assert((op->val<8)&&(op->val>=0));
+    sc_assert((op->val<8)&&(op->val>=0));
 #ifdef DEBUG
     printf("read R%d=%d\n",op->val,R[op->val]); 
 #endif
@@ -1373,20 +1373,20 @@ int cycle_model::fetch_operand(operand* op) {
     // fetch address
     my_stack->address += 1;
     int temp = fetch_instr(my_stack->address);
-    assert((op->val<INT_SIZE)&&(op->val>=0));
+    sc_assert((op->val<INT_SIZE)&&(op->val>=0));
     return int_mem[temp];
     break;
   }
   case o_ind: {
-    assert((op->val==0)||(op->val==1));
-    assert((R[op->val]<INT_SIZE)&&(R[op->val]>=0));
+    sc_assert((op->val==0)||(op->val==1));
+    sc_assert((R[op->val]<INT_SIZE)&&(R[op->val]>=0));
     return int_mem[R[op->val]];
     break;
   }
   case o_ext: {
-    assert((op->val==1)||(op->val==0));
+    sc_assert((op->val==1)||(op->val==0));
     int addr = R[op->val];
-    assert((addr<MEM_SIZE)&&(addr>=0));
+    sc_assert((addr<MEM_SIZE)&&(addr>=0));
     
     int result = fetch_data(addr);
 
@@ -1407,7 +1407,7 @@ int cycle_model::fetch_operand(operand* op) {
     int temp = fetch_instr(my_stack->address);
 
     my_stack->address += 1;
-    assert(my_stack->address<=MEM_SIZE);
+    sc_assert(my_stack->address<=MEM_SIZE);
     temp = (temp<<8) +  fetch_instr(my_stack->address);
 
     return temp;
@@ -1462,7 +1462,7 @@ int cycle_model::write_back(operand* op, int v) {
     break;
   }
   case o_reg: {
-    assert((op->val<8)&&(op->val>=0));
+    sc_assert((op->val<8)&&(op->val>=0));
     R[op->val] = v;
 #ifdef DEBUG
     printf("write R%d <- %d\n",op->val,R[op->val]);
@@ -1474,22 +1474,22 @@ int cycle_model::write_back(operand* op, int v) {
     // write address
     my_stack->address += 1;
     int temp = fetch_instr(my_stack->address);
-    assert((temp<INT_SIZE)&&(temp>=0));
+    sc_assert((temp<INT_SIZE)&&(temp>=0));
     int_mem[temp] = v;
     return int_mem[temp];
     break;
   }
   case o_ind: {
-    assert((op->val==0)||(op->val==1));
-    assert((R[op->val]<INT_SIZE)&&(R[op->val]>=0));
+    sc_assert((op->val==0)||(op->val==1));
+    sc_assert((R[op->val]<INT_SIZE)&&(R[op->val]>=0));
     int_mem[R[op->val]] = v;
     return int_mem[R[op->val]];
     break;
   }
   case o_ext: {
-    assert((op->val==1)||(op->val==0));
+    sc_assert((op->val==1)||(op->val==0));
     int addr = R[op->val];
-    assert((addr<MEM_SIZE)&&(addr>=0));
+    sc_assert((addr<MEM_SIZE)&&(addr>=0));
     int data, result;
     data = v;
     result = write_data(addr,data);

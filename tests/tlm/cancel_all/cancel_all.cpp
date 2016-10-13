@@ -53,20 +53,20 @@ SC_MODULE(Test_peq_with_cb)
   {
     sc_time t = sc_time_stamp();
     sc_dt::uint64 adr = trans.get_address();
-    assert( section == 1 || section == 2 );
+    sc_assert( section == 1 || section == 2 );
     if (section == 1)
     {
       if (flag1) cout << "Called peq_cb with section = " << section << "\n";
       flag1 = false;
-      assert( t >= sc_time(0, SC_NS) && t <= sc_time(50, SC_NS) );
-      assert( adr >= 0 && adr < 50);
+      sc_assert( t >= sc_time(0, SC_NS) && t <= sc_time(50, SC_NS) );
+      sc_assert( adr >= 0 && adr < 50);
     }
     else if (section == 2)
     {
       if (flag2) cout << "Called peq_cb with section = " << section << "\n";
       flag2 = false;
-      assert( t >= sc_time(50, SC_NS) && t <= sc_time(100, SC_NS) );
-      assert( adr >= 100 && adr < 150);
+      sc_assert( t >= sc_time(50, SC_NS) && t <= sc_time(100, SC_NS) );
+      sc_assert( adr >= 100 && adr < 150);
     }
   }
 
@@ -128,20 +128,20 @@ SC_MODULE(Test_peq_with_get)
       {
         sc_time t = sc_time_stamp();
         sc_dt::uint64 adr = trans->get_address();
-        assert( section == 3 || section == 4 );
+        sc_assert( section == 3 || section == 4 );
         if (section == 3)
         {
           if (flag3) cout << "Called get_next_transaction with section = " << section << "\n";
           flag3 = false;
-          assert( t >= sc_time(1000, SC_NS) && t <= sc_time(1050, SC_NS) );
-          assert( adr >= 0 && adr < 50);
+          sc_assert( t >= sc_time(1000, SC_NS) && t <= sc_time(1050, SC_NS) );
+          sc_assert( adr >= 0 && adr < 50);
         }
         else if (section == 4)
         {
           if (flag4) cout << "Called get_next_transaction with section = " << section << "\n";
           flag4 = false;
-          assert( t >= sc_time(1050, SC_NS) && t <= sc_time(1100, SC_NS) );
-          assert( adr >= 100 && adr < 150);
+          sc_assert( t >= sc_time(1050, SC_NS) && t <= sc_time(1100, SC_NS) );
+          sc_assert( adr >= 100 && adr < 150);
         }
       }
     }

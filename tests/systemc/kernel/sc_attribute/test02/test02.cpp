@@ -19,7 +19,7 @@
 
 /*****************************************************************************
 
-  test02.cpp -- 
+  test02.cpp --
 
   Original Author: Ucar Aziz, Synopsys, Inc., 2002-02-15
                    Martin Janssen, Synopsys, Inc., 2002-02-15
@@ -36,7 +36,7 @@
 
  *****************************************************************************/
 
-// test of sc_attribute 
+// test of sc_attribute
 
 #include "systemc.h"
 
@@ -51,9 +51,9 @@ sc_main( int, char*[] )
   sc_attribute<int> a3( "a3", 24 );
   sc_attribute<std::string> a4( "a4", "casio" );
   sc_attribute<int> a5("a5");
-  
-  cout <<a2.name() << endl;
-  cout <<a2.value <<endl;
+
+  cout << a2.name() << endl;
+  cout << a2.value << endl;
 
   clk.add_attribute( a2 );
 
@@ -66,47 +66,49 @@ sc_main( int, char*[] )
 
    cout << endl;
    cout << "added attributes to the attribute collection class" << endl;
-  
-   if(att_cltn.push_back(&a1) == true)
+
+   if(att_cltn.push_back(&a1) == true) {
      cout << a1.name() << "   ";
-     cout << a1.value <<endl;
+     cout << a1.value << endl;
+   }
 
-   if(att_cltn.push_back(&a3) == true)
+   if(att_cltn.push_back(&a3) == true) {
      cout << a3.name() << "   ";
-     cout << a3.value <<endl;
+     cout << a3.value << endl;
+   }
 
-   if(att_cltn.push_back(&a4) == true)
+   if(att_cltn.push_back(&a4) == true) {
      cout << a4.name() << "   ";
-     cout << a4.value <<endl<<endl; 
-    
-   cout<<"size of the class\n";
-   cout<< att_cltn.size()<<endl<<endl;
+     cout << a4.value << endl << endl;
+   }
 
+   cout << "size of the class\n";
+   cout << att_cltn.size()<< endl<< endl;
 
-   cout <<"looking whether the name is in collection class\n";        
+   cout << "looking whether the name is in collection class\n";
    sc_attr_base *pr = att_cltn.operator []("a3");
    if(pr != 0)
-     cout << pr->name() <<" exists" << endl;
+     cout << pr->name() << " exists" << endl;
    else
      cout << "a3 does not exist\n";
 
    sc_attr_base *pm = att_cltn.operator []("a5");
    if(pm != 0)
-     cout << pm->name() <<" exists" << endl;
+     cout << pm->name() << " exists" << endl;
    else
-     cout << "a5 does not exist\n"<<endl;
-   
-   cout<<"removing names \n";
+     cout << "a5 does not exist\n" << endl;
+
+   cout << "removing names \n";
    sc_attr_base *pk = att_cltn.remove("a1");
    if(pk != 0)
-     cout<<"a1 is removed \n";
+     cout << "a1 is removed \n";
    else
-     cout<<"a1 does not exist\n";
+     cout << "a1 does not exist\n";
    sc_attr_base *pn = att_cltn.remove("a5");
    if(pn != 0)
-     cout<<"a5 is removed \n";
+     cout << "a5 is removed \n";
    else
-     cout<<"a5 does not exist\n";
+     cout << "a5 does not exist\n";
 
   return 0;
 }

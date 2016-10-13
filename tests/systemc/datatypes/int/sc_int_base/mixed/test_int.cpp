@@ -47,7 +47,7 @@ int sc_main( int ac, char *av[] )
 
   x = 8;
   a = 8;
-  assert( x == a);
+  sc_assert( x == a);
   
   cout << "x + a = " << x + a << endl;
   cout << "++a = " << ++a << endl;

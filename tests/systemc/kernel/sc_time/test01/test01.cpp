@@ -48,27 +48,27 @@ test_print()
     cout << t1 << endl;
 
     uint64 v = 1230;
-    sc_time t2( v, false );
+    sc_time t2 = sc_time::from_value( v );
     cout << t2 << endl;
 
     v *= 10000;
-    sc_time t3( v, false );
+    sc_time t3 = sc_time::from_value( v );
     cout << t3 << endl;
 
     v *= 100;
-    sc_time t4( v, false );
+    sc_time t4 = sc_time::from_value( v );
     cout << t4 << endl;
 
     v *= 10000;
-    sc_time t5( v, false );
+    sc_time t5 = sc_time::from_value( v );
     cout << t5 << endl;
 
     v *= 100;
-    sc_time t6( v, false );
+    sc_time t6 = sc_time::from_value( v );
     cout << t6 << endl;
 
     v *= 10000;
-    sc_time t7( v, false );
+    sc_time t7 = sc_time::from_value( v );
     cout << t7 << endl;
 }
 

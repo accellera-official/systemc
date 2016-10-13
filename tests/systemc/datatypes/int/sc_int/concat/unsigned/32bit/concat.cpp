@@ -48,7 +48,7 @@ int sc_main(int ac, char* av[] )
       cout << "i = " << i << endl;
       a_su32 = i;
       b_su32 = (a_su32.range(WIDTH-1,i+1), a_su32.range(i,0));
-      assert( a_su32 == b_su32 );
+      sc_assert( a_su32 == b_su32 );
   }
 
   return 0;

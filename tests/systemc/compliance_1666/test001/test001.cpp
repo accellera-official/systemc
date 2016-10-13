@@ -9,7 +9,7 @@ SC_MODULE(Mod)
 {
   SC_CTOR(Mod)
   {
-    assert(std::string(this->kind()) == "sc_module");
+    sc_assert(std::string(this->kind()) == "sc_module");
   }
 };
 
@@ -19,7 +19,7 @@ SC_MODULE(Mod0)
 {
   SC_CTOR(Mod0)
   {
-    assert(std::string(basename()) == "mod0");
+    sc_assert(std::string(basename()) == "mod0");
     SC_METHOD(method);
     dont_initialize();
     method();             //// Calling an SC_METHOD member function directly DOULOS009
@@ -35,18 +35,18 @@ SC_MODULE(Mod0)
     f();
   }
   void method(void) {
-    assert(sc_get_current_process_handle().proc_kind() == SC_METHOD_PROC_);
+    sc_assert(sc_get_current_process_handle().proc_kind() == SC_METHOD_PROC_);
   ++ global_count;
   }
   void thread(void) {
-  assert(sc_get_current_process_handle().proc_kind() == SC_THREAD_PROC_);
+  sc_assert(sc_get_current_process_handle().proc_kind() == SC_THREAD_PROC_);
   ++ global_count;
   }
 
   void f() { SC_THREAD(g); } //// Process registered in member function called from constructor DOULOS007
   void g()
   {
-    assert(std::string(sc_get_current_process_handle().name()) == "top.mod0.g");
+    sc_assert(std::string(sc_get_current_process_handle().name()) == "top.mod0.g");
   ++ global_count;
   }
 };
@@ -75,7 +75,7 @@ struct MyMod: Mod         //// Class derived from an SC_MODULE DOULOS050
 
   Chan ch;                //// Instance of pseudo-channel DOULOS048
   void p1() { ch.write(333); }
-  void p2() { int i; ch.read(i); assert(i == 333); }
+  void p2() { int i; ch.read(i); sc_assert(i == 333); }
 
   SC_HAS_PROCESS(MyMod);
 };
@@ -93,7 +93,7 @@ struct C0: sc_module, virtual sc_interface //// Combining channel and interface 
     SC_THREAD(action);
   }
   void action() {
-  assert(std::string(sc_get_current_process_handle().get_process_object()->basename()) == "action");
+  sc_assert(std::string(sc_get_current_process_handle().get_process_object()->basename()) == "action");
   }
 };
 
@@ -128,12 +128,12 @@ void check_form_of_suffix(std::string s)
   std::string charset = "0123456789";
   while (!s.empty())
   {
-    assert(s[0] == '_');
+    sc_assert(s[0] == '_');
     s = s.substr(1);
-    assert(!s.empty());
+    sc_assert(!s.empty());
     do
     {
-      assert(charset.find(s[0]) < charset.size());
+      sc_assert(charset.find(s[0]) < charset.size());
       s = s.substr(1);
     } while (!s.empty() && (s[0] != '_'));
   }
@@ -144,18 +144,18 @@ struct Modtype: sc_module
   Modtype(sc_module_name n = sc_gen_unique_name("Modtype"))
   {
     if (global_count == 0)
-      assert(std::string(basename()) == "mt");
+      sc_assert(std::string(basename()) == "mt");
     else
     {
       std::string s = std::string(basename());
-      assert(s.substr(0,7) == "Modtype");
-      assert(s.size() > 7);
+      sc_assert(s.substr(0,7) == "Modtype");
+      sc_assert(s.size() > 7);
       check_form_of_suffix(s.substr(7));
     }
     ++ global_count;
   }
   void dump() {
-    assert(std::string(sc_get_current_process_handle().get_process_object()->basename()) == "thread");
+    sc_assert(std::string(sc_get_current_process_handle().get_process_object()->basename()) == "thread");
     ++ global_count;
   }
 };
@@ -184,7 +184,7 @@ SC_MODULE(Moda)
 
   SC_CTOR(Moda): mt("mt")
   {
-  assert(std::string(name()) == "top.moda");
+  sc_assert(std::string(name()) == "top.moda");
     SC_THREAD(thread);
   }
   void thread();
@@ -200,7 +200,7 @@ SC_MODULE(Modb)
 
   SC_CTOR(Modb)
   {
-  assert(std::string(name()) == "top.modb");
+  sc_assert(std::string(name()) == "top.modb");
     SC_THREAD(thread);
     SC_THREAD(funny);
   }
@@ -219,7 +219,7 @@ void Modb::thread()
 {
   wait(SC_ZERO_TIME);
   int i; p1->read(i);
-  assert(i == 999);
+  sc_assert(i == 999);
   p2->method();
   p3->method();
   wait(SC_ZERO_TIME);
@@ -322,8 +322,8 @@ int sc_main(int argc, char* argv[])
   top.link->link->p->bind(s);         //// Binding dynamically allocated port DOULOS008
 
   sc_start();
-  assert(global_count == 10);
-  assert(top.sig->read() == 3);
+  sc_assert(global_count == 10);
+  sc_assert(top.sig->read() == 3);
 
   cout << endl << "Success" << endl;
   return 0;

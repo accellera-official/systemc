@@ -46,9 +46,9 @@ check_string( const sc_signed& z, int v )
 {
     std::string buf( z.to_string( SC_BIN ) );
     if (z < 0) {
-        assert(buf[2] == '1');
+        sc_assert(buf[2] == '1');
     } else {
-        assert(buf[2] == '0');
+        sc_assert(buf[2] == '0');
     }
 }
 
@@ -87,40 +87,40 @@ sc_main( int argc, char* argv[] )
 
                     x = qi;
                     tqi = qi;
-                    assert( x == qi );
+                    sc_assert( x == qi );
                     y = qj;
-                    assert( y == qj );
-                    assert((x == qj) == (qi == qj));
-                    assert((x == qj) == (qj == x));
-                    assert((x != qj) == (qi != qj));
-                    assert((x != qj) == (qj != x));
-                    assert((x < qj) == (qi < qj));
-                    assert((x < qj) == (qj > x));
-                    assert((x <= qj) == (qi <= qj));
-                    assert((x <= qj) == (qj >= x));
-                    assert((x > qj) == (qi > qj));
-                    assert((x > qj) == (qj < x));
-                    assert((x >= qj) == (qi >= qj));
-                    assert((x >= qj) == (qj <= x));
+                    sc_assert( y == qj );
+                    sc_assert((x == qj) == (qi == qj));
+                    sc_assert((x == qj) == (qj == x));
+                    sc_assert((x != qj) == (qi != qj));
+                    sc_assert((x != qj) == (qj != x));
+                    sc_assert((x < qj) == (qi < qj));
+                    sc_assert((x < qj) == (qj > x));
+                    sc_assert((x <= qj) == (qi <= qj));
+                    sc_assert((x <= qj) == (qj >= x));
+                    sc_assert((x > qj) == (qi > qj));
+                    sc_assert((x > qj) == (qj < x));
+                    sc_assert((x >= qj) == (qi >= qj));
+                    sc_assert((x >= qj) == (qj <= x));
 
                     x += y;
                     tqi += qj;
                     tqi = (tqi << (32 - i)) >> (32 - i);
-                    assert( x == tqi );
+                    sc_assert( x == tqi );
 
                     x = qi;
                     tqi = qi;
                     x -= y;
                     tqi -= qj;
                     tqi = (tqi << (32 - i)) >> (32 - i);
-                    assert( x == tqi );
+                    sc_assert( x == tqi );
 
                     x = qi;
                     tqi = qi;
                     x *= y;
                     tqi *= qj;
                     tqi = (tqi << (32 - i)) >> (32 - i);
-                    assert( x == tqi );
+                    sc_assert( x == tqi );
 
                     if (y != 0) {
                         x = qi;
@@ -128,14 +128,14 @@ sc_main( int argc, char* argv[] )
                         x /= y;
                         tqi /= qj;
                         tqi = (tqi << (32 - i)) >> (32 - i);
-                        assert( x == tqi );
+                        sc_assert( x == tqi );
 
                         x = qi;
                         tqi = qi;
                         x %= y;
                         tqi %= qj;
                         tqi = (tqi << (32 - i)) >> (32 - i);
-                        assert( x == tqi );
+                        sc_assert( x == tqi );
                     }
 
                     x = qi;
@@ -143,21 +143,21 @@ sc_main( int argc, char* argv[] )
                     x &= y;
                     tqi &= qj;
                     tqi = (tqi << (32 - i)) >> (32 - i);
-                    assert( x == tqi );
+                    sc_assert( x == tqi );
 
                     x = qi;
                     tqi = qi;
                     x |= y;
                     tqi |= qj;
                     tqi = (tqi << (32 - i)) >> (32 - i);
-                    assert( x == tqi );
+                    sc_assert( x == tqi );
 
                     x = qi;
                     tqi = qi;
                     x ^= y;
                     tqi ^= qj;
                     tqi = (tqi << (32 - i)) >> (32 - i);
-                    assert( x == tqi );
+                    sc_assert( x == tqi );
 
                     if (jj < i - 1) {
                         x = qi;
@@ -165,14 +165,14 @@ sc_main( int argc, char* argv[] )
                         x <<= jj;
                         tqi <<= jj;
                         tqi = (tqi << (32 - i)) >> (32 - i);
-                        assert( x == tqi );
+                        sc_assert( x == tqi );
 
                         x = qi;
                         tqi = qi;
                         x >>= jj;
                         tqi >>= jj;
                         tqi = (tqi << (32 - i)) >> (32 - i);
-                        assert( x == tqi );
+                        sc_assert( x == tqi );
                     }
                 }
             }

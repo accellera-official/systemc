@@ -50,7 +50,7 @@ int sc_main(int ac, char* av[] )
       b_su32 = (a_su32.range(WIDTH-1,i+1), a_su32.range(i,0));
       // Output variables to avoid erroneous optimization observed on RHEL6 with g++-4.4.6.
       cout << a_su32 << (a_su32 == b_su32 ? " == " : " != ") << b_su32 << endl;
-      assert( a_su32 == b_su32 );
+      sc_assert( a_su32 == b_su32 );
   }
 
   return 0;

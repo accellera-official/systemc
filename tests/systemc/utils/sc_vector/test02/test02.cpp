@@ -71,7 +71,7 @@ struct derived_1 : public base
 };
 
 // plain function pointer
-sc_object* fill_array( const char* n, size_t i )
+base* fill_array( const char* n, size_t i )
 {
   if( i%2 ) return new derived_1( n );
   return new derived_0( n );

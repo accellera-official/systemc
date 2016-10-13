@@ -44,8 +44,8 @@ QTIsaac<8> rng;		// Platform independent random number generator.
 int
 sc_main( int argc, char* argv[] )
 {
-    signed int vali[5] = { 0, 1, (unsigned)-1, 7, (unsigned)-8 };
-    signed int valj[5] = { 0, 1, (unsigned)-1, 7, (unsigned)-8 };
+    unsigned int vali[5] = { 0, 1, (unsigned)-1, 7, (unsigned)-8 };
+    unsigned int valj[5] = { 0, 1, (unsigned)-1, 7, (unsigned)-8 };
 
     for (int i = 3; i < 32; ++i) {
         for (int j = 3; j < 32; ++j) {
@@ -78,7 +78,7 @@ sc_main( int argc, char* argv[] )
                     x = qi;
                     y = qj;
                     z = x * y;
-                    assert( (sc_unsigned)( z.range(31,0) ) ==
+                    sc_assert( (sc_unsigned)( z.range(31,0) ) ==
 			    (qi * qj) );
                     if ( i < 17 )
                     {
@@ -108,11 +108,11 @@ sc_main( int argc, char* argv[] )
                                 * 65536);
                         }
                     }
-                    assert(z == q);
+                    sc_assert(z == q);
 
                     if (y != 0) {
                         z /= y;
-                        assert(z == x);
+                        sc_assert(z == x);
                     }
                 }
             }

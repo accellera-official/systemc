@@ -74,70 +74,70 @@ sc_main( int argc, char* argv[] )
                     }
 
                     x = qi;
-                    assert( x == qi );
+                    sc_assert( x == qi );
                     y = qj;
-                    assert( y == qj );
-                    assert((x == qj) == (qi == qj));
-                    assert((x == qj) == (qj == x));
-                    assert((x != qj) == (qi != qj));
-                    assert((x != qj) == (qj != x));
-                    assert((x < qj) == (qi < qj));
-                    assert((x < qj) == (qj > x));
-                    assert((x <= qj) == (qi <= qj));
-                    assert((x <= qj) == (qj >= x));
-                    assert((x > qj) == (qi > qj));
-                    assert((x > qj) == (qj < x));
-                    assert((x >= qj) == (qi >= qj));
-                    assert((x >= qj) == (qj <= x));
+                    sc_assert( y == qj );
+                    sc_assert((x == qj) == (qi == qj));
+                    sc_assert((x == qj) == (qj == x));
+                    sc_assert((x != qj) == (qi != qj));
+                    sc_assert((x != qj) == (qj != x));
+                    sc_assert((x < qj) == (qi < qj));
+                    sc_assert((x < qj) == (qj > x));
+                    sc_assert((x <= qj) == (qi <= qj));
+                    sc_assert((x <= qj) == (qj >= x));
+                    sc_assert((x > qj) == (qi > qj));
+                    sc_assert((x > qj) == (qj < x));
+                    sc_assert((x >= qj) == (qi >= qj));
+                    sc_assert((x >= qj) == (qj <= x));
                     z = x + qj;
-                    assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
+                    sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
 			    (qi + qj) );
                     z = qi + y;
-                    assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
+                    sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
 			    (qi + qj) );
                     z = x - qj;
-                    assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
+                    sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
 			    (qi - qj) );
                     z = qi - y;
-                    assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
+                    sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
 			    (qi - qj) );
                     z = x * qj;
-                    assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
+                    sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
 			    (qi * qj) );
                     z = qi * y;
-                    assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
+                    sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
 			    (qi * qj) );
                     if (qj != 0) {
                         z = x / qj;
-                        assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
+                        sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
 				(qi / qj) );
                         z = qi / y;
-                        assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
+                        sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
 				(qi / qj) );
                         z = x % qj;
-                        assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
+                        sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
 				(qi % qj) );
                         z = qi % y;
-                        assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
+                        sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
 				(qi % qj) );
                     }
                     z = x & qj;
-                    assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
+                    sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
 			    (qi & qj) );
                     z = qi & y;
-                    assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
+                    sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
 			    (qi & qj) );
                     z = x | qj;
-                    assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
+                    sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
 			    (qi | qj) );
                     z = qi | y;
-                    assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
+                    sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
 			    (qi | qj) );
                     z = x ^ qj;
-                    assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
+                    sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
 			    (qi ^ qj) );
                     z = qi ^ y;
-                    assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
+                    sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
 			    (qi ^ qj) );
                 }
             }

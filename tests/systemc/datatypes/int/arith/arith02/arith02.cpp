@@ -46,9 +46,9 @@ check_string( const sc_signed& z, int v )
 {
     std::string buf(z.to_string( SC_BIN ) );
     if (z < 0) {
-        assert(buf[2] == '1');
+        sc_assert(buf[2] == '1');
     } else {
-        assert(buf[2] == '0');
+        sc_assert(buf[2] == '0');
     }
 }
 
@@ -90,63 +90,63 @@ sc_main( int argc, char* argv[] )
                     }
 
                     x = qi;
-                    assert( x == qi );
+                    sc_assert( x == qi );
                     y = qj;
-                    assert( y == qj );
-                    assert((x == qj) == (qi == qj));
-                    assert((x == qj) == (qj == x));
-                    assert((x != qj) == (qi != qj));
-                    assert((x != qj) == (qj != x));
-                    assert((x < qj) == (qi < qj));
-                    assert((x < qj) == (qj > x));
-                    assert((x <= qj) == (qi <= qj));
-                    assert((x <= qj) == (qj >= x));
-                    assert((x > qj) == (qi > qj));
-                    assert((x > qj) == (qj < x));
-                    assert((x >= qj) == (qi >= qj));
-                    assert((x >= qj) == (qj <= x));
+                    sc_assert( y == qj );
+                    sc_assert((x == qj) == (qi == qj));
+                    sc_assert((x == qj) == (qj == x));
+                    sc_assert((x != qj) == (qi != qj));
+                    sc_assert((x != qj) == (qj != x));
+                    sc_assert((x < qj) == (qi < qj));
+                    sc_assert((x < qj) == (qj > x));
+                    sc_assert((x <= qj) == (qi <= qj));
+                    sc_assert((x <= qj) == (qj >= x));
+                    sc_assert((x > qj) == (qi > qj));
+                    sc_assert((x > qj) == (qj < x));
+                    sc_assert((x >= qj) == (qi >= qj));
+                    sc_assert((x >= qj) == (qj <= x));
                     z = x + y;
-                    assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
+                    sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
                             (qi + qj) );
                     check_string( z, qi + qj );
                     z = x - y;
-                    assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
+                    sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
 			    (qi - qj) );
                     check_string( z, qi - qj );
                     z = x * y;
-                    assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
+                    sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
 			    (qi * qj) );
                     check_string( z, qi * qj );
                     if (y != 0) {
                         z = x / y;
-                        assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
+                        sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
 				(qi / qj) );
                         check_string( z, qi / qj );
                         z = x % y;
-                        assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
+                        sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
 				(qi % qj) );
                         check_string( z, qi % qj );
                     }
                     z = x & y;
-                    assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
+                    sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
 			    (qi & qj) );
                     check_string( z, qi & qj );
                     z = x | y;
-                    assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
+                    sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
 			    (qi | qj) );
                     check_string( z, qi | qj );
                     z = x ^ y;
-                    assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
+                    sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
 			    (qi ^ qj) );
                     check_string( z, qi ^ qj );
                     if (jj < i - 1) {
                         z = x << jj;
                         for (int r = 0; r < i; ++r) {
-                            assert( (bool) z[r] == !!((qi << jj) & (1 << r)) );
+                            sc_assert( (bool) z[r] == !!((qi << jj) & (1 << r)) );
                         }
                         z = x >> jj;
                         for (int r = 0; r < i; ++r) {
-                            assert( (bool) z[r] == !!((qi >> jj) & (1 << r)) );
+                            sc_assert( (bool) z[r] == !!((qi >> jj) & (1 << r)) );
                         }
                     }
                 }

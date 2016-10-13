@@ -48,7 +48,7 @@ int sc_main(int ac, char* av[] )
       cout << "i = " << i << endl;
       a_si32 = i;
       b_si32 = (a_si32.range(WIDTH-1,i+1), a_si32.range(i,0));
-      assert( a_si32 == b_si32 );
+      sc_assert( a_si32 == b_si32 );
   }
 
   return 0;

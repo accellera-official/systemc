@@ -121,17 +121,17 @@ aproc2::entry()
         }
         wait();
         if (loops < 1) {
-            // assert( a.sensitive_aprocs_neg.size() == 1 );
-            // assert( a.sensitive_aprocs.size() == 1 );
-            // assert( b.sensitive_aprocs_neg.size() == 1 );
-            // assert( b.sensitive_aprocs.size() == 1 );
+            // sc_assert( a.sensitive_aprocs_neg.size() == 1 );
+            // sc_assert( a.sensitive_aprocs.size() == 1 );
+            // sc_assert( b.sensitive_aprocs_neg.size() == 1 );
+            // sc_assert( b.sensitive_aprocs.size() == 1 );
         }
         if (loops > 5) {
             // /* By this time aproc1 should have died. */
-            // assert( a.sensitive_aprocs_neg.size() == 1 );
-            // assert( a.sensitive_aprocs.size() == 0 );
-            // assert( b.sensitive_aprocs_neg.size() == 0 );
-            // assert( b.sensitive_aprocs.size() == 1 );
+            // sc_assert( a.sensitive_aprocs_neg.size() == 1 );
+            // sc_assert( a.sensitive_aprocs.size() == 0 );
+            // sc_assert( b.sensitive_aprocs_neg.size() == 0 );
+            // sc_assert( b.sensitive_aprocs.size() == 1 );
         }
         loops++;
     }
@@ -201,10 +201,10 @@ sc_main(int argc, char** argv)
     aproc2 p2("p2", a, b, d);
     sync1  s1("s1", clk, a, b, c, d);
 
-    // assert( p1.aproc_handle->trigger_signals[0] == &a );
-    // assert( p1.aproc_handle->trigger_signals_edgy_neg[0] == &b );
-    // assert( p2.aproc_handle->trigger_signals[0] == &b );
-    // assert( p2.aproc_handle->trigger_signals_edgy_neg[0] == &a );
+    // sc_assert( p1.aproc_handle->trigger_signals[0] == &a );
+    // sc_assert( p1.aproc_handle->trigger_signals_edgy_neg[0] == &b );
+    // sc_assert( p2.aproc_handle->trigger_signals[0] == &b );
+    // sc_assert( p2.aproc_handle->trigger_signals_edgy_neg[0] == &a );
 
     sc_start(2000, SC_NS);
     return 0;

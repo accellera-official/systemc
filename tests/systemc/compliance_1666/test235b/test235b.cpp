@@ -27,13 +27,13 @@ SC_MODULE(M)
   {}
   void end_of_elaboration()
   {
-    assert(p1.size() == 0);
-    assert(p2.size() == 1);
-    assert(p3.size() == 3);
-    assert(p4.size() == 2);
-    assert(p5.size() == 6);
-    assert(p6.size() == 0);
-    assert(p7.size() == 2);
+    sc_assert(p1.size() == 0);
+    sc_assert(p2.size() == 1);
+    sc_assert(p3.size() == 3);
+    sc_assert(p4.size() == 2);
+    sc_assert(p5.size() == 6);
+    sc_assert(p6.size() == 0);
+    sc_assert(p7.size() == 2);
   }
 };
 
@@ -85,7 +85,7 @@ int sc_main(int argc, char* argv[])
 
   sc_start(1, SC_NS);
 
-  assert(sc_report_handler::get_count(SC_ERROR) == 7);
+  sc_assert(sc_report_handler::get_count(SC_ERROR) == 7);
 
   cout << endl << "Success" << endl;
   return 0;

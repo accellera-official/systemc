@@ -49,14 +49,14 @@ int sc_main( int ac, char* av[] )
     for(unsigned int j=0; j < COUNT; j++ ){
       
       /*    ( By.range(WIDTH-1, i+1), By.range(i,0) ) = Bx;
-	    assert( By == Bx );
+	    sc_assert( By == Bx );
 	    */
       
       Bx = j;
       By.range(WIDTH-1,i) = Bx.range(WIDTH-1,i);
       if(i >= 1)
 	By.range(i-1,0) = Bx.range(i-1,0);
-      assert( Bx == By );
+      sc_assert( Bx == By );
     }
   }
 

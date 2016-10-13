@@ -86,7 +86,7 @@ int sc_main(int,char**)
 
     // open log file
     sc_report_handler::set_log_file_name( fname );
-    assert( strcmp(fname,sc_report_handler::get_log_file_name()) == 0 );
+    sc_assert( strcmp(fname,sc_report_handler::get_log_file_name()) == 0 );
 
     // emit report from global context at t=0
     sc_report_handler::report( SC_INFO,    "ID1", "after log is opened", "file1", 1);

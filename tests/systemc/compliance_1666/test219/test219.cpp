@@ -44,12 +44,12 @@ SC_MODULE(M)
   {
     wait(10, SC_NS);
     prim.write();
-    assert(sc_time_stamp() == sc_time(10, SC_NS));
+    sc_assert(sc_time_stamp() == sc_time(10, SC_NS));
   }
   void ME()
   {
     ++ ME_count;
-    assert(sc_time_stamp() == sc_time(15, SC_NS));
+    sc_assert(sc_time_stamp() == sc_time(15, SC_NS));
   }
   int ME_count;
 };
@@ -70,8 +70,8 @@ int sc_main(int argc, char* argv[])
   Top top("top");
   sc_start();
 
-  assert(top.m->prim.count == 1);
-  assert(top.m->ME_count == 1);
+  sc_assert(top.m->prim.count == 1);
+  sc_assert(top.m->ME_count == 1);
 
 
   cout << endl << "Success" << endl;

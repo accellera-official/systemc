@@ -1,8 +1,6 @@
 SystemC Simulation
 test_print
 0 s
-
-Info: (I804) /IEEE_Std_1666/deprecated: deprecated constructor: sc_time(uint64,bool)
 1230 ps
 12300 ns
 1230 us
@@ -39,6 +37,8 @@ Info: (I804) /IEEE_Std_1666/deprecated: deprecated constructor: sc_time(double,b
 2 ps
 0 s
 18446744073709551615 ps
+
+Info: (I804) /IEEE_Std_1666/deprecated: deprecated constructor: sc_time(uint64,bool)
 0 s
 25 ns
 25 ps

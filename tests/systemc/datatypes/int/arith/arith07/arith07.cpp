@@ -50,8 +50,8 @@ QTIsaac<8> rng;		// Platform independent random number generator.
 int
 sc_main( int argc, char* argv[] )
 {
-    signed int vali[5] = { 0, 1, (unsigned)-1, 7, (unsigned)-8 };
-    signed int valj[5] = { 0, 1, (unsigned)-1, 7, (unsigned)-8 };
+    unsigned int vali[5] = { 0, 1, (unsigned)-1, 7, (unsigned)-8 };
+    unsigned int valj[5] = { 0, 1, (unsigned)-1, 7, (unsigned)-8 };
 
     for (int i = 3; i < 32; ++i) {
         for (int j = 3; j < 32; ++j) {

@@ -49,13 +49,13 @@ int sc_main( int ac, char* av[] )
     for(unsigned int j=0; j < COUNT; j++ ){
       
       /*    ( By.range(WIDTH-1, i+1), By.range(i,0) ) = Bx;
-	    assert( By == Bx );
+	    sc_assert( By == Bx );
 	    */
       
       Bx = j;
-      assert( (bool) Bx[i] == (j & (1<<i)? 1 : 0) );
+      sc_assert( (bool) Bx[i] == (j & (1<<i)? 1 : 0) );
       By[i] = Bx[i];
-      assert( (bool) By[i] == (j & (1<<i)? 1 : 0) );
+      sc_assert( (bool) By[i] == (j & (1<<i)? 1 : 0) );
     }
   }
   

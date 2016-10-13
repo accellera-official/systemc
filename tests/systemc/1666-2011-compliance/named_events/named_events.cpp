@@ -126,8 +126,8 @@ struct Top: sc_module
     sc_assert( vec[0] == &ev1 );
     sc_assert( vec[1] == &ev2 );
     
-    assert( sc_find_event(ev1.name()) == &ev1 );
-    assert( sc_find_event(ev2.name()) == &ev2 );
+    sc_assert( sc_find_event(ev1.name()) == &ev1 );
+    sc_assert( sc_find_event(ev2.name()) == &ev2 );
     
     T_done = true;
   }
@@ -188,7 +188,7 @@ int sc_main(int argc, char* argv[])
   vec_o = sc_get_top_level_objects();
   sc_assert( vec_o.size() == 1 ); 
   
-  assert( sc_find_event(ev3.name()) == &ev3 );
+  sc_assert( sc_find_event(ev3.name()) == &ev3 );
   
   sc_signal<bool> sig; // Kernel events should not be hierarchically named
   vec_e = sc_get_top_level_events();
