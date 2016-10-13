@@ -41,7 +41,7 @@ SUBDIRS = \
 
 INST_FILES = \
 	AUTHORS \
-	COPYING \
+	NOTICE \
 	ChangeLog \
 	INSTALL \
 	LICENSE \
