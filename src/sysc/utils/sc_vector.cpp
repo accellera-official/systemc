@@ -28,12 +28,10 @@
 
 
 #include "sc_vector.h"
-
-#include "sysc/utils/sc_hash.h"
-#include "sysc/utils/sc_list.h"
 #include "sysc/utils/sc_utils_ids.h"
 
 #include "sysc/kernel/sc_simcontext.h"
+#include "sysc/kernel/sc_simcontext_int.h"
 #include "sysc/kernel/sc_object_manager.h"
 
 #include <sstream>
@@ -98,25 +96,6 @@ sc_vector_base::check_init( size_type n ) const
                    , str.str().c_str() );
     return false;
   }
-
-  sc_simcontext* simc = simcontext();
-  sc_assert( simc == sc_get_curr_simcontext() );
-
-  sc_object* parent_p = simc->active_object();
-  if( parent_p != get_parent_object() )
-  {
-    std::stringstream str;
-    str << name() << ": expected "
-        << ( get_parent_object()
-              ? get_parent_object()->name() : "<top-level>" )
-        << ", got "
-        << ( parent_p ? parent_p->name() : "<top-level>" );
-
-    SC_REPORT_ERROR( SC_ID_VECTOR_INIT_INVALID_CONTEXT_
-                   , str.str().c_str() );
-    return false;
-  }
-
   return true;
 }
 
@@ -148,6 +127,32 @@ sc_vector_base::make_name( const char* prefix, size_type /* idx */ )
   //       v1.name() == "vector", v2.name() == "vector_0"
   //       v1.init( 1 ); -> v1[0].name() == "vector_0" -> clash
   return sc_gen_unique_name( prefix );
+}
+
+sc_vector_base::context_scope::context_scope( sc_vector_base* owner )
+  : owner_(NULL)
+{
+  sc_simcontext* simc = owner->simcontext();
+  sc_assert( simc == sc_get_curr_simcontext() );
+
+  sc_object* parent = owner->get_parent_object();
+  sc_object* active = simc->active_object();
+
+  if (parent != active) // override object creation context
+  {
+    owner_ = owner;
+    owner->simcontext()->get_object_manager()
+      ->hierarchy_push( owner_->get_parent_object() );
+  }
+}
+
+sc_vector_base::context_scope::~context_scope()
+{
+  if (owner_) // restore current object context
+  {
+    sc_object* obj = owner_->simcontext()->get_object_manager()->hierarchy_pop();
+    sc_assert( obj == owner_->get_parent_object() );
+  }
 }
 
 } // namespace sc_core

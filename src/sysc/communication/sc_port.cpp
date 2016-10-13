@@ -377,7 +377,7 @@ void
 sc_port_base::make_sensitive( sc_thread_handle handle_,
 			      sc_event_finder* event_finder_ ) const
 {
-    assert( m_bind_info != 0 );
+    sc_assert( m_bind_info != 0 );
     m_bind_info->thread_vec.push_back( 
 	new sc_bind_ef( (sc_process_b*)handle_, event_finder_ ) );
 }
@@ -386,7 +386,7 @@ void
 sc_port_base::make_sensitive( sc_method_handle handle_,
 			      sc_event_finder* event_finder_ ) const
 {
-    assert( m_bind_info != 0 );
+    sc_assert( m_bind_info != 0 );
     m_bind_info->method_vec.push_back( 
 	new sc_bind_ef( (sc_process_b*)handle_, event_finder_ ) );
 }
@@ -451,7 +451,7 @@ sc_port_base::complete_binding()
 
     // IF BINDING HAS ALREADY BEEN COMPLETED IGNORE THIS CALL:
 
-    assert( m_bind_info != 0 );
+    sc_assert( m_bind_info != 0 );
     if( m_bind_info->complete ) {
         return;
     }
@@ -565,7 +565,7 @@ sc_port_base::construction_done()
 void
 sc_port_base::elaboration_done()
 {
-    assert( m_bind_info != 0 && m_bind_info->complete );
+    sc_assert( m_bind_info != 0 && m_bind_info->complete );
     delete m_bind_info;
     m_bind_info = 0;
 

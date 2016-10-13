@@ -57,20 +57,16 @@ public:
     // constructors
 
     explicit sc_fifo( int size_ = 16 )
-	: sc_prim_channel( sc_gen_unique_name( "fifo" ) ),
-	  m_data_read_event(
-	      (std::string(SC_KERNEL_EVENT_PREFIX)+"_read_event").c_str()),
-	  m_data_written_event(
-	      (std::string(SC_KERNEL_EVENT_PREFIX)+"_write_event").c_str())
-	{ init( size_ ); }
+      : sc_prim_channel( sc_gen_unique_name( "fifo" ) ),
+        m_data_read_event( sc_event::kernel_event, "read_event" ),
+        m_data_written_event( sc_event::kernel_event, "write_event" )
+      { init( size_ ); }
 
     explicit sc_fifo( const char* name_, int size_ = 16 )
-	: sc_prim_channel( name_ ),
-	  m_data_read_event(
-	      (std::string(SC_KERNEL_EVENT_PREFIX)+"_read_event").c_str()),
-	  m_data_written_event(
-	      (std::string(SC_KERNEL_EVENT_PREFIX)+"_write_event").c_str())
-	{ init( size_ ); }
+      : sc_prim_channel( name_ ),
+        m_data_read_event( sc_event::kernel_event, "read_event" ),
+        m_data_written_event( sc_event::kernel_event, "write_event" )
+      { init( size_ ); }
 
 
     // destructor

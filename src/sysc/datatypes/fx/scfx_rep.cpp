@@ -19,7 +19,7 @@
 
 /*****************************************************************************
 
-  scfx_rep.cpp - 
+  scfx_rep.cpp -
 
   Original Author: Robert Graulich, Synopsys, Inc.
                    Martin Janssen,  Synopsys, Inc.
@@ -66,11 +66,12 @@
 #include "sysc/datatypes/fx/scfx_utils.h"
 
 #include "sysc/datatypes/bit/sc_bv_base.h"
+#include "sysc/datatypes/bit/sc_lv_base.h"
 
-#include <ctype.h>
+#include <cctype>
 #include <cstdio>
-#include <stdlib.h>
-#include <math.h>
+#include <cstdlib>
+#include <cmath>
 
 
 namespace sc_dt
@@ -97,14 +98,14 @@ n_word( int x )
 // ----------------------------------------------------------------------------
 
 scfx_rep::scfx_rep()
-: m_mant( min_mant ), m_wp(), m_sign(), m_state(), m_msw(), m_lsw(), 
+: m_mant( min_mant ), m_wp(), m_sign(), m_state(), m_msw(), m_lsw(),
   m_r_flag( false )
 {
     set_zero();
 }
 
 scfx_rep::scfx_rep( int a )
-: m_mant( min_mant ), m_wp(), m_sign(), m_state(), m_msw(), m_lsw(), 
+: m_mant( min_mant ), m_wp(), m_sign(), m_state(), m_msw(), m_lsw(),
   m_r_flag( false )
 {
     if( a != 0 )
@@ -128,7 +129,7 @@ scfx_rep::scfx_rep( int a )
 }
 
 scfx_rep::scfx_rep( unsigned int a )
-: m_mant( min_mant ), m_wp(), m_sign(), m_state(), m_msw(), m_lsw(), 
+: m_mant( min_mant ), m_wp(), m_sign(), m_state(), m_msw(), m_lsw(),
   m_r_flag( false )
 {
     if( a != 0 )
@@ -144,7 +145,7 @@ scfx_rep::scfx_rep( unsigned int a )
 }
 
 scfx_rep::scfx_rep( long a )
-: m_mant( min_mant ), m_wp(), m_sign(), m_state(), m_msw(), m_lsw(), 
+: m_mant( min_mant ), m_wp(), m_sign(), m_state(), m_msw(), m_lsw(),
   m_r_flag( false )
 {
     if( a != 0 )
@@ -159,7 +160,7 @@ scfx_rep::scfx_rep( long a )
         {
             a = -a;
             m_sign = -1;
-        } 
+        }
 #       if defined(SC_LONG_64)
             m_wp = 1;
             m_mant[1] = static_cast<word>( a );
@@ -178,7 +179,7 @@ scfx_rep::scfx_rep( long a )
 }
 
 scfx_rep::scfx_rep( unsigned long a )
-: m_mant( min_mant ), m_wp(), m_sign(), m_state(), m_msw(), m_lsw(), 
+: m_mant( min_mant ), m_wp(), m_sign(), m_state(), m_msw(), m_lsw(),
   m_r_flag( false )
 {
     if( a != 0 )
@@ -204,7 +205,7 @@ scfx_rep::scfx_rep( unsigned long a )
 }
 
 scfx_rep::scfx_rep( double a )
-: m_mant( min_mant ), m_wp( 0 ), m_sign(), m_state( normal ), m_msw( 0 ), 
+: m_mant( min_mant ), m_wp( 0 ), m_sign(), m_state( normal ), m_msw( 0 ),
   m_lsw( 0 ), m_r_flag( false )
 {
     m_mant.clear();
@@ -232,7 +233,7 @@ scfx_rep::scfx_rep( double a )
 }
 
 scfx_rep::scfx_rep( int64 a )
-: m_mant( min_mant ), m_wp(), m_sign(), m_state(), m_msw(), m_lsw(), 
+: m_mant( min_mant ), m_wp(), m_sign(), m_state(), m_msw(), m_lsw(),
   m_r_flag( false )
 {
     if( a != 0 )
@@ -259,7 +260,7 @@ scfx_rep::scfx_rep( int64 a )
 }
 
 scfx_rep::scfx_rep( uint64 a )
-: m_mant( min_mant ), m_wp(), m_sign(), m_state(), m_msw(), m_lsw(), 
+: m_mant( min_mant ), m_wp(), m_sign(), m_state(), m_msw(), m_lsw(),
   m_r_flag( false )
 {
     if( a != 0 )
@@ -277,7 +278,7 @@ scfx_rep::scfx_rep( uint64 a )
 }
 
 scfx_rep::scfx_rep( const sc_signed& a )
-: m_mant( min_mant ), m_wp(), m_sign(), m_state(), m_msw(), m_lsw(), 
+: m_mant( min_mant ), m_wp(), m_sign(), m_state(), m_msw(), m_lsw(),
   m_r_flag( false )
 {
     if( a.iszero() )
@@ -320,7 +321,7 @@ scfx_rep::scfx_rep( const sc_signed& a )
 }
 
 scfx_rep::scfx_rep( const sc_unsigned& a )
-: m_mant( min_mant ), m_wp(), m_sign(), m_state(), m_msw(), m_lsw(), 
+: m_mant( min_mant ), m_wp(), m_sign(), m_state(), m_msw(), m_lsw(),
   m_r_flag( false )
 {
     if( a.iszero() )
@@ -467,7 +468,7 @@ scfx_rep::from_string( const char* s, int cte_wl )
 	    base = 2;
 	    break;
 	}
-	
+
 	case SC_BIN_SM:
 	{
 	    base = 2;
@@ -522,7 +523,7 @@ scfx_rep::from_string( const char* s, int cte_wl )
     {
 	if( scfx_exp_start( end ) )
 	    break;
-	
+
 	if( *end == '.' )
 	{
 	    SCFX_FAIL_IF_( based_point );
@@ -543,14 +544,14 @@ scfx_rep::from_string( const char* s, int cte_wl )
     SCFX_FAIL_IF_( int_digits == 0 && frac_digits == 0 );
 
     // [ exponent ]
-    
+
     int exponent = 0;
 
     if( *end )
     {
 	for( const char *e = end + 2; *e; ++ e )
 	    SCFX_FAIL_IF_( ! scfx_is_digit( *e, SC_DEC ) );
-	exponent = atoi( end + 1 );
+	exponent = std::atoi( end + 1 );
     }
 
     //
@@ -597,7 +598,7 @@ scfx_rep::from_string( const char* s, int cte_wl )
 	    m_mant.clear();
 
 	    int j = n_word( frac_digits ) * bits_in_word + int_digits - 1;
-	    
+
 	    for( ; s < end; s ++ )
 	    {
 		switch( *s )
@@ -634,7 +635,7 @@ scfx_rep::from_string( const char* s, int cte_wl )
 	    m_mant.clear();
 
 	    int j = n_word( frac_digits ) * bits_in_word + int_digits - 3;
-	    
+
 	    for( ; s < end; s ++ )
 	    {
 		switch( *s )
@@ -662,7 +663,7 @@ scfx_rep::from_string( const char* s, int cte_wl )
 
 	    m_mant.clear();
 	    m_msw = m_lsw = 0;
-	    
+
 	    for( ; s < end; s ++ )
 	    {
 		switch( *s )
@@ -674,7 +675,7 @@ scfx_rep::from_string( const char* s, int cte_wl )
 			for ( int i = 0; carry && i < m_mant.size(); i++ )
 			{
 			    temp = m_mant[i];
-                            temp += carry;			    
+                            temp += carry;
 			    carry = temp < m_mant[i];
 			    m_mant[i] = temp;
 			}
@@ -684,12 +685,12 @@ scfx_rep::from_string( const char* s, int cte_wl )
 			SCFX_FAIL_IF_( true );  // should not happen
 		}
 	    }
-	    
+
 	    m_wp = 0;
 	    find_sw();
 
 	    int denominator = frac_digits - exponent;
-	    
+
 	    if( denominator )
 	    {
 		scfx_rep frac_num = pow10_fx( denominator );
@@ -720,7 +721,7 @@ scfx_rep::from_string( const char* s, int cte_wl )
 	    m_mant.clear();
 
 	    int j = n_word( frac_digits ) * bits_in_word + int_digits - 4;
-	    
+
 	    for( ; s < end; s ++ )
 	    {
 		switch( *s )
@@ -759,7 +760,7 @@ scfx_rep::from_string( const char* s, int cte_wl )
 
     if( mant_is_neg )
     {
-	m_mant[m_msw] |=  -1 << scfx_find_msb( m_mant[m_msw] );
+	m_mant[m_msw] |=  ~0U << scfx_find_msb( m_mant[m_msw] );
 	for( int i = m_msw + 1; i < m_mant.size(); ++ i )
 	    m_mant[i] = static_cast<word>( -1 );
 	complement( m_mant, m_mant, m_mant.size() );
@@ -780,7 +781,7 @@ scfx_rep::from_string( const char* s, int cte_wl )
 // ----------------------------------------------------------------------------
 
 double
-scfx_rep::to_double() const 
+scfx_rep::to_double() const
 {
     scfx_ieee_double id;
 
@@ -823,7 +824,7 @@ scfx_rep::to_double() const
 	id = 0.;
 	return id;
     }
- 
+
     int shift = mantissa0_size - msb;
 
     unsigned int m0;
@@ -862,7 +863,7 @@ scfx_rep::to_double() const
 	        m1 |= m_mant[m_msw - 2] >> ( bits_in_word - shift );
 		guard = ( m_mant[m_msw - 2] >> (bits_in_word - shift - 1) )
                       & 1;
-	    }      
+	    }
 	}
     }
 
@@ -931,13 +932,13 @@ print_dec( scfx_string& s, const scfx_rep& num, int w_prefix, sc_fmt fmt )
     scfx_rep frac_part = num;
 
     int i;
-    
+
     for( i = int_part.m_lsw; i <= int_part.m_msw && i < int_part.m_wp; i ++ )
 	int_part.m_mant[i] = 0;
     int_part.find_sw();
     if( int_part.m_wp < int_part.m_lsw )
 	int_part.resize_to( int_part.size() - int_part.m_wp, -1 );
-    
+
     for( i = frac_part.m_msw;
 	 i >= frac_part.m_lsw && i >= frac_part.m_wp;
 	 i -- )
@@ -950,12 +951,12 @@ print_dec( scfx_string& s, const scfx_rep& num, int w_prefix, sc_fmt fmt )
 
     int int_digits = 0;
     int int_zeros  = 0;
-    
+
     if( ! int_part.is_zero() )
     {
 	double int_wl = ( int_part.m_msw - int_part.m_wp ) * bits_in_word
 	              + scfx_find_msb( int_part.m_mant[int_part.m_msw] ) + 1;
-	int_digits = (int) ceil( int_wl * log10( 2. ) );
+	int_digits = (int) std::ceil( int_wl * std::log10( 2. ) );
 
 	int len = s.length();
 	s.append( int_digits );
@@ -966,7 +967,7 @@ print_dec( scfx_string& s, const scfx_rep& num, int w_prefix, sc_fmt fmt )
 	{
 	    unsigned int remainder = int_part.divide_by_ten();
 	    s[i] = static_cast<char>( '0' + remainder );
-	    
+
 	    if( zero_digits )
 	    {
 		if( remainder == 0 )
@@ -1001,14 +1002,14 @@ print_dec( scfx_string& s, const scfx_rep& num, int w_prefix, sc_fmt fmt )
 	double frac_wl = ( frac_part.m_wp - frac_part.m_msw ) * bits_in_word
 	               - scfx_find_msb( frac_part.m_mant[frac_part.m_msw] )
                        - 1;
-	frac_zeros = (int) floor( frac_wl * log10( 2. ) );
+	frac_zeros = (int) std::floor( frac_wl * std::log10( 2. ) );
 
 	scfx_rep temp;
 	sc_dt::multiply( temp, frac_part, pow10_fx( frac_zeros ) );
 	frac_part = temp;
 	if( frac_part.m_msw == frac_part.size() - 1 )
 	    frac_part.resize_to( frac_part.size() + 1, 1 );
-	
+
 	frac_digits = frac_zeros;
 	if( ! zero_digits )
 	{
@@ -1021,7 +1022,7 @@ print_dec( scfx_string& s, const scfx_rep& num, int w_prefix, sc_fmt fmt )
 	{
 	    frac_part.multiply_by_ten();
 	    int n = frac_part.m_mant[frac_part.m_msw + 1];
-	
+
 	    if( zero_digits )
 	    {
 		if( n == 0 )
@@ -1029,7 +1030,7 @@ print_dec( scfx_string& s, const scfx_rep& num, int w_prefix, sc_fmt fmt )
 		else
 		    zero_digits = false;
 	    }
-	
+
 	    if( ! zero_digits )
 		s += static_cast<char>( '0' + n );
 
@@ -1039,7 +1040,7 @@ print_dec( scfx_string& s, const scfx_rep& num, int w_prefix, sc_fmt fmt )
     }
 
     // print exponent
-    
+
     if( fmt != SC_F )
     {
         if( frac_digits == 0 )
@@ -1083,7 +1084,7 @@ print_other( scfx_string& s, const scfx_rep& a, sc_numrep numrep, int w_prefix,
 		;
 	}
     }
-    
+
     if( w_prefix != 0 ) {
 	scfx_print_prefix( s, numrep );
     }
@@ -1156,9 +1157,9 @@ print_other( scfx_string& s, const scfx_rep& a, sc_numrep numrep, int w_prefix,
 	    step = 0;
     }
 
-    msb = (int) ceil( double( msb + 1 ) / step ) * step - 1;
+    msb = (int) std::ceil( double( msb + 1 ) / step ) * step - 1;
 
-    lsb = (int) floor( double( lsb ) / step ) * step;
+    lsb = (int) std::floor( double( lsb ) / step ) * step;
 
     if( msb < 0 )
     {
@@ -1559,7 +1560,7 @@ multiply( scfx_rep& result, const scfx_rep& lhs, const scfx_rep& rhs,
 	result.set_inf( lhs.m_sign * rhs.m_sign );
 	return;
     }
-    
+
     if( lhs.is_zero() || rhs.is_zero() ) {
 	result.set_zero( lhs.m_sign * rhs.m_sign );
 	return;
@@ -1801,7 +1802,7 @@ compare_abs( const scfx_rep& a, const scfx_rep& b )
 
     word a_word = a.m_mant[a.m_msw];
     word b_word = b.m_mant[b.m_msw];
-  
+
     if( a_word == 0 || b_word == 0 )
     {
 	if( a_word != 0 )
@@ -1845,7 +1846,7 @@ compare_abs( const scfx_rep& a, const scfx_rep& b )
 	a_zero = a_zero && ( a.m_mant[a_i] == 0 );
 	-- a_i;
     }
-  
+
     bool b_zero = true;
     while( b_i >= b.m_lsw )
     {
@@ -1926,7 +1927,7 @@ cmp_scfx_rep( const scfx_rep& a, const scfx_rep& b )
 	    }
 	}
     }
-  
+
     if( a.is_zero() && b.is_zero() )
     {
 	return 0;
@@ -2029,7 +2030,7 @@ scfx_rep::quantization( const scfx_params& params, bool& q_flag )
 	        ;
 	}
 	q_clear( x );
-	
+
 	find_sw();
     }
 }
@@ -2230,7 +2231,7 @@ scfx_rep::cast( const scfx_params& params, bool& q_flag, bool& o_flag )
     o_flag = false;
 
     // check for special cases
-    
+
     if( is_zero() )
     {
 	if( is_neg() )
@@ -2876,7 +2877,7 @@ void
 scfx_rep::round( int wl )
 {
     // check for special cases
-    
+
     if( is_nan() || is_inf() || is_zero() )
 	return;
 

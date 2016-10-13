@@ -58,6 +58,9 @@
 
 // Disable VC++ warnings that are harmless
 
+// extern template instantiations
+#pragma warning(disable: 4231)
+
 // this : used in base member initializer list
 #pragma warning(disable: 4355)
 
@@ -77,7 +80,7 @@
 // identifier was truncated to '255' characters in the browser information
 #pragma warning(disable: 4786)
 
-#endif 
+#endif
 
 // ----------------------------------------------------------------------------
 // helper macros to aid branch prediction on GCC (compatible) compilers
@@ -95,6 +98,52 @@
 #include <cassert>
 #include <cstdio>
 #include <cstdlib>
+#include <vector>
+
+// ----------------------------------------------------------------------------
+
+// build SystemC DLL on Windows
+#if defined(SC_WIN_DLL) && (defined(_WIN32) || defined(_WIN64))
+
+# if defined(SC_BUILD) // building SystemC library
+#   define SC_API  __declspec(dllexport)
+
+# else                 // building SystemC application
+#   define SC_API  __declspec(dllimport)
+# endif // SC_BUILD
+
+#else // !SC_WIN_DLL
+# define SC_API /* nothing */
+
+#endif // SC_WIN_DLL
+
+// declare certain template instantiations as "extern" during library build
+// to force their instantiation into the (shared) SystemC library
+
+#if defined(SC_BUILD) // building SystemC library
+# define SC_API_TEMPLATE_ /* empty - instantiate template in translation unit */
+#else
+# if defined(__GNUC__) && __cplusplus < 201101L
+#  define SC_API_TEMPLATE_ __extension__ extern
+# else
+#  define SC_API_TEMPLATE_ extern
+# endif
+#endif
+
+// explicitly instantiate and export/import an std::vector specialization
+#define SC_API_VECTOR_(Type) \
+  SC_API_TEMPLATE_ template class SC_API ::std::allocator<Type>; \
+  SC_API_TEMPLATE_ template class SC_API ::std::vector<Type,::std::allocator<Type> >
+
+namespace sc_core {
+class SC_API sc_object;
+class SC_API sc_event;
+} // namespace sc_core
+
+// export explicit std::vector<> template instantiations
+SC_API_VECTOR_(sc_core::sc_object*);
+SC_API_VECTOR_(sc_core::sc_event*);
+SC_API_VECTOR_(const sc_core::sc_event*);
 
 #endif // SC_CMNHDR_H
 

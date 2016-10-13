@@ -30,6 +30,7 @@
 #ifndef SC_DYNAMIC_PROCESSES_H
 #define SC_DYNAMIC_PROCESSES_H
 
+#include "sysc/kernel/sc_cmnhdr.h"
 #include "sysc/kernel/sc_except.h"
 #include "sysc/kernel/sc_spawn.h"
 #include "sysc/kernel/sc_join.h"

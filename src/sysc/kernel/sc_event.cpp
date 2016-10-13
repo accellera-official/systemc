@@ -26,8 +26,8 @@
  CHANGE LOG APPEARS AT THE END OF THE FILE
  *****************************************************************************/
 
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 
 #include "sysc/kernel/sc_event.h"
 #include "sysc/kernel/sc_kernel_ids.h"
@@ -39,6 +39,10 @@
 #include "sysc/utils/sc_utils_ids.h"
 
 namespace sc_core {
+
+using std::malloc;
+using std::strrchr;
+using std::strncmp;
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_event
@@ -202,6 +206,9 @@ sc_event::notify_delayed( const sc_time& t )
     }
 }
 
+#define SC_KERNEL_EVENT_PREFIX "$$$$kernel_event$$$$_"
+sc_event::kernel_tag sc_event::kernel_event;
+
 // +----------------------------------------------------------------------------
 // |"sc_event::register_event"
 // | 
@@ -209,14 +216,14 @@ sc_event::notify_delayed( const sc_time& t )
 // | it to the object manager's hierarchy. The object instance will be
 // | inserted into the object manager's hierarchy if one of the following is
 // | true:
-// |   (a) the leaf name is non-null and does not start with  
-// |       SC_KERNEL_EVENT_PREFIX.
+// |   (a) the leaf name is non-null and is_kernel_event == false
 // |   (b) the event is being created before the start of simulation.
 // |
 // | Arguments:
 // |     leaf_name = leaf name of the object or NULL.
 // +----------------------------------------------------------------------------
-void sc_event::register_event( const char* leaf_name )
+void
+sc_event::register_event( const char* leaf_name, bool is_kernel_event /* = false */ )
 {
     sc_object_manager* object_manager = m_simc->get_object_manager();
     m_parent_p = m_simc->active_object();
@@ -225,8 +232,17 @@ void sc_event::register_event( const char* leaf_name )
 
     if( !leaf_name || !leaf_name[0] )
     {
-	if ( sc_is_running( m_simc ) ) return;
-        leaf_name = sc_gen_unique_name("event");    
+        if ( sc_is_running( m_simc ) ) return;
+        leaf_name = sc_gen_unique_name
+            ( is_kernel_event ? SC_KERNEL_EVENT_PREFIX : "event" );
+    }
+
+    // prepend kernel events with internal prefix
+    else if ( is_kernel_event )
+    {
+        m_name = SC_KERNEL_EVENT_PREFIX;
+        m_name.append( leaf_name );
+        leaf_name = m_name.c_str();
     }
 
     // Create a hierarchichal name and place it into the object manager if
@@ -234,8 +250,7 @@ void sc_event::register_event( const char* leaf_name )
 
     object_manager->create_name( leaf_name ).swap( m_name );
 
-    if ( strncmp( leaf_name, SC_KERNEL_EVENT_PREFIX, 
-                  strlen(SC_KERNEL_EVENT_PREFIX) ) )
+    if ( !is_kernel_event )
     {
 	object_manager->insert_event(m_name, this);
 	if ( m_parent_p )
@@ -261,7 +276,7 @@ sc_event::reset()
 // |"sc_event::sc_event(name)"
 // | 
 // | This is the object instance constructor for named sc_event instances.
-// | If the name is non-null or the this is during elaboration add the
+// | If the name is non-null or this is during elaboration add the
 // | event to the object hierarchy.
 // |
 // | Arguments:
@@ -279,16 +294,14 @@ sc_event::sc_event( const char* name ) :
     m_threads_static(),
     m_threads_dynamic()
 {
-    // Skip simulator's internally defined events.
-
     register_event( name );
 }
 
 // +----------------------------------------------------------------------------
-// |"sc_event::sc_event(name)"
+// |"sc_event::sc_event()"
 // | 
 // | This is the object instance constructor for non-named sc_event instances.
-// | If this is during elaboration add create a name and add it to the object
+// | If this is during elaboration create a name and add it to the object
 // | hierarchy.
 // +----------------------------------------------------------------------------
 sc_event::sc_event() :
@@ -303,8 +316,29 @@ sc_event::sc_event() :
     m_threads_static(),
     m_threads_dynamic()
 {
-
     register_event( NULL );
+}
+
+// +----------------------------------------------------------------------------
+// |"sc_event::sc_event(kernel_event, name)"
+// |
+// | This is the object instance constructor for kernel sc_event instances.
+// | If this is during elaboration create an implementation-defined name and
+// | do NOT add it to the object hierarchy.
+// +----------------------------------------------------------------------------
+sc_event::sc_event( kernel_tag, const char* name ) :
+    m_name(),
+    m_parent_p(NULL),
+    m_simc( sc_get_curr_simcontext() ),
+    m_notify_type( NONE ),
+    m_delta_event_index( -1 ),
+    m_timed( 0 ),
+    m_methods_static(),
+    m_methods_dynamic(),
+    m_threads_static(),
+    m_threads_dynamic()
+{
+    register_event( name, /* is_kernel_event = */ true );
 }
 
 // +----------------------------------------------------------------------------

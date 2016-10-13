@@ -31,6 +31,8 @@
 
 #include <iosfwd>
 
+#include "sysc/kernel/sc_cmnhdr.h"
+
 namespace sc_core {
 
 // simulation status codes
@@ -64,7 +66,7 @@ enum sc_status
 };
 
 // pretty-printing of sc_status values
-std::ostream& operator << ( std::ostream&, sc_status );
+SC_API std::ostream& operator << ( std::ostream&, sc_status );
 
 } // namespace sc_core
 

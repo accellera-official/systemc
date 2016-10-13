@@ -149,7 +149,7 @@ sc_cor_pkg_pthread::sc_cor_pkg_pthread( sc_simcontext* simc )
     {
         pthread_cond_init( &create_condition, PTHREAD_NULL );
         pthread_mutex_init( &create_mutex, PTHREAD_NULL );
-        assert( active_cor_p == 0 );
+        sc_assert( active_cor_p == 0 );
         main_cor.m_pkg_p = this;
 		DEBUGF << &main_cor << ": is main co-routine" << std::endl;
         active_cor_p = &main_cor;
@@ -191,6 +191,7 @@ sc_cor_pkg_pthread::create( std::size_t stack_size, sc_cor_fn* fn, void* arg )
 
     pthread_attr_t attr;
 	pthread_attr_init( &attr ); 
+	pthread_attr_setdetachstate( &attr, PTHREAD_CREATE_DETACHED );
 	if ( stack_size != 0 )
 	{
 		pthread_attr_setstacksize( &attr, stack_size );

@@ -67,9 +67,9 @@
 
 #ifndef SC_DEFINE_MESSAGE
 #define SC_DEFINE_MESSAGE(id,unused1,unused2) \
-    namespace sc_core { extern const char id[]; }
+    namespace sc_core { extern SC_API const char id[]; }
 namespace sc_core {
-    extern const char SC_ID_REGISTER_ID_FAILED_[]; // in sc_report_handler.cpp
+    extern SC_API const char SC_ID_REGISTER_ID_FAILED_[]; // in sc_report_handler.cpp
 }
 #endif
 

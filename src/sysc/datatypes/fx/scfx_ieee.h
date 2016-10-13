@@ -117,7 +117,7 @@ const unsigned int SCFX_IEEE_DOUBLE_E_SIZE  =    11;
 //  Convenient interface to union ieee_double.
 // ----------------------------------------------------------------------------
 
-class scfx_ieee_double
+class SC_API scfx_ieee_double
 {
 
     ieee_double m_id;
@@ -457,7 +457,7 @@ const unsigned int SCFX_IEEE_FLOAT_E_SIZE =    8;
 // Convenient wrapper to union ieee_float.
 // ----------------------------------------------------------------------------
 
-class scfx_ieee_float
+class SC_API scfx_ieee_float
 {
 
     ieee_float m_if;

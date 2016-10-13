@@ -65,10 +65,17 @@ class sc_method_process;
 class sc_cthread_process;
 class sc_thread_process;
 
+} // namespace sc_core
+
+// export explicit std::vector<> template instantiations
+SC_API_VECTOR_(sc_core::sc_trace_file*);
+
+namespace sc_core {
+
 template< typename > class sc_plist;
 typedef sc_plist< sc_process_b* > sc_process_list;
 
-struct sc_curr_proc_info
+struct SC_API sc_curr_proc_info
 {
     sc_process_b*     process_handle;
     sc_curr_proc_kind kind;
@@ -81,16 +88,16 @@ enum sc_stop_mode {          // sc_stop modes:
     SC_STOP_FINISH_DELTA,
     SC_STOP_IMMEDIATE
 };
-extern void sc_set_stop_mode( sc_stop_mode mode );
-extern sc_stop_mode sc_get_stop_mode();
+extern SC_API void sc_set_stop_mode( sc_stop_mode mode );
+extern SC_API sc_stop_mode sc_get_stop_mode();
 
 enum sc_starvation_policy 
 {
     SC_EXIT_ON_STARVATION,
     SC_RUN_TO_TIME
 };
-extern void sc_start();
-extern void sc_start( const sc_time& duration, 
+extern SC_API void sc_start();
+extern SC_API void sc_start( const sc_time& duration, 
                       sc_starvation_policy p=SC_RUN_TO_TIME );
 inline void sc_start( int duration, sc_time_unit unit, 
                       sc_starvation_policy p=SC_RUN_TO_TIME )
@@ -104,27 +111,28 @@ inline void sc_start( double duration, sc_time_unit unit,
     sc_start( sc_time(duration,unit), p );
 }
 
-extern void sc_stop();
+extern SC_API void sc_stop();
 
 // friend function declarations
 
-sc_dt::uint64 sc_delta_count();
-const std::vector<sc_event*>& sc_get_top_level_events(
+SC_API sc_dt::uint64 sc_delta_count();
+SC_API sc_dt::uint64 sc_delta_count_at_current_time();
+SC_API const std::vector<sc_event*>& sc_get_top_level_events(
 				const   sc_simcontext* simc_p);
-const std::vector<sc_object*>& sc_get_top_level_objects(
+SC_API const std::vector<sc_object*>& sc_get_top_level_objects(
 				const   sc_simcontext* simc_p);
-bool    sc_is_running( const sc_simcontext* simc_p );
-void    sc_pause();
-bool    sc_end_of_simulation_invoked();
-void    sc_start( const sc_time&, sc_starvation_policy );
-bool    sc_start_of_simulation_invoked();
-void    sc_set_time_resolution( double, sc_time_unit );
-sc_time sc_get_time_resolution();
-void    sc_set_default_time_unit( double, sc_time_unit );
-sc_time sc_get_default_time_unit();
-bool    sc_pending_activity_at_current_time( const sc_simcontext* );
-bool    sc_pending_activity_at_future_time( const sc_simcontext* );
-sc_time sc_time_to_pending_activity( const sc_simcontext* );
+SC_API bool    sc_is_running( const sc_simcontext* simc_p );
+SC_API void    sc_pause();
+SC_API bool    sc_end_of_simulation_invoked();
+SC_API void    sc_start( const sc_time&, sc_starvation_policy );
+SC_API bool    sc_start_of_simulation_invoked();
+SC_API void    sc_set_time_resolution( double, sc_time_unit );
+SC_API sc_time sc_get_time_resolution();
+SC_API void    sc_set_default_time_unit( double, sc_time_unit );
+SC_API sc_time sc_get_default_time_unit();
+SC_API bool    sc_pending_activity_at_current_time( const sc_simcontext* );
+SC_API bool    sc_pending_activity_at_future_time( const sc_simcontext* );
+SC_API sc_time sc_time_to_pending_activity( const sc_simcontext* );
 
 struct sc_invoke_method; 
 
@@ -134,13 +142,14 @@ struct sc_invoke_method;
 //  The simulation context.
 // ----------------------------------------------------------------------------
 
-class sc_simcontext
+class SC_API sc_simcontext
 {
     friend struct sc_invoke_method; 
     friend class sc_event;
     friend class sc_module;
     friend class sc_object;
     friend class sc_time;
+    friend class sc_time_tuple;
     friend class sc_clock;
     friend class sc_method_process;
     friend class sc_phase_callback_registry;
@@ -149,20 +158,20 @@ class sc_simcontext
     friend class sc_prim_channel;
     friend class sc_cthread_process;
     friend class sc_thread_process;
-    friend sc_dt::uint64 sc_delta_count();
-    friend const std::vector<sc_event*>& sc_get_top_level_events(
+    friend SC_API sc_dt::uint64 sc_delta_count();
+    friend SC_API const std::vector<sc_event*>& sc_get_top_level_events(
         const sc_simcontext* simc_p);
-    friend const std::vector<sc_object*>& sc_get_top_level_objects(
+    friend SC_API const std::vector<sc_object*>& sc_get_top_level_objects(
         const sc_simcontext* simc_p);
-    friend bool sc_is_running( const sc_simcontext* simc_p );
-    friend void sc_pause();
-    friend bool sc_end_of_simulation_invoked();
-    friend void sc_start( const sc_time&, sc_starvation_policy );
-    friend bool sc_start_of_simulation_invoked();
+    friend SC_API bool sc_is_running( const sc_simcontext* simc_p );
+    friend SC_API void sc_pause();
+    friend SC_API bool sc_end_of_simulation_invoked();
+    friend SC_API void sc_start( const sc_time&, sc_starvation_policy );
+    friend SC_API bool sc_start_of_simulation_invoked();
     friend void sc_thread_cor_fn(void*);
-    friend sc_time sc_time_to_pending_activity( const sc_simcontext* );
-    friend bool sc_pending_activity_at_current_time( const sc_simcontext* );
-    friend bool sc_pending_activity_at_future_time( const sc_simcontext* );
+    friend SC_API sc_time sc_time_to_pending_activity( const sc_simcontext* );
+    friend SC_API bool sc_pending_activity_at_current_time( const sc_simcontext* );
+    friend SC_API bool sc_pending_activity_at_future_time( const sc_simcontext* );
 
 
     void init();
@@ -203,6 +212,17 @@ public:
     sc_export_registry* get_export_registry();
     sc_prim_channel_registry* get_prim_channel_registry();
 
+    std::string construct_hierarchical_name(const sc_object* parent,
+                                            const std::string& name);
+    bool register_hierarchical_name(const sc_object* parent,
+                                    const std::string& name);
+    bool unregister_hierarchical_name(const sc_object* parent,
+                                      const std::string& name);
+    bool hierarchical_name_exists(const sc_object* parent,
+                                  const std::string& name);
+    const char* get_hierarchical_name(const sc_object* parent,
+                                      const std::string& name);
+
     // to generate unique names for objects in an MT-Safe way
     const char* gen_unique_name( const char* basename_, 
                                  bool preserve_first = false 
@@ -232,16 +252,17 @@ public:
     void add_trace_file( sc_trace_file* );
     void remove_trace_file( sc_trace_file* );
 
-    friend void    sc_set_time_resolution( double, sc_time_unit );
-    friend sc_time sc_get_time_resolution();
-    friend void    sc_set_default_time_unit( double, sc_time_unit );
-    friend sc_time sc_get_default_time_unit();
+    friend SC_API void    sc_set_time_resolution( double, sc_time_unit );
+    friend SC_API sc_time sc_get_time_resolution();
+    friend SC_API void    sc_set_default_time_unit( double, sc_time_unit );
+    friend SC_API sc_time sc_get_default_time_unit();
 
     const sc_time& max_time() const;
     const sc_time& time_stamp() const;
 
     sc_dt::uint64 change_stamp() const;
     sc_dt::uint64 delta_count() const;
+    sc_dt::uint64 delta_count_at_current_time() const;
     bool event_occurred( sc_dt::uint64 last_change_count ) const;
     bool evaluation_phase() const;
     bool is_running() const;
@@ -302,6 +323,7 @@ private:
     void suspend_current_process();
 
     void do_sc_stop_action();
+    void do_timestep( const sc_time& );
     void mark_to_collect_process( sc_process_b* zombie_p );
 
 private:
@@ -349,6 +371,7 @@ private:
     sc_invoke_method*           m_method_invoker_p;
     sc_dt::uint64               m_change_stamp; // "time" change occurred.
     sc_dt::uint64               m_delta_count;
+    sc_dt::uint64               m_initial_delta_count_at_current_time;
     bool                        m_forced_stop;
     bool                        m_paused;
     bool                        m_ready_to_simulate;
@@ -375,8 +398,8 @@ private:
 // Not MT safe.
 
 #if 1
-extern sc_simcontext* sc_curr_simcontext;
-extern sc_simcontext* sc_default_global_context;
+extern SC_API sc_simcontext* sc_curr_simcontext;
+extern SC_API sc_simcontext* sc_default_global_context;
 
 inline sc_simcontext*
 sc_get_curr_simcontext()
@@ -388,7 +411,7 @@ sc_get_curr_simcontext()
     return sc_curr_simcontext;
 }
 #else
-    extern sc_simcontext* sc_get_curr_simcontext();
+    extern SC_API sc_simcontext* sc_get_curr_simcontext();
 #endif // 0
 inline sc_status sc_get_status()
 {
@@ -497,6 +520,12 @@ sc_simcontext::change_stamp() const
     return m_change_stamp;
 }
 
+inline sc_dt::uint64
+sc_simcontext::delta_count_at_current_time() const
+{
+    return m_delta_count - m_initial_delta_count_at_current_time;
+}
+
 inline
 const sc_time&
 sc_simcontext::time_stamp() const
@@ -580,7 +609,7 @@ sc_simcontext::write_check() const
 // ----------------------------------------------------------------------------
 
 class sc_process_handle;
-sc_process_handle sc_get_current_process_handle();
+SC_API sc_process_handle sc_get_current_process_handle();
 
 // Get the current object hierarchy context
 //
@@ -602,7 +631,7 @@ sc_get_current_process_b()
 }
 
 // THE FOLLOWING FUNCTION IS DEPRECATED IN 2.1
-extern sc_process_b* sc_get_curr_process_handle();
+extern SC_API sc_process_b* sc_get_curr_process_handle();
 
 inline
 sc_curr_proc_kind
@@ -619,22 +648,22 @@ inline int sc_get_simulator_status()
 
 
 // Generates unique names within each module.
-extern
+extern SC_API
 const char*
 sc_gen_unique_name( const char* basename_, bool preserve_first = false );
 
 
 // Set the random seed for controlled randomization -- not yet implemented
-extern
+extern SC_API
 void
 sc_set_random_seed( unsigned int seed_ );
 
 
-extern void sc_initialize();
+extern SC_API void sc_initialize();
 
-extern const sc_time& sc_max_time();    // Get maximum time value.
-extern const sc_time& sc_time_stamp();  // Current simulation time.
-extern double sc_simulation_time();     // Current time in default time units.
+extern SC_API const sc_time& sc_max_time();    // Get maximum time value.
+extern SC_API const sc_time& sc_time_stamp();  // Current simulation time.
+extern SC_API double sc_simulation_time();     // Current time in default time units.
 
 inline
 const std::vector<sc_event*>& sc_get_top_level_events(
@@ -650,14 +679,20 @@ const std::vector<sc_object*>& sc_get_top_level_objects(
     return simc_p->m_child_objects;
 }
 
-extern sc_event* sc_find_event( const char* name );
+extern SC_API sc_event* sc_find_event( const char* name );
 
-extern sc_object* sc_find_object( const char* name );
+extern SC_API sc_object* sc_find_object( const char* name );
 
 inline
 sc_dt::uint64 sc_delta_count()
 {
     return sc_get_curr_simcontext()->m_delta_count;
+}
+
+inline
+sc_dt::uint64 sc_delta_count_at_current_time()
+{
+    return sc_get_curr_simcontext()->delta_count_at_current_time();
 }
 
 inline 
@@ -666,7 +701,7 @@ bool sc_is_running( const sc_simcontext* simc_p = sc_get_curr_simcontext() )
     return simc_p->m_ready_to_simulate;
 }
 
-bool sc_is_unwinding();
+SC_API bool sc_is_unwinding();
 
 inline void sc_pause()
 {
@@ -700,7 +735,7 @@ inline bool sc_pending_activity
       || sc_pending_activity_at_future_time( simc_p );
 }
 
-sc_time
+SC_API sc_time
 sc_time_to_pending_activity
   ( const sc_simcontext* simc_p = sc_get_curr_simcontext() );
 
@@ -712,13 +747,65 @@ sc_end_of_simulation_invoked()
     return sc_get_curr_simcontext()->m_end_of_simulation_called;
 }
 
-inline bool sc_hierarchical_name_exists( const char* name )
+inline
+bool
+sc_hierarchical_name_exists( const char* name )
 {
-    return sc_find_object(name) || sc_find_event(name);
+    return sc_get_curr_simcontext()->hierarchical_name_exists(NULL, name);
 }
 
 inline
-bool 
+bool
+sc_hierarchical_name_exists( const sc_object* parent,
+                             const char* name )
+{
+    return sc_get_curr_simcontext()->hierarchical_name_exists(parent, name);
+}
+
+inline
+const char*
+sc_get_hierarchical_name(const char* name)
+{
+    return sc_get_curr_simcontext()->get_hierarchical_name(NULL, name);
+}
+
+inline
+const char*
+sc_get_hierarchical_name(const sc_object* parent, const char* name)
+{
+    return sc_get_curr_simcontext()->get_hierarchical_name(parent, name);
+}
+
+inline
+bool
+sc_register_hierarchical_name(const char* name)
+{
+    return sc_get_curr_simcontext()->register_hierarchical_name(NULL, name);
+}
+
+inline
+bool
+sc_register_hierarchical_name(const sc_object* parent, const char* name)
+{
+    return sc_get_curr_simcontext()->register_hierarchical_name(parent, name);
+}
+
+inline
+bool
+sc_unregister_hierarchical_name(const char* name)
+{
+    return sc_get_curr_simcontext()->unregister_hierarchical_name(NULL, name);
+}
+
+inline
+bool
+sc_unregister_hierarchical_name(const sc_object* parent, const char* name)
+{
+    return sc_get_curr_simcontext()->unregister_hierarchical_name(parent, name);
+}
+
+inline
+bool
 sc_start_of_simulation_invoked()
 {
     return sc_get_curr_simcontext()->m_start_of_simulation_called;
@@ -728,7 +815,7 @@ sc_start_of_simulation_invoked()
 // be considered errors or not. See sc_simcontext.cpp for details on what
 // happens if this value is set to true.
 
-extern bool sc_allow_process_control_corners;
+extern SC_API bool sc_allow_process_control_corners;
 
 } // namespace sc_core
 

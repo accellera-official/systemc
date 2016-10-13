@@ -42,7 +42,7 @@ namespace sc_core {
 //  The sc_mutex primitive channel class.
 // ----------------------------------------------------------------------------
 
-class sc_mutex
+class SC_API sc_mutex
 : public sc_mutex_if,
   public sc_object
 {

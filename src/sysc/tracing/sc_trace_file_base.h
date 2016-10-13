@@ -53,10 +53,15 @@
 #include "sysc/tracing/sc_trace.h"
 #include "sysc/tracing/sc_tracing_ids.h"
 
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(push)
+#pragma warning(disable: 4251) // DLL import for std::string
+#endif
+
 namespace sc_core {
 
 // shared implementation of trace files
-class sc_trace_file_base
+class SC_API sc_trace_file_base
   : public sc_trace_file
 #if SC_TRACING_PHASE_CALLBACKS_
   , private sc_object // to be used as callback target
@@ -119,12 +124,16 @@ private: // disabled
 
 // Convert double time to 64-bit integer
 
-void double_to_special_int64( double in, unsigned* high, unsigned* low );
+void SC_API double_to_special_int64( double in, unsigned* high, unsigned* low );
 
 // obtain formatted time string
-std::string localtime_string();
+SC_API std::string localtime_string();
 
 } // namespace sc_core
+
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(pop)
+#endif
 
 /*****************************************************************************
 

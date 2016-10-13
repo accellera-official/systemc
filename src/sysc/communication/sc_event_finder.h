@@ -41,7 +41,7 @@ namespace sc_core {
 //  Event finder base class.
 // ----------------------------------------------------------------------------
 
-class sc_event_finder
+class SC_API sc_event_finder
 {
   friend class sc_simcontext;
 

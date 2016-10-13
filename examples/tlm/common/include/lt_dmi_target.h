@@ -28,19 +28,19 @@
 //   Charles Wilson, ESLX
 //=====================================================================
 
-#ifndef __LT_DMI_TARGET_H__ 
+#ifndef __LT_DMI_TARGET_H__
 #define __LT_DMI_TARGET_H__
 
 #include "tlm.h"                                // TLM headers
 #include "memory.h"
 #include "tlm_utils/simple_target_socket.h"
 
-class lt_dmi_target                      
+class lt_dmi_target
 :         public sc_core::sc_module           	/// inherit from SC module base clase
 {
 // Member Methods =====================================================
-	
-  public:	  
+
+  public:
 //=====================================================================
 ///	@fn lt_dmi_target
 ///
@@ -48,11 +48,11 @@ class lt_dmi_target
 ///
 ///	@details
 ///		Generic Single Phase target used in several examples.
-///		Constructor offers several parameters for customization	
+///		Constructor offers several parameters for customization
 ///
 //=====================================================================
-  
-  lt_dmi_target                          
+
+  lt_dmi_target
   ( sc_core::sc_module_name   module_name           ///< SC module name
   , const unsigned int        ID                    ///< target ID
   , const char                *memory_socket        ///< socket name
@@ -64,58 +64,56 @@ class lt_dmi_target
   , const sc_core::sc_time    start_dmi_delay = sc_core::sc_time(100,sc_core::SC_NS)
   , const sc_core::sc_time    dmi_duration    = sc_core::sc_time(1000,sc_core::SC_NS)
   );
- 
+
    void toggle_dmi_method(void);
 
   private:
-	    
+
 //==============================================================================
 // Methods not Implemented for this Example
-  
+
 /// b_transport() - Blocking Transport
-  void                                                // returns nothing 
+  void                                                // returns nothing
   custom_b_transport
-  ( tlm::tlm_generic_payload  &payload                // ref to payload 
-  , sc_core::sc_time          &delay_time             // delay time 
+  ( tlm::tlm_generic_payload  &payload                // ref to payload
+  , sc_core::sc_time          &delay_time             // delay time
   );
 
 
 /// Implemented for this example but required by interface
   bool                                              // success / failure
-  get_direct_mem_ptr                       
+  get_direct_mem_ptr
   ( tlm::tlm_generic_payload   &payload,            // address + extensions
     tlm::tlm_dmi               &dmi_data            // DMI data
   );
 
 // Member Variables ===================================================
-  
-  public:  
-	  
+
+  public:
+
   typedef tlm::tlm_generic_payload  *gp_ptr;		///< generic payload pointer
-  
+
     tlm_utils::simple_target_socket<lt_dmi_target>  m_memory_socket; ///<  target socket
 
   private:
-	  
+
   const unsigned int        m_ID;                   ///< target ID
         sc_dt::uint64       m_memory_size;          ///< memory size (bytes)
         unsigned int        m_memory_width;         ///< word size (bytes)
   const sc_core::sc_time    m_accept_delay;         ///< accept delay
   const sc_core::sc_time    m_read_response_delay;  ///< read response delay
   const sc_core::sc_time    m_write_response_delay; ///< write response delays
-  
-        bool                m_trans_dbg_prev_warning;
-        
+
         bool                m_dmi_enabled;
   const sc_core::sc_time    m_start_dmi_delay;
   const sc_core::sc_time    m_dmi_duration;
         sc_dt::uint64       m_start_address;
         sc_dt::uint64       m_end_address;
-         
+
         sc_core::sc_event   m_end_resp_rcvd_event;
         unsigned int        m_toggle_count;
   const unsigned int        m_max_dmi_toggle_count;
-  
+
         memory              m_target_memory;
 };
 

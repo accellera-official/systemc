@@ -34,7 +34,7 @@
 
 
 namespace sc_core {
-#define SC_DEFINE_MESSAGE(id,unused,text) extern const char id[] = text;
+#define SC_DEFINE_MESSAGE(id,unused,text) extern SC_API const char id[] = text;
 #include "sysc/utils/sc_utils_ids.h"
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/communication/sc_communication_ids.h"

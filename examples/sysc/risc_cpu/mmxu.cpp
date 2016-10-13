@@ -99,7 +99,7 @@ void mmxu::entry(){
     		switch (opcode_tmp) {
        		case 0:         // Stall 
 			opcode_encode = "STALL";
-                	dout_tmp = dout_tmp;
+                	// dout_tmp = dout_tmp;  // keeps its value
                 	wait();
                 	break;
         	case 3:         // add 
@@ -214,7 +214,7 @@ void mmxu::entry(){
                         mmxc3_tmp = mmxc3_tmp << 24;
                         mmxc2_tmp = mmxc2_tmp << 16;
                         mmxc1_tmp = mmxc1_tmp << 8;
-                        mmxc0_tmp = mmxc0_tmp ;
+                        // mmxc0_tmp = mmxc0_tmp ;  // keeps its value
                         dout_tmp  = mmxc3_tmp | mmxc2_tmp | mmxc1_tmp | mmxc0_tmp;
                         wait();
                         break;

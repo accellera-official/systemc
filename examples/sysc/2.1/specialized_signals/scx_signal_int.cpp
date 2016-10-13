@@ -35,7 +35,7 @@
 
  *****************************************************************************/
 
-/* 
+/*
 $Log: scx_signal_int.cpp,v $
 Revision 1.3  2011/08/26 22:28:29  acg
  Torsten Maehne: eliminate unused argument warnings.
@@ -153,7 +153,7 @@ void sc_int_sigref::concat_set(sc_dt::int64 src, int low_i)
 
 void sc_int_sigref::concat_set(const sc_dt::sc_signed& src, int low_i)
 {
-    if ( low_i < src.length() )  
+    if ( low_i < src.length() )
         *this = src >> low_i;
     else
         *this = (src < 0) ? (sc_dt::uint64)-1 : 0;

@@ -57,7 +57,7 @@ examples_BUILD += \
 
 examples_CLEAN += \
 	simple_bus/run.log \
-	simple_bus/expexted_trimmed.log \
+	simple_bus/expected_trimmed.log \
 	simple_bus/run_trimmed.log \
 	simple_bus/diff.log
 

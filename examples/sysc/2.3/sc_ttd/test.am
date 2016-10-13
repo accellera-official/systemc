@@ -57,7 +57,7 @@ examples_BUILD += \
 
 examples_CLEAN += \
 	2.3/sc_ttd/run.log \
-	2.3/sc_ttd/expexted_trimmed.log \
+	2.3/sc_ttd/expected_trimmed.log \
 	2.3/sc_ttd/run_trimmed.log \
 	2.3/sc_ttd/diff.log
 
@@ -78,7 +78,8 @@ examples_FILES += \
 2_3_sc_ttd_CXX_FILES = \
 	2.3/sc_ttd/main.cpp
 
-2_3_sc_ttd_BUILD =
+2_3_sc_ttd_BUILD = \
+	2.3/sc_ttd/golden.log
 
 2_3_sc_ttd_EXTRA = \
 	2.3/sc_ttd/sc_ttd.vcproj \

@@ -58,7 +58,7 @@ examples_BUILD += \
 
 examples_CLEAN += \
 	at_mixed_targets/run.log \
-	at_mixed_targets/expexted_trimmed.log \
+	at_mixed_targets/expected_trimmed.log \
 	at_mixed_targets/run_trimmed.log \
 	at_mixed_targets/diff.log
 

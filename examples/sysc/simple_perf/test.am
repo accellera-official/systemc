@@ -57,7 +57,7 @@ examples_BUILD += \
 
 examples_CLEAN += \
 	simple_perf/run.log \
-	simple_perf/expexted_trimmed.log \
+	simple_perf/expected_trimmed.log \
 	simple_perf/run_trimmed.log \
 	simple_perf/diff.log
 
@@ -74,7 +74,9 @@ simple_perf_H_FILES =
 simple_perf_CXX_FILES = \
 	simple_perf/simple_perf.cpp
 
-simple_perf_BUILD =
+# output is randomized across runs
+#simple_perf_BUILD = \
+#	simple_perf/golden.log
 
 simple_perf_EXTRA = \
 	simple_perf/simple_perf.vcproj \

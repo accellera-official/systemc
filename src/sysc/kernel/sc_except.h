@@ -31,6 +31,7 @@
 #define SC_EXCEPT_H
 
 #include <exception>
+#include "sysc/kernel/sc_cmnhdr.h"
 
 namespace sc_core {
 
@@ -45,7 +46,7 @@ void sc_thread_cor_fn( void* arg );
  *  the implementation of various SystemC throws.
  */
 
-class sc_user
+class SC_API sc_user
 {
     /*EMPTY*/
 public:
@@ -53,21 +54,21 @@ public:
     sc_user( const sc_user& ) {}
 };
 
-class sc_halt
+class SC_API sc_halt
 {
 public:
     sc_halt() {}
     sc_halt( const sc_halt& ) {}
 };
 
-class sc_kill
+class SC_API sc_kill
 {
 public:
     sc_kill() {}
     sc_kill( const sc_kill& ) {}
 };
 
-class sc_unwind_exception : public std::exception
+class SC_API sc_unwind_exception : public std::exception
 {
     friend class sc_simcontext;
     friend class sc_process_b;
@@ -115,7 +116,7 @@ sc_unwind_exception::sc_unwind_exception( const sc_unwind_exception& that )
 //------------------------------------------------------------------------------
  
 class sc_report;
-sc_report* sc_handle_exception();
+SC_API sc_report* sc_handle_exception();
 
 } // namespace sc_core
 

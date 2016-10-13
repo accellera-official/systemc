@@ -18,28 +18,28 @@
  *****************************************************************************/
 
 /*****************************************************************************
- 
+
   bios.h -- System Bios Unit.
- 
+
   Original Author: Martin Wang, Synopsys, Inc.
- 
- *****************************************************************************/
- 
-/*****************************************************************************
- 
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
- 
-      Name, Affiliation, Date:
-  Description of Modification:
- 
+
  *****************************************************************************/
 
- 
+/*****************************************************************************
+
+  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+  changes you are making here.
+
+      Name, Affiliation, Date:
+  Description of Modification:
+
+ *****************************************************************************/
+
+
 
 #define BOOT_LENGTH  5
 
-struct bios : sc_module { 
+struct bios : sc_module {
   	sc_in<unsigned > 		datain; 	// modified instruction
   	sc_in<bool> 			cs;    		// chip select
   	sc_in<bool>  			we;    		// write enable for SMC
@@ -56,10 +56,10 @@ struct bios : sc_module {
   int wait_cycles; 				// Cycle # it takes to access memory
 
   void init_param(int given_delay_cycles) {
-    wait_cycles = given_delay_cycles; 
+    wait_cycles = given_delay_cycles;
   }
 
-  //Constructor 
+  //Constructor
   SC_CTOR(bios) {
         SC_CTHREAD(entry, CLK.pos());
 
@@ -85,5 +85,3 @@ struct bios : sc_module {
   // Process functionality in member function below
   void entry();
 };
-
-

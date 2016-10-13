@@ -57,7 +57,7 @@ examples_BUILD += \
 
 examples_CLEAN += \
 	simple_fifo/run.log \
-	simple_fifo/expexted_trimmed.log \
+	simple_fifo/expected_trimmed.log \
 	simple_fifo/run_trimmed.log \
 	simple_fifo/diff.log
 
@@ -74,7 +74,8 @@ simple_fifo_H_FILES =
 simple_fifo_CXX_FILES = \
 	simple_fifo/simple_fifo.cpp
 
-simple_fifo_BUILD =
+simple_fifo_BUILD = \
+	simple_fifo/golden.log
 
 simple_fifo_EXTRA = \
 	simple_fifo/simple_fifo.vcproj \

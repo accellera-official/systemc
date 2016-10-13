@@ -61,6 +61,13 @@
 #include <utility>
 #include <vector>
 
+// C++11 deprecates std::gets, as it can't be used safely.
+// Compilers are starting to remove it from their headers.
+#if defined(__cplusplus) && (__cplusplus >= 201103L) || \
+    defined(_MSC_VER) && (_MSC_VER >= 1900)
+#define SC_NO_STDGETS_
+#endif
+
 // USINGS FOR I/O STREAM SUPPORT:
 
     using std::ios;
@@ -117,7 +124,9 @@
     using std::fputs;
     using std::getc;
     using std::getchar;
+#ifndef SC_NO_STDGETS_
     using std::gets;
+#endif
     using std::putc;
     using std::putchar;
     using std::puts;
@@ -345,4 +354,6 @@ using namespace sc_core;
 	typedef ::std::string sc_string;
 #endif
 
-#endif
+#undef SC_NO_STDGETS_
+
+#endif // SYSTEMC_H

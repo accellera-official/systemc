@@ -18,8 +18,8 @@
 ##
 ## ****************************************************************************
 ##
-##  test-run.sh.in --
-##  Process this file (during `make check') to produce a test-run.sh file.
+##  test.sh.in --
+##  Process this file (during `make check') to produce a test.sh file.
 ##
 ##  Original Author: Philipp A. Hartmann, 2013-05-20
 ##
@@ -80,7 +80,7 @@ result=$?
 
 if test -s diff.log ; then
   echo "***ERROR:"
-  cat diff.log 
+  cat diff.log
 else
   echo "OK"
 fi

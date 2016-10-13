@@ -93,7 +93,7 @@ private:
         s << m_name << ": non-blocking callback allready registered";
         SC_REPORT_WARNING("/OSCI_TLM-2/simple_socket",s.str().c_str());
       } else {
-        assert(!m_mod || m_mod == mod);
+        sc_assert(!m_mod || m_mod == mod);
         m_mod = mod;
         m_transport_ptr = p;
       }
@@ -106,7 +106,7 @@ private:
         s << m_name << ": invalidate DMI callback allready registered";
         SC_REPORT_WARNING("/OSCI_TLM-2/simple_socket",s.str().c_str());
       } else {
-        assert(!m_mod || m_mod == mod);
+        sc_assert(!m_mod || m_mod == mod);
         m_mod = mod;
         m_invalidate_direct_mem_ptr = p;
       }
@@ -116,7 +116,7 @@ private:
     {
       if (m_transport_ptr) {
         // forward call
-        assert(m_mod);
+        sc_assert(m_mod);
         return (m_mod->*m_transport_ptr)(trans, phase, t);
 
       } else {
@@ -132,7 +132,7 @@ private:
     {
       if (m_invalidate_direct_mem_ptr) {
         // forward call
-        assert(m_mod);
+        sc_assert(m_mod);
         (m_mod->*m_invalidate_direct_mem_ptr)(start_range, end_range);
       }
     }
@@ -230,7 +230,7 @@ private:
         s << m_name << ": non-blocking callback allready registered";
         SC_REPORT_WARNING("/OSCI_TLM-2/simple_socket",s.str().c_str());
       } else {
-        assert(!m_mod || m_mod == mod);
+        sc_assert(!m_mod || m_mod == mod);
         m_mod = mod;
         m_transport_ptr = p;
       }
@@ -243,7 +243,7 @@ private:
         s << m_name << ": invalidate DMI callback allready registered";
         SC_REPORT_WARNING("/OSCI_TLM-2/simple_socket",s.str().c_str());
       } else {
-        assert(!m_mod || m_mod == mod);
+        sc_assert(!m_mod || m_mod == mod);
         m_mod = mod;
         m_invalidate_direct_mem_ptr = p;
       }
@@ -253,7 +253,7 @@ private:
     {
       if (m_transport_ptr) {
         // forward call
-        assert(m_mod);
+        sc_assert(m_mod);
         return (m_mod->*m_transport_ptr)(m_transport_user_id, trans, phase, t);
 
       } else {
@@ -269,7 +269,7 @@ private:
     {
       if (m_invalidate_direct_mem_ptr) {
         // forward call
-        assert(m_mod);
+        sc_assert(m_mod);
         (m_mod->*m_invalidate_direct_mem_ptr)(m_invalidate_direct_mem_user_id, start_range, end_range);
       }
     }

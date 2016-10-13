@@ -43,10 +43,11 @@
 //     P    = pointer to process message is for, or NULL in which case the
 //            message will not print.
 #if 0
+#   include <cstring>
 #   define DEBUG_NAME ""
 #   define DEBUG_MSG(NAME,P,MSG) \
     { \
-        if ( P && ( (strlen(NAME)==0) || !strcmp(NAME,P->name())) ) \
+        if ( P && ( (std::strlen(NAME)==0) || !std::strcmp(NAME,P->name())) ) \
           std::cout << "**** " << sc_time_stamp() << " ("  \
 	            << sc_get_current_process_name() << "): " << MSG \
 		    << " - " << P->name() << std::endl; \
@@ -865,7 +866,7 @@ bool sc_thread_process::trigger_dynamic( sc_event* e )
 //"sc_set_stack_size"
 //
 //------------------------------------------------------------------------------
-void
+SC_API void
 sc_set_stack_size( sc_thread_handle thread_h, std::size_t size )
 {
     thread_h->set_stack_size( size );

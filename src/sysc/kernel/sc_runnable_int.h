@@ -46,10 +46,11 @@
 //     P    = pointer to process message is for, or NULL in which case the
 //            message will not print.
 #if 0
+#   include <cstring>
 #   define DEBUG_NAME ""
 #   define DEBUG_MSG(NAME,P,MSG) \
     { \
-        if ( P && ( (strlen(NAME)==0) || !strcmp(NAME,P->name())) ) \
+        if ( P && ( (std::strlen(NAME)==0) || !std::strcmp(NAME,P->name())) ) \
           std::cout << "**** " << sc_time_stamp() << " ("  \
 	            << sc_get_current_process_name() << "): " << MSG \
 		    << " - " << P->name() << std::endl; \
@@ -191,7 +192,7 @@ inline bool sc_runnable::is_initialized() const
 //------------------------------------------------------------------------------
 inline void sc_runnable::push_back_method( sc_method_handle method_h )
 {
-    // assert( method_h->next_runnable() == 0 ); // Can't queue twice.
+    // sc_assert( method_h->next_runnable() == 0 ); // Can't queue twice.
     DEBUG_MSG(DEBUG_NAME,method_h,"pushing back method");
     method_h->set_next_runnable(SC_NO_METHODS);
     m_methods_push_tail->set_next_runnable(method_h);
@@ -208,7 +209,7 @@ inline void sc_runnable::push_back_method( sc_method_handle method_h )
 //------------------------------------------------------------------------------
 inline void sc_runnable::push_back_thread( sc_thread_handle thread_h )
 {
-    // assert( thread_h->next_runnable() == 0 ); // Can't queue twice.
+    // sc_assert( thread_h->next_runnable() == 0 ); // Can't queue twice.
     DEBUG_MSG(DEBUG_NAME,thread_h,"pushing back thread");
     thread_h->set_next_runnable(SC_NO_THREADS);
     m_threads_push_tail->set_next_runnable(thread_h);
@@ -226,7 +227,7 @@ inline void sc_runnable::push_back_thread( sc_thread_handle thread_h )
 //------------------------------------------------------------------------------
 inline void sc_runnable::push_front_method( sc_method_handle method_h )
 {
-    // assert( method_h->next_runnable() == 0 ); // Can't queue twice.
+    // sc_assert( method_h->next_runnable() == 0 ); // Can't queue twice.
     DEBUG_MSG(DEBUG_NAME,method_h,"pushing front method");
     method_h->set_next_runnable(m_methods_push_head->next_runnable());
     if ( m_methods_push_tail == m_methods_push_head ) // Empty queue.
@@ -251,7 +252,7 @@ inline void sc_runnable::push_front_method( sc_method_handle method_h )
 //------------------------------------------------------------------------------
 inline void sc_runnable::push_front_thread( sc_thread_handle thread_h )
 {
-    // assert( thread_h->next_runnable() == 0 ); // Can't queue twice.
+    // sc_assert( thread_h->next_runnable() == 0 ); // Can't queue twice.
     DEBUG_MSG(DEBUG_NAME,thread_h,"pushing front thread");
     thread_h->set_next_runnable(m_threads_push_head->next_runnable());
     if ( m_threads_push_tail == m_threads_push_head ) // Empty queue.

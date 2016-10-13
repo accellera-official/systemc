@@ -22,7 +22,7 @@
   sc_thread_process.h -- Thread process declarations
 
   Original Author: Andy Goodrich, Forte Design Systems, 4 August 2005
-               
+
 
   CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
@@ -47,16 +47,17 @@
 //     P    = pointer to process message is for, or NULL in which case the
 //            message will not print.
 #if 0
+#   include <cstring>
 #   define DEBUG_NAME ""
 #   define DEBUG_MSG(NAME,P,MSG) \
     { \
-        if ( P && ( (strlen(NAME)==0) || !strcmp(NAME,P->name())) ) \
+        if ( P && ( (std::strlen(NAME)==0) || !std::strcmp(NAME,P->name())) ) \
           std::cout << "**** " << sc_time_stamp() << " ("  \
 	            << sc_get_current_process_name() << "): " << MSG \
 		    << " - " << P->name() << std::endl; \
     }
 #else
-#   define DEBUG_MSG(NAME,P,MSG) 
+#   define DEBUG_MSG(NAME,P,MSG)
 #endif
 
 
@@ -67,7 +68,7 @@ class sc_event_and_list;
 class sc_event_or_list;
 class sc_reset;
 void sc_thread_cor_fn( void* );
-void sc_set_stack_size( sc_thread_handle, std::size_t );
+SC_API void sc_set_stack_size( sc_thread_handle, std::size_t );
 class sc_event;
 class sc_join;
 class sc_module;
@@ -77,15 +78,15 @@ class sc_simcontext;
 class sc_runnable;
 
 sc_cor* get_cor_pointer( sc_process_b* process_p );
-void sc_set_stack_size( sc_thread_handle thread_h, std::size_t size );
-void wait( sc_simcontext* );
-void wait( const sc_event&, sc_simcontext* );
-void wait( const sc_event_or_list&, sc_simcontext* );
-void wait( const sc_event_and_list&, sc_simcontext* );
-void wait( const sc_time&, sc_simcontext* );
-void wait( const sc_time&, const sc_event&, sc_simcontext* );
-void wait( const sc_time&, const sc_event_or_list&, sc_simcontext* );
-void wait( const sc_time&, const sc_event_and_list&, sc_simcontext* );
+SC_API void sc_set_stack_size( sc_thread_handle thread_h, std::size_t size );
+SC_API void wait( sc_simcontext* );
+SC_API void wait( const sc_event&, sc_simcontext* );
+SC_API void wait( const sc_event_or_list&, sc_simcontext* );
+SC_API void wait( const sc_event_and_list&, sc_simcontext* );
+SC_API void wait( const sc_time&, sc_simcontext* );
+SC_API void wait( const sc_time&, const sc_event&, sc_simcontext* );
+SC_API void wait( const sc_time&, const sc_event_or_list&, sc_simcontext* );
+SC_API void wait( const sc_time&, const sc_event_and_list&, sc_simcontext* );
 
 //==============================================================================
 // sc_thread_process -
@@ -113,8 +114,8 @@ class sc_thread_process : public sc_process_b {
     friend void wait( const sc_time&, const sc_event_or_list&, sc_simcontext* );
     friend void wait( const sc_time&, const sc_event_and_list&, sc_simcontext*);
   public:
-    sc_thread_process( const char* name_p, bool free_host, 
-        SC_ENTRY_FUNC method_p, sc_process_host* host_p, 
+    sc_thread_process( const char* name_p, bool free_host,
+        SC_ENTRY_FUNC method_p, sc_process_host* host_p,
         const sc_spawn_options* opt_p );
 
     virtual const char* kind() const
@@ -124,23 +125,23 @@ class sc_thread_process : public sc_process_b {
     // may not be deleted manually (called from sc_process_b)
     virtual ~sc_thread_process();
 
-    virtual void disable_process( 
+    virtual void disable_process(
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
-    virtual void enable_process( 
+    virtual void enable_process(
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
     virtual void kill_process(
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
     sc_thread_handle next_exist();
     sc_thread_handle next_runnable();
     virtual void prepare_for_simulation();
-    virtual void resume_process( 
+    virtual void resume_process(
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
     void set_next_exist( sc_thread_handle next_p );
     void set_next_runnable( sc_thread_handle next_p );
 
     void set_stack_size( std::size_t size );
     inline void suspend_me();
-    virtual void suspend_process( 
+    virtual void suspend_process(
         sc_descendant_inclusion_info descendants = SC_NO_DESCENDANTS );
     virtual void throw_reset( bool async );
     virtual void throw_user( const sc_throw_it_helper& helper,
@@ -181,7 +182,7 @@ class sc_thread_process : public sc_process_b {
 //------------------------------------------------------------------------------
 inline void sc_thread_process::set_stack_size( std::size_t size )
 {
-    assert( size );
+    sc_assert( size );
     m_stack_size = size;
 }
 
@@ -189,7 +190,7 @@ inline void sc_thread_process::set_stack_size( std::size_t size )
 //"sc_thread_process::suspend_me"
 //
 // This method suspends this object instance in favor of the next runnable
-// process. Upon awakening we check to see if an exception should be thrown. 
+// process. Upon awakening we check to see if an exception should be thrown.
 // There are two types of exceptions that can be thrown, synchronous reset
 // and asynchronous reset. At a future time there may be more asynchronous
 // exceptions.  If an asynchronous reset is seen and there is not static reset
@@ -201,13 +202,12 @@ inline void sc_thread_process::set_stack_size( std::size_t size )
 //       the file sc_reset.cpp.
 //   (2) The m_sticky_reset field is used to handle synchronous resets that
 //       are enabled via the sc_process_handle::sync_reset_on() method. These
-//       resets are not generated by a signal, but rather are modal by 
+//       resets are not generated by a signal, but rather are modal by
 //       method call: sync_reset_on() - sync_reset_off().
 //------------------------------------------------------------------------------
 inline void sc_thread_process::suspend_me()
 {
     // remember, if we're currently unwinding
-
     bool unwinding_preempted = m_unwinding;
 
     sc_simcontext* simc_p = simcontext();
@@ -239,7 +239,7 @@ inline void sc_thread_process::suspend_me()
       case THROW_SYNC_RESET:
         DEBUG_MSG( DEBUG_NAME , this, "throwing reset for");
 	if ( m_reset_event_p ) m_reset_event_p->notify();
-        throw sc_unwind_exception( this, true ); 
+        throw sc_unwind_exception( this, true );
 
       case THROW_USER:
         DEBUG_MSG( DEBUG_NAME, this, "invoking throw_it for");
@@ -254,7 +254,9 @@ inline void sc_thread_process::suspend_me()
 	throw sc_unwind_exception( this, false );
 
       default: // THROWING_NOW
-        sc_assert( unwinding_preempted );
+        if( !unwinding_preempted )
+            SC_REPORT_FATAL( SC_ID_INTERNAL_ERROR_
+                           , "unexpected unwinding/throw status" );
         DEBUG_MSG( DEBUG_NAME, this, "restarting thread");
         break;
     }
@@ -268,7 +270,7 @@ inline void sc_thread_process::suspend_me()
 inline
 void
 sc_thread_process::wait( const sc_event& e )
-{   
+{
     if( m_unwinding )
         SC_REPORT_ERROR( SC_ID_WAIT_DURING_UNWINDING_, name() );
 
@@ -281,7 +283,7 @@ sc_thread_process::wait( const sc_event& e )
 inline
 void
 sc_thread_process::wait( const sc_event_or_list& el )
-{   
+{
     if( m_unwinding )
         SC_REPORT_ERROR( SC_ID_WAIT_DURING_UNWINDING_, name() );
 
@@ -370,13 +372,13 @@ sc_thread_process::wait( const sc_time& t, const sc_event_and_list& el )
 // This method suspends this object instance for the specified number of cycles.
 // A cycle is defined as the event the thread is set up to staticly wait on.
 // The field m_wait_cycle_n is set to one less than the number of cycles to
-// be waited for, since the value is tested before being decremented in 
+// be waited for, since the value is tested before being decremented in
 // the simulation kernel.
 //------------------------------------------------------------------------------
 inline
 void
 sc_thread_process::wait_cycles( int n )
-{   
+{
     if( m_unwinding )
         SC_REPORT_ERROR( SC_ID_WAIT_DURING_UNWINDING_, name() );
 
@@ -444,7 +446,7 @@ inline sc_cor* get_cor_pointer( sc_process_b* process_p )
 //"sc_thread_process::trigger_static"
 //
 // This inline method adds the current thread to the queue of runnable
-// processes, if required.  This is the case if the following criteria
+// processes if required.  This is the case if the following criteria
 // are met:
 //   (1) The process is in a runnable state.
 //   (2) The process is not already on the run queue.
@@ -461,9 +463,9 @@ void
 sc_thread_process::trigger_static()
 {
     // No need to try queueing this thread if one of the following is true:
-    //    (a) its disabled
-    //    (b) its already queued for execution
-    //    (c) its waiting on a dynamic event
+    //    (a) it is disabled
+    //    (b) it is already queued for execution
+    //    (c) it is waiting on a dynamic event
     //    (d) its wait count is not satisfied
 
     if ( (m_state & ps_bit_disabled) || is_runnable() ||
@@ -484,9 +486,9 @@ sc_thread_process::trigger_static()
         return;
     }
 
-    // If we get here then the thread is has satisfied its wait criteria, if 
-    // its suspended mark its state as ready to run. If its not suspended then 
-    // push it onto the runnable queue.
+    // If we get here, then the thread has satisfied its wait criteria. If it is
+    // suspended, then mark its state as ready to run. If it is not suspended,
+    // then push it onto the runnable queue.
 
     if ( m_state & ps_bit_suspended )
     {
@@ -501,7 +503,7 @@ sc_thread_process::trigger_static()
 #undef DEBUG_MSG
 #undef DEBUG_NAME
 
-} // namespace sc_core 
+} // namespace sc_core
 
 // $Log: sc_thread_process.h,v $
 // Revision 1.30  2011/08/26 20:46:11  acg

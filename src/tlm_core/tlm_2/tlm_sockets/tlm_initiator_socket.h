@@ -17,14 +17,19 @@
 
  *****************************************************************************/
 
-#ifndef __TLM_INITIATOR_SOCKET_H__
-#define __TLM_INITIATOR_SOCKET_H__
+#ifndef TLM_CORE_TLM_INITIATOR_SOCKET_H_INCLUDED_
+#define TLM_CORE_TLM_INITIATOR_SOCKET_H_INCLUDED_
 
-//#include <systemc>
 #include "tlm_core/tlm_2/tlm_2_interfaces/tlm_fw_bw_ifs.h"
 
-namespace tlm {
+#if defined(__clang__) || \
+   (defined(__GNUC__) && ((__GNUC__ * 1000 + __GNUC_MINOR__) >= 4006))
+// ignore warning about deliberately hidden "bind()" overloads
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#endif
 
+namespace tlm {
 
 template <unsigned int BUSWIDTH = 32,
           typename FW_IF = tlm_fw_transport_if<>,
@@ -50,36 +55,21 @@ template <unsigned int BUSWIDTH,
 template <unsigned int BUSWIDTH,
           typename FW_IF,
           typename BW_IF,
-          int N
-#if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
-          ,sc_core::sc_port_policy POL
-#endif
-          > class tlm_base_target_socket;
+          int N,
+          sc_core::sc_port_policy POL> class tlm_base_target_socket;
 
 template <unsigned int BUSWIDTH = 32,
           typename FW_IF = tlm_fw_transport_if<>,
           typename BW_IF = tlm_bw_transport_if<>,
-          int N = 1
-#if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
-          ,sc_core::sc_port_policy POL = sc_core::SC_ONE_OR_MORE_BOUND
-#endif
-          >
+          int N = 1,
+          sc_core::sc_port_policy POL = sc_core::SC_ONE_OR_MORE_BOUND>
 class tlm_base_initiator_socket : public tlm_base_initiator_socket_b<BUSWIDTH, FW_IF, BW_IF>,
-                                  public sc_core::sc_port<FW_IF, N
-#if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
-                                                        , POL
-#endif
-                                                    >
-
+                                  public sc_core::sc_port<FW_IF, N, POL>
 {
 public:
-  typedef FW_IF                                 fw_interface_type;
-  typedef BW_IF                                 bw_interface_type;
-  typedef sc_core::sc_port<fw_interface_type, N
-#if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
-                                            , POL
-#endif
-                                            >   port_type;
+  typedef FW_IF fw_interface_type;
+  typedef BW_IF bw_interface_type;
+  typedef sc_core::sc_port<fw_interface_type,N,POL>   port_type;
 
   typedef sc_core::sc_export<bw_interface_type> export_type;
 
@@ -90,11 +80,7 @@ public:
                                       fw_interface_type,
                                       bw_interface_type> base_type;
 
-  template <unsigned int, typename, typename, int
-#if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
-           ,sc_core::sc_port_policy
-#endif
-           >
+  template <unsigned int, typename, typename, int, sc_core::sc_port_policy>
   friend class tlm_base_target_socket;
 
 public:
@@ -180,11 +166,7 @@ public:
   virtual                    BW_IF  &       get_base_interface()
     { return m_export; }
   virtual                    BW_IF  const & get_base_interface() const
-#if !( defined(IEEE_1666_SYSTEMC) && IEEE_1666_SYSTEMC >= 201101L )
-    { return const_cast<export_type &>(m_export); }
-#else
     { return m_export; }
-#endif
 
   virtual sc_core::sc_export<BW_IF> &       get_base_export()
     { return m_export; }
@@ -201,31 +183,20 @@ protected:
 
 template <unsigned int BUSWIDTH = 32,
           typename TYPES = tlm_base_protocol_types,
-          int N = 1
-#if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
-          ,sc_core::sc_port_policy POL = sc_core::SC_ONE_OR_MORE_BOUND
-#endif
-          >
+          int N = 1,
+          sc_core::sc_port_policy POL = sc_core::SC_ONE_OR_MORE_BOUND>
 class tlm_initiator_socket :
-  public tlm_base_initiator_socket <BUSWIDTH,
+  public tlm_base_initiator_socket<BUSWIDTH,
                                tlm_fw_transport_if<TYPES>,
                                tlm_bw_transport_if<TYPES>,
-                               N
-#if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
-                               ,POL
-#endif
-                              >
+                               N, POL>
 {
 public:
   tlm_initiator_socket() :
     tlm_base_initiator_socket<BUSWIDTH,
                          tlm_fw_transport_if<TYPES>,
                          tlm_bw_transport_if<TYPES>,
-                         N
-#if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
-                         ,POL
-#endif
-                         >()
+                         N, POL>()
   {
   }
 
@@ -233,11 +204,7 @@ public:
     tlm_base_initiator_socket<BUSWIDTH,
                          tlm_fw_transport_if<TYPES>,
                          tlm_bw_transport_if<TYPES>,
-                         N
-#if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
-                         ,POL
-#endif
-                         >(name)
+                         N, POL>(name)
   {
   }
 
@@ -249,4 +216,9 @@ public:
 
 } // namespace tlm
 
+#if defined(__clang__) || \
+   (defined(__GNUC__) && ((__GNUC__ * 1000 + __GNUC_MINOR__) >= 4006))
+#pragma GCC diagnostic pop
 #endif
+
+#endif // TLM_CORE_TLM_INITIATOR_SOCKET_H_INCLUDED_

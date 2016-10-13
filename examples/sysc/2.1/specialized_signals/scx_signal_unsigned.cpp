@@ -35,7 +35,7 @@
 
  *****************************************************************************/
 
-/* 
+/*
 $Log: scx_signal_unsigned.cpp,v $
 Revision 1.3  2011/08/26 22:28:29  acg
  Torsten Maehne: eliminate unused argument warnings.
@@ -149,9 +149,9 @@ void sc_unsigned_part_if::write_part( sc_dt::uint64 /*v*/, int /*left*/, int /*r
 {
     SC_REPORT_ERROR( SC_ID_OPERATION_ON_NON_SPECIALIZED_SIGNAL_, "int" );
 }
-void sc_unsigned_part_if::write_part( 
+void sc_unsigned_part_if::write_part(
     const sc_dt::sc_signed& /*v*/, int /*left*/, int /*right*/ )
-{   
+{
     SC_REPORT_ERROR( SC_ID_OPERATION_ON_NON_SPECIALIZED_SIGNAL_, "int" );
 }
 void sc_unsigned_part_if::write_part(
@@ -174,7 +174,7 @@ void sc_unsigned_part_if::write_part(
 void sc_unsigned_sigref::concat_set(sc_dt::int64 src, int low_i)
 {
     sc_dt::int64 tmp;
-    if ( low_i < 63 ) 
+    if ( low_i < 63 )
         tmp = src >> low_i;
     else
         tmp = (src < 0) ? -1 : 0;

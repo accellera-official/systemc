@@ -38,12 +38,14 @@
 #  endif
 #endif
 
+#include "sysc/kernel/sc_process_handle.h"
+
 namespace sc_core {
 
 class sc_object;
 class sc_port_base;
 extern
-void
+SC_API void
 sc_signal_invalid_writer( sc_object* target, sc_object* first_writer,
                           sc_object* second_writer, bool check_delta );
 
@@ -68,25 +70,25 @@ class sc_signal;
 template< sc_writer_policy >
 struct sc_writer_policy_check;
 
-struct sc_writer_policy_nocheck_write
+struct SC_API sc_writer_policy_nocheck_write
 {
   bool check_write( sc_object* /* target */, bool /* value_changed */ )
     { return true; }
   void update(){}
 };
 
-struct sc_writer_policy_check_write
+struct SC_API sc_writer_policy_check_write
 {
   bool check_write( sc_object* target, bool value_changed );
   void update(){}
 protected:
   sc_writer_policy_check_write( bool check_delta = false )
-    : m_check_delta( check_delta ), m_writer_p(NULL) {}
+    : m_check_delta( check_delta ), m_writer_p() {}
   const bool         m_check_delta;
-  sc_object*         m_writer_p;
+  sc_process_handle  m_writer_p;
 };
 
-struct sc_writer_policy_check_delta
+struct SC_API sc_writer_policy_check_delta
     : sc_writer_policy_check_write
 {
 
@@ -100,16 +102,16 @@ struct sc_writer_policy_check_delta
       return true;
   }
 
-  void update(){ m_writer_p = NULL; }
+  void update(){ sc_process_handle().swap( m_writer_p ); }
 };
 
-struct sc_writer_policy_nocheck_port
+struct SC_API sc_writer_policy_nocheck_port
 {
   bool check_port( sc_object*, sc_port_base*, bool )
     { return true; }
 };
 
-struct sc_writer_policy_check_port
+struct SC_API sc_writer_policy_check_port
 {
   bool check_port( sc_object* target, sc_port_base* port, bool is_output );
 
@@ -119,19 +121,19 @@ protected:
 };
 
 template<>
-struct sc_writer_policy_check<SC_ONE_WRITER>
+struct SC_API sc_writer_policy_check<SC_ONE_WRITER>
   : sc_writer_policy_check_port
   , sc_writer_policy_check_write
 {};
 
 template<>
-struct sc_writer_policy_check<SC_MANY_WRITERS>
+struct SC_API sc_writer_policy_check<SC_MANY_WRITERS>
   : sc_writer_policy_nocheck_port
   , sc_writer_policy_check_delta
 {};
 
 template<>
-struct sc_writer_policy_check<SC_UNCHECKED_WRITERS>
+struct SC_API sc_writer_policy_check<SC_UNCHECKED_WRITERS>
   : sc_writer_policy_nocheck_port
   , sc_writer_policy_nocheck_write
 {};

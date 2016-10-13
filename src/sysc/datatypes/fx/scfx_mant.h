@@ -75,7 +75,7 @@ typedef unsigned short half_word;
 //  Mantissa class.
 // ----------------------------------------------------------------------------
 
-class scfx_mant
+class SC_API scfx_mant
 {
 
     word* m_array;
@@ -172,10 +172,10 @@ scfx_mant::operator[]( int i )
 }
 
 inline
-scfx_mant::scfx_mant( std::size_t size )
-: m_array(0), m_size(size)
+scfx_mant::scfx_mant( std::size_t size_ )
+: m_array(0), m_size(size_)
 {
-    m_array = alloc( size );
+    m_array = alloc( size_ );
 }
 
 inline
@@ -378,7 +378,7 @@ inc( scfx_mant& mant )
 //  Mantissa reference class.
 // ----------------------------------------------------------------------------
 
-class scfx_mant_ref
+class SC_API scfx_mant_ref
 {
 
     scfx_mant* m_mant;

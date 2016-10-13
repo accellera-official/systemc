@@ -257,11 +257,11 @@ sc_signed_subref::operator = ( double v )
 
     int i = 0;
 
-    while (floor(v) && (i < nd)) {
+    while (std::floor(v) && (i < nd)) {
 #ifndef _WIN32
-	d[i++] = (sc_digit) floor(remainder(v, DIGIT_RADIX));
+	d[i++] = (sc_digit) std::floor(remainder(v, DIGIT_RADIX));
 #else
-	d[i++] = (sc_digit) floor(fmod(v, DIGIT_RADIX));
+	d[i++] = (sc_digit) std::floor(std::fmod(v, DIGIT_RADIX));
 #endif
 	v /= DIGIT_RADIX;
     }

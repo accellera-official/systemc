@@ -39,7 +39,7 @@ namespace sc_core {
 //  The sc_mutex_if interface class.
 // ----------------------------------------------------------------------------
 
-class sc_mutex_if
+class SC_API sc_mutex_if
 : virtual public sc_interface
 {
 public:
@@ -76,7 +76,7 @@ private:
 // ----------------------------------------------------------------------------
 
 //template< typename Lockable = sc_mutex_if >
-class sc_scoped_lock
+class SC_API sc_scoped_lock
 {
 public:
     //typedef Lockable lockable_type;

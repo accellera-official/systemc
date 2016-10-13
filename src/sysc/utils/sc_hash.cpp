@@ -27,15 +27,15 @@
   CHANGE LOG AT END OF FILE
  *****************************************************************************/
 
-#include <assert.h>
-#include <stdlib.h> // duplicate (c)stdlib.h headers for Solaris
-#include <cstdlib>
-#include <cstddef>
-#include <string.h>
-
 #include "sysc/kernel/sc_cmnhdr.h"
 #include "sysc/utils/sc_hash.h"
 #include "sysc/utils/sc_mempool.h"
+#include "sysc/utils/sc_report.h"  // sc_assert
+
+#include <cstdlib>
+#include <cstddef>
+#include <cstring>
+#include <algorithm>
 
 namespace sc_core {
 
@@ -43,9 +43,9 @@ namespace sc_core {
 // approximate it by size_t
 typedef std::size_t uintptr_t;
 
-const double PHASH_DEFAULT_GROW_FACTOR     = 2.0;
+SC_API const double PHASH_DEFAULT_GROW_FACTOR     = 2.0;
 
-class sc_phash_elem {
+class SC_API sc_phash_elem {
     friend class sc_phash_base;
     friend class sc_phash_base_iter;
 
@@ -59,9 +59,9 @@ private:
     sc_phash_elem() : key(0), contents(0), next(0) { }
     ~sc_phash_elem() { }
 
-    static void* operator new(std::size_t sz) 
+    static void* operator new(std::size_t sz)
         { return sc_mempool::allocate(sz); }
-    static void operator delete(void* p, std::size_t sz) 
+    static void operator delete(void* p, std::size_t sz)
         { sc_mempool::release(p, sz);      }
 };
 
@@ -76,7 +76,7 @@ sc_phash_base::sc_phash_base(
     int (*cmp_fn)(const void*, const void*)
 ) :
     default_value(def), num_bins(0), num_entries(0), max_density(density),
-    reorder_flag(reorder), grow_factor(grow), bins(0), hash(hash_fn), 
+    reorder_flag(reorder), grow_factor(grow), bins(0), hash(hash_fn),
     cmpr(cmp_fn)
 {
     if (size <= 0)
@@ -181,7 +181,7 @@ sc_phash_base::find_entry_c( unsigned hash_val, const void* key, sc_phash_elem**
         last = &(ptr->next);
         ptr = *last;
     }
-        /* Bring to front */
+    /* Bring to front */
     if ((ptr != 0) && reorder_flag) {
         *last = ptr->next;
         ptr->next = bins[hash_val];
@@ -219,7 +219,7 @@ sc_phash_base::erase()
         }
         bins[i] = 0;
     }
-    assert(num_entries == 0);
+    sc_assert(num_entries == 0);
 }
 
 void
@@ -236,7 +236,7 @@ sc_phash_base::erase(void (*kfree)(void*))
         }
         bins[i] = 0;
     }
-    assert(num_entries == 0);
+    sc_assert(num_entries == 0);
 }
 
 void
@@ -323,7 +323,7 @@ sc_phash_base::remove( const void* k )
     if (ptr == 0)
         return 0;
 
-    assert(*last == ptr);
+    sc_assert(*last == ptr);
     *last = ptr->next;
     delete ptr;
     --num_entries;
@@ -347,7 +347,7 @@ sc_phash_base::remove( const void* k, void** pk, void** pc )
         *pc = ptr->contents;
     }
 
-    assert(*last == ptr);
+    sc_assert(*last == ptr);
     *last = ptr->next;
     delete ptr;
     --num_entries;
@@ -591,21 +591,21 @@ sc_phash_base_iter::set_contents( void* c )
 
 /****************************************************************************/
 
-unsigned 
+SC_API unsigned
 default_ptr_hash_fn(const void* p)
 {
     return static_cast<unsigned>(((uintptr_t)(p) >> 2) * 2654435789U);
 
 }
 
-unsigned
+SC_API unsigned
 default_int_hash_fn(const void* p)
 {
     return static_cast<unsigned>((uintptr_t)(p) * 3141592661U);
 }
 
 
-unsigned
+SC_API unsigned
 default_str_hash_fn(const void* p)
 {
     if (!p) return 0;
@@ -622,24 +622,26 @@ default_str_hash_fn(const void* p)
     return h;
 }
 
-int
+SC_API int
 sc_strhash_cmp( const void* a, const void* b )
 {
-    return strcmp( (const char*) a, (const char*) b );
+    return std::strcmp( (const char*) a, (const char*) b );
 }
 
-void*
+SC_API void*
 sc_strhash_kdup(const void* k)
 {
-    char* result = (char*) malloc( strlen((const char*)k)+1 );
-    strcpy(result, (const char*) k);
+    std::size_t size = std::strlen((const char*)k)+1;
+    char* result = new char[size];
+    std::copy(static_cast<const char*>(k), static_cast<const char*>(k) + size,
+              result);
     return result;
 }
 
-void
+SC_API void
 sc_strhash_kfree(void* k)
 {
-    if (k) free((char*) k);
+    delete[] static_cast<char*>(k);
 }
  } // namespace sc_core
 

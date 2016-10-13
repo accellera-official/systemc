@@ -41,7 +41,7 @@ namespace sc_core {
 //  Class that manages the ready-to-run queues.
 //=============================================================================
 
-class sc_runnable
+class SC_API sc_runnable
 {
 
   public:

@@ -48,6 +48,7 @@
 #define SC_FXDEFS_H
 
 
+#include "sysc/kernel/sc_cmnhdr.h"
 #include "sysc/utils/sc_machine.h"
 #include "sysc/datatypes/fx/sc_fx_ids.h"
 #include "sysc/datatypes/int/sc_nbutils.h"
@@ -69,7 +70,7 @@ enum sc_enc
 };
 
 
-const std::string to_string( sc_enc );
+SC_API const std::string to_string( sc_enc );
 
 
 inline
@@ -98,7 +99,7 @@ enum sc_q_mode
 };
 
 
-const std::string to_string( sc_q_mode );
+SC_API const std::string to_string( sc_q_mode );
 
 
 inline
@@ -127,7 +128,7 @@ enum sc_o_mode
 // (*) uses the number of saturated bits argument, see the documentation.
 
 
-const std::string to_string( sc_o_mode );
+SC_API const std::string to_string( sc_o_mode );
 
 
 inline
@@ -151,7 +152,7 @@ enum sc_switch
 };
 
 
-const std::string to_string( sc_switch );
+SC_API const std::string to_string( sc_switch );
 
 
 inline
@@ -175,7 +176,7 @@ enum sc_fmt
 };
 
 
-const std::string to_string( sc_fmt );
+SC_API const std::string to_string( sc_fmt );
 
 
 inline

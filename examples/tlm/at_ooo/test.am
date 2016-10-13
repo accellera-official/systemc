@@ -58,7 +58,7 @@ examples_BUILD += \
 
 examples_CLEAN += \
 	at_ooo/run.log \
-	at_ooo/expexted_trimmed.log \
+	at_ooo/expected_trimmed.log \
 	at_ooo/run_trimmed.log \
 	at_ooo/diff.log
 

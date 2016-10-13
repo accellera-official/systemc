@@ -37,8 +37,8 @@ namespace sc_core {
 
 // friend function declarations:
 
-void halt( sc_simcontext* );
-void wait( int, sc_simcontext* );
+void SC_API halt( sc_simcontext* );
+void SC_API wait( int, sc_simcontext* );
 
 
 //==============================================================================

@@ -66,7 +66,7 @@ class scfx_params;
 //  ...
 // ----------------------------------------------------------------------------
 
-class scfx_params
+class SC_API scfx_params
 {
 
 public:

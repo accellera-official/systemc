@@ -58,7 +58,7 @@ examples_BUILD += \
 
 examples_CLEAN += \
 	lt_extension_mandatory/run.log \
-	lt_extension_mandatory/expexted_trimmed.log \
+	lt_extension_mandatory/expected_trimmed.log \
 	lt_extension_mandatory/run_trimmed.log \
 	lt_extension_mandatory/diff.log
 

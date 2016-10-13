@@ -39,7 +39,7 @@ namespace sc_core {
 //  The sc_semaphore_if interface class.
 // ----------------------------------------------------------------------------
 
-class sc_semaphore_if
+class SC_API sc_semaphore_if
 : virtual public sc_interface
 {
 public:

@@ -57,7 +57,7 @@ examples_BUILD += \
 
 examples_CLEAN += \
 	2.1/sc_export/run.log \
-	2.1/sc_export/expexted_trimmed.log \
+	2.1/sc_export/expected_trimmed.log \
 	2.1/sc_export/run_trimmed.log \
 	2.1/sc_export/diff.log
 
@@ -74,7 +74,8 @@ examples_FILES += \
 2_1_sc_export_CXX_FILES = \
 	2.1/sc_export/main.cpp
 
-2_1_sc_export_BUILD =
+2_1_sc_export_BUILD = \
+	2.1/sc_export/golden.log
 
 2_1_sc_export_EXTRA = \
 	2.1/sc_export/sc_export.vcproj \

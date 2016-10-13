@@ -17,10 +17,8 @@
 
  *****************************************************************************/
 
-#ifndef __TLM_EVENT_FINDER_H__
-#define __TLM_EVENT_FINDER_H__
-
-//#include <systemc>
+#ifndef TLM_CORE_TLM_EVENT_FINDER_H_INCLUDED_
+#define TLM_CORE_TLM_EVENT_FINDER_H_INCLUDED_
 
 #include "tlm_core/tlm_1/tlm_req_rsp/tlm_1_interfaces/tlm_tag.h"
 
@@ -28,7 +26,7 @@ namespace tlm {
 
 template <class IF , class T>
 class tlm_event_finder_t
-: public sc_core::sc_event_finder
+  : public sc_core::sc_event_finder
 {
 public:
 
@@ -43,11 +41,8 @@ public:
 
     virtual ~tlm_event_finder_t()
         {}
-#if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
+
     virtual const sc_core::sc_event& find_event( sc_core::sc_interface* if_p = 0 ) const;
-#else
-    virtual const sc_core::sc_event& find_event() const;
-#endif
 
 private:
 
@@ -62,7 +57,6 @@ private:
 };
 
 
-#if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
 template <class IF , class T>
 inline
 const sc_core::sc_event&
@@ -71,24 +65,11 @@ tlm_event_finder_t<IF,T>::find_event( sc_core::sc_interface* if_p ) const
     const IF* iface = ( if_p ) ? dynamic_cast<const IF*>( if_p ) :
                                  dynamic_cast<const IF*>( port().get_interface() );
     if( iface == 0 ) {
-  report_error( sc_core::SC_ID_FIND_EVENT_, "port is not bound" );
+        report_error( sc_core::SC_ID_FIND_EVENT_, "port is not bound" );
     }
     return (const_cast<IF*>( iface )->*m_event_method) ( 0 );
 }
-#else
-template <class IF , class T>
-inline
-const sc_core::sc_event&
-tlm_event_finder_t<IF,T>::find_event() const
-{
-    const IF* iface = dynamic_cast<const IF*>( port().get_interface() );
-    if( iface == 0 ) {
-  report_error( sc_core::SC_ID_FIND_EVENT_, "port is not bound" );
-    }
-    return (const_cast<IF*>( iface )->*m_event_method) ( 0 );
-}
-#endif
 
 } // namespace tlm
 
-#endif
+#endif // TLM_CORE_TLM_EVENT_FINDER_H_INCLUDED_

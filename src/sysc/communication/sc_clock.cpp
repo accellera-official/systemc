@@ -36,6 +36,12 @@
 // Added $Log command so that CVS comments are reproduced in the source.
 //
 
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+// disable warning about explicit instantiation of sc_signal
+// without implementation in this translation unit (-> sc_signal.cpp)
+#pragma warning(disable:4661)
+#endif
+
 #include "sysc/communication/sc_clock.h"
 #include "sysc/communication/sc_communication_ids.h"
 #include "sysc/kernel/sc_simcontext.h"
@@ -57,11 +63,8 @@ sc_clock::sc_clock() :
     base_type( sc_gen_unique_name( "clock" ) ),
     m_period(), m_duty_cycle(), m_start_time(), m_posedge_first(),
     m_posedge_time(), m_negedge_time(),
-    m_next_posedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
-                          "_next_posedge_event").c_str()),
-    m_next_negedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
-                          "_next_negedge_event").c_str())
-
+    m_next_posedge_event( sc_event::kernel_event, "next_posedge_event" ),
+    m_next_negedge_event( sc_event::kernel_event, "next_negedge_event" )
 {
     init( sc_time::from_value(simcontext()->m_time_params->default_time_unit),
 	  0.5,
@@ -75,10 +78,8 @@ sc_clock::sc_clock( const char* name_ ) :
     base_type( name_ ),
     m_period(), m_duty_cycle(), m_start_time(), m_posedge_first(),
     m_posedge_time(), m_negedge_time(),
-    m_next_posedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
-			   std::string(name_) + "_next_posedge_event").c_str()),
-    m_next_negedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
-			   std::string(name_) + "_next_negedge_event").c_str())
+    m_next_posedge_event( sc_event::kernel_event, "next_posedge_event" ),
+    m_next_negedge_event( sc_event::kernel_event, "next_negedge_event" )
 {
     init( sc_time::from_value(simcontext()->m_time_params->default_time_unit),
 	  0.5,
@@ -96,10 +97,8 @@ sc_clock::sc_clock( const char* name_,
     base_type( name_ ),
     m_period(), m_duty_cycle(), m_start_time(), m_posedge_first(),
     m_posedge_time(), m_negedge_time(),
-    m_next_posedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
-			   std::string(name_) + "_next_posedge_event").c_str()),
-    m_next_negedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
-			   std::string(name_) + "_next_negedge_event").c_str())
+    m_next_posedge_event( sc_event::kernel_event, "next_posedge_event" ),
+    m_next_negedge_event( sc_event::kernel_event, "next_negedge_event" )
 {
     init( period_,
 	  duty_cycle_,
@@ -122,10 +121,8 @@ sc_clock::sc_clock( const char* name_,
     base_type( name_ ),
     m_period(), m_duty_cycle(), m_start_time(), m_posedge_first(),
     m_posedge_time(), m_negedge_time(),
-    m_next_posedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
-			   std::string(name_) + "_next_posedge_event").c_str()),
-    m_next_negedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
-			   std::string(name_) + "_next_negedge_event").c_str())
+    m_next_posedge_event( sc_event::kernel_event, "next_posedge_event" ),
+    m_next_negedge_event( sc_event::kernel_event, "next_negedge_event" )
 {
     init( sc_time( period_v_, period_tu_, simcontext() ),
 	  duty_cycle_,
@@ -146,10 +143,8 @@ sc_clock::sc_clock( const char* name_,
     base_type( name_ ),
     m_period(), m_duty_cycle(), m_start_time(), m_posedge_first(),
     m_posedge_time(), m_negedge_time(),
-    m_next_posedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
-			   std::string(name_) + "_next_posedge_event").c_str()),
-    m_next_negedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
-			   std::string(name_) + "_next_negedge_event").c_str())
+    m_next_posedge_event( sc_event::kernel_event, "next_posedge_event" ),
+    m_next_negedge_event( sc_event::kernel_event, "next_negedge_event" )
 {
     init( sc_time( period_v_, period_tu_, simcontext() ),
 	  duty_cycle_,
@@ -174,10 +169,8 @@ sc_clock::sc_clock( const char* name_,
     base_type( name_ ),
     m_period(), m_duty_cycle(), m_start_time(), m_posedge_first(),
     m_posedge_time(), m_negedge_time(),
-    m_next_posedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
-			   std::string(name_) + "_next_posedge_event").c_str()),
-    m_next_negedge_event( (std::string(SC_KERNEL_EVENT_PREFIX) + 
-			   std::string(name_) + "_next_negedge_event").c_str())
+    m_next_posedge_event( sc_event::kernel_event, "next_posedge_event" ),
+    m_next_negedge_event( sc_event::kernel_event, "next_negedge_event" )
 {
     static bool warn_sc_clock=true;
     if ( warn_sc_clock )

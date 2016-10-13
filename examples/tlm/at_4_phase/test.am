@@ -58,7 +58,7 @@ examples_BUILD += \
 
 examples_CLEAN += \
 	at_4_phase/run.log \
-	at_4_phase/expexted_trimmed.log \
+	at_4_phase/expected_trimmed.log \
 	at_4_phase/run_trimmed.log \
 	at_4_phase/diff.log
 

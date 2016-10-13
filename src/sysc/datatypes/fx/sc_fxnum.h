@@ -60,6 +60,7 @@
 #define SC_FXNUM_H
 
 
+#include "sysc/kernel/sc_cmnhdr.h"
 #include "sysc/datatypes/bit/sc_lv_base.h"
 #include "sysc/datatypes/fx/sc_fxval.h"
 #include "sysc/datatypes/fx/scfx_params.h"
@@ -92,7 +93,7 @@ class sc_fxnum_fast;
 //  Proxy class for bit-selection in class sc_fxnum, behaves like sc_bit.
 // ----------------------------------------------------------------------------
 
-class sc_fxnum_bitref
+class SC_API sc_fxnum_bitref
 {
     friend class sc_fxnum;
     friend class sc_fxnum_fast_bitref;
@@ -163,7 +164,7 @@ private:
 //  Proxy class for bit-selection in class sc_fxnum_fast, behaves like sc_bit.
 // ----------------------------------------------------------------------------
 
-class sc_fxnum_fast_bitref
+class SC_API sc_fxnum_fast_bitref
 {
     friend class sc_fxnum_fast;
     friend class sc_fxnum_bitref;
@@ -235,7 +236,7 @@ private:
 //  behaves like sc_bv_base.
 // ----------------------------------------------------------------------------
 
-class sc_fxnum_subref
+class SC_API sc_fxnum_subref
 {
     friend class sc_fxnum;
     friend class sc_fxnum_fast_subref;
@@ -398,7 +399,7 @@ private:
 //  behaves like sc_bv_base.
 // ----------------------------------------------------------------------------
 
-class sc_fxnum_fast_subref
+class SC_API sc_fxnum_fast_subref
 {
     friend class sc_fxnum_fast;
     friend class sc_fxnum_subref;
@@ -560,7 +561,7 @@ private:
 //  Base class for the fixed-point types; arbitrary precision.
 // ----------------------------------------------------------------------------
 
-class sc_fxnum
+class SC_API sc_fxnum
 {
     friend class sc_fxval;
 
@@ -987,7 +988,7 @@ private:
 //  Base class for the fixed-point types; limited precision.
 // ----------------------------------------------------------------------------
 
-class sc_fxnum_fast
+class SC_API sc_fxnum_fast
 {
     friend class sc_fxval_fast;
 

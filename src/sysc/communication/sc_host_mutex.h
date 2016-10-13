@@ -89,7 +89,7 @@ namespace sc_core {
 //   The sc_host_mutex class, wrapping an OS mutex on the simulation host
 // ----------------------------------------------------------------------------
 
-class sc_host_mutex : public sc_mutex_if
+class SC_API sc_host_mutex : public sc_mutex_if
 {
     typedef SC_MTX_TYPE_ underlying_type;
 public:

@@ -63,7 +63,7 @@ examples_BUILD += \
 
 examples_CLEAN += \
 	fir/run.log \
-	fir/expexted_trimmed.log \
+	fir/expected_trimmed.log \
 	fir/run_trimmed.log \
 	fir/diff.log
 
@@ -99,7 +99,9 @@ fir_rtl_CXX_FILES = \
 	fir/fir_data.cpp \
 	fir/main_rtl.cpp
 
-fir_BUILD =
+# output varies between fir/fir_rtl
+#fir_BUILD = \
+#	fir/golden.log
 
 fir_EXTRA = \
 	fir/log \

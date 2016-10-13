@@ -58,7 +58,7 @@ examples_BUILD += \
 
 examples_CLEAN += \
 	at_extension_optional/run.log \
-	at_extension_optional/expexted_trimmed.log \
+	at_extension_optional/expected_trimmed.log \
 	at_extension_optional/run_trimmed.log \
 	at_extension_optional/diff.log
 

@@ -100,7 +100,7 @@ private:
 //  Coroutine package class implemented with QuickThreads.
 // ----------------------------------------------------------------------------
 
-class sc_cor_pkg_fiber
+class SC_API sc_cor_pkg_fiber
 : public sc_cor_pkg
 {
   public:

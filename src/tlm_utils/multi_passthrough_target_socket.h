@@ -16,8 +16,8 @@
   permissions and limitations under the License.
 
  *****************************************************************************/
-#ifndef __MULTI_PASSTHROUGH_TARGET_SOCKET_H__
-#define __MULTI_PASSTHROUGH_TARGET_SOCKET_H__
+#ifndef TLM_UTILS_MULTI_PASSTHROUGH_TARGET_SOCKET_H_INCLUDED_
+#define TLM_UTILS_MULTI_PASSTHROUGH_TARGET_SOCKET_H_INCLUDED_
 
 #include "tlm_utils/multi_socket_bases.h"
 #include <sstream>
@@ -38,19 +38,11 @@ index of this socket the calling initiator is connected.
 template <typename MODULE,
           unsigned int BUSWIDTH = 32,
           typename TYPES = tlm::tlm_base_protocol_types,
-          unsigned int N=0
-#if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
-          ,sc_core::sc_port_policy POL = sc_core::SC_ONE_OR_MORE_BOUND
-#endif
-          >
-class multi_passthrough_target_socket: public multi_target_base< BUSWIDTH,
-                                                        TYPES,
-                                                        N
-#if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
-                                                        ,POL
-#endif
-                                                        >
-                              , public multi_to_multi_bind_base<TYPES>
+          unsigned int N=0,
+          sc_core::sc_port_policy POL = sc_core::SC_ONE_OR_MORE_BOUND>
+class multi_passthrough_target_socket
+  : public multi_target_base< BUSWIDTH, TYPES, N, POL>
+  , public multi_to_multi_bind_base<TYPES>
 {
 
 public:
@@ -67,13 +59,7 @@ public:
   typedef unsigned int (MODULE::*dbg_cb)(int, transaction_type& txn);
   typedef bool (MODULE::*dmi_cb)(int, transaction_type& txn, tlm::tlm_dmi& dmi);
 
-  typedef multi_target_base<BUSWIDTH,
-                        TYPES,
-                        N
-#if !(defined SYSTEMC_VERSION & SYSTEMC_VERSION <= 20050714)
-                        ,POL
-#endif
-                        > base_type;
+  typedef multi_target_base<BUSWIDTH, TYPES, N, POL> base_type;
 
   typedef typename base_type::base_initiator_socket_type base_initiator_socket_type;
 
@@ -337,4 +323,4 @@ protected:
 
 }
 
-#endif
+#endif // TLM_UTILS_MULTI_PASSTHROUGH_TARGET_SOCKET_H_INCLUDED_

@@ -66,11 +66,6 @@ sc_export_base::before_end_of_elaboration()
 void
 sc_export_base::construction_done()
 {
-    if ( get_interface() == 0 )
-    {
-      report_error( SC_ID_SC_EXPORT_NOT_BOUND_AFTER_CONSTRUCTION_, 0);
-    }
-
     sc_module* parent = static_cast<sc_module*>( get_parent_object() );
     sc_object::hierarchy_scope scope( parent );
     before_end_of_elaboration();
@@ -87,6 +82,11 @@ sc_export_base::end_of_elaboration()
 void
 sc_export_base::elaboration_done()
 {
+    if ( get_interface() == 0 )
+    {
+      report_error( SC_ID_COMPLETE_BINDING_, "export not bound" );
+    }
+
     sc_module* parent = static_cast<sc_module*>( get_parent_object() );
     sc_object::hierarchy_scope scope( parent );
     end_of_elaboration();

@@ -157,23 +157,20 @@ QT_ARCH_FILES = \
 	qtmds.s
 
 if QT_ARCH_X86
-QT_ARCH_IMPL = md/i386.s md/null.c
+QT_ARCH_IMPL = md/i386.s
 endif
 if QT_ARCH_X86_64
-QT_ARCH_IMPL = md/iX86_64.s md/null.c
+QT_ARCH_IMPL = md/iX86_64.s
 endif
 if QT_ARCH_POWERPC_MACOSX
 QT_ARCH_FILES+=qtmdc.c
 QT_ARCH_IMPL = md/powerpc_mach.s md/powerpc.c
 endif
 if QT_ARCH_SPARC
-QT_ARCH_IMPL = md/sparc.s md/null.c
+QT_ARCH_IMPL = md/sparc.s
 endif
 if QT_ARCH_HPPA
-QT_ARCH_IMPL = md/hppa.s md/null.c
-endif
-if QT_ARCH_PTHREADS
-QT_ARCH_IMPL = md/null.s md/null.c
+QT_ARCH_IMPL = md/hppa.s
 endif
 
 # ensure to use a working link command in 'config'

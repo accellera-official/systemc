@@ -51,7 +51,7 @@
 // the source.
 //
 
-#include <math.h>
+#include <cmath>
 
 #include "sysc/datatypes/fx/sc_fxnum.h"
 

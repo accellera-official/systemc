@@ -27,7 +27,6 @@
  *****************************************************************************/
 
 
-#include <cassert>
 #include <cstdlib>
 #include <cstddef>
 
@@ -46,7 +45,7 @@ namespace sc_core {
 // This is the object instance constructor for this class.
 //------------------------------------------------------------------------------
 sc_join::sc_join()
-  : m_join_event( (std::string(SC_KERNEL_EVENT_PREFIX)+"_join_event").c_str() )
+  : m_join_event( sc_event::kernel_event, "join_event" )
   , m_threads_n(0)
 {}
 
@@ -61,7 +60,7 @@ sc_join::sc_join()
 void sc_join::add_process( sc_process_b* process_p )
 {
     sc_thread_handle handle = DCAST<sc_thread_handle>(process_p);
-    assert( handle != 0 );
+    sc_assert( handle != 0 );
     m_threads_n++;
     handle->add_monitor( this );
 }

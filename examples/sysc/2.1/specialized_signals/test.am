@@ -57,7 +57,7 @@ examples_BUILD += \
 
 examples_CLEAN += \
 	2.1/specialized_signals/run.log \
-	2.1/specialized_signals/expexted_trimmed.log \
+	2.1/specialized_signals/expected_trimmed.log \
 	2.1/specialized_signals/run_trimmed.log \
 	2.1/specialized_signals/diff.log
 
@@ -82,7 +82,8 @@ examples_FILES += \
 	2.1/specialized_signals/scx_signal_signed.cpp \
 	2.1/specialized_signals/scx_signal_unsigned.cpp 
 
-2_1_specialized_signals_BUILD =
+2_1_specialized_signals_BUILD = \
+	2.1/specialized_signals/golden.log
 
 2_1_specialized_signals_EXTRA = \
 	2.1/specialized_signals/specialized_signals.vcproj \

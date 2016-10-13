@@ -74,7 +74,7 @@ class sc_unsigned;
 //  definitions in sc_object.cpp.
 // ----------------------------------------------------------------------------
 
-class sc_value_base 
+class SC_API sc_value_base 
 {
     friend class sc_concatref;
   private: 

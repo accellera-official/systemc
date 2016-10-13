@@ -102,15 +102,6 @@ $(error SystemC library [$(SYSTEMC_LIB_DIR)] not found. \
         Please update Makefile.config)
 endif
 
-# use g++ by default, unless user specifies CXX explicitly
-ifeq (default,$(origin CXX))
-CXX=g++
-endif
-# use CXX by default, unless user specifies CC explicitly
-ifeq (default,$(origin CC))
-CC=$(CXX)
-endif
-
 ## ***************************************************************************
 ## build rules
 
@@ -120,7 +111,7 @@ GOLDEN?=golden.log
 EXEEXT?=.x
 EXE   := $(PROJECT)$(EXEEXT)
 
-all: announce $(EXE)
+all: announce build
 
 announce:
 	@if test x1 = x$(FLAG_BATCH) ; then \
@@ -141,20 +132,21 @@ check: announce all
 	  else echo "OK"; fi \
 	fi
 
-
 run: announce all
 	@if test -f "$(INPUT)" ; then INPUT="< $(INPUT)" ; fi ; \
 		eval "./$(EXE) $(ARGS) $${INPUT}"
 
+build: announce $(EXE)
+
 $(EXE): $(OBJS) $(SYSTEMC_LIB_DIR)/libsystemc.a
-	$(CC) $(LDFLAGS) -o $@ $(OBJS) $(LIBS) 2>&1 | c++filt
+	$(CXX) $(LDFLAGS) -o $@ $(OBJS) $(LIBS) 2>&1 | c++filt
 	@test -x $@
 
 .cpp.o:
-	$(CC) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 .cc.o:
-	$(CC) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:: announce
 	rm -f $(OBJS) $(EXE) core $(EXTRA_CLEAN) \
@@ -164,6 +156,6 @@ ultraclean: announce clean
 	rm -f Makefile.deps *~
 
 Makefile.deps:
-#	$(CC) $(CXXFLAGS) -M $(SRCS) >> Makefile.deps
+#	$(CXX) $(CXXFLAGS) -M $(SRCS) >> Makefile.deps
 
 #include Makefile.deps

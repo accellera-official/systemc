@@ -79,7 +79,7 @@ sc_unwind_exception::~sc_unwind_exception() throw()
 // returns a pointer to a dynamically allocated sc_report object,
 // containing the caught message
 
-sc_report*
+SC_API sc_report*
 sc_handle_exception()
 {
     try {

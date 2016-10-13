@@ -32,7 +32,7 @@
 
       Name, Affiliation, Date:
   Description of Modification:
-    
+
  *****************************************************************************/
 
 #include "systemc.h"
@@ -48,7 +48,7 @@
 	{ \
 	    cout << #exp1 << "(" << base << exp1 << ") != " \
 		     << #exp2 << "(" << base << exp2 << ")" << endl; \
-    } 
+    }
 
 SC_MODULE(DUT)
 {
@@ -56,7 +56,7 @@ SC_MODULE(DUT)
 	{
 		SC_THREAD(exec)
 		sensitive << m_clk.pos();
-       
+
         // CONNECT PORTS TO THEIR BACKING SIGNALS:
 
 		m_in_bigint4(m_back_in_bigint4);
@@ -125,13 +125,13 @@ SC_MODULE(DUT)
 		//
 		// Note there is not need to call .read() methods!
 
-        m_nb_signal_bigint8 = -1; 
+        m_nb_signal_bigint8 = -1;
 		m_nb_signal_biguint8 = 255;
-        m_nb_signal_int8 = -2; 
+        m_nb_signal_int8 = -2;
 		m_nb_signal_uint8 = 128;
-        m_signal_bigint8 = -1; 
+        m_signal_bigint8 = -1;
 		m_signal_biguint8 = 255;
-        m_signal_int8 = -2; 
+        m_signal_int8 = -2;
 		m_signal_uint8 = 128;
 		wait();
 		TEST(m_signal_bigint8*m_signal_biguint8,
@@ -164,13 +164,13 @@ SC_MODULE(DUT)
 		TEST(m_signal_int8+m_signal_uint8*m_signal_bigint8-m_signal_biguint8,
 		     m_nb_signal_int8+m_nb_signal_uint8*m_nb_signal_bigint8-m_nb_signal_biguint8,dec);
 
-        m_nb_in_bigint4 = -1; 
+        m_nb_in_bigint4 = -1;
 		m_nb_in_biguint4 = 15;
-        m_nb_in_int4 = -2; 
+        m_nb_in_int4 = -2;
 		m_nb_in_uint4 = 8;
-        m_back_in_bigint4 = -1; 
+        m_back_in_bigint4 = -1;
 		m_back_in_biguint4 = 15;
-        m_back_in_int4 = -2; 
+        m_back_in_int4 = -2;
 		m_back_in_uint4 = 8;
 		wait();
 		TEST(m_in_bigint4*m_in_biguint4,

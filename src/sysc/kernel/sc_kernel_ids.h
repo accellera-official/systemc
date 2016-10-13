@@ -41,9 +41,9 @@
 
 #ifndef SC_DEFINE_MESSAGE
 #define SC_DEFINE_MESSAGE(id,unused1,unused2) \
-    namespace sc_core { extern const char id[]; }
+    namespace sc_core { extern SC_API const char id[]; }
 namespace sc_core {
-    extern const char SC_ID_REGISTER_ID_FAILED_[]; // in sc_report_handler.cpp
+    extern SC_API const char SC_ID_REGISTER_ID_FAILED_[]; // in sc_report_handler.cpp
 }
 #endif
 
@@ -119,7 +119,8 @@ SC_DEFINE_MESSAGE(SC_ID_MODULE_NAME_STACK_EMPTY_     , 533,
 	"module name stack is empty: did you forget to "
 	"add a sc_module_name parameter to your module "
 	"constructor?" )
-// available message number 534
+SC_DEFINE_MESSAGE(SC_ID_NAME_EXISTS_                 , 534,
+	"name already exists")
 // available message number 535
 SC_DEFINE_MESSAGE( SC_ID_IMMEDIATE_SELF_NOTIFICATION_, 536,
          "immediate self-notification ignored as of IEEE 1666-2011" )
@@ -180,7 +181,8 @@ SC_DEFINE_MESSAGE(SC_ID_EVENT_ON_NULL_PROCESS_         , 564,
 // available message number 565
 SC_DEFINE_MESSAGE(SC_ID_UNKNOWN_PROCESS_TYPE_,       566,
 	"Unknown process type" )
-// available message number 567
+SC_DEFINE_MESSAGE(SC_ID_TIME_CONVERSION_FAILED_, 567,
+        "sc_time conversion failed")
 SC_DEFINE_MESSAGE(SC_ID_NEGATIVE_SIMULATION_TIME_, 568,
         "negative simulation interval specified in sc_start call" )
 SC_DEFINE_MESSAGE(SC_ID_BAD_SC_MODULE_CONSTRUCTOR_  , 569,

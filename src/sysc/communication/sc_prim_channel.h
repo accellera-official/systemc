@@ -41,7 +41,7 @@ namespace sc_core {
 //  Abstract base class of all primitive channel classes.
 // ----------------------------------------------------------------------------
 
-class sc_prim_channel
+class SC_API sc_prim_channel
 : public sc_object
 {
     friend class sc_prim_channel_registry;

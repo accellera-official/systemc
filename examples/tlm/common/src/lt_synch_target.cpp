@@ -30,14 +30,14 @@
 
 #include "lt_synch_target.h"                        // our header
 #include "reporting.h"                            // reporting macros
-                    
+
 using namespace  std;
 
 static const char *filename = "lt_synch_target.cpp"; ///< filename for reporting
 
 SC_HAS_PROCESS(lt_synch_target);
 ///Constructor
-lt_synch_target::lt_synch_target                      
+lt_synch_target::lt_synch_target
 ( sc_core::sc_module_name module_name               // module name
 , const unsigned int        ID                      // target ID
 , const char                *memory_socket          // socket name
@@ -61,55 +61,48 @@ lt_synch_target::lt_synch_target
   , m_read_response_delay         // delay for reads
   , m_write_response_delay        // delay for writes
   , m_memory_size                 // memory size (bytes)
-  , m_memory_width                // memory width (bytes)      
+  , m_memory_width                // memory width (bytes)
   )
-  
+
 {
-  
+
   m_memory_socket.register_b_transport(this, &lt_synch_target::custom_b_transport);
 
 }
 
 //==============================================================================
-//  b_transport implementation calls from initiators 
+//  b_transport implementation calls from initiators
 //
 //=============================================================================
-void                                        
+void
 lt_synch_target::custom_b_transport
-( tlm::tlm_generic_payload  &payload                // ref to  Generic Payload 
-, sc_core::sc_time          &delay_time             // delay time 
+( tlm::tlm_generic_payload  &payload                // ref to  Generic Payload
+, sc_core::sc_time          &delay_time             // delay time
 )
 {
- 
-  std::ostringstream  msg;                          
+
+  std::ostringstream  msg;
   msg.str("");
   sc_core::sc_time      mem_op_time;
-  
+
   m_target_memory.operation(payload, mem_op_time);
-  
+
   delay_time = delay_time + m_accept_delay + mem_op_time;
-  
-  msg << "Target: " << m_ID               
-      << " Forcing a synch in a temporal decoupled initiator with wait( " 
+
+  msg << "Target: " << m_ID
+      << " Forcing a synch in a temporal decoupled initiator with wait( "
       << delay_time << "),";
   REPORT_INFO(filename,  __FUNCTION__, msg.str());
-   
+
   wait(delay_time);
-  
+
   delay_time = sc_core::SC_ZERO_TIME;
-  
+
   msg.str("");
-  msg << "Target: " << m_ID               
-      << " return from wait will return a delay of " 
+  msg << "Target: " << m_ID
+      << " return from wait will return a delay of "
       << delay_time;
   REPORT_INFO(filename,  __FUNCTION__, msg.str());
-  
-  return;     
+
+  return;
 }
-
-
-
-
-
-
-

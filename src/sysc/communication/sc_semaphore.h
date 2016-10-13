@@ -42,7 +42,7 @@ namespace sc_core {
 //  The sc_semaphore primitive channel class.
 // ----------------------------------------------------------------------------
 
-class sc_semaphore
+class SC_API sc_semaphore
 : public sc_semaphore_if,
   public sc_object
 {

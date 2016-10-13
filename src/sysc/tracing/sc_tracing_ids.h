@@ -29,6 +29,8 @@
 #ifndef SC_TRACING_IDS_H
 #define SC_TRACING_IDS_H
 
+#include "sysc/kernel/sc_cmnhdr.h"
+
 // ----------------------------------------------------------------------------
 //  Report ids (tracing)
 //
@@ -37,7 +39,7 @@
 
 #ifndef SC_DEFINE_MESSAGE
 #define SC_DEFINE_MESSAGE(id,unused1,unused2) \
-    namespace sc_core { extern const char id[]; }
+    namespace sc_core { extern SC_API const char id[]; }
 #endif
 
 SC_DEFINE_MESSAGE( SC_ID_TRACING_FOPEN_FAILED_,         701,

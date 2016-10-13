@@ -42,13 +42,13 @@ namespace sc_core {
 sc_mutex::sc_mutex()
 : sc_object( sc_gen_unique_name( "mutex" ) ),
   m_owner( 0 ),
-  m_free( (std::string(SC_KERNEL_EVENT_PREFIX)+"_free_event").c_str() )
+  m_free( sc_event::kernel_event, "free_event" )
 {}
 
 sc_mutex::sc_mutex( const char* name_ )
 : sc_object( name_ ),
   m_owner( 0 ),
-  m_free( (std::string(SC_KERNEL_EVENT_PREFIX)+"_free_event").c_str() )
+  m_free( sc_event::kernel_event, "free_event" )
 {}
 
 

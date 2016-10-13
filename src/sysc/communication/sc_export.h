@@ -49,7 +49,7 @@ namespace sc_core {
 //  Abstract base class for class sc_export<IF>.
 //=============================================================================
 
-class sc_export_base : public sc_object
+class SC_API sc_export_base : public sc_object
 {
     friend class sc_export_registry;
 public:

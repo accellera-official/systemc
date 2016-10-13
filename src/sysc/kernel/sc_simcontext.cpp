@@ -30,8 +30,6 @@
 
 #include <algorithm>
 
-#define SC_DISABLE_API_VERSION_CHECK // for in-library sc_ver.h inclusion
-
 #include "sysc/kernel/sc_cor_fiber.h"
 #include "sysc/kernel/sc_cor_pthread.h"
 #include "sysc/kernel/sc_cor_qt.h"
@@ -69,10 +67,11 @@
 //     P    = pointer to process message is for, or NULL in which case the
 //            message will not print.
 #if 0
+#   include <cstring>
 #   define DEBUG_NAME ""
 #   define DEBUG_MSG(NAME,P,MSG) \
     { \
-        if ( P && ( (strlen(NAME)==0) || !strcmp(NAME,P->name())) ) \
+        if ( P && ( (std::strlen(NAME)==0) || !std::strcmp(NAME,P->name())) ) \
           std::cout << "**** " << sc_time_stamp() << " ("  \
 	            << sc_get_current_process_name() << "): " << MSG \
 		    << " - " << P->name() << std::endl; \
@@ -250,7 +249,7 @@ sc_process_table::thread_q_head()
     return m_thread_q;
 }
 
-int
+SC_API int
 sc_notify_time_compare( const void* p1, const void* p2 )
 {
     const sc_event_timed* et1 = static_cast<const sc_event_timed*>( p1 );
@@ -395,6 +394,7 @@ sc_simcontext::init()
     m_max_time = SC_ZERO_TIME;
     m_change_stamp = 0;
     m_delta_count = 0;
+    m_initial_delta_count_at_current_time = 0;
     m_forced_stop = false;
     m_paused = false;
     m_ready_to_simulate = false;
@@ -413,26 +413,26 @@ sc_simcontext::init()
 void
 sc_simcontext::clean()
 {
-    delete m_object_manager;
-    delete m_module_registry;
-    delete m_port_registry;
-    delete m_export_registry;
-    delete m_prim_channel_registry;
-    delete m_phase_cb_registry;
-    delete m_name_gen;
-    delete m_process_table;
-    m_child_objects.resize(0);
-    m_delta_events.resize(0);
-    delete m_timed_events;
+    delete m_error;
+    delete m_cor_pkg;
+    delete m_time_params;
+    delete m_collectable;
+    delete m_runnable;
     for( int i = m_trace_files.size() - 1; i >= 0; -- i ) {
 	delete m_trace_files[i];
     }
     m_trace_files.resize(0);
-    delete m_runnable;
-    delete m_collectable;
-    delete m_time_params;
-    delete m_cor_pkg;
-    delete m_error;
+    delete m_timed_events;
+    m_delta_events.resize(0);
+    m_child_objects.resize(0);
+    delete m_process_table;
+    delete m_name_gen;
+    delete m_phase_cb_registry;
+    delete m_prim_channel_registry;
+    delete m_export_registry;
+    delete m_port_registry;
+    delete m_module_registry;
+    delete m_object_manager;
 }
 
 
@@ -445,7 +445,8 @@ sc_simcontext::sc_simcontext() :
     m_child_objects(), m_delta_events(), m_timed_events(0), m_trace_files(),
     m_something_to_trace(false), m_runnable(0), m_collectable(0), 
     m_time_params(), m_curr_time(SC_ZERO_TIME), m_max_time(SC_ZERO_TIME), 
-    m_change_stamp(0), m_delta_count(0), m_forced_stop(false), m_paused(false),
+    m_change_stamp(0), m_delta_count(0), m_initial_delta_count_at_current_time(0),
+    m_forced_stop(false), m_paused(false),
     m_ready_to_simulate(false), m_elaboration_done(false),
     m_execution_phase(phase_initialize), m_error(0),
     m_in_simulator_control(false), m_end_of_simulation_called(false),
@@ -652,13 +653,12 @@ sc_simcontext::cycle( const sc_time& t)
 
     m_in_simulator_control = true;
     crunch(); 
-    SC_DO_PHASE_CALLBACK_(before_timestep);
 #if SC_SIMCONTEXT_TRACING_
     if( m_something_to_trace ) {
         trace_cycle( /* delta cycle? */ false );
     }
 #endif
-    m_curr_time += t;
+    do_timestep( m_curr_time + t );
     if ( next_time(next_event_time) && next_event_time <= m_curr_time) {
         SC_REPORT_WARNING(SC_ID_CYCLE_MISSES_EVENTS_, "");
     }
@@ -897,7 +897,7 @@ sc_simcontext::simulate( const sc_time& duration )
 	return;
     }
 
-    sc_time non_overflow_time = sc_max_time() - m_curr_time;
+    sc_time non_overflow_time = max_time() - m_curr_time;
     if ( duration > non_overflow_time )
     {
 	SC_REPORT_ERROR(SC_ID_SIMULATION_TIME_OVERFLOW_, "");
@@ -965,12 +965,8 @@ sc_simcontext::simulate( const sc_time& duration )
 	    // See note 1 above:
 
             if ( !next_time(t) || (t > until_t ) ) goto exit_time;
-	    if ( t > m_curr_time ) 
-	    {
-		SC_DO_PHASE_CALLBACK_(before_timestep);
-		m_curr_time = t;
-		m_change_stamp++;
-	    }
+            if ( t > m_curr_time )
+                do_timestep(t);
 
 	    // PROCESS TIMED NOTIFICATIONS AT THE CURRENT TIME
 
@@ -988,16 +984,22 @@ sc_simcontext::simulate( const sc_time& duration )
     } while ( t < until_t ); // hold off on the delta for the until_t time.
 
 exit_time:  // final simulation time update, if needed
-    if ( t > m_curr_time && t <= until_t ) 
-    {
-        SC_DO_PHASE_CALLBACK_(before_timestep);
-        m_curr_time = t;
-        m_change_stamp++;
-    }
+    if ( t > m_curr_time && t <= until_t )
+        do_timestep(t);
 exit_pause: // call pause callback upon implicit or explicit pause
     m_execution_phase      = phase_evaluate;
     m_in_simulator_control = false;
     SC_DO_PHASE_CALLBACK_(simulation_paused);
+}
+
+void
+sc_simcontext::do_timestep(const sc_time& t)
+{
+    sc_assert( m_curr_time < t );
+    SC_DO_PHASE_CALLBACK_(before_timestep);
+    m_curr_time = t;
+    m_change_stamp++;
+    m_initial_delta_count_at_current_time = m_delta_count;
 }
 
 void
@@ -1118,6 +1120,48 @@ sc_simcontext::find_object( const char* name )
             " use sc_find_object()" );
     }
     return m_object_manager->find_object( name );
+}
+
+std::string
+sc_simcontext::construct_hierarchical_name(const sc_object* parent,
+                                           const std::string& name)
+{
+    std::string hierarchical_name = parent ? ( std::string(parent->name())
+                                               + SC_HIERARCHY_CHAR ) : "";
+    hierarchical_name += name;
+    return hierarchical_name;
+}
+
+bool
+sc_simcontext::register_hierarchical_name(const sc_object* parent,
+                                          const std::string& name)
+{
+    return m_object_manager->insert_external_name(
+            construct_hierarchical_name(parent, name));
+}
+
+bool
+sc_simcontext::unregister_hierarchical_name(const sc_object* parent,
+                                            const std::string& name)
+{
+    return m_object_manager->remove_external_name(
+            construct_hierarchical_name(parent, name));
+}
+
+bool
+sc_simcontext::hierarchical_name_exists(const sc_object* parent,
+                                        const std::string& name)
+{
+    return m_object_manager->name_exists(
+            construct_hierarchical_name(parent, name));
+}
+
+const char*
+sc_simcontext::get_hierarchical_name(const sc_object* parent,
+                                     const std::string& name)
+{
+    return m_object_manager->get_name(
+            construct_hierarchical_name(parent, name));
 }
 
 // to generate unique names for objects in an MT-Safe way
@@ -1374,7 +1418,7 @@ sc_simcontext::remove_delta_event( sc_event* e )
 {
     int i = e->m_delta_event_index;
     int j = m_delta_events.size() - 1;
-    assert( i >= 0 && i <= j );
+    sc_assert( i >= 0 && i <= j );
     if( i != j ) {
 	sc_event** l_delta_events = &m_delta_events[0];
 	l_delta_events[i] = l_delta_events[j];
@@ -1524,15 +1568,15 @@ sc_simcontext::trace_cycle( bool delta_cycle )
 	static sc_simcontext sc_default_global_context;
 	sc_simcontext* sc_curr_simcontext = &sc_default_global_context;
 #else
-	sc_simcontext* sc_curr_simcontext = 0;
-	sc_simcontext* sc_default_global_context = 0;
+	SC_API sc_simcontext* sc_curr_simcontext = 0;
+	SC_API sc_simcontext* sc_default_global_context = 0;
 #endif
 #else
 // Not MT-safe!
 static sc_simcontext* sc_curr_simcontext = 0;
 
 
-sc_simcontext*
+SC_API sc_simcontext*
 sc_get_curr_simcontext()
 {
     if( sc_curr_simcontext == 0 ) {
@@ -1550,7 +1594,7 @@ sc_get_curr_simcontext()
 
 // Generates unique names within each module.
 
-const char*
+SC_API const char*
 sc_gen_unique_name( const char* basename_, bool preserve_first )
 {
     sc_simcontext* simc = sc_get_curr_simcontext();
@@ -1578,7 +1622,7 @@ sc_gen_unique_name( const char* basename_, bool preserve_first )
 // pointer to the raw sc_process_b instance, which may be acquired via
 // sc_get_current_process_b().
 
-sc_process_handle
+SC_API sc_process_handle
 sc_get_current_process_handle()
 {
     return ( sc_is_running() ) ?
@@ -1587,7 +1631,7 @@ sc_get_current_process_handle()
 }
 
 // THE FOLLOWING FUNCTION IS DEPRECATED IN 2.1
-sc_process_b*
+SC_API sc_process_b*
 sc_get_curr_process_handle()
 {
     static bool warn=true;
@@ -1614,7 +1658,7 @@ sc_simcontext::pending_activity_at_current_time() const
 
 // Return time of next activity.
 
-sc_time sc_time_to_pending_activity( const sc_simcontext* simc_p ) 
+SC_API sc_time sc_time_to_pending_activity( const sc_simcontext* simc_p ) 
 {
     // If there is an activity pending at the current time
     // return a delta of zero.
@@ -1639,7 +1683,7 @@ sc_time sc_time_to_pending_activity( const sc_simcontext* simc_p )
 
 // Set the random seed for controlled randomization -- not yet implemented
 
-void
+SC_API void
 sc_set_random_seed( unsigned int )
 {
     SC_REPORT_WARNING( SC_ID_NOT_IMPLEMENTED_,
@@ -1656,7 +1700,7 @@ sc_set_random_seed( unsigned int )
 // |     duration = the amount of time the simulator should execute.
 // |     p        = event starvation policy.
 // +----------------------------------------------------------------------------
-void
+SC_API void
 sc_start( const sc_time& duration, sc_starvation_policy p )
 {
     sc_simcontext* context_p;      // current simulation context.
@@ -1703,9 +1747,10 @@ sc_start( const sc_time& duration, sc_starvation_policy p )
     // Update the current time to the exit time if that is the starvation
     // policy:
 
-    if ( p == SC_RUN_TO_TIME && !context_p->m_paused && status == SC_SIM_OK )
+    if ( p == SC_RUN_TO_TIME && !context_p->m_paused && status == SC_SIM_OK
+         && context_p->m_curr_time < exit_time )
     {
-        context_p->m_curr_time = exit_time;
+        context_p->do_timestep( exit_time );
     }
 
     // If there was no activity and the simulation clock did not move warn
@@ -1724,7 +1769,7 @@ sc_start( const sc_time& duration, sc_starvation_policy p )
     init_delta_or_pending_updates = false;
 }
 
-void
+SC_API void
 sc_start()  
 {
     sc_start( sc_max_time() - sc_time_stamp(),
@@ -1756,7 +1801,7 @@ sc_start( double duration )  // in default time units
 }
 #endif // 
 
-void
+SC_API void
 sc_stop()
 {
     sc_get_curr_simcontext()->stop();
@@ -1765,7 +1810,7 @@ sc_stop()
 
 // The following function is deprecated in favor of sc_start(SC_ZERO_TIME):
 
-void
+SC_API void
 sc_initialize()
 {
     static bool warning_initialize = true;
@@ -1781,7 +1826,7 @@ sc_initialize()
 
 // The following function has been deprecated in favor of sc_start(duration):
 
-void
+SC_API void
 sc_cycle( const sc_time& duration )
 {
     static bool warning_cycle = true;
@@ -1795,30 +1840,30 @@ sc_cycle( const sc_time& duration )
     sc_get_curr_simcontext()->cycle( duration );
 }
 
-sc_event* sc_find_event( const char* name )
+SC_API sc_event* sc_find_event( const char* name )
 {
     return sc_get_curr_simcontext()->get_object_manager()->find_event( name );
 }
 
-sc_object* sc_find_object( const char* name )
+SC_API sc_object* sc_find_object( const char* name )
 {
     return sc_get_curr_simcontext()->get_object_manager()->find_object( name );
 }
 
 
-const sc_time&
+SC_API const sc_time&
 sc_max_time()
 {
     return sc_get_curr_simcontext()->max_time();
 }
 
-const sc_time&
+SC_API const sc_time&
 sc_time_stamp()
 {
     return sc_get_curr_simcontext()->time_stamp();
 }
 
-double
+SC_API double
 sc_simulation_time()
 {
     static bool warn_simulation_time=true;
@@ -1831,13 +1876,14 @@ sc_simulation_time()
     return sc_get_curr_simcontext()->time_stamp().to_default_time_units();
 }
 
-void
+SC_API void
 sc_defunct_process_function( sc_module* )
 {
     // This function is pointed to by defunct sc_thread_process'es and
     // sc_cthread_process'es. In a correctly constructed world, this
     // function should never be called; hence the assert.
     assert( false );
+    sc_assert( false );
 }
 
 //------------------------------------------------------------------------------
@@ -1846,7 +1892,7 @@ sc_defunct_process_function( sc_module* )
 // This function sets the mode of operation when sc_stop() is called.
 //     mode = SC_STOP_IMMEDIATE or SC_STOP_FINISH_DELTA.
 //------------------------------------------------------------------------------
-void sc_set_stop_mode(sc_stop_mode mode)
+SC_API void sc_set_stop_mode(sc_stop_mode mode)
 {
     if ( sc_is_running() )
     {
@@ -1866,13 +1912,13 @@ void sc_set_stop_mode(sc_stop_mode mode)
     }
 }
 
-sc_stop_mode
+SC_API sc_stop_mode
 sc_get_stop_mode()
 {
     return stop_mode;
 }
 
-bool sc_is_unwinding()
+SC_API bool sc_is_unwinding()
 { 
     return sc_get_current_process_handle().is_unwinding();
 }
@@ -1954,7 +2000,7 @@ static std::ostream&
 print_status_expression( std::ostream& os, sc_status s );
 
 // utility helper to print a simulation status
-std::ostream& operator << ( std::ostream& os, sc_status s )
+SC_API std::ostream& operator << ( std::ostream& os, sc_status s )
 {
     // print primitive values
     switch(s)

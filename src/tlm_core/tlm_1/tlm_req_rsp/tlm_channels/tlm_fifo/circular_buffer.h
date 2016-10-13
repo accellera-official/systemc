@@ -132,7 +132,7 @@ void
 circular_buffer<T>::clear()
 {
   for( int i=0; i < used(); i++ ) {
-    buf_clear( m_buf, i );
+    buf_clear( m_buf, (m_ri + i) % m_size );
   }
   m_free = m_size;
   m_used = m_ri = m_wi = 0;

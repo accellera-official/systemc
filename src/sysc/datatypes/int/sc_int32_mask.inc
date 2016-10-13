@@ -19,7 +19,7 @@
 
 /*****************************************************************************
 
-  sc_int32_mask.cpp -- Fills the mask_int lookup table to enable efficient
+  sc_int32_mask.inc -- Fills the mask_int lookup table to enable efficient
                        part-selection on 32-bit sc_ints and sc_uints.
 
   Original Author: Amit Rao, Synopsys, Inc.
@@ -64,7 +64,7 @@
 namespace sc_dt
 {
 
-const uint_type mask_int[SC_INTWIDTH][SC_INTWIDTH] = 
+SC_API const uint_type mask_int[SC_INTWIDTH][SC_INTWIDTH] = 
 {
 {
 0xfffffffeU

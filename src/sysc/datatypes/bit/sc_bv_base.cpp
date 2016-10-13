@@ -52,7 +52,7 @@
 // the source.
 //
 
-#include <string.h>
+#include <cstring>
 
 #include "sysc/datatypes/bit/sc_bit_ids.h"
 #include "sysc/datatypes/bit/sc_bv_base.h"
@@ -306,7 +306,7 @@ sc_bv_base::rrotate( int n )
 
 // convert formatted string to binary string
 
-const std::string
+SC_API const std::string
 convert_to_bin( const char* s )
 {
     // Beware: logic character strings cannot start with '0x' or '0X',
@@ -374,7 +374,7 @@ convert_to_bin( const char* s )
 
 // convert binary string to formatted string
 
-const std::string
+SC_API const std::string
 convert_to_fmt( const std::string& s, sc_numrep numrep, bool w_prefix )
 {
     int n = s.length();

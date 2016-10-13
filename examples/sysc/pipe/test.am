@@ -57,7 +57,7 @@ examples_BUILD += \
 
 examples_CLEAN += \
 	pipe/run.log \
-	pipe/expexted_trimmed.log \
+	pipe/expected_trimmed.log \
 	pipe/run_trimmed.log \
 	pipe/diff.log
 

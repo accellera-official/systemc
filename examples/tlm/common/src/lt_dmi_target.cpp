@@ -30,7 +30,7 @@
 
 #include "lt_dmi_target.h"                              // our header
 #include "reporting.h"                                  // reporting macros
-                    
+
 using namespace  std;
 
 static const char *filename = "lt_dmi_target.cpp"; ///< filename for reporting
@@ -38,7 +38,7 @@ static const char *filename = "lt_dmi_target.cpp"; ///< filename for reporting
 SC_HAS_PROCESS(lt_dmi_target);
 
 ///Constructor
-lt_dmi_target::lt_dmi_target                      
+lt_dmi_target::lt_dmi_target
 ( sc_core::sc_module_name module_name                   ///< module name
 , const unsigned int        ID                          ///< target ID
 , const char                *memory_socket              ///< socket name
@@ -70,29 +70,29 @@ lt_dmi_target::lt_dmi_target
                             , m_read_response_delay     // delay for reads
                             , m_write_response_delay    // delay for writes
                             , m_memory_size             // memory size (bytes)
-                            , m_memory_width            // memory width (bytes)      
+                            , m_memory_width            // memory width (bytes)
                             )                           ///< target memory
 {
   SC_METHOD(toggle_dmi_method);
-  
+
   m_memory_socket.register_b_transport(this, &lt_dmi_target::custom_b_transport);
   m_memory_socket.register_get_direct_mem_ptr(this, &lt_dmi_target::get_direct_mem_ptr);
 }
 
 //==============================================================================
-//  b_transport implementation calls from initiators 
+//  b_transport implementation calls from initiators
 //
 //=============================================================================
-void                                        
+void
 lt_dmi_target::custom_b_transport
-( tlm::tlm_generic_payload  &payload                // ref to  Generic Payload 
-, sc_core::sc_time          &delay_time             // delay time 
+( tlm::tlm_generic_payload  &payload                // ref to  Generic Payload
+, sc_core::sc_time          &delay_time             // delay time
 )
 {
   sc_core::sc_time      mem_op_time;
   std::ostringstream    msg;
-  
-  msg.str("");   
+
+  msg.str("");
 
   m_target_memory.operation(payload, mem_op_time);
 
@@ -100,7 +100,7 @@ lt_dmi_target::custom_b_transport
   {
     payload.set_dmi_allowed(true);
     msg << "Target: " << m_ID
-        << " has set dmi_allowed " 
+        << " has set dmi_allowed "
         << endl << "      ";
   }
   else
@@ -116,12 +116,12 @@ lt_dmi_target::custom_b_transport
 
   msg << " = " << delay_time;
   REPORT_INFO(filename,  __FUNCTION__, msg.str());
-  
+
   return;
 }
 
-bool                                            
-lt_dmi_target::get_direct_mem_ptr    
+bool
+lt_dmi_target::get_direct_mem_ptr
 ( tlm::tlm_generic_payload   &gp              ///< address + extensions
 , tlm::tlm_dmi               &dmi_properties  ///< dmi data
 )
@@ -129,7 +129,7 @@ lt_dmi_target::get_direct_mem_ptr
   std::ostringstream  msg;
   msg.str("");
   sc_dt::uint64 address = gp.get_address();
-  
+
   // First check to see if we are "open" to a dmi
   if(!m_dmi_enabled)
   {
@@ -139,7 +139,7 @@ lt_dmi_target::get_direct_mem_ptr
   }
   else
   {                                  // dmi processing
-    if (address < m_end_address+1)   // check that address is in our range              
+    if (address < m_end_address+1)   // check that address is in our range
     {
       // set up dmi properties object ======================================
       dmi_properties.allow_read_write   (                                );
@@ -162,8 +162,8 @@ lt_dmi_target::get_direct_mem_ptr
       REPORT_INFO(filename, __FUNCTION__, msg.str());
     } // end else
   } // end else
-  
-  return false; 
+
+  return false;
 } // end get_direct_mem_ptr
 
 void
@@ -174,27 +174,27 @@ lt_dmi_target::toggle_dmi_method
   std::ostringstream msg;
   msg.str("");
   m_toggle_count++;
-  
+
   if (m_dmi_enabled)
   {
     m_dmi_enabled = false;
 
-    msg << "Target: " << m_ID 
+    msg << "Target: " << m_ID
         << " invalidate_direct_ptr "
         << "(" << m_start_address << ", " << m_end_address << ");";
-    REPORT_INFO(filename, __FUNCTION__, msg.str());  
-    
+    REPORT_INFO(filename, __FUNCTION__, msg.str());
+
     m_memory_socket->invalidate_direct_mem_ptr(m_start_address, m_end_address );
-    
+
     next_trigger(m_start_dmi_delay);
   }
   else
   {
     m_dmi_enabled = true;
     next_trigger(m_dmi_duration);
-    msg << "Target: " << m_ID 
+    msg << "Target: " << m_ID
         << " DMI has been enabled in this target";
-    REPORT_INFO(filename, __FUNCTION__, msg.str());  
+    REPORT_INFO(filename, __FUNCTION__, msg.str());
   }
 
   // Don't execute again

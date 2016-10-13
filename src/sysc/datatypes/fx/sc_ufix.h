@@ -68,7 +68,7 @@ class sc_ufix_fast;
 //  "Unconstrained" unsigned fixed-point class; arbitrary precision.
 // ----------------------------------------------------------------------------
 
-class sc_ufix : public sc_fxnum
+class SC_API sc_ufix : public sc_fxnum
 {
 
 public:
@@ -303,7 +303,7 @@ public:
 //  "Unconstrained" unsigned fixed-point class; limited precision.
 // ----------------------------------------------------------------------------
 
-class sc_ufix_fast : public sc_fxnum_fast
+class SC_API sc_ufix_fast : public sc_fxnum_fast
 {
 
 public:
@@ -649,19 +649,19 @@ sc_ufix::sc_ufix( int wl_, int iwl_, sc_q_mode qm, sc_o_mode om, int nb,
 {}
 
 inline
-sc_ufix::sc_ufix( const sc_fxtype_params& type_params,
+sc_ufix::sc_ufix( const sc_fxtype_params& type_params_,
 		  sc_fxnum_observer* observer_ )
-: sc_fxnum( type_params,
+: sc_fxnum( type_params_,
 	    SC_US_,
 	    sc_fxcast_switch(),
 	    observer_ )
 {}
 
 inline
-sc_ufix::sc_ufix( const sc_fxtype_params& type_params,
+sc_ufix::sc_ufix( const sc_fxtype_params& type_params_,
 		  const sc_fxcast_switch& cast_sw,
 		  sc_fxnum_observer* observer_ )
-: sc_fxnum( type_params,
+: sc_fxnum( type_params_,
 	    SC_US_,
 	    cast_sw,
 	    observer_ )
@@ -806,10 +806,10 @@ sc_ufix::sc_ufix( tp a,                                                       \
                                                                               \
 inline                                                                        \
 sc_ufix::sc_ufix( tp a,                                                       \
-		  const sc_fxtype_params& type_params,                        \
+		  const sc_fxtype_params& type_params_,                        \
 		  sc_fxnum_observer* observer_ )                              \
 : sc_fxnum( a,                                                                \
-	    type_params,                                                      \
+	    type_params_,                                                      \
 	    SC_US_,                                                           \
 	    sc_fxcast_switch(),                                               \
 	    observer_ )                                                       \
@@ -817,11 +817,11 @@ sc_ufix::sc_ufix( tp a,                                                       \
                                                                               \
 inline                                                                        \
 sc_ufix::sc_ufix( tp a,                                                       \
-		  const sc_fxtype_params& type_params,                        \
+		  const sc_fxtype_params& type_params_,                        \
 		  const sc_fxcast_switch& cast_sw,                            \
 		  sc_fxnum_observer* observer_ )                              \
 : sc_fxnum( a,                                                                \
-	    type_params,                                                      \
+	    type_params_,                                                      \
 	    SC_US_,                                                           \
 	    cast_sw,                                                          \
 	    observer_ )                                                       \
@@ -966,10 +966,10 @@ sc_ufix::sc_ufix( tp a,                                                       \
                                                                               \
 inline                                                                        \
 sc_ufix::sc_ufix( tp a,                                                       \
-		  const sc_fxtype_params& type_params,                        \
+		  const sc_fxtype_params& type_params_,                        \
 		  sc_fxnum_observer* observer_ )                              \
 : sc_fxnum( a,                                                                \
-	    type_params,                                                      \
+	    type_params_,                                                      \
 	    SC_US_,                                                           \
 	    sc_fxcast_switch(),                                               \
 	    observer_ )                                                       \
@@ -977,11 +977,11 @@ sc_ufix::sc_ufix( tp a,                                                       \
                                                                               \
 inline                                                                        \
 sc_ufix::sc_ufix( tp a,                                                       \
-		  const sc_fxtype_params& type_params,                        \
+		  const sc_fxtype_params& type_params_,                        \
 		  const sc_fxcast_switch& cast_sw,                            \
 		  sc_fxnum_observer* observer_ )                              \
 : sc_fxnum( a,                                                                \
-	    type_params,                                                      \
+	    type_params_,                                                      \
 	    SC_US_,                                                           \
 	    cast_sw,                                                          \
 	    observer_ )                                                       \
@@ -1359,19 +1359,19 @@ sc_ufix_fast::sc_ufix_fast( int wl_, int iwl_,
 {}
 
 inline
-sc_ufix_fast::sc_ufix_fast( const sc_fxtype_params& type_params,
+sc_ufix_fast::sc_ufix_fast( const sc_fxtype_params& type_params_,
 			    sc_fxnum_fast_observer* observer_ )
-: sc_fxnum_fast( type_params,
+: sc_fxnum_fast( type_params_,
 		 SC_US_,
 		 sc_fxcast_switch(),
 		 observer_ )
 {}
 
 inline
-sc_ufix_fast::sc_ufix_fast( const sc_fxtype_params& type_params,
+sc_ufix_fast::sc_ufix_fast( const sc_fxtype_params& type_params_,
 			    const sc_fxcast_switch& cast_sw,
 			    sc_fxnum_fast_observer* observer_ )
-: sc_fxnum_fast( type_params,
+: sc_fxnum_fast( type_params_,
 		 SC_US_,
 		 cast_sw,
 		 observer_ )
@@ -1518,10 +1518,10 @@ sc_ufix_fast::sc_ufix_fast( tp a,                                             \
                                                                               \
 inline                                                                        \
 sc_ufix_fast::sc_ufix_fast( tp a,                                             \
-			    const sc_fxtype_params& type_params,              \
+			    const sc_fxtype_params& type_params_,              \
 			    sc_fxnum_fast_observer* observer_ )               \
 : sc_fxnum_fast( a,                                                           \
-		 type_params,                                                 \
+		 type_params_,                                                 \
 		 SC_US_,                                                      \
 		 sc_fxcast_switch(),                                          \
 		 observer_ )                                                  \
@@ -1529,11 +1529,11 @@ sc_ufix_fast::sc_ufix_fast( tp a,                                             \
                                                                               \
 inline                                                                        \
 sc_ufix_fast::sc_ufix_fast( tp a,                                             \
-			    const sc_fxtype_params& type_params,              \
+			    const sc_fxtype_params& type_params_,              \
 			    const sc_fxcast_switch& cast_sw,                  \
 			    sc_fxnum_fast_observer* observer_ )               \
 : sc_fxnum_fast( a,                                                           \
-		 type_params,                                                 \
+		 type_params_,                                                 \
 		 SC_US_,                                                      \
 		 cast_sw,                                                     \
 		 observer_ )                                                  \
@@ -1680,10 +1680,10 @@ sc_ufix_fast::sc_ufix_fast( tp a,                                             \
                                                                               \
 inline                                                                        \
 sc_ufix_fast::sc_ufix_fast( tp a,                                             \
-			    const sc_fxtype_params& type_params,              \
+			    const sc_fxtype_params& type_params_,              \
 			    sc_fxnum_fast_observer* observer_ )               \
 : sc_fxnum_fast( a,                                                           \
-		 type_params,                                                 \
+		 type_params_,                                                 \
 		 SC_US_,                                                      \
 		 sc_fxcast_switch(),                                          \
 		 observer_ )                                                  \
@@ -1691,11 +1691,11 @@ sc_ufix_fast::sc_ufix_fast( tp a,                                             \
                                                                               \
 inline                                                                        \
 sc_ufix_fast::sc_ufix_fast( tp a,                                             \
-			    const sc_fxtype_params& type_params,              \
+			    const sc_fxtype_params& type_params_,              \
 			    const sc_fxcast_switch& cast_sw,                  \
 			    sc_fxnum_fast_observer* observer_ )               \
 : sc_fxnum_fast( a,                                                           \
-		 type_params,                                                 \
+		 type_params_,                                                 \
 		 SC_US_,                                                      \
 		 cast_sw,                                                     \
 		 observer_ )                                                  \

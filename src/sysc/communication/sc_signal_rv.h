@@ -36,6 +36,11 @@ namespace sc_core {
 
 class sc_process_b;
 
+} // namespace sc_core
+
+SC_API_VECTOR_(sc_core::sc_process_b*);
+
+namespace sc_core {
 
 // ----------------------------------------------------------------------------
 //  CLASS sc_lv_resolve<W>
@@ -43,7 +48,7 @@ class sc_process_b;
 //  Resolution function for sc_dt::sc_lv<W>.
 // ----------------------------------------------------------------------------
 
-extern const sc_dt::sc_logic_value_t sc_logic_resolution_tbl[4][4];
+extern SC_API const sc_dt::sc_logic_value_t sc_logic_resolution_tbl[4][4];
 
 
 template <int W>
@@ -68,7 +73,7 @@ sc_lv_resolve<W>::resolve( sc_dt::sc_lv<W>& result_,
 {
     int sz = values_.size();
 
-    assert( sz != 0 );
+    sc_assert( sz != 0 );
 
     if( sz == 1 ) {
 	result_ = *values_[0];

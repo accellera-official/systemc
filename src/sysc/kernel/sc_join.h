@@ -50,7 +50,7 @@ namespace sc_core {
 // execution. The threads whose completion is to be monitored are registered,
 // and upon their completion an event notification will occur.
 //==============================================================================
-class sc_join : public sc_process_monitor {
+class SC_API sc_join : public sc_process_monitor {
     friend class sc_process_b;
     friend class sc_process_handle;
   public:
@@ -67,6 +67,10 @@ class sc_join : public sc_process_monitor {
   protected:
     sc_event m_join_event;  // Event to notify when all threads have reported.
     int      m_threads_n;   // # of threads still need to wait for.
+
+  private:
+    sc_join( const sc_join& );
+    sc_join& operator = ( const sc_join& );
 };
 
 int sc_join::process_count() { return m_threads_n; }

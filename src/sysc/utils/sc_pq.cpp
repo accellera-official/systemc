@@ -33,6 +33,7 @@
 //
 
 #include "sysc/utils/sc_pq.h"
+#include "sysc/utils/sc_report.h"  // sc_assert
 
 namespace sc_core {
 
@@ -59,7 +60,7 @@ sc_ppq_base::~sc_ppq_base()
 void*
 sc_ppq_base::extract_top()
 {
-    assert( m_heap_size > 0 );
+    sc_assert( m_heap_size > 0 );
     void* topelem = m_heap[1];
     m_heap[1] = m_heap[m_heap_size];
     m_heap_size --;

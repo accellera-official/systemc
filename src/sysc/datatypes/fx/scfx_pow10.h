@@ -68,7 +68,7 @@ class scfx_pow10;
 const int SCFX_POW10_TABLE_SIZE = 32;
 
 
-class scfx_pow10
+class SC_API scfx_pow10
 {
 
 public:

@@ -53,7 +53,7 @@
 
 namespace sc_core {
 
-class vcd_trace;  // defined in vcd_trace.cpp
+class vcd_trace;  // defined in sc_vcd_trace.cpp
 template<class T> class vcd_T_trace;
 
 
@@ -92,26 +92,26 @@ protected:
      void trace(const bool& object, const std::string& name);
 
     // Trace a sc_bit object (single bit)
-    virtual void trace( const sc_dt::sc_bit& object, 
+    virtual void trace( const sc_dt::sc_bit& object,
 	    const std::string& name);
 
     // Trace a sc_logic object (single bit)
      void trace(const sc_dt::sc_logic& object, const std::string& name);
-    
+
     // Trace an unsigned char with the given width
-     void trace(const unsigned char& object, const std::string& name, 
+     void trace(const unsigned char& object, const std::string& name,
      	int width);
 
     // Trace an unsigned short with the given width
-     void trace(const unsigned short& object, const std::string& name, 
+     void trace(const unsigned short& object, const std::string& name,
      	int width);
 
     // Trace an unsigned int with the given width
-     void trace(const unsigned int& object, const std::string& name, 
+     void trace(const unsigned int& object, const std::string& name,
      	int width);
 
     // Trace an unsigned long with the given width
-     void trace(const unsigned long& object, const std::string& name, 
+     void trace(const unsigned long& object, const std::string& name,
      	int width);
 
     // Trace a signed char with the given width
@@ -125,13 +125,13 @@ protected:
 
     // Trace a signed long with the given width
      void trace(const long& object, const std::string& name, int width);
-    
+
     // Trace an int64 with a given width
-     void trace(const sc_dt::int64& object, const std::string& name, 
+     void trace(const sc_dt::int64& object, const std::string& name,
          int width);
 
     // Trace a uint64 with a given width
-     void trace(const sc_dt::uint64& object, const std::string& name, 
+     void trace(const sc_dt::uint64& object, const std::string& name,
          int width);
 
     // Trace a float
@@ -141,15 +141,15 @@ protected:
      void trace(const double& object, const std::string& name);
 
     // Trace sc_dt::sc_uint_base
-     void trace (const sc_dt::sc_uint_base& object, 
+     void trace (const sc_dt::sc_uint_base& object,
 	 	const std::string& name);
 
     // Trace sc_dt::sc_int_base
-     void trace (const sc_dt::sc_int_base& object, 
+     void trace (const sc_dt::sc_int_base& object,
 	 	const std::string& name);
 
     // Trace sc_dt::sc_unsigned
-     void trace (const sc_dt::sc_unsigned& object, 
+     void trace (const sc_dt::sc_unsigned& object,
 	 	const std::string& name);
 
     // Trace sc_dt::sc_signed
@@ -159,18 +159,18 @@ protected:
     void trace( const sc_dt::sc_fxval& object, const std::string& name );
 
     // Trace sc_dt::sc_fxval_fast
-    void trace( const sc_dt::sc_fxval_fast& object, 
+    void trace( const sc_dt::sc_fxval_fast& object,
 		const std::string& name );
 
     // Trace sc_dt::sc_fxnum
     void trace( const sc_dt::sc_fxnum& object, const std::string& name );
 
     // Trace sc_dt::sc_fxnum_fast
-    void trace( const sc_dt::sc_fxnum_fast& object, 
+    void trace( const sc_dt::sc_fxnum_fast& object,
 		const std::string& name );
 
     template<class T>
-    void traceT(const T& object, const std::string& name, 
+    void traceT(const T& object, const std::string& name,
     	vcd_enum type=VCD_WIRE)
     {
         if( add_trace_check(name) )
@@ -179,16 +179,16 @@ protected:
     }
 
    // Trace sc_dt::sc_bv_base (sc_dt::sc_bv)
-    virtual void trace(const sc_dt::sc_bv_base& object, 
+    virtual void trace(const sc_dt::sc_bv_base& object,
 		const std::string& name);
 
     // Trace sc_dt::sc_lv_base (sc_dt::sc_lv)
-    virtual void trace(const sc_dt::sc_lv_base& object, 
+    virtual void trace(const sc_dt::sc_lv_base& object,
 	    const std::string& name);
     // Trace an enumerated object - where possible output the enumeration literals
     // in the trace file. Enum literals is a null terminated array of null
     // terminated char* literal strings.
-     void trace(const unsigned& object, const std::string& name, 
+     void trace(const unsigned& object, const std::string& name,
      	const char** enum_literals);
 
     // Output a comment to the trace file

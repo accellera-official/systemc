@@ -63,7 +63,7 @@ operator < ( const sc_process_handle& left, const sc_process_handle& right );
 // process.
 //=============================================================================
 class sc_simcontext;
-class sc_process_handle {
+class SC_API sc_process_handle {
     typedef sc_process_handle this_type;
 
     friend bool operator == ( const this_type& left, const this_type& right );

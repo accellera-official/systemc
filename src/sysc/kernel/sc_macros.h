@@ -84,7 +84,6 @@ namespace sc_core {
 
 
 // token concatenation
-
 #define SC_CONCAT_HELPER_( a, b ) \
   SC_CONCAT_HELPER_DEFERRED_( a, b )
 #define SC_CONCAT_HELPER_DEFERRED_( a, b ) \
@@ -96,20 +95,21 @@ namespace sc_core {
 
 /*
  *  These help debugging --
- *  -- user can find out where each process is stopped at.
+ *  -- the user can find out at which location in their source file a process calls wait.
  */
 
-#define WAIT()                                                                \
-    ::sc_core::sc_set_location( __FILE__, __LINE__ );                         \
-    ::sc_core::wait()
+#define SC_WAIT()                                       \
+    ::sc_core::sc_set_location( __FILE__, __LINE__ );   \
+    ::sc_core::wait();                                  \
+    ::sc_core::sc_set_location( NULL, 0 )
 
-#define WAITN(n)                                                              \
-    ::sc_core::sc_set_location( __FILE__, __LINE__ );                         \
-    ::sc_core::wait(n)
+#define SC_WAITN(n)                                     \
+    ::sc_core::sc_set_location( __FILE__, __LINE__ );   \
+    ::sc_core::wait(n);                                 \
+    ::sc_core::sc_set_location( NULL, 0 )
 
-#define WAIT_UNTIL(expr)                                                      \
-    ::sc_core::sc_set_location( __FILE__, __LINE__ );                         \
-    do { ::sc_core::wait(); } while( !(expr) )
+#define SC_WAIT_UNTIL(expr)                             \
+  do { SC_WAIT(); } while( !(expr) )
 
 } // namespace sc_core
 

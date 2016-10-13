@@ -68,7 +68,7 @@ void exec::entry(){
     		// output MUX
     		switch (opcode_tmp) {
         		case 0:         // Stall 
-                	dout_tmp = dout_tmp;
+                	// dout_tmp = dout_tmp;  // keeps its value
                 	wait();
                 	break;
 		case 1: 	// add with carry

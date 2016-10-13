@@ -19,7 +19,7 @@
 
 /*****************************************************************************
 
-  scfx_rep.h - 
+  scfx_rep.h -
 
   Original Author: Robert Graulich, Synopsys, Inc.
                    Martin Janssen,  Synopsys, Inc.
@@ -89,20 +89,20 @@ class sc_signed;
 class sc_unsigned;
 
 // function declarations
-void multiply( scfx_rep&, const scfx_rep&, const scfx_rep&, 
+SC_API void multiply( scfx_rep&, const scfx_rep&, const scfx_rep&,
 	       int max_wl = SC_DEFAULT_MAX_WL_ );
-scfx_rep*  neg_scfx_rep( const scfx_rep& );
-scfx_rep*  mult_scfx_rep( const scfx_rep&, const scfx_rep&, 
+SC_API scfx_rep*  neg_scfx_rep( const scfx_rep& );
+SC_API scfx_rep*  mult_scfx_rep( const scfx_rep&, const scfx_rep&,
 	                  int max_wl = SC_DEFAULT_MAX_WL_ );
-scfx_rep*  div_scfx_rep( const scfx_rep&, const scfx_rep&, 
+SC_API scfx_rep*  div_scfx_rep( const scfx_rep&, const scfx_rep&,
 	                 int max_wl = SC_DEFAULT_DIV_WL_ );
-scfx_rep*  add_scfx_rep( const scfx_rep&, const scfx_rep&, 
+SC_API scfx_rep*  add_scfx_rep( const scfx_rep&, const scfx_rep&,
 	                 int max_wl = SC_DEFAULT_MAX_WL_ );
-scfx_rep*  sub_scfx_rep( const scfx_rep&, const scfx_rep&, 
+SC_API scfx_rep*  sub_scfx_rep( const scfx_rep&, const scfx_rep&,
 	                 int max_wl = SC_DEFAULT_MAX_WL_ );
-scfx_rep*  lsh_scfx_rep( const scfx_rep&, int );
-scfx_rep*  rsh_scfx_rep( const scfx_rep&, int );
-int        cmp_scfx_rep( const scfx_rep&, const scfx_rep& );
+SC_API scfx_rep*  lsh_scfx_rep( const scfx_rep&, int );
+SC_API scfx_rep*  rsh_scfx_rep( const scfx_rep&, int );
+SC_API int        cmp_scfx_rep( const scfx_rep&, const scfx_rep& );
 
 
 const int min_mant = 4;
@@ -115,7 +115,7 @@ const int bits_in_word = sizeof(word) * CHAR_BIT;
 //  CLASS : scfx_index
 // ----------------------------------------------------------------------------
 
-class scfx_index
+class SC_API scfx_index
 {
 
 public:
@@ -141,7 +141,7 @@ private:
 //  Arbitrary-precision fixed-point implementation class.
 // ----------------------------------------------------------------------------
 
-class scfx_rep
+class SC_API scfx_rep
 {
     enum state
     {
@@ -195,20 +195,20 @@ public:
 
     void operator = ( const scfx_rep& );
 
-    friend void multiply( scfx_rep&, const scfx_rep&, const scfx_rep&, int );
+    friend SC_API void multiply( scfx_rep&, const scfx_rep&, const scfx_rep&, int );
 
-    friend scfx_rep* neg_scfx_rep( const scfx_rep& );
-    friend scfx_rep* mult_scfx_rep( const scfx_rep&, const scfx_rep&, int );
-    friend scfx_rep* div_scfx_rep( const scfx_rep&, const scfx_rep&, int );
-    friend scfx_rep* add_scfx_rep( const scfx_rep&, const scfx_rep&, int );
-    friend scfx_rep* sub_scfx_rep( const scfx_rep&, const scfx_rep&, int );
-    friend scfx_rep* lsh_scfx_rep( const scfx_rep&, int );
-    friend scfx_rep* rsh_scfx_rep( const scfx_rep&, int );
+    friend SC_API scfx_rep* neg_scfx_rep( const scfx_rep& );
+    friend SC_API scfx_rep* mult_scfx_rep( const scfx_rep&, const scfx_rep&, int );
+    friend SC_API scfx_rep* div_scfx_rep( const scfx_rep&, const scfx_rep&, int );
+    friend SC_API scfx_rep* add_scfx_rep( const scfx_rep&, const scfx_rep&, int );
+    friend SC_API scfx_rep* sub_scfx_rep( const scfx_rep&, const scfx_rep&, int );
+    friend SC_API scfx_rep* lsh_scfx_rep( const scfx_rep&, int );
+    friend SC_API scfx_rep* rsh_scfx_rep( const scfx_rep&, int );
 
     void lshift( int );
     void rshift( int );
 
-    friend int        cmp_scfx_rep( const scfx_rep&, const scfx_rep& );
+    friend SC_API int        cmp_scfx_rep( const scfx_rep&, const scfx_rep& );
 
     void cast( const scfx_params&, bool&, bool& );
 
@@ -526,7 +526,7 @@ scfx_rep::o_extend( const scfx_index& x, sc_enc enc )
     int bi = x.bi();
 
     SC_ASSERT_( wi >= 0 && wi < size(), "word index out of range" );
-    
+
     if( enc == SC_US_ || ( m_mant[wi] & ( ((word)1) << bi ) ) == 0 )
     {
         if( bi != bits_in_word - 1 )
@@ -551,7 +551,7 @@ scfx_rep::o_bit_at( const scfx_index& x ) const
 {
     int wi = x.wi();
     int bi = x.bi();
-    
+
     SC_ASSERT_( wi >= 0 && wi < size(), "word index out of range" );
 
     return ( m_mant[wi] & ( ((word)1) << bi ) ) != 0;
@@ -623,7 +623,7 @@ scfx_rep::o_set_high( const scfx_index& x, const scfx_index& x2,
 
     SC_ASSERT_( wi >= 0 && wi < size(), "word index out of range" );
     SC_ASSERT_( wi2 >= 0 && wi2 < size(), "word index out of range" );
-    
+
     int i;
 
     for( i = 0; i < size(); ++ i )
@@ -636,7 +636,7 @@ scfx_rep::o_set_high( const scfx_index& x, const scfx_index& x2,
     m_mant[wi2] &= ( ((word)-1) << bi2 );
     for( i = wi2 - 1; i >= 0; -- i )
 	m_mant[i] = 0;
-    
+
     if( enc == SC_TC_ )
 	m_sign = sign;
     else
@@ -655,7 +655,7 @@ scfx_rep::o_set( const scfx_index& x, const scfx_index& x3,
     int bi = x.bi();
     int wi3 = x3.wi();
     int bi3 = x3.bi();
-    
+
     SC_ASSERT_( wi >= 0 && wi < size(), "word index out of range" );
     SC_ASSERT_( wi3 >= 0 && wi3 < size(), "word index out of range" );
 
@@ -673,7 +673,7 @@ scfx_rep::o_set( const scfx_index& x, const scfx_index& x3,
 	else
 	    m_mant[i] = static_cast<word>( -1 );
     }
-	
+
     if( enc == SC_TC_ )
     {
 	if( under )
@@ -718,7 +718,7 @@ scfx_rep::q_clear( const scfx_index& x )
 {
     int wi = x.wi();
     int bi = x.bi();
-    
+
     SC_ASSERT_( wi >= 0 && wi < size(), "word index out of range" );
 
     m_mant[wi] &= ( ((word)-1) << bi );
@@ -732,7 +732,7 @@ scfx_rep::q_incr( const scfx_index& x )
 {
     int wi = x.wi();
     int bi = x.bi();
-    
+
     SC_ASSERT_( wi >= 0 && wi < size(), "word index out of range" );
 
     word old_val = m_mant[wi];

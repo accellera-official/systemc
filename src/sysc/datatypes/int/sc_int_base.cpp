@@ -33,7 +33,7 @@
 
       Name, Affiliation, Date:
   Description of Modification:
-    
+
  *****************************************************************************/
 
 
@@ -151,7 +151,7 @@ sc_int_bitref::scan( ::std::istream& is )
 // ----------------------------------------------------------------------------
 
 bool sc_int_subref_r::concat_get_ctrl( sc_digit* dst_p, int low_i ) const
-{    
+{
     int       dst_i;       // Word in dst_p now processing.
     int       end_i;       // Highest order word in dst_p to process.
     int       high_i;      // Index of high order bit in dst_p to set.
@@ -197,7 +197,7 @@ bool sc_int_subref_r::concat_get_ctrl( sc_digit* dst_p, int low_i ) const
 
 
 bool sc_int_subref_r::concat_get_data( sc_digit* dst_p, int low_i ) const
-{    
+{
     int       dst_i;      // Word in dst_p now processing.
     int       end_i;      // Highest order word in dst_p to process.
     int       high_i;     // Index of high order bit in dst_p to set.
@@ -217,8 +217,8 @@ bool sc_int_subref_r::concat_get_data( sc_digit* dst_p, int low_i ) const
 
     // PROCESS THE FIRST WORD:
 
-    mask = ~(-1 << left_shift);
-    dst_p[dst_i] = (sc_digit)((dst_p[dst_i] & mask) | 
+    mask = ~(~UINT_ZERO << left_shift);
+    dst_p[dst_i] = (sc_digit)((dst_p[dst_i] & mask) |
 		((val << left_shift) & DIGIT_MASK));
 
     switch ( end_i - dst_i )
@@ -265,8 +265,8 @@ bool sc_int_subref_r::concat_get_data( sc_digit* dst_p, int low_i ) const
 sc_core::sc_vpool<sc_int_subref> sc_int_subref::m_pool(9);
 
 // assignment operators
-  
-sc_int_subref& 
+
+sc_int_subref&
 sc_int_subref::operator = ( int_type v )
 {
     int_type val = m_obj_p->m_val;
@@ -408,7 +408,7 @@ sc_int_base::check_value() const
 
 
 // constructors
-sc_int_base::sc_int_base( const sc_bv_base& v ) 
+sc_int_base::sc_int_base( const sc_bv_base& v )
     : m_val(0), m_len( v.length() ), m_ulen( SC_INTWIDTH - m_len )
 {
     check_length();
@@ -470,7 +470,7 @@ sc_int_base::sc_int_base( const sc_unsigned& a )
 
 // assignment operators
 
-sc_int_base& 
+sc_int_base&
 sc_int_base::operator = ( const sc_signed& a )
 {
     int minlen = sc_min( m_len, a.length() );
@@ -487,7 +487,7 @@ sc_int_base::operator = ( const sc_signed& a )
     return *this;
 }
 
-sc_int_base& 
+sc_int_base&
 sc_int_base::operator = ( const sc_unsigned& a )
 {
     int minlen = sc_min( m_len, a.length() );
@@ -609,7 +609,7 @@ sc_int_base::xor_reduce() const
 
 
 bool sc_int_base::concat_get_ctrl( sc_digit* dst_p, int low_i ) const
-{    
+{
     int        dst_i;       // Word in dst_p now processing.
     int        end_i;       // Highest order word in dst_p to process.
     int        left_shift;  // Left shift for val.
@@ -619,7 +619,7 @@ bool sc_int_base::concat_get_ctrl( sc_digit* dst_p, int low_i ) const
     left_shift = low_i % BITS_PER_DIGIT;
     end_i = (low_i + (m_len-1)) / BITS_PER_DIGIT;
 
-    mask = ~(-1 << left_shift);
+    mask = ~(~UINT_ZERO << left_shift);
     dst_p[dst_i] = (sc_digit)(dst_p[dst_i] & mask);
 	dst_i++;
 	for ( ; dst_i <= end_i; dst_i++ ) dst_p[dst_i] = 0;
@@ -642,7 +642,7 @@ bool sc_int_base::concat_get_ctrl( sc_digit* dst_p, int low_i ) const
 //   low_i =  first bit within dst_p to be set.
 //------------------------------------------------------------------------------
 bool sc_int_base::concat_get_data( sc_digit* dst_p, int low_i ) const
-{    
+{
     int        dst_i;       // Word in dst_p now processing.
     int        end_i;       // Highest order word in dst_p to process.
     int        high_i;      // Index of high order bit in dst_p to set.
@@ -662,14 +662,14 @@ bool sc_int_base::concat_get_data( sc_digit* dst_p, int low_i ) const
 
     if ( m_len < 64 )
     {
-	mask = ~((uint_type)-1 << m_len);
+	mask = ~(~UINT_ZERO << m_len);
         val &=  mask;
     }
 
     // PROCESS THE FIRST WORD:
 
-    mask = (-1 << left_shift);
-    dst_p[dst_i] = (sc_digit)((dst_p[dst_i] & ~mask) | 
+    mask = (~UINT_ZERO << left_shift);
+    dst_p[dst_i] = (sc_digit)((dst_p[dst_i] & ~mask) |
 		((val <<left_shift) & DIGIT_MASK));
     switch ( end_i - dst_i )
     {

@@ -40,7 +40,7 @@ namespace sc_core {
 //  ...
 // ----------------------------------------------------------------------------
 
-class sc_mempool
+class SC_API sc_mempool
 {
 public:
 
@@ -56,7 +56,7 @@ public:
 //  ...
 // ----------------------------------------------------------------------------
 
-class sc_mpobject
+class SC_API sc_mpobject
 {
 public:
 

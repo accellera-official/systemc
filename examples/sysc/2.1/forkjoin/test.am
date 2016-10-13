@@ -58,7 +58,7 @@ examples_BUILD += \
 
 examples_CLEAN += \
 	2.1/forkjoin/run.log \
-	2.1/forkjoin/expexted_trimmed.log \
+	2.1/forkjoin/expected_trimmed.log \
 	2.1/forkjoin/run_trimmed.log \
 	2.1/forkjoin/diff.log
 
@@ -75,7 +75,8 @@ examples_FILES += \
 2_1_forkjoin_CXX_FILES = \
 	2.1/forkjoin/forkjoin.cpp
 
-2_1_forkjoin_BUILD =
+2_1_forkjoin_BUILD = \
+	2.1/forkjoin/golden.log
 
 2_1_forkjoin_EXTRA = \
 	2.1/forkjoin/forkjoin.vcproj \

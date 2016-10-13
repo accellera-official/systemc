@@ -108,8 +108,11 @@ class sc_fxval_fast;
 class sc_fxnum;
 class sc_fxnum_fast;
 
+} // namespace sc_dt
 
-extern const uint_type mask_int[SC_INTWIDTH][SC_INTWIDTH];
+namespace sc_dt {
+
+extern SC_API const uint_type mask_int[SC_INTWIDTH][SC_INTWIDTH];
 
 // friend operator declarations
     inline bool operator == ( const sc_uint_base& a, const sc_uint_base& b );
@@ -127,7 +130,7 @@ extern const uint_type mask_int[SC_INTWIDTH][SC_INTWIDTH];
 //  Proxy class for sc_uint bit selection (r-value only).
 // ----------------------------------------------------------------------------
 
-class sc_uint_bitref_r : public sc_value_base
+class SC_API sc_uint_bitref_r : public sc_value_base
 {
     friend class sc_uint_base;
     friend class sc_uint_signal;
@@ -248,7 +251,7 @@ operator << ( ::std::ostream&, const sc_uint_bitref_r& );
 //  Proxy class for sc_uint bit selection (r-value and l-value).
 // ----------------------------------------------------------------------------
 
-class sc_uint_bitref
+class SC_API sc_uint_bitref
     : public sc_uint_bitref_r
 {
     friend class sc_uint_base;
@@ -305,7 +308,7 @@ operator >> ( ::std::istream&, sc_uint_bitref& );
 //  Proxy class for sc_uint part selection (r-value only).
 // ----------------------------------------------------------------------------
 
-class sc_uint_subref_r : public sc_value_base
+class SC_API sc_uint_subref_r : public sc_value_base
 {
     friend class sc_uint_base;
 	friend class sc_uint_subref;
@@ -315,7 +318,7 @@ class sc_uint_subref_r : public sc_value_base
 
 public:
     sc_uint_subref_r( const sc_uint_subref_r& init ) :
-        sc_value_base(init), m_left(init.m_left), m_obj_p(init.m_obj_p), 
+        sc_value_base(init), m_left(init.m_left), m_obj_p(init.m_obj_p),
 	m_right(init.m_right)
 	{}
 
@@ -433,7 +436,7 @@ operator << ( ::std::ostream&, const sc_uint_subref_r& );
 //  Proxy class for sc_uint part selection (r-value and l-value).
 // ----------------------------------------------------------------------------
 
-class sc_uint_subref
+class SC_API sc_uint_subref
     : public sc_uint_subref_r
 {
     friend class sc_uint_base;
@@ -522,7 +525,7 @@ operator >> ( ::std::istream&, sc_uint_subref& );
 //  Base class for sc_uint.
 // ----------------------------------------------------------------------------
 
-class sc_uint_base : public sc_value_base
+class SC_API sc_uint_base : public sc_value_base
 {
     friend class sc_uint_bitref_r;
     friend class sc_uint_bitref;
@@ -1346,6 +1349,11 @@ operator >> ( ::std::istream& is, sc_uint_base& a )
 
 } // namespace sc_dt
 
+// explicit template instantiations
+namespace sc_core {
+    SC_API_TEMPLATE_ template class SC_API sc_vpool<sc_dt::sc_uint_bitref>;
+    SC_API_TEMPLATE_ template class SC_API sc_vpool<sc_dt::sc_uint_subref>;
+} // namespace sc_core
 
 #endif
 

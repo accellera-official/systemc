@@ -85,7 +85,7 @@ extern void sc_deprecated_sc_bit();
 //  Note: VSIA compatibility indicated.
 // ----------------------------------------------------------------------------
 
-class sc_bit
+class SC_API sc_bit
 {
     // support methods
 

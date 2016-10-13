@@ -57,7 +57,7 @@ namespace sc_dt
 //  Enumeration of sign encodings.
 // ----------------------------------------------------------------------------
 
-const std::string
+SC_API const std::string
 to_string( sc_enc enc )
 {
     switch( enc )
@@ -78,7 +78,7 @@ to_string( sc_enc enc )
 //  Enumeration of quantization modes.
 // ----------------------------------------------------------------------------
 
-const std::string
+SC_API const std::string
 to_string( sc_q_mode q_mode )
 {
     switch( q_mode )
@@ -109,7 +109,7 @@ to_string( sc_q_mode q_mode )
 //  Enumeration of overflow modes.
 // ----------------------------------------------------------------------------
 
-const std::string
+SC_API const std::string
 to_string( sc_o_mode o_mode )
 {
     switch( o_mode )
@@ -136,7 +136,7 @@ to_string( sc_o_mode o_mode )
 //  Enumeration of switch states.
 // ----------------------------------------------------------------------------
 
-const std::string
+SC_API const std::string
 to_string( sc_switch sw )
 {
     switch( sw ) {
@@ -156,7 +156,7 @@ to_string( sc_switch sw )
 //  Enumeration of formats for character string conversion.
 // ----------------------------------------------------------------------------
 
-const std::string
+SC_API const std::string
 to_string( sc_fmt fmt )
 {
     switch( fmt ) {
