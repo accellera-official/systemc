@@ -44,7 +44,7 @@ dnl
 dnl Some simple checks.
 dnl
 AC_CANONICAL_SYSTEM
-AM_INIT_AUTOMAKE([1.10 no-define]) # for .s file support of LIBTOOLFLAGS
+AM_INIT_AUTOMAKE([1.10 no-define foreign]) # for .s file support of LIBTOOLFLAGS
 
 dnl
 dnl reset default compiler flags
