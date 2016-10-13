@@ -42,7 +42,6 @@
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_event.h"
 #include "sysc/utils/sc_hash.h"
-#include "sysc/utils/sc_iostream.h"
 #include "sysc/utils/sc_list.h"
 #include "sysc/utils/sc_utils_ids.h"
 #include "sysc/utils/sc_mempool.h"

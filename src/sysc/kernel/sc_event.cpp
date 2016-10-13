@@ -36,6 +36,8 @@
 #include "sysc/kernel/sc_object_manager.h"
 #include "sysc/utils/sc_utils_ids.h"
 
+#include <sstream>
+
 namespace sc_core {
 
 using std::malloc;

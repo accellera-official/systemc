@@ -33,8 +33,8 @@
 #define SC_STRING_H
 
 
-#include "sysc/utils/sc_iostream.h"
 #include "sysc/utils/sc_report.h"
+#include <iostream>
 
 namespace sc_dt {
 	class sc_string_old;

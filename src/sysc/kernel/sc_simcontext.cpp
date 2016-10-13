@@ -56,6 +56,8 @@
 #include "sysc/utils/sc_list.h"
 #include "sysc/utils/sc_utils_ids.h"
 
+#include <sstream>
+
 // DEBUGGING MACROS:
 //
 // DEBUG_MSG(NAME,P,MSG)

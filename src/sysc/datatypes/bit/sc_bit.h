@@ -62,7 +62,7 @@
 
 
 #include "sysc/datatypes/int/sc_nbdefs.h"
-#include "sysc/utils/sc_iostream.h"
+#include <iostream>
 
 
 namespace sc_dt

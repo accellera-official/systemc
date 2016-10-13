@@ -31,6 +31,7 @@
 
 #include <algorithm>
 #include <functional>
+#include <sstream>
 
 namespace sc_core {
 

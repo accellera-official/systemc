@@ -33,7 +33,6 @@
 #include <cctype>
 #include <algorithm> // pick up std::sort.
 
-#include "sysc/utils/sc_iostream.h"
 #include "sysc/kernel/sc_object.h"
 #include "sysc/utils/sc_hash.h"
 #include "sysc/utils/sc_list.h"
@@ -43,6 +42,8 @@
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/kernel/sc_process.h"
 #include "sysc/kernel/sc_module_name.h"
+
+#include <sstream>
 
 namespace sc_core {
 

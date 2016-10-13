@@ -61,7 +61,6 @@
 
 
 #include "sysc/kernel/sc_cmnhdr.h"
-#include "sysc/utils/sc_iostream.h"
 #include "sysc/datatypes/int/sc_signed.h"
 #include "sysc/datatypes/int/sc_unsigned.h"
 #include "sysc/datatypes/int/sc_int_base.h"

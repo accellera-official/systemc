@@ -68,7 +68,8 @@
 #include "sysc/datatypes/int/sc_int_ids.h"
 #include "sysc/datatypes/int/sc_nbdefs.h"
 #include "sysc/utils/sc_report.h"
-
+#include <ios>
+#include <ostream>
 
 namespace sc_dt
 {

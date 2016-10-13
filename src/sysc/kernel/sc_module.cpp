@@ -48,7 +48,6 @@
 #include "sysc/communication/sc_signal.h"
 #include "sysc/communication/sc_signal_ports.h"
 #include "sysc/utils/sc_utils_ids.h"
-#include "sysc/utils/sc_iostream.h"
 
 namespace sc_core {
 

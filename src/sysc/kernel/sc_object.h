@@ -28,8 +28,8 @@
 #ifndef SC_OBJECT_H
 #define SC_OBJECT_H
 
-#include "sysc/utils/sc_iostream.h"
 #include "sysc/kernel/sc_attribute.h"
+#include <iostream>
 
 #if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
 #pragma warning(push)

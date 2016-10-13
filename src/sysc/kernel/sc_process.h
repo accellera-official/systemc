@@ -29,7 +29,6 @@
 #if !defined(sc_process_h_INCLUDED)
 #define sc_process_h_INCLUDED
 
-#include "sysc/utils/sc_iostream.h"
 #include "sysc/kernel/sc_constants.h"
 #include "sysc/kernel/sc_object.h"
 #include "sysc/kernel/sc_kernel_ids.h"
