@@ -56,7 +56,7 @@ dnl
 dnl Some simple checks.
 dnl
 AC_CANONICAL_SYSTEM
-AM_INIT_AUTOMAKE([1.10 tar-pax -Werror -Wno-portability no-define subdir-objects])
+AM_INIT_AUTOMAKE([1.10 tar-pax -Werror -Wno-portability no-define subdir-objects foreign])
 dnl 1.10 needed for .s file support of LIBTOOLFLAGS
 
 dnl enable silent rules, if present
