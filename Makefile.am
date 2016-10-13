@@ -42,7 +42,7 @@ SUBDIRS = \
 
 DOC_FILES = \
 	AUTHORS \
-	COPYING \
+	NOTICE \
 	ChangeLog \
 	INSTALL \
 	LICENSE \
