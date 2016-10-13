@@ -36,8 +36,7 @@ DOXYGEN=doxygen
 
 ## Core documentation (see also root directory)
 
-DOC_FILES = \
-	SystemC_Open_Source_License.pdf
+DOC_FILES =
 
 ##
 ## SystemC documentation
