@@ -32,7 +32,7 @@ eval '(exit $?0)' && eval 'exec perl -S $0 ${1+"$@"}'
 #  OFFIS eV, Escherweg 2, 26121 Oldenburg, Germany
 #
 #  Copyright 2011-2016 STMicroelectronics International NV. All rights reserved.
-#  STMicroelectronics, 39, Chemin de Champs des Filles, Plan-Les-Ouates, Geneva, Switzerland
+#  STMicroelectronics, 39, Chemin de Champ-des-Filles, Plan-Les-Ouates, Geneva, Switzerland
 #
 #  Copyright 1996-2016 Synopsys, Inc. All rights reserved.
 #  Synopsys, Inc., 690 East Middlefield Road Mountain View, CA 94043, USA
