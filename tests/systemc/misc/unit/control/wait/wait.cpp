@@ -135,10 +135,10 @@ int sc_main(int argc, char ** argv) {
   sc_assert(thread->lineno == lineno);
   sc_core::sc_start(sc_time(980, SC_US));  // time should be 2005
   sc_assert(endsWith(thread->file, "wait.cpp"));  // SC_WAITN in waitFunIsTrue
-  sc_assert(thread->lineno == 58);
+  sc_assert(thread->lineno == 60);
   sc_core::sc_start(sc_time(95, SC_US));
   sc_assert(endsWith(thread->file, "wait.cpp"));
-  sc_assert(thread->lineno == 58);
+  sc_assert(thread->lineno == 60);
   sc_core::sc_start(sc_time(910, SC_US));
   sc_assert(endsWith(thread->file, "wait.cpp"));  // 2nd SC_WAIT_UNTIL
   sc_assert(thread->lineno == lineno);
