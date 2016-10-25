@@ -1,0 +1,114 @@
+## ****************************************************************************
+##
+##  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+##  more contributor license agreements.  See the NOTICE file distributed
+##  with this work for additional information regarding copyright ownership.
+##  Accellera licenses this file to you under the Apache License, Version 2.0
+##  (the "License"); you may not use this file except in compliance with the
+##  License.  You may obtain a copy of the License at
+##
+##   http://www.apache.org/licenses/LICENSE-2.0
+##
+##  Unless required by applicable law or agreed to in writing, software
+##  distributed under the License is distributed on an "AS IS" BASIS,
+##  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+##  implied.  See the License for the specific language governing
+##  permissions and limitations under the License.
+##
+## ****************************************************************************
+##
+##  test.am --
+##  Included from a Makefile.am to provide example-specific information
+##
+##  Original Author: Philipp A. Hartmann, OFFIS, 2013-05-20
+##
+## ****************************************************************************
+##
+##  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+##  changes you are making here.
+##
+##      Name, Affiliation, Date:
+##  Description of Modification:
+##
+## ***************************************************************************
+
+## Generic example setup
+## (should be kept in sync among all test.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##      included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D%: simple_bus
+##   %C%: simple_bus
+
+examples_TESTS += simple_bus/test
+
+simple_bus_test_CPPFLAGS = \
+	$(AM_CPPFLAGS)
+
+simple_bus_test_SOURCES = \
+	$(simple_bus_H_FILES) \
+	$(simple_bus_CXX_FILES)
+
+examples_BUILD += \
+	$(simple_bus_BUILD)
+
+examples_CLEAN += \
+	simple_bus/run.log \
+	simple_bus/expexted_trimmed.log \
+	simple_bus/run_trimmed.log \
+	simple_bus/diff.log
+
+examples_FILES += \
+	$(simple_bus_H_FILES) \
+	$(simple_bus_CXX_FILES) \
+	$(simple_bus_BUILD) \
+	$(simple_bus_EXTRA)
+
+## example-specific details
+
+simple_bus_H_FILES = \
+	simple_bus/simple_bus.h \
+	simple_bus/simple_bus_arbiter.h \
+	simple_bus/simple_bus_arbiter_if.h \
+	simple_bus/simple_bus_blocking_if.h \
+	simple_bus/simple_bus_direct_if.h \
+	simple_bus/simple_bus_fast_mem.h \
+	simple_bus/simple_bus_master_blocking.h \
+	simple_bus/simple_bus_master_direct.h \
+	simple_bus/simple_bus_master_non_blocking.h \
+	simple_bus/simple_bus_non_blocking_if.h \
+	simple_bus/simple_bus_request.h \
+	simple_bus/simple_bus_slave_if.h \
+	simple_bus/simple_bus_slow_mem.h \
+	simple_bus/simple_bus_test.h \
+	simple_bus/simple_bus_types.h
+
+simple_bus_CXX_FILES = \
+	simple_bus/simple_bus.cpp                     \
+	simple_bus/simple_bus_arbiter.cpp             \
+	simple_bus/simple_bus_main.cpp                \
+	simple_bus/simple_bus_master_blocking.cpp     \
+	simple_bus/simple_bus_master_direct.cpp       \
+	simple_bus/simple_bus_master_non_blocking.cpp \
+	simple_bus/simple_bus_types.cpp               \
+	simple_bus/simple_bus_tools.cpp
+
+simple_bus_BUILD = \
+	simple_bus/golden.log
+
+simple_bus_EXTRA = \
+	simple_bus/simple_bus.vcproj \
+	simple_bus/Makefile \
+	simple_bus/ChangeLog \
+	simple_bus/README \
+	simple_bus/SLIDES.pdf \
+	simple_bus/LEGAL
+
+#simple_bus_FILTER = 
+#export simple_bus_FILTER
+
+## Taf!
+## :vim:ft=automake:

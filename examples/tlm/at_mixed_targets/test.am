@@ -1,0 +1,97 @@
+## ****************************************************************************
+##
+##  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+##  more contributor license agreements.  See the NOTICE file distributed
+##  with this work for additional information regarding copyright ownership.
+##  Accellera licenses this file to you under the Apache License, Version 2.0
+##  (the "License"); you may not use this file except in compliance with the
+##  License.  You may obtain a copy of the License at
+##
+##   http://www.apache.org/licenses/LICENSE-2.0
+##
+##  Unless required by applicable law or agreed to in writing, software
+##  distributed under the License is distributed on an "AS IS" BASIS,
+##  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+##  implied.  See the License for the specific language governing
+##  permissions and limitations under the License.
+##
+## ****************************************************************************
+##
+##  test.am --
+##  Included from a Makefile.am to provide example-specific information
+##
+##  Original Author: Philipp A. Hartmann, OFFIS, 2013-05-20
+##
+## ****************************************************************************
+##
+##  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+##  changes you are making here.
+##
+##      Name, Affiliation, Date:
+##  Description of Modification:
+##
+## ***************************************************************************
+
+## Generic example setup
+## (should be kept in sync among all test.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##      included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D%: at_mixed_targets
+##   %C%: at_mixed_targets
+
+examples_TESTS += at_mixed_targets/test
+
+at_mixed_targets_test_CPPFLAGS = \
+	-I$(srcdir)/at_mixed_targets/include \
+	$(CPPFLAGS_TLMTESTS)
+
+at_mixed_targets_test_SOURCES = \
+	$(at_mixed_targets_H_FILES) \
+	$(at_mixed_targets_CXX_FILES)
+
+examples_BUILD += \
+	$(at_mixed_targets_BUILD)
+
+examples_CLEAN += \
+	at_mixed_targets/run.log \
+	at_mixed_targets/expexted_trimmed.log \
+	at_mixed_targets/run_trimmed.log \
+	at_mixed_targets/diff.log
+
+examples_FILES += \
+	$(at_mixed_targets_H_FILES) \
+	$(at_mixed_targets_CXX_FILES) \
+	$(at_mixed_targets_BUILD) \
+	$(at_mixed_targets_EXTRA)
+
+## example-specific details
+
+at_mixed_targets_H_FILES = \
+	at_mixed_targets/include/at_mixed_targets_top.h \
+	at_mixed_targets/include/initiator_top.h
+
+at_mixed_targets_CXX_FILES = \
+	at_mixed_targets/src/at_mixed_targets.cpp \
+	at_mixed_targets/src/at_mixed_targets_top.cpp \
+	at_mixed_targets/src/initiator_top.cpp
+
+at_mixed_targets_BUILD = \
+	at_mixed_targets/results/expected.log
+
+at_mixed_targets_EXTRA = \
+	at_mixed_targets/build-msvc/Makefile \
+	at_mixed_targets/build-msvc/at_mixed_targets.sln \
+	at_mixed_targets/build-msvc/at_mixed_targets.vcproj \
+	at_mixed_targets/build-unix/Makefile \
+	at_mixed_targets/docs/at_mixed_targets_example.pdf \
+	at_mixed_targets/docs/at_mixed_targets_example.ppt
+
+#at_mixed_targets_FILTER = 
+#export at_mixed_targets_FILTER
+
+## Taf!
+## :vim:ft=automake:

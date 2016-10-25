@@ -1,0 +1,97 @@
+## ****************************************************************************
+##
+##  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+##  more contributor license agreements.  See the NOTICE file distributed
+##  with this work for additional information regarding copyright ownership.
+##  Accellera licenses this file to you under the Apache License, Version 2.0
+##  (the "License"); you may not use this file except in compliance with the
+##  License.  You may obtain a copy of the License at
+##
+##   http://www.apache.org/licenses/LICENSE-2.0
+##
+##  Unless required by applicable law or agreed to in writing, software
+##  distributed under the License is distributed on an "AS IS" BASIS,
+##  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+##  implied.  See the License for the specific language governing
+##  permissions and limitations under the License.
+##
+## ****************************************************************************
+##
+##  test.am --
+##  Included from a Makefile.am to provide example-specific information
+##
+##  Original Author: Philipp A. Hartmann, OFFIS, 2013-05-20
+##
+## ****************************************************************************
+##
+##  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+##  changes you are making here.
+##
+##      Name, Affiliation, Date:
+##  Description of Modification:
+##
+## ***************************************************************************
+
+## Generic example setup
+## (should be kept in sync among all test.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##      included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D%: at_1_phase
+##   %C%: at_1_phase
+
+examples_TESTS += at_1_phase/test
+
+at_1_phase_test_CPPFLAGS = \
+	-I$(srcdir)/at_1_phase/include \
+	$(CPPFLAGS_TLMTESTS)
+
+at_1_phase_test_SOURCES = \
+	$(at_1_phase_H_FILES) \
+	$(at_1_phase_CXX_FILES)
+
+examples_BUILD += \
+	$(at_1_phase_BUILD)
+
+examples_CLEAN += \
+	at_1_phase/run.log \
+	at_1_phase/expexted_trimmed.log \
+	at_1_phase/run_trimmed.log \
+	at_1_phase/diff.log
+
+examples_FILES += \
+	$(at_1_phase_H_FILES) \
+	$(at_1_phase_CXX_FILES) \
+	$(at_1_phase_BUILD) \
+	$(at_1_phase_EXTRA)
+
+## example-specific details
+
+at_1_phase_H_FILES = \
+	at_1_phase/include/at_1_phase_top.h \
+	at_1_phase/include/initiator_top.h
+
+at_1_phase_CXX_FILES = \
+	at_1_phase/src/at_1_phase.cpp \
+	at_1_phase/src/at_1_phase_top.cpp \
+	at_1_phase/src/initiator_top.cpp
+
+at_1_phase_BUILD = \
+	at_1_phase/results/expected.log
+
+at_1_phase_EXTRA = \
+	at_1_phase/build-msvc/Makefile \
+	at_1_phase/build-msvc/at_1_phase.sln \
+	at_1_phase/build-msvc/at_1_phase.vcproj \
+	at_1_phase/build-unix/Makefile \
+	at_1_phase/docs/at_1_phase_example.pdf \
+	at_1_phase/docs/at_1_phase_example.ppt
+
+#at_1_phase_FILTER = 
+#export at_1_phase_FILTER
+
+## Taf!
+## :vim:ft=automake:

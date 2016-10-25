@@ -40,7 +40,7 @@
 namespace sc_core {
 
 class sc_cor_pkg_pthread;
-
+typedef sc_cor_pkg_pthread sc_cor_pkg_t;
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_cor_pthread

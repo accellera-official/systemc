@@ -1,8 +1,10 @@
-
-        DEFS = $(EXTRA_DEFINES)
 # top-level SystemC include directory is added in Make-rules.{sysc,examples}
-    INCLUDES =
-MAIN_LIBRARY = libsystemc.la
+
+# build flags
+
+        DEFS = $(PKGCONFIG_DEFINES) $(EXTRA_DEFINES)
+
+ AM_CPPFLAGS =
 
     AM_CFLAGS=$(EXTRA_CXXFLAGS) \
               $(EXTRA_CFLAGS)
@@ -14,6 +16,7 @@ MAIN_LIBRARY = libsystemc.la
 if WANT_DEBUG
   AM_CFLAGS+=$(DEBUG_CXXFLAGS)
   AM_CXXFLAGS+=$(DEBUG_CXXFLAGS)
+  AM_CCASFLAGS+=$(DEBUG_CXXFLAGS)
 endif
 
 if WANT_OPTIMIZE
@@ -25,16 +28,13 @@ endif
 if USES_PTHREADS_LIB
     AM_CFLAGS+=$(PTHREAD_CFLAGS)
   AM_CXXFLAGS+=$(PTHREAD_CFLAGS)
-         LIBS+=$(PTHREAD_LIBS)
+   AM_LDFLAGS=$(PTHREAD_LIBS)
 endif
 
 # always add fix-point support
 EXTRA_DEFINES=-DSC_INCLUDE_FX
 
-if DISABLE_ASYNC_UPDATES
-  EXTRA_DEFINES+=-DSC_DISABLE_ASYNC_UPDATES
-endif
+# initialize some useful variables (filled later)
 
-if WANT_PTHREADS_THREADS
-  EXTRA_DEFINES+=-DSC_USE_PTHREADS
-endif
+CLEANFILES =
+EXTRA_DIST =

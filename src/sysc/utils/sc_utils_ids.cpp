@@ -41,6 +41,7 @@ namespace sc_core {
 #include "sysc/datatypes/bit/sc_bit_ids.h"
 #include "sysc/datatypes/fx/sc_fx_ids.h"
 #include "sysc/datatypes/int/sc_int_ids.h"
+#include "sysc/tracing/sc_tracing_ids.h"
 #undef SC_DEFINE_MESSAGE
 
 
@@ -66,6 +67,9 @@ static sc_msg_def texts[] = {
 #undef SC_INT_IDS_H
 #include "sysc/datatypes/int/sc_int_ids.h"
 
+#undef SC_TRACING_IDS_H
+#include "sysc/tracing/sc_tracing_ids.h"
+
 #undef SC_DEFINE_MESSAGE
 };
 static sc_report_handler::msg_def_items items = {
@@ -82,8 +86,8 @@ int initialize()
     const char* deprecation_warn = std::getenv("SC_DEPRECATION_WARNINGS");
     if ( (deprecation_warn!=0) && !std::strcmp(deprecation_warn,"DISABLE") )
     {
-        sc_report_handler::set_actions("/IEEE_Std_1666/deprecated", 
-            SC_DO_NOTHING);
+        sc_report_handler::set_actions( SC_ID_IEEE_1666_DEPRECATION_
+                                      , SC_DO_NOTHING);
     }
     return 42;
 }

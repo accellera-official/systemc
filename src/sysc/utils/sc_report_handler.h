@@ -102,8 +102,9 @@ public:
     static void initialize(); // just reset counters
     static void release(); // initialize() needed for reports after it
 
-    static void set_handler(sc_report_handler_proc);
-    // use set_handler(&sc_report_handler::default_handler); to restore
+    static sc_report_handler_proc set_handler(sc_report_handler_proc);
+    static sc_report_handler_proc get_handler();
+    // use set_handler(NULL); to restore default handler
     static void default_handler(const sc_report&, const sc_actions&);
 
     static sc_actions get_new_action_id();

@@ -74,25 +74,6 @@ at_negedge( const sc_signal_in_if<sc_dt::sc_logic>&,
 	    sc_simcontext* = sc_get_curr_simcontext() );
 
 
-
-class sc_watch
-{
-public:
-
-    sc_cthread_handle cthread_h;
-
-    sc_watch( sc_simcontext* simc ) : cthread_h()
-    {
-        sc_curr_proc_handle cpi = simc->get_curr_proc_info();
-        assert( SC_CTHREAD_PROC_ == cpi->kind );
-        cthread_h = RCAST<sc_cthread_handle>( cpi->process_handle );
-    }
-
-    ~sc_watch()
-    {
-    }
-};
-
 } // namespace sc_core
 
 /* 

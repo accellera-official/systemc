@@ -1,0 +1,116 @@
+## ****************************************************************************
+##
+##  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+##  more contributor license agreements.  See the NOTICE file distributed
+##  with this work for additional information regarding copyright ownership.
+##  Accellera licenses this file to you under the Apache License, Version 2.0
+##  (the "License"); you may not use this file except in compliance with the
+##  License.  You may obtain a copy of the License at
+##
+##   http://www.apache.org/licenses/LICENSE-2.0
+##
+##  Unless required by applicable law or agreed to in writing, software
+##  distributed under the License is distributed on an "AS IS" BASIS,
+##  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+##  implied.  See the License for the specific language governing
+##  permissions and limitations under the License.
+##
+## ****************************************************************************
+##
+##  test.am --
+##  Included from a Makefile.am to provide example-specific information
+##
+##  Original Author: Philipp A. Hartmann, OFFIS, 2013-05-20
+##
+## ****************************************************************************
+##
+##  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+##  changes you are making here.
+##
+##      Name, Affiliation, Date:
+##  Description of Modification:
+##
+## ***************************************************************************
+
+## Generic example setup
+## (should be kept in sync among all test.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##       included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D%: fft/fft_flpt
+##   %C%: fft_fft_flpt
+
+examples_TESTS += fft/fft_flpt/test
+
+fft_fft_flpt_test_CPPFLAGS = \
+	$(AM_CPPFLAGS)
+
+fft_fft_flpt_test_SOURCES = \
+	$(fft_fft_flpt_H_FILES) \
+	$(fft_fft_flpt_CXX_FILES)
+
+examples_BUILD += \
+	$(fft_fft_flpt_BUILD)
+
+examples_CLEAN += \
+	fft/fft_flpt/run.log \
+	fft/fft_flpt/expexted_trimmed.log \
+	fft/fft_flpt/run_trimmed.log \
+	fft/fft_flpt/diff.log
+
+examples_FILES += \
+	$(fft_fft_flpt_H_FILES) \
+	$(fft_fft_flpt_CXX_FILES) \
+	$(fft_fft_flpt_BUILD) \
+	$(fft_fft_flpt_EXTRA)
+
+## example-specific details
+
+examples_CLEAN += \
+	fft/fft_flpt/out_real \
+	fft/fft_flpt/out_imag
+
+fft_fft_flpt_H_FILES = \
+	fft/fft_flpt/fft.h \
+	fft/fft_flpt/sink.h \
+	fft/fft_flpt/source.h
+
+fft_fft_flpt_CXX_FILES = \
+	fft/fft_flpt/fft.cpp \
+	fft/fft_flpt/main.cpp \
+	fft/fft_flpt/sink.cpp \
+	fft/fft_flpt/source.cpp
+
+fft_fft_flpt_BUILD = \
+	fft/fft_flpt/in_imag \
+	fft/fft_flpt/in_imag.1 \
+	fft/fft_flpt/in_imag.2 \
+	fft/fft_flpt/in_imag.3 \
+	fft/fft_flpt/in_imag.4 \
+	fft/fft_flpt/in_real \
+	fft/fft_flpt/in_real.1 \
+	fft/fft_flpt/in_real.2 \
+	fft/fft_flpt/in_real.3 \
+	fft/fft_flpt/in_real.4 \
+	fft/fft_flpt/out_imag.1.golden \
+	fft/fft_flpt/out_imag.2.golden \
+	fft/fft_flpt/out_imag.3.golden \
+	fft/fft_flpt/out_imag.4.golden \
+	fft/fft_flpt/out_real.1.golden \
+	fft/fft_flpt/out_real.2.golden \
+	fft/fft_flpt/out_real.3.golden \
+	fft/fft_flpt/out_real.4.golden
+
+fft_fft_flpt_EXTRA = \
+	fft/fft_flpt/fft_flpt.vcproj \
+	fft/fft_flpt/Makefile
+
+
+#fft_fft_flpt_FILTER = 
+#export fft_fft_flpt_FILTER
+
+## Taf!
+## :vim:ft=automake:

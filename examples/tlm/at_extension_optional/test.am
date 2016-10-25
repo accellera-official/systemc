@@ -1,0 +1,113 @@
+## ****************************************************************************
+##
+##  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+##  more contributor license agreements.  See the NOTICE file distributed
+##  with this work for additional information regarding copyright ownership.
+##  Accellera licenses this file to you under the Apache License, Version 2.0
+##  (the "License"); you may not use this file except in compliance with the
+##  License.  You may obtain a copy of the License at
+##
+##   http://www.apache.org/licenses/LICENSE-2.0
+##
+##  Unless required by applicable law or agreed to in writing, software
+##  distributed under the License is distributed on an "AS IS" BASIS,
+##  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+##  implied.  See the License for the specific language governing
+##  permissions and limitations under the License.
+##
+## ****************************************************************************
+##
+##  test.am --
+##  Included from a Makefile.am to provide example-specific information
+##
+##  Original Author: Philipp A. Hartmann, OFFIS, 2013-05-20
+##
+## ****************************************************************************
+##
+##  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+##  changes you are making here.
+##
+##      Name, Affiliation, Date:
+##  Description of Modification:
+##
+## ***************************************************************************
+
+## Generic example setup
+## (should be kept in sync among all test.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##      included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D%: at_extension_optional
+##   %C%: at_extension_optional
+
+examples_TESTS += at_extension_optional/test
+
+at_extension_optional_test_CPPFLAGS = \
+	-I$(srcdir)/at_extension_optional/include \
+	$(CPPFLAGS_TLMTESTS)
+
+at_extension_optional_test_SOURCES = \
+	$(at_extension_optional_H_FILES) \
+	$(at_extension_optional_CXX_FILES)
+
+examples_BUILD += \
+	$(at_extension_optional_BUILD)
+
+examples_CLEAN += \
+	at_extension_optional/run.log \
+	at_extension_optional/expexted_trimmed.log \
+	at_extension_optional/run_trimmed.log \
+	at_extension_optional/diff.log
+
+examples_FILES += \
+	$(at_extension_optional_H_FILES) \
+	$(at_extension_optional_CXX_FILES) \
+	$(at_extension_optional_BUILD) \
+	$(at_extension_optional_EXTRA)
+
+## example-specific details
+
+at_extension_optional_test_CPPFLAGS += \
+	-DUSING_EXTENSION_OPTIONAL
+
+at_extension_optional_H_FILES = \
+	at_extension_optional/include/at_extension_optional_top.h \
+	at_extension_optional/include/initiator_top.h
+
+at_extension_optional_CXX_FILES = \
+	at_extension_optional/src/at_extension_optional.cpp \
+	at_extension_optional/src/at_extension_optional_top.cpp \
+	at_extension_optional/src/initiator_top.cpp
+
+at_extension_optional_SHARED_CXX_FILES = \
+	at_extension_optional/at_target_4_phase.cpp \
+	at_extension_optional/traffic_generator.cpp
+
+at_extension_optional_BUILD = \
+	at_extension_optional/results/expected.log
+
+at_extension_optional_EXTRA = \
+	at_extension_optional/build-msvc/Makefile \
+	at_extension_optional/build-msvc/at_extension_optional.sln \
+	at_extension_optional/build-msvc/at_extension_optional.vcproj \
+	at_extension_optional/build-unix/Makefile \
+	at_extension_optional/docs/at_extension_optional_example.pdf \
+	at_extension_optional/docs/at_extension_optional_example.ppt
+
+#at_extension_optional_FILTER = 
+#export at_extension_optional_FILTER
+
+$(at_extension_optional_SHARED_CXX_FILES) :
+	$(AM_V_GEN)$(INSTALL_DATA) $(srcdir)/common/src/$(@F) $@
+
+nodist_at_extension_optional_test_SOURCES = \
+	$(at_extension_optional_SHARED_CXX_FILES)
+
+CLEANFILES += \
+	$(at_extension_optional_SHARED_CXX_FILES)
+
+## Taf!
+## :vim:ft=automake:

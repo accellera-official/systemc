@@ -43,13 +43,11 @@
 void paging::entry()
 {
  int		address=0;
- int		address_conversion_factor = 0;
  int	 	dataout_tmp =0;
 
  while (true) {
     	do { wait(); } while ( !(paging_csin == true) ); 
 	address = logical_address.read();
-        address_conversion_factor = paging_din.read(); 
 
 	if (address >= 5) {
     		if (paging_wein.read() == true) { 	// Write operation

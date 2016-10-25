@@ -30,11 +30,7 @@
 #ifndef SC_COR_FIBER_H
 #define SC_COR_FIBER_H
 
-
-#ifdef WIN32
-#ifdef __GNUC__
-#   include <windows.h>
-#endif
+#if defined(_WIN32) || defined(WIN32) || defined(WIN64)
 
 #include "sysc/kernel/sc_cor.h"
 #include "sysc/kernel/sc_cmnhdr.h"
@@ -49,6 +45,7 @@
 namespace sc_core {
 
 class sc_cor_pkg_fiber;
+typedef sc_cor_pkg_fiber sc_cor_pkg_t;
 
 #if( defined(_MSC_VER) && _MSC_VER >= 1300 )
 typedef std::size_t size_t;
@@ -81,7 +78,7 @@ public:
 public:
 
     std::size_t       m_stack_size;     // stack size
-    PVOID             m_fiber;          // fiber
+    void*             m_fiber;          // fiber
 
     sc_cor_pkg_fiber* m_pkg;            // the creating coroutine package
 #if defined(__GNUC__) && __USING_SJLJ_EXCEPTIONS__

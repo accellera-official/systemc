@@ -1,0 +1,117 @@
+## ****************************************************************************
+##
+##  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+##  more contributor license agreements.  See the NOTICE file distributed
+##  with this work for additional information regarding copyright ownership.
+##  Accellera licenses this file to you under the Apache License, Version 2.0
+##  (the "License"); you may not use this file except in compliance with the
+##  License.  You may obtain a copy of the License at
+##
+##   http://www.apache.org/licenses/LICENSE-2.0
+##
+##  Unless required by applicable law or agreed to in writing, software
+##  distributed under the License is distributed on an "AS IS" BASIS,
+##  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+##  implied.  See the License for the specific language governing
+##  permissions and limitations under the License.
+##
+## ****************************************************************************
+##
+##  test.am --
+##  Included from a Makefile.am to provide example-specific information
+##
+##  Original Author: Philipp A. Hartmann, OFFIS, 2013-05-20
+##
+## ****************************************************************************
+##
+##  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+##  changes you are making here.
+##
+##      Name, Affiliation, Date:
+##  Description of Modification:
+##
+## ***************************************************************************
+
+## Generic example setup
+## (should be kept in sync among all test.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##       included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D%: fir
+##   %C%: fir
+
+examples_TESTS += fir/test fir/test_rtl
+
+fir_test_CPPFLAGS = \
+	$(AM_CPPFLAGS)
+
+fir_test_SOURCES = \
+	$(fir_H_FILES) \
+	$(fir_CXX_COMMON) \
+	$(fir_CXX_FILES)
+
+fir_test_rtl_SOURCES = \
+	$(fir_H_FILES) \
+	$(fir_CXX_COMMON) \
+	$(fir_rtl_CXX_FILES)
+
+examples_BUILD += \
+	$(fir_BUILD)
+
+examples_CLEAN += \
+	fir/run.log \
+	fir/expexted_trimmed.log \
+	fir/run_trimmed.log \
+	fir/diff.log
+
+examples_FILES += \
+	$(fir_H_FILES) \
+	$(fir_CXX_COMMON) \
+	$(fir_CXX_FILES) \
+	$(fir_rtl_CXX_FILES) \
+	$(fir_BUILD) \
+	$(fir_EXTRA)
+
+## example-specific details
+
+fir_H_FILES = \
+	fir/display.h    \
+	fir/fir.h        \
+	fir/fir_const.h  \
+	fir/fir_data.h   \
+	fir/fir_fsm.h    \
+	fir/fir_top.h    \
+	fir/stimulus.h
+
+fir_CXX_COMMON = \
+	fir/stimulus.cpp \
+	fir/display.cpp
+
+fir_CXX_FILES = \
+	fir/fir.cpp \
+	fir/main.cpp
+
+fir_rtl_CXX_FILES = \
+	fir/fir_fsm.cpp \
+	fir/fir_data.cpp \
+	fir/main_rtl.cpp
+
+fir_BUILD =
+
+fir_EXTRA = \
+	fir/log \
+	fir/rtl_log \
+	fir/fir_common.vcproj \
+	fir/fir.vcproj \
+	fir/fir_rtl.vcproj \
+	fir/Makefile \
+	fir/README
+
+#fir_FILTER = 
+#export fir_FILTER
+
+## Taf!
+## :vim:ft=automake:

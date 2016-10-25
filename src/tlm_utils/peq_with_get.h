@@ -24,8 +24,8 @@
 #ifndef __PEQ_WITH_GET_H__
 #define __PEQ_WITH_GET_H__
 
-//#include "tlm.h"
 #include <systemc>
+//#include <tlm>
 #include <map>
 
 namespace tlm_utils {

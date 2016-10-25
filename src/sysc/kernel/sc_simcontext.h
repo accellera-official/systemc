@@ -32,6 +32,7 @@
 
 #include "sysc/kernel/sc_cmnhdr.h"
 #include "sysc/kernel/sc_process.h"
+#include "sysc/kernel/sc_status.h"
 #include "sysc/kernel/sc_time.h"
 #include "sysc/utils/sc_hash.h"
 #include "sysc/utils/sc_pq.h"
@@ -51,6 +52,7 @@ class sc_module_registry;
 class sc_name_gen;
 class sc_object;
 class sc_object_manager;
+class sc_phase_callback_registry;
 class sc_process_handle;
 class sc_port_registry;
 class sc_prim_channel_registry;
@@ -74,24 +76,6 @@ struct sc_curr_proc_info
 };
 
 typedef const sc_curr_proc_info* sc_curr_proc_handle;
-
-// simulation status codes
-
-const int SC_SIM_OK        = 0;
-const int SC_SIM_ERROR     = 1;
-const int SC_SIM_USER_STOP = 2;
-
-enum sc_status { // sc_get_status values:
-    SC_UNITIALIZED=0x00,               // initialize() not called yet.
-    SC_ELABORATION=0x01,               // during module hierarchy construction.
-    SC_BEFORE_END_OF_ELABORATION=0x02, // during before_end_of_elaboration().
-    SC_END_OF_ELABORATION=0x04,        // during end_of_elaboration().
-    SC_START_OF_SIMULATION=0x08,       // during start_of_simulation().
-    SC_RUNNING=0x10,                   // initialization, evaluation or update.
-    SC_PAUSED=0x20,                    // when scheduler stopped by sc_pause().
-    SC_STOPPED=0x40,                   // when scheduler stopped by sc_stop().
-    SC_END_OF_SIMULATION=0x80          // during end_of_simulation().
-};
 
 enum sc_stop_mode {          // sc_stop modes:
     SC_STOP_FINISH_DELTA,
@@ -159,6 +143,7 @@ class sc_simcontext
     friend class sc_time;
     friend class sc_clock;
     friend class sc_method_process;
+    friend class sc_phase_callback_registry;
     friend class sc_process_b;
     friend class sc_process_handle;
     friend class sc_prim_channel;
@@ -197,6 +182,8 @@ public:
 
     int sim_status() const;
     bool elaboration_done() const;
+
+    std::vector<sc_thread_handle>& get_active_invokers();
 
     sc_object_manager* get_object_manager();
 
@@ -243,6 +230,7 @@ public:
     int next_proc_id();
 
     void add_trace_file( sc_trace_file* );
+    void remove_trace_file( sc_trace_file* );
 
     friend void    sc_set_time_resolution( double, sc_time_unit );
     friend sc_time sc_get_time_resolution();
@@ -258,6 +246,7 @@ public:
     bool evaluation_phase() const;
     bool is_running() const;
     bool update_phase() const;
+    bool notify_phase() const;
     bool get_error();
     void set_error( sc_report* );
 
@@ -329,6 +318,7 @@ private:
     sc_port_registry*           m_port_registry;
     sc_export_registry*         m_export_registry;
     sc_prim_channel_registry*   m_prim_channel_registry;
+    sc_phase_callback_registry* m_phase_cb_registry;
 
     sc_name_gen*                m_name_gen;
 
@@ -337,6 +327,8 @@ private:
     sc_object*                  m_current_writer;
     bool                        m_write_check;
     int                         m_next_proc_id;
+
+    std::vector<sc_thread_handle> m_active_invokers;
 
     std::vector<sc_event*>      m_child_events;
     std::vector<sc_object*>     m_child_objects;
@@ -493,7 +485,7 @@ sc_simcontext::max_time() const
 {
     if ( m_max_time == SC_ZERO_TIME )
     {
-        m_max_time = sc_time(~(sc_dt::uint64)0, false);
+        m_max_time = sc_time::from_value( ~sc_dt::UINT64_ZERO );
     }
     return m_max_time;
 }
@@ -533,6 +525,13 @@ bool
 sc_simcontext::update_phase() const
 {
     return m_execution_phase == phase_update;
+}
+
+inline
+bool
+sc_simcontext::notify_phase() const
+{
+    return m_execution_phase == phase_notify;
 }
 
 inline
@@ -582,6 +581,18 @@ sc_simcontext::write_check() const
 
 class sc_process_handle;
 sc_process_handle sc_get_current_process_handle();
+
+// Get the current object hierarchy context
+//
+// Returns a pointer the the sc_object (module or process) that
+// would become the parent object of a newly created element
+// of the SystemC object hierarchy, or NULL.
+//
+inline sc_object*
+sc_get_current_object()
+{
+  return sc_get_curr_simcontext()->active_object();
+}
 
 inline
 sc_process_b*

@@ -1,0 +1,100 @@
+## ****************************************************************************
+##
+##  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+##  more contributor license agreements.  See the NOTICE file distributed
+##  with this work for additional information regarding copyright ownership.
+##  Accellera licenses this file to you under the Apache License, Version 2.0
+##  (the "License"); you may not use this file except in compliance with the
+##  License.  You may obtain a copy of the License at
+##
+##   http://www.apache.org/licenses/LICENSE-2.0
+##
+##  Unless required by applicable law or agreed to in writing, software
+##  distributed under the License is distributed on an "AS IS" BASIS,
+##  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+##  implied.  See the License for the specific language governing
+##  permissions and limitations under the License.
+##
+## ****************************************************************************
+##
+##  test.am --
+##  Included from a Makefile.am to provide example-specific information
+##
+##  Original Author: Philipp A. Hartmann, OFFIS, 2013-05-20
+##
+## ****************************************************************************
+##
+##  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+##  changes you are making here.
+##
+##      Name, Affiliation, Date:
+##  Description of Modification:
+##
+## ***************************************************************************
+
+## Generic example setup
+## (should be kept in sync among all test.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##      included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D%: pkt_switch
+##   %C%: pkt_switch
+
+examples_TESTS += pkt_switch/test
+
+pkt_switch_test_CPPFLAGS = \
+	$(AM_CPPFLAGS)
+
+pkt_switch_test_SOURCES = \
+	$(pkt_switch_H_FILES) \
+	$(pkt_switch_CXX_FILES)
+
+examples_BUILD += \
+	$(pkt_switch_BUILD)
+
+examples_CLEAN += \
+	pkt_switch/run.log \
+	pkt_switch/expexted_trimmed.log \
+	pkt_switch/run_trimmed.log \
+	pkt_switch/diff.log
+
+examples_FILES += \
+	$(pkt_switch_H_FILES) \
+	$(pkt_switch_CXX_FILES) \
+	$(pkt_switch_BUILD) \
+	$(pkt_switch_EXTRA)
+
+## example-specific details
+
+pkt_switch_H_FILES = \
+	pkt_switch/fifo.h \
+	pkt_switch/pkt.h \
+	pkt_switch/receiver.h \
+	pkt_switch/sender.h \
+	pkt_switch/switch.h \
+	pkt_switch/switch_clk.h \
+	pkt_switch/switch_reg.h
+
+pkt_switch_CXX_FILES = \
+	pkt_switch/fifo.cpp \
+	pkt_switch/main.cpp \
+	pkt_switch/receiver.cpp \
+	pkt_switch/sender.cpp \
+	pkt_switch/switch.cpp \
+	pkt_switch/switch_clk.cpp
+
+pkt_switch_BUILD =
+
+pkt_switch_EXTRA = \
+	pkt_switch/pkt_switch.vcproj \
+	pkt_switch/Makefile \
+	pkt_switch/README
+
+#pkt_switch_FILTER = 
+#export pkt_switch_FILTER
+
+## Taf!
+## :vim:ft=automake:

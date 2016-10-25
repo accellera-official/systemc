@@ -1,6 +1,12 @@
-* SystemC 2.3.0-apl
+* SystemC 2.3.1a
   Relicensed under Apache License, Version 2.0.
   No functional changes.
+
+* SystemC 2.3.1
+  Release of SystemC 2.3.1
+  - Bug fixes.
+  - Code cleanup.
+  - Some experimental new features.
 
 * SystemC 2.3.0
   Release of SystemC 2.3.0

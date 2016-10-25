@@ -136,7 +136,7 @@ void sc_process_b::disconnect_process()
     remove_dynamic_events();
     remove_static_events();
 
-    for ( size_t rst_i = 0; rst_i < m_resets.size(); rst_i++ )
+    for ( std::vector<sc_reset*>::size_type rst_i = 0; rst_i < m_resets.size(); rst_i++ )
     {
         m_resets[rst_i]->remove_process( this );
     }

@@ -46,8 +46,8 @@
 //	abc.asm	= a sample program
 //
 //	A simple assembler named assembler.pl which was written in PERL. 
-//	Usage: assembler.pl <testname> -code > icache
-//	Usage: assembler.pl <testname> > printout (for viewing only)
+//	Usage: assembler.pl <testname> -code > icache.img
+//	Usage: assembler.pl <testname> > printout.img (for viewing only)
 //
 //	Steps:
 //
@@ -57,7 +57,7 @@
 //
 //	2) based on abc.asm , write your own assembly language program, named <testname.asm>
 //
-//	3) assembler.pl abc.asm -code > icache
+//	3) assembler.pl abc.asm -code > icache.img
 //
 //	4) gmake
 //	

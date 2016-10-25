@@ -2,6 +2,8 @@
 
 # set -x
 
+: ${LN_S:="ln -s"}
+
 # rm -f Makefile Makefile.md README.md qtmd.h qtmdb.s qtmdc.c qtmds.s configuration
 rm -f qtmdc.c qtmds.s configuration
 
@@ -11,23 +13,23 @@ case $1 in
 		case $1 in
 			axp-osf1*)
 				: "Compile using /bin/cc under OSF 1.x."
-#				ln -s md/axp.1.Makefile Makefile.md
+#				${LN_S} md/axp.1.Makefile Makefile.md
 				;;
 			axp-osf2*)
 				: "Compile using /bin/cc under OSF 2.x."
-#				ln -s md/axp.1.Makefile Makefile.md
+#				${LN_S} md/axp.1.Makefile Makefile.md
 				;;
 			*)
 				: "Compile using GNU CC."
-#				ln -s md/axp.Makefile Makefile.md
+#				${LN_S} md/axp.Makefile Makefile.md
 				;;
 		esac
 
-#		ln -s md/axp.h qtmd.h
-		ln -s md/axp.c qtmdc.c
-		ln -s md/axp.s qtmds.s
-#		ln -s md/axp_b.s qtmdb.s
-#		ln -s md/axp.README README.md
+#		${LN_S} md/axp.h qtmd.h
+		${LN_S} md/axp.c qtmdc.c
+		${LN_S} md/axp.s qtmds.s
+#		${LN_S} md/axp_b.s qtmdb.s
+#		${LN_S} md/axp.README README.md
 		iter_init=1000000000
 		iter_runone=10000000
 		iter_blockint=10000000
@@ -52,17 +54,17 @@ case $1 in
 		case $1 in
 			hppa-cnx-spp*)
 				: "Convex SPP (PA-RISC 1.1 processors)."
-#				ln -s md/hppa-cnx.Makefile Makefile.md
+#				${LN_S} md/hppa-cnx.Makefile Makefile.md
 				;;
 			*)
-#				ln -s md/hppa.Makefile Makefile.md
+#				${LN_S} md/hppa.Makefile Makefile.md
 				;;
 		esac
 
-#		ln -s md/hppa.h qtmd.h
-		ln -s md/null.c qtmdc.c
-		ln -s md/hppa.s qtmds.s
-#		ln -s md/hppa_b.s qtmdb.s
+#		${LN_S} md/hppa.h qtmd.h
+#		${LN_S} md/null.c qtmdc.c
+		${LN_S} md/hppa.s qtmds.s
+#		${LN_S} md/hppa_b.s qtmdb.s
 		iter_init=10000000
 		iter_runone=1000000
 		iter_blockint=1000000
@@ -89,11 +91,11 @@ case $1 in
 				;;
 				
 			*)
-				ln -s md/iX86_64.s qtmds.s
+				${LN_S} md/iX86_64.s qtmds.s
 				;;
 		esac
 		: "Intel X386 64-bit and compatibles"
-		ln -s md/null.c qtmdc.c
+#		${LN_S} md/null.c qtmdc.c
 		iter_init=10000000
 		iter_runone=1000000
 		iter_blockint=1000000
@@ -121,15 +123,15 @@ case $1 in
                 ;;
                 
             *)
-                ln -s md/i386.s qtmds.s
-#               ln -s md/i386_b.s qtmdb.s
+                ${LN_S} md/i386.s qtmds.s
+#               ${LN_S} md/i386_b.s qtmdb.s
                 ;;
         esac
         : "Intel 80386 and compatibles (not '286...)"
-#       ln -s md/default.Makefile Makefile.md
-#       ln -s md/i386.h qtmd.h
-        ln -s md/null.c qtmdc.c
-#       ln -s md/i386.README README.md
+#       ${LN_S} md/default.Makefile Makefile.md
+#       ${LN_S} md/i386.h qtmd.h
+#       ${LN_S} md/null.c qtmdc.c
+#       ${LN_S} md/i386.README README.md
         iter_init=10000000
         iter_runone=1000000
         iter_blockint=1000000
@@ -151,22 +153,22 @@ case $1 in
 
 	m68k)
 		: "Motorola 68000 family -- incomplete!"
-#		ln -s md/default.Makefile Makefile.md
-#		ln -s md/m68k.h qtmd.h
-		ln -s md/null.c qtmdc.c
-		ln -s md/m68k.s qtmds.s
-#		ln -s md/m68k_b.s qtmdb.s
-#		ln -s md/null.README README.md
+#		${LN_S} md/default.Makefile Makefile.md
+#		${LN_S} md/m68k.h qtmd.h
+#		${LN_S} md/null.c qtmdc.c
+		${LN_S} md/m68k.s qtmds.s
+#		${LN_S} md/m68k_b.s qtmdb.s
+#		${LN_S} md/null.README README.md
 		;;
 
 	m88k)
 		: "Motorola 88000 family"
-#		ln -s md/m88k.Makefile Makefile.md
-#		ln -s md/m88k.h qtmd.h
-		ln -s md/m88k.c qtmdc.c
-		ln -s md/m88k.s qtmds.s
-#		ln -s md/m88k_b.s qtmdb.s
-#		ln -s md/null.README README.md
+#		${LN_S} md/m88k.Makefile Makefile.md
+#		${LN_S} md/m88k.h qtmd.h
+		${LN_S} md/m88k.c qtmdc.c
+		${LN_S} md/m88k.s qtmds.s
+#		${LN_S} md/m88k_b.s qtmdb.s
+#		${LN_S} md/null.README README.md
 		iter_init=1000000
 		iter_runone=100000
 		iter_blockint=100000
@@ -192,18 +194,18 @@ case $1 in
 			mips-irix5*)
 				: "Silicon Graphics Irix with dynamic linking"
 				: "Use mips for irix4."
-				ln -s md/mips-irix5.s qtmds.s
+				${LN_S} md/mips-irix5.s qtmds.s
 				;;
 			*)
-				ln -s md/mips.s qtmds.s
+				${LN_S} md/mips.s qtmds.s
 				;;
 		esac
 
-#		ln -s md/default.Makefile Makefile.md
-#		ln -s md/mips.h qtmd.h
-		ln -s md/null.c qtmdc.c
-#		ln -s md/mips_b.s qtmdb.s
-#		ln -s md/null.README README.md
+#		${LN_S} md/default.Makefile Makefile.md
+#		${LN_S} md/mips.h qtmd.h
+#		${LN_S} md/null.c qtmdc.c
+#		${LN_S} md/mips_b.s qtmdb.s
+#		${LN_S} md/null.README README.md
 		iter_init=10000000
 		iter_runone=10000000
 		iter_blockint=10000000
@@ -228,18 +230,18 @@ case $1 in
 			sparc-os2*)
 				sed 's/_qt_/qt_/' md/sparc.s > qtmds.s
 #				sed 's/_b_/b_/' md/sparc_b.s > qtmdb.s
-#				ln -s md/solaris.README README.md
+#				${LN_S} md/solaris.README README.md
 				;;
 			*)
-				ln -s md/sparc.s qtmds.s
-#				ln -s md/sparc_b.s qtmdb.s
-#				ln -s md/null.README README.md
+				${LN_S} md/sparc.s qtmds.s
+#				${LN_S} md/sparc_b.s qtmdb.s
+#				${LN_S} md/null.README README.md
 				;;
 		esac
 
- 		ln -s md/default.Makefile Makefile.md
-#		ln -s md/sparc.h qtmd.h
-		ln -s md/null.c qtmdc.c
+ 		${LN_S} md/default.Makefile Makefile.md
+#		${LN_S} md/sparc.h qtmd.h
+#		${LN_S} md/null.c qtmdc.c
 		iter_init=10000000
 		iter_runone=1000000
 		iter_blockint=1000000
@@ -260,12 +262,12 @@ case $1 in
 
 	vax*)
 		: "DEC VAX processors."
-#		ln -s md/default.Makefile Makefile.md
-#		ln -s md/vax.h qtmd.h
-		ln -s md/null.c qtmdc.c
-		ln -s md/vax.s qtmds.s
-#		ln -s md/vax_b.s qtmdb.s
-#		ln -s md/null.README README.md
+#		${LN_S} md/default.Makefile Makefile.md
+#		${LN_S} md/vax.h qtmd.h
+#		${LN_S} md/null.c qtmdc.c
+		${LN_S} md/vax.s qtmds.s
+#		${LN_S} md/vax_b.s qtmdb.s
+#		${LN_S} md/null.README README.md
 		iter_init=1000000
 		iter_runone=100000
 		iter_blockint=100000
@@ -287,12 +289,12 @@ case $1 in
 	ksr1)
 		: "Kendall Square Research model KSR-1."
 		: "Varargs is not currently supported."
-#		ln -s md/ksr1.Makefile Makefile.md
-#		ln -s md/ksr1.h qtmd.h
-		ln -s md/null.c qtmdc.c
-		ln -s md/ksr1.s qtmds.s
-#		ln -s md/ksr1_b.s qtmdb.s
-#		ln -s md/null.README README.md
+#		${LN_S} md/ksr1.Makefile Makefile.md
+#		${LN_S} md/ksr1.h qtmd.h
+#		${LN_S} md/null.c qtmdc.c
+		${LN_S} md/ksr1.s qtmds.s
+#		${LN_S} md/ksr1_b.s qtmdb.s
+#		${LN_S} md/null.README README.md
 		iter_init=1000000
 		iter_runone=100000
 		iter_blockint=100000
@@ -319,17 +321,17 @@ case $1 in
 				: "PowerPC using Mach Application Binary Interface"
                 : "NOTICE: Darwin assembler syntax is used:"
                 : "  (i.e. registers are named rx not %rx)"
-                ln -s md/default.Makefile Makefile.md
-#               ln -s md/powerpc_mach.h qtmd.h
-                ln -s md/powerpc_mach.s qtmds.s
+                ${LN_S} md/default.Makefile Makefile.md
+#               ${LN_S} md/powerpc_mach.h qtmd.h
+                ${LN_S} md/powerpc_mach.s qtmds.s
                 ;;
             powerpc-linux*)
                 : "PowerPC using System V Application Binary Interface"
                 : "  (e.g. LinuxPPC)"
                 : "Use powerpc-darwin for MacOS X and other systems based on Mac
 h ABI"
-#               ln -s md/powerpc_sys5.h qtmd.h
-                ln -s md/powerpc_sys5.s qtmds.s
+#               ${LN_S} md/powerpc_sys5.h qtmd.h
+                ${LN_S} md/powerpc_sys5.s qtmds.s
                 ;;
             *)
                 echo "Unknown configuration"
@@ -343,18 +345,18 @@ tem V ABI"
 
         esac
 
-        ln -s md/powerpc.c qtmdc.c
-        ln -s md/powerpc.README README.md
+        ${LN_S} md/powerpc.c qtmdc.c
+        ${LN_S} md/powerpc.README README.md
         ;;
 
 
 	pthreads*)
 		: Posix thread support rather than Quick threads.
-#		ln -s md/hppa.h qtmd.h
-		ln -s md/null.c qtmdc.c
-		ln -s md/null.s qtmds.s
-#		ln -s md/hppa_b.s qtmdb.s
-		cp md/pthreads.Makefile Makefile
+#		${LN_S} md/hppa.h qtmd.h
+#		${LN_S} md/null.c qtmdc.c
+#		${LN_S} md/null.s qtmds.s
+#		${LN_S} md/hppa_b.s qtmdb.s
+#		cp md/pthreads.Makefile Makefile
 		exit 0
 		;;
 

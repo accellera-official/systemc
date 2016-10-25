@@ -20,7 +20,7 @@
 #ifndef __SIMPLE_INITIATOR_SOCKET_H__
 #define __SIMPLE_INITIATOR_SOCKET_H__
 
-#include "tlm.h"
+#include <tlm>
 #include <sstream>
 
 namespace tlm_utils {

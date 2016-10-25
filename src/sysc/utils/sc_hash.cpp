@@ -28,8 +28,10 @@
  *****************************************************************************/
 
 #include <assert.h>
+#include <stdlib.h> // duplicate (c)stdlib.h headers for Solaris
 #include <cstdlib>
 #include <cstddef>
+#include <string.h>
 
 #include "sysc/kernel/sc_cmnhdr.h"
 #include "sysc/utils/sc_hash.h"
@@ -592,14 +594,14 @@ sc_phash_base_iter::set_contents( void* c )
 unsigned 
 default_ptr_hash_fn(const void* p)
 {
-    return ((uintptr_t)(p) >> 2) * 2654435789U;
+    return static_cast<unsigned>(((uintptr_t)(p) >> 2) * 2654435789U);
 
 }
 
 unsigned
 default_int_hash_fn(const void* p)
 {
-    return (uintptr_t)(p) * 3141592661U;
+    return static_cast<unsigned>((uintptr_t)(p) * 3141592661U);
 }
 
 

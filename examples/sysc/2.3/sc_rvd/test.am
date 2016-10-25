@@ -1,0 +1,91 @@
+## ****************************************************************************
+##
+##  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+##  more contributor license agreements.  See the NOTICE file distributed
+##  with this work for additional information regarding copyright ownership.
+##  Accellera licenses this file to you under the Apache License, Version 2.0
+##  (the "License"); you may not use this file except in compliance with the
+##  License.  You may obtain a copy of the License at
+##
+##   http://www.apache.org/licenses/LICENSE-2.0
+##
+##  Unless required by applicable law or agreed to in writing, software
+##  distributed under the License is distributed on an "AS IS" BASIS,
+##  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+##  implied.  See the License for the specific language governing
+##  permissions and limitations under the License.
+##
+## ****************************************************************************
+##
+##  test.am --
+##  Included from a Makefile.am to provide example-specific information
+##
+##  Original Author: Philipp A. Hartmann, OFFIS, 2013-05-20
+##
+## ****************************************************************************
+##
+##  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+##  changes you are making here.
+##
+##      Name, Affiliation, Date:
+##  Description of Modification:
+##
+## ***************************************************************************
+
+## Generic example setup
+## (should be kept in sync among all test.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##      included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D%: 2.3/sc_rvd
+##   %C%: 2_3_sc_rvd
+
+examples_TESTS += 2.3/sc_rvd/test
+
+2_3_sc_rvd_test_CPPFLAGS = \
+	$(AM_CPPFLAGS)
+
+2_3_sc_rvd_test_SOURCES = \
+	$(2_3_sc_rvd_H_FILES) \
+	$(2_3_sc_rvd_CXX_FILES)
+
+examples_BUILD += \
+	$(2_3_sc_rvd_BUILD)
+
+examples_CLEAN += \
+	2.3/sc_rvd/run.log \
+	2.3/sc_rvd/expexted_trimmed.log \
+	2.3/sc_rvd/run_trimmed.log \
+	2.3/sc_rvd/diff.log
+
+examples_FILES += \
+	$(2_3_sc_rvd_H_FILES) \
+	$(2_3_sc_rvd_CXX_FILES) \
+	$(2_3_sc_rvd_BUILD) \
+	$(2_3_sc_rvd_EXTRA)
+
+## example-specific details
+
+2_3_sc_rvd_test_CPPFLAGS += \
+	-I $(srcdir)/2.3/sc_rvd/../include
+
+2_3_sc_rvd_H_FILES = \
+	2.3/sc_rvd/../include/sc_rvd.h
+
+2_3_sc_rvd_CXX_FILES = \
+	2.3/sc_rvd/main.cpp
+
+2_3_sc_rvd_BUILD =
+
+2_3_sc_rvd_EXTRA = \
+	2.3/sc_rvd/sc_rvd.vcproj \
+	2.3/sc_rvd/Makefile
+
+#2_3_sc_rvd_FILTER = 
+#export 2_3_sc_rvd_FILTER
+
+## Taf!
+## :vim:ft=automake:

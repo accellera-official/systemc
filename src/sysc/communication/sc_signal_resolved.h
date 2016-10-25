@@ -70,6 +70,11 @@ public:
         base_type( name_ ), m_proc_vec(), m_val_vec()
 	{}
 
+    sc_signal_resolved( const char* name_, const data_type & initial_value_ )
+      : base_type( name_, initial_value_ )
+      , m_proc_vec()
+      , m_val_vec()
+    {}
 
     // interface methods
 

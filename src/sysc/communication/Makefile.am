@@ -64,7 +64,8 @@ H_FILES = \
 	sc_signal_rv_ports.h \
 	sc_writer_policy.h
 
-noinst_HEADERS = $(H_FILES)
+localincludedir = $(includedir)/sysc/communication
+nobase_localinclude_HEADERS = $(H_FILES)
 
 CXX_FILES = \
 	sc_clock.cpp \
@@ -81,24 +82,6 @@ CXX_FILES = \
 	sc_signal_resolved.cpp \
 	sc_signal_resolved_ports.cpp 
 
-NO_CXX_FILES =
-
-libcommunication_la_SOURCES = $(H_FILES) $(CXX_FILES)
-
-INCLUDE_DIR = $(prefix)/include/sysc/communication
-
-install-data-local:
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(INCLUDE_DIR)
-	for file in $(noinst_HEADERS); do \
-	  $(INSTALL_DATA) $(srcdir)/$$file $(INCLUDE_DIR)/$$file; \
-	done
-
-uninstall-local:
-	@$(NORMAL_UNINSTALL)
-	for file in $(noinst_HEADERS); do \
-	  rm -f $(INCLUDE_DIR)/$$file; \
-	done
-	-rmdir $(INCLUDE_DIR)
+libcommunication_la_SOURCES = $(NO_H_FILES) $(CXX_FILES)
 
 ## Taf!

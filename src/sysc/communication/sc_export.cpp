@@ -30,6 +30,7 @@
 #include "sysc/communication/sc_export.h"
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_module.h"
+#include "sysc/kernel/sc_object_int.h"
 
 namespace sc_core {
 
@@ -69,11 +70,10 @@ sc_export_base::construction_done()
     {
       report_error( SC_ID_SC_EXPORT_NOT_BOUND_AFTER_CONSTRUCTION_, 0);
     }
-    sc_module* parent = DCAST<sc_module*>( get_parent_object() );
-    sc_assert( parent );
-    simcontext()->hierarchy_push( parent );
+
+    sc_module* parent = static_cast<sc_module*>( get_parent_object() );
+    sc_object::hierarchy_scope scope( parent );
     before_end_of_elaboration();
-    simcontext()->hierarchy_pop();
 }
 
 // called by elaboration_done() (does nothing by default)
@@ -87,11 +87,9 @@ sc_export_base::end_of_elaboration()
 void
 sc_export_base::elaboration_done()
 {
-    sc_module* parent = DCAST<sc_module*>( get_parent_object() );
-    sc_assert( parent );
-    simcontext()->hierarchy_push( parent );
+    sc_module* parent = static_cast<sc_module*>( get_parent_object() );
+    sc_object::hierarchy_scope scope( parent );
     end_of_elaboration();
-    simcontext()->hierarchy_pop();
 }
 
 // called by start_simulation (does nothing)
@@ -105,11 +103,9 @@ sc_export_base::start_of_simulation()
 void
 sc_export_base::start_simulation()
 {
-    sc_module* parent = DCAST<sc_module*>( get_parent_object() );
-    sc_assert( parent );
-    simcontext()->hierarchy_push( parent );
+    sc_module* parent = static_cast<sc_module*>( get_parent_object() );
+    sc_object::hierarchy_scope scope( parent );
     start_of_simulation();
-    simcontext()->hierarchy_pop();
 }
 
 // called by simulation_done (does nothing)
@@ -123,11 +119,9 @@ sc_export_base::end_of_simulation()
 void
 sc_export_base::simulation_done()
 {
-    sc_module* parent = DCAST<sc_module*>( get_parent_object() );
-    sc_assert( parent );
-    simcontext()->hierarchy_push( parent );
+    sc_module* parent = static_cast<sc_module*>( get_parent_object() );
+    sc_object::hierarchy_scope scope( parent );
     end_of_simulation();
-    simcontext()->hierarchy_pop();
 }
 
 void

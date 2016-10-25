@@ -1,0 +1,211 @@
+## ****************************************************************************
+##
+##  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+##  more contributor license agreements.  See the NOTICE file distributed
+##  with this work for additional information regarding copyright ownership.
+##  Accellera licenses this file to you under the Apache License, Version 2.0
+##  (the "License"); you may not use this file except in compliance with the
+##  License.  You may obtain a copy of the License at
+##
+##   http://www.apache.org/licenses/LICENSE-2.0
+##
+##  Unless required by applicable law or agreed to in writing, software
+##  distributed under the License is distributed on an "AS IS" BASIS,
+##  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+##  implied.  See the License for the specific language governing
+##  permissions and limitations under the License.
+##
+## ****************************************************************************
+##
+##  Makefile.rules -- simple generic SystemC example build rules
+##                    (for MSVC projects)
+##
+##  Include this file from your own Makefile to obtain a simple build
+##  environment.  You need to set at least the variables
+##    PLATFORM - platform to build for (default Win32)
+##    CONFIG   - configuration to use (Debug, Release, Both)
+##
+##    PROJECT  - name of the MSVC project to use
+##     or, when building manually
+##    OBJS     - object filenames of the sources you use
+##               (located in SRCDIR or SRCDIRCOMMON)
+##  to make things work.
+##
+##  The environment is assumed to be set up from Makefile.config file
+##  and the main example Makefile.
+##
+##  Original Author: Philipp A. Hartmann, OFFIS
+##
+## ***************************************************************************
+##
+##  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+##  changes you are making here.
+##
+##      Name, Affiliation, Date:
+##  Description of Modification:
+##
+## ***************************************************************************
+
+GOLDEN=..\results\expected.log
+EXEEXT=.exe
+
+# Windows "find" command (grep)
+!IFNDEF FIND
+# The full path to find is used as some users may have cygwin installed,
+# which includes another version of find
+FIND="%WINDIR%\system32\find"
+!ENDIF
+
+!IFNDEF PROJECT
+!ERROR "PROJECT" not set. Cannot build.
+!ENDIF
+
+!IFNDEF EXECUTABLE
+EXECUTABLE=$(PROJECT)$(EXEEXT)
+!ENDIF
+
+!IFNDEF PLATFORM
+PLATFORM=Win32
+!ENDIF
+
+!IFNDEF CONFIG
+CONFIG=Debug
+!ENDIF
+
+# if systemc.vsprops is not correctly updated
+!IFNDEF SYSTEMC_HOME
+SYSTEMC_HOME=..\..\..\..
+!ENDIF
+
+## default rule
+all: announce build
+
+announce:
+	@if defined FLAG_BATCH (echo *** $(PROJECT) "$(CONFIG)|$(PLATFORM)":)
+
+## ***************************************************************************
+## forward rules
+
+!IF "$(PLATFORM)" == "Both"
+
+build run check clean:
+	@( $(MAKE) FLAG_BATCH=1 CONFIG=$(CONFIG) PLATFORM=Win32 $@ && \
+	   $(MAKE) FLAG_BATCH=1 CONFIG=$(CONFIG) PLATFORM=x64   $@ )
+
+!ELSEIF "$(CONFIG)" == "Both"
+
+build run check clean:
+	@( $(MAKE) FLAG_BATCH=1 CONFIG=Debug   PLATFORM=$(PLATFORM) $@ && \
+	   $(MAKE) FLAG_BATCH=1 CONFIG=Release PLATFORM=$(PLATFORM) $@ )
+
+## ***************************************************************************
+## actual rules
+!ELSE
+
+## platform-specific flag additions
+!IF "$(PLATFORM)" == "x64"
+OUTDIR=$(PLATFORM)\$(CONFIG)
+CXXFLAGS=$(CXXFLAGS) /DWIN64
+LDFLAGS =$(LDFLAGS)  /MACHINE:X64
+!ELSE
+OUTDIR=$(CONFIG)
+CXXFLAGS=$(CXXFLAGS) /DWIN32
+LDFLAGS =$(LDFLAGS)  /MACHINE:X86
+!ENDIF
+
+## debug / release flag additions
+!IF "$(CONFIG)" == "Debug"
+CXXFLAGS=$(CXXFLAGS) $(CXXFLAGS_DEBUG)
+LDFLAGS =$(LDFLAGS)  $(LDFLAGS_DEBUG)
+!ELSE
+CXXFLAGS=$(CXXFLAGS) $(CXXFLAGS_RELEASE)
+LDFLAGS =$(LDFLAGS)  $(LDFLAGS_RELEASE)
+!ENDIF
+
+CPP=$(CXX)
+CPPFLAGS=$(CXXFLAGS)
+
+# TODO: fix input handling
+!IF defined(INPUT) && EXISTS( $(INPUT) )
+INPUTFILE= < "$(INPUT)"
+!ELSE
+INPUTFILE=
+!ENDIF
+
+!IFNDEF FILTER
+FILTERCMD=
+!ELSE
+FILTERCMD=| $(FIND) $(FILTER)
+!ENDIF
+
+!IFNDEF ARGS
+ARGS=
+!ENDIF
+
+!IF "$(V)" == "1"
+AT=
+!ELSE
+AT=@
+!ENDIF
+
+# Notes:
+# 1. two lines starting @type filter out lines containing
+#    "stopped by user" so that differences in messages between SystemC 2.2.0
+#    and SystemC 2.3.0 (or later) are not significant.
+# 2. find /v returns all lines that don't match.
+#    fc /w ignores (collapses)  white space
+check: announce $(EXECUTABLE)
+	$(AT).\$(EXECUTABLE) $(ARGS) $(INPUTFILE) $(FILTERCMD) > runtemp.log
+	@type runtemp.log | $(FIND) /v /i "stopped by user" > run.log
+	@type $(GOLDEN) | $(FIND) /v /i "stopped by user" > expected.log
+	@(fc /w run.log expected.log > diff.log) & \
+	  if ERRORLEVEL 1  (echo "***ERROR:" & type diff.log) else (echo OK)
+
+run: announce $(EXECUTABLE)
+	$(AT).\$(EXECUTABLE) $(ARGS) < $(INPUTFILE)
+
+$(EXECUTABLE): build
+	$(AT)copy /y $(OUTDIR)\$@ .\$@
+
+!IFDEF VCBUILD # Visual Studio command-line builder
+
+build: announce
+	$(AT)$(VCBUILD) $(VCBUILDFLAGS) $(PROJECT)$(PROJEXT) "$(CONFIG)|$(PLATFORM)"
+
+clean: announce
+	$(AT)$(VCBUILD) /clean $(VCBUILDFLAGS) $(PROJECT)$(PROJEXT) "$(CONFIG)|$(PLATFORM)"
+	$(AT)if exist $(OUTDIR)\BuildLog.htm ( del /q $(OUTDIR)\BuildLog.htm  )
+	$(AT)if exist $(OUTDIR) ( rmdir /q $(OUTDIR) )
+	$(AT)for %%X in ( $(EXECUTABLE) *.log $(EXTRA_CLEAN) ) do \
+	  @( if exist %%X del /q %%X )
+
+!ELSE # command-line rules (direct use of compiler and linker)
+
+!IFNDEF OBJS
+!ERROR "OBJS" not set.  Cannot build.
+!ENDIF
+
+build: announce $(OUTDIR)\$(EXECUTABLE)
+
+$(OUTDIR)\$(EXECUTABLE): $(OBJS)
+	@echo $@
+	$(AT)$(LD) /OUT:"$@" $(LDFLAGS) $(OBJS) systemc.lib
+
+{$(SRCDIR)}.cpp{$(OUTDIR)}.obj:
+	@if not exist $(OUTDIR) MKDIR $(OUTDIR)
+	$(AT)$(CXX) /c $(CXXFLAGS) /Fo"$(@)" $<
+
+{$(SRCDIRCOMMON)}.cpp{$(OUTDIR)}.obj:
+	@if not exist $(OUTDIR) MKDIR $(OUTDIR)
+	$(AT)$(CXX) /c $(CXXFLAGS) /Fo"$(@)" $<
+
+clean: announce
+	$(AT)if exist $(OUTDIR) ( rmdir /s /q $(OUTDIR) )
+	$(AT)for %%X in ( $(EXECUTABLE) *.log $(EXTRA_CLEAN) ) do \
+	  @( if exist %%X del /q %%X )
+
+!ENDIF # plain command-line rules
+
+!ENDIF
+## Taf!
+

@@ -347,8 +347,8 @@ AND_HELPER(small_type us,
 
   sc_digit *d = dbegin;
 
-  register const sc_digit *x;
-  register const sc_digit *y;
+  const sc_digit *x;
+  const sc_digit *y;
   int xnd;
   int ynd;
   small_type xs;
@@ -391,8 +391,8 @@ AND_HELPER(small_type us,
     }
     else {  // case 3
 
-      register sc_digit xcarry = 1;
-      register sc_digit ycarry = 1;
+      sc_digit xcarry = 1;
+      sc_digit ycarry = 1;
 
       while (y < yend) {
         xcarry += (~(*x++) & DIGIT_MASK);
@@ -416,7 +416,7 @@ AND_HELPER(small_type us,
 
     if (xs > 0) { // case 4
 
-      register sc_digit ycarry = 1;
+      sc_digit ycarry = 1;
 
       while (y < yend) {
         ycarry += (~(*y++) & DIGIT_MASK);
@@ -433,7 +433,7 @@ AND_HELPER(small_type us,
     }
     else {  // case 5
 
-      register sc_digit xcarry = 1;
+      sc_digit xcarry = 1;
 
       while (y < yend) {
         xcarry += (~(*x++) & DIGIT_MASK);
@@ -479,8 +479,8 @@ OR_HELPER(small_type us,
 
   sc_digit *d = dbegin;
 
-  register const sc_digit *x;
-  register const sc_digit *y;
+  const sc_digit *x;
+  const sc_digit *y;
   int xnd;
   int ynd;
   small_type xs;
@@ -523,8 +523,8 @@ OR_HELPER(small_type us,
     }
     else {  // case 4
 
-      register sc_digit xcarry = 1;
-      register sc_digit ycarry = 1;
+      sc_digit xcarry = 1;
+      sc_digit ycarry = 1;
 
       while (y < yend) {
         xcarry += (~(*x++) & DIGIT_MASK);
@@ -549,7 +549,7 @@ OR_HELPER(small_type us,
 
     if (xs > 0) { // case 5
 
-      register sc_digit ycarry = 1;
+      sc_digit ycarry = 1;
 
       while (y < yend) {
         ycarry += (~(*y++) & DIGIT_MASK);
@@ -566,7 +566,7 @@ OR_HELPER(small_type us,
     }
     else {  // case 6
 
-      register sc_digit xcarry = 1;
+      sc_digit xcarry = 1;
 
       while (y < yend) {
         xcarry += (~(*x++) & DIGIT_MASK);
@@ -615,8 +615,8 @@ XOR_HELPER(small_type us,
 
   sc_digit *d = dbegin;
 
-  register const sc_digit *x;
-  register const sc_digit *y;
+  const sc_digit *x;
+  const sc_digit *y;
   int xnd;
   int ynd;
   small_type xs;
@@ -659,8 +659,8 @@ XOR_HELPER(small_type us,
     }
     else {  // case 4
 
-      register sc_digit xcarry = 1;
-      register sc_digit ycarry = 1;
+      sc_digit xcarry = 1;
+      sc_digit ycarry = 1;
 
       while (y < yend) {
         xcarry += (~(*x++) & DIGIT_MASK);
@@ -684,7 +684,7 @@ XOR_HELPER(small_type us,
 
     if (xs > 0) { // case 5
 
-      register sc_digit ycarry = 1;
+      sc_digit ycarry = 1;
 
       while (y < yend) {
         ycarry += (~(*y++) & DIGIT_MASK);
@@ -701,7 +701,7 @@ XOR_HELPER(small_type us,
     }
     else {  // case 6
 
-      register sc_digit xcarry = 1;
+      sc_digit xcarry = 1;
 
       while (y < yend) {
         xcarry += (~(*x++) & DIGIT_MASK);

@@ -44,14 +44,12 @@
 void dcache::entry()
 {
   unsigned int	address;			// address to DataCache
-  unsigned int 	reg_tmp=0;
   unsigned int  dest_tmp = 0;
 
 
   while (true) {
     	do { wait(); } while ( !(cs == true) ); 
      	dest_tmp = dest.read();
-        reg_tmp = dest.read();
     	address = addr.read();
     	if (we.read() == true) { 		// Write operation
       		wait();

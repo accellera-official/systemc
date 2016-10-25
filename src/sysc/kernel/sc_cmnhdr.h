@@ -31,14 +31,26 @@
 #ifndef SC_CMNHDR_H
 #define SC_CMNHDR_H
 
+// include useful platform information from Boost
+#include "sysc/packages/boost/config.hpp"
+
+#if defined(_WIN32) || defined(_MSC_VER) || defined(__BORLANDC__) || \
+	defined(__MINGW32__)
 
 // all windows 32-bit compilers should define WIN32
-
-#if defined( _MSC_VER ) || defined( __BORLANDC__ )
-#ifndef WIN32
+#if !defined(WIN32) && !defined(WIN64) && !defined(_WIN64)
 #define WIN32
 #endif
+
+// Windows Version Build Option
+#ifndef _WIN32_WINNT
+#define _WIN32_WINNT 0x0400
 #endif
+
+// remember to later include windows.h, if needed
+#define SC_HAS_WINDOWS_H_
+
+#endif // WIN32
 
 // ----------------------------------------------------------------------------
 
@@ -65,44 +77,9 @@
 // identifier was truncated to '255' characters in the browser information
 #pragma warning(disable: 4786)
 
-
-// Windows Version Build Option
-
-#define _WIN32_WINNT 0x0400
-#include <Windows.h>
-
-
-// MSVC6.0 for() scope bug
-
-#define for if( false ); else for
-
-#endif
-
+#endif 
 
 // ----------------------------------------------------------------------------
-
-#ifdef __BORLANDC__
-
-// Windows Version Build Option
-
-#define _WIN32_WINNT 0x0400
-#include <Windows.h>
-
-#endif
-
-
-// ----------------------------------------------------------------------------
-
-// Windows Version Build Option
-
-#ifdef __MINGW32__
-
-#ifndef _WIN32_WINNT
-#define _WIN32_WINNT 0x0400
-#endif
-
-#endif
-
 // helper macros to aid branch prediction on GCC (compatible) compilers
 
 #ifndef __GNUC__
@@ -119,7 +96,14 @@
 #include <cstdio>
 #include <cstdlib>
 
+#endif // SC_CMNHDR_H
 
+// ----------------------------------------------------------------------------
+// only include Windows.h, if explicitly requested
+// (deliberately outside of include guards to enable later effect)
+#if defined(SC_HAS_WINDOWS_H_) && defined(SC_INCLUDE_WINDOWS_H)
+#  undef SC_HAS_WINDOWS_H_
+#  include <Windows.h>
 #endif
 
 // $Log: sc_cmnhdr.h,v $

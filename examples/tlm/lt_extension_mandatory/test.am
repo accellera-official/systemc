@@ -1,0 +1,99 @@
+## ****************************************************************************
+##
+##  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+##  more contributor license agreements.  See the NOTICE file distributed
+##  with this work for additional information regarding copyright ownership.
+##  Accellera licenses this file to you under the Apache License, Version 2.0
+##  (the "License"); you may not use this file except in compliance with the
+##  License.  You may obtain a copy of the License at
+##
+##   http://www.apache.org/licenses/LICENSE-2.0
+##
+##  Unless required by applicable law or agreed to in writing, software
+##  distributed under the License is distributed on an "AS IS" BASIS,
+##  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+##  implied.  See the License for the specific language governing
+##  permissions and limitations under the License.
+##
+## ****************************************************************************
+##
+##  test.am --
+##  Included from a Makefile.am to provide example-specific information
+##
+##  Original Author: Philipp A. Hartmann, OFFIS, 2013-05-20
+##
+## ****************************************************************************
+##
+##  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+##  changes you are making here.
+##
+##      Name, Affiliation, Date:
+##  Description of Modification:
+##
+## ***************************************************************************
+
+## Generic example setup
+## (should be kept in sync among all test.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##      included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D%: lt_extension_mandatory
+##   %C%: lt_extension_mandatory
+
+examples_TESTS += lt_extension_mandatory/test
+
+lt_extension_mandatory_test_CPPFLAGS = \
+	-I$(srcdir)/lt_extension_mandatory/include \
+	$(CPPFLAGS_TLMTESTS)
+
+lt_extension_mandatory_test_SOURCES = \
+	$(lt_extension_mandatory_H_FILES) \
+	$(lt_extension_mandatory_CXX_FILES)
+
+examples_BUILD += \
+	$(lt_extension_mandatory_BUILD)
+
+examples_CLEAN += \
+	lt_extension_mandatory/run.log \
+	lt_extension_mandatory/expexted_trimmed.log \
+	lt_extension_mandatory/run_trimmed.log \
+	lt_extension_mandatory/diff.log
+
+examples_FILES += \
+	$(lt_extension_mandatory_H_FILES) \
+	$(lt_extension_mandatory_CXX_FILES) \
+	$(lt_extension_mandatory_BUILD) \
+	$(lt_extension_mandatory_EXTRA)
+
+## example-specific details
+
+lt_extension_mandatory_H_FILES = \
+	lt_extension_mandatory/include/lt_extension_mandatory_top.h \
+	lt_extension_mandatory/include/lt_initiator_extension_mandatory.h \
+	lt_extension_mandatory/include/lt_target_extension_mandatory.h
+
+lt_extension_mandatory_CXX_FILES = \
+	lt_extension_mandatory/src/lt_extension_mandatory.cpp \
+	lt_extension_mandatory/src/lt_extension_mandatory_top.cpp \
+	lt_extension_mandatory/src/lt_initiator_extension_mandatory.cpp \
+	lt_extension_mandatory/src/lt_target_extension_mandatory.cpp
+
+lt_extension_mandatory_BUILD = \
+	lt_extension_mandatory/results/expected.log
+
+lt_extension_mandatory_EXTRA = \
+	lt_extension_mandatory/build-msvc/Makefile \
+	lt_extension_mandatory/build-msvc/lt_extension_mandatory.sln \
+	lt_extension_mandatory/build-msvc/lt_extension_mandatory.vcproj \
+	lt_extension_mandatory/build-unix/Makefile \
+	lt_extension_mandatory/docs/lt_extension_mandatory_example.pdf \
+	lt_extension_mandatory/docs/lt_extension_mandatory_example.ppt
+
+#lt_extension_mandatory_FILTER = 
+#export lt_extension_mandatory_FILTER
+
+## Taf!
+## :vim: ft=automake:

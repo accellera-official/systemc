@@ -67,7 +67,7 @@
 namespace sc_dt
 {
 
-#if !defined(WIN32) || defined(__MINGW32__)
+#if !defined(_WIN32) || defined(__MINGW32__)
 
 const uint_type mask_int[SC_INTWIDTH][SC_INTWIDTH] = 
 {
