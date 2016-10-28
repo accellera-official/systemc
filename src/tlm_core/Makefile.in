@@ -58,7 +58,8 @@ build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
 DIST_COMMON = $(nobase_localinclude_HEADERS) $(srcdir)/Makefile.am \
-	$(srcdir)/Makefile.in $(top_srcdir)/config/Make-rules.common \
+	$(srcdir)/Makefile.in $(srcdir)/tlm.pc.in \
+	$(top_srcdir)/config/Make-rules.common \
 	$(top_srcdir)/config/Make-rules.sysc
 @WANT_DEBUG_TRUE@am__append_1 = $(DEBUG_CXXFLAGS)
 @WANT_DEBUG_TRUE@am__append_2 = $(DEBUG_CXXFLAGS)
@@ -73,7 +74,7 @@ DIST_COMMON = $(nobase_localinclude_HEADERS) $(srcdir)/Makefile.am \
 @ENABLE_CALLBACKS_TRUE@am__append_9 = -DSC_ENABLE_SIMULATION_PHASE_CALLBACKS
 @ENABLE_CALLBACKS_TRACING_TRUE@am__append_10 = -DSC_ENABLE_SIMULATION_PHASE_CALLBACKS_TRACING
 @WANT_PTHREADS_THREADS_TRUE@am__append_11 = -DSC_USE_PTHREADS
-subdir = src/sysc/datatypes
+subdir = src/tlm_core
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/config/ax_check_define.m4 \
 	$(top_srcdir)/config/ax_pthread.m4 \
@@ -85,71 +86,16 @@ am__aclocal_m4_deps = $(top_srcdir)/config/ax_check_define.m4 \
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
-CONFIG_CLEAN_FILES =
+CONFIG_CLEAN_FILES = tlm.pc
 CONFIG_CLEAN_VPATH_FILES =
-LTLIBRARIES = $(noinst_LTLIBRARIES)
-libdatatypes_la_LIBADD =
-am__objects_1 =
-am__dirstamp = $(am__leading_dot)dirstamp
-am__objects_2 = bit/sc_bit.lo bit/sc_bv_base.lo bit/sc_logic.lo \
-	bit/sc_lv_base.lo fx/sc_fxcast_switch.lo fx/sc_fxdefs.lo \
-	fx/sc_fxnum.lo fx/sc_fxnum_observer.lo fx/sc_fxtype_params.lo \
-	fx/sc_fxval.lo fx/sc_fxval_observer.lo fx/scfx_mant.lo \
-	fx/scfx_pow10.lo fx/scfx_rep.lo fx/scfx_utils.lo \
-	int/sc_int_base.lo int/sc_int32_mask.lo int/sc_int64_io.lo \
-	int/sc_int64_mask.lo int/sc_length_param.lo int/sc_nbdefs.lo \
-	int/sc_nbexterns.lo int/sc_nbutils.lo int/sc_signed.lo \
-	int/sc_uint_base.lo int/sc_unsigned.lo misc/sc_concatref.lo \
-	misc/sc_value_base.lo
-am_libdatatypes_la_OBJECTS = $(am__objects_1) $(am__objects_2)
-libdatatypes_la_OBJECTS = $(am_libdatatypes_la_OBJECTS)
-AM_V_lt = $(am__v_lt_@AM_V@)
-am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
-am__v_lt_0 = --silent
-DEFAULT_INCLUDES = -I.@am__isrc@
-depcomp = $(SHELL) $(top_srcdir)/config/depcomp
-am__depfiles_maybe = depfiles
-am__mv = mv -f
-CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
-	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
-LTCXXCOMPILE = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) \
-	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
-	$(AM_CXXFLAGS) $(CXXFLAGS)
-AM_V_CXX = $(am__v_CXX_@AM_V@)
-am__v_CXX_ = $(am__v_CXX_@AM_DEFAULT_V@)
-am__v_CXX_0 = @echo "  CXX   " $@;
-AM_V_at = $(am__v_at_@AM_V@)
-am__v_at_ = $(am__v_at_@AM_DEFAULT_V@)
-am__v_at_0 = @
-CXXLD = $(CXX)
-CXXLINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
-	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-AM_V_CXXLD = $(am__v_CXXLD_@AM_V@)
-am__v_CXXLD_ = $(am__v_CXXLD_@AM_DEFAULT_V@)
-am__v_CXXLD_0 = @echo "  CXXLD " $@;
-COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-LTCOMPILE = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) \
-	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
-	$(AM_CFLAGS) $(CFLAGS)
-AM_V_CC = $(am__v_CC_@AM_V@)
-am__v_CC_ = $(am__v_CC_@AM_DEFAULT_V@)
-am__v_CC_0 = @echo "  CC    " $@;
-CCLD = $(CC)
-LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-AM_V_CCLD = $(am__v_CCLD_@AM_V@)
-am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
-am__v_CCLD_0 = @echo "  CCLD  " $@;
 AM_V_GEN = $(am__v_GEN_@AM_V@)
 am__v_GEN_ = $(am__v_GEN_@AM_DEFAULT_V@)
 am__v_GEN_0 = @echo "  GEN   " $@;
-SOURCES = $(libdatatypes_la_SOURCES)
-DIST_SOURCES = $(libdatatypes_la_SOURCES)
+AM_V_at = $(am__v_at_@AM_V@)
+am__v_at_ = $(am__v_at_@AM_DEFAULT_V@)
+am__v_at_0 = @
+SOURCES =
+DIST_SOURCES =
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -182,7 +128,9 @@ am__uninstall_files_from_dir = { \
     || { echo " ( cd '$$dir' && rm -f" $$files ")"; \
          $(am__cd) "$$dir" && rm -f $$files; }; \
   }
-am__installdirs = "$(DESTDIR)$(localincludedir)"
+am__installdirs = "$(DESTDIR)$(pkgconfigdir)" \
+	"$(DESTDIR)$(localincludedir)"
+DATA = $(pkgconfig_DATA)
 HEADERS = $(nobase_localinclude_HEADERS)
 ETAGS = etags
 CTAGS = ctags
@@ -349,108 +297,60 @@ EXTRA_DEFINES = -DSC_INCLUDE_FX $(am__append_8) $(am__append_9) \
 
 # initialize some useful variables (filled later)
 CLEANFILES = 
-EXTRA_DIST = 
-noinst_LTLIBRARIES = libdatatypes.la
+EXTRA_DIST = tlm_1/README.txt tlm_2/README.txt
+pkgconfigdir = $(libarchdir)/pkgconfig
+pkgconfig_DATA = tlm.pc
 H_FILES = \
-	bit/sc_bit.h \
-	bit/sc_bit_ids.h \
-	bit/sc_bit_proxies.h \
-	bit/sc_bv.h \
-	bit/sc_bv_base.h \
-	bit/sc_logic.h \
-	bit/sc_lv.h \
-	bit/sc_lv_base.h \
-	bit/sc_proxy.h \
+	tlm_2/tlm_version.h \
+	tlm_2/tlm_2_interfaces/tlm_2_interfaces.h \
+	tlm_2/tlm_2_interfaces/tlm_dmi.h \
+	tlm_2/tlm_2_interfaces/tlm_fw_bw_ifs.h \
 	\
-	fx/fx.h \
-	fx/sc_context.h \
-	fx/sc_fix.h \
-	fx/sc_fixed.h \
-	fx/sc_fx_ids.h \
-	fx/sc_fxcast_switch.h \
-	fx/sc_fxdefs.h \
-	fx/sc_fxnum.h \
-	fx/sc_fxnum_observer.h \
-	fx/sc_fxtype_params.h \
-	fx/sc_fxval.h \
-	fx/sc_fxval_observer.h \
-	fx/sc_ufix.h \
-	fx/sc_ufixed.h \
-	fx/scfx_ieee.h \
-	fx/scfx_mant.h \
-	fx/scfx_other_defs.h \
-	fx/scfx_params.h \
-	fx/scfx_rep.h \
-	fx/scfx_string.h \
-	fx/scfx_utils.h \
+	tlm_2/tlm_generic_payload/tlm_array.h \
+	tlm_2/tlm_generic_payload/tlm_endian_conv.h \
+	tlm_2/tlm_generic_payload/tlm_generic_payload.h \
+	tlm_2/tlm_generic_payload/tlm_gp.h \
+	tlm_2/tlm_generic_payload/tlm_helpers.h \
+	tlm_2/tlm_generic_payload/tlm_phase.h \
 	\
-	int/sc_bigint.h \
-	int/sc_biguint.h \
-	int/sc_int.h \
-	int/sc_int_base.h \
-	int/sc_int_ids.h \
-	int/sc_length_param.h \
-	int/sc_nbdefs.h \
-	int/sc_nbexterns.h \
-	int/sc_nbutils.h \
-	int/sc_signed.h \
-	int/sc_uint.h \
-	int/sc_uint_base.h \
-	int/sc_unsigned.h \
+	tlm_2/tlm_quantum/tlm_global_quantum.h \
+	tlm_2/tlm_quantum/tlm_quantum.h \
 	\
-	misc/sc_concatref.h \
-	misc/sc_value_base.h
+	tlm_2/tlm_sockets/tlm_initiator_socket.h \
+	tlm_2/tlm_sockets/tlm_sockets.h \
+	tlm_2/tlm_sockets/tlm_target_socket.h \
+	\
+	tlm_1/tlm_analysis/tlm_analysis.h \
+	tlm_1/tlm_analysis/tlm_analysis_fifo.h \
+	tlm_1/tlm_analysis/tlm_analysis_if.h \
+	tlm_1/tlm_analysis/tlm_analysis_port.h \
+	tlm_1/tlm_analysis/tlm_analysis_triple.h \
+	tlm_1/tlm_analysis/tlm_write_if.h \
+	\
+	tlm_1/tlm_req_rsp/tlm_req_rsp.h \
+	tlm_1/tlm_req_rsp/tlm_1_interfaces/tlm_core_ifs.h \
+	tlm_1/tlm_req_rsp/tlm_1_interfaces/tlm_fifo_ifs.h \
+	tlm_1/tlm_req_rsp/tlm_1_interfaces/tlm_master_slave_ifs.h \
+	tlm_1/tlm_req_rsp/tlm_1_interfaces/tlm_tag.h \
+	\
+	tlm_1/tlm_req_rsp/tlm_adapters/tlm_adapters.h \
+	\
+	tlm_1/tlm_req_rsp/tlm_channels/tlm_fifo/circular_buffer.h \
+	tlm_1/tlm_req_rsp/tlm_channels/tlm_fifo/tlm_fifo.h \
+	tlm_1/tlm_req_rsp/tlm_channels/tlm_fifo/tlm_fifo_peek.h \
+	tlm_1/tlm_req_rsp/tlm_channels/tlm_fifo/tlm_fifo_put_get.h \
+	tlm_1/tlm_req_rsp/tlm_channels/tlm_fifo/tlm_fifo_resize.h \
+	tlm_1/tlm_req_rsp/tlm_channels/tlm_req_rsp_channels/tlm_put_get_imp.h \
+	tlm_1/tlm_req_rsp/tlm_channels/tlm_req_rsp_channels/tlm_req_rsp_channels.h \
+	\
+	tlm_1/tlm_req_rsp/tlm_ports/tlm_event_finder.h \
+	tlm_1/tlm_req_rsp/tlm_ports/tlm_nonblocking_port.h
 
-NO_H_FILES = \
-	int/sc_nbcommon.inc \
-	int/sc_nbfriends.inc \
-	int/sc_signed_bitref.inc \
-	int/sc_signed_subref.inc \
-	int/sc_unsigned_bitref.inc \
-	int/sc_unsigned_subref.inc \
-	\
-	fx/scfx_pow10.h
-
-CXX_FILES = \
-	bit/sc_bit.cpp \
-	bit/sc_bv_base.cpp \
-	bit/sc_logic.cpp \
-	bit/sc_lv_base.cpp \
-	\
-	fx/sc_fxcast_switch.cpp \
-	fx/sc_fxdefs.cpp \
-	fx/sc_fxnum.cpp \
-	fx/sc_fxnum_observer.cpp \
-	fx/sc_fxtype_params.cpp \
-	fx/sc_fxval.cpp \
-	fx/sc_fxval_observer.cpp \
-	fx/scfx_mant.cpp \
-	fx/scfx_pow10.cpp \
-	fx/scfx_rep.cpp \
-	fx/scfx_utils.cpp \
-	\
-	int/sc_int_base.cpp \
-	int/sc_int32_mask.cpp \
-	int/sc_int64_io.cpp \
-	int/sc_int64_mask.cpp \
-	int/sc_length_param.cpp \
-	int/sc_nbdefs.cpp \
-	int/sc_nbexterns.cpp \
-	int/sc_nbutils.cpp \
-	int/sc_signed.cpp \
-	int/sc_uint_base.cpp \
-	int/sc_unsigned.cpp \
-	\
-	misc/sc_concatref.cpp \
-	misc/sc_value_base.cpp
-
-localincludedir = $(includedir)/sysc/datatypes
+localincludedir = $(includedir)/tlm_core
 nobase_localinclude_HEADERS = $(H_FILES)
-libdatatypes_la_SOURCES = $(NO_H_FILES) $(CXX_FILES)
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .cpp .lo .o .obj
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(top_srcdir)/config/Make-rules.sysc $(top_srcdir)/config/Make-rules.common $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -460,9 +360,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(top_srcdir)/config/Make-rules.sy
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign src/sysc/datatypes/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu src/tlm_core/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign src/sysc/datatypes/Makefile
+	  $(AUTOMAKE) --gnu src/tlm_core/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -482,203 +382,35 @@ $(top_srcdir)/configure:  $(am__configure_deps)
 $(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
-
-clean-noinstLTLIBRARIES:
-	-test -z "$(noinst_LTLIBRARIES)" || rm -f $(noinst_LTLIBRARIES)
-	@list='$(noinst_LTLIBRARIES)'; for p in $$list; do \
-	  dir="`echo $$p | sed -e 's|/[^/]*$$||'`"; \
-	  test "$$dir" != "$$p" || dir=.; \
-	  echo "rm -f \"$${dir}/so_locations\""; \
-	  rm -f "$${dir}/so_locations"; \
-	done
-bit/$(am__dirstamp):
-	@$(MKDIR_P) bit
-	@: > bit/$(am__dirstamp)
-bit/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) bit/$(DEPDIR)
-	@: > bit/$(DEPDIR)/$(am__dirstamp)
-bit/sc_bit.lo: bit/$(am__dirstamp) bit/$(DEPDIR)/$(am__dirstamp)
-bit/sc_bv_base.lo: bit/$(am__dirstamp) bit/$(DEPDIR)/$(am__dirstamp)
-bit/sc_logic.lo: bit/$(am__dirstamp) bit/$(DEPDIR)/$(am__dirstamp)
-bit/sc_lv_base.lo: bit/$(am__dirstamp) bit/$(DEPDIR)/$(am__dirstamp)
-fx/$(am__dirstamp):
-	@$(MKDIR_P) fx
-	@: > fx/$(am__dirstamp)
-fx/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) fx/$(DEPDIR)
-	@: > fx/$(DEPDIR)/$(am__dirstamp)
-fx/sc_fxcast_switch.lo: fx/$(am__dirstamp) \
-	fx/$(DEPDIR)/$(am__dirstamp)
-fx/sc_fxdefs.lo: fx/$(am__dirstamp) fx/$(DEPDIR)/$(am__dirstamp)
-fx/sc_fxnum.lo: fx/$(am__dirstamp) fx/$(DEPDIR)/$(am__dirstamp)
-fx/sc_fxnum_observer.lo: fx/$(am__dirstamp) \
-	fx/$(DEPDIR)/$(am__dirstamp)
-fx/sc_fxtype_params.lo: fx/$(am__dirstamp) \
-	fx/$(DEPDIR)/$(am__dirstamp)
-fx/sc_fxval.lo: fx/$(am__dirstamp) fx/$(DEPDIR)/$(am__dirstamp)
-fx/sc_fxval_observer.lo: fx/$(am__dirstamp) \
-	fx/$(DEPDIR)/$(am__dirstamp)
-fx/scfx_mant.lo: fx/$(am__dirstamp) fx/$(DEPDIR)/$(am__dirstamp)
-fx/scfx_pow10.lo: fx/$(am__dirstamp) fx/$(DEPDIR)/$(am__dirstamp)
-fx/scfx_rep.lo: fx/$(am__dirstamp) fx/$(DEPDIR)/$(am__dirstamp)
-fx/scfx_utils.lo: fx/$(am__dirstamp) fx/$(DEPDIR)/$(am__dirstamp)
-int/$(am__dirstamp):
-	@$(MKDIR_P) int
-	@: > int/$(am__dirstamp)
-int/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) int/$(DEPDIR)
-	@: > int/$(DEPDIR)/$(am__dirstamp)
-int/sc_int_base.lo: int/$(am__dirstamp) int/$(DEPDIR)/$(am__dirstamp)
-int/sc_int32_mask.lo: int/$(am__dirstamp) \
-	int/$(DEPDIR)/$(am__dirstamp)
-int/sc_int64_io.lo: int/$(am__dirstamp) int/$(DEPDIR)/$(am__dirstamp)
-int/sc_int64_mask.lo: int/$(am__dirstamp) \
-	int/$(DEPDIR)/$(am__dirstamp)
-int/sc_length_param.lo: int/$(am__dirstamp) \
-	int/$(DEPDIR)/$(am__dirstamp)
-int/sc_nbdefs.lo: int/$(am__dirstamp) int/$(DEPDIR)/$(am__dirstamp)
-int/sc_nbexterns.lo: int/$(am__dirstamp) int/$(DEPDIR)/$(am__dirstamp)
-int/sc_nbutils.lo: int/$(am__dirstamp) int/$(DEPDIR)/$(am__dirstamp)
-int/sc_signed.lo: int/$(am__dirstamp) int/$(DEPDIR)/$(am__dirstamp)
-int/sc_uint_base.lo: int/$(am__dirstamp) int/$(DEPDIR)/$(am__dirstamp)
-int/sc_unsigned.lo: int/$(am__dirstamp) int/$(DEPDIR)/$(am__dirstamp)
-misc/$(am__dirstamp):
-	@$(MKDIR_P) misc
-	@: > misc/$(am__dirstamp)
-misc/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) misc/$(DEPDIR)
-	@: > misc/$(DEPDIR)/$(am__dirstamp)
-misc/sc_concatref.lo: misc/$(am__dirstamp) \
-	misc/$(DEPDIR)/$(am__dirstamp)
-misc/sc_value_base.lo: misc/$(am__dirstamp) \
-	misc/$(DEPDIR)/$(am__dirstamp)
-libdatatypes.la: $(libdatatypes_la_OBJECTS) $(libdatatypes_la_DEPENDENCIES) $(EXTRA_libdatatypes_la_DEPENDENCIES) 
-	$(AM_V_CXXLD)$(CXXLINK)  $(libdatatypes_la_OBJECTS) $(libdatatypes_la_LIBADD) $(LIBS)
-
-mostlyclean-compile:
-	-rm -f *.$(OBJEXT)
-	-rm -f bit/sc_bit.$(OBJEXT)
-	-rm -f bit/sc_bit.lo
-	-rm -f bit/sc_bv_base.$(OBJEXT)
-	-rm -f bit/sc_bv_base.lo
-	-rm -f bit/sc_logic.$(OBJEXT)
-	-rm -f bit/sc_logic.lo
-	-rm -f bit/sc_lv_base.$(OBJEXT)
-	-rm -f bit/sc_lv_base.lo
-	-rm -f fx/sc_fxcast_switch.$(OBJEXT)
-	-rm -f fx/sc_fxcast_switch.lo
-	-rm -f fx/sc_fxdefs.$(OBJEXT)
-	-rm -f fx/sc_fxdefs.lo
-	-rm -f fx/sc_fxnum.$(OBJEXT)
-	-rm -f fx/sc_fxnum.lo
-	-rm -f fx/sc_fxnum_observer.$(OBJEXT)
-	-rm -f fx/sc_fxnum_observer.lo
-	-rm -f fx/sc_fxtype_params.$(OBJEXT)
-	-rm -f fx/sc_fxtype_params.lo
-	-rm -f fx/sc_fxval.$(OBJEXT)
-	-rm -f fx/sc_fxval.lo
-	-rm -f fx/sc_fxval_observer.$(OBJEXT)
-	-rm -f fx/sc_fxval_observer.lo
-	-rm -f fx/scfx_mant.$(OBJEXT)
-	-rm -f fx/scfx_mant.lo
-	-rm -f fx/scfx_pow10.$(OBJEXT)
-	-rm -f fx/scfx_pow10.lo
-	-rm -f fx/scfx_rep.$(OBJEXT)
-	-rm -f fx/scfx_rep.lo
-	-rm -f fx/scfx_utils.$(OBJEXT)
-	-rm -f fx/scfx_utils.lo
-	-rm -f int/sc_int32_mask.$(OBJEXT)
-	-rm -f int/sc_int32_mask.lo
-	-rm -f int/sc_int64_io.$(OBJEXT)
-	-rm -f int/sc_int64_io.lo
-	-rm -f int/sc_int64_mask.$(OBJEXT)
-	-rm -f int/sc_int64_mask.lo
-	-rm -f int/sc_int_base.$(OBJEXT)
-	-rm -f int/sc_int_base.lo
-	-rm -f int/sc_length_param.$(OBJEXT)
-	-rm -f int/sc_length_param.lo
-	-rm -f int/sc_nbdefs.$(OBJEXT)
-	-rm -f int/sc_nbdefs.lo
-	-rm -f int/sc_nbexterns.$(OBJEXT)
-	-rm -f int/sc_nbexterns.lo
-	-rm -f int/sc_nbutils.$(OBJEXT)
-	-rm -f int/sc_nbutils.lo
-	-rm -f int/sc_signed.$(OBJEXT)
-	-rm -f int/sc_signed.lo
-	-rm -f int/sc_uint_base.$(OBJEXT)
-	-rm -f int/sc_uint_base.lo
-	-rm -f int/sc_unsigned.$(OBJEXT)
-	-rm -f int/sc_unsigned.lo
-	-rm -f misc/sc_concatref.$(OBJEXT)
-	-rm -f misc/sc_concatref.lo
-	-rm -f misc/sc_value_base.$(OBJEXT)
-	-rm -f misc/sc_value_base.lo
-
-distclean-compile:
-	-rm -f *.tab.c
-
-@AMDEP_TRUE@@am__include@ @am__quote@bit/$(DEPDIR)/sc_bit.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@bit/$(DEPDIR)/sc_bv_base.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@bit/$(DEPDIR)/sc_logic.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@bit/$(DEPDIR)/sc_lv_base.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@fx/$(DEPDIR)/sc_fxcast_switch.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@fx/$(DEPDIR)/sc_fxdefs.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@fx/$(DEPDIR)/sc_fxnum.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@fx/$(DEPDIR)/sc_fxnum_observer.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@fx/$(DEPDIR)/sc_fxtype_params.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@fx/$(DEPDIR)/sc_fxval.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@fx/$(DEPDIR)/sc_fxval_observer.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@fx/$(DEPDIR)/scfx_mant.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@fx/$(DEPDIR)/scfx_pow10.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@fx/$(DEPDIR)/scfx_rep.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@fx/$(DEPDIR)/scfx_utils.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@int/$(DEPDIR)/sc_int32_mask.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@int/$(DEPDIR)/sc_int64_io.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@int/$(DEPDIR)/sc_int64_mask.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@int/$(DEPDIR)/sc_int_base.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@int/$(DEPDIR)/sc_length_param.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@int/$(DEPDIR)/sc_nbdefs.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@int/$(DEPDIR)/sc_nbexterns.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@int/$(DEPDIR)/sc_nbutils.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@int/$(DEPDIR)/sc_signed.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@int/$(DEPDIR)/sc_uint_base.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@int/$(DEPDIR)/sc_unsigned.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@misc/$(DEPDIR)/sc_concatref.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@misc/$(DEPDIR)/sc_value_base.Plo@am__quote@
-
-.cpp.o:
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
-@am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ $< &&\
-@am__fastdepCXX_TRUE@	$(am__mv) $$depbase.Tpo $$depbase.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXXCOMPILE) -c -o $@ $<
-
-.cpp.obj:
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.obj$$||'`;\
-@am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ `$(CYGPATH_W) '$<'` &&\
-@am__fastdepCXX_TRUE@	$(am__mv) $$depbase.Tpo $$depbase.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
-
-.cpp.lo:
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.lo$$||'`;\
-@am__fastdepCXX_TRUE@	$(LTCXXCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ $< &&\
-@am__fastdepCXX_TRUE@	$(am__mv) $$depbase.Tpo $$depbase.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LTCXXCOMPILE) -c -o $@ $<
+tlm.pc: $(top_builddir)/config.status $(srcdir)/tlm.pc.in
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 
 mostlyclean-libtool:
 	-rm -f *.lo
 
 clean-libtool:
 	-rm -rf .libs _libs
-	-rm -rf bit/.libs bit/_libs
-	-rm -rf fx/.libs fx/_libs
-	-rm -rf int/.libs int/_libs
-	-rm -rf misc/.libs misc/_libs
+install-pkgconfigDATA: $(pkgconfig_DATA)
+	@$(NORMAL_INSTALL)
+	@list='$(pkgconfig_DATA)'; test -n "$(pkgconfigdir)" || list=; \
+	if test -n "$$list"; then \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(pkgconfigdir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(pkgconfigdir)" || exit 1; \
+	fi; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(pkgconfigdir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(pkgconfigdir)" || exit $$?; \
+	done
+
+uninstall-pkgconfigDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(pkgconfig_DATA)'; test -n "$(pkgconfigdir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	dir='$(DESTDIR)$(pkgconfigdir)'; $(am__uninstall_files_from_dir)
 install-nobase_localincludeHEADERS: $(nobase_localinclude_HEADERS)
 	@$(NORMAL_INSTALL)
 	@list='$(nobase_localinclude_HEADERS)'; test -n "$(localincludedir)" || list=; \
@@ -788,9 +520,9 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(LTLIBRARIES) $(HEADERS)
+all-am: Makefile $(DATA) $(HEADERS)
 installdirs:
-	for dir in "$(DESTDIR)$(localincludedir)"; do \
+	for dir in "$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(localincludedir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-am
@@ -820,28 +552,17 @@ clean-generic:
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
-	-rm -f bit/$(DEPDIR)/$(am__dirstamp)
-	-rm -f bit/$(am__dirstamp)
-	-rm -f fx/$(DEPDIR)/$(am__dirstamp)
-	-rm -f fx/$(am__dirstamp)
-	-rm -f int/$(DEPDIR)/$(am__dirstamp)
-	-rm -f int/$(am__dirstamp)
-	-rm -f misc/$(DEPDIR)/$(am__dirstamp)
-	-rm -f misc/$(am__dirstamp)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-generic clean-libtool clean-noinstLTLIBRARIES \
-	mostlyclean-am
+clean-am: clean-generic clean-libtool mostlyclean-am
 
 distclean: distclean-am
-	-rm -rf bit/$(DEPDIR) fx/$(DEPDIR) int/$(DEPDIR) misc/$(DEPDIR)
 	-rm -f Makefile
-distclean-am: clean-am distclean-compile distclean-generic \
-	distclean-tags
+distclean-am: clean-am distclean-generic distclean-tags
 
 dvi: dvi-am
 
@@ -855,7 +576,8 @@ info: info-am
 
 info-am:
 
-install-data-am: install-nobase_localincludeHEADERS
+install-data-am: install-nobase_localincludeHEADERS \
+	install-pkgconfigDATA
 
 install-dvi: install-dvi-am
 
@@ -884,14 +606,12 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-	-rm -rf bit/$(DEPDIR) fx/$(DEPDIR) int/$(DEPDIR) misc/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
 mostlyclean: mostlyclean-am
 
-mostlyclean-am: mostlyclean-compile mostlyclean-generic \
-	mostlyclean-libtool
+mostlyclean-am: mostlyclean-generic mostlyclean-libtool
 
 pdf: pdf-am
 
@@ -901,24 +621,24 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-nobase_localincludeHEADERS
+uninstall-am: uninstall-nobase_localincludeHEADERS \
+	uninstall-pkgconfigDATA
 
 .MAKE: install-am install-strip
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
-	clean-libtool clean-noinstLTLIBRARIES ctags distclean \
-	distclean-compile distclean-generic distclean-libtool \
-	distclean-tags distdir dvi dvi-am html html-am info info-am \
-	install install-am install-data install-data-am install-dvi \
-	install-dvi-am install-exec install-exec-am install-html \
-	install-html-am install-info install-info-am install-man \
-	install-nobase_localincludeHEADERS install-pdf install-pdf-am \
-	install-ps install-ps-am install-strip installcheck \
-	installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-compile \
-	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	tags uninstall uninstall-am \
-	uninstall-nobase_localincludeHEADERS
+	clean-libtool ctags distclean distclean-generic \
+	distclean-libtool distclean-tags distdir dvi dvi-am html \
+	html-am info info-am install install-am install-data \
+	install-data-am install-dvi install-dvi-am install-exec \
+	install-exec-am install-html install-html-am install-info \
+	install-info-am install-man install-nobase_localincludeHEADERS \
+	install-pdf install-pdf-am install-pkgconfigDATA install-ps \
+	install-ps-am install-strip installcheck installcheck-am \
+	installdirs maintainer-clean maintainer-clean-generic \
+	mostlyclean mostlyclean-generic mostlyclean-libtool pdf pdf-am \
+	ps ps-am tags uninstall uninstall-am \
+	uninstall-nobase_localincludeHEADERS uninstall-pkgconfigDATA
 
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
