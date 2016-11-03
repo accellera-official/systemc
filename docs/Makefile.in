@@ -318,7 +318,7 @@ EXTRA_DEFINES = -DSC_INCLUDE_FX
 CLEANFILES = 
 EXTRA_DIST = $(DOC_FILES)
 DOXYGEN = doxygen
-DOC_FILES = SystemC_Open_Source_License.pdf sysc/README \
+DOC_FILES = sysc/README \
 	sysc/archived/README sysc/archived/FuncSpec20.pdf \
 	sysc/archived/WhitePaper20.pdf sysc/archived/UserGuide20.pdf \
 	sysc/archived/SystemC_2_1_overview.pdf \
@@ -343,9 +343,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(top_srcdir)/config/Make-rules.co
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu docs/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign docs/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu docs/Makefile
+	  $(AUTOMAKE) --foreign docs/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \

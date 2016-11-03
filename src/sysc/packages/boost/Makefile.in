@@ -436,9 +436,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(top_srcdir)/config/Make-rules.sy
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu src/sysc/packages/boost/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign src/sysc/packages/boost/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu src/sysc/packages/boost/Makefile
+	  $(AUTOMAKE) --foreign src/sysc/packages/boost/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \

@@ -427,9 +427,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(top_srcdir)/config/Make-rules.sy
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu src/sysc/tracing/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign src/sysc/tracing/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu src/sysc/tracing/Makefile
+	  $(AUTOMAKE) --foreign src/sysc/tracing/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \

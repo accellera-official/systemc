@@ -512,9 +512,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(top_srcdir)/config/Make-rules.sy
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu src/sysc/datatypes/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign src/sysc/datatypes/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu src/sysc/datatypes/Makefile
+	  $(AUTOMAKE) --foreign src/sysc/datatypes/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \

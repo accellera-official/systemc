@@ -1462,9 +1462,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(top_srcdir)/config/Make-rules.ex
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu examples/sysc/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign examples/sysc/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu examples/sysc/Makefile
+	  $(AUTOMAKE) --foreign examples/sysc/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
