@@ -105,7 +105,12 @@ DIST_COMMON = $(top_srcdir)/config/Make-rules.sysc \
 subdir = src/sysc/datatypes
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/config/ax_check_define.m4 \
-	$(top_srcdir)/config/ax_pthread.m4 $(top_srcdir)/configure.ac
+	$(top_srcdir)/config/ax_pthread.m4 \
+	$(top_srcdir)/config/libtool.m4 \
+	$(top_srcdir)/config/ltoptions.m4 \
+	$(top_srcdir)/config/ltsugar.m4 \
+	$(top_srcdir)/config/ltversion.m4 \
+	$(top_srcdir)/config/lt~obsolete.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
@@ -121,9 +126,9 @@ am__objects_2 = bit/sc_bit.lo bit/sc_bv_base.lo bit/sc_logic.lo \
 	fx/sc_fxval.lo fx/sc_fxval_observer.lo fx/scfx_mant.lo \
 	fx/scfx_pow10.lo fx/scfx_rep.lo fx/scfx_utils.lo \
 	int/sc_int_base.lo int/sc_int_mask.lo int/sc_length_param.lo \
-	int/sc_nbdefs.lo int/sc_nbexterns.lo int/sc_nbutils.lo \
-	int/sc_signed.lo int/sc_uint_base.lo int/sc_unsigned.lo \
-	misc/sc_concatref.lo misc/sc_value_base.lo
+	int/sc_nbexterns.lo int/sc_nbutils.lo int/sc_signed.lo \
+	int/sc_uint_base.lo int/sc_unsigned.lo misc/sc_concatref.lo \
+	misc/sc_value_base.lo
 am_libdatatypes_la_OBJECTS = $(am__objects_1) $(am__objects_2)
 libdatatypes_la_OBJECTS = $(am_libdatatypes_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
@@ -486,7 +491,6 @@ CXX_FILES = \
 	int/sc_int_base.cpp \
 	int/sc_int_mask.cpp \
 	int/sc_length_param.cpp \
-	int/sc_nbdefs.cpp \
 	int/sc_nbexterns.cpp \
 	int/sc_nbutils.cpp \
 	int/sc_signed.cpp \
@@ -586,7 +590,6 @@ int/sc_int_base.lo: int/$(am__dirstamp) int/$(DEPDIR)/$(am__dirstamp)
 int/sc_int_mask.lo: int/$(am__dirstamp) int/$(DEPDIR)/$(am__dirstamp)
 int/sc_length_param.lo: int/$(am__dirstamp) \
 	int/$(DEPDIR)/$(am__dirstamp)
-int/sc_nbdefs.lo: int/$(am__dirstamp) int/$(DEPDIR)/$(am__dirstamp)
 int/sc_nbexterns.lo: int/$(am__dirstamp) int/$(DEPDIR)/$(am__dirstamp)
 int/sc_nbutils.lo: int/$(am__dirstamp) int/$(DEPDIR)/$(am__dirstamp)
 int/sc_signed.lo: int/$(am__dirstamp) int/$(DEPDIR)/$(am__dirstamp)
@@ -638,7 +641,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@int/$(DEPDIR)/sc_int_base.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@int/$(DEPDIR)/sc_int_mask.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@int/$(DEPDIR)/sc_length_param.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@int/$(DEPDIR)/sc_nbdefs.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@int/$(DEPDIR)/sc_nbexterns.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@int/$(DEPDIR)/sc_nbutils.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@int/$(DEPDIR)/sc_signed.Plo@am__quote@

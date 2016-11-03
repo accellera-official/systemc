@@ -80,21 +80,25 @@ build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
 subdir = .
-DIST_COMMON = INSTALL NEWS README AUTHORS ChangeLog \
-	$(srcdir)/Makefile.in $(srcdir)/Makefile.am \
+DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
 	$(top_srcdir)/configure $(am__configure_deps) \
 	$(top_srcdir)/docs/sysc/doxygen/Doxyfile.in \
-	$(top_srcdir)/docs/tlm/doxygen/Doxyfile.in COPYING \
-	config/compile config/config.guess config/config.sub \
-	config/depcomp config/install-sh config/missing \
-	config/ltmain.sh $(top_srcdir)/config/compile \
+	$(top_srcdir)/docs/tlm/doxygen/Doxyfile.in AUTHORS ChangeLog \
+	INSTALL NEWS README config/compile config/config.guess \
+	config/config.sub config/depcomp config/install-sh \
+	config/missing config/ltmain.sh $(top_srcdir)/config/compile \
 	$(top_srcdir)/config/config.guess \
 	$(top_srcdir)/config/config.sub \
 	$(top_srcdir)/config/install-sh $(top_srcdir)/config/ltmain.sh \
 	$(top_srcdir)/config/missing
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/config/ax_check_define.m4 \
-	$(top_srcdir)/config/ax_pthread.m4 $(top_srcdir)/configure.ac
+	$(top_srcdir)/config/ax_pthread.m4 \
+	$(top_srcdir)/config/libtool.m4 \
+	$(top_srcdir)/config/ltoptions.m4 \
+	$(top_srcdir)/config/ltsugar.m4 \
+	$(top_srcdir)/config/ltversion.m4 \
+	$(top_srcdir)/config/lt~obsolete.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
