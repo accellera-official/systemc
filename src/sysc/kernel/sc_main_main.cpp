@@ -1,17 +1,19 @@
 /*****************************************************************************
 
-  The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2014 by all Contributors.
-  All Rights reserved.
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
 
-  The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License (the "License");
-  You may not use this file except in compliance with such restrictions and
-  limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.accellera.org/. Software distributed by Contributors
-  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  ANY KIND, either express or implied. See the License for the specific
-  language governing rights and limitations under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
 
  *****************************************************************************/
 
@@ -54,12 +56,12 @@ message_function( const char* s )
 
 bool sc_in_action = false;
 
-int sc_argc() 
+int sc_argc()
 {
     return argc_copy;
 }
 
-const char* const* sc_argv() 
+const char* const* sc_argv()
 {
     return argv_copy;
 }
@@ -75,8 +77,10 @@ sc_elab_and_sim( int argc, char* argv[] )
     // Copy argv into a new structure to prevent sc_main from modifying the
     // result returned from sc_argv.
     std::vector<char*> argv_call(argc + 1, NULL);
-    for ( int i = 0; i < argc; i++ ) {
-        argv_call[i] = strdup(argv[i]);
+    for ( int i = 0; i < argc; ++i ) {
+        std::size_t size = std::strlen(argv[i]) + 1;
+        argv_call[i] = new char[size];
+        std::copy(argv[i], argv[i] + size, argv_call[i]);
     }
 
     try
@@ -103,26 +107,27 @@ sc_elab_and_sim( int argc, char* argv[] )
         delete err_p;
     }
 
-    std::for_each(argv_call.begin(), argv_call.end(), free);
+    for ( int i = 0; i < argc; ++i ) {
+        delete[] argv_call[i];
+    }
 
-    // IF DEPRECATION WARNINGS WERE ISSUED TELL THE USER HOW TO TURN THEM OFF 
+    // IF DEPRECATION WARNINGS WERE ISSUED TELL THE USER HOW TO TURN THEM OFF
 
     if ( sc_report_handler::get_count( SC_ID_IEEE_1666_DEPRECATION_ ) > 0 )
     {
         std::stringstream ss;
 
-#       define MSGNL  "\n             "
-#       define CODENL "\n  "
+        const char MSGNL[] = "\n             ";
+        const char CODENL[] = "\n  ";
 
-        ss <<
-          "You can turn off warnings about" MSGNL
-          "IEEE 1666 deprecated features by placing this method call" MSGNL
-          "as the first statement in your sc_main() function:\n" CODENL
-          "sc_core::sc_report_handler::set_actions( "
-          "\"" << SC_ID_IEEE_1666_DEPRECATION_ << "\"," CODENL
-          "                                         " /* indent param */
-          "sc_core::SC_DO_NOTHING );"
-          << std::endl;
+        ss << "You can turn off warnings about" << MSGNL
+           << "IEEE 1666 deprecated features by placing this method call" << MSGNL
+           << "as the first statement in your sc_main() function:\n" << CODENL
+           << "sc_core::sc_report_handler::set_actions( "
+           << "\"" << SC_ID_IEEE_1666_DEPRECATION_ << "\"," << CODENL
+           << "                                         " /* indent param */
+           << "sc_core::SC_DO_NOTHING );"
+           << std::endl;
 
         SC_REPORT_INFO( SC_ID_IEEE_1666_DEPRECATION_, ss.str().c_str() );
     }
