@@ -56,6 +56,30 @@ namespace sc_core {
 typedef SC_STRING_VIEW_NS_::string_view sc_string_view;
 // TODO: add ABI guard against inconsistent configurations
 
+/// null-terminated, non-owning string, constant reference
+class sc_zstring_view : public sc_string_view
+{
+public:
+  /* constexpr */ sc_zstring_view() /* noexcept */
+    : sc_string_view() {}
+
+  /* constexpr */ sc_zstring_view(const char* s) /* noexcept */
+    : sc_string_view(s) {}
+
+  sc_zstring_view(const std::string& s) /* noexcept */
+    : sc_string_view(s) {}
+
+  /* constexpr */ void swap(sc_zstring_view& s) /* noexcept */
+    { sc_string_view::swap(s); }
+
+  /* constexpr */ const char* c_str() const /* noexcept */
+    { return data(); }
+
+private:
+  // Hide invariant-breaking function
+  using sc_string_view::remove_suffix;
+}; // class sc_zstring_view
+
 } // namespace sc_core
 
 #undef SC_STRING_VIEW_NS_
