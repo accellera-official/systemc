@@ -31,6 +31,7 @@
 #include <iosfwd>
 
 // <LWG: disable C++11 (and newer Boost) features>
+#define SC_BOOST_NO_CXX11_DEFAULTED_FUNCTIONS
 #define SC_BOOST_NO_CXX11_EXPLICIT_CONVERSION_OPERATORS
 #define SC_BOOST_NO_CXX11_FUNCTION_TEMPLATE_DEFAULT_ARGS
 
@@ -55,6 +56,11 @@
   throw what
 #endif
 // </LWG>
+
+#if defined(SC_BOOST_NO_CXX11_DEFAULTED_FUNCTIONS) || (defined(SC_BOOST_GCC) && ((SC_BOOST_GCC+0) / 100) <= 406)
+// GCC 4.6 cannot handle a defaulted function with noexcept specifier
+#define SC_BOOST_STRING_VIEW_NO_CXX11_DEFAULTED_NOEXCEPT_FUNCTIONS
+#endif
 
 namespace sc_boost {
 
@@ -91,14 +97,25 @@ namespace sc_boost {
       SC_BOOST_CONSTEXPR basic_string_view() SC_BOOST_NOEXCEPT
         : ptr_(NULL), len_(0) {}
 
+      // by defaulting these functions, basic_string_ref becomes
+      //  trivially copy/move constructible.
       SC_BOOST_CONSTEXPR basic_string_view(const basic_string_view &rhs) SC_BOOST_NOEXCEPT
+#ifndef SC_BOOST_STRING_VIEW_NO_CXX11_DEFAULTED_NOEXCEPT_FUNCTIONS
+        = default;
+#else
         : ptr_(rhs.ptr_), len_(rhs.len_) {}
+#endif
 
-      basic_string_view& operator=(const basic_string_view &rhs) SC_BOOST_NOEXCEPT {
+      basic_string_view& operator=(const basic_string_view &rhs) SC_BOOST_NOEXCEPT
+#ifndef SC_BOOST_STRING_VIEW_NO_CXX11_DEFAULTED_NOEXCEPT_FUNCTIONS
+            = default;
+#else
+        {
         ptr_ = rhs.ptr_;
         len_ = rhs.len_;
         return *this;
         }
+#endif
 
       template<typename Allocator>
         basic_string_view(const std::basic_string<charT, traits,
@@ -172,12 +189,17 @@ namespace sc_boost {
 
 #ifndef SC_BOOST_NO_CXX11_FUNCTION_TEMPLATE_DEFAULT_ARGS
         template<typename Allocator = std::allocator<charT> >
-        std::basic_string<charT, traits> to_string(const Allocator& a = Allocator()) const {
+        std::basic_string<charT, traits, Allocator> to_string(const Allocator& a = Allocator()) const {
             return std::basic_string<charT, traits, Allocator>(begin(), end(), a);
             }
 #else
         std::basic_string<charT, traits> to_string() const {
             return std::basic_string<charT, traits>(begin(), end());
+            }
+
+        template<typename Allocator>
+        std::basic_string<charT, traits, Allocator> to_string(const Allocator& a) const {
+            return std::basic_string<charT, traits, Allocator>(begin(), end(), a);
             }
 #endif
 
@@ -230,7 +252,7 @@ namespace sc_boost {
         //  Searches
         SC_BOOST_CONSTEXPR bool starts_with(charT c) const SC_BOOST_NOEXCEPT {              // Boost extension
             return !empty() && traits::eq(c, front());
-            }  
+            }
 
         SC_BOOST_CONSTEXPR bool starts_with(basic_string_view x) const SC_BOOST_NOEXCEPT {  // Boost extension
             return len_ >= x.len_ && traits::compare(ptr_, x.ptr_, x.len_) == 0;
@@ -241,7 +263,7 @@ namespace sc_boost {
             }
 
         SC_BOOST_CONSTEXPR bool ends_with(basic_string_view x) const SC_BOOST_NOEXCEPT {    // Boost extension
-            return len_ >= x.len_ && 
+            return len_ >= x.len_ &&
                traits::compare(ptr_ + len_ - x.len_, x.ptr_, x.len_) == 0;
             }
 
@@ -266,11 +288,11 @@ namespace sc_boost {
         SC_BOOST_CXX14_CONSTEXPR size_type rfind(basic_string_view s, size_type pos = npos) const SC_BOOST_NOEXCEPT {
             if (len_ < s.len_)
               return npos;
-            if (pos > len_ - s.len_) 
+            if (pos > len_ - s.len_)
               pos = len_ - s.len_;
             if (s.len_ == 0u)     // an empty string is always found
               return pos;
-            for (const charT* cur = ptr_ + pos;; --cur) {
+            for (const charT* cur = ptr_ + pos; ; --cur) {
                 if (traits::compare(cur, s.ptr_, s.len_) == 0)
                   return cur - ptr_;
                 if (cur == ptr_)
@@ -337,7 +359,7 @@ namespace sc_boost {
         //  find_last_not_of
         SC_BOOST_CXX14_CONSTEXPR size_type find_last_not_of(basic_string_view s, size_type pos = npos) const SC_BOOST_NOEXCEPT {
             if (pos >= len_)
-              pos = len_ - 1;;
+              pos = len_ - 1;
             if (s.len_ == 0u)
               return pos;
             pos = len_ - (pos+1);
@@ -383,7 +405,7 @@ namespace sc_boost {
 //  Inequality
     template<typename charT, typename traits>
     inline bool operator!=(basic_string_view<charT, traits> x,
-                           basic_string_view<charT, traits> y) SC_BOOST_NOEXCEPT { 
+                           basic_string_view<charT, traits> y) SC_BOOST_NOEXCEPT {
         if ( x.size () != y.size ()) return true;
         return x.compare(y) != 0;
         }
@@ -391,180 +413,180 @@ namespace sc_boost {
 //  Less than
     template<typename charT, typename traits>
     inline bool operator<(basic_string_view<charT, traits> x,
-                          basic_string_view<charT, traits> y) SC_BOOST_NOEXCEPT { 
+                          basic_string_view<charT, traits> y) SC_BOOST_NOEXCEPT {
         return x.compare(y) < 0;
         }
 
 //  Greater than
     template<typename charT, typename traits>
     inline bool operator>(basic_string_view<charT, traits> x,
-                          basic_string_view<charT, traits> y) SC_BOOST_NOEXCEPT { 
+                          basic_string_view<charT, traits> y) SC_BOOST_NOEXCEPT {
         return x.compare(y) > 0;
         }
 
 //  Less than or equal to
     template<typename charT, typename traits>
     inline bool operator<=(basic_string_view<charT, traits> x,
-                           basic_string_view<charT, traits> y) SC_BOOST_NOEXCEPT { 
+                           basic_string_view<charT, traits> y) SC_BOOST_NOEXCEPT {
         return x.compare(y) <= 0;
         }
 
 //  Greater than or equal to
     template<typename charT, typename traits>
     inline bool operator>=(basic_string_view<charT, traits> x,
-                           basic_string_view<charT, traits> y) SC_BOOST_NOEXCEPT { 
+                           basic_string_view<charT, traits> y) SC_BOOST_NOEXCEPT {
         return x.compare(y) >= 0;
         }
 
 // "sufficient additional overloads of comparison functions"
     template<typename charT, typename traits, typename Allocator>
     inline bool operator==(basic_string_view<charT, traits> x,
-                     const std::basic_string<charT, traits, Allocator> & y) SC_BOOST_NOEXCEPT { 
+                     const std::basic_string<charT, traits, Allocator> & y) SC_BOOST_NOEXCEPT {
         return x == basic_string_view<charT, traits>(y);
         }
 
     template<typename charT, typename traits, typename Allocator>
     inline bool operator==(const std::basic_string<charT, traits, Allocator> & x,
-                                 basic_string_view<charT, traits> y) SC_BOOST_NOEXCEPT { 
+                                 basic_string_view<charT, traits> y) SC_BOOST_NOEXCEPT {
         return basic_string_view<charT, traits>(x) == y;
         }
 
     template<typename charT, typename traits>
     inline bool operator==(basic_string_view<charT, traits> x,
-                                              const charT * y) SC_BOOST_NOEXCEPT { 
+                                              const charT * y) SC_BOOST_NOEXCEPT {
         return x == basic_string_view<charT, traits>(y);
         }
 
     template<typename charT, typename traits>
     inline bool operator==(const charT * x,
-                           basic_string_view<charT, traits> y) SC_BOOST_NOEXCEPT { 
+                           basic_string_view<charT, traits> y) SC_BOOST_NOEXCEPT {
         return basic_string_view<charT, traits>(x) == y;
         }
 
     template<typename charT, typename traits, typename Allocator>
     inline bool operator!=(basic_string_view<charT, traits> x,
-                     const std::basic_string<charT, traits, Allocator> & y) SC_BOOST_NOEXCEPT { 
+                     const std::basic_string<charT, traits, Allocator> & y) SC_BOOST_NOEXCEPT {
         return x != basic_string_view<charT, traits>(y);
         }
 
     template<typename charT, typename traits, typename Allocator>
     inline bool operator!=(const std::basic_string<charT, traits, Allocator> & x,
-                                 basic_string_view<charT, traits> y) SC_BOOST_NOEXCEPT { 
+                                 basic_string_view<charT, traits> y) SC_BOOST_NOEXCEPT {
         return basic_string_view<charT, traits>(x) != y;
         }
 
     template<typename charT, typename traits>
     inline bool operator!=(basic_string_view<charT, traits> x,
-                           const charT * y) SC_BOOST_NOEXCEPT { 
+                           const charT * y) SC_BOOST_NOEXCEPT {
         return x != basic_string_view<charT, traits>(y);
         }
 
     template<typename charT, typename traits>
     inline bool operator!=(const charT * x,
-                           basic_string_view<charT, traits> y) SC_BOOST_NOEXCEPT { 
+                           basic_string_view<charT, traits> y) SC_BOOST_NOEXCEPT {
         return basic_string_view<charT, traits>(x) != y;
         }
 
     template<typename charT, typename traits, typename Allocator>
     inline bool operator<(basic_string_view<charT, traits> x,
-                    const std::basic_string<charT, traits, Allocator> & y) SC_BOOST_NOEXCEPT { 
+                    const std::basic_string<charT, traits, Allocator> & y) SC_BOOST_NOEXCEPT {
         return x < basic_string_view<charT, traits>(y);
         }
 
     template<typename charT, typename traits, typename Allocator>
     inline bool operator<(const std::basic_string<charT, traits, Allocator> & x,
-                                basic_string_view<charT, traits> y) SC_BOOST_NOEXCEPT { 
+                                basic_string_view<charT, traits> y) SC_BOOST_NOEXCEPT {
         return basic_string_view<charT, traits>(x) < y;
         }
 
     template<typename charT, typename traits>
     inline bool operator<(basic_string_view<charT, traits> x,
-                          const charT * y) SC_BOOST_NOEXCEPT { 
+                          const charT * y) SC_BOOST_NOEXCEPT {
         return x < basic_string_view<charT, traits>(y);
         }
 
     template<typename charT, typename traits>
     inline bool operator<(const charT * x,
-                          basic_string_view<charT, traits> y) SC_BOOST_NOEXCEPT { 
+                          basic_string_view<charT, traits> y) SC_BOOST_NOEXCEPT {
         return basic_string_view<charT, traits>(x) < y;
         }
 
     template<typename charT, typename traits, typename Allocator>
     inline bool operator>(basic_string_view<charT, traits> x,
-                    const std::basic_string<charT, traits, Allocator> & y) SC_BOOST_NOEXCEPT { 
+                    const std::basic_string<charT, traits, Allocator> & y) SC_BOOST_NOEXCEPT {
         return x > basic_string_view<charT, traits>(y);
         }
 
     template<typename charT, typename traits, typename Allocator>
     inline bool operator>(const std::basic_string<charT, traits, Allocator> & x,
-                                basic_string_view<charT, traits> y) SC_BOOST_NOEXCEPT { 
+                                basic_string_view<charT, traits> y) SC_BOOST_NOEXCEPT {
         return basic_string_view<charT, traits>(x) > y;
         }
 
     template<typename charT, typename traits>
     inline bool operator>(basic_string_view<charT, traits> x,
-                          const charT * y) SC_BOOST_NOEXCEPT { 
+                          const charT * y) SC_BOOST_NOEXCEPT {
         return x > basic_string_view<charT, traits>(y);
         }
 
     template<typename charT, typename traits>
     inline bool operator>(const charT * x,
-                          basic_string_view<charT, traits> y) SC_BOOST_NOEXCEPT { 
+                          basic_string_view<charT, traits> y) SC_BOOST_NOEXCEPT {
         return basic_string_view<charT, traits>(x) > y;
         }
 
     template<typename charT, typename traits, typename Allocator>
     inline bool operator<=(basic_string_view<charT, traits> x,
-                     const std::basic_string<charT, traits, Allocator> & y) SC_BOOST_NOEXCEPT { 
+                     const std::basic_string<charT, traits, Allocator> & y) SC_BOOST_NOEXCEPT {
         return x <= basic_string_view<charT, traits>(y);
         }
 
     template<typename charT, typename traits, typename Allocator>
     inline bool operator<=(const std::basic_string<charT, traits, Allocator> & x,
-                                 basic_string_view<charT, traits> y) SC_BOOST_NOEXCEPT { 
+                                 basic_string_view<charT, traits> y) SC_BOOST_NOEXCEPT {
         return basic_string_view<charT, traits>(x) <= y;
         }
 
     template<typename charT, typename traits>
     inline bool operator<=(basic_string_view<charT, traits> x,
-                           const charT * y) SC_BOOST_NOEXCEPT { 
+                           const charT * y) SC_BOOST_NOEXCEPT {
         return x <= basic_string_view<charT, traits>(y);
         }
 
     template<typename charT, typename traits>
     inline bool operator<=(const charT * x,
-                           basic_string_view<charT, traits> y) SC_BOOST_NOEXCEPT { 
+                           basic_string_view<charT, traits> y) SC_BOOST_NOEXCEPT {
         return basic_string_view<charT, traits>(x) <= y;
         }
 
     template<typename charT, typename traits, typename Allocator>
     inline bool operator>=(basic_string_view<charT, traits> x,
-                     const std::basic_string<charT, traits, Allocator> & y) SC_BOOST_NOEXCEPT { 
+                     const std::basic_string<charT, traits, Allocator> & y) SC_BOOST_NOEXCEPT {
         return x >= basic_string_view<charT, traits>(y);
         }
 
     template<typename charT, typename traits, typename Allocator>
     inline bool operator>=(const std::basic_string<charT, traits, Allocator> & x,
-                                 basic_string_view<charT, traits> y) SC_BOOST_NOEXCEPT { 
+                                 basic_string_view<charT, traits> y) SC_BOOST_NOEXCEPT {
         return basic_string_view<charT, traits>(x) >= y;
         }
 
     template<typename charT, typename traits>
     inline bool operator>=(basic_string_view<charT, traits> x,
-                           const charT * y) SC_BOOST_NOEXCEPT { 
+                           const charT * y) SC_BOOST_NOEXCEPT {
         return x >= basic_string_view<charT, traits>(y);
         }
 
     template<typename charT, typename traits>
     inline bool operator>=(const charT * x,
-                           basic_string_view<charT, traits> y) SC_BOOST_NOEXCEPT { 
+                           basic_string_view<charT, traits> y) SC_BOOST_NOEXCEPT {
         return basic_string_view<charT, traits>(x) >= y;
         }
 
     namespace detail {
 
         template<class charT, class traits>
-        inline void insert_fill_chars(std::basic_ostream<charT, traits>& os, std::size_t n) {
+        inline void sv_insert_fill_chars(std::basic_ostream<charT, traits>& os, std::size_t n) {
             enum { chunk_size = 8 };
             charT fill_chars[chunk_size];
             std::fill_n(fill_chars, static_cast< std::size_t >(chunk_size), os.fill());
@@ -575,19 +597,19 @@ namespace sc_boost {
             }
 
         template<class charT, class traits>
-        void insert_aligned(std::basic_ostream<charT, traits>& os, const basic_string_view<charT,traits>& str) {
+        void sv_insert_aligned(std::basic_ostream<charT, traits>& os, const basic_string_view<charT,traits>& str) {
             const std::size_t size = str.size();
             const std::size_t alignment_size = static_cast< std::size_t >(os.width()) - size;
             const bool align_left = (os.flags() & std::basic_ostream<charT, traits>::adjustfield) == std::basic_ostream<charT, traits>::left;
             if (!align_left) {
-                detail::insert_fill_chars(os, alignment_size);
+                detail::sv_insert_fill_chars(os, alignment_size);
                 if (os.good())
                     os.write(str.data(), size);
                 }
             else {
                 os.write(str.data(), size);
                 if (os.good())
-                    detail::insert_fill_chars(os, alignment_size);
+                    detail::sv_insert_fill_chars(os, alignment_size);
                 }
             }
 
@@ -604,7 +626,7 @@ namespace sc_boost {
             if (w <= size)
                 os.write(str.data(), size);
             else
-                detail::insert_aligned(os, str);
+                detail::sv_insert_aligned(os, str);
             os.width(0);
             }
         return os;
