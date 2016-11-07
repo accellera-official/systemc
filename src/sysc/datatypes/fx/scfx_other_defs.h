@@ -207,13 +207,6 @@ sc_unsigned::operator = ( const sc_fxnum_fast& v )
 //  CLASS : sc_int_base
 // ----------------------------------------------------------------------------
 
-#ifndef _32BIT_
-#define NUM_WIDTH LLWIDTH
-#else
-#define NUM_WIDTH INTWIDTH
-#endif
-
-
 // assignment operators
 
 inline
@@ -275,8 +268,6 @@ sc_int_base::operator = ( const sc_fxnum_fast& v )
     extend_sign();
     return *this;
 }
-
-#undef NUM_WIDTH
 
 
 // ----------------------------------------------------------------------------
