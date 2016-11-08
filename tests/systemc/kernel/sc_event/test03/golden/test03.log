@@ -1,4 +1,4 @@
 SystemC Simulation
 
-Error: (E521) immediate notification is not allowed during the update phase
+Error: (E521) immediate notification is not allowed during update phase or elaboration
 In file: <removed by verify.pl>
