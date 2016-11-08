@@ -33,6 +33,7 @@
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/utils/sc_report.h"
 
+#include <cstring>
 #include <sstream>
 
 using std::getenv;

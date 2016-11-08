@@ -36,9 +36,10 @@
 #include "sysc/utils/sc_report_handler.h"
 #include "sysc/utils/sc_utils_ids.h"
 
-#include <vector>
 #include <algorithm>
+#include <cstring>
 #include <sstream>
+#include <vector>
 
 namespace sc_core {
 
