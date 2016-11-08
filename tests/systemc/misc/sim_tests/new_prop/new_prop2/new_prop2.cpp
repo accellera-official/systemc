@@ -113,7 +113,8 @@ new_prop::my_print(const char* p)
     for (int j = 0; j < 16; ++j) {
         if (i[j].posedge()) {
             (*print_func)("\tposedge i[%d]\n", j);
-        } else if (i[j].negedge()) {
+        }
+        if (i[j].negedge()) {
             (*print_func)("\tnegedge i[%d]\n", j);
         }
     }
