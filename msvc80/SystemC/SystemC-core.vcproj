@@ -730,10 +730,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\sysc\datatypes\int\sc_nbdefs.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\src\sysc\datatypes\int\sc_nbexterns.cpp"
 				>
 			</File>
