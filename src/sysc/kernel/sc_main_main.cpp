@@ -32,12 +32,13 @@
 #include "sysc/kernel/sc_externs.h"
 #include "sysc/kernel/sc_except.h"
 #include "sysc/kernel/sc_ver.h"
-#include "sysc/utils/sc_iostream.h"
 #include "sysc/utils/sc_report.h"
 #include "sysc/utils/sc_report_handler.h"
 #include "sysc/utils/sc_utils_ids.h"
+
 #include <vector>
 #include <algorithm>
+#include <sstream>
 
 namespace sc_core {
 

@@ -1116,10 +1116,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\sysc\utils\sc_iostream.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\src\sysc\kernel\sc_join.h"
 				>
 			</File>

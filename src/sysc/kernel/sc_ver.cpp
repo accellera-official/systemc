@@ -31,8 +31,9 @@
 
 #include "sysc/kernel/sc_ver.h"
 #include "sysc/kernel/sc_kernel_ids.h"
-#include "sysc/utils/sc_iostream.h"
 #include "sysc/utils/sc_report.h"
+
+#include <sstream>
 
 using std::getenv;
 using std::strcmp;

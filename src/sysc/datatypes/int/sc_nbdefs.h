@@ -75,7 +75,6 @@
 #  include <stdint.h>
 #endif
 
-#include "sysc/utils/sc_iostream.h"
 #include "sysc/kernel/sc_constants.h"   // For SC_MAX_NBITS
 
 // Activate support mixed operands for concatenation via the comma operator
