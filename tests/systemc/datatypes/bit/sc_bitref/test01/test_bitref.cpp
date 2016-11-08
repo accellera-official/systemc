@@ -56,6 +56,48 @@ int sc_main(int,char*[])
     sc_nassert( bv[0] == bv[1] );
     sc_nassert( SC_LOGIC_1 != bv[1] );
 
+    sc_assert ( bv[0] == '0' );
+    sc_nassert( bv[1] == '0' );
+    sc_assert ( bv[1] == '1' );
+    sc_nassert( bv[0] == '1' );
+
+    sc_nassert( bv[0] != '0' );
+    sc_assert ( bv[1] != '0' );
+    sc_nassert( bv[1] != '1' );
+    sc_assert ( bv[0] != '1' );
+
+    sc_assert ( '0' == bv[0] );
+    sc_nassert( '0' == bv[1] );
+    sc_assert ( '1' == bv[1] );
+    sc_nassert( '1' == bv[0] );
+
+    sc_nassert( '0' != bv[0] );
+    sc_assert ( '0' != bv[1] );
+    sc_nassert( '1' != bv[1] );
+    sc_assert ( '1' != bv[0] );
+
+    sc_nassert( ~bv[0] == '0' );
+    sc_assert ( ~bv[1] == '0' );
+    sc_nassert( ~bv[1] == '1' );
+    sc_assert ( ~bv[0] == '1' );
+
+    sc_assert ( ~bv[0] != '0' );
+    sc_nassert( ~bv[1] != '0' );
+    sc_assert ( ~bv[1] != '1' );
+    sc_nassert( ~bv[0] != '1' );
+
+    sc_nassert( '0' == ~bv[0] );
+    sc_assert ( '0' == ~bv[1] );
+    sc_nassert( '1' == ~bv[1] );
+    sc_assert ( '1' == ~bv[0] );
+
+    sc_assert ( '0' != ~bv[0] );
+    sc_nassert( '0' != ~bv[1] );
+    sc_assert ( '1' != ~bv[1] );
+    sc_nassert( '1' != ~bv[0] );
+
+
+
     sc_assert( bv[0] == lv[0] );
     sc_assert( bv[0] != lv[6] );
 
