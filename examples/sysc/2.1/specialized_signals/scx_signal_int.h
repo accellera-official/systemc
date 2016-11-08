@@ -718,9 +718,9 @@ class sc_in<sc_dt::sc_int<W> > :
     // bind methods and operators:
 
     void bind( const in_if_type& interface_ )
-        { sc_port_base::bind( CCAST<in_if_type&>( interface_) );}
+        { sc_port_base::bind( const_cast<in_if_type&>( interface_) );}
     void operator () ( const in_if_type& interface_ )
-        { sc_port_base::bind( CCAST<in_if_type&>( interface_) );}
+        { sc_port_base::bind( const_cast<in_if_type&>( interface_) );}
     void bind( in_port_type& parent_ )
         { sc_port_base::bind(parent_);}
     void operator () ( in_port_type& parent_ )
@@ -738,12 +738,12 @@ class sc_in<sc_dt::sc_int<W> > :
         }
     virtual inline int vbind( sc_port_base& parent_ )
         {
-            in_port_type* in_parent = DCAST<in_port_type*>( &parent_ );
+            in_port_type* in_parent = dynamic_cast<in_port_type*>( &parent_ );
             if( in_parent != 0 ) {
                 sc_port_base::bind( *in_parent );
                 return 0;
             }
-            inout_port_type* inout_parent = DCAST<inout_port_type*>( &parent_ );
+            inout_port_type* inout_parent = dynamic_cast<inout_port_type*>( &parent_ );
             if( inout_parent != 0 ) {
                 sc_port_base::bind( *inout_parent );
                 return 0;
@@ -765,11 +765,11 @@ class sc_in<sc_dt::sc_int<W> > :
         {}
 
     explicit sc_in( const in_if_type& interface_ )
-        : base_type( CCAST<in_if_type&>( interface_ ) ), m_traces( 0 )
+        : base_type( const_cast<in_if_type&>( interface_ ) ), m_traces( 0 )
         {}
 
     sc_in( const char* name_, const in_if_type& interface_ )
-        : base_type( name_, CCAST<in_if_type&>( interface_ ) ), m_traces( 0 )
+        : base_type( name_, const_cast<in_if_type&>( interface_ ) ), m_traces( 0 )
         {}
 
     explicit sc_in( in_port_type& parent_ )
@@ -985,9 +985,9 @@ class sc_inout<sc_dt::sc_int<W> > :
     // bind methods and operators:
 
     void bind( const inout_if_type& interface_ )
-        { sc_port_base::bind( CCAST<inout_if_type&>( interface_) ); }
+        { sc_port_base::bind( const_cast<inout_if_type&>( interface_) ); }
     void operator () ( const inout_if_type& interface_ )
-        { sc_port_base::bind( CCAST<inout_if_type&>( interface_) ); }
+        { sc_port_base::bind( const_cast<inout_if_type&>( interface_) ); }
     void bind( inout_port_type& parent_ )
         { sc_port_base::bind(parent_); }
     void operator () ( inout_port_type& parent_ )
@@ -1001,7 +1001,7 @@ class sc_inout<sc_dt::sc_int<W> > :
         }
     virtual inline int vbind( sc_port_base& parent_ )
         {
-            inout_port_type* inout_parent = DCAST<inout_port_type*>( &parent_ );
+            inout_port_type* inout_parent = dynamic_cast<inout_port_type*>( &parent_ );
             if( inout_parent != 0 ) {
                 sc_port_base::bind( *inout_parent );
                 return 0;

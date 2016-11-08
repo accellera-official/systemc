@@ -734,7 +734,7 @@ protected:
     void initialize( const sc_signed* obj_p, int index_ )
         {
 	    m_index = index_;
-	    m_obj_p = ( CCAST<sc_signed*>( obj_p ) );
+	    m_obj_p = ( const_cast<sc_signed*>( obj_p ) );
 	}
 
 public:
@@ -908,7 +908,7 @@ protected:
 
     void initialize( const sc_signed* obj_p, int left_, int right_ )
         {
-	    m_obj_p = ( CCAST<sc_signed*>( obj_p ));
+	    m_obj_p = ( const_cast<sc_signed*>( obj_p ));
 	    m_left = left_;
 	    m_right = right_;
 	}

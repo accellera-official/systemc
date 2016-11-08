@@ -47,17 +47,17 @@ static
 sc_method_handle
 as_method_handle( sc_process_b* handle_ )
 {
-    return DCAST<sc_method_handle>( handle_ );
+    return dynamic_cast<sc_method_handle>( handle_ );
 }
 
 static
 sc_thread_handle
 as_thread_handle( sc_process_b* handle_ )
 {
-    return DCAST<sc_thread_handle>( handle_ );
+    return dynamic_cast<sc_thread_handle>( handle_ );
 }
 
-static 
+static
 void
 warn_no_parens()
 {
@@ -241,7 +241,7 @@ sc_sensitive::operator << ( sc_event_finder& event_finder_ )
     return *this;
 }
 
-void 
+void
 sc_sensitive::make_static_sensitivity(
     sc_process_b* handle_, sc_event_finder& event_finder_)
 {

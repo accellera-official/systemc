@@ -211,8 +211,8 @@ sc_event::kernel_tag sc_event::kernel_event;
 
 // +----------------------------------------------------------------------------
 // |"sc_event::register_event"
-// | 
-// | This method sets the name of this object instance and optionally adds 
+// |
+// | This method sets the name of this object instance and optionally adds
 // | it to the object manager's hierarchy. The object instance will be
 // | inserted into the object manager's hierarchy if one of the following is
 // | true:
@@ -274,7 +274,7 @@ sc_event::reset()
 
 // +----------------------------------------------------------------------------
 // |"sc_event::sc_event(name)"
-// | 
+// |
 // | This is the object instance constructor for named sc_event instances.
 // | If the name is non-null or this is during elaboration add the
 // | event to the object hierarchy.
@@ -299,7 +299,7 @@ sc_event::sc_event( const char* name ) :
 
 // +----------------------------------------------------------------------------
 // |"sc_event::sc_event()"
-// | 
+// |
 // | This is the object instance constructor for non-named sc_event instances.
 // | If this is during elaboration create a name and add it to the object
 // | hierarchy.
@@ -343,9 +343,9 @@ sc_event::sc_event( kernel_tag, const char* name ) :
 
 // +----------------------------------------------------------------------------
 // |"sc_event::~sc_event"
-// | 
+// |
 // | This is the object instance destructor for this class. It cancels any
-// | outstanding waits and removes the event from the object manager's 
+// | outstanding waits and removes the event from the object manager's
 // | instance table if it has a name.
 // +----------------------------------------------------------------------------
 sc_event::~sc_event()
@@ -360,9 +360,9 @@ sc_event::~sc_event()
 
 // +----------------------------------------------------------------------------
 // |"sc_event::trigger"
-// | 
+// |
 // | This method "triggers" this object instance. This consists of scheduling
-// | for execution all the processes that are schedulable and waiting on this 
+// | for execution all the processes that are schedulable and waiting on this
 // | event.
 // +----------------------------------------------------------------------------
 void
@@ -374,7 +374,7 @@ sc_event::trigger()
 
     // trigger the static sensitive methods
 
-    if( ( size = m_methods_static.size() ) != 0 ) 
+    if( ( size = m_methods_static.size() ) != 0 )
     {
         sc_method_handle* l_methods_static = &m_methods_static[0];
         int i = size - 1;
@@ -387,7 +387,7 @@ sc_event::trigger()
     // trigger the dynamic sensitive methods
 
 
-    if( ( size = m_methods_dynamic.size() ) != 0 ) 
+    if( ( size = m_methods_dynamic.size() ) != 0 )
     {
 	last_i = size - 1;
 	sc_method_handle* l_methods_dynamic = &m_methods_dynamic[0];
@@ -407,7 +407,7 @@ sc_event::trigger()
 
     // trigger the static sensitive threads
 
-    if( ( size = m_threads_static.size() ) != 0 ) 
+    if( ( size = m_threads_static.size() ) != 0 )
     {
         sc_thread_handle* l_threads_static = &m_threads_static[0];
         int i = size - 1;
@@ -419,7 +419,7 @@ sc_event::trigger()
 
     // trigger the dynamic sensitive threads
 
-    if( ( size = m_threads_dynamic.size() ) != 0 ) 
+    if( ( size = m_threads_dynamic.size() ) != 0 )
     {
 	last_i = size - 1;
 	sc_thread_handle* l_threads_dynamic = &m_threads_dynamic[0];
@@ -552,7 +552,7 @@ void
 sc_event_timed::deallocate( void* p )
 {
     if( p != 0 ) {
-        sc_event_timed_u* q = RCAST<sc_event_timed_u*>( p );
+        sc_event_timed_u* q = reinterpret_cast<sc_event_timed_u*>( p );
         q->next = free_list;
         free_list = q;
     }
@@ -581,7 +581,7 @@ sc_event_list::push_back( const sc_event& e )
     m_events.push_back( &e );
 }
 
-void 
+void
 sc_event_list::push_back( const sc_event_list& el )
 {
     m_events.reserve( size() + el.size() );

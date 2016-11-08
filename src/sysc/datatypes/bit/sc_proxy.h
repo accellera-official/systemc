@@ -106,7 +106,7 @@ void
 assign_p_( sc_proxy<X>& px, const sc_proxy<Y>& py );
 
 // Vector types that are not derived from sc_proxy must have a length()
-// function and an operator []. 
+// function and an operator [].
 
 template <class X, class T>
 inline
@@ -208,10 +208,10 @@ public:
     // casts
 
     X& back_cast()
-	{ return SCAST<X&>( *this ); }
+	{ return static_cast<X&>( *this ); }
 
     const X& back_cast() const
-	{ return SCAST<const X&>( *this ); }
+	{ return static_cast<const X&>( *this ); }
 
 
     // assignment operators
@@ -514,13 +514,13 @@ public:
     // other methods
 
     void print( ::std::ostream& os = ::std::cout ) const
-	{ 
-	    // the test below will force printing in binary if decimal is 
+	{
+	    // the test below will force printing in binary if decimal is
 	    // specified.
 	    if ( sc_io_base(os, SC_DEC) == SC_DEC )
 	        os << to_string();
 	    else
-	        os << to_string(sc_io_base(os,SC_BIN),sc_io_show_base(os)); 
+	        os << to_string(sc_io_base(os,SC_BIN),sc_io_show_base(os));
 	}
 
     void scan( ::std::istream& is = ::std::cin );
@@ -1468,7 +1468,7 @@ sc_proxy<X>::to_anything_unsigned() const
 
 template <class X>
 inline
-uint64 
+uint64
 sc_proxy<X>::to_uint64() const
 {
     // words 1 and 0 returned.
@@ -1479,16 +1479,16 @@ sc_proxy<X>::to_uint64() const
 	SC_REPORT_WARNING( sc_core::SC_ID_VECTOR_CONTAINS_LOGIC_VALUE_, 0 );
     }
     uint64 w = x.get_word( 0 );
-    if( len > SC_DIGIT_SIZE ) 
+    if( len > SC_DIGIT_SIZE )
     {
 	if( x.get_cword( 1 ) != SC_DIGIT_ZERO ) {
 	    SC_REPORT_WARNING( sc_core::SC_ID_VECTOR_CONTAINS_LOGIC_VALUE_, 0 );
 	}
 	uint64 w1 = x.get_word( 1 );
-        w = w | (w1 << SC_DIGIT_SIZE);	
+        w = w | (w1 << SC_DIGIT_SIZE);
 	return w;
     }
-    else if( len == SC_DIGIT_SIZE ) 
+    else if( len == SC_DIGIT_SIZE )
     {
 	return w;
     }
@@ -1507,13 +1507,13 @@ sc_proxy<X>::to_anything_signed() const
     int len = x.length();
     int64 w = 0;
 
-    if( len > SC_DIGIT_SIZE ) 
+    if( len > SC_DIGIT_SIZE )
     {
-	if( x.get_cword( 1 ) != SC_DIGIT_ZERO ) 
+	if( x.get_cword( 1 ) != SC_DIGIT_ZERO )
 	    SC_REPORT_WARNING( sc_core::SC_ID_VECTOR_CONTAINS_LOGIC_VALUE_, 0 );
 	w = x.get_word(1);
     }
-    if( x.get_cword( 0 ) != SC_DIGIT_ZERO ) 
+    if( x.get_cword( 0 ) != SC_DIGIT_ZERO )
 	SC_REPORT_WARNING( sc_core::SC_ID_VECTOR_CONTAINS_LOGIC_VALUE_, 0 );
     w = (w << SC_DIGIT_SIZE) | x.get_word( 0 );
     if( len >= 64 ) {

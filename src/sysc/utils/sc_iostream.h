@@ -56,28 +56,6 @@ typedef ::std::ios::fmtflags fmtflags;
 
 } // namespace sc_dt
 
-// shortcuts that save some typing
-
-#ifdef CCAST
-#    undef CCAST
-#endif
-#define CCAST       const_cast
-
-#ifdef DCAST
-#    undef DCAST
-#endif
-#define DCAST     dynamic_cast
-
-#ifdef RCAST
-#    undef RCAST
-#endif
-#define RCAST reinterpret_cast
-
-#ifdef SCAST
-#    undef SCAST
-#endif
-#define SCAST      static_cast
-
 // $Log: sc_iostream.h,v $
 // Revision 1.3  2011/08/26 20:46:18  acg
 //  Andy Goodrich: moved the modification log to the end of the file to

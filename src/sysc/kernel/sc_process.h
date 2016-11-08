@@ -93,7 +93,7 @@ namespace sc_core {
 // their methods (e.g., sc_module)
 //==============================================================================
 
-class SC_API sc_process_host 
+class SC_API sc_process_host
 {
   public:
     sc_process_host() {}
@@ -105,7 +105,7 @@ class SC_API sc_process_host
 //==============================================================================
 // CLASS sc_process_monitor
 //
-// This class provides a way of monitoring a process' status (e.g., waiting 
+// This class provides a way of monitoring a process' status (e.g., waiting
 // for a thread to complete its execution.) This class is intended to be a base
 // class for classes which need to monitor a process or processes (e.g.,
 // sc_join.) Its methods should be overloaded where notifications are desired.
@@ -119,21 +119,21 @@ class SC_API sc_process_monitor {
     virtual ~sc_process_monitor() {}
     virtual void signal(sc_thread_handle thread_p, int type);
 };
-inline void sc_process_monitor::signal(sc_thread_handle , int ) {}  
+inline void sc_process_monitor::signal(sc_thread_handle , int ) {}
 
 //------------------------------------------------------------------------------
 // PROCESS INVOCATION METHOD OR FUNCTION:
 //
-//  Define SC_USE_MEMBER_FUNC_PTR if we want to use member function pointers 
-//  to implement process dispatch. Otherwise, we'll use a hack that involves 
+//  Define SC_USE_MEMBER_FUNC_PTR if we want to use member function pointers
+//  to implement process dispatch. Otherwise, we'll use a hack that involves
 //  creating a templated invocation object which will invoke the member
 //  function. This should not be necessary, but some compilers (e.g., VC++)
-//  do not allow the conversion from `void (callback_tag::*)()' to 
-//  `void (sc_process_host::*)()'. This is supposed to be OK as long as the 
-//  dynamic type is correct.  C++ Standard 5.4 "Explicit type conversion", 
-//  clause 7: a pointer to member of derived class type may be explicitly 
-//  converted to a pointer to member of an unambiguous non-virtual base class 
-//  type. 
+//  do not allow the conversion from `void (callback_tag::*)()' to
+//  `void (sc_process_host::*)()'. This is supposed to be OK as long as the
+//  dynamic type is correct.  C++ Standard 5.4 "Explicit type conversion",
+//  clause 7: a pointer to member of derived class type may be explicitly
+//  converted to a pointer to member of an unambiguous non-virtual base class
+//  type.
 //-----------------------------------------------------------------------------
 
 #if defined(_MSC_VER)
@@ -218,19 +218,19 @@ class sc_unwind_exception;
 //
 // This class serves as a way of throwing an execption for an aribtrary type
 // without knowing what that type is. A true virtual method in the base
-// class is used to actually throw the execption. A pointer to the base 
+// class is used to actually throw the execption. A pointer to the base
 // class is used internally removing the necessity of knowing what the type
 // of EXCEPT is for code internal to the library.
 //
 // Note the clone() true virtual method. This is used to allow instances
 // of the sc_throw_it<EXCEPT> class to be easily garbage collected. Since
 // an exception may be propogated to more than one process knowing when
-// to garbage collect is non-trivial. So when a call is made to 
-// sc_process_handle::throw_it() an instance of sc_throw_it<EXCEPT> is 
-// allocated on the stack. For each process throwing the exception a copy is 
+// to garbage collect is non-trivial. So when a call is made to
+// sc_process_handle::throw_it() an instance of sc_throw_it<EXCEPT> is
+// allocated on the stack. For each process throwing the exception a copy is
 // made via clone(). That allows those objects to be deleted by the individual
-// processes when they are no longer needed (in this implementation of SystemC 
-// that deletion will occur each time a new exception is thrown ( see 
+// processes when they are no longer needed (in this implementation of SystemC
+// that deletion will occur each time a new exception is thrown ( see
 // sc_thread_process::suspend_me() ).
 //==============================================================================
 class SC_API sc_throw_it_helper {
@@ -257,24 +257,24 @@ class sc_throw_it : public sc_throw_it_helper
 //==============================================================================
 // CLASS sc_process_b - USER INITIATED DYNAMIC PROCESS SUPPORT:
 //
-// This class implements the base class for a threaded process_base process 
-// whose semantics are provided by the true virtual method semantics(). 
-// Classes derived from this one will provide a version of semantics which 
+// This class implements the base class for a threaded process_base process
+// whose semantics are provided by the true virtual method semantics().
+// Classes derived from this one will provide a version of semantics which
 // implements the desired semantics. See the sc_spawn_xxx classes below.
 //
 // Notes:
-//   (1) Object instances of this class maintain a reference count of 
-//       outstanding handles. When the handle count goes to zero the 
-//       object will be deleted. 
+//   (1) Object instances of this class maintain a reference count of
+//       outstanding handles. When the handle count goes to zero the
+//       object will be deleted.
 //   (2) Descriptions of the methods and operators in this class appear with
 //       their implementations.
 //   (3) The m_sticky_reset field is used to handle synchronous resets that
 //       are enabled via the sc_process_handle::sync_reset_on() method. These
-//       resets are not generated by a signal, but rather are modal by 
+//       resets are not generated by a signal, but rather are modal by
 //       method call: sync_reset_on - sync_reset_off.
-//       
+//
 //==============================================================================
-class SC_API sc_process_b : public sc_object { 
+class SC_API sc_process_b : public sc_object {
     friend class sc_simcontext;      // Allow static processes to have base.
     friend class sc_cthread_process; // Child can access parent.
     friend class sc_method_process;  // Child can access parent.
@@ -333,9 +333,9 @@ class SC_API sc_process_b : public sc_object {
         AND_LIST_TIMEOUT
     };
 
-  public: 
-    sc_process_b( const char* name_p, bool is_thread, bool free_host, 
-        SC_ENTRY_FUNC method_p, sc_process_host* host_p, 
+  public:
+    sc_process_b( const char* name_p, bool is_thread, bool free_host,
+        SC_ENTRY_FUNC method_p, sc_process_host* host_p,
         const sc_spawn_options* opt_p );
 
   protected:
@@ -354,7 +354,7 @@ class SC_API sc_process_b : public sc_object {
 
   public:
     static inline sc_process_handle last_created_process_handle();
-        
+
   protected:
     virtual void add_child_object( sc_object* );
     void add_static_event( const sc_event& );
@@ -368,7 +368,7 @@ class SC_API sc_process_b : public sc_object {
     void remove_dynamic_events( bool skip_timeout = false );
     void remove_static_events();
     inline void set_last_report( sc_report* last_p )
-        {  
+        {
             delete m_last_report_p;
             m_last_report_p = last_p;
         }
@@ -500,7 +500,7 @@ sc_process_b::get_child_objects() const
 //------------------------------------------------------------------------------
 inline void sc_process_b::initially_in_reset( bool async )
 {
-    if ( async ) 
+    if ( async )
         m_active_areset_n++;
     else
         m_active_reset_n++;
@@ -509,7 +509,7 @@ inline void sc_process_b::initially_in_reset( bool async )
 //------------------------------------------------------------------------------
 //"sc_process_b::is_disabled"
 //
-// This method returns true if this process is disabled. 
+// This method returns true if this process is disabled.
 //------------------------------------------------------------------------------
 inline bool sc_process_b::is_disabled() const
 {
@@ -541,7 +541,7 @@ inline bool sc_process_b::is_unwinding() const
 //"sc_process_b::start_unwinding"
 //
 // This method flags that this object instance should start unwinding if the
-// current throw status requires an unwind. 
+// current throw status requires an unwind.
 //
 // Result is true if the flag is set, false if the flag is already set.
 //------------------------------------------------------------------------------
@@ -604,7 +604,7 @@ inline sc_curr_proc_kind sc_process_b::proc_kind() const
 //------------------------------------------------------------------------------
 //"sc_process_b::reference_decrement"
 //
-// This inline method decrements the number of outstanding references to this 
+// This inline method decrements the number of outstanding references to this
 // object instance. If the number of references goes to zero, this object
 // can be deleted in "sc_process_b::delete_process()".
 //------------------------------------------------------------------------------
@@ -618,7 +618,7 @@ inline void sc_process_b::reference_decrement()
 //------------------------------------------------------------------------------
 //"sc_process_b::reference_increment"
 //
-// This inline method increments the number of outstanding references to this 
+// This inline method increments the number of outstanding references to this
 // object instance.
 //------------------------------------------------------------------------------
 inline void sc_process_b::reference_increment()
@@ -630,12 +630,12 @@ inline void sc_process_b::reference_increment()
 //------------------------------------------------------------------------------
 //"sc_process_b::semantics"
 //
-// This inline method invokes the semantics for this object instance. 
+// This inline method invokes the semantics for this object instance.
 // We check to see if we are initially in reset and then invoke the
 // process semantics.
 //
 // Notes:
-//   (1) For a description of the process reset mechanism see the top of 
+//   (1) For a description of the process reset mechanism see the top of
 //       the file sc_reset.cpp.
 //------------------------------------------------------------------------------
 struct SC_API scoped_flag
@@ -658,8 +658,8 @@ inline void sc_process_b::semantics()
 
     // See if we need to trigger the notify event:
 
-    if ( m_reset_event_p && 
-         ( (m_throw_status == THROW_SYNC_RESET) || 
+    if ( m_reset_event_p &&
+         ( (m_throw_status == THROW_SYNC_RESET) ||
 	   (m_throw_status == THROW_ASYNC_RESET) )
     ) {
         trigger_reset_event();
@@ -667,7 +667,7 @@ inline void sc_process_b::semantics()
 
     // Set the new reset status of this object based on the reset counts:
 
-    m_throw_status = m_active_areset_n ? THROW_ASYNC_RESET : 
+    m_throw_status = m_active_areset_n ? THROW_ASYNC_RESET :
         ( m_active_reset_n  ?  THROW_SYNC_RESET : THROW_NONE);
 
     // Dispatch the actual semantics for the process:
@@ -675,7 +675,7 @@ inline void sc_process_b::semantics()
 #   ifndef SC_USE_MEMBER_FUNC_PTR
         m_semantics_method_p->invoke( m_semantics_host_p );
 #   else
-        (m_semantics_host_p->*m_semantics_method_p)(); 
+        (m_semantics_host_p->*m_semantics_method_p)();
 #   endif
 }
 
@@ -709,12 +709,12 @@ inline bool sc_process_b::timed_out() const
   changes you are making here.
 
       Name, Affiliation, Date: Andy Goodrich, Forte Design Systems, 12 Aug 05
-  Description of Modification: This is the rewrite of process support. It 
+  Description of Modification: This is the rewrite of process support. It
                                contains some code from the original
                                sc_process.h by Stan Liao, and the now-defunct
                                sc_process_b.h by Stan Liao and Martin
                                Janssen, all of Synopsys, Inc., It also contains
-                               code from the original sc_process_b.h by 
+                               code from the original sc_process_b.h by
                                Andy Goodrich of Forte Design Systems and
                                Bishnupriya Bhattacharya of Cadence Design
                                Systems.

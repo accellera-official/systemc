@@ -89,7 +89,7 @@ sc_time_tuple::init( value_type val )
         time_params->time_resolution_fixed = true;
 #   endif // SC_MAXTIME_ALLOWED_
 
-    value_type tr  = SCAST<sc_dt::int64>( time_params->time_resolution );
+    value_type tr  = static_cast<sc_dt::int64>( time_params->time_resolution );
     unsigned scale = 0;
     while( ( tr % 10 ) == 0 ) {
         tr /= 10;
@@ -167,7 +167,7 @@ from_value_and_unit( double v, sc_time_unit tu, sc_time_params* tp )
         double scale_fac = time_values[tu] / tp->time_resolution;
         // linux bug workaround; don't change next two lines
         volatile double tmp = v * scale_fac + 0.5;
-        t = SCAST<sc_dt::int64>( tmp );
+        t = static_cast<sc_dt::int64>( tmp );
         tp->time_resolution_fixed = true;
     }
     return t;
@@ -200,11 +200,11 @@ sc_time::sc_time( double v, bool scale )
 		time_params->default_time_unit );
 	    // linux bug workaround; don't change next two lines
 	    volatile double tmp = v * scale_fac + 0.5;
-	    m_value = SCAST<sc_dt::int64>( tmp );
+	    m_value = static_cast<sc_dt::int64>( tmp );
 	} else {
 	    // linux bug workaround; don't change next two lines
 	    volatile double tmp = v + 0.5;
-	    m_value = SCAST<sc_dt::int64>( tmp );
+	    m_value = static_cast<sc_dt::int64>( tmp );
 	}
 	time_params->time_resolution_fixed = true;
     }
@@ -228,7 +228,7 @@ sc_time::sc_time( value_type v, bool scale )
 	    // linux bug workaround; don't change next two lines
 	    volatile double tmp = sc_dt::uint64_to_double( v ) *
 		                  scale_fac + 0.5;
-	    m_value = SCAST<sc_dt::int64>( tmp );
+	    m_value = static_cast<sc_dt::int64>( tmp );
 	} else {
 	    m_value = v;
 	}
@@ -411,14 +411,14 @@ sc_set_time_resolution( double v, sc_time_unit tu )
 	SC_REPORT_WARNING( SC_ID_DEFAULT_TIME_UNIT_CHANGED_, 0 );
 	time_params->default_time_unit = 1;
     } else {
-	time_params->default_time_unit = SCAST<sc_dt::int64>( time_unit );
+	time_params->default_time_unit = static_cast<sc_dt::int64>( time_unit );
     }
 
     time_params->time_resolution = resolution;
     time_params->time_resolution_specified = true;
 }
 
-sc_time 
+sc_time
 sc_get_time_resolution()
 {
     return sc_time::from_value( sc_dt::UINT64_ONE );
@@ -435,7 +435,7 @@ sc_set_default_time_unit( double v, sc_time_unit tu )
         SC_REPORT_INFO(SC_ID_IEEE_1666_DEPRECATION_,
 	    "deprecated function: sc_set_default_time_unit");
     }
-    
+
     // first perform the necessary checks
 
     // must be positive
@@ -478,7 +478,7 @@ sc_set_default_time_unit( double v, sc_time_unit tu )
 			 "value smaller than time resolution" );
     }
 
-    time_params->default_time_unit = SCAST<sc_dt::int64>( time_unit );
+    time_params->default_time_unit = static_cast<sc_dt::int64>( time_unit );
     time_params->default_time_unit_specified = true;
 }
 
