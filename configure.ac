@@ -1,17 +1,19 @@
 dnl ***************************************************************************
 dnl
-dnl  The following code is derived, directly or indirectly, from the SystemC
-dnl  source code Copyright (c) 1996-2014 by all Contributors.
-dnl  All Rights reserved.
+dnl  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+dnl  more contributor license agreements.  See the NOTICE file distributed
+dnl  with this work for additional information regarding copyright ownership.
+dnl  Accellera licenses this file to you under the Apache License, Version 2.0
+dnl  (the "License"); you may not use this file except in compliance with the
+dnl  License.  You may obtain a copy of the License at
 dnl
-dnl  The contents of this file are subject to the restrictions and limitations
-dnl  set forth in the SystemC Open Source License (the "License");
-dnl  You may not use this file except in compliance with such restrictions and
-dnl  limitations. You may obtain instructions on how to receive a copy of the
-dnl  License at http://www.accellera.org/. Software distributed by Contributors
-dnl  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-dnl  ANY KIND, either express or implied. See the License for the specific
-dnl  language governing rights and limitations under the License.
+dnl   http://www.apache.org/licenses/LICENSE-2.0
+dnl
+dnl  Unless required by applicable law or agreed to in writing, software
+dnl  distributed under the License is distributed on an "AS IS" BASIS,
+dnl  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+dnl  implied.  See the License for the specific language governing
+dnl  permissions and limitations under the License.
 dnl
 dnl ***************************************************************************
 dnl
@@ -54,7 +56,7 @@ dnl
 dnl Some simple checks.
 dnl
 AC_CANONICAL_SYSTEM
-AM_INIT_AUTOMAKE([1.10 tar-pax -Werror -Wno-portability no-define subdir-objects])
+AM_INIT_AUTOMAKE([1.10 tar-pax -Werror -Wno-portability no-define subdir-objects foreign])
 dnl 1.10 needed for .s file support of LIBTOOLFLAGS
 
 dnl enable silent rules, if present
