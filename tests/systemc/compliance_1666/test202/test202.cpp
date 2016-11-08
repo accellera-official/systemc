@@ -1,4 +1,5 @@
 #include <systemc>
+#include <cstring>
 using namespace sc_core;
 using namespace sc_dt;
 using std::cout;
