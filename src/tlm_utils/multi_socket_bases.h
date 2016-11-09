@@ -186,7 +186,7 @@ class callback_binder_fw: public tlm::tlm_fw_transport_if<TYPES>{
     //the DMI method of the fw interface
     bool get_direct_mem_ptr(transaction_type& trans, tlm::tlm_dmi&  dmi_data){
       //check if a callback is registered
-      if ((m_dmi_f == 0) && (m_dmi_f && m_dmi_f->empty())) {
+      if ((m_dmi_f == 0) || (m_dmi_f && m_dmi_f->empty())) {
         dmi_data.allow_none();
         dmi_data.set_start_address(0x0);
         dmi_data.set_end_address((sc_dt::uint64)-1);
