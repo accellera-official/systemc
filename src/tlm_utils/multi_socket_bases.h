@@ -81,7 +81,7 @@ public: \
     return m_fn(m_mod,m_mem_fn, index, TLM_ARG_LIST_WITHOUT_TYPES); \
   } \
 \
-  bool empty(){return (m_mod==0 || m_mem_fn==0 || m_fn==0);}\
+  bool is_valid(){return (m_mod!=0 && m_mem_fn!=0 && m_fn!=0);}\
 \
 protected: \
   call_fn m_fn;\
@@ -164,46 +164,46 @@ class callback_binder_fw: public tlm::tlm_fw_transport_if<TYPES>{
                                 phase_type& p,
                                 sc_core::sc_time& t){
       //check if a callback is registered
-      if ((m_nb_f == 0) || (m_nb_f && m_nb_f->empty())) {
-        //std::cerr<<"No function registered"<<std::endl;
-        SC_REPORT_ERROR("/OSCI_TLM-2/multi_socket","Call to nb_transport_fw without a registered callback for nb_transport_fw.");
-      }
-      else
+      if (m_nb_f && m_nb_f->is_valid()) {
         return (*m_nb_f)(m_id, txn, p, t); //do the callback
+      }
+
+      SC_REPORT_ERROR("/OSCI_TLM-2/multi_socket","Call to nb_transport_fw without a registered callback for nb_transport_fw.");
       return tlm::TLM_ACCEPTED; //unreachable
     }
     
     //the b_transport method of the fw interface
     void b_transport(transaction_type& trans,sc_core::sc_time& t){
       //check if a callback is registered
-      if ((m_b_f == 0) || (m_b_f && m_b_f->empty())) {
-        SC_REPORT_ERROR("/OSCI_TLM-2/multi_socket","Call to b_transport without a registered callback for b_transport.");
-      }
-      else
+      if (m_b_f && m_b_f->is_valid()) {
         (*m_b_f)(m_id, trans,t); //do the callback
+        return;
+      }
+
+      SC_REPORT_ERROR("/OSCI_TLM-2/multi_socket","Call to b_transport without a registered callback for b_transport.");
     }
     
     //the DMI method of the fw interface
     bool get_direct_mem_ptr(transaction_type& trans, tlm::tlm_dmi&  dmi_data){
       //check if a callback is registered
-      if ((m_dmi_f == 0) || (m_dmi_f && m_dmi_f->empty())) {
-        dmi_data.allow_none();
-        dmi_data.set_start_address(0x0);
-        dmi_data.set_end_address((sc_dt::uint64)-1);
-        return false;
-      }
-      else
+      if (m_dmi_f && m_dmi_f->is_valid()) {
         return (*m_dmi_f)(m_id, trans,dmi_data); //do the callback
+      }
+
+      dmi_data.allow_none();
+      dmi_data.set_start_address(0x0);
+      dmi_data.set_end_address((sc_dt::uint64)-1);
+      return false;
     }
     
     //the debug method of the fw interface
     unsigned int transport_dbg(transaction_type& trans){
       //check if a callback is registered
-      if ((m_dbg_f == 0) || (m_dbg_f && m_dbg_f->empty())) {
-        return 0;
-      }
-      else
+      if (m_dbg_f && m_dbg_f->is_valid()) {
         return (*m_dbg_f)(m_id, trans); //do the callback
+      }
+
+      return 0;
     }
     
     //the SystemC standard callback register_port:
@@ -267,22 +267,20 @@ class callback_binder_bw: public tlm::tlm_bw_transport_if<TYPES>{
                                 phase_type& p,
                                 sc_core::sc_time& t){
       //check if a callback is registered
-      if ((m_nb_f == 0) || (m_nb_f && m_nb_f->empty())) {
-        SC_REPORT_ERROR("/OSCI_TLM-2/multi_socket","Call to nb_transport_bw without a registered callback for nb_transport_bw");
-      }
-      else
+      if (m_nb_f && m_nb_f->is_valid()) {
         return (*m_nb_f)(m_id, txn, p, t); //do the callback
+      }
+
+      SC_REPORT_ERROR("/OSCI_TLM-2/multi_socket","Call to nb_transport_bw without a registered callback for nb_transport_bw");
       return tlm::TLM_ACCEPTED; //unreachable
     }
     
     //the DMI method of the bw interface
     void invalidate_direct_mem_ptr(sc_dt::uint64 l, sc_dt::uint64 u){
       //check if a callback is registered
-      if ((m_dmi_f == 0) || (m_dmi_f && m_dmi_f->empty())) {
-        return;
-      }
-      else
+      if (m_dmi_f && m_dmi_f->is_valid()) {
         (*m_dmi_f)(m_id,l,u); //do the callback
+      }
     }
 
     //register callbacks for all bw interface methods at once
