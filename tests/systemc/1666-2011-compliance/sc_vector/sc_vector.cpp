@@ -35,6 +35,7 @@
 
 #define SC_INCLUDE_DYNAMIC_PROCESSES
 #include <systemc>
+#include <cstring>
 
 using namespace sc_core;
 using std::cout;
