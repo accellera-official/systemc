@@ -26,16 +26,17 @@
   CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
 
-
-#include <cmath>
-#include <sstream>
-#include <cstdlib>
-#include <cctype>
+#include "sysc/kernel/sc_time.h"
 
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/kernel/sc_simcontext.h"
-#include "sysc/kernel/sc_time.h"
 #include "sysc/utils/sc_utils_ids.h"
+
+#include <cctype>
+#include <cmath>
+#include <cstdlib>
+#include <cstring>
+#include <sstream>
 
 #ifdef SC_ENABLE_EARLY_MAXTIME_CREATION
 #  define SC_MAXTIME_ALLOWED_ 1

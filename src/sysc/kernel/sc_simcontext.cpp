@@ -28,7 +28,8 @@
   CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
 
-#include <algorithm>
+#include "sysc/kernel/sc_simcontext.h"
+#include "sysc/kernel/sc_simcontext_int.h"
 
 #include "sysc/kernel/sc_cor_fiber.h"
 #include "sysc/kernel/sc_cor_pthread.h"
@@ -43,8 +44,6 @@
 #include "sysc/kernel/sc_method_process.h"
 #include "sysc/kernel/sc_thread_process.h"
 #include "sysc/kernel/sc_process_handle.h"
-#include "sysc/kernel/sc_simcontext.h"
-#include "sysc/kernel/sc_simcontext_int.h"
 #include "sysc/kernel/sc_reset.h"
 #include "sysc/kernel/sc_ver.h"
 #include "sysc/kernel/sc_boost.h"
@@ -58,6 +57,8 @@
 #include "sysc/utils/sc_list.h"
 #include "sysc/utils/sc_utils_ids.h"
 
+#include <algorithm>
+#include <cstring>
 #include <sstream>
 
 // DEBUGGING MACROS:
