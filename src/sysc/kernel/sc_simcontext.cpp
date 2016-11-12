@@ -407,6 +407,7 @@ sc_simcontext::init()
     m_cor_pkg = 0;
     m_method_invoker_p = NULL;
     m_cor = 0;
+    m_reset_finder_q = 0;
     m_in_simulator_control = false;
     m_start_of_simulation_called = false;
     m_end_of_simulation_called = false;
@@ -436,6 +437,11 @@ sc_simcontext::clean()
     delete m_port_registry;
     delete m_module_registry;
     delete m_object_manager;
+    while( m_reset_finder_q ) {
+        sc_reset_finder* rf = m_reset_finder_q;
+        m_reset_finder_q = rf->m_next_p;
+        delete rf;
+    }
 }
 
 
@@ -454,7 +460,7 @@ sc_simcontext::sc_simcontext() :
     m_execution_phase(phase_initialize), m_error(0),
     m_in_simulator_control(false), m_end_of_simulation_called(false),
     m_simulation_status(SC_ELABORATION), m_start_of_simulation_called(false),
-    m_cor_pkg(0), m_cor(0)
+    m_cor_pkg(0), m_cor(0), m_reset_finder_q(0)
 {
     init();
 }
@@ -713,7 +719,7 @@ sc_simcontext::elaborate()
     m_prim_channel_registry->elaboration_done();
     m_module_registry->elaboration_done();
     SC_DO_PHASE_CALLBACK_(elaboration_done);
-    sc_reset::reconcile_resets();
+    sc_reset::reconcile_resets(m_reset_finder_q);
 
     // check for call(s) to sc_stop
     if( m_forced_stop ) {
@@ -1307,6 +1313,13 @@ sc_simcontext::next_cor()
     } else {
 	return m_cor;
     }
+}
+
+void
+sc_simcontext::add_reset_finder( sc_reset_finder* reset_finder )
+{
+    reset_finder->m_next_p = m_reset_finder_q;
+    m_reset_finder_q = reset_finder;
 }
 
 const ::std::vector<sc_object*>&

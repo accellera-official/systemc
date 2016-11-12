@@ -63,46 +63,12 @@
 
 namespace sc_core {
 
-class sc_reset_finder;
-static sc_reset_finder* reset_finder_q=0;  // Q of reset finders to reconcile.
-
-//==============================================================================
-// sc_reset_finder - place holder class for a port reset signal until it is
-//                   bound and an interface class is available. When the port
-//                   has been bound the information in this class will be used
-//                   to initialize its sc_reset object instance.
-//==============================================================================
-class SC_API sc_reset_finder {
-    friend class sc_reset;
-  public:
-    sc_reset_finder( bool async, const sc_in<bool>* port_p, bool level,
-        sc_process_b* target_p);
-    sc_reset_finder( bool async, const sc_inout<bool>* port_p, bool level,
-        sc_process_b* target_p);
-    sc_reset_finder( bool async, const sc_out<bool>* port_p, bool level,
-        sc_process_b* target_p);
-
-  protected:
-    bool                   m_async;     // True if asynchronous reset.
-    bool                   m_level;     // Level for reset.
-    sc_reset_finder*       m_next_p;    // Next reset finder in list.
-    const sc_in<bool>*     m_in_p;      // Port for which reset is needed.
-    const sc_inout<bool>*  m_inout_p;   // Port for which reset is needed.
-    const sc_out<bool>*    m_out_p;     // Port for which reset is needed.
-    sc_process_b*          m_target_p;  // Process to reset.
-
-  private: // disabled
-    sc_reset_finder( const sc_reset_finder& );
-    const sc_reset_finder& operator = ( const sc_reset_finder& );
-};
-
 inline sc_reset_finder::sc_reset_finder(
     bool async, const sc_in<bool>* port_p, bool level, sc_process_b* target_p) :
     m_async(async), m_level(level), m_next_p(0), m_in_p(port_p), m_inout_p(0),
     m_out_p(0), m_target_p(target_p)
 {
-    m_next_p = reset_finder_q;
-    reset_finder_q = this;
+    sc_get_curr_simcontext()->add_reset_finder(this);
 }
 
 inline sc_reset_finder::sc_reset_finder(
@@ -111,8 +77,7 @@ inline sc_reset_finder::sc_reset_finder(
     m_async(async), m_level(level), m_next_p(0), m_in_p(0), m_inout_p(port_p),
     m_out_p(0), m_target_p(target_p)
 {
-    m_next_p = reset_finder_q;
-    reset_finder_q = this;
+    sc_get_curr_simcontext()->add_reset_finder(this);
 }
 
 inline sc_reset_finder::sc_reset_finder(
@@ -121,8 +86,7 @@ inline sc_reset_finder::sc_reset_finder(
     m_async(async), m_level(level), m_next_p(0), m_in_p(0), m_inout_p(0),
     m_out_p(port_p), m_target_p(target_p)
 {
-    m_next_p = reset_finder_q;
-    reset_finder_q = this;
+    sc_get_curr_simcontext()->add_reset_finder(this);
 }
 
 
@@ -159,7 +123,7 @@ void sc_reset::notify_processes()
 // Notes:
 //   (1) If reset is asserted we tell the process that it is in reset.
 //------------------------------------------------------------------------------
-void sc_reset::reconcile_resets()
+void sc_reset::reconcile_resets(sc_reset_finder* reset_finder_q)
 {
     const sc_signal_in_if<bool>*  iface_p;      // Interface to reset signal.
     sc_reset_finder*              next_p;       // Next finder to process.
@@ -196,7 +160,6 @@ void sc_reset::reconcile_resets()
 	    now_p->m_target_p->initially_in_reset( now_p->m_async );
         delete now_p;
     }
-    reset_finder_q = NULL;
 }
 
 
