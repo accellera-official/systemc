@@ -152,6 +152,8 @@
 #     define SC_BOOST_COMPILER_VERSION 11.0
 #   elif _MSC_VER < 1900
 #     define SC_BOOST_COMPILER_VERSION 12.0
+#   elif _MSC_VER < 2000
+#     define SC_BOOST_COMPILER_VERSION 14.0
 #   else
 #     define SC_BOOST_COMPILER_VERSION _MSC_VER
 #   endif
@@ -166,8 +168,8 @@
 #error "Compiler not supported or configured - please reconfigure"
 #endif
 //
-// last known and checked version is 1800 (VC 12.0 / 2013):
-#if (_MSC_VER > 1800)
+// last known and checked version is 1900 (VC 14.0 / 2015):
+#if (_MSC_VER > 1900)
 #  if defined(SC_BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  else

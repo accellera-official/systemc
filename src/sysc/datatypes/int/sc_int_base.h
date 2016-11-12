@@ -1,17 +1,19 @@
 /*****************************************************************************
 
-  The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2014 by all Contributors.
-  All Rights reserved.
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
 
-  The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License (the "License");
-  You may not use this file except in compliance with such restrictions and
-  limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.accellera.org/. Software distributed by Contributors
-  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  ANY KIND, either express or implied. See the License for the specific
-  language governing rights and limitations under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
 
  *****************************************************************************/
 
@@ -71,13 +73,13 @@
 #ifndef SC_INT_BASE_H
 #define SC_INT_BASE_H
 
+#include "sysc/kernel/sc_cmnhdr.h"
 #include "sysc/kernel/sc_object.h"
 #include "sysc/datatypes/misc/sc_value_base.h"
 #include "sysc/datatypes/int/sc_int_ids.h"
 #include "sysc/datatypes/int/sc_length_param.h"
 #include "sysc/datatypes/int/sc_nbdefs.h"
 #include "sysc/datatypes/int/sc_uint_base.h"
-#include "sysc/utils/sc_iostream.h"
 #include "sysc/utils/sc_temporary.h"
 
 
@@ -105,8 +107,11 @@ class sc_fxval_fast;
 class sc_fxnum;
 class sc_fxnum_fast;
 
+} // namespace sc_dt
 
-extern const uint_type mask_int[SC_INTWIDTH][SC_INTWIDTH];
+namespace sc_dt {
+
+extern SC_API const uint_type mask_int[SC_INTWIDTH][SC_INTWIDTH];
 
 // friend operator declarations
     // relational operators
@@ -130,7 +135,7 @@ extern const uint_type mask_int[SC_INTWIDTH][SC_INTWIDTH];
 //  Proxy class for sc_int bit selection (r-value only).
 // ----------------------------------------------------------------------------
 
-class sc_int_bitref_r : public sc_value_base
+class SC_API sc_int_bitref_r : public sc_value_base
 {
     friend class sc_int_base;
 
@@ -251,7 +256,7 @@ operator << ( ::std::ostream&, const sc_int_bitref_r& );
 //  Proxy class for sc_int bit selection (r-value and l-value).
 // ----------------------------------------------------------------------------
 
-class sc_int_bitref
+class SC_API sc_int_bitref
     : public sc_int_bitref_r
 {
     friend class sc_int_base;
@@ -311,7 +316,7 @@ operator >> ( ::std::istream&, sc_int_bitref& );
 //  Proxy class for sc_int part selection (r-value only).
 // ----------------------------------------------------------------------------
 
-class sc_int_subref_r : public sc_value_base
+class SC_API sc_int_subref_r : public sc_value_base
 {
     friend class sc_int_base;
     friend class sc_int_signal;
@@ -338,7 +343,7 @@ public:
     // copy constructor
 
     sc_int_subref_r( const sc_int_subref_r& a ) :
-        sc_value_base(a), m_left( a.m_left ), m_obj_p( a.m_obj_p ), 
+        sc_value_base(a), m_left( a.m_left ), m_obj_p( a.m_obj_p ),
 	m_right( a.m_right )
         {}
 
@@ -445,7 +450,7 @@ operator << ( ::std::ostream&, const sc_int_subref_r& );
 //  Proxy class for sc_int part selection (r-value and l-value).
 // ----------------------------------------------------------------------------
 
-class sc_int_subref
+class SC_API sc_int_subref
     : public sc_int_subref_r
 {
     friend class sc_int_base;
@@ -534,7 +539,7 @@ operator >> ( ::std::istream&, sc_int_subref& );
 //  Base class for sc_int.
 // ----------------------------------------------------------------------------
 
-class sc_int_base : public sc_value_base
+class SC_API sc_int_base : public sc_value_base
 {
     friend class sc_int_bitref_r;
     friend class sc_int_bitref;
@@ -580,7 +585,7 @@ public:
 	{ check_length(); extend_sign(); }
 
     sc_int_base( const sc_int_base& a )
-	: sc_value_base(a), m_val( a.m_val ), m_len( a.m_len ), 
+	: sc_value_base(a), m_val( a.m_val ), m_len( a.m_len ),
 	  m_ulen( a.m_ulen )
 	{}
 
@@ -1374,6 +1379,11 @@ operator >> ( ::std::istream& is, sc_int_base& a )
 
 } // namespace sc_dt
 
+// explicitly export template instantiations
+namespace sc_core {
+    SC_API_TEMPLATE_ template class SC_API sc_vpool<sc_dt::sc_int_bitref>;
+    SC_API_TEMPLATE_ template class SC_API sc_vpool<sc_dt::sc_int_subref>;
+} // namespace sc_core
 
 #endif
 

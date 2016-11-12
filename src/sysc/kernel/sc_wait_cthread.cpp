@@ -1,17 +1,19 @@
 /*****************************************************************************
 
-  The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2014 by all Contributors.
-  All Rights reserved.
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
 
-  The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License (the "License");
-  You may not use this file except in compliance with such restrictions and
-  limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.accellera.org/. Software distributed by Contributors
-  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  ANY KIND, either express or implied. See the License for the specific
-  language governing rights and limitations under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
 
  *****************************************************************************/
 
@@ -33,7 +35,7 @@
 #include "sysc/kernel/sc_wait_cthread.h"
 #include "sysc/communication/sc_port.h"
 #include "sysc/kernel/sc_wait.h"
-namespace sc_core 
+namespace sc_core
 {
 
 // for SC_CTHREADs
@@ -44,7 +46,7 @@ halt( sc_simcontext* simc )
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();
     switch( cpi->kind ) {
     case SC_CTHREAD_PROC_: {
-	RCAST<sc_cthread_handle>( cpi->process_handle )->wait_halt();
+	reinterpret_cast<sc_cthread_handle>( cpi->process_handle )->wait_halt();
 	break;
     }
     default:
@@ -64,9 +66,9 @@ wait( int n, sc_simcontext* simc )
 	SC_REPORT_ERROR( SC_ID_WAIT_N_INVALID_, msg );
     }
     switch( cpi->kind ) {
-      case SC_THREAD_PROC_: 
-      case SC_CTHREAD_PROC_: 
-	RCAST<sc_cthread_handle>( cpi->process_handle )->wait_cycles( n );
+      case SC_THREAD_PROC_:
+      case SC_CTHREAD_PROC_:
+	reinterpret_cast<sc_cthread_handle>( cpi->process_handle )->wait_cycles( n );
         break;
       default:
         SC_REPORT_ERROR( SC_ID_WAIT_NOT_ALLOWED_, "\n        "
@@ -79,7 +81,7 @@ wait( int n, sc_simcontext* simc )
 void
 at_posedge( const sc_signal_in_if<bool>& s, sc_simcontext* simc )
 {
-    if( s.read() == true ) 
+    if( s.read() == true )
         do { wait(simc); } while ( s.read() == true );
     do { wait(simc); } while ( s.read() == false );
 }
@@ -87,7 +89,7 @@ at_posedge( const sc_signal_in_if<bool>& s, sc_simcontext* simc )
 void
 at_posedge( const sc_signal_in_if<sc_dt::sc_logic>& s, sc_simcontext* simc )
 {
-    if( s.read() == '1' ) 
+    if( s.read() == '1' )
         do { wait(simc); } while ( s.read() == '1' );
     do { wait(simc); } while ( s.read() == '0' );
 }
@@ -95,7 +97,7 @@ at_posedge( const sc_signal_in_if<sc_dt::sc_logic>& s, sc_simcontext* simc )
 void
 at_negedge( const sc_signal_in_if<bool>& s, sc_simcontext* simc )
 {
-    if( s.read() == false ) 
+    if( s.read() == false )
         do { wait(simc); } while ( s.read() == false );
     do { wait(simc); } while ( s.read() == true );
 }
@@ -103,7 +105,7 @@ at_negedge( const sc_signal_in_if<bool>& s, sc_simcontext* simc )
 void
 at_negedge( const sc_signal_in_if<sc_dt::sc_logic>& s, sc_simcontext* simc )
 {
-    if( s.read() == '0' ) 
+    if( s.read() == '0' )
         do { wait(simc); } while ( s.read() == '0' );
     do { wait(simc); } while ( s.read() == '1' );
 }
@@ -111,7 +113,7 @@ at_negedge( const sc_signal_in_if<sc_dt::sc_logic>& s, sc_simcontext* simc )
 
 } // namespace sc_core
 
-/* 
+/*
 $Log: sc_wait_cthread.cpp,v $
 Revision 1.6  2011/08/26 20:46:11  acg
  Andy Goodrich: moved the modification log to the end of the file to

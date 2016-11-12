@@ -1,17 +1,21 @@
-/*******************************************************************************
-  The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2014 by all Contributors.
-  All Rights reserved.
+/*****************************************************************************
 
-  The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License (the "License");
-  You may not use this file except in compliance with such restrictions and
-  limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.accellera.org/. Software distributed by Contributors
-  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  ANY KIND, either express or implied. See the License for the specific
-  language governing rights and limitations under the License.
-*******************************************************************************/
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
+
+ *****************************************************************************/
 //==============================================================================
 ///  @file memory.h
 //
@@ -29,23 +33,23 @@
 
 #include "tlm.h"                                // TLM headers
 
-class memory                          
+class memory
 {
 // Member Methods  ====================================================
-  
+
   public:
-    
+
 //=====================================================================
 /// @fn memory.h
 //
 ///  @brief memory Constructor
 //
 ///  @details
-//       Initialize member variables, include allocating and initializing 
+//       Initialize member variables, include allocating and initializing
 //       the actual memory
 //
 //=====================================================================
-  memory              
+  memory
   (
     const unsigned int ID                 ///< initiator ID for messaging
   , sc_core::sc_time   read_delay         ///< delay for reads
@@ -65,12 +69,12 @@ class memory
  ///    and updating the time based upon initialization parameters
  ///
  ///===================================================================
-  void  
+  void
   operation(
-      tlm::tlm_generic_payload  &gp           ///< TLM2 GP reference 
-    , sc_core::sc_time          &delay_time   ///< transaction delay 
-    );    
-   
+      tlm::tlm_generic_payload  &gp           ///< TLM2 GP reference
+    , sc_core::sc_time          &delay_time   ///< transaction delay
+    );
+
  //====================================================================
  /// @fn get_delay
  ///
@@ -82,37 +86,37 @@ class memory
  ///    and updating the time based upon initialization parameters
  ///
  ///===================================================================
-  void 
+  void
   get_delay(
       tlm::tlm_generic_payload  &gp           ///< TLM2 GP reference
     , sc_core::sc_time          &delay_time   ///< time to be updated
     );
-  
+
   unsigned char* get_mem_ptr(void);
 
   private:
- 
+
 /// Check the address vs. range passed at construction
-	  
-  tlm::tlm_response_status 
+
+  tlm::tlm_response_status
   check_address
   (
-    tlm::tlm_generic_payload  &gp        
-  );   
-  
+    tlm::tlm_generic_payload  &gp
+  );
+
 // Member Variables/Objects  ===================================================
-    
+
    private:
-    
-   unsigned int          m_ID;                    ///< initiator ID
-   sc_core::sc_time      m_read_delay;            ///< read delay
-   sc_core::sc_time      m_write_delay;           ///< write delay
-   sc_dt::uint64         m_memory_size;           ///< memory size (bytes)
-   unsigned int          m_memory_width;          ///< memory width (bytes)
-    
-   unsigned char         *m_memory;               ///< memory
-   
-   bool                  m_previous_warning;      ///< limits to one message
-    
-}; 
+
+   const unsigned int     m_ID;                   ///< initiator ID
+   const sc_core::sc_time m_read_delay;           ///< read delay
+   const sc_core::sc_time m_write_delay;          ///< write delay
+   const sc_dt::uint64    m_memory_size;          ///< memory size (bytes)
+   const unsigned int     m_memory_width;         ///< memory width (bytes)
+
+   unsigned char          *m_memory;              ///< memory
+
+   bool                   m_previous_warning;     ///< limits to one message
+
+};
  #endif /* __MEMORY_H__ */

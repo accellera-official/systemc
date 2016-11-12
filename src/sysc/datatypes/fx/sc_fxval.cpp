@@ -1,17 +1,19 @@
 /*****************************************************************************
 
-  The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2014 by all Contributors.
-  All Rights reserved.
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
 
-  The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License (the "License");
-  You may not use this file except in compliance with such restrictions and
-  limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.accellera.org/. Software distributed by Contributors
-  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  ANY KIND, either express or implied. See the License for the specific
-  language governing rights and limitations under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
 
  *****************************************************************************/
 
@@ -43,10 +45,10 @@
 // the source.
 //
 
-#include <ctype.h>
-#include <stdlib.h>
-#include <math.h>
-#include <float.h>
+#include <cctype>
+#include <cstdlib>
+#include <cmath>
+#include <cfloat>
 
 #include "sysc/datatypes/fx/sc_fxval.h"
 
@@ -206,7 +208,7 @@ print_dec( scfx_string& s, scfx_ieee_double id, int w_prefix, sc_fmt fmt )
     // split 'id' into its integer and fractional part
 
     double int_part;
-    double frac_part = modf( static_cast<double>( id ), &int_part );
+    double frac_part = std::modf( static_cast<double>( id ), &int_part );
 
     int i;
 
@@ -217,7 +219,7 @@ print_dec( scfx_string& s, scfx_ieee_double id, int w_prefix, sc_fmt fmt )
     
     if( int_part != 0.0 )
     {
-	int_digits = (int) ceil( log10( int_part + 1.0 ) );
+	int_digits = (int) std::ceil( std::log10( int_part + 1.0 ) );
 
 	int len = s.length();
 	s.append( int_digits );
@@ -226,7 +228,7 @@ print_dec( scfx_string& s, scfx_ieee_double id, int w_prefix, sc_fmt fmt )
 
 	for( i = int_digits + len - 1; i >= len; i-- )
 	{
-	    unsigned int remainder = (unsigned int) fmod( int_part, 10.0 );
+	    unsigned int remainder = (unsigned int) std::fmod( int_part, 10.0 );
 	    s[i] = static_cast<char>( '0' + remainder );
 	    
 	    if( zero_digits )
@@ -262,9 +264,9 @@ print_dec( scfx_string& s, scfx_ieee_double id, int w_prefix, sc_fmt fmt )
 
 	bool zero_digits = ( int_digits == 0 && fmt != SC_F );
 
-	frac_zeros = (int) floor( - log10( frac_part + DBL_EPSILON ) );
+	frac_zeros = (int) std::floor( - std::log10( frac_part + DBL_EPSILON ) );
 
-	frac_part *= pow( 10.0, frac_zeros );
+	frac_part *= std::pow( 10.0, frac_zeros );
 	
 	frac_digits = frac_zeros;
 	if( ! zero_digits )
@@ -417,9 +419,9 @@ print_other( scfx_string& s, const scfx_ieee_double& id, sc_numrep numrep,
 	    step = 0;
     }
 
-    msb = (int) ceil( double( msb + 1 ) / step ) * step - 1;
+    msb = (int) std::ceil( double( msb + 1 ) / step ) * step - 1;
 
-    lsb = (int) floor( double( lsb ) / step ) * step;
+    lsb = (int) std::floor( double( lsb ) / step ) * step;
 
     if( msb < 0 )
     {
@@ -783,7 +785,7 @@ sc_fxval_fast::from_string( const char* s )
     {
 	for( const char *e = end + 2; *e; e ++ )
 	    SCFX_FAIL_IF_( ! scfx_is_digit( *e, SC_DEC ) );
-	exponent = atoi( end + 1 );
+	exponent = std::atoi( end + 1 );
     }
 
     //
@@ -868,7 +870,7 @@ sc_fxval_fast::from_string( const char* s )
 	}
     }
 
-    double exp = ( exponent != 0 ) ? pow( (double) base, (double) exponent )
+    double exp = ( exponent != 0 ) ? std::pow( (double) base, (double) exponent )
 	                           : 1;
 
     return ( sign * ( integer + fraction ) * exp );

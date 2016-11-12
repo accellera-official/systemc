@@ -1,17 +1,19 @@
 /*****************************************************************************
 
-  The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2014 by all Contributors.
-  All Rights reserved.
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
 
-  The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License (the "License");
-  You may not use this file except in compliance with such restrictions and
-  limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.accellera.org/. Software distributed by Contributors
-  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  ANY KIND, either express or implied. See the License for the specific
-  language governing rights and limitations under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
 
  *****************************************************************************/
 
@@ -56,6 +58,9 @@
 
 // Disable VC++ warnings that are harmless
 
+// extern template instantiations
+#pragma warning(disable: 4231)
+
 // this : used in base member initializer list
 #pragma warning(disable: 4355)
 
@@ -75,7 +80,7 @@
 // identifier was truncated to '255' characters in the browser information
 #pragma warning(disable: 4786)
 
-#endif 
+#endif
 
 // ----------------------------------------------------------------------------
 // helper macros to aid branch prediction on GCC (compatible) compilers
@@ -93,6 +98,52 @@
 #include <cassert>
 #include <cstdio>
 #include <cstdlib>
+#include <vector>
+
+// ----------------------------------------------------------------------------
+
+// build SystemC DLL on Windows
+#if defined(SC_WIN_DLL) && (defined(_WIN32) || defined(_WIN64))
+
+# if defined(SC_BUILD) // building SystemC library
+#   define SC_API  __declspec(dllexport)
+
+# else                 // building SystemC application
+#   define SC_API  __declspec(dllimport)
+# endif // SC_BUILD
+
+#else // !SC_WIN_DLL
+# define SC_API /* nothing */
+
+#endif // SC_WIN_DLL
+
+// declare certain template instantiations as "extern" during library build
+// to force their instantiation into the (shared) SystemC library
+
+#if defined(SC_BUILD) // building SystemC library
+# define SC_API_TEMPLATE_ /* empty - instantiate template in translation unit */
+#else
+# if defined(__GNUC__) && __cplusplus < 201101L
+#  define SC_API_TEMPLATE_ __extension__ extern
+# else
+#  define SC_API_TEMPLATE_ extern
+# endif
+#endif
+
+// explicitly instantiate and export/import an std::vector specialization
+#define SC_API_VECTOR_(Type) \
+  SC_API_TEMPLATE_ template class SC_API ::std::allocator<Type>; \
+  SC_API_TEMPLATE_ template class SC_API ::std::vector<Type,::std::allocator<Type> >
+
+namespace sc_core {
+class SC_API sc_object;
+class SC_API sc_event;
+} // namespace sc_core
+
+// export explicit std::vector<> template instantiations
+SC_API_VECTOR_(sc_core::sc_object*);
+SC_API_VECTOR_(sc_core::sc_event*);
+SC_API_VECTOR_(const sc_core::sc_event*);
 
 #endif // SC_CMNHDR_H
 

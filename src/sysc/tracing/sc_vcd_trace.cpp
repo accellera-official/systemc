@@ -1,17 +1,19 @@
 /*****************************************************************************
 
-  The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2014 by all Contributors.
-  All Rights reserved.
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
 
-  The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License (the "License");
-  You may not use this file except in compliance with such restrictions and
-  limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.accellera.org/. Software distributed by Contributors
-  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  ANY KIND, either express or implied. See the License for the specific
-  language governing rights and limitations under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
 
  *****************************************************************************/
 
@@ -31,7 +33,7 @@
       Name, Affiliation, Date: Ali Dasdan, Synopsys, Inc.
   Description of Modification: - Replaced 'width' of sc_(u)int with their
                                  'bitwidth()'.
-    
+
       Name, Affiliation, Date:
   Description of Modification:
 
@@ -50,10 +52,8 @@
 
 
 #include <cstdlib>
-#include <string.h>
+#include <cstring>
 #include <vector>
-
-#define SC_DISABLE_API_VERSION_CHECK // for in-library sc_ver.h inclusion
 
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_ver.h"
@@ -66,6 +66,9 @@
 #include "sysc/datatypes/int/sc_uint_base.h"
 #include "sysc/datatypes/fx/fx.h"
 #include "sysc/tracing/sc_vcd_trace.h"
+#include "sysc/utils/sc_report.h" // sc_assert
+
+#include <sstream>
 
 namespace sc_core {
 
@@ -94,7 +97,7 @@ public:
     // Needs to be pure virtual as has to be defined by the particular
     // type being traced
     virtual void write(FILE* f) = 0;
-    
+
     virtual void set_width();
 
     static const char* strip_leading_bits(const char* originalbuf);
@@ -113,7 +116,7 @@ public:
     const std::string name;
     const std::string vcd_name;
     const char* vcd_var_typ_name;
-    int bit_width; 
+    int bit_width;
 };
 
 
@@ -122,7 +125,7 @@ vcd_trace::vcd_trace(const std::string& name_, const std::string& vcd_name_)
 {
     /* Intentionally blank */
 }
-        
+
 void
 vcd_trace::compose_data_line(char* rawdata, char* compdata)
 {
@@ -172,7 +175,7 @@ vcd_trace::print_variable_declaration_line(FILE* f)
         return;
     }
 
-    std::string namecopy = name; 
+    std::string namecopy = name;
     remove_vcd_name_problems(this, namecopy);
     if ( bit_width == 1 )
     {
@@ -212,7 +215,7 @@ vcd_trace::strip_leading_bits(const char* originalbuf)
     //    bzzzzz1     -> bz1
     //    bxxxz10     -> xz10
     // - For leading 0's followed by 1, remove all leading 0's
-    //    b0000010101 -> b10101  
+    //    b0000010101 -> b10101
 
     const char* position = originalbuf;
 
@@ -282,7 +285,7 @@ vcd_trace_file::trace(
     const sc_dt::sc_bv_base& object, const std::string& name)
 {
    traceT(object,name);
-}   
+}
 
 // Trace sc_dt::sc_lv_base (sc_dt::sc_lv)
 void
@@ -337,7 +340,7 @@ vcd_bool_trace::write(FILE* f)
 
 class vcd_sc_bit_trace : public vcd_trace {
 public:
-    vcd_sc_bit_trace(const sc_dt::sc_bit& , const std::string& , 
+    vcd_sc_bit_trace(const sc_dt::sc_bit& , const std::string& ,
     	const std::string& );
     void write(FILE* f);
     bool changed();
@@ -383,7 +386,7 @@ public:
     void write(FILE* f);
     bool changed();
 
-protected:    
+protected:
     const sc_dt::sc_logic& object;
     sc_dt::sc_logic old_value;
 };
@@ -391,7 +394,7 @@ protected:
 
 vcd_sc_logic_trace::vcd_sc_logic_trace(const sc_dt::sc_logic& object_,
 				       const std::string& name_,
-				       const std::string& vcd_name_) 
+				       const std::string& vcd_name_)
 : vcd_trace(name_, vcd_name_), object(object_), old_value(object_)
 {
     vcd_var_typ_name = "wire";
@@ -411,7 +414,7 @@ vcd_sc_logic_trace::write(FILE* f)
 {
     char out_char;
     out_char = map_sc_logic_state_to_vcd_state(object.to_char());
-    std::fputc(out_char, f); 
+    std::fputc(out_char, f);
 
     std::fprintf(f,"%s", vcd_name.c_str());
 
@@ -430,7 +433,7 @@ public:
     bool changed();
     void set_width();
 
-protected:    
+protected:
     const sc_dt::sc_unsigned& object;
     sc_dt::sc_unsigned old_value;
 };
@@ -438,7 +441,7 @@ protected:
 
 vcd_sc_unsigned_trace::vcd_sc_unsigned_trace(const sc_dt::sc_unsigned& object_,
 					     const std::string& name_,
-					     const std::string& vcd_name_) 
+					     const std::string& vcd_name_)
 : vcd_trace(name_, vcd_name_), object(object_), old_value(object_.length())
 // The last may look strange, but is correct
 {
@@ -458,8 +461,8 @@ vcd_sc_unsigned_trace::write(FILE* f)
     static std::vector<char> compdata(1024), rawdata(1024);
     typedef std::vector<char>::size_type size_t;
 
-    if ( compdata.size() < (size_t)object.length() ) {
-        size_t sz = ( (size_t)object.length() + 4096 ) & (~(size_t)(4096-1));
+    if ( compdata.size() < static_cast<size_t>(object.length()) ) {
+        size_t sz = ( static_cast<size_t>(object.length()) + 4096 ) & (~static_cast<size_t>(4096-1));
         std::vector<char>( sz ).swap( compdata ); // resize without copying values
         std::vector<char>( sz ).swap( rawdata );
     }
@@ -493,7 +496,7 @@ public:
     bool changed();
     void set_width();
 
-protected:    
+protected:
     const sc_dt::sc_signed& object;
     sc_dt::sc_signed old_value;
 };
@@ -501,7 +504,7 @@ protected:
 
 vcd_sc_signed_trace::vcd_sc_signed_trace(const sc_dt::sc_signed& object_,
 					 const std::string& name_,
-					 const std::string& vcd_name_) 
+					 const std::string& vcd_name_)
 : vcd_trace(name_, vcd_name_), object(object_), old_value(object_.length())
 {
     vcd_var_typ_name = "wire";
@@ -520,8 +523,8 @@ vcd_sc_signed_trace::write(FILE* f)
     static std::vector<char> compdata(1024), rawdata(1024);
     typedef std::vector<char>::size_type size_t;
 
-    if ( compdata.size() < (size_t)object.length() ) {
-        size_t sz = ( (size_t)object.length() + 4096 ) & (~(size_t)(4096-1));
+    if ( compdata.size() < static_cast<size_t>(object.length()) ) {
+        size_t sz = ( static_cast<size_t>(object.length()) + 4096 ) & (~static_cast<size_t>(4096-1));
         std::vector<char>( sz ).swap( compdata ); // resize without copying values
         std::vector<char>( sz ).swap( rawdata );
     }
@@ -554,7 +557,7 @@ public:
     bool changed();
     void set_width();
 
-protected:    
+protected:
     const sc_dt::sc_uint_base& object;
     sc_dt::sc_uint_base old_value;
 };
@@ -612,7 +615,7 @@ public:
     bool changed();
     void set_width();
 
-protected:    
+protected:
     const sc_dt::sc_int_base& object;
     sc_dt::sc_int_base old_value;
 };
@@ -620,7 +623,7 @@ protected:
 
 vcd_sc_int_base_trace::vcd_sc_int_base_trace(const sc_dt::sc_int_base& object_,
 					     const std::string& name_,
-					     const std::string& vcd_name_) 
+					     const std::string& vcd_name_)
 : vcd_trace(name_, vcd_name_), object(object_), old_value(object_.length())
 {
     vcd_var_typ_name = "wire";
@@ -718,7 +721,7 @@ protected:
 
 };
 
-vcd_sc_fxval_fast_trace::vcd_sc_fxval_fast_trace( 
+vcd_sc_fxval_fast_trace::vcd_sc_fxval_fast_trace(
                                         const sc_dt::sc_fxval_fast& object_,
 					const std::string& name_,
 					const std::string& vcd_name_ )
@@ -788,8 +791,8 @@ vcd_sc_fxnum_trace::write( FILE* f )
     static std::vector<char> compdata(1024), rawdata(1024);
     typedef std::vector<char>::size_type size_t;
 
-    if ( compdata.size() < (size_t)object.wl() ) {
-        size_t sz = ( (size_t)object.wl() + 4096 ) & (~(size_t)(4096-1));
+    if ( compdata.size() < static_cast<size_t>(object.wl()) ) {
+        size_t sz = ( static_cast<size_t>(object.wl()) + 4096 ) & (~static_cast<size_t>(4096-1));
         std::vector<char>( sz ).swap( compdata ); // resize without copying values
         std::vector<char>( sz ).swap( rawdata );
     }
@@ -832,7 +835,7 @@ protected:
 
 };
 
-vcd_sc_fxnum_fast_trace::vcd_sc_fxnum_fast_trace( 
+vcd_sc_fxnum_fast_trace::vcd_sc_fxnum_fast_trace(
                                         const sc_dt::sc_fxnum_fast& object_,
 					const std::string& name_,
 					const std::string& vcd_name_ )
@@ -859,8 +862,8 @@ vcd_sc_fxnum_fast_trace::write( FILE* f )
     static std::vector<char> compdata(1024), rawdata(1024);
     typedef std::vector<char>::size_type size_t;
 
-    if ( compdata.size() < (size_t)object.wl() ) {
-        size_t sz = ( (size_t)object.wl() + 4096 ) & (~(size_t)(4096-1));
+    if ( compdata.size() < static_cast<size_t>(object.wl()) ) {
+        size_t sz = ( static_cast<size_t>(object.wl()) + 4096 ) & (~static_cast<size_t>(4096-1));
         std::vector<char>( sz ).swap( compdata ); // resize without copying values
         std::vector<char>( sz ).swap( rawdata );
     }
@@ -898,7 +901,7 @@ public:
 protected:
     const unsigned& object;
     unsigned old_value;
-    unsigned mask; 
+    unsigned mask;
 };
 
 
@@ -906,12 +909,12 @@ vcd_unsigned_int_trace::vcd_unsigned_int_trace(
                                             const unsigned& object_,
 					    const std::string& name_,
 					    const std::string& vcd_name_,
-					    int width_) 
+					    int width_)
 : vcd_trace(name_, vcd_name_), object(object_), old_value( object_ ),
-  mask((unsigned)-1)
+  mask(~0U)
 {
     bit_width = width_;
-    if (bit_width < 32) mask = ~(-1 << bit_width);
+    if (bit_width < 32) mask = ~(~0U << bit_width);
 
     vcd_var_typ_name = "wire";
 }
@@ -937,7 +940,7 @@ vcd_unsigned_int_trace::write(FILE* f)
             rawdata[bitindex] = 'x';
         }
     }
-    else{
+    else {
         unsigned bit_mask = 1 << (bit_width-1);
         for (bitindex = 0; bitindex < bit_width; bitindex++) {
             rawdata[bitindex] = (object & bit_mask)? '1' : '0';
@@ -964,7 +967,7 @@ public:
 protected:
     const unsigned short& object;
     unsigned short old_value;
-    unsigned short mask; 
+    unsigned short mask;
 };
 
 
@@ -972,11 +975,11 @@ vcd_unsigned_short_trace::vcd_unsigned_short_trace(
                                         const unsigned short& object_,
 					const std::string& name_,
 					const std::string& vcd_name_,
-					int width_) 
-: vcd_trace(name_, vcd_name_), object(object_), old_value(object_), mask(0xffff)
+					int width_)
+: vcd_trace(name_, vcd_name_), object(object_), old_value(object_), mask(static_cast<unsigned short>(~0U))
 {
     bit_width = width_;
-    if (bit_width < 16) mask = (unsigned short)~(-1 << bit_width);
+    if (bit_width < 16) mask = static_cast<unsigned short>(~(~0U << bit_width));
 
     vcd_var_typ_name = "wire";
 }
@@ -1002,7 +1005,7 @@ vcd_unsigned_short_trace::write(FILE* f)
             rawdata[bitindex] = 'x';
         }
     }
-    else{
+    else {
         unsigned bit_mask = 1 << (bit_width-1);
         for (bitindex = 0; bitindex < bit_width; bitindex++) {
             rawdata[bitindex] = (object & bit_mask)? '1' : '0';
@@ -1029,7 +1032,7 @@ public:
 protected:
     const unsigned char& object;
     unsigned char old_value;
-    unsigned char mask; 
+    unsigned char mask;
 };
 
 
@@ -1038,10 +1041,10 @@ vcd_unsigned_char_trace::vcd_unsigned_char_trace(
 				const std::string& name_,
 				const std::string& vcd_name_,
 				int width_)
-: vcd_trace(name_, vcd_name_), object(object_), old_value(object_), mask(0xff)
+: vcd_trace(name_, vcd_name_), object(object_), old_value(object_), mask(static_cast<unsigned char>(~0U))
 {
     bit_width = width_;
-    if (bit_width < 8) mask = (unsigned char)~(-1 << bit_width);
+    if (bit_width < 8) mask = static_cast<unsigned char>(~(~0U << bit_width));
     vcd_var_typ_name = "wire";
 }
 
@@ -1064,7 +1067,7 @@ void vcd_unsigned_char_trace::write(FILE* f)
             rawdata[bitindex] = 'x';
         }
     }
-    else{
+    else {
         unsigned bit_mask = 1 << (bit_width-1);
         for (bitindex = 0; bitindex < bit_width; bitindex++) {
             rawdata[bitindex] = (object & bit_mask)? '1' : '0';
@@ -1091,7 +1094,7 @@ public:
 protected:
     const unsigned long& object;
     unsigned long old_value;
-    unsigned long mask; 
+    unsigned long mask;
 };
 
 
@@ -1100,12 +1103,12 @@ vcd_unsigned_long_trace::vcd_unsigned_long_trace(
 				const std::string& name_,
 				const std::string& vcd_name_,
 				int width_)
-: vcd_trace(name_, vcd_name_), object(object_), old_value(object_), 
-  mask((unsigned long)-1)
+: vcd_trace(name_, vcd_name_), object(object_), old_value(object_),
+  mask(~0UL)
 {
     bit_width = width_;
-    if ( bit_width < (int)(sizeof(unsigned long)*8) ) 
-        mask = ~(-1L << bit_width);
+    if ( bit_width < static_cast<int>(sizeof(unsigned long)*8) )
+        mask = ~(~0UL << bit_width);
 
     vcd_var_typ_name = "wire";
 }
@@ -1129,7 +1132,7 @@ void vcd_unsigned_long_trace::write(FILE* f)
             rawdata[bitindex] = 'x';
         }
     }
-    else{
+    else {
         unsigned long bit_mask = 1ul << (bit_width-1);
         for (bitindex = 0; bitindex < bit_width; bitindex++) {
             rawdata[bitindex] = (object & bit_mask)? '1' : '0';
@@ -1156,7 +1159,7 @@ public:
 protected:
     const int& object;
     int old_value;
-    unsigned mask; 
+    unsigned mask;
 };
 
 
@@ -1164,11 +1167,11 @@ vcd_signed_int_trace::vcd_signed_int_trace(const signed& object_,
 					   const std::string& name_,
 					   const std::string& vcd_name_,
 					   int width_)
-: vcd_trace(name_, vcd_name_), object(object_), old_value(object_),  
-  mask((unsigned)-1)
+: vcd_trace(name_, vcd_name_), object(object_), old_value(object_),
+  mask(~0U)
 {
     bit_width = width_;
-    if (bit_width < 32) mask = ~(-1 << bit_width);
+    if (bit_width < 32) mask = ~(~0U << bit_width);
 
     vcd_var_typ_name = "wire";
 }
@@ -1187,12 +1190,12 @@ void vcd_signed_int_trace::write(FILE* f)
     int bitindex;
 
     // Check for overflow
-    if (((unsigned) object & mask) != (unsigned) object) {
-        for (bitindex = 0; bitindex < bit_width; bitindex++){
+    if ((static_cast<unsigned>(object) & mask) != static_cast<unsigned>(object)) {
+        for (bitindex = 0; bitindex < bit_width; bitindex++) {
             rawdata[bitindex] = 'x';
         }
     }
-    else{
+    else {
         unsigned bit_mask = 1 << (bit_width-1);
         for (bitindex = 0; bitindex < bit_width; bitindex++) {
             rawdata[bitindex] = (object & bit_mask)? '1' : '0';
@@ -1219,7 +1222,7 @@ public:
 protected:
     const short& object;
     short old_value;
-    unsigned short mask; 
+    unsigned short mask;
 };
 
 
@@ -1228,10 +1231,10 @@ vcd_signed_short_trace::vcd_signed_short_trace(
 					const std::string& name_,
 					const std::string& vcd_name_,
 					int width_)
-: vcd_trace(name_, vcd_name_), object(object_), old_value(object_), mask(0xffff)
+: vcd_trace(name_, vcd_name_), object(object_), old_value(object_), mask(static_cast<unsigned short>(~0U))
 {
     bit_width = width_;
-    if (bit_width < 16) mask = (unsigned short)~(-1 << bit_width);
+    if (bit_width < 16) mask = static_cast<unsigned short>(~(~0U << bit_width));
 
     vcd_var_typ_name = "wire";
 }
@@ -1250,12 +1253,12 @@ void vcd_signed_short_trace::write(FILE* f)
     int bitindex;
 
     // Check for overflow
-    if (((unsigned short) object & mask) != (unsigned short) object) {
-        for (bitindex = 0; bitindex < bit_width; bitindex++){
+    if ((static_cast<unsigned short>(object) & mask) != static_cast<unsigned short>(object)) {
+        for (bitindex = 0; bitindex < bit_width; bitindex++) {
             rawdata[bitindex] = 'x';
         }
     }
-    else{
+    else {
         unsigned bit_mask = 1 << (bit_width-1);
         for (bitindex = 0; bitindex < bit_width; bitindex++) {
             rawdata[bitindex] = (object & bit_mask)? '1' : '0';
@@ -1282,7 +1285,7 @@ public:
 protected:
     const char& object;
     char old_value;
-    unsigned char mask; 
+    unsigned char mask;
 };
 
 
@@ -1290,10 +1293,10 @@ vcd_signed_char_trace::vcd_signed_char_trace(const char& object_,
 					     const std::string& name_,
 					     const std::string& vcd_name_,
 					     int width_)
-: vcd_trace(name_, vcd_name_), object(object_), old_value(object_), mask(0xff)
+: vcd_trace(name_, vcd_name_), object(object_), old_value(object_), mask(static_cast<unsigned char>(~0U))
 {
     bit_width = width_;
-    if (bit_width < 8) mask = (unsigned char)~(-1 << bit_width);
+    if (bit_width < 8) mask = static_cast<unsigned char>(~(~0U << bit_width));
 
     vcd_var_typ_name = "wire";
 }
@@ -1312,12 +1315,12 @@ void vcd_signed_char_trace::write(FILE* f)
     int bitindex;
 
     // Check for overflow
-    if (((unsigned char) object & mask) != (unsigned char) object) {
-        for (bitindex = 0; bitindex < bit_width; bitindex++){
+    if ((static_cast<unsigned char>(object) & mask) != static_cast<unsigned char>(object)) {
+        for (bitindex = 0; bitindex < bit_width; bitindex++) {
             rawdata[bitindex] = 'x';
         }
     }
-    else{
+    else {
         unsigned bit_mask = 1 << (bit_width-1);
         for (bitindex = 0; bitindex < bit_width; bitindex++) {
             rawdata[bitindex] = (object & bit_mask)? '1' : '0';
@@ -1344,7 +1347,7 @@ public:
 protected:
     const sc_dt::int64& object;
     sc_dt::int64 old_value;
-    sc_dt::uint64 mask; 
+    sc_dt::uint64 mask;
 };
 
 
@@ -1352,7 +1355,7 @@ vcd_int64_trace::vcd_int64_trace(const sc_dt::int64& object_,
 					     const std::string& name_,
 					     const std::string& vcd_name_,
 					     int width_)
-: vcd_trace(name_, vcd_name_), object(object_), old_value(object_), 
+: vcd_trace(name_, vcd_name_), object(object_), old_value(object_),
   mask((sc_dt::uint64)-1)
 {
     bit_width = width_;
@@ -1374,15 +1377,14 @@ void vcd_int64_trace::write(FILE* f)
     int bitindex;
 
     // Check for overflow
-    if (((sc_dt::uint64) object & mask) != (sc_dt::uint64) object) 
-	{
-        for (bitindex = 0; bitindex < bit_width; bitindex++)
-		{
+    if ((static_cast<sc_dt::uint64>(object) & mask) != static_cast<sc_dt::uint64>(object))
+    {
+        for (bitindex = 0; bitindex < bit_width; bitindex++) {
             rawdata[bitindex] = 'x';
         }
     }
     else
-	{
+    {
         sc_dt::uint64 bit_mask = 1;
         bit_mask = bit_mask << (bit_width-1);
         for (bitindex = 0; bitindex < bit_width; bitindex++) {
@@ -1411,7 +1413,7 @@ public:
 protected:
     const sc_dt::uint64& object;
     sc_dt::uint64 old_value;
-    sc_dt::uint64 mask; 
+    sc_dt::uint64 mask;
 };
 
 
@@ -1441,18 +1443,17 @@ void vcd_uint64_trace::write(FILE* f)
     int bitindex;
 
     // Check for overflow
-    if ((object & mask) != object) 
-	{
-        for (bitindex = 0; bitindex < bit_width; bitindex++){
+    if ((object & mask) != object)
+    {
+        for (bitindex = 0; bitindex < bit_width; bitindex++) {
             rawdata[bitindex] = 'x';
         }
     }
     else
-	{
+    {
         sc_dt::uint64 bit_mask = 1;
         bit_mask = bit_mask << (bit_width-1);
-        for (bitindex = 0; bitindex < bit_width; bitindex++) 
-		{
+        for (bitindex = 0; bitindex < bit_width; bitindex++) {
             rawdata[bitindex] = (object & bit_mask)? '1' : '0';
             bit_mask = bit_mask >> 1;
         }
@@ -1478,7 +1479,7 @@ public:
 protected:
     const long& object;
     long old_value;
-    unsigned long mask; 
+    unsigned long mask;
 };
 
 
@@ -1487,11 +1488,11 @@ vcd_signed_long_trace::vcd_signed_long_trace(const long& object_,
 					     const std::string& vcd_name_,
 					     int width_)
 : vcd_trace(name_, vcd_name_), object(object_), old_value(object_),
-  mask((unsigned long)-1)
+  mask(~0UL)
 {
     bit_width = width_;
-    if ( bit_width < (int)(sizeof(long)*8) ) 
-        mask = ~(-1L << bit_width);
+    if ( bit_width < static_cast<int>(sizeof(long)*8) )
+        mask = ~(~0UL << bit_width);
     vcd_var_typ_name = "wire";
 }
 
@@ -1509,12 +1510,12 @@ void vcd_signed_long_trace::write(FILE* f)
     int bitindex;
 
     // Check for overflow
-    if (((unsigned long) object & mask) != (unsigned long) object) {
-        for (bitindex = 0; bitindex < bit_width; bitindex++){
+    if ((static_cast<unsigned long>(object) & mask) != static_cast<unsigned long>(object)) {
+        for (bitindex = 0; bitindex < bit_width; bitindex++) {
             rawdata[bitindex] = 'x';
         }
     }
-    else{
+    else {
         unsigned long bit_mask = 1ul << (bit_width-1);
         for (bitindex = 0; bitindex < bit_width; bitindex++) {
             rawdata[bitindex] = (object & bit_mask)? '1' : '0';
@@ -1538,7 +1539,7 @@ public:
     void write(FILE* f);
     bool changed();
 
-protected:    
+protected:
     const float& object;
     float old_value;
 };
@@ -1574,7 +1575,7 @@ public:
     void write(FILE* f);
     bool changed();
 
-protected:    
+protected:
     const double& object;
     double old_value;
 };
@@ -1625,7 +1626,7 @@ vcd_enum_trace::vcd_enum_trace(const unsigned& object_,
 			       const std::string& vcd_name_,
 			       const char** enum_literals_)
 : vcd_trace(name_, vcd_name_), object(object_), old_value(object_),
-  mask(0xffffffff), literals(enum_literals_), nliterals(0)
+  mask(~0U), literals(enum_literals_), nliterals(0)
 {
     // find number of bits required to represent enumeration literal - counting loop
     for (nliterals = 0; enum_literals_[nliterals]; nliterals++) continue;
@@ -1640,13 +1641,13 @@ vcd_enum_trace::vcd_enum_trace(const unsigned& object_,
 
     // Set the mask
     if (bit_width < 32) {
-      mask = ~(-1 << bit_width);
+      mask = ~(~0U << bit_width);
     } else {
-      mask = 0xffffffff;
+      mask = ~0U;
     }
 
     vcd_var_typ_name = "wire";
-}       
+}
 
 bool vcd_enum_trace::changed()
 {
@@ -1661,7 +1662,7 @@ void vcd_enum_trace::write(FILE* f)
 
     // Check for overflow
     if ((object & mask) != object) {
-        for (bitindex = 0; bitindex < bit_width; bitindex++){
+        for (bitindex = 0; bitindex < bit_width; bitindex++) {
             rawdata[bitindex] = 'x';
         }
     } else {
@@ -1755,7 +1756,7 @@ vcd_trace_file::do_initialize()
 
     // double inittime = sc_simulation_time();
     double inittime = sc_time_stamp().to_seconds();
-    
+
     std::sprintf(buf,
             "All initial values are dumped below at time "
             "%g sec = %g timescale units.",
@@ -1922,7 +1923,7 @@ vcd_trace_file::cycle(bool this_is_a_delta_cycle)
     double_to_special_int64(now_units, &now_units_high, &now_units_low );
 
     bool now_later_than_previous_time = false;
-    if( (now_units_low > previous_time_units_low 
+    if( (now_units_low > previous_time_units_low
         && now_units_high == previous_time_units_high)
         || now_units_high > previous_time_units_high){
         now_later_than_previous_time = true;
@@ -1980,12 +1981,12 @@ vcd_trace_file::cycle(bool this_is_a_delta_cycle)
     // Not a delta cycle and time has gone backward
     // This will happen with large number of delta cycles between two real
     // advances of time
-    if(!this_is_a_delta_cycle && !now_equals_previous_time && 
+    if(!this_is_a_delta_cycle && !now_equals_previous_time &&
         !now_later_than_previous_time){
         static bool warned = false;
         if(!warned) {
             std::stringstream ss;
-            ss << "units count (" 
+            ss << "units count ("
                << previous_time_units_low << "->" << now_units_low << ")\n"
                "\tThis can occur when delta cycling is activated."
                   " Cycles with falling time are not shown.\n"
@@ -2000,10 +2001,10 @@ vcd_trace_file::cycle(bool this_is_a_delta_cycle)
         // optimized mode, the compiler complains because of this. Therefore,
         // we include the lines at the very beginning of this function to make
         // the compiler shut up.
-        return; 
+        return;
     }
 
-    // Now do the actual printing 
+    // Now do the actual printing
     bool time_printed = false;
     vcd_trace* const* const l_traces = &traces[0];
     for (int i = 0; i < (int)traces.size(); i++) {
@@ -2014,7 +2015,7 @@ vcd_trace_file::cycle(bool this_is_a_delta_cycle)
                 if(this_time_units_high){
                     std::sprintf(buf, "#%u%09u", this_time_units_high, this_time_units_low);
                 }
-                else{ 
+                else{
                     std::sprintf(buf, "#%u", this_time_units_low);
                 }
                 std::fputs(buf, fp);
@@ -2039,13 +2040,6 @@ vcd_trace_file::cycle(bool this_is_a_delta_cycle)
     }
 }
 
-#if 0
-void
-vcd_trace_file::create_vcd_name(std::string* p_destination)
-{
-    obtain_name.swap( *p_destination );
-}
-#endif
 
 // Create a VCD name for a variable
 std::string
@@ -2056,19 +2050,19 @@ vcd_trace_file::obtain_name()
     int result;
 
     result = vcd_name_index;
-    char char6 = (char)(vcd_name_index % used_types_count);
+    char char6 = static_cast<char>(vcd_name_index % used_types_count);
 
     result = result / used_types_count;
-    char char5 = (char)(result % used_types_count);
+    char char5 = static_cast<char>(result % used_types_count);
 
     result = result / used_types_count;
-    char char4 = (char)(result % used_types_count);
+    char char4 = static_cast<char>(result % used_types_count);
 
     result = result / used_types_count;
-    char char3 = (char)(result % used_types_count);
+    char char3 = static_cast<char>(result % used_types_count);
 
     result = result / used_types_count;
-    char char2 = (char)(result % used_types_count);
+    char char2 = static_cast<char>(result % used_types_count);
 
     char buf[20];
     std::sprintf(buf, "%c%c%c%c%c",
@@ -2099,7 +2093,7 @@ map_sc_logic_state_to_vcd_state(char in_char)
 
     switch(in_char){
         case 'U':
-        case 'X': 
+        case 'X':
         case 'W':
         case 'D':
             out_char = 'x';
@@ -2109,10 +2103,10 @@ map_sc_logic_state_to_vcd_state(char in_char)
             out_char = '0';
             break;
         case  '1':
-        case  'H': 
+        case  'H':
             out_char = '1';
             break;
-        case  'Z': 
+        case  'Z':
             out_char = 'z';
             break;
         default:
@@ -2156,18 +2150,18 @@ remove_vcd_name_problems(vcd_trace const* vcd, std::string& name)
 
 // ----------------------------------------------------------------------------
 
-sc_trace_file*
+SC_API sc_trace_file*
 sc_create_vcd_trace_file(const char * name)
 {
     sc_trace_file * tf = new vcd_trace_file(name);
     return tf;
 }
 
-void
+SC_API void
 sc_close_vcd_trace_file( sc_trace_file* tf )
 {
     vcd_trace_file* vcd_tf = static_cast<vcd_trace_file*>(tf);
-    delete vcd_tf; 
+    delete vcd_tf;
 }
 
 } // namespace sc_core

@@ -1,12 +1,9 @@
-export FLAG_BATCH = 1
-
 SUBDIRS := $(dir $(wildcard */Makefile */*/Makefile))
 
-TARGETS := all clean check run
-
+TARGETS := all build run check clean
 .PHONY: $(TARGETS)
 
 $(TARGETS): %:
 	@set -e ; for i in $(SUBDIRS); do \
-		$(MAKE) -C $$i $@ ; \
+		$(MAKE) -C $$i FLAG_BATCH=1 $@ ; \
 	done

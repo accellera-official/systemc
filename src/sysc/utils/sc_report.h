@@ -1,20 +1,19 @@
-#ifndef SC_REPORT_H
-#define SC_REPORT_H 1
-
 /*****************************************************************************
 
-  The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2014 by all Contributors.
-  All Rights reserved.
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
 
-  The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License (the "License");
-  You may not use this file except in compliance with such restrictions and
-  limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.accellera.org/. Software distributed by Contributors
-  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  ANY KIND, either express or implied. See the License for the specific
-  language governing rights and limitations under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
 
  *****************************************************************************/
 
@@ -32,8 +31,12 @@
   CHANGE LOG AT END OF FILE
  *****************************************************************************/
 
-#include "sysc/kernel/sc_except.h"
+#ifndef SC_REPORT_H
+#define SC_REPORT_H 1
+
+#include <exception>
 #include <string>
+#include "sysc/kernel/sc_cmnhdr.h"
 
 namespace sc_core {
 
@@ -57,17 +60,17 @@ enum sc_severity {
 //  Enumeration of message verbosity.
 // ----------------------------------------------------------------------------
 
- enum sc_verbosity { 
-     SC_NONE = 0, 
-     SC_LOW = 100, 
-     SC_MEDIUM = 200, 
+ enum sc_verbosity {
+     SC_NONE = 0,
+     SC_LOW = 100,
+     SC_MEDIUM = 200,
      SC_HIGH = 300,
-     SC_FULL = 400, 
+     SC_FULL = 400,
      SC_DEBUG = 500
  };
 
 // ----------------------------------------------------------------------------
-//  ENUM : 
+//  ENUM :
 //
 //  Enumeration of actions on an exception (implementation specific)
 // ----------------------------------------------------------------------------
@@ -98,7 +101,7 @@ class sc_time;
 struct sc_msg_def;
 class sc_report;
 class sc_report_handler;
-const std::string sc_report_compose_message( const sc_report& );
+SC_API const std::string sc_report_compose_message( const sc_report& );
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_report
@@ -106,10 +109,10 @@ const std::string sc_report_compose_message( const sc_report& );
 //  Exception reporting
 // ----------------------------------------------------------------------------
 
-class sc_report : public std::exception
+class SC_API sc_report : public std::exception
 {
     friend class sc_report_handler;
-    friend sc_report* sc_handle_exception();
+    friend SC_API sc_report* sc_handle_exception();
 
     sc_report(); // used internally by sc_handle_exception
 
@@ -145,7 +148,7 @@ public:
     bool valid () const;
 
     virtual const char* what() const throw()
-        { 
+        {
 	    return m_what;
 	}
 
@@ -219,28 +222,28 @@ typedef std::exception sc_exception;
 //  and simulation time, if the simulation is running.
 // ----------------------------------------------------------------------------
 
-#ifdef NDEBUG
+#if defined(NDEBUG) && !defined(SC_ENABLE_ASSERTIONS) // disable assertions
 
 #define sc_assert(expr) \
  ((void) 0)
 
-#else
+#else // enable assertions
 
 #define sc_assert(expr) \
  ((void)((expr) ? 0 :   \
      (SC_REPORT_FATAL( ::sc_core::SC_ID_ASSERTION_FAILED_, #expr ), 0)))
 
-#endif // NDEBUG
+#endif // defined(NDEBUG) && !defined(SC_ENABLE_ASSERTIONS)
 
-extern const char SC_ID_UNKNOWN_ERROR_[];
-extern const char SC_ID_WITHOUT_MESSAGE_[];
-extern const char SC_ID_NOT_IMPLEMENTED_[];
-extern const char SC_ID_INTERNAL_ERROR_[];
-extern const char SC_ID_ASSERTION_FAILED_[];
-extern const char SC_ID_OUT_OF_BOUNDS_[];
+extern SC_API const char SC_ID_UNKNOWN_ERROR_[];
+extern SC_API const char SC_ID_WITHOUT_MESSAGE_[];
+extern SC_API const char SC_ID_NOT_IMPLEMENTED_[];
+extern SC_API const char SC_ID_INTERNAL_ERROR_[];
+extern SC_API const char SC_ID_ASSERTION_FAILED_[];
+extern SC_API const char SC_ID_OUT_OF_BOUNDS_[];
 
 // backward compatibility with 2.0+
-extern const char SC_ID_REGISTER_ID_FAILED_[];
+extern SC_API const char SC_ID_REGISTER_ID_FAILED_[];
 
 } // namespace sc_core
 

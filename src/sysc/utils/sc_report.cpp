@@ -1,17 +1,19 @@
 /*****************************************************************************
 
-  The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2014 by all Contributors.
-  All Rights reserved.
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
 
-  The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License (the "License");
-  You may not use this file except in compliance with such restrictions and
-  limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.accellera.org/. Software distributed by Contributors
-  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  ANY KIND, either express or implied. See the License for the specific
-  language governing rights and limitations under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
 
  *****************************************************************************/
 
@@ -30,8 +32,8 @@
  *****************************************************************************/
 
 
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 
 #include "sysc/kernel/sc_process.h"
 #include "sysc/kernel/sc_simcontext_int.h"
@@ -62,8 +64,9 @@ static inline char * empty_dup(const char * p)
     if ( p && *p )
     {
         char* result;
-        result = (char*)malloc(strlen(p)+1);
-        strcpy(result, p);
+        std::size_t size = strlen(p)+1;
+        result = new char[size];
+        std::copy(p, p + size, result);
         return result;
     }
     else
@@ -72,7 +75,7 @@ static inline char * empty_dup(const char * p)
     }
 }
 
-sc_report::sc_report() 
+sc_report::sc_report()
 : severity(SC_INFO),
   md(0),
   msg(empty_dup(0)),
@@ -142,14 +145,14 @@ sc_report::swap( sc_report & that )
 sc_report::~sc_report() throw()
 {
     if ( file != empty_str )
-        free(file);
+	delete[] file;
     if ( msg != empty_str )
-        free(msg);
+	delete[] msg;
     delete timestamp;
     if ( process_name != empty_str )
-        free(process_name);
+        delete[] process_name;
     if ( m_what != empty_str )
-        free(m_what);
+	delete[] m_what;
 }
 
 const char * sc_report::get_msg_type() const

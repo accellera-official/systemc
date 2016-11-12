@@ -1,18 +1,19 @@
-
 /*****************************************************************************
 
-  The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2014 by all Contributors.
-  All Rights reserved.
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
 
-  The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License (the "License");
-  You may not use this file except in compliance with such restrictions and
-  limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.accellera.org/. Software distributed by Contributors
-  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  ANY KIND, either express or implied. See the License for the specific
-  language governing rights and limitations under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
 
  *****************************************************************************/
 
@@ -65,11 +66,6 @@ sc_export_base::before_end_of_elaboration()
 void
 sc_export_base::construction_done()
 {
-    if ( get_interface() == 0 )
-    {
-      report_error( SC_ID_SC_EXPORT_NOT_BOUND_AFTER_CONSTRUCTION_, 0);
-    }
-
     sc_module* parent = static_cast<sc_module*>( get_parent_object() );
     sc_object::hierarchy_scope scope( parent );
     before_end_of_elaboration();
@@ -86,6 +82,11 @@ sc_export_base::end_of_elaboration()
 void
 sc_export_base::elaboration_done()
 {
+    if ( get_interface() == 0 )
+    {
+      report_error( SC_ID_COMPLETE_BINDING_, "export not bound" );
+    }
+
     sc_module* parent = static_cast<sc_module*>( get_parent_object() );
     sc_object::hierarchy_scope scope( parent );
     end_of_elaboration();

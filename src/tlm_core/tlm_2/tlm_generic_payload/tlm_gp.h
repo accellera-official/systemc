@@ -1,19 +1,21 @@
 /*****************************************************************************
 
-  The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2014 by all Contributors.
-  All Rights reserved.
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
 
-  The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License (the "License");
-  You may not use this file except in compliance with such restrictions and
-  limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.accellera.org/. Software distributed by Contributors
-  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  ANY KIND, either express or implied. See the License for the specific
-  language governing rights and limitations under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
 
-*****************************************************************************/
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
+
+ *****************************************************************************/
 
 // 12-Jan-2009  John Aynsley  Bug fix. has_mm() and get_ref_count() should both be const
 // 23-Mar-2009  John Aynsley  Add method update_original_from()
@@ -25,8 +27,8 @@
 #ifndef __TLM_GP_H__
 #define __TLM_GP_H__
 
-#include <systemc>
 #include "tlm_core/tlm_2/tlm_generic_payload/tlm_array.h"
+#include <cstring> // std::memcpy et.al.
 
 namespace tlm {
 
@@ -77,7 +79,7 @@ class tlm_extension : public tlm_extension_base
 {
 public:
     virtual tlm_extension_base* clone() const = 0;
-    virtual void copy_from(tlm_extension_base const &ext) = 0; //{assert(typeid(this)==typeid(ext)); assert(ID === ext.ID); assert(0);}
+    virtual void copy_from(tlm_extension_base const &ext) = 0; //{sc_assert(typeid(this)==typeid(ext)); sc_assert(ID === ext.ID); sc_assert(0);}
     virtual ~tlm_extension() {}
     const static unsigned int ID;
 };
@@ -159,8 +161,8 @@ public:
     {
     }
 
-    void acquire(){assert(m_mm != 0); m_ref_count++;}
-    void release(){assert(m_mm != 0 && m_ref_count > 0); if (--m_ref_count==0) m_mm->free(this);}
+    void acquire(){sc_assert(m_mm != 0); m_ref_count++;}
+    void release(){sc_assert(m_mm != 0 && m_ref_count > 0); if (--m_ref_count==0) m_mm->free(this);}
     int get_ref_count() const {return m_ref_count;}
     void set_mm(tlm_mm_interface* mm) { m_mm = mm; }
     bool has_mm() const { return m_mm != 0; }
@@ -236,13 +238,13 @@ public:
         // there must be enough space in the target transaction!
         if(m_data && other.m_data)
         {
-            memcpy(m_data, other.m_data, m_length);
+            std::memcpy(m_data, other.m_data, m_length);
         }
         // deep copy byte enables
         // there must be enough space in the target transaction!
         if(m_byte_enable && other.m_byte_enable)
         {
-            memcpy(m_byte_enable, other.m_byte_enable, m_byte_enable_length);
+            std::memcpy(m_byte_enable, other.m_byte_enable, m_byte_enable_length);
         }
         // deep copy extensions (sticky and non-sticky)
         for(unsigned int i=0; i<other.m_extensions.size(); i++)
@@ -325,7 +327,7 @@ public:
                             m_data[i] = other.m_data[i];
             }
             else
-              memcpy(m_data, other.m_data, m_length);
+              std::memcpy(m_data, other.m_data, m_length);
         }
     }
 
@@ -545,7 +547,7 @@ public:
         tlm_extension_base* tmp = m_extensions[index];
         m_extensions[index] = ext;
         if (!tmp) m_extensions.insert_in_cache(&m_extensions[index]);
-        assert(m_mm != 0);
+        sc_assert(m_mm != 0);
         return tmp;
     }
 

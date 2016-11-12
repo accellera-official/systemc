@@ -1,17 +1,19 @@
 /*****************************************************************************
 
-  The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2014 by all Contributors.
-  All Rights reserved.
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
 
-  The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License (the "License");
-  You may not use this file except in compliance with such restrictions and
-  limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.accellera.org/. Software distributed by Contributors
-  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  ANY KIND, either express or implied. See the License for the specific
-  language governing rights and limitations under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
 
  *****************************************************************************/
 
@@ -77,7 +79,6 @@
 #include "sysc/datatypes/int/sc_length_param.h"
 #include "sysc/datatypes/int/sc_nbdefs.h"
 #include "sysc/datatypes/fx/scfx_ieee.h"
-#include "sysc/utils/sc_iostream.h"
 #include "sysc/utils/sc_temporary.h"
 
 
@@ -106,8 +107,11 @@ class sc_fxval_fast;
 class sc_fxnum;
 class sc_fxnum_fast;
 
+} // namespace sc_dt
 
-extern const uint_type mask_int[SC_INTWIDTH][SC_INTWIDTH];
+namespace sc_dt {
+
+extern SC_API const uint_type mask_int[SC_INTWIDTH][SC_INTWIDTH];
 
 // friend operator declarations
     inline bool operator == ( const sc_uint_base& a, const sc_uint_base& b );
@@ -125,7 +129,7 @@ extern const uint_type mask_int[SC_INTWIDTH][SC_INTWIDTH];
 //  Proxy class for sc_uint bit selection (r-value only).
 // ----------------------------------------------------------------------------
 
-class sc_uint_bitref_r : public sc_value_base
+class SC_API sc_uint_bitref_r : public sc_value_base
 {
     friend class sc_uint_base;
     friend class sc_uint_signal;
@@ -246,7 +250,7 @@ operator << ( ::std::ostream&, const sc_uint_bitref_r& );
 //  Proxy class for sc_uint bit selection (r-value and l-value).
 // ----------------------------------------------------------------------------
 
-class sc_uint_bitref
+class SC_API sc_uint_bitref
     : public sc_uint_bitref_r
 {
     friend class sc_uint_base;
@@ -303,7 +307,7 @@ operator >> ( ::std::istream&, sc_uint_bitref& );
 //  Proxy class for sc_uint part selection (r-value only).
 // ----------------------------------------------------------------------------
 
-class sc_uint_subref_r : public sc_value_base
+class SC_API sc_uint_subref_r : public sc_value_base
 {
     friend class sc_uint_base;
 	friend class sc_uint_subref;
@@ -313,7 +317,7 @@ class sc_uint_subref_r : public sc_value_base
 
 public:
     sc_uint_subref_r( const sc_uint_subref_r& init ) :
-        sc_value_base(init), m_left(init.m_left), m_obj_p(init.m_obj_p), 
+        sc_value_base(init), m_left(init.m_left), m_obj_p(init.m_obj_p),
 	m_right(init.m_right)
 	{}
 
@@ -431,7 +435,7 @@ operator << ( ::std::ostream&, const sc_uint_subref_r& );
 //  Proxy class for sc_uint part selection (r-value and l-value).
 // ----------------------------------------------------------------------------
 
-class sc_uint_subref
+class SC_API sc_uint_subref
     : public sc_uint_subref_r
 {
     friend class sc_uint_base;
@@ -520,7 +524,7 @@ operator >> ( ::std::istream&, sc_uint_subref& );
 //  Base class for sc_uint.
 // ----------------------------------------------------------------------------
 
-class sc_uint_base : public sc_value_base
+class SC_API sc_uint_base : public sc_value_base
 {
     friend class sc_uint_bitref_r;
     friend class sc_uint_bitref;
@@ -1344,6 +1348,11 @@ operator >> ( ::std::istream& is, sc_uint_base& a )
 
 } // namespace sc_dt
 
+// explicit template instantiations
+namespace sc_core {
+    SC_API_TEMPLATE_ template class SC_API sc_vpool<sc_dt::sc_uint_bitref>;
+    SC_API_TEMPLATE_ template class SC_API sc_vpool<sc_dt::sc_uint_subref>;
+} // namespace sc_core
 
 #endif
 

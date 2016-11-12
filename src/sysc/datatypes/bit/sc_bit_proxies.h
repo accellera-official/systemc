@@ -1,17 +1,19 @@
 /*****************************************************************************
 
-  The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2014 by all Contributors.
-  All Rights reserved.
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
 
-  The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License (the "License");
-  You may not use this file except in compliance with such restrictions and
-  limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.accellera.org/. Software distributed by Contributors
-  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  ANY KIND, either express or implied. See the License for the specific
-  language governing rights and limitations under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
 
  *****************************************************************************/
 
@@ -66,7 +68,7 @@ public:
     // constructor
 
     sc_bitref_r( const T& obj_, int index_ )
-	: m_obj( CCAST<T&>( obj_ ) ), m_index( index_ )
+	: m_obj( const_cast<T&>( obj_ ) ), m_index( index_ )
 	{}
 
 
@@ -637,7 +639,7 @@ public:
     // constructor
 
     sc_subref_r( const X& obj_, int hi_, int lo_ )
-	: m_obj( CCAST<X&>( obj_ ) ), m_hi( hi_ ), m_lo( lo_ ), m_len( 0 )
+	: m_obj( const_cast<X&>( obj_ ) ), m_hi( hi_ ), m_lo( lo_ ), m_len( 0 )
 	{ check_bounds(); }
 
 
@@ -1109,7 +1111,7 @@ public:
     // constructor
 
     sc_concref_r( const X& left_, const Y& right_, int delete_ = 0 )
-	: m_left( CCAST<X&>( left_ ) ), m_right( CCAST<Y&>( right_ ) ),
+	: m_left( const_cast<X&>( left_ ) ), m_right( const_cast<Y&>( right_ ) ),
 	  m_delete( delete_ ), m_refs( *new int( 1 ) )
 	{}
 
@@ -2556,7 +2558,7 @@ sc_subref_r<X>::set_word( int i, sc_digit w )
 	n1 = m_lo - i * SC_DIGIT_SIZE;
 	n2 = sc_max( n1 - SC_DIGIT_SIZE, m_hi - 1 );
 	for( int n = n1; n > n2; n -- ) {
-	    m_obj.set_bit( n, sc_logic_value_t( 
+	    m_obj.set_bit( n, sc_logic_value_t(
 	                              ( (w >> k ++) & SC_DIGIT_ONE ) |
 				      ( m_obj[n].value() & SC_DIGIT_TWO ) ) );
 	}
@@ -2564,7 +2566,7 @@ sc_subref_r<X>::set_word( int i, sc_digit w )
 	n1 = m_lo + i * SC_DIGIT_SIZE;
 	n2 = sc_min( n1 + SC_DIGIT_SIZE, m_hi + 1 );
 	for( int n = n1; n < n2; n ++ ) {
-	    m_obj.set_bit( n, sc_logic_value_t( 
+	    m_obj.set_bit( n, sc_logic_value_t(
 	                                ( (w >> k ++) & SC_DIGIT_ONE ) |
 					( m_obj[n].value() & SC_DIGIT_TWO ) ) );
 	}
@@ -2609,7 +2611,7 @@ sc_subref_r<X>::set_cword( int i, sc_digit w )
 	n1 = m_lo - i * SC_DIGIT_SIZE;
 	n2 = sc_max( n1 - SC_DIGIT_SIZE, m_hi - 1 );
 	for( int n = n1; n > n2; n -- ) {
-	    m_obj.set_bit( n, sc_logic_value_t( 
+	    m_obj.set_bit( n, sc_logic_value_t(
 	                             ( ((w >> k ++) & SC_DIGIT_ONE) << 1 ) |
 				     ( m_obj[n].value() & SC_DIGIT_ONE ) ) );
 	}
@@ -2617,7 +2619,7 @@ sc_subref_r<X>::set_cword( int i, sc_digit w )
 	n1 = m_lo + i * SC_DIGIT_SIZE;
 	n2 = sc_min( n1 + SC_DIGIT_SIZE, m_hi + 1 );
 	for( int n = n1; n < n2; n ++ ) {
-	    m_obj.set_bit( n, sc_logic_value_t( 
+	    m_obj.set_bit( n, sc_logic_value_t(
 	                                ( ((w >> k ++) & SC_DIGIT_ONE) << 1 ) |
 					( m_obj[n].value() & SC_DIGIT_ONE ) ) );
 	}

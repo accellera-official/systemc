@@ -1,17 +1,19 @@
 /*****************************************************************************
 
-  The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2014 by all Contributors.
-  All Rights reserved.
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
 
-  The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License (the "License");
-  You may not use this file except in compliance with such restrictions and
-  limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.accellera.org/. Software distributed by Contributors
-  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  ANY KIND, either express or implied. See the License for the specific
-  language governing rights and limitations under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
 
  *****************************************************************************/
 
@@ -33,8 +35,8 @@
 #define SC_STRING_H
 
 
-#include "sysc/utils/sc_iostream.h"
 #include "sysc/utils/sc_report.h"
+#include <iostream>
 
 namespace sc_dt {
 	class sc_string_old;
@@ -62,10 +64,10 @@ sc_string_old operator + ( const char* s, const sc_string_old& t );
 //  String class (yet another).
 // ----------------------------------------------------------------------------
 
-class sc_string_old
+class SC_API sc_string_old
 {
-    friend systemc_ostream& operator << (systemc_ostream& os, const sc_string_old& a);
-    friend systemc_istream& operator >> ( systemc_istream& is, sc_string_old& a );
+    friend ::std::ostream& operator << (::std::ostream& os, const sc_string_old& a);
+    friend ::std::istream& operator >> ( ::std::istream& is, sc_string_old& a );
 
 public:
 
@@ -209,7 +211,7 @@ public:
     int cmp( const sc_string_old& s ) const;
 
 
-    void print( systemc_ostream& os = ::std::cout ) const;
+    void print( ::std::ostream& os = ::std::cout ) const;
 
 private:
 
@@ -225,8 +227,8 @@ private:
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
 inline
-systemc_ostream&
-operator << ( systemc_ostream& os, const sc_string_old& a )
+::std::ostream&
+operator << ( ::std::ostream& os, const sc_string_old& a )
 {
     a.print( os );
     return os;

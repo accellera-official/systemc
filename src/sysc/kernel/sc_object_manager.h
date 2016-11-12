@@ -1,17 +1,19 @@
 /*****************************************************************************
 
-  The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2014 by all Contributors.
-  All Rights reserved.
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
 
-  The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License (the "License");
-  You may not use this file except in compliance with such restrictions and
-  limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.accellera.org/. Software distributed by Contributors
-  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  ANY KIND, either express or implied. See the License for the specific
-  language governing rights and limitations under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
 
  *****************************************************************************/
 
@@ -51,12 +53,20 @@ class sc_object_manager
     friend class sc_simcontext;
 
 protected:
+    enum sc_name_origin
+    {
+        SC_NAME_NONE,
+        SC_NAME_OBJECT,
+        SC_NAME_EVENT,
+        SC_NAME_EXTERNAL
+    };
+
     struct table_entry
     {
-        table_entry() : m_event_p(NULL), m_object_p(NULL) {}
+        table_entry() : m_element_p(NULL), m_name_origin(SC_NAME_NONE) {}
 
-	sc_event*  m_event_p;   // if non-null this is an sc_event.
-        sc_object* m_object_p;  // if non-null this is an sc_object.
+	    void*          m_element_p; // can be an sc_object or an sc_event
+        sc_name_origin m_name_origin;
     };
 
 public:
@@ -65,6 +75,9 @@ public:
 
     sc_object_manager();
     ~sc_object_manager();
+
+    bool name_exists(const std::string& name);
+    const char* get_name(const std::string& name);
 
     sc_event* find_event(const char* name);
 
@@ -86,8 +99,10 @@ private:
     std::string create_name( const char* leaf_name );
     void insert_event(const std::string& name, sc_event* obj);
     void insert_object(const std::string& name, sc_object* obj);
+    bool insert_external_name(const std::string& name);
     void remove_event(const std::string& name);
     void remove_object(const std::string& name);
+    bool remove_external_name(const std::string& name);
 
 private:
 

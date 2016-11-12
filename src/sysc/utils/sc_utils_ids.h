@@ -1,17 +1,19 @@
 /*****************************************************************************
 
-  The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2014 by all Contributors.
-  All Rights reserved.
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
 
-  The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License (the "License");
-  You may not use this file except in compliance with such restrictions and
-  limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.accellera.org/. Software distributed by Contributors
-  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  ANY KIND, either express or implied. See the License for the specific
-  language governing rights and limitations under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
 
  *****************************************************************************/
 
@@ -35,9 +37,9 @@
 
 #ifndef SC_DEFINE_MESSAGE
 #define SC_DEFINE_MESSAGE(id,unused1,unused2) \
-    namespace sc_core { extern const char id[]; }
+    namespace sc_core { extern SC_API const char id[]; }
 namespace sc_core {
-    extern const char SC_ID_REGISTER_ID_FAILED_[]; // in sc_report_handler.cpp
+    extern SC_API const char SC_ID_REGISTER_ID_FAILED_[]; // in sc_report_handler.cpp
 }
 #endif
 
@@ -51,8 +53,7 @@ SC_DEFINE_MESSAGE(SC_ID_IEEE_1666_DEPRECATION_,
 		  804, "/IEEE_Std_1666/deprecated" )
 SC_DEFINE_MESSAGE(SC_ID_VECTOR_INIT_CALLED_TWICE_,
                   805, "sc_vector::init has already been called" )
-SC_DEFINE_MESSAGE(SC_ID_VECTOR_INIT_INVALID_CONTEXT_,
-                  806, "sc_vector::init called from invalid object context" )
+// available message number 806
 SC_DEFINE_MESSAGE(SC_ID_VECTOR_BIND_EMPTY_,
                   807, "sc_vector::bind called with empty range" )
 SC_DEFINE_MESSAGE(SC_ID_VECTOR_NONOBJECT_ELEMENTS_,

@@ -1,17 +1,19 @@
 /*****************************************************************************
 
-  The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2014 by all Contributors.
-  All Rights reserved.
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
 
-  The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License (the "License");
-  You may not use this file except in compliance with such restrictions and
-  limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.accellera.org/. Software distributed by Contributors
-  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  ANY KIND, either express or implied. See the License for the specific
-  language governing rights and limitations under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
 
  *****************************************************************************/
 
@@ -46,7 +48,7 @@ sc_in<bool>::end_of_elaboration()
     if( m_traces != 0 ) {
 	for( int i = 0; i < (int)m_traces->size(); ++ i ) {
 	    sc_trace_params* p = (*m_traces)[i];
-	    in_if_type* iface = DCAST<in_if_type*>( get_interface() );
+	    in_if_type* iface = dynamic_cast<in_if_type*>( get_interface() );
 	    sc_trace( p->tf, iface->read(), p->name );
 	}
 	remove_traces();
@@ -56,7 +58,7 @@ sc_in<bool>::end_of_elaboration()
 // called by sc_trace
 
 void
-sc_in<bool>::add_trace_internal(sc_trace_file* tf_, 
+sc_in<bool>::add_trace_internal(sc_trace_file* tf_,
 	const std::string& name_) const
 {
     if( tf_ != 0 ) {
@@ -68,7 +70,7 @@ sc_in<bool>::add_trace_internal(sc_trace_file* tf_,
 }
 
 void
-sc_in<bool>::add_trace(sc_trace_file* tf_, 
+sc_in<bool>::add_trace(sc_trace_file* tf_,
 	const std::string& name_) const
 {
     sc_deprecated_add_trace();
@@ -99,12 +101,12 @@ sc_in<bool>::vbind( sc_interface& interface_ )
 int
 sc_in<bool>::vbind( sc_port_base& parent_ )
 {
-    in_port_type* in_parent = DCAST<in_port_type*>( &parent_ );
+    in_port_type* in_parent = dynamic_cast<in_port_type*>( &parent_ );
     if( in_parent != 0 ) {
 	sc_port_base::bind( *in_parent );
 	return 0;
     }
-    inout_port_type* inout_parent = DCAST<inout_port_type*>( &parent_ );
+    inout_port_type* inout_parent = dynamic_cast<inout_port_type*>( &parent_ );
     if( inout_parent != 0 ) {
 	sc_port_base::bind( *inout_parent );
 	return 0;
@@ -128,7 +130,7 @@ sc_in<sc_dt::sc_logic>::end_of_elaboration()
     if( m_traces != 0 ) {
 	for( int i = 0; i < (int)m_traces->size(); ++ i ) {
 	    sc_trace_params* p = (*m_traces)[i];
-	    in_if_type* iface = DCAST<in_if_type*>( get_interface() );
+	    in_if_type* iface = dynamic_cast<in_if_type*>( get_interface() );
 	    sc_trace( p->tf, iface->read(), p->name );
 	}
 	remove_traces();
@@ -139,7 +141,7 @@ sc_in<sc_dt::sc_logic>::end_of_elaboration()
 // called by sc_trace
 
 void
-sc_in<sc_dt::sc_logic>::add_trace_internal( sc_trace_file* tf_, 
+sc_in<sc_dt::sc_logic>::add_trace_internal( sc_trace_file* tf_,
     const std::string& name_ ) const
 {
     if( tf_ != 0 ) {
@@ -151,7 +153,7 @@ sc_in<sc_dt::sc_logic>::add_trace_internal( sc_trace_file* tf_,
 }
 
 void
-sc_in<sc_dt::sc_logic>::add_trace( sc_trace_file* tf_, 
+sc_in<sc_dt::sc_logic>::add_trace( sc_trace_file* tf_,
     const std::string& name_ ) const
 {
     sc_deprecated_add_trace();
@@ -182,12 +184,12 @@ sc_in<sc_dt::sc_logic>::vbind( sc_interface& interface_ )
 int
 sc_in<sc_dt::sc_logic>::vbind( sc_port_base& parent_ )
 {
-    in_port_type* in_parent = DCAST<in_port_type*>( &parent_ );
+    in_port_type* in_parent = dynamic_cast<in_port_type*>( &parent_ );
     if( in_parent != 0 ) {
 	sc_port_base::bind( *in_parent );
 	return 0;
     }
-    inout_port_type* inout_parent = DCAST<inout_port_type*>( &parent_ );
+    inout_port_type* inout_parent = dynamic_cast<inout_port_type*>( &parent_ );
     if( inout_parent != 0 ) {
 	sc_port_base::bind( *inout_parent );
 	return 0;
@@ -220,7 +222,7 @@ sc_inout<bool>::~sc_inout()
 void
 sc_inout<bool>::initialize( const data_type& value_ )
 {
-    inout_if_type* iface = DCAST<inout_if_type*>( get_interface() );
+    inout_if_type* iface = dynamic_cast<inout_if_type*>( get_interface() );
     if( iface != 0 ) {
 	iface->write( value_ );
     } else {
@@ -245,7 +247,7 @@ sc_inout<bool>::end_of_elaboration()
     if( m_traces != 0 ) {
 	for( int i = 0; i < (int)m_traces->size(); ++ i ) {
 	    sc_trace_params* p = (*m_traces)[i];
-	    in_if_type* iface = DCAST<in_if_type*>( get_interface() );
+	    in_if_type* iface = dynamic_cast<in_if_type*>( get_interface() );
 	    sc_trace( p->tf, iface->read(), p->name );
 	}
 	remove_traces();
@@ -256,7 +258,7 @@ sc_inout<bool>::end_of_elaboration()
 // called by sc_trace
 
 void
-sc_inout<bool>::add_trace_internal( sc_trace_file* tf_, 
+sc_inout<bool>::add_trace_internal( sc_trace_file* tf_,
     const std::string& name_ ) const
 {
     if( tf_ != 0 ) {
@@ -268,7 +270,7 @@ sc_inout<bool>::add_trace_internal( sc_trace_file* tf_,
 }
 
 void
-sc_inout<bool>::add_trace( sc_trace_file* tf_, 
+sc_inout<bool>::add_trace( sc_trace_file* tf_,
     const std::string& name_ ) const
 {
     sc_deprecated_add_trace();
@@ -311,7 +313,7 @@ sc_inout<sc_dt::sc_logic>::~sc_inout()
 void
 sc_inout<sc_dt::sc_logic>::initialize( const data_type& value_ )
 {
-    inout_if_type* iface = DCAST<inout_if_type*>( get_interface() );
+    inout_if_type* iface = dynamic_cast<inout_if_type*>( get_interface() );
     if( iface != 0 ) {
 	iface->write( value_ );
     } else {
@@ -336,7 +338,7 @@ sc_inout<sc_dt::sc_logic>::end_of_elaboration()
     if( m_traces != 0 ) {
 	for( int i = 0; i < (int)m_traces->size(); ++ i ) {
 	    sc_trace_params* p = (*m_traces)[i];
-	    in_if_type* iface = DCAST<in_if_type*>( get_interface() );
+	    in_if_type* iface = dynamic_cast<in_if_type*>( get_interface() );
 	    sc_trace( p->tf, iface->read(), p->name );
 	}
 	remove_traces();

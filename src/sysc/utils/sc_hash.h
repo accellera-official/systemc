@@ -1,17 +1,19 @@
 /*****************************************************************************
 
-  The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2014 by all Contributors.
-  All Rights reserved.
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
 
-  The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License (the "License");
-  You may not use this file except in compliance with such restrictions and
-  limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.accellera.org/. Software distributed by Contributors
-  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  ANY KIND, either express or implied. See the License for the specific
-  language governing rights and limitations under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
 
  *****************************************************************************/
 
@@ -28,24 +30,25 @@
 #ifndef SC_HASH_H
 #define SC_HASH_H
 
+#include "sysc/kernel/sc_simcontext.h"
 
 namespace sc_core {
 
-extern unsigned default_int_hash_fn(const void*);
-extern unsigned default_ptr_hash_fn(const void*);
-extern unsigned default_str_hash_fn(const void*);
+extern SC_API unsigned default_int_hash_fn(const void*);
+extern SC_API unsigned default_ptr_hash_fn(const void*);
+extern SC_API unsigned default_str_hash_fn(const void*);
 
 class sc_phash_elem;
 class sc_phash_base_iter;
-template<class K, class C>  //template class 
+template<class K, class C>  //template class
 class sc_pdhash_iter;       //decl. -- Amit
 
 const int    PHASH_DEFAULT_MAX_DENSITY     = 5;
 const int    PHASH_DEFAULT_INIT_TABLE_SIZE = 11;
-extern const double PHASH_DEFAULT_GROW_FACTOR;
+extern SC_API const double PHASH_DEFAULT_GROW_FACTOR;
 const bool   PHASH_DEFAULT_REORDER_FLAG    = true;
 
-class sc_phash_base {
+class SC_API sc_phash_base {
     friend class sc_phash_base_iter;
 
     typedef sc_phash_base_iter iterator;
@@ -79,7 +82,7 @@ protected:
       /* Amit (5/14/99)                                             */
       if( cmpr == 0 )
         return ((sc_phash_base*)this)->find_entry_q( hv, k, plast );
-      else 
+      else
 	return ((sc_phash_base*)this)->find_entry_c( hv, k, plast );
     }
 
@@ -88,7 +91,7 @@ public:
                    int    size     = PHASH_DEFAULT_INIT_TABLE_SIZE,
                    int    density  = PHASH_DEFAULT_MAX_DENSITY,
                    double grow     = PHASH_DEFAULT_GROW_FACTOR,
-                   bool   reorder  = PHASH_DEFAULT_REORDER_FLAG,    
+                   bool   reorder  = PHASH_DEFAULT_REORDER_FLAG,
                    hash_fn_t hash_fn = default_ptr_hash_fn,
                    cmpr_fn_t cmpr_fn = 0                             );
     ~sc_phash_base();
@@ -122,7 +125,7 @@ public:
     void* operator[](const void* key) const;
 };
 
-class sc_phash_base_iter {
+class SC_API sc_phash_base_iter {
 protected:
     sc_phash_base*  table;
     sc_phash_elem*  entry;
@@ -342,9 +345,9 @@ public:
     }
 };
 
-extern int sc_strhash_cmp( const void*, const void* );
-extern void sc_strhash_kfree(void*);
-extern void* sc_strhash_kdup(const void*);
+extern SC_API int sc_strhash_cmp( const void*, const void* );
+extern SC_API void sc_strhash_kfree(void*);
+extern SC_API void* sc_strhash_kdup(const void*);
 
 template< class C >      // template class decl.
 class sc_strhash_iter;   // --Amit

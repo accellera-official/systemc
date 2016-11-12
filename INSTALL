@@ -462,6 +462,9 @@ The provided project files are prepared for both the 32-bit 'Win32' and
 64-bit 'x64' configurations.  Please refer to the Microsoft Visual Studio
 documentation for details about 64-bit builds.
 
+In addition to building static libraries for SystemC, the provided project
+files include support for building a SystemC DLL (configurations DebugDLL,
+ReleaseDLL).
 
 Creating SystemC Applications
 -----------------------------
@@ -552,7 +555,9 @@ to the configure script via the CXXFLAGS variable:
 
 In Visual C++, the preprocessor symbols can be added to the project
 configuration via the 'C/C++' tab under the 'Preprocessor' properties
-in the 'Preprocessor definitions' setting.
+in the 'Preprocessor definitions' setting.  Alternatively, you can add
+the switches to the 'SystemC.vsprops' property sheet to apply these
+settings to all build configurations.
 
 
  * SC_DEFAULT_WRITER_POLICY=<sc_writer_policy> -
@@ -604,6 +609,17 @@ in the 'Preprocessor definitions' setting.
          sc_core::sc_copyright() still works as expected.
    Note: Only effective during library build.
    See : Environment variable SC_COPYRIGHT_MESSAGE
+
+
+ * SC_ENABLE_ASSERTIONS -
+   Always enable the `sc_assert' expressions
+
+   Some build systems define `NDEBUG' by default in optimised build
+   configurations. As a result, the SystemC assertion macro `sc_assert()'
+   is disabled (similar to the C `assert()' macro).  By defining this
+   preprocessor symbol (when building the library and/or an application),
+   the `sc_assert()' checks are always enabled, irrespectively of the
+   definition of `NDEBUG'.
 
 
  * SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS -
@@ -738,6 +754,15 @@ in the 'Preprocessor definitions' setting.
    SC_USE_STD_STRING -
      Provide `sc_string' as an alias to `std::string':
        typedef std::string sc_string;
+
+
+ * SC_WIN_DLL -
+   Build (against) a DLL build of SystemC (Windows/MSVC only)
+
+   Needs to be set when building a SystemC DLL on Windows, as well
+   as when building an application/library to be linked against a
+   DLL version of SystemC.
+
 
 
 Influential environment variables

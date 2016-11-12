@@ -1,17 +1,19 @@
 /*****************************************************************************
 
-  The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2014 by all Contributors.
-  All Rights reserved.
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
 
-  The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License (the "License");
-  You may not use this file except in compliance with such restrictions and
-  limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.accellera.org/. Software distributed by Contributors
-  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  ANY KIND, either express or implied. See the License for the specific
-  language governing rights and limitations under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
 
  *****************************************************************************/
 
@@ -26,10 +28,10 @@
  *****************************************************************************/
 
 #include <cstdio>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
+#include <fstream>
 
-#include "sysc/utils/sc_iostream.h"
 #include "sysc/kernel/sc_process.h"
 #include "sysc/kernel/sc_simcontext_int.h"
 #include "sysc/utils/sc_stop_here.h"
@@ -93,17 +95,90 @@ const std::string sc_report_compose_message(const sc_report& rep)
 
     return str;
 }
-bool sc_report_close_default_log();
 
-static ::std::ofstream* log_stream = 0;
-static
-struct auto_close_log
+//
+// Private class to handle log files
+//
+class sc_log_file_handle
 {
-    ~auto_close_log()
-    {
-	sc_report_close_default_log();
-    }
-} auto_close;
+protected:
+	// not CopyConstructible
+	sc_log_file_handle(sc_log_file_handle const &);	
+	
+	// not CopyAssignable
+	void operator=(sc_log_file_handle const &);
+
+public:
+	sc_log_file_handle();
+	sc_log_file_handle(const char *);
+	void update_file_name(const char *);
+	bool release();
+	::std::ofstream& operator*();
+
+private:
+	std::string log_file_name;
+	::std::ofstream log_stream; 
+};
+
+sc_log_file_handle::sc_log_file_handle()
+{}
+
+sc_log_file_handle::sc_log_file_handle(const char * fname)
+: log_file_name(fname)
+, log_stream(fname)
+{}
+
+void
+sc_log_file_handle::update_file_name(const char * fname)
+{
+	if (!fname)
+	{
+		release();
+	}
+	else //fname != NULL
+	{
+		if (log_file_name.empty())
+		{
+			if (log_stream.is_open()) //should be closed already
+				log_stream.close();
+			log_file_name = fname;
+			log_stream.open(fname);
+		}
+		else // log_file_name not empty
+		{
+			// filename changed?
+			if (log_file_name != fname)
+			{
+				// new filename
+				release();
+				log_file_name = fname;
+				log_stream.open(fname);
+			}
+			else
+			{
+				// nothing to do
+			}
+		}
+	}
+}
+
+bool
+sc_log_file_handle::release()
+{
+	if (log_stream.is_open())
+	{
+		log_stream.close();
+		log_file_name.clear();
+		return false;
+	}
+	return true;
+}
+
+::std::ofstream& 
+sc_log_file_handle::operator*()
+{ return log_stream;	}
+
+static sc_log_file_handle log_stream;
 
 
 //
@@ -119,8 +194,7 @@ void sc_report_handler::default_handler(const sc_report& rep,
 
     if ( (actions & SC_LOG) && get_log_file_name() )
     {
-	if ( !log_stream )
-	    log_stream = new ::std::ofstream(get_log_file_name()); // ios::trunc
+		log_stream.update_file_name(get_log_file_name());
 
 	*log_stream << rep.get_time() << ": "
 	    << sc_report_compose_message(rep) << ::std::endl;
@@ -147,14 +221,10 @@ void sc_report_handler::default_handler(const sc_report& rep,
 // not documented, but available
 bool sc_report_close_default_log()
 {
-    delete log_stream;
+    bool ret = log_stream.release();
     sc_report_handler::set_log_file_name(NULL);
 
-    if ( !log_stream )
-	return false;
-
-    log_stream = 0;
-    return true;
+    return ret;
 }
 
 int sc_report_handler::get_count(sc_severity severity_) 
@@ -419,7 +489,7 @@ sc_msg_def * sc_report_handler::add_msg_type(const char * msg_type_)
     }
     else
     {
-	delete items->md;
+	delete [] items->md;
 	delete items;
 	return 0;
     }
@@ -718,13 +788,13 @@ sc_actions sc_report_handler::get_catch_actions()
 // predefined messages
 //
 
-const char SC_ID_REGISTER_ID_FAILED_[] = "register_id failed";
-const char SC_ID_UNKNOWN_ERROR_[]      = "unknown error";
-const char SC_ID_WITHOUT_MESSAGE_[]    = "";
-const char SC_ID_NOT_IMPLEMENTED_[]    = "not implemented";
-const char SC_ID_INTERNAL_ERROR_[]     = "internal error";
-const char SC_ID_ASSERTION_FAILED_[]   = "assertion failed";
-const char SC_ID_OUT_OF_BOUNDS_[]      = "out of bounds";
+SC_API const char SC_ID_REGISTER_ID_FAILED_[] = "register_id failed";
+SC_API const char SC_ID_UNKNOWN_ERROR_[]      = "unknown error";
+SC_API const char SC_ID_WITHOUT_MESSAGE_[]    = "";
+SC_API const char SC_ID_NOT_IMPLEMENTED_[]    = "not implemented";
+SC_API const char SC_ID_INTERNAL_ERROR_[]     = "internal error";
+SC_API const char SC_ID_ASSERTION_FAILED_[]   = "assertion failed";
+SC_API const char SC_ID_OUT_OF_BOUNDS_[]      = "out of bounds";
 
 #define DEFINE_MSG(id,n)                                                     \
     {                                                                        \

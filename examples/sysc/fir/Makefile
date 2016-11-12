@@ -1,7 +1,7 @@
 include ../Makefile.config
 
 PROJECTS := fir fir_rtl
-COMMON_TARGETS := all run check clean ultraclean
+COMMON_TARGETS := all build run check clean ultraclean
 
 COMMON_SRCS = \
 	stimulus.cpp \

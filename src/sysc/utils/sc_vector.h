@@ -1,17 +1,19 @@
 /*****************************************************************************
 
-  The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2014 by all Contributors.
-  All Rights reserved.
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
 
-  The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License (the "License");
-  You may not use this file except in compliance with such restrictions and
-  limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.accellera.org/. Software distributed by Contributors
-  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  ANY KIND, either express or implied. See the License for the specific
-  language governing rights and limitations under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
 
  *****************************************************************************/
 
@@ -35,8 +37,6 @@
 #include "sysc/kernel/sc_object.h"
 #include "sysc/packages/boost/config.hpp"
 #include "sysc/packages/boost/utility/enable_if.hpp"
-
-//#define SC_VECTOR_HEADER_ONLY_
 
 namespace sc_core {
 namespace sc_meta {
@@ -103,7 +103,14 @@ sc_vector_do_operator_paren( Container & cont
                            , ArgumentIterator  last
                            , typename Container::iterator from );
 
-class sc_vector_base
+class sc_vector_element;  // opaque pointer
+
+} // namespace sc_core
+
+SC_API_VECTOR_(sc_core::sc_vector_element*);
+
+namespace sc_core {
+class SC_API sc_vector_base
   : public sc_object
 {
 
@@ -112,7 +119,8 @@ class sc_vector_base
 
 public:
 
-  typedef std::vector< void* >          storage_type;
+  typedef sc_vector_element*            handle_type;
+  typedef std::vector< handle_type >    storage_type;
   typedef storage_type::size_type       size_type;
   typedef storage_type::difference_type difference_type;
 
@@ -141,7 +149,7 @@ protected:
   ~sc_vector_base()
     { delete objs_vec_; }
 
-  void * & at( size_type i )
+  void * at( size_type i )
     { return vec_[i]; }
 
   void const * at( size_type i ) const
@@ -154,7 +162,7 @@ protected:
     { vec_.clear(); }
 
   void push_back( void* item )
-    { vec_.push_back(item); }
+    { vec_.push_back( static_cast<handle_type>(item) ); }
 
   void check_index( size_type i ) const;
   bool check_init( size_type n )  const;
@@ -172,8 +180,15 @@ protected:
   sc_object* implicit_cast( sc_object* p ) const { return p; }
   sc_object* implicit_cast( ... /* incompatible */ )  const;
 
-public: 
+  class context_scope
+  {
+    sc_vector_base* owner_;
+  public:
+    explicit context_scope(sc_vector_base* owner);
+    ~context_scope();
+  };
 
+public: 
   void report_empty_bind( const char* kind_, bool dst_range_ ) const;
 
 private:
@@ -263,6 +278,8 @@ class sc_vector_iter
 
   typedef typename sc_meta::remove_const<ElementType>::type plain_type;
   typedef const plain_type                                  const_plain_type;
+  typedef typename sc_direct_access<plain_type>::const_policy
+    const_direct_policy;
 
   friend class sc_vector< plain_type >;
   template< typename, typename > friend class sc_vector_assembly;
@@ -281,6 +298,8 @@ class sc_vector_iter
 
   typedef typename select_iter<ElementType>::type          raw_iterator;
   typedef sc_vector_iter< const_plain_type, const_policy > const_iterator;
+  typedef sc_vector_iter< const_plain_type, const_direct_policy >
+    const_direct_iterator;
 
   // underlying vector iterator
 
@@ -302,13 +321,20 @@ public:
   sc_vector_iter() : access_policy(), it_() {}
 
   // iterator conversions to more const, and/or direct iterators
-  template< typename OtherElement, typename OtherPolicy >
-  sc_vector_iter( const sc_vector_iter<OtherElement, OtherPolicy>& it
-      , SC_ENABLE_IF_((
-          sc_meta::is_more_const< element_type
-                                , typename OtherPolicy::element_type >
-        ))
-      )
+  //
+  // Note: There is a minor risk to match unrelated classes (i.e. not sc_vector_iter<T,POL>),
+  //       but MSVC 2005 does not correctly consider a restricted conversion constructor
+  //       sc_vector_iter( const sc_vector_iter<OtherType,OtherPolicy>, SC_ENABLE_IF_ ...).
+  //       To reduce this risk, the types used in the enable-if condition could be further
+  //       tailored towards sc_vector(_iter), should the need arise.
+  //
+  // See also: sc_direct_access conversion constructor
+  template< typename It >
+  sc_vector_iter( const It& it
+    , SC_ENABLE_IF_((
+        sc_meta::is_more_const< element_type
+                              , typename It::policy::element_type >
+      )) )
     : access_policy( it.get_policy() ), it_( it.it_ )
   {}
 
@@ -328,23 +354,29 @@ public:
   this_type& operator-=( difference_type n ) { it_-=n; return *this; }
 
   // relations
-  bool operator== ( const this_type& that ) const { return it_ == that.it_; }
-  bool operator!= ( const this_type& that ) const { return it_ != that.it_; }
-  bool operator<= ( const this_type& that ) const { return it_ <= that.it_; }
-  bool operator>= ( const this_type& that ) const { return it_ >= that.it_; }
-  bool operator<  ( const this_type& that ) const { return it_ < that.it_; }
-  bool operator>  ( const this_type& that ) const { return it_ > that.it_; }
+  bool operator==( const const_direct_iterator& that ) const
+    { return it_ == that.it_; }
+  bool operator!=( const const_direct_iterator& that ) const
+    { return it_ != that.it_; }
+  bool operator<=( const const_direct_iterator& that ) const
+    { return it_ <= that.it_; }
+  bool operator>=( const const_direct_iterator& that ) const
+    { return it_ >= that.it_; }
+  bool operator< ( const const_direct_iterator& that ) const
+    { return it_ < that.it_; }
+  bool operator> ( const const_direct_iterator& that ) const
+    { return it_ > that.it_; }
 
   // dereference
   reference operator*() const
-    { return *access_policy::get( static_cast<element_type*>(*it_) ); }
+    { return *access_policy::get( static_cast<element_type*>((void*)*it_) ); }
   pointer   operator->() const
-    { return access_policy::get( static_cast<element_type*>(*it_) ); }
+    { return access_policy::get( static_cast<element_type*>((void*)*it_) ); }
   reference operator[]( difference_type n ) const
-    { return *access_policy::get( static_cast<element_type*>(it_[n]) ); }
+    { return *access_policy::get( static_cast<element_type*>((void*)it_[n]) ); }
 
   // distance
-  difference_type operator-( this_type const& that ) const
+  difference_type operator-( const_direct_iterator const& that ) const
     { return it_-that.it_; }
 
 }; // sc_vector_iter
@@ -622,6 +654,9 @@ sc_vector<T>::init( size_type n, Creator c )
 {
   if ( base_type::check_init(n) )
   {
+    // restore SystemC hierarchy context, if needed
+    sc_vector_base::context_scope scope( this );
+
     base_type::reserve( n );
     try
     {
@@ -631,7 +666,7 @@ sc_vector<T>::init( size_type n, Creator c )
         std::string  name  = make_name( basename(), i );
         const char*  cname = name.c_str();
 
-        void* p = c( cname, i ) ; // call Creator
+        element_type* p = c( cname, i ) ; // call Creator
         base_type::push_back(p);
       }
     }
@@ -651,7 +686,6 @@ sc_vector<T>::clear()
   while ( i --> 0 )
   {
     delete &( (*this)[i] );
-    base_type::at(i) = 0;
   }
   base_type::clear();
 }

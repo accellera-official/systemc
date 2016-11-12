@@ -1,17 +1,19 @@
 /*****************************************************************************
 
-  The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2014 by all Contributors.
-  All Rights reserved.
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
 
-  The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License (the "License");
-  You may not use this file except in compliance with such restrictions and
-  limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.accellera.org/. Software distributed by Contributors
-  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  ANY KIND, either express or implied. See the License for the specific
-  language governing rights and limitations under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
 
  *****************************************************************************/
 
@@ -28,6 +30,7 @@
 #ifndef SC_VER_H
 #define SC_VER_H
 
+#include "sysc/kernel/sc_cmnhdr.h"
 #include "sysc/kernel/sc_macros.h"               // SC_CONCAT_UNDERSCORE_
                                                  // SC_STRINGIFY_HELPER_
 #include "sysc/communication/sc_writer_policy.h" // SC_DEFAULT_WRITER_POLICY
@@ -36,29 +39,29 @@
 
 namespace sc_core {
 
-extern const char* sc_copyright();
-extern const char* sc_release();
-extern const char* sc_version();
+extern SC_API const char* sc_copyright();
+extern SC_API const char* sc_release();
+extern SC_API const char* sc_version();
 
-extern const unsigned int sc_version_major;
-extern const unsigned int sc_version_minor;
-extern const unsigned int sc_version_patch;
+extern SC_API const unsigned int sc_version_major;
+extern SC_API const unsigned int sc_version_minor;
+extern SC_API const unsigned int sc_version_patch;
 
-extern const std::string  sc_version_originator;
-extern const std::string  sc_version_release_date;
-extern const std::string  sc_version_prerelease;
-extern const bool         sc_is_prerelease;
-extern const std::string  sc_version_string;
-extern const std::string  sc_copyright_string;
+extern SC_API const std::string  sc_version_originator;
+extern SC_API const std::string  sc_version_release_date;
+extern SC_API const std::string  sc_version_prerelease;
+extern SC_API const bool         sc_is_prerelease;
+extern SC_API const std::string  sc_version_string;
+extern SC_API const std::string  sc_copyright_string;
 
-#define SYSTEMC_2_3_1
+#define SYSTEMC_2_3_2
  
-#define SYSTEMC_VERSION       20140417
+#define SYSTEMC_VERSION       20161111
 #define SC_VERSION_ORIGINATOR "Accellera"
 #define SC_VERSION_MAJOR      2
 #define SC_VERSION_MINOR      3
-#define SC_VERSION_PATCH      1
-#define SC_IS_PRERELEASE      0
+#define SC_VERSION_PATCH      2
+#define SC_IS_PRERELEASE      1
 
 /// compliancy with IEEE 1666-2011 (see 8.6.5)
 #define IEEE_1666_SYSTEMC     201101L
@@ -72,7 +75,7 @@ extern const std::string  sc_copyright_string;
   SC_STRINGIFY_HELPER_( SYSTEMC_VERSION )
 
 #if ( SC_IS_PRERELEASE == 1 )
-#  define SC_VERSION_PRERELEASE "pub_rev"
+#  define SC_VERSION_PRERELEASE "lwg"
 #  define SC_VERSION \
     SC_STRINGIFY_HELPER_( SC_VERSION_MAJOR.SC_VERSION_MINOR.SC_VERSION_PATCH ) \
     "_" SC_VERSION_PRERELEASE "_" SC_VERSION_RELEASE_DATE \
@@ -154,7 +157,14 @@ struct SC_API_VERSION_STRING
     );
 };
 
-#if !defined( SC_DISABLE_API_VERSION_CHECK ) // disabled in sc_ver.cpp
+#if !defined(SC_BUILD)
+// import explicitly instantiated template
+SC_API_TEMPLATE_ template struct SC_API SC_API_VERSION_STRING
+<
+  &SC_DISABLE_VIRTUAL_BIND_CHECK_
+>;
+
+#if !defined(SC_DISABLE_API_VERSION_CHECK)
 static
 SC_API_VERSION_STRING
 <
@@ -166,6 +176,7 @@ api_version_check
   SC_DEFAULT_WRITER_POLICY
 );
 #endif // SC_DISABLE_API_VERSION_CHECK
+#endif // SC_BUILD
 
 //#undef SC_API_DEFINED_
 //#undef SC_API_UNDEFINED_

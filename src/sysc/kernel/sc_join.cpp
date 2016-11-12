@@ -1,17 +1,19 @@
 /*****************************************************************************
 
-  The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2014 by all Contributors.
-  All Rights reserved.
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
 
-  The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License (the "License");
-  You may not use this file except in compliance with such restrictions and
-  limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.accellera.org/. Software distributed by Contributors
-  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  ANY KIND, either express or implied. See the License for the specific
-  language governing rights and limitations under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
 
  *****************************************************************************/
 
@@ -25,7 +27,6 @@
  *****************************************************************************/
 
 
-#include <cassert>
 #include <cstdlib>
 #include <cstddef>
 
@@ -44,7 +45,7 @@ namespace sc_core {
 // This is the object instance constructor for this class.
 //------------------------------------------------------------------------------
 sc_join::sc_join()
-  : m_join_event( (std::string(SC_KERNEL_EVENT_PREFIX)+"_join_event").c_str() )
+  : m_join_event( sc_event::kernel_event, "join_event" )
   , m_threads_n(0)
 {}
 
@@ -52,14 +53,14 @@ sc_join::sc_join()
 //"sc_join::add_process - sc_process_b*"
 //
 // This method adds a process to this join object instance. This consists of
-// incrementing the count of processes in the join process and adding this 
+// incrementing the count of processes in the join process and adding this
 // object instance to the supplied thread's monitoring queue.
 //     process_p -> thread to be monitored.
 //------------------------------------------------------------------------------
 void sc_join::add_process( sc_process_b* process_p )
 {
-    sc_thread_handle handle = DCAST<sc_thread_handle>(process_p);
-    assert( handle != 0 );
+    sc_thread_handle handle = dynamic_cast<sc_thread_handle>(process_p);
+    sc_assert( handle != 0 );
     m_threads_n++;
     handle->add_monitor( this );
 }
@@ -69,7 +70,7 @@ void sc_join::add_process( sc_process_b* process_p )
 //"sc_join::add_process - sc_process_handle"
 //
 // This method adds a process to this join object instance. This consists of
-// incrementing the count of processes in the join process and adding this 
+// incrementing the count of processes in the join process and adding this
 // object instance to the supplied thread's monitoring queue.
 //     process_h = handle for process to be monitored.
 //------------------------------------------------------------------------------
@@ -85,7 +86,7 @@ void sc_join::add_process( sc_process_handle process_h )
     }
     else
     {
-        SC_REPORT_ERROR( SC_ID_JOIN_ON_METHOD_HANDLE_, 0 ); 
+        SC_REPORT_ERROR( SC_ID_JOIN_ON_METHOD_HANDLE_, 0 );
     }
 }
 
@@ -94,8 +95,8 @@ void sc_join::add_process( sc_process_handle process_h )
 //"sc_join::signal"
 //
 // This virtual method is called when a process being monitored by this object
-// instance sends a signal. If the signal type is spm_exit and the count of 
-// threads that we are waiting to terminate on goes to zero we fire our join 
+// instance sends a signal. If the signal type is spm_exit and the count of
+// threads that we are waiting to terminate on goes to zero we fire our join
 // event.
 //     thread_p -> thread that is signalling.
 //     type     =  type of signal being sent.

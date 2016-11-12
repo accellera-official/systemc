@@ -1,17 +1,19 @@
 /*****************************************************************************
 
-  The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2014 by all Contributors.
-  All Rights reserved.
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
 
-  The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License (the "License");
-  You may not use this file except in compliance with such restrictions and
-  limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.accellera.org/. Software distributed by Contributors
-  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  ANY KIND, either express or implied. See the License for the specific
-  language governing rights and limitations under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
 
  *****************************************************************************/
 
@@ -82,7 +84,6 @@ namespace sc_core {
 
 
 // token concatenation
-
 #define SC_CONCAT_HELPER_( a, b ) \
   SC_CONCAT_HELPER_DEFERRED_( a, b )
 #define SC_CONCAT_HELPER_DEFERRED_( a, b ) \
@@ -94,20 +95,21 @@ namespace sc_core {
 
 /*
  *  These help debugging --
- *  -- user can find out where each process is stopped at.
+ *  -- the user can find out at which location in their source file a process calls wait.
  */
 
-#define WAIT()                                                                \
-    ::sc_core::sc_set_location( __FILE__, __LINE__ );                         \
-    ::sc_core::wait()
+#define SC_WAIT()                                       \
+    ::sc_core::sc_set_location( __FILE__, __LINE__ );   \
+    ::sc_core::wait();                                  \
+    ::sc_core::sc_set_location( NULL, 0 )
 
-#define WAITN(n)                                                              \
-    ::sc_core::sc_set_location( __FILE__, __LINE__ );                         \
-    ::sc_core::wait(n)
+#define SC_WAITN(n)                                     \
+    ::sc_core::sc_set_location( __FILE__, __LINE__ );   \
+    ::sc_core::wait(n);                                 \
+    ::sc_core::sc_set_location( NULL, 0 )
 
-#define WAIT_UNTIL(expr)                                                      \
-    ::sc_core::sc_set_location( __FILE__, __LINE__ );                         \
-    do { ::sc_core::wait(); } while( !(expr) )
+#define SC_WAIT_UNTIL(expr)                             \
+  do { SC_WAIT(); } while( !(expr) )
 
 } // namespace sc_core
 

@@ -1,17 +1,19 @@
 /*****************************************************************************
 
-  The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2014 by all Contributors.
-  All Rights reserved.
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
 
-  The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License (the "License");
-  You may not use this file except in compliance with such restrictions and
-  limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.accellera.org/. Software distributed by Contributors
-  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  ANY KIND, either express or implied. See the License for the specific
-  language governing rights and limitations under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
 
  *****************************************************************************/
 
@@ -24,8 +26,8 @@
  CHANGE LOG APPEARS AT THE END OF THE FILE
  *****************************************************************************/
 
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 
 #include "sysc/kernel/sc_event.h"
 #include "sysc/kernel/sc_kernel_ids.h"
@@ -36,7 +38,13 @@
 #include "sysc/kernel/sc_object_manager.h"
 #include "sysc/utils/sc_utils_ids.h"
 
+#include <sstream>
+
 namespace sc_core {
+
+using std::malloc;
+using std::strrchr;
+using std::strncmp;
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_event
@@ -80,14 +88,11 @@ void
 sc_event::notify()
 {
     // immediate notification
-    if(
-        // coming from sc_prim_channel::update
-        m_simc->update_phase()
-#if SC_HAS_PHASE_CALLBACKS_
-        // coming from phase callbacks
-        || m_simc->notify_phase()
-#endif
-      )
+    if( !m_simc->evaluation_phase() )
+        // coming from
+        //  * elaboration
+        //  * sc_prim_channel::update
+        //  * phase callbacks
     {
         SC_REPORT_ERROR( SC_ID_IMMEDIATE_NOTIFICATION_, "" );
         return;
@@ -200,21 +205,24 @@ sc_event::notify_delayed( const sc_time& t )
     }
 }
 
+#define SC_KERNEL_EVENT_PREFIX "$$$$kernel_event$$$$_"
+sc_event::kernel_tag sc_event::kernel_event;
+
 // +----------------------------------------------------------------------------
 // |"sc_event::register_event"
-// | 
-// | This method sets the name of this object instance and optionally adds 
+// |
+// | This method sets the name of this object instance and optionally adds
 // | it to the object manager's hierarchy. The object instance will be
 // | inserted into the object manager's hierarchy if one of the following is
 // | true:
-// |   (a) the leaf name is non-null and does not start with  
-// |       SC_KERNEL_EVENT_PREFIX.
+// |   (a) the leaf name is non-null and is_kernel_event == false
 // |   (b) the event is being created before the start of simulation.
 // |
 // | Arguments:
 // |     leaf_name = leaf name of the object or NULL.
 // +----------------------------------------------------------------------------
-void sc_event::register_event( const char* leaf_name )
+void
+sc_event::register_event( const char* leaf_name, bool is_kernel_event /* = false */ )
 {
     sc_object_manager* object_manager = m_simc->get_object_manager();
     m_parent_p = m_simc->active_object();
@@ -223,8 +231,17 @@ void sc_event::register_event( const char* leaf_name )
 
     if( !leaf_name || !leaf_name[0] )
     {
-	if ( sc_is_running( m_simc ) ) return;
-        leaf_name = sc_gen_unique_name("event");    
+        if ( sc_is_running( m_simc ) ) return;
+        leaf_name = sc_gen_unique_name
+            ( is_kernel_event ? SC_KERNEL_EVENT_PREFIX : "event" );
+    }
+
+    // prepend kernel events with internal prefix
+    else if ( is_kernel_event )
+    {
+        m_name = SC_KERNEL_EVENT_PREFIX;
+        m_name.append( leaf_name );
+        leaf_name = m_name.c_str();
     }
 
     // Create a hierarchichal name and place it into the object manager if
@@ -232,8 +249,7 @@ void sc_event::register_event( const char* leaf_name )
 
     object_manager->create_name( leaf_name ).swap( m_name );
 
-    if ( strncmp( leaf_name, SC_KERNEL_EVENT_PREFIX, 
-                  strlen(SC_KERNEL_EVENT_PREFIX) ) )
+    if ( !is_kernel_event )
     {
 	object_manager->insert_event(m_name, this);
 	if ( m_parent_p )
@@ -257,9 +273,9 @@ sc_event::reset()
 
 // +----------------------------------------------------------------------------
 // |"sc_event::sc_event(name)"
-// | 
+// |
 // | This is the object instance constructor for named sc_event instances.
-// | If the name is non-null or the this is during elaboration add the
+// | If the name is non-null or this is during elaboration add the
 // | event to the object hierarchy.
 // |
 // | Arguments:
@@ -277,16 +293,14 @@ sc_event::sc_event( const char* name ) :
     m_threads_static(),
     m_threads_dynamic()
 {
-    // Skip simulator's internally defined events.
-
     register_event( name );
 }
 
 // +----------------------------------------------------------------------------
-// |"sc_event::sc_event(name)"
-// | 
+// |"sc_event::sc_event()"
+// |
 // | This is the object instance constructor for non-named sc_event instances.
-// | If this is during elaboration add create a name and add it to the object
+// | If this is during elaboration create a name and add it to the object
 // | hierarchy.
 // +----------------------------------------------------------------------------
 sc_event::sc_event() :
@@ -301,15 +315,36 @@ sc_event::sc_event() :
     m_threads_static(),
     m_threads_dynamic()
 {
-
     register_event( NULL );
 }
 
 // +----------------------------------------------------------------------------
+// |"sc_event::sc_event(kernel_event, name)"
+// |
+// | This is the object instance constructor for kernel sc_event instances.
+// | If this is during elaboration create an implementation-defined name and
+// | do NOT add it to the object hierarchy.
+// +----------------------------------------------------------------------------
+sc_event::sc_event( kernel_tag, const char* name ) :
+    m_name(),
+    m_parent_p(NULL),
+    m_simc( sc_get_curr_simcontext() ),
+    m_notify_type( NONE ),
+    m_delta_event_index( -1 ),
+    m_timed( 0 ),
+    m_methods_static(),
+    m_methods_dynamic(),
+    m_threads_static(),
+    m_threads_dynamic()
+{
+    register_event( name, /* is_kernel_event = */ true );
+}
+
+// +----------------------------------------------------------------------------
 // |"sc_event::~sc_event"
-// | 
+// |
 // | This is the object instance destructor for this class. It cancels any
-// | outstanding waits and removes the event from the object manager's 
+// | outstanding waits and removes the event from the object manager's
 // | instance table if it has a name.
 // +----------------------------------------------------------------------------
 sc_event::~sc_event()
@@ -324,9 +359,9 @@ sc_event::~sc_event()
 
 // +----------------------------------------------------------------------------
 // |"sc_event::trigger"
-// | 
+// |
 // | This method "triggers" this object instance. This consists of scheduling
-// | for execution all the processes that are schedulable and waiting on this 
+// | for execution all the processes that are schedulable and waiting on this
 // | event.
 // +----------------------------------------------------------------------------
 void
@@ -338,7 +373,7 @@ sc_event::trigger()
 
     // trigger the static sensitive methods
 
-    if( ( size = m_methods_static.size() ) != 0 ) 
+    if( ( size = m_methods_static.size() ) != 0 )
     {
         sc_method_handle* l_methods_static = &m_methods_static[0];
         int i = size - 1;
@@ -351,7 +386,7 @@ sc_event::trigger()
     // trigger the dynamic sensitive methods
 
 
-    if( ( size = m_methods_dynamic.size() ) != 0 ) 
+    if( ( size = m_methods_dynamic.size() ) != 0 )
     {
 	last_i = size - 1;
 	sc_method_handle* l_methods_dynamic = &m_methods_dynamic[0];
@@ -371,7 +406,7 @@ sc_event::trigger()
 
     // trigger the static sensitive threads
 
-    if( ( size = m_threads_static.size() ) != 0 ) 
+    if( ( size = m_threads_static.size() ) != 0 )
     {
         sc_thread_handle* l_threads_static = &m_threads_static[0];
         int i = size - 1;
@@ -383,7 +418,7 @@ sc_event::trigger()
 
     // trigger the dynamic sensitive threads
 
-    if( ( size = m_threads_dynamic.size() ) != 0 ) 
+    if( ( size = m_threads_dynamic.size() ) != 0 )
     {
 	last_i = size - 1;
 	sc_thread_handle* l_threads_dynamic = &m_threads_dynamic[0];
@@ -516,7 +551,7 @@ void
 sc_event_timed::deallocate( void* p )
 {
     if( p != 0 ) {
-        sc_event_timed_u* q = RCAST<sc_event_timed_u*>( p );
+        sc_event_timed_u* q = reinterpret_cast<sc_event_timed_u*>( p );
         q->next = free_list;
         free_list = q;
     }
@@ -545,7 +580,7 @@ sc_event_list::push_back( const sc_event& e )
     m_events.push_back( &e );
 }
 
-void 
+void
 sc_event_list::push_back( const sc_event_list& el )
 {
     m_events.reserve( size() + el.size() );

@@ -1,17 +1,19 @@
 /*****************************************************************************
 
-  The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2014 by all Contributors.
-  All Rights reserved.
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
 
-  The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License (the "License");
-  You may not use this file except in compliance with such restrictions and
-  limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.accellera.org/. Software distributed by Contributors
-  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  ANY KIND, either express or implied. See the License for the specific
-  language governing rights and limitations under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
 
  *****************************************************************************/
 
@@ -25,14 +27,14 @@
  *****************************************************************************/
 
 
-#include <stdio.h>
+#include <cstdio>
 #include <cstdlib>
 #include <cassert>
-#include <ctype.h>
-#include <stddef.h>
+#include <cctype>
+#include <cstddef>
+#include <cctype>
 #include <algorithm> // pick up std::sort.
 
-#include "sysc/utils/sc_iostream.h"
 #include "sysc/kernel/sc_object.h"
 #include "sysc/utils/sc_hash.h"
 #include "sysc/utils/sc_list.h"
@@ -42,6 +44,8 @@
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/kernel/sc_process.h"
 #include "sysc/kernel/sc_module_name.h"
+
+#include <sstream>
 
 namespace sc_core {
 
@@ -75,8 +79,10 @@ sc_object_manager::~sc_object_manager()
 
     for ( it = m_instance_table.begin(); it != m_instance_table.end(); it++) 
     {
-        sc_object* obj_p = it->second.m_object_p;
-        if ( obj_p ) obj_p->m_simc = 0;
+        if(it->second.m_name_origin == SC_NAME_OBJECT) {
+            sc_object* obj_p = static_cast<sc_object*>(it->second.m_element_p);
+            obj_p->m_simc = 0;
+        }
     }
 }
 
@@ -126,12 +132,10 @@ std::string sc_object_manager::create_name(const char* leaf_name)
     clash = false; 
     for (;;)
     {
-	instance_table_t::iterator it = m_instance_table.find(result_string);
-	if ( it == m_instance_table.end() ||
-	     (it->second.m_event_p == NULL && it->second.m_object_p == NULL ) )
-	{
-	    break;
-	}
+	    if ( !name_exists(result_string) )
+	    {
+	        break;
+	    }
         clash = true; 
         leafname_string = sc_gen_unique_name(leafname_string.c_str(), false); 
 	if (parent_p) {
@@ -153,6 +157,46 @@ std::string sc_object_manager::create_name(const char* leaf_name)
 }
 
 // +----------------------------------------------------------------------------
+// |"sc_object_manager::name_exists"
+// |
+// | This method returns true if the supplied name exists in the hierarchy
+// | or false if the element does not exist.
+// |
+// | Arguments:
+// |     name = name of the element
+// | Result is a boolean
+// +----------------------------------------------------------------------------
+bool
+sc_object_manager::name_exists(const std::string& name)
+{
+    instance_table_t::const_iterator it = m_instance_table.find(name);
+    return (it != m_instance_table.end()) &&
+           (it->second.m_name_origin != SC_NAME_NONE);
+}
+
+// +----------------------------------------------------------------------------
+// |"sc_object_manager::get_name"
+// |
+// | This method returns the pointer to the supplied name if it exists in the
+// | hierarchy or NULL if it doesn't exist.
+// |
+// | Arguments:
+// |     name = name of the element
+// | Result is a pointer to the name or NULL if it doesn't exist.
+// +----------------------------------------------------------------------------
+const char*
+sc_object_manager::get_name(const std::string& name)
+{
+    instance_table_t::iterator it = m_instance_table.find(name);
+    if (it != m_instance_table.end() &&
+        it->second.m_name_origin != SC_NAME_NONE) {
+        return it->first.c_str();
+    } else {
+        return NULL;
+    }
+}
+
+// +----------------------------------------------------------------------------
 // |"sc_object_manager::find_event"
 // | 
 // | This method returns the sc_event with the supplied name, or a NULL if
@@ -167,7 +211,13 @@ sc_object_manager::find_event(const char* name)
 {
     instance_table_t::iterator it;
     it = m_instance_table.find(name);
-    return it == m_instance_table.end() ? NULL : it->second.m_event_p;
+    if(it != m_instance_table.end()
+       && it->second.m_name_origin == SC_NAME_EVENT)
+    {
+        return static_cast<sc_event*>(it->second.m_element_p);
+    } else {
+        return NULL;
+    }
 }
 
 // +----------------------------------------------------------------------------
@@ -185,7 +235,13 @@ sc_object_manager::find_object(const char* name)
 {
     instance_table_t::iterator it;
     it = m_instance_table.find(name);
-    return it == m_instance_table.end() ? NULL : it->second.m_object_p;
+    if(it != m_instance_table.end()
+       && it->second.m_name_origin == SC_NAME_OBJECT)
+    {
+        return static_cast<sc_object*>(it->second.m_element_p);
+    } else {
+        return NULL;
+    }
 }
 
 
@@ -207,8 +263,9 @@ sc_object_manager::first_object()
           m_object_it != m_instance_table.end(); 
 	  m_object_it++ )
     {
-        result_p = m_object_it->second.m_object_p;
-	if ( result_p ) break;
+        if(m_object_it->second.m_name_origin == SC_NAME_OBJECT) {
+            return static_cast<sc_object*>(m_object_it->second.m_element_p);
+        }
     }
     return result_p;
 }
@@ -222,7 +279,7 @@ sc_object_manager::first_object()
 sc_object*
 sc_object_manager::hierarchy_curr()
 {
-    size_t     hierarchy_n; // current size of the hierarchy.
+    std::size_t hierarchy_n;  // current size of the hierarchy.
 
     hierarchy_n = m_object_stack.size();
     return hierarchy_n ? m_object_stack[hierarchy_n-1] : 0;
@@ -237,8 +294,8 @@ sc_object_manager::hierarchy_curr()
 sc_object*
 sc_object_manager::hierarchy_pop()
 {
-    size_t     hierarchy_n; // current size of the hierarchy.
-    sc_object* result_p;    // object to return.
+    std::size_t hierarchy_n;  // current size of the hierarchy.
+    sc_object*  result_p;     // object to return.
 
     hierarchy_n = m_object_stack.size();
     if ( hierarchy_n == 0 ) return NULL;
@@ -276,6 +333,36 @@ sc_object_manager::hierarchy_size()
 }
 
 // +----------------------------------------------------------------------------
+// |"sc_object_manager::insert_external_name"
+// |
+// | This method inserts the supplied name into the instance table using
+// | the supplied name.
+// |
+// | Arguments:
+// |     name     =  external to be inserted.
+// +----------------------------------------------------------------------------
+bool
+sc_object_manager::insert_external_name(const std::string& name)
+{
+    if(!name_exists(name)) {
+        m_instance_table[name].m_element_p = NULL;
+        m_instance_table[name].m_name_origin = SC_NAME_EXTERNAL;
+        return true;
+    } else {
+        table_entry element = m_instance_table[name];
+        std::stringstream msg;
+        msg << name << " ("
+            << ((element.m_name_origin == SC_NAME_OBJECT)
+                ? (static_cast<sc_object*>(element.m_element_p))->kind()
+                : (element.m_name_origin == SC_NAME_EVENT)
+                    ? "event" : "external name")
+            << ")";
+        SC_REPORT_WARNING( SC_ID_NAME_EXISTS_, msg.str().c_str());
+        return false;
+    }
+}
+
+// +----------------------------------------------------------------------------
 // |"sc_object_manager::insert_event"
 // | 
 // | This method inserts the supplied sc_event instance into the instance
@@ -288,7 +375,8 @@ sc_object_manager::hierarchy_size()
 void
 sc_object_manager::insert_event(const std::string& name, sc_event* event_p)
 {
-    m_instance_table[name].m_event_p = event_p;
+    m_instance_table[name].m_element_p = static_cast<void*>(event_p);
+    m_instance_table[name].m_name_origin = SC_NAME_EVENT;
 }
 
 // +----------------------------------------------------------------------------
@@ -304,7 +392,8 @@ sc_object_manager::insert_event(const std::string& name, sc_event* event_p)
 void
 sc_object_manager::insert_object(const std::string& name, sc_object* object_p)
 {
-    m_instance_table[name].m_object_p = object_p;
+    m_instance_table[name].m_element_p = static_cast<void*>(object_p);
+    m_instance_table[name].m_name_origin = SC_NAME_OBJECT;
 }
 
 // +----------------------------------------------------------------------------
@@ -317,7 +406,7 @@ sc_object_manager::next_object()
 {
     sc_object* result_p; // result to return.
 
-    assert( m_object_walk_ok );
+    sc_assert( m_object_walk_ok );
 
     if ( m_object_it == m_instance_table.end() ) return NULL;
     m_object_it++;
@@ -325,8 +414,9 @@ sc_object_manager::next_object()
     for ( result_p = NULL; m_object_it != m_instance_table.end(); 
 	  m_object_it++ )
     {
-        result_p = m_object_it->second.m_object_p;
-	if ( result_p ) break;
+        if(m_object_it->second.m_name_origin == SC_NAME_OBJECT) {
+            return static_cast<sc_object*>(m_object_it->second.m_element_p);
+        }
     }
     return result_p;
 }
@@ -379,8 +469,7 @@ sc_object_manager::top_of_module_name_stack()
 // |"sc_object_manager::remove_event"
 // | 
 // | This method removes the sc_event instance with the supplied name from
-// | the table of instances. Note we just clear the pointer since if the name
-// | was for an sc_object the m_event_p pointer will be null anyway.
+// | the table of instances.
 // |
 // | Arguments:
 // |     name = name of the event to be removed.
@@ -390,15 +479,19 @@ sc_object_manager::remove_event(const std::string& name)
 {
     instance_table_t::iterator it;     // instance table iterator.
     it = m_instance_table.find(name);
-    if ( it != m_instance_table.end() ) it->second.m_event_p = NULL;
+    if(it != m_instance_table.end()
+       && it->second.m_name_origin == SC_NAME_EVENT)
+    {
+        it->second.m_element_p = NULL;
+        it->second.m_name_origin = SC_NAME_NONE;
+    }
 }
 
 // +----------------------------------------------------------------------------
 // |"sc_object_manager::remove_object"
 // | 
 // | This method removes the sc_object instance with the supplied name from
-// | the table of instances. Note we just clear the pointer since if the name
-// | was for an sc_event the m_object_p pointer will be null anyway.
+// | the table of instances.
 // |
 // | Arguments:
 // |     name = name of the object to be removed.
@@ -408,7 +501,37 @@ sc_object_manager::remove_object(const std::string& name)
 {
     instance_table_t::iterator it;     // instance table iterator.
     it = m_instance_table.find(name);
-    if ( it != m_instance_table.end() ) it->second.m_object_p = NULL;
+    if(it != m_instance_table.end()
+       && it->second.m_name_origin == SC_NAME_OBJECT)
+    {
+        it->second.m_element_p = NULL;
+        it->second.m_name_origin = SC_NAME_NONE;
+    }
+}
+
+// +----------------------------------------------------------------------------
+// |"sc_object_manager::remove_external_name"
+// |
+// | This method removes the name instance with the supplied name from
+// | the table of instances.
+// |
+// | Arguments:
+// |     name = external name to be removed.
+// +----------------------------------------------------------------------------
+bool
+sc_object_manager::remove_external_name(const std::string& name)
+{
+    instance_table_t::iterator it;     // instance table iterator.
+    it = m_instance_table.find(name);
+    if(it != m_instance_table.end()
+       && it->second.m_name_origin == SC_NAME_EXTERNAL)
+    {
+        it->second.m_element_p = NULL;
+        it->second.m_name_origin = SC_NAME_NONE;
+        return true;
+    } else {
+        return false;
+    }
 }
 
 } // namespace sc_core

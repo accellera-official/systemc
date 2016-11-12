@@ -1,17 +1,19 @@
 /*****************************************************************************
 
-  The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2014 by all Contributors.
-  All Rights reserved.
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
 
-  The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License (the "License");
-  You may not use this file except in compliance with such restrictions and
-  limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.accellera.org/. Software distributed by Contributors
-  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  ANY KIND, either express or implied. See the License for the specific
-  language governing rights and limitations under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
 
  *****************************************************************************/
 
@@ -63,17 +65,17 @@ sc_cor_qt::stack_protect( bool enable )
     // Code still needs to be ported to WIN32
 
     static std::size_t pagesize;
-    
+
     if( pagesize == 0 ) {
 #       if defined(__ppc__)
 	    pagesize = getpagesize();
 #       else
 	    pagesize = sysconf( _SC_PAGESIZE );
-#       endif 
+#       endif
     }
 
-    assert( pagesize != 0 );
-    assert( m_stack_size > ( 2 * pagesize ) );
+    sc_assert( pagesize != 0 );
+    sc_assert( m_stack_size > ( 2 * pagesize ) );
 
 #ifdef QUICKTHREADS_GROW_DOWN
     // Stacks grow from high address down to low address
@@ -93,8 +95,8 @@ sc_cor_qt::stack_protect( bool enable )
 
     if( enable ) {
         ret = mprotect( redzone, pagesize - 1, PROT_NONE );
-    } 
-    
+    }
+
     // Revert the red zone to normal memory usage. Try to make it read - write -
     // execute. If that does not work then settle for read - write
 
@@ -104,7 +106,7 @@ sc_cor_qt::stack_protect( bool enable )
             ret = mprotect( redzone, pagesize - 1, PROT_READ | PROT_WRITE );
     }
 
-    assert( ret == 0 );
+    sc_assert( ret == 0 );
 }
 
 
@@ -136,7 +138,7 @@ sc_cor_pkg_qt::sc_cor_pkg_qt( sc_simcontext* simc )
 {
     if( ++ instance_count == 1 ) {
 	// initialize the current coroutine
-	assert( curr_cor == 0 );
+	sc_assert( curr_cor == 0 );
 	curr_cor = &main_cor;
     }
 }
@@ -159,7 +161,7 @@ extern "C"
 void
 sc_cor_qt_wrapper( void* arg, void* cor, qt_userf_t* fn )
 {
-    curr_cor = RCAST<sc_cor_qt*>( cor );
+    curr_cor = reinterpret_cast<sc_cor_qt*>( cor );
     // invoke the user function
     (*(sc_cor_fn*) fn)( arg );
     // not reached
@@ -172,7 +174,7 @@ sc_cor_pkg_qt::create( std::size_t stack_size, sc_cor_fn* fn, void* arg )
     cor->m_pkg = this;
     cor->m_stack_size = stack_size;
     cor->m_stack = new char[cor->m_stack_size];
-    void* sto = stack_align( cor->m_stack, QUICKTHREADS_STKALIGN, 
+    void* sto = stack_align( cor->m_stack, QUICKTHREADS_STKALIGN,
                              &cor->m_stack_size );
     cor->m_sp = QUICKTHREADS_SP(sto, cor->m_stack_size - QUICKTHREADS_STKALIGN);
     cor->m_sp = QUICKTHREADS_ARGS( cor->m_sp, arg, cor, (qt_userf_t*) fn,
@@ -187,14 +189,14 @@ extern "C"
 void*
 sc_cor_qt_yieldhelp( qt_t* sp, void* old_cor, void* )
 {
-    RCAST<sc_cor_qt*>( old_cor )->m_sp = sp;
+    reinterpret_cast<sc_cor_qt*>( old_cor )->m_sp = sp;
     return 0;
 }
 
 void
 sc_cor_pkg_qt::yield( sc_cor* next_cor )
 {
-    sc_cor_qt* new_cor = SCAST<sc_cor_qt*>( next_cor );
+    sc_cor_qt* new_cor = static_cast<sc_cor_qt*>( next_cor );
     sc_cor_qt* old_cor = curr_cor;
     curr_cor = new_cor;
     QUICKTHREADS_BLOCK( sc_cor_qt_yieldhelp, old_cor, 0, new_cor->m_sp );
@@ -213,7 +215,7 @@ sc_cor_qt_aborthelp( qt_t*, void*, void* )
 void
 sc_cor_pkg_qt::abort( sc_cor* next_cor )
 {
-    sc_cor_qt* new_cor = SCAST<sc_cor_qt*>( next_cor );
+    sc_cor_qt* new_cor = static_cast<sc_cor_qt*>( next_cor );
     sc_cor_qt* old_cor = curr_cor;
     curr_cor = new_cor;
     QUICKTHREADS_ABORT( sc_cor_qt_aborthelp, old_cor, 0, new_cor->m_sp );
