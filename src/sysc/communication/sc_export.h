@@ -88,12 +88,11 @@ protected:
     // called after simulation ends (does nothing)
     virtual void end_of_simulation();
 
-    virtual const char* if_typename() const = 0;
- 
     // error reporting
     void report_error( const char* id, const char* add_msg = 0) const;
 
 private:
+    virtual const char* if_typename() const = 0;
 
     void construction_done();
     void elaboration_done();
@@ -194,7 +193,7 @@ public: // binding:
 public: // identification:
     virtual const char* kind() const { return "sc_export"; }
 
-protected:
+private:
   const char* if_typename() const {
     return typeid( IF ).name();
   }
