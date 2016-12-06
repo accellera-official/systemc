@@ -135,7 +135,7 @@ public:
     check_export_binding();
 
     //warn if there already is a callback
-    if (!m_nb_f.empty()){
+    if (m_nb_f.is_valid()){
       display_warning("NBTransport_bw callback already registered.");
       return;
     }
@@ -151,7 +151,7 @@ public:
     check_export_binding();
 
     //warn if there already is a callback
-    if (!m_b_f.empty()){
+    if (m_b_f.is_valid()){
       display_warning("BTransport callback already registered.");
       return;
     }
@@ -167,7 +167,7 @@ public:
     check_export_binding();
 
     //warn if there already is a callback
-    if (!m_dbg_f.empty()){
+    if (m_dbg_f.is_valid()){
       display_warning("DebugTransport callback already registered.");
       return;
     }
@@ -183,7 +183,7 @@ public:
     check_export_binding();
 
     //warn if there already is a callback
-    if (!m_dmi_f.empty()){
+    if (m_dmi_f.is_valid()){
       display_warning("DMI callback already registered.");
       return;
     }
