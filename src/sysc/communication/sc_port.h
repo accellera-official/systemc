@@ -121,11 +121,13 @@ protected:
     virtual int vbind( sc_interface& ) = 0;
     virtual int vbind( sc_port_base& ) = 0;
 
+private:
     // called by complete_binding (for internal use only)
     virtual void add_interface( sc_interface* ) = 0;
     virtual int interface_count() const = 0;
     virtual const char* if_typename() const = 0;
 
+protected:
     // called by construction_done (does nothing by default)
     virtual void before_end_of_elaboration();
 
@@ -342,14 +344,11 @@ protected:
     virtual int vbind( sc_interface& );
     virtual int vbind( sc_port_base& );
 
-protected:
-
     // called by the sc_sensitive* classes
     virtual void make_sensitive( sc_thread_handle, sc_event_finder* = 0 ) const;
     virtual void make_sensitive( sc_method_handle, sc_event_finder* = 0 ) const;
 
 private:
-
     // called by complete_binding (for internal use only)
     virtual void add_interface( sc_interface* );
     virtual const char* if_typename() const;
