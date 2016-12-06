@@ -87,8 +87,6 @@ H_FILES = \
 	misc/sc_value_base.h
 
 NO_H_FILES = \
-	int/sc_int32_mask.inc \
-	int/sc_int64_mask.inc \
 	int/sc_nbcommon.inc \
 	int/sc_nbfriends.inc \
 	int/sc_signed_bitref.inc \
