@@ -1007,22 +1007,22 @@ public:
     // write the new value
 
     void write( const data_type& value_ )
-	{ (*this)->write( value_ ); }
+      { (*this)->write( value_ ); }
 
     this_type& operator = ( const data_type& value_ )
-	{ (*this)->write( value_ ); return *this; }
+      { write( value_ ); return *this; }
 
     this_type& operator = ( const in_if_type& interface_ )
-	{ (*this)->write( interface_.read() ); return *this; }
+      { return *this = interface_.read(); }
 
     this_type& operator = ( const in_port_type& port_ )
-	{ (*this)->write( port_->read() ); return *this; }
+      { return *this = port_->read(); }
 
     this_type& operator = ( const inout_port_type& port_ )
-	{ (*this)->write( port_->read() ); return *this; }
+      { return *this = port_->read(); }
 
     this_type& operator = ( const this_type& port_ )
-	{ (*this)->write( port_->read() ); return *this; }
+      { return *this = port_->read(); }
 
 
     // set initial value (can also be called when port is not bound yet)
@@ -1333,22 +1333,22 @@ public:
     // write the new value
 
     void write( const data_type& value_ )
-	{ (*this)->write( value_ ); }
+      { (*this)->write( value_ ); }
 
     this_type& operator = ( const data_type& value_ )
-	{ (*this)->write( value_ ); return *this; }
+      { write( value_ ); return *this; }
 
     this_type& operator = ( const in_if_type& interface_ )
-	{ (*this)->write( interface_.read() ); return *this; }
+      { return *this = interface_.read(); }
 
     this_type& operator = ( const in_port_type& port_ )
-	{ (*this)->write( port_->read() ); return *this; }
+      { return *this = port_->read(); }
 
     this_type& operator = ( const inout_port_type& port_ )
-	{ (*this)->write( port_->read() ); return *this; }
+      { return *this = port_->read(); }
 
     this_type& operator = ( const this_type& port_ )
-	{ (*this)->write( port_->read() ); return *this; }
+      { return *this = port_->read(); }
 
 
     // set initial value (can also be called when port is not bound yet)
@@ -1559,22 +1559,22 @@ public:
     // write the new value
 
     void write( const data_type& value_ )
-	{ (*this)->write( value_ ); }
+      { (*this)->write( value_ ); }
 
     this_type& operator = ( const data_type& value_ )
-	{ (*this)->write( value_ ); return *this; }
+      { write( value_ ); return *this; }
 
     this_type& operator = ( const in_if_type& interface_ )
-	{ (*this)->write( interface_.read() ); return *this; }
+      { return *this = interface_.read(); }
 
     this_type& operator = ( const in_port_type& port_ )
-	{ (*this)->write( port_->read() ); return *this; }
+      { return *this = port_->read(); }
 
     this_type& operator = ( const inout_port_type& port_ )
-	{ (*this)->write( port_->read() ); return *this; }
+      { return *this = port_->read(); }
 
     this_type& operator = ( const this_type& port_ )
-	{ (*this)->write( port_->read() ); return *this; }
+      { return *this = port_->read(); }
 
 
     // set initial value (can also be called when port is not bound yet)
@@ -1712,20 +1712,9 @@ public:
 
     // write the new value
 
-    this_type& operator = ( const data_type& value_ )
-	{ (*this)->write( value_ ); return *this; }
-
-    this_type& operator = ( const in_if_type& interface_ )
-	{ (*this)->write( interface_.read() ); return *this; }
-
-    this_type& operator = ( const in_port_type& port_ )
-	{ (*this)->write( port_->read() ); return *this; }
-
-    this_type& operator = ( const inout_port_type& port_ )
-	{ (*this)->write( port_->read() ); return *this; }
-
+    using base_type::operator=;
     this_type& operator = ( const this_type& port_ )
-	{ (*this)->write( port_->read() ); return *this; }
+      { base_type::operator=(port_); return *this; }
 
     virtual const char* kind() const
         { return "sc_out"; }
