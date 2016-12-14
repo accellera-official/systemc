@@ -119,8 +119,8 @@ class sc_process_table
     void push_front( sc_method_handle );
     void push_front( sc_thread_handle );
     sc_method_handle method_q_head();
-    sc_method_handle remove( sc_method_handle );
     sc_thread_handle thread_q_head();
+    sc_method_handle remove( sc_method_handle );
     sc_thread_handle remove( sc_thread_handle );
 
 
@@ -144,40 +144,18 @@ sc_process_table::~sc_process_table()
 
     for( method_now_p = m_method_q; method_now_p; method_now_p = method_next_p )
     {
-	method_next_p = method_now_p->next_exist();
-	delete method_now_p;
+        method_next_p = method_now_p->next_exist();
+        method_now_p->reference_decrement();
     }
 
-    if ( m_thread_q )
-    {
-        ::std::cout << ::std::endl
-             << "WATCH OUT!! In sc_process_table destructor. "
-             << "Threads and cthreads are not actually getting deleted here. "
-	     << "Some memory may leak. Look at the comments here in "
-	     << "kernel/sc_simcontext.cpp for more details."
-	     << ::std::endl;
-    }
-
-    // don't delete threads and cthreads. If a (c)thread
-    // has died, then it has already been deleted. Only (c)threads created
-    // before simulation-start are in this table. Due to performance
-    // reasons, we don't look up the dying thread in the process table
-    // and remove it from there. simcontext::reset and ~simcontext invoke this
-    // destructor. At present none of these routines are ever invoked.
-    // We can delete threads and cthreads here if a dying thread figured out
-    // it was created before simulation-start and took itself off the
-    // process_table.
-
-#if 0
     sc_thread_handle  thread_next_p;	// Next thread to delete.
     sc_thread_handle  thread_now_p;	// Thread now deleting.
 
     for( thread_now_p=m_thread_q; thread_now_p; thread_now_p=thread_next_p )
     {
-	thread_next_p = thread_now_p->next_exist();
-	delete thread_now_p;
+        thread_next_p = thread_now_p->next_exist();
+        thread_now_p->reference_decrement();
     }
-#endif // 0
 }
 
 inline
@@ -185,6 +163,13 @@ sc_method_handle
 sc_process_table::method_q_head()
 {
     return m_method_q;
+}
+
+inline
+sc_thread_handle
+sc_process_table::thread_q_head()
+{
+    return m_thread_q;
 }
 
 inline
@@ -224,6 +209,12 @@ sc_process_table::remove( sc_method_handle handle_ )
     return 0;
 }
 
+sc_method_handle
+sc_simcontext::remove_process( sc_method_handle handle_ )
+{
+    return m_process_table->remove(handle_);
+}
+
 sc_thread_handle
 sc_process_table::remove( sc_thread_handle handle_ )
 {
@@ -245,11 +236,10 @@ sc_process_table::remove( sc_thread_handle handle_ )
     return 0;
 }
 
-inline
 sc_thread_handle
-sc_process_table::thread_q_head()
+sc_simcontext::remove_process( sc_thread_handle handle_ )
 {
-    return m_thread_q;
+    return m_process_table->remove(handle_);
 }
 
 SC_API int
