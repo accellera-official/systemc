@@ -126,7 +126,7 @@
 #    include "sysc/utils/sc_string.h"
 #endif // SC_USE_SC_STRING_OLD
 
-#ifdef SC_INCLUDE_CSTRING_SSTREAM
+#ifdef SC_INCLUDE_EXTRA_STD_HEADERS
 #    include <cstring>
 #    include <sstream>
-#endif // SC_INCLUDE_CSTRING
+#endif // SC_INCLUDE_EXTRA_STD_HEADERS
