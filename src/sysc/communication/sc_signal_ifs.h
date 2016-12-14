@@ -257,7 +257,12 @@ private:
 // sc_signal_out_if can also be read from, hence no difference with
 // sc_signal_inout_if.
 
-#define sc_signal_out_if sc_signal_inout_if
+#if SC_CPLUSPLUS >= 201103L
+template<typename T>
+using sc_signal_out_if = sc_signal_inout_if<T>;
+#else
+# define sc_signal_out_if sc_signal_inout_if
+#endif // C++11
 
 } // namespace sc_core
 
