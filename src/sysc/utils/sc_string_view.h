@@ -21,10 +21,14 @@
 
   sc_string_view.h -- Non-owning, constant reference to a character string
 
+  Original Author: Philipp A Hartmann, Intel
+
   Intended to follow C++ Library Fundamentals TS
     http://open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4480.html#string.view
 
-  Original Author: Philipp A Hartmann, Intel
+  NOTE: The types sc_string_view and sc_zstring_view are implementation-
+        defined and should not be used within user models.  After C++17 is
+        fully adopted, all uses shall be replaced by std::string_view.
 
  *****************************************************************************/
 
@@ -53,10 +57,11 @@
 
 namespace sc_core {
 
+/// non-owning, constant reference to a string (implementation-defined)
 typedef SC_STRING_VIEW_NS_::string_view sc_string_view;
 // TODO: add ABI guard against inconsistent configurations
 
-/// null-terminated, non-owning string, constant reference
+/// non-owning, const-ref to null-terminated string (implementation-defined)
 class sc_zstring_view : public sc_string_view
 {
 public:
