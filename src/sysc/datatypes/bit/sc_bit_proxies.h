@@ -38,6 +38,7 @@ namespace sc_dt
 {
 
 // classes defined in this module
+template <class X, class Traits> class sc_bitref_conv_r;
 template <class X> class sc_bitref_r;
 template <class X> class sc_bitref;
 template <class X> class sc_subref_r;
@@ -45,6 +46,31 @@ template <class X> class sc_subref;
 template <class X, class Y> class sc_concref_r;
 template <class X, class Y> class sc_concref;
 
+// ----------------------------------------------------------------------------
+//  CLASS TEMPLATE : sc_bitref_conv_r<T>
+//
+//  Proxy class for sc_proxy bit selection (r-value only, boolean conversion).
+// ----------------------------------------------------------------------------
+template<class T, class Traits = typename T::traits_type>
+class sc_bitref_conv_r { /* empty by default */ };
+
+// specialization for bit-vector based sc_proxy classes
+template<typename T>
+class sc_bitref_conv_r<T, sc_proxy_traits<sc_bv_base> >
+{
+public:
+#if IEEE_STD_1666_CPLUSPLUS >= 201103L // explicit operator needs C++11
+    // explicit conversion to bool
+    explicit operator bool() const {
+        return static_cast<const sc_bitref_r<T>&>(*this).to_bool();
+    }
+#endif
+
+    // explicit (negating) conversion to bool
+    bool operator!() const {
+        return ! static_cast<const sc_bitref_r<T>&>(*this).to_bool();
+    }
+};
 
 // ----------------------------------------------------------------------------
 //  CLASS TEMPLATE : sc_bitref_r<T>
@@ -54,6 +80,7 @@ template <class X, class Y> class sc_concref;
 
 template <class T>
 class sc_bitref_r
+  : public sc_bitref_conv_r<T>
 {
     friend class sc_bv_base;
     friend class sc_lv_base;
