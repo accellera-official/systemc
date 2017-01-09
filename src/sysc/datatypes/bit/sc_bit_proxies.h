@@ -88,13 +88,13 @@ public:
 
     // bitwise complement
 
-    const bit_type operator ~ () const
+    bit_type operator ~ () const
         { return bit_type( sc_logic::not_table[value()] ); }
 
 
     // implicit conversion to bit_type
 
-    operator const bit_type() const
+    operator bit_type() const
         { return bit_type( m_obj.get_bit( m_index ) ); }
 
 
@@ -152,7 +152,7 @@ private:
 
 template <class T1, class T2>
 inline
-const sc_logic
+sc_logic
 operator & ( const sc_bitref_r<T1>& a, const sc_bitref_r<T2>& b );
 
 
@@ -160,7 +160,7 @@ operator & ( const sc_bitref_r<T1>& a, const sc_bitref_r<T2>& b );
 
 template <class T1, class T2>
 inline
-const sc_logic
+sc_logic
 operator | ( const sc_bitref_r<T1>& a, const sc_bitref_r<T2>& b );
 
 
@@ -168,7 +168,7 @@ operator | ( const sc_bitref_r<T1>& a, const sc_bitref_r<T2>& b );
 
 template <class T1, class T2>
 inline
-const sc_logic
+sc_logic
 operator ^ ( const sc_bitref_r<T1>& a, const sc_bitref_r<T2>& b );
 
 
@@ -1888,7 +1888,7 @@ concat( sc_proxy<T1>&, sc_proxy<T2>& );
 
 template <class T1, class T2>
 inline
-const sc_logic
+sc_logic
 operator & ( const sc_bitref_r<T1>& a, const sc_bitref_r<T2>& b )
 {
     return sc_logic( sc_logic::and_table[a.value()][b.value()] );
@@ -1899,7 +1899,7 @@ operator & ( const sc_bitref_r<T1>& a, const sc_bitref_r<T2>& b )
 
 template <class T1, class T2>
 inline
-const sc_logic
+sc_logic
 operator | ( const sc_bitref_r<T1>& a, const sc_bitref_r<T2>& b )
 {
     return sc_logic( sc_logic::or_table[a.value()][b.value()] );
@@ -1910,7 +1910,7 @@ operator | ( const sc_bitref_r<T1>& a, const sc_bitref_r<T2>& b )
 
 template <class T1, class T2>
 inline
-const sc_logic
+sc_logic
 operator ^ ( const sc_bitref_r<T1>& a, const sc_bitref_r<T2>& b )
 {
     return sc_logic( sc_logic::xor_table[a.value()][b.value()] );
