@@ -64,6 +64,7 @@ public:
 
     typedef typename T::traits_type          traits_type;
     typedef typename traits_type::bit_type   bit_type;
+    typedef typename traits_type::value_type value_type;
 
     // constructor
 
@@ -100,7 +101,7 @@ public:
 
     // explicit conversions
 
-    sc_logic_value_t value() const
+    value_type value() const
 	{ return m_obj.get_bit( m_index ); }
 
 
@@ -122,7 +123,7 @@ public:
     int size() const
 	{ return ( (length() - 1) / SC_DIGIT_SIZE + 1 ); }
 
-    sc_logic_value_t get_bit( int n ) const;
+    value_type get_bit( int n ) const;
 
     sc_digit get_word( int i ) const;
     sc_digit get_cword( int i ) const;
@@ -449,6 +450,7 @@ class sc_bitref
     friend class sc_lv_base;
 
 public:
+    typedef typename sc_bitref_r<X>::value_type value_type;
 
     // constructor
 
@@ -553,7 +555,7 @@ public:
 
     // common methods
 
-    void set_bit( int n, sc_logic_value_t value );
+    void set_bit( int n, value_type value );
 
     void set_word( int i, sc_digit w );
     void set_cword( int i, sc_digit w );
@@ -635,6 +637,7 @@ class sc_subref_r
     void check_bounds();
 
 public:
+    typedef typename sc_proxy<sc_subref_r<X> >::value_type value_type;
 
     // constructor
 
@@ -664,8 +667,8 @@ public:
     int size() const
 	{ return ( (length() - 1) / SC_DIGIT_SIZE + 1 ); }
 
-    sc_logic_value_t get_bit( int n ) const;
-    void set_bit( int n, sc_logic_value_t value );
+    value_type get_bit( int n ) const;
+    void set_bit( int n, value_type value );
 
     sc_digit get_word( int i )const;
     void set_word( int i, sc_digit w );
@@ -1107,6 +1110,7 @@ class sc_concref_r
     : public sc_proxy<sc_concref_r<X,Y> >
 {
 public:
+    typedef typename sc_proxy<sc_concref_r<X,Y> >::value_type value_type;
 
     // constructor
 
@@ -1143,8 +1147,8 @@ public:
     int size() const
 	{ return ( (length() - 1) / SC_DIGIT_SIZE + 1 ); }
 
-    sc_logic_value_t get_bit( int n ) const;
-    void set_bit( int n, sc_logic_value_t value );
+    value_type get_bit( int n ) const;
+    void set_bit( int n, value_type value );
 
     sc_digit get_word( int i ) const;
     void set_word( int i, sc_digit w );
@@ -1940,7 +1944,7 @@ operator != ( const sc_bitref_r<T1>& a, const sc_bitref_r<T2>& b )
 
 template <class T>
 inline
-sc_logic_value_t
+typename sc_bitref_r<T>::value_type
 sc_bitref_r<T>::get_bit( int n ) const
 {
     if( n == 0 ) {
@@ -2328,7 +2332,7 @@ sc_bitref<X>::b_not()
 template <class X>
 inline
 void
-sc_bitref<X>::set_bit( int n, sc_logic_value_t value )
+sc_bitref<X>::set_bit( int n, value_type value )
 {
     if( n == 0 ) {
 	this->m_obj.set_bit( this->m_index, value );
@@ -2498,7 +2502,7 @@ sc_subref_r<X>::check_bounds()
 
 template <class X>
 inline
-sc_logic_value_t
+typename sc_subref_r<X>::value_type
 sc_subref_r<X>::get_bit( int n ) const
 {
     if( reversed() ) {
@@ -2511,7 +2515,7 @@ sc_subref_r<X>::get_bit( int n ) const
 template <class X>
 inline
 void
-sc_subref_r<X>::set_bit( int n, sc_logic_value_t value )
+sc_subref_r<X>::set_bit( int n, value_type value )
 {
     if( reversed() ) {
 	m_obj.set_bit( m_lo - n, value );
@@ -2558,7 +2562,7 @@ sc_subref_r<X>::set_word( int i, sc_digit w )
 	n1 = m_lo - i * SC_DIGIT_SIZE;
 	n2 = sc_max( n1 - SC_DIGIT_SIZE, m_hi - 1 );
 	for( int n = n1; n > n2; n -- ) {
-	    m_obj.set_bit( n, sc_logic_value_t(
+	    m_obj.set_bit( n, value_type(
 	                              ( (w >> k ++) & SC_DIGIT_ONE ) |
 				      ( m_obj[n].value() & SC_DIGIT_TWO ) ) );
 	}
@@ -2566,7 +2570,7 @@ sc_subref_r<X>::set_word( int i, sc_digit w )
 	n1 = m_lo + i * SC_DIGIT_SIZE;
 	n2 = sc_min( n1 + SC_DIGIT_SIZE, m_hi + 1 );
 	for( int n = n1; n < n2; n ++ ) {
-	    m_obj.set_bit( n, sc_logic_value_t(
+	    m_obj.set_bit( n, value_type(
 	                                ( (w >> k ++) & SC_DIGIT_ONE ) |
 					( m_obj[n].value() & SC_DIGIT_TWO ) ) );
 	}
@@ -2611,7 +2615,7 @@ sc_subref_r<X>::set_cword( int i, sc_digit w )
 	n1 = m_lo - i * SC_DIGIT_SIZE;
 	n2 = sc_max( n1 - SC_DIGIT_SIZE, m_hi - 1 );
 	for( int n = n1; n > n2; n -- ) {
-	    m_obj.set_bit( n, sc_logic_value_t(
+	    m_obj.set_bit( n, value_type(
 	                             ( ((w >> k ++) & SC_DIGIT_ONE) << 1 ) |
 				     ( m_obj[n].value() & SC_DIGIT_ONE ) ) );
 	}
@@ -2619,7 +2623,7 @@ sc_subref_r<X>::set_cword( int i, sc_digit w )
 	n1 = m_lo + i * SC_DIGIT_SIZE;
 	n2 = sc_min( n1 + SC_DIGIT_SIZE, m_hi + 1 );
 	for( int n = n1; n < n2; n ++ ) {
-	    m_obj.set_bit( n, sc_logic_value_t(
+	    m_obj.set_bit( n, value_type(
 	                                ( ((w >> k ++) & SC_DIGIT_ONE) << 1 ) |
 					( m_obj[n].value() & SC_DIGIT_ONE ) ) );
 	}
@@ -3012,14 +3016,14 @@ sc_concref_r<X,Y>::~sc_concref_r()
 
 template <class X, class Y>
 inline
-sc_logic_value_t
+typename sc_concref_r<X,Y>::value_type
 sc_concref_r<X,Y>::get_bit( int n ) const
 {
     int r_len = m_right.length();
     if( n < r_len ) {
-	return m_right.get_bit( n );
+        return value_type(m_right.get_bit( n ));
     } else if( n < r_len + m_left.length() ) {
-	return m_left.get_bit( n - r_len );
+        return value_type(m_left.get_bit( n - r_len ));
     } else {
 	SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, 0 );
 	// never reached
@@ -3030,13 +3034,13 @@ sc_concref_r<X,Y>::get_bit( int n ) const
 template <class X, class Y>
 inline
 void
-sc_concref_r<X,Y>::set_bit( int n, sc_logic_value_t v )
+sc_concref_r<X,Y>::set_bit( int n, value_type v )
 {
     int r_len = m_right.length();
     if( n < r_len ) {
-	m_right.set_bit( n, v );
+        m_right.set_bit( n, typename Y::value_type(v) );
     } else if( n < r_len + m_left.length() ) {
-	m_left.set_bit( n - r_len, v );
+        m_left.set_bit( n - r_len, typename X::value_type(v) );
     } else {
 	SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, 0 );
     }

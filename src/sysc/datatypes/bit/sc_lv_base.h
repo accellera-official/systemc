@@ -98,7 +98,8 @@ public:
 
     // typedefs
 
-    typedef sc_proxy<sc_lv_base> base_type;
+    typedef sc_proxy<sc_lv_base>  base_type;
+    typedef base_type::value_type value_type;
 
 
     // constructors
@@ -249,8 +250,8 @@ public:
     int size() const
 	{ return m_size; }
 
-    sc_logic_value_t get_bit( int i ) const;
-    void set_bit( int i, sc_logic_value_t value );
+    value_type get_bit( int i ) const;
+    void set_bit( int i, value_type value );
 
     sc_digit get_word( int wi ) const
 	{ return m_data[wi]; }
@@ -314,18 +315,18 @@ rrotate( const sc_lv_base& x, int n )
 
 
 inline
-sc_logic_value_t
+sc_lv_base::value_type
 sc_lv_base::get_bit( int i ) const
 {
     int wi = i / SC_DIGIT_SIZE;
     int bi = i % SC_DIGIT_SIZE;
-    return sc_logic_value_t( ((m_data[wi] >> bi) & SC_DIGIT_ONE) |
+    return value_type( ((m_data[wi] >> bi) & SC_DIGIT_ONE) |
 			     (((m_ctrl[wi] >> bi) << 1) & SC_DIGIT_TWO) );
 }
 
 inline
 void
-sc_lv_base::set_bit( int i, sc_logic_value_t value )
+sc_lv_base::set_bit( int i, value_type value )
 {
     int wi = i / SC_DIGIT_SIZE; // word index
     int bi = i % SC_DIGIT_SIZE; // bit index

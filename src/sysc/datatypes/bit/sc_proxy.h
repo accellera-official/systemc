@@ -194,8 +194,9 @@ template <class X>
 class sc_proxy // #### : public sc_value_base
 {
 public:
-    typedef typename sc_proxy_traits<X>::type traits_type;
-    typedef typename traits_type::bit_type    bit_type;
+    typedef typename sc_proxy_traits<X>::traits_type traits_type;
+    typedef typename traits_type::bit_type   bit_type;
+    typedef typename traits_type::value_type value_type;
 
     // virtual destructor
 
@@ -440,19 +441,19 @@ public:
 
     // reduce functions
 
-    sc_logic_value_t and_reduce() const;
+    value_type and_reduce() const;
 
-    sc_logic_value_t nand_reduce() const
+    value_type nand_reduce() const
 	{ return sc_logic::not_table[and_reduce()]; }
 
-    sc_logic_value_t or_reduce() const;
+    value_type or_reduce() const;
 
-    sc_logic_value_t nor_reduce() const
+    value_type nor_reduce() const
 	{ return sc_logic::not_table[or_reduce()]; }
 
-    sc_logic_value_t xor_reduce() const;
+    value_type xor_reduce() const;
 
-    sc_logic_value_t xnor_reduce() const
+    value_type xnor_reduce() const
 	{ return sc_logic::not_table[xor_reduce()]; }
 
 
@@ -1266,9 +1267,9 @@ sc_proxy<X>::reverse()
     int len = x.length();
     int half_len = len / 2;
     for( int i = 0, j = len - 1; i < half_len; ++ i, --j ) {
-	sc_logic_value_t t = x.get_bit( i );
-	x.set_bit( i, x.get_bit( j ) );
-	x.set_bit( j, t );
+        value_type t = x.get_bit( i );
+        x.set_bit( i, x.get_bit( j ) );
+        x.set_bit( j, t );
     }
     return x;
 }
@@ -1283,11 +1284,11 @@ reverse( const sc_proxy<X>& a );
 
 template <class X>
 inline
-sc_logic_value_t
+typename sc_proxy<X>::value_type
 sc_proxy<X>::and_reduce() const
 {
     const X& x = back_cast();
-    sc_logic_value_t result = sc_logic_value_t( 1 );
+    value_type result = value_type( 1 );
     int len = x.length();
     for( int i = 0; i < len; ++ i ) {
 	result = sc_logic::and_table[result][x.get_bit( i )];
@@ -1297,11 +1298,11 @@ sc_proxy<X>::and_reduce() const
 
 template <class X>
 inline
-sc_logic_value_t
+typename sc_proxy<X>::value_type
 sc_proxy<X>::or_reduce() const
 {
     const X& x = back_cast();
-    sc_logic_value_t result = sc_logic_value_t( 0 );
+    value_type result = value_type( 0 );
     int len = x.length();
     for( int i = 0; i < len; ++ i ) {
 	result = sc_logic::or_table[result][x.get_bit( i )];
@@ -1311,11 +1312,11 @@ sc_proxy<X>::or_reduce() const
 
 template <class X>
 inline
-sc_logic_value_t
+typename sc_proxy<X>::value_type
 sc_proxy<X>::xor_reduce() const
 {
     const X& x = back_cast();
-    sc_logic_value_t result = sc_logic_value_t( 0 );
+    value_type result = value_type( 0 );
     int len = x.length();
     for( int i = 0; i < len; ++ i ) {
 	result = sc_logic::xor_table[result][x.get_bit( i )];
@@ -1518,7 +1519,7 @@ sc_proxy<X>::to_anything_signed() const
     }
 
     uint64 zero = 0;
-    sc_logic_value_t sgn = x.get_bit( len - 1 );
+    value_type sgn = x.get_bit( len - 1 );
     if( sgn == 0 ) {
 	return (int64)( w & (~zero >> (64 - len)) );
     } else {
@@ -1533,7 +1534,7 @@ sc_proxy<X>::to_anything_signed() const
 
 template <class X>
 inline
-sc_logic_value_t
+typename sc_proxy<X>::value_type
 and_reduce( const sc_proxy<X>& a )
 {
     return a.and_reduce();
@@ -1541,7 +1542,7 @@ and_reduce( const sc_proxy<X>& a )
 
 template <class X>
 inline
-sc_logic_value_t
+typename sc_proxy<X>::value_type
 nand_reduce( const sc_proxy<X>& a )
 {
     return a.nand_reduce();
@@ -1549,7 +1550,7 @@ nand_reduce( const sc_proxy<X>& a )
 
 template <class X>
 inline
-sc_logic_value_t
+typename sc_proxy<X>::value_type
 or_reduce( const sc_proxy<X>& a )
 {
     return a.or_reduce();
@@ -1557,7 +1558,7 @@ or_reduce( const sc_proxy<X>& a )
 
 template <class X>
 inline
-sc_logic_value_t
+typename sc_proxy<X>::value_type
 nor_reduce( const sc_proxy<X>& a )
 {
     return a.nor_reduce();
@@ -1565,7 +1566,7 @@ nor_reduce( const sc_proxy<X>& a )
 
 template <class X>
 inline
-sc_logic_value_t
+typename sc_proxy<X>::value_type
 xor_reduce( const sc_proxy<X>& a )
 {
     return a.xor_reduce();
@@ -1573,7 +1574,7 @@ xor_reduce( const sc_proxy<X>& a )
 
 template <class X>
 inline
-sc_logic_value_t
+typename sc_proxy<X>::value_type
 xnor_reduce( const sc_proxy<X>& a )
 {
     return a.xnor_reduce();
