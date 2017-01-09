@@ -134,9 +134,8 @@ template<> struct sc_proxy_traits<sc_bv_base>
 {
     typedef sc_proxy_traits<sc_bv_base> traits_type;
     typedef bool                        value_type;
-    typedef bool                        bit_type;
+    typedef sc_logic                    bit_type; // sc_logic needed for mixed expressions
     typedef sc_bv_base                  vector_type;
-    typedef traits_type                 type;
 };
 
 template<> struct sc_proxy_traits<sc_lv_base>
@@ -145,7 +144,6 @@ template<> struct sc_proxy_traits<sc_lv_base>
     typedef sc_logic_value_t            value_type;
     typedef sc_logic                    bit_type;
     typedef sc_lv_base                  vector_type;
-    typedef traits_type                 type;
 };
 
 
@@ -175,13 +173,13 @@ template<typename X> struct sc_mixed_proxy_traits_helper<X,X>
 
 
 template<typename X, typename Y> struct sc_proxy_traits< sc_concref_r<X,Y> >
-  : sc_mixed_proxy_traits_helper< typename X::traits_type::type
-                                , typename Y::traits_type::type >
+  : sc_mixed_proxy_traits_helper< typename X::traits_type
+                                , typename Y::traits_type >
 {};
 
 template<typename X, typename Y> struct sc_proxy_traits<sc_concref<X,Y> >
-  : sc_mixed_proxy_traits_helper< typename X::traits_type::type
-                                , typename Y::traits_type::type >
+  : sc_mixed_proxy_traits_helper< typename X::traits_type
+                                , typename Y::traits_type >
 {};
 
 
