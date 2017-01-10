@@ -176,51 +176,9 @@ public:
 
 private:
     //disabled copy ctor and assignment operator.
-    // Copy constructor
-    tlm_generic_payload(const tlm_generic_payload& x)
-        : m_address(x.get_address())
-        , m_command(x.get_command())
-        , m_data(x.get_data_ptr())
-        , m_length(x.get_data_length())
-        , m_response_status(x.get_response_status())
-        , m_dmi(x.is_dmi_allowed())
-        , m_byte_enable(x.get_byte_enable_ptr())
-        , m_byte_enable_length(x.get_byte_enable_length())
-        , m_streaming_width(x.get_streaming_width())
-        , m_gp_option(x.m_gp_option)
-        , m_extensions(max_num_extensions())
-    {
-        // copy all extensions
-        for(unsigned int i=0; i<m_extensions.size(); i++)
-        {
-            m_extensions[i] = x.get_extension(i);
-        }
-    }
+    tlm_generic_payload(const tlm_generic_payload& x) /* = delete */;
+    tlm_generic_payload& operator= (const tlm_generic_payload& x) /* = delete */;
 
-    // Assignment operator
-    tlm_generic_payload& operator= (const tlm_generic_payload& x)
-    {
-        m_command =            x.get_command();
-        m_address =            x.get_address();
-        m_data =               x.get_data_ptr();
-        m_length =             x.get_data_length();
-        m_response_status =    x.get_response_status();
-        m_byte_enable =        x.get_byte_enable_ptr();
-        m_byte_enable_length = x.get_byte_enable_length();
-        m_streaming_width =    x.get_streaming_width();
-        m_gp_option =          x.get_gp_option();
-        m_dmi =                x.is_dmi_allowed();
-
-        // extension copy: all extension arrays must be of equal size by
-        // construction (i.e. it must either be constructed after C++
-        // static construction time, or the resize_extensions() method must
-        // have been called prior to using the object)
-        for(unsigned int i=0; i<m_extensions.size(); i++)
-        {
-            m_extensions[i] = x.get_extension(i);
-        }
-        return (*this);
-    }
 public:
     // non-virtual deep-copying of the object
     void deep_copy_from(const tlm_generic_payload & other)
@@ -247,6 +205,9 @@ public:
             std::memcpy(m_byte_enable, other.m_byte_enable, m_byte_enable_length);
         }
         // deep copy extensions (sticky and non-sticky)
+        if(m_extensions.size() < other.m_extensions.size()) {
+            m_extensions.expand(other.m_extensions.size());
+        }
         for(unsigned int i=0; i<other.m_extensions.size(); i++)
         {
             if(other.m_extensions[i])
@@ -334,7 +295,8 @@ public:
     void update_extensions_from(const tlm_generic_payload & other)
     {
         // deep copy extensions that are already present
-        for(unsigned int i=0; i<other.m_extensions.size(); i++)
+        sc_assert(m_extensions.size() <= other.m_extensions.size());
+        for(unsigned int i=0; i<m_extensions.size(); i++)
         {
             if(other.m_extensions[i])
             {                       //original has extension i
@@ -528,6 +490,7 @@ public:
     tlm_extension_base* set_extension(unsigned int index,
                                       tlm_extension_base* ext)
     {
+        sc_assert(index < m_extensions.size());
         tlm_extension_base* tmp = m_extensions[index];
         m_extensions[index] = ext;
         return tmp;
@@ -544,6 +507,7 @@ public:
     tlm_extension_base* set_auto_extension(unsigned int index,
                                            tlm_extension_base* ext)
     {
+        sc_assert(index < m_extensions.size());
         tlm_extension_base* tmp = m_extensions[index];
         m_extensions[index] = ext;
         if (!tmp) m_extensions.insert_in_cache(&m_extensions[index]);
@@ -563,6 +527,7 @@ public:
     // Non-templatized version with manual index:
     tlm_extension_base* get_extension(unsigned int index) const
     {
+        sc_assert(index < m_extensions.size());
         return m_extensions[index];
     }
 
@@ -604,11 +569,13 @@ private:
     // Non-templatized version with manual index
     void clear_extension(unsigned int index)
     {
+        sc_assert(index < m_extensions.size());
         m_extensions[index] = static_cast<tlm_extension_base*>(0);
     }
     // Non-templatized version with manual index
     void release_extension(unsigned int index)
     {
+        sc_assert(index < m_extensions.size());
         if (m_mm)
         {
             m_extensions.insert_in_cache(&m_extensions[index]);
