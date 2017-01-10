@@ -731,6 +731,20 @@ settings to all build configurations.
    Note: Only effective when building an application.
 
 
+ * SC_INCLUDE_EXTRA_STD_HEADERS -
+   Include <cstring> and <sstream> headers from <systemc> header
+
+   Previous versions of SystemC implicitly included the <cstring> and
+   <sstream> headers on all platforms without depending on their
+   contents.
+
+   If you rely on the inclusion of these headers in your application,
+   you can add this symbol to the list of preprocessor switches for
+   your compiler.
+
+   Note: Only effective when building an application.
+
+
  * SC_OVERRIDE_DEFAULT_STACK_SIZE=<size> -
    Define the default stack size used for SystemC (thread) processes
 
