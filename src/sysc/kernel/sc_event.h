@@ -49,6 +49,7 @@ class sc_event_list;
 class sc_event_or_list;
 class sc_event_and_list;
 class sc_object;
+class sc_signal_channel;
 
 // friend function declarations
 SC_API int sc_notify_time_compare( const void*, const void* );
@@ -262,8 +263,7 @@ class SC_API sc_event
     friend class sc_interface;
     friend class sc_clock;
     friend class sc_event_queue;
-    friend SC_API sc_event * sc_lazy_kernel_event( sc_event**, const char* );
-    template<typename IF, sc_writer_policy POL> friend class sc_signal;
+    friend class sc_signal_channel;
     template<typename IF> friend class sc_fifo;
     friend class sc_semaphore;
     friend class sc_mutex;
