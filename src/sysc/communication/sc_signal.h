@@ -64,7 +64,7 @@ sc_writer_policy_check_write::check_write( sc_object* target, bool )
 //  The sc_signal type-agnostic primitive channel base class.
 // ----------------------------------------------------------------------------
 
-class sc_signal_channel
+class SC_API sc_signal_channel
   : public sc_prim_channel
 {
 protected:
@@ -204,14 +204,15 @@ public:
 	{ return read(); }
 
 
+    // assignment
     this_type& operator = ( const T& a )
-	{ write( a ); return *this; }
+      { write( a ); return *this; }
 
     this_type& operator = ( const sc_signal_in_if<T>& a )
-	{ write( a.read() ); return *this; }
+      { write( a.read() ); return *this; }
 
     this_type& operator = ( const this_type& a )
-	{ write( a.read() ); return *this; }
+      { write( a.read() ); return *this; }
 
 
     const T& get_new_value() const
@@ -318,7 +319,6 @@ sc_signal_t<T,POL>::do_update()
     m_cur_val = m_new_val;
 }
 
-
 // ----------------------------------------------------------------------------
 //  CLASS : sc_signal<T, POL>
 //
@@ -354,12 +354,14 @@ public:
     virtual ~sc_signal() {} /* = default; */
 
     // assignment
-    using base_type::operator=;
+    this_type& operator = ( const value_type& a )
+      { base_type::operator=(a); return *this; }
+
+    this_type& operator = ( const sc_signal_in_if<value_type>& a )
+      { base_type::operator=(a); return *this; }
+
     this_type& operator = ( const this_type& a )
-    {
-        base_type::operator=( a );
-        return *this;
-    }
+      { base_type::operator=(a); return *this; }
 
 private:
     // disabled
@@ -374,6 +376,10 @@ private:
 // ----------------------------------------------------------------------------
 
 class SC_API sc_reset;
+
+SC_API_TEMPLATE_ template class SC_API sc_signal_t<bool,SC_ONE_WRITER>;
+SC_API_TEMPLATE_ template class SC_API sc_signal_t<bool,SC_MANY_WRITERS>;
+SC_API_TEMPLATE_ template class SC_API sc_signal_t<bool,SC_UNCHECKED_WRITERS>;
 
 template< sc_writer_policy POL >
 class SC_API sc_signal<bool,POL>
@@ -421,13 +427,16 @@ public:
     virtual bool negedge() const
         { return ( this->event() && ! this->m_cur_val ); }
 
+
     // assignment
-    using base_type::operator=;
+    this_type& operator = ( const value_type& a )
+      { base_type::operator=(a); return *this; }
+
+    this_type& operator = ( const sc_signal_in_if<value_type>& a )
+      { base_type::operator=(a); return *this; }
+
     this_type& operator = ( const this_type& a )
-    {
-        base_type::operator=( a );
-        return *this;
-    }
+      { base_type::operator=(a); return *this; }
 
 protected:
 
@@ -455,6 +464,10 @@ private:
 //
 //  Specialization of sc_signal<T> for type sc_dt::sc_logic.
 // ----------------------------------------------------------------------------
+
+SC_API_TEMPLATE_ template class SC_API sc_signal_t<sc_dt::sc_logic,SC_ONE_WRITER>;
+SC_API_TEMPLATE_ template class SC_API sc_signal_t<sc_dt::sc_logic,SC_MANY_WRITERS>;
+SC_API_TEMPLATE_ template class SC_API sc_signal_t<sc_dt::sc_logic,SC_UNCHECKED_WRITERS>;
 
 template< sc_writer_policy POL >
 class SC_API sc_signal<sc_dt::sc_logic,POL>
@@ -501,13 +514,16 @@ public:
     virtual bool negedge() const
         { return ( this->event() && this->m_cur_val == sc_dt::SC_LOGIC_0 ); }
 
+
     // assignment
-    using base_type::operator=;
+    this_type& operator = ( const value_type& a )
+      { base_type::operator=(a); return *this; }
+
+    this_type& operator = ( const sc_signal_in_if<value_type>& a )
+      { base_type::operator=(a); return *this; }
+
     this_type& operator = ( const this_type& a )
-    {
-        base_type::operator=( a );
-        return *this;
-    }
+      { base_type::operator=(a); return *this; }
 
 protected:
 

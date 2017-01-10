@@ -62,25 +62,25 @@ public:
 
     typedef sc_signal_resolved                         this_type;
     typedef sc_signal<sc_dt::sc_logic,SC_MANY_WRITERS> base_type;
-    typedef sc_dt::sc_logic                            data_type;
+    typedef sc_dt::sc_logic                            value_type;
 
 public:
 
     // constructors
 
-    sc_signal_resolved() :
-        base_type( sc_gen_unique_name( "signal_resolved" ) ), m_proc_vec(), 
-	m_val_vec()
-        {}
+    sc_signal_resolved()
+      : base_type( sc_gen_unique_name( "signal_resolved" ) )
+      , m_proc_vec(), m_val_vec()
+    {}
 
-    explicit sc_signal_resolved( const char* name_ ): 
-        base_type( name_ ), m_proc_vec(), m_val_vec()
-	{}
+    explicit sc_signal_resolved( const char* name_ )
+      : base_type( name_ )
+      , m_proc_vec(), m_val_vec()
+    {}
 
-    sc_signal_resolved( const char* name_, const data_type & initial_value_ )
+    sc_signal_resolved( const char* name_, const value_type& initial_value_ )
       : base_type( name_, initial_value_ )
-      , m_proc_vec()
-      , m_val_vec()
+      , m_proc_vec() , m_val_vec()
     {}
 
     // interface methods
@@ -90,28 +90,30 @@ public:
 
 
     // write the new value
-    virtual void write( const data_type& );
+    virtual void write( const value_type& );
 
 
     // other methods
-
-    this_type& operator = ( const data_type& a )
-        { write( a ); return *this; }
-
-    this_type& operator = ( const this_type& a )
-        { write( a.read() ); return *this; }
-
     virtual const char* kind() const
         { return "sc_signal_resolved"; }
 
-protected:
 
+    // assignment
+    this_type& operator = ( const value_type& a )
+      { base_type::operator=(a); return *this; }
+
+    this_type& operator = ( const sc_signal_in_if<value_type>& a )
+      { base_type::operator=(a); return *this; }
+
+    this_type& operator = ( const this_type& a )
+      { base_type::operator=(a); return *this; }
+
+protected:
     virtual void update();
 
 protected:
-
     std::vector<sc_process_b*> m_proc_vec; // processes writing this signal
-    std::vector<data_type>     m_val_vec;  // new values written this signal
+    std::vector<value_type>    m_val_vec;  // new values written this signal
 
 private:
 
