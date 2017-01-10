@@ -64,6 +64,7 @@ class sc_process_host;
 class sc_method_process;
 class sc_cthread_process;
 class sc_thread_process;
+class sc_reset_finder;
 
 } // namespace sc_core
 
@@ -275,6 +276,8 @@ public:
         { return m_cor_pkg; }
     sc_cor* next_cor();
 
+    void add_reset_finder( sc_reset_finder* );
+
     const ::std::vector<sc_object*>& get_child_objects() const;
 
     void elaborate();
@@ -382,6 +385,8 @@ private:
 
     sc_cor_pkg*                 m_cor_pkg; // the simcontext's coroutine package
     sc_cor*                     m_cor;     // the simcontext's coroutine
+
+    sc_reset_finder*            m_reset_finder_q; // Q of reset finders to reconcile.
 
 private:
 
