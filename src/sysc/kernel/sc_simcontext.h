@@ -326,6 +326,9 @@ private:
     void do_timestep( const sc_time& );
     void mark_to_collect_process( sc_process_b* zombie_p );
 
+    sc_method_handle remove_process( sc_method_handle );
+    sc_thread_handle remove_process( sc_thread_handle );
+
 private:
 
     enum execution_phases {

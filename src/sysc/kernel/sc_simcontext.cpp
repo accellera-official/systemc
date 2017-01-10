@@ -119,8 +119,8 @@ class sc_process_table
     void push_front( sc_method_handle );
     void push_front( sc_thread_handle );
     sc_method_handle method_q_head();
-    sc_method_handle remove( sc_method_handle );
     sc_thread_handle thread_q_head();
+    sc_method_handle remove( sc_method_handle );
     sc_thread_handle remove( sc_thread_handle );
 
 
@@ -144,40 +144,18 @@ sc_process_table::~sc_process_table()
 
     for( method_now_p = m_method_q; method_now_p; method_now_p = method_next_p )
     {
-	method_next_p = method_now_p->next_exist();
-	delete method_now_p;
+        method_next_p = method_now_p->next_exist();
+        method_now_p->reference_decrement();
     }
 
-    if ( m_thread_q )
-    {
-        ::std::cout << ::std::endl
-             << "WATCH OUT!! In sc_process_table destructor. "
-             << "Threads and cthreads are not actually getting deleted here. "
-	     << "Some memory may leak. Look at the comments here in "
-	     << "kernel/sc_simcontext.cpp for more details."
-	     << ::std::endl;
-    }
-
-    // don't delete threads and cthreads. If a (c)thread
-    // has died, then it has already been deleted. Only (c)threads created
-    // before simulation-start are in this table. Due to performance
-    // reasons, we don't look up the dying thread in the process table
-    // and remove it from there. simcontext::reset and ~simcontext invoke this
-    // destructor. At present none of these routines are ever invoked.
-    // We can delete threads and cthreads here if a dying thread figured out
-    // it was created before simulation-start and took itself off the
-    // process_table.
-
-#if 0
     sc_thread_handle  thread_next_p;	// Next thread to delete.
     sc_thread_handle  thread_now_p;	// Thread now deleting.
 
     for( thread_now_p=m_thread_q; thread_now_p; thread_now_p=thread_next_p )
     {
-	thread_next_p = thread_now_p->next_exist();
-	delete thread_now_p;
+        thread_next_p = thread_now_p->next_exist();
+        thread_now_p->reference_decrement();
     }
-#endif // 0
 }
 
 inline
@@ -185,6 +163,13 @@ sc_method_handle
 sc_process_table::method_q_head()
 {
     return m_method_q;
+}
+
+inline
+sc_thread_handle
+sc_process_table::thread_q_head()
+{
+    return m_thread_q;
 }
 
 inline
@@ -224,6 +209,12 @@ sc_process_table::remove( sc_method_handle handle_ )
     return 0;
 }
 
+sc_method_handle
+sc_simcontext::remove_process( sc_method_handle handle_ )
+{
+    return m_process_table->remove(handle_);
+}
+
 sc_thread_handle
 sc_process_table::remove( sc_thread_handle handle_ )
 {
@@ -245,11 +236,10 @@ sc_process_table::remove( sc_thread_handle handle_ )
     return 0;
 }
 
-inline
 sc_thread_handle
-sc_process_table::thread_q_head()
+sc_simcontext::remove_process( sc_thread_handle handle_ )
 {
-    return m_thread_q;
+    return m_process_table->remove(handle_);
 }
 
 SC_API int
@@ -284,9 +274,7 @@ SC_MODULE(sc_invoke_method)
     }
 
     virtual ~sc_invoke_method()
-    {
-	m_invokers.resize(0);
-    }
+    {}
 
     // Method to call to execute a method's semantics.
 
@@ -417,18 +405,13 @@ sc_simcontext::init()
 void
 sc_simcontext::clean()
 {
+    delete m_method_invoker_p;
     delete m_error;
     delete m_cor_pkg;
     delete m_time_params;
     delete m_collectable;
     delete m_runnable;
-    for( int i = m_trace_files.size() - 1; i >= 0; -- i ) {
-	delete m_trace_files[i];
-    }
-    m_trace_files.resize(0);
     delete m_timed_events;
-    m_delta_events.resize(0);
-    m_child_objects.resize(0);
     delete m_process_table;
     delete m_name_gen;
     delete m_phase_cb_registry;
@@ -437,6 +420,11 @@ sc_simcontext::clean()
     delete m_port_registry;
     delete m_module_registry;
     delete m_object_manager;
+
+    m_delta_events.clear();
+    m_child_objects.clear();
+    m_trace_files.clear();
+
     while( m_reset_finder_q ) {
         sc_reset_finder* rf = m_reset_finder_q;
         m_reset_finder_q = rf->m_next_p;
@@ -629,7 +617,7 @@ sc_simcontext::crunch( bool once )
 	    do {
 		l_events[i]->trigger();
 	    } while( -- i >= 0 );
-	    m_delta_events.resize(0);
+	    m_delta_events.clear();
 	}
 
 	if( m_runnable->is_empty() ) {
@@ -837,7 +825,7 @@ sc_simcontext::prepare_to_simulate()
         do {
             l_delta_events[i]->trigger();
         } while( -- i >= 0 );
-        m_delta_events.resize(0);
+        m_delta_events.clear();
     }
 
     SC_DO_PHASE_CALLBACK_(initialization_done);
@@ -1357,7 +1345,7 @@ sc_simcontext::remove_child_event( sc_event* event_ )
     for( int i = 0; i < size; ++ i ) {
 	if( event_ == m_child_events[i] ) {
 	    m_child_events[i] = m_child_events[size - 1];
-	    m_child_events.resize(size-1);
+	    m_child_events.pop_back();
 	    return;
 	}
     }
@@ -1371,7 +1359,7 @@ sc_simcontext::remove_child_object( sc_object* object_ )
     for( int i = 0; i < size; ++ i ) {
 	if( object_ == m_child_objects[i] ) {
 	    m_child_objects[i] = m_child_objects[size - 1];
-	    m_child_objects.resize(size-1);
+	    m_child_objects.pop_back();
 	    return;
 	}
     }
@@ -1440,7 +1428,7 @@ sc_simcontext::remove_delta_event( sc_event* e )
 	l_delta_events[i] = l_delta_events[j];
 	l_delta_events[i]->m_delta_event_index = i;
     }
-    m_delta_events.resize(m_delta_events.size()-1);
+    m_delta_events.pop_back();
     e->m_delta_event_index = -1;
 }
 

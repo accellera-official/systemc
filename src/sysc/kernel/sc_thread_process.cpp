@@ -475,6 +475,10 @@ sc_thread_process::~sc_thread_process()
         delete m_cor_p;
         m_cor_p = 0;
     }
+
+    if( !dynamic() ) {
+        simcontext()->remove_process(this);
+    }
 }
 
 
