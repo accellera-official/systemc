@@ -70,7 +70,7 @@ sc_cor_fiber::~sc_cor_fiber()
 {
     if( m_fiber != 0 ) {
       PVOID cur_fiber = GetCurrentFiber();
-      if (m_fiber != cur_fiber)
+      if( m_fiber != cur_fiber && this != m_pkg->get_main() )
          DeleteFiber( m_fiber );
     }
 }
@@ -94,6 +94,7 @@ sc_cor_pkg_fiber::sc_cor_pkg_fiber( sc_simcontext* simc )
         // initialize the main coroutine
         sc_assert( main_cor.m_fiber == 0 );
         main_cor.m_fiber = ConvertThreadToFiber( 0 );
+        main_cor.m_pkg = this;
 
         if( !main_cor.m_fiber && GetLastError() == ERROR_ALREADY_FIBER ) {
             // conversion of current thread to fiber has failed, because
@@ -117,8 +118,9 @@ sc_cor_pkg_fiber::sc_cor_pkg_fiber( sc_simcontext* simc )
 sc_cor_pkg_fiber::~sc_cor_pkg_fiber()
 {
     if( -- instance_count == 0 ) {
-	// cleanup the main coroutine
-	main_cor.m_fiber = 0;
+        // cleanup the main coroutine
+        main_cor.m_fiber = 0;
+        main_cor.m_pkg = 0;
 #       if defined(__GNUC__) && __USING_SJLJ_EXCEPTIONS__
             // cleanup the current coroutine
             curr_cor = 0;
