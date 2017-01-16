@@ -589,7 +589,7 @@ int
 sc_simcontext::add_delta_event( sc_event* e )
 {
     m_delta_events.push_back( e );
-    return ( m_delta_events.size() - 1 );
+    return static_cast<int>( m_delta_events.size() - 1 );
 }
 
 inline

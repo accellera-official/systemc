@@ -223,7 +223,7 @@ public:
     void remove( sc_export_base* );
 
     int size() const
-        { return m_export_vec.size(); }
+        { return static_cast<int>(m_export_vec.size()); }
 
 private:
 
