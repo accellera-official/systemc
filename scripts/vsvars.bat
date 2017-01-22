@@ -1,3 +1,4 @@
+@echo off
 rem ***************************************************************************
 rem
 rem  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
@@ -37,7 +38,6 @@ rem    vsvars.vat x86_amd64   # load x64 cross-tools for MSVC 2005
 rem
 rem ***************************************************************************
 
-@echo off
 set SYSTEMC_MSVC_VERSION=
 set SYSTEMC_MSVC_PLATFORM=
 
