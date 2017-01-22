@@ -99,8 +99,11 @@ SC_MODULE(Wait) {
 int sc_main(int argc, char ** argv) {
   Wait w("dut");
 
-  sc_core::sc_object *o = sc_core::sc_find_object("dut.thread");
-  sc_core::sc_process_b *thread = dynamic_cast<sc_core::sc_process_b*>(o);
+  sc_core::sc_process_handle hnd( sc_core::sc_find_object("dut.thread") );
+  const sc_core::sc_process_b *thread
+    = dynamic_cast<sc_core::sc_process_b*>(hnd.get_process_object());
+  sc_assert(hnd.valid() && thread);
+
   sc_assert(thread->file == NULL);  // 1st wait(delay)
   sc_assert(thread->lineno == 0);
   sc_core::sc_start(sc_time(15, SC_US));
