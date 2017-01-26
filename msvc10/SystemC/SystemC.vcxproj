@@ -300,7 +300,9 @@
     <ClCompile Include="..\..\src\sysc\kernel\sc_main_main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\src\systemc" />
+    <None Include="..\..\src\systemc">
+      <FileType>CppHeader</FileType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\systemc.h" />
