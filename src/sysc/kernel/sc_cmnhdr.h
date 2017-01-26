@@ -1,17 +1,19 @@
 /*****************************************************************************
 
-  The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2014 by all Contributors.
-  All Rights reserved.
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
 
-  The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License (the "License");
-  You may not use this file except in compliance with such restrictions and
-  limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.accellera.org/. Software distributed by Contributors
-  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  ANY KIND, either express or implied. See the License for the specific
-  language governing rights and limitations under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
 
  *****************************************************************************/
 
@@ -92,6 +94,37 @@
 #endif
 
 // ----------------------------------------------------------------------------
+// C++ standard
+//
+// Selected C++ standard baseline, supported values are
+//   199711L (C++03, ISO/IEC 14882:1998, 14882:2003)
+//   201103L (C++11, ISO/IEC 14882:2011)
+//   201402L (C++14, ISO/IEC 14882:2014)
+//
+// This macro can be used inside the library sources to make certain assumptions
+// on the available features in the underlying C++ implementation.
+// TODO: Add consistency check in sc_ver.h, once this becomes ABI breaking
+//
+#ifndef SC_STD_CPLUSPLUS
+#  define SC_STD_CPLUSPLUS __cplusplus // use compiler's default
+// TODO: refine selection based on compiler features, eg. on MSVC
+#endif // SC_STD_CPLUSCPLUS
+
+// Currently, SystemC standard requires/assumes C++03 only
+#define SC_STD_CPLUSPLUS_MAX_ 199711L
+
+// The IEEE_STD_1666_CPLUSPLUS features is meant for checks in the models,
+// checking for availability of SystemC features relying on specific C++
+// standard versions.
+//
+// IEEE_STD_1666_CPLUSPLUS = min(SC_STD_CPLUSCPLUS, SC_STD_CPLUSPLUS_MAX_)
+#if SC_STD_CPLUSPLUS >= SC_STD_CPLUSPLUS_MAX_
+#  define IEEE_STD_1666_CPLUSPLUS SC_STD_CPLUSPLUS_MAX_
+#else
+#  define IEEE_STD_1666_CPLUSPLUS SC_STD_CPLUSPLUS
+#endif // IEEE_STD_1666_CPLUSPLUS
+
+// ----------------------------------------------------------------------------
 
 #include <cassert>
 #include <cstdio>
@@ -121,7 +154,7 @@
 #if defined(SC_BUILD) // building SystemC library
 # define SC_API_TEMPLATE_ /* empty - instantiate template in translation unit */
 #else
-# if defined(__GNUC__) && __cplusplus < 201101L
+# if defined(__GNUC__) && SC_STD_CPLUSPLUS < 201101L
 #  define SC_API_TEMPLATE_ __extension__ extern
 # else
 #  define SC_API_TEMPLATE_ extern

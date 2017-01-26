@@ -1,17 +1,19 @@
 /*****************************************************************************
 
-  The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2014 by all Contributors.
-  All Rights reserved.
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
 
-  The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License (the "License");
-  You may not use this file except in compliance with such restrictions and
-  limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.accellera.org/. Software distributed by Contributors
-  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  ANY KIND, either express or implied. See the License for the specific
-  language governing rights and limitations under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
 
  *****************************************************************************/
 
@@ -48,12 +50,12 @@ class sc_port_base;
 
 struct sc_bind_info;
 
-enum sc_port_policy 
-{ 
-    SC_ONE_OR_MORE_BOUND,   // Default 
-    SC_ZERO_OR_MORE_BOUND, 
-    SC_ALL_BOUND  
-}; 
+enum sc_port_policy
+{
+    SC_ONE_OR_MORE_BOUND,   // Default
+    SC_ZERO_OR_MORE_BOUND,
+    SC_ALL_BOUND
+};
 
 } // namespace sc_core
 
@@ -101,9 +103,9 @@ public:
 protected:
 
     // constructors
-    explicit sc_port_base( int max_size_, 
+    explicit sc_port_base( int max_size_,
 	    sc_port_policy policy=SC_ONE_OR_MORE_BOUND );
-    sc_port_base( const char* name_, int max_size_, 
+    sc_port_base( const char* name_, int max_size_,
 		  sc_port_policy policy=SC_ONE_OR_MORE_BOUND );
 
     // destructor
@@ -119,11 +121,13 @@ protected:
     virtual int vbind( sc_interface& ) = 0;
     virtual int vbind( sc_port_base& ) = 0;
 
+private:
     // called by complete_binding (for internal use only)
     virtual void add_interface( sc_interface* ) = 0;
     virtual int interface_count() const = 0;
     virtual const char* if_typename() const = 0;
 
+protected:
     // called by construction_done (does nothing by default)
     virtual void before_end_of_elaboration();
 
@@ -318,14 +322,14 @@ protected:
 
     // constructors
 
-    explicit sc_port_b( int max_size_, 
+    explicit sc_port_b( int max_size_,
 	                sc_port_policy policy=SC_ONE_OR_MORE_BOUND ) :
 	base_type( max_size_, policy ), m_interface( 0 ), m_interface_vec()
 	{}
 
-    sc_port_b( const char* name_, int max_size_, 
+    sc_port_b( const char* name_, int max_size_,
                sc_port_policy policy=SC_ONE_OR_MORE_BOUND ) :
-	base_type( name_, max_size_, policy ), m_interface( 0 ), 
+	base_type( name_, max_size_, policy ), m_interface( 0 ),
 	m_interface_vec()
 	{}
 
@@ -340,14 +344,11 @@ protected:
     virtual int vbind( sc_interface& );
     virtual int vbind( sc_port_base& );
 
-protected:
-
     // called by the sc_sensitive* classes
     virtual void make_sensitive( sc_thread_handle, sc_event_finder* = 0 ) const;
     virtual void make_sensitive( sc_method_handle, sc_event_finder* = 0 ) const;
 
 private:
-
     // called by complete_binding (for internal use only)
     virtual void add_interface( sc_interface* );
     virtual const char* if_typename() const;
@@ -512,7 +513,7 @@ inline
 int
 sc_port_b<IF>::vbind( sc_interface& interface_ )
 {
-    IF* iface = DCAST<IF*>( &interface_ );
+    IF* iface = dynamic_cast<IF*>( &interface_ );
     if( iface == 0 ) {
 	// type mismatch
 	return 2;
@@ -526,7 +527,7 @@ inline
 int
 sc_port_b<IF>::vbind( sc_port_base& parent_ )
 {
-    this_type* parent = DCAST<this_type*>( &parent_ );
+    this_type* parent = dynamic_cast<this_type*>( &parent_ );
     if( parent == 0 ) {
 	// type mismatch
 	return 2;
@@ -543,7 +544,7 @@ inline
 void
 sc_port_b<IF>::add_interface( sc_interface* interface_ )
 {
-    IF* iface = DCAST<IF*>( interface_ );
+    IF* iface = dynamic_cast<IF*>( interface_ );
     sc_assert( iface != 0 );
 
     // make sure that the interface is not already bound:
@@ -553,7 +554,7 @@ sc_port_b<IF>::add_interface( sc_interface* interface_ )
     {
     	if ( iface == m_interface_vec[i] )
 	{
-	    report_error( SC_ID_BIND_IF_TO_PORT_, 
+	    report_error( SC_ID_BIND_IF_TO_PORT_,
 	    	"interface already bound to port" );
 	}
     }
@@ -561,7 +562,7 @@ sc_port_b<IF>::add_interface( sc_interface* interface_ )
     // "bind" the interface and make sure our short cut for 0 is set up.
 
     m_interface_vec.push_back( iface );
-    m_interface = m_interface_vec[0]; 
+    m_interface = m_interface_vec[0];
 }
 
 template <class IF>
@@ -648,10 +649,10 @@ sc_port_b<IF>::make_sensitive( sc_method_handle handle_p,
                                12 December, 2005
   Description of Modification: multiport binding policy changes
 
-    
+
  *****************************************************************************/
 
-/* 
+/*
 $Log: sc_port.h,v $
 Revision 1.10  2011/08/26 20:45:41  acg
  Andy Goodrich: moved the modification log to the end of the file to

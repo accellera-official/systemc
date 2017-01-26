@@ -1,17 +1,19 @@
 /*****************************************************************************
 
-  The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2014 by all Contributors.
-  All Rights reserved.
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
 
-  The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License (the "License");
-  You may not use this file except in compliance with such restrictions and
-  limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.accellera.org/. Software distributed by Contributors
-  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  ANY KIND, either express or implied. See the License for the specific
-  language governing rights and limitations under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
 
  *****************************************************************************/
 
@@ -27,7 +29,6 @@
 
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/kernel/sc_name_gen.h"
-#include "sysc/utils/sc_iostream.h"
 
 #if defined(_MSC_VER) && _MSC_VER >= 1310
 // "C4351: new behavior: elements of array will be default initialized"
@@ -66,10 +67,10 @@ sc_name_gen::gen_unique_name( const char* basename_, bool preserve_first )
     int* c = m_unique_name_map[basename_];
     if( c == 0 ) {
 	c = new int( 0 );
-	m_unique_name_map.insert( CCAST<char*>( basename_ ), c );
+	m_unique_name_map.insert( const_cast<char*>( basename_ ), c );
 	if (preserve_first) {
 	    std::sprintf( m_unique_name, "%s", basename_ );
-	} else {    
+	} else {
             std::sprintf( m_unique_name, "%s_%d", basename_, *c );
         }
     } else {

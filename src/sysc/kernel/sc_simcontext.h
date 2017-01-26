@@ -1,17 +1,19 @@
 /*****************************************************************************
 
-  The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2014 by all Contributors.
-  All Rights reserved.
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
 
-  The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License (the "License");
-  You may not use this file except in compliance with such restrictions and
-  limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.accellera.org/. Software distributed by Contributors
-  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  ANY KIND, either express or implied. See the License for the specific
-  language governing rights and limitations under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
 
  *****************************************************************************/
 
@@ -62,6 +64,7 @@ class sc_process_host;
 class sc_method_process;
 class sc_cthread_process;
 class sc_thread_process;
+class sc_reset_finder;
 
 } // namespace sc_core
 
@@ -114,6 +117,7 @@ extern SC_API void sc_stop();
 // friend function declarations
 
 SC_API sc_dt::uint64 sc_delta_count();
+SC_API sc_dt::uint64 sc_delta_count_at_current_time();
 SC_API const std::vector<sc_event*>& sc_get_top_level_events(
 				const   sc_simcontext* simc_p);
 SC_API const std::vector<sc_object*>& sc_get_top_level_objects(
@@ -209,14 +213,16 @@ public:
     sc_export_registry* get_export_registry();
     sc_prim_channel_registry* get_prim_channel_registry();
 
-    std::string get_hierarchical_name(const sc_object* parent,
-                                      const std::string& name);
+    std::string construct_hierarchical_name(const sc_object* parent,
+                                            const std::string& name);
     bool register_hierarchical_name(const sc_object* parent,
                                     const std::string& name);
     bool unregister_hierarchical_name(const sc_object* parent,
                                       const std::string& name);
     bool hierarchical_name_exists(const sc_object* parent,
                                   const std::string& name);
+    const char* get_hierarchical_name(const sc_object* parent,
+                                      const std::string& name);
 
     // to generate unique names for objects in an MT-Safe way
     const char* gen_unique_name( const char* basename_, 
@@ -257,6 +263,7 @@ public:
 
     sc_dt::uint64 change_stamp() const;
     sc_dt::uint64 delta_count() const;
+    sc_dt::uint64 delta_count_at_current_time() const;
     bool event_occurred( sc_dt::uint64 last_change_count ) const;
     bool evaluation_phase() const;
     bool is_running() const;
@@ -268,6 +275,8 @@ public:
     sc_cor_pkg* cor_pkg()
         { return m_cor_pkg; }
     sc_cor* next_cor();
+
+    void add_reset_finder( sc_reset_finder* );
 
     const ::std::vector<sc_object*>& get_child_objects() const;
 
@@ -292,9 +301,6 @@ private:
 
     void trace_cycle( bool delta_cycle );
 
-    const ::std::vector<sc_event*>& get_child_events_internal() const;
-    const ::std::vector<sc_object*>& get_child_objects_internal() const;
-
     void execute_method_next( sc_method_handle );
     void execute_thread_next( sc_thread_handle );
 
@@ -317,7 +323,11 @@ private:
     void suspend_current_process();
 
     void do_sc_stop_action();
+    void do_timestep( const sc_time& );
     void mark_to_collect_process( sc_process_b* zombie_p );
+
+    sc_method_handle remove_process( sc_method_handle );
+    sc_thread_handle remove_process( sc_thread_handle );
 
 private:
 
@@ -364,6 +374,7 @@ private:
     sc_invoke_method*           m_method_invoker_p;
     sc_dt::uint64               m_change_stamp; // "time" change occurred.
     sc_dt::uint64               m_delta_count;
+    sc_dt::uint64               m_initial_delta_count_at_current_time;
     bool                        m_forced_stop;
     bool                        m_paused;
     bool                        m_ready_to_simulate;
@@ -377,6 +388,8 @@ private:
 
     sc_cor_pkg*                 m_cor_pkg; // the simcontext's coroutine package
     sc_cor*                     m_cor;     // the simcontext's coroutine
+
+    sc_reset_finder*            m_reset_finder_q; // Q of reset finders to reconcile.
 
 private:
 
@@ -510,6 +523,12 @@ sc_dt::uint64
 sc_simcontext::change_stamp() const
 {
     return m_change_stamp;
+}
+
+inline sc_dt::uint64
+sc_simcontext::delta_count_at_current_time() const
+{
+    return m_delta_count - m_initial_delta_count_at_current_time;
 }
 
 inline
@@ -675,6 +694,12 @@ sc_dt::uint64 sc_delta_count()
     return sc_get_curr_simcontext()->m_delta_count;
 }
 
+inline
+sc_dt::uint64 sc_delta_count_at_current_time()
+{
+    return sc_get_curr_simcontext()->delta_count_at_current_time();
+}
+
 inline 
 bool sc_is_running( const sc_simcontext* simc_p = sc_get_curr_simcontext() )
 {
@@ -740,6 +765,20 @@ sc_hierarchical_name_exists( const sc_object* parent,
                              const char* name )
 {
     return sc_get_curr_simcontext()->hierarchical_name_exists(parent, name);
+}
+
+inline
+const char*
+sc_get_hierarchical_name(const char* name)
+{
+    return sc_get_curr_simcontext()->get_hierarchical_name(NULL, name);
+}
+
+inline
+const char*
+sc_get_hierarchical_name(const sc_object* parent, const char* name)
+{
+    return sc_get_curr_simcontext()->get_hierarchical_name(parent, name);
 }
 
 inline

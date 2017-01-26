@@ -16,6 +16,7 @@
 # ppc, ppc64, i386, and x86_64 on Mac OS X
 #/config/config.guess
 #/config/config.sub
+/config/ar-lib
 /config/depcomp
 /config/distclean
 /config/install-sh

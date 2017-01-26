@@ -13,6 +13,14 @@
 
 //  GNU C++ compiler setup:
 
+//
+// Define SC_BOOST_GCC so we know this is "real" GCC and not some pretender:
+//
+#define SC_BOOST_GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
+#if !defined(__CUDACC__)
+#define SC_BOOST_GCC SC_BOOST_GCC_VERSION
+#endif
+
 #if __GNUC__ < 3
 #   if __GNUC_MINOR__ == 91
        // egcs 1.1 won't parse shared_ptr.hpp without this:

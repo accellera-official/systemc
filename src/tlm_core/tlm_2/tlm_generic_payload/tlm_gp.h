@@ -1,19 +1,21 @@
 /*****************************************************************************
 
-  The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2014 by all Contributors.
-  All Rights reserved.
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
 
-  The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License (the "License");
-  You may not use this file except in compliance with such restrictions and
-  limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.accellera.org/. Software distributed by Contributors
-  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  ANY KIND, either express or implied. See the License for the specific
-  language governing rights and limitations under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
 
-*****************************************************************************/
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
+
+ *****************************************************************************/
 
 // 12-Jan-2009  John Aynsley  Bug fix. has_mm() and get_ref_count() should both be const
 // 23-Mar-2009  John Aynsley  Add method update_original_from()
@@ -25,8 +27,8 @@
 #ifndef __TLM_GP_H__
 #define __TLM_GP_H__
 
-#include <systemc>
 #include "tlm_core/tlm_2/tlm_generic_payload/tlm_array.h"
+#include <cstring> // std::memcpy et.al.
 
 namespace tlm {
 
@@ -174,51 +176,9 @@ public:
 
 private:
     //disabled copy ctor and assignment operator.
-    // Copy constructor
-    tlm_generic_payload(const tlm_generic_payload& x)
-        : m_address(x.get_address())
-        , m_command(x.get_command())
-        , m_data(x.get_data_ptr())
-        , m_length(x.get_data_length())
-        , m_response_status(x.get_response_status())
-        , m_dmi(x.is_dmi_allowed())
-        , m_byte_enable(x.get_byte_enable_ptr())
-        , m_byte_enable_length(x.get_byte_enable_length())
-        , m_streaming_width(x.get_streaming_width())
-        , m_gp_option(x.m_gp_option)
-        , m_extensions(max_num_extensions())
-    {
-        // copy all extensions
-        for(unsigned int i=0; i<m_extensions.size(); i++)
-        {
-            m_extensions[i] = x.get_extension(i);
-        }
-    }
+    tlm_generic_payload(const tlm_generic_payload& x) /* = delete */;
+    tlm_generic_payload& operator= (const tlm_generic_payload& x) /* = delete */;
 
-    // Assignment operator
-    tlm_generic_payload& operator= (const tlm_generic_payload& x)
-    {
-        m_command =            x.get_command();
-        m_address =            x.get_address();
-        m_data =               x.get_data_ptr();
-        m_length =             x.get_data_length();
-        m_response_status =    x.get_response_status();
-        m_byte_enable =        x.get_byte_enable_ptr();
-        m_byte_enable_length = x.get_byte_enable_length();
-        m_streaming_width =    x.get_streaming_width();
-        m_gp_option =          x.get_gp_option();
-        m_dmi =                x.is_dmi_allowed();
-
-        // extension copy: all extension arrays must be of equal size by
-        // construction (i.e. it must either be constructed after C++
-        // static construction time, or the resize_extensions() method must
-        // have been called prior to using the object)
-        for(unsigned int i=0; i<m_extensions.size(); i++)
-        {
-            m_extensions[i] = x.get_extension(i);
-        }
-        return (*this);
-    }
 public:
     // non-virtual deep-copying of the object
     void deep_copy_from(const tlm_generic_payload & other)
@@ -236,15 +196,18 @@ public:
         // there must be enough space in the target transaction!
         if(m_data && other.m_data)
         {
-            memcpy(m_data, other.m_data, m_length);
+            std::memcpy(m_data, other.m_data, m_length);
         }
         // deep copy byte enables
         // there must be enough space in the target transaction!
         if(m_byte_enable && other.m_byte_enable)
         {
-            memcpy(m_byte_enable, other.m_byte_enable, m_byte_enable_length);
+            std::memcpy(m_byte_enable, other.m_byte_enable, m_byte_enable_length);
         }
         // deep copy extensions (sticky and non-sticky)
+        if(m_extensions.size() < other.m_extensions.size()) {
+            m_extensions.expand(other.m_extensions.size());
+        }
         for(unsigned int i=0; i<other.m_extensions.size(); i++)
         {
             if(other.m_extensions[i])
@@ -325,14 +288,15 @@ public:
                             m_data[i] = other.m_data[i];
             }
             else
-              memcpy(m_data, other.m_data, m_length);
+              std::memcpy(m_data, other.m_data, m_length);
         }
     }
 
     void update_extensions_from(const tlm_generic_payload & other)
     {
         // deep copy extensions that are already present
-        for(unsigned int i=0; i<other.m_extensions.size(); i++)
+        sc_assert(m_extensions.size() <= other.m_extensions.size());
+        for(unsigned int i=0; i<m_extensions.size(); i++)
         {
             if(other.m_extensions[i])
             {                       //original has extension i
@@ -526,6 +490,7 @@ public:
     tlm_extension_base* set_extension(unsigned int index,
                                       tlm_extension_base* ext)
     {
+        sc_assert(index < m_extensions.size());
         tlm_extension_base* tmp = m_extensions[index];
         m_extensions[index] = ext;
         return tmp;
@@ -542,6 +507,7 @@ public:
     tlm_extension_base* set_auto_extension(unsigned int index,
                                            tlm_extension_base* ext)
     {
+        sc_assert(index < m_extensions.size());
         tlm_extension_base* tmp = m_extensions[index];
         m_extensions[index] = ext;
         if (!tmp) m_extensions.insert_in_cache(&m_extensions[index]);
@@ -561,6 +527,7 @@ public:
     // Non-templatized version with manual index:
     tlm_extension_base* get_extension(unsigned int index) const
     {
+        sc_assert(index < m_extensions.size());
         return m_extensions[index];
     }
 
@@ -602,11 +569,13 @@ private:
     // Non-templatized version with manual index
     void clear_extension(unsigned int index)
     {
+        sc_assert(index < m_extensions.size());
         m_extensions[index] = static_cast<tlm_extension_base*>(0);
     }
     // Non-templatized version with manual index
     void release_extension(unsigned int index)
     {
+        sc_assert(index < m_extensions.size());
         if (m_mm)
         {
             m_extensions.insert_in_cache(&m_extensions[index]);

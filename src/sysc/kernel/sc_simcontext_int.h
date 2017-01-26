@@ -1,17 +1,19 @@
 /*****************************************************************************
 
-  The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2014 by all Contributors.
-  All Rights reserved.
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
 
-  The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License (the "License");
-  You may not use this file except in compliance with such restrictions and
-  limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.accellera.org/. Software distributed by Contributors
-  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  ANY KIND, either express or implied. See the License for the specific
-  language governing rights and limitations under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
 
  *****************************************************************************/
 
@@ -53,7 +55,7 @@
 		    << " - " << P->name() << std::endl; \
     }
 #else
-#   define DEBUG_MSG(NAME,P,MSG) 
+#   define DEBUG_MSG(NAME,P,MSG)
 #endif
 
 
@@ -96,7 +98,7 @@ sc_simcontext::reset_curr_proc()
     m_curr_proc_info.process_handle = 0;
     m_curr_proc_info.kind           = SC_NO_PROC_;
     m_current_writer                = 0;
-    sc_process_b::m_last_created_process_p = 0; 
+    sc_process_b::m_last_created_process_p = 0;
 }
 
 inline
@@ -115,10 +117,10 @@ sc_simcontext::execute_thread_next( sc_thread_handle thread_h )
 
 // +----------------------------------------------------------------------------
 // |"sc_simcontext::preempt_with"
-// | 
+// |
 // | This method executes the supplied thread immediately, suspending the
 // | caller. After executing the supplied thread the caller's execution will
-// | be restored. It is used to allow a thread to immediately throw an 
+// | be restored. It is used to allow a thread to immediately throw an
 // | exception, e.g., when the thread's kill_process() method was called.
 // | There are three cases to consider:
 // |   (1) The caller is a method, e.g., murder by method.
@@ -136,10 +138,10 @@ sc_simcontext::preempt_with( sc_thread_handle thread_h )
     sc_curr_proc_info caller_info; // process info for caller.
 
     // Determine the active process and take the thread to be run off the
-    // run queue, if its there, since we will be explicitly causing its 
+    // run queue, if its there, since we will be explicitly causing its
     // execution.
 
-    active_p = DCAST<sc_thread_handle>(sc_get_current_process_b());
+    active_p = dynamic_cast<sc_thread_handle>(sc_get_current_process_b());
     if ( thread_h->next_runnable() != NULL )
 	remove_runnable_thread( thread_h );
 
@@ -160,20 +162,20 @@ sc_simcontext::preempt_with( sc_thread_handle thread_h )
 	sc_thread_handle           invoke_thread_p; // latest invocation thread.
         sc_method_handle           method_p;        // active method.
 
-	method_p = DCAST<sc_method_handle>(sc_get_current_process_b());
+	method_p = dynamic_cast<sc_method_handle>(sc_get_current_process_b());
 	invokers_p = &get_active_invokers();
 	caller_info = m_curr_proc_info;
 	if ( invokers_p->size() != 0 )
 	{
 	    invoke_thread_p = invokers_p->back();
-	    DEBUG_MSG( DEBUG_NAME, invoke_thread_p, 
+	    DEBUG_MSG( DEBUG_NAME, invoke_thread_p,
 	        "queueing invocation thread to execute next" );
 	    execute_thread_next(invoke_thread_p);
 	}
         DEBUG_MSG( DEBUG_NAME, thread_h, "preempting method with thread" );
 	set_curr_proc( (sc_process_b*)thread_h );
 	m_cor_pkg->yield( thread_h->m_cor_p );
-	m_curr_proc_info = caller_info; 
+	m_curr_proc_info = caller_info;
         DEBUG_MSG(DEBUG_NAME, thread_h, "back from preempting method w/thread");
 	method_p->check_for_throws();
     }
@@ -182,7 +184,7 @@ sc_simcontext::preempt_with( sc_thread_handle thread_h )
     //
     //   (a) Push the calling thread onto the front of the runnable queue
     //       so it be the first thread to be run after this thread.
-    //   (b) Push the thread to be run onto the front of the runnable queue so 
+    //   (b) Push the thread to be run onto the front of the runnable queue so
     //       it will execute when we suspend the calling thread.
     //   (c) Suspend the active thread.
 
@@ -197,7 +199,7 @@ sc_simcontext::preempt_with( sc_thread_handle thread_h )
 
     // CALLER IS THE THREAD TO BE RUN:
     //
-    //   (a) Push the thread to be run onto the front of the runnable queue so 
+    //   (a) Push the thread to be run onto the front of the runnable queue so
     //       it will execute when we suspend the calling thread.
     //   (b) Suspend the active thread.
 

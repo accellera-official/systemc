@@ -1,32 +1,31 @@
 /*****************************************************************************
 
-  The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2014 by all Contributors.
-  All Rights reserved.
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
 
-  The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License (the "License");
-  You may not use this file except in compliance with such restrictions and
-  limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.accellera.org/. Software distributed by Contributors
-  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  ANY KIND, either express or implied. See the License for the specific
-  language governing rights and limitations under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
 
  *****************************************************************************/
 
 /*****************************************************************************
 
-  sc_uint_base.h -- A sc_uint is an unsigned integer whose length is less than
-               the machine's native integer length. We provide two
-               implementations (i) sc_uint with length between 1 - 64, and (ii)
-               sc_uint with length between 1 - 32. Implementation (i) is the
-               default implementation, while implementation (ii) can be used
-               only if compiled with -D_32BIT_. Unlike arbitrary precision,
-               arithmetic and bitwise operations are performed using the native
-               types (hence capped at 32/64 bits). The sc_uint integer is
-               useful when the user does not need arbitrary precision and the
-               performance is superior to sc_bigint/sc_biguint.
+  sc_uint_base.h -- An unsigned integer whose length is less than 64 bits.
+
+               Unlike arbitrary precision, arithmetic and bitwise operations
+               are performed using the native types (hence capped at 64 bits).
+               The sc_uint integer is useful when the user does not need
+               arbitrary precision and the performance is superior to
+               sc_bigint/sc_biguint.
 
   Original Author: Amit Rao, Synopsys, Inc.
 
@@ -77,7 +76,6 @@
 #include "sysc/datatypes/int/sc_length_param.h"
 #include "sysc/datatypes/int/sc_nbdefs.h"
 #include "sysc/datatypes/fx/scfx_ieee.h"
-#include "sysc/utils/sc_iostream.h"
 #include "sysc/utils/sc_temporary.h"
 
 
@@ -316,7 +314,7 @@ class SC_API sc_uint_subref_r : public sc_value_base
 
 public:
     sc_uint_subref_r( const sc_uint_subref_r& init ) :
-        sc_value_base(init), m_left(init.m_left), m_obj_p(init.m_obj_p), 
+        sc_value_base(init), m_left(init.m_left), m_obj_p(init.m_obj_p),
 	m_right(init.m_right)
 	{}
 
@@ -825,13 +823,12 @@ public:
         { return uint64_to_double( m_val ); }
 
 
-#ifndef _32BIT_
     long long_low() const
 	{ return (long) (m_val & UINT64_32ONES); }
 
     long long_high() const
 	{ return (long) ((m_val >> 32) & UINT64_32ONES); }
-#endif
+
 
     // explicit conversion to character string
 

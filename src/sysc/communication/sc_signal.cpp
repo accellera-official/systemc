@@ -1,17 +1,19 @@
 /*****************************************************************************
 
-  The following code is derived, directly or indirectly, from the SystemC
-  source code Copyright (c) 1996-2014 by all Contributors.
-  All Rights reserved.
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
 
-  The contents of this file are subject to the restrictions and limitations
-  set forth in the SystemC Open Source License (the "License");
-  You may not use this file except in compliance with such restrictions and
-  limitations. You may obtain instructions on how to receive a copy of the
-  License at http://www.accellera.org/. Software distributed by Contributors
-  under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF
-  ANY KIND, either express or implied. See the License for the specific
-  language governing rights and limitations under the License.
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
 
  *****************************************************************************/
 
@@ -28,18 +30,11 @@
 #include "sysc/communication/sc_communication_ids.h"
 #include "sysc/utils/sc_utils_ids.h"
 #include "sysc/communication/sc_signal.h"
-#include "sysc/datatypes/int/sc_signed.h"
-#include "sysc/datatypes/int/sc_unsigned.h"
-#include "sysc/datatypes/bit/sc_lv_base.h"
 #include "sysc/kernel/sc_reset.h"
 
 #include <sstream>
 
-using sc_dt::sc_lv_base;
-using sc_dt::sc_signed;
-using sc_dt::sc_unsigned;
-using sc_dt::int64;
-using sc_dt::uint64;
+using sc_dt::sc_logic;
 
 namespace sc_core {
 
@@ -91,18 +86,25 @@ sc_writer_policy_check_port::
     return true;
 }
 
-void sc_deprecated_get_data_ref()
+sc_signal_channel::~sc_signal_channel()
+{
+    delete m_change_event_p;
+}
+
+void
+sc_signal_channel::deprecated_get_data_ref() const
 {
     static bool warn_get_data_ref_deprecated=true;
     if ( warn_get_data_ref_deprecated )
     {
         warn_get_data_ref_deprecated=false;
 	SC_REPORT_INFO(SC_ID_IEEE_1666_DEPRECATION_,
-	    "get_data_ref() is deprecated, use read() instead" );
+	    "sc_signal<T>::get_data_ref() is deprecated, use read() instead" );
     }
 }
 
-void sc_deprecated_get_new_value()
+void
+sc_signal_channel::deprecated_get_new_value() const
 {
     static bool warn_new_value=true;
     if ( warn_new_value )
@@ -113,7 +115,8 @@ void sc_deprecated_get_new_value()
     }
 }
 
-void sc_deprecated_trace()
+void
+sc_signal_channel::deprecated_trace() const
 {
     static bool warn_trace_deprecated=true;
     if ( warn_trace_deprecated )
@@ -124,68 +127,41 @@ void sc_deprecated_trace()
     }
 }
 
+// create a (kernel) event, if needed
 sc_event*
-sc_lazy_kernel_event( sc_event** ev, const char* name )
+sc_signal_channel::lazy_kernel_event( sc_event** ev, const char* name ) const
 {
     if ( !*ev ) {
         *ev = new sc_event( sc_event::kernel_event, name );
     }
     return *ev;
-
 }
 
-// IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
-template< sc_writer_policy POL >
-void
-sc_signal<bool,POL>::register_port( sc_port_base& port_,
-                                    const char* if_typename_ )
+// get the value changed event
+const sc_event&
+sc_signal_channel::value_changed_event() const
 {
-    bool is_output = std::string( if_typename_ ) == typeid(if_type).name();
-    if( !policy_type::check_port( this, &port_, is_output ) )
-       ((void)0); // fallback? error has been suppressed ...
+    return *lazy_kernel_event(&m_change_event_p,"value_changed_event");
 }
 
 
-// write the new value
-
-template< sc_writer_policy POL >
+// do the generic update actions
 void
-sc_signal<bool,POL>::write( const bool& value_ )
+sc_signal_channel::do_update()
 {
-    bool value_changed = !( m_cur_val == value_ );
-    if ( !policy_type::check_write(this, value_changed) )
-        return;
-    m_new_val = value_;
-    if( value_changed ) {
-        request_update();
-    }
+    notify_next_delta( m_change_event_p );
+    m_change_stamp = simcontext()->change_stamp();
 }
 
-template< sc_writer_policy POL >
-inline
-void
-sc_signal<bool,POL>::print( ::std::ostream& os ) const
-{
-    os << m_cur_val;
-}
-
-template< sc_writer_policy POL >
-void
-sc_signal<bool,POL>::dump( ::std::ostream& os ) const
-{
-    os << "     name = " << name() << ::std::endl;
-    os << "    value = " << m_cur_val << ::std::endl;
-    os << "new value = " << m_new_val << ::std::endl;
-}
-
+// IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
 template< sc_writer_policy POL >
 void
 sc_signal<bool,POL>::update()
 {
     policy_type::update();
-    if( !( m_new_val == m_cur_val ) ) {
+    if( !( base_type::m_new_val == base_type::m_cur_val ) ) {
         do_update();
     }
 }
@@ -196,45 +172,31 @@ sc_signal<bool,POL>::do_update()
 {
     // order of execution below is important, the notify_processes() call
     // must come after the update of m_cur_val for things to work properly!
-
-    m_cur_val = m_new_val;
-
+    base_type::do_update();
     if ( m_reset_p ) m_reset_p->notify_processes();
 
-    if ( m_change_event_p ) m_change_event_p->notify_next_delta();
-
-    sc_event* event_p = this->m_cur_val
-                      ? m_posedge_event_p : m_negedge_event_p;
-    if ( event_p ) event_p->notify_next_delta();
-
-    m_change_stamp = simcontext()->change_stamp();
+    sc_event* event_p = this->m_cur_val ? m_posedge_event_p : m_negedge_event_p;
+    sc_signal_channel::notify_next_delta( event_p );
 }
 
-// (edge) event methods
-
-template< sc_writer_policy POL >
-const sc_event&
-sc_signal<bool,POL>::value_changed_event() const
-{
-    return *sc_lazy_kernel_event(&m_change_event_p,"value_changed_event");
-}
+// edge event methods
 
 template< sc_writer_policy POL >
 const sc_event&
 sc_signal<bool,POL>::posedge_event() const
 {
-    return *sc_lazy_kernel_event(&m_posedge_event_p,"posedge_event");
+    return *this->lazy_kernel_event(&m_posedge_event_p,"posedge_event");
 }
 
 template< sc_writer_policy POL >
 const sc_event&
 sc_signal<bool,POL>::negedge_event() const
 {
-    return *sc_lazy_kernel_event(&m_negedge_event_p,"negedge_event");
+    return *this->lazy_kernel_event(&m_negedge_event_p,"negedge_event");
 }
 
 
-// reset support:
+// reset support
 
 template< sc_writer_policy POL >
 sc_reset*
@@ -251,109 +213,60 @@ sc_signal<bool,POL>::is_reset() const
 template< sc_writer_policy POL >
 sc_signal<bool,POL>::~sc_signal()
 {
-    delete m_change_event_p;
     delete m_negedge_event_p;
     delete m_posedge_event_p;
     delete m_reset_p;
 }
 
-// IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
+// IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
 template< sc_writer_policy POL >
 void
-sc_signal<sc_dt::sc_logic,POL>::register_port( sc_port_base& port_,
-                                               const char* if_typename_ )
-{
-    bool is_output = std::string( if_typename_ ) == typeid(if_type).name();
-    if( !policy_type::check_port( this, &port_, is_output ) )
-       ((void)0); // fallback? error has been suppressed ...
-}
-
-
-// write the new value
-
-template< sc_writer_policy POL >
-inline
-void
-sc_signal<sc_dt::sc_logic,POL>::write( const sc_dt::sc_logic& value_ )
-{
-    bool value_changed = !( m_cur_val == value_ );
-    if ( !policy_type::check_write(this, value_changed) )
-        return;
-
-    m_new_val = value_;
-    if( value_changed ) {
-        request_update();
-    }
-}
-
-template< sc_writer_policy POL >
-inline
-void
-sc_signal<sc_dt::sc_logic,POL>::print( ::std::ostream& os ) const
-{
-    os << m_cur_val;
-}
-
-template< sc_writer_policy POL >
-void
-sc_signal<sc_dt::sc_logic,POL>::dump( ::std::ostream& os ) const
-{
-    os << "     name = " << name() << ::std::endl;
-    os << "    value = " << m_cur_val << ::std::endl;
-    os << "new value = " << m_new_val << ::std::endl;
-}
-
-
-template< sc_writer_policy POL >
-void
-sc_signal<sc_dt::sc_logic,POL>::update()
+sc_signal<sc_logic,POL>::update()
 {
     policy_type::update();
-    if( !( m_new_val == m_cur_val ) ) {
+    if( !( base_type::m_new_val == base_type::m_cur_val ) ) {
         do_update();
     }
 }
 
 template< sc_writer_policy POL >
 void
-sc_signal<sc_dt::sc_logic,POL>::do_update()
+sc_signal<sc_logic,POL>::do_update()
 {
-    m_cur_val = m_new_val;
+    base_type::do_update();
 
-    if ( m_change_event_p ) m_change_event_p->notify_next_delta();
-
-    if( m_posedge_event_p && (this->m_cur_val == sc_dt::SC_LOGIC_1) ) {
-        m_posedge_event_p->notify_next_delta();
+    if( this->m_cur_val == sc_dt::SC_LOGIC_1 ) {
+        sc_signal_channel::notify_next_delta( m_posedge_event_p );
     }
-    else if( m_negedge_event_p && (this->m_cur_val == sc_dt::SC_LOGIC_0) ) {
-        m_negedge_event_p->notify_next_delta();
+    else if( this->m_cur_val == sc_dt::SC_LOGIC_0 ) {
+        sc_signal_channel::notify_next_delta( m_negedge_event_p );
     }
-
-    m_change_stamp = simcontext()->change_stamp();
 }
 
-// (edge) event methods
+// edge event methods
 
 template< sc_writer_policy POL >
 const sc_event&
-sc_signal<sc_dt::sc_logic,POL>::value_changed_event() const
+sc_signal<sc_logic,POL>::posedge_event() const
 {
-    return *sc_lazy_kernel_event(&m_change_event_p,"value_changed_event");
-}
-
-template< sc_writer_policy POL >
-const sc_event&
-sc_signal<sc_dt::sc_logic,POL>::posedge_event() const
-{
-    return *sc_lazy_kernel_event(&m_posedge_event_p,"posedge_event");
+    return *this->lazy_kernel_event(&m_posedge_event_p,"posedge_event");
 }
 
 template< sc_writer_policy POL >
 const sc_event&
-sc_signal<sc_dt::sc_logic,POL>::negedge_event() const
+sc_signal<sc_logic,POL>::negedge_event() const
 {
-    return *sc_lazy_kernel_event(&m_negedge_event_p,"negedge_event");
+    return *this->lazy_kernel_event(&m_negedge_event_p,"negedge_event");
+}
+
+// destructor
+
+template< sc_writer_policy POL >
+sc_signal<sc_logic,POL>::~sc_signal()
+{
+    delete m_negedge_event_p;
+    delete m_posedge_event_p;
 }
 
 
@@ -363,9 +276,9 @@ template class SC_API sc_signal<bool,SC_ONE_WRITER>;
 template class SC_API sc_signal<bool,SC_MANY_WRITERS>;
 template class SC_API sc_signal<bool,SC_UNCHECKED_WRITERS>;
 
-template class SC_API sc_signal<sc_dt::sc_logic,SC_ONE_WRITER>;
-template class SC_API sc_signal<sc_dt::sc_logic,SC_MANY_WRITERS>;
-template class SC_API sc_signal<sc_dt::sc_logic,SC_UNCHECKED_WRITERS>;
+template class SC_API sc_signal<sc_logic,SC_ONE_WRITER>;
+template class SC_API sc_signal<sc_logic,SC_MANY_WRITERS>;
+template class SC_API sc_signal<sc_logic,SC_UNCHECKED_WRITERS>;
 
 } // namespace sc_core
 
