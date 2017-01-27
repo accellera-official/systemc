@@ -180,7 +180,7 @@ protected:
   sc_object* implicit_cast( sc_object* p ) const { return p; }
   sc_object* implicit_cast( ... /* incompatible */ )  const;
 
-  class context_scope
+  class SC_API context_scope
   {
     sc_vector_base* owner_;
   public:
