@@ -32,12 +32,6 @@
 #include "sysc/datatypes/bit/sc_lv_base.h"
 #include "sysc/utils/sc_utils_ids.h"
 
-SC_API_VECTOR_IMPL_(sc_core::sc_signal_in_if<bool>*);
-SC_API_VECTOR_IMPL_(sc_core::sc_signal_inout_if<bool>*);
-SC_API_VECTOR_IMPL_(sc_core::sc_signal_in_if<sc_dt::sc_logic>*);
-SC_API_VECTOR_IMPL_(sc_core::sc_signal_inout_if<sc_dt::sc_logic>*);
-SC_API_VECTOR_IMPL_(sc_core::sc_trace_params*);
-
 namespace sc_core {
 
 SC_API_TEMPLATE_IMPL_ template class SC_API sc_port<sc_signal_in_if<bool>,1,SC_ONE_OR_MORE_BOUND>;

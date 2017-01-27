@@ -36,6 +36,11 @@
 #include "sysc/communication/sc_export.h"
 #include "sysc/communication/sc_signal_ports.h"
 
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(push)
+#pragma warning(disable: 4251) // DLL import for std::vector
+#endif
+
 namespace sc_core {
 
 class sc_event;
@@ -44,15 +49,6 @@ class sc_interface;
 class sc_event_finder;
 class sc_process_b;
 class sc_spawn_reset_base;
-
-} // namespace sc_core
-
-// explicitly export std::vector<> instantiations
-SC_API_VECTOR_DECL_(sc_core::sc_event_finder*);
-SC_API_VECTOR_DECL_(sc_core::sc_interface*);
-SC_API_VECTOR_DECL_(sc_core::sc_spawn_reset_base*);
-
-namespace sc_core {
 
 
 //=============================================================================
@@ -125,6 +121,10 @@ class SC_API sc_spawn_options {
 };
 
 } // namespace sc_core
+
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(pop)
+#endif
 
 // $Log: sc_spawn_options.h,v $
 // Revision 1.11  2011/08/26 20:46:11  acg

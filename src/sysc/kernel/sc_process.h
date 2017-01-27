@@ -36,6 +36,11 @@
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/communication/sc_export.h"
 
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(push)
+#pragma warning(disable: 4251) // DLL import for std::vector
+#endif
+
 namespace sc_core {
 
 // Forward declarations:
@@ -76,14 +81,6 @@ enum sc_descendant_inclusion_info {
     SC_INVALID_DESCENDANTS
 };
 
-} // namespace sc_core
-
-// explititly export std::vector<> instantiations
-SC_API_VECTOR_DECL_(sc_core::sc_reset*);
-SC_API_VECTOR_DECL_(sc_core::sc_method_handle);
-SC_API_VECTOR_DECL_(sc_core::sc_thread_handle);
-
-namespace sc_core {
 
 //==============================================================================
 // CLASS sc_process_host
@@ -702,6 +699,10 @@ inline bool sc_process_b::timed_out() const
 }
 
 } // namespace sc_core
+
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(pop)
+#endif
 
 /*****************************************************************************
 

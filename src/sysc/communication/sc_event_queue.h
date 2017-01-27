@@ -70,12 +70,6 @@ public:
     virtual void cancel_all() =0;
 };
 
-} // namespace sc_core
-
-SC_API_VECTOR_DECL_(sc_core::sc_event_queue_if*);
-
-namespace sc_core {
-
 // ---------------------------------------------------------------------------
 // sc_event_queue: a queue that can contain any number of pending 
 // delta, or timed events.

@@ -37,7 +37,7 @@
 
 #if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
 #pragma warning(push)
-#pragma warning(disable: 4251) // DLL import for std::string
+#pragma warning(disable: 4251) // DLL import for std::string,vector
 #endif
 
 namespace sc_core {
@@ -73,12 +73,6 @@ private:
     sc_attr_base& operator = ( const sc_attr_base& );
 };
 
-} // namespace sc_core
-
-// explicitly instantiate/export std::vector<sc_attr_base*>
-SC_API_VECTOR_DECL_(sc_core::sc_attr_base*);
-
-namespace sc_core {
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_attr_cltn

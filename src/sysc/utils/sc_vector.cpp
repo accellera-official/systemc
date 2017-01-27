@@ -36,8 +36,6 @@
 
 #include <sstream>
 
-SC_API_VECTOR_IMPL_(sc_core::sc_vector_element*);
-
 namespace sc_core {
 
 sc_vector_base::sc_vector_base()

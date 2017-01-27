@@ -28,8 +28,6 @@
 
 #include "sysc/kernel/sc_attribute.h"
 
-SC_API_VECTOR_IMPL_(sc_core::sc_attr_base*);
-
 namespace sc_core {
 
 // ----------------------------------------------------------------------------

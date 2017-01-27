@@ -48,8 +48,6 @@
 #include "sysc/utils/sc_utils_ids.h"
 #include "sysc/utils/sc_mempool.h"
 
-SC_API_VECTOR_IMPL_(sc_core::sc_object*);
-
 namespace sc_core {
 
 typedef int (*STRCMP)(const void*, const void*);

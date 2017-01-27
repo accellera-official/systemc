@@ -43,6 +43,11 @@
 #  define SC_VIRTUAL_ /* non-virtual */
 #endif
 
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(push)
+#pragma warning(disable: 4251) // DLL import for std::vector
+#endif
+
 namespace sc_core {
 
 class sc_event_finder;
@@ -57,11 +62,6 @@ enum sc_port_policy
     SC_ALL_BOUND
 };
 
-} // namespace sc_core
-
-SC_API_VECTOR_DECL_(sc_core::sc_port_base*);
-
-namespace sc_core {
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //  BEWARE: Ports can only be created and bound during elaboration.
@@ -634,6 +634,10 @@ sc_port_b<IF>::make_sensitive( sc_method_handle handle_p,
 } // namespace sc_core
 
 #undef SC_VIRTUAL_
+
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(pop)
+#endif
 
 /*****************************************************************************
 

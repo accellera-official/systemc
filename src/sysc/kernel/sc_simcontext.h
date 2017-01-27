@@ -37,6 +37,11 @@
 #include "sysc/utils/sc_hash.h"
 #include "sysc/utils/sc_pq.h"
 
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(push)
+#pragma warning(disable: 4251) // DLL import for std::vector
+#endif
+
 namespace sc_core {
 
 // forward declarations
@@ -66,12 +71,6 @@ class sc_cthread_process;
 class sc_thread_process;
 class sc_reset_finder;
 
-} // namespace sc_core
-
-// export explicit std::vector<> template instantiations
-SC_API_VECTOR_DECL_(sc_core::sc_trace_file*);
-
-namespace sc_core {
 
 template< typename > class sc_plist;
 typedef sc_plist< sc_process_b* > sc_process_list;
@@ -823,6 +822,10 @@ sc_start_of_simulation_invoked()
 extern SC_API bool sc_allow_process_control_corners;
 
 } // namespace sc_core
+
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(pop)
+#endif
 
 /*****************************************************************************
 

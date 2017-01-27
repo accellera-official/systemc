@@ -31,6 +31,11 @@
 
 #include "sysc/communication/sc_writer_policy.h"
 
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(push)
+#pragma warning(disable: 4251) // DLL import for std::vector
+#endif
+
 namespace sc_core {
 
 // FORWARD CLASS REFERENCES:
@@ -67,12 +72,6 @@ inline std::ostream& operator << ( std::ostream& os,
     return os;
 }
 
-} // namespace sc_core
-
-// explicitly instantiate std::vector<sc_reset_target>
-SC_API_VECTOR_DECL_(sc_core::sc_reset_target);
-
-namespace sc_core {
 
 //==============================================================================
 // sc_reset_finder - place holder class for a port reset signal until it is
@@ -198,5 +197,9 @@ class SC_API sc_reset {
 // Added $Log to record CVS changes into the source.
 
 } // namespace sc_core
+
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(pop)
+#endif
 
 #endif // !defined(sc_reset_h_INCLUDED)

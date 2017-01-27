@@ -71,15 +71,6 @@ struct SC_API sc_trace_params
 
 typedef std::vector<sc_trace_params*> sc_trace_params_vec;
 
-} // namespace sc_core
-
-SC_API_VECTOR_DECL_(sc_core::sc_signal_in_if<bool>*);
-SC_API_VECTOR_DECL_(sc_core::sc_signal_inout_if<bool>*);
-SC_API_VECTOR_DECL_(sc_core::sc_signal_in_if<sc_dt::sc_logic>*);
-SC_API_VECTOR_DECL_(sc_core::sc_signal_inout_if<sc_dt::sc_logic>*);
-SC_API_VECTOR_DECL_(sc_core::sc_trace_params*);
-
-namespace sc_core {
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_in<T>

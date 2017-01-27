@@ -160,26 +160,6 @@
 
 #define SC_API_TEMPLATE_ SC_API_TEMPLATE_DECL_
 
-// explicitly instantiate and export/import an std::vector specialization
-#define SC_API_VECTOR_IMPL_(Type) \
-  SC_API_TEMPLATE_IMPL_ template class SC_API ::std::allocator<Type>; \
-  SC_API_TEMPLATE_IMPL_ template class SC_API ::std::vector<Type,::std::allocator<Type> >
-
-// std::vector specialization declaration
-#define SC_API_VECTOR_DECL_(Type) \
-  SC_API_TEMPLATE_DECL_ template class SC_API ::std::allocator<Type>; \
-  SC_API_TEMPLATE_DECL_ template class SC_API ::std::vector<Type,::std::allocator<Type> >
-
-namespace sc_core {
-class SC_API sc_object;
-class SC_API sc_event;
-} // namespace sc_core
-
-// std::vector<> template declarations
-SC_API_VECTOR_DECL_(sc_core::sc_object*);
-SC_API_VECTOR_DECL_(sc_core::sc_event*);
-SC_API_VECTOR_DECL_(const sc_core::sc_event*);
-
 #endif // SC_CMNHDR_H
 
 // ----------------------------------------------------------------------------

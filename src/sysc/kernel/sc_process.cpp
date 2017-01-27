@@ -38,10 +38,6 @@
 #include "sysc/kernel/sc_event.h"
 #include <sstream>
 
-SC_API_VECTOR_IMPL_(sc_core::sc_process_b*);
-SC_API_VECTOR_IMPL_(sc_core::sc_method_handle);
-SC_API_VECTOR_IMPL_(sc_core::sc_thread_handle);
-
 namespace sc_core {
 
 // sc_process_handle entities that are returned for null pointer instances:

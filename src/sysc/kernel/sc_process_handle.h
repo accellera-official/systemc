@@ -41,6 +41,11 @@
 
 #include "sysc/kernel/sc_module.h"
 
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(push)
+#pragma warning(disable: 4251) // DLL import for std::vector
+#endif
+
 namespace sc_core {
 
 // forward operator declarations:
@@ -523,6 +528,10 @@ inline sc_process_handle sc_get_last_created_process_handle()
 }
 
 } // namespace sc_core
+
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(pop)
+#endif
 
 // Revision 1.19  2011/08/24 22:05:51  acg
 //  Torsten Maehne: initialization changes to remove warnings.
