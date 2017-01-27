@@ -70,7 +70,7 @@ inline std::ostream& operator << ( std::ostream& os,
 } // namespace sc_core
 
 // explicitly instantiate std::vector<sc_reset_target>
-SC_API_VECTOR_(sc_core::sc_reset_target);
+SC_API_VECTOR_DECL_(sc_core::sc_reset_target);
 
 namespace sc_core {
 

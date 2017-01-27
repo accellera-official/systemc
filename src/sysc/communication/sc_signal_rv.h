@@ -38,7 +38,7 @@ class sc_process_b;
 
 } // namespace sc_core
 
-SC_API_VECTOR_(sc_core::sc_process_b*);
+SC_API_VECTOR_DECL_(sc_core::sc_process_b*);
 
 namespace sc_core {
 

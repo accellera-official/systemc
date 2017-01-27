@@ -107,7 +107,7 @@ class sc_vector_element;  // opaque pointer
 
 } // namespace sc_core
 
-SC_API_VECTOR_(sc_core::sc_vector_element*);
+SC_API_VECTOR_DECL_(sc_core::sc_vector_element*);
 
 namespace sc_core {
 class SC_API sc_vector_base

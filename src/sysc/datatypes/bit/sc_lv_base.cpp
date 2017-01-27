@@ -55,6 +55,9 @@
 namespace sc_dt
 {
 
+SC_API_TEMPLATE_IMPL_ template class SC_API sc_proxy<sc_lv_base>;
+SC_API_TEMPLATE_IMPL_ template class SC_API sc_proxy<sc_bv_base>;
+
 // ----------------------------------------------------------------------------
 //  CLASS : sc_lv_base
 //

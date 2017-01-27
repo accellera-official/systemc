@@ -29,7 +29,12 @@
 #include "sysc/communication/sc_event_queue.h"
 #include "sysc/kernel/sc_method_process.h"
 
+SC_API_VECTOR_IMPL_(sc_core::sc_event_queue_if*);
+
 namespace sc_core {
+
+SC_API_TEMPLATE_IMPL_ template class SC_API sc_ppq<sc_time*>;
+SC_API_TEMPLATE_IMPL_ template class SC_API sc_port<sc_event_queue_if,1,SC_ONE_OR_MORE_BOUND>;
 
 static int 
 sc_time_compare( const void* p1, const void* p2 )

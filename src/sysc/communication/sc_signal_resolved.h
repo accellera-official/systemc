@@ -42,8 +42,8 @@ extern SC_API const sc_dt::sc_logic_value_t sc_logic_resolution_tbl[4][4];
 } // namespace sc_core
 
 // explicitly export std::vector<> instantiations
-SC_API_VECTOR_(sc_core::sc_process_b*);
-SC_API_VECTOR_(sc_dt::sc_logic);
+SC_API_VECTOR_DECL_(sc_core::sc_process_b*);
+SC_API_VECTOR_DECL_(sc_dt::sc_logic);
 
 namespace sc_core {
 

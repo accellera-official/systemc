@@ -30,6 +30,7 @@
 #include "sysc/communication/sc_communication_ids.h"
 #include "sysc/kernel/sc_event.h"
 
+SC_API_VECTOR_IMPL_(sc_core::sc_interface*);
 
 namespace sc_core {
 

@@ -121,4 +121,6 @@ sc_spawn_options::specify_resets() const
 
 } // namespace sc_core
 
+SC_API_VECTOR_IMPL_(sc_core::sc_spawn_reset_base*);
+
 // Taf!

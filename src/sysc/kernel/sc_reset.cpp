@@ -61,6 +61,9 @@
 //     method, the tail of which will execute each time the thread is
 //     dispatched.
 
+SC_API_VECTOR_IMPL_(sc_core::sc_reset*);
+SC_API_VECTOR_IMPL_(sc_core::sc_reset_target);
+
 namespace sc_core {
 
 inline sc_reset_finder::sc_reset_finder(

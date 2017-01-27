@@ -29,6 +29,8 @@
 
 #include "sysc/communication/sc_event_finder.h"
 
+SC_API_VECTOR_IMPL_(sc_core::sc_event_finder*);
+
 namespace sc_core {
 
 // ----------------------------------------------------------------------------

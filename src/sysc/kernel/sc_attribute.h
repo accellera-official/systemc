@@ -76,7 +76,7 @@ private:
 } // namespace sc_core
 
 // explicitly instantiate/export std::vector<sc_attr_base*>
-SC_API_VECTOR_(sc_core::sc_attr_base*);
+SC_API_VECTOR_DECL_(sc_core::sc_attr_base*);
 
 namespace sc_core {
 

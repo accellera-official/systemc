@@ -49,6 +49,7 @@
 #include "sysc/datatypes/bit/sc_bit_ids.h"
 #include "sysc/datatypes/bit/sc_logic.h"
 
+SC_API_VECTOR_IMPL_(sc_dt::sc_logic);
 
 namespace sc_dt
 {
