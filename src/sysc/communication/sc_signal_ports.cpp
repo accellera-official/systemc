@@ -34,10 +34,10 @@
 
 namespace sc_core {
 
-SC_API_TEMPLATE_IMPL_ template class SC_API sc_port<sc_signal_in_if<bool>,1,SC_ONE_OR_MORE_BOUND>;
-SC_API_TEMPLATE_IMPL_ template class SC_API sc_port<sc_signal_in_if<sc_dt::sc_logic>,1,SC_ONE_OR_MORE_BOUND>;
-SC_API_TEMPLATE_IMPL_ template class SC_API sc_port<sc_signal_inout_if<bool>,1,SC_ONE_OR_MORE_BOUND>;
-SC_API_TEMPLATE_IMPL_ template class SC_API sc_port<sc_signal_inout_if<sc_dt::sc_logic>,1,SC_ONE_OR_MORE_BOUND>;
+template class SC_API sc_port<sc_signal_in_if<bool>,1,SC_ONE_OR_MORE_BOUND>;
+template class SC_API sc_port<sc_signal_in_if<sc_dt::sc_logic>,1,SC_ONE_OR_MORE_BOUND>;
+template class SC_API sc_port<sc_signal_inout_if<bool>,1,SC_ONE_OR_MORE_BOUND>;
+template class SC_API sc_port<sc_signal_inout_if<sc_dt::sc_logic>,1,SC_ONE_OR_MORE_BOUND>;
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_in<bool>

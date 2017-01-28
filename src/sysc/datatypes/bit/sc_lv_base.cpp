@@ -51,12 +51,11 @@
 #include "sysc/datatypes/bit/sc_bit_ids.h"
 #include "sysc/datatypes/bit/sc_lv_base.h"
 
+namespace sc_dt {
 
-namespace sc_dt
-{
-
-SC_API_TEMPLATE_IMPL_ template class SC_API sc_proxy<sc_lv_base>;
-SC_API_TEMPLATE_IMPL_ template class SC_API sc_proxy<sc_bv_base>;
+// explicit template instantiations
+template class SC_API sc_proxy<sc_lv_base>;
+template class SC_API sc_proxy<sc_bv_base>;
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_lv_base

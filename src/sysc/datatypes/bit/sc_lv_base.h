@@ -1821,8 +1821,9 @@ concat( bool a, sc_proxy<T>& b )
 
 #endif
 
-SC_API_TEMPLATE_DECL_ template class SC_API sc_proxy<sc_lv_base>;
-SC_API_TEMPLATE_DECL_ template class SC_API sc_proxy<sc_bv_base>;
+// extern template instantiations
+SC_API_TEMPLATE_DECL_ sc_proxy<sc_lv_base>;
+SC_API_TEMPLATE_DECL_ sc_proxy<sc_bv_base>;
 
 } // namespace sc_dt
 

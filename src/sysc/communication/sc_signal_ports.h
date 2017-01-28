@@ -392,7 +392,7 @@ sc_in<T>::vbind( sc_port_base& parent_ )
 //  Specialization of sc_in<T> for type bool.
 // ----------------------------------------------------------------------------
 
-SC_API_TEMPLATE_DECL_ template class SC_API sc_port<sc_signal_in_if<bool>,1,SC_ONE_OR_MORE_BOUND>;
+SC_API_TEMPLATE_DECL_ sc_port<sc_signal_in_if<bool>,1,SC_ONE_OR_MORE_BOUND>;
 
 template <>
 class SC_API sc_in<bool> :
@@ -668,7 +668,7 @@ private:
 //  Specialization of sc_in<T> for type sc_dt::sc_logic.
 // ----------------------------------------------------------------------------
 
-SC_API_TEMPLATE_DECL_ template class SC_API sc_port<sc_signal_in_if<sc_dt::sc_logic>,1,SC_ONE_OR_MORE_BOUND>;
+SC_API_TEMPLATE_DECL_ sc_port<sc_signal_in_if<sc_dt::sc_logic>,1,SC_ONE_OR_MORE_BOUND>;
 
 template <>
 class SC_API sc_in<sc_dt::sc_logic>
@@ -1226,7 +1226,7 @@ sc_inout<T>::remove_traces() const
 //  Specialization of sc_inout<T> for type bool.
 // ----------------------------------------------------------------------------
 
-SC_API_TEMPLATE_DECL_ template class SC_API sc_port<sc_signal_inout_if<bool>,1,SC_ONE_OR_MORE_BOUND>;
+SC_API_TEMPLATE_DECL_ sc_port<sc_signal_inout_if<bool>,1,SC_ONE_OR_MORE_BOUND>;
 
 template <>
 class SC_API sc_inout<bool> :
@@ -1464,7 +1464,7 @@ private:
 //  Specialization of sc_inout<T> for type sc_dt::sc_logic.
 // ----------------------------------------------------------------------------
 
-SC_API_TEMPLATE_DECL_ template class SC_API sc_port<sc_signal_inout_if<sc_dt::sc_logic>,1,SC_ONE_OR_MORE_BOUND>;
+SC_API_TEMPLATE_DECL_ sc_port<sc_signal_inout_if<sc_dt::sc_logic>,1,SC_ONE_OR_MORE_BOUND>;
 
 template <>
 class SC_API sc_inout<sc_dt::sc_logic>

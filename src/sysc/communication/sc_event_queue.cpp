@@ -31,8 +31,8 @@
 
 namespace sc_core {
 
-SC_API_TEMPLATE_IMPL_ template class SC_API sc_ppq<sc_time*>;
-SC_API_TEMPLATE_IMPL_ template class SC_API sc_port<sc_event_queue_if,1,SC_ONE_OR_MORE_BOUND>;
+template class SC_API sc_ppq<sc_time*>;
+template class SC_API sc_port<sc_event_queue_if,1,SC_ONE_OR_MORE_BOUND>;
 
 static int 
 sc_time_compare( const void* p1, const void* p2 )
