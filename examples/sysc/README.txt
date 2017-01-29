@@ -19,7 +19,7 @@ Makefiles
 
    The following variables can be set (or overridden from the environment):
 
-     SYSTEMC_HOME / SYSTEMC - path to installation
+     SYSTEMC_HOME           - path to installation
      TARGET_ARCH            - target architecture
      ARCH_SUFFIX            - library architecture suffix (see INSTALL)
 
@@ -47,12 +47,11 @@ For convenience, a simple recursing Makefile is available as well.
 Microsoft Visual C++
 --------------------
 
-Project files for Microsoft Visual C++ 2005 (8.0) are provided in the 
+Project files for Microsoft Visual C++ 2010 (10.0) are provided in the 
 subdidrectory containing each of these examples.
 
 Each project file has the correct settings to build the example in either
 Debug or Release modes.
 
-The project files assume an environment variable name SYSTEMC exists and 
-contains the path to the mscv80 subdirectory that is part of the SystemC 
-installation (e.g. C:\systemc-2.3.1\msvc80).
+The project files assume an environment variable name SYSTEMC_HOME and MSVC is set and 
+contains the path to the mscv10 subdirectory. Update MSVC entry in SystemC_examples properties file. 
