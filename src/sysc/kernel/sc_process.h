@@ -643,6 +643,8 @@ struct SC_API scoped_flag
     scoped_flag( bool& b ) : ref(b){ ref = true;  }
     ~scoped_flag()                 { ref = false; }
     bool& ref;
+private:
+    scoped_flag& operator=(const scoped_flag&) /* = delete */;
 };
 inline void sc_process_b::semantics()
 {

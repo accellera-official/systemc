@@ -75,7 +75,7 @@ void fft::entry()
        //Initialize
        M = 4; N = 16; 
        len = N/2;
-       theta = 8.0*atan(1.0)/N;
+       theta = 8.0f*atanf(1.0f)/N;
 
        cout << "Computing..." << endl;
 
@@ -181,7 +181,7 @@ void fft::entry()
        bits_index[2]= bits_i[1];
        bits_index[1]= bits_i[2];
        bits_index[0]= bits_i[3];
-       index = bits_index;
+       index = bits_index.to_uint();
        out_real.write(sample[index][0]);
        out_imag.write(sample[index][1]);
        data_ready.write(true);
