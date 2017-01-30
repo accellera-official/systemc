@@ -78,7 +78,8 @@ simple_fifo_BUILD = \
 	simple_fifo/golden.log
 
 simple_fifo_EXTRA = \
-	simple_fifo/simple_fifo.vcproj \
+	simple_fifo/simple_fifo.sln \
+	simple_fifo/simple_fifo.vcxproj \
 	simple_fifo/Makefile
 
 

@@ -87,7 +87,7 @@ lt_extension_mandatory_BUILD = \
 lt_extension_mandatory_EXTRA = \
 	lt_extension_mandatory/build-msvc/Makefile \
 	lt_extension_mandatory/build-msvc/lt_extension_mandatory.sln \
-	lt_extension_mandatory/build-msvc/lt_extension_mandatory.vcproj \
+	lt_extension_mandatory/build-msvc/lt_extension_mandatory.vcxproj \
 	lt_extension_mandatory/build-unix/Makefile \
 	lt_extension_mandatory/docs/lt_extension_mandatory_example.pdf \
 	lt_extension_mandatory/docs/lt_extension_mandatory_example.ppt

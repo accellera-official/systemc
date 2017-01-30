@@ -79,7 +79,8 @@ rsa_CXX_FILES = \
 #	rsa/golden.log
 
 rsa_EXTRA = \
-	rsa/rsa.vcproj \
+	rsa/rsa.sln \
+	rsa/rsa.vcxproj \
 	rsa/Makefile \
 	rsa/README
 

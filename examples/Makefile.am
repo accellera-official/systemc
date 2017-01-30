@@ -38,5 +38,26 @@ SUBDIRS = \
 	sysc \
 	tlm
 
+examples_FILES = \
+	build-msvc/Makefile \
+	build-msvc/Makefile.config \
+	build-msvc/Makefile.rules \
+	build-msvc/READMEcommandlinemsvc.txt \
+	build-msvc/SystemC_examples.props \
+	build-msvc/SystemC_examples.sln \
+	build-msvc/openhere.bat \
+	build-msvc/tlm_examples.props \
+	build-msvc/tlm_examples.sln \
+	build-msvc/vsvars.bat
+
+# install examples?
+if SEPARATE_INSTALL_TREE
+buildexamplesdir = $(examplesdir)
+nobase_buildexamples_DATA = \
+	$(examples_FILES)
+endif
+
+EXTRA_DIST += \
+	$(examples_FILES)
 
 ## Taf!

@@ -79,7 +79,8 @@ examples_FILES += \
 	2.1/forkjoin/golden.log
 
 2_1_forkjoin_EXTRA = \
-	2.1/forkjoin/forkjoin.vcproj \
+	2.1/forkjoin/forkjoin.sln \
+	2.1/forkjoin/forkjoin.vcxproj \
 	2.1/forkjoin/Makefile \
 	2.1/forkjoin/README.txt
 
