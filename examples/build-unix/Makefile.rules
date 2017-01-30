@@ -107,7 +107,7 @@ endif
 
 .SUFFIXES: .cc .cpp .o .x
 
-GOLDEN?=../results/expected.log
+GOLDEN?=$(firstword $(wildcard ../results/expected.log golden.log))
 EXEEXT?=.x
 EXE   := $(PROJECT)$(EXEEXT)
 

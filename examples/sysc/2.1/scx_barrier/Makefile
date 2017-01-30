@@ -1,7 +1,7 @@
 SYSTEMC_HOME ?= ../../../..
-include ../../Makefile.config
+include ../../../build-unix/Makefile.config
 
 PROJECT = scx_barrier
 OBJS    = main.o
 
-include ../../Makefile.rules
+include ../../../build-unix/Makefile.rules

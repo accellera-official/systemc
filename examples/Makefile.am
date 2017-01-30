@@ -39,6 +39,10 @@ SUBDIRS = \
 	tlm
 
 examples_FILES = \
+	build-unix/Makefile \
+	build-unix/Makefile.config \
+	build-unix/Makefile.rules \
+	\
 	build-msvc/Makefile \
 	build-msvc/Makefile.config \
 	build-msvc/Makefile.rules \

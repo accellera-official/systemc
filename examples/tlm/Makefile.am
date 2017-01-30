@@ -56,10 +56,6 @@ check_PROGRAMS = $(examples_TESTS)
 tlmexamplesdir = $(examplesdir)/tlm
 
 examples_FILES = \
-	build-unix/Makefile \
-	build-unix/Makefile.config \
-	build-unix/Makefile.rules \
-	\
 	README.txt
 
 ## ************************************************************************

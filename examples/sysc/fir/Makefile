@@ -1,4 +1,4 @@
-include ../Makefile.config
+include ../../build-unix/Makefile.config
 
 PROJECTS := fir fir_rtl
 COMMON_TARGETS := all build run check clean ultraclean
@@ -30,7 +30,7 @@ else # module-specific rules
 
 OBJS := $($(PROJECT)_SRCS:.cpp=.o)
 
-include ../Makefile.rules
+include ../../build-unix/Makefile.rules
 
 endif # project switch
 
