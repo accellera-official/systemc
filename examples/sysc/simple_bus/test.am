@@ -100,7 +100,8 @@ simple_bus_BUILD = \
 	simple_bus/golden.log
 
 simple_bus_EXTRA = \
-	simple_bus/simple_bus.vcproj \
+	simple_bus/simple_bus.sln \
+	simple_bus/simple_bus.vcxproj \
 	simple_bus/Makefile \
 	simple_bus/ChangeLog \
 	simple_bus/README \

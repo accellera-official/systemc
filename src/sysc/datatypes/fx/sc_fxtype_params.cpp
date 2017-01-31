@@ -47,9 +47,15 @@
 
 #include "sysc/datatypes/fx/sc_fxtype_params.h"
 
+// explicit template instantiations
+namespace sc_core {
+template class SC_API sc_phash<void*, const sc_dt::sc_fxtype_params*>;
+} // namespace sc_core
 
-namespace sc_dt
-{
+namespace sc_dt {
+
+template class SC_API sc_global<sc_fxtype_params>;
+template class SC_API sc_context<sc_fxtype_params>;
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_fxtype_params

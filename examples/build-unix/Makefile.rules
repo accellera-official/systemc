@@ -1,0 +1,161 @@
+## ****************************************************************************
+##
+##  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+##  more contributor license agreements.  See the NOTICE file distributed
+##  with this work for additional information regarding copyright ownership.
+##  Accellera licenses this file to you under the Apache License, Version 2.0
+##  (the "License"); you may not use this file except in compliance with the
+##  License.  You may obtain a copy of the License at
+##
+##   http://www.apache.org/licenses/LICENSE-2.0
+##
+##  Unless required by applicable law or agreed to in writing, software
+##  distributed under the License is distributed on an "AS IS" BASIS,
+##  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+##  implied.  See the License for the specific language governing
+##  permissions and limitations under the License.
+##
+## ****************************************************************************
+##
+##  Makefile.rules -- simple generic SystemC example build rules
+##
+##  Include this file from your own Makefile to obtain a simple build
+##  environment.  You need to set at least the variables
+##    PROJECT - name of the application
+##    OBJS    - list of required object files
+##  to make things work.
+##
+##  The environment is assumed to be set up from Makefile.config file and
+##  the main example Makefile.
+##
+##  Original Author: Philipp A. Hartmann, OFFIS
+##
+## ***************************************************************************
+##
+##  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+##  changes you are making here.
+##
+##      Name, Affiliation, Date:
+##  Description of Modification:
+##
+## ***************************************************************************
+## complete config, if not set from Makefile.config
+
+## Variable that points to SystemC installation path
+## needs to be set, fallback to SYSTEMC otherwise
+SYSTEMC_HOME?=$(SYSTEMC)
+
+## Select the TARGET_ARCH needs to be set
+# TARGET_ARCH      ?= linux
+
+## default values for additional setup variables
+ifneq (,$(strip $(TARGET_ARCH)))
+ARCH_SUFFIX      ?= -$(TARGET_ARCH)
+endif
+LDFLAG_RPATH     ?= -Wl,-rpath=
+
+SYSTEMC_INC_DIR  ?= $(SYSTEMC_HOME)/include
+SYSTEMC_LIB_DIR  ?= $(SYSTEMC_HOME)/lib$(ARCH_SUFFIX)
+
+SYSTEMC_DEFINES  ?=
+SYSTEMC_CXXFLAGS ?= $(FLAGS_COMMON) $(FLAGS_STRICT) $(FLAGS_WERROR)
+SYSTEMC_LDFLAGS  ?= -L $(SYSTEMC_LIB_DIR) \
+                    $(LDFLAG_RPATH)$(SYSTEMC_LIB_DIR)
+SYSTEMC_LIBS     ?= -lsystemc -lm
+
+## Add 'PTHREADS=1' to command line for a pthreads build
+## (should not be needed in most cases)
+ifdef PTHREADS
+SYSTEMC_CXXFLAGS += -pthread
+SYSTEMC_LIBS     += -lpthread
+endif
+
+## ***************************************************************************
+## example defaults
+## - basic configuration should be set from Makefile.config
+
+FILTER ?= cat
+
+INCDIR   += -I. -I.. -I$(SYSTEMC_INC_DIR)
+LIBDIR   += -L. -L..
+
+CXXFLAGS  += $(CFLAGS) $(SYSTEMC_CXXFLAGS) $(INCDIR) $(SYSTEMC_DEFINES)
+LDFLAGS   += $(CFLAGS) $(SYSTEMC_CXXFLAGS) $(LIBDIR) $(SYSTEMC_LDFLAGS)
+LIBS      += $(SYSTEMC_LIBS) $(EXTRA_LIBS)
+
+# "real" Makefile needs to set PROJECT
+ifeq (,$(strip $(PROJECT)))
+$(error PROJECT not set. Cannot build.)
+endif
+
+# basic check for SystemC directory
+ifeq (,$(wildcard $(SYSTEMC_HOME)/.))
+$(error SYSTEMC_HOME [$(SYSTEMC_HOME)] is not present. \
+        Please update Makefile.config)
+endif
+ifeq (,$(wildcard $(SYSTEMC_INC_DIR)/systemc.h))
+$(error systemc.h [$(SYSTEMC_INC_DIR)] not found. \
+        Please update Makefile.config)
+endif
+ifeq (,$(wildcard $(SYSTEMC_LIB_DIR)/libsystemc*))
+$(error SystemC library [$(SYSTEMC_LIB_DIR)] not found. \
+        Please update Makefile.config)
+endif
+
+## ***************************************************************************
+## build rules
+
+.SUFFIXES: .cc .cpp .o .x
+
+GOLDEN?=$(firstword $(wildcard ../results/expected.log golden.log))
+EXEEXT?=.x
+EXE   := $(PROJECT)$(EXEEXT)
+
+all: announce build
+
+announce:
+	@if test x1 = x$(FLAG_BATCH) ; then \
+		echo; echo "*** $(PROJECT):"; echo; \
+	fi
+
+check: announce all
+	@if test -f "$(INPUT)" ; then INPUT="< $(INPUT)" ; fi ; \
+		eval "$(VALGRIND) ./$(EXE) $(ARGS) $${INPUT} > run.log"
+	@cat run.log | grep -v "stopped by user" | \
+		$(FILTER) | awk '{if($$0!="") print $$0}' > run_trimmed.log
+	@if test -f "$(GOLDEN)" ; then \
+	  cat "$(GOLDEN)" | grep -v "stopped by user" | \
+		awk '{if($$0!="") print $$0}' > ./expected_trimmed.log ; \
+	  diff ./run_trimmed.log ./expected_trimmed.log > diff.log 2>&1 ; \
+	  if [ -s diff.log ]; then \
+	    echo "***ERROR:"; cat diff.log; \
+	  else echo "OK"; fi \
+	fi
+
+run: announce all
+	@if test -f "$(INPUT)" ; then INPUT="< $(INPUT)" ; fi ; \
+		eval "./$(EXE) $(ARGS) $${INPUT}"
+
+build: announce $(EXE)
+
+$(EXE): $(OBJS) $(SYSTEMC_LIB_DIR)/libsystemc.a
+	$(CXX) $(LDFLAGS) -o $@ $(OBJS) $(LIBS) 2>&1 | c++filt
+	@test -x $@
+
+.cpp.o:
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+.cc.o:
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+clean:: announce
+	rm -f $(OBJS) $(EXE) core $(EXTRA_CLEAN) \
+		run.log run_trimmed.log expected_trimmed.log diff.log
+
+ultraclean: announce clean
+	rm -f Makefile.deps *~
+
+Makefile.deps:
+#	$(CXX) $(CXXFLAGS) -M $(SRCS) >> Makefile.deps
+
+#include Makefile.deps

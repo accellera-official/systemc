@@ -1,4 +1,4 @@
-include ../../build-unix/Makefile.config
+include ../../../build-unix/Makefile.config
 
 PROJECT = lt_dmi
 
@@ -22,6 +22,6 @@ OBJS = \
 	report.o \
 	traffic_generator.o
 
-include ../../build-unix/Makefile.rules
+include ../../../build-unix/Makefile.rules
 
 # DO NOT DELETE

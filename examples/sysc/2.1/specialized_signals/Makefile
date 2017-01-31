@@ -1,8 +1,8 @@
 SYSTEMC_HOME ?= ../../../..
-include ../../Makefile.config
+include ../../../build-unix/Makefile.config
 
 PROJECT = specialized_signals
 SRCS    = $(wildcard *.cpp)
 OBJS    = $(SRCS:.cpp=.o)
 
-include ../../Makefile.rules
+include ../../../build-unix/Makefile.rules

@@ -86,7 +86,7 @@ lt_EXTRA = \
 	lt/README \
 	lt/build-msvc/Makefile \
 	lt/build-msvc/lt.sln \
-	lt/build-msvc/lt.vcproj \
+	lt/build-msvc/lt.vcxproj \
 	lt/build-unix/Makefile \
 	lt/docs/lt_example.pdf \
 	lt/docs/lt_example.ppt

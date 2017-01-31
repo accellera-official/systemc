@@ -29,7 +29,6 @@
 
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/kernel/sc_name_gen.h"
-#include "sysc/utils/sc_iostream.h"
 
 #if defined(_MSC_VER) && _MSC_VER >= 1310
 // "C4351: new behavior: elements of array will be default initialized"
@@ -68,10 +67,10 @@ sc_name_gen::gen_unique_name( const char* basename_, bool preserve_first )
     int* c = m_unique_name_map[basename_];
     if( c == 0 ) {
 	c = new int( 0 );
-	m_unique_name_map.insert( CCAST<char*>( basename_ ), c );
+	m_unique_name_map.insert( const_cast<char*>( basename_ ), c );
 	if (preserve_first) {
 	    std::sprintf( m_unique_name, "%s", basename_ );
-	} else {    
+	} else {
             std::sprintf( m_unique_name, "%s_%d", basename_, *c );
         }
     } else {

@@ -106,6 +106,14 @@ not clang
   [sc_cv_clang=yes],[sc_cv_clang=no])
   AC_LANG_POP([C])])
 
+dnl AM_PROG_AR available since Automake 1.11.2, generic check otherwise
+m4_ifdef([AM_PROG_AR],[AM_PROG_AR],[AC_CHECK_TOOL([AR],[ar],[ar])])
+
+dnl Update default archiver flags to avoid warnings on some platforms,
+dnl see https://www.mail-archive.com/bug-automake@gnu.org/msg04226.html
+: ${ARFLAGS=cr}
+: ${AR_FLAGS=${ARFLAGS}}dnl used by many libtool versions
+
 AM_PROG_AS
 AC_PROG_INSTALL
 AC_PROG_LN_S

@@ -157,6 +157,7 @@ public:
     const T& value() const;
 
 private:
+    sc_context& operator=(const sc_context&) /* = delete */;
 
     const T   m_value;
     const T*& m_def_value_ptr;

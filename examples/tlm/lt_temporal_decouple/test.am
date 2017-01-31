@@ -88,7 +88,7 @@ lt_temporal_decouple_EXTRA = \
 	lt_temporal_decouple/README \
 	lt_temporal_decouple/build-msvc/Makefile \
 	lt_temporal_decouple/build-msvc/lt_temporal_decouple.sln \
-	lt_temporal_decouple/build-msvc/lt_temporal_decouple.vcproj \
+	lt_temporal_decouple/build-msvc/lt_temporal_decouple.vcxproj \
 	lt_temporal_decouple/build-unix/Makefile \
 	lt_temporal_decouple/docs/lt_temporal_decouple_example.pdf \
 	lt_temporal_decouple/docs/lt_temporal_decouple_example.ppt

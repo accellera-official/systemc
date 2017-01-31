@@ -103,7 +103,7 @@
 #include "sysc/datatypes/int/sc_int.h"
 #include "sysc/datatypes/int/sc_uint.h"
 
-#include "sysc/datatypes/misc/sc_concatref.h" 
+#include "sysc/datatypes/misc/sc_concatref.h"
 
 #ifdef SC_INCLUDE_FX
 #   include "sysc/datatypes/fx/fx.h"
@@ -111,10 +111,10 @@
 
 #include "sysc/tracing/sc_trace.h"
 
-#include "sysc/utils/sc_iostream.h"
 #include "sysc/utils/sc_utils_ids.h"
 
 #include "sysc/utils/sc_pvector.h"
+#include "sysc/utils/sc_string_view.h"
 #include "sysc/utils/sc_vector.h"
 
 #endif // !defined(SYSTEMC_INCLUDED)
@@ -126,3 +126,8 @@
 #ifdef SC_USE_SC_STRING_OLD
 #    include "sysc/utils/sc_string.h"
 #endif // SC_USE_SC_STRING_OLD
+
+#ifdef SC_INCLUDE_EXTRA_STD_HEADERS
+#    include <cstring>
+#    include <sstream>
+#endif // SC_INCLUDE_EXTRA_STD_HEADERS

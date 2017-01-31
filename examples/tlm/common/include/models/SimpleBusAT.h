@@ -203,7 +203,7 @@ public:
           phase = tlm::END_RESP;
           t = sc_core::SC_ZERO_TIME;
           sync_enum_type r = (*it->second.to)->nb_transport_fw(*trans, phase, t);
-          assert(r == tlm::TLM_COMPLETED);
+          assert(r == tlm::TLM_COMPLETED); (void)r;
         }
 
         mPendingTransactions.erase(it);

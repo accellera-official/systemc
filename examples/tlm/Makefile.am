@@ -56,19 +56,6 @@ check_PROGRAMS = $(examples_TESTS)
 tlmexamplesdir = $(examplesdir)/tlm
 
 examples_FILES = \
-	build-msvc/Makefile \
-	build-msvc/Makefile.config \
-	build-msvc/Makefile.rules \
-	build-msvc/openhere.bat \
-	build-msvc/READMEcommandlinemsvc.txt \
-	build-msvc/systemc.vsprops \
-	build-msvc/tlm.sln \
-	build-msvc/vsvars.bat \
-	\
-	build-unix/Makefile \
-	build-unix/Makefile.config \
-	build-unix/Makefile.rules \
-	\
 	README.txt
 
 ## ************************************************************************

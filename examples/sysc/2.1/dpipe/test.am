@@ -78,7 +78,8 @@ examples_FILES += \
 	2.1/dpipe/golden.log
 
 2_1_dpipe_EXTRA = \
-	2.1/dpipe/dpipe.vcproj \
+	2.1/dpipe/dpipe.sln \
+	2.1/dpipe/dpipe.vcxproj \
 	2.1/dpipe/Makefile
 
 #2_1_dpipe_FILTER = 

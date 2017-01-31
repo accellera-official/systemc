@@ -79,7 +79,8 @@ examples_FILES += \
 	2.1/scx_barrier/golden.log
 
 2_1_scx_barrier_EXTRA = \
-	2.1/scx_barrier/scx_barrier.vcproj \
+	2.1/scx_barrier/scx_barrier.sln \
+	2.1/scx_barrier/scx_barrier.vcxproj \
 	2.1/scx_barrier/Makefile
 
 #2_1_scx_barrier_FILTER = 

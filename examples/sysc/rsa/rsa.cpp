@@ -100,7 +100,7 @@ randomize( int seed  )
 {
   long in_seed;  // time_t is long.
 
-  in_seed = ( seed <= 0 ? time( 0 ) : seed );
+  in_seed = ( seed <= 0 ? static_cast<long>(time( 0 )) : seed );
 
 #ifndef WIN32
   srand48( in_seed );

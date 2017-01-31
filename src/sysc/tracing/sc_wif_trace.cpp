@@ -76,6 +76,12 @@
 #include "sysc/datatypes/fx/fx.h"
 #include "sysc/tracing/sc_wif_trace.h"
 
+#include <sstream>
+
+#if defined(_MSC_VER)
+# pragma warning(disable:4309) // truncation of constant value
+#endif
+
 namespace sc_core {
 
 // Forward declarations for functions that come later in the file

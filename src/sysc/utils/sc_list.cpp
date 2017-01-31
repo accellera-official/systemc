@@ -30,7 +30,6 @@
 #include <cstddef>
 
 #include "sysc/kernel/sc_cmnhdr.h"
-#include "sysc/utils/sc_iostream.h"
 #include "sysc/utils/sc_list.h"
 #include "sysc/utils/sc_mempool.h"
 #include "sysc/utils/sc_report.h"

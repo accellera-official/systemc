@@ -47,6 +47,8 @@
 #  include "sysc/kernel/sc_object_int.h"
 #endif
 
+#include <sstream>
+
 namespace sc_core {
 
 bool sc_trace_file_base::tracing_initialized_ = false;

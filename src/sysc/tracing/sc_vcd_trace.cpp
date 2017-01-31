@@ -68,6 +68,12 @@
 #include "sysc/tracing/sc_vcd_trace.h"
 #include "sysc/utils/sc_report.h" // sc_assert
 
+#include <sstream>
+
+#if defined(_MSC_VER)
+# pragma warning(disable:4309) // truncation of constant value
+#endif
+
 namespace sc_core {
 
 // Forward declarations for functions that come later in the file

@@ -51,6 +51,7 @@ public:
 
     typedef sc_buffer<T,POL> this_type;
     typedef sc_signal<T,POL> base_type;
+    typedef T                value_type;
 
 public:
 
@@ -64,7 +65,7 @@ public:
 	: base_type( name_ )
 	{}
 
-    sc_buffer( const char* name_, const T& initial_value_ )
+    sc_buffer( const char* name_, const value_type& initial_value_ )
       : base_type( name_, initial_value_ )
     {}
 
@@ -76,17 +77,19 @@ public:
 
     // other methods
 
-    this_type& operator = ( const T& a )
-	{ write( a ); return *this; }
-
-    this_type& operator = ( const sc_signal_in_if<T>& a )
-	{ write( a.read() ); return *this; }
-
-    this_type& operator = ( const this_type& a )
-	{ write( a.read() ); return *this; }
-
     virtual const char* kind() const
         { return "sc_buffer"; }
+
+
+    // assignment
+    this_type& operator = ( const value_type& a )
+      { base_type::operator=(a); return *this; }
+
+    this_type& operator = ( const sc_signal_in_if<value_type>& a )
+      { base_type::operator=(a); return *this; }
+
+    this_type& operator = ( const this_type& a )
+      { base_type::operator=(a); return *this; }
 
 protected:
 

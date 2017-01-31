@@ -102,7 +102,6 @@
 
 #include "sysc/kernel/sc_object.h"
 #include "sysc/datatypes/misc/sc_value_base.h"
-#include "sysc/utils/sc_iostream.h"
 #include "sysc/utils/sc_temporary.h"
 #include "sysc/datatypes/int/sc_length_param.h"
 #include "sysc/datatypes/int/sc_nbdefs.h"
@@ -137,6 +136,13 @@ class sc_fxnum;
 class sc_fxnum_fast;
 
 } // namespace sc_dt
+
+// extern template instantiations
+namespace sc_core {
+SC_API_TEMPLATE_DECL_ sc_vpool<sc_dt::sc_unsigned_bitref>;
+SC_API_TEMPLATE_DECL_ sc_vpool<sc_dt::sc_unsigned_subref>;
+SC_API_TEMPLATE_DECL_ sc_vpool<sc_dt::sc_unsigned>;
+} // namespace sc_core
 
 namespace sc_dt {
 
@@ -639,7 +645,7 @@ protected:
 
     void initialize( const sc_unsigned* obj_p, int index_ )
         {
-	    m_obj_p = CCAST<sc_unsigned*>( obj_p );
+	    m_obj_p = const_cast<sc_unsigned*>( obj_p );
 	    m_index = index_;
 	}
 
@@ -813,7 +819,7 @@ protected:
 
     void initialize( const sc_unsigned* obj_p, int left_, int right_ )
 	{
-	    m_obj_p = CCAST<sc_unsigned*>( obj_p );
+	    m_obj_p = const_cast<sc_unsigned*>( obj_p );
 	    m_left = left_;
 	    m_right = right_;
 	}
@@ -2188,14 +2194,6 @@ operator >> ( ::std::istream& is, sc_unsigned& a )
     return is;
 }
 
-
 } // namespace sc_dt
-
-// explicit template instantiations
-namespace sc_core {
-    SC_API_TEMPLATE_ template class SC_API sc_vpool<sc_dt::sc_unsigned_bitref>;
-    SC_API_TEMPLATE_ template class SC_API sc_vpool<sc_dt::sc_unsigned_subref>;
-    SC_API_TEMPLATE_ template class SC_API sc_vpool<sc_dt::sc_unsigned>;
-} // namespace sc_core
 
 #endif

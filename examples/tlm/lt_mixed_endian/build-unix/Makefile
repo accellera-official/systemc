@@ -1,4 +1,4 @@
-include ../../build-unix/Makefile.config
+include ../../../build-unix/Makefile.config
 
 PROJECT = lt_mixed_endian
 
@@ -25,6 +25,6 @@ OBJS = \
 INPUT  = ../results/input.txt
 FILTER = grep "::"
 
-include ../../build-unix/Makefile.rules
+include ../../../build-unix/Makefile.rules
 
 # DO NOT DELETE

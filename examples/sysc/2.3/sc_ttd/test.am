@@ -82,7 +82,8 @@ examples_FILES += \
 	2.3/sc_ttd/golden.log
 
 2_3_sc_ttd_EXTRA = \
-	2.3/sc_ttd/sc_ttd.vcproj \
+	2.3/sc_ttd/sc_ttd.sln \
+	2.3/sc_ttd/sc_ttd.vcxproj \
 	2.3/sc_ttd/Makefile
 
 #2_3_sc_ttd_FILTER = 

@@ -49,9 +49,6 @@ check_PROGRAMS = $(examples_TESTS)
 syscexamplesdir = $(examplesdir)/sysc
 
 examples_FILES = \
-	Makefile.all \
-	Makefile.config \
-	Makefile.rules \
 	README.txt \
 	\
 	fft/README

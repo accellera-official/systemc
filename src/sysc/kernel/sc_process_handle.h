@@ -22,7 +22,7 @@
   sc_process_handle.h -- Process access support.
 
   Original Author: Andy Goodrich, Forte Design Systems, 17 June 2003
-               
+
 
   CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
@@ -41,16 +41,21 @@
 
 #include "sysc/kernel/sc_module.h"
 
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(push)
+#pragma warning(disable: 4251) // DLL import for std::vector
+#endif
+
 namespace sc_core {
 
 // forward operator declarations:
 
 class sc_process_handle;
-bool 
+bool
 operator == ( const sc_process_handle& left, const sc_process_handle& right );
-bool 
+bool
 operator != ( const sc_process_handle& left, const sc_process_handle& right );
-bool 
+bool
 operator < ( const sc_process_handle& left, const sc_process_handle& right );
 
 
@@ -59,7 +64,7 @@ operator < ( const sc_process_handle& left, const sc_process_handle& right );
 // CLASS sc_process_handle
 //
 // This class provides access to an sc_process_b object instance in a
-// manner which allows some persistence after the deletion of the actual 
+// manner which allows some persistence after the deletion of the actual
 // process.
 //=============================================================================
 class sc_simcontext;
@@ -98,20 +103,20 @@ class SC_API sc_process_handle {
     inline sc_object* get_parent_object() const;
     inline sc_object* get_process_object() const;
     inline bool is_unwinding() const;
-    inline void kill( 
+    inline void kill(
         sc_descendant_inclusion_info descendants=SC_NO_DESCENDANTS );
     inline const char* name() const;
     inline sc_curr_proc_kind proc_kind() const;
-    inline void reset( 
+    inline void reset(
         sc_descendant_inclusion_info descendants=SC_NO_DESCENDANTS );
     inline sc_event& reset_event() const;
     inline void resume(
         sc_descendant_inclusion_info descendants=SC_NO_DESCENDANTS );
     inline void suspend(
         sc_descendant_inclusion_info descendants=SC_NO_DESCENDANTS );
-    inline void sync_reset_off( 
+    inline void sync_reset_off(
         sc_descendant_inclusion_info descendants=SC_NO_DESCENDANTS );
-    inline void sync_reset_on( 
+    inline void sync_reset_on(
         sc_descendant_inclusion_info descendants=SC_NO_DESCENDANTS );
     inline sc_event& terminated_event();
     inline bool terminated() const;
@@ -124,16 +129,16 @@ class SC_API sc_process_handle {
     inline std::string dump_state() const;
 
   protected:
-    inline bool dont_initialize() const 
+    inline bool dont_initialize() const
         { return m_target_p ? m_target_p->dont_initialize() : false; }
     inline void dont_initialize( bool dont );
 
   public:
-    operator sc_process_b* () 
+    operator sc_process_b* ()
         { return m_target_p; }
     operator sc_cthread_handle ();
     operator sc_method_handle ();
-    operator sc_thread_handle ();  
+    operator sc_thread_handle ();
 
   protected:
     sc_process_b* m_target_p;   // Target for this object instance.
@@ -144,14 +149,14 @@ class SC_API sc_process_handle {
     static sc_event                non_event;           // If m_target_p == 0.
 };
 
-inline bool operator == ( 
+inline bool operator == (
     const sc_process_handle& left, const sc_process_handle& right )
 {
     return (left.m_target_p != 0) && (right.m_target_p != 0) &&
         (left.m_target_p == right.m_target_p);
 }
 
-inline bool operator != ( 
+inline bool operator != (
     const sc_process_handle& left, const sc_process_handle& right )
 {
     return (left.m_target_p == 0) || (right.m_target_p == 0) ||
@@ -183,7 +188,7 @@ inline sc_process_handle::sc_process_handle() : m_target_p(0)
 //     object_p -> sc_object instance this is handle for.
 //------------------------------------------------------------------------------
 inline sc_process_handle::sc_process_handle( sc_object* object_p ) :
-    m_target_p(DCAST<sc_process_b*>(object_p))
+    m_target_p(dynamic_cast<sc_process_b*>(object_p))
 {
     if ( m_target_p ) m_target_p->reference_increment();
 }
@@ -231,7 +236,7 @@ inline sc_process_handle::sc_process_handle( const sc_process_handle& orig ) :
 //     orig = sc_process_handle object instance to be copied from.
 // Result is a reference for this object instance.
 //------------------------------------------------------------------------------
-inline sc_process_handle& 
+inline sc_process_handle&
 sc_process_handle::operator = ( sc_process_handle orig )
 {
     swap( orig );
@@ -260,7 +265,7 @@ inline sc_process_handle::~sc_process_handle()
 
 inline void sc_process_handle::disable(sc_descendant_inclusion_info descendants)
 {
-    if ( m_target_p ) 
+    if ( m_target_p )
         m_target_p->disable_process(descendants);
     else
         SC_REPORT_WARNING( SC_ID_EMPTY_PROCESS_HANDLE_, "disable()");
@@ -270,7 +275,7 @@ inline void sc_process_handle::disable(sc_descendant_inclusion_info descendants)
 
 inline void sc_process_handle::dont_initialize( bool dont )
 {
-    if ( m_target_p ) 
+    if ( m_target_p )
         m_target_p->dont_initialize( dont );
     else
         SC_REPORT_WARNING( SC_ID_EMPTY_PROCESS_HANDLE_, "dont_initialize()");
@@ -294,7 +299,7 @@ inline bool sc_process_handle::dynamic() const
 
 inline void sc_process_handle::enable(sc_descendant_inclusion_info descendants)
 {
-    if ( m_target_p ) 
+    if ( m_target_p )
         m_target_p->enable_process(descendants);
     else
         SC_REPORT_WARNING( SC_ID_EMPTY_PROCESS_HANDLE_, "enable()");
@@ -302,7 +307,7 @@ inline void sc_process_handle::enable(sc_descendant_inclusion_info descendants)
 
 // return the child objects for this object instance's target.
 
-inline 
+inline
 const std::vector<sc_event*>& sc_process_handle::get_child_events() const
 {
     return m_target_p ?  m_target_p->get_child_events() : empty_event_vector;
@@ -310,7 +315,7 @@ const std::vector<sc_event*>& sc_process_handle::get_child_events() const
 
 // return the child objects for this object instance's target.
 
-inline 
+inline
 const std::vector<sc_object*>& sc_process_handle::get_child_objects() const
 {
     return m_target_p ?  m_target_p->get_child_objects() : empty_object_vector;
@@ -346,7 +351,7 @@ inline bool sc_process_handle::is_unwinding() const
 
 inline void sc_process_handle::kill( sc_descendant_inclusion_info descendants )
 {
-    if ( m_target_p ) 
+    if ( m_target_p )
         m_target_p->kill_process( descendants );
     else
         SC_REPORT_WARNING( SC_ID_EMPTY_PROCESS_HANDLE_, "kill()");
@@ -356,7 +361,7 @@ inline void sc_process_handle::kill( sc_descendant_inclusion_info descendants )
 
 inline const char* sc_process_handle::name() const
 {
-    return  m_target_p ? m_target_p->name() : ""; 
+    return  m_target_p ? m_target_p->name() : "";
 }
 
 // return the process kind for this object instance's target.
@@ -370,7 +375,7 @@ inline sc_curr_proc_kind sc_process_handle::proc_kind() const
 
 inline void sc_process_handle::reset( sc_descendant_inclusion_info descendants )
 {
-    if ( m_target_p ) 
+    if ( m_target_p )
         m_target_p->reset_process( sc_process_b::reset_asynchronous,
 	                           descendants );
     else
@@ -381,7 +386,7 @@ inline void sc_process_handle::reset( sc_descendant_inclusion_info descendants )
 
 inline sc_event& sc_process_handle::reset_event() const
 {
-    if ( m_target_p ) 
+    if ( m_target_p )
         return m_target_p->reset_event();
     else
     {
@@ -394,7 +399,7 @@ inline sc_event& sc_process_handle::reset_event() const
 
 inline void sc_process_handle::resume(sc_descendant_inclusion_info descendants)
 {
-    if ( m_target_p ) 
+    if ( m_target_p )
         m_target_p->resume_process(descendants);
     else
         SC_REPORT_WARNING( SC_ID_EMPTY_PROCESS_HANDLE_, "resume()");
@@ -404,7 +409,7 @@ inline void sc_process_handle::resume(sc_descendant_inclusion_info descendants)
 
 inline void sc_process_handle::suspend(sc_descendant_inclusion_info descendants)
 {
-    if ( m_target_p ) 
+    if ( m_target_p )
         m_target_p->suspend_process(descendants);
     else
         SC_REPORT_WARNING( SC_ID_EMPTY_PROCESS_HANDLE_, "suspend()");
@@ -424,8 +429,8 @@ inline void sc_process_handle::swap( sc_process_handle& other )
 inline void sc_process_handle::sync_reset_off(
     sc_descendant_inclusion_info descendants)
 {
-    if ( m_target_p ) 
-        m_target_p->reset_process( sc_process_b::reset_synchronous_off, 
+    if ( m_target_p )
+        m_target_p->reset_process( sc_process_b::reset_synchronous_off,
 	                           descendants);
     else
         SC_REPORT_WARNING( SC_ID_EMPTY_PROCESS_HANDLE_, "sync_reset_off()");
@@ -436,9 +441,9 @@ inline void sc_process_handle::sync_reset_off(
 inline void sc_process_handle::sync_reset_on(
     sc_descendant_inclusion_info descendants)
 {
-    if ( m_target_p ) 
+    if ( m_target_p )
     {
-        m_target_p->reset_process(sc_process_b::reset_synchronous_on, 
+        m_target_p->reset_process(sc_process_b::reset_synchronous_on,
             descendants);
     }
     else
@@ -498,7 +503,7 @@ inline void sc_process_handle::throw_it( const EXCEPT& exception,
 {
     sc_throw_it<EXCEPT> helper(exception);  // helper to throw the exception.
 
-    if ( !m_target_p ) 
+    if ( !m_target_p )
     {
         SC_REPORT_WARNING( SC_ID_EMPTY_PROCESS_HANDLE_, "throw_it()");
 	return;
@@ -523,6 +528,10 @@ inline sc_process_handle sc_get_last_created_process_handle()
 }
 
 } // namespace sc_core
+
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(pop)
+#endif
 
 // Revision 1.19  2011/08/24 22:05:51  acg
 //  Torsten Maehne: initialization changes to remove warnings.

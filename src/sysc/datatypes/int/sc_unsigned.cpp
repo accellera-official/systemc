@@ -92,6 +92,13 @@
 #include "sysc/datatypes/fx/sc_ufix.h"
 #include "sysc/datatypes/fx/scfx_other_defs.h"
 
+// explicit template instantiations
+namespace sc_core {
+template class SC_API sc_vpool<sc_dt::sc_unsigned_bitref>;
+template class SC_API sc_vpool<sc_dt::sc_unsigned_subref>;
+template class SC_API sc_vpool<sc_dt::sc_unsigned>;
+} // namespace sc_core
+
 namespace sc_dt
 {
 

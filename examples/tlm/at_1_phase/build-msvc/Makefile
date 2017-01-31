@@ -1,4 +1,4 @@
-!include <..\..\build-msvc\Makefile.config>
+!include <..\..\..\build-msvc\Makefile.config>
 
 PROJECT = at_1_phase
 
@@ -13,4 +13,4 @@ OBJS=\
 	$(OUTDIR)\select_initiator.obj \
 	$(OUTDIR)\traffic_generator.obj
 
-!include <..\..\build-msvc\Makefile.rules>
+!include <..\..\..\build-msvc\Makefile.rules>

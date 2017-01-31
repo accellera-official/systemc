@@ -1,4 +1,4 @@
-!include <..\..\build-msvc/Makefile.config>
+!include <..\..\..\build-msvc/Makefile.config>
 
 PROJECT = lt_mixed_endian
 
@@ -17,4 +17,4 @@ OBJS = \
 INPUT  = ../results/input.txt
 FILTER = "::"
 
-!include <..\..\build-msvc/Makefile.rules>
+!include <..\..\..\build-msvc/Makefile.rules>

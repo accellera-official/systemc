@@ -56,9 +56,11 @@ EXTRA_DIST = \
 	config/bootstrap \
 	config/test.sh.in \
 	\
-	msvc80/SystemC/SystemC.sln \
-	msvc80/SystemC/SystemC.vcproj \
-	msvc80/SystemC/SystemC-examples.sln
+	msvc10/SystemC/SystemC.sln \
+	msvc10/SystemC/SystemC.props \
+	msvc10/SystemC/SystemC.vcxproj \
+	msvc10/SystemC/SystemC-core.vcxproj \
+	msvc10/SystemC/SystemC-core.vcxproj.filters
 
 ## ****************************************************************************
 

@@ -249,7 +249,7 @@ void fft::entry()
              real[index] = tmp_real;
              imag[index] = tmp_imag;
 	    
-	     i = i + (len << 1);   
+             i = (short)(i + (len << 1));
           }
 
         //Remaining Iterations: Use Stored W
@@ -281,7 +281,7 @@ void fft::entry()
               real[index2] = real2_out;
               imag[index2] = imag2_out; 
 
-              i = i + (len << 1);
+              i = (short)(i + (len << 1));
             }
             windex = windex + incr;
             j++;
@@ -310,7 +310,7 @@ void fft::entry()
        bits_index[2]= bits_i[1];
        bits_index[1]= bits_i[2];
        bits_index[0]= bits_i[3];
-       index = bits_index;
+       index = (short)bits_index;
        real1 = real[index];
        imag1 = imag[index];
        out_real.write(real1); 

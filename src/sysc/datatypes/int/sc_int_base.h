@@ -19,16 +19,12 @@
 
 /*****************************************************************************
 
-  sc_int_base.h -- A sc_int is a signed integer whose length is less than the
-              machine's native integer length. We provide two implementations
-              (i) sc_int with length between 1 - 64, and (ii) sc_int with
-              length between 1 - 32. Implementation (i) is the default
-              implementation, while implementation (ii) can be used only if
-              the class library is compiled with -D_32BIT_. Unlike arbitrary
-              precision, arithmetic and bitwise operations are performed
-              using the native types (hence capped at 32/64 bits). The sc_int
-              integer is useful when the user does not need arbitrary
-              precision and the performance is superior to
+  sc_int_base.h -- A signed integer whose length is less than 64 bit.
+
+              Unlike arbitrary precision, arithmetic and bitwise operations
+              are performed using the native types (hence capped at 64 bits).
+              The sc_int integer is useful when the user does not need
+              arbitrary precision and the performance is superior to
               sc_bigint/sc_biguint.
 
   Original Author: Amit Rao, Synopsys, Inc.
@@ -80,7 +76,6 @@
 #include "sysc/datatypes/int/sc_length_param.h"
 #include "sysc/datatypes/int/sc_nbdefs.h"
 #include "sysc/datatypes/int/sc_uint_base.h"
-#include "sysc/utils/sc_iostream.h"
 #include "sysc/utils/sc_temporary.h"
 
 
@@ -109,6 +104,12 @@ class sc_fxnum;
 class sc_fxnum_fast;
 
 } // namespace sc_dt
+
+// extern template instantiations
+namespace sc_core {
+SC_API_TEMPLATE_DECL_ sc_vpool<sc_dt::sc_int_bitref>;
+SC_API_TEMPLATE_DECL_ sc_vpool<sc_dt::sc_int_subref>;
+} // namespace sc_core
 
 namespace sc_dt {
 
@@ -848,13 +849,11 @@ public:
 	{ return (double) m_val; }
 
 
-#ifndef _32BIT_
     long long_low() const
 	{ return (long) (m_val & UINT64_32ONES); }
 
     long long_high() const
 	{ return (long) ((m_val >> 32) & UINT64_32ONES); }
-#endif
 
 
     // explicit conversion to character string
@@ -1379,12 +1378,6 @@ operator >> ( ::std::istream& is, sc_int_base& a )
 }
 
 } // namespace sc_dt
-
-// explicitly export template instantiations
-namespace sc_core {
-    SC_API_TEMPLATE_ template class SC_API sc_vpool<sc_dt::sc_int_bitref>;
-    SC_API_TEMPLATE_ template class SC_API sc_vpool<sc_dt::sc_int_subref>;
-} // namespace sc_core
 
 #endif
 

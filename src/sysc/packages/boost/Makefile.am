@@ -113,7 +113,9 @@ H_FILES = \
 	mpl/integral_c_tag.hpp \
 	\
 	utility/addressof.hpp \
-	utility/enable_if.hpp
+	utility/enable_if.hpp \
+	utility/string_view.hpp \
+	utility/string_view_fwd.hpp
 
 
 EXTRA_DIST += \

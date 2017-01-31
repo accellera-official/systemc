@@ -38,7 +38,6 @@ noinst_LTLIBRARIES = libutils.la
 
 H_FILES = \
 	sc_hash.h \
-	sc_iostream.h \
 	sc_list.h \
 	sc_machine.h \
 	sc_mempool.h \
@@ -47,9 +46,10 @@ H_FILES = \
 	sc_report.h \
 	sc_report_handler.h \
 	sc_string.h \
+	sc_string_view.h \
 	sc_temporary.h \
 	sc_utils_ids.h \
-	sc_vector.h 
+	sc_vector.h
 
 NO_H_FILES = \
 	sc_stop_here.h

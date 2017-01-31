@@ -53,10 +53,10 @@ void sink::entry()
  { 
    do { wait(); } while ( !(data_ready == true) );
    tmp = in_real.read();
-   tmp_out = tmp;
+   tmp_out = tmp.to_int();
    fprintf(fp_real,"%d  \n",tmp_out);
    tmp = in_imag.read();
-   tmp_out = tmp;
+   tmp_out = tmp.to_int();
    fprintf(fp_imag,"%d  \n",tmp_out);
    data_ack.write(true);
    do { wait(); } while ( !(data_ready == false) );

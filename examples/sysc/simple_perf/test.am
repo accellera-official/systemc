@@ -79,7 +79,8 @@ simple_perf_CXX_FILES = \
 #	simple_perf/golden.log
 
 simple_perf_EXTRA = \
-	simple_perf/simple_perf.vcproj \
+	simple_perf/simple_perf.sln \
+	simple_perf/simple_perf.vcxproj \
 	simple_perf/Makefile
 
 #simple_perf_FILTER = 

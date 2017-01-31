@@ -27,9 +27,9 @@
                      sc_nbfriends.cpp and sc_nbexterns.cpp is created in order
                      to ensure only one version of each function, regardless
                      of the class that they interface to.
- 
+
   Original Author: Ali Dasdan, Synopsys, Inc.
-  
+
  *****************************************************************************/
 
 /*****************************************************************************
@@ -123,7 +123,7 @@ CLASS_TYPE::CLASS_TYPE(const sc_bv_base& v) :
     *this = v;
 }
 
-CLASS_TYPE::CLASS_TYPE(const sc_lv_base& v) : 
+CLASS_TYPE::CLASS_TYPE(const sc_lv_base& v) :
     sc_value_base(), sgn(), nbits(), ndigits(), digit()
 {
     int nb = v.length();
@@ -278,13 +278,13 @@ CLASS_TYPE::operator=(const OTHER_CLASS_TYPE& v)
 
   else
     copy_digits(v.nbits, v.ndigits, v.digit);
-    
+
   return *this;
 }
 
 
 // Assignment from an sc_unsigned_subref_r
-const CLASS_TYPE& 
+const CLASS_TYPE&
 CLASS_TYPE::operator=(const sc_unsigned_subref_r& v)
 {
   return operator=(sc_unsigned(v));
@@ -292,7 +292,7 @@ CLASS_TYPE::operator=(const sc_unsigned_subref_r& v)
 
 
 // Assignment from an sc_signed_subref_r
-const CLASS_TYPE& 
+const CLASS_TYPE&
 CLASS_TYPE::operator=(const sc_signed_subref_r& v)
 {
   return operator=(sc_unsigned(v));
@@ -320,13 +320,13 @@ CLASS_TYPE::scan( ::std::istream& is )
 // 1. 0 + v = v
 // 2. u + 0 = u
 // 3. if sgn(u) == sgn(v)
-//    3.1 u + v = +(u + v) = sgn(u) * (u + v) 
+//    3.1 u + v = +(u + v) = sgn(u) * (u + v)
 //    3.2 (-u) + (-v) = -(u + v) = sgn(u) * (u + v)
 // 4. if sgn(u) != sgn(v)
 //    4.1 u + (-v) = u - v = sgn(u) * (u - v)
 //    4.2 (-u) + v = -(u - v) ==> sgn(u) * (u - v)
 //
-// Specialization of above cases for computing ++u or u++: 
+// Specialization of above cases for computing ++u or u++:
 // 1. 0 + 1 = 1
 // 3. u + 1 = u + 1 = sgn(u) * (u + 1)
 // 4. (-u) + 1 = -(u - 1) = sgn(u) * (u - 1)
@@ -348,7 +348,7 @@ CLASS_TYPE::operator+=(const CLASS_TYPE& v)
 
   convert_SM_to_2C_to_SM();
 
-  return *this; 
+  return *this;
 }
 
 
@@ -369,7 +369,7 @@ CLASS_TYPE::operator+=(const OTHER_CLASS_TYPE& v)
 
   convert_SM_to_2C_to_SM();
 
-  return *this; 
+  return *this;
 }
 
 
@@ -377,7 +377,7 @@ CLASS_TYPE&
 CLASS_TYPE::operator++() // prefix
 {
     *this = *this + 1;
-    return *this;   
+    return *this;
 }
 
 
@@ -499,16 +499,16 @@ CLASS_TYPE::operator+=(unsigned long v)
 // ----------------------------------------------------------------------------
 
 // Cases to consider when computing u + v:
-// 1. u - 0 = u 
+// 1. u - 0 = u
 // 2. 0 - v = -v
 // 3. if sgn(u) != sgn(v)
 //    3.1 u - (-v) = u + v = sgn(u) * (u + v)
 //    3.2 (-u) - v = -(u + v) ==> sgn(u) * (u + v)
 // 4. if sgn(u) == sgn(v)
-//    4.1 u - v = +(u - v) = sgn(u) * (u - v) 
+//    4.1 u - v = +(u - v) = sgn(u) * (u - v)
 //    4.2 (-u) - (-v) = -(u - v) = sgn(u) * (u - v)
 //
-// Specialization of above cases for computing --u or u--: 
+// Specialization of above cases for computing --u or u--:
 // 1. 0 - 1 = -1
 // 3. (-u) - 1 = -(u + 1) = sgn(u) * (u + 1)
 // 4. u - 1 = u - 1 = sgn(u) * (u - 1)
@@ -524,13 +524,13 @@ CLASS_TYPE::operator-=(const CLASS_TYPE& v)
   if (sgn == SC_ZERO) { // case 2
 
     sgn = -v.sgn;
-    copy_digits(v.nbits, v.ndigits, v.digit);   
+    copy_digits(v.nbits, v.ndigits, v.digit);
 
   }
   else {
-    
+
     // cases 3 and 4
-    add_on_help(sgn, nbits, ndigits, digit, 
+    add_on_help(sgn, nbits, ndigits, digit,
                 -v.sgn, v.nbits, v.ndigits, v.digit);
 
     convert_SM_to_2C_to_SM();
@@ -552,19 +552,19 @@ CLASS_TYPE::operator-=(const OTHER_CLASS_TYPE& v)
   if (sgn == SC_ZERO) { // case 2
 
     sgn = -v.sgn;
-    copy_digits(v.nbits, v.ndigits, v.digit);   
+    copy_digits(v.nbits, v.ndigits, v.digit);
 
   }
   else {
 
     // cases 3 and 4
-    add_on_help(sgn, nbits, ndigits, digit, 
+    add_on_help(sgn, nbits, ndigits, digit,
                 -v.sgn, v.nbits, v.ndigits, v.digit);
 
     convert_SM_to_2C_to_SM();
-    
+
   }
-  
+
   return *this;
 }
 
@@ -573,7 +573,7 @@ CLASS_TYPE&
 CLASS_TYPE::operator--() // prefix
 {
     *this = *this - 1;
-    return *this;   
+    return *this;
 }
 
 
@@ -733,7 +733,7 @@ CLASS_TYPE::operator*=(const OTHER_CLASS_TYPE& v)
   if (sgn == SC_ZERO) // case 1
     vec_zero(ndigits, digit);
 
-  else 
+  else
     // cases 2-4
     MUL_ON_HELPER(sgn,  nbits, ndigits, digit,
                   v.nbits, v.ndigits, v.digit);
@@ -979,7 +979,7 @@ CLASS_TYPE::operator/=(unsigned long v)
 
   }
   else {
-    
+
     CONVERT_LONG_2(v);
 
     // other cases
@@ -1050,7 +1050,7 @@ CLASS_TYPE::operator%=(int64 v)
 
   }
   else {
-    
+
     CONVERT_INT64_2(v);
 
     // other cases
@@ -1073,7 +1073,7 @@ CLASS_TYPE::operator%=(uint64 v)
 
   }
   else {
-    
+
     CONVERT_INT64_2(v);
 
     // other cases
@@ -1098,7 +1098,7 @@ CLASS_TYPE::operator%=(long v)
 
   }
   else {
-    
+
     CONVERT_LONG_2(v);
 
     // other cases
@@ -1121,7 +1121,7 @@ CLASS_TYPE::operator%=(unsigned long v)
 
   }
   else {
-    
+
     CONVERT_LONG_2(v);
 
     // other cases
@@ -1175,7 +1175,7 @@ CLASS_TYPE::operator&=(const OTHER_CLASS_TYPE& v)
     makezero();
 
   else {  // other cases
-    
+
     and_on_help(sgn, nbits, ndigits, digit,
                 v.sgn, v.nbits, v.ndigits, v.digit);
 
@@ -1226,7 +1226,7 @@ CLASS_TYPE::operator&=(uint64 v)
                 vs, BITS_PER_UINT64, DIGITS_PER_UINT64, vd);
 
     convert_2C_to_SM();
-    
+
   }
 
   return *this;
@@ -1509,7 +1509,7 @@ CLASS_TYPE::operator^=(uint64 v)
 
   xor_on_help(sgn, nbits, ndigits, digit,
               vs, BITS_PER_UINT64, DIGITS_PER_UINT64, vd);
-  
+
   convert_2C_to_SM();
 
   return *this;
@@ -1553,7 +1553,7 @@ CLASS_TYPE::operator^=(unsigned long v)
 
   xor_on_help(sgn, nbits, ndigits, digit,
               vs, BITS_PER_ULONG, DIGITS_PER_ULONG, vd);
-  
+
   convert_2C_to_SM();
 
   return *this;
@@ -1613,7 +1613,7 @@ operator~(const CLASS_TYPE& u)
 CLASS_TYPE
 operator<<(const CLASS_TYPE& u, const CLASS_TYPE& v)
 {
-  if (v.sgn == SC_ZERO) 
+  if (v.sgn == SC_ZERO)
     return CLASS_TYPE(u);
 
 #ifdef SC_SIGNED
@@ -1634,7 +1634,7 @@ CLASS_TYPE::operator<<=(const CLASS_TYPE& v)
 #ifdef SC_SIGNED
   if (v.sgn == SC_NEG)
     return *this;
-#endif 
+#endif
 
   return operator<<=(v.to_ulong());
 }
@@ -1721,7 +1721,7 @@ operator<<(const CLASS_TYPE& u, unsigned long v)
   sc_digit d[MAX_NDIGITS];
 #else
   sc_digit *d = new sc_digit[nd];
-#endif  
+#endif
 
   vec_copy_and_zero(nd, d, u.ndigits, u.digit);
 
@@ -1878,7 +1878,7 @@ operator>>(const CLASS_TYPE& u, unsigned long v)
   sc_digit d[MAX_NDIGITS];
 #else
   sc_digit *d = new sc_digit[nd];
-#endif  
+#endif
 
   vec_copy(nd, d, u.digit);
 
@@ -1888,7 +1888,7 @@ operator>>(const CLASS_TYPE& u, unsigned long v)
     vec_shift_right(nd, d, v, DIGIT_MASK);
   else
     vec_shift_right(nd, d, v, 0);
-    
+
   small_type s = convert_signed_2C_to_SM(nb, nd, d);
 
   return CLASS_TYPE(s, nb, nd, d);
@@ -1918,7 +1918,7 @@ CLASS_TYPE::operator>>=(unsigned long v)
 
   if (sgn == SC_NEG)
     vec_shift_right(ndigits, digit, v, DIGIT_MASK);
-  else 
+  else
     vec_shift_right(ndigits, digit, v, 0);
 
   convert_2C_to_SM();
@@ -1955,21 +1955,21 @@ operator!=(const CLASS_TYPE& u, int64 v)
 bool
 operator!=(int64 u, const CLASS_TYPE& v)
 {
-  return (! operator==(u, v));  
+  return (! operator==(u, v));
 }
 
 
 bool
 operator!=(const CLASS_TYPE& u, uint64 v)
 {
-  return (! operator==(u, v));  
+  return (! operator==(u, v));
 }
 
 
 bool
 operator!=(uint64 u, const CLASS_TYPE& v)
 {
-  return (! operator==(u, v));  
+  return (! operator==(u, v));
 }
 
 
@@ -1983,21 +1983,21 @@ operator!=(const CLASS_TYPE& u, long v)
 bool
 operator!=(long u, const CLASS_TYPE& v)
 {
-  return (! operator==(u, v));  
+  return (! operator==(u, v));
 }
 
 
 bool
 operator!=(const CLASS_TYPE& u, unsigned long v)
 {
-  return (! operator==(u, v));  
+  return (! operator==(u, v));
 }
 
 
 bool
 operator!=(unsigned long u, const CLASS_TYPE& v)
 {
-  return (! operator==(u, v));  
+  return (! operator==(u, v));
 }
 
 
@@ -2228,7 +2228,7 @@ v = (v << BITS_PER_DIGIT) + digit[vnd];                      \
 if (sgn == SC_NEG)                                           \
 return -v;                                                   \
 else                                                         \
-return v;                                                    
+return v;
 
 
 int64
@@ -2415,7 +2415,7 @@ CLASS_TYPE::test(int i) const
 #else
   if (check_if_outside(i))
     return 0;
-#endif  
+#endif
 
   int bit_num = bit_ord(i);
   int digit_num = digit_ord(i);
@@ -2439,14 +2439,14 @@ CLASS_TYPE::test(int i) const
     return val;
 
   }
-  else 
+  else
     return ((digit[digit_num] & one_and_zeros(bit_num)) != 0);
 }
 
 
 // Set the ith bit with 1.
-void 
-CLASS_TYPE::set(int i) 
+void
+CLASS_TYPE::set(int i)
 {
   if (check_if_outside(i))
     return;
@@ -2455,14 +2455,14 @@ CLASS_TYPE::set(int i)
   int digit_num = digit_ord(i);
 
   convert_SM_to_2C();
-  digit[digit_num] |= one_and_zeros(bit_num);    
+  digit[digit_num] |= one_and_zeros(bit_num);
   digit[digit_num] &= DIGIT_MASK; // Needed to zero the overflow bits.
   convert_2C_to_SM();
 }
 
 
 // Set the ith bit with 0, i.e., clear the ith bit.
-void 
+void
 CLASS_TYPE::clear(int i)
 {
   if (check_if_outside(i))
@@ -2489,7 +2489,7 @@ CLASS_TYPE::reverse()
 
 
 // Get a packed bit representation of the number.
-void 
+void
 CLASS_TYPE::get_packed_rep(sc_digit *buf) const
 {
   int buf_ndigits = (length() - 1) / BITS_PER_DIGIT_TYPE + 1;
@@ -2510,7 +2510,7 @@ CLASS_TYPE::get_packed_rep(sc_digit *buf) const
   if (sgn == SC_POS)
     digit_or_d = digit;
 
-  else 
+  else
   {
     // If sgn is negative, we have to convert digit to its 2's
     // complement. Since this function is const, we can not do it on
@@ -2536,12 +2536,12 @@ CLASS_TYPE::get_packed_rep(sc_digit *buf) const
 
     if ((digit_or_d[digit_ord(i)] & one_and_zeros(bit_ord(i))) != 0) // Test.
 
-      buf[i / BITS_PER_DIGIT_TYPE] |= 
+      buf[i / BITS_PER_DIGIT_TYPE] |=
         one_and_zeros(i % BITS_PER_DIGIT_TYPE); // Set.
 
-    else  
+    else
 
-      buf[i / BITS_PER_DIGIT_TYPE] &= 
+      buf[i / BITS_PER_DIGIT_TYPE] &=
         ~(one_and_zeros(i % BITS_PER_DIGIT_TYPE));  // Clear.
 
   }
@@ -2553,7 +2553,7 @@ CLASS_TYPE::get_packed_rep(sc_digit *buf) const
 
 
 // Set a packed bit representation of the number.
-void 
+void
 CLASS_TYPE::set_packed_rep(sc_digit *buf)
 {
   // Initialize digit to zero.
@@ -2562,12 +2562,12 @@ CLASS_TYPE::set_packed_rep(sc_digit *buf)
   // Copy the bits from buf to digit.
   for (int i = length() - 1; i >= 0; --i) {
 
-    if ((buf[i / BITS_PER_DIGIT_TYPE] & 
+    if ((buf[i / BITS_PER_DIGIT_TYPE] &
          one_and_zeros(i % BITS_PER_DIGIT_TYPE)) != 0) // Test.
 
       digit[digit_ord(i)] |= one_and_zeros(bit_ord(i));     // Set.
 
-    else  
+    else
 
       digit[digit_ord(i)] &= ~(one_and_zeros(bit_ord(i)));  // Clear
 
@@ -2613,8 +2613,8 @@ CLASS_TYPE::CLASS_TYPE(const OTHER_CLASS_TYPE& v, small_type s) :
 
 // Create a signed number with (s, nb, nd, d) as its attributes (as
 // defined in class CLASS_TYPE). If alloc is set, delete d.
-CLASS_TYPE::CLASS_TYPE(small_type s, int nb, 
-                       int nd, sc_digit *d, 
+CLASS_TYPE::CLASS_TYPE(small_type s, int nb,
+                       int nd, sc_digit *d,
                        bool alloc) :
     sc_value_base(), sgn(s), nbits(num_bits(nb)), ndigits(), digit()
 {
@@ -2638,7 +2638,7 @@ CLASS_TYPE::CLASS_TYPE(small_type s, int nb,
 // This constructor is mainly used in finding a "range" of bits from a
 // number of type CLASS_TYPE. The function range(l, r) can have
 // arbitrary precedence between l and r. If l is smaller than r, then
-// the output is the reverse of range(r, l). 
+// the output is the reverse of range(r, l).
 CLASS_TYPE::CLASS_TYPE(const CLASS_TYPE* u, int l, int r) :
     sc_value_base(), sgn(), nbits(), ndigits(), digit()
 {
@@ -2656,7 +2656,7 @@ CLASS_TYPE::CLASS_TYPE(const CLASS_TYPE* u, int l, int r) :
   // make sure that l and r point to the bits of u
   r = sc_max( r, 0 );
   l = sc_min( l, u->nbits - 1 );
-    
+
   nbits = num_bits( l - r + 1 );
 
   // nbits can still be <= 0 because l and r have just been updated
@@ -2679,15 +2679,15 @@ CLASS_TYPE::CLASS_TYPE(const CLASS_TYPE* u, int l, int r) :
   // The rest will be executed if u is not zero.
 
   ndigits = DIV_CEIL(nbits);
-  
+
   // The number of bits up to and including l and r, respectively.
-  int nl = l + 1; 
-  int nr = r + 1; 
-  
+  int nl = l + 1;
+  int nr = r + 1;
+
   // The indices of the digits that have lth and rth bits, respectively.
   int left_digit = DIV_CEIL(nl) - 1;
   int right_digit = DIV_CEIL(nr) - 1;
-  
+
   int nd;
 
   // The range is performed on the 2's complement representation, so
@@ -2704,29 +2704,29 @@ CLASS_TYPE::CLASS_TYPE(const CLASS_TYPE* u, int l, int r) :
   digit = new sc_digit[ndigits];
   sc_digit *d = new sc_digit[nd];
 #endif
-  
+
   // Getting the range on the 2's complement representation.
   if (u->sgn == SC_NEG) {
-    
+
     vec_copy(nd, d, u->digit);
     vec_complement(nd, d);  // d = -d;
     vec_shift_right(nd, d, r, DIGIT_MASK);
-    
+
   }
   else {
-    
+
     for (int i = right_digit; i <= left_digit; ++i)
       d[i - right_digit] = u->digit[i];
-    
+
     vec_shift_right(nd, d, r - right_digit * BITS_PER_DIGIT, 0);
-    
+
   }
-  
+
   vec_zero(ndigits, digit);
 
   if (! reversed)
     vec_copy(sc_min(nd, ndigits), digit, d);
-  
+
   else {
 
     // If l < r, i.e., reversed is set, reverse the bits of digit.  d
@@ -2743,7 +2743,7 @@ CLASS_TYPE::CLASS_TYPE(const CLASS_TYPE* u, int l, int r) :
     // Deletions will start from the left end and move one position
     // after each deletion.
     sc_digit del_mask = one_and_zeros(bit_ord(l - r));
-      
+
     while (del_mask) {
       vec_shift_right(ndigits, digit, 1, ((d[nd_less_1] & del_mask) != 0));
       del_mask >>= 1;
@@ -2767,17 +2767,17 @@ CLASS_TYPE::CLASS_TYPE(const CLASS_TYPE* u, int l, int r) :
     }
 
     if (u->sgn == SC_NEG)
-      vec_shift_right(ndigits, digit, 
+      vec_shift_right(ndigits, digit,
                       ndigits * BITS_PER_DIGIT - length(), DIGIT_MASK);
     else
-      vec_shift_right(ndigits, digit, 
+      vec_shift_right(ndigits, digit,
                       ndigits * BITS_PER_DIGIT - length(), 0);
 
 
   }  // if reversed.
 
   convert_2C_to_SM();
-  
+
 #ifndef SC_MAX_NBITS
   delete [] d;
 #endif
@@ -2786,7 +2786,7 @@ CLASS_TYPE::CLASS_TYPE(const CLASS_TYPE* u, int l, int r) :
 // This constructor is mainly used in finding a "range" of bits from a
 // number of type OTHER_CLASS_TYPE. The function range(l, r) can have
 // arbitrary precedence between l and r. If l is smaller than r, then
-// the output is the reverse of range(r, l). 
+// the output is the reverse of range(r, l).
 CLASS_TYPE::CLASS_TYPE(const OTHER_CLASS_TYPE* u, int l, int r) :
     sc_value_base(), sgn(), nbits(), ndigits(), digit()
 {
@@ -2804,7 +2804,7 @@ CLASS_TYPE::CLASS_TYPE(const OTHER_CLASS_TYPE* u, int l, int r) :
   // make sure that l and r point to the bits of u
   r = sc_max( r, 0 );
   l = sc_min( l, u->nbits - 1 );
-    
+
   nbits = num_bits( l - r + 1 );
 
   // nbits can still be <= 0 because l and r have just been updated
@@ -2827,15 +2827,15 @@ CLASS_TYPE::CLASS_TYPE(const OTHER_CLASS_TYPE* u, int l, int r) :
   // The rest will be executed if u is not zero.
 
   ndigits = DIV_CEIL(nbits);
-  
+
   // The number of bits up to and including l and r, respectively.
-  int nl = l + 1; 
-  int nr = r + 1; 
-  
+  int nl = l + 1;
+  int nr = r + 1;
+
   // The indices of the digits that have lth and rth bits, respectively.
   int left_digit = DIV_CEIL(nl) - 1;
   int right_digit = DIV_CEIL(nr) - 1;
-  
+
   int nd;
 
   // The range is performed on the 2's complement representation, so
@@ -2852,29 +2852,29 @@ CLASS_TYPE::CLASS_TYPE(const OTHER_CLASS_TYPE* u, int l, int r) :
   digit = new sc_digit[ndigits];
   sc_digit *d = new sc_digit[nd];
 #endif
-  
+
   // Getting the range on the 2's complement representation.
   if (u->sgn == SC_NEG) {
-    
+
     vec_copy(nd, d, u->digit);
     vec_complement(nd, d);  // d = -d;
     vec_shift_right(nd, d, r, DIGIT_MASK);
-    
+
   }
   else {
-    
+
     for (int i = right_digit; i <= left_digit; ++i)
       d[i - right_digit] = u->digit[i];
-    
+
     vec_shift_right(nd, d, r - right_digit * BITS_PER_DIGIT, 0);
-    
+
   }
-  
+
   vec_zero(ndigits, digit);
 
   if (! reversed)
     vec_copy(sc_min(nd, ndigits), digit, d);
-  
+
   else {
 
     // If l < r, i.e., reversed is set, reverse the bits of digit.  d
@@ -2891,7 +2891,7 @@ CLASS_TYPE::CLASS_TYPE(const OTHER_CLASS_TYPE* u, int l, int r) :
     // Deletions will start from the left end and move one position
     // after each deletion.
     sc_digit del_mask = one_and_zeros(bit_ord(l - r));
-      
+
     while (del_mask) {
       vec_shift_right(ndigits, digit, 1, ((d[nd_less_1] & del_mask) != 0));
       del_mask >>= 1;
@@ -2915,17 +2915,17 @@ CLASS_TYPE::CLASS_TYPE(const OTHER_CLASS_TYPE* u, int l, int r) :
     }
 
     if (u->sgn == SC_NEG)
-      vec_shift_right(ndigits, digit, 
+      vec_shift_right(ndigits, digit,
                       ndigits * BITS_PER_DIGIT - length(), DIGIT_MASK);
     else
-      vec_shift_right(ndigits, digit, 
+      vec_shift_right(ndigits, digit,
                       ndigits * BITS_PER_DIGIT - length(), 0);
 
 
   }  // if reversed.
 
   convert_2C_to_SM();
-  
+
 #ifndef SC_MAX_NBITS
   delete [] d;
 #endif
@@ -2937,7 +2937,7 @@ void
 CLASS_TYPE::dump(::std::ostream& os) const
 {
   // Save the current setting, and set the base to decimal.
-  fmtflags old_flags = os.setf(::std::ios::dec, ::std::ios::basefield);
+  ::std::ios::fmtflags old_flags = os.setf(::std::ios::dec, ::std::ios::basefield);
 
   os << "width = " << length() << ::std::endl;
   os << "value = " << *this << ::std::endl;
