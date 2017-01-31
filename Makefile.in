@@ -84,9 +84,10 @@ DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
 	$(top_srcdir)/configure $(am__configure_deps) \
 	$(top_srcdir)/docs/sysc/doxygen/Doxyfile.in \
 	$(top_srcdir)/docs/tlm/doxygen/Doxyfile.in AUTHORS ChangeLog \
-	INSTALL NEWS README config/compile config/config.guess \
-	config/config.sub config/depcomp config/install-sh \
-	config/missing config/ltmain.sh $(top_srcdir)/config/compile \
+	INSTALL NEWS README config/ar-lib config/compile \
+	config/config.guess config/config.sub config/depcomp \
+	config/install-sh config/missing config/ltmain.sh \
+	$(top_srcdir)/config/ar-lib $(top_srcdir)/config/compile \
 	$(top_srcdir)/config/config.guess \
 	$(top_srcdir)/config/config.sub \
 	$(top_srcdir)/config/install-sh $(top_srcdir)/config/ltmain.sh \
@@ -407,9 +408,11 @@ EXTRA_DIST = \
 	config/bootstrap \
 	config/test.sh.in \
 	\
-	msvc80/SystemC/SystemC.sln \
-	msvc80/SystemC/SystemC.vcproj \
-	msvc80/SystemC/SystemC-examples.sln
+	msvc10/SystemC/SystemC.sln \
+	msvc10/SystemC/SystemC.props \
+	msvc10/SystemC/SystemC.vcxproj \
+	msvc10/SystemC/SystemC-core.vcxproj \
+	msvc10/SystemC/SystemC-core.vcxproj.filters
 
 @SEPARATE_INSTALL_TREE_TRUE@rootdoc_DATA = \
 @SEPARATE_INSTALL_TREE_TRUE@	$(DOC_FILES)

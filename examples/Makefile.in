@@ -17,6 +17,7 @@
 # top-level SystemC include directory is added in Make-rules.{sysc,examples}
 
 # build flags
+
 VPATH = @srcdir@
 am__is_gnu_make = test -n '$(MAKEFILE_LIST)' && test -n '$(MAKELEVEL)'
 am__make_running_with_option = \
@@ -137,6 +138,35 @@ am__can_run_installinfo = \
     n|no|NO) false;; \
     *) (install-info --version) >/dev/null 2>&1;; \
   esac
+am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
+am__vpath_adj = case $$p in \
+    $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
+    *) f=$$p;; \
+  esac;
+am__strip_dir = f=`echo $$p | sed -e 's|^.*/||'`;
+am__install_max = 40
+am__nobase_strip_setup = \
+  srcdirstrip=`echo "$(srcdir)" | sed 's/[].[^$$\\*|]/\\\\&/g'`
+am__nobase_strip = \
+  for p in $$list; do echo "$$p"; done | sed -e "s|$$srcdirstrip/||"
+am__nobase_list = $(am__nobase_strip_setup); \
+  for p in $$list; do echo "$$p $$p"; done | \
+  sed "s| $$srcdirstrip/| |;"' / .*\//!s/ .*/ ./; s,\( .*\)/[^/]*$$,\1,' | \
+  $(AWK) 'BEGIN { files["."] = "" } { files[$$2] = files[$$2] " " $$1; \
+    if (++n[$$2] == $(am__install_max)) \
+      { print $$2, files[$$2]; n[$$2] = 0; files[$$2] = "" } } \
+    END { for (dir in files) print dir, files[dir] }'
+am__base_list = \
+  sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | \
+  sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
+am__uninstall_files_from_dir = { \
+  test -z "$$files" \
+    || { test ! -d "$$dir" && test ! -f "$$dir" && test ! -r "$$dir"; } \
+    || { echo " ( cd '$$dir' && rm -f" $$files ")"; \
+         $(am__cd) "$$dir" && rm -f $$files; }; \
+  }
+am__installdirs = "$(DESTDIR)$(buildexamplesdir)"
+DATA = $(nobase_buildexamples_DATA)
 RECURSIVE_CLEAN_TARGETS = mostlyclean-recursive clean-recursive	\
   distclean-recursive maintainer-clean-recursive
 am__recursive_targets = \
@@ -353,7 +383,7 @@ EXTRA_DEFINES = -DSC_INCLUDE_FX
 
 # initialize some useful variables (filled later)
 CLEANFILES = $(am__append_9)
-EXTRA_DIST = 
+EXTRA_DIST = $(examples_FILES)
 SYSTEMC_INC_DIR = $(top_srcdir)/src
 SYSTEMC_LIB_DIR = $(libdir)$(LIB_ARCH_SUFFIX)
 LDADD = $(top_builddir)/src/sysc/libsystemc.la
@@ -361,6 +391,28 @@ TESTSCRIPT_IN = $(top_srcdir)/config/test.sh.in
 SUBDIRS = \
 	sysc \
 	tlm
+
+examples_FILES = \
+	build-unix/Makefile \
+	build-unix/Makefile.config \
+	build-unix/Makefile.rules \
+	\
+	build-msvc/Makefile \
+	build-msvc/Makefile.config \
+	build-msvc/Makefile.rules \
+	build-msvc/READMEcommandlinemsvc.txt \
+	build-msvc/SystemC_examples.props \
+	build-msvc/SystemC_examples.sln \
+	build-msvc/openhere.bat \
+	build-msvc/tlm_examples.props \
+	build-msvc/tlm_examples.sln \
+	build-msvc/vsvars.bat
+
+
+# install examples?
+@SEPARATE_INSTALL_TREE_TRUE@buildexamplesdir = $(examplesdir)
+@SEPARATE_INSTALL_TREE_TRUE@nobase_buildexamples_DATA = \
+@SEPARATE_INSTALL_TREE_TRUE@	$(examples_FILES)
 
 all: all-recursive
 
@@ -402,6 +454,30 @@ mostlyclean-libtool:
 
 clean-libtool:
 	-rm -rf .libs _libs
+install-nobase_buildexamplesDATA: $(nobase_buildexamples_DATA)
+	@$(NORMAL_INSTALL)
+	@list='$(nobase_buildexamples_DATA)'; test -n "$(buildexamplesdir)" || list=; \
+	if test -n "$$list"; then \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(buildexamplesdir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(buildexamplesdir)" || exit 1; \
+	fi; \
+	$(am__nobase_list) | while read dir files; do \
+	  xfiles=; for file in $$files; do \
+	    if test -f "$$file"; then xfiles="$$xfiles $$file"; \
+	    else xfiles="$$xfiles $(srcdir)/$$file"; fi; done; \
+	  test -z "$$xfiles" || { \
+	    test "x$$dir" = x. || { \
+	      echo " $(MKDIR_P) '$(DESTDIR)$(buildexamplesdir)/$$dir'"; \
+	      $(MKDIR_P) "$(DESTDIR)$(buildexamplesdir)/$$dir"; }; \
+	    echo " $(INSTALL_DATA) $$xfiles '$(DESTDIR)$(buildexamplesdir)/$$dir'"; \
+	    $(INSTALL_DATA) $$xfiles "$(DESTDIR)$(buildexamplesdir)/$$dir" || exit $$?; }; \
+	done
+
+uninstall-nobase_buildexamplesDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(nobase_buildexamples_DATA)'; test -n "$(buildexamplesdir)" || list=; \
+	$(am__nobase_strip_setup); files=`$(am__nobase_strip)`; \
+	dir='$(DESTDIR)$(buildexamplesdir)'; $(am__uninstall_files_from_dir)
 
 # This directory's subdirectories are mostly independent; you can cd
 # into them and run 'make' without going through this Makefile.
@@ -560,9 +636,12 @@ distdir: $(DISTFILES)
 check-am: all-am
 check: check-recursive
 @SEPARATE_BUILD_TREE_FALSE@all-local:
-all-am: Makefile all-local
+all-am: Makefile $(DATA) all-local
 installdirs: installdirs-recursive
 installdirs-am:
+	for dir in "$(DESTDIR)$(buildexamplesdir)"; do \
+	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
+	done
 install: install-recursive
 install-exec: install-exec-recursive
 install-data: install-data-recursive
@@ -614,7 +693,7 @@ info: info-recursive
 
 info-am:
 
-install-data-am:
+install-data-am: install-nobase_buildexamplesDATA
 
 install-dvi: install-dvi-recursive
 
@@ -658,7 +737,7 @@ ps: ps-recursive
 
 ps-am:
 
-uninstall-am:
+uninstall-am: uninstall-nobase_buildexamplesDATA
 
 .MAKE: $(am__recursive_targets) install-am install-strip
 
@@ -669,11 +748,12 @@ uninstall-am:
 	install install-am install-data install-data-am install-dvi \
 	install-dvi-am install-exec install-exec-am install-html \
 	install-html-am install-info install-info-am install-man \
-	install-pdf install-pdf-am install-ps install-ps-am \
-	install-strip installcheck installcheck-am installdirs \
-	installdirs-am maintainer-clean maintainer-clean-generic \
-	mostlyclean mostlyclean-generic mostlyclean-libtool pdf pdf-am \
-	ps ps-am tags tags-am uninstall uninstall-am
+	install-nobase_buildexamplesDATA install-pdf install-pdf-am \
+	install-ps install-ps-am install-strip installcheck \
+	installcheck-am installdirs installdirs-am maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-generic \
+	mostlyclean-libtool pdf pdf-am ps ps-am tags tags-am uninstall \
+	uninstall-am uninstall-nobase_buildexamplesDATA
 
 
 %.sh: %$(EXEEXT) $(TESTSCRIPT_IN) 

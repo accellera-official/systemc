@@ -797,8 +797,7 @@ LDADD = $(top_builddir)/src/sysc/libsystemc.la
 TESTSCRIPT_IN = $(top_srcdir)/config/test.sh.in
 check_SCRIPTS = $(examples_TESTS:=.sh)
 syscexamplesdir = $(examplesdir)/sysc
-examples_FILES = Makefile.all Makefile.config Makefile.rules \
-	README.txt fft/README $(fft_fft_flpt_H_FILES) \
+examples_FILES = README.txt fft/README $(fft_fft_flpt_H_FILES) \
 	$(fft_fft_flpt_CXX_FILES) $(fft_fft_flpt_BUILD) \
 	$(fft_fft_flpt_EXTRA) $(fft_fft_fxpt_H_FILES) \
 	$(fft_fft_fxpt_CXX_FILES) $(fft_fft_fxpt_BUILD) \
@@ -942,7 +941,8 @@ fft_fft_flpt_BUILD = \
 	fft/fft_flpt/out_real.4.golden
 
 fft_fft_flpt_EXTRA = \
-	fft/fft_flpt/fft_flpt.vcproj \
+	fft/fft_flpt/fft_flpt.sln \
+	fft/fft_flpt/fft_flpt.vcxproj \
 	fft/fft_flpt/Makefile
 
 fft_fft_fxpt_test_CPPFLAGS = \
@@ -985,7 +985,8 @@ fft_fft_fxpt_BUILD = \
 	fft/fft_fxpt/out_real.4.golden
 
 fft_fft_fxpt_EXTRA = \
-	fft/fft_fxpt/fft_fxpt.vcproj \
+	fft/fft_fxpt/fft_fxpt.sln \
+	fft/fft_fxpt/fft_fxpt.vcxproj \
 	fft/fft_fxpt/Makefile
 
 fir_test_CPPFLAGS = \
@@ -1030,9 +1031,10 @@ fir_rtl_CXX_FILES = \
 fir_EXTRA = \
 	fir/log \
 	fir/rtl_log \
-	fir/fir_common.vcproj \
-	fir/fir.vcproj \
-	fir/fir_rtl.vcproj \
+	fir/fir.sln \
+	fir/fir_common.vcxproj \
+	fir/fir.vcxproj \
+	fir/fir_rtl.vcxproj \
 	fir/Makefile \
 	fir/README
 
@@ -1063,7 +1065,8 @@ pipe_CXX_FILES = \
 #pipe_BUILD = \
 #	pipe/golden.log
 pipe_EXTRA = \
-	pipe/pipe.vcproj \
+	pipe/pipe.sln \
+	pipe/pipe.vcxproj \
 	pipe/Makefile \
 	pipe/README
 
@@ -1096,7 +1099,8 @@ pkt_switch_CXX_FILES = \
 #pkt_switch_BUILD = \
 #	pkt_switch/golden.log
 pkt_switch_EXTRA = \
-	pkt_switch/pkt_switch.vcproj \
+	pkt_switch/pkt_switch.sln \
+	pkt_switch/pkt_switch.vcxproj \
 	pkt_switch/Makefile \
 	pkt_switch/README
 
@@ -1148,7 +1152,8 @@ risc_cpu_EXTRA = \
 	risc_cpu/test1.asm \
 	risc_cpu/README \
 	risc_cpu/README_TYPESCRIPT \
-	risc_cpu/risc_cpu.vcproj \
+	risc_cpu/risc_cpu.sln \
+	risc_cpu/risc_cpu.vcxproj \
 	risc_cpu/Makefile
 
 rsa_test_CPPFLAGS = \
@@ -1167,7 +1172,8 @@ rsa_CXX_FILES = \
 #rsa_BUILD = \
 #	rsa/golden.log
 rsa_EXTRA = \
-	rsa/rsa.vcproj \
+	rsa/rsa.sln \
+	rsa/rsa.vcxproj \
 	rsa/Makefile \
 	rsa/README
 
@@ -1209,7 +1215,8 @@ simple_bus_BUILD = \
 	simple_bus/golden.log
 
 simple_bus_EXTRA = \
-	simple_bus/simple_bus.vcproj \
+	simple_bus/simple_bus.sln \
+	simple_bus/simple_bus.vcxproj \
 	simple_bus/Makefile \
 	simple_bus/ChangeLog \
 	simple_bus/README \
@@ -1231,7 +1238,8 @@ simple_fifo_BUILD = \
 	simple_fifo/golden.log
 
 simple_fifo_EXTRA = \
-	simple_fifo/simple_fifo.vcproj \
+	simple_fifo/simple_fifo.sln \
+	simple_fifo/simple_fifo.vcxproj \
 	simple_fifo/Makefile
 
 simple_perf_test_CPPFLAGS = \
@@ -1250,7 +1258,8 @@ simple_perf_CXX_FILES = \
 #simple_perf_BUILD = \
 #	simple_perf/golden.log
 simple_perf_EXTRA = \
-	simple_perf/simple_perf.vcproj \
+	simple_perf/simple_perf.sln \
+	simple_perf/simple_perf.vcxproj \
 	simple_perf/Makefile
 
 2_1_dpipe_test_CPPFLAGS = \
@@ -1268,7 +1277,8 @@ simple_perf_EXTRA = \
 	2.1/dpipe/golden.log
 
 2_1_dpipe_EXTRA = \
-	2.1/dpipe/dpipe.vcproj \
+	2.1/dpipe/dpipe.sln \
+	2.1/dpipe/dpipe.vcxproj \
 	2.1/dpipe/Makefile
 
 2_1_forkjoin_test_CPPFLAGS = \
@@ -1286,7 +1296,8 @@ simple_perf_EXTRA = \
 	2.1/forkjoin/golden.log
 
 2_1_forkjoin_EXTRA = \
-	2.1/forkjoin/forkjoin.vcproj \
+	2.1/forkjoin/forkjoin.sln \
+	2.1/forkjoin/forkjoin.vcxproj \
 	2.1/forkjoin/Makefile \
 	2.1/forkjoin/README.txt
 
@@ -1305,7 +1316,8 @@ simple_perf_EXTRA = \
 	2.1/reset_signal_is/golden.log
 
 2_1_reset_signal_is_EXTRA = \
-	2.1/reset_signal_is/reset_signal_is.vcproj \
+	2.1/reset_signal_is/reset_signal_is.sln \
+	2.1/reset_signal_is/reset_signal_is.vcxproj \
 	2.1/reset_signal_is/Makefile
 
 2_1_sc_export_test_CPPFLAGS = \
@@ -1323,7 +1335,8 @@ simple_perf_EXTRA = \
 	2.1/sc_export/golden.log
 
 2_1_sc_export_EXTRA = \
-	2.1/sc_export/sc_export.vcproj \
+	2.1/sc_export/sc_export.sln \
+	2.1/sc_export/sc_export.vcxproj \
 	2.1/sc_export/Makefile \
 	2.1/sc_export/README.txt
 
@@ -1342,7 +1355,8 @@ simple_perf_EXTRA = \
 	2.1/sc_report/golden.log
 
 2_1_sc_report_EXTRA = \
-	2.1/sc_report/sc_report.vcproj \
+	2.1/sc_report/sc_report.sln \
+	2.1/sc_report/sc_report.vcxproj \
 	2.1/sc_report/Makefile \
 	2.1/sc_report/README.txt
 
@@ -1363,7 +1377,8 @@ simple_perf_EXTRA = \
 	2.1/scx_barrier/golden.log
 
 2_1_scx_barrier_EXTRA = \
-	2.1/scx_barrier/scx_barrier.vcproj \
+	2.1/scx_barrier/scx_barrier.sln \
+	2.1/scx_barrier/scx_barrier.vcxproj \
 	2.1/scx_barrier/Makefile
 
 2_1_scx_mutex_w_policy_test_CPPFLAGS = \
@@ -1381,7 +1396,8 @@ simple_perf_EXTRA = \
 	2.1/scx_mutex_w_policy/golden.log
 
 2_1_scx_mutex_w_policy_EXTRA = \
-	2.1/scx_mutex_w_policy/scx_mutex_w_policy.vcproj \
+	2.1/scx_mutex_w_policy/scx_mutex_w_policy.sln \
+	2.1/scx_mutex_w_policy/scx_mutex_w_policy.vcxproj \
 	2.1/scx_mutex_w_policy/Makefile
 
 2_1_specialized_signals_test_CPPFLAGS = \
@@ -1408,7 +1424,8 @@ simple_perf_EXTRA = \
 	2.1/specialized_signals/golden.log
 
 2_1_specialized_signals_EXTRA = \
-	2.1/specialized_signals/specialized_signals.vcproj \
+	2.1/specialized_signals/specialized_signals.sln \
+	2.1/specialized_signals/specialized_signals.vcxproj \
 	2.1/specialized_signals/Makefile
 
 2_3_sc_rvd_test_CPPFLAGS = $(AM_CPPFLAGS) -I \
@@ -1427,7 +1444,8 @@ simple_perf_EXTRA = \
 	2.3/sc_rvd/golden.log
 
 2_3_sc_rvd_EXTRA = \
-	2.3/sc_rvd/sc_rvd.vcproj \
+	2.3/sc_rvd/sc_rvd.sln \
+	2.3/sc_rvd/sc_rvd.vcxproj \
 	2.3/sc_rvd/Makefile
 
 2_3_sc_ttd_test_CPPFLAGS = $(AM_CPPFLAGS) -I \
@@ -1446,7 +1464,8 @@ simple_perf_EXTRA = \
 	2.3/sc_ttd/golden.log
 
 2_3_sc_ttd_EXTRA = \
-	2.3/sc_ttd/sc_ttd.vcproj \
+	2.3/sc_ttd/sc_ttd.sln \
+	2.3/sc_ttd/sc_ttd.vcxproj \
 	2.3/sc_ttd/Makefile
 
 

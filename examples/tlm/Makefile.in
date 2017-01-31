@@ -765,14 +765,9 @@ SUBDIRS = \
 
 check_SCRIPTS = $(examples_TESTS:=.sh)
 tlmexamplesdir = $(examplesdir)/tlm
-examples_FILES = build-msvc/Makefile build-msvc/Makefile.config \
-	build-msvc/Makefile.rules build-msvc/openhere.bat \
-	build-msvc/READMEcommandlinemsvc.txt \
-	build-msvc/systemc.vsprops build-msvc/tlm.sln \
-	build-msvc/vsvars.bat build-unix/Makefile \
-	build-unix/Makefile.config build-unix/Makefile.rules \
-	README.txt $(at_1_phase_H_FILES) $(at_1_phase_CXX_FILES) \
-	$(at_1_phase_BUILD) $(at_1_phase_EXTRA) $(at_2_phase_H_FILES) \
+examples_FILES = README.txt $(at_1_phase_H_FILES) \
+	$(at_1_phase_CXX_FILES) $(at_1_phase_BUILD) \
+	$(at_1_phase_EXTRA) $(at_2_phase_H_FILES) \
 	$(at_2_phase_CXX_FILES) $(at_2_phase_BUILD) \
 	$(at_2_phase_EXTRA) $(at_4_phase_H_FILES) \
 	$(at_4_phase_CXX_FILES) $(at_4_phase_BUILD) \
@@ -855,7 +850,7 @@ at_1_phase_BUILD = \
 at_1_phase_EXTRA = \
 	at_1_phase/build-msvc/Makefile \
 	at_1_phase/build-msvc/at_1_phase.sln \
-	at_1_phase/build-msvc/at_1_phase.vcproj \
+	at_1_phase/build-msvc/at_1_phase.vcxproj \
 	at_1_phase/build-unix/Makefile \
 	at_1_phase/docs/at_1_phase_example.pdf \
 	at_1_phase/docs/at_1_phase_example.ppt
@@ -883,7 +878,7 @@ at_2_phase_BUILD = \
 at_2_phase_EXTRA = \
 	at_2_phase/build-msvc/Makefile \
 	at_2_phase/build-msvc/at_2_phase.sln \
-	at_2_phase/build-msvc/at_2_phase.vcproj \
+	at_2_phase/build-msvc/at_2_phase.vcxproj \
 	at_2_phase/build-unix/Makefile \
 	at_2_phase/docs/at_2_phase_example.pdf \
 	at_2_phase/docs/at_2_phase_example.ppt
@@ -911,7 +906,7 @@ at_4_phase_BUILD = \
 at_4_phase_EXTRA = \
 	at_4_phase/build-msvc/Makefile \
 	at_4_phase/build-msvc/at_4_phase.sln \
-	at_4_phase/build-msvc/at_4_phase.vcproj \
+	at_4_phase/build-msvc/at_4_phase.vcxproj \
 	at_4_phase/build-unix/Makefile \
 	at_4_phase/docs/at_4_phase_example.pdf \
 	at_4_phase/docs/at_4_phase_example.ppt
@@ -942,7 +937,7 @@ at_extension_optional_BUILD = \
 at_extension_optional_EXTRA = \
 	at_extension_optional/build-msvc/Makefile \
 	at_extension_optional/build-msvc/at_extension_optional.sln \
-	at_extension_optional/build-msvc/at_extension_optional.vcproj \
+	at_extension_optional/build-msvc/at_extension_optional.vcxproj \
 	at_extension_optional/build-unix/Makefile \
 	at_extension_optional/docs/at_extension_optional_example.pdf \
 	at_extension_optional/docs/at_extension_optional_example.ppt
@@ -973,7 +968,7 @@ at_mixed_targets_BUILD = \
 at_mixed_targets_EXTRA = \
 	at_mixed_targets/build-msvc/Makefile \
 	at_mixed_targets/build-msvc/at_mixed_targets.sln \
-	at_mixed_targets/build-msvc/at_mixed_targets.vcproj \
+	at_mixed_targets/build-msvc/at_mixed_targets.vcxproj \
 	at_mixed_targets/build-unix/Makefile \
 	at_mixed_targets/docs/at_mixed_targets_example.pdf \
 	at_mixed_targets/docs/at_mixed_targets_example.ppt
@@ -1003,7 +998,7 @@ at_ooo_BUILD = \
 at_ooo_EXTRA = \
 	at_ooo/build-msvc/Makefile \
 	at_ooo/build-msvc/at_ooo.sln \
-	at_ooo/build-msvc/at_ooo.vcproj \
+	at_ooo/build-msvc/at_ooo.vcxproj \
 	at_ooo/build-unix/Makefile \
 	at_ooo/docs/at_ooo_example.pdf \
 	at_ooo/docs/at_ooo_example.ppt
@@ -1032,7 +1027,7 @@ lt_EXTRA = \
 	lt/README \
 	lt/build-msvc/Makefile \
 	lt/build-msvc/lt.sln \
-	lt/build-msvc/lt.vcproj \
+	lt/build-msvc/lt.vcxproj \
 	lt/build-unix/Makefile \
 	lt/docs/lt_example.pdf \
 	lt/docs/lt_example.ppt
@@ -1061,7 +1056,7 @@ lt_dmi_EXTRA = \
 	lt_dmi/README \
 	lt_dmi/build-msvc/Makefile \
 	lt_dmi/build-msvc/lt_dmi.sln \
-	lt_dmi/build-msvc/lt_dmi.vcproj \
+	lt_dmi/build-msvc/lt_dmi.vcxproj \
 	lt_dmi/build-unix/Makefile \
 	lt_dmi/docs/lt_dmi_example.pdf \
 	lt_dmi/docs/lt_dmi_example.ppt
@@ -1091,7 +1086,7 @@ lt_extension_mandatory_BUILD = \
 lt_extension_mandatory_EXTRA = \
 	lt_extension_mandatory/build-msvc/Makefile \
 	lt_extension_mandatory/build-msvc/lt_extension_mandatory.sln \
-	lt_extension_mandatory/build-msvc/lt_extension_mandatory.vcproj \
+	lt_extension_mandatory/build-msvc/lt_extension_mandatory.vcxproj \
 	lt_extension_mandatory/build-unix/Makefile \
 	lt_extension_mandatory/docs/lt_extension_mandatory_example.pdf \
 	lt_extension_mandatory/docs/lt_extension_mandatory_example.ppt
@@ -1124,7 +1119,7 @@ lt_mixed_endian_EXTRA = \
 	lt_mixed_endian/build-msvc/Makefile \
 	lt_mixed_endian/build-msvc/README.txt \
 	lt_mixed_endian/build-msvc/lt_mixed_endian.sln \
-	lt_mixed_endian/build-msvc/lt_mixed_endian.vcproj \
+	lt_mixed_endian/build-msvc/lt_mixed_endian.vcxproj \
 	lt_mixed_endian/build-unix/Makefile \
 	lt_mixed_endian/docs/lt_mixed_endian_example.pdf \
 	lt_mixed_endian/docs/lt_mixed_endian_example.ppt
@@ -1156,7 +1151,7 @@ lt_temporal_decouple_EXTRA = \
 	lt_temporal_decouple/README \
 	lt_temporal_decouple/build-msvc/Makefile \
 	lt_temporal_decouple/build-msvc/lt_temporal_decouple.sln \
-	lt_temporal_decouple/build-msvc/lt_temporal_decouple.vcproj \
+	lt_temporal_decouple/build-msvc/lt_temporal_decouple.vcxproj \
 	lt_temporal_decouple/build-unix/Makefile \
 	lt_temporal_decouple/docs/lt_temporal_decouple_example.pdf \
 	lt_temporal_decouple/docs/lt_temporal_decouple_example.ppt
