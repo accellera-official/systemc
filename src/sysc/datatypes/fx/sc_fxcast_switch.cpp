@@ -50,9 +50,15 @@
 
 #include "sysc/datatypes/fx/sc_fxcast_switch.h"
 
+// explicit template instantiations
+namespace sc_core {
+template class SC_API sc_phash<void*, const sc_dt::sc_fxcast_switch*>;
+} // namespace sc_core
 
-namespace sc_dt
-{
+namespace sc_dt {
+
+template class SC_API sc_global<sc_fxcast_switch>;
+template class SC_API sc_context<sc_fxcast_switch>;
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_fxcast_switch

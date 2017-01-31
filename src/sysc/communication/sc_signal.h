@@ -375,6 +375,10 @@ private:
 
 class SC_API sc_reset;
 
+SC_API_TEMPLATE_DECL_ sc_signal_t<bool,SC_ONE_WRITER>;
+SC_API_TEMPLATE_DECL_ sc_signal_t<bool,SC_MANY_WRITERS>;
+SC_API_TEMPLATE_DECL_ sc_signal_t<bool,SC_UNCHECKED_WRITERS>;
+
 template< sc_writer_policy POL >
 class SC_API sc_signal<bool,POL>
   : public sc_signal_t<bool,POL>
@@ -455,6 +459,10 @@ private:
 //
 //  Specialization of sc_signal<T> for type sc_dt::sc_logic.
 // ----------------------------------------------------------------------------
+
+SC_API_TEMPLATE_DECL_ sc_signal_t<sc_dt::sc_logic,SC_ONE_WRITER>;
+SC_API_TEMPLATE_DECL_ sc_signal_t<sc_dt::sc_logic,SC_MANY_WRITERS>;
+SC_API_TEMPLATE_DECL_ sc_signal_t<sc_dt::sc_logic,SC_UNCHECKED_WRITERS>;
 
 template< sc_writer_policy POL >
 class SC_API sc_signal<sc_dt::sc_logic,POL>

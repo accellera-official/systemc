@@ -36,12 +36,6 @@ namespace sc_core {
 
 class sc_process_b;
 
-} // namespace sc_core
-
-SC_API_VECTOR_(sc_core::sc_process_b*);
-
-namespace sc_core {
-
 // ----------------------------------------------------------------------------
 //  CLASS sc_lv_resolve<W>
 //

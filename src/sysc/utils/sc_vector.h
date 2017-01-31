@@ -38,6 +38,11 @@
 #include "sysc/packages/boost/config.hpp"
 #include "sysc/packages/boost/utility/enable_if.hpp"
 
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(push)
+#pragma warning(disable: 4251) // DLL import for std::vector
+#endif
+
 namespace sc_core {
 namespace sc_meta {
 
@@ -105,11 +110,6 @@ sc_vector_do_operator_paren( Container & cont
 
 class sc_vector_element;  // opaque pointer
 
-} // namespace sc_core
-
-SC_API_VECTOR_(sc_core::sc_vector_element*);
-
-namespace sc_core {
 class SC_API sc_vector_base
   : public sc_object
 {
@@ -751,6 +751,10 @@ sc_vector_assembly<T,MT>::get_elements() const
 } // namespace sc_core
 #undef SC_RPTYPE_
 #undef SC_ENABLE_IF_
+
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(pop)
+#endif
 
 // $Log: sc_vector.h,v $
 // Revision 1.17  2011/08/26 20:46:20  acg

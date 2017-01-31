@@ -33,19 +33,17 @@
 
 #include "sysc/communication/sc_signal.h"
 
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(push)
+#pragma warning(disable: 4251) // DLL import for std::vector
+#endif
+
 namespace sc_core {
 
 class sc_process_b;
 
 extern SC_API const sc_dt::sc_logic_value_t sc_logic_resolution_tbl[4][4];
 
-} // namespace sc_core
-
-// explicitly export std::vector<> instantiations
-SC_API_VECTOR_(sc_core::sc_process_b*);
-SC_API_VECTOR_(sc_dt::sc_logic);
-
-namespace sc_core {
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_signal_resolved
@@ -120,6 +118,10 @@ private:
 };
 
 } // namespace sc_core
+
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(pop)
+#endif
 
 //$Log: sc_signal_resolved.h,v $
 //Revision 1.6  2011/08/26 20:45:44  acg
