@@ -107,7 +107,7 @@ build run check clean:
 !ELSE
 
 ## platform-specific flag additions
-!IF "$(PLATFORM)" == "x64"
+!IF "$(PLATFORM)" == "x64" || "$(PLATFORM)" == "X64"
 OUTDIR=$(PLATFORM)\$(CONFIG)
 CXXFLAGS=$(CXXFLAGS) /DWIN64
 LDFLAGS =$(LDFLAGS)  /MACHINE:X64
@@ -180,7 +180,8 @@ build: announce
 clean: announce
 	$(AT)$(MSBUILD) /t:clean $(MSBUILDFLAGS) $(PROJECT)$(PROJEXT) \
 		/p:configuration="$(CONFIG)" /p:platform="$(PLATFORM)"
-	$(AT)if exist $(OUTDIR)\BuildLog.htm ( del /q $(OUTDIR)\BuildLog.htm  )
+	$(AT)for %%X in ( $(OUTDIR)\BuildLog.htm $(OUTDIR)\*.log ) do \
+	  @( if exist %%X del /q %%X )
 	$(AT)if exist $(OUTDIR) ( rmdir /q $(OUTDIR) )
 	$(AT)for %%X in ( $(EXECUTABLE) *.log $(EXTRA_CLEAN) ) do \
 	  @( if exist %%X del /q %%X )
