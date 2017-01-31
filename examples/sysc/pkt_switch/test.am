@@ -91,7 +91,8 @@ pkt_switch_CXX_FILES = \
 #	pkt_switch/golden.log
 
 pkt_switch_EXTRA = \
-	pkt_switch/pkt_switch.vcproj \
+	pkt_switch/pkt_switch.sln \
+	pkt_switch/pkt_switch.vcxproj \
 	pkt_switch/Makefile \
 	pkt_switch/README
 

@@ -100,19 +100,23 @@ public:
 
     typedef sc_signal_rv<W>                             this_type;
     typedef sc_signal<sc_dt::sc_lv<W>, SC_MANY_WRITERS> base_type;
-    typedef sc_dt::sc_lv<W>                             data_type;
+    typedef sc_dt::sc_lv<W>                             value_type;
 
 public:
 
     // constructors
 
     sc_signal_rv()
-        : base_type( sc_gen_unique_name( "signal_rv" ) )
-	{}
+      : base_type( sc_gen_unique_name( "signal_rv" ) )
+    {}
 
     explicit sc_signal_rv( const char* name_ )
-        : base_type( name_ )
-	{}
+      : base_type( name_, value_type() )
+    {}
+
+    sc_signal_rv( const char* name_, const value_type& initial_value_ )
+      : base_type( name_, initial_value_ )
+    {}
 
 
     // destructor
@@ -126,19 +130,23 @@ public:
 
 
     // write the new value
-    virtual void write( const data_type& );
+    virtual void write( const value_type& );
 
 
     // other methods
-
-    this_type& operator = ( const data_type& a )
-        { write( a ); return *this; }
-
-    this_type& operator = ( const this_type& a )
-        { write( a.read() ); return *this; }
-
     virtual const char* kind() const
         { return "sc_signal_rv"; }
+
+
+    // assignment
+    this_type& operator = ( const value_type& a )
+      { base_type::operator=(a); return *this; }
+
+    this_type& operator = ( const sc_signal_in_if<value_type>& a )
+      { base_type::operator=(a); return *this; }
+
+    this_type& operator = ( const this_type& a )
+      { base_type::operator=(a); return *this; }
 
 protected:
 
@@ -147,7 +155,7 @@ protected:
 protected:
 
     std::vector<sc_process_b*> m_proc_vec; // processes writing this signal
-    std::vector<data_type*>       m_val_vec;  // new values written this signal
+    std::vector<value_type*>   m_val_vec;  // new values written this signal
 
 private:
 
@@ -176,7 +184,7 @@ sc_signal_rv<W>::~sc_signal_rv()
 template <int W>
 inline
 void
-sc_signal_rv<W>::write( const data_type& value_ )
+sc_signal_rv<W>::write( const value_type& value_ )
 {
     sc_process_b* cur_proc = sc_get_current_process_b();
 
@@ -196,7 +204,7 @@ sc_signal_rv<W>::write( const data_type& value_ )
     
     if( ! found ) {
 	m_proc_vec.push_back( cur_proc );
-	m_val_vec.push_back( new data_type( value_ ) );
+	m_val_vec.push_back( new value_type( value_ ) );
 	value_changed = true;
     }
     

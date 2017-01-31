@@ -1,8 +1,8 @@
 SYSTEMC_HOME ?= ../../../..
-include ../../Makefile.config
+include ../../../build-unix/Makefile.config
 
 PROJECT = sc_ttd
 OBJS    = main.o
 INCDIR  = -I ../include
 
-include ../../Makefile.rules
+include ../../../build-unix/Makefile.rules

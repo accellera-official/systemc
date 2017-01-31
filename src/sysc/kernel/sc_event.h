@@ -558,7 +558,7 @@ inline
 int
 sc_event_list::size() const
 {
-    return m_events.size();
+    return static_cast<int>(m_events.size());
 }
 
 inline

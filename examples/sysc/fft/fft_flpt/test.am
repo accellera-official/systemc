@@ -106,7 +106,8 @@ fft_fft_flpt_BUILD = \
 	fft/fft_flpt/out_real.4.golden
 
 fft_fft_flpt_EXTRA = \
-	fft/fft_flpt/fft_flpt.vcproj \
+	fft/fft_flpt/fft_flpt.sln \
+	fft/fft_flpt/fft_flpt.vcxproj \
 	fft/fft_flpt/Makefile
 
 

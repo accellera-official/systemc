@@ -85,7 +85,7 @@ at_mixed_targets_BUILD = \
 at_mixed_targets_EXTRA = \
 	at_mixed_targets/build-msvc/Makefile \
 	at_mixed_targets/build-msvc/at_mixed_targets.sln \
-	at_mixed_targets/build-msvc/at_mixed_targets.vcproj \
+	at_mixed_targets/build-msvc/at_mixed_targets.vcxproj \
 	at_mixed_targets/build-unix/Makefile \
 	at_mixed_targets/docs/at_mixed_targets_example.pdf \
 	at_mixed_targets/docs/at_mixed_targets_example.ppt

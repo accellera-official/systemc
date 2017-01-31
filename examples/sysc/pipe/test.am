@@ -89,7 +89,8 @@ pipe_CXX_FILES = \
 #	pipe/golden.log
 
 pipe_EXTRA = \
-	pipe/pipe.vcproj \
+	pipe/pipe.sln \
+	pipe/pipe.vcxproj \
 	pipe/Makefile \
 	pipe/README
 

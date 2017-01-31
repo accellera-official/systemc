@@ -1,4 +1,4 @@
-include ../../build-unix/Makefile.config
+include ../../../build-unix/Makefile.config
 
 PROJECT = at_4_phase
 
@@ -21,6 +21,6 @@ OBJS = \
 	select_initiator.o \
 	traffic_generator.o
 
-include ../../build-unix/Makefile.rules
+include ../../../build-unix/Makefile.rules
 
 # DO NOT DELETE

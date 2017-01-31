@@ -1,4 +1,4 @@
-!include <..\..\build-msvc\Makefile.config>
+!include <..\..\..\build-msvc\Makefile.config>
 
 PROJECT = lt_extension_mandatory
 
@@ -11,4 +11,4 @@ OBJS = \
 	$(OUTDIR)\extension_initiator_id.obj \
 	$(OUTDIR)\report.obj
 
-!include <..\..\build-msvc\Makefile.rules>
+!include <..\..\..\build-msvc\Makefile.rules>

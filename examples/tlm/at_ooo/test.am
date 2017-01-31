@@ -87,7 +87,7 @@ at_ooo_BUILD = \
 at_ooo_EXTRA = \
 	at_ooo/build-msvc/Makefile \
 	at_ooo/build-msvc/at_ooo.sln \
-	at_ooo/build-msvc/at_ooo.vcproj \
+	at_ooo/build-msvc/at_ooo.vcxproj \
 	at_ooo/build-unix/Makefile \
 	at_ooo/docs/at_ooo_example.pdf \
 	at_ooo/docs/at_ooo_example.ppt

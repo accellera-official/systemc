@@ -1,4 +1,4 @@
-!include <..\..\build-msvc\Makefile.config>
+!include <..\..\..\build-msvc\Makefile.config>
 
 PROJECT = lt_dmi
 
@@ -14,4 +14,4 @@ OBJS = \
 	$(OUTDIR)\report.obj \
 	$(OUTDIR)\traffic_generator.obj
 
-!include <..\..\build-msvc\Makefile.rules>
+!include <..\..\..\build-msvc\Makefile.rules>

@@ -85,7 +85,7 @@ at_2_phase_BUILD = \
 at_2_phase_EXTRA = \
 	at_2_phase/build-msvc/Makefile \
 	at_2_phase/build-msvc/at_2_phase.sln \
-	at_2_phase/build-msvc/at_2_phase.vcproj \
+	at_2_phase/build-msvc/at_2_phase.vcxproj \
 	at_2_phase/build-unix/Makefile \
 	at_2_phase/docs/at_2_phase_example.pdf \
 	at_2_phase/docs/at_2_phase_example.ppt

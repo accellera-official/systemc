@@ -1211,7 +1211,7 @@ void
 sc_inout<T>::remove_traces() const
 {
     if( m_traces != 0 ) {
-		for( int i = m_traces->size() - 1; i >= 0; -- i ) {
+		for( int i = static_cast<int>(m_traces->size()) - 1; i >= 0; -- i ) {
 	        delete (*m_traces)[i];
 		}
 		delete m_traces;

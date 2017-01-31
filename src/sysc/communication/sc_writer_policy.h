@@ -84,7 +84,7 @@ struct SC_API sc_writer_policy_check_write
 protected:
   sc_writer_policy_check_write( bool check_delta = false )
     : m_check_delta( check_delta ), m_writer_p() {}
-  const bool         m_check_delta;
+  bool               m_check_delta;
   sc_process_handle  m_writer_p;
 };
 

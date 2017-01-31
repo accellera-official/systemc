@@ -1,7 +1,7 @@
 SYSTEMC_HOME ?= ../../../..
-include ../../Makefile.config
+include ../../../build-unix/Makefile.config
 
 PROJECT = forkjoin
 OBJS    = $(PROJECT).o
 
-include ../../Makefile.rules
+include ../../../build-unix/Makefile.rules

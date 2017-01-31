@@ -85,7 +85,7 @@ at_4_phase_BUILD = \
 at_4_phase_EXTRA = \
 	at_4_phase/build-msvc/Makefile \
 	at_4_phase/build-msvc/at_4_phase.sln \
-	at_4_phase/build-msvc/at_4_phase.vcproj \
+	at_4_phase/build-msvc/at_4_phase.vcxproj \
 	at_4_phase/build-unix/Makefile \
 	at_4_phase/docs/at_4_phase_example.pdf \
 	at_4_phase/docs/at_4_phase_example.ppt

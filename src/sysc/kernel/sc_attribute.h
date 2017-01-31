@@ -116,7 +116,7 @@ public:
 
     // get the size of the collection
     int size() const
-        { return m_cltn.size(); }
+        { return static_cast<int>(m_cltn.size()); }
 
     // get the begin iterator
     iterator begin()
