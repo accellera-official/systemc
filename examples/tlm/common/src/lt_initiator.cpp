@@ -70,7 +70,6 @@ lt_initiator::lt_initiator                        // constructor
 void lt_initiator::initiator_thread(void)   ///< initiator thread
 {  
   tlm::tlm_generic_payload *transaction_ptr;    ///< transaction pointer
-  std::ostringstream       msg;                 ///< log message
 
   while (true) 
   {

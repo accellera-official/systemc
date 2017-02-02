@@ -72,7 +72,6 @@ select_initiator::select_initiator                  // constructor
 void select_initiator::initiator_thread(void)   // initiator thread
 {
   tlm::tlm_generic_payload *transaction_ptr;    // transaction pointer
-  std::ostringstream       msg;                 // log message
 
   while (true)
   {
