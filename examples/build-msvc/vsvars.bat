@@ -66,37 +66,37 @@ rem installation.  This should be usually the case by default.
 :check_MSVC80
 set SYSTEMC_MSVC_VERSION=8.0 (2005)
 set VSINSTALLDIR=%VS80COMNTOOLS%..\..\
-set MSVC msvc80
+set MSVC=msvc80
 goto load_MSVC
 
 :check_MSVC90
 set SYSTEMC_MSVC_VERSION=9.0 (2008)
 set VSINSTALLDIR=%VS90COMNTOOLS%..\..\
-set MSVC msvc90
+set MSVC=msvc90
 goto load_MSVC
 
 :check_MSVC100
 set SYSTEMC_MSVC_VERSION=10.0 (2010)
 set VSINSTALLDIR=%VS100COMNTOOLS%..\..\
-set MSVC msvc10
+set MSVC=msvc10
 goto load_MSVC
 
 :check_MSVC110
 set SYSTEMC_MSVC_VERSION=11.0 (2012)
 set VSINSTALLDIR=%VS110COMNTOOLS%..\..\
-set MSVC msvc11
+set MSVC=msvc11
 goto load_MSVC
 
 :check_MSVC120
 set SYSTEMC_MSVC_VERSION=12.0 (2013)
 set VSINSTALLDIR=%VS120COMNTOOLS%..\..\
-set MSVC msvc12
+set MSVC=msvc12
 goto load_MSVC
 
 :check_MSVC140
 set SYSTEMC_MSVC_VERSION=14.0 (2015)
 set VSINSTALLDIR=%VS140COMNTOOLS%..\..\
-set MSVC msvc14
+set MSVC=msvc14
 goto load_MSVC
 
 :load_MSVC
