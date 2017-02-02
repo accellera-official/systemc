@@ -38,6 +38,11 @@
 #include <string>
 #include "sysc/kernel/sc_cmnhdr.h"
 
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+# pragma warning(push)
+# pragma warning(disable:4275) // ignore missing std::exception DLL export
+#endif
+
 namespace sc_core {
 
 // ----------------------------------------------------------------------------
@@ -248,6 +253,10 @@ extern SC_API const char SC_ID_OUT_OF_BOUNDS_[];
 extern SC_API const char SC_ID_REGISTER_ID_FAILED_[];
 
 } // namespace sc_core
+
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+# pragma warning(pop)
+#endif
 
 #include "sysc/utils/sc_report_handler.h"
 
