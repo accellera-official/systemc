@@ -235,6 +235,9 @@
     <ClCompile Include="..\..\src\tlm_core\tlm_2\tlm_generic_payload\tlm_phase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\tlm_core\tlm_2\tlm_generic_payload\tlm_gp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\sysc\datatypes\int\sc_nbfriends.inc">

@@ -23,6 +23,8 @@
 
 #include "tlm_core/tlm_2/tlm_generic_payload/tlm_gp.h"
 
+#include <cstring> // std::memset
+
 namespace tlm {
 
 /*

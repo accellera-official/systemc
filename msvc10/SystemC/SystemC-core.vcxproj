@@ -386,6 +386,7 @@
     <ClCompile Include="..\..\src\sysc\datatypes\fx\scfx_pow10.cpp" />
     <ClCompile Include="..\..\src\sysc\datatypes\fx\scfx_rep.cpp" />
     <ClCompile Include="..\..\src\sysc\datatypes\fx\scfx_utils.cpp" />
+    <ClCompile Include="..\..\src\tlm_core\tlm_2\tlm_generic_payload\tlm_gp.cpp" />
     <ClCompile Include="..\..\src\tlm_core\tlm_2\tlm_generic_payload\tlm_phase.cpp" />
     <ClCompile Include="..\..\src\tlm_core\tlm_2\tlm_quantum\tlm_global_quantum.cpp" />
   </ItemGroup>
