@@ -36,6 +36,7 @@ include $(top_srcdir)/config/Make-rules.sysc
 
 H_FILES = \
 	instance_specific_extensions.h \
+	instance_specific_extensions_int.h \
 	multi_passthrough_initiator_socket.h \
 	multi_passthrough_target_socket.h \
 	multi_socket_bases.h \
@@ -45,6 +46,9 @@ H_FILES = \
 	simple_initiator_socket.h \
 	simple_target_socket.h \
 	tlm_quantumkeeper.h
+
+CXX_FILES = \
+	instance_specific_extensions.cpp
 
 EXTRA_DIST += \
 	README.txt

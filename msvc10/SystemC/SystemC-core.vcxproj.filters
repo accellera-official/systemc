@@ -238,6 +238,9 @@
     <ClCompile Include="..\..\src\tlm_core\tlm_2\tlm_generic_payload\tlm_gp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\tlm_utils\instance_specific_extensions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\sysc\datatypes\int\sc_nbfriends.inc">
@@ -769,6 +772,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\sysc\communication\sc_semaphore_if.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_utils\instance_specific_extensions_int.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
