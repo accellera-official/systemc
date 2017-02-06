@@ -68,6 +68,8 @@
 #include "sysc/tracing/sc_vcd_trace.h"
 #include "sysc/utils/sc_report.h" // sc_assert
 
+#include <sstream>
+
 namespace sc_core {
 
 // Forward declarations for functions that come later in the file

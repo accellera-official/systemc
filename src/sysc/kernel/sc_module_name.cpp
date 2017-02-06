@@ -34,7 +34,6 @@
 #include "sysc/kernel/sc_module_name.h"
 #include "sysc/kernel/sc_object_manager.h"
 #include "sysc/kernel/sc_simcontext.h"
-#include "sysc/utils/sc_iostream.h"
 
 namespace sc_core {
 

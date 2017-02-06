@@ -31,7 +31,6 @@
 #include <cstdarg>
 #include <cstring>
 
-#include "sysc/utils/sc_iostream.h"
 #include "sysc/utils/sc_string.h"
 #include "sysc/utils/sc_report.h"  // sc_assert
 #include "sysc/utils/sc_utils_ids.h"

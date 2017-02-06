@@ -29,9 +29,6 @@
 #ifndef SC_MEMPOOL_H
 #define SC_MEMPOOL_H
 
-
-#include "sysc/utils/sc_iostream.h"
-
 namespace sc_core {
 
 // ----------------------------------------------------------------------------

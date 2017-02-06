@@ -102,7 +102,6 @@
 
 #include "sysc/kernel/sc_object.h"
 #include "sysc/datatypes/misc/sc_value_base.h"
-#include "sysc/utils/sc_iostream.h"
 #include "sysc/utils/sc_temporary.h"
 #include "sysc/datatypes/int/sc_length_param.h"
 #include "sysc/datatypes/int/sc_nbdefs.h"
@@ -639,7 +638,7 @@ protected:
 
     void initialize( const sc_unsigned* obj_p, int index_ )
         {
-	    m_obj_p = CCAST<sc_unsigned*>( obj_p );
+	    m_obj_p = const_cast<sc_unsigned*>( obj_p );
 	    m_index = index_;
 	}
 
@@ -813,7 +812,7 @@ protected:
 
     void initialize( const sc_unsigned* obj_p, int left_, int right_ )
 	{
-	    m_obj_p = CCAST<sc_unsigned*>( obj_p );
+	    m_obj_p = const_cast<sc_unsigned*>( obj_p );
 	    m_left = left_;
 	    m_right = right_;
 	}

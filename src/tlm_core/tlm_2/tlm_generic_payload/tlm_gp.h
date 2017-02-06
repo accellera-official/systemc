@@ -27,8 +27,8 @@
 #ifndef __TLM_GP_H__
 #define __TLM_GP_H__
 
-#include <systemc>
 #include "tlm_core/tlm_2/tlm_generic_payload/tlm_array.h"
+#include <cstring> // std::memcpy et.al.
 
 namespace tlm {
 
@@ -238,13 +238,13 @@ public:
         // there must be enough space in the target transaction!
         if(m_data && other.m_data)
         {
-            memcpy(m_data, other.m_data, m_length);
+            std::memcpy(m_data, other.m_data, m_length);
         }
         // deep copy byte enables
         // there must be enough space in the target transaction!
         if(m_byte_enable && other.m_byte_enable)
         {
-            memcpy(m_byte_enable, other.m_byte_enable, m_byte_enable_length);
+            std::memcpy(m_byte_enable, other.m_byte_enable, m_byte_enable_length);
         }
         // deep copy extensions (sticky and non-sticky)
         for(unsigned int i=0; i<other.m_extensions.size(); i++)
@@ -327,7 +327,7 @@ public:
                             m_data[i] = other.m_data[i];
             }
             else
-              memcpy(m_data, other.m_data, m_length);
+              std::memcpy(m_data, other.m_data, m_length);
         }
     }
 

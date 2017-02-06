@@ -21,12 +21,9 @@
 #ifndef __TLM_ENDIAN_CONV_H__
 #define __TLM_ENDIAN_CONV_H__
 
-#include <systemc>
 #include "tlm_core/tlm_2/tlm_generic_payload/tlm_gp.h"
 
-
 namespace tlm {
-
 
 /*
 Tranaction-Level Modelling
@@ -386,7 +383,7 @@ tlm_to_hostendian_generic(tlm_generic_payload *txn, unsigned int sizeof_databus)
   txn->set_data_ptr(tc->new_dbuf);
   tc->establish_bebuf(new_length);
   txn->set_byte_enable_ptr(tc->new_bebuf);
-  memset(txn->get_byte_enable_ptr(), TLM_BYTE_DISABLED, new_length);
+  std::memset(txn->get_byte_enable_ptr(), TLM_BYTE_DISABLED, new_length);
   txn->set_streaming_width(new_stream_width);
   txn->set_data_length(new_length);
   txn->set_byte_enable_length(new_length);

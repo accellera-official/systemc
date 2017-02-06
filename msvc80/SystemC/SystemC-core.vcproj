@@ -730,10 +730,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\sysc\datatypes\int\sc_nbdefs.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\src\sysc\datatypes\int\sc_nbexterns.cpp"
 				>
 			</File>
@@ -1113,10 +1109,6 @@
 			</File>
 			<File
 				RelativePath="..\..\src\sysc\communication\sc_interface.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\sysc\utils\sc_iostream.h"
 				>
 			</File>
 			<File

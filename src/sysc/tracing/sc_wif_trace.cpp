@@ -76,6 +76,8 @@
 #include "sysc/datatypes/fx/fx.h"
 #include "sysc/tracing/sc_wif_trace.h"
 
+#include <sstream>
+
 namespace sc_core {
 
 // Forward declarations for functions that come later in the file

@@ -50,12 +50,12 @@ class sc_port_base;
 
 struct sc_bind_info;
 
-enum sc_port_policy 
-{ 
-    SC_ONE_OR_MORE_BOUND,   // Default 
-    SC_ZERO_OR_MORE_BOUND, 
-    SC_ALL_BOUND  
-}; 
+enum sc_port_policy
+{
+    SC_ONE_OR_MORE_BOUND,   // Default
+    SC_ZERO_OR_MORE_BOUND,
+    SC_ALL_BOUND
+};
 
 } // namespace sc_core
 
@@ -103,9 +103,9 @@ public:
 protected:
 
     // constructors
-    explicit sc_port_base( int max_size_, 
+    explicit sc_port_base( int max_size_,
 	    sc_port_policy policy=SC_ONE_OR_MORE_BOUND );
-    sc_port_base( const char* name_, int max_size_, 
+    sc_port_base( const char* name_, int max_size_,
 		  sc_port_policy policy=SC_ONE_OR_MORE_BOUND );
 
     // destructor
@@ -320,14 +320,14 @@ protected:
 
     // constructors
 
-    explicit sc_port_b( int max_size_, 
+    explicit sc_port_b( int max_size_,
 	                sc_port_policy policy=SC_ONE_OR_MORE_BOUND ) :
 	base_type( max_size_, policy ), m_interface( 0 ), m_interface_vec()
 	{}
 
-    sc_port_b( const char* name_, int max_size_, 
+    sc_port_b( const char* name_, int max_size_,
                sc_port_policy policy=SC_ONE_OR_MORE_BOUND ) :
-	base_type( name_, max_size_, policy ), m_interface( 0 ), 
+	base_type( name_, max_size_, policy ), m_interface( 0 ),
 	m_interface_vec()
 	{}
 
@@ -514,7 +514,7 @@ inline
 int
 sc_port_b<IF>::vbind( sc_interface& interface_ )
 {
-    IF* iface = DCAST<IF*>( &interface_ );
+    IF* iface = dynamic_cast<IF*>( &interface_ );
     if( iface == 0 ) {
 	// type mismatch
 	return 2;
@@ -528,7 +528,7 @@ inline
 int
 sc_port_b<IF>::vbind( sc_port_base& parent_ )
 {
-    this_type* parent = DCAST<this_type*>( &parent_ );
+    this_type* parent = dynamic_cast<this_type*>( &parent_ );
     if( parent == 0 ) {
 	// type mismatch
 	return 2;
@@ -545,7 +545,7 @@ inline
 void
 sc_port_b<IF>::add_interface( sc_interface* interface_ )
 {
-    IF* iface = DCAST<IF*>( interface_ );
+    IF* iface = dynamic_cast<IF*>( interface_ );
     sc_assert( iface != 0 );
 
     // make sure that the interface is not already bound:
@@ -555,7 +555,7 @@ sc_port_b<IF>::add_interface( sc_interface* interface_ )
     {
     	if ( iface == m_interface_vec[i] )
 	{
-	    report_error( SC_ID_BIND_IF_TO_PORT_, 
+	    report_error( SC_ID_BIND_IF_TO_PORT_,
 	    	"interface already bound to port" );
 	}
     }
@@ -563,7 +563,7 @@ sc_port_b<IF>::add_interface( sc_interface* interface_ )
     // "bind" the interface and make sure our short cut for 0 is set up.
 
     m_interface_vec.push_back( iface );
-    m_interface = m_interface_vec[0]; 
+    m_interface = m_interface_vec[0];
 }
 
 template <class IF>
@@ -650,10 +650,10 @@ sc_port_b<IF>::make_sensitive( sc_method_handle handle_p,
                                12 December, 2005
   Description of Modification: multiport binding policy changes
 
-    
+
  *****************************************************************************/
 
-/* 
+/*
 $Log: sc_port.h,v $
 Revision 1.10  2011/08/26 20:45:41  acg
  Andy Goodrich: moved the modification log to the end of the file to

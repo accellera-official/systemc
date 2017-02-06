@@ -641,11 +641,11 @@ sc_signed::operator = (const sc_int_base& v)
 
 sc_signed
 operator + ( const sc_unsigned& u, const sc_int_base& v )
-{ return operator + ( u, SCAST<int64>( v ) ); }
+{ return operator + ( u, static_cast<int64>( v ) ); }
 
 sc_signed
 operator + ( const sc_int_base& u, const sc_unsigned& v )
-{ return operator + ( SCAST<int64>( u ), v ); }
+{ return operator + ( static_cast<int64>( u ), v ); }
 
 sc_signed
 operator + (const sc_signed& u, const sc_int_base& v)
@@ -683,11 +683,11 @@ sc_signed::operator -= (const sc_int_base& v)
 
 sc_signed
 operator * ( const sc_unsigned& u, const sc_int_base& v )
-{ return operator * ( u, SCAST<int64>( v ) ); }
+{ return operator * ( u, static_cast<int64>( v ) ); }
 
 sc_signed
 operator * ( const sc_int_base& u, const sc_unsigned& v )
-{ return operator * ( SCAST<int64>( u ), v ); }
+{ return operator * ( static_cast<int64>( u ), v ); }
 
 sc_signed
 operator * (const sc_signed& u, const sc_int_base& v)
@@ -704,11 +704,11 @@ sc_signed::operator *= (const sc_int_base& v)
 
 sc_signed
 operator / ( const sc_unsigned& u, const sc_int_base& v )
-{ return operator / ( u, SCAST<int64>( v ) ); }
+{ return operator / ( u, static_cast<int64>( v ) ); }
 
 sc_signed
 operator / ( const sc_int_base& u, const sc_unsigned& v )
-{ return operator / ( SCAST<int64>( u ), v ); }
+{ return operator / ( static_cast<int64>( u ), v ); }
 
 sc_signed
 operator / (const sc_signed& u, const sc_int_base& v)
@@ -725,11 +725,11 @@ sc_signed::operator /= (const sc_int_base& v)
 
 sc_signed
 operator % ( const sc_unsigned& u, const sc_int_base& v )
-{ return operator % ( u, SCAST<int64>( v ) ); }
+{ return operator % ( u, static_cast<int64>( v ) ); }
 
 sc_signed
 operator % ( const sc_int_base& u, const sc_unsigned& v )
-{ return operator % ( SCAST<int64>( u ), v ); }
+{ return operator % ( static_cast<int64>( u ), v ); }
 
 sc_signed
 operator % (const sc_signed& u, const sc_int_base& v)
@@ -746,11 +746,11 @@ sc_signed::operator %= (const sc_int_base& v)
 
 sc_signed
 operator & ( const sc_unsigned& u, const sc_int_base& v )
-{ return operator & ( u, SCAST<int64>( v ) ); }
+{ return operator & ( u, static_cast<int64>( v ) ); }
 
 sc_signed
 operator & ( const sc_int_base& u, const sc_unsigned& v )
-{ return operator & ( SCAST<int64>( u ), v ); }
+{ return operator & ( static_cast<int64>( u ), v ); }
 
 sc_signed
 operator & (const sc_signed& u, const sc_int_base& v)
@@ -767,11 +767,11 @@ sc_signed::operator &= (const sc_int_base& v)
 
 sc_signed
 operator | ( const sc_unsigned& u, const sc_int_base& v )
-{ return operator | ( u, SCAST<int64>( v ) ); }
+{ return operator | ( u, static_cast<int64>( v ) ); }
 
 sc_signed
 operator | ( const sc_int_base& u, const sc_unsigned& v )
-{ return operator | ( SCAST<int64>( u ), v ); }
+{ return operator | ( static_cast<int64>( u ), v ); }
 
 sc_signed
 operator | (const sc_signed& u, const sc_int_base& v)
@@ -788,11 +788,11 @@ sc_signed::operator |= (const sc_int_base& v)
 
 sc_signed
 operator ^ ( const sc_unsigned& u, const sc_int_base& v )
-{ return operator ^ ( u, SCAST<int64>( v ) ); }
+{ return operator ^ ( u, static_cast<int64>( v ) ); }
 
 sc_signed
 operator ^ ( const sc_int_base& u, const sc_unsigned& v )
-{ return operator ^ ( SCAST<int64>( u ), v ); }
+{ return operator ^ ( static_cast<int64>( u ), v ); }
 
 sc_signed
 operator ^ (const sc_signed& u, const sc_int_base& v)
