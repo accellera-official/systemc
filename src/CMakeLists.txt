@@ -236,7 +236,6 @@ set (systemc_PUBLIC_HEADERS sysc/communication/sc_buffer.h
                             sysc/tracing/sc_vcd_trace.h
                             sysc/tracing/sc_wif_trace.h
                             sysc/utils/sc_hash.h
-                            sysc/utils/sc_iostream.h
                             sysc/utils/sc_list.h
                             sysc/utils/sc_machine.h
                             sysc/utils/sc_mempool.h
