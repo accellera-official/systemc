@@ -46,13 +46,29 @@ Makefile.in
 *.suo
 *.ncb
 *.vcproj.*
+*.vcxproj.*
+*.old
+*.tmp
+*.sdf
+*.XML
+*.opensdf
+*.db
+
 Release/
 Debug/
+DebugDLL/
+ReleaseDLL/
+_UpgradeReport_Files/
+
 #/msvc*/SystemC/SystemC.suo
 #/msvc*/SystemC/SystemC.ncb
 #/msvc*/SystemC/SystemC.vcproj.*
 #/msvc*/SystemC/Release/
 #/msvc*/SystemC/Debug/
+#/msvc*/SystemC/ReleaseDLL/
+#/msvc*/SystemC/DebugDLL/
+#/msvc*/SystemC/_UpgradeReport_Files/
+
 
 # ignore Doxygen documentation
 /docs/*/doxygen/html/
