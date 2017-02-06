@@ -230,6 +230,8 @@ set (systemc_PUBLIC_HEADERS sysc/communication/sc_buffer.h
                             sysc/packages/boost/type.hpp
                             sysc/packages/boost/utility/addressof.hpp
                             sysc/packages/boost/utility/enable_if.hpp
+                            sysc/packages/boost/utility/string_view.hpp
+                            sysc/packages/boost/utility/string_view_fwd.hpp
                             sysc/tracing/sc_trace.h
                             sysc/tracing/sc_trace_file_base.h
                             sysc/tracing/sc_tracing_ids.h
@@ -245,6 +247,7 @@ set (systemc_PUBLIC_HEADERS sysc/communication/sc_buffer.h
                             sysc/utils/sc_report_handler.h
                             sysc/utils/sc_stop_here.h
                             sysc/utils/sc_string.h
+                            sysc/utils/sc_string_view.h
                             sysc/utils/sc_temporary.h
                             sysc/utils/sc_utils_ids.h
                             sysc/utils/sc_vector.h
