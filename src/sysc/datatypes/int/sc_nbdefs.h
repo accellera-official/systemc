@@ -225,26 +225,12 @@ typedef unsigned int sc_digit;	// 32-bit unsigned integer
 static const small_type NB_DEFAULT_BASE = SC_DEC;
 
 // For sc_int code:
-#define LLWIDTH  BITS_PER_INT64
-#define INTWIDTH BITS_PER_INT
-
-#ifndef _32BIT_
 
     typedef int64 int_type;
     typedef uint64 uint_type;
 #   define SC_INTWIDTH 64
     static const uint64 UINT_ZERO = UINT64_ZERO;
     static const uint64 UINT_ONE = UINT64_ONE;
-
-#else // _32BIT_
-
-    typedef int int_type;
-    typedef unsigned int uint_type;
-#   define SC_INTWIDTH 32
-    static const unsigned int UINT_ZERO = 0U;
-    static const unsigned int UINT_ONE = 1U;
-
-#endif // _32BIT_
 
 } // namespace sc_dt
 

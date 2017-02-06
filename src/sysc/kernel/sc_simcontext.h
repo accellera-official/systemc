@@ -298,9 +298,6 @@ private:
 
     void trace_cycle( bool delta_cycle );
 
-    const ::std::vector<sc_event*>& get_child_events_internal() const;
-    const ::std::vector<sc_object*>& get_child_objects_internal() const;
-
     void execute_method_next( sc_method_handle );
     void execute_thread_next( sc_thread_handle );
 

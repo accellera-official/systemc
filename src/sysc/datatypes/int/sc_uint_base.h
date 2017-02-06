@@ -19,16 +19,13 @@
 
 /*****************************************************************************
 
-  sc_uint_base.h -- A sc_uint is an unsigned integer whose length is less than
-               the machine's native integer length. We provide two
-               implementations (i) sc_uint with length between 1 - 64, and (ii)
-               sc_uint with length between 1 - 32. Implementation (i) is the
-               default implementation, while implementation (ii) can be used
-               only if compiled with -D_32BIT_. Unlike arbitrary precision,
-               arithmetic and bitwise operations are performed using the native
-               types (hence capped at 32/64 bits). The sc_uint integer is
-               useful when the user does not need arbitrary precision and the
-               performance is superior to sc_bigint/sc_biguint.
+  sc_uint_base.h -- An unsigned integer whose length is less than 64 bits.
+
+               Unlike arbitrary precision, arithmetic and bitwise operations
+               are performed using the native types (hence capped at 64 bits).
+               The sc_uint integer is useful when the user does not need
+               arbitrary precision and the performance is superior to
+               sc_bigint/sc_biguint.
 
   Original Author: Amit Rao, Synopsys, Inc.
 
@@ -826,13 +823,12 @@ public:
         { return uint64_to_double( m_val ); }
 
 
-#ifndef _32BIT_
     long long_low() const
 	{ return (long) (m_val & UINT64_32ONES); }
 
     long long_high() const
 	{ return (long) ((m_val >> 32) & UINT64_32ONES); }
-#endif
+
 
     // explicit conversion to character string
 

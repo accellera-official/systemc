@@ -19,16 +19,12 @@
 
 /*****************************************************************************
 
-  sc_int.h -- A sc_int is a signed integer whose length is less than the
-              machine's native integer length. We provide two implementations
-              (i) sc_int with length between 1 - 64, and (ii) sc_int with
-              length between 1 - 32. Implementation (i) is the default
-              implementation, while implementation (ii) can be used only if
-              the class library is compiled with -D_32BIT_. Unlike arbitrary
-              precision, arithmetic and bitwise operations are performed
-              using the native types (hence capped at 32/64 bits). The sc_int
-              integer is useful when the user does not need arbitrary
-              precision and the performance is superior to
+  sc_int.h -- A signed integer whose length is less than 64 bits.
+
+              Unlike arbitrary precision, arithmetic and bitwise operations
+              are performed using the native types (hence capped at 64 bits).
+              The sc_int integer is useful when the user does not need
+              arbitrary precision and the performance is superior to
               sc_bigint/sc_biguint.
 
   Original Author: Amit Rao, Synopsys, Inc.

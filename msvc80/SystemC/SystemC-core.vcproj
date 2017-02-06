@@ -1100,14 +1100,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\sysc\datatypes\int\sc_int32_mask.inc"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\sysc\datatypes\int\sc_int64_mask.inc"
-				>
-			</File>
-			<File
 				RelativePath="..\..\src\sysc\communication\sc_interface.h"
 				>
 			</File>

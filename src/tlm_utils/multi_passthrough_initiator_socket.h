@@ -106,7 +106,7 @@ public:
                                                            sc_core::sc_time&))
   {
     //warn if there already is a callback
-    if (!m_nb_f.empty()){
+    if (m_nb_f.is_valid()){
       display_warning("NBTransport_bw callback already registered.");
       return;
     }
@@ -120,7 +120,7 @@ public:
                              void (MODULE::*cb)(int, sc_dt::uint64, sc_dt::uint64))
   {
     //warn if there already is a callback
-    if (!m_dmi_f.empty()){
+    if (m_dmi_f.is_valid()){
       display_warning("InvalidateDMI callback already registered.");
       return;
     }
