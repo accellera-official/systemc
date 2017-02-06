@@ -1,7 +1,7 @@
 ###############################################################################
 #
 # The following code is derived, directly or indirectly, from the SystemC
-# source code Copyright (c) 1996-2011 by all Contributors.
+# source code Copyright (c) 1996-2017 by all Contributors.
 # All Rights reserved.
 #
 # The contents of this file are subject to the restrictions and limitations
@@ -37,8 +37,7 @@
 ###############################################################################
 
 
-set (DOC_FILES SystemC_Open_Source_License.pdf
-               sysc/README
+set (DOC_FILES sysc/README
                sysc/archived/README
 	       sysc/archived/FuncSpec20.pdf
 	       sysc/archived/WhitePaper20.pdf
