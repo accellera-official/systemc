@@ -1,7 +1,7 @@
-include ../Makefile.config
+include ../../build-unix/Makefile.config
 
 PROJECT := risc_cpu
 SRCS    := $(wildcard *.cpp)
 OBJS    := $(SRCS:.cpp=.o)
 
-include ../Makefile.rules
+include ../../build-unix/Makefile.rules

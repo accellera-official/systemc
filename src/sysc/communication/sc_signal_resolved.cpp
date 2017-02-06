@@ -90,7 +90,7 @@ sc_logic_resolve( sc_dt::sc_logic& result_,
 // write the new value
 
 void
-sc_signal_resolved::write( const data_type& value_ )
+sc_signal_resolved::write( const value_type& value_ )
 {
     sc_process_b* cur_proc = sc_get_current_process_b();
 

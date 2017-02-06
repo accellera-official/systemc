@@ -33,8 +33,8 @@
 
 namespace sc_core {
 
-class sc_event;
-class sc_port_base;
+class SC_API sc_event;
+class SC_API sc_port_base;
 
 
 // ----------------------------------------------------------------------------

@@ -133,12 +133,20 @@
 
 // ----------------------------------------------------------------------------
 
+// declare certain template instantiations as "extern" during library build
+// and adding an explicit instantiation into the (shared) SystemC library
+
+#if defined(__GNUC__) && SC_STD_CPLUSPLUS < 201101L
+# define SC_TPLEXTERN_ __extension__ extern
+#else
+# define SC_TPLEXTERN_ extern
+#endif
+
 // build SystemC DLL on Windows
 #if defined(SC_WIN_DLL) && (defined(_WIN32) || defined(_WIN64))
 
 # if defined(SC_BUILD) // building SystemC library
 #   define SC_API  __declspec(dllexport)
-
 # else                 // building SystemC application
 #   define SC_API  __declspec(dllimport)
 # endif // SC_BUILD
@@ -148,33 +156,13 @@
 
 #endif // SC_WIN_DLL
 
-// declare certain template instantiations as "extern" during library build
-// to force their instantiation into the (shared) SystemC library
-
-#if defined(SC_BUILD) // building SystemC library
-# define SC_API_TEMPLATE_ /* empty - instantiate template in translation unit */
+#if defined(SC_BUILD) && defined(_MSC_VER)
+// always instantiate during Windows library build
+# define SC_API_TEMPLATE_DECL_ template class SC_API
 #else
-# if defined(__GNUC__) && SC_STD_CPLUSPLUS < 201101L
-#  define SC_API_TEMPLATE_ __extension__ extern
-# else
-#  define SC_API_TEMPLATE_ extern
-# endif
+// keep extern when building an application (or on non-Windows)
+# define SC_API_TEMPLATE_DECL_ SC_TPLEXTERN_ template class SC_API
 #endif
-
-// explicitly instantiate and export/import an std::vector specialization
-#define SC_API_VECTOR_(Type) \
-  SC_API_TEMPLATE_ template class SC_API ::std::allocator<Type>; \
-  SC_API_TEMPLATE_ template class SC_API ::std::vector<Type,::std::allocator<Type> >
-
-namespace sc_core {
-class SC_API sc_object;
-class SC_API sc_event;
-} // namespace sc_core
-
-// export explicit std::vector<> template instantiations
-SC_API_VECTOR_(sc_core::sc_object*);
-SC_API_VECTOR_(sc_core::sc_event*);
-SC_API_VECTOR_(const sc_core::sc_event*);
 
 #endif // SC_CMNHDR_H
 

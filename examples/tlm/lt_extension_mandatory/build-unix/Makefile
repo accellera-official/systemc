@@ -1,4 +1,4 @@
-include ../../build-unix/Makefile.config
+include ../../../build-unix/Makefile.config
 
 PROJECT = lt_extension_mandatory
 
@@ -19,6 +19,6 @@ OBJS = \
 	extension_initiator_id.o \
 	report.o
 
-include ../../build-unix/Makefile.rules
+include ../../../build-unix/Makefile.rules
 
 # DO NOT DELETE

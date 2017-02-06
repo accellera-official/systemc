@@ -106,7 +106,8 @@ fft_fft_fxpt_BUILD = \
 	fft/fft_fxpt/out_real.4.golden
 
 fft_fft_fxpt_EXTRA = \
-	fft/fft_fxpt/fft_fxpt.vcproj \
+	fft/fft_fxpt/fft_fxpt.sln \
+	fft/fft_fxpt/fft_fxpt.vcxproj \
 	fft/fft_fxpt/Makefile
 
 #fft_fft_fxpt_FILTER = 

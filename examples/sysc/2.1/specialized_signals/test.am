@@ -86,7 +86,8 @@ examples_FILES += \
 	2.1/specialized_signals/golden.log
 
 2_1_specialized_signals_EXTRA = \
-	2.1/specialized_signals/specialized_signals.vcproj \
+	2.1/specialized_signals/specialized_signals.sln \
+	2.1/specialized_signals/specialized_signals.vcxproj \
 	2.1/specialized_signals/Makefile
 
 #2_1_specialized_signals_FILTER = 

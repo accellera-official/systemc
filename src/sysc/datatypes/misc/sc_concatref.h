@@ -97,6 +97,10 @@ class sc_concat_bool;
 
 namespace sc_core {
 extern sc_byte_heap SC_API sc_temp_heap; // Temporary storage.
+
+// explicit template instantiations
+SC_API_TEMPLATE_DECL_ sc_vpool<sc_dt::sc_concatref>;
+SC_API_TEMPLATE_DECL_ sc_vpool<sc_dt::sc_concat_bool>;
 } // namespace sc_core
 
 namespace sc_dt {
@@ -857,12 +861,6 @@ sc_dt::sc_concatref& operator , (bool a, const sc_dt::sc_value_base& b)
 }
 
 } // namespace sc_dt
-
-namespace sc_core {
-// explicit template instantiations
-SC_API_TEMPLATE_ template class SC_API sc_vpool<sc_dt::sc_concatref>;
-SC_API_TEMPLATE_ template class SC_API sc_vpool<sc_dt::sc_concat_bool>;
-} // namespace sc_core
 
 #endif //  SC_CONCATREF_H
 

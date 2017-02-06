@@ -43,6 +43,11 @@
 #  define SC_VIRTUAL_ /* non-virtual */
 #endif
 
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(push)
+#pragma warning(disable: 4251) // DLL import for std::vector
+#endif
+
 namespace sc_core {
 
 class sc_event_finder;
@@ -57,11 +62,6 @@ enum sc_port_policy
     SC_ALL_BOUND
 };
 
-} // namespace sc_core
-
-SC_API_VECTOR_(sc_core::sc_port_base*);
-
-namespace sc_core {
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //  BEWARE: Ports can only be created and bound during elaboration.
@@ -206,7 +206,7 @@ public:
     void remove( sc_port_base* );
 
     int size() const
-        { return m_port_vec.size(); }
+        { return static_cast<int>(m_port_vec.size()); }
 
 private:
 
@@ -293,7 +293,7 @@ public:
     // number of connected interfaces
 
     int size() const
-	{ return m_interface_vec.size(); }
+        { return static_cast<int>(m_interface_vec.size()); }
 
 
     // allow to call methods provided by the first interface
@@ -549,8 +549,8 @@ sc_port_b<IF>::add_interface( sc_interface* interface_ )
 
     // make sure that the interface is not already bound:
 
-    int size = m_interface_vec.size();
-    for ( int i = 0; i < size; i++ )
+    int if_n = size();
+    for ( int i = 0; i < if_n; i++ )
     {
     	if ( iface == m_interface_vec[i] )
 	{
@@ -578,7 +578,7 @@ inline
 int
 sc_port_b<IF>::interface_count() const
 {
-	return m_interface_vec.size();
+    return size();
 }
 
 template <class IF>
@@ -588,7 +588,7 @@ sc_port_b<IF>::make_sensitive( sc_thread_handle handle_p,
 {
     if ( m_bind_info == 0 )
     {
-        int if_n = m_interface_vec.size();
+        int if_n = size();
         for ( int if_i = 0; if_i < if_n; if_i++ )
 	{
 	    IF* iface_p = m_interface_vec[if_i];
@@ -609,7 +609,7 @@ sc_port_b<IF>::make_sensitive( sc_method_handle handle_p,
 {
     if ( m_bind_info == 0 )
     {
-        int if_n = m_interface_vec.size();
+        int if_n = size();
         for ( int if_i = 0; if_i < if_n; if_i++ )
 	{
 	    IF* iface_p = m_interface_vec[if_i];
@@ -634,6 +634,10 @@ sc_port_b<IF>::make_sensitive( sc_method_handle handle_p,
 } // namespace sc_core
 
 #undef SC_VIRTUAL_
+
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(pop)
+#endif
 
 /*****************************************************************************
 

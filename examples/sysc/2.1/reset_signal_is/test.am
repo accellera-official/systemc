@@ -79,7 +79,8 @@ examples_FILES += \
 	2.1/reset_signal_is/golden.log
 
 2_1_reset_signal_is_EXTRA = \
-	2.1/reset_signal_is/reset_signal_is.vcproj \
+	2.1/reset_signal_is/reset_signal_is.sln \
+	2.1/reset_signal_is/reset_signal_is.vcxproj \
 	2.1/reset_signal_is/Makefile
 
 #2_1_reset_signal_is_FILTER = 

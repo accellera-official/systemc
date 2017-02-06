@@ -106,9 +106,10 @@ fir_rtl_CXX_FILES = \
 fir_EXTRA = \
 	fir/log \
 	fir/rtl_log \
-	fir/fir_common.vcproj \
-	fir/fir.vcproj \
-	fir/fir_rtl.vcproj \
+	fir/fir.sln \
+	fir/fir_common.vcxproj \
+	fir/fir.vcxproj \
+	fir/fir_rtl.vcxproj \
 	fir/Makefile \
 	fir/README
 

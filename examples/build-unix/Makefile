@@ -1,4 +1,5 @@
-SUBDIRS := $(dir $(wildcard */Makefile */*/Makefile))
+SUBDIRS := $(dir $(wildcard ../sysc/*/Makefile ../sysc/*/*/Makefile))
+SUBDIRS += $(wildcard ../tlm/*/build-unix)
 
 TARGETS := all build run check clean
 .PHONY: $(TARGETS)

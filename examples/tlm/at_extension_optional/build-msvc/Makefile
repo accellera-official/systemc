@@ -1,4 +1,4 @@
-!include <..\..\build-msvc\Makefile.config>
+!include <..\..\..\build-msvc\Makefile.config>
 
 PROJECT = at_extension_optional
 
@@ -20,4 +20,4 @@ OBJS = \
 	$(OUTDIR)\traffic_generator.obj
 
 
-!include <..\..\build-msvc/Makefile.rules>
+!include <..\..\..\build-msvc/Makefile.rules>

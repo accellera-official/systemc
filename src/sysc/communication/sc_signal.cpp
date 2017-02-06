@@ -272,9 +272,17 @@ sc_signal<sc_logic,POL>::~sc_signal()
 
 // template instantiations for writer policies
 
+template class SC_API sc_signal_t<bool,SC_ONE_WRITER>;
+template class SC_API sc_signal_t<bool,SC_MANY_WRITERS>;
+template class SC_API sc_signal_t<bool,SC_UNCHECKED_WRITERS>;
+
 template class SC_API sc_signal<bool,SC_ONE_WRITER>;
 template class SC_API sc_signal<bool,SC_MANY_WRITERS>;
 template class SC_API sc_signal<bool,SC_UNCHECKED_WRITERS>;
+
+template class SC_API sc_signal_t<sc_logic,SC_ONE_WRITER>;
+template class SC_API sc_signal_t<sc_logic,SC_MANY_WRITERS>;
+template class SC_API sc_signal_t<sc_logic,SC_UNCHECKED_WRITERS>;
 
 template class SC_API sc_signal<sc_logic,SC_ONE_WRITER>;
 template class SC_API sc_signal<sc_logic,SC_MANY_WRITERS>;

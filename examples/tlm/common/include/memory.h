@@ -37,6 +37,9 @@ class memory
 {
 // Member Methods  ====================================================
 
+    memory(const memory&) /* = delete*/;
+    memory& operator=(const memory&) /* = delete */;
+
   public:
 
 //=====================================================================

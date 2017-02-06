@@ -92,7 +92,7 @@ at_extension_optional_BUILD = \
 at_extension_optional_EXTRA = \
 	at_extension_optional/build-msvc/Makefile \
 	at_extension_optional/build-msvc/at_extension_optional.sln \
-	at_extension_optional/build-msvc/at_extension_optional.vcproj \
+	at_extension_optional/build-msvc/at_extension_optional.vcxproj \
 	at_extension_optional/build-unix/Makefile \
 	at_extension_optional/docs/at_extension_optional_example.pdf \
 	at_extension_optional/docs/at_extension_optional_example.ppt

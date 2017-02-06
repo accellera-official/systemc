@@ -110,7 +110,8 @@ risc_cpu_EXTRA = \
 	risc_cpu/test1.asm \
 	risc_cpu/README \
 	risc_cpu/README_TYPESCRIPT \
-	risc_cpu/risc_cpu.vcproj \
+	risc_cpu/risc_cpu.sln \
+	risc_cpu/risc_cpu.vcxproj \
 	risc_cpu/Makefile
 
 #risc_cpu_FILTER = 

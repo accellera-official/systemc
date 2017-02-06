@@ -72,8 +72,13 @@
 #include "sysc/datatypes/fx/scfx_other_defs.h"
 
 
-namespace sc_dt
-{
+// explicit template instantiations
+namespace sc_core {
+template class SC_API sc_vpool<sc_dt::sc_uint_bitref>;
+template class SC_API sc_vpool<sc_dt::sc_uint_subref>;
+} // namespace sc_core
+
+namespace sc_dt {
 
 // to avoid code bloat in sc_uint_concat<T1,T2>
 

@@ -65,7 +65,11 @@ EXECUTABLE=$(PROJECT)$(EXEEXT)
 !ENDIF
 
 !IFNDEF PLATFORM
+!IFDEF SYSTEMC_MSVC_PLATFORM
+PLATFORM=$(SYSTEMC_MSVC_PLATFORM)
+!ELSE
 PLATFORM=Win32
+!ENDIF
 !ENDIF
 
 !IFNDEF CONFIG
@@ -103,7 +107,7 @@ build run check clean:
 !ELSE
 
 ## platform-specific flag additions
-!IF "$(PLATFORM)" == "x64"
+!IF "$(PLATFORM)" == "x64" || "$(PLATFORM)" == "X64"
 OUTDIR=$(PLATFORM)\$(CONFIG)
 CXXFLAGS=$(CXXFLAGS) /DWIN64
 LDFLAGS =$(LDFLAGS)  /MACHINE:X64
@@ -167,14 +171,17 @@ run: announce $(EXECUTABLE)
 $(EXECUTABLE): build
 	$(AT)copy /y $(OUTDIR)\$@ .\$@
 
-!IFDEF VCBUILD # Visual Studio command-line builder
+!IFDEF MSBUILD # Visual Studio command-line builder
 
 build: announce
-	$(AT)$(VCBUILD) $(VCBUILDFLAGS) $(PROJECT)$(PROJEXT) "$(CONFIG)|$(PLATFORM)"
+	$(AT)$(MSBUILD) $(MSBUILDFLAGS) $(PROJECT)$(PROJEXT) \
+		/p:configuration="$(CONFIG)" /p:platform="$(PLATFORM)"
 
 clean: announce
-	$(AT)$(VCBUILD) /clean $(VCBUILDFLAGS) $(PROJECT)$(PROJEXT) "$(CONFIG)|$(PLATFORM)"
-	$(AT)if exist $(OUTDIR)\BuildLog.htm ( del /q $(OUTDIR)\BuildLog.htm  )
+	$(AT)$(MSBUILD) /t:clean $(MSBUILDFLAGS) $(PROJECT)$(PROJEXT) \
+		/p:configuration="$(CONFIG)" /p:platform="$(PLATFORM)"
+	$(AT)for %%X in ( $(OUTDIR)\BuildLog.htm $(OUTDIR)\*.log ) do \
+	  @( if exist %%X del /q %%X )
 	$(AT)if exist $(OUTDIR) ( rmdir /q $(OUTDIR) )
 	$(AT)for %%X in ( $(EXECUTABLE) *.log $(EXTRA_CLEAN) ) do \
 	  @( if exist %%X del /q %%X )

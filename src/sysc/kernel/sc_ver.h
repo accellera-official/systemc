@@ -56,7 +56,7 @@ extern SC_API const std::string  sc_copyright_string;
 
 #define SYSTEMC_2_3_2
  
-#define SYSTEMC_VERSION       20170129
+#define SYSTEMC_VERSION       20170131
 #define SC_VERSION_ORIGINATOR "Accellera"
 #define SC_VERSION_MAJOR      2
 #define SC_VERSION_MINOR      3
@@ -159,7 +159,7 @@ struct SC_API_VERSION_STRING
 
 #if !defined(SC_BUILD)
 // import explicitly instantiated template
-SC_API_TEMPLATE_ template struct SC_API SC_API_VERSION_STRING
+SC_TPLEXTERN_ template struct SC_API SC_API_VERSION_STRING
 <
   &SC_DISABLE_VIRTUAL_BIND_CHECK_
 >;

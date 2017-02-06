@@ -82,7 +82,8 @@ examples_FILES += \
 	2.3/sc_rvd/golden.log
 
 2_3_sc_rvd_EXTRA = \
-	2.3/sc_rvd/sc_rvd.vcproj \
+	2.3/sc_rvd/sc_rvd.sln \
+	2.3/sc_rvd/sc_rvd.vcxproj \
 	2.3/sc_rvd/Makefile
 
 #2_3_sc_rvd_FILTER = 

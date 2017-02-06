@@ -1,17 +1,20 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="UserMacros">
     <MSVC>msvc10</MSVC>
   </PropertyGroup>
-    <ItemDefinitionGroup>
+  <PropertyGroup>
+    <GenerateManifest>false</GenerateManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
     <ClCompile>
       <AdditionalOptions>/vmg %(AdditionalOptions)</AdditionalOptions>
       <WarningLevel>Level3</WarningLevel>
-<DisableSpecificWarnings>4244;4267;4996</DisableSpecificWarnings>
-        </ClCompile>
+      <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-        <BuildMacro Include="MSVC">
+    <BuildMacro Include="MSVC">
       <Value>$(MSVC)</Value>
       <EnvironmentVariable>true</EnvironmentVariable>
     </BuildMacro>
