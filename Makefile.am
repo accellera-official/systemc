@@ -62,6 +62,7 @@ EXTRA_DIST = \
 	cmake/SystemCConfigVersion.cmake.in \
 	cmake/TLMConfig.cmake.in \
 	cmake/TLMConfigVersion.cmake.in \
+	cmake/run_test.cmake \
 	\
 	msvc10/SystemC/SystemC.sln \
 	msvc10/SystemC/SystemC.props \
