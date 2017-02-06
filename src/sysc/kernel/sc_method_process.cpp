@@ -369,6 +369,9 @@ sc_method_process::sc_method_process( const char* name_p,
 //------------------------------------------------------------------------------
 sc_method_process::~sc_method_process()
 {
+    if( !dynamic() ) {
+        simcontext()->remove_process(this);
+    }
 }
 
 

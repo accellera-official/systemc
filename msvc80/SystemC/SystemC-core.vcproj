@@ -1352,6 +1352,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\sysc\utils\sc_string_view.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\sysc\utils\sc_temporary.h"
 				>
 			</File>

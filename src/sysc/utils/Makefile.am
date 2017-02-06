@@ -46,6 +46,7 @@ H_FILES = \
 	sc_report.h \
 	sc_report_handler.h \
 	sc_string.h \
+	sc_string_view.h \
 	sc_temporary.h \
 	sc_utils_ids.h \
 	sc_vector.h

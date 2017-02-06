@@ -278,6 +278,7 @@ class SC_API sc_process_b : public sc_object {
     friend class sc_cthread_process; // Child can access parent.
     friend class sc_method_process;  // Child can access parent.
     friend class sc_process_handle;  // Allow handles to modify ref. count.
+    friend class sc_process_table;   // Allow process_table to modify ref. count.
     friend class sc_thread_process;  // Child can access parent.
 
     friend class sc_object;
