@@ -160,7 +160,8 @@ SC_DEFINE_MESSAGE(SC_ID_PHASE_CALLBACK_REGISTER_,        552,
        "register simulation phase callback" )
 SC_DEFINE_MESSAGE(SC_ID_PHASE_CALLBACK_FORBIDDEN_,       553,
        "forbidden action in simulation phase callback" )
-// available message number 554
+SC_DEFINE_MESSAGE( SC_ID_SIMULATION_START_UNEXPECTED_, 554,
+        "sc_start called unexpectedly" )
 // available message number 555
 SC_DEFINE_MESSAGE(SC_ID_THROW_IT_IGNORED_  , 556,
         "throw_it on method/non-running process is being ignored " )

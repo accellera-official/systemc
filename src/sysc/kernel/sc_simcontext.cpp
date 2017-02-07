@@ -1711,7 +1711,8 @@ sc_start( const sc_time& duration, sc_starvation_policy p )
     sc_time        entry_time;     // simulation time upon entry.
     sc_time        exit_time;      // simulation time to set upon exit.
     sc_dt::uint64  starting_delta; // delta count upon entry.
-    int            status;         // current simulation status.
+    int            sim_status;     // current simulation status.
+    int            status;         // current status.
 
     // Set up based on the arguments passed to us:
 
@@ -1727,13 +1728,19 @@ sc_start( const sc_time& duration, sc_starvation_policy p )
 
     // If the simulation status is bad issue the appropriate message:
 
-    status = context_p->sim_status();
-    if( status != SC_SIM_OK )
+    sim_status = context_p->sim_status();
+    if( sim_status != SC_SIM_OK )
     {
-        if ( status == SC_SIM_USER_STOP )
+        if ( sim_status == SC_SIM_USER_STOP )
             SC_REPORT_ERROR(SC_ID_SIMULATION_START_AFTER_STOP_, "");
-        if ( status == SC_SIM_ERROR )
+        if ( sim_status == SC_SIM_ERROR )
             SC_REPORT_ERROR(SC_ID_SIMULATION_START_AFTER_ERROR_, "");
+        return;
+    }
+    status = context_p->get_status();
+    if( !(status == SC_PAUSED || status == SC_ELABORATION) )
+    {
+        SC_REPORT_ERROR(SC_ID_SIMULATION_START_UNEXPECTED_, "");
         return;
     }
 
@@ -1746,12 +1753,12 @@ sc_start( const sc_time& duration, sc_starvation_policy p )
 
     // Re-check the status:
 
-    status = context_p->sim_status();
+    sim_status = context_p->sim_status();
 
     // Update the current time to the exit time if that is the starvation
     // policy:
 
-    if ( p == SC_RUN_TO_TIME && !context_p->m_paused && status == SC_SIM_OK
+    if ( p == SC_RUN_TO_TIME && !context_p->m_paused && sim_status == SC_SIM_OK
          && context_p->m_curr_time < exit_time )
     {
         context_p->do_timestep( exit_time );
@@ -1764,7 +1771,7 @@ sc_start( const sc_time& duration, sc_starvation_policy p )
     if ( !init_delta_or_pending_updates &&
          starting_delta == sc_delta_count() &&
          context_p->m_curr_time == entry_time &&
-         status == SC_SIM_OK )
+         sim_status == SC_SIM_OK )
     {
         SC_REPORT_WARNING(SC_ID_NO_SC_START_ACTIVITY_, "");
     }
