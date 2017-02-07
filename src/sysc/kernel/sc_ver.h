@@ -94,12 +94,17 @@ extern SC_API const std::string  sc_copyright_string;
 // in it. That object instance will cause the constructor below
 // to be invoked. If the version of the SystemC being linked against
 // does not contain the constructor below a linkage error will occur.
+//
+// The static API check includes the SystemC version numbers as well as
+// the underlying C++ standard version (SC_STD_CPLUSPLUS).
 
 #define SC_API_VERSION_STRING \
       SC_CONCAT_UNDERSCORE_( sc_api_version, \
       SC_CONCAT_UNDERSCORE_( SC_VERSION_MAJOR, \
       SC_CONCAT_UNDERSCORE_( SC_VERSION_MINOR, \
-                             SC_VERSION_PATCH ) ) )
+      SC_CONCAT_UNDERSCORE_( SC_VERSION_PATCH, \
+      SC_CONCAT_HELPER_( cxx, SC_STD_CPLUSPLUS ) \
+  ) ) ) )
 
 // explicitly avoid macro expansion
 #define SC_API_DEFINED_( Symbol ) \
