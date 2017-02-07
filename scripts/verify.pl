@@ -80,6 +80,9 @@ push( @INC, $1 );
 # flush STDOUT after each print
 $oldfh = select( STDOUT ); $| = 1; select( $oldfh );
 
+# remove CR at end of command line sometimes present on Windows
+$ARGV[-1] =~ s/\r$//;
+
 &main;
 
 
