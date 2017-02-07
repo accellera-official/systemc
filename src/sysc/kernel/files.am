@@ -1,0 +1,132 @@
+## ****************************************************************************
+##
+##  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+##  more contributor license agreements.  See the NOTICE file distributed
+##  with this work for additional information regarding copyright ownership.
+##  Accellera licenses this file to you under the Apache License, Version 2.0
+##  (the "License"); you may not use this file except in compliance with the
+##  License.  You may obtain a copy of the License at
+##
+##   http://www.apache.org/licenses/LICENSE-2.0
+##
+##  Unless required by applicable law or agreed to in writing, software
+##  distributed under the License is distributed on an "AS IS" BASIS,
+##  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+##  implied.  See the License for the specific language governing
+##  permissions and limitations under the License.
+##
+## ****************************************************************************
+##
+##  src/sysc/kernel/files.am --
+##  Included from a Makefile.am to provide directory-specific information
+##
+##  Original Author: Philipp A. Hartmann, Intel, 2015-11-24
+##
+## ****************************************************************************
+##
+##  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+##  changes you are making here.
+##
+##      Name, Affiliation, Date:
+##  Description of Modification:
+##
+## ****************************************************************************
+
+## Generic directory setup
+## (should be kept in sync among all files.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##       included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D%: kernel
+##   %C%: kernel
+
+
+H_FILES += \
+	kernel/sc_attribute.h \
+	kernel/sc_boost.h \
+	kernel/sc_cmnhdr.h \
+	kernel/sc_constants.h \
+	kernel/sc_cor.h \
+	kernel/sc_dynamic_processes.h \
+	kernel/sc_event.h \
+	kernel/sc_except.h \
+	kernel/sc_externs.h \
+	kernel/sc_join.h \
+	kernel/sc_kernel_ids.h \
+	kernel/sc_macros.h \
+	kernel/sc_module.h \
+	kernel/sc_module_name.h \
+	kernel/sc_object.h \
+	kernel/sc_process.h \
+	kernel/sc_process_handle.h \
+	kernel/sc_runnable.h \
+	kernel/sc_sensitive.h \
+	kernel/sc_spawn.h \
+	kernel/sc_spawn_options.h \
+	kernel/sc_status.h \
+	kernel/sc_simcontext.h \
+	kernel/sc_time.h \
+	kernel/sc_ver.h \
+	kernel/sc_wait.h \
+	kernel/sc_wait_cthread.h
+
+NO_H_FILES += \
+	kernel/sc_cor_fiber.h \
+	kernel/sc_cor_pthread.h \
+	kernel/sc_cor_qt.h \
+	kernel/sc_cthread_process.h \
+	kernel/sc_method_process.h \
+	kernel/sc_module_registry.h \
+	kernel/sc_name_gen.h \
+	kernel/sc_object_int.h \
+	kernel/sc_object_manager.h \
+	kernel/sc_phase_callback_registry.h \
+	kernel/sc_reset.h \
+	kernel/sc_runnable_int.h \
+	kernel/sc_simcontext_int.h \
+	kernel/sc_thread_process.h
+
+CXX_FILES += \
+	kernel/sc_attribute.cpp \
+	$(CXX_COR_FILES) \
+	kernel/sc_cthread_process.cpp \
+	kernel/sc_event.cpp \
+	kernel/sc_except.cpp \
+	kernel/sc_join.cpp \
+	kernel/sc_main.cpp \
+	kernel/sc_main_main.cpp \
+	kernel/sc_method_process.cpp \
+	kernel/sc_module.cpp \
+	kernel/sc_module_name.cpp \
+	kernel/sc_module_registry.cpp \
+	kernel/sc_name_gen.cpp \
+	kernel/sc_object.cpp \
+	kernel/sc_object_manager.cpp \
+	kernel/sc_phase_callback_registry.cpp \
+	kernel/sc_process.cpp \
+	kernel/sc_reset.cpp \
+	kernel/sc_sensitive.cpp \
+	kernel/sc_simcontext.cpp \
+	kernel/sc_spawn_options.cpp \
+	kernel/sc_thread_process.cpp \
+	kernel/sc_time.cpp \
+	kernel/sc_ver.cpp \
+	kernel/sc_wait.cpp \
+	kernel/sc_wait_cthread.cpp
+
+# co-routine implementation
+if WANT_QT_THREADS
+CXX_COR_FILES = kernel/sc_cor_qt.cpp
+else
+if WANT_PTHREADS_THREADS
+CXX_COR_FILES = kernel/sc_cor_pthread.cpp
+else
+CXX_COR_FILES = kernel/sc_cor_fiber.cpp
+endif
+endif # co-routine implementation
+
+## Taf!
+## :vim:ft=automake:

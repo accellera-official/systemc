@@ -39,50 +39,31 @@ QT_LIB    = packages/qt/libqt.la
 QT_SUBDIR = packages/qt
 endif
 
+# only build external packages separately
 SUBDIRS = \
-	kernel \
-	communication \
-	tracing \
-	utils \
 	packages/boost \
-	$(QT_SUBDIR) \
-	datatypes
+	$(QT_SUBDIR)
 
-H_FILES = 
-
+H_FILES =
+NO_H_FILES =
 CXX_FILES =
+
+# include file lists for sub-directories
+include kernel/files.am
+include communication/files.am
+include datatypes/files.am
+include tracing/files.am
+include utils/files.am
 
 localincludedir = $(includedir)/sysc
 nobase_localinclude_HEADERS = $(H_FILES)
 
-libarchdir = $(libdir)$(LIB_ARCH_SUFFIX)
-libarch_LTLIBRARIES = libsystemc.la
+noinst_LTLIBRARIES = libsysc.la
 
-pkgconfigdir = $(libarchdir)/pkgconfig
-pkgconfig_DATA = systemc.pc
+libsysc_la_SOURCES = $(NO_H_FILES) $(CXX_FILES)
 
-libsystemc_la_SOURCES =
-
-# dummy C++ source to cause C++ linking
-nodist_EXTRA_libsystemc_la_SOURCES = sc_nonexistent.cpp
-
-
-libsystemc_la_LIBADD = \
-       kernel/libkernel.la \
-       $(QT_LIB) \
-       communication/libcommunication.la \
-       tracing/libtracing.la \
-       utils/libutils.la \
-       datatypes/libdatatypes.la
-
-# either for async_update locking or pthread processes
-if USES_PTHREADS_LIB
-# Libtool/GCC do not play well together on some platforms
-# with C++ libraries and libpthread dependency, see e.g.
-# http://lists.gnu.org/archive/html/libtool/2012-02/msg00003.html
-libsystemc_la_LIBADD+=$(EXPLICIT_LPTHREAD)
-endif
-
-libsystemc_la_LDFLAGS = $(EXTRA_LDFLAGS) -release $(VERSION)
+# add dependent (package) libraries
+libsysc_la_LIBADD = \
+       $(QT_LIB)
 
 ## Taf!

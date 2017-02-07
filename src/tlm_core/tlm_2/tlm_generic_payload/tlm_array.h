@@ -17,10 +17,15 @@
 
  *****************************************************************************/
 
-#ifndef __TLM_ARRAY_H__
-#define __TLM_ARRAY_H__
+#ifndef TLM_CORE_TLM2_TLM_ARRAY_H_INCLUDED_
+#define TLM_CORE_TLM2_TLM_ARRAY_H_INCLUDED_
 
-#include <systemc>
+#include <vector>
+
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(push)
+#pragma warning(disable: 4251) // DLL import for std::string,vector
+#endif
 
 namespace tlm {
 
@@ -109,15 +114,15 @@ public:
 protected:
     std::vector<size_type> m_entries;
     T m_default;
-
-    // disabled:
-    tlm_array& operator=(const tlm_array<T>&);
 };
-
 
 template <typename T>
 const char* const tlm_array<T>::kind_string = "tlm_array";
 
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(pop)
+#endif
+
 } // namespace tlm
 
-#endif /* __TLM_ARRAY_H__ */
+#endif /* TLM_CORE_TLM2_TLM_ARRAY_H_INCLUDED_ */

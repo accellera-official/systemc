@@ -1,0 +1,90 @@
+## ****************************************************************************
+##
+##  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+##  more contributor license agreements.  See the NOTICE file distributed
+##  with this work for additional information regarding copyright ownership.
+##  Accellera licenses this file to you under the Apache License, Version 2.0
+##  (the "License"); you may not use this file except in compliance with the
+##  License.  You may obtain a copy of the License at
+##
+##   http://www.apache.org/licenses/LICENSE-2.0
+##
+##  Unless required by applicable law or agreed to in writing, software
+##  distributed under the License is distributed on an "AS IS" BASIS,
+##  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+##  implied.  See the License for the specific language governing
+##  permissions and limitations under the License.
+##
+## ****************************************************************************
+##
+##  src/sysc/communication/files.am --
+##  Included from a Makefile.am to provide directory-specific information
+##
+##  Original Author: Philipp A. Hartmann, Intel, 2015-11-24
+##
+## ****************************************************************************
+##
+##  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+##  changes you are making here.
+##
+##      Name, Affiliation, Date:
+##  Description of Modification:
+##
+## ****************************************************************************
+
+## Generic directory setup
+## (should be kept in sync among all files.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##       included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D%: communication
+##   %C%: communication
+
+H_FILES += \
+	communication/sc_buffer.h \
+	communication/sc_clock.h \
+	communication/sc_clock_ports.h \
+	communication/sc_communication_ids.h \
+	communication/sc_event_finder.h \
+	communication/sc_event_queue.h \
+	communication/sc_export.h \
+	communication/sc_fifo.h \
+	communication/sc_fifo_ifs.h \
+	communication/sc_fifo_ports.h \
+	communication/sc_host_mutex.h \
+	communication/sc_interface.h \
+	communication/sc_mutex.h \
+	communication/sc_mutex_if.h \
+	communication/sc_port.h \
+	communication/sc_prim_channel.h \
+	communication/sc_semaphore.h \
+	communication/sc_semaphore_if.h \
+	communication/sc_signal.h \
+	communication/sc_signal_ifs.h \
+	communication/sc_signal_ports.h \
+	communication/sc_signal_resolved.h \
+	communication/sc_signal_resolved_ports.h \
+	communication/sc_signal_rv.h \
+	communication/sc_signal_rv_ports.h \
+	communication/sc_writer_policy.h
+
+CXX_FILES += \
+	communication/sc_clock.cpp \
+	communication/sc_event_finder.cpp \
+	communication/sc_event_queue.cpp \
+	communication/sc_export.cpp \
+	communication/sc_interface.cpp \
+	communication/sc_mutex.cpp \
+	communication/sc_port.cpp \
+	communication/sc_prim_channel.cpp \
+	communication/sc_semaphore.cpp \
+	communication/sc_signal.cpp \
+	communication/sc_signal_ports.cpp \
+	communication/sc_signal_resolved.cpp \
+	communication/sc_signal_resolved_ports.cpp
+
+## Taf!
+## :vim:ft=automake:

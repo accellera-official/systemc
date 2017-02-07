@@ -17,10 +17,10 @@
 ##
 ## ****************************************************************************
 ##
-##  src/sysc/utils/Makefile.am --
-##  Process this file with automake to produce a Makefile.in file.
+##  src/sysc/utils/files.am --
+##  Included from a Makefile.am to provide directory-specific information
 ##
-##  Original Author: Martin Janssen, Synopsys, Inc., 2001-05-21
+##  Original Author: Philipp A. Hartmann, Intel, 2015-11-24
 ##
 ## ****************************************************************************
 ##
@@ -32,43 +32,47 @@
 ##
 ## ****************************************************************************
 
-include $(top_srcdir)/config/Make-rules.sysc
+## Generic directory setup
+## (should be kept in sync among all files.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##       included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D%: utils
+##   %C%: utils
 
-noinst_LTLIBRARIES = libutils.la
+H_FILES += \
+	utils/sc_hash.h \
+	utils/sc_list.h \
+	utils/sc_machine.h \
+	utils/sc_mempool.h \
+	utils/sc_pq.h \
+	utils/sc_pvector.h \
+	utils/sc_report.h \
+	utils/sc_report_handler.h \
+	utils/sc_string.h \
+	utils/sc_string_view.h \
+	utils/sc_temporary.h \
+	utils/sc_typeindex.h \
+	utils/sc_utils_ids.h \
+	utils/sc_vector.h
 
-H_FILES = \
-	sc_hash.h \
-	sc_list.h \
-	sc_machine.h \
-	sc_mempool.h \
-	sc_pq.h \
-	sc_pvector.h \
-	sc_report.h \
-	sc_report_handler.h \
-	sc_string.h \
-	sc_string_view.h \
-	sc_temporary.h \
-	sc_utils_ids.h \
-	sc_vector.h
+NO_H_FILES += \
+	utils/sc_stop_here.h
 
-NO_H_FILES = \
-	sc_stop_here.h
-
-CXX_FILES = \
-	sc_hash.cpp \
-	sc_list.cpp \
-	sc_mempool.cpp \
-	sc_pq.cpp \
-	sc_report.cpp \
-	sc_report_handler.cpp \
-	sc_stop_here.cpp \
-	sc_string.cpp \
-	sc_utils_ids.cpp \
-	sc_vector.cpp
-
-localincludedir = $(includedir)/sysc/utils
-nobase_localinclude_HEADERS = $(H_FILES)
-
-libutils_la_SOURCES = $(NO_H_FILES) $(CXX_FILES)
+CXX_FILES += \
+	utils/sc_hash.cpp \
+	utils/sc_list.cpp \
+	utils/sc_mempool.cpp \
+	utils/sc_pq.cpp \
+	utils/sc_report.cpp \
+	utils/sc_report_handler.cpp \
+	utils/sc_stop_here.cpp \
+	utils/sc_string.cpp \
+	utils/sc_utils_ids.cpp \
+	utils/sc_vector.cpp
 
 ## Taf!
+## :vim:ft=automake:

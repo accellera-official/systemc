@@ -229,11 +229,20 @@
     <ClCompile Include="..\..\src\sysc\datatypes\fx\sc_fxnum.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\tlm_core\tlm_2\tlm_quantum\tlm_global_quantum.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tlm_core\tlm_2\tlm_generic_payload\tlm_phase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tlm_core\tlm_2\tlm_generic_payload\tlm_gp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\tlm_utils\instance_specific_extensions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\sysc\communication\sc_semaphore_if.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\sysc\datatypes\int\sc_nbfriends.inc">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -646,6 +655,126 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\sysc\datatypes\fx\scfx_utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\sysc\utils\sc_string_view.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\sysc\utils\sc_typeindex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_analysis\tlm_analysis.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_analysis\tlm_analysis_fifo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_analysis\tlm_analysis_if.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_analysis\tlm_analysis_port.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_analysis\tlm_analysis_triple.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_analysis\tlm_write_if.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_req_rsp\tlm_1_interfaces\tlm_core_ifs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_req_rsp\tlm_1_interfaces\tlm_fifo_ifs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_req_rsp\tlm_1_interfaces\tlm_master_slave_ifs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_req_rsp\tlm_1_interfaces\tlm_tag.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_req_rsp\tlm_adapters\tlm_adapters.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_req_rsp\tlm_channels\tlm_fifo\circular_buffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_req_rsp\tlm_channels\tlm_fifo\tlm_fifo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_req_rsp\tlm_channels\tlm_fifo\tlm_fifo_peek.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_req_rsp\tlm_channels\tlm_fifo\tlm_fifo_put_get.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_req_rsp\tlm_channels\tlm_fifo\tlm_fifo_resize.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_req_rsp\tlm_channels\tlm_req_rsp_channels\tlm_put_get_imp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_req_rsp\tlm_channels\tlm_req_rsp_channels\tlm_req_rsp_channels.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_req_rsp\tlm_ports\tlm_event_finder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_req_rsp\tlm_ports\tlm_nonblocking_port.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_req_rsp\tlm_req_rsp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_version.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_2_interfaces\tlm_2_interfaces.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_2_interfaces\tlm_dmi.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_2_interfaces\tlm_fw_bw_ifs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_generic_payload\tlm_array.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_generic_payload\tlm_endian_conv.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_generic_payload\tlm_generic_payload.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_generic_payload\tlm_gp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_generic_payload\tlm_helpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_generic_payload\tlm_phase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_quantum\tlm_global_quantum.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_quantum\tlm_quantum.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_sockets\tlm_initiator_socket.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_sockets\tlm_sockets.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_sockets\tlm_target_socket.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\sysc\communication\sc_semaphore_if.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_utils\instance_specific_extensions_int.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

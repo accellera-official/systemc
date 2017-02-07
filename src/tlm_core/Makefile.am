@@ -34,9 +34,6 @@
 
 include $(top_srcdir)/config/Make-rules.sysc
 
-pkgconfigdir = $(libarchdir)/pkgconfig
-pkgconfig_DATA = tlm.pc
-
 H_FILES = \
 	tlm_2/tlm_version.h \
 	tlm_2/tlm_2_interfaces/tlm_2_interfaces.h \
@@ -83,9 +80,17 @@ H_FILES = \
 	tlm_1/tlm_req_rsp/tlm_ports/tlm_event_finder.h \
 	tlm_1/tlm_req_rsp/tlm_ports/tlm_nonblocking_port.h
 
+CXX_FILES = \
+	tlm_2/tlm_generic_payload/tlm_gp.cpp \
+	tlm_2/tlm_generic_payload/tlm_phase.cpp \
+	tlm_2/tlm_quantum/tlm_global_quantum.cpp
+
 EXTRA_DIST += \
 	tlm_1/README.txt \
 	tlm_2/README.txt
 
 localincludedir = $(includedir)/tlm_core
 nobase_localinclude_HEADERS = $(H_FILES)
+
+noinst_LTLIBRARIES = libtlm_core.la
+libtlm_core_la_SOURCES = $(NO_H_FILES) $(CXX_FILES)
