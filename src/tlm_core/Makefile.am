@@ -50,6 +50,7 @@ H_FILES = \
 	tlm_2/tlm_quantum/tlm_global_quantum.h \
 	tlm_2/tlm_quantum/tlm_quantum.h \
 	\
+	tlm_2/tlm_sockets/tlm_base_socket_if.h \
 	tlm_2/tlm_sockets/tlm_initiator_socket.h \
 	tlm_2/tlm_sockets/tlm_sockets.h \
 	tlm_2/tlm_sockets/tlm_target_socket.h \

@@ -297,6 +297,21 @@ class callback_binder_bw: public tlm::tlm_bw_transport_if<TYPES>{
     dmi_func_type* m_dmi_f;
 };
 
+/*
+This class forms the base for multi initiator sockets,
+with fewer template parameters than the multi_init_base.
+This class is implementation-defined.
+*/
+template <typename TYPES = tlm::tlm_base_protocol_types>
+class multi_init_base_if {
+public:
+  //this method shall return a vector of the callback binders of multi initiator socket
+  virtual std::vector<callback_binder_bw<TYPES>* >& get_binders()=0;
+  //this method shall return a vector of all target interfaces bound to this multi init socket
+  virtual std::vector<tlm::tlm_fw_transport_if<TYPES>*>& get_sockets()=0;
+protected:
+  virtual ~multi_init_base_if() {}
+};
 
 /*
 This class forms the base for multi initiator sockets.
@@ -308,7 +323,8 @@ template <unsigned int BUSWIDTH = 32,
           unsigned int N=0,
           sc_core::sc_port_policy POL = sc_core::SC_ONE_OR_MORE_BOUND>
 class multi_init_base
-  : public tlm::tlm_initiator_socket<BUSWIDTH, TYPES, N, POL>
+  : public tlm::tlm_initiator_socket<BUSWIDTH, TYPES, N, POL>,
+    public multi_init_base_if<TYPES>
 {
 public:
   //typedef for the base type: the standard tlm initiator socket
@@ -323,16 +339,35 @@ public:
   //  If the base is not bound hierarchically it shall return a pointer to itself
   virtual multi_init_base* get_hierarch_bind()=0;
   
-  //this method shall return a vector of the callback binders of multi initiator socket
-  virtual std::vector<callback_binder_bw<TYPES>* >& get_binders()=0;
-  
-  //this method shall return a vector of all target interfaces bound to this multi init socket
-  virtual std::vector<tlm::tlm_fw_transport_if<TYPES>*>&  get_sockets()=0;
-  
+  virtual tlm::tlm_socket_category get_socket_category() const
+  {
+    return tlm::TLM_MULTI_INITIATOR_SOCKET;
+  }
+
   //ctor and dtor
   virtual ~multi_init_base(){}
   multi_init_base():base_type(sc_core::sc_gen_unique_name("multi_init_base")){}
   multi_init_base(const char* name):base_type(name){}
+};
+
+/*
+This class forms the base for multi target sockets,
+with fewer template parameters than the multi_target_base.
+This class is implementation-defined.
+*/
+template <typename TYPES = tlm::tlm_base_protocol_types>
+class multi_target_base_if {
+public:
+  //this method shall return a vector of the callback binders of multi initiator socket
+  virtual std::vector<callback_binder_fw<TYPES>* >& get_binders()=0;
+  
+  //this method shall return a map of all multi initiator sockets that are
+  // bound to this multi target the key of the map is the index at which the
+  // multi initiator i bound, while the value is the interface of the multi
+  // initiator socket that is bound at that index
+  virtual std::map<unsigned int, tlm::tlm_bw_transport_if<TYPES>*>& get_multi_binds()=0;
+protected:
+  virtual ~multi_target_base_if() {}
 };
 
 /*
@@ -345,7 +380,8 @@ template <unsigned int BUSWIDTH = 32,
           unsigned int N=0,
           sc_core::sc_port_policy POL = sc_core::SC_ONE_OR_MORE_BOUND>
 class multi_target_base
-  : public tlm::tlm_target_socket<BUSWIDTH, TYPES, N, POL>
+  : public tlm::tlm_target_socket<BUSWIDTH, TYPES, N, POL>,
+    public multi_target_base_if<TYPES>
 {
 public:
   //typedef for the base type: the standard tlm target socket
@@ -359,15 +395,12 @@ public:
   //this method shall inform the multi target socket that it is bound
   // hierarchically and to which other multi target socket it is bound hierarchically
   virtual void set_hierarch_bind(multi_target_base*)=0;
-  
-  //this method shall return a vector of the callback binders of multi initiator socket
-  virtual std::vector<callback_binder_fw<TYPES>* >& get_binders()=0;
-  
-  //this method shall return a map of all multi initiator sockets that are bound to this multi target
-  // the key of the map is the index at which the multi initiator i bound, while the value
-  //  is the interface of the multi initiator socket that is bound at that index
-  virtual std::map<unsigned int, tlm::tlm_bw_transport_if<TYPES>*>&  get_multi_binds()=0;
-  
+
+  virtual tlm::tlm_socket_category get_socket_category() const
+  {
+    return tlm::TLM_MULTI_TARGET_SOCKET;
+  }
+
   //ctor and dtor
   virtual ~multi_target_base(){}
   multi_target_base():base_type(sc_core::sc_gen_unique_name("multi_target_base")){}
