@@ -87,7 +87,8 @@ public:
 
     // typedefs
 
-    typedef sc_proxy<sc_bv_base> base_type;
+    typedef sc_proxy<sc_bv_base>  base_type;
+    typedef base_type::value_type value_type;
 
 
     // constructors
@@ -233,8 +234,8 @@ public:
     int size() const
 	{ return m_size; }
 
-    sc_logic_value_t get_bit( int i ) const;
-    void set_bit( int i, sc_logic_value_t value );
+    value_type get_bit( int i ) const;
+    void set_bit( int i, value_type value );
 
     sc_digit get_word( int i ) const
 	{ return m_data[i]; }
@@ -294,17 +295,17 @@ rrotate( const sc_bv_base& x, int n )
 // common methods
 
 inline
-sc_logic_value_t
+sc_bv_base::value_type
 sc_bv_base::get_bit( int i ) const
 {
     int wi = i / SC_DIGIT_SIZE;
     int bi = i % SC_DIGIT_SIZE;
-    return sc_logic_value_t( (m_data[wi] >> bi) & SC_DIGIT_ONE );
+    return value_type( (m_data[wi] >> bi) & SC_DIGIT_ONE );
 }
 
 inline
 void
-sc_bv_base::set_bit( int i, sc_logic_value_t value )
+sc_bv_base::set_bit( int i, value_type value )
 {
     int wi = i / SC_DIGIT_SIZE;
     int bi = i % SC_DIGIT_SIZE;

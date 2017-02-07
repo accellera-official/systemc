@@ -139,7 +139,7 @@ private:
 
     static sc_logic_value_t to_value( int i )
 	{
-	    if( i < 0 || i > 3 ) {
+	    if( i < Log_0 || i > Log_X ) {
 		invalid_value( i );
 	    }
 	    return sc_logic_value_t( i );
