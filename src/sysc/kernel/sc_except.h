@@ -33,6 +33,11 @@
 #include <exception>
 #include "sysc/kernel/sc_cmnhdr.h"
 
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+# pragma warning(push)
+# pragma warning(disable:4275) // ignore missing std::exception DLL export
+#endif
+
 namespace sc_core {
 
 class sc_simcontext;
@@ -119,6 +124,10 @@ class sc_report;
 SC_API sc_report* sc_handle_exception();
 
 } // namespace sc_core
+
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+# pragma warning(pop)
+#endif
 
 /*****************************************************************************
 

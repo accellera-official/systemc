@@ -170,7 +170,7 @@ traffic_generator::traffic_generator_thread
   
     mem_address = base_address; 
    
-    for (unsigned int i = 0; i < 16; i++ )
+    for (unsigned int k = 0; k < 16; k++ )
     {
       if(!m_transaction_queue.is_empty())
       {

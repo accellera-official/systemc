@@ -76,9 +76,18 @@ PLATFORM=Win32
 CONFIG=Debug
 !ENDIF
 
-# if systemc.vsprops is not correctly updated
+# if systemc.props is not correctly updated
 !IFNDEF SYSTEMC_HOME
 SYSTEMC_HOME=..\..\..\..
+!ENDIF
+
+!IFDEF DLL
+CXXFLAGS_RELEASE=/MD $(CXXFLAGS_RELEASE)
+CXXFLAGS_DEBUG=/MDd $(CXXFLAGS_DEBUG)
+CXXFLAGS_DEFINES=/DSC_WIN_DLL $(CXXFLAGS_DEFINES)
+!ELSE
+CXXFLAGS_RELEASE=/MTd $(CXXFLAGS_RELEASE)
+CXXFLAGS_DEBUG=/MTd $(CXXFLAGS_DEBUG)
 !ENDIF
 
 ## default rule
@@ -152,6 +161,8 @@ AT=
 AT=@
 !ENDIF
 
+PATH=$(SYSTEMC_LIB_DIR);$(PATH)
+
 # Notes:
 # 1. two lines starting @type filter out lines containing
 #    "stopped by user" so that differences in messages between SystemC 2.2.0
@@ -166,7 +177,7 @@ check: announce $(EXECUTABLE)
 	  if ERRORLEVEL 1  (echo "***ERROR:" & type diff.log) else (echo OK)
 
 run: announce $(EXECUTABLE)
-	$(AT).\$(EXECUTABLE) $(ARGS) < $(INPUTFILE)
+	$(AT).\$(EXECUTABLE) $(ARGS) $(INPUTFILE)
 
 $(EXECUTABLE): build
 	$(AT)copy /y $(OUTDIR)\$@ .\$@
