@@ -113,7 +113,7 @@
 #   if _MSC_VER < 1800   // MSVC'2010 and earlier, assume C++03
 #     define SC_CPLUSPLUS 199711L
 #   elif _MSC_VER < 1900 // MSVC'2013, assume C++11
-#     define SC_CPLUSPLUS 201101L
+#     define SC_CPLUSPLUS 201103L
 #   elif _MSC_VER < 2000 // MSVC'2015, assume C++14
 #     define SC_CPLUSPLUS 201402L
 #   else // more recent MSVC versions, assume C++14
@@ -128,7 +128,7 @@
 #endif // SC_STD_CPLUSCPLUS
 
 // Currently, SystemC standard requires/assumes C++03 only
-#define SC_CPLUSPLUS_BASE_ 199711L
+#define SC_CPLUSPLUS_BASE_ 201103L
 
 // The IEEE_1666_CPLUSPLUS macro is meant to be queried in the models,
 // checking for availability of SystemC features relying on specific
@@ -153,7 +153,7 @@
 // declare certain template instantiations as "extern" during library build
 // and adding an explicit instantiation into the (shared) SystemC library
 
-#if defined(__GNUC__) && SC_CPLUSPLUS < 201101L
+#if defined(__GNUC__) && SC_CPLUSPLUS < 201103L
 # define SC_TPLEXTERN_ __extension__ extern
 #else
 # define SC_TPLEXTERN_ extern
