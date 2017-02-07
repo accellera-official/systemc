@@ -35,7 +35,7 @@
 #include "sysc/kernel/sc_event.h"
 #include "sysc/kernel/sc_object.h"
 #include "sysc/kernel/sc_process.h"
-#include <typeinfo>
+#include "sysc/utils/sc_typeindex.h"
 
 #if ! defined( SC_DISABLE_VIRTUAL_BIND )
 #  define SC_VIRTUAL_ virtual
@@ -100,6 +100,9 @@ public:
     virtual const char* kind() const
         { return "sc_port_base"; }
 
+    // return RTTI information of associated interface
+    virtual sc_type_index get_interface_type() const = 0;
+
 protected:
 
     // constructors
@@ -125,7 +128,9 @@ private:
     // called by complete_binding (for internal use only)
     virtual void add_interface( sc_interface* ) = 0;
     virtual int interface_count() const = 0;
-    virtual const char* if_typename() const = 0;
+
+    const char* if_typename() const
+      { return get_interface_type().name(); }
 
 protected:
     // called by construction_done (does nothing by default)
@@ -318,6 +323,9 @@ public:
     virtual const sc_interface* get_interface() const
         { return m_interface; }
 
+    // return RTTI information of associated interface
+    virtual sc_type_index get_interface_type() const;
+
 protected:
 
     // constructors
@@ -351,7 +359,6 @@ protected:
 private:
     // called by complete_binding (for internal use only)
     virtual void add_interface( sc_interface* );
-    virtual const char* if_typename() const;
     virtual int interface_count() const;
 
     // disabled
@@ -567,10 +574,10 @@ sc_port_b<IF>::add_interface( sc_interface* interface_ )
 
 template <class IF>
 inline
-const char*
-sc_port_b<IF>::if_typename() const
+sc_type_index
+sc_port_b<IF>::get_interface_type() const
 {
-    return typeid( IF ).name();
+    return typeid( IF );
 }
 
 template <class IF>
