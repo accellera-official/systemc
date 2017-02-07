@@ -35,6 +35,7 @@ Makefile
 Makefile.in
 
 # ignore recommended build directory and variants
+/build*/
 /objdir*/
 
 # ignore in-tree installation

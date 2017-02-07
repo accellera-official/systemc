@@ -58,7 +58,8 @@ pkgconfig_DATA = \
 	tlm.pc
 
 EXTRA_DIST += \
-	README_TLM.txt
+	README_TLM.txt \
+	CMakeLists.txt
 
 # no own sources here
 libsystemc_la_SOURCES =

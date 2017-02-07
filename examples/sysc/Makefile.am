@@ -105,7 +105,28 @@ nobase_syscexamples_DATA = \
 endif
 
 EXTRA_DIST += \
-	$(examples_FILES)
+	$(examples_FILES) \
+	CMakeLists.txt \
+	2.1/dpipe/CMakeLists.txt \
+	2.1/forkjoin/CMakeLists.txt \
+	2.1/reset_signal_is/CMakeLists.txt \
+	2.1/sc_export/CMakeLists.txt \
+	2.1/sc_report/CMakeLists.txt \
+	2.1/scx_barrier/CMakeLists.txt \
+	2.1/scx_mutex_w_policy/CMakeLists.txt \
+	2.1/specialized_signals/CMakeLists.txt \
+	2.3/sc_rvd/CMakeLists.txt \
+	2.3/sc_ttd/CMakeLists.txt \
+	fft/fft_flpt/CMakeLists.txt \
+	fft/fft_fxpt/CMakeLists.txt \
+	fir/CMakeLists.txt \
+	pipe/CMakeLists.txt \
+	pkt_switch/CMakeLists.txt \
+	risc_cpu/CMakeLists.txt \
+	rsa/CMakeLists.txt \
+	simple_bus/CMakeLists.txt \
+	simple_fifo/CMakeLists.txt \
+	simple_perf/CMakeLists.txt
 
 CLEANFILES += \
 	$(examples_CLEAN) \

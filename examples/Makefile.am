@@ -62,6 +62,8 @@ nobase_buildexamples_DATA = \
 endif
 
 EXTRA_DIST += \
+	CMakeLists.txt \
+	\
 	$(examples_FILES)
 
 ## Taf!

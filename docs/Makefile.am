@@ -81,9 +81,10 @@ nobase_doc_DATA += \
 
 endif # SEPARATE_INSTALL_TREE
 
-## add documentation to distribution
+## add documentation and CMake scripts to distribution
 EXTRA_DIST += \
-	$(DOC_FILES)
+	$(DOC_FILES) \
+	CMakeLists.txt
 
 doxygen: sysc/doxygen/Doxyfile tlm/doxygen/Doxyfile
 	@(cd sysc/doxygen && $(DOXYGEN))
