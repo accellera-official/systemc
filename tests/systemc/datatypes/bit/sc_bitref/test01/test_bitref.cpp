@@ -51,7 +51,7 @@ int sc_main(int,char*[])
     sc_assert ( !bv[0].to_bool() );
     sc_assert( (~bv[0]).to_bool() );
 
-#if IEEE_STD_1666_CPLUSPLUS >= 201103L
+#if IEEE_1666_CPLUSPLUS >= 201103L
     sc_assert( bv[1] );
 #endif
     sc_nassert( !bv[1] );
@@ -140,7 +140,7 @@ int sc_main(int,char*[])
     /* auto */ sc_subref< sc_bv_base >   bv_range   = bv.range(5,1);
     /* auto */ sc_subref< sc_lv_base >   lv_range   = lv.range(6,2);
 
-#if IEEE_STD_1666_CPLUSPLUS >= 201103L
+#if IEEE_1666_CPLUSPLUS >= 201103L
     sc_assert( bv_range[0] );
 #endif
     sc_nassert( !bv_range[0] );
@@ -155,7 +155,7 @@ int sc_main(int,char*[])
     sc_assert( bv[1] == bv_range[0] );
 
     bv_range[0] = SC_LOGIC_1;
-#if IEEE_STD_1666_CPLUSPLUS >= 201103L
+#if IEEE_1666_CPLUSPLUS >= 201103L
     sc_assert( bv[1] );
 #endif
     sc_assert( bv[1] == bv_range_r[0] );
@@ -182,7 +182,7 @@ int sc_main(int,char*[])
                            , sc_bv_base >
       lv_range_r = ( bv.range(7,6) , lv.range(6,2), true );
 
-#if IEEE_STD_1666_CPLUSPLUS >= 201103L
+#if IEEE_1666_CPLUSPLUS >= 201103L
     sc_assert( bv_range[0] );
 #endif
     sc_nassert( !bv_range[0] );
@@ -196,7 +196,7 @@ int sc_main(int,char*[])
     sc_assert( bv[1] == bv_range[0] );
 
     bv_range[0] = SC_LOGIC_1;
-#if IEEE_STD_1666_CPLUSPLUS >= 201103L
+#if IEEE_1666_CPLUSPLUS >= 201103L
     sc_assert( bv[1] );
 #endif
     sc_assert( bv[1] == bv_range[0] );
