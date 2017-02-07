@@ -37,7 +37,7 @@
 
 #include <sysc/kernel/sc_cmnhdr.h>
 
-#if defined(__has_include) && SC_STD_CPLUSPLUS >= 201402L
+#if defined(__has_include) && SC_CPLUSPLUS >= 201402L
 #  if __has_include(<string_view>) // available in C++17
 #    define SC_STRING_VIEW_NS_ std
 #    include <string_view>

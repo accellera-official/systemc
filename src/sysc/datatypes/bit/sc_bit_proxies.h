@@ -59,7 +59,7 @@ template<typename T>
 class sc_bitref_conv_r<T, sc_proxy_traits<sc_bv_base> >
 {
 public:
-#if IEEE_STD_1666_CPLUSPLUS >= 201103L // explicit operator needs C++11
+#if IEEE_1666_CPLUSPLUS >= 201103L // explicit operator needs C++11
     // explicit conversion to bool
     explicit operator bool() const {
         return static_cast<const sc_bitref_r<T>&>(*this).to_bool();

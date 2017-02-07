@@ -31,11 +31,11 @@
 #ifndef SYSC_UTILS_SC_TYPEINDEX_H_INCLUDED_
 #define SYSC_UTILS_SC_TYPEINDEX_H_INCLUDED_
 
-#include "sysc/kernel/sc_cmnhdr.h" // SC_STD_CPLUSPLUS
+#include "sysc/kernel/sc_cmnhdr.h" // SC_CPLUSPLUS
 
 #include <typeinfo>
 
-#if SC_STD_CPLUSPLUS >= 201103L
+#if SC_CPLUSPLUS >= 201103L
 #include <typeindex> // C++11 has std::typeindex to serve our needs
 
 namespace sc_core {
@@ -81,6 +81,6 @@ private:
 
 } // namespace sc_core
 
-#endif // SC_STD_CPLUSPLUS < 201103L
+#endif // SC_CPLUSPLUS < 201103L
 #endif // SYSC_UTILS_SC_TYPEINDEX_H_INCLUDED_
 // Taf!
