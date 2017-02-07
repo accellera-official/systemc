@@ -82,7 +82,7 @@ sc_report::sc_report()
   file(empty_dup(0)),
   line(0),
   timestamp(new sc_time(sc_time_stamp())),
-  process(0),
+  process_name(empty_dup(0)),
   m_verbosity_level(SC_MEDIUM),
   m_what(empty_dup(0))
 {
@@ -100,7 +100,7 @@ sc_report::sc_report(sc_severity severity_,
   file(empty_dup(file_)),
   line(line_),
   timestamp(new sc_time(sc_time_stamp())),
-  process(sc_get_current_process_b()),
+  process_name(empty_dup(sc_get_current_process_name())),
   m_verbosity_level(verbosity_level),
   m_what( empty_dup( sc_report_compose_message(*this).c_str() ) )
 {
@@ -114,7 +114,7 @@ sc_report::sc_report(const sc_report& other)
   file(empty_dup(other.file)),
   line(other.line),
   timestamp(new sc_time(*other.timestamp)),
-  process(other.process),
+  process_name(empty_dup(other.process_name)),
   m_verbosity_level(other.m_verbosity_level),
   m_what(empty_dup(other.m_what))
 {
@@ -137,10 +137,10 @@ sc_report::swap( sc_report & that )
     swap( file,              that.file );
     swap( line,              that.line );
     swap( timestamp,         that.timestamp );
-    swap( process,           that.process );
+    swap( process_name,      that.process_name );
     swap( m_verbosity_level, that.m_verbosity_level );
     swap( m_what,            that.m_what );
-}
+} 
 
 sc_report::~sc_report() throw()
 {
@@ -149,6 +149,8 @@ sc_report::~sc_report() throw()
     if ( msg != empty_str )
 	delete[] msg;
     delete timestamp;
+    if ( process_name != empty_str )
+        delete[] process_name;
     if ( m_what != empty_str )
 	delete[] m_what;
 }
@@ -156,6 +158,16 @@ sc_report::~sc_report() throw()
 const char * sc_report::get_msg_type() const
 {
     return md->msg_type;
+}
+
+bool sc_report::valid() const
+{
+    return process_name != empty_str;
+}
+
+const char* sc_report::get_process_name() const
+{
+    return process_name != empty_str ? process_name : 0;
 }
 
 //

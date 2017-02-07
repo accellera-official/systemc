@@ -51,7 +51,7 @@
     { \
         if ( P && ( (std::strlen(NAME)==0) || !std::strcmp(NAME,P->name())) ) \
           std::cout << "**** " << sc_time_stamp() << " ("  \
-	            << sc_get_current_process_name() << "): " << MSG \
+	            << sc_get_current_process_name("** NONE **") << "): " << MSG \
 		    << " - " << P->name() << std::endl; \
     }
 #else
@@ -63,7 +63,7 @@ namespace sc_core {
 
 inline
 const char*
-sc_get_current_process_name()
+sc_get_current_process_name( const char * if_empty = NULL )
 {
     sc_process_b* active_p; // active process to get name of.
     const char*   result;   // name of active process.
@@ -72,7 +72,7 @@ sc_get_current_process_name()
     if ( active_p )
         result = active_p->name();
     else
-        result = "** NONE **";
+        result = if_empty;
     return result;
 }
 

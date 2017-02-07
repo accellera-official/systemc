@@ -48,14 +48,6 @@ extern void pln();
 static int    argc_copy;	// Copy of argc value passed to sc_elab_and_sim.
 static char** argv_copy;	// Copy of argv value passed to sc_elab_and_sim.
 
-static
-inline
-void
-message_function( const char* s )
-{
-    ::std::cout << "\n" << s << ::std::endl;
-}
-
 bool sc_in_action = false;
 
 int sc_argc()
@@ -99,13 +91,16 @@ sc_elab_and_sim( int argc, char* argv[] )
     }
     catch( const sc_report& x )
     {
-	message_function( x.what() );
+        sc_report_handler::get_handler()
+            ( x, sc_report_handler::get_catch_actions() );
     }
     catch( ... )
     {
         // translate other escaping exceptions
         sc_report*  err_p = sc_handle_exception();
-        if( err_p ) message_function( err_p->what() );
+        if( err_p )
+            sc_report_handler::get_handler()
+                ( *err_p, sc_report_handler::get_catch_actions() );
         delete err_p;
     }
 

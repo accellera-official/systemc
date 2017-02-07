@@ -92,7 +92,8 @@ enum {
     SC_DEFAULT_INFO_ACTIONS    = SC_LOG | SC_DISPLAY,
     SC_DEFAULT_WARNING_ACTIONS = SC_LOG | SC_DISPLAY,
     SC_DEFAULT_ERROR_ACTIONS   = SC_LOG | SC_CACHE_REPORT | SC_THROW,
-    SC_DEFAULT_FATAL_ACTIONS   = SC_LOG | SC_DISPLAY | SC_CACHE_REPORT | SC_ABORT
+    SC_DEFAULT_FATAL_ACTIONS   = SC_LOG | SC_DISPLAY | SC_CACHE_REPORT | SC_ABORT,
+    SC_DEFAULT_CATCH_ACTIONS   = SC_DISPLAY
 };
 
 class sc_object;
@@ -144,10 +145,7 @@ public:
 
     int get_verbosity() const { return m_verbosity_level; }
 
-    bool valid () const
-        {
-	    return process != 0;
-	}
+    bool valid () const;
 
     virtual const char* what() const throw()
         {
@@ -171,7 +169,7 @@ protected:
     char*              file;
     int                line;
     sc_time*           timestamp;
-    sc_object*         process;
+    char*              process_name;
     int                m_verbosity_level;
     char*              m_what;
 
