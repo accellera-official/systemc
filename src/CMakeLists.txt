@@ -249,6 +249,7 @@ set (systemc_PUBLIC_HEADERS sysc/communication/sc_buffer.h
                             sysc/utils/sc_string.h
                             sysc/utils/sc_string_view.h
                             sysc/utils/sc_temporary.h
+                            sysc/utils/sc_typeindex.h
                             sysc/utils/sc_utils_ids.h
                             sysc/utils/sc_vector.h
                             systemc
@@ -287,11 +288,13 @@ set (systemc_PUBLIC_HEADERS sysc/communication/sc_buffer.h
                             tlm_core/tlm_2/tlm_generic_payload/tlm_phase.h
                             tlm_core/tlm_2/tlm_quantum/tlm_global_quantum.h
                             tlm_core/tlm_2/tlm_quantum/tlm_quantum.h
+                            tlm_core/tlm_2/tlm_sockets/tlm_base_socket_if.h
                             tlm_core/tlm_2/tlm_sockets/tlm_initiator_socket.h
                             tlm_core/tlm_2/tlm_sockets/tlm_sockets.h
                             tlm_core/tlm_2/tlm_sockets/tlm_target_socket.h
                             tlm_core/tlm_2/tlm_version.h
                             tlm_utils/instance_specific_extensions.h
+                            tlm_utils/instance_specific_extensions_int.h
                             tlm_utils/multi_passthrough_initiator_socket.h
                             tlm_utils/multi_passthrough_target_socket.h
                             tlm_utils/multi_socket_bases.h
@@ -388,7 +391,11 @@ set (systemc_SOURCES sysc/communication/sc_clock.cpp
                      sysc/utils/sc_stop_here.cpp
                      sysc/utils/sc_string.cpp
                      sysc/utils/sc_utils_ids.cpp
-                     sysc/utils/sc_vector.cpp)
+                     sysc/utils/sc_vector.cpp
+                     tlm_core/tlm_2/tlm_generic_payload/tlm_gp.cpp
+                     tlm_core/tlm_2/tlm_generic_payload/tlm_phase.cpp
+                     tlm_core/tlm_2/tlm_quantum/tlm_global_quantum.cpp
+                     tlm_utils/instance_specific_extensions.cpp)
 
 
 ###############################################################################
