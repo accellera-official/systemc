@@ -564,6 +564,7 @@
     <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_generic_payload\tlm_phase.h" />
     <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_quantum\tlm_global_quantum.h" />
     <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_quantum\tlm_quantum.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_sockets\tlm_base_socket_if.h" />
     <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_sockets\tlm_initiator_socket.h" />
     <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_sockets\tlm_sockets.h" />
     <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_sockets\tlm_target_socket.h" />
