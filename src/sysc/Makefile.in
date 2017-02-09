@@ -19,7 +19,6 @@
 # build flags
 
 
-
 VPATH = @srcdir@
 am__is_gnu_make = test -n '$(MAKEFILE_LIST)' && test -n '$(MAKELEVEL)'
 am__make_running_with_option = \
@@ -86,9 +85,12 @@ build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
 DIST_COMMON = $(top_srcdir)/config/Make-rules.sysc \
-	$(top_srcdir)/config/Make-rules.common $(srcdir)/Makefile.in \
-	$(srcdir)/Makefile.am $(srcdir)/systemc.pc.in \
-	$(top_srcdir)/config/depcomp $(nobase_localinclude_HEADERS)
+	$(top_srcdir)/config/Make-rules.common \
+	$(srcdir)/kernel/files.am $(srcdir)/communication/files.am \
+	$(srcdir)/datatypes/files.am $(srcdir)/tracing/files.am \
+	$(srcdir)/utils/files.am $(srcdir)/Makefile.in \
+	$(srcdir)/Makefile.am $(top_srcdir)/config/depcomp \
+	$(nobase_localinclude_HEADERS)
 @WANT_DEBUG_TRUE@am__append_1 = $(DEBUG_CXXFLAGS)
 @WANT_DEBUG_TRUE@am__append_2 = $(DEBUG_CXXFLAGS)
 @WANT_DEBUG_TRUE@am__append_3 = $(DEBUG_CXXFLAGS)
@@ -103,12 +105,6 @@ DIST_COMMON = $(top_srcdir)/config/Make-rules.sysc \
 @ENABLE_CALLBACKS_TRUE@am__append_10 = -DSC_ENABLE_SIMULATION_PHASE_CALLBACKS
 @ENABLE_CALLBACKS_TRACING_TRUE@am__append_11 = -DSC_ENABLE_SIMULATION_PHASE_CALLBACKS_TRACING
 @WANT_PTHREADS_THREADS_TRUE@am__append_12 = -DSC_USE_PTHREADS
-
-# either for async_update locking or pthread processes
-# Libtool/GCC do not play well together on some platforms
-# with C++ libraries and libpthread dependency, see e.g.
-# http://lists.gnu.org/archive/html/libtool/2012-02/msg00003.html
-@USES_PTHREADS_LIB_TRUE@am__append_13 = $(EXPLICIT_LPTHREAD)
 subdir = src/sysc
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/config/ax_check_define.m4 \
@@ -121,54 +117,115 @@ am__aclocal_m4_deps = $(top_srcdir)/config/ax_check_define.m4 \
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
-CONFIG_CLEAN_FILES = systemc.pc
+CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
-am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
-am__vpath_adj = case $$p in \
-    $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
-    *) f=$$p;; \
-  esac;
-am__strip_dir = f=`echo $$p | sed -e 's|^.*/||'`;
-am__install_max = 40
-am__nobase_strip_setup = \
-  srcdirstrip=`echo "$(srcdir)" | sed 's/[].[^$$\\*|]/\\\\&/g'`
-am__nobase_strip = \
-  for p in $$list; do echo "$$p"; done | sed -e "s|$$srcdirstrip/||"
-am__nobase_list = $(am__nobase_strip_setup); \
-  for p in $$list; do echo "$$p $$p"; done | \
-  sed "s| $$srcdirstrip/| |;"' / .*\//!s/ .*/ ./; s,\( .*\)/[^/]*$$,\1,' | \
-  $(AWK) 'BEGIN { files["."] = "" } { files[$$2] = files[$$2] " " $$1; \
-    if (++n[$$2] == $(am__install_max)) \
-      { print $$2, files[$$2]; n[$$2] = 0; files[$$2] = "" } } \
-    END { for (dir in files) print dir, files[dir] }'
-am__base_list = \
-  sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | \
-  sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
-am__uninstall_files_from_dir = { \
-  test -z "$$files" \
-    || { test ! -d "$$dir" && test ! -f "$$dir" && test ! -r "$$dir"; } \
-    || { echo " ( cd '$$dir' && rm -f" $$files ")"; \
-         $(am__cd) "$$dir" && rm -f $$files; }; \
-  }
-am__installdirs = "$(DESTDIR)$(libarchdir)" \
-	"$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(localincludedir)"
-LTLIBRARIES = $(libarch_LTLIBRARIES)
-am__DEPENDENCIES_1 =
-@USES_PTHREADS_LIB_TRUE@am__DEPENDENCIES_2 = $(am__DEPENDENCIES_1)
-libsystemc_la_DEPENDENCIES = kernel/libkernel.la $(QT_LIB) \
-	communication/libcommunication.la tracing/libtracing.la \
-	utils/libutils.la datatypes/libdatatypes.la \
-	$(am__DEPENDENCIES_2)
-am_libsystemc_la_OBJECTS =
-libsystemc_la_OBJECTS = $(am_libsystemc_la_OBJECTS)
+LTLIBRARIES = $(noinst_LTLIBRARIES)
+libsysc_la_DEPENDENCIES = $(QT_LIB)
+am__libsysc_la_SOURCES_DIST = kernel/sc_cor_fiber.h \
+	kernel/sc_cor_pthread.h kernel/sc_cor_qt.h \
+	kernel/sc_cthread_process.h kernel/sc_method_process.h \
+	kernel/sc_module_registry.h kernel/sc_name_gen.h \
+	kernel/sc_object_int.h kernel/sc_object_manager.h \
+	kernel/sc_phase_callback_registry.h kernel/sc_reset.h \
+	kernel/sc_runnable_int.h kernel/sc_simcontext_int.h \
+	kernel/sc_thread_process.h datatypes/int/sc_nbcommon.inc \
+	datatypes/int/sc_nbfriends.inc \
+	datatypes/int/sc_signed_bitref.inc \
+	datatypes/int/sc_signed_subref.inc \
+	datatypes/int/sc_unsigned_bitref.inc \
+	datatypes/int/sc_unsigned_subref.inc datatypes/fx/scfx_pow10.h \
+	tracing/sc_trace_file_base.h tracing/sc_vcd_trace.h \
+	tracing/sc_wif_trace.h utils/sc_stop_here.h \
+	kernel/sc_attribute.cpp kernel/sc_cor_fiber.cpp \
+	kernel/sc_cor_pthread.cpp kernel/sc_cor_qt.cpp \
+	kernel/sc_cthread_process.cpp kernel/sc_event.cpp \
+	kernel/sc_except.cpp kernel/sc_join.cpp kernel/sc_main.cpp \
+	kernel/sc_main_main.cpp kernel/sc_method_process.cpp \
+	kernel/sc_module.cpp kernel/sc_module_name.cpp \
+	kernel/sc_module_registry.cpp kernel/sc_name_gen.cpp \
+	kernel/sc_object.cpp kernel/sc_object_manager.cpp \
+	kernel/sc_phase_callback_registry.cpp kernel/sc_process.cpp \
+	kernel/sc_reset.cpp kernel/sc_sensitive.cpp \
+	kernel/sc_simcontext.cpp kernel/sc_spawn_options.cpp \
+	kernel/sc_thread_process.cpp kernel/sc_time.cpp \
+	kernel/sc_ver.cpp kernel/sc_wait.cpp \
+	kernel/sc_wait_cthread.cpp communication/sc_clock.cpp \
+	communication/sc_event_finder.cpp \
+	communication/sc_event_queue.cpp communication/sc_export.cpp \
+	communication/sc_interface.cpp communication/sc_mutex.cpp \
+	communication/sc_port.cpp communication/sc_prim_channel.cpp \
+	communication/sc_semaphore.cpp communication/sc_signal.cpp \
+	communication/sc_signal_ports.cpp \
+	communication/sc_signal_resolved.cpp \
+	communication/sc_signal_resolved_ports.cpp \
+	datatypes/bit/sc_bit.cpp datatypes/bit/sc_bv_base.cpp \
+	datatypes/bit/sc_logic.cpp datatypes/bit/sc_lv_base.cpp \
+	datatypes/fx/sc_fxcast_switch.cpp datatypes/fx/sc_fxdefs.cpp \
+	datatypes/fx/sc_fxnum.cpp datatypes/fx/sc_fxnum_observer.cpp \
+	datatypes/fx/sc_fxtype_params.cpp datatypes/fx/sc_fxval.cpp \
+	datatypes/fx/sc_fxval_observer.cpp datatypes/fx/scfx_mant.cpp \
+	datatypes/fx/scfx_pow10.cpp datatypes/fx/scfx_rep.cpp \
+	datatypes/fx/scfx_utils.cpp datatypes/int/sc_int_base.cpp \
+	datatypes/int/sc_int_mask.cpp \
+	datatypes/int/sc_length_param.cpp \
+	datatypes/int/sc_nbexterns.cpp datatypes/int/sc_nbutils.cpp \
+	datatypes/int/sc_signed.cpp datatypes/int/sc_uint_base.cpp \
+	datatypes/int/sc_unsigned.cpp datatypes/misc/sc_concatref.cpp \
+	datatypes/misc/sc_value_base.cpp tracing/sc_trace.cpp \
+	tracing/sc_trace_file_base.cpp tracing/sc_vcd_trace.cpp \
+	tracing/sc_wif_trace.cpp utils/sc_hash.cpp utils/sc_list.cpp \
+	utils/sc_mempool.cpp utils/sc_pq.cpp utils/sc_report.cpp \
+	utils/sc_report_handler.cpp utils/sc_stop_here.cpp \
+	utils/sc_string.cpp utils/sc_utils_ids.cpp utils/sc_vector.cpp
+am__objects_1 =
+am__dirstamp = $(am__leading_dot)dirstamp
+@WANT_PTHREADS_THREADS_FALSE@@WANT_QT_THREADS_FALSE@am__objects_2 = kernel/sc_cor_fiber.lo
+@WANT_PTHREADS_THREADS_TRUE@@WANT_QT_THREADS_FALSE@am__objects_2 = kernel/sc_cor_pthread.lo
+@WANT_QT_THREADS_TRUE@am__objects_2 = kernel/sc_cor_qt.lo
+am__objects_3 = kernel/sc_attribute.lo $(am__objects_2) \
+	kernel/sc_cthread_process.lo kernel/sc_event.lo \
+	kernel/sc_except.lo kernel/sc_join.lo kernel/sc_main.lo \
+	kernel/sc_main_main.lo kernel/sc_method_process.lo \
+	kernel/sc_module.lo kernel/sc_module_name.lo \
+	kernel/sc_module_registry.lo kernel/sc_name_gen.lo \
+	kernel/sc_object.lo kernel/sc_object_manager.lo \
+	kernel/sc_phase_callback_registry.lo kernel/sc_process.lo \
+	kernel/sc_reset.lo kernel/sc_sensitive.lo \
+	kernel/sc_simcontext.lo kernel/sc_spawn_options.lo \
+	kernel/sc_thread_process.lo kernel/sc_time.lo kernel/sc_ver.lo \
+	kernel/sc_wait.lo kernel/sc_wait_cthread.lo \
+	communication/sc_clock.lo communication/sc_event_finder.lo \
+	communication/sc_event_queue.lo communication/sc_export.lo \
+	communication/sc_interface.lo communication/sc_mutex.lo \
+	communication/sc_port.lo communication/sc_prim_channel.lo \
+	communication/sc_semaphore.lo communication/sc_signal.lo \
+	communication/sc_signal_ports.lo \
+	communication/sc_signal_resolved.lo \
+	communication/sc_signal_resolved_ports.lo \
+	datatypes/bit/sc_bit.lo datatypes/bit/sc_bv_base.lo \
+	datatypes/bit/sc_logic.lo datatypes/bit/sc_lv_base.lo \
+	datatypes/fx/sc_fxcast_switch.lo datatypes/fx/sc_fxdefs.lo \
+	datatypes/fx/sc_fxnum.lo datatypes/fx/sc_fxnum_observer.lo \
+	datatypes/fx/sc_fxtype_params.lo datatypes/fx/sc_fxval.lo \
+	datatypes/fx/sc_fxval_observer.lo datatypes/fx/scfx_mant.lo \
+	datatypes/fx/scfx_pow10.lo datatypes/fx/scfx_rep.lo \
+	datatypes/fx/scfx_utils.lo datatypes/int/sc_int_base.lo \
+	datatypes/int/sc_int_mask.lo datatypes/int/sc_length_param.lo \
+	datatypes/int/sc_nbexterns.lo datatypes/int/sc_nbutils.lo \
+	datatypes/int/sc_signed.lo datatypes/int/sc_uint_base.lo \
+	datatypes/int/sc_unsigned.lo datatypes/misc/sc_concatref.lo \
+	datatypes/misc/sc_value_base.lo tracing/sc_trace.lo \
+	tracing/sc_trace_file_base.lo tracing/sc_vcd_trace.lo \
+	tracing/sc_wif_trace.lo utils/sc_hash.lo utils/sc_list.lo \
+	utils/sc_mempool.lo utils/sc_pq.lo utils/sc_report.lo \
+	utils/sc_report_handler.lo utils/sc_stop_here.lo \
+	utils/sc_string.lo utils/sc_utils_ids.lo utils/sc_vector.lo
+am_libsysc_la_OBJECTS = $(am__objects_1) $(am__objects_3)
+libsysc_la_OBJECTS = $(am_libsysc_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
-libsystemc_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
-	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
-	$(AM_CXXFLAGS) $(CXXFLAGS) $(libsystemc_la_LDFLAGS) $(LDFLAGS) \
-	-o $@
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -203,9 +260,26 @@ AM_V_CXXLD = $(am__v_CXXLD_@AM_V@)
 am__v_CXXLD_ = $(am__v_CXXLD_@AM_DEFAULT_V@)
 am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
-SOURCES = $(libsystemc_la_SOURCES) \
-	$(nodist_EXTRA_libsystemc_la_SOURCES)
-DIST_SOURCES = $(libsystemc_la_SOURCES)
+COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+LTCOMPILE = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) \
+	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
+	$(AM_CFLAGS) $(CFLAGS)
+AM_V_CC = $(am__v_CC_@AM_V@)
+am__v_CC_ = $(am__v_CC_@AM_DEFAULT_V@)
+am__v_CC_0 = @echo "  CC      " $@;
+am__v_CC_1 = 
+CCLD = $(CC)
+LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+AM_V_CCLD = $(am__v_CCLD_@AM_V@)
+am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
+am__v_CCLD_0 = @echo "  CCLD    " $@;
+am__v_CCLD_1 = 
+SOURCES = $(libsysc_la_SOURCES)
+DIST_SOURCES = $(am__libsysc_la_SOURCES_DIST)
 RECURSIVE_TARGETS = all-recursive check-recursive cscopelist-recursive \
 	ctags-recursive dvi-recursive html-recursive info-recursive \
 	install-data-recursive install-dvi-recursive \
@@ -219,7 +293,34 @@ am__can_run_installinfo = \
     n|no|NO) false;; \
     *) (install-info --version) >/dev/null 2>&1;; \
   esac
-DATA = $(pkgconfig_DATA)
+am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
+am__vpath_adj = case $$p in \
+    $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
+    *) f=$$p;; \
+  esac;
+am__strip_dir = f=`echo $$p | sed -e 's|^.*/||'`;
+am__install_max = 40
+am__nobase_strip_setup = \
+  srcdirstrip=`echo "$(srcdir)" | sed 's/[].[^$$\\*|]/\\\\&/g'`
+am__nobase_strip = \
+  for p in $$list; do echo "$$p"; done | sed -e "s|$$srcdirstrip/||"
+am__nobase_list = $(am__nobase_strip_setup); \
+  for p in $$list; do echo "$$p $$p"; done | \
+  sed "s| $$srcdirstrip/| |;"' / .*\//!s/ .*/ ./; s,\( .*\)/[^/]*$$,\1,' | \
+  $(AWK) 'BEGIN { files["."] = "" } { files[$$2] = files[$$2] " " $$1; \
+    if (++n[$$2] == $(am__install_max)) \
+      { print $$2, files[$$2]; n[$$2] = 0; files[$$2] = "" } } \
+    END { for (dir in files) print dir, files[dir] }'
+am__base_list = \
+  sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | \
+  sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
+am__uninstall_files_from_dir = { \
+  test -z "$$files" \
+    || { test ! -d "$$dir" && test ! -f "$$dir" && test ! -r "$$dir"; } \
+    || { echo " ( cd '$$dir' && rm -f" $$files ")"; \
+         $(am__cd) "$$dir" && rm -f $$files; }; \
+  }
+am__installdirs = "$(DESTDIR)$(localincludedir)"
 HEADERS = $(nobase_localinclude_HEADERS)
 RECURSIVE_CLEAN_TARGETS = mostlyclean-recursive clean-recursive	\
   distclean-recursive maintainer-clean-recursive
@@ -248,8 +349,7 @@ am__define_uniq_tagged_files = \
   done | $(am__uniquify_input)`
 ETAGS = etags
 CTAGS = ctags
-DIST_SUBDIRS = kernel communication tracing utils packages/boost \
-	packages/qt datatypes
+DIST_SUBDIRS = packages/boost packages/qt
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 am__relativize = \
   dir0=`pwd`; \
@@ -400,7 +500,7 @@ htmldir = @htmldir@
 includedir = @includedir@
 infodir = @infodir@
 install_sh = @install_sh@
-libarchdir = $(libdir)$(LIB_ARCH_SUFFIX)
+libarchdir = @libarchdir@
 libdir = @libdir@
 libexecdir = @libexecdir@
 localedir = @localedir@
@@ -442,35 +542,143 @@ CLEANFILES =
 EXTRA_DIST = 
 @WANT_QT_THREADS_TRUE@QT_LIB = packages/qt/libqt.la
 @WANT_QT_THREADS_TRUE@QT_SUBDIR = packages/qt
-SUBDIRS = \
-	kernel \
-	communication \
-	tracing \
-	utils \
-	packages/boost \
-	$(QT_SUBDIR) \
-	datatypes
 
-H_FILES = 
-CXX_FILES = 
+# only build external packages separately
+SUBDIRS = \
+	packages/boost \
+	$(QT_SUBDIR)
+
+H_FILES = kernel/sc_attribute.h kernel/sc_boost.h kernel/sc_cmnhdr.h \
+	kernel/sc_constants.h kernel/sc_cor.h \
+	kernel/sc_dynamic_processes.h kernel/sc_event.h \
+	kernel/sc_except.h kernel/sc_externs.h kernel/sc_join.h \
+	kernel/sc_kernel_ids.h kernel/sc_macros.h kernel/sc_module.h \
+	kernel/sc_module_name.h kernel/sc_object.h kernel/sc_process.h \
+	kernel/sc_process_handle.h kernel/sc_runnable.h \
+	kernel/sc_sensitive.h kernel/sc_spawn.h \
+	kernel/sc_spawn_options.h kernel/sc_status.h \
+	kernel/sc_simcontext.h kernel/sc_time.h kernel/sc_ver.h \
+	kernel/sc_wait.h kernel/sc_wait_cthread.h \
+	communication/sc_buffer.h communication/sc_clock.h \
+	communication/sc_clock_ports.h \
+	communication/sc_communication_ids.h \
+	communication/sc_event_finder.h communication/sc_event_queue.h \
+	communication/sc_export.h communication/sc_fifo.h \
+	communication/sc_fifo_ifs.h communication/sc_fifo_ports.h \
+	communication/sc_host_mutex.h communication/sc_interface.h \
+	communication/sc_mutex.h communication/sc_mutex_if.h \
+	communication/sc_port.h communication/sc_prim_channel.h \
+	communication/sc_semaphore.h communication/sc_semaphore_if.h \
+	communication/sc_signal.h communication/sc_signal_ifs.h \
+	communication/sc_signal_ports.h \
+	communication/sc_signal_resolved.h \
+	communication/sc_signal_resolved_ports.h \
+	communication/sc_signal_rv.h \
+	communication/sc_signal_rv_ports.h \
+	communication/sc_writer_policy.h datatypes/bit/sc_bit.h \
+	datatypes/bit/sc_bit_ids.h datatypes/bit/sc_bit_proxies.h \
+	datatypes/bit/sc_bv.h datatypes/bit/sc_bv_base.h \
+	datatypes/bit/sc_logic.h datatypes/bit/sc_lv.h \
+	datatypes/bit/sc_lv_base.h datatypes/bit/sc_proxy.h \
+	datatypes/fx/fx.h datatypes/fx/sc_context.h \
+	datatypes/fx/sc_fix.h datatypes/fx/sc_fixed.h \
+	datatypes/fx/sc_fx_ids.h datatypes/fx/sc_fxcast_switch.h \
+	datatypes/fx/sc_fxdefs.h datatypes/fx/sc_fxnum.h \
+	datatypes/fx/sc_fxnum_observer.h \
+	datatypes/fx/sc_fxtype_params.h datatypes/fx/sc_fxval.h \
+	datatypes/fx/sc_fxval_observer.h datatypes/fx/sc_ufix.h \
+	datatypes/fx/sc_ufixed.h datatypes/fx/scfx_ieee.h \
+	datatypes/fx/scfx_mant.h datatypes/fx/scfx_other_defs.h \
+	datatypes/fx/scfx_params.h datatypes/fx/scfx_rep.h \
+	datatypes/fx/scfx_string.h datatypes/fx/scfx_utils.h \
+	datatypes/int/sc_bigint.h datatypes/int/sc_biguint.h \
+	datatypes/int/sc_int.h datatypes/int/sc_int_base.h \
+	datatypes/int/sc_int_ids.h datatypes/int/sc_length_param.h \
+	datatypes/int/sc_nbdefs.h datatypes/int/sc_nbexterns.h \
+	datatypes/int/sc_nbutils.h datatypes/int/sc_signed.h \
+	datatypes/int/sc_uint.h datatypes/int/sc_uint_base.h \
+	datatypes/int/sc_unsigned.h datatypes/misc/sc_concatref.h \
+	datatypes/misc/sc_value_base.h tracing/sc_trace.h \
+	tracing/sc_tracing_ids.h utils/sc_hash.h utils/sc_list.h \
+	utils/sc_machine.h utils/sc_mempool.h utils/sc_pq.h \
+	utils/sc_pvector.h utils/sc_report.h utils/sc_report_handler.h \
+	utils/sc_string.h utils/sc_string_view.h utils/sc_temporary.h \
+	utils/sc_typeindex.h utils/sc_utils_ids.h utils/sc_vector.h
+NO_H_FILES = kernel/sc_cor_fiber.h kernel/sc_cor_pthread.h \
+	kernel/sc_cor_qt.h kernel/sc_cthread_process.h \
+	kernel/sc_method_process.h kernel/sc_module_registry.h \
+	kernel/sc_name_gen.h kernel/sc_object_int.h \
+	kernel/sc_object_manager.h kernel/sc_phase_callback_registry.h \
+	kernel/sc_reset.h kernel/sc_runnable_int.h \
+	kernel/sc_simcontext_int.h kernel/sc_thread_process.h \
+	datatypes/int/sc_nbcommon.inc datatypes/int/sc_nbfriends.inc \
+	datatypes/int/sc_signed_bitref.inc \
+	datatypes/int/sc_signed_subref.inc \
+	datatypes/int/sc_unsigned_bitref.inc \
+	datatypes/int/sc_unsigned_subref.inc datatypes/fx/scfx_pow10.h \
+	tracing/sc_trace_file_base.h tracing/sc_vcd_trace.h \
+	tracing/sc_wif_trace.h utils/sc_stop_here.h
+CXX_FILES = kernel/sc_attribute.cpp $(CXX_COR_FILES) \
+	kernel/sc_cthread_process.cpp kernel/sc_event.cpp \
+	kernel/sc_except.cpp kernel/sc_join.cpp kernel/sc_main.cpp \
+	kernel/sc_main_main.cpp kernel/sc_method_process.cpp \
+	kernel/sc_module.cpp kernel/sc_module_name.cpp \
+	kernel/sc_module_registry.cpp kernel/sc_name_gen.cpp \
+	kernel/sc_object.cpp kernel/sc_object_manager.cpp \
+	kernel/sc_phase_callback_registry.cpp kernel/sc_process.cpp \
+	kernel/sc_reset.cpp kernel/sc_sensitive.cpp \
+	kernel/sc_simcontext.cpp kernel/sc_spawn_options.cpp \
+	kernel/sc_thread_process.cpp kernel/sc_time.cpp \
+	kernel/sc_ver.cpp kernel/sc_wait.cpp \
+	kernel/sc_wait_cthread.cpp communication/sc_clock.cpp \
+	communication/sc_event_finder.cpp \
+	communication/sc_event_queue.cpp communication/sc_export.cpp \
+	communication/sc_interface.cpp communication/sc_mutex.cpp \
+	communication/sc_port.cpp communication/sc_prim_channel.cpp \
+	communication/sc_semaphore.cpp communication/sc_signal.cpp \
+	communication/sc_signal_ports.cpp \
+	communication/sc_signal_resolved.cpp \
+	communication/sc_signal_resolved_ports.cpp \
+	datatypes/bit/sc_bit.cpp datatypes/bit/sc_bv_base.cpp \
+	datatypes/bit/sc_logic.cpp datatypes/bit/sc_lv_base.cpp \
+	datatypes/fx/sc_fxcast_switch.cpp datatypes/fx/sc_fxdefs.cpp \
+	datatypes/fx/sc_fxnum.cpp datatypes/fx/sc_fxnum_observer.cpp \
+	datatypes/fx/sc_fxtype_params.cpp datatypes/fx/sc_fxval.cpp \
+	datatypes/fx/sc_fxval_observer.cpp datatypes/fx/scfx_mant.cpp \
+	datatypes/fx/scfx_pow10.cpp datatypes/fx/scfx_rep.cpp \
+	datatypes/fx/scfx_utils.cpp datatypes/int/sc_int_base.cpp \
+	datatypes/int/sc_int_mask.cpp \
+	datatypes/int/sc_length_param.cpp \
+	datatypes/int/sc_nbexterns.cpp datatypes/int/sc_nbutils.cpp \
+	datatypes/int/sc_signed.cpp datatypes/int/sc_uint_base.cpp \
+	datatypes/int/sc_unsigned.cpp datatypes/misc/sc_concatref.cpp \
+	datatypes/misc/sc_value_base.cpp tracing/sc_trace.cpp \
+	tracing/sc_trace_file_base.cpp tracing/sc_vcd_trace.cpp \
+	tracing/sc_wif_trace.cpp utils/sc_hash.cpp utils/sc_list.cpp \
+	utils/sc_mempool.cpp utils/sc_pq.cpp utils/sc_report.cpp \
+	utils/sc_report_handler.cpp utils/sc_stop_here.cpp \
+	utils/sc_string.cpp utils/sc_utils_ids.cpp utils/sc_vector.cpp
+@WANT_PTHREADS_THREADS_FALSE@@WANT_QT_THREADS_FALSE@CXX_COR_FILES = kernel/sc_cor_fiber.cpp
+@WANT_PTHREADS_THREADS_TRUE@@WANT_QT_THREADS_FALSE@CXX_COR_FILES = kernel/sc_cor_pthread.cpp
+
+# co-routine implementation
+@WANT_QT_THREADS_TRUE@CXX_COR_FILES = kernel/sc_cor_qt.cpp
+
+# include file lists for sub-directories
 localincludedir = $(includedir)/sysc
 nobase_localinclude_HEADERS = $(H_FILES)
-libarch_LTLIBRARIES = libsystemc.la
-pkgconfigdir = $(libarchdir)/pkgconfig
-pkgconfig_DATA = systemc.pc
-libsystemc_la_SOURCES = 
+noinst_LTLIBRARIES = libsysc.la
+libsysc_la_SOURCES = $(NO_H_FILES) $(CXX_FILES)
 
-# dummy C++ source to cause C++ linking
-nodist_EXTRA_libsystemc_la_SOURCES = sc_nonexistent.cpp
-libsystemc_la_LIBADD = kernel/libkernel.la $(QT_LIB) \
-	communication/libcommunication.la tracing/libtracing.la \
-	utils/libutils.la datatypes/libdatatypes.la $(am__append_13)
-libsystemc_la_LDFLAGS = $(EXTRA_LDFLAGS) -release $(VERSION)
+# add dependent (package) libraries
+libsysc_la_LIBADD = \
+       $(QT_LIB)
+
 all: all-recursive
 
 .SUFFIXES:
 .SUFFIXES: .cpp .lo .o .obj
-$(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(top_srcdir)/config/Make-rules.sysc $(top_srcdir)/config/Make-rules.common $(am__configure_deps)
+$(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(top_srcdir)/config/Make-rules.sysc $(top_srcdir)/config/Make-rules.common $(srcdir)/kernel/files.am $(srcdir)/communication/files.am $(srcdir)/datatypes/files.am $(srcdir)/tracing/files.am $(srcdir)/utils/files.am $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
 	    *$$dep*) \
@@ -491,7 +699,7 @@ Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	    echo ' cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)'; \
 	    cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe);; \
 	esac;
-$(top_srcdir)/config/Make-rules.sysc $(top_srcdir)/config/Make-rules.common:
+$(top_srcdir)/config/Make-rules.sysc $(top_srcdir)/config/Make-rules.common $(srcdir)/kernel/files.am $(srcdir)/communication/files.am $(srcdir)/datatypes/files.am $(srcdir)/tracing/files.am $(srcdir)/utils/files.am:
 
 $(top_builddir)/config.status: $(top_srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
@@ -501,36 +709,10 @@ $(top_srcdir)/configure:  $(am__configure_deps)
 $(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
-systemc.pc: $(top_builddir)/config.status $(srcdir)/systemc.pc.in
-	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 
-install-libarchLTLIBRARIES: $(libarch_LTLIBRARIES)
-	@$(NORMAL_INSTALL)
-	@list='$(libarch_LTLIBRARIES)'; test -n "$(libarchdir)" || list=; \
-	list2=; for p in $$list; do \
-	  if test -f $$p; then \
-	    list2="$$list2 $$p"; \
-	  else :; fi; \
-	done; \
-	test -z "$$list2" || { \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(libarchdir)'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(libarchdir)" || exit 1; \
-	  echo " $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$list2 '$(DESTDIR)$(libarchdir)'"; \
-	  $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$list2 "$(DESTDIR)$(libarchdir)"; \
-	}
-
-uninstall-libarchLTLIBRARIES:
-	@$(NORMAL_UNINSTALL)
-	@list='$(libarch_LTLIBRARIES)'; test -n "$(libarchdir)" || list=; \
-	for p in $$list; do \
-	  $(am__strip_dir) \
-	  echo " $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f '$(DESTDIR)$(libarchdir)/$$f'"; \
-	  $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f "$(DESTDIR)$(libarchdir)/$$f"; \
-	done
-
-clean-libarchLTLIBRARIES:
-	-test -z "$(libarch_LTLIBRARIES)" || rm -f $(libarch_LTLIBRARIES)
-	@list='$(libarch_LTLIBRARIES)'; \
+clean-noinstLTLIBRARIES:
+	-test -z "$(noinst_LTLIBRARIES)" || rm -f $(noinst_LTLIBRARIES)
+	@list='$(noinst_LTLIBRARIES)'; \
 	locs=`for p in $$list; do echo $$p; done | \
 	      sed 's|^[^/]*$$|.|; s|/[^/]*$$||; s|$$|/so_locations|' | \
 	      sort -u`; \
@@ -538,17 +720,320 @@ clean-libarchLTLIBRARIES:
 	  echo rm -f $${locs}; \
 	  rm -f $${locs}; \
 	}
+kernel/$(am__dirstamp):
+	@$(MKDIR_P) kernel
+	@: > kernel/$(am__dirstamp)
+kernel/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) kernel/$(DEPDIR)
+	@: > kernel/$(DEPDIR)/$(am__dirstamp)
+kernel/sc_attribute.lo: kernel/$(am__dirstamp) \
+	kernel/$(DEPDIR)/$(am__dirstamp)
+kernel/sc_cor_fiber.lo: kernel/$(am__dirstamp) \
+	kernel/$(DEPDIR)/$(am__dirstamp)
+kernel/sc_cor_pthread.lo: kernel/$(am__dirstamp) \
+	kernel/$(DEPDIR)/$(am__dirstamp)
+kernel/sc_cor_qt.lo: kernel/$(am__dirstamp) \
+	kernel/$(DEPDIR)/$(am__dirstamp)
+kernel/sc_cthread_process.lo: kernel/$(am__dirstamp) \
+	kernel/$(DEPDIR)/$(am__dirstamp)
+kernel/sc_event.lo: kernel/$(am__dirstamp) \
+	kernel/$(DEPDIR)/$(am__dirstamp)
+kernel/sc_except.lo: kernel/$(am__dirstamp) \
+	kernel/$(DEPDIR)/$(am__dirstamp)
+kernel/sc_join.lo: kernel/$(am__dirstamp) \
+	kernel/$(DEPDIR)/$(am__dirstamp)
+kernel/sc_main.lo: kernel/$(am__dirstamp) \
+	kernel/$(DEPDIR)/$(am__dirstamp)
+kernel/sc_main_main.lo: kernel/$(am__dirstamp) \
+	kernel/$(DEPDIR)/$(am__dirstamp)
+kernel/sc_method_process.lo: kernel/$(am__dirstamp) \
+	kernel/$(DEPDIR)/$(am__dirstamp)
+kernel/sc_module.lo: kernel/$(am__dirstamp) \
+	kernel/$(DEPDIR)/$(am__dirstamp)
+kernel/sc_module_name.lo: kernel/$(am__dirstamp) \
+	kernel/$(DEPDIR)/$(am__dirstamp)
+kernel/sc_module_registry.lo: kernel/$(am__dirstamp) \
+	kernel/$(DEPDIR)/$(am__dirstamp)
+kernel/sc_name_gen.lo: kernel/$(am__dirstamp) \
+	kernel/$(DEPDIR)/$(am__dirstamp)
+kernel/sc_object.lo: kernel/$(am__dirstamp) \
+	kernel/$(DEPDIR)/$(am__dirstamp)
+kernel/sc_object_manager.lo: kernel/$(am__dirstamp) \
+	kernel/$(DEPDIR)/$(am__dirstamp)
+kernel/sc_phase_callback_registry.lo: kernel/$(am__dirstamp) \
+	kernel/$(DEPDIR)/$(am__dirstamp)
+kernel/sc_process.lo: kernel/$(am__dirstamp) \
+	kernel/$(DEPDIR)/$(am__dirstamp)
+kernel/sc_reset.lo: kernel/$(am__dirstamp) \
+	kernel/$(DEPDIR)/$(am__dirstamp)
+kernel/sc_sensitive.lo: kernel/$(am__dirstamp) \
+	kernel/$(DEPDIR)/$(am__dirstamp)
+kernel/sc_simcontext.lo: kernel/$(am__dirstamp) \
+	kernel/$(DEPDIR)/$(am__dirstamp)
+kernel/sc_spawn_options.lo: kernel/$(am__dirstamp) \
+	kernel/$(DEPDIR)/$(am__dirstamp)
+kernel/sc_thread_process.lo: kernel/$(am__dirstamp) \
+	kernel/$(DEPDIR)/$(am__dirstamp)
+kernel/sc_time.lo: kernel/$(am__dirstamp) \
+	kernel/$(DEPDIR)/$(am__dirstamp)
+kernel/sc_ver.lo: kernel/$(am__dirstamp) \
+	kernel/$(DEPDIR)/$(am__dirstamp)
+kernel/sc_wait.lo: kernel/$(am__dirstamp) \
+	kernel/$(DEPDIR)/$(am__dirstamp)
+kernel/sc_wait_cthread.lo: kernel/$(am__dirstamp) \
+	kernel/$(DEPDIR)/$(am__dirstamp)
+communication/$(am__dirstamp):
+	@$(MKDIR_P) communication
+	@: > communication/$(am__dirstamp)
+communication/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) communication/$(DEPDIR)
+	@: > communication/$(DEPDIR)/$(am__dirstamp)
+communication/sc_clock.lo: communication/$(am__dirstamp) \
+	communication/$(DEPDIR)/$(am__dirstamp)
+communication/sc_event_finder.lo: communication/$(am__dirstamp) \
+	communication/$(DEPDIR)/$(am__dirstamp)
+communication/sc_event_queue.lo: communication/$(am__dirstamp) \
+	communication/$(DEPDIR)/$(am__dirstamp)
+communication/sc_export.lo: communication/$(am__dirstamp) \
+	communication/$(DEPDIR)/$(am__dirstamp)
+communication/sc_interface.lo: communication/$(am__dirstamp) \
+	communication/$(DEPDIR)/$(am__dirstamp)
+communication/sc_mutex.lo: communication/$(am__dirstamp) \
+	communication/$(DEPDIR)/$(am__dirstamp)
+communication/sc_port.lo: communication/$(am__dirstamp) \
+	communication/$(DEPDIR)/$(am__dirstamp)
+communication/sc_prim_channel.lo: communication/$(am__dirstamp) \
+	communication/$(DEPDIR)/$(am__dirstamp)
+communication/sc_semaphore.lo: communication/$(am__dirstamp) \
+	communication/$(DEPDIR)/$(am__dirstamp)
+communication/sc_signal.lo: communication/$(am__dirstamp) \
+	communication/$(DEPDIR)/$(am__dirstamp)
+communication/sc_signal_ports.lo: communication/$(am__dirstamp) \
+	communication/$(DEPDIR)/$(am__dirstamp)
+communication/sc_signal_resolved.lo: communication/$(am__dirstamp) \
+	communication/$(DEPDIR)/$(am__dirstamp)
+communication/sc_signal_resolved_ports.lo:  \
+	communication/$(am__dirstamp) \
+	communication/$(DEPDIR)/$(am__dirstamp)
+datatypes/bit/$(am__dirstamp):
+	@$(MKDIR_P) datatypes/bit
+	@: > datatypes/bit/$(am__dirstamp)
+datatypes/bit/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) datatypes/bit/$(DEPDIR)
+	@: > datatypes/bit/$(DEPDIR)/$(am__dirstamp)
+datatypes/bit/sc_bit.lo: datatypes/bit/$(am__dirstamp) \
+	datatypes/bit/$(DEPDIR)/$(am__dirstamp)
+datatypes/bit/sc_bv_base.lo: datatypes/bit/$(am__dirstamp) \
+	datatypes/bit/$(DEPDIR)/$(am__dirstamp)
+datatypes/bit/sc_logic.lo: datatypes/bit/$(am__dirstamp) \
+	datatypes/bit/$(DEPDIR)/$(am__dirstamp)
+datatypes/bit/sc_lv_base.lo: datatypes/bit/$(am__dirstamp) \
+	datatypes/bit/$(DEPDIR)/$(am__dirstamp)
+datatypes/fx/$(am__dirstamp):
+	@$(MKDIR_P) datatypes/fx
+	@: > datatypes/fx/$(am__dirstamp)
+datatypes/fx/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) datatypes/fx/$(DEPDIR)
+	@: > datatypes/fx/$(DEPDIR)/$(am__dirstamp)
+datatypes/fx/sc_fxcast_switch.lo: datatypes/fx/$(am__dirstamp) \
+	datatypes/fx/$(DEPDIR)/$(am__dirstamp)
+datatypes/fx/sc_fxdefs.lo: datatypes/fx/$(am__dirstamp) \
+	datatypes/fx/$(DEPDIR)/$(am__dirstamp)
+datatypes/fx/sc_fxnum.lo: datatypes/fx/$(am__dirstamp) \
+	datatypes/fx/$(DEPDIR)/$(am__dirstamp)
+datatypes/fx/sc_fxnum_observer.lo: datatypes/fx/$(am__dirstamp) \
+	datatypes/fx/$(DEPDIR)/$(am__dirstamp)
+datatypes/fx/sc_fxtype_params.lo: datatypes/fx/$(am__dirstamp) \
+	datatypes/fx/$(DEPDIR)/$(am__dirstamp)
+datatypes/fx/sc_fxval.lo: datatypes/fx/$(am__dirstamp) \
+	datatypes/fx/$(DEPDIR)/$(am__dirstamp)
+datatypes/fx/sc_fxval_observer.lo: datatypes/fx/$(am__dirstamp) \
+	datatypes/fx/$(DEPDIR)/$(am__dirstamp)
+datatypes/fx/scfx_mant.lo: datatypes/fx/$(am__dirstamp) \
+	datatypes/fx/$(DEPDIR)/$(am__dirstamp)
+datatypes/fx/scfx_pow10.lo: datatypes/fx/$(am__dirstamp) \
+	datatypes/fx/$(DEPDIR)/$(am__dirstamp)
+datatypes/fx/scfx_rep.lo: datatypes/fx/$(am__dirstamp) \
+	datatypes/fx/$(DEPDIR)/$(am__dirstamp)
+datatypes/fx/scfx_utils.lo: datatypes/fx/$(am__dirstamp) \
+	datatypes/fx/$(DEPDIR)/$(am__dirstamp)
+datatypes/int/$(am__dirstamp):
+	@$(MKDIR_P) datatypes/int
+	@: > datatypes/int/$(am__dirstamp)
+datatypes/int/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) datatypes/int/$(DEPDIR)
+	@: > datatypes/int/$(DEPDIR)/$(am__dirstamp)
+datatypes/int/sc_int_base.lo: datatypes/int/$(am__dirstamp) \
+	datatypes/int/$(DEPDIR)/$(am__dirstamp)
+datatypes/int/sc_int_mask.lo: datatypes/int/$(am__dirstamp) \
+	datatypes/int/$(DEPDIR)/$(am__dirstamp)
+datatypes/int/sc_length_param.lo: datatypes/int/$(am__dirstamp) \
+	datatypes/int/$(DEPDIR)/$(am__dirstamp)
+datatypes/int/sc_nbexterns.lo: datatypes/int/$(am__dirstamp) \
+	datatypes/int/$(DEPDIR)/$(am__dirstamp)
+datatypes/int/sc_nbutils.lo: datatypes/int/$(am__dirstamp) \
+	datatypes/int/$(DEPDIR)/$(am__dirstamp)
+datatypes/int/sc_signed.lo: datatypes/int/$(am__dirstamp) \
+	datatypes/int/$(DEPDIR)/$(am__dirstamp)
+datatypes/int/sc_uint_base.lo: datatypes/int/$(am__dirstamp) \
+	datatypes/int/$(DEPDIR)/$(am__dirstamp)
+datatypes/int/sc_unsigned.lo: datatypes/int/$(am__dirstamp) \
+	datatypes/int/$(DEPDIR)/$(am__dirstamp)
+datatypes/misc/$(am__dirstamp):
+	@$(MKDIR_P) datatypes/misc
+	@: > datatypes/misc/$(am__dirstamp)
+datatypes/misc/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) datatypes/misc/$(DEPDIR)
+	@: > datatypes/misc/$(DEPDIR)/$(am__dirstamp)
+datatypes/misc/sc_concatref.lo: datatypes/misc/$(am__dirstamp) \
+	datatypes/misc/$(DEPDIR)/$(am__dirstamp)
+datatypes/misc/sc_value_base.lo: datatypes/misc/$(am__dirstamp) \
+	datatypes/misc/$(DEPDIR)/$(am__dirstamp)
+tracing/$(am__dirstamp):
+	@$(MKDIR_P) tracing
+	@: > tracing/$(am__dirstamp)
+tracing/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) tracing/$(DEPDIR)
+	@: > tracing/$(DEPDIR)/$(am__dirstamp)
+tracing/sc_trace.lo: tracing/$(am__dirstamp) \
+	tracing/$(DEPDIR)/$(am__dirstamp)
+tracing/sc_trace_file_base.lo: tracing/$(am__dirstamp) \
+	tracing/$(DEPDIR)/$(am__dirstamp)
+tracing/sc_vcd_trace.lo: tracing/$(am__dirstamp) \
+	tracing/$(DEPDIR)/$(am__dirstamp)
+tracing/sc_wif_trace.lo: tracing/$(am__dirstamp) \
+	tracing/$(DEPDIR)/$(am__dirstamp)
+utils/$(am__dirstamp):
+	@$(MKDIR_P) utils
+	@: > utils/$(am__dirstamp)
+utils/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) utils/$(DEPDIR)
+	@: > utils/$(DEPDIR)/$(am__dirstamp)
+utils/sc_hash.lo: utils/$(am__dirstamp) \
+	utils/$(DEPDIR)/$(am__dirstamp)
+utils/sc_list.lo: utils/$(am__dirstamp) \
+	utils/$(DEPDIR)/$(am__dirstamp)
+utils/sc_mempool.lo: utils/$(am__dirstamp) \
+	utils/$(DEPDIR)/$(am__dirstamp)
+utils/sc_pq.lo: utils/$(am__dirstamp) utils/$(DEPDIR)/$(am__dirstamp)
+utils/sc_report.lo: utils/$(am__dirstamp) \
+	utils/$(DEPDIR)/$(am__dirstamp)
+utils/sc_report_handler.lo: utils/$(am__dirstamp) \
+	utils/$(DEPDIR)/$(am__dirstamp)
+utils/sc_stop_here.lo: utils/$(am__dirstamp) \
+	utils/$(DEPDIR)/$(am__dirstamp)
+utils/sc_string.lo: utils/$(am__dirstamp) \
+	utils/$(DEPDIR)/$(am__dirstamp)
+utils/sc_utils_ids.lo: utils/$(am__dirstamp) \
+	utils/$(DEPDIR)/$(am__dirstamp)
+utils/sc_vector.lo: utils/$(am__dirstamp) \
+	utils/$(DEPDIR)/$(am__dirstamp)
 
-libsystemc.la: $(libsystemc_la_OBJECTS) $(libsystemc_la_DEPENDENCIES) $(EXTRA_libsystemc_la_DEPENDENCIES) 
-	$(AM_V_CXXLD)$(libsystemc_la_LINK) -rpath $(libarchdir) $(libsystemc_la_OBJECTS) $(libsystemc_la_LIBADD) $(LIBS)
+libsysc.la: $(libsysc_la_OBJECTS) $(libsysc_la_DEPENDENCIES) $(EXTRA_libsysc_la_DEPENDENCIES) 
+	$(AM_V_CXXLD)$(CXXLINK)  $(libsysc_la_OBJECTS) $(libsysc_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
+	-rm -f communication/*.$(OBJEXT)
+	-rm -f communication/*.lo
+	-rm -f datatypes/bit/*.$(OBJEXT)
+	-rm -f datatypes/bit/*.lo
+	-rm -f datatypes/fx/*.$(OBJEXT)
+	-rm -f datatypes/fx/*.lo
+	-rm -f datatypes/int/*.$(OBJEXT)
+	-rm -f datatypes/int/*.lo
+	-rm -f datatypes/misc/*.$(OBJEXT)
+	-rm -f datatypes/misc/*.lo
+	-rm -f kernel/*.$(OBJEXT)
+	-rm -f kernel/*.lo
+	-rm -f tracing/*.$(OBJEXT)
+	-rm -f tracing/*.lo
+	-rm -f utils/*.$(OBJEXT)
+	-rm -f utils/*.lo
 
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sc_nonexistent.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@communication/$(DEPDIR)/sc_clock.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@communication/$(DEPDIR)/sc_event_finder.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@communication/$(DEPDIR)/sc_event_queue.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@communication/$(DEPDIR)/sc_export.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@communication/$(DEPDIR)/sc_interface.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@communication/$(DEPDIR)/sc_mutex.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@communication/$(DEPDIR)/sc_port.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@communication/$(DEPDIR)/sc_prim_channel.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@communication/$(DEPDIR)/sc_semaphore.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@communication/$(DEPDIR)/sc_signal.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@communication/$(DEPDIR)/sc_signal_ports.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@communication/$(DEPDIR)/sc_signal_resolved.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@communication/$(DEPDIR)/sc_signal_resolved_ports.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@datatypes/bit/$(DEPDIR)/sc_bit.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@datatypes/bit/$(DEPDIR)/sc_bv_base.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@datatypes/bit/$(DEPDIR)/sc_logic.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@datatypes/bit/$(DEPDIR)/sc_lv_base.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@datatypes/fx/$(DEPDIR)/sc_fxcast_switch.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@datatypes/fx/$(DEPDIR)/sc_fxdefs.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@datatypes/fx/$(DEPDIR)/sc_fxnum.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@datatypes/fx/$(DEPDIR)/sc_fxnum_observer.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@datatypes/fx/$(DEPDIR)/sc_fxtype_params.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@datatypes/fx/$(DEPDIR)/sc_fxval.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@datatypes/fx/$(DEPDIR)/sc_fxval_observer.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@datatypes/fx/$(DEPDIR)/scfx_mant.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@datatypes/fx/$(DEPDIR)/scfx_pow10.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@datatypes/fx/$(DEPDIR)/scfx_rep.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@datatypes/fx/$(DEPDIR)/scfx_utils.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@datatypes/int/$(DEPDIR)/sc_int_base.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@datatypes/int/$(DEPDIR)/sc_int_mask.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@datatypes/int/$(DEPDIR)/sc_length_param.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@datatypes/int/$(DEPDIR)/sc_nbexterns.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@datatypes/int/$(DEPDIR)/sc_nbutils.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@datatypes/int/$(DEPDIR)/sc_signed.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@datatypes/int/$(DEPDIR)/sc_uint_base.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@datatypes/int/$(DEPDIR)/sc_unsigned.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@datatypes/misc/$(DEPDIR)/sc_concatref.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@datatypes/misc/$(DEPDIR)/sc_value_base.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@kernel/$(DEPDIR)/sc_attribute.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@kernel/$(DEPDIR)/sc_cor_fiber.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@kernel/$(DEPDIR)/sc_cor_pthread.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@kernel/$(DEPDIR)/sc_cor_qt.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@kernel/$(DEPDIR)/sc_cthread_process.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@kernel/$(DEPDIR)/sc_event.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@kernel/$(DEPDIR)/sc_except.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@kernel/$(DEPDIR)/sc_join.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@kernel/$(DEPDIR)/sc_main.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@kernel/$(DEPDIR)/sc_main_main.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@kernel/$(DEPDIR)/sc_method_process.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@kernel/$(DEPDIR)/sc_module.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@kernel/$(DEPDIR)/sc_module_name.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@kernel/$(DEPDIR)/sc_module_registry.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@kernel/$(DEPDIR)/sc_name_gen.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@kernel/$(DEPDIR)/sc_object.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@kernel/$(DEPDIR)/sc_object_manager.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@kernel/$(DEPDIR)/sc_phase_callback_registry.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@kernel/$(DEPDIR)/sc_process.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@kernel/$(DEPDIR)/sc_reset.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@kernel/$(DEPDIR)/sc_sensitive.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@kernel/$(DEPDIR)/sc_simcontext.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@kernel/$(DEPDIR)/sc_spawn_options.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@kernel/$(DEPDIR)/sc_thread_process.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@kernel/$(DEPDIR)/sc_time.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@kernel/$(DEPDIR)/sc_ver.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@kernel/$(DEPDIR)/sc_wait.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@kernel/$(DEPDIR)/sc_wait_cthread.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@tracing/$(DEPDIR)/sc_trace.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@tracing/$(DEPDIR)/sc_trace_file_base.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@tracing/$(DEPDIR)/sc_vcd_trace.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@tracing/$(DEPDIR)/sc_wif_trace.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@utils/$(DEPDIR)/sc_hash.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@utils/$(DEPDIR)/sc_list.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@utils/$(DEPDIR)/sc_mempool.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@utils/$(DEPDIR)/sc_pq.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@utils/$(DEPDIR)/sc_report.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@utils/$(DEPDIR)/sc_report_handler.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@utils/$(DEPDIR)/sc_stop_here.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@utils/$(DEPDIR)/sc_string.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@utils/$(DEPDIR)/sc_utils_ids.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@utils/$(DEPDIR)/sc_vector.Plo@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -579,27 +1064,14 @@ mostlyclean-libtool:
 
 clean-libtool:
 	-rm -rf .libs _libs
-install-pkgconfigDATA: $(pkgconfig_DATA)
-	@$(NORMAL_INSTALL)
-	@list='$(pkgconfig_DATA)'; test -n "$(pkgconfigdir)" || list=; \
-	if test -n "$$list"; then \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(pkgconfigdir)'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(pkgconfigdir)" || exit 1; \
-	fi; \
-	for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  echo "$$d$$p"; \
-	done | $(am__base_list) | \
-	while read files; do \
-	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(pkgconfigdir)'"; \
-	  $(INSTALL_DATA) $$files "$(DESTDIR)$(pkgconfigdir)" || exit $$?; \
-	done
-
-uninstall-pkgconfigDATA:
-	@$(NORMAL_UNINSTALL)
-	@list='$(pkgconfig_DATA)'; test -n "$(pkgconfigdir)" || list=; \
-	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
-	dir='$(DESTDIR)$(pkgconfigdir)'; $(am__uninstall_files_from_dir)
+	-rm -rf communication/.libs communication/_libs
+	-rm -rf datatypes/bit/.libs datatypes/bit/_libs
+	-rm -rf datatypes/fx/.libs datatypes/fx/_libs
+	-rm -rf datatypes/int/.libs datatypes/int/_libs
+	-rm -rf datatypes/misc/.libs datatypes/misc/_libs
+	-rm -rf kernel/.libs kernel/_libs
+	-rm -rf tracing/.libs tracing/_libs
+	-rm -rf utils/.libs utils/_libs
 install-nobase_localincludeHEADERS: $(nobase_localinclude_HEADERS)
 	@$(NORMAL_INSTALL)
 	@list='$(nobase_localinclude_HEADERS)'; test -n "$(localincludedir)" || list=; \
@@ -781,10 +1253,10 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-recursive
-all-am: Makefile $(LTLIBRARIES) $(DATA) $(HEADERS)
+all-am: Makefile $(LTLIBRARIES) $(HEADERS)
 installdirs: installdirs-recursive
 installdirs-am:
-	for dir in "$(DESTDIR)$(libarchdir)" "$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(localincludedir)"; do \
+	for dir in "$(DESTDIR)$(localincludedir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-recursive
@@ -814,17 +1286,33 @@ clean-generic:
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
+	-rm -f communication/$(DEPDIR)/$(am__dirstamp)
+	-rm -f communication/$(am__dirstamp)
+	-rm -f datatypes/bit/$(DEPDIR)/$(am__dirstamp)
+	-rm -f datatypes/bit/$(am__dirstamp)
+	-rm -f datatypes/fx/$(DEPDIR)/$(am__dirstamp)
+	-rm -f datatypes/fx/$(am__dirstamp)
+	-rm -f datatypes/int/$(DEPDIR)/$(am__dirstamp)
+	-rm -f datatypes/int/$(am__dirstamp)
+	-rm -f datatypes/misc/$(DEPDIR)/$(am__dirstamp)
+	-rm -f datatypes/misc/$(am__dirstamp)
+	-rm -f kernel/$(DEPDIR)/$(am__dirstamp)
+	-rm -f kernel/$(am__dirstamp)
+	-rm -f tracing/$(DEPDIR)/$(am__dirstamp)
+	-rm -f tracing/$(am__dirstamp)
+	-rm -f utils/$(DEPDIR)/$(am__dirstamp)
+	-rm -f utils/$(am__dirstamp)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-recursive
 
-clean-am: clean-generic clean-libarchLTLIBRARIES clean-libtool \
+clean-am: clean-generic clean-libtool clean-noinstLTLIBRARIES \
 	mostlyclean-am
 
 distclean: distclean-recursive
-	-rm -rf ./$(DEPDIR)
+	-rm -rf communication/$(DEPDIR) datatypes/bit/$(DEPDIR) datatypes/fx/$(DEPDIR) datatypes/int/$(DEPDIR) datatypes/misc/$(DEPDIR) kernel/$(DEPDIR) tracing/$(DEPDIR) utils/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -841,8 +1329,7 @@ info: info-recursive
 
 info-am:
 
-install-data-am: install-libarchLTLIBRARIES \
-	install-nobase_localincludeHEADERS install-pkgconfigDATA
+install-data-am: install-nobase_localincludeHEADERS
 
 install-dvi: install-dvi-recursive
 
@@ -871,7 +1358,7 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-recursive
-	-rm -rf ./$(DEPDIR)
+	-rm -rf communication/$(DEPDIR) datatypes/bit/$(DEPDIR) datatypes/fx/$(DEPDIR) datatypes/int/$(DEPDIR) datatypes/misc/$(DEPDIR) kernel/$(DEPDIR) tracing/$(DEPDIR) utils/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
@@ -888,28 +1375,25 @@ ps: ps-recursive
 
 ps-am:
 
-uninstall-am: uninstall-libarchLTLIBRARIES \
-	uninstall-nobase_localincludeHEADERS uninstall-pkgconfigDATA
+uninstall-am: uninstall-nobase_localincludeHEADERS
 
 .MAKE: $(am__recursive_targets) install-am install-strip
 
 .PHONY: $(am__recursive_targets) CTAGS GTAGS TAGS all all-am check \
-	check-am clean clean-generic clean-libarchLTLIBRARIES \
-	clean-libtool cscopelist-am ctags ctags-am distclean \
+	check-am clean clean-generic clean-libtool \
+	clean-noinstLTLIBRARIES cscopelist-am ctags ctags-am distclean \
 	distclean-compile distclean-generic distclean-libtool \
 	distclean-tags distdir dvi dvi-am html html-am info info-am \
 	install install-am install-data install-data-am install-dvi \
 	install-dvi-am install-exec install-exec-am install-html \
-	install-html-am install-info install-info-am \
-	install-libarchLTLIBRARIES install-man \
+	install-html-am install-info install-info-am install-man \
 	install-nobase_localincludeHEADERS install-pdf install-pdf-am \
-	install-pkgconfigDATA install-ps install-ps-am install-strip \
-	installcheck installcheck-am installdirs installdirs-am \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
-	pdf pdf-am ps ps-am tags tags-am uninstall uninstall-am \
-	uninstall-libarchLTLIBRARIES \
-	uninstall-nobase_localincludeHEADERS uninstall-pkgconfigDATA
+	install-ps install-ps-am install-strip installcheck \
+	installcheck-am installdirs installdirs-am maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+	tags tags-am uninstall uninstall-am \
+	uninstall-nobase_localincludeHEADERS
 
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

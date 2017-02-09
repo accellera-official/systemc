@@ -144,7 +144,7 @@ am__objects_2 = 2.1/dpipe/2_1_dpipe_test-main.$(OBJEXT)
 am_2_1_dpipe_test_OBJECTS = $(am__objects_1) $(am__objects_2)
 2_1_dpipe_test_OBJECTS = $(am_2_1_dpipe_test_OBJECTS)
 2_1_dpipe_test_LDADD = $(LDADD)
-2_1_dpipe_test_DEPENDENCIES = $(top_builddir)/src/sysc/libsystemc.la
+2_1_dpipe_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
@@ -153,8 +153,7 @@ am__objects_3 = 2.1/forkjoin/2_1_forkjoin_test-forkjoin.$(OBJEXT)
 am_2_1_forkjoin_test_OBJECTS = $(am__objects_1) $(am__objects_3)
 2_1_forkjoin_test_OBJECTS = $(am_2_1_forkjoin_test_OBJECTS)
 2_1_forkjoin_test_LDADD = $(LDADD)
-2_1_forkjoin_test_DEPENDENCIES =  \
-	$(top_builddir)/src/sysc/libsystemc.la
+2_1_forkjoin_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
 am__objects_4 = 2.1/reset_signal_is/2_1_reset_signal_is_test-reset_signal_is.$(OBJEXT)
 am_2_1_reset_signal_is_test_OBJECTS = $(am__objects_1) \
 	$(am__objects_4)
@@ -162,25 +161,22 @@ am_2_1_reset_signal_is_test_OBJECTS = $(am__objects_1) \
 	$(am_2_1_reset_signal_is_test_OBJECTS)
 2_1_reset_signal_is_test_LDADD = $(LDADD)
 2_1_reset_signal_is_test_DEPENDENCIES =  \
-	$(top_builddir)/src/sysc/libsystemc.la
+	$(top_builddir)/src/libsystemc.la
 am__objects_5 = 2.1/sc_export/2_1_sc_export_test-main.$(OBJEXT)
 am_2_1_sc_export_test_OBJECTS = $(am__objects_1) $(am__objects_5)
 2_1_sc_export_test_OBJECTS = $(am_2_1_sc_export_test_OBJECTS)
 2_1_sc_export_test_LDADD = $(LDADD)
-2_1_sc_export_test_DEPENDENCIES =  \
-	$(top_builddir)/src/sysc/libsystemc.la
+2_1_sc_export_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
 am__objects_6 = 2.1/sc_report/2_1_sc_report_test-main.$(OBJEXT)
 am_2_1_sc_report_test_OBJECTS = $(am__objects_1) $(am__objects_6)
 2_1_sc_report_test_OBJECTS = $(am_2_1_sc_report_test_OBJECTS)
 2_1_sc_report_test_LDADD = $(LDADD)
-2_1_sc_report_test_DEPENDENCIES =  \
-	$(top_builddir)/src/sysc/libsystemc.la
+2_1_sc_report_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
 am__objects_7 = 2.1/scx_barrier/2_1_scx_barrier_test-main.$(OBJEXT)
 am_2_1_scx_barrier_test_OBJECTS = $(am__objects_1) $(am__objects_7)
 2_1_scx_barrier_test_OBJECTS = $(am_2_1_scx_barrier_test_OBJECTS)
 2_1_scx_barrier_test_LDADD = $(LDADD)
-2_1_scx_barrier_test_DEPENDENCIES =  \
-	$(top_builddir)/src/sysc/libsystemc.la
+2_1_scx_barrier_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
 am__objects_8 = 2.1/scx_mutex_w_policy/2_1_scx_mutex_w_policy_test-scx_mutex_w_policy.$(OBJEXT)
 am_2_1_scx_mutex_w_policy_test_OBJECTS = $(am__objects_1) \
 	$(am__objects_8)
@@ -188,7 +184,7 @@ am_2_1_scx_mutex_w_policy_test_OBJECTS = $(am__objects_1) \
 	$(am_2_1_scx_mutex_w_policy_test_OBJECTS)
 2_1_scx_mutex_w_policy_test_LDADD = $(LDADD)
 2_1_scx_mutex_w_policy_test_DEPENDENCIES =  \
-	$(top_builddir)/src/sysc/libsystemc.la
+	$(top_builddir)/src/libsystemc.la
 am__objects_9 = 2.1/specialized_signals/2_1_specialized_signals_test-main.$(OBJEXT) \
 	2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_int.$(OBJEXT) \
 	2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_uint.$(OBJEXT) \
@@ -200,17 +196,17 @@ am_2_1_specialized_signals_test_OBJECTS = $(am__objects_1) \
 	$(am_2_1_specialized_signals_test_OBJECTS)
 2_1_specialized_signals_test_LDADD = $(LDADD)
 2_1_specialized_signals_test_DEPENDENCIES =  \
-	$(top_builddir)/src/sysc/libsystemc.la
+	$(top_builddir)/src/libsystemc.la
 am__objects_10 = 2.3/sc_rvd/2_3_sc_rvd_test-main.$(OBJEXT)
 am_2_3_sc_rvd_test_OBJECTS = $(am__objects_1) $(am__objects_10)
 2_3_sc_rvd_test_OBJECTS = $(am_2_3_sc_rvd_test_OBJECTS)
 2_3_sc_rvd_test_LDADD = $(LDADD)
-2_3_sc_rvd_test_DEPENDENCIES = $(top_builddir)/src/sysc/libsystemc.la
+2_3_sc_rvd_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
 am__objects_11 = 2.3/sc_ttd/2_3_sc_ttd_test-main.$(OBJEXT)
 am_2_3_sc_ttd_test_OBJECTS = $(am__objects_1) $(am__objects_11)
 2_3_sc_ttd_test_OBJECTS = $(am_2_3_sc_ttd_test_OBJECTS)
 2_3_sc_ttd_test_LDADD = $(LDADD)
-2_3_sc_ttd_test_DEPENDENCIES = $(top_builddir)/src/sysc/libsystemc.la
+2_3_sc_ttd_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
 am__objects_12 = fft/fft_flpt/fft_fft_flpt_test-fft.$(OBJEXT) \
 	fft/fft_flpt/fft_fft_flpt_test-main.$(OBJEXT) \
 	fft/fft_flpt/fft_fft_flpt_test-sink.$(OBJEXT) \
@@ -218,8 +214,7 @@ am__objects_12 = fft/fft_flpt/fft_fft_flpt_test-fft.$(OBJEXT) \
 am_fft_fft_flpt_test_OBJECTS = $(am__objects_1) $(am__objects_12)
 fft_fft_flpt_test_OBJECTS = $(am_fft_fft_flpt_test_OBJECTS)
 fft_fft_flpt_test_LDADD = $(LDADD)
-fft_fft_flpt_test_DEPENDENCIES =  \
-	$(top_builddir)/src/sysc/libsystemc.la
+fft_fft_flpt_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
 am__objects_13 = fft/fft_fxpt/fft_fft_fxpt_test-fft.$(OBJEXT) \
 	fft/fft_fxpt/fft_fft_fxpt_test-main.$(OBJEXT) \
 	fft/fft_fxpt/fft_fft_fxpt_test-sink.$(OBJEXT) \
@@ -227,8 +222,7 @@ am__objects_13 = fft/fft_fxpt/fft_fft_fxpt_test-fft.$(OBJEXT) \
 am_fft_fft_fxpt_test_OBJECTS = $(am__objects_1) $(am__objects_13)
 fft_fft_fxpt_test_OBJECTS = $(am_fft_fft_fxpt_test_OBJECTS)
 fft_fft_fxpt_test_LDADD = $(LDADD)
-fft_fft_fxpt_test_DEPENDENCIES =  \
-	$(top_builddir)/src/sysc/libsystemc.la
+fft_fft_fxpt_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
 am__objects_14 = fir/fir_test-stimulus.$(OBJEXT) \
 	fir/fir_test-display.$(OBJEXT)
 am__objects_15 = fir/fir_test-fir.$(OBJEXT) \
@@ -237,7 +231,7 @@ am_fir_test_OBJECTS = $(am__objects_1) $(am__objects_14) \
 	$(am__objects_15)
 fir_test_OBJECTS = $(am_fir_test_OBJECTS)
 fir_test_LDADD = $(LDADD)
-fir_test_DEPENDENCIES = $(top_builddir)/src/sysc/libsystemc.la
+fir_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
 am__objects_16 = fir/stimulus.$(OBJEXT) fir/display.$(OBJEXT)
 am__objects_17 = fir/fir_fsm.$(OBJEXT) fir/fir_data.$(OBJEXT) \
 	fir/main_rtl.$(OBJEXT)
@@ -245,7 +239,7 @@ am_fir_test_rtl_OBJECTS = $(am__objects_1) $(am__objects_16) \
 	$(am__objects_17)
 fir_test_rtl_OBJECTS = $(am_fir_test_rtl_OBJECTS)
 fir_test_rtl_LDADD = $(LDADD)
-fir_test_rtl_DEPENDENCIES = $(top_builddir)/src/sysc/libsystemc.la
+fir_test_rtl_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
 am__objects_18 = pipe/pipe_test-display.$(OBJEXT) \
 	pipe/pipe_test-main.$(OBJEXT) pipe/pipe_test-numgen.$(OBJEXT) \
 	pipe/pipe_test-stage1.$(OBJEXT) \
@@ -254,7 +248,7 @@ am__objects_18 = pipe/pipe_test-display.$(OBJEXT) \
 am_pipe_test_OBJECTS = $(am__objects_1) $(am__objects_18)
 pipe_test_OBJECTS = $(am_pipe_test_OBJECTS)
 pipe_test_LDADD = $(LDADD)
-pipe_test_DEPENDENCIES = $(top_builddir)/src/sysc/libsystemc.la
+pipe_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
 am__objects_19 = pkt_switch/pkt_switch_test-fifo.$(OBJEXT) \
 	pkt_switch/pkt_switch_test-main.$(OBJEXT) \
 	pkt_switch/pkt_switch_test-receiver.$(OBJEXT) \
@@ -264,7 +258,7 @@ am__objects_19 = pkt_switch/pkt_switch_test-fifo.$(OBJEXT) \
 am_pkt_switch_test_OBJECTS = $(am__objects_1) $(am__objects_19)
 pkt_switch_test_OBJECTS = $(am_pkt_switch_test_OBJECTS)
 pkt_switch_test_LDADD = $(LDADD)
-pkt_switch_test_DEPENDENCIES = $(top_builddir)/src/sysc/libsystemc.la
+pkt_switch_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
 am__objects_20 = risc_cpu/risc_cpu_test-bios.$(OBJEXT) \
 	risc_cpu/risc_cpu_test-dcache.$(OBJEXT) \
 	risc_cpu/risc_cpu_test-decode.$(OBJEXT) \
@@ -279,12 +273,12 @@ am__objects_20 = risc_cpu/risc_cpu_test-bios.$(OBJEXT) \
 am_risc_cpu_test_OBJECTS = $(am__objects_1) $(am__objects_20)
 risc_cpu_test_OBJECTS = $(am_risc_cpu_test_OBJECTS)
 risc_cpu_test_LDADD = $(LDADD)
-risc_cpu_test_DEPENDENCIES = $(top_builddir)/src/sysc/libsystemc.la
+risc_cpu_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
 am__objects_21 = rsa/rsa_test-rsa.$(OBJEXT)
 am_rsa_test_OBJECTS = $(am__objects_1) $(am__objects_21)
 rsa_test_OBJECTS = $(am_rsa_test_OBJECTS)
 rsa_test_LDADD = $(LDADD)
-rsa_test_DEPENDENCIES = $(top_builddir)/src/sysc/libsystemc.la
+rsa_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
 am__objects_22 = simple_bus/simple_bus_test-simple_bus.$(OBJEXT) \
 	simple_bus/simple_bus_test-simple_bus_arbiter.$(OBJEXT) \
 	simple_bus/simple_bus_test-simple_bus_main.$(OBJEXT) \
@@ -296,19 +290,17 @@ am__objects_22 = simple_bus/simple_bus_test-simple_bus.$(OBJEXT) \
 am_simple_bus_test_OBJECTS = $(am__objects_1) $(am__objects_22)
 simple_bus_test_OBJECTS = $(am_simple_bus_test_OBJECTS)
 simple_bus_test_LDADD = $(LDADD)
-simple_bus_test_DEPENDENCIES = $(top_builddir)/src/sysc/libsystemc.la
+simple_bus_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
 am__objects_23 = simple_fifo/simple_fifo_test-simple_fifo.$(OBJEXT)
 am_simple_fifo_test_OBJECTS = $(am__objects_1) $(am__objects_23)
 simple_fifo_test_OBJECTS = $(am_simple_fifo_test_OBJECTS)
 simple_fifo_test_LDADD = $(LDADD)
-simple_fifo_test_DEPENDENCIES =  \
-	$(top_builddir)/src/sysc/libsystemc.la
+simple_fifo_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
 am__objects_24 = simple_perf/simple_perf_test-simple_perf.$(OBJEXT)
 am_simple_perf_test_OBJECTS = $(am__objects_1) $(am__objects_24)
 simple_perf_test_OBJECTS = $(am_simple_perf_test_OBJECTS)
 simple_perf_test_LDADD = $(LDADD)
-simple_perf_test_DEPENDENCIES =  \
-	$(top_builddir)/src/sysc/libsystemc.la
+simple_perf_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -790,10 +782,21 @@ EXTRA_DEFINES = -DSC_INCLUDE_FX
 
 # initialize some useful variables (filled later)
 CLEANFILES = $(am__append_9) $(examples_CLEAN) $(check_SCRIPTS)
-EXTRA_DIST = $(examples_FILES)
+EXTRA_DIST = $(examples_FILES) CMakeLists.txt 2.1/dpipe/CMakeLists.txt \
+	2.1/forkjoin/CMakeLists.txt 2.1/reset_signal_is/CMakeLists.txt \
+	2.1/sc_export/CMakeLists.txt 2.1/sc_report/CMakeLists.txt \
+	2.1/scx_barrier/CMakeLists.txt \
+	2.1/scx_mutex_w_policy/CMakeLists.txt \
+	2.1/specialized_signals/CMakeLists.txt \
+	2.3/sc_rvd/CMakeLists.txt 2.3/sc_ttd/CMakeLists.txt \
+	fft/fft_flpt/CMakeLists.txt fft/fft_fxpt/CMakeLists.txt \
+	fir/CMakeLists.txt pipe/CMakeLists.txt \
+	pkt_switch/CMakeLists.txt risc_cpu/CMakeLists.txt \
+	rsa/CMakeLists.txt simple_bus/CMakeLists.txt \
+	simple_fifo/CMakeLists.txt simple_perf/CMakeLists.txt
 SYSTEMC_INC_DIR = $(top_srcdir)/src
 SYSTEMC_LIB_DIR = $(libdir)$(LIB_ARCH_SUFFIX)
-LDADD = $(top_builddir)/src/sysc/libsystemc.la
+LDADD = $(top_builddir)/src/libsystemc.la
 TESTSCRIPT_IN = $(top_srcdir)/config/test.sh.in
 check_SCRIPTS = $(examples_TESTS:=.sh)
 syscexamplesdir = $(examplesdir)/sysc

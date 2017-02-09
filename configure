@@ -16736,7 +16736,7 @@ fi
 
 
 
-ac_config_files="$ac_config_files Makefile src/Makefile src/sysc/Makefile src/sysc/systemc.pc src/sysc/communication/Makefile src/sysc/datatypes/Makefile src/sysc/kernel/Makefile src/sysc/tracing/Makefile src/sysc/utils/Makefile src/sysc/packages/boost/Makefile src/sysc/packages/qt/Makefile src/tlm_core/Makefile src/tlm_core/tlm.pc src/tlm_utils/Makefile examples/Makefile examples/sysc/Makefile examples/tlm/Makefile examples/tlm/common/Makefile docs/Makefile docs/sysc/doxygen/Doxyfile docs/tlm/doxygen/Doxyfile"
+ac_config_files="$ac_config_files Makefile src/Makefile src/systemc.pc src/tlm.pc src/sysc/Makefile src/sysc/packages/boost/Makefile src/sysc/packages/qt/Makefile src/tlm_core/Makefile src/tlm_utils/Makefile examples/Makefile examples/sysc/Makefile examples/tlm/Makefile examples/tlm/common/Makefile docs/Makefile docs/sysc/doxygen/Doxyfile docs/tlm/doxygen/Doxyfile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -17927,17 +17927,12 @@ do
     "libtool") CONFIG_COMMANDS="$CONFIG_COMMANDS libtool" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "src/Makefile") CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
+    "src/systemc.pc") CONFIG_FILES="$CONFIG_FILES src/systemc.pc" ;;
+    "src/tlm.pc") CONFIG_FILES="$CONFIG_FILES src/tlm.pc" ;;
     "src/sysc/Makefile") CONFIG_FILES="$CONFIG_FILES src/sysc/Makefile" ;;
-    "src/sysc/systemc.pc") CONFIG_FILES="$CONFIG_FILES src/sysc/systemc.pc" ;;
-    "src/sysc/communication/Makefile") CONFIG_FILES="$CONFIG_FILES src/sysc/communication/Makefile" ;;
-    "src/sysc/datatypes/Makefile") CONFIG_FILES="$CONFIG_FILES src/sysc/datatypes/Makefile" ;;
-    "src/sysc/kernel/Makefile") CONFIG_FILES="$CONFIG_FILES src/sysc/kernel/Makefile" ;;
-    "src/sysc/tracing/Makefile") CONFIG_FILES="$CONFIG_FILES src/sysc/tracing/Makefile" ;;
-    "src/sysc/utils/Makefile") CONFIG_FILES="$CONFIG_FILES src/sysc/utils/Makefile" ;;
     "src/sysc/packages/boost/Makefile") CONFIG_FILES="$CONFIG_FILES src/sysc/packages/boost/Makefile" ;;
     "src/sysc/packages/qt/Makefile") CONFIG_FILES="$CONFIG_FILES src/sysc/packages/qt/Makefile" ;;
     "src/tlm_core/Makefile") CONFIG_FILES="$CONFIG_FILES src/tlm_core/Makefile" ;;
-    "src/tlm_core/tlm.pc") CONFIG_FILES="$CONFIG_FILES src/tlm_core/tlm.pc" ;;
     "src/tlm_utils/Makefile") CONFIG_FILES="$CONFIG_FILES src/tlm_utils/Makefile" ;;
     "examples/Makefile") CONFIG_FILES="$CONFIG_FILES examples/Makefile" ;;
     "examples/sysc/Makefile") CONFIG_FILES="$CONFIG_FILES examples/sysc/Makefile" ;;

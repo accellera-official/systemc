@@ -321,7 +321,7 @@ EXTRA_DEFINES = -DSC_INCLUDE_FX
 
 # initialize some useful variables (filled later)
 CLEANFILES = 
-EXTRA_DIST = $(DOC_FILES)
+EXTRA_DIST = $(DOC_FILES) CMakeLists.txt
 DOXYGEN = doxygen
 DOC_FILES = sysc/README sysc/archived/README \
 	sysc/archived/FuncSpec20.pdf sysc/archived/WhitePaper20.pdf \

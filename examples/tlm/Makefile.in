@@ -137,7 +137,7 @@ am__objects_2 = at_1_phase/src/at_1_phase_test-at_1_phase.$(OBJEXT) \
 am_at_1_phase_test_OBJECTS = $(am__objects_1) $(am__objects_2)
 at_1_phase_test_OBJECTS = $(am_at_1_phase_test_OBJECTS)
 at_1_phase_test_LDADD = $(LDADD)
-at_1_phase_test_DEPENDENCIES = $(top_builddir)/src/sysc/libsystemc.la \
+at_1_phase_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la \
 	common/libtlm20examples.la
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -149,7 +149,7 @@ am__objects_3 = at_2_phase/src/at_2_phase_test-at_2_phase.$(OBJEXT) \
 am_at_2_phase_test_OBJECTS = $(am__objects_1) $(am__objects_3)
 at_2_phase_test_OBJECTS = $(am_at_2_phase_test_OBJECTS)
 at_2_phase_test_LDADD = $(LDADD)
-at_2_phase_test_DEPENDENCIES = $(top_builddir)/src/sysc/libsystemc.la \
+at_2_phase_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la \
 	common/libtlm20examples.la
 am__objects_4 = at_4_phase/src/at_4_phase_test-at_4_phase.$(OBJEXT) \
 	at_4_phase/src/at_4_phase_test-at_4_phase_top.$(OBJEXT) \
@@ -157,7 +157,7 @@ am__objects_4 = at_4_phase/src/at_4_phase_test-at_4_phase.$(OBJEXT) \
 am_at_4_phase_test_OBJECTS = $(am__objects_1) $(am__objects_4)
 at_4_phase_test_OBJECTS = $(am_at_4_phase_test_OBJECTS)
 at_4_phase_test_LDADD = $(LDADD)
-at_4_phase_test_DEPENDENCIES = $(top_builddir)/src/sysc/libsystemc.la \
+at_4_phase_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la \
 	common/libtlm20examples.la
 am__objects_5 = at_extension_optional/src/at_extension_optional_test-at_extension_optional.$(OBJEXT) \
 	at_extension_optional/src/at_extension_optional_test-at_extension_optional_top.$(OBJEXT) \
@@ -172,8 +172,7 @@ at_extension_optional_test_OBJECTS =  \
 	$(nodist_at_extension_optional_test_OBJECTS)
 at_extension_optional_test_LDADD = $(LDADD)
 at_extension_optional_test_DEPENDENCIES =  \
-	$(top_builddir)/src/sysc/libsystemc.la \
-	common/libtlm20examples.la
+	$(top_builddir)/src/libsystemc.la common/libtlm20examples.la
 am__objects_7 = at_mixed_targets/src/at_mixed_targets_test-at_mixed_targets.$(OBJEXT) \
 	at_mixed_targets/src/at_mixed_targets_test-at_mixed_targets_top.$(OBJEXT) \
 	at_mixed_targets/src/at_mixed_targets_test-initiator_top.$(OBJEXT)
@@ -181,8 +180,7 @@ am_at_mixed_targets_test_OBJECTS = $(am__objects_1) $(am__objects_7)
 at_mixed_targets_test_OBJECTS = $(am_at_mixed_targets_test_OBJECTS)
 at_mixed_targets_test_LDADD = $(LDADD)
 at_mixed_targets_test_DEPENDENCIES =  \
-	$(top_builddir)/src/sysc/libsystemc.la \
-	common/libtlm20examples.la
+	$(top_builddir)/src/libsystemc.la common/libtlm20examples.la
 am__objects_8 = at_ooo/src/at_ooo_test-at_ooo.$(OBJEXT) \
 	at_ooo/src/at_ooo_test-at_ooo_top.$(OBJEXT) \
 	at_ooo/src/at_ooo_test-at_target_ooo_2_phase.$(OBJEXT) \
@@ -190,14 +188,14 @@ am__objects_8 = at_ooo/src/at_ooo_test-at_ooo.$(OBJEXT) \
 am_at_ooo_test_OBJECTS = $(am__objects_1) $(am__objects_8)
 at_ooo_test_OBJECTS = $(am_at_ooo_test_OBJECTS)
 at_ooo_test_LDADD = $(LDADD)
-at_ooo_test_DEPENDENCIES = $(top_builddir)/src/sysc/libsystemc.la \
+at_ooo_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la \
 	common/libtlm20examples.la
 am__objects_9 = lt/src/lt_test-initiator_top.$(OBJEXT) \
 	lt/src/lt_test-lt.$(OBJEXT) lt/src/lt_test-lt_top.$(OBJEXT)
 am_lt_test_OBJECTS = $(am__objects_1) $(am__objects_9)
 lt_test_OBJECTS = $(am_lt_test_OBJECTS)
 lt_test_LDADD = $(LDADD)
-lt_test_DEPENDENCIES = $(top_builddir)/src/sysc/libsystemc.la \
+lt_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la \
 	common/libtlm20examples.la
 am__objects_10 = lt_dmi/src/lt_dmi_test-initiator_top.$(OBJEXT) \
 	lt_dmi/src/lt_dmi_test-lt_dmi.$(OBJEXT) \
@@ -205,7 +203,7 @@ am__objects_10 = lt_dmi/src/lt_dmi_test-initiator_top.$(OBJEXT) \
 am_lt_dmi_test_OBJECTS = $(am__objects_1) $(am__objects_10)
 lt_dmi_test_OBJECTS = $(am_lt_dmi_test_OBJECTS)
 lt_dmi_test_LDADD = $(LDADD)
-lt_dmi_test_DEPENDENCIES = $(top_builddir)/src/sysc/libsystemc.la \
+lt_dmi_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la \
 	common/libtlm20examples.la
 am__objects_11 = lt_extension_mandatory/src/lt_extension_mandatory_test-lt_extension_mandatory.$(OBJEXT) \
 	lt_extension_mandatory/src/lt_extension_mandatory_test-lt_extension_mandatory_top.$(OBJEXT) \
@@ -217,8 +215,7 @@ lt_extension_mandatory_test_OBJECTS =  \
 	$(am_lt_extension_mandatory_test_OBJECTS)
 lt_extension_mandatory_test_LDADD = $(LDADD)
 lt_extension_mandatory_test_DEPENDENCIES =  \
-	$(top_builddir)/src/sysc/libsystemc.la \
-	common/libtlm20examples.la
+	$(top_builddir)/src/libsystemc.la common/libtlm20examples.la
 am__objects_12 = lt_mixed_endian/src/lt_mixed_endian_test-initiator_top.$(OBJEXT) \
 	lt_mixed_endian/src/lt_mixed_endian_test-lt.$(OBJEXT) \
 	lt_mixed_endian/src/lt_mixed_endian_test-lt_top.$(OBJEXT) \
@@ -226,8 +223,7 @@ am__objects_12 = lt_mixed_endian/src/lt_mixed_endian_test-initiator_top.$(OBJEXT
 am_lt_mixed_endian_test_OBJECTS = $(am__objects_1) $(am__objects_12)
 lt_mixed_endian_test_OBJECTS = $(am_lt_mixed_endian_test_OBJECTS)
 lt_mixed_endian_test_LDADD = $(LDADD)
-lt_mixed_endian_test_DEPENDENCIES =  \
-	$(top_builddir)/src/sysc/libsystemc.la \
+lt_mixed_endian_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la \
 	common/libtlm20examples.la
 am__objects_13 = lt_temporal_decouple/src/lt_temporal_decouple_test-initiator_top.$(OBJEXT) \
 	lt_temporal_decouple/src/lt_temporal_decouple_test-lt_temporal_decouple.$(OBJEXT) \
@@ -239,8 +235,7 @@ lt_temporal_decouple_test_OBJECTS =  \
 	$(am_lt_temporal_decouple_test_OBJECTS)
 lt_temporal_decouple_test_LDADD = $(LDADD)
 lt_temporal_decouple_test_DEPENDENCIES =  \
-	$(top_builddir)/src/sysc/libsystemc.la \
-	common/libtlm20examples.la
+	$(top_builddir)/src/libsystemc.la common/libtlm20examples.la
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -753,11 +748,17 @@ EXTRA_DEFINES = -DSC_INCLUDE_FX
 # initialize some useful variables (filled later)
 CLEANFILES = $(am__append_9) $(at_extension_optional_SHARED_CXX_FILES) \
 	$(examples_CLEAN) $(check_SCRIPTS)
-EXTRA_DIST = $(examples_FILES)
+EXTRA_DIST = $(examples_FILES) CMakeLists.txt \
+	at_1_phase/CMakeLists.txt at_2_phase/CMakeLists.txt \
+	at_4_phase/CMakeLists.txt at_extension_optional/CMakeLists.txt \
+	at_mixed_targets/CMakeLists.txt at_ooo/CMakeLists.txt \
+	lt/CMakeLists.txt lt_dmi/CMakeLists.txt \
+	lt_extension_mandatory/CMakeLists.txt \
+	lt_mixed_endian/CMakeLists.txt \
+	lt_temporal_decouple/CMakeLists.txt
 SYSTEMC_INC_DIR = $(top_srcdir)/src
 SYSTEMC_LIB_DIR = $(libdir)$(LIB_ARCH_SUFFIX)
-LDADD = $(top_builddir)/src/sysc/libsystemc.la \
-	common/libtlm20examples.la
+LDADD = $(top_builddir)/src/libsystemc.la common/libtlm20examples.la
 TESTSCRIPT_IN = $(top_srcdir)/config/test.sh.in
 SUBDIRS = \
 	common \
