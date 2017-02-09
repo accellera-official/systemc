@@ -70,7 +70,7 @@ sc_elab_and_sim( int argc, char* argv[] )
 
     // Copy argv into a new structure to prevent sc_main from modifying the
     // result returned from sc_argv.
-    std::vector<char*> argv_call(argc + 1, NULL);
+    std::vector<char*> argv_call(argc + 1, static_cast<char*>(NULL));
     for ( int i = 0; i < argc; ++i ) {
         std::size_t size = std::strlen(argv[i]) + 1;
         argv_call[i] = new char[size];
