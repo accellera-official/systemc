@@ -66,7 +66,7 @@ int sc_main( int, char*[] )
     sc_time_unit resunit   = SC_FS;
     unsigned* res = resolutions;
 
-    do
+    while( true )
     {
         std::cout << "\nResolution = " << sc_get_time_resolution() << std::endl;
 
@@ -80,9 +80,13 @@ int sc_main( int, char*[] )
         check_time( sc_time(1000,   SC_US),  SC_MS,   "1 ms" );
         check_time( sc_time( 100,  SC_SEC), SC_SEC, "100 s" );
 
+        // exit loop before final resolution update
+        if (res == resolutions + (sizeof(resolutions)/sizeof(*resolutions)))
+            break;
+
         sc_set_time_resolution( *res, resunit );
+        res++;
     }
-    while( res++ < resolutions + (sizeof(resolutions)/sizeof*resolutions) );
 
     cout << "\nProgram completed" << endl;
     return 0;
