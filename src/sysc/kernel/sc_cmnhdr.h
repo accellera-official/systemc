@@ -103,26 +103,43 @@
 //
 // This macro can be used inside the library sources to make certain assumptions
 // on the available features in the underlying C++ implementation.
-// TODO: Add consistency check in sc_ver.h, once this becomes ABI breaking
 //
-#ifndef SC_STD_CPLUSPLUS
-#  define SC_STD_CPLUSPLUS __cplusplus // use compiler's default
-// TODO: refine selection based on compiler features, eg. on MSVC
+#ifndef SC_CPLUSPLUS
+# ifdef _MSC_VER // don't rely on __cplusplus for MSVC
+// Instead, we select the C++ standard with reasonable support.
+// If some features still need to be excluded on specific MSVC
+// versions, we'll do so at the point of definition.
+
+#   if _MSC_VER < 1800   // MSVC'2010 and earlier, assume C++03
+#     define SC_CPLUSPLUS 199711L
+#   elif _MSC_VER < 1900 // MSVC'2013, assume C++11
+#     define SC_CPLUSPLUS 201103L
+#   elif _MSC_VER < 2000 // MSVC'2015, assume C++14
+#     define SC_CPLUSPLUS 201402L
+#   else // more recent MSVC versions, assume C++14
+#     define SC_CPLUSPLUS 201402L
+#   endif
+
+# else // not _MSC_VER
+// use compiler's default
+#   define SC_CPLUSPLUS __cplusplus
+
+# endif // not _MSC_VER
 #endif // SC_STD_CPLUSCPLUS
 
 // Currently, SystemC standard requires/assumes C++03 only
-#define SC_STD_CPLUSPLUS_MAX_ 199711L
+#define SC_CPLUSPLUS_BASE_ 201103L
 
-// The IEEE_STD_1666_CPLUSPLUS features is meant for checks in the models,
-// checking for availability of SystemC features relying on specific C++
-// standard versions.
+// The IEEE_1666_CPLUSPLUS macro is meant to be queried in the models,
+// checking for availability of SystemC features relying on specific
+// C++ standard versions.
 //
-// IEEE_STD_1666_CPLUSPLUS = min(SC_STD_CPLUSCPLUS, SC_STD_CPLUSPLUS_MAX_)
-#if SC_STD_CPLUSPLUS >= SC_STD_CPLUSPLUS_MAX_
-#  define IEEE_STD_1666_CPLUSPLUS SC_STD_CPLUSPLUS_MAX_
+// IEEE_1666_CPLUSPLUS = min(SC_STD_CPLUSCPLUS, SC_STD_CPLUSPLUS_BASE_)
+#if SC_CPLUSPLUS >= SC_STD_CPLUSPLUS_BASE_
+# define IEEE_1666_CPLUSPLUS SC_STD_CPLUSPLUS_BASE_
 #else
-#  define IEEE_STD_1666_CPLUSPLUS SC_STD_CPLUSPLUS
-#endif // IEEE_STD_1666_CPLUSPLUS
+# define IEEE_1666_CPLUSPLUS SC_STD_CPLUSPLUS
+#endif // IEEE_1666_CPLUSPLUS
 
 // ----------------------------------------------------------------------------
 
@@ -136,7 +153,7 @@
 // declare certain template instantiations as "extern" during library build
 // and adding an explicit instantiation into the (shared) SystemC library
 
-#if defined(__GNUC__) && SC_STD_CPLUSPLUS < 201101L
+#if defined(__GNUC__) && SC_CPLUSPLUS < 201103L
 # define SC_TPLEXTERN_ __extension__ extern
 #else
 # define SC_TPLEXTERN_ extern

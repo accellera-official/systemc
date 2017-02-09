@@ -38,6 +38,11 @@
 #include <string>
 #include "sysc/kernel/sc_cmnhdr.h"
 
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+# pragma warning(push)
+# pragma warning(disable:4275) // ignore missing std::exception DLL export
+#endif
+
 namespace sc_core {
 
 // ----------------------------------------------------------------------------
@@ -92,7 +97,8 @@ enum {
     SC_DEFAULT_INFO_ACTIONS    = SC_LOG | SC_DISPLAY,
     SC_DEFAULT_WARNING_ACTIONS = SC_LOG | SC_DISPLAY,
     SC_DEFAULT_ERROR_ACTIONS   = SC_LOG | SC_CACHE_REPORT | SC_THROW,
-    SC_DEFAULT_FATAL_ACTIONS   = SC_LOG | SC_DISPLAY | SC_CACHE_REPORT | SC_ABORT
+    SC_DEFAULT_FATAL_ACTIONS   = SC_LOG | SC_DISPLAY | SC_CACHE_REPORT | SC_ABORT,
+    SC_DEFAULT_CATCH_ACTIONS   = SC_DISPLAY
 };
 
 class sc_object;
@@ -144,10 +150,7 @@ public:
 
     int get_verbosity() const { return m_verbosity_level; }
 
-    bool valid () const
-        {
-	    return process != 0;
-	}
+    bool valid () const;
 
     virtual const char* what() const throw()
         {
@@ -171,7 +174,7 @@ protected:
     char*              file;
     int                line;
     sc_time*           timestamp;
-    sc_object*         process;
+    char*              process_name;
     int                m_verbosity_level;
     char*              m_what;
 
@@ -248,6 +251,10 @@ extern SC_API const char SC_ID_OUT_OF_BOUNDS_[];
 extern SC_API const char SC_ID_REGISTER_ID_FAILED_[];
 
 } // namespace sc_core
+
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+# pragma warning(pop)
+#endif
 
 #include "sysc/utils/sc_report_handler.h"
 

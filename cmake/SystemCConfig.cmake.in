@@ -1,0 +1,76 @@
+# - Config file for the SystemC package
+# It defines the following variables
+#  SystemC_DEFINITIONS  - required preprocessor definitions to use SystemC
+#  SystemC_INCLUDE_DIRS - include directories for SystemC
+#  SystemC_LIBRARIES    - libraries to link against
+#  SystemC_TARGET_ARCH  - Target architecture according to the Accellera SystemC conventions
+
+# SystemC requires Pthreads under certain conditions
+if (@CMAKE_USE_PTHREADS_INIT@)
+  set (CMAKE_THREAD_PREFER_PTHREAD)
+  find_package (Threads REQUIRED)
+  if (NOT CMAKE_USE_PTHREADS_INIT)
+    message (SEND_ERROR "Failed to find the Pthreads library required to implement the SystemC coroutines and async_request_update() of primitive channels on Unix.")
+  endif (NOT CMAKE_USE_PTHREADS_INIT)
+endif (@CMAKE_USE_PTHREADS_INIT@)
+
+if (MSVC)
+  # Select method to represent pointers to class members in MSVC such
+  # that a pointer to a member of a class may be declared before
+  # defining the class itself. All code linking to the SystemC library
+  # requires this compiler option to be set.
+  if (NOT CMAKE_C_FLAGS MATCHES "/vmg")
+    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /vmg" CACHE STRING "Flags used by the compiler during all build types." FORCE)
+  endif (NOT CMAKE_C_FLAGS MATCHES "/vmg")
+  if (NOT CMAKE_CXX_FLAGS MATCHES "/vmg")
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /vmg" CACHE STRING "Flags used by the compiler during all build types." FORCE)
+  endif (NOT CMAKE_CXX_FLAGS MATCHES "/vmg")
+  # Enable parallel compiles of object files for same target when using MSVC.
+  if (NOT CMAKE_C_FLAGS MATCHES "/MP")
+    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /MP" CACHE STRING "Flags used by the compiler during all build types." FORCE)
+  endif (NOT CMAKE_C_FLAGS MATCHES "/MP")
+  if (NOT CMAKE_CXX_FLAGS MATCHES "/MP")
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP" CACHE STRING "Flags used by the compiler during all build types." FORCE)
+  endif (NOT CMAKE_CXX_FLAGS MATCHES "/MP")
+endif (MSVC)
+
+set (SystemC_TARGET_ARCH @SystemC_TARGET_ARCH@)
+
+# Preprocessor definitions
+# set (SystemC_DEFINITIONS "-DSC_INCLUDE_FX")
+
+if (@DISABLE_VIRTUAL_BIND@)
+  list (APPEND SystemC_DEFINITIONS "-DSC_DISABLE_VIRTUAL_BIND")
+endif (@DISABLE_VIRTUAL_BIND@)
+
+if (@ENABLE_ASSERTIONS@)
+  list (APPEND SystemC_DEFINITIONS "-DSC_ENABLE_ASSERTIONS")
+endif (@ENABLE_ASSERTIONS@)
+
+if (@ENABLE_IMMEDIATE_SELF_NOTIFICATIONS@)
+  list (APPEND SystemC_DEFINITIONS "-DSC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS")
+endif (@ENABLE_IMMEDIATE_SELF_NOTIFICATIONS@)
+
+if (@ENABLE_PHASE_CALLBACKS@)
+  list (APPEND SystemC_DEFINITIONS "-DSC_ENABLE_SIMULATION_PHASE_CALLBACKS")
+endif (@ENABLE_PHASE_CALLBACKS@)
+
+if (@ENABLE_PHASE_CALLBACKS_TRACING@)
+  list (APPEND SystemC_DEFINITIONS "-DSC_ENABLE_SIMULATION_PHASE_CALLBACKS_TRACING")
+endif (@ENABLE_PHASE_CALLBACKS_TRACING@)
+
+if (@BUILD_SHARED_LIBS@ AND (WIN32 OR CYGWIN))
+  list (APPEND SystemC_DEFINITIONS "-DSC_WIN_DLL")
+endif (@BUILD_SHARED_LIBS@ AND (WIN32 OR CYGWIN))
+
+# Compute paths
+get_filename_component (SystemC_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+set (SystemC_INCLUDE_DIRS "@CONF_INCLUDE_DIRS@")
+
+# Our library dependencies (contains definitions for IMPORTED targets)
+if (NOT TARGET systemc AND NOT SystemC_LIBRARY_DIR)
+  include ("${SystemC_CMAKE_DIR}/SystemCTargets.cmake")
+endif (NOT TARGET systemc AND NOT SystemC_LIBRARY_DIR)
+
+# systemc is an IMPORTED target created by SystemCTargets.cmake
+set (SystemC_LIBRARIES systemc ${CMAKE_THREAD_LIBS_INIT})

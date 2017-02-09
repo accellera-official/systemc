@@ -10,6 +10,16 @@ Contents:
         3. SystemC Library Configuration Switches
 
 
+Note: A new CMake-based build system for SystemC is part of this
+      distribution, which unifies the configuration of the SystemC
+      sources on different Unix and Windows platforms. It is able to
+      generate the necessary files to compile/install SystemC using
+      different command-line build tools (e.g., GNU Make or Ninja) and
+      IDEs (e.g., Eclipse, Xcode, MS Visual Studio C++, or Kdevelop).
+      The installation notes for SystemC using CMake can be found in the
+      file docs/INSTALL_USING_CMAKE.
+
+
 1. Installation Notes for Unix
 ------------------------------
 

@@ -49,7 +49,38 @@ H_FILES = \
 
 nobase_include_HEADERS = $(H_FILES)
 
+libarchdir = $(libdir)$(LIB_ARCH_SUFFIX)
+libarch_LTLIBRARIES = libsystemc.la
+
+pkgconfigdir = $(libarchdir)/pkgconfig
+pkgconfig_DATA = \
+	systemc.pc \
+	tlm.pc
+
 EXTRA_DIST += \
-	README_TLM.txt
+	README_TLM.txt \
+	CMakeLists.txt
+
+# no own sources here
+libsystemc_la_SOURCES =
+
+# dummy C++ source to cause C++ linking
+nodist_EXTRA_libsystemc_la_SOURCES = sc_nonexistent.cpp
+
+# add main libraries
+libsystemc_la_LIBADD = \
+	tlm_utils/libtlm_utils.la \
+	tlm_core/libtlm_core.la \
+	sysc/libsysc.la
+
+# either for async_update locking or pthread processes
+if USES_PTHREADS_LIB
+# Libtool/GCC do not play well together on some platforms
+# with C++ libraries and libpthread dependency, see e.g.
+# http://lists.gnu.org/archive/html/libtool/2012-02/msg00003.html
+libsystemc_la_LIBADD+=$(EXPLICIT_LPTHREAD)
+endif
+
+libsystemc_la_LDFLAGS = $(EXTRA_LDFLAGS) -release $(VERSION)
 
 ## Taf!

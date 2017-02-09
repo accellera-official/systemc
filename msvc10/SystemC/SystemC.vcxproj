@@ -303,9 +303,13 @@
     <None Include="..\..\src\systemc">
       <FileType>CppHeader</FileType>
     </None>
+    <None Include="..\..\src\tlm">
+      <FileType>CppHeader</FileType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\systemc.h" />
+    <ClInclude Include="..\..\src\tlm.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="SystemC-core.vcxproj">

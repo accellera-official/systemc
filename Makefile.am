@@ -48,13 +48,21 @@ DOC_FILES = \
 	LICENSE \
 	NEWS \
 	README \
-	RELEASENOTES
+	RELEASENOTES \
+	cmake/INSTALL_USING_CMAKE
 
 EXTRA_DIST = \
 	$(DOC_FILES) \
 	\
 	config/bootstrap \
 	config/test.sh.in \
+	\
+	CMakeLists.txt \
+	cmake/SystemCConfig.cmake.in \
+	cmake/SystemCConfigVersion.cmake.in \
+	cmake/TLMConfig.cmake.in \
+	cmake/TLMConfigVersion.cmake.in \
+	cmake/run_test.cmake \
 	\
 	msvc10/SystemC/SystemC.sln \
 	msvc10/SystemC/SystemC.props \

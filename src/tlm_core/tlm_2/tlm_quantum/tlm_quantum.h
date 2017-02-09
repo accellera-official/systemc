@@ -17,9 +17,9 @@
 
  *****************************************************************************/
 
-#ifndef __TLM_QUANTUM_H__
-#define __TLM_QUANTUM_H__
+#ifndef TLM_CORE_TLM2_TLM_QUANTUM_H_INCLUDED_
+#define TLM_CORE_TLM2_TLM_QUANTUM_H_INCLUDED_
 
 #include "tlm_core/tlm_2/tlm_quantum/tlm_global_quantum.h"
 
-#endif
+#endif // TLM_CORE_TLM2_TLM_QUANTUM_H_INCLUDED_

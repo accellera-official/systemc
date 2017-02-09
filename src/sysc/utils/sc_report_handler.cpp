@@ -180,11 +180,6 @@ sc_log_file_handle::operator*()
 
 static sc_log_file_handle log_stream;
 
-const char* sc_report::get_process_name() const
-{
-	return process ? process->name() : 0;
-}
-
 
 //
 // The official handler of the exception reporting
@@ -773,6 +768,21 @@ char * sc_report_handler::log_file_name = 0;
 sc_report_handler::msg_def_items * sc_report_handler::messages =
     &sc_report_handler::msg_terminator;
 
+
+sc_actions sc_report_handler::catch_actions = SC_DEFAULT_CATCH_ACTIONS;
+
+sc_actions sc_report_handler::set_catch_actions(sc_actions act)
+{
+    //sc_assert( !(act | SC_THROW) ); // allow SC_THROW?
+    sc_actions old = catch_actions;
+    catch_actions = act;
+    return old;
+}
+
+sc_actions sc_report_handler::get_catch_actions()
+{
+    return catch_actions;
+}
 
 //
 // predefined messages

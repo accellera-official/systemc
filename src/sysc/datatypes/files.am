@@ -1,0 +1,137 @@
+## ****************************************************************************
+##
+##  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+##  more contributor license agreements.  See the NOTICE file distributed
+##  with this work for additional information regarding copyright ownership.
+##  Accellera licenses this file to you under the Apache License, Version 2.0
+##  (the "License"); you may not use this file except in compliance with the
+##  License.  You may obtain a copy of the License at
+##
+##   http://www.apache.org/licenses/LICENSE-2.0
+##
+##  Unless required by applicable law or agreed to in writing, software
+##  distributed under the License is distributed on an "AS IS" BASIS,
+##  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+##  implied.  See the License for the specific language governing
+##  permissions and limitations under the License.
+##
+## ****************************************************************************
+##
+##  src/sysc/datatypes/files.am --
+##  Included from a Makefile.am to provide directory-specific information
+##
+##  Original Author: Philipp A. Hartmann, Intel, 2015-11-24
+##
+## ****************************************************************************
+##
+##  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+##  changes you are making here.
+##
+##      Name, Affiliation, Date:
+##  Description of Modification:
+##
+## ****************************************************************************
+
+## Generic directory setup
+## (should be kept in sync among all files.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##       included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D%: datatypes
+##   %C%: datatypes
+
+H_FILES += \
+	datatypes/bit/sc_bit.h \
+	datatypes/bit/sc_bit_ids.h \
+	datatypes/bit/sc_bit_proxies.h \
+	datatypes/bit/sc_bv.h \
+	datatypes/bit/sc_bv_base.h \
+	datatypes/bit/sc_logic.h \
+	datatypes/bit/sc_lv.h \
+	datatypes/bit/sc_lv_base.h \
+	datatypes/bit/sc_proxy.h \
+	\
+	datatypes/fx/fx.h \
+	datatypes/fx/sc_context.h \
+	datatypes/fx/sc_fix.h \
+	datatypes/fx/sc_fixed.h \
+	datatypes/fx/sc_fx_ids.h \
+	datatypes/fx/sc_fxcast_switch.h \
+	datatypes/fx/sc_fxdefs.h \
+	datatypes/fx/sc_fxnum.h \
+	datatypes/fx/sc_fxnum_observer.h \
+	datatypes/fx/sc_fxtype_params.h \
+	datatypes/fx/sc_fxval.h \
+	datatypes/fx/sc_fxval_observer.h \
+	datatypes/fx/sc_ufix.h \
+	datatypes/fx/sc_ufixed.h \
+	datatypes/fx/scfx_ieee.h \
+	datatypes/fx/scfx_mant.h \
+	datatypes/fx/scfx_other_defs.h \
+	datatypes/fx/scfx_params.h \
+	datatypes/fx/scfx_rep.h \
+	datatypes/fx/scfx_string.h \
+	datatypes/fx/scfx_utils.h \
+	\
+	datatypes/int/sc_bigint.h \
+	datatypes/int/sc_biguint.h \
+	datatypes/int/sc_int.h \
+	datatypes/int/sc_int_base.h \
+	datatypes/int/sc_int_ids.h \
+	datatypes/int/sc_length_param.h \
+	datatypes/int/sc_nbdefs.h \
+	datatypes/int/sc_nbexterns.h \
+	datatypes/int/sc_nbutils.h \
+	datatypes/int/sc_signed.h \
+	datatypes/int/sc_uint.h \
+	datatypes/int/sc_uint_base.h \
+	datatypes/int/sc_unsigned.h \
+	\
+	datatypes/misc/sc_concatref.h \
+	datatypes/misc/sc_value_base.h
+
+NO_H_FILES += \
+	datatypes/int/sc_nbcommon.inc \
+	datatypes/int/sc_nbfriends.inc \
+	datatypes/int/sc_signed_bitref.inc \
+	datatypes/int/sc_signed_subref.inc \
+	datatypes/int/sc_unsigned_bitref.inc \
+	datatypes/int/sc_unsigned_subref.inc \
+	\
+	datatypes/fx/scfx_pow10.h
+
+CXX_FILES += \
+	datatypes/bit/sc_bit.cpp \
+	datatypes/bit/sc_bv_base.cpp \
+	datatypes/bit/sc_logic.cpp \
+	datatypes/bit/sc_lv_base.cpp \
+	\
+	datatypes/fx/sc_fxcast_switch.cpp \
+	datatypes/fx/sc_fxdefs.cpp \
+	datatypes/fx/sc_fxnum.cpp \
+	datatypes/fx/sc_fxnum_observer.cpp \
+	datatypes/fx/sc_fxtype_params.cpp \
+	datatypes/fx/sc_fxval.cpp \
+	datatypes/fx/sc_fxval_observer.cpp \
+	datatypes/fx/scfx_mant.cpp \
+	datatypes/fx/scfx_pow10.cpp \
+	datatypes/fx/scfx_rep.cpp \
+	datatypes/fx/scfx_utils.cpp \
+	\
+	datatypes/int/sc_int_base.cpp \
+	datatypes/int/sc_int_mask.cpp \
+	datatypes/int/sc_length_param.cpp \
+	datatypes/int/sc_nbexterns.cpp \
+	datatypes/int/sc_nbutils.cpp \
+	datatypes/int/sc_signed.cpp \
+	datatypes/int/sc_uint_base.cpp \
+	datatypes/int/sc_unsigned.cpp \
+	\
+	datatypes/misc/sc_concatref.cpp \
+	datatypes/misc/sc_value_base.cpp
+
+## Taf!
+## :vim:ft=automake:

@@ -17,10 +17,10 @@
 
  *****************************************************************************/
 
-#ifndef __TLM_GLOBAL_QUANTUM_H__
-#define __TLM_GLOBAL_QUANTUM_H__
+#ifndef TLM_CORE_TLM2_TLM_GLOBAL_QUANTUM_H_INCLUDED_
+#define TLM_CORE_TLM2_TLM_GLOBAL_QUANTUM_H_INCLUDED_
 
-#include <systemc>
+#include "sysc/kernel/sc_time.h"
 
 namespace tlm {
 
@@ -28,7 +28,7 @@ namespace tlm {
 // tlm_global_quantum class
 //
 // The global quantum is the maximum time an initiator can run ahead of
-// systemC time. All initiators should synchronize on timingpoints that
+// SystemC time. All initiators should synchronize on timingpoints that
 // are multiples of the global quantum value.
 //
 // sc_set_time_resolution can only be called before the first
@@ -38,17 +38,13 @@ namespace tlm {
 // the global quantum is set.
 //
 
-class tlm_global_quantum
+class SC_API tlm_global_quantum
 {
 public:
   //
   // Returns a reference to the tlm_global_quantum singleton
   //
-  static tlm_global_quantum& instance()
-  {
-    static tlm_global_quantum instance_;
-    return instance_;
-  }
+  static tlm_global_quantum& instance();
 
 public:
 
@@ -72,21 +68,10 @@ public:
   // local quantum of an initiator can be smaller, but should never be
   // greater than the value returned by this method.
   //
-  sc_core::sc_time compute_local_quantum()
-  {
-    if (m_global_quantum != sc_core::SC_ZERO_TIME) {
-      const sc_core::sc_time current = sc_core::sc_time_stamp();
-      const sc_core::sc_time g_quant = m_global_quantum;
-      return g_quant - (current % g_quant);
-    } else {
-      return sc_core::SC_ZERO_TIME;
-    }
-  }
+  sc_core::sc_time compute_local_quantum();
 
 protected:
-  tlm_global_quantum() : m_global_quantum(sc_core::SC_ZERO_TIME)
-  {
-  }
+  tlm_global_quantum();
 
 protected:
   sc_core::sc_time m_global_quantum;
@@ -94,4 +79,4 @@ protected:
 
 } // namespace tlm
 
-#endif
+#endif // TLM_CORE_TLM2_TLM_GLOBAL_QUANTUM_H_INCLUDED_

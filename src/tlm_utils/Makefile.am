@@ -36,6 +36,7 @@ include $(top_srcdir)/config/Make-rules.sysc
 
 H_FILES = \
 	instance_specific_extensions.h \
+	instance_specific_extensions_int.h \
 	multi_passthrough_initiator_socket.h \
 	multi_passthrough_target_socket.h \
 	multi_socket_bases.h \
@@ -46,8 +47,14 @@ H_FILES = \
 	simple_target_socket.h \
 	tlm_quantumkeeper.h
 
-localincludedir = $(includedir)/tlm_utils
-nobase_localinclude_HEADERS = $(H_FILES)
+CXX_FILES = \
+	instance_specific_extensions.cpp
 
 EXTRA_DIST += \
 	README.txt
+
+localincludedir = $(includedir)/tlm_utils
+nobase_localinclude_HEADERS = $(H_FILES)
+
+noinst_LTLIBRARIES = libtlm_utils.la
+libtlm_utils_la_SOURCES = $(NO_H_FILES) $(CXX_FILES)
