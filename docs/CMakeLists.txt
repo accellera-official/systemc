@@ -82,8 +82,7 @@ if (BUILD_SOURCE_DOCUMENTATION)
                                PROPERTIES GENERATED 1)
   add_custom_command (OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/sysc/doxygen/html/index.html
                       COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/sysc/doxygen/Doxyfile
-                      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/sysc/doxygen/Doxyfile
-                              systemc
+                      DEPENDS systemc
                       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/sysc/doxygen
                       COMMENT "Building the SystemC source code documentation using Doxygen.")
   add_custom_target (doxygen-sysc
@@ -108,8 +107,7 @@ if (BUILD_SOURCE_DOCUMENTATION)
                                PROPERTIES GENERATED 1)
   add_custom_command (OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/tlm/doxygen/html/index.html
                       COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/tlm/doxygen/Doxyfile
-                      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/tlm/doxygen/Doxyfile
-                              doxygen-sysc
+                      DEPENDS doxygen-sysc
                       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/tlm/doxygen
                       COMMENT "Building the TLM source code documentation using Doxygen.")
   add_custom_target (doxygen-tlm
