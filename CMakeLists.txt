@@ -323,15 +323,6 @@ option (ENABLE_PTHREADS
         "Use POSIX threads for SystemC processes instead of QuickThreads on Unix or Fiber on Windows."
         OFF)
 
-mark_as_advanced(DISABLE_ASYNC_UPDATES
-                 DISABLE_COPYRIGHT_MESSAGE
-                 DISABLE_VIRTUAL_BIND
-                 ENABLE_ASSERTIONS
-                 ENABLE_EARLY_MAXTIME_CREATION
-                 ENABLE_IMMEDIATE_SELF_NOTIFICATIONS
-                 ENABLE_PHASE_CALLBACKS
-                 ENABLE_PHASE_CALLBACKS_TRACING)
-
 option (INSTALL_TO_LIB_BUILD_TYPE_DIR "Install the libraries to lib-${CMAKE_BUILD_TYPE} to enable parallel installation of the different build variants. (default: ON)" ON)
 
 if (CMAKE_HOST_UNIX)
@@ -339,6 +330,16 @@ if (CMAKE_HOST_UNIX)
 endif (CMAKE_HOST_UNIX)
 
 set (OVERRIDE_DEFAULT_STACK_SIZE 0 CACHE STRING "Define the default stack size used for SystemC (thread) processes. (> 0)")
+
+mark_as_advanced(DISABLE_ASYNC_UPDATES
+                 DISABLE_COPYRIGHT_MESSAGE
+                 DISABLE_VIRTUAL_BIND
+                 ENABLE_ASSERTIONS
+                 ENABLE_EARLY_MAXTIME_CREATION
+                 ENABLE_IMMEDIATE_SELF_NOTIFICATIONS
+                 ENABLE_PHASE_CALLBACKS
+                 ENABLE_PHASE_CALLBACKS_TRACING
+                 OVERRIDE_DEFAULT_STACK_SIZE)
 
 
 ###############################################################################
