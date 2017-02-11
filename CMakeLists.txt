@@ -211,6 +211,10 @@
 # - Find a better way to make sure all code linking to the SystemC library is
 #   also linking to ${CMAKE_THREAD_LIBS_INIT} if needed.
 #
+# - Configure and install systemc.pc and tlm.pc for pkg-config
+#
+# - Upgrade the whole CMake build system to modern CMake 3.x style
+#
 ###############################################################################
 
 
