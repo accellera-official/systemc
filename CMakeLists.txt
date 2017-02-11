@@ -507,6 +507,7 @@ if (NOT DEFINED QT_ARCH)
   set (QT_ARCH ${_QT_ARCH} CACHE STRING "QuickThreads architecture (IGNORE, sparc, hppa, x86_64, i386, powerpc_mach, powerpc_sys5).")
   unset (_QT_ARCH)
 endif (NOT DEFINED QT_ARCH)
+mark_as_advanced(QT_ARCH)
 
 if (QT_ARCH)
   # To build QuickThreads, enable the assembler support.
