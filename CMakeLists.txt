@@ -394,27 +394,32 @@ if (NOT SystemC_TARGET_ARCH)
     else (HAS__i386_DEFINED)
       set (_TARGET_ARCH "macosxunknown")
     endif (N_OSX_ARCHITECTURES GREATER 1)
-  elseif (UNIX AND CMAKE_SYSTEM_NAME STREQUAL "Linux" AND HAS__i386_DEFINED)
-    set (_TARGET_ARCH "linux")
-  elseif (UNIX AND CMAKE_SYSTEM_NAME STREQUAL "Linux" AND HAS__x86_64__DEFINED)
-    set (_TARGET_ARCH "linux64")
-  elseif (UNIX AND CMAKE_SYSTEM_NAME STREQUAL "Linux" AND HAS__powerpc_DEFINED)
-    # Untested platform.
-    set (_TARGET_ARCH "linuxppc")
-  elseif (UNIX AND CMAKE_SYSTEM_NAME STREQUAL "Linux" AND (HAS__sparc_DEFINED OR HAS__sparc__DEFINED))
-    # Untested platform.
-    set (_TARGET_ARCH "linuxsparc")
   elseif (UNIX AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    # Untested platform.
-    set (_TARGET_ARCH "linuxunknown")
-  elseif (UNIX AND CMAKE_SYSTEM_NAME MATCHES ".*BSD" AND HAS__i386_DEFINED)
-    set (_TARGET_ARCH "bsd")
-  elseif (UNIX AND CMAKE_SYSTEM_NAME MATCHES ".*BSD" AND HAS__x86_64__DEFINED)
-    set (_TARGET_ARCH "bsd64")
-  elseif (UNIX AND CMAKE_SYSTEM_NAME STREQUAL ".*BSD")
-    # Untested platform.
-    set (_TARGET_ARCH "bsdunknown")
-  elseif (UNIX AND CMAKE_SYSTEM_NAME STREQUAL "SunOS" AND (HAS__sparc_DEFINED OR HAS__sparc__DEFINED))
+    if (HAS__i386_DEFINED)
+      set (_TARGET_ARCH "linux")
+    elseif (HAS__x86_64__DEFINED)
+      set (_TARGET_ARCH "linux64")
+    elseif (HAS__powerpc_DEFINED)
+      # Untested platform.
+      set (_TARGET_ARCH "linuxppc")
+    elseif (HAS__sparc_DEFINED OR HAS__sparc__DEFINED)
+      # Untested platform.
+      set (_TARGET_ARCH "linuxsparc")
+    else (HAS__i386_DEFINED)
+      # Untested platform.
+      set (_TARGET_ARCH "linuxunknown")
+    endif (HAS__i386_DEFINED)
+  elseif (UNIX AND CMAKE_SYSTEM_NAME MATCHES ".*BSD")
+    if (HAS__i386_DEFINED)
+      set (_TARGET_ARCH "bsd")
+    elseif (HAS__x86_64__DEFINED)
+      set (_TARGET_ARCH "bsd64")
+    else (HAS__i386_DEFINED)
+      # Untested platform.
+      set (_TARGET_ARCH "bsdunknown")
+    endif (HAS__i386_DEFINED)
+  elseif (UNIX AND CMAKE_SYSTEM_NAME STREQUAL "SunOS"
+          AND (HAS__sparc_DEFINED OR HAS__sparc__DEFINED))
     # Untested platform.
     set (_TARGET_ARCH "sparcOS5")
     if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
