@@ -630,11 +630,6 @@ if (WIN32)
     else (CMAKE_BUILD_TYPE MATCHES "Debug|RelWithDebInfo")
       add_definitions (-DNDEBUG) # Needed?
     endif (CMAKE_BUILD_TYPE MATCHES "Debug|RelWithDebInfo")
-    add_definitions(-D_USE_MATH_DEFINES)  # Needed?
-    # Suppress warnings about sprintf from Visual C++ 2005
-    add_definitions (-D_CRT_SECURE_NO_DEPRECATE) # Needed?
-    # Suppress warnings from Visual C++ 2008
-    add_definitions (-D_CRT_SECURE_NO_WARNINGS) # Needed?
   endif (MSVC)
 endif (WIN32)
 
