@@ -40,7 +40,6 @@
 
 
 include_directories (include)
-add_definitions(-DUSING_EXTENSION_OPTIONAL)
 add_executable (at_extension_optional src/at_extension_optional.cpp
                                       src/at_extension_optional_top.cpp
                                       src/initiator_top.cpp
@@ -52,4 +51,5 @@ add_executable (at_extension_optional src/at_extension_optional.cpp
                                       ${COMMON_SRC_DIR}/select_initiator.cpp
                                       ${COMMON_SRC_DIR}/extension_initiator_id.cpp)
 target_link_libraries (at_extension_optional ${SystemC_LIBRARIES})
+target_compile_definitions(at_extension_optional PRIVATE USING_EXTENSION_OPTIONAL)
 configure_and_add_test (at_extension_optional)

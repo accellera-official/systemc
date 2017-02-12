@@ -50,6 +50,13 @@ endif (NOT BUILD_EXAMPLES)
 
 include_directories (BEFORE ${SystemC_SOURCE_DIR}/src)
 
+if (DEBUG_SYSTEMC)
+  add_definitions (-DDEBUG_SYSTEMC)
+endif (DEBUG_SYSTEMC)
+if (ENABLE_ASSERTIONS)
+  add_definitions (-DSC_ENABLE_ASSERTIONS)
+endif (ENABLE_ASSERTIONS)
+
 if (WIN32)
   # Not sure, if these preprocessor definitions are strictly required to build
   # console applications with Visual Studio. Instead of _CONSOLE, _LIB may be

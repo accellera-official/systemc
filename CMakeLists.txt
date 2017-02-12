@@ -184,8 +184,8 @@
 # - Detect C++'11-compatible compiler and then pass the right flags
 #   to use C++'11 language and library features.
 #
-# - Check whether preprocessor definitions WIN32, _LIB, _DEBUG, _CONSOLE, and
-#   NOGDI are necessary on WIN32 platforms (MSVC and MinGW).
+# - Check whether preprocessor definitions WIN32, _CONSOLE, _LIB, _DEBUG, NDEBUG,
+#   and NOGDI are necessary on WIN32 platforms (MSVC and MinGW).
 #
 # - Don't generate source documentation with Doxygen in the source tree.
 #
@@ -330,6 +330,9 @@ if (CMAKE_HOST_UNIX)
 endif (CMAKE_HOST_UNIX)
 
 set (OVERRIDE_DEFAULT_STACK_SIZE 0 CACHE STRING "Define the default stack size used for SystemC (thread) processes. (> 0)")
+if (OVERRIDE_DEFAULT_STACK_SIZE LESS 0)
+  message (SEND_ERROR "Negative default stack size requested for SystemC (thread) processes.")
+endif (OVERRIDE_DEFAULT_STACK_SIZE LESS 0)
 
 mark_as_advanced(DISABLE_ASYNC_UPDATES
                  DISABLE_COPYRIGHT_MESSAGE
@@ -532,62 +535,15 @@ endif (QT_ARCH)
 if (ENABLE_PTHREADS OR (QT_ARCH AND NOT DISABLE_ASYNC_UPDATES) OR NOT QT_ARCH)
   set (CMAKE_THREAD_PREFER_PTHREAD)
   find_package (Threads REQUIRED)
-  if (ENABLE_PTHREADS)
-    if (NOT CMAKE_USE_PTHREADS_INIT)
-      message (SEND_ERROR "Failed to find the Pthreads library required to implement the SystemC coroutines and async_request_update() of primitive channels on Unix.")
-    endif (NOT CMAKE_USE_PTHREADS_INIT)
-    add_definitions (-DSC_USE_PTHREADS)
-  endif (ENABLE_PTHREADS)
+  if (ENABLE_PTHREADS AND NOT CMAKE_USE_PTHREADS_INIT)
+    message (SEND_ERROR "Failed to find the Pthreads library required to implement the SystemC coroutines and async_request_update() of primitive channels on Unix.")
+  endif (ENABLE_PTHREADS AND NOT CMAKE_USE_PTHREADS_INIT)
 endif (ENABLE_PTHREADS OR (QT_ARCH AND NOT DISABLE_ASYNC_UPDATES) OR NOT QT_ARCH)
 
 
 ###############################################################################
-# Set the preprocessor definitions and platform-dependent compiler flags.
+# Set the platform-dependent compiler flags.
 ###############################################################################
-
-add_definitions (-DSC_INCLUDE_FX)
-
-if (DISABLE_ASYNC_UPDATES)
-  add_definitions (-DSC_DISABLE_ASYNC_UPDATES)
-endif (DISABLE_ASYNC_UPDATES)
-
-if (DISABLE_COPYRIGHT_MESSAGE)
-  add_definitions (-DSC_DISABLE_COPYRIGHT_MESSAGE)
-endif (DISABLE_COPYRIGHT_MESSAGE)
-
-if (DISABLE_VIRTUAL_BIND)
-  add_definitions (-DSC_DISABLE_VIRTUAL_BIND)
-endif (DISABLE_VIRTUAL_BIND)
-
-if (ENABLE_ASSERTIONS)
-  add_definitions (-DSC_ENABLE_ASSERTIONS)
-endif (ENABLE_ASSERTIONS)
-
-if (ENABLE_EARLY_MAXTIME_CREATION)
-  add_definitions (-DSC_ENABLE_EARLY_MAXTIME_CREATION)
-endif (ENABLE_EARLY_MAXTIME_CREATION)
-
-if (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS)
-  add_definitions (-DSC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS)
-endif (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS)
-
-if (ENABLE_PHASE_CALLBACKS)
-  add_definitions (-DSC_ENABLE_SIMULATION_PHASE_CALLBACKS)
-endif (ENABLE_PHASE_CALLBACKS)
-
-if (ENABLE_PHASE_CALLBACKS_TRACING)
-  add_definitions (-DSC_ENABLE_SIMULATION_PHASE_CALLBACKS_TRACING)
-endif (ENABLE_PHASE_CALLBACKS_TRACING)
-
-if (OVERRIDE_DEFAULT_STACK_SIZE GREATER 0)
-  add_definitions (-DSC_OVERRIDE_DEFAULT_STACK_SIZE=${OVERRIDE_DEFAULT_STACK_SIZE})
-elseif (OVERRIDE_DEFAULT_STACK_SIZE LESS 0)
-  message (SEND_ERROR "Negative default stack size requested for SystemC (thread) processes.")
-endif (OVERRIDE_DEFAULT_STACK_SIZE GREATER 0)
-
-if (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
-  add_definitions (-DSC_WIN_DLL)
-endif (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
 
 # Set additional compiler flags for known compilers.
 if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
@@ -617,21 +573,6 @@ if (APPLE)
   set (CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS "${CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS} -Wl,-U,_sc_main")
   set (CMAKE_SHARED_MODULE_CREATE_CXX_FLAGS "${CMAKE_SHARED_MODULE_CREATE_CXX_FLAGS} -Wl,-U,_sc_main")
 endif (APPLE)
-
-# TODO: Check required preprocessor definitions for WIN32.
-if (WIN32)
-  add_definitions (-DWIN32) # Needed?
-  if (MSVC)
-    # Additional definition for Microsoft Visual Studio C++ compilers
-    add_definitions(-D_LIB)               # Needed?
-    # Is the definition of _DEBUG needed or already handled by CMake?
-    if (CMAKE_BUILD_TYPE MATCHES "Debug|RelWithDebInfo")
-      add_definitions (-D_DEBUG) # Needed?
-    else (CMAKE_BUILD_TYPE MATCHES "Debug|RelWithDebInfo")
-      add_definitions (-DNDEBUG) # Needed?
-    endif (CMAKE_BUILD_TYPE MATCHES "Debug|RelWithDebInfo")
-  endif (MSVC)
-endif (WIN32)
 
 
 ###############################################################################

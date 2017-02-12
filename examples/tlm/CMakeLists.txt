@@ -43,7 +43,6 @@
 # Common definitions for the TLM examples.
 ########################################################################
 
-add_definitions (-DSC_INCLUDE_DYNAMIC_PROCESSES)
 include_directories (BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/common/include)
 set (COMMON_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/common/src)
 
