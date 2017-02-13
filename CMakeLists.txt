@@ -542,40 +542,6 @@ endif (ENABLE_PTHREADS OR (QT_ARCH AND NOT DISABLE_ASYNC_UPDATES) OR NOT QT_ARCH
 
 
 ###############################################################################
-# Set the platform-dependent compiler flags.
-###############################################################################
-
-# Set additional compiler flags for known compilers.
-if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-  if (NOT CMAKE_C_FLAGS)
-    set (CMAKE_C_FLAGS "-Wall -Wextra -Wno-unused-parameter -Wno-unused-variable" CACHE STRING "Flags used by the compiler during all build types." FORCE)
-  endif (NOT CMAKE_C_FLAGS)
-  if (NOT CMAKE_CXX_FLAGS)
-    set (CMAKE_CXX_FLAGS "-Wall -Wextra -Wno-unused-parameter -Wno-unused-variable" CACHE STRING "Flags used by the compiler during all build types." FORCE)
-  endif (NOT CMAKE_CXX_FLAGS)
-elseif (MSVC)
-  if (NOT CMAKE_C_FLAGS MATCHES "/vmg")
-    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /vmg" CACHE STRING "Flags used by the compiler during all build types." FORCE)
-  endif (NOT CMAKE_C_FLAGS MATCHES "/vmg")
-  if (NOT CMAKE_CXX_FLAGS MATCHES "/vmg")
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /vmg" CACHE STRING "Flags used by the compiler during all build types." FORCE)
-  endif (NOT CMAKE_CXX_FLAGS MATCHES "/vmg")
-  if (NOT CMAKE_C_FLAGS MATCHES "/MP")
-    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /MP" CACHE STRING "Flags used by the compiler during all build types." FORCE)
-  endif (NOT CMAKE_C_FLAGS MATCHES "/MP")
-  if (NOT CMAKE_CXX_FLAGS MATCHES "/MP")
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP" CACHE STRING "Flags used by the compiler during all build types." FORCE)
-  endif (NOT CMAKE_CXX_FLAGS MATCHES "/MP")
-endif (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-
-if (APPLE)
-  # On Mac OS X, the linker needs to be told that it's OK that _sc_main is an undefined symbol.
-  set (CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS "${CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS} -Wl,-U,_sc_main")
-  set (CMAKE_SHARED_MODULE_CREATE_CXX_FLAGS "${CMAKE_SHARED_MODULE_CREATE_CXX_FLAGS} -Wl,-U,_sc_main")
-endif (APPLE)
-
-
-###############################################################################
 # Set the installation paths
 ###############################################################################
 

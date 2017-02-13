@@ -493,6 +493,20 @@ target_compile_definitions (
     SC_OVERRIDE_DEFAULT_STACK_SIZE=${OVERRIDE_DEFAULT_STACK_SIZE}>
   $<$<AND:$<BOOL:${WIN32}>,$<BOOL:${MSVC}>>:_LIB>)
 
+target_compile_options(
+  systemc
+  PUBLIC
+  $<$<CXX_COMPILER_ID:MSVC>:/vmg /MP>
+  PRIVATE
+  $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:
+    -Wall -Wextra -Wno-unused-parameter -Wno-unused-variable>
+  $<$<CXX_COMPILER_ID:MSVC>:/W3 /wd4244 /wd4267 /wd4996>)
+
+if (APPLE)
+  # It's OK that _sc_main is an undefined symbol.
+  set_target_properties (systemc PROPERTIES LINK_FLAGS -Wl,-U,_sc_main)
+endif (APPLE)
+
 if (DEFINED ${CMAKE_THREAD_LIBS_INIT})
   target_link_libraries (systemc ${CMAKE_THREAD_LIBS_INIT})
 endif (DEFINED ${CMAKE_THREAD_LIBS_INIT})

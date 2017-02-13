@@ -72,6 +72,15 @@ if (WIN32)
   add_definitions (-D_CONSOLE -DNOGDI)
 endif (WIN32)
 
+# TODO: Set MSVC warning level to 3 and 4 for the individual examples
+# and disable selected warnings (e.g., 4996). See the individual
+# *.vcxproj files for details.
+if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+  add_compile_options(-Wall -Wextra -Wno-unused-parameter -Wno-unused-variable)
+elseif (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+  add_compile_options(/W3)
+endif (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+
 # On many platforms (e.g., Linux), code that links to SystemC also needs to
 # link to ${CMAKE_THREAD_LIBS_INIT}.
 #
