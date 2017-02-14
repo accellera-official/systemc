@@ -48,8 +48,6 @@ endif (NOT BUILD_EXAMPLES)
 # Common definitions for all examples.
 ########################################################################
 
-include_directories (BEFORE ${SystemC_SOURCE_DIR}/src)
-
 if (DEBUG_SYSTEMC)
   add_definitions (-DDEBUG_SYSTEMC)
 endif (DEBUG_SYSTEMC)

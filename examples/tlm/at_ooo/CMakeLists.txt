@@ -39,15 +39,15 @@
 ###############################################################################
 
 
-include_directories (include)
 add_executable (at_ooo src/at_ooo.cpp
                        src/at_ooo_top.cpp
                        src/initiator_top.cpp
-                       ${COMMON_SRC_DIR}/at_target_2_phase.cpp
+                       ../common/src/at_target_2_phase.cpp
                        src/at_target_ooo_2_phase.cpp
-                       ${COMMON_SRC_DIR}/memory.cpp
-                       ${COMMON_SRC_DIR}/report.cpp
-                       ${COMMON_SRC_DIR}/select_initiator.cpp
-                       ${COMMON_SRC_DIR}/traffic_generator.cpp)
+                       ../common/src/memory.cpp
+                       ../common/src/report.cpp
+                       ../common/src/select_initiator.cpp
+                       ../common/src/traffic_generator.cpp)
+target_include_directories (at_ooo PRIVATE include ../common/include)
 target_link_libraries (at_ooo ${SystemC_LIBRARIES})
 configure_and_add_test (at_ooo)

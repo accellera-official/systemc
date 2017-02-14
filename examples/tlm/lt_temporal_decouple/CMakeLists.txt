@@ -39,17 +39,17 @@
 ###############################################################################
 
 
-include_directories (include)
 add_executable (lt_temporal_decouple src/lt_temporal_decouple.cpp
                                      src/lt_temporal_decouple_top.cpp
                                      src/initiator_top.cpp
                                      src/td_initiator_top.cpp
-                                     ${COMMON_SRC_DIR}/lt_initiator.cpp
-                                     ${COMMON_SRC_DIR}/lt_td_initiator.cpp
-                                     ${COMMON_SRC_DIR}/lt_target.cpp
-                                     ${COMMON_SRC_DIR}/lt_synch_target.cpp
-                                     ${COMMON_SRC_DIR}/memory.cpp
-                                     ${COMMON_SRC_DIR}/report.cpp
-                                     ${COMMON_SRC_DIR}/traffic_generator.cpp)
+                                     ../common/src/lt_initiator.cpp
+                                     ../common/src/lt_td_initiator.cpp
+                                     ../common/src/lt_target.cpp
+                                     ../common/src/lt_synch_target.cpp
+                                     ../common/src/memory.cpp
+                                     ../common/src/report.cpp
+                                     ../common/src/traffic_generator.cpp)
+target_include_directories (lt_temporal_decouple PRIVATE include ../common/include)
 target_link_libraries (lt_temporal_decouple ${SystemC_LIBRARIES})
 configure_and_add_test (lt_temporal_decouple)

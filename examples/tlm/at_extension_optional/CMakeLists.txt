@@ -39,17 +39,17 @@
 ###############################################################################
 
 
-include_directories (include)
 add_executable (at_extension_optional src/at_extension_optional.cpp
                                       src/at_extension_optional_top.cpp
                                       src/initiator_top.cpp
-                                      ${COMMON_SRC_DIR}/traffic_generator.cpp
-                                      ${COMMON_SRC_DIR}/memory.cpp
-                                      ${COMMON_SRC_DIR}/report.cpp
-                                      ${COMMON_SRC_DIR}/at_target_2_phase.cpp
-                                      ${COMMON_SRC_DIR}/at_target_4_phase.cpp
-                                      ${COMMON_SRC_DIR}/select_initiator.cpp
-                                      ${COMMON_SRC_DIR}/extension_initiator_id.cpp)
-target_link_libraries (at_extension_optional ${SystemC_LIBRARIES})
+                                      ../common/src/traffic_generator.cpp
+                                      ../common/src/memory.cpp
+                                      ../common/src/report.cpp
+                                      ../common/src/at_target_2_phase.cpp
+                                      ../common/src/at_target_4_phase.cpp
+                                      ../common/src/select_initiator.cpp
+                                      ../common/src/extension_initiator_id.cpp)
+target_include_directories (at_extension_optional PRIVATE include ../common/include)
 target_compile_definitions(at_extension_optional PRIVATE USING_EXTENSION_OPTIONAL)
+target_link_libraries (at_extension_optional ${SystemC_LIBRARIES})
 configure_and_add_test (at_extension_optional)

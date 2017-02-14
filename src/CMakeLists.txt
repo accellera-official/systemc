@@ -466,7 +466,6 @@ endif (APPLE)
 # Build rules for SystemC library
 ###############################################################################
 
-include_directories (BEFORE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/sysc/qt)
 add_library (systemc ${systemc_SOURCES} ${systemc_HEADERS})
 target_compile_definitions (
   systemc
@@ -501,6 +500,11 @@ target_compile_options(
   $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:
     -Wall -Wextra -Wno-unused-parameter -Wno-unused-variable>
   $<$<CXX_COMPILER_ID:MSVC>:/W3 /wd4244 /wd4267 /wd4996>)
+
+target_include_directories(systemc
+  PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
 if (APPLE)
   # It's OK that _sc_main is an undefined symbol.

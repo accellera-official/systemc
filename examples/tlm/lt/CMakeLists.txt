@@ -39,15 +39,15 @@
 ###############################################################################
 
 
-include_directories (include)
 add_executable (lt src/lt.cpp
                    src/lt_top.cpp
                    src/initiator_top.cpp
-                   ${COMMON_SRC_DIR}/lt_initiator.cpp
-                   ${COMMON_SRC_DIR}/at_target_1_phase.cpp
-                   ${COMMON_SRC_DIR}/lt_target.cpp
-                   ${COMMON_SRC_DIR}/memory.cpp
-                   ${COMMON_SRC_DIR}/report.cpp
-                   ${COMMON_SRC_DIR}/traffic_generator.cpp)
+                   ../common/src/lt_initiator.cpp
+                   ../common/src/at_target_1_phase.cpp
+                   ../common/src/lt_target.cpp
+                   ../common/src/memory.cpp
+                   ../common/src/report.cpp
+                   ../common/src/traffic_generator.cpp)
+target_include_directories (lt PRIVATE include ../common/include)
 target_link_libraries (lt ${SystemC_LIBRARIES})
 configure_and_add_test (lt)

@@ -39,15 +39,15 @@
 ###############################################################################
 
 
-include_directories (include)
 add_executable (lt_mixed_endian src/lt.cpp
                                 src/lt_top.cpp
                                 src/initiator_top.cpp
                                 src/me_traffic_generator.cpp
-                                ${COMMON_SRC_DIR}/lt_initiator.cpp
-                                ${COMMON_SRC_DIR}/at_target_1_phase.cpp
-                                ${COMMON_SRC_DIR}/at_target_4_phase.cpp
-                                ${COMMON_SRC_DIR}/memory.cpp
-                                ${COMMON_SRC_DIR}/report.cpp)
+                                ../common/src/lt_initiator.cpp
+                                ../common/src/at_target_1_phase.cpp
+                                ../common/src/at_target_4_phase.cpp
+                                ../common/src/memory.cpp
+                                ../common/src/report.cpp)
+target_include_directories (lt_mixed_endian PRIVATE include ../common/include)
 target_link_libraries (lt_mixed_endian ${SystemC_LIBRARIES})
 configure_and_add_test (lt_mixed_endian results/input.txt)

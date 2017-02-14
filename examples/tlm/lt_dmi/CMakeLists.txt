@@ -39,15 +39,15 @@
 ###############################################################################
 
 
-include_directories (include)
 add_executable (lt_dmi src/lt_dmi.cpp
                        src/lt_dmi_top.cpp
                        src/initiator_top.cpp
-                       ${COMMON_SRC_DIR}/lt_dmi_initiator.cpp
-                       ${COMMON_SRC_DIR}/lt_dmi_target.cpp
-                       ${COMMON_SRC_DIR}/memory.cpp
-                       ${COMMON_SRC_DIR}/dmi_memory.cpp
-                       ${COMMON_SRC_DIR}/report.cpp
-                       ${COMMON_SRC_DIR}/traffic_generator.cpp)
+                       ../common/src/lt_dmi_initiator.cpp
+                       ../common/src/lt_dmi_target.cpp
+                       ../common/src/memory.cpp
+                       ../common/src/dmi_memory.cpp
+                       ../common/src/report.cpp
+                       ../common/src/traffic_generator.cpp)
+target_include_directories (lt_dmi PRIVATE include ../common/include)
 target_link_libraries (lt_dmi ${SystemC_LIBRARIES})
 configure_and_add_test (lt_dmi)
