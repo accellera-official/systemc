@@ -139,7 +139,14 @@ BUILD_SHARED_LIBS             Build shared instead of static libraries
 BUILD_SOURCE_DOCUMENTATION    Build source code documentation using Doxygen
                               (default: OFF).
 
-CMAKE_BUILD_TYPE              Build type (default: Release).
+CMAKE_BUILD_TYPE              Specifies the build type on single-configuration
+                              generators. (default: Release).
+
+CMAKE_CXX_STANDARD            Choose the preferred C++ standard to build all
+                              targets. Supported values are 98, 11, and 14.
+                              The next supported older standard is used in
+                              case a compiler is not yet compatible to the
+                              requested standard. (default: 14)
 
 CMAKE_OSX_ARCHITECTURES       Architectures for cross-compilation on Mac OS X
                               (default: empty, i.e., only for the system
