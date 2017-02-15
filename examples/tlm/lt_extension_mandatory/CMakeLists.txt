@@ -40,10 +40,15 @@
 
 
 add_executable (lt_extension_mandatory src/lt_extension_mandatory.cpp
+                                       include/lt_extension_mandatory_top.h
                                        src/lt_extension_mandatory_top.cpp
+                                       include/lt_initiator_extension_mandatory.h
                                        src/lt_initiator_extension_mandatory.cpp
+                                       include/lt_target_extension_mandatory.h
                                        src/lt_target_extension_mandatory.cpp
+                                       ../common/include/extension_initiator_id.h
                                        ../common/src/extension_initiator_id.cpp
+                                       ../common/include/reporting.h
                                        ../common/src/report.cpp)
 target_include_directories (lt_extension_mandatory PRIVATE include ../common/include)
 target_link_libraries (lt_extension_mandatory ${SystemC_LIBRARIES})

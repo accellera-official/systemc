@@ -40,12 +40,19 @@
 
 
 add_executable (at_1_phase src/at_1_phase.cpp
+                           include/at_1_phase_top.h
                            src/at_1_phase_top.cpp
+                           include/initiator_top.h
                            src/initiator_top.cpp
+                           ../common/include/traffic_generator.h
                            ../common/src/traffic_generator.cpp
+                           ../common/include/memory.h
                            ../common/src/memory.cpp
+                           ../common/include/reporting.h
                            ../common/src/report.cpp
+                           ../common/include/at_target_1_phase.h
                            ../common/src/at_target_1_phase.cpp
+                           ../common/include/select_initiator.h
                            ../common/src/select_initiator.cpp)
 target_include_directories (at_1_phase PRIVATE include ../common/include)
 target_link_libraries (at_1_phase ${SystemC_LIBRARIES})

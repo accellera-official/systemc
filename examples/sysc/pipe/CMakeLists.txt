@@ -39,19 +39,16 @@
 ###############################################################################
 
 
-set (pipe_HEADERS display.h
-                  numgen.h
-                  stage1.h
-                  stage2.h
-                  stage3.h)
-
-set (pipe_SOURCES display.cpp
-                  main.cpp
-                  numgen.cpp
-                  stage1.cpp
-                  stage2.cpp
-                  stage3.cpp)
-
-add_executable (pipe ${pipe_SOURCES} ${pipe_HEADERS})
+add_executable (pipe main.cpp
+                     display.h
+                     display.cpp
+                     numgen.h
+                     numgen.cpp
+                     stage1.h
+                     stage1.cpp
+                     stage2.h
+                     stage2.cpp
+                     stage3.h
+                     stage3.cpp)
 target_link_libraries (pipe ${SystemC_LIBRARIES})
 configure_and_add_test (pipe)

@@ -39,7 +39,7 @@
 ###############################################################################
 
 
-add_executable (sc_rvd main.cpp)
+add_executable (sc_rvd main.cpp ../include/sc_rvd.h)
 target_include_directories (sc_rvd PRIVATE ../include)
 target_link_libraries (sc_rvd ${SystemC_LIBRARIES})
 configure_and_add_test (sc_rvd)

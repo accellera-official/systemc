@@ -40,13 +40,21 @@
 
 
 add_executable (lt src/lt.cpp
+                   include/lt_top.h
                    src/lt_top.cpp
+                   include/initiator_top.h
                    src/initiator_top.cpp
+                   ../common/include/lt_initiator.h
                    ../common/src/lt_initiator.cpp
+                   ../common/include/at_target_1_phase.h
                    ../common/src/at_target_1_phase.cpp
+                   ../common/include/lt_target.h
                    ../common/src/lt_target.cpp
+                   ../common/include/memory.h
                    ../common/src/memory.cpp
+                   ../common/include/reporting.h
                    ../common/src/report.cpp
+                   ../common/include/traffic_generator.h
                    ../common/src/traffic_generator.cpp)
 target_include_directories (lt PRIVATE include ../common/include)
 target_link_libraries (lt ${SystemC_LIBRARIES})

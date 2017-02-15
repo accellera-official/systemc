@@ -39,21 +39,18 @@
 ###############################################################################
 
 
-set (pkt_switch_HEADERS fifo.h
-                        pkt.h
-                        receiver.h
-                        sender.h
-                        switch.h
-                        switch_clk.h
-                        switch_reg.h)
-
-set (pkt_switch_SOURCES main.cpp
-                        receiver.cpp
-                        fifo.cpp
-                        sender.cpp
-                        switch.cpp
-                        switch_clk.cpp)
-
-add_executable (pkt_switch ${pkt_switch_SOURCES} ${pkt_switch_HEADERS})
+add_executable (pkt_switch main.cpp
+                           pkt.h
+                           fifo.h
+                           fifo.cpp
+                           sender.h
+                           sender.cpp
+                           switch_clk.h
+                           switch_clk.cpp
+                           switch_reg.h
+                           switch.h
+                           switch.cpp
+                           receiver.h
+                           receiver.cpp)
 target_link_libraries (pkt_switch ${SystemC_LIBRARIES})
 configure_and_add_test (pkt_switch)

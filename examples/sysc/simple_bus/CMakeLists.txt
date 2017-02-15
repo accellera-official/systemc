@@ -39,31 +39,28 @@
 ###############################################################################
 
 
-set (simple_bus_HEADERS simple_bus.h
-                        simple_bus_arbiter.h
-                        simple_bus_arbiter_if.h
-                        simple_bus_blocking_if.h
-                        simple_bus_direct_if.h
-                        simple_bus_fast_mem.h
-                        simple_bus_master_blocking.h
-                        simple_bus_master_direct.h
-                        simple_bus_master_non_blocking.h
-                        simple_bus_non_blocking_if.h
-                        simple_bus_request.h
-                        simple_bus_slave_if.h
-                        simple_bus_slow_mem.h
-                        simple_bus_test.h
-                        simple_bus_types.h)
-
-set (simple_bus_SOURCES simple_bus.cpp
-                        simple_bus_arbiter.cpp
-                        simple_bus_main.cpp
-                        simple_bus_master_blocking.cpp
-                        simple_bus_master_direct.cpp
-                        simple_bus_master_non_blocking.cpp
-                        simple_bus_types.cpp
-                        simple_bus_tools.cpp)
-
-add_executable (simple_bus ${simple_bus_SOURCES} ${simple_bus_HEADERS})
+add_executable (simple_bus simple_bus_main.cpp
+                           simple_bus_test.h
+                           simple_bus_master_blocking.h
+                           simple_bus_master_blocking.cpp
+                           simple_bus_master_non_blocking.h
+                           simple_bus_master_non_blocking.cpp
+                           simple_bus_master_direct.h
+                           simple_bus_master_direct.cpp
+                           simple_bus_slow_mem.h
+                           simple_bus_types.h
+                           simple_bus_blocking_if.h
+                           simple_bus_direct_if.h
+                           simple_bus_non_blocking_if.h
+                           simple_bus_request.h
+                           simple_bus_slave_if.h
+                           simple_bus.h
+                           simple_bus.cpp
+                           simple_bus_fast_mem.h
+                           simple_bus_arbiter.h
+                           simple_bus_arbiter_if.h
+                           simple_bus_arbiter.cpp
+                           simple_bus_types.cpp
+                           simple_bus_tools.cpp)
 target_link_libraries (simple_bus ${SystemC_LIBRARIES})
 configure_and_add_test (simple_bus)

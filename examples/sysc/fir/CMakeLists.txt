@@ -39,30 +39,27 @@
 ###############################################################################
 
 
-set (fir_COMMON_HEADERS display.h
-                        fir.h
-                        fir_const.h
-                        fir_data.h
-                        fir_fsm.h
-                        fir_top.h
-                        stimulus.h)
-
-set (fir_COMMON_SOURCES stimulus.cpp
-                        display.cpp)
-
-set (fir_SOURCES fir.cpp
-                 main.cpp
-                 ${fir_COMMON_SOURCES})
-
-set (fir_rtl_SOURCES fir_fsm.cpp
-                     fir_data.cpp
-                     main_rtl.cpp
-                     ${fir_COMMON_SOURCES})
-
-add_executable (fir ${fir_SOURCES} ${fir_COMMON_HEADERS})
+add_executable (fir main.cpp
+                    fir.h
+                    fir.cpp
+                    fir_const.h
+                    stimulus.h
+                    stimulus.cpp
+                    display.h
+                    display.cpp)
 target_link_libraries (fir ${SystemC_LIBRARIES})
 configure_and_add_test (fir)
 
-add_executable (fir_rtl ${fir_rtl_SOURCES} ${fir_COMMON_HEADERS})
+add_executable (fir_rtl main_rtl.cpp
+                        fir_top.h
+                        fir_fsm.h
+                        fir_fsm.cpp
+                        fir_data.h
+                        fir_data.cpp
+                        fir_const.h
+                        stimulus.h
+                        stimulus.cpp
+                        display.h
+                        display.cpp)
 target_link_libraries (fir_rtl ${SystemC_LIBRARIES})
 configure_and_add_test (fir_rtl)

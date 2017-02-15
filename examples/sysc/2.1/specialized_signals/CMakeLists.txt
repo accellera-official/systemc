@@ -39,18 +39,17 @@
 ###############################################################################
 
 
-set (specialized_signals_HEADERS scx_signal_int.h
-                                 scx_signal_uint.h
-                                 scx_signal_signed.h
-                                 scx_signal_unsigned.h)
 
-set (specialized_signals_SOURCES main.cpp
-                                 scx_signal_int.cpp
-                                 scx_signal_uint.cpp
-                                 scx_signal_signed.cpp
-                                 scx_signal_unsigned.cpp)
 
-add_executable (specialized_signals ${specialized_signals_SOURCES}
-                                    ${specialized_signals_HEADERS})
+
+add_executable (specialized_signals main.cpp
+                                    scx_signal_int.h
+                                    scx_signal_int.cpp
+                                    scx_signal_uint.h
+                                    scx_signal_uint.cpp
+                                    scx_signal_signed.h
+                                    scx_signal_signed.cpp
+                                    scx_signal_unsigned.h
+                                    scx_signal_unsigned.cpp)
 target_link_libraries (specialized_signals ${SystemC_LIBRARIES})
 configure_and_add_test (specialized_signals)

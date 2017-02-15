@@ -40,14 +40,23 @@
 
 
 add_executable (at_extension_optional src/at_extension_optional.cpp
+                                      include/at_extension_optional_top.h
                                       src/at_extension_optional_top.cpp
+                                      include/initiator_top.h
                                       src/initiator_top.cpp
+                                      ../common/include/traffic_generator.h
                                       ../common/src/traffic_generator.cpp
+                                      ../common/include/memory.h
                                       ../common/src/memory.cpp
+                                      ../common/include/reporting.h
                                       ../common/src/report.cpp
+                                      ../common/include/at_target_2_phase.h
                                       ../common/src/at_target_2_phase.cpp
+                                      ../common/include/at_target_4_phase.h
                                       ../common/src/at_target_4_phase.cpp
+                                      ../common/include/select_initiator.h
                                       ../common/src/select_initiator.cpp
+                                      ../common/include/extension_initiator_id.h
                                       ../common/src/extension_initiator_id.cpp)
 target_include_directories (at_extension_optional PRIVATE include ../common/include)
 target_compile_definitions(at_extension_optional PRIVATE USING_EXTENSION_OPTIONAL)

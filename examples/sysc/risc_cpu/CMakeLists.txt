@@ -42,29 +42,29 @@
 # TODO: Fix multiple driver issue in risc_cpu example.
 # TODO: Fix segfault when risc_cpu is not started from the current directory.
 
-set (risc_cpu_HEADERS bios.h
-                      dcache.h
-                      decode.h
-                      directive.h
-                      exec.h
-                      fetch.h
-                      floating.h
-                      icache.h
-                      mmxu.h
-                      paging.h
-                      pic.h)
-
-set (risc_cpu_SOURCES bios.cpp
-                      dcache.cpp
-                      decode.cpp
-                      exec.cpp
-                      fetch.cpp
-                      floating.cpp
-                      icache.cpp
-                      main.cpp
-                      mmxu.cpp
-                      paging.cpp
-                      pic.cpp)
+add_executable (risc_cpu main.cpp
+                         directive.h
+                         bios.h
+                         bios.cpp
+                         paging.h
+                         paging.cpp
+                         icache.h
+                         icache.cpp
+                         fetch.h
+                         fetch.cpp
+                         decode.h
+                         decode.cpp
+                         exec.h
+                         exec.cpp
+                         mmxu.h
+                         mmxu.cpp
+                         floating.h
+                         floating.cpp
+                         dcache.h
+                         dcache.cpp
+                         pic.h
+                         pic.cpp)
+target_link_libraries (risc_cpu ${SystemC_LIBRARIES})
 
 set (risc_cpu_EXTRAS  README
                       README_TYPESCRIPT
@@ -78,9 +78,6 @@ set (risc_cpu_EXTRAS  README
                       register.img
                       test.asm
                       test1.asm)
-
-add_executable (risc_cpu ${risc_cpu_SOURCES} ${risc_cpu_HEADERS})
-target_link_libraries (risc_cpu ${SystemC_LIBRARIES})
 
 foreach (risc_cpu_EXTRA ${risc_cpu_EXTRAS})
   configure_file (${CMAKE_CURRENT_SOURCE_DIR}/${risc_cpu_EXTRA} ${CMAKE_CURRENT_BINARY_DIR}/${risc_cpu_EXTRA} COPYONLY)

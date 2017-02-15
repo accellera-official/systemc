@@ -39,7 +39,7 @@
 ###############################################################################
 
 
-add_executable (sc_ttd main.cpp)
+add_executable (sc_ttd main.cpp ../include/sc_ttd.h)
 target_include_directories (sc_ttd PRIVATE ../include)
 target_link_libraries (sc_ttd ${SystemC_LIBRARIES})
 configure_and_add_test (sc_ttd)
