@@ -47,7 +47,6 @@
 #include "simple_bus.h"
 #include "simple_bus_fast_mem.h"
 #include "simple_bus_arbiter.h"
-#include "simple_bus_test.h"
 
 SC_MODULE(simple_bus_test)
 {
