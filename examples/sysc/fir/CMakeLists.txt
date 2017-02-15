@@ -47,7 +47,7 @@ add_executable (fir main.cpp
                     stimulus.cpp
                     display.h
                     display.cpp)
-target_link_libraries (fir ${SystemC_LIBRARIES})
+target_link_libraries (fir SystemC::systemc)
 configure_and_add_test (fir)
 
 add_executable (fir_rtl main_rtl.cpp
@@ -61,5 +61,5 @@ add_executable (fir_rtl main_rtl.cpp
                         stimulus.cpp
                         display.h
                         display.cpp)
-target_link_libraries (fir_rtl ${SystemC_LIBRARIES})
+target_link_libraries (fir_rtl SystemC::systemc)
 configure_and_add_test (fir_rtl)

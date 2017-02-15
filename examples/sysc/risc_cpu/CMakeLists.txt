@@ -64,7 +64,7 @@ add_executable (risc_cpu main.cpp
                          dcache.cpp
                          pic.h
                          pic.cpp)
-target_link_libraries (risc_cpu ${SystemC_LIBRARIES})
+target_link_libraries (risc_cpu SystemC::systemc)
 
 set (risc_cpu_EXTRAS  README
                       README_TYPESCRIPT

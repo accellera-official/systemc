@@ -50,5 +50,5 @@ add_executable (pipe main.cpp
                      stage2.cpp
                      stage3.h
                      stage3.cpp)
-target_link_libraries (pipe ${SystemC_LIBRARIES})
+target_link_libraries (pipe SystemC::systemc)
 configure_and_add_test (pipe)

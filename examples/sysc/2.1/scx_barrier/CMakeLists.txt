@@ -40,5 +40,5 @@
 
 
 add_executable (scx_barrier main.cpp scx_barrier.h)
-target_link_libraries (scx_barrier ${SystemC_LIBRARIES})
+target_link_libraries (scx_barrier SystemC::systemc)
 configure_and_add_test (scx_barrier)

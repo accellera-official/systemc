@@ -51,5 +51,5 @@ add_executable (specialized_signals main.cpp
                                     scx_signal_signed.cpp
                                     scx_signal_unsigned.h
                                     scx_signal_unsigned.cpp)
-target_link_libraries (specialized_signals ${SystemC_LIBRARIES})
+target_link_libraries (specialized_signals SystemC::systemc)
 configure_and_add_test (specialized_signals)

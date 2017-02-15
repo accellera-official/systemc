@@ -57,5 +57,5 @@ add_executable (lt_dmi src/lt_dmi.cpp
                        ../common/include/traffic_generator.h
                        ../common/src/traffic_generator.cpp)
 target_include_directories (lt_dmi PRIVATE include ../common/include)
-target_link_libraries (lt_dmi ${SystemC_LIBRARIES})
+target_link_libraries (lt_dmi SystemC::systemc)
 configure_and_add_test (lt_dmi)

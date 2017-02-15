@@ -61,5 +61,5 @@ add_executable (lt_temporal_decouple src/lt_temporal_decouple.cpp
                                      ../common/include/traffic_generator.h
                                      ../common/src/traffic_generator.cpp)
 target_include_directories (lt_temporal_decouple PRIVATE include ../common/include)
-target_link_libraries (lt_temporal_decouple ${SystemC_LIBRARIES})
+target_link_libraries (lt_temporal_decouple SystemC::systemc)
 configure_and_add_test (lt_temporal_decouple)

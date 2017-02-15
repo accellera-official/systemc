@@ -59,5 +59,5 @@ add_executable (at_mixed_targets src/at_mixed_targets.cpp
                                  ../common/include/select_initiator.h
                                  ../common/src/select_initiator.cpp)
 target_include_directories (at_mixed_targets PRIVATE include ../common/include)
-target_link_libraries (at_mixed_targets ${SystemC_LIBRARIES})
+target_link_libraries (at_mixed_targets SystemC::systemc)
 configure_and_add_test (at_mixed_targets)

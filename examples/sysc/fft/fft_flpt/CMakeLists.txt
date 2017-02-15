@@ -46,7 +46,7 @@ add_executable (fft_flpt main.cpp
                          fft.cpp
                          sink.h
                          sink.cpp)
-target_link_libraries (fft_flpt ${SystemC_LIBRARIES})
+target_link_libraries (fft_flpt SystemC::systemc)
 
 set (IMAGE_FILES in_imag
                  in_imag.1

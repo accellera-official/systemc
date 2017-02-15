@@ -60,5 +60,5 @@ add_executable (at_extension_optional src/at_extension_optional.cpp
                                       ../common/src/extension_initiator_id.cpp)
 target_include_directories (at_extension_optional PRIVATE include ../common/include)
 target_compile_definitions(at_extension_optional PRIVATE USING_EXTENSION_OPTIONAL)
-target_link_libraries (at_extension_optional ${SystemC_LIBRARIES})
+target_link_libraries (at_extension_optional SystemC::systemc)
 configure_and_add_test (at_extension_optional)

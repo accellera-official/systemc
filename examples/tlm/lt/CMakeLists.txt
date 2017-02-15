@@ -57,5 +57,5 @@ add_executable (lt src/lt.cpp
                    ../common/include/traffic_generator.h
                    ../common/src/traffic_generator.cpp)
 target_include_directories (lt PRIVATE include ../common/include)
-target_link_libraries (lt ${SystemC_LIBRARIES})
+target_link_libraries (lt SystemC::systemc)
 configure_and_add_test (lt)

@@ -57,5 +57,5 @@ add_executable (lt_mixed_endian src/lt.cpp
                                 ../common/include/reporting.h
                                 ../common/src/report.cpp)
 target_include_directories (lt_mixed_endian PRIVATE include ../common/include)
-target_link_libraries (lt_mixed_endian ${SystemC_LIBRARIES})
+target_link_libraries (lt_mixed_endian SystemC::systemc)
 configure_and_add_test (lt_mixed_endian results/input.txt)

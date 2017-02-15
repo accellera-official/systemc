@@ -51,5 +51,5 @@ add_executable (lt_extension_mandatory src/lt_extension_mandatory.cpp
                                        ../common/include/reporting.h
                                        ../common/src/report.cpp)
 target_include_directories (lt_extension_mandatory PRIVATE include ../common/include)
-target_link_libraries (lt_extension_mandatory ${SystemC_LIBRARIES})
+target_link_libraries (lt_extension_mandatory SystemC::systemc)
 configure_and_add_test (lt_extension_mandatory)

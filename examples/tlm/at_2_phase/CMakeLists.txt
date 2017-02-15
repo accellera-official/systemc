@@ -55,5 +55,5 @@ add_executable (at_2_phase src/at_2_phase.cpp
                            ../common/include/select_initiator.h
                            ../common/src/select_initiator.cpp)
 target_include_directories (at_2_phase PRIVATE include ../common/include)
-target_link_libraries (at_2_phase ${SystemC_LIBRARIES})
+target_link_libraries (at_2_phase SystemC::systemc)
 configure_and_add_test (at_2_phase)

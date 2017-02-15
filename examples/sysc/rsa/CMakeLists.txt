@@ -40,5 +40,5 @@
 
 
 add_executable (rsa rsa.cpp)
-target_link_libraries (rsa ${SystemC_LIBRARIES})
+target_link_libraries (rsa SystemC::systemc)
 configure_and_add_test (rsa)

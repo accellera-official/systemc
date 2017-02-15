@@ -52,5 +52,5 @@ add_executable (pkt_switch main.cpp
                            switch.cpp
                            receiver.h
                            receiver.cpp)
-target_link_libraries (pkt_switch ${SystemC_LIBRARIES})
+target_link_libraries (pkt_switch SystemC::systemc)
 configure_and_add_test (pkt_switch)

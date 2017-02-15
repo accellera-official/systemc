@@ -467,6 +467,8 @@ endif (APPLE)
 ###############################################################################
 
 add_library (systemc ${systemc_SOURCES} ${systemc_HEADERS})
+add_library (SystemC::systemc ALIAS systemc)
+
 target_compile_definitions (
   systemc
   PUBLIC
