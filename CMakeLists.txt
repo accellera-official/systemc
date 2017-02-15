@@ -218,7 +218,7 @@
 ###############################################################################
 
 
-cmake_minimum_required (VERSION 2.8.12)
+cmake_minimum_required (VERSION 3.1)
 
 project (SystemC CXX C)
 
@@ -533,7 +533,7 @@ endif (QT_ARCH)
 ###############################################################################
 
 if (ENABLE_PTHREADS OR (QT_ARCH AND NOT DISABLE_ASYNC_UPDATES) OR NOT QT_ARCH)
-  set (CMAKE_THREAD_PREFER_PTHREAD)
+  set (THREADS_PREFER_PTHREAD_FLAG ON)
   find_package (Threads REQUIRED)
   if (ENABLE_PTHREADS AND NOT CMAKE_USE_PTHREADS_INIT)
     message (SEND_ERROR "Failed to find the Pthreads library required to implement the SystemC coroutines and async_request_update() of primitive channels on Unix.")
@@ -704,8 +704,8 @@ message (STATUS "===============================================================
 ###############################################################################
 
 add_subdirectory (docs)
-add_subdirectory (examples)
 add_subdirectory (src)
+add_subdirectory (examples)
 
 
 ###############################################################################

@@ -79,12 +79,7 @@ elseif (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
   add_compile_options(/W3)
 endif (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 
-# On many platforms (e.g., Linux), code that links to SystemC also needs to
-# link to ${CMAKE_THREAD_LIBS_INIT}.
-#
-# TODO: Check why CMake doesn't add automatically ${CMAKE_THREAD_LIBS_INIT},
-# as already target systemc depends on it.
-set (SystemC_LIBRARIES systemc ${CMAKE_THREAD_LIBS_INIT})
+set (SystemC_LIBRARIES systemc)
 
 # If possible, find a more powerful platform-specific diff tool than "cmake -E compare_files"
 find_program (DIFF_COMMAND
