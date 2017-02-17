@@ -37,14 +37,14 @@ libraries, it can configure the sources and generate the necessary
 files to compile/install SystemC using GNU Make, Ninja, or an IDE such as
 Eclipse, Xcode, MS Visual Studio C++, or Kdevelop.
 
-The CMake build scripts are compatible with CMake >2.8.5 and have been
+The CMake build scripts are compatible with CMake >=3.1 and have been
 tested on the following OS/processor/compiler platforms:
 
 - Mac OS X >= 10.5 (GCC, Clang): i386, x86_64, ppc
 
 - Linux (GCC, Clang): i386, x86_64
 
-- Windows (MingW32 GCC + optionally MSYS): x86
+- Windows (MSYS2 with the MinGW-W32 or MinGW-W64 GCC toolchains): x86, AMD64
 
 Currently untested, but considered by the build script (based on the
 autotools scripts) are:
@@ -55,7 +55,7 @@ autotools scripts) are:
 
 - Mac OS X <= 10.5 (GCC): ppc64
 
-- Windows (Cygwin GCC, MingW32 GCC, Visual C++): x86, AMD64
+- Windows (Cygwin GCC, MinGW-W32 GCC, MinGW-W64 GCC, Visual C++): x86, AMD64
 
 - Solaris (GCC and native compiler): sparc
 
@@ -78,7 +78,7 @@ sources using CMake:
 
 1.) Download and install CMake from <http://www.cmake.org/> (Linux
 distributions provide often a package). Note, the CMake script have been
-developed for CMake >= 2.8.5.
+developed for CMake >= 3.1.
 
 2.) Create a build subdirectory:
 
