@@ -143,10 +143,6 @@
 # OVERRIDE_DEFAULT_STACK_SIZE   Define the default stack size used for SystemC
 #                               (thread) processes. (> 0)
 #
-# QT_ARCH                       QuickThreads architecture (auto-detected:
-#                               hppa, x86_64, i386, powerpc_mach,
-#                               powerpc_sys5, IGNORE).
-#
 # SystemC_ROOT_DIR              Root directory of the SystemC libraries
 #                               installation (default $SYSTEMC_ROOT_DIR,
 #                               $SYSTEMC_ROOT, $SYSTEMC_HOME, $SYSTEMC_PATH
@@ -359,7 +355,7 @@ mark_as_advanced(DISABLE_ASYNC_UPDATES
 
 
 ###############################################################################
-# Set SystemC_TARGET_ARCH and QT_ARCH depending on OS and processor type
+# Set SystemC_TARGET_ARCH depending on OS and processor type
 ###############################################################################
 
 message (STATUS "Checking OS and processor type.")
@@ -487,46 +483,30 @@ endif (NOT SystemC_TARGET_ARCH)
 # Configure QuickThreads
 ###############################################################################
 
-# Check if chosen QuickThreads is valid.
-if (DEFINED QT_ARCH AND (NOT QT_ARCH MATCHES "sparc|hppa|x86_64|i386|powerpc_mach|powerpc_sys5|IGNORE"))
-  message (WARNING "Unknown QuickThreads architecture \"${QT_ARCH}\".")
-  unset (QT_ARCH CACHE)
-endif (DEFINED QT_ARCH AND (NOT QT_ARCH MATCHES "sparc|hppa|x86_64|i386|powerpc_mach|powerpc_sys5|IGNORE"))
-
-if (APPLE AND CMAKE_OSX_ARCHITECTURES)
-  # Make sure that the QuickThreads architecture always matches the target OS X architecture(s).
-  unset (QT_ARCH CACHE)
-endif (APPLE AND CMAKE_OSX_ARCHITECTURES)
-
 # Set QuickThreads architecture based on the detected preprocessor symbols.
-if (NOT DEFINED QT_ARCH)
-  message (STATUS "Detect the target processor architecture for QuickThreads.")
-  if (ENABLE_PTHREADS)
-    set (_QT_ARCH "IGNORE") # Pthreads will be used for the SystemC coroutines.
-  elseif (MSVC)
-    set (_QT_ARCH "IGNORE") # Fibers will be used for the SystemC coroutines.
-  elseif (APPLE AND (N_OSX_ARCHITECTURES GREATER 1))
-    set (_QT_ARCH "IGNORE") # For universal libraries, Pthreads will be used for the SystemC coroutines.
-  elseif (HAS__sparc_DEFINED OR HAS__sparc__DEFINED)
-    set (_QT_ARCH "sparc")
-  elseif (HAS__hppa_DEFINED)
-    set (_QT_ARCH "hppa")
-  elseif (HAS__x86_64__DEFINED)
-    set (_QT_ARCH "x86_64")
-  elseif (HAS__i386_DEFINED)
-    set (_QT_ARCH "i386")
-  elseif (HAS__ppc__DEFINED)
-    set (_QT_ARCH "powerpc_mach")
-  elseif (HAS__powerpc__DEFINED)
-    set (_QT_ARCH "powerpc_sys5")
-  else (ENABLE_PTHREADS)
-    message (WARNING "QuickThreads is not supported on ${CMAKE_SYSTEM} on ${CMAKE_SYSTEM_PROCESSOR}.")
-    set (_QT_ARCH "IGNORE")
-  endif (ENABLE_PTHREADS)
-  set (QT_ARCH ${_QT_ARCH} CACHE STRING "QuickThreads architecture (IGNORE, sparc, hppa, x86_64, i386, powerpc_mach, powerpc_sys5).")
-  unset (_QT_ARCH)
-endif (NOT DEFINED QT_ARCH)
-mark_as_advanced(QT_ARCH)
+message (STATUS "Detect the target processor architecture for QuickThreads.")
+if (ENABLE_PTHREADS)
+  set (QT_ARCH "IGNORE") # Pthreads will be used for the SystemC coroutines.
+elseif (MSVC)
+  set (QT_ARCH "IGNORE") # Fibers will be used for the SystemC coroutines.
+elseif (APPLE AND (N_OSX_ARCHITECTURES GREATER 1))
+  set (QT_ARCH "IGNORE") # For universal libraries, Pthreads will be used for the SystemC coroutines.
+elseif (HAS__sparc_DEFINED OR HAS__sparc__DEFINED)
+  set (QT_ARCH "sparc")
+elseif (HAS__hppa_DEFINED)
+  set (QT_ARCH "hppa")
+elseif (HAS__x86_64__DEFINED)
+  set (QT_ARCH "x86_64")
+elseif (HAS__i386_DEFINED)
+  set (QT_ARCH "i386")
+elseif (HAS__ppc__DEFINED)
+  set (QT_ARCH "powerpc_mach")
+elseif (HAS__powerpc__DEFINED)
+  set (QT_ARCH "powerpc_sys5")
+else (ENABLE_PTHREADS)
+  message (WARNING "QuickThreads is not supported on ${CMAKE_SYSTEM} on ${CMAKE_SYSTEM_PROCESSOR}.")
+  set (QT_ARCH "IGNORE")
+endif (ENABLE_PTHREADS)
 
 if (QT_ARCH)
   # To build QuickThreads, enable the assembler support.

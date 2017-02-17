@@ -175,10 +175,6 @@ ENABLE_IMMEDIATE_SELF_NOTIFICATIONS  Enable immediate self-notification of
 ENABLE_PTHREADS               Use POSIX threads for SystemC processes instead
                               of QuickThreads on Unix or Fiber on Windows.
 
-QT_ARCH                       QuickThreads architecture (auto-detected:
-                              hppa, x86_64, i386, powerpc_mach,
-                              powerpc_sys5, IGNORE).
-
 SystemC_ROOT_DIR              Root directory of the SystemC libraries
                               installation (default $SYSTEMC_ROOT_DIR,
                               $SYSTEMC_ROOT, $SYSTEMC_HOME, $SYSTEMC_PATH
