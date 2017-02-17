@@ -76,7 +76,7 @@ endif (WIN32)
 if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
   add_compile_options(-Wall -Wextra -Wno-unused-parameter -Wno-unused-variable)
 elseif (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-  add_compile_options(/W3)
+  add_compile_options(/W3 /wd4244 /wd4267 /wd4996)
 endif (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 
 set (SystemC_LIBRARIES systemc)
