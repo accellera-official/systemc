@@ -184,9 +184,6 @@
 #   be automatically found by other CMake projects (e.g., SCV, SystemC AMS).
 #   <http://www.cmake.org/Wiki/CMake/Tutorials/How_to_create_a_ProjectConfig.cmake_file>
 #
-# - Detect C++'11-compatible compiler and then pass the right flags
-#   to use C++'11 language and library features.
-#
 # - Check whether preprocessor definitions WIN32, _CONSOLE, _LIB, _DEBUG, NDEBUG,
 #   and NOGDI are necessary on WIN32 platforms (MSVC and MinGW).
 #
@@ -201,8 +198,6 @@
 #
 # - Test on as many different hardware / OS platforms as possible.
 #
-# - Set more reliably the needed compiler options, e.g., /vmg for MSVC.
-#
 # - Check whether SystemCConfig.cmake.in should define further compiler options
 #   beyond those defined currently for MSVC (/vmg /MP).
 #
@@ -210,9 +205,6 @@
 #   preprocessor definitions that need to be consistent for compilation of
 #   SystemC libraries as well as applications (e.g., remove
 #   SC_ENABLE_ASSERTIONS?).
-#
-# - Find a better way to make sure all code linking to the SystemC library is
-#   also linking to ${CMAKE_THREAD_LIBS_INIT} if needed.
 #
 # - Configure and install systemc.pc and tlm.pc for pkg-config
 #
