@@ -10,11 +10,8 @@ is required, even when using the Microsoft Visual C++ compiler (CL).
 The test script uses the command-line version of the Visual C++ compiler.
 
 In the instructions that follow, it is assumed that you have installed
-Visual C++ 2010 Express Edition, other versions later than Visual C++ 2005
+Visual Studio 2010, other versions later than Visual C++ 2010
 will also work as documented in the SystemC library itself.
-
-Please note that if using Visual C++ 2005, you may also need to install the
-Windows Server 2003 Platform SDK SP1 so that you have the Windows header files.
 
 Menus (such as the start menu path to Visual C++) are taken from a Windows 7
 32-bit installation. You may need to make slight adjustments to the names if
@@ -26,14 +23,13 @@ Installing SystemC
 
 When you install SystemC, make sure that the folder that contains the SystemC
 Visual C++ project has the correct name for the version of Visual C++ you are
-using.  This can be done by copying the default 'msvc80' folder to the
+using.  This can be done by copying the default 'msvc10' folder to the
 appropriate location before upgrading the solution/project files).
 
+For Visual C++ 2015      : msvc14
 For Visual C++ 2013      : msvc12
 For Visual C++ 2012      : msvc11
 For Visual C++ 2010      : msvc10
-For Visual C++ 2008      : msvc90
-For Visual C++ 2005      : msvc80
 
 
 Running the regressions
@@ -46,11 +42,8 @@ Running the regressions
 
      Start
        > Programs
-       > Microsoft Visual Studio 2010 Express
+       > Microsoft Visual Studio 2010
        > Visual Studio Command Prompt (2010)
-
-   [Note: for Visual C++ 2005, you should also run
-    "c:\Program Files\Microsoft Platform SDK\setenv.cmd"]
 
    Alternatively, you can open a plain command prompt and use the
    'scripts\vsvars.bat' file to setup the Visual C++ tools environment.
@@ -59,13 +52,13 @@ Running the regressions
 
       cd c:\systemc_regressions-2.3.1\scripts
 
-      vsvars.bat [arch]               # load MSVC 2005 for [arch]
+      vsvars.bat [arch]               # load MSVC 2010 for [arch]
       vsvars.bat [version]            # load MSVC [version] for x86
       vsvars.bat [version] [platform] # load MSVC [version] for [platform]
 
-      vsvars.bat 2010 amd64  # load 64-bit tools for MSVC 10.0
+      vsvars.bat 2013 amd64  # load 64-bit tools for MSVC 12.0
       vsvars.bat 11.0        # load default (x86) tools for MSVC 2012
-      vsvars.vat x86_amd64   # load x64 cross-tools for MSVC 2005
+      vsvars.vat x86_amd64   # load x64 cross-tools for MSVC 2010
 
 
 2) From that command prompt, launch a shell for your Un*x shell compatibility
@@ -107,6 +100,9 @@ have now appeared in a new window.
    ../scripts/verify.pl -g systemc  (runs all SystemC tests using debug library)
    ../scripts/verify.pl tlm         (runs all TLM2 tests using release library)
    ../scripts/verity.pl -g tlm      (runs all TLM2 tests using debug library)
+
+   Note: If you built the SystemC library as a Windows DLL, please add the option
+         '-dll' to the verify.pl invocation for the libraries to be linked correctly.
 
 6) After all tests are complete, the output summary should show 100%
    passes for both systemc and tlm.
