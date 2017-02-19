@@ -1,4 +1,4 @@
-        Release Notes for SystemC 2.3.1 regression test suite
+        Release Notes for SystemC 2.3.2 regression test suite
         =====================================================
 
 
@@ -24,8 +24,8 @@ Compatibility across different platforms has been greatly improved and
 support for new platforms has been added (additional BSD flavours,
 MacOS X 64-bit, Windows 64-bit (MSVC, Cygwin, MinGW)).
 
-Improved coverage of SystemC features, including tests for the new features and
-bugfixes added to the 2.3.1 release.
+Improved coverage of SystemC features, including tests for the new features
+and bugfixes added to the 2.3.1 and 2.3.2 releases.
 
 
 2) Bug fixes and enhancements
@@ -42,30 +42,26 @@ This is a summary of the main changes:
 
     New options have been added to affect the compiler/linker invocation and
     architecture selection:
-     -arch <arch> Override SystemC architecture
-     -D <symbol>  Additional predefined macros
-     -I <dir>     Additional include directory
-     -L <dir>     Additional linker directory
-     -l <libname> Additional library to link
-     -o <opts>    Additional (custom) compiler options.
-
+      -arch <arch> Override SystemC architecture.
+      -dll         Link against SystemC DLL (Windows/MSVC only).
+      -D <symbol>  Additional predefined macros (may be added multiple times).
+      -I <dir>     Additional include directory (may be added multiple times).
+      -L <dir>     Additional linker directory (may be added multiple times).
+      -l <libname> Additional library to link (may be added mutliple times).
+      -M(D,T)[d]   Select MSVC runtime library (default: -MT[d]).
+      -o <opts>    Additional (custom) compiler options.
 
   - A new "-recheck" option has been added to verify.pl to rerun the
     tests that failed in a previous run, e.g. to add '-no-cleanup'
     and/or '-g' for further analysis.
 
-
-  - verify.pl now accepts all GCC-compatible compilers
-
-    Instead of relying on the hard-coded name of the compiler's executable,
-    check for the predefined macro __GNUC__ to detect GCC-compatible
-    compilers on all platforms.
+  - Added support for Microsoft Visual Studio 2015.
 
 
 3) Other changes
 ================
 
-Here is an overview of changes with respect to the previous release:
+Here is an overview of changes with respect to previous releases:
 
   - The environment variables RT_ADD_INCLUDES, RT_ADD_LDLIBS, and 
     RT_ADD_LDPATHS now need to omit the compiler flags prefixes
