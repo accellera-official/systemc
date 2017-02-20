@@ -418,7 +418,7 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      tlm_utils/simple_target_socket.h
                      tlm_utils/tlm_quantumkeeper.h
                      # QuickThreads
-                     $<$<BOOL:QT_ARCH>:
+                     $<$<BOOL:${QT_ARCH}>:
                        sysc/packages/qt/qt.c
                        $<$<STREQUAL:${QT_ARCH},sparc>:
                          ${CMAKE_CURRENT_BINARY_DIR}/sysc/packages/qt/md/sparc.s>
