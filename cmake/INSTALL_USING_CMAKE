@@ -21,7 +21,11 @@ Table of Contents
 
    3.3 Generic Cross Compilation to a Target System
 
-4. Ressources
+4. Finding and Using SystemC with CMake
+
+5. Known Problems
+
+6. Ressources
 
 
 1. Introduction
@@ -149,11 +153,11 @@ BUILD_SOURCE_DOCUMENTATION    Build source code documentation using Doxygen
 CMAKE_BUILD_TYPE              Specifies the build type on single-configuration
                               generators. (default: Release).
 
-CMAKE_CXX_STANDARD            Choose the preferred C++ standard to build all
-                              targets. Supported values are 98, 11, and 14.
-                              The next supported older standard is used in
-                              case a compiler is not yet compatible to the
-                              requested standard. (default: 14)
+CMAKE_CXX_STANDARD            C++ standard to build all targets. Supported
+                              values are 98, 11, and 14. (default: 98)
+
+CMAKE_CXX_STANDARD_REQUIRED   The with CMAKE_CXX_STANDARD selected C++ standard
+                              is a requirement. (default: ON)
 
 CMAKE_INSTALL_PREFIX          Root directory of the SystemC libraries
                               installation (defaults to $SystemC_DIR or
@@ -347,7 +351,60 @@ CMAKE_FIND_ROOT_PATH_MODE_INCLUDE, either "NEVER", "ONLY", or "BOTH" (default)
 The necessary steps are discussed in detail on the CMake Wiki
 <http://www.cmake.org/Wiki/CMake_Cross_Compiling>.
 
-4. Known Problems
+
+4. Finding and Using SystemC with CMake
+=======================================
+
+The CMake build scripts install CMake package config files to facilitate finding
+the SystemC and TLM libraries. The packages are called SystemCLanguage and
+SystemCTLM. As the TLM support is compiled into the SystemC library, the package
+SystemCTLM just finds the matching SystemC library as a dependency. As SystemC
+is usually installed in its own directory tree, you have to tell CMake where to
+look for the package config files by setting the variable CMAKE_PREFIX_PATH to
+the root directory of your SystemC installation before calling find_package().
+
+The SystemCLanguage package provides the imported target SystemC::systemc to
+which an application or library should link to. Linking to an imported target
+ensures that all necessary preprocessor definitions, compiler options, and
+transitive link libraries are used when compiling and linking the application.
+
+The SystemCLanguage package exports a number of variables:
+
+SystemC_TARGET_ARCH            Target architecture according to the Accellera
+                               SystemC conventions
+
+SystemC_CXX_STANDARD           Preferred C++ standard
+
+SystemC_CXX_STANDARD_REQUIRED  Determine whether the selected C++ standard is
+                               a requirement
+
+The SystemC_CXX_STANDARD and SystemC_CXX_STANDARD_REQUIRED variables should be
+used to initialize the respective CMAKE_CXX_STANDARD and
+CMAKE_CXX_STANDARD_REQUIRED variables in the CMake build scripts of the
+application/library. Alternatively, the CXX_STANDARD and CXX_STANDARD_REQUIRED
+target properties can be set directly.
+
+As an example, here is a minimal CMakeLists.txt to compile the simple_perf
+SystemC example as a stand-alone application:
+
+--- Start: CMakeLists.txt ---
+cmake_minimum_required(VERSION 3.1)
+project(simple_perf CXX)
+
+set (SystemCLanguage_DIR /opt/systemc)
+find_package(SystemCLanguage CONFIG REQUIRED)
+
+set (CMAKE_CXX_STANDARD ${SystemC_CXX_STANDARD} CACHE STRING
+     "C++ standard to build all targets. Supported values are 98, 11, and 14.")
+set (CMAKE_CXX_STANDARD_REQUIRED ${SystemC_CXX_STANDARD_REQUIRED} CACHE BOOL
+     "The with CMAKE_CXX_STANDARD selected C++ standard is a requirement.")
+
+add_executable(simple_perf simple_perf.cpp)
+target_link_libraries(simple_perf SystemC::systemc)
+--- End: CMakeLists.txt ---
+
+
+5. Known Problems
 =================
 
   - The CMake build scripts require more thorough testing of the various build
@@ -370,7 +427,7 @@ The necessary steps are discussed in detail on the CMake Wiki
     SystemC regression test suite does.
 
 
-5. Ressources
+6. Ressources
 =============
 
 [1] CMake - Cross Platform Make Homepage <http://www.cmake.org>
