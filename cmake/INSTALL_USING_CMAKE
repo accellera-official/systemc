@@ -391,7 +391,7 @@ SystemC example as a stand-alone application:
 cmake_minimum_required(VERSION 3.1)
 project(simple_perf CXX)
 
-set (SystemCLanguage_DIR /opt/systemc)
+set (CMAKE_PREFIX_PATH /opt/systemc)
 find_package(SystemCLanguage CONFIG REQUIRED)
 
 set (CMAKE_CXX_STANDARD ${SystemC_CXX_STANDARD} CACHE STRING
