@@ -103,6 +103,14 @@
 #                               case a compiler is not yet compatible to the
 #                               requested standard. (default: 14)
 #
+# CMAKE_INSTALL_PREFIX          Root directory of the SystemC libraries
+#                               installation (defaults to $SystemC_DIR or
+#                               $ENV{SYSTEMC_HOME} if set to an absolute path
+#                               and otherwise to either /opt/systemc/
+#                               (Unix-like platforms including CYGWIN),
+#                               $ENV{ProgramFiles}/SystemC/ (on Windows
+#                               systems), or ${CMAKE_INSTALL_PREFIX}/systemc.
+#
 # CMAKE_OSX_ARCHITECTURES       Architectures for cross-compilation on Mac OS X
 #                               (default: empty, i.e., only for the system
 #                               processor).
@@ -142,14 +150,6 @@
 #
 # OVERRIDE_DEFAULT_STACK_SIZE   Define the default stack size used for SystemC
 #                               (thread) processes. (> 0)
-#
-# SystemC_ROOT_DIR              Root directory of the SystemC libraries
-#                               installation (default $SYSTEMC_ROOT_DIR,
-#                               $SYSTEMC_ROOT, $SYSTEMC_HOME, $SYSTEMC_PATH
-#                               /opt/systemc/ (Unix, Cygwin, MSYS), or
-#                               $ENV{ProgramFiles}/SystemC/ (MinGW and
-#                               MS Visual Studio)). CMAKE_INSTALL_PREFIX will
-#                               be set to its value.
 #
 # SystemC_TARGET_ARCH           Target architecture according to the
 #                               Accellera SystemC conventions set either from
@@ -530,31 +530,23 @@ endif (ENABLE_PTHREADS OR (QT_ARCH AND NOT DISABLE_ASYNC_UPDATES) OR NOT QT_ARCH
 # Set the installation paths
 ###############################################################################
 
-# If necessary, default-initialize SystemC_ROOT_DIR and set
-# CMAKE_INSTALL_PREFIX to its value.
-if (NOT SystemC_ROOT_DIR)
-  if (EXISTS $ENV{SYSTEMC_ROOT_DIR})
-    set (_SystemC_ROOT_DIR $ENV{SYSTEMC_ROOT_DIR})
-  elseif (EXISTS $ENV{SYSTEMC_ROOT})
-    set (_SystemC_ROOT_DIR $ENV{SYSTEMC_ROOT})
-  elseif (EXISTS $ENV{SYSTEMC_HOME})
-    set (_SystemC_ROOT_DIR $ENV{SYSTEMC_HOME})
-  elseif (EXISTS $ENV{SYSTEMC_PATH})
-    set (_SystemC_ROOT_DIR $ENV{SYSTEMC_PATH})
+if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+  if (IS_ABSOLUTE ${SystemC_DIR})
+    set (_CMAKE_INSTALL_PREFIX ${SystemC_DIR})
+  elseif (IS_ABSOLUTE $ENV{SYSTEMC_HOME})
+    set (_CMAKE_INSTALL_PREFIX $ENV{SYSTEMC_HOME})
   elseif (UNIX)
-    set (_SystemC_ROOT_DIR "/opt/systemc")
+    set (_CMAKE_INSTALL_PREFIX "/opt/systemc")
   elseif (WIN32)
     file (TO_CMAKE_PATH $ENV{ProgramFiles} _WIN32_INSTALL_PREFIX)
-    set (_SystemC_ROOT_DIR "${_WIN32_INSTALL_PREFIX}/SystemC")
+    set (_CMAKE_INSTALL_PREFIX "${_WIN32_INSTALL_PREFIX}/SystemC")
     unset (_WIN32_INSTALL_PREFIX)
   else (EXISTS $ENV{SYSTEMC_ROOT_DIR})
-    set (_SystemC_ROOT_DIR "${CMAKE_INSTALL_PREFIX}/systemc")
+    set (_CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}/systemc")
   endif (EXISTS $ENV{SYSTEMC_ROOT_DIR})
-  set (SystemC_ROOT_DIR ${_SystemC_ROOT_DIR} CACHE PATH "installation root for the SystemC libraries")
-  unset (_SystemC_ROOT_DIR)
-endif (NOT SystemC_ROOT_DIR)
-set (CMAKE_INSTALL_PREFIX ${SystemC_ROOT_DIR} CACHE PATH "Install directory used by install." FORCE)
-mark_as_advanced (CMAKE_INSTALL_PREFIX)
+  set (CMAKE_INSTALL_PREFIX ${_CMAKE_INSTALL_PREFIX} CACHE PATH "Installation root directory" FORCE)
+  unset (_CMAKE_INSTALL_PREFIX)
+endif (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 
 # Set the installation paths for headers, libraries, and documentation.
 set (CMAKE_INSTALL_DOCDIR "share/doc/systemc") # otherwise mixed-case
