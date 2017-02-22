@@ -2,8 +2,8 @@
 
  Install Notes for SystemC Using CMake to Configure the Build Process
 
-       Torsten Maehne, Université Pierre et Marie Curie, France
-                              2013-10-31
+   Torsten Maehne, Bern University of Applied Sciences, Switzerland
+                              2017-02-22
 
 
 Table of Contents
@@ -26,6 +26,13 @@ Table of Contents
 
 1. Introduction
 ===============
+
+WARNING: The CMake build scripts are only provided as a preview to
+         gather feedback from the community! They are a work in
+         progress and have not been as thoroughly tested as the
+         other build options for SystemC (i.e., the traditional
+         autotools-based build system and the MSVC solutions). There
+         are known open issues (see section 4).
 
 The original autotools-based build system of the SystemC distribution
 only supports a limited number of OS/processor/compiler platforms and
@@ -134,7 +141,7 @@ documentation string. The most important variables are:
 BUILD_EXAMPLES                Build the SystemC examples (default: OFF).
 
 BUILD_SHARED_LIBS             Build shared instead of static libraries
-                              (default: ON).
+                              (default: ON if not targetting Windows).
 
 BUILD_SOURCE_DOCUMENTATION    Build source code documentation using Doxygen
                               (default: OFF).
@@ -335,8 +342,30 @@ CMAKE_FIND_ROOT_PATH_MODE_INCLUDE, either "NEVER", "ONLY", or "BOTH" (default)
 The necessary steps are discussed in detail on the CMake Wiki
 <http://www.cmake.org/Wiki/CMake_Cross_Compiling>.
 
+4. Known Problems
+=================
 
-4. Ressources
+  - The CMake build scripts require more thorough testing of the various build
+    configurations on as many platforms as possible. For the moment, testing
+    has been primarily done on OS X (x86_64 and i686) and Linux (x86_64 and
+    i686) as well as to a lesser degree on Windows 7 using MSYS2 + MingGW-W64
+    and MSVC 2013 / 2015 (x86_64 and i686).
+
+  - The CMake build scripts do not yet support the compilation of the SystemC
+    libraries as a DLL on Windows. To make it work, the SystemC library has to
+    be at least split into libsystemc-core.dll and a static libsystemc.lib.
+
+  - The CMake build scripts don't yet configure and install systemc.pc and
+    tlm.pc for pkg-config.
+
+  - Depending on the build type and the platform, the tests 5 (sc_report) and
+    32 (lt_mixed_endian) from the SystemC/TLM examples are failing. It seems
+    that the output of both tests is platform dependent and the current
+    test runner does not yet allow platform-dependent golden files as the
+    SystemC regression test suite does.
+
+
+5. Ressources
 =============
 
 [1] CMake - Cross Platform Make Homepage <http://www.cmake.org>

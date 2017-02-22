@@ -89,7 +89,7 @@
 # BUILD_EXAMPLES                Build the SystemC examples (default: OFF).
 #
 # BUILD_SHARED_LIBS             Build shared instead of static libraries
-#                               (default: ON).
+#                               (default: ON if not targetting Windows).
 #
 # BUILD_SOURCE_DOCUMENTATION    Build source code documentation using Doxygen
 #                               (default: OFF).
@@ -295,7 +295,8 @@ else (NOT (WIN32 OR CYGWIN))
   option (BUILD_SHARED_LIBS "Build shared libraries." OFF)
 endif (NOT (WIN32 OR CYGWIN))
 if (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
-  message (WARNING "The compilation of SystemC as a DLL on Windows is currently broken! To make it work, the SystemC library has to be at least split into libsystemc-core.dll and a static libsystemc.lib.")
+  message (WARNING "The compilation of SystemC as a DLL on Windows is currently not supported!")
+  set (BUILD_SHARED_LIBS CACHE BOOL "Build shared libraries." OFF FORCE)
 endif (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
 
 option (BUILD_SOURCE_DOCUMENTATION "Build source documentation with Doxygen." OFF)
