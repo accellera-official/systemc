@@ -751,6 +751,7 @@ export (PACKAGE SystemCLanguage)
 export (PACKAGE SystemCTLM)
 
 # Create the SystemCLanguageConfig.cmake, and SystemCLanguageConfigVersion files
+include(CMakePackageConfigHelpers)
 # ... for the build tree
 set(CONF_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/src" "${PROJECT_BINARY_DIR}/src")
 configure_file(cmake/SystemCLanguageConfig.cmake.in
@@ -766,10 +767,16 @@ configure_file(cmake/SystemCLanguageConfig.cmake.in
 configure_file(cmake/SystemCTLMConfig.cmake.in
   "${PROJECT_BINARY_DIR}/cmake/SystemCTLMConfig.cmake" @ONLY)
 # ... for both
-configure_file(cmake/SystemCLanguageConfigVersion.cmake.in
-  "${PROJECT_BINARY_DIR}/SystemCLanguageConfigVersion.cmake" @ONLY)
-configure_file(cmake/SystemCTLMConfigVersion.cmake.in
-  "${PROJECT_BINARY_DIR}/SystemCTLMConfigVersion.cmake" @ONLY)
+write_basic_package_version_file(
+  "${CMAKE_CURRENT_BINARY_DIR}/SystemCLanguageConfigVersion.cmake"
+  VERSION ${SystemCLanguage_VERSION_MAJOR}.${SystemCLanguage_VERSION_MINOR}.${SystemCLanguage_VERSION_PATCH}.${SystemCLanguage_VERSION_RELEASE_DATE}
+  COMPATIBILITY AnyNewerVersion
+)
+write_basic_package_version_file(
+  "${CMAKE_CURRENT_BINARY_DIR}/SystemCTLMConfigVersion.cmake"
+  VERSION ${SystemCTLM_VERSION_MAJOR}.${SystemCTLM_VERSION_MINOR}.${SystemCTLM_VERSION_PATCH}.${SystemCTLM_VERSION_RELEASE_DATE}
+  COMPATIBILITY AnyNewerVersion
+)
 unset (REL_INCLUDEDIR)
 unset (CONF_INCLUDE_DIRS)
 
