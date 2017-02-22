@@ -79,8 +79,6 @@ elseif (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
   add_compile_options(/W3 /wd4244 /wd4267 /wd4996)
 endif (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 
-set (SystemC_LIBRARIES systemc)
-
 # If possible, find a more powerful platform-specific diff tool than "cmake -E compare_files"
 find_program (DIFF_COMMAND
               NAMES diff diff.exe fc fc.exe
