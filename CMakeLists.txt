@@ -97,11 +97,11 @@
 # CMAKE_BUILD_TYPE              Specifies the build type on single-configuration
 #                               generators. (default: Release).
 #
-# CMAKE_CXX_STANDARD            Choose the preferred C++ standard to build all
-#                               targets. Supported values are 98, 11, and 14.
-#                               The next supported older standard is used in
-#                               case a compiler is not yet compatible to the
-#                               requested standard. (default: 14)
+# CMAKE_CXX_STANDARD            C++ standard to build all targets. Supported
+#                               values are 98, 11, and 14. (default: 98)
+#
+# CMAKE_CXX_STANDARD_REQUIRED   The with CMAKE_CXX_STANDARD selected C++ standard
+#                               is a requirement. (default: ON)
 #
 # CMAKE_INSTALL_PREFIX          Root directory of the SystemC libraries
 #                               installation (defaults to $SystemC_DIR or
@@ -283,11 +283,11 @@ if (NOT CMAKE_BUILD_TYPE)
        FORCE)
 endif (NOT CMAKE_BUILD_TYPE)
 
-if (NOT CMAKE_CXX_STANDARD)
-  set (CMAKE_CXX_STANDARD 14 CACHE STRING
-       "Choose the preferred C++ standard to build all targets. Supported values are 98, 11, and 14. The next supported older standard is used in case a compiler is not yet compatible to the requested standard."
-       FORCE)
-endif (NOT CMAKE_CXX_STANDARD)
+set (CMAKE_CXX_STANDARD 98 CACHE STRING
+     "C++ standard to build all targets. Supported values are 98, 11, and 14.")
+set (CMAKE_CXX_STANDARD_REQUIRED ON CACHE BOOL
+     "The with CMAKE_CXX_STANDARD selected C++ standard is a requirement.")
+mark_as_advanced (CMAKE_CXX_STANDARD_REQUIRED)
 
 if (NOT (WIN32 OR CYGWIN))
   option (BUILD_SHARED_LIBS "Build shared libraries." ON)
@@ -589,14 +589,19 @@ if (INSTALL_LIB_TARGET_ARCH_SYMLINK AND CMAKE_HOST_UNIX)
 endif (INSTALL_LIB_TARGET_ARCH_SYMLINK AND CMAKE_HOST_UNIX)
 
 if (INSTALL_TO_LIB_BUILD_TYPE_DIR OR INSTALL_TO_LIB_TARGET_ARCH_DIR)
-  set (INSTALL_CMAKEDIR share/cmake CACHE PATH
+  set (SystemCLanguage_INSTALL_CMAKEDIR share/cmake/SystemCLanguage CACHE PATH
+       "CMake package configuration installation directory" FORCE)
+  set (SystemCTLM_INSTALL_CMAKEDIR share/cmake/SystemCTLM CACHE PATH
        "CMake package configuration installation directory" FORCE)
 else (INSTALL_TO_LIB_BUILD_TYPE_DIR OR INSTALL_TO_LIB_TARGET_ARCH_DIR)
-  set (INSTALL_CMAKEDIR ${CMAKE_INSTALL_LIBDIR}/cmake CACHE PATH
-       "CMake package configuration installation directory")
+  set (SystemCLanguage_INSTALL_CMAKEDIR ${CMAKE_INSTALL_LIBDIR}/cmake/SystemCLanguage CACHE PATH
+       "CMake package configuration installation directory for the SystemCLanguage package.")
+  set (SystemCTLM_INSTALL_CMAKEDIR ${CMAKE_INSTALL_LIBDIR}/cmake/SystemCTLM CACHE PATH
+       "CMake package configuration installation directory for the SystemCTLM package.")
 endif (INSTALL_TO_LIB_BUILD_TYPE_DIR OR INSTALL_TO_LIB_TARGET_ARCH_DIR)
-mark_as_advanced(INSTALL_CMAKEDIR)
-GNUInstallDirs_get_absolute_install_dir(INSTALL_FULL_CMAKEDIR INSTALL_CMAKEDIR)
+mark_as_advanced(SystemCLanguage_INSTALL_CMAKEDIR SystemCTLM_INSTALL_CMAKEDIR)
+set(SystemCLanguage_INSTALL_FULL_CMAKEDIR "${CMAKE_INSTALL_PREFIX}/${SystemCLanguage_INSTALL_CMAKEDIR}")
+set(SystemCTLM_INSTALL_FULL_CMAKEDIR "${CMAKE_INSTALL_PREFIX}/${SystemCTLM_INSTALL_CMAKEDIR}")
 
 
 ###############################################################################
@@ -670,6 +675,8 @@ message (STATUS "INSTALL_TO_LIB_BUILD_TYPE_DIR = ${INSTALL_TO_LIB_BUILD_TYPE_DIR
 message (STATUS "INSTALL_TO_LIB_TARGET_ARCH_DIR = ${INSTALL_TO_LIB_TARGET_ARCH_DIR}")
 message (STATUS "INSTALL_LIB_TARGET_ARCH_SYMLINK = ${INSTALL_LIB_TARGET_ARCH_SYMLINK}")
 message (STATUS "------------------------------------------------------------------------")
+message (STATUS "CMAKE_CXX_STANDARD = ${CMAKE_CXX_STANDARD}")
+message (STATUS "CMAKE_CXX_STANDARD_REQUIRED = ${CMAKE_CXX_STANDARD_REQUIRED}")
 message (STATUS "CMAKE_SYSTEM = ${CMAKE_SYSTEM}")
 message (STATUS "CMAKE_SYSTEM_PROCESSOR = ${CMAKE_SYSTEM_PROCESSOR}")
 message (STATUS "QT_ARCH = ${QT_ARCH}")
@@ -742,7 +749,7 @@ export (TARGETS systemc
 # ... to installation tree
 install (EXPORT SystemCLanguageTargets
          NAMESPACE SystemC::
-         DESTINATION ${INSTALL_CMAKEDIR}
+         DESTINATION ${SystemCLanguage_INSTALL_CMAKEDIR}
          COMPONENT dev)
 
 # Register the SystemCLanguage and SystemCTLM packages for use from the
@@ -750,40 +757,31 @@ install (EXPORT SystemCLanguageTargets
 export (PACKAGE SystemCLanguage)
 export (PACKAGE SystemCTLM)
 
-# Create the SystemCLanguageConfig.cmake, and SystemCLanguageConfigVersion files
+# Create the <Package>Config.cmake and <Package>ConfigVersion files
 include(CMakePackageConfigHelpers)
-# ... for the build tree
-set(CONF_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/src" "${PROJECT_BINARY_DIR}/src")
-configure_file(cmake/SystemCLanguageConfig.cmake.in
-  "${PROJECT_BINARY_DIR}/SystemCLanguageConfig.cmake" @ONLY)
-configure_file(cmake/SystemCTLMConfig.cmake.in
-  "${PROJECT_BINARY_DIR}/SystemCTLMConfig.cmake" @ONLY)
-# ... for the install tree
-file (RELATIVE_PATH REL_INCLUDEDIR
-                    "${INSTALL_FULL_CMAKEDIR}" "${CMAKE_INSTALL_FULL_INCLUDEDIR}")
-set(CONF_INCLUDE_DIRS "\${SystemC_CMAKE_DIR}/${REL_INCLUDEDIR}")
-configure_file(cmake/SystemCLanguageConfig.cmake.in
-  "${PROJECT_BINARY_DIR}/cmake/SystemCLanguageConfig.cmake" @ONLY)
-configure_file(cmake/SystemCTLMConfig.cmake.in
-  "${PROJECT_BINARY_DIR}/cmake/SystemCTLMConfig.cmake" @ONLY)
-# ... for both
+configure_package_config_file(cmake/SystemCLanguageConfig.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/SystemCLanguageConfig.cmake
+  INSTALL_DESTINATION ${SystemCLanguage_INSTALL_CMAKEDIR})
 write_basic_package_version_file(
   "${CMAKE_CURRENT_BINARY_DIR}/SystemCLanguageConfigVersion.cmake"
   VERSION ${SystemCLanguage_VERSION_MAJOR}.${SystemCLanguage_VERSION_MINOR}.${SystemCLanguage_VERSION_PATCH}.${SystemCLanguage_VERSION_RELEASE_DATE}
   COMPATIBILITY AnyNewerVersion
 )
+configure_package_config_file(cmake/SystemCTLMConfig.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/SystemCTLMConfig.cmake
+  INSTALL_DESTINATION ${SystemCTLM_INSTALL_CMAKEDIR})
 write_basic_package_version_file(
   "${CMAKE_CURRENT_BINARY_DIR}/SystemCTLMConfigVersion.cmake"
   VERSION ${SystemCTLM_VERSION_MAJOR}.${SystemCTLM_VERSION_MINOR}.${SystemCTLM_VERSION_PATCH}.${SystemCTLM_VERSION_RELEASE_DATE}
   COMPATIBILITY AnyNewerVersion
 )
-unset (REL_INCLUDEDIR)
-unset (CONF_INCLUDE_DIRS)
 
 # Install the <Package>Config.cmake and <Package>ConfigVersion.cmake
-install(FILES "${PROJECT_BINARY_DIR}/cmake/SystemCLanguageConfig.cmake"
+install(FILES "${PROJECT_BINARY_DIR}/SystemCLanguageConfig.cmake"
               "${PROJECT_BINARY_DIR}/SystemCLanguageConfigVersion.cmake"
-              "${PROJECT_BINARY_DIR}/cmake/SystemCTLMConfig.cmake"
+        DESTINATION "${SystemCLanguage_INSTALL_CMAKEDIR}"
+        COMPONENT dev)
+install(FILES "${PROJECT_BINARY_DIR}/SystemCTLMConfig.cmake"
               "${PROJECT_BINARY_DIR}/SystemCTLMConfigVersion.cmake"
-        DESTINATION "${INSTALL_CMAKEDIR}"
+        DESTINATION "${SystemCTLM_INSTALL_CMAKEDIR}"
         COMPONENT dev)

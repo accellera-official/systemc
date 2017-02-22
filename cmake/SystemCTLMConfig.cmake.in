@@ -1,14 +1,5 @@
 # - Config file for the SystemCTLM package
-# It defines the following variables
-#  TLM_DEFINITIONS  - required preprocessor definitions to use TLM
-#  TLM_INCLUDE_DIRS - include directories for TLM
-#  TLM_LIBRARIES    - libraries to link against
 
-# Load the SystemC configuration from the same directory as this file.
-get_filename_component (SystemCTLM_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
-find_package (SystemC PATHS ${SystemCTLM_CMAKE_DIR} NO_DEFAULT_PATH)
-
-# TLM is currently header-only and depends only on SystemC.
-set (TLM_DEFINITIONS ${SystemC_DEFINITIONS})
-set (TLM_INCLUDE_DIRS ${SystemC_INCLUDE_DIRS})
-set (TLM_LIBRARIES ${SystemC_LIBRARIES})
+# TLM is part of the SystemC language library.
+include(CMakeFindDependencyMacro)
+find_dependency (SystemC @SystemCLanguage_VERSION_MAJOR@.@SystemCLanguage_VERSION_MINOR@.@SystemCLanguage_VERSION_PATCH@.@SystemCLanguage_VERSION_RELEASE_DATE@ EXACT)
