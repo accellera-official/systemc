@@ -492,7 +492,7 @@ if (APPLE)
   set_target_properties (systemc PROPERTIES LINK_FLAGS -Wl,-U,_sc_main)
 endif (APPLE)
 
-target_link_libraries (systemc PRIVATE $<$<BOOL:${CMAKE_USE_PTHREADS_INIT}>:Threads::Threads>)
+target_link_libraries (systemc PUBLIC $<$<BOOL:${CMAKE_USE_PTHREADS_INIT}>:Threads::Threads>)
 
 set_target_properties (systemc
                        PROPERTIES
