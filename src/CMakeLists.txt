@@ -497,8 +497,8 @@ target_link_libraries (systemc PRIVATE $<$<BOOL:${CMAKE_USE_PTHREADS_INIT}>:Thre
 set_target_properties (systemc
                        PROPERTIES
                        LINKER_LANGUAGE CXX
-                       VERSION ${SystemC_VERSION}
-                       SOVERSION ${SystemC_SOVERSION}
+                       VERSION ${SystemCLanguage_VERSION}
+                       SOVERSION ${SystemCLanguage_SOVERSION}
                        INSTALL_NAME_DIR ${CMAKE_INSTALL_FULL_LIBDIR})
 
 
@@ -506,7 +506,7 @@ set_target_properties (systemc
 # Install rules for SystemC library
 ###############################################################################
 
-install (TARGETS systemc EXPORT  SystemCTargets
+install (TARGETS systemc EXPORT  SystemCLanguageTargets
                          RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
                          LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
                          ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}

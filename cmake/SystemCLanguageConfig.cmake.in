@@ -1,4 +1,4 @@
-# - Config file for the SystemC package
+# - Config file for the SystemCLanguage package
 # It defines the following variables
 #  SystemC_DEFINITIONS  - required preprocessor definitions to use SystemC
 #  SystemC_INCLUDE_DIRS - include directories for SystemC

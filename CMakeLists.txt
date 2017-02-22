@@ -215,62 +215,62 @@
 
 cmake_minimum_required (VERSION 3.1)
 
-project (SystemC CXX C)
+project (SystemCLanguage CXX C)
 
-set(SystemC_VERSION_FILE "${PROJECT_SOURCE_DIR}/src/sysc/kernel/sc_ver.h")
-if(EXISTS ${SystemC_VERSION_FILE})
-    file(READ ${SystemC_VERSION_FILE} SYSTEMC_VERSION_FILE_CONTENT)
-    string(REGEX MATCH "SC_VERSION_MAJOR[ \t]+([0-9]+)" SystemC_VERSION_MAJOR ${SYSTEMC_VERSION_FILE_CONTENT})
-    string(REGEX MATCH "([0-9]+)" SystemC_VERSION_MAJOR ${SystemC_VERSION_MAJOR})
-    string(REGEX MATCH "SC_VERSION_MINOR[ \t]+([0-9]+)" SystemC_VERSION_MINOR ${SYSTEMC_VERSION_FILE_CONTENT})
-    string(REGEX MATCH "([0-9]+)" SystemC_VERSION_MINOR ${SystemC_VERSION_MINOR})
-    string(REGEX MATCH "SC_VERSION_PATCH[ \t]+([0-9]+)" SystemC_VERSION_PATCH ${SYSTEMC_VERSION_FILE_CONTENT})
-    string(REGEX MATCH "([0-9]+)" SystemC_VERSION_PATCH ${SystemC_VERSION_PATCH})
-    string(REGEX MATCH "SC_IS_PRERELEASE[ \t]+([0-9]+)" SystemC_VERSION_IS_PRERELEASE ${SYSTEMC_VERSION_FILE_CONTENT})
-    string(REGEX MATCH "([0-9]+)" SystemC_VERSION_IS_PRERELEASE ${SystemC_VERSION_IS_PRERELEASE})
-    string(REGEX MATCH "SC_VERSION_PRERELEASE[ \t]+\"([^\".]+)\"" SystemC_VERSION_PRERELEASE ${SYSTEMC_VERSION_FILE_CONTENT})
-    string(REGEX REPLACE "(.*)\"(.*)\"" "\\2" SystemC_VERSION_PRERELEASE ${SystemC_VERSION_PRERELEASE})
-    string(REGEX MATCH "SYSTEMC_VERSION[ \t]+([0-9]+)" SystemC_VERSION_RELEASE_DATE ${SYSTEMC_VERSION_FILE_CONTENT})
-    string(REGEX MATCH "([0-9]+)" SystemC_VERSION_RELEASE_DATE ${SystemC_VERSION_RELEASE_DATE})
-else(EXISTS ${SystemC_VERSION_FILE})
+set(SystemCLanguage_VERSION_FILE "${PROJECT_SOURCE_DIR}/src/sysc/kernel/sc_ver.h")
+if(EXISTS ${SystemCLanguage_VERSION_FILE})
+    file(READ ${SystemCLanguage_VERSION_FILE} SYSTEMC_VERSION_FILE_CONTENT)
+    string(REGEX MATCH "SC_VERSION_MAJOR[ \t]+([0-9]+)" SystemCLanguage_VERSION_MAJOR ${SYSTEMC_VERSION_FILE_CONTENT})
+    string(REGEX MATCH "([0-9]+)" SystemCLanguage_VERSION_MAJOR ${SystemCLanguage_VERSION_MAJOR})
+    string(REGEX MATCH "SC_VERSION_MINOR[ \t]+([0-9]+)" SystemCLanguage_VERSION_MINOR ${SYSTEMC_VERSION_FILE_CONTENT})
+    string(REGEX MATCH "([0-9]+)" SystemCLanguage_VERSION_MINOR ${SystemCLanguage_VERSION_MINOR})
+    string(REGEX MATCH "SC_VERSION_PATCH[ \t]+([0-9]+)" SystemCLanguage_VERSION_PATCH ${SYSTEMC_VERSION_FILE_CONTENT})
+    string(REGEX MATCH "([0-9]+)" SystemCLanguage_VERSION_PATCH ${SystemCLanguage_VERSION_PATCH})
+    string(REGEX MATCH "SC_IS_PRERELEASE[ \t]+([0-9]+)" SystemCLanguage_VERSION_IS_PRERELEASE ${SYSTEMC_VERSION_FILE_CONTENT})
+    string(REGEX MATCH "([0-9]+)" SystemCLanguage_VERSION_IS_PRERELEASE ${SystemCLanguage_VERSION_IS_PRERELEASE})
+    string(REGEX MATCH "SC_VERSION_PRERELEASE[ \t]+\"([^\".]+)\"" SystemCLanguage_VERSION_PRERELEASE ${SYSTEMC_VERSION_FILE_CONTENT})
+    string(REGEX REPLACE "(.*)\"(.*)\"" "\\2" SystemCLanguage_VERSION_PRERELEASE ${SystemCLanguage_VERSION_PRERELEASE})
+    string(REGEX MATCH "SYSTEMC_VERSION[ \t]+([0-9]+)" SystemCLanguage_VERSION_RELEASE_DATE ${SYSTEMC_VERSION_FILE_CONTENT})
+    string(REGEX MATCH "([0-9]+)" SystemCLanguage_VERSION_RELEASE_DATE ${SystemCLanguage_VERSION_RELEASE_DATE})
+else(EXISTS ${SystemCLanguage_VERSION_FILE})
     message (FATAL_ERROR "Unable to read SystemC version file")
-endif(EXISTS ${SystemC_VERSION_FILE})
+endif(EXISTS ${SystemCLanguage_VERSION_FILE})
 
-set (SystemC_VERSION "${SystemC_VERSION_MAJOR}.${SystemC_VERSION_MINOR}.${SystemC_VERSION_PATCH}")
-if (SystemC_VERSION_IS_PRERELEASE)
-  set (SystemC_VERSION "${SystemC_VERSION}_${SystemC_VERSION_PRERELEASE}_${SystemC_VERSION_RELEASE_DATE}")
-endif (SystemC_VERSION_IS_PRERELEASE)
-set (SystemC_SOVERSION "${SystemC_VERSION_MAJOR}.${SystemC_VERSION_MINOR}")
+set (SystemCLanguage_VERSION "${SystemCLanguage_VERSION_MAJOR}.${SystemCLanguage_VERSION_MINOR}.${SystemCLanguage_VERSION_PATCH}")
+if (SystemCLanguage_VERSION_IS_PRERELEASE)
+  set (SystemCLanguage_VERSION "${SystemCLanguage_VERSION}_${SystemCLanguage_VERSION_PRERELEASE}_${SystemCLanguage_VERSION_RELEASE_DATE}")
+endif (SystemCLanguage_VERSION_IS_PRERELEASE)
+set (SystemCLanguage_SOVERSION "${SystemCLanguage_VERSION_MAJOR}.${SystemCLanguage_VERSION_MINOR}")
 
-set(TLM_VERSION_FILE "${PROJECT_SOURCE_DIR}/src/tlm_core/tlm_2/tlm_version.h")
-if(EXISTS ${TLM_VERSION_FILE})
-    file(READ ${TLM_VERSION_FILE} TLM_VERSION_FILE_CONTENT)
-    string(REGEX MATCH "TLM_VERSION_MAJOR[ \t]+([0-9]+)" TLM_VERSION_MAJOR ${TLM_VERSION_FILE_CONTENT})
-    string(REGEX MATCH "([0-9]+)" TLM_VERSION_MAJOR ${TLM_VERSION_MAJOR})
-    string(REGEX MATCH "TLM_VERSION_MINOR[ \t]+([0-9]+)" TLM_VERSION_MINOR ${TLM_VERSION_FILE_CONTENT})
-    string(REGEX MATCH "([0-9]+)" TLM_VERSION_MINOR ${TLM_VERSION_MINOR})
-    string(REGEX MATCH "TLM_VERSION_PATCH[ \t]+([0-9]+)" TLM_VERSION_PATCH ${TLM_VERSION_FILE_CONTENT})
-    string(REGEX MATCH "([0-9]+)" TLM_VERSION_PATCH ${TLM_VERSION_PATCH})
-    string(REGEX MATCH "TLM_IS_PRERELEASE[ \t]+([0-9]+)" TLM_VERSION_IS_PRERELEASE ${TLM_VERSION_FILE_CONTENT})
-    string(REGEX MATCH "([0-9]+)" TLM_VERSION_IS_PRERELEASE ${TLM_VERSION_IS_PRERELEASE})
-    string(REGEX MATCH "TLM_VERSION_PRERELEASE[ \t]+\"([^\".]+)\"" TLM_VERSION_PRERELEASE ${TLM_VERSION_FILE_CONTENT})
-    string(REGEX REPLACE "(.*)\"(.*)\"" "\\2" TLM_VERSION_PRERELEASE ${TLM_VERSION_PRERELEASE})
-    string(REGEX MATCH "TLM_VERSION_RELEASE_YEAR[ \t]+\"([0-9]+)\"" TLM_VERSION_RELEASE_YEAR ${TLM_VERSION_FILE_CONTENT})
-    string(REGEX MATCH "([0-9]+)" TLM_VERSION_RELEASE_YEAR ${TLM_VERSION_RELEASE_YEAR})
-    string(REGEX MATCH "TLM_VERSION_RELEASE_MONTH[ \t]+\"([0-9]+)\"" TLM_VERSION_RELEASE_MONTH ${TLM_VERSION_FILE_CONTENT})
-    string(REGEX MATCH "([0-9]+)" TLM_VERSION_RELEASE_MONTH ${TLM_VERSION_RELEASE_MONTH})
-    string(REGEX MATCH "TLM_VERSION_RELEASE_DAY[ \t]+\"([0-9]+)\"" TLM_VERSION_RELEASE_DAY ${TLM_VERSION_FILE_CONTENT})
-    string(REGEX MATCH "([0-9]+)" TLM_VERSION_RELEASE_DAY ${TLM_VERSION_RELEASE_DAY})
-else(EXISTS ${TLM_VERSION_FILE})
+set(SystemCTLM_VERSION_FILE "${PROJECT_SOURCE_DIR}/src/tlm_core/tlm_2/tlm_version.h")
+if(EXISTS ${SystemCTLM_VERSION_FILE})
+    file(READ ${SystemCTLM_VERSION_FILE} SystemCTLM_VERSION_FILE_CONTENT)
+    string(REGEX MATCH "TLM_VERSION_MAJOR[ \t]+([0-9]+)" SystemCTLM_VERSION_MAJOR ${SystemCTLM_VERSION_FILE_CONTENT})
+    string(REGEX MATCH "([0-9]+)" SystemCTLM_VERSION_MAJOR ${SystemCTLM_VERSION_MAJOR})
+    string(REGEX MATCH "TLM_VERSION_MINOR[ \t]+([0-9]+)" SystemCTLM_VERSION_MINOR ${SystemCTLM_VERSION_FILE_CONTENT})
+    string(REGEX MATCH "([0-9]+)" SystemCTLM_VERSION_MINOR ${SystemCTLM_VERSION_MINOR})
+    string(REGEX MATCH "TLM_VERSION_PATCH[ \t]+([0-9]+)" SystemCTLM_VERSION_PATCH ${SystemCTLM_VERSION_FILE_CONTENT})
+    string(REGEX MATCH "([0-9]+)" SystemCTLM_VERSION_PATCH ${SystemCTLM_VERSION_PATCH})
+    string(REGEX MATCH "TLM_IS_PRERELEASE[ \t]+([0-9]+)" SystemCTLM_VERSION_IS_PRERELEASE ${SystemCTLM_VERSION_FILE_CONTENT})
+    string(REGEX MATCH "([0-9]+)" SystemCTLM_VERSION_IS_PRERELEASE ${SystemCTLM_VERSION_IS_PRERELEASE})
+    string(REGEX MATCH "TLM_VERSION_PRERELEASE[ \t]+\"([^\".]+)\"" SystemCTLM_VERSION_PRERELEASE ${SystemCTLM_VERSION_FILE_CONTENT})
+    string(REGEX REPLACE "(.*)\"(.*)\"" "\\2" SystemCTLM_VERSION_PRERELEASE ${SystemCTLM_VERSION_PRERELEASE})
+    string(REGEX MATCH "TLM_VERSION_RELEASE_YEAR[ \t]+\"([0-9]+)\"" SystemCTLM_VERSION_RELEASE_YEAR ${SystemCTLM_VERSION_FILE_CONTENT})
+    string(REGEX MATCH "([0-9]+)" SystemCTLM_VERSION_RELEASE_YEAR ${SystemCTLM_VERSION_RELEASE_YEAR})
+    string(REGEX MATCH "TLM_VERSION_RELEASE_MONTH[ \t]+\"([0-9]+)\"" SystemCTLM_VERSION_RELEASE_MONTH ${SystemCTLM_VERSION_FILE_CONTENT})
+    string(REGEX MATCH "([0-9]+)" SystemCTLM_VERSION_RELEASE_MONTH ${SystemCTLM_VERSION_RELEASE_MONTH})
+    string(REGEX MATCH "TLM_VERSION_RELEASE_DAY[ \t]+\"([0-9]+)\"" SystemCTLM_VERSION_RELEASE_DAY ${SystemCTLM_VERSION_FILE_CONTENT})
+    string(REGEX MATCH "([0-9]+)" SystemCTLM_VERSION_RELEASE_DAY ${SystemCTLM_VERSION_RELEASE_DAY})
+else(EXISTS ${SystemCTLM_VERSION_FILE})
     message(FATAL_ERROR "Unable to read TLM version file")
-endif(EXISTS ${TLM_VERSION_FILE})
+endif(EXISTS ${SystemCTLM_VERSION_FILE})
 
-set (TLM_VERSION_RELEASE_DATE "${TLM_VERSION_RELEASE_YEAR}${TLM_VERSION_RELEASE_MONTH}${TLM_VERSION_RELEASE_DAY}")
-set (TLM_VERSION "${TLM_VERSION_MAJOR}.${TLM_VERSION_MINOR}.${TLM_VERSION_PATCH}")
+set (SystemCTLM_VERSION_RELEASE_DATE "${SystemCTLM_VERSION_RELEASE_YEAR}${SystemCTLM_VERSION_RELEASE_MONTH}${SystemCTLM_VERSION_RELEASE_DAY}")
+set (SystemCTLM_VERSION "${SystemCTLM_VERSION_MAJOR}.${SystemCTLM_VERSION_MINOR}.${SystemCTLM_VERSION_PATCH}")
 if (TLM_IS_PRERELEASE)
-  set (TLM_VERSION "${TLM_VERSION}_${TLM_VERSION_PRERELEASE}_${TLM_VERSION_RELEASE_DATE}")
+  set (SystemCTLM_VERSION "${SystemCTLM_VERSION}_${SystemCTLM_VERSION_PRERELEASE}_${SystemCTLM_VERSION_RELEASE_DATE}")
 endif (TLM_IS_PRERELEASE)
-set (TLM_SOVERSION "${TLM_MAJOR_VERSION}.${TLM_MINOR_VERSION}")
+set (SystemCTLM_SOVERSION "${SystemCTLM_VERSION_MAJOR}.${SystemCTLM_VERSION_MINOR}")
 
 
 ###############################################################################
@@ -629,7 +629,7 @@ endif ("${isSystemDir}" STREQUAL "-1")
 ###############################################################################
 
 message (STATUS "========================================================================")
-message (STATUS "Settings to build SystemC ${SystemC_VERSION} (${SystemC_VERSION_RELEASE_DATE}) and TLM ${TLM_VERSION} (${TLM_VERSION_RELEASE_DATE})")
+message (STATUS "Settings to build SystemC ${SystemCLanguage_VERSION} (${SystemCLanguage_VERSION_RELEASE_DATE}) and TLM ${SystemCTLM_VERSION} (${SystemCTLM_VERSION_RELEASE_DATE})")
 message (STATUS "------------------------------------------------------------------------")
 message (STATUS "BUILD_EXAMPLES = ${BUILD_EXAMPLES}")
 message (STATUS "BUILD_SHARED_LIBS = ${BUILD_SHARED_LIBS}")
@@ -664,8 +664,8 @@ if (OVERRIDE_DEFAULT_STACK_SIZE GREATER 0)
   message ("OVERRIDE_DEFAULT_STACK_SIZE = ${OVERRIDE_DEFAULT_STACK_SIZE}")
 endif (OVERRIDE_DEFAULT_STACK_SIZE GREATER 0)
 message (STATUS "SystemC_TARGET_ARCH = ${SystemC_TARGET_ARCH}")
-message (STATUS "SystemC_VERSION = ${SystemC_VERSION}")
-message (STATUS "TLM_VERSION = ${TLM_VERSION}")
+message (STATUS "SystemCLanguage_VERSION = ${SystemCLanguage_VERSION}")
+message (STATUS "SystemCTLM_VERSION = ${SystemCTLM_VERSION}")
 message (STATUS "INSTALL_TO_LIB_BUILD_TYPE_DIR = ${INSTALL_TO_LIB_BUILD_TYPE_DIR}")
 message (STATUS "INSTALL_TO_LIB_TARGET_ARCH_DIR = ${INSTALL_TO_LIB_TARGET_ARCH_DIR}")
 message (STATUS "INSTALL_LIB_TARGET_ARCH_SYMLINK = ${INSTALL_LIB_TARGET_ARCH_SYMLINK}")
@@ -736,43 +736,47 @@ install (FILES AUTHORS
 
 # Export the systemc library target for usage by other programs
 # ... to local build tree
-export (TARGETS systemc FILE SystemCTargets.cmake)
+export (TARGETS systemc
+        NAMESPACE SystemC::
+        FILE SystemCLanguageTargets.cmake)
 # ... to installation tree
-install (EXPORT SystemCTargets DESTINATION ${INSTALL_CMAKEDIR}
-                               COMPONENT dev)
+install (EXPORT SystemCLanguageTargets
+         NAMESPACE SystemC::
+         DESTINATION ${INSTALL_CMAKEDIR}
+         COMPONENT dev)
 
-# Register the SystemC package for use from the build tree.
-# (This registers the build tree with the global CMake-registry.)
-export (PACKAGE SystemC)
-export (PACKAGE TLM)
+# Register the SystemCLanguage and SystemCTLM packages for use from the
+# build tree. (This registers the build tree with the global CMake-registry.)
+export (PACKAGE SystemCLanguage)
+export (PACKAGE SystemCTLM)
 
-# Create the SystemCConfig.cmake, and SystemCConfigVersion files
+# Create the SystemCLanguageConfig.cmake, and SystemCLanguageConfigVersion files
 # ... for the build tree
 set(CONF_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/src" "${PROJECT_BINARY_DIR}/src")
-configure_file(cmake/SystemCConfig.cmake.in
-  "${PROJECT_BINARY_DIR}/SystemCConfig.cmake" @ONLY)
-configure_file(cmake/TLMConfig.cmake.in
-  "${PROJECT_BINARY_DIR}/TLMConfig.cmake" @ONLY)
+configure_file(cmake/SystemCLanguageConfig.cmake.in
+  "${PROJECT_BINARY_DIR}/SystemCLanguageConfig.cmake" @ONLY)
+configure_file(cmake/SystemCTLMConfig.cmake.in
+  "${PROJECT_BINARY_DIR}/SystemCTLMConfig.cmake" @ONLY)
 # ... for the install tree
 file (RELATIVE_PATH REL_INCLUDEDIR
                     "${INSTALL_FULL_CMAKEDIR}" "${CMAKE_INSTALL_FULL_INCLUDEDIR}")
 set(CONF_INCLUDE_DIRS "\${SystemC_CMAKE_DIR}/${REL_INCLUDEDIR}")
-configure_file(cmake/SystemCConfig.cmake.in
-  "${PROJECT_BINARY_DIR}/cmake/SystemCConfig.cmake" @ONLY)
-configure_file(cmake/TLMConfig.cmake.in
-  "${PROJECT_BINARY_DIR}/cmake/TLMConfig.cmake" @ONLY)
+configure_file(cmake/SystemCLanguageConfig.cmake.in
+  "${PROJECT_BINARY_DIR}/cmake/SystemCLanguageConfig.cmake" @ONLY)
+configure_file(cmake/SystemCTLMConfig.cmake.in
+  "${PROJECT_BINARY_DIR}/cmake/SystemCTLMConfig.cmake" @ONLY)
 # ... for both
-configure_file(cmake/SystemCConfigVersion.cmake.in
-  "${PROJECT_BINARY_DIR}/SystemCConfigVersion.cmake" @ONLY)
-configure_file(cmake/TLMConfigVersion.cmake.in
-  "${PROJECT_BINARY_DIR}/TLMConfigVersion.cmake" @ONLY)
+configure_file(cmake/SystemCLanguageConfigVersion.cmake.in
+  "${PROJECT_BINARY_DIR}/SystemCLanguageConfigVersion.cmake" @ONLY)
+configure_file(cmake/SystemCTLMConfigVersion.cmake.in
+  "${PROJECT_BINARY_DIR}/SystemCTLMConfigVersion.cmake" @ONLY)
 unset (REL_INCLUDEDIR)
 unset (CONF_INCLUDE_DIRS)
 
-# Install the FooBarConfig.cmake and FooBarConfigVersion.cmake
-install(FILES "${PROJECT_BINARY_DIR}/cmake/SystemCConfig.cmake"
-              "${PROJECT_BINARY_DIR}/SystemCConfigVersion.cmake"
-              "${PROJECT_BINARY_DIR}/cmake/TLMConfig.cmake"
-              "${PROJECT_BINARY_DIR}/TLMConfigVersion.cmake"
+# Install the <Package>Config.cmake and <Package>ConfigVersion.cmake
+install(FILES "${PROJECT_BINARY_DIR}/cmake/SystemCLanguageConfig.cmake"
+              "${PROJECT_BINARY_DIR}/SystemCLanguageConfigVersion.cmake"
+              "${PROJECT_BINARY_DIR}/cmake/SystemCTLMConfig.cmake"
+              "${PROJECT_BINARY_DIR}/SystemCTLMConfigVersion.cmake"
         DESTINATION "${INSTALL_CMAKEDIR}"
         COMPONENT dev)

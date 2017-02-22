@@ -70,7 +70,7 @@ if (BUILD_SOURCE_DOCUMENTATION)
   # SystemC source code documentation
   set (PACKAGE_NAME ${PROJECT_NAME})
   string(TOLOWER "${PROJECT_NAME}" PACKAGE_TARNAME)
-  set (PACKAGE_VERSION ${SystemC_VERSION})
+  set (PACKAGE_VERSION ${SystemCLanguage_VERSION})
   set (top_srcdir ${CMAKE_SOURCE_DIR})
 
   configure_file (${CMAKE_CURRENT_SOURCE_DIR}/sysc/doxygen/Doxyfile.in
@@ -95,7 +95,7 @@ if (BUILD_SOURCE_DOCUMENTATION)
            COMPONENT doc)
 
   # TLM source code documentation
-  set (TLM_PACKAGE_VERSION ${TLM_VERSION})
+  set (TLM_PACKAGE_VERSION ${SystemCTLM_VERSION})
   set (top_srcdir ${CMAKE_SOURCE_DIR})
 
   configure_file (${CMAKE_CURRENT_SOURCE_DIR}/tlm/doxygen/Doxyfile.in
