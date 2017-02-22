@@ -159,7 +159,12 @@
 # INSTALL_TO_LIB_BUILD_TYPE_DIR Install the libraries to a
 #                               lib-${CMAKE_BUILD_TYPE}/ to enable parallel
 #                               installation of the different build variants.
-#                               (default: ON)
+#                               (default: OFF)
+#
+# INSTALL_TO_LIB_TARGET_ARCH_DIR  Install the libraries to lib-<target-arch>
+#                               to facilitate linking applications, which
+#                               build systems assume to find SystemC in
+#                               lib-<target-arch>. (default: OFF)
 #
 # INSTALL_LIB_TARGET_ARCH_SYMLINK  On Unix, install a symlink lib-<target-arch>
 #                               to lib-${CMAKE_BUILD_TYPE} facilitating the
@@ -178,11 +183,6 @@
 # - Enable the compilation of SystemC as a DLL on Windows! To make it work, the
 #   SystemC library has to be at least split into libsystemc-core.dll and a
 #   static libsystemc.lib.
-#
-# - Improve further the directory layout for the installation of SystemC and
-#   libraries using it. The installed CMake project configuration files should
-#   be automatically found by other CMake projects (e.g., SCV, SystemC AMS).
-#   <http://www.cmake.org/Wiki/CMake/Tutorials/How_to_create_a_ProjectConfig.cmake_file>
 #
 # - Check whether preprocessor definitions WIN32, _CONSOLE, _LIB, _DEBUG, NDEBUG,
 #   and NOGDI are necessary on WIN32 platforms (MSVC and MinGW).
@@ -325,11 +325,21 @@ option (ENABLE_PTHREADS
         "Use POSIX threads for SystemC processes instead of QuickThreads on Unix or Fiber on Windows."
         OFF)
 
-option (INSTALL_TO_LIB_BUILD_TYPE_DIR "Install the libraries to lib-${CMAKE_BUILD_TYPE} to enable parallel installation of the different build variants. (default: ON)" ON)
+option (INSTALL_TO_LIB_BUILD_TYPE_DIR
+        "Install the libraries to lib-${CMAKE_BUILD_TYPE} to enable parallel installation of the different build variants. (default: OFF)"
+        OFF)
 
-if (CMAKE_HOST_UNIX)
+if (NOT INSTALL_TO_LIB_BUILD_TYPE_DIR)
+  option (INSTALL_TO_LIB_TARGET_ARCH_DIR "Install the libraries to lib-<target-arch> to facilitate linking applications, which build systems assume to find SystemC in lib-<target-arch>. (default: OFF)" OFF)
+else (NOT INSTALL_TO_LIB_BUILD_TYPE_DIR)
+  unset (INSTALL_TO_LIB_TARGET_ARCH_DIR CACHE)
+endif (NOT INSTALL_TO_LIB_BUILD_TYPE_DIR)
+
+if (CMAKE_HOST_UNIX AND NOT INSTALL_TO_LIB_TARGET_ARCH_DIR)
   option (INSTALL_LIB_TARGET_ARCH_SYMLINK "Install a symlink lib-<target-arch> to lib-${CMAKE_BUILD_TYPE} facilitating the linking of user code, which build system assumes to find the SystemC libraries under lib-<target-arch>." OFF)
-endif (CMAKE_HOST_UNIX)
+else (CMAKE_HOST_UNIX AND NOT INSTALL_TO_LIB_TARGET_ARCH_DIR)
+  unset (INSTALL_LIB_TARGET_ARCH_SYMLINK CACHE)
+endif (CMAKE_HOST_UNIX AND NOT INSTALL_TO_LIB_TARGET_ARCH_DIR)
 
 set (OVERRIDE_DEFAULT_STACK_SIZE 0 CACHE STRING "Define the default stack size used for SystemC (thread) processes. (> 0)")
 if (OVERRIDE_DEFAULT_STACK_SIZE LESS 0)
@@ -550,7 +560,8 @@ if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 endif (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 
 # Set the installation paths for headers, libraries, and documentation.
-set (CMAKE_INSTALL_DOCDIR "share/doc/systemc") # otherwise mixed-case
+set (CMAKE_INSTALL_DOCDIR "share/doc/systemc" CACHE PATH
+     "Documentation installation directory") # otherwise mixed-case
 if (INSTALL_TO_LIB_BUILD_TYPE_DIR)
   # Install libraries to lib-${CMAKE_BUILD_TYPE} so that different build variants
   # of the library can be installed in parallel to the same SystemC root
@@ -559,8 +570,13 @@ if (INSTALL_TO_LIB_BUILD_TYPE_DIR)
   # ${CMAKE_BUILD_TYPE}.
   set (_INSTALL_LIBDIR lib-${CMAKE_BUILD_TYPE})
   string (TOLOWER ${_INSTALL_LIBDIR} _INSTALL_LIBDIR)
-  set (CMAKE_INSTALL_LIBDIR ${_INSTALL_LIBDIR})
+  set (CMAKE_INSTALL_LIBDIR ${_INSTALL_LIBDIR} CACHE PATH
+       "Object code libraries installation directory" FORCE)
   unset (_INSTALL_LIBDIR)
+elseif (INSTALL_TO_LIB_TARGET_ARCH_DIR)
+  # Some build systems assume to find SystemC in lib-<target-arch>
+  set (CMAKE_INSTALL_LIBDIR lib-${SystemC_TARGET_ARCH} CACHE PATH
+       "Object code libraries installation directory" FORCE)
 endif (INSTALL_TO_LIB_BUILD_TYPE_DIR)
 include (GNUInstallDirs)
 
@@ -571,6 +587,16 @@ if (INSTALL_LIB_TARGET_ARCH_SYMLINK AND CMAKE_HOST_UNIX)
                     WORKING_DIRECTORY ${CMAKE_INSTALL_PREFIX})
   ")
 endif (INSTALL_LIB_TARGET_ARCH_SYMLINK AND CMAKE_HOST_UNIX)
+
+if (INSTALL_TO_LIB_BUILD_TYPE_DIR OR INSTALL_TO_LIB_TARGET_ARCH_DIR)
+  set (INSTALL_CMAKEDIR share/cmake CACHE PATH
+       "CMake package configuration installation directory" FORCE)
+else (INSTALL_TO_LIB_BUILD_TYPE_DIR OR INSTALL_TO_LIB_TARGET_ARCH_DIR)
+  set (INSTALL_CMAKEDIR ${CMAKE_INSTALL_LIBDIR}/cmake CACHE PATH
+       "CMake package configuration installation directory")
+endif (INSTALL_TO_LIB_BUILD_TYPE_DIR OR INSTALL_TO_LIB_TARGET_ARCH_DIR)
+mark_as_advanced(INSTALL_CMAKEDIR)
+GNUInstallDirs_get_absolute_install_dir(INSTALL_FULL_CMAKEDIR INSTALL_CMAKEDIR)
 
 
 ###############################################################################
@@ -642,6 +668,7 @@ message (STATUS "SystemC_TARGET_ARCH = ${SystemC_TARGET_ARCH}")
 message (STATUS "SystemC_VERSION = ${SystemC_VERSION}")
 message (STATUS "TLM_VERSION = ${TLM_VERSION}")
 message (STATUS "INSTALL_TO_LIB_BUILD_TYPE_DIR = ${INSTALL_TO_LIB_BUILD_TYPE_DIR}")
+message (STATUS "INSTALL_TO_LIB_TARGET_ARCH_DIR = ${INSTALL_TO_LIB_TARGET_ARCH_DIR}")
 message (STATUS "INSTALL_LIB_TARGET_ARCH_SYMLINK = ${INSTALL_LIB_TARGET_ARCH_SYMLINK}")
 message (STATUS "------------------------------------------------------------------------")
 message (STATUS "CMAKE_SYSTEM = ${CMAKE_SYSTEM}")
@@ -674,6 +701,7 @@ message (STATUS "CMAKE_INSTALL_BINDIR = ${CMAKE_INSTALL_BINDIR}")
 message (STATUS "CMAKE_INSTALL_DOCDIR = ${CMAKE_INSTALL_DOCDIR}")
 message (STATUS "CMAKE_INSTALL_INCLUDEDIR = ${CMAKE_INSTALL_INCLUDEDIR}")
 message (STATUS "CMAKE_INSTALL_LIBDIR = ${CMAKE_INSTALL_LIBDIR}")
+message (STATUS "INSTALL_CMAKEDIR = ${INSTALL_CMAKEDIR}")
 message (STATUS "========================================================================")
 
 
@@ -706,9 +734,6 @@ install (FILES AUTHORS
 ###############################################################################
 # Provide package of the SystemC library to other programs using CMake
 ###############################################################################
-
-set (INSTALL_CMAKEDIR cmake)
-set (INSTALL_FULL_CMAKEDIR ${CMAKE_INSTALL_PREFIX}/${INSTALL_CMAKEDIR})
 
 # Export the systemc library target for usage by other programs
 # ... to local build tree

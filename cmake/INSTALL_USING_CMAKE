@@ -197,7 +197,12 @@ SystemC_TARGET_ARCH           Target architecture according to the
 
 INSTALL_TO_LIB_BUILD_TYPE_DIR Install the libraries to lib-${CMAKE_BUILD_TYPE}
                               to enable parallel installation of the different
-                              build variants. (default: ON)
+                              build variants. (default: OFF)
+
+INSTALL_TO_LIB_TARGET_ARCH_DIR  Install the libraries to lib-<target-arch>
+                              to facilitate linking applications, which
+                              build systems assume to find SystemC in
+                              lib-<target-arch>. (default: OFF)
 
 INSTALL_LIB_TARGET_ARCH_SYMLINK  On Unix, install a symlink lib-<target-arch>
                               to lib-${CMAKE_BUILD_TYPE} facilitating the
