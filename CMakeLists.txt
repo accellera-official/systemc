@@ -187,8 +187,6 @@
 # - Check whether preprocessor definitions WIN32, _CONSOLE, _LIB, _DEBUG, NDEBUG,
 #   and NOGDI are necessary on WIN32 platforms (MSVC and MinGW).
 #
-# - Don't generate source documentation with Doxygen in the source tree.
-#
 # - Turn on more compiler warnings by default once SystemC is supposed to
 #   compile without any warnings on recent compiler versions. Currently, the
 #   compiler warning flags are set to reduce the number of generated compiler
@@ -198,17 +196,7 @@
 #
 # - Test on as many different hardware / OS platforms as possible.
 #
-# - Check whether SystemCConfig.cmake.in should define further compiler options
-#   beyond those defined currently for MSVC (/vmg /MP).
-#
-# - Check whether SystemCConfig.cmake.in forwards all necessary
-#   preprocessor definitions that need to be consistent for compilation of
-#   SystemC libraries as well as applications (e.g., remove
-#   SC_ENABLE_ASSERTIONS?).
-#
 # - Configure and install systemc.pc and tlm.pc for pkg-config
-#
-# - Upgrade the whole CMake build system to modern CMake 3.x style
 #
 ###############################################################################
 
