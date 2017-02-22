@@ -104,11 +104,10 @@
 #                               is a requirement. (default: ON)
 #
 # CMAKE_INSTALL_PREFIX          Root directory of the SystemC libraries
-#                               installation (defaults to $SystemC_DIR or
-#                               $ENV{SYSTEMC_HOME} if set to an absolute path
-#                               and otherwise to either /opt/systemc/
-#                               (Unix-like platforms including CYGWIN),
-#                               $ENV{ProgramFiles}/SystemC/ (on Windows
+#                               installation (defaults to $ENV{SYSTEMC_HOME}
+#                               if set to an absolute path and otherwise to either
+#                               /opt/systemc/ (Unix-like platforms including
+#                               CYGWIN), $ENV{ProgramFiles}/SystemC/ (on Windows
 #                               systems), or ${CMAKE_INSTALL_PREFIX}/systemc.
 #
 # CMAKE_OSX_ARCHITECTURES       Architectures for cross-compilation on Mac OS X
@@ -530,9 +529,7 @@ endif (ENABLE_PTHREADS OR (QT_ARCH AND NOT DISABLE_ASYNC_UPDATES) OR NOT QT_ARCH
 ###############################################################################
 
 if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-  if (IS_ABSOLUTE ${SystemC_DIR})
-    set (_CMAKE_INSTALL_PREFIX ${SystemC_DIR})
-  elseif (IS_ABSOLUTE $ENV{SYSTEMC_HOME})
+  if (IS_ABSOLUTE $ENV{SYSTEMC_HOME})
     set (_CMAKE_INSTALL_PREFIX $ENV{SYSTEMC_HOME})
   elseif (UNIX)
     set (_CMAKE_INSTALL_PREFIX "/opt/systemc")
@@ -542,7 +539,7 @@ if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     unset (_WIN32_INSTALL_PREFIX)
   else (EXISTS $ENV{SYSTEMC_ROOT_DIR})
     set (_CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}/systemc")
-  endif (IS_ABSOLUTE ${SystemC_DIR})
+  endif (IS_ABSOLUTE $ENV{SYSTEMC_HOME})
   set (CMAKE_INSTALL_PREFIX ${_CMAKE_INSTALL_PREFIX} CACHE PATH "Installation root directory" FORCE)
   unset (_CMAKE_INSTALL_PREFIX)
 endif (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)

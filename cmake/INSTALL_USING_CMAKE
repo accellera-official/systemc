@@ -160,11 +160,10 @@ CMAKE_CXX_STANDARD_REQUIRED   The with CMAKE_CXX_STANDARD selected C++ standard
                               is a requirement. (default: ON)
 
 CMAKE_INSTALL_PREFIX          Root directory of the SystemC libraries
-                              installation (defaults to $SystemC_DIR or
-                              $ENV{SYSTEMC_HOME} if set to an absolute path
-                              and otherwise to either /opt/systemc/
-                              (Unix-like platforms including CYGWIN),
-                              $ENV{ProgramFiles}/SystemC/ (on Windows
+                              installation (defaults to $ENV{SYSTEMC_HOME}
+                              if set to an absolute path and otherwise to either
+                              /opt/systemc/ (Unix-like platforms including
+                              CYGWIN), $ENV{ProgramFiles}/SystemC/ (on Windows
                               systems), or ${CMAKE_INSTALL_PREFIX}/systemc.
 
 CMAKE_OSX_ARCHITECTURES       Architectures for cross-compilation on Mac OS X
