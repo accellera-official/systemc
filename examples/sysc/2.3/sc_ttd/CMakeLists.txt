@@ -39,8 +39,7 @@
 ###############################################################################
 
 
-include_directories (${CMAKE_CURRENT_SOURCE_DIR}/../include)
-
-add_executable (sc_ttd main.cpp)
-target_link_libraries (sc_ttd ${SystemC_LIBRARIES})
+add_executable (sc_ttd main.cpp ../include/sc_ttd.h)
+target_include_directories (sc_ttd PRIVATE ../include)
+target_link_libraries (sc_ttd SystemC::systemc)
 configure_and_add_test (sc_ttd)

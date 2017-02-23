@@ -39,14 +39,14 @@
 ###############################################################################
 
 
-set (fft_flpt_HEADERS fft.h
-                      sink.h
-                      source.h)
-
-set (fft_flpt_SOURCES fft.cpp
-                      main.cpp
-                      sink.cpp
-                      source.cpp)
+add_executable (fft_flpt main.cpp
+                         source.h
+                         source.cpp
+                         fft.h
+                         fft.cpp
+                         sink.h
+                         sink.cpp)
+target_link_libraries (fft_flpt SystemC::systemc)
 
 set (IMAGE_FILES in_imag
                  in_imag.1
@@ -67,11 +67,9 @@ set (IMAGE_FILES in_imag
                  out_real.3.golden
                  out_real.4.golden)
 
-add_executable (fft_flpt ${fft_flpt_SOURCES} ${fft_flpt_HEADERS})
-target_link_libraries (fft_flpt ${SystemC_LIBRARIES})
-
 foreach (IMAGE_FILE ${IMAGE_FILES})
-  configure_file (${CMAKE_CURRENT_SOURCE_DIR}/${IMAGE_FILE} ${CMAKE_CURRENT_BINARY_DIR}/${IMAGE_FILE} COPYONLY)
+  configure_file (${CMAKE_CURRENT_SOURCE_DIR}/${IMAGE_FILE}
+                  ${CMAKE_CURRENT_BINARY_DIR}/${IMAGE_FILE} COPYONLY)
 endforeach (IMAGE_FILE ${IMAGE_FILES})
 
 configure_and_add_test (fft_flpt)

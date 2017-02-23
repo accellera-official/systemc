@@ -89,12 +89,26 @@
 # BUILD_EXAMPLES                Build the SystemC examples (default: OFF).
 #
 # BUILD_SHARED_LIBS             Build shared instead of static libraries
-#                               (default: ON).
+#                               (default: ON if not targetting Windows).
 #
 # BUILD_SOURCE_DOCUMENTATION    Build source code documentation using Doxygen
 #                               (default: OFF).
 #
-# CMAKE_BUILD_TYPE              Build type (default: Release).
+# CMAKE_BUILD_TYPE              Specifies the build type on single-configuration
+#                               generators. (default: Release).
+#
+# CMAKE_CXX_STANDARD            C++ standard to build all targets. Supported
+#                               values are 98, 11, and 14. (default: 98)
+#
+# CMAKE_CXX_STANDARD_REQUIRED   The with CMAKE_CXX_STANDARD selected C++ standard
+#                               is a requirement. (default: ON)
+#
+# CMAKE_INSTALL_PREFIX          Root directory of the SystemC libraries
+#                               installation (defaults to $ENV{SYSTEMC_HOME}
+#                               if set to an absolute path and otherwise to either
+#                               /opt/systemc/ (Unix-like platforms including
+#                               CYGWIN), $ENV{ProgramFiles}/SystemC/ (on Windows
+#                               systems), or ${CMAKE_INSTALL_PREFIX}/systemc.
 #
 # CMAKE_OSX_ARCHITECTURES       Architectures for cross-compilation on Mac OS X
 #                               (default: empty, i.e., only for the system
@@ -104,10 +118,16 @@
 #
 # DISABLE_ASYNC_UPDATES         Disable async_request_update() support.
 #
+# DISABLE_COPYRIGHT_MESSAGE     Do not print the copyright message when starting
+#                               the application. (default: OFF)
+#
 # DISABLE_VIRTUAL_BIND          Disable the definition of bind() member
 #                               functions of ports and exports as "virtual",
 #                               which is incompatible with old TLM library
 #                               implementations (< 2.0.2).
+#
+# ENABLE_ASSERTIONS             Always enable the `sc_assert' expressions
+#                               (default: ON)
 #
 # ENABLE_EARLY_MAXTIME_CREATION Allow creation of sc_time objects with a value
 #                               of sc_max_time() before finalizing the time
@@ -130,18 +150,6 @@
 # OVERRIDE_DEFAULT_STACK_SIZE   Define the default stack size used for SystemC
 #                               (thread) processes. (> 0)
 #
-# QT_ARCH                       QuickThreads architecture (auto-detected:
-#                               hppa, x86_64, i386, powerpc_mach,
-#                               powerpc_sys5, IGNORE).
-#
-# SystemC_ROOT_DIR              Root directory of the SystemC libraries
-#                               installation (default $SYSTEMC_ROOT_DIR,
-#                               $SYSTEMC_ROOT, $SYSTEMC_HOME, $SYSTEMC_PATH
-#                               /opt/systemc/ (Unix, Cygwin, MSYS), or
-#                               $ENV{ProgramFiles}/SystemC/ (MinGW and
-#                               MS Visual Studio)). CMAKE_INSTALL_PREFIX will
-#                               be set to its value.
-#
 # SystemC_TARGET_ARCH           Target architecture according to the
 #                               Accellera SystemC conventions set either from
 #                               $ENV{SYSTEMC_TARGET_ARCH}, $ENV{SYSTEMC_ARCH},
@@ -150,7 +158,12 @@
 # INSTALL_TO_LIB_BUILD_TYPE_DIR Install the libraries to a
 #                               lib-${CMAKE_BUILD_TYPE}/ to enable parallel
 #                               installation of the different build variants.
-#                               (default: ON)
+#                               (default: OFF)
+#
+# INSTALL_TO_LIB_TARGET_ARCH_DIR  Install the libraries to lib-<target-arch>
+#                               to facilitate linking applications, which
+#                               build systems assume to find SystemC in
+#                               lib-<target-arch>. (default: OFF)
 #
 # INSTALL_LIB_TARGET_ARCH_SYMLINK  On Unix, install a symlink lib-<target-arch>
 #                               to lib-${CMAKE_BUILD_TYPE} facilitating the
@@ -170,18 +183,8 @@
 #   SystemC library has to be at least split into libsystemc-core.dll and a
 #   static libsystemc.lib.
 #
-# - Improve further the directory layout for the installation of SystemC and
-#   libraries using it. The installed CMake project configuration files should
-#   be automatically found by other CMake projects (e.g., SCV, SystemC AMS).
-#   <http://www.cmake.org/Wiki/CMake/Tutorials/How_to_create_a_ProjectConfig.cmake_file>
-#
-# - Detect C++'11-compatible compiler and then pass the right flags
-#   to use C++'11 language and library features.
-#
-# - Check whether preprocessor definitions WIN32, _LIB, _DEBUG, _CONSOLE, and
-#   NOGDI are necessary on WIN32 platforms (MSVC and MinGW).
-#
-# - Don't generate source documentation with Doxygen in the source tree.
+# - Check whether preprocessor definitions WIN32, _CONSOLE, _LIB, _DEBUG, NDEBUG,
+#   and NOGDI are necessary on WIN32 platforms (MSVC and MinGW).
 #
 # - Turn on more compiler warnings by default once SystemC is supposed to
 #   compile without any warnings on recent compiler versions. Currently, the
@@ -192,80 +195,69 @@
 #
 # - Test on as many different hardware / OS platforms as possible.
 #
-# - Set more reliably the needed compiler options, e.g., /vmg for MSVC.
-#
-# - Check whether SystemCConfig.cmake.in should define further compiler options
-#   beyond those defined currently for MSVC (/vmg /MP).
-#
-# - Check whether SystemCConfig.cmake.in forwards all necessary
-#   preprocessor definitions that need to be consistent for compilation of
-#   SystemC libraries as well as applications (e.g., remove
-#   SC_ENABLE_ASSERTIONS?).
-#
-# - Find a better way to make sure all code linking to the SystemC library is
-#   also linking to ${CMAKE_THREAD_LIBS_INIT} if needed.
+# - Configure and install systemc.pc and tlm.pc for pkg-config
 #
 ###############################################################################
 
 
-cmake_minimum_required (VERSION 2.8.11)
+cmake_minimum_required (VERSION 3.1)
 
-project (SystemC CXX C)
+project (SystemCLanguage CXX C)
 
-set(SystemC_VERSION_FILE "${PROJECT_SOURCE_DIR}/src/sysc/kernel/sc_ver.h")
-if(EXISTS ${SystemC_VERSION_FILE})
-    file(READ ${SystemC_VERSION_FILE} SYSTEMC_VERSION_FILE_CONTENT)
-    string(REGEX MATCH "SC_VERSION_MAJOR[ \t]+([0-9]+)" SystemC_VERSION_MAJOR ${SYSTEMC_VERSION_FILE_CONTENT})
-    string(REGEX MATCH "([0-9]+)" SystemC_VERSION_MAJOR ${SystemC_VERSION_MAJOR})
-    string(REGEX MATCH "SC_VERSION_MINOR[ \t]+([0-9]+)" SystemC_VERSION_MINOR ${SYSTEMC_VERSION_FILE_CONTENT})
-    string(REGEX MATCH "([0-9]+)" SystemC_VERSION_MINOR ${SystemC_VERSION_MINOR})
-    string(REGEX MATCH "SC_VERSION_PATCH[ \t]+([0-9]+)" SystemC_VERSION_PATCH ${SYSTEMC_VERSION_FILE_CONTENT})
-    string(REGEX MATCH "([0-9]+)" SystemC_VERSION_PATCH ${SystemC_VERSION_PATCH})
-    string(REGEX MATCH "SC_IS_PRERELEASE[ \t]+([0-9]+)" SystemC_VERSION_IS_PRERELEASE ${SYSTEMC_VERSION_FILE_CONTENT})
-    string(REGEX MATCH "([0-9]+)" SystemC_VERSION_IS_PRERELEASE ${SystemC_VERSION_IS_PRERELEASE})
-    string(REGEX MATCH "SC_VERSION_PRERELEASE[ \t]+\"([^\".]+)\"" SystemC_VERSION_PRERELEASE ${SYSTEMC_VERSION_FILE_CONTENT})
-    string(REGEX REPLACE "(.*)\"(.*)\"" "\\2" SystemC_VERSION_PRERELEASE ${SystemC_VERSION_PRERELEASE})
-    string(REGEX MATCH "SYSTEMC_VERSION[ \t]+([0-9]+)" SystemC_VERSION_RELEASE_DATE ${SYSTEMC_VERSION_FILE_CONTENT})
-    string(REGEX MATCH "([0-9]+)" SystemC_VERSION_RELEASE_DATE ${SystemC_VERSION_RELEASE_DATE})
-else(EXISTS ${SystemC_VERSION_FILE})
+set(SystemCLanguage_VERSION_FILE "${PROJECT_SOURCE_DIR}/src/sysc/kernel/sc_ver.h")
+if(EXISTS ${SystemCLanguage_VERSION_FILE})
+    file(READ ${SystemCLanguage_VERSION_FILE} SYSTEMC_VERSION_FILE_CONTENT)
+    string(REGEX MATCH "SC_VERSION_MAJOR[ \t]+([0-9]+)" SystemCLanguage_VERSION_MAJOR ${SYSTEMC_VERSION_FILE_CONTENT})
+    string(REGEX MATCH "([0-9]+)" SystemCLanguage_VERSION_MAJOR ${SystemCLanguage_VERSION_MAJOR})
+    string(REGEX MATCH "SC_VERSION_MINOR[ \t]+([0-9]+)" SystemCLanguage_VERSION_MINOR ${SYSTEMC_VERSION_FILE_CONTENT})
+    string(REGEX MATCH "([0-9]+)" SystemCLanguage_VERSION_MINOR ${SystemCLanguage_VERSION_MINOR})
+    string(REGEX MATCH "SC_VERSION_PATCH[ \t]+([0-9]+)" SystemCLanguage_VERSION_PATCH ${SYSTEMC_VERSION_FILE_CONTENT})
+    string(REGEX MATCH "([0-9]+)" SystemCLanguage_VERSION_PATCH ${SystemCLanguage_VERSION_PATCH})
+    string(REGEX MATCH "SC_IS_PRERELEASE[ \t]+([0-9]+)" SystemCLanguage_VERSION_IS_PRERELEASE ${SYSTEMC_VERSION_FILE_CONTENT})
+    string(REGEX MATCH "([0-9]+)" SystemCLanguage_VERSION_IS_PRERELEASE ${SystemCLanguage_VERSION_IS_PRERELEASE})
+    string(REGEX MATCH "SC_VERSION_PRERELEASE[ \t]+\"([^\".]+)\"" SystemCLanguage_VERSION_PRERELEASE ${SYSTEMC_VERSION_FILE_CONTENT})
+    string(REGEX REPLACE "(.*)\"(.*)\"" "\\2" SystemCLanguage_VERSION_PRERELEASE ${SystemCLanguage_VERSION_PRERELEASE})
+    string(REGEX MATCH "SYSTEMC_VERSION[ \t]+([0-9]+)" SystemCLanguage_VERSION_RELEASE_DATE ${SYSTEMC_VERSION_FILE_CONTENT})
+    string(REGEX MATCH "([0-9]+)" SystemCLanguage_VERSION_RELEASE_DATE ${SystemCLanguage_VERSION_RELEASE_DATE})
+else(EXISTS ${SystemCLanguage_VERSION_FILE})
     message (FATAL_ERROR "Unable to read SystemC version file")
-endif(EXISTS ${SystemC_VERSION_FILE})
+endif(EXISTS ${SystemCLanguage_VERSION_FILE})
 
-set (SystemC_VERSION "${SystemC_VERSION_MAJOR}.${SystemC_VERSION_MINOR}.${SystemC_VERSION_PATCH}")
-if (SystemC_VERSION_IS_PRERELEASE)
-  set (SystemC_VERSION "${SystemC_VERSION}_${SystemC_VERSION_PRERELEASE}_${SystemC_VERSION_RELEASE_DATE}")
-endif (SystemC_VERSION_IS_PRERELEASE)
-set (SystemC_SOVERSION "${SystemC_VERSION_MAJOR}.${SystemC_VERSION_MINOR}")
+set (SystemCLanguage_VERSION "${SystemCLanguage_VERSION_MAJOR}.${SystemCLanguage_VERSION_MINOR}.${SystemCLanguage_VERSION_PATCH}")
+if (SystemCLanguage_VERSION_IS_PRERELEASE)
+  set (SystemCLanguage_VERSION "${SystemCLanguage_VERSION}_${SystemCLanguage_VERSION_PRERELEASE}_${SystemCLanguage_VERSION_RELEASE_DATE}")
+endif (SystemCLanguage_VERSION_IS_PRERELEASE)
+set (SystemCLanguage_SOVERSION "${SystemCLanguage_VERSION_MAJOR}.${SystemCLanguage_VERSION_MINOR}")
 
-set(TLM_VERSION_FILE "${PROJECT_SOURCE_DIR}/src/tlm_core/tlm_2/tlm_version.h")
-if(EXISTS ${TLM_VERSION_FILE})
-    file(READ ${TLM_VERSION_FILE} TLM_VERSION_FILE_CONTENT)
-    string(REGEX MATCH "TLM_VERSION_MAJOR[ \t]+([0-9]+)" TLM_VERSION_MAJOR ${TLM_VERSION_FILE_CONTENT})
-    string(REGEX MATCH "([0-9]+)" TLM_VERSION_MAJOR ${TLM_VERSION_MAJOR})
-    string(REGEX MATCH "TLM_VERSION_MINOR[ \t]+([0-9]+)" TLM_VERSION_MINOR ${TLM_VERSION_FILE_CONTENT})
-    string(REGEX MATCH "([0-9]+)" TLM_VERSION_MINOR ${TLM_VERSION_MINOR})
-    string(REGEX MATCH "TLM_VERSION_PATCH[ \t]+([0-9]+)" TLM_VERSION_PATCH ${TLM_VERSION_FILE_CONTENT})
-    string(REGEX MATCH "([0-9]+)" TLM_VERSION_PATCH ${TLM_VERSION_PATCH})
-    string(REGEX MATCH "TLM_IS_PRERELEASE[ \t]+([0-9]+)" TLM_VERSION_IS_PRERELEASE ${TLM_VERSION_FILE_CONTENT})
-    string(REGEX MATCH "([0-9]+)" TLM_VERSION_IS_PRERELEASE ${TLM_VERSION_IS_PRERELEASE})
-    string(REGEX MATCH "TLM_VERSION_PRERELEASE[ \t]+\"([^\".]+)\"" TLM_VERSION_PRERELEASE ${TLM_VERSION_FILE_CONTENT})
-    string(REGEX REPLACE "(.*)\"(.*)\"" "\\2" TLM_VERSION_PRERELEASE ${TLM_VERSION_PRERELEASE})
-    string(REGEX MATCH "TLM_VERSION_RELEASE_YEAR[ \t]+\"([0-9]+)\"" TLM_VERSION_RELEASE_YEAR ${TLM_VERSION_FILE_CONTENT})
-    string(REGEX MATCH "([0-9]+)" TLM_VERSION_RELEASE_YEAR ${TLM_VERSION_RELEASE_YEAR})
-    string(REGEX MATCH "TLM_VERSION_RELEASE_MONTH[ \t]+\"([0-9]+)\"" TLM_VERSION_RELEASE_MONTH ${TLM_VERSION_FILE_CONTENT})
-    string(REGEX MATCH "([0-9]+)" TLM_VERSION_RELEASE_MONTH ${TLM_VERSION_RELEASE_MONTH})
-    string(REGEX MATCH "TLM_VERSION_RELEASE_DAY[ \t]+\"([0-9]+)\"" TLM_VERSION_RELEASE_DAY ${TLM_VERSION_FILE_CONTENT})
-    string(REGEX MATCH "([0-9]+)" TLM_VERSION_RELEASE_DAY ${TLM_VERSION_RELEASE_DAY})
-else(EXISTS ${TLM_VERSION_FILE})
+set(SystemCTLM_VERSION_FILE "${PROJECT_SOURCE_DIR}/src/tlm_core/tlm_2/tlm_version.h")
+if(EXISTS ${SystemCTLM_VERSION_FILE})
+    file(READ ${SystemCTLM_VERSION_FILE} SystemCTLM_VERSION_FILE_CONTENT)
+    string(REGEX MATCH "TLM_VERSION_MAJOR[ \t]+([0-9]+)" SystemCTLM_VERSION_MAJOR ${SystemCTLM_VERSION_FILE_CONTENT})
+    string(REGEX MATCH "([0-9]+)" SystemCTLM_VERSION_MAJOR ${SystemCTLM_VERSION_MAJOR})
+    string(REGEX MATCH "TLM_VERSION_MINOR[ \t]+([0-9]+)" SystemCTLM_VERSION_MINOR ${SystemCTLM_VERSION_FILE_CONTENT})
+    string(REGEX MATCH "([0-9]+)" SystemCTLM_VERSION_MINOR ${SystemCTLM_VERSION_MINOR})
+    string(REGEX MATCH "TLM_VERSION_PATCH[ \t]+([0-9]+)" SystemCTLM_VERSION_PATCH ${SystemCTLM_VERSION_FILE_CONTENT})
+    string(REGEX MATCH "([0-9]+)" SystemCTLM_VERSION_PATCH ${SystemCTLM_VERSION_PATCH})
+    string(REGEX MATCH "TLM_IS_PRERELEASE[ \t]+([0-9]+)" SystemCTLM_VERSION_IS_PRERELEASE ${SystemCTLM_VERSION_FILE_CONTENT})
+    string(REGEX MATCH "([0-9]+)" SystemCTLM_VERSION_IS_PRERELEASE ${SystemCTLM_VERSION_IS_PRERELEASE})
+    string(REGEX MATCH "TLM_VERSION_PRERELEASE[ \t]+\"([^\".]+)\"" SystemCTLM_VERSION_PRERELEASE ${SystemCTLM_VERSION_FILE_CONTENT})
+    string(REGEX REPLACE "(.*)\"(.*)\"" "\\2" SystemCTLM_VERSION_PRERELEASE ${SystemCTLM_VERSION_PRERELEASE})
+    string(REGEX MATCH "TLM_VERSION_RELEASE_YEAR[ \t]+\"([0-9]+)\"" SystemCTLM_VERSION_RELEASE_YEAR ${SystemCTLM_VERSION_FILE_CONTENT})
+    string(REGEX MATCH "([0-9]+)" SystemCTLM_VERSION_RELEASE_YEAR ${SystemCTLM_VERSION_RELEASE_YEAR})
+    string(REGEX MATCH "TLM_VERSION_RELEASE_MONTH[ \t]+\"([0-9]+)\"" SystemCTLM_VERSION_RELEASE_MONTH ${SystemCTLM_VERSION_FILE_CONTENT})
+    string(REGEX MATCH "([0-9]+)" SystemCTLM_VERSION_RELEASE_MONTH ${SystemCTLM_VERSION_RELEASE_MONTH})
+    string(REGEX MATCH "TLM_VERSION_RELEASE_DAY[ \t]+\"([0-9]+)\"" SystemCTLM_VERSION_RELEASE_DAY ${SystemCTLM_VERSION_FILE_CONTENT})
+    string(REGEX MATCH "([0-9]+)" SystemCTLM_VERSION_RELEASE_DAY ${SystemCTLM_VERSION_RELEASE_DAY})
+else(EXISTS ${SystemCTLM_VERSION_FILE})
     message(FATAL_ERROR "Unable to read TLM version file")
-endif(EXISTS ${TLM_VERSION_FILE})
+endif(EXISTS ${SystemCTLM_VERSION_FILE})
 
-set (TLM_VERSION_RELEASE_DATE "${TLM_VERSION_RELEASE_YEAR}${TLM_VERSION_RELEASE_MONTH}${TLM_VERSION_RELEASE_DAY}")
-set (TLM_VERSION "${TLM_VERSION_MAJOR}.${TLM_VERSION_MINOR}.${TLM_VERSION_PATCH}")
+set (SystemCTLM_VERSION_RELEASE_DATE "${SystemCTLM_VERSION_RELEASE_YEAR}${SystemCTLM_VERSION_RELEASE_MONTH}${SystemCTLM_VERSION_RELEASE_DAY}")
+set (SystemCTLM_VERSION "${SystemCTLM_VERSION_MAJOR}.${SystemCTLM_VERSION_MINOR}.${SystemCTLM_VERSION_PATCH}")
 if (TLM_IS_PRERELEASE)
-  set (TLM_VERSION "${TLM_VERSION}_${TLM_VERSION_PRERELEASE}_${TLM_VERSION_RELEASE_DATE}")
+  set (SystemCTLM_VERSION "${SystemCTLM_VERSION}_${SystemCTLM_VERSION_PRERELEASE}_${SystemCTLM_VERSION_RELEASE_DATE}")
 endif (TLM_IS_PRERELEASE)
-set (TLM_SOVERSION "${TLM_MAJOR_VERSION}.${TLM_MINOR_VERSION}")
+set (SystemCTLM_SOVERSION "${SystemCTLM_VERSION_MAJOR}.${SystemCTLM_VERSION_MINOR}")
 
 
 ###############################################################################
@@ -278,13 +270,20 @@ if (NOT CMAKE_BUILD_TYPE)
        FORCE)
 endif (NOT CMAKE_BUILD_TYPE)
 
+set (CMAKE_CXX_STANDARD 98 CACHE STRING
+     "C++ standard to build all targets. Supported values are 98, 11, and 14.")
+set (CMAKE_CXX_STANDARD_REQUIRED ON CACHE BOOL
+     "The with CMAKE_CXX_STANDARD selected C++ standard is a requirement.")
+mark_as_advanced (CMAKE_CXX_STANDARD_REQUIRED)
+
 if (NOT (WIN32 OR CYGWIN))
   option (BUILD_SHARED_LIBS "Build shared libraries." ON)
 else (NOT (WIN32 OR CYGWIN))
   option (BUILD_SHARED_LIBS "Build shared libraries." OFF)
 endif (NOT (WIN32 OR CYGWIN))
 if (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
-  message (WARNING "The compilation of SystemC as a DLL on Windows is currently broken! To make it work, the SystemC library has to be at least split into libsystemc-core.dll and a static libsystemc.lib.")
+  message (WARNING "The compilation of SystemC as a DLL on Windows is currently not supported!")
+  set (BUILD_SHARED_LIBS CACHE BOOL "Build shared libraries." OFF FORCE)
 endif (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
 
 option (BUILD_SOURCE_DOCUMENTATION "Build source documentation with Doxygen." OFF)
@@ -313,6 +312,27 @@ option (ENABLE_PTHREADS
         "Use POSIX threads for SystemC processes instead of QuickThreads on Unix or Fiber on Windows."
         OFF)
 
+option (INSTALL_TO_LIB_BUILD_TYPE_DIR
+        "Install the libraries to lib-${CMAKE_BUILD_TYPE} to enable parallel installation of the different build variants. (default: OFF)"
+        OFF)
+
+if (NOT INSTALL_TO_LIB_BUILD_TYPE_DIR)
+  option (INSTALL_TO_LIB_TARGET_ARCH_DIR "Install the libraries to lib-<target-arch> to facilitate linking applications, which build systems assume to find SystemC in lib-<target-arch>. (default: OFF)" OFF)
+else (NOT INSTALL_TO_LIB_BUILD_TYPE_DIR)
+  unset (INSTALL_TO_LIB_TARGET_ARCH_DIR CACHE)
+endif (NOT INSTALL_TO_LIB_BUILD_TYPE_DIR)
+
+if (CMAKE_HOST_UNIX AND NOT INSTALL_TO_LIB_TARGET_ARCH_DIR)
+  option (INSTALL_LIB_TARGET_ARCH_SYMLINK "Install a symlink lib-<target-arch> to lib-${CMAKE_BUILD_TYPE} facilitating the linking of user code, which build system assumes to find the SystemC libraries under lib-<target-arch>." OFF)
+else (CMAKE_HOST_UNIX AND NOT INSTALL_TO_LIB_TARGET_ARCH_DIR)
+  unset (INSTALL_LIB_TARGET_ARCH_SYMLINK CACHE)
+endif (CMAKE_HOST_UNIX AND NOT INSTALL_TO_LIB_TARGET_ARCH_DIR)
+
+set (OVERRIDE_DEFAULT_STACK_SIZE 0 CACHE STRING "Define the default stack size used for SystemC (thread) processes. (> 0)")
+if (OVERRIDE_DEFAULT_STACK_SIZE LESS 0)
+  message (SEND_ERROR "Negative default stack size requested for SystemC (thread) processes.")
+endif (OVERRIDE_DEFAULT_STACK_SIZE LESS 0)
+
 mark_as_advanced(DISABLE_ASYNC_UPDATES
                  DISABLE_COPYRIGHT_MESSAGE
                  DISABLE_VIRTUAL_BIND
@@ -320,19 +340,12 @@ mark_as_advanced(DISABLE_ASYNC_UPDATES
                  ENABLE_EARLY_MAXTIME_CREATION
                  ENABLE_IMMEDIATE_SELF_NOTIFICATIONS
                  ENABLE_PHASE_CALLBACKS
-                 ENABLE_PHASE_CALLBACKS_TRACING)
-
-option (INSTALL_TO_LIB_BUILD_TYPE_DIR "Install the libraries to lib-${CMAKE_BUILD_TYPE} to enable parallel installation of the different build variants. (default: ON)" ON)
-
-if (CMAKE_HOST_UNIX)
-  option (INSTALL_LIB_TARGET_ARCH_SYMLINK "Install a symlink lib-<target-arch> to lib-${CMAKE_BUILD_TYPE} facilitating the linking of user code, which build system assumes to find the SystemC libraries under lib-<target-arch>." OFF)
-endif (CMAKE_HOST_UNIX)
-
-set (OVERRIDE_DEFAULT_STACK_SIZE 0 CACHE STRING "Define the default stack size used for SystemC (thread) processes. (> 0)")
+                 ENABLE_PHASE_CALLBACKS_TRACING
+                 OVERRIDE_DEFAULT_STACK_SIZE)
 
 
 ###############################################################################
-# Set SystemC_TARGET_ARCH and QT_ARCH depending on OS and processor type
+# Set SystemC_TARGET_ARCH depending on OS and processor type
 ###############################################################################
 
 message (STATUS "Checking OS and processor type.")
@@ -343,12 +356,10 @@ endif (APPLE)
 
 if (NOT APPLE OR (APPLE AND (N_OSX_ARCHITECTURES LESS 2)))
   if (APPLE)
-    if (N_OSX_ARCHITECTURES GREATER 0)
-      message (STATUS "The target architecture(s) will be passed explicitly to the Apple compiler.")
-      if (N_OSX_ARCHITECTURES EQUAL 1)
-        set (CMAKE_REQUIRED_FLAGS "-arch ${CMAKE_OSX_ARCHITECTURES}")
-      endif (N_OSX_ARCHITECTURES EQUAL 1)
-    endif (N_OSX_ARCHITECTURES GREATER 0)
+    if (N_OSX_ARCHITECTURES EQUAL 1)
+      message (STATUS "The target architecture will be passed explicitly to the Apple compiler.")
+      set (CMAKE_REQUIRED_FLAGS "-arch ${CMAKE_OSX_ARCHITECTURES}")
+    endif (N_OSX_ARCHITECTURES EQUAL 1)
     unset (HAS__i386_DEFINED CACHE)
     unset (HAS__x86_64__DEFINED CACHE)
     unset (HAS__ppc__DEFINED CACHE)
@@ -385,27 +396,32 @@ if (NOT SystemC_TARGET_ARCH)
     else (HAS__i386_DEFINED)
       set (_TARGET_ARCH "macosxunknown")
     endif (N_OSX_ARCHITECTURES GREATER 1)
-  elseif (UNIX AND CMAKE_SYSTEM_NAME STREQUAL "Linux" AND HAS__i386_DEFINED)
-    set (_TARGET_ARCH "linux")
-  elseif (UNIX AND CMAKE_SYSTEM_NAME STREQUAL "Linux" AND HAS__x86_64__DEFINED)
-    set (_TARGET_ARCH "linux64")
-  elseif (UNIX AND CMAKE_SYSTEM_NAME STREQUAL "Linux" AND HAS__powerpc_DEFINED)
-    # Untested platform.
-    set (_TARGET_ARCH "linuxppc")
-  elseif (UNIX AND CMAKE_SYSTEM_NAME STREQUAL "Linux" AND (HAS__sparc_DEFINED OR HAS__sparc__DEFINED))
-    # Untested platform.
-    set (_TARGET_ARCH "linuxsparc")
   elseif (UNIX AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    # Untested platform.
-    set (_TARGET_ARCH "linuxunknown")
-  elseif (UNIX AND CMAKE_SYSTEM_NAME MATCHES ".*BSD" AND HAS__i386_DEFINED)
-    set (_TARGET_ARCH "bsd")
-  elseif (UNIX AND CMAKE_SYSTEM_NAME MATCHES ".*BSD" AND HAS__x86_64__DEFINED)
-    set (_TARGET_ARCH "bsd64")
-  elseif (UNIX AND CMAKE_SYSTEM_NAME STREQUAL ".*BSD")
-    # Untested platform.
-    set (_TARGET_ARCH "bsdunknown")
-  elseif (UNIX AND CMAKE_SYSTEM_NAME STREQUAL "SunOS" AND (HAS__sparc_DEFINED OR HAS__sparc__DEFINED))
+    if (HAS__i386_DEFINED)
+      set (_TARGET_ARCH "linux")
+    elseif (HAS__x86_64__DEFINED)
+      set (_TARGET_ARCH "linux64")
+    elseif (HAS__powerpc_DEFINED)
+      # Untested platform.
+      set (_TARGET_ARCH "linuxppc")
+    elseif (HAS__sparc_DEFINED OR HAS__sparc__DEFINED)
+      # Untested platform.
+      set (_TARGET_ARCH "linuxsparc")
+    else (HAS__i386_DEFINED)
+      # Untested platform.
+      set (_TARGET_ARCH "linuxunknown")
+    endif (HAS__i386_DEFINED)
+  elseif (UNIX AND CMAKE_SYSTEM_NAME MATCHES ".*BSD")
+    if (HAS__i386_DEFINED)
+      set (_TARGET_ARCH "bsd")
+    elseif (HAS__x86_64__DEFINED)
+      set (_TARGET_ARCH "bsd64")
+    else (HAS__i386_DEFINED)
+      # Untested platform.
+      set (_TARGET_ARCH "bsdunknown")
+    endif (HAS__i386_DEFINED)
+  elseif (UNIX AND CMAKE_SYSTEM_NAME STREQUAL "SunOS"
+          AND (HAS__sparc_DEFINED OR HAS__sparc__DEFINED))
     # Untested platform.
     set (_TARGET_ARCH "sparcOS5")
     if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
@@ -457,45 +473,30 @@ endif (NOT SystemC_TARGET_ARCH)
 # Configure QuickThreads
 ###############################################################################
 
-# Check if chosen QuickThreads is valid.
-if (DEFINED QT_ARCH AND (NOT QT_ARCH MATCHES "sparc|hppa|x86_64|i386|powerpc_mach|powerpc_sys5|IGNORE"))
-  message (WARNING "Unknown QuickThreads architecture \"${QT_ARCH}\".")
-  unset (QT_ARCH CACHE)
-endif (DEFINED QT_ARCH AND (NOT QT_ARCH MATCHES "sparc|hppa|x86_64|i386|powerpc_mach|powerpc_sys5|IGNORE"))
-
-if (APPLE AND CMAKE_OSX_ARCHITECTURES)
-  # Make sure that the QuickThreads architecture always matches the target OS X architecture(s).
-  unset (QT_ARCH CACHE)
-endif (APPLE AND CMAKE_OSX_ARCHITECTURES)
-
 # Set QuickThreads architecture based on the detected preprocessor symbols.
-if (NOT DEFINED QT_ARCH)
-  message (STATUS "Detect the target processor architecture for QuickThreads.")
-  if (ENABLE_PTHREADS)
-    set (_QT_ARCH "IGNORE") # Pthreads will be used for the SystemC coroutines.
-  elseif (MSVC)
-    set (_QT_ARCH "IGNORE") # Fibers will be used for the SystemC coroutines.
-  elseif (APPLE AND (N_OSX_ARCHITECTURES GREATER 1))
-    set (_QT_ARCH "IGNORE") # For universal libraries, Pthreads will be used for the SystemC coroutines.
-  elseif (HAS__sparc_DEFINED OR HAS__sparc__DEFINED)
-    set (_QT_ARCH "sparc")
-  elseif (HAS__hppa_DEFINED)
-    set (_QT_ARCH "hppa")
-  elseif (HAS__x86_64__DEFINED)
-    set (_QT_ARCH "x86_64")
-  elseif (HAS__i386_DEFINED)
-    set (_QT_ARCH "i386")
-  elseif (HAS__ppc__DEFINED)
-    set (_QT_ARCH "powerpc_mach")
-  elseif (HAS__powerpc__DEFINED)
-    set (_QT_ARCH "powerpc_sys5")
-  else (ENABLE_PTHREADS)
-    message (WARNING "QuickThreads is not supported on ${CMAKE_SYSTEM} on ${CMAKE_SYSTEM_PROCESSOR}.")
-    set (_QT_ARCH "IGNORE")
-  endif (ENABLE_PTHREADS)
-  set (QT_ARCH ${_QT_ARCH} CACHE STRING "QuickThreads architecture (IGNORE, sparc, hppa, x86_64, i386, powerpc_mach, powerpc_sys5).")
-  unset (_QT_ARCH)
-endif (NOT DEFINED QT_ARCH)
+message (STATUS "Detect the target processor architecture for QuickThreads.")
+if (ENABLE_PTHREADS)
+  set (QT_ARCH "IGNORE") # Pthreads will be used for the SystemC coroutines.
+elseif (MSVC)
+  set (QT_ARCH "IGNORE") # Fibers will be used for the SystemC coroutines.
+elseif (APPLE AND (N_OSX_ARCHITECTURES GREATER 1))
+  set (QT_ARCH "IGNORE") # For universal libraries, Pthreads will be used for the SystemC coroutines.
+elseif (HAS__sparc_DEFINED OR HAS__sparc__DEFINED)
+  set (QT_ARCH "sparc")
+elseif (HAS__hppa_DEFINED)
+  set (QT_ARCH "hppa")
+elseif (HAS__x86_64__DEFINED)
+  set (QT_ARCH "x86_64")
+elseif (HAS__i386_DEFINED)
+  set (QT_ARCH "i386")
+elseif (HAS__ppc__DEFINED)
+  set (QT_ARCH "powerpc_mach")
+elseif (HAS__powerpc__DEFINED)
+  set (QT_ARCH "powerpc_sys5")
+else (ENABLE_PTHREADS)
+  message (WARNING "QuickThreads is not supported on ${CMAKE_SYSTEM} on ${CMAKE_SYSTEM_PROCESSOR}.")
+  set (QT_ARCH "IGNORE")
+endif (ENABLE_PTHREADS)
 
 if (QT_ARCH)
   # To build QuickThreads, enable the assembler support.
@@ -515,147 +516,37 @@ endif (QT_ARCH)
 ###############################################################################
 
 if (ENABLE_PTHREADS OR (QT_ARCH AND NOT DISABLE_ASYNC_UPDATES) OR NOT QT_ARCH)
-  set (CMAKE_THREAD_PREFER_PTHREAD)
+  set (THREADS_PREFER_PTHREAD_FLAG ON)
   find_package (Threads REQUIRED)
-  if (ENABLE_PTHREADS)
-    if (NOT CMAKE_USE_PTHREADS_INIT)
-      message (SEND_ERROR "Failed to find the Pthreads library required to implement the SystemC coroutines and async_request_update() of primitive channels on Unix.")
-    endif (NOT CMAKE_USE_PTHREADS_INIT)
-    add_definitions (-DSC_USE_PTHREADS)
-  endif (ENABLE_PTHREADS)
+  if (ENABLE_PTHREADS AND NOT CMAKE_USE_PTHREADS_INIT)
+    message (SEND_ERROR "Failed to find the Pthreads library required to implement the SystemC coroutines and async_request_update() of primitive channels on Unix.")
+  endif (ENABLE_PTHREADS AND NOT CMAKE_USE_PTHREADS_INIT)
 endif (ENABLE_PTHREADS OR (QT_ARCH AND NOT DISABLE_ASYNC_UPDATES) OR NOT QT_ARCH)
-
-
-###############################################################################
-# Set the preprocessor definitions and platform-dependent compiler flags.
-###############################################################################
-
-add_definitions (-DSC_INCLUDE_FX)
-
-if (DISABLE_ASYNC_UPDATES)
-  add_definitions (-DSC_DISABLE_ASYNC_UPDATES)
-endif (DISABLE_ASYNC_UPDATES)
-
-if (DISABLE_COPYRIGHT_MESSAGE)
-  add_definitions (-DSC_DISABLE_COPYRIGHT_MESSAGE)
-endif (DISABLE_COPYRIGHT_MESSAGE)
-
-if (DISABLE_VIRTUAL_BIND)
-  add_definitions (-DSC_DISABLE_VIRTUAL_BIND)
-endif (DISABLE_VIRTUAL_BIND)
-
-if (ENABLE_ASSERTIONS)
-  add_definitions (-DSC_ENABLE_ASSERTIONS)
-endif (ENABLE_ASSERTIONS)
-
-if (ENABLE_EARLY_MAXTIME_CREATION)
-  add_definitions (-DSC_ENABLE_EARLY_MAXTIME_CREATION)
-endif (ENABLE_EARLY_MAXTIME_CREATION)
-
-if (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS)
-  add_definitions (-DSC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS)
-endif (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS)
-
-if (ENABLE_PHASE_CALLBACKS)
-  add_definitions (-DSC_ENABLE_SIMULATION_PHASE_CALLBACKS)
-endif (ENABLE_PHASE_CALLBACKS)
-
-if (ENABLE_PHASE_CALLBACKS_TRACING)
-  add_definitions (-DSC_ENABLE_SIMULATION_PHASE_CALLBACKS_TRACING)
-endif (ENABLE_PHASE_CALLBACKS_TRACING)
-
-if (OVERRIDE_DEFAULT_STACK_SIZE GREATER 0)
-  add_definitions (-DSC_OVERRIDE_DEFAULT_STACK_SIZE=${OVERRIDE_DEFAULT_STACK_SIZE})
-elseif (OVERRIDE_DEFAULT_STACK_SIZE LESS 0)
-  message (SEND_ERROR "Negative default stack size requested for SystemC (thread) processes.")
-endif (OVERRIDE_DEFAULT_STACK_SIZE GREATER 0)
-
-if (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
-  add_definitions (-DSC_WIN_DLL)
-endif (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
-
-# Set additional compiler flags for known compilers.
-if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-  if (NOT CMAKE_C_FLAGS)
-    set (CMAKE_C_FLAGS "-Wall -Wextra -Wno-unused-parameter -Wno-unused-variable" CACHE STRING "Flags used by the compiler during all build types." FORCE)
-  endif (NOT CMAKE_C_FLAGS)
-  if (NOT CMAKE_CXX_FLAGS)
-    set (CMAKE_CXX_FLAGS "-Wall -Wextra -Wno-unused-parameter -Wno-unused-variable" CACHE STRING "Flags used by the compiler during all build types." FORCE)
-  endif (NOT CMAKE_CXX_FLAGS)
-elseif (MSVC)
-  if (NOT CMAKE_C_FLAGS MATCHES "/vmg")
-    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /vmg" CACHE STRING "Flags used by the compiler during all build types." FORCE)
-  endif (NOT CMAKE_C_FLAGS MATCHES "/vmg")
-  if (NOT CMAKE_CXX_FLAGS MATCHES "/vmg")
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /vmg" CACHE STRING "Flags used by the compiler during all build types." FORCE)
-  endif (NOT CMAKE_CXX_FLAGS MATCHES "/vmg")
-  if (NOT CMAKE_C_FLAGS MATCHES "/MP")
-    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /MP" CACHE STRING "Flags used by the compiler during all build types." FORCE)
-  endif (NOT CMAKE_C_FLAGS MATCHES "/MP")
-  if (NOT CMAKE_CXX_FLAGS MATCHES "/MP")
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP" CACHE STRING "Flags used by the compiler during all build types." FORCE)
-  endif (NOT CMAKE_CXX_FLAGS MATCHES "/MP")
-endif (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-
-if (APPLE)
-  # On Mac OS X, the linker needs to be told that it's OK that _sc_main is an undefined symbol.
-  set (CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS "${CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS} -Wl,-U,_sc_main")
-  set (CMAKE_SHARED_MODULE_CREATE_CXX_FLAGS "${CMAKE_SHARED_MODULE_CREATE_CXX_FLAGS} -Wl,-U,_sc_main")
-endif (APPLE)
-
-# TODO: Check required preprocessor definitions for WIN32.
-if (WIN32)
-  add_definitions (-DWIN32) # Needed?
-  if (MSVC)
-    # Additional definition for Microsoft Visual Studio C++ compilers
-    add_definitions(-D_LIB)               # Needed?
-    # Is the definition of _DEBUG needed or already handled by CMake?
-    if (CMAKE_BUILD_TYPE MATCHES "Debug|RelWithDebInfo")
-      add_definitions (-D_DEBUG) # Needed?
-    else (CMAKE_BUILD_TYPE MATCHES "Debug|RelWithDebInfo")
-      add_definitions (-DNDEBUG) # Needed?
-    endif (CMAKE_BUILD_TYPE MATCHES "Debug|RelWithDebInfo")
-    add_definitions(-D_USE_MATH_DEFINES)  # Needed?
-    # Suppress warnings about sprintf from Visual C++ 2005
-    add_definitions (-D_CRT_SECURE_NO_DEPRECATE) # Needed?
-    # Suppress warnings from Visual C++ 2008
-    add_definitions (-D_CRT_SECURE_NO_WARNINGS) # Needed?
-  endif (MSVC)
-endif (WIN32)
 
 
 ###############################################################################
 # Set the installation paths
 ###############################################################################
 
-# If necessary, default-initialize SystemC_ROOT_DIR and set
-# CMAKE_INSTALL_PREFIX to its value.
-if (NOT SystemC_ROOT_DIR)
-  if (EXISTS $ENV{SYSTEMC_ROOT_DIR})
-    set (_SystemC_ROOT_DIR $ENV{SYSTEMC_ROOT_DIR})
-  elseif (EXISTS $ENV{SYSTEMC_ROOT})
-    set (_SystemC_ROOT_DIR $ENV{SYSTEMC_ROOT})
-  elseif (EXISTS $ENV{SYSTEMC_HOME})
-    set (_SystemC_ROOT_DIR $ENV{SYSTEMC_HOME})
-  elseif (EXISTS $ENV{SYSTEMC_PATH})
-    set (_SystemC_ROOT_DIR $ENV{SYSTEMC_PATH})
+if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+  if (IS_ABSOLUTE $ENV{SYSTEMC_HOME})
+    set (_CMAKE_INSTALL_PREFIX $ENV{SYSTEMC_HOME})
   elseif (UNIX)
-    set (_SystemC_ROOT_DIR "/opt/systemc")
+    set (_CMAKE_INSTALL_PREFIX "/opt/systemc")
   elseif (WIN32)
     file (TO_CMAKE_PATH $ENV{ProgramFiles} _WIN32_INSTALL_PREFIX)
-    set (_SystemC_ROOT_DIR "${_WIN32_INSTALL_PREFIX}/SystemC")
+    set (_CMAKE_INSTALL_PREFIX "${_WIN32_INSTALL_PREFIX}/SystemC")
     unset (_WIN32_INSTALL_PREFIX)
   else (EXISTS $ENV{SYSTEMC_ROOT_DIR})
-    set (_SystemC_ROOT_DIR "${CMAKE_INSTALL_PREFIX}/systemc")
-  endif (EXISTS $ENV{SYSTEMC_ROOT_DIR})
-  set (SystemC_ROOT_DIR ${_SystemC_ROOT_DIR} CACHE PATH "installation root for the SystemC libraries")
-  unset (_SystemC_ROOT_DIR)
-endif (NOT SystemC_ROOT_DIR)
-set (CMAKE_INSTALL_PREFIX ${SystemC_ROOT_DIR} CACHE PATH "Install directory used by install." FORCE)
-mark_as_advanced (CMAKE_INSTALL_PREFIX)
+    set (_CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}/systemc")
+  endif (IS_ABSOLUTE $ENV{SYSTEMC_HOME})
+  set (CMAKE_INSTALL_PREFIX ${_CMAKE_INSTALL_PREFIX} CACHE PATH "Installation root directory" FORCE)
+  unset (_CMAKE_INSTALL_PREFIX)
+endif (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 
 # Set the installation paths for headers, libraries, and documentation.
-set (CMAKE_INSTALL_DOCDIR "share/doc/systemc") # otherwise mixed-case
+set (CMAKE_INSTALL_DOCDIR "share/doc/systemc" CACHE PATH
+     "Documentation installation directory") # otherwise mixed-case
 if (INSTALL_TO_LIB_BUILD_TYPE_DIR)
   # Install libraries to lib-${CMAKE_BUILD_TYPE} so that different build variants
   # of the library can be installed in parallel to the same SystemC root
@@ -664,8 +555,13 @@ if (INSTALL_TO_LIB_BUILD_TYPE_DIR)
   # ${CMAKE_BUILD_TYPE}.
   set (_INSTALL_LIBDIR lib-${CMAKE_BUILD_TYPE})
   string (TOLOWER ${_INSTALL_LIBDIR} _INSTALL_LIBDIR)
-  set (CMAKE_INSTALL_LIBDIR ${_INSTALL_LIBDIR})
+  set (CMAKE_INSTALL_LIBDIR ${_INSTALL_LIBDIR} CACHE PATH
+       "Object code libraries installation directory" FORCE)
   unset (_INSTALL_LIBDIR)
+elseif (INSTALL_TO_LIB_TARGET_ARCH_DIR)
+  # Some build systems assume to find SystemC in lib-<target-arch>
+  set (CMAKE_INSTALL_LIBDIR lib-${SystemC_TARGET_ARCH} CACHE PATH
+       "Object code libraries installation directory" FORCE)
 endif (INSTALL_TO_LIB_BUILD_TYPE_DIR)
 include (GNUInstallDirs)
 
@@ -676,6 +572,21 @@ if (INSTALL_LIB_TARGET_ARCH_SYMLINK AND CMAKE_HOST_UNIX)
                     WORKING_DIRECTORY ${CMAKE_INSTALL_PREFIX})
   ")
 endif (INSTALL_LIB_TARGET_ARCH_SYMLINK AND CMAKE_HOST_UNIX)
+
+if (INSTALL_TO_LIB_BUILD_TYPE_DIR OR INSTALL_TO_LIB_TARGET_ARCH_DIR)
+  set (SystemCLanguage_INSTALL_CMAKEDIR share/cmake/SystemCLanguage CACHE PATH
+       "CMake package configuration installation directory" FORCE)
+  set (SystemCTLM_INSTALL_CMAKEDIR share/cmake/SystemCTLM CACHE PATH
+       "CMake package configuration installation directory" FORCE)
+else (INSTALL_TO_LIB_BUILD_TYPE_DIR OR INSTALL_TO_LIB_TARGET_ARCH_DIR)
+  set (SystemCLanguage_INSTALL_CMAKEDIR ${CMAKE_INSTALL_LIBDIR}/cmake/SystemCLanguage CACHE PATH
+       "CMake package configuration installation directory for the SystemCLanguage package.")
+  set (SystemCTLM_INSTALL_CMAKEDIR ${CMAKE_INSTALL_LIBDIR}/cmake/SystemCTLM CACHE PATH
+       "CMake package configuration installation directory for the SystemCTLM package.")
+endif (INSTALL_TO_LIB_BUILD_TYPE_DIR OR INSTALL_TO_LIB_TARGET_ARCH_DIR)
+mark_as_advanced(SystemCLanguage_INSTALL_CMAKEDIR SystemCTLM_INSTALL_CMAKEDIR)
+set(SystemCLanguage_INSTALL_FULL_CMAKEDIR "${CMAKE_INSTALL_PREFIX}/${SystemCLanguage_INSTALL_CMAKEDIR}")
+set(SystemCTLM_INSTALL_FULL_CMAKEDIR "${CMAKE_INSTALL_PREFIX}/${SystemCTLM_INSTALL_CMAKEDIR}")
 
 
 ###############################################################################
@@ -708,7 +619,7 @@ endif ("${isSystemDir}" STREQUAL "-1")
 ###############################################################################
 
 message (STATUS "========================================================================")
-message (STATUS "Settings to build SystemC ${SystemC_VERSION} (${SystemC_VERSION_RELEASE_DATE}) and TLM ${TLM_VERSION} (${TLM_VERSION_RELEASE_DATE})")
+message (STATUS "Settings to build SystemC ${SystemCLanguage_VERSION} (${SystemCLanguage_VERSION_RELEASE_DATE}) and TLM ${SystemCTLM_VERSION} (${SystemCTLM_VERSION_RELEASE_DATE})")
 message (STATUS "------------------------------------------------------------------------")
 message (STATUS "BUILD_EXAMPLES = ${BUILD_EXAMPLES}")
 message (STATUS "BUILD_SHARED_LIBS = ${BUILD_SHARED_LIBS}")
@@ -719,11 +630,13 @@ if (DISABLE_ASYNC_UPDATES)
 else (DISABLE_ASYNC_UPDATES)
   message (STATUS "DISABLE_ASYNC_UPDATES = ${DISABLE_ASYNC_UPDATES}")
 endif (DISABLE_ASYNC_UPDATES)
+message (STATUS "DISABLE_COPYRIGHT_MESSAGE = ${DISABLE_COPYRIGHT_MESSAGE}")
 if (DISABLE_VIRTUAL_BIND)
   message ("DISABLE_VIRTUAL_BIND = ${DISABLE_VIRTUAL_BIND}")
 else (DISABLE_VIRTUAL_BIND)
   message (STATUS "DISABLE_VIRTUAL_BIND = ${DISABLE_VIRTUAL_BIND}")
 endif (DISABLE_VIRTUAL_BIND)
+message (STATUS "ENABLE_ASSERTIONS = ${ENABLE_ASSERTIONS}")
 message (STATUS "ENABLE_EARLY_MAXTIME_CREATION = ${ENABLE_EARLY_MAXTIME_CREATION}")
 if (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS)
   message ("ENABLE_IMMEDIATE_SELF_NOTIFICATIONS = ${ENABLE_IMMEDIATE_SELF_NOTIFICATIONS}")
@@ -740,13 +653,15 @@ endif (ENABLE_PTHREADS)
 if (OVERRIDE_DEFAULT_STACK_SIZE GREATER 0)
   message ("OVERRIDE_DEFAULT_STACK_SIZE = ${OVERRIDE_DEFAULT_STACK_SIZE}")
 endif (OVERRIDE_DEFAULT_STACK_SIZE GREATER 0)
-message (STATUS "SystemC_ROOT_DIR = ${SystemC_ROOT_DIR}")
 message (STATUS "SystemC_TARGET_ARCH = ${SystemC_TARGET_ARCH}")
-message (STATUS "SystemC_VERSION = ${SystemC_VERSION}")
-message (STATUS "TLM_VERSION = ${TLM_VERSION}")
+message (STATUS "SystemCLanguage_VERSION = ${SystemCLanguage_VERSION}")
+message (STATUS "SystemCTLM_VERSION = ${SystemCTLM_VERSION}")
 message (STATUS "INSTALL_TO_LIB_BUILD_TYPE_DIR = ${INSTALL_TO_LIB_BUILD_TYPE_DIR}")
+message (STATUS "INSTALL_TO_LIB_TARGET_ARCH_DIR = ${INSTALL_TO_LIB_TARGET_ARCH_DIR}")
 message (STATUS "INSTALL_LIB_TARGET_ARCH_SYMLINK = ${INSTALL_LIB_TARGET_ARCH_SYMLINK}")
 message (STATUS "------------------------------------------------------------------------")
+message (STATUS "CMAKE_CXX_STANDARD = ${CMAKE_CXX_STANDARD}")
+message (STATUS "CMAKE_CXX_STANDARD_REQUIRED = ${CMAKE_CXX_STANDARD_REQUIRED}")
 message (STATUS "CMAKE_SYSTEM = ${CMAKE_SYSTEM}")
 message (STATUS "CMAKE_SYSTEM_PROCESSOR = ${CMAKE_SYSTEM_PROCESSOR}")
 message (STATUS "QT_ARCH = ${QT_ARCH}")
@@ -777,6 +692,7 @@ message (STATUS "CMAKE_INSTALL_BINDIR = ${CMAKE_INSTALL_BINDIR}")
 message (STATUS "CMAKE_INSTALL_DOCDIR = ${CMAKE_INSTALL_DOCDIR}")
 message (STATUS "CMAKE_INSTALL_INCLUDEDIR = ${CMAKE_INSTALL_INCLUDEDIR}")
 message (STATUS "CMAKE_INSTALL_LIBDIR = ${CMAKE_INSTALL_LIBDIR}")
+message (STATUS "INSTALL_CMAKEDIR = ${INSTALL_CMAKEDIR}")
 message (STATUS "========================================================================")
 
 
@@ -785,8 +701,8 @@ message (STATUS "===============================================================
 ###############################################################################
 
 add_subdirectory (docs)
-add_subdirectory (examples)
 add_subdirectory (src)
+add_subdirectory (examples)
 
 
 ###############################################################################
@@ -810,48 +726,47 @@ install (FILES AUTHORS
 # Provide package of the SystemC library to other programs using CMake
 ###############################################################################
 
-set (INSTALL_CMAKEDIR cmake)
-set (INSTALL_FULL_CMAKEDIR ${CMAKE_INSTALL_PREFIX}/${INSTALL_CMAKEDIR})
-
 # Export the systemc library target for usage by other programs
 # ... to local build tree
-export (TARGETS systemc FILE SystemCTargets.cmake)
+export (TARGETS systemc
+        NAMESPACE SystemC::
+        FILE SystemCLanguageTargets.cmake)
 # ... to installation tree
-install (EXPORT SystemCTargets DESTINATION ${INSTALL_CMAKEDIR}
-                               COMPONENT dev)
+install (EXPORT SystemCLanguageTargets
+         NAMESPACE SystemC::
+         DESTINATION ${SystemCLanguage_INSTALL_CMAKEDIR}
+         COMPONENT dev)
 
-# Register the SystemC package for use from the build tree.
-# (This registers the build tree with the global CMake-registry.)
-export (PACKAGE SystemC)
-export (PACKAGE TLM)
+# Register the SystemCLanguage and SystemCTLM packages for use from the
+# build tree. (This registers the build tree with the global CMake-registry.)
+export (PACKAGE SystemCLanguage)
+export (PACKAGE SystemCTLM)
 
-# Create the SystemCConfig.cmake, and SystemCConfigVersion files
-# ... for the build tree
-set(CONF_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/src" "${PROJECT_BINARY_DIR}/src")
-configure_file(cmake/SystemCConfig.cmake.in
-  "${PROJECT_BINARY_DIR}/SystemCConfig.cmake" @ONLY)
-configure_file(cmake/TLMConfig.cmake.in
-  "${PROJECT_BINARY_DIR}/TLMConfig.cmake" @ONLY)
-# ... for the install tree
-file (RELATIVE_PATH REL_INCLUDEDIR
-                    "${INSTALL_FULL_CMAKEDIR}" "${CMAKE_INSTALL_FULL_INCLUDEDIR}")
-set(CONF_INCLUDE_DIRS "\${SystemC_CMAKE_DIR}/${REL_INCLUDEDIR}")
-configure_file(cmake/SystemCConfig.cmake.in
-  "${PROJECT_BINARY_DIR}/cmake/SystemCConfig.cmake" @ONLY)
-configure_file(cmake/TLMConfig.cmake.in
-  "${PROJECT_BINARY_DIR}/cmake/TLMConfig.cmake" @ONLY)
-# ... for both
-configure_file(cmake/SystemCConfigVersion.cmake.in
-  "${PROJECT_BINARY_DIR}/SystemCConfigVersion.cmake" @ONLY)
-configure_file(cmake/TLMConfigVersion.cmake.in
-  "${PROJECT_BINARY_DIR}/TLMConfigVersion.cmake" @ONLY)
-unset (REL_INCLUDEDIR)
-unset (CONF_INCLUDE_DIRS)
+# Create the <Package>Config.cmake and <Package>ConfigVersion files
+include(CMakePackageConfigHelpers)
+configure_package_config_file(cmake/SystemCLanguageConfig.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/SystemCLanguageConfig.cmake
+  INSTALL_DESTINATION ${SystemCLanguage_INSTALL_CMAKEDIR})
+write_basic_package_version_file(
+  "${CMAKE_CURRENT_BINARY_DIR}/SystemCLanguageConfigVersion.cmake"
+  VERSION ${SystemCLanguage_VERSION_MAJOR}.${SystemCLanguage_VERSION_MINOR}.${SystemCLanguage_VERSION_PATCH}.${SystemCLanguage_VERSION_RELEASE_DATE}
+  COMPATIBILITY AnyNewerVersion
+)
+configure_package_config_file(cmake/SystemCTLMConfig.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/SystemCTLMConfig.cmake
+  INSTALL_DESTINATION ${SystemCTLM_INSTALL_CMAKEDIR})
+write_basic_package_version_file(
+  "${CMAKE_CURRENT_BINARY_DIR}/SystemCTLMConfigVersion.cmake"
+  VERSION ${SystemCTLM_VERSION_MAJOR}.${SystemCTLM_VERSION_MINOR}.${SystemCTLM_VERSION_PATCH}.${SystemCTLM_VERSION_RELEASE_DATE}
+  COMPATIBILITY AnyNewerVersion
+)
 
-# Install the FooBarConfig.cmake and FooBarConfigVersion.cmake
-install(FILES "${PROJECT_BINARY_DIR}/cmake/SystemCConfig.cmake"
-              "${PROJECT_BINARY_DIR}/SystemCConfigVersion.cmake"
-              "${PROJECT_BINARY_DIR}/cmake/TLMConfig.cmake"
-              "${PROJECT_BINARY_DIR}/TLMConfigVersion.cmake"
-        DESTINATION "${INSTALL_CMAKEDIR}"
+# Install the <Package>Config.cmake and <Package>ConfigVersion.cmake
+install(FILES "${PROJECT_BINARY_DIR}/SystemCLanguageConfig.cmake"
+              "${PROJECT_BINARY_DIR}/SystemCLanguageConfigVersion.cmake"
+        DESTINATION "${SystemCLanguage_INSTALL_CMAKEDIR}"
+        COMPONENT dev)
+install(FILES "${PROJECT_BINARY_DIR}/SystemCTLMConfig.cmake"
+              "${PROJECT_BINARY_DIR}/SystemCTLMConfigVersion.cmake"
+        DESTINATION "${SystemCTLM_INSTALL_CMAKEDIR}"
         COMPONENT dev)

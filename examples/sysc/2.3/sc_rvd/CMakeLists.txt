@@ -39,8 +39,7 @@
 ###############################################################################
 
 
-include_directories (${CMAKE_CURRENT_SOURCE_DIR}/../include)
-
-add_executable (sc_rvd main.cpp)
-target_link_libraries (sc_rvd ${SystemC_LIBRARIES})
+add_executable (sc_rvd main.cpp ../include/sc_rvd.h)
+target_include_directories (sc_rvd PRIVATE ../include)
+target_link_libraries (sc_rvd SystemC::systemc)
 configure_and_add_test (sc_rvd)
