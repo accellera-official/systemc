@@ -40,5 +40,5 @@
 
 
 add_executable (sc_report main.cpp)
-target_link_libraries (sc_report ${SystemC_LIBRARIES})
+target_link_libraries (sc_report SystemC::systemc)
 configure_and_add_test (sc_report)

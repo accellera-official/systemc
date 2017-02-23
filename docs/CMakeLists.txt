@@ -70,7 +70,7 @@ if (BUILD_SOURCE_DOCUMENTATION)
   # SystemC source code documentation
   set (PACKAGE_NAME ${PROJECT_NAME})
   string(TOLOWER "${PROJECT_NAME}" PACKAGE_TARNAME)
-  set (PACKAGE_VERSION ${SystemC_VERSION})
+  set (PACKAGE_VERSION ${SystemCLanguage_VERSION})
   set (top_srcdir ${CMAKE_SOURCE_DIR})
 
   configure_file (${CMAKE_CURRENT_SOURCE_DIR}/sysc/doxygen/Doxyfile.in
@@ -82,8 +82,7 @@ if (BUILD_SOURCE_DOCUMENTATION)
                                PROPERTIES GENERATED 1)
   add_custom_command (OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/sysc/doxygen/html/index.html
                       COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/sysc/doxygen/Doxyfile
-                      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/sysc/doxygen/Doxyfile
-                              systemc
+                      DEPENDS systemc
                       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/sysc/doxygen
                       COMMENT "Building the SystemC source code documentation using Doxygen.")
   add_custom_target (doxygen-sysc
@@ -96,7 +95,7 @@ if (BUILD_SOURCE_DOCUMENTATION)
            COMPONENT doc)
 
   # TLM source code documentation
-  set (TLM_PACKAGE_VERSION ${TLM_VERSION})
+  set (TLM_PACKAGE_VERSION ${SystemCTLM_VERSION})
   set (top_srcdir ${CMAKE_SOURCE_DIR})
 
   configure_file (${CMAKE_CURRENT_SOURCE_DIR}/tlm/doxygen/Doxyfile.in
@@ -108,8 +107,7 @@ if (BUILD_SOURCE_DOCUMENTATION)
                                PROPERTIES GENERATED 1)
   add_custom_command (OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/tlm/doxygen/html/index.html
                       COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/tlm/doxygen/Doxyfile
-                      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/tlm/doxygen/Doxyfile
-                              doxygen-sysc
+                      DEPENDS doxygen-sysc
                       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/tlm/doxygen
                       COMMENT "Building the TLM source code documentation using Doxygen.")
   add_custom_target (doxygen-tlm

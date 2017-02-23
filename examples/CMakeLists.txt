@@ -48,7 +48,12 @@ endif (NOT BUILD_EXAMPLES)
 # Common definitions for all examples.
 ########################################################################
 
-include_directories (BEFORE ${SystemC_SOURCE_DIR}/src)
+if (DEBUG_SYSTEMC)
+  add_definitions (-DDEBUG_SYSTEMC)
+endif (DEBUG_SYSTEMC)
+if (ENABLE_ASSERTIONS)
+  add_definitions (-DSC_ENABLE_ASSERTIONS)
+endif (ENABLE_ASSERTIONS)
 
 if (WIN32)
   # Not sure, if these preprocessor definitions are strictly required to build
@@ -65,12 +70,14 @@ if (WIN32)
   add_definitions (-D_CONSOLE -DNOGDI)
 endif (WIN32)
 
-# On many platforms (e.g., Linux), code that links to SystemC also needs to
-# link to ${CMAKE_THREAD_LIBS_INIT}.
-#
-# TODO: Check why CMake doesn't add automatically ${CMAKE_THREAD_LIBS_INIT},
-# as already target systemc depends on it.
-set (SystemC_LIBRARIES systemc ${CMAKE_THREAD_LIBS_INIT})
+# TODO: Set MSVC warning level to 3 and 4 for the individual examples
+# and disable selected warnings (e.g., 4996). See the individual
+# *.vcxproj files for details.
+if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+  add_compile_options(-Wall -Wextra -Wno-unused-parameter -Wno-unused-variable)
+elseif (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+  add_compile_options(/W3 /wd4244 /wd4267 /wd4996)
+endif (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 
 # If possible, find a more powerful platform-specific diff tool than "cmake -E compare_files"
 find_program (DIFF_COMMAND

@@ -39,12 +39,17 @@
 ###############################################################################
 
 
-include_directories (include)
 add_executable (lt_extension_mandatory src/lt_extension_mandatory.cpp
+                                       include/lt_extension_mandatory_top.h
                                        src/lt_extension_mandatory_top.cpp
+                                       include/lt_initiator_extension_mandatory.h
                                        src/lt_initiator_extension_mandatory.cpp
+                                       include/lt_target_extension_mandatory.h
                                        src/lt_target_extension_mandatory.cpp
-                                       ${COMMON_SRC_DIR}/extension_initiator_id.cpp
-                                       ${COMMON_SRC_DIR}/report.cpp)
-target_link_libraries (lt_extension_mandatory ${SystemC_LIBRARIES})
+                                       ../common/include/extension_initiator_id.h
+                                       ../common/src/extension_initiator_id.cpp
+                                       ../common/include/reporting.h
+                                       ../common/src/report.cpp)
+target_include_directories (lt_extension_mandatory PRIVATE include ../common/include)
+target_link_libraries (lt_extension_mandatory SystemC::systemc)
 configure_and_add_test (lt_extension_mandatory)

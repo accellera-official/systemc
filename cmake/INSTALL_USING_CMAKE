@@ -2,8 +2,8 @@
 
  Install Notes for SystemC Using CMake to Configure the Build Process
 
-       Torsten Maehne, Université Pierre et Marie Curie, France
-                              2013-10-31
+   Torsten Maehne, Bern University of Applied Sciences, Switzerland
+                              2017-02-22
 
 
 Table of Contents
@@ -21,11 +21,22 @@ Table of Contents
 
    3.3 Generic Cross Compilation to a Target System
 
-4. Ressources
+4. Finding and Using SystemC with CMake
+
+5. Known Problems
+
+6. Ressources
 
 
 1. Introduction
 ===============
+
+WARNING: The CMake build scripts are only provided as a preview to
+         gather feedback from the community! They are a work in
+         progress and have not been as thoroughly tested as the
+         other build options for SystemC (i.e., the traditional
+         autotools-based build system and the MSVC solutions). There
+         are known open issues (see section 4).
 
 The original autotools-based build system of the SystemC distribution
 only supports a limited number of OS/processor/compiler platforms and
@@ -37,14 +48,14 @@ libraries, it can configure the sources and generate the necessary
 files to compile/install SystemC using GNU Make, Ninja, or an IDE such as
 Eclipse, Xcode, MS Visual Studio C++, or Kdevelop.
 
-The CMake build scripts are compatible with CMake >2.8.5 and have been
+The CMake build scripts are compatible with CMake >=3.1 and have been
 tested on the following OS/processor/compiler platforms:
 
 - Mac OS X >= 10.5 (GCC, Clang): i386, x86_64, ppc
 
 - Linux (GCC, Clang): i386, x86_64
 
-- Windows (MingW32 GCC + optionally MSYS): x86
+- Windows (MSYS2 with the MinGW-W32 or MinGW-W64 GCC toolchains): x86, AMD64
 
 Currently untested, but considered by the build script (based on the
 autotools scripts) are:
@@ -55,7 +66,7 @@ autotools scripts) are:
 
 - Mac OS X <= 10.5 (GCC): ppc64
 
-- Windows (Cygwin GCC, MingW32 GCC, Visual C++): x86, AMD64
+- Windows (Cygwin GCC, MinGW-W32 GCC, MinGW-W64 GCC, Visual C++): x86, AMD64
 
 - Solaris (GCC and native compiler): sparc
 
@@ -78,7 +89,7 @@ sources using CMake:
 
 1.) Download and install CMake from <http://www.cmake.org/> (Linux
 distributions provide often a package). Note, the CMake script have been
-developed for CMake >= 2.8.5.
+developed for CMake >= 3.1.
 
 2.) Create a build subdirectory:
 
@@ -134,12 +145,26 @@ documentation string. The most important variables are:
 BUILD_EXAMPLES                Build the SystemC examples (default: OFF).
 
 BUILD_SHARED_LIBS             Build shared instead of static libraries
-                              (default: ON).
+                              (default: ON if not targetting Windows).
 
 BUILD_SOURCE_DOCUMENTATION    Build source code documentation using Doxygen
                               (default: OFF).
 
-CMAKE_BUILD_TYPE              Build type (default: Release).
+CMAKE_BUILD_TYPE              Specifies the build type on single-configuration
+                              generators. (default: Release).
+
+CMAKE_CXX_STANDARD            C++ standard to build all targets. Supported
+                              values are 98, 11, and 14. (default: 98)
+
+CMAKE_CXX_STANDARD_REQUIRED   The with CMAKE_CXX_STANDARD selected C++ standard
+                              is a requirement. (default: ON)
+
+CMAKE_INSTALL_PREFIX          Root directory of the SystemC libraries
+                              installation (defaults to $ENV{SYSTEMC_HOME}
+                              if set to an absolute path and otherwise to either
+                              /opt/systemc/ (Unix-like platforms including
+                              CYGWIN), $ENV{ProgramFiles}/SystemC/ (on Windows
+                              systems), or ${CMAKE_INSTALL_PREFIX}/systemc.
 
 CMAKE_OSX_ARCHITECTURES       Architectures for cross-compilation on Mac OS X
                               (default: empty, i.e., only for the system
@@ -149,10 +174,16 @@ CMAKE_VERBOSE_MAKEFILE        Generate a verbose Makefile (default: OFF).
 
 DISABLE_ASYNC_UPDATES         Disable async_request_update() support.
 
+DISABLE_COPYRIGHT_MESSAGE     Do not print the copyright message when starting
+                              the application. (default: OFF)
+
 DISABLE_VIRTUAL_BIND          Disable the definition of bind() member
                               functions of ports and exports as "virtual",
                               which is incompatible with old TLM library
                               implementations (< 2.0.2).
+
+ENABLE_ASSERTIONS             Always enable the `sc_assert' expressions
+                              (default: ON)
 
 ENABLE_IMMEDIATE_SELF_NOTIFICATIONS  Enable immediate self-notification of
                               processes, which is no longer supported due to
@@ -162,18 +193,6 @@ ENABLE_IMMEDIATE_SELF_NOTIFICATIONS  Enable immediate self-notification of
 ENABLE_PTHREADS               Use POSIX threads for SystemC processes instead
                               of QuickThreads on Unix or Fiber on Windows.
 
-QT_ARCH                       QuickThreads architecture (auto-detected:
-                              hppa, x86_64, i386, powerpc_mach,
-                              powerpc_sys5, IGNORE).
-
-SystemC_ROOT_DIR              Root directory of the SystemC libraries
-                              installation (default $SYSTEMC_ROOT_DIR,
-                              $SYSTEMC_ROOT, $SYSTEMC_HOME, $SYSTEMC_PATH
-                              /opt/systemc/ (Unix, Cygwin, MSYS), or
-                              $ENV{ProgramFiles}/SystemC/ (MinGW and
-                              MS Visual Studio)). CMAKE_INSTALL_PREFIX will
-                              be set to its value.
-
 SystemC_TARGET_ARCH           Target architecture according to the
                               Accellera SystemC conventions set either from
                               $ENV{SYSTEMC_TARGET_ARCH}, $ENV{SYSTEMC_ARCH},
@@ -181,7 +200,12 @@ SystemC_TARGET_ARCH           Target architecture according to the
 
 INSTALL_TO_LIB_BUILD_TYPE_DIR Install the libraries to lib-${CMAKE_BUILD_TYPE}
                               to enable parallel installation of the different
-                              build variants. (default: ON)
+                              build variants. (default: OFF)
+
+INSTALL_TO_LIB_TARGET_ARCH_DIR  Install the libraries to lib-<target-arch>
+                              to facilitate linking applications, which
+                              build systems assume to find SystemC in
+                              lib-<target-arch>. (default: OFF)
 
 INSTALL_LIB_TARGET_ARCH_SYMLINK  On Unix, install a symlink lib-<target-arch>
                               to lib-${CMAKE_BUILD_TYPE} facilitating the
@@ -327,7 +351,82 @@ The necessary steps are discussed in detail on the CMake Wiki
 <http://www.cmake.org/Wiki/CMake_Cross_Compiling>.
 
 
-4. Ressources
+4. Finding and Using SystemC with CMake
+=======================================
+
+The CMake build scripts install CMake package config files to facilitate finding
+the SystemC and TLM libraries. The packages are called SystemCLanguage and
+SystemCTLM. As the TLM support is compiled into the SystemC library, the package
+SystemCTLM just finds the matching SystemC library as a dependency. As SystemC
+is usually installed in its own directory tree, you have to tell CMake where to
+look for the package config files by setting the variable CMAKE_PREFIX_PATH to
+the root directory of your SystemC installation before calling find_package().
+
+The SystemCLanguage package provides the imported target SystemC::systemc to
+which an application or library should link to. Linking to an imported target
+ensures that all necessary preprocessor definitions, compiler options, and
+transitive link libraries are used when compiling and linking the application.
+
+The SystemCLanguage package exports a number of variables:
+
+SystemC_TARGET_ARCH            Target architecture according to the Accellera
+                               SystemC conventions
+
+SystemC_CXX_STANDARD           Preferred C++ standard
+
+SystemC_CXX_STANDARD_REQUIRED  Determine whether the selected C++ standard is
+                               a requirement
+
+The SystemC_CXX_STANDARD and SystemC_CXX_STANDARD_REQUIRED variables should be
+used to initialize the respective CMAKE_CXX_STANDARD and
+CMAKE_CXX_STANDARD_REQUIRED variables in the CMake build scripts of the
+application/library. Alternatively, the CXX_STANDARD and CXX_STANDARD_REQUIRED
+target properties can be set directly.
+
+As an example, here is a minimal CMakeLists.txt to compile the simple_perf
+SystemC example as a stand-alone application:
+
+--- Start: CMakeLists.txt ---
+cmake_minimum_required(VERSION 3.1)
+project(simple_perf CXX)
+
+set (CMAKE_PREFIX_PATH /opt/systemc)
+find_package(SystemCLanguage CONFIG REQUIRED)
+
+set (CMAKE_CXX_STANDARD ${SystemC_CXX_STANDARD} CACHE STRING
+     "C++ standard to build all targets. Supported values are 98, 11, and 14.")
+set (CMAKE_CXX_STANDARD_REQUIRED ${SystemC_CXX_STANDARD_REQUIRED} CACHE BOOL
+     "The with CMAKE_CXX_STANDARD selected C++ standard is a requirement.")
+
+add_executable(simple_perf simple_perf.cpp)
+target_link_libraries(simple_perf SystemC::systemc)
+--- End: CMakeLists.txt ---
+
+
+5. Known Problems
+=================
+
+  - The CMake build scripts require more thorough testing of the various build
+    configurations on as many platforms as possible. For the moment, testing
+    has been primarily done on OS X (x86_64 and i686) and Linux (x86_64 and
+    i686) as well as to a lesser degree on Windows 7 using MSYS2 + MingGW-W64
+    and MSVC 2013 / 2015 (x86_64 and i686).
+
+  - The CMake build scripts do not yet support the compilation of the SystemC
+    libraries as a DLL on Windows. To make it work, the SystemC library has to
+    be at least split into libsystemc-core.dll and a static libsystemc.lib.
+
+  - The CMake build scripts don't yet configure and install systemc.pc and
+    tlm.pc for pkg-config.
+
+  - Depending on the build type and the platform, the tests 5 (sc_report) and
+    32 (lt_mixed_endian) from the SystemC/TLM examples are failing. It seems
+    that the output of both tests is platform dependent and the current
+    test runner does not yet allow platform-dependent golden files as the
+    SystemC regression test suite does.
+
+
+6. Ressources
 =============
 
 [1] CMake - Cross Platform Make Homepage <http://www.cmake.org>

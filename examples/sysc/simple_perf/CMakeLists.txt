@@ -40,5 +40,5 @@
 
 
 add_executable (simple_perf simple_perf.cpp)
-target_link_libraries (simple_perf ${SystemC_LIBRARIES})
+target_link_libraries (simple_perf SystemC::systemc)
 configure_and_add_test (simple_perf)

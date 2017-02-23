@@ -40,5 +40,5 @@
 
 
 add_executable (dpipe main.cpp)
-target_link_libraries (dpipe ${SystemC_LIBRARIES})
+target_link_libraries (dpipe SystemC::systemc)
 configure_and_add_test (dpipe)

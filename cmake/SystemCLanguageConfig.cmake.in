@@ -1,0 +1,24 @@
+# - Config file for the SystemCLanguage package
+# It defines the following variables:
+#  SystemC_TARGET_ARCH - Target architecture according to the Accellera SystemC conventions
+#  SystemC_CXX_STANDARD - Preferred C++ standard
+#  SystemC_CXX_STANDARD_REQUIRED - Determine whether the selected C++ standard is a requirement
+
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+
+# SystemC requires Pthreads under certain conditions
+if (@CMAKE_USE_PTHREADS_INIT@)
+  set (THREADS_PREFER_PTHREAD_FLAG ON)
+  find_dependency (Threads)
+  if (NOT CMAKE_USE_PTHREADS_INIT)
+    message (SEND_ERROR "Failed to find the Pthreads library required to implement the SystemC coroutines and async_request_update() of primitive channels on Unix.")
+  endif (NOT CMAKE_USE_PTHREADS_INIT)
+endif (@CMAKE_USE_PTHREADS_INIT@)
+
+include ("${CMAKE_CURRENT_LIST_DIR}/SystemCLanguageTargets.cmake")
+
+set (SystemC_TARGET_ARCH @SystemC_TARGET_ARCH@)
+set (SystemC_CXX_STANDARD @CMAKE_CXX_STANDARD@)
+set (SystemC_CXX_STANDARD_REQUIRED @CMAKE_CXX_STANDARD_REQUIRED@)
