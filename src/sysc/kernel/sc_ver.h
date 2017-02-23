@@ -56,7 +56,7 @@ extern SC_API const std::string  sc_copyright_string;
 
 #define SYSTEMC_2_3_2
 
-#define SYSTEMC_VERSION       20170209
+#define SYSTEMC_VERSION       20170223
 #define SC_VERSION_ORIGINATOR "Accellera"
 #define SC_VERSION_MAJOR      2
 #define SC_VERSION_MINOR      3
@@ -67,7 +67,7 @@ extern SC_API const std::string  sc_copyright_string;
 #define IEEE_1666_SYSTEMC     201101L
 
 #define SC_COPYRIGHT                               \
-  "Copyright (c) 1996-2014 by all Contributors,\n" \
+  "Copyright (c) 1996-2017 by all Contributors,\n" \
   "ALL RIGHTS RESERVED\n"
 
 
@@ -75,7 +75,7 @@ extern SC_API const std::string  sc_copyright_string;
   SC_STRINGIFY_HELPER_( SYSTEMC_VERSION )
 
 #if ( SC_IS_PRERELEASE == 1 )
-#  define SC_VERSION_PRERELEASE "lwg"
+#  define SC_VERSION_PRERELEASE "pub_rev"
 #  define SC_VERSION \
     SC_STRINGIFY_HELPER_( SC_VERSION_MAJOR.SC_VERSION_MINOR.SC_VERSION_PATCH ) \
     "_" SC_VERSION_PRERELEASE "_" SC_VERSION_RELEASE_DATE \
