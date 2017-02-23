@@ -1,7 +1,7 @@
-                 SystemC 2.3.1 regression test suite
+                 SystemC 2.3.2 regression test suite
                  ===================================
 
-This is the production release of the SystemC 2.3.1 regression test suite.
+This is the public review release of the SystemC 2.3.2 regression test suite.
 
 Note: for Windows users, please also refer to README_windows.txt
 
@@ -52,7 +52,7 @@ CONTENTS
   contains one or more golden reference files (stripped). The
   filename of these files is the same as the test name (see above), and
   the extension starts with '.log'. Platform specific golden reference
-  files append '.<platform>' to the file, e.g. 'test.log.sparcOS5'.
+  files append '.<platform>' to the file, e.g. 'test.log.linux64'.
 
 
 2) Running tests
@@ -104,6 +104,7 @@ CONTENTS
                -> msvc10   (Visual C++ 2010)
                -> msvc11   (Visual C++ 2012)
                -> msvc12   (Visual C++ 2013)
+               -> msvc14   (Visual C++ 2015)
     o c++, g++ -> cygwin   (default on Cygwin)
                -> cygwin64 (64-bit Cygwin, untested)
                -> mingw    (default on MinGW/MSYS)
