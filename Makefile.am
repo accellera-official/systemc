@@ -58,10 +58,8 @@ EXTRA_DIST = \
 	config/test.sh.in \
 	\
 	CMakeLists.txt \
-	cmake/SystemCConfig.cmake.in \
-	cmake/SystemCConfigVersion.cmake.in \
-	cmake/TLMConfig.cmake.in \
-	cmake/TLMConfigVersion.cmake.in \
+	cmake/SystemCLanguageConfig.cmake.in \
+	cmake/SystemCTLMConfig.cmake.in \
 	cmake/run_test.cmake \
 	\
 	msvc10/SystemC/SystemC.sln \
