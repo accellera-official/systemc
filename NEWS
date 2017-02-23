@@ -3,6 +3,7 @@
   - Includes TLM 2.0.4_pub_rev_20170223
   - Initial support for C++11/14.
   - Windows DLL support.
+  - Cmake build system (experimental)
   - Bug fixes, code cleanup.
   - Some minor new features.
 
