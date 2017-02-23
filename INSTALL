@@ -17,7 +17,7 @@ Note: A new CMake-based build system for SystemC is part of this
       different command-line build tools (e.g., GNU Make or Ninja) and
       IDEs (e.g., Eclipse, Xcode, MS Visual Studio C++, or Kdevelop).
       The installation notes for SystemC using CMake can be found in the
-      file docs/INSTALL_USING_CMAKE.
+      file cmake/INSTALL_USING_CMAKE.
 
 
 1. Installation Notes for Unix
@@ -113,7 +113,7 @@ Basic SystemC Installation
 
 To install SystemC on a UNIX system, do the following steps:
 
-  1. Change to the top level directory (systemc-2.3.1)
+  1. Change to the top level directory (systemc-2.3.2)
 
   2. Create a temporary directory, e.g.,
 
@@ -173,10 +173,10 @@ To install SystemC on a UNIX system, do the following steps:
      significantly when using this compiler flag.
 
      In case you want to install the package in another place than the
-     top level directory (systemc-2.3.1), configure the package e.g. as
+     top level directory (systemc-2.3.2), configure the package e.g. as
      follows:
 
-        > ../configure --prefix=/usr/local/systemc-2.3.1
+        > ../configure --prefix=/usr/local/systemc-2.3.2
 
      Note: make sure you have created the target directory before installing
            the package. Do _not_ use /usr/local as a prefix, unless you
@@ -425,8 +425,8 @@ Use the `--help' option to print a list.
 2. Installation Notes for Windows
 ---------------------------------
 
-This release has been tested on Visual C++ versions 2005 through 2013,
-running on Windows 7.
+This release has been tested on Visual C++ versions 2010 through 2015,
+running on Windows 8.1 and Windows 10.
 
 
 Note: This section covers the installation based on Microsoft Visual C++.
@@ -444,29 +444,30 @@ Note: If you experience spurious errors about missing files in the
       7-zip (http://7-zip.org) is known to work.
 
 
-Microsoft Visual C++ 2005 (compiler version 8.0) or later
+Microsoft Visual C++ 2010 (compiler version 10.0) or later
 ---------------------------------------------------------
 
-The download directory contains two subdirectories: 'msvc80' and
-'examples'.
+The download directory contains two subdirectories: 'msvc10' and
+'examples/build-msvc'.
 
-The 'msvc80' directory contains the project and workspace files to
+The 'msvc10' directory contains the project and workspace files to
 compile the 'systemc.lib' library. Double-click on the 'SystemC.sln'
-file to launch Visual C++ 2005 with the workspace file. The workspace file
-will have the proper switches set to compile for Visual C++ 2005.
+file to launch Visual C++ 2010 with the workspace file. The workspace file
+will have the proper switches set to compile for Visual C++ 2010.
 Select `Build SystemC' under the Build menu or press F7 to build
 `systemc.lib'.
 
-The `examples' directory contains the project and workspace files to
-compile the SystemC examples. Go to one of the examples subdirectories
-and double-click on the .vcproj file to launch Visual C++ with the
-workspace file. The workspace file will have the proper switches set
-to compile for Visual C++ 2005. Select 'Build <example>.exe' under the
+The `examples/build-msvc' directory contains the project and workspace
+files to compile the SystemC examples. Go to one of the examples
+subdirectories and double-click on the .vcxproj file to launch Visual C++
+with the workspace file. The workspace file will have the proper switches
+set to compile for Visual C++ 2010. Select 'Build <example>.exe' under the
 Build menu or press F7 to build the example executable.
 
-For convenience, a combined solution file 'SystemC-examples.sln' with
-all example projects can be found in the 'msvc80' directory.  A similar
-solution file for the TLM examples is located in 'examples/tlm/build-msvc'.
+For convenience, a combined solution file 'SystemC_examples.sln' with
+all example projects can be found in the 'examples/build-msvc' directory.
+A similar solution file 'tlm_examples.sln' for the TLM examples is available
+as well.
 
 The provided project files are prepared for both the 32-bit 'Win32' and
 64-bit 'x64' configurations.  Please refer to the Microsoft Visual Studio
@@ -492,19 +493,16 @@ Creating SystemC Applications
 4. Display the project Property Pages by selecting 'Properties...' from
    the Project menu.
 
-5. From the C/C++ tab, select the General properties and set
-   'Detect 64-bit Portability Issues' to No
-
-6. From the C/C++ tab, select the Language properties and set
+5. From the C/C++ tab, select the Language properties and set
    'Enable Run-Time Type Info' to Yes
 
-7. From the C/C++ tab, select the Command Line properties and add /vmg
+6. From the C/C++ tab, select the Command Line properties and add /vmg
    to the 'Additional Options:' box.
 
-8. From the Linker tab, select the Input properties and type 'systemc.lib'
+7. From the Linker tab, select the Input properties and type 'systemc.lib'
    in the 'Additional Dependencies' box.
 
-9. Click OK
+8. Click OK
 
 
 Also make sure that the compiler and linker can find the SystemC header
@@ -517,11 +515,11 @@ projects:
 
 2. Select show directories for: Library files
 
-3. Select the 'New' icon and browse to: C:\systemc-2.3.1\msvc80\systemc\debug
+3. Select the 'New' icon and browse to: C:\systemc-2.3.2\msvc10\systemc\debug
 
 4. Select show directories for: Include files
 
-5. Select the 'New' icon and browse to: C:\systemc-2.3.1\src
+5. Select the 'New' icon and browse to: C:\systemc-2.3.2\src
 
 To add the include file and library directory search paths for the current
 project only:
@@ -534,11 +532,28 @@ project only:
   'Additional include directories' (e.g. the examples use '..\..\..\src').
 
 3. From the Linker tab, select the General properties and type the path to
-   the SystemC library:   ...\systemc-2.3.1\msvc80\systemc\debug'systemc.lib'
+   the SystemC library:   ...\systemc-2.3.2\msvc10\systemc\debug
    in the 'Additional Library Directories:' box.
 
 9. Click OK
 
+
+Building against a SystemC DLL
+------------------------------
+
+In order to link your application against a DLL-build of SystemC (build
+configurations 'DebugDLL', 'ReleaseDLL' in the SystemC library build),
+several changes are needed.
+
+1. Adjust the linker library directory settings to reference 'DebugDLL'
+   (or 'ReleaseDLL') instead of 'Debug' or 'Release', respecitvely:
+      ...\systemc-2.3.2\msvc10\systemc\DebugDLL
+
+2. Add the preprocessor switch 'SC_WIN_DLL' to your project's properties
+   (C/C++ -> Preprocessor -> Preprocessor Definitions).
+
+3. When running the simulation, you need to add the location of the
+   SystemC DLL to your PATH variable.
 
 
 
@@ -568,6 +583,22 @@ configuration via the 'C/C++' tab under the 'Preprocessor' properties
 in the 'Preprocessor definitions' setting.  Alternatively, you can add
 the switches to the 'SystemC.vsprops' property sheet to apply these
 settings to all build configurations.
+
+
+ * SC_CPLUSPLUS -
+   Override automatically detected C++ standard support
+
+   This setting allows downgrading the assumed version of the
+   underlying C++ standard on the current platform.  By default,
+   the latest supported version is chosen.
+
+   Supported values are
+     * SC_CPLUSPLUS=199701L (C++03, ISO/IEC 14882:1998, 14882:2003)
+     * SC_CPLUSPLUS=201103L (C++11, ISO/IEC 14882:2011)
+     * SC_CPLUSPLUS=201402L (C++14, ISO/IEC 14882:2014)
+
+   Note: This symbol needs to be consistently defined in the library
+            and any application linking against the built library.
 
 
  * SC_DEFAULT_WRITER_POLICY=<sc_writer_policy> -

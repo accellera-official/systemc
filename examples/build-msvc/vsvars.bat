@@ -28,13 +28,13 @@ rem
 rem  You can specify the version and the platform to use via additional
 rem  command-line options given to vsvars.bat, e.g.
 rem
-rem    vsvars.bat [arch]               # load MSVC 2005 for [arch]
+rem    vsvars.bat [arch]               # load MSVC 2010 for [arch]
 rem    vsvars.bat [version]            # load MSVC [version] for x86
 rem    vsvars.bat [version] [platform] # load MSVC [version] for [platform]
 rem
 rem    vsvars.bat 2010 amd64  # load 64-bit tools for MSVC 10.0
 rem    vsvars.bat 11.0        # load default (x86) tools for MSVC 2012
-rem    vsvars.vat x86_amd64   # load x64 cross-tools for MSVC 2005
+rem    vsvars.vat x86_amd64   # load x64 cross-tools for MSVC 2010
 rem
 rem ***************************************************************************
 
@@ -58,7 +58,7 @@ if "%1" == "2015"  goto check_MSVC140
 
 if not "%1" == "" set SYSTEMC_MSVC_PLATFORM=%1
 if     "%1" == "" set SYSTEMC_MSVC_PLATFORM=x86
-goto check_MSVC80
+goto check_MSVC100
 
 rem We rely on the variables VSXXXCOMNTOOLS to be set by the MSVC
 rem installation.  This should be usually the case by default.
