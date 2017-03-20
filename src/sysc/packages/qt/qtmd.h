@@ -10,4 +10,6 @@
 #include "sysc/packages/qt/md/powerpc_mach.h"
 #elif defined( __powerpc )
 #include "sysc/packages/qt/md/powerpc_sys5.h"
+#elif defined( __aarch64__ )
+#include "sysc/packages/qt/md/aarch64.h"
 #endif
