@@ -34,7 +34,27 @@
 #include "sysc/kernel/sc_except.h"
 #include "sysc/kernel/sc_spawn.h"
 #include "sysc/kernel/sc_join.h"
-#include "sysc/kernel/sc_boost.h"
+
+#if SC_CPLUSPLUS >= 201103L // C++11 or later has std::bind
+# include <functional>
+
+namespace sc_unnamed {
+using namespace std::placeholders;
+} // namespace sc_unnamed
+
+# define sc_bind    ::std::bind
+# define sc_ref(r)  ::std::ref(r)
+# define sc_cref(r) ::std::cref(r)
+
+#else // use Boost implementation
+# include "sysc/packages/boost/bind.hpp"
+# include "sysc/packages/boost/ref.hpp"
+
+# define sc_bind    sc_boost::bind
+# define sc_ref(r)  sc_boost::ref(r)
+# define sc_cref(r) sc_boost::cref(r)
+
+#endif // C++11 implementation
 
 // $Log: sc_dynamic_processes.h,v $
 // Revision 1.5  2011/08/26 20:46:09  acg
