@@ -31,9 +31,6 @@
 #ifndef SC_CMNHDR_H
 #define SC_CMNHDR_H
 
-// include useful platform information from Boost
-#include "sysc/packages/boost/config.hpp"
-
 #if defined(_WIN32) || defined(_MSC_VER) || defined(__BORLANDC__) || \
 	defined(__MINGW32__)
 
