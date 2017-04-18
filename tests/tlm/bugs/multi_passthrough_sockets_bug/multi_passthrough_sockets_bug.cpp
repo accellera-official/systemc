@@ -29,10 +29,10 @@ class initiator_module : public sc_core::sc_module
 public:
   
   tlm_utils::simple_initiator_socket<initiator_module> initiator_socket;
-  
   SC_HAS_PROCESS(initiator_module);
-  initiator_module(sc_core::sc_module_name module_name) :
-    sc_core::sc_module(module_name)
+  explicit initiator_module(sc_core::sc_module_name module_name)
+    : sc_core::sc_module(module_name)
+    , initiator_socket("initiator_socket")
   {
     SC_THREAD(process);
   }
@@ -66,14 +66,21 @@ class target_module : public sc_core::sc_module
 public:
   
   tlm_utils::multi_passthrough_target_socket<target_module> target_socket;
+  tlm_utils::multi_passthrough_target_socket<target_module, 32, tlm::tlm_base_protocol_types,0,::sc_core::SC_ZERO_OR_MORE_BOUND> target_optional;
   
-  target_module(sc_core::sc_module_name module_name) :
-    sc_core::sc_module(module_name),
-    target_socket("target_socket")
+  explicit target_module(sc_core::sc_module_name module_name)
+    : sc_core::sc_module(module_name)
+    , target_socket("target_socket")
+    , target_optional("target_optional")
   {
     target_socket.register_b_transport(this, &target_module::transport);
     target_socket.register_transport_dbg(this, &target_module::transport_dbg);
     target_socket.register_get_direct_mem_ptr(this, &target_module::get_direct_mem_ptr);
+
+    // bind callbacks to optional socket (unbound)
+    target_optional.register_b_transport(this, &target_module::transport);
+    target_optional.register_transport_dbg(this, &target_module::transport_dbg);
+    target_optional.register_get_direct_mem_ptr(this, &target_module::get_direct_mem_ptr);
   }
   
   virtual void transport(int port, tlm::tlm_generic_payload & transaction, sc_core::sc_time & t) {}
@@ -137,9 +144,7 @@ public:
     introspection_extension *ext = new introspection_extension;
     
     transaction.set_extension(ext);
-    
-    sc_core::sc_time t = sc_core::SC_ZERO_TIME;
-    
+
     target_socket->transport_dbg(transaction);
   }
   
