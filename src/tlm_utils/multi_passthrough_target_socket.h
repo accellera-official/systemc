@@ -203,10 +203,12 @@ public:
     //error if this socket is already bound hierarchically
     if (m_hierarch_bind) display_error("Socket already bound hierarchically.");
 
-    if (!m_export_callback_created)
-      m_binders.push_back(new callback_binder_fw<TYPES>(m_binders.size()));
-    else
+    if (m_export_callback_created) {
+      // consume binder created from the callback registration
       m_export_callback_created = false;
+    } else {
+      m_binders.push_back(new callback_binder_fw<TYPES>(m_binders.size()));
+    }
 
     return *m_binders[m_binders.size()-1];
   }
@@ -214,7 +216,7 @@ public:
   // const overload not allowed for multi-sockets
   virtual const tlm::tlm_fw_transport_if<TYPES>& get_base_interface() const
   {
-    display_error("'get_base_interface()' const not allowed for multi-sockets.");
+    display_error("'get_base_interface() const' not allowed for multi-sockets.");
     return base_type::get_base_interface();
   }
 
@@ -240,7 +242,12 @@ public:
     std::vector<callback_binder_fw<TYPES>* >& binders=get_hierarch_bind()->get_binders();
     std::map<unsigned int, tlm::tlm_bw_transport_if<TYPES>*>&  multi_binds=get_hierarch_bind()->get_multi_binds();
 
-    //iterate over all binders
+    // complete binding only if there has been a real bind
+    bool unbound = (binders.size() == 1 && m_export_callback_created);
+    // no call to get_base_interface has consumed the export - ignore
+    if (unbound) return;
+
+    // iterate over all binders
     for (unsigned int i=0; i<binders.size(); i++) {
       binders[i]->set_callbacks(m_nb_f, m_b_f, m_dmi_f, m_dbg_f); //set the callbacks for the binder
       if (multi_binds.find(i)!=multi_binds.end()) //check if this connection is multi-multi
@@ -309,8 +316,8 @@ protected:
   std::vector<callback_binder_fw<TYPES>*> m_binders;
 
   base_type*  m_hierarch_bind; //pointer to hierarchical bound multi port
-  bool m_eoe_disabled; //bool that diables callback bindings at end of elaboration
-  bool m_export_callback_created; // bool to indicate that a callback has already been created for export binding
+  bool m_eoe_disabled; //bool that disables callback bindings at end of elaboration
+  bool m_export_callback_created; //bool that indicates that a binder has been created from a callback registration
 
   //callbacks as functors
   // (allows to pass the callback to another socket that does not know the type of the module that owns
