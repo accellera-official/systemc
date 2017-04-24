@@ -154,8 +154,8 @@
 #     define SC_BOOST_COMPILER_VERSION 12.0
 #   elif _MSC_VER < 1910
 #     define SC_BOOST_COMPILER_VERSION 14.0
-#   elif _MSC_VER < 2000
-#     define SC_BOOST_COMPILER_VERSION 15.0
+#   elif _MSC_VER < 1920
+#     define SC_BOOST_COMPILER_VERSION 14.1
 #   else
 #     define SC_BOOST_COMPILER_VERSION _MSC_VER
 #   endif
