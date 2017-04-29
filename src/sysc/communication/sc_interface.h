@@ -68,17 +68,6 @@ private:
     // disabled
     sc_interface( const sc_interface& );
     sc_interface& operator = ( const sc_interface& );
-
-private:
-
-    static sc_event m_never_notified;
-
-#if defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x520)
-    // Workaround for a bug in the Sun WorkShop 6 update 2 compiler.
-    // An empty virtual base class can cause the optimizer to
-    // generate wrong code.
-    char dummy;
-#endif
 };
 
 } // namespace sc_core

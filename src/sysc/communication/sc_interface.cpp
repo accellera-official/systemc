@@ -52,7 +52,7 @@ const sc_event&
 sc_interface::default_event() const
 {
     SC_REPORT_WARNING( SC_ID_NO_DEFAULT_EVENT_, 0 );
-    return m_never_notified;
+    return sc_event::none;
 }
 
 
@@ -66,12 +66,6 @@ sc_interface::~sc_interface()
 
 sc_interface::sc_interface()
 {}
-
-
-// special event for never notified cases, note the special name to keep
-// it out of the named event structures.
-
-sc_event sc_interface::m_never_notified( sc_event::kernel_event );
 
 } // namespace sc_core
 
