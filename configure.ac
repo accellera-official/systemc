@@ -45,7 +45,7 @@ AC_INIT([SystemC],
         [http://accellera.org/],
 )
 dnl version of the included TLM library
-TLM_PACKAGE_VERSION=2.0.3
+TLM_PACKAGE_VERSION=2.0.4
 AC_SUBST(TLM_PACKAGE_VERSION)
 
 AC_CONFIG_SRCDIR([NEWS])
