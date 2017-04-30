@@ -91,7 +91,6 @@ examples_FILES += \
 	2.1/specialized_signals/Makefile
 
 #2_1_specialized_signals_FILTER = 
-#export 2_1_specialized_signals_FILTER
 
 ## Taf!
 ## :vim:ft=automake:

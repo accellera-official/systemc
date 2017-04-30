@@ -85,7 +85,6 @@ examples_FILES += \
 	2.1/forkjoin/README.txt
 
 #2_1_forkjoin_FILTER = 
-#export 2_1_forkjoin_FILTER
 
 ## Taf!
 ## :vim:ft=automake:

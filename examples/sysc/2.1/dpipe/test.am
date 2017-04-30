@@ -83,7 +83,6 @@ examples_FILES += \
 	2.1/dpipe/Makefile
 
 #2_1_dpipe_FILTER = 
-#export 2_1_dpipe_FILTER
 
 ## Taf!
 ## :vim:ft=automake:

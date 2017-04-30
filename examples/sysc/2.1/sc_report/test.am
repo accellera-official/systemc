@@ -85,7 +85,6 @@ examples_FILES += \
 	2.1/sc_report/README.txt
 
 #2_1_sc_report_FILTER = 
-#export 2_1_sc_report_FILTER
 
 ## Taf!
 ## :vim:ft=automake:

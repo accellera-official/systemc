@@ -91,7 +91,6 @@ at_2_phase_EXTRA = \
 	at_2_phase/docs/at_2_phase_example.ppt
 
 #at_2_phase_FILTER =
-#export at_2_phase_FILTER
 
 ## Taf!
 ## :vim:ft=automake:

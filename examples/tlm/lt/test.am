@@ -92,7 +92,6 @@ lt_EXTRA = \
 	lt/docs/lt_example.ppt
 
 #lt_FILTER = 
-#export lt_FILTER
 
 ## Taf!
 ## :vim: ft=automake:

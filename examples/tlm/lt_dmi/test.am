@@ -92,7 +92,6 @@ lt_dmi_EXTRA = \
 	lt_dmi/docs/lt_dmi_example.ppt
 
 #lt_dmi_FILTER = 
-#export lt_dmi_FILTER
 
 ## Taf!
 ## :vim: ft=automake:

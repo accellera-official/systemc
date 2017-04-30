@@ -85,7 +85,6 @@ rsa_EXTRA = \
 	rsa/README
 
 #rsa_FILTER = 
-#export rsa_FILTER
 
 ## Taf!
 ## :vim:ft=automake:

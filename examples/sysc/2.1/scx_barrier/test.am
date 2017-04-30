@@ -84,7 +84,6 @@ examples_FILES += \
 	2.1/scx_barrier/Makefile
 
 #2_1_scx_barrier_FILTER = 
-#export 2_1_scx_barrier_FILTER
 
 ## Taf!
 ## :vim:ft=automake:

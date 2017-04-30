@@ -115,7 +115,6 @@ risc_cpu_EXTRA = \
 	risc_cpu/Makefile
 
 #risc_cpu_FILTER = 
-#export risc_cpu_FILTER
 
 ## Taf!
 ## :vim:ft=automake:

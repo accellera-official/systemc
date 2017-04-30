@@ -114,7 +114,6 @@ fir_EXTRA = \
 	fir/README
 
 #fir_FILTER = 
-#export fir_FILTER
 
 ## Taf!
 ## :vim:ft=automake:
