@@ -389,6 +389,7 @@
     <ClCompile Include="..\..\src\tlm_core\tlm_2\tlm_generic_payload\tlm_gp.cpp" />
     <ClCompile Include="..\..\src\tlm_core\tlm_2\tlm_generic_payload\tlm_phase.cpp" />
     <ClCompile Include="..\..\src\tlm_core\tlm_2\tlm_quantum\tlm_global_quantum.cpp" />
+    <ClCompile Include="..\..\src\tlm_utils\convenience_socket_bases.cpp" />
     <ClCompile Include="..\..\src\tlm_utils\instance_specific_extensions.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -568,6 +569,7 @@
     <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_sockets\tlm_sockets.h" />
     <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_sockets\tlm_target_socket.h" />
     <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_version.h" />
+    <ClInclude Include="..\..\src\tlm_utils\convenience_socket_bases.h" />
     <ClInclude Include="..\..\src\tlm_utils\instance_specific_extensions.h" />
     <ClInclude Include="..\..\src\tlm_utils\instance_specific_extensions_int.h" />
     <ClInclude Include="..\..\src\tlm_utils\multi_passthrough_initiator_socket.h" />

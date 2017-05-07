@@ -35,6 +35,7 @@
 include $(top_srcdir)/config/Make-rules.sysc
 
 H_FILES = \
+	convenience_socket_bases.h \
 	instance_specific_extensions.h \
 	instance_specific_extensions_int.h \
 	multi_passthrough_initiator_socket.h \
@@ -48,6 +49,7 @@ H_FILES = \
 	tlm_quantumkeeper.h
 
 CXX_FILES = \
+	convenience_socket_bases.cpp \
 	instance_specific_extensions.cpp
 
 EXTRA_DIST += \

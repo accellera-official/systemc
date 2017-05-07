@@ -41,7 +41,6 @@ template <typename MODULE,
 class multi_passthrough_initiator_socket
   : public multi_init_base< BUSWIDTH, TYPES, N, POL>
 {
-
 public:
 
   //typedefs
@@ -61,21 +60,15 @@ public:
 
   typedef typename base_type::base_target_socket_type base_target_socket_type;
 
-  //CTOR
-  multi_passthrough_initiator_socket()
-      : base_type(sc_core::sc_gen_unique_name("multi_passthrough_initiator_socket"))
-      , m_hierarch_bind(0)
-      , m_beoe_disabled(false)
-      , m_dummy(42)
-  {
-  }
+  static const char* default_name()
+    { return sc_core::sc_gen_unique_name("multi_passthrough_initiator_socket"); }
 
   //CTOR
-  multi_passthrough_initiator_socket(const char* name)
+  explicit multi_passthrough_initiator_socket(const char* name = default_name())
       : base_type(name)
       , m_hierarch_bind(0)
       , m_beoe_disabled(false)
-      , m_dummy(42)
+      , m_dummy(this,42)
   {
   }
 
@@ -83,20 +76,6 @@ public:
     //clean up everything allocated by 'new'
     for (unsigned int i=0; i<m_binders.size(); i++) delete m_binders[i];
   }
-
-  //simple helpers for warnings an errors to shorten in code notation
-  void display_warning(const std::string& text) const {
-    std::stringstream s;
-    s<<"WARNING in instance "<<base_type::name()<<": "<<text;
-    SC_REPORT_WARNING("/OSCI_TLM-2/multi_socket", s.str().c_str());
-  }
-
-  void display_error(const std::string& text) const {
-    std::stringstream s;
-    s<<"ERROR in instance "<<base_type::name()<<": "<<text;
-    SC_REPORT_ERROR("/OSCI_TLM-2/multi_socket", s.str().c_str());
-  }
-
 
   //register callback for nb transport of bw interface
   void register_nb_transport_bw(MODULE* mod,
@@ -136,7 +115,7 @@ public:
   // of the target socket, so that it binds to the callback binder
   virtual tlm::tlm_bw_transport_if<TYPES>& get_base_interface()
   {
-    m_binders.push_back(new callback_binder_bw<TYPES>(m_binders.size()));
+    m_binders.push_back(new callback_binder_bw<TYPES>(this, m_binders.size()));
     return *m_binders[m_binders.size()-1];
   }
 
@@ -167,14 +146,19 @@ public:
   virtual void bind(base_target_socket_type& s)
   {
     //error if this socket is already bound hierarchically
-    if (m_hierarch_bind)
+    if (m_hierarch_bind) {
       display_error("Already hierarchically bound.");
+      return;
+    }
 
     base_type::bind(s); //satisfy systemC, leads to a call to get_base_interface()
 
     //try to cast the target socket into a fw interface
     sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >* p_ex_s=dynamic_cast<sc_core::sc_export<tlm::tlm_fw_transport_if<TYPES> >*>(&s);
-    if (!p_ex_s) display_error("Multi socket not bound to tlm_socket.");
+    if (!p_ex_s) {
+      display_error("Multi socket not bound to tlm_socket.");
+      return;
+    }
 
     //try a cast into a multi sockets
     multi_to_multi_bind_base<TYPES>* test=dynamic_cast<multi_to_multi_bind_base<TYPES>*> (p_ex_s);
@@ -228,8 +212,11 @@ public:
   //
   virtual void bind(base_type& s)
   {
-    if (m_binders.size()) //a multi socket is either bound hierarchically or directly
+    if (m_binders.size()) {
+      //a multi socket is either bound hierarchically or directly
       display_error("Socket already directly bound.");
+      return;
+    }
     if (m_hierarch_bind){
       display_warning("Socket already bound hierarchically. Bind attempt ignored.");
       return;
@@ -256,6 +243,9 @@ public:
   unsigned int size() {return get_hierarch_bind()->get_sockets().size();}
 
 protected:
+  using base_type::display_warning;
+  using base_type::display_error;
+
   //implementation of base class interface
   base_type* get_hierarch_bind(){if (m_hierarch_bind) return m_hierarch_bind->get_hierarch_bind(); else return this;}
   void disable_cb_bind(){ m_beoe_disabled=true;}
@@ -279,6 +269,5 @@ protected:
   typename callback_binder_bw<TYPES>::dmi_func_type m_dmi_f;
 };
 
-}
-
+} // namespace tlm_utils
 #endif // TLM_UTILS_MULTI_PASSTHROUGH_INITIATOR_SOCKET_H_INCLUDED_
