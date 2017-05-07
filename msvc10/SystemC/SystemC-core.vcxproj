@@ -464,7 +464,6 @@
     <ClInclude Include="..\..\src\sysc\datatypes\misc\sc_concatref.h" />
     <ClInclude Include="..\..\src\sysc\datatypes\misc\sc_value_base.h" />
     <ClInclude Include="..\..\src\sysc\kernel\sc_attribute.h" />
-    <ClInclude Include="..\..\src\sysc\kernel\sc_boost.h" />
     <ClInclude Include="..\..\src\sysc\kernel\sc_cmnhdr.h" />
     <ClInclude Include="..\..\src\sysc\kernel\sc_constants.h" />
     <ClInclude Include="..\..\src\sysc\kernel\sc_cor.h" />
@@ -476,10 +475,6 @@
     <ClInclude Include="..\..\src\sysc\kernel\sc_externs.h" />
     <ClInclude Include="..\..\src\sysc\kernel\sc_join.h" />
     <ClInclude Include="..\..\src\sysc\kernel\sc_kernel_ids.h" />
-    <ClInclude Include="..\..\src\sysc\kernel\sc_lambda.h" />
-    <ClInclude Include="..\..\src\sysc\kernel\sc_lambda_defs.h" />
-    <ClInclude Include="..\..\src\sysc\kernel\sc_lambda_exps.h" />
-    <ClInclude Include="..\..\src\sysc\kernel\sc_lambda_friends.h" />
     <ClInclude Include="..\..\src\sysc\kernel\sc_macros.h" />
     <ClInclude Include="..\..\src\sysc\kernel\sc_method_process.h" />
     <ClInclude Include="..\..\src\sysc\kernel\sc_module.h" />
@@ -508,8 +503,12 @@
     <ClInclude Include="..\..\src\sysc\kernel\sc_wait_cthread.h" />
     <ClInclude Include="..\..\src\sysc\packages\boost\bind.hpp" />
     <ClInclude Include="..\..\src\sysc\packages\boost\config.hpp" />
+    <ClInclude Include="..\..\src\sysc\packages\boost\detail\endian.hpp" />
     <ClInclude Include="..\..\src\sysc\packages\boost\mem_fn.hpp" />
     <ClInclude Include="..\..\src\sysc\packages\boost\ref.hpp" />
+    <ClInclude Include="..\..\src\sysc\packages\boost\utility\enable_if.hpp" />
+    <ClInclude Include="..\..\src\sysc\packages\boost\utility\string_view.hpp" />
+    <ClInclude Include="..\..\src\sysc\packages\boost\utility\string_view_fwd.hpp" />
     <ClInclude Include="..\..\src\sysc\tracing\sc_trace.h" />
     <ClInclude Include="..\..\src\sysc\tracing\sc_trace_file_base.h" />
     <ClInclude Include="..\..\src\sysc\tracing\sc_tracing_ids.h" />
@@ -569,7 +568,17 @@
     <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_sockets\tlm_sockets.h" />
     <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_sockets\tlm_target_socket.h" />
     <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_version.h" />
+    <ClInclude Include="..\..\src\tlm_utils\instance_specific_extensions.h" />
     <ClInclude Include="..\..\src\tlm_utils\instance_specific_extensions_int.h" />
+    <ClInclude Include="..\..\src\tlm_utils\multi_passthrough_initiator_socket.h" />
+    <ClInclude Include="..\..\src\tlm_utils\multi_passthrough_target_socket.h" />
+    <ClInclude Include="..\..\src\tlm_utils\multi_socket_bases.h" />
+    <ClInclude Include="..\..\src\tlm_utils\passthrough_target_socket.h" />
+    <ClInclude Include="..\..\src\tlm_utils\peq_with_cb_and_phase.h" />
+    <ClInclude Include="..\..\src\tlm_utils\peq_with_get.h" />
+    <ClInclude Include="..\..\src\tlm_utils\simple_initiator_socket.h" />
+    <ClInclude Include="..\..\src\tlm_utils\simple_target_socket.h" />
+    <ClInclude Include="..\..\src\tlm_utils\tlm_quantumkeeper.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\sysc\datatypes\int\sc_nbcommon.inc">
