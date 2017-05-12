@@ -82,6 +82,7 @@ sc_bit::invalid_value( char c )
     char msg[BUFSIZ];
     std::sprintf( msg, "sc_bit( '%c' )", c );
     SC_REPORT_ERROR( sc_core::SC_ID_VALUE_NOT_VALID_, msg );
+    sc_core::sc_abort(); // can't recover from here
 }
 
 void
@@ -90,6 +91,7 @@ sc_bit::invalid_value( int i )
     char msg[BUFSIZ];
     std::sprintf( msg, "sc_bit( %d )", i );
     SC_REPORT_ERROR( sc_core::SC_ID_VALUE_NOT_VALID_, msg );
+    sc_core::sc_abort(); // can't recover from here
 }
 
 

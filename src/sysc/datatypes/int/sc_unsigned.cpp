@@ -123,6 +123,7 @@ sc_unsigned::invalid_index( int i ) const
          "0 <= index <= %d",
          i, nbits - 2 );
     SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
+    sc_core::sc_abort(); // can't recover from here
 }
 
 void
@@ -131,9 +132,10 @@ sc_unsigned::invalid_range( int l, int r ) const
     char msg[BUFSIZ];
     std::sprintf( msg,
          "sc_biguint part selection: left = %d, right = %d \n"
-	 "  violates either (%d >= left >= 0) or (%d >= right >= 0)",
+         "  violates either (%d >= left >= 0) or (%d >= right >= 0)",
          l, r, nbits-2, nbits-2 );
     SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
+    sc_core::sc_abort(); // can't recover from here
 }
 
 // ----------------------------------------------------------------------------
@@ -469,15 +471,15 @@ sc_unsigned::operator = ( const char* a )
         SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_,
                          "character string is zero" );
     }
-    if( *a == 0 ) {
+    else if( *a == 0 ) {
         SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_,
                          "character string is empty" );
     }
-    try {
+    else try {
         int len = length();
         sc_ufix aa( a, len, len, SC_TRN, SC_WRAP, 0, SC_ON );
         return this->operator = ( aa );
-    } catch( sc_core::sc_report ) {
+    } catch( const sc_core::sc_report & ) {
         char msg[BUFSIZ];
         std::sprintf( msg, "character string '%s' is not valid", a );
         SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_, msg );

@@ -91,6 +91,7 @@ sc_uint_concref_invalid_length( int length )
 	     "violates 1 <= length <= %d",
 	     length, SC_INTWIDTH );
     SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
+    sc_core::sc_abort(); // can't recover from here
 }
 
 
@@ -345,6 +346,7 @@ sc_uint_base::invalid_length() const
 	     "1 <= length <= %d",
 	     m_len, SC_INTWIDTH );
     SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
+    sc_core::sc_abort(); // can't recover from here
 }
 
 void
@@ -356,6 +358,7 @@ sc_uint_base::invalid_index( int i ) const
 	     "0 <= index <= %d",
 	     i, m_len - 1 );
     SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
+    sc_core::sc_abort(); // can't recover from here
 }
 
 void
@@ -367,6 +370,7 @@ sc_uint_base::invalid_range( int l, int r ) const
 	     "%d >= left >= right >= 0",
 	     l, r, m_len - 1 );
     SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
+    sc_core::sc_abort(); // can't recover from here
 }
 
 
@@ -519,21 +523,20 @@ sc_uint_base::operator = ( const char* a )
 	SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_,
 			 "character string is zero" );
     }
-    if( *a == 0 ) {
+    else if( *a == 0 ) {
 	SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_,
 			 "character string is empty" );
     }
-    try {
+    else try {
 	int len = m_len;
 	sc_ufix aa( a, len, len, SC_TRN, SC_WRAP, 0, SC_ON );
 	return this->operator = ( aa );
-    } catch( sc_core::sc_report ) {
+    } catch( const sc_core::sc_report & ) {
 	char msg[BUFSIZ];
 	std::sprintf( msg, "character string '%s' is not valid", a );
 	SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_, msg );
-	// never reached
-	return *this;
     }
+    return *this;
 }
 
 

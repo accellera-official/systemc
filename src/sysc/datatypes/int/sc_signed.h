@@ -2352,8 +2352,9 @@ sc_signed::sc_signed( const sc_generic_base<T>& v )
     } else {
         char msg[BUFSIZ];
         std::sprintf( msg,
-		    "sc_unsigned( sc_generic_base<T> ) : nb = %d is not valid", nb);
+              "sc_unsigned( sc_generic_base<T> ) : nb = %d is not valid", nb);
         SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
+        sc_core::sc_abort(); // can't recover from here
     }
     ndigits = DIV_CEIL(nbits);
 #   ifdef SC_MAX_NBITS

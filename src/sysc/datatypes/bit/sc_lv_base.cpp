@@ -75,7 +75,8 @@ sc_lv_base::init( int length_, const sc_logic& init_value )
 {
     // check the length
     if( length_ <= 0 ) {
-	SC_REPORT_ERROR( sc_core::SC_ID_ZERO_LENGTH_, 0 );
+        SC_REPORT_ERROR( sc_core::SC_ID_ZERO_LENGTH_, 0 );
+        sc_core::sc_abort(); // can't recover from here
     }
     // allocate memory for the data and control words
     m_len = length_;

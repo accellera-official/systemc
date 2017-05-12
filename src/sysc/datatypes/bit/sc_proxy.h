@@ -1138,11 +1138,12 @@ sc_proxy<X>::operator <<= ( int n )
 {
     X& x = back_cast();
     if( n < 0 ) {
-	char msg[BUFSIZ];
-	std::sprintf( msg,
-		 "left shift operation is only allowed with positive "
-		 "shift values, shift value = %d", n );
-	SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
+        char msg[BUFSIZ];
+        std::sprintf( msg,
+                 "left shift operation is only allowed with positive "
+                 "shift values, shift value = %d", n );
+        SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
+        return x;
     }
     if( n >= x.length() ) {
 	extend_sign_w_( x, 0, false );
@@ -1194,11 +1195,12 @@ sc_proxy<X>::operator >>= ( int n )
 {
     X& x = back_cast();
     if( n < 0 ) {
-	char msg[BUFSIZ];
-	std::sprintf( msg,
-		 "right shift operation is only allowed with positive "
-		 "shift values, shift value = %d", n );
-	SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
+        char msg[BUFSIZ];
+        std::sprintf( msg,
+                 "right shift operation is only allowed with positive "
+                 "shift values, shift value = %d", n );
+        SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
+        return x;
     }
     if( n >= x.length() ) {
 	extend_sign_w_( x, 0, false );
@@ -1430,7 +1432,8 @@ void
 sc_proxy<X>::check_bounds( int n ) const  // check if bit n accessible
 {
     if( n < 0 || n >= back_cast().length() ) {
-	SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, 0 );
+        SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, 0 );
+        sc_core::sc_abort(); // can't recover from here
     }
 }
 
@@ -1440,7 +1443,8 @@ void
 sc_proxy<X>::check_wbounds( int n ) const  // check if word n accessible
 {
     if( n < 0 || n >= back_cast().size() ) {
-	SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, 0 );
+        SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, 0 );
+        sc_core::sc_abort(); // can't recover from here
     }
 }
 

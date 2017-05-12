@@ -59,6 +59,7 @@ CLASS_TYPE::CLASS_TYPE( int nb ) :
 	std::sprintf( msg, "%s::%s( int nb ) : nb = %d is not valid",
 		 CLASS_TYPE_STR, CLASS_TYPE_STR, nb );
 	SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
+        sc_core::sc_abort(); // can't recover from here
     }
     ndigits = DIV_CEIL(nbits);
 #ifdef SC_MAX_NBITS
@@ -112,6 +113,7 @@ CLASS_TYPE::CLASS_TYPE(const sc_bv_base& v) :
         std::sprintf( msg, "%s::%s( sc_bv_base ) : nb = %d is not valid",
                  CLASS_TYPE_STR, CLASS_TYPE_STR, nb );
         SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
+        sc_core::sc_abort(); // can't recover from here
     }
     ndigits = DIV_CEIL(nbits);
 #   ifdef SC_MAX_NBITS
@@ -135,6 +137,7 @@ CLASS_TYPE::CLASS_TYPE(const sc_lv_base& v) :
         std::sprintf( msg, "%s::%s( sc_lv_base ) : nb = %d is not valid",
                  CLASS_TYPE_STR, CLASS_TYPE_STR, nb );
         SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
+        sc_core::sc_abort(); // can't recover from here
     }
     ndigits = DIV_CEIL(nbits);
 #   ifdef SC_MAX_NBITS
@@ -158,6 +161,7 @@ CLASS_TYPE::CLASS_TYPE(const sc_int_subref_r& v) :
         std::sprintf( msg, "%s::%s( sc_int_subref ) : nb = %d is not valid",
                  CLASS_TYPE_STR, CLASS_TYPE_STR, nb );
         SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
+        sc_core::sc_abort(); // can't recover from here
     }
     ndigits = DIV_CEIL(nbits);
 #   ifdef SC_MAX_NBITS
@@ -181,6 +185,7 @@ CLASS_TYPE::CLASS_TYPE(const sc_uint_subref_r& v) :
         std::sprintf( msg, "%s::%s( sc_uint_subref ) : nb = %d is not valid",
                  CLASS_TYPE_STR, CLASS_TYPE_STR, nb );
         SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
+        sc_core::sc_abort(); // can't recover from here
     }
     ndigits = DIV_CEIL(nbits);
 #   ifdef SC_MAX_NBITS
@@ -204,6 +209,7 @@ CLASS_TYPE::CLASS_TYPE(const sc_signed_subref_r& v) :
         std::sprintf( msg, "%s::%s( sc_signed_subref ) : nb = %d is not valid",
                  CLASS_TYPE_STR, CLASS_TYPE_STR, nb );
         SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
+        sc_core::sc_abort(); // can't recover from here
     }
     ndigits = DIV_CEIL(nbits);
 #   ifdef SC_MAX_NBITS
@@ -227,6 +233,7 @@ CLASS_TYPE::CLASS_TYPE(const sc_unsigned_subref_r& v) :
         std::sprintf( msg, "%s::%s( sc_unsigned_subref ) : nb = %d is not valid",
                  CLASS_TYPE_STR, CLASS_TYPE_STR, nb );
         SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
+        sc_core::sc_abort(); // can't recover from here
     }
     ndigits = DIV_CEIL(nbits);
 #   ifdef SC_MAX_NBITS
