@@ -67,6 +67,7 @@ sc_unwind_exception::~sc_unwind_exception() throw()
       // can't throw an exception, since we're already throwing
       // -> abort instead
       SC_REPORT_FATAL( SC_ID_RETHROW_UNWINDING_, m_proc_p->name() );
+      sc_abort(); // can't recover from here
   }
 }
 

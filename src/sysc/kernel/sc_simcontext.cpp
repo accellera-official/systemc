@@ -1837,18 +1837,17 @@ SC_API void sc_set_stop_mode(sc_stop_mode mode)
     if ( sc_is_running() )
     {
         SC_REPORT_ERROR(SC_ID_STOP_MODE_AFTER_START_,"");
+        return;
     }
-    else
+
+    switch( mode )
     {
-        switch( mode )
-        {
-          case SC_STOP_IMMEDIATE:
-          case SC_STOP_FINISH_DELTA:
-              stop_mode = mode;
-              break;
-          default:
-              break;
-        }
+      case SC_STOP_IMMEDIATE:
+      case SC_STOP_FINISH_DELTA:
+          stop_mode = mode;
+          break;
+      default:
+          break;
     }
 }
 

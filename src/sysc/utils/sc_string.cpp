@@ -425,8 +425,10 @@ sc_string_old::print( ::std::ostream& os ) const
 
 void sc_string_old::test(int position)const
 {
-	if(position<0 || position>=length())
-		SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, "sc_string_old::test" );
+    if(position<0 || position>=length()) {
+        SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, "sc_string_old::test" );
+        sc_core::sc_abort(); // can't recover from here
+    }
 }
 
 // TODO: conveniece formatting functions for common types
@@ -506,8 +508,10 @@ sc_string_old::remove(unsigned index, unsigned length)
 sc_string_old&
 sc_string_old::insert(const sc_string_old& sub_string, unsigned index)
 {
-    if(index>(unsigned)length())   
-	SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, "sc_string_old::insert" );
+    if(index>(unsigned)length()) {
+        SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, "sc_string_old::insert" );
+        return *this;
+    }
     return (*this) = substr(0,index-1)+sub_string+substr(index,length()-1);
 }
 

@@ -203,19 +203,21 @@ sc_prim_channel_registry::insert( sc_prim_channel& prim_channel_ )
 {
     if( sc_is_running() ) {
        SC_REPORT_ERROR( SC_ID_INSERT_PRIM_CHANNEL_, "simulation running" );
+       return;
     }
 
     if( m_simc->elaboration_done() ) {
-
-	SC_REPORT_ERROR( SC_ID_INSERT_PRIM_CHANNEL_, "elaboration done" );
+       SC_REPORT_ERROR( SC_ID_INSERT_PRIM_CHANNEL_, "elaboration done" );
+       return;
     }
 
 #ifdef DEBUG_SYSTEMC
     // check if prim_channel_ is already inserted
     for( int i = 0; i < size(); ++ i ) {
-	if( &prim_channel_ == m_prim_channel_vec[i] ) {
-	    SC_REPORT_ERROR( SC_ID_INSERT_PRIM_CHANNEL_, "already inserted" );
-	}
+        if( &prim_channel_ == m_prim_channel_vec[i] ) {
+            SC_REPORT_ERROR( SC_ID_INSERT_PRIM_CHANNEL_, "already inserted" );
+            return;
+        }
     }
 #endif
 
@@ -234,7 +236,8 @@ sc_prim_channel_registry::remove( sc_prim_channel& prim_channel_ )
 	}
     }
     if( i == size() ) {
-	SC_REPORT_ERROR( SC_ID_REMOVE_PRIM_CHANNEL_, 0 );
+        SC_REPORT_ERROR( SC_ID_REMOVE_PRIM_CHANNEL_, 0 );
+        return;
     }
 
     // remove

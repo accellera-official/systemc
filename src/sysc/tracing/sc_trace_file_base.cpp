@@ -168,11 +168,11 @@ sc_trace_file_base::initialize()
 void
 sc_trace_file_base::open_fp()
 {
-    sc_assert( !fp );
+    sc_assert( !fp && filename() );
     fp = fopen( filename(), "w" );
     if( !fp ) {
         SC_REPORT_ERROR( SC_ID_TRACING_FOPEN_FAILED_, filename() );
-        std::terminate(); // can't recover from here
+        sc_abort(); // can't recover from here
     }
 }
 

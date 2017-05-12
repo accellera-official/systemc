@@ -77,6 +77,7 @@ sc_vector_base::check_index( size_type i ) const
     str << name()
         << "[" << i << "] >= size() = " << size();
     SC_REPORT_ERROR( SC_ID_OUT_OF_BOUNDS_, str.str().c_str() );
+    sc_abort(); // can't recover from here
   }
 }
 

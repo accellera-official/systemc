@@ -153,6 +153,7 @@ public: // interface access:
         if ( m_interface_p == 0 )
         {
             SC_REPORT_ERROR(SC_ID_SC_EXPORT_HAS_NO_INTERFACE_,name());
+            // may continue, if suppressed
         }
         return m_interface_p;
     }
@@ -161,17 +162,19 @@ public: // interface access:
         if ( m_interface_p == 0 )
         {
             SC_REPORT_ERROR(SC_ID_SC_EXPORT_HAS_NO_INTERFACE_,name());
+            // may continue, if suppressed
         }
         return m_interface_p;
     }
 
     operator IF& ()
     {
-	if ( m_interface_p == 0 )
-	{
-	    SC_REPORT_ERROR(SC_ID_SC_EXPORT_HAS_NO_INTERFACE_,name());
-	}
-	return *m_interface_p;
+        if ( m_interface_p == 0 )
+        {
+            SC_REPORT_ERROR(SC_ID_SC_EXPORT_HAS_NO_INTERFACE_,name());
+            sc_abort(); // can't recover from here
+        }
+        return *m_interface_p;
     }
     operator const IF&() const
         { return *const_cast<this_type*>(this); }
@@ -180,14 +183,12 @@ public: // interface access:
 public: // binding:
     SC_VIRTUAL_ void bind( IF& interface_ )
     {
-    	if ( m_interface_p )
-	{
-	    SC_REPORT_ERROR(SC_ID_SC_EXPORT_ALREADY_BOUND_,name());
-	}
-	else
-	{
-	    m_interface_p = &interface_;
-	}
+        if ( m_interface_p )
+        {
+            SC_REPORT_ERROR(SC_ID_SC_EXPORT_ALREADY_BOUND_,name());
+            return;
+        }
+        m_interface_p = &interface_;
     }
 
     void operator () ( IF& interface_ )

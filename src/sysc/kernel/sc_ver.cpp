@@ -128,6 +128,7 @@ pln()
       SC_CONCAT_UNDERSCORE_( Name, config ) = Name; \
     } else if( SC_CONCAT_UNDERSCORE_( Name, config ) != Name ) { \
       SC_REPORT_FATAL( SC_ID_INCONSISTENT_API_CONFIG_, Symbol ); \
+      /* may continue, if suppressed */ \
     } \
   } while( false )
 
