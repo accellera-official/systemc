@@ -45,23 +45,22 @@ sc_signal_invalid_writer( sc_object* target, sc_object* first_writer,
                           sc_object* second_writer, bool check_delta )
 {
     if ( second_writer )
-    {   
+    {
         std::stringstream msg;
-
         msg
             << "\n signal "
                "`" << target->name() << "' "
                "(" << target->kind() << ")"
             << "\n first driver "
                "`" << first_writer->name() << "' "
-              " (" << first_writer->kind() << ")"
+               "(" << first_writer->kind() << ")"
             << "\n second driver "
                "`" << second_writer->name() << "' "
                "(" << second_writer->kind() << ")";
 
         if( check_delta )
         {
-            msg << "\n first conflicting write in delta cycle "
+            msg << "\n conflicting write in delta cycle "
                 << sc_delta_count();
         }
         SC_REPORT_ERROR( SC_ID_MORE_THAN_ONE_SIGNAL_DRIVER_,
