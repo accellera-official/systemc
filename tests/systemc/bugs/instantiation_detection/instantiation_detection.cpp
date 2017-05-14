@@ -102,6 +102,11 @@ int sc_main( int, char*[] )
   sc_report_handler::set_actions( "object already exists", SC_DO_NOTHING );
 
   top dut("dut");
+
+  // disallow ports and exports outside of modules
+  sc_assert( create<sc_in<bool> >("port") == NULL );
+  sc_assert( create<sc_export<sc_signal_in_if<bool> > >("export") == NULL );
+
   sc_start( 1, SC_NS );
   std::cout << "\nSuccess" << std::endl;
   return 0;
