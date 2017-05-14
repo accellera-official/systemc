@@ -829,9 +829,13 @@ and influence the SystemC library's behaviour:
  1) SC_COPYRIGHT_MESSAGE=DISABLE -
     Run-time alternative to SC_DISABLE_COPYRIGHT_MESSAGE (see above).
 
- 2) SC_SIGNAL_WRITE_CHECK=DISABLE
-    Run-time alternative to SC_DEFAULT_WRITER_POLICY=SC_UNCHECKED_WRITERS
-    (see above)
+ 2) SC_SIGNAL_WRITE_CHECK=DISABLE, SC_SIGNAL_WRITE_CHECK=CONFLICT
+    Run-time alternative to SC_DEFAULT_WRITER_POLICY (see above).
+
+    DISABLE  = disable all checks for conflicting writes
+               (SC_UNCHECKED_WRITERS)
+    CONFLICT = detect conflicting writes within the same
+               evaluation phase (SC_MANY_WRITERS)
 
  3) SC_DEPRECATION_WARNINGS=DISABLE
     Do not issue warnings about using deprecated features as of

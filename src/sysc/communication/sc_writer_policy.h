@@ -82,10 +82,15 @@ struct SC_API sc_writer_policy_check_write
 {
   bool check_write( sc_object* target, bool value_changed );
   bool needs_update() const { return m_delta_only; }
-  void update(){}
+  void update();
+
+private:
+  static bool only_delta();
+
 protected:
-  sc_writer_policy_check_write( bool delta_only = false )
+  sc_writer_policy_check_write( bool delta_only = only_delta() )
     : m_delta_only( delta_only ), m_writer_p() {}
+
   const bool         m_delta_only;
   sc_process_handle  m_writer_p;
 };
@@ -93,9 +98,6 @@ protected:
 struct SC_API sc_writer_policy_check_delta
     : sc_writer_policy_check_write
 {
-  sc_writer_policy_check_delta()
-    : sc_writer_policy_check_write(true) {}
-
   // bool write_check(sc_object*, bool); /* inherited */
 
   // always force update phase to reset process
@@ -103,6 +105,10 @@ struct SC_API sc_writer_policy_check_delta
 
   // reset current writer during update phase
   void update() { sc_process_handle().swap( m_writer_p ); }
+
+protected:
+  sc_writer_policy_check_delta()
+    : sc_writer_policy_check_write(true) {}
 };
 
 struct SC_API sc_writer_policy_nocheck_port

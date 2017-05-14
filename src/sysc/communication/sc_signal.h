@@ -46,7 +46,7 @@ inline
 bool
 sc_writer_policy_check_write::check_write( sc_object* target, bool /*value_changed*/ )
 {
-  sc_object* writer_p = sc_get_curr_simcontext()->get_current_writer();
+  sc_process_b* writer_p = sc_get_curr_simcontext()->get_current_writer();
   if( SC_UNLIKELY_( !m_writer_p.valid() ) ) {
     // always store first writer
     sc_process_handle( writer_p ).swap( m_writer_p );
@@ -63,6 +63,14 @@ sc_writer_policy_check_write::check_write( sc_object* target, bool /*value_chang
     }
   }
   return true;
+}
+
+
+inline void
+sc_writer_policy_check_write::update()
+{
+  if( m_delta_only ) // reset, if we're only checking for delta conflicts
+    sc_process_handle().swap( m_writer_p );
 }
 
 

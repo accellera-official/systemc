@@ -242,8 +242,9 @@ public:
     sc_process_host* host_p, const sc_spawn_options* opt_p );
 
     sc_curr_proc_handle get_curr_proc_info();
-    sc_object* get_current_writer() const;
+    sc_process_b* get_current_writer() const;
     bool write_check() const;
+    bool write_check_conflicts_only() const;
     void set_curr_proc( sc_process_b* );
     void reset_curr_proc();
 
@@ -348,8 +349,8 @@ private:
 
     sc_process_table*           m_process_table;
     sc_curr_proc_info           m_curr_proc_info;
-    sc_object*                  m_current_writer;
-    bool                        m_write_check;
+    sc_process_b*               m_current_writer;
+    unsigned                    m_write_check;
     int                         m_next_proc_id;
 
     std::vector<sc_thread_handle> m_active_invokers;
@@ -598,17 +599,30 @@ sc_simcontext::add_timed_event( sc_event_timed* et )
     m_timed_events->insert( et );
 }
 
-inline sc_object* 
+// ----------------------------------------------------------------------------
+
+inline sc_process_b*
 sc_simcontext::get_current_writer() const
 {
     return m_current_writer;
 }
 
-inline bool 
+#define SC_SIGNAL_WRITE_CHECK_DISABLE_   0x0
+#define SC_SIGNAL_WRITE_CHECK_DEFAULT_   0x1
+#define SC_SIGNAL_WRITE_CHECK_CONFLICT_  0x2
+
+inline bool
 sc_simcontext::write_check() const
 {
-    return m_write_check;
+    return m_write_check != SC_SIGNAL_WRITE_CHECK_DISABLE_;
 }
+
+// undefine macros when building an application
+#ifndef SC_BUILD
+# undef SC_SIGNAL_WRITE_CHECK_DEFAULT_
+# undef SC_SIGNAL_WRITE_CHECK_CONFLICT_
+# undef SC_SIGNAL_WRITE_CHECK_DISABLE_
+#endif
 
 // ----------------------------------------------------------------------------
 

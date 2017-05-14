@@ -31,6 +31,7 @@
 #include "sysc/utils/sc_utils_ids.h"
 #include "sysc/communication/sc_signal.h"
 #include "sysc/kernel/sc_reset.h"
+#include "sysc/kernel/sc_simcontext_int.h"
 
 #include <sstream>
 
@@ -69,10 +70,17 @@ sc_signal_invalid_writer( sc_object* target, sc_object* first_writer,
 }
 
 bool
+sc_writer_policy_check_write::only_delta()
+{
+    return sc_get_curr_simcontext()->write_check_conflicts_only();
+}
+
+bool
 sc_writer_policy_check_port::
   check_port( sc_object* target, sc_port_base * port_, bool is_output )
 {
-    if ( is_output && sc_get_curr_simcontext()->write_check() )
+    if ( is_output && sc_get_curr_simcontext()->write_check() &&
+         !sc_get_curr_simcontext()->write_check_conflicts_only() )
     {
         // an out or inout port; only one can be connected
         if( m_output != 0) {
