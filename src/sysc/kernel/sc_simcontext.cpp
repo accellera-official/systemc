@@ -961,7 +961,15 @@ sc_simcontext::simulate( const sc_time& duration )
 	do {
 	    // See note 1 above:
 
-            if ( !next_time(t) || (t > until_t ) ) goto exit_time;
+            if ( !next_time(t) || (t > until_t) ) {
+                if ( (t > until_t) || m_prim_channel_registry->async_suspend() ) {
+                    // requested simulation time completed or no external updates
+                    goto exit_time;
+                }
+                // received external updates, continue simulation
+                break;
+            }
+
             if ( t > m_curr_time )
                 do_timestep(t);
 
