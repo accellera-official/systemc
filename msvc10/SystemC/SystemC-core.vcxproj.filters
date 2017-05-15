@@ -387,6 +387,9 @@
     <ClInclude Include="..\..\src\sysc\communication\sc_host_mutex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\sysc\communication\sc_host_semaphore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\sysc\datatypes\int\sc_int.h">
       <Filter>Header Files</Filter>
     </ClInclude>

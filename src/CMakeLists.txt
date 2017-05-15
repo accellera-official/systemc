@@ -166,6 +166,7 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      sysc/communication/sc_fifo_ifs.h
                      sysc/communication/sc_fifo_ports.h
                      sysc/communication/sc_host_mutex.h
+                     sysc/communication/sc_host_semaphore.h
                      sysc/communication/sc_interface.h
                      sysc/communication/sc_mutex.h
                      sysc/communication/sc_mutex_if.h
