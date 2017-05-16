@@ -31,56 +31,73 @@
 #include "systemc.h"
 #include "async_event.h"
 
-#ifndef IEEE_1666_CPLUSPLUS
-#error This example Requires SystemC is built with c++11, you may use the async_event in a non c++11 environment.
-#endif
-
+#if SC_CPLUSPLUS >= 201103L
+// this version properly uses separate host threads.
+// Without host threads, the example simply notifys the async event
+// directly from the constructor
 #include <thread>
 #include <chrono>
+#endif
 
 SC_MODULE(watchDog)
 {
   async_event when;
-  std::thread m_thread;
+  bool barked;
 public:
-  SC_CTOR(watchDog)
-    {
-
-      SC_METHOD(call_stop);
-      sensitive << when;
-      dont_initialize();
-
-      SC_THREAD(startProcess);
-    }
-  
-  ~watchDog() {
+  SC_CTOR(watchDog) : barked(false)
+  {
+    SC_METHOD(call_stop);
+    sensitive << when;
+    dont_initialize();
+#if SC_CPLUSPLUS >= 201103L
+    m_thread=std::thread( [this] { this->process(); } );
+  }
+  ~watchDog()
+  {
     m_thread.join();
   }
-  
-
-  void startProcess() 
-    {
-      m_thread=std::thread( [this] { this->process(); } );
-    }
-  void call_stop()
-    {
-      cout << "Asked to stop" << endl;
-      sc_stop();
-    }
+private:
+  std::thread m_thread;
   void process()
-    {
-      std::this_thread::sleep_for(std::chrono::seconds(1));
-      when.notify(SC_ZERO_TIME);
-    }
+  {
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+#endif
+    when.notify(sc_time(10,SC_NS));
+  }
+  
+  void call_stop()
+  {
+    cout << "Asked to stop at time " << sc_time_stamp() << endl;
+    barked=true;
+    sc_stop();
+  }
+  void end_of_simulation()
+  {
+    sc_assert(barked==true);
+    cout << "The dog barks before the end of simulation" << endl;
+  }
 };
 
+SC_MODULE(activity)
+{
+  SC_CTOR(activity)
+  {
+    SC_THREAD(busy);
+  }
+
+  void busy()
+  {
+    cout << "I'm busy!"<<endl;
+  }
+};
 
 
 
 int sc_main(int , char* [])
 {
 
-  watchDog catcher("WatchDog");
+  watchDog m_watchdog("WatchDog");
+  activity m_activity("Activity");
 
   cout << "Start SystemC " << endl;
   sc_start();
@@ -88,3 +105,4 @@ int sc_main(int , char* [])
   cout << "Program completed" << endl;
   return 0;
 }
+
