@@ -49,28 +49,44 @@ public:
     SC_METHOD(call_stop);
     sensitive << when;
     dont_initialize();
-#if SC_CPLUSPLUS >= 201103L
-    m_thread=std::thread( [this] { this->process(); } );
   }
+
+#if SC_CPLUSPLUS >= 201103L // C++11 threading support
   ~watchDog()
   {
     m_thread.join();
   }
+
 private:
   std::thread m_thread;
+
+  void start_of_simulation()
+  {
+    m_thread=std::thread( [this] { this->process(); } );
+  }
+
   void process()
   {
     std::this_thread::sleep_for(std::chrono::seconds(1));
-#endif
+    // asynchronous notification from a separate thread
     when.notify(sc_time(10,SC_NS));
   }
-  
+#else
+  void start_of_simulation()
+  {
+    // no threading support, notifiy directly
+    when.notify(sc_time(10,SC_NS));
+  }
+#endif // C++11 threading support
+
+private:
   void call_stop()
   {
     cout << "Asked to stop at time " << sc_time_stamp() << endl;
     barked=true;
     sc_stop();
   }
+
   void end_of_simulation()
   {
     sc_assert(barked==true);

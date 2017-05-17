@@ -78,8 +78,8 @@ examples_FILES += \
 2_3_simple_async_CXX_FILES = \
 	2.3/simple_async/main.cpp
 
-#2_3_simple_async_BUILD = \
-#	2.3/simple_async/golden.log
+2_3_simple_async_BUILD = \
+	2.3/simple_async/golden.log
 
 2_3_simple_async_EXTRA = \
 	2.3/simple_async/simple_async.sln \
@@ -87,7 +87,6 @@ examples_FILES += \
 	2.3/simple_async/Makefile
 
 #2_3_simple_async_FILTER = 
-#export 2_3_simple_async_FILTER
 
 ## Taf!
 ## :vim:ft=automake:

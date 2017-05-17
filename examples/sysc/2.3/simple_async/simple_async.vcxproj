@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{5DA7B653-E73E-4C68-BEF6-382A605B0851}</ProjectGuid>
+    <ProjectGuid>{B2C51629-4AF6-48D0-B54C-378F55C63302}</ProjectGuid>
     <RootNamespace>simple_async</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
