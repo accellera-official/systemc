@@ -43,28 +43,28 @@ SC_MODULE( M )
 {
     sc_event trigger_t, trigger_m;
     SC_CTOR( M ) {
-	SC_THREAD( thread1 );
-	sensitive << trigger_t;
-	dont_initialize();
+        SC_THREAD( thread1 );
+        sensitive << trigger_t;
+        dont_initialize();
 
-	SC_METHOD( method1 );
-	sensitive << trigger_m;
-	dont_initialize();
+        SC_METHOD( method1 );
+        sensitive << trigger_m;
+        dont_initialize();
     }
     void method1() {
-	sc_report_handler::report( SC_INFO,    "ID1", "after log is opened", "method", 101);
-	sc_report_handler::report( SC_WARNING, "ID2", "after log is opened", "method", 102);
-	sc_report_handler::report( SC_ERROR,   "ID1", "after log is opened", "method", 103);
-	sc_report_handler::report( SC_FATAL,   "ID2", "after log is opened", "method", 104);
+        sc_report_handler::report( SC_INFO,    "ID1", "after log is opened", "method", 101);
+        sc_report_handler::report( SC_WARNING, "ID2", "after log is opened", "method", 102);
+        sc_report_handler::report( SC_ERROR,   "ID1", "after log is opened", "method", 103);
+        sc_report_handler::report( SC_FATAL,   "ID2", "after log is opened", "method", 104);
     }
     void thread1() {
-	while(1) {
-	    sc_report_handler::report( SC_INFO,    "ID2", "after log is opened", "thread", 201);
-	    sc_report_handler::report( SC_WARNING, "ID1", "after log is opened", "thread", 202);
-	    sc_report_handler::report( SC_ERROR,   "ID2", "after log is opened", "thread", 203);
-	    sc_report_handler::report( SC_FATAL,   "ID1", "after log is opened", "thread", 204);
-	    wait();
-	}
+        while(1) {
+            sc_report_handler::report( SC_INFO,    "ID2", "after log is opened", "thread", 201);
+            sc_report_handler::report( SC_WARNING, "ID1", "after log is opened", "thread", 202);
+            sc_report_handler::report( SC_ERROR,   "ID2", "after log is opened", "thread", 203);
+            sc_report_handler::report( SC_FATAL,   "ID1", "after log is opened", "thread", 204);
+            wait();
+        }
     }
 };
 
@@ -111,15 +111,14 @@ int sc_main(int,char**)
     cout << "\n\nDump the logfile\n";
     FILE* log = fopen( fname,"r" );
     if ( !log ) {
-	SC_REPORT_FATAL( "Can not open the sc_report log file: ", fname );
-	return 1;
+        SC_REPORT_FATAL( "Can not open the sc_report log file: ", fname );
+        return 1;
     }
-    char c;
     while ( 1 ) {
-	c = fgetc(log);
-	if (c==EOF)
-	    break;
-	cout << c;
+        int c = fgetc(log);
+        if (c==EOF)
+            break;
+        cout << static_cast<char>(c);
     }
     fclose( log) ;
 
