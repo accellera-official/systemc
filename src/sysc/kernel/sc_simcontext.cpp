@@ -854,12 +854,8 @@ sc_simcontext::simulate( const sc_time& duration )
     sc_time non_overflow_time = max_time() - m_curr_time;
     if ( duration > non_overflow_time )
     {
-	SC_REPORT_ERROR(SC_ID_SIMULATION_TIME_OVERFLOW_, "");
-	return;
-    }
-    else if ( duration < SC_ZERO_TIME )
-    {
-        SC_REPORT_ERROR(SC_ID_NEGATIVE_SIMULATION_TIME_,"");
+        SC_REPORT_ERROR(SC_ID_SIMULATION_TIME_OVERFLOW_, "");
+        return;
     }
 
     m_in_simulator_control = true;
@@ -1744,30 +1740,6 @@ sc_start()
               SC_EXIT_ON_STARVATION );
 }
 
-// for backward compatibility with 1.0
-#if 0
-void
-sc_start( double duration )  // in default time units
-{
-    static bool warn_sc_start=true;
-    if ( warn_sc_start )
-    {
-	warn_sc_start = false;
-	SC_REPORT_INFO(SC_ID_IEEE_1666_DEPRECATION_,
-	    "sc_start(double) deprecated, use sc_start(sc_time) or sc_start()");
-    }
-
-    if( duration == -1 )  // simulate forever
-    {
-        sc_start(
-            sc_time(~sc_dt::UINT64_ZERO, false) - sc_time_stamp() );
-    }
-    else
-    {
-        sc_start( sc_time( duration, true ) );
-    }
-}
-#endif //
 
 SC_API void
 sc_stop()
