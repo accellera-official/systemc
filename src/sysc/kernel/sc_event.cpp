@@ -52,6 +52,9 @@ using std::strncmp;
 //  The event class.
 // ----------------------------------------------------------------------------
 
+// kernel-internal event, that is never notified
+const sc_event sc_event::none( kernel_event, "none" );
+
 const char*
 sc_event::basename() const
 {
