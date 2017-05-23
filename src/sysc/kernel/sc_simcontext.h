@@ -173,6 +173,13 @@ class SC_API sc_simcontext
     friend SC_API bool sc_pending_activity_at_current_time( const sc_simcontext* );
     friend SC_API bool sc_pending_activity_at_future_time( const sc_simcontext* );
 
+    enum sc_signal_write_check
+    {
+       SC_SIGNAL_WRITE_CHECK_DISABLE_  = 0x0, // no multiple writer checks
+       SC_SIGNAL_WRITE_CHECK_DEFAULT_  = 0x1, // default IEEE-1666 writer checks
+       SC_SIGNAL_WRITE_CHECK_CONFLICT_ = 0x2  // only check for conflicting writes
+    };
+
 
     void init();
     void clean();
@@ -350,7 +357,7 @@ private:
     sc_process_table*           m_process_table;
     sc_curr_proc_info           m_curr_proc_info;
     sc_process_b*               m_current_writer;
-    unsigned                    m_write_check;
+    sc_signal_write_check       m_write_check;
     int                         m_next_proc_id;
 
     std::vector<sc_thread_handle> m_active_invokers;
@@ -607,22 +614,11 @@ sc_simcontext::get_current_writer() const
     return m_current_writer;
 }
 
-#define SC_SIGNAL_WRITE_CHECK_DISABLE_   0x0
-#define SC_SIGNAL_WRITE_CHECK_DEFAULT_   0x1
-#define SC_SIGNAL_WRITE_CHECK_CONFLICT_  0x2
-
 inline bool
 sc_simcontext::write_check() const
 {
     return m_write_check != SC_SIGNAL_WRITE_CHECK_DISABLE_;
 }
-
-// undefine macros when building an application
-#ifndef SC_BUILD
-# undef SC_SIGNAL_WRITE_CHECK_DEFAULT_
-# undef SC_SIGNAL_WRITE_CHECK_CONFLICT_
-# undef SC_SIGNAL_WRITE_CHECK_DISABLE_
-#endif
 
 // ----------------------------------------------------------------------------
 
