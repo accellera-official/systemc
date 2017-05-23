@@ -156,20 +156,20 @@ void double_to_special_int64(double in, unsigned* high, unsigned* low)
 // ----------------------------------------------------------------------------
 
 #define DEFN_TRACE_FUNC_REF_A(tp)                                             \
-SC_API void                                                                          \
-sc_trace( sc_trace_file* tf, const tp& object, const std::string& name ) \
+SC_API void                                                                   \
+sc_trace( sc_trace_file* tf, const tp& object, const std::string& name )      \
 {                                                                             \
     if( tf ) {                                                                \
-	tf->trace( object, name );                                            \
+	tf->trace( object, name );                                                \
     }                                                                         \
 }
 
 #define DEFN_TRACE_FUNC_PTR_A(tp)                                             \
-SC_API void                                                                          \
-sc_trace( sc_trace_file* tf, const tp* object, const std::string& name ) \
+SC_API void                                                                   \
+sc_trace( sc_trace_file* tf, const tp* object, const std::string& name )      \
 {                                                                             \
     if( tf ) {                                                                \
-	tf->trace( *object, name );                                           \
+	tf->trace( *object, name );                                               \
     }                                                                         \
 }
 
@@ -177,6 +177,47 @@ sc_trace( sc_trace_file* tf, const tp* object, const std::string& name ) \
 DEFN_TRACE_FUNC_REF_A(tp)                                                     \
 DEFN_TRACE_FUNC_PTR_A(tp)
 
+
+#define DEFN_TRACE_FUNC_REF_B(tp)                                             \
+SC_API void                                                                   \
+sc_trace( sc_trace_file* tf, const tp& object, const std::string& name,       \
+          int width)                                                          \
+{                                                                             \
+    if( tf ) {                                                                \
+	tf->trace( object, name, width );                                         \
+    }                                                                         \
+}
+
+#define DEFN_TRACE_FUNC_PTR_B(tp)                                             \
+SC_API void                                                                   \
+sc_trace( sc_trace_file* tf, const tp* object, const std::string& name,       \
+          int width)                                                          \
+{                                                                             \
+    if( tf ) {                                                                \
+	tf->trace( *object, name, width );                                        \
+    }                                                                         \
+}
+
+
+#define DEFN_TRACE_FUNC_B(tp)                                                 \
+DEFN_TRACE_FUNC_REF_B(tp)                                                     \
+DEFN_TRACE_FUNC_PTR_B(tp)
+
+
+DEFN_TRACE_FUNC_A( bool )
+DEFN_TRACE_FUNC_A( float )
+DEFN_TRACE_FUNC_A( double )
+
+DEFN_TRACE_FUNC_B( unsigned char )
+DEFN_TRACE_FUNC_B( unsigned short )
+DEFN_TRACE_FUNC_B( unsigned int )
+DEFN_TRACE_FUNC_B( unsigned long )
+DEFN_TRACE_FUNC_B( char )
+DEFN_TRACE_FUNC_B( short )
+DEFN_TRACE_FUNC_B( int )
+DEFN_TRACE_FUNC_B( long )
+DEFN_TRACE_FUNC_B( sc_dt::int64 )
+DEFN_TRACE_FUNC_B( sc_dt::uint64 )
 
 DEFN_TRACE_FUNC_A( sc_dt::sc_bit )
 DEFN_TRACE_FUNC_A( sc_dt::sc_logic )
@@ -186,13 +227,25 @@ DEFN_TRACE_FUNC_A( sc_dt::sc_uint_base )
 DEFN_TRACE_FUNC_A( sc_dt::sc_signed )
 DEFN_TRACE_FUNC_A( sc_dt::sc_unsigned )
 
-DEFN_TRACE_FUNC_REF_A( sc_dt::sc_bv_base )
-DEFN_TRACE_FUNC_REF_A( sc_dt::sc_lv_base )
+DEFN_TRACE_FUNC_A( sc_dt::sc_bv_base )
+DEFN_TRACE_FUNC_A( sc_dt::sc_lv_base )
 
+#ifdef SC_INCLUDE_FX
+
+DEFN_TRACE_FUNC_A( sc_dt::sc_fxval )
+DEFN_TRACE_FUNC_A( sc_dt::sc_fxval_fast )
+DEFN_TRACE_FUNC_A( sc_dt::sc_fxnum )
+DEFN_TRACE_FUNC_A( sc_dt::sc_fxnum_fast )
+
+#endif // SC_INCLUDE_FX
 
 #undef DEFN_TRACE_FUNC_REF_A
 #undef DEFN_TRACE_FUNC_PTR_A
 #undef DEFN_TRACE_FUNC_A
+
+#undef DEFN_TRACE_FUNC_REF_B
+#undef DEFN_TRACE_FUNC_PTR_B
+#undef DEFN_TRACE_FUNC_B
 
 
 SC_API void
