@@ -166,16 +166,11 @@ sc_export_registry::insert( sc_export_base* export_ )
     }
 #endif
 
-/* 
-    //TBD:  maybe we want to do this stuf for later
-
-    // append the port to the current module's vector of ports
     sc_module* curr_module = m_simc->hierarchy_curr();
     if( curr_module == 0 ) {
-	port_->report_error( SC_ID_PORT_OUTSIDE_MODULE_ );
+        export_->report_error( SC_ID_EXPORT_OUTSIDE_MODULE_ );
+        return;
     }
-    curr_module->append_port( port_ );
-*/
 
     // insert
     m_export_vec.push_back( export_ );
