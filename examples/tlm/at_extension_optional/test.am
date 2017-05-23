@@ -98,7 +98,6 @@ at_extension_optional_EXTRA = \
 	at_extension_optional/docs/at_extension_optional_example.ppt
 
 #at_extension_optional_FILTER = 
-#export at_extension_optional_FILTER
 
 $(at_extension_optional_SHARED_CXX_FILES) :
 	$(AM_V_GEN)$(INSTALL_DATA) $(srcdir)/common/src/$(@F) $@

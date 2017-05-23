@@ -96,7 +96,6 @@ pipe_EXTRA = \
 
 
 #pipe_FILTER = 
-#export pipe_FILTER
 
 ## Taf!
 ## :vim:ft=automake:

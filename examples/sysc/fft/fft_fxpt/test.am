@@ -111,7 +111,6 @@ fft_fft_fxpt_EXTRA = \
 	fft/fft_fxpt/Makefile
 
 #fft_fft_fxpt_FILTER = 
-#export fft_fft_fxpt_FILTER
 
 ## Taf!
 ## :vim:ft=automake:

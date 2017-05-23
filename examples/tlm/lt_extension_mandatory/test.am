@@ -93,7 +93,6 @@ lt_extension_mandatory_EXTRA = \
 	lt_extension_mandatory/docs/lt_extension_mandatory_example.ppt
 
 #lt_extension_mandatory_FILTER = 
-#export lt_extension_mandatory_FILTER
 
 ## Taf!
 ## :vim: ft=automake:

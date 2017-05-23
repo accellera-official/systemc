@@ -93,7 +93,6 @@ at_ooo_EXTRA = \
 	at_ooo/docs/at_ooo_example.ppt
 
 #at_ooo_FILTER = 
-#export at_ooo_FILTER
 
 ## Taf!
 ## :vim: ft=automake:

@@ -94,7 +94,6 @@ lt_temporal_decouple_EXTRA = \
 	lt_temporal_decouple/docs/lt_temporal_decouple_example.ppt
 
 #lt_temporal_decouple_FILTER = 
-#export lt_temporal_decouple_FILTER
 
 ## Taf!
 ## :vim: ft=automake:
