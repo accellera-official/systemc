@@ -3,7 +3,7 @@ SystemC Simulation
 Error: (E100) port specified outside of module: port 'port_0' (sc_port_base)
 In file: <removed by verify.pl>
 
-Error: (E100) port specified outside of module: export 'export_0' (sc_object)
+Error: (E122) sc_export specified outside of module: export 'export_0' (sc_object)
 In file: <removed by verify.pl>
 
 ---8<--- end_of_elaboration  ---8<---
