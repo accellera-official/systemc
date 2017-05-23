@@ -112,133 +112,91 @@ sc_stop_mode stop_mode = SC_STOP_FINISH_DELTA;
 class sc_process_table
 {
   public:
+    template<typename ProcessHandle> struct queue
+    {
+      queue() : m_head() {}
+      ~queue();
 
-    sc_process_table();
-    ~sc_process_table();
-    void push_front( sc_method_handle );
-    void push_front( sc_thread_handle );
-    sc_method_handle method_q_head();
-    sc_thread_handle thread_q_head();
-    sc_method_handle remove( sc_method_handle );
-    sc_thread_handle remove( sc_thread_handle );
+      ProcessHandle head() const { return m_head; }
+      void          push_front(ProcessHandle h);
+      ProcessHandle remove(ProcessHandle h);
+    private:
+      ProcessHandle m_head;
+    };
 
+    void push_front( sc_method_handle handle )
+      { m_methods.push_front(handle); }
+    void push_front( sc_thread_handle handle )
+      { m_threads.push_front(handle); }
+
+    sc_method_handle method_q_head() const
+      { return m_methods.head(); }
+    sc_thread_handle thread_q_head() const
+      { return m_threads.head(); }
+
+    sc_method_handle remove( sc_method_handle handle )
+      { return m_methods.remove(handle); }
+    sc_thread_handle remove( sc_thread_handle handle )
+      { return m_threads.remove(handle); }
 
   private:
-
-    sc_method_handle  m_method_q;  // Queue of existing method processes.
-    sc_thread_handle  m_thread_q;  // Queue of existing thread processes.
+    queue<sc_method_handle> m_methods; // Queue of existing method processes.
+    queue<sc_thread_handle> m_threads; // Queue of existing thread processes.
 };
 
+template<typename ProcessHandle>
+sc_process_table::queue<ProcessHandle>::~queue()
+{
+    while( m_head ) {
+        ProcessHandle now_p = m_head;
+        m_head = m_head->next_exist();
+        now_p->reference_decrement();
+    }
+}
+
+template<typename ProcessHandle>
+void
+sc_process_table::queue<ProcessHandle>::push_front( ProcessHandle handle )
+{
+    handle->set_next_exist(m_head);
+    m_head = handle;
+}
+
+template<typename ProcessHandle>
+ProcessHandle
+sc_process_table::queue<ProcessHandle>::remove( ProcessHandle handle )
+{
+    ProcessHandle now_p   = m_head; // Entry now examining.
+    ProcessHandle prior_p = NULL;   // Entry prior to one now examining.
+
+    while( now_p )
+    {
+        if ( now_p == handle )
+        {
+            if ( prior_p )
+                prior_p->set_next_exist( now_p->next_exist() );
+            else
+                m_head = now_p->next_exist();
+            return handle;
+        }
+        prior_p = now_p;
+        now_p   = now_p->next_exist();
+    }
+    return NULL;
+}
 
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
-sc_process_table::sc_process_table() : m_method_q(0), m_thread_q(0)
-{}
-
-sc_process_table::~sc_process_table()
-{
-
-    sc_method_handle  method_next_p;	// Next method to delete.
-    sc_method_handle  method_now_p;	// Method now deleting.
-
-    for( method_now_p = m_method_q; method_now_p; method_now_p = method_next_p )
-    {
-        method_next_p = method_now_p->next_exist();
-        method_now_p->reference_decrement();
-    }
-
-    sc_thread_handle  thread_next_p;	// Next thread to delete.
-    sc_thread_handle  thread_now_p;	// Thread now deleting.
-
-    for( thread_now_p=m_thread_q; thread_now_p; thread_now_p=thread_next_p )
-    {
-        thread_next_p = thread_now_p->next_exist();
-        thread_now_p->reference_decrement();
-    }
-}
-
-inline
 sc_method_handle
-sc_process_table::method_q_head()
+sc_simcontext::remove_process( sc_method_handle handle )
 {
-    return m_method_q;
-}
-
-inline
-sc_thread_handle
-sc_process_table::thread_q_head()
-{
-    return m_thread_q;
-}
-
-inline
-void
-sc_process_table::push_front( sc_method_handle handle_ )
-{
-    handle_->set_next_exist(m_method_q);
-    m_method_q = handle_;
-}
-
-inline
-void
-sc_process_table::push_front( sc_thread_handle handle_ )
-{
-    handle_->set_next_exist(m_thread_q);
-    m_thread_q = handle_;
-}
-
-sc_method_handle
-sc_process_table::remove( sc_method_handle handle_ )
-{
-    sc_method_handle now_p;	// Entry now examining.
-    sc_method_handle prior_p;	// Entry prior to one now examining.
-
-    prior_p = 0;
-    for ( now_p = m_method_q; now_p; now_p = now_p->next_exist() )
-    {
-	if ( now_p == handle_ )
-	{
-	    if ( prior_p )
-		prior_p->set_next_exist( now_p->next_exist() );
-	    else
-		m_method_q = now_p->next_exist();
-	    return handle_;
-	}
-    }
-    return 0;
-}
-
-sc_method_handle
-sc_simcontext::remove_process( sc_method_handle handle_ )
-{
-    return m_process_table->remove(handle_);
+    return m_process_table->remove(handle);
 }
 
 sc_thread_handle
-sc_process_table::remove( sc_thread_handle handle_ )
+sc_simcontext::remove_process( sc_thread_handle handle )
 {
-    sc_thread_handle now_p;	// Entry now examining.
-    sc_thread_handle prior_p;	// Entry prior to one now examining.
-
-    prior_p = 0;
-    for ( now_p = m_thread_q; now_p; now_p = now_p->next_exist() )
-    {
-	if ( now_p == handle_ )
-	{
-	    if ( prior_p )
-		prior_p->set_next_exist( now_p->next_exist() );
-	    else
-		m_thread_q = now_p->next_exist();
-	    return handle_;
-	}
-    }
-    return 0;
-}
-
-sc_thread_handle
-sc_simcontext::remove_process( sc_thread_handle handle_ )
-{
-    return m_process_table->remove(handle_);
+    return m_process_table->remove(handle);
 }
 
 SC_API int
