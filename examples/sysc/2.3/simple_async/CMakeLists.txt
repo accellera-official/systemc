@@ -40,6 +40,5 @@
 
 
 add_executable (simple_async main.cpp async_event.h)
-target_include_directories (simple_async PRIVATE)
 target_link_libraries (simple_async SystemC::systemc)
 configure_and_add_test (simple_async)
