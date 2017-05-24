@@ -116,9 +116,9 @@ private:
 #undef SC_SEM_TYPE_
 #undef SC_SEM_INIT_
 #undef SC_SEM_DESTROY_
-#undef SC_SEM_LOCK_
-#undef SC_SEM_TRYLOCK_
-#undef SC_SEM_UNLOCK_
+#undef SC_SEM_WAIT_
+#undef SC_SEM_TRYWAIT_
+#undef SC_SEM_POST_
 
 #endif // SC_HOST_SEMAPHORE_H_INCLUDED_
 // Taf!
