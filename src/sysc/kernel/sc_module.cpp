@@ -148,7 +148,6 @@ sc_module::sc_module_init()
     m_module_name_p = 0;
     m_port_vec = new std::vector<sc_port_base*>;
     m_port_index = 0;
-    m_name_gen = new sc_name_gen;
 }
 
 /*
@@ -365,6 +364,7 @@ sc_module::reset_signal_is( const sc_signal_in_if<bool>& iface, bool level )
 const char*
 sc_module::gen_unique_name( const char* basename_, bool preserve_first )
 {
+    if( !m_name_gen ) m_name_gen = new sc_name_gen;
     return m_name_gen->gen_unique_name( basename_, preserve_first );
 }
 

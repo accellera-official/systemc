@@ -84,7 +84,6 @@ simple_perf_EXTRA = \
 	simple_perf/Makefile
 
 #simple_perf_FILTER = 
-#export simple_perf_FILTER
 
 ## Taf!
 ## :vim:ft=automake:

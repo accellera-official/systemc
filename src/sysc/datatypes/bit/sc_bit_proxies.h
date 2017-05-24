@@ -33,6 +33,15 @@
 #include "sysc/datatypes/bit/sc_bit_ids.h"
 #include "sysc/datatypes/bit/sc_proxy.h"
 
+#ifdef _MSC_VER
+// disable false positive warning C4806:
+//   '&': unsafe operation: no value of type 'bool' promoted to type
+//   'const sc_dt::sc_digit' can equal the given constant
+// triggered by calling sc_subref<sc_bv_base>::get_cword
+// TODO: optimize get_cword for bit ranges to avoid check entirely
+#pragma warning(push)
+#pragma warning(disable:4806)
+#endif
 
 namespace sc_dt
 {
@@ -3866,6 +3875,10 @@ concat( sc_proxy<T1>& a, sc_proxy<T2>& b )
 }
 
 } // namespace sc_dt
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 // $Log: sc_bit_proxies.h,v $
 // Revision 1.10  2011/09/05 21:19:53  acg

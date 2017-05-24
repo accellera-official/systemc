@@ -97,7 +97,6 @@ pkt_switch_EXTRA = \
 	pkt_switch/README
 
 #pkt_switch_FILTER = 
-#export pkt_switch_FILTER
 
 ## Taf!
 ## :vim:ft=automake:

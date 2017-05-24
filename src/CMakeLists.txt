@@ -229,7 +229,6 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      sysc/datatypes/misc/sc_concatref.h
                      sysc/datatypes/misc/sc_value_base.h
                      sysc/kernel/sc_attribute.h
-                     sysc/kernel/sc_boost.h
                      sysc/kernel/sc_cmnhdr.h
                      sysc/kernel/sc_constants.h
                      sysc/kernel/sc_cor.h

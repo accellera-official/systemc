@@ -84,7 +84,6 @@ examples_FILES += \
 	2.1/reset_signal_is/Makefile
 
 #2_1_reset_signal_is_FILTER = 
-#export 2_1_reset_signal_is_FILTER
 
 ## Taf!
 ## :vim:ft=automake:

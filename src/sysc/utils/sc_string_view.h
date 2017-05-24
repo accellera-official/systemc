@@ -37,10 +37,12 @@
 
 #include <sysc/kernel/sc_cmnhdr.h>
 
-#if defined(__has_include) && SC_CPLUSPLUS >= 201402L
-#  if __has_include(<string_view>) // available in C++17
+#if SC_CPLUSPLUS >= 201402L && defined(__has_include)
+#  if __has_include(<string_view>) /* available in C++17 */ \
+   && (!defined(_MSC_VER) || _HAS_CXX17) /* MSVC: support only in C++17 mode */
 #    define SC_STRING_VIEW_NS_ std
 #    include <string_view>
+   /*  available in Library Fundamentals, ISO/IEC TS 19568:2015 */
 #  elif __has_include(<experimental/string_view>)
 #    define SC_STRING_VIEW_NS_ std::experimental
 #    include <experimental/string_view>

@@ -44,9 +44,9 @@ export SHELL
 TEST=@TEST@
 INPUT=@TESTINPUT@
 GOLDEN=@TESTGOLDEN@
+FILTER=@TESTFILTER@
 
 # prepare environment
-TESTNAME=`dirname "${TEST}" | sed "s:[^A-Za-z0-9_\@]:_:g" `
 TESTDIR=`dirname "$0"`
 TESTEXE=`basename "${TEST}"`
 export TEST TESTDIR TESTEXE
@@ -58,10 +58,8 @@ if test ! x"$TESTDIR" = x. ; then
 fi
 
 if test ! -f "${INPUT}" ; then INPUT="" ; fi
-eval FILTER=\"\${${TESTNAME}_FILTER}\" 2>/dev/null
-
-if test "x${INPUT}"  != x ; then INPUT="< ${INPUT}" ; fi
-if test "x${FILTER}" != x ; then FILTER="| grep \"${FILTER}\"" ; fi
+if test "x${INPUT}"  != x ; then INPUT="< '${INPUT}'" ; fi
+if test "x${FILTER}" != x ; then FILTER="| grep '${FILTER}'" ; fi
 
 # run test executable
 eval "./${TESTEXE} ${INPUT} ${FILTER} > run.log"
