@@ -42,9 +42,45 @@ namespace sc_unnamed {
 using namespace std::placeholders;
 } // namespace sc_unnamed
 
-# define sc_bind    ::std::bind
-# define sc_ref(r)  ::std::ref(r)
-# define sc_cref(r) ::std::cref(r)
+namespace sc_core {
+
+template<typename F, typename... Args>
+auto sc_bind( F&& f, Args&&... args )
+#  if SC_CPLUSPLUS < 201402L // deduce return type on C++14 or later
+   -> decltype( std::bind(std::forward<F>(f), std::forward<Args>(args)...) )
+#  endif
+ { return std::bind( std::forward<F>(f), std::forward<Args>(args)... ); }
+
+template<typename T>
+auto sc_ref( T&& v )
+#  if SC_CPLUSPLUS < 201402L // deduce return type on C++14 or later
+   -> decltype( std::ref(std::forward<T>(v) ) )
+#  endif
+ { return std::ref( std::forward<T>(v) ); }
+
+template<typename T>
+auto sc_cref( T&& v )
+#  if SC_CPLUSPLUS < 201402L // deduce return type on C++14 or later
+   -> decltype( std::cref(std::forward<T>(v) ) )
+#  endif
+ { return std::cref( std::forward<T>(v) ); }
+
+} // namespace sc_core
+
+// bring sc_bind, sc_ref, sc_cref into global namespace
+#ifdef SC_BIND_IN_GLOBAL_NAMESPACE
+#define SC_BIND_IN_GLOBAL_NS_ SC_BIND_IN_GLOBAL_NAMESPACE
+#else
+// TODO: change default to 0 for IEEE 1666-202x
+#define SC_BIND_IN_GLOBAL_NS_ 1
+#endif // SC_INCLUDE_BIND_GLOBAL_NS
+
+#if SC_BIND_IN_GLOBAL_NS_
+using sc_core::sc_bind;
+using sc_core::sc_ref;
+using sc_core::sc_cref;
+#endif // SC_BIND_IN_GLOBAL_NS_
+#undef SC_BIND_IN_GLOBAL_NS_
 
 #else // use Boost implementation
 # include "sysc/packages/boost/bind.hpp"
