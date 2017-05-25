@@ -1154,6 +1154,7 @@ print_other( scfx_string& s, const scfx_rep& a, sc_numrep numrep, int w_prefix,
 	    step = 4;
 	    break;
 	default:
+	    sc_assert(false && "print_other(scfx_rep): unexpected sc_numrep");
 	    step = 0;
     }
 

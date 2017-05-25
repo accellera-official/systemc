@@ -416,6 +416,7 @@ print_other( scfx_string& s, const scfx_ieee_double& id, sc_numrep numrep,
 	    step = 4;
 	    break;
 	default:
+	    sc_assert(false && "print_other(scfx_ieee_double): unexpected sc_numrep");
 	    step = 0;
     }
 
