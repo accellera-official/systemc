@@ -111,10 +111,10 @@
 #     define SC_CPLUSPLUS 199711L
 #   elif _MSC_VER < 1900 // MSVC'2013, assume C++11
 #     define SC_CPLUSPLUS 201103L
-#   elif _MSC_VER < 2000 // MSVC'2015, assume C++14
-#     define SC_CPLUSPLUS 201402L
-#   else // more recent MSVC versions, assume C++14
-#     define SC_CPLUSPLUS 201402L
+#   elif defined(_MSVC_LANG) // MSVC'2015 Update 3 or later
+#     define SC_CPLUSPLUS _MSVC_LANG
+#   else
+#     define SC_CPLUSPLUS 201402L // default to C++14
 #   endif
 
 # else // not _MSC_VER
