@@ -238,8 +238,8 @@ sc_prim_channel_registry::remove( sc_prim_channel& prim_channel_ )
     }
 
     // remove
-    m_prim_channel_vec[i] = m_prim_channel_vec[size() - 1];
-    m_prim_channel_vec.resize(size()-1);
+    m_prim_channel_vec[i] = m_prim_channel_vec.back();
+    m_prim_channel_vec.pop_back();
 }
 
 bool
