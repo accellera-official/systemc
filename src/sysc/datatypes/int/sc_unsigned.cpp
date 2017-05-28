@@ -347,8 +347,6 @@ bool sc_unsigned::concat_get_data( sc_digit* dst_p, int low_i ) const
             {
                 dst_p[dst_i] = 0;
             }
-            high_i = high_i % BITS_PER_DIGIT;
-            mask = ~(~1U << high_i) & DIGIT_MASK;
             dst_p[dst_i] = 0;
         }
 
@@ -357,8 +355,6 @@ bool sc_unsigned::concat_get_data( sc_digit* dst_p, int low_i ) const
 
         else
         {
-            high_i = high_i % BITS_PER_DIGIT;
-            right_shift = BITS_PER_DIGIT - left_shift;
             mask = ~(~0U << left_shift);
             dst_p[dst_i] = (dst_p[dst_i] & mask);
             for ( dst_i++; dst_i <= end_i; dst_i++ )
