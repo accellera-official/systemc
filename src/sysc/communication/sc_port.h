@@ -462,7 +462,7 @@ sc_port_b<IF>::operator -> ()
 {
     if( m_interface == 0 ) {
         report_error( SC_ID_GET_IF_, "port is not bound" );
-        // may continue, if suppressed
+        sc_core::sc_abort(); // can't recover from here
     }
     return m_interface;
 }
@@ -472,11 +472,8 @@ inline
 const IF*
 sc_port_b<IF>::operator -> () const
 {
-    if( m_interface == 0 ) {
-        report_error( SC_ID_GET_IF_, "port is not bound" );
-        // may continue, if suppressed
-    }
-    return m_interface;
+    // delegate implementation to non-const overload
+    return const_cast<sc_port_b&>(*this).operator->();
 }
 
 
@@ -506,14 +503,8 @@ inline
 const IF*
 sc_port_b<IF>::get_interface( int index_ ) const
 {
-    if ( index_ == 0 ) {
-        return m_interface;
-    }
-    else if( index_ < 0 || index_ >= size() ) {
-        report_error( SC_ID_GET_IF_, "index out of range" );
-        return NULL;
-    }
-    return m_interface_vec[index_];
+    // delegate implementation to non-const overload
+    return const_cast<sc_port_b&>(*this).get_interface(index_);
 }
 
 
