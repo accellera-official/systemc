@@ -67,20 +67,13 @@ auto sc_cref( T&& v )
 
 } // namespace sc_core
 
-// bring sc_bind, sc_ref, sc_cref into global namespace
-#ifdef SC_BIND_IN_GLOBAL_NAMESPACE
-#define SC_BIND_IN_GLOBAL_NS_ SC_BIND_IN_GLOBAL_NAMESPACE
-#else
-// TODO: change default to 0 for IEEE 1666-202x
-#define SC_BIND_IN_GLOBAL_NS_ 1
-#endif // SC_INCLUDE_BIND_GLOBAL_NS
-
-#if SC_BIND_IN_GLOBAL_NS_
+// bring sc_bind, sc_ref, sc_cref into global namespace - unless asked not to
+// TODO: invert default for IEEE 1666-202x
+#if ! (defined(SC_BIND_IN_GLOBAL_NAMESPACE) && SC_BIND_IN_GLOBAL_NAMESPACE == 0)
 using sc_core::sc_bind;
 using sc_core::sc_ref;
 using sc_core::sc_cref;
-#endif // SC_BIND_IN_GLOBAL_NS_
-#undef SC_BIND_IN_GLOBAL_NS_
+#endif // SC_BIND_IN_GLOBAL_NAMESPACE
 
 #else // use Boost implementation
 # include "sysc/packages/boost/bind.hpp"
