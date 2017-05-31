@@ -122,20 +122,20 @@
 #   define SC_CPLUSPLUS __cplusplus
 
 # endif // not _MSC_VER
-#endif // SC_STD_CPLUSCPLUS
+#endif // SC_CPLUSCPLUS
 
-// Currently, SystemC standard requires/assumes C++03 only
+// SystemC adds some features under C++11 already (see RELEASENOTES)
 #define SC_CPLUSPLUS_BASE_ 201103L
 
 // The IEEE_1666_CPLUSPLUS macro is meant to be queried in the models,
 // checking for availability of SystemC features relying on specific
 // C++ standard versions.
 //
-// IEEE_1666_CPLUSPLUS = min(SC_STD_CPLUSCPLUS, SC_STD_CPLUSPLUS_BASE_)
-#if SC_CPLUSPLUS >= SC_STD_CPLUSPLUS_BASE_
-# define IEEE_1666_CPLUSPLUS SC_STD_CPLUSPLUS_BASE_
+// IEEE_1666_CPLUSPLUS = min(SC_CPLUSCPLUS, SC_CPLUSPLUS_BASE_)
+#if SC_CPLUSPLUS >= SC_CPLUSPLUS_BASE_
+# define IEEE_1666_CPLUSPLUS SC_CPLUSPLUS_BASE_
 #else
-# define IEEE_1666_CPLUSPLUS SC_STD_CPLUSPLUS
+# define IEEE_1666_CPLUSPLUS SC_CPLUSPLUS
 #endif // IEEE_1666_CPLUSPLUS
 
 // ----------------------------------------------------------------------------
