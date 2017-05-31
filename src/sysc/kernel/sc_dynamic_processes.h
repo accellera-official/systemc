@@ -46,21 +46,21 @@ namespace sc_core {
 
 template<typename F, typename... Args>
 auto sc_bind( F&& f, Args&&... args )
-#  if SC_CPLUSPLUS < 201402L // deduce return type on C++14 or later
+#  if SC_CPLUSPLUS < 201402L // explicit return type needed before C++14
    -> decltype( std::bind(std::forward<F>(f), std::forward<Args>(args)...) )
 #  endif
  { return std::bind( std::forward<F>(f), std::forward<Args>(args)... ); }
 
 template<typename T>
 auto sc_ref( T&& v )
-#  if SC_CPLUSPLUS < 201402L // deduce return type on C++14 or later
+#  if SC_CPLUSPLUS < 201402L // explicit return type needed before C++14
    -> decltype( std::ref(std::forward<T>(v) ) )
 #  endif
  { return std::ref( std::forward<T>(v) ); }
 
 template<typename T>
 auto sc_cref( T&& v )
-#  if SC_CPLUSPLUS < 201402L // deduce return type on C++14 or later
+#  if SC_CPLUSPLUS < 201402L // explicit return type needed before C++14
    -> decltype( std::cref(std::forward<T>(v) ) )
 #  endif
  { return std::cref( std::forward<T>(v) ); }
