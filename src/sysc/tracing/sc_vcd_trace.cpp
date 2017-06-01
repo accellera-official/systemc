@@ -69,6 +69,7 @@
 #include "sysc/utils/sc_report.h" // sc_assert
 
 #include <sstream>
+#include <iomanip>
 
 #if defined(_MSC_VER)
 # pragma warning(disable:4309) // truncation of constant value
@@ -1699,8 +1700,6 @@ vcd_trace_file::vcd_trace_file(const char *name)
 void
 vcd_trace_file::do_initialize()
 {
-    char buf[2000];
-
     //date:
     std::fprintf(fp, "$date\n     %s\n$end\n\n", localtime_string().c_str() );
 
@@ -1708,41 +1707,7 @@ vcd_trace_file::do_initialize()
     std::fprintf(fp, "$version\n %s\n$end\n\n", sc_version());
 
     //timescale:
-    static struct SC_TIMESCALE_TO_TEXT {
-        double       unit;
-        const char*  text;
-    } timescale_to_text [] = {
-        { sc_time(1, SC_FS).to_seconds(), "1 fs" },
-        { sc_time(10, SC_FS).to_seconds(), "10 fs" },
-        { sc_time(100, SC_FS).to_seconds(),"100 fs" },
-        { sc_time(1, SC_PS).to_seconds(),  "1 ps" },
-        { sc_time(10, SC_PS).to_seconds(), "10 ps" },
-        { sc_time(100, SC_PS).to_seconds(),"100 ps" },
-        { sc_time(1, SC_NS).to_seconds(),  "1 ns" },
-        { sc_time(10, SC_NS).to_seconds(), "10 ns" },
-        { sc_time(100, SC_NS).to_seconds(),"100 ns" },
-        { sc_time(1, SC_US).to_seconds(),  "1 us" },
-        { sc_time(10, SC_US).to_seconds(), "10 us" },
-        { sc_time(100, SC_US).to_seconds(),"100 us" },
-        { sc_time(1, SC_MS).to_seconds(),  "1 ms" },
-        { sc_time(10, SC_MS).to_seconds(), "10 ms" },
-        { sc_time(100, SC_MS).to_seconds(),"100 ms" },
-        { sc_time(1, SC_SEC).to_seconds(),  "1 sec" },
-        { sc_time(10, SC_SEC).to_seconds(), "10 sec" },
-        { sc_time(100, SC_SEC).to_seconds(),"100 sec" }
-    };
-    static int timescale_to_text_n =
-        sizeof(timescale_to_text)/sizeof(SC_TIMESCALE_TO_TEXT);
-
-    for ( int time_i = 0; time_i < timescale_to_text_n; time_i++ )
-    {
-        if (timescale_unit == timescale_to_text[time_i].unit)
-        {
-            std::fprintf(fp,"$timescale\n     %s\n$end\n\n",
-                timescale_to_text[time_i].text);
-            break;
-        }
-    }
+    std::fprintf(fp,"$timescale\n     %s\n$end\n\n", fs_unit_to_str(trace_unit_fs).c_str());
 
     // Create a dummy scope
     std::fputs("$scope module SystemC $end\n", fp);
@@ -1758,20 +1723,19 @@ vcd_trace_file::do_initialize()
 
     std::fputs("$enddefinitions  $end\n\n", fp);
 
-    // double inittime = sc_simulation_time();
-    double inittime = sc_time_stamp().to_seconds();
+    timestamp_in_trace_units(previous_time_units_high, previous_time_units_low);
 
-    std::sprintf(buf,
-            "All initial values are dumped below at time "
-            "%g sec = %g timescale units.",
-            inittime, inittime/timescale_unit
-            );
-    write_comment(buf);
+    std::stringstream ss;
 
-    double_to_special_int64(inittime/timescale_unit,
-                            &previous_time_units_high,
-                            &previous_time_units_low );
+    ss << "All initial values are dumped below at time "
+       << sc_time_stamp().to_seconds() <<" sec = ";
+    if(has_low_units())
+        ss << previous_time_units_high << std::setfill('0') << std::setw(low_units_len()) << previous_time_units_low;
+    else
+        ss << previous_time_units_high;
+    ss << " timescale units.";
 
+    write_comment(ss.str());
 
     std::fputs("$dumpvars\n",fp);
     for (int i = 0; i < (int)traces.size(); i++) {
@@ -1908,104 +1872,57 @@ vcd_trace_file::write_comment(const std::string& comment)
 void
 vcd_trace_file::cycle(bool this_is_a_delta_cycle)
 {
-    unsigned this_time_units_high, this_time_units_low;
-
-    // Just to make g++ shut up in the optimized mode
-    this_time_units_high = this_time_units_low = 0;
-
     // Trace delta cycles only when enabled
     if (!delta_cycles() && this_is_a_delta_cycle) return;
 
     // Check for initialization
-    if( initialize() ) {
+    if( initialize() )
         return;
-    };
 
+    unit_type now_units_high, now_units_low;
 
-    double now_units = sc_time_stamp().to_seconds() / timescale_unit;
-    unsigned now_units_high, now_units_low;
-    double_to_special_int64(now_units, &now_units_high, &now_units_low );
+    bool time_advanced = get_time_stamp(now_units_high, now_units_low);
 
-    bool now_later_than_previous_time = false;
-    if( (now_units_low > previous_time_units_low
-        && now_units_high == previous_time_units_high)
-        || now_units_high > previous_time_units_high){
-        now_later_than_previous_time = true;
+    if (!has_low_units() && (now_units_low != 0)) {
+        std::stringstream ss;
+        ss << "\n\tCurrent kernel time is " << sc_time_stamp();
+        ss << "\n\tVCD trace time unit is " << fs_unit_to_str(trace_unit_fs);
+        ss << "\n\tUse 'tracefile->set_time_unit(double, sc_time_unit);' to increase the time resolution.";
+        SC_REPORT_WARNING( SC_ID_TRACING_VCD_TIME_RESOLUTION_, ss.str().c_str() );
     }
 
-    bool now_equals_previous_time = false;
-    if(now_later_than_previous_time){
-        this_time_units_high = now_units_high;
-        this_time_units_low = now_units_low;
-    } else {
-        if( now_units_low == previous_time_units_low
-	    && now_units_high == previous_time_units_high){
-	    now_equals_previous_time = true;
-            this_time_units_high = now_units_high;
-            this_time_units_low = now_units_low;
-	}
-    }
+    if (delta_cycles()) {
 
-    // Since VCD does not understand 0 time progression, we have to fake
-    // delta cycles with progressing time by one unit
-    if(this_is_a_delta_cycle){
-        this_time_units_high = previous_time_units_high;
-        this_time_units_low = previous_time_units_low + 1;
-        if(this_time_units_low == 1000000000){
-            this_time_units_high++;
-            this_time_units_low=0;
-        }
-        static bool warned = false;
-        if(!warned){
-            SC_REPORT_INFO( SC_ID_TRACING_VCD_DELTA_CYCLE_
-                          , sc_time( timescale_unit, SC_SEC )
-                              .to_string().c_str() );
-            warned = true;
-        }
-    }
+        if(this_is_a_delta_cycle) {
+            static bool warned = false;
+            if(!warned){
+                SC_REPORT_INFO( SC_ID_TRACING_VCD_DELTA_CYCLE_
+                , fs_unit_to_str(trace_unit_fs).c_str() );
+                warned = true;
+            }
 
+            if (sc_delta_count_at_current_time() == 0) {
+                if(!time_advanced) {
+                    std::stringstream ss;
+                    ss <<"\n\tThis can occur when delta cycle tracing is activated."
+                       <<"\n\tSome delta cycles at " << sc_time_stamp() << " are not shown in vcd."
+                       <<"\n\tUse 'tracefile->set_time_unit(double, sc_time_unit);' to increase the time resolution.";
+                    SC_REPORT_WARNING( SC_ID_TRACING_REVERSED_TIME_, ss.str().c_str() );
 
-    // Not a delta cycle and time has not progressed
-    if( ! this_is_a_delta_cycle && now_equals_previous_time &&
-	( now_units_high != 0 || now_units_low != 0 ) ) {
-	// Don't print the message at time zero
-        static bool warned = false;
-        if( ! warned ) {
-            std::stringstream ss;
-            ss << "units count: " << now_units_low << "\n"
-               "\tWaveform viewers will only show the states of the last one.\n"
-               "\tUse `tracefile->set_time_unit(double, sc_time_unit);'"
-                  " to increase the time resolution.";
-            SC_REPORT_WARNING( SC_ID_TRACING_VCD_DUPLICATE_TIME_
-                             , ss.str().c_str() );
-            // warned = true;
+                    return;
+                }
+            }
         }
-    }
 
-    // Not a delta cycle and time has gone backward
-    // This will happen with large number of delta cycles between two real
-    // advances of time
-    if(!this_is_a_delta_cycle && !now_equals_previous_time &&
-        !now_later_than_previous_time){
-        static bool warned = false;
-        if(!warned) {
-            std::stringstream ss;
-            ss << "units count ("
-               << previous_time_units_low << "->" << now_units_low << ")\n"
-               "\tThis can occur when delta cycling is activated."
-                  " Cycles with falling time are not shown.\n"
-               "\tUse `tracefile->set_time_unit(double, sc_time_unit);'"
-                  " to increase the time resolution.";
-            SC_REPORT_WARNING( SC_ID_TRACING_VCD_DUPLICATE_TIME_
-                             , ss.str().c_str() );
-            // warned = true;
+        if (!this_is_a_delta_cycle) {
+            if (time_advanced) {
+                previous_time_units_high = now_units_high;
+                previous_time_units_low = now_units_low;
+            }
+            // Value updates can't happen during timed notification
+            // so it is safe to skip printing
+            return;
         }
-        // Note that we don't set this_time_units_high/low to any value only
-        // in this case because we are not going to do any tracing. In the
-        // optimized mode, the compiler complains because of this. Therefore,
-        // we include the lines at the very beginning of this function to make
-        // the compiler shut up.
-        return;
     }
 
     // Now do the actual printing
@@ -2013,35 +1930,44 @@ vcd_trace_file::cycle(bool this_is_a_delta_cycle)
     vcd_trace* const* const l_traces = &traces[0];
     for (int i = 0; i < (int)traces.size(); i++) {
         vcd_trace* t = l_traces[i];
-        if(t->changed()){
-            if(time_printed == false){
-                char buf[200];
-                if(this_time_units_high){
-                    std::sprintf(buf, "#%u%09u", this_time_units_high, this_time_units_low);
-                }
-                else{
-                    std::sprintf(buf, "#%u", this_time_units_low);
-                }
-                std::fputs(buf, fp);
-                std::fputc('\n', fp);
+        if(t->changed()) {
+            if(!time_printed){
+                print_time_stamp(now_units_high, now_units_low);
+
                 time_printed = true;
             }
 
-	    // Write the variable
+            // Write the variable
             t->write(fp);
             std::fputc('\n', fp);
         }
     }
     // Put another newline after all values are printed
     if(time_printed) std::fputc('\n', fp);
+}
 
-    if(time_printed){
-        // We update previous_time_units only when we print time because
-        // this field stores the previous time that was printed, not the
-        // previous time this function was called
-        previous_time_units_high = this_time_units_high;
-        previous_time_units_low = this_time_units_low;
-    }
+bool vcd_trace_file::get_time_stamp(sc_trace_file_base::unit_type &now_units_high,
+                                    sc_trace_file_base::unit_type &now_units_low) const
+{
+    timestamp_in_trace_units(now_units_high, now_units_low);
+
+    return ( (now_units_low > previous_time_units_low && now_units_high == previous_time_units_high)
+            || now_units_high > previous_time_units_high);
+
+}
+
+void vcd_trace_file::print_time_stamp(sc_trace_file_base::unit_type now_units_high,
+                                      sc_trace_file_base::unit_type now_units_low) const
+{
+
+    std::stringstream ss;
+    if(has_low_units())
+        ss << "#" << now_units_high << std::setfill('0') << std::setw(low_units_len()) << now_units_low;
+    else
+        ss << "#" << now_units_high;
+
+    fputs(ss.str().c_str(), fp);
+    fputc('\n', fp);
 }
 
 
@@ -2081,6 +2007,11 @@ vcd_trace_file::obtain_name()
 
 vcd_trace_file::~vcd_trace_file()
 {
+    unit_type now_units_high, now_units_low;
+    if (get_time_stamp(now_units_high,now_units_low)) {
+        print_time_stamp(now_units_high, now_units_low);
+    }
+
     for( int i = 0; i < (int)traces.size(); i++ ) {
         vcd_trace* t = traces[i];
         delete t;

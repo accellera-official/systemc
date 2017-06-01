@@ -206,11 +206,13 @@ private:
 
     // Initialize the VCD tracing
     virtual void do_initialize();
+    void print_time_stamp(unit_type now_units_high, unit_type now_units_low) const;
+    bool get_time_stamp(unit_type &now_units_high, unit_type &now_units_low) const;
 
     unsigned vcd_name_index;           // Number of variables traced
 
-    unsigned previous_time_units_low;  // Previous time unit as 64-bit integer
-    unsigned previous_time_units_high;
+    unit_type previous_time_units_low;
+    unit_type previous_time_units_high;
 
 public:
 
