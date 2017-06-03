@@ -38,11 +38,13 @@
 #
 ###############################################################################
 
+cmake_minimum_required (VERSION 3.0)
 
-if (NOT BUILD_EXAMPLES)
-  set_directory_properties (PROPERTIES EXCLUDE_FROM_ALL 1)
-endif (NOT BUILD_EXAMPLES)
-
+# Only built under "check" target
+#  - see https://cmake.org/Wiki/CMakeEmulateMakeCheck
+set_directory_properties (PROPERTIES EXCLUDE_FROM_ALL 1)
+add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
+enable_testing()
 
 ########################################################################
 # Common definitions for all examples.
@@ -138,6 +140,7 @@ function (configure_and_add_test TEST_PROG)
                                      "-DDIFF_COMMAND=${DIFF_COMMAND}"
                                      "-DDIFF_OPTIONS=${DIFF_OPTIONS}"
                                      -P ${PROJECT_SOURCE_DIR}/cmake/run_test.cmake)
+  add_dependencies(check ${TEST_PROG})
   set_tests_properties (${TEST_NAME}
                         PROPERTIES FAIL_REGULAR_EXPRESSION "^[*][*][*]ERROR")
 endfunction (configure_and_add_test)
