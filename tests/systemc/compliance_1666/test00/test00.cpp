@@ -50,6 +50,13 @@ using sc_dt::sc_bigint;
 using std::cout;
 using std::endl;
 
+#if defined(IEEE_1666_CPLUSPLUS) && IEEE_1666_CPLUSPLUS >= 201103L
+// dynamic process macros have been moved to functions on C++11
+using sc_core::sc_bind;
+using sc_core::sc_ref;
+using sc_core::sc_cref;
+#endif // IEEE_1666_CPLUSPLUS
+
 struct i_f: virtual sc_interface
 {
   virtual void write() = 0;
