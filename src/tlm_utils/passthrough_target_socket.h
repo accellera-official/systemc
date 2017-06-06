@@ -17,19 +17,20 @@
 
  *****************************************************************************/
 
-#ifndef __PASSTHROUGH_TARGET_SOCKET_H__
-#define __PASSTHROUGH_TARGET_SOCKET_H__
+#ifndef TLM_UTILS_PASSTHROUGH_TARGET_SOCKET_H_INCLUDED_
+#define TLM_UTILS_PASSTHROUGH_TARGET_SOCKET_H_INCLUDED_
 
 #include <tlm>
-#include <sstream>
+#include "tlm_utils/convenience_socket_bases.h"
 
 namespace tlm_utils {
 
 template <typename MODULE,
           unsigned int BUSWIDTH = 32,
           typename TYPES = tlm::tlm_base_protocol_types>
-class passthrough_target_socket :
-  public tlm::tlm_target_socket<BUSWIDTH, TYPES>
+class passthrough_target_socket
+  : public tlm::tlm_target_socket<BUSWIDTH, TYPES>
+  , protected passthrough_socket_base
 {
 public:
   typedef typename TYPES::tlm_payload_type              transaction_type;
@@ -40,16 +41,12 @@ public:
   typedef tlm::tlm_target_socket<BUSWIDTH, TYPES>       base_type;
 
 public:
-  passthrough_target_socket() :
-    base_type(sc_core::sc_gen_unique_name("passthrough_target_socket")),
-    m_process(this->name())
-  {
-    bind(m_process);
-  }
+  static const char* default_name()
+    { return sc_core::sc_gen_unique_name("passthrough_target_socket"); }
 
-  explicit passthrough_target_socket(const char* n) :
-    base_type(n),
-    m_process(this->name())
+  explicit passthrough_target_socket(const char* n = default_name())
+    : base_type(n)
+    , m_process(this)
   {
     bind(m_process);
   }
@@ -86,7 +83,9 @@ public:
   }
 
 private:
-  class process : public tlm::tlm_fw_transport_if<TYPES>
+  class process
+    : public tlm::tlm_fw_transport_if<TYPES>
+    , protected convenience_socket_cb_holder
   {
   public:
     typedef sync_enum_type (MODULE::*NBTransportPtr)(transaction_type&,
@@ -97,68 +96,58 @@ private:
     typedef unsigned int (MODULE::*TransportDbgPtr)(transaction_type&);
     typedef bool (MODULE::*GetDirectMem_ptr)(transaction_type&,
                                                tlm::tlm_dmi&);
-      
-    process(const std::string& name) :
-      m_name(name),
-      m_mod(0),
-      m_nb_transport_ptr(0),
-      m_b_transport_ptr(0),
-      m_transport_dbg_ptr(0),
-      m_get_direct_mem_ptr(0)
+
+    explicit process(passthrough_socket_base* owner)
+      : convenience_socket_cb_holder(owner), m_mod(0)
+      , m_nb_transport_ptr(0)
+      , m_b_transport_ptr(0)
+      , m_transport_dbg_ptr(0)
+      , m_get_direct_mem_ptr(0)
     {
     }
   
     void set_nb_transport_ptr(MODULE* mod, NBTransportPtr p)
     {
       if (m_nb_transport_ptr) {
-        std::stringstream s;
-        s << m_name << ": non-blocking callback allready registered";
-        SC_REPORT_WARNING("/OSCI_TLM-2/passthrough_socket",s.str().c_str());
-
-      } else {
-        sc_assert(!m_mod || m_mod == mod);
-        m_mod = mod;
-        m_nb_transport_ptr = p;
+        display_warning("non-blocking callback already registered");
+        return;
       }
+      sc_assert(!m_mod || m_mod == mod);
+      m_mod = mod;
+      m_nb_transport_ptr = p;
     }
 
     void set_b_transport_ptr(MODULE* mod, BTransportPtr p)
     {
       if (m_b_transport_ptr) {
-        std::stringstream s;
-        s << m_name << ": blocking callback allready registered";
-        SC_REPORT_WARNING("/OSCI_TLM-2/passthrough_socket",s.str().c_str());
-      } else {
-        sc_assert(!m_mod || m_mod == mod);
-        m_mod = mod;
-        m_b_transport_ptr = p;
+        display_warning("blocking callback already registered");
+        return;
       }
+      sc_assert(!m_mod || m_mod == mod);
+      m_mod = mod;
+      m_b_transport_ptr = p;
     }
 
     void set_transport_dbg_ptr(MODULE* mod, TransportDbgPtr p)
     {
       if (m_transport_dbg_ptr) {
-        std::stringstream s;
-        s << m_name << ": debug callback allready registered";
-        SC_REPORT_WARNING("/OSCI_TLM-2/passthrough_socket",s.str().c_str());
-      } else {
-        sc_assert(!m_mod || m_mod == mod);
-        m_mod = mod;
-        m_transport_dbg_ptr = p;
+        display_warning("debug callback already registered");
+        return;
       }
+      sc_assert(!m_mod || m_mod == mod);
+      m_mod = mod;
+      m_transport_dbg_ptr = p;
     }
 
     void set_get_direct_mem_ptr(MODULE* mod, GetDirectMem_ptr p)
     {
       if (m_get_direct_mem_ptr) {
-        std::stringstream s;
-        s << m_name << ": get DMI pointer callback allready registered";
-        SC_REPORT_WARNING("/OSCI_TLM-2/passthrough_socket",s.str().c_str());
-      } else {
-        sc_assert(!m_mod || m_mod == mod);
-        m_mod = mod;
-        m_get_direct_mem_ptr = p;
+        display_warning("get DMI pointer callback already registered");
+        return;
       }
+      sc_assert(!m_mod || m_mod == mod);
+      m_mod = mod;
+      m_get_direct_mem_ptr = p;
     }
 
     sync_enum_type nb_transport_fw(transaction_type& trans,
@@ -169,13 +158,9 @@ private:
         // forward call
         sc_assert(m_mod);
         return (m_mod->*m_nb_transport_ptr)(trans, phase, t);
-
-      } else {
-        std::stringstream s;
-        s << m_name << ": no non-blocking callback registered";
-        SC_REPORT_ERROR("/OSCI_TLM-2/passthrough_socket",s.str().c_str());
       }
-      return tlm::TLM_ACCEPTED;   ///< unreachable code
+      display_error("no non-blocking callback registered");
+      return tlm::TLM_COMPLETED;
     }
 
     void b_transport(transaction_type& trans, sc_core::sc_time& t)
@@ -184,12 +169,8 @@ private:
         // forward call
         sc_assert(m_mod);
         return (m_mod->*m_b_transport_ptr)(trans, t);
-
-      } else {
-        std::stringstream s;
-        s << m_name << ": no blocking callback registered";
-        SC_REPORT_ERROR("/OSCI_TLM-2/passthrough_socket",s.str().c_str());
       }
+      display_error("no blocking callback registered");
     }
 
     unsigned int transport_dbg(transaction_type& trans)
@@ -198,11 +179,9 @@ private:
         // forward call
         sc_assert(m_mod);
         return (m_mod->*m_transport_dbg_ptr)(trans);
-
-      } else {
-        // No debug support
-        return 0;
       }
+      // No debug support
+      return 0;
     }
 
     bool get_direct_mem_ptr(transaction_type& trans,
@@ -212,18 +191,15 @@ private:
         // forward call
         sc_assert(m_mod);
         return (m_mod->*m_get_direct_mem_ptr)(trans, dmi_data);
-
-      } else {
-        // No DMI support
-        dmi_data.allow_read_write();
-        dmi_data.set_start_address(0x0);
-        dmi_data.set_end_address((sc_dt::uint64)-1);
-        return false;
       }
+      // No DMI support
+      dmi_data.allow_read_write();
+      dmi_data.set_start_address(0x0);
+      dmi_data.set_end_address((sc_dt::uint64)-1);
+      return false;
     }
 
   private:
-    const std::string m_name;
     MODULE* m_mod;
     NBTransportPtr m_nb_transport_ptr;
     BTransportPtr m_b_transport_ptr;
@@ -232,6 +208,8 @@ private:
   };
 
 private:
+  const sc_core::sc_object* get_socket() const { return this; }
+private:
   process m_process;
 };
 
@@ -239,8 +217,9 @@ private:
 template <typename MODULE,
           unsigned int BUSWIDTH = 32,
           typename TYPES = tlm::tlm_base_protocol_types>
-class passthrough_target_socket_tagged :
-  public tlm::tlm_target_socket<BUSWIDTH, TYPES>
+class passthrough_target_socket_tagged
+  : public tlm::tlm_target_socket<BUSWIDTH, TYPES>
+  , protected passthrough_socket_base
 {
 public:
   typedef typename TYPES::tlm_payload_type              transaction_type;
@@ -250,17 +229,13 @@ public:
   typedef tlm::tlm_bw_transport_if<TYPES>               bw_interface_type;
   typedef tlm::tlm_target_socket<BUSWIDTH, TYPES>       base_type;
 
-public:
-  passthrough_target_socket_tagged() :
-    base_type(sc_core::sc_gen_unique_name("passthrough_target_socket_tagged")),
-    m_process(this->name())
-  {
-    bind(m_process);
-  }
+  static const char* default_name()
+    { return sc_core::sc_gen_unique_name("passthrough_target_socket_tagged"); }
 
-  explicit passthrough_target_socket_tagged(const char* n) :
-    base_type(n),
-    m_process(this->name())
+public:
+  explicit passthrough_target_socket_tagged(const char* n = default_name())
+    : base_type(n)
+    , m_process(this)
   {
     bind(m_process);
   }
@@ -309,7 +284,9 @@ public:
   }
 
 private:
-  class process : public tlm::tlm_fw_transport_if<TYPES>
+  class process
+    : public tlm::tlm_fw_transport_if<TYPES>
+    , protected convenience_socket_cb_holder
   {
   public:
     typedef sync_enum_type (MODULE::*NBTransportPtr)(int id,
@@ -324,18 +301,17 @@ private:
     typedef bool (MODULE::*GetDirectMem_ptr)(int id,
                                              transaction_type&,
                                              tlm::tlm_dmi&);
-      
-    process(const std::string& name) :
-      m_name(name),
-      m_mod(0),
-      m_nb_transport_ptr(0),
-      m_b_transport_ptr(0),
-      m_transport_dbg_ptr(0),
-      m_get_direct_mem_ptr(0),
-      m_nb_transport_user_id(0),
-      m_b_transport_user_id(0),
-      m_transport_dbg_user_id(0),
-      m_get_dmi_user_id(0)
+
+    process(passthrough_socket_base* owner)
+      : convenience_socket_cb_holder(owner), m_mod(0)
+      , m_nb_transport_ptr(0)
+      , m_b_transport_ptr(0)
+      , m_transport_dbg_ptr(0)
+      , m_get_direct_mem_ptr(0)
+      , m_nb_transport_user_id(0)
+      , m_b_transport_user_id(0)
+      , m_transport_dbg_user_id(0)
+      , m_get_dmi_user_id(0)
     {
     }
 
@@ -347,53 +323,45 @@ private:
     void set_nb_transport_ptr(MODULE* mod, NBTransportPtr p)
     {
       if (m_nb_transport_ptr) {
-        std::stringstream s;
-        s << m_name << ": non-blocking callback allready registered";
-        SC_REPORT_WARNING("/OSCI_TLM-2/passthrough_socket",s.str().c_str());
-      } else {
-        sc_assert(!m_mod || m_mod == mod);
-        m_mod = mod;
-        m_nb_transport_ptr = p;
+        display_warning("non-blocking callback already registered");
+        return;
       }
+      sc_assert(!m_mod || m_mod == mod);
+      m_mod = mod;
+      m_nb_transport_ptr = p;
     }
 
     void set_b_transport_ptr(MODULE* mod, BTransportPtr p)
     {
       if (m_b_transport_ptr) {
-        std::stringstream s;
-        s << m_name << ": blocking callback allready registered";
-        SC_REPORT_WARNING("/OSCI_TLM-2/passthrough_socket",s.str().c_str());
-      } else {
-        sc_assert(!m_mod || m_mod == mod);
-        m_mod = mod;
-        m_b_transport_ptr = p;
+        display_warning("blocking callback already registered");
+        return;
       }
+      sc_assert(!m_mod || m_mod == mod);
+      m_mod = mod;
+      m_b_transport_ptr = p;
     }
 
     void set_transport_dbg_ptr(MODULE* mod, TransportDbgPtr p)
     {
       if (m_transport_dbg_ptr) {
-        std::stringstream s;
-        s << m_name << ": debug callback allready registered";
-        SC_REPORT_WARNING("/OSCI_TLM-2/passthrough_socket",s.str().c_str());
-      } else {
-        sc_assert(!m_mod || m_mod == mod);
-        m_mod = mod;
-        m_transport_dbg_ptr = p;
+        display_warning("debug callback already registered");
+        return;
       }
+      sc_assert(!m_mod || m_mod == mod);
+      m_mod = mod;
+      m_transport_dbg_ptr = p;
     }
 
     void set_get_direct_mem_ptr(MODULE* mod, GetDirectMem_ptr p)
     {
       if (m_get_direct_mem_ptr) {
-        std::stringstream s;
-        s << m_name << ": get DMI pointer callback allready registered";
-        SC_REPORT_WARNING("/OSCI_TLM-2/passthrough_socket",s.str().c_str());
-      } else {
-        sc_assert(!m_mod || m_mod == mod);
-        m_mod = mod;
-        m_get_direct_mem_ptr = p;
+        display_warning("get DMI pointer callback already registered");
+        return;
       }
+      sc_assert(!m_mod || m_mod == mod);
+      m_mod = mod;
+      m_get_direct_mem_ptr = p;
     }
 
     sync_enum_type nb_transport_fw(transaction_type& trans,
@@ -404,13 +372,9 @@ private:
         // forward call
         sc_assert(m_mod);
         return (m_mod->*m_nb_transport_ptr)(m_nb_transport_user_id, trans, phase, t);
-
-      } else {
-        std::stringstream s;
-        s << m_name << ": no non-blocking callback registered";
-        SC_REPORT_ERROR("/OSCI_TLM-2/passthrough_socket",s.str().c_str());
       }
-      return tlm::TLM_ACCEPTED;   ///< unreachable code
+      display_error("no non-blocking callback registered");
+      return tlm::TLM_COMPLETED;
     }
 
     void b_transport(transaction_type& trans, sc_core::sc_time& t)
@@ -419,12 +383,8 @@ private:
         // forward call
         sc_assert(m_mod);
         return (m_mod->*m_b_transport_ptr)(m_b_transport_user_id, trans, t);
-
-      } else {
-        std::stringstream s;
-        s << m_name << ": no blocking callback registered";
-        SC_REPORT_ERROR("/OSCI_TLM-2/passthrough_socket",s.str().c_str());
       }
+      display_error("no blocking callback registered");
     }
 
     unsigned int transport_dbg(transaction_type& trans)
@@ -433,11 +393,9 @@ private:
         // forward call
         sc_assert(m_mod);
         return (m_mod->*m_transport_dbg_ptr)(m_transport_dbg_user_id, trans);
-
-      } else {
-        // No debug support
-        return 0;
       }
+      // No debug support
+      return 0;
     }
 
     bool get_direct_mem_ptr(transaction_type& trans,
@@ -447,18 +405,15 @@ private:
         // forward call
         sc_assert(m_mod);
         return (m_mod->*m_get_direct_mem_ptr)(m_get_dmi_user_id, trans, dmi_data);
-
-      } else {
-        // No DMI support
-        dmi_data.allow_read_write();
-        dmi_data.set_start_address(0x0);
-        dmi_data.set_end_address((sc_dt::uint64)-1);
-        return false;
       }
+      // No DMI support
+      dmi_data.allow_read_write();
+      dmi_data.set_start_address(0x0);
+      dmi_data.set_end_address((sc_dt::uint64)-1);
+      return false;
     }
 
   private:
-    const std::string m_name;
     MODULE* m_mod;
     NBTransportPtr m_nb_transport_ptr;
     BTransportPtr m_b_transport_ptr;
@@ -471,9 +426,10 @@ private:
   };
 
 private:
+  const sc_core::sc_object* get_socket() const { return this; }
+private:
   process m_process;
 };
 
-}
-
-#endif
+} // namespace tlm_utils
+#endif // TLM_UTILS_PASSTHROUGH_TARGET_SOCKET_H_INCLUDED_
