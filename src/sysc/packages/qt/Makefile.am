@@ -39,6 +39,7 @@ NO_H_FILES = \
 	qt.h \
 	qtmd.h \
 	\
+	md/aarch64.h \
 	md/axp.h \
 	md/hppa.h \
 	md/i386.h \
@@ -64,6 +65,7 @@ NO_C_FILES = \
 	md/powerpc.c
 
 NO_S_FILES = \
+	md/aarch64.s \
 	md/axp_b.s \
 	md/axp.s \
 	md/hppa_b.s \
@@ -156,6 +158,9 @@ qtmds_o_CCASFLAGS = \
 QT_ARCH_FILES = \
 	qtmds.s
 
+if QT_ARCH_AARCH64
+QT_ARCH_IMPL = md/aarch64.s
+endif
 if QT_ARCH_X86
 QT_ARCH_IMPL = md/i386.s
 endif

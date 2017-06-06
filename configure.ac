@@ -160,16 +160,20 @@ AS_CASE([${TARGET_ARCH}],
        [x86_64|amd64], dnl
          [TARGET_ARCH="${TARGET_ARCH}64"
           QT_ARCH="x86_64"
-          CPU_ARCH=64],
+          CPU_ARCH="-m64"],
        [x*86|i*86], dnl
          [QT_ARCH="iX86"
-          CPU_ARCH=32],
+          CPU_ARCH="-m32"],
+       [aarch64], dnl
+         [TARGET_ARCH="linuxaarch64"
+          QT_ARCH="aarch64"
+          CPU_ARCH=""],
        [AC_MSG_ERROR("sorry...architecture not supported")])
 
      # check compiler
      AS_VAR_IF([GXX],[yes],dnl
-       [EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -m${CPU_ARCH}"
-        EXTRA_ASFLAGS="${EXTRA_ASFLAGS} -m${CPU_ARCH}"],
+       [EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} ${CPU_ARCH}"
+        EXTRA_ASFLAGS="${EXTRA_ASFLAGS} ${CPU_ARCH}"],
        [AC_MSG_ERROR("sorry...compiler not supported")])
 
      # use WinFiber on MinGW platforms
@@ -463,6 +467,7 @@ dnl
 dnl Set conditionals for various quick thread architectures:
 dnl
 AM_CONDITIONAL([QT_ARCH_X86], [ test "${QT_ARCH}" = "iX86" ])
+AM_CONDITIONAL([QT_ARCH_AARCH64], [ test "${QT_ARCH}" = "aarch64" ])
 AM_CONDITIONAL([QT_ARCH_X86_64], [ test "${QT_ARCH}" = "x86_64" ])
 AM_CONDITIONAL([QT_ARCH_POWERPC_MACOSX], [ test "${QT_ARCH}" = "powerpc-apple-macosx" ])
 AM_CONDITIONAL([QT_ARCH_SPARC], [ test "${QT_ARCH}" = "sparc-os2" ])

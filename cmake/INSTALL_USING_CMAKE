@@ -55,6 +55,8 @@ tested on the following OS/processor/compiler platforms:
 
 - Linux (GCC, Clang): i386, x86_64
 
+- Linux (GCC): aarch64
+
 - Windows (MSYS2 with the MinGW-W32 or MinGW-W64 GCC toolchains): x86, AMD64
 
 Currently untested, but considered by the build script (based on the
@@ -63,6 +65,8 @@ autotools scripts) are:
 - *BSD (GCC, Clang): i386, x86_64
 
 - Linux (GCC, Clang): sparc, powerpc
+
+- Linux (Clang): aarch64
 
 - Mac OS X <= 10.5 (GCC): ppc64
 
