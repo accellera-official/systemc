@@ -54,6 +54,7 @@
 #include "sysc/tracing/sc_trace.h"
 #include "sysc/utils/sc_mempool.h"
 #include "sysc/utils/sc_list.h"
+#include "sysc/utils/sc_string_view.h"
 #include "sysc/utils/sc_utils_ids.h"
 
 #include <algorithm>
@@ -325,9 +326,13 @@ sc_simcontext::init()
     // CHECK FOR ENVIRONMENT VARIABLES THAT MODIFY SIMULATOR EXECUTION:
 
     const char* write_check = std::getenv("SC_SIGNAL_WRITE_CHECK");
-    m_write_check = ( (write_check==0) || strcmp(write_check,"DISABLE") ) ?
-      true : false;
-
+    sc_string_view write_check_s = (write_check != NULL) ? write_check : "";
+    if ( write_check_s == "DISABLE" )
+        m_write_check = SC_SIGNAL_WRITE_CHECK_DISABLE_;
+    else if ( write_check_s == "CONFLICT" )
+        m_write_check = SC_SIGNAL_WRITE_CHECK_CONFLICT_;
+    else
+        m_write_check = SC_SIGNAL_WRITE_CHECK_DEFAULT_;
 
     // FINISH INITIALIZATIONS:
 
@@ -395,9 +400,9 @@ sc_simcontext::sc_simcontext() :
     m_export_registry(0), m_prim_channel_registry(0),
     m_phase_cb_registry(0), m_name_gen(0),
     m_process_table(0), m_curr_proc_info(), m_current_writer(0),
-    m_write_check(false), m_next_proc_id(-1), m_child_events(),
-    m_child_objects(), m_delta_events(), m_timed_events(0), m_trace_files(),
-    m_something_to_trace(false), m_runnable(0), m_collectable(0),
+    m_write_check(SC_SIGNAL_WRITE_CHECK_DEFAULT_), m_next_proc_id(-1),
+    m_child_events(), m_child_objects(), m_delta_events(), m_timed_events(0),
+    m_trace_files(), m_something_to_trace(false), m_runnable(0), m_collectable(0),
     m_time_params(), m_curr_time(SC_ZERO_TIME), m_max_time(SC_ZERO_TIME),
     m_change_stamp(0), m_delta_count(0), m_initial_delta_count_at_current_time(0),
     m_forced_stop(false), m_paused(false),

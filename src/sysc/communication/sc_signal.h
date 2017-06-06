@@ -44,17 +44,33 @@ namespace sc_core {
 
 inline
 bool
-sc_writer_policy_check_write::check_write( sc_object* target, bool )
+sc_writer_policy_check_write::check_write( sc_object* target, bool /*value_changed*/ )
 {
-  sc_object* writer_p = sc_get_curr_simcontext()->get_current_writer();
+  sc_process_b* writer_p = sc_get_curr_simcontext()->get_current_writer();
   if( SC_UNLIKELY_( !m_writer_p.valid() ) ) {
-       sc_process_handle( writer_p ).swap( m_writer_p );
+    // always store first writer
+    sc_process_handle( writer_p ).swap( m_writer_p );
   } else if( SC_UNLIKELY_(m_writer_p != writer_p && writer_p != 0) ) {
-       sc_signal_invalid_writer( target, m_writer_p, writer_p, m_check_delta );
-       // error has been suppressed, ignore check as well
-       // return false;
+    // Alternative option: only flag error, if either
+    //  - we enforce conflicts across multiple evaluation phases, or
+    //  - the new value is different from the previous write
+    //if( !m_delta_only || value_changed )
+    {
+      sc_signal_invalid_writer( target, m_writer_p, writer_p, m_delta_only );
+      // error has been suppressed, accept check as well,
+      // but update current writer to the last "successful" one
+      sc_process_handle( writer_p ).swap( m_writer_p );
+    }
   }
   return true;
+}
+
+
+inline void
+sc_writer_policy_check_write::update()
+{
+  if( m_delta_only ) // reset, if we're only checking for delta conflicts
+    sc_process_handle().swap( m_writer_p );
 }
 
 
@@ -272,12 +288,13 @@ inline
 void
 sc_signal_t<T,POL>::write( const T& value_ )
 {
-    bool value_changed = !( m_cur_val == value_ );
+    // first write per eval phase: m_new_val == m_cur_val
+    bool value_changed = !( m_new_val == value_ );
     if ( !policy_type::check_write(this, value_changed) )
         return;
 
     m_new_val = value_;
-    if( value_changed ) {
+    if( value_changed || policy_type::needs_update() ) {
         request_update();
     }
 }

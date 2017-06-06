@@ -74,35 +74,41 @@ struct SC_API sc_writer_policy_nocheck_write
 {
   bool check_write( sc_object* /* target */, bool /* value_changed */ )
     { return true; }
-  void update(){}
+  bool needs_update() const { return false; }
+  void update() {}
 };
 
 struct SC_API sc_writer_policy_check_write
 {
   bool check_write( sc_object* target, bool value_changed );
-  void update(){}
+  bool needs_update() const { return m_delta_only; }
+  void update();
+
+private:
+  static bool only_delta();
+
 protected:
-  sc_writer_policy_check_write( bool check_delta = false )
-    : m_check_delta( check_delta ), m_writer_p() {}
-  bool               m_check_delta;
+  sc_writer_policy_check_write( bool delta_only = only_delta() )
+    : m_delta_only( delta_only ), m_writer_p() {}
+
+  const bool         m_delta_only;
   sc_process_handle  m_writer_p;
 };
 
 struct SC_API sc_writer_policy_check_delta
     : sc_writer_policy_check_write
 {
+  // bool write_check(sc_object*, bool); /* inherited */
 
+  // always force update phase to reset process
+  bool needs_update() const { return true; }
+
+  // reset current writer during update phase
+  void update() { sc_process_handle().swap( m_writer_p ); }
+
+protected:
   sc_writer_policy_check_delta()
     : sc_writer_policy_check_write(true) {}
-
-  bool check_write( sc_object* target, bool value_changed )
-  {
-      if( value_changed )
-          return sc_writer_policy_check_write::check_write( target, true );
-      return true;
-  }
-
-  void update(){ sc_process_handle().swap( m_writer_p ); }
 };
 
 struct SC_API sc_writer_policy_nocheck_port
