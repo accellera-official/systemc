@@ -404,6 +404,7 @@
     <ClInclude Include="..\..\src\sysc\communication\sc_fifo_ifs.h" />
     <ClInclude Include="..\..\src\sysc\communication\sc_fifo_ports.h" />
     <ClInclude Include="..\..\src\sysc\communication\sc_host_mutex.h" />
+    <ClInclude Include="..\..\src\sysc\communication\sc_host_semaphore.h" />
     <ClInclude Include="..\..\src\sysc\communication\sc_interface.h" />
     <ClInclude Include="..\..\src\sysc\communication\sc_mutex.h" />
     <ClInclude Include="..\..\src\sysc\communication\sc_mutex_if.h" />
