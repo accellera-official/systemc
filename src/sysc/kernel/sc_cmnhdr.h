@@ -108,18 +108,18 @@
 // If some features still need to be excluded on specific MSVC
 // versions, we'll do so at the point of definition.
 
-#   if _MSC_VER < 1800   // MSVC'2010 and earlier, assume C++03
-#     define SC_CPLUSPLUS 199711L
-#   elif _MSC_VER < 1900 // MSVC'2013, assume C++11
-#     define SC_CPLUSPLUS 201103L
-#   elif defined(_MSVC_LANG) // MSVC'2015 Update 3 or later
+#   if defined(_MSVC_LANG) // MSVC'2015 Update 3 or later, use compiler setting
 #     define SC_CPLUSPLUS _MSVC_LANG
-#   else
-#     define SC_CPLUSPLUS 201402L // default to C++14
+#   elif _MSC_VER < 1800   // MSVC'2010 and earlier, assume C++03
+#     define SC_CPLUSPLUS 199711L
+#   elif _MSC_VER < 1900   // MSVC'2013, assume C++11
+#     define SC_CPLUSPLUS 201103L
+#   else                   // MSVC'2015 before Update 3, assume C++14
+#     define SC_CPLUSPLUS 201402L
 #   endif
 
 # else // not _MSC_VER
-// use compiler's default
+// use compiler setting
 #   define SC_CPLUSPLUS __cplusplus
 
 # endif // not _MSC_VER
