@@ -12,6 +12,7 @@ comment "All initial values are dumped below at time 0 sec = 0 timescale units."
 assign O0 '1' ;
 assign O1 "00000000000000000000000000000000" ;
 assign O2 '1' ;
+
 delta_time 50000 ;
 assign O0 '0' ;
 

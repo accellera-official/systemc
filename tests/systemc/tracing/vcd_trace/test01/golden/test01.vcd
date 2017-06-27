@@ -17,14 +17,10 @@ $end
 
 $dumpvars
 0aaaaa
-0aaaab
-b0 aaaac
-b0 aaaad
-$end
-
-#0
 1aaaab
+b0 aaaac
 b1111 aaaad
+$end
 
 #10000
 1aaaaa
@@ -127,3 +123,4 @@ b1111 aaaad
 b1010 aaaac
 b1011 aaaad
 
+#200000

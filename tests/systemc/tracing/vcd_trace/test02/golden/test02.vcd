@@ -17,19 +17,12 @@ All initial values are dumped below at time 0 sec = 0 timescale units.
 $end
 
 $dumpvars
-b0 aaaaa
-b0 aaaab
-b0 aaaac
-b0 aaaad
-0aaaae
-$end
-
-#0
 b111 aaaaa
 b11111 aaaab
 b1111111111 aaaac
 b11111111111 aaaad
 1aaaae
+$end
 
 #10000
 b1 aaaaa
@@ -164,3 +157,4 @@ b10000000000 aaaac
 b100000000000 aaaad
 0aaaae
 
+#200000
