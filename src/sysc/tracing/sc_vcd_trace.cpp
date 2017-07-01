@@ -69,6 +69,7 @@
 #include "sysc/utils/sc_report.h" // sc_assert
 
 #include <sstream>
+#include <map>
 
 #if defined(_MSC_VER)
 # pragma warning(disable:4309) // truncation of constant value
@@ -110,7 +111,7 @@ public:
     virtual bool changed() = 0;
 
     // Make this virtual as some derived classes may overwrite
-    virtual void print_variable_declaration_line(FILE* f);
+    virtual void print_variable_declaration_line(FILE* f, const char* scoped_name);
 
     void compose_data_line(char* rawdata, char* compdata);
     std::string compose_line(const std::string& data);
@@ -166,7 +167,7 @@ vcd_trace::compose_line(const std::string& data)
 }
 
 void
-vcd_trace::print_variable_declaration_line(FILE* f)
+vcd_trace::print_variable_declaration_line(FILE* f, const char* scoped_name)
 {
     char buf[2000];
 
@@ -174,20 +175,17 @@ vcd_trace::print_variable_declaration_line(FILE* f)
     {
         std::stringstream ss;
         ss << "'" << name << "' has 0 bits";
-        SC_REPORT_ERROR( SC_ID_TRACING_OBJECT_IGNORED_
-                       , ss.str().c_str() );
+        SC_REPORT_ERROR( SC_ID_TRACING_OBJECT_IGNORED_, ss.str().c_str() );
         return;
     }
 
-    std::string namecopy = name;
-    remove_vcd_name_problems(this, namecopy);
     if ( bit_width == 1 )
     {
         std::sprintf(buf, "$var %s  % 3d  %s  %s       $end\n",
                      vcd_var_typ_name,
                      bit_width,
                      vcd_name.c_str(),
-                     namecopy.c_str());
+                     scoped_name);
     }
     else
     {
@@ -195,9 +193,10 @@ vcd_trace::print_variable_declaration_line(FILE* f)
                      vcd_var_typ_name,
                      bit_width,
                      vcd_name.c_str(),
-                     namecopy.c_str(),
+                     scoped_name,
                      bit_width-1);
     }
+
     std::fputs(buf, f);
 }
 
@@ -1682,6 +1681,79 @@ void vcd_enum_trace::write(FILE* f)
     old_value = object;
 }
 
+/*****************************************************************************
+ VCD Scopes support
+ *****************************************************************************/
+
+struct vcd_scope {
+
+    void add_trace(vcd_trace *trace);
+    void print(FILE *fp, const char *scope_name = "SystemC");
+
+    ~vcd_scope();
+private:
+    void add_trace_rec(std::stringstream &ss, const std::string &cur_name, vcd_trace *trace);
+
+    std::vector<std::pair<std::string,vcd_trace*> > m_traces;
+    std::map<std::string, vcd_scope*> m_scopes;
+};
+
+
+vcd_scope::~vcd_scope() {
+    for (std::map<std::string, vcd_scope*>::iterator it = m_scopes.begin(); it != m_scopes.end(); ++it)
+        delete (*it).second;
+}
+
+void vcd_scope::add_trace(vcd_trace *trace) {
+
+    std::string name_copy = trace->name;
+    remove_vcd_name_problems(trace, name_copy);
+#ifdef SC_DISABLE_VCD_SCOPES
+    m_traces.push_back(std::make_pair(name_copy, trace));
+#else
+    std::stringstream ss(name_copy);
+    std::string first_token;
+    std::getline(ss, first_token, '.');
+    add_trace_rec(ss, first_token, trace);
+#endif
+}
+
+void vcd_scope::add_trace_rec(std::stringstream &ss, const std::string &cur_name, vcd_trace *trace) {
+    std::string next_token;
+    if (std::getline(ss, next_token, '.')) {
+        vcd_scope*& cur_scope = m_scopes[cur_name];
+        if (!cur_scope)
+            cur_scope = new vcd_scope;
+        cur_scope->add_trace_rec(ss, next_token, trace);
+    } else {
+        m_traces.push_back(std::make_pair(cur_name, trace));
+    }
+}
+
+void vcd_scope::print(FILE *fp, const char *scope_name) {
+    fprintf(fp,"$scope module %s $end\n", scope_name);
+
+    for (std::vector<std::pair<std::string,vcd_trace*> >::iterator it = m_traces.begin(); it != m_traces.end(); ++it) {
+        it->second->set_width();
+        it->second->print_variable_declaration_line(fp, it->first.c_str());
+    }
+
+    for (std::map<std::string, vcd_scope*>::iterator it = m_scopes.begin(); it != m_scopes.end(); ++it)
+        it->second->print(fp,it->first.c_str());
+
+    fprintf(fp,"$upscope $end\n");
+}
+
+void vcd_print_scopes(FILE *fp, std::vector<vcd_trace*>& traces) {
+
+    vcd_scope top_scope;
+
+    for (std::vector<vcd_trace*>::iterator it = traces.begin(); it != traces.end(); ++it)
+        top_scope.add_trace(*it);
+
+    top_scope.print(fp);
+}
+
 
 /*****************************************************************************
            vcd_trace_file functions
@@ -1744,17 +1816,7 @@ vcd_trace_file::do_initialize()
         }
     }
 
-    // Create a dummy scope
-    std::fputs("$scope module SystemC $end\n", fp);
-
-    //variable definitions:
-    for (int i = 0; i < (int)traces.size(); i++) {
-        vcd_trace* t = traces[i];
-        t->set_width(); // needed for all vectors
-        t->print_variable_declaration_line(fp);
-    }
-
-    std::fputs("$upscope $end\n", fp);
+    vcd_print_scopes(fp, traces);
 
     std::fputs("$enddefinitions  $end\n\n", fp);
 
