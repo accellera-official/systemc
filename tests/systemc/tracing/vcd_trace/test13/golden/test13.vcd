@@ -5,7 +5,9 @@ $end
 
 $scope module SystemC $end
 $var wire    1  aaaaa  clk       $end
-$var wire   37  aaaab  mod.a [36:0]  $end
+$scope module mod $end
+$var wire   37  aaaab  a [36:0]  $end
+$upscope $end
 $upscope $end
 $enddefinitions  $end
 

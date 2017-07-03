@@ -9,16 +9,18 @@ $var wire    1  aaaab  sig_bool       $end
 $var wire    1  aaaac  sig_logic       $end
 $var wire    1  aaaad  sig_resolved       $end
 $var wire    1  aaaae  sig_rv1       $end
-$var wire    1  aaaaf  a.out_rv1       $end
-$var wire    1  aaaag  a.out_resolved       $end
-$var wire    1  aaaah  a.out_logic       $end
-$var wire    1  aaaai  a.out_bool       $end
-$var wire   32  aaaaj  a.out_int [31:0]  $end
-$var wire    1  aaaak  a.in_rv1       $end
-$var wire    1  aaaal  a.in_resolved       $end
-$var wire    1  aaaam  a.in_logic       $end
-$var wire    1  aaaan  a.in_bool       $end
-$var wire   32  aaaao  a.in_int [31:0]  $end
+$scope module a $end
+$var wire    1  aaaaf  out_rv1       $end
+$var wire    1  aaaag  out_resolved       $end
+$var wire    1  aaaah  out_logic       $end
+$var wire    1  aaaai  out_bool       $end
+$var wire   32  aaaaj  out_int [31:0]  $end
+$var wire    1  aaaak  in_rv1       $end
+$var wire    1  aaaal  in_resolved       $end
+$var wire    1  aaaam  in_logic       $end
+$var wire    1  aaaan  in_bool       $end
+$var wire   32  aaaao  in_int [31:0]  $end
+$upscope $end
 $upscope $end
 $enddefinitions  $end
 
