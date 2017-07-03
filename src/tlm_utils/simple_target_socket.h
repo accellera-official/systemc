@@ -111,6 +111,13 @@ public:
     m_fw_process.set_get_direct_mem_ptr(mod, cb);
   }
 
+protected:
+  void start_of_simulation()
+  {
+    base_type::start_of_simulation();
+    m_fw_process.start_of_simulation();
+  }
+
 private:
   //make call on bw path.
   sync_enum_type bw_nb_transport(transaction_type &trans, phase_type &phase, sc_core::sc_time &t)
@@ -191,11 +198,17 @@ private:
       m_get_direct_mem_ptr(0),
       m_peq(sc_core::sc_gen_unique_name("m_peq")),
       m_response_in_progress(false)
+    {}
+
+    void start_of_simulation()
     {
-      sc_core::sc_spawn_options opts;
-      opts.set_sensitivity(&m_peq.get_event());
-      sc_core::sc_spawn(sc_bind(&fw_process::b2nb_thread, this),
-                        sc_core::sc_gen_unique_name("b2nb_thread"), &opts);
+      if (!m_b_transport_ptr && m_nb_transport_ptr) { // only spawn b2nb_thread, if needed
+        sc_core::sc_spawn_options opts;
+        opts.set_sensitivity(&m_peq.get_event());
+        opts.dont_initialize();
+        sc_core::sc_spawn(sc_bind(&fw_process::b2nb_thread, this),
+                          sc_core::sc_gen_unique_name("b2nb_thread"), &opts);
+      }
     }
 
     void set_nb_transport_ptr(MODULE* mod, NBTransportPtr p)
@@ -438,8 +451,6 @@ private:
     void b2nb_thread()
     {
       while (true) {
-        sc_core::wait(m_peq.get_event());
-
         transaction_type* trans;
         while ((trans = m_peq.get_next_transaction())!=0) {
           sc_assert(m_mod);
@@ -497,6 +508,7 @@ private:
             m_owner->display_error("invalid sync value received");
           }
         }
+        sc_core::wait();
       }
     }
 
@@ -620,6 +632,13 @@ public:
     m_fw_process.set_get_dmi_user_id(id);
   }
 
+protected:
+  void start_of_simulation()
+  {
+    base_type::start_of_simulation();
+    m_fw_process.start_of_simulation();
+  }
+
 private:
   //make call on bw path.
   sync_enum_type bw_nb_transport(transaction_type &trans, phase_type &phase, sc_core::sc_time &t)
@@ -706,11 +725,17 @@ private:
       m_get_dmi_user_id(0),
       m_peq(sc_core::sc_gen_unique_name("m_peq")),
       m_response_in_progress(false)
+    {}
+
+    void start_of_simulation()
     {
-      sc_core::sc_spawn_options opts;
-      opts.set_sensitivity(&m_peq.get_event());
-      sc_core::sc_spawn(sc_bind(&fw_process::b2nb_thread, this),
-                        sc_core::sc_gen_unique_name("b2nb_thread"), &opts);
+      if (!m_b_transport_ptr && m_nb_transport_ptr) { // only spawn b2nb_thread, if needed
+        sc_core::sc_spawn_options opts;
+        opts.set_sensitivity(&m_peq.get_event());
+        opts.dont_initialize();
+        sc_core::sc_spawn(sc_bind(&fw_process::b2nb_thread, this),
+                          sc_core::sc_gen_unique_name("b2nb_thread"), &opts);
+      }
     }
 
     void set_nb_transport_user_id(int id) { m_nb_transport_user_id = id; }
@@ -956,8 +981,6 @@ private:
     void b2nb_thread()
     {
       while (true) {
-        sc_core::wait(m_peq.get_event());
-
         transaction_type* trans;
         while ((trans = m_peq.get_next_transaction())!=0) {
           sc_assert(m_mod);
@@ -1015,6 +1038,7 @@ private:
             m_owner->display_error("invalid sync value received");
           }
         }
+        sc_core::wait();
       }
     }
 
