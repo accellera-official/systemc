@@ -35,38 +35,8 @@
 #include "sysc/kernel/sc_cmnhdr.h"
 #include "sysc/communication/sc_semaphore_if.h"
 
-#if defined(WIN32) || defined(_WIN32)
-
-#define SC_SEM_TYPE_ HANDLE
-
-#define SC_SEM_INIT_( Semaphore, InitValue ) \
-    (Semaphore) = CreateSemaphore( NULL, InitValue, LONG_MAX, NULL ); \
-    sc_assert( (Semaphore) != NULL )
-#define SC_SEM_WAIT_( Semaphore ) \
-    WaitForSingleObject( (Semaphore), INFINITE )
-#define SC_SEM_TRYWAIT_( Semaphore ) \
-    ( WaitForSingleObject( (Semaphore), 0 ) == WAIT_OBJECT_0 )
-#define SC_SEM_POST_( Semaphore ) \
-    ReleaseSemaphore( (Semaphore), 1, NULL )
-#define SC_SEM_DESTROY_( Semaphore ) \
-    CloseHandle( (Semaphore) )
-
-#else // use POSIX semaphore
-
+#if !defined(WIN32) && !defined(_WIN32) // use POSIX semaphore
 #include <semaphore.h>
-#define SC_SEM_TYPE_ sem_t
-
-#define SC_SEM_INIT_( Semaphore, InitValue ) \
-    sem_init( &(Semaphore), 0, InitValue )
-#define SC_SEM_WAIT_( Semaphore ) \
-    sem_wait( &(Semaphore) )
-#define SC_SEM_TRYWAIT_( Semaphore ) \
-    ( sem_trywait( &(Semaphore) ) == 0 )
-#define SC_SEM_POST_( Semaphore ) \
-    sem_post( &(Semaphore) )
-#define SC_SEM_DESTROY_( Semaphore ) \
-    sem_close( &(Semaphore) )
-
 #endif
 
 namespace sc_core {
@@ -79,29 +49,58 @@ namespace sc_core {
 
 class SC_API sc_host_semaphore : public sc_semaphore_if
 {
-    typedef SC_SEM_TYPE_ underlying_type;
+#if defined(WIN32) || defined(_WIN32) // use Windows Semaphore
+
+    typedef HANDLE underlying_type;
+
+    void do_init(int init)
+    {
+      m_sem = CreateSemaphore( NULL, init, LONG_MAX, NULL );
+      sc_assert( m_sem != NULL );
+    }
+    void do_wait()
+      { WaitForSingleObject( m_sem, INFINITE ); }
+    bool do_trywait()
+      { return ( WaitForSingleObject( m_sem, 0 ) == WAIT_OBJECT_0 ); }
+    void do_post()
+      { ReleaseSemaphore( m_sem, 1, NULL ); }
+    void do_destroy()
+      { CloseHandle( m_sem ); }
+
+#else // use POSIX semaphore
+
+    typedef sem_t underlying_type;
+
+    void do_init(int init) { sem_init( &m_sem, 0, init ); }
+    void do_wait()         { sem_wait( &m_sem ); }
+    bool do_trywait()      { return ( sem_trywait( &m_sem ) == 0 ); }
+    bool do_post()         { sem_post( &m_sem ); }
+    bool do_destroy()      { sem_close( &m_sem ); }
+
+#endif // platform-specific implementation
+
 public:
 
     // constructors and destructor
 
-    explicit sc_host_semaphore(int init = 0)
-      { SC_SEM_INIT_(m_sem, init); }
+    explicit sc_host_semaphore(int init = 0) : m_sem()
+      { do_init(init); }
     virtual ~sc_host_semaphore()
-      { SC_SEM_DESTROY_(m_sem); }
+      { do_destroy(); }
 
     // interface methods
 
     // lock (take) the semaphore, block if not available
     virtual int wait()
-      { SC_SEM_WAIT_(m_sem); return 0; }
+      { do_wait(); return 0; }
 
     // lock (take) the semaphore, return -1 if not available
     virtual int trywait()
-      { return SC_SEM_TRYWAIT_(m_sem) ? 0 : -1; }
+      { return do_trywait() ? 0 : -1; }
 
     // unlock (give) the semaphore
     virtual int post()
-      { SC_SEM_POST_(m_sem); return 0; }
+      { do_post(); return 0; }
 
     // get the value of the semaphore (not supported)
     virtual int get_value() const
@@ -112,13 +111,6 @@ private:
 };
 
 } // namespace sc_core
-
-#undef SC_SEM_TYPE_
-#undef SC_SEM_INIT_
-#undef SC_SEM_DESTROY_
-#undef SC_SEM_WAIT_
-#undef SC_SEM_TRYWAIT_
-#undef SC_SEM_POST_
 
 #endif // SC_HOST_SEMAPHORE_H_INCLUDED_
 // Taf!
