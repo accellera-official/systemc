@@ -74,8 +74,8 @@ class SC_API sc_host_semaphore : public sc_semaphore_if
     void do_init(int init) { sem_init( &m_sem, 0, init ); }
     void do_wait()         { sem_wait( &m_sem ); }
     bool do_trywait()      { return ( sem_trywait( &m_sem ) == 0 ); }
-    bool do_post()         { sem_post( &m_sem ); }
-    bool do_destroy()      { sem_close( &m_sem ); }
+    void do_post()         { sem_post( &m_sem ); }
+    void do_destroy()      { sem_close( &m_sem ); }
 
 #endif // platform-specific implementation
 
