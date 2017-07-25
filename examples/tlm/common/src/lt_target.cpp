@@ -49,6 +49,7 @@ lt_target::lt_target
 )
 : sc_module               (module_name)             /// init module name
 , m_memory_socket         (memory_socket)           /// init socket name
+, m_optional_socket       ((std::string(memory_socket) + "_opt").c_str()) /// init optional socket name
 , m_ID                    (ID)                      /// init target ID
 , m_memory_size           (memory_size)             /// init memory size (bytes)
 , m_memory_width          (memory_width)            /// init memory width (bytes)
@@ -67,7 +68,7 @@ lt_target::lt_target
 {
 
   m_memory_socket.register_b_transport(this, &lt_target::custom_b_transport);
-
+  m_optional_socket.register_b_transport(this, &lt_target::custom_b_transport);
 }
 
 //==============================================================================
