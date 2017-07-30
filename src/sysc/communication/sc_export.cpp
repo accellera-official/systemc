@@ -32,6 +32,8 @@
 #include "sysc/kernel/sc_module.h"
 #include "sysc/kernel/sc_object_int.h"
 
+#include <sstream>
+
 namespace sc_core {
 
 // ----------------------------------------------------------------------------
@@ -128,13 +130,11 @@ sc_export_base::simulation_done()
 void
 sc_export_base::report_error( const char* id, const char* add_msg ) const
 {
-    char msg[BUFSIZ];
-    if( add_msg != 0 ) {
-        std::sprintf( msg, "%s: export '%s' (%s)", add_msg, name(), kind() );
-    } else {
-        std::sprintf( msg, "export '%s' (%s)", name(), kind() );
-    }
-    SC_REPORT_ERROR( id, msg );
+    std::stringstream msg;
+    if (add_msg != 0)
+        msg << add_msg << ": ";
+    msg << "export '" << name() << "' (" << kind() << ")";
+    SC_REPORT_ERROR( id, msg.str().c_str() );
 }
 
 

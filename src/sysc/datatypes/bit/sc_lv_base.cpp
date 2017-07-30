@@ -51,11 +51,23 @@
 #include "sysc/datatypes/bit/sc_bit_ids.h"
 #include "sysc/datatypes/bit/sc_lv_base.h"
 
+#include <sstream>
+
 namespace sc_dt {
 
 // explicit template instantiations
 template class SC_API sc_proxy<sc_lv_base>;
 template class SC_API sc_proxy<sc_bv_base>;
+
+SC_API void sc_proxy_out_of_bounds(const char* msg, int64 val)
+{
+    std::stringstream ss;
+    if( msg != NULL )
+        ss << msg;
+    if( val != 0 )
+        ss << val;
+    SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, ss.str().c_str() );
+}
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_lv_base

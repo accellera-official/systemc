@@ -670,11 +670,8 @@ sc_proxy<X>::lrotate( int n )
 {
     X& x = back_cast();
     if( n < 0 ) {
-        char msg[BUFSIZ];
-        std::sprintf( msg,
-                 "left rotate operation is only allowed with positive "
-                 "rotate values, rotate value = %d", n );
-        SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
+        sc_proxy_out_of_bounds( "left rotate operation is only allowed with "
+                                "positive rotate values, rotate value = ", n );
         return x;
     }
     int len = x.length();
@@ -710,11 +707,8 @@ sc_proxy<X>::rrotate( int n )
 {
     X& x = back_cast();
     if( n < 0 ) {
-        char msg[BUFSIZ];
-        std::sprintf( msg,
-                 "right rotate operation is only allowed with positive "
-                 "rotate values, rotate value = %d", n );
-        SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
+        sc_proxy_out_of_bounds( "right rotate operation is only allowed with "
+                                "positive rotate values, rotate value = ", n );
         return x;
     }
     int len = x.length();

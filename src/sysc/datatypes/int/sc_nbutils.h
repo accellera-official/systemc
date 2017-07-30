@@ -657,17 +657,14 @@ mul_signs(small_type us, small_type vs)
 
 #ifdef SC_MAX_NBITS
 
-inline
-void
+SC_API void test_bound_failed(int nb);
+
+inline void
 test_bound(int nb)
 {
   if (nb > SC_MAX_NBITS) {
-      char msg[BUFSIZ];
-      std::sprintf( msg, "test_bound( int nb ) : "
-	       "nb = %d > SC_MAX_NBITS = %d is not valid",
-	       nb, SC_MAX_NBITS );
-      SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
-      sc_core::sc_abort(); // can't recover from here
+    test_bound_failed( nb );
+    sc_core::sc_abort(); // can't recover from here
   }
 }
 

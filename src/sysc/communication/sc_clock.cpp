@@ -49,6 +49,8 @@
 #include "sysc/kernel/sc_spawn.h"
 #include "sysc/utils/sc_utils_ids.h"
 
+#include <sstream>
+
 namespace sc_core {
 
 // ----------------------------------------------------------------------------
@@ -283,13 +285,11 @@ sc_clock::time_stamp()
 void
 sc_clock::report_error( const char* id, const char* add_msg ) const
 {
-    char msg[BUFSIZ];
-    if( add_msg != 0 ) {
-	std::sprintf( msg, "%s: clock '%s'", add_msg, name() );
-    } else {
-	std::sprintf( msg, "clock '%s'", name() );
-    }
-    SC_REPORT_ERROR( id, msg );
+    std::stringstream msg;
+    if( add_msg != 0 )
+      msg << add_msg << ": ";
+    msg << "clock '" << name() << "'";
+    SC_REPORT_ERROR( id, msg.str().c_str() );
 }
 
 

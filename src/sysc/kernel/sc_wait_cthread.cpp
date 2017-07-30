@@ -35,8 +35,10 @@
 #include "sysc/kernel/sc_wait_cthread.h"
 #include "sysc/communication/sc_port.h"
 #include "sysc/kernel/sc_wait.h"
-namespace sc_core
-{
+
+#include <sstream>
+
+namespace sc_core {
 
 // for SC_CTHREADs
 
@@ -61,9 +63,9 @@ wait( int n, sc_simcontext* simc )
 {
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();
     if( n <= 0 ) {
-	char msg[BUFSIZ];
-	std::sprintf( msg, "n = %d", n );
-	SC_REPORT_ERROR( SC_ID_WAIT_N_INVALID_, msg );
+        std::stringstream msg;
+        msg << "n = " << n;
+        SC_REPORT_ERROR( SC_ID_WAIT_N_INVALID_, msg.str().c_str() );
     }
     switch( cpi->kind ) {
       case SC_THREAD_PROC_:

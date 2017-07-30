@@ -53,6 +53,7 @@
 //
 
 #include <cstring>
+#include <sstream>
 
 #include "sysc/datatypes/bit/sc_bit_ids.h"
 #include "sysc/datatypes/bit/sc_bv_base.h"
@@ -214,9 +215,9 @@ convert_to_bin( const char* s )
                 }
                 return std::string( p );
           } catch( const sc_core::sc_report & ) {
-              char msg[BUFSIZ];
-              std::sprintf( msg, "character string '%s' is not valid", s );
-              SC_REPORT_ERROR( sc_core::SC_ID_CANNOT_CONVERT_, msg );
+              std::stringstream msg;
+              msg << "character string '" << s << "' is not valid";
+              SC_REPORT_ERROR( sc_core::SC_ID_CANNOT_CONVERT_, msg.str().c_str() );
               return std::string();
           }
       }

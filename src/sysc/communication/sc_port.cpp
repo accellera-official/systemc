@@ -37,6 +37,8 @@
 #include "sysc/communication/sc_port.h"
 #include "sysc/communication/sc_signal_ifs.h"
 
+#include <sstream>
+
 namespace sc_core {
 
 // ----------------------------------------------------------------------------
@@ -224,13 +226,11 @@ int sc_port_base::bind_count()
 void
 sc_port_base::report_error( const char* id, const char* add_msg ) const
 {
-    char msg[BUFSIZ];
-    if( add_msg != 0 ) {
-	std::sprintf( msg, "%s: port '%s' (%s)", add_msg, name(), kind() );
-    } else {
-	std::sprintf( msg, "port '%s' (%s)", name(), kind() );
-    }
-    SC_REPORT_ERROR( id, msg );
+    std::stringstream msg;
+    if (add_msg != 0)
+        msg << add_msg << ": ";
+    msg << "port '" << name() << "' (" << kind() << ")";
+    SC_REPORT_ERROR( id, msg.str().c_str() );
 }
 
 
@@ -453,8 +453,6 @@ sc_port_base::insert_parent( int i )
 void
 sc_port_base::complete_binding()
 {
-    char msg_buffer[128]; // For error message construction.
-
     // IF BINDING HAS ALREADY BEEN COMPLETED IGNORE THIS CALL:
 
     sc_assert( m_bind_info != 0 );
@@ -520,9 +518,10 @@ sc_port_base::complete_binding()
 
     if ( actual_binds > m_bind_info->max_size() )
     {
-        sprintf(msg_buffer, "%d binds exceeds maximum of %d allowed",
-                actual_binds, m_bind_info->max_size() );
-        report_error( SC_ID_COMPLETE_BINDING_, msg_buffer );
+        std::stringstream msg;
+        msg << actual_binds << " binds exceeds maximum of "
+            << m_bind_info->max_size() << " allowed";
+        report_error( SC_ID_COMPLETE_BINDING_, msg.str().c_str() );
         // may continue, if suppressed
     }
     switch ( m_bind_info->policy() )
@@ -535,9 +534,10 @@ sc_port_base::complete_binding()
         break;
       case SC_ALL_BOUND:
         if ( actual_binds < m_bind_info->max_size() || actual_binds < 1 ) {
-            sprintf(msg_buffer, "%d actual binds is less than required %d",
-                    actual_binds, m_bind_info->max_size() );
-            report_error( SC_ID_COMPLETE_BINDING_, msg_buffer );
+            std::stringstream msg;
+            msg << actual_binds << " actual binds is less than required "
+                << m_bind_info->max_size();
+            report_error( SC_ID_COMPLETE_BINDING_, msg.str().c_str() );
             // may continue, if suppressed
         }
         break;
