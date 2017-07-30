@@ -55,6 +55,7 @@ Makefile.in
 *.opensdf
 *.db
 
+.vs/
 Release/
 Debug/
 DebugDLL/
