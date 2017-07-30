@@ -84,7 +84,6 @@ SC_API sc_report*
 sc_handle_exception()
 {
     try {
-
         // re-throw exception here
         try { throw; }
 
@@ -94,7 +93,8 @@ sc_handle_exception()
         }
         catch( sc_unwind_exception const & )
         {
-            sc_assert( false && "Unhandled kill/reset, should never happen" );
+            SC_REPORT_ERROR( SC_ID_INTERNAL_ERROR_,
+                             "unhandled kill/reset, should never happen" );
         }
         catch( std::exception const & x )
         {

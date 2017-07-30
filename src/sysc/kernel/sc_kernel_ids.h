@@ -179,7 +179,8 @@ SC_DEFINE_MESSAGE(SC_ID_NO_PROCESS_SEMANTICS_         , 563,
 	"Attempt to invoke process with no semantics() method" )
 SC_DEFINE_MESSAGE(SC_ID_EVENT_ON_NULL_PROCESS_         , 564,
 	"Attempt to get an event for non-existent process" )
-// available message number 565
+SC_DEFINE_MESSAGE(SC_ID_EVENT_LIST_FAILED_, 565,
+         "invalid use of sc_(and|or)_event_list" )
 SC_DEFINE_MESSAGE(SC_ID_UNKNOWN_PROCESS_TYPE_,       566,
 	"Unknown process type" )
 SC_DEFINE_MESSAGE(SC_ID_TIME_CONVERSION_FAILED_, 567,

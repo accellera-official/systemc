@@ -196,7 +196,7 @@ private:
 
 #if SC_TRACING_PHASE_CALLBACKS_
     // avoid hidden overload warnings
-    virtual void trace( sc_trace_file* ) const { sc_assert(false); }
+    virtual void trace( sc_trace_file* ) const;
 #endif // SC_TRACING_PHASE_CALLBACKS_
 
     // Initialize the tracing mechanism
