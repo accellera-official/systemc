@@ -62,12 +62,12 @@ class SC_API word_list { // Entry in free_words bucket.
 };
 
 static inline
-int
+unsigned
 next_pow2_index( std::size_t size )
 {
-    int index = scfx_find_msb( size );
+    unsigned index = scfx_find_msb( size );
     // If this was a power of 2 we are one bucket too low.
-    if( ~ (1 << index) & size ) index ++;
+    if( ~ (UINT64_ONE << index) & size ) index ++;
     // If this is a 64-bit machine and we are using 32-bit words go down
 	// one slot size, as all the slots are 2x in size.
     if ( index != 0 && ( sizeof(word_list) != sizeof(word) ) ) 
@@ -84,16 +84,15 @@ scfx_mant::alloc_word( std::size_t size )
 {
     const int ALLOC_SIZE = 128;
 
-    int slot_index = next_pow2_index( size );
-
-    int alloc_size = ( 1 << slot_index );
+    unsigned slot_index = next_pow2_index( size );
+    unsigned alloc_size = ( UINT64_ONE << slot_index );
 
     word_list*& slot = free_words[slot_index];
 
     if( ! slot )
     {
         slot = new word_list[ALLOC_SIZE * alloc_size];
-	int i;
+	unsigned i;
 	for( i = 0; i < alloc_size*(ALLOC_SIZE-1) ; i+=alloc_size )
 	{
 	    slot[i].m_next_p = &slot[i+alloc_size];

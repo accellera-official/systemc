@@ -95,6 +95,7 @@ include 2.1/specialized_signals/test.am
 
 include 2.3/sc_rvd/test.am
 include 2.3/sc_ttd/test.am
+include 2.3/simple_async/test.am
 
 ## ************************************************************************
 

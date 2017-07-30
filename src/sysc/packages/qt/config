@@ -151,6 +151,28 @@ case $1 in
         ;;
 
 
+    aarch64*)
+        : "ARM's ARM64 AArch64 processors"
+        ${LN_S} md/aarch64.s qtmds.s
+        iter_init=10000000
+        iter_runone=1000000
+        iter_blockint=1000000
+        iter_blockfloat=1000000
+        iter_vainit0=1000000
+        iter_vainit2=1000000
+        iter_vainit4=1000000
+        iter_vainit8=1000000
+        iter_vastart0=1000000
+        iter_vastart2=1000000
+        iter_vastart4=1000000
+        iter_vastart8=1000000
+        iter_bench_call_reg=1000000
+        iter_bench_call_imm=1000000
+        iter_bench_add=100000000
+        iter_bench_load=10000000
+        ;;
+
+
 	m68k)
 		: "Motorola 68000 family -- incomplete!"
 #		${LN_S} md/default.Makefile Makefile.md
@@ -334,7 +356,7 @@ h ABI"
                 ${LN_S} md/powerpc_sys5.s qtmds.s
                 ;;
             *)
-                echo "Unknown configuration"
+                echo "Unknown configuration '$1'"
                 echo "See md/powerpc.README for documentation"
                 echo "Use powerpc-darwin for MacOS X and other systems based on
 Mach ABI"

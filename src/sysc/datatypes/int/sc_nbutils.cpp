@@ -323,7 +323,6 @@ void parse_binary_bits(
         if ( src_i < 0 ) 
         {
             src_n += BITS_PER_DIGIT;
-            src_i = 0;
             data = 0;
             ctrl = 0;
             for ( src_i = 0; src_i < src_n; src_i++ )
@@ -462,7 +461,6 @@ void parse_hex_bits(
         if ( src_i < 0 ) 
         {
             src_n += 8;
-            src_i = 0;
             data = 0;
             ctrl = 0;
             for ( src_i = 0; src_i < src_n; src_i++ )

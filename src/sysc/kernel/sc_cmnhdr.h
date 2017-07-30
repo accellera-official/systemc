@@ -97,6 +97,7 @@
 //   199711L (C++03, ISO/IEC 14882:1998, 14882:2003)
 //   201103L (C++11, ISO/IEC 14882:2011)
 //   201402L (C++14, ISO/IEC 14882:2014)
+//   201703L (C++17, N4659: Working Draft, Standard for Programming Language C++)
 //
 // This macro can be used inside the library sources to make certain assumptions
 // on the available features in the underlying C++ implementation.
@@ -107,35 +108,35 @@
 // If some features still need to be excluded on specific MSVC
 // versions, we'll do so at the point of definition.
 
-#   if _MSC_VER < 1800   // MSVC'2010 and earlier, assume C++03
+#   if defined(_MSVC_LANG) // MSVC'2015 Update 3 or later, use compiler setting
+#     define SC_CPLUSPLUS _MSVC_LANG
+#   elif _MSC_VER < 1800   // MSVC'2010 and earlier, assume C++03
 #     define SC_CPLUSPLUS 199711L
-#   elif _MSC_VER < 1900 // MSVC'2013, assume C++11
+#   elif _MSC_VER < 1900   // MSVC'2013, assume C++11
 #     define SC_CPLUSPLUS 201103L
-#   elif _MSC_VER < 2000 // MSVC'2015, assume C++14
-#     define SC_CPLUSPLUS 201402L
-#   else // more recent MSVC versions, assume C++14
+#   else                   // MSVC'2015 before Update 3, assume C++14
 #     define SC_CPLUSPLUS 201402L
 #   endif
 
 # else // not _MSC_VER
-// use compiler's default
+// use compiler setting
 #   define SC_CPLUSPLUS __cplusplus
 
 # endif // not _MSC_VER
-#endif // SC_STD_CPLUSCPLUS
+#endif // SC_CPLUSCPLUS
 
-// Currently, SystemC standard requires/assumes C++03 only
+// SystemC adds some features under C++11 already (see RELEASENOTES)
 #define SC_CPLUSPLUS_BASE_ 201103L
 
 // The IEEE_1666_CPLUSPLUS macro is meant to be queried in the models,
 // checking for availability of SystemC features relying on specific
 // C++ standard versions.
 //
-// IEEE_1666_CPLUSPLUS = min(SC_STD_CPLUSCPLUS, SC_STD_CPLUSPLUS_BASE_)
-#if SC_CPLUSPLUS >= SC_STD_CPLUSPLUS_BASE_
-# define IEEE_1666_CPLUSPLUS SC_STD_CPLUSPLUS_BASE_
+// IEEE_1666_CPLUSPLUS = min(SC_CPLUSCPLUS, SC_CPLUSPLUS_BASE_)
+#if SC_CPLUSPLUS >= SC_CPLUSPLUS_BASE_
+# define IEEE_1666_CPLUSPLUS SC_CPLUSPLUS_BASE_
 #else
-# define IEEE_1666_CPLUSPLUS SC_STD_CPLUSPLUS
+# define IEEE_1666_CPLUSPLUS SC_CPLUSPLUS
 #endif // IEEE_1666_CPLUSPLUS
 
 // ----------------------------------------------------------------------------

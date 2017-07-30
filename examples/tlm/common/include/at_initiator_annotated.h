@@ -136,6 +136,5 @@ private:
                           m_send_end_rsp_PEQ;       // send end response PEq
   unsigned int            m_ID;                     // initiator ID
   sc_core::sc_time        m_end_rsp_delay;          // end response delay
-  bool                    m_nb_trans_fw_prev_warning;
 }; 
  #endif /* __AT_INITIATOR_ANNOTATED_H__ */

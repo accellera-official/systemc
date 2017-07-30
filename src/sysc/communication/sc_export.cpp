@@ -195,8 +195,8 @@ sc_export_registry::remove( sc_export_base* export_ )
     }
 
     // remove
-    m_export_vec[i] = m_export_vec[size() - 1];
-    m_export_vec.resize(size()-1);
+    m_export_vec[i] = m_export_vec.back();
+    m_export_vec.pop_back();
 }
 
 // constructor

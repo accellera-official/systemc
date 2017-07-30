@@ -84,8 +84,8 @@ sc_module_registry::remove( sc_module& module_ )
     }
 
     // remove
-    m_module_vec[i] = m_module_vec[size() - 1];
-    m_module_vec.resize(m_module_vec.size()-1);
+    m_module_vec[i] = m_module_vec.back();
+    m_module_vec.pop_back();
 }
 
 

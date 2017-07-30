@@ -20,7 +20,6 @@
 #define TLM_UTILS_MULTI_PASSTHROUGH_TARGET_SOCKET_H_INCLUDED_
 
 #include "tlm_utils/multi_socket_bases.h"
-#include <sstream>
 
 namespace tlm_utils {
 
@@ -63,17 +62,11 @@ public:
 
   typedef typename base_type::base_initiator_socket_type base_initiator_socket_type;
 
-  //CTOR
-  multi_passthrough_target_socket()
-      : base_type(sc_core::sc_gen_unique_name("multi_passthrough_target_socket"))
-      , m_hierarch_bind(0)
-      , m_eoe_disabled(false)
-      , m_export_callback_created(false)
-  {
-  }
+  static const char* default_name()
+    { return sc_core::sc_gen_unique_name("multi_passthrough_target_socket"); }
 
   //CTOR
-  multi_passthrough_target_socket(const char* name)
+  explicit multi_passthrough_target_socket(const char* name = default_name())
       : base_type(name)
       , m_hierarch_bind(0)
       , m_eoe_disabled(false)
@@ -84,19 +77,6 @@ public:
   ~multi_passthrough_target_socket(){
     //clean up everything allocated by 'new'
     for (unsigned int i=0; i<m_binders.size(); i++) delete m_binders[i];
-  }
-
-  //simple helpers for warnings an errors to shorten in code notation
-  void display_warning(const std::string& text) const {
-    std::stringstream s;
-    s<<"WARNING in instance "<<base_type::name()<<": "<<text;
-    SC_REPORT_WARNING("/OSCI_TLM-2/multi_socket", s.str().c_str());
-  }
-
-  void display_error(const std::string& text) const {
-    std::stringstream s;
-    s<<"ERROR in instance "<<base_type::name()<<": "<<text;
-    SC_REPORT_ERROR("/OSCI_TLM-2/multi_socket", s.str().c_str());
   }
 
   void check_export_binding()
@@ -115,7 +95,7 @@ public:
 
       if (m_binders.size() == 0)
       {
-        binder = new callback_binder_fw<TYPES>(m_binders.size());
+        binder = new callback_binder_fw<TYPES>(this, m_binders.size());
         m_binders.push_back(binder);
         m_export_callback_created = true;
       }
@@ -207,7 +187,7 @@ public:
       // consume binder created from the callback registration
       m_export_callback_created = false;
     } else {
-      m_binders.push_back(new callback_binder_fw<TYPES>(m_binders.size()));
+      m_binders.push_back(new callback_binder_fw<TYPES>(this, m_binders.size()));
     }
 
     return *m_binders[m_binders.size()-1];
@@ -295,6 +275,9 @@ public:
   unsigned int size(){return get_hierarch_bind()->get_binders().size();}
 
 protected:
+  using base_type::display_warning;
+  using base_type::display_error;
+
   //implementation of base class interface
   base_type* get_hierarch_bind(){if (m_hierarch_bind) return m_hierarch_bind->get_hierarch_bind(); else return this;}
   std::map<unsigned int, tlm::tlm_bw_transport_if<TYPES>*>&  get_multi_binds(){return m_multi_binds;}
@@ -328,6 +311,5 @@ protected:
   typename callback_binder_fw<TYPES>::dmi_func_type   m_dmi_f;
 };
 
-}
-
+} // namespace tlm_utils
 #endif // TLM_UTILS_MULTI_PASSTHROUGH_TARGET_SOCKET_H_INCLUDED_

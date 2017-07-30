@@ -537,7 +537,7 @@ sc_event_timed::allocate()
 
     if( free_list == 0 ) {
         free_list = (sc_event_timed_u*) malloc( ALLOC_SIZE *
-                                                sizeof( sc_event_timed ) );
+                                                sizeof( sc_event_timed_u ) );
         int i = 0;
         for( ; i < ALLOC_SIZE - 1; ++ i ) {
             free_list[i].next = &free_list[i + 1];

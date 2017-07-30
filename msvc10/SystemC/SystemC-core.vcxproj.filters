@@ -238,6 +238,9 @@
     <ClCompile Include="..\..\src\tlm_core\tlm_2\tlm_generic_payload\tlm_gp.cpp">
       <Filter>Source Files\tlm</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\tlm_utils\convenience_socket_bases.cpp">
+      <Filter>Source Files\tlm_utils</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\tlm_utils\instance_specific_extensions.cpp">
       <Filter>Source Files\tlm_utils</Filter>
     </ClCompile>
@@ -367,6 +370,9 @@
       <Filter>Header Files\sc_core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\sysc\communication\sc_host_mutex.h">
+      <Filter>Header Files\sc_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\sysc\communication\sc_host_semaphore.h">
       <Filter>Header Files\sc_core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\sysc\communication\sc_interface.h">
@@ -743,6 +749,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_analysis\tlm_write_if.h">
       <Filter>Header Files\tlm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\tlm_utils\convenience_socket_bases.h">
+      <Filter>Header Files\tlm_utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\tlm_utils\instance_specific_extensions.h">
       <Filter>Header Files\tlm_utils</Filter>

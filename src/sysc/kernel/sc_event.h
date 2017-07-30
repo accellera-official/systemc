@@ -522,8 +522,10 @@ sc_event_list::operator=( sc_event_list const & that )
     if( m_busy )
         report_invalid_modification();
 
-    move_from( that );
-    that.auto_delete(); // free automatic lists
+    if( SC_LIKELY_(this != &that) ) {
+        move_from( that );
+        that.auto_delete(); // free automatic lists
+    }
 
     return *this;
 }

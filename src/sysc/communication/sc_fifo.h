@@ -223,9 +223,8 @@ sc_fifo<T>::read( T& val_ )
     while( num_available() == 0 ) {
 	sc_core::wait( m_data_written_event );
     }
-    m_num_read ++;
-    buf_read( val_ );
-    request_update();
+    bool read_success = sc_fifo<T>::nb_read(val_);
+    sc_assert( read_success );
 }
 
 template <class T>
@@ -248,10 +247,12 @@ sc_fifo<T>::nb_read( T& val_ )
     if( num_available() == 0 ) {
 	return false;
     }
-    m_num_read ++;
-    buf_read( val_ );
-    request_update();
-    return true;
+    bool read_success = buf_read( val_ );
+    if( SC_LIKELY_(read_success) ) {
+        m_num_read ++;
+        request_update();
+    }
+    return read_success;
 }
 
 
@@ -265,9 +266,8 @@ sc_fifo<T>::write( const T& val_ )
     while( num_free() == 0 ) {
 	sc_core::wait( m_data_read_event );
     }
-    m_num_written ++;
-    buf_write( val_ );
-    request_update();
+    bool write_success = sc_fifo<T>::nb_write(val_);
+    sc_assert( write_success );
 }
 
 // non-blocking write
@@ -280,10 +280,12 @@ sc_fifo<T>::nb_write( const T& val_ )
     if( num_free() == 0 ) {
 	return false;
     }
-    m_num_written ++;
-    buf_write( val_ );
-    request_update();
-    return true;
+    bool write_success = buf_write( val_ );
+    if( SC_LIKELY_(write_success) ) {
+        m_num_written ++;
+        request_update();
+    }
+    return write_success;
 }
 
 

@@ -20,11 +20,10 @@
 #ifndef TLM_UTILS_MULTI_SOCKET_BASES_H_INCLUDED_
 #define TLM_UTILS_MULTI_SOCKET_BASES_H_INCLUDED_
 
-#include <systemc>
 #include <tlm>
+#include "tlm_utils/convenience_socket_bases.h"
 
 #include <map>
-#include <sstream>
 
 namespace tlm_utils {
 
@@ -142,7 +141,10 @@ The callbacks simply forward the fw interface call, but add the id (an int)
 of the callback binder to the signature of the call.
 */
 template <typename TYPES>
-class callback_binder_fw: public tlm::tlm_fw_transport_if<TYPES>{
+class callback_binder_fw
+  : public tlm::tlm_fw_transport_if<TYPES>
+  , protected convenience_socket_cb_holder
+{
   public:
     //typedefs according to the used TYPES class
     typedef typename TYPES::tlm_payload_type              transaction_type;
@@ -156,8 +158,11 @@ class callback_binder_fw: public tlm::tlm_fw_transport_if<TYPES>{
     typedef get_dmi_ptr_functor<TYPES>     dmi_func_type;
 
     //ctor: an ID is needed to create a callback binder
-    callback_binder_fw(int id): m_id(id), m_nb_f(0), m_b_f(0), m_dbg_f(0), m_dmi_f(0), m_caller_port(0) {
-    }
+    callback_binder_fw(multi_socket_base* owner, int id)
+      : convenience_socket_cb_holder(owner), m_id(id)
+      , m_nb_f(0), m_b_f(0), m_dbg_f(0), m_dmi_f(0)
+      , m_caller_port(0)
+    {}
 
     //the nb_transport method of the fw interface
     sync_enum_type nb_transport_fw(transaction_type& txn,
@@ -168,10 +173,10 @@ class callback_binder_fw: public tlm::tlm_fw_transport_if<TYPES>{
         return (*m_nb_f)(m_id, txn, p, t); //do the callback
       }
 
-      SC_REPORT_ERROR("/OSCI_TLM-2/multi_socket","Call to nb_transport_fw without a registered callback for nb_transport_fw.");
-      return tlm::TLM_ACCEPTED; //unreachable
+      display_error("Call to nb_transport_fw without a registered callback for nb_transport_fw.");
+      return tlm::TLM_COMPLETED;
     }
-    
+
     //the b_transport method of the fw interface
     void b_transport(transaction_type& trans,sc_core::sc_time& t){
       //check if a callback is registered
@@ -180,7 +185,7 @@ class callback_binder_fw: public tlm::tlm_fw_transport_if<TYPES>{
         return;
       }
 
-      SC_REPORT_ERROR("/OSCI_TLM-2/multi_socket","Call to b_transport without a registered callback for b_transport.");
+      display_error("Call to b_transport without a registered callback for b_transport.");
     }
     
     //the DMI method of the fw interface
@@ -209,7 +214,7 @@ class callback_binder_fw: public tlm::tlm_fw_transport_if<TYPES>{
     //the SystemC standard callback register_port:
     // - called when a port if bound to the interface
     // - allowd to find out who is bound to that callback binder
-    void register_port(sc_core::sc_port_base& b, const char* name){
+    void register_port(sc_core::sc_port_base& b, const char* /*name*/){
       m_caller_port=&b;
     }
     
@@ -247,7 +252,10 @@ The callbacks simply forward the bw interface call, but add the id (an int)
 of the callback binder to the signature of the call.
 */
 template <typename TYPES>
-class callback_binder_bw: public tlm::tlm_bw_transport_if<TYPES>{
+class callback_binder_bw
+  : public tlm::tlm_bw_transport_if<TYPES>
+  , protected convenience_socket_cb_holder
+{
   public:
     //typedefs according to the used TYPES class
     typedef typename TYPES::tlm_payload_type              transaction_type;
@@ -259,8 +267,9 @@ class callback_binder_bw: public tlm::tlm_bw_transport_if<TYPES>{
     typedef invalidate_dmi_functor<TYPES> dmi_func_type;
 
     //ctor: an ID is needed to create a callback binder
-    callback_binder_bw(int id): m_id(id), m_nb_f(0), m_dmi_f(0) {
-    }
+    callback_binder_bw(multi_socket_base* owner, int id)
+      : convenience_socket_cb_holder(owner), m_id(id)
+      , m_nb_f(0), m_dmi_f(0) {}
 
     //the nb_transport method of the bw interface
     sync_enum_type nb_transport_bw(transaction_type& txn,
@@ -271,8 +280,8 @@ class callback_binder_bw: public tlm::tlm_bw_transport_if<TYPES>{
         return (*m_nb_f)(m_id, txn, p, t); //do the callback
       }
 
-      SC_REPORT_ERROR("/OSCI_TLM-2/multi_socket","Call to nb_transport_bw without a registered callback for nb_transport_bw");
-      return tlm::TLM_ACCEPTED; //unreachable
+      display_error("Call to nb_transport_bw without a registered callback for nb_transport_bw");
+      return tlm::TLM_COMPLETED;
     }
     
     //the DMI method of the bw interface
@@ -323,8 +332,9 @@ template <unsigned int BUSWIDTH = 32,
           unsigned int N=0,
           sc_core::sc_port_policy POL = sc_core::SC_ONE_OR_MORE_BOUND>
 class multi_init_base
-  : public tlm::tlm_initiator_socket<BUSWIDTH, TYPES, N, POL>,
-    public multi_init_base_if<TYPES>
+  : public tlm::tlm_initiator_socket<BUSWIDTH, TYPES, N, POL>
+  , public multi_init_base_if<TYPES>
+  , protected multi_socket_base
 {
 public:
   //typedef for the base type: the standard tlm initiator socket
@@ -348,6 +358,9 @@ public:
   virtual ~multi_init_base(){}
   multi_init_base():base_type(sc_core::sc_gen_unique_name("multi_init_base")){}
   multi_init_base(const char* name):base_type(name){}
+
+private:
+  const sc_core::sc_object* get_socket() const { return this; }
 };
 
 /*
@@ -380,8 +393,9 @@ template <unsigned int BUSWIDTH = 32,
           unsigned int N=0,
           sc_core::sc_port_policy POL = sc_core::SC_ONE_OR_MORE_BOUND>
 class multi_target_base
-  : public tlm::tlm_target_socket<BUSWIDTH, TYPES, N, POL>,
-    public multi_target_base_if<TYPES>
+  : public tlm::tlm_target_socket<BUSWIDTH, TYPES, N, POL>
+  , public multi_target_base_if<TYPES>
+  , protected multi_socket_base
 {
 public:
   //typedef for the base type: the standard tlm target socket
@@ -405,6 +419,9 @@ public:
   virtual ~multi_target_base(){}
   multi_target_base():base_type(sc_core::sc_gen_unique_name("multi_target_base")){}
   multi_target_base(const char* name):base_type(name){}
+
+private:
+  const sc_core::sc_object* get_socket() const { return this; }
 };
 
 /*
@@ -419,5 +436,5 @@ public:
   virtual tlm::tlm_fw_transport_if<TYPES>* get_last_binder(tlm::tlm_bw_transport_if<TYPES>*)=0;
 };
 
-}
+} // namespace tlm_utils
 #endif // TLM_UTILS_MULTI_SOCKET_BASES_H_INCLUDED_

@@ -657,8 +657,8 @@ sc_port_registry::remove( sc_port_base* port_ )
     }
 
     // remove
-    m_port_vec[i] = m_port_vec[size() - 1];
-    m_port_vec.resize(size()-1);
+    m_port_vec[i] = m_port_vec.back();
+    m_port_vec.pop_back();
 }
 
 
