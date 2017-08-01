@@ -297,8 +297,8 @@ const int SC_DEFAULT_MAX_WL_ = SC_BUILTIN_MAX_WL_;
 
 #define SC_OBSERVER_DEFAULT_(observer_type)                                   \
 {                                                                             \
-    if( m_observer == 0 && observer_type ## ::default_observer != 0 )         \
-        m_observer = (* ## observer_type ## ::default_observer)();            \
+    if( m_observer == 0 && observer_type::default_observer != 0 )             \
+        m_observer = (*observer_type::default_observer)();                    \
 }
 
 } // namespace sc_dt

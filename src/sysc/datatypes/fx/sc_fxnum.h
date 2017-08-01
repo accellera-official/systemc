@@ -4759,7 +4759,7 @@ inline
 void
 sc_fxnum_fast::observer_read() const
 {
-    SC_FXNUM_OBSERVER_READ_( *this );
+    SC_FXNUM_FAST_OBSERVER_READ_( *this );
 }
 
 
