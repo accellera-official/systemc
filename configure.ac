@@ -466,7 +466,7 @@ AC_MSG_RESULT($enable_phase_callbacks)
 dnl
 dnl enable VCD scopes
 dnl
-AC_MSG_CHECKING([whether to enable VCD scopes])
+AC_MSG_CHECKING([whether to enable VCD scopes by default])
 AC_ARG_ENABLE([vcd-scopes],
   [AS_HELP_STRING([--enable-vcd-scopes],
                   [enable vcd scopes
@@ -653,6 +653,7 @@ Configuration summary of $PACKAGE_STRING for $target
    Enable compiler optimizations  : $enable_optimize
    Include debugging symbols      : $enable_debug
    Coroutine package for processes: $sysc_coroutine
+   Enable VCD scopes by default   : $enable_vcd_scopes
    Disable async_request_update   : $disable_async_updates
    Phase callbacks (experimental) : $enable_phase_callbacks
  ${sysc_additional}

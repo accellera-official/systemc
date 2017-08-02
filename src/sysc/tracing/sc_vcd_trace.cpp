@@ -67,6 +67,7 @@
 #include "sysc/datatypes/fx/fx.h"
 #include "sysc/tracing/sc_vcd_trace.h"
 #include "sysc/utils/sc_report.h" // sc_assert
+#include "sysc/utils/sc_string_view.h"
 
 #include <sstream>
 #include <map>
@@ -1687,7 +1688,7 @@ void vcd_enum_trace::write(FILE* f)
 
 struct vcd_scope {
 
-    void add_trace(vcd_trace *trace);
+    void add_trace(vcd_trace *trace, bool with_scopes);
     void print(FILE *fp, const char *scope_name = "SystemC");
 
     ~vcd_scope();
@@ -1704,18 +1705,20 @@ vcd_scope::~vcd_scope() {
         delete (*it).second;
 }
 
-void vcd_scope::add_trace(vcd_trace *trace) {
-
+void vcd_scope::add_trace(vcd_trace *trace, bool with_scopes)
+{
     std::string name_copy = trace->name;
     remove_vcd_name_problems(trace, name_copy);
-#ifdef SC_DISABLE_VCD_SCOPES
-    m_traces.push_back(std::make_pair(name_copy, trace));
-#else
-    std::stringstream ss(name_copy);
-    std::string first_token;
-    std::getline(ss, first_token, '.');
-    add_trace_rec(ss, first_token, trace);
-#endif
+
+    if (with_scopes) {
+        std::stringstream ss(name_copy);
+        std::string first_token;
+        std::getline(ss, first_token, '.');
+        add_trace_rec(ss, first_token, trace);
+    } else {
+        m_traces.push_back(std::make_pair(name_copy, trace));
+    }
+
 }
 
 void vcd_scope::add_trace_rec(std::stringstream &ss, const std::string &cur_name, vcd_trace *trace) {
@@ -1744,12 +1747,25 @@ void vcd_scope::print(FILE *fp, const char *scope_name) {
     fprintf(fp,"$upscope $end\n");
 }
 
+#ifdef SC_DISABLE_VCD_SCOPES
+#  define VCD_SCOPES_DEFAULT_ false
+#else
+#  define VCD_SCOPES_DEFAULT_ true
+#endif
+
 void vcd_print_scopes(FILE *fp, std::vector<vcd_trace*>& traces) {
 
     vcd_scope top_scope;
 
+    const char*    with_scopes_p = std::getenv("SC_VCD_SCOPES");
+    sc_string_view with_scopes_s = (with_scopes_p) ? with_scopes_p : "";
+
+    bool with_scopes = VCD_SCOPES_DEFAULT_;
+    if (with_scopes_s == "DISABLE") with_scopes = false;
+    if (with_scopes_s == "ENABLE")  with_scopes = true;
+
     for (std::vector<vcd_trace*>::iterator it = traces.begin(); it != traces.end(); ++it)
-        top_scope.add_trace(*it);
+        top_scope.add_trace(*it, with_scopes);
 
     top_scope.print(fp);
 }
