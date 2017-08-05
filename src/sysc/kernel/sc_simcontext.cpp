@@ -745,7 +745,8 @@ sc_simcontext::prepare_to_simulate()
 	}
 	else if ( (method_p->m_state & sc_process_b::ps_bit_suspended) == 0)
 	{
-	    push_runnable_method_front( method_p );
+            if ( !method_p->is_runnable() ) // already scheduled?
+                push_runnable_method_front( method_p );
         }
 	else
 	{
@@ -770,7 +771,8 @@ sc_simcontext::prepare_to_simulate()
 	}
 	else if ( (thread_p->m_state & sc_process_b::ps_bit_suspended) == 0)
 	{
-            push_runnable_thread_front( thread_p );
+            if ( !thread_p->is_runnable() ) // already scheduled?
+                push_runnable_thread_front( thread_p );
         }
 	else
 	{
