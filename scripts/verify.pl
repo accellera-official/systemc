@@ -666,7 +666,7 @@ sub init_globals
     $ENV{ 'SYSTEMC_REGRESSION' } = 1;
 
     # MSVC runtime library defaults
-    $rt_msvc_runtime     = '-MT';
+    $rt_msvc_runtime     = '-MD';
     $rt_msvc_runtime_dbg = $rt_msvc_runtime.'d';
 
     @rt_add_defines = ();
