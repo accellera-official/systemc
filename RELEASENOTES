@@ -324,6 +324,9 @@ Here is a list of known incompatibilities between this release and 2.3.1
     for earlier versions of MSVC might still be possible with the new
     CMake build system (see cmake/INSTALL_USING_CMAKE).
 
+  - Switch to MSVC DLL-based Runtime Library (/MD[d]) instead of using
+    the no longer recommended static variants.
+
   - The non-standard functions `interface_count` and `if_typename` in
     sc_port_base have been marked as private.
 
