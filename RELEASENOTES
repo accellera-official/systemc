@@ -42,7 +42,7 @@ Compared to the 2.3.0 release, this release has the following new items:
   - New features, partially beyond the current IEEE 1666-2011 standard,
     see section 3.
 
-  - Experimental features (disabled by default), see section 5.
+  - Experimental features (some disabled by default), see section 5.
     Testing and feedback welcome via the Accellera SystemC forums
     at http://forums.accellera.org/forum/9-systemc/.
 
@@ -76,18 +76,32 @@ RELEASENOTES.
     has been reverted in 2.3.2 and replaced by an "explicit" boolean
     conversion instead (requires C++11, see section 5).
 
+  - Improve sc_name_gen memory footprint
+
   - Add support for binding an sc_export during the
     before_end_of_elaboration() phase.
 
+  - Detect instantiation of an sc_export outside of an sc_module
+
   - Detect invalid immediate notification of events during elaboration
     (report an error, instead of causing a crash in some cases)
+
+  - Guard against self-assignment of sc_(and|or)_event_list objects
 
   - Fix incomplete time advance under the SC_RUN_TO_TIME starvation
     policy, causing incorrect sc_signal::event() values in some
     corner cases
 
+  - Fix memory corruption when starting processes in asynchronous
+    reset state (async_reset_signal_is asserted at startup)
+
   - Avoid accessing invalid memory in the sc_signal writer check
     in case conflicting writer processes have already terminated.
+
+  - Correctly detect all conflicting signal writes under the
+    SC_MANY_WRITERS writer policy.
+
+  - Improved error checking in sc_fifo implementation
 
   - Minor enhancements of sc_vector-related classes
      - enable initialization from outside the current SystemC hierarchy
@@ -163,7 +177,12 @@ Note: These features partly add functionality beyond the current
       virtual sc_type_index sc_export_base::get_interface_type() const = 0;
 
 
-  - [2.3.2] Add new `sc_time::from_string`, `sc_time::to_tuple` functions
+  - [2.3.2] Add never-notified event: const sc_event sc_event::none
+
+      wait( sc_event::none ); // never triggered
+
+
+  - [2.3.2] Add new `sc_time::from_string` functions, `sc_time_tuple` class
 
     With sc_time::from_string, it is now possible to conveniently create
     time objects from string repesentations (e.g. configuration files):
@@ -175,8 +194,6 @@ Note: These features partly add functionality beyond the current
     introduced, providing separate access to the value and the unit of
     the time object:
 
-      sc_time_tuple to_tuple() const;
-
       class sc_time_tuple
       {
         // ...
@@ -185,8 +202,9 @@ Note: These features partly add functionality beyond the current
         const char * unit_symbol() const;
       };
 
-      sc_time(10000, SC_NS).to_tuple().value() == 10
-      sc_time(10000, SC_NS).to_tuple().unit()  == SC_US
+      sc_time tuple tt = sc_time(10000, SC_NS);
+        tt.value() == 10
+        tt.unit()  == SC_US
 
 
   - [2.3.1] Improved conversion between the underlying integral time
@@ -240,6 +258,15 @@ Note: These features partly add functionality beyond the current
 
     The new base class for all signal channels reduces the code duplication
     in the template-based signal implementations.
+
+
+  - [2.3.2] Add support for SC_SIGNAL_WRITE_CHECK=CONFLICT
+
+    Instead of disabling all runtime signal write checks via the
+    environment setting SC_SIGNAL_WRITE_CHECK=DISABLE, setting the
+    variable to SC_SIGNAL_WRITE_CHECK=CONFLICT allows detecting
+    conflicting writes to a signal within a single evaluation phase
+    (see INSTALL).
 
 
   - [2.3.2] Promote SC_DEFAULT_*_ACTIONS to enum constants
@@ -302,11 +329,14 @@ Note: These features partly add functionality beyond the current
     - improved "make check" test handling
 
 
+  - [2.3.2] Add support for AArch64 architecture (on Linux)
+
+
   - [2.3.2] Updated MS Visual C++ project and solution files to include
     support for Visual Studio 2010 and later
     - support for 32-bit and 64-bit builds
-    - support for building SystemC dynamic link library (DLL)
-      (see INSTALL)
+    - support for building SystemC dynamic link library (DLL) (see INSTALL)
+    - switch to DLL-based runtime by default (/MD[d])
 
 
   - [2.3.2] New CMake-based build system (experimental)
@@ -418,6 +448,9 @@ beyond ISO/IEC 14882:2003 (aka C++03):
      to explicit boolean contexts (e.g. `if` expressions).
      Use the `to_bool()` function on earlier setups.
 
+   o On C++11-enabled platforms, the embedded Boost implementation is
+     superseded by using standard C++11 features.
+
    o Convert sc_bind/sc_(c)ref macros to functions
 
      With the support of perfect forwarding since C++11, the dynamic process
@@ -428,6 +461,7 @@ beyond ISO/IEC 14882:2003 (aka C++03):
      in the global namespace, unless the macro SC_BIND_IN_GLOBAL_NAMESPACE
      is explicitly defined to 0.
 
+
 In the future, further language features depending on modern C++ language
 constructs may be added.
 
@@ -437,7 +471,7 @@ constructs may be added.
 
 In this section the experimental features of this release are listed.
 
-Note: These features are not enabled in the default library
+Note: Some of these features are not enabled in the default library
       configuration and need to be explicitly activated during at
       library build time.  See INSTALL file.
 
@@ -529,6 +563,23 @@ Note: These features are not enabled in the default library
    time units (SC_FS, SC_PS, ...) is used or observed by the application.
 
 
+ - Allow suspending simulation to receive asynchronous updates
+
+   When using asynchronous channels (updated from outside the simulation
+   via async_request_update), the simulation can run into event starvation
+   prematurely.
+
+   Two new functions are added to the sc_prim_channel base class
+      bool async_attach_suspending();
+      bool async_detach_suspending();
+
+   If any channel has attached itself to request suspension, instead
+   of ending the simulation when running out of internal events, the
+   simulation loop suspends until any external async_request_update()
+   call is received.
+
+   An example demonstrating the usage of this feature is provided in
+   examples/sysc/2.3/simple_async (requires C++11).
 
 
 7) Known Problems
@@ -668,7 +719,14 @@ Compared to the TLM 2.0.3 kit (part of SystemC 2.3.1), the following has changed
          be used in conjunction with the matching SystemC kernel sources.
 
 
- - Drop support for earlier/non-bundled SystemC versions.
+ - Improved error handling in convenience sockets
+
+   All error checking on the convenience sockets now consistently report
+   the affected socket name (and kind) to help tracking down their origin.
+
+
+ - Fix regression introduced in 2.0.3 to allow using the optional sc_port_policy
+   SC_ZERO_OR_MORE_BOUND for tlm_utils::multi_passthrough_target_socket again.
 
  - Fix memory corruption in tlm::circular_buffer<T>::clear.
 
