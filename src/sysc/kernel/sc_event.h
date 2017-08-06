@@ -271,7 +271,7 @@ class SC_API sc_event
 public:
 
     sc_event();
-    sc_event( const char* name );
+    explicit sc_event( const char* name );
     ~sc_event();
 
     void cancel();
@@ -293,6 +293,9 @@ public:
     sc_event_or_expr  operator | ( const sc_event_or_list& ) const;
     sc_event_and_expr operator & ( const sc_event& ) const;
     sc_event_and_expr operator & ( const sc_event_and_list& ) const;
+
+    // has this event been triggered in the current delta cycle?
+    bool triggered() const;
 
     // never notified event
     static const sc_event none;
@@ -324,6 +327,7 @@ private:
     std::string     m_name;     // name of object.
     sc_object*      m_parent_p; // parent sc_object for this event.
     sc_simcontext*  m_simc;
+    sc_dt::uint64   m_trigger_stamp; // delta of last trigger
     notify_t        m_notify_type;
     int             m_delta_event_index;
     sc_event_timed* m_timed;
