@@ -291,6 +291,7 @@ inline
 void
 sc_fifo<T>::trace( sc_trace_file* tf ) const
 {
+    (void) tf; /* ignore potentially unused parameter */
 #if defined(DEBUG_SYSTEMC)
     char buf[32];
     std::string nm = name();
