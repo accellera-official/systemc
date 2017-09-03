@@ -203,6 +203,7 @@
 
 
 cmake_minimum_required (VERSION 3.1)
+cmake_policy(SET CMP0001 NEW)
 
 project (SystemCLanguage CXX C)
 
