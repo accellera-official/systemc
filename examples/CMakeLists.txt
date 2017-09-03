@@ -42,9 +42,12 @@ cmake_minimum_required (VERSION 3.0)
 
 # Only built under "check" target
 #  - see https://cmake.org/Wiki/CMakeEmulateMakeCheck
-set_directory_properties (PROPERTIES EXCLUDE_FROM_ALL 1)
-add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
+add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} -C "${CMAKE_BUILD_TYPE}")
 enable_testing()
+
+set_property(GLOBAL PROPERTY USE_FOLDERS TRUE)
+set_directory_properties(PROPERTIES EXCLUDE_FROM_ALL TRUE)
+set_target_properties(check PROPERTIES FOLDER "examples")
 
 ########################################################################
 # Common definitions for all examples.
@@ -97,7 +100,7 @@ mark_as_advanced (DIFF_COMMAND DIFF_OPTIONS)
 
 # configure_and_add_test(<NAME> [INPUT <input-file>] [GOLDEN <golden-log>] [FILTER <filter>])
 function (configure_and_add_test TEST_PROG)
-  set (oneValueArgs INPUT GOLDEN FILTER)
+  set (oneValueArgs INPUT GOLDEN FILTER FOLDER)
   cmake_parse_arguments(TEST "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
 
   if (${TEST_UNPARSED_ARGS})
@@ -143,6 +146,7 @@ function (configure_and_add_test TEST_PROG)
   add_dependencies(check ${TEST_PROG})
   set_tests_properties (${TEST_NAME}
                         PROPERTIES FAIL_REGULAR_EXPRESSION "^[*][*][*]ERROR")
+  set_target_properties(${TEST_PROG} PROPERTIES FOLDER "${TEST_FOLDER}")
 endfunction (configure_and_add_test)
 
 
