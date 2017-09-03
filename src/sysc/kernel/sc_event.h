@@ -267,6 +267,7 @@ class SC_API sc_event
     friend class sc_semaphore;
     friend class sc_mutex;
     friend class sc_join;
+    friend class sc_trace_file;
 
 public:
 

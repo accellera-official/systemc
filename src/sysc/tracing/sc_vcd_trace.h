@@ -53,6 +53,8 @@
 
 namespace sc_core {
 
+class sc_time;
+
 class vcd_trace;  // defined in sc_vcd_trace.cpp
 template<class T> class vcd_T_trace;
 
@@ -68,7 +70,7 @@ class vcd_trace_file
 {
 public:
 
-    enum vcd_enum {VCD_WIRE=0, VCD_REAL=1, VCD_LAST};
+    enum vcd_enum {VCD_WIRE=0, VCD_REAL, VCD_EVENT, VCD_TIME, VCD_LAST};
 
 	// sc_set_vcd_time_unit is deprecated.
 #if 0 // deprecated
@@ -87,6 +89,10 @@ protected:
 
     // These are all virtual functions in sc_trace_file and
     // they need to be defined here.
+
+    // Trace sc_time, sc_event
+    virtual void trace(const sc_time& object, const std::string& name);
+    virtual void trace(const sc_event& object, const std::string& name);
 
     // Trace a boolean object (single bit)
      void trace(const bool& object, const std::string& name);
@@ -185,6 +191,7 @@ protected:
     // Trace sc_dt::sc_lv_base (sc_dt::sc_lv)
     virtual void trace(const sc_dt::sc_lv_base& object,
 	    const std::string& name);
+
     // Trace an enumerated object - where possible output the enumeration literals
     // in the trace file. Enum literals is a null terminated array of null
     // terminated char* literal strings.
@@ -198,6 +205,11 @@ protected:
      void cycle(bool delta_cycle);
 
 private:
+
+    template<typename T> const T& extract_ref(const T& object) const
+      { return object; }
+    const sc_dt::uint64& extract_ref(const sc_event& object) const
+      { return event_trigger_stamp(object); }
 
 #if SC_TRACING_PHASE_CALLBACKS_
     // avoid hidden overload warnings

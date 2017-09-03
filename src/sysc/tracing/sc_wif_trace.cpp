@@ -1645,6 +1645,18 @@ void wif_trace_file::do_initialize()
 
 // ----------------------------------------------------------------------------
 
+void wif_trace_file::trace(const sc_event&, const std::string& name) {
+    std::stringstream msg;
+    msg << "sc_events are not supported by WIF trace: " << name;
+    SC_REPORT_ERROR(SC_ID_TRACING_OBJECT_IGNORED_, msg.str().c_str() );
+}
+
+void wif_trace_file::trace(const sc_time&, const std::string& name) {
+    std::stringstream msg;
+    msg << "sc_time is not supported by WIF trace: " << name;
+    SC_REPORT_ERROR(SC_ID_TRACING_OBJECT_IGNORED_, msg.str().c_str() );
+}
+
 #define DEFN_TRACE_METHOD(tp)                                                 \
 void                                                                          \
 wif_trace_file::trace( const tp& object_, const std::string& name_ )          \

@@ -73,6 +73,7 @@ namespace sc_dt
 
 namespace sc_core {
 
+class sc_event;
 class sc_time;
 
 template <class T> class sc_signal_in_if;
@@ -101,6 +102,9 @@ public:
 			const std::string& name,                                     \
 			int width ) = 0;
 
+
+    DECL_TRACE_METHOD_A( sc_event )
+    DECL_TRACE_METHOD_A( sc_time )
 
     DECL_TRACE_METHOD_A( bool )
     DECL_TRACE_METHOD_A( sc_dt::sc_bit )
@@ -161,6 +165,9 @@ protected:
     // Write trace info for cycle
     virtual void cycle( bool delta_cycle ) = 0;
 
+    // Helper for event tracing
+    const sc_dt::uint64& event_trigger_stamp( const sc_event& event ) const;
+
     // Flush results and close file
     virtual ~sc_trace_file()
 	{ /* Intentionally blank */ }
@@ -205,6 +212,9 @@ sc_trace( sc_trace_file* tf, const tp* object, const std::string& name,  \
 DECL_TRACE_FUNC_REF_B(tp)      \
 DECL_TRACE_FUNC_PTR_B(tp)
 
+
+DECL_TRACE_FUNC_A( sc_event )
+DECL_TRACE_FUNC_A( sc_time )
 
 DECL_TRACE_FUNC_A( bool )
 DECL_TRACE_FUNC_A( float )

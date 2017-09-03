@@ -51,7 +51,9 @@
 
 #include "sysc/tracing/sc_trace.h"
 #include "sysc/tracing/sc_tracing_ids.h"
+
 #include "sysc/communication/sc_signal_ifs.h"
+#include "sysc/kernel/sc_event.h"
 #include "sysc/utils/sc_report.h"
 #include "sysc/utils/sc_utils_ids.h"
 
@@ -84,6 +86,11 @@ void sc_trace_file::delta_cycles(bool)
   /* Intentionally blank */
 }
 
+const sc_dt::uint64&
+sc_trace_file::event_trigger_stamp(const sc_event& ev) const
+{
+    return ev.m_trigger_stamp;
+}
 
 SC_API void
 sc_trace( sc_trace_file* tf,
@@ -203,6 +210,9 @@ sc_trace( sc_trace_file* tf, const tp* object, const std::string& name,       \
 DEFN_TRACE_FUNC_REF_B(tp)                                                     \
 DEFN_TRACE_FUNC_PTR_B(tp)
 
+
+DEFN_TRACE_FUNC_A( sc_event )
+DEFN_TRACE_FUNC_A( sc_time )
 
 DEFN_TRACE_FUNC_A( bool )
 DEFN_TRACE_FUNC_A( float )
