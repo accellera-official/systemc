@@ -188,44 +188,6 @@ public:
 	{ base_type::assign_( a ); return *this; }
 
 
-#if 0
-
-    // bitwise complement
-
-    sc_bv_base& b_not();
-
-    const sc_bv_base operator ~ () const
-	{ sc_bv_base a( *this ); return a.b_not(); }
-
-
-    // bitwise left shift
-
-    sc_bv_base& operator <<= ( int n );
-
-    const sc_bv_base operator << ( int n ) const
-	{ sc_bv_base a( *this ); return ( a <<= n ); }
-
-
-    // bitwise right shift
-
-    sc_bv_base& operator >>= ( int n );
-
-    const sc_bv_base operator >> ( int n ) const
-	{ sc_bv_base a( *this ); return ( a >>= n ); }
-
-
-    // bitwise left rotate
-
-    sc_bv_base& lrotate( int n );
-
-
-    // bitwise right rotate
-
-    sc_bv_base& rrotate( int n );
-
-#endif
-
-
     // common methods
 
     int length() const

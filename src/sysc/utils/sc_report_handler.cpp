@@ -208,7 +208,7 @@ void sc_report_handler::default_handler(const sc_report& rep,
 	sc_interrupt_here(rep.get_msg_type(), rep.get_severity());
 
     if ( actions & SC_ABORT )
-	abort();
+        sc_abort();
 
     if ( actions & SC_THROW ) {
         sc_process_b* proc_p = sc_get_current_process_b();
@@ -795,6 +795,7 @@ SC_API const char SC_ID_NOT_IMPLEMENTED_[]    = "not implemented";
 SC_API const char SC_ID_INTERNAL_ERROR_[]     = "internal error";
 SC_API const char SC_ID_ASSERTION_FAILED_[]   = "assertion failed";
 SC_API const char SC_ID_OUT_OF_BOUNDS_[]      = "out of bounds";
+SC_API const char SC_ID_ABORT_[]              = "simulation aborted";
 
 #define DEFINE_MSG(id,n)                                                     \
     {                                                                        \
@@ -812,7 +813,9 @@ static sc_msg_def default_msgs[] = {
     DEFINE_MSG(SC_ID_NOT_IMPLEMENTED_, 2),
     DEFINE_MSG(SC_ID_INTERNAL_ERROR_, 3),
     DEFINE_MSG(SC_ID_ASSERTION_FAILED_, 4),
-    DEFINE_MSG(SC_ID_OUT_OF_BOUNDS_, 5)
+    DEFINE_MSG(SC_ID_OUT_OF_BOUNDS_, 5),
+
+    DEFINE_MSG(SC_ID_ABORT_, 99)
 };
 
 sc_report_handler::msg_def_items sc_report_handler::msg_terminator =
@@ -822,6 +825,23 @@ sc_report_handler::msg_def_items sc_report_handler::msg_terminator =
     false,
     NULL
 };
+
+
+void
+sc_abort()
+{
+    SC_REPORT_INFO(SC_ID_ABORT_, 0);
+    abort();
+}
+
+
+void
+sc_assertion_failed(const char* msg, const char* file, int line)
+{
+    sc_report_handler::report( SC_FATAL, SC_ID_ASSERTION_FAILED_
+                             , msg, file, line );
+    sc_abort();
+}
 
 } // namespace sc_core
 

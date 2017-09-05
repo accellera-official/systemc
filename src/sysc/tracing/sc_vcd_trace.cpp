@@ -1781,6 +1781,12 @@ vcd_trace_file::do_initialize()
     std::fputs("$end\n\n", fp);
 }
 
+#if SC_TRACING_PHASE_CALLBACKS_
+void vcd_trace_file::trace( sc_trace_file* ) const {
+    SC_REPORT_ERROR( sc_core::SC_ID_INTERNAL_ERROR_
+                   , "invalid call to vcd_trace_file::trace(sc_trace_file*)" );
+}
+#endif // SC_TRACING_PHASE_CALLBACKS_
 
 // ----------------------------------------------------------------------------
 

@@ -1643,6 +1643,13 @@ void wif_trace_file::do_initialize()
     }
 }
 
+#if SC_TRACING_PHASE_CALLBACKS_
+void wif_trace_file::trace( sc_trace_file* ) const {
+    SC_REPORT_ERROR( sc_core::SC_ID_INTERNAL_ERROR_
+                   , "invalid call to wif_trace_file::trace(sc_trace_file*)" );
+}
+#endif // SC_TRACING_PHASE_CALLBACKS_
+
 // ----------------------------------------------------------------------------
 
 #define DEFN_TRACE_METHOD(tp)                                                 \

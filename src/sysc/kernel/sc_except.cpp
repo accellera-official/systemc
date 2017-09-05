@@ -67,6 +67,7 @@ sc_unwind_exception::~sc_unwind_exception() throw()
       // can't throw an exception, since we're already throwing
       // -> abort instead
       SC_REPORT_FATAL( SC_ID_RETHROW_UNWINDING_, m_proc_p->name() );
+      sc_abort(); // can't recover from here
   }
 }
 
@@ -83,7 +84,6 @@ SC_API sc_report*
 sc_handle_exception()
 {
     try {
-
         // re-throw exception here
         try { throw; }
 
@@ -93,7 +93,8 @@ sc_handle_exception()
         }
         catch( sc_unwind_exception const & )
         {
-            sc_assert( false && "Unhandled kill/reset, should never happen" );
+            SC_REPORT_ERROR( SC_ID_INTERNAL_ERROR_,
+                             "unhandled kill/reset, should never happen" );
         }
         catch( std::exception const & x )
         {

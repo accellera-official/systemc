@@ -164,18 +164,19 @@ void sc_method_process::disable_process(
 
     if ( !sc_allow_process_control_corners )
     {
-	switch( m_trigger_type )
-	{
-	  case AND_LIST_TIMEOUT:
-	  case EVENT_TIMEOUT:
-	  case OR_LIST_TIMEOUT:
-	  case TIMEOUT:
-	    report_error( SC_ID_PROCESS_CONTROL_CORNER_CASE_,
-	                  "attempt to disable a method with timeout wait" );
-	    break;
-	  default:
-	    break;
-	}
+        switch( m_trigger_type )
+        {
+          case AND_LIST_TIMEOUT:
+          case EVENT_TIMEOUT:
+          case OR_LIST_TIMEOUT:
+          case TIMEOUT:
+            report_error( SC_ID_PROCESS_CONTROL_CORNER_CASE_,
+                          "attempt to disable a method with timeout wait" );
+            // may continue, if suppressed
+            break;
+          default:
+            break;
+        }
     }
 
     // DISABLE OUR OBJECT INSTANCE:
@@ -243,9 +244,10 @@ void sc_method_process::kill_process(sc_descendant_inclusion_info descendants)
 
     // IF THE SIMULATION HAS NOT BEEN INITIALIZED YET THAT IS AN ERROR:
 
-    if ( sc_get_status() == SC_ELABORATION )
+    if ( !sc_is_running() )
     {
         report_error( SC_ID_KILL_PROCESS_WHILE_UNITIALIZED_ );
+        return;
     }
 
     // IF NEEDED, PROPOGATE THE KILL REQUEST THROUGH OUR DESCENDANTS:
@@ -313,6 +315,7 @@ sc_method_process::sc_method_process( const char* name_p,
     if ( dynamic_cast<sc_module*>(host_p) != 0 && sc_is_running() )
     {
         report_error( SC_ID_MODULE_METHOD_AFTER_START_, "" );
+        sc_abort(); // can't recover from here
     }
 
     // INITIALIZE VALUES:
@@ -406,13 +409,15 @@ void sc_method_process::suspend_process(
 
     if ( !sc_allow_process_control_corners && m_has_reset_signal )
     {
-	report_error(SC_ID_PROCESS_CONTROL_CORNER_CASE_,
-		     "attempt to suspend a method that has a reset signal");
+        report_error(SC_ID_PROCESS_CONTROL_CORNER_CASE_,
+                     "attempt to suspend a method that has a reset signal");
+        // may continue, if suppressed
     }
     else if ( !sc_allow_process_control_corners && m_sticky_reset )
     {
-	report_error(SC_ID_PROCESS_CONTROL_CORNER_CASE_,
-		     "attempt to suspend a method in synchronous reset");
+        report_error(SC_ID_PROCESS_CONTROL_CORNER_CASE_,
+                     "attempt to suspend a method in synchronous reset");
+        // may continue, if suppressed
     }
 
     // SUSPEND OUR OBJECT INSTANCE:
@@ -467,9 +472,10 @@ void sc_method_process::resume_process(
     if ( !sc_allow_process_control_corners && (m_state & ps_bit_disabled) &&
          (m_state & ps_bit_suspended) )
     {
-	m_state = m_state & ~ps_bit_suspended;
+        m_state = m_state & ~ps_bit_suspended;
         report_error( SC_ID_PROCESS_CONTROL_CORNER_CASE_,
-	              "call to resume() on a disabled suspended method");
+                      "call to resume() on a disabled suspended method" );
+        // may continue, if suppressed
     }
 
     // CLEAR THE SUSPENDED BIT:
@@ -573,6 +579,7 @@ void sc_method_process::throw_user( const sc_throw_it_helper& helper,
     if (  sc_get_status() != SC_RUNNING )
     {
         report_error( SC_ID_THROW_IT_WHILE_NOT_RUNNING_ );
+        return;
     }
 
     // IF NEEDED PROPOGATE THE THROW REQUEST THROUGH OUR DESCENDANTS:

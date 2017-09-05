@@ -61,7 +61,7 @@
 #include "sysc/utils/sc_utils_ids.h"
 #include "sysc/datatypes/bit/sc_logic.h"
 
-#include <cstdio>
+#include <sstream>
 
 
 namespace sc_dt
@@ -79,17 +79,19 @@ namespace sc_dt
 void
 sc_bit::invalid_value( char c )
 {
-    char msg[BUFSIZ];
-    std::sprintf( msg, "sc_bit( '%c' )", c );
-    SC_REPORT_ERROR( sc_core::SC_ID_VALUE_NOT_VALID_, msg );
+    std::stringstream msg;
+    msg << "sc_bit( '" << c << "' )";
+    SC_REPORT_ERROR( sc_core::SC_ID_VALUE_NOT_VALID_, msg.str().c_str() );
+    sc_core::sc_abort(); // can't recover from here
 }
 
 void
 sc_bit::invalid_value( int i )
 {
-    char msg[BUFSIZ];
-    std::sprintf( msg, "sc_bit( %d )", i );
-    SC_REPORT_ERROR( sc_core::SC_ID_VALUE_NOT_VALID_, msg );
+    std::stringstream msg;
+    msg << "sc_bit( " << i << " )";
+    SC_REPORT_ERROR( sc_core::SC_ID_VALUE_NOT_VALID_, msg.str().c_str() );
+    sc_core::sc_abort(); // can't recover from here
 }
 
 

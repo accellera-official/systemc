@@ -92,6 +92,8 @@
 #include "sysc/datatypes/fx/sc_ufix.h"
 #include "sysc/datatypes/fx/scfx_other_defs.h"
 
+#include <sstream>
+
 // explicit template instantiations
 namespace sc_core {
 template class SC_API sc_vpool<sc_dt::sc_unsigned_bitref>;
@@ -110,6 +112,15 @@ sc_core::sc_vpool<sc_unsigned> sc_unsigned::m_pool(8);
 sc_core::sc_vpool<sc_unsigned_bitref> sc_unsigned_bitref::m_pool(9);
 sc_core::sc_vpool<sc_unsigned_subref> sc_unsigned_subref::m_pool(9);
 
+
+void sc_unsigned::invalid_init( const char* type_name, int nb ) const
+{
+    std::stringstream msg;
+    msg << "sc_unsigned( "<< type_name << " ) : nb = " << nb << " is not valid";
+    SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg.str().c_str() );
+}
+
+
 // -----------------------------------------------------------------------------
 // SECTION: Public members - Invalid selections.
 // -----------------------------------------------------------------------------
@@ -117,23 +128,22 @@ sc_core::sc_vpool<sc_unsigned_subref> sc_unsigned_subref::m_pool(9);
 void
 sc_unsigned::invalid_index( int i ) const
 {
-    char msg[BUFSIZ];
-    std::sprintf( msg,
-         "sc_biguint bit selection: index = %d violates "
-         "0 <= index <= %d",
-         i, nbits - 2 );
-    SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
+    std::stringstream msg;
+    msg << "sc_biguint bit selection: index = " << i << " violates "
+           "0 <= index <= " << (nbits-2);
+    SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg.str().c_str() );
+    sc_core::sc_abort(); // can't recover from here
 }
 
 void
 sc_unsigned::invalid_range( int l, int r ) const
 {
-    char msg[BUFSIZ];
-    std::sprintf( msg,
-         "sc_biguint part selection: left = %d, right = %d \n"
-	 "  violates either (%d >= left >= 0) or (%d >= right >= 0)",
-         l, r, nbits-2, nbits-2 );
-    SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
+    std::stringstream msg;
+    msg << "sc_biguint part selection: left = " << l << ", right = " << r << "\n"
+           "  violates either (" << (nbits-2) << " >= left >= 0) or "
+           "(" << (nbits-2) << " >= right >= 0)";
+    SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg.str().c_str() );
+    sc_core::sc_abort(); // can't recover from here
 }
 
 // ----------------------------------------------------------------------------
@@ -465,19 +475,18 @@ sc_unsigned::operator = ( const char* a )
         SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_,
                          "character string is zero" );
     }
-    if( *a == 0 ) {
+    else if( *a == 0 ) {
         SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_,
                          "character string is empty" );
     }
-    try {
+    else try {
         int len = length();
         sc_ufix aa( a, len, len, SC_TRN, SC_WRAP, 0, SC_ON );
         return this->operator = ( aa );
-    } catch( sc_core::sc_report ) {
-        char msg[BUFSIZ];
-        std::sprintf( msg, "character string '%s' is not valid", a );
-        SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_, msg );
-        // never reached
+    } catch( const sc_core::sc_report & ) {
+        std::stringstream msg;
+        msg << "character string '" << a << "' is not valid";
+        SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_, msg.str().c_str() );
     }
     return *this;
 }

@@ -29,6 +29,8 @@
 
 #include "sysc/communication/sc_event_finder.h"
 
+#include <sstream>
+
 namespace sc_core {
 
 // ----------------------------------------------------------------------------
@@ -42,14 +44,11 @@ namespace sc_core {
 void
 sc_event_finder::report_error( const char* id, const char* add_msg ) const
 {
-    char msg[BUFSIZ];
-    if( add_msg != 0 ) {
-	std::sprintf( msg, "%s: port '%s' (%s)",
-		 add_msg, m_port.name(), m_port.kind() );
-    } else {
-	std::sprintf( msg, "port '%s' (%s)", m_port.name(), m_port.kind() );
-    }
-    SC_REPORT_ERROR( id, msg );
+    std::stringstream msg;
+    if (add_msg != 0)
+        msg << add_msg << ": ";
+    msg << "port '" << m_port.name() << "' (" << m_port.kind() << ")";
+    SC_REPORT_ERROR( id, msg.str().c_str() );
 }
 
 

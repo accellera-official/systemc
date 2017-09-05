@@ -666,17 +666,19 @@ sc_event_list::report_premature_destruction() const
     // is currently running (which is only part of the story):
 
     if( sc_get_current_process_handle().valid() ) {
-        // FIXME: improve error-handling
-        sc_assert( false && "sc_event_list prematurely destroyed" );
+        // called from a destructor, can't throw
+        SC_REPORT_FATAL( SC_ID_EVENT_LIST_FAILED_
+                       , "list prematurely destroyed" );
+        sc_abort();
     }
-
 }
 
 void
 sc_event_list::report_invalid_modification() const
 {
-    // FIXME: improve error-handling
-    sc_assert( false && "sc_event_list modfied while being waited on" );
+    SC_REPORT_ERROR( SC_ID_EVENT_LIST_FAILED_
+                   , "list modfied while being waited on" );
+    // may continue, if suppressed
 }
 
 // ----------------------------------------------------------------------------
