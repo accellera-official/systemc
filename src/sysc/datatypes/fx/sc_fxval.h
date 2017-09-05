@@ -1355,7 +1355,7 @@ short
 sc_fxval::to_short() const
 {
     SC_FXVAL_OBSERVER_READ_( *this )
-    return static_cast<short>( m_rep->to_double() );
+    return static_cast<short>( m_rep->to_uint64() );
 }
 
 inline
@@ -1363,7 +1363,7 @@ unsigned short
 sc_fxval::to_ushort() const
 {
     SC_FXVAL_OBSERVER_READ_( *this )
-    return static_cast<unsigned short>( m_rep->to_double() );
+    return static_cast<unsigned short>( m_rep->to_uint64() );
 }
 
 inline
@@ -1371,7 +1371,7 @@ int
 sc_fxval::to_int() const
 {
     SC_FXVAL_OBSERVER_READ_( *this )
-    return static_cast<int>( m_rep->to_double() );
+    return static_cast<int>( m_rep->to_uint64() );
 }
 
 inline
@@ -1379,23 +1379,7 @@ int64
 sc_fxval::to_int64() const
 {
     SC_FXVAL_OBSERVER_READ_( *this )
-    return static_cast<int64>( m_rep->to_double() );
-}
-
-inline
-uint64
-sc_fxval::to_uint64() const
-{
-    SC_FXVAL_OBSERVER_READ_( *this )
-    return static_cast<uint64>( m_rep->to_double() );
-}
-
-inline
-long
-sc_fxval::to_long() const
-{
-    SC_FXVAL_OBSERVER_READ_( *this )
-    return static_cast<long>( m_rep->to_double() );
+    return static_cast<int64>( m_rep->to_uint64() );
 }
 
 inline
@@ -1403,7 +1387,23 @@ unsigned int
 sc_fxval::to_uint() const
 {
     SC_FXVAL_OBSERVER_READ_( *this )
-    return static_cast<unsigned int>( m_rep->to_double() );
+    return static_cast<unsigned int>( m_rep->to_uint64() );
+}
+
+inline
+uint64
+sc_fxval::to_uint64() const
+{
+    SC_FXVAL_OBSERVER_READ_( *this )
+    return m_rep->to_uint64();
+}
+
+inline
+long
+sc_fxval::to_long() const
+{
+    SC_FXVAL_OBSERVER_READ_( *this )
+    return static_cast<long>( m_rep->to_uint64() );
 }
 
 inline
@@ -1411,7 +1411,7 @@ unsigned long
 sc_fxval::to_ulong() const
 {
     SC_FXVAL_OBSERVER_READ_( *this )
-    return static_cast<unsigned long>( m_rep->to_double() );
+    return static_cast<unsigned long>( m_rep->to_uint64() );
 }
 
 inline
@@ -2109,64 +2109,81 @@ inline
 short
 sc_fxval_fast::to_short() const
 {
-    SC_FXVAL_FAST_OBSERVER_READ_( *this )
-    return static_cast<short>( m_val );
+    // SC_FXVAL_FAST_OBSERVER_READ_ in to_uint64
+    return static_cast<short>( to_uint64() );
 }
 
 inline
 unsigned short
 sc_fxval_fast::to_ushort() const
 {
-    SC_FXVAL_FAST_OBSERVER_READ_( *this )
-    return static_cast<unsigned short>( m_val );
+    // SC_FXVAL_FAST_OBSERVER_READ_ in to_uint64
+    return static_cast<unsigned short>( to_uint64() );
 }
 
 inline
 int64
 sc_fxval_fast::to_int64() const
 {
-    SC_FXVAL_FAST_OBSERVER_READ_( *this )
-    return static_cast<int64>( m_val );
+    // SC_FXVAL_FAST_OBSERVER_READ_ in to_uint64
+    return static_cast<int64>( to_uint64() );
 }
 
 inline
 int
 sc_fxval_fast::to_int() const
 {
-    SC_FXVAL_FAST_OBSERVER_READ_( *this )
-    return static_cast<int>( m_val );
+    // SC_FXVAL_FAST_OBSERVER_READ_ in to_uint64
+    return static_cast<int>( to_uint64() );
 }
 
 inline
 unsigned int
 sc_fxval_fast::to_uint() const
 {
-    SC_FXVAL_FAST_OBSERVER_READ_( *this )
-    return static_cast<unsigned int>( m_val );
+    // SC_FXVAL_FAST_OBSERVER_READ_ in to_uint64
+    return static_cast<unsigned int>( to_uint64() );
 }
 
 inline
 uint64
 sc_fxval_fast::to_uint64() const
 {
-    SC_FXVAL_FAST_OBSERVER_READ_( *this )
-    return static_cast<uint64>( m_val );
+    // SC_FXVAL_FAST_OBSERVER_READ_ in is_normal
+    if (!is_normal())
+    {
+        return 0;
+    }
+
+    int exponent;
+    double mantissa_dbl = frexp(m_val, &exponent);
+
+    uint64 mantissa = static_cast<uint64>(fabs(mantissa_dbl) * (UINT64_ONE << 53));
+    exponent -= 53;
+
+    if (!(-64 < exponent && exponent < 64))
+    {
+        return 0;
+    }
+
+    mantissa = exponent >= 0 ? mantissa << exponent : mantissa >> -exponent;
+    return mantissa_dbl >= 0 ? mantissa : -mantissa;
 }
 
 inline
 long
 sc_fxval_fast::to_long() const
 {
-    SC_FXVAL_FAST_OBSERVER_READ_( *this )
-    return static_cast<long>( m_val );
+    // SC_FXVAL_FAST_OBSERVER_READ_ in to_uint64
+    return static_cast<long>( to_uint64() );
 }
 
 inline
 unsigned long
 sc_fxval_fast::to_ulong() const
 {
-    SC_FXVAL_FAST_OBSERVER_READ_( *this )
-    return static_cast<unsigned long>( m_val );
+    // SC_FXVAL_FAST_OBSERVER_READ_ in to_uint64
+    return static_cast<unsigned long>( to_uint64() );
 }
 
 inline

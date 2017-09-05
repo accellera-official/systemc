@@ -905,6 +905,38 @@ scfx_rep::to_double() const
 
 
 // ----------------------------------------------------------------------------
+//  METHOD : to_uint64
+//
+//  Convert from scfx_rep to uint64.
+//  Truncates towards 0 _then_ wraps; infinities and NaN go to zero.
+// ----------------------------------------------------------------------------
+
+uint64
+scfx_rep::to_uint64() const
+{
+    if( !is_normal() || is_zero() )
+    {
+        return 0;
+    }
+
+    uint64 result = 0;
+    int shift = 0;
+    int idx = m_wp;
+
+    // Ignore bits off the top; they modulo out.
+    // Ignore bits off the bottom; we're truncating.
+    while (shift < 64 && m_msw >= idx && idx >= m_lsw)
+    {
+        result += static_cast<uint64>(m_mant[idx]) << shift;
+        shift += bits_in_word;
+        idx += 1;
+    }
+
+    return m_sign > 0 ? result : -result;
+}
+
+
+// ----------------------------------------------------------------------------
 //  METHOD : to_string
 //
 //  Convert from scfx_rep to character string.
