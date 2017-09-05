@@ -300,6 +300,8 @@ option (DISABLE_ASYNC_UPDATES "Disable async_request_update() support." OFF)
 
 option (DISABLE_COPYRIGHT_MESSAGE "Do not print the copyright message when starting the application." OFF)
 
+option (DISABLE_VCD_SCOPES "Put all traces in a single dummy scope. For compatibility with SystemC 2.3.1." OFF)
+
 option (DISABLE_VIRTUAL_BIND "Disable the definition of bind() member functions of ports and exports as \"virtual\", which is incompatible with old TLM library implementations (< 2.0.2)." OFF)
 
 option (ENABLE_ASSERTIONS "Always enable the `sc_assert' expressions." ON)
@@ -345,7 +347,8 @@ mark_as_advanced(DISABLE_ASYNC_UPDATES
                  ENABLE_IMMEDIATE_SELF_NOTIFICATIONS
                  ENABLE_PHASE_CALLBACKS
                  ENABLE_PHASE_CALLBACKS_TRACING
-                 OVERRIDE_DEFAULT_STACK_SIZE)
+                 OVERRIDE_DEFAULT_STACK_SIZE
+                 DISABLE_VCD_SCOPES)
 
 
 ###############################################################################
@@ -640,6 +643,7 @@ else (DISABLE_ASYNC_UPDATES)
   message (STATUS "DISABLE_ASYNC_UPDATES = ${DISABLE_ASYNC_UPDATES}")
 endif (DISABLE_ASYNC_UPDATES)
 message (STATUS "DISABLE_COPYRIGHT_MESSAGE = ${DISABLE_COPYRIGHT_MESSAGE}")
+message (STATUS "DISABLE_VCD_SCOPES = ${DISABLE_VCD_SCOPES}")
 if (DISABLE_VIRTUAL_BIND)
   message ("DISABLE_VIRTUAL_BIND = ${DISABLE_VIRTUAL_BIND}")
 else (DISABLE_VIRTUAL_BIND)

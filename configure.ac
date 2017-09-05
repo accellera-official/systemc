@@ -464,6 +464,23 @@ AM_CONDITIONAL([ENABLE_CALLBACKS_TRACING],dnl
 AC_MSG_RESULT($enable_phase_callbacks)
 
 dnl
+dnl enable VCD scopes
+dnl
+AC_MSG_CHECKING([whether to enable VCD scopes by default])
+AC_ARG_ENABLE([vcd-scopes],
+  [AS_HELP_STRING([--enable-vcd-scopes],
+                  [enable vcd scopes
+                   @<:@yes(=default)|no@:>@])],
+  [AS_CASE(["${enableval}"],dnl
+    [yes|default],       [enable_vcd_scopes=yes],
+    [no],[enable_vcd_scopes=no],
+    [AC_MSG_ERROR([bad value ${enableval} for --enable-vcd-scopes])])],
+  [enable_vcd_scopes=yes])
+AM_CONDITIONAL([DISABLE_VCD_SCOPES],dnl
+               [test x"$enable_vcd_scopes" = xno])
+AC_MSG_RESULT($enable_vcd_scopes)
+
+dnl
 dnl Set conditionals for various quick thread architectures:
 dnl
 AM_CONDITIONAL([QT_ARCH_X86], [ test "${QT_ARCH}" = "iX86" ])
@@ -636,6 +653,7 @@ Configuration summary of $PACKAGE_STRING for $target
    Enable compiler optimizations  : $enable_optimize
    Include debugging symbols      : $enable_debug
    Coroutine package for processes: $sysc_coroutine
+   Enable VCD scopes by default   : $enable_vcd_scopes
    Disable async_request_update   : $disable_async_updates
    Phase callbacks (experimental) : $enable_phase_callbacks
  ${sysc_additional}
