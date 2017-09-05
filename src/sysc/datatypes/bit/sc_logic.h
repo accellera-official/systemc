@@ -111,6 +111,8 @@ private:
 	{
 	    if( v < Log_0 || v > Log_X ) {
 		invalid_value( v );
+		// may continue, if suppressed
+		v = Log_X;
 	    }
 	    return v;
 	}
@@ -120,27 +122,22 @@ private:
 
     static sc_logic_value_t to_value( char c )
 	{
-	    sc_logic_value_t v;
 	    unsigned int index = (int)c;
 	    if ( index > 127 )
 	    {
-	        invalid_value(c);
-		v = Log_X;
+		invalid_value( c );
+		// may continue, if suppressed
+		index = 127; // aka Log_X
 	    }
-	    else
-	    {
-		v = char_to_logic[index];
-		if( v < Log_0 || v > Log_X ) {
-		    invalid_value( c );
-		}
-	    }
-	    return v;
+	    return char_to_logic[index];
 	}
 
     static sc_logic_value_t to_value( int i )
 	{
 	    if( i < Log_0 || i > Log_X ) {
 		invalid_value( i );
+		// may continue, if suppressed
+		i = Log_X;
 	    }
 	    return sc_logic_value_t( i );
 	}

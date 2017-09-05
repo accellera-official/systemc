@@ -536,7 +536,6 @@ sc_simcontext::crunch( bool once )
 	{
 //	    SC_DO_PHASE_CALLBACK_(evaluation_done);
 	    m_change_stamp++;
-	    m_delta_count ++;
 	}
 	m_prim_channel_registry->perform_update();
 	SC_DO_PHASE_CALLBACK_(update_done);
@@ -582,6 +581,9 @@ sc_simcontext::crunch( bool once )
 	    m_delta_events.clear();
 	}
 
+	if ( !empty_eval_phase )
+		m_delta_count ++;
+
 	if( m_runnable->is_empty() ) {
 	    // no more runnable processes
 	    break;
@@ -612,11 +614,6 @@ sc_simcontext::cycle( const sc_time& t)
 
     m_in_simulator_control = true;
     crunch();
-#if SC_SIMCONTEXT_TRACING_
-    if( m_something_to_trace ) {
-        trace_cycle( /* delta cycle? */ false );
-    }
-#endif
     do_timestep( m_curr_time + t );
     if ( next_time(next_event_time) && next_event_time <= m_curr_time) {
         SC_REPORT_WARNING(SC_ID_CYCLE_MISSES_EVENTS_, "");
@@ -745,7 +742,8 @@ sc_simcontext::prepare_to_simulate()
 	}
 	else if ( (method_p->m_state & sc_process_b::ps_bit_suspended) == 0)
 	{
-	    push_runnable_method_front( method_p );
+            if ( !method_p->is_runnable() ) // already scheduled?
+                push_runnable_method_front( method_p );
         }
 	else
 	{
@@ -770,7 +768,8 @@ sc_simcontext::prepare_to_simulate()
 	}
 	else if ( (thread_p->m_state & sc_process_b::ps_bit_suspended) == 0)
 	{
-            push_runnable_thread_front( thread_p );
+            if ( !thread_p->is_runnable() ) // already scheduled?
+                push_runnable_thread_front( thread_p );
         }
 	else
 	{
@@ -806,12 +805,6 @@ sc_simcontext::initial_crunch( bool no_crunch )
     if( m_error ) {
         return;
     }
-
-#if SC_SIMCONTEXT_TRACING_
-    if( m_something_to_trace ) {
-        trace_cycle( false );
-    }
-#endif
 
     // check for call(s) to sc_stop
     if( m_forced_stop ) {
@@ -881,10 +874,6 @@ sc_simcontext::simulate( const sc_time& duration )
 	    m_in_simulator_control = false;
 	    return;
 	}
-#if SC_SIMCONTEXT_TRACING_
-        if( m_something_to_trace )
-            trace_cycle( /* delta cycle? */ false );
-#endif
         if( m_forced_stop ) {
             do_sc_stop_action();
             return;
@@ -902,11 +891,6 @@ sc_simcontext::simulate( const sc_time& duration )
 	    m_in_simulator_control = false;
 	    return;
 	}
-#if SC_SIMCONTEXT_TRACING_
-	if( m_something_to_trace ) {
-	    trace_cycle( false );
-	}
-#endif
         // check for call(s) to sc_stop() or sc_pause().
         if( m_forced_stop ) {
             do_sc_stop_action();
@@ -959,7 +943,15 @@ void
 sc_simcontext::do_timestep(const sc_time& t)
 {
     sc_assert( m_curr_time < t );
+
     SC_DO_PHASE_CALLBACK_(before_timestep);
+
+#if SC_SIMCONTEXT_TRACING_
+    if( m_something_to_trace ) {
+        trace_cycle( false );
+    }
+#endif
+
     m_curr_time = t;
     m_change_stamp++;
     m_initial_delta_count_at_current_time = m_delta_count;
@@ -1850,18 +1842,17 @@ SC_API void sc_set_stop_mode(sc_stop_mode mode)
     if ( sc_is_running() )
     {
         SC_REPORT_ERROR(SC_ID_STOP_MODE_AFTER_START_,"");
+        return;
     }
-    else
+
+    switch( mode )
     {
-        switch( mode )
-        {
-          case SC_STOP_IMMEDIATE:
-          case SC_STOP_FINISH_DELTA:
-              stop_mode = mode;
-              break;
-          default:
-              break;
-        }
+      case SC_STOP_IMMEDIATE:
+      case SC_STOP_FINISH_DELTA:
+          stop_mode = mode;
+          break;
+      default:
+          break;
     }
 }
 

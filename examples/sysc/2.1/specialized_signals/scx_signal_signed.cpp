@@ -149,7 +149,7 @@ sc_signed sc_signed_part_if::read_part( int /*left*/, int /*right*/ ) const
 sc_signed_sigref& sc_signed_part_if::select_part( int /*left*/, int /*right*/ )
 {
     SC_REPORT_ERROR( SC_ID_OPERATION_ON_NON_SPECIALIZED_SIGNAL_, "int" );
-    return *(sc_signed_sigref*)0;
+    sc_core::sc_abort(); // can't recover from here
 }
 void sc_signed_part_if::write_part( int64 /*v*/, int /*left*/, int /*right*/ )
 {

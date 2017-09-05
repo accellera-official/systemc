@@ -461,7 +461,8 @@ IF*
 sc_port_b<IF>::operator -> ()
 {
     if( m_interface == 0 ) {
-	report_error( SC_ID_GET_IF_, "port is not bound" );
+        report_error( SC_ID_GET_IF_, "port is not bound" );
+        sc_core::sc_abort(); // can't recover from here
     }
     return m_interface;
 }
@@ -471,10 +472,8 @@ inline
 const IF*
 sc_port_b<IF>::operator -> () const
 {
-    if( m_interface == 0 ) {
-	report_error( SC_ID_GET_IF_, "port is not bound" );
-    }
-    return m_interface;
+    // delegate implementation to non-const overload
+    return const_cast<sc_port_b&>(*this).operator->();
 }
 
 
@@ -490,10 +489,11 @@ IF*
 sc_port_b<IF>::get_interface( int index_ )
 {
     if ( index_ == 0 ) {
-    	return m_interface;
+        return m_interface;
     }
     else if( index_ < 0 || index_ >= size() ) {
-	report_error( SC_ID_GET_IF_, "index out of range" );
+        report_error( SC_ID_GET_IF_, "index out of range" );
+        return NULL;
     }
     return m_interface_vec[index_];
 }
@@ -503,13 +503,8 @@ inline
 const IF*
 sc_port_b<IF>::get_interface( int index_ ) const
 {
-    if ( index_ == 0 ) {
-    	return m_interface;
-    }
-    else if( index_ < 0 || index_ >= size() ) {
-	report_error( SC_ID_GET_IF_, "index out of range" );
-    }
-    return m_interface_vec[index_];
+    // delegate implementation to non-const overload
+    return const_cast<sc_port_b&>(*this).get_interface(index_);
 }
 
 
@@ -559,11 +554,12 @@ sc_port_b<IF>::add_interface( sc_interface* interface_ )
     int if_n = size();
     for ( int i = 0; i < if_n; i++ )
     {
-    	if ( iface == m_interface_vec[i] )
-	{
-	    report_error( SC_ID_BIND_IF_TO_PORT_,
-	    	"interface already bound to port" );
-	}
+        if ( iface == m_interface_vec[i] )
+        {
+            report_error( SC_ID_BIND_IF_TO_PORT_,
+                          "interface already bound to port" );
+            // may continue, if suppressed
+        }
     }
 
     // "bind" the interface and make sure our short cut for 0 is set up.

@@ -101,21 +101,6 @@ sc_object::dump(::std::ostream& os) const
     os << "kind = " << kind() << "\n";
 }
 
-static int sc_object_num = 0;
-
-static std::string
-sc_object_newname()
-{
-    char        buffer[64];
-    std::string result;
-
-    std::sprintf(buffer, "{%d}", sc_object_num);
-    sc_object_num++;
-    result = buffer;
-
-    return result;
-}
-
 // +----------------------------------------------------------------------------
 // |"sc_object::remove_child_event"
 // | 
@@ -169,7 +154,7 @@ sc_object::remove_child_object( sc_object* object_p )
 // |"sc_object::sc_object_init"
 // | 
 // | This method initializes this object instance and places it in to the
-// | object hierarchy if the supplied name is not NULL.
+// | object hierarchy.
 // |
 // | Arguments:
 // |     nm = leaf name for the object.
@@ -187,10 +172,9 @@ sc_object::sc_object_init(const char* nm)
     m_parent = m_simc->active_object();
 
     // CONSTRUCT PATHNAME TO OBJECT BEING CREATED: 
-    // 
-    // If there is not a leaf name generate one. 
 
-    m_name = object_manager->create_name(nm ? nm : sc_object_newname().c_str());
+    sc_assert( nm );
+    m_name = object_manager->create_name(nm);
 
 
     // PLACE THE OBJECT INTO THE HIERARCHY
@@ -234,7 +218,7 @@ sc_object::sc_object(const char* nm) :
     // null name or "" uses machine generated name.
     
     if ( !nm || !*nm )
-	nm = sc_gen_unique_name("object");
+        nm = sc_gen_unique_name("object");
     p = nm;
 
     if (nm && sc_enable_name_checking) {

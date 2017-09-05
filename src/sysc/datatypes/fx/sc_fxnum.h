@@ -3433,7 +3433,7 @@ short
 sc_fxnum::to_short() const
 {
     SC_FXNUM_OBSERVER_READ_( *this )
-    return static_cast<short>( m_rep->to_double() );
+    return static_cast<short>( m_rep->to_uint64() );
 }
 
 inline
@@ -3441,7 +3441,7 @@ unsigned short
 sc_fxnum::to_ushort() const
 {
     SC_FXNUM_OBSERVER_READ_( *this )
-    return static_cast<unsigned short>( m_rep->to_double() );
+    return static_cast<unsigned short>( m_rep->to_uint64() );
 }
 
 inline
@@ -3449,7 +3449,7 @@ int
 sc_fxnum::to_int() const
 {
     SC_FXNUM_OBSERVER_READ_( *this )
-    return static_cast<int>( m_rep->to_double() );
+    return static_cast<int>( m_rep->to_uint64() );
 }
 
 inline
@@ -3457,7 +3457,7 @@ int64
 sc_fxnum::to_int64() const
 {
     SC_FXNUM_OBSERVER_READ_( *this )
-    return static_cast<int64>( m_rep->to_double() );
+    return static_cast<int64>( m_rep->to_uint64() );
 }
 
 inline
@@ -3465,7 +3465,7 @@ unsigned int
 sc_fxnum::to_uint() const
 {
     SC_FXNUM_OBSERVER_READ_( *this )
-    return static_cast<unsigned int>( m_rep->to_double() );
+    return static_cast<unsigned int>( m_rep->to_uint64() );
 }
 
 inline
@@ -3473,7 +3473,7 @@ uint64
 sc_fxnum::to_uint64() const
 {
     SC_FXNUM_OBSERVER_READ_( *this )
-    return static_cast<uint64>( m_rep->to_double() );
+    return m_rep->to_uint64();
 }
 
 inline
@@ -3481,7 +3481,7 @@ long
 sc_fxnum::to_long() const
 {
     SC_FXNUM_OBSERVER_READ_( *this )
-    return static_cast<long>( m_rep->to_double() );
+    return static_cast<long>( m_rep->to_uint64() );
 }
 
 inline
@@ -3489,7 +3489,7 @@ unsigned long
 sc_fxnum::to_ulong() const
 {
     SC_FXNUM_OBSERVER_READ_( *this )
-    return static_cast<unsigned long>( m_rep->to_double() );
+    return static_cast<unsigned long>( m_rep->to_uint64() );
 }
 
 inline
@@ -4551,64 +4551,81 @@ inline
 short
 sc_fxnum_fast::to_short() const
 {
-    SC_FXNUM_FAST_OBSERVER_READ_( *this )
-    return static_cast<short>( m_val );
+    // SC_FXNUM_FAST_OBSERVER_READ_ in to_uint64
+    return static_cast<short>( to_uint64() );
 }
 
 inline
 unsigned short
 sc_fxnum_fast::to_ushort() const
 {
-    SC_FXNUM_FAST_OBSERVER_READ_( *this )
-    return static_cast<unsigned short>( m_val );
+    // SC_FXNUM_FAST_OBSERVER_READ_ in to_uint64
+    return static_cast<unsigned short>( to_uint64() );
 }
 
 inline
 int
 sc_fxnum_fast::to_int() const
 {
-    SC_FXNUM_FAST_OBSERVER_READ_( *this )
-    return static_cast<int>( m_val );
+    // SC_FXNUM_FAST_OBSERVER_READ_ in to_uint64
+    return static_cast<int>( to_uint64() );
 }
 
 inline
 int64
 sc_fxnum_fast::to_int64() const
 {
-    SC_FXNUM_FAST_OBSERVER_READ_( *this )
-    return static_cast<int64>( m_val );
+    // SC_FXNUM_FAST_OBSERVER_READ_ in to_uint64
+    return static_cast<int64>( to_uint64() );
 }
 
 inline
 unsigned int
 sc_fxnum_fast::to_uint() const
 {
-    SC_FXNUM_FAST_OBSERVER_READ_( *this )
-    return static_cast<unsigned int>( m_val );
+    // SC_FXNUM_FAST_OBSERVER_READ_ in to_uint64
+    return static_cast<unsigned int>( to_uint64() );
 }
 
 inline
 uint64
 sc_fxnum_fast::to_uint64() const
 {
-    SC_FXNUM_FAST_OBSERVER_READ_( *this )
-    return static_cast<uint64>( m_val );
+    // SC_FXNUM_FAST_OBSERVER_READ_ in is_normal
+    if (!is_normal())
+    {
+        return 0;
+    }
+
+    int exponent;
+    double mantissa_dbl = frexp(m_val, &exponent);
+
+    uint64 mantissa = static_cast<uint64>(fabs(mantissa_dbl) * (UINT64_ONE << 53));
+    exponent -= 53;
+
+    if (!(-64 < exponent && exponent < 64))
+    {
+        return 0;
+    }
+
+    mantissa = exponent >= 0 ? mantissa << exponent : mantissa >> -exponent;
+    return mantissa_dbl >= 0 ? mantissa : -mantissa;
 }
 
 inline
 long
 sc_fxnum_fast::to_long() const
 {
-    SC_FXNUM_FAST_OBSERVER_READ_( *this )
-    return static_cast<long>( m_val );
+    // SC_FXNUM_FAST_OBSERVER_READ_ in to_uint64
+    return static_cast<long>( to_uint64() );
 }
 
 inline
 unsigned long
 sc_fxnum_fast::to_ulong() const
 {
-    SC_FXNUM_FAST_OBSERVER_READ_( *this )
-    return static_cast<unsigned long>( m_val );
+    // SC_FXNUM_FAST_OBSERVER_READ_ in to_uint64
+    return static_cast<unsigned long>( to_uint64() );
 }
 
 inline
@@ -4742,7 +4759,7 @@ inline
 void
 sc_fxnum_fast::observer_read() const
 {
-    SC_FXNUM_OBSERVER_READ_( *this );
+    SC_FXNUM_FAST_OBSERVER_READ_( *this );
 }
 
 

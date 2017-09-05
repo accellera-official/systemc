@@ -198,50 +198,6 @@ public:
     sc_lv_base& operator = ( int64 a )
 	{ base_type::assign_( a ); return *this; }
 
-
-#if 0
-
-    // bitwise complement
-
-    sc_lv_base& b_not()
-	{ return sc_proxy<sc_lv_base>::b_not(); }
-
-    const sc_lv_base operator ~ () const
-	{ sc_lv_base a( *this ); return a.b_not(); }
-
-
-    // bitwise left shift
-
-    sc_lv_base& operator <<= ( int n )
-	{ return sc_proxy<sc_lv_base>::operator <<= ( n ); }
-
-    const sc_lv_base operator << ( int n ) const
-	{ sc_lv_base a( *this ); return ( a <<= n ); }
-
-
-    // bitwise right shift
-
-    sc_lv_base& operator >>= ( int n )
-	{ return sc_proxy<sc_lv_base>::operator >>= ( n ); }
-
-    const sc_lv_base operator >> ( int n ) const
-	{ sc_lv_base a( *this ); return ( a >>= n ); }
-
-
-    // bitwise left rotate
-
-    sc_lv_base& lrotate( int n )
-	{ return sc_proxy<sc_lv_base>::lrotate( n ); }
-
-
-    // bitwise right rotate
-
-    sc_lv_base& rrotate( int n )
-	{ return sc_proxy<sc_lv_base>::rrotate( n ); }
-
-#endif
-
-
     // common methods
 
     int length() const
@@ -714,11 +670,9 @@ sc_proxy<X>::lrotate( int n )
 {
     X& x = back_cast();
     if( n < 0 ) {
-	char msg[BUFSIZ];
-	std::sprintf( msg,
-		 "left rotate operation is only allowed with positive "
-		 "rotate values, rotate value = %d", n );
-	SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
+        sc_proxy_out_of_bounds( "left rotate operation is only allowed with "
+                                "positive rotate values, rotate value = ", n );
+        return x;
     }
     int len = x.length();
     n %= len;
@@ -753,11 +707,9 @@ sc_proxy<X>::rrotate( int n )
 {
     X& x = back_cast();
     if( n < 0 ) {
-	char msg[BUFSIZ];
-	std::sprintf( msg,
-		 "right rotate operation is only allowed with positive "
-		 "rotate values, rotate value = %d", n );
-	SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
+        sc_proxy_out_of_bounds( "right rotate operation is only allowed with "
+                                "positive rotate values, rotate value = ", n );
+        return x;
     }
     int len = x.length();
     n %= len;

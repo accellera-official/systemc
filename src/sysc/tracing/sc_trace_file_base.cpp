@@ -60,9 +60,10 @@ sc_trace_file_base::sc_trace_file_base( const char* name, const char* extension 
   , sc_object( sc_gen_unique_name("$$$$kernel_tracefile$$$$") )
 #endif
   , fp(0)
-  , timescale_unit()
+  , trace_unit_fs()
+  , kernel_unit_fs()
   , timescale_set_by_user(false)
-  , filename_() 
+  , filename_()
   , initialized_(false)
   , trace_delta_cycles_(false)
 {
@@ -79,15 +80,7 @@ sc_trace_file_base::sc_trace_file_base( const char* name, const char* extension 
     // remove from hierarchy
     sc_object::detach();
     // register regular (non-delta) callbacks
-    sc_object::register_simulation_phase_callback(
-        // Note: Usually, one would expect to dump the initial values
-        //       of the traced variables at the end of the initialization
-        //       phase.  The "non-callback" implementation dumps those
-        //       values only after the first delta cycle, though.
-        // SC_END_OF_INITIALIZATION |
-        SC_BEFORE_TIMESTEP |
-        SC_PAUSED | SC_STOPPED
-    );
+    sc_object::register_simulation_phase_callback( SC_BEFORE_TIMESTEP );
 #else // explicitly register with simcontext
     sc_get_curr_simcontext()->add_trace_file( this );
 #endif
@@ -140,18 +133,19 @@ sc_trace_file_base::initialize()
         if( running_regression ) {
           sc_report_handler::set_actions( SC_ID_TRACING_TIMESCALE_DEFAULT_
                                         , SC_INFO,    SC_DO_NOTHING );
-          sc_report_handler::set_actions( SC_ID_TRACING_VCD_DUPLICATE_TIME_
-                                        , SC_WARNING, SC_DO_NOTHING );
         }
     }
 
     // open trace file
     if(!fp) open_fp();
 
+    sc_time_tuple kernel_res_tuple = sc_time_tuple(sc_get_time_resolution());
+    kernel_unit_fs = kernel_res_tuple.value() * unit_to_fs(kernel_res_tuple.unit());
+
     // setup timescale
     if( !timescale_set_by_user )
     {
-        timescale_unit = sc_get_time_resolution().to_seconds();
+        trace_unit_fs = kernel_unit_fs;
 
         std::stringstream ss;
         ss << sc_get_time_resolution() << " (" << filename_ << ")";
@@ -168,11 +162,11 @@ sc_trace_file_base::initialize()
 void
 sc_trace_file_base::open_fp()
 {
-    sc_assert( !fp );
+    sc_assert( !fp && filename() );
     fp = fopen( filename(), "w" );
     if( !fp ) {
         SC_REPORT_ERROR( SC_ID_TRACING_FOPEN_FAILED_, filename() );
-        std::terminate(); // can't recover from here
+        sc_abort(); // can't recover from here
     }
 }
 
@@ -203,30 +197,13 @@ sc_trace_file_base::set_time_unit( double v, sc_time_unit tu )
         return;
     }
 
-    switch ( tu )
-    {
-      case SC_FS:  v = v * 1e-15; break;
-      case SC_PS:  v = v * 1e-12; break;
-      case SC_NS:  v = v * 1e-9;  break;
-      case SC_US:  v = v * 1e-6;  break;
-      case SC_MS:  v = v * 1e-3;  break;
-      case SC_SEC:                break;
-      default: {
-            std::stringstream ss;
-            ss << "unknown time unit:" << tu
-               << " (" << filename_ << ")";
-            SC_REPORT_WARNING( SC_ID_TRACING_TIMESCALE_UNIT_
-                             , ss.str().c_str() );
-        }
-    }
-
     timescale_set_by_user = true;
-    timescale_unit = v;
+    trace_unit_fs = static_cast<unit_type>(v * unit_to_fs(tu));
 
     // EMIT ADVISORY MESSAGE ABOUT CHANGE IN TIME SCALE:
     {
       std::stringstream ss;
-      ss << sc_time( timescale_unit, SC_SEC )
+      ss << fs_unit_to_str(trace_unit_fs)
          << " (" << filename_ << ")";
       SC_REPORT_INFO( SC_ID_TRACING_TIMESCALE_UNIT_, ss.str().c_str() );
     }
@@ -249,8 +226,95 @@ sc_trace_file_base::add_trace_check( const std::string & name ) const
     return false;
 }
 
+
+bool
+sc_trace_file_base::has_low_units() const {
+    return kernel_unit_fs > trace_unit_fs;
+}
+
+
+int
+sc_trace_file_base::low_units_len() const {
+    sc_assert(has_low_units());
+    unit_type max_low_units = kernel_unit_fs / trace_unit_fs;
+    return static_cast<int>(log10(max_low_units));
+}
+
+
+void
+sc_trace_file_base::timestamp_in_trace_units(unit_type &high, unit_type &low) const
+{
+    unit_type time_now = sc_time_stamp().value();
+    unit_type delta_now = sc_delta_count_at_current_time();
+
+    if (has_low_units()) {
+        unit_type max_low_units = kernel_unit_fs / trace_unit_fs;
+        low = 0;
+        high = time_now;
+
+        if (delta_cycles()) {
+            low += delta_now % max_low_units;
+            high += delta_now / max_low_units;
+        }
+
+    } else {
+        unit_type unit_divisor = trace_unit_fs / kernel_unit_fs;
+        low = time_now % unit_divisor;
+        high = time_now / unit_divisor;
+
+        if (delta_cycles())
+            high += delta_now;
+    }
+}
+
+
+sc_time::value_type
+sc_trace_file_base::unit_to_fs(sc_time_unit tu)
+{
+    switch ( tu )
+    {
+        case SC_FS: return 1;
+        case SC_PS: return 1000;
+        case SC_NS: return 1000000;
+        case SC_US: return 1000000000;
+        case SC_MS: return 1000000000000;
+        case SC_SEC:return 1000000000000000;
+        default:
+            sc_assert(0);
+            return 0;
+    }
+}
+
+std::string
+sc_trace_file_base::fs_unit_to_str(sc_trace_file_base::unit_type tu)
+{
+    switch (tu)
+    {
+        case 1: return "1 fs";
+        case 10: return "10 fs";
+        case 100: return "100 fs";
+        case 1000: return "1 ps";
+        case 10000: return "10 ps";
+        case 100000: return "100 ps";
+        case 1000000: return "1 ns";
+        case 10000000: return "10 ns";
+        case 100000000: return "100 ns";
+        case 1000000000: return "1 us";
+        case 10000000000: return "10 us";
+        case 100000000000: return "100 us";
+        case 1000000000000: return "1 ms";
+        case 10000000000000: return "10 ms";
+        case 100000000000000: return "100 ms";
+        case 1000000000000000: return "1 sec";
+        case 10000000000000000: return "10 sec";
+        case 100000000000000000: return "100 sec";
+        default: sc_assert(0); return "";
+    }
+}
+
 // obtain formatted time string
-SC_API std::string localtime_string()
+SC_API std::string
+localtime_string()
 {
     char buf[200];
     time_t long_time;

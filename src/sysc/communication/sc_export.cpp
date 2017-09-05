@@ -32,6 +32,8 @@
 #include "sysc/kernel/sc_module.h"
 #include "sysc/kernel/sc_object_int.h"
 
+#include <sstream>
+
 namespace sc_core {
 
 // ----------------------------------------------------------------------------
@@ -84,7 +86,8 @@ sc_export_base::elaboration_done()
 {
     if ( get_interface() == 0 )
     {
-      report_error( SC_ID_COMPLETE_BINDING_, "export not bound" );
+        report_error( SC_ID_COMPLETE_BINDING_, "export not bound" );
+        // may continue, if suppressed
     }
 
     sc_module* parent = static_cast<sc_module*>( get_parent_object() );
@@ -127,13 +130,11 @@ sc_export_base::simulation_done()
 void
 sc_export_base::report_error( const char* id, const char* add_msg ) const
 {
-    char msg[BUFSIZ];
-    if( add_msg != 0 ) {
-        std::sprintf( msg, "%s: export '%s' (%s)", add_msg, name(), kind() );
-    } else {
-        std::sprintf( msg, "export '%s' (%s)", name(), kind() );
-    }
-    SC_REPORT_ERROR( id, msg );
+    std::stringstream msg;
+    if (add_msg != 0)
+        msg << add_msg << ": ";
+    msg << "export '" << name() << "' (" << kind() << ")";
+    SC_REPORT_ERROR( id, msg.str().c_str() );
 }
 
 
@@ -148,21 +149,23 @@ void
 sc_export_registry::insert( sc_export_base* export_ )
 {
     if( sc_is_running() ) {
-	export_->report_error(SC_ID_INSERT_EXPORT_, "simulation running");
+        export_->report_error(SC_ID_INSERT_EXPORT_, "simulation running");
+        return;
     }
 
     if( m_simc->elaboration_done()  ) {
-       export_->report_error(SC_ID_INSERT_EXPORT_, "elaboration done");
+        export_->report_error(SC_ID_INSERT_EXPORT_, "elaboration done");
+        return;
     }
-
 
 #ifdef DEBUG_SYSTEMC
     // check if port_ is already inserted
     for( int i = size() - 1; i >= 0; -- i ) {
-	if( export_ == m_export_vec[i] ) {
-	    export_->report_error( SC_ID_INSERT_EXPORT_, 
-	                           "export already inserted ");
-	}
+        if( export_ == m_export_vec[i] ) {
+            export_->report_error( SC_ID_INSERT_EXPORT_,
+                                   "export already inserted ");
+            return;
+        }
     }
 #endif
 
@@ -187,7 +190,8 @@ sc_export_registry::remove( sc_export_base* export_ )
 	}
     }
     if( i == -1 ) {
-	export_->report_error( SC_ID_SC_EXPORT_NOT_REGISTERED_ );
+        export_->report_error( SC_ID_SC_EXPORT_NOT_REGISTERED_ );
+        return;
     }
 
     // remove

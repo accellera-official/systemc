@@ -46,19 +46,22 @@ void
 sc_module_registry::insert( sc_module& module_ )
 {
     if( sc_is_running() ) {
-	SC_REPORT_ERROR( SC_ID_INSERT_MODULE_, "simulation running" );
+        SC_REPORT_ERROR( SC_ID_INSERT_MODULE_, "simulation running" );
+        return;
     }
 
     if( m_simc->elaboration_done() ) {
-       SC_REPORT_ERROR( SC_ID_INSERT_MODULE_, "elaboration done" );
+        SC_REPORT_ERROR( SC_ID_INSERT_MODULE_, "elaboration done" );
+        return;
     }
 
 #ifdef DEBUG_SYSTEMC
     // check if module_ is already inserted
     for( int i = size() - 1; i >= 0; -- i ) {
-	if( &module_ == m_module_vec[i] ) {
-	    SC_REPORT_ERROR( SC_ID_INSERT_MODULE_, "already inserted" );
-	}
+        if( &module_ == m_module_vec[i] ) {
+            SC_REPORT_ERROR( SC_ID_INSERT_MODULE_, "already inserted" );
+            return;
+        }
     }
 #endif
 
@@ -76,7 +79,8 @@ sc_module_registry::remove( sc_module& module_ )
 	}
     }
     if( i == size() ) {
-	SC_REPORT_ERROR( SC_ID_REMOVE_MODULE_, 0 );
+        SC_REPORT_ERROR( SC_ID_REMOVE_MODULE_, 0 );
+        return;
     }
 
     // remove

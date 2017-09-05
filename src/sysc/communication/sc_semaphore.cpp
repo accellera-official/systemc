@@ -31,6 +31,8 @@
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_wait.h"
 
+#include <sstream>
+
 namespace sc_core {
 
 // ----------------------------------------------------------------------------
@@ -44,13 +46,11 @@ namespace sc_core {
 void
 sc_semaphore::report_error( const char* id, const char* add_msg ) const
 {
-    char msg[BUFSIZ];
-    if( add_msg != 0 ) {
-	std::sprintf( msg, "%s: semaphore '%s'", add_msg, name() );
-    } else {
-	std::sprintf( msg, "semaphore '%s'", name() );
-    }
-    SC_REPORT_ERROR( id, msg );
+    std::stringstream msg;
+    if (add_msg != 0)
+        msg << add_msg << ": ";
+    msg << "semaphore '" << name() << "'";
+    SC_REPORT_ERROR( id, msg.str().c_str() );
 }
 
 

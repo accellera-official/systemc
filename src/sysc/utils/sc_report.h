@@ -190,8 +190,8 @@ public:  // backward compatibility with 2.0+
 
     int get_id() const;
 };
-typedef std::exception sc_exception;
 
+typedef std::exception sc_exception;
 
 // ----------------------------------------------------------------------------
 //  Report macros.
@@ -220,6 +220,30 @@ typedef std::exception sc_exception;
     ::sc_core::sc_report_handler::report( \
             ::sc_core::SC_FATAL, msg_type, msg, __FILE__, __LINE__ )
 
+
+// SC_NORETURN_ macro, indicating that a function does not return
+#if SC_CPLUSPLUS >= 201103L && (!defined(_MSC_VER) || _MSC_VER >= 1900)
+// C++11: use standard C++ attribute
+# define SC_NORETURN_ [[noreturn]]
+#else
+# if defined(_MSC_VER)
+#    define SC_NORETURN_ __declspec(noreturn)
+# elif defined(__GNUC__) || defined(__MINGW32__) || defined(__clang__)
+#    define SC_NORETURN_ __attribute__((noreturn))
+# else
+#    define SC_NORETURN_ /* nothing */
+# endif
+#endif // SC_NORETURN_
+
+// ----------------------------------------------------------------------------
+//  FUNCTION : sc_abort()
+//
+//  Like abort(), never returns and aborts the current program immediately,
+//  but may print additional information.
+// ----------------------------------------------------------------------------
+
+SC_NORETURN_ SC_API void sc_abort();
+
 // ----------------------------------------------------------------------------
 //  MACRO : sc_assert(expr)
 //
@@ -235,10 +259,13 @@ typedef std::exception sc_exception;
 #else // enable assertions
 
 #define sc_assert(expr) \
- ((void)((expr) ? 0 :   \
-     (SC_REPORT_FATAL( ::sc_core::SC_ID_ASSERTION_FAILED_, #expr ), 0)))
+ ((void)((expr) ? 0 : \
+   (::sc_core::sc_assertion_failed(#expr,__FILE__,__LINE__),0)))
 
 #endif // defined(NDEBUG) && !defined(SC_ENABLE_ASSERTIONS)
+
+SC_NORETURN_ SC_API  void
+sc_assertion_failed(const char* msg, const char* file, int line);
 
 extern SC_API const char SC_ID_UNKNOWN_ERROR_[];
 extern SC_API const char SC_ID_WITHOUT_MESSAGE_[];
@@ -246,11 +273,14 @@ extern SC_API const char SC_ID_NOT_IMPLEMENTED_[];
 extern SC_API const char SC_ID_INTERNAL_ERROR_[];
 extern SC_API const char SC_ID_ASSERTION_FAILED_[];
 extern SC_API const char SC_ID_OUT_OF_BOUNDS_[];
+extern SC_API const char SC_ID_ABORT_[];
 
 // backward compatibility with 2.0+
 extern SC_API const char SC_ID_REGISTER_ID_FAILED_[];
 
 } // namespace sc_core
+
+#undef SC_NORETURN_
 
 #if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
 # pragma warning(pop)

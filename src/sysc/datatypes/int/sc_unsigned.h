@@ -1005,8 +1005,10 @@ class SC_API sc_unsigned : public sc_value_base
     friend class sc_signed_subref;
     friend class sc_signed_subref_r;
 
-  // Needed for types using sc_unsigned.
-  typedef bool elemtype;
+    // Needed for types using sc_unsigned.
+    typedef bool elemtype;
+
+    void invalid_init( const char* type_name, int nb ) const;
 
 public:
 
@@ -1015,7 +1017,7 @@ public:
     explicit sc_unsigned( int nb = sc_length_param().len() );
     sc_unsigned( const sc_unsigned& v );
     sc_unsigned( const sc_signed&   v );
-	template<class T>
+    template<class T>
     explicit sc_unsigned( const sc_generic_base<T>& v );
     explicit sc_unsigned( const sc_bv_base& v );
     explicit sc_unsigned( const sc_lv_base& v );
@@ -2162,10 +2164,8 @@ sc_unsigned::sc_unsigned( const sc_generic_base<T>& v )
     if( nb > 0 ) {
         nbits = num_bits( nb );
     } else {
-        char msg[BUFSIZ];
-        std::sprintf( msg,
-		    "sc_unsigned( sc_generic_base<T> ) : nb = %d is not valid", nb);
-        SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
+        invalid_init( "sc_generic_base<T>", nb );
+        sc_core::sc_abort(); // can't recover from here
     }
     ndigits = DIV_CEIL(nbits);
 #   ifdef SC_MAX_NBITS

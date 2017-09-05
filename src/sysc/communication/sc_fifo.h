@@ -188,24 +188,27 @@ sc_fifo<T>::register_port( sc_port_base& port_,
     if( nm == typeid( sc_fifo_in_if<T> ).name() ||
         nm == typeid( sc_fifo_blocking_in_if<T> ).name() 
     ) {
-	// only one reader can be connected
-	if( m_reader != 0 ) {
-	    SC_REPORT_ERROR( SC_ID_MORE_THAN_ONE_FIFO_READER_, 0 );
-	}
-	m_reader = &port_;
+        // only one reader can be connected
+        if( m_reader != 0 ) {
+            SC_REPORT_ERROR( SC_ID_MORE_THAN_ONE_FIFO_READER_, 0 );
+            // may continue, if suppressed
+        }
+        m_reader = &port_;
     } else if( nm == typeid( sc_fifo_out_if<T> ).name() ||
                nm == typeid( sc_fifo_blocking_out_if<T> ).name()
     ) {
-	// only one writer can be connected
-	if( m_writer != 0 ) {
-	    SC_REPORT_ERROR( SC_ID_MORE_THAN_ONE_FIFO_WRITER_, 0 );
-	}
-	m_writer = &port_;
+        // only one writer can be connected
+        if( m_writer != 0 ) {
+            SC_REPORT_ERROR( SC_ID_MORE_THAN_ONE_FIFO_WRITER_, 0 );
+            // may continue, if suppressed
+        }
+        m_writer = &port_;
     }
     else
     {
-        SC_REPORT_ERROR( SC_ID_BIND_IF_TO_PORT_, 
-	                 "sc_fifo<T> port not recognized" );
+        SC_REPORT_ERROR( SC_ID_BIND_IF_TO_PORT_,
+                         "sc_fifo<T> port not recognized" );
+        // may continue, if suppressed
     }
 }
 
@@ -291,6 +294,7 @@ inline
 void
 sc_fifo<T>::trace( sc_trace_file* tf ) const
 {
+    (void) tf; /* ignore potentially unused parameter */
 #if defined(DEBUG_SYSTEMC)
     char buf[32];
     std::string nm = name();
@@ -377,7 +381,8 @@ void
 sc_fifo<T>::buf_init( int size_ )
 {
     if( size_ <= 0 ) {
-	SC_REPORT_ERROR( SC_ID_INVALID_FIFO_SIZE_, 0 );
+        SC_REPORT_ERROR( SC_ID_INVALID_FIFO_SIZE_, 0 );
+        return;
     }
     m_size = size_;
     m_buf = new T[m_size];

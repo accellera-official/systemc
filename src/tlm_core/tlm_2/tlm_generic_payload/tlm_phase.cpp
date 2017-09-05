@@ -41,7 +41,11 @@ struct tlm_phase_registry
   {
     type_map::const_iterator it = ids_.find( type );
 
-    sc_assert( !name.empty() && "unexpected empty phase name" );
+    if( name.empty() ) {
+      SC_REPORT_FATAL( sc_core::SC_ID_INTERNAL_ERROR_,
+                       "unexpected empty tlm_phase name" );
+      return UNINITIALIZED_PHASE;
+    }
 
     if( it == ids_.end() ) { // new phase - generate/store ID and name
       type_map::value_type v( type, static_cast<key_type>(names_.size()) );
@@ -50,8 +54,11 @@ struct tlm_phase_registry
       return v.second;
     }
 
-    sc_assert( ( names_[it->second] == name )
-                && "phase registration failed: duplicate type info" );
+    if( names_[it->second] != name ) {
+      SC_REPORT_FATAL( sc_core::SC_ID_INTERNAL_ERROR_,
+                       "tlm_phase registration failed: duplicate type info" );
+      sc_core::sc_abort();
+    }
     return it->second;
   }
 

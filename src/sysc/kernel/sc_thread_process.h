@@ -257,6 +257,8 @@ inline void sc_thread_process::suspend_me()
         if( !unwinding_preempted )
             SC_REPORT_FATAL( SC_ID_INTERNAL_ERROR_
                            , "unexpected unwinding/throw status" );
+        // may continue, if suppressed
+        m_throw_status = THROW_NONE;
         DEBUG_MSG( DEBUG_NAME, this, "restarting thread");
         break;
     }

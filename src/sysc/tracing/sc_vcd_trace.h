@@ -201,16 +201,18 @@ private:
 
 #if SC_TRACING_PHASE_CALLBACKS_
     // avoid hidden overload warnings
-    virtual void trace( sc_trace_file* ) const { sc_assert(false); }
+    virtual void trace( sc_trace_file* ) const;
 #endif // SC_TRACING_PHASE_CALLBACKS_
 
     // Initialize the VCD tracing
     virtual void do_initialize();
+    void print_time_stamp(unit_type now_units_high, unit_type now_units_low) const;
+    bool get_time_stamp(unit_type &now_units_high, unit_type &now_units_low) const;
 
     unsigned vcd_name_index;           // Number of variables traced
 
-    unsigned previous_time_units_low;  // Previous time unit as 64-bit integer
-    unsigned previous_time_units_high;
+    unit_type previous_time_units_low;
+    unit_type previous_time_units_high;
 
 public:
 
