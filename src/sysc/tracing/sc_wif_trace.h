@@ -204,9 +204,8 @@ private:
 
     unsigned wif_name_index;           // Number of variables traced
 
-    unsigned previous_time_units_low;  // Previous time as 64 bit integer
-    unsigned previous_time_units_high;
-    double   previous_time;            // Previous time as a double
+    unit_type previous_units_low;
+    unit_type previous_units_high;
 
 public:
     // Create wif names for each variable

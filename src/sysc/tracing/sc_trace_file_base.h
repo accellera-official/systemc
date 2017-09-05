@@ -68,6 +68,8 @@ class SC_API sc_trace_file_base
 #endif
 {
 public:
+    typedef sc_time::value_type  unit_type;
+
     const char* filename() const
       { return filename_.c_str(); }
 
@@ -94,8 +96,21 @@ protected:
     // (i.e. trace file is not yet initialized)
     bool add_trace_check( const std::string& name ) const;
 
+    // tracefile time unit < kernel unit, extra units will be placed in low part
+    bool has_low_units() const;
+
+    // number of decimal digits in low units
+    int  low_units_len() const;
+
+    // get current kernel time in trace time units
+    void timestamp_in_trace_units(unit_type &high, unit_type &low) const;
+
     // Flush results and close file.
     virtual ~sc_trace_file_base();
+
+    static sc_time::value_type unit_to_fs(sc_time_unit tu);
+
+    static std::string fs_unit_to_str(sc_trace_file_base::unit_type tu);
 
 #if SC_TRACING_PHASE_CALLBACKS_
 private:
@@ -104,7 +119,9 @@ private:
 
 protected:
     FILE* fp;                          // pointer to the trace file
-    double      timescale_unit;        // in seconds
+
+    unit_type   trace_unit_fs;         // tracefile timescale unit in femtoseconds
+    unit_type   kernel_unit_fs;        // kernel timescale unit in femtoseconds
     bool        timescale_set_by_user; // = true means set by user
 
 private:
@@ -122,9 +139,6 @@ private: // disabled
 
 // -----------------------------------------------------------------------
 
-// Convert double time to 64-bit integer
-
-void SC_API double_to_special_int64( double in, unsigned* high, unsigned* low );
 
 // obtain formatted time string
 SC_API std::string localtime_string();

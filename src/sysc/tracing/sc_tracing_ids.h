@@ -58,10 +58,10 @@ SC_DEFINE_MESSAGE( SC_ID_TRACING_OBJECT_NAME_FILTERED_, 711,
                    "traced object name filtered" )
 SC_DEFINE_MESSAGE( SC_ID_TRACING_INVALID_ENUM_VALUE_,   712,
                 "traced value of enumerated type undefined" )
-SC_DEFINE_MESSAGE( SC_ID_TRACING_VCD_DUPLICATE_TIME_,   713,
-  "multiple VCD tracing cycles with the same time detected" )
-SC_DEFINE_MESSAGE( SC_ID_TRACING_VCD_REVERSED_TIME_,    714,
-             "VCD tracing cycle with falling time detected" )
+SC_DEFINE_MESSAGE( SC_ID_TRACING_VCD_TIME_RESOLUTION_,  713,
+  "current kernel time is not representable in VCD time units" )
+SC_DEFINE_MESSAGE( SC_ID_TRACING_REVERSED_TIME_,    714,
+ "tracing cycle with duplicate or reversed time detected" )
 /* unused IDs 715-719 */
 SC_DEFINE_MESSAGE( SC_ID_TRACING_ALREADY_INITIALIZED_,  720,
                    "sc_trace_file already initialized" )

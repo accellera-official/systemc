@@ -139,20 +139,6 @@ sc_trace(sc_trace_file* /* not used */,
 }
 
 
-
-void double_to_special_int64(double in, unsigned* high, unsigned* low)
-{
-    double invar = in;
-    if(invar > 5e17) invar = 5e17; // Saturation limit
-    if(invar < 0.0) invar = 0.0;
-    invar += .5;
-    *high = (unsigned)(invar / 1e9);
-    double rest = invar - 1e9 * (*high);
-    if(rest < 0) *low = 0;
-    else *low = (unsigned)rest;
-}
-
-
 // ----------------------------------------------------------------------------
 
 #define DEFN_TRACE_FUNC_REF_A(tp)                                             \
