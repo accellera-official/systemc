@@ -428,6 +428,10 @@ AC_ARG_ENABLE([pthreads],
     [AC_MSG_ERROR([bad value ${enableval} for --enable-pthreads])])],
   [enable_pthreads=no])
 
+AS_IF([test x"$enable_pthreads" = xyes -a x"$TARGET_ARCH" = xmingw],[dnl
+  AC_MSG_ERROR([pthread processes not supported on target architecture ${target}])
+])
+  
 AS_IF([test x"$QT_ARCH" = xpthreads -a x"$enable_pthreads" = xno],[dnl
   AS_IF([test x"$ax_pthread_ok" = xyes],dnl
     [enable_pthreads=yes],
