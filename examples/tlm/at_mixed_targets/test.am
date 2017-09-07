@@ -91,7 +91,6 @@ at_mixed_targets_EXTRA = \
 	at_mixed_targets/docs/at_mixed_targets_example.ppt
 
 #at_mixed_targets_FILTER = 
-#export at_mixed_targets_FILTER
 
 ## Taf!
 ## :vim:ft=automake:

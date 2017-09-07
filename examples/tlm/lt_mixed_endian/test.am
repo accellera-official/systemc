@@ -95,8 +95,7 @@ lt_mixed_endian_EXTRA = \
 	lt_mixed_endian/docs/lt_mixed_endian_example.pdf \
 	lt_mixed_endian/docs/lt_mixed_endian_example.ppt
 
-lt_mixed_endian_FILTER = "'::'"
-export lt_mixed_endian_FILTER
+lt_mixed_endian_FILTER = "::"
 
 ## Taf!
 ## :vim: ft=automake:

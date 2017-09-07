@@ -109,7 +109,6 @@ simple_bus_EXTRA = \
 	simple_bus/LEGAL
 
 #simple_bus_FILTER = 
-#export simple_bus_FILTER
 
 ## Taf!
 ## :vim:ft=automake:

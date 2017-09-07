@@ -596,6 +596,7 @@ settings to all build configurations.
      * SC_CPLUSPLUS=199701L (C++03, ISO/IEC 14882:1998, 14882:2003)
      * SC_CPLUSPLUS=201103L (C++11, ISO/IEC 14882:2011)
      * SC_CPLUSPLUS=201402L (C++14, ISO/IEC 14882:2014)
+     * SC_CPLUSPLUS=201703L (C++17, N4659: Working Draft, Standard for Programming Language C++)
 
    Note: This symbol needs to be consistently defined in the library
             and any application linking against the built library.
@@ -829,9 +830,13 @@ and influence the SystemC library's behaviour:
  1) SC_COPYRIGHT_MESSAGE=DISABLE -
     Run-time alternative to SC_DISABLE_COPYRIGHT_MESSAGE (see above).
 
- 2) SC_SIGNAL_WRITE_CHECK=DISABLE
-    Run-time alternative to SC_DEFAULT_WRITER_POLICY=SC_UNCHECKED_WRITERS
-    (see above)
+ 2) SC_SIGNAL_WRITE_CHECK=DISABLE, SC_SIGNAL_WRITE_CHECK=CONFLICT
+    Run-time alternative to SC_DEFAULT_WRITER_POLICY (see above).
+
+    DISABLE  = disable all checks for conflicting writes
+               (SC_UNCHECKED_WRITERS)
+    CONFLICT = detect conflicting writes within the same
+               evaluation phase (SC_MANY_WRITERS)
 
  3) SC_DEPRECATION_WARNINGS=DISABLE
     Do not issue warnings about using deprecated features as of

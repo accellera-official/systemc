@@ -62,6 +62,8 @@
 #
 # - Linux (GCC, Clang): i386, x86_64
 #
+# - Linux (GCC): aarch64
+#
 # - Mac OS X >= 10.5 (GCC, Clang): i386, x86_64, ppc
 #
 # - Windows (MingW32 GCC + optionally MSYS): x86
@@ -72,6 +74,8 @@
 # - *BSD (GCC, Clang): i386, x86_64
 #
 # - Linux (GCC, Clang): sparc, powerpc
+#
+# - Linux (Clang): aarch64
 #
 # - Mac OS X <= 10.5 (GCC): ppc, ppc64
 #
@@ -296,6 +300,8 @@ option (DISABLE_ASYNC_UPDATES "Disable async_request_update() support." OFF)
 
 option (DISABLE_COPYRIGHT_MESSAGE "Do not print the copyright message when starting the application." OFF)
 
+option (DISABLE_VCD_SCOPES "Put all traces in a single dummy scope. For compatibility with SystemC 2.3.1." OFF)
+
 option (DISABLE_VIRTUAL_BIND "Disable the definition of bind() member functions of ports and exports as \"virtual\", which is incompatible with old TLM library implementations (< 2.0.2)." OFF)
 
 option (ENABLE_ASSERTIONS "Always enable the `sc_assert' expressions." ON)
@@ -341,7 +347,8 @@ mark_as_advanced(DISABLE_ASYNC_UPDATES
                  ENABLE_IMMEDIATE_SELF_NOTIFICATIONS
                  ENABLE_PHASE_CALLBACKS
                  ENABLE_PHASE_CALLBACKS_TRACING
-                 OVERRIDE_DEFAULT_STACK_SIZE)
+                 OVERRIDE_DEFAULT_STACK_SIZE
+                 DISABLE_VCD_SCOPES)
 
 
 ###############################################################################
@@ -371,6 +378,7 @@ if (NOT APPLE OR (APPLE AND (N_OSX_ARCHITECTURES LESS 2)))
   check_symbol_exists (__hppa "" HAS__hppa_DEFINED)
   check_symbol_exists (__x86_64__ "" HAS__x86_64__DEFINED)
   check_symbol_exists (__i386 "" HAS__i386_DEFINED)
+  check_symbol_exists (__aarch64__ "" HAS__aarch64__DEFINED)
   check_symbol_exists (__ppc__ "" HAS__ppc__DEFINED)
   check_symbol_exists (__powerpc "" HAS__powerpc_DEFINED)
 endif (NOT APPLE OR (APPLE AND (N_OSX_ARCHITECTURES LESS 2)))
@@ -401,6 +409,8 @@ if (NOT SystemC_TARGET_ARCH)
       set (_TARGET_ARCH "linux")
     elseif (HAS__x86_64__DEFINED)
       set (_TARGET_ARCH "linux64")
+    elseif (HAS__aarch64__DEFINED)
+      set (_TARGET_ARCH "linuxaarch64")
     elseif (HAS__powerpc_DEFINED)
       # Untested platform.
       set (_TARGET_ARCH "linuxppc")
@@ -489,6 +499,8 @@ elseif (HAS__x86_64__DEFINED)
   set (QT_ARCH "x86_64")
 elseif (HAS__i386_DEFINED)
   set (QT_ARCH "i386")
+elseif (HAS__aarch64__DEFINED)
+  set (QT_ARCH "aarch64")
 elseif (HAS__ppc__DEFINED)
   set (QT_ARCH "powerpc_mach")
 elseif (HAS__powerpc__DEFINED)
@@ -631,6 +643,7 @@ else (DISABLE_ASYNC_UPDATES)
   message (STATUS "DISABLE_ASYNC_UPDATES = ${DISABLE_ASYNC_UPDATES}")
 endif (DISABLE_ASYNC_UPDATES)
 message (STATUS "DISABLE_COPYRIGHT_MESSAGE = ${DISABLE_COPYRIGHT_MESSAGE}")
+message (STATUS "DISABLE_VCD_SCOPES = ${DISABLE_VCD_SCOPES}")
 if (DISABLE_VIRTUAL_BIND)
   message ("DISABLE_VIRTUAL_BIND = ${DISABLE_VIRTUAL_BIND}")
 else (DISABLE_VIRTUAL_BIND)

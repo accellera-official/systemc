@@ -45,7 +45,7 @@ AC_INIT([SystemC],
         [http://accellera.org/],
 )
 dnl version of the included TLM library
-TLM_PACKAGE_VERSION=2.0.3
+TLM_PACKAGE_VERSION=2.0.4
 AC_SUBST(TLM_PACKAGE_VERSION)
 
 AC_CONFIG_SRCDIR([NEWS])
@@ -160,16 +160,20 @@ AS_CASE([${TARGET_ARCH}],
        [x86_64|amd64], dnl
          [TARGET_ARCH="${TARGET_ARCH}64"
           QT_ARCH="x86_64"
-          CPU_ARCH=64],
+          CPU_ARCH="-m64"],
        [x*86|i*86], dnl
          [QT_ARCH="iX86"
-          CPU_ARCH=32],
+          CPU_ARCH="-m32"],
+       [aarch64], dnl
+         [TARGET_ARCH="linuxaarch64"
+          QT_ARCH="aarch64"
+          CPU_ARCH=""],
        [AC_MSG_ERROR("sorry...architecture not supported")])
 
      # check compiler
      AS_VAR_IF([GXX],[yes],dnl
-       [EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -m${CPU_ARCH}"
-        EXTRA_ASFLAGS="${EXTRA_ASFLAGS} -m${CPU_ARCH}"],
+       [EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} ${CPU_ARCH}"
+        EXTRA_ASFLAGS="${EXTRA_ASFLAGS} ${CPU_ARCH}"],
        [AC_MSG_ERROR("sorry...compiler not supported")])
 
      # use WinFiber on MinGW platforms
@@ -460,9 +464,27 @@ AM_CONDITIONAL([ENABLE_CALLBACKS_TRACING],dnl
 AC_MSG_RESULT($enable_phase_callbacks)
 
 dnl
+dnl enable VCD scopes
+dnl
+AC_MSG_CHECKING([whether to enable VCD scopes by default])
+AC_ARG_ENABLE([vcd-scopes],
+  [AS_HELP_STRING([--enable-vcd-scopes],
+                  [enable vcd scopes
+                   @<:@yes(=default)|no@:>@])],
+  [AS_CASE(["${enableval}"],dnl
+    [yes|default],       [enable_vcd_scopes=yes],
+    [no],[enable_vcd_scopes=no],
+    [AC_MSG_ERROR([bad value ${enableval} for --enable-vcd-scopes])])],
+  [enable_vcd_scopes=yes])
+AM_CONDITIONAL([DISABLE_VCD_SCOPES],dnl
+               [test x"$enable_vcd_scopes" = xno])
+AC_MSG_RESULT($enable_vcd_scopes)
+
+dnl
 dnl Set conditionals for various quick thread architectures:
 dnl
 AM_CONDITIONAL([QT_ARCH_X86], [ test "${QT_ARCH}" = "iX86" ])
+AM_CONDITIONAL([QT_ARCH_AARCH64], [ test "${QT_ARCH}" = "aarch64" ])
 AM_CONDITIONAL([QT_ARCH_X86_64], [ test "${QT_ARCH}" = "x86_64" ])
 AM_CONDITIONAL([QT_ARCH_POWERPC_MACOSX], [ test "${QT_ARCH}" = "powerpc-apple-macosx" ])
 AM_CONDITIONAL([QT_ARCH_SPARC], [ test "${QT_ARCH}" = "sparc-os2" ])
@@ -631,6 +653,7 @@ Configuration summary of $PACKAGE_STRING for $target
    Enable compiler optimizations  : $enable_optimize
    Include debugging symbols      : $enable_debug
    Coroutine package for processes: $sysc_coroutine
+   Enable VCD scopes by default   : $enable_vcd_scopes
    Disable async_request_update   : $disable_async_updates
    Phase callbacks (experimental) : $enable_phase_callbacks
  ${sysc_additional}

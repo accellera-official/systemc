@@ -33,6 +33,15 @@
 #include "sysc/datatypes/bit/sc_bit_ids.h"
 #include "sysc/datatypes/bit/sc_proxy.h"
 
+#ifdef _MSC_VER
+// disable false positive warning C4806:
+//   '&': unsafe operation: no value of type 'bool' promoted to type
+//   'const sc_dt::sc_digit' can equal the given constant
+// triggered by calling sc_subref<sc_bv_base>::get_cword
+// TODO: optimize get_cword for bit ranges to avoid check entirely
+#pragma warning(push)
+#pragma warning(disable:4806)
+#endif
 
 namespace sc_dt
 {
@@ -1978,7 +1987,6 @@ sc_bitref_r<T>::get_bit( int n ) const
 	return m_obj.get_bit( m_index );
     } else {
 	SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_ , 0 );
-        // never reached
 	return Log_0;
     }
 }
@@ -1993,7 +2001,6 @@ sc_bitref_r<T>::get_word( int n ) const
 	return ( get_bit( n ) & SC_DIGIT_ONE );
     } else {
 	SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, 0 );
-	// never reached
 	return 0;
     }
 }
@@ -2007,7 +2014,6 @@ sc_bitref_r<T>::get_cword( int n ) const
 	return ( (get_bit( n ) & SC_DIGIT_TWO) >> 1 );
     } else {
 	SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, 0 );
-	// never reached
 	return 0;
     }
 }
@@ -2515,7 +2521,8 @@ sc_subref_r<X>::check_bounds()
 {
     int len = m_obj.length();
     if( m_hi < 0 || m_hi >= len || m_lo < 0 || m_lo >= len ) {
-	SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, 0 );
+        SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, 0 );
+        sc_core::sc_abort(); // can't recover from here
     }
     if( reversed() ) {
 	m_len = m_lo - m_hi + 1;
@@ -3053,7 +3060,6 @@ sc_concref_r<X,Y>::get_bit( int n ) const
         return value_type(m_left.get_bit( n - r_len ));
     } else {
 	SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, 0 );
-	// never reached
 	return Log_0;
     }
 }
@@ -3866,6 +3872,10 @@ concat( sc_proxy<T1>& a, sc_proxy<T2>& b )
 }
 
 } // namespace sc_dt
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 // $Log: sc_bit_proxies.h,v $
 // Revision 1.10  2011/09/05 21:19:53  acg

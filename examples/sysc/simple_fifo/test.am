@@ -84,7 +84,6 @@ simple_fifo_EXTRA = \
 
 
 #simple_fifo_FILTER = 
-#export simple_fifo_FILTER
 
 ## Taf!
 ## :vim:ft=automake:

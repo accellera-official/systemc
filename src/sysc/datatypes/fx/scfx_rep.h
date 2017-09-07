@@ -184,6 +184,7 @@ public:
     void from_string( const char*, int );
 
     double to_double() const;
+    uint64 to_uint64() const;
 
     const char* to_string( sc_numrep,
 			   int,
@@ -301,7 +302,7 @@ private:
     state     m_state;    // value state, e.g., normal, inf, etc.
     int       m_msw;      // index of most significant non-zero word.
     int       m_lsw;      // index of least significant non-zero word.
-    bool      m_r_flag;   // true if founding occurred.
+    bool      m_r_flag;   // true if rounding occurred.
 
 };
 

@@ -153,6 +153,7 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      tlm_core/tlm_2/tlm_generic_payload/tlm_gp.cpp
                      tlm_core/tlm_2/tlm_generic_payload/tlm_phase.cpp
                      tlm_core/tlm_2/tlm_quantum/tlm_global_quantum.cpp
+                     tlm_utils/convenience_socket_bases.cpp
                      tlm_utils/instance_specific_extensions.cpp
                      # SystemC headers
                      sysc/communication/sc_buffer.h
@@ -166,6 +167,7 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      sysc/communication/sc_fifo_ifs.h
                      sysc/communication/sc_fifo_ports.h
                      sysc/communication/sc_host_mutex.h
+                     sysc/communication/sc_host_semaphore.h
                      sysc/communication/sc_interface.h
                      sysc/communication/sc_mutex.h
                      sysc/communication/sc_mutex_if.h
@@ -228,7 +230,6 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      sysc/datatypes/misc/sc_concatref.h
                      sysc/datatypes/misc/sc_value_base.h
                      sysc/kernel/sc_attribute.h
-                     sysc/kernel/sc_boost.h
                      sysc/kernel/sc_cmnhdr.h
                      sysc/kernel/sc_constants.h
                      sysc/kernel/sc_cor.h
@@ -406,6 +407,7 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      tlm_core/tlm_2/tlm_sockets/tlm_sockets.h
                      tlm_core/tlm_2/tlm_sockets/tlm_target_socket.h
                      tlm_core/tlm_2/tlm_version.h
+                     tlm_utils/convenience_socket_bases.h
                      tlm_utils/instance_specific_extensions.h
                      tlm_utils/instance_specific_extensions_int.h
                      tlm_utils/multi_passthrough_initiator_socket.h
@@ -425,12 +427,14 @@ add_library (systemc sysc/communication/sc_clock.cpp
                        $<$<STREQUAL:${QT_ARCH},hppa>:sysc/packages/qt/md/hppa.s>
                        $<$<STREQUAL:${QT_ARCH},x86_64>:sysc/packages/qt/md/iX86_64.s>
                        $<$<STREQUAL:${QT_ARCH},i386>:sysc/packages/qt/md/i386.s>
+                       $<$<STREQUAL:${QT_ARCH},aarch64>:sysc/packages/qt/md/aarch64.s>
                        $<$<STREQUAL:${QT_ARCH},powerpc_mach>:
                          sysc/packages/qt/md/powerpc_mach.s
                          sysc/packages/qt/md/powerpc.c>
                        $<$<STREQUAL:${QT_ARCH},powerpc_sys5>:
                          sysc/packages/qt/md/powerpc_sys5.s
                          sysc/packages/qt/md/powerpc.c>
+                       sysc/packages/qt/md/aarch64.h
                        sysc/packages/qt/md/axp.h
                        sysc/packages/qt/md/hppa.h
                        sysc/packages/qt/md/i386.h
@@ -461,6 +465,7 @@ target_compile_definitions (
   $<$<BOOL:${DEBUG_SYSTEMC}>:DEBUG_SYSTEMC>
   $<$<BOOL:${DISABLE_ASYNC_UPDATES}>:SC_DISABLE_ASYNC_UPDATES>
   $<$<BOOL:${DISABLE_COPYRIGHT_MESSAGE}>:SC_DISABLE_COPYRIGHT_MESSAGE>
+  $<$<BOOL:${DISABLE_VCD_SCOPES}>:SC_DISABLE_VCD_SCOPES>
   $<$<BOOL:${ENABLE_ASSERTIONS}>:SC_ENABLE_ASSERTIONS>
   $<$<BOOL:${ENABLE_EARLY_MAXTIME_CREATION}>:SC_ENABLE_EARLY_MAXTIME_CREATION>
   $<$<BOOL:${ENABLE_IMMEDIATE_SELF_NOTIFICATIONS}>:

@@ -122,8 +122,9 @@ scfx_params::scfx_params( const sc_fxtype_params& type_params_,
 {
     if( m_enc == SC_US_ && m_type_params.o_mode() == SC_WRAP_SM )
     {
-	SC_REPORT_ERROR( sc_core::SC_ID_INVALID_O_MODE_,
-			 "SC_WRAP_SM not defined for unsigned numbers" );
+        SC_REPORT_ERROR( sc_core::SC_ID_INVALID_O_MODE_,
+                         "SC_WRAP_SM not defined for unsigned numbers" );
+        // may continue, if suppressed
     }
 
 }

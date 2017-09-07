@@ -71,6 +71,7 @@
 #include "sysc/datatypes/fx/sc_ufix.h"
 #include "sysc/datatypes/fx/scfx_other_defs.h"
 
+#include <sstream>
 
 // explicit template instantiations
 namespace sc_core {
@@ -85,12 +86,11 @@ namespace sc_dt {
 void
 sc_uint_concref_invalid_length( int length )
 {
-    char msg[BUFSIZ];
-    std::sprintf( msg,
-	     "sc_uint_concref<T1,T2> initialization: length = %d "
-	     "violates 1 <= length <= %d",
-	     length, SC_INTWIDTH );
-    SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
+    std::stringstream msg;
+    msg << "sc_uint_concref<T1,T2> initialization: length = " << length
+        << "violates 1 <= length <= " << SC_INTWIDTH;
+    SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg.str().c_str() );
+    sc_core::sc_abort(); // can't recover from here
 }
 
 
@@ -339,34 +339,32 @@ sc_uint_subref::scan( ::std::istream& is )
 void
 sc_uint_base::invalid_length() const
 {
-    char msg[BUFSIZ];
-    std::sprintf( msg,
-	     "sc_uint[_base] initialization: length = %d violates "
-	     "1 <= length <= %d",
-	     m_len, SC_INTWIDTH );
-    SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
+    std::stringstream msg;
+    msg << "sc_uint[_base] initialization: length = " << m_len
+        << " violates 1 <= length <= " << SC_INTWIDTH;
+    SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg.str().c_str() );
+    sc_core::sc_abort(); // can't recover from here}
 }
 
 void
 sc_uint_base::invalid_index( int i ) const
 {
-    char msg[BUFSIZ];
-    std::sprintf( msg,
-	     "sc_uint[_base] bit selection: index = %d violates "
-	     "0 <= index <= %d",
-	     i, m_len - 1 );
-    SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
+    std::stringstream msg;
+    msg << "sc_uint[_base] bit selection: index = " << i
+        << " violates 0 <= index <= " << (m_len - 1);
+    SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg.str().c_str() );
+    sc_core::sc_abort(); // can't recover from here
 }
 
 void
 sc_uint_base::invalid_range( int l, int r ) const
 {
-    char msg[BUFSIZ];
-    std::sprintf( msg,
-	     "sc_uint[_base] part selection: left = %d, right = %d violates "
-	     "%d >= left >= right >= 0",
-	     l, r, m_len - 1 );
-    SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
+    std::stringstream msg;
+    msg << "sc_uint[_base] part selection: "
+        << "left = " << l << ", right = " << r << " violates "
+        << (m_len-1) << " >= left >= right >= 0";
+    SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg.str().c_str() );
+    sc_core::sc_abort(); // can't recover from here
 }
 
 
@@ -375,10 +373,9 @@ sc_uint_base::check_value() const
 {
     uint_type limit = (~UINT_ZERO >> m_ulen);
     if( m_val > limit ) {
-	char msg[BUFSIZ];
-	std::sprintf( msg, "sc_uint[_base]: value does not fit into a length of %d",
-		 m_len );
-	SC_REPORT_WARNING( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
+        std::stringstream msg;
+        msg << "sc_uint[_base]: value does not fit into a length of " << m_len;
+        SC_REPORT_WARNING( sc_core::SC_ID_OUT_OF_BOUNDS_, msg.str().c_str() );
     }
 }
 
@@ -519,21 +516,20 @@ sc_uint_base::operator = ( const char* a )
 	SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_,
 			 "character string is zero" );
     }
-    if( *a == 0 ) {
+    else if( *a == 0 ) {
 	SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_,
 			 "character string is empty" );
     }
-    try {
+    else try {
 	int len = m_len;
 	sc_ufix aa( a, len, len, SC_TRN, SC_WRAP, 0, SC_ON );
 	return this->operator = ( aa );
-    } catch( sc_core::sc_report ) {
-	char msg[BUFSIZ];
-	std::sprintf( msg, "character string '%s' is not valid", a );
-	SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_, msg );
-	// never reached
-	return *this;
+    } catch( const sc_core::sc_report & ) {
+        std::stringstream msg;
+        msg << "character string '" << a << "' is not valid";
+        SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_, msg.str().c_str() );
     }
+    return *this;
 }
 
 

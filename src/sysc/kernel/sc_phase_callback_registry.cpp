@@ -57,16 +57,13 @@ static const sc_phase_callback_registry::mask_type
 namespace /* anonymous */ {
 
 struct entry_match
-  : std::unary_function< sc_phase_callback_registry::entry, bool >
 {
-    typedef sc_phase_callback_registry::cb_type* ref_type;
-
     explicit
-    entry_match( ref_type ref )
+    entry_match( sc_phase_callback_registry::cb_type* ref )
       : ref_(ref)
     {}
 
-    result_type operator()( argument_type e )
+    bool operator()( const sc_phase_callback_registry::entry& e ) const
         { return e.target == ref_; }
 private:
     sc_phase_callback_registry::cb_type * ref_;

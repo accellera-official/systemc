@@ -52,6 +52,9 @@ using std::strncmp;
 //  The event class.
 // ----------------------------------------------------------------------------
 
+// kernel-internal event, that is never notified
+const sc_event sc_event::none( kernel_event, "none" );
+
 const char*
 sc_event::basename() const
 {
@@ -534,7 +537,7 @@ sc_event_timed::allocate()
 
     if( free_list == 0 ) {
         free_list = (sc_event_timed_u*) malloc( ALLOC_SIZE *
-                                                sizeof( sc_event_timed ) );
+                                                sizeof( sc_event_timed_u ) );
         int i = 0;
         for( ; i < ALLOC_SIZE - 1; ++ i ) {
             free_list[i].next = &free_list[i + 1];
@@ -663,17 +666,19 @@ sc_event_list::report_premature_destruction() const
     // is currently running (which is only part of the story):
 
     if( sc_get_current_process_handle().valid() ) {
-        // FIXME: improve error-handling
-        sc_assert( false && "sc_event_list prematurely destroyed" );
+        // called from a destructor, can't throw
+        SC_REPORT_FATAL( SC_ID_EVENT_LIST_FAILED_
+                       , "list prematurely destroyed" );
+        sc_abort();
     }
-
 }
 
 void
 sc_event_list::report_invalid_modification() const
 {
-    // FIXME: improve error-handling
-    sc_assert( false && "sc_event_list modfied while being waited on" );
+    SC_REPORT_ERROR( SC_ID_EVENT_LIST_FAILED_
+                   , "list modfied while being waited on" );
+    // may continue, if suppressed
 }
 
 // ----------------------------------------------------------------------------

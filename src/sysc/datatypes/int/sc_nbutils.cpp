@@ -59,14 +59,39 @@
 #include <cctype>
 #include <cstdio>
 #include <cstring>
+#include <sstream>
 
 #include "sysc/datatypes/int/sc_int_ids.h"
 #include "sysc/datatypes/int/sc_nbutils.h"
 #include "sysc/kernel/sc_macros.h"
 
 
-namespace sc_dt
+namespace sc_dt {
+
+// only used within vec_from_str (non-standard, deprecated)
+static inline void
+is_valid_base(sc_numrep base)
 {
+  switch (base) {
+    case SC_NOBASE: case SC_BIN:
+    case SC_OCT: case SC_DEC:
+    case SC_HEX:
+        break;
+    case SC_BIN_US: case SC_BIN_SM:
+    case SC_OCT_US: case SC_OCT_SM:
+    case SC_HEX_US: case SC_HEX_SM:
+    case SC_CSD:
+      SC_REPORT_ERROR( sc_core::SC_ID_NOT_IMPLEMENTED_,
+                       "is_valid_base( sc_numrep base ) : "
+                       "bases SC_CSD, or ending in _US and _SM are not supported" );
+      break;
+    default:
+      std::stringstream msg;
+      msg << "is_valid_base( sc_numrep base ) : base = " << base
+          << " is not valid";
+      SC_REPORT_ERROR( sc_core::SC_ID_VALUE_NOT_VALID_, msg.str().c_str() );
+  }
+}
 
 // ----------------------------------------------------------------------------
 //  ENUM : sc_numrep
@@ -173,8 +198,8 @@ fsm_move(char c, small_type &b, small_type &s, small_type &state)
 // pointer to the first char after the point where b and s are
 // determined or where the end of v is reached. The input string v has
 // to be null terminated.
-const char 
-*get_base_and_sign(const char *v, small_type &b, small_type &s)
+const char *
+get_base_and_sign(const char *v, small_type &b, small_type &s)
 {
 
 #ifdef DEBUG_SYSTEMC
@@ -204,22 +229,19 @@ const char
     }
   }
 
-#ifdef DEBUG_SYSTEMC
   // Test to see if the above loop executed more than it should
   // have. The max number of skipped chars is equal to the length of
   // the longest format specifier, e.g., "-0x".
   sc_assert(nskip <= 3);
-#endif
 
   v += nskip;
 
   // Handles empty strings or strings without any digits after the
   // base or base and sign specifier.
   if (*v == '\0') { 
-      char msg[BUFSIZ];
-      std::sprintf( msg,
-	       "get_base_and_sign( const char* v, small_type&, small_type& ) : "
-	       "v = \"\" is not valid" );
+      static const char msg[]
+         = "get_base_and_sign( const char* v, small_type&, small_type& ) : "
+           "v = \"\" is not valid";
       SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_, msg );
   }
 
@@ -255,10 +277,12 @@ void parse_binary_bits(
     if( src_p == 0 ) {
         SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_,
                          "character string is zero" );
+        return;
     }
     if( *src_p == 0 ) {
         SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_,
                          "character string is empty" );
+        return;
     }
 
 
@@ -298,7 +322,6 @@ void parse_binary_bits(
         if ( src_i < 0 ) 
         {
             src_n += BITS_PER_DIGIT;
-            src_i = 0;
             data = 0;
             ctrl = 0;
             for ( src_i = 0; src_i < src_n; src_i++ )
@@ -315,10 +338,10 @@ void parse_binary_bits(
                   case '0':                  break;
                   default:
                     {
-                        char msg[BUFSIZ];
-                        std::sprintf( msg, "character string '%s' is not valid", 
-                        src_p );
-                        SC_REPORT_ERROR(sc_core::SC_ID_CONVERSION_FAILED_, msg);
+                        std::stringstream msg;
+                        msg << "character string '" << src_p << "' is not valid";
+                        SC_REPORT_ERROR(sc_core::SC_ID_CONVERSION_FAILED_, msg.str().c_str() );
+                        return;
                     }
                     break;
                 }
@@ -347,10 +370,10 @@ void parse_binary_bits(
               case '0':                  break;
               default:
                 {
-                    char msg[BUFSIZ];
-                    std::sprintf( msg, "character string '%s' is not valid", 
-                    src_p );
-                    SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_, msg );
+                    std::stringstream msg;
+                    msg << "character string '" << src_p << "' is not valid";
+                    SC_REPORT_ERROR(sc_core::SC_ID_CONVERSION_FAILED_, msg.str().c_str() );
+                    return;
                 }
                 break;
             }
@@ -360,7 +383,7 @@ void parse_binary_bits(
         src_n = src_n - BITS_PER_DIGIT;
     }
 }
-        
+
 
 //------------------------------------------------------------------------------
 //"parse_hex_bits"
@@ -390,10 +413,12 @@ void parse_hex_bits(
     if( src_p == 0 ) {
         SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_,
                          "character string is zero" );
+        return;
     }
     if( *src_p == 0 ) {
         SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_,
                          "character string is empty" );
+        return;
     }
 
 
@@ -433,7 +458,6 @@ void parse_hex_bits(
         if ( src_i < 0 ) 
         {
             src_n += 8;
-            src_i = 0;
             data = 0;
             ctrl = 0;
             for ( src_i = 0; src_i < src_n; src_i++ )
@@ -470,10 +494,10 @@ void parse_hex_bits(
                   case 'z': ctrl = ctrl | 15; break;
                   default:
                     {
-                        char msg[BUFSIZ];
-                        std::sprintf( msg, "character string '%s' is not valid", 
-                        src_p );
-                        SC_REPORT_ERROR(sc_core::SC_ID_CONVERSION_FAILED_, msg);
+                        std::stringstream msg;
+                        msg << "character string '" << src_p << "' is not valid";
+                        SC_REPORT_ERROR(sc_core::SC_ID_CONVERSION_FAILED_, msg.str().c_str() );
+                        return;
                     }
                     break;
                 }
@@ -522,10 +546,10 @@ void parse_hex_bits(
 	      case 'z': ctrl = ctrl | 15; break;
               default:
                 {
-                    char msg[BUFSIZ];
-                    std::sprintf( msg, "character string '%s' is not valid", 
-                    src_p );
-                    SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_, msg );
+                    std::stringstream msg;
+                    msg << "character string '" << src_p << "' is not valid";
+                    SC_REPORT_ERROR(sc_core::SC_ID_CONVERSION_FAILED_, msg.str().c_str() );
+                    return;
                 }
                 break;
             }
@@ -564,12 +588,11 @@ vec_from_str(int unb, int und, sc_digit *u,
     if (b == NB_DEFAULT_BASE)
       b = base;
     else {
-	char msg[BUFSIZ];
-	std::sprintf( msg,
-		 "vec_from_str( int, int, sc_digit*, const char*, sc_numrep base ) : "
-		 "base = %s does not match the default base",
-		 to_string( base ).c_str() );
-	SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_, msg );
+        std::stringstream msg;
+        msg << "vec_from_str( int, int, sc_digit*, const char*, sc_numrep base ) : "
+            << "base = " << base << " does not match the default base";
+        SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_, msg.str().c_str() );
+        return 0;
     }
   }
 
@@ -587,16 +610,15 @@ vec_from_str(int unb, int und, sc_digit *u,
         val = toupper(c) - 'A' + 10;
       else
         val = c - '0';
-      
+
       if (val >= b) {
-	  char msg[BUFSIZ];
-	  std::sprintf( msg,
-		   "vec_from_str( int, int, sc_digit*, const char*, sc_numrep base ) : "
-		   "'%c' is not a valid digit in base %d",
-		   *v, b );
-	  SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_, msg );
+          std::stringstream msg;
+          msg << "vec_from_str( int, int, sc_digit*, const char*, sc_numrep base ) : "
+              << "'" << *v << "' is not a valid digit in base " << b;
+          SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_, msg.str().c_str() );
+          return 0;
       }
-      
+
       // digit = digit * b + val;
       vec_mul_small_on(und, u, b);
       
@@ -605,12 +627,11 @@ vec_from_str(int unb, int und, sc_digit *u,
 
     }
     else {
-	char msg[BUFSIZ];
-	std::sprintf( msg,
-		 "vec_from_str( int, int, sc_digit*, const char*, sc_numrep base ) : "
-		 "'%c' is not a valid digit in base %d",
-		 *v, b );
-	SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_, msg );
+        std::stringstream msg;
+        msg << "vec_from_str( int, int, sc_digit*, const char*, sc_numrep base ) : "
+            << "'" << *v << "' is not a valid digit in base " << b;
+        SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_, msg.str().c_str() );
+        return 0;
     }
   }
 
@@ -1847,11 +1868,11 @@ vec_reverse(int unb, int und, sc_digit *ud,
 #endif
 
   if (l < r) {
-      char msg[BUFSIZ];
-      std::sprintf( msg, "vec_reverse( int, int, sc_digit*, int l, int r ) : "
-	       "l = %d < r = %d is not valid",
-	       l, r );
-      SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_, msg );
+      std::stringstream msg;
+      msg << "vec_reverse( int, int, sc_digit*, int l, int r ) : "
+          << "l = " << l << " < r = " << r << " is not valid",
+      SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_, msg.str().c_str() );
+      return;
   }
 
   // Make sure that l and r are within bounds.
@@ -1883,8 +1904,18 @@ vec_reverse(int unb, int und, sc_digit *ud,
 #ifndef SC_MAX_NBITS
   delete [] d;
 #endif
-    
 }
+
+#ifdef SC_MAX_NBITS
+void test_bound_failed(int nb )
+{
+    std::stringstream msg;
+    msg << "test_bound( int nb ) : "
+           "nb = " << nb << " > SC_MAX_NBITS = " << SC_MAX_NBITS
+        << "  is not valid";
+    SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg.str().c_str() );
+}
+#endif // SC_MAX_NBITS
 
 } // namespace sc_dt
 

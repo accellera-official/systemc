@@ -87,7 +87,6 @@ examples_FILES += \
 	2.3/sc_rvd/Makefile
 
 #2_3_sc_rvd_FILTER = 
-#export 2_3_sc_rvd_FILTER
 
 ## Taf!
 ## :vim:ft=automake:

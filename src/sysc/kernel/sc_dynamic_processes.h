@@ -34,7 +34,56 @@
 #include "sysc/kernel/sc_except.h"
 #include "sysc/kernel/sc_spawn.h"
 #include "sysc/kernel/sc_join.h"
-#include "sysc/kernel/sc_boost.h"
+
+#if SC_CPLUSPLUS >= 201103L // C++11 or later has std::bind
+# include <functional>
+
+namespace sc_unnamed {
+using namespace std::placeholders;
+} // namespace sc_unnamed
+
+namespace sc_core {
+
+template<typename F, typename... Args>
+auto sc_bind( F&& f, Args&&... args )
+#  if SC_CPLUSPLUS < 201402L // explicit return type needed before C++14
+   -> decltype( std::bind(std::forward<F>(f), std::forward<Args>(args)...) )
+#  endif
+ { return std::bind( std::forward<F>(f), std::forward<Args>(args)... ); }
+
+template<typename T>
+auto sc_ref( T&& v )
+#  if SC_CPLUSPLUS < 201402L // explicit return type needed before C++14
+   -> decltype( std::ref(std::forward<T>(v) ) )
+#  endif
+ { return std::ref( std::forward<T>(v) ); }
+
+template<typename T>
+auto sc_cref( T&& v )
+#  if SC_CPLUSPLUS < 201402L // explicit return type needed before C++14
+   -> decltype( std::cref(std::forward<T>(v) ) )
+#  endif
+ { return std::cref( std::forward<T>(v) ); }
+
+} // namespace sc_core
+
+// bring sc_bind, sc_ref, sc_cref into global namespace - unless asked not to
+// TODO: invert default for IEEE 1666-202x
+#if ! (defined(SC_BIND_IN_GLOBAL_NAMESPACE) && SC_BIND_IN_GLOBAL_NAMESPACE == 0)
+using sc_core::sc_bind;
+using sc_core::sc_ref;
+using sc_core::sc_cref;
+#endif // SC_BIND_IN_GLOBAL_NAMESPACE
+
+#else // use Boost implementation
+# include "sysc/packages/boost/bind.hpp"
+# include "sysc/packages/boost/ref.hpp"
+
+# define sc_bind    sc_boost::bind
+# define sc_ref(r)  sc_boost::ref(r)
+# define sc_cref(r) sc_boost::cref(r)
+
+#endif // C++11 implementation
 
 // $Log: sc_dynamic_processes.h,v $
 // Revision 1.5  2011/08/26 20:46:09  acg

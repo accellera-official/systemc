@@ -179,13 +179,13 @@ SC_DEFINE_MESSAGE(SC_ID_NO_PROCESS_SEMANTICS_         , 563,
 	"Attempt to invoke process with no semantics() method" )
 SC_DEFINE_MESSAGE(SC_ID_EVENT_ON_NULL_PROCESS_         , 564,
 	"Attempt to get an event for non-existent process" )
-// available message number 565
+SC_DEFINE_MESSAGE(SC_ID_EVENT_LIST_FAILED_, 565,
+         "invalid use of sc_(and|or)_event_list" )
 SC_DEFINE_MESSAGE(SC_ID_UNKNOWN_PROCESS_TYPE_,       566,
 	"Unknown process type" )
 SC_DEFINE_MESSAGE(SC_ID_TIME_CONVERSION_FAILED_, 567,
         "sc_time conversion failed")
-SC_DEFINE_MESSAGE(SC_ID_NEGATIVE_SIMULATION_TIME_, 568,
-        "negative simulation interval specified in sc_start call" )
+// available number 568
 SC_DEFINE_MESSAGE(SC_ID_BAD_SC_MODULE_CONSTRUCTOR_  , 569,
         "sc_module(const char*), sc_module(const std::string&) "
         "have been deprecated, use sc_module(const sc_module_name&)" )

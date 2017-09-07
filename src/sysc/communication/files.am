@@ -55,6 +55,7 @@ H_FILES += \
 	communication/sc_fifo_ifs.h \
 	communication/sc_fifo_ports.h \
 	communication/sc_host_mutex.h \
+	communication/sc_host_semaphore.h \
 	communication/sc_interface.h \
 	communication/sc_mutex.h \
 	communication/sc_mutex_if.h \

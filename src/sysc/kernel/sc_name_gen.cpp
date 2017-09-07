@@ -30,10 +30,7 @@
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/kernel/sc_name_gen.h"
 
-#if defined(_MSC_VER) && _MSC_VER >= 1310
-// "C4351: new behavior: elements of array will be default initialized"
-#pragma warning(disable: 4351)
-#endif
+#include <sstream>
 
 namespace sc_core {
 
@@ -61,22 +58,27 @@ sc_name_gen::~sc_name_gen()
 const char*
 sc_name_gen::gen_unique_name( const char* basename_, bool preserve_first )
 {
-    if( basename_ == 0 ) {
-	SC_REPORT_ERROR( SC_ID_GEN_UNIQUE_NAME_, 0 );
+    if( basename_ == 0 || *basename_ == 0 ) {
+        SC_REPORT_ERROR( SC_ID_GEN_UNIQUE_NAME_, 0 );
+        basename_ = "unnamed"; // usually not reached
     }
     int* c = m_unique_name_map[basename_];
     if( c == 0 ) {
-	c = new int( 0 );
-	m_unique_name_map.insert( const_cast<char*>( basename_ ), c );
-	if (preserve_first) {
-	    std::sprintf( m_unique_name, "%s", basename_ );
-	} else {
-            std::sprintf( m_unique_name, "%s_%d", basename_, *c );
+        c = new int( 0 );
+        m_unique_name_map.insert( const_cast<char*>( basename_ ), c );
+        if (preserve_first) {
+            m_unique_name = basename_;
+        } else {
+            std::stringstream sstr;
+            sstr << basename_ << "_" << *c;
+            sstr.str().swap( m_unique_name );
         }
     } else {
-        std::sprintf( m_unique_name, "%s_%d", basename_, ++ (*c) );
+        std::stringstream sstr;
+        sstr << basename_ << "_" << ++ (*c);
+        sstr.str().swap( m_unique_name );
     }
-    return m_unique_name;
+    return m_unique_name.c_str();
 }
 
 } // namespace sc_core

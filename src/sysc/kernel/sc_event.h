@@ -260,7 +260,6 @@ class SC_API sc_event
     friend class sc_method_process;
     friend class sc_thread_process;
     friend void sc_thread_cor_fn( void* arg );
-    friend class sc_interface;
     friend class sc_clock;
     friend class sc_event_queue;
     friend class sc_signal_channel;
@@ -295,6 +294,8 @@ public:
     sc_event_and_expr operator & ( const sc_event& ) const;
     sc_event_and_expr operator & ( const sc_event_and_list& ) const;
 
+    // never notified event
+    static const sc_event none;
 
 private:
 
@@ -521,8 +522,10 @@ sc_event_list::operator=( sc_event_list const & that )
     if( m_busy )
         report_invalid_modification();
 
-    move_from( that );
-    that.auto_delete(); // free automatic lists
+    if( SC_LIKELY_(this != &that) ) {
+        move_from( that );
+        that.auto_delete(); // free automatic lists
+    }
 
     return *this;
 }

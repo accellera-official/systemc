@@ -128,32 +128,6 @@ operator << ( ::std::ostream& os, sc_numrep numrep )
     return os;
 }
 
-// only used within vec_from_str (non-standard, deprecated)
-inline void
-is_valid_base(sc_numrep base)
-{
-  switch (base) {
-    case SC_NOBASE: case SC_BIN:
-    case SC_OCT: case SC_DEC:
-    case SC_HEX:
-        break;
-    case SC_BIN_US: case SC_BIN_SM:
-    case SC_OCT_US: case SC_OCT_SM:
-    case SC_HEX_US: case SC_HEX_SM:
-    case SC_CSD:
-      SC_REPORT_ERROR( sc_core::SC_ID_NOT_IMPLEMENTED_,
-		       "is_valid_base( sc_numrep base ) : "
-		       "bases SC_CSD, or ending in _US and _SM are not supported" );
-      break;
-    default:
-      char msg[BUFSIZ];
-      std::sprintf( msg, "is_valid_base( sc_numrep base ) : "
-	       "base = %s is not valid",
-	       to_string( base ).c_str() );
-      SC_REPORT_ERROR( sc_core::SC_ID_VALUE_NOT_VALID_, msg );
-  }
-}
-
 // ----------------------------------------------------------------------------
 
 // One transition of the FSM to find base and sign of a number.
@@ -683,16 +657,14 @@ mul_signs(small_type us, small_type vs)
 
 #ifdef SC_MAX_NBITS
 
-inline
-void
+SC_API void test_bound_failed(int nb);
+
+inline void
 test_bound(int nb)
 {
   if (nb > SC_MAX_NBITS) {
-      char msg[BUFSIZ];
-      std::sprintf( msg, "test_bound( int nb ) : "
-	       "nb = %d > SC_MAX_NBITS = %d is not valid",
-	       nb, SC_MAX_NBITS );
-      SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
+    test_bound_failed( nb );
+    sc_core::sc_abort(); // can't recover from here
   }
 }
 
@@ -706,6 +678,7 @@ div_by_zero(Type s)
   if (s == 0) {
       SC_REPORT_ERROR( sc_core::SC_ID_OPERATION_FAILED_,
 		       "div_by_zero<Type>( Type ) : division by zero" );
+      sc_core::sc_abort(); // can't recover from here
   }
 }
 

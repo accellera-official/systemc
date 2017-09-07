@@ -53,6 +53,7 @@
 //
 
 #include <cstring>
+#include <sstream>
 
 #include "sysc/datatypes/bit/sc_bit_ids.h"
 #include "sysc/datatypes/bit/sc_bv_base.h"
@@ -74,7 +75,8 @@ sc_bv_base::init( int length_, bool init_value )
 {
     // check the length
     if( length_ <= 0 ) {
-	SC_REPORT_ERROR( sc_core::SC_ID_ZERO_LENGTH_, 0 );
+        SC_REPORT_ERROR( sc_core::SC_ID_ZERO_LENGTH_, 0 );
+        sc_core::sc_abort(); // can't recover from here
     }
     // allocate memory for the data and control words
     m_len = length_;
@@ -84,7 +86,7 @@ sc_bv_base::init( int length_, bool init_value )
     sc_digit dw = init_value ? ~SC_DIGIT_ZERO : SC_DIGIT_ZERO;
     int sz = m_size;
     for( int i = 0; i < sz; ++ i ) {
-	m_data[i] = dw;
+        m_data[i] = dw;
     }
     clean_tail();
 }
@@ -99,18 +101,20 @@ sc_bv_base::assign_from_string( const std::string& s )
     int min_len = sc_min( len, s_len );
     int i = 0;
     for( ; i < min_len; ++ i ) {
-	char c = s[s_len - i - 1];
-	if( c != '0' && c != '1' ) {
-	    SC_REPORT_ERROR( sc_core::SC_ID_CANNOT_CONVERT_,
-	        "string can contain only '0' and '1' characters" );
-	}
-	set_bit( i, sc_logic_value_t( c - '0' ) );
+        char c = s[s_len - i - 1];
+        if( c != '0' && c != '1' ) {
+            SC_REPORT_ERROR( sc_core::SC_ID_CANNOT_CONVERT_,
+                "string can contain only '0' and '1' characters" );
+            // may continue, if suppressed
+            c = '0';
+        }
+        set_bit( i, sc_logic_value_t( c - '0' ) );
     }
     // if formatted, fill the rest with sign(s), otherwise fill with zeros
     sc_logic_value_t fill = (s[s_len] == 'F' ? sc_logic_value_t( s[0] - '0' )
-		                             : sc_logic_value_t( 0 ));
+                                             : sc_logic_value_t( 0 ));
     for( ; i < len; ++ i ) {
-	set_bit( i, fill );
+        set_bit( i, fill );
     }
 }
 
@@ -141,7 +145,7 @@ sc_bv_base::sc_bv_base( const sc_bv_base& a )
     // copy the bits
     int sz = m_size;
     for( int i = 0; i < sz; ++ i ) {
-	m_data[i] = a.m_data[i];
+        m_data[i] = a.m_data[i];
     }
 }
 
@@ -156,152 +160,6 @@ sc_bv_base::operator = ( const char* a )
 }
 
 
-#if 0
-
-// bitwise complement
-
-sc_bv_base&
-sc_bv_base::b_not()
-{
-    int sz = m_size;
-    for( int i = 0; i < sz; ++ i ) {
-	m_data[i] = ~m_data[i];
-    }
-    clean_tail();
-    return *this;
-}
-
-
-// bitwise left shift
-
-sc_bv_base&
-sc_bv_base::operator <<= ( int n )
-{
-    if( n < 0 ) {
-	char msg[BUFSIZ];
-	std::sprintf( msg,
-		 "left shift operation is only allowed with positive "
-		 "shift values, shift value = %d", n );
-	SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
-    }
-    int sz = m_size;
-    if( n >= m_len ) {
-	for( int i = 0; i < sz; ++ i ) {
-	    m_data[i] = SC_DIGIT_ZERO;
-	}
-	// clean_tail();
-	return *this;
-    }
-    int wn = n / SC_DIGIT_SIZE;
-    int bn = n % SC_DIGIT_SIZE;
-    if( wn != 0 ) {
-	// shift words
-	int i = sz - 1;
-	for( ; i >= wn; -- i ) {
-	    m_data[i] = m_data[i - wn];
-	}
-	for( ; i >= 0; -- i ) {
-	    m_data[i] = SC_DIGIT_ZERO;
-	}
-    }
-    if( bn != 0 ) {
-	// shift bits
-	for( int i = sz - 1; i >= 1; -- i ) {
-	    m_data[i] <<= bn;
-	    m_data[i] |= m_data[i - 1] >> (SC_DIGIT_SIZE - bn);
-	}
-	m_data[0] <<= bn;
-    }
-    clean_tail();
-    return *this;
-}
-
-
-// bitwise right shift
-
-sc_bv_base&
-sc_bv_base::operator >>= ( int n )
-{
-    if( n < 0 ) {
-	char msg[BUFSIZ];
-	std::sprintf( msg,
-		 "right shift operation is only allowed with positive "
-		 "shift values, shift value = %d", n );
-	SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
-    }
-    int sz = m_size;
-    if( n >= m_len ) {
-	for( int i = 0; i < sz; ++ i ) {
-	    m_data[i] = SC_DIGIT_ZERO;
-	}
-	// clean_tail();
-	return *this;
-    }
-    int wn = n / SC_DIGIT_SIZE;
-    int bn = n % SC_DIGIT_SIZE;
-    if( wn != 0 ) {
-	// shift words
-	int i = 0;
-	for( ; i < (sz - wn); ++ i ) {
-	    m_data[i] = m_data[i + wn];
-	}
-	for( ; i < sz; ++ i ) {
-	    m_data[i] = SC_DIGIT_ZERO;
-	}
-    }
-    if( bn != 0 ) {
-	// shift bits
-	for( int i = 0; i < (sz - 1); ++ i ) {
-	    m_data[i] >>= bn;
-	    m_data[i] |= m_data[i + 1] << (SC_DIGIT_SIZE - bn);
-	}
-	m_data[sz - 1] >>= bn;
-    }
-    clean_tail();
-    return *this;
-}
-
-
-// bitwise left rotate
-
-sc_bv_base&
-sc_bv_base::lrotate( int n )
-{
-    if( n < 0 ) {
-	char msg[BUFSIZ];
-	std::sprintf( msg,
-		 "left rotate operation is only allowed with positive "
-		 "rotate values, rotate value = %d", n );
-	SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
-    }
-    int len = m_len;
-    n %= len;
-    *this = (*this << n) | (*this >> (len - n));
-    return *this;
-}
-
-
-// bitwise right rotate
-
-sc_bv_base&
-sc_bv_base::rrotate( int n )
-{
-    if( n < 0 ) {
-	char msg[BUFSIZ];
-	std::sprintf( msg,
-		 "right rotate operation is only allowed with positive "
-		 "rotate values, rotate value = %d", n );
-	SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
-    }
-    int len = m_len;
-    n %= len;
-    *this = (*this >> n) | (*this << (len - n));
-    return *this;
-}
-
-#endif
-
-
 // ----------------------------------------------------------------------------
 
 // convert formatted string to binary string
@@ -313,55 +171,56 @@ convert_to_bin( const char* s )
     //         because this is seen as a hexadecimal encoding prefix!
 
     if( s == 0 ) {
-	SC_REPORT_ERROR(sc_core::SC_ID_CANNOT_CONVERT_, 
-	    "character string is zero" );
+        SC_REPORT_ERROR(sc_core::SC_ID_CANNOT_CONVERT_,
+            "character string is zero" );
+        return std::string();
     }
     if( *s == 0 ) {
-	SC_REPORT_ERROR(sc_core::SC_ID_CANNOT_CONVERT_, 
-	    "character string is empty");
+        SC_REPORT_ERROR(sc_core::SC_ID_CANNOT_CONVERT_,
+            "character string is empty");
+        return std::string();
     }
 
     int n = strlen( s );
     int i = 0;
     if( s[0] == '-' || s[0] == '+' ) {
-	++ i;
+        ++ i;
     }
     if( n > (i + 2) && s[i] == '0' )
     {
         if (s[i+1] == 'b' || s[i+1] == 'B' )
-	{
-	    if ( s[i+2] == '0' || s[i+2] == '1' )
-	    {
-		std::string str( &s[2] );
-	        str += "F";
-	        return str;
-	    }
-	}
-        if ( s[i+1] == 'b' || s[i+1] == 'B' ||
-	     s[i+1] == 'c' || s[i+1] == 'C' ||
-	     s[i+1] == 'd' || s[i+1] == 'D' ||
-	     s[i+1] == 'o' || s[i+1] == 'O' ||
-	     s[i+1] == 'x' || s[i+1] == 'X') 
         {
-	    try {
-		// worst case length = n * 4
-		sc_fix a( s, n * 4, n * 4, SC_TRN, SC_WRAP, 0, SC_ON );
-		std::string str = a.to_bin();
-		str += "F"; // mark the string as formatted
-		// get rid of prefix (0b) and redundant leading bits
-		const char* p = str.c_str() + 2;
-		while( p[1] && p[0] == p[1] ) {
-		    ++ p;
-		}
-		return std::string( p );
-	    } catch( sc_core::sc_report ) {
-		char msg[BUFSIZ];
-		std::sprintf( msg, "character string '%s' is not valid", s );
-		SC_REPORT_ERROR( sc_core::SC_ID_CANNOT_CONVERT_, msg );
-		// never reached
-		return std::string();
-	    }
-	}
+            if ( s[i+2] == '0' || s[i+2] == '1' )
+            {
+                std::string str( &s[2] );
+                str += "F";
+                return str;
+            }
+        }
+        if ( s[i+1] == 'b' || s[i+1] == 'B' ||
+             s[i+1] == 'c' || s[i+1] == 'C' ||
+             s[i+1] == 'd' || s[i+1] == 'D' ||
+             s[i+1] == 'o' || s[i+1] == 'O' ||
+             s[i+1] == 'x' || s[i+1] == 'X')
+        {
+            try {
+                // worst case length = n * 4
+                sc_fix a( s, n * 4, n * 4, SC_TRN, SC_WRAP, 0, SC_ON );
+                std::string str = a.to_bin();
+                str += "F"; // mark the string as formatted
+                // get rid of prefix (0b) and redundant leading bits
+                const char* p = str.c_str() + 2;
+                while( p[1] && p[0] == p[1] ) {
+                    ++ p;
+                }
+                return std::string( p );
+          } catch( const sc_core::sc_report & ) {
+              std::stringstream msg;
+              msg << "character string '" << s << "' is not valid";
+              SC_REPORT_ERROR( sc_core::SC_ID_CANNOT_CONVERT_, msg.str().c_str() );
+              return std::string();
+          }
+      }
 
     }
 

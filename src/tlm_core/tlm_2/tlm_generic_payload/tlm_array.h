@@ -58,10 +58,9 @@ class tlm_array
 public:
 
     // constructor:
-    tlm_array(size_type size = 0, T const & default_value = T() )
-        : base_type(size,default_value)
+    tlm_array(size_type size = 0)
+        : base_type(size)
         , m_entries()
-        , m_default(default_value)
     {
         //m_entries.reserve(size); // optional
     }
@@ -113,7 +112,6 @@ public:
 
 protected:
     std::vector<size_type> m_entries;
-    T m_default;
 };
 
 template <typename T>

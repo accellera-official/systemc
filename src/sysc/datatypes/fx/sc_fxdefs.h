@@ -247,22 +247,23 @@ const int SC_DEFAULT_MAX_WL_ = SC_BUILTIN_MAX_WL_;
 //  Dedicated error reporting and checking.
 // ----------------------------------------------------------------------------
 
+#define SC_ERROR_IF_IMPL_(cnd,id,msg)                                         \
+  do {                                                                        \
+    if( cnd ) {                                                               \
+        SC_REPORT_ERROR( id, msg );                                           \
+        sc_core::sc_abort(); /* can't recover from here */                    \
+    }                                                                         \
+  } while( false )
+
 #ifdef DEBUG_SYSTEMC
-#define SC_ASSERT_(cnd,msg)                                                   \
-{                                                                             \
-    if( ! (cnd) )                                                             \
-        SC_REPORT_ERROR( sc_core::SC_ID_INTERNAL_ERROR_, msg );                        \
-}
+# define SC_ASSERT_(cnd,msg)                                                  \
+    SC_ERROR_IF_IMPL_(!(cnd), sc_core::SC_ID_INTERNAL_ERROR_, msg )
 #else
-#define SC_ASSERT_(cnd,msg)
+# define SC_ASSERT_(cnd,msg) (void(0))
 #endif
 
 #define SC_ERROR_IF_(cnd,id)                                                  \
-{                                                                             \
-    if( cnd )                                                                 \
-        SC_REPORT_ERROR( id, 0 );                                             \
-}
-
+    SC_ERROR_IF_IMPL_( cnd, id, 0 )
 
 #define SC_CHECK_WL_(wl)                                                      \
     SC_ERROR_IF_( (wl) <= 0, sc_core::SC_ID_INVALID_WL_ )
@@ -297,8 +298,8 @@ const int SC_DEFAULT_MAX_WL_ = SC_BUILTIN_MAX_WL_;
 
 #define SC_OBSERVER_DEFAULT_(observer_type)                                   \
 {                                                                             \
-    if( m_observer == 0 && observer_type ## ::default_observer != 0 )         \
-        m_observer = (* ## observer_type ## ::default_observer)();            \
+    if( m_observer == 0 && observer_type::default_observer != 0 )             \
+        m_observer = (*observer_type::default_observer)();                    \
 }
 
 } // namespace sc_dt

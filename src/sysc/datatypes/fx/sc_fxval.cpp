@@ -416,7 +416,9 @@ print_other( scfx_string& s, const scfx_ieee_double& id, sc_numrep numrep,
 	    step = 4;
 	    break;
 	default:
-	    step = 0;
+            SC_REPORT_FATAL( sc_core::SC_ID_ASSERTION_FAILED_
+                           , "unexpected sc_numrep" );
+            sc_core::sc_abort();
     }
 
     msb = (int) std::ceil( double( msb + 1 ) / step ) * step - 1;

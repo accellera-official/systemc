@@ -31,6 +31,7 @@
 #include "sysc/utils/sc_utils_ids.h"
 #include "sysc/communication/sc_signal.h"
 #include "sysc/kernel/sc_reset.h"
+#include "sysc/kernel/sc_simcontext_int.h"
 
 #include <sstream>
 
@@ -45,23 +46,22 @@ sc_signal_invalid_writer( sc_object* target, sc_object* first_writer,
                           sc_object* second_writer, bool check_delta )
 {
     if ( second_writer )
-    {   
+    {
         std::stringstream msg;
-
         msg
             << "\n signal "
                "`" << target->name() << "' "
                "(" << target->kind() << ")"
             << "\n first driver "
                "`" << first_writer->name() << "' "
-              " (" << first_writer->kind() << ")"
+               "(" << first_writer->kind() << ")"
             << "\n second driver "
                "`" << second_writer->name() << "' "
                "(" << second_writer->kind() << ")";
 
         if( check_delta )
         {
-            msg << "\n first conflicting write in delta cycle "
+            msg << "\n conflicting write in delta cycle "
                 << sc_delta_count();
         }
         SC_REPORT_ERROR( SC_ID_MORE_THAN_ONE_SIGNAL_DRIVER_,
@@ -70,10 +70,17 @@ sc_signal_invalid_writer( sc_object* target, sc_object* first_writer,
 }
 
 bool
+sc_writer_policy_check_write::only_delta()
+{
+    return sc_get_curr_simcontext()->write_check_conflicts_only();
+}
+
+bool
 sc_writer_policy_check_port::
   check_port( sc_object* target, sc_port_base * port_, bool is_output )
 {
-    if ( is_output && sc_get_curr_simcontext()->write_check() )
+    if ( is_output && sc_get_curr_simcontext()->write_check() &&
+         !sc_get_curr_simcontext()->write_check_conflicts_only() )
     {
         // an out or inout port; only one can be connected
         if( m_output != 0) {

@@ -46,8 +46,7 @@
 #include "sysc/kernel/sc_process_handle.h"
 #include "sysc/kernel/sc_reset.h"
 #include "sysc/kernel/sc_ver.h"
-#include "sysc/kernel/sc_boost.h"
-#include "sysc/kernel/sc_spawn.h"
+#include "sysc/kernel/sc_dynamic_processes.h"
 #include "sysc/kernel/sc_phase_callback_registry.h"
 #include "sysc/communication/sc_port.h"
 #include "sysc/communication/sc_export.h"
@@ -55,6 +54,7 @@
 #include "sysc/tracing/sc_trace.h"
 #include "sysc/utils/sc_mempool.h"
 #include "sysc/utils/sc_list.h"
+#include "sysc/utils/sc_string_view.h"
 #include "sysc/utils/sc_utils_ids.h"
 
 #include <algorithm>
@@ -113,133 +113,91 @@ sc_stop_mode stop_mode = SC_STOP_FINISH_DELTA;
 class sc_process_table
 {
   public:
+    template<typename ProcessHandle> struct queue
+    {
+      queue() : m_head() {}
+      ~queue();
 
-    sc_process_table();
-    ~sc_process_table();
-    void push_front( sc_method_handle );
-    void push_front( sc_thread_handle );
-    sc_method_handle method_q_head();
-    sc_thread_handle thread_q_head();
-    sc_method_handle remove( sc_method_handle );
-    sc_thread_handle remove( sc_thread_handle );
+      ProcessHandle head() const { return m_head; }
+      void          push_front(ProcessHandle h);
+      ProcessHandle remove(ProcessHandle h);
+    private:
+      ProcessHandle m_head;
+    };
 
+    void push_front( sc_method_handle handle )
+      { m_methods.push_front(handle); }
+    void push_front( sc_thread_handle handle )
+      { m_threads.push_front(handle); }
+
+    sc_method_handle method_q_head() const
+      { return m_methods.head(); }
+    sc_thread_handle thread_q_head() const
+      { return m_threads.head(); }
+
+    sc_method_handle remove( sc_method_handle handle )
+      { return m_methods.remove(handle); }
+    sc_thread_handle remove( sc_thread_handle handle )
+      { return m_threads.remove(handle); }
 
   private:
-
-    sc_method_handle  m_method_q;  // Queue of existing method processes.
-    sc_thread_handle  m_thread_q;  // Queue of existing thread processes.
+    queue<sc_method_handle> m_methods; // Queue of existing method processes.
+    queue<sc_thread_handle> m_threads; // Queue of existing thread processes.
 };
 
+template<typename ProcessHandle>
+sc_process_table::queue<ProcessHandle>::~queue()
+{
+    while( m_head ) {
+        ProcessHandle now_p = m_head;
+        m_head = m_head->next_exist();
+        now_p->reference_decrement();
+    }
+}
+
+template<typename ProcessHandle>
+void
+sc_process_table::queue<ProcessHandle>::push_front( ProcessHandle handle )
+{
+    handle->set_next_exist(m_head);
+    m_head = handle;
+}
+
+template<typename ProcessHandle>
+ProcessHandle
+sc_process_table::queue<ProcessHandle>::remove( ProcessHandle handle )
+{
+    ProcessHandle now_p   = m_head; // Entry now examining.
+    ProcessHandle prior_p = NULL;   // Entry prior to one now examining.
+
+    while( now_p )
+    {
+        if ( now_p == handle )
+        {
+            if ( prior_p )
+                prior_p->set_next_exist( now_p->next_exist() );
+            else
+                m_head = now_p->next_exist();
+            return handle;
+        }
+        prior_p = now_p;
+        now_p   = now_p->next_exist();
+    }
+    return NULL;
+}
 
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
-sc_process_table::sc_process_table() : m_method_q(0), m_thread_q(0)
-{}
-
-sc_process_table::~sc_process_table()
-{
-
-    sc_method_handle  method_next_p;	// Next method to delete.
-    sc_method_handle  method_now_p;	// Method now deleting.
-
-    for( method_now_p = m_method_q; method_now_p; method_now_p = method_next_p )
-    {
-        method_next_p = method_now_p->next_exist();
-        method_now_p->reference_decrement();
-    }
-
-    sc_thread_handle  thread_next_p;	// Next thread to delete.
-    sc_thread_handle  thread_now_p;	// Thread now deleting.
-
-    for( thread_now_p=m_thread_q; thread_now_p; thread_now_p=thread_next_p )
-    {
-        thread_next_p = thread_now_p->next_exist();
-        thread_now_p->reference_decrement();
-    }
-}
-
-inline
 sc_method_handle
-sc_process_table::method_q_head()
+sc_simcontext::remove_process( sc_method_handle handle )
 {
-    return m_method_q;
-}
-
-inline
-sc_thread_handle
-sc_process_table::thread_q_head()
-{
-    return m_thread_q;
-}
-
-inline
-void
-sc_process_table::push_front( sc_method_handle handle_ )
-{
-    handle_->set_next_exist(m_method_q);
-    m_method_q = handle_;
-}
-
-inline
-void
-sc_process_table::push_front( sc_thread_handle handle_ )
-{
-    handle_->set_next_exist(m_thread_q);
-    m_thread_q = handle_;
-}
-
-sc_method_handle
-sc_process_table::remove( sc_method_handle handle_ )
-{
-    sc_method_handle now_p;	// Entry now examining.
-    sc_method_handle prior_p;	// Entry prior to one now examining.
-
-    prior_p = 0;
-    for ( now_p = m_method_q; now_p; now_p = now_p->next_exist() )
-    {
-	if ( now_p == handle_ )
-	{
-	    if ( prior_p )
-		prior_p->set_next_exist( now_p->next_exist() );
-	    else
-		m_method_q = now_p->next_exist();
-	    return handle_;
-	}
-    }
-    return 0;
-}
-
-sc_method_handle
-sc_simcontext::remove_process( sc_method_handle handle_ )
-{
-    return m_process_table->remove(handle_);
+    return m_process_table->remove(handle);
 }
 
 sc_thread_handle
-sc_process_table::remove( sc_thread_handle handle_ )
+sc_simcontext::remove_process( sc_thread_handle handle )
 {
-    sc_thread_handle now_p;	// Entry now examining.
-    sc_thread_handle prior_p;	// Entry prior to one now examining.
-
-    prior_p = 0;
-    for ( now_p = m_thread_q; now_p; now_p = now_p->next_exist() )
-    {
-	if ( now_p == handle_ )
-	{
-	    if ( prior_p )
-		prior_p->set_next_exist( now_p->next_exist() );
-	    else
-		m_thread_q = now_p->next_exist();
-	    return handle_;
-	}
-    }
-    return 0;
-}
-
-sc_thread_handle
-sc_simcontext::remove_process( sc_thread_handle handle_ )
-{
-    return m_process_table->remove(handle_);
+    return m_process_table->remove(handle);
 }
 
 SC_API int
@@ -368,9 +326,13 @@ sc_simcontext::init()
     // CHECK FOR ENVIRONMENT VARIABLES THAT MODIFY SIMULATOR EXECUTION:
 
     const char* write_check = std::getenv("SC_SIGNAL_WRITE_CHECK");
-    m_write_check = ( (write_check==0) || strcmp(write_check,"DISABLE") ) ?
-      true : false;
-
+    sc_string_view write_check_s = (write_check != NULL) ? write_check : "";
+    if ( write_check_s == "DISABLE" )
+        m_write_check = SC_SIGNAL_WRITE_CHECK_DISABLE_;
+    else if ( write_check_s == "CONFLICT" )
+        m_write_check = SC_SIGNAL_WRITE_CHECK_CONFLICT_;
+    else
+        m_write_check = SC_SIGNAL_WRITE_CHECK_DEFAULT_;
 
     // FINISH INITIALIZATIONS:
 
@@ -438,9 +400,9 @@ sc_simcontext::sc_simcontext() :
     m_export_registry(0), m_prim_channel_registry(0),
     m_phase_cb_registry(0), m_name_gen(0),
     m_process_table(0), m_curr_proc_info(), m_current_writer(0),
-    m_write_check(false), m_next_proc_id(-1), m_child_events(),
-    m_child_objects(), m_delta_events(), m_timed_events(0), m_trace_files(),
-    m_something_to_trace(false), m_runnable(0), m_collectable(0),
+    m_write_check(SC_SIGNAL_WRITE_CHECK_DEFAULT_), m_next_proc_id(-1),
+    m_child_events(), m_child_objects(), m_delta_events(), m_timed_events(0),
+    m_trace_files(), m_something_to_trace(false), m_runnable(0), m_collectable(0),
     m_time_params(), m_curr_time(SC_ZERO_TIME), m_max_time(SC_ZERO_TIME),
     m_change_stamp(0), m_delta_count(0), m_initial_delta_count_at_current_time(0),
     m_forced_stop(false), m_paused(false),
@@ -574,7 +536,6 @@ sc_simcontext::crunch( bool once )
 	{
 //	    SC_DO_PHASE_CALLBACK_(evaluation_done);
 	    m_change_stamp++;
-	    m_delta_count ++;
 	}
 	m_prim_channel_registry->perform_update();
 	SC_DO_PHASE_CALLBACK_(update_done);
@@ -620,6 +581,9 @@ sc_simcontext::crunch( bool once )
 	    m_delta_events.clear();
 	}
 
+	if ( !empty_eval_phase )
+		m_delta_count ++;
+
 	if( m_runnable->is_empty() ) {
 	    // no more runnable processes
 	    break;
@@ -650,11 +614,6 @@ sc_simcontext::cycle( const sc_time& t)
 
     m_in_simulator_control = true;
     crunch();
-#if SC_SIMCONTEXT_TRACING_
-    if( m_something_to_trace ) {
-        trace_cycle( /* delta cycle? */ false );
-    }
-#endif
     do_timestep( m_curr_time + t );
     if ( next_time(next_event_time) && next_event_time <= m_curr_time) {
         SC_REPORT_WARNING(SC_ID_CYCLE_MISSES_EVENTS_, "");
@@ -783,7 +742,8 @@ sc_simcontext::prepare_to_simulate()
 	}
 	else if ( (method_p->m_state & sc_process_b::ps_bit_suspended) == 0)
 	{
-	    push_runnable_method_front( method_p );
+            if ( !method_p->is_runnable() ) // already scheduled?
+                push_runnable_method_front( method_p );
         }
 	else
 	{
@@ -808,7 +768,8 @@ sc_simcontext::prepare_to_simulate()
 	}
 	else if ( (thread_p->m_state & sc_process_b::ps_bit_suspended) == 0)
 	{
-            push_runnable_thread_front( thread_p );
+            if ( !thread_p->is_runnable() ) // already scheduled?
+                push_runnable_thread_front( thread_p );
         }
 	else
 	{
@@ -844,12 +805,6 @@ sc_simcontext::initial_crunch( bool no_crunch )
     if( m_error ) {
         return;
     }
-
-#if SC_SIMCONTEXT_TRACING_
-    if( m_something_to_trace ) {
-        trace_cycle( false );
-    }
-#endif
 
     // check for call(s) to sc_stop
     if( m_forced_stop ) {
@@ -897,12 +852,8 @@ sc_simcontext::simulate( const sc_time& duration )
     sc_time non_overflow_time = max_time() - m_curr_time;
     if ( duration > non_overflow_time )
     {
-	SC_REPORT_ERROR(SC_ID_SIMULATION_TIME_OVERFLOW_, "");
-	return;
-    }
-    else if ( duration < SC_ZERO_TIME )
-    {
-        SC_REPORT_ERROR(SC_ID_NEGATIVE_SIMULATION_TIME_,"");
+        SC_REPORT_ERROR(SC_ID_SIMULATION_TIME_OVERFLOW_, "");
+        return;
     }
 
     m_in_simulator_control = true;
@@ -923,10 +874,6 @@ sc_simcontext::simulate( const sc_time& duration )
 	    m_in_simulator_control = false;
 	    return;
 	}
-#if SC_SIMCONTEXT_TRACING_
-        if( m_something_to_trace )
-            trace_cycle( /* delta cycle? */ false );
-#endif
         if( m_forced_stop ) {
             do_sc_stop_action();
             return;
@@ -944,11 +891,6 @@ sc_simcontext::simulate( const sc_time& duration )
 	    m_in_simulator_control = false;
 	    return;
 	}
-#if SC_SIMCONTEXT_TRACING_
-	if( m_something_to_trace ) {
-	    trace_cycle( false );
-	}
-#endif
         // check for call(s) to sc_stop() or sc_pause().
         if( m_forced_stop ) {
             do_sc_stop_action();
@@ -961,7 +903,15 @@ sc_simcontext::simulate( const sc_time& duration )
 	do {
 	    // See note 1 above:
 
-            if ( !next_time(t) || (t > until_t ) ) goto exit_time;
+            if ( !next_time(t) || (t > until_t) ) {
+                if ( (t > until_t) || m_prim_channel_registry->async_suspend() ) {
+                    // requested simulation time completed or no external updates
+                    goto exit_time;
+                }
+                // received external updates, continue simulation
+                break;
+            }
+
             if ( t > m_curr_time )
                 do_timestep(t);
 
@@ -993,7 +943,15 @@ void
 sc_simcontext::do_timestep(const sc_time& t)
 {
     sc_assert( m_curr_time < t );
+
     SC_DO_PHASE_CALLBACK_(before_timestep);
+
+#if SC_SIMCONTEXT_TRACING_
+    if( m_something_to_trace ) {
+        trace_cycle( false );
+    }
+#endif
+
     m_curr_time = t;
     m_change_stamp++;
     m_initial_delta_count_at_current_time = m_delta_count;
@@ -1787,30 +1745,6 @@ sc_start()
               SC_EXIT_ON_STARVATION );
 }
 
-// for backward compatibility with 1.0
-#if 0
-void
-sc_start( double duration )  // in default time units
-{
-    static bool warn_sc_start=true;
-    if ( warn_sc_start )
-    {
-	warn_sc_start = false;
-	SC_REPORT_INFO(SC_ID_IEEE_1666_DEPRECATION_,
-	    "sc_start(double) deprecated, use sc_start(sc_time) or sc_start()");
-    }
-
-    if( duration == -1 )  // simulate forever
-    {
-        sc_start(
-            sc_time(~sc_dt::UINT64_ZERO, false) - sc_time_stamp() );
-    }
-    else
-    {
-        sc_start( sc_time( duration, true ) );
-    }
-}
-#endif //
 
 SC_API void
 sc_stop()
@@ -1908,18 +1842,17 @@ SC_API void sc_set_stop_mode(sc_stop_mode mode)
     if ( sc_is_running() )
     {
         SC_REPORT_ERROR(SC_ID_STOP_MODE_AFTER_START_,"");
+        return;
     }
-    else
+
+    switch( mode )
     {
-        switch( mode )
-        {
-          case SC_STOP_IMMEDIATE:
-          case SC_STOP_FINISH_DELTA:
-              stop_mode = mode;
-              break;
-          default:
-              break;
-        }
+      case SC_STOP_IMMEDIATE:
+      case SC_STOP_FINISH_DELTA:
+          stop_mode = mode;
+          break;
+      default:
+          break;
     }
 }
 

@@ -83,7 +83,6 @@ examples_FILES += \
 	2.1/scx_mutex_w_policy/Makefile
 
 #2_1_scx_mutex_w_policy_FILTER = 
-#export 2_1_scx_mutex_w_policy_FILTER
 
 ## Taf!
 ## :vim:ft=automake:

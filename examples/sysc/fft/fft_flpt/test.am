@@ -112,7 +112,6 @@ fft_fft_flpt_EXTRA = \
 
 
 #fft_fft_flpt_FILTER = 
-#export fft_fft_flpt_FILTER
 
 ## Taf!
 ## :vim:ft=automake:

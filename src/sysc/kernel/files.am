@@ -46,7 +46,6 @@
 
 H_FILES += \
 	kernel/sc_attribute.h \
-	kernel/sc_boost.h \
 	kernel/sc_cmnhdr.h \
 	kernel/sc_constants.h \
 	kernel/sc_cor.h \

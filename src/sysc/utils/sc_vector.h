@@ -35,8 +35,13 @@
 #include <algorithm> // std::swap
 
 #include "sysc/kernel/sc_object.h"
-#include "sysc/packages/boost/config.hpp"
-#include "sysc/packages/boost/utility/enable_if.hpp"
+
+#if SC_CPLUSPLUS >= 201103L // use C++11 for type traits
+# include <type_traits>
+#else // use Boost for type traits
+# include "sysc/packages/boost/config.hpp"
+# include "sysc/packages/boost/utility/enable_if.hpp"
+#endif // type traits
 
 #if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
 #pragma warning(push)
@@ -46,9 +51,23 @@
 namespace sc_core {
 namespace sc_meta {
 
-  using ::sc_boost::enable_if;
+#if SC_CPLUSPLUS >= 201103L // use C++11 for type traits
+  using std::enable_if;
+  using std::remove_const;
+  using std::is_same;
+  using std::is_const;
 
-  // simplistic version to avoid Boost et.al.
+# define SC_STATIC_CONSTANT_(Type,Value) \
+    static const Type Value
+
+#else // use Boost/local implementation for type traits
+  template<bool Cond, typename T = void>
+  struct enable_if : sc_boost::enable_if_c<Cond, T> {};
+
+# define SC_STATIC_CONSTANT_(Type,Value) \
+    SC_BOOST_STATIC_CONSTANT(Type,Value)
+
+  // simplistic version to reduce Boost usage
   template< typename T > struct remove_const          { typedef T type; };
   template< typename T > struct remove_const<const T> { typedef T type; };
 
@@ -62,9 +81,11 @@ namespace sc_meta {
   template< typename T >
   struct is_const< const T> { SC_BOOST_STATIC_CONSTANT( bool, value = true );  };
 
+#endif // type traits
+
   template< typename CT, typename T >
   struct is_more_const {
-    SC_BOOST_STATIC_CONSTANT( bool, value
+    SC_STATIC_CONSTANT_( bool, value
        = ( is_same< typename remove_const<CT>::type
                  , typename remove_const<T>::type
                  >::value
@@ -78,8 +99,8 @@ namespace sc_meta {
     { typedef T type; };
 
 #define SC_RPTYPE_(Type)                                   \
-  typename ::sc_core::sc_meta::remove_special_fptr         \
-    < ::sc_core::sc_meta::special_result& (*) Type >::type
+  ::sc_core::sc_meta::remove_special_fptr         \
+    < ::sc_core::sc_meta::special_result& (*) Type >::type::value
 
 #define SC_ENABLE_IF_( Cond )                              \
   typename ::sc_core::sc_meta::enable_if                   \
@@ -749,6 +770,8 @@ sc_vector_assembly<T,MT>::get_elements() const
 }
 
 } // namespace sc_core
+
+#undef SC_STATIC_CONSTANT_
 #undef SC_RPTYPE_
 #undef SC_ENABLE_IF_
 

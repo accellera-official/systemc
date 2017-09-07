@@ -214,10 +214,12 @@ void sc_report::register_id( int id, const char* msg )
     if( id < 0 ) {
 	SC_REPORT_ERROR( SC_ID_REGISTER_ID_FAILED_,
 			 "invalid report id" );
+        return;
     }
     if( msg == 0 ) {
 	SC_REPORT_ERROR( SC_ID_REGISTER_ID_FAILED_,
 			 "invalid report message" );
+        return;
     }
     sc_msg_def * md = sc_report_handler::mdlookup(id);
 
@@ -227,6 +229,7 @@ void sc_report::register_id( int id, const char* msg )
     if ( !md ) {
 	SC_REPORT_ERROR( SC_ID_REGISTER_ID_FAILED_,
 			 "report_map insertion error" );
+        return;
     }
 
     if( md->id != -1 ) {

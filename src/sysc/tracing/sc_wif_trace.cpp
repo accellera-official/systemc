@@ -77,6 +77,7 @@
 #include "sysc/tracing/sc_wif_trace.h"
 
 #include <sstream>
+#include <iomanip>
 
 #if defined(_MSC_VER)
 # pragma warning(disable:4309) // truncation of constant value
@@ -1565,9 +1566,8 @@ typedef wif_T_trace<sc_dt::sc_lv_base> wif_sc_lv_trace;
 wif_trace_file::wif_trace_file(const char * name)
   : sc_trace_file_base( name, "awif" )
   , wif_name_index(0)
-  , previous_time_units_low(0)
-  , previous_time_units_high(0)
-  , previous_time(0.0)
+  , previous_units_low(0)
+  , previous_units_high(0)
   , traces()
 {}
 
@@ -1580,24 +1580,7 @@ void wif_trace_file::do_initialize()
     std::fprintf(fp, "init ;\n\n");
 
     //timescale:
-    if     (timescale_unit == 1e-15) std::sprintf(buf,"0");
-    else if(timescale_unit == 1e-14) std::sprintf(buf,"1");
-    else if(timescale_unit == 1e-13) std::sprintf(buf,"2");
-    else if(timescale_unit == 1e-12) std::sprintf(buf,"3");
-    else if(timescale_unit == 1e-11) std::sprintf(buf,"4");
-    else if(timescale_unit == 1e-10) std::sprintf(buf,"5");
-    else if(timescale_unit == 1e-9)  std::sprintf(buf,"6");
-    else if(timescale_unit == 1e-8)  std::sprintf(buf,"7");
-    else if(timescale_unit == 1e-7)  std::sprintf(buf,"8");
-    else if(timescale_unit == 1e-6)  std::sprintf(buf,"9");
-    else if(timescale_unit == 1e-5)  std::sprintf(buf,"10");
-    else if(timescale_unit == 1e-4)  std::sprintf(buf,"11");
-    else if(timescale_unit == 1e-3)  std::sprintf(buf,"12");
-    else if(timescale_unit == 1e-2)  std::sprintf(buf,"13");
-    else if(timescale_unit == 1e-1)  std::sprintf(buf,"14");
-    else if(timescale_unit == 1e0)   std::sprintf(buf,"15");
-    else if(timescale_unit == 1e1)   std::sprintf(buf,"16");
-    else if(timescale_unit == 1e2)   std::sprintf(buf,"17");
+    std::sprintf(buf,"%d", static_cast<int>(log10(trace_unit_fs)));
     std::fprintf(fp,"header  %s \"%s\" ;\n\n", buf, sc_version());
 
     std::fprintf(fp, "comment \"ASCII WIF file produced on date:  %s\" ;\n"
@@ -1621,27 +1604,33 @@ void wif_trace_file::do_initialize()
         t->print_variable_declaration_line(fp);
     }
 
-    double inittime = sc_time_stamp().to_seconds();
-    previous_time = inittime/timescale_unit;
+    std::stringstream ss;
 
-    // Dump all values at initial time
-    std::sprintf(buf,
-            "All initial values are dumped below at time "
-            "%g sec = %g timescale units.",
-            inittime,
-            inittime/timescale_unit
-            );
-    write_comment(buf);
+    timestamp_in_trace_units(previous_units_high, previous_units_low);
 
-    double_to_special_int64(inittime/timescale_unit,
-			    &previous_time_units_high,
-			    &previous_time_units_low );
+    ss << "All initial values are dumped below at time "
+       << sc_time_stamp().to_seconds() <<" sec = ";
+    if(has_low_units())
+        ss << previous_units_high << std::setfill('0') << std::setw(low_units_len()) << previous_units_low;
+    else
+        ss << previous_units_high;
+    ss << " timescale units.";
+
+    write_comment(ss.str());
 
     for (i = 0; i < (int)traces.size(); i++) {
         wif_trace* t = traces[i];
         t->write(fp);
     }
+    std::fprintf(fp, "\n");
 }
+
+#if SC_TRACING_PHASE_CALLBACKS_
+void wif_trace_file::trace( sc_trace_file* ) const {
+    SC_REPORT_ERROR( sc_core::SC_ID_INTERNAL_ERROR_
+                   , "invalid call to wif_trace_file::trace(sc_trace_file*)" );
+}
+#endif // SC_TRACING_PHASE_CALLBACKS_
 
 // ----------------------------------------------------------------------------
 
@@ -1782,60 +1771,80 @@ wif_trace_file::write_comment(const std::string& comment)
 void
 wif_trace_file::cycle(bool this_is_a_delta_cycle)
 {
-    unsigned now_units_high, now_units_low;
+    unit_type now_units_high, now_units_low;
 
     // Trace delta cycles only when enabled
     if (!delta_cycles() && this_is_a_delta_cycle) return;
+    // When delta cycles enabled, value changes happen only during delta cycles
+    if (delta_cycles() && !this_is_a_delta_cycle) return;
 
     // Check for initialization
     if( initialize() ) {
         return;
     };
 
-    // double now_units = sc_simulation_time() / timescale_unit;
-    double now_units = sc_time_stamp().to_seconds() / timescale_unit;
+    timestamp_in_trace_units(now_units_high, now_units_low);
 
-    double_to_special_int64(now_units, &now_units_high, &now_units_low );
+    unit_type delta_units_high, delta_units_low;
+    bool time_advanced = true;
+    if (now_units_low < previous_units_low) {
+        unit_type max_low_units = kernel_unit_fs / trace_unit_fs;
+        delta_units_low = max_low_units - previous_units_low + now_units_low;
 
-    // Now do the real stuff
-    unsigned delta_units_high, delta_units_low;
-    double diff_time;
-    diff_time = now_units - previous_time;
-    double_to_special_int64(diff_time, &delta_units_high, &delta_units_low);
-    if (this_is_a_delta_cycle && (diff_time == 0.0))
-	delta_units_low++; // Increment time for delta cycle simulation
-    // Note that in the last statement above, we are assuming no more
-    // than 2^32 delta cycles - seems realistic
+        if (now_units_high <= previous_units_high)
+            time_advanced = false;
+
+        delta_units_high = now_units_high - 1 - previous_units_high;
+    } else {
+        delta_units_low = now_units_low - previous_units_low;
+
+        if (now_units_high < previous_units_high || ((now_units_high == previous_units_high) && delta_units_low == 0) )
+            time_advanced = false;
+
+        delta_units_high = now_units_high - previous_units_high;
+    }
+
+    if (!time_advanced) {
+        std::stringstream ss;
+        ss <<"\n\tThis can occur when delta cycle tracing is activated."
+           <<"\n\tSome delta cycles at " << sc_time_stamp() << " are not shown in trace file."
+           <<"\n\tUse 'tracefile->set_time_unit(double, sc_time_unit);' to increase the time resolution.";
+        SC_REPORT_WARNING( SC_ID_TRACING_REVERSED_TIME_, ss.str().c_str() );
+        return;
+    }
 
     bool time_printed = false;
     wif_trace* const* const l_traces = &traces[0];
     for (int i = 0; i < (int)traces.size(); i++) {
         wif_trace* t = l_traces[i];
         if(t->changed()){
-            if(time_printed == false){
-                if(delta_units_high){
-                    std::fprintf(fp, "delta_time %u%09u ;\n", delta_units_high,
-			    delta_units_low);
-                }
-                else{
-                    std::fprintf(fp, "delta_time %u ;\n", delta_units_low);
-                }
+            if(time_printed == false) {
+
+                std::stringstream ss;
+
+                if(has_low_units())
+                    ss << "delta_time " << delta_units_high << std::setfill('0')
+                       << std::setw(low_units_len()) << delta_units_low << " ;\n";
+                else
+                    ss << "delta_time " << delta_units_high <<" ;\n";
+
+                std::fputs(ss.str().c_str(), fp);
+
                 time_printed = true;
             }
 
-	    // Write the variable
+            // Write the variable
             t->write(fp);
         }
     }
 
     if(time_printed) {
         std::fprintf(fp, "\n");     // Put another newline
-	// We update previous_time_units only when we print time because
-	// this field stores the previous time that was printed, not the
-	// previous time this function was called
-	previous_time_units_high = now_units_high;
-	previous_time_units_low = now_units_low;
-	previous_time = now_units;
+        // We update previous_time_units only when we print time because
+        // this field stores the previous time that was printed, not the
+        // previous time this function was called
+        previous_units_high = now_units_high;
+        previous_units_low = now_units_low;
     }
 }
 

@@ -88,7 +88,8 @@ sc_simcontext::set_curr_proc( sc_process_b* process_h )
 {
     m_curr_proc_info.process_handle = process_h;
     m_curr_proc_info.kind           = process_h->proc_kind();
-    m_current_writer = m_write_check ? process_h : (sc_object*)0;
+    m_current_writer =
+      (m_write_check != SC_SIGNAL_WRITE_CHECK_DISABLE_) ? process_h : 0;
 }
 
 inline
@@ -286,6 +287,12 @@ std::vector<sc_thread_handle>&
 sc_simcontext::get_active_invokers()
 {
     return m_active_invokers;
+}
+
+inline bool
+sc_simcontext::write_check_conflicts_only() const
+{
+    return ( m_write_check == SC_SIGNAL_WRITE_CHECK_CONFLICT_ );
 }
 
 // ----------------------------------------------------------------------------

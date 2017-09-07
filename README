@@ -26,6 +26,10 @@ as described in the IEEE 1666-2011 Language Reference Manual.
       - GNU C++ compiler versions gcc-4.2.2 through gcc-6.1.0
       - Intel C++ Compiler (ICC 15.0.0)
 
+   o 64-bit Linux (aarch64)
+      (Ubuntu 16.04)
+      - GNU C++ compiler version gcc-4.5.0
+
     o 64-bit Mac OS X (x86_64)
       (10.12 Sierra)
       - Apple LLVM version 8.0 (clang-800.0.42.1)

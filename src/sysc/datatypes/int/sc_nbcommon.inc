@@ -55,10 +55,8 @@ CLASS_TYPE::CLASS_TYPE( int nb ) :
     if( nb > 0 ) {
 	nbits = num_bits( nb );
     } else {
-	char msg[BUFSIZ];
-	std::sprintf( msg, "%s::%s( int nb ) : nb = %d is not valid",
-		 CLASS_TYPE_STR, CLASS_TYPE_STR, nb );
-	SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
+        invalid_init( "int nb", nb );
+        sc_core::sc_abort(); // can't recover from here
     }
     ndigits = DIV_CEIL(nbits);
 #ifdef SC_MAX_NBITS
@@ -108,10 +106,8 @@ CLASS_TYPE::CLASS_TYPE(const sc_bv_base& v) :
     if( nb > 0 ) {
         nbits = num_bits( nb );
     } else {
-        char msg[BUFSIZ];
-        std::sprintf( msg, "%s::%s( sc_bv_base ) : nb = %d is not valid",
-                 CLASS_TYPE_STR, CLASS_TYPE_STR, nb );
-        SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
+        invalid_init( "sc_bv_base", nb );
+        sc_core::sc_abort(); // can't recover from here
     }
     ndigits = DIV_CEIL(nbits);
 #   ifdef SC_MAX_NBITS
@@ -131,10 +127,8 @@ CLASS_TYPE::CLASS_TYPE(const sc_lv_base& v) :
     if( nb > 0 ) {
         nbits = num_bits( nb );
     } else {
-        char msg[BUFSIZ];
-        std::sprintf( msg, "%s::%s( sc_lv_base ) : nb = %d is not valid",
-                 CLASS_TYPE_STR, CLASS_TYPE_STR, nb );
-        SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
+        invalid_init( "sc_lv_base", nb );
+        sc_core::sc_abort(); // can't recover from here
     }
     ndigits = DIV_CEIL(nbits);
 #   ifdef SC_MAX_NBITS
@@ -154,10 +148,8 @@ CLASS_TYPE::CLASS_TYPE(const sc_int_subref_r& v) :
     if( nb > 0 ) {
         nbits = num_bits( nb );
     } else {
-        char msg[BUFSIZ];
-        std::sprintf( msg, "%s::%s( sc_int_subref ) : nb = %d is not valid",
-                 CLASS_TYPE_STR, CLASS_TYPE_STR, nb );
-        SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
+        invalid_init( "sc_int_subref", nb );
+        sc_core::sc_abort(); // can't recover from here
     }
     ndigits = DIV_CEIL(nbits);
 #   ifdef SC_MAX_NBITS
@@ -177,10 +169,8 @@ CLASS_TYPE::CLASS_TYPE(const sc_uint_subref_r& v) :
     if( nb > 0 ) {
         nbits = num_bits( nb );
     } else {
-        char msg[BUFSIZ];
-        std::sprintf( msg, "%s::%s( sc_uint_subref ) : nb = %d is not valid",
-                 CLASS_TYPE_STR, CLASS_TYPE_STR, nb );
-        SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
+        invalid_init( "sc_uint_subref", nb );
+        sc_core::sc_abort(); // can't recover from here
     }
     ndigits = DIV_CEIL(nbits);
 #   ifdef SC_MAX_NBITS
@@ -200,10 +190,8 @@ CLASS_TYPE::CLASS_TYPE(const sc_signed_subref_r& v) :
     if( nb > 0 ) {
         nbits = num_bits( nb );
     } else {
-        char msg[BUFSIZ];
-        std::sprintf( msg, "%s::%s( sc_signed_subref ) : nb = %d is not valid",
-                 CLASS_TYPE_STR, CLASS_TYPE_STR, nb );
-        SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
+        invalid_init( "sc_signed_subref", nb );
+        sc_core::sc_abort(); // can't recover from here
     }
     ndigits = DIV_CEIL(nbits);
 #   ifdef SC_MAX_NBITS
@@ -223,10 +211,8 @@ CLASS_TYPE::CLASS_TYPE(const sc_unsigned_subref_r& v) :
     if( nb > 0 ) {
         nbits = num_bits( nb );
     } else {
-        char msg[BUFSIZ];
-        std::sprintf( msg, "%s::%s( sc_unsigned_subref ) : nb = %d is not valid",
-                 CLASS_TYPE_STR, CLASS_TYPE_STR, nb );
-        SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
+        invalid_init( "sc_unsigned_subref", nb );
+        sc_core::sc_abort(); // can't recover from here
     }
     ndigits = DIV_CEIL(nbits);
 #   ifdef SC_MAX_NBITS
@@ -2968,11 +2954,10 @@ CLASS_TYPE::check_if_outside(int bit_num) const
 
 #ifdef DEBUG_SYSTEMC
       if( bit_num < 0 || bit_num >= nbits ) {
-	  char msg[BUFSIZ];
-	  std::sprintf( msg, "%s::check_if_outside( int bit_num ) : "
-		   "bit_num = %d is out of bounds",
-		   CLASS_TYPE_STR, bit_num );
-	  SC_REPORT_WARNING( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
+          std::stringstream msg;
+          msg << CLASS_TYPE_STR "::check_if_outside( int bit_num ) : "
+                 "bit_num = " << bit_num << " is out of bounds";
+          SC_REPORT_WARNING( sc_core::SC_ID_OUT_OF_BOUNDS_, msg.str().c_str() );
       }
 #endif
 

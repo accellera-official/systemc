@@ -289,20 +289,20 @@ inline void copy_db0(uchar *src1, uchar *src2, uchar *dest1, uchar *dest2) {
   *dest2 = *src2;
 }
 
-inline void copy_dbtrue0(uchar *src1, uchar *src2, uchar *dest1, uchar *dest2) {
+inline void copy_dbtrue0(uchar *src1, uchar * /* src2 */, uchar *dest1, uchar *dest2) {
   *dest1 = *src1;
   *dest2 = TLM_BYTE_ENABLED;
 }
 
-inline void copy_btrue0(uchar *src1, uchar *src2, uchar *dest1, uchar *dest2) {
+inline void copy_btrue0(uchar * /* src1 */, uchar * /* src2 */, uchar * /* dest1 */, uchar *dest2) {
   *dest2 = TLM_BYTE_ENABLED;
 }
 
-inline void copy_b0(uchar *src1, uchar *src2, uchar *dest1, uchar *dest2) {
+inline void copy_b0(uchar * /* src1 */, uchar *src2, uchar * /* dest1 */, uchar *dest2) {
   *dest2 = *src2;
 }
 
-inline void copy_dbyb0(uchar *src1, uchar *src2, uchar *dest1, uchar *dest2) {
+inline void copy_dbyb0(uchar *src1, uchar * /* src2 */, uchar *dest1, uchar *dest2) {
   if(*dest2 == TLM_BYTE_ENABLED) *src1 = *dest1;
 }
 

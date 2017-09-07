@@ -37,6 +37,8 @@
 #include "sysc/communication/sc_port.h"
 #include "sysc/communication/sc_signal_ifs.h"
 
+#include <sstream>
+
 namespace sc_core {
 
 // ----------------------------------------------------------------------------
@@ -224,13 +226,11 @@ int sc_port_base::bind_count()
 void
 sc_port_base::report_error( const char* id, const char* add_msg ) const
 {
-    char msg[BUFSIZ];
-    if( add_msg != 0 ) {
-	std::sprintf( msg, "%s: port '%s' (%s)", add_msg, name(), kind() );
-    } else {
-	std::sprintf( msg, "port '%s' (%s)", name(), kind() );
-    }
-    SC_REPORT_ERROR( id, msg );
+    std::stringstream msg;
+    if (add_msg != 0)
+        msg << add_msg << ": ";
+    msg << "port '" << name() << "' (" << kind() << ")";
+    SC_REPORT_ERROR( id, msg.str().c_str() );
 }
 
 
@@ -272,8 +272,9 @@ void
 sc_port_base::bind( sc_interface& interface_ )
 {
     if( m_bind_info == 0 ) {
-	// cannot bind an interface after elaboration
-	report_error( SC_ID_BIND_IF_TO_PORT_, "simulation running" );
+        // cannot bind an interface after elaboration
+        report_error( SC_ID_BIND_IF_TO_PORT_, "simulation running" );
+        return;
     }
 
     m_bind_info->vec.push_back( new sc_bind_elem( &interface_ ) );
@@ -292,20 +293,23 @@ void
 sc_port_base::bind( this_type& parent_ )
 {
     if( m_bind_info == 0 ) {
-	// cannot bind a parent port after elaboration
-	report_error( SC_ID_BIND_PORT_TO_PORT_, "simulation running" );
+        // cannot bind a parent port after elaboration
+        report_error( SC_ID_BIND_PORT_TO_PORT_, "simulation running" );
+        return;
     }
 
     if( &parent_ == this ) {
-	report_error( SC_ID_BIND_PORT_TO_PORT_, "same port" );
+        report_error( SC_ID_BIND_PORT_TO_PORT_, "same port" );
+        return;
     }
 
     // check if parent port is already bound to this port
 #if 0
     for( int i = m_bind_info->size() - 1; i >= 0; -- i ) {
-	if( &parent_ == m_bind_info->vec[i]->parent ) {
-	    report_error( SC_ID_BIND_PORT_TO_PORT_, "already bound" );
-	}
+        if( &parent_ == m_bind_info->vec[i]->parent ) {
+            report_error( SC_ID_BIND_PORT_TO_PORT_, "already bound" );
+            return;
+        }
     }
 #endif // 
 
@@ -342,10 +346,11 @@ int
 sc_port_base::pbind( sc_interface& interface_ )
 {
     if( m_bind_info == 0 ) {
-	// cannot bind an interface after elaboration
-	report_error( SC_ID_BIND_IF_TO_PORT_, "simulation running" );
+        // cannot bind an interface after elaboration
+        report_error( SC_ID_BIND_IF_TO_PORT_, "simulation running" );
+        return -1;
     }
-    
+
     if( m_bind_info->size() != 0 ) {
 	// first interface already bound
 	return 1;
@@ -358,10 +363,11 @@ int
 sc_port_base::pbind( sc_port_base& parent_ )
 {
     if( m_bind_info == 0 ) {
-	// cannot bind a parent port after elaboration
-	report_error( SC_ID_BIND_PORT_TO_PORT_, "simulation running" );
+        // cannot bind a parent port after elaboration
+        report_error( SC_ID_BIND_PORT_TO_PORT_, "simulation running" );
+        return -1;
     }
-    
+
     if( m_bind_info->size() != 0 ) {
 	// first interface already bound
 	return 1;
@@ -447,8 +453,6 @@ sc_port_base::insert_parent( int i )
 void
 sc_port_base::complete_binding()
 {
-    char msg_buffer[128]; // For error message construction.
-
     // IF BINDING HAS ALREADY BEEN COMPLETED IGNORE THIS CALL:
 
     sc_assert( m_bind_info != 0 );
@@ -514,22 +518,27 @@ sc_port_base::complete_binding()
 
     if ( actual_binds > m_bind_info->max_size() )
     {
-	sprintf(msg_buffer, "%d binds exceeds maximum of %d allowed",
-	    actual_binds, m_bind_info->max_size() );
-	report_error( SC_ID_COMPLETE_BINDING_, msg_buffer );
+        std::stringstream msg;
+        msg << actual_binds << " binds exceeds maximum of "
+            << m_bind_info->max_size() << " allowed";
+        report_error( SC_ID_COMPLETE_BINDING_, msg.str().c_str() );
+        // may continue, if suppressed
     }
     switch ( m_bind_info->policy() )
     {
       case SC_ONE_OR_MORE_BOUND:
         if ( actual_binds < 1 ) {
             report_error( SC_ID_COMPLETE_BINDING_, "port not bound" );
+            // may continue, if suppressed
         }
         break;
       case SC_ALL_BOUND:
         if ( actual_binds < m_bind_info->max_size() || actual_binds < 1 ) {
-	    sprintf(msg_buffer, "%d actual binds is less than required %d",
-	        actual_binds, m_bind_info->max_size() ); 
-            report_error( SC_ID_COMPLETE_BINDING_, msg_buffer );
+            std::stringstream msg;
+            msg << actual_binds << " actual binds is less than required "
+                << m_bind_info->max_size();
+            report_error( SC_ID_COMPLETE_BINDING_, msg.str().c_str() );
+            // may continue, if suppressed
         }
         break;
       default:  // SC_ZERO_OR_MORE_BOUND:
@@ -602,26 +611,30 @@ void
 sc_port_registry::insert( sc_port_base* port_ )
 {
     if( sc_is_running() ) {
-	port_->report_error( SC_ID_INSERT_PORT_, "simulation running" );
+        port_->report_error( SC_ID_INSERT_PORT_, "simulation running" );
+        return;
     }
 
     if( m_simc->elaboration_done()  ) {
        port_->report_error( SC_ID_INSERT_PORT_, "elaboration done" );
+        return;
     }
 
 #if defined(DEBUG_SYSTEMC)
     // check if port_ is already inserted
     for( int i = size() - 1; i >= 0; -- i ) {
-	if( port_ == m_port_vec[i] ) {
-	    port_->report_error( SC_ID_INSERT_PORT_, "port already inserted" );
-	}
+        if( port_ == m_port_vec[i] ) {
+            port_->report_error( SC_ID_INSERT_PORT_, "port already inserted" );
+            return;
+        }
     }
 #endif
 
     // append the port to the current module's vector of ports
     sc_module* curr_module = m_simc->hierarchy_curr();
     if( curr_module == 0 ) {
-	port_->report_error( SC_ID_PORT_OUTSIDE_MODULE_ );
+        port_->report_error( SC_ID_PORT_OUTSIDE_MODULE_ );
+        return;
     }
     curr_module->append_port( port_ );
 
@@ -639,12 +652,13 @@ sc_port_registry::remove( sc_port_base* port_ )
 	}
     }
     if( i == -1 ) {
-	port_->report_error( SC_ID_REMOVE_PORT_, "port not registered" );
+        port_->report_error( SC_ID_REMOVE_PORT_, "port not registered" );
+        return;
     }
 
     // remove
-    m_port_vec[i] = m_port_vec[size() - 1];
-    m_port_vec.resize(size()-1);
+    m_port_vec[i] = m_port_vec.back();
+    m_port_vec.pop_back();
 }
 
 

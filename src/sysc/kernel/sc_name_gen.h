@@ -30,9 +30,7 @@
 #ifndef SC_NAME_GEN
 #define SC_NAME_GEN
 
-
-#include <cstdio>
-
+#include <string>
 #include "sysc/utils/sc_hash.h"
 
 namespace sc_core{
@@ -50,14 +48,13 @@ public:
     sc_name_gen();
     ~sc_name_gen();
 
-    const char* gen_unique_name( const char* basename_, 
-                                 bool preserve_first = false 
-                               );
+    const char* gen_unique_name( const char* basename_,
+                                 bool preserve_first = false );
 
 private:
 
     sc_strhash<int*> m_unique_name_map;
-    char             m_unique_name[BUFSIZ];
+    std::string      m_unique_name;
 
 private:
 
